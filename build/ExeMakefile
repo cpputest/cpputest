@@ -1,0 +1,14 @@
+
+all: $(TARGET)
+	
+
+test: $(TARGET)
+	 
+
+vtest: $(TARGET)
+
+clean:
+	rm -f $(TARGET)
+	rm -f $(TARGET).exe	
+
+include $(CPP_U_TEST)/build/ObjMakefile

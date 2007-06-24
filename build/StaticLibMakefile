@@ -1,0 +1,9 @@
+
+$(TARGET) : $(OBJS)
+	ar -rc $@ $(OBJS)
+	ranlib $@
+#	mv $@ $(LIBDIR)
+
+all: $(TARGET)
+
+include $(CPP_U_TEST)/build/ObjMakefile

@@ -1,0 +1,25 @@
+CXXFLAGS =  -c $(INCLUDE) $(APP_CXXFLAGS)
+
+all: outputmessage $(OBJS) $(TARGET)
+
+.PHONY: outputmessage
+outputmessage:
+	@echo "Building with CXXFLAGS = $(CXXFLAGS)"
+
+.cpp.o: outputmessage
+	@echo $(CXX) $<
+	@$(CXX) $(CXXFLAGS) -o $@ $<
+
+
+DEPENDENCY_FILE = .dependencies
+
+depend:
+	rm -f $(DEPENDENCY_FILE)
+	$(CXX) -MM -c $(CXXFLAGS) *.cpp >$(DEPENDENCY_FILE)
+	
+ifeq ($(DEPENDENCY_FILE), $(wildcard $(DEPENDENCY_FILE)))
+     include $(DEPENDENCY_FILE)
+endif
+
+clean:
+	rm -f *.o $(TARGET)

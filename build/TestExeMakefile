@@ -1,0 +1,12 @@
+
+RUNNER=./RunAllTests.sh
+
+test: $(TARGET)
+	@pwd
+	@$(RUNNER) 
+
+vtest: $(TARGET)
+	@pwd
+	@$(RUNNER) -v
+
+include $(CPP_U_TEST)/build/ObjMakefile
