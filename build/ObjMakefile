@@ -22,4 +22,4 @@ ifeq ($(DEPENDENCY_FILE), $(wildcard $(DEPENDENCY_FILE)))
 endif
 
 clean:
-	rm -f *.o $(TARGET)
+	rm -f *.o $(TARGET) $(TARGET).exe	
