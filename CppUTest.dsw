@@ -1,0 +1,74 @@
+Microsoft Developer Studio Workspace File, Format Version 6.00
+# WARNING: DO NOT EDIT OR DELETE THIS WORKSPACE FILE!
+
+###############################################################################
+
+Project: "Helpers"=.\Helpers\Helpers.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "UnitTestHarness"=.\UnitTestHarness\UnitTestHarness.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "UnitTestHarnessTests"=.\UnitTestHarnessTests\UnitTestHarnessTests.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name Helpers
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name UnitTestHarness
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name VisualCpp
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "VisualCpp"=.\Platforms\VisualCpp\VisualCpp.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Global:
+
+Package=<5>
+{{{
+}}}
+
+Package=<3>
+{{{
+}}}
+
+###############################################################################
+
