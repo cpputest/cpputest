@@ -26,30 +26,29 @@
  */
 
 #include "MemoryLeakWarningPlugin.h"
-#include "MemoryLeakWarning.h"
 #include "Failure.h"
 #include "TestResult.h"
 
 void MemoryLeakWarningPlugin::preTestAction(Utest& test, TestResult& result)
 {
-	MemoryLeakWarning::CheckPointUsage();
+	memLeakWarning.CheckPointUsage();
 }
 
 void MemoryLeakWarningPlugin::postTestAction(Utest& test, TestResult& result)
 {
-	if (MemoryLeakWarning::UsageIsNotBalanced())
-	  {
-	    Failure f(&test, MemoryLeakWarning::Message());
+	if (memLeakWarning.UsageIsNotBalanced()) {
+	    Failure f(&test, memLeakWarning.Message());
 	    result.addFailure(f);
 	  }
+	  memLeakWarning.ExpectLeaks(0);
 }
 
 void MemoryLeakWarningPlugin::Enable()
 {
-	MemoryLeakWarning::Enable();
+	memLeakWarning.Enable();
 }
 
 const char* MemoryLeakWarningPlugin::FinalReport()
 {
-	return MemoryLeakWarning::FinalReport();
+	return memLeakWarning.FinalReport();
 }
