@@ -30,18 +30,48 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+/* Static since we REALLY can have only one of these! */
 static int allocatedBlocks = 0;
-static int initialBlocksUsed = 0;
 static int allocatedArrays = 0;
-static int initialArraysUsed = 0;
+static int firstInitialBlocks = 0;
+static int firstInitialArrays = 0;
+static bool reporterRegistered = false;
 
-static char message[100] = "";
+class MemoryLeakWarningData
+{
+	public:
+		MemoryLeakWarningData();
+		
+		int initialBlocksUsed;
+		int initialArraysUsed;
 
+		int blockUsageCheckPoint;
+		int arrayUsageCheckPoint;
+		int expectCount;
+		char message[100];
+};
+
+void MemoryLeakWarning::CreateData()
+{
+	_impl = (MemoryLeakWarningData*) malloc(sizeof(MemoryLeakWarningData));
+	_impl->initialBlocksUsed = 0;
+	_impl->initialArraysUsed = 0;
+
+	_impl->blockUsageCheckPoint = 0;
+	_impl->arrayUsageCheckPoint = 0;
+	_impl->expectCount = 0;
+	_impl->message[0] = '\0';
+}
+
+void MemoryLeakWarning::DestroyData()
+{
+	free(_impl);
+}
 
 void reportMemoryBallance()
 {
-  int blockBalance = allocatedBlocks - initialBlocksUsed;
-  int arrayBalance = allocatedArrays - initialArraysUsed;
+  int blockBalance = allocatedBlocks - firstInitialBlocks;
+  int arrayBalance = allocatedArrays - firstInitialArrays;
   if (blockBalance == 0 && arrayBalance == 0)
     ;
   else if (blockBalance + arrayBalance == 0)
@@ -66,20 +96,28 @@ void reportMemoryBallance()
 }
 
 
+MemoryLeakWarning* MemoryLeakWarning::_latest = NULL;
+
 void MemoryLeakWarning::Enable()
 {
-  initialBlocksUsed = allocatedBlocks;
-  initialArraysUsed = allocatedArrays;
-  atexit(reportMemoryBallance);
+  _impl->initialBlocksUsed = allocatedBlocks;
+  _impl->initialArraysUsed = allocatedArrays;
+
+	if (!reporterRegistered) {
+		firstInitialBlocks = allocatedBlocks;
+		firstInitialArrays = allocatedArrays;
+		reporterRegistered = true;
+		atexit(reportMemoryBallance);
+	}
+
 }
 
 const char*  MemoryLeakWarning::FinalReport()
 {
-
-  if (initialBlocksUsed != allocatedBlocks || initialArraysUsed != allocatedArrays )
+  if (_impl->initialBlocksUsed != allocatedBlocks || _impl->initialArraysUsed != allocatedArrays )
     {
       printf("initial blocks=%d, allocated blocks=%d\ninitial arrays=%d, allocated arrays=%d\n",
-             initialBlocksUsed, allocatedBlocks, initialArraysUsed, allocatedArrays);
+             _impl->initialBlocksUsed, allocatedBlocks, _impl->initialArraysUsed, allocatedArrays);
 
       return "Memory new/delete imbalance after running tests\n";
     }
@@ -87,72 +125,70 @@ const char*  MemoryLeakWarning::FinalReport()
     return "";
 }
 
-static int blockUsageCheckPoint = 0;
-static int arrayUsageCheckPoint = 0;
-static int ignoreCount = 0;
-
 void MemoryLeakWarning::CheckPointUsage()
 {
-  blockUsageCheckPoint = allocatedBlocks;
-  arrayUsageCheckPoint = allocatedArrays;
+  _impl->blockUsageCheckPoint = allocatedBlocks;
+  _impl->arrayUsageCheckPoint = allocatedArrays;
 }
 
 bool MemoryLeakWarning::UsageIsNotBalanced()
 {
-  int arrayBalance = allocatedArrays - arrayUsageCheckPoint;
-  int blockBalance = allocatedBlocks - blockUsageCheckPoint;
+  int arrayBalance = allocatedArrays - _impl->arrayUsageCheckPoint;
+  int blockBalance = allocatedBlocks - _impl->blockUsageCheckPoint;
 
-  if (ignoreCount != 0 && blockBalance + arrayBalance == ignoreCount)
+  if (_impl->expectCount != 0 && blockBalance + arrayBalance == _impl->expectCount)
     return false;
   if (blockBalance == 0 && arrayBalance == 0)
     return false;
   else if (blockBalance + arrayBalance == 0)
-    sprintf(message, "No leaks but some arrays were deleted without []\n");
+    sprintf(_impl->message, "No leaks but some arrays were deleted without []\n");
   else
     {
       int nchars = 0;
-      if (blockUsageCheckPoint != allocatedBlocks)
-        nchars = sprintf(message, "this test leaks %d blocks",
-                         allocatedBlocks - blockUsageCheckPoint);
+      if (_impl->blockUsageCheckPoint != allocatedBlocks)
+        nchars = sprintf(_impl->message, "this test leaks %d blocks",
+                         allocatedBlocks - _impl->blockUsageCheckPoint);
 
-      if (arrayUsageCheckPoint != allocatedArrays)
-        sprintf(message + nchars, "this test leaks %d arrays",
-                allocatedArrays - arrayUsageCheckPoint);
+      if (_impl->arrayUsageCheckPoint != allocatedArrays)
+        sprintf(_impl->message + nchars, "this test leaks %d arrays",
+                allocatedArrays - _impl->arrayUsageCheckPoint);
     }
-
   return true;
 }
 
 const char* MemoryLeakWarning::Message()
 {
-  return message;
+  return _impl->message;
 }
+
+void MemoryLeakWarning::ExpectLeaks(int n)
+{
+	_impl->expectCount = n;
+}
+
+/* Global overloaded operators */
 
 void* operator new(size_t size)
 {
-  allocatedBlocks++;
-  return malloc(size);
+	allocatedBlocks++;
+  	return malloc(size);
 }
 
 void operator delete(void* mem)
 {
-  allocatedBlocks--;
-  free(mem);
+  	allocatedBlocks--;
+  	free(mem);
 }
 
 void* operator new[](size_t size)
 {
-  allocatedArrays++;
-  return malloc(size);
+	allocatedArrays++;
+  	return malloc(size);
 }
 
 void operator delete[](void* mem)
 {
-  allocatedArrays--;
-  free(mem);
+ 	allocatedArrays--;
+  	free(mem);
 }
 
-void MemoryLeakWarning::IgnoreLeaks(int n)
-{
-    ignoreCount = n;
-}
