@@ -34,6 +34,9 @@
 #include "TestHarness.h"
 
 extern "C" {
+	
+	#include "stdlib.h"
+	
 	void  CHECK_EQUAL_C_INT(int expected, int actual)
 	{
 			CHECK_EQUAL((long)expected, (long)actual);
@@ -62,5 +65,15 @@ extern "C" {
 	void  FAIL_C ()
 	{
 		FAIL("");
+	}
+	
+	char* cpputest_malloc(size_t size)
+	{
+		return new char[size];
+	}
+	
+	void cpputest_free(char* buffer)
+	{
+		delete[] buffer;
 	}
 }
