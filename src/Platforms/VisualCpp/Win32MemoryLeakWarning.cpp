@@ -39,7 +39,7 @@
 #define  SET_CRT_DEBUG_FIELD(a)   ((void) 0)
 #endif
 
-static int ignoreCount = 0;
+static int expectCount = 0;
 
 
 void MemoryLeakWarning::Enable()
@@ -64,7 +64,7 @@ static _CrtMemState s1, s2, s3;
 
 void MemoryLeakWarning::CheckPointUsage()
 {
-  ignoreCount = 0;
+  expectCount = 0;
   _CrtMemCheckpoint( &s1 );
 }
 
@@ -74,7 +74,7 @@ bool MemoryLeakWarning::UsageIsNotBalanced()
   _CrtMemCheckpoint( &s2 );
   if (_CrtMemDifference( &s3, &s1, &s2) )
   {
-      if (s3.lCounts[1] == ignoreCount)
+      if (s3.lCounts[1] == expectCount)
         return false;
       else
       {
@@ -95,5 +95,5 @@ const char* MemoryLeakWarning::Message()
 
 void MemoryLeakWarning::IgnoreLeaks(int n)
 {
-    ignoreCount = n;
+    expectCount = n;
 }
