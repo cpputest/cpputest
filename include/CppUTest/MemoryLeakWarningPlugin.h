@@ -29,6 +29,7 @@
 #define D_MemoryLeakWarningPlugin_h
 
 #include "TestPlugin.h"
+#include "MemoryLeakWarning.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -43,11 +44,14 @@
 class MemoryLeakWarningPlugin : public TestPlugin
   {
   public:
+  
 		virtual void preTestAction(Utest& test, TestResult& result);
 		virtual void postTestAction(Utest& test, TestResult& result);
 
 		virtual void Enable();
 		virtual const char* FinalReport();
+	private:
+		MemoryLeakWarning memLeakWarning;
   };
 
 #endif

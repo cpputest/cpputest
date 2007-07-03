@@ -37,20 +37,30 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+class MemoryLeakWarningData;
 
 class MemoryLeakWarning
   {
   public:
-    static void Enable();
-    static const char*  FinalReport();
-    static void CheckPointUsage();
-    static void IgnoreLeaks(int n);
-    static bool UsageIsNotBalanced();
-    static const char* Message();
+  	MemoryLeakWarning () {_latest = this; CreateData();}
+    ~MemoryLeakWarning () {DestroyData();}
+    
+    void Enable();
+    const char*  FinalReport();
+    void CheckPointUsage();
+    void ExpectLeaks(int n);
+    bool UsageIsNotBalanced();
+    const char* Message();
 
+	static MemoryLeakWarning* _latest;
+	
   private:
+  	MemoryLeakWarningData* _impl;
+  	void CreateData();
+  	void DestroyData();
+  	
   };
 
-#define IGNORE_N_LEAKS(n) MemoryLeakWarning::IgnoreLeaks(n);
+#define EXPECT_N_LEAKS(n) MemoryLeakWarning::_latest->ExpectLeaks(n);
 
 #endif
