@@ -26,42 +26,112 @@
  */
 
 #include "TestHarness.h"
+#include "MockTestOutput.h"
+#include "MemoryLeakWarningPlugin.h"
 
 EXPORT_TEST_GROUP(MemoryLeakWarningTest);
 
 namespace
 {
-  char* arrayToLeak1;
-  char* arrayToLeak2;
-  long* nonArrayToLeak;
-  void SetUp()
-  {
-  }
-  void TearDown()
-  {
-  }
+  void stub()
+  {}
 }
 
-//tests run backwards and this one cares because it has to cleanup after the 
-//leaky tests
-TEST(MemoryLeakWarningTest, CleanUpLeaks)
+class GenericTest : public Utest
+  {
+  public:
+  	void (*_testFunction)();
+    GenericTest()
+        :Utest("Generic", "Generic", "Generic", 1, stub, stub)
+    {
+    	_testFunction = 0;
+    }
+    void testBody()
+    {
+    	_testFunction();
+    }
+};
+
+namespace
 {
-    IGNORE_N_LEAKS(-3);
-    delete [] arrayToLeak1;
-    delete [] arrayToLeak2;
-    delete nonArrayToLeak;
+	char* arrayToLeak1;
+	char* arrayToLeak2;
+	long* nonArrayToLeak;
+  
+	TestRegistry* myRegistry;
+	GenericTest* genTest;
+	MockTestOutput* output;
+	TestResult *result;
+	MemoryLeakWarningPlugin* memPlugin;
+	MemoryLeakWarning* prevMemWarning;
+	void SetUp()
+	{
+		output = new MockTestOutput();
+    	result = new TestResult(*output);
+  		genTest = new GenericTest();
+  		myRegistry = new TestRegistry();
+  		prevMemWarning = MemoryLeakWarning::_latest;
+  		memPlugin = new MemoryLeakWarningPlugin;
+  		myRegistry->installPlugin(memPlugin);
+  		myRegistry->setCurrentRegistry(myRegistry);
+		myRegistry->addTest(genTest);
+		
+		arrayToLeak1 = 0;
+		arrayToLeak2 = 0;
+		nonArrayToLeak = 0;
+	}
+	void TearDown()
+	{
+		myRegistry->setCurrentRegistry(0);
+  		delete myRegistry;
+  		delete memPlugin;
+  		delete result;
+    	delete output;
+  		delete genTest;
+  		MemoryLeakWarning::_latest = prevMemWarning;
+  		
+  		if (arrayToLeak1) delete [] arrayToLeak1;
+  		if (arrayToLeak2) delete [] arrayToLeak2;
+  		if (nonArrayToLeak) delete nonArrayToLeak;
+	}
+}
+
+void _testExpectOneLeak()
+{
+    EXPECT_N_LEAKS(1);
+    arrayToLeak1 = new char[100];
 }
 
 TEST(MemoryLeakWarningTest, Ignore1)
 {
-    IGNORE_N_LEAKS(1);
-    arrayToLeak1 = new char[100];
+	genTest->_testFunction = _testExpectOneLeak;
+	myRegistry->runAllTests(*result, output); 
+	LONGS_EQUAL(0, result->getFailureCount());
 }
 
-TEST(MemoryLeakWarningTest, Ignore2)
+void _testTwoLeaks()
 {
-    IGNORE_N_LEAKS(2);
+    arrayToLeak2 = new char[10];
+    nonArrayToLeak = new long;
+}	
+
+TEST(MemoryLeakWarningTest, TwoLeaks)
+{
+	genTest->_testFunction = _testTwoLeaks;
+	myRegistry->runAllTests(*result, output);
+	LONGS_EQUAL(1, result->getFailureCount());
+}
+
+void _testIgnore2()
+{
+    EXPECT_N_LEAKS(2);
     arrayToLeak2 = new char[10];
     nonArrayToLeak = new long;
 }
 
+TEST(MemoryLeakWarningTest, Ignore2)
+{
+	genTest->_testFunction = _testIgnore2;
+	myRegistry->runAllTests(*result, output); 
+	LONGS_EQUAL(0, result->getFailureCount());
+}
