@@ -27,3 +27,4 @@
 
 IMPORT_TEST_GROUP(Printer);
 IMPORT_TEST_GROUP(CircularBuffer);
+IMPORT_TEST_GROUP(HelloWorld);

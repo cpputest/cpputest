@@ -3,6 +3,8 @@ OBJS =\
  CircularBuffer.o CircularBufferTest.o\
  PrinterTest.o\
  Printer.o\
+ hello.o\
+ HelloTest.o
 
 INCLUDE =\
  -I../include\
