@@ -53,6 +53,28 @@ Customize CHECK_EQUAL to work with your types that support operator==()
 
         SimpleString StringFrom (const yourType&)
 
+Building default checks with TestPlugin
+
+    * CppUTest can support extra checking functionality by inserting TestPlugins
+    * TestPlugin is derived from the TestPlugin class and can be inserted in the
+      TestRegistry via the installPlugin method.
+    * All TestPlugins are called before and after running all tests and before and
+      after running a single test (like Setup and Teardown). TestPlugins are typically
+      inserted in the main.
+    * TestPlugins can be used for, for example, system stability and resource handling
+      like files, memory or network connection clean-up.
+    * In CppUTest, the memory leak detection is done via a default enabled TestPlugin
+
+Example of a main with a TestPlugin:
+
+int main(int ac, char** av)
+{
+   LogPlugin logPlugin;
+   TestRegistry::getCurrentRegistry()->installPlugin(&logPlugin);
+   int result = CommandLineTestRunner::RunAllTests(ac, av);
+   TestRegistry::getCurrentRegistry()->resetPlugins();
+   return result;
+}
 
 Memory leak detection
 
