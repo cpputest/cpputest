@@ -84,11 +84,11 @@ class Utest
       return currentTest_;
     }
 
-    virtual bool assertTrue(bool condition, const char* conditionString, int lineNumber);
-    virtual bool assertCstrEqual(const char* expected, const char* actual, int lineNumber);
-    virtual bool assertLongsEqual(long expected, long actual, int lineNumber);
-    virtual bool assertDoublesEqual(double expected, double actual, double threshold, int lineNumber);
-    virtual void fail(const char* text, int lineNumber);
+    virtual bool assertTrue(bool condition, const char* conditionString, const char* fileName, int lineNumber);
+    virtual bool assertCstrEqual(const char* expected, const char* actual, const char* fileName, int lineNumber);
+    virtual bool assertLongsEqual(long expected, long actual, const char* fileName, int lineNumber);
+    virtual bool assertDoublesEqual(double expected, double actual, double threshold, const char* fileName, int lineNumber);
+    virtual void fail(const char* text, const char* fileName, int lineNumber);
 
   protected:
 
@@ -163,17 +163,25 @@ class IgnoredTest : public Utest
   int* p##testGroup = &externTestGroup##testGroup
 
 //Check any boolean condition
+
+#define CHECK_LOCATION(condition, file, line)\
+  {if (!Utest::getCurrent()->assertTrue(condition, #condition, file, line)) return;}
+
 #define CHECK(condition)\
-  {if (!Utest::getCurrent()->assertTrue(condition, #condition, __LINE__)) return;}
+  CHECK_LOCATION(condition, __FILE__, __LINE__)
 
 
 
 //This check needs the equality operator, and a StringFrom(YourType) function
+
 #define CHECK_EQUAL(expected,actual)\
+  CHECK_EQUAL_LOCATION(expected, actual, __FILE__, __LINE__)
+
+#define CHECK_EQUAL_LOCATION(expected,actual, file, line)\
   if ((expected) != (actual))\
   {\
 	 Utest::getTestResult()->countCheck();\
-  	 EqualsFailure _f(Utest::getCurrent(), __LINE__, StringFrom(expected), StringFrom(actual)); \
+  	 EqualsFailure _f(Utest::getCurrent(), file, line, StringFrom(expected), StringFrom(actual)); \
      Utest::getTestResult()->addFailure(_f);\
      return;\
   }\
@@ -183,24 +191,39 @@ class IgnoredTest : public Utest
 //This check checks for char* string equality using strcmp.
 //This makes up for the fact that CHECK_EQUAL only compares the pointers to char*'s
 #define STRCMP_EQUAL(expected,actual)\
-  {if (!Utest::getCurrent()->assertCstrEqual(expected, actual, __LINE__)) return;}
+  STRCMP_EQUAL_LOCATION(expected, actual, __FILE__, __LINE__)
+   
+#define STRCMP_EQUAL_LOCATION(expected,actual, file, line)\
+  {if (!Utest::getCurrent()->assertCstrEqual(expected, actual, file, line)) return;}
 
 //Check two long integers for equality
 #define LONGS_EQUAL(expected,actual)\
-  { if (!Utest::getCurrent()->assertLongsEqual(expected, actual, __LINE__)) return; }
+  LONGS_EQUAL_LOCATION(expected,actual,__FILE__, __LINE__)
+  
+#define LONGS_EQUAL_LOCATION(expected,actual,file,line)\
+  { if (!Utest::getCurrent()->assertLongsEqual(expected, actual,  file, line)) return; }
 
 //Check two doubles for equality within a tolerance threshold
 #define DOUBLES_EQUAL(expected,actual,threshold)\
-  { if (!Utest::getCurrent()->assertDoublesEqual(expected, actual, threshold, __LINE__)) return; }
+  DOUBLES_EQUAL_LOCATION(expected,actual,threshold,__FILE__,__LINE__)
+  
+#define DOUBLES_EQUAL_LOCATION(expected,actual,threshold,file,line)\
+  { if (!Utest::getCurrent()->assertDoublesEqual(expected, actual, threshold,  file, line)) return; }
 
 //Fail if you get to this macro
 //The macro FAIL may already be taken, so allow FAIL_TEST too
 #ifndef FAIL
 #define FAIL(text)\
-  { Utest::getCurrent()->fail(text, __LINE__); return; }
+  FAIL_LOCATION(text, __FILE__,__LINE__)
+  
+#define FAIL_LOCATION(text, file, line)\
+  { Utest::getCurrent()->fail(text,  file, line); return; }
 #endif
 
-#define FAIL_TEST(text)\
-  { Utest::getCurrent()->fail(text, __LINE__); return; }
+#define FAIL_TEST(text, file, line)\
+  FAIL_TEST_LOCATION(text, __FILE__,__LINE__)
+  
+#define FAIL_TEST_LOCATION(text, file,line)\
+  { Utest::getCurrent()->fail(text, file, line); return; }
 
 #endif
