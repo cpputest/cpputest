@@ -30,9 +30,9 @@
 #include "TestOutput.h"
 
 
-Failure::Failure(Utest* test, long lineNumber, const SimpleString& theMessage)
+Failure::Failure(Utest* test, const char* fileName, long lineNumber, const SimpleString& theMessage)
     : testName (test->getFormattedName())
-    , fileName (test->getFile())
+    , fileName (fileName)
     , lineNumber (lineNumber)
     , message (theMessage)
 {}
@@ -45,9 +45,9 @@ Failure::Failure(Utest* test, const SimpleString& theMessage)
     , message (theMessage)
 {}
 
-Failure::Failure(Utest* test, long lineNum)
+Failure::Failure(Utest* test, const char* fileName, long lineNum)
     : testName (test->getFormattedName())
-    , fileName (test->getFile())
+    , fileName (fileName)
     , lineNumber (lineNum)
     , message("no message")
 {}

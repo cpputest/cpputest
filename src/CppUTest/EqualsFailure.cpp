@@ -31,10 +31,10 @@
 #include <string.h> // for strlen()
 #include <stdio.h>
 
-EqualsFailure::EqualsFailure(Utest* test, long lineNumber,
+EqualsFailure::EqualsFailure(Utest* test, const char* fileName, long lineNumber,
                              const SimpleString& expected,
                              const SimpleString& actual)
-    : Failure(test, lineNumber)
+    : Failure(test, fileName, lineNumber)
 {
   const char *format = "\texpected <%s>\n\tbut was  <%s>";
 
