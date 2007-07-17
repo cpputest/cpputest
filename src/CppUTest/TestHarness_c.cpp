@@ -36,15 +36,16 @@
 extern "C" {
 	
 	#include "stdlib.h"
-	
+	#include "TestHarness_c.h"	
+
 	void  CHECK_EQUAL_C_INT(int expected, int actual)
 	{
 			CHECK_EQUAL((long)expected, (long)actual);
 	}
 	
-	void  CHECK_EQUAL_C_REAL(double expected, double actual)
+	void  CHECK_EQUAL_C_REAL(double expected, double actual, double threshold)
 	{
-		CHECK_EQUAL(expected, actual);
+		DOUBLES_EQUAL(expected, actual, threshold);
 	}
 
 	void  CHECK_EQUAL_C_CHAR(char expected, char actual)
