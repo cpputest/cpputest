@@ -35,6 +35,7 @@ EXPORT_TEST_GROUP(Failure);
 namespace
   {
   const int failLineNumber = 2;
+  const char* failFileName = "fail.cpp";
 }
 
 namespace
@@ -57,12 +58,12 @@ namespace
 
 TEST(Failure, CreateFailure)
 {
-  Failure f1(test, failLineNumber, "the failure message");
+  Failure f1(test, failFileName, failLineNumber, "the failure message");
   Failure f2(test, "the failure message");
-  Failure f3(test, failLineNumber);
+  Failure f3(test, failFileName, failLineNumber);
 }
 
 TEST(Failure, CreatePassingEqualsFailure)
 {
-  EqualsFailure f(test, failLineNumber, "expected", "actual");
+  EqualsFailure f(test, failFileName, failLineNumber, "expected", "actual");
 }
