@@ -48,9 +48,9 @@ class Failure
   {
 
   public:
-    Failure(Utest*, long lineNumber, const SimpleString& theMessage);
+    Failure(Utest*, const char* fileName, long lineNumber, const SimpleString& theMessage);
     Failure(Utest*, const SimpleString& theMessage);
-    Failure(Utest*, long lineNumber);
+    Failure(Utest*, const char* fileName, long lineNumber);
     virtual ~Failure();
 
     virtual void Print(TestOutput&) const;

@@ -49,7 +49,7 @@ class EqualsFailure : public Failure
 
   public:
 
-    EqualsFailure(Utest*, long lineNumber,
+    EqualsFailure(Utest*, const char* fileName, long lineNumber,
                   const SimpleString& expected,
                   const SimpleString& actual);
 
