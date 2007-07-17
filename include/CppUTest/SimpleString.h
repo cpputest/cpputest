@@ -66,6 +66,7 @@ class SimpleString
 
 
 SimpleString StringFrom (bool value);
+SimpleString StringFrom (char value);
 SimpleString StringFrom (const char *value);
 SimpleString StringFrom (long value);
 SimpleString StringFrom (double value);
