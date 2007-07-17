@@ -151,6 +151,14 @@ SimpleString StringFrom (double value)
   return SimpleString(buffer);
 }
 
+SimpleString StringFrom (char value)
+{
+  char buffer [10];
+  sprintf (buffer, "%c", value);
+
+  return SimpleString(buffer);
+}
+
 SimpleString StringFrom (const SimpleString& value)
 {
   return SimpleString(value);
