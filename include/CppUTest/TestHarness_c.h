@@ -38,13 +38,31 @@
 #ifndef D_TestHarness_c_h
 #define D_TestHarness_c_h
 
+#define CHECK_EQUAL_C_INT(expected,actual) \
+  CHECK_EQUAL_C_INT_LOCATION(expected,actual,__FILE__,__LINE__)
+
+#define CHECK_EQUAL_C_REAL(expected,actual,threshold) \
+  CHECK_EQUAL_C_REAL_LOCATION(expected,actual,threshold,__FILE__,__LINE__)
+
+#define CHECK_EQUAL_C_CHAR(expected,actual) \
+  CHECK_EQUAL_C_CHAR_LOCATION(expected,actual,__FILE__,__LINE__)
+
+#define CHECK_EQUAL_C_STRING(expected,actual) \
+  CHECK_EQUAL_C_STRING_LOCATION(expected,actual,__FILE__,__LINE__)
+
+#define FAIL_TEXT_C(text) \
+  FAIL_TEXT_C_LOCATION(text,__FILE__,__LINE__)
+
+#define FAIL_C() \
+  FAIL_C_LOCATION(__FILE__,__LINE__)
+
 /* CHECKS that can be used from C code */
-extern void  CHECK_EQUAL_C_INT(int expected, int actual);
-extern void  CHECK_EQUAL_C_REAL(double expected, double actual, double threshold);
-extern void  CHECK_EQUAL_C_CHAR(char expected, char actual);
-extern void  CHECK_EQUAL_C_STRING(char* expected, char* actual);
-extern void  FAIL_TEXT_C(char* text);
-extern void  FAIL_C();
+extern void  CHECK_EQUAL_C_INT_LOCATION(int expected, int actual, const char* fileName, int lineNumber);
+extern void  CHECK_EQUAL_C_REAL_LOCATION(double expected, double actual, double threshold, const char* fileName, int lineNumber);
+extern void  CHECK_EQUAL_C_CHAR_LOCATION(char expected, char actual, const char* fileName, int lineNumber);
+extern void  CHECK_EQUAL_C_STRING_LOCATION(char* expected, char* actual, const char* fileName, int lineNumber);
+extern void  FAIL_TEXT_C_LOCATION(char* text, const char* fileName, int lineNumber);
+extern void  FAIL_C_LOCATION(const char* fileName, int lineNumber);
 
 /* Memory allocation routines that use new, so the memory leak checker works */
 
