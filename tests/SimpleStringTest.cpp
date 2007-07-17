@@ -143,3 +143,9 @@ TEST(SimpleString, Contains)
   CHECK(!empty.contains(s));
 }
 
+TEST(SimpleString, Characters)
+{
+  SimpleString s(StringFrom('a'));
+  SimpleString s2(StringFrom('a'));
+  CHECK(s == s2);
+}
