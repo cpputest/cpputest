@@ -28,17 +28,53 @@
 #include "Platform.h"
 #include "TestHarness.h"
 #include "MockTestOutput.h"
+#include "GenericTest.h"
 
 EXPORT_TEST_GROUP(Utest);
 
 namespace
   {
-  void stub()
-  {}
-  const int testLineNumber = 1;
+  GenericTestFixture* fixture;
+
+  void SetUp()
+  {
+	fixture = new GenericTestFixture();
+  }
+  void TearDown()
+  {
+  	delete fixture;
+  };
+
+
+};
+
+static void _failMethod()
+{
+	FAIL("This test fails");
 }
 
-void callAllMacrosThatPass()
+TEST(Utest, FailurePrintsSomething)
+{
+  fixture->setTestFunction(_failMethod);
+  fixture->runAllTests(); 
+  LONGS_EQUAL(1, fixture->getFailureCount());
+  fixture->assertPrintContains("This test fails");
+}
+
+static void _passMethod()
+{
+	CHECK(true);
+}
+
+TEST(Utest, SuccessPrintsNothing)
+{
+  fixture->setTestFunction(_passMethod);
+  fixture->runAllTests(); 
+  LONGS_EQUAL(0, fixture->getFailureCount());
+  fixture->assertPrintContains("");
+}
+
+TEST(Utest, allMacros)
 {
   CHECK(0 == 0);
   LONGS_EQUAL(1,1);
@@ -47,139 +83,29 @@ void callAllMacrosThatPass()
   DOUBLES_EQUAL(1.0, 1.0, .01);
 }
 
-void callMacrosThatFail()
-{
- 	FAIL("This fails");
-}
-
-class PassingTestImplementation : public Utest
-  {
-  public:
-    PassingTestImplementation()
-        :Utest("Group", "Name", "File", testLineNumber, stub, stub)
-    {}
-    void testBody()
-    {}
-    ;
-  };
-
-class FailingTestImplementation : public Utest
-  {
-  public:
-    FailingTestImplementation()
-        :Utest("Group", "Name", "File", testLineNumber, stub, stub)
-    {}
-    void testBody()
-    {
-      FAIL("This test fails");
-    };
-  };
-
-class ChecksInSetupTest : public Utest
-  {
-  public:
-    ChecksInSetupTest(void (*setUp)())
-        :Utest("Group", "Name", "File", testLineNumber, setUp, stub)
-    {}
-
-    virtual void setUp()
-    {
-  		CHECK(this == Utest::getCurrent());
-  		Utest::setUp();
-    }
-    virtual void tearDown()
-    {
-    	CHECK(this == Utest::getCurrent());
-    	Utest::tearDown();
-    }
-
-    void testBody()
-    {
-    };
-  };
-
-namespace
-  {
-  Utest* passingTest;
-  Utest* failingTest;
-  MockTestOutput* output;
-
-  void SetUp()
-  {
-    passingTest = new PassingTestImplementation();
-    failingTest = new FailingTestImplementation();
-    output = new MockTestOutput();
-        
-  }
-  void TearDown()
-  {
-    delete passingTest;
-    delete failingTest;
-    delete output;
-  };
-
-
-  void assertPrintContains(MockTestOutput* output, SimpleString& contains)
-  {
-    if (output->getOutput().contains(contains))
-      return;
-    SimpleString message("\tActual <");
-    message += output->getOutput().asCharString();
-    message += ">\n";
-    message += "\tdid not contain <";
-    message += contains.asCharString();
-    message += ">\n";
-
-    FAIL(message.asCharString());
-
-  }
-};
-
-
-TEST(Utest, FailurePrintsSomething)
-{
-  TestResult result(*output);
-  failingTest->run(result);
-  SimpleString contains("This test fails");
-  assertPrintContains(output, contains);
-}
-
-TEST(Utest, SuccessPrintsNothing)
-{
-  TestResult result(*output);
-  passingTest->run(result);
-  SimpleString expected = "";
-  CHECK_EQUAL(expected, output->getOutput());
-}
-
-TEST(Utest, OutOfMacroHelper)
-{
-  callAllMacrosThatPass();
-}
-
 TEST(Utest, AssertsActLikeStatements)
 {
-  if (output != 0)
+  if (fixture != 0)
     CHECK(true)
   else
     CHECK(false)
 
-  if (output != 0)
+  if (fixture != 0)
     CHECK_EQUAL(true, true)
   else
     CHECK_EQUAL(false, false)
 
-  if (output != 0)
+  if (fixture != 0)
     STRCMP_EQUAL("", "")
     else
       STRCMP_EQUAL("", " ")
 
-  if (output != 0)
+  if (fixture != 0)
     LONGS_EQUAL(1, 1)
     else
       LONGS_EQUAL(1, 0)
 
-  if (output != 0)
+  if (fixture != 0)
     DOUBLES_EQUAL(1, 1, 0.01)
     else
       DOUBLES_EQUAL(1, 0, 0.01)
@@ -209,15 +135,18 @@ IGNORE_TEST(Utest, IgnoreTestSupportsAllMacros)
 
 TEST(Utest, MacrosUsedInSetup)
 {
-	TestRegistry myRegistry;
-	MockTestOutput output;
-  TestResult result(output);
- 	ChecksInSetupTest callsMacrosInSetupTest(callMacrosThatFail);
+	delete fixture->genTest;
+	fixture->genTest = new GenericTest(_failMethod);
+ 	fixture->setTestFunction(_passMethod);
+ 	fixture->runAllTests(); 
+	LONGS_EQUAL(1, fixture->getFailureCount());
+}
 
-  myRegistry.setCurrentRegistry(&myRegistry);
-	myRegistry.addTest(&callsMacrosInSetupTest);
-	myRegistry.runAllTests(result, &output);
- 	myRegistry.setCurrentRegistry(0);
- 	LONGS_EQUAL(1, result.getFailureCount());
- 	
+TEST(Utest, MacrosUsedInTearDown)
+{
+	delete fixture->genTest;
+	fixture->genTest = new GenericTest(stub, _failMethod);
+ 	fixture->setTestFunction(_passMethod);
+ 	fixture->runAllTests(); 
+	LONGS_EQUAL(1, fixture->getFailureCount());
 }

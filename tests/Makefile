@@ -18,7 +18,8 @@ OBJS = \
  TestInstallerTest.o \
  TestOutputTest.o \
  TestRegistryTest.o \
- UtestTest.o 
+ UtestTest.o \
+ TestHarness_cTest.o
 
 INCLUDE =\
  -I$(CPP_U_TEST)/include/CppUTest\

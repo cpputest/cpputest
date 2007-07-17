@@ -28,29 +28,9 @@
 #include "TestHarness.h"
 #include "MockTestOutput.h"
 #include "MemoryLeakWarningPlugin.h"
+#include "GenericTest.h"
 
 EXPORT_TEST_GROUP(MemoryLeakWarningTest);
-
-namespace
-{
-  void stub()
-  {}
-}
-
-class GenericTest : public Utest
-  {
-  public:
-  	void (*_testFunction)();
-    GenericTest()
-        :Utest("Generic", "Generic", "Generic", 1, stub, stub)
-    {
-    	_testFunction = 0;
-    }
-    void testBody()
-    {
-    	_testFunction();
-    }
-};
 
 namespace
 {
@@ -58,23 +38,16 @@ namespace
 	char* arrayToLeak2;
 	long* nonArrayToLeak;
   
-	TestRegistry* myRegistry;
-	GenericTest* genTest;
-	MockTestOutput* output;
-	TestResult *result;
 	MemoryLeakWarningPlugin* memPlugin;
 	MemoryLeakWarning* prevMemWarning;
+
+	GenericTestFixture* fixture;
 	void SetUp()
 	{
-		output = new MockTestOutput();
-    	result = new TestResult(*output);
-  		genTest = new GenericTest();
-  		myRegistry = new TestRegistry();
+		fixture = new GenericTestFixture();
   		prevMemWarning = MemoryLeakWarning::_latest;
   		memPlugin = new MemoryLeakWarningPlugin;
-  		myRegistry->installPlugin(memPlugin);
-  		myRegistry->setCurrentRegistry(myRegistry);
-		myRegistry->addTest(genTest);
+  		fixture->registry->installPlugin(memPlugin);
 		
 		arrayToLeak1 = 0;
 		arrayToLeak2 = 0;
@@ -82,12 +55,8 @@ namespace
 	}
 	void TearDown()
 	{
-		myRegistry->setCurrentRegistry(0);
-  		delete myRegistry;
+		delete fixture;
   		delete memPlugin;
-  		delete result;
-    	delete output;
-  		delete genTest;
   		MemoryLeakWarning::_latest = prevMemWarning;
   		
   		if (arrayToLeak1) delete [] arrayToLeak1;
@@ -104,9 +73,9 @@ void _testExpectOneLeak()
 
 TEST(MemoryLeakWarningTest, Ignore1)
 {
-	genTest->_testFunction = _testExpectOneLeak;
-	myRegistry->runAllTests(*result, output); 
-	LONGS_EQUAL(0, result->getFailureCount());
+	fixture->setTestFunction(_testExpectOneLeak);
+	fixture->runAllTests(); 
+	LONGS_EQUAL(0, fixture->getFailureCount());
 }
 
 void _testTwoLeaks()
@@ -117,9 +86,9 @@ void _testTwoLeaks()
 
 TEST(MemoryLeakWarningTest, TwoLeaks)
 {
-	genTest->_testFunction = _testTwoLeaks;
-	myRegistry->runAllTests(*result, output);
-	LONGS_EQUAL(1, result->getFailureCount());
+	fixture->setTestFunction(_testTwoLeaks);
+	fixture->runAllTests(); 
+	LONGS_EQUAL(1, fixture->getFailureCount());
 }
 
 void _testIgnore2()
@@ -131,7 +100,7 @@ void _testIgnore2()
 
 TEST(MemoryLeakWarningTest, Ignore2)
 {
-	genTest->_testFunction = _testIgnore2;
-	myRegistry->runAllTests(*result, output); 
-	LONGS_EQUAL(0, result->getFailureCount());
+	fixture->setTestFunction(_testIgnore2);
+	fixture->runAllTests(); 
+	LONGS_EQUAL(0, fixture->getFailureCount());
 }
