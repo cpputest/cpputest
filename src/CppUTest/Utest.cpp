@@ -187,7 +187,7 @@ bool Utest::shouldRun(const SimpleString& groupFilter, const SimpleString& nameF
     return false;
   }
 
-bool Utest::assertTrue(bool condition, const char* conditionString, int lineNumber)
+bool Utest::assertTrue(bool condition, const char* conditionString, const char* fileName, int lineNumber)
 {
   testResult_->countCheck();
   if (!(condition))
@@ -195,52 +195,52 @@ bool Utest::assertTrue(bool condition, const char* conditionString, int lineNumb
       SimpleString message("CHECK(");
       message += conditionString;
       message += ") failed";
-      Failure _f(this, lineNumber, message);
+      Failure _f(this, fileName, lineNumber, message);
       testResult_->addFailure (_f);
       return false;
     }
   return true;
 }
 
-bool Utest::assertCstrEqual(const char* expected, const char* actual, int lineNumber)
+bool Utest::assertCstrEqual(const char* expected, const char* actual, const char* fileName, int lineNumber)
 {
   testResult_->countCheck();
   if (strcmp(expected, actual) != 0)
     {
-      EqualsFailure _f(this, lineNumber, StringFrom(expected), StringFrom(actual));
+      EqualsFailure _f(this, fileName, lineNumber, StringFrom(expected), StringFrom(actual));
       testResult_->addFailure (_f);
       return false;
     }
   return true;
 }
 
-bool Utest::assertLongsEqual(long expected, long actual, int lineNumber)
+bool Utest::assertLongsEqual(long expected, long actual, const char* fileName, int lineNumber)
 {
   testResult_->countCheck();
   if (expected != actual)
     {
-      EqualsFailure _f(this, lineNumber, StringFrom(expected), StringFrom(actual));
+      EqualsFailure _f(this, fileName, lineNumber, StringFrom(expected), StringFrom(actual));
       testResult_->addFailure (_f);
       return false;
     }
   return true;
 }
 
-bool Utest::assertDoublesEqual(double expected, double actual, double threshold, int lineNumber)
+bool Utest::assertDoublesEqual(double expected, double actual, double threshold, const char* fileName, int lineNumber)
 {
   testResult_->countCheck();
   if (fabs(expected-actual) > threshold)
     {
-      EqualsFailure _f(this, lineNumber, StringFrom(expected), StringFrom(actual));
+      EqualsFailure _f(this, fileName, lineNumber, StringFrom(expected), StringFrom(actual));
       testResult_->addFailure (_f);
       return false;
     }
   return true;
 }
 
-void Utest::fail(const char *text, int lineNumber)
+void Utest::fail(const char *text, const char* fileName, int lineNumber)
 {
-  Failure _f(this, lineNumber, text);
+  Failure _f(this, fileName, lineNumber, text);
   testResult_->addFailure (_f);
 }
 
