@@ -40,7 +40,7 @@
 
 /* CHECKS that can be used from C code */
 extern void  CHECK_EQUAL_C_INT(int expected, int actual);
-extern void  CHECK_EQUAL_C_REAL(double expected, double actual);
+extern void  CHECK_EQUAL_C_REAL(double expected, double actual, double threshold);
 extern void  CHECK_EQUAL_C_CHAR(char expected, char actual);
 extern void  CHECK_EQUAL_C_STRING(char* expected, char* actual);
 extern void  FAIL_TEXT_C(char* text);
