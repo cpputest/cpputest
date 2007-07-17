@@ -49,18 +49,6 @@ namespace
 	}
 }
 
-void _failMethod()
-{
-	FAIL_C();
-}
-
-TEST(TestHarness_c, fail)
-{
-	fixture->setTestFunction(_failMethod);
-	fixture->runAllTests(); 
-	LONGS_EQUAL(1, fixture->getFailureCount());
-}
-
 void _failIntMethod()
 {
 	CHECK_EQUAL_C_INT(1, 2);
@@ -72,6 +60,7 @@ TEST(TestHarness_c, checkInt)
 	fixture->setTestFunction(_failIntMethod);
 	fixture->runAllTests();
 	fixture->assertPrintContains("expected <1>\n	but was  <2>");
+	fixture->assertPrintContains("TestHarness_cTest.cpp");
 }
 
 void _failRealMethod()
@@ -85,6 +74,7 @@ TEST(TestHarness_c, checkReal)
 	fixture->setTestFunction(_failRealMethod);
 	fixture->runAllTests();
 	fixture->assertPrintContains("expected <1.000000>\n	but was  <2.000000>");
+	fixture->assertPrintContains("TestHarness_cTest.cpp");
 }
 
 void _failCharMethod()
@@ -92,10 +82,52 @@ void _failCharMethod()
 	CHECK_EQUAL_C_CHAR('a', 'c');
 }
 
-IGNORE_TEST(TestHarness_c, checkChar)
+TEST(TestHarness_c, checkChar)
 {
 	CHECK_EQUAL_C_CHAR('a', 'a');
 	fixture->setTestFunction(_failCharMethod);
 	fixture->runAllTests();
-	fixture->assertPrintContains("expected <'a'>\n	but was  <'b'>");
+	fixture->assertPrintContains("expected <a>\n	but was  <c>");
+	fixture->assertPrintContains("TestHarness_cTest.cpp");
 }
+
+void _failStringMethod()
+{
+	CHECK_EQUAL_C_STRING("Hello", "World");
+}
+
+TEST(TestHarness_c, checkString)
+{
+	CHECK_EQUAL_C_STRING("Hello", "Hello");
+	fixture->setTestFunction(_failStringMethod);
+	fixture->runAllTests();
+	fixture->assertPrintContains("expected <Hello>\n	but was  <World>");
+	fixture->assertPrintContains("TestHarness_cTest.cpp");
+}
+
+void _failTextMethod()
+{
+	FAIL_TEXT_C("Booo");
+}
+
+TEST(TestHarness_c, checkFailText)
+{
+	fixture->setTestFunction(_failTextMethod);
+	fixture->runAllTests();
+	fixture->assertPrintContains("Booo");
+	fixture->assertPrintContains("TestHarness_cTest.cpp");
+}
+
+void _failMethod()
+{
+	FAIL_C();
+}
+
+TEST(TestHarness_c, checkFail)
+{
+	fixture->setTestFunction(_failMethod);
+	fixture->runAllTests();
+	fixture->assertPrintContains("TestHarness_cTest.cpp");
+	LONGS_EQUAL(1, fixture->getFailureCount());
+}
+
