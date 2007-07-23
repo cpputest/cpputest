@@ -18,17 +18,20 @@ Test Macros
 
     * TEST(group, name) - define a test
     * IGNORE_TEST(group, name) - turn off the execution of a test
-    * IMPORT_TEST_GROUP(group) - Link in a test group from another library to 
-      the test main (this goes in main, a header file included by main, or a 
-      cpp file linked to main
+    * TEST_GROUP(group) - Declare a test group to which certain tests belong.
+                          This will also create thelink needed from another library.
+    * TEST_GROUP_BASE(group, base) - Same as TEST_GROUP, just use a different 
+                          base class than Utest
+    * TEST_SETUP() - Declare a void setup method in a TEST_GROUP
+    * TEST_TEARDOWN() - Declare a void setup method in a TEST_GROUP
     * EXPORT_TEST_GROUP(group) - Export the name of a test group so it can 
       be linked in from a library
 
 
 Set up and tear down support
 
-    * Each test file defines SetUp and TearDown functions
-    * SetUp is called prior to each TEST body and TearDown is called after 
+    * Each TEST_GROUP may contain setup or teardown methods
+    * Setup is called prior to each TEST body and Teardown is called after 
       the test body
 
 
@@ -121,17 +124,15 @@ Example Test
 #include "UnitTestHarness/TestHarness.h"
 #include "ClassName.h"
 
-EXPORT_TEST_GROUP(ClassName)
-
-namespace 
+TEST_GROUP(ClassName)
 {
   ClassName* className;
 
-  void SetUp()
+  void Setup()
   {
     className = new ClassName();
   }
-  void TearDown()
+  void Teardown()
   {
     delete className;
   }
@@ -147,8 +148,3 @@ TEST(ClassName, Create)
   STRCMP_EQUAL("hello", "hello");
   FAIL("The prior tests pass, but this one doesn't");
 }
-
-
-SetUp and TearDown are located within the unnamed namespace. This avoids 
-global name pollution as SetUp and TearDown will only be visable within
-the current file.
