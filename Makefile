@@ -20,6 +20,7 @@ clean:
 	$(MAKE) -C src/CppUTest clean 
 	$(MAKE) -C tests clean 
 	$(MAKE) -C lib clean
+	$(MAKE) -C examples clean
 	
 depend:
 	$(MAKE) -C src/Platforms/Gcc depend
