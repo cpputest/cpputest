@@ -34,20 +34,18 @@ extern "C" {
 #include "MockTestOutput.h"
 #include "GenericTest.h"
 
-EXPORT_TEST_GROUP(TestHarness_c);
-
-namespace
+TEST_GROUP(TestHarness_c)
 {
 	GenericTestFixture* fixture;
-	void SetUp()
+	TEST_SETUP()
 	{
 		fixture = new GenericTestFixture();
 	}
-	void TearDown()
+	TEST_TEARDOWN()
 	{
 		delete fixture;
 	}
-}
+};
 
 void _failIntMethod()
 {

@@ -29,20 +29,15 @@
 #include "TestHarness.h"
 #include "SimpleStringExtensions.h"
 
-EXPORT_TEST_GROUP(SimpleStringExtensions);
 
-namespace
-  {
-  void SetUp()
-  {}
-  void TearDown()
-  {}
-  ;
+
+TEST_GROUP(SimpleStringExtensions)
+{
 };
 
 using namespace std;
 
-TEST(SimpleString, fromStdString)
+TEST(SimpleStringExtensions, fromStdString)
 {
   string s("hello");
   SimpleString s1(StringFrom(s));

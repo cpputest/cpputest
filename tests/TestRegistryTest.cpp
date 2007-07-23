@@ -29,8 +29,6 @@
 #include "TestHarness.h"
 #include "MockTestOutput.h"
 
-EXPORT_TEST_GROUP(TestRegistry);
-
 namespace
   {
   void stub()
@@ -41,7 +39,7 @@ class MockTest : public Utest
   {
   public:
     MockTest()
-        :Utest("Group", "Name", "File", testLineNumber, stub, stub), hasRun_(false)
+        :Utest("Group", "Name", "File", testLineNumber), hasRun_(false)
     {}
     void testBody()
     {
@@ -51,14 +49,14 @@ class MockTest : public Utest
     bool hasRun_;
 	};
 	
-namespace
+TEST_GROUP(TestRegistry)
 {
 	TestRegistry* myRegistry;
 	MockTestOutput* output;
 	MockTest* test1;
 	MockTest* test2;
   TestResult *result;
-  void SetUp() 
+  TEST_SETUP() 
   {
     output = new MockTestOutput();
     result = new TestResult(*output);
@@ -68,7 +66,7 @@ namespace
   	myRegistry->setCurrentRegistry(myRegistry);
   }
   
-  void TearDown()
+  TEST_TEARDOWN()
   {
   	myRegistry->setCurrentRegistry(0);
   	delete myRegistry;

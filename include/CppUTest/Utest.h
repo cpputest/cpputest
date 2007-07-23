@@ -51,13 +51,11 @@ class Utest
     Utest(const char* groupName,
          const char* testName,
          const char* fileName,
-         int lineNumber,
-         void (*setUp)(),
-         void (*tearDown)());
+         int lineNumber);
 
     virtual ~Utest();
 
-    virtual void testBody() = 0;
+    virtual void testBody(){};
 
     virtual void run (TestResult& result);
     virtual SimpleString getFormattedName() const;
@@ -71,8 +69,8 @@ class Utest
     bool shouldRun(const SimpleString& groupFilter, const SimpleString& nameFilter) const;
     const SimpleString getFile() const;
     int getLineNumber() const;
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setup();
+    virtual void teardown();
 
     static TestResult* getTestResult()
     {
@@ -90,14 +88,19 @@ class Utest
     virtual bool assertDoublesEqual(double expected, double actual, double threshold, const char* fileName, int lineNumber);
     virtual void fail(const char* text, const char* fileName, int lineNumber);
 
-  protected:
 
+	void setFileName(const char* fileName);
+	void setLineNumber(int lineNumber);
+	void setGroupName(const char* groupName);
+	void setTestName(const char* testName);
+  protected:
+	
+	Utest();
+	
     Utest(const char* groupName,
          const char* testName,
          const char* fileName,
-         int lineNumber,
-         void (*setUp)(),
-         void (*tearDown)(), Utest* nextTest);
+         int lineNumber, Utest* nextTest);
 
     virtual SimpleString getMacroName() const
       {
@@ -111,8 +114,6 @@ class Utest
     const char* file_;
     int	lineNumber_;
     Utest *next_;
-    void (*setUp_)();
-    void (*tearDown_)();
     static TestResult* testResult_;
     static Utest* currentTest_;
   };
@@ -120,10 +121,7 @@ class Utest
 class IgnoredTest : public Utest
   {
   public:
-    IgnoredTest(const char* groupName,
-                const char* testName,
-                const char* fileName,
-                int lineNumber);
+    IgnoredTest();
 
     virtual ~IgnoredTest();
     virtual void testBody();
@@ -138,29 +136,42 @@ class IgnoredTest : public Utest
   };
 
 
+#define TEST_GROUP(testGroup) \
+  int externTestGroup##testGroup = 0; \
+  struct CppUTestGroup##testGroup : public Utest
+
+#define TEST_GROUP_BASE(testGroup, baseclass) \
+  int externTestGroup##testGroup = 0; \
+  struct CppUTestGroup##testGroup : public baseclass
+  
+
+#define TEST_SETUP() \
+  virtual void setup() 
+
+#define TEST_TEARDOWN() \
+  virtual void teardown() 
 
 #define TEST(testGroup, testName) \
-  class testGroup##testName##Test : public Utest \
-{ public: testGroup##testName##Test () : Utest (#testGroup, #testName, __FILE__,__LINE__, &SetUp, &TearDown) {} \
+  class testGroup##testName##Test : public CppUTestGroup##testGroup \
+{ public: testGroup##testName##Test () : CppUTestGroup##testGroup () {} \
             void testBody(); } \
     testGroup##testName##Instance; \
-  TestInstaller testGroup##testName##Installer(&testGroup##testName##Instance); \
+  TestInstaller testGroup##testName##Installer(&testGroup##testName##Instance, #testGroup, #testName, __FILE__,__LINE__); \
 	void testGroup##testName##Test::testBody()
 
 #define IGNORE_TEST(testGroup, testName)\
   class testGroup##testName##Test : public IgnoredTest \
-{ public: testGroup##testName##Test () : IgnoredTest (#testGroup, #testName, __FILE__,__LINE__) {} \
+{ public: testGroup##testName##Test () : IgnoredTest () {} \
             void thisNeverRuns (); } \
     testGroup##testName##Instance; \
-  TestInstaller testGroup##testName##Installer(&testGroup##testName##Instance); \
+  TestInstaller testGroup##testName##Installer(&testGroup##testName##Instance, #testGroup, #testName, __FILE__,__LINE__); \
 	void testGroup##testName##Test::thisNeverRuns ()
-
-#define EXPORT_TEST_GROUP(testGroup)\
-  int externTestGroup##testGroup = 0
 
 #define IMPORT_TEST_GROUP(testGroup) \
   extern int externTestGroup##testGroup;\
   int* p##testGroup = &externTestGroup##testGroup
+
+
 
 //Check any boolean condition
 

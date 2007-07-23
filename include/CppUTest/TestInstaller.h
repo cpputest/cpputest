@@ -44,7 +44,7 @@ class Utest;
 class TestInstaller
   {
   public:
-    explicit TestInstaller(Utest*);
+    explicit TestInstaller(Utest*, const char* groupName, const char* testName, const char* fileName, int lineNumber);
     virtual ~TestInstaller();
 
     void unDo();

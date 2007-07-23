@@ -28,24 +28,28 @@
 #ifndef D_GenericTest_H
 #define D_GenericTest_H
 
-namespace
-{
-  void stub()
-  {}
-}
-
 class GenericTest : public Utest
   {
+  	void (*setup_)();
+  	void (*teardown_)();
   public:
   	void (*_testFunction)();
-    GenericTest(void (*setup)() = stub, void (*teardown)() = stub)
-        :Utest("Generic", "Generic", "Generic", 1, setup, teardown)
+    GenericTest(void (*setup)() = 0, void (*teardown)() = 0)
+        :Utest("Generic", "Generic", "Generic", 1), setup_(setup), teardown_(teardown)
     {
     	_testFunction = 0;
     }
     void testBody()
     {
     	_testFunction();
+    }
+    virtual void setup()
+    {
+    	if (setup_) setup_();
+    }
+    virtual void teardown()
+    {
+    	if (teardown_) teardown_();
     }
 };
 

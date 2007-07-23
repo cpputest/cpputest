@@ -28,21 +28,19 @@
 #include "TestHarness.h"
 #include "NullTest.h"
 
-EXPORT_TEST_GROUP(NullTest);
-
-namespace
-  {
+TEST_GROUP(NullTest)
+{
   NullTest* nullTest;
 
-  void SetUp()
+  TEST_SETUP()
   {
     nullTest = new NullTest();
   }
-  void TearDown()
+  TEST_TEARDOWN()
   {
     delete nullTest;
   }
-}
+};
 
 TEST(NullTest, Create)
 {}

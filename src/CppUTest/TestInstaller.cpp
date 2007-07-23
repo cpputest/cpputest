@@ -29,9 +29,13 @@
 #include "Utest.h"
 #include "TestRegistry.h"
 
-TestInstaller::TestInstaller(Utest* t)
+TestInstaller::TestInstaller(Utest* t, const char* groupName, const char* testName, const char* fileName, int lineNumber)
 {
-  TestRegistry::getCurrentRegistry()->addTest(t);
+	t->setGroupName(groupName);
+	t->setTestName(testName);
+	t->setFileName(fileName);
+	t->setLineNumber(lineNumber);
+	TestRegistry::getCurrentRegistry()->addTest(t);
 }
 
 TestInstaller::~TestInstaller()

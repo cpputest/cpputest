@@ -45,46 +45,43 @@ namespace
 TestResult* Utest::testResult_ = 0;
 Utest* Utest::currentTest_ = 0;
 
+Utest::Utest()
+    : group_(0)
+    , name_(0)
+    , file_(0)
+    , lineNumber_(0)
+    , next_(&NullTest::instance())
+{
+}
+
 Utest::Utest (const char* groupName,
             const char* testName,
             const char* fileName,
-            int lineNumber,
-            void (*setUp)(),
-            void (*tearDown)())
+            int lineNumber)
     : group_(groupName)
     , name_(testName)
     , file_(fileName)
     , lineNumber_(lineNumber)
     , next_(&NullTest::instance())
-    , setUp_(setUp)
-    , tearDown_(tearDown)
 {}
 
 Utest::Utest (const char* groupName,
             const char* testName,
             const char* fileName,
             int lineNumber,
-            void (*setUp)(),
-            void (*tearDown)(),
             Utest* nextTest)
     : group_(groupName)
     , name_(testName)
     , file_(fileName)
     , lineNumber_(lineNumber)
     , next_(nextTest)
-    , setUp_(setUp)
-    , tearDown_(tearDown)
 {}
 
 Utest::~Utest ()
 {}
 
-IgnoredTest::IgnoredTest(
-  const char* groupName,
-  const char* testName,
-  const char* fileName,
-  int lineNumber)
-    : Utest(groupName, testName, fileName, lineNumber, doNothing, doNothing)
+IgnoredTest::IgnoredTest()
+    : Utest()
 {}
 
 IgnoredTest::~IgnoredTest ()
@@ -99,9 +96,9 @@ void Utest::run(TestResult& result)
   result.countRun();
   testResult_ = &result;
   currentTest_ = this;
-  setUp();
+  setup();
   testBody();
-  tearDown();
+  teardown();
 
   //restore
   currentTest_ = savedTest;
@@ -156,6 +153,26 @@ SimpleString Utest::getFormattedName() const
     return formattedName;
   }
 
+void Utest::setFileName(const char* fileName)
+{
+	file_ = fileName;
+}
+
+void Utest::setLineNumber(int lineNumber)
+{
+	lineNumber_ = lineNumber;
+}
+
+void Utest::setGroupName(const char* groupName)
+{
+	group_ = groupName;
+}
+
+void Utest::setTestName(const char* testName)
+{
+	name_ = testName;
+}
+
 const SimpleString Utest::getFile() const
   {
     return SimpleString(file_);
@@ -167,14 +184,12 @@ int Utest::getLineNumber() const
     return lineNumber_;
   }
 
-void Utest::setUp()
+void Utest::setup()
 {
-  (*setUp_)();
 }
 
-void Utest::tearDown()
+void Utest::teardown()
 {
-  (*tearDown_)();
 }
 
 bool Utest::shouldRun(const SimpleString& groupFilter, const SimpleString& nameFilter) const

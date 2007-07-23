@@ -26,8 +26,8 @@
  */
 
 //Include this in the test main to execute these tests
-IMPORT_TEST_GROUP(Failure);
 IMPORT_TEST_GROUP(Utest);
+IMPORT_TEST_GROUP(Failure);
 IMPORT_TEST_GROUP(TestOutput);
 IMPORT_TEST_GROUP(SimpleString);
 IMPORT_TEST_GROUP(TestInstaller);

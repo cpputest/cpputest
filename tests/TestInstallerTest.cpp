@@ -29,7 +29,6 @@
 #include "TestInstaller.h"
 #include "NullTest.h"
 
-EXPORT_TEST_GROUP(TestInstaller);
 
 // this is file scope because the test is installed
 // with all other tests, which also happen to be
@@ -37,24 +36,24 @@ EXPORT_TEST_GROUP(TestInstaller);
 
 static NullTest nullTest;
 
-namespace
+TEST_GROUP(TestInstaller)
   {
   TestInstaller* testInstaller;
 	TestRegistry* myRegistry;
-  void SetUp()
+  TEST_SETUP()
   {
   	myRegistry = new TestRegistry();
   	myRegistry->setCurrentRegistry(myRegistry);
-    testInstaller = new TestInstaller(&nullTest);
+    testInstaller = new TestInstaller(&nullTest, "TestInstaller", "test", __FILE__, __LINE__);
   }
-  void TearDown()
+  TEST_TEARDOWN()
   {
   	myRegistry->setCurrentRegistry(0);
     testInstaller->unDo();
     delete testInstaller;
   	delete myRegistry;
   }
-}
+};
 
 TEST(TestInstaller, Create)
 {}

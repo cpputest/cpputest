@@ -27,11 +27,8 @@
 
 #include "NullTest.h"
 
-static void stub()
-{}
-
 NullTest::NullTest()
-    :Utest("NullGroup", "NullName", "NullFile", -1, stub, stub, 0)
+    :Utest("NullGroup", "NullName", "NullFile", -1, 0)
 {}
 
 NullTest::~NullTest()

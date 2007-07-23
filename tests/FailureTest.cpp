@@ -30,7 +30,6 @@
 #include "MockTestOutput.h"
 #include "NullTest.h"
 
-EXPORT_TEST_GROUP(Failure);
 
 namespace
   {
@@ -38,17 +37,17 @@ namespace
   const char* failFileName = "fail.cpp";
 }
 
-namespace
+TEST_GROUP(Failure)
   {
   Utest* test;
   MockTestOutput* printer;
 
-  void SetUp()
+  TEST_SETUP()
   {
     test = new NullTest();
     printer = new MockTestOutput();
   }
-  void TearDown()
+  TEST_TEARDOWN()
   {
     delete test;
     delete printer;

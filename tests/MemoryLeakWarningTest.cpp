@@ -30,19 +30,18 @@
 #include "MemoryLeakWarningPlugin.h"
 #include "GenericTest.h"
 
-EXPORT_TEST_GROUP(MemoryLeakWarningTest);
+static char* arrayToLeak1;
+static char* arrayToLeak2;
+static long* nonArrayToLeak;
 
-namespace
+TEST_GROUP(MemoryLeakWarningTest)
 {
-	char* arrayToLeak1;
-	char* arrayToLeak2;
-	long* nonArrayToLeak;
   
 	MemoryLeakWarningPlugin* memPlugin;
 	MemoryLeakWarning* prevMemWarning;
 
 	GenericTestFixture* fixture;
-	void SetUp()
+	TEST_SETUP()
 	{
 		fixture = new GenericTestFixture();
   		prevMemWarning = MemoryLeakWarning::_latest;
@@ -53,7 +52,7 @@ namespace
 		arrayToLeak2 = 0;
 		nonArrayToLeak = 0;
 	}
-	void TearDown()
+	TEST_TEARDOWN()
 	{
 		delete fixture;
   		delete memPlugin;
@@ -63,7 +62,7 @@ namespace
   		if (arrayToLeak2) delete [] arrayToLeak2;
   		if (nonArrayToLeak) delete nonArrayToLeak;
 	}
-}
+};
 
 void _testExpectOneLeak()
 {

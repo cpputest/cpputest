@@ -29,16 +29,8 @@
 #include "TestHarness.h"
 #include "SimpleString.h"
 
-EXPORT_TEST_GROUP(SimpleString);
-
-namespace
-  {
-
-  void SetUp()
-  {}
-  void TearDown()
-  {}
-  ;
+TEST_GROUP(SimpleString)
+{
 };
 
 

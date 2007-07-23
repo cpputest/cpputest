@@ -30,22 +30,17 @@
 #include "MockTestOutput.h"
 #include "GenericTest.h"
 
-EXPORT_TEST_GROUP(Utest);
-
-namespace
-  {
-  GenericTestFixture* fixture;
-
-  void SetUp()
-  {
-	fixture = new GenericTestFixture();
-  }
-  void TearDown()
-  {
-  	delete fixture;
-  };
-
-
+TEST_GROUP(Utest)
+{
+	GenericTestFixture* fixture;
+	TEST_SETUP()
+	{
+		fixture = new GenericTestFixture();
+	}
+	TEST_TEARDOWN()
+	{
+  		delete fixture;
+  	}
 };
 
 static void _failMethod()
@@ -122,7 +117,6 @@ TEST(Utest, AssertsActLikeStatements)
 
 }
 
-
 IGNORE_TEST(Utest, IgnoreTestSupportsAllMacros)
 {
   CHECK(true);
@@ -145,8 +139,34 @@ TEST(Utest, MacrosUsedInSetup)
 TEST(Utest, MacrosUsedInTearDown)
 {
 	delete fixture->genTest;
-	fixture->genTest = new GenericTest(stub, _failMethod);
+	fixture->genTest = new GenericTest(0, _failMethod);
  	fixture->setTestFunction(_passMethod);
  	fixture->runAllTests(); 
 	LONGS_EQUAL(1, fixture->getFailureCount());
+}
+
+class MyOwnTest : public Utest
+{
+public:
+	MyOwnTest() : inTest(false) {}
+	bool inTest;
+	
+	void setup()
+	{
+		CHECK(!inTest);
+		inTest = true;
+	}
+	void teardown()
+	{
+		CHECK(inTest);
+	}
+};
+
+TEST_GROUP_BASE(UtestMyOwn, MyOwnTest)
+{
+};
+
+TEST(UtestMyOwn, test)
+{
+	CHECK(inTest);
 }

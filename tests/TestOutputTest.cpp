@@ -29,23 +29,21 @@
 #include "TestOutput.h"
 #include "MockTestOutput.h"
 
-EXPORT_TEST_GROUP(TestOutput);
-
-namespace
+TEST_GROUP(TestOutput)
   {
   TestOutput* printer;
   MockTestOutput* mock;
 
-  void SetUp()
+  TEST_SETUP()
   {
     mock = new MockTestOutput();
     printer = mock;
   }
-  void TearDown()
+  TEST_TEARDOWN()
   {
     delete printer;
   }
-}
+};
 
 TEST(TestOutput, PrintConstCharStar)
 {
