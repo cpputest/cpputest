@@ -30,23 +30,21 @@
 #include "Printer.h"
 #include "MockPrinter.h"
 
-EXPORT_TEST_GROUP(Printer);
-
-namespace
+TEST_GROUP(Printer)
   {
   Printer* printer;
   MockPrinter* mockPrinter;
 
-  void SetUp()
+  void setup()
   {
     mockPrinter = new MockPrinter();
     printer = mockPrinter;
   }
-  void TearDown()
+  void teardown()
   {
     delete printer;
   }
-}
+};
 
 TEST(Printer, PrintConstCharStar)
 {

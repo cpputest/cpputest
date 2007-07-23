@@ -30,17 +30,15 @@
 #include "MockPrinter.h"
 #include "CircularBuffer.h"
 
-EXPORT_TEST_GROUP(CircularBuffer);
-
-namespace 
+TEST_GROUP(CircularBuffer)
 {
   CircularBuffer* buffer;
 
-  void SetUp()
+  void setup()
   {
     buffer = new CircularBuffer();
   }
-  void TearDown()
+  void teardown()
   {
     delete buffer;
   }
@@ -55,7 +53,7 @@ namespace
     for (int i = 0; i < howMany; i++)
         buffer->Get();
   }
-}
+};
 
 /*
  * Tests I think i need
