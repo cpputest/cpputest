@@ -127,6 +127,11 @@ IGNORE_TEST(Utest, IgnoreTestSupportsAllMacros)
   FAIL("");
 }
 
+IGNORE_TEST(Utest, IgnoreTestAccessingFixture)
+{
+	CHECK(fixture);
+}
+
 TEST(Utest, MacrosUsedInSetup)
 {
 	delete fixture->genTest;
@@ -170,3 +175,15 @@ TEST(UtestMyOwn, test)
 {
 	CHECK(inTest);
 }
+
+class NullParameterTest : public Utest
+{
+};
+
+TEST(UtestMyOwn, NullParameters)
+{
+	NullParameterTest nullTest; /* Bug fix tests for creating a test without a name, fix in SimpleString */
+	TestRegistry* reg = TestRegistry::getCurrentRegistry();
+	nullTest.shouldRun(reg->getGroupFilter(), reg->getNameFilter());
+}
+
