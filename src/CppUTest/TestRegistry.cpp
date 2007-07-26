@@ -61,18 +61,16 @@ void TestRegistry::runAllTests (TestResult& result, TestOutput* p)
   dotCount = 0;
   result.testsStarted ();
 
-  for (Utest *test = tests; !test->isLast(); test = test->getNext ())
-    {
-      result.countTest();
-      if (testShouldRun(test, result))
-        {
-          print(test);
+	for (Utest *test = tests; !test->isLast(); test = test->getNext ()){
+		result.countTest();
+		if (testShouldRun(test, result)) {
+			print(test);
           
-          firstPlugin_->runAllPreTestAction(*test, result);
-          test->run(result);
-					firstPlugin_->runAllPostTestAction(*test, result);
-        }
-    }
+			firstPlugin_->runAllPreTestAction(*test, result);
+			test->run(result);
+			firstPlugin_->runAllPostTestAction(*test, result);
+		}
+	}
     result.testsEnded ();
 }
 
@@ -113,6 +111,16 @@ void TestRegistry::nameFilter(const char* f)
 void TestRegistry::groupFilter(const char* f)
 {
   groupFilter_ = f;
+}
+
+const char* TestRegistry::getGroupFilter()
+{
+	return groupFilter_;
+}
+
+const char* TestRegistry::getNameFilter()
+{
+	return nameFilter_;
 }
 
 bool TestRegistry::testShouldRun(Utest* test, TestResult& result)
