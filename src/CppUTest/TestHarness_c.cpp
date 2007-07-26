@@ -68,7 +68,7 @@ extern "C" {
 		FAIL_LOCATION("", fileName, lineNumber);
 	}
 	
-	char* cpputest_malloc(size_t size)
+	char* cpputest_malloc(unsigned int size)
 	{
 		return new char[size];
 	}
