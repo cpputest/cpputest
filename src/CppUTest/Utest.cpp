@@ -36,19 +36,13 @@
 #include <string.h>
 #include <stdio.h>
 
-namespace
-  {
-  void doNothing()
-  {}
-}
-
 TestResult* Utest::testResult_ = 0;
 Utest* Utest::currentTest_ = 0;
 
 Utest::Utest()
-    : group_(0)
-    , name_(0)
-    , file_(0)
+    : group_("UndefinedTestGroup")
+    , name_("UndefinedTest")
+    , file_("UndefinedFile")
     , lineNumber_(0)
     , next_(&NullTest::instance())
 {
@@ -80,13 +74,6 @@ Utest::Utest (const char* groupName,
 Utest::~Utest ()
 {}
 
-IgnoredTest::IgnoredTest()
-    : Utest()
-{}
-
-IgnoredTest::~IgnoredTest ()
-{}
-
 void Utest::run(TestResult& result)
 {
   //save test context, so that test class can be tested
@@ -104,15 +91,6 @@ void Utest::run(TestResult& result)
   currentTest_ = savedTest;
   testResult_ = savedResult;
 }
-
-void IgnoredTest::run(TestResult& result)
-{
-  result.countIgnored();
-}
-
-void IgnoredTest::testBody()
-{}
-
 
 Utest *Utest::getNext() const
   {
