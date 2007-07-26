@@ -25,7 +25,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/*
+/******************************************************************************
  *
  * TESTHARNESS_c.H
  *
@@ -33,7 +33,7 @@
  *
  * Remember to use extern "C" when including in a cpp file!
  *
-*/
+*******************************************************************************/
  
 #ifndef D_TestHarness_c_h
 #define D_TestHarness_c_h
