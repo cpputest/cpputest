@@ -118,24 +118,6 @@ class Utest
     static Utest* currentTest_;
   };
 
-class IgnoredTest : public Utest
-  {
-  public:
-    IgnoredTest();
-
-    virtual ~IgnoredTest();
-    virtual void testBody();
-    virtual void run (TestResult& result);
-
-  protected:
-    virtual SimpleString getMacroName() const
-      {
-        return "IGNORE_TEST";
-      }
-
-  };
-
-
 #define TEST_GROUP(testGroup) \
   int externTestGroup##testGroup = 0; \
   struct CppUTestGroup##testGroup : public Utest
@@ -154,15 +136,19 @@ class IgnoredTest : public Utest
 #define TEST(testGroup, testName) \
   class testGroup##testName##Test : public CppUTestGroup##testGroup \
 { public: testGroup##testName##Test () : CppUTestGroup##testGroup () {} \
-            void testBody(); } \
+       void testBody(); } \
     testGroup##testName##Instance; \
   TestInstaller testGroup##testName##Installer(&testGroup##testName##Instance, #testGroup, #testName, __FILE__,__LINE__); \
 	void testGroup##testName##Test::testBody()
 
 #define IGNORE_TEST(testGroup, testName)\
-  class testGroup##testName##Test : public IgnoredTest \
-{ public: testGroup##testName##Test () : IgnoredTest () {} \
-            void thisNeverRuns (); } \
+  class testGroup##testName##Test : public CppUTestGroup##testGroup \
+{ public: testGroup##testName##Test () : CppUTestGroup##testGroup () {} \
+    virtual void run (TestResult& result) { \
+    	result.countIgnored(); } \
+  protected:  virtual SimpleString getMacroName() const \
+      { return "IGNORE_TEST"; } \
+  public:          void thisNeverRuns (); } \
     testGroup##testName##Instance; \
   TestInstaller testGroup##testName##Installer(&testGroup##testName##Instance, #testGroup, #testName, __FILE__,__LINE__); \
 	void testGroup##testName##Test::thisNeverRuns ()
@@ -170,8 +156,6 @@ class IgnoredTest : public Utest
 #define IMPORT_TEST_GROUP(testGroup) \
   extern int externTestGroup##testGroup;\
   int* p##testGroup = &externTestGroup##testGroup
-
-
 
 //Check any boolean condition
 
