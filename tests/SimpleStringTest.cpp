@@ -135,6 +135,12 @@ TEST(SimpleString, Contains)
   CHECK(!empty.contains(s));
 }
 
+TEST(SimpleString, ContainsNull)
+{
+	SimpleString s(0);
+	CHECK(!s.contains("something"));
+}
+
 TEST(SimpleString, Characters)
 {
   SimpleString s(StringFrom('a'));
