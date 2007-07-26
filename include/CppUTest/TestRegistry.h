@@ -44,25 +44,28 @@ class TestOutput;
 class TestPlugin;
 
 class TestRegistry
-  {
-  public:
-    TestRegistry();
-    virtual ~TestRegistry();
+{
+	public:
+		TestRegistry();
+		virtual ~TestRegistry();
 
-    virtual void addTest(Utest *test);
-    virtual void unDoLastAddTest();
-    virtual int  countTests();
-    virtual void runAllTests(TestResult& result, TestOutput*);
-    virtual void verbose();
-    virtual void nameFilter(const char*);
-    virtual void groupFilter(const char*);
+		virtual void addTest(Utest *test);
+		virtual void unDoLastAddTest();
+		virtual int  countTests();
+		virtual void runAllTests(TestResult& result, TestOutput*);
+		virtual void verbose();
+		virtual void nameFilter(const char*);
+		virtual void groupFilter(const char*);
 
-		virtual void 				installPlugin(TestPlugin* plugin);
-		virtual void 				resetPlugins();
+		virtual void installPlugin(TestPlugin* plugin);
+		virtual void resetPlugins();
 		virtual TestPlugin* getFirstPlugin();
 		
+		const char* getGroupFilter();
+		const char* getNameFilter();
+		
 		static TestRegistry*  getCurrentRegistry();
-		virtual void					setCurrentRegistry(TestRegistry* registry);
+		virtual void setCurrentRegistry(TestRegistry* registry);
   private:
 
     bool testShouldRun(Utest* test, TestResult& result);
