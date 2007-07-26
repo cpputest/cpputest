@@ -32,17 +32,16 @@
 #include <string.h>
 
 
-SimpleString::SimpleString ()
-    : buffer(new char [1])
-{
-  buffer [0] = '\0';
-}
-
-
 SimpleString::SimpleString (const char *otherBuffer)
-    : buffer (new char [strlen (otherBuffer) + 1])
 {
-  strcpy (buffer, otherBuffer);
+  if (otherBuffer == 0) {
+  	  buffer = new char [1];
+  	  buffer [0] = '\0';
+  }
+  else {
+  	buffer = new char [strlen (otherBuffer) + 1];
+  	strcpy (buffer, otherBuffer);
+  }
 }
 
 SimpleString::SimpleString (const SimpleString& other)
