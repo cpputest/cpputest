@@ -66,7 +66,7 @@ extern void  FAIL_C_LOCATION(const char* fileName, int lineNumber);
 
 /* Memory allocation routines that use new, so the memory leak checker works */
 
-extern char* cpputest_malloc(size_t size);
+extern char* cpputest_malloc(unsigned int size);
 extern void cpputest_free(char* buffer);
  
 #endif
