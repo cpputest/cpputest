@@ -45,8 +45,7 @@ class SimpleString
     friend bool	operator!= (const SimpleString& left, const SimpleString& right);
 
   public:
-    SimpleString ();
-    SimpleString (const char *value);
+    SimpleString (const char *value = "");
     SimpleString (const SimpleString& other);
     ~SimpleString ();
 
