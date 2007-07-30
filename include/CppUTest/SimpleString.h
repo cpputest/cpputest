@@ -50,11 +50,19 @@ class SimpleString
     ~SimpleString ();
 
     SimpleString& operator= (const SimpleString& other);
-    bool contains(const SimpleString& other) const;
     SimpleString operator+(const SimpleString&);
     SimpleString& operator+=(const SimpleString&);
     SimpleString& operator+=(const char*);
 
+    bool contains(const SimpleString& other) const;
+    bool startsWith(const SimpleString& other) const;
+    bool endsWith(const SimpleString& other) const;
+	int split(const SimpleString& split, SimpleString*& output) const;
+	int count(const SimpleString& str) const;
+
+	void replace(char to, char with);
+	void replace(const char* to, const char* with);
+	
     const char *asCharString () const;
     int	size() const;
 
