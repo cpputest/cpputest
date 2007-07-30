@@ -51,22 +51,20 @@ class Failure
     Failure(Utest*, const char* fileName, long lineNumber, const SimpleString& theMessage);
     Failure(Utest*, const SimpleString& theMessage);
     Failure(Utest*, const char* fileName, long lineNumber);
+    Failure(const Failure&);
     virtual ~Failure();
 
-    virtual void Print(TestOutput&) const;
+	virtual SimpleString getFileName() const;
+	virtual SimpleString getTestName() const;
+	virtual int getLineNumber() const;
+	virtual SimpleString getMessage() const;
 
   protected:
-    virtual void PrintLeader(TestOutput&) const;
-    virtual void PrintSpecifics(TestOutput&) const;
-    virtual void PrintTrailer(TestOutput&) const;
-
-  private:
     SimpleString testName;
     SimpleString fileName;
     long lineNumber;
     SimpleString message;
 
-    Failure(const Failure&);
     Failure& operator=(const Failure&);
 
   };
