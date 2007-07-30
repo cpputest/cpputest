@@ -38,17 +38,36 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 class CommandLineTestRunner
-  {
-  public:
-    static int RunAllTests(int ac, char** av);
+{
+public:
+	enum OutputType {OUTPUT_NORMAL, OUTPUT_JUNIT};
+	
+	static int RunAllTests(int ac, char** av);
 
+    CommandLineTestRunner(TestOutput* output);
+    virtual ~CommandLineTestRunner();
+	int RunAllTests();
+	bool parseArguments(int ac, char** av);
+
+	bool isVerbose();
+	int getRepeatCount();
+	char* getGroupFilter();
+	char* getNameFilter();
+	OutputType getOutputType();
   private:
-    static TestOutput* output;
-    static void SetOptions(int ac, char** av);
-    static void SetRepeatCount(int ac, char** av, int& index);
-    static void SetGroupFilter(int ac, char** av, int& index);
-    static void SetNameFilter(int ac, char** av, int& index);
-    static int repeat;
-  };
+  
+  	void initializeTestRun();
+    bool verbose_;
+    TestOutput* output_;
+    int repeat_;
+    char* groupFilter_;
+    char* nameFilter_;
+    OutputType outputType_;
+    
+    void SetRepeatCount(int ac, char** av, int& index);
+    void SetGroupFilter(int ac, char** av, int& index);
+    void SetNameFilter(int ac, char** av, int& index);
+    bool SetOutputType(int ac, char** av, int& index);
+};
 
 #endif
