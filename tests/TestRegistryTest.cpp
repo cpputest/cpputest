@@ -106,7 +106,7 @@ TEST(TestRegistry, runTwoTests)
 	myRegistry->addTest(test2);
 	CHECK(!test1->hasRun_);
 	CHECK(!test2->hasRun_);
-	myRegistry->runAllTests(*result, output);
+	myRegistry->runAllTests(*result);
 	CHECK(test1->hasRun_);
 	CHECK(test2->hasRun_);
 }
@@ -134,7 +134,7 @@ TEST(TestRegistry, reallyUndoLastTest)
 	CHECK(myRegistry->countTests() == 2);
 	myRegistry->unDoLastAddTest();
 	CHECK(myRegistry->countTests() == 1);
-	myRegistry->runAllTests(*result, output);
+	myRegistry->runAllTests(*result);
 	CHECK(test1->hasRun_);
 	CHECK(!test2->hasRun_);
 }
