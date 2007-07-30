@@ -53,12 +53,7 @@ class EqualsFailure : public Failure
                   const SimpleString& expected,
                   const SimpleString& actual);
 
-  protected:
-    virtual void PrintSpecifics(TestOutput&) const;
-
   private:
-    SimpleString message;
-
     EqualsFailure(const EqualsFailure&);
     EqualsFailure& operator=(const EqualsFailure&);
 
