@@ -80,7 +80,7 @@ public:
 	}
 	
 	void runAllTests () {
-		registry->runAllTests(*result, output);
+		registry->runAllTests(*result);
 	}
 	
 	int getFailureCount () {
@@ -95,15 +95,14 @@ public:
  	static void assertPrintContains(MockTestOutput* output, const SimpleString& contains)
  	{
 		if (output->getOutput().contains(contains))
-		return;
-	SimpleString message("\tActual <");
-	message += output->getOutput().asCharString();
-	message += ">\n";
-	message += "\tdid not contain <";
-	message += contains.asCharString();
-	message += ">\n";
-
-	FAIL(message.asCharString());
+			return;
+		SimpleString message("\tActual <");
+		message += output->getOutput().asCharString();
+		message += ">\n";
+		message += "\tdid not contain <";
+		message += contains.asCharString();
+		message += ">\n";
+		FAIL(message.asCharString());
 
   }
 
