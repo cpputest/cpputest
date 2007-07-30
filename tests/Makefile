@@ -19,7 +19,9 @@ OBJS = \
  TestOutputTest.o \
  TestRegistryTest.o \
  UtestTest.o \
- TestHarness_cTest.o
+ TestHarness_cTest.o \
+ CommandLineTestRunnerTest.o \
+ JUnitOutputTest.o
 
 INCLUDE =\
  -I$(CPP_U_TEST)/include/CppUTest\
