@@ -135,6 +135,90 @@ TEST(SimpleString, Contains)
   CHECK(!empty.contains(s));
 }
 
+TEST(SimpleString, startsWith)
+{
+	SimpleString hi("Hi you!");
+	SimpleString part("Hi");
+	SimpleString diff("Hrrm Hi you! ffdsfd");
+	CHECK(hi.startsWith(part));
+	CHECK(!part.startsWith(hi));
+	CHECK(!diff.startsWith(hi));
+}
+
+TEST(SimpleString, split)
+{
+	SimpleString hi("hello\nworld\nhow\ndo\nyou\ndo\n\n");
+	SimpleString* splitted;
+	int size = hi.split("\n", splitted);
+	LONGS_EQUAL(7, size);
+	STRCMP_EQUAL("hello\n", splitted[0].asCharString());
+	STRCMP_EQUAL("world\n", splitted[1].asCharString());
+	STRCMP_EQUAL("how\n", splitted[2].asCharString());
+	STRCMP_EQUAL("do\n", splitted[3].asCharString());
+	STRCMP_EQUAL("you\n", splitted[4].asCharString());
+	STRCMP_EQUAL("do\n", splitted[5].asCharString());
+	STRCMP_EQUAL("\n", splitted[6].asCharString());
+	
+	delete [] splitted;
+}
+
+TEST(SimpleString, splitNoTokenOnTheEnd)
+{
+	SimpleString string("Bah Yah oops");
+	SimpleString* splitted;
+	int size = string.split(" ", splitted);
+	LONGS_EQUAL(3, size);
+	STRCMP_EQUAL("Bah ", splitted[0].asCharString());
+	STRCMP_EQUAL("Yah ", splitted[1].asCharString());
+	STRCMP_EQUAL("oops", splitted[2].asCharString());
+	
+	delete [] splitted;
+}
+
+
+TEST(SimpleString, count)
+{
+	SimpleString str("ha ha ha ha");
+	LONGS_EQUAL(4, str.count("ha"));
+}
+
+TEST(SimpleString, countTogether)
+{
+	SimpleString str("hahahaha");
+	LONGS_EQUAL(4, str.count("ha"));
+}
+
+TEST(SimpleString, endsWith)
+{
+	SimpleString str("Hello World");
+	CHECK(str.endsWith("World"));
+	CHECK(!str.endsWith("Worl"));
+	CHECK(!str.endsWith("Hello"));
+	SimpleString str2("ah");
+	CHECK(str2.endsWith("ah"));
+	CHECK(!str2.endsWith("baah"));
+	SimpleString str3("");
+	CHECK(!str3.endsWith("baah"));
+	
+	SimpleString str4("ha ha ha ha");
+	CHECK(str4.endsWith("ha"));
+	
+}
+
+TEST(SimpleString, replaceCharwithChar)
+{
+	SimpleString str("abcabcabca");
+	str.replace('a','b');
+	STRCMP_EQUAL("bbcbbcbbcb", str.asCharString());
+}
+
+TEST(SimpleString, replaceStringWithString)
+{
+	SimpleString str("boo baa boo baa boo");
+	str.replace("boo","boohoo");
+	STRCMP_EQUAL("boohoo baa boohoo baa boohoo", str.asCharString());
+}
+
 TEST(SimpleString, ContainsNull)
 {
 	SimpleString s(0);
@@ -147,3 +231,5 @@ TEST(SimpleString, Characters)
   SimpleString s2(StringFrom('a'));
   CHECK(s == s2);
 }
+
+
