@@ -41,21 +41,32 @@
 
 class Failure;
 class TestOutput;
+class Utest;
 
 class TestResult
-  {
+{
   public:
     TestResult (TestOutput&);
     virtual ~TestResult();
+  
     virtual void testsStarted ();
+	virtual void setCurrentTest(Utest* test);
+    virtual void testsEnded ();
+
+
     virtual void countTest();
     virtual void countRun();
     virtual void countCheck();
     virtual void countFilteredOut();
     virtual void countIgnored();
     virtual void addFailure (const Failure& failure);
-    virtual void testsEnded ();
-    int getFailureCount() {return failureCount;}
+
+    int getTestCount() const {return testCount;}
+    int getRunCount() const {return runCount;}
+    int getCheckCount() const {return checkCount;}
+    int getFilteredOutCount() const {return filteredOutCount;}
+    int getIgnoredCount() const {return ignoredCount;}
+    int getFailureCount() const {return failureCount;}
 
   private:
 
