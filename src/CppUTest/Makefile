@@ -13,7 +13,8 @@ OBJS = \
  TestPlugin.o \
  Utest.o \
  TestRegistry.o\
- TestResult.o
+ TestResult.o \
+ JUnitTestOutput.o
 
 INCLUDE =\
  -I$(CPP_U_TEST)/include/CppUTest\
