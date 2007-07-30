@@ -48,7 +48,7 @@ void MemoryLeakWarningPlugin::Enable()
 	memLeakWarning.Enable();
 }
 
-const char* MemoryLeakWarningPlugin::FinalReport()
+const char* MemoryLeakWarningPlugin::FinalReport(int toBeDeletedLeaks)
 {
-	return memLeakWarning.FinalReport();
+	return memLeakWarning.FinalReport(toBeDeletedLeaks);
 }
