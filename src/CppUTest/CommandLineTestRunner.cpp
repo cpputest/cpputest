@@ -30,110 +30,161 @@
 #include "MemoryLeakWarningPlugin.h"
 #include "TestOutput.h"
 #include "RealTestOutput.h"
+#include "JUnitTestOutput.h"
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
 
-int CommandLineTestRunner::repeat = 0;
-TestOutput* CommandLineTestRunner::output;
+CommandLineTestRunner::CommandLineTestRunner(TestOutput* output) :
+	verbose_(false), output_(output), repeat_(1), groupFilter_(0), nameFilter_(0), outputType_(OUTPUT_NORMAL)
+{
+}	
+
+CommandLineTestRunner::~CommandLineTestRunner()
+{
+	if (output_) delete output_;
+}
 
 int CommandLineTestRunner::RunAllTests(int ac, char** av)
 {
 	MemoryLeakWarningPlugin memLeakWarn;
 	TestRegistry::getCurrentRegistry()->installPlugin(&memLeakWarn);
-  memLeakWarn.Enable();
-  RealTestOutput realTestOutput;
-  output = &realTestOutput;
+	memLeakWarn.Enable();
+		
+	CommandLineTestRunner runner(new RealTestOutput());
+	if (!runner.parseArguments(ac, av)) {
+		return 1;
+	}
 
-  SetOptions(ac, av);
-  bool repeating = (repeat > 1);
-  int loopCount = 1;
-  int failureCount = 0;
-
-  do
-    {
-      if (repeating)
-        {
-          output->print("Test run ");
-          output->print(loopCount);
-          output->print("\n");
-        }
-
-      TestResult tr(*output);
-      TestRegistry::getCurrentRegistry()->runAllTests(tr, output);
-      failureCount = tr.getFailureCount();
-    }
-  while (++loopCount <= repeat);
-
-  realTestOutput << memLeakWarn.FinalReport();
-  
-  return failureCount;
+	int testResult = runner.RunAllTests(); 
+  	*runner.output_ << memLeakWarn.FinalReport(1);
+	return testResult; 
 }
 
-void CommandLineTestRunner::SetOptions(int ac, char** av)
+void CommandLineTestRunner::initializeTestRun()
 {
-  repeat = 1;
-  for (int i = 1; i < ac; i++)
-    {
-      if (0 == strcmp("-v", av[i]))
-        TestRegistry::getCurrentRegistry()->verbose();
-      else if (av[i] == strstr(av[i], "-r"))
-        SetRepeatCount(ac, av, i);
-      else if (av[i] == strstr(av[i], "-g"))
-        SetGroupFilter(ac, av, i);
-      else if (av[i] == strstr(av[i], "-n"))
-        SetNameFilter(ac, av, i);
-      else
-        {
-          output->print("usage [-v] [-r#] [-g groupName] [-n testName]\n");
-        }
-    }
+  	if (groupFilter_) TestRegistry::getCurrentRegistry()->groupFilter(groupFilter_);
+  	if (nameFilter_) TestRegistry::getCurrentRegistry()->nameFilter(nameFilter_);	
+  	if (verbose_) output_->verbose();
+  	if (outputType_ == OUTPUT_JUNIT) output_ = new JUnitTestOutput();
 }
 
+int CommandLineTestRunner::RunAllTests()
+{
+	initializeTestRun();
+  	int loopCount = 0;
+  	int failureCount = 0;
+
+  	while (loopCount++ < repeat_) {
+		output_->printTestRun(loopCount, repeat_);
+		TestResult tr(*output_);
+		TestRegistry::getCurrentRegistry()->runAllTests(tr);
+		failureCount += tr.getFailureCount();
+	}
+	
+	return failureCount;
+}
+
+bool CommandLineTestRunner::parseArguments(int ac, char** av)
+{
+	bool correctParameters = true;
+	for (int i = 1; i < ac; i++) {
+		if (strcmp(av[i], "-v") == 0)
+			verbose_ = true;
+		else if (av[i] == strstr(av[i], "-r"))
+			SetRepeatCount(ac, av, i);
+      	else if (av[i] == strstr(av[i], "-g"))
+        	SetGroupFilter(ac, av, i);
+      	else if (av[i] == strstr(av[i], "-n"))
+        	SetNameFilter(ac, av, i);
+      	else if (av[i] == strstr(av[i], "-o"))
+        	correctParameters = SetOutputType(ac, av, i);
+		else
+			correctParameters = false;
+
+		if (correctParameters == false) {
+          output_->print("usage [-v] [-r#] [-g groupName] [-n testName] [-o{normal, junit}]\n");
+          return false;
+        }
+	}
+	return true;
+}
+
+bool CommandLineTestRunner::isVerbose()
+{
+	return verbose_;
+}
+
+int CommandLineTestRunner::getRepeatCount()
+{
+	return repeat_;
+}
+
+char* CommandLineTestRunner::getGroupFilter()
+{
+	return groupFilter_;
+}
+
+char* CommandLineTestRunner::getNameFilter()
+{
+	return nameFilter_;
+}
+
+CommandLineTestRunner::OutputType CommandLineTestRunner::getOutputType()
+{
+	return outputType_;
+}
 
 void CommandLineTestRunner::SetRepeatCount(int ac, char** av, int& i)
 {
-  repeat = 0;
+  repeat_ = 0;
 
   if (strlen(av[i]) > 2)
-    repeat = atoi(av[i] + 2);
+    repeat_ = atoi(av[i] + 2);
   else if (i + 1 < ac)
     {
-      repeat = atoi(av[i+1]);
-      if (repeat != 0)
+      repeat_ = atoi(av[i+1]);
+      if (repeat_ != 0)
         i++;
     }
 
-  if (0 == repeat)
-    repeat = 2;
+  if (0 == repeat_)
+    repeat_ = 2;
 
 }
 
+static char* getParameterField(int ac, char** av, int& i)
+{
+	if (strlen(av[i]) > 2)
+		return av[i] + 2;
+	else if (i + 1 < ac)
+		return av[++i];
+	return NULL;
+}
+
+
 void CommandLineTestRunner::SetGroupFilter(int ac, char** av, int& i)
 {
-  const char* groupFilter;
-
-  if (strlen(av[i]) > 2)
-    groupFilter = av[i] + 2;
-  else if (i + 1 < ac)
-    {
-      groupFilter = av[++i];
-    }
-  TestRegistry::getCurrentRegistry()->groupFilter(groupFilter);
-
+  groupFilter_ = getParameterField(ac, av, i);
 }
 
 void CommandLineTestRunner::SetNameFilter(int ac, char** av, int& i)
 {
-  const char* nameFilter;
-
-  if (strlen(av[i]) > 2)
-    nameFilter = av[i] + 2;
-  else if (i + 1 < ac)
-    {
-      nameFilter = av[++i];
-    }
-  TestRegistry::getCurrentRegistry()->nameFilter(nameFilter);
-
+   nameFilter_ = getParameterField(ac, av, i);
 }
 
+bool CommandLineTestRunner::SetOutputType(int ac, char** av, int& i)
+{
+	char* outputType = getParameterField(ac, av, i);
+	if (outputType == 0) return false;
+	
+	if (strcmp("normal", outputType) == 0) {
+		outputType_ = OUTPUT_NORMAL;
+		return true;
+	}
+	if (strcmp("junit", outputType) == 0) {
+		outputType_ = OUTPUT_JUNIT;
+		return true;
+	}
+	return false;
+}
