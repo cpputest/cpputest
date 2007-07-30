@@ -40,7 +40,6 @@
 
 class Utest;
 class TestResult;
-class TestOutput;
 class TestPlugin;
 
 class TestRegistry
@@ -52,8 +51,7 @@ class TestRegistry
 		virtual void addTest(Utest *test);
 		virtual void unDoLastAddTest();
 		virtual int  countTests();
-		virtual void runAllTests(TestResult& result, TestOutput*);
-		virtual void verbose();
+		virtual void runAllTests(TestResult& result);
 		virtual void nameFilter(const char*);
 		virtual void groupFilter(const char*);
 
@@ -69,14 +67,10 @@ class TestRegistry
   private:
 
     bool testShouldRun(Utest* test, TestResult& result);
-    void print(Utest* test);
 
-    TestOutput* 	output;
     Utest *				tests;
-    bool 					verbose_;
     const char* 	nameFilter_;
     const char* 	groupFilter_;
-    int 					dotCount;
     TestPlugin* 	firstPlugin_;
     static TestRegistry* currentRegistry_;
 
