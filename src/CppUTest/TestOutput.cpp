@@ -28,12 +28,20 @@
 #include "TestOutput.h"
 #include <stdio.h>
 #include "SimpleString.h"
+#include "Utest.h"
+#include "Failure.h"
+#include "TestResult.h"
 
-TestOutput::TestOutput()
+TestOutput::TestOutput() : dotCount_(0), verbose_(false)
 {}
 
 TestOutput::~TestOutput()
 {}
+
+void TestOutput::verbose()
+{
+	verbose_ = true;
+}
 
 void TestOutput::print(const char* s)
 {
@@ -57,3 +65,72 @@ TestOutput& operator<<(TestOutput& p, long int i)
   return p;
 }
 
+void TestOutput::printCurrentTest(const Utest& test)
+{
+	if (verbose_) {
+		print(test.getFormattedName().asCharString());
+		print("\n");
+	}
+	else {		
+		print(".");
+		if (++dotCount_ % 50 == 0)
+			print("\n");
+	}
+}
+
+void TestOutput::printTestsStarted()
+{
+}
+
+void TestOutput::flush()
+{
+}
+
+void TestOutput::printTestsEnded(const TestResult& result)
+{
+	if (result.getFailureCount() > 0) {
+	  print("\nErrors (");
+      print(result.getFailureCount());
+      print(" failures, ");
+	}
+	else {
+		print("\nOK (");
+	}
+	print(result.getTestCount());
+	print(" tests, ");
+	print(result.getRunCount());
+	print(" ran, ");
+	print(result.getCheckCount());
+	print(" checks, ");
+	print(result.getIgnoredCount());
+	print(" ignored, ");
+	print(result.getFilteredOutCount());
+	print(" filtered out)\n\n");
+}
+
+
+void TestOutput::printTestRun(int number, int total)
+{
+	if (total > 1) {
+		print("Test run ");
+		print(number);
+		print(" of ");
+		print(total);
+		print("\n");
+	}
+}
+
+void TestOutput::print(const Failure& failure)
+{
+    print("\n");
+    print(failure.getFileName().asCharString());
+    print(":");
+    print(failure.getLineNumber());
+    print(":");
+    print("Failure in ");
+    print(failure.getTestName().asCharString());
+    print("\n");
+    print("\t");
+    print(failure.getMessage().asCharString());
+    print("\n\n");
+}
