@@ -63,7 +63,7 @@ SimpleString& SimpleString::operator= (const SimpleString& other)
 }
 
 bool SimpleString::contains(const SimpleString& other) const
-  {
+ {
     //strstr on some machines does not handle ""
     //the right way.  "" should be found in any string
     if (strlen(other.buffer) == 0)
@@ -73,6 +73,103 @@ bool SimpleString::contains(const SimpleString& other) const
     else
       return strstr(buffer, other.buffer) != NULL;
   }
+
+bool SimpleString::startsWith(const SimpleString& other) const
+{
+    if (strlen(other.buffer) == 0)
+      return true;
+    else if (strlen(buffer) == 0)
+      return false;
+    else
+      return strstr(buffer, other.buffer) == buffer;
+}
+
+bool SimpleString::endsWith(const SimpleString& other) const
+{
+	int buffer_length = strlen(buffer);
+	int other_buffer_length = strlen(other.buffer);
+    if (other_buffer_length == 0) return true;
+    if (buffer_length == 0) return false;
+    if (buffer_length < other_buffer_length) return false;
+	return strcmp(buffer + buffer_length - other_buffer_length, other.buffer) == 0;
+}
+
+int SimpleString::count(const SimpleString& substr) const
+{
+	int num = 0;
+	char* str = buffer;
+	while(str = strstr(str, substr.buffer)) {
+		num++;
+		str++;
+	}
+	return num;
+}
+
+int SimpleString::split(const SimpleString& split, SimpleString*& output) const
+{
+	int num = count(split);
+	int extraEndToken = (endsWith(split)) ? 0 : 1;
+	output = new SimpleString[num + extraEndToken];
+
+	char* str = buffer;
+	char* prev;
+	for (int i = 0; i < num; ++i){
+		prev = str;
+		str = strstr(str, split.buffer) + 1;
+		int len = str - prev;
+		char* sub = new char[len+1];
+		strncpy(sub, prev, len);
+		sub[len] = '\0';
+		output[i] = sub;
+		delete [] sub;
+	}
+	if (extraEndToken) {
+		output[num] = str;
+	}
+	return num + extraEndToken;
+}
+
+void SimpleString::replace(char to, char with)
+{
+	int s = size();
+	for (int i = 0; i < s; i++) {
+		if (buffer[i] == to) buffer[i] = with;
+	}
+}
+
+void SimpleString::replace(const char* to, const char* with)
+{
+	int c = count(to);
+	int len = size();
+	int tolen = strlen(to);
+	int withlen = strlen(with);
+	
+	int newsize = len + (withlen * c) - (tolen * c) + 1;
+	
+	if (newsize) {
+		char* newbuf = new char[newsize];
+		for (int i = 0, j = 0; i < len;) {
+			if (strncmp(&buffer[i], to, tolen) == 0) {
+				strncpy(&newbuf[j], with, withlen);
+				j += withlen;
+				i += tolen;
+			}
+			else {
+				newbuf[j] = buffer[i];
+				j++;
+				i++;
+			}
+		}
+		delete [] buffer;
+		buffer = newbuf;
+		buffer[newsize-1] = '\0';
+	}
+	else {
+  	  buffer = new char [1];
+  	  buffer [0] = '\0';
+	}		
+}
+
 
 const char *SimpleString::asCharString () const
   {
