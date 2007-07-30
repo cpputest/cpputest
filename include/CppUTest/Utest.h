@@ -65,10 +65,12 @@ class Utest
     virtual bool isLast () const;
     virtual int  countTests();
 
-    const SimpleString getName() const;
     bool shouldRun(const SimpleString& groupFilter, const SimpleString& nameFilter) const;
+    const SimpleString getName() const;
+	const SimpleString getGroup() const;
     const SimpleString getFile() const;
     int getLineNumber() const;
+
     virtual void setup();
     virtual void teardown();
 
@@ -87,8 +89,7 @@ class Utest
     virtual bool assertLongsEqual(long expected, long actual, const char* fileName, int lineNumber);
     virtual bool assertDoublesEqual(double expected, double actual, double threshold, const char* fileName, int lineNumber);
     virtual void fail(const char* text, const char* fileName, int lineNumber);
-
-
+	
 	void setFileName(const char* fileName);
 	void setLineNumber(int lineNumber);
 	void setGroupName(const char* groupName);
