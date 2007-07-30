@@ -50,10 +50,14 @@ TestResult::~TestResult()
 void TestResult::testsStarted ()
 {}
 
+void TestResult::setCurrentTest(Utest* test)
+{
+	output.printCurrentTest(*test);
+}
 
 void TestResult::addFailure (const Failure& failure)
 {
-  failure.Print(output);
+  output.print(failure);
   failureCount++;
 }
 
@@ -84,24 +88,5 @@ void TestResult::countIgnored()
 
 void TestResult::testsEnded ()
 {
-  if (failureCount > 0)
-    {
-      output.print("\nErrors (");
-      output.print(failureCount);
-      output.print(" failures, ");
-    }
-  else
-    {
-      output.print("\nOK (");
-    }
-  output.print(testCount);
-  output.print(" tests, ");
-  output.print(runCount);
-  output.print(" ran, ");
-  output.print(checkCount);
-  output.print(" checks, ");
-  output.print(ignoredCount);
-  output.print(" ignored, ");
-  output.print(filteredOutCount);
-  output.print(" filtered out)\n\n");
+	output.printTestsEnded(*this);
 }
