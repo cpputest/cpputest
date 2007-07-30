@@ -27,22 +27,32 @@
 
 #include "TestHarness.h"
 #include "TestOutput.h"
+#include "TestResult.h"
 #include "MockTestOutput.h"
 
 TEST_GROUP(TestOutput)
-  {
-  TestOutput* printer;
-  MockTestOutput* mock;
+{
+	TestOutput* printer;
+	MockTestOutput* mock;
+	Utest* tst;
+	Failure *f;
+	TestResult* result;
 
-  TEST_SETUP()
-  {
-    mock = new MockTestOutput();
-    printer = mock;
-  }
-  TEST_TEARDOWN()
-  {
-    delete printer;
-  }
+	TEST_SETUP()
+	{
+		mock = new MockTestOutput();
+		printer = mock;
+		tst = new Utest("group", "test", "file", 1);
+		f = new Failure(tst, "failfile", 2, "message");
+		result = new TestResult(*mock);
+	}
+	TEST_TEARDOWN()
+	{
+		delete printer;
+		delete tst;
+		delete f;
+		delete result;
+	}
 };
 
 TEST(TestOutput, PrintConstCharStar)
@@ -64,3 +74,68 @@ TEST(TestOutput, StreamOperators)
   STRCMP_EQUAL("n=1234", mock->getOutput().asCharString());
 }
 
+TEST(TestOutput, PrintTest)
+{
+	printer->printCurrentTest(*tst);
+	STRCMP_EQUAL(".", mock->getOutput().asCharString());
+}
+
+TEST(TestOutput, PrintTestALot)
+{
+	for (int i = 0; i < 60; ++i) {
+		printer->printCurrentTest(*tst);
+	}
+	STRCMP_EQUAL("..................................................\n..........", mock->getOutput().asCharString());
+}
+
+TEST(TestOutput, PrintTestVerbose)
+{
+	mock->verbose();
+	printer->printCurrentTest(*tst);
+	STRCMP_EQUAL("TEST(group, test)\n", mock->getOutput().asCharString());
+}
+
+TEST(TestOutput, PrintTestRun)
+{
+	printer->printTestRun(2, 3);
+	STRCMP_EQUAL("Test run 2 of 3\n", mock->getOutput().asCharString());
+}
+
+TEST(TestOutput, PrintTestRunOnlyOne)
+{
+	printer->printTestRun(1, 1);
+	STRCMP_EQUAL("", mock->getOutput().asCharString());
+}
+
+TEST(TestOutput, PrintFailure)
+{
+	printer->print(*f);
+	STRCMP_EQUAL("\nfailfile:2:Failure in TEST(group, test)\n\tmessage\n\n", mock->getOutput().asCharString());
+}
+
+TEST(TestOutput, PrintTestStarts)
+{
+	printer->printTestsStarted();
+	STRCMP_EQUAL("", mock->getOutput().asCharString());
+}
+
+TEST(TestOutput, printTestsEnded)
+{
+	result->countTest();
+	result->countCheck();
+	result->countIgnored();
+	result->countIgnored();
+	result->countRun();
+	result->countRun();
+	result->countRun();
+	printer->printTestsEnded(*result);
+	STRCMP_EQUAL("\nOK (1 tests, 3 ran, 1 checks, 2 ignored, 0 filtered out)\n\n", mock->getOutput().asCharString());
+}
+
+TEST(TestOutput, printTestsEndedWithFailures)
+{
+	result->addFailure(*f);
+	printer->flush();
+	printer->printTestsEnded(*result);
+	STRCMP_EQUAL("\nErrors (1 failures, 0 tests, 0 ran, 0 checks, 0 ignored, 0 filtered out)\n\n", mock->getOutput().asCharString());
+}
