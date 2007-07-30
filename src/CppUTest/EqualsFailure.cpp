@@ -36,7 +36,7 @@ EqualsFailure::EqualsFailure(Utest* test, const char* fileName, long lineNumber,
                              const SimpleString& actual)
     : Failure(test, fileName, lineNumber)
 {
-  const char *format = "\texpected <%s>\n\tbut was  <%s>";
+  const char *format = "expected <%s>\n\tbut was  <%s>";
 
   char *stage = new char [strlen(format) - (2 * strlen("%s"))
                           + expected.size ()
@@ -51,10 +51,3 @@ EqualsFailure::EqualsFailure(Utest* test, const char* fileName, long lineNumber,
 
   delete [] stage;
 }
-
-
-
-void EqualsFailure::PrintSpecifics(TestOutput& p)const
-  {
-    p << message.asCharString();
-  }
