@@ -35,10 +35,8 @@
 
 TestRegistry::TestRegistry()
     : tests(&NullTest::instance())
-    , verbose_(false)
     , nameFilter_("")
     , groupFilter_("")
-    , dotCount(0)
     , firstPlugin_ (NullTestPlugin::instance())
 {
 }
@@ -53,18 +51,15 @@ void TestRegistry::addTest (Utest *test)
 }
 
 
-void TestRegistry::runAllTests (TestResult& result, TestOutput* p)
+void TestRegistry::runAllTests (TestResult& result)
 {
 
-  output = p;
-
-  dotCount = 0;
-  result.testsStarted ();
+	result.testsStarted ();
 
 	for (Utest *test = tests; !test->isLast(); test = test->getNext ()){
 		result.countTest();
 		if (testShouldRun(test, result)) {
-			print(test);
+			result.setCurrentTest(test);
           
 			firstPlugin_->runAllPreTestAction(*test, result);
 			test->run(result);
@@ -98,11 +93,6 @@ void TestRegistry::unDoLastAddTest()
 
 }
 
-void TestRegistry::verbose()
-{
-  verbose_ = 1;
-}
-
 void TestRegistry::nameFilter(const char* f)
 {
 	nameFilter_ = f;
@@ -131,21 +121,6 @@ bool TestRegistry::testShouldRun(Utest* test, TestResult& result)
   else {
       result.countFilteredOut();
       return false;
-    }
-}
-
-void TestRegistry::print(Utest* test)
-{
-  if (verbose_)
-    {
-      output->print(test->getFormattedName().asCharString());
-      output->print("\n");
-    }
-  else
-    {
-      output->print(".");
-      if (++dotCount % 50 == 0)
-        output->print("\n");
     }
 }
 
