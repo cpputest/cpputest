@@ -53,7 +53,7 @@ void MemoryLeakWarning::Enable()
   SET_CRT_DEBUG_FIELD( _CRTDBG_LEAK_CHECK_DF );
 }
 
-const char* MemoryLeakWarning::FinalReport()
+const char* MemoryLeakWarning::FinalReport(int toBeDeletedLeaks)
 {
   //windows reports leaks automatically when set up as above
   return "";
