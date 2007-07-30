@@ -46,7 +46,7 @@ class MemoryLeakWarning
     ~MemoryLeakWarning () {DestroyData();}
     
     void Enable();
-    const char*  FinalReport();
+    const char*  FinalReport(int toBeDeletedLeaks);
     void CheckPointUsage();
     void ExpectLeaks(int n);
     bool UsageIsNotBalanced();

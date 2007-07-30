@@ -49,7 +49,7 @@ class MemoryLeakWarningPlugin : public TestPlugin
 		virtual void postTestAction(Utest& test, TestResult& result);
 
 		virtual void Enable();
-		virtual const char* FinalReport();
+		virtual const char* FinalReport(int toBeDeletedLeaks = 0);
 	private:
 		MemoryLeakWarning memLeakWarning;
   };
