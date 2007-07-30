@@ -55,6 +55,11 @@ class MockTestOutput : public TestOutput
       output += s;
     }
 
+    void flush()
+    {
+      output = "";
+    }
+
     const SimpleString& getOutput()
     {
       return output;
