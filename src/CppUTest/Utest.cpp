@@ -118,6 +118,11 @@ const SimpleString Utest::getName() const
   {
     return SimpleString(name_);
   }
+  
+const SimpleString Utest::getGroup() const
+{
+	return SimpleString(group_);
+}  
 
 SimpleString Utest::getFormattedName() const
   {
@@ -197,14 +202,24 @@ bool Utest::assertTrue(bool condition, const char* conditionString, const char* 
 
 bool Utest::assertCstrEqual(const char* expected, const char* actual, const char* fileName, int lineNumber)
 {
-  testResult_->countCheck();
-  if (strcmp(expected, actual) != 0)
-    {
-      EqualsFailure _f(this, fileName, lineNumber, StringFrom(expected), StringFrom(actual));
-      testResult_->addFailure (_f);
-      return false;
-    }
-  return true;
+	testResult_->countCheck();
+	if (actual == 0 && expected == 0) return true;
+	if (actual == 0) {
+		EqualsFailure _f(this, fileName, lineNumber, StringFrom(expected), StringFrom("(null)"));
+		testResult_->addFailure (_f);
+		return false;
+	}
+	if (expected == 0) {
+		EqualsFailure _f(this, fileName, lineNumber, StringFrom("(null)"), StringFrom(actual));
+		testResult_->addFailure (_f);
+		return false;
+	}
+	if (strcmp(expected, actual) != 0) {
+		EqualsFailure _f(this, fileName, lineNumber, StringFrom(expected), StringFrom(actual));
+		testResult_->addFailure (_f);
+		return false;
+	}
+	return true;
 }
 
 bool Utest::assertLongsEqual(long expected, long actual, const char* fileName, int lineNumber)
