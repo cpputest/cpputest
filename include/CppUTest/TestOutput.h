@@ -39,20 +39,35 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+class Utest;
+class Failure;
+class TestResult;
+
 class TestOutput
   {
   public:
     explicit TestOutput();
     virtual ~TestOutput();
 
+	virtual void printTestsStarted();
+	virtual void printCurrentTest(const Utest& test);
+	virtual void printTestsEnded(const TestResult& result);
+	
+	virtual void verbose();
     virtual void print(const char*);
     virtual void print(long);
+    virtual void print(const Failure& failure);
+	virtual void printTestRun(int number, int total);
+
+	virtual void flush();
 
   private:
 
     TestOutput(const TestOutput&);
     TestOutput& operator=(const TestOutput&);
 
+	int dotCount_;
+	bool verbose_;
   };
 
 TestOutput& operator<<(TestOutput&, const char*);
