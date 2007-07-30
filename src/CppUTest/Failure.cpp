@@ -52,33 +52,35 @@ Failure::Failure(Utest* test, const char* fileName, long lineNum)
     , message("no message")
 {}
 
+Failure::Failure(const Failure& f)
+    : testName (f.testName)
+    , fileName (f.fileName)
+    , lineNumber (f.lineNumber)
+    , message(f.message)
+{
+}
+
 Failure::~Failure()
 {}
 
+SimpleString Failure::getFileName() const
+{
+	return fileName;
+}
 
-void Failure::PrintLeader(TestOutput& p)const
-  {
-    p 
-    << "\n"  << fileName.asCharString()
-    << ":" <<lineNumber <<":"
-    << "Failure in " << testName.asCharString() << "\n";
-  }
+SimpleString Failure::getTestName() const
+{
+	return testName;
+}
 
-void Failure::Print(TestOutput& p)const
-  {
-    PrintLeader(p);
-    PrintSpecifics(p);
-    PrintTrailer(p);
-  }
+int Failure::getLineNumber() const
+{
+	return lineNumber;
+}
 
-void Failure::PrintSpecifics(TestOutput& p)const
-  {
-    p << "    " << message.asCharString();
-  }
-
-void Failure::PrintTrailer(TestOutput& p)const
-  {
-    p << "\n\n";
-  }
+SimpleString Failure::getMessage() const
+{
+	return message;
+}
 
 
