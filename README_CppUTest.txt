@@ -102,7 +102,7 @@ TEST to ignore a certain number of leaks as in this example:
 
 TEST(MemoryLeakWarningTest, Ignore1)
 {
-    IGNORE_N_LEAKS(1);
+    EXPECT_N_LEAKS(1);
     char* arrayToLeak1 = new char[100];
 }
 
@@ -148,3 +148,7 @@ TEST(ClassName, Create)
   STRCMP_EQUAL("hello", "hello");
   FAIL("The prior tests pass, but this one doesn't");
 }
+
+There are some scripts that are helpful in creating your initial h, cpp, and 
+Test files.  See scripts/README.TXT
+
