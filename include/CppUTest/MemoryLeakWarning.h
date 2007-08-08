@@ -25,8 +25,8 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef D_EnableMemoryLeakWarning_h
-#define D_EnableMemoryLeakWarning_h
+#ifndef D_MemoryLeakWarning_h
+#define D_MemoryLeakWarning_h
 
 ///////////////////////////////////////////////////////////////////////////////
 //
