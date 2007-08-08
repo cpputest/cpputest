@@ -25,12 +25,12 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
  
+#include "Platform.h"
 #include "JUnitTestOutput.h"
 #include "Utest.h"
 #include "TestResult.h"
 #include "Failure.h"
 #include <stdio.h>
- 
  
  JUnitTestOutput::JUnitTestOutput()
 {
