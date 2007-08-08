@@ -82,7 +82,7 @@ TestRegistry* TestRegistry::getCurrentRegistry()
 	return (currentRegistry_ == 0) ? &registry : currentRegistry_;
 }
 
-void TestRegistry::TestRegistry::setCurrentRegistry(TestRegistry* registry)
+void TestRegistry::setCurrentRegistry(TestRegistry* registry)
 {
 	currentRegistry_ = registry;
 }
