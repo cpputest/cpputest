@@ -3,10 +3,8 @@
 #include "ClassName.h"
 #include "MockClassName.h"
 
-EXPORT_TEST_GROUP(ClassName);
-
-namespace
-  {
+TEST_GROUP(ClassName)
+{
   ClassName* aClassName;
   MockClassName* mockClassName;
 
@@ -25,4 +23,3 @@ TEST(ClassName, Create)
 {
   FAIL("Start here");
 }
-

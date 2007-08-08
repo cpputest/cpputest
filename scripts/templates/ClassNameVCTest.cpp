@@ -6,17 +6,20 @@ extern "C"
 #include "ClassName.h"
   }
 
+static struct ClassName* aClassName;
 
-static ClassName* aClassName;
-
-static void SetUp()
+TEST_GROUP(ClassName)
 {
-  aClassName = ClassName_Create(42);
-}
+  ClassName* aClassName;
 
-static void TearDown()
-{
-  aClassName = send(aClassName, Destroy);
+  void SetUp()
+  {
+      aClassName = ClassName_Create(42);
+  }
+  void TearDown()
+  {
+      aClassName = send(aClassName, Destroy);
+  }
 }
 
 TEST(ClassName, Create)

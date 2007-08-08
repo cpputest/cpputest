@@ -2,9 +2,7 @@
 #include "CppUTest/SimpleStringExtensions.h"
 #include "ClassName.h"
 
-EXPORT_TEST_GROUP(ClassName);
-
-namespace
+TEST_GROUP(ClassName)
 {
   ClassName* aClassName;
 
