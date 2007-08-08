@@ -1,7 +1,5 @@
 #/bin/bash
-source checkForCppUTestEnvVariable.sh
-
-checkForCppUTestEnvVariable
+CPP_U_TEST=$(pwd)/..
 
 EXE_DIR=${EXE_DIR:-/usr/local/bin}
 test -f ${EXE_DIR} || mkdir -p ${EXE_DIR}
