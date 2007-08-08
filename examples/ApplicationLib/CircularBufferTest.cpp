@@ -55,59 +55,6 @@ TEST_GROUP(CircularBuffer)
   }
 };
 
-/*
- * Tests I think i need
- * Empty
- * Not empty
- * Simple put and get
- * wraparound
- * capactiy
- * overfill
- * underflow
- * Print under various conditions
- */
-
-/*
- * TDD Exercise
- * 
- * The purpose of this exercise is to give you a feel for 
- * pair programming with an experienced TDD programmer
- * 
- * The CircularBuffer files were created using the NewClass.sh script
- * like this:
- *      NewClass CircularBuffer 
- * 
- * Delete the failing testsCompile this 
- * and witness that all test pass
- * 
- * To get the feel of TDD enable only one test at a time
- * by moving the #if down one test.  This is simulating 
- * writing that next test.  
- * 
- * Do the minimum coding needed to get the test to pass.
- * Like this:
- * 
- *   Move the #if down the page.  Study the test, make 
- *   sure you understand what the test is trying to 
- *   accomplish.  You are pretending to have written that test
- * 
- *   Get the test to compile.  This usually means just
- *   getting the header file right.  Once the header file is
- *   right you will have a linker error.
- * 
- *   Next add the simplest implementation that will fail to
- *   get rid of the linker error.  Watch the test fail.
- * 
- *   Next do the minimum code necessary to get the test
- *   to pass.  Sometimes this means hardcoding a return
- *   value.
- * 
- *   Now go to the next test.
- * 
- * You will find some more instruction down the page
-*/
-
-
 TEST(CircularBuffer, EmptyAfterCreation)
 {
     CHECK(buffer->IsEmpty());   
@@ -232,11 +179,6 @@ TEST(CircularBuffer, PrintAfterOnePut)
                         mock.getOutput()); 
 }
 
-/*
- * you must be sick of writing that for loop to fill the
- * queue.  Refactor that duplication using the helper 
- * suggested by this test
- */
  
 TEST(CircularBuffer, PrintNotYetWrappedOrFull)
 {
