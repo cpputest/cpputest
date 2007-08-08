@@ -30,7 +30,7 @@
 #include <iostream>
 #include <crtdbg.h>
 #include <windows.h>
-#include "UnitTestHarness/MemoryLeakWarning.h"
+#include "MemoryLeakWarning.h"
 
 #ifdef   _DEBUG
 #define  SET_CRT_DEBUG_FIELD(a) \
@@ -93,7 +93,3 @@ const char* MemoryLeakWarning::Message()
   return message;
 }
 
-void MemoryLeakWarning::IgnoreLeaks(int n)
-{
-    expectCount = n;
-}
