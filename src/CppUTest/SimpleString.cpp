@@ -98,7 +98,7 @@ int SimpleString::count(const SimpleString& substr) const
 {
 	int num = 0;
 	char* str = buffer;
-	while(str = strstr(str, substr.buffer)) {
+	while( (str = strstr(str, substr.buffer)) ) {
 		num++;
 		str++;
 	}
