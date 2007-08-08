@@ -24,5 +24,7 @@ clean:
 	
 depend:
 	$(MAKE) -C src/Platforms/Gcc depend
-	$(MAKE) -C src depend
+	$(MAKE) -C src/CppUTest depend 
+	$(MAKE) -C tests depend 
+	$(MAKE) -C examples depend
 	
