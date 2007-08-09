@@ -1,12 +1,14 @@
 export CPP_U_TEST = $(shell pwd)/..
 
-all:
+all: compile test
+
+compile:
 	$(MAKE) -C ApplicationLib all
 	$(MAKE) -C lib all
-	$(MAKE) -C AllTests all test
+	$(MAKE) -C AllTests all
  
 test: all
-	$(MAKE) -C AllTests test
+	$(MAKE) -s -C AllTests test
  
 clean:
 	$(MAKE) -C ApplicationLib clean
