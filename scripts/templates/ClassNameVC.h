@@ -1,7 +1,7 @@
 #ifndef D_ClassName_H
 #define D_ClassName_H
 
-#include "VirtualCall.h"
+#include "CppUTest/VirtualCall.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 //

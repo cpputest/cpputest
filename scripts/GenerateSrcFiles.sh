@@ -1,10 +1,10 @@
-#!/bin/bash
+#!/bin/bash -x
 #$1 is the class name
 #$2 is the template root file name
 #$3 is the kind of file to create (c or cpp)
 #$4 is the Mock if a mock version should be created
 
-className=$1
+className=$x
 
 #Test for env var set.
 checkForCppUTestEnvVariable() {

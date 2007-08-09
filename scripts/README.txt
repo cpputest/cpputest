@@ -2,8 +2,6 @@ The New*.sh scripts are helpful for creating the initial files for a new class..
 	NewClass.sh - for TTDing a new C++ class
 	NewInterface.sh - for TDDing a new interface along with its Mock
 	NewCModule.sh - for TDDing a C module
-	NewVCModule.sh - for TDDing a C module that uses function pointers like
-					a virtual function.
 
 To use NewClass for example:
 	cd to the directory where your makefile is

@@ -20,7 +20,7 @@ TEST_GROUP(ClassName)
   {
      ClassName_destroy(aClassName);
   }
-}
+};
 
 TEST(ClassName, Create)
 {
