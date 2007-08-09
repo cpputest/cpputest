@@ -2,7 +2,7 @@ export CPP_U_TEST = $(shell pwd)
 export CPP_PLATFORM = Gcc
 export APP_CXXFLAGS = -Wall
 
-all: compile test
+all: compile test example
 
 compile:
 	$(MAKE) -C src/Platforms/Gcc all
