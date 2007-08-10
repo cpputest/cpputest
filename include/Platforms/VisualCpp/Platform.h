@@ -30,3 +30,4 @@
 #endif
 
 #define snprintf _snprintf
+#define vsnprintf _vsnprintf

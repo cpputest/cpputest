@@ -92,7 +92,15 @@ SOURCE=.\AllTests.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\CommandLineTestRunnerTest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\FailureTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\JUnitOutputTest.cpp
 # End Source File
 # Begin Source File
 
@@ -109,6 +117,10 @@ SOURCE=.\SimpleStringExtensionsTest.cpp
 # Begin Source File
 
 SOURCE=.\SimpleStringTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\TestHarness_cTest.cpp
 # End Source File
 # Begin Source File
 
@@ -133,6 +145,10 @@ SOURCE=.\UtestTest.cpp
 # Begin Source File
 
 SOURCE=.\AllTests.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\GenericTest.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"

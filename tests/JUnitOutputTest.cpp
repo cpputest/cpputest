@@ -25,6 +25,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "Platform.h"
 #include "TestHarness.h"
 #include "JUnitTestOutput.h"
 #include "TestResult.h"
@@ -170,7 +171,7 @@ TEST_GROUP(JUnitOutputTest)
 			SimpleString* arr = 0;
 			int size = buffer.split("\n", arr);
 			CHECK(size >= totalSize);
-			CHECK(arr);
+			CHECK(arr != 0);
 			CHECK_HAS_XML_HEADER(arr[0]);
 			CHECK_TEST_SUITE_START(arr[1]);
 			CHECK_PROPERTIES_START(arr[2]);

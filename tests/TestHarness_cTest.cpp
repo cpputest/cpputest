@@ -58,7 +58,8 @@ TEST(TestHarness_c, checkInt)
 	fixture->setTestFunction(_failIntMethod);
 	fixture->runAllTests();
 	fixture->assertPrintContains("expected <1>\n	but was  <2>");
-	fixture->assertPrintContains("TestHarness_cTest.cpp");
+	fixture->assertPrintContains("arness_c");
+//	fixture->assertPrintContains("TestHarness_cTest.cpp");;  //becuase of MS lowercasing the files
 }
 
 void _failRealMethod()
@@ -72,7 +73,8 @@ TEST(TestHarness_c, checkReal)
 	fixture->setTestFunction(_failRealMethod);
 	fixture->runAllTests();
 	fixture->assertPrintContains("expected <1.000000>\n	but was  <2.000000>");
-	fixture->assertPrintContains("TestHarness_cTest.cpp");
+	fixture->assertPrintContains("arness_c");
+//	fixture->assertPrintContains("TestHarness_cTest.cpp");
 }
 
 void _failCharMethod()
@@ -86,7 +88,8 @@ TEST(TestHarness_c, checkChar)
 	fixture->setTestFunction(_failCharMethod);
 	fixture->runAllTests();
 	fixture->assertPrintContains("expected <a>\n	but was  <c>");
-	fixture->assertPrintContains("TestHarness_cTest.cpp");
+	fixture->assertPrintContains("arness_c");
+//	fixture->assertPrintContains("TestHarness_cTest.cpp");
 }
 
 void _failStringMethod()
@@ -100,7 +103,8 @@ TEST(TestHarness_c, checkString)
 	fixture->setTestFunction(_failStringMethod);
 	fixture->runAllTests();
 	fixture->assertPrintContains("expected <Hello>\n	but was  <World>");
-	fixture->assertPrintContains("TestHarness_cTest.cpp");
+	fixture->assertPrintContains("arness_c");
+//	fixture->assertPrintContains("TestHarness_cTest.cpp");
 }
 
 void _failTextMethod()
@@ -113,7 +117,8 @@ TEST(TestHarness_c, checkFailText)
 	fixture->setTestFunction(_failTextMethod);
 	fixture->runAllTests();
 	fixture->assertPrintContains("Booo");
-	fixture->assertPrintContains("TestHarness_cTest.cpp");
+	fixture->assertPrintContains("arness_c");
+//	fixture->assertPrintContains("TestHarness_cTest.cpp");
 }
 
 void _failMethod()
@@ -125,7 +130,8 @@ TEST(TestHarness_c, checkFail)
 {
 	fixture->setTestFunction(_failMethod);
 	fixture->runAllTests();
-	fixture->assertPrintContains("TestHarness_cTest.cpp");
 	LONGS_EQUAL(1, fixture->getFailureCount());
+	fixture->assertPrintContains("arness_c");
+//	fixture->assertPrintContains("TestHarness_cTest.cpp");
 }
 

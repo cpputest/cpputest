@@ -129,7 +129,7 @@ IGNORE_TEST(Utest, IgnoreTestSupportsAllMacros)
 
 IGNORE_TEST(Utest, IgnoreTestAccessingFixture)
 {
-	CHECK(fixture);
+	CHECK(fixture != 0);
 }
 
 TEST(Utest, MacrosUsedInSetup)

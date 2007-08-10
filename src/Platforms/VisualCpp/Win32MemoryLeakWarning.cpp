@@ -41,6 +41,12 @@
 
 static int expectCount = 0;
 
+class MemoryLeakWarningData
+{
+public:
+	_CrtMemState initalMemoryState, finalMemoryState, memoryStateDifference;
+
+};
 
 void MemoryLeakWarning::Enable()
 {
@@ -59,26 +65,25 @@ const char* MemoryLeakWarning::FinalReport(int toBeDeletedLeaks)
   return "";
 }
 
-static _CrtMemState s1, s2, s3;
-
 
 void MemoryLeakWarning::CheckPointUsage()
 {
   expectCount = 0;
-  _CrtMemCheckpoint( &s1 );
+  _CrtMemCheckpoint( &(_impl->initalMemoryState) );
 }
 
 static char message[50] = "";
 bool MemoryLeakWarning::UsageIsNotBalanced()
 {
-  _CrtMemCheckpoint( &s2 );
-  if (_CrtMemDifference( &s3, &s1, &s2) )
+  _CrtMemCheckpoint( &(_impl->finalMemoryState) );
+  if (_CrtMemDifference( &(_impl->memoryStateDifference), &(_impl->initalMemoryState), &(_impl->finalMemoryState)) )
   {
-      if (s3.lCounts[1] == expectCount)
+      if (_impl->memoryStateDifference.lCounts[1] == expectCount)
         return false;
       else
       {
-        sprintf(message, "this test leaks %d blocks", s3.lCounts[1]);
+        sprintf(message, "this test leaks %d blocks", _impl->memoryStateDifference.lCounts[1]);
+		//_CrtDumpMemoryLeaks();
         return true;
       }
   }
@@ -91,5 +96,22 @@ bool MemoryLeakWarning::UsageIsNotBalanced()
 const char* MemoryLeakWarning::Message()
 {
   return message;
+}
+
+void MemoryLeakWarning::CreateData()
+{
+	_impl = new MemoryLeakWarningData;
+}
+
+void MemoryLeakWarning::DestroyData()
+{
+	delete _impl;
+}
+
+MemoryLeakWarning* MemoryLeakWarning::_latest = NULL;
+
+void MemoryLeakWarning::ExpectLeaks(int n)
+{
+	expectCount = n;
 }
 
