@@ -146,7 +146,7 @@ SOURCE=.\SRC\CPPUTEST\Utest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\Platforms\VisualCpp\win32memoryleakwarning.cpp
+SOURCE=.\src\Platforms\VisualCpp\Win32MemoryLeakWarning.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -154,7 +154,87 @@ SOURCE=.\src\Platforms\VisualCpp\win32memoryleakwarning.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=.\SRC\PLATFORMS\VISUALCPP\Platform.h
+SOURCE=.\include\CppUTest\CommandLineTestRunner.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTest\EqualsFailure.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTest\Failure.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTest\JunitTestOutput.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTest\MemoryLeakWarning.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTest\MemoryLeakWarningPlugin.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTest\MockTestOutput.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTest\NullTest.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\Platforms\VisualCpp\Platform.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTest\RealTestOutput.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTest\SimpleString.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTest\SimpleStringExtensions.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTest\TestHarness.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTest\TestHarness_c.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTest\TestInstaller.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTest\TestOutput.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTest\TestPlugin.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTest\TestRegistry.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTest\TestResult.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTest\Utest.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTest\VirtualCall.h
 # End Source File
 # End Group
 # End Target
