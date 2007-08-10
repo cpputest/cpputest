@@ -110,7 +110,7 @@ TEST(TestOutput, PrintTestRunOnlyOne)
 TEST(TestOutput, PrintFailure)
 {
 	printer->print(*f);
-	STRCMP_EQUAL("\nfailfile:2:Failure in TEST(group, test)\n\tmessage\n\n", mock->getOutput().asCharString());
+	STRCMP_EQUAL("\nfailfile:2: error: Failure in TEST(group, test)\n\tmessage\n\n", mock->getOutput().asCharString());
 }
 
 TEST(TestOutput, PrintTestStarts)
