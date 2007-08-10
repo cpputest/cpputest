@@ -164,6 +164,7 @@ public:
 	void teardown()
 	{
 		CHECK(inTest);
+		inTest = false;
 	}
 };
 
