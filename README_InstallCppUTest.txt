@@ -1,6 +1,10 @@
 1. Unzip into <someDirectory>, resulting in
 		<someDirectory>/CppUTest/	
-		
+
+   MAKE SURE <someDirectory> DOES NOT HAVE SPACES IN IT	
+   MAKE SURE <someDirectory> DOES NOT HAVE SPACES IN IT	
+   MAKE SURE <someDirectory> DOES NOT HAVE SPACES IN IT	
+	
 2. Set the environement variable CPP_U_TEST to 
 		<someDirectory>/CppUTest/
 		

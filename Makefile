@@ -9,7 +9,7 @@ compile:
 	$(MAKE) -C src/CppUTest all
 	$(MAKE) -C lib all
  
-test: all
+test: compile example
 	$(MAKE) -s -C tests test
 	$(MAKE) -s -C examples/AllTests test
 
