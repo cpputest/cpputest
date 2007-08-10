@@ -1,4 +1,3 @@
-export CPP_U_TEST = $(shell pwd)/..
 
 all: compile test
 

@@ -4,6 +4,7 @@ extern "C" {
 	extern helloWorldApi helloWorldApiInstance;
 }
 
+#include "Platform.h"
 #include <stdio.h>
 #include <stdarg.h>
 #include "CppUTest/TestHarness.h"
