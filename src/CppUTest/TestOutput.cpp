@@ -45,7 +45,8 @@ void TestOutput::verbose()
 
 void TestOutput::print(const char* s)
 {
-  printf(s);
+    for (const char* p = s; *p; p++)
+        putchar(*p);
 }
 
 void TestOutput::print(long n)
