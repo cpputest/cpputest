@@ -46,16 +46,16 @@ class TestPlugin
     TestPlugin();
     virtual ~TestPlugin();
 
-		virtual void preTestAction(Utest& test, TestResult& result) {};
-		virtual void postTestAction(Utest& test, TestResult& result) {};
+		virtual void preTestAction(Utest&, TestResult&) {};
+		virtual void postTestAction(Utest&, TestResult&) {};
 
-		virtual void runAllPreTestAction(Utest& test, TestResult& result);
-		virtual void runAllPostTestAction(Utest& test, TestResult& result);
+		virtual void runAllPreTestAction(Utest&, TestResult&);
+		virtual void runAllPostTestAction(Utest&, TestResult&);
 		
-		virtual TestPlugin* addPlugin(TestPlugin* plugin);
-
+		virtual TestPlugin* addPlugin(TestPlugin*);
+        
 	protected:
-    TestPlugin(TestPlugin* next);
+        TestPlugin(TestPlugin* next);
 
 	private:
 		TestPlugin* next_;
