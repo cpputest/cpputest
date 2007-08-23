@@ -68,6 +68,10 @@ void MemoryLeakWarning::DestroyData()
 	free(_impl);
 }
 
+extern "C" {
+void reportMemoryBallance();
+}
+
 void reportMemoryBallance()
 {
   int blockBalance = allocatedBlocks - firstInitialBlocks;
