@@ -71,10 +71,10 @@ NullTestPlugin* NullTestPlugin::instance()
 	return &_instance; 
 }
 
-void NullTestPlugin::runAllPreTestAction(Utest& test, TestResult& result)
+void NullTestPlugin::runAllPreTestAction(Utest&, TestResult&)
 {
 }
 	
-void NullTestPlugin::runAllPostTestAction(Utest& test, TestResult& result)
+void NullTestPlugin::runAllPostTestAction(Utest&, TestResult&)
 {
 }
