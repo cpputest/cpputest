@@ -30,18 +30,17 @@
 
 class GenericTest : public Utest
   {
+  public:
   	void (*setup_)();
   	void (*teardown_)();
-  public:
   	void (*_testFunction)();
     GenericTest(void (*setup)() = 0, void (*teardown)() = 0)
-        :Utest("Generic", "Generic", "Generic", 1), setup_(setup), teardown_(teardown)
+        :Utest("Generic", "Generic", "Generic", 1), setup_(setup), teardown_(teardown), _testFunction(0)
     {
-    	_testFunction = 0;
     }
     void testBody()
     {
-    	_testFunction();
+    	if (_testFunction) _testFunction();
     }
     virtual void setup()
     {
@@ -77,6 +76,10 @@ public:
 
 	void setTestFunction(void (*testFunction)()) {
 		genTest->_testFunction = testFunction;
+	}
+
+	void setSetup(void (*setupFunction)()) {
+		genTest->setup_ = setupFunction;
 	}
 	
 	void runAllTests () {
