@@ -253,3 +253,12 @@ void Utest::fail(const char *text, const char* fileName, int lineNumber)
 }
 
 
+TestResult* Utest::getTestResult()
+{
+  return testResult_;
+}
+
+Utest* Utest::getCurrent()
+{
+  return currentTest_;
+}
