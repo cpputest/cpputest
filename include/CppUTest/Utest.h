@@ -74,15 +74,8 @@ class Utest
     virtual void setup();
     virtual void teardown();
 
-    static TestResult* getTestResult()
-    {
-      return testResult_;
-    }
-
-    static Utest* getCurrent()
-    {
-      return currentTest_;
-    }
+    static TestResult* getTestResult();
+    static Utest* getCurrent();
 
     virtual bool assertTrue(bool condition, const char* conditionString, const char* fileName, int lineNumber);
     virtual bool assertCstrEqual(const char* expected, const char* actual, const char* fileName, int lineNumber);
