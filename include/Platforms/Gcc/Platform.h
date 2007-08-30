@@ -25,7 +25,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifdef D_Gcc_Platform_H
+#ifndef D_Gcc_Platform_H
 #define D_Gcc_Platform_H
 
 #endif
