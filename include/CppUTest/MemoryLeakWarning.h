@@ -42,25 +42,29 @@ class MemoryLeakWarningData;
 class MemoryLeakWarning
   {
   public:
-  	MemoryLeakWarning () {_latest = this; CreateData();}
-    ~MemoryLeakWarning () {DestroyData();}
+  	MemoryLeakWarning();
+  	~MemoryLeakWarning();
     
-    void Enable();
-    const char*  FinalReport(int toBeDeletedLeaks);
-    void CheckPointUsage();
-    void ExpectLeaks(int n);
-    bool UsageIsNotBalanced();
-    const char* Message();
-
-	static MemoryLeakWarning* _latest;
+  	void Enable();
+  	const char*  FinalReport(int toBeDeletedLeaks);
+  	void CheckPointUsage();
+	void ExpectLeaks(int n);
+	bool UsageIsNotBalanced();
+	const char* Message();
 	
+	static MemoryLeakWarning* GetLatest();
+	static void SetLatest(MemoryLeakWarning* latest);
+
+    
   private:
   	MemoryLeakWarningData* _impl;
   	void CreateData();
   	void DestroyData();
-  	
+
+  private:
+	static MemoryLeakWarning* _latest;
   };
 
-#define EXPECT_N_LEAKS(n) MemoryLeakWarning::_latest->ExpectLeaks(n);
+#define EXPECT_N_LEAKS(n) MemoryLeakWarning::GetLatest()->ExpectLeaks(n);
 
 #endif
