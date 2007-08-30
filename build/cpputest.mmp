@@ -1,0 +1,92 @@
+/*
+============================================================================
+ Name		: cpputest.mmp
+ Author	  : 
+ Copyright   : Your copyright notice
+ Description : This is the project specification file for cpputest.
+============================================================================
+*/
+
+TARGET		  cpputest.lib
+TARGETTYPE	  LIB
+UID			 0x00000000 0x03A6305A
+
+USERINCLUDE	 ..\include ..\include\CppUTest ..\include\Platforms\Symbian
+SYSTEMINCLUDE   \epoc32\include \epoc32\include\stdapis \epoc32\include\stlport
+
+LIBRARY		 euser.lib libc.lib libm.lib libpthread.lib
+
+SOURCEPATH ..\src\CppUTest
+SOURCE CommandLineTestRunner.cpp EqualsFailure.cpp Failure.cpp MemoryLeakWarningPlugin.cpp NullTest.cpp SimpleString.cpp SimpleStringExtensions.cpp TestInstaller.cpp TestOutput.cpp TestPlugin.cpp TestRegistry.cpp TestResult.cpp Utest.cpp
+SOURCE JUnitTestOutput.cpp TestHarness_c.cpp
+SOURCEPATH ..\src\Platforms\Symbian
+SOURCE SymbianMemoryLeakWarning.cpp
+/*
+============================================================================
+ Name		: cpputest.mmp
+ Author	  : 
+ Copyright   : Your copyright notice
+ Description : This is the project specification file for cpputest.
+============================================================================
+*/
+
+TARGET		  cpputest.lib
+TARGETTYPE	  LIB
+UID			 0x00000000 0x03A6305A
+
+USERINCLUDE	 ..\include ..\include\CppUTest ..\include\Platforms\Symbian
+SYSTEMINCLUDE   \epoc32\include \epoc32\include\stdapis \epoc32\include\stlport
+
+LIBRARY		 euser.lib libc.lib libm.lib libpthread.lib
+
+SOURCEPATH ..\src\CppUTest
+SOURCE CommandLineTestRunner.cpp EqualsFailure.cpp Failure.cpp MemoryLeakWarningPlugin.cpp NullTest.cpp SimpleString.cpp SimpleStringExtensions.cpp TestInstaller.cpp TestOutput.cpp TestPlugin.cpp TestRegistry.cpp TestResult.cpp Utest.cpp
+SOURCE JUnitTestOutput.cpp TestHarness_c.cpp
+SOURCEPATH ..\src\Platforms\Symbian
+SOURCE SymbianMemoryLeakWarning.cpp
+/*
+============================================================================
+ Name		: cpputest.mmp
+ Author	  : 
+ Copyright   : Your copyright notice
+ Description : This is the project specification file for cpputest.
+============================================================================
+*/
+
+TARGET		  cpputest.lib
+TARGETTYPE	  LIB
+UID			 0x00000000 0x03A6305A
+
+USERINCLUDE	 ..\include ..\include\CppUTest ..\include\Platforms\Symbian
+SYSTEMINCLUDE   \epoc32\include \epoc32\include\stdapis \epoc32\include\stlport
+
+LIBRARY		 euser.lib libc.lib libm.lib libpthread.lib
+
+SOURCEPATH ..\src\CppUTest
+SOURCE CommandLineTestRunner.cpp EqualsFailure.cpp Failure.cpp MemoryLeakWarningPlugin.cpp NullTest.cpp SimpleString.cpp SimpleStringExtensions.cpp TestInstaller.cpp TestOutput.cpp TestPlugin.cpp TestRegistry.cpp TestResult.cpp Utest.cpp
+SOURCE JUnitTestOutput.cpp TestHarness_c.cpp
+SOURCEPATH ..\src\Platforms\Symbian
+SOURCE SymbianMemoryLeakWarning.cpp
+/*
+============================================================================
+ Name		: cpputest.mmp
+ Author	  : 
+ Copyright   : Your copyright notice
+ Description : This is the project specification file for cpputest.
+============================================================================
+*/
+
+TARGET		  cpputest.lib
+TARGETTYPE	  LIB
+UID			 0x00000000 0x03A6305A
+
+USERINCLUDE	 ..\include ..\include\CppUTest ..\include\Platforms\Symbian
+SYSTEMINCLUDE   \epoc32\include \epoc32\include\stdapis \epoc32\include\stlport
+
+LIBRARY		 euser.lib libc.lib libm.lib libpthread.lib
+
+SOURCEPATH ..\src\CppUTest
+SOURCE CommandLineTestRunner.cpp EqualsFailure.cpp Failure.cpp MemoryLeakWarningPlugin.cpp NullTest.cpp SimpleString.cpp SimpleStringExtensions.cpp TestInstaller.cpp TestOutput.cpp TestPlugin.cpp TestRegistry.cpp TestResult.cpp Utest.cpp
+SOURCE JUnitTestOutput.cpp TestHarness_c.cpp
+SOURCEPATH ..\src\Platforms\Symbian
+SOURCE SymbianMemoryLeakWarning.cpp
