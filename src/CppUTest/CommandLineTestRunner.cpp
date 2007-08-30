@@ -66,7 +66,10 @@ void CommandLineTestRunner::initializeTestRun()
   	if (groupFilter_) TestRegistry::getCurrentRegistry()->groupFilter(groupFilter_);
   	if (nameFilter_) TestRegistry::getCurrentRegistry()->nameFilter(nameFilter_);	
   	if (verbose_) output_->verbose();
-  	if (outputType_ == OUTPUT_JUNIT) output_ = new JUnitTestOutput();
+  	if (outputType_ == OUTPUT_JUNIT) {
+  		delete output_;
+  		output_ = new JUnitTestOutput();
+  	}
 }
 
 int CommandLineTestRunner::RunAllTests()
