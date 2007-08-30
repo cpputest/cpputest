@@ -44,7 +44,7 @@ TEST_GROUP(MemoryLeakWarningTest)
 	TEST_SETUP()
 	{
 		fixture = new GenericTestFixture();
-  		prevMemWarning = MemoryLeakWarning::_latest;
+  		prevMemWarning = MemoryLeakWarning::GetLatest();
   		memPlugin = new MemoryLeakWarningPlugin;
   		fixture->registry->installPlugin(memPlugin);
 		
@@ -56,7 +56,7 @@ TEST_GROUP(MemoryLeakWarningTest)
 	{
 		delete fixture;
   		delete memPlugin;
-  		MemoryLeakWarning::_latest = prevMemWarning;
+  		MemoryLeakWarning::SetLatest(prevMemWarning);
   		
   		if (arrayToLeak1) delete [] arrayToLeak1;
   		if (arrayToLeak2) delete [] arrayToLeak2;
