@@ -1,6 +1,7 @@
 
 OBJS = \
- GccMemoryLeakWarning.o
+ GccMemoryLeakWarning.o \
+ UtestPlatform.o
 
 INCLUDE =\
  -I$(CPP_U_TEST)/include/CppUTest\
