@@ -102,6 +102,27 @@ void reportMemoryBallance()
 
 MemoryLeakWarning* MemoryLeakWarning::_latest = NULL;
 
+MemoryLeakWarning::MemoryLeakWarning()
+{
+	_latest = this; 
+	CreateData();	
+}
+
+MemoryLeakWarning::~MemoryLeakWarning()
+{
+	DestroyData();
+}
+
+MemoryLeakWarning* MemoryLeakWarning::GetLatest()
+{
+	return _latest;
+}
+
+void MemoryLeakWarning::SetLatest(MemoryLeakWarning* latest)
+{
+	_latest = latest;
+}
+
 void MemoryLeakWarning::Enable()
 {
   _impl->initialBlocksUsed = allocatedBlocks;
