@@ -13,26 +13,7 @@ LIBRARY		 euser.lib libc.lib libm.lib libpthread.lib
 
 
 SOURCEPATH .
-SOURCE FailureTest.cpp MemoryLeakWarningTest.cpp NullTestTest.cpp SimpleStringExtensionsTest.cpp SimpleStringTest.cpp TestInstallerTest.cpp
+SOURCE FailureTest.cpp MemoryLeakWarningTest.cpp NullTestTest.cpp SimpleStringExtensionsTest.cpp 
+SOURCE SimpleStringTest.cpp TestInstallerTest.cpp
 SOURCE TestOutputTest.cpp TestRegistryTest.cpp UtestTest.cpp CommandLineTestRunnerTest.cpp JUnitOutputTest.cpp
-
-SOURCE SymbianAllTests.cpp TestHarness_cTest.cpp
-TARGET		  cpputest.exe
-TARGETTYPE	  exe
-UID			 0x00000000 0x03A6305A
-
-USERINCLUDE	 ..\include\CppUTest ..\include\Platforms\Symbian
-SYSTEMINCLUDE   \epoc32\include \epoc32\include\stdapis \epoc32\include\stlport
-
-// Using main() as entry point
-STATICLIBRARY libcrt0.lib 
-STATICLIBRARY stlport_s.lib cpputest.lib
-
-LIBRARY		 euser.lib libc.lib libm.lib libpthread.lib
-
-
-SOURCEPATH .
-SOURCE FailureTest.cpp MemoryLeakWarningTest.cpp NullTestTest.cpp SimpleStringExtensionsTest.cpp SimpleStringTest.cpp TestInstallerTest.cpp
-SOURCE TestOutputTest.cpp TestRegistryTest.cpp UtestTest.cpp CommandLineTestRunnerTest.cpp JUnitOutputTest.cpp
-
 SOURCE SymbianAllTests.cpp TestHarness_cTest.cpp
