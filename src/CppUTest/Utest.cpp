@@ -36,6 +36,7 @@
 #include <string.h>
 #include <stdio.h>
 
+
 TestResult* Utest::testResult_ = 0;
 Utest* Utest::currentTest_ = 0;
 
@@ -84,13 +85,14 @@ void Utest::run(TestResult& result)
   testResult_ = &result;
   currentTest_ = this;
   setup();
-  testBody();
+  executePlatformSpecificTestBody();
   teardown();
 
   //restore
   currentTest_ = savedTest;
   testResult_ = savedResult;
 }
+
 
 Utest *Utest::getNext() const
   {
