@@ -8,12 +8,12 @@ TEST_GROUP(ClassName)
   ClassName* aClassName;
   MockClassName* mockClassName;
 
-  void SetUp()
+  void setup()
   {
     mockClassName = new MockClassName();
     aClassName = mockClassName;
   }
-  void TearDown()
+  void teardown()
   {
     delete aClassName;
   }
