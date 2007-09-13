@@ -26,6 +26,7 @@
  */
 
 #include "Printer.h"
+#include "CppUTest/SimpleString.h"
 #include <stdio.h>
 #include <string>
 
@@ -39,12 +40,13 @@ Printer::~Printer()
 
 void Printer::Print(const char* s)
 {
-  printf(s);
+    for (const char* p = s; *p; p++)
+        putchar(*p);
 }
 
 void Printer::Print(long n)
 {
-  printf("%ld", n);
+   Print(StringFrom(n).asCharString());
 }
 
 Printer& operator<<(Printer& p, const char* s)
