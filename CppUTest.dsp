@@ -146,6 +146,10 @@ SOURCE=.\SRC\CPPUTEST\Utest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\Platforms\VisualCpp\UtestPlatform.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\Platforms\VisualCpp\Win32MemoryLeakWarning.cpp
 # End Source File
 # End Group

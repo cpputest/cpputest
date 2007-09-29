@@ -2,7 +2,7 @@
 $(TARGET) : $(OBJS)
 	ar -rc $@ $(OBJS)
 	ranlib $@
-#	mv $@ $(LIBDIR)
+	mv $@ $(LIBDIR)
 
 all: $(TARGET)
 

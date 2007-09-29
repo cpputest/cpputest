@@ -224,17 +224,46 @@ bool Utest::assertCstrEqual(const char* expected, const char* actual, const char
 	return true;
 }
 
+void PadStringsToSameLength(SimpleString& aDecimal, SimpleString& eDecimal, char padCharacter)
+{
+    char pad[2];
+    pad[0] = padCharacter;
+    pad[1] = 0;
+    if (aDecimal.size() > eDecimal.size())
+        eDecimal = SimpleString(pad, aDecimal.size() - eDecimal.size()) + eDecimal;
+    else
+        aDecimal = SimpleString(pad, eDecimal.size() - aDecimal.size()) + aDecimal;
+}
+
 bool Utest::assertLongsEqual(long expected, long actual, const char* fileName, int lineNumber)
 {
   testResult_->countCheck();
   if (expected != actual)
-    {
-      EqualsFailure _f(this, fileName, lineNumber, StringFrom(expected), StringFrom(actual));
+    {       
+      SimpleString aDecimal = StringFrom(actual);
+      SimpleString aHex = HexStringFrom(actual); 
+      SimpleString eDecimal = StringFrom(expected);
+      SimpleString eHex = HexStringFrom(expected);
+      
+      PadStringsToSameLength(aDecimal, eDecimal, ' ');
+      PadStringsToSameLength(aHex, eHex, '0');
+//      if (aDecimal.size() > eDecimal.size())
+//        eDecimal = SimpleString(" ", aDecimal.size() - eDecimal.size()) + eDecimal;
+//      else
+//        aDecimal = SimpleString(" ", eDecimal.size() - aDecimal.size()) + aDecimal;
+      
+      
+      SimpleString actualReported = aDecimal + " 0x" + aHex;
+      SimpleString expectedReported = eDecimal + " 0x" + eHex;
+       
+      EqualsFailure _f(this, fileName, lineNumber, expectedReported, actualReported);
       testResult_->addFailure (_f);
       return false;
     }
   return true;
 }
+
+
 
 bool Utest::assertDoublesEqual(double expected, double actual, double threshold, const char* fileName, int lineNumber)
 {

@@ -6,11 +6,11 @@ TEST_GROUP(ClassName)
 {
   ClassName* aClassName;
 
-  setup()
+  void setup()
   {
     aClassName = new ClassName();
   }
-  teardown()
+  void teardown()
   {
     delete aClassName;
   }

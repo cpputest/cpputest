@@ -39,6 +39,22 @@ TEST(SimpleString, Create)
   SimpleString s("hello");
 }
 
+TEST(SimpleString, CreateSequence)
+{
+  SimpleString expected("hellohello");
+  SimpleString actual("hello", 2);
+  
+  CHECK_EQUAL(expected, actual);
+}
+
+TEST(SimpleString, CreateSequenceOfZero)
+{
+  SimpleString expected("");
+  SimpleString actual("hello", 0);
+  
+  CHECK_EQUAL(expected, actual);
+}
+
 TEST(SimpleString, Copy)
 {
   SimpleString s1("hello");
@@ -230,6 +246,12 @@ TEST(SimpleString, Characters)
   SimpleString s(StringFrom('a'));
   SimpleString s2(StringFrom('a'));
   CHECK(s == s2);
+}
+
+TEST(SimpleString, HexStrings)
+{
+  SimpleString h1 = HexStringFrom(0xffff);
+  STRCMP_EQUAL("ffff", h1.asCharString());
 }
 
 

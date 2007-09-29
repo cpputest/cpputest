@@ -56,6 +56,7 @@ class TestOutput
 	virtual void verbose();
     virtual void print(const char*);
     virtual void print(long);
+    virtual void printHex(long);
     virtual void print(const Failure& failure);
 	virtual void printTestRun(int number, int total);
 

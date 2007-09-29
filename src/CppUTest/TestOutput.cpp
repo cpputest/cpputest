@@ -54,6 +54,12 @@ void TestOutput::print(long n)
   print(StringFrom(n).asCharString());
 }
 
+void TestOutput::printHex(long n)
+{
+  print(HexStringFrom(n).asCharString());
+}
+
+
 TestOutput& operator<<(TestOutput& p, const char* s)
 {
   p.print(s);

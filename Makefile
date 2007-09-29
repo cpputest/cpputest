@@ -2,18 +2,18 @@ export CPP_U_TEST = $(shell pwd)
 export CPP_PLATFORM = Gcc
 export APP_CXXFLAGS = -Wall
 
-all: compile example test
+all: testharness example test
 
-compile:
+testharness:
 	$(MAKE) -C src/Platforms/Gcc all
 	$(MAKE) -C src/CppUTest all
 	$(MAKE) -C lib all
  
-test: compile example
+test:
 	$(MAKE) -s -C tests test
 	$(MAKE) -s -C examples/AllTests test
 
-example: all
+example: 
 	$(MAKE) -C examples all
  
 clean:

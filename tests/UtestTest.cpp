@@ -45,7 +45,7 @@ TEST_GROUP(Utest)
 
 static void _failMethod()
 {
-	FAIL("This test fails");
+    FAIL("This test fails");
 }
 
 TEST(Utest, FailurePrintsSomething)
@@ -55,6 +55,20 @@ TEST(Utest, FailurePrintsSomething)
   LONGS_EQUAL(1, fixture->getFailureCount());
   fixture->assertPrintContains("This test fails");
 }
+
+static void _LongsEqualFailMethod()
+{
+  LONGS_EQUAL(1, 0xff);
+}
+
+TEST(Utest, FailurePriHexOutputForLongsntsSomething)
+{
+  fixture->setTestFunction(_LongsEqualFailMethod);
+  fixture->runAllTests(); 
+  fixture->assertPrintContains("expected <  1 0x01>");
+  fixture->assertPrintContains("but was  <255 0xff>");
+}
+
 
 static void _passMethod()
 {

@@ -44,6 +44,18 @@ SimpleString::SimpleString (const char *otherBuffer)
   }
 }
 
+SimpleString::SimpleString (const char *other, int repeatCount)
+{
+    buffer = new char [strlen(other) *  repeatCount + 1];
+    char* next = buffer;
+    for (int i = 0; i < repeatCount; i++)
+    {
+        strcpy(next, other);
+        next += strlen(other);
+    }
+    *next = 0;
+    
+}
 SimpleString::SimpleString (const SimpleString& other)
 {
   buffer = new char [other.size() + 1];
@@ -235,6 +247,14 @@ SimpleString StringFrom (long value)
 {
   char buffer [20];
   sprintf (buffer, "%ld", value);
+
+  return SimpleString(buffer);
+}
+
+SimpleString HexStringFrom (long value)
+{
+  char buffer [20];
+  sprintf (buffer, "%lx", value);
 
   return SimpleString(buffer);
 }

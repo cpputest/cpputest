@@ -46,6 +46,7 @@ class SimpleString
 
   public:
     SimpleString (const char *value = "");
+    SimpleString (const char *value, int repeatCount);
     SimpleString (const SimpleString& other);
     ~SimpleString ();
 
@@ -76,6 +77,7 @@ SimpleString StringFrom (bool value);
 SimpleString StringFrom (char value);
 SimpleString StringFrom (const char *value);
 SimpleString StringFrom (long value);
+SimpleString HexStringFrom(long value);
 SimpleString StringFrom (double value);
 SimpleString StringFrom (const SimpleString& other);
 
