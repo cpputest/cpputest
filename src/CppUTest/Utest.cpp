@@ -247,11 +247,6 @@ bool Utest::assertLongsEqual(long expected, long actual, const char* fileName, i
       
       PadStringsToSameLength(aDecimal, eDecimal, ' ');
       PadStringsToSameLength(aHex, eHex, '0');
-//      if (aDecimal.size() > eDecimal.size())
-//        eDecimal = SimpleString(" ", aDecimal.size() - eDecimal.size()) + eDecimal;
-//      else
-//        aDecimal = SimpleString(" ", eDecimal.size() - aDecimal.size()) + aDecimal;
-      
       
       SimpleString actualReported = aDecimal + " 0x" + aHex;
       SimpleString expectedReported = eDecimal + " 0x" + eHex;

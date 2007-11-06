@@ -42,6 +42,15 @@
 #include "SimpleString.h"
 #include "TestInstaller.h"
 
+/*! \brief UTest.h
+ * \ingroup someGroup
+ *
+ * Something about UTest.h
+ *
+ * \see TEST_GROUP
+ * \see TEST
+ */
+
 class TestResult;
 
 class Utest
@@ -112,6 +121,15 @@ class Utest
     static TestResult* testResult_;
     static Utest* currentTest_;
   };
+
+  /*! \brief Define a goup of tests
+   * 
+   * All tests in a TEST_GROUP share the same setup
+   * and teardown.  setup is run before the opening
+   * curly brace of the test group and teardown is 
+   * called after the closing curly brace of the test group.
+   * 
+   */
 
 #define TEST_GROUP(testGroup) \
   int externTestGroup##testGroup = 0; \

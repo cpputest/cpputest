@@ -33,18 +33,18 @@ Use the command line to execute makeAndRunTests.sh
  Double click <someDirectory>/CppUTest/example/CppUTestExample.dsw
  Run without debugging, see the test results in the command window
  
- NOTE: To create your own project, you need to hae CppUTest and your project 
+ NOTE: To create your own project, you need to have CppUTest and your project 
  compiled with the same compile and link settings
  
  NOTE: VC6 test runs may report memory leaks.
 
 3c. For Microsoft Visual Studio .NET
  Double click <someDirectory>/CppUTest/CppUTest.dsw
- Allow VS.NET to conver the files by clicking "yes to all"
+ Allow VS.NET to convert the files by clicking "yes to all"
  Run without debugging, see the test results in the command window
  Exit MS VS.NET
  
- Allow VS.NET to conver the files by clicking "yes to all"
+ Allow VS.NET to convert the files by clicking "yes to all"
  Run without debugging, see the test results in the command window
  
  NOTE: To create your own project, you need to hae CppUTest and your project 
@@ -54,7 +54,7 @@ Use the command line to execute makeAndRunTests.sh
 
 4. Setup the support scripts. These scripts work in various unix systems 
 and cygwin.  (these are quite handy)  If you are using windows
-install some tool like cygwin or msys so you have scripting
+install some tool like cygwin, msys or MKSToolkit to run these scripts.
  > cd <someDirectory>/CppUTest/CppSourceTemplates
  > ./InstallScripts.sh
 
@@ -63,3 +63,6 @@ to run it as root.
 
 	sudo ./InstallScripts.sh
  
+MSYS - http://www.mingw.org/msys.shtml
+CYGWIN - http://www.cygwin.com/
+MKSToolkit - http://mkstoolkit.com/

@@ -38,6 +38,7 @@
 #ifndef D_SimpleString_h
 #define D_SimpleString_h
 
+#include <stdint.h>
 
 class SimpleString
   {
@@ -77,6 +78,7 @@ SimpleString StringFrom (bool value);
 SimpleString StringFrom (char value);
 SimpleString StringFrom (const char *value);
 SimpleString StringFrom (long value);
+SimpleString StringFrom (uint32_t value);
 SimpleString HexStringFrom(long value);
 SimpleString StringFrom (double value);
 SimpleString StringFrom (const SimpleString& other);

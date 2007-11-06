@@ -61,7 +61,7 @@ static void _LongsEqualFailMethod()
   LONGS_EQUAL(1, 0xff);
 }
 
-TEST(Utest, FailurePriHexOutputForLongsntsSomething)
+TEST(Utest, FailurePrintHexOutputForLongInts)
 {
   fixture->setTestFunction(_LongsEqualFailMethod);
   fixture->runAllTests(); 
