@@ -3,7 +3,7 @@ TARGET = AllTests
 DEPENDENCY_FILE = .dependencies
 
 LOADLIBS =\
- -lApplicationLib\
+ -lProject\
  -lCppUTest\
  -lstdc++\
  -lpthread
@@ -22,7 +22,7 @@ OBJS =
 
 include $(CPP_U_TEST)/build/TestExeMakefile
 
-$(TARGET): $(TARGET).o $(DOTO) $(LIBDIR)/libApplicationLib.a
+$(TARGET): $(TARGET).o $(DOTO) $(LIBDIR)/libProject.a
 	$(CXX) -o $(TARGET) $(LIBDIRS) $^ $(LOADLIBS)
 
 	

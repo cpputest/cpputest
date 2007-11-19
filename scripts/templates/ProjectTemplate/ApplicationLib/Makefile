@@ -1,16 +1,15 @@
+TARGET = libProject.a
+
+DEPENDENCY_FILE = .dependencies
 
 OBJS =\
+  DeleteThis.o
+
 
 INCLUDE =\
- -I../include\
  -I$(CPP_U_TEST)/include\
- -I$(CPP_U_TEST)/include/Platforms/$(CPP_PLATFORM)\
  -I.
-
+ 
 LIBDIR = ../lib
-
-include $(CPP_U_TEST)/build/ObjMakefile
-
-
-
-
+ 
+include $(CPP_U_TEST)/build/StaticLibMakefile
