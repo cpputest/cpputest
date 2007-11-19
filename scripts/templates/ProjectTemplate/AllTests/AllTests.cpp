@@ -6,4 +6,4 @@ int main(int ac, char** av)
     return CommandLineTestRunner::RunAllTests(ac, av);
 }
 
-#include "../ApplicationLib/AllTests.h"
+#include "../Project/AllTests.h"
