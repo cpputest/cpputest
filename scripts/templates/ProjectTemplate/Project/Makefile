@@ -3,8 +3,8 @@ TARGET = libProject.a
 DEPENDENCY_FILE = .dependencies
 
 OBJS =\
-  DeleteThis.o
-
+ ProjectBuildTimeTest.o\
+ ProjectBuildTime.o\
 
 INCLUDE =\
  -I$(CPP_U_TEST)/include\

@@ -12,11 +12,12 @@ TEST_GROUP(ClassName)
 {
   ClassName* aClassName;
 
-  setup()
+  void setup()
   {
       aClassName = ClassName_create();
   }
-  teardown()
+  
+  void teardown()
   {
      ClassName_destroy(aClassName);
   }

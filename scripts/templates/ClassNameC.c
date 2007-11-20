@@ -11,6 +11,7 @@ struct ClassName* ClassName_create(void)
 {
     struct ClassName* aClassName = malloc(sizeof(struct ClassName));
     memset(aClassName, 0, sizeof(struct ClassName));
+    //do member initialization here as needed
     return aClassName;
 }
 
