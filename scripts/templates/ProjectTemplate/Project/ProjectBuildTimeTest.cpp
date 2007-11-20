@@ -1,6 +1,7 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/SimpleStringExtensions.h"
 #include "ProjectBuildTime.h"
+#include <string.h>
 
 TEST_GROUP(ProjectBuildTime)
 {
@@ -16,8 +17,14 @@ TEST_GROUP(ProjectBuildTime)
   }
 };
 
-TEST(ProjectBuildTime, Create)
+TEST(ProjectBuildTime, CrudeBuildTimeTest)
 {
-  STRCMP_EQUAL(__DATE__ " " __TIME__, projectBuildTime->GetDateTime());
+  int expectedLength = strlen(__DATE__ " " __TIME__);
+  int actualLength = strlen(projectBuildTime->GetDateTime());
+
+  if (actualLength != expectedLength)
+  {
+      FAIL(projectBuildTime->GetDateTime());
+  }
 }
 
