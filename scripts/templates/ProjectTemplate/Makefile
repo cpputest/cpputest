@@ -1,3 +1,6 @@
+export CPP_U_TEST=$(shell pwd)/../CppUTest
+export CPP_PLATFORM=Gcc
+export APP_CXXFLAGS= -Wall
 
 all: compile test
 
