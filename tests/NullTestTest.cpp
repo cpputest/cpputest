@@ -26,7 +26,6 @@
  */
 
 #include "TestHarness.h"
-#include "NullTest.h"
 
 TEST_GROUP(NullTest)
 {

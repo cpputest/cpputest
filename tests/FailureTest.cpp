@@ -28,7 +28,6 @@
 #include "Platform.h"
 #include "TestHarness.h"
 #include "MockTestOutput.h"
-#include "NullTest.h"
 
 
 namespace

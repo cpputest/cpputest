@@ -27,7 +27,6 @@
 
 #include "TestHarness.h"
 #include "TestInstaller.h"
-#include "NullTest.h"
 
 
 // this is file scope because the test is installed
