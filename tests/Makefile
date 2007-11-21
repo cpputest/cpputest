@@ -1,4 +1,4 @@
-TARGET = AllTests
+CPPUTEST_TARGET = AllTests
 
 LOADLIBS =\
  -lCppUTest\
@@ -29,6 +29,6 @@ INCLUDE =\
 
 include $(CPP_U_TEST)/build/TestExeMakefile
 
-$(TARGET): $(TARGET).o $(OBJS)\
+$(CPPUTEST_TARGET): $(CPPUTEST_TARGET).o $(OBJS)\
 		$(LIBDIR)/libCppUTest.a
-	$(CXX) -o $(TARGET) $(LIBDIRS) $^ $(LOADLIBS)
+	$(CXX) -o $(CPPUTEST_TARGET) $(LIBDIRS) $^ $(LOADLIBS)

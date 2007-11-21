@@ -1,11 +1,11 @@
 
 RUNNER=./RunAllTests.sh
 
-test: $(TARGET)
+test: $(CPPUTEST_TARGET)
 	@pwd
 	@$(RUNNER) 
 
-vtest: $(TARGET)
+vtest: $(CPPUTEST_TARGET)
 	@pwd
 	@$(RUNNER) -v
 

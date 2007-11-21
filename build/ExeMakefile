@@ -1,14 +1,14 @@
 
-all: $(TARGET)
+all: $(CPPUTEST_TARGET)
 	
 
-test: $(TARGET)
+test: $(CPPUTEST_TARGET)
 	 
 
-vtest: $(TARGET)
+vtest: $(CPPUTEST_TARGET)
 
 clean:
-	rm -f $(TARGET)
-	rm -f $(TARGET).exe	
+	rm -f $(CPPUTEST_TARGET)
+	rm -f $(CPPUTEST_TARGET).exe	
 
 include $(CPP_U_TEST)/build/ObjMakefile

@@ -1,6 +1,6 @@
 CXXFLAGS =  -c $(INCLUDE) $(APP_CXXFLAGS)
 
-all: outputmessage $(OBJS) $(TARGET)
+all: outputmessage $(OBJS) $(CPPUTEST_TARGET)
 
 .PHONY: outputmessage
 outputmessage:
@@ -22,4 +22,4 @@ ifeq ($(DEPENDENCY_FILE), $(wildcard $(DEPENDENCY_FILE)))
 endif
 
 clean:
-	rm -f *.o $(TARGET) $(TARGET).exe	
+	rm -f *.o $(CPPUTEST_TARGET) $(CPPUTEST_TARGET).exe	

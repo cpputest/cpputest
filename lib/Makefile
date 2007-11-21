@@ -1,4 +1,4 @@
-TARGET = libCppUTest.a
+CPPUTEST_TARGET = libCppUTest.a
 
 SRC_DIR = ../src
 

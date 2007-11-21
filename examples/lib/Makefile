@@ -1,4 +1,4 @@
-TARGET = libApplicationLib.a
+CPPUTEST_TARGET = libApplicationLib.a
 
 SRC_DIR = ../ApplicationLib
 

@@ -1,11 +1,11 @@
 
-$(TARGET) : $(OBJS)
+$(CPPUTEST_TARGET) : $(OBJS)
 	ar -rc $@ $(OBJS)
 	ranlib $@
 	if [ "$(LIBDIR)" != "." ]; then\
 	  mv $@ $(LIBDIR) ; \
 	fi
 
-all: $(TARGET)
+all: $(CPPUTEST_TARGET)
 
 include $(CPP_U_TEST)/build/ObjMakefile
