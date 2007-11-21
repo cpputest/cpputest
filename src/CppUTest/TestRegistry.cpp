@@ -27,7 +27,6 @@
 
 
 #include "Utest.h"
-#include "NullTest.h"
 #include "TestRegistry.h"
 #include "TestPlugin.h"
 #include "TestResult.h"

@@ -30,7 +30,6 @@
 #include "TestRegistry.h"
 #include "TestResult.h"
 #include "Failure.h"
-#include "NullTest.h"
 
 #include <string.h>
 #include <stdio.h>
@@ -286,4 +285,35 @@ TestResult* Utest::getTestResult()
 Utest* Utest::getCurrent()
 {
   return currentTest_;
+}
+
+
+////////////// NullTest ////////////
+
+NullTest::NullTest()
+    :Utest("NullGroup", "NullName", "NullFile", -1, 0)
+{}
+
+NullTest::~NullTest()
+{}
+
+NullTest& NullTest::instance()
+{
+	static NullTest _instance;
+	return _instance;
+}
+
+int NullTest::countTests()
+{
+	return 0;
+}
+
+Utest* NullTest::getNext() const
+{
+	return &instance();
+}
+
+bool NullTest::isLast () const
+{
+	return true;
 }
