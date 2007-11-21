@@ -2,6 +2,8 @@ export CPP_U_TEST = $(shell pwd)
 export CPP_PLATFORM = Gcc
 export APP_CXXFLAGS = -Wall
 
+default: testharness test
+
 all: testharness example test
 
 testharness:
@@ -11,10 +13,10 @@ testharness:
  
 test:
 	$(MAKE) -s -C tests test
-	$(MAKE) -s -C examples/AllTests test
 
 example: 
 	$(MAKE) -C examples all
+	$(MAKE) -s -C examples/AllTests test
  
 clean:
 	$(MAKE) -C src/Platforms/Gcc clean

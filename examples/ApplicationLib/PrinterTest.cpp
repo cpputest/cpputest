@@ -25,8 +25,8 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "CppUTest/SimpleStringExtensions.h"
 #include "CppUTest/TestHarness.h"
+#include "SimpleStringExtensions.h"
 #include "Printer.h"
 #include "MockPrinter.h"
 

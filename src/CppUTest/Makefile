@@ -5,7 +5,6 @@ OBJS = \
  Failure.o\
  MemoryLeakWarningPlugin.o\
  SimpleString.o \
- SimpleStringExtensions.o \
  TestHarness_c.o \
  TestPlugin.o \
  Utest.o \

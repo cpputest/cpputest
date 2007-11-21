@@ -1,6 +1,7 @@
 
 OBJS =\
  CircularBuffer.o CircularBufferTest.o\
+ SimpleStringExtensions.o SimpleStringExtensionsTest.o \
  PrinterTest.o\
  Printer.o\
  hello.o\

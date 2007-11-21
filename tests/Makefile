@@ -13,7 +13,6 @@ OBJS = \
  FailureTest.o \
  MemoryLeakWarningTest.o \
  NullTestTest.o \
- SimpleStringExtensionsTest.o \
  SimpleStringTest.o \
  TestInstallerTest.o \
  TestOutputTest.o \
