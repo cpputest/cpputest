@@ -39,7 +39,6 @@
 #include "Utest.h"
 #include "TestResult.h"
 #include "Failure.h"
-#include "EqualsFailure.h"
 #include "TestRegistry.h"
 #include "SimpleString.h"
 #include "MemoryLeakWarning.h"

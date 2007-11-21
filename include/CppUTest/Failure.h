@@ -69,5 +69,20 @@ class Failure
 
   };
 
+class EqualsFailure : public Failure
+  {
+
+  public:
+
+    EqualsFailure(Utest*, const char* fileName, long lineNumber,
+                  const SimpleString& expected,
+                  const SimpleString& actual);
+
+  private:
+    EqualsFailure(const EqualsFailure&);
+    EqualsFailure& operator=(const EqualsFailure&);
+
+  };
+
 
 #endif
