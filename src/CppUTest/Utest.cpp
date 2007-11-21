@@ -317,3 +317,22 @@ bool NullTest::isLast () const
 {
 	return true;
 }
+
+////////////// TestInstaller ////////////
+
+TestInstaller::TestInstaller(Utest* t, const char* groupName, const char* testName, const char* fileName, int lineNumber)
+{
+	t->setGroupName(groupName);
+	t->setTestName(testName);
+	t->setFileName(fileName);
+	t->setLineNumber(lineNumber);
+	TestRegistry::getCurrentRegistry()->addTest(t);
+}
+
+TestInstaller::~TestInstaller()
+{}
+
+void TestInstaller::unDo()
+{
+  TestRegistry::getCurrentRegistry()->unDoLastAddTest();
+}

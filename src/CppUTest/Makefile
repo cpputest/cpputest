@@ -1,6 +1,5 @@
 
 OBJS = \
- TestInstaller.o \
  TestOutput.o \
  CommandLineTestRunner.o\
  Failure.o\
