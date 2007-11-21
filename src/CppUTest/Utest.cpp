@@ -30,7 +30,6 @@
 #include "TestRegistry.h"
 #include "TestResult.h"
 #include "Failure.h"
-#include "EqualsFailure.h"
 #include "NullTest.h"
 
 #include <string.h>

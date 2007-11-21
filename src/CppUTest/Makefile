@@ -4,7 +4,6 @@ OBJS = \
  TestInstaller.o \
  TestOutput.o \
  CommandLineTestRunner.o\
- EqualsFailure.o\
  Failure.o\
  MemoryLeakWarningPlugin.o\
  SimpleString.o \

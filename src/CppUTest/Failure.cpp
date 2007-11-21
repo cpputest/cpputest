@@ -29,6 +29,9 @@
 #include "Utest.h"
 #include "TestOutput.h"
 
+#include <string.h>
+#include <stdio.h>
+
 
 Failure::Failure(Utest* test, const char* fileName, long lineNumber, const SimpleString& theMessage)
     : testName (test->getFormattedName())
@@ -83,4 +86,23 @@ SimpleString Failure::getMessage() const
 	return message;
 }
 
+EqualsFailure::EqualsFailure(Utest* test, const char* fileName, long lineNumber,
+                             const SimpleString& expected,
+                             const SimpleString& actual)
+    : Failure(test, fileName, lineNumber)
+{
+  const char *format = "expected <%s>\n\tbut was  <%s>";
 
+  char *stage = new char [strlen(format) - (2 * strlen("%s"))
+                          + expected.size ()
+                          + actual.size ()
+                          + 1];
+
+  sprintf(stage, format,
+          expected.asCharString(),
+          actual.asCharString());
+
+  message = SimpleString(stage);
+
+  delete [] stage;
+}
