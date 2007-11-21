@@ -37,6 +37,7 @@
 #define D_TestHarness_h
 
 #include "Utest.h"
+#include "UtestMacros.h"
 #include "TestResult.h"
 #include "Failure.h"
 #include "TestRegistry.h"

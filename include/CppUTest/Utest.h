@@ -122,116 +122,25 @@ class Utest
     static Utest* currentTest_;
   };
 
-  /*! \brief Define a goup of tests
-   * 
-   * All tests in a TEST_GROUP share the same setup
-   * and teardown.  setup is run before the opening
-   * curly brace of the test group and teardown is 
-   * called after the closing curly brace of the test group.
-   * 
-   */
+class NullTest : public Utest
+  {
+  public:
+    explicit NullTest();
+    virtual ~NullTest();
 
-#define TEST_GROUP(testGroup) \
-  int externTestGroup##testGroup = 0; \
-  struct CppUTestGroup##testGroup : public Utest
+    void testBody()
+    {}
+		
+		static NullTest& instance();
+		
+		virtual int  countTests();
+		virtual Utest*getNext () const;
+		virtual bool isLast () const;
+  private:
 
-#define TEST_GROUP_BASE(testGroup, baseclass) \
-  int externTestGroup##testGroup = 0; \
-  struct CppUTestGroup##testGroup : public baseclass
-  
+    NullTest(const NullTest&);
+    NullTest& operator=(const NullTest&);
 
-#define TEST_SETUP() \
-  virtual void setup() 
-
-#define TEST_TEARDOWN() \
-  virtual void teardown() 
-
-#define TEST(testGroup, testName) \
-  class testGroup##testName##Test : public CppUTestGroup##testGroup \
-{ public: testGroup##testName##Test () : CppUTestGroup##testGroup () {} \
-       void testBody(); } \
-    testGroup##testName##Instance; \
-  TestInstaller testGroup##testName##Installer(&testGroup##testName##Instance, #testGroup, #testName, __FILE__,__LINE__); \
-	void testGroup##testName##Test::testBody()
-
-#define IGNORE_TEST(testGroup, testName)\
-  class testGroup##testName##Test : public CppUTestGroup##testGroup \
-{ public: testGroup##testName##Test () : CppUTestGroup##testGroup () {} \
-    virtual void run (TestResult& result) { \
-    	result.countIgnored(); } \
-  protected:  virtual SimpleString getMacroName() const \
-      { return "IGNORE_TEST"; } \
-  public:          void thisNeverRuns (); } \
-    testGroup##testName##Instance; \
-  TestInstaller testGroup##testName##Installer(&testGroup##testName##Instance, #testGroup, #testName, __FILE__,__LINE__); \
-	void testGroup##testName##Test::thisNeverRuns ()
-
-#define IMPORT_TEST_GROUP(testGroup) \
-  extern int externTestGroup##testGroup;\
-  int* p##testGroup = &externTestGroup##testGroup
-
-//Check any boolean condition
-
-#define CHECK_LOCATION(condition, file, line)\
-  {if (!Utest::getCurrent()->assertTrue(condition, #condition, file, line)) return;}
-
-#define CHECK(condition)\
-  CHECK_LOCATION(condition, __FILE__, __LINE__)
-
-
-
-//This check needs the equality operator, and a StringFrom(YourType) function
-
-#define CHECK_EQUAL(expected,actual)\
-  CHECK_EQUAL_LOCATION(expected, actual, __FILE__, __LINE__)
-
-#define CHECK_EQUAL_LOCATION(expected,actual, file, line)\
-  if ((expected) != (actual))\
-  {\
-	 Utest::getTestResult()->countCheck();\
-  	 EqualsFailure _f(Utest::getCurrent(), file, line, StringFrom(expected), StringFrom(actual)); \
-     Utest::getTestResult()->addFailure(_f);\
-     return;\
-  }\
-  else\
-	 Utest::getTestResult()->countCheck();
-
-//This check checks for char* string equality using strcmp.
-//This makes up for the fact that CHECK_EQUAL only compares the pointers to char*'s
-#define STRCMP_EQUAL(expected,actual)\
-  STRCMP_EQUAL_LOCATION(expected, actual, __FILE__, __LINE__)
-   
-#define STRCMP_EQUAL_LOCATION(expected,actual, file, line)\
-  {if (!Utest::getCurrent()->assertCstrEqual(expected, actual, file, line)) return;}
-
-//Check two long integers for equality
-#define LONGS_EQUAL(expected,actual)\
-  LONGS_EQUAL_LOCATION(expected,actual,__FILE__, __LINE__)
-  
-#define LONGS_EQUAL_LOCATION(expected,actual,file,line)\
-  { if (!Utest::getCurrent()->assertLongsEqual(expected, actual,  file, line)) return; }
-
-//Check two doubles for equality within a tolerance threshold
-#define DOUBLES_EQUAL(expected,actual,threshold)\
-  DOUBLES_EQUAL_LOCATION(expected,actual,threshold,__FILE__,__LINE__)
-  
-#define DOUBLES_EQUAL_LOCATION(expected,actual,threshold,file,line)\
-  { if (!Utest::getCurrent()->assertDoublesEqual(expected, actual, threshold,  file, line)) return; }
-
-//Fail if you get to this macro
-//The macro FAIL may already be taken, so allow FAIL_TEST too
-#ifndef FAIL
-#define FAIL(text)\
-  FAIL_LOCATION(text, __FILE__,__LINE__)
-  
-#define FAIL_LOCATION(text, file, line)\
-  { Utest::getCurrent()->fail(text,  file, line); return; }
-#endif
-
-#define FAIL_TEST(text, file, line)\
-  FAIL_TEST_LOCATION(text, __FILE__,__LINE__)
-  
-#define FAIL_TEST_LOCATION(text, file,line)\
-  { Utest::getCurrent()->fail(text, file, line); return; }
+  };
 
 #endif
