@@ -40,7 +40,6 @@
 
 #include <math.h>
 #include "SimpleString.h"
-#include "TestInstaller.h"
 
 /*! \brief UTest.h
  * \ingroup someGroup
@@ -122,6 +121,8 @@ class Utest
     static Utest* currentTest_;
   };
 
+//////////////////// NulLTest
+
 class NullTest : public Utest
   {
   public:
@@ -140,6 +141,24 @@ class NullTest : public Utest
 
     NullTest(const NullTest&);
     NullTest& operator=(const NullTest&);
+
+  };
+
+
+//////////////////// TestInstaller
+
+class TestInstaller
+  {
+  public:
+    explicit TestInstaller(Utest*, const char* groupName, const char* testName, const char* fileName, int lineNumber);
+    virtual ~TestInstaller();
+
+    void unDo();
+
+  private:
+
+    TestInstaller(const TestInstaller&);
+    TestInstaller& operator=(const TestInstaller&);
 
   };
 
