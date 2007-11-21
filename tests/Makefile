@@ -17,6 +17,7 @@ OBJS = \
  TestInstallerTest.o \
  TestOutputTest.o \
  TestRegistryTest.o \
+ TestResultTest.o \
  UtestTest.o \
  TestHarness_cTest.o \
  CommandLineTestRunnerTest.o \

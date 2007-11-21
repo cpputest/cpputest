@@ -68,7 +68,10 @@ class TestResult
     int getIgnoredCount() const {return ignoredCount;}
     int getFailureCount() const {return failureCount;}
 
+	double getTotalExecutionTime() const;
+	void setTotalExecutionTime(double exTime);
   private:
+	virtual long GetPlatformSpecificTimeInMillis();
 
     TestOutput& output;
     int testCount;
@@ -77,6 +80,8 @@ class TestResult
     int	failureCount;
     int filteredOutCount;
     int ignoredCount;
+    double totalExecutionTime;
+    long timeStarted;
   };
 
 #endif

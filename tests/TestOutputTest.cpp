@@ -68,6 +68,12 @@ TEST(TestOutput, PrintLong)
   STRCMP_EQUAL("1234", mock->getOutput().asCharString());
 }
 
+TEST(TestOutput, PrintDouble)
+{
+  printer->printDouble(12.34);
+  STRCMP_EQUAL("12.340000", mock->getOutput().asCharString());
+}
+
 TEST(TestOutput, StreamOperators)
 {
   *printer << "n=" << 1234;
@@ -138,4 +144,13 @@ TEST(TestOutput, printTestsEndedWithFailures)
 	printer->flush();
 	printer->printTestsEnded(*result);
 	STRCMP_EQUAL("\nErrors (1 failures, 0 tests, 0 ran, 0 checks, 0 ignored, 0 filtered out)\n\n", mock->getOutput().asCharString());
+}
+
+TEST(TestOutput, printTestExecutionTimeOfOneSecond)
+{
+	result->countTest();
+	result->countTest();
+	result->setTotalExecutionTime(1.0);
+	printer->printTotalExecutionTime(*result);
+	STRCMP_EQUAL("\n2 tests ran in 1.000000 seconds", mock->getOutput().asCharString());
 }

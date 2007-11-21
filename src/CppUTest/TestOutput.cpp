@@ -54,6 +54,11 @@ void TestOutput::print(long n)
   print(StringFrom(n).asCharString());
 }
 
+void TestOutput::printDouble(double d)
+{
+  print(StringFrom(d).asCharString());
+}
+
 void TestOutput::printHex(long n)
 {
   print(HexStringFrom(n).asCharString());
@@ -91,6 +96,15 @@ void TestOutput::printTestsStarted()
 
 void TestOutput::flush()
 {
+}
+
+void TestOutput::printTotalExecutionTime(const TestResult& result)
+{
+	print("\n");
+	print(result.getTestCount());
+	print(" tests ran in ");	
+	printDouble(result.getTotalExecutionTime());
+	print(" seconds");	
 }
 
 void TestOutput::printTestsEnded(const TestResult& result)

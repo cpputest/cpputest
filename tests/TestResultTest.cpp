@@ -25,55 +25,50 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef D_TestOutput_h
-#define D_TestOutput_h
+#include "TestHarness.h"
+#include "MockTestOutput.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  TestOutput.h
-//
-//  This is a minimal printer inteface.
-//  We kept streams out too keep footprint small, and so the test
-//  harness could be used with less capable compilers so more
-//  platforms could use this test harness
-//
-///////////////////////////////////////////////////////////////////////////////
 
-class Utest;
-class Failure;
-class TestResult;
+static long timeInMillies;
 
-class TestOutput
-  {
-  public:
-    explicit TestOutput();
-    virtual ~TestOutput();
+class MockTestResult : public TestResult
+{
+public:
 
-	virtual void printTestsStarted();
-	virtual void printCurrentTest(const Utest& test);
-	virtual void printTotalExecutionTime(const TestResult& result);
-	virtual void printTestsEnded(const TestResult& result);
+	MockTestResult(TestOutput& output) : TestResult(output){};
 	
-	virtual void verbose();
-    virtual void print(const char*);
-    virtual void print(long);
-    virtual void printDouble(double);
-    virtual void printHex(long);
-    virtual void print(const Failure& failure);
-	virtual void printTestRun(int number, int total);
+	virtual long GetPlatformSpecificTimeInMillis()
+	{
+		return timeInMillies;
+	}
+};
 
-	virtual void flush();
+TEST_GROUP(TestResult)
+{
+	TestOutput* printer;
+	MockTestOutput* mock;
+	
+	TestResult* res;
+	MockTestResult * mockRes;
 
-  private:
+	TEST_SETUP()
+	{
+		mock = new MockTestOutput();
+		printer = mock;
+		mockRes = new MockTestResult(*printer);
+		res = mockRes;
+		timeInMillies = 0;
+	}
+	TEST_TEARDOWN()
+	{
+		delete printer;
+		delete res;
+	}	
+};
 
-    TestOutput(const TestOutput&);
-    TestOutput& operator=(const TestOutput&);
-
-	int dotCount_;
-	bool verbose_;
-  };
-
-TestOutput& operator<<(TestOutput&, const char*);
-TestOutput& operator<<(TestOutput&, long);
-
-#endif  // D_TestOutput_h
+TEST(TestResult, TestEndedWillPrintResultsAndExecutionTime)
+{
+	timeInMillies = 10;
+	res->testsEnded();
+	CHECK(mock->getOutput().contains("1.0"));
+}

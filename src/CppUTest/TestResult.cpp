@@ -31,7 +31,6 @@
 #include "TestOutput.h"
 #include <stdio.h>
 
-
 TestResult::TestResult (TestOutput& p)
     : output(p)
     , testCount(0)
@@ -40,6 +39,8 @@ TestResult::TestResult (TestOutput& p)
     , failureCount (0)
     , filteredOutCount(0)
     , ignoredCount(0)
+    , totalExecutionTime(0.0)
+    , timeStarted(0)
 {}
 
 
@@ -48,7 +49,9 @@ TestResult::~TestResult()
 
 
 void TestResult::testsStarted ()
-{}
+{
+	timeStarted = GetPlatformSpecificTimeInMillis();
+}
 
 void TestResult::setCurrentTest(Utest* test)
 {
@@ -86,7 +89,22 @@ void TestResult::countIgnored()
   ignoredCount++;
 }
 
+#include <unistd.h>
+
 void TestResult::testsEnded ()
 {
+	long timeEnded = GetPlatformSpecificTimeInMillis();
+	totalExecutionTime = (timeEnded - timeStarted) / 10.0;
+	output.printTotalExecutionTime(*this);
 	output.printTestsEnded(*this);
+}
+
+double TestResult::getTotalExecutionTime() const
+{
+	return totalExecutionTime;
+}
+
+void TestResult::setTotalExecutionTime(double exTime)
+{
+	totalExecutionTime = exTime;
 }
