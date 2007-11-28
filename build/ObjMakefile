@@ -15,7 +15,7 @@ DEPENDENCY_FILE = .dependencies
 
 depend:
 	rm -f $(DEPENDENCY_FILE)
-	$(CXX) -MM -c $(CXXFLAGS) *.cpp >$(DEPENDENCY_FILE)
+	$(CXX) -MM -c $(CXXFLAGS) *.c* >$(DEPENDENCY_FILE)
 	
 ifeq ($(DEPENDENCY_FILE), $(wildcard $(DEPENDENCY_FILE)))
      include $(DEPENDENCY_FILE)
