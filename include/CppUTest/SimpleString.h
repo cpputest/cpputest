@@ -75,6 +75,7 @@ class SimpleString
 
 
 SimpleString StringFrom (bool value);
+SimpleString StringFrom (void* value);
 SimpleString StringFrom (char value);
 SimpleString StringFrom (const char *value);
 SimpleString StringFrom (long value);

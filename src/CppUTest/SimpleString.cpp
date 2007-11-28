@@ -251,6 +251,12 @@ SimpleString StringFrom (long value)
   return SimpleString(buffer);
 }
 
+SimpleString StringFrom (void* value)
+{
+  return HexStringFrom((long int)value);
+}
+
+
 SimpleString StringFrom (uint32_t value)
 {
     return StringFrom((long)value);
