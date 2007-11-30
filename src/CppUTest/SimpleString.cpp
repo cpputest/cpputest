@@ -274,7 +274,7 @@ SimpleString StringFrom (double value, int precision)
 {
   char buffer [40];
   char format [40];
-  sprintf (format, "%%l.%df", precision);
+  sprintf (format, "%%.%df", precision);
   sprintf (buffer, format, value);
 
   return SimpleString(buffer);
