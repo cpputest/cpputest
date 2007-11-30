@@ -38,8 +38,6 @@
 #ifndef D_SimpleString_h
 #define D_SimpleString_h
 
-#include <stdint.h>
-
 class SimpleString
   {
     friend bool	operator== (const SimpleString& left, const SimpleString& right);
@@ -79,7 +77,6 @@ SimpleString StringFrom (void* value);
 SimpleString StringFrom (char value);
 SimpleString StringFrom (const char *value);
 SimpleString StringFrom (long value);
-SimpleString StringFrom (uint32_t value);
 SimpleString HexStringFrom(long value);
 SimpleString StringFrom (double value, int precision = 6);
 SimpleString StringFrom (const SimpleString& other);
