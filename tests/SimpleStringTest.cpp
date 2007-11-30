@@ -248,6 +248,14 @@ TEST(SimpleString, Characters)
   CHECK(s == s2);
 }
 
+TEST(SimpleString, Doubles)
+{
+	SimpleString s(StringFrom(1.2));
+	STRCMP_EQUAL("1.200000", s.asCharString());
+	s = StringFrom(1.2,2);
+	STRCMP_EQUAL("1.20", s.asCharString());
+}
+
 TEST(SimpleString, HexStrings)
 {
   SimpleString h1 = HexStringFrom(0xffff);

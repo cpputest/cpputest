@@ -51,7 +51,6 @@ class TestOutput
 
 	virtual void printTestsStarted();
 	virtual void printCurrentTest(const Utest& test);
-	virtual void printTotalExecutionTime(const TestResult& result);
 	virtual void printTestsEnded(const TestResult& result);
 	
 	virtual void verbose();

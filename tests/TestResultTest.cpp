@@ -70,5 +70,5 @@ TEST(TestResult, TestEndedWillPrintResultsAndExecutionTime)
 {
 	timeInMillies = 10;
 	res->testsEnded();
-	CHECK(mock->getOutput().contains("1.0"));
+	CHECK(mock->getOutput().contains("10.0"));
 }

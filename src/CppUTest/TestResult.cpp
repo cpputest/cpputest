@@ -25,7 +25,6 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #include "TestResult.h"
 #include "Failure.h"
 #include "TestOutput.h"
@@ -94,8 +93,7 @@ void TestResult::countIgnored()
 void TestResult::testsEnded ()
 {
 	long timeEnded = GetPlatformSpecificTimeInMillis();
-	totalExecutionTime = (timeEnded - timeStarted) / 10.0;
-	output.printTotalExecutionTime(*this);
+	totalExecutionTime = timeEnded - timeStarted;
 	output.printTestsEnded(*this);
 }
 

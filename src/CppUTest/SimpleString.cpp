@@ -270,10 +270,12 @@ SimpleString HexStringFrom (long value)
   return SimpleString(buffer);
 }
 
-SimpleString StringFrom (double value)
+SimpleString StringFrom (double value, int precision)
 {
   char buffer [40];
-  sprintf (buffer, "%lf", value);
+  char format [40];
+  sprintf (format, "%%l.%df", precision);
+  sprintf (buffer, format, value);
 
   return SimpleString(buffer);
 }

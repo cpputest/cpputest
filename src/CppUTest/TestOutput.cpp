@@ -56,7 +56,7 @@ void TestOutput::print(long n)
 
 void TestOutput::printDouble(double d)
 {
-  print(StringFrom(d).asCharString());
+  print(StringFrom(d, 3).asCharString());
 }
 
 void TestOutput::printHex(long n)
@@ -98,15 +98,6 @@ void TestOutput::flush()
 {
 }
 
-void TestOutput::printTotalExecutionTime(const TestResult& result)
-{
-	print("\n");
-	print(result.getTestCount());
-	print(" tests ran in ");	
-	printDouble(result.getTotalExecutionTime());
-	print(" seconds");	
-}
-
 void TestOutput::printTestsEnded(const TestResult& result)
 {
 	if (result.getFailureCount() > 0) {
@@ -126,7 +117,9 @@ void TestOutput::printTestsEnded(const TestResult& result)
 	print(result.getIgnoredCount());
 	print(" ignored, ");
 	print(result.getFilteredOutCount());
-	print(" filtered out)\n\n");
+	print(" filtered out, ");
+	printDouble(result.getTotalExecutionTime());
+	print(" ms)\n\n");
 }
 
 

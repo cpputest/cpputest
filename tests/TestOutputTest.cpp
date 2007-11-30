@@ -45,6 +45,7 @@ TEST_GROUP(TestOutput)
 		tst = new Utest("group", "test", "file", 1);
 		f = new Failure(tst, "failfile", 2, "message");
 		result = new TestResult(*mock);
+		result->setTotalExecutionTime(10.0);
 	}
 	TEST_TEARDOWN()
 	{
@@ -71,7 +72,7 @@ TEST(TestOutput, PrintLong)
 TEST(TestOutput, PrintDouble)
 {
   printer->printDouble(12.34);
-  STRCMP_EQUAL("12.340000", mock->getOutput().asCharString());
+  STRCMP_EQUAL("12.340", mock->getOutput().asCharString());
 }
 
 TEST(TestOutput, StreamOperators)
@@ -135,7 +136,7 @@ TEST(TestOutput, printTestsEnded)
 	result->countRun();
 	result->countRun();
 	printer->printTestsEnded(*result);
-	STRCMP_EQUAL("\nOK (1 tests, 3 ran, 1 checks, 2 ignored, 0 filtered out)\n\n", mock->getOutput().asCharString());
+	STRCMP_EQUAL("\nOK (1 tests, 3 ran, 1 checks, 2 ignored, 0 filtered out, 10.000 ms)\n\n", mock->getOutput().asCharString());
 }
 
 TEST(TestOutput, printTestsEndedWithFailures)
@@ -143,14 +144,5 @@ TEST(TestOutput, printTestsEndedWithFailures)
 	result->addFailure(*f);
 	printer->flush();
 	printer->printTestsEnded(*result);
-	STRCMP_EQUAL("\nErrors (1 failures, 0 tests, 0 ran, 0 checks, 0 ignored, 0 filtered out)\n\n", mock->getOutput().asCharString());
-}
-
-TEST(TestOutput, printTestExecutionTimeOfOneSecond)
-{
-	result->countTest();
-	result->countTest();
-	result->setTotalExecutionTime(1.0);
-	printer->printTotalExecutionTime(*result);
-	STRCMP_EQUAL("\n2 tests ran in 1.000000 seconds", mock->getOutput().asCharString());
+	STRCMP_EQUAL("\nErrors (1 failures, 0 tests, 0 ran, 0 checks, 0 ignored, 0 filtered out, 10.000 ms)\n\n", mock->getOutput().asCharString());
 }

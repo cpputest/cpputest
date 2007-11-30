@@ -24,7 +24,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
+  
 ///////////////////////////////////////////////////////////////////////////////
 //
 // SIMPLESTRING.H
@@ -81,7 +81,7 @@ SimpleString StringFrom (const char *value);
 SimpleString StringFrom (long value);
 SimpleString StringFrom (uint32_t value);
 SimpleString HexStringFrom(long value);
-SimpleString StringFrom (double value);
+SimpleString StringFrom (double value, int precision = 6);
 SimpleString StringFrom (const SimpleString& other);
 
 #endif
