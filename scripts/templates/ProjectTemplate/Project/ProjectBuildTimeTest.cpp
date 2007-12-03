@@ -1,5 +1,4 @@
 #include "CppUTest/TestHarness.h"
-#include "CppUTest/SimpleStringExtensions.h"
 #include "ProjectBuildTime.h"
 #include <string.h>
 

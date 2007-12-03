@@ -1,4 +1,4 @@
-TARGET = libProject.a
+CPPUTEST_TARGET = libProject.a
 
 DEPENDENCY_FILE = .dependencies
 

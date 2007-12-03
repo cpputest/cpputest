@@ -1,5 +1,4 @@
 #include "CppUTest/TestHarness.h"
-#include "CppUTest/SimpleStringExtensions.h"
 #include "ClassName.h"
 
 TEST_GROUP(ClassName)

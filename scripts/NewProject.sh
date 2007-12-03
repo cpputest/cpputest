@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 TEMPLATE_DIR=${CPP_U_TEST}/scripts/templates
 PROJECT=$1
 
@@ -13,8 +13,10 @@ find $1 -name \.svn | xargs rm -rf
 
 echo "Update to the new project name"
 sedCommand="-e s/Project/${PROJECT}/g -i .bak"
- 
-for dir in ${PROJECT} ${PROJECT}/AllTests ${PROJECT}/Project ; do
+pwd
+ls $PROJECT
+sed ${sedCommand} ${PROJECT}/Makefile
+for dir in ${PROJECT}/AllTests ${PROJECT}/Project ; do
    sed ${sedCommand} ${dir}/*.*
    sed ${sedCommand} ${dir}/Makefile
 done

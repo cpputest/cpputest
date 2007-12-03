@@ -1,4 +1,4 @@
-TARGET = AllTests
+CPPUTEST_TARGET = AllTests
 
 DEPENDENCY_FILE = .dependencies
 
@@ -22,7 +22,7 @@ OBJS =
 
 include $(CPP_U_TEST)/build/TestExeMakefile
 
-$(TARGET): $(TARGET).o $(DOTO) $(LIBDIR)/libProject.a
-	$(CXX) -o $(TARGET) $(LIBDIRS) $^ $(LOADLIBS)
+$(CPPUTEST_TARGET): $(CPPUTEST_TARGET).o $(DOTO) $(LIBDIR)/libProject.a
+	$(CXX) -o $(CPPUTEST_TARGET) $(LIBDIRS) $^ $(LOADLIBS)
 
 	

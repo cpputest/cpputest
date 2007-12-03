@@ -4,7 +4,7 @@ export APP_CXXFLAGS= -Wall
 
 DIRS = Project AllTests
 
-all: compile test
+all: compile
 
 compile:
 	for d in $(DIRS) ; do \
@@ -25,4 +25,3 @@ depend:
 	for d in $(DIRS) ; do \
 		$(MAKE) -C $$d depend ; \
 	done
-

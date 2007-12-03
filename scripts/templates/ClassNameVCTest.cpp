@@ -1,5 +1,4 @@
 #include "CppUTest/TestHarness.h"
-#include "CppUTest/SimpleStringExtensions.h"
 
 extern "C"
   {
