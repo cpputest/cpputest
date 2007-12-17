@@ -53,7 +53,7 @@ example: $(CPPUTEST_OUTPUT) $(CPPUTEST_EXAMPLE_OUTPUT)
 
 $(CPPUTEST_EXAMPLE_OUTPUT): $(CPPUTEST_EXAMPLE_TST_OBJS) $(CPPUTEST_EXAMPLE_LIB) $(CPPUTEST_LIB)
 	$(CXX) $(CPPFLAGS) $^ $(LDFLAGS) -o $@
-	$@
+	./$@
 
 $(CPPUTEST_EXAMPLE_LIB): $(CPPUTEST_EXAMPLE_OBJS)
 	$(AR) r $@ $^
@@ -62,7 +62,7 @@ DEP_FILES = $(subst .c,.d,$(subst .cpp,.d,$(CPPUTEST_ALL_SRC)))
 DEP_FILES += $(subst .c,.d,$(subst .cpp,.d,$(CPPUTEST_ALL_TST)))
 DEP_FILES += $(subst .c,.d,$(subst .cpp,.d,$(CPPUTEST_ALL_EXAMPLE)))
 ifneq "$(MAKECMDGOALS)" "clean"
-include $(DEP_FILES)
+-include $(DEP_FILES)
 endif
 
 %.d: %.cpp
