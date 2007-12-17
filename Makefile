@@ -41,8 +41,8 @@ LDFLAGS += -lstdc++
 all: $(CPPUTEST_OUTPUT)
 
 $(CPPUTEST_OUTPUT): $(CPPUTEST_TST_OBJS) $(CPPUTEST_LIB) 
-	$(CC) $(CPPFLAGS) $^ $(LDFLAGS) -o $@
-	$@
+	$(CXX) $(CPPFLAGS) $^ $(LDFLAGS) -o $@
+	./$@
 
 $(CPPUTEST_LIB): $(CPPUTEST_OBJS) $(CPPUTEST_PLATFORM_OBJS)
 	$(AR) r $@ $^
@@ -52,7 +52,7 @@ $(CPPUTEST_LIB): $(CPPUTEST_OBJS) $(CPPUTEST_PLATFORM_OBJS)
 example: $(CPPUTEST_OUTPUT) $(CPPUTEST_EXAMPLE_OUTPUT)
 
 $(CPPUTEST_EXAMPLE_OUTPUT): $(CPPUTEST_EXAMPLE_TST_OBJS) $(CPPUTEST_EXAMPLE_LIB) $(CPPUTEST_LIB)
-	$(CC) $(CPPFLAGS) $^ $(LDFLAGS) -o $@
+	$(CXX) $(CPPFLAGS) $^ $(LDFLAGS) -o $@
 	$@
 
 $(CPPUTEST_EXAMPLE_LIB): $(CPPUTEST_EXAMPLE_OBJS)
@@ -66,7 +66,7 @@ include $(DEP_FILES)
 endif
 
 %.d: %.cpp
-	@$(CC) $(CFLAGS) $(CPPFLAGS) -M -MF $@ -MT "$(subst .cpp,.o,$< $(subst .cpp,.d,$<))" $<
+	@$(CXX) $(CFLAGS) $(CPPFLAGS) -M -MF $@ -MT "$(subst .cpp,.o,$< $(subst .cpp,.d,$<))" $<
 	@echo Generating dependency information for $(notdir $<)
 
 %.d: %.c
