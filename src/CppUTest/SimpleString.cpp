@@ -243,6 +243,14 @@ SimpleString StringFrom (const char *value)
   return SimpleString(value);
 }
 
+SimpleString StringFrom (int value)
+{
+    char buffer [20];
+    sprintf (buffer, "%d", value);
+
+    return SimpleString(buffer);
+}
+
 SimpleString StringFrom (long value)
 {
   char buffer [20];

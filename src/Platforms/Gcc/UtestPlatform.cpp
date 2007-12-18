@@ -13,5 +13,5 @@ long TestResult::GetPlatformSpecificTimeInMillis()
 	struct timeval tv;
 	struct timezone tz;
 	::gettimeofday(&tv, &tz);
-	return (tv.tv_sec * 10) + (tv.tv_usec * 0.001);	
+	return (tv.tv_sec * 10) + (tv.tv_usec / 1000);	
 }

@@ -77,6 +77,7 @@ SimpleString StringFrom (void* value);
 SimpleString StringFrom (char value);
 SimpleString StringFrom (const char *value);
 SimpleString StringFrom (long value);
+SimpleString StringFrom (int value);
 SimpleString HexStringFrom(long value);
 SimpleString StringFrom (double value, int precision = 6);
 SimpleString StringFrom (const SimpleString& other);

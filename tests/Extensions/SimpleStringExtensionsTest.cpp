@@ -26,12 +26,21 @@
  */
 
 #include "Platform.h"
-#include "CommandLineTestRunner.h"
+#include "CppUTest/TestHarness.h"
+#include "CppUTest/Extensions/SimpleStringExtensions.h"
 
-int main(int ac, char** av)
+
+
+TEST_GROUP(SimpleStringExtensions)
 {
-  return CommandLineTestRunner::RunAllTests(ac, av);
-}
+};
 
-#include "AllTests.h"
-#include "Extensions/AllTests.h"
+using namespace std;
+
+TEST(SimpleStringExtensions, fromStdString)
+{
+  string s("hello");
+  SimpleString s1(StringFrom(s));
+
+  STRCMP_EQUAL("hello", s1.asCharString());
+}

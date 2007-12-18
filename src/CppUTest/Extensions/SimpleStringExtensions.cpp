@@ -25,13 +25,10 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "Platform.h"
-#include "CommandLineTestRunner.h"
 
-int main(int ac, char** av)
+#include "CppUTest/Extensions/SimpleStringExtensions.h"
+
+SimpleString StringFrom (const std::string& value)
 {
-  return CommandLineTestRunner::RunAllTests(ac, av);
+  return SimpleString(value.c_str());
 }
-
-#include "AllTests.h"
-#include "Extensions/AllTests.h"

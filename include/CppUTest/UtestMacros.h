@@ -85,8 +85,7 @@
 
 
 
-//This check needs the equality operator, and a StringFrom(YourType) function
-
+//This check needs the operator!=(), and a StringFrom(YourType) function
 #define CHECK_EQUAL(expected,actual)\
   CHECK_EQUAL_LOCATION(expected, actual, __FILE__, __LINE__)
 

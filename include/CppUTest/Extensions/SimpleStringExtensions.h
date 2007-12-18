@@ -25,13 +25,21 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "Platform.h"
-#include "CommandLineTestRunner.h"
+///////////////////////////////////////////////////////////////////////////////
+//
+// One of the design goals of CppUTest is to compilation with very old C++
+// compilers.  For that reason, the simple string class that provides
+// only the operations needed in UnitTestHarness.  If you want to extend
+// SimpleString for your types, you can write a StringFrom function like these
+//
+///////////////////////////////////////////////////////////////////////////////
 
-int main(int ac, char** av)
-{
-  return CommandLineTestRunner::RunAllTests(ac, av);
-}
+#ifndef D_SimpleStringExtensions_H
+#define D_SimpleStringExtensions_H
 
-#include "AllTests.h"
-#include "Extensions/AllTests.h"
+#include "CppUTest/SimpleString.h"
+#include <string>
+
+SimpleString StringFrom (const std::string& other);
+
+#endif

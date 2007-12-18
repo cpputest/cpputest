@@ -25,13 +25,5 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "Platform.h"
-#include "CommandLineTestRunner.h"
-
-int main(int ac, char** av)
-{
-  return CommandLineTestRunner::RunAllTests(ac, av);
-}
-
-#include "AllTests.h"
-#include "Extensions/AllTests.h"
+//Include this in the test main to execute these tests
+IMPORT_TEST_GROUP(SimpleStringExtensions);
