@@ -43,5 +43,13 @@
 #include "TestRegistry.h"
 #include "SimpleString.h"
 #include "MemoryLeakWarning.h"
+
+// Some platform specific methods
+long GetPlatformSpecificTimeInMillis();
+void SetPlatformSpecificTimeInMillisMethod(long (*platformSpecific) ());
+
+SimpleString GetPlatformSpecificTimeString();
+void SetPlatformSpecificTimeStringMethod(SimpleString (*platformMethod) ());
+
 #endif
 
