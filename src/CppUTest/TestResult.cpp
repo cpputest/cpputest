@@ -25,6 +25,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "TestHarness.h"
 #include "TestResult.h"
 #include "Failure.h"
 #include "TestOutput.h"
@@ -38,23 +39,41 @@ TestResult::TestResult (TestOutput& p)
     , failureCount (0)
     , filteredOutCount(0)
     , ignoredCount(0)
-    , totalExecutionTime(0.0)
+    , totalExecutionTime(0)
     , timeStarted(0)
+    , currentTestTimeStarted(0)
+    , currentTestTotalExecutionTime(0)
+    , currentGroupTimeStarted(0)
+    , currentGroupTotalExecutionTime(0)
 {}
 
 
 TestResult::~TestResult()
 {}
 
-
-void TestResult::testsStarted ()
+void TestResult::currentGroupStarted(Utest* test)
 {
-	timeStarted = GetPlatformSpecificTimeInMillis();
+	output.printCurrentGroupStarted(*test);
+	currentGroupTimeStarted = GetPlatformSpecificTimeInMillis();
 }
 
-void TestResult::setCurrentTest(Utest* test)
+void TestResult::currentGroupEnded(Utest* test)
 {
-	output.printCurrentTest(*test);
+	currentGroupTotalExecutionTime = GetPlatformSpecificTimeInMillis() - currentGroupTimeStarted;
+	output.printCurrentGroupEnded(*this);
+}
+
+void TestResult::currentTestStarted(Utest* test)
+{
+	output.printCurrentTestStarted(*test);
+	currentTestTimeStarted = GetPlatformSpecificTimeInMillis();
+}
+
+void TestResult::currentTestEnded(Utest* test)
+{
+	currentTestTotalExecutionTime = GetPlatformSpecificTimeInMillis() - currentTestTimeStarted;
+	output.printCurrentTestEnded(*this);
+
 }
 
 void TestResult::addFailure (const Failure& failure)
@@ -88,7 +107,11 @@ void TestResult::countIgnored()
   ignoredCount++;
 }
 
-#include <unistd.h>
+void TestResult::testsStarted ()
+{
+	timeStarted = GetPlatformSpecificTimeInMillis();
+	output.printTestsStarted();
+}
 
 void TestResult::testsEnded ()
 {
@@ -97,12 +120,23 @@ void TestResult::testsEnded ()
 	output.printTestsEnded(*this);
 }
 
-double TestResult::getTotalExecutionTime() const
+long TestResult::getTotalExecutionTime() const
 {
 	return totalExecutionTime;
 }
 
-void TestResult::setTotalExecutionTime(double exTime)
+void TestResult::setTotalExecutionTime(long exTime)
 {
 	totalExecutionTime = exTime;
 }
+
+long TestResult::getCurrentTestTotalExecutionTime() const
+{
+	return currentTestTotalExecutionTime;
+}
+
+long TestResult::getCurrentGroupTotalExecutionTime() const
+{
+	return currentGroupTotalExecutionTime;
+}
+	

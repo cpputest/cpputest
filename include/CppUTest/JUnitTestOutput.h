@@ -39,9 +39,12 @@ class JUnitTestOutput : public TestOutput
   	virtual ~JUnitTestOutput();
   	
 	virtual void printTestsStarted();
-	virtual void printCurrentTest(const Utest& test);
 	virtual void printTestsEnded(const TestResult& result);
-	
+	virtual void printCurrentTestStarted(const Utest& test);
+	virtual void printCurrentTestEnded(const TestResult& res);
+	virtual void printCurrentGroupStarted(const Utest& test);
+	virtual void printCurrentGroupEnded(const TestResult& res);
+
 	virtual void verbose();
     virtual void print(const char*);
     virtual void print(long);
@@ -54,17 +57,20 @@ class JUnitTestOutput : public TestOutput
   
   	struct JUnitTestCaseResultNode 
   	{
-  		JUnitTestCaseResultNode() : failure_(0), next_(0){};
+  		JUnitTestCaseResultNode() : execTime_(0), failure_(0), next_(0){};
   		SimpleString name_;
+  		long execTime_;
   		Failure* failure_;
   		JUnitTestCaseResultNode* next_;
   	};
 
   	struct JUnitTestGroupResult
   	{
-  		JUnitTestGroupResult () : testCount_(0), failureCount_(0), head_(0), tail_(0){};
+  		JUnitTestGroupResult () : testCount_(0), failureCount_(0), groupExecTime_(0), head_(0), tail_(0){};
   		int testCount_;
   		int failureCount_;
+  		long startTime_;
+  		long groupExecTime_;
   		SimpleString group_;
   		JUnitTestCaseResultNode* head_;
   		JUnitTestCaseResultNode* tail_;

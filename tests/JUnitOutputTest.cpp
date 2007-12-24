@@ -31,6 +31,21 @@
 #include "TestResult.h"
 #include <stdio.h>
 
+static long millisTime;
+
+static char* theTime = "1978-10-03T00:00:00";
+
+static long MockGetPlatformSpecificTimeInMillis()
+{
+		return millisTime;
+}
+
+static SimpleString MockGetPlatformSpecificTimeString()
+{
+		return theTime;
+}
+
+
 TEST_GROUP(JUnitOutputTest)
 {
 	class MockJUnitTestOutput : public JUnitTestOutput
@@ -45,7 +60,7 @@ TEST_GROUP(JUnitOutputTest)
 		SimpleString fileName;
 		SimpleString buffer;
 
-
+		TestResult* res;
 		struct TestData
 		{
 			TestData() : tst_(0), testName_(0), failure_(0){};
@@ -77,13 +92,18 @@ TEST_GROUP(JUnitOutputTest)
 			buffer = "";
 		}
 
-		MockJUnitTestOutput() : filesOpened(0), fileBalance(0)
+		MockJUnitTestOutput() : filesOpened(0), fileBalance(0), res(0)
 		{
 			for (int i = 0; i < testGroupSize; i++) {
 				testGroupData_[i].numberTests_ = 0;
 				testGroupData_[i].totalFailures_ = 0;
 			}
 		};
+		
+		void setResult(TestResult* testRes)
+		{
+			res = testRes;
+		}
 		
 		virtual ~MockJUnitTestOutput()
 		{
@@ -133,15 +153,27 @@ TEST_GROUP(JUnitOutputTest)
 		}
 		void runTests()
 		{
+			res->testsStarted();
 			for (int i = 0; i < testGroupSize; i++) {
 				TestGroupData& data = testGroupData_[i];
+				if (data.numberTests_ == 0) continue; 
+				
+				millisTime = 0;
+				res->currentGroupStarted(data.testData_[0].tst_);
 				for (int i = 0; i < data.numberTests_; i++) {
 					TestData& testData = data.testData_[i]; 
-					printCurrentTest(*testData.tst_);
+					
+					millisTime = 0;
+					res->currentTestStarted(testData.tst_);
 					if (testData.failure_) 
 						print(*testData.failure_);
+					millisTime = 10;
+					res->currentTestEnded(testData.tst_);
 				}
+				millisTime = 50;
+				res->currentGroupEnded(data.testData_[0].tst_);
 			}
+			res->testsEnded();
 		}
 		
 		void setFailure(int groupIndex, int testIndex, const char* fileName, int lineNumber, const char* message) 
@@ -160,8 +192,8 @@ TEST_GROUP(JUnitOutputTest)
 		{
 			TestGroupData& group = currentGroup();
 			char buf[1024];
-			sprintf(buf, "<testsuite errors=\"0\" failures=\"%d\" hostname=\"localhost\" name=\"%s\" tests=\"%d\" time=\"0.0\" timestamp=\"1970-01-01T00:00:00\">\n",
-				group.totalFailures_, group.name_.asCharString(), group.numberTests_);
+			sprintf(buf, "<testsuite errors=\"0\" failures=\"%d\" hostname=\"localhost\" name=\"%s\" tests=\"%d\" time=\"50.0\" timestamp=\"%s\">\n",
+				group.totalFailures_, group.name_.asCharString(), group.numberTests_, theTime);
 			STRCMP_EQUAL(buf, output.asCharString());
 		}
 	
@@ -212,7 +244,7 @@ TEST_GROUP(JUnitOutputTest)
 			static char buf[1024];
 			
 			for (int index = 0, curTest = 0; curTest < currentGroup().numberTests_; curTest++, index++) {
-				snprintf(buf, 1024, "<testcase classname=\"%s\" name=\"%s\" time=\"0.0\"/>\n", 
+				snprintf(buf, 1024, "<testcase classname=\"%s\" name=\"%s\" time=\"10.0\"/>\n", 
 					currentGroup().name_.asCharString(), currentGroup().testData_[curTest].tst_->getName().asCharString()); 				
 				STRCMP_EQUAL(buf, arr[index].asCharString());
 				if (currentGroup().testData_[curTest].failure_) {
@@ -240,15 +272,21 @@ TEST_GROUP(JUnitOutputTest)
 	
 	MockJUnitTestOutput * output;
 	TestResult *res;
+
 	void setup()
 	{
 		output = new MockJUnitTestOutput();
 		res = new TestResult(*output);
+		output->setResult(res);
+		SetPlatformSpecificTimeInMillisMethod(MockGetPlatformSpecificTimeInMillis);
+		SetPlatformSpecificTimeStringMethod(MockGetPlatformSpecificTimeString);
 	}
 	void teardown()
 	{
 		delete output;
 		delete res;
+		SetPlatformSpecificTimeInMillisMethod(0);
+		SetPlatformSpecificTimeStringMethod(0);
 	}
 	void runTests() 
 	{
@@ -307,6 +345,7 @@ TEST(JUnitOutputTest, fourGroupsAndSomePassAndSomeFail)
 	
 	output->setFailure(0, 0, "file", 1, "Test just failed");
 	output->printTestsEnded(*res);
+	runTests();
 }
 
 TEST(JUnitOutputTest, messageWithNewLine)

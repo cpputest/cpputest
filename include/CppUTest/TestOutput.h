@@ -50,8 +50,11 @@ class TestOutput
     virtual ~TestOutput();
 
 	virtual void printTestsStarted();
-	virtual void printCurrentTest(const Utest& test);
 	virtual void printTestsEnded(const TestResult& result);
+	virtual void printCurrentTestStarted(const Utest& test);
+	virtual void printCurrentTestEnded(const TestResult& res);
+	virtual void printCurrentGroupStarted(const Utest& test);
+	virtual void printCurrentGroupEnded(const TestResult& res);
 	
 	virtual void verbose();
     virtual void print(const char*);

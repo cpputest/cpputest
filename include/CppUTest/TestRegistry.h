@@ -67,6 +67,7 @@ class TestRegistry
   private:
 
     bool testShouldRun(Utest* test, TestResult& result);
+    bool endOfGroup(Utest* test);
 
     Utest *				tests;
     const char* 	nameFilter_;

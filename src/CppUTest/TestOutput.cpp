@@ -26,11 +26,11 @@
  */
 
 #include "TestOutput.h"
-#include <stdio.h>
 #include "SimpleString.h"
 #include "Utest.h"
 #include "Failure.h"
 #include "TestResult.h"
+#include <stdio.h>
 
 TestOutput::TestOutput() : dotCount_(0), verbose_(false)
 {}
@@ -77,13 +77,19 @@ TestOutput& operator<<(TestOutput& p, long int i)
   return p;
 }
 
-void TestOutput::printCurrentTest(const Utest& test)
+void TestOutput::printCurrentTestStarted(const Utest& test)
+{
+	if (verbose_)	print(test.getFormattedName().asCharString());
+}
+
+void TestOutput::printCurrentTestEnded(const TestResult& res)
 {
 	if (verbose_) {
-		print(test.getFormattedName().asCharString());
-		print("\n");
+		print(" - ");
+		print(res.getCurrentTestTotalExecutionTime());
+		print(" ms\n");
 	}
-	else {		
+	else {
 		print(".");
 		if (++dotCount_ % 50 == 0)
 			print("\n");
@@ -91,6 +97,14 @@ void TestOutput::printCurrentTest(const Utest& test)
 }
 
 void TestOutput::printTestsStarted()
+{
+}
+
+void TestOutput::printCurrentGroupStarted(const Utest& test)
+{
+}
+
+void TestOutput::printCurrentGroupEnded(const TestResult& res)
 {
 }
 
@@ -118,7 +132,7 @@ void TestOutput::printTestsEnded(const TestResult& result)
 	print(" ignored, ");
 	print(result.getFilteredOutCount());
 	print(" filtered out, ");
-	printDouble(result.getTotalExecutionTime());
+	print(result.getTotalExecutionTime());
 	print(" ms)\n\n");
 }
 

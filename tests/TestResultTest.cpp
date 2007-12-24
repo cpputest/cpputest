@@ -28,20 +28,10 @@
 #include "TestHarness.h"
 #include "MockTestOutput.h"
 
-
-static long timeInMillies;
-
-class MockTestResult : public TestResult
+static long MockGetPlatformSpecificTimeInMillis()
 {
-public:
-
-	MockTestResult(TestOutput& output) : TestResult(output){};
-	
-	virtual long GetPlatformSpecificTimeInMillis()
-	{
-		return timeInMillies;
-	}
-};
+		return 10;
+}
 
 TEST_GROUP(TestResult)
 {
@@ -49,18 +39,17 @@ TEST_GROUP(TestResult)
 	MockTestOutput* mock;
 	
 	TestResult* res;
-	MockTestResult * mockRes;
 
 	TEST_SETUP()
 	{
 		mock = new MockTestOutput();
 		printer = mock;
-		mockRes = new MockTestResult(*printer);
-		res = mockRes;
-		timeInMillies = 0;
+		res = new TestResult(*printer);
+		SetPlatformSpecificTimeInMillisMethod(MockGetPlatformSpecificTimeInMillis);
 	}
 	TEST_TEARDOWN()
 	{
+		SetPlatformSpecificTimeInMillisMethod(0);
 		delete printer;
 		delete res;
 	}	
@@ -68,7 +57,6 @@ TEST_GROUP(TestResult)
 
 TEST(TestResult, TestEndedWillPrintResultsAndExecutionTime)
 {
-	timeInMillies = 10;
 	res->testsEnded();
-	CHECK(mock->getOutput().contains("10.0"));
+	CHECK(mock->getOutput().contains("10 ms"));
 }

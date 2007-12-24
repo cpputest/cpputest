@@ -30,6 +30,13 @@
 #include "TestResult.h"
 #include "MockTestOutput.h"
 
+static long millisTime;
+
+static long MockGetPlatformSpecificTimeInMillis()
+{
+		return millisTime;
+}
+
 TEST_GROUP(TestOutput)
 {
 	TestOutput* printer;
@@ -45,7 +52,9 @@ TEST_GROUP(TestOutput)
 		tst = new Utest("group", "test", "file", 1);
 		f = new Failure(tst, "failfile", 2, "message");
 		result = new TestResult(*mock);
-		result->setTotalExecutionTime(10.0);
+		result->setTotalExecutionTime(10);
+		millisTime = 0; 
+		SetPlatformSpecificTimeInMillisMethod(MockGetPlatformSpecificTimeInMillis);
 	}
 	TEST_TEARDOWN()
 	{
@@ -53,6 +62,7 @@ TEST_GROUP(TestOutput)
 		delete tst;
 		delete f;
 		delete result;
+		SetPlatformSpecificTimeInMillisMethod(0);
 	}
 };
 
@@ -81,25 +91,34 @@ TEST(TestOutput, StreamOperators)
   STRCMP_EQUAL("n=1234", mock->getOutput().asCharString());
 }
 
-TEST(TestOutput, PrintTest)
+TEST(TestOutput, PrintTestEnded)
 {
-	printer->printCurrentTest(*tst);
+	printer->printCurrentTestEnded(*result);
 	STRCMP_EQUAL(".", mock->getOutput().asCharString());
 }
 
 TEST(TestOutput, PrintTestALot)
 {
 	for (int i = 0; i < 60; ++i) {
-		printer->printCurrentTest(*tst);
+		printer->printCurrentTestEnded(*result);
 	}
 	STRCMP_EQUAL("..................................................\n..........", mock->getOutput().asCharString());
 }
 
-TEST(TestOutput, PrintTestVerbose)
+TEST(TestOutput, PrintTestVerboseStarted)
 {
 	mock->verbose();
-	printer->printCurrentTest(*tst);
-	STRCMP_EQUAL("TEST(group, test)\n", mock->getOutput().asCharString());
+	printer->printCurrentTestStarted(*tst);
+	STRCMP_EQUAL("TEST(group, test)", mock->getOutput().asCharString());
+}
+
+TEST(TestOutput, PrintTestVerboseEnded)
+{
+	mock->verbose();
+	result->currentTestStarted(tst);
+	millisTime = 5;
+	result->currentTestEnded(tst);
+	STRCMP_EQUAL("TEST(group, test) - 5 ms\n", mock->getOutput().asCharString());
 }
 
 TEST(TestOutput, PrintTestRun)
@@ -136,7 +155,7 @@ TEST(TestOutput, printTestsEnded)
 	result->countRun();
 	result->countRun();
 	printer->printTestsEnded(*result);
-	STRCMP_EQUAL("\nOK (1 tests, 3 ran, 1 checks, 2 ignored, 0 filtered out, 10.000 ms)\n\n", mock->getOutput().asCharString());
+	STRCMP_EQUAL("\nOK (1 tests, 3 ran, 1 checks, 2 ignored, 0 filtered out, 10 ms)\n\n", mock->getOutput().asCharString());
 }
 
 TEST(TestOutput, printTestsEndedWithFailures)
@@ -144,5 +163,5 @@ TEST(TestOutput, printTestsEndedWithFailures)
 	result->addFailure(*f);
 	printer->flush();
 	printer->printTestsEnded(*result);
-	STRCMP_EQUAL("\nErrors (1 failures, 0 tests, 0 ran, 0 checks, 0 ignored, 0 filtered out, 10.000 ms)\n\n", mock->getOutput().asCharString());
+	STRCMP_EQUAL("\nErrors (1 failures, 0 tests, 0 ran, 0 checks, 0 ignored, 0 filtered out, 10 ms)\n\n", mock->getOutput().asCharString());
 }

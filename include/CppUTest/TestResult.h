@@ -50,8 +50,11 @@ class TestResult
     virtual ~TestResult();
   
     virtual void testsStarted ();
-	virtual void setCurrentTest(Utest* test);
     virtual void testsEnded ();
+    virtual void currentGroupStarted(Utest* test);
+    virtual void currentGroupEnded(Utest* test);
+    virtual void currentTestStarted(Utest* test);
+    virtual void currentTestEnded(Utest* test);
 
 
     virtual void countTest();
@@ -68,10 +71,12 @@ class TestResult
     int getIgnoredCount() const {return ignoredCount;}
     int getFailureCount() const {return failureCount;}
 
-	double getTotalExecutionTime() const;
-	void setTotalExecutionTime(double exTime);
+	long getTotalExecutionTime() const;
+	void setTotalExecutionTime(long exTime);
+
+	long getCurrentTestTotalExecutionTime() const;
+	long getCurrentGroupTotalExecutionTime() const;
   private:
-	virtual long GetPlatformSpecificTimeInMillis();
 
     TestOutput& output;
     int testCount;
@@ -80,8 +85,12 @@ class TestResult
     int	failureCount;
     int filteredOutCount;
     int ignoredCount;
-    double totalExecutionTime;
+    long totalExecutionTime;
     long timeStarted;
+    long currentTestTimeStarted;
+    long currentTestTotalExecutionTime;
+    long currentGroupTimeStarted;
+    long currentGroupTotalExecutionTime;
   };
 
 #endif

@@ -52,21 +52,42 @@ void TestRegistry::addTest (Utest *test)
 
 void TestRegistry::runAllTests (TestResult& result)
 {
+	bool groupStart = true;
 
 	result.testsStarted ();
-
 	for (Utest *test = tests; !test->isLast(); test = test->getNext ()){
+
+		if (groupStart) {
+			result.currentGroupStarted(test);
+			groupStart = false;
+		}
+
 		result.countTest();
 		if (testShouldRun(test, result)) {
-			result.setCurrentTest(test);
-          
+			result.currentTestStarted(test);
+			          
 			firstPlugin_->runAllPreTestAction(*test, result);
 			test->run(result);
 			firstPlugin_->runAllPostTestAction(*test, result);
+			
+			result.currentTestEnded(test);
+		}
+		
+		if (endOfGroup (test)) {
+			groupStart = true;
+			result.currentGroupEnded(test);
 		}
 	}
-    result.testsEnded ();
+  result.testsEnded ();
 }
+
+bool TestRegistry::endOfGroup(Utest* test)
+{
+	if (test->isLast() || test->getGroup() != test->getNext()->getGroup())
+		return true;
+	return false;
+}
+
 
 int  TestRegistry::countTests()
 {

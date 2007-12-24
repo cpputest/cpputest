@@ -30,9 +30,10 @@
 #include "Utest.h"
 #include "TestResult.h"
 #include "Failure.h"
+#include "TestHarness.h"
 #include <stdio.h>
  
- JUnitTestOutput::JUnitTestOutput()
+JUnitTestOutput::JUnitTestOutput()
 {
 }
 
@@ -61,15 +62,31 @@ void JUnitTestOutput::printTestsStarted()
 {
 }
 
-void JUnitTestOutput::printCurrentTest(const Utest& test)
+void JUnitTestOutput::printCurrentGroupStarted(const Utest& test)
 {
-	if (results_.group_ != "" && test.getGroup() != results_.group_) {
-		writeTestGroupToFile();
-		resetTestGroupResult();
-	}
-	
+}
+
+void JUnitTestOutput::printCurrentTestEnded(const TestResult& result)
+{
+	results_.tail_->execTime_ = result.getCurrentTestTotalExecutionTime();
+}
+
+void JUnitTestOutput::printTestsEnded(const TestResult& result)
+{
+}
+
+void JUnitTestOutput::printCurrentGroupEnded(const TestResult& result)
+{
+	results_.groupExecTime_ = result.getCurrentGroupTotalExecutionTime();
+	writeTestGroupToFile();
+	resetTestGroupResult();
+}
+
+void JUnitTestOutput::printCurrentTestStarted(const Utest& test)
+{
 	results_.testCount_++;
 	results_.group_ = test.getGroup();
+	results_.startTime_ = GetPlatformSpecificTimeInMillis();
 	
 	if (results_.tail_ == 0) {
 		results_.head_ = results_.tail_ = new JUnitTestCaseResultNode;
@@ -81,12 +98,6 @@ void JUnitTestOutput::printCurrentTest(const Utest& test)
 	results_.tail_->name_ = test.getName(); 
 }
 
-void JUnitTestOutput::printTestsEnded(const TestResult& result)
-{
-	if (results_.group_ != "") {
-		writeTestGroupToFile();
-	}
-}
 	
 static SimpleString createFileName(const SimpleString& group)
 {
@@ -105,8 +116,8 @@ void JUnitTestOutput::writeTestSuiteSummery()
 {
 	const int buf_size = 1024;
 	static char buf[buf_size];
-	snprintf(buf, buf_size, "<testsuite errors=\"0\" failures=\"%d\" hostname=\"localhost\" name=\"%s\" tests=\"%d\" time=\"0.0\" timestamp=\"1970-01-01T00:00:00\">\n",
-			results_.failureCount_, results_.group_.asCharString(), results_.testCount_);
+	snprintf(buf, buf_size, "<testsuite errors=\"0\" failures=\"%d\" hostname=\"localhost\" name=\"%s\" tests=\"%d\" time=\"%d.0\" timestamp=\"%s\">\n",
+			results_.failureCount_, results_.group_.asCharString(), results_.testCount_, (int) results_.groupExecTime_, GetPlatformSpecificTimeString().asCharString());
 	writeToFile(buf);
 }
 
@@ -124,8 +135,8 @@ void JUnitTestOutput::writeTestCases()
 
   	JUnitTestCaseResultNode* cur = results_.head_;
   	while (cur) {
-		snprintf(buf, buf_size, "<testcase classname=\"%s\" name=\"%s\" time=\"0.0\"/>\n", 
-			results_.group_.asCharString(), cur->name_.asCharString());
+		snprintf(buf, buf_size, "<testcase classname=\"%s\" name=\"%s\" time=\"%d.0\"/>\n", 
+			results_.group_.asCharString(), cur->name_.asCharString(), (int) cur->execTime_);
 		writeToFile(buf);
 		
 		if (cur->failure_) {
