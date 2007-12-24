@@ -42,8 +42,13 @@
   int externTestGroup##testGroup = 0; \
   struct CppUTestGroup##testGroup : public baseclass
 
+#define TEST_BASE(testBaseClass) \
+  struct testBaseClass : public Utest
+
+
 #define TEST_GROUP(testGroup) \
   TEST_GROUP_BASE(testGroup, Utest)
+
   
 #define TEST_SETUP() \
   virtual void setup() 
