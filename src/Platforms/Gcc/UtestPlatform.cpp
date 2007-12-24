@@ -1,6 +1,7 @@
 
 #include "Utest.h"
 #include "TestResult.h"
+#include <time.h>
 #include <sys/time.h>
 
 void Utest::executePlatformSpecificTestBody()
