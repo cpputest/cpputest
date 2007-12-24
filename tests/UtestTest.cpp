@@ -165,9 +165,8 @@ TEST(Utest, MacrosUsedInTearDown)
 	LONGS_EQUAL(1, fixture->getFailureCount());
 }
 
-class MyOwnTest : public Utest
+TEST_BASE(MyOwnTest)
 {
-public:
 	MyOwnTest() : inTest(false) {}
 	bool inTest;
 	
