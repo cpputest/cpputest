@@ -51,8 +51,8 @@ public:
 
 	bool isVerbose();
 	int getRepeatCount();
-	char* getGroupFilter();
-	char* getNameFilter();
+	SimpleString getGroupFilter();
+	SimpleString getNameFilter();
 	OutputType getOutputType();
   private:
   
@@ -60,8 +60,8 @@ public:
     bool verbose_;
     TestOutput* output_;
     int repeat_;
-    char* groupFilter_;
-    char* nameFilter_;
+    SimpleString groupFilter_;
+    SimpleString nameFilter_;
     OutputType outputType_;
     
     void SetRepeatCount(int ac, char** av, int& index);

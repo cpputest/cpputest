@@ -52,15 +52,15 @@ class TestRegistry
 		virtual void unDoLastAddTest();
 		virtual int  countTests();
 		virtual void runAllTests(TestResult& result);
-		virtual void nameFilter(const char*);
-		virtual void groupFilter(const char*);
+		virtual void nameFilter(SimpleString);
+		virtual void groupFilter(SimpleString);
 
 		virtual void installPlugin(TestPlugin* plugin);
 		virtual void resetPlugins();
 		virtual TestPlugin* getFirstPlugin();
 		
-		const char* getGroupFilter();
-		const char* getNameFilter();
+		SimpleString getGroupFilter();
+		SimpleString getNameFilter();
 		
 		static TestRegistry*  getCurrentRegistry();
 		virtual void setCurrentRegistry(TestRegistry* registry);
@@ -69,9 +69,9 @@ class TestRegistry
     bool testShouldRun(Utest* test, TestResult& result);
     bool endOfGroup(Utest* test);
 
-    Utest *				tests;
-    const char* 	nameFilter_;
-    const char* 	groupFilter_;
+    Utest *			tests;
+    SimpleString 	nameFilter_;
+    SimpleString 	groupFilter_;
     TestPlugin* 	firstPlugin_;
     static TestRegistry* currentRegistry_;
 
