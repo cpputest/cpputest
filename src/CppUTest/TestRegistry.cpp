@@ -113,22 +113,22 @@ void TestRegistry::unDoLastAddTest()
 
 }
 
-void TestRegistry::nameFilter(const char* f)
+void TestRegistry::nameFilter(SimpleString f)
 {
 	nameFilter_ = f;
 }
 
-void TestRegistry::groupFilter(const char* f)
+void TestRegistry::groupFilter(SimpleString f)
 {
   groupFilter_ = f;
 }
 
-const char* TestRegistry::getGroupFilter()
+SimpleString TestRegistry::getGroupFilter()
 {
 	return groupFilter_;
 }
 
-const char* TestRegistry::getNameFilter()
+SimpleString TestRegistry::getNameFilter()
 {
 	return nameFilter_;
 }
