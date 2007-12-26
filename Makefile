@@ -44,18 +44,15 @@ EXAMPLE_TST_OBJS = $(call src_to_o,$(EXAMPLE_TST))
 ALL_SRC   = $(CPPUTEST_SRC) $(CPPUTEST_TST) $(EXAMPLE_SRC) $(EXAMPLE_TST)
 DEP_FILES = $(call src_to_d, $(ALL_SRC)) 
 
-CPPUTEST_INCLUDES = -I $(CPPUTEST_HOME)/include  \
-					          -I $(CPPUTEST_HOME)/include/CppUTest  \
-					          -I $(CPPUTEST_HOME)/include/Platforms/$(CPPUTEST_PLATFORM)
-
+CPPUTEST_INCLUDES       = -I $(CPPUTEST_HOME)/include  
 CPPUTEST_LIB_DIR        = $(CPPUTEST_HOME)/lib
 CPPUTEST_LIB            = $(CPPUTEST_LIB_DIR)/libCppUTest.a
 CPPUTEST_EXAMPLE_LIB    = $(CPPUTEST_LIB_DIR)/ApplicationLib.a
 CPPUTEST_OUTPUT         = CppUTest_tests
 CPPUTEST_EXAMPLE_OUTPUT = CppUTest_example_tests
 
-CPPFLAGS += $(CPPUTEST_INCLUDES) $(CPPUTEST_APPFLAGS)
-LDFLAGS += -lstdc++
+CPPFLAGS += -Wall $(CPPUTEST_INCLUDES) $(CPPUTEST_APPFLAGS)
+LDFLAGS  += -lstdc++
 
 # Targets
 .PHONY: all
@@ -83,7 +80,7 @@ $(CPPUTEST_EXAMPLE_LIB): $(EXAMPLE_OBJS)
 	$(AR) r $@ $^
 
 %.o: %.cpp
-	@echo compiling $(notdir $<)
+	@echo compiling $(CXXFLAGS) $(CPPFLAGS) $(notdir $<)
 	$(SILENCE)$(CC) $(CPPFLAGS) -M -MF $(subst .o,.d,$@) -MT "$@ $(subst .o,.d,$@)" $<
 	$(SILENCE)$(COMPILE.cpp) $(OUTPUT_OPTION) $<
 
