@@ -83,7 +83,7 @@ TEST(CommandLineTestRunner, setGroupFilter)
 	int argc = 3;
 	char* argv[] = {"tests.exe", "-g", "group"};
 	CHECK(runner->parseArguments(argc, argv));
-	STRCMP_EQUAL("group", runner->getGroupFilter());	
+	STRCMP_EQUAL("group", runner->getGroupFilter().asCharString());	
 }
 
 TEST(CommandLineTestRunner, setGroupFilterSameParameter)
@@ -91,7 +91,7 @@ TEST(CommandLineTestRunner, setGroupFilterSameParameter)
 	int argc = 2;
 	char* argv[] = {"tests.exe", "-ggroup"};
 	CHECK(runner->parseArguments(argc, argv));
-	STRCMP_EQUAL("group", runner->getGroupFilter());	
+	STRCMP_EQUAL("group", runner->getGroupFilter().asCharString());	
 }
 
 TEST(CommandLineTestRunner, setNameFilter)
@@ -99,7 +99,7 @@ TEST(CommandLineTestRunner, setNameFilter)
 	int argc = 3;
 	char* argv[] = {"tests.exe", "-n", "name"};
 	CHECK(runner->parseArguments(argc, argv));
-	STRCMP_EQUAL("name", runner->getNameFilter());	
+	STRCMP_EQUAL("name", runner->getNameFilter().asCharString());	
 }
 
 TEST(CommandLineTestRunner, setNameFilterSameParameter)
@@ -107,7 +107,7 @@ TEST(CommandLineTestRunner, setNameFilterSameParameter)
 	int argc = 2;
 	char* argv[] = {"tests.exe", "-nname"};
 	CHECK(runner->parseArguments(argc, argv));
-	STRCMP_EQUAL("name", runner->getNameFilter());	
+	STRCMP_EQUAL("name", runner->getNameFilter().asCharString());	
 }
 
 TEST(CommandLineTestRunner, setNormalOutput)
