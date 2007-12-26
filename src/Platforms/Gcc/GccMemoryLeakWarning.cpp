@@ -25,7 +25,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "MemoryLeakWarning.h"
+#include "CppUTest/MemoryLeakWarning.h"
 
 #include <stdlib.h>
 #include <stdio.h>
