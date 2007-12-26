@@ -26,10 +26,10 @@
  */
 
 
-#include "Utest.h"
-#include "TestRegistry.h"
-#include "TestResult.h"
-#include "Failure.h"
+#include "CppUTest/Utest.h"
+#include "CppUTest/TestRegistry.h"
+#include "CppUTest/TestResult.h"
+#include "CppUTest/Failure.h"
 
 #include <string.h>
 #include <stdio.h>

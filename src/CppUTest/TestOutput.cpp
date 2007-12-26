@@ -25,11 +25,11 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "TestOutput.h"
-#include "SimpleString.h"
-#include "Utest.h"
-#include "Failure.h"
-#include "TestResult.h"
+#include "CppUTest/TestOutput.h"
+#include "CppUTest/SimpleString.h"
+#include "CppUTest/Utest.h"
+#include "CppUTest/Failure.h"
+#include "CppUTest/TestResult.h"
 #include <stdio.h>
 
 TestOutput::TestOutput() : dotCount_(0), verbose_(false)

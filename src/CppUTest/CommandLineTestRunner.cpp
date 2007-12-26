@@ -26,11 +26,11 @@
  */
 
 
-#include "CommandLineTestRunner.h"
-#include "MemoryLeakWarningPlugin.h"
-#include "TestOutput.h"
-#include "RealTestOutput.h"
-#include "JUnitTestOutput.h"
+#include "CppUTest/CommandLineTestRunner.h"
+#include "CppUTest/MemoryLeakWarningPlugin.h"
+#include "CppUTest/TestOutput.h"
+#include "CppUTest/RealTestOutput.h"
+#include "CppUTest/JUnitTestOutput.h"
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>

@@ -25,9 +25,9 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "Failure.h"
-#include "Utest.h"
-#include "TestOutput.h"
+#include "CppUTest/Failure.h"
+#include "CppUTest/Utest.h"
+#include "CppUTest/TestOutput.h"
 
 #include <string.h>
 #include <stdio.h>

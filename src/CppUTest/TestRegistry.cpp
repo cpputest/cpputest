@@ -26,11 +26,11 @@
  */
 
 
-#include "Utest.h"
-#include "TestRegistry.h"
-#include "TestPlugin.h"
-#include "TestResult.h"
-#include "TestOutput.h"
+#include "CppUTest/Utest.h"
+#include "CppUTest/TestRegistry.h"
+#include "CppUTest/TestPlugin.h"
+#include "CppUTest/TestResult.h"
+#include "CppUTest/TestOutput.h"
 
 TestRegistry::TestRegistry()
     : tests(&NullTest::instance())

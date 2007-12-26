@@ -25,10 +25,10 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "TestHarness.h"
-#include "TestResult.h"
-#include "Failure.h"
-#include "TestOutput.h"
+#include "CppUTest/TestHarness.h"
+#include "CppUTest/TestResult.h"
+#include "CppUTest/Failure.h"
+#include "CppUTest/TestOutput.h"
 #include <stdio.h>
 
 TestResult::TestResult (TestOutput& p)

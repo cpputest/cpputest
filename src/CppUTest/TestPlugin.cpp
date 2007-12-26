@@ -25,7 +25,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "TestPlugin.h"
+#include "CppUTest/TestPlugin.h"
 
 TestPlugin::TestPlugin()
 	: next_(NullTestPlugin::instance())

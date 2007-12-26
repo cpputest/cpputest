@@ -25,9 +25,9 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "MemoryLeakWarningPlugin.h"
-#include "Failure.h"
-#include "TestResult.h"
+#include "CppUTest/MemoryLeakWarningPlugin.h"
+#include "CppUTest/Failure.h"
+#include "CppUTest/TestResult.h"
 
 void MemoryLeakWarningPlugin::preTestAction(Utest& test, TestResult& result)
 {

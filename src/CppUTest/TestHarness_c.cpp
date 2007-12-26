@@ -31,12 +31,12 @@
 //
 //
 ///////////////////////////////////////////////////////////////////////////////
-#include "TestHarness.h"
+#include "CppUTest/TestHarness.h"
 
 extern "C" {
 	 
 	#include "stdlib.h"
-	#include "TestHarness_c.h"	
+	#include "CppUTest/TestHarness_c.h"	
 
 	void  CHECK_EQUAL_C_INT_LOCATION(int expected, int actual, const char* fileName, int lineNumber)
 	{

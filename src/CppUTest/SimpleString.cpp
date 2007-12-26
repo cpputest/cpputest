@@ -26,7 +26,7 @@
  */
 
 
-#include "SimpleString.h"
+#include "CppUTest/SimpleString.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
