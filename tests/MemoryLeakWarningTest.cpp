@@ -25,9 +25,9 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "TestHarness.h"
-#include "MockTestOutput.h"
-#include "MemoryLeakWarningPlugin.h"
+#include "CppUTest/TestHarness.h"
+#include "CppUTest/MockTestOutput.h"
+#include "CppUTest/MemoryLeakWarningPlugin.h"
 #include "GenericTest.h"
 
 static char* arrayToLeak1;

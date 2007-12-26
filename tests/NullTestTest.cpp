@@ -25,7 +25,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "TestHarness.h"
+#include "CppUTest/TestHarness.h"
 
 TEST_GROUP(NullTest)
 {

@@ -25,8 +25,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "Platform.h"
-#include "CommandLineTestRunner.h"
+#include "CppUTest/CommandLineTestRunner.h"
 
 int main(int ac, char** av)
 {

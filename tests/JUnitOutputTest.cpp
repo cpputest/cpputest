@@ -25,10 +25,9 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "Platform.h"
-#include "TestHarness.h"
-#include "JUnitTestOutput.h"
-#include "TestResult.h"
+#include "CppUTest/TestHarness.h"
+#include "CppUTest/JUnitTestOutput.h"
+#include "CppUTest/TestResult.h"
 #include <stdio.h>
 
 static long millisTime;

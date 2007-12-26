@@ -25,9 +25,9 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "TestHarness.h"
-#include "CommandLineTestRunner.h"
-#include "MockTestOutput.h"
+#include "CppUTest/TestHarness.h"
+#include "CppUTest/CommandLineTestRunner.h"
+#include "CppUTest/MockTestOutput.h"
 #include "GenericTest.h"
 #include <string.h>
 

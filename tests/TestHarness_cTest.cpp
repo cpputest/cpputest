@@ -27,11 +27,11 @@
 
 extern "C" {
 	#include <stdlib.h>
-	#include "TestHarness_c.h"
+	#include "CppUTest/TestHarness_c.h"
 
 }
-#include "TestHarness.h"
-#include "MockTestOutput.h"
+#include "CppUTest/TestHarness.h"
+#include "CppUTest/MockTestOutput.h"
 #include "GenericTest.h"
 
 TEST_GROUP(TestHarness_c)

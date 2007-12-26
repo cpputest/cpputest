@@ -25,10 +25,10 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "TestHarness.h"
-#include "TestOutput.h"
-#include "TestResult.h"
-#include "MockTestOutput.h"
+#include "CppUTest/TestHarness.h"
+#include "CppUTest/TestOutput.h"
+#include "CppUTest/TestResult.h"
+#include "CppUTest/MockTestOutput.h"
 
 static long millisTime;
 

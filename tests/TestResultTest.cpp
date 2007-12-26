@@ -25,8 +25,8 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "TestHarness.h"
-#include "MockTestOutput.h"
+#include "CppUTest/TestHarness.h"
+#include "CppUTest/MockTestOutput.h"
 
 static long MockGetPlatformSpecificTimeInMillis()
 {

@@ -25,7 +25,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "TestHarness.h"
+#include "CppUTest/TestHarness.h"
 
 
 // this is file scope because the test is installed

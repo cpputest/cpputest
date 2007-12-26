@@ -25,9 +25,8 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "Platform.h"
-#include "TestHarness.h"
-#include "SimpleString.h"
+#include "CppUTest/TestHarness.h"
+#include "CppUTest/SimpleString.h"
 
 TEST_GROUP(SimpleString)
 {
