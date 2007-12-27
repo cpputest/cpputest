@@ -1,7 +1,7 @@
 
-#include "CppUTest\TestHarness.h"
-#include "CppUTest\MockTestOutput.h"
-#include "CppUTest\TestPlugin.h"
+#include "CppUTest/TestHarness.h"
+#include "CppUTest/MockTestOutput.h"
+#include "CppUTest/TestPlugin.h"
 
 static TestRegistry* myRegistry;
 static MockTestOutput* output;
