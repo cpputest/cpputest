@@ -25,6 +25,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "CppUTest/TestHarness.h"
 #include "CppUTest/TestPlugin.h"
 
 TestPlugin::TestPlugin()
@@ -59,6 +60,43 @@ void TestPlugin::runAllPostTestAction(Utest& test, TestResult& result)
 	next_->runAllPostTestAction(test, result);
 }
 
+struct cpputest_fp_pair {
+	void (**orig)();
+	void (*orig_value)();
+};
+
+//////// FunctionPointerPLugin
+
+static int index;
+static cpputest_fp_pair fplist[FunctionPointerPlugin::MAX_FPS];
+
+FunctionPointerPlugin::FunctionPointerPlugin()
+ {
+ 	index = 0;
+ }
+ 
+FunctionPointerPlugin::~FunctionPointerPlugin()
+{
+}
+ 
+ void CppUTestStoreFp(void (**function)(), void(*value)())
+{
+	if (index == FunctionPointerPlugin::MAX_FPS) {
+		FAIL("Maximum number of function pointers installed!");
+	}
+	fplist[index].orig_value = value;
+	fplist[index].orig = function;
+	index++;
+}
+ 
+ void FunctionPointerPlugin::postTestAction(Utest& test, TestResult& result) 
+{
+	for (int i = 0; i < index; i++) 
+		*(fplist[i].orig) = fplist[i].orig_value;
+ 	index = 0;
+}	
+
+//////// NullPlugin
 
 NullTestPlugin::NullTestPlugin()
 	: TestPlugin(0)
