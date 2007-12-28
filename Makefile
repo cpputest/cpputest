@@ -8,7 +8,7 @@ CPPUTEST_APPFLAGS = -Wall
 #To enable the CPPUTEST_EXTENSIONS
 #	set this variable to any non-null string
 #	un comment-out the include in AllTests.cpp
-CPPUTEST_EXTENSIONS = 
+#CPPUTEST_EXTENSIONS = y
 
 # Functions
 get_src  = $(wildcard $1/*.cpp) $(wildcard $1/*.c)
@@ -44,7 +44,7 @@ EXAMPLE_TST_OBJS = $(call src_to_o,$(EXAMPLE_TST))
 ALL_SRC   = $(CPPUTEST_SRC) $(CPPUTEST_TST) $(EXAMPLE_SRC) $(EXAMPLE_TST)
 DEP_FILES = $(call src_to_d, $(ALL_SRC)) 
 
-CPPUTEST_INCLUDES       = -I $(CPPUTEST_HOME)/include  
+CPPUTEST_INCLUDES       = -I $(CPPUTEST_HOME)/include  -I $(CPPUTEST_HOME)/include/Platforms/$(CPPUTEST_PLATFORM)
 CPPUTEST_LIB_DIR        = $(CPPUTEST_HOME)/lib
 CPPUTEST_LIB            = $(CPPUTEST_LIB_DIR)/libCppUTest.a
 CPPUTEST_EXAMPLE_LIB    = $(CPPUTEST_LIB_DIR)/ApplicationLib.a
