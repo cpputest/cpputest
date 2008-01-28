@@ -38,4 +38,4 @@ done
 flattenGcovOutput | getRidOfCruft  > ${TEMP_FILE1}
 getFileNameRootFromErrorFile | writeEachNoTestCoverageFile > ${TEMP_FILE2}
 cat ${TEMP_FILE1}  ${TEMP_FILE2} | sort | uniq > ${OUTPUT_FILE}
-#rm -f ${TEMP_FILE1} ${TEMP_FILE2} 
+rm -f ${TEMP_FILE1} ${TEMP_FILE2} 
