@@ -29,6 +29,8 @@
 
 int main(int ac, char** av)
 {
+    TestRegistry* r = TestRegistry::getCurrentRegistry();
+    r->installPlugin(new FunctionPointerPlugin());
     return CommandLineTestRunner::RunAllTests(ac, av);
 }
 

@@ -7,11 +7,12 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-struct ClassName;
+typedef struct
+{
+    int placeHolder;
+} ClassName;
 
-struct ClassName* ClassName_create(void);
-
-void ClassName_destroy(struct ClassName*);
-
+ClassName* ClassName_create(void);
+void ClassName_destroy(ClassName*);
 
 #endif  // D_ClassName_H

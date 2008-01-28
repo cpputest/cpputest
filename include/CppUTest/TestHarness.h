@@ -40,6 +40,7 @@
 #include "UtestMacros.h"
 #include "TestResult.h"
 #include "Failure.h"
+#include "TestPlugin.h"
 #include "TestRegistry.h"
 #include "SimpleString.h"
 #include "MemoryLeakWarning.h"

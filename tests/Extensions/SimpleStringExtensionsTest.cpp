@@ -25,7 +25,6 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "Platform.h"
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/Extensions/SimpleStringExtensions.h"
 

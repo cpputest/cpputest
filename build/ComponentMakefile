@@ -1,0 +1,121 @@
+#---------
+#
+# ComponentMakefile
+#
+# Include this file in your makefile
+# It makes
+#    A static library
+#    A test executable
+#
+# The necessary parameters are shown in 
+#    ComponentMakefileExampleParameters
+#
+#----------
+
+#Helper Functions
+get_src_from_dir  = $(wildcard $1/*.cpp) $(wildcard $1/*.c)
+get_src_from_dir_list = $(foreach dir, $1, $(call get_src_from_dir,$(dir)))				        
+src_to_o = $(subst .c,.o, $(subst .cpp,.o,$1))
+src_to_d = $(subst .c,.d, $(subst .cpp,.d,$1))
+#move_file_location = $(patsubst %.d,build/%.d, $1)
+src_to = $(subst .c,$1, $(subst .cpp,$1,$2))
+
+#Derived 
+SRC = $(call get_src_from_dir_list, $(SRC_DIRS))				        
+OBJ = $(call src_to_o,$(SRC))
+
+TEST_SRC = $(foreach dir, $(TEST_SRC_DIRS), $(call get_src_from_dir,$(dir)))				        
+TEST_OBJS = $(call src_to_o,$(TEST_SRC))
+
+ALL_SRC   = $(SRC) $(TEST_SRC)
+
+#DEP_FILES = $(call move_file_location,$(call src_to_d, $(ALL_SRC))) 
+DEP_FILES = $(call src_to_d, $(ALL_SRC))
+
+#Test coverage with gcov
+GCOV_OUTPUT = gcov_output.txt
+GCOV_REPORT = gcov_report.txt
+GCOV_ERROR = gcov_error.txt
+GCDA_FILES = $(call src_to,.gcda, $(ALL_SRC))
+GCNO_FILES = $(call src_to,.gcno, $(ALL_SRC))
+
+#Other stuff needed
+CPPUTEST_LIB = $(CPPUTEST_HOME)/lib/libCppUTest.a 
+
+CPPFLAGS += -Wall $(CXXFLAGS) $(INCLUDES) $(GCOVFLAGS)
+CFLAGS += -Wall $(INCLUDES) $(CXXFLAGS)  $(GCOVFLAGS)
+LDFLAGS  += -lstdc++
+
+#The gcda files for gcov need to be deleted before each run
+#To avoid annoying messages.
+GCOV_CLEAN = $(SILENCE)rm -f $(GCDA_FILES) $(GCOV_OUTPUT) $(GCOV_REPORT) $(GCOV_ERROR)
+RUN_TEST_TARGET = $(SILENCE) $(GCOV_CLEAN) ; ./$(TEST_TARGET)
+
+# Targets
+.PHONY: all
+all: printflags $(TEST_TARGET) 
+	$(RUN_TEST_TARGET)
+
+.PHONY: printflags
+printflags: 
+	$(SILENCE)echo Compile with these flags:
+	$(SILENCE)for f in $(CPPFLAGS) ; do \
+		echo "    C++ $$f" ; \
+	done
+	$(SILENCE)for f in $(CFLAGS) ; do \
+		echo "    C   $$f" ; \
+	done
+	
+$(TEST_TARGET): $(TEST_OBJS) $(TARGET_LIB) $(CPPUTEST_LIB)
+	$(SILENCE)echo Linking $@
+	$(SILENCE)$(CXX) $(CPPFLAGS) $^ $(LDFLAGS) -o $@
+
+$(TARGET_LIB): $(OBJ)
+	$(SILENCE)echo Building archive $@
+	$(SILENCE)$(AR) r $@ $^
+
+test: $(TEST_TARGET)
+	$(RUN_TEST_TARGET)
+	
+vtest: $(TEST_TARGET)
+	$(RUN_TEST_TARGET) -v
+
+%.o: %.cpp
+	@echo compiling $(notdir $<)
+	$(SILENCE)$(CXX) $(CPPFLAGS) -M -MF $(subst .o,.d,$@) -MT "$@ $(subst .o,.d,$@)" $<
+	$(SILENCE)$(COMPILE.cpp)  $(CPPFLAGS) $(OUTPUT_OPTION) $<
+
+%.o: %.c
+	@echo compiling $(notdir $<)
+	$(SILENCE)$(CC) $(CFLAGS) -M -MF $(subst .o,.d,$@) -MT "$@ $(subst .o,.d,$@)" $<
+	$(SILENCE)$(COMPILE.c)  $(CFLAGS) $(OUTPUT_OPTION) $<
+
+ifneq "$(MAKECMDGOALS)" "clean"
+-include $(DEP_FILES)
+endif
+
+.PHONY: clean
+clean:
+	$(SILENCE)echo Making clean
+	$(SILENCE)$(RM) \
+		$(TEST_TARGET) \
+		$(TEST_TARGET).exe \
+		$(OBJ) \
+		$(TEST_OBJS)\
+		$(TARGET_LIB)\
+		$(DEP_FILES)\
+		$(GCNO_FILES)\
+		$(GCDA_FILES)\
+		$(GCOV_ERROR)\
+		$(GCOV_REPORT)\
+		$(GCOV_OUTPUT)
+		
+	$(SILENCE)find . -name \*.gcov | xargs rm
+
+gcov: test
+	$(SILENCE)for d in $(SRC_DIRS) ; do \
+		gcov -o $$d $$d/*.c $$d/*.cpp >> $(GCOV_OUTPUT) 2>>$(GCOV_ERROR) ; \
+	done
+	$(CPPUTEST_HOME)/scripts/filterGcov.sh $(GCOV_OUTPUT) $(GCOV_ERROR) $(GCOV_REPORT)
+	cat $(GCOV_REPORT)
+ 

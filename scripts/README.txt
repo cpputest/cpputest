@@ -3,23 +3,26 @@ The New*.sh scripts are helpful for creating the initial files for a new class..
 	NewInterface.sh - for TDDing a new interface along with its Mock
 	NewCModule.sh - for TDDing a C module
 
-To use NewClass for example:
+Using NewClass for example:
 	cd to the directory where your makefile is
 	NewClass SomeClass
 	
-The script gets you ready for TDD and saves a lot of tedius typing
+The script gets you ready for TDD and saves a lot of tedious typing
 	1) Creates SomeClass.h SomeClass.cpp SomeClassTest.cpp
 		with the class and test essentials in place
 		(If the SomeClass.* file already exists, no file is generated)
-	2) Adds an entry to AllTests.h so the linker can find your test
-	3) Makes an entry into the .dependencies file
-	4) Updates the makefile (if there is one and it has an "OBJS =" line)
+	2) Adds an entry to AllTests.h so
+	    This file could be used to create separate test executables each with
+	    a subset of tests.  You would do this if tests cannot be run all at once.
+	    In this case the tests would have to be put into a library.  AllTests.h
+	    (or a subset of AllTests) would be included in your test main, 
+	    and then you link with the test library
 
-Run InstallScripts.sh to enable NewClass, NewInterface, NewCModule, NewVCModule
+Run InstallScripts.sh to enable NewClass, NewInterface, NewCModule
 support scripts.  Like this:
 	./InstallScripts.sh
 	
-You probably have to add the execute privilege to the shell scripts.
+You might have to add the execute privilege to the shell scripts.
 Like this:
 	chmod *.sh
 

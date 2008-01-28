@@ -1,6 +1,7 @@
-This is an Test Driven Development example.
+To build the examples
 
-For unix based systems, run the make file
+for gcc:
+make clean all test gcov
 
-For windows systems, open the worksapce and build all
-  
+for MS Studio:
+The workspace files may be out of date.

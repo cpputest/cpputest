@@ -5,21 +5,19 @@ extern "C"
 #include "ClassName.h"
 }
 
-static struct ClassName* aClassName;
-
 TEST_GROUP(ClassName)
 {
-  ClassName* aClassName;
+    ClassName* aClassName;
 
-  void setup()
-  {
+    void setup()
+    {
       aClassName = ClassName_create();
-  }
-  
-  void teardown()
-  {
-     ClassName_destroy(aClassName);
-  }
+    }
+    
+    void teardown()
+    {
+       ClassName_destroy(aClassName);
+    }
 };
 
 TEST(ClassName, Create)

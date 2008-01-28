@@ -2,22 +2,20 @@
 #include <stdlib.h>
 #include <memory.h>
 
-struct ClassName
-{
-  int define_implementation_data_here;
-};
+//static local variables
 
-struct ClassName* ClassName_create(void)
+
+ClassName* ClassName_create(void)
 {
-    struct ClassName* aClassName = malloc(sizeof(struct ClassName));
-    memset(aClassName, 0, sizeof(struct ClassName));
-    //do member initialization here as needed
-    return aClassName;
+     ClassName* self = malloc(sizeof(ClassName));
+     memset(self, 0, sizeof(ClassName));
+     //do member initialization here as needed
+     return self;
 }
 
-void ClassName_destroy(struct ClassName* aClassName)
+void ClassName_destroy(ClassName* self)
 {
-    free(aClassName);
+    free(self);
 }
 
 

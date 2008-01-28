@@ -24,11 +24,10 @@ TEST_GROUP(HelloWorld)
 	}
 	void setup()
   	{
-  		helloWorldApiInstance.printHelloWorld_output = &output_method;
+  		UT_FPSET(helloWorldApiInstance.printHelloWorld_output, &output_method);
   	}
   	void teardown()
   	{
-  		helloWorldApiInstance.printHelloWorld_output = &printf;
   	}
 };
 
