@@ -135,3 +135,14 @@ TEST(TestHarness_c, checkFail)
 //	fixture->assertPrintContains("TestHarness_cTest.cpp");
 }
 
+TEST(TestHarness_c, cpputest_malloc_out_of_memory)
+{
+    cpputest_malloc_set_out_of_memory();
+    CHECK(0 == cpputest_malloc(100));
+    
+    cpputest_malloc_set_not_out_of_memory();
+    char * mem = cpputest_malloc(100);
+    CHECK(0 != mem);
+    cpputest_free(mem);
+}
+

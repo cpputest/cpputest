@@ -68,8 +68,21 @@ extern "C" {
 		FAIL_LOCATION("", fileName, lineNumber);
 	}
 	
+	static int out_of_memory = 0;
+    void cpputest_malloc_set_out_of_memory()
+    {
+        out_of_memory = 1;
+    }
+    
+    void cpputest_malloc_set_not_out_of_memory()
+    {
+        out_of_memory = 0;
+    }
+    
 	char* cpputest_malloc(unsigned int size)
 	{
+	    if (out_of_memory)
+	        return 0;
 		return new char[size];
 	}
 	

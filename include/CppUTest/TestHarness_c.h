@@ -68,5 +68,7 @@ extern void  FAIL_C_LOCATION(const char* fileName, int lineNumber);
 
 extern char* cpputest_malloc(unsigned int size);
 extern void cpputest_free(char* buffer);
- 
+void cpputest_malloc_set_out_of_memory();
+void cpputest_malloc_set_not_out_of_memory();
+
 #endif
