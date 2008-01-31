@@ -10,6 +10,7 @@ TEST_TARGET = \
 	$(COMPONENT_NAME)_tests
 
 #--- Inputs ----#
+PROJECT_HOME_DIR = .
 CPPUTEST_HOME = ../CppUTest
 CPP_PLATFORM = Gcc
 

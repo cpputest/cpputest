@@ -119,3 +119,7 @@ gcov: test
 	$(CPPUTEST_HOME)/scripts/filterGcov.sh $(GCOV_OUTPUT) $(GCOV_ERROR) $(GCOV_REPORT)
 	cat $(GCOV_REPORT)
  
+.PHONEY: format
+format: 
+	$(CPPUTEST_HOME)/scripts/reformat.sh $(PROJECT_HOME_DIR)
+
