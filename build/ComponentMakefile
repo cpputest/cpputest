@@ -36,8 +36,9 @@ DEP_FILES = $(call src_to_d, $(ALL_SRC))
 GCOV_OUTPUT = gcov_output.txt
 GCOV_REPORT = gcov_report.txt
 GCOV_ERROR = gcov_error.txt
-GCDA_FILES = $(call src_to,.gcda, $(ALL_SRC))
-GCNO_FILES = $(call src_to,.gcno, $(ALL_SRC))
+GCOV_GCDA_FILES = $(call src_to,.gcda, $(ALL_SRC))
+GCOV_GCNO_FILES = $(call src_to,.gcno, $(ALL_SRC))
+TEST_OUTPUT = $(TEST_TARGET).txt
 
 #Other stuff needed
 CPPUTEST_LIB = $(CPPUTEST_HOME)/lib/libCppUTest.a 
@@ -48,16 +49,16 @@ LDFLAGS  += -lstdc++
 
 #The gcda files for gcov need to be deleted before each run
 #To avoid annoying messages.
-GCOV_CLEAN = $(SILENCE)rm -f $(GCDA_FILES) $(GCOV_OUTPUT) $(GCOV_REPORT) $(GCOV_ERROR)
+GCOV_CLEAN = $(SILENCE)rm -f $(GCOV_GCDA_FILES) $(GCOV_OUTPUT) $(GCOV_REPORT) $(GCOV_ERROR)
 RUN_TEST_TARGET = $(SILENCE) $(GCOV_CLEAN) ; ./$(TEST_TARGET)
 
 # Targets
 .PHONY: all
-all: printflags $(TEST_TARGET) 
+all: $(TEST_TARGET) 
 	$(RUN_TEST_TARGET)
 
-.PHONY: printflags
-printflags: 
+.PHONY: flags
+flags: 
 	$(SILENCE)echo Compile with these flags:
 	$(SILENCE)for f in $(CPPFLAGS) ; do \
 		echo "    C++ $$f" ; \
@@ -75,10 +76,10 @@ $(TARGET_LIB): $(OBJ)
 	$(SILENCE)$(AR) r $@ $^
 
 test: $(TEST_TARGET)
-	$(RUN_TEST_TARGET)
+	$(RUN_TEST_TARGET) | tee $(TEST_OUTPUT)
 	
 vtest: $(TEST_TARGET)
-	$(RUN_TEST_TARGET) -v
+	$(RUN_TEST_TARGET) -v  | tee $(TEST_OUTPUT)
 
 %.o: %.cpp
 	@echo compiling $(notdir $<)
@@ -104,11 +105,12 @@ clean:
 		$(TEST_OBJS)\
 		$(TARGET_LIB)\
 		$(DEP_FILES)\
-		$(GCNO_FILES)\
-		$(GCDA_FILES)\
+		$(GCOV_GCNO_FILES)\
+		$(GCOV_GCDA_FILES)\
 		$(GCOV_ERROR)\
 		$(GCOV_REPORT)\
-		$(GCOV_OUTPUT)
+		$(GCOV_OUTPUT)\
+		$(TEST_OUTPUT)
 		
 	$(SILENCE)find . -name \*.gcov | xargs rm
 
@@ -116,7 +118,7 @@ gcov: test
 	$(SILENCE)for d in $(SRC_DIRS) ; do \
 		gcov -o $$d $$d/*.c $$d/*.cpp >> $(GCOV_OUTPUT) 2>>$(GCOV_ERROR) ; \
 	done
-	$(CPPUTEST_HOME)/scripts/filterGcov.sh $(GCOV_OUTPUT) $(GCOV_ERROR) $(GCOV_REPORT)
+	$(CPPUTEST_HOME)/scripts/filterGcov.sh $(GCOV_OUTPUT) $(GCOV_ERROR) $(GCOV_REPORT) $(TEST_OUTPUT)
 	cat $(GCOV_REPORT)
  
 .PHONEY: format
