@@ -33,6 +33,10 @@
 #include "CppUTest/JUnitTestOutput.h"
 #include <stdlib.h>
 
+namespace {
+    JUnitTestOutput junitTestOutput;
+}
+
 CommandLineTestRunner::CommandLineTestRunner(TestOutput* output) :
 	verbose_(false), output_(output), repeat_(1), groupFilter_(0), nameFilter_(0), outputType_(OUTPUT_NORMAL)
 {
@@ -40,24 +44,30 @@ CommandLineTestRunner::CommandLineTestRunner(TestOutput* output) :
 
 CommandLineTestRunner::~CommandLineTestRunner()
 {
-	if (output_) delete output_;
 }
 
 int CommandLineTestRunner::RunAllTests(int ac, char** av)
 {
-	MemoryLeakWarningPlugin memLeakWarn;
-	TestRegistry::getCurrentRegistry()->installPlugin(&memLeakWarn);
-	memLeakWarn.Enable();
-		
-	CommandLineTestRunner runner(new RealTestOutput());
-	if (!runner.parseArguments(ac, av)) {
-		return 1;
-	}
-
-	int testResult = runner.RunAllTests(); 
- // TODO: This finalReport reports leak when there are not. This has to do with the CommandLineRunner members.
- //       Needs to be fixed somehow!
- // 	*runner.output_ << memLeakWarn.FinalReport(1);
+	RealTestOutput output;
+	int testResult = 0;
+    MemoryLeakWarningPlugin memLeakWarn;
+//    FunctionPointerPlugin fpPlugin;
+	{
+//        TestRegistry::getCurrentRegistry()->installPlugin(&fpPlugin);
+        TestRegistry::getCurrentRegistry()->installPlugin(&memLeakWarn);
+    	
+    	memLeakWarn.Enable();
+    	{	
+        	CommandLineTestRunner runner(&output);
+        	if (!runner.parseArguments(ac, av)) {
+        		return 1;
+        	}
+        
+        	testResult = runner.RunAllTests(); 
+    	}
+ 	}
+	if (testResult == 0)
+        output << memLeakWarn.FinalReport(0);
 	return testResult; 
 }
 
@@ -67,8 +77,7 @@ void CommandLineTestRunner::initializeTestRun()
   	TestRegistry::getCurrentRegistry()->nameFilter(nameFilter_);	
   	if (verbose_) output_->verbose();
   	if (outputType_ == OUTPUT_JUNIT) {
-  		delete output_;
-  		output_ = new JUnitTestOutput();
+  		output_ = &junitTestOutput;
   	}
 }
 

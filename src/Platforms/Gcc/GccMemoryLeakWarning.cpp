@@ -132,14 +132,14 @@ void MemoryLeakWarning::Enable()
 		firstInitialBlocks = allocatedBlocks;
 		firstInitialArrays = allocatedArrays;
 		reporterRegistered = true;
-		atexit(reportMemoryBallance);
 	}
 
 }
 
 const char*  MemoryLeakWarning::FinalReport(int toBeDeletedLeaks)
 {
-  if (_impl->initialBlocksUsed != (allocatedBlocks-toBeDeletedLeaks) || _impl->initialArraysUsed != allocatedArrays )
+  if (_impl->initialBlocksUsed != (allocatedBlocks-toBeDeletedLeaks) 
+          || _impl->initialArraysUsed != allocatedArrays )
     {
       printf("initial blocks=%d, allocated blocks=%d\ninitial arrays=%d, allocated arrays=%d\n",
              _impl->initialBlocksUsed, allocatedBlocks, _impl->initialArraysUsed, allocatedArrays);
@@ -217,3 +217,9 @@ void operator delete[](void* mem)
   	free(mem);
 }
 
+void* operator new(size_t size, const char* file, int line)
+{
+    allocatedBlocks++;
+    return malloc(size);
+    
+}

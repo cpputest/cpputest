@@ -40,6 +40,7 @@ TEST_GROUP(FunctionPointPluginTest)
 	
 	void setup() 
 	{
+        UT_FPSET(exit_current_test, exit_current_test_fake);
 		myRegistry = new TestRegistry();
     	plugin = new FunctionPointerPlugin();
 		tst = new FpUtest();

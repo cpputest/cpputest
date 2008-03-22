@@ -30,10 +30,21 @@
 #include "CppUTest/TestRegistry.h"
 #include "CppUTest/TestResult.h"
 #include "CppUTest/Failure.h"
+#include "LongJump.h"
 
 #include <string.h>
 #include <stdio.h>
 
+void exit_current_test_impl() 
+{
+    PLATFORM_LONGJMP;
+}
+
+void exit_current_test_fake() 
+{
+}
+
+void (*exit_current_test)() = exit_current_test_impl;
 
 TestResult* Utest::testResult_ = 0;
 Utest* Utest::currentTest_ = 0;

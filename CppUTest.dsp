@@ -64,7 +64,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /GX /ZI /Od /I ".\include\Platforms\VisualCpp" /I ".\include\CppUTest" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /GX /ZI /Od /I ".\include" /I ".\include\Platforms\VisualCpp" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /GZ /c
 # SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
@@ -86,63 +86,59 @@ LIB32=link.exe -lib
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=.\SRC\CPPUTEST\CommandLineTestRunner.cpp
+SOURCE=.\src\CppUTest\CommandLineTestRunner.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\SRC\CPPUTEST\EqualsFailure.cpp
+SOURCE=.\src\CppUTest\Failure.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\SRC\CPPUTEST\Failure.cpp
+SOURCE=.\src\CppUTest\FindLeaksMalloc.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\SRC\CPPUTEST\JUnitTestOutput.cpp
+SOURCE=.\src\CppUTest\JUnitTestOutput.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\SRC\CPPUTEST\MemoryLeakWarningPlugin.cpp
+SOURCE=.\src\Platforms\VisualCpp\LongJump.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\SRC\CPPUTEST\NullTest.cpp
+SOURCE=.\src\CppUTest\MemoryLeakWarningPlugin.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\SRC\CPPUTEST\SimpleString.cpp
+SOURCE=.\src\CppUTest\SimpleString.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\SRC\CPPUTEST\SimpleStringExtensions.cpp
+SOURCE=.\src\CppUTest\Extensions\SimpleStringExtensions.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\SRC\CPPUTEST\TestHarness_c.cpp
+SOURCE=.\src\CppUTest\TestHarness_c.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\SRC\CPPUTEST\TestInstaller.cpp
+SOURCE=.\src\CppUTest\TestOutput.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\SRC\CPPUTEST\TestOutput.cpp
+SOURCE=.\src\CppUTest\TestPlugin.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\SRC\CPPUTEST\TestPlugin.cpp
+SOURCE=.\src\CppUTest\TestRegistry.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\SRC\CPPUTEST\TestRegistry.cpp
+SOURCE=.\src\CppUTest\TestResult.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\SRC\CPPUTEST\TestResult.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\SRC\CPPUTEST\Utest.cpp
+SOURCE=.\src\CppUTest\Utest.cpp
 # End Source File
 # Begin Source File
 
@@ -156,90 +152,6 @@ SOURCE=.\src\Platforms\VisualCpp\Win32MemoryLeakWarning.cpp
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
-# Begin Source File
-
-SOURCE=.\include\CppUTest\CommandLineTestRunner.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\include\CppUTest\EqualsFailure.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\include\CppUTest\Failure.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\include\CppUTest\JunitTestOutput.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\include\CppUTest\MemoryLeakWarning.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\include\CppUTest\MemoryLeakWarningPlugin.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\include\CppUTest\MockTestOutput.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\include\CppUTest\NullTest.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\Platforms\VisualCpp\Platform.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\include\CppUTest\RealTestOutput.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\include\CppUTest\SimpleString.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\include\CppUTest\SimpleStringExtensions.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\include\CppUTest\TestHarness.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\include\CppUTest\TestHarness_c.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\include\CppUTest\TestInstaller.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\include\CppUTest\TestOutput.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\include\CppUTest\TestPlugin.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\include\CppUTest\TestRegistry.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\include\CppUTest\TestResult.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\include\CppUTest\Utest.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\include\CppUTest\VirtualCall.h
-# End Source File
 # End Group
 # End Target
 # End Project

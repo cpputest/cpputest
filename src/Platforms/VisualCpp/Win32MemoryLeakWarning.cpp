@@ -30,7 +30,7 @@
 #include <iostream>
 #include <crtdbg.h>
 #include <windows.h>
-#include "MemoryLeakWarning.h"
+#include "CppUTest/MemoryLeakWarning.h"
 
 #ifdef   _DEBUG
 #define  SET_CRT_DEBUG_FIELD(a) \
@@ -56,12 +56,12 @@ void MemoryLeakWarning::Enable()
   _CrtSetReportFile( _CRT_ERROR, _CRTDBG_FILE_STDERR );
   _CrtSetReportMode( _CRT_ASSERT, _CRTDBG_MODE_DEBUG|_CRTDBG_MODE_FILE );
   _CrtSetReportFile( _CRT_ASSERT, _CRTDBG_FILE_STDERR );
-  SET_CRT_DEBUG_FIELD( _CRTDBG_LEAK_CHECK_DF );
 }
 
 const char* MemoryLeakWarning::FinalReport(int toBeDeletedLeaks)
 {
   //windows reports leaks automatically when set up as above
+    SET_CRT_DEBUG_FIELD( _CRTDBG_LEAK_CHECK_DF );
   return "";
 }
 

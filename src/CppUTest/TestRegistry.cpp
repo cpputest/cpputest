@@ -32,6 +32,12 @@
 #include "CppUTest/TestResult.h"
 #include "CppUTest/TestOutput.h"
 
+extern "C"
+{
+#include "LongJump.h"
+}
+
+
 TestRegistry::TestRegistry()
     : tests(&NullTest::instance())
     , nameFilter_("")
@@ -65,10 +71,12 @@ void TestRegistry::runAllTests (TestResult& result)
 		result.countTest();
 		if (testShouldRun(test, result)) {
 			result.currentTestStarted(test);
-			          
-			firstPlugin_->runAllPreTestAction(*test, result);
-			test->run(result);
-			firstPlugin_->runAllPostTestAction(*test, result);
+			
+            if (0 == PLATFORM_SETJMP) {
+                firstPlugin_->runAllPreTestAction(*test, result) ;
+			    test->run(result);
+			    firstPlugin_->runAllPostTestAction(*test, result);
+			}
 			
 			result.currentTestEnded(test);
 		}

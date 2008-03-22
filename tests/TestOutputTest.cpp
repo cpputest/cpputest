@@ -47,6 +47,7 @@ TEST_GROUP(TestOutput)
 
 	TEST_SETUP()
 	{
+        UT_FPSET(exit_current_test, exit_current_test_fake);
 		mock = new MockTestOutput();
 		printer = mock;
 		tst = new Utest("group", "test", "file", 1);

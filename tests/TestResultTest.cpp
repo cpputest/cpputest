@@ -42,6 +42,7 @@ TEST_GROUP(TestResult)
 
 	TEST_SETUP()
 	{
+        UT_FPSET(exit_current_test, exit_current_test_fake);
 		mock = new MockTestOutput();
 		printer = mock;
 		res = new TestResult(*printer);

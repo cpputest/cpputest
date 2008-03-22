@@ -1,5 +1,8 @@
 
-#include "Utest.h"
+#include "CppUTest/Utest.h"
+#include <stdio.h>
+#include <windows.h>
+#include <mmsystem.h>
 
 void Utest::executePlatformSpecificTestBody()
 {
@@ -10,10 +13,7 @@ void Utest::executePlatformSpecificTestBody()
 
 static long TimeInMillisImplementation()
 {
-	struct timeval tv;
-	struct timezone tz;
-	::gettimeofday(&tv, &tz);
-	return (tv.tv_sec * 1000) + (long)(tv.tv_usec * 0.001);	
+    return timeGetTime()/1000;
 }
 
 static long (*timeInMillisFp) () = TimeInMillisImplementation;
@@ -32,8 +32,7 @@ void SetPlatformSpecificTimeInMillisMethod(long (*platformSpecific) ())
 
 static SimpleString TimeStringImplementation()
 {
-	time_t tm = time(NULL);
-	return ctime(&tm);
+	return "Windows time needs work";
 }
 
 static SimpleString (*timeStringFp) () = TimeStringImplementation;
@@ -41,6 +40,11 @@ static SimpleString (*timeStringFp) () = TimeStringImplementation;
 SimpleString GetPlatformSpecificTimeString()
 {
 	return timeStringFp();
+}
+
+extern "C"
+{
+#include "LongJump.h"
 }
 
 void SetPlatformSpecificTimeStringMethod(SimpleString (*platformMethod) ())

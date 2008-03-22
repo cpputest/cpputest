@@ -93,7 +93,8 @@ TEST_GROUP(TestRegistry)
   MockTestResult *mockResult;
   TEST_SETUP() 
   {
-    output = new MockTestOutput();
+   UT_FPSET(exit_current_test, exit_current_test_fake);
+   output = new MockTestOutput();
     mockResult = new MockTestResult(*output);
     result = mockResult;
     test1 = new MockTest();

@@ -35,6 +35,7 @@ TEST_GROUP(Utest)
 	TEST_SETUP()
 	{
 		fixture = new GenericTestFixture();
+		UT_FPSET(exit_current_test, exit_current_test_fake);
 	}
 	TEST_TEARDOWN()
 	{

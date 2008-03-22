@@ -36,6 +36,7 @@
 #ifndef D_TestHarness_h
 #define D_TestHarness_h
 
+#include "Platform.h"
 #include "Utest.h"
 #include "UtestMacros.h"
 #include "TestResult.h"
@@ -44,6 +45,9 @@
 #include "TestRegistry.h"
 #include "SimpleString.h"
 #include "MemoryLeakWarning.h"
+
+extern void (*exit_current_test)();
+extern void exit_current_test_fake();
 
 // Some platform specific methods
 long GetPlatformSpecificTimeInMillis();
