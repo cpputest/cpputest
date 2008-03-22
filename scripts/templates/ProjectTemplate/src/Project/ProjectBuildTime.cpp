@@ -9,7 +9,7 @@ ProjectBuildTime::~ProjectBuildTime()
 {
 }
 
-const char*ProjectBuildTime::GetDateTime()
+const char* ProjectBuildTime::GetDateTime()
 {
     return dateTime;
 }

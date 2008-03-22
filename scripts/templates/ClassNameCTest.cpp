@@ -7,16 +7,14 @@ extern "C"
 
 TEST_GROUP(ClassName)
 {
-    ClassName* aClassName;
-
     void setup()
     {
-      aClassName = ClassName_create();
+      ClassName_Create();
     }
     
     void teardown()
     {
-       ClassName_destroy(aClassName);
+       ClassName_Destroy();
     }
 };
 

@@ -5,6 +5,8 @@ TEMP_FILE2=${INPUT_FILE}2.tmp
 TEMP_FILE3=${INPUT_FILE}3.tmp
 ERROR_FILE=$2
 OUTPUT_FILE=$3
+HTML_OUTPUT_FILE=$3.html
+TEST_RESULTS=$4
 
 flattenGcovOutput() {
 while read line1
@@ -35,7 +37,18 @@ do
 done 
 }
 
+createHtmlOutput() {
+    echo "<table border="2" cellspacing="5" cellpadding="5">"
+    echo "<tr><th>Coverage</th><th>File</th></tr>"
+    sed "-e s/.*%   /<tr><td>&<\/td><td>/" \
+        "-e s/[a-zA-Z0-9_]*\.[ch][a-z]*/<a href='file:\.\/&.gcov'>&<\/a><\/td><\/tr>/" 
+    echo "</table>"
+    sed "-e s/.*/&<br>/g" < ${TEST_RESULTS}
+}
+
+
 flattenGcovOutput | getRidOfCruft  > ${TEMP_FILE1}
 getFileNameRootFromErrorFile | writeEachNoTestCoverageFile > ${TEMP_FILE2}
 cat ${TEMP_FILE1}  ${TEMP_FILE2} | sort | uniq > ${OUTPUT_FILE}
+createHtmlOutput < ${OUTPUT_FILE} > ${HTML_OUTPUT_FILE}
 rm -f ${TEMP_FILE1} ${TEMP_FILE2} 

@@ -6,7 +6,15 @@
 //  ClassName is responsible for ...
 //
 ///////////////////////////////////////////////////////////////////////////////
-void ClassName_Create(void);
-void ClassName_Destroy();
+
+typedef struct ClassNameTag
+{
+    int placeHolder;
+    void (*virtualFunction_renameThis)(struct ClassNameTag*);
+} ClassName;
+
+ClassName* ClassName_Create(void);
+void ClassName_Destroy(ClassName*);
+void ClassName_VirtualFunction_impl(ClassName*);
 
 #endif  // D_ClassName_H
