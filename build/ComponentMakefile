@@ -24,7 +24,7 @@ src_to = $(subst .c,$1, $(subst .cpp,$1,$2))
 SRC = $(call get_src_from_dir_list, $(SRC_DIRS))				        
 OBJ = $(call src_to_o,$(SRC))
 
-TEST_SRC = $(foreach dir, $(TEST_SRC_DIRS), $(call get_src_from_dir,$(dir)))				        
+TEST_SRC = $(call get_src_from_dir_list, $(TEST_SRC_DIRS))
 TEST_OBJS = $(call src_to_o,$(TEST_SRC))
 
 ALL_SRC   = $(SRC) $(TEST_SRC)
@@ -112,7 +112,7 @@ clean:
 		$(GCOV_OUTPUT)\
 		$(TEST_OUTPUT)
 		
-	$(SILENCE)find . -name \*.gcov | xargs rm
+	$(SILENCE)find . -name \*.gcov | xargs rm -f
 
 gcov: test
 	$(SILENCE)for d in $(SRC_DIRS) ; do \
