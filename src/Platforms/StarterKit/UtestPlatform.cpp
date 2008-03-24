@@ -1,5 +1,6 @@
 
-#include "CppUTest/TestHarness.h"
+#include "CppUTest/Utest.h"
+#include "CppUTest/TestResult.h"
 #include <time.h>
 #include <sys/time.h>
 
@@ -7,6 +8,7 @@ void Utest::executePlatformSpecificTestBody()
 {
 	testBody();
 }
+
 
 ///////////// Time in millis
 
@@ -50,22 +52,20 @@ void SetPlatformSpecificTimeStringMethod(SimpleString (*platformMethod) ())
 	timeStringFp = (platformMethod == 0) ? TimeStringImplementation : platformMethod;
 }
 
+///////////// Run one test with exit on first error, using setjmp/longjmp
+#include <setjmp.h>
 
-///////////// Run one test with exit on first error
+static jmp_buf test_exit_jmp_buf;
+
 void TestRegistry::platformSpecificRunOneTest(Utest* test, TestResult& result)
 {
-    try {
+    if (0 == setjmp(test_exit_jmp_buf))
         runOneTest(test, result) ;
-    } 
-    catch (int i) {
-        //exiting test early
-    }
-     
 }
 
 void PlatformSpecificExitCurrentTestImpl() 
 {
-    throw(1);
+    longjmp(test_exit_jmp_buf, 1);
 }
 
 void FakePlatformSpecificExitCurrentTest() 
@@ -73,5 +73,4 @@ void FakePlatformSpecificExitCurrentTest()
 }
 
 void (*PlatformSpecificExitCurrentTest)() = PlatformSpecificExitCurrentTestImpl;
-
 

@@ -80,7 +80,7 @@ void TestResult::addFailure (const Failure& failure)
 {
   output.print(failure);
   failureCount++;
-  exit_current_test();
+  PlatformSpecificExitCurrentTest();
 }
 
 void TestResult::countTest()

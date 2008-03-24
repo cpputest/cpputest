@@ -37,8 +37,7 @@ TEST_GROUP(CommandLineTestRunner)
 	MockTestOutput *output;
 	void setup()
 	{
-        UT_FPSET(exit_current_test, exit_current_test_fake);
-		output = new MockTestOutput(); 
+ 		output = new MockTestOutput(); 
 		runner = new CommandLineTestRunner(output);
 	}
 	void teardown()

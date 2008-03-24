@@ -1,5 +1,5 @@
 
-#include "CppUTest/Utest.h"
+#include "CppUTest/TestHarness.h"
 #include <stdio.h>
 #include <windows.h>
 #include <mmsystem.h>
@@ -42,12 +42,30 @@ SimpleString GetPlatformSpecificTimeString()
 	return timeStringFp();
 }
 
-extern "C"
-{
-#include "LongJump.h"
-}
-
 void SetPlatformSpecificTimeStringMethod(SimpleString (*platformMethod) ())
 {
 	timeStringFp = (platformMethod == 0) ? TimeStringImplementation : platformMethod;
 }
+
+void TestRegistry::platformSpecificRunOneTest(Utest* test, TestResult& result)
+{
+    try {
+        runOneTest(test, result) ;
+    } 
+    catch (int i) {
+        //exiting test early
+    }
+     
+}
+
+void PlatformSpecificExitCurrentTestImpl() 
+{
+    throw(1);
+}
+
+void FakePlatformSpecificExitCurrentTest() 
+{
+}
+
+void (*PlatformSpecificExitCurrentTest)() = PlatformSpecificExitCurrentTestImpl;
+

@@ -43,7 +43,7 @@ TEST_GROUP(MemoryLeakWarningTest)
 	GenericTestFixture* fixture;
 	TEST_SETUP()
 	{
-        UT_FPSET(exit_current_test, exit_current_test_fake);
+	    UT_FPSET(PlatformSpecificExitCurrentTest, FakePlatformSpecificExitCurrentTest);
 		fixture = new GenericTestFixture();
   		prevMemWarning = MemoryLeakWarning::GetLatest();
   		memPlugin = new MemoryLeakWarningPlugin;

@@ -26,17 +26,7 @@
  */
 
 
-#include "CppUTest/Utest.h"
-#include "CppUTest/TestRegistry.h"
-#include "CppUTest/TestPlugin.h"
-#include "CppUTest/TestResult.h"
-#include "CppUTest/TestOutput.h"
-
-extern "C"
-{
-#include "LongJump.h"
-}
-
+#include "CppUTest/TestHarness.h"
 
 TestRegistry::TestRegistry()
     : tests(&NullTest::instance())
@@ -55,7 +45,6 @@ void TestRegistry::addTest (Utest *test)
   tests = test->addTest(tests);
 }
 
-
 void TestRegistry::runAllTests (TestResult& result)
 {
 	bool groupStart = true;
@@ -71,13 +60,7 @@ void TestRegistry::runAllTests (TestResult& result)
 		result.countTest();
 		if (testShouldRun(test, result)) {
 			result.currentTestStarted(test);
-			
-            if (0 == PLATFORM_SETJMP) {
-                firstPlugin_->runAllPreTestAction(*test, result) ;
-			    test->run(result);
-			    firstPlugin_->runAllPostTestAction(*test, result);
-			}
-			
+			platformSpecificRunOneTest(test, result);
 			result.currentTestEnded(test);
 		}
 		
@@ -88,6 +71,14 @@ void TestRegistry::runAllTests (TestResult& result)
 	}
   result.testsEnded ();
 }
+
+void TestRegistry::runOneTest(Utest* test, TestResult& result)
+{
+        firstPlugin_->runAllPreTestAction(*test, result) ;
+        test->run(result);
+        firstPlugin_->runAllPostTestAction(*test, result);
+}
+
 
 bool TestRegistry::endOfGroup(Utest* test)
 {

@@ -93,8 +93,8 @@ TEST_GROUP(TestRegistry)
   MockTestResult *mockResult;
   TEST_SETUP() 
   {
-   UT_FPSET(exit_current_test, exit_current_test_fake);
-   output = new MockTestOutput();
+    UT_FPSET(PlatformSpecificExitCurrentTest, FakePlatformSpecificExitCurrentTest);
+    output = new MockTestOutput();
     mockResult = new MockTestResult(*output);
     result = mockResult;
     test1 = new MockTest();

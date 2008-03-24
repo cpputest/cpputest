@@ -51,8 +51,8 @@ class TestRegistry
 		virtual void addTest(Utest *test);
 		virtual void unDoLastAddTest();
 		virtual int  countTests();
-		virtual void runAllTests(TestResult& result);
-		virtual void nameFilter(SimpleString);
+        virtual void runAllTests(TestResult& result);
+ 		virtual void nameFilter(SimpleString);
 		virtual void groupFilter(SimpleString);
 
 		virtual void installPlugin(TestPlugin* plugin);
@@ -68,6 +68,8 @@ class TestRegistry
 
     bool testShouldRun(Utest* test, TestResult& result);
     bool endOfGroup(Utest* test);
+    virtual void runOneTest(Utest* test, TestResult& result);
+    virtual void platformSpecificRunOneTest(Utest* test, TestResult& result);
 
     Utest *			tests;
     SimpleString 	nameFilter_;
@@ -76,5 +78,7 @@ class TestRegistry
     static TestRegistry* currentRegistry_;
 
   };
+  
+  
 
 #endif

@@ -25,36 +25,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// TESTHARNESS.H
-//
-// The primary include file for the framework.
-//
-///////////////////////////////////////////////////////////////////////////////
-
-#ifndef D_TestHarness_h
-#define D_TestHarness_h
-
-#include "Platform.h"
-#include "Utest.h"
-#include "UtestMacros.h"
-#include "TestResult.h"
-#include "Failure.h"
-#include "TestPlugin.h"
-#include "TestRegistry.h"
-#include "SimpleString.h"
-#include "MemoryLeakWarning.h"
-
-// Some platform specific methods
-long GetPlatformSpecificTimeInMillis();
-void SetPlatformSpecificTimeInMillisMethod(long (*platformSpecific) ());
-
-SimpleString GetPlatformSpecificTimeString();
-void SetPlatformSpecificTimeStringMethod(SimpleString (*platformMethod) ());
-
-extern void (*PlatformSpecificExitCurrentTest)();
-extern void FakePlatformSpecificExitCurrentTest();
+#ifndef D_Gcc_Platform_H
+#define D_Gcc_Platform_H
 
 #endif
-
