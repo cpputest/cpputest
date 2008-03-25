@@ -102,10 +102,6 @@ SOURCE=.\src\CppUTest\JUnitTestOutput.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\Platforms\VisualCpp\LongJump.c
-# End Source File
-# Begin Source File
-
 SOURCE=.\src\CppUTest\MemoryLeakWarningPlugin.cpp
 # End Source File
 # Begin Source File

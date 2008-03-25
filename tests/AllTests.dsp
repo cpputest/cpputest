@@ -108,10 +108,6 @@ SOURCE=.\JUnitOutputTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\LongJumpTest.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\MemoryLeakWarningTest.cpp
 # End Source File
 # Begin Source File
