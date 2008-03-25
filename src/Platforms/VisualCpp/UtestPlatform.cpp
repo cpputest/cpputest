@@ -52,7 +52,7 @@ void TestRegistry::platformSpecificRunOneTest(Utest* test, TestResult& result)
     try {
         runOneTest(test, result) ;
     } 
-    catch (int i) {
+    catch (int) {
         //exiting test early
     }
      

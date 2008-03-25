@@ -1,5 +1,5 @@
 
-#include "CppUTest/Utest.h"
+#include "CppUTest/TestHarness.h"
 #include "CppUTest/TestResult.h"
 #include <time.h>
 #include <sys/time.h>
@@ -73,4 +73,5 @@ void FakePlatformSpecificExitCurrentTest()
 }
 
 void (*PlatformSpecificExitCurrentTest)() = PlatformSpecificExitCurrentTestImpl;
+
 
