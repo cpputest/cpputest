@@ -24,7 +24,7 @@ CPPFLAGS =
 #put them into an AllTests.h file in each directory
 SRC_DIRS = \
 	src/CppUtest \
-	src/Platforms/Gcc\
+	src/Platforms/$(CPP_PLATFORM)\
 	src/CppUTest/Extensions
 
 #TEST_SRC_DIRS is a list of directories including 
