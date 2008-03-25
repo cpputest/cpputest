@@ -40,6 +40,7 @@ INCLUDES =\
   -I.\
   -Iinclude/Project\
   -I$(CPPUTEST_HOME)/include/\
+  -I$(CPPUTEST_HOME)/include/Platforms/$(CPP_PLATFORM)\
 
 #Flags to pass to ld
 LDFLAGS +=
