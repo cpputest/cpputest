@@ -24,10 +24,11 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#include "Utest.h"
+#include "CppUTest/TestHarness.h"
 
 #include <e32def.h>
 #include <e32std.h>
+#include <sys/time.h>
 
 void Utest::executePlatformSpecificTestBody()
 {

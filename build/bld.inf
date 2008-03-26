@@ -33,13 +33,11 @@ PRJ_EXPORTS
 ..\include\CppUTest\Utest.h CppUTest\Utest.h
 ..\include\CppUTest\TestResult.h CppUTest\TestResult.h
 ..\include\CppUTest\Failure.h CppUTest\Failure.h
-..\include\CppUTest\EqualsFailure.h CppUTest\EqualsFailure.h
 ..\include\CppUTest\TestRegistry.h CppUTest\TestRegistry.h
 ..\include\CppUTest\SimpleString.h CppUTest\SimpleString.h
 ..\include\CppUTest\MemoryLeakWarning.h CppUTest\MemoryLeakWarning.h
 ..\include\CppUTest\CommandLineTestRunner.h CppuTest\CommandLineTestRunner.h
 ..\include\CppUTest\TestOutput.h CppuTest\TestOutput.h
-..\include\CppUTest\TestInstaller.h CppuTest\TestInstaller.h
 ..\include\Platforms\Symbian\Platform.h CppuTest\Platform.h
 
 PRJ_MMPFILES

@@ -35,7 +35,7 @@ SYSTEMINCLUDE   \epoc32\include \epoc32\include\stdapis \epoc32\include\stlport
 LIBRARY		 euser.lib libc.lib libm.lib libpthread.lib
 
 SOURCEPATH ..\src\CppUTest
-SOURCE CommandLineTestRunner.cpp EqualsFailure.cpp Failure.cpp MemoryLeakWarningPlugin.cpp NullTest.cpp SimpleString.cpp SimpleStringExtensions.cpp TestInstaller.cpp TestOutput.cpp TestPlugin.cpp TestRegistry.cpp TestResult.cpp Utest.cpp JUnitTestOutput.cpp TestHarness_c.cpp
+SOURCE CommandLineTestRunner.cpp Failure.cpp MemoryLeakWarningPlugin.cpp SimpleString.cpp TestOutput.cpp TestPlugin.cpp TestRegistry.cpp TestResult.cpp Utest.cpp JUnitTestOutput.cpp TestHarness_c.cpp
 
 SOURCEPATH ..\src\Platforms\Symbian
 SOURCE SymbianMemoryLeakWarning.cpp UtestPlatform.cpp

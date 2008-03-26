@@ -29,18 +29,17 @@ TARGET		  cpputest.exe
 TARGETTYPE	  exe
 UID			 0x00000000 0x03A6305A
 
-USERINCLUDE	 ..\include\CppUTest ..\include\Platforms\Symbian ..\tests
-SYSTEMINCLUDE   \epoc32\include \epoc32\include\stdapis \epoc32\include\stlport
+USERINCLUDE	 ..\include ..\include\CppUTest ..\include\Platforms\Symbian ..\tests
+SYSTEMINCLUDE   \epoc32\include \epoc32\include\stdapis
 
-// Using main() as entry point
 STATICLIBRARY libcrt0.lib 
-STATICLIBRARY stlport_s.lib cpputest.lib
+STATICLIBRARY cpputest.lib
 
 LIBRARY		 euser.lib libc.lib libm.lib libpthread.lib
 
 
 SOURCEPATH ..\tests
-SOURCE FailureTest.cpp MemoryLeakWarningTest.cpp NullTestTest.cpp SimpleStringExtensionsTest.cpp 
+SOURCE FailureTest.cpp MemoryLeakWarningTest.cpp NullTestTest.cpp 
 SOURCE SimpleStringTest.cpp TestInstallerTest.cpp
 SOURCE TestOutputTest.cpp TestRegistryTest.cpp UtestTest.cpp CommandLineTestRunnerTest.cpp JUnitOutputTest.cpp
 SOURCE TestHarness_cTest.cpp
