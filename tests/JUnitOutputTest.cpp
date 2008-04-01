@@ -243,12 +243,14 @@ TEST_GROUP(JUnitOutputTest)
 			static char buf[1024];
 			
 			for (int index = 0, curTest = 0; curTest < currentGroup().numberTests_; curTest++, index++) {
-				snprintf(buf, 1024, "<testcase classname=\"%s\" name=\"%s\" time=\"10.0\"/>\n", 
+				snprintf(buf, 1024, "<testcase classname=\"%s\" name=\"%s\" time=\"10.0\">\n", 
 					currentGroup().name_.asCharString(), currentGroup().testData_[curTest].tst_->getName().asCharString()); 				
 				STRCMP_EQUAL(buf, arr[index].asCharString());
 				if (currentGroup().testData_[curTest].failure_) {
 					CHECK_FAILURE(arr, index, curTest);
 				}
+				snprintf(buf, 1024, "</testcase>\n");
+				STRCMP_EQUAL(buf, arr[++index].asCharString());
 				
 			}				
 		}
