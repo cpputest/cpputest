@@ -27,7 +27,7 @@
 
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/SimpleString.h"
-#include "CppUTest/Extensions/SimpleStringFromStdInt.h"
+#include "CppUTest/Extensions/SimpleStringFromStdint.h"
 #include <stdint.h>
 
 TEST_GROUP(SimpleStringFromStdint)
