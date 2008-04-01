@@ -24,8 +24,7 @@ CPPFLAGS =
 #put them into an AllTests.h file in each directory
 SRC_DIRS = \
 	src/CppUTest \
-	src/Platforms/$(CPP_PLATFORM)\
-	src/CppUTest/Extensions
+	src/Platforms/$(CPP_PLATFORM)
 
 #TEST_SRC_DIRS is a list of directories including 
 # - A test main (AllTests.cpp by conventin)
@@ -33,14 +32,13 @@ SRC_DIRS = \
 # - Consequently - AllTests.h containing the IMPORT_TEST_GROUPS is not needed
 # - 
 TEST_SRC_DIRS = \
-	tests \
-	tests/Extensions
+	tests 
+
 
 #includes for all compiles	
 INCLUDES =\
   -I.\
-  -I$(CPPUTEST_HOME)/include\
-  -I$(CPPUTEST_HOME)/include/Platforms/$(CPP_PLATFORM)\
+  -I$(CPPUTEST_HOME)/include
 
 #Flags to pass to ld
 LDFLAGS +=
