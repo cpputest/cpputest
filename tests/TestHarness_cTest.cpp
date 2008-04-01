@@ -39,7 +39,7 @@ TEST_GROUP(TestHarness_c)
 	GenericTestFixture* fixture;
 	TEST_SETUP()
 	{
-	    UT_FPSET(PlatformSpecificExitCurrentTest, FakePlatformSpecificExitCurrentTest);
+	    UT_PTR_SET(PlatformSpecificExitCurrentTest, FakePlatformSpecificExitCurrentTest);
 		fixture = new GenericTestFixture();
 	}
 	TEST_TEARDOWN()

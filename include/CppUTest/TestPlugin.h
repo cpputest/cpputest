@@ -63,25 +63,26 @@ class TestPlugin
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-// FunctionPointerPlugin
+// SetPointerPlugin
 //
-// This is a very small plugin that resets function pointers to their original value.
+// This is a very small plugin that resets pointers to their original value.
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-extern void CppUTestStoreFp(void (**location)(), void(*value)());
+extern void CppUTestStore(void **location, void *value);
 
-class FunctionPointerPlugin : public TestPlugin
+class SetPointerPlugin : public TestPlugin
 {
 public:
-	FunctionPointerPlugin();
-	virtual ~FunctionPointerPlugin();
+	SetPointerPlugin();
+	virtual ~SetPointerPlugin();
 	virtual void postTestAction(Utest&, TestResult&);
 
-	enum {MAX_FPS = 1024};
+	enum {MAX_SET = 1024};
 };
 
-#define UT_FPSET(a, b) { CppUTestStoreFp( (void(**)()) &a, (void (*)()) a); a = b; }
+#define UT_PTR_SET(a, b) { CppUTestStore( (void**)&a, (void*) a); a = b; }
+
 
 ///////////// Null Plugin
 

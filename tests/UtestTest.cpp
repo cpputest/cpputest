@@ -35,7 +35,7 @@ TEST_GROUP(Utest)
 	TEST_SETUP()
 	{
 		fixture = new GenericTestFixture();
-	    UT_FPSET(PlatformSpecificExitCurrentTest, FakePlatformSpecificExitCurrentTest);
+	    UT_PTR_SET(PlatformSpecificExitCurrentTest, FakePlatformSpecificExitCurrentTest);
 	}
 	TEST_TEARDOWN()
 	{

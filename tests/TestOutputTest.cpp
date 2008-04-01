@@ -47,7 +47,7 @@ TEST_GROUP(TestOutput)
 
 	TEST_SETUP()
 	{
-	     UT_FPSET(PlatformSpecificExitCurrentTest, FakePlatformSpecificExitCurrentTest);
+		UT_PTR_SET(PlatformSpecificExitCurrentTest, FakePlatformSpecificExitCurrentTest);
 		mock = new MockTestOutput();
 		printer = mock;
 		tst = new Utest("group", "test", "file", 1);

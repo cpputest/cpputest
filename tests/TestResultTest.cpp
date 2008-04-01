@@ -42,7 +42,7 @@ TEST_GROUP(TestResult)
 
 	TEST_SETUP()
 	{
-	    UT_FPSET(PlatformSpecificExitCurrentTest, FakePlatformSpecificExitCurrentTest);
+	    UT_PTR_SET(PlatformSpecificExitCurrentTest, FakePlatformSpecificExitCurrentTest);
 		mock = new MockTestOutput();
 		printer = mock;
 		res = new TestResult(*printer);

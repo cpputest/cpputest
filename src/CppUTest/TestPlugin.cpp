@@ -60,39 +60,39 @@ void TestPlugin::runAllPostTestAction(Utest& test, TestResult& result)
 	next_->runAllPostTestAction(test, result);
 }
 
-struct cpputest_fp_pair {
-	void (**orig)();
-	void (*orig_value)();
+struct cpputest_pair {
+	void **orig;
+	void *orig_value;
 };
 
-//////// FunctionPointerPLugin
+//////// SetPlugin
 
 static int index;
-static cpputest_fp_pair fplist[FunctionPointerPlugin::MAX_FPS];
+static cpputest_pair setlist[SetPointerPlugin::MAX_SET];
 
-FunctionPointerPlugin::FunctionPointerPlugin()
+SetPointerPlugin::SetPointerPlugin()
  {
  	index = 0;
  }
  
-FunctionPointerPlugin::~FunctionPointerPlugin()
+SetPointerPlugin::~SetPointerPlugin()
 {
 }
  
- void CppUTestStoreFp(void (**function)(), void(*value)())
+ void CppUTestStore(void**function, void*value)
 {
-	if (index == FunctionPointerPlugin::MAX_FPS) {
+	if (index == SetPointerPlugin::MAX_SET) {
 		FAIL("Maximum number of function pointers installed!");
 	}
-	fplist[index].orig_value = value;
-	fplist[index].orig = function;
+	setlist[index].orig_value = value;
+	setlist[index].orig = function;
 	index++;
 }
  
- void FunctionPointerPlugin::postTestAction(Utest& test, TestResult& result) 
+ void SetPointerPlugin::postTestAction(Utest& test, TestResult& result) 
 {
 	for (int i = 0; i < index; i++) 
-		*(fplist[i].orig) = fplist[i].orig_value;
+		*((void**)setlist[i].orig) = setlist[i].orig_value;
  	index = 0;
 }	
 

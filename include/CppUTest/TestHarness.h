@@ -45,6 +45,7 @@
 #include "TestRegistry.h"
 #include "SimpleString.h"
 #include "MemoryLeakWarning.h"
+#include "TestPlugin.h"
 
 // Some platform specific methods
 long GetPlatformSpecificTimeInMillis();
