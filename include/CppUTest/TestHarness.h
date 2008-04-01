@@ -36,7 +36,6 @@
 #ifndef D_TestHarness_h
 #define D_TestHarness_h
 
-#include "Platform.h"
 #include "Utest.h"
 #include "UtestMacros.h"
 #include "TestResult.h"
