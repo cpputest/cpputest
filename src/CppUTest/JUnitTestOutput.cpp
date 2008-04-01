@@ -134,13 +134,15 @@ void JUnitTestOutput::writeTestCases()
 
   	JUnitTestCaseResultNode* cur = results_.head_;
   	while (cur) {
-		snprintf(buf, buf_size, "<testcase classname=\"%s\" name=\"%s\" time=\"%d.0\"/>\n", 
+		snprintf(buf, buf_size, "<testcase classname=\"%s\" name=\"%s\" time=\"%d.0\">\n", 
 			results_.group_.asCharString(), cur->name_.asCharString(), (int) cur->execTime_);
 		writeToFile(buf);
 		
 		if (cur->failure_) {
 			writeFailure(cur);
 		}
+		snprintf(buf, buf_size, "</testcase>\n");
+		writeToFile(buf);
   		cur = cur->next_;
   	}
 }
