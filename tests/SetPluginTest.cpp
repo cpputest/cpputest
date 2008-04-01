@@ -1,7 +1,7 @@
 
-#include "CppUTest\TestHarness.h"
-#include "CppUTest\MockTestOutput.h"
-#include "CppUTest\TestPlugin.h"
+#include "CppUTest/TestHarness.h"
+#include "CppUTest/MockTestOutput.h"
+#include "CppUTest/TestPlugin.h"
 
 void orig_func1 () {};
 void stub_func1 () {};
