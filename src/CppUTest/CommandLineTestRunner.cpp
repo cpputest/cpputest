@@ -51,9 +51,9 @@ int CommandLineTestRunner::RunAllTests(int ac, char** av)
 	RealTestOutput output;
 	int testResult = 0;
     MemoryLeakWarningPlugin memLeakWarn;
-//    FunctionPointerPlugin fpPlugin;
+    SetPointerPlugin pPlugin;
 	{
-//        TestRegistry::getCurrentRegistry()->installPlugin(&fpPlugin);
+        TestRegistry::getCurrentRegistry()->installPlugin(&pPlugin);
         TestRegistry::getCurrentRegistry()->installPlugin(&memLeakWarn);
     	
     	memLeakWarn.Enable();
