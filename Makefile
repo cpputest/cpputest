@@ -23,7 +23,7 @@ CPPFLAGS =
 #to be included in main to force them to be linked in.  By convention
 #put them into an AllTests.h file in each directory
 SRC_DIRS = \
-	src/CppUtest \
+	src/CppUTest \
 	src/Platforms/$(CPP_PLATFORM)\
 	src/CppUTest/Extensions
 
