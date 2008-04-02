@@ -91,7 +91,7 @@ SetPointerPlugin::~SetPointerPlugin()
  
  void SetPointerPlugin::postTestAction(Utest& test, TestResult& result) 
 {
-	for (int i = 0; i < index; i++) 
+	for (int i = index-1; i >= 0; i--) 
 		*((void**)setlist[i].orig) = setlist[i].orig_value;
  	index = 0;
 }	
