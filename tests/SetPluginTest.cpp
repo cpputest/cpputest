@@ -45,6 +45,7 @@ public:
 	{
 		UT_PTR_SET(fp1, stub_func1);
 		UT_PTR_SET(fp2, stub_func2);
+		UT_PTR_SET(fp2, stub_func2);
 	}
 	void testBody()
 	{
