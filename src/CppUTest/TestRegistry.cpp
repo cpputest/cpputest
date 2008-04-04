@@ -157,3 +157,16 @@ TestPlugin* TestRegistry::getFirstPlugin()
 {
 	return firstPlugin_;
 }
+
+TestPlugin* TestRegistry::getPluginByName(const SimpleString& name)
+{
+	return firstPlugin_->getPluginByName(name);
+}
+
+void TestRegistry::removePluginByName(const SimpleString& name)
+{
+	if (firstPlugin_->removePluginByName(name) == firstPlugin_)
+		firstPlugin_ = firstPlugin_->getNext();
+	if (firstPlugin_->getName() == name) firstPlugin_ = firstPlugin_->getNext();
+	firstPlugin_->removePluginByName(name);
+}

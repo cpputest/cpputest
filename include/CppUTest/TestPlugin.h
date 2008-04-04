@@ -43,22 +43,35 @@ class TestPlugin
   {
   public:
 
-    TestPlugin();
+    TestPlugin(const SimpleString& name);
     virtual ~TestPlugin();
 
 		virtual void preTestAction(Utest&, TestResult&) {};
 		virtual void postTestAction(Utest&, TestResult&) {};
+		virtual bool parseArguments(int ac, char** av, int index) { return false;};
 
 		virtual void runAllPreTestAction(Utest&, TestResult&);
 		virtual void runAllPostTestAction(Utest&, TestResult&);
+		virtual bool parseAllArguments(int ac, char** av, int index);
 		
 		virtual TestPlugin* addPlugin(TestPlugin*);
+		virtual TestPlugin* removePluginByName(const SimpleString& name);
+		virtual TestPlugin* getNext();
+				
+		virtual void disable();
+		virtual void enable ();
+		virtual bool isEnabled();
+		
+		const SimpleString& getName();
+		TestPlugin* getPluginByName(const SimpleString& name);
         
 	protected:
         TestPlugin(TestPlugin* next);
 
 	private:
 		TestPlugin* next_;
+		SimpleString name_;
+		bool enabled_;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -74,7 +87,7 @@ extern void CppUTestStore(void **location, void *value);
 class SetPointerPlugin : public TestPlugin
 {
 public:
-	SetPointerPlugin();
+	SetPointerPlugin(const SimpleString& name);
 	virtual ~SetPointerPlugin();
 	virtual void postTestAction(Utest&, TestResult&);
 

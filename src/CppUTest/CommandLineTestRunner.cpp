@@ -50,8 +50,8 @@ int CommandLineTestRunner::RunAllTests(int ac, char** av)
 {
 	RealTestOutput output;
 	int testResult = 0;
-    MemoryLeakWarningPlugin memLeakWarn;
-    SetPointerPlugin pPlugin;
+    MemoryLeakWarningPlugin memLeakWarn(DEF_PLUGIN_MEM_LEAK);
+    SetPointerPlugin pPlugin(DEF_PLUGIN_SET_POINTER);
 	{
         TestRegistry::getCurrentRegistry()->installPlugin(&pPlugin);
         TestRegistry::getCurrentRegistry()->installPlugin(&memLeakWarn);
@@ -112,6 +112,8 @@ bool CommandLineTestRunner::parseArguments(int ac, char** av)
         	SetNameFilter(ac, av, i);
       	else if (argument.startsWith("-o"))
         	correctParameters = SetOutputType(ac, av, i);
+      	else if (argument.startsWith("-p"))
+      		correctParameters = TestRegistry::getCurrentRegistry()->getFirstPlugin()->parseArguments(ac, av, i);
 		else
 			correctParameters = false;
 

@@ -150,4 +150,22 @@ TEST(CommandLineTestRunner, weirdParamatersPrintsUsageAndReturnsFalse)
 	GenericTestFixture::assertPrintContains(output, "usage [-v] [-r#] [-g groupName] [-n testName] [-o{normal, junit}]\n");
 }
 
+class OptionsPlugin : public TestPlugin
+{
+public:
+	OptionsPlugin(const SimpleString& name) : TestPlugin(name){};
+	~OptionsPlugin(){};
+	bool parseArguments(int ac, char** av, int index) { return true;};
+};
+
+TEST(CommandLineTestRunner, pluginKnowsOption)
+{
+	int argc = 2;
+	char* argv[] = {"tests.exe", "-pPluginOption"};
+	OptionsPlugin plugin("options");
+	TestRegistry::getCurrentRegistry()->installPlugin(&plugin);
+	CHECK(runner->parseArguments(argc, argv));
+	TestRegistry::getCurrentRegistry()->removePluginByName("options");
+}
+
 

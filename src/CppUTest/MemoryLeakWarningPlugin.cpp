@@ -25,9 +25,18 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "CppUTest/TestHarness.h"
 #include "CppUTest/MemoryLeakWarningPlugin.h"
-#include "CppUTest/Failure.h"
-#include "CppUTest/TestResult.h"
+
+
+MemoryLeakWarningPlugin::MemoryLeakWarningPlugin(const SimpleString& name)
+	: TestPlugin(name)
+{
+}
+
+MemoryLeakWarningPlugin::~MemoryLeakWarningPlugin()
+{
+}
 
 void MemoryLeakWarningPlugin::preTestAction(Utest& test, TestResult& result)
 {

@@ -28,16 +28,16 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TestPlugin.h"
 
-TestPlugin::TestPlugin()
-	: next_(NullTestPlugin::instance())
+TestPlugin::TestPlugin(const SimpleString& name)
+	: next_(NullTestPlugin::instance()), name_(name), enabled_(true)
 {
 }
 
 TestPlugin::TestPlugin(TestPlugin* next)
-	: next_(next)
+	: next_(next), name_("null")
 {
 }
-	
+
 TestPlugin::~TestPlugin()
 {
 }
@@ -50,14 +50,62 @@ TestPlugin* TestPlugin::addPlugin(TestPlugin* plugin)
 
 void TestPlugin::runAllPreTestAction(Utest& test, TestResult& result)
 {
-	preTestAction(test, result);
+	if (enabled_) preTestAction(test, result);
 	next_->runAllPreTestAction(test, result);
 }
 
 void TestPlugin::runAllPostTestAction(Utest& test, TestResult& result)
 {
-	postTestAction(test, result);
+	if (enabled_) postTestAction(test, result);
 	next_->runAllPostTestAction(test, result);
+}
+
+bool TestPlugin::parseAllArguments(int ac, char** av, int index)
+{
+	if (parseArguments(ac, av, index)) return true;
+	if (next_) return next_->parseAllArguments(ac, av, index);
+	return false;
+}
+
+const SimpleString& TestPlugin::getName()
+{
+	return name_;
+}
+
+TestPlugin* TestPlugin::getPluginByName(const SimpleString& name)
+{
+	if (name == name_) return this;
+	if (next_) return next_->getPluginByName(name);
+	return (next_);
+}
+
+TestPlugin* TestPlugin::getNext()
+{
+	return next_;
+}
+TestPlugin* TestPlugin::removePluginByName(const SimpleString& name)
+{
+	TestPlugin* removed;
+	if (next_ && next_->getName() == name) {
+		removed = next_;
+		next_ = next_->next_;
+	}
+	return removed;
+}
+
+void TestPlugin::disable()
+{
+	enabled_ = false;
+}
+
+void TestPlugin::enable ()
+{
+	enabled_ = true;
+}
+
+bool TestPlugin::isEnabled()
+{
+	return enabled_;
 }
 
 struct cpputest_pair {
@@ -70,7 +118,8 @@ struct cpputest_pair {
 static int index;
 static cpputest_pair setlist[SetPointerPlugin::MAX_SET];
 
-SetPointerPlugin::SetPointerPlugin()
+SetPointerPlugin::SetPointerPlugin(const SimpleString& name_) 
+	: TestPlugin(name_)
  {
  	index = 0;
  }

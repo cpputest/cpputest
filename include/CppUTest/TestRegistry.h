@@ -58,6 +58,8 @@ class TestRegistry
 		virtual void installPlugin(TestPlugin* plugin);
 		virtual void resetPlugins();
 		virtual TestPlugin* getFirstPlugin();
+		virtual TestPlugin* getPluginByName(const SimpleString& name);
+		virtual void removePluginByName(const SimpleString& name);
 		
 		SimpleString getGroupFilter();
 		SimpleString getNameFilter();

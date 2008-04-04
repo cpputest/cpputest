@@ -21,7 +21,7 @@ TEST_GROUP(SetPointerPluginTest)
 	void setup() 
 	{
 		myRegistry = new TestRegistry();
-    	plugin = new SetPointerPlugin();
+    	plugin = new SetPointerPlugin("TestSetPlugin");
 		myRegistry->setCurrentRegistry(myRegistry);
 		myRegistry->installPlugin(plugin);
     	output = new MockTestOutput();

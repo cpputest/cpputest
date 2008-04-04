@@ -44,6 +44,8 @@
 class MemoryLeakWarningPlugin : public TestPlugin
   {
   public:
+  		MemoryLeakWarningPlugin(const SimpleString& name);
+  		virtual ~MemoryLeakWarningPlugin();
   
 		virtual void preTestAction(Utest& test, TestResult& result);
 		virtual void postTestAction(Utest& test, TestResult& result);
