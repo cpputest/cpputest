@@ -82,11 +82,11 @@
 
 //Check any boolean condition
 
-#define CHECK_LOCATION(condition, file, line)\
-  {if (!Utest::getCurrent()->assertTrue(condition, #condition, file, line)) return;}
+#define CHECK_LOCATION(condition, conditionString, file, line)\
+  {if (!Utest::getCurrent()->assertTrue(condition, conditionString, file, line)) return;}
 
 #define CHECK(condition)\
-  CHECK_LOCATION(condition, __FILE__, __LINE__)
+  CHECK_LOCATION(condition, #condition, __FILE__, __LINE__)
 
 
 

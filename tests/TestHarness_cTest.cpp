@@ -136,6 +136,20 @@ TEST(TestHarness_c, checkFail)
 //	fixture->assertPrintContains("TestHarness_cTest.cpp");
 }
 
+void _CheckMethod()
+{
+	CHECK_C(false);
+}
+
+TEST(TestHarness_c, checkCheck)
+{
+	CHECK_C(true);
+	fixture->setTestFunction(_CheckMethod);
+	fixture->runAllTests();
+	LONGS_EQUAL(1, fixture->getFailureCount());
+}
+
+
 TEST(TestHarness_c, cpputest_malloc_out_of_memory)
 {
     cpputest_malloc_set_out_of_memory();
