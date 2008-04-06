@@ -30,7 +30,7 @@ TARGETTYPE	  LIB
 UID			 0x00000000 0x03A6305A
 
 USERINCLUDE	 ..\include ..\include\CppUTest ..\include\Platforms\Symbian
-SYSTEMINCLUDE   \epoc32\include \epoc32\include\stdapis \epoc32\include\stlport
+SYSTEMINCLUDE   \epoc32\include \epoc32\include\stdapis
 
 LIBRARY		 euser.lib libc.lib libm.lib libpthread.lib
 

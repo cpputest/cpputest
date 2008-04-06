@@ -39,6 +39,7 @@ PRJ_EXPORTS
 ..\include\CppUTest\CommandLineTestRunner.h CppuTest\CommandLineTestRunner.h
 ..\include\CppUTest\TestOutput.h CppuTest\TestOutput.h
 ..\include\Platforms\Symbian\Platform.h CppuTest\Platform.h
+../include/CppUTest/TestPlugin.h CppUTest
 
 PRJ_MMPFILES
 cpputest.mmp
