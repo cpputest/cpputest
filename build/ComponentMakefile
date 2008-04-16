@@ -73,7 +73,7 @@ $(TEST_TARGET): $(TEST_OBJS) $(TARGET_LIB) $(CPPUTEST_LIB)
 
 $(TARGET_LIB): $(OBJ)
 	$(SILENCE)echo Building archive $@
-	$(SILENCE)$(AR) r $@ $^
+	$(SILENCE)$(AR) $(ARFLAGS) $@ $^
 
 test: $(TEST_TARGET)
 	$(RUN_TEST_TARGET) | tee $(TEST_OUTPUT)
@@ -83,13 +83,13 @@ vtest: $(TEST_TARGET)
 
 %.o: %.cpp
 	@echo compiling $(notdir $<)
-	$(SILENCE)$(CXX) $(CPPFLAGS) -M -MF $(subst .o,.d,$@) -MT "$@ $(subst .o,.d,$@)" $<
-	$(SILENCE)$(COMPILE.cpp)  $(CPPFLAGS) $(OUTPUT_OPTION) $<
+	$(SILENCE)$(COMPILE.cpp) -M -MF $(subst .o,.d,$@) -MT "$@ $(subst .o,.d,$@)" $<
+	$(SILENCE)$(COMPILE.cpp) $(OUTPUT_OPTION) $<
 
 %.o: %.c
 	@echo compiling $(notdir $<)
-	$(SILENCE)$(CC) $(CFLAGS) -M -MF $(subst .o,.d,$@) -MT "$@ $(subst .o,.d,$@)" $<
-	$(SILENCE)$(COMPILE.c)  $(CFLAGS) $(OUTPUT_OPTION) $<
+	$(SILENCE)$(COMPILE.cpp) -M -MF $(subst .o,.d,$@) -MT "$@ $(subst .o,.d,$@)" $<
+	$(SILENCE)$(COMPILE.c) $(OUTPUT_OPTION) $<
 
 ifneq "$(MAKECMDGOALS)" "clean"
 -include $(DEP_FILES)
