@@ -45,8 +45,13 @@ TestResult::TestResult (TestOutput& p)
     , currentTestTotalExecutionTime(0)
     , currentGroupTimeStarted(0)
     , currentGroupTotalExecutionTime(0)
-{}
+{
+}
 
+void TestResult::setProgressIndicator(const char* indicator)
+{
+    output.setProgressIndicator(indicator);    
+}
 
 TestResult::~TestResult()
 {}

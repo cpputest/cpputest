@@ -51,6 +51,23 @@ void SetPlatformSpecificTimeStringMethod(SimpleString (*platformMethod) ())
 }
 
 
+///////////// Run one test with exit on first error, using setjmp/longjmp
+#include <setjmp.h>
+
+static jmp_buf test_exit_jmp_buf;
+
+void TestRegistry::platformSpecificRunOneTest(Utest* test, TestResult& result)
+{
+    if (0 == setjmp(test_exit_jmp_buf))
+        runOneTest(test, result) ;
+}
+
+void PlatformSpecificExitCurrentTestImpl() 
+{
+    longjmp(test_exit_jmp_buf, 1);
+}
+
+#if 0
 ///////////// Run one test with exit on first error
 void TestRegistry::platformSpecificRunOneTest(Utest* test, TestResult& result)
 {
@@ -67,6 +84,7 @@ void PlatformSpecificExitCurrentTestImpl()
 {
     throw(1);
 }
+#endif
 
 void FakePlatformSpecificExitCurrentTest() 
 {

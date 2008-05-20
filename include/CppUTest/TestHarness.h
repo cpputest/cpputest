@@ -55,6 +55,7 @@ void SetPlatformSpecificTimeStringMethod(SimpleString (*platformMethod) ());
 
 extern void (*PlatformSpecificExitCurrentTest)();
 extern void FakePlatformSpecificExitCurrentTest();
+extern void PlatformSpecificExitCurrentTestImpl();
 
 #endif
 

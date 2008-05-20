@@ -45,7 +45,6 @@
 #define TEST_BASE(testBaseClass) \
   struct testBaseClass : public Utest
 
-
 #define TEST_GROUP(testGroup) \
   TEST_GROUP_BASE(testGroup, Utest)
 
@@ -69,12 +68,13 @@
 { public: testGroup##testName##Test () : CppUTestGroup##testGroup () {} \
     virtual void run (TestResult& result) { \
     	result.countIgnored(); } \
+    virtual const char* getProgressIndicator() const {return "!";} \
   protected:  virtual SimpleString getMacroName() const \
       { return "IGNORE_TEST"; } \
-  public:          void thisNeverRuns (); } \
+  public: void testBodyThatNeverRuns (); } \
     testGroup##testName##Instance; \
   TestInstaller testGroup##testName##Installer(&testGroup##testName##Instance, #testGroup, #testName, __FILE__,__LINE__); \
-	void testGroup##testName##Test::thisNeverRuns ()
+	void testGroup##testName##Test::testBodyThatNeverRuns ()
 
 #define IMPORT_TEST_GROUP(testGroup) \
   extern int externTestGroup##testGroup;\

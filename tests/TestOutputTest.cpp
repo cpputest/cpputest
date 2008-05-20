@@ -100,10 +100,22 @@ TEST(TestOutput, PrintTestEnded)
 
 TEST(TestOutput, PrintTestALot)
 {
-	for (int i = 0; i < 60; ++i) {
-		printer->printCurrentTestEnded(*result);
-	}
-	STRCMP_EQUAL("..................................................\n..........", mock->getOutput().asCharString());
+    for (int i = 0; i < 60; ++i) {
+        printer->printCurrentTestEnded(*result);
+    }
+    STRCMP_EQUAL("..................................................\n..........", mock->getOutput().asCharString());
+}
+
+TEST(TestOutput, SetProgressIndicator)
+{
+    result->setProgressIndicator(".");
+    printer->printCurrentTestEnded(*result);
+    result->setProgressIndicator("!");
+    printer->printCurrentTestEnded(*result);
+    result->setProgressIndicator(".");
+    printer->printCurrentTestEnded(*result);
+
+    STRCMP_EQUAL(".!.", mock->getOutput().asCharString());
 }
 
 TEST(TestOutput, PrintTestVerboseStarted)

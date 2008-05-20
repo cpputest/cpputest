@@ -57,6 +57,7 @@ void TestRegistry::runAllTests (TestResult& result)
 			groupStart = false;
 		}
 
+		result.setProgressIndicator(test->getProgressIndicator());
 		result.countTest();
 		if (testShouldRun(test, result)) {
 			result.currentTestStarted(test);

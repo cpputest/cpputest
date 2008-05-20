@@ -80,7 +80,7 @@ TEST(Utest, SuccessPrintsNothing)
   fixture->setTestFunction(_passMethod);
   fixture->runAllTests(); 
   LONGS_EQUAL(0, fixture->getFailureCount());
-  fixture->assertPrintContains("");
+  fixture->assertPrintContains(".\nOK (1 tests");
 }
 
 TEST(Utest, allMacros)

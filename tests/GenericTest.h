@@ -107,7 +107,7 @@ public:
 		message += ">\n";
 		FAIL(message.asCharString());
 
-  }
+ 	}
 
 	TestRegistry* 	registry;
 	GenericTest* 	genTest;

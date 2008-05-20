@@ -85,7 +85,11 @@ TEST(SetPointerPluginTest, installTooMuchFunctionPointer)
 {
 	MaxFunctionPointerUtest *tst = new MaxFunctionPointerUtest(SetPointerPlugin::MAX_SET + 1);
 	myRegistry->addTest(tst);
+    
+	PlatformSpecificExitCurrentTest = FakePlatformSpecificExitCurrentTest;
 	myRegistry->runAllTests(*result);
+    PlatformSpecificExitCurrentTest = PlatformSpecificExitCurrentTestImpl;
+    
 	LONGS_EQUAL(1, result->getFailureCount());
 	delete tst;
 }

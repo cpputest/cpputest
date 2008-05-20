@@ -110,6 +110,12 @@ bool Utest::isLast () const
 	return false;
 }
 
+SimpleString Utest::getMacroName() const
+{
+  return "TEST";
+}
+
+
 const SimpleString Utest::getName() const
   {
     return SimpleString(name_);
@@ -131,6 +137,11 @@ SimpleString Utest::getFormattedName() const
 
     return formattedName;
   }
+
+const char* Utest::getProgressIndicator() const
+{
+    return ".";
+}
 
 void Utest::setFileName(const char* fileName)
 {
@@ -283,8 +294,8 @@ Utest* Utest::getCurrent()
   return currentTest_;
 }
 
-
 ////////////// NullTest ////////////
+
 
 NullTest::NullTest()
     :Utest("NullGroup", "NullName", "NullFile", -1, 0)

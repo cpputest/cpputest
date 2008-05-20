@@ -32,7 +32,7 @@
 #include "CppUTest/TestResult.h"
 #include <stdio.h>
 
-TestOutput::TestOutput() : dotCount_(0), verbose_(false)
+TestOutput::TestOutput() : dotCount_(0), verbose_(false), progressIndication(".")
 {}
 
 TestOutput::~TestOutput()
@@ -47,6 +47,7 @@ void TestOutput::print(const char* s)
 {
     for (const char* p = s; *p; p++)
         putchar(*p);
+    flush();
 }
 
 void TestOutput::print(long n)
@@ -90,11 +91,22 @@ void TestOutput::printCurrentTestEnded(const TestResult& res)
 		print(" ms\n");
 	}
 	else {
-		print(".");
-		if (++dotCount_ % 50 == 0)
-			print("\n");
+	    printProgressIndicator();
 	}
 }
+
+void TestOutput::printProgressIndicator()
+{
+    print(progressIndication);
+    if (++dotCount_ % 50 == 0)
+        print("\n");
+}
+
+void TestOutput::setProgressIndicator(const char* indicator)
+{
+    progressIndication = indicator;
+}
+
 
 void TestOutput::printTestsStarted()
 {
@@ -110,6 +122,7 @@ void TestOutput::printCurrentGroupEnded(const TestResult& res)
 
 void TestOutput::flush()
 {
+    fflush(stdout);
 }
 
 void TestOutput::printTestsEnded(const TestResult& result)

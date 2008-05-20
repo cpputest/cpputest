@@ -63,16 +63,21 @@ class TestOutput
     virtual void printHex(long);
     virtual void print(const Failure& failure);
 	virtual void printTestRun(int number, int total);
+    virtual void setProgressIndicator(const char*);
+	
 
 	virtual void flush();
 
   private:
 
+    virtual void printProgressIndicator();
+      
     TestOutput(const TestOutput&);
     TestOutput& operator=(const TestOutput&);
 
 	int dotCount_;
 	bool verbose_;
+	const char* progressIndication;
   };
 
 TestOutput& operator<<(TestOutput&, const char*);

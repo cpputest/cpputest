@@ -69,7 +69,7 @@ class Utest
     virtual void executePlatformSpecificTestBody();
     virtual SimpleString getFormattedName() const;
 
-		virtual Utest* addTest(Utest* test);
+	virtual Utest* addTest(Utest* test);
     virtual Utest *getNext () const;
     virtual bool isLast () const;
     virtual int  countTests();
@@ -79,6 +79,7 @@ class Utest
 	const SimpleString getGroup() const;
     const SimpleString getFile() const;
     int getLineNumber() const;
+    virtual const char* getProgressIndicator() const;
 
     virtual void setup();
     virtual void teardown();
@@ -105,10 +106,7 @@ class Utest
          const char* fileName,
          int lineNumber, Utest* nextTest);
 
-    virtual SimpleString getMacroName() const
-      {
-        return "TEST";
-      }
+    virtual SimpleString getMacroName() const;
 
   private:
 

@@ -63,6 +63,8 @@ class TestResult
     virtual void countFilteredOut();
     virtual void countIgnored();
     virtual void addFailure (const Failure& failure);
+    virtual void setProgressIndicator(const char*);
+
 
     int getTestCount() const {return testCount;}
     int getRunCount() const {return runCount;}
