@@ -50,7 +50,7 @@ LDFLAGS  += -lstdc++
 #The gcda files for gcov need to be deleted before each run
 #To avoid annoying messages.
 GCOV_CLEAN = $(SILENCE)rm -f $(GCOV_GCDA_FILES) $(GCOV_OUTPUT) $(GCOV_REPORT) $(GCOV_ERROR)
-RUN_TEST_TARGET = $(SILENCE) $(GCOV_CLEAN) ; ./$(TEST_TARGET)
+RUN_TEST_TARGET = $(SILENCE)  $(GCOV_CLEAN) ; echo "Running $(TEST_TARGET)"; ./$(TEST_TARGET)
 
 # Targets
 .PHONY: all
