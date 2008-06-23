@@ -28,7 +28,7 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/CommandLineTestRunner.h"
 #include "CppUTest/MockTestOutput.h"
-#include "GenericTest.h"
+#include "CppUTest/TestTestingFixture.h"
 #include <string.h>
 
 TEST_GROUP(CommandLineTestRunner)
@@ -147,7 +147,7 @@ TEST(CommandLineTestRunner, weirdParamatersPrintsUsageAndReturnsFalse)
 	int argc = 2;
 	char* argv[] = {"tests.exe", "-SomethingWeird"};
 	CHECK(!runner->parseArguments(argc, argv));
-	GenericTestFixture::assertPrintContains(output, "usage [-v] [-r#] [-g groupName] [-n testName] [-o{normal, junit}]\n");
+	TestTestingFixture::assertPrintContains(output, "usage [-v] [-r#] [-g groupName] [-n testName] [-o{normal, junit}]\n");
 }
 
 class OptionsPlugin : public TestPlugin

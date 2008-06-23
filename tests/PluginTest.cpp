@@ -27,7 +27,7 @@
 
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/MockTestOutput.h"
-#include "GenericTest.h"
+#include "CppUTest/TestTestingFixture.h"
 
 #define GENERIC_PLUGIN  "GenericPlugin"
 #define GENERIC_PLUGIN2 "GenericPlugin2"
@@ -57,13 +57,13 @@ TEST_GROUP(PluginTest)
 {
 	DummyPlugin* firstPlugin;
 	DummyPlugin* secondPlugin;
-	GenericTestFixture *genFixture;
+	TestTestingFixture *genFixture;
 	TestRegistry *registry;
 	void setup()
 	{
 		firstPlugin = new DummyPlugin(GENERIC_PLUGIN);
 		secondPlugin = new DummyPlugin(GENERIC_PLUGIN2);
-		genFixture = new GenericTestFixture;
+		genFixture = new TestTestingFixture;
 		registry = genFixture->registry;
 		registry->installPlugin(firstPlugin);
 	}

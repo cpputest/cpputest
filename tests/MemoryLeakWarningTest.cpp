@@ -28,7 +28,7 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/MockTestOutput.h"
 #include "CppUTest/MemoryLeakWarningPlugin.h"
-#include "GenericTest.h"
+#include "CppUTest/TestTestingFixture.h"
 
 static char* arrayToLeak1;
 static char* arrayToLeak2;
@@ -40,11 +40,11 @@ TEST_GROUP(MemoryLeakWarningTest)
 	MemoryLeakWarningPlugin* memPlugin;
 	MemoryLeakWarning* prevMemWarning;
 
-	GenericTestFixture* fixture;
+	TestTestingFixture* fixture;
 	TEST_SETUP()
 	{
 	    UT_PTR_SET(PlatformSpecificExitCurrentTest, FakePlatformSpecificExitCurrentTest);
-		fixture = new GenericTestFixture();
+		fixture = new TestTestingFixture();
   		prevMemWarning = MemoryLeakWarning::GetLatest();
   		memPlugin = new MemoryLeakWarningPlugin("TestMemoryLeakWarningPlugin");
   		fixture->registry->installPlugin(memPlugin);

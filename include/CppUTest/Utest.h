@@ -142,6 +142,32 @@ class NullTest : public Utest
 
   };
 
+//////////////////// ExecFunctionTest
+
+class ExecFunctionTest : public Utest
+  {
+  public:
+  	void (*setup_)();
+  	void (*teardown_)();
+  	void (*_testFunction)();
+    ExecFunctionTest(void (*setup)() = 0, void (*teardown)() = 0)
+        :Utest("Generic", "Generic", "Generic", 1), setup_(setup), teardown_(teardown), _testFunction(0)
+    {
+    }
+    void testBody()
+    {
+    	if (_testFunction) _testFunction();
+    }
+    virtual void setup()
+    {
+    	if (setup_) setup_();
+    }
+    virtual void teardown()
+    {
+    	if (teardown_) teardown_();
+    }
+};
+
 
 //////////////////// TestInstaller
 

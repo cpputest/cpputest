@@ -32,15 +32,15 @@ extern "C" {
 }
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/MockTestOutput.h"
-#include "GenericTest.h"
+#include "CppUTest/TestTestingFixture.h"
 
 TEST_GROUP(TestHarness_c)
 {
-	GenericTestFixture* fixture;
+	TestTestingFixture* fixture;
 	TEST_SETUP()
 	{
 	    UT_PTR_SET(PlatformSpecificExitCurrentTest, FakePlatformSpecificExitCurrentTest);
-		fixture = new GenericTestFixture();
+		fixture = new TestTestingFixture();
 	}
 	TEST_TEARDOWN()
 	{

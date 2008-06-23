@@ -27,14 +27,14 @@
 
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/MockTestOutput.h"
-#include "GenericTest.h"
+#include "CppUTest/TestTestingFixture.h"
 
 TEST_GROUP(Utest)
 {
-	GenericTestFixture* fixture;
+	TestTestingFixture* fixture;
 	TEST_SETUP()
 	{
-		fixture = new GenericTestFixture();
+		fixture = new TestTestingFixture();
 	    UT_PTR_SET(PlatformSpecificExitCurrentTest, FakePlatformSpecificExitCurrentTest);
 	}
 	TEST_TEARDOWN()
@@ -150,7 +150,7 @@ IGNORE_TEST(Utest, IgnoreTestAccessingFixture)
 TEST(Utest, MacrosUsedInSetup)
 {
 	delete fixture->genTest;
-	fixture->genTest = new GenericTest(_failMethod);
+	fixture->genTest = new ExecFunctionTest(_failMethod);
  	fixture->setTestFunction(_passMethod);
  	fixture->runAllTests(); 
 	LONGS_EQUAL(1, fixture->getFailureCount());
@@ -159,7 +159,7 @@ TEST(Utest, MacrosUsedInSetup)
 TEST(Utest, MacrosUsedInTearDown)
 {
 	delete fixture->genTest;
-	fixture->genTest = new GenericTest(0, _failMethod);
+	fixture->genTest = new ExecFunctionTest(0, _failMethod);
  	fixture->setTestFunction(_passMethod);
  	fixture->runAllTests(); 
 	LONGS_EQUAL(1, fixture->getFailureCount());

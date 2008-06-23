@@ -25,48 +25,24 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef D_GenericTest_H
-#define D_GenericTest_H
+#ifndef D_TestTestingFixture_H
+#define D_TestTestingFixture_H
 
-class GenericTest : public Utest
-  {
-  public:
-  	void (*setup_)();
-  	void (*teardown_)();
-  	void (*_testFunction)();
-    GenericTest(void (*setup)() = 0, void (*teardown)() = 0)
-        :Utest("Generic", "Generic", "Generic", 1), setup_(setup), teardown_(teardown), _testFunction(0)
-    {
-    }
-    void testBody()
-    {
-    	if (_testFunction) _testFunction();
-    }
-    virtual void setup()
-    {
-    	if (setup_) setup_();
-    }
-    virtual void teardown()
-    {
-    	if (teardown_) teardown_();
-    }
-};
-
-class GenericTestFixture
+class TestTestingFixture
 {
 public:
 
-	GenericTestFixture() {
+	TestTestingFixture() {
 		output = new MockTestOutput();
     	result = new TestResult(*output);
-  		genTest = new GenericTest();
+  		genTest = new ExecFunctionTest();
   		registry = new TestRegistry();
 
   		registry->setCurrentRegistry(registry);
 		registry->addTest(genTest);
 	};
 	
-	virtual ~GenericTestFixture() {
+	virtual ~TestTestingFixture() {
 		registry->setCurrentRegistry(0);
   		delete registry;
   		delete result;
@@ -110,7 +86,7 @@ public:
  	}
 
 	TestRegistry* 	registry;
-	GenericTest* 	genTest;
+	ExecFunctionTest* 	genTest;
 	MockTestOutput* output;
 	TestResult *	result;
 };
