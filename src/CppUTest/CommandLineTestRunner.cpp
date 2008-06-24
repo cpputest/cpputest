@@ -29,7 +29,6 @@
 #include "CppUTest/CommandLineTestRunner.h"
 #include "CppUTest/MemoryLeakWarningPlugin.h"
 #include "CppUTest/TestOutput.h"
-#include "CppUTest/RealTestOutput.h"
 #include "CppUTest/JUnitTestOutput.h"
 #include <stdlib.h>
 
@@ -48,7 +47,7 @@ CommandLineTestRunner::~CommandLineTestRunner()
 
 int CommandLineTestRunner::RunAllTests(int ac, char** av)
 {
-	RealTestOutput output;
+	ConsoleTestOutput output;
 	int testResult = 0;
     MemoryLeakWarningPlugin memLeakWarn(DEF_PLUGIN_MEM_LEAK);
     SetPointerPlugin pPlugin(DEF_PLUGIN_SET_POINTER);

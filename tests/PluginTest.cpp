@@ -26,7 +26,7 @@
  */
 
 #include "CppUTest/TestHarness.h"
-#include "CppUTest/MockTestOutput.h"
+#include "CppUTest/TestOutput.h"
 #include "CppUTest/TestTestingFixture.h"
 
 #define GENERIC_PLUGIN  "GenericPlugin"

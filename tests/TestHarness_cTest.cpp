@@ -31,7 +31,7 @@ extern "C" {
 
 }
 #include "CppUTest/TestHarness.h"
-#include "CppUTest/MockTestOutput.h"
+#include "CppUTest/TestOutput.h"
 #include "CppUTest/TestTestingFixture.h"
 
 TEST_GROUP(TestHarness_c)

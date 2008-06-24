@@ -33,7 +33,7 @@ class TestTestingFixture
 public:
 
 	TestTestingFixture() {
-		output = new MockTestOutput();
+		output = new StringBufferTestOutput();
     	result = new TestResult(*output);
   		genTest = new ExecFunctionTest();
   		registry = new TestRegistry();
@@ -71,7 +71,7 @@ public:
  		assertPrintContains(output, contains);
  	}
 
- 	static void assertPrintContains(MockTestOutput* output, const SimpleString& contains)
+ 	static void assertPrintContains(StringBufferTestOutput* output, const SimpleString& contains)
  	{
 		if (output->getOutput().contains(contains))
 			return;
@@ -87,7 +87,7 @@ public:
 
 	TestRegistry* 	registry;
 	ExecFunctionTest* 	genTest;
-	MockTestOutput* output;
+	StringBufferTestOutput* output;
 	TestResult *	result;
 };
 

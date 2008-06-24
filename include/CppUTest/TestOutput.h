@@ -83,4 +83,73 @@ class TestOutput
 TestOutput& operator<<(TestOutput&, const char*);
 TestOutput& operator<<(TestOutput&, long);
 
+///////////////////////////////////////////////////////////////////////////////
+//
+//  ConsoleTestOutput.h
+//
+//  Printf Based Solution
+//
+///////////////////////////////////////////////////////////////////////////////
+
+class ConsoleTestOutput : public TestOutput
+  {
+  public:
+    explicit ConsoleTestOutput()
+    {}
+    ;
+    virtual ~ConsoleTestOutput()
+    {}
+    ;
+
+    void print(const char* s);
+
+  private:
+
+    ConsoleTestOutput(const ConsoleTestOutput&);
+    ConsoleTestOutput& operator=(const ConsoleTestOutput&);
+
+  };
+
+///////////////////////////////////////////////////////////////////////////////
+//
+//  StringBufferTestOutput.h
+//
+//  TestOutput for test purposes
+//
+///////////////////////////////////////////////////////////////////////////////
+
+
+class StringBufferTestOutput : public TestOutput
+  {
+  public:
+    explicit StringBufferTestOutput()
+    {}
+    ;
+    virtual ~StringBufferTestOutput()
+    {}
+    ;
+
+    void print(const char* s)
+    {
+      output += s;
+    }
+
+    void flush()
+    {
+      output = "";
+    }
+
+    const SimpleString& getOutput()
+    {
+      return output;
+    }
+
+  private:
+    SimpleString output;
+
+    StringBufferTestOutput(const StringBufferTestOutput&);
+    StringBufferTestOutput& operator=(const StringBufferTestOutput&);
+
+  };
+
 #endif  // D_TestOutput_h

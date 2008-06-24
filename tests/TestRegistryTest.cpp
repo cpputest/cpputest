@@ -26,7 +26,7 @@
  */
 
 #include "CppUTest/TestHarness.h"
-#include "CppUTest/MockTestOutput.h"
+#include "CppUTest/TestOutput.h"
 
 namespace
   {
@@ -85,7 +85,7 @@ class MockTestResult : public TestResult
 TEST_GROUP(TestRegistry)
 {
 	TestRegistry* myRegistry;
-	MockTestOutput* output;
+	StringBufferTestOutput* output;
 	MockTest* test1;
 	MockTest* test2;
 	MockTest* test3;
@@ -94,7 +94,7 @@ TEST_GROUP(TestRegistry)
   TEST_SETUP() 
   {
     UT_PTR_SET(PlatformSpecificExitCurrentTest, FakePlatformSpecificExitCurrentTest);
-    output = new MockTestOutput();
+    output = new StringBufferTestOutput();
     mockResult = new MockTestResult(*output);
     result = mockResult;
     test1 = new MockTest();

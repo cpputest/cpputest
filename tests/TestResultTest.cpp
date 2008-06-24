@@ -26,7 +26,7 @@
  */
 
 #include "CppUTest/TestHarness.h"
-#include "CppUTest/MockTestOutput.h"
+#include "CppUTest/TestOutput.h"
 
 static long MockGetPlatformSpecificTimeInMillis()
 {
@@ -36,14 +36,14 @@ static long MockGetPlatformSpecificTimeInMillis()
 TEST_GROUP(TestResult)
 {
 	TestOutput* printer;
-	MockTestOutput* mock;
+	StringBufferTestOutput* mock;
 	
 	TestResult* res;
 
 	TEST_SETUP()
 	{
 	    UT_PTR_SET(PlatformSpecificExitCurrentTest, FakePlatformSpecificExitCurrentTest);
-		mock = new MockTestOutput();
+		mock = new StringBufferTestOutput();
 		printer = mock;
 		res = new TestResult(*printer);
 		SetPlatformSpecificTimeInMillisMethod(MockGetPlatformSpecificTimeInMillis);

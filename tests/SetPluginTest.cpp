@@ -1,6 +1,6 @@
 
 #include "CppUTest/TestHarness.h"
-#include "CppUTest/MockTestOutput.h"
+#include "CppUTest/TestOutput.h"
 #include "CppUTest/TestPlugin.h"
 
 void orig_func1 () {};
@@ -15,7 +15,7 @@ TEST_GROUP(SetPointerPluginTest)
 {
 	SetPointerPlugin* plugin;
 	TestRegistry* myRegistry;
-	MockTestOutput* output;
+	StringBufferTestOutput* output;
 	TestResult* result;
 	
 	void setup() 
@@ -24,7 +24,7 @@ TEST_GROUP(SetPointerPluginTest)
     	plugin = new SetPointerPlugin("TestSetPlugin");
 		myRegistry->setCurrentRegistry(myRegistry);
 		myRegistry->installPlugin(plugin);
-    	output = new MockTestOutput();
+    	output = new StringBufferTestOutput();
   		result = new TestResult(*output);
   	}
   

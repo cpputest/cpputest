@@ -27,17 +27,16 @@
 
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/CommandLineTestRunner.h"
-#include "CppUTest/MockTestOutput.h"
 #include "CppUTest/TestTestingFixture.h"
 #include <string.h>
 
 TEST_GROUP(CommandLineTestRunner)
 {
 	CommandLineTestRunner* runner;
-	MockTestOutput *output;
+	StringBufferTestOutput *output;
 	void setup()
 	{
- 		output = new MockTestOutput(); 
+ 		output = new StringBufferTestOutput(); 
 		runner = new CommandLineTestRunner(output);
 	}
 	void teardown()

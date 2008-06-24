@@ -25,8 +25,8 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "CppUTest/TestOutput.h"
 #include "CppUTest/SimpleString.h"
+#include "CppUTest/TestOutput.h"
 #include "CppUTest/Utest.h"
 #include "CppUTest/Failure.h"
 #include "CppUTest/TestResult.h"
@@ -176,3 +176,15 @@ void TestOutput::print(const Failure& failure)
     print(failure.getMessage().asCharString());
     print("\n\n");
 }
+
+void ConsoleTestOutput::print(const char* s)
+{
+  while(*s)
+    {
+      if ('\n' == *s)
+        putchar('\r');
+      putchar(*s);
+      s++;
+    }
+}
+

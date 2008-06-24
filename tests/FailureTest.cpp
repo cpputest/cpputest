@@ -26,7 +26,7 @@
  */
 
 #include "CppUTest/TestHarness.h"
-#include "CppUTest/MockTestOutput.h"
+#include "CppUTest/TestOutput.h"
 
 
 namespace
@@ -38,12 +38,12 @@ namespace
 TEST_GROUP(Failure)
   {
   Utest* test;
-  MockTestOutput* printer;
+  StringBufferTestOutput* printer;
 
   TEST_SETUP()
   {
     test = new NullTest();
-    printer = new MockTestOutput();
+    printer = new StringBufferTestOutput();
   }
   TEST_TEARDOWN()
   {
