@@ -43,13 +43,6 @@ void TestOutput::verbose()
 	verbose_ = true;
 }
 
-void TestOutput::print(const char* s)
-{
-    for (const char* p = s; *p; p++)
-        putchar(*p);
-    flush();
-}
-
 void TestOutput::print(long n)
 {
   print(StringFrom(n).asCharString());
@@ -122,7 +115,6 @@ void TestOutput::printCurrentGroupEnded(const TestResult& res)
 
 void TestOutput::flush()
 {
-    fflush(stdout);
 }
 
 void TestOutput::printTestsEnded(const TestResult& result)
@@ -179,12 +171,16 @@ void TestOutput::print(const Failure& failure)
 
 void ConsoleTestOutput::print(const char* s)
 {
-  while(*s)
-    {
+	while(*s) {
       if ('\n' == *s)
         putchar('\r');
       putchar(*s);
       s++;
     }
+    flush();
 }
 
+void ConsoleTestOutput::flush()
+{
+	fflush(stdout);
+}

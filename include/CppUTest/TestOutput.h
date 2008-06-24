@@ -57,7 +57,7 @@ class TestOutput
 	virtual void printCurrentGroupEnded(const TestResult& res);
 	
 	virtual void verbose();
-    virtual void print(const char*);
+    virtual void print(const char*)=0;
     virtual void print(long);
     virtual void printDouble(double);
     virtual void printHex(long);
@@ -65,7 +65,6 @@ class TestOutput
 	virtual void printTestRun(int number, int total);
     virtual void setProgressIndicator(const char*);
 	
-
 	virtual void flush();
 
   private:
@@ -94,20 +93,15 @@ TestOutput& operator<<(TestOutput&, long);
 class ConsoleTestOutput : public TestOutput
   {
   public:
-    explicit ConsoleTestOutput()
-    {}
-    ;
-    virtual ~ConsoleTestOutput()
-    {}
-    ;
+    explicit ConsoleTestOutput() {};
+    virtual ~ConsoleTestOutput() {};
 
-    void print(const char* s);
+    virtual void print(const char* s);
+	virtual void flush();
 
   private:
-
     ConsoleTestOutput(const ConsoleTestOutput&);
     ConsoleTestOutput& operator=(const ConsoleTestOutput&);
-
   };
 
 ///////////////////////////////////////////////////////////////////////////////
