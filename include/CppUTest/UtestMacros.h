@@ -120,6 +120,10 @@
 #define LONGS_EQUAL_LOCATION(expected,actual,file,line)\
   { if (!Utest::getCurrent()->assertLongsEqual(expected, actual,  file, line)) return; }
 
+#define BYTES_EQUAL(expected, actual)\
+    LONGS_EQUAL((expected) & 0xff,(actual) & 0xff)
+
+
 //Check two doubles for equality within a tolerance threshold
 #define DOUBLES_EQUAL(expected,actual,threshold)\
   DOUBLES_EQUAL_LOCATION(expected,actual,threshold,__FILE__,__LINE__)
