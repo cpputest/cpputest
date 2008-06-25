@@ -87,6 +87,7 @@ TEST(Utest, allMacros)
 {
   CHECK(0 == 0);
   LONGS_EQUAL(1,1);
+  BYTES_EQUAL(0xab,0xab);
   CHECK_EQUAL("THIS", "THIS");
   CHECK_EQUAL(100,100);
   STRCMP_EQUAL("THIS", "THIS");
