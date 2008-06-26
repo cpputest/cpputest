@@ -29,10 +29,8 @@ TARGET		  cpputest.lib
 TARGETTYPE	  LIB
 UID			 0x00000000 0x03A6305A
 
-USERINCLUDE	 ..\include ..\include\Platforms\Symbian
+USERINCLUDE	 ..\include ..\include\CppUTest ..\include\Platforms\Symbian
 SYSTEMINCLUDE   \epoc32\include \epoc32\include\stdapis
-
-LIBRARY		 euser.lib libc.lib libm.lib libpthread.lib
 
 SOURCEPATH ..\src\CppUTest
 SOURCE CommandLineTestRunner.cpp Failure.cpp MemoryLeakWarningPlugin.cpp SimpleString.cpp TestOutput.cpp TestPlugin.cpp TestRegistry.cpp TestResult.cpp Utest.cpp JUnitTestOutput.cpp TestHarness_c.cpp
