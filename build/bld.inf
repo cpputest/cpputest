@@ -29,17 +29,17 @@ PRJ_PLATFORMS
 DEFAULT
 
 PRJ_EXPORTS
-..\include\CppUTest\TestHarness.h CppUTest\TestHarness.h
-..\include\CppUTest\Utest.h CppUTest\Utest.h
-..\include\CppUTest\TestResult.h CppUTest\TestResult.h
-..\include\CppUTest\Failure.h CppUTest\Failure.h
-..\include\CppUTest\TestRegistry.h CppUTest\TestRegistry.h
-..\include\CppUTest\SimpleString.h CppUTest\SimpleString.h
-..\include\CppUTest\MemoryLeakWarning.h CppUTest\MemoryLeakWarning.h
-..\include\CppUTest\CommandLineTestRunner.h CppuTest\CommandLineTestRunner.h
-..\include\CppUTest\TestOutput.h CppuTest\TestOutput.h
-..\include\Platforms\Symbian\Platform.h CppuTest\Platform.h
-../include/CppUTest/TestPlugin.h CppUTest
+..\include\CppUTest\TestHarness.h \epoc32\include\CppUTest\TestHarness.h
+..\include\CppUTest\Utest.h \epoc32\include\CppUTest\Utest.h
+..\include\CppUTest\UtestMacros.h \epoc32\include\CppUTest\UtestMacros.h
+..\include\CppUTest\TestResult.h \epoc32\include\CppUTest\TestResult.h
+..\include\CppUTest\Failure.h \epoc32\include\CppUTest\Failure.h
+..\include\CppUTest\TestRegistry.h \epoc32\include\CppUTest\TestRegistry.h
+..\include\CppUTest\SimpleString.h \epoc32\include\CppUTest\SimpleString.h
+..\include\CppUTest\MemoryLeakWarning.h \epoc32\include\CppUTest\MemoryLeakWarning.h
+..\include\CppUTest\CommandLineTestRunner.h \epoc32\include\CppuTest\CommandLineTestRunner.h
+..\include\CppUTest\TestOutput.h \epoc32\include\CppuTest\TestOutput.h
+..\include\CppUTest\TestPlugin.h \epoc32\include\CppUTest\TestPlugin.h
 
 PRJ_MMPFILES
 cpputest.mmp
