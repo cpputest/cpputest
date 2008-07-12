@@ -45,6 +45,7 @@ The failure of one of these macros causes the current test to immediately exit
     * STRCMP_EQUAL(expected, actual) - check const char* strings for equality 
       using strcmp
     * LONGS_EQUAL(expected, actual) - Compares two numbers
+    * BYTESS_EQUAL(expected, actual) - Compares two numbers, eight bits wide
     * DOUBLES_EQUAL(expected, actual, tolerance) - Compares two doubles 
       within some tolerance
     * FAIL(text) - always fails
@@ -55,6 +56,8 @@ Customize CHECK_EQUAL to work with your types that support operator==()
     * Create the function
 
         SimpleString StringFrom (const yourType&)
+        
+    The Extensions directory has a few of these.
 
 Building default checks with TestPlugin
 
@@ -83,9 +86,17 @@ Memory leak detection
 
     * A platform specific memory leak detection mechanism is provided.
     * If a test fails and has allocated memory prior to the fail and 
-      that memory is not cleaned up by TearDown, a memory leak is reported. It is best to only chase memory leaks when other errors have been eliminated.
+      that memory is not cleaned up by TearDown, a memory leak is reported. 
+      It is best to only chase memory leaks when other errors have 
+      been eliminated.
     * Some code uses lazy initialization and appears to leak when it 
-      really does not (for example: gcc stringstream used to in an earlier release). One cause is that some standard library calls allocate something and do not free it until after main (or never). To find out if a memory leak is due to lazy initialization set the -r switch to run tests twice. The signature of this situation is that the first run shows leaks and the second run shows no leaks. When both runs show leaks, you have a leak to find.
+      really does not (for example: gcc stringstream used to in an 
+      earlier release). One cause is that some standard library calls 
+      allocate something and do not free it until after main (or never). 
+      To find out if a memory leak is due to lazy initialization set 
+      the -r switch to run tests twice. The signature of this situation 
+      is that the first run shows leaks and the second run shows no 
+      leaks. When both runs show leaks, you have a leak to find.
 
 How is memory leak detection implemented?
 
@@ -93,7 +104,7 @@ How is memory leak detection implemented?
     * After TearDown() another checkpoint is taken and compared to the 
       original checkpoint
     * In Visual Studio the MS debug heap capabilities are used
-    * For GCC a simple new/delete count is used in overriden operators new,  
+    * For GCC a simple new/delete count is used in overridden operators new,  
       new[], delete and delete[]
 
 
@@ -128,11 +139,11 @@ TEST_GROUP(ClassName)
 {
   ClassName* className;
 
-  void Setup()
+  void setup()
   {
     className = new ClassName();
   }
-  void Teardown()
+  void teardown()
   {
     delete className;
   }

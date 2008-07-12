@@ -1,6 +1,9 @@
 #Set this to @ to keep the makefile quiet
 SILENCE = @
 
+#Set to Y to get extensions.  This brings in string support, and stdint support
+ENABLE_EXTENSIONS = N
+
 #---- Outputs ----#
 COMPONENT_NAME = CppUTest
 TARGET_LIB = \
@@ -25,22 +28,28 @@ CPPFLAGS =
 SRC_DIRS = \
 	src/CppUTest \
 	src/Platforms/$(CPP_PLATFORM)
-
+	
 #TEST_SRC_DIRS is a list of directories including 
-# - A test main (AllTests.cpp by conventin)
+# - A test main (AllTests.cpp by convention)
 # - OBJ files in these directories are included in the TEST_TARGET
 # - Consequently - AllTests.h containing the IMPORT_TEST_GROUPS is not needed
 # - 
 TEST_SRC_DIRS = \
-	tests 
-
+	tests
 
 #includes for all compiles	
 INCLUDES =\
   -I.\
-  -I$(CPPUTEST_HOME)/include
+  -I$(CPPUTEST_HOME)/include\
+  -I$(CPPUTEST_HOME)/include/Platforms/$(CPP_PLATFORM)
 
-#Flags to pass to ld
+#Add extension directories if enabled
+ifeq ($(ENABLE_EXTENSIONS), Y)
+SRC_DIRS +=	src/CppUTest/Extensions
+TEST_SRC_DIRS += tests/Extensions 
+endif
+
+#Flags to pass to ar, ld
 LDFLAGS +=
 	
 include $(CPPUTEST_HOME)/build/ComponentMakefile

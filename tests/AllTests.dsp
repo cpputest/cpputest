@@ -100,10 +100,6 @@ SOURCE=.\FailureTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\FunctionPointPluginerTest.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\JUnitOutputTest.cpp
 # End Source File
 # Begin Source File
@@ -113,6 +109,14 @@ SOURCE=.\MemoryLeakWarningTest.cpp
 # Begin Source File
 
 SOURCE=.\NullTestTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\PluginTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\SetPluginTest.cpp
 # End Source File
 # Begin Source File
 
@@ -156,7 +160,7 @@ SOURCE=.\AllTests.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\GenericTest.h
+SOURCE=.\Extensions\AllTests.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"

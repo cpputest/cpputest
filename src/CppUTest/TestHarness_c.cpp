@@ -70,7 +70,7 @@ extern "C" {
 	
 	void  CHECK_C_LOCATION(int condition, const char* conditionString, const char* fileName, int lineNumber)
 	{
-		CHECK_LOCATION(condition, conditionString, fileName, lineNumber);	
+		CHECK_LOCATION(((condition) == 0 ? false : true), conditionString, fileName, lineNumber);	
 	}
 	
 	

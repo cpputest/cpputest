@@ -148,6 +148,86 @@ SOURCE=.\src\Platforms\VisualCpp\Win32MemoryLeakWarning.cpp
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
+# Begin Source File
+
+SOURCE=.\include\CppUTest\CommandLineTestRunner.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTest\Failure.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTest\FindLeaksMalloc.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTest\JUnitTestOutput.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTest\MemoryLeakWarning.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTest\MemoryLeakWarningPlugin.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\Platforms\VisualCpp\Platform.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTest\SimpleString.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTest\Extensions\SimpleStringExtensions.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTest\Extensions\SimpleStringFromStdint.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTest\TestHarness.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTest\TestHarness_c.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTest\TestOutput.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTest\TestPlugin.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTest\TestRegistry.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTest\TestResult.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTest\TestTestingFixture.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTest\Utest.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTest\UtestMacros.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTest\VirtualCall.h
+# End Source File
 # End Group
 # End Target
 # End Project
