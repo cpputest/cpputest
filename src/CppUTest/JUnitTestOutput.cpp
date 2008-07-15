@@ -25,13 +25,12 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "Platform.h"
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/JUnitTestOutput.h"
 #include "CppUTest/TestResult.h"
 #include "CppUTest/Failure.h"
 #include <stdio.h>
- 
+
 JUnitTestOutput::JUnitTestOutput()
 {
 }
@@ -115,7 +114,7 @@ void JUnitTestOutput::writeTestSuiteSummery()
 {
 	const int buf_size = 1024;
 	static char buf[buf_size];
-	snprintf(buf, buf_size, "<testsuite errors=\"0\" failures=\"%d\" hostname=\"localhost\" name=\"%s\" tests=\"%d\" time=\"%d.0\" timestamp=\"%s\">\n",
+	cpputest_snprintf(buf, buf_size, "<testsuite errors=\"0\" failures=\"%d\" hostname=\"localhost\" name=\"%s\" tests=\"%d\" time=\"%d.0\" timestamp=\"%s\">\n",
 			results_.failureCount_, results_.group_.asCharString(), results_.testCount_, (int) results_.groupExecTime_, GetPlatformSpecificTimeString().asCharString());
 	writeToFile(buf);
 }
@@ -134,14 +133,14 @@ void JUnitTestOutput::writeTestCases()
 
   	JUnitTestCaseResultNode* cur = results_.head_;
   	while (cur) {
-		snprintf(buf, buf_size, "<testcase classname=\"%s\" name=\"%s\" time=\"%d.0\">\n", 
+		cpputest_snprintf(buf, buf_size, "<testcase classname=\"%s\" name=\"%s\" time=\"%d.0\">\n", 
 			results_.group_.asCharString(), cur->name_.asCharString(), (int) cur->execTime_);
 		writeToFile(buf);
 		
 		if (cur->failure_) {
 			writeFailure(cur);
 		}
-		snprintf(buf, buf_size, "</testcase>\n");
+		cpputest_snprintf(buf, buf_size, "</testcase>\n");
 		writeToFile(buf);
   		cur = cur->next_;
   	}
@@ -157,7 +156,7 @@ void JUnitTestOutput::writeFailure(JUnitTestCaseResultNode* node)
 	message.replace('<','[');
 	message.replace('>',']');
 	message.replace("\n","{newline}");
-	snprintf(buf, buf_size, "<failure message=\"%s:%d: %s\" type=\"AssertionFailedError\">\n", 
+	cpputest_snprintf(buf, buf_size, "<failure message=\"%s:%d: %s\" type=\"AssertionFailedError\">\n", 
 		node->failure_->getFileName().asCharString(), node->failure_->getLineNumber(), message.asCharString());
 
 	writeToFile(buf);

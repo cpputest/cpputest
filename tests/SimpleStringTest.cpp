@@ -261,4 +261,20 @@ TEST(SimpleString, HexStrings)
   STRCMP_EQUAL("ffff", h1.asCharString());
 }
 
+TEST(SimpleString, cpputest_snprintf_fits)
+{
+    char buf[10];
+    
+    int count = cpputest_snprintf(buf, sizeof(buf), "%s", "12345");
+    STRCMP_EQUAL("12345", buf);
+    LONGS_EQUAL(5, count);
+}
 
+TEST(SimpleString, cpputest_snprintf_doesNotFit)
+{
+    char buf[10];
+    
+    int count = cpputest_snprintf(buf, sizeof(buf), "%s", "12345678901");
+    STRCMP_EQUAL("123456789", buf);
+    LONGS_EQUAL(-1, count);
+}

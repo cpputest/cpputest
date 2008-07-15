@@ -2,6 +2,9 @@
 #include "CppUTest/TestHarness.h"
 #include <time.h>
 #include <sys/time.h>
+#include <stdio.h>
+#include <stdarg.h>
+
 
 void Utest::executePlatformSpecificTestBody()
 {
@@ -91,5 +94,17 @@ void FakePlatformSpecificExitCurrentTest()
 }
 
 void (*PlatformSpecificExitCurrentTest)() = PlatformSpecificExitCurrentTestImpl;
+
+int cpputest_snprintf(char *str, size_t size, const char *format, ...) 
+{
+   va_list args;
+   va_start(args, format);
+   size_t count = vsnprintf( str, size, format, args);
+   if (size < count)
+       return -1;
+   else
+       return count;
+}
+
 
 

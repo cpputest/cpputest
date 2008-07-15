@@ -25,7 +25,6 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "Platform.h"
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/JUnitTestOutput.h"
 #include "CppUTest/TestResult.h"
@@ -244,13 +243,13 @@ TEST_GROUP(JUnitOutputTest)
 			static char buf[1024];
 			
 			for (int index = 0, curTest = 0; curTest < currentGroup().numberTests_; curTest++, index++) {
-				snprintf(buf, 1024, "<testcase classname=\"%s\" name=\"%s\" time=\"10.0\">\n", 
+				cpputest_snprintf(buf, 1024, "<testcase classname=\"%s\" name=\"%s\" time=\"10.0\">\n", 
 					currentGroup().name_.asCharString(), currentGroup().testData_[curTest].tst_->getName().asCharString()); 				
 				STRCMP_EQUAL(buf, arr[index].asCharString());
 				if (currentGroup().testData_[curTest].failure_) {
 					CHECK_FAILURE(arr, index, curTest);
 				}
-				snprintf(buf, 1024, "</testcase>\n");
+				cpputest_snprintf(buf, 1024, "</testcase>\n");
 				STRCMP_EQUAL(buf, arr[++index].asCharString());
 				
 			}				
@@ -265,7 +264,7 @@ TEST_GROUP(JUnitOutputTest)
 			message.replace('<','[');
 			message.replace('>',']');
 			message.replace("\n","{newline}");
-			snprintf(buf, 1024, "<failure message=\"%s:%d: %s\" type=\"AssertionFailedError\">\n", f.getFileName().asCharString(), f.getLineNumber(), message.asCharString()); 
+			cpputest_snprintf(buf, 1024, "<failure message=\"%s:%d: %s\" type=\"AssertionFailedError\">\n", f.getFileName().asCharString(), f.getLineNumber(), message.asCharString()); 
 			STRCMP_EQUAL(buf, arr[i].asCharString());
 			i++;
 			STRCMP_EQUAL("</failure>\n", arr[i].asCharString());

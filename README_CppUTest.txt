@@ -45,7 +45,7 @@ The failure of one of these macros causes the current test to immediately exit
     * STRCMP_EQUAL(expected, actual) - check const char* strings for equality 
       using strcmp
     * LONGS_EQUAL(expected, actual) - Compares two numbers
-    * BYTESS_EQUAL(expected, actual) - Compares two numbers, eight bits wide
+    * BYTES_EQUAL(expected, actual) - Compares two numbers, eight bits wide
     * DOUBLES_EQUAL(expected, actual, tolerance) - Compares two doubles 
       within some tolerance
     * FAIL(text) - always fails

@@ -26,11 +26,13 @@
  */
 
 #include "CppUTest/CommandLineTestRunner.h"
+#include "CppUTest/TestPlugin.h"
 
 int main(int ac, char** av)
 {
     TestRegistry* r = TestRegistry::getCurrentRegistry();
-    r->installPlugin(new FunctionPointerPlugin());
+    SetPointerPlugin ps("PointerStore");
+    r->installPlugin(&ps);
     return CommandLineTestRunner::RunAllTests(ac, av);
 }
 

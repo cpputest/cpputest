@@ -18,13 +18,13 @@ TEST_GROUP(HelloWorld)
 	{
 		va_list arguments;
 		va_start(arguments, output);
-		vsnprintf(buffer, BUFFER_SIZE, output, arguments);
+		cpputest_snprintf(buffer, BUFFER_SIZE, output, arguments);
 		va_end(arguments);
 		return 1;
 	}
 	void setup()
   	{
-  		UT_FPSET(helloWorldApiInstance.printHelloWorld_output, &output_method);
+	    UT_PTR_SET(helloWorldApiInstance.printHelloWorld_output, &output_method);
   	}
   	void teardown()
   	{

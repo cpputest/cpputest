@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <windows.h>
 #include <mmsystem.h>
+#include <stdarg.h>
 
 void Utest::executePlatformSpecificTestBody()
 {
@@ -68,4 +69,13 @@ void FakePlatformSpecificExitCurrentTest()
 }
 
 void (*PlatformSpecificExitCurrentTest)() = PlatformSpecificExitCurrentTestImpl;
+
+int cpputest_snprintf(char *str, size_t size, const char *format, ...) 
+{
+    va_list args;
+    va_start(args, format);
+    memset(str, 0, size);
+    return _vsnprintf( str, size-1, format, args);
+}
+
 

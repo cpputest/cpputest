@@ -2,7 +2,7 @@
 SILENCE = @
 
 #Set to Y to get extensions.  This brings in string support, and stdint support
-ENABLE_EXTENSIONS = N
+ENABLE_EXTENSIONS = Y
 
 #---- Outputs ----#
 COMPONENT_NAME = CppUTest
@@ -53,3 +53,7 @@ endif
 LDFLAGS +=
 	
 include $(CPPUTEST_HOME)/build/ComponentMakefile
+
+.PHONY: examples
+examples: 
+	make -C examples clean all

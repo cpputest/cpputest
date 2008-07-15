@@ -64,7 +64,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /GR- /GX /ZI /Od /I "$(CPP_U_TEST)/include" /I "$(CPP_U_TEST)/include/Platforms/VisualCpp" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /GX /ZI /Od /I "../../include" /I "../../include/Platforms/VisualCpp" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /GZ /c
 # SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
@@ -90,23 +90,11 @@ SOURCE=.\CircularBuffer.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\CircularBufferTest.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\hello.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\HelloTest.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\Printer.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\PrinterTest.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
