@@ -40,8 +40,7 @@ TEST_SRC_DIRS = \
 #includes for all compiles	
 INCLUDES =\
   -I.\
-  -I$(CPPUTEST_HOME)/include\
-  -I$(CPPUTEST_HOME)/include/Platforms/$(CPP_PLATFORM)
+  -I$(CPPUTEST_HOME)/include
 
 #Add extension directories if enabled
 ifeq ($(ENABLE_EXTENSIONS), Y)
