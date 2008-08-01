@@ -16,7 +16,7 @@ TEST_TARGET = \
 	$(COMPONENT_NAME)_tests
 
 #--- Inputs ----#
-CPPUTEST_HOME = ../../CppUTest
+CPPUTEST_HOME = ..
 CPP_PLATFORM = Gcc
 
 #CFLAGS are set to override malloc and free to get memory leak detection in C programs
