@@ -18,7 +18,7 @@ TEST_GROUP(HelloWorld)
 	{
 		va_list arguments;
 		va_start(arguments, output);
-		cpputest_snprintf(buffer, BUFFER_SIZE, output, arguments);
+		PlatformSpecificSprintf(buffer, BUFFER_SIZE, output, arguments);
 		va_end(arguments);
 		return 1;
 	}

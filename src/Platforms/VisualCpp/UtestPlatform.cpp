@@ -70,7 +70,7 @@ void FakePlatformSpecificExitCurrentTest()
 
 void (*PlatformSpecificExitCurrentTest)() = PlatformSpecificExitCurrentTestImpl;
 
-int cpputest_snprintf(char *str, size_t size, const char *format, ...) 
+int PlatformSpecificSprintf(char *str, size_t size, const char *format, ...) 
 {
     va_list args;
     va_start(args, format);

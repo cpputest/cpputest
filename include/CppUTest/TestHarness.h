@@ -58,7 +58,7 @@ extern void (*PlatformSpecificExitCurrentTest)();
 extern void FakePlatformSpecificExitCurrentTest();
 extern void PlatformSpecificExitCurrentTestImpl();
 
-int cpputest_snprintf(char *str, size_t size, const char *format, ...);
+int PlatformSpecificSprintf(char *str, size_t size, const char *format, ...);
 
 #endif
 
