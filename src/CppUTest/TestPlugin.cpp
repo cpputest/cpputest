@@ -85,7 +85,7 @@ TestPlugin* TestPlugin::getNext()
 }
 TestPlugin* TestPlugin::removePluginByName(const SimpleString& name)
 {
-	TestPlugin* removed;
+	TestPlugin* removed = 0;
 	if (next_ && next_->getName() == name) {
 		removed = next_;
 		next_ = next_->next_;

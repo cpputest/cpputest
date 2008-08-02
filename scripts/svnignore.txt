@@ -1,0 +1,17 @@
+*.d
+Debug
+*.exe
+*.obj
+*.o
+*.a
+*.ncb
+*.opt
+*.plg
+*.idb
+*.pdb
+*.lib
+.settings
+doxygen
+*.gcov
+*.gcno
+*.gcda
