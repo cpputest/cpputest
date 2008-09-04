@@ -7,6 +7,6 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 void ClassName_Create(void);
-void ClassName_Destroy();
+void ClassName_Destroy(void);
 
 #endif  // D_ClassName_H

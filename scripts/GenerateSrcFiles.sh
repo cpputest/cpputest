@@ -1,7 +1,7 @@
 #!/bin/bash -x
 #$1 is the template root file name
 #$2 is the kind of file to create (c or cpp)
-#$3 is Mock if a mock version should be created
+#$3 is Mock if a mock version should be created, Fake for a fake C version
 #$4 is the class/module name
 #$5 is the package name
 
@@ -39,6 +39,8 @@ templateHFile=$TEMPLATE_DIR/$templateRootName.h
 templateSrcFile=$TEMPLATE_DIR/$templateRootName.$srcSuffix
 if [ "$mock" == "Mock" ] ; then
   templateTestFile=$TEMPLATE_DIR/Interface$testSuffix.cpp
+elif [ "$mock" == "Fake" ] ; then
+  templateTestFile=$TEMPLATE_DIR/InterfaceC$testSuffix.cpp
 else
   templateTestFile=$TEMPLATE_DIR/$templateRootName$testSuffix.cpp
 fi
@@ -55,14 +57,15 @@ if [ ! "$packageName" == "" ]
     includeDir=include/$packageName/
     testsDir=tests/$packageName/
   fi
-  
-  
+
 #identify the files being created
 hFile=${includeDir}${className}.h
 srcFile=${srcDir}${className}.${srcSuffix}
 testFile=${testsDir}${className}${testSuffix}.cpp
-if [ "$mock" == "Mock" ] ; then
-  mockFile=${testsDir}Mock${className}.h
+if [ "$mock" != "NoMock" ] ; then
+  mockFile=${testsDir}${mock}${className}.h
+  srcFile=${testsDir}${mock}${className}.${srcSuffix}
+  testFile=${testsDir}${mock}${className}${testSuffix}.cpp
 else
   mockFile=
 fi
@@ -82,7 +85,7 @@ generateFileIfNotAlreadyThere() {
 generateFileIfNotAlreadyThere $templateHFile $hFile
 generateFileIfNotAlreadyThere $templateSrcFile $srcFile
 generateFileIfNotAlreadyThere $templateTestFile $testFile
-if [ "$mock" == "Mock" ] ; then
+if [ "$mock" != "NoMock" ] ; then
   generateFileIfNotAlreadyThere $templateMockFile $mockFile
 #  sed $sedCommands $templateMockFile | tr -d "\r" >$mockFile
 fi
