@@ -54,7 +54,7 @@ SimpleString::SimpleString (const char *other, int repeatCount)
         next += strlen(other);
     }
     *next = 0;
-    
+
 }
 SimpleString::SimpleString (const SimpleString& other)
 {
@@ -155,9 +155,9 @@ void SimpleString::replace(const char* to, const char* with)
 	int len = size();
 	int tolen = strlen(to);
 	int withlen = strlen(with);
-	
+
 	int newsize = len + (withlen * c) - (tolen * c) + 1;
-	
+
 	if (newsize) {
 		char* newbuf = new char[newsize];
 		for (int i = 0, j = 0; i < len;) {
@@ -179,7 +179,7 @@ void SimpleString::replace(const char* to, const char* with)
 	else {
   	  buffer = new char [1];
   	  buffer [0] = '\0';
-	}		
+	}
 }
 
 
@@ -261,7 +261,10 @@ SimpleString StringFrom (long value)
 
 SimpleString StringFrom (void* value)
 {
-  return HexStringFrom((long int)value);
+    char buffer [20];
+    sprintf (buffer, "%p", value);
+
+    return SimpleString(buffer);
 }
 
 SimpleString HexStringFrom (long value)

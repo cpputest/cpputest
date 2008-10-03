@@ -41,5 +41,6 @@ INCLUDES =\
 
 #Flags to pass to ld
 LDFLAGS +=
-	
+USER_LIBS =
+
 include $(CPPUTEST_HOME)/build/ComponentMakefile

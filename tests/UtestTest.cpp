@@ -51,7 +51,7 @@ static void _failMethod()
 TEST(Utest, FailurePrintsSomething)
 {
   fixture->setTestFunction(_failMethod);
-  fixture->runAllTests(); 
+  fixture->runAllTests();
   LONGS_EQUAL(1, fixture->getFailureCount());
   fixture->assertPrintContains("This test fails");
 }
@@ -64,11 +64,23 @@ static void _LongsEqualFailMethod()
 TEST(Utest, FailurePrintHexOutputForLongInts)
 {
   fixture->setTestFunction(_LongsEqualFailMethod);
-  fixture->runAllTests(); 
+  fixture->runAllTests();
   fixture->assertPrintContains("expected <  1 0x01>");
   fixture->assertPrintContains("but was  <255 0xff>");
 }
 
+static void _PointersEqualFailMethod()
+{
+  POINTERS_EQUAL((void*)0xa5a5, (void*)0xf0f0);
+}
+
+TEST(Utest, FailurePrintHexOutputForPointers)
+{
+  fixture->setTestFunction(_PointersEqualFailMethod);
+  fixture->runAllTests();
+  fixture->assertPrintContains("expected <0xa5a5>");
+  fixture->assertPrintContains("but was  <0xf0f0>");
+}
 
 static void _passMethod()
 {
@@ -78,7 +90,7 @@ static void _passMethod()
 TEST(Utest, SuccessPrintsNothing)
 {
   fixture->setTestFunction(_passMethod);
-  fixture->runAllTests(); 
+  fixture->runAllTests();
   LONGS_EQUAL(0, fixture->getFailureCount());
   fixture->assertPrintContains(".\nOK (1 tests");
 }
@@ -92,6 +104,7 @@ TEST(Utest, allMacros)
   CHECK_EQUAL(100,100);
   STRCMP_EQUAL("THIS", "THIS");
   DOUBLES_EQUAL(1.0, 1.0, .01);
+  POINTERS_EQUAL(this, this);
 }
 
 TEST(Utest, AssertsActLikeStatements)
@@ -153,7 +166,7 @@ TEST(Utest, MacrosUsedInSetup)
 	delete fixture->genTest;
 	fixture->genTest = new ExecFunctionTest(_failMethod);
  	fixture->setTestFunction(_passMethod);
- 	fixture->runAllTests(); 
+ 	fixture->runAllTests();
 	LONGS_EQUAL(1, fixture->getFailureCount());
 }
 
@@ -162,7 +175,7 @@ TEST(Utest, MacrosUsedInTearDown)
 	delete fixture->genTest;
 	fixture->genTest = new ExecFunctionTest(0, _failMethod);
  	fixture->setTestFunction(_passMethod);
- 	fixture->runAllTests(); 
+ 	fixture->runAllTests();
 	LONGS_EQUAL(1, fixture->getFailureCount());
 }
 
@@ -170,7 +183,7 @@ TEST_BASE(MyOwnTest)
 {
 	MyOwnTest() : inTest(false) {}
 	bool inTest;
-	
+
 	void setup()
 	{
 		CHECK(!inTest);

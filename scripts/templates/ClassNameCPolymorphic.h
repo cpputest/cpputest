@@ -7,7 +7,9 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-typedef struct _ClassName Classname;
+typedef struct _ClassName ClassnamePiml;
+
+
 
 ClassName* ClassName_Create(void);
 void ClassName_Destroy(ClassName*);

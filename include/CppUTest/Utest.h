@@ -90,17 +90,18 @@ class Utest
     virtual bool assertTrue(bool condition, const char* conditionString, const char* fileName, int lineNumber);
     virtual bool assertCstrEqual(const char* expected, const char* actual, const char* fileName, int lineNumber);
     virtual bool assertLongsEqual(long expected, long actual, const char* fileName, int lineNumber);
+    virtual bool assertPointersEqual(void* expected, void* actual, const char* fileName, int lineNumber);
     virtual bool assertDoublesEqual(double expected, double actual, double threshold, const char* fileName, int lineNumber);
     virtual void fail(const char* text, const char* fileName, int lineNumber);
-	
+
 	void setFileName(const char* fileName);
 	void setLineNumber(int lineNumber);
 	void setGroupName(const char* groupName);
 	void setTestName(const char* testName);
   protected:
-	
+
 	Utest();
-	
+
     Utest(const char* groupName,
          const char* testName,
          const char* fileName,
@@ -129,9 +130,9 @@ class NullTest : public Utest
 
     void testBody()
     {}
-		
+
 		static NullTest& instance();
-		
+
 		virtual int  countTests();
 		virtual Utest*getNext () const;
 		virtual bool isLast () const;

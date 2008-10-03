@@ -67,7 +67,7 @@ flags:
 		echo "    C   $$f" ; \
 	done
 	
-$(TEST_TARGET): $(TEST_OBJS) $(TARGET_LIB) $(CPPUTEST_LIB)
+$(TEST_TARGET): $(TEST_OBJS) $(TARGET_LIB) $(USER_LIBS) $(CPPUTEST_LIB)
 	$(SILENCE)echo Linking $@
 	$(SILENCE)$(CXX) $(CPPFLAGS) $^ $(LDFLAGS) -o $@
 

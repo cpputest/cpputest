@@ -2,7 +2,6 @@
 
 extern "C"
 {
-#include "ClassName.h"
 #include "FakeClassName.h"
 }
 

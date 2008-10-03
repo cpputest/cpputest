@@ -120,11 +120,11 @@ const SimpleString Utest::getName() const
   {
     return SimpleString(name_);
   }
-  
+
 const SimpleString Utest::getGroup() const
 {
 	return SimpleString(group_);
-}  
+}
 
 SimpleString Utest::getFormattedName() const
   {
@@ -244,19 +244,31 @@ bool Utest::assertLongsEqual(long expected, long actual, const char* fileName, i
 {
   testResult_->countCheck();
   if (expected != actual)
-    {       
+    {
       SimpleString aDecimal = StringFrom(actual);
-      SimpleString aHex = HexStringFrom(actual); 
+      SimpleString aHex = HexStringFrom(actual);
       SimpleString eDecimal = StringFrom(expected);
       SimpleString eHex = HexStringFrom(expected);
-      
+
       PadStringsToSameLength(aDecimal, eDecimal, ' ');
       PadStringsToSameLength(aHex, eHex, '0');
-      
+
       SimpleString actualReported = aDecimal + " 0x" + aHex;
       SimpleString expectedReported = eDecimal + " 0x" + eHex;
-       
+
       EqualsFailure _f(this, fileName, lineNumber, expectedReported, actualReported);
+      testResult_->addFailure (_f);
+      return false;
+    }
+  return true;
+}
+
+bool Utest::assertPointersEqual(void* expected, void* actual, const char* fileName, int lineNumber)
+{
+  testResult_->countCheck();
+  if (expected != actual)
+    {
+      EqualsFailure _f(this, fileName, lineNumber, StringFrom(expected), StringFrom(actual));
       testResult_->addFailure (_f);
       return false;
     }
