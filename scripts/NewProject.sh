@@ -27,7 +27,6 @@ changeProjectName . Makefile
 changeProjectName src/util BuildTime.cpp 
 changeProjectName include/util BuildTime.h 
 changeProjectName tests/util BuildTimeTest.cpp 
-changeProjectName tests/util NeedsTests.cpp 
 mv ${PROJECT}Makefile Makefile
 
 cd ${ORIGINAL_DIR}
