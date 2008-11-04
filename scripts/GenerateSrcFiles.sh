@@ -64,7 +64,6 @@ srcFile=${srcDir}${className}.${srcSuffix}
 testFile=${testsDir}${className}${testSuffix}.cpp
 if [ "$mock" != "NoMock" ] ; then
   mockFile=${testsDir}${mock}${className}.h
-  srcFile=${testsDir}${mock}${className}.${srcSuffix}
   testFile=${testsDir}${mock}${className}${testSuffix}.cpp
 else
   mockFile=
