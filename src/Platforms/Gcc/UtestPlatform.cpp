@@ -18,7 +18,7 @@ static long TimeInMillisImplementation()
 	struct timeval tv;
 	struct timezone tz;
 	::gettimeofday(&tv, &tz);
-	return (tv.tv_sec * 1000) + (long)(tv.tv_usec * 0.001);	
+	return (tv.tv_sec * 1000) + (long)(tv.tv_usec * 0.001);
 }
 
 static long (*timeInMillisFp) () = TimeInMillisImplementation;
@@ -65,7 +65,7 @@ void TestRegistry::platformSpecificRunOneTest(Utest* test, TestResult& result)
         runOneTest(test, result) ;
 }
 
-void PlatformSpecificExitCurrentTestImpl() 
+void PlatformSpecificExitCurrentTestImpl()
 {
     longjmp(test_exit_jmp_buf, 1);
 }
@@ -76,26 +76,26 @@ void TestRegistry::platformSpecificRunOneTest(Utest* test, TestResult& result)
 {
     try {
         runOneTest(test, result) ;
-    } 
+    }
     catch (int) {
         //exiting test early
     }
-     
+
 }
 
-void PlatformSpecificExitCurrentTestImpl() 
+void PlatformSpecificExitCurrentTestImpl()
 {
     throw(1);
 }
 #endif
 
-void FakePlatformSpecificExitCurrentTest() 
+void FakePlatformSpecificExitCurrentTest()
 {
 }
 
 void (*PlatformSpecificExitCurrentTest)() = PlatformSpecificExitCurrentTestImpl;
 
-int PlatformSpecificSprintf(char *str, size_t size, const char *format, ...) 
+int PlatformSpecificSprintf(char *str, unsigned int size, const char *format, ...)
 {
    va_list args;
    va_start(args, format);
