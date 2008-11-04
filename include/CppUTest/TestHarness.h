@@ -45,7 +45,6 @@
 #include "TestRegistry.h"
 #include "MemoryLeakWarning.h"
 #include "TestPlugin.h"
-#include <stdio.h>
 
 // Some platform specific methods
 long GetPlatformSpecificTimeInMillis();
@@ -58,7 +57,7 @@ extern void (*PlatformSpecificExitCurrentTest)();
 extern void FakePlatformSpecificExitCurrentTest();
 extern void PlatformSpecificExitCurrentTestImpl();
 
-int PlatformSpecificSprintf(char *str, size_t size, const char *format, ...);
+int PlatformSpecificSprintf(char *str, unsigned int size, const char *format, ...);
 
 #endif
 

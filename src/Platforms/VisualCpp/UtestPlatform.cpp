@@ -52,25 +52,25 @@ void TestRegistry::platformSpecificRunOneTest(Utest* test, TestResult& result)
 {
     try {
         runOneTest(test, result) ;
-    } 
+    }
     catch (int) {
         //exiting test early
     }
-     
+
 }
 
-void PlatformSpecificExitCurrentTestImpl() 
+void PlatformSpecificExitCurrentTestImpl()
 {
     throw(1);
 }
 
-void FakePlatformSpecificExitCurrentTest() 
+void FakePlatformSpecificExitCurrentTest()
 {
 }
 
 void (*PlatformSpecificExitCurrentTest)() = PlatformSpecificExitCurrentTestImpl;
 
-int PlatformSpecificSprintf(char *str, size_t size, const char *format, ...) 
+int PlatformSpecificSprintf(char *str, unsigned int size, const char *format, ...)
 {
     va_list args;
     va_start(args, format);
