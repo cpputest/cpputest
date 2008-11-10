@@ -69,7 +69,6 @@ else
   mockFile=
 fi
 
-echo Creating $hFile $srcFile $testFile $mockFile
 sedCommands="-e s/aClassName/$instanceName/g -e s/ClassName/$className/g"
  
 generateFileIfNotAlreadyThere() {
@@ -77,6 +76,7 @@ generateFileIfNotAlreadyThere() {
     then 
       echo "${2} already exists, skipping"
     else
+      echo "creating ${2}"
       sed $sedCommands $1 | tr -d "\r" >$2
     fi
 }
