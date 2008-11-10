@@ -261,10 +261,7 @@ SimpleString StringFrom (long value)
 
 SimpleString StringFrom (void* value)
 {
-    char buffer [20];
-    sprintf (buffer, "%p", value);
-
-    return SimpleString(buffer);
+    return SimpleString("0x") + HexStringFrom((long)value);
 }
 
 SimpleString HexStringFrom (long value)
