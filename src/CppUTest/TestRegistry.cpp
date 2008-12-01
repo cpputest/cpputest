@@ -50,7 +50,7 @@ void TestRegistry::runAllTests (TestResult& result)
 	bool groupStart = true;
 
 	result.testsStarted ();
-	for (Utest *test = tests; !test->isLast(); test = test->getNext ()){
+	for (Utest *test = tests; !test->isNull(); test = test->getNext ()){
 
 		if (groupStart) {
 			result.currentGroupStarted(test);
@@ -64,7 +64,7 @@ void TestRegistry::runAllTests (TestResult& result)
 			platformSpecificRunOneTest(test, result);
 			result.currentTestEnded(test);
 		}
-		
+
 		if (endOfGroup (test)) {
 			groupStart = true;
 			result.currentGroupEnded(test);
@@ -83,9 +83,7 @@ void TestRegistry::runOneTest(Utest* test, TestResult& result)
 
 bool TestRegistry::endOfGroup(Utest* test)
 {
-	if (test->isLast() || test->getGroup() != test->getNext()->getGroup())
-		return true;
-	return false;
+	return (test->isNull() || test->getGroup() != test->getNext()->getGroup());
 }
 
 
@@ -95,7 +93,7 @@ int  TestRegistry::countTests()
 }
 
 TestRegistry* TestRegistry::currentRegistry_ = 0;
-	
+
 TestRegistry* TestRegistry::getCurrentRegistry()
 {
 	static TestRegistry registry;
@@ -170,4 +168,17 @@ void TestRegistry::removePluginByName(const SimpleString& name)
 		firstPlugin_ = firstPlugin_->getNext();
 	if (firstPlugin_->getName() == name) firstPlugin_ = firstPlugin_->getNext();
 	firstPlugin_->removePluginByName(name);
+}
+
+Utest* TestRegistry::getFirstTest()
+{
+   return tests;
+}
+
+Utest* TestRegistry::getLastTest()
+{
+   Utest* current = tests;
+   while (!current->getNext()->isNull())
+      current = current->getNext();
+   return current;
 }

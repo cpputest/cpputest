@@ -105,7 +105,7 @@ int Utest::countTests()
 	return next_->countTests() + 1;
 }
 
-bool Utest::isLast () const
+bool Utest::isNull () const
 {
 	return false;
 }
@@ -332,7 +332,7 @@ Utest* NullTest::getNext() const
 	return &instance();
 }
 
-bool NullTest::isLast () const
+bool NullTest::isNull () const
 {
 	return true;
 }

@@ -71,7 +71,7 @@ class Utest
 
 	virtual Utest* addTest(Utest* test);
     virtual Utest *getNext () const;
-    virtual bool isLast () const;
+    virtual bool isNull () const;
     virtual int  countTests();
 
     bool shouldRun(const SimpleString& groupFilter, const SimpleString& nameFilter) const;
@@ -135,7 +135,7 @@ class NullTest : public Utest
 
 		virtual int  countTests();
 		virtual Utest*getNext () const;
-		virtual bool isLast () const;
+		virtual bool isNull () const;
   private:
 
     NullTest(const NullTest&);

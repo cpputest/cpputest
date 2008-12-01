@@ -60,10 +60,13 @@ class TestRegistry
 		virtual TestPlugin* getFirstPlugin();
 		virtual TestPlugin* getPluginByName(const SimpleString& name);
 		virtual void removePluginByName(const SimpleString& name);
-		
+
 		SimpleString getGroupFilter();
 		SimpleString getNameFilter();
-		
+
+		virtual Utest* getFirstTest();
+		virtual Utest* getLastTest();
+
 		static TestRegistry*  getCurrentRegistry();
 		virtual void setCurrentRegistry(TestRegistry* registry);
   private:
@@ -80,7 +83,7 @@ class TestRegistry
     static TestRegistry* currentRegistry_;
 
   };
-  
-  
+
+
 
 #endif
