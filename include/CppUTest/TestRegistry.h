@@ -66,6 +66,7 @@ class TestRegistry
 
 		virtual Utest* getFirstTest();
 		virtual Utest* getLastTest();
+		virtual Utest* getTestWithNext(Utest* test);
 
 		static TestRegistry*  getCurrentRegistry();
 		virtual void setCurrentRegistry(TestRegistry* registry);

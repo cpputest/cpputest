@@ -182,3 +182,11 @@ Utest* TestRegistry::getLastTest()
       current = current->getNext();
    return current;
 }
+
+Utest* TestRegistry::getTestWithNext(Utest* test)
+{
+   Utest* current = tests;
+   while (!current->getNext()->isNull() && current->getNext() != test)
+      current = current->getNext();
+   return current;
+}
