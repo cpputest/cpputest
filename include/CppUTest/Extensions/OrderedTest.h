@@ -25,6 +25,53 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-//Include this in the test main to execute these tests
-IMPORT_TEST_GROUP(SimpleStringExtensions);
-IMPORT_TEST_GROUP(TestOrderedTest);
+#ifndef D_OrderedTest_h
+#define D_OrderedTest_h
+
+class OrderedTest : public Utest
+{
+public:
+   OrderedTest();
+   virtual ~OrderedTest();
+
+   virtual OrderedTest* addOrderedTest(OrderedTest* test);
+   virtual OrderedTest* getNextOrderedTest();
+
+   int getLevel();
+   void setLevel(int level);
+
+   static void addOrderedTestToHead(OrderedTest* test);
+   static OrderedTest* getOrderedTestHead();
+   static bool firstOrderedTest();
+
+   static void setOrderedTestHead(OrderedTest* test);
+private:
+   static OrderedTest* _orderedTestsHead;
+   OrderedTest* _nextOrderedTest;
+
+   int _level;
+
+};
+
+class OrderedTestInstaller
+{
+  public:
+    explicit OrderedTestInstaller(OrderedTest* test, const char* groupName, const char* testName, const char* fileName, int lineNumber, int level);
+    virtual ~OrderedTestInstaller();
+
+  private:
+     void addOrderedTestInOrder(OrderedTest* test);
+     void addOrderedTestInOrderNotAtHeadPosition(OrderedTest* test);
+
+};
+
+#define TEST_ORDERED(testGroup, testName, testLevel) \
+  class testGroup##_##testName##_Test : public CppUTestGroup##testGroup \
+{ public: testGroup##_##testName##_Test () : CppUTestGroup##testGroup () {} \
+       void testBody(); } \
+    testGroup##_##testName##_Instance; \
+  OrderedTestInstaller testGroup##_##testName##_Installer(&testGroup##_##testName##_Instance, #testGroup, #testName, __FILE__,__LINE__, testLevel); \
+   void testGroup##_##testName##_Test::testBody()
+
+#endif
+
