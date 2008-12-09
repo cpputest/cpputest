@@ -7,10 +7,9 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-typedef struct _ClassName Classname;
+typedef struct _ClassName ClassName;
 
 ClassName* ClassName_Create(void);
 void ClassName_Destroy(ClassName*);
-void ClassName_VirtualFunction_impl(ClassName*);
 
 #endif  // D_ClassName_H
