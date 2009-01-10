@@ -191,6 +191,7 @@ void MemoryLeakWarning::ExpectLeaks(int n)
 	_impl->expectCount = n;
 }
 
+#if 0
 /* Global overloaded operators */
 
 void* operator new(size_t size)
@@ -227,3 +228,4 @@ void* operator new(size_t size, const char* file, int line)
     return malloc(size);
 
 }
+#endif

@@ -27,11 +27,50 @@
 
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/MemoryLeakWarningPlugin.h"
+#include "CppUTest/MemoryLeakDetector.h"
+#include <stdlib.h>
 
-
-MemoryLeakWarningPlugin::MemoryLeakWarningPlugin(const SimpleString& name)
-	: TestPlugin(name)
+class MemoryLeakWarningReporter : public MemoryLeakFailure
 {
+public:
+   virtual ~MemoryLeakWarningReporter() {};
+   virtual void fail(char* fail_string) {
+      FAIL(fail_string);
+   }
+};
+
+static MemoryLeakWarningReporter reporter;
+static MemoryLeakDetector globalDetector(&reporter);
+
+MemoryLeakWarningPlugin* MemoryLeakWarningPlugin::firstPlugin = 0;
+
+MemoryLeakWarningPlugin* MemoryLeakWarningPlugin::getFirstPlugin()
+{
+   return firstPlugin;
+}
+
+MemoryLeakDetector* MemoryLeakWarningPlugin::getMemoryLeakDetector()
+{
+   return memLeakDetector;
+}
+
+void MemoryLeakWarningPlugin::ignoreAllLeaksInTest()
+{
+   ignoreAllWarnings = true;
+}
+
+void MemoryLeakWarningPlugin::expectLeaksInTest(int n)
+{
+   expectedLeaks = n;
+}
+
+MemoryLeakWarningPlugin::MemoryLeakWarningPlugin(const SimpleString& name, MemoryLeakDetector* localDetector)
+	: TestPlugin(name), ignoreAllWarnings(false), expectedLeaks(0)
+{
+   if (firstPlugin == 0) firstPlugin = this;
+
+   if (localDetector) memLeakDetector = localDetector;
+   else memLeakDetector = &globalDetector;
 }
 
 MemoryLeakWarningPlugin::~MemoryLeakWarningPlugin()
@@ -40,24 +79,65 @@ MemoryLeakWarningPlugin::~MemoryLeakWarningPlugin()
 
 void MemoryLeakWarningPlugin::preTestAction(Utest& test, TestResult& result)
 {
-	memLeakWarning.CheckPointUsage();
+   memLeakDetector->startChecking();
+   failureCount = result.getFailureCount();
 }
 
 void MemoryLeakWarningPlugin::postTestAction(Utest& test, TestResult& result)
 {
-	if (memLeakWarning.UsageIsNotBalanced()) {
-	    Failure f(&test, memLeakWarning.Message());
+   memLeakDetector->stopChecking();
+   int leaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
+
+   if (!ignoreAllWarnings && expectedLeaks != leaks && failureCount == result.getFailureCount()) {
+	    Failure f(&test, memLeakDetector->report(mem_leak_period_checking));
 	    result.addFailure(f);
-	  }
-	  memLeakWarning.ExpectLeaks(0);
+   }
+   memLeakDetector->markCheckingPeriodLeaksAsNonCheckingPeriod();
+   ignoreAllWarnings = false;
+   expectedLeaks = 0;
 }
 
 void MemoryLeakWarningPlugin::Enable()
 {
-	memLeakWarning.Enable();
+   memLeakDetector->enable();
 }
 
 const char* MemoryLeakWarningPlugin::FinalReport(int toBeDeletedLeaks)
 {
-	return memLeakWarning.FinalReport(toBeDeletedLeaks);
+   int leaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_enabled);
+   if (leaks != toBeDeletedLeaks)
+      return memLeakDetector->report(mem_leak_period_enabled);
+   return "";
+}
+
+#undef new
+
+void* operator new(size_t size)
+{
+   return globalDetector.allocOperatorNew(size);
+}
+
+void operator delete(void* mem)
+{
+   globalDetector.freeOperatorDelete((char*)mem);
+}
+
+void* operator new[](size_t size)
+{
+   return globalDetector.allocOperatorNewArray(size);
+}
+
+void operator delete[](void* mem)
+{
+   globalDetector.freeOperatorDeleteArray((char*)mem);
+}
+
+void* operator new(size_t size, const char* file, int line)
+{
+   return globalDetector.allocOperatorNew(size, (char*) file, line);
+}
+
+void* operator new [](size_t size, const char* file, int line)
+{
+   return globalDetector.allocOperatorNewArray(size, (char*) file, line);
 }

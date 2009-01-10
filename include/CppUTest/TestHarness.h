@@ -36,6 +36,24 @@
 #ifndef D_TestHarness_h
 #define D_TestHarness_h
 
+#ifndef UT_NEW_MACROS_ENABLED
+   #ifdef UT_NEW_MACROS_DISABLED
+      #define UT_NEW_MACROS_ENABLED 0
+   #else
+      #define UT_NEW_MACROS_ENABLED 1
+   #endif
+#endif
+
+#ifndef UT_NEW_OVERRIDES_ENABLED
+   #ifdef UT_NEW_OVERRIDES_DISABLED
+      #define UT_NEW_OVERRIDES_ENABLED 1
+   #else
+      #define UT_NEW_OVERRIDES_ENABLED 0
+      #undef UT_NEW_MACROS_ENABLED
+      #define UT_NEW_MACROS_ENABLED 0
+   #endif
+#endif
+
 #include "Utest.h"
 #include "UtestMacros.h"
 #include "SimpleString.h"
@@ -43,10 +61,9 @@
 #include "Failure.h"
 #include "TestPlugin.h"
 #include "TestRegistry.h"
-#include "MemoryLeakWarning.h"
+#include "MemoryLeakWarningPlugin.h"
 #include "TestPlugin.h"
 
-// Some platform specific methods
 long GetPlatformSpecificTimeInMillis();
 void SetPlatformSpecificTimeInMillisMethod(long (*platformSpecific) ());
 
@@ -58,6 +75,7 @@ extern void FakePlatformSpecificExitCurrentTest();
 extern void PlatformSpecificExitCurrentTestImpl();
 
 int PlatformSpecificSprintf(char *str, unsigned int size, const char *format, ...);
+int PlatformSpecificVSNprintf(char *str, unsigned int size, const char* format, void* va_args_list);
 
 #endif
 

@@ -26,6 +26,7 @@
  */
 
 
+#include "CppUTest/TestHarness.h"
 #include "CppUTest/SimpleString.h"
 #include <stdio.h>
 #include <stdlib.h>

@@ -66,7 +66,6 @@ class Utest
     virtual void testBody(){};
 
     virtual void run (TestResult& result);
-    virtual void executePlatformSpecificTestBody();
     virtual SimpleString getFormattedName() const;
 
 	virtual Utest* addTest(Utest* test);
@@ -99,6 +98,11 @@ class Utest
 	void setGroupName(const char* groupName);
 	void setTestName(const char* testName);
   protected:
+
+     virtual bool executePlatformSpecificSetup();
+     virtual void executePlatformSpecificTestBody();
+     virtual void executePlatformSpecificTeardown();
+
 
 	Utest();
 

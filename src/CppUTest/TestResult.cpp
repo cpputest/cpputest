@@ -50,7 +50,7 @@ TestResult::TestResult (TestOutput& p)
 
 void TestResult::setProgressIndicator(const char* indicator)
 {
-    output.setProgressIndicator(indicator);    
+    output.setProgressIndicator(indicator);
 }
 
 TestResult::~TestResult()
@@ -85,7 +85,6 @@ void TestResult::addFailure (const Failure& failure)
 {
   output.print(failure);
   failureCount++;
-  PlatformSpecificExitCurrentTest();
 }
 
 void TestResult::countTest()
@@ -145,4 +144,4 @@ long TestResult::getCurrentGroupTotalExecutionTime() const
 {
 	return currentGroupTotalExecutionTime;
 }
-	
+

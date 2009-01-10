@@ -25,6 +25,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#define UT_NEW_OVERRIDES_DISABLED
 #include "CppUTest/TestHarness.h"
 #include "SimpleStringExtensions.h"
 #include "Printer.h"

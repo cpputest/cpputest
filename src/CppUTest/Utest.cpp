@@ -78,9 +78,11 @@ void Utest::run(TestResult& result)
   result.countRun();
   testResult_ = &result;
   currentTest_ = this;
-  setup();
-  executePlatformSpecificTestBody();
-  teardown();
+
+  if (executePlatformSpecificSetup()) {
+     executePlatformSpecificTestBody();
+  }
+  executePlatformSpecificTeardown();
 
   //restore
   currentTest_ = savedTest;

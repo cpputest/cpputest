@@ -34,7 +34,7 @@
  * Remember to use extern "C" when including in a cpp file!
  *
 *******************************************************************************/
- 
+
 #ifndef D_TestHarness_c_h
 #define D_TestHarness_c_h
 
@@ -70,8 +70,24 @@ extern void  CHECK_C_LOCATION(int condition, const char* conditionString, const 
 
 /* Memory allocation routines that use new, so the memory leak checker works */
 
+#ifndef UT_MALLOC_OVERRIDES_ENABLED
+   #ifdef UT_MALLOC_OVERRIDES_DISABLED
+      #define UT_MALLOC_OVERRIDES_ENABLED 0
+   #else
+      #define UT_MALLOC_OVERRIDES_ENABLED 1
+   #endif
+#endif
+
 extern char* cpputest_malloc(unsigned int size);
 extern void cpputest_free(char* buffer);
+extern char* cpputest_malloc_location(unsigned int size, char* file, int line);
+extern void cpputest_free_location(char* buffer, char* file, int line);
+
+#if UT_MALLOC_OVERRIDES_ENABLED
+   #define malloc(a) cpputest_malloc_location(a, __FILE__, __LINE__)
+   #define free(a) cpputest_free_location(a, __FILE__, __LINE__)
+#endif
+
 void cpputest_malloc_set_out_of_memory();
 void cpputest_malloc_set_not_out_of_memory();
 

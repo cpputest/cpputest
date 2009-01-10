@@ -39,7 +39,7 @@ namespace {
 CommandLineTestRunner::CommandLineTestRunner(TestOutput* output) :
 	verbose_(false), output_(output), repeat_(1), groupFilter_(0), nameFilter_(0), outputType_(OUTPUT_NORMAL)
 {
-}	
+}
 
 CommandLineTestRunner::~CommandLineTestRunner()
 {
@@ -49,31 +49,31 @@ int CommandLineTestRunner::RunAllTests(int ac, char** av)
 {
 	ConsoleTestOutput output;
 	int testResult = 0;
-    MemoryLeakWarningPlugin memLeakWarn(DEF_PLUGIN_MEM_LEAK);
-    SetPointerPlugin pPlugin(DEF_PLUGIN_SET_POINTER);
+   MemoryLeakWarningPlugin memLeakWarn(DEF_PLUGIN_MEM_LEAK);
+   SetPointerPlugin pPlugin(DEF_PLUGIN_SET_POINTER);
 	{
         TestRegistry::getCurrentRegistry()->installPlugin(&pPlugin);
         TestRegistry::getCurrentRegistry()->installPlugin(&memLeakWarn);
-    	
+
     	memLeakWarn.Enable();
-    	{	
+    	{
         	CommandLineTestRunner runner(&output);
         	if (!runner.parseArguments(ac, av)) {
         		return 1;
         	}
-        
-        	testResult = runner.RunAllTests(); 
+
+        	testResult = runner.RunAllTests();
     	}
  	}
 	if (testResult == 0)
-        output << memLeakWarn.FinalReport(0);
-	return testResult; 
+        output << memLeakWarn.FinalReport(2); // TODO: These are two leaks in SimpleString if the global TestRegistry!
+	return testResult;
 }
 
 void CommandLineTestRunner::initializeTestRun()
 {
   	TestRegistry::getCurrentRegistry()->groupFilter(groupFilter_);
-  	TestRegistry::getCurrentRegistry()->nameFilter(nameFilter_);	
+  	TestRegistry::getCurrentRegistry()->nameFilter(nameFilter_);
   	if (verbose_) output_->verbose();
   	if (outputType_ == OUTPUT_JUNIT) {
   		output_ = &junitTestOutput;
@@ -92,7 +92,7 @@ int CommandLineTestRunner::RunAllTests()
 		TestRegistry::getCurrentRegistry()->runAllTests(tr);
 		failureCount += tr.getFailureCount();
 	}
-	
+
 	return failureCount;
 }
 
@@ -193,7 +193,7 @@ bool CommandLineTestRunner::SetOutputType(int ac, char** av, int& i)
 {
 	SimpleString outputType = getParameterField(ac, av, i);
 	if (outputType.size () == 0) return false;
-	
+
 	if (outputType == "normal") {
 		outputType_ = OUTPUT_NORMAL;
 		return true;
