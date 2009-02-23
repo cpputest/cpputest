@@ -63,8 +63,8 @@
 extern void  CHECK_EQUAL_C_INT_LOCATION(int expected, int actual, const char* fileName, int lineNumber);
 extern void  CHECK_EQUAL_C_REAL_LOCATION(double expected, double actual, double threshold, const char* fileName, int lineNumber);
 extern void  CHECK_EQUAL_C_CHAR_LOCATION(char expected, char actual, const char* fileName, int lineNumber);
-extern void  CHECK_EQUAL_C_STRING_LOCATION(char* expected, char* actual, const char* fileName, int lineNumber);
-extern void  FAIL_TEXT_C_LOCATION(char* text, const char* fileName, int lineNumber);
+extern void  CHECK_EQUAL_C_STRING_LOCATION(const char* expected, const char* actual, const char* fileName, int lineNumber);
+extern void  FAIL_TEXT_C_LOCATION(const char* text, const char* fileName, int lineNumber);
 extern void  FAIL_C_LOCATION(const char* fileName, int lineNumber);
 extern void  CHECK_C_LOCATION(int condition, const char* conditionString, const char* fileName, int lineNumber);
 
@@ -80,8 +80,8 @@ extern void  CHECK_C_LOCATION(int condition, const char* conditionString, const 
 
 extern char* cpputest_malloc(unsigned int size);
 extern void cpputest_free(char* buffer);
-extern char* cpputest_malloc_location(unsigned int size, char* file, int line);
-extern void cpputest_free_location(char* buffer, char* file, int line);
+extern char* cpputest_malloc_location(unsigned int size,const char* file, int line);
+extern void cpputest_free_location(char* buffer, const char* file, int line);
 
 #if UT_MALLOC_OVERRIDES_ENABLED
    #define malloc(a) cpputest_malloc_location(a, __FILE__, __LINE__)

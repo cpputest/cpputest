@@ -29,7 +29,7 @@ struct SimpleBuffer
 
    SimpleBuffer();
    void clear();
-   void add(char* format, ...);
+   void add(const char* format, ...);
    char* toString();
 
 private:
@@ -107,22 +107,22 @@ public:
    void startChecking();
    void stopChecking();
 
-   char* report(MemLeakPeriod period);
+   const char* report(MemLeakPeriod period);
    void markCheckingPeriodLeaksAsNonCheckingPeriod();
    int totalMemoryLeaks(MemLeakPeriod period);
    void clearAllAccounting(MemLeakPeriod period);
 
    char* allocOperatorNew(unsigned int size);
-   char* allocOperatorNew(unsigned int size, char* file, int line);
+   char* allocOperatorNew(unsigned int size, const char* file, int line);
    char* allocOperatorNewArray(unsigned int size);
-   char* allocOperatorNewArray(unsigned int size, char* file, int line);
+   char* allocOperatorNewArray(unsigned int size, const char* file, int line);
    char* allocMalloc(unsigned int size);
-   char* allocMalloc(unsigned int size, char* file, int line);
+   char* allocMalloc(unsigned int size, const char* file, int line);
 
    void freeOperatorDelete(char* memory);
    void freeOperatorDeleteArray(char* memory);
    void freeFree(char* memory);
-   void freeFree(char* memory, char* file, int line);
+   void freeFree(char* memory, const char* file, int line);
 
 private:
    MemoryLeakFailure* reporter;
@@ -132,10 +132,10 @@ private:
 
 
    void ConstructMemoryLeakReport(MemLeakPeriod period);
-   void reportFailure(char* message, char* allocFile, int allocLine, int allocSize, MemLeakAllocType allocType, char* freeFile, int freeLine, MemLeakAllocType freeType);
+   void reportFailure(const char* message, const char* allocFile, int allocLine, int allocSize, MemLeakAllocType allocType, const char* freeFile, int freeLine, MemLeakAllocType freeType);
    char* alloc(unsigned int size, char* file, int line, MemLeakAllocType type);
-   char* getTypeString(MemLeakAllocType type);
-   void dealloc(char* memory, char* file, int line, MemLeakAllocType type);
+   const char* getTypeString(MemLeakAllocType type);
+   void dealloc(char* memory, const char* file, int line, MemLeakAllocType type);
 
 };
 

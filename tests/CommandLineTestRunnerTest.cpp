@@ -36,7 +36,7 @@ TEST_GROUP(CommandLineTestRunner)
 	StringBufferTestOutput *output;
 	void setup()
 	{
- 		output = new StringBufferTestOutput(); 
+ 		output = new StringBufferTestOutput();
 		runner = new CommandLineTestRunner(output);
 	}
 	void teardown()
@@ -49,102 +49,102 @@ TEST_GROUP(CommandLineTestRunner)
 TEST(CommandLineTestRunner, verboseSetMultipleParameters)
 {
 	int argc = 2;
-	char* argv[] = {"tests.exe", "-v"};
+	const char* argv[] = {"tests.exe", "-v"};
 	CHECK(runner->parseArguments(argc, argv));
-	CHECK(runner->isVerbose());	
+	CHECK(runner->isVerbose());
 }
 
 TEST(CommandLineTestRunner, repeatSet)
 {
 	int argc = 2;
-	char* argv[] = {"tests.exe", "-r3"};
+	const char* argv[] = {"tests.exe", "-r3"};
 	CHECK(runner->parseArguments(argc, argv));
-	LONGS_EQUAL(3, runner->getRepeatCount());	
+	LONGS_EQUAL(3, runner->getRepeatCount());
 }
 
 TEST(CommandLineTestRunner, repeatSetDifferentParameter)
 {
 	int argc = 3;
-	char* argv[] = {"tests.exe", "-r", "4"};
+	const char* argv[] = {"tests.exe", "-r", "4"};
 	CHECK(runner->parseArguments(argc, argv));
-	LONGS_EQUAL(4, runner->getRepeatCount());	
+	LONGS_EQUAL(4, runner->getRepeatCount());
 }
 
 TEST(CommandLineTestRunner, repeatSetDefaultsToTwo)
 {
 	int argc = 2;
-	char* argv[] = {"tests.exe", "-r"};
+	const char* argv[] = {"tests.exe", "-r"};
 	CHECK(runner->parseArguments(argc, argv));
-	LONGS_EQUAL(2, runner->getRepeatCount());	
+	LONGS_EQUAL(2, runner->getRepeatCount());
 }
 
 TEST(CommandLineTestRunner, setGroupFilter)
 {
 	int argc = 3;
-	char* argv[] = {"tests.exe", "-g", "group"};
+	const char* argv[] = {"tests.exe", "-g", "group"};
 	CHECK(runner->parseArguments(argc, argv));
-	STRCMP_EQUAL("group", runner->getGroupFilter().asCharString());	
+	STRCMP_EQUAL("group", runner->getGroupFilter().asCharString());
 }
 
 TEST(CommandLineTestRunner, setGroupFilterSameParameter)
 {
 	int argc = 2;
-	char* argv[] = {"tests.exe", "-ggroup"};
+	const char* argv[] = {"tests.exe", "-ggroup"};
 	CHECK(runner->parseArguments(argc, argv));
-	STRCMP_EQUAL("group", runner->getGroupFilter().asCharString());	
+	STRCMP_EQUAL("group", runner->getGroupFilter().asCharString());
 }
 
 TEST(CommandLineTestRunner, setNameFilter)
 {
 	int argc = 3;
-	char* argv[] = {"tests.exe", "-n", "name"};
+	const char* argv[] = {"tests.exe", "-n", "name"};
 	CHECK(runner->parseArguments(argc, argv));
-	STRCMP_EQUAL("name", runner->getNameFilter().asCharString());	
+	STRCMP_EQUAL("name", runner->getNameFilter().asCharString());
 }
 
 TEST(CommandLineTestRunner, setNameFilterSameParameter)
 {
 	int argc = 2;
-	char* argv[] = {"tests.exe", "-nname"};
+	const char* argv[] = {"tests.exe", "-nname"};
 	CHECK(runner->parseArguments(argc, argv));
-	STRCMP_EQUAL("name", runner->getNameFilter().asCharString());	
+	STRCMP_EQUAL("name", runner->getNameFilter().asCharString());
 }
 
 TEST(CommandLineTestRunner, setNormalOutput)
 {
 	int argc = 2;
-	char* argv[] = {"tests.exe", "-onormal"};
+	const char* argv[] = {"tests.exe", "-onormal"};
 	CHECK(runner->parseArguments(argc, argv));
-	LONGS_EQUAL(CommandLineTestRunner::OUTPUT_NORMAL, runner->getOutputType());	
+	LONGS_EQUAL(CommandLineTestRunner::OUTPUT_NORMAL, runner->getOutputType());
 }
 
 TEST(CommandLineTestRunner, setNormalOutputDifferentParameter)
 {
 	int argc = 3;
-	char* argv[] = {"tests.exe", "-o", "normal"};
+	const char* argv[] = {"tests.exe", "-o", "normal"};
 	CHECK(runner->parseArguments(argc, argv));
-	LONGS_EQUAL(CommandLineTestRunner::OUTPUT_NORMAL, runner->getOutputType());	
+	LONGS_EQUAL(CommandLineTestRunner::OUTPUT_NORMAL, runner->getOutputType());
 }
 
 TEST(CommandLineTestRunner, setJUnitOutputDifferentParameter)
 {
 	int argc = 3;
-	char* argv[] = {"tests.exe", "-o", "junit"};
+	const char* argv[] = {"tests.exe", "-o", "junit"};
 	CHECK(runner->parseArguments(argc, argv));
-	LONGS_EQUAL(CommandLineTestRunner::OUTPUT_JUNIT, runner->getOutputType());	
+	LONGS_EQUAL(CommandLineTestRunner::OUTPUT_JUNIT, runner->getOutputType());
 }
 
 TEST(CommandLineTestRunner, setOutputToGarbage)
 {
 	int argc = 3;
-	char* argv[] = {"tests.exe", "-o", "garbage"};
+	const char* argv[] = {"tests.exe", "-o", "garbage"};
 	CHECK(!runner->parseArguments(argc, argv));
 }
 
 TEST(CommandLineTestRunner, weirdParamatersPrintsUsageAndReturnsFalse)
 {
 	int argc = 2;
-	char* argv[] = {"tests.exe", "-SomethingWeird"};
+	const char* argv[] = {"tests.exe", "-SomethingWeird"};
 	CHECK(!runner->parseArguments(argc, argv));
 	TestTestingFixture::assertPrintContains(output, "usage [-v] [-r#] [-g groupName] [-n testName] [-o{normal, junit}]\n");
 }
@@ -154,13 +154,13 @@ class OptionsPlugin : public TestPlugin
 public:
 	OptionsPlugin(const SimpleString& name) : TestPlugin(name){};
 	~OptionsPlugin(){};
-	bool parseArguments(int ac, char** av, int index) { return true;};
+	bool parseArguments(int ac, const char** av, int index) { return true;};
 };
 
 TEST(CommandLineTestRunner, pluginKnowsOption)
 {
 	int argc = 2;
-	char* argv[] = {"tests.exe", "-pPluginOption"};
+	const char* argv[] = {"tests.exe", "-pPluginOption"};
 	OptionsPlugin plugin("options");
 	TestRegistry::getCurrentRegistry()->installPlugin(&plugin);
 	CHECK(runner->parseArguments(argc, argv));

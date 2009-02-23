@@ -48,23 +48,24 @@ class TestPlugin
 
 		virtual void preTestAction(Utest&, TestResult&) {};
 		virtual void postTestAction(Utest&, TestResult&) {};
-		virtual bool parseArguments(int ac, char** av, int index) { return false;};
+		virtual bool parseArguments(int ac, const char** av, int index) { return false;};
 
 		virtual void runAllPreTestAction(Utest&, TestResult&);
 		virtual void runAllPostTestAction(Utest&, TestResult&);
+		virtual bool parseAllArguments(int ac, const char** av, int index);
 		virtual bool parseAllArguments(int ac, char** av, int index);
-		
+
 		virtual TestPlugin* addPlugin(TestPlugin*);
 		virtual TestPlugin* removePluginByName(const SimpleString& name);
 		virtual TestPlugin* getNext();
-				
+
 		virtual void disable();
 		virtual void enable ();
 		virtual bool isEnabled();
-		
+
 		const SimpleString& getName();
 		TestPlugin* getPluginByName(const SimpleString& name);
-        
+
 	protected:
         TestPlugin(TestPlugin* next);
 
@@ -108,7 +109,7 @@ class NullTestPlugin : public TestPlugin
 
 		virtual void runAllPreTestAction(Utest& test, TestResult& result);
 		virtual void runAllPostTestAction(Utest& test, TestResult& result);
-    
+
     static NullTestPlugin* instance();
 };
 

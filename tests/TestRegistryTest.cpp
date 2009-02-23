@@ -38,7 +38,7 @@ namespace
 class MockTest : public Utest
   {
   public:
-    MockTest(char* group = "Group")
+    MockTest(const char* group = "Group")
         :Utest(group, "Name", "File", testLineNumber), hasRun_(false)
     {}
     void testBody()
@@ -52,18 +52,18 @@ class MockTest : public Utest
 class MockTestResult : public TestResult
 	{
 		public:
-			
+
 			int countTestsStarted;
 			int countTestsEnded;
 			int countCurrentTestStarted;
 			int countCurrentTestEnded;
 			int countCurrentGroupStarted;
 			int countCurrentGroupEnded;
-			
+
 			MockTestResult(TestOutput& p) : TestResult(p) { resetCount();};
 			virtual ~MockTestResult() {};
-			
-			void resetCount () 
+
+			void resetCount ()
 			{
 				countTestsStarted = 0;
 				countTestsEnded = 0;
@@ -72,16 +72,16 @@ class MockTestResult : public TestResult
 				countCurrentGroupStarted = 0;
 				countCurrentGroupEnded = 0;
 			}
-			
+
     	virtual void testsStarted () { countTestsStarted++;}
     	virtual void testsEnded () { countTestsEnded++; }
     	virtual void currentTestStarted(Utest* test) { countCurrentTestStarted++; }
     	virtual void currentTestEnded(Utest* test) { countCurrentTestEnded++; }
     	virtual void currentGroupStarted(Utest* test) { countCurrentGroupStarted++; }
     	virtual void currentGroupEnded(Utest* test) { countCurrentGroupEnded++; }
-				
+
 	};
-	
+
 TEST_GROUP(TestRegistry)
 {
 	TestRegistry* myRegistry;
@@ -91,7 +91,7 @@ TEST_GROUP(TestRegistry)
 	MockTest* test3;
   TestResult *result;
   MockTestResult *mockResult;
-  TEST_SETUP() 
+  TEST_SETUP()
   {
     UT_PTR_SET(PlatformSpecificExitCurrentTest, FakePlatformSpecificExitCurrentTest);
     output = new StringBufferTestOutput();
@@ -103,7 +103,7 @@ TEST_GROUP(TestRegistry)
   	myRegistry = new TestRegistry();
   	myRegistry->setCurrentRegistry(myRegistry);
   }
-  
+
   TEST_TEARDOWN()
   {
   	myRegistry->setCurrentRegistry(0);

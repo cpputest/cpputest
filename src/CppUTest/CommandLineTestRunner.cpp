@@ -47,6 +47,11 @@ CommandLineTestRunner::~CommandLineTestRunner()
 
 int CommandLineTestRunner::RunAllTests(int ac, char** av)
 {
+	return RunAllTests(ac, const_cast<const char**>(av));
+}
+
+int CommandLineTestRunner::RunAllTests(int ac, const char** av)
+{
 	ConsoleTestOutput output;
 	int testResult = 0;
    MemoryLeakWarningPlugin memLeakWarn(DEF_PLUGIN_MEM_LEAK);
@@ -96,7 +101,7 @@ int CommandLineTestRunner::RunAllTests()
 	return failureCount;
 }
 
-bool CommandLineTestRunner::parseArguments(int ac, char** av)
+bool CommandLineTestRunner::parseArguments(int ac, const char** av)
 {
 	bool correctParameters = true;
 	for (int i = 1; i < ac; i++) {
@@ -149,7 +154,7 @@ CommandLineTestRunner::OutputType CommandLineTestRunner::getOutputType()
 	return outputType_;
 }
 
-void CommandLineTestRunner::SetRepeatCount(int ac, char** av, int& i)
+void CommandLineTestRunner::SetRepeatCount(int ac, const char** av, int& i)
 {
   repeat_ = 0;
 
@@ -168,7 +173,7 @@ void CommandLineTestRunner::SetRepeatCount(int ac, char** av, int& i)
 
 }
 
-SimpleString getParameterField(int ac, char** av, int& i)
+SimpleString getParameterField(int ac, const char** av, int& i)
 {
 	SimpleString parameter(av[i]);
 	if (parameter.size() > 2)
@@ -179,17 +184,17 @@ SimpleString getParameterField(int ac, char** av, int& i)
 }
 
 
-void CommandLineTestRunner::SetGroupFilter(int ac, char** av, int& i)
+void CommandLineTestRunner::SetGroupFilter(int ac, const char** av, int& i)
 {
   groupFilter_ = getParameterField(ac, av, i);
 }
 
-void CommandLineTestRunner::SetNameFilter(int ac, char** av, int& i)
+void CommandLineTestRunner::SetNameFilter(int ac, const char** av, int& i)
 {
    nameFilter_ = getParameterField(ac, av, i);
 }
 
-bool CommandLineTestRunner::SetOutputType(int ac, char** av, int& i)
+bool CommandLineTestRunner::SetOutputType(int ac, const char** av, int& i)
 {
 	SimpleString outputType = getParameterField(ac, av, i);
 	if (outputType.size () == 0) return false;

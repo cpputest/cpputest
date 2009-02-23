@@ -62,6 +62,11 @@ void TestPlugin::runAllPostTestAction(Utest& test, TestResult& result)
 
 bool TestPlugin::parseAllArguments(int ac, char** av, int index)
 {
+	return parseAllArguments(ac, const_cast<const char**>(av), index);
+}
+
+bool TestPlugin::parseAllArguments(int ac, const char** av, int index)
+{
 	if (parseArguments(ac, av, index)) return true;
 	if (next_) return next_->parseAllArguments(ac, av, index);
 	return false;
@@ -118,16 +123,16 @@ struct cpputest_pair {
 static int index;
 static cpputest_pair setlist[SetPointerPlugin::MAX_SET];
 
-SetPointerPlugin::SetPointerPlugin(const SimpleString& name_) 
+SetPointerPlugin::SetPointerPlugin(const SimpleString& name_)
 	: TestPlugin(name_)
  {
  	index = 0;
  }
- 
+
 SetPointerPlugin::~SetPointerPlugin()
 {
 }
- 
+
  void CppUTestStore(void**function, void*value)
 {
 	if (index == SetPointerPlugin::MAX_SET) {
@@ -137,13 +142,13 @@ SetPointerPlugin::~SetPointerPlugin()
 	setlist[index].orig = function;
 	index++;
 }
- 
- void SetPointerPlugin::postTestAction(Utest& test, TestResult& result) 
+
+ void SetPointerPlugin::postTestAction(Utest& test, TestResult& result)
 {
-	for (int i = index-1; i >= 0; i--) 
+	for (int i = index-1; i >= 0; i--)
 		*((void**)setlist[i].orig) = setlist[i].orig_value;
  	index = 0;
-}	
+}
 
 //////// NullPlugin
 
@@ -152,16 +157,16 @@ NullTestPlugin::NullTestPlugin()
 {
 }
 
-NullTestPlugin* NullTestPlugin::instance() 
-{ 
-	static NullTestPlugin _instance; 
-	return &_instance; 
+NullTestPlugin* NullTestPlugin::instance()
+{
+	static NullTestPlugin _instance;
+	return &_instance;
 }
 
 void NullTestPlugin::runAllPreTestAction(Utest&, TestResult&)
 {
 }
-	
+
 void NullTestPlugin::runAllPostTestAction(Utest&, TestResult&)
 {
 }

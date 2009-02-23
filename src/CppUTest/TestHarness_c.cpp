@@ -54,12 +54,12 @@ extern "C" {
 		CHECK_EQUAL_LOCATION(expected, actual, fileName, lineNumber);
 	}
 
-	void  CHECK_EQUAL_C_STRING_LOCATION(char* expected, char* actual, const char* fileName, int lineNumber)
+	void  CHECK_EQUAL_C_STRING_LOCATION(const char* expected, const char* actual, const char* fileName, int lineNumber)
 	{
 	    STRCMP_EQUAL_LOCATION(expected, actual, fileName, lineNumber);
 	}
 
-	void  FAIL_TEXT_C_LOCATION(char* text, const char* fileName, int lineNumber)
+	void  FAIL_TEXT_C_LOCATION(const char* text, const char* fileName, int lineNumber)
 	{
 		FAIL_LOCATION(text, fileName, lineNumber);
 	}
@@ -96,7 +96,7 @@ extern "C" {
 		cpputest_free_location(buffer, "<unknown>", 0);
 	}
 
-	char* cpputest_malloc_location(unsigned int size, char* file, int line)
+	char* cpputest_malloc_location(unsigned int size, const char* file, int line)
    {
 	   if (out_of_memory) return 0;
 
@@ -105,7 +105,7 @@ extern "C" {
       return new char[size];
    }
 
-   void cpputest_free_location(char* buffer, char* file, int line)
+   void cpputest_free_location(char* buffer, const char* file, int line)
    {
       if (MemoryLeakWarningPlugin::getFirstPlugin())
          MemoryLeakWarningPlugin::getFirstPlugin()->getMemoryLeakDetector()->freeFree(buffer, file, line);

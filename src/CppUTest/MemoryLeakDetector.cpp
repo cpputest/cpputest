@@ -5,6 +5,8 @@
 #include <string.h>
 #include <stdarg.h>
 
+#define UNKNOWN const_cast<char*>("<unknown>")
+
 SimpleBuffer::SimpleBuffer() : positions_filled(0)
 {
 };
@@ -15,7 +17,7 @@ void SimpleBuffer::clear()
    buffer[0] = '\0';
 }
 
-void SimpleBuffer::add(char* format, ...)
+void SimpleBuffer::add(const char* format, ...)
 {
    int count = 0;
    va_list arguments;
@@ -234,7 +236,7 @@ void MemoryLeakDetector::disable()
    current_period = mem_leak_period_disabled;
 }
 
-void MemoryLeakDetector::reportFailure(char* message, char* allocFile, int allocLine, int allocSize, MemLeakAllocType allocType, char* freeFile, int freeLine, MemLeakAllocType freeType)
+void MemoryLeakDetector::reportFailure(const char* message, const char* allocFile, int allocLine, int allocSize, MemLeakAllocType allocType, const char* freeFile, int freeLine, MemLeakAllocType freeType)
 {
    output_buffer.add(message);
    output_buffer.add(MEM_LEAK_ALLOC_LOCATION, allocFile, allocLine, allocSize, getTypeString(allocType));
@@ -255,7 +257,7 @@ char* MemoryLeakDetector::alloc(unsigned int size, char* file, int line, MemLeak
    return mem;
 }
 
-void MemoryLeakDetector::dealloc(char* memory, char* file, int line, MemLeakAllocType type)
+void MemoryLeakDetector::dealloc(char* memory, const char* file, int line, MemLeakAllocType type)
 {
    if (memory == 0) return;
 
@@ -287,7 +289,7 @@ void MemoryLeakDetector::ConstructMemoryLeakReport(MemLeakPeriod period)
    output_buffer.add("%s %d", MEM_LEAK_FOOTER, total_leaks);
 }
 
-char* MemoryLeakDetector::report(MemLeakPeriod period)
+const char* MemoryLeakDetector::report(MemLeakPeriod period)
 {
    if (!memoryTable.hasLeaks(period)) return MEM_LEAK_NONE;
 
@@ -313,55 +315,54 @@ int MemoryLeakDetector::totalMemoryLeaks(MemLeakPeriod period)
 
 char* MemoryLeakDetector::allocOperatorNew(unsigned int size)
 {
-   return alloc(size, "<unknown>", 0, mem_leak_alloc_new);
+   return alloc(size, UNKNOWN, 0, mem_leak_alloc_new);
 }
 
-char* MemoryLeakDetector::allocOperatorNew(unsigned int size, char* file, int line)
+char* MemoryLeakDetector::allocOperatorNew(unsigned int size, const char* file, int line)
 {
-   return alloc(size, file, line, mem_leak_alloc_new);
+   return alloc(size, const_cast<char*>(file), line, mem_leak_alloc_new);
 }
 
 char* MemoryLeakDetector::allocOperatorNewArray(unsigned int size)
 {
-   return alloc(size, "<unknown>", 0, mem_leak_alloc_new_array);
+   return alloc(size, UNKNOWN, 0, mem_leak_alloc_new_array);
 }
 
-char* MemoryLeakDetector::allocOperatorNewArray(unsigned int size, char* file, int line)
+char* MemoryLeakDetector::allocOperatorNewArray(unsigned int size, const char* file, int line)
 {
-   return alloc(size, file, line, mem_leak_alloc_new_array);
+   return alloc(size, const_cast<char*>(file), line, mem_leak_alloc_new_array);
 }
 
 char* MemoryLeakDetector::allocMalloc(unsigned int size)
 {
-   return alloc(size, "<unknown>", 0, mem_leak_alloc_malloc);
+   return alloc(size, UNKNOWN, 0, mem_leak_alloc_malloc);
 }
 
-char* MemoryLeakDetector::allocMalloc(unsigned int size, char* file, int line)
+char* MemoryLeakDetector::allocMalloc(unsigned int size, const char* file, int line)
 {
-   return alloc(size, file, line, mem_leak_alloc_malloc);
+   return alloc(size, const_cast<char*>(file), line, mem_leak_alloc_malloc);
 }
 
 void MemoryLeakDetector::freeOperatorDeleteArray(char* memory)
 {
-   dealloc(memory, "<unknown>", 0, mem_leak_alloc_new_array);
+   dealloc(memory, UNKNOWN, 0, mem_leak_alloc_new_array);
 }
 
 void MemoryLeakDetector::freeOperatorDelete(char* memory)
 {
-   dealloc(memory, "<unknown>", 0, mem_leak_alloc_new);
+   dealloc(memory, UNKNOWN, 0, mem_leak_alloc_new);
 }
 
 void MemoryLeakDetector::freeFree(char* memory)
 {
-   dealloc(memory, "<unknown>", 0, mem_leak_alloc_malloc);
+   dealloc(memory, UNKNOWN, 0, mem_leak_alloc_malloc);
 }
 
-void MemoryLeakDetector::freeFree(char* memory, char* file, int line)
+void MemoryLeakDetector::freeFree(char* memory, const char* file, int line)
 {
    dealloc(memory, file, line, mem_leak_alloc_malloc);
 }
-
-char* MemoryLeakDetector::getTypeString(MemLeakAllocType type)
+const char* MemoryLeakDetector::getTypeString(MemLeakAllocType type)
 {
    switch (type) {
       case mem_leak_alloc_new: return "new";
