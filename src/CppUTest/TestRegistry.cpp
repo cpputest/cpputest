@@ -30,14 +30,23 @@
 
 TestRegistry::TestRegistry()
     : tests(&NullTest::instance())
-    , nameFilter_("")
-    , groupFilter_("")
+    , nameFilter_(0)
+    , groupFilter_(0)
     , firstPlugin_ (NullTestPlugin::instance())
 {
 }
 
 TestRegistry::~TestRegistry()
 {
+	cleanup();
+}
+
+void TestRegistry::cleanup()
+{
+	delete nameFilter_;
+	delete groupFilter_;
+	nameFilter_ = 0;
+	groupFilter_ = 0;
 }
 
 void TestRegistry::addTest (Utest *test)
@@ -113,28 +122,31 @@ void TestRegistry::unDoLastAddTest()
 
 void TestRegistry::nameFilter(SimpleString f)
 {
-	nameFilter_ = f;
+	delete nameFilter_;
+	nameFilter_ = new SimpleString(f);
 }
 
 void TestRegistry::groupFilter(SimpleString f)
 {
-  groupFilter_ = f;
+	delete groupFilter_;
+	groupFilter_ = new SimpleString(f);
 }
 
 SimpleString TestRegistry::getGroupFilter()
 {
-	return groupFilter_;
+	return *groupFilter_;
 }
 
 SimpleString TestRegistry::getNameFilter()
 {
-	return nameFilter_;
+	return *nameFilter_;
 }
 
 bool TestRegistry::testShouldRun(Utest* test, TestResult& result)
 {
-
-  if (test->shouldRun(groupFilter_, nameFilter_) )
+	  if (groupFilter_ == 0) groupFilter_ = new SimpleString();
+	  if (nameFilter_ == 0) nameFilter_ = new SimpleString();
+  if (test->shouldRun(*groupFilter_, *nameFilter_) )
     return true;
   else {
       result.countFilteredOut();

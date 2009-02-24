@@ -70,6 +70,7 @@ class TestRegistry
 
 		static TestRegistry*  getCurrentRegistry();
 		virtual void setCurrentRegistry(TestRegistry* registry);
+		void cleanup();
   private:
 
     bool testShouldRun(Utest* test, TestResult& result);
@@ -78,8 +79,8 @@ class TestRegistry
     virtual void platformSpecificRunOneTest(Utest* test, TestResult& result);
 
     Utest *			tests;
-    SimpleString 	nameFilter_;
-    SimpleString 	groupFilter_;
+    SimpleString* 	nameFilter_;
+    SimpleString* 	groupFilter_;
     TestPlugin* 	firstPlugin_;
     static TestRegistry* currentRegistry_;
 

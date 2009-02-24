@@ -70,8 +70,9 @@ int CommandLineTestRunner::RunAllTests(int ac, const char** av)
         	testResult = runner.RunAllTests();
     	}
  	}
+    TestRegistry::getCurrentRegistry()->cleanup();
 	if (testResult == 0)
-        output << memLeakWarn.FinalReport(2); // TODO: These are two leaks in SimpleString if the global TestRegistry!
+        output << memLeakWarn.FinalReport(0); // TODO: These are two leaks in SimpleString if the global TestRegistry!
 	return testResult;
 }
 
