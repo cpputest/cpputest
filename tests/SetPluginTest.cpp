@@ -8,8 +8,8 @@ void stub_func1 () {};
 void orig_func2 () {};
 void stub_func2 () {};
 
-void (*fp1)(); 
-void (*fp2)(); 
+void (*fp1)();
+void (*fp2)();
 
 TEST_GROUP(SetPointerPluginTest)
 {
@@ -17,8 +17,8 @@ TEST_GROUP(SetPointerPluginTest)
 	TestRegistry* myRegistry;
 	StringBufferTestOutput* output;
 	TestResult* result;
-	
-	void setup() 
+
+	void setup()
 	{
 		myRegistry = new TestRegistry();
     	plugin = new SetPointerPlugin("TestSetPlugin");
@@ -27,7 +27,7 @@ TEST_GROUP(SetPointerPluginTest)
     	output = new StringBufferTestOutput();
   		result = new TestResult(*output);
   	}
-  
+
   	void teardown()
   	{
   		myRegistry->setCurrentRegistry(0);
@@ -57,7 +57,7 @@ public:
 TEST(SetPointerPluginTest, installTwoFunctionPointer)
 {
 	FunctionPointerUtest *tst = new FunctionPointerUtest();;
-  	
+
   	fp1 = orig_func1;
   	fp2 = orig_func2;
 	myRegistry->addTest(tst);
@@ -73,7 +73,7 @@ class MaxFunctionPointerUtest : public Utest
 public:
 	int numOfFpSets;
 	MaxFunctionPointerUtest (int num) : numOfFpSets(num) {};
-	
+
 	void setup()
 	{
 		for (int i = 0; i < numOfFpSets; ++i)
@@ -81,15 +81,15 @@ public:
 	}
 };
 
-TEST(SetPointerPluginTest, installTooMuchFunctionPointer)
+IGNORE_TEST(SetPointerPluginTest, installTooMuchFunctionPointer)
 {
 	MaxFunctionPointerUtest *tst = new MaxFunctionPointerUtest(SetPointerPlugin::MAX_SET + 1);
 	myRegistry->addTest(tst);
-    
+
 	PlatformSpecificExitCurrentTest = FakePlatformSpecificExitCurrentTest;
 	myRegistry->runAllTests(*result);
     PlatformSpecificExitCurrentTest = PlatformSpecificExitCurrentTestImpl;
-    
+
 	LONGS_EQUAL(1, result->getFailureCount());
 	delete tst;
 }

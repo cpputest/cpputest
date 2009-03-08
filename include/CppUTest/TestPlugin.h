@@ -29,7 +29,7 @@
 //
 // TESTPlugin.H
 //
-// This file contains the ability to plugin general checks to all tests.
+// This file contains the ability to plugin_ general checks to all tests.
 //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -79,7 +79,7 @@ class TestPlugin
 //
 // SetPointerPlugin
 //
-// This is a very small plugin that resets pointers to their original value.
+// This is a very small plugin_ that resets pointers to their original value.
 //
 ///////////////////////////////////////////////////////////////////////////////
 

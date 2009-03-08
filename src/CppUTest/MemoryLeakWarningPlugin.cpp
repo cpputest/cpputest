@@ -119,7 +119,7 @@ void* operator new(size_t size)
 
 void operator delete(void* mem)
 {
-   globalDetector.freeOperatorDelete((char*)mem);
+	if (!globalDetector.isGone()) globalDetector.freeOperatorDelete((char*)mem);
 }
 
 void* operator new[](size_t size)
@@ -129,7 +129,7 @@ void* operator new[](size_t size)
 
 void operator delete[](void* mem)
 {
-   globalDetector.freeOperatorDeleteArray((char*)mem);
+   if (!globalDetector.isGone()) globalDetector.freeOperatorDeleteArray((char*)mem);
 }
 
 void* operator new(size_t size, const char* file, int line)

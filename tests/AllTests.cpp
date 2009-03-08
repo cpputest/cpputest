@@ -32,5 +32,3 @@ int main(int ac, const char** av)
   return CommandLineTestRunner::RunAllTests(ac, av);
 }
 
-#include "AllTests.h"
-

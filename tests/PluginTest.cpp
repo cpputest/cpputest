@@ -32,24 +32,30 @@
 #define GENERIC_PLUGIN  "GenericPlugin"
 #define GENERIC_PLUGIN2 "GenericPlugin2"
 
+static int sequenceNumber;
+
 class DummyPlugin : public TestPlugin
 {
 public:
-	DummyPlugin(const SimpleString& name) 
+	DummyPlugin(const SimpleString& name)
 		: TestPlugin(name), preAction(0), postAction(0){};
 	virtual ~DummyPlugin(){};
-		
-	virtual void preTestAction(Utest&, TestResult&) 
+
+	virtual void preTestAction(Utest&, TestResult&)
 	{
 		preAction++;
+		preActionSequence = sequenceNumber++;
 	};
-	virtual void postTestAction(Utest&, TestResult&) 
+	virtual void postTestAction(Utest&, TestResult&)
 	{
 		postAction++;
+		postActionSequence = sequenceNumber++;
 	};
 
 	int preAction;
+	int preActionSequence;
 	int postAction;
+	int postActionSequence;
 };
 
 
@@ -66,8 +72,9 @@ TEST_GROUP(PluginTest)
 		genFixture = new TestTestingFixture;
 		registry = genFixture->registry;
 		registry->installPlugin(firstPlugin);
+		sequenceNumber = 1;
 	}
-	
+
 	void teardown()
 	{
 		delete firstPlugin;
@@ -104,6 +111,16 @@ TEST(PluginTest, ActionsAllRun)
 	genFixture->runAllTests();
 	CHECK_EQUAL(2, firstPlugin->preAction);
 	CHECK_EQUAL(2, firstPlugin->postAction);
+}
+
+TEST(PluginTest, Sequence)
+{
+	registry->installPlugin(secondPlugin);
+	genFixture->runAllTests();
+	CHECK_EQUAL(1, secondPlugin->preActionSequence);
+	CHECK_EQUAL(2, firstPlugin->preActionSequence);
+	CHECK_EQUAL(3, firstPlugin->postActionSequence);
+	CHECK_EQUAL(4, secondPlugin->postActionSequence);
 }
 
 TEST(PluginTest, DisablesPluginsDontRun)

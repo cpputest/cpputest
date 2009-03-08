@@ -100,6 +100,7 @@ class MemoryLeakDetector
 {
 public:
    MemoryLeakDetector(MemoryLeakFailure* reporter);
+	~MemoryLeakDetector() {gone = true;}
 
    void enable();
    void disable();
@@ -123,12 +124,14 @@ public:
    void freeOperatorDeleteArray(char* memory);
    void freeFree(char* memory);
    void freeFree(char* memory, const char* file, int line);
+   bool isGone() {return gone;}
 
 private:
    MemoryLeakFailure* reporter;
    MemLeakPeriod current_period;
    SimpleBuffer output_buffer;
    MemoryLeakDetectorTable memoryTable;
+   bool gone;
 
 
    void ConstructMemoryLeakReport(MemLeakPeriod period);

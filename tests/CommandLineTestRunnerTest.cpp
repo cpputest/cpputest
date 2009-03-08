@@ -28,143 +28,20 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/CommandLineTestRunner.h"
 #include "CppUTest/TestTestingFixture.h"
+#include "CppUTest/TestPlugin.h"
 #include <string.h>
 
 TEST_GROUP(CommandLineTestRunner)
 {
-	CommandLineTestRunner* runner;
-	StringBufferTestOutput *output;
 	void setup()
 	{
- 		output = new StringBufferTestOutput();
-		runner = new CommandLineTestRunner(output);
 	}
 	void teardown()
 	{
-		delete runner;
-		delete output;
 	}
 };
 
-TEST(CommandLineTestRunner, verboseSetMultipleParameters)
+TEST(CommandLineTestRunner, HmmmmWhatToWrite)
 {
-	int argc = 2;
-	const char* argv[] = {"tests.exe", "-v"};
-	CHECK(runner->parseArguments(argc, argv));
-	CHECK(runner->isVerbose());
+	//TODO: maybe some tests are in order
 }
-
-TEST(CommandLineTestRunner, repeatSet)
-{
-	int argc = 2;
-	const char* argv[] = {"tests.exe", "-r3"};
-	CHECK(runner->parseArguments(argc, argv));
-	LONGS_EQUAL(3, runner->getRepeatCount());
-}
-
-TEST(CommandLineTestRunner, repeatSetDifferentParameter)
-{
-	int argc = 3;
-	const char* argv[] = {"tests.exe", "-r", "4"};
-	CHECK(runner->parseArguments(argc, argv));
-	LONGS_EQUAL(4, runner->getRepeatCount());
-}
-
-TEST(CommandLineTestRunner, repeatSetDefaultsToTwo)
-{
-	int argc = 2;
-	const char* argv[] = {"tests.exe", "-r"};
-	CHECK(runner->parseArguments(argc, argv));
-	LONGS_EQUAL(2, runner->getRepeatCount());
-}
-
-TEST(CommandLineTestRunner, setGroupFilter)
-{
-	int argc = 3;
-	const char* argv[] = {"tests.exe", "-g", "group"};
-	CHECK(runner->parseArguments(argc, argv));
-	STRCMP_EQUAL("group", runner->getGroupFilter().asCharString());
-}
-
-TEST(CommandLineTestRunner, setGroupFilterSameParameter)
-{
-	int argc = 2;
-	const char* argv[] = {"tests.exe", "-ggroup"};
-	CHECK(runner->parseArguments(argc, argv));
-	STRCMP_EQUAL("group", runner->getGroupFilter().asCharString());
-}
-
-TEST(CommandLineTestRunner, setNameFilter)
-{
-	int argc = 3;
-	const char* argv[] = {"tests.exe", "-n", "name"};
-	CHECK(runner->parseArguments(argc, argv));
-	STRCMP_EQUAL("name", runner->getNameFilter().asCharString());
-}
-
-TEST(CommandLineTestRunner, setNameFilterSameParameter)
-{
-	int argc = 2;
-	const char* argv[] = {"tests.exe", "-nname"};
-	CHECK(runner->parseArguments(argc, argv));
-	STRCMP_EQUAL("name", runner->getNameFilter().asCharString());
-}
-
-TEST(CommandLineTestRunner, setNormalOutput)
-{
-	int argc = 2;
-	const char* argv[] = {"tests.exe", "-onormal"};
-	CHECK(runner->parseArguments(argc, argv));
-	LONGS_EQUAL(CommandLineTestRunner::OUTPUT_NORMAL, runner->getOutputType());
-}
-
-TEST(CommandLineTestRunner, setNormalOutputDifferentParameter)
-{
-	int argc = 3;
-	const char* argv[] = {"tests.exe", "-o", "normal"};
-	CHECK(runner->parseArguments(argc, argv));
-	LONGS_EQUAL(CommandLineTestRunner::OUTPUT_NORMAL, runner->getOutputType());
-}
-
-TEST(CommandLineTestRunner, setJUnitOutputDifferentParameter)
-{
-	int argc = 3;
-	const char* argv[] = {"tests.exe", "-o", "junit"};
-	CHECK(runner->parseArguments(argc, argv));
-	LONGS_EQUAL(CommandLineTestRunner::OUTPUT_JUNIT, runner->getOutputType());
-}
-
-TEST(CommandLineTestRunner, setOutputToGarbage)
-{
-	int argc = 3;
-	const char* argv[] = {"tests.exe", "-o", "garbage"};
-	CHECK(!runner->parseArguments(argc, argv));
-}
-
-TEST(CommandLineTestRunner, weirdParamatersPrintsUsageAndReturnsFalse)
-{
-	int argc = 2;
-	const char* argv[] = {"tests.exe", "-SomethingWeird"};
-	CHECK(!runner->parseArguments(argc, argv));
-	TestTestingFixture::assertPrintContains(output, "usage [-v] [-r#] [-g groupName] [-n testName] [-o{normal, junit}]\n");
-}
-
-class OptionsPlugin : public TestPlugin
-{
-public:
-	OptionsPlugin(const SimpleString& name) : TestPlugin(name){};
-	~OptionsPlugin(){};
-	bool parseArguments(int ac, const char** av, int index) { return true;};
-};
-
-TEST(CommandLineTestRunner, pluginKnowsOption)
-{
-	int argc = 2;
-	const char* argv[] = {"tests.exe", "-pPluginOption"};
-	OptionsPlugin plugin("options");
-	TestRegistry::getCurrentRegistry()->installPlugin(&plugin);
-	CHECK(runner->parseArguments(argc, argv));
-	TestRegistry::getCurrentRegistry()->removePluginByName("options");
-}
-
-

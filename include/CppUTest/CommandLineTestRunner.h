@@ -30,6 +30,7 @@
 
 #include "TestHarness.h"
 #include "TestOutput.h"
+#include "CommandLineArguments.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -43,35 +44,33 @@
 class CommandLineTestRunner
 {
 public:
-	enum OutputType {OUTPUT_NORMAL, OUTPUT_JUNIT};
+	enum OutputType
+	{
+		OUTPUT_NORMAL, OUTPUT_JUNIT
+	};
 
 	static int RunAllTests(int ac, const char** av);
 	static int RunAllTests(int ac, char** av);
+	CommandLineTestRunner(int ac, const char** av, TestOutput*);
 
-    CommandLineTestRunner(TestOutput* output);
-    virtual ~CommandLineTestRunner();
-	int RunAllTests();
-	bool parseArguments(int ac, const char** av);
+	virtual ~CommandLineTestRunner();
+	int runAllTestsMain();
 
+private:
+
+	int argc;
+	const char** argv;
+	TestOutput* output_;
+	CommandLineArguments* arguments;
+
+	bool parseArguments(TestPlugin*);
+	int runAllTests();
+	void initializeTestRun();
 	bool isVerbose();
 	int getRepeatCount();
 	SimpleString getGroupFilter();
 	SimpleString getNameFilter();
-	OutputType getOutputType();
-  private:
-
-  	void initializeTestRun();
-    bool verbose_;
-    TestOutput* output_;
-    int repeat_;
-    SimpleString groupFilter_;
-    SimpleString nameFilter_;
-    OutputType outputType_;
-
-    void SetRepeatCount(int ac, const char** av, int& index);
-    void SetGroupFilter(int ac, const char** av, int& index);
-    void SetNameFilter(int ac, const char** av, int& index);
-    bool SetOutputType(int ac, const char** av, int& index);
+	CommandLineArguments::OutputType getOutputType();
 };
 
 #endif

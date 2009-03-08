@@ -206,7 +206,8 @@ MemoryLeakDetectorNode* MemoryLeakDetectorTable::getNextLeak(MemoryLeakDetectorN
 
 /////////////////////////////////////////////////////////////
 
-MemoryLeakDetector::MemoryLeakDetector(MemoryLeakFailure* reporter) : reporter(reporter), current_period(mem_leak_period_disabled)
+MemoryLeakDetector::MemoryLeakDetector(MemoryLeakFailure* reporter)
+: reporter(reporter), current_period(mem_leak_period_disabled), gone(false)
 {
 }
 

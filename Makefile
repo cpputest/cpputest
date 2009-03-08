@@ -5,7 +5,7 @@ SILENCE = @
 ENABLE_EXTENSIONS = Y
 
 #---- Outputs ----#
-COMPONENT_NAME = CppUTest
+COMPONENT_NAME = CppUTest_Bas
 TARGET_LIB = \
 	lib/lib$(COMPONENT_NAME).a
 	
@@ -35,7 +35,8 @@ SRC_DIRS = \
 # - Consequently - AllTests.h containing the IMPORT_TEST_GROUPS is not needed
 # - 
 TEST_SRC_DIRS = \
-	tests
+	tests\
+	tests\Extensions
 
 #includes for all compiles	
 INCLUDES =\

@@ -56,8 +56,9 @@ void TestPlugin::runAllPreTestAction(Utest& test, TestResult& result)
 
 void TestPlugin::runAllPostTestAction(Utest& test, TestResult& result)
 {
-	if (enabled_) postTestAction(test, result);
-	next_->runAllPostTestAction(test, result);
+	next_ ->runAllPostTestAction(test, result);
+	if  ( enabled_ )
+	   postTestAction(test, result);
 }
 
 bool TestPlugin::parseAllArguments(int ac, char** av, int index)

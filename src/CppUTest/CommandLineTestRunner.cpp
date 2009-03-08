@@ -32,17 +32,14 @@
 #include "CppUTest/JUnitTestOutput.h"
 #include <stdlib.h>
 
-namespace {
-    JUnitTestOutput junitTestOutput;
-}
-
-CommandLineTestRunner::CommandLineTestRunner(TestOutput* output) :
-	verbose_(false), output_(output), repeat_(1), groupFilter_(0), nameFilter_(0), outputType_(OUTPUT_NORMAL)
+CommandLineTestRunner::CommandLineTestRunner(int ac, const char** av, TestOutput* output)
+: argc(ac), argv(av), output_(output)
 {
 }
 
 CommandLineTestRunner::~CommandLineTestRunner()
 {
+	delete arguments;
 }
 
 int CommandLineTestRunner::RunAllTests(int ac, char** av)
@@ -53,44 +50,46 @@ int CommandLineTestRunner::RunAllTests(int ac, char** av)
 int CommandLineTestRunner::RunAllTests(int ac, const char** av)
 {
 	ConsoleTestOutput output;
+	CommandLineTestRunner runner(ac, av, &output);
+	return runner.runAllTestsMain();
+}
+
+int CommandLineTestRunner::runAllTestsMain()
+{
 	int testResult = 0;
-   MemoryLeakWarningPlugin memLeakWarn(DEF_PLUGIN_MEM_LEAK);
-   SetPointerPlugin pPlugin(DEF_PLUGIN_SET_POINTER);
-	{
-        TestRegistry::getCurrentRegistry()->installPlugin(&pPlugin);
-        TestRegistry::getCurrentRegistry()->installPlugin(&memLeakWarn);
 
-    	memLeakWarn.Enable();
-    	{
-        	CommandLineTestRunner runner(&output);
-        	if (!runner.parseArguments(ac, av)) {
-        		return 1;
-        	}
+	SetPointerPlugin pPlugin(DEF_PLUGIN_SET_POINTER);
+	TestRegistry::getCurrentRegistry()->installPlugin(&pPlugin);
 
-        	testResult = runner.RunAllTests();
-    	}
- 	}
-    TestRegistry::getCurrentRegistry()->cleanup();
+	MemoryLeakWarningPlugin memLeakWarn(DEF_PLUGIN_MEM_LEAK);
+	TestRegistry::getCurrentRegistry()->installPlugin(&memLeakWarn);
+	memLeakWarn.Enable();
+
+	if (!parseArguments(TestRegistry::getCurrentRegistry()->getFirstPlugin()))
+		return 1;
+
+	testResult = runAllTests();
+
+	TestRegistry::getCurrentRegistry()->cleanup();
 	if (testResult == 0)
-        output << memLeakWarn.FinalReport(0); // TODO: These are two leaks in SimpleString if the global TestRegistry!
+		*output_ << memLeakWarn.FinalReport(3); // TODO: where are the 3 leaks from
 	return testResult;
 }
 
 void CommandLineTestRunner::initializeTestRun()
 {
-  	TestRegistry::getCurrentRegistry()->groupFilter(groupFilter_);
-  	TestRegistry::getCurrentRegistry()->nameFilter(nameFilter_);
-  	if (verbose_) output_->verbose();
-  	if (outputType_ == OUTPUT_JUNIT) {
-  		output_ = &junitTestOutput;
-  	}
+  	TestRegistry::getCurrentRegistry()->groupFilter(arguments->getGroupFilter());
+  	TestRegistry::getCurrentRegistry()->nameFilter(arguments->getNameFilter());
+  	if (arguments->isVerbose())
+  		output_->verbose();
 }
 
-int CommandLineTestRunner::RunAllTests()
+int CommandLineTestRunner::runAllTests()
 {
 	initializeTestRun();
   	int loopCount = 0;
   	int failureCount = 0;
+  	int repeat_ = arguments->getRepeatCount();
 
   	while (loopCount++ < repeat_) {
 		output_->printTestRun(loopCount, repeat_);
@@ -102,111 +101,39 @@ int CommandLineTestRunner::RunAllTests()
 	return failureCount;
 }
 
-bool CommandLineTestRunner::parseArguments(int ac, const char** av)
+bool CommandLineTestRunner::parseArguments(TestPlugin* plugin)
 {
-	bool correctParameters = true;
-	for (int i = 1; i < ac; i++) {
-		SimpleString argument = av[i];
-		if (argument == "-v")
-			verbose_ = true;
-		else if (argument.startsWith("-r"))
-			SetRepeatCount(ac, av, i);
-      	else if (argument.startsWith("-g"))
-        	SetGroupFilter(ac, av, i);
-      	else if (argument.startsWith("-n"))
-        	SetNameFilter(ac, av, i);
-      	else if (argument.startsWith("-o"))
-        	correctParameters = SetOutputType(ac, av, i);
-      	else if (argument.startsWith("-p"))
-      		correctParameters = TestRegistry::getCurrentRegistry()->getFirstPlugin()->parseArguments(ac, av, i);
-		else
-			correctParameters = false;
-
-		if (correctParameters == false) {
-          output_->print("usage [-v] [-r#] [-g groupName] [-n testName] [-o{normal, junit}]\n");
-          return false;
-        }
+	arguments = new CommandLineArguments(argc, argv, plugin);
+	if (arguments->parse())
+		return true;
+	else
+	{
+        output_->print(arguments->usage());
+        return false;
 	}
-	return true;
 }
 
 bool CommandLineTestRunner::isVerbose()
 {
-	return verbose_;
+	return arguments->isVerbose();
 }
 
 int CommandLineTestRunner::getRepeatCount()
 {
-	return repeat_;
+	return arguments->getRepeatCount();
 }
 
 SimpleString CommandLineTestRunner::getGroupFilter()
 {
-	return groupFilter_;
+	return arguments->getGroupFilter();
 }
 
 SimpleString CommandLineTestRunner::getNameFilter()
 {
-	return nameFilter_;
+	return arguments->getNameFilter();
 }
 
-CommandLineTestRunner::OutputType CommandLineTestRunner::getOutputType()
+CommandLineArguments::OutputType CommandLineTestRunner::getOutputType()
 {
-	return outputType_;
-}
-
-void CommandLineTestRunner::SetRepeatCount(int ac, const char** av, int& i)
-{
-  repeat_ = 0;
-
-  SimpleString repeatParameter (av[i]);
-  if (repeatParameter.size() > 2)
-    repeat_ = atoi(av[i] + 2);
-  else if (i + 1 < ac)
-    {
-      repeat_ = atoi(av[i+1]);
-      if (repeat_ != 0)
-        i++;
-    }
-
-  if (0 == repeat_)
-    repeat_ = 2;
-
-}
-
-SimpleString getParameterField(int ac, const char** av, int& i)
-{
-	SimpleString parameter(av[i]);
-	if (parameter.size() > 2)
-		return av[i] + 2;
-	else if (i + 1 < ac)
-		return av[++i];
-	return NULL;
-}
-
-
-void CommandLineTestRunner::SetGroupFilter(int ac, const char** av, int& i)
-{
-  groupFilter_ = getParameterField(ac, av, i);
-}
-
-void CommandLineTestRunner::SetNameFilter(int ac, const char** av, int& i)
-{
-   nameFilter_ = getParameterField(ac, av, i);
-}
-
-bool CommandLineTestRunner::SetOutputType(int ac, const char** av, int& i)
-{
-	SimpleString outputType = getParameterField(ac, av, i);
-	if (outputType.size () == 0) return false;
-
-	if (outputType == "normal") {
-		outputType_ = OUTPUT_NORMAL;
-		return true;
-	}
-	if (outputType == "junit") {
-		outputType_ = OUTPUT_JUNIT;
-		return true;
-	}
-	return false;
+	return arguments->getOutputType();
 }
