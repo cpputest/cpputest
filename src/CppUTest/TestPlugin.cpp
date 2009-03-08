@@ -136,7 +136,7 @@ SetPointerPlugin::~SetPointerPlugin()
 
  void CppUTestStore(void**function, void*value)
 {
-	if (index == SetPointerPlugin::MAX_SET) {
+	if (index >= SetPointerPlugin::MAX_SET) {
 		FAIL("Maximum number of function pointers installed!");
 	}
 	setlist[index].orig_value = value;

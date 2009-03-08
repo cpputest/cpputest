@@ -89,7 +89,6 @@ void TestRegistry::runOneTest(Utest* test, TestResult& result)
         firstPlugin_->runAllPostTestAction(*test, result);
 }
 
-
 bool TestRegistry::endOfGroup(Utest* test)
 {
 	return (test->isNull() || test->getGroup() != test->getNext()->getGroup());

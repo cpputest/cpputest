@@ -41,7 +41,7 @@ TEST_GROUP(CommandLineTestRunner)
 	}
 };
 
-TEST(CommandLineTestRunner, HmmmmWhatToWrite)
+IGNORE_TEST(CommandLineTestRunner, HmmmmWhatToWrite)
 {
 	//TODO: maybe some tests are in order
 }
