@@ -5,11 +5,6 @@
 #include <mmsystem.h>
 #include <stdarg.h>
 
-void Utest::executePlatformSpecificTestBody()
-{
-	testBody();
-}
-
 ///////////// Time in millis
 
 static long TimeInMillisImplementation()
@@ -48,6 +43,8 @@ void SetPlatformSpecificTimeStringMethod(SimpleString (*platformMethod) ())
 	timeStringFp = (platformMethod == 0) ? TimeStringImplementation : platformMethod;
 }
 
+#if 0
+
 void TestRegistry::platformSpecificRunOneTest(Utest* test, TestResult& result)
 {
     try {
@@ -59,16 +56,17 @@ void TestRegistry::platformSpecificRunOneTest(Utest* test, TestResult& result)
 
 }
 
+void Utest::executePlatformSpecificTestBody()
+{
+	testBody();
+}
+
 void PlatformSpecificExitCurrentTestImpl()
 {
     throw(1);
 }
 
-void FakePlatformSpecificExitCurrentTest()
-{
-}
-
-void (*PlatformSpecificExitCurrentTest)() = PlatformSpecificExitCurrentTestImpl;
+#endif
 
 int PlatformSpecificSprintf(char *str, unsigned int size, const char *format, ...)
 {
@@ -78,4 +76,118 @@ int PlatformSpecificSprintf(char *str, unsigned int size, const char *format, ..
     return _vsnprintf( str, size-1, format, args);
 }
 
+int PlatformSpecificVSNprintf(char *str, unsigned int size, const char* format, void* args)
+{
+   return _vsnprintf( str, size, format, (va_list) args);
+}
 
+
+//platform specific test running stuff
+#if 0
+#include <setjmp.h>
+
+static jmp_buf test_exit_jmp_buf[10];
+static int jmp_buf_index = 0;
+
+bool Utest::executePlatformSpecificSetup()
+{
+   if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
+      jmp_buf_index++;
+      setup();
+      jmp_buf_index--;
+      return true;
+   }
+   return false;
+}
+
+void Utest::executePlatformSpecificTestBody()
+{
+   if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
+      jmp_buf_index++;
+      testBody();
+      jmp_buf_index--;
+   }
+}
+
+void Utest::executePlatformSpecificTeardown()
+{
+   if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
+      jmp_buf_index++;
+      teardown();
+      jmp_buf_index--;
+   }
+}
+
+void TestRegistry::platformSpecificRunOneTest(Utest* test, TestResult& result)
+{
+    if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
+       jmp_buf_index++;
+       runOneTest(test, result);
+       jmp_buf_index--;
+    }
+}
+
+
+void PlatformSpecificExitCurrentTestImpl()
+{
+   jmp_buf_index--;
+   longjmp(test_exit_jmp_buf[jmp_buf_index], 1);
+}
+
+static jmp_buf test_exit_jmp_buf[10];
+static int jmp_buf_index = 0;
+#endif
+
+bool Utest::executePlatformSpecificSetup()
+{
+	try {
+      setup();
+	}
+	catch (int) {
+		return false;
+	}
+    return true;
+}
+
+void Utest::executePlatformSpecificTestBody()
+{
+	try {
+      testBody();
+	}
+	catch (int) {
+	}
+
+}
+
+void Utest::executePlatformSpecificTeardown()
+{
+	try {
+      teardown();
+	}
+	catch (int) {
+	}
+
+}
+
+void TestRegistry::platformSpecificRunOneTest(Utest* test, TestResult& result)
+{
+	try {
+       runOneTest(test, result);
+	}
+	catch (int) {
+	}
+
+}
+
+
+void PlatformSpecificExitCurrentTestImpl()
+{
+	throw(1);
+}
+
+
+void (*PlatformSpecificExitCurrentTest)() = PlatformSpecificExitCurrentTestImpl;
+
+void FakePlatformSpecificExitCurrentTest()
+{
+}

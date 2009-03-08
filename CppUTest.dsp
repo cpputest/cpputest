@@ -86,6 +86,10 @@ LIB32=link.exe -lib
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
+SOURCE=.\src\CppUTest\CommandLineArguments.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\CppUTest\CommandLineTestRunner.cpp
 # End Source File
 # Begin Source File
@@ -94,15 +98,19 @@ SOURCE=.\src\CppUTest\Failure.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\CppUTest\FindLeaksMalloc.c
-# End Source File
-# Begin Source File
-
 SOURCE=.\src\CppUTest\JUnitTestOutput.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\CppUTest\MemoryLeakDetector.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\CppUTest\MemoryLeakWarningPlugin.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\CppUTest\Extensions\OrderedTest.cpp
 # End Source File
 # Begin Source File
 
@@ -115,6 +123,10 @@ SOURCE=.\src\CppUTest\Extensions\SimpleStringExtensions.cpp
 # Begin Source File
 
 SOURCE=.\src\CppUTest\TestHarness_c.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\tests\Extensions\TestOrderedTest.cpp
 # End Source File
 # Begin Source File
 
@@ -150,6 +162,10 @@ SOURCE=.\src\Platforms\VisualCpp\Win32MemoryLeakWarning.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
+SOURCE=.\include\CppUTest\CommandLineArguments.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\include\CppUTest\CommandLineTestRunner.h
 # End Source File
 # Begin Source File
@@ -183,10 +199,6 @@ SOURCE=.\include\CppUTest\SimpleString.h
 # Begin Source File
 
 SOURCE=.\include\CppUTest\Extensions\SimpleStringExtensions.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\include\CppUTest\Extensions\SimpleStringFromStdint.h
 # End Source File
 # Begin Source File
 
