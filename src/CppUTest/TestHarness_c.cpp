@@ -35,7 +35,7 @@
 #include "CppUTest/MemoryLeakDetector.h"
 
 extern "C" {
-
+	#undef __cplusplus
 	#include "stdlib.h"
 	#include "CppUTest/TestHarness_c.h"
 

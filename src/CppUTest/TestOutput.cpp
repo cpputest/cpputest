@@ -160,7 +160,7 @@ void TestOutput::print(const Failure& failure)
     print(":");
     print(failure.getLineNumber());
     print(":");
-    print(" error: ");    
+    print(" error: ");
     print("Failure in ");
     print(failure.getTestName().asCharString());
     print("\n");

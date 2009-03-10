@@ -55,7 +55,7 @@ void JUnitTestOutput::resetTestGroupResult()
   	results_.head_ = 0;
   	results_.tail_ = 0;
 }
- 
+
 void JUnitTestOutput::printTestsStarted()
 {
 }
@@ -85,18 +85,18 @@ void JUnitTestOutput::printCurrentTestStarted(const Utest& test)
 	results_.testCount_++;
 	results_.group_ = test.getGroup();
 	results_.startTime_ = GetPlatformSpecificTimeInMillis();
-	
+
 	if (results_.tail_ == 0) {
 		results_.head_ = results_.tail_ = new JUnitTestCaseResultNode;
 	}
 	else {
-		results_.tail_->next_ = new JUnitTestCaseResultNode; 
-		results_.tail_ = results_.tail_->next_; 
+		results_.tail_->next_ = new JUnitTestCaseResultNode;
+		results_.tail_ = results_.tail_->next_;
 	}
-	results_.tail_->name_ = test.getName(); 
+	results_.tail_->name_ = test.getName();
 }
 
-	
+
 static SimpleString createFileName(const SimpleString& group)
 {
 	SimpleString fileName = "cpputest_";
@@ -133,10 +133,10 @@ void JUnitTestOutput::writeTestCases()
 
   	JUnitTestCaseResultNode* cur = results_.head_;
   	while (cur) {
-		PlatformSpecificSprintf(buf, buf_size, "<testcase classname=\"%s\" name=\"%s\" time=\"%d.0\">\n", 
+		PlatformSpecificSprintf(buf, buf_size, "<testcase classname=\"%s\" name=\"%s\" time=\"%d.0\">\n",
 			results_.group_.asCharString(), cur->name_.asCharString(), (int) cur->execTime_);
 		writeToFile(buf);
-		
+
 		if (cur->failure_) {
 			writeFailure(cur);
 		}
@@ -156,7 +156,7 @@ void JUnitTestOutput::writeFailure(JUnitTestCaseResultNode* node)
 	message.replace('<','[');
 	message.replace('>',']');
 	message.replace("\n","{newline}");
-	PlatformSpecificSprintf(buf, buf_size, "<failure message=\"%s:%d: %s\" type=\"AssertionFailedError\">\n", 
+	PlatformSpecificSprintf(buf, buf_size, "<failure message=\"%s:%d: %s\" type=\"AssertionFailedError\">\n",
 		node->failure_->getFileName().asCharString(), node->failure_->getLineNumber(), message.asCharString());
 
 	writeToFile(buf);
@@ -170,7 +170,7 @@ void JUnitTestOutput::writeFileEnding()
 	writeToFile("</testsuite>");
 }
 
-void JUnitTestOutput::writeTestGroupToFile() 
+void JUnitTestOutput::writeTestGroupToFile()
 {
 	openFileForWrite(createFileName(results_.group_));
 	writeXmlHeader();

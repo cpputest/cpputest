@@ -128,3 +128,21 @@ int PlatformSpecificVSNprintf(char *str, unsigned int size, const char* format, 
        return count;
 }
 
+//int PlatformSpecificVSNprintf(char *str, unsigned int size, const char* format, va_list args)
+//{
+//   size_t count = vsnprintf( str, size, format, (va_list) args);
+//   if (size < count)
+//       return -1;
+//   else
+//       return count;
+//}
+
+int PlatformSpecificVSNprintf2(char *str, unsigned int size, const char* format, va_list args)
+{
+   size_t count = vsnprintf( str, size, format, args);
+   if (size < count)
+       return -1;
+   else
+       return count;
+}
+

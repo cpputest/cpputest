@@ -22,7 +22,7 @@ void SimpleBuffer::add(const char* format, ...)
    int count = 0;
    va_list arguments;
    va_start(arguments, format);
-   count = PlatformSpecificVSNprintf(buffer + positions_filled, SIMPLE_BUFFER_LEN - positions_filled, format, arguments);
+   count = PlatformSpecificVSNprintf2(buffer + positions_filled, SIMPLE_BUFFER_LEN - positions_filled, format, arguments);
    if (count > 0)
       positions_filled += count;
    va_end(arguments);
