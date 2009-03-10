@@ -119,6 +119,7 @@ public:
    char* allocOperatorNewArray(unsigned int size, const char* file, int line);
    char* allocMalloc(unsigned int size);
    char* allocMalloc(unsigned int size, const char* file, int line);
+   char* allocRealloc(char* memory, unsigned int size, const char* file, int line);
 
    void freeOperatorDelete(char* memory);
    void freeOperatorDeleteArray(char* memory);
@@ -137,9 +138,15 @@ private:
    void ConstructMemoryLeakReport(MemLeakPeriod period);
    void reportFailure(const char* message, const char* allocFile, int allocLine, int allocSize, MemLeakAllocType allocType, const char* freeFile, int freeLine, MemLeakAllocType freeType);
    char* alloc(unsigned int size, char* file, int line, MemLeakAllocType type);
+   char* reallocate(char* memory, unsigned int size, char* file, int line, MemLeakAllocType type);
    const char* getTypeString(MemLeakAllocType type);
    void dealloc(char* memory, const char* file, int line, MemLeakAllocType type);
 
+   void addMemoryCorruptionInformation(char* memory, int size);
+   void checkForAllocMismatchOrCorruption(MemoryLeakDetectorNode* node, const char* file, int line, MemLeakAllocType type);
+
+   void addMemoryLeakInfoAndCorruptionInfo(char* memory, int size, char* file, int line, MemLeakAllocType type);
+   bool removeMemoryLeakInfoAndCheckCorruption(char* memory, const char* file, int line, MemLeakAllocType type);
 };
 
 #endif

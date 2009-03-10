@@ -27,7 +27,8 @@
 
 extern "C" {
 	#include <stdlib.h>
-	#include "CppUTest/TestHarness_c.h"
+   #include <string.h>
+   #include "CppUTest/TestHarness_c.h"
 
 }
 #include "CppUTest/TestHarness.h"
@@ -60,7 +61,6 @@ TEST(TestHarness_c, checkInt)
 	fixture->runAllTests();
 	fixture->assertPrintContains("expected <1>\n	but was  <2>");
 	fixture->assertPrintContains("arness_c");
-//	fixture->assertPrintContains("TestHarness_cTest.cpp");;  //becuase of MS lowercasing the files
 }
 
 void _failRealMethod()
@@ -75,7 +75,6 @@ TEST(TestHarness_c, checkReal)
 	fixture->runAllTests();
 	fixture->assertPrintContains("expected <1.000000>\n	but was  <2.000000>");
 	fixture->assertPrintContains("arness_c");
-//	fixture->assertPrintContains("TestHarness_cTest.cpp");
 }
 
 void _failCharMethod()
@@ -90,7 +89,6 @@ TEST(TestHarness_c, checkChar)
 	fixture->runAllTests();
 	fixture->assertPrintContains("expected <a>\n	but was  <c>");
 	fixture->assertPrintContains("arness_c");
-//	fixture->assertPrintContains("TestHarness_cTest.cpp");
 }
 
 void _failStringMethod()
@@ -105,7 +103,6 @@ TEST(TestHarness_c, checkString)
 	fixture->runAllTests();
 	fixture->assertPrintContains("expected <Hello>\n	but was  <World>");
 	fixture->assertPrintContains("arness_c");
-//	fixture->assertPrintContains("TestHarness_cTest.cpp");
 }
 
 void _failTextMethod()
@@ -119,7 +116,6 @@ TEST(TestHarness_c, checkFailText)
 	fixture->runAllTests();
 	fixture->assertPrintContains("Booo");
 	fixture->assertPrintContains("arness_c");
-//	fixture->assertPrintContains("TestHarness_cTest.cpp");
 }
 
 void _failMethod()
@@ -133,7 +129,6 @@ TEST(TestHarness_c, checkFail)
 	fixture->runAllTests();
 	LONGS_EQUAL(1, fixture->getFailureCount());
 	fixture->assertPrintContains("arness_c");
-//	fixture->assertPrintContains("TestHarness_cTest.cpp");
 }
 
 void _CheckMethod()
@@ -154,10 +149,42 @@ TEST(TestHarness_c, cpputest_malloc_out_of_memory)
 {
     cpputest_malloc_set_out_of_memory();
     CHECK(0 == cpputest_malloc(100));
-    
+
     cpputest_malloc_set_not_out_of_memory();
-    char * mem = cpputest_malloc(100);
+    void * mem = cpputest_malloc(100);
     CHECK(0 != mem);
     cpputest_free(mem);
 }
 
+TEST(TestHarness_c, cpputest_calloc)
+{
+   void * mem = cpputest_calloc(10, 10);
+   CHECK(0 != mem);
+   cpputest_free(mem);
+}
+
+TEST(TestHarness_c, cpputest_realloc_larger)
+{
+   const char* number_string = "123456789";
+
+   char* mem1 = (char*)cpputest_malloc(10);
+
+   strcpy(mem1, number_string);
+   CHECK(mem1 != 0);
+
+   char* mem2 = (char*) cpputest_realloc(mem1, 1000);
+
+   CHECK(mem2 != 0);
+   STRCMP_EQUAL(number_string, mem2)
+
+   cpputest_free(mem2);
+}
+
+TEST(TestHarness_c, macros)
+{
+   void* mem1 = malloc(10);
+   void* mem2 = calloc(10, 20);
+   void* mem3 = realloc(mem2, 100);
+   free(mem1);
+   free(mem3);
+}

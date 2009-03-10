@@ -39,6 +39,11 @@ extern "C" {
 	#include "stdlib.h"
 	#include "CppUTest/TestHarness_c.h"
 
+#undef malloc
+#undef calloc
+#undef realloc
+#undef free
+
 	void  CHECK_EQUAL_C_INT_LOCATION(int expected, int actual, const char* fileName, int lineNumber)
 	{
 			CHECK_EQUAL_LOCATION((long)expected, (long)actual, fileName, lineNumber);
@@ -86,31 +91,53 @@ extern "C" {
         out_of_memory = 0;
     }
 
-	char* cpputest_malloc(unsigned int size)
-	{
-		return cpputest_malloc_location(size, "<unknown>", 0);
-	}
+    void* cpputest_malloc(unsigned int size)
+    {
+       return cpputest_malloc_location(size, "<unknown>", 0);
+    }
 
-	void cpputest_free(char* buffer)
+    void* cpputest_calloc(unsigned int num, unsigned int size)
+    {
+       return cpputest_calloc_location(num, size, "<unknown>", 0);
+    }
+
+    void* cpputest_realloc(void* ptr, unsigned int size)
+    {
+       return cpputest_realloc_location(ptr, size, "<unknown>", 0);
+    }
+
+	void cpputest_free(void* buffer)
 	{
 		cpputest_free_location(buffer, "<unknown>", 0);
 	}
 
-	char* cpputest_malloc_location(unsigned int size, const char* file, int line)
+	void* cpputest_malloc_location(unsigned int size, const char* file, int line)
    {
 	   if (out_of_memory) return 0;
 
-      if (MemoryLeakWarningPlugin::getFirstPlugin() && !out_of_memory)
+      if (MemoryLeakWarningPlugin::getFirstPlugin())
          return MemoryLeakWarningPlugin::getFirstPlugin()->getMemoryLeakDetector()->allocMalloc(size, file, line);
-      return new char[size];
+      return malloc(size);
    }
 
-   void cpputest_free_location(char* buffer, const char* file, int line)
+	void* cpputest_calloc_location(unsigned int num, unsigned int size,const char* file, int line)
+	{
+	   return cpputest_malloc_location(num*size, file, line);
+	}
+
+	void* cpputest_realloc_location(void* memory, unsigned int size, const char* file, int line)
+	{
+      if (MemoryLeakWarningPlugin::getFirstPlugin())
+         return MemoryLeakWarningPlugin::getFirstPlugin()->getMemoryLeakDetector()->allocRealloc((char*)memory, size, file, line);
+      return realloc(memory, size);
+	}
+
+   void cpputest_free_location(void* buffer, const char* file, int line)
    {
       if (MemoryLeakWarningPlugin::getFirstPlugin())
-         MemoryLeakWarningPlugin::getFirstPlugin()->getMemoryLeakDetector()->freeFree(buffer, file, line);
+         MemoryLeakWarningPlugin::getFirstPlugin()->getMemoryLeakDetector()->freeFree((char*) buffer, file, line);
       else
-         delete[] buffer;
+         free(buffer);
    }
 
 }

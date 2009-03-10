@@ -222,6 +222,21 @@ TEST(MemoryLeakDetectorTest, OneAllocAndFreeUsingMalloc)
    detector.stopChecking();
 }
 
+TEST(MemoryLeakDetectorTest, OneRealloc)
+{
+   char* mem1 = detector.allocMalloc(10, "file.cpp", 1234);
+
+   char* mem2 = detector.allocRealloc(mem1, 1000, "other.cpp", 5678);
+
+   LONGS_EQUAL(1, detector.totalMemoryLeaks(mem_leak_period_checking));
+   SimpleString output = detector.report(mem_leak_period_checking);
+   CHECK(output.contains("other.cpp"));
+
+   detector.freeFree(mem2);
+   LONGS_EQUAL(0, detector.totalMemoryLeaks(mem_leak_period_all));
+   detector.stopChecking();
+}
+
 TEST(MemoryLeakDetectorTest, AllocOneTypeFreeAnotherType)
 {
    char* mem = detector.allocOperatorNewArray(100, "ALLOC.c", 10);
