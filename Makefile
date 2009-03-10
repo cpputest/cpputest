@@ -5,7 +5,7 @@ SILENCE = @
 ENABLE_EXTENSIONS = Y
 
 #---- Outputs ----#
-COMPONENT_NAME = CppUTest_Bas
+COMPONENT_NAME = CppUTest
 TARGET_LIB = \
 	lib/lib$(COMPONENT_NAME).a
 	
@@ -36,7 +36,7 @@ SRC_DIRS = \
 # - 
 TEST_SRC_DIRS = \
 	tests\
-	tests\Extensions
+	tests/Extensions
 
 #includes for all compiles	
 INCLUDES =\
