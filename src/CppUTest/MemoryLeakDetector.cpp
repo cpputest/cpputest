@@ -207,7 +207,7 @@ MemoryLeakDetectorNode* MemoryLeakDetectorTable::getNextLeak(MemoryLeakDetectorN
 /////////////////////////////////////////////////////////////
 
 MemoryLeakDetector::MemoryLeakDetector(MemoryLeakFailure* reporter)
-: reporter(reporter), current_period(mem_leak_period_disabled), gone(false)
+: reporter(reporter), current_period(mem_leak_period_disabled)
 {
 }
 
@@ -410,3 +410,4 @@ const char* MemoryLeakDetector::getTypeString(MemLeakAllocType type)
    }
    return 0;
 }
+

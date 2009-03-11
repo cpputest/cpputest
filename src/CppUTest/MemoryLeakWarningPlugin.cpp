@@ -30,6 +30,9 @@
 #include "CppUTest/MemoryLeakDetector.h"
 #include <stdlib.h>
 
+#undef malloc
+#undef free
+
 class MemoryLeakWarningReporter : public MemoryLeakFailure
 {
 public:
@@ -39,8 +42,32 @@ public:
    }
 };
 
-static MemoryLeakWarningReporter reporter;
-static MemoryLeakDetector globalDetector(&reporter);
+static MemoryLeakWarningReporter* reporter = NULL;
+static MemoryLeakDetector* globalDetector = NULL;
+
+static void* operator new(size_t size, bool)
+{
+   return malloc(size);
+}
+
+void destroyDetector()
+{
+   free (globalDetector);
+   reporter->~MemoryLeakWarningReporter();
+   free (reporter);
+   reporter = NULL;
+   globalDetector = NULL;
+}
+
+MemoryLeakDetector* MemoryLeakWarningPlugin::getGlobalDetector()
+{
+   if (globalDetector == NULL) {
+      reporter = new(false) MemoryLeakWarningReporter;
+      globalDetector = new(false) MemoryLeakDetector(reporter);
+      atexit(destroyDetector);
+   }
+   return globalDetector;
+}
 
 MemoryLeakWarningPlugin* MemoryLeakWarningPlugin::firstPlugin = 0;
 
@@ -70,11 +97,12 @@ MemoryLeakWarningPlugin::MemoryLeakWarningPlugin(const SimpleString& name, Memor
    if (firstPlugin == 0) firstPlugin = this;
 
    if (localDetector) memLeakDetector = localDetector;
-   else memLeakDetector = &globalDetector;
+   else memLeakDetector = getGlobalDetector();
 }
 
 MemoryLeakWarningPlugin::~MemoryLeakWarningPlugin()
 {
+   if (this == firstPlugin) firstPlugin = NULL;
 }
 
 void MemoryLeakWarningPlugin::preTestAction(Utest& test, TestResult& result)
@@ -114,30 +142,30 @@ const char* MemoryLeakWarningPlugin::FinalReport(int toBeDeletedLeaks)
 
 void* operator new(size_t size)
 {
-   return globalDetector.allocOperatorNew(size);
+   return MemoryLeakWarningPlugin::getGlobalDetector()->allocOperatorNew(size);
 }
 
 void operator delete(void* mem)
 {
-	if (!globalDetector.isGone()) globalDetector.freeOperatorDelete((char*)mem);
+   MemoryLeakWarningPlugin::getGlobalDetector()->freeOperatorDelete((char*)mem);
 }
 
 void* operator new[](size_t size)
 {
-   return globalDetector.allocOperatorNewArray(size);
+   return MemoryLeakWarningPlugin::getGlobalDetector()->allocOperatorNewArray(size);
 }
 
 void operator delete[](void* mem)
 {
-   if (!globalDetector.isGone()) globalDetector.freeOperatorDeleteArray((char*)mem);
+   MemoryLeakWarningPlugin::getGlobalDetector()->freeOperatorDeleteArray((char*)mem);
 }
 
 void* operator new(size_t size, const char* file, int line)
 {
-   return globalDetector.allocOperatorNew(size, (char*) file, line);
+   return MemoryLeakWarningPlugin::getGlobalDetector()->allocOperatorNew(size, (char*) file, line);
 }
 
 void* operator new [](size_t size, const char* file, int line)
 {
-   return globalDetector.allocOperatorNewArray(size, (char*) file, line);
+   return MemoryLeakWarningPlugin::getGlobalDetector()->allocOperatorNewArray(size, (char*) file, line);
 }

@@ -115,9 +115,7 @@ extern "C" {
    {
 	   if (out_of_memory) return 0;
 
-      if (MemoryLeakWarningPlugin::getFirstPlugin())
-         return MemoryLeakWarningPlugin::getFirstPlugin()->getMemoryLeakDetector()->allocMalloc(size, file, line);
-      return malloc(size);
+	   return MemoryLeakWarningPlugin::getGlobalDetector()->allocMalloc(size, file, line);
    }
 
 	void* cpputest_calloc_location(unsigned int num, unsigned int size,const char* file, int line)
@@ -127,17 +125,12 @@ extern "C" {
 
 	void* cpputest_realloc_location(void* memory, unsigned int size, const char* file, int line)
 	{
-      if (MemoryLeakWarningPlugin::getFirstPlugin())
-         return MemoryLeakWarningPlugin::getFirstPlugin()->getMemoryLeakDetector()->allocRealloc((char*)memory, size, file, line);
-      return realloc(memory, size);
+     return MemoryLeakWarningPlugin::getGlobalDetector()->allocRealloc((char*)memory, size, file, line);
 	}
 
    void cpputest_free_location(void* buffer, const char* file, int line)
    {
-      if (MemoryLeakWarningPlugin::getFirstPlugin())
-         MemoryLeakWarningPlugin::getFirstPlugin()->getMemoryLeakDetector()->freeFree((char*) buffer, file, line);
-      else
-         free(buffer);
+      MemoryLeakWarningPlugin::getGlobalDetector()->freeFree((char*) buffer, file, line);
    }
 
 }

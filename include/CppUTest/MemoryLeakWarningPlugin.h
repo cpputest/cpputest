@@ -78,6 +78,8 @@ class MemoryLeakWarningPlugin : public TestPlugin
 
 		MemoryLeakDetector* getMemoryLeakDetector();
 		static MemoryLeakWarningPlugin* getFirstPlugin();
+
+		static MemoryLeakDetector* getGlobalDetector();
 	private:
 		MemoryLeakDetector* memLeakDetector;
 		bool ignoreAllWarnings;
