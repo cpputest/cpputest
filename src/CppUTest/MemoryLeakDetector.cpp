@@ -148,7 +148,7 @@ bool MemoryLeakDetectorList::hasLeaks(MemLeakPeriod period)
 
 int MemoryLeakDetectorTable::hash(char* memory)
 {
-   return ((int) memory) % hash_prime;
+   return ((unsigned int) memory) % hash_prime;
 }
 
 void MemoryLeakDetectorTable::clearAllAccounting(MemLeakPeriod period)
