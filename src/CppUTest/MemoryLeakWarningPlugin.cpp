@@ -45,7 +45,7 @@ public:
 static MemoryLeakWarningReporter* reporter = NULL;
 static MemoryLeakDetector* globalDetector = NULL;
 
-static void* operator new(size_t size, bool)
+void* operator new(size_t size, bool)
 {
    return malloc(size);
 }
