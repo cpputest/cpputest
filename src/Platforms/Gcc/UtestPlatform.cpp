@@ -146,3 +146,12 @@ int PlatformSpecificVSNprintf2(char *str, unsigned int size, const char* format,
        return count;
 }
 
+void PlatformSpecificFlush()
+{
+  fflush(stdout);
+}
+
+int PlatformSpecificPutchar(int c)
+{
+  return putchar(c);
+}

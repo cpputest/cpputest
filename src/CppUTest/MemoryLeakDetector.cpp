@@ -6,6 +6,8 @@
 #include <stdarg.h>
 
 #define UNKNOWN const_cast<char*>("<unknown>")
+#undef malloc
+#undef free
 
 SimpleBuffer::SimpleBuffer() : positions_filled(0)
 {
@@ -34,10 +36,19 @@ char* SimpleBuffer::toString()
 }
 
 ///////////////////////
+void* checkedMalloc(unsigned int size)
+{
+  void* mem = malloc(size);
+  if (mem == 0)
+    FAIL("malloc returned nul pointer");
+   return mem;
+}
+
+
 
 MemoryLeakDetectorNode* MemoryLeakDetectorList::allocNode(unsigned int size, char* memory, MemLeakPeriod period, char* file, int line, MemLeakAllocType type)
 {
-   MemoryLeakDetectorNode* node = (MemoryLeakDetectorNode*) malloc(sizeof(MemoryLeakDetectorNode));
+   MemoryLeakDetectorNode* node = (MemoryLeakDetectorNode*) checkedMalloc(sizeof(MemoryLeakDetectorNode));
    if (node) {
       node->size = size;
       node->memory = memory;
@@ -283,7 +294,7 @@ bool MemoryLeakDetector::removeMemoryLeakInfoAndCheckCorruption(char* memory, co
 
 char* MemoryLeakDetector::alloc(unsigned int size, char* file, int line, MemLeakAllocType type)
 {
-   char* mem = (char*) malloc(size+3);
+   char* mem = (char*) checkedMalloc(size+3);
    addMemoryLeakInfoAndCorruptionInfo(mem, size, file, line, type);
    return mem;
 }

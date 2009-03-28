@@ -47,7 +47,10 @@ static MemoryLeakDetector* globalDetector = NULL;
 
 void* operator new(size_t size, bool)
 {
-   return malloc(size);
+  void* mem = malloc(size);
+  if (mem == 0)
+    FAIL("operator new(size, bool) not enough memory");
+   return mem;
 }
 
 void destroyDetector()

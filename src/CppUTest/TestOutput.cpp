@@ -25,12 +25,8 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "CppUTest/SimpleString.h"
+#include "CppUTest/TestHarness.h"
 #include "CppUTest/TestOutput.h"
-#include "CppUTest/Utest.h"
-#include "CppUTest/Failure.h"
-#include "CppUTest/TestResult.h"
-#include <stdio.h>
 
 TestOutput::TestOutput() : dotCount_(0), verbose_(false), progressIndication(".")
 {}
@@ -171,10 +167,10 @@ void TestOutput::print(const Failure& failure)
 
 void ConsoleTestOutput::print(const char* s)
 {
-	while(*s) {
+    while(*s) {
       if ('\n' == *s)
-        putchar('\r');
-      putchar(*s);
+        PlatformSpecificPutchar('\r');
+      PlatformSpecificPutchar(*s);
       s++;
     }
     flush();
@@ -182,5 +178,5 @@ void ConsoleTestOutput::print(const char* s)
 
 void ConsoleTestOutput::flush()
 {
-	fflush(stdout);
+	PlatformSpecificFlush();;
 }

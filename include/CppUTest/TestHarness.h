@@ -76,8 +76,10 @@ extern void FakePlatformSpecificExitCurrentTest();
 extern void PlatformSpecificExitCurrentTestImpl();
 
 int PlatformSpecificSprintf(char *str, unsigned int size, const char *format, ...);
-//int PlatformSpecificVSNprintf(char *str, unsigned int size, const char* format, void* va_args_list);
+int PlatformSpecificVSNprintf(char *str, unsigned int size, const char* format, void* va_args_list);
+int PlatformSpecificVSNprintf(char *str, unsigned int size, const char* format, va_list va_args_list);
 int PlatformSpecificVSNprintf2(char *str, unsigned int size, const char* format, va_list va_args_list);
-
+int PlatformSpecificPutchar(int c);
+void PlatformSpecificFlush();
 #endif
 

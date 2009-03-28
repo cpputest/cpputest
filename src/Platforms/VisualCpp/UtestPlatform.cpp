@@ -191,3 +191,13 @@ void (*PlatformSpecificExitCurrentTest)() = PlatformSpecificExitCurrentTestImpl;
 void FakePlatformSpecificExitCurrentTest()
 {
 }
+
+void PlatformSpecificFlush()
+{
+  fflush(stdout);
+}
+
+int PlatformSpecificPutchar(int c)
+{
+  return putchar(c);
+}

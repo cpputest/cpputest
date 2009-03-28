@@ -29,7 +29,6 @@
 #include "CppUTest/CommandLineTestRunner.h"
 #include "CppUTest/MemoryLeakWarningPlugin.h"
 #include "CppUTest/TestOutput.h"
-#include "CppUTest/JUnitTestOutput.h"
 #include <stdlib.h>
 
 CommandLineTestRunner::CommandLineTestRunner(int ac, const char** av, TestOutput* output)

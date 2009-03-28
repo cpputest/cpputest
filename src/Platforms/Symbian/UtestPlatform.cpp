@@ -115,3 +115,13 @@ int PlatformSpecificSprintf(char *str, unsigned int size, const char *format, ..
    else
        return count;
 }
+
+void PlatformSpecificFlush()
+{
+  fflush(stdout);
+}
+
+int PlatformSpecificPutchar(int c)
+{
+  return putchar(c);
+}
