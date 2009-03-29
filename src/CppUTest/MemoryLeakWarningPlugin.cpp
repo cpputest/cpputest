@@ -29,6 +29,7 @@
 #include "CppUTest/MemoryLeakWarningPlugin.h"
 #include "CppUTest/MemoryLeakDetector.h"
 #include <stdlib.h>
+#include <string.h>
 
 #undef malloc
 #undef free
@@ -42,31 +43,36 @@ public:
    }
 };
 
-static MemoryLeakWarningReporter* reporter = NULL;
+static MemoryLeakWarningReporter* globalReporter = NULL;
 static MemoryLeakDetector* globalDetector = NULL;
-
-void* operator new(size_t size, bool)
-{
-  void* mem = malloc(size);
-  if (mem == 0)
-    FAIL("operator new(size, bool) not enough memory");
-   return mem;
-}
 
 void destroyDetector()
 {
    free (globalDetector);
-   reporter->~MemoryLeakWarningReporter();
-   free (reporter);
-   reporter = NULL;
+   globalReporter->~MemoryLeakWarningReporter();
+   free (globalReporter);
+   globalReporter = NULL;
    globalDetector = NULL;
 }
 
 MemoryLeakDetector* MemoryLeakWarningPlugin::getGlobalDetector()
 {
    if (globalDetector == NULL) {
-      reporter = new(false) MemoryLeakWarningReporter;
-      globalDetector = new(false) MemoryLeakDetector(reporter);
+
+      /*  Want to void using operator new here, however.. still need to init the vtable.
+       *  Now just memcpy a local stack variable in the malloced memory. Ought to work everywhere :))
+       */
+
+      MemoryLeakWarningReporter reporter;
+      globalReporter = (MemoryLeakWarningReporter*) malloc(sizeof(MemoryLeakWarningReporter));
+      memcpy(globalReporter, &reporter, sizeof(MemoryLeakWarningReporter));
+
+      MemoryLeakDetector detector(globalReporter);
+      globalDetector = (MemoryLeakDetector*) malloc(sizeof(MemoryLeakDetector));
+      if (globalDetector == 0)
+        FAIL("operator new(size, bool) not enough memory");
+      memcpy(globalDetector, &detector, sizeof(MemoryLeakDetector));
+
       atexit(destroyDetector);
    }
    return globalDetector;

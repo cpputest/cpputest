@@ -53,8 +53,6 @@ TEST_GROUP(MemoryLeakDetectorTest)
    void teardown()
    {
       delete reporter.message;
-      detector.clearAllAccounting(mem_leak_period_all);
-
    }
 };
 

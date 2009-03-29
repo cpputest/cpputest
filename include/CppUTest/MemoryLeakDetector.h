@@ -56,8 +56,7 @@ struct MemoryLeakDetectorList
 {
    MemoryLeakDetectorList() : head(0) {};
 
-   static MemoryLeakDetectorNode* allocNode(unsigned int size, char* memory, MemLeakPeriod period, char* file, int line, MemLeakAllocType type);
-   static void freeNode(MemoryLeakDetectorNode* node);
+   static void initNode(MemoryLeakDetectorNode* node, unsigned int size, char* memory, MemLeakPeriod period, char* file, int line, MemLeakAllocType type);
 
    void addNewNode(MemoryLeakDetectorNode* node);
    MemoryLeakDetectorNode* removeNode(char* memory);
@@ -92,7 +91,7 @@ struct MemoryLeakDetectorTable
 private:
    int hash(char* memory);
 
-   enum {hash_prime = 9973};
+   enum {hash_prime = MEMORY_LEAK_HASH_TABLE_SIZE};
    MemoryLeakDetectorList table[hash_prime];
 };
 
@@ -126,6 +125,7 @@ public:
    void freeFree(char* memory);
    void freeFree(char* memory, const char* file, int line);
 
+   enum { memory_corruption_buffer_size = 3};
 private:
    MemoryLeakFailure* reporter;
    MemLeakPeriod current_period;
@@ -140,6 +140,8 @@ private:
    const char* getTypeString(MemLeakAllocType type);
    void dealloc(char* memory, const char* file, int line, MemLeakAllocType type);
 
+   char* reallocateMemoryAndExtraInfo(char* memory, int size);
+   char* allocateMemoryAndExtraInfo(int size);
    void addMemoryCorruptionInformation(char* memory, int size);
    void checkForAllocMismatchOrCorruption(MemoryLeakDetectorNode* node, const char* file, int line, MemLeakAllocType type);
 
