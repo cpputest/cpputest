@@ -105,7 +105,15 @@ TEST(CommandLineArguments, setNormalOutput)
 	int argc = 2;
 	const char* argv[] = {"tests.exe", "-onormal"};
 	CHECK(newArgumentParser(argc, argv));
-	LONGS_EQUAL(CommandLineArguments::OUTPUT_NORMAL, args->getOutputType());
+	CHECK(args->isEclipseOutput());
+}
+
+TEST(CommandLineArguments, setEclsipeOutput)
+{
+	int argc = 2;
+	const char* argv[] = {"tests.exe", "-oeclipse"};
+	CHECK(newArgumentParser(argc, argv));
+	CHECK(args->isEclipseOutput());
 }
 
 TEST(CommandLineArguments, setNormalOutputDifferentParameter)
@@ -113,7 +121,7 @@ TEST(CommandLineArguments, setNormalOutputDifferentParameter)
 	int argc = 3;
 	const char* argv[] = {"tests.exe", "-o", "normal"};
 	CHECK(newArgumentParser(argc, argv));
-	LONGS_EQUAL(CommandLineArguments::OUTPUT_NORMAL, args->getOutputType());
+	CHECK(args->isEclipseOutput());
 }
 
 TEST(CommandLineArguments, setJUnitOutputDifferentParameter)
@@ -121,7 +129,7 @@ TEST(CommandLineArguments, setJUnitOutputDifferentParameter)
 	int argc = 3;
 	const char* argv[] = {"tests.exe", "-o", "junit"};
 	CHECK(newArgumentParser(argc, argv));
-	LONGS_EQUAL(CommandLineArguments::OUTPUT_JUNIT, args->getOutputType());
+	CHECK(args->isJUnitOutput());
 }
 
 TEST(CommandLineArguments, setOutputToGarbage)
@@ -158,5 +166,5 @@ TEST(CommandLineArguments, checkDefaultArguments)
 	LONGS_EQUAL(1, args->getRepeatCount());
 	STRCMP_EQUAL("", args->getGroupFilter().asCharString());
 	STRCMP_EQUAL("", args->getNameFilter().asCharString());
-	LONGS_EQUAL(CommandLineArguments::OUTPUT_NORMAL, args->getOutputType());
+	CHECK(args->isEclipseOutput());
 }

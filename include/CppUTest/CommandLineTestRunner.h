@@ -70,7 +70,6 @@ private:
 	int getRepeatCount();
 	SimpleString getGroupFilter();
 	SimpleString getNameFilter();
-	CommandLineArguments::OutputType getOutputType();
 };
 
 #endif

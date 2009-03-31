@@ -13,9 +13,7 @@ class TestPlugin;
 
 class CommandLineArguments
   {
-
   public:
-	enum OutputType {OUTPUT_NORMAL, OUTPUT_JUNIT};
     explicit CommandLineArguments(int ac, const char** av, TestPlugin*);
     virtual ~CommandLineArguments();
 
@@ -24,11 +22,13 @@ class CommandLineArguments
 	int getRepeatCount() const ;
 	SimpleString getGroupFilter() const;
 	SimpleString getNameFilter() const;
-	OutputType getOutputType() const;
+	bool isJUnitOutput() const;
+	bool isEclipseOutput() const;
 	const char* usage() const;
 
   private:
 
+	enum OutputType {OUTPUT_ECLIPSE, OUTPUT_JUNIT};
 	int ac;
 	const char** av;
 	TestPlugin* plugin_;

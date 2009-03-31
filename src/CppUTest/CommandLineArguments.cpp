@@ -12,7 +12,7 @@ CommandLineArguments::CommandLineArguments(int ac, const char** av, TestPlugin* 
 , repeat_(1)
 , groupFilter_("")
 , nameFilter_("")
-, outputType_(OUTPUT_NORMAL)
+, outputType_(OUTPUT_ECLIPSE)
 {
 }
 
@@ -72,11 +72,6 @@ SimpleString CommandLineArguments::getNameFilter() const
 	return nameFilter_;
 }
 
-CommandLineArguments::OutputType CommandLineArguments::getOutputType() const
-{
-	return outputType_;
-}
-
 void CommandLineArguments::SetRepeatCount(int ac, const char** av, int& i)
 {
   repeat_ = 0;
@@ -122,8 +117,8 @@ bool CommandLineArguments::SetOutputType(int ac, const char** av, int& i)
 	SimpleString outputType = getParameterField(ac, av, i);
 	if (outputType.size () == 0) return false;
 
-	if (outputType == "normal") {
-		outputType_ = OUTPUT_NORMAL;
+	if (outputType == "normal" || outputType == "eclipse") {
+		outputType_ = OUTPUT_ECLIPSE;
 		return true;
 	}
 	if (outputType == "junit") {
@@ -131,4 +126,14 @@ bool CommandLineArguments::SetOutputType(int ac, const char** av, int& i)
 		return true;
 	}
 	return false;
+}
+
+bool CommandLineArguments::isEclipseOutput() const
+{
+	return outputType_ == OUTPUT_ECLIPSE;
+}
+
+bool CommandLineArguments::isJUnitOutput() const
+{
+	return outputType_ == OUTPUT_JUNIT;
 }

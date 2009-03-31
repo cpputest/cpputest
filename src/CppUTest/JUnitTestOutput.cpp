@@ -31,29 +31,67 @@
 #include "CppUTest/Failure.h"
 #include <stdio.h>
 
+  	struct JUnitTestCaseResultNode
+{
+	JUnitTestCaseResultNode() :
+		execTime_(0), failure_(0), next_(0)
+	{
+	}
+	;
+	SimpleString name_;
+	long execTime_;
+	Failure* failure_;
+	JUnitTestCaseResultNode* next_;
+};
+
+struct JUnitTestGroupResult
+{
+	JUnitTestGroupResult() :
+		testCount_(0), failureCount_(0), groupExecTime_(0), head_(0), tail_(0)
+	{
+	}
+	;
+	int testCount_;
+	int failureCount_;
+	long startTime_;
+	long groupExecTime_;
+	SimpleString group_;
+	JUnitTestCaseResultNode* head_;
+	JUnitTestCaseResultNode* tail_;
+};
+
+struct JUnitTestOutputImpl
+{
+	JUnitTestGroupResult results_;
+	FILE* file_;
+};
+
+
 JUnitTestOutput::JUnitTestOutput()
+: impl_(new JUnitTestOutputImpl)
 {
 }
 
 JUnitTestOutput::~JUnitTestOutput()
 {
 	resetTestGroupResult();
+	delete impl_;
 }
 
 void JUnitTestOutput::resetTestGroupResult()
 {
-	results_.testCount_ = 0;
-	results_.failureCount_ = 0;
-	results_.group_ = "";
-  	JUnitTestCaseResultNode* cur = results_.head_;
+	impl_->results_.testCount_ = 0;
+	impl_->results_.failureCount_ = 0;
+	impl_->results_.group_ = "";
+  	JUnitTestCaseResultNode* cur = impl_->results_.head_;
   	while (cur) {
   		JUnitTestCaseResultNode* tmp = cur->next_;;
   		if (cur->failure_) delete cur->failure_;
   		delete cur;
   		cur = tmp;
   	}
-  	results_.head_ = 0;
-  	results_.tail_ = 0;
+  	impl_->results_.head_ = 0;
+  	impl_->results_.tail_ = 0;
 }
 
 void JUnitTestOutput::printTestsStarted()
@@ -66,7 +104,7 @@ void JUnitTestOutput::printCurrentGroupStarted(const Utest& test)
 
 void JUnitTestOutput::printCurrentTestEnded(const TestResult& result)
 {
-	results_.tail_->execTime_ = result.getCurrentTestTotalExecutionTime();
+	impl_->results_.tail_->execTime_ = result.getCurrentTestTotalExecutionTime();
 }
 
 void JUnitTestOutput::printTestsEnded(const TestResult& result)
@@ -75,25 +113,25 @@ void JUnitTestOutput::printTestsEnded(const TestResult& result)
 
 void JUnitTestOutput::printCurrentGroupEnded(const TestResult& result)
 {
-	results_.groupExecTime_ = result.getCurrentGroupTotalExecutionTime();
+	impl_->results_.groupExecTime_ = result.getCurrentGroupTotalExecutionTime();
 	writeTestGroupToFile();
 	resetTestGroupResult();
 }
 
 void JUnitTestOutput::printCurrentTestStarted(const Utest& test)
 {
-	results_.testCount_++;
-	results_.group_ = test.getGroup();
-	results_.startTime_ = GetPlatformSpecificTimeInMillis();
+	impl_->results_.testCount_++;
+	impl_->results_.group_ = test.getGroup();
+	impl_->results_.startTime_ = GetPlatformSpecificTimeInMillis();
 
-	if (results_.tail_ == 0) {
-		results_.head_ = results_.tail_ = new JUnitTestCaseResultNode;
+	if (impl_->results_.tail_ == 0) {
+		impl_->results_.head_ = impl_->results_.tail_ = new JUnitTestCaseResultNode;
 	}
 	else {
-		results_.tail_->next_ = new JUnitTestCaseResultNode;
-		results_.tail_ = results_.tail_->next_;
+		impl_->results_.tail_->next_ = new JUnitTestCaseResultNode;
+		impl_->results_.tail_ = impl_->results_.tail_->next_;
 	}
-	results_.tail_->name_ = test.getName();
+	impl_->results_.tail_->name_ = test.getName();
 }
 
 
@@ -115,7 +153,7 @@ void JUnitTestOutput::writeTestSuiteSummery()
 	const int buf_size = 1024;
 	static char buf[buf_size];
 	PlatformSpecificSprintf(buf, buf_size, "<testsuite errors=\"0\" failures=\"%d\" hostname=\"localhost\" name=\"%s\" tests=\"%d\" time=\"%d.0\" timestamp=\"%s\">\n",
-			results_.failureCount_, results_.group_.asCharString(), results_.testCount_, (int) results_.groupExecTime_, GetPlatformSpecificTimeString().asCharString());
+			impl_->results_.failureCount_, impl_->results_.group_.asCharString(), impl_->results_.testCount_, (int) impl_->results_.groupExecTime_, GetPlatformSpecificTimeString().asCharString());
 	writeToFile(buf);
 }
 
@@ -131,10 +169,10 @@ void JUnitTestOutput::writeTestCases()
 	const int buf_size = 1024;
 	static char buf[buf_size];
 
-  	JUnitTestCaseResultNode* cur = results_.head_;
+  	JUnitTestCaseResultNode* cur = impl_->results_.head_;
   	while (cur) {
 		PlatformSpecificSprintf(buf, buf_size, "<testcase classname=\"%s\" name=\"%s\" time=\"%d.0\">\n",
-			results_.group_.asCharString(), cur->name_.asCharString(), (int) cur->execTime_);
+			impl_->results_.group_.asCharString(), cur->name_.asCharString(), (int) cur->execTime_);
 		writeToFile(buf);
 
 		if (cur->failure_) {
@@ -172,7 +210,7 @@ void JUnitTestOutput::writeFileEnding()
 
 void JUnitTestOutput::writeTestGroupToFile()
 {
-	openFileForWrite(createFileName(results_.group_));
+	openFileForWrite(createFileName(impl_->results_.group_));
 	writeXmlHeader();
 	writeTestSuiteSummery();
 	writeProperties();
@@ -195,9 +233,9 @@ void JUnitTestOutput::print(long)
 
 void JUnitTestOutput::print(const Failure& failure)
 {
-	if (results_.tail_->failure_ == 0) {
-		results_.failureCount_++;
-		results_.tail_->failure_ = new Failure(failure);
+	if (impl_->results_.tail_->failure_ == 0) {
+		impl_->results_.failureCount_++;
+		impl_->results_.tail_->failure_ = new Failure(failure);
 	}
 }
 
@@ -211,16 +249,16 @@ void JUnitTestOutput::flush()
 
 void JUnitTestOutput::openFileForWrite(const SimpleString& fileName)
 {
-	file_ = fopen(fileName.asCharString(), "w");
+	impl_->file_ = fopen(fileName.asCharString(), "w");
 }
 
 void JUnitTestOutput::writeToFile(const SimpleString& buffer)
 {
-	fputs(buffer.asCharString(), file_);
+	fputs(buffer.asCharString(), impl_->file_);
 }
 
 void JUnitTestOutput::closeFile()
 {
-	fclose(file_);
+	fclose(impl_->file_);
 }
 

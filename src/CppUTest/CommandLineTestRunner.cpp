@@ -29,7 +29,10 @@
 #include "CppUTest/CommandLineTestRunner.h"
 #include "CppUTest/MemoryLeakWarningPlugin.h"
 #include "CppUTest/TestOutput.h"
+#include "CppUTest/JUnitTestOutput.h"
 #include <stdlib.h>
+
+JUnitTestOutput junitOutput;
 
 CommandLineTestRunner::CommandLineTestRunner(int ac, const char** av, TestOutput* output)
 : argc(ac), argv(av), output_(output)
@@ -104,7 +107,13 @@ bool CommandLineTestRunner::parseArguments(TestPlugin* plugin)
 {
 	arguments = new CommandLineArguments(argc, argv, plugin);
 	if (arguments->parse())
+	{
+		if (arguments->isJUnitOutput())
+		{
+			output_ = &junitOutput;
+		}
 		return true;
+	}
 	else
 	{
         output_->print(arguments->usage());
@@ -132,7 +141,3 @@ SimpleString CommandLineTestRunner::getNameFilter()
 	return arguments->getNameFilter();
 }
 
-CommandLineArguments::OutputType CommandLineTestRunner::getOutputType()
-{
-	return arguments->getOutputType();
-}
