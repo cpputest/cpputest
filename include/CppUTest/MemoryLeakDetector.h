@@ -98,8 +98,10 @@ private:
 class MemoryLeakDetector
 {
 public:
-   MemoryLeakDetector(MemoryLeakFailure* reporter);
+   MemoryLeakDetector();
 	~MemoryLeakDetector() {}
+
+	void init(MemoryLeakFailure* reporter);
 
    void enable();
    void disable();

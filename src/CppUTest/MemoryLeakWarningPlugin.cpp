@@ -74,11 +74,10 @@ MemoryLeakDetector* MemoryLeakWarningPlugin::getGlobalDetector()
       globalReporter = (MemoryLeakWarningReporter*) malloc(sizeof(MemoryLeakWarningReporter));
       memcpy(globalReporter, &reporter, sizeof(MemoryLeakWarningReporter));
 
-      MemoryLeakDetector detector(globalReporter);
       globalDetector = (MemoryLeakDetector*) malloc(sizeof(MemoryLeakDetector));
       if (globalDetector == 0)
         FAIL("operator new(size, bool) not enough memory");
-      memcpy(globalDetector, &detector, sizeof(MemoryLeakDetector));
+      globalDetector->init(globalReporter);
 #else
       globalReporter = new(false) MemoryLeakWarningReporter;
       globalDetector = new(false) MemoryLeakDetector(globalReporter);

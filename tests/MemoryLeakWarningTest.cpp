@@ -53,7 +53,8 @@ TEST_GROUP(MemoryLeakWarningTest)
 	void setup()
 	{
 		fixture = new TestTestingFixture();
-		detector = new MemoryLeakDetector(&dummy);
+		detector = new MemoryLeakDetector();
+		detector->init(&dummy);
   		memPlugin = new MemoryLeakWarningPlugin("TestMemoryLeakWarningPlugin", detector);
   		fixture->registry->installPlugin(memPlugin);
 

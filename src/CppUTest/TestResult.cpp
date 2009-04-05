@@ -74,6 +74,11 @@ void TestResult::currentTestStarted(Utest* test)
 	currentTestTimeStarted = GetPlatformSpecificTimeInMillis();
 }
 
+void TestResult::print (const char* text)
+{
+   output.print(text);
+}
+
 void TestResult::currentTestEnded(Utest* test)
 {
 	currentTestTotalExecutionTime = GetPlatformSpecificTimeInMillis() - currentTestTimeStarted;

@@ -113,6 +113,12 @@
 #define STRCMP_EQUAL_LOCATION(expected,actual, file, line)\
   {if (!Utest::getCurrent()->assertCstrEqual(expected, actual, file, line)) PlatformSpecificExitCurrentTest();}
 
+#define STRCMP_CONTAINS(expected,actual)\
+  STRCMP_CONTAINS_LOCATION(expected, actual, __FILE__, __LINE__)
+
+#define STRCMP_CONTAINS_LOCATION(expected,actual, file, line)\
+  {if (!Utest::getCurrent()->assertCstrContains(expected, actual, file, line)) PlatformSpecificExitCurrentTest();}
+
 //Check two long integers for equality
 #define LONGS_EQUAL(expected,actual)\
   LONGS_EQUAL_LOCATION(expected,actual,__FILE__, __LINE__)
@@ -152,5 +158,10 @@
 #define FAIL_TEST_LOCATION(text, file,line)\
   { Utest::getCurrent()->fail(text, file, line); PlatformSpecificExitCurrentTest(); }
 
+#define UT_PRINT_LOCATION(text, file, line) \
+   { Utest::getCurrent()->print(text, file, line); }
+
+#define UT_PRINT(text) \
+   UT_PRINT_LOCATION(text, __FILE__, __LINE__)
 
 #endif /*D_UTestMacros_h*/

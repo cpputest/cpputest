@@ -28,6 +28,7 @@
 
 #include "CppUTest/TestHarness.h"
 
+#include <math.h>
 #include <string.h>
 #include <stdio.h>
 
@@ -231,6 +232,28 @@ bool Utest::assertCstrEqual(const char* expected, const char* actual, const char
 	return true;
 }
 
+bool Utest::assertCstrContains(const char* expected, const char* actual, const char* fileName, int lineNumber)
+{
+   testResult_->countCheck();
+   if (actual == 0 && expected == 0) return true;
+   if (actual == 0) {
+      ContainsFailure _f(this, fileName, lineNumber, StringFrom(expected), StringFrom("(null)"));
+      testResult_->addFailure (_f);
+      return false;
+   }
+   if (expected == 0) {
+      ContainsFailure _f(this, fileName, lineNumber, StringFrom("(null)"), StringFrom(actual));
+      testResult_->addFailure (_f);
+      return false;
+   }
+   if (!SimpleString(actual).contains(expected)) {
+      ContainsFailure _f(this, fileName, lineNumber, StringFrom(expected), StringFrom(actual));
+      testResult_->addFailure (_f);
+      return false;
+   }
+   return true;
+}
+
 void PadStringsToSameLength(SimpleString& aDecimal, SimpleString& eDecimal, char padCharacter)
 {
     char pad[2];
@@ -277,8 +300,6 @@ bool Utest::assertPointersEqual(void* expected, void* actual, const char* fileNa
   return true;
 }
 
-
-
 bool Utest::assertDoublesEqual(double expected, double actual, double threshold, const char* fileName, int lineNumber)
 {
   testResult_->countCheck();
@@ -297,6 +318,21 @@ void Utest::fail(const char *text, const char* fileName, int lineNumber)
   testResult_->addFailure (_f);
 }
 
+void Utest::print(const char *text, const char* fileName, int lineNumber)
+{
+   SimpleString stringToPrint = "\n";
+   stringToPrint += fileName;
+   stringToPrint += ":";
+   stringToPrint += StringFrom(lineNumber);
+   stringToPrint += " ";
+   stringToPrint += text;
+   testResult_->print(stringToPrint.asCharString());
+}
+
+void Utest::print(const SimpleString& text, const char* fileName, int lineNumber)
+{
+   print(text.asCharString(), fileName, lineNumber);
+}
 
 TestResult* Utest::getTestResult()
 {

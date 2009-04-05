@@ -54,11 +54,20 @@ TEST_GROUP(Utest)
 
 };
 
-
 static void _passMethod()
 {
    CHECK(true);
    afterCheck = true;
+}
+
+static void _passPrint()
+{
+   UT_PRINT("Hello World!");
+}
+
+static void _passPrintF()
+{
+   UT_PRINT(StringFromFormat("Hello %s %d", "World!", 2009));
 }
 
 static void _failMethod()
@@ -91,6 +100,12 @@ static void _failMethodSTRCMP_EQUAL()
     afterCheck = true;
 }
 
+static void _failMethodSTRCMP_CONTAINS()
+{
+    STRCMP_CONTAINS("hello", "world");
+    afterCheck = true;
+}
+
 static void _failMethodLONGS_EQUAL()
 {
   LONGS_EQUAL(1, 0xff);
@@ -117,6 +132,7 @@ static void _failMethodDOUBLES_EQUAL()
 TEST(Utest, FailurePrintsSomething)
 {
   testFailureWith(_failMethod);
+  fixture->assertPrintContains(__FILE__);
   fixture->assertPrintContains("This test fails");
 }
 
@@ -158,6 +174,12 @@ TEST(Utest, FailureWithSTRCMP_EQUAL)
 {
    testFailureWith(_failMethodSTRCMP_EQUAL);
 }
+
+TEST(Utest, FailureWithSTRCMP_CONTAINS)
+{
+   testFailureWith(_failMethodSTRCMP_CONTAINS);
+}
+
 TEST(Utest, FailureWithBYTES_EQUAL)
 {
    testFailureWith(_failMethodBYTES_EQUAL);
@@ -170,6 +192,23 @@ TEST(Utest, SuccessPrintsNothing)
   LONGS_EQUAL(0, fixture->getFailureCount());
   fixture->assertPrintContains(".\nOK (1 tests");
   CHECK(afterCheck);
+}
+
+TEST(Utest, PrintPrintsWhateverPrintPrints)
+{
+  fixture->setTestFunction(_passPrint);
+  fixture->runAllTests();
+  LONGS_EQUAL(0, fixture->getFailureCount());
+  fixture->assertPrintContains("Hello World!");
+  fixture->assertPrintContains(__FILE__);
+}
+
+TEST(Utest, PrintPrintsPrintf)
+{
+   fixture->setTestFunction(_passPrintF);
+   fixture->runAllTests();
+   LONGS_EQUAL(0, fixture->getFailureCount());
+   fixture->assertPrintContains("Hello World! 2009");
 }
 
 TEST(Utest, allMacros)
@@ -216,6 +255,12 @@ TEST(Utest, AssertsActLikeStatements)
     STRCMP_EQUAL("", "")
     else
       STRCMP_EQUAL("", " ")
+
+  if (fixture != 0)
+    STRCMP_CONTAINS("con", "contains")
+  else
+    STRCMP_CONTAINS("hello", "world")
+
 
   if (fixture != 0)
     LONGS_EQUAL(1, 1)

@@ -24,7 +24,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-  
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 // SIMPLESTRING.H
@@ -62,7 +62,7 @@ class SimpleString
 
 	void replace(char to, char with);
 	void replace(const char* to, const char* with);
-	
+
     const char *asCharString () const;
     int	size() const;
 
@@ -81,5 +81,8 @@ SimpleString StringFrom (int value);
 SimpleString HexStringFrom(long value);
 SimpleString StringFrom (double value, int precision = 6);
 SimpleString StringFrom (const SimpleString& other);
+SimpleString StringFromFormat(const char* format, ...);
+
+#define SIMPLESTRING_FORMATTING_BUFFER_SIZE 1024
 
 #endif

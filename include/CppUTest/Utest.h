@@ -37,8 +37,6 @@
 #ifndef D_UTest_h
 #define D_UTest_h
 
-
-#include <math.h>
 #include "SimpleString.h"
 
 /*! \brief UTest.h
@@ -88,10 +86,13 @@ class Utest
 
     virtual bool assertTrue(bool condition, const char* conditionString, const char* fileName, int lineNumber);
     virtual bool assertCstrEqual(const char* expected, const char* actual, const char* fileName, int lineNumber);
+    virtual bool assertCstrContains(const char* expected, const char* actual, const char* fileName, int lineNumber);
     virtual bool assertLongsEqual(long expected, long actual, const char* fileName, int lineNumber);
     virtual bool assertPointersEqual(void* expected, void* actual, const char* fileName, int lineNumber);
     virtual bool assertDoublesEqual(double expected, double actual, double threshold, const char* fileName, int lineNumber);
     virtual void fail(const char* text, const char* fileName, int lineNumber);
+    virtual void print(const char* text, const char* fileName, int lineNumber);
+    virtual void print(const SimpleString& text, const char* fileName, int lineNumber);
 
 	void setFileName(const char* fileName);
 	void setLineNumber(int lineNumber);

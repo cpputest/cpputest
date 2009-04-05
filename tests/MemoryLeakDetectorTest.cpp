@@ -42,10 +42,10 @@ TEST_GROUP(MemoryLeakDetectorTest)
 {
    MemoryLeakDetector detector;
    MemoryLeakFailureForTest reporter;
-   CppUTestGroupMemoryLeakDetectorTest() : detector(&reporter) {};
 
    void setup()
    {
+      detector.init(&reporter);
       detector.enable();
       detector.startChecking();
       reporter.message = new SimpleString();

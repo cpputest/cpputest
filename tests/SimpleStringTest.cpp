@@ -42,7 +42,7 @@ TEST(SimpleString, CreateSequence)
 {
   SimpleString expected("hellohello");
   SimpleString actual("hello", 2);
-  
+
   CHECK_EQUAL(expected, actual);
 }
 
@@ -50,7 +50,7 @@ TEST(SimpleString, CreateSequenceOfZero)
 {
   SimpleString expected("");
   SimpleString actual("hello", 0);
-  
+
   CHECK_EQUAL(expected, actual);
 }
 
@@ -173,7 +173,7 @@ TEST(SimpleString, split)
 	STRCMP_EQUAL("you\n", splitted[4].asCharString());
 	STRCMP_EQUAL("do\n", splitted[5].asCharString());
 	STRCMP_EQUAL("\n", splitted[6].asCharString());
-	
+
 	delete [] splitted;
 }
 
@@ -186,7 +186,7 @@ TEST(SimpleString, splitNoTokenOnTheEnd)
 	STRCMP_EQUAL("Bah ", splitted[0].asCharString());
 	STRCMP_EQUAL("Yah ", splitted[1].asCharString());
 	STRCMP_EQUAL("oops", splitted[2].asCharString());
-	
+
 	delete [] splitted;
 }
 
@@ -214,10 +214,10 @@ TEST(SimpleString, endsWith)
 	CHECK(!str2.endsWith("baah"));
 	SimpleString str3("");
 	CHECK(!str3.endsWith("baah"));
-	
+
 	SimpleString str4("ha ha ha ha");
 	CHECK(str4.endsWith("ha"));
-	
+
 }
 
 TEST(SimpleString, replaceCharwithChar)
@@ -261,10 +261,16 @@ TEST(SimpleString, HexStrings)
   STRCMP_EQUAL("ffff", h1.asCharString());
 }
 
+TEST(SimpleString, FormatIn1024BytesBuffer)
+{
+  SimpleString h1 = StringFromFormat("%s %s! %d", "Hello", "World", 2009);
+  STRCMP_EQUAL("Hello World! 2009", h1.asCharString());
+}
+
 TEST(SimpleString, PlatformSpecificSprintf_fits)
 {
     char buf[10];
-    
+
     int count = PlatformSpecificSprintf(buf, sizeof(buf), "%s", "12345");
     STRCMP_EQUAL("12345", buf);
     LONGS_EQUAL(5, count);
@@ -273,7 +279,7 @@ TEST(SimpleString, PlatformSpecificSprintf_fits)
 TEST(SimpleString, PlatformSpecificSprintf_doesNotFit)
 {
     char buf[10];
-    
+
     int count = PlatformSpecificSprintf(buf, sizeof(buf), "%s", "12345678901");
     STRCMP_EQUAL("123456789", buf);
     LONGS_EQUAL(-1, count);

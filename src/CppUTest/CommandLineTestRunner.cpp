@@ -73,8 +73,13 @@ int CommandLineTestRunner::runAllTestsMain()
 	testResult = runAllTests();
 
 	TestRegistry::getCurrentRegistry()->cleanup();
-	if (testResult == 0)
-		*output_ << memLeakWarn.FinalReport(3); // TODO: where are the 3 leaks from
+	if (testResult == 0) {
+#if UT_SIMPLESTRING_BUFFERING
+		*output_ << memLeakWarn.FinalReport(2); // TODO: where are the 2 leaks from. One was from a SimpleString statically allocated....
+#else
+      *output_ << memLeakWarn.FinalReport(3); // TODO: where are the 3 leaks from
+#endif
+	}
 	return testResult;
 }
 

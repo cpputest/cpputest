@@ -32,22 +32,98 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define SIMPLESTRING_BUFFERS_BUFFER_SIZE 200
+#define SIMPLESTRING_BUFFERS_SIZE 50
+
+#if UT_SIMPLESTRING_BUFFERING
+
+class SimpleStringBuffers
+{
+public:
+   struct StringBuffer
+   {
+      StringBuffer() : avail(true) {};
+      char buffer[SIMPLESTRING_BUFFERS_BUFFER_SIZE];
+      bool avail;
+   };
+   StringBuffer buffer[SIMPLESTRING_BUFFERS_SIZE];
+   char emptyString[1];
+
+   SimpleStringBuffers()
+   {
+      emptyString[0] = '\0';
+   }
+
+   char* allocString(int size)
+   {
+      if (size < SIMPLESTRING_BUFFERS_BUFFER_SIZE) {
+         for (int i = 0; i < SIMPLESTRING_BUFFERS_SIZE; i++) {
+            if (buffer[i].avail) {
+               buffer[i].avail = false;
+               return buffer[i].buffer;
+            }
+         }
+      }
+      return new char[size];
+   }
+
+   void deallocString(char* str)
+   {
+      if (str == emptyString) return;
+
+      for (int i = 0; i < SIMPLESTRING_BUFFERS_SIZE; i++) {
+         if (buffer[i].buffer == str) {
+            buffer[i].avail = true;
+            return;;
+         }
+      }
+      delete [] str;
+   }
+
+   char* getEmptryString()
+   {
+      return emptyString;
+   }
+};
+#else
+
+class SimpleStringBuffers
+{
+public:
+   char* allocString(int size)
+   {
+      return new char[size];
+   }
+
+   void deallocString(char* str)
+   {
+      delete [] str;
+   }
+   char* getEmptryString()
+   {
+      char* empty = new char[1];
+      empty[0] = '\0';
+      return empty;
+   }
+};
+#endif
+
+static SimpleStringBuffers stringBuffers;
 
 SimpleString::SimpleString (const char *otherBuffer)
 {
   if (otherBuffer == 0) {
-  	  buffer = new char [1];
-  	  buffer [0] = '\0';
+  	  buffer = stringBuffers.getEmptryString();
   }
   else {
-  	buffer = new char [strlen (otherBuffer) + 1];
+  	buffer = stringBuffers.allocString(strlen (otherBuffer) + 1);
   	strcpy (buffer, otherBuffer);
   }
 }
 
 SimpleString::SimpleString (const char *other, int repeatCount)
 {
-    buffer = new char [strlen(other) *  repeatCount + 1];
+    buffer = stringBuffers.allocString(strlen(other) *  repeatCount + 1);
     char* next = buffer;
     for (int i = 0; i < repeatCount; i++)
     {
@@ -59,7 +135,7 @@ SimpleString::SimpleString (const char *other, int repeatCount)
 }
 SimpleString::SimpleString (const SimpleString& other)
 {
-  buffer = new char [other.size() + 1];
+  buffer = stringBuffers.allocString(other.size() + 1);
   strcpy(buffer, other.buffer);
 }
 
@@ -68,8 +144,8 @@ SimpleString& SimpleString::operator= (const SimpleString& other)
 {
   if (this != &other)
     {
-      delete [] buffer;
-      buffer = new char [other.size() + 1];
+     stringBuffers.deallocString(buffer);
+      buffer = stringBuffers.allocString(other.size() + 1);
       strcpy(buffer, other.buffer);
     }
   return *this;
@@ -130,11 +206,11 @@ int SimpleString::split(const SimpleString& split, SimpleString*& output) const
 		prev = str;
 		str = strstr(str, split.buffer) + 1;
 		int len = str - prev;
-		char* sub = new char[len+1];
+		char* sub = stringBuffers.allocString(len+1);
 		strncpy(sub, prev, len);
 		sub[len] = '\0';
 		output[i] = sub;
-		delete [] sub;
+		stringBuffers.deallocString(sub);
 	}
 	if (extraEndToken) {
 		output[num] = str;
@@ -160,7 +236,7 @@ void SimpleString::replace(const char* to, const char* with)
 	int newsize = len + (withlen * c) - (tolen * c) + 1;
 
 	if (newsize) {
-		char* newbuf = new char[newsize];
+		char* newbuf = stringBuffers.allocString(newsize);
 		for (int i = 0, j = 0; i < len;) {
 			if (strncmp(&buffer[i], to, tolen) == 0) {
 				strncpy(&newbuf[j], with, withlen);
@@ -173,12 +249,12 @@ void SimpleString::replace(const char* to, const char* with)
 				i++;
 			}
 		}
-		delete [] buffer;
+		stringBuffers.deallocString(buffer);
 		buffer = newbuf;
 		buffer[newsize-1] = '\0';
 	}
 	else {
-  	  buffer = new char [1];
+  	  buffer = stringBuffers.getEmptryString();
   	  buffer [0] = '\0';
 	}
 }
@@ -196,7 +272,7 @@ int SimpleString::size() const
 
 SimpleString::~SimpleString ()
 {
-  delete [] buffer;
+   stringBuffers.deallocString(buffer);
 }
 
 
@@ -224,10 +300,10 @@ SimpleString& SimpleString::operator+=(const SimpleString& rhs)
 
 SimpleString& SimpleString::operator+=(const char* rhs)
 {
-  char* tbuffer = new char [this->size() + strlen(rhs) + 1];
+  char* tbuffer = stringBuffers.allocString(this->size() + strlen(rhs) + 1);
   strcpy(tbuffer, this->buffer);
   strcat(tbuffer, rhs);
-  delete [] buffer;
+  stringBuffers.deallocString(buffer);
   buffer = tbuffer;
   return *this;
 }
@@ -294,4 +370,15 @@ SimpleString StringFrom (char value)
 SimpleString StringFrom (const SimpleString& value)
 {
   return SimpleString(value);
+}
+
+static char localFormattingBuffer[SIMPLESTRING_FORMATTING_BUFFER_SIZE];
+
+SimpleString StringFromFormat(const char* format, ...)
+{
+   va_list arguments;
+   va_start(arguments, format);
+   PlatformSpecificVSNprintf2(localFormattingBuffer, SIMPLESTRING_FORMATTING_BUFFER_SIZE, format, arguments);
+   va_end(arguments);
+   return SimpleString(localFormattingBuffer);
 }

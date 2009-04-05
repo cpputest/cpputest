@@ -87,22 +87,47 @@ SimpleString Failure::getMessage() const
 }
 
 EqualsFailure::EqualsFailure(Utest* test, const char* fileName, long lineNumber,
-                             const SimpleString& expected,
-                             const SimpleString& actual)
-    : Failure(test, fileName, lineNumber)
+              const SimpleString& expected,
+              const SimpleString& actual)
+   : Failure(test, fileName, lineNumber)
 {
-  const char *format = "expected <%s>\n\tbut was  <%s>";
 
-  char *stage = new char [strlen(format) - (2 * strlen("%s"))
-                          + expected.size ()
-                          + actual.size ()
-                          + 1];
+   const char* format = "expected <%s>\n\tbut was  <%s>";
 
-  sprintf(stage, format,
-          expected.asCharString(),
-          actual.asCharString());
+   char *stage = new char [strlen(format) - (2 * strlen("%s"))
+                           + expected.size ()
+                           + actual.size ()
+                           + 1];
 
-  message = SimpleString(stage);
+   sprintf(stage, format,
+           expected.asCharString(),
+           actual.asCharString());
 
-  delete [] stage;
+   message = SimpleString(stage);
+
+   delete [] stage;
+
+}
+
+ContainsFailure::ContainsFailure(Utest* test, const char* fileName, long lineNumber,
+              const SimpleString& expected,
+              const SimpleString& actual)
+   : Failure(test, fileName, lineNumber)
+{
+
+   const char* format = "actual <%s>\n\tdid not contain  <%s>";
+
+   char *stage = new char [strlen(format) - (2 * strlen("%s"))
+                           + expected.size ()
+                           + actual.size ()
+                           + 1];
+
+   sprintf(stage, format,
+         actual.asCharString(),
+         expected.asCharString());
+
+   message = SimpleString(stage);
+
+   delete [] stage;
+
 }

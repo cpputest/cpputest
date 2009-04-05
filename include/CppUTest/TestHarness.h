@@ -54,6 +54,8 @@
    #endif
 #endif
 
+#define UT_SIMPLESTRING_BUFFERING 0
+
 /* original value was 9973 which works will with large programs. Now set to smaller since it takes
  * a lot of memory in embedded apps. Change it if you experience the memory leak detector to be slow.
  */

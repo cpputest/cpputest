@@ -48,7 +48,7 @@ class TestResult
   public:
     TestResult (TestOutput&);
     virtual ~TestResult();
-  
+
     virtual void testsStarted ();
     virtual void testsEnded ();
     virtual void currentGroupStarted(Utest* test);
@@ -63,8 +63,8 @@ class TestResult
     virtual void countFilteredOut();
     virtual void countIgnored();
     virtual void addFailure (const Failure& failure);
+    virtual void print (const char* text);
     virtual void setProgressIndicator(const char*);
-
 
     int getTestCount() const {return testCount;}
     int getRunCount() const {return runCount;}

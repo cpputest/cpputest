@@ -71,17 +71,28 @@ class Failure
 
 class EqualsFailure : public Failure
   {
-
   public:
 
-    EqualsFailure(Utest*, const char* fileName, long lineNumber,
-                  const SimpleString& expected,
-                  const SimpleString& actual);
+     EqualsFailure(Utest*, const char* fileName, long lineNumber,
+                   const SimpleString& expected,
+                   const SimpleString& actual);
 
   private:
     EqualsFailure(const EqualsFailure&);
     EqualsFailure& operator=(const EqualsFailure&);
+  };
 
+class ContainsFailure : public Failure
+  {
+  public:
+
+     ContainsFailure(Utest*, const char* fileName, long lineNumber,
+                   const SimpleString& expected,
+                   const SimpleString& actual);
+
+  private:
+    ContainsFailure(const ContainsFailure&);
+    ContainsFailure& operator=(const ContainsFailure&);
   };
 
 
