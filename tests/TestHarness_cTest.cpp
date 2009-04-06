@@ -26,21 +26,20 @@
  */
 
 extern "C" {
-	#include <stdlib.h>
-   #include <string.h>
    #include "CppUTest/TestHarness_c.h"
 
 }
 #include "CppUTest/TestHarness.h"
+#include "CppUTest/TestRegistry.h"
 #include "CppUTest/TestOutput.h"
 #include "CppUTest/TestTestingFixture.h"
+#include "CppUTest/PlatformSpecificFunctions.h"
 
 TEST_GROUP(TestHarness_c)
 {
 	TestTestingFixture* fixture;
 	TEST_SETUP()
 	{
-	    UT_PTR_SET(PlatformSpecificExitCurrentTest, FakePlatformSpecificExitCurrentTest);
 		fixture = new TestTestingFixture();
 	}
 	TEST_TEARDOWN()
@@ -169,7 +168,7 @@ TEST(TestHarness_c, cpputest_realloc_larger)
 
    char* mem1 = (char*)cpputest_malloc(10);
 
-   strcpy(mem1, number_string);
+   PlatformSpecificStrCpy(mem1, number_string);
    CHECK(mem1 != 0);
 
    char* mem2 = (char*) cpputest_realloc(mem1, 1000);

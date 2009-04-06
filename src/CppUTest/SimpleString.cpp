@@ -25,12 +25,9 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/SimpleString.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include "CppUTest/PlatformSpecificFunctions.h"
 
 #define SIMPLESTRING_BUFFERS_BUFFER_SIZE 200
 #define SIMPLESTRING_BUFFERS_SIZE 50
@@ -116,27 +113,30 @@ SimpleString::SimpleString (const char *otherBuffer)
   	  buffer = stringBuffers.getEmptryString();
   }
   else {
-  	buffer = stringBuffers.allocString(strlen (otherBuffer) + 1);
-  	strcpy (buffer, otherBuffer);
+     int len = PlatformSpecificStrLen (otherBuffer) + 1;
+     buffer = stringBuffers.allocString(len);
+     PlatformSpecificStrCpy (buffer, otherBuffer);
   }
 }
 
 SimpleString::SimpleString (const char *other, int repeatCount)
 {
-    buffer = stringBuffers.allocString(strlen(other) *  repeatCount + 1);
+    int len = PlatformSpecificStrLen(other) *  repeatCount + 1;
+    buffer = stringBuffers.allocString(len);
     char* next = buffer;
     for (int i = 0; i < repeatCount; i++)
     {
-        strcpy(next, other);
-        next += strlen(other);
+       PlatformSpecificStrCpy(next, other);
+        next += PlatformSpecificStrLen(other);
     }
     *next = 0;
 
 }
 SimpleString::SimpleString (const SimpleString& other)
 {
-  buffer = stringBuffers.allocString(other.size() + 1);
-  strcpy(buffer, other.buffer);
+   int len = other.size() + 1;
+   buffer = stringBuffers.allocString(len);
+   PlatformSpecificStrCpy(buffer, other.buffer);
 }
 
 
@@ -145,8 +145,9 @@ SimpleString& SimpleString::operator= (const SimpleString& other)
   if (this != &other)
     {
      stringBuffers.deallocString(buffer);
-      buffer = stringBuffers.allocString(other.size() + 1);
-      strcpy(buffer, other.buffer);
+     int len = other.size() + 1;
+     buffer = stringBuffers.allocString(len);
+     PlatformSpecificStrCpy(buffer, other.buffer);
     }
   return *this;
 }
@@ -155,39 +156,39 @@ bool SimpleString::contains(const SimpleString& other) const
  {
     //strstr on some machines does not handle ""
     //the right way.  "" should be found in any string
-    if (strlen(other.buffer) == 0)
+    if (PlatformSpecificStrLen(other.buffer) == 0)
       return true;
-    else if (strlen(buffer) == 0)
+    else if (PlatformSpecificStrLen(buffer) == 0)
       return false;
     else
-      return strstr(buffer, other.buffer) != NULL;
+      return PlatformSpecificStrStr(buffer, other.buffer) != 0;
   }
 
 bool SimpleString::startsWith(const SimpleString& other) const
 {
-    if (strlen(other.buffer) == 0)
+    if (PlatformSpecificStrLen(other.buffer) == 0)
       return true;
-    else if (strlen(buffer) == 0)
+    else if (PlatformSpecificStrLen(buffer) == 0)
       return false;
     else
-      return strstr(buffer, other.buffer) == buffer;
+      return PlatformSpecificStrStr(buffer, other.buffer) == buffer;
 }
 
 bool SimpleString::endsWith(const SimpleString& other) const
 {
-	int buffer_length = strlen(buffer);
-	int other_buffer_length = strlen(other.buffer);
+	int buffer_length = PlatformSpecificStrLen(buffer);
+	int other_buffer_length = PlatformSpecificStrLen(other.buffer);
     if (other_buffer_length == 0) return true;
     if (buffer_length == 0) return false;
     if (buffer_length < other_buffer_length) return false;
-	return strcmp(buffer + buffer_length - other_buffer_length, other.buffer) == 0;
+	return PlatformSpecificStrCmp(buffer + buffer_length - other_buffer_length, other.buffer) == 0;
 }
 
 int SimpleString::count(const SimpleString& substr) const
 {
 	int num = 0;
 	char* str = buffer;
-	while( (str = strstr(str, substr.buffer)) ) {
+	while( (str = PlatformSpecificStrStr(str, substr.buffer)) ) {
 		num++;
 		str++;
 	}
@@ -204,10 +205,10 @@ int SimpleString::split(const SimpleString& split, SimpleString*& output) const
 	char* prev;
 	for (int i = 0; i < num; ++i){
 		prev = str;
-		str = strstr(str, split.buffer) + 1;
+		str = PlatformSpecificStrStr(str, split.buffer) + 1;
 		int len = str - prev;
 		char* sub = stringBuffers.allocString(len+1);
-		strncpy(sub, prev, len);
+		PlatformSpecificStrNCpy(sub, prev, len);
 		sub[len] = '\0';
 		output[i] = sub;
 		stringBuffers.deallocString(sub);
@@ -230,16 +231,16 @@ void SimpleString::replace(const char* to, const char* with)
 {
 	int c = count(to);
 	int len = size();
-	int tolen = strlen(to);
-	int withlen = strlen(with);
+	int tolen = PlatformSpecificStrLen(to);
+	int withlen = PlatformSpecificStrLen(with);
 
 	int newsize = len + (withlen * c) - (tolen * c) + 1;
 
 	if (newsize) {
 		char* newbuf = stringBuffers.allocString(newsize);
 		for (int i = 0, j = 0; i < len;) {
-			if (strncmp(&buffer[i], to, tolen) == 0) {
-				strncpy(&newbuf[j], with, withlen);
+			if (PlatformSpecificStrNCmp(&buffer[i], to, tolen) == 0) {
+			   PlatformSpecificStrNCpy(&newbuf[j], with, withlen);
 				j += withlen;
 				i += tolen;
 			}
@@ -267,7 +268,7 @@ const char *SimpleString::asCharString () const
 
 int SimpleString::size() const
   {
-    return strlen (buffer);
+    return PlatformSpecificStrLen (buffer);
   }
 
 SimpleString::~SimpleString ()
@@ -278,7 +279,7 @@ SimpleString::~SimpleString ()
 
 bool operator== (const SimpleString& left, const SimpleString& right)
 {
-  return 0 == strcmp (left.asCharString (), right.asCharString ());
+  return 0 == PlatformSpecificStrCmp (left.asCharString (), right.asCharString ());
 }
 
 bool operator!= (const SimpleString& left, const SimpleString& right)
@@ -300,9 +301,10 @@ SimpleString& SimpleString::operator+=(const SimpleString& rhs)
 
 SimpleString& SimpleString::operator+=(const char* rhs)
 {
-  char* tbuffer = stringBuffers.allocString(this->size() + strlen(rhs) + 1);
-  strcpy(tbuffer, this->buffer);
-  strcat(tbuffer, rhs);
+  int len = this->size() + PlatformSpecificStrLen(rhs) + 1;
+  char* tbuffer = stringBuffers.allocString(len);
+  PlatformSpecificStrCpy(tbuffer, this->buffer);
+  PlatformSpecificStrCat(tbuffer, rhs);
   stringBuffers.deallocString(buffer);
   buffer = tbuffer;
   return *this;
@@ -310,9 +312,7 @@ SimpleString& SimpleString::operator+=(const char* rhs)
 
 SimpleString StringFrom (bool value)
 {
-  char buffer [sizeof ("false") + 1];
-  sprintf (buffer, "%s", value ? "true" : "false");
-  return SimpleString(buffer);
+  return SimpleString(StringFromFormat("%s", value ? "true" : "false"));
 }
 
 SimpleString StringFrom (const char *value)
@@ -322,18 +322,12 @@ SimpleString StringFrom (const char *value)
 
 SimpleString StringFrom (int value)
 {
-    char buffer [20];
-    sprintf (buffer, "%d", value);
-
-    return SimpleString(buffer);
+    return StringFromFormat("%d", value);
 }
 
 SimpleString StringFrom (long value)
 {
-  char buffer [20];
-  sprintf (buffer, "%ld", value);
-
-  return SimpleString(buffer);
+  return StringFromFormat("%ld", value);
 }
 
 SimpleString StringFrom (void* value)
@@ -343,28 +337,18 @@ SimpleString StringFrom (void* value)
 
 SimpleString HexStringFrom (long value)
 {
-  char buffer [20];
-  sprintf (buffer, "%lx", value);
-
-  return SimpleString(buffer);
+  return StringFromFormat("%lx", value);
 }
 
 SimpleString StringFrom (double value, int precision)
 {
-  char buffer [40];
-  char format [40];
-  sprintf (format, "%%.%df", precision);
-  sprintf (buffer, format, value);
-
-  return SimpleString(buffer);
+   SimpleString format = StringFromFormat("%%.%df", precision);
+   return StringFromFormat(format.asCharString(), value);
 }
 
 SimpleString StringFrom (char value)
 {
-  char buffer [10];
-  sprintf (buffer, "%c", value);
-
-  return SimpleString(buffer);
+  return StringFromFormat("%c", value);
 }
 
 SimpleString StringFrom (const SimpleString& value)
@@ -378,7 +362,7 @@ SimpleString StringFromFormat(const char* format, ...)
 {
    va_list arguments;
    va_start(arguments, format);
-   PlatformSpecificVSNprintf2(localFormattingBuffer, SIMPLESTRING_FORMATTING_BUFFER_SIZE, format, arguments);
+   PlatformSpecificVSNprintf(localFormattingBuffer, SIMPLESTRING_FORMATTING_BUFFER_SIZE, format, arguments);
    va_end(arguments);
    return SimpleString(localFormattingBuffer);
 }

@@ -28,7 +28,7 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/JUnitTestOutput.h"
 #include "CppUTest/TestResult.h"
-#include <stdio.h>
+#include "CppUTest/PlatformSpecificFunctions.h"
 
 static long millisTime;
 
@@ -191,7 +191,7 @@ TEST_GROUP(JUnitOutputTest)
 		{
 			TestGroupData& group = currentGroup();
 			char buf[1024];
-			sprintf(buf, "<testsuite errors=\"0\" failures=\"%d\" hostname=\"localhost\" name=\"%s\" tests=\"%d\" time=\"50.0\" timestamp=\"%s\">\n",
+			PlatformSpecificSprintf(buf, 1024, "<testsuite errors=\"0\" failures=\"%d\" hostname=\"localhost\" name=\"%s\" tests=\"%d\" time=\"50.0\" timestamp=\"%s\">\n",
 				group.totalFailures_, group.name_.asCharString(), group.numberTests_, theTime);
 			STRCMP_EQUAL(buf, output.asCharString());
 		}

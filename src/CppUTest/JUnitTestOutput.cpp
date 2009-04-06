@@ -29,9 +29,9 @@
 #include "CppUTest/JUnitTestOutput.h"
 #include "CppUTest/TestResult.h"
 #include "CppUTest/Failure.h"
-#include <stdio.h>
+#include "CppUTest/PlatformSpecificFunctions.h"
 
-  	struct JUnitTestCaseResultNode
+struct JUnitTestCaseResultNode
 {
 	JUnitTestCaseResultNode() :
 		execTime_(0), failure_(0), next_(0)
@@ -63,7 +63,7 @@ struct JUnitTestGroupResult
 struct JUnitTestOutputImpl
 {
 	JUnitTestGroupResult results_;
-	FILE* file_;
+	PlatformSpecificFile file_;
 };
 
 
@@ -133,7 +133,6 @@ void JUnitTestOutput::printCurrentTestStarted(const Utest& test)
 	}
 	impl_->results_.tail_->name_ = test.getName();
 }
-
 
 static SimpleString createFileName(const SimpleString& group)
 {
@@ -249,16 +248,15 @@ void JUnitTestOutput::flush()
 
 void JUnitTestOutput::openFileForWrite(const SimpleString& fileName)
 {
-	impl_->file_ = fopen(fileName.asCharString(), "w");
+	impl_->file_ = PlatformSpecificFOpen(fileName.asCharString(), "w");
 }
 
 void JUnitTestOutput::writeToFile(const SimpleString& buffer)
 {
-	fputs(buffer.asCharString(), impl_->file_);
+	PlatformSpecificFPuts(buffer.asCharString(), impl_->file_);
 }
 
 void JUnitTestOutput::closeFile()
 {
-	fclose(impl_->file_);
+	PlatformSpecificFClose(impl_->file_);
 }
-

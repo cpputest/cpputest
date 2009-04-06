@@ -25,12 +25,11 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
+#include "CppUTest/TestHarness.h"
 #include "CppUTest/CommandLineTestRunner.h"
-#include "CppUTest/MemoryLeakWarningPlugin.h"
 #include "CppUTest/TestOutput.h"
 #include "CppUTest/JUnitTestOutput.h"
-#include <stdlib.h>
+#include "CppUTest/TestRegistry.h"
 
 JUnitTestOutput junitOutput;
 
@@ -145,4 +144,3 @@ SimpleString CommandLineTestRunner::getNameFilter()
 {
 	return arguments->getNameFilter();
 }
-

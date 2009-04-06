@@ -27,6 +27,7 @@
 
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/SimpleString.h"
+#include "CppUTest/PlatformSpecificFunctions.h"
 
 TEST_GROUP(SimpleString)
 {

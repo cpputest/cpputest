@@ -25,8 +25,8 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #include "CppUTest/TestHarness.h"
+#include "CppUTest/TestRegistry.h"
 
 TestRegistry::TestRegistry()
     : tests(&NullTest::instance())
@@ -70,7 +70,7 @@ void TestRegistry::runAllTests (TestResult& result)
 		result.countTest();
 		if (testShouldRun(test, result)) {
 			result.currentTestStarted(test);
-			platformSpecificRunOneTest(test, result);
+			test->runOneTestWithPlugins(firstPlugin_, result);
 			result.currentTestEnded(test);
 		}
 
@@ -80,13 +80,6 @@ void TestRegistry::runAllTests (TestResult& result)
 		}
 	}
   result.testsEnded ();
-}
-
-void TestRegistry::runOneTest(Utest* test, TestResult& result)
-{
-        firstPlugin_->runAllPreTestAction(*test, result) ;
-        test->run(result);
-        firstPlugin_->runAllPostTestAction(*test, result);
 }
 
 bool TestRegistry::endOfGroup(Utest* test)

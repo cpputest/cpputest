@@ -27,6 +27,8 @@
 
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TestOutput.h"
+#include "CppUTest/PlatformSpecificFunctions.h"
+
 
 TestOutput::TestOutput() : dotCount_(0), verbose_(false), progressIndication(".")
 {}

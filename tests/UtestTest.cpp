@@ -27,6 +27,7 @@
 
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TestOutput.h"
+#include "CppUTest/TestRegistry.h"
 #include "CppUTest/TestTestingFixture.h"
 
 static bool afterCheck;

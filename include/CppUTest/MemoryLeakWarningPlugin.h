@@ -42,7 +42,7 @@
 #define IGNORE_ALL_LEAKS_IN_TEST() MemoryLeakWarningPlugin::getFirstPlugin()->ignoreAllLeaksInTest();
 #define EXPECT_N_LEAKS(n)          MemoryLeakWarningPlugin::getFirstPlugin()->expectLeaksInTest(n);
 
-#if UT_NEW_OVERRIDES
+#if UT_NEW_OVERRIDES_ENABLED
 
    #ifdef new
       #undef new

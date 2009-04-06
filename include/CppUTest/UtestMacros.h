@@ -83,7 +83,7 @@
 //Check any boolean condition
 
 #define CHECK_LOCATION(condition, conditionString, file, line)\
-  {if (!Utest::getCurrent()->assertTrue(condition, conditionString, file, line)) PlatformSpecificExitCurrentTest();}
+  {if (!Utest::getCurrent()->assertTrue(condition, conditionString, file, line)) Utest::getCurrent()->exitCurrentTest();}
 
 #define CHECK(condition)\
   CHECK_LOCATION(condition, #condition, __FILE__, __LINE__)
@@ -100,7 +100,7 @@
   	   EqualsFailure _f(Utest::getCurrent(), file, line, StringFrom(expected), StringFrom(actual)); \
       Utest::getTestResult()->addFailure(_f);\
     } \
-    PlatformSpecificExitCurrentTest(); \
+    Utest::getCurrent()->exitCurrentTest(); \
   }\
   else\
 	 Utest::getTestResult()->countCheck();
@@ -111,20 +111,20 @@
   STRCMP_EQUAL_LOCATION(expected, actual, __FILE__, __LINE__)
 
 #define STRCMP_EQUAL_LOCATION(expected,actual, file, line)\
-  {if (!Utest::getCurrent()->assertCstrEqual(expected, actual, file, line)) PlatformSpecificExitCurrentTest();}
+  {if (!Utest::getCurrent()->assertCstrEqual(expected, actual, file, line)) Utest::getCurrent()->exitCurrentTest();}
 
 #define STRCMP_CONTAINS(expected,actual)\
   STRCMP_CONTAINS_LOCATION(expected, actual, __FILE__, __LINE__)
 
 #define STRCMP_CONTAINS_LOCATION(expected,actual, file, line)\
-  {if (!Utest::getCurrent()->assertCstrContains(expected, actual, file, line)) PlatformSpecificExitCurrentTest();}
+  {if (!Utest::getCurrent()->assertCstrContains(expected, actual, file, line)) Utest::getCurrent()->exitCurrentTest();}
 
 //Check two long integers for equality
 #define LONGS_EQUAL(expected,actual)\
   LONGS_EQUAL_LOCATION(expected,actual,__FILE__, __LINE__)
 
 #define LONGS_EQUAL_LOCATION(expected,actual,file,line)\
-  { if (!Utest::getCurrent()->assertLongsEqual(expected, actual,  file, line)) PlatformSpecificExitCurrentTest(); }
+  { if (!Utest::getCurrent()->assertLongsEqual(expected, actual,  file, line)) Utest::getCurrent()->exitCurrentTest(); }
 
 #define BYTES_EQUAL(expected, actual)\
     LONGS_EQUAL((expected) & 0xff,(actual) & 0xff)
@@ -133,14 +133,14 @@
     POINTERS_EQUAL_LOCATION((expected),(actual), __FILE__, __LINE__)
 
 #define POINTERS_EQUAL_LOCATION(expected,actual,file,line)\
-  { if (!Utest::getCurrent()->assertPointersEqual(expected, actual,  file, line)) PlatformSpecificExitCurrentTest(); }
+  { if (!Utest::getCurrent()->assertPointersEqual(expected, actual,  file, line)) Utest::getCurrent()->exitCurrentTest(); }
 
 //Check two doubles for equality within a tolerance threshold
 #define DOUBLES_EQUAL(expected,actual,threshold)\
   DOUBLES_EQUAL_LOCATION(expected,actual,threshold,__FILE__,__LINE__)
 
 #define DOUBLES_EQUAL_LOCATION(expected,actual,threshold,file,line)\
-  { if (!Utest::getCurrent()->assertDoublesEqual(expected, actual, threshold,  file, line)) PlatformSpecificExitCurrentTest(); }
+  { if (!Utest::getCurrent()->assertDoublesEqual(expected, actual, threshold,  file, line)) Utest::getCurrent()->exitCurrentTest(); }
 
 //Fail if you get to this macro
 //The macro FAIL may already be taken, so allow FAIL_TEST too
@@ -149,14 +149,14 @@
   FAIL_LOCATION(text, __FILE__,__LINE__)
 
 #define FAIL_LOCATION(text, file, line)\
-  { Utest::getCurrent()->fail(text,  file, line); PlatformSpecificExitCurrentTest(); }
+  { Utest::getCurrent()->fail(text,  file, line); Utest::getCurrent()->exitCurrentTest(); }
 #endif
 
 #define FAIL_TEST(text)\
   FAIL_TEST_LOCATION(text, __FILE__,__LINE__)
 
 #define FAIL_TEST_LOCATION(text, file,line)\
-  { Utest::getCurrent()->fail(text, file, line); PlatformSpecificExitCurrentTest(); }
+  { Utest::getCurrent()->fail(text, file, line); Utest::getCurrent()->exitCurrentTest(); }
 
 #define UT_PRINT_LOCATION(text, file, line) \
    { Utest::getCurrent()->print(text, file, line); }

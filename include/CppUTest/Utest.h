@@ -25,14 +25,8 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// TEST.H
-//
 // This file contains the Test class along with the macros which make effective
 // in the harness.
-//
-///////////////////////////////////////////////////////////////////////////////
 
 #ifndef D_UTest_h
 #define D_UTest_h
@@ -49,6 +43,7 @@
  */
 
 class TestResult;
+class TestPlugin;
 
 class Utest
   {
@@ -64,6 +59,7 @@ class Utest
     virtual void testBody(){};
 
     virtual void run (TestResult& result);
+    virtual void runOneTestWithPlugins(TestPlugin* plugin, TestResult& result);
     virtual SimpleString getFormattedName() const;
 
 	virtual Utest* addTest(Utest* test);
@@ -98,11 +94,16 @@ class Utest
 	void setLineNumber(int lineNumber);
 	void setGroupName(const char* groupName);
 	void setTestName(const char* testName);
-  protected:
 
+	void exitCurrentTest();
+  protected:
+     virtual void runOneTest(TestPlugin* plugin, TestResult& result);
+
+     virtual void executePlatformSpecificRunOneTest(TestPlugin* plugin, TestResult& result);
      virtual bool executePlatformSpecificSetup();
      virtual void executePlatformSpecificTestBody();
      virtual void executePlatformSpecificTeardown();
+     virtual void executePlatformSpecificExitCurrentTest();
 
 
 	Utest();

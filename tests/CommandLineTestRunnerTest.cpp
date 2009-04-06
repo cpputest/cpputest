@@ -27,9 +27,9 @@
 
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/CommandLineTestRunner.h"
+#include "CppUTest/TestRegistry.h"
 #include "CppUTest/TestTestingFixture.h"
 #include "CppUTest/TestPlugin.h"
-#include <string.h>
 
 TEST_GROUP(CommandLineTestRunner)
 {

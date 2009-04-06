@@ -26,8 +26,8 @@
  */
 
 #include "CppUTest/TestHarness.h"
-#include <CppUTest/MemoryLeakDetector.h>
-#include <stdlib.h>
+#include "CppUTest/MemoryLeakDetector.h"
+#include "CppUTest/PlatformSpecificFunctions.h"
 
 class MemoryLeakFailureForTest : public MemoryLeakFailure
 {
@@ -66,7 +66,7 @@ TEST(MemoryLeakDetectorTest, OneLeak)
    CHECK(output.contains("size: 4"));
    CHECK(output.contains("new"));
    CHECK(output.contains(MEM_LEAK_FOOTER));
-   free(mem);
+   PlatformSpecificFree(mem);
 }
 
 TEST(MemoryLeakDetectorTest, OneLeakOutsideCheckingPeriod)
@@ -78,7 +78,7 @@ TEST(MemoryLeakDetectorTest, OneLeakOutsideCheckingPeriod)
    CHECK(output.contains("size: 4"));
    CHECK(output.contains("new"));
    CHECK(output.contains(MEM_LEAK_FOOTER));
-   free(mem);
+   PlatformSpecificFree(mem);
 }
 
 TEST(MemoryLeakDetectorTest, NoLeaksWhatsoever)
@@ -98,8 +98,8 @@ TEST(MemoryLeakDetectorTest, TwoLeaksUsingOperatorNew)
    LONGS_EQUAL(2, detector.totalMemoryLeaks(mem_leak_period_checking));
    CHECK(output.contains("size: 8"));
    CHECK(output.contains("size: 4"));
-   free(mem);
-   free(mem2);
+   PlatformSpecificFree(mem);
+   PlatformSpecificFree(mem2);
 }
 
 TEST(MemoryLeakDetectorTest, OneAllocButNoLeak)
@@ -120,7 +120,7 @@ TEST(MemoryLeakDetectorTest, TwoAllocOneFreeOneLeak)
    LONGS_EQUAL(1, detector.totalMemoryLeaks(mem_leak_period_checking));
    CHECK(output.contains("size: 12"));
    CHECK(!output.contains("size: 4"));
-   free (mem2);
+   PlatformSpecificFree (mem2);
 }
 
 TEST(MemoryLeakDetectorTest, TwoAllocOneFreeOneLeakReverseOrder)
@@ -133,7 +133,7 @@ TEST(MemoryLeakDetectorTest, TwoAllocOneFreeOneLeakReverseOrder)
    LONGS_EQUAL(1, detector.totalMemoryLeaks(mem_leak_period_checking));
    CHECK(!output.contains("size: 12"));
    CHECK(output.contains("size: 4"));
-   free (mem);
+   PlatformSpecificFree (mem);
 }
 
 TEST(MemoryLeakDetectorTest, DeleteNonAlocatedMemory)
@@ -164,7 +164,7 @@ TEST(MemoryLeakDetectorTest, IgnoreMemoryAllocatedOutsideCheckingPeriodComplicat
    char* mem2 = detector.allocOperatorNew(8);
    LONGS_EQUAL(1, detector.totalMemoryLeaks(mem_leak_period_checking));
    detector.clearAllAccounting(mem_leak_period_checking);
-   free(mem);
+   PlatformSpecificFree(mem);
    LONGS_EQUAL(0, detector.totalMemoryLeaks(mem_leak_period_checking));
    LONGS_EQUAL(1, detector.totalMemoryLeaks(mem_leak_period_all));
 
@@ -180,8 +180,8 @@ TEST(MemoryLeakDetectorTest, IgnoreMemoryAllocatedOutsideCheckingPeriodComplicat
 
    detector.clearAllAccounting(mem_leak_period_all);
    LONGS_EQUAL(0, detector.totalMemoryLeaks(mem_leak_period_all));
-   free(mem2);
-   free(mem3);
+   PlatformSpecificFree(mem2);
+   PlatformSpecificFree(mem3);
 }
 
 TEST(MemoryLeakDetectorTest, OneLeakUsingOperatorNewWithFileLine)
@@ -191,7 +191,7 @@ TEST(MemoryLeakDetectorTest, OneLeakUsingOperatorNewWithFileLine)
    SimpleString output = detector.report(mem_leak_period_checking);
    CHECK(output.contains("file.cpp"));
    CHECK(output.contains("1234"));
-   free(mem);
+   PlatformSpecificFree(mem);
 }
 
 TEST(MemoryLeakDetectorTest, OneAllocAndFreeUsingArrayNew)
@@ -255,8 +255,8 @@ TEST(MemoryLeakDetectorTest, MarkCheckingPeriodLeaksAsNonCheckingPeriod)
    detector.markCheckingPeriodLeaksAsNonCheckingPeriod();
    LONGS_EQUAL(0, detector.totalMemoryLeaks(mem_leak_period_checking));
    LONGS_EQUAL(2, detector.totalMemoryLeaks(mem_leak_period_all));
-   free(mem);
-   free(mem2);
+   PlatformSpecificFree(mem);
+   PlatformSpecificFree(mem2);
 }
 
 TEST(MemoryLeakDetectorTest, memoryCorruption)

@@ -36,13 +36,7 @@
 
 extern "C" {
 	#undef __cplusplus
-	#include "stdlib.h"
 	#include "CppUTest/TestHarness_c.h"
-
-#undef malloc
-#undef calloc
-#undef realloc
-#undef free
 
 	void  CHECK_EQUAL_C_INT_LOCATION(int expected, int actual, const char* fileName, int lineNumber)
 	{

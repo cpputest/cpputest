@@ -26,7 +26,7 @@
  */
 
 #include "CppUTest/TestHarness.h"
-
+#include "CppUTest/TestRegistry.h"
 
 // this is file scope because the test is installed
 // with all other tests, which also happen to be

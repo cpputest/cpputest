@@ -28,6 +28,7 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TestOutput.h"
 #include "CppUTest/TestResult.h"
+#include "CppUTest/PlatformSpecificFunctions.h"
 
 static long millisTime;
 
@@ -46,14 +47,13 @@ TEST_GROUP(TestOutput)
 
 	TEST_SETUP()
 	{
-		UT_PTR_SET(PlatformSpecificExitCurrentTest, FakePlatformSpecificExitCurrentTest);
 		mock = new StringBufferTestOutput();
 		printer = mock;
 		tst = new Utest("group", "test", "file", 1);
 		f = new Failure(tst, "failfile", 2, "message");
 		result = new TestResult(*mock);
 		result->setTotalExecutionTime(10);
-		millisTime = 0; 
+		millisTime = 0;
 		SetPlatformSpecificTimeInMillisMethod(MockGetPlatformSpecificTimeInMillis);
 	}
 	TEST_TEARDOWN()

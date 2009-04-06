@@ -1,13 +1,34 @@
-
+/*
+ * Copyright (c) 2007, Michael Feathers, James Grenning and Bas Vodde
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the <organization> nor the
+ *       names of its contributors may be used to endorse or promote products
+ *       derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE EARLIER MENTIONED AUTHORS ``AS IS'' AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL <copyright holder> BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/MemoryLeakDetector.h"
-#include <stdlib.h>
-#include <string.h>
-#include <stdarg.h>
+#include "CppUTest/PlatformSpecificFunctions.h"
 
-#define UNKNOWN const_cast<char*>("<unknown>")
-#undef malloc
-#undef free
+#define UNKNOWN ((char*)("<unknown>"))
 
 SimpleBuffer::SimpleBuffer() : positions_filled(0)
 {
@@ -24,7 +45,7 @@ void SimpleBuffer::add(const char* format, ...)
    int count = 0;
    va_list arguments;
    va_start(arguments, format);
-   count = PlatformSpecificVSNprintf2(buffer + positions_filled, SIMPLE_BUFFER_LEN - positions_filled, format, arguments);
+   count = PlatformSpecificVSNprintf(buffer + positions_filled, SIMPLE_BUFFER_LEN - positions_filled, format, arguments);
    if (count > 0)
       positions_filled += count;
    va_end(arguments);
@@ -138,7 +159,6 @@ bool MemoryLeakDetectorList::hasLeaks(MemLeakPeriod period)
 
 /////////////////////////////////////////////////////////////
 
-
 int MemoryLeakDetectorTable::hash(char* memory)
 {
    return ((unsigned int) memory) % hash_prime;
@@ -245,7 +265,7 @@ void MemoryLeakDetector::reportFailure(const char* message, const char* allocFil
 
 void* checkedMalloc(unsigned int size)
 {
-  void* mem = malloc(size);
+  void* mem = PlatformSpecificMalloc(size);
   if (mem == 0)
     FAIL("malloc returned nul pointer");
    return mem;
@@ -258,7 +278,7 @@ char* MemoryLeakDetector::allocateMemoryAndExtraInfo(int size)
 
 char* MemoryLeakDetector::reallocateMemoryAndExtraInfo (char* memory, int size)
 {
-   return (char*) realloc(memory, size + memory_corruption_buffer_size + sizeof(MemoryLeakDetectorNode));
+   return (char*) PlatformSpecificRealloc(memory, size + memory_corruption_buffer_size + sizeof(MemoryLeakDetectorNode));
 }
 
 
@@ -310,7 +330,7 @@ void MemoryLeakDetector::dealloc(char* memory, const char* file, int line, MemLe
    if (memory == 0) return;
 
    if (removeMemoryLeakInfoAndCheckCorruption(memory, file, line, type))
-      free(memory);
+      PlatformSpecificFree(memory);
 }
 
 char* MemoryLeakDetector::reallocate(char* memory, unsigned int size, char* file, int line, MemLeakAllocType type)
@@ -428,4 +448,3 @@ const char* MemoryLeakDetector::getTypeString(MemLeakAllocType type)
    }
    return 0;
 }
-

@@ -29,8 +29,6 @@
 #include "CppUTest/JUnitTestOutput.h"
 #include "CppUTest/TestResult.h"
 #include "CppUTest/Failure.h"
-#include <stdio.h>
-
 
 //struct JUnitTestOutputImpl
 //{

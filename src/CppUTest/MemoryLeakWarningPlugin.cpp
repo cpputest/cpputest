@@ -28,11 +28,7 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/MemoryLeakWarningPlugin.h"
 #include "CppUTest/MemoryLeakDetector.h"
-#include <stdlib.h>
-#include <string.h>
-
-#undef malloc
-#undef free
+#include "CppUTest/PlatformSpecificFunctions.h"
 
 class MemoryLeakWarningReporter : public MemoryLeakFailure
 {
@@ -43,20 +39,23 @@ public:
    }
 };
 
-static MemoryLeakWarningReporter* globalReporter = NULL;
-static MemoryLeakDetector* globalDetector = NULL;
+static MemoryLeakWarningReporter* globalReporter = 0;
+static MemoryLeakDetector* globalDetector = 0;
 
 void destroyDetector()
 {
-   free (globalDetector);
+   PlatformSpecificFree (globalDetector);
    globalReporter->~MemoryLeakWarningReporter();
-   free (globalReporter);
-   globalReporter = NULL;
-   globalDetector = NULL;
+   PlatformSpecificFree (globalReporter);
+   globalReporter = 0;
+   globalDetector = 0;
 }
-void* operator new(size_t size, bool)
+
+#undef new
+
+void* operator new(unsigned int size, bool)
 {
-  void* mem = malloc(size);
+  void* mem = PlatformSpecificMalloc(size);
   if (mem == 0)
     FAIL("operator new(size, bool) not enough memory");
    return mem;
@@ -64,17 +63,17 @@ void* operator new(size_t size, bool)
 
 MemoryLeakDetector* MemoryLeakWarningPlugin::getGlobalDetector()
 {
-   if (globalDetector == NULL) {
+   if (globalDetector == 0) {
 
       /*  Want to void using operator new here, however.. still need to init the vtable.
        *  Now just memcpy a local stack variable in the malloced memory. Ought to work everywhere :))
        */
 #if 1
       MemoryLeakWarningReporter reporter;
-      globalReporter = (MemoryLeakWarningReporter*) malloc(sizeof(MemoryLeakWarningReporter));
-      memcpy(globalReporter, &reporter, sizeof(MemoryLeakWarningReporter));
+      globalReporter = (MemoryLeakWarningReporter*) PlatformSpecificMalloc(sizeof(MemoryLeakWarningReporter));
+      PlatformSpecificMemCpy(globalReporter, &reporter, sizeof(MemoryLeakWarningReporter));
 
-      globalDetector = (MemoryLeakDetector*) malloc(sizeof(MemoryLeakDetector));
+      globalDetector = (MemoryLeakDetector*) PlatformSpecificMalloc(sizeof(MemoryLeakDetector));
       if (globalDetector == 0)
         FAIL("operator new(size, bool) not enough memory");
       globalDetector->init(globalReporter);
@@ -82,7 +81,7 @@ MemoryLeakDetector* MemoryLeakWarningPlugin::getGlobalDetector()
       globalReporter = new(false) MemoryLeakWarningReporter;
       globalDetector = new(false) MemoryLeakDetector(globalReporter);
 #endif
-      atexit(destroyDetector);
+      PlatformSpecificAtExit(destroyDetector);
    }
    return globalDetector;
 }
@@ -120,7 +119,7 @@ MemoryLeakWarningPlugin::MemoryLeakWarningPlugin(const SimpleString& name, Memor
 
 MemoryLeakWarningPlugin::~MemoryLeakWarningPlugin()
 {
-   if (this == firstPlugin) firstPlugin = NULL;
+   if (this == firstPlugin) firstPlugin = 0;
 }
 
 void MemoryLeakWarningPlugin::preTestAction(Utest& test, TestResult& result)
@@ -156,9 +155,10 @@ const char* MemoryLeakWarningPlugin::FinalReport(int toBeDeletedLeaks)
    return "";
 }
 
+#if UT_NEW_OVERRIDES_ENABLED
 #undef new
 
-void* operator new(size_t size)
+void* operator new(unsigned int size)
 {
    return MemoryLeakWarningPlugin::getGlobalDetector()->allocOperatorNew(size);
 }
@@ -168,7 +168,7 @@ void operator delete(void* mem)
    MemoryLeakWarningPlugin::getGlobalDetector()->freeOperatorDelete((char*)mem);
 }
 
-void* operator new[](size_t size)
+void* operator new[](unsigned int size)
 {
    return MemoryLeakWarningPlugin::getGlobalDetector()->allocOperatorNewArray(size);
 }
@@ -178,12 +178,13 @@ void operator delete[](void* mem)
    MemoryLeakWarningPlugin::getGlobalDetector()->freeOperatorDeleteArray((char*)mem);
 }
 
-void* operator new(size_t size, const char* file, int line)
+void* operator new(unsigned int size, const char* file, int line)
 {
    return MemoryLeakWarningPlugin::getGlobalDetector()->allocOperatorNew(size, (char*) file, line);
 }
 
-void* operator new [](size_t size, const char* file, int line)
+void* operator new [](unsigned int size, const char* file, int line)
 {
    return MemoryLeakWarningPlugin::getGlobalDetector()->allocOperatorNewArray(size, (char*) file, line);
 }
+#endif

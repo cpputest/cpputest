@@ -26,6 +26,7 @@
  */
 
 #include "CppUTest/TestHarness.h"
+#include "CppUTest/TestRegistry.h"
 #include "CppUTest/TestOutput.h"
 
 namespace
@@ -93,7 +94,6 @@ TEST_GROUP(TestRegistry)
   MockTestResult *mockResult;
   TEST_SETUP()
   {
-    UT_PTR_SET(PlatformSpecificExitCurrentTest, FakePlatformSpecificExitCurrentTest);
     output = new StringBufferTestOutput();
     mockResult = new MockTestResult(*output);
     result = mockResult;

@@ -28,7 +28,7 @@
 
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/Extensions/SimpleStringFromStdint.h"
-#include <stdio.h>
+#include "CppUTest/PlatformSpecificFunctions.h"
 
 SimpleString StringFrom (uint64_t i)
 {

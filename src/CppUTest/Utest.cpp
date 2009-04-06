@@ -25,12 +25,9 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #include "CppUTest/TestHarness.h"
-
-#include <math.h>
-#include <string.h>
-#include <stdio.h>
+#include "CppUTest/TestRegistry.h"
+#include "CppUTest/PlatformSpecificFunctions.h"
 
 TestResult* Utest::testResult_ = 0;
 Utest* Utest::currentTest_ = 0;
@@ -70,6 +67,19 @@ Utest::Utest (const char* groupName,
 Utest::~Utest ()
 {}
 
+void Utest::runOneTestWithPlugins(TestPlugin* plugin, TestResult& result)
+{
+   executePlatformSpecificRunOneTest(plugin, result);
+}
+
+void Utest::runOneTest(TestPlugin* plugin, TestResult& result)
+{
+   plugin->runAllPreTestAction(*this, result) ;
+   run(result);
+   plugin->runAllPostTestAction(*this, result);
+}
+
+
 void Utest::run(TestResult& result)
 {
   //save test context, so that test class can be tested
@@ -90,6 +100,10 @@ void Utest::run(TestResult& result)
   testResult_ = savedResult;
 }
 
+void Utest::exitCurrentTest()
+{
+   executePlatformSpecificExitCurrentTest();
+}
 
 Utest *Utest::getNext() const
   {
@@ -224,7 +238,7 @@ bool Utest::assertCstrEqual(const char* expected, const char* actual, const char
 		testResult_->addFailure (_f);
 		return false;
 	}
-	if (strcmp(expected, actual) != 0) {
+	if (PlatformSpecificStrCmp(expected, actual) != 0) {
 		EqualsFailure _f(this, fileName, lineNumber, StringFrom(expected), StringFrom(actual));
 		testResult_->addFailure (_f);
 		return false;
@@ -303,7 +317,7 @@ bool Utest::assertPointersEqual(void* expected, void* actual, const char* fileNa
 bool Utest::assertDoublesEqual(double expected, double actual, double threshold, const char* fileName, int lineNumber)
 {
   testResult_->countCheck();
-  if (fabs(expected-actual) > threshold)
+  if (PlatformSpecificFabs(expected-actual) > threshold)
     {
       EqualsFailure _f(this, fileName, lineNumber, StringFrom(expected), StringFrom(actual));
       testResult_->addFailure (_f);

@@ -29,7 +29,7 @@
 #include "CppUTest/TestResult.h"
 #include "CppUTest/Failure.h"
 #include "CppUTest/TestOutput.h"
-#include <stdio.h>
+#include "CppUTest/PlatformSpecificFunctions.h"
 
 TestResult::TestResult (TestOutput& p)
     : output(p)

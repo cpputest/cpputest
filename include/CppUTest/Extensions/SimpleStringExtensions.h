@@ -38,7 +38,6 @@
 #define D_SimpleStringExtensions_H
 
 #include "CppUTest/SimpleString.h"
-#include <string>
 
 SimpleString StringFrom (const std::string& other);
 
