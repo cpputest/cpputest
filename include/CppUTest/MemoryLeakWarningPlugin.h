@@ -48,8 +48,8 @@
       #undef new
    #endif
 
-   void* operator new(unsigned int size, const char* file, int line);
-   void* operator new[](unsigned int size, const char* file, int line);
+   void* operator new(unsigned long size, const char* file, int line);
+   void* operator new[](unsigned long size, const char* file, int line);
    void operator delete(void* mem);
    void operator delete[](void* mem);
 

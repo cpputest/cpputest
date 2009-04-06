@@ -53,7 +53,7 @@ void destroyDetector()
 
 #undef new
 
-void* operator new(unsigned int size, bool)
+void* operator new(unsigned long size, bool)
 {
   void* mem = PlatformSpecificMalloc(size);
   if (mem == 0)
@@ -158,7 +158,7 @@ const char* MemoryLeakWarningPlugin::FinalReport(int toBeDeletedLeaks)
 #if UT_NEW_OVERRIDES_ENABLED
 #undef new
 
-void* operator new(unsigned int size)
+void* operator new(unsigned long size)
 {
    return MemoryLeakWarningPlugin::getGlobalDetector()->allocOperatorNew(size);
 }
@@ -168,7 +168,7 @@ void operator delete(void* mem)
    MemoryLeakWarningPlugin::getGlobalDetector()->freeOperatorDelete((char*)mem);
 }
 
-void* operator new[](unsigned int size)
+void* operator new[](unsigned long size)
 {
    return MemoryLeakWarningPlugin::getGlobalDetector()->allocOperatorNewArray(size);
 }
@@ -178,12 +178,12 @@ void operator delete[](void* mem)
    MemoryLeakWarningPlugin::getGlobalDetector()->freeOperatorDeleteArray((char*)mem);
 }
 
-void* operator new(unsigned int size, const char* file, int line)
+void* operator new(unsigned long size, const char* file, int line)
 {
    return MemoryLeakWarningPlugin::getGlobalDetector()->allocOperatorNew(size, (char*) file, line);
 }
 
-void* operator new [](unsigned int size, const char* file, int line)
+void* operator new [](unsigned long size, const char* file, int line)
 {
    return MemoryLeakWarningPlugin::getGlobalDetector()->allocOperatorNewArray(size, (char*) file, line);
 }
