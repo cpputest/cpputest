@@ -78,21 +78,31 @@ extern void  CHECK_C_LOCATION(int condition, const char* conditionString, const 
    #endif
 #endif
 
-extern void* cpputest_malloc(unsigned int size);
-extern void* cpputest_calloc(unsigned int num, unsigned int size);
-extern void* cpputest_realloc(void* ptr, unsigned int size);
+#if UT_MALLOC_OVERRIDES_ENABLED
+   #define malloc std_malloc
+   #define free std_free
+   #define calloc std_calloc
+   #define realloc std_realloc
+   #include <stdlib.h>
+   #undef malloc
+   #undef free
+   #undef realloc
+   #undef calloc
+#else
+   #include <stdlib.h>
+#endif
+
+extern void* cpputest_malloc(size_t size);
+extern void* cpputest_calloc(size_t num, size_t size);
+extern void* cpputest_realloc(void* ptr, size_t size);
 extern void cpputest_free(void* buffer);
 
-extern void* cpputest_malloc_location(unsigned int size,const char* file, int line);
-extern void* cpputest_calloc_location(unsigned int num, unsigned int size,const char* file, int line);
-extern void* cpputest_realloc_location(void* memory, unsigned int size, const char* file, int line);
+extern void* cpputest_malloc_location(size_t size,const char* file, int line);
+extern void* cpputest_calloc_location(size_t num, size_t size,const char* file, int line);
+extern void* cpputest_realloc_location(void* memory, size_t size, const char* file, int line);
 extern void cpputest_free_location(void* buffer, const char* file, int line);
 
 #if UT_MALLOC_OVERRIDES_ENABLED
-
-   #define malloc old_malloc
-   #include <stdlib.h>
-   #undef malloc
 
    #define malloc(a) cpputest_malloc_location(a, __FILE__, __LINE__)
    #define calloc(a, b) cpputest_calloc_location(a, b, __FILE__, __LINE__)

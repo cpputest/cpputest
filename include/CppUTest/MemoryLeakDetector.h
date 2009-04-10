@@ -40,7 +40,7 @@ private:
 struct MemoryLeakDetectorNode
 {
    MemoryLeakDetectorNode() : size(0), next(0) {};
-   unsigned int size;
+   size_t size;
    char* memory;
    char* file;
    int line;
@@ -56,7 +56,7 @@ struct MemoryLeakDetectorList
 {
    MemoryLeakDetectorList() : head(0) {};
 
-   static void initNode(MemoryLeakDetectorNode* node, unsigned int size, char* memory, MemLeakPeriod period, char* file, int line, MemLeakAllocType type);
+   static void initNode(MemoryLeakDetectorNode* node, size_t size, char* memory, MemLeakPeriod period, char* file, int line, MemLeakAllocType type);
 
    void addNewNode(MemoryLeakDetectorNode* node);
    MemoryLeakDetectorNode* removeNode(char* memory);
@@ -114,13 +114,13 @@ public:
    int totalMemoryLeaks(MemLeakPeriod period);
    void clearAllAccounting(MemLeakPeriod period);
 
-   char* allocOperatorNew(unsigned int size);
-   char* allocOperatorNew(unsigned int size, const char* file, int line);
-   char* allocOperatorNewArray(unsigned int size);
-   char* allocOperatorNewArray(unsigned int size, const char* file, int line);
-   char* allocMalloc(unsigned int size);
-   char* allocMalloc(unsigned int size, const char* file, int line);
-   char* allocRealloc(char* memory, unsigned int size, const char* file, int line);
+   char* allocOperatorNew(size_t size);
+   char* allocOperatorNew(size_t size, const char* file, int line);
+   char* allocOperatorNewArray(size_t size);
+   char* allocOperatorNewArray(size_t size, const char* file, int line);
+   char* allocMalloc(size_t size);
+   char* allocMalloc(size_t size, const char* file, int line);
+   char* allocRealloc(char* memory, size_t size, const char* file, int line);
 
    void freeOperatorDelete(char* memory);
    void freeOperatorDeleteArray(char* memory);
@@ -136,18 +136,18 @@ private:
 
 
    void ConstructMemoryLeakReport(MemLeakPeriod period);
-   void reportFailure(const char* message, const char* allocFile, int allocLine, int allocSize, MemLeakAllocType allocType, const char* freeFile, int freeLine, MemLeakAllocType freeType);
-   char* alloc(unsigned int size, char* file, int line, MemLeakAllocType type);
-   char* reallocate(char* memory, unsigned int size, char* file, int line, MemLeakAllocType type);
+   void reportFailure(const char* message, const char* allocFile, int allocLine, size_t allocSize, MemLeakAllocType allocType, const char* freeFile, int freeLine, MemLeakAllocType freeType);
+   char* alloc(size_t size, char* file, int line, MemLeakAllocType type);
+   char* reallocate(char* memory, size_t size, char* file, int line, MemLeakAllocType type);
    const char* getTypeString(MemLeakAllocType type);
    void dealloc(char* memory, const char* file, int line, MemLeakAllocType type);
 
-   char* reallocateMemoryAndExtraInfo(char* memory, int size);
-   char* allocateMemoryAndExtraInfo(int size);
-   void addMemoryCorruptionInformation(char* memory, int size);
+   char* reallocateMemoryAndExtraInfo(char* memory, size_t size);
+   char* allocateMemoryAndExtraInfo(size_t size);
+   void addMemoryCorruptionInformation(char* memory, size_t size);
    void checkForAllocMismatchOrCorruption(MemoryLeakDetectorNode* node, const char* file, int line, MemLeakAllocType type);
 
-   void addMemoryLeakInfoAndCorruptionInfo(char* memory, int size, char* file, int line, MemLeakAllocType type);
+   void addMemoryLeakInfoAndCorruptionInfo(char* memory, size_t size, char* file, int line, MemLeakAllocType type);
    bool removeMemoryLeakInfoAndCheckCorruption(char* memory, const char* file, int line, MemLeakAllocType type);
 };
 

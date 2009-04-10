@@ -44,12 +44,16 @@
 
 #if UT_NEW_OVERRIDES_ENABLED
 
+extern "C" { /* include for size_t definition */
+   #include "TestHarness_c.h"
+}
+
    #ifdef new
       #undef new
    #endif
 
-   void* operator new(unsigned long size, const char* file, int line);
-   void* operator new[](unsigned long size, const char* file, int line);
+   void* operator new(size_t size, const char* file, int line);
+   void* operator new[](size_t size, const char* file, int line);
    void operator delete(void* mem);
    void operator delete[](void* mem);
 

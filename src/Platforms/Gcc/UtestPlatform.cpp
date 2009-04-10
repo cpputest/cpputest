@@ -25,7 +25,13 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <stdlib.h>
 #include "CppUTest/TestHarness.h"
+#undef malloc
+#undef free
+#undef calloc
+#undef realloc
+
 #include "CppUTest/TestRegistry.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 #include <time.h>

@@ -50,9 +50,22 @@ int CommandLineTestRunner::RunAllTests(int ac, char** av)
 
 int CommandLineTestRunner::RunAllTests(int ac, const char** av)
 {
+   int result = 0;
 	ConsoleTestOutput output;
-	CommandLineTestRunner runner(ac, av, &output);
-	return runner.runAllTestsMain();
+
+	MemoryLeakWarningPlugin memLeakWarn(DEF_PLUGIN_MEM_LEAK);
+   TestRegistry::getCurrentRegistry()->installPlugin(&memLeakWarn);
+   memLeakWarn.Enable();
+
+	{
+	   CommandLineTestRunner runner(ac, av, &output);
+	   result = runner.runAllTestsMain();
+	}
+
+	if (result == 0) {
+      output << memLeakWarn.FinalReport(0);
+   }
+	return result;
 }
 
 int CommandLineTestRunner::runAllTestsMain()
@@ -62,23 +75,12 @@ int CommandLineTestRunner::runAllTestsMain()
 	SetPointerPlugin pPlugin(DEF_PLUGIN_SET_POINTER);
 	TestRegistry::getCurrentRegistry()->installPlugin(&pPlugin);
 
-	MemoryLeakWarningPlugin memLeakWarn(DEF_PLUGIN_MEM_LEAK);
-	TestRegistry::getCurrentRegistry()->installPlugin(&memLeakWarn);
-	memLeakWarn.Enable();
-
 	if (!parseArguments(TestRegistry::getCurrentRegistry()->getFirstPlugin()))
 		return 1;
 
 	testResult = runAllTests();
 
 	TestRegistry::getCurrentRegistry()->cleanup();
-	if (testResult == 0) {
-#if UT_SIMPLESTRING_BUFFERING
-		*output_ << memLeakWarn.FinalReport(2); // TODO: where are the 2 leaks from. One was from a SimpleString statically allocated....
-#else
-      *output_ << memLeakWarn.FinalReport(3); // TODO: where are the 3 leaks from
-#endif
-	}
 	return testResult;
 }
 
