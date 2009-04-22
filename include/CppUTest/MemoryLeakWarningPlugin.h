@@ -45,6 +45,8 @@
 #if UT_NEW_OVERRIDES_ENABLED
 
 extern "C" { /* include for size_t definition */
+   #undef __cplusplus
+   #define _WCHART
    #include "TestHarness_c.h"
 }
 

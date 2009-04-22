@@ -73,11 +73,6 @@ void JUnitTestOutput::printCurrentTestStarted(const Utest& test)
 {
 }
 
-
-static SimpleString createFileName(const SimpleString& group)
-{
-}
-
 void JUnitTestOutput::writeXmlHeader()
 {
 }

@@ -123,13 +123,14 @@ SimpleString CommandLineArguments::getParameterField(int ac, const char** av, in
 		return av[i] + 2;
 	else if (i + 1 < ac)
 		return av[++i];
-	return 0;
+	return "";
 }
 
 
 void CommandLineArguments::SetGroupFilter(int ac, const char** av, int& i)
 {
-  groupFilter_ = getParameterField(ac, av, i);
+  SimpleString gf = getParameterField(ac, av, i);
+  groupFilter_ = gf;
 }
 
 void CommandLineArguments::SetNameFilter(int ac, const char** av, int& i)
@@ -162,3 +163,4 @@ bool CommandLineArguments::isJUnitOutput() const
 {
 	return outputType_ == OUTPUT_JUNIT;
 }
+

@@ -16,6 +16,7 @@
 enum MemLeakPeriod { mem_leak_period_all, mem_leak_period_disabled, mem_leak_period_enabled, mem_leak_period_checking };
 enum MemLeakAllocType {mem_leak_alloc_new, mem_leak_alloc_new_array, mem_leak_alloc_malloc, mem_leak_alloc_unknown};
 
+#include <stdlib.h>
 class MemoryLeakFailure
 {
 public:

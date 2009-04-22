@@ -51,15 +51,7 @@ void destroyDetector()
    globalDetector = 0;
 }
 
-#undef new
 
-void* operator new(size_t size, bool)
-{
-  void* mem = PlatformSpecificMalloc(size);
-  if (mem == 0)
-    FAIL("operator new(size, bool) not enough memory");
-   return mem;
-}
 
 MemoryLeakDetector* MemoryLeakWarningPlugin::getGlobalDetector()
 {
@@ -68,7 +60,6 @@ MemoryLeakDetector* MemoryLeakWarningPlugin::getGlobalDetector()
       /*  Want to void using operator new here, however.. still need to init the vtable.
        *  Now just memcpy a local stack variable in the malloced memory. Ought to work everywhere :))
        */
-#if 1
       MemoryLeakWarningReporter reporter;
       globalReporter = (MemoryLeakWarningReporter*) PlatformSpecificMalloc(sizeof(MemoryLeakWarningReporter));
       PlatformSpecificMemCpy(globalReporter, &reporter, sizeof(MemoryLeakWarningReporter));
@@ -77,10 +68,6 @@ MemoryLeakDetector* MemoryLeakWarningPlugin::getGlobalDetector()
       if (globalDetector == 0)
         FAIL("operator new(size, bool) not enough memory");
       globalDetector->init(globalReporter);
-#else
-      globalReporter = new(false) MemoryLeakWarningReporter;
-      globalDetector = new(false) MemoryLeakDetector(globalReporter);
-#endif
       PlatformSpecificAtExit(destroyDetector);
    }
    return globalDetector;
@@ -111,6 +98,7 @@ void MemoryLeakWarningPlugin::expectLeaksInTest(int n)
 MemoryLeakWarningPlugin::MemoryLeakWarningPlugin(const SimpleString& name, MemoryLeakDetector* localDetector)
 	: TestPlugin(name), ignoreAllWarnings(false), expectedLeaks(0)
 {
+   disable();
    if (firstPlugin == 0) firstPlugin = this;
 
    if (localDetector) memLeakDetector = localDetector;
@@ -124,12 +112,18 @@ MemoryLeakWarningPlugin::~MemoryLeakWarningPlugin()
 
 void MemoryLeakWarningPlugin::preTestAction(Utest& test, TestResult& result)
 {
+    if (!isEnabled())
+       return;
+  
    memLeakDetector->startChecking();
    failureCount = result.getFailureCount();
 }
 
 void MemoryLeakWarningPlugin::postTestAction(Utest& test, TestResult& result)
 {
+  if (!isEnabled())
+    return;
+  
    memLeakDetector->stopChecking();
    int leaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
 
@@ -144,11 +138,16 @@ void MemoryLeakWarningPlugin::postTestAction(Utest& test, TestResult& result)
 
 void MemoryLeakWarningPlugin::Enable()
 {
+#if UT_NEW_OVERRIDES_ENABLED
    memLeakDetector->enable();
+#endif
 }
 
 const char* MemoryLeakWarningPlugin::FinalReport(int toBeDeletedLeaks)
 {
+  if (!isEnabled())
+    return "";
+  
    int leaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_enabled);
    if (leaks != toBeDeletedLeaks)
       return memLeakDetector->report(mem_leak_period_enabled);

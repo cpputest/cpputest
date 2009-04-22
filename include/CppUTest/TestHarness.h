@@ -61,5 +61,4 @@
 #include "Failure.h"
 #include "TestPlugin.h"
 #include "MemoryLeakWarningPlugin.h"
-
 #endif
