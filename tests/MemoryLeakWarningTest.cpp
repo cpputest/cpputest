@@ -58,6 +58,7 @@ TEST_GROUP(MemoryLeakWarningTest)
 		detector->init(&dummy);
   		memPlugin = new MemoryLeakWarningPlugin("TestMemoryLeakWarningPlugin", detector);
   		fixture->registry->installPlugin(memPlugin);
+  		memPlugin->enable();
 
 		arrayToLeak1 = 0;
 		arrayToLeak2 = 0;
