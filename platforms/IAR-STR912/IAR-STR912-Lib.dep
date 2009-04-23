@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<project>
+  <fileVersion>2</fileVersion>
+  <fileChecksum>3678243826</fileChecksum>
+  <configuration>
+    <name>Debug</name>
+    <outputs>
+      <file>$PROJ_DIR$\source\91x_adc.c</file>
+      <file>$PROJ_DIR$\source\91x_vic.c</file>
+      <file>$PROJ_DIR$\source\91x_wdg.c</file>
+      <file>$PROJ_DIR$\source\91x_wiu.c</file>
+      <file>$PROJ_DIR$\startup\91x_init.s</file>
+      <file>$PROJ_DIR$\startup\91x_vect.s</file>
+      <file>$PROJ_DIR$\91x_it.c</file>
+      <file>$PROJ_DIR$\init.c</file>
+      <file>$PROJ_DIR$\led.c</file>
+      <file>$PROJ_DIR$\source\91x_emi.c</file>
+      <file>$PROJ_DIR$\source\91x_fmi.c</file>
+      <file>$PROJ_DIR$\source\91x_gpio.c</file>
+      <file>$PROJ_DIR$\source\91x_i2c.c</file>
+      <file>$PROJ_DIR$\source\91x_lib.c</file>
+      <file>$PROJ_DIR$\source\91x_mc.c</file>
+      <file>$PROJ_DIR$\source\91x_rtc.c</file>
+      <file>$PROJ_DIR$\source\91x_scu.c</file>
+      <file>$PROJ_DIR$\source\91x_ssp.c</file>
+      <file>$PROJ_DIR$\source\91x_tim.c</file>
+      <file>$PROJ_DIR$\source\91x_uart.c</file>
+      <file>$PROJ_DIR$\source\91x_ahbapb.c</file>
+      <file>$PROJ_DIR$\source\91x_dma.c</file>
+      <file>$PROJ_DIR$\source\91x_can.c</file>
+    </outputs>
+  </configuration>
+</project>
+
+

@@ -1,10 +1,21 @@
-
+#include <stdlib.h>
 #include "CppUTest/TestHarness.h"
+#undef malloc
+#undef free
+#undef calloc
+#undef realloc
+
+#include "CppUTest/TestRegistry.h"
 #include <stdio.h>
+#include <stdarg.h>
+#include <setjmp.h>
+#include <string.h>
+#include <math.h>
+#include "CppUTest/PlatformSpecificFunctions.h"
+
+
 #include <windows.h>
 #include <mmsystem.h>
-#include <stdarg.h>
-
 ///////////// Time in millis
 
 static long TimeInMillisImplementation()
@@ -137,6 +148,7 @@ void PlatformSpecificExitCurrentTestImpl()
 static jmp_buf test_exit_jmp_buf[10];
 static int jmp_buf_index = 0;
 #endif
+
 
 bool Utest::executePlatformSpecificSetup()
 {

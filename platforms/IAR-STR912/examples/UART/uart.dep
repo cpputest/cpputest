@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<project>
+  <fileVersion>2</fileVersion>
+  <fileChecksum>2626678495</fileChecksum>
+  <configuration>
+    <name>Debug</name>
+    <outputs>
+      <file>$PROJ_DIR$\..\..\source\91x_gpio.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\main.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\91x_gpio.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\91x_init.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\91x_uart.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\91x_scu.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\91x_lib.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\91x_gpio.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\91x_it.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\main.pbi</file>
+      <file>$PROJ_DIR$\Debug\Exe\uart.out</file>
+      <file>$PROJ_DIR$\91x_conf.h</file>
+      <file>$PROJ_DIR$\..\..\include\91x_gpio.h</file>
+      <file>$PROJ_DIR$\..\..\include\91x_map.h</file>
+      <file>$PROJ_DIR$\..\..\include\91x_type.h</file>
+      <file>$PROJ_DIR$\..\..\include\91x_scu.h</file>
+      <file>$PROJ_DIR$\..\..\include\91x_vic.h</file>
+      <file>$PROJ_DIR$\..\..\include\91x_ssp.h</file>
+      <file>$PROJ_DIR$\..\..\source\91x_lib.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\91x_vect.o</file>
+      <file>$PROJ_DIR$\Debug\Obj\91x_it.o</file>
+      <file>$PROJ_DIR$\..\..\source\91x_scu.c</file>
+      <file>$PROJ_DIR$\..\..\source\91x_uart.c</file>
+      <file>$PROJ_DIR$\..\..\startup\91x_init.s</file>
+      <file>$PROJ_DIR$\..\..\startup\91x_vect.s</file>
+      <file>$PROJ_DIR$\91x_it.c</file>
+      <file>$PROJ_DIR$\main.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\uart.pbd</file>
+      <file>$PROJ_DIR$\Debug\Obj\91x_lib.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\91x_scu.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\91x_uart.pbi</file>
+      <file>$PROJ_DIR$\..\..\include\91x_it.h</file>
+      <file>$PROJ_DIR$\..\..\include\91x_lib.h</file>
+      <file>$PROJ_DIR$\..\..\include\91x_uart.h</file>
+    </outputs>
+    <file>
+      <name>$PROJ_DIR$\..\..\source\91x_gpio.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 2</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 7</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 12 13 11 14 15</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\source\91x_lib.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 6</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 28</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 32 13 11 14 16 31 12 15 33 17</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>[ROOT_NODE]</name>
+      <outputs>
+        <tool>
+          <name>ILINK</name>
+          <file> 10</file>
+        </tool>
+      </outputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\source\91x_scu.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 5</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 29</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 15 13 11 14</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\source\91x_uart.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 4</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 30</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 33 13 11 14 15</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\startup\91x_init.s</name>
+      <outputs>
+        <tool>
+          <name>AARM</name>
+          <file> 3</file>
+        </tool>
+      </outputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\..\startup\91x_vect.s</name>
+      <outputs>
+        <tool>
+          <name>AARM</name>
+          <file> 19</file>
+        </tool>
+      </outputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\91x_it.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 20</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 8</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 31 32 13 11 14 16 12 15 33 17</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\main.c</name>
+      <outputs>
+        <tool>
+          <name>ICCARM</name>
+          <file> 1</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 9</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>BICOMP</name>
+          <file> 32 13 11 14 16 31 12 15 33 17</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\Debug\Obj\uart.pbd</name>
+      <inputs>
+        <tool>
+          <name>BILINK</name>
+          <file> 7 8 28 29 30 9</file>
+        </tool>
+      </inputs>
+    </file>
+    <forcedrebuild>
+      <name>[MULTI_TOOL]</name>
+      <tool>ILINK</tool>
+    </forcedrebuild>
+  </configuration>
+</project>
+
+

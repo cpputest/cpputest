@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<workspace>
+  <project>
+    <path>$WS_DIR$\CppUTest-STR912-Main.ewp</path>
+  </project>
+  <project>
+    <path>$WS_DIR$\IAR-STR912-Lib.ewp</path>
+  </project>
+  <batchBuild>
+    <batchDefinition>
+      <name>CppUTest</name>
+      <member>
+        <project>IAR-STR912-Lib</project>
+        <configuration>Debug</configuration>
+      </member>
+      <member>
+        <project>CppUTest-STR912-Main</project>
+        <configuration>Debug</configuration>
+      </member>
+    </batchDefinition>
+  </batchBuild>
+</workspace>
+
+

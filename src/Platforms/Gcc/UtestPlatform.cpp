@@ -33,15 +33,15 @@
 #undef realloc
 
 #include "CppUTest/TestRegistry.h"
-#include "CppUTest/PlatformSpecificFunctions.h"
 #include <time.h>
 #include <sys/time.h>
 #include <stdio.h>
 #include <stdarg.h>
-#include <stdlib.h>
 #include <setjmp.h>
 #include <string.h>
 #include <math.h>
+#include "CppUTest/PlatformSpecificFunctions.h"
+
 
 static jmp_buf test_exit_jmp_buf[10];
 static int jmp_buf_index = 0;

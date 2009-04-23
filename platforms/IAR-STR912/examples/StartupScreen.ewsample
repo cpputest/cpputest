@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<exampleInfo>
+  <copyDir>..\include</copyDir>
+  <copyDir>..\source</copyDir>
+  <copyDir>..\linker</copyDir>
+  <copyDir>..\startup</copyDir>
+</exampleInfo>
+
