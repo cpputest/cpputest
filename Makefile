@@ -19,7 +19,7 @@ CPP_PLATFORM = Gcc
 #CFLAGS are set to override malloc and free to get memory leak detection in C programs
 #CFLAGS = -Dmalloc=cpputest_malloc -Dfree=cpputest_free
 CPPFLAGS += -Wall
-#CPPFLAGS -Wall -DUT_NEW_OVERRIDES_DISABLED -DUT_NEW_MACROS_DISABLED
+#CPPFLAGS += -DUT_NEW_OVERRIDES_DISABLED -DUT_NEW_MACROS_DISABLED
 #GCOVFLAGS = -fprofile-arcs -ftest-coverage
 
 #SRC_DIRS is a list of source directories that make up the target library
