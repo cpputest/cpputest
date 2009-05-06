@@ -62,10 +62,7 @@ void Utest::executePlatformSpecificTeardown() {
 	teardown();
 }
 
-///////////// Time in millis
-
-static long TimeInMillisImplementation()
-{
+static long TimeInMillisImplementation() {
 	struct timeval tv;
 	struct timezone tz;
 	::gettimeofday(&tv, &tz);
@@ -74,45 +71,36 @@ static long TimeInMillisImplementation()
 
 static long (*timeInMillisFp) () = TimeInMillisImplementation;
 
-long GetPlatformSpecificTimeInMillis()
-{
+long GetPlatformSpecificTimeInMillis() {
 	return timeInMillisFp();
 }
 
-void SetPlatformSpecificTimeInMillisMethod(long (*platformSpecific) ())
-{
+void SetPlatformSpecificTimeInMillisMethod(long (*platformSpecific) ()) {
 	timeInMillisFp = (platformSpecific == 0) ? TimeInMillisImplementation : platformSpecific;
 }
 
 ///////////// Time in String
 
-static SimpleString TimeStringImplementation()
-{
+static SimpleString TimeStringImplementation() {
 	time_t tm = time(NULL);
 	return ctime(&tm);
 }
 
 static SimpleString (*timeStringFp) () = TimeStringImplementation;
 
-SimpleString GetPlatformSpecificTimeString()
-{
+SimpleString GetPlatformSpecificTimeString() {
 	return timeStringFp();
 }
 
-void SetPlatformSpecificTimeStringMethod(SimpleString (*platformMethod) ())
-{
+void SetPlatformSpecificTimeStringMethod(SimpleString (*platformMethod) ()) {
 	timeStringFp = (platformMethod == 0) ? TimeStringImplementation : platformMethod;
-}
-
-void FakePlatformSpecificExitCurrentTest() {
 }
 
 int PlatformSpecificVSNprintf(char* str, unsigned int size, const char* format, va_list args) {
     return vsnprintf(str, size, format, args);
 }
 
-int PlatformSpecificSprintf(char *str, unsigned int size, const char *format, ...)
-{
+int PlatformSpecificSprintf(char *str, unsigned int size, const char *format, ...) {
     va_list args;
     va_start(args, format);
     int count = vsnprintf( str, size, format, args);
@@ -122,13 +110,11 @@ int PlatformSpecificSprintf(char *str, unsigned int size, const char *format, ..
         return count;
 }
 
-void PlatformSpecificFlush()
-{
+void PlatformSpecificFlush() {
 	fflush(stdout);
 }
 
-int PlatformSpecificPutchar(int c)
-{
+int PlatformSpecificPutchar(int c) {
 	return putchar(c);
 }
 
