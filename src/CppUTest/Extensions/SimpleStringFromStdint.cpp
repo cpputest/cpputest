@@ -39,14 +39,15 @@ SimpleString StringFrom (uint64_t i)
     return "uint64_t not supported";
 }
 
-SimpleString StringFrom (int64_t i)
+// The method was commented out as it clashes with StringFrom(long) in 64-bit environment
+/*SimpleString StringFrom (int64_t i)
 {
 //    char buffer [50];
 //    sprintf(buffer, "%20lu (0x%016lx)", i, i);
 
 //    return SimpleString(buffer);
     return "int64_t not supported";
-}
+}*/
 
 
 SimpleString StringFrom (uint32_t i)
