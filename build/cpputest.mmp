@@ -37,3 +37,6 @@ SOURCE CommandLineTestRunner.cpp Failure.cpp MemoryLeakWarningPlugin.cpp SimpleS
 
 SOURCEPATH ..\src\Platforms\Symbian
 SOURCE SymbianMemoryLeakWarning.cpp UtestPlatform.cpp
+
+MACRO UT_NEW_MACROS_DISABLED 
+MACRO UT_NEW_OVERRIDES_DISABLED

@@ -46,3 +46,6 @@ SOURCE TestHarness_cTest.cpp
 
 SOURCEPATH ..\tests
 SOURCE AllTests.cpp TestResultTest.cpp PluginTest.cpp SetPluginTest.cpp
+
+MACRO UT_NEW_MACROS_DISABLED 
+MACRO UT_NEW_OVERRIDES_DISABLED

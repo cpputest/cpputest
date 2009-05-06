@@ -88,12 +88,6 @@ void SetPlatformSpecificTimeStringMethod(SimpleString (*platformMethod) ())
 
 static jmp_buf test_exit_jmp_buf;
 
-void TestRegistry::platformSpecificRunOneTest(Utest* test, TestResult& result)
-{
-    if (0 == setjmp(test_exit_jmp_buf))
-        runOneTest(test, result) ;
-}
-
 void PlatformSpecificExitCurrentTestImpl()
 {
     longjmp(test_exit_jmp_buf, 1);
