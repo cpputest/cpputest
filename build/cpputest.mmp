@@ -40,3 +40,6 @@ SOURCE SymbianMemoryLeakWarning.cpp UtestPlatform.cpp
 
 MACRO UT_NEW_MACROS_DISABLED 
 MACRO UT_NEW_OVERRIDES_DISABLED
+
+SOURCEPATH ..\src\CppUTest
+SOURCE MemoryLeakDetector.cpp CommandLineArguments.cpp

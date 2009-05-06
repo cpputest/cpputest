@@ -40,6 +40,7 @@ PRJ_EXPORTS
 ..\include\CppUTest\CommandLineTestRunner.h \epoc32\include\CppuTest\CommandLineTestRunner.h
 ..\include\CppUTest\TestOutput.h \epoc32\include\CppuTest\TestOutput.h
 ..\include\CppUTest\TestPlugin.h \epoc32\include\CppUTest\TestPlugin.h
+..\include\CppUTest\PlatformSpecificFunctions.h \epoc32\include\CppUTest\PlatformSpecificFunctions.h
 
 PRJ_MMPFILES
 cpputest.mmp

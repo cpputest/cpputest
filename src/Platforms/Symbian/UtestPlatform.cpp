@@ -31,14 +31,35 @@
 #include <sys/time.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include <string.h>
+#include <math.h>
+#include <stdlib.h>
+#include "CppUTest/PlatformSpecificFunctions.h"
 
 void Utest::executePlatformSpecificTestBody()
 {
-		TInt err(KErrNone);
-		TRAP(err, testBody());
-		if(err != KErrNone) {
-			Utest::getCurrent()->fail("Leave in test method", "", 0);
-		}
+	TInt err(KErrNone);
+	TRAP(err, testBody());
+	if(err != KErrNone) {
+		Utest::getCurrent()->fail("Leave in test method", "", 0);
+	}
+}
+
+void Utest::executePlatformSpecificExitCurrentTest() {
+	User::Leave(KErrNone);
+}
+
+bool Utest::executePlatformSpecificSetup() {
+	setup();
+	return true;
+}
+
+void Utest::executePlatformSpecificRunOneTest(TestPlugin* plugin, TestResult& result) {
+	runOneTest(plugin, result);
+}
+
+void Utest::executePlatformSpecificTeardown() {
+	teardown();
 }
 
 ///////////// Time in millis
@@ -83,39 +104,98 @@ void SetPlatformSpecificTimeStringMethod(SimpleString (*platformMethod) ())
 	timeStringFp = (platformMethod == 0) ? TimeStringImplementation : platformMethod;
 }
 
-///////////// Run one test with exit on first error, using setjmp/longjmp
-#include <setjmp.h>
-
-static jmp_buf test_exit_jmp_buf;
-
-void PlatformSpecificExitCurrentTestImpl()
-{
-    longjmp(test_exit_jmp_buf, 1);
+void FakePlatformSpecificExitCurrentTest() {
 }
 
-void FakePlatformSpecificExitCurrentTest()
-{
+int PlatformSpecificVSNprintf(char* str, unsigned int size, const char* format, va_list args) {
+    return vsnprintf(str, size, format, args);
 }
-
-void (*PlatformSpecificExitCurrentTest)() = PlatformSpecificExitCurrentTestImpl;
 
 int PlatformSpecificSprintf(char *str, unsigned int size, const char *format, ...)
 {
-   va_list args;
-   va_start(args, format);
-   int count = vsnprintf( str, size, format, args);
-   if (size < count)
-       return -1;
-   else
-       return count;
+    va_list args;
+    va_start(args, format);
+    int count = vsnprintf( str, size, format, args);
+    if (size < count)
+        return -1;
+    else
+        return count;
 }
 
 void PlatformSpecificFlush()
 {
-  fflush(stdout);
+	fflush(stdout);
 }
 
 int PlatformSpecificPutchar(int c)
 {
-  return putchar(c);
+	return putchar(c);
+}
+
+char* PlatformSpecificStrCpy(char* s1, const char* s2) {
+	return strcpy(s1, s2); 
+}
+
+int PlatformSpecificStrLen(const char* s) {
+    return strlen(s);
+}
+
+char* PlatformSpecificStrStr(const char* s1, const char* s2) {
+    return strstr(s1, s2);
+}
+
+int PlatformSpecificStrCmp(const char* s1, const char* s2) {
+    return strcmp(s1, s2);
+}
+
+char* PlatformSpecificStrNCpy(char* s1, const char* s2, unsigned int size) {
+    return strncpy(s1, s2, size);
+}
+
+int PlatformSpecificStrNCmp(const char* s1, const char* s2, unsigned int size) {
+    return strncmp(s1, s2, size);
+}
+
+char* PlatformSpecificStrCat(char* s1, const char* s2) {
+    return strcat(s1, s2);
+}
+
+double PlatformSpecificFabs(double d) {
+    return fabs(d);
+}
+
+void* PlatformSpecificMalloc(unsigned int size) {
+    return malloc(size);
+}
+
+void* PlatformSpecificRealloc (void* memory, unsigned int size) {
+    return realloc(memory, size);
+}
+
+void PlatformSpecificFree(void* memory) {
+    free(memory);
+}
+
+void* PlatformSpecificMemCpy(void* s1, const void* s2, unsigned int size) {
+    return memcpy(s1, s2, size);
+}
+
+int PlatformSpecificAtExit(void (*func) ()) {
+    return atexit(func);
+}
+
+PlatformSpecificFile PlatformSpecificFOpen(const char* filename, const char* flag) {
+    return fopen(filename, flag);
+}
+
+void PlatformSpecificFPuts(const char* str, PlatformSpecificFile file) {
+    fputs(str, (FILE*)file);
+}
+
+void PlatformSpecificFClose(PlatformSpecificFile file) {
+    fclose((FILE*)file);
+}
+
+int PlatformSpecificAtoI(const char*str) {
+    return atoi(str);
 }
