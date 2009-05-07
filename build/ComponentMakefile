@@ -76,9 +76,8 @@ $(TEST_TARGET): $(TEST_OBJS) $(TARGET_LIB) $(USER_LIBS) $(CPPUTEST_LIB)
 
 $(TARGET_LIB): $(OBJ)
 	$(SILENCE)echo Building archive $@
-	$(SILENCE)libtool -static -o $@ $^
-#    $(SILENCE)$(AR) $(ARFLAGS) $@ $^
-#	$(SILENCE)ranlib $@
+	$(SILENCE)$(AR) $(ARFLAGS) $@ $^
+	$(SILENCE)ranlib $@
 
 test: $(TEST_TARGET)
 	$(RUN_TEST_TARGET) | tee $(TEST_OUTPUT)
