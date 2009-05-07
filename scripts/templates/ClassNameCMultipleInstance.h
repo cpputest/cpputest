@@ -7,7 +7,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-typedef struct _ClassName ClassName;
+typedef struct ClassName ClassName;
 
 ClassName* ClassName_Create(void);
 void ClassName_Destroy(ClassName*);
