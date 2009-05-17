@@ -100,16 +100,6 @@ int PlatformSpecificVSNprintf(char* str, unsigned int size, const char* format, 
     return vsnprintf(str, size, format, args);
 }
 
-int PlatformSpecificSprintf(char *str, unsigned int size, const char *format, ...) {
-    va_list args;
-    va_start(args, format);
-    int count = vsnprintf( str, size, format, args);
-    if (size < count)
-        return -1;
-    else
-        return count;
-}
-
 void PlatformSpecificFlush() {
 	fflush(stdout);
 }
@@ -119,7 +109,7 @@ int PlatformSpecificPutchar(int c) {
 }
 
 char* PlatformSpecificStrCpy(char* s1, const char* s2) {
-	return strcpy(s1, s2); 
+	return strcpy(s1, s2);
 }
 
 int PlatformSpecificStrLen(const char* s) {

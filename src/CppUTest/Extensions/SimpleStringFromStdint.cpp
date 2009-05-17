@@ -52,25 +52,16 @@ SimpleString StringFrom (uint64_t i)
 
 SimpleString StringFrom (uint32_t i)
 {
-    char buffer [10+1+1+2+8+1+1];
-    PlatformSpecificSprintf(buffer, sizeof(buffer), "%10u (0x%08x)", i, i);
-
-    return SimpleString(buffer);
+    return StringFromFormat("%10u (0x%08x)", i, i);
 }
 
 SimpleString StringFrom (uint16_t i)
 {
-    char buffer [5+1+1+2+4+1+1];
-    PlatformSpecificSprintf(buffer, sizeof(buffer), "%5u (0x%04x)", i, i);
-
-    return SimpleString(buffer);
+   return StringFromFormat("%5u (0x%04x)", i, i);
 }
 
 SimpleString StringFrom (uint8_t i)
 {
-    char buffer [3+1+1+2+2+1+1];
-    PlatformSpecificSprintf(buffer, sizeof(buffer), "%3u (0x%02x)", i, i);
-
-    return SimpleString(buffer);
+   return StringFromFormat("%3u (0x%02x)", i, i);
 }
 

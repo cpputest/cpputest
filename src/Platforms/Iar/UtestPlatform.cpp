@@ -88,7 +88,7 @@ void Utest::executePlatformSpecificExitCurrentTest()
 static long TimeInMillisImplementation()
 {
    clock_t t = clock();
-   
+
    t = t * 10;
 
    return  t;
@@ -168,23 +168,7 @@ char* PlatformSpecificStrStr(const char* s1, const char* s2)
 
 int PlatformSpecificVSNprintf(char *str, unsigned int size, const char* format, va_list args)
 {
-   size_t count = vsnprintf( str, size, format, args);
-   if (size < count)
-       return -1;
-   else
-       return count;
-}
-
-int PlatformSpecificSprintf(char *str, unsigned int size, const char *format, ...)
-{
-   va_list args;
-   va_start(args, format);
-   size_t count = vsnprintf( str, size, format, args);
-   va_end(args);
-   if (size < count)
-       return -1;
-   else
-       return count;
+   return vsnprintf( str, size, format, args);
 }
 
 PlatformSpecificFile PlatformSpecificFOpen(const char* filename, const char* flag)

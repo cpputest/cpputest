@@ -79,14 +79,6 @@ void PlatformSpecificExitCurrentTestImpl()
 
 #endif
 
-int PlatformSpecificSprintf(char *str, unsigned int size, const char *format, ...)
-{
-    va_list args;
-    va_start(args, format);
-    memset(str, 0, size);
-    return _vsnprintf( str, size-1, format, args);
-}
-
 int PlatformSpecificVSNprintf(char *str, unsigned int size, const char* format, void* args)
 {
    return _vsnprintf( str, size, format, (va_list) args);

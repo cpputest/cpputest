@@ -190,10 +190,9 @@ TEST_GROUP(JUnitOutputTest)
 		void CHECK_TEST_SUITE_START(SimpleString output)
 		{
 			TestGroupData& group = currentGroup();
-			char buf[1024];
-			PlatformSpecificSprintf(buf, 1024, "<testsuite errors=\"0\" failures=\"%d\" hostname=\"localhost\" name=\"%s\" tests=\"%d\" time=\"50.0\" timestamp=\"%s\">\n",
+			SimpleString buf = StringFromFormat("<testsuite errors=\"0\" failures=\"%d\" hostname=\"localhost\" name=\"%s\" tests=\"%d\" time=\"50.0\" timestamp=\"%s\">\n",
 				group.totalFailures_, group.name_.asCharString(), group.numberTests_, theTime);
-			STRCMP_EQUAL(buf, output.asCharString());
+			CHECK_EQUAL(buf, output);
 		}
 
 		void CHECK_XML_FILE()
@@ -240,17 +239,15 @@ TEST_GROUP(JUnitOutputTest)
 		}
 		void CHECK_TESTS(SimpleString* arr)
 		{
-			static char buf[1024];
-
 			for (int index = 0, curTest = 0; curTest < currentGroup().numberTests_; curTest++, index++) {
-				PlatformSpecificSprintf(buf, 1024, "<testcase classname=\"%s\" name=\"%s\" time=\"10.0\">\n",
+				SimpleString buf = StringFromFormat ("<testcase classname=\"%s\" name=\"%s\" time=\"10.0\">\n",
 					currentGroup().name_.asCharString(), currentGroup().testData_[curTest].tst_->getName().asCharString());
-				STRCMP_EQUAL(buf, arr[index].asCharString());
+				CHECK_EQUAL(buf, arr[index]);
 				if (currentGroup().testData_[curTest].failure_) {
 					CHECK_FAILURE(arr, index, curTest);
 				}
-				PlatformSpecificSprintf(buf, 1024, "</testcase>\n");
-				STRCMP_EQUAL(buf, arr[++index].asCharString());
+				buf = "</testcase>\n";
+            CHECK_EQUAL(buf, arr[++index]);
 
 			}
 		}
@@ -258,14 +255,13 @@ TEST_GROUP(JUnitOutputTest)
 		{
 			Failure& f = *currentGroup().testData_[curTest].failure_;
 			i++;
-			static char buf[1024];
 			SimpleString message = f.getMessage().asCharString();
 			message.replace('"','\'');
 			message.replace('<','[');
 			message.replace('>',']');
 			message.replace("\n","{newline}");
-			PlatformSpecificSprintf(buf, 1024, "<failure message=\"%s:%d: %s\" type=\"AssertionFailedError\">\n", f.getFileName().asCharString(), f.getLineNumber(), message.asCharString());
-			STRCMP_EQUAL(buf, arr[i].asCharString());
+			SimpleString buf = StringFromFormat("<failure message=\"%s:%d: %s\" type=\"AssertionFailedError\">\n", f.getFileName().asCharString(), f.getLineNumber(), message.asCharString());
+			CHECK_EQUAL(buf, arr[i]);
 			i++;
 			STRCMP_EQUAL("</failure>\n", arr[i].asCharString());
 		}

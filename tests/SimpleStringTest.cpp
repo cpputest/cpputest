@@ -267,11 +267,21 @@ TEST(SimpleString, StringFromFormatLarge)
    LONGS_EQUAL(10, h1.count(s));
 }
 
+static int WrappedUpVSNPrintf(char* buf, int n, const char* format, ...)
+{
+   va_list arguments;
+   va_start(arguments, format);
+
+   int result = PlatformSpecificVSNprintf(buf, n, format, arguments);
+   va_end(arguments);
+   return result;
+}
+
 TEST(SimpleString, PlatformSpecificSprintf_fits)
 {
     char buf[10];
 
-    int count = PlatformSpecificSprintf(buf, sizeof(buf), "%s", "12345");
+    int count = WrappedUpVSNPrintf(buf, sizeof(buf), "%s", "12345");
     STRCMP_EQUAL("12345", buf);
     LONGS_EQUAL(5, count);
 }
@@ -280,7 +290,7 @@ TEST(SimpleString, PlatformSpecificSprintf_doesNotFit)
 {
     char buf[10];
 
-    int count = PlatformSpecificSprintf(buf, sizeof(buf), "%s", "12345678901");
+    int count = WrappedUpVSNPrintf(buf, sizeof(buf), "%s", "12345678901");
     STRCMP_EQUAL("123456789", buf);
-    LONGS_EQUAL(-1, count);
+    LONGS_EQUAL(11, count);
 }
