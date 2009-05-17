@@ -51,8 +51,6 @@ void destroyDetector()
    globalDetector = 0;
 }
 
-
-
 MemoryLeakDetector* MemoryLeakWarningPlugin::getGlobalDetector()
 {
    if (globalDetector == 0) {
@@ -98,11 +96,12 @@ void MemoryLeakWarningPlugin::expectLeaksInTest(int n)
 MemoryLeakWarningPlugin::MemoryLeakWarningPlugin(const SimpleString& name, MemoryLeakDetector* localDetector)
 	: TestPlugin(name), ignoreAllWarnings(false), expectedLeaks(0)
 {
-   disable();
    if (firstPlugin == 0) firstPlugin = this;
 
    if (localDetector) memLeakDetector = localDetector;
    else memLeakDetector = getGlobalDetector();
+
+   memLeakDetector->enable();
 }
 
 MemoryLeakWarningPlugin::~MemoryLeakWarningPlugin()
@@ -112,18 +111,12 @@ MemoryLeakWarningPlugin::~MemoryLeakWarningPlugin()
 
 void MemoryLeakWarningPlugin::preTestAction(Utest& test, TestResult& result)
 {
-    if (!isEnabled())
-       return;
-  
    memLeakDetector->startChecking();
    failureCount = result.getFailureCount();
 }
 
 void MemoryLeakWarningPlugin::postTestAction(Utest& test, TestResult& result)
 {
-  if (!isEnabled())
-    return;
-  
    memLeakDetector->stopChecking();
    int leaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
 
@@ -136,18 +129,8 @@ void MemoryLeakWarningPlugin::postTestAction(Utest& test, TestResult& result)
    expectedLeaks = 0;
 }
 
-void MemoryLeakWarningPlugin::Enable()
-{
-#if UT_NEW_OVERRIDES_ENABLED
-   memLeakDetector->enable();
-#endif
-}
-
 const char* MemoryLeakWarningPlugin::FinalReport(int toBeDeletedLeaks)
 {
-  if (!isEnabled())
-    return "";
-  
    int leaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_enabled);
    if (leaks != toBeDeletedLeaks)
       return memLeakDetector->report(mem_leak_period_enabled);

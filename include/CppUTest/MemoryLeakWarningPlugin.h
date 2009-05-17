@@ -75,7 +75,6 @@ class MemoryLeakWarningPlugin : public TestPlugin
 		virtual void preTestAction(Utest& test, TestResult& result);
 		virtual void postTestAction(Utest& test, TestResult& result);
 
-		virtual void Enable();
 		virtual const char* FinalReport(int toBeDeletedLeaks = 0);
 
 		void ignoreAllLeaksInTest();

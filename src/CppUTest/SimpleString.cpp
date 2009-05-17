@@ -29,92 +29,29 @@
 #include "CppUTest/SimpleString.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
-#define SIMPLESTRING_BUFFERS_BUFFER_SIZE 200
-#define SIMPLESTRING_BUFFERS_SIZE 50
-
-#if UT_SIMPLESTRING_BUFFERING
-
-class SimpleStringBuffers
+static char* allocString(int size)
 {
-public:
-   struct StringBuffer
-   {
-      StringBuffer() : avail(true) {};
-      char buffer[SIMPLESTRING_BUFFERS_BUFFER_SIZE];
-      bool avail;
-   };
-   StringBuffer buffer[SIMPLESTRING_BUFFERS_SIZE];
-   char emptyString[1];
+   return new char[size];
+}
 
-   SimpleStringBuffers()
-   {
-      emptyString[0] = '\0';
-   }
-
-   char* allocString(int size)
-   {
-      if (size < SIMPLESTRING_BUFFERS_BUFFER_SIZE) {
-         for (int i = 0; i < SIMPLESTRING_BUFFERS_SIZE; i++) {
-            if (buffer[i].avail) {
-               buffer[i].avail = false;
-               return buffer[i].buffer;
-            }
-         }
-      }
-      return new char[size];
-   }
-
-   void deallocString(char* str)
-   {
-      if (str == emptyString) return;
-
-      for (int i = 0; i < SIMPLESTRING_BUFFERS_SIZE; i++) {
-         if (buffer[i].buffer == str) {
-            buffer[i].avail = true;
-            return;;
-         }
-      }
-      delete [] str;
-   }
-
-   char* getEmptryString()
-   {
-      return emptyString;
-   }
-};
-#else
-
-class SimpleStringBuffers
+static void deallocString(char* str)
 {
-public:
-   char* allocString(int size)
-   {
-      return new char[size];
-   }
-
-   void deallocString(char* str)
-   {
-      delete [] str;
-   }
-   char* getEmptryString()
-   {
-      char* empty = new char[1];
-      empty[0] = '\0';
-      return empty;
-   }
-};
-#endif
-
-static SimpleStringBuffers stringBuffers;
-
+   delete [] str;
+}
+static char* getEmptryString()
+{
+   char* empty = new char[1];
+   empty[0] = '\0';
+   return empty;
+}
 SimpleString::SimpleString (const char *otherBuffer)
 {
   if (otherBuffer == 0) {
-  	  buffer = stringBuffers.getEmptryString();
+  	  buffer = getEmptryString();
   }
   else {
      int len = PlatformSpecificStrLen (otherBuffer) + 1;
-     buffer = stringBuffers.allocString(len);
+     buffer = allocString(len);
      PlatformSpecificStrCpy (buffer, otherBuffer);
   }
 }
@@ -122,7 +59,7 @@ SimpleString::SimpleString (const char *otherBuffer)
 SimpleString::SimpleString (const char *other, int repeatCount)
 {
     int len = PlatformSpecificStrLen(other) *  repeatCount + 1;
-    buffer = stringBuffers.allocString(len);
+    buffer = allocString(len);
     char* next = buffer;
     for (int i = 0; i < repeatCount; i++)
     {
@@ -135,7 +72,7 @@ SimpleString::SimpleString (const char *other, int repeatCount)
 SimpleString::SimpleString (const SimpleString& other)
 {
    int len = other.size() + 1;
-   buffer = stringBuffers.allocString(len);
+   buffer = allocString(len);
    PlatformSpecificStrCpy(buffer, other.buffer);
 }
 
@@ -144,9 +81,9 @@ SimpleString& SimpleString::operator= (const SimpleString& other)
 {
   if (this != &other)
     {
-     stringBuffers.deallocString(buffer);
+     deallocString(buffer);
      int len = other.size() + 1;
-     buffer = stringBuffers.allocString(len);
+     buffer = allocString(len);
      PlatformSpecificStrCpy(buffer, other.buffer);
     }
   return *this;
@@ -207,11 +144,11 @@ int SimpleString::split(const SimpleString& split, SimpleString*& output) const
 		prev = str;
 		str = PlatformSpecificStrStr(str, split.buffer) + 1;
 		int len = str - prev;
-		char* sub = stringBuffers.allocString(len+1);
+		char* sub = allocString(len+1);
 		PlatformSpecificStrNCpy(sub, prev, len);
 		sub[len] = '\0';
 		output[i] = sub;
-		stringBuffers.deallocString(sub);
+		deallocString(sub);
 	}
 	if (extraEndToken) {
 		output[num] = str;
@@ -237,7 +174,7 @@ void SimpleString::replace(const char* to, const char* with)
 	int newsize = len + (withlen * c) - (tolen * c) + 1;
 
 	if (newsize) {
-		char* newbuf = stringBuffers.allocString(newsize);
+		char* newbuf = allocString(newsize);
 		for (int i = 0, j = 0; i < len;) {
 			if (PlatformSpecificStrNCmp(&buffer[i], to, tolen) == 0) {
 			   PlatformSpecificStrNCpy(&newbuf[j], with, withlen);
@@ -250,12 +187,12 @@ void SimpleString::replace(const char* to, const char* with)
 				i++;
 			}
 		}
-		stringBuffers.deallocString(buffer);
+		deallocString(buffer);
 		buffer = newbuf;
 		buffer[newsize-1] = '\0';
 	}
 	else {
-  	  buffer = stringBuffers.getEmptryString();
+  	  buffer = getEmptryString();
   	  buffer [0] = '\0';
 	}
 }
@@ -273,7 +210,7 @@ int SimpleString::size() const
 
 SimpleString::~SimpleString ()
 {
-   stringBuffers.deallocString(buffer);
+   deallocString(buffer);
 }
 
 
@@ -302,10 +239,10 @@ SimpleString& SimpleString::operator+=(const SimpleString& rhs)
 SimpleString& SimpleString::operator+=(const char* rhs)
 {
   int len = this->size() + PlatformSpecificStrLen(rhs) + 1;
-  char* tbuffer = stringBuffers.allocString(len);
+  char* tbuffer = allocString(len);
   PlatformSpecificStrCpy(tbuffer, this->buffer);
   PlatformSpecificStrCat(tbuffer, rhs);
-  stringBuffers.deallocString(buffer);
+  deallocString(buffer);
   buffer = tbuffer;
   return *this;
 }

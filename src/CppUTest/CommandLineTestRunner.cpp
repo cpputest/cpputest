@@ -55,7 +55,6 @@ int CommandLineTestRunner::RunAllTests(int ac, const char** av)
 
 	MemoryLeakWarningPlugin memLeakWarn(DEF_PLUGIN_MEM_LEAK);
    TestRegistry::getCurrentRegistry()->installPlugin(&memLeakWarn);
-   memLeakWarn.Enable();
 
 	{
 	   CommandLineTestRunner runner(ac, av, &output);
