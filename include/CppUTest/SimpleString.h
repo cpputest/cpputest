@@ -82,7 +82,6 @@ SimpleString HexStringFrom(long value);
 SimpleString StringFrom (double value, int precision = 6);
 SimpleString StringFrom (const SimpleString& other);
 SimpleString StringFromFormat(const char* format, ...);
-
-#define SIMPLESTRING_FORMATTING_BUFFER_SIZE 1024
+SimpleString VStringFromFormat(const char* format, va_list args);
 
 #endif

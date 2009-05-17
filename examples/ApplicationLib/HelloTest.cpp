@@ -8,9 +8,7 @@ extern "C" {
 #include <stdarg.h>
 #include "CppUTest/TestHarness.h"
 
-#define BUFFER_SIZE 256
-
-static char buffer[BUFFER_SIZE];
+static SimpleString buffer;
 
 TEST_GROUP(HelloWorld)
 {
@@ -18,7 +16,7 @@ TEST_GROUP(HelloWorld)
 	{
 		va_list arguments;
 		va_start(arguments, output);
-		PlatformSpecificVSNprintf(buffer, BUFFER_SIZE, output, arguments);
+		buffer = VStringFromFormat(output, arguments);
 		va_end(arguments);
 		return 1;
 	}
@@ -35,5 +33,5 @@ TEST_GROUP(HelloWorld)
 TEST(HelloWorld, PrintOk)
 {
 	printHelloWorld();
-	STRCMP_EQUAL("Hello World!\n", buffer);
+	STRCMP_EQUAL("Hello World!\n", buffer.asCharString());
 }

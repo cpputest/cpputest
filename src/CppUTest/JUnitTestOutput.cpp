@@ -149,11 +149,9 @@ void JUnitTestOutput::writeXmlHeader()
 
 void JUnitTestOutput::writeTestSuiteSummery()
 {
-	const int buf_size = 1024;
-	static char buf[buf_size];
-	PlatformSpecificSprintf(buf, buf_size, "<testsuite errors=\"0\" failures=\"%d\" hostname=\"localhost\" name=\"%s\" tests=\"%d\" time=\"%d.0\" timestamp=\"%s\">\n",
-			impl_->results_.failureCount_, impl_->results_.group_.asCharString(), impl_->results_.testCount_, (int) impl_->results_.groupExecTime_, GetPlatformSpecificTimeString().asCharString());
-	writeToFile(buf);
+   SimpleString buf = StringFromFormat("<testsuite errors=\"0\" failures=\"%d\" hostname=\"localhost\" name=\"%s\" tests=\"%d\" time=\"%d.0\" timestamp=\"%s\">\n",
+         impl_->results_.failureCount_, impl_->results_.group_.asCharString(), impl_->results_.testCount_, (int) impl_->results_.groupExecTime_, GetPlatformSpecificTimeString());
+	writeToFile(buf.asCharString());
 }
 
 void JUnitTestOutput::writeProperties()
@@ -165,38 +163,30 @@ void JUnitTestOutput::writeProperties()
 
 void JUnitTestOutput::writeTestCases()
 {
-	const int buf_size = 1024;
-	static char buf[buf_size];
-
   	JUnitTestCaseResultNode* cur = impl_->results_.head_;
   	while (cur) {
-		PlatformSpecificSprintf(buf, buf_size, "<testcase classname=\"%s\" name=\"%s\" time=\"%d.0\">\n",
-			impl_->results_.group_.asCharString(), cur->name_.asCharString(), (int) cur->execTime_);
-		writeToFile(buf);
+  	   SimpleString buf = StringFromFormat("<testcase classname=\"%s\" name=\"%s\" time=\"%d.0\">\n",
+  	         impl_->results_.group_.asCharString(), cur->name_.asCharString(), (int) cur->execTime_);
+		writeToFile(buf.asCharString());
 
 		if (cur->failure_) {
 			writeFailure(cur);
 		}
-		PlatformSpecificSprintf(buf, buf_size, "</testcase>\n");
-		writeToFile(buf);
+		writeToFile("</testcase>\n");
   		cur = cur->next_;
   	}
 }
 
 void JUnitTestOutput::writeFailure(JUnitTestCaseResultNode* node)
 {
-	const int buf_size = 1024;
-	static char buf[buf_size];
-
 	SimpleString message = node->failure_->getMessage().asCharString();
 	message.replace('"', '\'');
 	message.replace('<','[');
 	message.replace('>',']');
 	message.replace("\n","{newline}");
-	PlatformSpecificSprintf(buf, buf_size, "<failure message=\"%s:%d: %s\" type=\"AssertionFailedError\">\n",
+	SimpleString buf = StringFromFormat("<failure message=\"%s:%d: %s\" type=\"AssertionFailedError\">\n",
 		node->failure_->getFileName().asCharString(), node->failure_->getLineNumber(), message.asCharString());
-
-	writeToFile(buf);
+	writeToFile(buf.asCharString());
 	writeToFile("</failure>\n");
 }
 

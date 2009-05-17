@@ -33,12 +33,6 @@ TEST_GROUP(SimpleString)
 {
 };
 
-
-TEST(SimpleString, Create)
-{
-  SimpleString s("hello");
-}
-
 TEST(SimpleString, CreateSequence)
 {
   SimpleString expected("hellohello");
@@ -191,7 +185,6 @@ TEST(SimpleString, splitNoTokenOnTheEnd)
 	delete [] splitted;
 }
 
-
 TEST(SimpleString, count)
 {
 	SimpleString str("ha ha ha ha");
@@ -218,10 +211,9 @@ TEST(SimpleString, endsWith)
 
 	SimpleString str4("ha ha ha ha");
 	CHECK(str4.endsWith("ha"));
-
 }
 
-TEST(SimpleString, replaceCharwithChar)
+TEST(SimpleString, replaceCharWithChar)
 {
 	SimpleString str("abcabcabca");
 	str.replace('a','b');
@@ -262,10 +254,17 @@ TEST(SimpleString, HexStrings)
   STRCMP_EQUAL("ffff", h1.asCharString());
 }
 
-TEST(SimpleString, FormatIn1024BytesBuffer)
+TEST(SimpleString, StringFromFormat)
 {
   SimpleString h1 = StringFromFormat("%s %s! %d", "Hello", "World", 2009);
   STRCMP_EQUAL("Hello World! 2009", h1.asCharString());
+}
+
+TEST(SimpleString, StringFromFormatLarge)
+{
+   char* s = "ThisIsAPrettyLargeStringAndIfWeAddThisManyTimesToABufferItWillbeFull";
+   SimpleString h1 = StringFromFormat("%s%s%s%s%s%s%s%s%s%s", s, s, s, s, s, s, s, s, s, s);
+   LONGS_EQUAL(10, h1.count(s));
 }
 
 TEST(SimpleString, PlatformSpecificSprintf_fits)

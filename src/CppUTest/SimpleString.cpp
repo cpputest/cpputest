@@ -356,13 +356,33 @@ SimpleString StringFrom (const SimpleString& value)
   return SimpleString(value);
 }
 
-static char localFormattingBuffer[SIMPLESTRING_FORMATTING_BUFFER_SIZE];
 
 SimpleString StringFromFormat(const char* format, ...)
 {
+   SimpleString resultString;
    va_list arguments;
    va_start(arguments, format);
-   PlatformSpecificVSNprintf(localFormattingBuffer, SIMPLESTRING_FORMATTING_BUFFER_SIZE, format, arguments);
+
+   resultString = VStringFromFormat(format, arguments);
    va_end(arguments);
-   return SimpleString(localFormattingBuffer);
+   return resultString;
+}
+
+SimpleString VStringFromFormat(const char* format, va_list args)
+{
+   enum { sizeOfdefaultBuffer = 100 };
+   char defaultBuffer[sizeOfdefaultBuffer];
+   SimpleString resultString;
+
+   int size = PlatformSpecificVSNprintf(defaultBuffer, sizeOfdefaultBuffer, format, args);
+   if (size < sizeOfdefaultBuffer) {
+      resultString = SimpleString(defaultBuffer);
+   }
+   else {
+      char* newBuffer = new char[size+1];
+      PlatformSpecificVSNprintf(newBuffer, size+1, format, args);
+      resultString = SimpleString(newBuffer);
+      delete [] newBuffer;
+   }
+   return resultString;
 }

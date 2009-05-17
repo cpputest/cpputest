@@ -28,19 +28,10 @@
 #ifndef PLATFORMSPECIFICFUNCTIONS_H_
 #define PLATFORMSPECIFICFUNCTIONS_H_
 
-#include <stdarg.h>
-
-
 /* Platform specific interface we use in order to minimize dependencies with LibC.
  * This enables porting to different embedded platforms.
  *
- * Lib C dependencies that are currently still left:
- *
- * stdarg.h -> We use formatting functions and va_list requires to include stdarg.h
- * stdlib.h -> The TestHarness_c.h includes this to try to avoid conflicts in its malloc #define. This dependency can
- * easily be removed by not enabling the MALLOC overrides.
  */
-
 
 /* For test execution control (long_jmp set_jmp) */
 
@@ -55,8 +46,8 @@
 long GetPlatformSpecificTimeInMillis();
 void SetPlatformSpecificTimeInMillisMethod(long (*platformSpecific) ());
 
-SimpleString GetPlatformSpecificTimeString();
-void SetPlatformSpecificTimeStringMethod(SimpleString (*platformMethod) ());
+const char* GetPlatformSpecificTimeString();
+void SetPlatformSpecificTimeStringMethod(const char* (*platformMethod) ());
 
 /* String operations */
 int PlatformSpecificAtoI(const char*str);
@@ -68,7 +59,6 @@ int PlatformSpecificStrCmp(const char* s1, const char* s2);
 int PlatformSpecificStrNCmp(const char* s1, const char* s2, unsigned int size);
 char* PlatformSpecificStrStr(const char* s1, const char* s2);
 int PlatformSpecificVSNprintf(char *str, unsigned int size, const char* format, va_list va_args_list);
-int PlatformSpecificSprintf(char *str, unsigned int size, const char *format, ...);
 
 /* Misc */
 double PlatformSpecificFabs(double d);

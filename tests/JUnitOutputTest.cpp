@@ -39,7 +39,7 @@ static long MockGetPlatformSpecificTimeInMillis()
 		return millisTime;
 }
 
-static SimpleString MockGetPlatformSpecificTimeString()
+static const char* MockGetPlatformSpecificTimeString()
 {
 		return theTime;
 }

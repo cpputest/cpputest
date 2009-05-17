@@ -33,15 +33,14 @@
 #undef realloc
 
 #include "CppUTest/TestRegistry.h"
-#include <time.h>
 #include <sys/time.h>
 #include <stdio.h>
 #include <stdarg.h>
 #include <setjmp.h>
 #include <string.h>
 #include <math.h>
-#include "CppUTest/PlatformSpecificFunctions.h"
 
+#include "CppUTest/PlatformSpecificFunctions.h"
 
 static jmp_buf test_exit_jmp_buf[10];
 static int jmp_buf_index = 0;
@@ -96,7 +95,7 @@ static long TimeInMillisImplementation()
 {
 	struct timeval tv;
 	struct timezone tz;
-	::gettimeofday(&tv, &tz);
+	gettimeofday(&tv, &tz);
 	return (tv.tv_sec * 1000) + (long)(tv.tv_usec * 0.001);
 }
 
@@ -114,20 +113,20 @@ void SetPlatformSpecificTimeInMillisMethod(long (*platformSpecific) ())
 
 ///////////// Time in String
 
-static SimpleString TimeStringImplementation()
+static const char* TimeStringImplementation()
 {
 	time_t tm = time(NULL);
 	return ctime(&tm);
 }
 
-static SimpleString (*timeStringFp) () = TimeStringImplementation;
+static const char* (*timeStringFp) () = TimeStringImplementation;
 
-SimpleString GetPlatformSpecificTimeString()
+const char* GetPlatformSpecificTimeString()
 {
 	return timeStringFp();
 }
 
-void SetPlatformSpecificTimeStringMethod(SimpleString (*platformMethod) ())
+void SetPlatformSpecificTimeStringMethod(const char* (*platformMethod) ())
 {
 	timeStringFp = (platformMethod == 0) ? TimeStringImplementation : platformMethod;
 }
@@ -173,23 +172,7 @@ char* PlatformSpecificStrStr(const char* s1, const char* s2)
 
 int PlatformSpecificVSNprintf(char *str, unsigned int size, const char* format, va_list args)
 {
-   size_t count = vsnprintf( str, size, format, args);
-   if (size < count)
-       return -1;
-   else
-       return count;
-}
-
-int PlatformSpecificSprintf(char *str, unsigned int size, const char *format, ...)
-{
-   va_list args;
-   va_start(args, format);
-   size_t count = vsnprintf( str, size, format, args);
-   va_end(args);
-   if (size < count)
-       return -1;
-   else
-       return count;
+   return vsnprintf( str, size, format, args);
 }
 
 PlatformSpecificFile PlatformSpecificFOpen(const char* filename, const char* flag)

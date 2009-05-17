@@ -46,13 +46,21 @@
    #endif
 #endif
 
-#define UT_SIMPLESTRING_BUFFERING 0
-
 /* original value was 9973 which works will with large programs. Now set to smaller since it takes
  * a lot of memory in embedded apps. Change it if you experience the memory leak detector to be slow.
  */
 
 #define MEMORY_LEAK_HASH_TABLE_SIZE 73
+
+/*
+ * Lib C dependencies that are currently still left:
+ *
+ * stdarg.h -> We use formatting functions and va_list requires to include stdarg.h
+ * stdlib.h -> The TestHarness_c.h includes this to try to avoid conflicts in its malloc #define. This dependency can
+ * easily be removed by not enabling the MALLOC overrides.
+ */
+
+#include <stdarg.h>
 
 #include "Utest.h"
 #include "UtestMacros.h"

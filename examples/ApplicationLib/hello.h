@@ -4,8 +4,6 @@
 
 extern void printHelloWorld();
 
-struct helloWorldApi {
-	int (*printHelloWorld_output) (const char*, ...);
-};
+extern int (*printHelloWorld_output) (const char*, ...);
 
 #endif /*HELLO_H_*/
