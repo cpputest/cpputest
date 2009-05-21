@@ -4,6 +4,6 @@
 
 extern void printHelloWorld();
 
-extern int (*printHelloWorld_output) (const char*, ...);
+extern int (*PrintFormated) (const char*, ...);
 
 #endif /*HELLO_H_*/

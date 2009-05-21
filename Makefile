@@ -55,4 +55,8 @@ include $(CPPUTEST_HOME)/build/ComponentMakefile
 
 .PHONY: examples
 examples: 
-	make -C examples clean all
+	make -C examples  all
+	
+cleanExamples: 
+	make -C examples clean 
+	

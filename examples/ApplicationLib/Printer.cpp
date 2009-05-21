@@ -26,9 +26,9 @@
  */
 
 #include "Printer.h"
+#include "CppUTest/TestHarness.h"
 #include "CppUTest/SimpleString.h"
 #include <stdio.h>
-#include <string>
 
 Printer::Printer()
 {

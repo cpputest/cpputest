@@ -4,7 +4,7 @@
 
 void printHelloWorld()
 {
-	printHelloWorld_output("Hello World!\n");
+	PrintFormated("Hello World!\n");
 }
 
-int (*printHelloWorld_output) (const char*, ...) = printf;
+int (*PrintFormated) (const char*, ...) = printf;

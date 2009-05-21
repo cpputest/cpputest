@@ -30,10 +30,7 @@
 
 int main(int ac, char** av)
 {
-    TestRegistry* r = TestRegistry::getCurrentRegistry();
-    SetPointerPlugin ps("PointerStore");
-    r->installPlugin(&ps);
     return CommandLineTestRunner::RunAllTests(ac, av);
 }
 
-#include "../ApplicationLib/AllTests.h"
+#include "ApplicationLib/AllTests.h"

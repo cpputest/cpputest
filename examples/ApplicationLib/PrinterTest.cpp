@@ -27,7 +27,7 @@
 
 #define UT_NEW_OVERRIDES_DISABLED
 #include "CppUTest/TestHarness.h"
-#include "SimpleStringExtensions.h"
+#include "CppUTest/Extensions/SimpleStringExtensions.h"
 #include "Printer.h"
 #include "MockPrinter.h"
 
