@@ -72,7 +72,8 @@ void MemoryLeakDetectorList::initNode(MemoryLeakDetectorNode* node, size_t size,
 
 bool MemoryLeakDetectorList::isInPeriod(MemoryLeakDetectorNode* node, MemLeakPeriod period)
 {
-   return period == mem_leak_period_all || node->period == period || (node->period != mem_leak_period_disabled && period == mem_leak_period_enabled);
+
+	return period == mem_leak_period_all || node->period == period || (node->period != mem_leak_period_disabled && period == mem_leak_period_enabled);
 }
 
 void MemoryLeakDetectorList::clearAllAccounting(MemLeakPeriod period)

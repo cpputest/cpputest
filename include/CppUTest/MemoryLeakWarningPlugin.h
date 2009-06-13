@@ -53,12 +53,12 @@ extern "C" { /* include for size_t definition */
       #undef new
    #endif
 
+   #if UT_NEW_MACROS_ENABLED
    void* operator new(size_t size, const char* file, int line);
    void* operator new[](size_t size, const char* file, int line);
    void operator delete(void* mem);
    void operator delete[](void* mem);
 
-   #if UT_NEW_MACROS_ENABLED
       #define new new(__FILE__, __LINE__)
    #endif
 

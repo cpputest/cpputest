@@ -2,7 +2,7 @@
 
 int CppUTestMain()
 {
-  int ac = 1;
+  int ac = 4;
   char * av[] = {"test.exe", "-v", "-g", "Output"};
   return CommandLineTestRunner::RunAllTests(ac, av);
 }

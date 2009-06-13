@@ -13,9 +13,60 @@
 #include <math.h>
 #include "CppUTest/PlatformSpecificFunctions.h"
 
-
 #include <windows.h>
 #include <mmsystem.h>
+
+
+#if 0 //from GCC
+static jmp_buf test_exit_jmp_buf[10];
+static int jmp_buf_index = 0;
+
+bool Utest::executePlatformSpecificSetup()
+{
+   if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
+      jmp_buf_index++;
+      setup();
+      jmp_buf_index--;
+      return true;
+   }
+   return false;
+}
+
+void Utest::executePlatformSpecificTestBody()
+{
+   if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
+      jmp_buf_index++;
+      testBody();
+      jmp_buf_index--;
+   }
+}
+
+void Utest::executePlatformSpecificTeardown()
+{
+   if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
+      jmp_buf_index++;
+      teardown();
+      jmp_buf_index--;
+   }
+}
+
+void Utest::executePlatformSpecificRunOneTest(TestPlugin* plugin, TestResult& result)
+{
+    if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
+       jmp_buf_index++;
+       runOneTest(plugin, result);
+       jmp_buf_index--;
+    }
+}
+
+void Utest::executePlatformSpecificExitCurrentTest()
+{
+   jmp_buf_index--;
+   longjmp(test_exit_jmp_buf[jmp_buf_index], 1);
+}
+
+#endif
+
 ///////////// Time in millis
 
 static long TimeInMillisImplementation()
@@ -37,22 +88,147 @@ void SetPlatformSpecificTimeInMillisMethod(long (*platformSpecific) ())
 
 ///////////// Time in String
 
-static SimpleString TimeStringImplementation()
+static const char* TimeStringImplementation()
 {
 	return "Windows time needs work";
 }
 
-static SimpleString (*timeStringFp) () = TimeStringImplementation;
+static const char* (*timeStringFp) () = TimeStringImplementation;
 
-SimpleString GetPlatformSpecificTimeString()
+const char* GetPlatformSpecificTimeString()
 {
 	return timeStringFp();
 }
 
-void SetPlatformSpecificTimeStringMethod(SimpleString (*platformMethod) ())
+void SetPlatformSpecificTimeStringMethod(const char* (*platformMethod) ())
 {
 	timeStringFp = (platformMethod == 0) ? TimeStringImplementation : platformMethod;
 }
+
+
+////// taken from gcc
+
+int PlatformSpecificAtoI(const char*str)
+{
+   return atoi(str);
+}
+
+int PlatformSpecificStrLen(const char* str)
+{
+   return strlen(str);
+}
+
+char* PlatformSpecificStrCat(char* s1, const char* s2)
+{
+   return strcat(s1, s2);
+}
+
+char* PlatformSpecificStrCpy(char* s1, const char* s2)
+{
+   return strcpy(s1, s2);
+}
+
+char* PlatformSpecificStrNCpy(char* s1, const char* s2, unsigned int size)
+{
+   return strncpy(s1, s2, size);
+}
+
+int PlatformSpecificStrCmp(const char* s1, const char* s2)
+{
+   return strcmp(s1, s2);
+}
+
+int PlatformSpecificStrNCmp(const char* s1, const char* s2, unsigned int size)
+{
+   return strncmp(s1, s2, size);
+}
+char* PlatformSpecificStrStr(const char* s1, const char* s2)
+{
+   return strstr(s1, s2);
+}
+
+int PlatformSpecificVSNprintf(char *str, unsigned int size, const char* format, va_list args)
+{
+	char* buf = 0;
+	int sizeGuess = size;
+
+	int result = _vsnprintf( str, size, format, args);
+	str[size-1] = 0;
+	while (result == -1)
+	{
+		if (buf != 0)
+			free(buf);
+		sizeGuess += 10;
+		buf = (char*)malloc(sizeGuess);
+		result = _vsnprintf( buf, sizeGuess, format, args);
+	}
+	
+	if (buf != 0)
+		free(buf);
+	return result;
+
+}
+
+PlatformSpecificFile PlatformSpecificFOpen(const char* filename, const char* flag)
+{
+   return fopen(filename, flag);
+}
+
+void PlatformSpecificFPuts(const char* str, PlatformSpecificFile file)
+{
+   fputs(str, (FILE*)file);
+}
+
+void PlatformSpecificFClose(PlatformSpecificFile file)
+{
+   fclose((FILE*)file);
+}
+
+void PlatformSpecificFlush()
+{
+  fflush(stdout);
+}
+
+int PlatformSpecificPutchar(int c)
+{
+  return putchar(c);
+}
+
+void* PlatformSpecificMalloc(unsigned int size)
+{
+   return malloc(size);
+}
+
+void* PlatformSpecificRealloc (void* memory, unsigned int size)
+{
+   return realloc(memory, size);
+}
+
+void PlatformSpecificFree(void* memory)
+{
+   free(memory);
+}
+
+void* PlatformSpecificMemCpy(void* s1, const void* s2, unsigned int size)
+{
+   return memcpy(s1, s2, size);
+}
+
+int PlatformSpecificAtExit(void (*func) ())
+{
+   return atexit(func);
+}
+
+double PlatformSpecificFabs(double d)
+{
+   return fabs(d);
+}
+
+
+
+
+
+/////// clean up the rest
 
 #if 0
 
@@ -86,7 +262,7 @@ int PlatformSpecificVSNprintf(char *str, unsigned int size, const char* format, 
 
 
 //platform specific test running stuff
-#if 0
+#if 1
 #include <setjmp.h>
 
 static jmp_buf test_exit_jmp_buf[10];
@@ -121,27 +297,36 @@ void Utest::executePlatformSpecificTeardown()
    }
 }
 
-void TestRegistry::platformSpecificRunOneTest(Utest* test, TestResult& result)
+void Utest::executePlatformSpecificRunOneTest(TestPlugin* plugin, TestResult& result)
 {
     if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
        jmp_buf_index++;
-       runOneTest(test, result);
+       runOneTest(plugin, result);
        jmp_buf_index--;
     }
 }
 
 
-void PlatformSpecificExitCurrentTestImpl()
+void Utest::executePlatformSpecificExitCurrentTest()
 {
    jmp_buf_index--;
    longjmp(test_exit_jmp_buf[jmp_buf_index], 1);
 }
 
-static jmp_buf test_exit_jmp_buf[10];
-static int jmp_buf_index = 0;
+/*
+void PlatformSpecificExitCurrentTestImpl()
+{
+   jmp_buf_index--;
+   longjmp(test_exit_jmp_buf[jmp_buf_index], 1);
+}
+*/
 #endif
 
+//static jmp_buf test_exit_jmp_buf[10];
+//static int jmp_buf_index = 0;
 
+
+#if 0
 bool Utest::executePlatformSpecificSetup()
 {
 	try {
@@ -173,17 +358,6 @@ void Utest::executePlatformSpecificTeardown()
 
 }
 
-void TestRegistry::platformSpecificRunOneTest(Utest* test, TestResult& result)
-{
-	try {
-       runOneTest(test, result);
-	}
-	catch (int) {
-	}
-
-}
-
-
 void PlatformSpecificExitCurrentTestImpl()
 {
 	throw(1);
@@ -196,12 +370,5 @@ void FakePlatformSpecificExitCurrentTest()
 {
 }
 
-void PlatformSpecificFlush()
-{
-  fflush(stdout);
-}
+#endif
 
-int PlatformSpecificPutchar(int c)
-{
-  return putchar(c);
-}

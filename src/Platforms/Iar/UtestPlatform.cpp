@@ -108,20 +108,20 @@ void SetPlatformSpecificTimeInMillisMethod(long (*platformSpecific) ())
 
 ///////////// Time in String
 
-static SimpleString TimeStringImplementation()
+static const char* TimeStringImplementation()
 {
 	time_t tm = time(NULL);
 	return ctime(&tm);
 }
 
-static SimpleString (*timeStringFp) () = TimeStringImplementation;
+static const char* (*timeStringFp) () = TimeStringImplementation;
 
-SimpleString GetPlatformSpecificTimeString()
+const char* GetPlatformSpecificTimeString()
 {
 	return timeStringFp();
 }
 
-void SetPlatformSpecificTimeStringMethod(SimpleString (*platformMethod) ())
+void SetPlatformSpecificTimeStringMethod(const char* (*platformMethod) ())
 {
 	timeStringFp = (platformMethod == 0) ? TimeStringImplementation : platformMethod;
 }

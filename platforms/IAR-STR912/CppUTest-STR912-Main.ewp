@@ -91,7 +91,7 @@
         </option>
         <option>
           <name>OGLastSavedByProductVersion</name>
-          <state>5.30.0.51236</state>
+          <state>5.30.1.51309</state>
         </option>
         <option>
           <name>GeneralEnableMisra</name>
@@ -146,8 +146,8 @@
         <debug>1</debug>
         <option>
           <name>CCDefines</name>
-          <state>UT_NEW_MACROS_DISABLED</state>
-          <state>UT_NEW_OVERRIDES_DISABLED</state>
+          <state>UT_NEW_MACROS_DISABLED=1</state>
+          <state>UT_NEW_OVERRIDES_DISABLED=1</state>
         </option>
         <option>
           <name>CCPreprocFile</name>
