@@ -76,6 +76,7 @@ $(TEST_TARGET): $(TEST_OBJS) $(TARGET_LIB) $(USER_LIBS) $(CPPUTEST_LIB)
 
 $(TARGET_LIB): $(OBJ)
 	$(SILENCE)echo Building archive $@
+	$(SILENCE)mkdir -p lib
 	$(SILENCE)$(AR) $(ARFLAGS) $@ $^
 	$(SILENCE)ranlib $@
 

@@ -1,7 +1,5 @@
 #include "CppUTest/TestHarness.h"
 
-static int fakeRan = 0;
-
 extern "C"
 {
 #include "ClassName.h"
@@ -14,7 +12,6 @@ TEST_GROUP(ClassName)
     void setup()
     {
       aClassName = ClassName_Create();
-      fakeRan = 0;
     }
 
     void teardown()

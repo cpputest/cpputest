@@ -38,6 +38,7 @@
 #define D_SimpleStringExtensions_H
 
 #include <string>
+#include "CppUTest/TestHarness.h"
 #include "CppUTest/SimpleString.h"
 
 SimpleString StringFrom (const std::string& other);

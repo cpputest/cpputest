@@ -283,7 +283,7 @@ TEST(SimpleString, PlatformSpecificSprintf_fits)
 
     int count = WrappedUpVSNPrintf(buf, sizeof(buf), "%s", "12345");
     STRCMP_EQUAL("12345", buf);
-   // LONGS_EQUAL(5, count);
+    LONGS_EQUAL(5, count);
 }
 
 TEST(SimpleString, PlatformSpecificSprintf_doesNotFit)
@@ -292,5 +292,5 @@ TEST(SimpleString, PlatformSpecificSprintf_doesNotFit)
 
     int count = WrappedUpVSNPrintf(buf, sizeof(buf), "%s", "12345678901");
     STRCMP_EQUAL("123456789", buf);
-    //LONGS_EQUAL(11, count);
+    LONGS_EQUAL(11, count);
 }

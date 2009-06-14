@@ -200,7 +200,7 @@ TEST(CircularBuffer, PrintNotYetWrappedAndIsFull)
     fillTheQueue(200, buffer->Capacity());
 
     buffer->Print(&mock);
-    char* expected =
+    const char* expected =
         "Circular buffer content:\n"
         "<200, 201, 202, 203, 204>\n";
 
@@ -216,7 +216,7 @@ TEST(CircularBuffer, PrintWrappedAndIsFullOldestToNewest)
     buffer->Put(999);
 
     buffer->Print(&mock);
-    char* expected =
+    const char* expected =
         "Circular buffer content:\n"
         "<201, 202, 203, 204, 999>\n";
 
@@ -231,7 +231,7 @@ TEST(CircularBuffer, PrintWrappedAndFullOverwriteOldest)
     buffer->Put(9999);
 
     buffer->Print(&mock);
-    char* expected =
+    const char* expected =
         "Circular buffer content:\n"
         "<201, 202, 203, 204, 9999>\n";
 
@@ -248,7 +248,7 @@ TEST(CircularBuffer, PrintBoundary)
     fillTheQueue(300, buffer->Capacity()-1);
 
     buffer->Print(&mock);
-    char* expected =
+    const char* expected =
         "Circular buffer content:\n"
         "<888, 300, 301, 302, 303>\n";
 
@@ -262,7 +262,7 @@ TEST(CircularBuffer, FillEmptyThenPrint)
     fillTheQueue(200, buffer->Capacity());
     removeFromQueue(buffer->Capacity());
     buffer->Print(&mock);
-    char* expected =
+    const char* expected =
         "Circular buffer content:\n"
         "<>\n";
 
