@@ -79,6 +79,8 @@ extern void  CHECK_C_LOCATION(int condition, const char* conditionString, const 
 #endif
 
 #if UT_MALLOC_OVERRIDES_ENABLED
+   #undef malloc
+   #undef free
    #define malloc std_malloc
    #define free std_free
    #define calloc std_calloc

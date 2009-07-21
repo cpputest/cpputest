@@ -34,6 +34,7 @@
 
 #include "CppUTest/TestRegistry.h"
 #include <sys/time.h>
+#include <time.h>
 #include <stdio.h>
 #include <stdarg.h>
 #include <setjmp.h>

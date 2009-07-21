@@ -25,11 +25,10 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#define UT_NEW_OVERRIDES_DISABLED
-#include "CppUTest/TestHarness.h"
-#include "CppUTest/Extensions/SimpleStringExtensions.h"
 #include "MockPrinter.h"
 #include "CircularBuffer.h"
+#include "CppUTest/TestHarness.h"
+#include "CppUTest/Extensions/SimpleStringExtensions.h"
 
 TEST_GROUP(CircularBuffer)
 {
