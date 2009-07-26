@@ -145,6 +145,11 @@ void* operator new(size_t size)
    return MemoryLeakWarningPlugin::getGlobalDetector()->allocOperatorNew(size);
 }
 
+void operator delete(void* mem, const char* file, int line)
+{
+   MemoryLeakWarningPlugin::getGlobalDetector()->freeOperatorDelete((char*)mem);
+}
+
 void operator delete(void* mem)
 {
    MemoryLeakWarningPlugin::getGlobalDetector()->freeOperatorDelete((char*)mem);
@@ -153,6 +158,11 @@ void operator delete(void* mem)
 void* operator new[](size_t size)
 {
    return MemoryLeakWarningPlugin::getGlobalDetector()->allocOperatorNewArray(size);
+}
+
+void operator delete[](void* mem, const char* file, int line)
+{
+   MemoryLeakWarningPlugin::getGlobalDetector()->freeOperatorDeleteArray((char*)mem);
 }
 
 void operator delete[](void* mem)
