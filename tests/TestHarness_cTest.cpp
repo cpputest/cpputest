@@ -26,7 +26,6 @@
  */
 
 extern "C" {
-   #undef __cplusplus 
    #define _WCHART
    #include "CppUTest/TestHarness_c.h"
 
