@@ -132,28 +132,27 @@ int SimpleString::count(const SimpleString& substr) const
 	return num;
 }
 
-int SimpleString::split(const SimpleString& split, SimpleString*& output) const
+void SimpleString::split(const SimpleString& split, SimpleStringCollection& col) const
 {
-	int num = count(split);
-	int extraEndToken = (endsWith(split)) ? 0 : 1;
-	output = new SimpleString[num + extraEndToken];
+   int num = count(split);
+   int extraEndToken = (endsWith(split)) ? 0 : 1;
+   col.allocate(num + extraEndToken);
 
-	char* str = buffer;
-	char* prev;
-	for (int i = 0; i < num; ++i){
-		prev = str;
-		str = PlatformSpecificStrStr(str, split.buffer) + 1;
-		int len = str - prev;
-		char* sub = allocString(len+1);
-		PlatformSpecificStrNCpy(sub, prev, len);
-		sub[len] = '\0';
-		output[i] = sub;
-		deallocString(sub);
-	}
-	if (extraEndToken) {
-		output[num] = str;
-	}
-	return num + extraEndToken;
+   char* str = buffer;
+   char* prev;
+   for (int i = 0; i < num; ++i){
+      prev = str;
+      str = PlatformSpecificStrStr(str, split.buffer) + 1;
+      int len = str - prev;
+      char* sub = allocString(len+1);
+      PlatformSpecificStrNCpy(sub, prev, len);
+      sub[len] = '\0';
+      col[i] = sub;
+      deallocString(sub);
+   }
+   if (extraEndToken) {
+      col[num] = str;
+   }
 }
 
 void SimpleString::replace(char to, char with)
@@ -323,3 +322,39 @@ SimpleString VStringFromFormat(const char* format, va_list args)
    }
    return resultString;
 }
+
+SimpleStringCollection::SimpleStringCollection()
+{
+   collection = 0;
+   _size = 0;
+}
+
+void SimpleStringCollection::allocate(int size)
+{
+   if (collection) delete [] collection;
+
+   _size = size;
+   collection = new SimpleString[_size];
+}
+
+
+SimpleStringCollection::~SimpleStringCollection()
+{
+	 delete[] (collection);
+}
+
+int SimpleStringCollection::size () const
+{
+   return _size;
+}
+
+SimpleString& SimpleStringCollection::operator[](int index)
+{
+   if (index >= _size) {
+      empty = "";
+      return empty;
+   }
+
+   return collection[index];
+}
+

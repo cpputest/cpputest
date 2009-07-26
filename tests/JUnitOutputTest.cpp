@@ -29,6 +29,7 @@
 #include "CppUTest/JUnitTestOutput.h"
 #include "CppUTest/TestResult.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
+#include "CppUTest/MemoryLeakDetector.h" // REMOVE THIS AFTER THE VC++ EXPRESS IS FIXED!
 
 static long millisTime;
 
@@ -198,19 +199,17 @@ TEST_GROUP(JUnitOutputTest)
 		void CHECK_XML_FILE()
 		{
 			int totalSize =  currentGroup().numberTests_+ defaultSize + (currentGroup().totalFailures_ * 2);
-			SimpleString* arr = 0;
-			int size = buffer.split("\n", arr);
-			CHECK(size >= totalSize);
-			CHECK(arr != 0);
-			CHECK_HAS_XML_HEADER(arr[0]);
-			CHECK_TEST_SUITE_START(arr[1]);
-			CHECK_PROPERTIES_START(arr[2]);
-			CHECK_PROPERTIES_END(arr[3]);
-			CHECK_TESTS(&arr[4]);
-			CHECK_SYSTEM_OUT(arr[size-3]);
-			CHECK_SYSTEM_ERR(arr[size-2]);
-			CHECK_TEST_SUITE_END(arr[size-1]);
-			delete [] arr;
+			SimpleStringCollection col;
+			buffer.split("\n", col);
+			CHECK(col.size() >= totalSize);
+			CHECK_HAS_XML_HEADER(col[0]);
+			CHECK_TEST_SUITE_START(col[1]);
+			CHECK_PROPERTIES_START(col[2]);
+			CHECK_PROPERTIES_END(col[3]);
+			CHECK_TESTS(&col[4]);
+			CHECK_SYSTEM_OUT(col[col.size()-3]);
+			CHECK_SYSTEM_ERR(col[col.size()-2]);
+			CHECK_TEST_SUITE_END(col[col.size()-1]);
 		}
 
 		void CHECK_PROPERTIES_START(const SimpleString& output)
@@ -272,6 +271,8 @@ TEST_GROUP(JUnitOutputTest)
 
 	void setup()
 	{
+		MemoryLeakWarningPlugin::getGlobalDetector()->disableAllocationTypeChecking (); // REMOVE THIS AFTER THE VC++ EXPRESS IS FIXED!
+
 		output = new MockJUnitTestOutput();
 		res = new TestResult(*output);
 		output->setResult(res);
@@ -284,7 +285,9 @@ TEST_GROUP(JUnitOutputTest)
 		delete res;
 		SetPlatformSpecificTimeInMillisMethod(0);
 		SetPlatformSpecificTimeStringMethod(0);
+		MemoryLeakWarningPlugin::getGlobalDetector()->enableAllocationTypeChecking (); // REMOVE THIS AFTER THE VC++ EXPRESS IS FIXED!
 	}
+
 	void runTests()
 	{
 		output->printTestsStarted();

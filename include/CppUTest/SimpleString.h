@@ -38,6 +38,8 @@
 #ifndef D_SimpleString_h
 #define D_SimpleString_h
 
+class SimpleStringCollection;
+
 class SimpleString
   {
     friend bool	operator== (const SimpleString& left, const SimpleString& right);
@@ -57,11 +59,12 @@ class SimpleString
     bool contains(const SimpleString& other) const;
     bool startsWith(const SimpleString& other) const;
     bool endsWith(const SimpleString& other) const;
-	int split(const SimpleString& split, SimpleString*& output) const;
-	int count(const SimpleString& str) const;
+    void split(const SimpleString& split, SimpleStringCollection& outCollection) const;
 
-	void replace(char to, char with);
-	void replace(const char* to, const char* with);
+    int count(const SimpleString& str) const;
+
+    void replace(char to, char with);
+    void replace(const char* to, const char* with);
 
     const char *asCharString () const;
     int	size() const;
@@ -70,7 +73,25 @@ class SimpleString
     char *buffer;
   };
 
+class SimpleStringCollection
+{
+public:
+   SimpleStringCollection();
+   ~SimpleStringCollection();
 
+   void allocate(int size);
+
+   int size () const;
+   SimpleString& operator[](int index);
+
+private:
+   SimpleString* collection;
+   SimpleString empty;
+   int _size;
+
+   void operator =(SimpleStringCollection&);
+   SimpleStringCollection(SimpleStringCollection&);
+};
 
 SimpleString StringFrom (bool value);
 SimpleString StringFrom (void* value);

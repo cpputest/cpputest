@@ -25,8 +25,6 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <string>
-#include <stdarg.h>
 #include "CppUTest/Extensions/SimpleStringExtensions.h"
 
 SimpleString StringFrom (const std::string& value)

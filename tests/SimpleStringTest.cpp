@@ -29,8 +29,19 @@
 #include "CppUTest/SimpleString.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
+#include "CppUTest/MemoryLeakDetector.h" // REMOVE THIS AFTER THE VC++ EXPRESS IS FIXED!
+
 TEST_GROUP(SimpleString)
 {
+	void setup()
+	{
+		MemoryLeakWarningPlugin::getGlobalDetector()->disableAllocationTypeChecking (); // REMOVE THIS AFTER THE VC++ EXPRESS IS FIXED!
+	}
+
+	void teardown()
+	{
+		MemoryLeakWarningPlugin::getGlobalDetector()->enableAllocationTypeChecking (); // REMOVE THIS AFTER THE VC++ EXPRESS IS FIXED!
+	}
 };
 
 TEST(SimpleString, CreateSequence)
@@ -158,31 +169,30 @@ TEST(SimpleString, startsWith)
 TEST(SimpleString, split)
 {
 	SimpleString hi("hello\nworld\nhow\ndo\nyou\ndo\n\n");
-	SimpleString* splitted;
-	int size = hi.split("\n", splitted);
-	LONGS_EQUAL(7, size);
-	STRCMP_EQUAL("hello\n", splitted[0].asCharString());
-	STRCMP_EQUAL("world\n", splitted[1].asCharString());
-	STRCMP_EQUAL("how\n", splitted[2].asCharString());
-	STRCMP_EQUAL("do\n", splitted[3].asCharString());
-	STRCMP_EQUAL("you\n", splitted[4].asCharString());
-	STRCMP_EQUAL("do\n", splitted[5].asCharString());
-	STRCMP_EQUAL("\n", splitted[6].asCharString());
 
-	delete [] splitted;
+	SimpleStringCollection collection;
+	hi.split("\n", collection);
+
+	LONGS_EQUAL(7, collection.size());
+	STRCMP_EQUAL("hello\n", collection[0].asCharString());
+	STRCMP_EQUAL("world\n", collection[1].asCharString());
+	STRCMP_EQUAL("how\n", collection[2].asCharString());
+	STRCMP_EQUAL("do\n", collection[3].asCharString());
+	STRCMP_EQUAL("you\n", collection[4].asCharString());
+	STRCMP_EQUAL("do\n", collection[5].asCharString());
+	STRCMP_EQUAL("\n", collection[6].asCharString());
 }
 
 TEST(SimpleString, splitNoTokenOnTheEnd)
 {
 	SimpleString string("Bah Yah oops");
-	SimpleString* splitted;
-	int size = string.split(" ", splitted);
-	LONGS_EQUAL(3, size);
-	STRCMP_EQUAL("Bah ", splitted[0].asCharString());
-	STRCMP_EQUAL("Yah ", splitted[1].asCharString());
-	STRCMP_EQUAL("oops", splitted[2].asCharString());
+    SimpleStringCollection collection;
 
-	delete [] splitted;
+	string.split(" ", collection);
+	LONGS_EQUAL(3, collection.size());
+	STRCMP_EQUAL("Bah ", collection[0].asCharString());
+	STRCMP_EQUAL("Yah ", collection[1].asCharString());
+	STRCMP_EQUAL("oops", collection[2].asCharString());
 }
 
 TEST(SimpleString, count)
@@ -293,4 +303,34 @@ TEST(SimpleString, PlatformSpecificSprintf_doesNotFit)
     int count = WrappedUpVSNPrintf(buf, sizeof(buf), "%s", "12345678901");
     STRCMP_EQUAL("123456789", buf);
     LONGS_EQUAL(11, count);
+}
+
+TEST(SimpleString, NullParameters2)
+{
+	SimpleString* arr = new SimpleString[100];
+	delete [] arr;
+}
+
+
+TEST(SimpleString, CollectionMultipleAllocateNoLeaksMemory)
+{
+   SimpleStringCollection col;
+   col.allocate(5);
+   col.allocate(5);
+   // CHECK no memory leak
+}
+
+TEST(SimpleString, CollectionReadOutOfBoundsReturnsEmptyString)
+{
+   SimpleStringCollection col;
+   col.allocate(3);
+   STRCMP_EQUAL("", col[3].asCharString());
+}
+
+TEST(SimpleString, CollectionWritingToEmptyString)
+{
+   SimpleStringCollection col;
+   col.allocate(3);
+   col[3] = SimpleString("HAH");
+   STRCMP_EQUAL("", col[3].asCharString());
 }
