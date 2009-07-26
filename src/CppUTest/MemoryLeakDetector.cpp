@@ -226,6 +226,7 @@ MemoryLeakDetector::MemoryLeakDetector()
 
 void MemoryLeakDetector::init(MemoryLeakFailure* report)
 {
+   doAllocationTypeChecking = true;
    current_period = mem_leak_period_disabled;
    reporter = report;
    output_buffer = SimpleBuffer();
@@ -256,6 +257,16 @@ void MemoryLeakDetector::enable()
 void MemoryLeakDetector::disable()
 {
    current_period = mem_leak_period_disabled;
+}
+
+void MemoryLeakDetector::disableAllocationTypeChecking()
+{
+   doAllocationTypeChecking = false;
+}
+
+void MemoryLeakDetector::enableAllocationTypeChecking()
+{
+   doAllocationTypeChecking = true;
 }
 
 void MemoryLeakDetector::reportFailure(const char* message, const char* allocFile, int allocLine, size_t allocSize, MemLeakAllocType allocType, const char* freeFile, int freeLine, MemLeakAllocType freeType)
@@ -294,7 +305,7 @@ void MemoryLeakDetector::addMemoryCorruptionInformation(char* memory, size_t siz
 
 void MemoryLeakDetector::checkForAllocMismatchOrCorruption(MemoryLeakDetectorNode* node, const char* file, int line, MemLeakAllocType type)
 {
-   if (node->type != type)
+   if (node->type != type && doAllocationTypeChecking)
       reportFailure(MEM_LEAK_ALLOC_DEALLOC_MISMATCH, node->file, node->line, node->size, node->type, file, line, type);
    else if (node->memory[node->size] != 'B' || node->memory[node->size+1] != 'A' || node->memory[node->size+2] != 'S' )
       reportFailure(MEM_LEAK_MEMORY_CORRUPTION, node->file, node->line, node->size, node->type, file, line, type);

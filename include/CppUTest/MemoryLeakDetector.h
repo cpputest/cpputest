@@ -107,6 +107,9 @@ public:
    void enable();
    void disable();
 
+   void disableAllocationTypeChecking();
+   void enableAllocationTypeChecking();
+
    void startChecking();
    void stopChecking();
 
@@ -134,6 +137,7 @@ private:
    MemLeakPeriod current_period;
    SimpleBuffer output_buffer;
    MemoryLeakDetectorTable memoryTable;
+   bool doAllocationTypeChecking;
 
 
    void ConstructMemoryLeakReport(MemLeakPeriod period);
