@@ -17,8 +17,6 @@ CPPUTEST_HOME = .
 CPP_PLATFORM = Gcc
 
 CPPFLAGS += -Wall -g
-CPPFLAGS += -DUT_NEW_OVERRIDES_ENABLED=1
-CFLAGS = -Dmalloc=cpputest_malloc -Dfree=cpputest_free
 #CPPFLAGS += -DUT_NEW_OVERRIDES_DISABLED -DUT_NEW_MACROS_DISABLED
 #GCOVFLAGS = -fprofile-arcs -ftest-coverage
 
