@@ -228,6 +228,8 @@ void MemoryLeakDetector::init(MemoryLeakFailure* report)
 {
    current_period = mem_leak_period_disabled;
    reporter = report;
+   output_buffer = SimpleBuffer();
+   memoryTable = MemoryLeakDetectorTable();
 }
 
 void MemoryLeakDetector::clearAllAccounting(MemLeakPeriod period)
