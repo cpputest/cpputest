@@ -26,9 +26,8 @@
  */
 
 #include <string>
-#include "CppUTest/TestHarness.h"
 #include "CppUTest/Extensions/SimpleStringExtensions.h"
-
+#include "CppUTest/TestHarness.h"
 
 
 TEST_GROUP(SimpleStringExtensions)
