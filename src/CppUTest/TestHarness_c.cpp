@@ -35,7 +35,6 @@
 #include "CppUTest/MemoryLeakDetector.h"
 
 extern "C" {
-	#undef __cplusplus
 	#include "CppUTest/TestHarness_c.h"
 
 	void  CHECK_EQUAL_C_INT_LOCATION(int expected, int actual, const char* fileName, int lineNumber)
