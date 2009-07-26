@@ -245,6 +245,16 @@ TEST(MemoryLeakDetectorTest, AllocOneTypeFreeAnotherType)
    CHECK(reporter.message->contains("   dealllocated at file: FREE.c line: 100 type: malloc"));
 }
 
+TEST(MemoryLeakDetectorTest, AllocOneTypeFreeAnotherTypeWithCheckingDisabled)
+{
+   detector.disableAllocationTypeChecking ();
+   char* mem = detector.allocOperatorNewArray(100, "ALLOC.c", 10);
+   detector.freeFree(mem, "FREE.c", 100);
+   detector.stopChecking();
+   STRCMP_EQUAL("", reporter.message->asCharString());
+   detector.enableAllocationTypeChecking ();
+}
+
 TEST(MemoryLeakDetectorTest, MarkCheckingPeriodLeaksAsNonCheckingPeriod)
 {
    char* mem = detector.allocOperatorNewArray(100);
