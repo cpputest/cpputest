@@ -1,9 +1,10 @@
-#include "CppUTest/TestHarness.h"
-
 extern "C"
 {
 #include "ClassName.h"
 }
+
+//Should be the last include
+#include "CppUTest/TestHarness.h"
 
 TEST_GROUP(ClassName)
 {
@@ -11,7 +12,7 @@ TEST_GROUP(ClassName)
     {
       ClassName_Create();
     }
-    
+
     void teardown()
     {
        ClassName_Destroy();

@@ -1,5 +1,7 @@
-#include "CppUTest/TestHarness.h"
 #include "ClassName.h"
+
+//Should be the last include
+#include "CppUTest/TestHarness.h"
 
 TEST_GROUP(ClassName)
 {
