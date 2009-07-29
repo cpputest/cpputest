@@ -225,7 +225,7 @@
 	
 
 .\src\Platforms\VisualCpp\UtestPlatform.cpp : \
-	"..\..\program files\microsoft visual studio\vc98\include\basetsd.h"\
+	"\program files\microsoft visual studio\vc98\include\basetsd.h"\
 	".\include\CppUTest\Failure.h"\
 	".\include\CppUTest\MemoryLeakWarningPlugin.h"\
 	".\include\cpputest\platformspecificfunctions.h"\

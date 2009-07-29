@@ -626,26 +626,26 @@ SOURCE=.\UtestTest.cpp
 !IF  "$(CFG)" == "AllTests - Win32 Release"
 
 "CppUTest - Win32 Release" : 
-   cd "\workspace\CppUTest"
+   cd ..
    $(MAKE) /$(MAKEFLAGS) /F .\CppUTest.mak CFG="CppUTest - Win32 Release" 
-   cd ".\tests"
+   cd .\tests
 
 "CppUTest - Win32 ReleaseCLEAN" : 
-   cd "\workspace\CppUTest"
+   cd ..
    $(MAKE) /$(MAKEFLAGS) /F .\CppUTest.mak CFG="CppUTest - Win32 Release" RECURSE=1 CLEAN 
-   cd ".\tests"
+   cd .\tests
 
 !ELSEIF  "$(CFG)" == "AllTests - Win32 Debug"
 
 "CppUTest - Win32 Debug" : 
-   cd "\workspace\CppUTest"
+   cd ..
    $(MAKE) /$(MAKEFLAGS) /F .\CppUTest.mak CFG="CppUTest - Win32 Debug" 
-   cd ".\tests"
+   cd .\tests
+
 
 "CppUTest - Win32 DebugCLEAN" : 
-   cd "\workspace\CppUTest"
    $(MAKE) /$(MAKEFLAGS) /F .\CppUTest.mak CFG="CppUTest - Win32 Debug" RECURSE=1 CLEAN 
-   cd ".\tests"
+
 
 !ENDIF 
 
