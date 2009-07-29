@@ -261,7 +261,7 @@ TEST(SimpleString, Doubles)
 TEST(SimpleString, HexStrings)
 {
   SimpleString h1 = HexStringFrom(0xffff);
-  STRCMP_EQUAL("ffff", h1.asCharString());
+  STRCMP_EQUAL("fffe", h1.asCharString());
 }
 
 TEST(SimpleString, StringFromFormat)
