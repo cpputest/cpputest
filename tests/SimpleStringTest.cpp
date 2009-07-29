@@ -272,7 +272,7 @@ TEST(SimpleString, StringFromFormat)
 
 TEST(SimpleString, StringFromFormatLarge)
 {
-   const char* s = "ThisIsAPrettyLargeStringAndIfWeAddThisManyTimesToABufferItWillbeFull";
+   char* s = "ThisIsAPrettyLargeStringAndIfWeAddThisManyTimesToABufferItWillbeFull";
    SimpleString h1 = StringFromFormat("%s%s%s%s%s%s%s%s%s%s", s, s, s, s, s, s, s, s, s, s);
    LONGS_EQUAL(10, h1.count(s));
 }
