@@ -20,9 +20,10 @@ CPPUTEST_HOME = ..
 CPP_PLATFORM = Gcc
 
 #CFLAGS are set to override malloc and free to get memory leak detection in C programs
-#CFLAGS = -include $(CPPUTEST_HOME)/include/CppUtest/FindLeaksMalloc.h -Dmalloc=FIND_LEAKS_MALLOC -Dfree=FIND_LEAKS_FREE
 CFLAGS += -Dmalloc=cpputest_malloc -Dfree=cpputest_free
-CPPFLAGS += -DUT_NEW_OVERRIDES_ENABLED=1
+CPPFLAGS += -Wall
+CPPFLAGS += -Werror
+CPPFLAGS += -g
 
 #GCOVFLAGS = -fprofile-arcs -ftest-coverage
 
