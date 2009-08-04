@@ -1,7 +1,7 @@
 #include "ClassName.h"
 #include "MockClassName.h"
 
-//Should be the last include
+//CppUTest includes should be after your and system includes
 #include "CppUTest/TestHarness.h"
 
 TEST_GROUP(ClassName)
