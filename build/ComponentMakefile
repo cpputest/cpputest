@@ -10,6 +10,18 @@
 # The necessary parameters are shown in 
 #    ComponentMakefileExampleParameters
 #
+# Inputs 
+#	SRC - srouce code built into the library
+#	TEST_SRC - unit test code build into the unit test runner
+#	MOCKS_SRC - mock objects build into the test runner
+#	INCLUDES - List of -I files
+#	CPPFLAGS - flags for the C++ compiler
+#	CFLAGS - C complier
+#	LDFLAGS - Linker flags
+#	TARGET_LIB -  the created library
+#	TEST_TARGET - the created test executable
+#	OTHER_MAKEFILE_TO_INCLUDE - a hook to use this makefile to make 
+#		other targets. Like CSlim, which is part of fitnesse
 #----------
 
 #Helper Functions
@@ -20,17 +32,22 @@ src_to_d = $(subst .c,.d, $(subst .cpp,.d,$1))
 #move_file_location = $(patsubst %.d,build/%.d, $1)
 src_to = $(subst .c,$1, $(subst .cpp,$1,$2))
 
-#Derived 
+#Derived
+STUFF_TO_CLEAN += $(TEST_TARGET) $(TEST_TARGET).exe $(TARGET_LIB)
+
 SRC = $(call get_src_from_dir_list, $(SRC_DIRS))				        
 OBJ = $(call src_to_o,$(SRC))
+STUFF_TO_CLEAN += $(OBJ)
 
 TEST_SRC = $(call get_src_from_dir_list, $(TEST_SRC_DIRS))
 TEST_OBJS = $(call src_to_o,$(TEST_SRC))
+STUFF_TO_CLEAN += $(TEST_OBJS)
 
-ALL_SRC   = $(SRC) $(TEST_SRC)
+MOCKS_SRC = $(call get_src_from_dir_list, $(MOCKS_SRC_DIRS))
+MOCKS_OBJS = $(call src_to_o,$(MOCKS_SRC))
+STUFF_TO_CLEAN += $(MOCKS_OBJS)
 
-#DEP_FILES = $(call move_file_location,$(call src_to_d, $(ALL_SRC))) 
-DEP_FILES = $(call src_to_d, $(ALL_SRC))
+ALL_SRC = $(SRC) $(TEST_SRC) $(MOCKS_SRC)
 
 #Test coverage with gcov
 GCOV_OUTPUT = gcov_output.txt
@@ -39,6 +56,14 @@ GCOV_ERROR = gcov_error.txt
 GCOV_GCDA_FILES = $(call src_to,.gcda, $(ALL_SRC))
 GCOV_GCNO_FILES = $(call src_to,.gcno, $(ALL_SRC))
 TEST_OUTPUT = $(TEST_TARGET).txt
+STUFF_TO_CLEAN += \
+	$(GCOV_OUTPUT)\
+	$(GCOV_REPORT)\
+	$(GCOV_ERROR)\
+	$(GCOV_GCDA_FILES)\
+	$(GCOV_GCNO_FILES)\
+	$(TEST_OUTPUT)
+
 
 #Other stuff needed
 CPPUTEST_LIB = $(CPPUTEST_HOME)/lib/libCppUTest.a 
@@ -51,6 +76,13 @@ LDFLAGS  += -lstdc++
 #To avoid annoying messages.
 GCOV_CLEAN = $(SILENCE)rm -f $(GCOV_GCDA_FILES) $(GCOV_OUTPUT) $(GCOV_REPORT) $(GCOV_ERROR)
 RUN_TEST_TARGET = $(SILENCE)  $(GCOV_CLEAN) ; echo "Running $(TEST_TARGET)"; ./$(TEST_TARGET)
+
+ifneq "$(OTHER_MAKEFILE_TO_INCLUDE)" ""
+-include $(OTHER_MAKEFILE_TO_INCLUDE)
+endif
+
+DEP_FILES = $(call src_to_d, $(ALL_SRC))
+STUFF_TO_CLEAN += $(DEP_FILES)
 
 # Targets
 .PHONY: all
@@ -70,9 +102,13 @@ flags:
 		echo "    C   $$f" ; \
 	done
 	
-$(TEST_TARGET): $(TEST_OBJS) $(TARGET_LIB) $(USER_LIBS) $(CPPUTEST_LIB)
+$(TEST_TARGET): $(TEST_OBJS) $(MOCKS_OBJS) $(TARGET_LIB) $(USER_LIBS) $(CPPUTEST_LIB)
 	$(SILENCE)echo Linking $@
 	$(SILENCE)$(CXX) $(CPPFLAGS) $^ $(LDFLAGS) -o $@
+
+#$(CSLIM_TARGET): $(CSLIM_OBJS) $(MOCKS_OBJS) $(TARGET_LIB) $(USER_LIBS) $(CPPUTEST_LIB) $(CSLIM_LIB)
+#	$(SILENCE)echo Linking $@
+#	$(SILENCE)$(CXX) $(CPPFLAGS) $^ $(LDFLAGS) -o $@
 
 $(TARGET_LIB): $(OBJ)
 	$(SILENCE)echo Building archive $@
@@ -103,20 +139,7 @@ endif
 .PHONY: clean
 clean:
 	$(SILENCE)echo Making clean
-	$(SILENCE)$(RM) \
-		$(TEST_TARGET) \
-		$(TEST_TARGET).exe \
-		$(OBJ) \
-		$(TEST_OBJS)\
-		$(TARGET_LIB)\
-		$(DEP_FILES)\
-		$(GCOV_GCNO_FILES)\
-		$(GCOV_GCDA_FILES)\
-		$(GCOV_ERROR)\
-		$(GCOV_REPORT)\
-		$(GCOV_OUTPUT)\
-		$(TEST_OUTPUT)
-		
+	$(SILENCE)$(RM) $(STUFF_TO_CLEAN)
 	$(SILENCE)find . -name \*.gcov | xargs rm -f
 
 gcov: test
@@ -129,4 +152,9 @@ gcov: test
 .PHONEY: format
 format: 
 	$(CPPUTEST_HOME)/scripts/reformat.sh $(PROJECT_HOME_DIR)
+	
+debug:
+	$(SILENCE)for f in $(STUFF_TO_CLEAN) ; do \
+		echo "$$f" ; \
+	done
 
