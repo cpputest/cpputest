@@ -1,23 +1,16 @@
-#/bin/bash
-CPP_U_TEST=$(pwd)/..
-
-EXE_DIR=${EXE_DIR:-/usr/local/bin}
-test -f ${EXE_DIR} || mkdir -p ${EXE_DIR}
-
+#!/bin/bash
 NEW_SCRIPTS = \
     NewClass \
     NewInterface \
     NewCModule \
     NewCmiModule \
-    NewProject \
-    NewLibrary \
-    NewPackageDirs \
     NewCInterface \
-    NewCFunction \
-    NewHelp
+    NewCFunction 
 
 for file in ${NEW_SCRIPTS} ; do
+    echo ${file} name package
    rm -f ${EXE_DIR}/${file}
    ln -s ${CPP_U_TEST}/scripts/${file}.sh ${EXE_DIR}/${file}
    chmod a+x ${EXE_DIR}/${file}
 done
+
