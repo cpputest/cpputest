@@ -26,6 +26,7 @@
 
 #Helper Functions
 get_src_from_dir  = $(wildcard $1/*.cpp) $(wildcard $1/*.c)
+get_dirs_from_dirspec  = $(wildcard $1)
 get_src_from_dir_list = $(foreach dir, $1, $(call get_src_from_dir,$(dir)))				        
 src_to_o = $(subst .c,.o, $(subst .cpp,.o,$1))
 src_to_d = $(subst .c,.d, $(subst .cpp,.d,$1))
@@ -80,6 +81,10 @@ RUN_TEST_TARGET = $(SILENCE)  $(GCOV_CLEAN) ; echo "Running $(TEST_TARGET)"; ./$
 ifneq "$(OTHER_MAKEFILE_TO_INCLUDE)" ""
 -include $(OTHER_MAKEFILE_TO_INCLUDE)
 endif
+
+INCLUDES_DIRS_EXPANDED = $(call get_dirs_from_dirspec, $(INCLUDE_DIRS))
+INCLUDES += $(foreach dir, $(INCLUDES_DIRS_EXPANDED), -I$(dir))
+
 
 DEP_FILES = $(call src_to_d, $(ALL_SRC))
 STUFF_TO_CLEAN += $(DEP_FILES)
@@ -154,7 +159,13 @@ format:
 	$(CPPUTEST_HOME)/scripts/reformat.sh $(PROJECT_HOME_DIR)
 	
 debug:
+	echo Stuff to clean
 	$(SILENCE)for f in $(STUFF_TO_CLEAN) ; do \
 		echo "$$f" ; \
 	done
+	echo Includes
+	$(SILENCE)for i in $(INCLUDES) ; do \
+		echo "$$i" ; \
+	done
+	
 
