@@ -25,9 +25,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "CppUTest/TestHarness.h"
-#include "CppUTest/TestRegistry.h"
-#include "CppUTest/PlatformSpecificFunctions.h"
+
 #include <time.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -35,6 +33,13 @@
 #include <setjmp.h>
 #include <string.h>
 #include <math.h>
+#include "CppUTest/TestHarness.h"
+#undef malloc
+#undef calloc
+#undef realloc
+#undef free
+#include "CppUTest/TestRegistry.h"
+#include "CppUTest/PlatformSpecificFunctions.h"
 
 static jmp_buf test_exit_jmp_buf[10];
 static int jmp_buf_index = 0;
