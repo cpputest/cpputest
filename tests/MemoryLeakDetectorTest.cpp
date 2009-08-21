@@ -63,11 +63,11 @@ TEST_GROUP(MemoryLeakDetectorTest)
 
 TEST(MemoryLeakDetectorTest, OneLeak)
 {
-   char* mem = detector->allocOperatorNew(1);
+   char* mem = detector->allocOperatorNew(3);
    detector->stopChecking();
    SimpleString output = detector->report(mem_leak_period_checking);
    CHECK(output.contains(MEM_LEAK_HEADER));
-   CHECK(output.contains("size: 1"));
+   CHECK(output.contains("size: 3"));
    CHECK(output.contains("new"));
    CHECK(output.contains(MEM_LEAK_FOOTER));
    PlatformSpecificFree(mem);

@@ -292,17 +292,17 @@ int calculateIntAlignedSize(size_t size)
 
 MemoryLeakDetectorNode* MemoryLeakDetector::getNodeFromMemoryPointer(char* memory, size_t memory_size)
 {
-	return (MemoryLeakDetectorNode*) (memory + calculateIntAlignedSize(memory_size) + memory_corruption_buffer_size);
+	return (MemoryLeakDetectorNode*) (memory + calculateIntAlignedSize(memory_size + memory_corruption_buffer_size));
 }
 
 char* MemoryLeakDetector::allocateMemoryAndExtraInfo(size_t size)
 {
-   return (char*) checkedMalloc(calculateIntAlignedSize(size) + memory_corruption_buffer_size + sizeof(MemoryLeakDetectorNode));
+   return (char*) checkedMalloc(calculateIntAlignedSize(size + memory_corruption_buffer_size) + memory_corruption_buffer_size + sizeof(MemoryLeakDetectorNode));
 }
 
 char* MemoryLeakDetector::reallocateMemoryAndExtraInfo (char* memory, size_t size)
 {
-   return (char*) PlatformSpecificRealloc(memory, calculateIntAlignedSize(size) + memory_corruption_buffer_size + sizeof(MemoryLeakDetectorNode));
+   return (char*) PlatformSpecificRealloc(memory, calculateIntAlignedSize(size + memory_corruption_buffer_size) + sizeof(MemoryLeakDetectorNode));
 }
 
 
