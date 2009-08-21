@@ -154,6 +154,8 @@ private:
 
    void addMemoryLeakInfoAndCorruptionInfo(char* memory, size_t size, char* file, int line, MemLeakAllocType type);
    bool removeMemoryLeakInfoAndCheckCorruption(char* memory, const char* file, int line, MemLeakAllocType type);
+
+   MemoryLeakDetectorNode* getNodeFromMemoryPointer(char* memory, size_t size);
 };
 
 #endif
