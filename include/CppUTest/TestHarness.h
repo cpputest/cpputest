@@ -28,6 +28,18 @@
 #ifndef D_TestHarness_h
 #define D_TestHarness_h
 
+/* Memory leak detector macros:
+ *
+ * UT_NEW_MACROS_ENABLED/DISABLED
+ *   Control the #define new. When DISABLED, new with not be #defined.
+ *   Without this, the memory leak detector will not know the file/line location of leaks.
+ * UT_NEW_OVERRIDES_ENABLED/DISABLED
+ *   Controls the override of the global operator new/deleted.
+ *   Without this, there will be no memory leak detection in C++.
+ * UT_MALLOC_MACROS_ENABLED/DISABLED
+ *   Controls the #define of malloc for enabling memory leak detection in C.
+ */
+
 #ifndef UT_NEW_MACROS_ENABLED
    #ifdef UT_NEW_MACROS_DISABLED
       #define UT_NEW_MACROS_ENABLED 0

@@ -70,15 +70,15 @@ extern void  CHECK_C_LOCATION(int condition, const char* conditionString, const 
 
 /* Memory allocation routines that use new, so the memory leak checker works */
 
-#ifndef UT_MALLOC_OVERRIDES_ENABLED
-   #ifdef UT_MALLOC_OVERRIDES_DISABLED
-      #define UT_MALLOC_OVERRIDES_ENABLED 0
+#ifndef UT_MALLOC_MACROS_ENABLED
+   #ifdef UT_MALLOC_MACROS_DISABLED
+      #define UT_MALLOC_MACROS_ENABLED 0
    #else
-      #define UT_MALLOC_OVERRIDES_ENABLED 1
+      #define UT_MALLOC_MACROS_ENABLED 1
    #endif
 #endif
 
-#if UT_MALLOC_OVERRIDES_ENABLED
+#if UT_MALLOC_MACROS_ENABLED
    #undef malloc
    #undef free
    #define malloc std_malloc
@@ -104,8 +104,7 @@ extern void* cpputest_calloc_location(size_t num, size_t size,const char* file, 
 extern void* cpputest_realloc_location(void* memory, size_t size, const char* file, int line);
 extern void cpputest_free_location(void* buffer, const char* file, int line);
 
-#if UT_MALLOC_OVERRIDES_ENABLED
-
+#if UT_MALLOC_MACROS_ENABLED
    #define malloc(a) cpputest_malloc_location(a, __FILE__, __LINE__)
    #define calloc(a, b) cpputest_calloc_location(a, b, __FILE__, __LINE__)
    #define realloc(a, b) cpputest_realloc_location(a, b, __FILE__, __LINE__)
