@@ -4,7 +4,7 @@ CPP_U_TEST=$(pwd)/..
 EXE_DIR=${EXE_DIR:-/usr/local/bin}
 test -f ${EXE_DIR} || mkdir -p ${EXE_DIR}
 
-NEW_SCRIPTS="NewClass NewInterface NewCModule NewCmiModule NewProject NewLibrary NewPackageDirs NewCInterface NewCFunction NewHelp"
+NEW_SCRIPTS="NewCIoDriver NewClass NewInterface NewCModule NewCmiModule NewProject NewLibrary NewPackageDirs NewCInterface NewCFunction NewHelp"
 
 
 for file in $NEW_SCRIPTS ; do
