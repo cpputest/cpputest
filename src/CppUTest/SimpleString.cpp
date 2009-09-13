@@ -28,6 +28,9 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/SimpleString.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
+#include <memory.h>
+#include <string.h>
+
 
 static char* allocString(int size)
 {
@@ -306,6 +309,8 @@ SimpleString StringFromFormat(const char* format, ...)
 
 SimpleString VStringFromFormat(const char* format, va_list args)
 {
+   va_list argsCopy;
+   va_copy(argsCopy, args);
    enum { sizeOfdefaultBuffer = 100 };
    char defaultBuffer[sizeOfdefaultBuffer];
    SimpleString resultString;
@@ -316,8 +321,9 @@ SimpleString VStringFromFormat(const char* format, va_list args)
    }
    else {
       char* newBuffer = new char[size+1];
-      PlatformSpecificVSNprintf(newBuffer, size+1, format, args);
+      PlatformSpecificVSNprintf(newBuffer, size+1, format, argsCopy);
       resultString = SimpleString(newBuffer);
+
       delete [] newBuffer;
    }
    return resultString;
