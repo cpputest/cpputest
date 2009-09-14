@@ -38,6 +38,8 @@
 #ifndef D_SimpleString_h
 #define D_SimpleString_h
 
+#include <stdarg.h>
+
 class SimpleStringCollection;
 
 class SimpleString

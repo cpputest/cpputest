@@ -28,9 +28,6 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/SimpleString.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
-#include <memory.h>
-#include <string.h>
-
 
 static char* allocString(int size)
 {
