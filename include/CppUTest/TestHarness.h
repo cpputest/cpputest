@@ -67,12 +67,10 @@
 /*
  * Lib C dependencies that are currently still left:
  *
- * stdarg.h -> We use formatting functions and va_list requires to include stdarg.h
+ * stdarg.h -> We use formatting functions and va_list requires to include stdarg.h in SimpleString
  * stdlib.h -> The TestHarness_c.h includes this to try to avoid conflicts in its malloc #define. This dependency can
  * easily be removed by not enabling the MALLOC overrides.
  */
-
-#include <stdarg.h>
 
 #include "Utest.h"
 #include "UtestMacros.h"
