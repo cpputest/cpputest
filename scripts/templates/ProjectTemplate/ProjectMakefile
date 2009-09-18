@@ -2,7 +2,7 @@
 SILENCE = @
 
 #---- Outputs ----#
-COMPONENT_NAME = ConferenceExercise
+COMPONENT_NAME = Project
 TARGET_LIB = \
 	lib/lib$(COMPONENT_NAME).a
 	
