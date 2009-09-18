@@ -31,6 +31,7 @@ changeProjectName include/util BuildTime.h ${CODE_LEGAL_PROJECT_NAME}
 changeProjectName tests/util BuildTimeTest.cpp ${CODE_LEGAL_PROJECT_NAME}
 mv ${CODE_LEGAL_PROJECT_NAME}Makefile Makefile
 mv ${PROJECT_NAME}.project .project
+mv Project.cproject .cproject
 
 cd ${ORIGINAL_DIR}
 echo "You might want to modify the path for CPPUTEST_HOME in the Makefile."
