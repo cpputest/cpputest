@@ -19,16 +19,18 @@ cd ${PROJECT_NAME}
 ls
 
 changeProjectName() {
-    echo Change Name $1/Project$2 to ${CODE_LEGAL_PROJECT_NAME}$2
-    sed "-e s/Project/${CODE_LEGAL_PROJECT_NAME}/g" $1/Project$2 | tr -d "\r" >$1/${CODE_LEGAL_PROJECT_NAME}$2
+    echo Change Name $1/Project$2 to $3$2
+    sed "-e s/Project/$3/g" $1/Project$2 | tr -d "\r" >$1/$3$2
     rm $1/Project$2 
 }
 
-changeProjectName . Makefile
-changeProjectName src/util BuildTime.cpp 
-changeProjectName include/util BuildTime.h 
-changeProjectName tests/util BuildTimeTest.cpp 
+changeProjectName . Makefile ${CODE_LEGAL_PROJECT_NAME}
+changeProjectName . .project ${PROJECT_NAME}
+changeProjectName src/util BuildTime.cpp  ${CODE_LEGAL_PROJECT_NAME}
+changeProjectName include/util BuildTime.h ${CODE_LEGAL_PROJECT_NAME}
+changeProjectName tests/util BuildTimeTest.cpp ${CODE_LEGAL_PROJECT_NAME}
 mv ${CODE_LEGAL_PROJECT_NAME}Makefile Makefile
+mv ${PROJECT_NAME}.project .project
 
 cd ${ORIGINAL_DIR}
 echo "You might want to modify the path for CPPUTEST_HOME in the Makefile."

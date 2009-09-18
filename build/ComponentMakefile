@@ -84,6 +84,8 @@ endif
 
 INCLUDES_DIRS_EXPANDED = $(call get_dirs_from_dirspec, $(INCLUDE_DIRS))
 INCLUDES += $(foreach dir, $(INCLUDES_DIRS_EXPANDED), -I$(dir))
+MOCK_DIRS_EXPANDED = $(call get_dirs_from_dirspec, $(MOCKS_SRC_DIRS))
+INCLUDES += $(foreach dir, $(MOCK_DIRS_EXPANDED), -I$(dir))
 
 
 DEP_FILES = $(call src_to_d, $(ALL_SRC))
