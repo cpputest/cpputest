@@ -2,7 +2,7 @@
 SILENCE = @
 
 #---- Outputs ----#
-COMPONENT_NAME = Project
+COMPONENT_NAME = ConferenceExercise
 TARGET_LIB = \
 	lib/lib$(COMPONENT_NAME).a
 	
@@ -11,7 +11,9 @@ TEST_TARGET = \
 
 #--- Inputs ----#
 PROJECT_HOME_DIR = .
-CPPUTEST_HOME = ../CppUTest
+ifeq "$(CPPUTEST_HOME)" ""
+    CPPUTEST_HOME = ../CppUTest
+endif
 CPP_PLATFORM = Gcc
 
 #CFLAGS are set to override malloc and free to get memory leak detection in C programs
@@ -19,12 +21,22 @@ CFLAGS = -Dmalloc=cpputest_malloc -Dfree=cpputest_free
 CPPFLAGS =
 #GCOVFLAGS = -fprofile-arcs -ftest-coverage
 
+#includes for all compiles
+#a list of -I's are created from these directories
+	
+INCLUDE_DIRS =\
+  .\
+  include\
+  include/*\
+  $(CPPUTEST_HOME)/include/
+
 #SRC_DIRS is a list of source directories that make up the target library
 #If test files are in these directories, their IMPORT_TEST_GROUPs need
 #to be included in main to force them to be linked in.  By convention
 #put them into an AllTests.h file in each directory
 SRC_DIRS = \
-	src/util
+	src\
+	src/*
 
 #TEST_SRC_DIRS is a list of directories including 
 # - A test main (AllTests.cpp by convention)
@@ -33,13 +45,13 @@ SRC_DIRS = \
 # - 
 TEST_SRC_DIRS = \
 	tests \
-	tests/util
+	tests/*
 
-#includes for all compiles	
-INCLUDES =\
-  -I.\
-  -Iinclude/util\
-  -I$(CPPUTEST_HOME)/include/
+# - OBJ files in these directories are included in the TEST_TARGET
+MOCKS_SRC_DIRS = \
+	mocks
+	
+
 
 #Flags to pass to ld
 LDFLAGS +=
