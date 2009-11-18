@@ -82,6 +82,10 @@ ifneq "$(OTHER_MAKEFILE_TO_INCLUDE)" ""
 -include $(OTHER_MAKEFILE_TO_INCLUDE)
 endif
 
+ifneq "$(MAP_FILE)" ""
+	LDFLAGS += -Wl,-map,$(MAP_FILE)
+endif
+
 INCLUDES_DIRS_EXPANDED = $(call get_dirs_from_dirspec, $(INCLUDE_DIRS))
 INCLUDES += $(foreach dir, $(INCLUDES_DIRS_EXPANDED), -I$(dir))
 MOCK_DIRS_EXPANDED = $(call get_dirs_from_dirspec, $(MOCKS_SRC_DIRS))
@@ -89,7 +93,7 @@ INCLUDES += $(foreach dir, $(MOCK_DIRS_EXPANDED), -I$(dir))
 
 
 DEP_FILES = $(call src_to_d, $(ALL_SRC))
-STUFF_TO_CLEAN += $(DEP_FILES)
+STUFF_TO_CLEAN += $(DEP_FILES) + $(PRODUCTION_CODE_START) + $(PRODUCTION_CODE_END) + $(STDLIB_CODE_START) + $(MAP_FILE)
 
 # Targets
 .PHONY: all
@@ -108,14 +112,17 @@ flags:
 	$(SILENCE)for f in $(CFLAGS) ; do \
 		echo "    C   $$f" ; \
 	done
+	$(SILENCE)for f in $(LDFLAGS) ; do \
+		echo "    LD   $$f" ; \
+	done
+	$(SILENCE)for f in $(ARFLAGS) ; do \
+		echo "    AR   $$f" ; \
+	done
 	
-$(TEST_TARGET): $(TEST_OBJS) $(MOCKS_OBJS) $(TARGET_LIB) $(USER_LIBS) $(CPPUTEST_LIB)
+	
+$(TEST_TARGET): $(TEST_OBJS) $(MOCKS_OBJS)  $(PRODUCTION_CODE_START) $(TARGET_LIB) $(USER_LIBS) $(PRODUCTION_CODE_END) $(CPPUTEST_LIB) $(STDLIB_CODE_START) 
 	$(SILENCE)echo Linking $@
-	$(SILENCE)$(CXX) $(CPPFLAGS) $^ $(LDFLAGS) -o $@
-
-#$(CSLIM_TARGET): $(CSLIM_OBJS) $(MOCKS_OBJS) $(TARGET_LIB) $(USER_LIBS) $(CPPUTEST_LIB) $(CSLIM_LIB)
-#	$(SILENCE)echo Linking $@
-#	$(SILENCE)$(CXX) $(CPPFLAGS) $^ $(LDFLAGS) -o $@
+	$(SILENCE)$(CXX) -o $@ $(CPPFLAGS)  $^ $(LDFLAGS) 
 
 $(TARGET_LIB): $(OBJ)
 	$(SILENCE)echo Building archive $@

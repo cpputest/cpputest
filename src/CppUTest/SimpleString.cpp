@@ -304,6 +304,11 @@ SimpleString StringFromFormat(const char* format, ...)
    return resultString;
 }
 
+//Kludge to get a va_copy in VC++ V6
+#ifndef va_copy
+#define va_copy(copy, original) copy = original;
+#endif
+
 SimpleString VStringFromFormat(const char* format, va_list args)
 {
    va_list argsCopy;
