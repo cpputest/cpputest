@@ -96,7 +96,7 @@ static long TimeInMillisImplementation()
 
    t = t * 10;
 
-   return  t;
+   return  1;
 }
 
 static long (*timeInMillisFp) () = TimeInMillisImplementation;

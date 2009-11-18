@@ -146,8 +146,7 @@
         <debug>1</debug>
         <option>
           <name>CCDefines</name>
-          <state>UT_NEW_MACROS_DISABLED=1</state>
-          <state>UT_NEW_OVERRIDES_DISABLED=1</state>
+          <state></state>
         </option>
         <option>
           <name>CCPreprocFile</name>
