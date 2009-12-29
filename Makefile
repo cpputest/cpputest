@@ -2,7 +2,10 @@
 SILENCE = @
 
 #Set to Y to get extensions.  This brings in string support, and stdint support
-ENABLE_EXTENSIONS = Y
+ENABLE_EXTENSIONS = N
+
+# Set to Y for enabling debug
+ENABLE_DEBUG = N
 
 #---- Outputs ----#
 COMPONENT_NAME = CppUTest
@@ -16,9 +19,12 @@ TEST_TARGET = \
 CPPUTEST_HOME = .
 CPP_PLATFORM = Gcc
 
-CPPFLAGS += -Wall
-CPPFLAGS += -Werror
+CPPFLAGS += -Wall -Werror
+
+ifeq ($(ENABLE_DEBUG), Y)
 CPPFLAGS += -g
+endif
+
 #CPPFLAGS += -DUT_NEW_OVERRIDES_DISABLED -DUT_NEW_MACROS_DISABLED
 #GCOVFLAGS = -fprofile-arcs -ftest-coverage
 
@@ -36,12 +42,10 @@ SRC_DIRS = \
 # - Consequently - AllTests.h containing the IMPORT_TEST_GROUPS is not needed
 # - 
 TEST_SRC_DIRS = \
-	tests\
-	tests/Extensions
+	tests
 
 #includes for all compiles	
 INCLUDES =\
-  -I.\
   -I$(CPPUTEST_HOME)/include
 
 #Add extension directories if enabled
@@ -55,6 +59,21 @@ LDFLAGS +=
 	
 include $(CPPUTEST_HOME)/build/ComponentMakefile
 
+.PHONY: test_all
+test_all:
+	make ENABLE_DEBUG=N ENABLE_EXTENSIONS=Y
+	make examples ENABLE_EXTENSIONS=N
+	make clean
+	make ENABLE_DEBUG=N ENABLE_EXTENSIONS=N
+	./$(TEST_TARGET) -ojunit > junit_run_output
+#	if [ -s junit_run_output ]; then echo "JUnit run has output. Build failed!"; exit 1; fi
+	make examples ENABLE_EXTENSIONS=N
+	make clean
+	make ENABLE_DEBUG=Y ENABLE_EXTENSIONS=Y
+	make clean
+	make ENABLE_DEBUG=Y ENABLE_EXTENSIONS=N
+	make clean
+	
 .PHONY: examples
 examples: 
 	make -C examples  all
