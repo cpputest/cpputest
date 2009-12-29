@@ -14,9 +14,11 @@
 #define MEM_LEAK_DEALLOC_NON_ALLOCATED "Deallocating non-allocated memory\n"
 
 enum MemLeakPeriod { mem_leak_period_all, mem_leak_period_disabled, mem_leak_period_enabled, mem_leak_period_checking };
-enum MemLeakAllocType {mem_leak_alloc_new, mem_leak_alloc_new_array, mem_leak_alloc_malloc, mem_leak_alloc_unknown};
+
+class MemoryLeakAllocator;
 
 #include <stdlib.h>
+
 class MemoryLeakFailure
 {
 public:
@@ -24,17 +26,17 @@ public:
    virtual void fail(char* fail_string)=0;
 };
 
-struct SimpleBuffer
+struct SimpleStringBuffer
 {
-   enum { SIMPLE_BUFFER_LEN = 4096};
+   enum { SIMPLE_STRING_BUFFER_LEN = 4096};
 
-   SimpleBuffer();
+   SimpleStringBuffer();
    void clear();
    void add(const char* format, ...);
    char* toString();
 
 private:
-   char buffer[SIMPLE_BUFFER_LEN];
+   char buffer[SIMPLE_STRING_BUFFER_LEN];
    int positions_filled;
 };
 
@@ -43,9 +45,9 @@ struct MemoryLeakDetectorNode
    MemoryLeakDetectorNode() : size(0), next(0) {};
    size_t size;
    char* memory;
-   char* file;
+   const char* file;
    int line;
-   MemLeakAllocType type;
+   MemoryLeakAllocator* allocator;
    MemLeakPeriod period;
 
 private:
@@ -57,7 +59,7 @@ struct MemoryLeakDetectorList
 {
    MemoryLeakDetectorList() : head(0) {};
 
-   static void initNode(MemoryLeakDetectorNode* node, size_t size, char* memory, MemLeakPeriod period, char* file, int line, MemLeakAllocType type);
+   static void initNode(MemoryLeakDetectorNode* node, MemoryLeakAllocator* allocator, size_t size, char* memory, MemLeakPeriod period, const char* file, int line);
 
    void addNewNode(MemoryLeakDetectorNode* node);
    MemoryLeakDetectorNode* removeNode(char* memory);
@@ -118,42 +120,30 @@ public:
    int totalMemoryLeaks(MemLeakPeriod period);
    void clearAllAccounting(MemLeakPeriod period);
 
-   char* allocOperatorNew(size_t size);
-   char* allocOperatorNew(size_t size, const char* file, int line);
-   char* allocOperatorNewArray(size_t size);
-   char* allocOperatorNewArray(size_t size, const char* file, int line);
-   char* allocMalloc(size_t size);
-   char* allocMalloc(size_t size, const char* file, int line);
-   char* allocRealloc(char* memory, size_t size, const char* file, int line);
-
-   void freeOperatorDelete(char* memory);
-   void freeOperatorDeleteArray(char* memory);
-   void freeFree(char* memory);
-   void freeFree(char* memory, const char* file, int line);
+   char* allocMemory(MemoryLeakAllocator* allocator, size_t size);
+   char* allocMemory(MemoryLeakAllocator* allocator, size_t size, const char* file, int line);
+   void deallocMemory(MemoryLeakAllocator* allocator, void* memory);
+   void deallocMemory(MemoryLeakAllocator* allocator, void* memory, const char* file, int line);
+   char* reallocMemory(MemoryLeakAllocator* allocator, char* memory, size_t size, const char* file, int line);
 
    enum { memory_corruption_buffer_size = 3};
 private:
    MemoryLeakFailure* reporter;
    MemLeakPeriod current_period;
-   SimpleBuffer output_buffer;
+   SimpleStringBuffer output_buffer;
    MemoryLeakDetectorTable memoryTable;
    bool doAllocationTypeChecking;
 
-
    void ConstructMemoryLeakReport(MemLeakPeriod period);
-   void reportFailure(const char* message, const char* allocFile, int allocLine, size_t allocSize, MemLeakAllocType allocType, const char* freeFile, int freeLine, MemLeakAllocType freeType);
-   char* alloc(size_t size, char* file, int line, MemLeakAllocType type);
-   char* reallocate(char* memory, size_t size, char* file, int line, MemLeakAllocType type);
-   const char* getTypeString(MemLeakAllocType type);
-   void dealloc(char* memory, const char* file, int line, MemLeakAllocType type);
+   void reportFailure(const char* message, const char* allocFile, int allocLine, size_t allocSize, MemoryLeakAllocator* allocAllocator, const char* freeFile, int freeLine, MemoryLeakAllocator* freeAllocator);
 
    char* reallocateMemoryAndExtraInfo(char* memory, size_t size);
-   char* allocateMemoryAndExtraInfo(size_t size);
+   char* allocateMemoryAndExtraInfo(MemoryLeakAllocator* allocator, size_t size);
    void addMemoryCorruptionInformation(char* memory, size_t size);
-   void checkForAllocMismatchOrCorruption(MemoryLeakDetectorNode* node, const char* file, int line, MemLeakAllocType type);
+   void checkForAllocMismatchOrCorruption(MemoryLeakDetectorNode* node, const char* file, int line, MemoryLeakAllocator* allocator);
 
-   void addMemoryLeakInfoAndCorruptionInfo(char* memory, size_t size, char* file, int line, MemLeakAllocType type);
-   bool removeMemoryLeakInfoAndCheckCorruption(char* memory, const char* file, int line, MemLeakAllocType type);
+   void addMemoryLeakInfoAndCorruptionInfo(char* memory, size_t size, const char* file, int line, MemoryLeakAllocator* allocator);
+   bool removeMemoryLeakInfoAndCheckCorruption(char* memory, const char* file, int line, MemoryLeakAllocator* allocator);
 
    MemoryLeakDetectorNode* getNodeFromMemoryPointer(char* memory, size_t size);
 };

@@ -30,11 +30,11 @@
 #include "CppUTest/TestOutput.h"
 #include "CppUTest/MemoryLeakWarningPlugin.h"
 #include "CppUTest/MemoryLeakDetector.h"
+#include "CppUTest/MemoryLeakAllocator.h"
 #include "CppUTest/TestTestingFixture.h"
 
-static char* arrayToLeak1;
-static char* arrayToLeak2;
-static long* nonArrayToLeak;
+static char* leak1;
+static long* leak2;
 
 class DummyReporter : public MemoryLeakFailure
 {
@@ -46,6 +46,7 @@ public:
 static MemoryLeakDetector* detector;
 static MemoryLeakWarningPlugin* memPlugin;
 static DummyReporter dummy;
+static MemoryLeakAllocator* allocator;
 
 
 TEST_GROUP(MemoryLeakWarningTest)
@@ -55,57 +56,31 @@ TEST_GROUP(MemoryLeakWarningTest)
 	{
 		fixture = new TestTestingFixture();
 		detector = new MemoryLeakDetector();
+		allocator = new StandardNewAllocator;
 		detector->init(&dummy);
   		memPlugin = new MemoryLeakWarningPlugin("TestMemoryLeakWarningPlugin", detector);
   		fixture->registry->installPlugin(memPlugin);
   		memPlugin->enable();
 
-		arrayToLeak1 = 0;
-		arrayToLeak2 = 0;
-		nonArrayToLeak = 0;
+		leak1 = 0;
+		leak2 = 0;
 	}
 	void teardown()
 	{
-      detector->freeOperatorDeleteArray(arrayToLeak1);
-      detector->freeOperatorDeleteArray(arrayToLeak2);
-      detector->freeOperatorDelete((char*)nonArrayToLeak);
+      detector->deallocMemory(allocator, leak1);
+      detector->deallocMemory(allocator, leak2);
 
       delete fixture;
   		delete memPlugin;
   		delete detector;
+  		delete allocator;
 	}
 };
 
-void _testExpectOneArrayLeak()
-{
-   memPlugin->expectLeaksInTest(1);
-   arrayToLeak1 = detector->allocOperatorNewArray(100);
-}
-
-TEST(MemoryLeakWarningTest, Ignore1)
-{
-	fixture->setTestFunction(_testExpectOneArrayLeak);
-	fixture->runAllTests();
-	LONGS_EQUAL(0, fixture->getFailureCount());
-}
-
-void _testOneArrayLeak()
-{
-   arrayToLeak1 = detector->allocOperatorNewArray(100);
-}
-
-TEST(MemoryLeakWarningTest, OneArrayLeak)
-{
-   fixture->setTestFunction(_testOneArrayLeak);
-   fixture->runAllTests();
-   LONGS_EQUAL(1, fixture->getFailureCount());
-   fixture->assertPrintContains("Total number of leaks:  1");
-}
-
 void _testTwoLeaks()
 {
-    arrayToLeak2 = detector->allocOperatorNewArray(10);;
-    nonArrayToLeak = (long*) detector->allocOperatorNew(4);
+    leak1 = detector->allocMemory(allocator, 10);;
+    leak2 = (long*) detector->allocMemory(allocator, 4);
 }
 
 TEST(MemoryLeakWarningTest, TwoLeaks)
@@ -119,8 +94,8 @@ TEST(MemoryLeakWarningTest, TwoLeaks)
 void _testIgnore2()
 {
    memPlugin->expectLeaksInTest(2);
-   arrayToLeak2 = detector->allocOperatorNewArray(10);
-   nonArrayToLeak = (long*) detector->allocOperatorNew(4);
+   leak1 = detector->allocMemory(allocator, 10);
+   leak2 = (long*) detector->allocMemory(allocator, 4);
 }
 
 TEST(MemoryLeakWarningTest, Ignore2)
@@ -132,7 +107,7 @@ TEST(MemoryLeakWarningTest, Ignore2)
 
 static void _failAndLeakMemory()
 {
-   arrayToLeak2 = detector->allocOperatorNewArray(10);
+   leak1 = detector->allocMemory(allocator, 10);
    FAIL("");
 }
 
