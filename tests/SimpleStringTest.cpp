@@ -29,19 +29,10 @@
 #include "CppUTest/SimpleString.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
-#include "CppUTest/MemoryLeakDetector.h" // REMOVE THIS AFTER THE VC++ EXPRESS IS FIXED!
 TEST_GROUP(SimpleString)
 {
-		void setup()
-		{
-			MemoryLeakWarningPlugin::getGlobalDetector()->disableAllocationTypeChecking(); // REMOVE THIS AFTER THE VC++ EXPRESS IS FIXED!
-		}
 
-		void teardown()
-		{
-			MemoryLeakWarningPlugin::getGlobalDetector()->enableAllocationTypeChecking(); // REMOVE THIS AFTER THE VC++ EXPRESS IS FIXED!
-		}
-	};
+};
 
 	TEST(SimpleString, CreateSequence)
 	{

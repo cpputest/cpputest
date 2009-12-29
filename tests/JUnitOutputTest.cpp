@@ -29,7 +29,7 @@
 #include "CppUTest/JUnitTestOutput.h"
 #include "CppUTest/TestResult.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
-#include "CppUTest/MemoryLeakDetector.h" // REMOVE THIS AFTER THE VC++ EXPRESS IS FIXED!
+
 static long millisTime;
 
 static const char* theTime = "1978-10-03T00:00:00";
@@ -285,8 +285,6 @@ TestResult *res;
 
 void setup()
 {
-	MemoryLeakWarningPlugin::getGlobalDetector()->disableAllocationTypeChecking (); // REMOVE THIS AFTER THE VC++ EXPRESS IS FIXED!
-
 	output = new MockJUnitTestOutput();
 	res = new TestResult(*output);
 	output->setResult(res);
@@ -299,7 +297,6 @@ void teardown()
 	delete res;
 	SetPlatformSpecificTimeInMillisMethod(0);
 	SetPlatformSpecificTimeStringMethod(0);
-	MemoryLeakWarningPlugin::getGlobalDetector()->enableAllocationTypeChecking (); // REMOVE THIS AFTER THE VC++ EXPRESS IS FIXED!
 }
 
 void runTests()
