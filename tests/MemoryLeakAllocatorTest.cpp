@@ -56,6 +56,15 @@ TEST(MemoryLeakAllocatorTest, SetCurrentNewArrayAllocator)
 	POINTERS_EQUAL(StandardNewArrayAllocator::defaultAllocator(), MemoryLeakAllocator::getCurrentNewArrayAllocator());
 }
 
+TEST(MemoryLeakAllocatorTest, SetCurrentMallocAllocator)
+{
+	allocator = new StandardMallocAllocator;
+	MemoryLeakAllocator::setCurrentMallocAllocator(allocator);
+	POINTERS_EQUAL(allocator, MemoryLeakAllocator::getCurrentMallocAllocator());
+	MemoryLeakAllocator::setCurrentMallocAllocatorToDefault();
+	POINTERS_EQUAL(StandardMallocAllocator::defaultAllocator(), MemoryLeakAllocator::getCurrentMallocAllocator());
+}
+
 
 TEST(MemoryLeakAllocatorTest, MallocAllocation)
 {

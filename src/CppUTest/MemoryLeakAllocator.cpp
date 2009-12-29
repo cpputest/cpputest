@@ -38,6 +38,7 @@ static char* checkedMalloc(size_t size)
 
 MemoryLeakAllocator* MemoryLeakAllocator::currentNewAllocator = 0;
 MemoryLeakAllocator* MemoryLeakAllocator::currentNewArrayAllocator = 0;
+MemoryLeakAllocator* MemoryLeakAllocator::currentMallocAllocator = 0;
 
 int MemoryLeakAllocator::isOfEqualType(MemoryLeakAllocator* allocator)
 {
@@ -76,6 +77,23 @@ MemoryLeakAllocator* MemoryLeakAllocator::getCurrentNewArrayAllocator()
 void MemoryLeakAllocator::setCurrentNewArrayAllocatorToDefault()
 {
 	currentNewArrayAllocator = StandardNewArrayAllocator::defaultAllocator();
+}
+
+void MemoryLeakAllocator::setCurrentMallocAllocator(MemoryLeakAllocator* allocator)
+{
+	currentMallocAllocator = allocator;
+}
+
+MemoryLeakAllocator* MemoryLeakAllocator::getCurrentMallocAllocator()
+{
+	if (currentMallocAllocator == 0)
+		setCurrentMallocAllocatorToDefault();
+	return currentMallocAllocator;
+}
+
+void MemoryLeakAllocator::setCurrentMallocAllocatorToDefault()
+{
+	currentMallocAllocator = StandardMallocAllocator::defaultAllocator();
 }
 
 

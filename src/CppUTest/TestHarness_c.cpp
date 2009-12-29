@@ -35,9 +35,6 @@
 #include "CppUTest/MemoryLeakDetector.h"
 #include "CppUTest/MemoryLeakAllocator.h"
 
-static StandardMallocAllocator defaultAllocator;
-static MemoryLeakAllocator* currentAllocator = &defaultAllocator;
-
 extern "C"
 {
 
@@ -84,15 +81,14 @@ void CHECK_C_LOCATION(int condition, const char* conditionString,
 	CHECK_LOCATION(((condition) == 0 ? false : true), conditionString, fileName, lineNumber);
 }
 
-static int out_of_memory = 0;
 void cpputest_malloc_set_out_of_memory()
 {
-	out_of_memory = 1;
+	MemoryLeakAllocator::setCurrentMallocAllocator(NullUnknownAllocator::defaultAllocator());
 }
 
 void cpputest_malloc_set_not_out_of_memory()
 {
-	out_of_memory = 0;
+	MemoryLeakAllocator::setCurrentMallocAllocatorToDefault();
 }
 
 void* cpputest_malloc(size_t size)
@@ -117,10 +113,8 @@ void cpputest_free(void* buffer)
 
 void* cpputest_malloc_location(size_t size, const char* file, int line)
 {
-	if (out_of_memory) return 0;
-
 	return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(
-			currentAllocator, size, file, line);
+			MemoryLeakAllocator::getCurrentMallocAllocator(), size, file, line);
 }
 
 void* cpputest_calloc_location(size_t num, size_t size, const char* file,
@@ -133,13 +127,13 @@ void* cpputest_realloc_location(void* memory, size_t size, const char* file,
 		int line)
 {
 	return MemoryLeakWarningPlugin::getGlobalDetector()->reallocMemory(
-			currentAllocator, (char*) memory, size, file, line);
+			MemoryLeakAllocator::getCurrentMallocAllocator(), (char*) memory, size, file, line);
 }
 
 void cpputest_free_location(void* buffer, const char* file, int line)
 {
 	MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(
-			currentAllocator, (char*) buffer, file, line);
+			MemoryLeakAllocator::getCurrentMallocAllocator(), (char*) buffer, file, line);
 }
 
 }

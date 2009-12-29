@@ -347,3 +347,8 @@ TEST(MemoryLeakDetectorTest, periodChecking)
 	detector->deallocMemory(mallocAllocator, mem);
 }
 
+TEST(MemoryLeakDetectorTest, allocateWithANullAllocatorCausesNoProblems)
+{
+	char* mem = detector->allocMemory(NullUnknownAllocator::defaultAllocator(), 2);
+	detector->deallocMemory(NullUnknownAllocator::defaultAllocator(), mem);
+}

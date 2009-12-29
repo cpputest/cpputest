@@ -379,7 +379,8 @@ char* MemoryLeakDetector::allocMemory(MemoryLeakAllocator* allocator,
 		size_t size, const char* file, int line)
 {
 	char* mem = allocateMemoryAndExtraInfo(allocator, size);
-	addMemoryLeakInfoAndCorruptionInfo(mem, size, file, line, allocator);
+	if (mem)
+		addMemoryLeakInfoAndCorruptionInfo(mem, size, file, line, allocator);
 	return mem;
 }
 
