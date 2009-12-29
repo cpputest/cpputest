@@ -71,7 +71,7 @@ CPPUTEST_LIB = $(CPPUTEST_HOME)/lib/libCppUTest.a
 
 CPPFLAGS +=  $(INCLUDES) $(GCOVFLAGS)
 CFLAGS += $(INCLUDES) $(GCOVFLAGS)
-LDFLAGS  += -lstdc++
+LDFLAGS  +=
 
 #The gcda files for gcov need to be deleted before each run
 #To avoid annoying messages.
@@ -122,7 +122,7 @@ flags:
 	
 $(TEST_TARGET): $(TEST_OBJS) $(MOCKS_OBJS)  $(PRODUCTION_CODE_START) $(TARGET_LIB) $(USER_LIBS) $(PRODUCTION_CODE_END) $(CPPUTEST_LIB) $(STDLIB_CODE_START) 
 	$(SILENCE)echo Linking $@
-	$(SILENCE)$(LINK.o) -o $@ $^
+	$(SILENCE)$(LINK.o) -o $@ $^ $(LD_LIBRARIES)
 
 $(TARGET_LIB): $(OBJ)
 	$(SILENCE)echo Building archive $@

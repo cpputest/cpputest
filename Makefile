@@ -55,8 +55,9 @@ TEST_SRC_DIRS += tests/Extensions
 endif
 
 #Flags to pass to ar, ld
-LDFLAGS +=
-	
+LDFLAGS += 
+LD_LIBRARIES += -lstdc++
+
 include $(CPPUTEST_HOME)/build/ComponentMakefile
 
 .PHONY: test_all
