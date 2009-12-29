@@ -69,8 +69,8 @@ STUFF_TO_CLEAN += \
 #Other stuff needed
 CPPUTEST_LIB = $(CPPUTEST_HOME)/lib/libCppUTest.a 
 
-CPPFLAGS += -Wall $(CXXFLAGS) $(INCLUDES) $(GCOVFLAGS)
-CFLAGS += -Wall $(INCLUDES) $(CXXFLAGS)  $(GCOVFLAGS)
+CPPFLAGS +=  $(INCLUDES) $(GCOVFLAGS)
+CFLAGS += $(INCLUDES) $(GCOVFLAGS)
 LDFLAGS  += -lstdc++
 
 #The gcda files for gcov need to be deleted before each run
@@ -143,7 +143,7 @@ vtest: $(TEST_TARGET)
 
 %.o: %.c
 	@echo compiling $(notdir $<)
-	$(SILENCE)$(COMPILE.cpp) -M -MF $(subst .o,.d,$@) -MT "$@ $(subst .o,.d,$@)" $<
+	$(SILENCE)$(COMPILE.c) -M -MF $(subst .o,.d,$@) -MT "$@ $(subst .o,.d,$@)" $<
 	$(SILENCE)$(COMPILE.c) $(OUTPUT_OPTION) $<
 
 ifneq "$(MAKECMDGOALS)" "clean"
