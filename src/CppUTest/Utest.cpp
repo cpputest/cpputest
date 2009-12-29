@@ -32,89 +32,77 @@
 TestResult* Utest::testResult_ = 0;
 Utest* Utest::currentTest_ = 0;
 
-Utest::Utest()
-    : group_("UndefinedTestGroup")
-    , name_("UndefinedTest")
-    , file_("UndefinedFile")
-    , lineNumber_(0)
-    , next_(&NullTest::instance())
+Utest::Utest() :
+	group_("UndefinedTestGroup"), name_("UndefinedTest"),
+			file_("UndefinedFile"), lineNumber_(0),
+			next_(&NullTest::instance())
 {
 }
 
-Utest::Utest (const char* groupName,
-            const char* testName,
-            const char* fileName,
-            int lineNumber)
-    : group_(groupName)
-    , name_(testName)
-    , file_(fileName)
-    , lineNumber_(lineNumber)
-    , next_(&NullTest::instance())
-{}
+Utest::Utest(const char* groupName, const char* testName, const char* fileName,
+		int lineNumber) :
+	group_(groupName), name_(testName), file_(fileName),
+			lineNumber_(lineNumber), next_(&NullTest::instance())
+{
+}
 
-Utest::Utest (const char* groupName,
-            const char* testName,
-            const char* fileName,
-            int lineNumber,
-            Utest* nextTest)
-    : group_(groupName)
-    , name_(testName)
-    , file_(fileName)
-    , lineNumber_(lineNumber)
-    , next_(nextTest)
-{}
+Utest::Utest(const char* groupName, const char* testName, const char* fileName,
+		int lineNumber, Utest* nextTest) :
+	group_(groupName), name_(testName), file_(fileName),
+			lineNumber_(lineNumber), next_(nextTest)
+{
+}
 
-Utest::~Utest ()
-{}
+Utest::~Utest()
+{
+}
 
 void Utest::runOneTestWithPlugins(TestPlugin* plugin, TestResult& result)
 {
-   executePlatformSpecificRunOneTest(plugin, result);
+	executePlatformSpecificRunOneTest(plugin, result);
 }
 
 void Utest::runOneTest(TestPlugin* plugin, TestResult& result)
 {
-   plugin->runAllPreTestAction(*this, result) ;
-   run(result);
-   plugin->runAllPostTestAction(*this, result);
+	plugin->runAllPreTestAction(*this, result);
+	run(result);
+	plugin->runAllPostTestAction(*this, result);
 }
-
 
 void Utest::run(TestResult& result)
 {
-  //save test context, so that test class can be tested
-  Utest* savedTest = currentTest_;
-  TestResult* savedResult = testResult_;
+	//save test context, so that test class can be tested
+	Utest* savedTest = currentTest_;
+	TestResult* savedResult = testResult_;
 
-  result.countRun();
-  testResult_ = &result;
-  currentTest_ = this;
+	result.countRun();
+	testResult_ = &result;
+	currentTest_ = this;
 
-  if (executePlatformSpecificSetup()) {
-     executePlatformSpecificTestBody();
-  }
-  executePlatformSpecificTeardown();
+	if (executePlatformSpecificSetup()) {
+		executePlatformSpecificTestBody();
+	}
+	executePlatformSpecificTeardown();
 
-  //restore
-  currentTest_ = savedTest;
-  testResult_ = savedResult;
+	//restore
+	currentTest_ = savedTest;
+	testResult_ = savedResult;
 }
 
 void Utest::exitCurrentTest()
 {
-   executePlatformSpecificExitCurrentTest();
+	executePlatformSpecificExitCurrentTest();
 }
 
 Utest *Utest::getNext() const
-  {
-    return next_;
-  }
-
+{
+	return next_;
+}
 
 Utest* Utest::addTest(Utest *test)
 {
-  next_ = test;
-  return this;
+	next_ = test;
+	return this;
 }
 
 int Utest::countTests()
@@ -122,21 +110,20 @@ int Utest::countTests()
 	return next_->countTests() + 1;
 }
 
-bool Utest::isNull () const
+bool Utest::isNull() const
 {
 	return false;
 }
 
 SimpleString Utest::getMacroName() const
 {
-  return "TEST";
+	return "TEST";
 }
 
-
 const SimpleString Utest::getName() const
-  {
-    return SimpleString(name_);
-  }
+{
+	return SimpleString(name_);
+}
 
 const SimpleString Utest::getGroup() const
 {
@@ -144,20 +131,20 @@ const SimpleString Utest::getGroup() const
 }
 
 SimpleString Utest::getFormattedName() const
-  {
-    SimpleString formattedName(getMacroName());
-    formattedName += "(";
-    formattedName += group_;
-    formattedName += ", ";
-    formattedName += name_;
-    formattedName += ")";
+{
+	SimpleString formattedName(getMacroName());
+	formattedName += "(";
+	formattedName += group_;
+	formattedName += ", ";
+	formattedName += name_;
+	formattedName += ")";
 
-    return formattedName;
-  }
+	return formattedName;
+}
 
 const char* Utest::getProgressIndicator() const
 {
-    return ".";
+	return ".";
 }
 
 void Utest::setFileName(const char* fileName)
@@ -181,15 +168,14 @@ void Utest::setTestName(const char* testName)
 }
 
 const SimpleString Utest::getFile() const
-  {
-    return SimpleString(file_);
-  }
-
+{
+	return SimpleString(file_);
+}
 
 int Utest::getLineNumber() const
-  {
-    return lineNumber_;
-  }
+{
+	return lineNumber_;
+}
 
 void Utest::setup()
 {
@@ -199,174 +185,189 @@ void Utest::teardown()
 {
 }
 
-bool Utest::shouldRun(const SimpleString& groupFilter, const SimpleString& nameFilter) const
-  {
-    SimpleString group(group_);
-    SimpleString name(name_);
-    if (group.contains(groupFilter) && name.contains(nameFilter))
-      return true;
-
-    return false;
-  }
-
-bool Utest::assertTrue(bool condition, const char* conditionString, const char* fileName, int lineNumber)
+bool Utest::shouldRun(const SimpleString& groupFilter,
+		const SimpleString& nameFilter) const
 {
-  testResult_->countCheck();
-  if (!(condition))
-    {
-      SimpleString message("CHECK(");
-      message += conditionString;
-      message += ") failed";
-      Failure _f(this, fileName, lineNumber, message);
-      testResult_->addFailure (_f);
-      return false;
-    }
-  return true;
+	SimpleString group(group_);
+	SimpleString name(name_);
+	if (group.contains(groupFilter) && name.contains(nameFilter)) return true;
+
+	return false;
 }
 
-bool Utest::assertCstrEqual(const char* expected, const char* actual, const char* fileName, int lineNumber)
+bool Utest::assertTrue(bool condition, const char* conditionString,
+		const char* fileName, int lineNumber)
 {
 	testResult_->countCheck();
-	if (actual == 0 && expected == 0) return true;
-	if (actual == 0) {
-		EqualsFailure _f(this, fileName, lineNumber, StringFrom(expected), StringFrom("(null)"));
-		testResult_->addFailure (_f);
-		return false;
-	}
-	if (expected == 0) {
-		EqualsFailure _f(this, fileName, lineNumber, StringFrom("(null)"), StringFrom(actual));
-		testResult_->addFailure (_f);
-		return false;
-	}
-	if (PlatformSpecificStrCmp(expected, actual) != 0) {
-		EqualsFailure _f(this, fileName, lineNumber, StringFrom(expected), StringFrom(actual));
-		testResult_->addFailure (_f);
+	if (!(condition)) {
+		SimpleString message("CHECK(");
+		message += conditionString;
+		message += ") failed";
+		Failure _f(this, fileName, lineNumber, message);
+		testResult_->addFailure(_f);
 		return false;
 	}
 	return true;
 }
 
-bool Utest::assertCstrContains(const char* expected, const char* actual, const char* fileName, int lineNumber)
+bool Utest::assertCstrEqual(const char* expected, const char* actual,
+		const char* fileName, int lineNumber)
 {
-   testResult_->countCheck();
-   if (actual == 0 && expected == 0) return true;
-   if (actual == 0) {
-      ContainsFailure _f(this, fileName, lineNumber, StringFrom(expected), StringFrom("(null)"));
-      testResult_->addFailure (_f);
-      return false;
-   }
-   if (expected == 0) {
-      ContainsFailure _f(this, fileName, lineNumber, StringFrom("(null)"), StringFrom(actual));
-      testResult_->addFailure (_f);
-      return false;
-   }
-   if (!SimpleString(actual).contains(expected)) {
-      ContainsFailure _f(this, fileName, lineNumber, StringFrom(expected), StringFrom(actual));
-      testResult_->addFailure (_f);
-      return false;
-   }
-   return true;
+	testResult_->countCheck();
+	if (actual == 0 && expected == 0) return true;
+	if (actual == 0) {
+		EqualsFailure _f(this, fileName, lineNumber, StringFrom(expected),
+				StringFrom("(null)"));
+		testResult_->addFailure(_f);
+		return false;
+	}
+	if (expected == 0) {
+		EqualsFailure _f(this, fileName, lineNumber, StringFrom("(null)"),
+				StringFrom(actual));
+		testResult_->addFailure(_f);
+		return false;
+	}
+	if (PlatformSpecificStrCmp(expected, actual) != 0) {
+		EqualsFailure _f(this, fileName, lineNumber, StringFrom(expected),
+				StringFrom(actual));
+		testResult_->addFailure(_f);
+		return false;
+	}
+	return true;
 }
 
-void PadStringsToSameLength(SimpleString& aDecimal, SimpleString& eDecimal, char padCharacter)
+bool Utest::assertCstrContains(const char* expected, const char* actual,
+		const char* fileName, int lineNumber)
 {
-    char pad[2];
-    pad[0] = padCharacter;
-    pad[1] = 0;
-    if (aDecimal.size() > eDecimal.size())
-        eDecimal = SimpleString(pad, aDecimal.size() - eDecimal.size()) + eDecimal;
-    else
-        aDecimal = SimpleString(pad, eDecimal.size() - aDecimal.size()) + aDecimal;
+	testResult_->countCheck();
+	if (actual == 0 && expected == 0) return true;
+	if (actual == 0) {
+		ContainsFailure _f(this, fileName, lineNumber, StringFrom(expected),
+				StringFrom("(null)"));
+		testResult_->addFailure(_f);
+		return false;
+	}
+	if (expected == 0) {
+		ContainsFailure _f(this, fileName, lineNumber, StringFrom("(null)"),
+				StringFrom(actual));
+		testResult_->addFailure(_f);
+		return false;
+	}
+	if (!SimpleString(actual).contains(expected)) {
+		ContainsFailure _f(this, fileName, lineNumber, StringFrom(expected),
+				StringFrom(actual));
+		testResult_->addFailure(_f);
+		return false;
+	}
+	return true;
 }
 
-bool Utest::assertLongsEqual(long expected, long actual, const char* fileName, int lineNumber)
+void PadStringsToSameLength(SimpleString& aDecimal, SimpleString& eDecimal,
+		char padCharacter)
 {
-  testResult_->countCheck();
-  if (expected != actual)
-    {
-      SimpleString aDecimal = StringFrom(actual);
-      SimpleString aHex = HexStringFrom(actual);
-      SimpleString eDecimal = StringFrom(expected);
-      SimpleString eHex = HexStringFrom(expected);
-
-      PadStringsToSameLength(aDecimal, eDecimal, ' ');
-      PadStringsToSameLength(aHex, eHex, '0');
-
-      SimpleString actualReported = aDecimal + " 0x" + aHex;
-      SimpleString expectedReported = eDecimal + " 0x" + eHex;
-
-      EqualsFailure _f(this, fileName, lineNumber, expectedReported, actualReported);
-      testResult_->addFailure (_f);
-      return false;
-    }
-  return true;
+	char pad[2];
+	pad[0] = padCharacter;
+	pad[1] = 0;
+	if (aDecimal.size() > eDecimal.size()) eDecimal = SimpleString(pad,
+			aDecimal.size() - eDecimal.size()) + eDecimal;
+	else aDecimal = SimpleString(pad, eDecimal.size() - aDecimal.size())
+			+ aDecimal;
 }
 
-bool Utest::assertPointersEqual(void* expected, void* actual, const char* fileName, int lineNumber)
+bool Utest::assertLongsEqual(long expected, long actual, const char* fileName,
+		int lineNumber)
 {
-  testResult_->countCheck();
-  if (expected != actual)
-    {
-      EqualsFailure _f(this, fileName, lineNumber, StringFrom(expected), StringFrom(actual));
-      testResult_->addFailure (_f);
-      return false;
-    }
-  return true;
+	testResult_->countCheck();
+	if (expected != actual) {
+		SimpleString aDecimal = StringFrom(actual);
+		SimpleString aHex = HexStringFrom(actual);
+		SimpleString eDecimal = StringFrom(expected);
+		SimpleString eHex = HexStringFrom(expected);
+
+		PadStringsToSameLength(aDecimal, eDecimal, ' ');
+		PadStringsToSameLength(aHex, eHex, '0');
+
+		SimpleString actualReported = aDecimal + " 0x" + aHex;
+		SimpleString expectedReported = eDecimal + " 0x" + eHex;
+
+		EqualsFailure _f(this, fileName, lineNumber, expectedReported,
+				actualReported);
+		testResult_->addFailure(_f);
+		return false;
+	}
+	return true;
 }
 
-bool Utest::assertDoublesEqual(double expected, double actual, double threshold, const char* fileName, int lineNumber)
+bool Utest::assertPointersEqual(void* expected, void* actual,
+		const char* fileName, int lineNumber)
 {
-  testResult_->countCheck();
-  if (PlatformSpecificFabs(expected-actual) > threshold)
-    {
-      EqualsFailure _f(this, fileName, lineNumber, StringFrom(expected), StringFrom(actual));
-      testResult_->addFailure (_f);
-      return false;
-    }
-  return true;
+	testResult_->countCheck();
+	if (expected != actual) {
+		EqualsFailure _f(this, fileName, lineNumber, StringFrom(expected),
+				StringFrom(actual));
+		testResult_->addFailure(_f);
+		return false;
+	}
+	return true;
+}
+
+bool Utest::assertDoublesEqual(double expected, double actual,
+		double threshold, const char* fileName, int lineNumber)
+{
+	testResult_->countCheck();
+	if (PlatformSpecificFabs(expected - actual) > threshold) {
+		EqualsFailure _f(this, fileName, lineNumber, StringFrom(expected),
+				StringFrom(actual));
+		testResult_->addFailure(_f);
+		return false;
+	}
+	return true;
 }
 
 void Utest::fail(const char *text, const char* fileName, int lineNumber)
 {
-  Failure _f(this, fileName, lineNumber, text);
-  testResult_->addFailure (_f);
+	Failure _f(this, fileName, lineNumber, text);
+	testResult_->addFailure(_f);
 }
 
 void Utest::print(const char *text, const char* fileName, int lineNumber)
 {
-   SimpleString stringToPrint = "\n";
-   stringToPrint += fileName;
-   stringToPrint += ":";
-   stringToPrint += StringFrom(lineNumber);
-   stringToPrint += " ";
-   stringToPrint += text;
-   testResult_->print(stringToPrint.asCharString());
+	SimpleString stringToPrint = "\n";
+	stringToPrint += fileName;
+	stringToPrint += ":";
+	stringToPrint += StringFrom(lineNumber);
+	stringToPrint += " ";
+	stringToPrint += text;
+	testResult_->print(stringToPrint.asCharString());
 }
 
-void Utest::print(const SimpleString& text, const char* fileName, int lineNumber)
+void Utest::print(const SimpleString& text, const char* fileName,
+		int lineNumber)
 {
-   print(text.asCharString(), fileName, lineNumber);
+	print(text.asCharString(), fileName, lineNumber);
 }
 
 TestResult* Utest::getTestResult()
 {
-  return testResult_;
+	return testResult_;
 }
 
 Utest* Utest::getCurrent()
 {
-  return currentTest_;
+	return currentTest_;
 }
 
 ////////////// NullTest ////////////
 
 
-NullTest::NullTest()
-    :Utest("NullGroup", "NullName", "NullFile", -1, 0)
-{}
+NullTest::NullTest() :
+	Utest("NullGroup", "NullName", "NullFile", -1, 0)
+{
+}
 
 NullTest::~NullTest()
-{}
+{
+}
 
 NullTest& NullTest::instance()
 {
@@ -384,14 +385,15 @@ Utest* NullTest::getNext() const
 	return &instance();
 }
 
-bool NullTest::isNull () const
+bool NullTest::isNull() const
 {
 	return true;
 }
 
 ////////////// TestInstaller ////////////
 
-TestInstaller::TestInstaller(Utest* t, const char* groupName, const char* testName, const char* fileName, int lineNumber)
+TestInstaller::TestInstaller(Utest* t, const char* groupName,
+		const char* testName, const char* fileName, int lineNumber)
 {
 	t->setGroupName(groupName);
 	t->setTestName(testName);
@@ -401,9 +403,10 @@ TestInstaller::TestInstaller(Utest* t, const char* groupName, const char* testNa
 }
 
 TestInstaller::~TestInstaller()
-{}
+{
+}
 
 void TestInstaller::unDo()
 {
-  TestRegistry::getCurrentRegistry()->unDoLastAddTest();
+	TestRegistry::getCurrentRegistry()->unDoLastAddTest();
 }

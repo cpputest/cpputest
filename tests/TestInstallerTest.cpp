@@ -35,24 +35,26 @@
 static NullTest nullTest;
 
 TEST_GROUP(TestInstaller)
-  {
-  TestInstaller* testInstaller;
-	TestRegistry* myRegistry;
-  TEST_SETUP()
-  {
-  	myRegistry = new TestRegistry();
-  	myRegistry->setCurrentRegistry(myRegistry);
-    testInstaller = new TestInstaller(&nullTest, "TestInstaller", "test", __FILE__, __LINE__);
-  }
-  TEST_TEARDOWN()
-  {
-  	myRegistry->setCurrentRegistry(0);
-    testInstaller->unDo();
-    delete testInstaller;
-  	delete myRegistry;
-  }
-};
+{
+		TestInstaller* testInstaller;
+		TestRegistry* myRegistry;
+		void setup()
+		{
+			myRegistry = newTestRegistry();
+			myRegistry->setCurrentRegistry(myRegistry);
+			testInstaller = newTestInstaller(&nullTest, "TestInstaller",
+					"test", __FILE__, __LINE__);
+		}
+		void teardown()
+		{
+			myRegistry->setCurrentRegistry(0);
+			testInstaller->unDo();
+			delete testInstaller;
+			delete myRegistry;
+		}
+	};
 
-TEST(TestInstaller, Create)
-{}
+	TEST(TestInstaller, Create)
+	{
+	}
 

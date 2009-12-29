@@ -33,7 +33,7 @@
  *
  * Remember to use extern "C" when including in a cpp file!
  *
-*******************************************************************************/
+ *******************************************************************************/
 
 #ifndef D_TestHarness_c_h
 #define D_TestHarness_c_h
@@ -60,38 +60,44 @@
   CHECK_C_LOCATION(condition, #condition, __FILE__,__LINE__)
 
 /* CHECKS that can be used from C code */
-extern void  CHECK_EQUAL_C_INT_LOCATION(int expected, int actual, const char* fileName, int lineNumber);
-extern void  CHECK_EQUAL_C_REAL_LOCATION(double expected, double actual, double threshold, const char* fileName, int lineNumber);
-extern void  CHECK_EQUAL_C_CHAR_LOCATION(char expected, char actual, const char* fileName, int lineNumber);
-extern void  CHECK_EQUAL_C_STRING_LOCATION(const char* expected, const char* actual, const char* fileName, int lineNumber);
-extern void  FAIL_TEXT_C_LOCATION(const char* text, const char* fileName, int lineNumber);
-extern void  FAIL_C_LOCATION(const char* fileName, int lineNumber);
-extern void  CHECK_C_LOCATION(int condition, const char* conditionString, const char* fileName, int lineNumber);
+extern void CHECK_EQUAL_C_INT_LOCATION(int expected, int actual,
+		const char* fileName, int lineNumber);
+extern void CHECK_EQUAL_C_REAL_LOCATION(double expected, double actual,
+		double threshold, const char* fileName, int lineNumber);
+extern void CHECK_EQUAL_C_CHAR_LOCATION(char expected, char actual,
+		const char* fileName, int lineNumber);
+extern void CHECK_EQUAL_C_STRING_LOCATION(const char* expected,
+		const char* actual, const char* fileName, int lineNumber);
+extern void FAIL_TEXT_C_LOCATION(const char* text, const char* fileName,
+		int lineNumber);
+extern void FAIL_C_LOCATION(const char* fileName, int lineNumber);
+extern void CHECK_C_LOCATION(int condition, const char* conditionString,
+		const char* fileName, int lineNumber);
 
 /* Memory allocation routines that use new, so the memory leak checker works */
 
 #ifndef UT_MALLOC_MACROS_ENABLED
-   #ifdef UT_MALLOC_MACROS_DISABLED
-      #define UT_MALLOC_MACROS_ENABLED 0
-   #else
-      #define UT_MALLOC_MACROS_ENABLED 1
-   #endif
+#ifdef UT_MALLOC_MACROS_DISABLED
+#define UT_MALLOC_MACROS_ENABLED 0
+#else
+#define UT_MALLOC_MACROS_ENABLED 1
+#endif
 #endif
 
 #if UT_MALLOC_MACROS_ENABLED
-   #undef malloc
-   #undef free
-   #define malloc std_malloc
-   #define free std_free
-   #define calloc std_calloc
-   #define realloc std_realloc
-   #include <stdlib.h>
-   #undef malloc
-   #undef free
-   #undef realloc
-   #undef calloc
+#undef malloc
+#undef free
+#define malloc std_malloc
+#define free std_free
+#define calloc std_calloc
+#define realloc std_realloc
+#include <stdlib.h>
+#undef malloc
+#undef free
+#undef realloc
+#undef calloc
 #else
-   #include <stdlib.h>
+#include <stdlib.h>
 #endif
 
 extern void* cpputest_malloc(size_t size);
@@ -99,16 +105,18 @@ extern void* cpputest_calloc(size_t num, size_t size);
 extern void* cpputest_realloc(void* ptr, size_t size);
 extern void cpputest_free(void* buffer);
 
-extern void* cpputest_malloc_location(size_t size,const char* file, int line);
-extern void* cpputest_calloc_location(size_t num, size_t size,const char* file, int line);
-extern void* cpputest_realloc_location(void* memory, size_t size, const char* file, int line);
+extern void* cpputest_malloc_location(size_t size, const char* file, int line);
+extern void* cpputest_calloc_location(size_t num, size_t size,
+		const char* file, int line);
+extern void* cpputest_realloc_location(void* memory, size_t size,
+		const char* file, int line);
 extern void cpputest_free_location(void* buffer, const char* file, int line);
 
 #if UT_MALLOC_MACROS_ENABLED
-   #define malloc(a) cpputest_malloc_location(a, __FILE__, __LINE__)
-   #define calloc(a, b) cpputest_calloc_location(a, b, __FILE__, __LINE__)
-   #define realloc(a, b) cpputest_realloc_location(a, b, __FILE__, __LINE__)
-   #define free(a) cpputest_free_location(a, __FILE__, __LINE__)
+#define malloc(a) cpputest_malloc_location(a, __FILE__, __LINE__)
+#define calloc(a, b) cpputest_calloc_location(a, b, __FILE__, __LINE__)
+#define realloc(a, b) cpputest_realloc_location(a, b, __FILE__, __LINE__)
+#define free(a) cpputest_free_location(a, __FILE__, __LINE__)
 #endif
 
 void cpputest_malloc_set_out_of_memory();

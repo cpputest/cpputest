@@ -29,36 +29,46 @@
 #include "CppUTest/CommandLineArguments.h"
 #include "CppUTest/TestRegistry.h"
 
-class OptionsPlugin : public TestPlugin
+class OptionsPlugin: public TestPlugin
 {
 public:
-	OptionsPlugin(const SimpleString& name) : TestPlugin(name){};
-	~OptionsPlugin(){};
-	bool parseArguments(int ac, const char** av, int index) { return true;};
+	OptionsPlugin(const SimpleString& name) :
+		TestPlugin(name)
+	{
+	}
+	;
+	~OptionsPlugin()
+	{
+	}
+	;
+	bool parseArguments(int ac, const char** av, int index)
+	{
+		return true;
+	}
+	;
 };
-
 
 TEST_GROUP(CommandLineArguments)
 {
-  CommandLineArguments* args;
-  OptionsPlugin* plugin;
+		CommandLineArguments* args;
+		OptionsPlugin* plugin;
 
-  void setup()
-  {
-	  plugin = new OptionsPlugin("options");
-  }
-  void teardown()
-  {
-    delete args;
-    delete plugin;
-  }
+		void setup()
+		{
+			plugin = newOptionsPlugin("options");
+		}
+		void teardown()
+		{
+			delete args;
+			delete plugin;
+		}
 
-  bool newArgumentParser(int argc, const char** argv)
-  {
-	    args = new CommandLineArguments(argc, argv, plugin);
-		return args->parse();
-  }
-};
+		bool newArgumentParser(int argc, const char** argv)
+		{
+			args = new CommandLineArguments(argc, argv, plugin);
+			return args->parse();
+		}
+	};
 
 TEST(CommandLineArguments, Create)
 {
@@ -66,7 +76,7 @@ TEST(CommandLineArguments, Create)
 
 TEST(CommandLineArguments, verboseSetMultipleParameters)
 {
-	const char* argv[] = {"tests.exe", "-v"};
+	const char* argv[] = { "tests.exe", "-v" };
 	CHECK(newArgumentParser(2, argv));
 	CHECK(args->isVerbose());
 }
@@ -74,7 +84,7 @@ TEST(CommandLineArguments, verboseSetMultipleParameters)
 TEST(CommandLineArguments, repeatSet)
 {
 	int argc = 2;
-	const char* argv[] = {"tests.exe", "-r3"};
+	const char* argv[] = { "tests.exe", "-r3" };
 	CHECK(newArgumentParser(argc, argv));
 	LONGS_EQUAL(3, args->getRepeatCount());
 }
@@ -82,7 +92,7 @@ TEST(CommandLineArguments, repeatSet)
 TEST(CommandLineArguments, repeatSetDifferentParameter)
 {
 	int argc = 3;
-	const char* argv[] = {"tests.exe", "-r", "4"};
+	const char* argv[] = { "tests.exe", "-r", "4" };
 	CHECK(newArgumentParser(argc, argv));
 	LONGS_EQUAL(4, args->getRepeatCount());
 }
@@ -90,7 +100,7 @@ TEST(CommandLineArguments, repeatSetDifferentParameter)
 TEST(CommandLineArguments, repeatSetDefaultsToTwo)
 {
 	int argc = 2;
-	const char* argv[] = {"tests.exe", "-r"};
+	const char* argv[] = { "tests.exe", "-r" };
 	CHECK(newArgumentParser(argc, argv));
 	LONGS_EQUAL(2, args->getRepeatCount());
 }
@@ -98,7 +108,7 @@ TEST(CommandLineArguments, repeatSetDefaultsToTwo)
 TEST(CommandLineArguments, setGroupFilter)
 {
 	int argc = 3;
-	const char* argv[] = {"tests.exe", "-g", "group"};
+	const char* argv[] = { "tests.exe", "-g", "group" };
 	CHECK(newArgumentParser(argc, argv));
 	STRCMP_EQUAL("group", args->getGroupFilter().asCharString());
 }
@@ -106,7 +116,7 @@ TEST(CommandLineArguments, setGroupFilter)
 TEST(CommandLineArguments, setGroupFilterSameParameter)
 {
 	int argc = 2;
-	const char* argv[] = {"tests.exe", "-ggroup"};
+	const char* argv[] = { "tests.exe", "-ggroup" };
 	CHECK(newArgumentParser(argc, argv));
 	STRCMP_EQUAL("group", args->getGroupFilter().asCharString());
 }
@@ -114,7 +124,7 @@ TEST(CommandLineArguments, setGroupFilterSameParameter)
 TEST(CommandLineArguments, setNameFilter)
 {
 	int argc = 3;
-	const char* argv[] = {"tests.exe", "-n", "name"};
+	const char* argv[] = { "tests.exe", "-n", "name" };
 	CHECK(newArgumentParser(argc, argv));
 	STRCMP_EQUAL("name", args->getNameFilter().asCharString());
 }
@@ -122,7 +132,7 @@ TEST(CommandLineArguments, setNameFilter)
 TEST(CommandLineArguments, setNameFilterSameParameter)
 {
 	int argc = 2;
-	const char* argv[] = {"tests.exe", "-nname"};
+	const char* argv[] = { "tests.exe", "-nname" };
 	CHECK(newArgumentParser(argc, argv));
 	STRCMP_EQUAL("name", args->getNameFilter().asCharString());
 }
@@ -130,7 +140,7 @@ TEST(CommandLineArguments, setNameFilterSameParameter)
 TEST(CommandLineArguments, setNormalOutput)
 {
 	int argc = 2;
-	const char* argv[] = {"tests.exe", "-onormal"};
+	const char* argv[] = { "tests.exe", "-onormal" };
 	CHECK(newArgumentParser(argc, argv));
 	CHECK(args->isEclipseOutput());
 }
@@ -138,7 +148,7 @@ TEST(CommandLineArguments, setNormalOutput)
 TEST(CommandLineArguments, setEclsipeOutput)
 {
 	int argc = 2;
-	const char* argv[] = {"tests.exe", "-oeclipse"};
+	const char* argv[] = { "tests.exe", "-oeclipse" };
 	CHECK(newArgumentParser(argc, argv));
 	CHECK(args->isEclipseOutput());
 }
@@ -146,7 +156,7 @@ TEST(CommandLineArguments, setEclsipeOutput)
 TEST(CommandLineArguments, setNormalOutputDifferentParameter)
 {
 	int argc = 3;
-	const char* argv[] = {"tests.exe", "-o", "normal"};
+	const char* argv[] = { "tests.exe", "-o", "normal" };
 	CHECK(newArgumentParser(argc, argv));
 	CHECK(args->isEclipseOutput());
 }
@@ -154,7 +164,7 @@ TEST(CommandLineArguments, setNormalOutputDifferentParameter)
 TEST(CommandLineArguments, setJUnitOutputDifferentParameter)
 {
 	int argc = 3;
-	const char* argv[] = {"tests.exe", "-o", "junit"};
+	const char* argv[] = { "tests.exe", "-o", "junit" };
 	CHECK(newArgumentParser(argc, argv));
 	CHECK(args->isJUnitOutput());
 }
@@ -162,14 +172,14 @@ TEST(CommandLineArguments, setJUnitOutputDifferentParameter)
 TEST(CommandLineArguments, setOutputToGarbage)
 {
 	int argc = 3;
-	const char* argv[] = {"tests.exe", "-o", "garbage"};
+	const char* argv[] = { "tests.exe", "-o", "garbage" };
 	CHECK(!newArgumentParser(argc, argv));
 }
 
 TEST(CommandLineArguments, weirdParamatersPrintsUsageAndReturnsFalse)
 {
 	int argc = 2;
-	const char* argv[] = {"tests.exe", "-SomethingWeird"};
+	const char* argv[] = { "tests.exe", "-SomethingWeird" };
 	CHECK(!newArgumentParser(argc, argv));
 	STRCMP_EQUAL("usage [-v] [-r#] [-g groupName] [-n testName] [-o{normal, junit}]\n",
 			args->usage());
@@ -178,7 +188,7 @@ TEST(CommandLineArguments, weirdParamatersPrintsUsageAndReturnsFalse)
 TEST(CommandLineArguments, pluginKnowsOption)
 {
 	int argc = 2;
-	const char* argv[] = {"tests.exe", "-pPluginOption"};
+	const char* argv[] = { "tests.exe", "-pPluginOption" };
 	TestRegistry::getCurrentRegistry()->installPlugin(plugin);
 	CHECK(newArgumentParser(argc, argv));
 	TestRegistry::getCurrentRegistry()->removePluginByName("options");
@@ -187,7 +197,7 @@ TEST(CommandLineArguments, pluginKnowsOption)
 TEST(CommandLineArguments, checkDefaultArguments)
 {
 	int argc = 1;
-	const char* argv[] = {"tests.exe"};
+	const char* argv[] = { "tests.exe" };
 	CHECK(newArgumentParser(argc, argv));
 	CHECK(!args->isVerbose());
 	LONGS_EQUAL(1, args->getRepeatCount());

@@ -34,27 +34,31 @@
 static MemoryLeakAllocator* currentNewAllocator = 0;
 static MemoryLeakAllocator* currentNewArrayAllocator = 0;
 
-MemoryLeakAllocator* getCurrentNewAllocator ()
+MemoryLeakAllocator* getCurrentNewAllocator()
 {
-	if (currentNewAllocator == 0)
-		currentNewAllocator = StandardNewAllocator::defaultAllocator();
+	if (currentNewAllocator == 0) currentNewAllocator
+			= StandardNewAllocator::defaultAllocator();
 	return currentNewAllocator;
 }
 
-MemoryLeakAllocator* getCurrentNewArrayAllocator ()
+MemoryLeakAllocator* getCurrentNewArrayAllocator()
 {
-	if (currentNewArrayAllocator == 0)
-		currentNewArrayAllocator = StandardNewArrayAllocator::defaultAllocator();
+	if (currentNewArrayAllocator == 0) currentNewArrayAllocator
+			= StandardNewArrayAllocator::defaultAllocator();
 	return currentNewArrayAllocator;
 }
 
-class MemoryLeakWarningReporter : public MemoryLeakFailure
+class MemoryLeakWarningReporter: public MemoryLeakFailure
 {
 public:
-   virtual ~MemoryLeakWarningReporter() {};
-   virtual void fail(char* fail_string) {
-      FAIL(fail_string);
-   }
+	virtual ~MemoryLeakWarningReporter()
+	{
+	}
+	;
+	virtual void fail(char* fail_string)
+	{
+		FAIL(fail_string);
+	}
 };
 
 static MemoryLeakWarningReporter* globalReporter = 0;
@@ -62,97 +66,101 @@ static MemoryLeakDetector* globalDetector = 0;
 
 void destroyDetector()
 {
-   PlatformSpecificFree (globalDetector);
-   globalReporter->~MemoryLeakWarningReporter();
-   PlatformSpecificFree (globalReporter);
-   globalReporter = 0;
-   globalDetector = 0;
+	PlatformSpecificFree(globalDetector);
+	globalReporter->~MemoryLeakWarningReporter();
+	PlatformSpecificFree(globalReporter);
+	globalReporter = 0;
+	globalDetector = 0;
 }
 
 MemoryLeakDetector* MemoryLeakWarningPlugin::getGlobalDetector()
 {
-   if (globalDetector == 0) {
+	if (globalDetector == 0) {
 
-      /*  Want to void using operator new here, however.. still need to init the vtable.
-       *  Now just memcpy a local stack variable in the malloced memory. Ought to work everywhere :))
-       */
-      MemoryLeakWarningReporter reporter;
-      globalReporter = (MemoryLeakWarningReporter*) PlatformSpecificMalloc(sizeof(MemoryLeakWarningReporter));
-      PlatformSpecificMemCpy(globalReporter, &reporter, sizeof(MemoryLeakWarningReporter));
+		/*  Want to void using operator new here, however.. still need to init the vtable.
+		 *  Now just memcpy a local stack variable in the malloced memory. Ought to work everywhere :))
+		 */
+		MemoryLeakWarningReporter reporter;
+		globalReporter = (MemoryLeakWarningReporter*) PlatformSpecificMalloc(
+				sizeof(MemoryLeakWarningReporter));
+		PlatformSpecificMemCpy(globalReporter, &reporter,
+				sizeof(MemoryLeakWarningReporter));
 
-      globalDetector = (MemoryLeakDetector*) PlatformSpecificMalloc(sizeof(MemoryLeakDetector));
-      if (globalDetector == 0)
-        FAIL("operator new(size, bool) not enough memory");
-      globalDetector->init(globalReporter);
-      PlatformSpecificAtExit(destroyDetector);
-   }
-   return globalDetector;
+		globalDetector = (MemoryLeakDetector*) PlatformSpecificMalloc(
+				sizeof(MemoryLeakDetector));
+		if (globalDetector == 0)FAIL("operator new(size, bool) not enough memory");
+		globalDetector->init(globalReporter);
+		PlatformSpecificAtExit(destroyDetector);
+	}
+	return globalDetector;
 }
 
 MemoryLeakWarningPlugin* MemoryLeakWarningPlugin::firstPlugin = 0;
 
 MemoryLeakWarningPlugin* MemoryLeakWarningPlugin::getFirstPlugin()
 {
-   return firstPlugin;
+	return firstPlugin;
 }
 
 MemoryLeakDetector* MemoryLeakWarningPlugin::getMemoryLeakDetector()
 {
-   return memLeakDetector;
+	return memLeakDetector;
 }
 
 void MemoryLeakWarningPlugin::ignoreAllLeaksInTest()
 {
-   ignoreAllWarnings = true;
+	ignoreAllWarnings = true;
 }
 
 void MemoryLeakWarningPlugin::expectLeaksInTest(int n)
 {
-   expectedLeaks = n;
+	expectedLeaks = n;
 }
 
-MemoryLeakWarningPlugin::MemoryLeakWarningPlugin(const SimpleString& name, MemoryLeakDetector* localDetector)
-	: TestPlugin(name), ignoreAllWarnings(false), expectedLeaks(0)
+MemoryLeakWarningPlugin::MemoryLeakWarningPlugin(const SimpleString& name,
+		MemoryLeakDetector* localDetector) :
+	TestPlugin(name), ignoreAllWarnings(false), expectedLeaks(0)
 {
-   if (firstPlugin == 0) firstPlugin = this;
+	if (firstPlugin == 0) firstPlugin = this;
 
-   if (localDetector) memLeakDetector = localDetector;
-   else memLeakDetector = getGlobalDetector();
+	if (localDetector) memLeakDetector = localDetector;
+	else memLeakDetector = getGlobalDetector();
 
-   memLeakDetector->enable();
+	memLeakDetector->enable();
 }
 
 MemoryLeakWarningPlugin::~MemoryLeakWarningPlugin()
 {
-   if (this == firstPlugin) firstPlugin = 0;
+	if (this == firstPlugin) firstPlugin = 0;
 }
 
 void MemoryLeakWarningPlugin::preTestAction(Utest& test, TestResult& result)
 {
-   memLeakDetector->startChecking();
-   failureCount = result.getFailureCount();
+	memLeakDetector->startChecking();
+	failureCount = result.getFailureCount();
 }
 
 void MemoryLeakWarningPlugin::postTestAction(Utest& test, TestResult& result)
 {
-   memLeakDetector->stopChecking();
-   int leaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
+	memLeakDetector->stopChecking();
+	int leaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
 
-   if (!ignoreAllWarnings && expectedLeaks != leaks && failureCount == result.getFailureCount()) {
-	    Failure f(&test, memLeakDetector->report(mem_leak_period_checking));
-	    result.addFailure(f);
-   }
-   memLeakDetector->markCheckingPeriodLeaksAsNonCheckingPeriod();
-   ignoreAllWarnings = false;
-   expectedLeaks = 0;
+	if (!ignoreAllWarnings && expectedLeaks != leaks && failureCount
+			== result.getFailureCount()) {
+		Failure f(&test, memLeakDetector->report(mem_leak_period_checking));
+		result.addFailure(f);
+	}
+	memLeakDetector->markCheckingPeriodLeaksAsNonCheckingPeriod();
+	ignoreAllWarnings = false;
+	expectedLeaks = 0;
 }
 
 const char* MemoryLeakWarningPlugin::FinalReport(int toBeDeletedLeaks)
 {
-   int leaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_enabled);
-   if (leaks != toBeDeletedLeaks)
-      return memLeakDetector->report(mem_leak_period_enabled);
-   return "";
+	int leaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_enabled);
+	if (leaks != toBeDeletedLeaks) return memLeakDetector->report(
+			mem_leak_period_enabled);
+	return "";
 }
 
 #if UT_NEW_OVERRIDES_ENABLED
@@ -160,42 +168,50 @@ const char* MemoryLeakWarningPlugin::FinalReport(int toBeDeletedLeaks)
 
 void* operator new(size_t size)
 {
-   return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewAllocator(), size);
+	return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(
+			getCurrentNewAllocator(), size);
 }
 
 void operator delete(void* mem, const char* file, int line)
 {
-   MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(getCurrentNewAllocator(), (char*)mem);
+	MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(
+			getCurrentNewAllocator(), (char*) mem);
 }
 
 void operator delete(void* mem)
 {
-   MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(getCurrentNewAllocator(), (char*)mem);
+	MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(
+			getCurrentNewAllocator(), (char*) mem);
 }
 
 void* operator new[](size_t size)
 {
-   return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewArrayAllocator(), size);
+	return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(
+			getCurrentNewArrayAllocator(), size);
 }
 
 void operator delete[](void* mem, const char* file, int line)
 {
-   MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(getCurrentNewArrayAllocator(), (char*)mem);
+	MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(
+			getCurrentNewArrayAllocator(), (char*) mem);
 }
 
 void operator delete[](void* mem)
 {
-   MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(getCurrentNewArrayAllocator(), (char*)mem);
+	MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(
+			getCurrentNewArrayAllocator(), (char*) mem);
 }
 
 void* operator new(size_t size, const char* file, int line)
 {
-   return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewAllocator(), size, (char*) file, line);
+	return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(
+			getCurrentNewAllocator(), size, (char*) file, line);
 }
 
 void* operator new [](size_t size, const char* file, int line)
 {
-   return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewArrayAllocator(), size, (char*) file, line);
+	return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(
+			getCurrentNewArrayAllocator(), size, (char*) file, line);
 }
 
 #endif

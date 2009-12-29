@@ -33,116 +33,116 @@
 
 TEST_GROUP(TestOrderedTest)
 {
-      TestTestingFixture* fixture;
+		TestTestingFixture* fixture;
 
-      OrderedTest orderedTest;
-      OrderedTest orderedTest2;
-      OrderedTest orderedTest3;
-      ExecFunctionTest normalTest;
-      ExecFunctionTest normalTest2;
-      ExecFunctionTest normalTest3;
+		OrderedTest orderedTest;
+		OrderedTest orderedTest2;
+		OrderedTest orderedTest3;
+		ExecFunctionTest normalTest;
+		ExecFunctionTest normalTest2;
+		ExecFunctionTest normalTest3;
 
-      OrderedTest* orderedTestCache;
-      void setup()
-      {
-         orderedTestCache = OrderedTest::getOrderedTestHead();
-         OrderedTest::setOrderedTestHead(0);
+		OrderedTest* orderedTestCache;
+		void setup()
+		{
+			orderedTestCache = OrderedTest::getOrderedTestHead();
+			OrderedTest::setOrderedTestHead(0);
 
-         fixture = new TestTestingFixture();
-         fixture->registry->unDoLastAddTest();
-      }
-      void teardown()
-      {
-         delete fixture;
-         OrderedTest::setOrderedTestHead(orderedTestCache);
-      }
+			fixture = newTestTestingFixture();
+			fixture->registry->unDoLastAddTest();
+		}
+		void teardown()
+		{
+			delete fixture;
+			OrderedTest::setOrderedTestHead(orderedTestCache);
+		}
 
-      void InstallOrderedTest(OrderedTest* test, int level)
-      {
-         OrderedTestInstaller(test, "testgroup", "testname", __FILE__, __LINE__, level);
-      }
+		void InstallOrderedTest(OrderedTest* test, int level)
+		{
+			OrderedTestInstaller(test, "testgroup", "testname", __FILE__, __LINE__, level);
+		}
 
-      void InstallNormalTest(Utest* test)
-      {
-         TestInstaller(test, "testgroup", "testname", __FILE__, __LINE__);
-      }
+		void InstallNormalTest(Utest* test)
+		{
+			TestInstaller(test, "testgroup", "testname", __FILE__, __LINE__);
+		}
 
-      Utest* firstTest()
-      {
-         return fixture->registry->getFirstTest();
-      }
+		Utest* firstTest()
+		{
+			return fixture->registry->getFirstTest();
+		}
 
-      Utest* secondTest()
-      {
-         return fixture->registry->getFirstTest()->getNext();
-      }
-};
-
+		Utest* secondTest()
+		{
+			return fixture->registry->getFirstTest()->getNext();
+		}
+	};
 
 TEST(TestOrderedTest, TestInstallerSetsFields)
 {
-   OrderedTestInstaller(&orderedTest, "testgroup", "testname", "this.cpp", 10, 5);
-   STRCMP_EQUAL("testgroup", orderedTest.getGroup().asCharString());
-   STRCMP_EQUAL("testname", orderedTest.getName().asCharString());
-   STRCMP_EQUAL("this.cpp", orderedTest.getFile().asCharString());
-   LONGS_EQUAL(10, orderedTest.getLineNumber());
-   LONGS_EQUAL(5, orderedTest.getLevel());
+	OrderedTestInstaller(&orderedTest, "testgroup", "testname", "this.cpp", 10,
+			5);
+	STRCMP_EQUAL("testgroup", orderedTest.getGroup().asCharString());
+	STRCMP_EQUAL("testname", orderedTest.getName().asCharString());
+	STRCMP_EQUAL("this.cpp", orderedTest.getFile().asCharString());
+	LONGS_EQUAL(10, orderedTest.getLineNumber());
+	LONGS_EQUAL(5, orderedTest.getLevel());
 }
 
 TEST(TestOrderedTest, InstallOneText)
 {
-   InstallOrderedTest(&orderedTest, 5);
-   CHECK(firstTest() == &orderedTest);
+	InstallOrderedTest(&orderedTest, 5);
+	CHECK(firstTest() == &orderedTest);
 }
 
 TEST(TestOrderedTest, OrderedTestsAreLast)
 {
-   InstallNormalTest(&normalTest);
-   InstallOrderedTest(&orderedTest, 5);
-   CHECK(firstTest() == &normalTest);
-   CHECK(secondTest() == &orderedTest);
+	InstallNormalTest(&normalTest);
+	InstallOrderedTest(&orderedTest, 5);
+	CHECK(firstTest() == &normalTest);
+	CHECK(secondTest() == &orderedTest);
 }
 
 TEST(TestOrderedTest, TwoTestsAddedInReverseOrder)
 {
-   InstallOrderedTest(&orderedTest, 5);
-   InstallOrderedTest(&orderedTest2, 3);
-   CHECK(firstTest() == &orderedTest2);
-   CHECK(secondTest() == &orderedTest);
+	InstallOrderedTest(&orderedTest, 5);
+	InstallOrderedTest(&orderedTest2, 3);
+	CHECK(firstTest() == &orderedTest2);
+	CHECK(secondTest() == &orderedTest);
 }
 
 TEST(TestOrderedTest, TwoTestsAddedInOrder)
 {
-   InstallOrderedTest(&orderedTest2, 3);
-   InstallOrderedTest(&orderedTest, 5);
-   CHECK(firstTest() == &orderedTest2);
-   CHECK(secondTest() == &orderedTest);
+	InstallOrderedTest(&orderedTest2, 3);
+	InstallOrderedTest(&orderedTest, 5);
+	CHECK(firstTest() == &orderedTest2);
+	CHECK(secondTest() == &orderedTest);
 }
 
 TEST(TestOrderedTest, MultipleOrderedTests)
 {
-   InstallNormalTest(&normalTest);
-   InstallOrderedTest(&orderedTest2, 3);
-   InstallNormalTest(&normalTest2);
-   InstallOrderedTest(&orderedTest, 5);
-   InstallNormalTest(&normalTest3);
-   InstallOrderedTest(&orderedTest3, 7);
+	InstallNormalTest(&normalTest);
+	InstallOrderedTest(&orderedTest2, 3);
+	InstallNormalTest(&normalTest2);
+	InstallOrderedTest(&orderedTest, 5);
+	InstallNormalTest(&normalTest3);
+	InstallOrderedTest(&orderedTest3, 7);
 
-   Utest * firstOrderedTest = firstTest()->getNext()->getNext()->getNext();
-   CHECK(firstOrderedTest == &orderedTest2);
-   CHECK(firstOrderedTest->getNext() == &orderedTest);
-   CHECK(firstOrderedTest->getNext()->getNext() == &orderedTest3);
+	Utest * firstOrderedTest = firstTest()->getNext()->getNext()->getNext();
+	CHECK(firstOrderedTest == &orderedTest2);
+	CHECK(firstOrderedTest->getNext() == &orderedTest);
+	CHECK(firstOrderedTest->getNext()->getNext() == &orderedTest3);
 }
 
 TEST(TestOrderedTest, MultipleOrderedTests2)
 {
-   InstallOrderedTest(&orderedTest,  3);
-   InstallOrderedTest(&orderedTest2, 1);
-   InstallOrderedTest(&orderedTest3, 2);
+	InstallOrderedTest(&orderedTest, 3);
+	InstallOrderedTest(&orderedTest2, 1);
+	InstallOrderedTest(&orderedTest3, 2);
 
-   CHECK(firstTest() == &orderedTest2);
-   CHECK(secondTest() == &orderedTest3);
-   CHECK(secondTest()->getNext() == &orderedTest);
+	CHECK(firstTest() == &orderedTest2);
+	CHECK(secondTest() == &orderedTest3);
+	CHECK(secondTest()->getNext() == &orderedTest);
 
 }
 TEST_GROUP_BASE(TestOrderedTestMacros, OrderedTest)
@@ -153,30 +153,30 @@ static int testNumber = 0;
 
 TEST(TestOrderedTestMacros, NormalTest)
 {
-   CHECK(testNumber == 0);
-   testNumber++;
+	CHECK(testNumber == 0);
+	testNumber++;
 }
 
 TEST_ORDERED(TestOrderedTestMacros, Test2, 2)
 {
-   CHECK(testNumber == 2);
-   testNumber++;
+	CHECK(testNumber == 2);
+	testNumber++;
 }
 
 TEST_ORDERED(TestOrderedTestMacros, Test1, 1)
 {
-   CHECK(testNumber == 1);
-   testNumber++;
+	CHECK(testNumber == 1);
+	testNumber++;
 }
 
 TEST_ORDERED(TestOrderedTestMacros, Test4, 4)
 {
-   CHECK(testNumber == 4);
-   testNumber++;
+	CHECK(testNumber == 4);
+	testNumber++;
 }
 
 TEST_ORDERED(TestOrderedTestMacros, Test3, 3)
 {
-   CHECK(testNumber == 3);
-   testNumber++;
+	CHECK(testNumber == 3);
+	testNumber++;
 }

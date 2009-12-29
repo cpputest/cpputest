@@ -34,61 +34,61 @@ static long millisTime;
 
 static long MockGetPlatformSpecificTimeInMillis()
 {
-		return millisTime;
+	return millisTime;
 }
 
 TEST_GROUP(TestOutput)
 {
-	TestOutput* printer;
-	StringBufferTestOutput* mock;
-	Utest* tst;
-	Failure *f;
-	TestResult* result;
+		TestOutput* printer;
+		StringBufferTestOutput* mock;
+		Utest* tst;
+		Failure *f;
+		TestResult* result;
 
-	TEST_SETUP()
-	{
-		mock = new StringBufferTestOutput();
-		printer = mock;
-		tst = new Utest("group", "test", "file", 1);
-		f = new Failure(tst, "failfile", 2, "message");
-		result = new TestResult(*mock);
-		result->setTotalExecutionTime(10);
-		millisTime = 0;
-		SetPlatformSpecificTimeInMillisMethod(MockGetPlatformSpecificTimeInMillis);
-	}
-	TEST_TEARDOWN()
-	{
-		delete printer;
-		delete tst;
-		delete f;
-		delete result;
-		SetPlatformSpecificTimeInMillisMethod(0);
-	}
-};
+		TEST_SETUP()
+		{
+			mock = newStringBufferTestOutput();
+			printer = mock;
+			tst = new Utest("group", "test", "file", 1);
+			f = new Failure(tst, "failfile", 2, "message");
+			result = new TestResult(*mock);
+			result->setTotalExecutionTime(10);
+			millisTime = 0;
+			SetPlatformSpecificTimeInMillisMethod(MockGetPlatformSpecificTimeInMillis);
+		}
+		TEST_TEARDOWN()
+		{
+			delete printer;
+			delete tst;
+			delete f;
+			delete result;
+			SetPlatformSpecificTimeInMillisMethod(0);
+		}
+	};
 
 TEST(TestOutput, PrintConstCharStar)
 {
-  printer->print("hello");
-  printer->print("hello\n");
-  STRCMP_EQUAL("hellohello\n", mock->getOutput().asCharString());
+	printer->print("hello");
+	printer->print("hello\n");
+	STRCMP_EQUAL("hellohello\n", mock->getOutput().asCharString());
 }
 
 TEST(TestOutput, PrintLong)
 {
-  printer->print(1234);
-  STRCMP_EQUAL("1234", mock->getOutput().asCharString());
+	printer->print(1234);
+	STRCMP_EQUAL("1234", mock->getOutput().asCharString());
 }
 
 TEST(TestOutput, PrintDouble)
 {
-  printer->printDouble(12.34);
-  STRCMP_EQUAL("12.340", mock->getOutput().asCharString());
+	printer->printDouble(12.34);
+	STRCMP_EQUAL("12.340", mock->getOutput().asCharString());
 }
 
 TEST(TestOutput, StreamOperators)
 {
-  *printer << "n=" << 1234;
-  STRCMP_EQUAL("n=1234", mock->getOutput().asCharString());
+	*printer << "n=" << 1234;
+	STRCMP_EQUAL("n=1234", mock->getOutput().asCharString());
 }
 
 TEST(TestOutput, PrintTestEnded)
@@ -99,22 +99,22 @@ TEST(TestOutput, PrintTestEnded)
 
 TEST(TestOutput, PrintTestALot)
 {
-    for (int i = 0; i < 60; ++i) {
-        printer->printCurrentTestEnded(*result);
-    }
-    STRCMP_EQUAL("..................................................\n..........", mock->getOutput().asCharString());
+	for (int i = 0; i < 60; ++i) {
+		printer->printCurrentTestEnded(*result);
+	}
+	STRCMP_EQUAL("..................................................\n..........", mock->getOutput().asCharString());
 }
 
 TEST(TestOutput, SetProgressIndicator)
 {
-    result->setProgressIndicator(".");
-    printer->printCurrentTestEnded(*result);
-    result->setProgressIndicator("!");
-    printer->printCurrentTestEnded(*result);
-    result->setProgressIndicator(".");
-    printer->printCurrentTestEnded(*result);
+	result->setProgressIndicator(".");
+	printer->printCurrentTestEnded(*result);
+	result->setProgressIndicator("!");
+	printer->printCurrentTestEnded(*result);
+	result->setProgressIndicator(".");
+	printer->printCurrentTestEnded(*result);
 
-    STRCMP_EQUAL(".!.", mock->getOutput().asCharString());
+	STRCMP_EQUAL(".!.", mock->getOutput().asCharString());
 }
 
 TEST(TestOutput, PrintTestVerboseStarted)

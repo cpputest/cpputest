@@ -36,8 +36,8 @@
 //};
 //
 
-JUnitTestOutput::JUnitTestOutput()
-: impl_(0)
+JUnitTestOutput::JUnitTestOutput() :
+	impl_(0)
 {
 }
 
@@ -84,7 +84,6 @@ void JUnitTestOutput::writeTestSuiteSummery()
 void JUnitTestOutput::writeProperties()
 {
 }
-
 
 void JUnitTestOutput::writeTestCases()
 {

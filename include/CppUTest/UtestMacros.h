@@ -25,18 +25,17 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #ifndef D_UTestMacros_h
 #define D_UTestMacros_h
 
-  /*! \brief Define a group of tests
-   *
-   * All tests in a TEST_GROUP share the same setup
-   * and teardown.  setup is run before the opening
-   * curly brace of the test group and teardown is
-   * called after the closing curly brace of the test group.
-   *
-   */
+/*! \brief Define a group of tests
+ *
+ * All tests in a TEST_GROUP share the same setup
+ * and teardown.  setup is run before the opening
+ * curly brace of the test group and teardown is
+ * called after the closing curly brace of the test group.
+ *
+ */
 
 #define TEST_GROUP_BASE(testGroup, baseclass) \
   int externTestGroup##testGroup = 0; \
@@ -47,7 +46,6 @@
 
 #define TEST_GROUP(testGroup) \
   TEST_GROUP_BASE(testGroup, Utest)
-
 
 #define TEST_SETUP() \
   virtual void setup()

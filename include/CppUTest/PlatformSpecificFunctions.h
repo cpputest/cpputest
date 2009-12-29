@@ -44,10 +44,10 @@
 
 /* Time operations */
 long GetPlatformSpecificTimeInMillis();
-void SetPlatformSpecificTimeInMillisMethod(long (*platformSpecific) ());
+void SetPlatformSpecificTimeInMillisMethod(long(*platformSpecific)());
 
 const char* GetPlatformSpecificTimeString();
-void SetPlatformSpecificTimeStringMethod(const char* (*platformMethod) ());
+void SetPlatformSpecificTimeStringMethod(const char* (*platformMethod)());
 
 /* String operations */
 int PlatformSpecificAtoI(const char*str);
@@ -58,16 +58,18 @@ char* PlatformSpecificStrNCpy(char* s1, const char* s2, unsigned int size);
 int PlatformSpecificStrCmp(const char* s1, const char* s2);
 int PlatformSpecificStrNCmp(const char* s1, const char* s2, unsigned int size);
 char* PlatformSpecificStrStr(const char* s1, const char* s2);
-int PlatformSpecificVSNprintf(char *str, unsigned int size, const char* format, va_list va_args_list);
+int PlatformSpecificVSNprintf(char *str, unsigned int size, const char* format,
+		va_list va_args_list);
 
 /* Misc */
 double PlatformSpecificFabs(double d);
-int PlatformSpecificAtExit(void (*func) ());
+int PlatformSpecificAtExit(void(*func)());
 
 /* IO operations */
 typedef void* PlatformSpecificFile;
 
-PlatformSpecificFile PlatformSpecificFOpen(const char* filename, const char* flag);
+PlatformSpecificFile PlatformSpecificFOpen(const char* filename,
+		const char* flag);
 void PlatformSpecificFPuts(const char* str, PlatformSpecificFile file);
 void PlatformSpecificFClose(PlatformSpecificFile file);
 
@@ -76,7 +78,7 @@ void PlatformSpecificFlush();
 
 /* Dynamic Memory operations */
 void* PlatformSpecificMalloc(unsigned int size);
-void* PlatformSpecificRealloc (void* memory, unsigned int size);
+void* PlatformSpecificRealloc(void* memory, unsigned int size);
 void PlatformSpecificFree(void* memory);
 void* PlatformSpecificMemCpy(void* s1, const void* s2, unsigned int size);
 

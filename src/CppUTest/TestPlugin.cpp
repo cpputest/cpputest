@@ -28,13 +28,13 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TestPlugin.h"
 
-TestPlugin::TestPlugin(const SimpleString& name)
-	: next_(NullTestPlugin::instance()), name_(name), enabled_(true)
+TestPlugin::TestPlugin(const SimpleString& name) :
+	next_(NullTestPlugin::instance()), name_(name), enabled_(true)
 {
 }
 
-TestPlugin::TestPlugin(TestPlugin* next)
-	: next_(next), name_("null")
+TestPlugin::TestPlugin(TestPlugin* next) :
+	next_(next), name_("null")
 {
 }
 
@@ -57,13 +57,12 @@ void TestPlugin::runAllPreTestAction(Utest& test, TestResult& result)
 void TestPlugin::runAllPostTestAction(Utest& test, TestResult& result)
 {
 	next_ ->runAllPostTestAction(test, result);
-	if  ( enabled_ )
-	   postTestAction(test, result);
+	if (enabled_) postTestAction(test, result);
 }
 
 bool TestPlugin::parseAllArguments(int ac, char** av, int index)
 {
-	return parseAllArguments(ac, const_cast<const char**>(av), index);
+	return parseAllArguments(ac, const_cast<const char**> (av), index);
 }
 
 bool TestPlugin::parseAllArguments(int ac, const char** av, int index)
@@ -104,7 +103,7 @@ void TestPlugin::disable()
 	enabled_ = false;
 }
 
-void TestPlugin::enable ()
+void TestPlugin::enable()
 {
 	enabled_ = true;
 }
@@ -114,7 +113,8 @@ bool TestPlugin::isEnabled()
 	return enabled_;
 }
 
-struct cpputest_pair {
+struct cpputest_pair
+{
 	void **orig;
 	void *orig_value;
 };
@@ -124,17 +124,17 @@ struct cpputest_pair {
 static int index;
 static cpputest_pair setlist[SetPointerPlugin::MAX_SET];
 
-SetPointerPlugin::SetPointerPlugin(const SimpleString& name_)
-	: TestPlugin(name_)
- {
- 	index = 0;
- }
+SetPointerPlugin::SetPointerPlugin(const SimpleString& name_) :
+	TestPlugin(name_)
+{
+	index = 0;
+}
 
 SetPointerPlugin::~SetPointerPlugin()
 {
 }
 
- void CppUTestStore(void**function, void*value)
+void CppUTestStore(void**function, void*value)
 {
 	if (index >= SetPointerPlugin::MAX_SET) {
 		FAIL("Maximum number of function pointers installed!");
@@ -144,17 +144,17 @@ SetPointerPlugin::~SetPointerPlugin()
 	index++;
 }
 
- void SetPointerPlugin::postTestAction(Utest& test, TestResult& result)
+void SetPointerPlugin::postTestAction(Utest& test, TestResult& result)
 {
-	for (int i = index-1; i >= 0; i--)
-		*((void**)setlist[i].orig) = setlist[i].orig_value;
- 	index = 0;
+	for (int i = index - 1; i >= 0; i--)
+		*((void**) setlist[i].orig) = setlist[i].orig_value;
+	index = 0;
 }
 
 //////// NullPlugin
 
-NullTestPlugin::NullTestPlugin()
-	: TestPlugin(0)
+NullTestPlugin::NullTestPlugin() :
+	TestPlugin(0)
 {
 }
 

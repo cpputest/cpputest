@@ -25,9 +25,10 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-extern "C" {
-   #define _WCHART
-   #include "CppUTest/TestHarness_c.h"
+extern "C"
+{
+#define _WCHART
+#include "CppUTest/TestHarness_c.h"
 
 }
 #include "CppUTest/TestHarness.h"
@@ -38,16 +39,16 @@ extern "C" {
 
 TEST_GROUP(TestHarness_c)
 {
-	TestTestingFixture* fixture;
-	TEST_SETUP()
-	{
-		fixture = new TestTestingFixture();
-	}
-	TEST_TEARDOWN()
-	{
-		delete fixture;
-	}
-};
+		TestTestingFixture* fixture;
+		TEST_SETUP()
+		{
+			fixture = newTestTestingFixture();
+		}
+		TEST_TEARDOWN()
+		{
+			delete fixture;
+		}
+	};
 
 void _failIntMethod()
 {
@@ -144,47 +145,46 @@ TEST(TestHarness_c, checkCheck)
 	LONGS_EQUAL(1, fixture->getFailureCount());
 }
 
-
 TEST(TestHarness_c, cpputest_malloc_out_of_memory)
 {
-    cpputest_malloc_set_out_of_memory();
-    CHECK(0 == cpputest_malloc(100));
+	cpputest_malloc_set_out_of_memory();
+	CHECK(0 == cpputest_malloc(100));
 
-    cpputest_malloc_set_not_out_of_memory();
-    void * mem = cpputest_malloc(100);
-    CHECK(0 != mem);
-    cpputest_free(mem);
+	cpputest_malloc_set_not_out_of_memory();
+	void * mem = cpputest_malloc(100);
+	CHECK(0 != mem);
+	cpputest_free(mem);
 }
 
 TEST(TestHarness_c, cpputest_calloc)
 {
-   void * mem = cpputest_calloc(10, 10);
-   CHECK(0 != mem);
-   cpputest_free(mem);
+	void * mem = cpputest_calloc(10, 10);
+	CHECK(0 != mem);
+	cpputest_free(mem);
 }
 
 TEST(TestHarness_c, cpputest_realloc_larger)
 {
-   const char* number_string = "123456789";
+	const char* number_string = "123456789";
 
-   char* mem1 = (char*)cpputest_malloc(10);
+	char* mem1 = (char*) cpputest_malloc(10);
 
-   PlatformSpecificStrCpy(mem1, number_string);
-   CHECK(mem1 != 0);
+	PlatformSpecificStrCpy(mem1, number_string);
+	CHECK(mem1 != 0);
 
-   char* mem2 = (char*) cpputest_realloc(mem1, 1000);
+	char* mem2 = (char*) cpputest_realloc(mem1, 1000);
 
-   CHECK(mem2 != 0);
-   STRCMP_EQUAL(number_string, mem2)
+	CHECK(mem2 != 0);
+	STRCMP_EQUAL(number_string, mem2)
 
-   cpputest_free(mem2);
+	cpputest_free(mem2);
 }
 
 TEST(TestHarness_c, macros)
 {
-   void* mem1 = malloc(10);
-   void* mem2 = calloc(10, 20);
-   void* mem3 = realloc(mem2, 100);
-   free(mem1);
-   free(mem3);
+	void* mem1 = malloc(10);
+	void* mem2 = calloc(10, 20);
+	void* mem3 = realloc(mem2, 100);
+	free(mem1);
+	free(mem3);
 }

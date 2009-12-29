@@ -35,20 +35,20 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 class Printer
-  {
-  public:
-    explicit Printer();
-    virtual ~Printer();
-    
-    virtual void Print(const char*);
-    virtual void Print(long int);
+{
+public:
+	explicit Printer();
+	virtual ~Printer();
 
-  private:
+	virtual void Print(const char*);
+	virtual void Print(long int);
 
-    Printer(const Printer&);
-    Printer& operator=(const Printer&);
+private:
 
-  };
+	Printer(const Printer&);
+	Printer& operator=(const Printer&);
+
+};
 
 Printer& operator<<(Printer&, const char*);
 Printer& operator<<(Printer&, long int);

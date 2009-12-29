@@ -34,11 +34,11 @@
 struct JUnitTestOutputImpl;
 struct JUnitTestCaseResultNode;
 
-class JUnitTestOutput : public TestOutput
+class JUnitTestOutput: public TestOutput
 {
-  public:
-  	JUnitTestOutput();
-  	virtual ~JUnitTestOutput();
+public:
+	JUnitTestOutput();
+	virtual ~JUnitTestOutput();
 
 	virtual void printTestsStarted();
 	virtual void printTestsEnded(const TestResult& result);
@@ -48,23 +48,22 @@ class JUnitTestOutput : public TestOutput
 	virtual void printCurrentGroupEnded(const TestResult& res);
 
 	virtual void verbose();
-    virtual void print(const char*);
-    virtual void print(long);
-    virtual void print(const Failure& failure);
+	virtual void print(const char*);
+	virtual void print(long);
+	virtual void print(const Failure& failure);
 	virtual void printTestRun(int number, int total);
 
 	virtual void flush();
 
-  protected:
+protected:
 
 	JUnitTestOutputImpl* impl_;
-  	void resetTestGroupResult();
+	void resetTestGroupResult();
 
 	virtual void openFileForWrite(const SimpleString& fileName);
 	virtual void writeTestGroupToFile();
 	virtual void writeToFile(const SimpleString& buffer);
 	virtual void closeFile();
-
 
 	virtual void writeXmlHeader();
 	virtual void writeTestSuiteSummery();
@@ -72,7 +71,6 @@ class JUnitTestOutput : public TestOutput
 	virtual void writeTestCases();
 	virtual void writeFailure(JUnitTestCaseResultNode* node);
 	virtual void writeFileEnding();
-
 
 };
 

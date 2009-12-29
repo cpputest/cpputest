@@ -35,7 +35,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 
-
 #ifndef D_TestResult_h
 #define D_TestResult_h
 
@@ -45,54 +44,71 @@ class Utest;
 
 class TestResult
 {
-  public:
-    TestResult (TestOutput&);
-    virtual ~TestResult();
+public:
+	TestResult(TestOutput&);
+	virtual ~TestResult();
 
-    virtual void testsStarted ();
-    virtual void testsEnded ();
-    virtual void currentGroupStarted(Utest* test);
-    virtual void currentGroupEnded(Utest* test);
-    virtual void currentTestStarted(Utest* test);
-    virtual void currentTestEnded(Utest* test);
+	virtual void testsStarted();
+	virtual void testsEnded();
+	virtual void currentGroupStarted(Utest* test);
+	virtual void currentGroupEnded(Utest* test);
+	virtual void currentTestStarted(Utest* test);
+	virtual void currentTestEnded(Utest* test);
 
+	virtual void countTest();
+	virtual void countRun();
+	virtual void countCheck();
+	virtual void countFilteredOut();
+	virtual void countIgnored();
+	virtual void addFailure(const Failure& failure);
+	virtual void print(const char* text);
+	virtual void setProgressIndicator(const char*);
 
-    virtual void countTest();
-    virtual void countRun();
-    virtual void countCheck();
-    virtual void countFilteredOut();
-    virtual void countIgnored();
-    virtual void addFailure (const Failure& failure);
-    virtual void print (const char* text);
-    virtual void setProgressIndicator(const char*);
-
-    int getTestCount() const {return testCount;}
-    int getRunCount() const {return runCount;}
-    int getCheckCount() const {return checkCount;}
-    int getFilteredOutCount() const {return filteredOutCount;}
-    int getIgnoredCount() const {return ignoredCount;}
-    int getFailureCount() const {return failureCount;}
+	int getTestCount() const
+	{
+		return testCount;
+	}
+	int getRunCount() const
+	{
+		return runCount;
+	}
+	int getCheckCount() const
+	{
+		return checkCount;
+	}
+	int getFilteredOutCount() const
+	{
+		return filteredOutCount;
+	}
+	int getIgnoredCount() const
+	{
+		return ignoredCount;
+	}
+	int getFailureCount() const
+	{
+		return failureCount;
+	}
 
 	long getTotalExecutionTime() const;
 	void setTotalExecutionTime(long exTime);
 
 	long getCurrentTestTotalExecutionTime() const;
 	long getCurrentGroupTotalExecutionTime() const;
-  private:
+private:
 
-    TestOutput& output;
-    int testCount;
-    int runCount;
-    int checkCount;
-    int	failureCount;
-    int filteredOutCount;
-    int ignoredCount;
-    long totalExecutionTime;
-    long timeStarted;
-    long currentTestTimeStarted;
-    long currentTestTotalExecutionTime;
-    long currentGroupTimeStarted;
-    long currentGroupTotalExecutionTime;
-  };
+	TestOutput& output;
+	int testCount;
+	int runCount;
+	int checkCount;
+	int failureCount;
+	int filteredOutCount;
+	int ignoredCount;
+	long totalExecutionTime;
+	long timeStarted;
+	long currentTestTimeStarted;
+	long currentTestTotalExecutionTime;
+	long currentGroupTimeStarted;
+	long currentGroupTotalExecutionTime;
+};
 
 #endif

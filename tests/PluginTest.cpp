@@ -35,23 +35,31 @@
 
 static int sequenceNumber;
 
-class DummyPlugin : public TestPlugin
+class DummyPlugin: public TestPlugin
 {
 public:
-	DummyPlugin(const SimpleString& name)
-		: TestPlugin(name), preAction(0), postAction(0){};
-	virtual ~DummyPlugin(){};
+	DummyPlugin(const SimpleString& name) :
+		TestPlugin(name), preAction(0), postAction(0)
+	{
+	}
+	;
+	virtual ~DummyPlugin()
+	{
+	}
+	;
 
 	virtual void preTestAction(Utest&, TestResult&)
 	{
 		preAction++;
 		preActionSequence = sequenceNumber++;
-	};
+	}
+	;
 	virtual void postTestAction(Utest&, TestResult&)
 	{
 		postAction++;
 		postActionSequence = sequenceNumber++;
-	};
+	}
+	;
 
 	int preAction;
 	int preActionSequence;
@@ -59,30 +67,29 @@ public:
 	int postActionSequence;
 };
 
-
 TEST_GROUP(PluginTest)
 {
-	DummyPlugin* firstPlugin;
-	DummyPlugin* secondPlugin;
-	TestTestingFixture *genFixture;
-	TestRegistry *registry;
-	void setup()
-	{
-		firstPlugin = new DummyPlugin(GENERIC_PLUGIN);
-		secondPlugin = new DummyPlugin(GENERIC_PLUGIN2);
-		genFixture = new TestTestingFixture;
-		registry = genFixture->registry;
-		registry->installPlugin(firstPlugin);
-		sequenceNumber = 1;
-	}
+		DummyPlugin* firstPlugin;
+		DummyPlugin* secondPlugin;
+		TestTestingFixture *genFixture;
+		TestRegistry *registry;
+		void setup()
+		{
+			firstPlugin = newDummyPlugin(GENERIC_PLUGIN);
+			secondPlugin = new DummyPlugin(GENERIC_PLUGIN2);
+			genFixture = new TestTestingFixture;
+			registry = genFixture->registry;
+			registry->installPlugin(firstPlugin);
+			sequenceNumber = 1;
+		}
 
-	void teardown()
-	{
-		delete firstPlugin;
-		delete secondPlugin;
-		delete genFixture;
-	}
-};
+		void teardown()
+		{
+			delete firstPlugin;
+			delete secondPlugin;
+			delete genFixture;
+		}
+	};
 
 #define GENERIC_PLUGIN  "GenericPlugin"
 #define GENERIC_PLUGIN2 "GenericPlugin2"

@@ -41,21 +41,21 @@
  */
 
 #ifndef UT_NEW_MACROS_ENABLED
-   #ifdef UT_NEW_MACROS_DISABLED
-      #define UT_NEW_MACROS_ENABLED 0
-   #else
-      #define UT_NEW_MACROS_ENABLED 1
-   #endif
+#ifdef UT_NEW_MACROS_DISABLED
+#define UT_NEW_MACROS_ENABLED 0
+#else
+#define UT_NEW_MACROS_ENABLED 1
+#endif
 #endif
 
 #ifndef UT_NEW_OVERRIDES_ENABLED
-   #ifdef UT_NEW_OVERRIDES_DISABLED
-      #define UT_NEW_OVERRIDES_ENABLED 0
-      #undef UT_NEW_MACROS_ENABLED
-      #define UT_NEW_MACROS_ENABLED 0
-   #else
-      #define UT_NEW_OVERRIDES_ENABLED 1
-   #endif
+#ifdef UT_NEW_OVERRIDES_DISABLED
+#define UT_NEW_OVERRIDES_ENABLED 0
+#undef UT_NEW_MACROS_ENABLED
+#define UT_NEW_MACROS_ENABLED 0
+#else
+#define UT_NEW_OVERRIDES_ENABLED 1
+#endif
 #endif
 
 /* original value was 9973 which works will with large programs. Now set to smaller since it takes

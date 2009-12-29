@@ -31,23 +31,23 @@
 
 TEST_GROUP(MemoryLeakAllocatorTest)
 {
-	MemoryLeakAllocator* allocator;
+		MemoryLeakAllocator* allocator;
 
-	void teardown()
+		void teardown()
+		{
+			if (allocator) delete allocator;
+		}
+	};
+
+	TEST(MemoryLeakAllocatorTest, MallocAllocation)
 	{
-		if (allocator) delete allocator;
+		allocator = newStandardMallocAllocator;
+		allocator->free_memory(allocator->alloc_memory(100));
 	}
-};
-
-TEST(MemoryLeakAllocatorTest, MallocAllocation)
-{
-	allocator = new StandardMallocAllocator;
-	allocator->free_memory(allocator->alloc_memory(100));
-}
 
 TEST(MemoryLeakAllocatorTest, MallocNames)
 {
-	allocator = new StandardMallocAllocator;
+	allocator = newStandardMallocAllocator;
 	STRCMP_EQUAL("Standard Malloc Allocator", allocator->name());
 	STRCMP_EQUAL("malloc", allocator->alloc_name());
 	STRCMP_EQUAL("free", allocator->free_name());
@@ -55,13 +55,13 @@ TEST(MemoryLeakAllocatorTest, MallocNames)
 
 TEST(MemoryLeakAllocatorTest, NewAllocation)
 {
-	allocator = new StandardNewAllocator;
+	allocator = newStandardNewAllocator;
 	allocator->free_memory(allocator->alloc_memory(100));
 }
 
 TEST(MemoryLeakAllocatorTest, NewNames)
 {
-	allocator = new StandardNewAllocator;
+	allocator = newStandardNewAllocator;
 	STRCMP_EQUAL("Standard New Allocator", allocator->name());
 	STRCMP_EQUAL("new", allocator->alloc_name());
 	STRCMP_EQUAL("delete", allocator->free_name());
@@ -69,13 +69,13 @@ TEST(MemoryLeakAllocatorTest, NewNames)
 
 TEST(MemoryLeakAllocatorTest, NewArrayAllocation)
 {
-	allocator = new StandardNewArrayAllocator;
+	allocator = newStandardNewArrayAllocator;
 	allocator->free_memory(allocator->alloc_memory(100));
 }
 
 TEST(MemoryLeakAllocatorTest, NewArrayNames)
 {
-	allocator = new StandardNewArrayAllocator;
+	allocator = newStandardNewArrayAllocator;
 	STRCMP_EQUAL("Standard New [] Allocator", allocator->name());
 	STRCMP_EQUAL("new []", allocator->alloc_name());
 	STRCMP_EQUAL("delete []", allocator->free_name());
@@ -83,13 +83,13 @@ TEST(MemoryLeakAllocatorTest, NewArrayNames)
 
 TEST(MemoryLeakAllocatorTest, NullUnknownAllocation)
 {
-	allocator = new NullUnknownAllocator;
+	allocator = newNullUnknownAllocator;
 	allocator->free_memory(allocator->alloc_memory(100));
 }
 
 TEST(MemoryLeakAllocatorTest, NullUnknownNames)
 {
-	allocator = new NullUnknownAllocator;
+	allocator = newNullUnknownAllocator;
 	STRCMP_EQUAL("Null Allocator", allocator->name());
 	STRCMP_EQUAL("unknown", allocator->alloc_name());
 	STRCMP_EQUAL("unknown", allocator->free_name());

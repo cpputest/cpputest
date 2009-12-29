@@ -66,9 +66,8 @@ struct JUnitTestOutputImpl
 	PlatformSpecificFile file_;
 };
 
-
-JUnitTestOutput::JUnitTestOutput()
-: impl_(new JUnitTestOutputImpl)
+JUnitTestOutput::JUnitTestOutput() :
+	impl_(new JUnitTestOutputImpl)
 {
 }
 
@@ -83,15 +82,16 @@ void JUnitTestOutput::resetTestGroupResult()
 	impl_->results_.testCount_ = 0;
 	impl_->results_.failureCount_ = 0;
 	impl_->results_.group_ = "";
-  	JUnitTestCaseResultNode* cur = impl_->results_.head_;
-  	while (cur) {
-  		JUnitTestCaseResultNode* tmp = cur->next_;;
-  		if (cur->failure_) delete cur->failure_;
-  		delete cur;
-  		cur = tmp;
-  	}
-  	impl_->results_.head_ = 0;
-  	impl_->results_.tail_ = 0;
+	JUnitTestCaseResultNode* cur = impl_->results_.head_;
+	while (cur) {
+		JUnitTestCaseResultNode* tmp = cur->next_;
+		;
+		if (cur->failure_) delete cur->failure_;
+		delete cur;
+		cur = tmp;
+	}
+	impl_->results_.head_ = 0;
+	impl_->results_.tail_ = 0;
 }
 
 void JUnitTestOutput::printTestsStarted()
@@ -104,7 +104,8 @@ void JUnitTestOutput::printCurrentGroupStarted(const Utest& test)
 
 void JUnitTestOutput::printCurrentTestEnded(const TestResult& result)
 {
-	impl_->results_.tail_->execTime_ = result.getCurrentTestTotalExecutionTime();
+	impl_->results_.tail_->execTime_
+			= result.getCurrentTestTotalExecutionTime();
 }
 
 void JUnitTestOutput::printTestsEnded(const TestResult& result)
@@ -125,7 +126,7 @@ void JUnitTestOutput::printCurrentTestStarted(const Utest& test)
 	impl_->results_.startTime_ = GetPlatformSpecificTimeInMillis();
 
 	if (impl_->results_.tail_ == 0) {
-		impl_->results_.head_ = impl_->results_.tail_ = new JUnitTestCaseResultNode;
+		impl_->results_.head_ = impl_->results_.tail_ = newJUnitTestCaseResultNode;
 	}
 	else {
 		impl_->results_.tail_->next_ = new JUnitTestCaseResultNode;
@@ -149,8 +150,15 @@ void JUnitTestOutput::writeXmlHeader()
 
 void JUnitTestOutput::writeTestSuiteSummery()
 {
-   SimpleString buf = StringFromFormat("<testsuite errors=\"0\" failures=\"%d\" hostname=\"localhost\" name=\"%s\" tests=\"%d\" time=\"%d.0\" timestamp=\"%s\">\n",
-         impl_->results_.failureCount_, impl_->results_.group_.asCharString(), impl_->results_.testCount_, (int) impl_->results_.groupExecTime_, GetPlatformSpecificTimeString());
+	SimpleString
+			buf =
+					StringFromFormat(
+							"<testsuite errors=\"0\" failures=\"%d\" hostname=\"localhost\" name=\"%s\" tests=\"%d\" time=\"%d.0\" timestamp=\"%s\">\n",
+							impl_->results_.failureCount_,
+							impl_->results_.group_.asCharString(),
+							impl_->results_.testCount_,
+							(int) impl_->results_.groupExecTime_,
+							GetPlatformSpecificTimeString());
 	writeToFile(buf.asCharString());
 }
 
@@ -160,32 +168,35 @@ void JUnitTestOutput::writeProperties()
 	writeToFile("</properties>\n");
 }
 
-
 void JUnitTestOutput::writeTestCases()
 {
-  	JUnitTestCaseResultNode* cur = impl_->results_.head_;
-  	while (cur) {
-  	   SimpleString buf = StringFromFormat("<testcase classname=\"%s\" name=\"%s\" time=\"%d.0\">\n",
-  	         impl_->results_.group_.asCharString(), cur->name_.asCharString(), (int) cur->execTime_);
+	JUnitTestCaseResultNode* cur = impl_->results_.head_;
+	while (cur) {
+		SimpleString buf = StringFromFormat(
+				"<testcase classname=\"%s\" name=\"%s\" time=\"%d.0\">\n",
+				impl_->results_.group_.asCharString(),
+				cur->name_.asCharString(), (int) cur->execTime_);
 		writeToFile(buf.asCharString());
 
 		if (cur->failure_) {
 			writeFailure(cur);
 		}
 		writeToFile("</testcase>\n");
-  		cur = cur->next_;
-  	}
+		cur = cur->next_;
+	}
 }
 
 void JUnitTestOutput::writeFailure(JUnitTestCaseResultNode* node)
 {
 	SimpleString message = node->failure_->getMessage().asCharString();
 	message.replace('"', '\'');
-	message.replace('<','[');
-	message.replace('>',']');
-	message.replace("\n","{newline}");
-	SimpleString buf = StringFromFormat("<failure message=\"%s:%d: %s\" type=\"AssertionFailedError\">\n",
-		node->failure_->getFileName().asCharString(), node->failure_->getLineNumber(), message.asCharString());
+	message.replace('<', '[');
+	message.replace('>', ']');
+	message.replace("\n", "{newline}");
+	SimpleString buf = StringFromFormat(
+			"<failure message=\"%s:%d: %s\" type=\"AssertionFailedError\">\n",
+			node->failure_->getFileName().asCharString(),
+			node->failure_->getLineNumber(), message.asCharString());
 	writeToFile(buf.asCharString());
 	writeToFile("</failure>\n");
 }
@@ -224,7 +235,7 @@ void JUnitTestOutput::print(const Failure& failure)
 {
 	if (impl_->results_.tail_->failure_ == 0) {
 		impl_->results_.failureCount_++;
-		impl_->results_.tail_->failure_ = new Failure(failure);
+		impl_->results_.tail_->failure_ = newFailure(failure);
 	}
 }
 

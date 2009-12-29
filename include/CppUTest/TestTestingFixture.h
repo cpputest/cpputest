@@ -32,53 +32,61 @@ class TestTestingFixture
 {
 public:
 
-	TestTestingFixture() {
+	TestTestingFixture()
+	{
 		output = new StringBufferTestOutput();
-    	result = new TestResult(*output);
-  		genTest = new ExecFunctionTest();
-  		registry = new TestRegistry();
+		result = new TestResult(*output);
+		genTest = new ExecFunctionTest();
+		registry = new TestRegistry();
 
-  		registry->setCurrentRegistry(registry);
+		registry->setCurrentRegistry(registry);
 		registry->addTest(genTest);
-	};
+	}
+	;
 
-	virtual ~TestTestingFixture() {
+	virtual ~TestTestingFixture()
+	{
 		registry->setCurrentRegistry(0);
-  		delete registry;
-  		delete result;
-    	delete output;
-  		delete genTest;
+		delete registry;
+		delete result;
+		delete output;
+		delete genTest;
 	}
 
-	void setTestFunction(void (*testFunction)()) {
+	void setTestFunction(void(*testFunction)())
+	{
 		genTest->_testFunction = testFunction;
 	}
 
-   void setSetup(void (*setupFunction)()) {
-      genTest->setup_ = setupFunction;
-   }
+	void setSetup(void(*setupFunction)())
+	{
+		genTest->setup_ = setupFunction;
+	}
 
-   void setTeardown(void (*teardownFunction)()) {
-      genTest->teardown_ = teardownFunction;
-   }
+	void setTeardown(void(*teardownFunction)())
+	{
+		genTest->teardown_ = teardownFunction;
+	}
 
-	void runAllTests () {
+	void runAllTests()
+	{
 		registry->runAllTests(*result);
 	}
 
-	int getFailureCount () {
+	int getFailureCount()
+	{
 		return result->getFailureCount();
 	}
 
- 	void assertPrintContains(const SimpleString& contains)
- 	{
- 		assertPrintContains(output, contains);
- 	}
+	void assertPrintContains(const SimpleString& contains)
+	{
+		assertPrintContains(output, contains);
+	}
 
- 	static void assertPrintContains(StringBufferTestOutput* output, const SimpleString& contains)
- 	{
-		if (output->getOutput().contains(contains))
-			return;
+	static void assertPrintContains(StringBufferTestOutput* output,
+			const SimpleString& contains)
+	{
+		if (output->getOutput().contains(contains)) return;
 		SimpleString message("\tActual <");
 		message += output->getOutput().asCharString();
 		message += ">\n";
@@ -87,12 +95,12 @@ public:
 		message += ">\n";
 		FAIL(message.asCharString());
 
- 	}
+	}
 
-	TestRegistry* 	registry;
-	ExecFunctionTest* 	genTest;
+	TestRegistry* registry;
+	ExecFunctionTest* genTest;
 	StringBufferTestOutput* output;
-	TestResult *	result;
+	TestResult * result;
 };
 
 #endif

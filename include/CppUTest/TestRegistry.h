@@ -44,46 +44,44 @@ class TestPlugin;
 
 class TestRegistry
 {
-	public:
-		TestRegistry();
-		virtual ~TestRegistry();
+public:
+	TestRegistry();
+	virtual ~TestRegistry();
 
-		virtual void addTest(Utest *test);
-		virtual void unDoLastAddTest();
-		virtual int  countTests();
-        virtual void runAllTests(TestResult& result);
- 		virtual void nameFilter(SimpleString);
-		virtual void groupFilter(SimpleString);
+	virtual void addTest(Utest *test);
+	virtual void unDoLastAddTest();
+	virtual int countTests();
+	virtual void runAllTests(TestResult& result);
+	virtual void nameFilter(SimpleString);
+	virtual void groupFilter(SimpleString);
 
-		virtual void installPlugin(TestPlugin* plugin);
-		virtual void resetPlugins();
-		virtual TestPlugin* getFirstPlugin();
-		virtual TestPlugin* getPluginByName(const SimpleString& name);
-		virtual void removePluginByName(const SimpleString& name);
+	virtual void installPlugin(TestPlugin* plugin);
+	virtual void resetPlugins();
+	virtual TestPlugin* getFirstPlugin();
+	virtual TestPlugin* getPluginByName(const SimpleString& name);
+	virtual void removePluginByName(const SimpleString& name);
 
-		SimpleString getGroupFilter();
-		SimpleString getNameFilter();
+	SimpleString getGroupFilter();
+	SimpleString getNameFilter();
 
-		virtual Utest* getFirstTest();
-		virtual Utest* getLastTest();
-		virtual Utest* getTestWithNext(Utest* test);
+	virtual Utest* getFirstTest();
+	virtual Utest* getLastTest();
+	virtual Utest* getTestWithNext(Utest* test);
 
-		static TestRegistry*  getCurrentRegistry();
-		virtual void setCurrentRegistry(TestRegistry* registry);
-		void cleanup();
-  private:
+	static TestRegistry* getCurrentRegistry();
+	virtual void setCurrentRegistry(TestRegistry* registry);
+	void cleanup();
+private:
 
-    bool testShouldRun(Utest* test, TestResult& result);
-    bool endOfGroup(Utest* test);
+	bool testShouldRun(Utest* test, TestResult& result);
+	bool endOfGroup(Utest* test);
 
-    Utest *			tests;
-    SimpleString* 	nameFilter_;
-    SimpleString* 	groupFilter_;
-    TestPlugin* 	firstPlugin_;
-    static TestRegistry* currentRegistry_;
+	Utest * tests;
+	SimpleString* nameFilter_;
+	SimpleString* groupFilter_;
+	TestPlugin* firstPlugin_;
+	static TestRegistry* currentRegistry_;
 
-  };
-
-
+};
 
 #endif

@@ -31,37 +31,37 @@
 #include "CppUTest/Extensions/SimpleStringExtensions.h"
 
 TEST_GROUP(Printer)
-  {
-  Printer* printer;
-  MockPrinter* mockPrinter;
+{
+		Printer* printer;
+		MockPrinter* mockPrinter;
 
-  void setup()
-  {
-    mockPrinter = new MockPrinter();
-    printer = mockPrinter;
-  }
-  void teardown()
-  {
-    delete printer;
-  }
-};
+		void setup()
+		{
+			mockPrinter = newMockPrinter();
+			printer = mockPrinter;
+		}
+		void teardown()
+		{
+			delete printer;
+		}
+	};
 
 TEST(Printer, PrintConstCharStar)
 {
-  printer->Print("hello");
-  printer->Print("hello\n");
-  CHECK_EQUAL("hellohello\n", mockPrinter->getOutput());
+	printer->Print("hello");
+	printer->Print("hello\n");
+	CHECK_EQUAL("hellohello\n", mockPrinter->getOutput());
 }
 
 TEST(Printer, PrintLong)
 {
-  printer->Print(1234);
-  CHECK_EQUAL("1234", mockPrinter->getOutput());
+	printer->Print(1234);
+	CHECK_EQUAL("1234", mockPrinter->getOutput());
 }
 
 TEST(Printer, StreamOperators)
 {
-  *printer << "n=" << 1234;
-  CHECK_EQUAL("n=1234", mockPrinter->getOutput());
+	*printer << "n=" << 1234;
+	CHECK_EQUAL("n=1234", mockPrinter->getOutput());
 }
 

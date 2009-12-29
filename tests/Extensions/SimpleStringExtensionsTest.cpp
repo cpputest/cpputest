@@ -28,7 +28,6 @@
 #include "CppUTest/Extensions/SimpleStringExtensions.h"
 #include "CppUTest/TestHarness.h"
 
-
 TEST_GROUP(SimpleStringExtensions)
 {
 };
@@ -37,8 +36,8 @@ using namespace std;
 
 TEST(SimpleStringExtensions, fromStdString)
 {
-  string s("hello");
-  SimpleString s1(StringFrom(s));
+	string s("hello");
+	SimpleString s1(StringFrom(s));
 
-  STRCMP_EQUAL("hello", s1.asCharString());
+	STRCMP_EQUAL("hello", s1.asCharString());
 }

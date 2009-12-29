@@ -27,7 +27,7 @@
 
 #include "CppUTest/Extensions/SimpleStringExtensions.h"
 
-SimpleString StringFrom (const std::string& value)
+SimpleString StringFrom(const std::string& value)
 {
-  return SimpleString(value.c_str());
+	return SimpleString(value.c_str());
 }

@@ -30,153 +30,168 @@
 #include "CppUTest/TestResult.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 #include "CppUTest/MemoryLeakDetector.h" // REMOVE THIS AFTER THE VC++ EXPRESS IS FIXED!
-
 static long millisTime;
 
 static const char* theTime = "1978-10-03T00:00:00";
 
 static long MockGetPlatformSpecificTimeInMillis()
 {
-		return millisTime;
+	return millisTime;
 }
 
 static const char* MockGetPlatformSpecificTimeString()
 {
-		return theTime;
+	return theTime;
 }
-
 
 TEST_GROUP(JUnitOutputTest)
 {
-	class MockJUnitTestOutput : public JUnitTestOutput
-	{
-	public:
-		enum {testGroupSize = 10};
-		enum {defaultSize = 7};
-
-		int filesOpened;
-		int fileBalance;
-
-		SimpleString fileName;
-		SimpleString buffer;
-
-		TestResult* res;
-		struct TestData
+		class MockJUnitTestOutput: public JUnitTestOutput
 		{
-			TestData() : tst_(0), testName_(0), failure_(0){};
-			Utest* tst_;
-			SimpleString* testName_;
-			Failure* failure_;
-		};
+		public:
+			enum
+			{
+				testGroupSize = 10
+			};
+			enum
+			{
+				defaultSize = 7
+			};
 
-		struct TestGroupData
-		{
-			TestGroupData() : numberTests_(0), totalFailures_(0), name_(""), testData_(0){};
+			int filesOpened;
+			int fileBalance;
 
-			int numberTests_;
-			int totalFailures_;
-			SimpleString name_;
+			SimpleString fileName;
+			SimpleString buffer;
 
-			TestData* testData_;
-		};
-
-		TestGroupData testGroupData_[testGroupSize];
-
-		TestGroupData& currentGroup()
-		{
-			return testGroupData_[filesOpened-1];
-		}
-
-		void resetXmlFile()
-		{
-			buffer = "";
-		}
-
-		MockJUnitTestOutput() : filesOpened(0), fileBalance(0), res(0)
-		{
-			for (int i = 0; i < testGroupSize; i++) {
-				testGroupData_[i].numberTests_ = 0;
-				testGroupData_[i].totalFailures_ = 0;
-			}
-		};
-
-		void setResult(TestResult* testRes)
-		{
-			res = testRes;
-		}
-
-		virtual ~MockJUnitTestOutput()
-		{
-			for (int i = 0; i < testGroupSize; i++) {
-				for (int j = 0; j < testGroupData_[i].numberTests_; j++) {
-					delete testGroupData_[i].testData_[j].tst_;
-					delete testGroupData_[i].testData_[j].testName_;
-					if (testGroupData_[i].testData_[j].failure_) delete testGroupData_[i].testData_[j].failure_;
+			TestResult* res;
+			struct TestData
+			{
+				TestData() :
+					tst_(0), testName_(0), failure_(0)
+				{
 				}
-				if (testGroupData_[i].testData_) delete [] testGroupData_[i].testData_;
+				;
+				Utest* tst_;
+				SimpleString* testName_;
+				Failure* failure_;
+			};
+
+			struct TestGroupData
+			{
+				TestGroupData() :
+					numberTests_(0), totalFailures_(0), name_(""), testData_(0)
+				{
+				}
+				;
+
+				int numberTests_;
+				int totalFailures_;
+				SimpleString name_;
+
+				TestData* testData_;
+			};
+
+			TestGroupData testGroupData_[testGroupSize];
+
+			TestGroupData& currentGroup()
+			{
+				return testGroupData_[filesOpened - 1];
 			}
 
-			LONGS_EQUAL(0, fileBalance);
-		}
-
-		void writeToFile(const SimpleString& buf)
-		{
-			buffer += buf;
-		}
-
-		void openFileForWrite(const SimpleString& in_FileName)
-		{
-			filesOpened++;
-			fileBalance++;
-			fileName = in_FileName;
-		}
-
-		void closeFile()
-		{
-			CHECK_XML_FILE();
-			resetXmlFile();
-			fileBalance--;
-		}
-
-		void createTestsInGroup(int index, int amount, const char* group, const char* basename)
-		{
-			testGroupData_[index].name_ = group;
-			testGroupData_[index].numberTests_ = amount;
-
-			testGroupData_[index].testData_ = new TestData[amount];
-			for (int i = 0; i < amount; i++) {
-				TestData& testData = testGroupData_[index].testData_[i];
-				testData.testName_ = new SimpleString(basename);
-				*testData.testName_ += StringFrom((long)i);
-				testData.tst_ = new Utest(group, testData.testName_->asCharString(), "file", 1);
+			void resetXmlFile()
+			{
+				buffer = "";
 			}
-		}
-		void runTests()
-		{
-			res->testsStarted();
-			for (int i = 0; i < testGroupSize; i++) {
-				TestGroupData& data = testGroupData_[i];
-				if (data.numberTests_ == 0) continue;
 
-				millisTime = 0;
-				res->currentGroupStarted(data.testData_[0].tst_);
-				for (int i = 0; i < data.numberTests_; i++) {
-					TestData& testData = data.testData_[i];
+			MockJUnitTestOutput() :
+				filesOpened(0), fileBalance(0), res(0)
+			{
+				for (int i = 0; i < testGroupSize; i++) {
+					testGroupData_[i].numberTests_ = 0;
+					testGroupData_[i].totalFailures_ = 0;
+				}
+			}
+			;
+
+			void setResult(TestResult* testRes)
+			{
+				res = testRes;
+			}
+
+			virtual ~MockJUnitTestOutput()
+			{
+				for (int i = 0; i < testGroupSize; i++) {
+					for (int j = 0; j < testGroupData_[i].numberTests_; j++) {
+						delete testGroupData_[i].testData_[j].tst_;
+						delete testGroupData_[i].testData_[j].testName_;
+						if (testGroupData_[i].testData_[j].failure_) delete testGroupData_[i].testData_[j].failure_;
+					}
+					if (testGroupData_[i].testData_) delete[] testGroupData_[i].testData_;
+				}
+
+				LONGS_EQUAL(0, fileBalance);
+			}
+
+			void writeToFile(const SimpleString& buf)
+			{
+				buffer += buf;
+			}
+
+			void openFileForWrite(const SimpleString& in_FileName)
+			{
+				filesOpened++;
+				fileBalance++;
+				fileName = in_FileName;
+			}
+
+			void closeFile()
+			{
+				CHECK_XML_FILE();
+				resetXmlFile();
+				fileBalance--;
+			}
+
+			void createTestsInGroup(int index, int amount, const char* group,
+					const char* basename)
+			{
+				testGroupData_[index].name_ = group;
+				testGroupData_[index].numberTests_ = amount;
+
+				testGroupData_[index].testData_ = newTestData[amount];
+				for (int i = 0; i < amount; i++) {
+					TestData& testData = testGroupData_[index].testData_[i];
+					testData.testName_ = new SimpleString(basename);
+					*testData.testName_ += StringFrom((long)i);
+					testData.tst_ = new Utest(group, testData.testName_->asCharString(), "file", 1);
+				}
+			}
+			void runTests()
+			{
+				res->testsStarted();
+				for (int i = 0; i < testGroupSize; i++) {
+					TestGroupData& data = testGroupData_[i];
+					if (data.numberTests_ == 0) continue;
 
 					millisTime = 0;
-					res->currentTestStarted(testData.tst_);
-					if (testData.failure_)
-						print(*testData.failure_);
-					millisTime = 10;
-					res->currentTestEnded(testData.tst_);
-				}
-				millisTime = 50;
-				res->currentGroupEnded(data.testData_[0].tst_);
-			}
-			res->testsEnded();
-		}
+					res->currentGroupStarted(data.testData_[0].tst_);
+					for (int i = 0; i < data.numberTests_; i++) {
+						TestData& testData = data.testData_[i];
 
-		void setFailure(int groupIndex, int testIndex, const char* fileName, int lineNumber, const char* message)
+						millisTime = 0;
+						res->currentTestStarted(testData.tst_);
+						if (testData.failure_)
+						print(*testData.failure_);
+						millisTime = 10;
+						res->currentTestEnded(testData.tst_);
+					}
+					millisTime = 50;
+					res->currentGroupEnded(data.testData_[0].tst_);
+				}
+				res->testsEnded();
+			}
+
+			void setFailure(int groupIndex, int testIndex, const char* fileName, intlineNumber, const char* message)
 		{
 			TestData& data = testGroupData_[groupIndex].testData_[testIndex];
 			data.failure_ = new Failure(data.tst_, fileName, lineNumber, message);
@@ -266,35 +281,35 @@ TEST_GROUP(JUnitOutputTest)
 		}
 	};
 
-	MockJUnitTestOutput * output;
-	TestResult *res;
+				MockJUnitTestOutput * output;
+				TestResult *res;
 
-	void setup()
-	{
-		MemoryLeakWarningPlugin::getGlobalDetector()->disableAllocationTypeChecking (); // REMOVE THIS AFTER THE VC++ EXPRESS IS FIXED!
+				void setup()
+				{
+					MemoryLeakWarningPlugin::getGlobalDetector()->disableAllocationTypeChecking (); // REMOVE THIS AFTER THE VC++ EXPRESS IS FIXED!
 
-		output = new MockJUnitTestOutput();
-		res = new TestResult(*output);
-		output->setResult(res);
-		SetPlatformSpecificTimeInMillisMethod(MockGetPlatformSpecificTimeInMillis);
-		SetPlatformSpecificTimeStringMethod(MockGetPlatformSpecificTimeString);
-	}
-	void teardown()
-	{
-		delete output;
-		delete res;
-		SetPlatformSpecificTimeInMillisMethod(0);
-		SetPlatformSpecificTimeStringMethod(0);
-		MemoryLeakWarningPlugin::getGlobalDetector()->enableAllocationTypeChecking (); // REMOVE THIS AFTER THE VC++ EXPRESS IS FIXED!
-	}
+					output = new MockJUnitTestOutput();
+					res = new TestResult(*output);
+					output->setResult(res);
+					SetPlatformSpecificTimeInMillisMethod(MockGetPlatformSpecificTimeInMillis);
+					SetPlatformSpecificTimeStringMethod(MockGetPlatformSpecificTimeString);
+				}
+				void teardown()
+				{
+					delete output;
+					delete res;
+					SetPlatformSpecificTimeInMillisMethod(0);
+					SetPlatformSpecificTimeStringMethod(0);
+					MemoryLeakWarningPlugin::getGlobalDetector()->enableAllocationTypeChecking (); // REMOVE THIS AFTER THE VC++ EXPRESS IS FIXED!
+				}
 
-	void runTests()
-	{
-		output->printTestsStarted();
-		output->runTests();
-		output->printTestsEnded(*res);
-	}
-};
+				void runTests()
+				{
+					output->printTestsStarted();
+					output->runTests();
+					output->printTestsEnded(*res);
+				}
+			};
 
 TEST(JUnitOutputTest, oneTestInOneGroupAllPass)
 {

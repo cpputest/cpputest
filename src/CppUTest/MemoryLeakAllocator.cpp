@@ -31,10 +31,9 @@
 
 static char* checkedMalloc(size_t size)
 {
-  char* mem = (char*) PlatformSpecificMalloc(size);
-  if (mem == 0)
-    FAIL("malloc returned nul pointer");
-   return mem;
+	char* mem = (char*) PlatformSpecificMalloc(size);
+	if (mem == 0)FAIL("malloc returned nul pointer");
+	return mem;
 }
 
 int MemoryLeakAllocator::isOfEqualType(MemoryLeakAllocator* allocator)
@@ -47,7 +46,7 @@ char* StandardMallocAllocator::alloc_memory(size_t size)
 	return checkedMalloc(size);
 }
 
-void  StandardMallocAllocator::free_memory(char* memory)
+void StandardMallocAllocator::free_memory(char* memory)
 {
 	PlatformSpecificFree(memory);
 }
@@ -78,7 +77,7 @@ char* StandardNewAllocator::alloc_memory(size_t size)
 	return checkedMalloc(size);
 }
 
-void  StandardNewAllocator::free_memory(char* memory)
+void StandardNewAllocator::free_memory(char* memory)
 {
 	PlatformSpecificFree(memory);
 }
@@ -109,7 +108,7 @@ char* StandardNewArrayAllocator::alloc_memory(size_t size)
 	return checkedMalloc(size);
 }
 
-void  StandardNewArrayAllocator::free_memory(char* memory)
+void StandardNewArrayAllocator::free_memory(char* memory)
 {
 	PlatformSpecificFree(memory);
 }
@@ -139,7 +138,7 @@ char* NullUnknownAllocator::alloc_memory(size_t size)
 	return 0;
 }
 
-void  NullUnknownAllocator::free_memory(char* memory)
+void NullUnknownAllocator::free_memory(char* memory)
 {
 }
 

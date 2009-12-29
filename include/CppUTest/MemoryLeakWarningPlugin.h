@@ -45,55 +45,56 @@
 #if UT_NEW_OVERRIDES_ENABLED
 
 extern "C" { /* include for size_t definition */
-   #include "TestHarness_c.h"
+#include "TestHarness_c.h"
 }
 
-   #ifdef new
-      #undef new
-   #endif
+#ifdef new
+#undef new
+#endif
 
-   void* operator new(size_t size);
-   void* operator new[](size_t size);
-   void* operator new(size_t size, const char* file, int line);
-   void* operator new[](size_t size, const char* file, int line);
-   void operator delete(void* mem, const char* file, int line);
-   void operator delete[](void* mem, const char* file, int line);
-   void operator delete(void* mem);
-   void operator delete[](void* mem);
+void* operator new(size_t size);
+void* operator new[](size_t size);
+void* operator new(size_t size, const char* file, int line);
+void* operator new[](size_t size, const char* file, int line);
+void operator delete(void* mem, const char* file, int line);
+void operator delete[](void* mem, const char* file, int line);
+void operator delete(void* mem);
+void operator delete[](void* mem);
 
-   #if UT_NEW_MACROS_ENABLED
-      #define new new(__FILE__, __LINE__)
-   #endif
+#if UT_NEW_MACROS_ENABLED
+#define new new(__FILE__, __LINE__)
+#endif
 
 #endif
 
 class MemoryLeakDetector;
 
-class MemoryLeakWarningPlugin : public TestPlugin
-  {
-  public:
-  		MemoryLeakWarningPlugin(const SimpleString& name, MemoryLeakDetector* localDetector = 0);
-  		virtual ~MemoryLeakWarningPlugin();
+class MemoryLeakWarningPlugin: public TestPlugin
+{
+public:
+	MemoryLeakWarningPlugin(const SimpleString& name,
+			MemoryLeakDetector* localDetector = 0);
+	virtual ~MemoryLeakWarningPlugin();
 
-		virtual void preTestAction(Utest& test, TestResult& result);
-		virtual void postTestAction(Utest& test, TestResult& result);
+	virtual void preTestAction(Utest& test, TestResult& result);
+	virtual void postTestAction(Utest& test, TestResult& result);
 
-		virtual const char* FinalReport(int toBeDeletedLeaks = 0);
+	virtual const char* FinalReport(int toBeDeletedLeaks = 0);
 
-		void ignoreAllLeaksInTest();
-		void expectLeaksInTest(int n);
+	void ignoreAllLeaksInTest();
+	void expectLeaksInTest(int n);
 
-		MemoryLeakDetector* getMemoryLeakDetector();
-		static MemoryLeakWarningPlugin* getFirstPlugin();
+	MemoryLeakDetector* getMemoryLeakDetector();
+	static MemoryLeakWarningPlugin* getFirstPlugin();
 
-		static MemoryLeakDetector* getGlobalDetector();
-	private:
-		MemoryLeakDetector* memLeakDetector;
-		bool ignoreAllWarnings;
-		int expectedLeaks;
-		int failureCount;
+	static MemoryLeakDetector* getGlobalDetector();
+private:
+	MemoryLeakDetector* memLeakDetector;
+	bool ignoreAllWarnings;
+	int expectedLeaks;
+	int failureCount;
 
-		static MemoryLeakWarningPlugin* firstPlugin;
-  };
+	static MemoryLeakWarningPlugin* firstPlugin;
+};
 
 #endif

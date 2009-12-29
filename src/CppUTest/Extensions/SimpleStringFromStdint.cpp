@@ -25,43 +25,41 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/Extensions/SimpleStringFromStdint.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
-SimpleString StringFrom (uint64_t i)
+SimpleString StringFrom(uint64_t i)
 {
-//    char buffer [50];
-//    sprintf(buffer, "%20lu (0x%016lx)", i, i);
+	//    char buffer [50];
+	//    sprintf(buffer, "%20lu (0x%016lx)", i, i);
 
-//    return SimpleString(buffer);
-    return "uint64_t not supported";
+	//    return SimpleString(buffer);
+	return "uint64_t not supported";
 }
 
 // The method was commented out as it clashes with StringFrom(long) in 64-bit environment
 /*SimpleString StringFrom (int64_t i)
+ {
+ //    char buffer [50];
+ //    sprintf(buffer, "%20lu (0x%016lx)", i, i);
+
+ //    return SimpleString(buffer);
+ return "int64_t not supported";
+ }*/
+
+SimpleString StringFrom(uint32_t i)
 {
-//    char buffer [50];
-//    sprintf(buffer, "%20lu (0x%016lx)", i, i);
-
-//    return SimpleString(buffer);
-    return "int64_t not supported";
-}*/
-
-
-SimpleString StringFrom (uint32_t i)
-{
-    return StringFromFormat("%10u (0x%08x)", i, i);
+	return StringFromFormat("%10u (0x%08x)", i, i);
 }
 
-SimpleString StringFrom (uint16_t i)
+SimpleString StringFrom(uint16_t i)
 {
-   return StringFromFormat("%5u (0x%04x)", i, i);
+	return StringFromFormat("%5u (0x%04x)", i, i);
 }
 
-SimpleString StringFrom (uint8_t i)
+SimpleString StringFrom(uint8_t i)
 {
-   return StringFromFormat("%3u (0x%02x)", i, i);
+	return StringFromFormat("%3u (0x%02x)", i, i);
 }
 

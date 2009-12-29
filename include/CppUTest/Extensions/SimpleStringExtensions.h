@@ -41,6 +41,6 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/SimpleString.h"
 
-SimpleString StringFrom (const std::string& other);
+SimpleString StringFrom(const std::string& other);
 
 #endif

@@ -40,12 +40,12 @@
 #include "CppUTest/SimpleString.h"
 #include <stdint.h>
 
-SimpleString StringFrom (uint64_t);
-SimpleString StringFrom (uint32_t);
-SimpleString StringFrom (uint16_t);
-SimpleString StringFrom (uint8_t);
+SimpleString StringFrom(uint64_t);
+SimpleString StringFrom(uint32_t);
+SimpleString StringFrom(uint16_t);
+SimpleString StringFrom(uint8_t);
 
-SimpleString StringFrom (int64_t);
+SimpleString StringFrom(int64_t);
 //These are covered by your plain ints
 //SimpleString StringFrom (int32_t);
 //SimpleString StringFrom (int16_t);

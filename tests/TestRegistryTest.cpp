@@ -30,91 +30,119 @@
 #include "CppUTest/TestOutput.h"
 
 namespace
-  {
-  void stub()
-  {}
-  const int testLineNumber = 1;
+{
+void stub()
+{
+}
+const int testLineNumber = 1;
 }
 
-class MockTest : public Utest
-  {
-  public:
-    MockTest(const char* group = "Group")
-        :Utest(group, "Name", "File", testLineNumber), hasRun_(false)
-    {}
-    void testBody()
-    {
-    	hasRun_ = true;
-    }
-    ;
-    bool hasRun_;
-	};
-
-class MockTestResult : public TestResult
+class MockTest: public Utest
+{
+public:
+	MockTest(const char* group = "Group") :
+		Utest(group, "Name", "File", testLineNumber), hasRun_(false)
 	{
-		public:
+	}
+	void testBody()
+	{
+		hasRun_ = true;
+	}
+	;
+	bool hasRun_;
+};
 
-			int countTestsStarted;
-			int countTestsEnded;
-			int countCurrentTestStarted;
-			int countCurrentTestEnded;
-			int countCurrentGroupStarted;
-			int countCurrentGroupEnded;
+class MockTestResult: public TestResult
+{
+public:
 
-			MockTestResult(TestOutput& p) : TestResult(p) { resetCount();};
-			virtual ~MockTestResult() {};
+	int countTestsStarted;
+	int countTestsEnded;
+	int countCurrentTestStarted;
+	int countCurrentTestEnded;
+	int countCurrentGroupStarted;
+	int countCurrentGroupEnded;
 
-			void resetCount ()
-			{
-				countTestsStarted = 0;
-				countTestsEnded = 0;
-				countCurrentTestStarted = 0;
-				countCurrentTestEnded = 0;
-				countCurrentGroupStarted = 0;
-				countCurrentGroupEnded = 0;
-			}
+	MockTestResult(TestOutput& p) :
+		TestResult(p)
+	{
+		resetCount();
+	}
+	;
+	virtual ~MockTestResult()
+	{
+	}
+	;
 
-    	virtual void testsStarted () { countTestsStarted++;}
-    	virtual void testsEnded () { countTestsEnded++; }
-    	virtual void currentTestStarted(Utest* test) { countCurrentTestStarted++; }
-    	virtual void currentTestEnded(Utest* test) { countCurrentTestEnded++; }
-    	virtual void currentGroupStarted(Utest* test) { countCurrentGroupStarted++; }
-    	virtual void currentGroupEnded(Utest* test) { countCurrentGroupEnded++; }
+	void resetCount()
+	{
+		countTestsStarted = 0;
+		countTestsEnded = 0;
+		countCurrentTestStarted = 0;
+		countCurrentTestEnded = 0;
+		countCurrentGroupStarted = 0;
+		countCurrentGroupEnded = 0;
+	}
 
-	};
+	virtual void testsStarted()
+	{
+		countTestsStarted++;
+	}
+	virtual void testsEnded()
+	{
+		countTestsEnded++;
+	}
+	virtual void currentTestStarted(Utest* test)
+	{
+		countCurrentTestStarted++;
+	}
+	virtual void currentTestEnded(Utest* test)
+	{
+		countCurrentTestEnded++;
+	}
+	virtual void currentGroupStarted(Utest* test)
+	{
+		countCurrentGroupStarted++;
+	}
+	virtual void currentGroupEnded(Utest* test)
+	{
+		countCurrentGroupEnded++;
+	}
+
+};
 
 TEST_GROUP(TestRegistry)
 {
-	TestRegistry* myRegistry;
-	StringBufferTestOutput* output;
-	MockTest* test1;
-	MockTest* test2;
-	MockTest* test3;
-  TestResult *result;
-  MockTestResult *mockResult;
-  TEST_SETUP()
-  {
-    output = new StringBufferTestOutput();
-    mockResult = new MockTestResult(*output);
-    result = mockResult;
-    test1 = new MockTest();
-    test2 = new MockTest();
-    test3 = new MockTest("group2");
-  	myRegistry = new TestRegistry();
-  	myRegistry->setCurrentRegistry(myRegistry);
-  }
+		TestRegistry* myRegistry;
+		StringBufferTestOutput* output;
+		MockTest* test1;
+		MockTest* test2;
+		MockTest* test3;
+		TestResult *result;
+		MockTestResult *mockResult;
+		TEST_SETUP()
+		{
+			output = newStringBufferTestOutput();
+			mockResult = new MockTestResult(*output);
+			result = mockResult;
+			test1 = new MockTest();
+			test2 = new MockTest();
+			test3 = new MockTest("group2");
+			myRegistry = new TestRegistry();
+			myRegistry->setCurrentRegistry(myRegistry);
+		}
 
-  TEST_TEARDOWN()
-  {
-  	myRegistry->setCurrentRegistry(0);
-  	delete myRegistry;
-  	delete test1;
-  	delete test2;
-  	delete test3;
-  	delete result;
-    delete output;
- }
-};
+		TEST_TEARDOWN()
+		{
+			myRegistry->setCurrentRegistry(0);
+			delete myRegistry;
+			delete test1;
+			delete test2;
+			delete test3;
+			delete result;
+			delete output;
+		}
+	};
 
 TEST(TestRegistry, registryMyRegistryAndReset)
 {
@@ -182,7 +210,6 @@ TEST(TestRegistry, unDoTest)
 	myRegistry->unDoLastAddTest();
 	CHECK(myRegistry->countTests() == 0);
 }
-
 
 TEST(TestRegistry, unDoButNoTest)
 {

@@ -29,12 +29,14 @@
 #include "CppUTest/TestOutput.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
-
-TestOutput::TestOutput() : dotCount_(0), verbose_(false), progressIndication(".")
-{}
+TestOutput::TestOutput() :
+	dotCount_(0), verbose_(false), progressIndication(".")
+{
+}
 
 TestOutput::~TestOutput()
-{}
+{
+}
 
 void TestOutput::verbose()
 {
@@ -43,35 +45,34 @@ void TestOutput::verbose()
 
 void TestOutput::print(long n)
 {
-  print(StringFrom(n).asCharString());
+	print(StringFrom(n).asCharString());
 }
 
 void TestOutput::printDouble(double d)
 {
-  print(StringFrom(d, 3).asCharString());
+	print(StringFrom(d, 3).asCharString());
 }
 
 void TestOutput::printHex(long n)
 {
-  print(HexStringFrom(n).asCharString());
+	print(HexStringFrom(n).asCharString());
 }
-
 
 TestOutput& operator<<(TestOutput& p, const char* s)
 {
-  p.print(s);
-  return p;
+	p.print(s);
+	return p;
 }
 
 TestOutput& operator<<(TestOutput& p, long int i)
 {
-  p.print(i);
-  return p;
+	p.print(i);
+	return p;
 }
 
 void TestOutput::printCurrentTestStarted(const Utest& test)
 {
-	if (verbose_)	print(test.getFormattedName().asCharString());
+	if (verbose_) print(test.getFormattedName().asCharString());
 }
 
 void TestOutput::printCurrentTestEnded(const TestResult& res)
@@ -82,22 +83,20 @@ void TestOutput::printCurrentTestEnded(const TestResult& res)
 		print(" ms\n");
 	}
 	else {
-	    printProgressIndicator();
+		printProgressIndicator();
 	}
 }
 
 void TestOutput::printProgressIndicator()
 {
-    print(progressIndication);
-    if (++dotCount_ % 50 == 0)
-        print("\n");
+	print(progressIndication);
+	if (++dotCount_ % 50 == 0) print("\n");
 }
 
 void TestOutput::setProgressIndicator(const char* indicator)
 {
-    progressIndication = indicator;
+	progressIndication = indicator;
 }
-
 
 void TestOutput::printTestsStarted()
 {
@@ -118,9 +117,9 @@ void TestOutput::flush()
 void TestOutput::printTestsEnded(const TestResult& result)
 {
 	if (result.getFailureCount() > 0) {
-	  print("\nErrors (");
-      print(result.getFailureCount());
-      print(" failures, ");
+		print("\nErrors (");
+		print(result.getFailureCount());
+		print(" failures, ");
 	}
 	else {
 		print("\nOK (");
@@ -139,7 +138,6 @@ void TestOutput::printTestsEnded(const TestResult& result)
 	print(" ms)\n\n");
 }
 
-
 void TestOutput::printTestRun(int number, int total)
 {
 	if (total > 1) {
@@ -153,29 +151,28 @@ void TestOutput::printTestRun(int number, int total)
 
 void TestOutput::print(const Failure& failure)
 {
-    print("\n");
-    print(failure.getFileName().asCharString());
-    print(":");
-    print(failure.getLineNumber());
-    print(":");
-    print(" error: ");
-    print("Failure in ");
-    print(failure.getTestName().asCharString());
-    print("\n");
-    print("\t");
-    print(failure.getMessage().asCharString());
-    print("\n\n");
+	print("\n");
+	print(failure.getFileName().asCharString());
+	print(":");
+	print(failure.getLineNumber());
+	print(":");
+	print(" error: ");
+	print("Failure in ");
+	print(failure.getTestName().asCharString());
+	print("\n");
+	print("\t");
+	print(failure.getMessage().asCharString());
+	print("\n\n");
 }
 
 void ConsoleTestOutput::print(const char* s)
 {
-    while(*s) {
-      if ('\n' == *s)
-        PlatformSpecificPutchar('\r');
-      PlatformSpecificPutchar(*s);
-      s++;
-    }
-    flush();
+	while (*s) {
+		if ('\n' == *s) PlatformSpecificPutchar('\r');
+		PlatformSpecificPutchar(*s);
+		s++;
+	}
+	flush();
 }
 
 void ConsoleTestOutput::flush()

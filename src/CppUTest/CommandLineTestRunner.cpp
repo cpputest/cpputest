@@ -33,8 +33,9 @@
 
 JUnitTestOutput junitOutput;
 
-CommandLineTestRunner::CommandLineTestRunner(int ac, const char** av, TestOutput* output)
-: argc(ac), argv(av), output_(output)
+CommandLineTestRunner::CommandLineTestRunner(int ac, const char** av,
+		TestOutput* output) :
+	argc(ac), argv(av), output_(output)
 {
 }
 
@@ -45,26 +46,26 @@ CommandLineTestRunner::~CommandLineTestRunner()
 
 int CommandLineTestRunner::RunAllTests(int ac, char** av)
 {
-	return RunAllTests(ac, const_cast<const char**>(av));
+	return RunAllTests(ac, const_cast<const char**> (av));
 }
 
 int CommandLineTestRunner::RunAllTests(int ac, const char** av)
 {
-   int result = 0;
+	int result = 0;
 	ConsoleTestOutput output;
 
 	MemoryLeakWarningPlugin memLeakWarn(DEF_PLUGIN_MEM_LEAK);
 	//memLeakWarn.disable();
-   TestRegistry::getCurrentRegistry()->installPlugin(&memLeakWarn);
+	TestRegistry::getCurrentRegistry()->installPlugin(&memLeakWarn);
 
 	{
-	   CommandLineTestRunner runner(ac, av, &output);
-	   result = runner.runAllTestsMain();
+		CommandLineTestRunner runner(ac, av, &output);
+		result = runner.runAllTestsMain();
 	}
 
 	if (result == 0) {
-      output << memLeakWarn.FinalReport(0);
-   }
+		output << memLeakWarn.FinalReport(0);
+	}
 	return result;
 }
 
@@ -75,8 +76,7 @@ int CommandLineTestRunner::runAllTestsMain()
 	SetPointerPlugin pPlugin(DEF_PLUGIN_SET_POINTER);
 	TestRegistry::getCurrentRegistry()->installPlugin(&pPlugin);
 
-	if (!parseArguments(TestRegistry::getCurrentRegistry()->getFirstPlugin()))
-		return 1;
+	if (!parseArguments(TestRegistry::getCurrentRegistry()->getFirstPlugin())) return 1;
 
 	testResult = runAllTests();
 
@@ -86,20 +86,19 @@ int CommandLineTestRunner::runAllTestsMain()
 
 void CommandLineTestRunner::initializeTestRun()
 {
-  	TestRegistry::getCurrentRegistry()->groupFilter(arguments->getGroupFilter());
-  	TestRegistry::getCurrentRegistry()->nameFilter(arguments->getNameFilter());
-  	if (arguments->isVerbose())
-  		output_->verbose();
+	TestRegistry::getCurrentRegistry()->groupFilter(arguments->getGroupFilter());
+	TestRegistry::getCurrentRegistry()->nameFilter(arguments->getNameFilter());
+	if (arguments->isVerbose()) output_->verbose();
 }
 
 int CommandLineTestRunner::runAllTests()
 {
 	initializeTestRun();
-  	int loopCount = 0;
-  	int failureCount = 0;
-  	int repeat_ = arguments->getRepeatCount();
+	int loopCount = 0;
+	int failureCount = 0;
+	int repeat_ = arguments->getRepeatCount();
 
-  	while (loopCount++ < repeat_) {
+	while (loopCount++ < repeat_) {
 		output_->printTestRun(loopCount, repeat_);
 		TestResult tr(*output_);
 		TestRegistry::getCurrentRegistry()->runAllTests(tr);
@@ -111,19 +110,16 @@ int CommandLineTestRunner::runAllTests()
 
 bool CommandLineTestRunner::parseArguments(TestPlugin* plugin)
 {
-	arguments = new CommandLineArguments(argc, argv, plugin);
-	if (arguments->parse())
-	{
-		if (arguments->isJUnitOutput())
-		{
+	arguments = newCommandLineArguments(argc, argv, plugin);
+	if (arguments->parse()) {
+		if (arguments->isJUnitOutput()) {
 			output_ = &junitOutput;
 		}
 		return true;
 	}
-	else
-	{
-        output_->print(arguments->usage());
-        return false;
+	else {
+		output_->print(arguments->usage());
+		return false;
 	}
 }
 

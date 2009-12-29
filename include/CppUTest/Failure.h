@@ -25,7 +25,6 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 ///////////////////////////////////////////////////////////////////////////////
 //
 // FAILURE.H
@@ -45,55 +44,53 @@ class Utest;
 class TestOutput;
 
 class Failure
-  {
+{
 
-  public:
-    Failure(Utest*, const char* fileName, long lineNumber, const SimpleString& theMessage);
-    Failure(Utest*, const SimpleString& theMessage);
-    Failure(Utest*, const char* fileName, long lineNumber);
-    Failure(const Failure&);
-    virtual ~Failure();
+public:
+	Failure(Utest*, const char* fileName, long lineNumber,
+			const SimpleString& theMessage);
+	Failure(Utest*, const SimpleString& theMessage);
+	Failure(Utest*, const char* fileName, long lineNumber);
+	Failure(const Failure&);
+	virtual ~Failure();
 
 	virtual SimpleString getFileName() const;
 	virtual SimpleString getTestName() const;
 	virtual int getLineNumber() const;
 	virtual SimpleString getMessage() const;
 
-  protected:
-    SimpleString testName;
-    SimpleString fileName;
-    long lineNumber;
-    SimpleString message;
+protected:
+	SimpleString testName;
+	SimpleString fileName;
+	long lineNumber;
+	SimpleString message;
 
-    Failure& operator=(const Failure&);
+	Failure& operator=(const Failure&);
 
-  };
+};
 
-class EqualsFailure : public Failure
-  {
-  public:
+class EqualsFailure: public Failure
+{
+public:
 
-     EqualsFailure(Utest*, const char* fileName, long lineNumber,
-                   const SimpleString& expected,
-                   const SimpleString& actual);
+	EqualsFailure(Utest*, const char* fileName, long lineNumber,
+			const SimpleString& expected, const SimpleString& actual);
 
-  private:
-    EqualsFailure(const EqualsFailure&);
-    EqualsFailure& operator=(const EqualsFailure&);
-  };
+private:
+	EqualsFailure(const EqualsFailure&);
+	EqualsFailure& operator=(const EqualsFailure&);
+};
 
-class ContainsFailure : public Failure
-  {
-  public:
+class ContainsFailure: public Failure
+{
+public:
 
-     ContainsFailure(Utest*, const char* fileName, long lineNumber,
-                   const SimpleString& expected,
-                   const SimpleString& actual);
+	ContainsFailure(Utest*, const char* fileName, long lineNumber,
+			const SimpleString& expected, const SimpleString& actual);
 
-  private:
-    ContainsFailure(const ContainsFailure&);
-    ContainsFailure& operator=(const ContainsFailure&);
-  };
-
+private:
+	ContainsFailure(const ContainsFailure&);
+	ContainsFailure& operator=(const ContainsFailure&);
+};
 
 #endif

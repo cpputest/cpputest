@@ -31,101 +31,93 @@
 
 static char* allocString(int size)
 {
-   return new char[size];
+	return newchar[size];
 }
 
 static void deallocString(char* str)
 {
-   delete [] str;
+	delete[] str;
 }
 static char* getEmptryString()
 {
-   char* empty = new char[1];
-   empty[0] = '\0';
-   return empty;
+	char* empty = newchar[1];
+	empty[0] = '\0';
+	return empty;
 }
-SimpleString::SimpleString (const char *otherBuffer)
+SimpleString::SimpleString(const char *otherBuffer)
 {
-  if (otherBuffer == 0) {
-  	  buffer = getEmptryString();
-  }
-  else {
-     int len = PlatformSpecificStrLen (otherBuffer) + 1;
-     buffer = allocString(len);
-     PlatformSpecificStrCpy (buffer, otherBuffer);
-  }
-}
-
-SimpleString::SimpleString (const char *other, int repeatCount)
-{
-    int len = PlatformSpecificStrLen(other) *  repeatCount + 1;
-    buffer = allocString(len);
-    char* next = buffer;
-    for (int i = 0; i < repeatCount; i++)
-    {
-       PlatformSpecificStrCpy(next, other);
-        next += PlatformSpecificStrLen(other);
-    }
-    *next = 0;
-
-}
-SimpleString::SimpleString (const SimpleString& other)
-{
-   int len = other.size() + 1;
-   buffer = allocString(len);
-   PlatformSpecificStrCpy(buffer, other.buffer);
+	if (otherBuffer == 0) {
+		buffer = getEmptryString();
+	}
+	else {
+		int len = PlatformSpecificStrLen(otherBuffer) + 1;
+		buffer = allocString(len);
+		PlatformSpecificStrCpy(buffer, otherBuffer);
+	}
 }
 
-
-SimpleString& SimpleString::operator= (const SimpleString& other)
+SimpleString::SimpleString(const char *other, int repeatCount)
 {
-  if (this != &other)
-    {
-     deallocString(buffer);
-     int len = other.size() + 1;
-     buffer = allocString(len);
-     PlatformSpecificStrCpy(buffer, other.buffer);
-    }
-  return *this;
+	int len = PlatformSpecificStrLen(other) * repeatCount + 1;
+	buffer = allocString(len);
+	char* next = buffer;
+	for (int i = 0; i < repeatCount; i++) {
+		PlatformSpecificStrCpy(next, other);
+		next += PlatformSpecificStrLen(other);
+	}
+	*next = 0;
+
+}
+SimpleString::SimpleString(const SimpleString& other)
+{
+	int len = other.size() + 1;
+	buffer = allocString(len);
+	PlatformSpecificStrCpy(buffer, other.buffer);
+}
+
+SimpleString& SimpleString::operator=(const SimpleString& other)
+{
+	if (this != &other) {
+		deallocString(buffer);
+		int len = other.size() + 1;
+		buffer = allocString(len);
+		PlatformSpecificStrCpy(buffer, other.buffer);
+	}
+	return *this;
 }
 
 bool SimpleString::contains(const SimpleString& other) const
- {
-    //strstr on some machines does not handle ""
-    //the right way.  "" should be found in any string
-    if (PlatformSpecificStrLen(other.buffer) == 0)
-      return true;
-    else if (PlatformSpecificStrLen(buffer) == 0)
-      return false;
-    else
-      return PlatformSpecificStrStr(buffer, other.buffer) != 0;
-  }
+{
+	//strstr on some machines does not handle ""
+	//the right way.  "" should be found in any string
+	if (PlatformSpecificStrLen(other.buffer) == 0) return true;
+	else if (PlatformSpecificStrLen(buffer) == 0) return false;
+	else return PlatformSpecificStrStr(buffer, other.buffer) != 0;
+}
 
 bool SimpleString::startsWith(const SimpleString& other) const
 {
-    if (PlatformSpecificStrLen(other.buffer) == 0)
-      return true;
-    else if (PlatformSpecificStrLen(buffer) == 0)
-      return false;
-    else
-      return PlatformSpecificStrStr(buffer, other.buffer) == buffer;
+	if (PlatformSpecificStrLen(other.buffer) == 0) return true;
+	else if (PlatformSpecificStrLen(buffer) == 0) return false;
+	else return PlatformSpecificStrStr(buffer, other.buffer) == buffer;
 }
 
 bool SimpleString::endsWith(const SimpleString& other) const
 {
 	int buffer_length = PlatformSpecificStrLen(buffer);
 	int other_buffer_length = PlatformSpecificStrLen(other.buffer);
-    if (other_buffer_length == 0) return true;
-    if (buffer_length == 0) return false;
-    if (buffer_length < other_buffer_length) return false;
-	return PlatformSpecificStrCmp(buffer + buffer_length - other_buffer_length, other.buffer) == 0;
+	if (other_buffer_length == 0) return true;
+	if (buffer_length == 0) return false;
+	if (buffer_length < other_buffer_length) return false;
+	return PlatformSpecificStrCmp(buffer + buffer_length - other_buffer_length,
+			other.buffer) == 0;
 }
 
 int SimpleString::count(const SimpleString& substr) const
 {
 	int num = 0;
 	char* str = buffer;
-	while( (str = PlatformSpecificStrStr(str, substr.buffer)) ) {
+	while ((str = PlatformSpecificStrStr(str, substr.buffer))) {
 		num++;
 		str++;
 	}
@@ -134,25 +126,25 @@ int SimpleString::count(const SimpleString& substr) const
 
 void SimpleString::split(const SimpleString& split, SimpleStringCollection& col) const
 {
-   int num = count(split);
-   int extraEndToken = (endsWith(split)) ? 0 : 1;
-   col.allocate(num + extraEndToken);
+	int num = count(split);
+	int extraEndToken = (endsWith(split)) ? 0 : 1;
+	col.allocate(num + extraEndToken);
 
-   char* str = buffer;
-   char* prev;
-   for (int i = 0; i < num; ++i){
-      prev = str;
-      str = PlatformSpecificStrStr(str, split.buffer) + 1;
-      int len = str - prev;
-      char* sub = allocString(len+1);
-      PlatformSpecificStrNCpy(sub, prev, len);
-      sub[len] = '\0';
-      col[i] = sub;
-      deallocString(sub);
-   }
-   if (extraEndToken) {
-      col[num] = str;
-   }
+	char* str = buffer;
+	char* prev;
+	for (int i = 0; i < num; ++i) {
+		prev = str;
+		str = PlatformSpecificStrStr(str, split.buffer) + 1;
+		int len = str - prev;
+		char* sub = allocString(len + 1);
+		PlatformSpecificStrNCpy(sub, prev, len);
+		sub[len] = '\0';
+		col[i] = sub;
+		deallocString(sub);
+	}
+	if (extraEndToken) {
+		col[num] = str;
+	}
 }
 
 void SimpleString::replace(char to, char with)
@@ -176,7 +168,7 @@ void SimpleString::replace(const char* to, const char* with)
 		char* newbuf = allocString(newsize);
 		for (int i = 0, j = 0; i < len;) {
 			if (PlatformSpecificStrNCmp(&buffer[i], to, tolen) == 0) {
-			   PlatformSpecificStrNCpy(&newbuf[j], with, withlen);
+				PlatformSpecificStrNCpy(&newbuf[j], with, withlen);
 				j += withlen;
 				i += tolen;
 			}
@@ -188,120 +180,118 @@ void SimpleString::replace(const char* to, const char* with)
 		}
 		deallocString(buffer);
 		buffer = newbuf;
-		buffer[newsize-1] = '\0';
+		buffer[newsize - 1] = '\0';
 	}
 	else {
-  	  buffer = getEmptryString();
-  	  buffer [0] = '\0';
+		buffer = getEmptryString();
+		buffer[0] = '\0';
 	}
 }
 
-
-const char *SimpleString::asCharString () const
-  {
-    return buffer;
-  }
+const char *SimpleString::asCharString() const
+{
+	return buffer;
+}
 
 int SimpleString::size() const
-  {
-    return PlatformSpecificStrLen (buffer);
-  }
-
-SimpleString::~SimpleString ()
 {
-   deallocString(buffer);
+	return PlatformSpecificStrLen(buffer);
 }
 
-
-bool operator== (const SimpleString& left, const SimpleString& right)
+SimpleString::~SimpleString()
 {
-  return 0 == PlatformSpecificStrCmp (left.asCharString (), right.asCharString ());
+	deallocString(buffer);
 }
 
-bool operator!= (const SimpleString& left, const SimpleString& right)
+bool operator==(const SimpleString& left, const SimpleString& right)
 {
-  return !(left == right);
+	return 0 == PlatformSpecificStrCmp(left.asCharString(),
+			right.asCharString());
+}
+
+bool operator!=(const SimpleString& left, const SimpleString& right)
+{
+	return !(left == right);
 }
 
 SimpleString SimpleString::operator+(const SimpleString& rhs)
 {
-  SimpleString t(buffer);
-  t += rhs.buffer;
-  return t;
+	SimpleString t(buffer);
+	t += rhs.buffer;
+	return t;
 }
 
 SimpleString& SimpleString::operator+=(const SimpleString& rhs)
 {
-  return operator+=(rhs.buffer);
+	return operator+=(rhs.buffer);
 }
 
 SimpleString& SimpleString::operator+=(const char* rhs)
 {
-  int len = this->size() + PlatformSpecificStrLen(rhs) + 1;
-  char* tbuffer = allocString(len);
-  PlatformSpecificStrCpy(tbuffer, this->buffer);
-  PlatformSpecificStrCat(tbuffer, rhs);
-  deallocString(buffer);
-  buffer = tbuffer;
-  return *this;
+	int len = this->size() + PlatformSpecificStrLen(rhs) + 1;
+	char* tbuffer = allocString(len);
+	PlatformSpecificStrCpy(tbuffer, this->buffer);
+	PlatformSpecificStrCat(tbuffer, rhs);
+	deallocString(buffer);
+	buffer = tbuffer;
+	return *this;
 }
 
-SimpleString StringFrom (bool value)
+SimpleString StringFrom(bool value)
 {
-  return SimpleString(StringFromFormat("%s", value ? "true" : "false"));
+	return SimpleString(StringFromFormat("%s", value ? "true" : "false"));
 }
 
-SimpleString StringFrom (const char *value)
+SimpleString StringFrom(const char *value)
 {
-  return SimpleString(value);
+	return SimpleString(value);
 }
 
-SimpleString StringFrom (int value)
+SimpleString StringFrom(int value)
 {
-    return StringFromFormat("%d", value);
+	return StringFromFormat("%d", value);
 }
 
-SimpleString StringFrom (long value)
+SimpleString StringFrom(long value)
 {
-  return StringFromFormat("%ld", value);
+	return StringFromFormat("%ld", value);
 }
 
-SimpleString StringFrom (void* value)
+SimpleString StringFrom(void* value)
 {
-    return SimpleString("0x") + HexStringFrom((long)value);
+	return SimpleString("0x") + HexStringFrom((long) value);
 }
 
-SimpleString HexStringFrom (long value)
+SimpleString HexStringFrom(long value)
 {
-  return StringFromFormat("%lx", value);
+	return StringFromFormat("%lx", value);
 }
 
-SimpleString StringFrom (double value, int precision)
+SimpleString StringFrom(double value, int precision)
 {
-   SimpleString format = StringFromFormat("%%.%df", precision);
-   return StringFromFormat(format.asCharString(), value);
+	SimpleString format = StringFromFormat("%%.%df", precision);
+	return StringFromFormat(format.asCharString(), value);
 }
 
-SimpleString StringFrom (char value)
+SimpleString StringFrom(char value)
 {
-  return StringFromFormat("%c", value);
+	return StringFromFormat("%c", value);
 }
 
-SimpleString StringFrom (const SimpleString& value)
+SimpleString StringFrom(const SimpleString& value)
 {
-  return SimpleString(value);
+	return SimpleString(value);
 }
-
 
 SimpleString StringFromFormat(const char* format, ...)
 {
-   SimpleString resultString;
-   va_list arguments;
-   va_start(arguments, format);
+	SimpleString resultString;
+	va_list arguments;
+	va_start(arguments, format);
 
-   resultString = VStringFromFormat(format, arguments);
-   va_end(arguments);
-   return resultString;
+	resultString = VStringFromFormat(format, arguments);
+	va_end(arguments);
+	return resultString;
 }
 
 //Kludge to get a va_copy in VC++ V6
@@ -311,58 +301,61 @@ SimpleString StringFromFormat(const char* format, ...)
 
 SimpleString VStringFromFormat(const char* format, va_list args)
 {
-   va_list argsCopy;
-   va_copy(argsCopy, args);
-   enum { sizeOfdefaultBuffer = 100 };
-   char defaultBuffer[sizeOfdefaultBuffer];
-   SimpleString resultString;
+	va_list argsCopy;
+	va_copy(argsCopy, args);
+	enum
+	{
+		sizeOfdefaultBuffer = 100
+	};
+	char defaultBuffer[sizeOfdefaultBuffer];
+	SimpleString resultString;
 
-   int size = PlatformSpecificVSNprintf(defaultBuffer, sizeOfdefaultBuffer, format, args);
-   if (size < sizeOfdefaultBuffer) {
-      resultString = SimpleString(defaultBuffer);
-   }
-   else {
-      char* newBuffer = new char[size+1];
-      PlatformSpecificVSNprintf(newBuffer, size+1, format, argsCopy);
-      resultString = SimpleString(newBuffer);
+	int size = PlatformSpecificVSNprintf(defaultBuffer, sizeOfdefaultBuffer,
+			format, args);
+	if (size < sizeOfdefaultBuffer) {
+		resultString = SimpleString(defaultBuffer);
+	}
+	else {
+		char* newBuffer = newchar[size+1];
+		PlatformSpecificVSNprintf(newBuffer, size+1, format, argsCopy);
+		resultString = SimpleString(newBuffer);
 
-      delete [] newBuffer;
-   }
-   return resultString;
+		delete [] newBuffer;
+	}
+	return resultString;
 }
 
 SimpleStringCollection::SimpleStringCollection()
 {
-   collection = 0;
-   _size = 0;
+	collection = 0;
+	_size = 0;
 }
 
 void SimpleStringCollection::allocate(int size)
 {
-   if (collection) delete [] collection;
+	if (collection) delete[] collection;
 
-   _size = size;
-   collection = new SimpleString[_size];
+	_size = size;
+	collection = newSimpleString[_size];
 }
-
 
 SimpleStringCollection::~SimpleStringCollection()
 {
-	 delete[] (collection);
+	delete[] (collection);
 }
 
-int SimpleStringCollection::size () const
+int SimpleStringCollection::size() const
 {
-   return _size;
+	return _size;
 }
 
 SimpleString& SimpleStringCollection::operator[](int index)
 {
-   if (index >= _size) {
-      empty = "";
-      return empty;
-   }
+	if (index >= _size) {
+		empty = "";
+		return empty;
+	}
 
-   return collection[index];
+	return collection[index];
 }
 

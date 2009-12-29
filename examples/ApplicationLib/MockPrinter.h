@@ -39,31 +39,40 @@
 #include <stdlib.h>
 #include <string>
 
-class MockPrinter : public Printer
-  {
-  public:
-    explicit MockPrinter()
-    {}
-    virtual ~MockPrinter()
-    {}
+class MockPrinter: public Printer
+{
+public:
+	explicit MockPrinter()
+	{
+	}
+	virtual ~MockPrinter()
+	{
+	}
 
-    virtual void Print(const char* s) { savedOutput.append(s); }
-      
-    virtual void Print(long int value) {
-      char buffer [20];
-  	  sprintf (buffer, "%ld", value);
-  	  savedOutput.append(buffer);
-    }
-    
-    std::string getOutput() const { return savedOutput; }
+	virtual void Print(const char* s)
+	{
+		savedOutput.append(s);
+	}
 
-  private:
-  
-    std::string savedOutput;
+	virtual void Print(long int value)
+	{
+		char buffer[20];
+		sprintf(buffer, "%ld", value);
+		savedOutput.append(buffer);
+	}
 
-    MockPrinter(const MockPrinter&);
-    MockPrinter& operator=(const MockPrinter&);
+	std::string getOutput() const
+	{
+		return savedOutput;
+	}
 
-  };
+private:
+
+	std::string savedOutput;
+
+	MockPrinter(const MockPrinter&);
+	MockPrinter& operator=(const MockPrinter&);
+
+};
 
 #endif  // D_MockPrinter_H

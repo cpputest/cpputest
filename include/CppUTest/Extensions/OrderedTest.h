@@ -61,7 +61,7 @@ class OrderedTestInstaller
 
   private:
      void addOrderedTestInOrder(OrderedTest* test);
-     void addOrderedTestInOrderNotAtHeadPosition(OrderedTest* test);
+	void addOrderedTestInOrderNotAtHeadPosition(OrderedTest* test);
 
 };
 

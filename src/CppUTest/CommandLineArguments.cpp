@@ -29,15 +29,10 @@
 #include "CppUTest/CommandLineArguments.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
-CommandLineArguments::CommandLineArguments(int ac, const char** av, TestPlugin* plugin)
-: ac(ac)
-, av(av)
-, plugin_(plugin)
-, verbose_(false)
-, repeat_(1)
-, groupFilter_("")
-, nameFilter_("")
-, outputType_(OUTPUT_ECLIPSE)
+CommandLineArguments::CommandLineArguments(int ac, const char** av,
+		TestPlugin* plugin) :
+	ac(ac), av(av), plugin_(plugin), verbose_(false), repeat_(1), groupFilter_(
+			""), nameFilter_(""), outputType_(OUTPUT_ECLIPSE)
 {
 }
 
@@ -50,24 +45,19 @@ bool CommandLineArguments::parse()
 	bool correctParameters = true;
 	for (int i = 1; i < ac; i++) {
 		SimpleString argument = av[i];
-		if (argument == "-v")
-			verbose_ = true;
-		else if (argument.startsWith("-r"))
-			SetRepeatCount(ac, av, i);
-      	else if (argument.startsWith("-g"))
-        	SetGroupFilter(ac, av, i);
-      	else if (argument.startsWith("-n"))
-        	SetNameFilter(ac, av, i);
-      	else if (argument.startsWith("-o"))
-        	correctParameters = SetOutputType(ac, av, i);
-      	else if (argument.startsWith("-p"))
-      		correctParameters = plugin_->parseArguments(ac, av, i);
-		else
-			correctParameters = false;
+		if (argument == "-v") verbose_ = true;
+		else if (argument.startsWith("-r")) SetRepeatCount(ac, av, i);
+		else if (argument.startsWith("-g")) SetGroupFilter(ac, av, i);
+		else if (argument.startsWith("-n")) SetNameFilter(ac, av, i);
+		else if (argument.startsWith("-o")) correctParameters = SetOutputType(
+				ac, av, i);
+		else if (argument.startsWith("-p")) correctParameters
+				= plugin_->parseArguments(ac, av, i);
+		else correctParameters = false;
 
 		if (correctParameters == false) {
-          return false;
-        }
+			return false;
+		}
 	}
 	return true;
 }
@@ -99,49 +89,43 @@ SimpleString CommandLineArguments::getNameFilter() const
 
 void CommandLineArguments::SetRepeatCount(int ac, const char** av, int& i)
 {
-  repeat_ = 0;
+	repeat_ = 0;
 
-  SimpleString repeatParameter (av[i]);
-  if (repeatParameter.size() > 2)
-    repeat_ = PlatformSpecificAtoI(av[i] + 2);
-  else if (i + 1 < ac)
-    {
-      repeat_ = PlatformSpecificAtoI(av[i+1]);
-      if (repeat_ != 0)
-        i++;
-    }
+	SimpleString repeatParameter(av[i]);
+	if (repeatParameter.size() > 2) repeat_ = PlatformSpecificAtoI(av[i] + 2);
+	else if (i + 1 < ac) {
+		repeat_ = PlatformSpecificAtoI(av[i + 1]);
+		if (repeat_ != 0) i++;
+	}
 
-  if (0 == repeat_)
-    repeat_ = 2;
+	if (0 == repeat_) repeat_ = 2;
 
 }
 
-SimpleString CommandLineArguments::getParameterField(int ac, const char** av, int& i)
+SimpleString CommandLineArguments::getParameterField(int ac, const char** av,
+		int& i)
 {
 	SimpleString parameter(av[i]);
-	if (parameter.size() > 2)
-		return av[i] + 2;
-	else if (i + 1 < ac)
-		return av[++i];
+	if (parameter.size() > 2) return av[i] + 2;
+	else if (i + 1 < ac) return av[++i];
 	return "";
 }
 
-
 void CommandLineArguments::SetGroupFilter(int ac, const char** av, int& i)
 {
-  SimpleString gf = getParameterField(ac, av, i);
-  groupFilter_ = gf;
+	SimpleString gf = getParameterField(ac, av, i);
+	groupFilter_ = gf;
 }
 
 void CommandLineArguments::SetNameFilter(int ac, const char** av, int& i)
 {
-   nameFilter_ = getParameterField(ac, av, i);
+	nameFilter_ = getParameterField(ac, av, i);
 }
 
 bool CommandLineArguments::SetOutputType(int ac, const char** av, int& i)
 {
 	SimpleString outputType = getParameterField(ac, av, i);
-	if (outputType.size () == 0) return false;
+	if (outputType.size() == 0) return false;
 
 	if (outputType == "normal" || outputType == "eclipse") {
 		outputType_ = OUTPUT_ECLIPSE;

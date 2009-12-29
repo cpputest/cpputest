@@ -29,38 +29,34 @@
 #include "CppUTest/Failure.h"
 #include "CppUTest/TestOutput.h"
 
-Failure::Failure(Utest* test, const char* fileName, long lineNumber, const SimpleString& theMessage)
-    : testName (test->getFormattedName())
-    , fileName (fileName)
-    , lineNumber (lineNumber)
-    , message (theMessage)
-{}
+Failure::Failure(Utest* test, const char* fileName, long lineNumber,
+		const SimpleString& theMessage) :
+	testName(test->getFormattedName()), fileName(fileName), lineNumber(
+			lineNumber), message(theMessage)
+{
+}
 
+Failure::Failure(Utest* test, const SimpleString& theMessage) :
+	testName(test->getFormattedName()), fileName(test->getFile()), lineNumber(
+			test->getLineNumber()), message(theMessage)
+{
+}
 
-Failure::Failure(Utest* test, const SimpleString& theMessage)
-    : testName (test->getFormattedName())
-    , fileName (test->getFile())
-    , lineNumber (test->getLineNumber())
-    , message (theMessage)
-{}
+Failure::Failure(Utest* test, const char* fileName, long lineNum) :
+	testName(test->getFormattedName()), fileName(fileName),
+			lineNumber(lineNum), message("no message")
+{
+}
 
-Failure::Failure(Utest* test, const char* fileName, long lineNum)
-    : testName (test->getFormattedName())
-    , fileName (fileName)
-    , lineNumber (lineNum)
-    , message("no message")
-{}
-
-Failure::Failure(const Failure& f)
-    : testName (f.testName)
-    , fileName (f.fileName)
-    , lineNumber (f.lineNumber)
-    , message(f.message)
+Failure::Failure(const Failure& f) :
+	testName(f.testName), fileName(f.fileName), lineNumber(f.lineNumber),
+			message(f.message)
 {
 }
 
 Failure::~Failure()
-{}
+{
+}
 
 SimpleString Failure::getFileName() const
 {
@@ -82,22 +78,24 @@ SimpleString Failure::getMessage() const
 	return message;
 }
 
-EqualsFailure::EqualsFailure(Utest* test, const char* fileName, long lineNumber,
-              const SimpleString& expected,
-              const SimpleString& actual)
-   : Failure(test, fileName, lineNumber)
+EqualsFailure::EqualsFailure(Utest* test, const char* fileName,
+		long lineNumber, const SimpleString& expected,
+		const SimpleString& actual) :
+	Failure(test, fileName, lineNumber)
 {
 
-   const char* format = "expected <%s>\n\tbut was  <%s>";
-   message = StringFromFormat(format, expected.asCharString(), actual.asCharString());
+	const char* format = "expected <%s>\n\tbut was  <%s>";
+	message = StringFromFormat(format, expected.asCharString(),
+			actual.asCharString());
 }
 
-ContainsFailure::ContainsFailure(Utest* test, const char* fileName, long lineNumber,
-              const SimpleString& expected,
-              const SimpleString& actual)
-   : Failure(test, fileName, lineNumber)
+ContainsFailure::ContainsFailure(Utest* test, const char* fileName,
+		long lineNumber, const SimpleString& expected,
+		const SimpleString& actual) :
+	Failure(test, fileName, lineNumber)
 {
 
-   const char* format = "actual <%s>\n\tdid not contain  <%s>";
-   message = StringFromFormat(format, actual.asCharString(), expected.asCharString());
+	const char* format = "actual <%s>\n\tdid not contain  <%s>";
+	message = StringFromFormat(format, actual.asCharString(),
+			expected.asCharString());
 }

@@ -43,67 +43,69 @@
 class SimpleStringCollection;
 
 class SimpleString
-  {
-    friend bool	operator== (const SimpleString& left, const SimpleString& right);
-    friend bool	operator!= (const SimpleString& left, const SimpleString& right);
+{
+	friend bool operator==(const SimpleString& left, const SimpleString& right);
+	friend bool operator!=(const SimpleString& left, const SimpleString& right);
 
-  public:
-    SimpleString (const char *value = "");
-    SimpleString (const char *value, int repeatCount);
-    SimpleString (const SimpleString& other);
-    ~SimpleString ();
+public:
+	SimpleString(const char *value = "");
+	SimpleString(const char *value, int repeatCount);
+	SimpleString(const SimpleString& other);
+	~SimpleString();
 
-    SimpleString& operator= (const SimpleString& other);
-    SimpleString operator+(const SimpleString&);
-    SimpleString& operator+=(const SimpleString&);
-    SimpleString& operator+=(const char*);
+	SimpleString& operator=(const SimpleString& other);
+	SimpleString operator+(const SimpleString&);
+	SimpleString& operator+=(const SimpleString&);
+	SimpleString& operator+=(const char*);
 
-    bool contains(const SimpleString& other) const;
-    bool startsWith(const SimpleString& other) const;
-    bool endsWith(const SimpleString& other) const;
-    void split(const SimpleString& split, SimpleStringCollection& outCollection) const;
+	bool contains(const SimpleString& other) const;
+	bool startsWith(const SimpleString& other) const;
+	bool endsWith(const SimpleString& other) const;
+	void
+			split(const SimpleString& split,
+					SimpleStringCollection& outCollection) const;
 
-    int count(const SimpleString& str) const;
+	int count(const SimpleString& str) const;
 
-    void replace(char to, char with);
-    void replace(const char* to, const char* with);
+	void replace(char to, char with);
+	void replace(const char* to, const char* with);
 
-    const char *asCharString () const;
-    int	size() const;
+	const char *asCharString() const;
+	int size() const;
 
-  private:
-    char *buffer;
-  };
+private:
+	char *buffer;
+};
 
 class SimpleStringCollection
 {
 public:
-   SimpleStringCollection();
-   ~SimpleStringCollection();
+	SimpleStringCollection();
+	~SimpleStringCollection();
 
-   void allocate(int size);
+	void allocate(int size);
 
-   int size () const;
-   SimpleString& operator[](int index);
+	int size() const;
+	SimpleString& operator[](int index);
 
 private:
-   SimpleString* collection;
-   SimpleString empty;
-   int _size;
+	SimpleString* collection;
+	SimpleString empty;
+	int _size;
 
-   void operator =(SimpleStringCollection&);
-   SimpleStringCollection(SimpleStringCollection&);
+	void operator =(SimpleStringCollection&);
+	SimpleStringCollection(SimpleStringCollection&);
 };
 
-SimpleString StringFrom (bool value);
-SimpleString StringFrom (void* value);
-SimpleString StringFrom (char value);
-SimpleString StringFrom (const char *value);
-SimpleString StringFrom (long value);
-SimpleString StringFrom (int value);
+SimpleString StringFrom(bool value);
+SimpleString StringFrom(void* value);
+SimpleString StringFrom(char value);
+SimpleString StringFrom(const char *value);
+SimpleString StringFrom(long value);
+SimpleString StringFrom(int value);
 SimpleString HexStringFrom(long value);
-SimpleString StringFrom (double value, int precision = 6);
-SimpleString StringFrom (const SimpleString& other);
+SimpleString StringFrom(double value, int precision = 6);
+SimpleString StringFrom(const SimpleString& other);
 SimpleString StringFromFormat(const char* format, ...);
 SimpleString VStringFromFormat(const char* format, va_list args);
 

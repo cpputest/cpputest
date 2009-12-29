@@ -44,10 +44,10 @@ class Failure;
 class TestResult;
 
 class TestOutput
-  {
-  public:
-    explicit TestOutput();
-    virtual ~TestOutput();
+{
+public:
+	explicit TestOutput();
+	virtual ~TestOutput();
 
 	virtual void printTestsStarted();
 	virtual void printTestsEnded(const TestResult& result);
@@ -55,29 +55,29 @@ class TestOutput
 	virtual void printCurrentTestEnded(const TestResult& res);
 	virtual void printCurrentGroupStarted(const Utest& test);
 	virtual void printCurrentGroupEnded(const TestResult& res);
-	
+
 	virtual void verbose();
-    virtual void print(const char*)=0;
-    virtual void print(long);
-    virtual void printDouble(double);
-    virtual void printHex(long);
-    virtual void print(const Failure& failure);
+	virtual void print(const char*)=0;
+	virtual void print(long);
+	virtual void printDouble(double);
+	virtual void printHex(long);
+	virtual void print(const Failure& failure);
 	virtual void printTestRun(int number, int total);
-    virtual void setProgressIndicator(const char*);
-	
+	virtual void setProgressIndicator(const char*);
+
 	virtual void flush();
 
-  private:
+private:
 
-    virtual void printProgressIndicator();
-      
-    TestOutput(const TestOutput&);
-    TestOutput& operator=(const TestOutput&);
+	virtual void printProgressIndicator();
+
+	TestOutput(const TestOutput&);
+	TestOutput& operator=(const TestOutput&);
 
 	int dotCount_;
 	bool verbose_;
 	const char* progressIndication;
-  };
+};
 
 TestOutput& operator<<(TestOutput&, const char*);
 TestOutput& operator<<(TestOutput&, long);
@@ -90,19 +90,25 @@ TestOutput& operator<<(TestOutput&, long);
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-class ConsoleTestOutput : public TestOutput
-  {
-  public:
-    explicit ConsoleTestOutput() {};
-    virtual ~ConsoleTestOutput() {};
+class ConsoleTestOutput: public TestOutput
+{
+public:
+	explicit ConsoleTestOutput()
+	{
+	}
+	;
+	virtual ~ConsoleTestOutput()
+	{
+	}
+	;
 
-    virtual void print(const char* s);
+	virtual void print(const char* s);
 	virtual void flush();
 
-  private:
-    ConsoleTestOutput(const ConsoleTestOutput&);
-    ConsoleTestOutput& operator=(const ConsoleTestOutput&);
-  };
+private:
+	ConsoleTestOutput(const ConsoleTestOutput&);
+	ConsoleTestOutput& operator=(const ConsoleTestOutput&);
+};
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -113,37 +119,39 @@ class ConsoleTestOutput : public TestOutput
 ///////////////////////////////////////////////////////////////////////////////
 
 
-class StringBufferTestOutput : public TestOutput
-  {
-  public:
-    explicit StringBufferTestOutput()
-    {}
-    ;
-    virtual ~StringBufferTestOutput()
-    {}
-    ;
+class StringBufferTestOutput: public TestOutput
+{
+public:
+	explicit StringBufferTestOutput()
+	{
+	}
+	;
+	virtual ~StringBufferTestOutput()
+	{
+	}
+	;
 
-    void print(const char* s)
-    {
-      output += s;
-    }
+	void print(const char* s)
+	{
+		output += s;
+	}
 
-    void flush()
-    {
-      output = "";
-    }
+	void flush()
+	{
+		output = "";
+	}
 
-    const SimpleString& getOutput()
-    {
-      return output;
-    }
+	const SimpleString& getOutput()
+	{
+		return output;
+	}
 
-  private:
-    SimpleString output;
+private:
+	SimpleString output;
 
-    StringBufferTestOutput(const StringBufferTestOutput&);
-    StringBufferTestOutput& operator=(const StringBufferTestOutput&);
+	StringBufferTestOutput(const StringBufferTestOutput&);
+	StringBufferTestOutput& operator=(const StringBufferTestOutput&);
 
-  };
+};
 
 #endif  // D_TestOutput_h

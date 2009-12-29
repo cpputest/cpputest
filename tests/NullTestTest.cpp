@@ -29,20 +29,21 @@
 
 TEST_GROUP(NullTest)
 {
-  NullTest* nullTest;
+		NullTest* nullTest;
 
-  TEST_SETUP()
-  {
-    nullTest = new NullTest();
-  }
-  TEST_TEARDOWN()
-  {
-    delete nullTest;
-  }
-};
+		TEST_SETUP()
+		{
+			nullTest = newNullTest();
+		}
+		TEST_TEARDOWN()
+		{
+			delete nullTest;
+		}
+	};
 
 TEST(NullTest, Create)
-{}
+{
+}
 
 TEST(NullTest, InstanceAlwaysTheSame)
 {

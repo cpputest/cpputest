@@ -40,24 +40,24 @@ Printer::~Printer()
 
 void Printer::Print(const char* s)
 {
-    for (const char* p = s; *p; p++)
-        putchar(*p);
+	for (const char* p = s; *p; p++)
+		putchar(*p);
 }
 
 void Printer::Print(long n)
 {
-   Print(StringFrom(n).asCharString());
+	Print(StringFrom(n).asCharString());
 }
 
 Printer& operator<<(Printer& p, const char* s)
 {
-  p.Print(s);
-  return p;
+	p.Print(s);
+	return p;
 }
 
 Printer& operator<<(Printer& p, long int i)
 {
-  p.Print(i);
-  return p;
+	p.Print(i);
+	return p;
 }
 

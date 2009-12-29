@@ -28,39 +28,37 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TestOutput.h"
 
-
 namespace
-  {
-  const int failLineNumber = 2;
-  const char* failFileName = "fail.cpp";
+{
+const int failLineNumber = 2;
+const char* failFileName = "fail.cpp";
 }
 
 TEST_GROUP(Failure)
-  {
-  Utest* test;
-  StringBufferTestOutput* printer;
+{
+		Utest* test;
+		StringBufferTestOutput* printer;
 
-  TEST_SETUP()
-  {
-    test = new NullTest();
-    printer = new StringBufferTestOutput();
-  }
-  TEST_TEARDOWN()
-  {
-    delete test;
-    delete printer;
-  };
-};
-
+		TEST_SETUP()
+		{
+			test = newNullTest();
+			printer = new StringBufferTestOutput();
+		}
+		TEST_TEARDOWN()
+		{
+			delete test;
+			delete printer;
+		};
+	};
 
 TEST(Failure, CreateFailure)
 {
-  Failure f1(test, failFileName, failLineNumber, "the failure message");
-  Failure f2(test, "the failure message");
-  Failure f3(test, failFileName, failLineNumber);
+	Failure f1(test, failFileName, failLineNumber, "the failure message");
+	Failure f2(test, "the failure message");
+	Failure f3(test, failFileName, failLineNumber);
 }
 
 TEST(Failure, CreatePassingEqualsFailure)
 {
-  EqualsFailure f(test, failFileName, failLineNumber, "expected", "actual");
+	EqualsFailure f(test, failFileName, failLineNumber, "expected", "actual");
 }
