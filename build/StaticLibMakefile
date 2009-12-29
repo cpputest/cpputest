@@ -8,4 +8,3 @@ $(CPPUTEST_TARGET) : $(OBJS)
 
 all: $(CPPUTEST_TARGET)
 
-include $(CPP_U_TEST)/build/ObjMakefile

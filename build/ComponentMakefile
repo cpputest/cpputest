@@ -122,7 +122,7 @@ flags:
 	
 $(TEST_TARGET): $(TEST_OBJS) $(MOCKS_OBJS)  $(PRODUCTION_CODE_START) $(TARGET_LIB) $(USER_LIBS) $(PRODUCTION_CODE_END) $(CPPUTEST_LIB) $(STDLIB_CODE_START) 
 	$(SILENCE)echo Linking $@
-	$(SILENCE)$(CXX) -o $@ $(CPPFLAGS)  $^ $(LDFLAGS) 
+	$(SILENCE)$(LINK.o) -o $@ $^
 
 $(TARGET_LIB): $(OBJ)
 	$(SILENCE)echo Building archive $@
@@ -177,4 +177,3 @@ debug:
 		echo "$$i" ; \
 	done
 	
-

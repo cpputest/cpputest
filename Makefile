@@ -1,5 +1,5 @@
 #Set this to @ to keep the makefile quiet
-SILENCE = @
+SILENCE = 
 
 #Set to Y to get extensions.  This brings in string support, and stdint support
 ENABLE_EXTENSIONS = N

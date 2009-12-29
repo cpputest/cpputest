@@ -9,4 +9,3 @@ vtest: $(CPPUTEST_TARGET)
 	@pwd
 	@$(RUNNER) -v
 
-include $(CPP_U_TEST)/build/ObjMakefile
