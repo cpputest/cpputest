@@ -66,7 +66,7 @@ test_all:
 	make clean
 	make ENABLE_DEBUG=N ENABLE_EXTENSIONS=N
 	./$(TEST_TARGET) -ojunit > junit_run_output
-#	if [ -s junit_run_output ]; then echo "JUnit run has output. Build failed!"; exit 1; fi
+	if [ -s junit_run_output ]; then echo "JUnit run has output. Build failed!"; exit 1; fi
 	make clean
 	make ENABLE_DEBUG=Y ENABLE_EXTENSIONS=Y
 	make clean

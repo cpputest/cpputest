@@ -31,17 +31,16 @@
 #include "CppUTest/JUnitTestOutput.h"
 #include "CppUTest/TestRegistry.h"
 
-JUnitTestOutput junitOutput;
-
 CommandLineTestRunner::CommandLineTestRunner(int ac, const char** av,
 		TestOutput* output) :
-	argc(ac), argv(av), output_(output)
+	argc(ac), argv(av), output_(output), jUnitOutput(new JUnitTestOutput)
 {
 }
 
 CommandLineTestRunner::~CommandLineTestRunner()
 {
 	delete arguments;
+	delete jUnitOutput;
 }
 
 int CommandLineTestRunner::RunAllTests(int ac, char** av)
@@ -113,7 +112,7 @@ bool CommandLineTestRunner::parseArguments(TestPlugin* plugin)
 	arguments = new CommandLineArguments(argc, argv, plugin);
 	if (arguments->parse()) {
 		if (arguments->isJUnitOutput()) {
-			output_ = &junitOutput;
+			output_ = jUnitOutput;
 		}
 		return true;
 	}
