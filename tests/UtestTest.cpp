@@ -37,7 +37,7 @@ TEST_GROUP(Utest)
 		TestTestingFixture* fixture;
 		void setup()
 		{
-			fixture = newTestTestingFixture();
+			fixture = new TestTestingFixture();
 			afterCheck = false;
 		}
 		void teardown()

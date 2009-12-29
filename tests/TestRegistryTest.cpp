@@ -122,7 +122,7 @@ TEST_GROUP(TestRegistry)
 		MockTestResult *mockResult;
 		TEST_SETUP()
 		{
-			output = newStringBufferTestOutput();
+			output = new StringBufferTestOutput();
 			mockResult = new MockTestResult(*output);
 			result = mockResult;
 			test1 = new MockTest();

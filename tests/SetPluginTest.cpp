@@ -24,31 +24,30 @@ void (*fp1)();
 void (*fp2)();
 
 TEST_GROUP(SetPointerPluginTest)
+{ SetPointerPlugin* plugin;
+TestRegistry* myRegistry;
+StringBufferTestOutput* output;
+TestResult* result;
+
+void setup()
 {
-		SetPointerPlugin* plugin;
-		TestRegistry* myRegistry;
-		StringBufferTestOutput* output;
-		TestResult* result;
+	myRegistry = new TestRegistry();
+	plugin = new SetPointerPlugin("TestSetPlugin");
+	myRegistry->setCurrentRegistry(myRegistry);
+	myRegistry->installPlugin(plugin);
+	output = new StringBufferTestOutput();
+	result = new TestResult(*output);
+}
 
-		void setup()
-		{
-			myRegistry = newTestRegistry();
-			plugin = new SetPointerPlugin("TestSetPlugin");
-			myRegistry->setCurrentRegistry(myRegistry);
-			myRegistry->installPlugin(plugin);
-			output = new StringBufferTestOutput();
-			result = new TestResult(*output);
-		}
-
-		void teardown()
-		{
-			myRegistry->setCurrentRegistry(0);
-			delete myRegistry;
-			delete plugin;
-			delete output;
-			delete result;
-		}
-	};
+void teardown()
+{
+	myRegistry->setCurrentRegistry(0);
+	delete myRegistry;
+	delete plugin;
+	delete output;
+	delete result;
+}
+};
 
 class FunctionPointerUtest: public Utest
 {
@@ -68,7 +67,8 @@ public:
 
 TEST(SetPointerPluginTest, installTwoFunctionPointer)
 {
-	FunctionPointerUtest *tst = newFunctionPointerUtest();;
+	FunctionPointerUtest *tst = new FunctionPointerUtest();
+	;
 
 	fp1 = orig_func1;
 	fp2 = orig_func2;
@@ -99,7 +99,8 @@ public:
 
 IGNORE_TEST(SetPointerPluginTest, installTooMuchFunctionPointer)
 {
-	MaxFunctionPointerUtest *tst = newMaxFunctionPointerUtest(SetPointerPlugin::MAX_SET + 1);
+	MaxFunctionPointerUtest *tst = new MaxFunctionPointerUtest(
+			SetPointerPlugin::MAX_SET + 1);
 	myRegistry->addTest(tst);
 
 	myRegistry->runAllTests(*result);
@@ -127,7 +128,7 @@ public:
 
 TEST(SetPointerPluginTest, doublePointer)
 {
-	SetDoublePointerUtest *doubletst = newSetDoublePointerUtest();
+	SetDoublePointerUtest *doubletst = new SetDoublePointerUtest();
 	myRegistry->addTest(doubletst);
 	CHECK(orig_double_ptr == &orig_double);
 	delete doubletst;

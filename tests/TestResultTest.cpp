@@ -43,7 +43,7 @@ TEST_GROUP(TestResult)
 
 		TEST_SETUP()
 		{
-			mock = newStringBufferTestOutput();
+			mock = new StringBufferTestOutput();
 			printer = mock;
 			res = new TestResult(*printer);
 			SetPlatformSpecificTimeInMillisMethod(MockGetPlatformSpecificTimeInMillis);

@@ -42,7 +42,7 @@ TEST_GROUP(TestHarness_c)
 		TestTestingFixture* fixture;
 		TEST_SETUP()
 		{
-			fixture = newTestTestingFixture();
+			fixture = new TestTestingFixture();
 		}
 		TEST_TEARDOWN()
 		{

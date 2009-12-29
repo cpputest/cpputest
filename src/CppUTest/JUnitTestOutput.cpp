@@ -126,7 +126,8 @@ void JUnitTestOutput::printCurrentTestStarted(const Utest& test)
 	impl_->results_.startTime_ = GetPlatformSpecificTimeInMillis();
 
 	if (impl_->results_.tail_ == 0) {
-		impl_->results_.head_ = impl_->results_.tail_ = newJUnitTestCaseResultNode;
+		impl_->results_.head_ = impl_->results_.tail_
+				= new JUnitTestCaseResultNode;
 	}
 	else {
 		impl_->results_.tail_->next_ = new JUnitTestCaseResultNode;
@@ -235,7 +236,7 @@ void JUnitTestOutput::print(const Failure& failure)
 {
 	if (impl_->results_.tail_->failure_ == 0) {
 		impl_->results_.failureCount_++;
-		impl_->results_.tail_->failure_ = newFailure(failure);
+		impl_->results_.tail_->failure_ = new Failure(failure);
 	}
 }
 

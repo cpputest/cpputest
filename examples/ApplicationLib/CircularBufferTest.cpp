@@ -31,29 +31,28 @@
 #include "CppUTest/Extensions/SimpleStringExtensions.h"
 
 TEST_GROUP(CircularBuffer)
+{ CircularBuffer* buffer;
+
+void setup()
 {
-		CircularBuffer* buffer;
+	buffer = new CircularBuffer();
+}
+void teardown()
+{
+	delete buffer;
+}
 
-		void setup()
-		{
-			buffer = newCircularBuffer();
-		}
-		void teardown()
-		{
-			delete buffer;
-		}
-
-		void fillTheQueue(int seed, int howMany)
-		{
-			for (int i = 0; i < howMany; i++)
-			buffer->Put(seed + i);
-		}
-		void removeFromQueue(int howMany)
-		{
-			for (int i = 0; i < howMany; i++)
-			buffer->Get();
-		}
-	};
+void fillTheQueue(int seed, int howMany)
+{
+	for (int i = 0; i < howMany; i++)
+	buffer->Put(seed + i);
+}
+void removeFromQueue(int howMany)
+{
+	for (int i = 0; i < howMany; i++)
+	buffer->Get();
+}
+};
 
 TEST(CircularBuffer, EmptyAfterCreation)
 {

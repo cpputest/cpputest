@@ -49,26 +49,25 @@ public:
 };
 
 TEST_GROUP(CommandLineArguments)
+{ CommandLineArguments* args;
+OptionsPlugin* plugin;
+
+void setup()
 {
-		CommandLineArguments* args;
-		OptionsPlugin* plugin;
+	plugin = new OptionsPlugin("options");
+}
+void teardown()
+{
+	delete args;
+	delete plugin;
+}
 
-		void setup()
-		{
-			plugin = newOptionsPlugin("options");
-		}
-		void teardown()
-		{
-			delete args;
-			delete plugin;
-		}
-
-		bool newArgumentParser(int argc, const char** argv)
-		{
-			args = new CommandLineArguments(argc, argv, plugin);
-			return args->parse();
-		}
-	};
+bool newArgumentParser(int argc, const char** argv)
+{
+	args = new CommandLineArguments(argc, argv, plugin);
+	return args->parse();
+}
+};
 
 TEST(CommandLineArguments, Create)
 {

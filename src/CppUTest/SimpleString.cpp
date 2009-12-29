@@ -31,7 +31,7 @@
 
 static char* allocString(int size)
 {
-	return newchar[size];
+	return new char[size];
 }
 
 static void deallocString(char* str)
@@ -40,7 +40,7 @@ static void deallocString(char* str)
 }
 static char* getEmptryString()
 {
-	char* empty = newchar[1];
+	char* empty = new char[1];
 	empty[0] = '\0';
 	return empty;
 }
@@ -316,11 +316,11 @@ SimpleString VStringFromFormat(const char* format, va_list args)
 		resultString = SimpleString(defaultBuffer);
 	}
 	else {
-		char* newBuffer = newchar[size+1];
-		PlatformSpecificVSNprintf(newBuffer, size+1, format, argsCopy);
+		char* newBuffer = new char[size + 1];
+		PlatformSpecificVSNprintf(newBuffer, size + 1, format, argsCopy);
 		resultString = SimpleString(newBuffer);
 
-		delete [] newBuffer;
+		delete[] newBuffer;
 	}
 	return resultString;
 }
@@ -336,7 +336,7 @@ void SimpleStringCollection::allocate(int size)
 	if (collection) delete[] collection;
 
 	_size = size;
-	collection = newSimpleString[_size];
+	collection = new SimpleString[_size];
 }
 
 SimpleStringCollection::~SimpleStringCollection()

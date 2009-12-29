@@ -307,7 +307,7 @@ TEST_GROUP(SimpleString)
 
 	TEST(SimpleString, NullParameters2)
 	{
-		SimpleString* arr = newSimpleString[100];
+		SimpleString* arr = new SimpleString[100];
 		delete[] arr;
 	}
 

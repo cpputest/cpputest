@@ -38,6 +38,8 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+class JUnitTestOutput;
+
 #define DEF_PLUGIN_MEM_LEAK "MemoryLeakPlugin"
 #define DEF_PLUGIN_SET_POINTER "SetPointerPlugin"
 
@@ -61,6 +63,7 @@ private:
 	int argc;
 	const char** argv;
 	TestOutput* output_;
+	JUnitTestOutput* jUnitOutput;
 	CommandLineArguments* arguments;
 
 	bool parseArguments(TestPlugin*);

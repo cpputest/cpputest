@@ -55,7 +55,7 @@ TEST_GROUP(MemoryLeakDetectorTest)
 
 		void setup()
 		{
-			detector = newMemoryLeakDetector;
+			detector = new MemoryLeakDetector;
 			reporter = new MemoryLeakFailureForTest;
 			mallocAllocator = new StandardMallocAllocator;
 			newAllocator = new StandardNewAllocator;

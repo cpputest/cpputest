@@ -35,21 +35,20 @@ const char* failFileName = "fail.cpp";
 }
 
 TEST_GROUP(Failure)
-{
-		Utest* test;
-		StringBufferTestOutput* printer;
+{ Utest* test;
+StringBufferTestOutput* printer;
 
-		TEST_SETUP()
-		{
-			test = newNullTest();
-			printer = new StringBufferTestOutput();
-		}
-		TEST_TEARDOWN()
-		{
-			delete test;
-			delete printer;
-		};
-	};
+TEST_SETUP()
+{
+	test = new NullTest();
+	printer = new StringBufferTestOutput();
+}
+TEST_TEARDOWN()
+{
+	delete test;
+	delete printer;
+};
+};
 
 TEST(Failure, CreateFailure)
 {

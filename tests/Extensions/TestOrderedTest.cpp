@@ -32,51 +32,50 @@
 #include "CppUTest/Extensions/OrderedTest.h"
 
 TEST_GROUP(TestOrderedTest)
+{ TestTestingFixture* fixture;
+
+OrderedTest orderedTest;
+OrderedTest orderedTest2;
+OrderedTest orderedTest3;
+ExecFunctionTest normalTest;
+ExecFunctionTest normalTest2;
+ExecFunctionTest normalTest3;
+
+OrderedTest* orderedTestCache;
+void setup()
 {
-		TestTestingFixture* fixture;
+	orderedTestCache = OrderedTest::getOrderedTestHead();
+	OrderedTest::setOrderedTestHead(0);
 
-		OrderedTest orderedTest;
-		OrderedTest orderedTest2;
-		OrderedTest orderedTest3;
-		ExecFunctionTest normalTest;
-		ExecFunctionTest normalTest2;
-		ExecFunctionTest normalTest3;
+	fixture = new TestTestingFixture();
+	fixture->registry->unDoLastAddTest();
+}
+void teardown()
+{
+	delete fixture;
+	OrderedTest::setOrderedTestHead(orderedTestCache);
+}
 
-		OrderedTest* orderedTestCache;
-		void setup()
-		{
-			orderedTestCache = OrderedTest::getOrderedTestHead();
-			OrderedTest::setOrderedTestHead(0);
+void InstallOrderedTest(OrderedTest* test, int level)
+{
+	OrderedTestInstaller(test, "testgroup", "testname", __FILE__, __LINE__, level);
+}
 
-			fixture = newTestTestingFixture();
-			fixture->registry->unDoLastAddTest();
-		}
-		void teardown()
-		{
-			delete fixture;
-			OrderedTest::setOrderedTestHead(orderedTestCache);
-		}
+void InstallNormalTest(Utest* test)
+{
+	TestInstaller(test, "testgroup", "testname", __FILE__, __LINE__);
+}
 
-		void InstallOrderedTest(OrderedTest* test, int level)
-		{
-			OrderedTestInstaller(test, "testgroup", "testname", __FILE__, __LINE__, level);
-		}
+Utest* firstTest()
+{
+	return fixture->registry->getFirstTest();
+}
 
-		void InstallNormalTest(Utest* test)
-		{
-			TestInstaller(test, "testgroup", "testname", __FILE__, __LINE__);
-		}
-
-		Utest* firstTest()
-		{
-			return fixture->registry->getFirstTest();
-		}
-
-		Utest* secondTest()
-		{
-			return fixture->registry->getFirstTest()->getNext();
-		}
-	};
+Utest* secondTest()
+{
+	return fixture->registry->getFirstTest()->getNext();
+}
+};
 
 TEST(TestOrderedTest, TestInstallerSetsFields)
 {
@@ -146,8 +145,7 @@ TEST(TestOrderedTest, MultipleOrderedTests2)
 
 }
 TEST_GROUP_BASE(TestOrderedTestMacros, OrderedTest)
-{
-};
+{};
 
 static int testNumber = 0;
 

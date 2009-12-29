@@ -75,7 +75,7 @@ TEST_GROUP(PluginTest)
 		TestRegistry *registry;
 		void setup()
 		{
-			firstPlugin = newDummyPlugin(GENERIC_PLUGIN);
+			firstPlugin = new DummyPlugin(GENERIC_PLUGIN);
 			secondPlugin = new DummyPlugin(GENERIC_PLUGIN2);
 			genFixture = new TestTestingFixture;
 			registry = genFixture->registry;

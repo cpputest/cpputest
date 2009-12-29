@@ -47,7 +47,7 @@ TEST_GROUP(TestOutput)
 
 		TEST_SETUP()
 		{
-			mock = newStringBufferTestOutput();
+			mock = new StringBufferTestOutput();
 			printer = mock;
 			tst = new Utest("group", "test", "file", 1);
 			f = new Failure(tst, "failfile", 2, "message");

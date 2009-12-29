@@ -55,36 +55,36 @@ static DummyReporter dummy;
 static MemoryLeakAllocator* allocator;
 
 TEST_GROUP(MemoryLeakWarningTest)
+{ TestTestingFixture* fixture;
+void setup()
 {
-		TestTestingFixture* fixture;
-		void setup()
-		{
-			fixture = newTestTestingFixture();
-			detector = new MemoryLeakDetector();
-			allocator = new StandardNewAllocator;
-			detector->init(&dummy);
-			memPlugin = new MemoryLeakWarningPlugin("TestMemoryLeakWarningPlugin", detector);
-			fixture->registry->installPlugin(memPlugin);
-			memPlugin->enable();
+	fixture = new TestTestingFixture();
+	detector = new MemoryLeakDetector();
+	allocator = new StandardNewAllocator;
+	detector->init(&dummy);
+	memPlugin = new MemoryLeakWarningPlugin("TestMemoryLeakWarningPlugin", detector);
+	fixture->registry->installPlugin(memPlugin);
+	memPlugin->enable();
 
-			leak1 = 0;
-			leak2 = 0;
-		}
-		void teardown()
-		{
-			detector->deallocMemory(allocator, leak1);
-			detector->deallocMemory(allocator, leak2);
+	leak1 = 0;
+	leak2 = 0;
+}
+void teardown()
+{
+	detector->deallocMemory(allocator, leak1);
+	detector->deallocMemory(allocator, leak2);
 
-			delete fixture;
-			delete memPlugin;
-			delete detector;
-			delete allocator;
-		}
-	};
+	delete fixture;
+	delete memPlugin;
+	delete detector;
+	delete allocator;
+}
+};
 
 void _testTwoLeaks()
 {
-	leak1 = detector->allocMemory(allocator, 10);;
+	leak1 = detector->allocMemory(allocator, 10);
+	;
 	leak2 = (long*) detector->allocMemory(allocator, 4);
 }
 

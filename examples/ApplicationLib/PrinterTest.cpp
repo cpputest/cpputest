@@ -31,20 +31,19 @@
 #include "CppUTest/Extensions/SimpleStringExtensions.h"
 
 TEST_GROUP(Printer)
-{
-		Printer* printer;
-		MockPrinter* mockPrinter;
+{ Printer* printer;
+MockPrinter* mockPrinter;
 
-		void setup()
-		{
-			mockPrinter = newMockPrinter();
-			printer = mockPrinter;
-		}
-		void teardown()
-		{
-			delete printer;
-		}
-	};
+void setup()
+{
+	mockPrinter = new MockPrinter();
+	printer = mockPrinter;
+}
+void teardown()
+{
+	delete printer;
+}
+};
 
 TEST(Printer, PrintConstCharStar)
 {

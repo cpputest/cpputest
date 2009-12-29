@@ -112,13 +112,13 @@ void TestRegistry::unDoLastAddTest()
 void TestRegistry::nameFilter(SimpleString f)
 {
 	delete nameFilter_;
-	nameFilter_ = newSimpleString(f);
+	nameFilter_ = new SimpleString(f);
 }
 
 void TestRegistry::groupFilter(SimpleString f)
 {
 	delete groupFilter_;
-	groupFilter_ = newSimpleString(f);
+	groupFilter_ = new SimpleString(f);
 }
 
 SimpleString TestRegistry::getGroupFilter()
@@ -133,10 +133,9 @@ SimpleString TestRegistry::getNameFilter()
 
 bool TestRegistry::testShouldRun(Utest* test, TestResult& result)
 {
-	if (groupFilter_ == 0) groupFilter_ = newSimpleString();
+	if (groupFilter_ == 0) groupFilter_ = new SimpleString();
 	if (nameFilter_ == 0) nameFilter_ = new SimpleString();
-	if (test->shouldRun(*groupFilter_, *nameFilter_) )
-	return true;
+	if (test->shouldRun(*groupFilter_, *nameFilter_)) return true;
 	else {
 		result.countFilteredOut();
 		return false;

@@ -110,7 +110,7 @@ int CommandLineTestRunner::runAllTests()
 
 bool CommandLineTestRunner::parseArguments(TestPlugin* plugin)
 {
-	arguments = newCommandLineArguments(argc, argv, plugin);
+	arguments = new CommandLineArguments(argc, argv, plugin);
 	if (arguments->parse()) {
 		if (arguments->isJUnitOutput()) {
 			output_ = &junitOutput;
