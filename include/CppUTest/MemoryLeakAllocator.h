@@ -16,6 +16,18 @@ public:
 	{
 	}
 	;
+
+	static void setCurrentNewAllocator(MemoryLeakAllocator* allocator);
+	static MemoryLeakAllocator* getCurrentNewAllocator();
+	static void setCurrentNewAllocatorToDefault();
+
+	static void setCurrentNewArrayAllocator(MemoryLeakAllocator* allocator);
+	static MemoryLeakAllocator* getCurrentNewArrayAllocator();
+	static void setCurrentNewArrayAllocatorToDefault();
+
+private:
+	static MemoryLeakAllocator* currentNewAllocator;
+	static MemoryLeakAllocator* currentNewArrayAllocator;
 };
 
 class StandardMallocAllocator: public MemoryLeakAllocator

@@ -38,6 +38,25 @@ void teardown()
 }
 };
 
+TEST(MemoryLeakAllocatorTest, SetCurrentNewAllocator)
+{
+	allocator = new StandardNewAllocator;
+	MemoryLeakAllocator::setCurrentNewAllocator(allocator);
+	POINTERS_EQUAL(allocator, MemoryLeakAllocator::getCurrentNewAllocator());
+	MemoryLeakAllocator::setCurrentNewAllocatorToDefault();
+	POINTERS_EQUAL(StandardNewAllocator::defaultAllocator(), MemoryLeakAllocator::getCurrentNewAllocator());
+}
+
+TEST(MemoryLeakAllocatorTest, SetCurrentNewArrayAllocator)
+{
+	allocator = new StandardNewArrayAllocator;
+	MemoryLeakAllocator::setCurrentNewArrayAllocator(allocator);
+	POINTERS_EQUAL(allocator, MemoryLeakAllocator::getCurrentNewArrayAllocator());
+	MemoryLeakAllocator::setCurrentNewArrayAllocatorToDefault();
+	POINTERS_EQUAL(StandardNewArrayAllocator::defaultAllocator(), MemoryLeakAllocator::getCurrentNewArrayAllocator());
+}
+
+
 TEST(MemoryLeakAllocatorTest, MallocAllocation)
 {
 	allocator = new StandardMallocAllocator;

@@ -31,23 +31,6 @@
 #include "CppUTest/MemoryLeakAllocator.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
-static MemoryLeakAllocator* currentNewAllocator = 0;
-static MemoryLeakAllocator* currentNewArrayAllocator = 0;
-
-MemoryLeakAllocator* getCurrentNewAllocator()
-{
-	if (currentNewAllocator == 0) currentNewAllocator
-			= StandardNewAllocator::defaultAllocator();
-	return currentNewAllocator;
-}
-
-MemoryLeakAllocator* getCurrentNewArrayAllocator()
-{
-	if (currentNewArrayAllocator == 0) currentNewArrayAllocator
-			= StandardNewArrayAllocator::defaultAllocator();
-	return currentNewArrayAllocator;
-}
-
 class MemoryLeakWarningReporter: public MemoryLeakFailure
 {
 public:
@@ -169,49 +152,49 @@ const char* MemoryLeakWarningPlugin::FinalReport(int toBeDeletedLeaks)
 void* operator new(size_t size)
 {
 	return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(
-			getCurrentNewAllocator(), size);
-}
-
-void operator delete(void* mem, const char* file, int line)
-{
-	MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(
-			getCurrentNewAllocator(), (char*) mem);
-}
-
-void operator delete(void* mem)
-{
-	MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(
-			getCurrentNewAllocator(), (char*) mem);
-}
-
-void* operator new[](size_t size)
-{
-	return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(
-			getCurrentNewArrayAllocator(), size);
-}
-
-void operator delete[](void* mem, const char* file, int line)
-{
-	MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(
-			getCurrentNewArrayAllocator(), (char*) mem);
-}
-
-void operator delete[](void* mem)
-{
-	MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(
-			getCurrentNewArrayAllocator(), (char*) mem);
+			MemoryLeakAllocator::getCurrentNewAllocator(), size);
 }
 
 void* operator new(size_t size, const char* file, int line)
 {
 	return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(
-			getCurrentNewAllocator(), size, (char*) file, line);
+			MemoryLeakAllocator::getCurrentNewAllocator(), size, (char*) file, line);
+}
+
+void operator delete(void* mem, const char* file, int line)
+{
+	MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(
+			MemoryLeakAllocator::getCurrentNewAllocator(), (char*) mem);
+}
+
+void operator delete(void* mem)
+{
+	MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(
+			MemoryLeakAllocator::getCurrentNewAllocator(), (char*) mem);
+}
+
+void* operator new[](size_t size)
+{
+	return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(
+			MemoryLeakAllocator::getCurrentNewArrayAllocator(), size);
 }
 
 void* operator new [](size_t size, const char* file, int line)
 {
 	return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(
-			getCurrentNewArrayAllocator(), size, (char*) file, line);
+			MemoryLeakAllocator::getCurrentNewArrayAllocator(), size, (char*) file, line);
+}
+
+void operator delete[](void* mem, const char* file, int line)
+{
+	MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(
+			MemoryLeakAllocator::getCurrentNewArrayAllocator(), (char*) mem);
+}
+
+void operator delete[](void* mem)
+{
+	MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(
+			MemoryLeakAllocator::getCurrentNewArrayAllocator(), (char*) mem);
 }
 
 #endif

@@ -36,10 +36,48 @@ static char* checkedMalloc(size_t size)
 	return mem;
 }
 
+MemoryLeakAllocator* MemoryLeakAllocator::currentNewAllocator = 0;
+MemoryLeakAllocator* MemoryLeakAllocator::currentNewArrayAllocator = 0;
+
 int MemoryLeakAllocator::isOfEqualType(MemoryLeakAllocator* allocator)
 {
 	return PlatformSpecificStrCmp(this->name(), allocator->name()) == 0;
 }
+
+void MemoryLeakAllocator::setCurrentNewAllocator(MemoryLeakAllocator* allocator)
+{
+	currentNewAllocator = allocator;
+}
+
+MemoryLeakAllocator* MemoryLeakAllocator::getCurrentNewAllocator()
+{
+	if (currentNewAllocator == 0)
+		setCurrentNewAllocatorToDefault();
+	return currentNewAllocator;
+}
+
+void MemoryLeakAllocator::setCurrentNewAllocatorToDefault()
+{
+	currentNewAllocator = StandardNewAllocator::defaultAllocator();
+}
+
+void MemoryLeakAllocator::setCurrentNewArrayAllocator(MemoryLeakAllocator* allocator)
+{
+	currentNewArrayAllocator = allocator;
+}
+
+MemoryLeakAllocator* MemoryLeakAllocator::getCurrentNewArrayAllocator()
+{
+	if (currentNewArrayAllocator == 0)
+		setCurrentNewArrayAllocatorToDefault();
+	return currentNewArrayAllocator;
+}
+
+void MemoryLeakAllocator::setCurrentNewArrayAllocatorToDefault()
+{
+	currentNewArrayAllocator = StandardNewArrayAllocator::defaultAllocator();
+}
+
 
 char* StandardMallocAllocator::alloc_memory(size_t size)
 {
