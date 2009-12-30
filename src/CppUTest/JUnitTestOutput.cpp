@@ -154,11 +154,11 @@ void JUnitTestOutput::writeTestSuiteSummery()
 	SimpleString
 			buf =
 					StringFromFormat(
-							"<testsuite errors=\"0\" failures=\"%d\" hostname=\"localhost\" name=\"%s\" tests=\"%d\" time=\"%d.0\" timestamp=\"%s\">\n",
+							"<testsuite errors=\"0\" failures=\"%d\" hostname=\"localhost\" name=\"%s\" tests=\"%d\" time=\"%d.%03d\" timestamp=\"%s\">\n",
 							impl_->results_.failureCount_,
 							impl_->results_.group_.asCharString(),
 							impl_->results_.testCount_,
-							(int) impl_->results_.groupExecTime_,
+							(int) (impl_->results_.groupExecTime_ / 1000), (int) (impl_->results_.groupExecTime_ % 1000),
 							GetPlatformSpecificTimeString());
 	writeToFile(buf.asCharString());
 }
@@ -174,9 +174,9 @@ void JUnitTestOutput::writeTestCases()
 	JUnitTestCaseResultNode* cur = impl_->results_.head_;
 	while (cur) {
 		SimpleString buf = StringFromFormat(
-				"<testcase classname=\"%s\" name=\"%s\" time=\"%d.0\">\n",
+				"<testcase classname=\"%s\" name=\"%s\" time=\"%d.%03d\">\n",
 				impl_->results_.group_.asCharString(),
-				cur->name_.asCharString(), (int) cur->execTime_);
+				cur->name_.asCharString(), (int) (cur->execTime_ / 1000), (int)(cur->execTime_ % 1000));
 		writeToFile(buf.asCharString());
 
 		if (cur->failure_) {

@@ -205,7 +205,7 @@ public:
 	void CHECK_TEST_SUITE_START(SimpleString output)
 	{
 		TestGroupData& group = currentGroup();
-		SimpleString buf = StringFromFormat("<testsuite errors=\"0\" failures=\"%d\" hostname=\"localhost\" name=\"%s\" tests=\"%d\" time=\"50.0\" timestamp=\"%s\">\n",
+		SimpleString buf = StringFromFormat("<testsuite errors=\"0\" failures=\"%d\" hostname=\"localhost\" name=\"%s\" tests=\"%d\" time=\"0.050\" timestamp=\"%s\">\n",
 				group.totalFailures_, group.name_.asCharString(), group.numberTests_, theTime);
 		CHECK_EQUAL(buf, output);
 	}
@@ -253,7 +253,7 @@ public:
 	void CHECK_TESTS(SimpleString* arr)
 	{
 		for (int index = 0, curTest = 0; curTest < currentGroup().numberTests_; curTest++, index++) {
-			SimpleString buf = StringFromFormat ("<testcase classname=\"%s\" name=\"%s\" time=\"10.0\">\n",
+			SimpleString buf = StringFromFormat ("<testcase classname=\"%s\" name=\"%s\" time=\"0.010\">\n",
 					currentGroup().name_.asCharString(), currentGroup().testData_[curTest].tst_->getName().asCharString());
 			CHECK_EQUAL(buf, arr[index]);
 			if (currentGroup().testData_[curTest].failure_) {
