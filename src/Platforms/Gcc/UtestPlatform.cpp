@@ -168,7 +168,7 @@ int PlatformSpecificStrNCmp(const char* s1, const char* s2, unsigned int size)
 }
 char* PlatformSpecificStrStr(const char* s1, const char* s2)
 {
-   return strstr(s1, s2);
+   return (char*) strstr(s1, s2);
 }
 
 int PlatformSpecificVSNprintf(char *str, unsigned int size, const char* format, va_list args)
