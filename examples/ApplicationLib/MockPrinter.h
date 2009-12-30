@@ -36,6 +36,7 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 #include "Printer.h"
+#include "CppUTest/SimpleString.h"
 #include <stdlib.h>
 #include <string>
 
@@ -56,9 +57,9 @@ public:
 
 	virtual void Print(long int value)
 	{
-		char buffer[20];
-		sprintf(buffer, "%ld", value);
-		savedOutput.append(buffer);
+		SimpleString buffer;
+		buffer = StringFromFormat("%ld", value);
+		savedOutput.append(buffer.asCharString());
 	}
 
 	std::string getOutput() const

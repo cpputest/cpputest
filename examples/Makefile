@@ -5,7 +5,7 @@
 #----------
 
 #Set this to @ to keep the makefile quiet
-SILENCE = @
+SILENCE = 
 
 #---- Outputs ----#
 COMPONENT_NAME = CppUTestExamples
@@ -49,6 +49,7 @@ INCLUDES =\
 
 #Flags to pass to ld
 LDFLAGS +=
+LD_LIBRARIES = -lstdc++
 	
 include $(CPPUTEST_HOME)/build/ComponentMakefile
 

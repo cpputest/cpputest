@@ -71,7 +71,6 @@ CPPUTEST_LIB = $(CPPUTEST_HOME)/lib/libCppUTest.a
 
 CPPFLAGS +=  $(INCLUDES) $(GCOVFLAGS)
 CFLAGS += $(INCLUDES) $(GCOVFLAGS)
-LDFLAGS  +=
 
 #The gcda files for gcov need to be deleted before each run
 #To avoid annoying messages.
