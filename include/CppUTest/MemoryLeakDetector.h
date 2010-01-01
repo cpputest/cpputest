@@ -9,7 +9,7 @@
 #define MEM_LEAK_ALLOC_DEALLOC_MISMATCH "Allocation/deallocation type mismatch\n"
 #define MEM_LEAK_MEMORY_CORRUPTION "Memory corruption (written out of bounds?)\n"
 #define MEM_LEAK_ALLOC_LOCATION "   allocated at file: %s line: %d size: %d type: %s\n"
-#define MEM_LEAK_DEALLOC_LOCATION "   dealllocated at file: %s line: %d type: %s\n"
+#define MEM_LEAK_DEALLOC_LOCATION "   deallocated at file: %s line: %d type: %s\n"
 #define MEM_LEAK_DEALLOC_NON_ALLOCATED "Deallocating non-allocated memory\n"
 
 enum MemLeakPeriod
