@@ -162,7 +162,7 @@ TEST(MemoryLeakDetectorTest, DeleteNonAlocatedMemory)
 	detector->stopChecking();
 	CHECK(reporter->message->contains(MEM_LEAK_DEALLOC_NON_ALLOCATED));
 	CHECK(reporter->message->contains("   allocated at file: <unknown> line: 0 size: 0 type: unknown"));
-	CHECK(reporter->message->contains("   dealllocated at file: FREE.c line: 100 type: free"));
+	CHECK(reporter->message->contains("   deallocated at file: FREE.c line: 100 type: free"));
 }
 
 TEST(MemoryLeakDetectorTest, IgnoreMemoryAllocatedOutsideCheckingPeriod)
@@ -270,7 +270,7 @@ TEST(MemoryLeakDetectorTest, AllocOneTypeFreeAnotherType)
 	detector->stopChecking();
 	CHECK(reporter->message->contains(MEM_LEAK_ALLOC_DEALLOC_MISMATCH));
 	CHECK(reporter->message->contains("   allocated at file: ALLOC.c line: 10 size: 100 type: new []"));
-	CHECK(reporter->message->contains("   dealllocated at file: FREE.c line: 100 type: free"));
+	CHECK(reporter->message->contains("   deallocated at file: FREE.c line: 100 type: free"));
 }
 
 TEST(MemoryLeakDetectorTest, AllocOneTypeFreeAnotherTypeWithCheckingDisabled)
@@ -306,7 +306,7 @@ TEST(MemoryLeakDetectorTest, memoryCorruption)
 	detector->stopChecking();
 	CHECK(reporter->message->contains(MEM_LEAK_MEMORY_CORRUPTION));
 	CHECK(reporter->message->contains("   allocated at file: ALLOC.c line: 10 size: 10 type: malloc"));
-	CHECK(reporter->message->contains("   dealllocated at file: FREE.c line: 100 type: free"));
+	CHECK(reporter->message->contains("   deallocated at file: FREE.c line: 100 type: free"));
 }
 
 TEST(MemoryLeakDetectorTest, safelyDeleteNULL)
