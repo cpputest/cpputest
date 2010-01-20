@@ -92,7 +92,8 @@ INCLUDES += $(foreach dir, $(MOCK_DIRS_EXPANDED), -I$(dir))
 
 
 DEP_FILES = $(call src_to_d, $(ALL_SRC))
-STUFF_TO_CLEAN += $(DEP_FILES) + $(PRODUCTION_CODE_START) + $(PRODUCTION_CODE_END) + $(STDLIB_CODE_START) + $(MAP_FILE)
+STUFF_TO_CLEAN += $(DEP_FILES) + $(PRODUCTION_CODE_START) + $(PRODUCTION_CODE_END)
+STUFF_TO_CLEAN += $(STDLIB_CODE_START) + $(MAP_FILE) + cpputest_*.xml junit_run_output
 
 # Targets
 .PHONY: all
