@@ -2,10 +2,14 @@
 SILENCE = @
 
 #Set to Y to get extensions.  This brings in string support, and stdint support
-ENABLE_EXTENSIONS = N
+ifeq ($(CPPUTEST_ENABLE_EXTENSIONS), Y)
+	ENABLE_EXTENSIONS = Y
+else
+	ENABLE_EXTENSIONS = N
+endif
 
 # Set to Y for enabling debug
-ENABLE_DEBUG = N
+ENABLE_DEBUG = Y
 
 #---- Outputs ----#
 COMPONENT_NAME = CppUTest
