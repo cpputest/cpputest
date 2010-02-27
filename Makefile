@@ -8,6 +8,13 @@ else
 	ENABLE_EXTENSIONS = N
 endif
 
+#Set to Y to disable the memory leak detection. Enabled by default
+ifeq ($(CPPUTEST_DISABLE_MEMLEAKDETECTION), Y)
+	ENABLE_MEMLEAKDETECTION = N
+else
+	ENABLE_MEMLEAKDETECTION = Y
+endif
+
 # Set to Y for enabling debug
 ENABLE_DEBUG = Y
 
@@ -23,7 +30,11 @@ TEST_TARGET = \
 CPPUTEST_HOME = .
 CPP_PLATFORM = Gcc
 
-CPPFLAGS += -Wall -Werror
+CPPFLAGS += -Wall -Werror -fno-use-cxa-atexit
+
+ifeq ($(ENABLE_MEMLEAKDETECTION), N)
+CPPFLAGS += -DUT_NEW_MACROS_DISABLED -DUT_NEW_OVERRIDES_DISABLED
+endif
 
 ifeq ($(ENABLE_DEBUG), Y)
 CPPFLAGS += -g
@@ -73,9 +84,11 @@ test_all:
 	$(SILENCE)./$(TEST_TARGET) -ojunit > junit_run_output
 	$(SILENCE)if [ -s junit_run_output ]; then echo "JUnit run has output. Build failed!"; exit 1; fi
 	make clean
-	make ENABLE_DEBUG=Y ENABLE_EXTENSIONS=Y
+	make ENABLE_DEBUG=Y CPPUTEST_ENABLE_EXTENSIONS=Y
 	make clean
-	make ENABLE_DEBUG=Y ENABLE_EXTENSIONS=N
+	make ENABLE_DEBUG=Y CPPUTEST_ENABLE_EXTENSIONS=N
+	make clean
+	make CPPUTEST_DISABLE_MEMLEAKDETECTION=Y
 	make clean
 	
 .PHONY: examples

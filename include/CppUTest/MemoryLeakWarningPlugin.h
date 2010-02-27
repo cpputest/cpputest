@@ -42,12 +42,11 @@
 #define IGNORE_ALL_LEAKS_IN_TEST() MemoryLeakWarningPlugin::getFirstPlugin()->ignoreAllLeaksInTest();
 #define EXPECT_N_LEAKS(n)          MemoryLeakWarningPlugin::getFirstPlugin()->expectLeaksInTest(n);
 
-#if UT_NEW_OVERRIDES_ENABLED
-
 extern "C" { /* include for size_t definition */
 #include "TestHarness_c.h"
 }
 
+#if UT_NEW_OVERRIDES_ENABLED
 #ifdef new
 #undef new
 #endif
