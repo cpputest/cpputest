@@ -30,7 +30,7 @@ TEST_TARGET = \
 CPPUTEST_HOME = .
 CPP_PLATFORM = Gcc
 
-CPPFLAGS += -Wall -Werror -fno-use-cxa-atexit
+CPPFLAGS += -Wall -Werror --use-cxa-atexit
 
 ifeq ($(ENABLE_MEMLEAKDETECTION), N)
 CPPFLAGS += -DUT_NEW_MACROS_DISABLED -DUT_NEW_OVERRIDES_DISABLED
