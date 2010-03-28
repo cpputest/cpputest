@@ -66,12 +66,12 @@ class OrderedTestInstaller
 };
 
 #define TEST_ORDERED(testGroup, testName, testLevel) \
-  class testGroup##_##testName##_Test : public CppUTestGroup##testGroup \
-{ public: testGroup##_##testName##_Test () : CppUTestGroup##testGroup () {} \
+  class TEST_##testGroup##_##testName##_Test : public TEST_GROUP_##CppUTestGroup##testGroup \
+{ public: TEST_##testGroup##_##testName##_Test () : TEST_GROUP_##CppUTestGroup##testGroup () {} \
        void testBody(); } \
-    testGroup##_##testName##_Instance; \
-  OrderedTestInstaller testGroup##_##testName##_Installer(&testGroup##_##testName##_Instance, #testGroup, #testName, __FILE__,__LINE__, testLevel); \
-   void testGroup##_##testName##_Test::testBody()
+    TEST_##testGroup##_##testName##_Instance; \
+  OrderedTestInstaller TEST_##testGroup##_##testName##_Installer(&TEST_##testGroup##_##testName##_Instance, #testGroup, #testName, __FILE__,__LINE__, testLevel); \
+   void TEST_##testGroup##_##testName##_Test::testBody()
 
 #endif
 

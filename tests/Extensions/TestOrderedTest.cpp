@@ -50,6 +50,7 @@ void setup()
 	fixture = new TestTestingFixture();
 	fixture->registry->unDoLastAddTest();
 }
+
 void teardown()
 {
 	delete fixture;

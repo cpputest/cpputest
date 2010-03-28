@@ -39,7 +39,7 @@
 
 #define TEST_GROUP_BASE(testGroup, baseclass) \
   int externTestGroup##testGroup = 0; \
-  struct CppUTestGroup##testGroup : public baseclass
+  struct TEST_GROUP_##CppUTestGroup##testGroup : public baseclass
 
 #define TEST_BASE(testBaseClass) \
   struct testBaseClass : public Utest
@@ -54,25 +54,25 @@
   virtual void teardown()
 
 #define TEST(testGroup, testName) \
-  class testGroup##_##testName##_Test : public CppUTestGroup##testGroup \
-{ public: testGroup##_##testName##_Test () : CppUTestGroup##testGroup () {} \
+  class TEST_##testGroup##_##testName##_Test : public TEST_GROUP_##CppUTestGroup##testGroup \
+{ public: TEST_##testGroup##_##testName##_Test () : TEST_GROUP_##CppUTestGroup##testGroup () {} \
        void testBody(); } \
-    testGroup##_##testName##_Instance; \
-  TestInstaller testGroup##_##testName##_Installer(&testGroup##_##testName##_Instance, #testGroup, #testName, __FILE__,__LINE__); \
-	void testGroup##_##testName##_Test::testBody()
+    TEST_##testGroup##_##testName##_Instance; \
+  TestInstaller TEST_##testGroup##_##testName##_Installer(&TEST_##testGroup##_##testName##_Instance, #testGroup, #testName, __FILE__,__LINE__); \
+	void TEST_##testGroup##_##testName##_Test::testBody()
 
 #define IGNORE_TEST(testGroup, testName)\
-  class testGroup##testName##Test : public CppUTestGroup##testGroup \
-{ public: testGroup##testName##Test () : CppUTestGroup##testGroup () {} \
+  class IGNORE##testGroup##_##testName##_Test : public TEST_GROUP_##CppUTestGroup##testGroup \
+{ public: IGNORE##testGroup##_##testName##_Test () : TEST_GROUP_##CppUTestGroup##testGroup () {} \
     virtual void run (TestResult& result) { \
     	result.countIgnored(); } \
     virtual const char* getProgressIndicator() const {return "!";} \
   protected:  virtual SimpleString getMacroName() const \
       { return "IGNORE_TEST"; } \
   public: void testBodyThatNeverRuns (); } \
-    testGroup##testName##Instance; \
-  TestInstaller testGroup##testName##Installer(&testGroup##testName##Instance, #testGroup, #testName, __FILE__,__LINE__); \
-	void testGroup##testName##Test::testBodyThatNeverRuns ()
+    TEST_##testGroup##_##testName##_Instance; \
+  TestInstaller TEST_##testGroup##testName##_Installer(&TEST_##testGroup##_##testName##_Instance, #testGroup, #testName, __FILE__,__LINE__); \
+	void IGNORE##testGroup##_##testName##_Test::testBodyThatNeverRuns ()
 
 #define IMPORT_TEST_GROUP(testGroup) \
   extern int externTestGroup##testGroup;\
@@ -161,5 +161,7 @@
 
 #define UT_PRINT(text) \
    UT_PRINT_LOCATION(text, __FILE__, __LINE__)
+
+#define RUN_ALL_TESTS(ac, av) CommandLineTestRunner::RunAllTests(ac, av)
 
 #endif /*D_UTestMacros_h*/
