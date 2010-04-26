@@ -101,6 +101,10 @@ SOURCE=.\src\CppUTest\JUnitTestOutput.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\CppUTest\MemoryLeakAllocator.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\CppUTest\MemoryLeakDetector.cpp
 # End Source File
 # Begin Source File
