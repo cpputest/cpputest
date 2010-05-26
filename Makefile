@@ -38,8 +38,6 @@ CPPUTEST_HOME = .
 CPP_PLATFORM = Gcc
 
 CPPFLAGS += -pedantic-errors -Wall -Wextra -Werror 
-#for 64 bit linux... No, for old gcc compilers!
-#CPPFLAGS += --use-cxa-atexit
 
 ifeq ($(ENABLE_MEMLEAKDETECTION), N)
 CPPFLAGS += -DUT_NEW_MACROS_DISABLED -DUT_NEW_OVERRIDES_DISABLED

@@ -73,7 +73,6 @@ MemoryLeakDetector* MemoryLeakWarningPlugin::getGlobalDetector()
 				sizeof(MemoryLeakDetector));
 		if (globalDetector == 0)FAIL("operator new(size, bool) not enough memory");
 		globalDetector->init(globalReporter);
-		PlatformSpecificAtExit(destroyDetector);
 	}
 	return globalDetector;
 }

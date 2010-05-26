@@ -221,11 +221,6 @@ void* PlatformSpecificMemCpy(void* s1, const void* s2, unsigned int size)
    return memcpy(s1, s2, size);
 }
 
-int PlatformSpecificAtExit(void (*func) ())
-{
-   return atexit(func);
-}
-
 double PlatformSpecificFabs(double d)
 {
    return fabs(d);
