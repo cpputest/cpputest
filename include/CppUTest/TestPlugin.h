@@ -54,7 +54,7 @@ public:
 	{
 	}
 	;
-	virtual bool parseArguments(int ac, const char** av, int index)
+	virtual bool parseArguments(int /* ac */, const char** /* av */, int /* index */ )
 	{
 		return false;
 	}
@@ -108,7 +108,8 @@ public:
 	};
 };
 
-#define UT_PTR_SET(a, b) { CppUTestStore( (void**)&a, (void*) a); a = b; }
+/* C++ standard says we cannot cast function pointers to object pointers. Extra casting to fool the compiler */
+#define UT_PTR_SET(a, b) { CppUTestStore( (void**)&a, *((void**) &a)); a = b; }
 
 ///////////// Null Plugin
 
