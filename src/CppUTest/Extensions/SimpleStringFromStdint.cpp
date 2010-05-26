@@ -29,7 +29,7 @@
 #include "CppUTest/Extensions/SimpleStringFromStdint.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
-SimpleString StringFrom(uint64_t i)
+SimpleString StringFrom(uint64_t /*i*/)
 {
 	//    char buffer [50];
 	//    sprintf(buffer, "%20lu (0x%016lx)", i, i);
