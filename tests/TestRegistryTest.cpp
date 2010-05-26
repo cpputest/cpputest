@@ -92,19 +92,19 @@ public:
 	{
 		countTestsEnded++;
 	}
-	virtual void currentTestStarted(Utest* test)
+	virtual void currentTestStarted(Utest* /*test*/)
 	{
 		countCurrentTestStarted++;
 	}
-	virtual void currentTestEnded(Utest* test)
+	virtual void currentTestEnded(Utest* /*test*/)
 	{
 		countCurrentTestEnded++;
 	}
-	virtual void currentGroupStarted(Utest* test)
+	virtual void currentGroupStarted(Utest* /*test*/)
 	{
 		countCurrentGroupStarted++;
 	}
-	virtual void currentGroupEnded(Utest* test)
+	virtual void currentGroupEnded(Utest* /*test*/)
 	{
 		countCurrentGroupEnded++;
 	}
