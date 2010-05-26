@@ -35,7 +35,7 @@ SimpleStringBuffer::SimpleStringBuffer() :
 	positions_filled(0)
 {
 }
-;
+
 
 void SimpleStringBuffer::clear()
 {
