@@ -55,7 +55,7 @@ void TestResult::currentGroupStarted(Utest* test)
 	currentGroupTimeStarted = GetPlatformSpecificTimeInMillis();
 }
 
-void TestResult::currentGroupEnded(Utest* test)
+void TestResult::currentGroupEnded(Utest* /*test*/)
 {
 	currentGroupTotalExecutionTime = GetPlatformSpecificTimeInMillis()
 			- currentGroupTimeStarted;
@@ -73,7 +73,7 @@ void TestResult::print(const char* text)
 	output.print(text);
 }
 
-void TestResult::currentTestEnded(Utest* test)
+void TestResult::currentTestEnded(Utest* /*test*/)
 {
 	currentTestTotalExecutionTime = GetPlatformSpecificTimeInMillis()
 			- currentTestTimeStarted;
