@@ -98,7 +98,7 @@ void JUnitTestOutput::printTestsStarted()
 {
 }
 
-void JUnitTestOutput::printCurrentGroupStarted(const Utest& test)
+void JUnitTestOutput::printCurrentGroupStarted(const Utest& /*test*/)
 {
 }
 
@@ -108,7 +108,7 @@ void JUnitTestOutput::printCurrentTestEnded(const TestResult& result)
 			= result.getCurrentTestTotalExecutionTime();
 }
 
-void JUnitTestOutput::printTestsEnded(const TestResult& result)
+void JUnitTestOutput::printTestsEnded(const TestResult& /*result*/)
 {
 }
 
@@ -240,7 +240,7 @@ void JUnitTestOutput::print(const Failure& failure)
 	}
 }
 
-void JUnitTestOutput::printTestRun(int number, int total)
+void JUnitTestOutput::printTestRun(int /*number*/, int /*total*/)
 {
 }
 
