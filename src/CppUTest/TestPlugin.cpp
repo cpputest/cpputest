@@ -144,7 +144,7 @@ void CppUTestStore(void**function, void*value)
 	index++;
 }
 
-void SetPointerPlugin::postTestAction(Utest& test, TestResult& result)
+void SetPointerPlugin::postTestAction(Utest& /*test*/, TestResult& /*result*/)
 {
 	for (int i = index - 1; i >= 0; i--)
 		*((void**) setlist[i].orig) = setlist[i].orig_value;
