@@ -102,11 +102,11 @@ void TestOutput::printTestsStarted()
 {
 }
 
-void TestOutput::printCurrentGroupStarted(const Utest& test)
+void TestOutput::printCurrentGroupStarted(const Utest& /*test*/)
 {
 }
 
-void TestOutput::printCurrentGroupEnded(const TestResult& res)
+void TestOutput::printCurrentGroupEnded(const TestResult& /*res*/)
 {
 }
 
