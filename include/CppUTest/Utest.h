@@ -104,7 +104,7 @@ public:
 	void setGroupName(const char* groupName);
 	void setTestName(const char* testName);
 
-	void exitCurrentTest();
+	virtual void exitCurrentTest();
 protected:
 	virtual void runOneTest(TestPlugin* plugin, TestResult& result);
 

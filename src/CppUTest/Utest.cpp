@@ -28,9 +28,34 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TestRegistry.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
+#include "CppUTest/TestOutput.h"
 
-TestResult* Utest::testResult_ = 0;
-Utest* Utest::currentTest_ = 0;
+/* Sometimes stubs use the CppUTest assertions.
+ * Its not correct to do so, but this small helper class will prevent a segmentation fault and instead
+ * will give an error message and also the file/line of the check that was executed outside the tests.
+ */
+class OutsideTestRunnerUTest : public Utest
+{
+public:
+	static OutsideTestRunnerUTest& instance()
+	{
+		static OutsideTestRunnerUTest instance_;
+		return instance_;
+	}
+	virtual TestResult& getTestResult()
+	{
+		return defaultTestResult;
+	}
+	virtual void exitCurrentTest() {};
+	virtual ~OutsideTestRunnerUTest(){};
+private:
+	OutsideTestRunnerUTest() : Utest("\n\t NOTE: Assertion happened without being in a test run (perhaps in main?)", "\n\t       Something is very wrong. Check this assertion and fix", "unknown file", 0), defaultTestResult(defaultOutput) {};
+	ConsoleTestOutput defaultOutput;
+	TestResult defaultTestResult;
+};
+
+TestResult* Utest::testResult_ = &OutsideTestRunnerUTest::instance().getTestResult();
+Utest* Utest::currentTest_ = &OutsideTestRunnerUTest::instance();
 
 Utest::Utest() :
 	group_("UndefinedTestGroup"), name_("UndefinedTest"),
