@@ -272,7 +272,7 @@ TEST(Utest, AssertsActLikeStatements)
 
 	if (false)
 	FAIL("")
-	else
+	else CHECK(true);
 	;
 
 	if (true)
