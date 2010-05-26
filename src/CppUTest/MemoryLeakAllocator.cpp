@@ -96,7 +96,6 @@ void MemoryLeakAllocator::setCurrentMallocAllocatorToDefault()
 	currentMallocAllocator = StandardMallocAllocator::defaultAllocator();
 }
 
-
 char* StandardMallocAllocator::alloc_memory(size_t size)
 {
 	return checkedMalloc(size);
@@ -189,12 +188,12 @@ MemoryLeakAllocator* StandardNewArrayAllocator::defaultAllocator()
 	static StandardNewArrayAllocator allocator;
 	return &allocator;
 }
-char* NullUnknownAllocator::alloc_memory(size_t size)
+char* NullUnknownAllocator::alloc_memory(size_t /*size*/)
 {
 	return 0;
 }
 
-void NullUnknownAllocator::free_memory(char* memory)
+void NullUnknownAllocator::free_memory(char* /*memory*/)
 {
 }
 
