@@ -28,26 +28,29 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/SimpleString.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
+#include "CppUTest/MemoryLeakAllocator.h"
 
-static char* allocString(int size)
+/* Avoid using the memory leak detector INSIDE SimpleString as its used inside the detector */
+char* SimpleString::allocString(int size) const
 {
-	return new char[size];
+	return StandardNewArrayAllocator::defaultAllocator()->alloc_memory(size);
 }
 
-static void deallocString(char* str)
+void SimpleString::deallocString(char* str) const
 {
-	delete[] str;
+	StandardNewArrayAllocator::defaultAllocator()->free_memory(str);
 }
-static char* getEmptryString()
+
+char* SimpleString::getEmptyString() const
 {
-	char* empty = new char[1];
+	char* empty = allocString(1);
 	empty[0] = '\0';
 	return empty;
 }
 SimpleString::SimpleString(const char *otherBuffer)
 {
 	if (otherBuffer == 0) {
-		buffer = getEmptryString();
+		buffer = getEmptyString();
 	}
 	else {
 		int len = PlatformSpecificStrLen(otherBuffer) + 1;
@@ -183,7 +186,7 @@ void SimpleString::replace(const char* to, const char* with)
 		buffer[newsize - 1] = '\0';
 	}
 	else {
-		buffer = getEmptryString();
+		buffer = getEmptyString();
 		buffer[0] = '\0';
 	}
 }

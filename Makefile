@@ -15,6 +15,13 @@ else
 	ENABLE_MEMLEAKDETECTION = Y
 endif
 
+#Set to N to remove the dependency with StdC++ new header file and operator new std_badalloc throw
+ifeq ($(CPPUTEST_DISABLE_STDCPP_NEW), Y)
+	ENABLE_STDCPP_NEW = N
+else
+	ENABLE_STDCPP_NEW = Y
+endif
+
 # Set to Y for enabling debug
 ENABLE_DEBUG = Y
 
@@ -30,8 +37,8 @@ TEST_TARGET = \
 CPPUTEST_HOME = .
 CPP_PLATFORM = Gcc
 
-CPPFLAGS += -Wall -Werror 
-#for 64 bit linux
+CPPFLAGS += -pedantic-errors -Wall -Wextra -Werror 
+#for 64 bit linux... No, for old gcc compilers!
 #CPPFLAGS += --use-cxa-atexit
 
 ifeq ($(ENABLE_MEMLEAKDETECTION), N)
@@ -42,7 +49,11 @@ ifeq ($(ENABLE_DEBUG), Y)
 CPPFLAGS += -g
 endif
 
-#CPPFLAGS += -DUT_NEW_OVERRIDES_DISABLED -DUT_NEW_MACROS_DISABLED
+ifeq ($(ENABLE_STDCPP_NEW), N)
+CPPFLAGS += -DUT_STDCPP_NEW_DISABLED
+CPPFLAGS += -nostdinc++
+endif
+
 #GCOVFLAGS = -fprofile-arcs -ftest-coverage
 
 #SRC_DIRS is a list of source directories that make up the target library
@@ -79,22 +90,32 @@ include $(CPPUTEST_HOME)/build/ComponentMakefile
 
 .PHONY: test_all
 test_all:
-	make ENABLE_DEBUG=N ENABLE_EXTENSIONS=Y
-	make examples ENABLE_EXTENSIONS=N
+	$(SILENCE)echo Building with the default flags.
+	make
 	make clean
+	$(SILENCE)echo Building with the STDC++ new disabled. Extentions disabled too
+	make CPPUTEST_DISABLE_STDCPP_NEW=Y
+	make CPPUTEST_DISABLE_STDCPP_NEW=Y clean
+	$(SILENCE)echo Building ENABLE_DEBUG disabled and ENABLE_EXTENTIONS enabled
+	make ENABLE_DEBUG=N ENABLE_EXTENSIONS=Y
+	make clean ENABLE_DEBUG=N ENABLE_EXTENSIONS=Y
+	$(SILENCE)echo Building with Memory Leak Detection disabled
+	make CPPUTEST_DISABLE_MEMLEAKDETECTION=Y
+	make CPPUTEST_DISABLE_MEMLEAKDETECTION=Y clean
+	$(SILENCE)echo Building examples without extentions disabled
+	make examples ENABLE_EXTENSIONS=Y
+	make ENABLE_EXTENSIONS=Y clean cleanExamples
 	make ENABLE_DEBUG=N ENABLE_EXTENSIONS=N
 	$(SILENCE)./$(TEST_TARGET) -ojunit > junit_run_output
 	$(SILENCE)if [ -s junit_run_output ]; then echo "JUnit run has output. Build failed!"; exit 1; fi
 	make clean
 	make ENABLE_DEBUG=Y CPPUTEST_ENABLE_EXTENSIONS=Y
-	make clean
+	make clean CPPUTEST_ENABLE_EXTENSIONS=Y
 	make ENABLE_DEBUG=Y CPPUTEST_ENABLE_EXTENSIONS=N
-	make clean
-	make CPPUTEST_DISABLE_MEMLEAKDETECTION=Y
 	make clean
 	
 .PHONY: examples
-examples: 
+examples: $(TEST_TARGET) 
 	make -C examples  all
 	
 cleanExamples: 

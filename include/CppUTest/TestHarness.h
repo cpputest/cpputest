@@ -58,6 +58,15 @@
 #endif
 #endif
 
+
+#ifndef UT_STDCPP_NEW_ENABLED
+#ifdef UT_STDCPP_NEW_DISABLED
+#define UT_STDCPP_NEW_ENABLED 0
+#else
+#define UT_STDCPP_NEW_ENABLED 1
+#endif
+#endif
+
 /* original value was 9973 which works will with large programs. Now set to smaller since it takes
  * a lot of memory in embedded apps. Change it if you experience the memory leak detector to be slow.
  */

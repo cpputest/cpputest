@@ -43,7 +43,7 @@ public:
 	{
 	}
 	;
-	virtual void fail(char* fail_string)
+	virtual void fail(char* /*fail_string*/)
 	{
 	}
 	;
@@ -55,7 +55,9 @@ static DummyReporter dummy;
 static MemoryLeakAllocator* allocator;
 
 TEST_GROUP(MemoryLeakWarningTest)
-{ TestTestingFixture* fixture;
+{
+	TestTestingFixture* fixture;
+
 void setup()
 {
 	fixture = new TestTestingFixture();
@@ -122,3 +124,101 @@ TEST(MemoryLeakWarningTest, FailingTestDoesNotReportMemoryLeaks)
 	fixture->runAllTests();
 	LONGS_EQUAL(1, fixture->getFailureCount());
 }
+
+TEST_GROUP(OutOfMemoryTestsForOperatorNew)
+{
+	MemoryLeakAllocator* no_memory_allocator;
+	void setup()
+	{
+		no_memory_allocator = new NullUnknownAllocator;
+		MemoryLeakAllocator::setCurrentNewAllocator(no_memory_allocator);
+		MemoryLeakAllocator::setCurrentNewArrayAllocator(no_memory_allocator);
+	}
+	void teardown()
+	{
+		MemoryLeakAllocator::setCurrentNewAllocatorToDefault();
+		MemoryLeakAllocator::setCurrentNewArrayAllocatorToDefault();
+		delete no_memory_allocator;
+	}
+};
+
+#if UT_NEW_OVERRIDES_ENABLED
+
+#if UT_STDCPP_NEW_ENABLED
+
+TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorThrowsAnExceptionWhenUsingStdCppNew)
+{
+	try {
+		new char;
+		FAIL("Should have thrown an exception!")
+	}
+	catch (std::bad_alloc)
+	{
+	}
+}
+
+TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorThrowsAnExceptionWhenUsingStdCppNew)
+{
+	try {
+		new char[10];
+		FAIL("Should have thrown an exception!")
+	}
+	catch (std::bad_alloc)
+	{
+	}
+}
+
+#else
+
+TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorReturnsNull)
+{
+	POINTERS_EQUAL(NULL, new char);
+}
+
+TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorReturnsNull)
+{
+	POINTERS_EQUAL(NULL, new char[10]);
+}
+
+#endif
+
+#undef new
+
+#if UT_STDCPP_NEW_ENABLED
+
+TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorThrowsAnExceptionWhenUsingStdCppNewWithoutOverride)
+{
+	try {
+		new char;
+		FAIL("Should have thrown an exception!")
+	}
+	catch (std::bad_alloc)
+	{
+	}
+}
+
+TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorThrowsAnExceptionWhenUsingStdCppNewWithoutOverride)
+{
+	try {
+		new char[10];
+		FAIL("Should have thrown an exception!")
+	}
+	catch (std::bad_alloc)
+	{
+	}
+}
+#else
+
+TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorReturnsNullWithoutOverride)
+{
+	POINTERS_EQUAL(NULL, new char);
+}
+
+TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorReturnsNullWithoutOverride)
+{
+	POINTERS_EQUAL(NULL, new char[10]);
+}
+
+#endif
+
+#endif

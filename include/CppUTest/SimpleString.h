@@ -41,6 +41,7 @@
 #include <stdarg.h>
 
 class SimpleStringCollection;
+class MemoryLeakAllocator;
 
 class SimpleString
 {
@@ -75,6 +76,10 @@ public:
 
 private:
 	char *buffer;
+
+	char* allocString(int size) const;
+	void deallocString(char* str) const;
+	char* getEmptyString() const;
 };
 
 class SimpleStringCollection
