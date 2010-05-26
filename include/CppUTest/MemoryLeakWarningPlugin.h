@@ -53,17 +53,19 @@ extern "C" { /* include for size_t definition */
 
 #if UT_STDCPP_NEW_ENABLED
 #define UT_THROW(a) throw(a)
+#define UT_THROW_EMPTY() throw()
 #include <new>
 #else
 #define UT_THROW(a)
+#define UT_THROW_EMPTY() 
 #endif
 
 void* operator new(size_t size) UT_THROW(std::bad_alloc);
 void* operator new[](size_t size) UT_THROW(std::bad_alloc);
 void* operator new(size_t size, const char* file, int line) UT_THROW(std::bad_alloc);
 void* operator new[](size_t size, const char* file, int line) UT_THROW(std::bad_alloc);
-void operator delete(void* mem) UT_THROW();
-void operator delete[](void* mem) UT_THROW();
+void operator delete(void* mem) UT_THROW_EMPTY();
+void operator delete[](void* mem) UT_THROW_EMPTY();
 
 #if UT_NEW_MACROS_ENABLED
 #define new new(__FILE__, __LINE__)
