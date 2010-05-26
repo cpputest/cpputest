@@ -262,18 +262,6 @@ bool Utest::assertCstrContains(const char* expected, const char* actual,
 	return true;
 }
 
-void PadStringsToSameLength(SimpleString& aDecimal, SimpleString& eDecimal,
-		char padCharacter)
-{
-	char pad[2];
-	pad[0] = padCharacter;
-	pad[1] = 0;
-	if (aDecimal.size() > eDecimal.size()) eDecimal = SimpleString(pad,
-			aDecimal.size() - eDecimal.size()) + eDecimal;
-	else aDecimal = SimpleString(pad, eDecimal.size() - aDecimal.size())
-			+ aDecimal;
-}
-
 bool Utest::assertLongsEqual(long expected, long actual, const char* fileName,
 		int lineNumber)
 {
@@ -284,8 +272,8 @@ bool Utest::assertLongsEqual(long expected, long actual, const char* fileName,
 		SimpleString eDecimal = StringFrom(expected);
 		SimpleString eHex = HexStringFrom(expected);
 
-		PadStringsToSameLength(aDecimal, eDecimal, ' ');
-		PadStringsToSameLength(aHex, eHex, '0');
+		SimpleString::padStringsToSameLength(aDecimal, eDecimal, ' ');
+		SimpleString::padStringsToSameLength(aHex, eHex, '0');
 
 		SimpleString actualReported = aDecimal + " 0x" + aHex;
 		SimpleString expectedReported = eDecimal + " 0x" + eHex;

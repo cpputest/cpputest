@@ -240,6 +240,19 @@ SimpleString& SimpleString::operator+=(const char* rhs)
 	return *this;
 }
 
+void SimpleString::padStringsToSameLength(SimpleString& str1, SimpleString& str2,
+		char padCharacter)
+{
+	if (str1.size() > str2.size())
+		return padStringsToSameLength(str2, str1, padCharacter);
+
+	char pad[2];
+	pad[0] = padCharacter;
+	pad[1] = 0;
+	str1 = SimpleString(pad, str2.size() - str1.size()) + str1;
+}
+
+
 SimpleString StringFrom(bool value)
 {
 	return SimpleString(StringFromFormat("%s", value ? "true" : "false"));

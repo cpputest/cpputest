@@ -296,6 +296,38 @@ TEST_GROUP(SimpleString)
 		LONGS_EQUAL(11, count);
 	}
 
+	TEST(SimpleString, PadStringsToSameLengthString1Larger)
+	{
+		SimpleString str1("1");
+		SimpleString str2("222");
+
+		SimpleString::padStringsToSameLength(str1, str2, '4');
+		STRCMP_EQUAL("441", str1.asCharString());
+		STRCMP_EQUAL("222", str2.asCharString());
+	}
+
+	TEST(SimpleString, PadStringsToSameLengthString2Larger)
+	{
+		SimpleString str1("    ");
+		SimpleString str2("");
+
+		SimpleString::padStringsToSameLength(str1, str2, ' ');
+		STRCMP_EQUAL("    ", str1.asCharString());
+		STRCMP_EQUAL("    ", str2.asCharString());
+	}
+
+	TEST(SimpleString, PadStringsToSameLengthWithSameLengthStrings)
+	{
+		SimpleString str1("123");
+		SimpleString str2("123");
+
+		SimpleString::padStringsToSameLength(str1, str2, ' ');
+		STRCMP_EQUAL("123", str1.asCharString());
+		STRCMP_EQUAL("123", str2.asCharString());
+	}
+
+
+
 	TEST(SimpleString, NullParameters2)
 	{
 		SimpleString* arr = new SimpleString[100];

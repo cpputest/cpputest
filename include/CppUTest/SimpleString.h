@@ -74,6 +74,8 @@ public:
 	const char *asCharString() const;
 	int size() const;
 
+	static void padStringsToSameLength(SimpleString& str1, SimpleString& str2, char ch);
+
 private:
 	char *buffer;
 
