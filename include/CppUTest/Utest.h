@@ -165,9 +165,9 @@ public:
 	void (*setup_)();
 	void (*teardown_)();
 	void (*_testFunction)();
-	ExecFunctionTest(void(*setup)() = 0, void(*teardown)() = 0) :
-		Utest("Generic", "Generic", "Generic", 1), setup_(setup), teardown_(
-				teardown), _testFunction(0)
+	ExecFunctionTest(void(*set)() = 0, void(*tear)() = 0) :
+		Utest("Generic", "Generic", "Generic", 1), setup_(set), teardown_(
+				tear), _testFunction(0)
 	{
 	}
 	void testBody()
