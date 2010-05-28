@@ -55,7 +55,7 @@ public:
 
 	void setTestFunction(void(*testFunction)())
 	{
-		genTest_->_testFunction = testFunction;
+		genTest_->testFunction_ = testFunction;
 	}
 
 	void setSetup(void(*setupFunction)())

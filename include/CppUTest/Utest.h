@@ -164,15 +164,15 @@ class ExecFunctionTest: public Utest
 public:
 	void (*setup_)();
 	void (*teardown_)();
-	void (*_testFunction)();
+	void (*testFunction_)();
 	ExecFunctionTest(void(*set)() = 0, void(*tear)() = 0) :
 		Utest("Generic", "Generic", "Generic", 1), setup_(set), teardown_(
-				tear), _testFunction(0)
+				tear), testFunction_(0)
 	{
 	}
 	void testBody()
 	{
-		if (_testFunction) _testFunction();
+		if (testFunction_) testFunction_();
 	}
 	virtual void setup()
 	{

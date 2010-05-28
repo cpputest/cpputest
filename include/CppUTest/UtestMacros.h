@@ -64,8 +64,8 @@
 #define IGNORE_TEST(testGroup, testName)\
   class IGNORE##testGroup##_##testName##_Test : public TEST_GROUP_##CppUTestGroup##testGroup \
 { public: IGNORE##testGroup##_##testName##_Test () : TEST_GROUP_##CppUTestGroup##testGroup () {} \
-    virtual void run (TestResult& result) { \
-    	result.countIgnored(); } \
+    virtual void run (TestResult& result_parameter) { \
+    	result_parameter.countIgnored(); } \
     virtual const char* getProgressIndicator() const {return "!";} \
   protected:  virtual SimpleString getMacroName() const \
       { return "IGNORE_TEST"; } \

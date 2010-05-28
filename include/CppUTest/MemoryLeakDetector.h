@@ -54,26 +54,26 @@ private:
 struct MemoryLeakDetectorNode
 {
 	MemoryLeakDetectorNode() :
-		size(0), next(0)
+		size_(0), next_(0)
 	{
 	}
 	;
-	size_t size;
-	char* memory;
-	const char* file;
-	int line;
-	MemoryLeakAllocator* allocator;
-	MemLeakPeriod period;
+	size_t size_;
+	char* memory_;
+	const char* file_;
+	int line_;
+	MemoryLeakAllocator* allocator_;
+	MemLeakPeriod period_;
 
 private:
 	friend struct MemoryLeakDetectorList;
-	MemoryLeakDetectorNode* next;
+	MemoryLeakDetectorNode* next_;
 };
 
 struct MemoryLeakDetectorList
 {
 	MemoryLeakDetectorList() :
-		head(0)
+		head_(0)
 	{
 	}
 	;
@@ -98,7 +98,7 @@ struct MemoryLeakDetectorList
 	bool isInPeriod(MemoryLeakDetectorNode* node, MemLeakPeriod period);
 
 private:
-	MemoryLeakDetectorNode* head;
+	MemoryLeakDetectorNode* head_;
 };
 
 struct MemoryLeakDetectorTable
@@ -122,7 +122,7 @@ private:
 	{
 		hash_prime = MEMORY_LEAK_HASH_TABLE_SIZE
 	};
-	MemoryLeakDetectorList table[hash_prime];
+	MemoryLeakDetectorList table_[hash_prime];
 };
 
 class MemoryLeakDetector
@@ -163,11 +163,11 @@ public:
 		memory_corruption_buffer_size = 3
 	};
 private:
-	MemoryLeakFailure* reporter;
-	MemLeakPeriod current_period;
-	SimpleStringBuffer output_buffer;
-	MemoryLeakDetectorTable memoryTable;
-	bool doAllocationTypeChecking;
+	MemoryLeakFailure* reporter_;
+	MemLeakPeriod current_period_;
+	SimpleStringBuffer output_buffer_;
+	MemoryLeakDetectorTable memoryTable_;
+	bool doAllocationTypeChecking_;
 
 	void ConstructMemoryLeakReport(MemLeakPeriod period);
 	void reportFailure(const char* message, const char* allocFile,

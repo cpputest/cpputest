@@ -124,8 +124,8 @@ struct cpputest_pair
 static int index;
 static cpputest_pair setlist[SetPointerPlugin::MAX_SET];
 
-SetPointerPlugin::SetPointerPlugin(const SimpleString& name_) :
-	TestPlugin(name_)
+SetPointerPlugin::SetPointerPlugin(const SimpleString& name) :
+	TestPlugin(name)
 {
 	index = 0;
 }

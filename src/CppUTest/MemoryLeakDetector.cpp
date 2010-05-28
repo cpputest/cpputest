@@ -66,68 +66,68 @@ void MemoryLeakDetectorList::initNode(MemoryLeakDetectorNode* node,
 		MemLeakPeriod period, const char* file, int line)
 {
 	if (node) {
-		node->size = size;
-		node->memory = memory;
-		node->period = period;
-		node->file = file;
-		node->line = line;
-		node->allocator = allocator;
+		node->size_ = size;
+		node->memory_ = memory;
+		node->period_ = period;
+		node->file_ = file;
+		node->line_ = line;
+		node->allocator_ = allocator;
 	}
 }
 
 bool MemoryLeakDetectorList::isInPeriod(MemoryLeakDetectorNode* node,
 		MemLeakPeriod period)
 {
-	return period == mem_leak_period_all || node->period == period
-			|| (node->period != mem_leak_period_disabled && period
+	return period == mem_leak_period_all || node->period_ == period
+			|| (node->period_ != mem_leak_period_disabled && period
 					== mem_leak_period_enabled);
 }
 
 void MemoryLeakDetectorList::clearAllAccounting(MemLeakPeriod period)
 {
-	MemoryLeakDetectorNode* cur = head;
+	MemoryLeakDetectorNode* cur = head_;
 	MemoryLeakDetectorNode* prev = 0;
 
 	while (cur) {
 		if (isInPeriod(cur, period)) {
 			if (prev) {
-				prev->next = cur->next;
+				prev->next_ = cur->next_;
 				cur = prev;
 			}
 			else {
-				head = cur->next;
-				cur = head;
+				head_ = cur->next_;
+				cur = head_;
 				continue;
 			}
 		}
 		prev = cur;
-		cur = cur->next;
+		cur = cur->next_;
 	}
 }
 
 void MemoryLeakDetectorList::addNewNode(MemoryLeakDetectorNode* node)
 {
-	node->next = head;
-	head = node;
+	node->next_ = head_;
+	head_ = node;
 }
 
 MemoryLeakDetectorNode* MemoryLeakDetectorList::removeNode(char* memory)
 {
-	MemoryLeakDetectorNode* cur = head;
+	MemoryLeakDetectorNode* cur = head_;
 	MemoryLeakDetectorNode* prev = 0;
 	while (cur) {
-		if (cur->memory == memory) {
+		if (cur->memory_ == memory) {
 			if (prev) {
-				prev->next = cur->next;
+				prev->next_ = cur->next_;
 				return cur;
 			}
 			else {
-				head = cur->next;
+				head_ = cur->next_;
 				return cur;
 			}
 		}
 		prev = cur;
-		cur = cur->next;
+		cur = cur->next_;
 	}
 	return 0;
 }
@@ -135,7 +135,7 @@ MemoryLeakDetectorNode* MemoryLeakDetectorList::removeNode(char* memory)
 MemoryLeakDetectorNode* MemoryLeakDetectorList::getLeakFrom(
 		MemoryLeakDetectorNode* node, MemLeakPeriod period)
 {
-	for (MemoryLeakDetectorNode* cur = node; cur; cur = cur->next)
+	for (MemoryLeakDetectorNode* cur = node; cur; cur = cur->next_)
 		if (isInPeriod(cur, period)) return cur;
 	return 0;
 }
@@ -143,19 +143,19 @@ MemoryLeakDetectorNode* MemoryLeakDetectorList::getLeakFrom(
 MemoryLeakDetectorNode* MemoryLeakDetectorList::getFirstLeak(
 		MemLeakPeriod period)
 {
-	return getLeakFrom(head, period);
+	return getLeakFrom(head_, period);
 }
 
 MemoryLeakDetectorNode* MemoryLeakDetectorList::getNextLeak(
 		MemoryLeakDetectorNode* node, MemLeakPeriod period)
 {
-	return getLeakFrom(node->next, period);
+	return getLeakFrom(node->next_, period);
 }
 
 int MemoryLeakDetectorList::getTotalLeaks(MemLeakPeriod period)
 {
 	int total_leaks = 0;
-	for (MemoryLeakDetectorNode* node = head; node; node = node->next) {
+	for (MemoryLeakDetectorNode* node = head_; node; node = node->next_) {
 		if (isInPeriod(node, period)) total_leaks++;
 	}
 	return total_leaks;
@@ -163,7 +163,7 @@ int MemoryLeakDetectorList::getTotalLeaks(MemLeakPeriod period)
 
 bool MemoryLeakDetectorList::hasLeaks(MemLeakPeriod period)
 {
-	for (MemoryLeakDetectorNode* node = head; node; node = node->next)
+	for (MemoryLeakDetectorNode* node = head_; node; node = node->next_)
 		if (isInPeriod(node, period)) return true;
 	return false;
 }
@@ -178,23 +178,23 @@ int MemoryLeakDetectorTable::hash(char* memory)
 void MemoryLeakDetectorTable::clearAllAccounting(MemLeakPeriod period)
 {
 	for (int i = 0; i < hash_prime; i++)
-		table[i].clearAllAccounting(period);
+		table_[i].clearAllAccounting(period);
 }
 
 void MemoryLeakDetectorTable::addNewNode(MemoryLeakDetectorNode* node)
 {
-	table[hash(node->memory)].addNewNode(node);
+	table_[hash(node->memory_)].addNewNode(node);
 }
 
 MemoryLeakDetectorNode* MemoryLeakDetectorTable::removeNode(char* memory)
 {
-	return table[hash(memory)].removeNode(memory);
+	return table_[hash(memory)].removeNode(memory);
 }
 
 bool MemoryLeakDetectorTable::hasLeaks(MemLeakPeriod period)
 {
 	for (int i = 0; i < hash_prime; i++)
-		if (table[i].hasLeaks(period)) return true;
+		if (table_[i].hasLeaks(period)) return true;
 	return false;
 }
 
@@ -202,7 +202,7 @@ int MemoryLeakDetectorTable::getTotalLeaks(MemLeakPeriod period)
 {
 	int total_leaks = 0;
 	for (int i = 0; i < hash_prime; i++)
-		total_leaks += table[i].getTotalLeaks(period);
+		total_leaks += table_[i].getTotalLeaks(period);
 	return total_leaks;
 }
 
@@ -210,7 +210,7 @@ MemoryLeakDetectorNode* MemoryLeakDetectorTable::getFirstLeak(
 		MemLeakPeriod period)
 {
 	for (int i = 0; i < hash_prime; i++) {
-		MemoryLeakDetectorNode* node = table[i].getFirstLeak(period);
+		MemoryLeakDetectorNode* node = table_[i].getFirstLeak(period);
 		if (node) return node;
 	}
 	return 0;
@@ -219,12 +219,12 @@ MemoryLeakDetectorNode* MemoryLeakDetectorTable::getFirstLeak(
 MemoryLeakDetectorNode* MemoryLeakDetectorTable::getNextLeak(
 		MemoryLeakDetectorNode* leak, MemLeakPeriod period)
 {
-	int i = hash(leak->memory);
-	MemoryLeakDetectorNode* node = table[i].getNextLeak(leak, period);
+	int i = hash(leak->memory_);
+	MemoryLeakDetectorNode* node = table_[i].getNextLeak(leak, period);
 	if (node) return node;
 
 	for (++i; i < hash_prime; i++) {
-		node = table[i].getFirstLeak(period);
+		node = table_[i].getFirstLeak(period);
 		if (node) return node;
 	}
 	return 0;
@@ -236,49 +236,49 @@ MemoryLeakDetector::MemoryLeakDetector()
 {
 }
 
-void MemoryLeakDetector::init(MemoryLeakFailure* report)
+void MemoryLeakDetector::init(MemoryLeakFailure* reporter)
 {
-	doAllocationTypeChecking = true;
-	current_period = mem_leak_period_disabled;
-	reporter = report;
-	output_buffer = SimpleStringBuffer();
-	memoryTable = MemoryLeakDetectorTable();
+	doAllocationTypeChecking_ = true;
+	current_period_ = mem_leak_period_disabled;
+	reporter_ = reporter;
+	output_buffer_ = SimpleStringBuffer();
+	memoryTable_ = MemoryLeakDetectorTable();
 }
 
 void MemoryLeakDetector::clearAllAccounting(MemLeakPeriod period)
 {
-	memoryTable.clearAllAccounting(period);
+	memoryTable_.clearAllAccounting(period);
 }
 
 void MemoryLeakDetector::startChecking()
 {
-	output_buffer.clear();
-	current_period = mem_leak_period_checking;
+	output_buffer_.clear();
+	current_period_ = mem_leak_period_checking;
 }
 
 void MemoryLeakDetector::stopChecking()
 {
-	current_period = mem_leak_period_enabled;
+	current_period_ = mem_leak_period_enabled;
 }
 
 void MemoryLeakDetector::enable()
 {
-	current_period = mem_leak_period_enabled;
+	current_period_ = mem_leak_period_enabled;
 }
 
 void MemoryLeakDetector::disable()
 {
-	current_period = mem_leak_period_disabled;
+	current_period_ = mem_leak_period_disabled;
 }
 
 void MemoryLeakDetector::disableAllocationTypeChecking()
 {
-	doAllocationTypeChecking = false;
+	doAllocationTypeChecking_ = false;
 }
 
 void MemoryLeakDetector::enableAllocationTypeChecking()
 {
-	doAllocationTypeChecking = true;
+	doAllocationTypeChecking_ = true;
 }
 
 void MemoryLeakDetector::reportFailure(const char* message,
@@ -286,12 +286,12 @@ void MemoryLeakDetector::reportFailure(const char* message,
 		MemoryLeakAllocator* allocAllocator, const char* freeFile,
 		int freeLine, MemoryLeakAllocator* freeAllocator)
 {
-	output_buffer.add(message);
-	output_buffer.add(MEM_LEAK_ALLOC_LOCATION, allocFile, allocLine, allocSize,
+	output_buffer_.add(message);
+	output_buffer_.add(MEM_LEAK_ALLOC_LOCATION, allocFile, allocLine, allocSize,
 			allocAllocator->alloc_name());
-	output_buffer.add(MEM_LEAK_DEALLOC_LOCATION, freeFile, freeLine,
+	output_buffer_.add(MEM_LEAK_DEALLOC_LOCATION, freeFile, freeLine,
 			freeAllocator->free_name());
-	reporter->fail(output_buffer.toString());
+	reporter_->fail(output_buffer_.toString());
 }
 
 int calculateIntAlignedSize(size_t size)
@@ -333,15 +333,15 @@ void MemoryLeakDetector::checkForAllocMismatchOrCorruption(
 		MemoryLeakDetectorNode* node, const char* file, int line,
 		MemoryLeakAllocator* allocator)
 {
-	if (node->allocator != allocator && doAllocationTypeChecking) {
-		if (!allocator->isOfEqualType(node->allocator)) reportFailure(
-				MEM_LEAK_ALLOC_DEALLOC_MISMATCH, node->file, node->line,
-				node->size, node->allocator, file, line, allocator);
+	if (node->allocator_ != allocator && doAllocationTypeChecking_) {
+		if (!allocator->isOfEqualType(node->allocator_)) reportFailure(
+				MEM_LEAK_ALLOC_DEALLOC_MISMATCH, node->file_, node->line_,
+				node->size_, node->allocator_, file, line, allocator);
 	}
-	else if (node->memory[node->size] != 'B' || node->memory[node->size + 1]
-			!= 'A' || node->memory[node->size + 2] != 'S') reportFailure(
-			MEM_LEAK_MEMORY_CORRUPTION, node->file, node->line, node->size,
-			node->allocator, file, line, allocator);
+	else if (node->memory_[node->size_] != 'B' || node->memory_[node->size_ + 1]
+			!= 'A' || node->memory_[node->size_ + 2] != 'S') reportFailure(
+			MEM_LEAK_MEMORY_CORRUPTION, node->file_, node->line_, node->size_,
+			node->allocator_, file, line, allocator);
 }
 
 void MemoryLeakDetector::addMemoryLeakInfoAndCorruptionInfo(char* memory,
@@ -351,15 +351,15 @@ void MemoryLeakDetector::addMemoryLeakInfoAndCorruptionInfo(char* memory,
 	if (memory) {
 		MemoryLeakDetectorNode* node = getNodeFromMemoryPointer(memory, size);
 		MemoryLeakDetectorList::initNode(node, allocator, size, memory,
-				current_period, file, line);
-		memoryTable.addNewNode(node);
+				current_period_, file, line);
+		memoryTable_.addNewNode(node);
 	}
 }
 
 bool MemoryLeakDetector::removeMemoryLeakInfoAndCheckCorruption(char* memory,
 		const char* file, int line, MemoryLeakAllocator* allocator)
 {
-	MemoryLeakDetectorNode* node = memoryTable.removeNode(memory);
+	MemoryLeakDetectorNode* node = memoryTable_.removeNode(memory);
 	if (node) {
 		checkForAllocMismatchOrCorruption(node, file, line, allocator);
 		return true;
@@ -413,41 +413,41 @@ char* MemoryLeakDetector::reallocMemory(MemoryLeakAllocator* allocator,
 
 void MemoryLeakDetector::ConstructMemoryLeakReport(MemLeakPeriod period)
 {
-	MemoryLeakDetectorNode* leak = memoryTable.getFirstLeak(period);
+	MemoryLeakDetectorNode* leak = memoryTable_.getFirstLeak(period);
 	int total_leaks = 0;
-	output_buffer.add(MEM_LEAK_HEADER);
+	output_buffer_.add(MEM_LEAK_HEADER);
 
 	while (leak) {
-		output_buffer.add(MEM_LEAK_LEAK, leak->size, leak->file, leak->line,
-				leak->allocator->alloc_name(), leak->memory);
+		output_buffer_.add(MEM_LEAK_LEAK, leak->size_, leak->file_, leak->line_,
+				leak->allocator_->alloc_name(), leak->memory_);
 		total_leaks++;
-		leak = memoryTable.getNextLeak(leak, period);
+		leak = memoryTable_.getNextLeak(leak, period);
 	}
-	output_buffer.add("%s %d", MEM_LEAK_FOOTER, total_leaks);
+	output_buffer_.add("%s %d", MEM_LEAK_FOOTER, total_leaks);
 }
 
 const char* MemoryLeakDetector::report(MemLeakPeriod period)
 {
-	if (!memoryTable.hasLeaks(period)) return MEM_LEAK_NONE;
+	if (!memoryTable_.hasLeaks(period)) return MEM_LEAK_NONE;
 
-	output_buffer.clear();
+	output_buffer_.clear();
 	ConstructMemoryLeakReport(period);
 
-	return output_buffer.toString();
+	return output_buffer_.toString();
 }
 
 void MemoryLeakDetector::markCheckingPeriodLeaksAsNonCheckingPeriod()
 {
-	MemoryLeakDetectorNode* leak = memoryTable.getFirstLeak(
+	MemoryLeakDetectorNode* leak = memoryTable_.getFirstLeak(
 			mem_leak_period_checking);
 	while (leak) {
-		if (leak->period == mem_leak_period_checking) leak->period
+		if (leak->period_ == mem_leak_period_checking) leak->period_
 				= mem_leak_period_enabled;
-		leak = memoryTable.getNextLeak(leak, mem_leak_period_checking);
+		leak = memoryTable_.getNextLeak(leak, mem_leak_period_checking);
 	}
 }
 
 int MemoryLeakDetector::totalMemoryLeaks(MemLeakPeriod period)
 {
-	return memoryTable.getTotalLeaks(period);
+	return memoryTable_.getTotalLeaks(period);
 }

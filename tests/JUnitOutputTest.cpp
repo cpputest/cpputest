@@ -60,10 +60,10 @@ public:
 	int filesOpened;
 	int fileBalance;
 
-	SimpleString fileName;
-	SimpleString buffer;
+	SimpleString fileName_;
+	SimpleString buffer_;
 
-	TestResult* res;
+	TestResult* res_;
 	struct TestData
 	{
 		TestData() :
@@ -100,11 +100,11 @@ public:
 
 	void resetXmlFile()
 	{
-		buffer = "";
+		buffer_ = "";
 	}
 
 	MockJUnitTestOutput() :
-	filesOpened(0), fileBalance(0), res(0)
+	filesOpened(0), fileBalance(0), res_(0)
 	{
 		for (int i = 0; i < testGroupSize; i++) {
 			testGroupData_[i].numberTests_ = 0;
@@ -115,7 +115,7 @@ public:
 
 	void setResult(TestResult* testRes)
 	{
-		res = testRes;
+		res_ = testRes;
 	}
 
 	virtual ~MockJUnitTestOutput()
@@ -134,14 +134,14 @@ public:
 
 	void writeToFile(const SimpleString& buf)
 	{
-		buffer += buf;
+		buffer_ += buf;
 	}
 
 	void openFileForWrite(const SimpleString& in_FileName)
 	{
 		filesOpened++;
 		fileBalance++;
-		fileName = in_FileName;
+		fileName_ = in_FileName;
 	}
 
 	void closeFile()
@@ -167,27 +167,27 @@ public:
 	}
 	void runTests()
 	{
-		res->testsStarted();
+		res_->testsStarted();
 		for (int i = 0; i < testGroupSize; i++) {
 			TestGroupData& data = testGroupData_[i];
 			if (data.numberTests_ == 0) continue;
 
 			millisTime = 0;
-			res->currentGroupStarted(data.testData_[0].tst_);
-			for (int i = 0; i < data.numberTests_; i++) {
-				TestData& testData = data.testData_[i];
+			res_->currentGroupStarted(data.testData_[0].tst_);
+			for (int j = 0; j < data.numberTests_; j++) {
+				TestData& testData = data.testData_[j];
 
 				millisTime = 0;
-				res->currentTestStarted(testData.tst_);
+				res_->currentTestStarted(testData.tst_);
 				if (testData.failure_)
 				print(*testData.failure_);
 				millisTime = 10;
-				res->currentTestEnded(testData.tst_);
+				res_->currentTestEnded(testData.tst_);
 			}
 			millisTime = 50;
-			res->currentGroupEnded(data.testData_[0].tst_);
+			res_->currentGroupEnded(data.testData_[0].tst_);
 		}
-		res->testsEnded();
+		res_->testsEnded();
 	}
 
 	void setFailure(int groupIndex, int testIndex, const char* fileName, int lineNumber, const char* message)
@@ -214,7 +214,7 @@ public:
 	{
 		int totalSize = currentGroup().numberTests_+ defaultSize + (currentGroup().totalFailures_ * 2);
 		SimpleStringCollection col;
-		buffer.split("\n", col);
+		buffer_.split("\n", col);
 		CHECK(col.size() >= totalSize);
 		CHECK_HAS_XML_HEADER(col[0]);
 		CHECK_TEST_SUITE_START(col[1]);
@@ -311,7 +311,7 @@ TEST(JUnitOutputTest, oneTestInOneGroupAllPass)
 {
 	output->createTestsInGroup(0, 1, "group", "name");
 	runTests();
-	STRCMP_EQUAL("cpputest_group.xml", output->fileName.asCharString());
+	STRCMP_EQUAL("cpputest_group.xml", output->fileName_.asCharString());
 	LONGS_EQUAL(1, output->filesOpened);
 }
 

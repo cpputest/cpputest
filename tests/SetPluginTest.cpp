@@ -24,28 +24,28 @@ void (*fp1)();
 void (*fp2)();
 
 TEST_GROUP(SetPointerPluginTest)
-{ SetPointerPlugin* plugin;
-TestRegistry* myRegistry;
-StringBufferTestOutput* output;
-TestResult* result;
+{ SetPointerPlugin* plugin_;
+TestRegistry* myRegistry_;
+StringBufferTestOutput* output_;
+TestResult* result_;
 
 void setup()
 {
-	myRegistry = new TestRegistry();
-	plugin = new SetPointerPlugin("TestSetPlugin");
-	myRegistry->setCurrentRegistry(myRegistry);
-	myRegistry->installPlugin(plugin);
-	output = new StringBufferTestOutput();
-	result = new TestResult(*output);
+	myRegistry_ = new TestRegistry();
+	plugin_ = new SetPointerPlugin("TestSetPlugin");
+	myRegistry_->setCurrentRegistry(myRegistry_);
+	myRegistry_->installPlugin(plugin_);
+	output_ = new StringBufferTestOutput();
+	result_ = new TestResult(*output_);
 }
 
 void teardown()
 {
-	myRegistry->setCurrentRegistry(0);
-	delete myRegistry;
-	delete plugin;
-	delete output;
-	delete result;
+	myRegistry_->setCurrentRegistry(0);
+	delete myRegistry_;
+	delete plugin_;
+	delete output_;
+	delete result_;
 }
 };
 
@@ -72,11 +72,11 @@ TEST(SetPointerPluginTest, installTwoFunctionPointer)
 
 	fp1 = orig_func1;
 	fp2 = orig_func2;
-	myRegistry->addTest(tst);
-	myRegistry->runAllTests(*result);
+	myRegistry_->addTest(tst);
+	myRegistry_->runAllTests(*result_);
 	CHECK(fp1 == orig_func1);
 	CHECK(fp2 == orig_func2);
-	LONGS_EQUAL(0, result->getFailureCount());
+	LONGS_EQUAL(0, result_->getFailureCount());
 	delete tst;
 }
 
@@ -101,11 +101,11 @@ IGNORE_TEST(SetPointerPluginTest, installTooMuchFunctionPointer)
 {
 	MaxFunctionPointerUtest *tst = new MaxFunctionPointerUtest(
 			SetPointerPlugin::MAX_SET + 1);
-	myRegistry->addTest(tst);
+	myRegistry_->addTest(tst);
 
-	myRegistry->runAllTests(*result);
+	myRegistry_->runAllTests(*result_);
 
-	LONGS_EQUAL(1, result->getFailureCount());
+	LONGS_EQUAL(1, result_->getFailureCount());
 	delete tst;
 }
 
@@ -129,7 +129,7 @@ public:
 TEST(SetPointerPluginTest, doublePointer)
 {
 	SetDoublePointerUtest *doubletst = new SetDoublePointerUtest();
-	myRegistry->addTest(doubletst);
+	myRegistry_->addTest(doubletst);
 	CHECK(orig_double_ptr == &orig_double);
 	delete doubletst;
 }

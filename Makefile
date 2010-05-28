@@ -37,8 +37,7 @@ TEST_TARGET = \
 CPPUTEST_HOME = .
 CPP_PLATFORM = Gcc
 
-WARNINGFLAGS = -pedantic-errors -Wall -Wextra -Werror 
-#-Wshadow
+WARNINGFLAGS = -pedantic-errors -Wall -Wextra -Werror -Wshadow -Wswitch-default -Wswitch-enum -Wconversion
 CPPFLAGS += $(WARNINGFLAGS)
 
 ifeq ($(ENABLE_MEMLEAKDETECTION), N)

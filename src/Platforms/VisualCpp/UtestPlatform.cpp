@@ -50,11 +50,11 @@ void Utest::executePlatformSpecificTeardown()
    }
 }
 
-void Utest::executePlatformSpecificRunOneTest(TestPlugin* plugin, TestResult& result_)
+void Utest::executePlatformSpecificRunOneTest(TestPlugin* plugin_, TestResult& result_)
 {
     if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
        jmp_buf_index++;
-       runOneTest(plugin, result_);
+       runOneTest(plugin_, result_);
        jmp_buf_index--;
     }
 }

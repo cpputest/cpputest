@@ -31,9 +31,9 @@
 #include "CppUTest/MemoryLeakAllocator.h"
 
 /* Avoid using the memory leak detector INSIDE SimpleString as its used inside the detector */
-char* SimpleString::allocString(int size) const
+char* SimpleString::allocString(int _size) const
 {
-	return StandardNewArrayAllocator::defaultAllocator()->alloc_memory(size);
+	return StandardNewArrayAllocator::defaultAllocator()->alloc_memory(_size);
 }
 
 void SimpleString::deallocString(char* str) const
@@ -127,17 +127,17 @@ int SimpleString::count(const SimpleString& substr) const
 	return num;
 }
 
-void SimpleString::split(const SimpleString& split, SimpleStringCollection& col) const
+void SimpleString::split(const SimpleString& delimiter, SimpleStringCollection& col) const
 {
-	int num = count(split);
-	int extraEndToken = (endsWith(split)) ? 0 : 1;
+	int num = count(delimiter);
+	int extraEndToken = (endsWith(delimiter)) ? 0 : 1;
 	col.allocate(num + extraEndToken);
 
 	char* str = buffer_;
 	char* prev;
 	for (int i = 0; i < num; ++i) {
 		prev = str;
-		str = PlatformSpecificStrStr(str, split.buffer_) + 1;
+		str = PlatformSpecificStrStr(str, delimiter.buffer_) + 1;
 		int len = str - prev;
 		char* sub = allocString(len + 1);
 		PlatformSpecificStrNCpy(sub, prev, len);
@@ -347,11 +347,11 @@ SimpleStringCollection::SimpleStringCollection()
 	size_ = 0;
 }
 
-void SimpleStringCollection::allocate(int size)
+void SimpleStringCollection::allocate(int _size)
 {
 	if (collection_) delete[] collection_;
 
-	size_ = size;
+	size_ = _size;
 	collection_ = new SimpleString[size_];
 }
 
