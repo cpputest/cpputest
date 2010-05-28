@@ -29,9 +29,8 @@
 #include "CppUTest/CommandLineArguments.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
-CommandLineArguments::CommandLineArguments(int ac, const char** av,
-		TestPlugin* plugin) :
-	ac(ac), av(av), plugin_(plugin), verbose_(false), repeat_(1), groupFilter_(
+CommandLineArguments::CommandLineArguments(int ac, const char** av) :
+	ac_(ac), av_(av), verbose_(false), repeat_(1), groupFilter_(
 			""), nameFilter_(""), outputType_(OUTPUT_ECLIPSE)
 {
 }
@@ -40,19 +39,19 @@ CommandLineArguments::~CommandLineArguments()
 {
 }
 
-bool CommandLineArguments::parse()
+bool CommandLineArguments::parse(TestPlugin* plugin)
 {
 	bool correctParameters = true;
-	for (int i = 1; i < ac; i++) {
-		SimpleString argument = av[i];
+	for (int i = 1; i < ac_; i++) {
+		SimpleString argument = av_[i];
 		if (argument == "-v") verbose_ = true;
-		else if (argument.startsWith("-r")) SetRepeatCount(ac, av, i);
-		else if (argument.startsWith("-g")) SetGroupFilter(ac, av, i);
-		else if (argument.startsWith("-n")) SetNameFilter(ac, av, i);
+		else if (argument.startsWith("-r")) SetRepeatCount(ac_, av_, i);
+		else if (argument.startsWith("-g")) SetGroupFilter(ac_, av_, i);
+		else if (argument.startsWith("-n")) SetNameFilter(ac_, av_, i);
 		else if (argument.startsWith("-o")) correctParameters = SetOutputType(
-				ac, av, i);
+				ac_, av_, i);
 		else if (argument.startsWith("-p")) correctParameters
-				= plugin_->parseArguments(ac, av, i);
+				= plugin->parseArguments(ac_, av_, i);
 		else correctParameters = false;
 
 		if (correctParameters == false) {

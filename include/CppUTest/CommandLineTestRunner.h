@@ -59,12 +59,9 @@ public:
 	int runAllTestsMain();
 
 private:
-
-	int argc;
-	const char** argv;
 	TestOutput* output_;
-	JUnitTestOutput* jUnitOutput;
-	CommandLineArguments* arguments;
+	JUnitTestOutput* jUnitOutput_;
+	CommandLineArguments* arguments_;
 
 	bool parseArguments(TestPlugin*);
 	int runAllTests();

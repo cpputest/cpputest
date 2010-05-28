@@ -64,8 +64,8 @@ void teardown()
 
 bool newArgumentParser(int argc, const char** argv)
 {
-	args = new CommandLineArguments(argc, argv, plugin);
-	return args->parse();
+	args = new CommandLineArguments(argc, argv);
+	return args->parse(plugin);
 }
 };
 

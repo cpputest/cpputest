@@ -33,14 +33,15 @@
 
 CommandLineTestRunner::CommandLineTestRunner(int ac, const char** av,
 		TestOutput* output) :
-	argc(ac), argv(av), output_(output), jUnitOutput(new JUnitTestOutput)
+	output_(output), jUnitOutput_(new JUnitTestOutput)
 {
+	arguments_ = new CommandLineArguments(ac, av);
 }
 
 CommandLineTestRunner::~CommandLineTestRunner()
 {
-	delete arguments;
-	delete jUnitOutput;
+	delete arguments_;
+	delete jUnitOutput_;
 }
 
 int CommandLineTestRunner::RunAllTests(int ac, char** av)
@@ -85,9 +86,9 @@ int CommandLineTestRunner::runAllTestsMain()
 
 void CommandLineTestRunner::initializeTestRun()
 {
-	TestRegistry::getCurrentRegistry()->groupFilter(arguments->getGroupFilter());
-	TestRegistry::getCurrentRegistry()->nameFilter(arguments->getNameFilter());
-	if (arguments->isVerbose()) output_->verbose();
+	TestRegistry::getCurrentRegistry()->groupFilter(arguments_->getGroupFilter());
+	TestRegistry::getCurrentRegistry()->nameFilter(arguments_->getNameFilter());
+	if (arguments_->isVerbose()) output_->verbose();
 }
 
 int CommandLineTestRunner::runAllTests()
@@ -95,7 +96,7 @@ int CommandLineTestRunner::runAllTests()
 	initializeTestRun();
 	int loopCount = 0;
 	int failureCount = 0;
-	int repeat_ = arguments->getRepeatCount();
+	int repeat_ = arguments_->getRepeatCount();
 
 	while (loopCount++ < repeat_) {
 		output_->printTestRun(loopCount, repeat_);
@@ -109,35 +110,34 @@ int CommandLineTestRunner::runAllTests()
 
 bool CommandLineTestRunner::parseArguments(TestPlugin* plugin)
 {
-	arguments = new CommandLineArguments(argc, argv, plugin);
-	if (arguments->parse()) {
-		if (arguments->isJUnitOutput()) {
-			output_ = jUnitOutput;
+	if (arguments_->parse(plugin)) {
+		if (arguments_->isJUnitOutput()) {
+			output_ = jUnitOutput_;
 		}
 		return true;
 	}
 	else {
-		output_->print(arguments->usage());
+		output_->print(arguments_->usage());
 		return false;
 	}
 }
 
 bool CommandLineTestRunner::isVerbose()
 {
-	return arguments->isVerbose();
+	return arguments_->isVerbose();
 }
 
 int CommandLineTestRunner::getRepeatCount()
 {
-	return arguments->getRepeatCount();
+	return arguments_->getRepeatCount();
 }
 
 SimpleString CommandLineTestRunner::getGroupFilter()
 {
-	return arguments->getGroupFilter();
+	return arguments_->getGroupFilter();
 }
 
 SimpleString CommandLineTestRunner::getNameFilter()
 {
-	return arguments->getNameFilter();
+	return arguments_->getNameFilter();
 }

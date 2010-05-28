@@ -14,10 +14,10 @@ class TestPlugin;
 class CommandLineArguments
 {
 public:
-	explicit CommandLineArguments(int ac, const char** av, TestPlugin*);
+	explicit CommandLineArguments(int ac, const char** av);
 	virtual ~CommandLineArguments();
 
-	bool parse();
+	bool parse(TestPlugin* plugin);
 	bool isVerbose() const;
 	int getRepeatCount() const;
 	SimpleString getGroupFilter() const;
@@ -32,9 +32,8 @@ private:
 	{
 		OUTPUT_ECLIPSE, OUTPUT_JUNIT
 	};
-	int ac;
-	const char** av;
-	TestPlugin* plugin_;
+	int ac_;
+	const char** av_;
 
 	bool verbose_;
 	int repeat_;
