@@ -30,40 +30,24 @@
 
 /* Memory leak detector macros:
  *
- * UT_NEW_MACROS_ENABLED/DISABLED
- *   Control the #define new. When DISABLED, new with not be #defined.
- *   Without this, the memory leak detector will not know the file/line location of leaks.
- * UT_NEW_OVERRIDES_ENABLED/DISABLED
- *   Controls the override of the global operator new/deleted.
- *   Without this, there will be no memory leak detection in C++.
- * UT_MALLOC_MACROS_ENABLED/DISABLED
- *   Controls the #define of malloc for enabling memory leak detection in C.
+ * UT_MEMORY_LEAK_DETECTION_ENABLED/DISABLED
+ *   Controls the override of the global operator new/deleted and malloc/free.
+ *   Without this, there will be no memory leak detection in C/C++.
  */
 
-#ifndef UT_NEW_MACROS_ENABLED
-#ifdef UT_NEW_MACROS_DISABLED
-#define UT_NEW_MACROS_ENABLED 0
+#ifndef UT_MEMORY_LEAK_DETECTION_ENABLED
+#ifdef UT_MEMORY_LEAK_DETECTION_DISABLED
+#define UT_MEMORY_LEAK_DETECTION_ENABLED 0
 #else
-#define UT_NEW_MACROS_ENABLED 1
+#define UT_MEMORY_LEAK_DETECTION_ENABLED 1
 #endif
 #endif
 
-#ifndef UT_NEW_OVERRIDES_ENABLED
-#ifdef UT_NEW_OVERRIDES_DISABLED
-#define UT_NEW_OVERRIDES_ENABLED 0
-#undef UT_NEW_MACROS_ENABLED
-#define UT_NEW_MACROS_ENABLED 0
+#ifndef UT_USE_STDCPP_LIBRARY_ENABLED
+#ifdef UT_USE_STDCPP_LIBRARY_DISABLED
+#define UT_USE_STDCPP_LIBRARY_ENABLED 0
 #else
-#define UT_NEW_OVERRIDES_ENABLED 1
-#endif
-#endif
-
-
-#ifndef UT_STDCPP_NEW_ENABLED
-#ifdef UT_STDCPP_NEW_DISABLED
-#define UT_STDCPP_NEW_ENABLED 0
-#else
-#define UT_STDCPP_NEW_ENABLED 1
+#define UT_USE_STDCPP_LIBRARY_ENABLED 1
 #endif
 #endif
 
@@ -79,6 +63,10 @@
  * stdarg.h -> We use formatting functions and va_list requires to include stdarg.h in SimpleString
  * stdlib.h -> The TestHarness_c.h includes this to try to avoid conflicts in its malloc #define. This dependency can
  * easily be removed by not enabling the MALLOC overrides.
+ *
+ * Lib C++ dependencies are all under the UT_USE_STDCPP_LIBRARY_ENABLED.
+ * The only dependency is to <new> which has the bad_alloc struct
+ *
  */
 
 #include "Utest.h"

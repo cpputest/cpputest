@@ -16,10 +16,10 @@ else
 endif
 
 #Set to N to remove the dependency with StdC++ new header file and operator new std_badalloc throw
-ifeq ($(CPPUTEST_DISABLE_STDCPP_NEW), Y)
-	ENABLE_STDCPP_NEW = N
+ifeq ($(CPPUTEST_DISABLE_STDCPP_LIB), Y)
+	ENABLE_STDCPP_LIB = N
 else
-	ENABLE_STDCPP_NEW = Y
+	ENABLE_STDCPP_LIB = Y
 endif
 
 # Set to Y for enabling debug
@@ -41,17 +41,20 @@ WARNINGFLAGS = -pedantic-errors -Wall -Wextra -Werror -Wshadow -Wswitch-default 
 CPPFLAGS += $(WARNINGFLAGS)
 
 ifeq ($(ENABLE_MEMLEAKDETECTION), N)
-CPPFLAGS += -DUT_NEW_MACROS_DISABLED -DUT_NEW_OVERRIDES_DISABLED
+CPPFLAGS += -DUT_MEMORY_LEAK_DETECTION_DISABLED
 endif
 
 ifeq ($(ENABLE_DEBUG), Y)
 CPPFLAGS += -g
 endif
 
-ifeq ($(ENABLE_STDCPP_NEW), N)
-CPPFLAGS += -DUT_STDCPP_NEW_DISABLED
-CPPFLAGS += -nostdinc++
+ifeq ($(ENABLE_STDCPP_LIB), N)
+CPPFLAGS += -DUT_USE_STDCPP_LIBRARY_DISABLED
+CXXFLAGS += -nostdinc++
 endif
+
+CXXFLAGS += -include include/CppUTest/MemoryLeakDetectorNewMacros.h
+CFLAGS += -include include/CppUTest/MemoryLeakDetectorMallocMacros.h
 
 #GCOVFLAGS = -fprofile-arcs -ftest-coverage
 
@@ -93,8 +96,8 @@ test_all:
 	make
 	make clean
 	$(SILENCE)echo Building with the STDC++ new disabled. Extentions disabled too
-	make CPPUTEST_DISABLE_STDCPP_NEW=Y
-	make CPPUTEST_DISABLE_STDCPP_NEW=Y clean
+	make CPPUTEST_DISABLE_STDCPP_LIB=Y
+	make CPPUTEST_DISABLE_STDCPP_LIB=Y clean
 	$(SILENCE)echo Building ENABLE_DEBUG disabled and ENABLE_EXTENTIONS enabled
 	make ENABLE_DEBUG=N ENABLE_EXTENSIONS=Y
 	make clean ENABLE_DEBUG=N ENABLE_EXTENSIONS=Y

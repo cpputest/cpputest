@@ -37,7 +37,12 @@
 #ifndef D_SimpleStringExtensions_H
 #define D_SimpleStringExtensions_H
 
+#undef new
 #include <string>
+#if UT_NEW_MACRO_ENABLED
+#include "CppUTest/MemoryLeakDetectorNewMacros.h"
+#endif
+
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/SimpleString.h"
 

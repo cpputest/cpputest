@@ -145,13 +145,17 @@ const char* MemoryLeakWarningPlugin::FinalReport(int toBeDeletedLeaks)
 	return "";
 }
 
-#if UT_NEW_OVERRIDES_ENABLED
+#if UT_MEMORY_LEAK_DETECTION_ENABLED
 #undef new
 
-#if UT_STDCPP_NEW_ENABLED
+#if UT_USE_STDCPP_LIBRARY_ENABLED
 #define UT_THROW_BAD_ALLOC_WHEN_NULL(memory) if (memory == NULL) throw std::bad_alloc();
+#define UT_THROW(except) throw (except)
+#define UT_THROW_EMPTY() throw ()
 #else
 #define UT_THROW_BAD_ALLOC_WHEN_NULL(memory)
+#define UT_THROW(except)
+#define UT_THROW_EMPTY()
 #endif
 
 void* operator new(size_t size) UT_THROW(std::bad_alloc)

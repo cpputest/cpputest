@@ -46,29 +46,29 @@ extern "C" { /* include for size_t definition */
 #include "TestHarness_c.h"
 }
 
-#if UT_NEW_OVERRIDES_ENABLED
-#ifdef new
+#if UT_MEMORY_LEAK_DETECTION_ENABLED
+
 #undef new
-#endif
 
-#if UT_STDCPP_NEW_ENABLED
-#define UT_THROW(a) throw(a)
-#define UT_THROW_EMPTY() throw()
+#if UT_USE_STDCPP_LIBRARY_ENABLED
+
 #include <new>
+void* operator new(size_t size) throw(std::bad_alloc);
+void* operator new[](size_t size) throw(std::bad_alloc);
+void operator delete(void* mem) throw();
+void operator delete[](void* mem) throw();
+
 #else
-#define UT_THROW(a)
-#define UT_THROW_EMPTY() 
+
+void* operator new(size_t size);
+void* operator new[](size_t size);
+void operator delete(void* mem);
+void operator delete[](void* mem);
+
 #endif
 
-void* operator new(size_t size) UT_THROW(std::bad_alloc);
-void* operator new[](size_t size) UT_THROW(std::bad_alloc);
-void* operator new(size_t size, const char* file, int line) UT_THROW(std::bad_alloc);
-void* operator new[](size_t size, const char* file, int line) UT_THROW(std::bad_alloc);
-void operator delete(void* mem) UT_THROW_EMPTY();
-void operator delete[](void* mem) UT_THROW_EMPTY();
-
-#if UT_NEW_MACROS_ENABLED
-#define new new(__FILE__, __LINE__)
+#if UT_NEW_MACRO_ENABLED
+#include "MemoryLeakDetectorNewMacros.h"
 #endif
 
 #endif
