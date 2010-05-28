@@ -65,7 +65,7 @@ void setup()
 	allocator = new StandardNewAllocator;
 	detector->init(&dummy);
 	memPlugin = new MemoryLeakWarningPlugin("TestMemoryLeakWarningPlugin", detector);
-	fixture->registry->installPlugin(memPlugin);
+	fixture->registry_->installPlugin(memPlugin);
 	memPlugin->enable();
 
 	leak1 = 0;

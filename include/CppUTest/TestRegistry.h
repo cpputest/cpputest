@@ -76,7 +76,7 @@ private:
 	bool testShouldRun(Utest* test, TestResult& result);
 	bool endOfGroup(Utest* test);
 
-	Utest * tests;
+	Utest * tests_;
 	SimpleString* nameFilter_;
 	SimpleString* groupFilter_;
 	TestPlugin* firstPlugin_;

@@ -76,7 +76,7 @@ private:
 
 	int dotCount_;
 	bool verbose_;
-	const char* progressIndication;
+	const char* progressIndication_;
 };
 
 TestOutput& operator<<(TestOutput&, const char*);

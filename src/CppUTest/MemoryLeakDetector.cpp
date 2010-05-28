@@ -32,15 +32,15 @@
 #define UNKNOWN ((char*)("<unknown>"))
 
 SimpleStringBuffer::SimpleStringBuffer() :
-	positions_filled(0)
+	positions_filled_(0)
 {
 }
 
 
 void SimpleStringBuffer::clear()
 {
-	positions_filled = 0;
-	buffer[0] = '\0';
+	positions_filled_ = 0;
+	buffer_[0] = '\0';
 }
 
 void SimpleStringBuffer::add(const char* format, ...)
@@ -48,15 +48,15 @@ void SimpleStringBuffer::add(const char* format, ...)
 	int count = 0;
 	va_list arguments;
 	va_start(arguments, format);
-	count = PlatformSpecificVSNprintf(buffer + positions_filled,
-			SIMPLE_STRING_BUFFER_LEN - positions_filled, format, arguments);
-	if (count > 0) positions_filled += count;
+	count = PlatformSpecificVSNprintf(buffer_ + positions_filled_,
+			SIMPLE_STRING_BUFFER_LEN - positions_filled_, format, arguments);
+	if (count > 0) positions_filled_ += count;
 	va_end(arguments);
 }
 
 char* SimpleStringBuffer::toString()
 {
-	return buffer;
+	return buffer_;
 }
 
 ///////////////////////

@@ -50,11 +50,11 @@ void Utest::executePlatformSpecificTeardown()
    }
 }
 
-void Utest::executePlatformSpecificRunOneTest(TestPlugin* plugin, TestResult& result)
+void Utest::executePlatformSpecificRunOneTest(TestPlugin* plugin, TestResult& result_)
 {
     if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
        jmp_buf_index++;
-       runOneTest(plugin, result);
+       runOneTest(plugin, result_);
        jmp_buf_index--;
     }
 }
@@ -227,10 +227,10 @@ double PlatformSpecificFabs(double d)
 
 #if 0
 
-void TestRegistry::platformSpecificRunOneTest(Utest* test, TestResult& result)
+void TestRegistry::platformSpecificRunOneTest(Utest* test, TestResult& result_)
 {
     try {
-        runOneTest(test, result) ;
+        runOneTest(test, result_) ;
     }
     catch (int) {
         //exiting test early

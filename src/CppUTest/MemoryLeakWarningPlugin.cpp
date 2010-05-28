@@ -77,70 +77,70 @@ MemoryLeakDetector* MemoryLeakWarningPlugin::getGlobalDetector()
 	return globalDetector;
 }
 
-MemoryLeakWarningPlugin* MemoryLeakWarningPlugin::firstPlugin = 0;
+MemoryLeakWarningPlugin* MemoryLeakWarningPlugin::firstPlugin_ = 0;
 
 MemoryLeakWarningPlugin* MemoryLeakWarningPlugin::getFirstPlugin()
 {
-	return firstPlugin;
+	return firstPlugin_;
 }
 
 MemoryLeakDetector* MemoryLeakWarningPlugin::getMemoryLeakDetector()
 {
-	return memLeakDetector;
+	return memLeakDetector_;
 }
 
 void MemoryLeakWarningPlugin::ignoreAllLeaksInTest()
 {
-	ignoreAllWarnings = true;
+	ignoreAllWarnings_ = true;
 }
 
 void MemoryLeakWarningPlugin::expectLeaksInTest(int n)
 {
-	expectedLeaks = n;
+	expectedLeaks_ = n;
 }
 
 MemoryLeakWarningPlugin::MemoryLeakWarningPlugin(const SimpleString& name,
 		MemoryLeakDetector* localDetector) :
-	TestPlugin(name), ignoreAllWarnings(false), expectedLeaks(0)
+	TestPlugin(name), ignoreAllWarnings_(false), expectedLeaks_(0)
 {
-	if (firstPlugin == 0) firstPlugin = this;
+	if (firstPlugin_ == 0) firstPlugin_ = this;
 
-	if (localDetector) memLeakDetector = localDetector;
-	else memLeakDetector = getGlobalDetector();
+	if (localDetector) memLeakDetector_ = localDetector;
+	else memLeakDetector_ = getGlobalDetector();
 
-	memLeakDetector->enable();
+	memLeakDetector_->enable();
 }
 
 MemoryLeakWarningPlugin::~MemoryLeakWarningPlugin()
 {
-	if (this == firstPlugin) firstPlugin = 0;
+	if (this == firstPlugin_) firstPlugin_ = 0;
 }
 
 void MemoryLeakWarningPlugin::preTestAction(Utest& /*test*/, TestResult& result)
 {
-	memLeakDetector->startChecking();
-	failureCount = result.getFailureCount();
+	memLeakDetector_->startChecking();
+	failureCount_ = result.getFailureCount();
 }
 
 void MemoryLeakWarningPlugin::postTestAction(Utest& test, TestResult& result)
 {
-	memLeakDetector->stopChecking();
-	int leaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
+	memLeakDetector_->stopChecking();
+	int leaks = memLeakDetector_->totalMemoryLeaks(mem_leak_period_checking);
 
-	if (!ignoreAllWarnings && expectedLeaks != leaks && failureCount
+	if (!ignoreAllWarnings_ && expectedLeaks_ != leaks && failureCount_
 			== result.getFailureCount()) {
-		Failure f(&test, memLeakDetector->report(mem_leak_period_checking));
+		Failure f(&test, memLeakDetector_->report(mem_leak_period_checking));
 		result.addFailure(f);
 	}
-	memLeakDetector->markCheckingPeriodLeaksAsNonCheckingPeriod();
-	ignoreAllWarnings = false;
-	expectedLeaks = 0;
+	memLeakDetector_->markCheckingPeriodLeaksAsNonCheckingPeriod();
+	ignoreAllWarnings_ = false;
+	expectedLeaks_ = 0;
 }
 
 const char* MemoryLeakWarningPlugin::FinalReport(int toBeDeletedLeaks)
 {
-	int leaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_enabled);
-	if (leaks != toBeDeletedLeaks) return memLeakDetector->report(
+	int leaks = memLeakDetector_->totalMemoryLeaks(mem_leak_period_enabled);
+	if (leaks != toBeDeletedLeaks) return memLeakDetector_->report(
 			mem_leak_period_enabled);
 	return "";
 }

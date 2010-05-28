@@ -66,27 +66,27 @@ public:
 
 	int getTestCount() const
 	{
-		return testCount;
+		return testCount_;
 	}
 	int getRunCount() const
 	{
-		return runCount;
+		return runCount_;
 	}
 	int getCheckCount() const
 	{
-		return checkCount;
+		return checkCount_;
 	}
 	int getFilteredOutCount() const
 	{
-		return filteredOutCount;
+		return filteredOutCount_;
 	}
 	int getIgnoredCount() const
 	{
-		return ignoredCount;
+		return ignoredCount_;
 	}
 	int getFailureCount() const
 	{
-		return failureCount;
+		return failureCount_;
 	}
 
 	long getTotalExecutionTime() const;
@@ -96,19 +96,19 @@ public:
 	long getCurrentGroupTotalExecutionTime() const;
 private:
 
-	TestOutput& output;
-	int testCount;
-	int runCount;
-	int checkCount;
-	int failureCount;
-	int filteredOutCount;
-	int ignoredCount;
-	long totalExecutionTime;
-	long timeStarted;
-	long currentTestTimeStarted;
-	long currentTestTotalExecutionTime;
-	long currentGroupTimeStarted;
-	long currentGroupTotalExecutionTime;
+	TestOutput& output_;
+	int testCount_;
+	int runCount_;
+	int checkCount_;
+	int failureCount_;
+	int filteredOutCount_;
+	int ignoredCount_;
+	long totalExecutionTime_;
+	long timeStarted_;
+	long currentTestTimeStarted_;
+	long currentTestTotalExecutionTime_;
+	long currentGroupTimeStarted_;
+	long currentGroupTotalExecutionTime_;
 };
 
 #endif

@@ -32,17 +32,17 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 
 TestResult::TestResult(TestOutput& p) :
-	output(p), testCount(0), runCount(0), checkCount(0), failureCount(0),
-			filteredOutCount(0), ignoredCount(0), totalExecutionTime(0),
-			timeStarted(0), currentTestTimeStarted(0),
-			currentTestTotalExecutionTime(0), currentGroupTimeStarted(0),
-			currentGroupTotalExecutionTime(0)
+	output_(p), testCount_(0), runCount_(0), checkCount_(0), failureCount_(0),
+			filteredOutCount_(0), ignoredCount_(0), totalExecutionTime_(0),
+			timeStarted_(0), currentTestTimeStarted_(0),
+			currentTestTotalExecutionTime_(0), currentGroupTimeStarted_(0),
+			currentGroupTotalExecutionTime_(0)
 {
 }
 
 void TestResult::setProgressIndicator(const char* indicator)
 {
-	output.setProgressIndicator(indicator);
+	output_.setProgressIndicator(indicator);
 }
 
 TestResult::~TestResult()
@@ -51,97 +51,97 @@ TestResult::~TestResult()
 
 void TestResult::currentGroupStarted(Utest* test)
 {
-	output.printCurrentGroupStarted(*test);
-	currentGroupTimeStarted = GetPlatformSpecificTimeInMillis();
+	output_.printCurrentGroupStarted(*test);
+	currentGroupTimeStarted_ = GetPlatformSpecificTimeInMillis();
 }
 
 void TestResult::currentGroupEnded(Utest* /*test*/)
 {
-	currentGroupTotalExecutionTime = GetPlatformSpecificTimeInMillis()
-			- currentGroupTimeStarted;
-	output.printCurrentGroupEnded(*this);
+	currentGroupTotalExecutionTime_ = GetPlatformSpecificTimeInMillis()
+			- currentGroupTimeStarted_;
+	output_.printCurrentGroupEnded(*this);
 }
 
 void TestResult::currentTestStarted(Utest* test)
 {
-	output.printCurrentTestStarted(*test);
-	currentTestTimeStarted = GetPlatformSpecificTimeInMillis();
+	output_.printCurrentTestStarted(*test);
+	currentTestTimeStarted_ = GetPlatformSpecificTimeInMillis();
 }
 
 void TestResult::print(const char* text)
 {
-	output.print(text);
+	output_.print(text);
 }
 
 void TestResult::currentTestEnded(Utest* /*test*/)
 {
-	currentTestTotalExecutionTime = GetPlatformSpecificTimeInMillis()
-			- currentTestTimeStarted;
-	output.printCurrentTestEnded(*this);
+	currentTestTotalExecutionTime_ = GetPlatformSpecificTimeInMillis()
+			- currentTestTimeStarted_;
+	output_.printCurrentTestEnded(*this);
 
 }
 
 void TestResult::addFailure(const Failure& failure)
 {
-	output.print(failure);
-	failureCount++;
+	output_.print(failure);
+	failureCount_++;
 }
 
 void TestResult::countTest()
 {
-	testCount++;
+	testCount_++;
 }
 
 void TestResult::countRun()
 {
-	runCount++;
+	runCount_++;
 }
 
 void TestResult::countCheck()
 {
-	checkCount++;
+	checkCount_++;
 }
 
 void TestResult::countFilteredOut()
 {
-	filteredOutCount++;
+	filteredOutCount_++;
 }
 
 void TestResult::countIgnored()
 {
-	ignoredCount++;
+	ignoredCount_++;
 }
 
 void TestResult::testsStarted()
 {
-	timeStarted = GetPlatformSpecificTimeInMillis();
-	output.printTestsStarted();
+	timeStarted_ = GetPlatformSpecificTimeInMillis();
+	output_.printTestsStarted();
 }
 
 void TestResult::testsEnded()
 {
 	long timeEnded = GetPlatformSpecificTimeInMillis();
-	totalExecutionTime = timeEnded - timeStarted;
-	output.printTestsEnded(*this);
+	totalExecutionTime_ = timeEnded - timeStarted_;
+	output_.printTestsEnded(*this);
 }
 
 long TestResult::getTotalExecutionTime() const
 {
-	return totalExecutionTime;
+	return totalExecutionTime_;
 }
 
 void TestResult::setTotalExecutionTime(long exTime)
 {
-	totalExecutionTime = exTime;
+	totalExecutionTime_ = exTime;
 }
 
 long TestResult::getCurrentTestTotalExecutionTime() const
 {
-	return currentTestTotalExecutionTime;
+	return currentTestTotalExecutionTime_;
 }
 
 long TestResult::getCurrentGroupTotalExecutionTime() const
 {
-	return currentGroupTotalExecutionTime;
+	return currentGroupTotalExecutionTime_;
 }
 

@@ -30,7 +30,7 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 
 TestOutput::TestOutput() :
-	dotCount_(0), verbose_(false), progressIndication(".")
+	dotCount_(0), verbose_(false), progressIndication_(".")
 {
 }
 
@@ -89,13 +89,13 @@ void TestOutput::printCurrentTestEnded(const TestResult& res)
 
 void TestOutput::printProgressIndicator()
 {
-	print(progressIndication);
+	print(progressIndication_);
 	if (++dotCount_ % 50 == 0) print("\n");
 }
 
 void TestOutput::setProgressIndicator(const char* indicator)
 {
-	progressIndication = indicator;
+	progressIndication_ = indicator;
 }
 
 void TestOutput::printTestsStarted()

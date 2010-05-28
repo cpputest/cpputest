@@ -95,12 +95,12 @@ public:
 
 	static MemoryLeakDetector* getGlobalDetector();
 private:
-	MemoryLeakDetector* memLeakDetector;
-	bool ignoreAllWarnings;
-	int expectedLeaks;
-	int failureCount;
+	MemoryLeakDetector* memLeakDetector_;
+	bool ignoreAllWarnings_;
+	int expectedLeaks_;
+	int failureCount_;
 
-	static MemoryLeakWarningPlugin* firstPlugin;
+	static MemoryLeakWarningPlugin* firstPlugin_;
 };
 
 #endif

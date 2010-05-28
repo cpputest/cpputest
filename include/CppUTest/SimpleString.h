@@ -77,7 +77,7 @@ public:
 	static void padStringsToSameLength(SimpleString& str1, SimpleString& str2, char ch);
 
 private:
-	char *buffer;
+	char *buffer_;
 
 	char* allocString(int size) const;
 	void deallocString(char* str) const;
@@ -96,9 +96,9 @@ public:
 	SimpleString& operator[](int index);
 
 private:
-	SimpleString* collection;
-	SimpleString empty;
-	int _size;
+	SimpleString* collection_;
+	SimpleString empty_;
+	int size_;
 
 	void operator =(SimpleStringCollection&);
 	SimpleStringCollection(SimpleStringCollection&);

@@ -47,8 +47,8 @@ struct SimpleStringBuffer
 	char* toString();
 
 private:
-	char buffer[SIMPLE_STRING_BUFFER_LEN];
-	int positions_filled;
+	char buffer_[SIMPLE_STRING_BUFFER_LEN];
+	int positions_filled_;
 };
 
 struct MemoryLeakDetectorNode

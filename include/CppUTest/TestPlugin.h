@@ -77,7 +77,7 @@ public:
 	TestPlugin* getPluginByName(const SimpleString& name);
 
 protected:
-	TestPlugin(TestPlugin* next);
+	TestPlugin(TestPlugin* next_);
 
 private:
 	TestPlugin* next_;

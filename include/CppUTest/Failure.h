@@ -60,10 +60,10 @@ public:
 	virtual SimpleString getMessage() const;
 
 protected:
-	SimpleString testName;
-	SimpleString fileName;
-	long lineNumber;
-	SimpleString message;
+	SimpleString testName_;
+	SimpleString fileName_;
+	long lineNumber_;
+	SimpleString message_;
 
 	Failure& operator=(const Failure&);
 

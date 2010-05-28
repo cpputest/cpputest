@@ -48,7 +48,7 @@ void setup()
 	OrderedTest::setOrderedTestHead(0);
 
 	fixture = new TestTestingFixture();
-	fixture->registry->unDoLastAddTest();
+	fixture->registry_->unDoLastAddTest();
 }
 
 void teardown()
@@ -69,12 +69,12 @@ void InstallNormalTest(Utest* test)
 
 Utest* firstTest()
 {
-	return fixture->registry->getFirstTest();
+	return fixture->registry_->getFirstTest();
 }
 
 Utest* secondTest()
 {
-	return fixture->registry->getFirstTest()->getNext();
+	return fixture->registry_->getFirstTest()->getNext();
 }
 };
 

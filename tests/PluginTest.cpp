@@ -78,7 +78,7 @@ TEST_GROUP(PluginTest)
 			firstPlugin = new DummyPlugin(GENERIC_PLUGIN);
 			secondPlugin = new DummyPlugin(GENERIC_PLUGIN2);
 			genFixture = new TestTestingFixture;
-			registry = genFixture->registry;
+			registry = genFixture->registry_;
 			registry->installPlugin(firstPlugin);
 			sequenceNumber = 1;
 		}

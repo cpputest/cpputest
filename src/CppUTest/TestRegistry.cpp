@@ -29,7 +29,7 @@
 #include "CppUTest/TestRegistry.h"
 
 TestRegistry::TestRegistry() :
-	tests(&NullTest::instance()), nameFilter_(0), groupFilter_(0),
+	tests_(&NullTest::instance()), nameFilter_(0), groupFilter_(0),
 			firstPlugin_(NullTestPlugin::instance())
 {
 }
@@ -49,7 +49,7 @@ void TestRegistry::cleanup()
 
 void TestRegistry::addTest(Utest *test)
 {
-	tests = test->addTest(tests);
+	tests_ = test->addTest(tests_);
 }
 
 void TestRegistry::runAllTests(TestResult& result)
@@ -57,7 +57,7 @@ void TestRegistry::runAllTests(TestResult& result)
 	bool groupStart = true;
 
 	result.testsStarted();
-	for (Utest *test = tests; !test->isNull(); test = test->getNext()) {
+	for (Utest *test = tests_; !test->isNull(); test = test->getNext()) {
 
 		if (groupStart) {
 			result.currentGroupStarted(test);
@@ -87,7 +87,7 @@ bool TestRegistry::endOfGroup(Utest* test)
 
 int TestRegistry::countTests()
 {
-	return tests->countTests();
+	return tests_->countTests();
 }
 
 TestRegistry* TestRegistry::currentRegistry_ = 0;
@@ -105,7 +105,7 @@ void TestRegistry::setCurrentRegistry(TestRegistry* registry)
 
 void TestRegistry::unDoLastAddTest()
 {
-	tests = tests->getNext();
+	tests_ = tests_->getNext();
 
 }
 
@@ -172,12 +172,12 @@ void TestRegistry::removePluginByName(const SimpleString& name)
 
 Utest* TestRegistry::getFirstTest()
 {
-	return tests;
+	return tests_;
 }
 
 Utest* TestRegistry::getLastTest()
 {
-	Utest* current = tests;
+	Utest* current = tests_;
 	while (!current->getNext()->isNull())
 		current = current->getNext();
 	return current;
@@ -185,7 +185,7 @@ Utest* TestRegistry::getLastTest()
 
 Utest* TestRegistry::getTestWithNext(Utest* test)
 {
-	Utest* current = tests;
+	Utest* current = tests_;
 	while (!current->getNext()->isNull() && current->getNext() != test)
 		current = current->getNext();
 	return current;

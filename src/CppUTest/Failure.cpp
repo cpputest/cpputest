@@ -31,26 +31,26 @@
 
 Failure::Failure(Utest* test, const char* fileName, long lineNumber,
 		const SimpleString& theMessage) :
-	testName(test->getFormattedName()), fileName(fileName), lineNumber(
-			lineNumber), message(theMessage)
+	testName_(test->getFormattedName()), fileName_(fileName), lineNumber_(
+			lineNumber), message_(theMessage)
 {
 }
 
 Failure::Failure(Utest* test, const SimpleString& theMessage) :
-	testName(test->getFormattedName()), fileName(test->getFile()), lineNumber(
-			test->getLineNumber()), message(theMessage)
+	testName_(test->getFormattedName()), fileName_(test->getFile()), lineNumber_(
+			test->getLineNumber()), message_(theMessage)
 {
 }
 
 Failure::Failure(Utest* test, const char* fileName, long lineNum) :
-	testName(test->getFormattedName()), fileName(fileName),
-			lineNumber(lineNum), message("no message")
+	testName_(test->getFormattedName()), fileName_(fileName),
+			lineNumber_(lineNum), message_("no message")
 {
 }
 
 Failure::Failure(const Failure& f) :
-	testName(f.testName), fileName(f.fileName), lineNumber(f.lineNumber),
-			message(f.message)
+	testName_(f.testName_), fileName_(f.fileName_), lineNumber_(f.lineNumber_),
+			message_(f.message_)
 {
 }
 
@@ -60,22 +60,22 @@ Failure::~Failure()
 
 SimpleString Failure::getFileName() const
 {
-	return fileName;
+	return fileName_;
 }
 
 SimpleString Failure::getTestName() const
 {
-	return testName;
+	return testName_;
 }
 
 int Failure::getLineNumber() const
 {
-	return lineNumber;
+	return lineNumber_;
 }
 
 SimpleString Failure::getMessage() const
 {
-	return message;
+	return message_;
 }
 
 EqualsFailure::EqualsFailure(Utest* test, const char* fileName,
@@ -85,7 +85,7 @@ EqualsFailure::EqualsFailure(Utest* test, const char* fileName,
 {
 
 	const char* format = "expected <%s>\n\tbut was  <%s>";
-	message = StringFromFormat(format, expected.asCharString(),
+	message_ = StringFromFormat(format, expected.asCharString(),
 			actual.asCharString());
 }
 
@@ -96,6 +96,6 @@ ContainsFailure::ContainsFailure(Utest* test, const char* fileName,
 {
 
 	const char* format = "actual <%s>\n\tdid not contain  <%s>";
-	message = StringFromFormat(format, actual.asCharString(),
+	message_ = StringFromFormat(format, actual.asCharString(),
 			expected.asCharString());
 }

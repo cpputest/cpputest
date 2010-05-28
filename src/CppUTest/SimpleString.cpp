@@ -50,20 +50,20 @@ char* SimpleString::getEmptyString() const
 SimpleString::SimpleString(const char *otherBuffer)
 {
 	if (otherBuffer == 0) {
-		buffer = getEmptyString();
+		buffer_ = getEmptyString();
 	}
 	else {
 		int len = PlatformSpecificStrLen(otherBuffer) + 1;
-		buffer = allocString(len);
-		PlatformSpecificStrCpy(buffer, otherBuffer);
+		buffer_ = allocString(len);
+		PlatformSpecificStrCpy(buffer_, otherBuffer);
 	}
 }
 
 SimpleString::SimpleString(const char *other, int repeatCount)
 {
 	int len = PlatformSpecificStrLen(other) * repeatCount + 1;
-	buffer = allocString(len);
-	char* next = buffer;
+	buffer_ = allocString(len);
+	char* next = buffer_;
 	for (int i = 0; i < repeatCount; i++) {
 		PlatformSpecificStrCpy(next, other);
 		next += PlatformSpecificStrLen(other);
@@ -74,17 +74,17 @@ SimpleString::SimpleString(const char *other, int repeatCount)
 SimpleString::SimpleString(const SimpleString& other)
 {
 	int len = other.size() + 1;
-	buffer = allocString(len);
-	PlatformSpecificStrCpy(buffer, other.buffer);
+	buffer_ = allocString(len);
+	PlatformSpecificStrCpy(buffer_, other.buffer_);
 }
 
 SimpleString& SimpleString::operator=(const SimpleString& other)
 {
 	if (this != &other) {
-		deallocString(buffer);
+		deallocString(buffer_);
 		int len = other.size() + 1;
-		buffer = allocString(len);
-		PlatformSpecificStrCpy(buffer, other.buffer);
+		buffer_ = allocString(len);
+		PlatformSpecificStrCpy(buffer_, other.buffer_);
 	}
 	return *this;
 }
@@ -93,34 +93,34 @@ bool SimpleString::contains(const SimpleString& other) const
 {
 	//strstr on some machines does not handle ""
 	//the right way.  "" should be found in any string
-	if (PlatformSpecificStrLen(other.buffer) == 0) return true;
-	else if (PlatformSpecificStrLen(buffer) == 0) return false;
-	else return PlatformSpecificStrStr(buffer, other.buffer) != 0;
+	if (PlatformSpecificStrLen(other.buffer_) == 0) return true;
+	else if (PlatformSpecificStrLen(buffer_) == 0) return false;
+	else return PlatformSpecificStrStr(buffer_, other.buffer_) != 0;
 }
 
 bool SimpleString::startsWith(const SimpleString& other) const
 {
-	if (PlatformSpecificStrLen(other.buffer) == 0) return true;
-	else if (PlatformSpecificStrLen(buffer) == 0) return false;
-	else return PlatformSpecificStrStr(buffer, other.buffer) == buffer;
+	if (PlatformSpecificStrLen(other.buffer_) == 0) return true;
+	else if (PlatformSpecificStrLen(buffer_) == 0) return false;
+	else return PlatformSpecificStrStr(buffer_, other.buffer_) == buffer_;
 }
 
 bool SimpleString::endsWith(const SimpleString& other) const
 {
-	int buffer_length = PlatformSpecificStrLen(buffer);
-	int other_buffer_length = PlatformSpecificStrLen(other.buffer);
+	int buffer_length = PlatformSpecificStrLen(buffer_);
+	int other_buffer_length = PlatformSpecificStrLen(other.buffer_);
 	if (other_buffer_length == 0) return true;
 	if (buffer_length == 0) return false;
 	if (buffer_length < other_buffer_length) return false;
-	return PlatformSpecificStrCmp(buffer + buffer_length - other_buffer_length,
-			other.buffer) == 0;
+	return PlatformSpecificStrCmp(buffer_ + buffer_length - other_buffer_length,
+			other.buffer_) == 0;
 }
 
 int SimpleString::count(const SimpleString& substr) const
 {
 	int num = 0;
-	char* str = buffer;
-	while ((str = PlatformSpecificStrStr(str, substr.buffer))) {
+	char* str = buffer_;
+	while ((str = PlatformSpecificStrStr(str, substr.buffer_))) {
 		num++;
 		str++;
 	}
@@ -133,11 +133,11 @@ void SimpleString::split(const SimpleString& split, SimpleStringCollection& col)
 	int extraEndToken = (endsWith(split)) ? 0 : 1;
 	col.allocate(num + extraEndToken);
 
-	char* str = buffer;
+	char* str = buffer_;
 	char* prev;
 	for (int i = 0; i < num; ++i) {
 		prev = str;
-		str = PlatformSpecificStrStr(str, split.buffer) + 1;
+		str = PlatformSpecificStrStr(str, split.buffer_) + 1;
 		int len = str - prev;
 		char* sub = allocString(len + 1);
 		PlatformSpecificStrNCpy(sub, prev, len);
@@ -154,7 +154,7 @@ void SimpleString::replace(char to, char with)
 {
 	int s = size();
 	for (int i = 0; i < s; i++) {
-		if (buffer[i] == to) buffer[i] = with;
+		if (buffer_[i] == to) buffer_[i] = with;
 	}
 }
 
@@ -170,40 +170,40 @@ void SimpleString::replace(const char* to, const char* with)
 	if (newsize) {
 		char* newbuf = allocString(newsize);
 		for (int i = 0, j = 0; i < len;) {
-			if (PlatformSpecificStrNCmp(&buffer[i], to, tolen) == 0) {
+			if (PlatformSpecificStrNCmp(&buffer_[i], to, tolen) == 0) {
 				PlatformSpecificStrNCpy(&newbuf[j], with, withlen);
 				j += withlen;
 				i += tolen;
 			}
 			else {
-				newbuf[j] = buffer[i];
+				newbuf[j] = buffer_[i];
 				j++;
 				i++;
 			}
 		}
-		deallocString(buffer);
-		buffer = newbuf;
-		buffer[newsize - 1] = '\0';
+		deallocString(buffer_);
+		buffer_ = newbuf;
+		buffer_[newsize - 1] = '\0';
 	}
 	else {
-		buffer = getEmptyString();
-		buffer[0] = '\0';
+		buffer_ = getEmptyString();
+		buffer_[0] = '\0';
 	}
 }
 
 const char *SimpleString::asCharString() const
 {
-	return buffer;
+	return buffer_;
 }
 
 int SimpleString::size() const
 {
-	return PlatformSpecificStrLen(buffer);
+	return PlatformSpecificStrLen(buffer_);
 }
 
 SimpleString::~SimpleString()
 {
-	deallocString(buffer);
+	deallocString(buffer_);
 }
 
 bool operator==(const SimpleString& left, const SimpleString& right)
@@ -219,24 +219,24 @@ bool operator!=(const SimpleString& left, const SimpleString& right)
 
 SimpleString SimpleString::operator+(const SimpleString& rhs)
 {
-	SimpleString t(buffer);
-	t += rhs.buffer;
+	SimpleString t(buffer_);
+	t += rhs.buffer_;
 	return t;
 }
 
 SimpleString& SimpleString::operator+=(const SimpleString& rhs)
 {
-	return operator+=(rhs.buffer);
+	return operator+=(rhs.buffer_);
 }
 
 SimpleString& SimpleString::operator+=(const char* rhs)
 {
 	int len = this->size() + PlatformSpecificStrLen(rhs) + 1;
 	char* tbuffer = allocString(len);
-	PlatformSpecificStrCpy(tbuffer, this->buffer);
+	PlatformSpecificStrCpy(tbuffer, this->buffer_);
 	PlatformSpecificStrCat(tbuffer, rhs);
-	deallocString(buffer);
-	buffer = tbuffer;
+	deallocString(buffer_);
+	buffer_ = tbuffer;
 	return *this;
 }
 
@@ -343,35 +343,35 @@ SimpleString VStringFromFormat(const char* format, va_list args)
 
 SimpleStringCollection::SimpleStringCollection()
 {
-	collection = 0;
-	_size = 0;
+	collection_ = 0;
+	size_ = 0;
 }
 
 void SimpleStringCollection::allocate(int size)
 {
-	if (collection) delete[] collection;
+	if (collection_) delete[] collection_;
 
-	_size = size;
-	collection = new SimpleString[_size];
+	size_ = size;
+	collection_ = new SimpleString[size_];
 }
 
 SimpleStringCollection::~SimpleStringCollection()
 {
-	delete[] (collection);
+	delete[] (collection_);
 }
 
 int SimpleStringCollection::size() const
 {
-	return _size;
+	return size_;
 }
 
 SimpleString& SimpleStringCollection::operator[](int index)
 {
-	if (index >= _size) {
-		empty = "";
-		return empty;
+	if (index >= size_) {
+		empty_ = "";
+		return empty_;
 	}
 
-	return collection[index];
+	return collection_[index];
 }
 

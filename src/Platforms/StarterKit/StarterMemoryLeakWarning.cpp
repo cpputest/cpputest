@@ -60,7 +60,7 @@ void MemoryLeakWarning::CreateData()
 	_impl->blockUsageCheckPoint = 0;
 	_impl->arrayUsageCheckPoint = 0;
 	_impl->expectCount = 0;
-	_impl->message[0] = '\0';
+	_impl->message_[0] = '\0';
 }
 
 void MemoryLeakWarning::DestroyData()
@@ -166,16 +166,16 @@ bool MemoryLeakWarning::UsageIsNotBalanced()
   if (blockBalance == 0 && arrayBalance == 0)
     return false;
   else if (blockBalance + arrayBalance == 0)
-    sprintf(_impl->message, "No leaks but some arrays were deleted without []\n");
+    sprintf(_impl->message_, "No leaks but some arrays were deleted without []\n");
   else
     {
       int nchars = 0;
       if (_impl->blockUsageCheckPoint != allocatedBlocks)
-        nchars = sprintf(_impl->message, "this test leaks %d blocks",
+        nchars = sprintf(_impl->message_, "this test leaks %d blocks",
                          allocatedBlocks - _impl->blockUsageCheckPoint);
 
       if (_impl->arrayUsageCheckPoint != allocatedArrays)
-        sprintf(_impl->message + nchars, "this test leaks %d arrays",
+        sprintf(_impl->message_ + nchars, "this test leaks %d arrays",
                 allocatedArrays - _impl->arrayUsageCheckPoint);
     }
   return true;
@@ -183,7 +183,7 @@ bool MemoryLeakWarning::UsageIsNotBalanced()
 
 const char* MemoryLeakWarning::Message()
 {
-  return _impl->message;
+  return _impl->message_;
 }
 
 void MemoryLeakWarning::ExpectLeaks(int n)

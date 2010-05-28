@@ -34,53 +34,53 @@ public:
 
 	TestTestingFixture()
 	{
-		output = new StringBufferTestOutput();
-		result = new TestResult(*output);
-		genTest = new ExecFunctionTest();
-		registry = new TestRegistry();
+		output_ = new StringBufferTestOutput();
+		result_ = new TestResult(*output_);
+		genTest_ = new ExecFunctionTest();
+		registry_ = new TestRegistry();
 
-		registry->setCurrentRegistry(registry);
-		registry->addTest(genTest);
+		registry_->setCurrentRegistry(registry_);
+		registry_->addTest(genTest_);
 	}
 	;
 
 	virtual ~TestTestingFixture()
 	{
-		registry->setCurrentRegistry(0);
-		delete registry;
-		delete result;
-		delete output;
-		delete genTest;
+		registry_->setCurrentRegistry(0);
+		delete registry_;
+		delete result_;
+		delete output_;
+		delete genTest_;
 	}
 
 	void setTestFunction(void(*testFunction)())
 	{
-		genTest->_testFunction = testFunction;
+		genTest_->_testFunction = testFunction;
 	}
 
 	void setSetup(void(*setupFunction)())
 	{
-		genTest->setup_ = setupFunction;
+		genTest_->setup_ = setupFunction;
 	}
 
 	void setTeardown(void(*teardownFunction)())
 	{
-		genTest->teardown_ = teardownFunction;
+		genTest_->teardown_ = teardownFunction;
 	}
 
 	void runAllTests()
 	{
-		registry->runAllTests(*result);
+		registry_->runAllTests(*result_);
 	}
 
 	int getFailureCount()
 	{
-		return result->getFailureCount();
+		return result_->getFailureCount();
 	}
 
 	void assertPrintContains(const SimpleString& contains)
 	{
-		assertPrintContains(output, contains);
+		assertPrintContains(output_, contains);
 	}
 
 	static void assertPrintContains(StringBufferTestOutput* output,
@@ -97,10 +97,10 @@ public:
 
 	}
 
-	TestRegistry* registry;
-	ExecFunctionTest* genTest;
-	StringBufferTestOutput* output;
-	TestResult * result;
+	TestRegistry* registry_;
+	ExecFunctionTest* genTest_;
+	StringBufferTestOutput* output_;
+	TestResult * result_;
 };
 
 #endif
