@@ -57,6 +57,7 @@ CLEAN :
 	-@erase "$(INTDIR)\FailureTest.obj"
 	-@erase "$(INTDIR)\JUnitOutputTest.obj"
 	-@erase "$(INTDIR)\MemoryLeakAllocator.obj"
+	-@erase "$(INTDIR)\MemoryLeakAllocatorTest.obj"
 	-@erase "$(INTDIR)\MemoryLeakDetectorTest.obj"
 	-@erase "$(INTDIR)\MemoryLeakWarningTest.obj"
 	-@erase "$(INTDIR)\NullTestTest.obj"
@@ -101,6 +102,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\TestRegistryTest.obj" \
 	"$(INTDIR)\TestResultTest.obj" \
 	"$(INTDIR)\UtestTest.obj" \
+	"$(INTDIR)\MemoryLeakAllocatorTest.obj" \
 	"..\Release\CppUTest.lib"
 
 "$(OUTDIR)\AllTests.exe" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
@@ -143,6 +145,8 @@ CLEAN :
 	-@erase "$(INTDIR)\JUnitOutputTest.sbr"
 	-@erase "$(INTDIR)\MemoryLeakAllocator.obj"
 	-@erase "$(INTDIR)\MemoryLeakAllocator.sbr"
+	-@erase "$(INTDIR)\MemoryLeakAllocatorTest.obj"
+	-@erase "$(INTDIR)\MemoryLeakAllocatorTest.sbr"
 	-@erase "$(INTDIR)\MemoryLeakDetectorTest.obj"
 	-@erase "$(INTDIR)\MemoryLeakDetectorTest.sbr"
 	-@erase "$(INTDIR)\MemoryLeakWarningTest.obj"
@@ -198,7 +202,8 @@ BSC32_SBRS= \
 	"$(INTDIR)\TestOutputTest.sbr" \
 	"$(INTDIR)\TestRegistryTest.sbr" \
 	"$(INTDIR)\TestResultTest.sbr" \
-	"$(INTDIR)\UtestTest.sbr"
+	"$(INTDIR)\UtestTest.sbr" \
+	"$(INTDIR)\MemoryLeakAllocatorTest.sbr"
 
 "$(OUTDIR)\AllTests.bsc" : "$(OUTDIR)" $(BSC32_SBRS)
     $(BSC32) @<<
@@ -226,6 +231,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\TestRegistryTest.obj" \
 	"$(INTDIR)\TestResultTest.obj" \
 	"$(INTDIR)\UtestTest.obj" \
+	"$(INTDIR)\MemoryLeakAllocatorTest.obj" \
 	"..\lib\CppUTest.lib"
 
 "$(OUTDIR)\AllTests.exe" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
@@ -370,6 +376,22 @@ SOURCE=..\src\CppUTest\MemoryLeakAllocator.cpp
 
 "$(INTDIR)\MemoryLeakAllocator.obj"	"$(INTDIR)\MemoryLeakAllocator.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+!ENDIF 
+
+SOURCE=.\MemoryLeakAllocatorTest.cpp
+
+!IF  "$(CFG)" == "AllTests - Win32 Release"
+
+
+"$(INTDIR)\MemoryLeakAllocatorTest.obj" : $(SOURCE) "$(INTDIR)"
+
+
+!ELSEIF  "$(CFG)" == "AllTests - Win32 Debug"
+
+
+"$(INTDIR)\MemoryLeakAllocatorTest.obj"	"$(INTDIR)\MemoryLeakAllocatorTest.sbr" : $(SOURCE) "$(INTDIR)"
 
 
 !ENDIF 

@@ -112,6 +112,10 @@ SOURCE=..\src\CppUTest\MemoryLeakAllocator.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\MemoryLeakAllocatorTest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\MemoryLeakDetectorTest.cpp
 # End Source File
 # Begin Source File
