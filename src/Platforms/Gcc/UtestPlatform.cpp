@@ -97,7 +97,7 @@ static long TimeInMillisImplementation()
 	struct timeval tv;
 	struct timezone tz;
 	gettimeofday(&tv, &tz);
-	return (tv.tv_sec * 1000) + (long)(tv.tv_usec * 0.001);
+	return (tv.tv_sec * 1000) + (long)((double)tv.tv_usec * 0.001);
 }
 
 static long (*timeInMillisFp) () = TimeInMillisImplementation;
@@ -137,7 +137,7 @@ int PlatformSpecificAtoI(const char*str)
    return atoi(str);
 }
 
-int PlatformSpecificStrLen(const char* str)
+size_t PlatformSpecificStrLen(const char* str)
 {
    return strlen(str);
 }
@@ -152,7 +152,7 @@ char* PlatformSpecificStrCpy(char* s1, const char* s2)
    return strcpy(s1, s2);
 }
 
-char* PlatformSpecificStrNCpy(char* s1, const char* s2, unsigned int size)
+char* PlatformSpecificStrNCpy(char* s1, const char* s2, size_t size)
 {
    return strncpy(s1, s2, size);
 }
@@ -162,7 +162,7 @@ int PlatformSpecificStrCmp(const char* s1, const char* s2)
    return strcmp(s1, s2);
 }
 
-int PlatformSpecificStrNCmp(const char* s1, const char* s2, unsigned int size)
+int PlatformSpecificStrNCmp(const char* s1, const char* s2, size_t size)
 {
    return strncmp(s1, s2, size);
 }
@@ -201,12 +201,12 @@ int PlatformSpecificPutchar(int c)
   return putchar(c);
 }
 
-void* PlatformSpecificMalloc(unsigned int size)
+void* PlatformSpecificMalloc(size_t size)
 {
    return malloc(size);
 }
 
-void* PlatformSpecificRealloc (void* memory, unsigned int size)
+void* PlatformSpecificRealloc (void* memory, size_t size)
 {
    return realloc(memory, size);
 }
@@ -216,7 +216,7 @@ void PlatformSpecificFree(void* memory)
    free(memory);
 }
 
-void* PlatformSpecificMemCpy(void* s1, const void* s2, unsigned int size)
+void* PlatformSpecificMemCpy(void* s1, const void* s2, size_t size)
 {
    return memcpy(s1, s2, size);
 }

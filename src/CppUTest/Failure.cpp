@@ -29,7 +29,7 @@
 #include "CppUTest/Failure.h"
 #include "CppUTest/TestOutput.h"
 
-Failure::Failure(Utest* test, const char* fileName, long lineNumber,
+Failure::Failure(Utest* test, const char* fileName, int lineNumber,
 		const SimpleString& theMessage) :
 	testName_(test->getFormattedName()), fileName_(fileName), lineNumber_(
 			lineNumber), message_(theMessage)
@@ -42,7 +42,7 @@ Failure::Failure(Utest* test, const SimpleString& theMessage) :
 {
 }
 
-Failure::Failure(Utest* test, const char* fileName, long lineNum) :
+Failure::Failure(Utest* test, const char* fileName, int lineNum) :
 	testName_(test->getFormattedName()), fileName_(fileName),
 			lineNumber_(lineNum), message_("no message")
 {
@@ -79,7 +79,7 @@ SimpleString Failure::getMessage() const
 }
 
 EqualsFailure::EqualsFailure(Utest* test, const char* fileName,
-		long lineNumber, const SimpleString& expected,
+		int lineNumber, const SimpleString& expected,
 		const SimpleString& actual) :
 	Failure(test, fileName, lineNumber)
 {
@@ -90,7 +90,7 @@ EqualsFailure::EqualsFailure(Utest* test, const char* fileName,
 }
 
 ContainsFailure::ContainsFailure(Utest* test, const char* fileName,
-		long lineNumber, const SimpleString& expected,
+		int lineNumber, const SimpleString& expected,
 		const SimpleString& actual) :
 	Failure(test, fileName, lineNumber)
 {

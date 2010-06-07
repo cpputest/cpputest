@@ -212,7 +212,7 @@ public:
 
 	void CHECK_XML_FILE()
 	{
-		int totalSize = currentGroup().numberTests_+ defaultSize + (currentGroup().totalFailures_ * 2);
+		size_t totalSize = currentGroup().numberTests_+ defaultSize + (currentGroup().totalFailures_ * 2);
 		SimpleStringCollection col;
 		buffer_.split("\n", col);
 		CHECK(col.size() >= totalSize);

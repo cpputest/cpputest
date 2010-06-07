@@ -31,7 +31,7 @@
 #include "CppUTest/MemoryLeakAllocator.h"
 
 /* Avoid using the memory leak detector INSIDE SimpleString as its used inside the detector */
-char* SimpleString::allocString(int _size) const
+char* SimpleString::allocString(size_t _size) const
 {
 	return StandardNewArrayAllocator::defaultAllocator()->alloc_memory(_size);
 }
@@ -53,18 +53,18 @@ SimpleString::SimpleString(const char *otherBuffer)
 		buffer_ = getEmptyString();
 	}
 	else {
-		int len = PlatformSpecificStrLen(otherBuffer) + 1;
+		size_t len = PlatformSpecificStrLen(otherBuffer) + 1;
 		buffer_ = allocString(len);
 		PlatformSpecificStrCpy(buffer_, otherBuffer);
 	}
 }
 
-SimpleString::SimpleString(const char *other, int repeatCount)
+SimpleString::SimpleString(const char *other, size_t repeatCount)
 {
 	int len = PlatformSpecificStrLen(other) * repeatCount + 1;
 	buffer_ = allocString(len);
 	char* next = buffer_;
-	for (int i = 0; i < repeatCount; i++) {
+	for (size_t i = 0; i < repeatCount; i++) {
 		PlatformSpecificStrCpy(next, other);
 		next += PlatformSpecificStrLen(other);
 	}
@@ -107,8 +107,8 @@ bool SimpleString::startsWith(const SimpleString& other) const
 
 bool SimpleString::endsWith(const SimpleString& other) const
 {
-	int buffer_length = PlatformSpecificStrLen(buffer_);
-	int other_buffer_length = PlatformSpecificStrLen(other.buffer_);
+	size_t buffer_length = PlatformSpecificStrLen(buffer_);
+	size_t other_buffer_length = PlatformSpecificStrLen(other.buffer_);
 	if (other_buffer_length == 0) return true;
 	if (buffer_length == 0) return false;
 	if (buffer_length < other_buffer_length) return false;
@@ -116,9 +116,9 @@ bool SimpleString::endsWith(const SimpleString& other) const
 			other.buffer_) == 0;
 }
 
-int SimpleString::count(const SimpleString& substr) const
+size_t SimpleString::count(const SimpleString& substr) const
 {
-	int num = 0;
+	size_t num = 0;
 	char* str = buffer_;
 	while ((str = PlatformSpecificStrStr(str, substr.buffer_))) {
 		num++;
@@ -129,16 +129,16 @@ int SimpleString::count(const SimpleString& substr) const
 
 void SimpleString::split(const SimpleString& delimiter, SimpleStringCollection& col) const
 {
-	int num = count(delimiter);
-	int extraEndToken = (endsWith(delimiter)) ? 0 : 1;
+	size_t num = count(delimiter);
+	size_t extraEndToken = (endsWith(delimiter)) ? 0 : 1;
 	col.allocate(num + extraEndToken);
 
 	char* str = buffer_;
 	char* prev;
-	for (int i = 0; i < num; ++i) {
+	for (size_t i = 0; i < num; ++i) {
 		prev = str;
 		str = PlatformSpecificStrStr(str, delimiter.buffer_) + 1;
-		int len = str - prev;
+		size_t len = str - prev;
 		char* sub = allocString(len + 1);
 		PlatformSpecificStrNCpy(sub, prev, len);
 		sub[len] = '\0';
@@ -152,24 +152,24 @@ void SimpleString::split(const SimpleString& delimiter, SimpleStringCollection& 
 
 void SimpleString::replace(char to, char with)
 {
-	int s = size();
-	for (int i = 0; i < s; i++) {
+	size_t s = size();
+	for (size_t i = 0; i < s; i++) {
 		if (buffer_[i] == to) buffer_[i] = with;
 	}
 }
 
 void SimpleString::replace(const char* to, const char* with)
 {
-	int c = count(to);
-	int len = size();
-	int tolen = PlatformSpecificStrLen(to);
-	int withlen = PlatformSpecificStrLen(with);
+	size_t c = count(to);
+	size_t len = size();
+	size_t tolen = PlatformSpecificStrLen(to);
+	size_t withlen = PlatformSpecificStrLen(with);
 
-	int newsize = len + (withlen * c) - (tolen * c) + 1;
+	size_t newsize = len + (withlen * c) - (tolen * c) + 1;
 
 	if (newsize) {
 		char* newbuf = allocString(newsize);
-		for (int i = 0, j = 0; i < len;) {
+		for (size_t i = 0, j = 0; i < len;) {
 			if (PlatformSpecificStrNCmp(&buffer_[i], to, tolen) == 0) {
 				PlatformSpecificStrNCpy(&newbuf[j], with, withlen);
 				j += withlen;
@@ -196,7 +196,7 @@ const char *SimpleString::asCharString() const
 	return buffer_;
 }
 
-int SimpleString::size() const
+size_t SimpleString::size() const
 {
 	return PlatformSpecificStrLen(buffer_);
 }
@@ -231,7 +231,7 @@ SimpleString& SimpleString::operator+=(const SimpleString& rhs)
 
 SimpleString& SimpleString::operator+=(const char* rhs)
 {
-	int len = this->size() + PlatformSpecificStrLen(rhs) + 1;
+	size_t len = this->size() + PlatformSpecificStrLen(rhs) + 1;
 	char* tbuffer = allocString(len);
 	PlatformSpecificStrCpy(tbuffer, this->buffer_);
 	PlatformSpecificStrCat(tbuffer, rhs);
@@ -373,7 +373,7 @@ SimpleStringCollection::SimpleStringCollection()
 	size_ = 0;
 }
 
-void SimpleStringCollection::allocate(int _size)
+void SimpleStringCollection::allocate(size_t _size)
 {
 	if (collection_) delete[] collection_;
 
@@ -386,12 +386,12 @@ SimpleStringCollection::~SimpleStringCollection()
 	delete[] (collection_);
 }
 
-int SimpleStringCollection::size() const
+size_t SimpleStringCollection::size() const
 {
 	return size_;
 }
 
-SimpleString& SimpleStringCollection::operator[](int index)
+SimpleString& SimpleStringCollection::operator[](size_t index)
 {
 	if (index >= size_) {
 		empty_ = "";

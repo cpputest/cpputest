@@ -51,12 +51,12 @@ void SetPlatformSpecificTimeStringMethod(const char* (*platformMethod)());
 
 /* String operations */
 int PlatformSpecificAtoI(const char*str);
-int PlatformSpecificStrLen(const char* str);
+size_t PlatformSpecificStrLen(const char* str);
 char* PlatformSpecificStrCat(char* s1, const char* s2);
 char* PlatformSpecificStrCpy(char* s1, const char* s2);
-char* PlatformSpecificStrNCpy(char* s1, const char* s2, unsigned int size);
+char* PlatformSpecificStrNCpy(char* s1, const char* s2, size_t size);
 int PlatformSpecificStrCmp(const char* s1, const char* s2);
-int PlatformSpecificStrNCmp(const char* s1, const char* s2, unsigned int size);
+int PlatformSpecificStrNCmp(const char* s1, const char* s2, size_t size);
 char* PlatformSpecificStrStr(const char* s1, const char* s2);
 int PlatformSpecificVSNprintf(char *str, unsigned int size, const char* format,
 		va_list va_args_list);
@@ -77,9 +77,9 @@ int PlatformSpecificPutchar(int c);
 void PlatformSpecificFlush();
 
 /* Dynamic Memory operations */
-void* PlatformSpecificMalloc(unsigned int size);
-void* PlatformSpecificRealloc(void* memory, unsigned int size);
+void* PlatformSpecificMalloc(size_t size);
+void* PlatformSpecificRealloc(void* memory, size_t size);
 void PlatformSpecificFree(void* memory);
-void* PlatformSpecificMemCpy(void* s1, const void* s2, unsigned int size);
+void* PlatformSpecificMemCpy(void* s1, const void* s2, size_t size);
 
 #endif

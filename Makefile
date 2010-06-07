@@ -112,6 +112,9 @@ test_all:
 .PHONY: examples
 examples: $(TEST_TARGET) 
 	make -C examples  all
+
+extension:
+	echo "To be done"
 	
 cleanExamples: 
 	make -C examples clean 

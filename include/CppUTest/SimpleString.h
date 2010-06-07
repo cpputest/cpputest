@@ -39,6 +39,7 @@
 #define D_SimpleString_h
 
 #include <stdarg.h>
+#include <stddef.h>
 
 class SimpleStringCollection;
 class MemoryLeakAllocator;
@@ -50,7 +51,7 @@ class SimpleString
 
 public:
 	SimpleString(const char *value = "");
-	SimpleString(const char *value, int repeatCount);
+	SimpleString(const char *value, size_t repeatCount);
 	SimpleString(const SimpleString& other);
 	~SimpleString();
 
@@ -62,24 +63,23 @@ public:
 	bool contains(const SimpleString& other) const;
 	bool startsWith(const SimpleString& other) const;
 	bool endsWith(const SimpleString& other) const;
-	void
-			split(const SimpleString& split,
+	void split(const SimpleString& split,
 					SimpleStringCollection& outCollection) const;
 
-	int count(const SimpleString& str) const;
+	size_t count(const SimpleString& str) const;
 
 	void replace(char to, char with);
 	void replace(const char* to, const char* with);
 
 	const char *asCharString() const;
-	int size() const;
+	size_t size() const;
 
 	static void padStringsToSameLength(SimpleString& str1, SimpleString& str2, char ch);
 
 private:
 	char *buffer_;
 
-	char* allocString(int size) const;
+	char* allocString(size_t size) const;
 	void deallocString(char* str) const;
 	char* getEmptyString() const;
 };
@@ -90,15 +90,15 @@ public:
 	SimpleStringCollection();
 	~SimpleStringCollection();
 
-	void allocate(int size);
+	void allocate(size_t size);
 
-	int size() const;
-	SimpleString& operator[](int index);
+	size_t size() const;
+	SimpleString& operator[](size_t index);
 
 private:
 	SimpleString* collection_;
 	SimpleString empty_;
-	int size_;
+	size_t size_;
 
 	void operator =(SimpleStringCollection&);
 	SimpleStringCollection(SimpleStringCollection&);

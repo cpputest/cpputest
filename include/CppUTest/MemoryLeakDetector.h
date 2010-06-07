@@ -112,7 +112,7 @@ struct MemoryLeakDetectorTable
 			MemLeakPeriod period);
 
 private:
-	int hash(char* memory);
+	unsigned long hash(char* memory);
 
 	enum
 	{

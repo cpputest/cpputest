@@ -47,10 +47,10 @@ class Failure
 {
 
 public:
-	Failure(Utest*, const char* fileName, long lineNumber,
+	Failure(Utest*, const char* fileName, int lineNumber,
 			const SimpleString& theMessage);
 	Failure(Utest*, const SimpleString& theMessage);
-	Failure(Utest*, const char* fileName, long lineNumber);
+	Failure(Utest*, const char* fileName, int lineNumber);
 	Failure(const Failure&);
 	virtual ~Failure();
 
@@ -62,7 +62,7 @@ public:
 protected:
 	SimpleString testName_;
 	SimpleString fileName_;
-	long lineNumber_;
+	int lineNumber_;
 	SimpleString message_;
 
 	Failure& operator=(const Failure&);
@@ -73,7 +73,7 @@ class EqualsFailure: public Failure
 {
 public:
 
-	EqualsFailure(Utest*, const char* fileName, long lineNumber,
+	EqualsFailure(Utest*, const char* fileName, int lineNumber,
 			const SimpleString& expected, const SimpleString& actual);
 
 private:
@@ -85,7 +85,7 @@ class ContainsFailure: public Failure
 {
 public:
 
-	ContainsFailure(Utest*, const char* fileName, long lineNumber,
+	ContainsFailure(Utest*, const char* fileName, int lineNumber,
 			const SimpleString& expected, const SimpleString& actual);
 
 private:

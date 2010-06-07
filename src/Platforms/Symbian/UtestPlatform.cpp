@@ -112,7 +112,7 @@ char* PlatformSpecificStrCpy(char* s1, const char* s2) {
 	return strcpy(s1, s2);
 }
 
-int PlatformSpecificStrLen(const char* s) {
+size_t PlatformSpecificStrLen(const char* s) {
     return strlen(s);
 }
 
@@ -124,11 +124,11 @@ int PlatformSpecificStrCmp(const char* s1, const char* s2) {
     return strcmp(s1, s2);
 }
 
-char* PlatformSpecificStrNCpy(char* s1, const char* s2, unsigned int size) {
+char* PlatformSpecificStrNCpy(char* s1, const char* s2, size_t size) {
     return strncpy(s1, s2, size);
 }
 
-int PlatformSpecificStrNCmp(const char* s1, const char* s2, unsigned int size) {
+int PlatformSpecificStrNCmp(const char* s1, const char* s2, size_t size) {
     return strncmp(s1, s2, size);
 }
 
@@ -140,11 +140,11 @@ double PlatformSpecificFabs(double d) {
     return fabs(d);
 }
 
-void* PlatformSpecificMalloc(unsigned int size) {
+void* PlatformSpecificMalloc(size_t size) {
     return malloc(size);
 }
 
-void* PlatformSpecificRealloc (void* memory, unsigned int size) {
+void* PlatformSpecificRealloc (void* memory, size_t size) {
     return realloc(memory, size);
 }
 
@@ -152,7 +152,7 @@ void PlatformSpecificFree(void* memory) {
     free(memory);
 }
 
-void* PlatformSpecificMemCpy(void* s1, const void* s2, unsigned int size) {
+void* PlatformSpecificMemCpy(void* s1, const void* s2, size_t size) {
     return memcpy(s1, s2, size);
 }
 
