@@ -1,6 +1,8 @@
 #ifndef D_MemoryLeakAllocator_h
 #define D_MemoryLeakAllocator_h
 
+struct MemoryLeakNode;
+
 class MemoryLeakAllocator
 {
 public:
@@ -15,7 +17,10 @@ public:
 	virtual ~MemoryLeakAllocator()
 	{
 	}
-	;
+
+	virtual bool allocateMemoryLeakNodeSeparately();
+	virtual char* allocMemoryLeakNode(size_t size);
+	virtual void freeMemoryLeakNode(char* memory);
 
 	static void setCurrentNewAllocator(MemoryLeakAllocator* allocator);
 	static MemoryLeakAllocator* getCurrentNewAllocator();
@@ -44,6 +49,8 @@ public:
 	const char* name();
 	const char* alloc_name();
 	const char* free_name();
+
+	virtual bool allocateMemoryLeakNodeSeparately();
 
 	static MemoryLeakAllocator* defaultAllocator();
 };

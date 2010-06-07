@@ -45,20 +45,70 @@ public:
 	SimpleString *message;
 };
 
+class NewAllocatorForMemoryLeakDetectionTest : public StandardNewAllocator
+{
+public:
+	NewAllocatorForMemoryLeakDetectionTest() : alloc_called(0), free_called(0) {};
+	int alloc_called;
+	int free_called;
+	char* alloc_memory(size_t size)
+	{
+		alloc_called++;
+		return StandardNewAllocator::alloc_memory(size);
+	}
+	void free_memory(char* memory)
+	{
+		free_called++;
+		StandardNewAllocator::free_memory(memory);
+	}
+};
+
+class MallocAllocatorForMemoryLeakDetectionTest : public StandardMallocAllocator
+{
+public:
+	MallocAllocatorForMemoryLeakDetectionTest() : alloc_called(0), free_called(0), allocMemoryLeakNodeCalled(0), freeMemoryLeakNodeCalled(0) {};
+	int alloc_called;
+	int free_called;
+	int allocMemoryLeakNodeCalled;
+	int freeMemoryLeakNodeCalled;
+	char* alloc_memory(size_t size)
+	{
+		alloc_called++;
+		return StandardMallocAllocator::alloc_memory(size);
+	}
+	void free_memory(char* memory)
+	{
+		free_called++;
+		StandardMallocAllocator::free_memory(memory);
+	}
+
+	char* allocMemoryLeakNode(size_t size)
+	{
+		allocMemoryLeakNodeCalled++;
+		return StandardMallocAllocator::alloc_memory(size);
+	}
+
+	void freeMemoryLeakNode(char* memory)
+	{
+		freeMemoryLeakNodeCalled++;
+		return StandardMallocAllocator::free_memory(memory);
+	}
+};
+
 TEST_GROUP(MemoryLeakDetectorTest)
 {
 		MemoryLeakDetector* detector;
 		MemoryLeakFailureForTest *reporter;
-		StandardMallocAllocator* mallocAllocator;
-		StandardNewAllocator* newAllocator;
+		MallocAllocatorForMemoryLeakDetectionTest* mallocAllocator;
+		NewAllocatorForMemoryLeakDetectionTest* newAllocator;
 		StandardNewArrayAllocator* newArrayAllocator;
 
 		void setup()
 		{
 			detector = new MemoryLeakDetector;
 			reporter = new MemoryLeakFailureForTest;
-			mallocAllocator = new StandardMallocAllocator;
-			newAllocator = new StandardNewAllocator;
+			mallocAllocator = new MallocAllocatorForMemoryLeakDetectionTest;
+			newAllocator = new NewAllocatorForMemoryLeakDetectionTest;
 			newArrayAllocator = new StandardNewArrayAllocator;
 			detector->init(reporter);
 			detector->enable();
@@ -86,6 +136,8 @@ TEST(MemoryLeakDetectorTest, OneLeak)
 	CHECK(output.contains("new"));
 	CHECK(output.contains(MEM_LEAK_FOOTER));
 	PlatformSpecificFree(mem);
+	LONGS_EQUAL(1, newAllocator->alloc_called);
+	LONGS_EQUAL(0, newAllocator->free_called);
 }
 
 TEST(MemoryLeakDetectorTest, OneLeakOutsideCheckingPeriod)
@@ -126,6 +178,8 @@ TEST(MemoryLeakDetectorTest, OneAllocButNoLeak)
 	detector->deallocMemory(newAllocator, mem);
 	detector->stopChecking();
 	STRCMP_EQUAL(MEM_LEAK_NONE, detector->report(mem_leak_period_checking));
+	LONGS_EQUAL(1, newAllocator->alloc_called);
+	LONGS_EQUAL(1, newAllocator->free_called);
 }
 
 TEST(MemoryLeakDetectorTest, TwoAllocOneFreeOneLeak)
@@ -139,6 +193,8 @@ TEST(MemoryLeakDetectorTest, TwoAllocOneFreeOneLeak)
 	CHECK(output.contains("size: 12"));
 	CHECK(!output.contains("size: 4"));
 	PlatformSpecificFree(mem2);
+	LONGS_EQUAL(2, newAllocator->alloc_called);
+	LONGS_EQUAL(1, newAllocator->free_called);
 }
 
 TEST(MemoryLeakDetectorTest, TwoAllocOneFreeOneLeakReverseOrder)
@@ -163,6 +219,7 @@ TEST(MemoryLeakDetectorTest, DeleteNonAlocatedMemory)
 	CHECK(reporter->message->contains(MEM_LEAK_DEALLOC_NON_ALLOCATED));
 	CHECK(reporter->message->contains("   allocated at file: <unknown> line: 0 size: 0 type: unknown"));
 	CHECK(reporter->message->contains("   deallocated at file: FREE.c line: 100 type: free"));
+	LONGS_EQUAL(0, newAllocator->free_called);
 }
 
 TEST(MemoryLeakDetectorTest, IgnoreMemoryAllocatedOutsideCheckingPeriod)
@@ -252,6 +309,10 @@ TEST(MemoryLeakDetectorTest, OneRealloc)
 	detector->deallocMemory(mallocAllocator, mem2);
 	LONGS_EQUAL(0, detector->totalMemoryLeaks(mem_leak_period_all));
 	detector->stopChecking();
+	LONGS_EQUAL(1, mallocAllocator->alloc_called);
+	LONGS_EQUAL(1, mallocAllocator->free_called);
+	LONGS_EQUAL(2, mallocAllocator->allocMemoryLeakNodeCalled);
+	LONGS_EQUAL(2, mallocAllocator->freeMemoryLeakNodeCalled);
 }
 
 TEST(MemoryLeakDetectorTest, AllocAndFreeWithDifferenceInstancesOfTheSameAllocatorType)

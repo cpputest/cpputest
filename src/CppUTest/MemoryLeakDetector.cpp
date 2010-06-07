@@ -59,21 +59,19 @@ char* SimpleStringBuffer::toString()
 	return buffer_;
 }
 
-///////////////////////
+////////////////////////
 
-void MemoryLeakDetectorList::initNode(MemoryLeakDetectorNode* node,
-		MemoryLeakAllocator* allocator, size_t size, char* memory,
-		MemLeakPeriod period, const char* file, int line)
+void MemoryLeakDetectorNode::init(char* memory, size_t size, MemoryLeakAllocator* allocator, MemLeakPeriod period, const char* file, int line)
 {
-	if (node) {
-		node->size_ = size;
-		node->memory_ = memory;
-		node->period_ = period;
-		node->file_ = file;
-		node->line_ = line;
-		node->allocator_ = allocator;
-	}
+	memory_ = memory;
+	size_ = size;
+	allocator_ = allocator;
+	period_ = period;
+	file_ = file;
+	line_ = line;
 }
+
+///////////////////////
 
 bool MemoryLeakDetectorList::isInPeriod(MemoryLeakDetectorNode* node,
 		MemLeakPeriod period)
@@ -299,74 +297,63 @@ int calculateIntAlignedSize(size_t size)
 	return (sizeof(int) - (size % sizeof(int))) + size;
 }
 
-MemoryLeakDetectorNode* MemoryLeakDetector::getNodeFromMemoryPointer(
-		char* memory, size_t memory_size)
+int MemoryLeakDetector::sizeOfMemoryWithCorruptionInfo(size_t size)
 {
-	return (MemoryLeakDetectorNode*) (memory + calculateIntAlignedSize(
-			memory_size + memory_corruption_buffer_size));
+    return calculateIntAlignedSize(size + memory_corruption_buffer_size);
 }
 
-char* MemoryLeakDetector::allocateMemoryAndExtraInfo(
-		MemoryLeakAllocator* allocator, size_t size)
+MemoryLeakDetectorNode* MemoryLeakDetector::getNodeFromMemoryPointer(char* memory, size_t memory_size)
 {
-	return allocator->alloc_memory(calculateIntAlignedSize(size
-			+ memory_corruption_buffer_size) + memory_corruption_buffer_size
-			+ sizeof(MemoryLeakDetectorNode));
+	return (MemoryLeakDetectorNode*) (memory + sizeOfMemoryWithCorruptionInfo(memory_size));
 }
 
-char* MemoryLeakDetector::reallocateMemoryAndExtraInfo(char* memory,
-		size_t size)
+void MemoryLeakDetector::storeLeakInformation(MemoryLeakDetectorNode *& node, char *new_memory, size_t size, MemoryLeakAllocator *allocator, const char *file, int line)
 {
-	return (char*) PlatformSpecificRealloc(memory, calculateIntAlignedSize(size
-			+ memory_corruption_buffer_size) + sizeof(MemoryLeakDetectorNode));
+    node->init(new_memory, size, allocator, current_period_, file, line);
+    addMemoryCorruptionInformation(node->memory_ + node->size_);
+    memoryTable_.addNewNode(node);
 }
 
-void MemoryLeakDetector::addMemoryCorruptionInformation(char* memory,
-		size_t size)
+char* MemoryLeakDetector::reallocateMemoryAndLeakInformation(MemoryLeakAllocator* allocator, char* memory, size_t size, const char* file, int line)
 {
-	memory[size] = 'B';
-	memory[size + 1] = 'A';
-	memory[size + 2] = 'S';
+	char* new_memory = (char*)(PlatformSpecificRealloc(memory, sizeOfMemoryWithCorruptionInfo(size)));
+    if (new_memory == NULL)
+		return NULL;
+    MemoryLeakDetectorNode *node = (MemoryLeakDetectorNode*)(allocator->allocMemoryLeakNode(size));
+    storeLeakInformation(node, new_memory, size, allocator, file, line);
+	return node->memory_;
 }
 
-void MemoryLeakDetector::checkForAllocMismatchOrCorruption(
-		MemoryLeakDetectorNode* node, const char* file, int line,
-		MemoryLeakAllocator* allocator)
+void MemoryLeakDetector::addMemoryCorruptionInformation(char* memory)
 {
-	if (node->allocator_ != allocator && doAllocationTypeChecking_) {
-		if (!allocator->isOfEqualType(node->allocator_)) reportFailure(
-				MEM_LEAK_ALLOC_DEALLOC_MISMATCH, node->file_, node->line_,
-				node->size_, node->allocator_, file, line, allocator);
-	}
-	else if (node->memory_[node->size_] != 'B' || node->memory_[node->size_ + 1]
-			!= 'A' || node->memory_[node->size_ + 2] != 'S') reportFailure(
-			MEM_LEAK_MEMORY_CORRUPTION, node->file_, node->line_, node->size_,
-			node->allocator_, file, line, allocator);
+	memory[0] = 'B';
+	memory[1] = 'A';
+	memory[2] = 'S';
 }
 
-void MemoryLeakDetector::addMemoryLeakInfoAndCorruptionInfo(char* memory,
-		size_t size, const char* file, int line, MemoryLeakAllocator* allocator)
+bool MemoryLeakDetector::validMemoryCorruptionInformation(char* memory)
 {
-	addMemoryCorruptionInformation(memory, size);
-	if (memory) {
-		MemoryLeakDetectorNode* node = getNodeFromMemoryPointer(memory, size);
-		MemoryLeakDetectorList::initNode(node, allocator, size, memory,
-				current_period_, file, line);
-		memoryTable_.addNewNode(node);
-	}
+    return memory[0] == 'B' && memory[1] == 'A' && memory[2] == 'S';
 }
 
-bool MemoryLeakDetector::removeMemoryLeakInfoAndCheckCorruption(char* memory,
+bool MemoryLeakDetector::matchingAllocation(MemoryLeakAllocator *alloc_allocator, MemoryLeakAllocator *free_allocator)
+{
+	if (alloc_allocator == free_allocator) return true;
+	if (!doAllocationTypeChecking_) return true;
+    return free_allocator->isOfEqualType(alloc_allocator);
+}
+
+void MemoryLeakDetector::checkForCorruption(MemoryLeakDetectorNode* node,
 		const char* file, int line, MemoryLeakAllocator* allocator)
 {
-	MemoryLeakDetectorNode* node = memoryTable_.removeNode(memory);
-	if (node) {
-		checkForAllocMismatchOrCorruption(node, file, line, allocator);
-		return true;
-	}
-	reportFailure(MEM_LEAK_DEALLOC_NON_ALLOCATED, "<unknown>", 0, 0,
-			NullUnknownAllocator::defaultAllocator(), file, line, allocator);
-	return false;
+	if (!matchingAllocation(node->allocator_, allocator))
+		reportFailure(MEM_LEAK_ALLOC_DEALLOC_MISMATCH, node->file_, node->line_,
+				node->size_, node->allocator_, file, line, allocator);
+	else if (!validMemoryCorruptionInformation(node->memory_ + node->size_))
+		reportFailure(MEM_LEAK_MEMORY_CORRUPTION, node->file_, node->line_, node->size_,
+			node->allocator_, file, line, allocator);
+	else if (allocator->allocateMemoryLeakNodeSeparately())
+		allocator->freeMemoryLeakNode((char*)node);
 }
 
 char* MemoryLeakDetector::allocMemory(MemoryLeakAllocator* allocator,
@@ -375,55 +362,91 @@ char* MemoryLeakDetector::allocMemory(MemoryLeakAllocator* allocator,
 	return allocMemory(allocator, size, UNKNOWN, 0);
 }
 
-char* MemoryLeakDetector::allocMemory(MemoryLeakAllocator* allocator,
-		size_t size, const char* file, int line)
+char* MemoryLeakDetector::allocMemory(MemoryLeakAllocator* allocator, size_t size, const char* file, int line)
 {
-	char* mem = allocateMemoryAndExtraInfo(allocator, size);
-	if (mem)
-		addMemoryLeakInfoAndCorruptionInfo(mem, size, file, line, allocator);
-	return mem;
+	/* With malloc, it is harder to guarantee that the allocator free is called.
+	 * This is because operator new is overloaded via linker symbols, but malloc just via #defines.
+	 * If the same allocation is used and the wrong free is called, it will deallocate the memory leak information
+	 * without the memory leak detector ever noticing it!
+	 * So, for malloc, we'll allocate the memory separately so we can detect this and give a proper error.
+	 */
+	char* memory;
+	MemoryLeakDetectorNode* node;
+	if (allocator->allocateMemoryLeakNodeSeparately()) {
+		memory = allocator->alloc_memory(sizeOfMemoryWithCorruptionInfo(size));
+		if (memory == NULL)
+			return NULL;
+		node = (MemoryLeakDetectorNode*) allocator->allocMemoryLeakNode(sizeof(MemoryLeakDetectorNode));
+	}
+	else {
+		memory = allocator->alloc_memory(sizeOfMemoryWithCorruptionInfo(size) + sizeof(MemoryLeakDetectorNode));
+		if (memory == NULL)
+			return NULL;
+		node = getNodeFromMemoryPointer(memory, size);
+	}
+
+    storeLeakInformation(node, memory, size, allocator, file, line);
+	return node->memory_;
 }
 
-void MemoryLeakDetector::deallocMemory(MemoryLeakAllocator* allocator,
-		void* memory, const char* file, int line)
+void MemoryLeakDetector::removeMemoryLeakInformationWithoutCheckingOrDeallocating(void* memory)
+{
+	memoryTable_.removeNode((char*)memory);
+}
+
+void MemoryLeakDetector::deallocMemory(MemoryLeakAllocator* allocator, void* memory, const char* file, int line)
 {
 	if (memory == 0) return;
 
-	if (removeMemoryLeakInfoAndCheckCorruption((char*) memory, file, line,
-			allocator)) allocator->free_memory((char*) memory);
+	MemoryLeakDetectorNode* node = memoryTable_.removeNode((char*)memory);
+	if (node == NULL) {
+		reportFailure(MEM_LEAK_DEALLOC_NON_ALLOCATED, "<unknown>", 0, 0,
+				NullUnknownAllocator::defaultAllocator(), file, line, allocator);
+		return;
+	}
+	checkForCorruption(node, file, line, allocator);
+	allocator->free_memory((char*) memory);
 }
 
-void MemoryLeakDetector::deallocMemory(MemoryLeakAllocator* allocator,
-		void* memory)
+void MemoryLeakDetector::deallocMemory(MemoryLeakAllocator* allocator, void* memory)
 {
 	deallocMemory(allocator, (char*) memory, UNKNOWN, 0);
 }
 
-char* MemoryLeakDetector::reallocMemory(MemoryLeakAllocator* allocator,
-		char* memory, size_t size, const char* file, int line)
+char* MemoryLeakDetector::reallocMemory(MemoryLeakAllocator* allocator, char* memory, size_t size, const char* file, int line)
 {
-	if (memory) removeMemoryLeakInfoAndCheckCorruption(memory, file, line,
-			allocator);
-
-	char* mem = reallocateMemoryAndExtraInfo(memory, size);
-	addMemoryCorruptionInformation(mem, size);
-	addMemoryLeakInfoAndCorruptionInfo(mem, size, file, line, allocator);
-	return mem;
+	if (memory) {
+		MemoryLeakDetectorNode* node = memoryTable_.removeNode(memory);
+		if (node == NULL) {
+			reportFailure(MEM_LEAK_DEALLOC_NON_ALLOCATED, "<unknown>", 0, 0,
+				NullUnknownAllocator::defaultAllocator(), file, line, allocator);
+			return NULL;
+		}
+		checkForCorruption(node, file, line, allocator);
+	}
+	return reallocateMemoryAndLeakInformation(allocator, memory, size, file, line);
 }
 
 void MemoryLeakDetector::ConstructMemoryLeakReport(MemLeakPeriod period)
 {
 	MemoryLeakDetectorNode* leak = memoryTable_.getFirstLeak(period);
 	int total_leaks = 0;
+	bool giveWarningOnUsingMalloc = false;
 	output_buffer_.add(MEM_LEAK_HEADER);
 
 	while (leak) {
-		output_buffer_.add(MEM_LEAK_LEAK, leak->size_, leak->file_, leak->line_,
-				leak->allocator_->alloc_name(), leak->memory_);
+		output_buffer_.add(MEM_LEAK_LEAK, leak->size_, leak->file_, leak->line_, leak->allocator_->alloc_name(), leak->memory_);
+		if (leak->allocator_->allocateMemoryLeakNodeSeparately()) {
+			giveWarningOnUsingMalloc = true;
+		}
 		total_leaks++;
 		leak = memoryTable_.getNextLeak(leak, period);
 	}
-	output_buffer_.add("%s %d", MEM_LEAK_FOOTER, total_leaks);
+	output_buffer_.add("%s %d\n", MEM_LEAK_FOOTER, total_leaks);
+	output_buffer_.add("NOTE:\n");
+	output_buffer_.add("\tMemory leak reports about malloc and free can be caused by allocating using the cpputest version of free,\n");
+	output_buffer_.add("\tbut deallocate using the standard free.\n");
+	output_buffer_.add("\tIf this is the case, check whether your malloc/free replacements are working (#define malloc cpputest_malloc etc).\n");
 }
 
 const char* MemoryLeakDetector::report(MemLeakPeriod period)
@@ -438,11 +461,9 @@ const char* MemoryLeakDetector::report(MemLeakPeriod period)
 
 void MemoryLeakDetector::markCheckingPeriodLeaksAsNonCheckingPeriod()
 {
-	MemoryLeakDetectorNode* leak = memoryTable_.getFirstLeak(
-			mem_leak_period_checking);
+	MemoryLeakDetectorNode* leak = memoryTable_.getFirstLeak(mem_leak_period_checking);
 	while (leak) {
-		if (leak->period_ == mem_leak_period_checking) leak->period_
-				= mem_leak_period_enabled;
+		if (leak->period_ == mem_leak_period_checking) leak->period_ = mem_leak_period_enabled;
 		leak = memoryTable_.getNextLeak(leak, mem_leak_period_checking);
 	}
 }

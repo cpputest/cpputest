@@ -117,8 +117,7 @@ void* cpputest_malloc_location(size_t size, const char* file, int line)
 			MemoryLeakAllocator::getCurrentMallocAllocator(), size, file, line);
 }
 
-void* cpputest_calloc_location(size_t num, size_t size, const char* file,
-		int line)
+void* cpputest_calloc_location(size_t num, size_t size, const char* file, int line)
 {
 	return cpputest_malloc_location(num * size, file, line);
 }
@@ -126,8 +125,7 @@ void* cpputest_calloc_location(size_t num, size_t size, const char* file,
 void* cpputest_realloc_location(void* memory, size_t size, const char* file,
 		int line)
 {
-	return MemoryLeakWarningPlugin::getGlobalDetector()->reallocMemory(
-			MemoryLeakAllocator::getCurrentMallocAllocator(), (char*) memory, size, file, line);
+	return MemoryLeakWarningPlugin::getGlobalDetector()->reallocMemory(MemoryLeakAllocator::getCurrentMallocAllocator(), (char*) memory, size, file, line);
 }
 
 void cpputest_free_location(void* buffer, const char* file, int line)

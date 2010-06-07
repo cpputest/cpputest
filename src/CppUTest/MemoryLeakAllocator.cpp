@@ -96,6 +96,23 @@ void MemoryLeakAllocator::setCurrentMallocAllocatorToDefault()
 	currentMallocAllocator = StandardMallocAllocator::defaultAllocator();
 }
 
+bool MemoryLeakAllocator::allocateMemoryLeakNodeSeparately()
+{
+	return false;
+}
+
+char* MemoryLeakAllocator::allocMemoryLeakNode(size_t size)
+{
+	return alloc_memory(size);
+}
+
+void  MemoryLeakAllocator::freeMemoryLeakNode(char* memory)
+{
+	free_memory(memory);
+}
+
+
+
 char* StandardMallocAllocator::alloc_memory(size_t size)
 {
 	return checkedMalloc(size);
@@ -119,6 +136,11 @@ const char* StandardMallocAllocator::alloc_name()
 const char* StandardMallocAllocator::free_name()
 {
 	return "free";
+}
+
+bool StandardMallocAllocator::allocateMemoryLeakNodeSeparately()
+{
+	return true;
 }
 
 MemoryLeakAllocator* StandardMallocAllocator::defaultAllocator()

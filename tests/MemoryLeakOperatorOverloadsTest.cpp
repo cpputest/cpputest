@@ -37,6 +37,21 @@ TEST(MemoryLeakOverridesToBeUsedInProductionCode, OperatorNewArrayMacroOverloadV
 	delete [] leak;
 }
 
+TEST(MemoryLeakOverridesToBeUsedInProductionCode, MallocOverrideWorks)
+{
+	char* leak = mallocAllocation();
+	STRCMP_CONTAINS("AllocationInCFile.c", memLeakDetector->report(mem_leak_period_checking));
+	freeAllocation (leak);
+}
+
+TEST(MemoryLeakOverridesToBeUsedInProductionCode, MallocWithButFreeWithoutLeakDetectionDoesntCrash)
+{
+	char* leak = mallocAllocation();
+	freeAllocationWithoutMacro(leak);
+	STRCMP_CONTAINS("Memory leak reports about malloc and free can be caused", memLeakDetector->report(mem_leak_period_checking));
+	memLeakDetector->removeMemoryLeakInformationWithoutCheckingOrDeallocating(leak);
+}
+
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, OperatorNewOverloadingWithoutMacroWorks)
 {
 	char* leak = newAllocationWithoutMacro();
@@ -51,12 +66,6 @@ TEST(MemoryLeakOverridesToBeUsedInProductionCode, OperatorNewArrayOverloadingWit
 	delete [] leak;
 }
 
-TEST(MemoryLeakOverridesToBeUsedInProductionCode, MallocOverrideWorks)
-{
-	char* leak = mallocAllocation();
-	STRCMP_CONTAINS("AllocationInCFile.c", memLeakDetector->report(mem_leak_period_checking));
-	free (leak);
-}
 
 #else
 
