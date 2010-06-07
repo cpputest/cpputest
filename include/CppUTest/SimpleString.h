@@ -124,6 +124,8 @@ SimpleString VStringFromFormat(const char* format, va_list args);
 #include "CppUTest/MemoryLeakDetectorNewMacros.h"
 #endif
 
+#include <stdint.h>
+
 SimpleString StringFrom(const std::string& other);
 SimpleString StringFrom(uint32_t);
 SimpleString StringFrom(uint16_t);
