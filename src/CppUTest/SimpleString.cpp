@@ -310,6 +310,32 @@ SimpleString StringFromFormat(const char* format, ...)
 	return resultString;
 }
 
+#if UT_USE_STDCPP_LIBRARY_ENABLED
+
+#include <string>
+
+SimpleString StringFrom(const std::string& value)
+{
+	return SimpleString(value.c_str());
+}
+
+SimpleString StringFrom(uint32_t i)
+{
+	return StringFromFormat("%10u (0x%08x)", i, i);
+}
+
+SimpleString StringFrom(uint16_t i)
+{
+	return StringFromFormat("%5u (0x%04x)", i, i);
+}
+
+SimpleString StringFrom(uint8_t i)
+{
+	return StringFromFormat("%3u (0x%02x)", i, i);
+}
+
+#endif
+
 //Kludge to get a va_copy in VC++ V6
 #ifndef va_copy
 #define va_copy(copy, original) copy = original;
