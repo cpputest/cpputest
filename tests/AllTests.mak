@@ -25,6 +25,9 @@ NULL=
 NULL=nul
 !ENDIF 
 
+CPP=cl.exe
+RSC=rc.exe
+
 !IF  "$(CFG)" == "AllTests - Win32 Release"
 
 OUTDIR=.\Release
@@ -53,16 +56,15 @@ CLEAN :
 	-@erase "$(INTDIR)\CommandLineTestRunnerTest.obj"
 	-@erase "$(INTDIR)\FailureTest.obj"
 	-@erase "$(INTDIR)\JUnitOutputTest.obj"
+	-@erase "$(INTDIR)\MemoryLeakAllocator.obj"
 	-@erase "$(INTDIR)\MemoryLeakDetectorTest.obj"
 	-@erase "$(INTDIR)\MemoryLeakWarningTest.obj"
 	-@erase "$(INTDIR)\NullTestTest.obj"
 	-@erase "$(INTDIR)\PluginTest.obj"
 	-@erase "$(INTDIR)\SetPluginTest.obj"
-	-@erase "$(INTDIR)\SimpleStringExtensionsTest.obj"
 	-@erase "$(INTDIR)\SimpleStringTest.obj"
 	-@erase "$(INTDIR)\TestHarness_cTest.obj"
 	-@erase "$(INTDIR)\TestInstallerTest.obj"
-	-@erase "$(INTDIR)\TestOrderedTest.obj"
 	-@erase "$(INTDIR)\TestOutputTest.obj"
 	-@erase "$(INTDIR)\TestRegistryTest.obj"
 	-@erase "$(INTDIR)\TestResultTest.obj"
@@ -73,40 +75,7 @@ CLEAN :
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
-CPP=cl.exe
 CPP_PROJ=/nologo /ML /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /Fp"$(INTDIR)\AllTests.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
-
-.c{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cpp{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cxx{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.c{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cpp{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cxx{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-RSC=rc.exe
 BSC32=bscmake.exe
 BSC32_FLAGS=/nologo /o"$(OUTDIR)\AllTests.bsc" 
 BSC32_SBRS= \
@@ -119,16 +88,15 @@ LINK32_OBJS= \
 	"$(INTDIR)\CommandLineTestRunnerTest.obj" \
 	"$(INTDIR)\FailureTest.obj" \
 	"$(INTDIR)\JUnitOutputTest.obj" \
+	"$(INTDIR)\MemoryLeakAllocator.obj" \
 	"$(INTDIR)\MemoryLeakDetectorTest.obj" \
 	"$(INTDIR)\MemoryLeakWarningTest.obj" \
 	"$(INTDIR)\NullTestTest.obj" \
 	"$(INTDIR)\PluginTest.obj" \
 	"$(INTDIR)\SetPluginTest.obj" \
-	"$(INTDIR)\SimpleStringExtensionsTest.obj" \
 	"$(INTDIR)\SimpleStringTest.obj" \
 	"$(INTDIR)\TestHarness_cTest.obj" \
 	"$(INTDIR)\TestInstallerTest.obj" \
-	"$(INTDIR)\TestOrderedTest.obj" \
 	"$(INTDIR)\TestOutputTest.obj" \
 	"$(INTDIR)\TestRegistryTest.obj" \
 	"$(INTDIR)\TestResultTest.obj" \
@@ -173,6 +141,8 @@ CLEAN :
 	-@erase "$(INTDIR)\FailureTest.sbr"
 	-@erase "$(INTDIR)\JUnitOutputTest.obj"
 	-@erase "$(INTDIR)\JUnitOutputTest.sbr"
+	-@erase "$(INTDIR)\MemoryLeakAllocator.obj"
+	-@erase "$(INTDIR)\MemoryLeakAllocator.sbr"
 	-@erase "$(INTDIR)\MemoryLeakDetectorTest.obj"
 	-@erase "$(INTDIR)\MemoryLeakDetectorTest.sbr"
 	-@erase "$(INTDIR)\MemoryLeakWarningTest.obj"
@@ -183,16 +153,12 @@ CLEAN :
 	-@erase "$(INTDIR)\PluginTest.sbr"
 	-@erase "$(INTDIR)\SetPluginTest.obj"
 	-@erase "$(INTDIR)\SetPluginTest.sbr"
-	-@erase "$(INTDIR)\SimpleStringExtensionsTest.obj"
-	-@erase "$(INTDIR)\SimpleStringExtensionsTest.sbr"
 	-@erase "$(INTDIR)\SimpleStringTest.obj"
 	-@erase "$(INTDIR)\SimpleStringTest.sbr"
 	-@erase "$(INTDIR)\TestHarness_cTest.obj"
 	-@erase "$(INTDIR)\TestHarness_cTest.sbr"
 	-@erase "$(INTDIR)\TestInstallerTest.obj"
 	-@erase "$(INTDIR)\TestInstallerTest.sbr"
-	-@erase "$(INTDIR)\TestOrderedTest.obj"
-	-@erase "$(INTDIR)\TestOrderedTest.sbr"
 	-@erase "$(INTDIR)\TestOutputTest.obj"
 	-@erase "$(INTDIR)\TestOutputTest.sbr"
 	-@erase "$(INTDIR)\TestRegistryTest.obj"
@@ -211,8 +177,63 @@ CLEAN :
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
-CPP=cl.exe
 CPP_PROJ=/nologo /MDd /W3 /GX /ZI /Od /I "..\include" /I "..\include\Platforms\VisualCpp" /D "_CONSOLE" /D "WIN32" /D "_DEBUG" /D "_MBCS" /FR"$(INTDIR)\\" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+BSC32=bscmake.exe
+BSC32_FLAGS=/nologo /o"$(OUTDIR)\AllTests.bsc" 
+BSC32_SBRS= \
+	"$(INTDIR)\AllTests.sbr" \
+	"$(INTDIR)\CommandLineArgumentsTest.sbr" \
+	"$(INTDIR)\CommandLineTestRunnerTest.sbr" \
+	"$(INTDIR)\FailureTest.sbr" \
+	"$(INTDIR)\JUnitOutputTest.sbr" \
+	"$(INTDIR)\MemoryLeakAllocator.sbr" \
+	"$(INTDIR)\MemoryLeakDetectorTest.sbr" \
+	"$(INTDIR)\MemoryLeakWarningTest.sbr" \
+	"$(INTDIR)\NullTestTest.sbr" \
+	"$(INTDIR)\PluginTest.sbr" \
+	"$(INTDIR)\SetPluginTest.sbr" \
+	"$(INTDIR)\SimpleStringTest.sbr" \
+	"$(INTDIR)\TestHarness_cTest.sbr" \
+	"$(INTDIR)\TestInstallerTest.sbr" \
+	"$(INTDIR)\TestOutputTest.sbr" \
+	"$(INTDIR)\TestRegistryTest.sbr" \
+	"$(INTDIR)\TestResultTest.sbr" \
+	"$(INTDIR)\UtestTest.sbr"
+
+"$(OUTDIR)\AllTests.bsc" : "$(OUTDIR)" $(BSC32_SBRS)
+    $(BSC32) @<<
+  $(BSC32_FLAGS) $(BSC32_SBRS)
+<<
+
+LINK32=link.exe
+LINK32_FLAGS=..\lib\CppUTest.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib /nologo /subsystem:console /incremental:yes /pdb:"$(OUTDIR)\AllTests.pdb" /debug /machine:I386 /out:"$(OUTDIR)\AllTests.exe" /pdbtype:sept 
+LINK32_OBJS= \
+	"$(INTDIR)\AllTests.obj" \
+	"$(INTDIR)\CommandLineArgumentsTest.obj" \
+	"$(INTDIR)\CommandLineTestRunnerTest.obj" \
+	"$(INTDIR)\FailureTest.obj" \
+	"$(INTDIR)\JUnitOutputTest.obj" \
+	"$(INTDIR)\MemoryLeakAllocator.obj" \
+	"$(INTDIR)\MemoryLeakDetectorTest.obj" \
+	"$(INTDIR)\MemoryLeakWarningTest.obj" \
+	"$(INTDIR)\NullTestTest.obj" \
+	"$(INTDIR)\PluginTest.obj" \
+	"$(INTDIR)\SetPluginTest.obj" \
+	"$(INTDIR)\SimpleStringTest.obj" \
+	"$(INTDIR)\TestHarness_cTest.obj" \
+	"$(INTDIR)\TestInstallerTest.obj" \
+	"$(INTDIR)\TestOutputTest.obj" \
+	"$(INTDIR)\TestRegistryTest.obj" \
+	"$(INTDIR)\TestResultTest.obj" \
+	"$(INTDIR)\UtestTest.obj" \
+	"..\lib\CppUTest.lib"
+
+"$(OUTDIR)\AllTests.exe" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
+    $(LINK32) @<<
+  $(LINK32_FLAGS) $(LINK32_OBJS)
+<<
+
+!ENDIF 
 
 .c{$(INTDIR)}.obj::
    $(CPP) @<<
@@ -243,66 +264,6 @@ CPP_PROJ=/nologo /MDd /W3 /GX /ZI /Od /I "..\include" /I "..\include\Platforms\V
    $(CPP) @<<
    $(CPP_PROJ) $< 
 <<
-
-RSC=rc.exe
-BSC32=bscmake.exe
-BSC32_FLAGS=/nologo /o"$(OUTDIR)\AllTests.bsc" 
-BSC32_SBRS= \
-	"$(INTDIR)\AllTests.sbr" \
-	"$(INTDIR)\CommandLineArgumentsTest.sbr" \
-	"$(INTDIR)\CommandLineTestRunnerTest.sbr" \
-	"$(INTDIR)\FailureTest.sbr" \
-	"$(INTDIR)\JUnitOutputTest.sbr" \
-	"$(INTDIR)\MemoryLeakDetectorTest.sbr" \
-	"$(INTDIR)\MemoryLeakWarningTest.sbr" \
-	"$(INTDIR)\NullTestTest.sbr" \
-	"$(INTDIR)\PluginTest.sbr" \
-	"$(INTDIR)\SetPluginTest.sbr" \
-	"$(INTDIR)\SimpleStringExtensionsTest.sbr" \
-	"$(INTDIR)\SimpleStringTest.sbr" \
-	"$(INTDIR)\TestHarness_cTest.sbr" \
-	"$(INTDIR)\TestInstallerTest.sbr" \
-	"$(INTDIR)\TestOrderedTest.sbr" \
-	"$(INTDIR)\TestOutputTest.sbr" \
-	"$(INTDIR)\TestRegistryTest.sbr" \
-	"$(INTDIR)\TestResultTest.sbr" \
-	"$(INTDIR)\UtestTest.sbr"
-
-"$(OUTDIR)\AllTests.bsc" : "$(OUTDIR)" $(BSC32_SBRS)
-    $(BSC32) @<<
-  $(BSC32_FLAGS) $(BSC32_SBRS)
-<<
-
-LINK32=link.exe
-LINK32_FLAGS=..\lib\CppUTest.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib /nologo /subsystem:console /incremental:yes /pdb:"$(OUTDIR)\AllTests.pdb" /debug /machine:I386 /out:"$(OUTDIR)\AllTests.exe" /pdbtype:sept 
-LINK32_OBJS= \
-	"$(INTDIR)\AllTests.obj" \
-	"$(INTDIR)\CommandLineArgumentsTest.obj" \
-	"$(INTDIR)\CommandLineTestRunnerTest.obj" \
-	"$(INTDIR)\FailureTest.obj" \
-	"$(INTDIR)\JUnitOutputTest.obj" \
-	"$(INTDIR)\MemoryLeakDetectorTest.obj" \
-	"$(INTDIR)\MemoryLeakWarningTest.obj" \
-	"$(INTDIR)\NullTestTest.obj" \
-	"$(INTDIR)\PluginTest.obj" \
-	"$(INTDIR)\SetPluginTest.obj" \
-	"$(INTDIR)\SimpleStringExtensionsTest.obj" \
-	"$(INTDIR)\SimpleStringTest.obj" \
-	"$(INTDIR)\TestHarness_cTest.obj" \
-	"$(INTDIR)\TestInstallerTest.obj" \
-	"$(INTDIR)\TestOrderedTest.obj" \
-	"$(INTDIR)\TestOutputTest.obj" \
-	"$(INTDIR)\TestRegistryTest.obj" \
-	"$(INTDIR)\TestResultTest.obj" \
-	"$(INTDIR)\UtestTest.obj" \
-	"..\lib\CppUTest.lib"
-
-"$(OUTDIR)\AllTests.exe" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
-    $(LINK32) @<<
-  $(LINK32_FLAGS) $(LINK32_OBJS)
-<<
-
-!ENDIF 
 
 
 !IF "$(NO_EXTERNAL_DEPS)" != "1"
@@ -395,6 +356,24 @@ SOURCE=.\JUnitOutputTest.cpp
 
 !ENDIF 
 
+SOURCE=..\src\CppUTest\MemoryLeakAllocator.cpp
+
+!IF  "$(CFG)" == "AllTests - Win32 Release"
+
+
+"$(INTDIR)\MemoryLeakAllocator.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+!ELSEIF  "$(CFG)" == "AllTests - Win32 Debug"
+
+
+"$(INTDIR)\MemoryLeakAllocator.obj"	"$(INTDIR)\MemoryLeakAllocator.sbr" : $(SOURCE) "$(INTDIR)"
+	$(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+!ENDIF 
+
 SOURCE=.\MemoryLeakDetectorTest.cpp
 
 !IF  "$(CFG)" == "AllTests - Win32 Release"
@@ -475,24 +454,6 @@ SOURCE=.\SetPluginTest.cpp
 
 !ENDIF 
 
-SOURCE=.\Extensions\SimpleStringExtensionsTest.cpp
-
-!IF  "$(CFG)" == "AllTests - Win32 Release"
-
-
-"$(INTDIR)\SimpleStringExtensionsTest.obj" : $(SOURCE) "$(INTDIR)"
-	$(CPP) $(CPP_PROJ) $(SOURCE)
-
-
-!ELSEIF  "$(CFG)" == "AllTests - Win32 Debug"
-
-
-"$(INTDIR)\SimpleStringExtensionsTest.obj"	"$(INTDIR)\SimpleStringExtensionsTest.sbr" : $(SOURCE) "$(INTDIR)"
-	$(CPP) $(CPP_PROJ) $(SOURCE)
-
-
-!ENDIF 
-
 SOURCE=.\SimpleStringTest.cpp
 
 !IF  "$(CFG)" == "AllTests - Win32 Release"
@@ -537,24 +498,6 @@ SOURCE=.\TestInstallerTest.cpp
 
 
 "$(INTDIR)\TestInstallerTest.obj"	"$(INTDIR)\TestInstallerTest.sbr" : $(SOURCE) "$(INTDIR)"
-
-
-!ENDIF 
-
-SOURCE=.\Extensions\TestOrderedTest.cpp
-
-!IF  "$(CFG)" == "AllTests - Win32 Release"
-
-
-"$(INTDIR)\TestOrderedTest.obj" : $(SOURCE) "$(INTDIR)"
-	$(CPP) $(CPP_PROJ) $(SOURCE)
-
-
-!ELSEIF  "$(CFG)" == "AllTests - Win32 Debug"
-
-
-"$(INTDIR)\TestOrderedTest.obj"	"$(INTDIR)\TestOrderedTest.sbr" : $(SOURCE) "$(INTDIR)"
-	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ENDIF 
@@ -626,26 +569,26 @@ SOURCE=.\UtestTest.cpp
 !IF  "$(CFG)" == "AllTests - Win32 Release"
 
 "CppUTest - Win32 Release" : 
-   cd ..
+   cd "\workspace\CppUTest"
    $(MAKE) /$(MAKEFLAGS) /F .\CppUTest.mak CFG="CppUTest - Win32 Release" 
-   cd .\tests
+   cd ".\tests"
 
 "CppUTest - Win32 ReleaseCLEAN" : 
-   cd ..
+   cd "\workspace\CppUTest"
    $(MAKE) /$(MAKEFLAGS) /F .\CppUTest.mak CFG="CppUTest - Win32 Release" RECURSE=1 CLEAN 
-   cd .\tests
+   cd ".\tests"
 
 !ELSEIF  "$(CFG)" == "AllTests - Win32 Debug"
 
 "CppUTest - Win32 Debug" : 
-   cd ..
+   cd "\workspace\CppUTest"
    $(MAKE) /$(MAKEFLAGS) /F .\CppUTest.mak CFG="CppUTest - Win32 Debug" 
-   cd .\tests
-
+   cd ".\tests"
 
 "CppUTest - Win32 DebugCLEAN" : 
+   cd "\workspace\CppUTest"
    $(MAKE) /$(MAKEFLAGS) /F .\CppUTest.mak CFG="CppUTest - Win32 Debug" RECURSE=1 CLEAN 
-
+   cd ".\tests"
 
 !ENDIF 
 

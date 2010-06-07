@@ -132,10 +132,6 @@ SOURCE=.\SetPluginTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\Extensions\SimpleStringExtensionsTest.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\SimpleStringTest.cpp
 # End Source File
 # Begin Source File
@@ -145,10 +141,6 @@ SOURCE=.\TestHarness_cTest.cpp
 # Begin Source File
 
 SOURCE=.\TestInstallerTest.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\Extensions\TestOrderedTest.cpp
 # End Source File
 # Begin Source File
 
@@ -177,6 +169,10 @@ SOURCE=.\AllTests.h
 # Begin Source File
 
 SOURCE=.\Extensions\AllTests.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\Platforms\VisualCpp\stdint.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"

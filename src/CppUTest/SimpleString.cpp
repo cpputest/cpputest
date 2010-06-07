@@ -243,8 +243,11 @@ SimpleString& SimpleString::operator+=(const char* rhs)
 void SimpleString::padStringsToSameLength(SimpleString& str1, SimpleString& str2,
 		char padCharacter)
 {
-	if (str1.size() > str2.size())
-		return padStringsToSameLength(str2, str1, padCharacter);
+	if (str1.size() > str2.size()) 
+	{
+		padStringsToSameLength(str2, str1, padCharacter);
+		return;
+	}
 
 	char pad[2];
 	pad[0] = padCharacter;

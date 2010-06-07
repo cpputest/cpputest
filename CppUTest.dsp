@@ -113,23 +113,11 @@ SOURCE=.\src\CppUTest\MemoryLeakWarningPlugin.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\CppUTest\Extensions\OrderedTest.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\src\CppUTest\SimpleString.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\CppUTest\Extensions\SimpleStringExtensions.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\src\CppUTest\TestHarness_c.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\tests\Extensions\TestOrderedTest.cpp
 # End Source File
 # Begin Source File
 

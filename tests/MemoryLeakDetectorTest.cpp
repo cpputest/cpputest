@@ -91,7 +91,7 @@ public:
 	void freeMemoryLeakNode(char* memory)
 	{
 		freeMemoryLeakNodeCalled++;
-		return StandardMallocAllocator::free_memory(memory);
+		StandardMallocAllocator::free_memory(memory);
 	}
 };
 
