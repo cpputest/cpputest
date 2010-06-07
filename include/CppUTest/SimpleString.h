@@ -116,11 +116,11 @@ SimpleString StringFrom(const SimpleString& other);
 SimpleString StringFromFormat(const char* format, ...);
 SimpleString VStringFromFormat(const char* format, va_list args);
 
-#if UT_USE_STDCPP_LIBRARY_ENABLED
+#if CPPUTEST_USE_STD_CPP_LIB
 
 #undef new
 #include <string>
-#if UT_NEW_MACRO_ENABLED
+#if CPPUTEST_USE_NEW_MACROS
 #include "CppUTest/MemoryLeakDetectorNewMacros.h"
 #endif
 

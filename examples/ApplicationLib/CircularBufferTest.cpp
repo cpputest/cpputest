@@ -25,10 +25,9 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "CppUTest/TestHarness.h"
 #include "MockPrinter.h"
 #include "CircularBuffer.h"
-#include "CppUTest/TestHarness.h"
-#include "CppUTest/Extensions/SimpleStringExtensions.h"
 
 TEST_GROUP(CircularBuffer)
 { CircularBuffer* buffer;

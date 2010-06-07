@@ -357,7 +357,7 @@ TEST_GROUP(SimpleString)
 		STRCMP_EQUAL("", col[3].asCharString());
 	}
 
-#if UT_USE_STDCPP_LIBRARY_ENABLED
+#if CPPUTEST_USE_STD_CPP_LIB
 
 	TEST(SimpleString, fromStdString)
 	{

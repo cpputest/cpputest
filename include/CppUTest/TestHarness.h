@@ -30,28 +30,27 @@
 
 /* Memory leak detector macros:
  *
- * UT_MEMORY_LEAK_DETECTION_ENABLED/DISABLED
+ * CPPUTEST_USE_MEM_LEAK_DETECTION pr CPPUTEST_MEM_LEAK_DETECTION_DISABLED
  *   Controls the override of the global operator new/deleted and malloc/free.
  *   Without this, there will be no memory leak detection in C/C++.
  */
-
-#ifndef UT_MEMORY_LEAK_DETECTION_ENABLED
-#ifdef UT_MEMORY_LEAK_DETECTION_DISABLED
-#define UT_MEMORY_LEAK_DETECTION_ENABLED 0
+#ifndef CPPUTEST_USE_MEM_LEAK_DETECTION
+#ifdef CPPUTEST_MEM_LEAK_DETECTION_DISABLED
+#define CPPUTEST_USE_MEM_LEAK_DETECTION 0
 #else
-#define UT_MEMORY_LEAK_DETECTION_ENABLED 1
+#define CPPUTEST_USE_MEM_LEAK_DETECTION 1
 #endif
 #endif
 
-#ifndef UT_USE_STDCPP_LIBRARY_ENABLED
-#ifdef UT_USE_STDCPP_LIBRARY_DISABLED
-#define UT_USE_STDCPP_LIBRARY_ENABLED 0
+#ifndef CPPUTEST_USE_STD_CPP_LIB
+#ifdef CPPUTEST_STD_CPP_LIB_DISABLED
+#define CPPUTEST_USE_STD_CPP_LIB 0
 #else
-#define UT_USE_STDCPP_LIBRARY_ENABLED 1
+#define CPPUTEST_USE_STD_CPP_LIB 1
 #endif
 #endif
 
-/* original value was 9973 which works will with large programs. Now set to smaller since it takes
+/* original value was 9973 which works well with large programs. Now set to smaller since it takes
  * a lot of memory in embedded apps. Change it if you experience the memory leak detector to be slow.
  */
 
@@ -64,7 +63,7 @@
  * stdlib.h -> The TestHarness_c.h includes this to try to avoid conflicts in its malloc #define. This dependency can
  * easily be removed by not enabling the MALLOC overrides.
  *
- * Lib C++ dependencies are all under the UT_USE_STDCPP_LIBRARY_ENABLED.
+ * Lib C++ dependencies are all under the CPPUTEST_USE_STD_CPP_LIB.
  * The only dependency is to <new> which has the bad_alloc struct
  *
  */

@@ -46,11 +46,11 @@ extern "C" { /* include for size_t definition */
 #include "TestHarness_c.h"
 }
 
-#if UT_MEMORY_LEAK_DETECTION_ENABLED
+#if CPPUTEST_USE_MEM_LEAK_DETECTION
 
 #undef new
 
-#if UT_USE_STDCPP_LIBRARY_ENABLED
+#if CPPUTEST_USE_STD_CPP_LIB
 
 #include <new>
 void* operator new(size_t size) throw(std::bad_alloc);
@@ -67,7 +67,7 @@ void operator delete[](void* mem);
 
 #endif
 
-#if UT_NEW_MACRO_ENABLED
+#if CPPUTEST_USE_NEW_MACROS
 #include "MemoryLeakDetectorNewMacros.h"
 #endif
 

@@ -145,10 +145,10 @@ const char* MemoryLeakWarningPlugin::FinalReport(int toBeDeletedLeaks)
 	return "";
 }
 
-#if UT_MEMORY_LEAK_DETECTION_ENABLED
+#if CPPUTEST_USE_MEM_LEAK_DETECTION
 #undef new
 
-#if UT_USE_STDCPP_LIBRARY_ENABLED
+#if CPPUTEST_USE_STD_CPP_LIB
 #define UT_THROW_BAD_ALLOC_WHEN_NULL(memory) if (memory == NULL) throw std::bad_alloc();
 #define UT_THROW(except) throw (except)
 #define UT_THROW_EMPTY() throw ()

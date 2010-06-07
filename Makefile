@@ -2,17 +2,17 @@
 SILENCE = @
 
 #Set to Y to disable the memory leak detection. Enabled by default
-ifeq ($(CPPUTEST_DISABLE_MEMLEAKDETECTION), Y)
-	ENABLE_MEMLEAKDETECTION = N
+ifeq ($(CPPUTEST_DISABLE_MEM_LEAK_DETECTION), Y)
+	CPPUTEST_USE_MEM_LEAK_DETECTION = N
 else
-	ENABLE_MEMLEAKDETECTION = Y
+	CPPUTEST_USE_MEM_LEAK_DETECTION = Y
 endif
 
 #Set to N to remove the dependency with StdC++ new header file and operator new std_badalloc throw
-ifeq ($(CPPUTEST_DISABLE_STDCPP_LIB), Y)
-	ENABLE_STDCPP_LIB = N
+ifeq ($(CPPUTEST_DISABLE_STD_CPP_LIB), Y)
+	CPPUTEST_USE_STD_CPP_LIB = N
 else
-	ENABLE_STDCPP_LIB = Y
+	CPPUTEST_USE_STD_CPP_LIB = Y
 endif
 
 # Set to Y for enabling debug
@@ -33,16 +33,16 @@ CPP_PLATFORM = Gcc
 WARNINGFLAGS = -pedantic-errors -Wall -Wextra -Werror -Wshadow -Wswitch-default -Wswitch-enum -Wconversion
 CPPFLAGS += $(WARNINGFLAGS)
 
-ifeq ($(ENABLE_MEMLEAKDETECTION), N)
-CPPFLAGS += -DUT_MEMORY_LEAK_DETECTION_DISABLED
+ifeq ($(CPPUTEST_USE_MEM_LEAK_DETECTION), N)
+CPPFLAGS += -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED
 endif
 
 ifeq ($(ENABLE_DEBUG), Y)
 CPPFLAGS += -g
 endif
 
-ifeq ($(ENABLE_STDCPP_LIB), N)
-CPPFLAGS += -DUT_USE_STDCPP_LIBRARY_DISABLED
+ifeq ($(CPPUTEST_USE_STD_CPP_LIB), N)
+CPPFLAGS += -DCPPUTEST_STD_CPP_LIB_DISABLED
 CXXFLAGS += -nostdinc++
 endif
 
@@ -83,20 +83,23 @@ test_all:
 	make
 	make clean
 	$(SILENCE)echo Building with the STDC++ new disabled. 
-	make CPPUTEST_DISABLE_STDCPP_LIB=Y
-	make CPPUTEST_DISABLE_STDCPP_LIB=Y clean
+	make CPPUTEST_DISABLE_STD_CPP_LIB=Y
+	make CPPUTEST_DISABLE_STD_CPP_LIB=Y clean
 	$(SILENCE)echo Building with Memory Leak Detection disabled
-	make CPPUTEST_DISABLE_MEMLEAKDETECTION=Y
-	make CPPUTEST_DISABLE_MEMLEAKDETECTION=Y clean
+	make CPPUTEST_DISABLE_MEM_LEAK_DETECTION=Y
+	make CPPUTEST_DISABLE_MEM_LEAK_DETECTION=Y clean
 	$(SILENCE)echo Building with Memory Leak Detection disabled and STD C++ disabled
-	make CPPUTEST_DISABLE_MEMLEAKDETECTION=Y CPPUTEST_DISABLE_STDCPP_LIB=Y
-	make CPPUTEST_DISABLE_MEMLEAKDETECTION=Y CPPUTEST_DISABLE_STDCPP_LIB=Y clean
+	make CPPUTEST_DISABLE_MEM_LEAK_DETECTION=Y CPPUTEST_DISABLE_STD_CPP_LIB=Y
+	make CPPUTEST_DISABLE_MEM_LEAK_DETECTION=Y CPPUTEST_DISABLE_STD_CPP_LIB=Y clean
 	$(SILENCE)echo Building with debug disabled
 	make ENABLE_DEBUG=N 
 	make ENABLE_DEBUG=N clean
-	$(SILENCE)echo Building with overridden CXXFLAGS and CFLAGS
-	make CLFAGS="" CXXFLAGS=""
+	$(SILENCE)echo Building with overridden CXXFLAGS and CFLAGS and CPPFLAGS
+	make CLFAGS="" CXXFLAGS="" CPPFLAGS="-Iinclude"
 	make CFLAGS="" CXXFLAGS="" clean
+	$(SILENCE)echo Building with overridden CXXFLAGS and CFLAGS and memory leak and STDC++ disabled
+	make CLFAGS="" CXXFLAGS="" CPPFLAGS="-Iinclude -DCPPUTEST_STD_CPP_LIB_DISABLED -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED"
+	make CFLAGS="" CXXFLAGS="" CPPFLAGS="-DCPPUTEST_STD_CPP_LIB_DISABLED -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED" clean
 	$(SILENCE)echo Building examples 
 	make examples
 	make cleanExamples

@@ -21,7 +21,7 @@ TEST_GROUP(MemoryLeakOverridesToBeUsedInProductionCode)
 
 };
 
-#if UT_MEMORY_LEAK_DETECTION_ENABLED
+#if CPPUTEST_USE_MEM_LEAK_DETECTION
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, OperatorNewMacroOverloadViaIncludeFileWorks)
 {
@@ -96,9 +96,9 @@ TEST_GROUP(OutOfMemoryTestsForOperatorNew)
 	}
 };
 
-#if UT_MEMORY_LEAK_DETECTION_ENABLED
+#if CPPUTEST_USE_MEM_LEAK_DETECTION
 
-#if UT_USE_STDCPP_LIBRARY_ENABLED
+#if CPPUTEST_USE_STD_CPP_LIB
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorThrowsAnExceptionWhenUsingStdCppNew)
 {
@@ -138,7 +138,7 @@ TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorReturnsNull)
 
 #undef new
 
-#if UT_USE_STDCPP_LIBRARY_ENABLED
+#if CPPUTEST_USE_STD_CPP_LIB
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorThrowsAnExceptionWhenUsingStdCppNewWithoutOverride)
 {

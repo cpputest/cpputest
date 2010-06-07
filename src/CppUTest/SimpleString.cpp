@@ -310,7 +310,7 @@ SimpleString StringFromFormat(const char* format, ...)
 	return resultString;
 }
 
-#if UT_USE_STDCPP_LIBRARY_ENABLED
+#if CPPUTEST_USE_STD_CPP_LIB
 
 #include <string>
 
