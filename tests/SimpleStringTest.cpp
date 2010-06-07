@@ -356,3 +356,57 @@ TEST_GROUP(SimpleString)
 		col[3] = SimpleString("HAH");
 		STRCMP_EQUAL("", col[3].asCharString());
 	}
+
+#if UT_USE_STDCPP_LIBRARY_ENABLED
+
+	TEST(SimpleString, fromStdString)
+	{
+		std::string s("hello");
+		SimpleString s1(StringFrom(s));
+
+		STRCMP_EQUAL("hello", s1.asCharString());
+	}
+
+	TEST(SimpleString, CHECK_EQUAL_Uint32_t)
+	{
+		uint32_t i = 0xffffffff;
+		CHECK_EQUAL(i, i);
+	}
+
+	TEST(SimpleString, CHECK_EQUAL_Uint16_t)
+	{
+		uint16_t i = 0xffff;
+		CHECK_EQUAL(i, i);
+	}
+
+	TEST(SimpleString, CHECK_EQUAL_Uint8_t)
+	{
+		uint8_t i = 0xff;
+		CHECK_EQUAL(i, i);
+	}
+
+	TEST(SimpleString, Uint32_t)
+	{
+		uint32_t i = 0xffffffff;
+
+		SimpleString result = StringFrom(i);
+		CHECK_EQUAL("4294967295 (0xffffffff)", result);
+	}
+
+	TEST(SimpleString, Uint16_t)
+	{
+		uint16_t i = 0xffff;
+
+		SimpleString result = StringFrom(i);
+		CHECK_EQUAL("65535 (0xffff)", result);
+	}
+
+	TEST(SimpleString, Uint8_t)
+	{
+		uint8_t i = 0xff;
+
+		SimpleString result = StringFrom(i);
+		CHECK_EQUAL("255 (0xff)", result);
+	}
+
+#endif

@@ -1,13 +1,6 @@
 #Set this to @ to keep the makefile quiet
 SILENCE = @
 
-#Set to Y to get extensions.  This brings in string support, and stdint support
-ifeq ($(CPPUTEST_ENABLE_EXTENSIONS), Y)
-	ENABLE_EXTENSIONS = Y
-else
-	ENABLE_EXTENSIONS = N
-endif
-
 #Set to Y to disable the memory leak detection. Enabled by default
 ifeq ($(CPPUTEST_DISABLE_MEMLEAKDETECTION), Y)
 	ENABLE_MEMLEAKDETECTION = N
@@ -78,12 +71,6 @@ TEST_SRC_DIRS = \
 INCLUDES =\
   -I$(CPPUTEST_HOME)/include
 
-#Add extension directories if enabled
-ifeq ($(ENABLE_EXTENSIONS), Y)
-SRC_DIRS +=	src/CppUTest/Extensions
-TEST_SRC_DIRS += tests/Extensions 
-endif
-
 #Flags to pass to ar, ld
 LDFLAGS += 
 LD_LIBRARIES += -lstdc++
@@ -95,25 +82,28 @@ test_all:
 	$(SILENCE)echo Building with the default flags.
 	make
 	make clean
-	$(SILENCE)echo Building with the STDC++ new disabled. Extentions disabled too
+	$(SILENCE)echo Building with the STDC++ new disabled. 
 	make CPPUTEST_DISABLE_STDCPP_LIB=Y
 	make CPPUTEST_DISABLE_STDCPP_LIB=Y clean
-	$(SILENCE)echo Building ENABLE_DEBUG disabled and ENABLE_EXTENTIONS enabled
-	make ENABLE_DEBUG=N ENABLE_EXTENSIONS=Y
-	make clean ENABLE_DEBUG=N ENABLE_EXTENSIONS=Y
 	$(SILENCE)echo Building with Memory Leak Detection disabled
 	make CPPUTEST_DISABLE_MEMLEAKDETECTION=Y
 	make CPPUTEST_DISABLE_MEMLEAKDETECTION=Y clean
-	$(SILENCE)echo Building examples without extentions disabled
-	make examples ENABLE_EXTENSIONS=Y
-	make ENABLE_EXTENSIONS=Y clean cleanExamples
-	make ENABLE_DEBUG=N ENABLE_EXTENSIONS=N
+	$(SILENCE)echo Building with Memory Leak Detection disabled and STD C++ disabled
+	make CPPUTEST_DISABLE_MEMLEAKDETECTION=Y CPPUTEST_DISABLE_STDCPP_LIB=Y
+	make CPPUTEST_DISABLE_MEMLEAKDETECTION=Y CPPUTEST_DISABLE_STDCPP_LIB=Y clean
+	$(SILENCE)echo Building with debug disabled
+	make ENABLE_DEBUG=N 
+	make ENABLE_DEBUG=N clean
+	$(SILENCE)echo Building with overridden CXXFLAGS and CFLAGS
+	make CLFAGS="" CXXFLAGS=""
+	make CFLAGS="" CXXFLAGS="" clean
+	$(SILENCE)echo Building examples 
+	make examples
+	make cleanExamples
+	$(SILENCE)echo Testing JUnit output
+	make
 	$(SILENCE)./$(TEST_TARGET) -ojunit > junit_run_output
 	$(SILENCE)if [ -s junit_run_output ]; then echo "JUnit run has output. Build failed!"; exit 1; fi
-	make clean
-	make ENABLE_DEBUG=Y CPPUTEST_ENABLE_EXTENSIONS=Y
-	make clean CPPUTEST_ENABLE_EXTENSIONS=Y
-	make ENABLE_DEBUG=Y CPPUTEST_ENABLE_EXTENSIONS=N
 	make clean
 	
 .PHONY: examples
