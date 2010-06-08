@@ -30,8 +30,7 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 
 CommandLineArguments::CommandLineArguments(int ac, const char** av) :
-	ac_(ac), av_(av), verbose_(false), repeat_(1), groupFilter_(
-			""), nameFilter_(""), outputType_(OUTPUT_ECLIPSE)
+	ac_(ac), av_(av), verbose_(false), repeat_(1), groupFilter_(""), nameFilter_(""), outputType_(OUTPUT_ECLIPSE)
 {
 }
 
@@ -48,10 +47,8 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
 		else if (argument.startsWith("-r")) SetRepeatCount(ac_, av_, i);
 		else if (argument.startsWith("-g")) SetGroupFilter(ac_, av_, i);
 		else if (argument.startsWith("-n")) SetNameFilter(ac_, av_, i);
-		else if (argument.startsWith("-o")) correctParameters = SetOutputType(
-				ac_, av_, i);
-		else if (argument.startsWith("-p")) correctParameters
-				= plugin->parseArguments(ac_, av_, i);
+		else if (argument.startsWith("-o")) correctParameters = SetOutputType(ac_, av_, i);
+		else if (argument.startsWith("-p")) correctParameters = plugin->parseArguments(ac_, av_, i);
 		else correctParameters = false;
 
 		if (correctParameters == false) {
@@ -101,8 +98,7 @@ void CommandLineArguments::SetRepeatCount(int ac, const char** av, int& i)
 
 }
 
-SimpleString CommandLineArguments::getParameterField(int ac, const char** av,
-		int& i)
+SimpleString CommandLineArguments::getParameterField(int ac, const char** av, int& i)
 {
 	SimpleString parameter(av[i]);
 	if (parameter.size() > 2) return av[i] + 2;

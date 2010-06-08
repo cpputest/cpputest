@@ -45,10 +45,14 @@ public:
 	SimpleString *message;
 };
 
-class NewAllocatorForMemoryLeakDetectionTest : public StandardNewAllocator
+class NewAllocatorForMemoryLeakDetectionTest: public StandardNewAllocator
 {
 public:
-	NewAllocatorForMemoryLeakDetectionTest() : alloc_called(0), free_called(0) {};
+	NewAllocatorForMemoryLeakDetectionTest() :
+		alloc_called(0), free_called(0)
+	{
+	}
+
 	int alloc_called;
 	int free_called;
 	char* alloc_memory(size_t size)
@@ -63,10 +67,14 @@ public:
 	}
 };
 
-class MallocAllocatorForMemoryLeakDetectionTest : public StandardMallocAllocator
+class MallocAllocatorForMemoryLeakDetectionTest: public StandardMallocAllocator
 {
 public:
-	MallocAllocatorForMemoryLeakDetectionTest() : alloc_called(0), free_called(0), allocMemoryLeakNodeCalled(0), freeMemoryLeakNodeCalled(0) {};
+	MallocAllocatorForMemoryLeakDetectionTest() :
+		alloc_called(0), free_called(0), allocMemoryLeakNodeCalled(0), freeMemoryLeakNodeCalled(0)
+	{
+	}
+
 	int alloc_called;
 	int free_called;
 	int allocMemoryLeakNodeCalled;
@@ -97,34 +105,34 @@ public:
 
 TEST_GROUP(MemoryLeakDetectorTest)
 {
-		MemoryLeakDetector* detector;
-		MemoryLeakFailureForTest *reporter;
-		MallocAllocatorForMemoryLeakDetectionTest* mallocAllocator;
-		NewAllocatorForMemoryLeakDetectionTest* newAllocator;
-		StandardNewArrayAllocator* newArrayAllocator;
+	MemoryLeakDetector* detector;
+	MemoryLeakFailureForTest *reporter;
+	MallocAllocatorForMemoryLeakDetectionTest* mallocAllocator;
+	NewAllocatorForMemoryLeakDetectionTest* newAllocator;
+	StandardNewArrayAllocator* newArrayAllocator;
 
-		void setup()
-		{
-			detector = new MemoryLeakDetector;
-			reporter = new MemoryLeakFailureForTest;
-			mallocAllocator = new MallocAllocatorForMemoryLeakDetectionTest;
-			newAllocator = new NewAllocatorForMemoryLeakDetectionTest;
-			newArrayAllocator = new StandardNewArrayAllocator;
-			detector->init(reporter);
-			detector->enable();
-			detector->startChecking();
-			reporter->message = new SimpleString();
-		}
-		void teardown()
-		{
-			delete reporter->message;
-			delete detector;
-			delete reporter;
-			delete mallocAllocator;
-			delete newAllocator;
-			delete newArrayAllocator;
-		}
-	};
+	void setup()
+	{
+		detector = new MemoryLeakDetector;
+		reporter = new MemoryLeakFailureForTest;
+		mallocAllocator = new MallocAllocatorForMemoryLeakDetectionTest;
+		newAllocator = new NewAllocatorForMemoryLeakDetectionTest;
+		newArrayAllocator = new StandardNewArrayAllocator;
+		detector->init(reporter);
+		detector->enable();
+		detector->startChecking();
+		reporter->message = new SimpleString();
+	}
+	void teardown()
+	{
+		delete reporter->message;
+		delete detector;
+		delete reporter;
+		delete mallocAllocator;
+		delete newAllocator;
+		delete newArrayAllocator;
+	}
+};
 
 TEST(MemoryLeakDetectorTest, OneLeak)
 {
@@ -299,8 +307,7 @@ TEST(MemoryLeakDetectorTest, OneRealloc)
 {
 	char* mem1 = detector->allocMemory(mallocAllocator, 10, "file.cpp", 1234);
 
-	char* mem2 = detector->reallocMemory(mallocAllocator, mem1, 1000,
-			"other.cpp", 5678);
+	char* mem2 = detector->reallocMemory(mallocAllocator, mem1, 1000, "other.cpp", 5678);
 
 	LONGS_EQUAL(1, detector->totalMemoryLeaks(mem_leak_period_checking));
 	SimpleString output = detector->report(mem_leak_period_checking);

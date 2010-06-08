@@ -69,27 +69,27 @@ public:
 
 TEST_GROUP(PluginTest)
 {
-		DummyPlugin* firstPlugin;
-		DummyPlugin* secondPlugin;
-		TestTestingFixture *genFixture;
-		TestRegistry *registry;
-		void setup()
-		{
-			firstPlugin = new DummyPlugin(GENERIC_PLUGIN);
-			secondPlugin = new DummyPlugin(GENERIC_PLUGIN2);
-			genFixture = new TestTestingFixture;
-			registry = genFixture->registry_;
-			registry->installPlugin(firstPlugin);
-			sequenceNumber = 1;
-		}
+	DummyPlugin* firstPlugin;
+	DummyPlugin* secondPlugin;
+	TestTestingFixture *genFixture;
+	TestRegistry *registry;
+	void setup()
+	{
+		firstPlugin = new DummyPlugin(GENERIC_PLUGIN);
+		secondPlugin = new DummyPlugin(GENERIC_PLUGIN2);
+		genFixture = new TestTestingFixture;
+		registry = genFixture->registry_;
+		registry->installPlugin(firstPlugin);
+		sequenceNumber = 1;
+	}
 
-		void teardown()
-		{
-			delete firstPlugin;
-			delete secondPlugin;
-			delete genFixture;
-		}
-	};
+	void teardown()
+	{
+		delete firstPlugin;
+		delete secondPlugin;
+		delete genFixture;
+	}
+};
 
 #define GENERIC_PLUGIN  "GenericPlugin"
 #define GENERIC_PLUGIN2 "GenericPlugin2"

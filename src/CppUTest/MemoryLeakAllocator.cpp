@@ -32,7 +32,8 @@
 static char* checkedMalloc(size_t size)
 {
 	char* mem = (char*) PlatformSpecificMalloc(size);
-	if (mem == 0)FAIL("malloc returned nul pointer");
+	if (mem == 0)
+	FAIL("malloc returned nul pointer");
 	return mem;
 }
 
@@ -52,8 +53,7 @@ void MemoryLeakAllocator::setCurrentNewAllocator(MemoryLeakAllocator* allocator)
 
 MemoryLeakAllocator* MemoryLeakAllocator::getCurrentNewAllocator()
 {
-	if (currentNewAllocator == 0)
-		setCurrentNewAllocatorToDefault();
+	if (currentNewAllocator == 0) setCurrentNewAllocatorToDefault();
 	return currentNewAllocator;
 }
 
@@ -69,8 +69,7 @@ void MemoryLeakAllocator::setCurrentNewArrayAllocator(MemoryLeakAllocator* alloc
 
 MemoryLeakAllocator* MemoryLeakAllocator::getCurrentNewArrayAllocator()
 {
-	if (currentNewArrayAllocator == 0)
-		setCurrentNewArrayAllocatorToDefault();
+	if (currentNewArrayAllocator == 0) setCurrentNewArrayAllocatorToDefault();
 	return currentNewArrayAllocator;
 }
 
@@ -86,8 +85,7 @@ void MemoryLeakAllocator::setCurrentMallocAllocator(MemoryLeakAllocator* allocat
 
 MemoryLeakAllocator* MemoryLeakAllocator::getCurrentMallocAllocator()
 {
-	if (currentMallocAllocator == 0)
-		setCurrentMallocAllocatorToDefault();
+	if (currentMallocAllocator == 0) setCurrentMallocAllocatorToDefault();
 	return currentMallocAllocator;
 }
 
@@ -106,12 +104,10 @@ char* MemoryLeakAllocator::allocMemoryLeakNode(size_t size)
 	return alloc_memory(size);
 }
 
-void  MemoryLeakAllocator::freeMemoryLeakNode(char* memory)
+void MemoryLeakAllocator::freeMemoryLeakNode(char* memory)
 {
 	free_memory(memory);
 }
-
-
 
 char* StandardMallocAllocator::alloc_memory(size_t size)
 {

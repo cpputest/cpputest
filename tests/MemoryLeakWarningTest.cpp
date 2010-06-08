@@ -42,11 +42,9 @@ public:
 	virtual ~DummyReporter()
 	{
 	}
-	;
 	virtual void fail(char* /*fail_string*/)
 	{
 	}
-	;
 };
 
 static MemoryLeakDetector* detector;
@@ -58,29 +56,29 @@ TEST_GROUP(MemoryLeakWarningTest)
 {
 	TestTestingFixture* fixture;
 
-void setup()
-{
-	fixture = new TestTestingFixture();
-	detector = new MemoryLeakDetector();
-	allocator = new StandardNewAllocator;
-	detector->init(&dummy);
-	memPlugin = new MemoryLeakWarningPlugin("TestMemoryLeakWarningPlugin", detector);
-	fixture->registry_->installPlugin(memPlugin);
-	memPlugin->enable();
+	void setup()
+	{
+		fixture = new TestTestingFixture();
+		detector = new MemoryLeakDetector();
+		allocator = new StandardNewAllocator;
+		detector->init(&dummy);
+		memPlugin = new MemoryLeakWarningPlugin("TestMemoryLeakWarningPlugin", detector);
+		fixture->registry_->installPlugin(memPlugin);
+		memPlugin->enable();
 
-	leak1 = 0;
-	leak2 = 0;
-}
-void teardown()
-{
-	detector->deallocMemory(allocator, leak1);
-	detector->deallocMemory(allocator, leak2);
+		leak1 = 0;
+		leak2 = 0;
+	}
+	void teardown()
+	{
+		detector->deallocMemory(allocator, leak1);
+		detector->deallocMemory(allocator, leak2);
 
-	delete fixture;
-	delete memPlugin;
-	delete detector;
-	delete allocator;
-}
+		delete fixture;
+		delete memPlugin;
+		delete detector;
+		delete allocator;
+	}
 };
 
 void _testTwoLeaks()

@@ -34,26 +34,26 @@ static bool afterCheck;
 
 TEST_GROUP(Utest)
 {
-		TestTestingFixture* fixture;
-		void setup()
-		{
-			fixture = new TestTestingFixture();
-			afterCheck = false;
-		}
-		void teardown()
-		{
-			delete fixture;
-		}
+	TestTestingFixture* fixture;
+	void setup()
+	{
+		fixture = new TestTestingFixture();
+		afterCheck = false;
+	}
+	void teardown()
+	{
+		delete fixture;
+	}
 
-		void testFailureWith(void (*method)())
-		{
-			fixture->setTestFunction(method);
-			fixture->runAllTests();
-			LONGS_EQUAL(1, fixture->getFailureCount());
-			CHECK(!afterCheck);
-		}
+	void testFailureWith(void(*method)())
+	{
+		fixture->setTestFunction(method);
+		fixture->runAllTests();
+		LONGS_EQUAL(1, fixture->getFailureCount());
+		CHECK(!afterCheck);
+	}
 
-	};
+};
 
 static void _passMethod()
 {
@@ -242,13 +242,13 @@ TEST(Utest, allMacrosFromFunctionThatReturnsAValue)
 
 TEST(Utest, AssertsActLikeStatements)
 {
-	if (fixture != 0)CHECK(true)else
+	if (fixture != 0)
+	CHECK(true)
+	else
 	CHECK(false)
 
-	if (fixture != 0)
-	CHECK_EQUAL(true, true)
-	else
-	CHECK_EQUAL(false, false)
+	if (fixture != 0) CHECK_EQUAL(true, true)
+	else CHECK_EQUAL(false, false)
 
 	if (fixture != 0)
 	STRCMP_EQUAL("", "")
@@ -272,11 +272,10 @@ TEST(Utest, AssertsActLikeStatements)
 
 	if (false)
 	FAIL("")
-	else CHECK(true);
-	;
+	else
+	CHECK(true);;
 
-	if (true)
-	;
+	if (true) ;
 	else
 	FAIL("")
 
@@ -360,20 +359,24 @@ TEST(Utest, TestStopsAfterSetupFailure)
 	LONGS_EQUAL(0, stopAfterFailure);
 }
 
-TEST_BASE(MyOwnTest){
-MyOwnTest() : inTest(false) {}
-bool inTest;
+TEST_BASE(MyOwnTest)
+{
+	MyOwnTest() :
+		inTest(false)
+	{
+	}
+	bool inTest;
 
-void setup()
-{
-	CHECK(!inTest);
-	inTest = true;
-}
-void teardown()
-{
-	CHECK(inTest);
-	inTest = false;
-}
+	void setup()
+	{
+		CHECK(!inTest);
+		inTest = true;
+	}
+	void teardown()
+	{
+		CHECK(inTest);
+		inTest = false;
+	}
 };
 
 TEST_GROUP_BASE(UtestMyOwn, MyOwnTest)

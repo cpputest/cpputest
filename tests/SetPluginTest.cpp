@@ -19,34 +19,34 @@ void stub_func2()
 {
 }
 
-
 void (*fp1)();
 void (*fp2)();
 
 TEST_GROUP(SetPointerPluginTest)
-{ SetPointerPlugin* plugin_;
-TestRegistry* myRegistry_;
-StringBufferTestOutput* output_;
-TestResult* result_;
-
-void setup()
 {
-	myRegistry_ = new TestRegistry();
-	plugin_ = new SetPointerPlugin("TestSetPlugin");
-	myRegistry_->setCurrentRegistry(myRegistry_);
-	myRegistry_->installPlugin(plugin_);
-	output_ = new StringBufferTestOutput();
-	result_ = new TestResult(*output_);
-}
+	SetPointerPlugin* plugin_;
+	TestRegistry* myRegistry_;
+	StringBufferTestOutput* output_;
+	TestResult* result_;
 
-void teardown()
-{
-	myRegistry_->setCurrentRegistry(0);
-	delete myRegistry_;
-	delete plugin_;
-	delete output_;
-	delete result_;
-}
+	void setup()
+	{
+		myRegistry_ = new TestRegistry();
+		plugin_ = new SetPointerPlugin("TestSetPlugin");
+		myRegistry_->setCurrentRegistry(myRegistry_);
+		myRegistry_->installPlugin(plugin_);
+		output_ = new StringBufferTestOutput();
+		result_ = new TestResult(*output_);
+	}
+
+	void teardown()
+	{
+		myRegistry_->setCurrentRegistry(0);
+		delete myRegistry_;
+		delete plugin_;
+		delete output_;
+		delete result_;
+	}
 };
 
 class FunctionPointerUtest: public Utest
@@ -99,8 +99,7 @@ public:
 
 IGNORE_TEST(SetPointerPluginTest, installTooMuchFunctionPointer)
 {
-	MaxFunctionPointerUtest *tst = new MaxFunctionPointerUtest(
-			SetPointerPlugin::MAX_SET + 1);
+	MaxFunctionPointerUtest *tst = new MaxFunctionPointerUtest(SetPointerPlugin::MAX_SET + 1);
 	myRegistry_->addTest(tst);
 
 	myRegistry_->runAllTests(*result_);

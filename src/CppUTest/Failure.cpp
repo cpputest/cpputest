@@ -29,28 +29,23 @@
 #include "CppUTest/Failure.h"
 #include "CppUTest/TestOutput.h"
 
-Failure::Failure(Utest* test, const char* fileName, int lineNumber,
-		const SimpleString& theMessage) :
-	testName_(test->getFormattedName()), fileName_(fileName), lineNumber_(
-			lineNumber), message_(theMessage)
+Failure::Failure(Utest* test, const char* fileName, int lineNumber, const SimpleString& theMessage) :
+	testName_(test->getFormattedName()), fileName_(fileName), lineNumber_(lineNumber), message_(theMessage)
 {
 }
 
 Failure::Failure(Utest* test, const SimpleString& theMessage) :
-	testName_(test->getFormattedName()), fileName_(test->getFile()), lineNumber_(
-			test->getLineNumber()), message_(theMessage)
+	testName_(test->getFormattedName()), fileName_(test->getFile()), lineNumber_(test->getLineNumber()), message_(theMessage)
 {
 }
 
 Failure::Failure(Utest* test, const char* fileName, int lineNum) :
-	testName_(test->getFormattedName()), fileName_(fileName),
-			lineNumber_(lineNum), message_("no message")
+	testName_(test->getFormattedName()), fileName_(fileName), lineNumber_(lineNum), message_("no message")
 {
 }
 
 Failure::Failure(const Failure& f) :
-	testName_(f.testName_), fileName_(f.fileName_), lineNumber_(f.lineNumber_),
-			message_(f.message_)
+	testName_(f.testName_), fileName_(f.fileName_), lineNumber_(f.lineNumber_), message_(f.message_)
 {
 }
 
@@ -78,24 +73,18 @@ SimpleString Failure::getMessage() const
 	return message_;
 }
 
-EqualsFailure::EqualsFailure(Utest* test, const char* fileName,
-		int lineNumber, const SimpleString& expected,
-		const SimpleString& actual) :
+EqualsFailure::EqualsFailure(Utest* test, const char* fileName, int lineNumber, const SimpleString& expected, const SimpleString& actual) :
 	Failure(test, fileName, lineNumber)
 {
 
 	const char* format = "expected <%s>\n\tbut was  <%s>";
-	message_ = StringFromFormat(format, expected.asCharString(),
-			actual.asCharString());
+	message_ = StringFromFormat(format, expected.asCharString(), actual.asCharString());
 }
 
-ContainsFailure::ContainsFailure(Utest* test, const char* fileName,
-		int lineNumber, const SimpleString& expected,
-		const SimpleString& actual) :
+ContainsFailure::ContainsFailure(Utest* test, const char* fileName, int lineNumber, const SimpleString& expected, const SimpleString& actual) :
 	Failure(test, fileName, lineNumber)
 {
 
 	const char* format = "actual <%s>\n\tdid not contain  <%s>";
-	message_ = StringFromFormat(format, actual.asCharString(),
-			expected.asCharString());
+	message_ = StringFromFormat(format, actual.asCharString(), expected.asCharString());
 }

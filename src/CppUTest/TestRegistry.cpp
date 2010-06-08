@@ -29,8 +29,7 @@
 #include "CppUTest/TestRegistry.h"
 
 TestRegistry::TestRegistry() :
-	tests_(&NullTest::instance()), nameFilter_(0), groupFilter_(0),
-			firstPlugin_(NullTestPlugin::instance())
+	tests_(&NullTest::instance()), nameFilter_(0), groupFilter_(0), firstPlugin_(NullTestPlugin::instance())
 {
 }
 
@@ -164,8 +163,7 @@ TestPlugin* TestRegistry::getPluginByName(const SimpleString& name)
 
 void TestRegistry::removePluginByName(const SimpleString& name)
 {
-	if (firstPlugin_->removePluginByName(name) == firstPlugin_) firstPlugin_
-			= firstPlugin_->getNext();
+	if (firstPlugin_->removePluginByName(name) == firstPlugin_) firstPlugin_ = firstPlugin_->getNext();
 	if (firstPlugin_->getName() == name) firstPlugin_ = firstPlugin_->getNext();
 	firstPlugin_->removePluginByName(name);
 }

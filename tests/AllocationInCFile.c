@@ -1,4 +1,3 @@
-
 #include <stdlib.h>
 #include "AllocationInCFile.h"
 #include "CppUTest/MemoryLeakDetectorMallocMacros.h"

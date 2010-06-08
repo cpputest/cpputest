@@ -36,25 +36,25 @@ static long MockGetPlatformSpecificTimeInMillis()
 
 TEST_GROUP(TestResult)
 {
-		TestOutput* printer;
-		StringBufferTestOutput* mock;
+	TestOutput* printer;
+	StringBufferTestOutput* mock;
 
-		TestResult* res;
+	TestResult* res;
 
-		TEST_SETUP()
-		{
-			mock = new StringBufferTestOutput();
-			printer = mock;
-			res = new TestResult(*printer);
-			SetPlatformSpecificTimeInMillisMethod(MockGetPlatformSpecificTimeInMillis);
-		}
-		TEST_TEARDOWN()
-		{
-			SetPlatformSpecificTimeInMillisMethod(0);
-			delete printer;
-			delete res;
-		}
-	};
+	void setup()
+	{
+		mock = new StringBufferTestOutput();
+		printer = mock;
+		res = new TestResult(*printer);
+		SetPlatformSpecificTimeInMillisMethod(MockGetPlatformSpecificTimeInMillis);
+	}
+	void teardown()
+	{
+		SetPlatformSpecificTimeInMillisMethod(0);
+		delete printer;
+		delete res;
+	}
+};
 
 TEST(TestResult, TestEndedWillPrintResultsAndExecutionTime)
 {

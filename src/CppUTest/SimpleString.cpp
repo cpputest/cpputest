@@ -112,8 +112,7 @@ bool SimpleString::endsWith(const SimpleString& other) const
 	if (other_buffer_length == 0) return true;
 	if (buffer_length == 0) return false;
 	if (buffer_length < other_buffer_length) return false;
-	return PlatformSpecificStrCmp(buffer_ + buffer_length - other_buffer_length,
-			other.buffer_) == 0;
+	return PlatformSpecificStrCmp(buffer_ + buffer_length - other_buffer_length, other.buffer_) == 0;
 }
 
 size_t SimpleString::count(const SimpleString& substr) const
@@ -208,8 +207,7 @@ SimpleString::~SimpleString()
 
 bool operator==(const SimpleString& left, const SimpleString& right)
 {
-	return 0 == PlatformSpecificStrCmp(left.asCharString(),
-			right.asCharString());
+	return 0 == PlatformSpecificStrCmp(left.asCharString(), right.asCharString());
 }
 
 bool operator!=(const SimpleString& left, const SimpleString& right)
@@ -240,11 +238,9 @@ SimpleString& SimpleString::operator+=(const char* rhs)
 	return *this;
 }
 
-void SimpleString::padStringsToSameLength(SimpleString& str1, SimpleString& str2,
-		char padCharacter)
+void SimpleString::padStringsToSameLength(SimpleString& str1, SimpleString& str2, char padCharacter)
 {
-	if (str1.size() > str2.size()) 
-	{
+	if (str1.size() > str2.size()) {
 		padStringsToSameLength(str2, str1, padCharacter);
 		return;
 	}
@@ -254,7 +250,6 @@ void SimpleString::padStringsToSameLength(SimpleString& str1, SimpleString& str2
 	pad[1] = 0;
 	str1 = SimpleString(pad, str2.size() - str1.size()) + str1;
 }
-
 
 SimpleString StringFrom(bool value)
 {
@@ -355,8 +350,7 @@ SimpleString VStringFromFormat(const char* format, va_list args)
 	char defaultBuffer[sizeOfdefaultBuffer];
 	SimpleString resultString;
 
-	int size = PlatformSpecificVSNprintf(defaultBuffer, sizeOfdefaultBuffer,
-			format, args);
+	int size = PlatformSpecificVSNprintf(defaultBuffer, sizeOfdefaultBuffer, format, args);
 	if (size < sizeOfdefaultBuffer) {
 		resultString = SimpleString(defaultBuffer);
 	}

@@ -30,12 +30,13 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 
 TEST_GROUP(MemoryLeakAllocatorTest)
-{ MemoryLeakAllocator* allocator;
-
-void teardown()
 {
-	if (allocator) delete allocator;
-}
+	MemoryLeakAllocator* allocator;
+
+	void teardown()
+	{
+		if (allocator) delete allocator;
+	}
 };
 
 TEST(MemoryLeakAllocatorTest, SetCurrentNewAllocator)
@@ -64,7 +65,6 @@ TEST(MemoryLeakAllocatorTest, SetCurrentMallocAllocator)
 	MemoryLeakAllocator::setCurrentMallocAllocatorToDefault();
 	POINTERS_EQUAL(StandardMallocAllocator::defaultAllocator(), MemoryLeakAllocator::getCurrentMallocAllocator());
 }
-
 
 TEST(MemoryLeakAllocatorTest, MallocAllocation)
 {

@@ -113,36 +113,36 @@ public:
 
 TEST_GROUP(TestRegistry)
 {
-		TestRegistry* myRegistry;
-		StringBufferTestOutput* output;
-		MockTest* test1;
-		MockTest* test2;
-		MockTest* test3;
-		TestResult *result;
-		MockTestResult *mockResult;
-		TEST_SETUP()
-		{
-			output = new StringBufferTestOutput();
-			mockResult = new MockTestResult(*output);
-			result = mockResult;
-			test1 = new MockTest();
-			test2 = new MockTest();
-			test3 = new MockTest("group2");
-			myRegistry = new TestRegistry();
-			myRegistry->setCurrentRegistry(myRegistry);
-		}
+	TestRegistry* myRegistry;
+	StringBufferTestOutput* output;
+	MockTest* test1;
+	MockTest* test2;
+	MockTest* test3;
+	TestResult *result;
+	MockTestResult *mockResult;
+	void setup()
+	{
+		output = new StringBufferTestOutput();
+		mockResult = new MockTestResult(*output);
+		result = mockResult;
+		test1 = new MockTest();
+		test2 = new MockTest();
+		test3 = new MockTest("group2");
+		myRegistry = new TestRegistry();
+		myRegistry->setCurrentRegistry(myRegistry);
+	}
 
-		TEST_TEARDOWN()
-		{
-			myRegistry->setCurrentRegistry(0);
-			delete myRegistry;
-			delete test1;
-			delete test2;
-			delete test3;
-			delete result;
-			delete output;
-		}
-	};
+	void teardown()
+	{
+		myRegistry->setCurrentRegistry(0);
+		delete myRegistry;
+		delete test1;
+		delete test2;
+		delete test3;
+		delete result;
+		delete output;
+	}
+};
 
 TEST(TestRegistry, registryMyRegistryAndReset)
 {

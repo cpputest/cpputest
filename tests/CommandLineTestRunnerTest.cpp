@@ -33,15 +33,15 @@
 
 TEST_GROUP(CommandLineTestRunner)
 {
-		void setup()
-		{
-		}
-		void teardown()
-		{
-		}
-	};
-
-	IGNORE_TEST(CommandLineTestRunner, HmmmmWhatToWrite)
+	void setup()
 	{
-		//TODO: maybe some tests are in order
 	}
+	void teardown()
+	{
+	}
+};
+
+IGNORE_TEST(CommandLineTestRunner, HmmmmWhatToWrite)
+{
+	//TODO: maybe some tests are in order
+}

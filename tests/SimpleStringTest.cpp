@@ -34,379 +34,375 @@ TEST_GROUP(SimpleString)
 
 };
 
-	TEST(SimpleString, CreateSequence)
-	{
-		SimpleString expected("hellohello");
-		SimpleString actual("hello", 2);
+TEST(SimpleString, CreateSequence)
+{
+	SimpleString expected("hellohello");
+	SimpleString actual("hello", 2);
 
-		CHECK_EQUAL(expected, actual);
-	}
+	CHECK_EQUAL(expected, actual);
+}
 
-	TEST(SimpleString, CreateSequenceOfZero)
-	{
-		SimpleString expected("");
-		SimpleString actual("hello", 0);
+TEST(SimpleString, CreateSequenceOfZero)
+{
+	SimpleString expected("");
+	SimpleString actual("hello", 0);
 
-		CHECK_EQUAL(expected, actual);
-	}
+	CHECK_EQUAL(expected, actual);
+}
 
-	TEST(SimpleString, Copy)
-	{
-		SimpleString s1("hello");
-		SimpleString s2(s1);
+TEST(SimpleString, Copy)
+{
+	SimpleString s1("hello");
+	SimpleString s2(s1);
 
-		CHECK_EQUAL(s1, s2);
-	}
+	CHECK_EQUAL(s1, s2);
+}
 
-	TEST(SimpleString, Assignment)
-	{
-		SimpleString s1("hello");
-		SimpleString s2("goodbye");
+TEST(SimpleString, Assignment)
+{
+	SimpleString s1("hello");
+	SimpleString s2("goodbye");
 
-		s2 = s1;
+	s2 = s1;
 
-		CHECK_EQUAL(s1, s2);
-	}
+	CHECK_EQUAL(s1, s2);
+}
 
-	TEST(SimpleString, Equality)
-	{
-		SimpleString s1("hello");
-		SimpleString s2("hello");
+TEST(SimpleString, Equality)
+{
+	SimpleString s1("hello");
+	SimpleString s2("hello");
 
-		CHECK(s1 == s2);
-	}
+	CHECK(s1 == s2);
+}
 
-	TEST(SimpleString, InEquality)
-	{
-		SimpleString s1("hello");
-		SimpleString s2("goodbye");
+TEST(SimpleString, InEquality)
+{
+	SimpleString s1("hello");
+	SimpleString s2("goodbye");
 
-		CHECK(s1 != s2);
-	}
+	CHECK(s1 != s2);
+}
 
-	TEST(SimpleString, asCharString)
-	{
-		SimpleString s1("hello");
+TEST(SimpleString, asCharString)
+{
+	SimpleString s1("hello");
 
-		STRCMP_EQUAL("hello", s1.asCharString());
-	}
+	STRCMP_EQUAL("hello", s1.asCharString());
+}
 
-	TEST(SimpleString, Size)
-	{
-		SimpleString s1("hello!");
+TEST(SimpleString, Size)
+{
+	SimpleString s1("hello!");
 
-		LONGS_EQUAL(6, s1.size());
-	}
+	LONGS_EQUAL(6, s1.size());
+}
 
-	TEST(SimpleString, Addition)
-	{
-		SimpleString s1("hello!");
-		SimpleString s2("goodbye!");
-		SimpleString s3("hello!goodbye!");
-		SimpleString s4;
-		s4 = s1 + s2;
+TEST(SimpleString, Addition)
+{
+	SimpleString s1("hello!");
+	SimpleString s2("goodbye!");
+	SimpleString s3("hello!goodbye!");
+	SimpleString s4;
+	s4 = s1 + s2;
 
-		CHECK_EQUAL(s3, s4);
-	}
+	CHECK_EQUAL(s3, s4);
+}
 
-	TEST(SimpleString, Concatenation)
-	{
-		SimpleString s1("hello!");
-		SimpleString s2("goodbye!");
-		SimpleString s3("hello!goodbye!");
-		SimpleString s4;
-		s4 += s1;
-		s4 += s2;
+TEST(SimpleString, Concatenation)
+{
+	SimpleString s1("hello!");
+	SimpleString s2("goodbye!");
+	SimpleString s3("hello!goodbye!");
+	SimpleString s4;
+	s4 += s1;
+	s4 += s2;
 
-		CHECK_EQUAL(s3, s4);
+	CHECK_EQUAL(s3, s4);
 
-		SimpleString s5("hello!goodbye!hello!goodbye!");
-		s4 += s4;
+	SimpleString s5("hello!goodbye!hello!goodbye!");
+	s4 += s4;
 
-		CHECK_EQUAL(s5, s4);
-	}
+	CHECK_EQUAL(s5, s4);
+}
 
-	TEST(SimpleString, Contains)
-	{
-		SimpleString s("hello!");
-		SimpleString empty("");
-		SimpleString beginning("hello");
-		SimpleString end("lo!");
-		SimpleString mid("l");
-		SimpleString notPartOfString("xxxx");
+TEST(SimpleString, Contains)
+{
+	SimpleString s("hello!");
+	SimpleString empty("");
+	SimpleString beginning("hello");
+	SimpleString end("lo!");
+	SimpleString mid("l");
+	SimpleString notPartOfString("xxxx");
 
-		CHECK(s.contains(empty));
-		CHECK(s.contains(beginning));
-		CHECK(s.contains(end));
-		CHECK(s.contains(mid));
-		CHECK(!s.contains(notPartOfString));
+	CHECK(s.contains(empty));
+	CHECK(s.contains(beginning));
+	CHECK(s.contains(end));
+	CHECK(s.contains(mid));
+	CHECK(!s.contains(notPartOfString));
 
-		CHECK(empty.contains(empty));
-		CHECK(!empty.contains(s));
-	}
+	CHECK(empty.contains(empty));
+	CHECK(!empty.contains(s));
+}
 
-	TEST(SimpleString, startsWith)
-	{
-		SimpleString hi("Hi you!");
-		SimpleString part("Hi");
-		SimpleString diff("Hrrm Hi you! ffdsfd");
-		CHECK(hi.startsWith(part));
-		CHECK(!part.startsWith(hi));
-		CHECK(!diff.startsWith(hi));
-	}
+TEST(SimpleString, startsWith)
+{
+	SimpleString hi("Hi you!");
+	SimpleString part("Hi");
+	SimpleString diff("Hrrm Hi you! ffdsfd");
+	CHECK(hi.startsWith(part));
+	CHECK(!part.startsWith(hi));
+	CHECK(!diff.startsWith(hi));
+}
 
-	TEST(SimpleString, split)
-	{
-		SimpleString hi("hello\nworld\nhow\ndo\nyou\ndo\n\n");
+TEST(SimpleString, split)
+{
+	SimpleString hi("hello\nworld\nhow\ndo\nyou\ndo\n\n");
 
-		SimpleStringCollection collection;
-		hi.split("\n", collection);
+	SimpleStringCollection collection;
+	hi.split("\n", collection);
 
-		LONGS_EQUAL(7, collection.size());
-		STRCMP_EQUAL("hello\n", collection[0].asCharString());
-		STRCMP_EQUAL("world\n", collection[1].asCharString());
-		STRCMP_EQUAL("how\n", collection[2].asCharString());
-		STRCMP_EQUAL("do\n", collection[3].asCharString());
-		STRCMP_EQUAL("you\n", collection[4].asCharString());
-		STRCMP_EQUAL("do\n", collection[5].asCharString());
-		STRCMP_EQUAL("\n", collection[6].asCharString());
-	}
+	LONGS_EQUAL(7, collection.size());
+	STRCMP_EQUAL("hello\n", collection[0].asCharString());
+	STRCMP_EQUAL("world\n", collection[1].asCharString());
+	STRCMP_EQUAL("how\n", collection[2].asCharString());
+	STRCMP_EQUAL("do\n", collection[3].asCharString());
+	STRCMP_EQUAL("you\n", collection[4].asCharString());
+	STRCMP_EQUAL("do\n", collection[5].asCharString());
+	STRCMP_EQUAL("\n", collection[6].asCharString());
+}
 
-	TEST(SimpleString, splitNoTokenOnTheEnd)
-	{
-		SimpleString string("Bah Yah oops");
-		SimpleStringCollection collection;
+TEST(SimpleString, splitNoTokenOnTheEnd)
+{
+	SimpleString string("Bah Yah oops");
+	SimpleStringCollection collection;
 
-		string.split(" ", collection);
-		LONGS_EQUAL(3, collection.size());
-		STRCMP_EQUAL("Bah ", collection[0].asCharString());
-		STRCMP_EQUAL("Yah ", collection[1].asCharString());
-		STRCMP_EQUAL("oops", collection[2].asCharString());
-	}
+	string.split(" ", collection);
+	LONGS_EQUAL(3, collection.size());
+	STRCMP_EQUAL("Bah ", collection[0].asCharString());
+	STRCMP_EQUAL("Yah ", collection[1].asCharString());
+	STRCMP_EQUAL("oops", collection[2].asCharString());
+}
 
-	TEST(SimpleString, count)
-	{
-		SimpleString str("ha ha ha ha");
-		LONGS_EQUAL(4, str.count("ha"));
-	}
+TEST(SimpleString, count)
+{
+	SimpleString str("ha ha ha ha");
+	LONGS_EQUAL(4, str.count("ha"));
+}
 
-	TEST(SimpleString, countTogether)
-	{
-		SimpleString str("hahahaha");
-		LONGS_EQUAL(4, str.count("ha"));
-	}
+TEST(SimpleString, countTogether)
+{
+	SimpleString str("hahahaha");
+	LONGS_EQUAL(4, str.count("ha"));
+}
 
-	TEST(SimpleString, endsWith)
-	{
-		SimpleString str("Hello World");
-		CHECK(str.endsWith("World"));
-		CHECK(!str.endsWith("Worl"));
-		CHECK(!str.endsWith("Hello"));
-		SimpleString str2("ah");
-		CHECK(str2.endsWith("ah"));
-		CHECK(!str2.endsWith("baah"));
-		SimpleString str3("");
-		CHECK(!str3.endsWith("baah"));
+TEST(SimpleString, endsWith)
+{
+	SimpleString str("Hello World");
+	CHECK(str.endsWith("World"));
+	CHECK(!str.endsWith("Worl"));
+	CHECK(!str.endsWith("Hello"));
+	SimpleString str2("ah");
+	CHECK(str2.endsWith("ah"));
+	CHECK(!str2.endsWith("baah"));
+	SimpleString str3("");
+	CHECK(!str3.endsWith("baah"));
 
-		SimpleString str4("ha ha ha ha");
-		CHECK(str4.endsWith("ha"));
-	}
+	SimpleString str4("ha ha ha ha");
+	CHECK(str4.endsWith("ha"));
+}
 
-	TEST(SimpleString, replaceCharWithChar)
-	{
-		SimpleString str("abcabcabca");
-		str.replace('a', 'b');
-		STRCMP_EQUAL("bbcbbcbbcb", str.asCharString());
-	}
+TEST(SimpleString, replaceCharWithChar)
+{
+	SimpleString str("abcabcabca");
+	str.replace('a', 'b');
+	STRCMP_EQUAL("bbcbbcbbcb", str.asCharString());
+}
 
-	TEST(SimpleString, replaceStringWithString)
-	{
-		SimpleString str("boo baa boo baa boo");
-		str.replace("boo", "boohoo");
-		STRCMP_EQUAL("boohoo baa boohoo baa boohoo", str.asCharString());
-	}
+TEST(SimpleString, replaceStringWithString)
+{
+	SimpleString str("boo baa boo baa boo");
+	str.replace("boo", "boohoo");
+	STRCMP_EQUAL("boohoo baa boohoo baa boohoo", str.asCharString());
+}
 
-	TEST(SimpleString, ContainsNull)
-	{
-		SimpleString s(0);
-		CHECK(!s.contains("something"));
-	}
+TEST(SimpleString, ContainsNull)
+{
+	SimpleString s(0);
+	CHECK(!s.contains("something"));
+}
 
-	TEST(SimpleString, Characters)
-	{
-		SimpleString s(StringFrom('a'));
-		SimpleString s2(StringFrom('a'));
-		CHECK(s == s2);
-	}
+TEST(SimpleString, Characters)
+{
+	SimpleString s(StringFrom('a'));
+	SimpleString s2(StringFrom('a'));
+	CHECK(s == s2);
+}
 
-	TEST(SimpleString, Doubles)
-	{
-		SimpleString s(StringFrom(1.2));
-		STRCMP_EQUAL("1.200000", s.asCharString());
-		s = StringFrom(1.2, 2);
-		STRCMP_EQUAL("1.20", s.asCharString());
-	}
+TEST(SimpleString, Doubles)
+{
+	SimpleString s(StringFrom(1.2));
+	STRCMP_EQUAL("1.200000", s.asCharString());
+	s = StringFrom(1.2, 2);
+	STRCMP_EQUAL("1.20", s.asCharString());
+}
 
-	TEST(SimpleString, HexStrings)
-	{
-		SimpleString h1 = HexStringFrom(0xffff);
-		STRCMP_EQUAL("ffff", h1.asCharString());
-	}
+TEST(SimpleString, HexStrings)
+{
+	SimpleString h1 = HexStringFrom(0xffff);
+	STRCMP_EQUAL("ffff", h1.asCharString());
+}
 
-	TEST(SimpleString, StringFromFormat)
-	{
-		SimpleString h1 = StringFromFormat("%s %s! %d", "Hello", "World", 2009);
-		STRCMP_EQUAL("Hello World! 2009", h1.asCharString());
-	}
+TEST(SimpleString, StringFromFormat)
+{
+	SimpleString h1 = StringFromFormat("%s %s! %d", "Hello", "World", 2009);
+	STRCMP_EQUAL("Hello World! 2009", h1.asCharString());
+}
 
-	TEST(SimpleString, StringFromFormatLarge)
-	{
-		const char* s =
-				"ThisIsAPrettyLargeStringAndIfWeAddThisManyTimesToABufferItWillbeFull";
-		SimpleString h1 = StringFromFormat("%s%s%s%s%s%s%s%s%s%s", s, s, s, s,
-				s, s, s, s, s, s);
-		LONGS_EQUAL(10, h1.count(s));
-	}
+TEST(SimpleString, StringFromFormatLarge)
+{
+	const char* s = "ThisIsAPrettyLargeStringAndIfWeAddThisManyTimesToABufferItWillbeFull";
+	SimpleString h1 = StringFromFormat("%s%s%s%s%s%s%s%s%s%s", s, s, s, s, s, s, s, s, s, s);
+	LONGS_EQUAL(10, h1.count(s));
+}
 
-	static int WrappedUpVSNPrintf(char* buf, int n, const char* format, ...)
-	{
-		va_list arguments;
-		va_start(arguments, format);
+static int WrappedUpVSNPrintf(char* buf, int n, const char* format, ...)
+{
+	va_list arguments;
+	va_start(arguments, format);
 
-		int result = PlatformSpecificVSNprintf(buf, n, format, arguments);
-		va_end(arguments);
-		return result;
-	}
+	int result = PlatformSpecificVSNprintf(buf, n, format, arguments);
+	va_end(arguments);
+	return result;
+}
 
-	TEST(SimpleString, PlatformSpecificSprintf_fits)
-	{
-		char buf[10];
+TEST(SimpleString, PlatformSpecificSprintf_fits)
+{
+	char buf[10];
 
-		int count = WrappedUpVSNPrintf(buf, sizeof(buf), "%s", "12345");
-		STRCMP_EQUAL("12345", buf);
-		LONGS_EQUAL(5, count);
-	}
+	int count = WrappedUpVSNPrintf(buf, sizeof(buf), "%s", "12345");
+	STRCMP_EQUAL("12345", buf);
+	LONGS_EQUAL(5, count);
+}
 
-	TEST(SimpleString, PlatformSpecificSprintf_doesNotFit)
-	{
-		char buf[10];
+TEST(SimpleString, PlatformSpecificSprintf_doesNotFit)
+{
+	char buf[10];
 
-		int count = WrappedUpVSNPrintf(buf, sizeof(buf), "%s", "12345678901");
-		STRCMP_EQUAL("123456789", buf);
-		LONGS_EQUAL(11, count);
-	}
+	int count = WrappedUpVSNPrintf(buf, sizeof(buf), "%s", "12345678901");
+	STRCMP_EQUAL("123456789", buf);
+	LONGS_EQUAL(11, count);
+}
 
-	TEST(SimpleString, PadStringsToSameLengthString1Larger)
-	{
-		SimpleString str1("1");
-		SimpleString str2("222");
+TEST(SimpleString, PadStringsToSameLengthString1Larger)
+{
+	SimpleString str1("1");
+	SimpleString str2("222");
 
-		SimpleString::padStringsToSameLength(str1, str2, '4');
-		STRCMP_EQUAL("441", str1.asCharString());
-		STRCMP_EQUAL("222", str2.asCharString());
-	}
+	SimpleString::padStringsToSameLength(str1, str2, '4');
+	STRCMP_EQUAL("441", str1.asCharString());
+	STRCMP_EQUAL("222", str2.asCharString());
+}
 
-	TEST(SimpleString, PadStringsToSameLengthString2Larger)
-	{
-		SimpleString str1("    ");
-		SimpleString str2("");
+TEST(SimpleString, PadStringsToSameLengthString2Larger)
+{
+	SimpleString str1("    ");
+	SimpleString str2("");
 
-		SimpleString::padStringsToSameLength(str1, str2, ' ');
-		STRCMP_EQUAL("    ", str1.asCharString());
-		STRCMP_EQUAL("    ", str2.asCharString());
-	}
+	SimpleString::padStringsToSameLength(str1, str2, ' ');
+	STRCMP_EQUAL("    ", str1.asCharString());
+	STRCMP_EQUAL("    ", str2.asCharString());
+}
 
-	TEST(SimpleString, PadStringsToSameLengthWithSameLengthStrings)
-	{
-		SimpleString str1("123");
-		SimpleString str2("123");
+TEST(SimpleString, PadStringsToSameLengthWithSameLengthStrings)
+{
+	SimpleString str1("123");
+	SimpleString str2("123");
 
-		SimpleString::padStringsToSameLength(str1, str2, ' ');
-		STRCMP_EQUAL("123", str1.asCharString());
-		STRCMP_EQUAL("123", str2.asCharString());
-	}
+	SimpleString::padStringsToSameLength(str1, str2, ' ');
+	STRCMP_EQUAL("123", str1.asCharString());
+	STRCMP_EQUAL("123", str2.asCharString());
+}
 
+TEST(SimpleString, NullParameters2)
+{
+	SimpleString* arr = new SimpleString[100];
+	delete[] arr;
+}
 
+TEST(SimpleString, CollectionMultipleAllocateNoLeaksMemory)
+{
+	SimpleStringCollection col;
+	col.allocate(5);
+	col.allocate(5);
+	// CHECK no memory leak
+}
 
-	TEST(SimpleString, NullParameters2)
-	{
-		SimpleString* arr = new SimpleString[100];
-		delete[] arr;
-	}
+TEST(SimpleString, CollectionReadOutOfBoundsReturnsEmptyString)
+{
+	SimpleStringCollection col;
+	col.allocate(3);
+	STRCMP_EQUAL("", col[3].asCharString());
+}
 
-	TEST(SimpleString, CollectionMultipleAllocateNoLeaksMemory)
-	{
-		SimpleStringCollection col;
-		col.allocate(5);
-		col.allocate(5);
-		// CHECK no memory leak
-	}
-
-	TEST(SimpleString, CollectionReadOutOfBoundsReturnsEmptyString)
-	{
-		SimpleStringCollection col;
-		col.allocate(3);
-		STRCMP_EQUAL("", col[3].asCharString());
-	}
-
-	TEST(SimpleString, CollectionWritingToEmptyString)
-	{
-		SimpleStringCollection col;
-		col.allocate(3);
-		col[3] = SimpleString("HAH");
-		STRCMP_EQUAL("", col[3].asCharString());
-	}
+TEST(SimpleString, CollectionWritingToEmptyString)
+{
+	SimpleStringCollection col;
+	col.allocate(3);
+	col[3] = SimpleString("HAH");
+	STRCMP_EQUAL("", col[3].asCharString());
+}
 
 #if CPPUTEST_USE_STD_CPP_LIB
 
-	TEST(SimpleString, fromStdString)
-	{
-		std::string s("hello");
-		SimpleString s1(StringFrom(s));
+TEST(SimpleString, fromStdString)
+{
+	std::string s("hello");
+	SimpleString s1(StringFrom(s));
 
-		STRCMP_EQUAL("hello", s1.asCharString());
-	}
+	STRCMP_EQUAL("hello", s1.asCharString());
+}
 
-	TEST(SimpleString, CHECK_EQUAL_Uint32_t)
-	{
-		uint32_t i = 0xffffffff;
-		CHECK_EQUAL(i, i);
-	}
+TEST(SimpleString, CHECK_EQUAL_Uint32_t)
+{
+	uint32_t i = 0xffffffff;
+	CHECK_EQUAL(i, i);
+}
 
-	TEST(SimpleString, CHECK_EQUAL_Uint16_t)
-	{
-		uint16_t i = 0xffff;
-		CHECK_EQUAL(i, i);
-	}
+TEST(SimpleString, CHECK_EQUAL_Uint16_t)
+{
+	uint16_t i = 0xffff;
+	CHECK_EQUAL(i, i);
+}
 
-	TEST(SimpleString, CHECK_EQUAL_Uint8_t)
-	{
-		uint8_t i = 0xff;
-		CHECK_EQUAL(i, i);
-	}
+TEST(SimpleString, CHECK_EQUAL_Uint8_t)
+{
+	uint8_t i = 0xff;
+	CHECK_EQUAL(i, i);
+}
 
-	TEST(SimpleString, Uint32_t)
-	{
-		uint32_t i = 0xffffffff;
+TEST(SimpleString, Uint32_t)
+{
+	uint32_t i = 0xffffffff;
 
-		SimpleString result = StringFrom(i);
-		CHECK_EQUAL("4294967295 (0xffffffff)", result);
-	}
+	SimpleString result = StringFrom(i);
+	CHECK_EQUAL("4294967295 (0xffffffff)", result);
+}
 
-	TEST(SimpleString, Uint16_t)
-	{
-		uint16_t i = 0xffff;
+TEST(SimpleString, Uint16_t)
+{
+	uint16_t i = 0xffff;
 
-		SimpleString result = StringFrom(i);
-		CHECK_EQUAL("65535 (0xffff)", result);
-	}
+	SimpleString result = StringFrom(i);
+	CHECK_EQUAL("65535 (0xffff)", result);
+}
 
-	TEST(SimpleString, Uint8_t)
-	{
-		uint8_t i = 0xff;
+TEST(SimpleString, Uint8_t)
+{
+	uint8_t i = 0xff;
 
-		SimpleString result = StringFrom(i);
-		CHECK_EQUAL("255 (0xff)", result);
-	}
+	SimpleString result = StringFrom(i);
+	CHECK_EQUAL("255 (0xff)", result);
+}
 
 #endif

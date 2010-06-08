@@ -39,16 +39,16 @@ extern "C"
 
 TEST_GROUP(TestHarness_c)
 {
-		TestTestingFixture* fixture;
-		TEST_SETUP()
-		{
-			fixture = new TestTestingFixture();
-		}
-		TEST_TEARDOWN()
-		{
-			delete fixture;
-		}
-	};
+	TestTestingFixture* fixture;
+	TEST_SETUP()
+	{
+		fixture = new TestTestingFixture();
+	}
+	TEST_TEARDOWN()
+	{
+		delete fixture;
+	}
+};
 
 void _failIntMethod()
 {

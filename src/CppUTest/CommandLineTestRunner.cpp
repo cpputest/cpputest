@@ -31,8 +31,7 @@
 #include "CppUTest/JUnitTestOutput.h"
 #include "CppUTest/TestRegistry.h"
 
-CommandLineTestRunner::CommandLineTestRunner(int ac, const char** av,
-		TestOutput* output) :
+CommandLineTestRunner::CommandLineTestRunner(int ac, const char** av, TestOutput* output) :
 	output_(output), jUnitOutput_(new JUnitTestOutput)
 {
 	arguments_ = new CommandLineArguments(ac, av);
@@ -55,7 +54,6 @@ int CommandLineTestRunner::RunAllTests(int ac, const char** av)
 	ConsoleTestOutput output;
 
 	MemoryLeakWarningPlugin memLeakWarn(DEF_PLUGIN_MEM_LEAK);
-	//memLeakWarn.disable();
 	TestRegistry::getCurrentRegistry()->installPlugin(&memLeakWarn);
 
 	{

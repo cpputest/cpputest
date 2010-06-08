@@ -45,266 +45,265 @@ static const char* MockGetPlatformSpecificTimeString()
 }
 
 TEST_GROUP(JUnitOutputTest)
-{ class MockJUnitTestOutput: public JUnitTestOutput
 {
-public:
-	enum
+	class MockJUnitTestOutput: public JUnitTestOutput
 	{
-		testGroupSize = 10
-	};
-	enum
-	{
-		defaultSize = 7
-	};
-
-	int filesOpened;
-	int fileBalance;
-
-	SimpleString fileName_;
-	SimpleString buffer_;
-
-	TestResult* res_;
-	struct TestData
-	{
-		TestData() :
-		tst_(0), testName_(0), failure_(0)
+	public:
+		enum
 		{
-		}
-		;
-		Utest* tst_;
-		SimpleString* testName_;
-		Failure* failure_;
-	};
-
-	struct TestGroupData
-	{
-		TestGroupData() :
-		numberTests_(0), totalFailures_(0), name_(""), testData_(0)
+			testGroupSize = 10
+		};
+		enum
 		{
-		}
-		;
+			defaultSize = 7
+		};
 
-		int numberTests_;
-		int totalFailures_;
-		SimpleString name_;
+		int filesOpened;
+		int fileBalance;
 
-		TestData* testData_;
-	};
+		SimpleString fileName_;
+		SimpleString buffer_;
 
-	TestGroupData testGroupData_[testGroupSize];
-
-	TestGroupData& currentGroup()
-	{
-		return testGroupData_[filesOpened - 1];
-	}
-
-	void resetXmlFile()
-	{
-		buffer_ = "";
-	}
-
-	MockJUnitTestOutput() :
-	filesOpened(0), fileBalance(0), res_(0)
-	{
-		for (int i = 0; i < testGroupSize; i++) {
-			testGroupData_[i].numberTests_ = 0;
-			testGroupData_[i].totalFailures_ = 0;
-		}
-	}
-	;
-
-	void setResult(TestResult* testRes)
-	{
-		res_ = testRes;
-	}
-
-	virtual ~MockJUnitTestOutput()
-	{
-		for (int i = 0; i < testGroupSize; i++) {
-			for (int j = 0; j < testGroupData_[i].numberTests_; j++) {
-				delete testGroupData_[i].testData_[j].tst_;
-				delete testGroupData_[i].testData_[j].testName_;
-				if (testGroupData_[i].testData_[j].failure_) delete testGroupData_[i].testData_[j].failure_;
+		TestResult* res_;
+		struct TestData
+		{
+			TestData() :
+				tst_(0), testName_(0), failure_(0)
+			{
 			}
-			if (testGroupData_[i].testData_) delete[] testGroupData_[i].testData_;
+			;
+			Utest* tst_;
+			SimpleString* testName_;
+			Failure* failure_;
+		};
+
+		struct TestGroupData
+		{
+			TestGroupData() :
+				numberTests_(0), totalFailures_(0), name_(""), testData_(0)
+			{
+			}
+			;
+
+			int numberTests_;
+			int totalFailures_;
+			SimpleString name_;
+
+			TestData* testData_;
+		};
+
+		TestGroupData testGroupData_[testGroupSize];
+
+		TestGroupData& currentGroup()
+		{
+			return testGroupData_[filesOpened - 1];
 		}
 
-		LONGS_EQUAL(0, fileBalance);
-	}
-
-	void writeToFile(const SimpleString& buf)
-	{
-		buffer_ += buf;
-	}
-
-	void openFileForWrite(const SimpleString& in_FileName)
-	{
-		filesOpened++;
-		fileBalance++;
-		fileName_ = in_FileName;
-	}
-
-	void closeFile()
-	{
-		CHECK_XML_FILE();
-		resetXmlFile();
-		fileBalance--;
-	}
-
-	void createTestsInGroup(int index, int amount, const char* group,
-			const char* basename)
-	{
-		testGroupData_[index].name_ = group;
-		testGroupData_[index].numberTests_ = amount;
-
-		testGroupData_[index].testData_ = new TestData[amount];
-		for (int i = 0; i < amount; i++) {
-			TestData& testData = testGroupData_[index].testData_[i];
-			testData.testName_ = new SimpleString(basename);
-			*testData.testName_ += StringFrom((long)i);
-			testData.tst_ = new Utest(group, testData.testName_->asCharString(), "file", 1);
+		void resetXmlFile()
+		{
+			buffer_ = "";
 		}
-	}
-	void runTests()
-	{
-		res_->testsStarted();
-		for (int i = 0; i < testGroupSize; i++) {
-			TestGroupData& data = testGroupData_[i];
-			if (data.numberTests_ == 0) continue;
 
-			millisTime = 0;
-			res_->currentGroupStarted(data.testData_[0].tst_);
-			for (int j = 0; j < data.numberTests_; j++) {
-				TestData& testData = data.testData_[j];
+		MockJUnitTestOutput() :
+			filesOpened(0), fileBalance(0), res_(0)
+		{
+			for (int i = 0; i < testGroupSize; i++) {
+				testGroupData_[i].numberTests_ = 0;
+				testGroupData_[i].totalFailures_ = 0;
+			}
+		}
+		;
+
+		void setResult(TestResult* testRes)
+		{
+			res_ = testRes;
+		}
+
+		virtual ~MockJUnitTestOutput()
+		{
+			for (int i = 0; i < testGroupSize; i++) {
+				for (int j = 0; j < testGroupData_[i].numberTests_; j++) {
+					delete testGroupData_[i].testData_[j].tst_;
+					delete testGroupData_[i].testData_[j].testName_;
+					if (testGroupData_[i].testData_[j].failure_) delete testGroupData_[i].testData_[j].failure_;
+				}
+				if (testGroupData_[i].testData_) delete[] testGroupData_[i].testData_;
+			}
+
+			LONGS_EQUAL(0, fileBalance);
+		}
+
+		void writeToFile(const SimpleString& buf)
+		{
+			buffer_ += buf;
+		}
+
+		void openFileForWrite(const SimpleString& in_FileName)
+		{
+			filesOpened++;
+			fileBalance++;
+			fileName_ = in_FileName;
+		}
+
+		void closeFile()
+		{
+			CHECK_XML_FILE();
+			resetXmlFile();
+			fileBalance--;
+		}
+
+		void createTestsInGroup(int index, int amount, const char* group, const char* basename)
+		{
+			testGroupData_[index].name_ = group;
+			testGroupData_[index].numberTests_ = amount;
+
+			testGroupData_[index].testData_ = new TestData[amount];
+			for (int i = 0; i < amount; i++) {
+				TestData& testData = testGroupData_[index].testData_[i];
+				testData.testName_ = new SimpleString(basename);
+				*testData.testName_ += StringFrom((long) i);
+				testData.tst_ = new Utest(group, testData.testName_->asCharString(), "file", 1);
+			}
+		}
+		void runTests()
+		{
+			res_->testsStarted();
+			for (int i = 0; i < testGroupSize; i++) {
+				TestGroupData& data = testGroupData_[i];
+				if (data.numberTests_ == 0) continue;
 
 				millisTime = 0;
-				res_->currentTestStarted(testData.tst_);
-				if (testData.failure_)
-				print(*testData.failure_);
-				millisTime = 10;
-				res_->currentTestEnded(testData.tst_);
+				res_->currentGroupStarted(data.testData_[0].tst_);
+				for (int j = 0; j < data.numberTests_; j++) {
+					TestData& testData = data.testData_[j];
+
+					millisTime = 0;
+					res_->currentTestStarted(testData.tst_);
+					if (testData.failure_) print(*testData.failure_);
+					millisTime = 10;
+					res_->currentTestEnded(testData.tst_);
+				}
+				millisTime = 50;
+				res_->currentGroupEnded(data.testData_[0].tst_);
 			}
-			millisTime = 50;
-			res_->currentGroupEnded(data.testData_[0].tst_);
+			res_->testsEnded();
 		}
-		res_->testsEnded();
-	}
 
-	void setFailure(int groupIndex, int testIndex, const char* fileName, int lineNumber, const char* message)
-	{
-		TestData& data = testGroupData_[groupIndex].testData_[testIndex];
-		data.failure_ = new Failure(data.tst_, fileName, lineNumber, message);
-		testGroupData_[groupIndex].totalFailures_++;
-	}
+		void setFailure(int groupIndex, int testIndex, const char* fileName, int lineNumber, const char* message)
+		{
+			TestData& data = testGroupData_[groupIndex].testData_[testIndex];
+			data.failure_ = new Failure(data.tst_, fileName, lineNumber, message);
+			testGroupData_[groupIndex].totalFailures_++;
+		}
 
-	void CHECK_HAS_XML_HEADER(SimpleString string)
-	{
-		STRCMP_EQUAL("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n", string.asCharString());
-	}
+		void CHECK_HAS_XML_HEADER(SimpleString string)
+		{
+			STRCMP_EQUAL("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n", string.asCharString());
+		}
 
-	void CHECK_TEST_SUITE_START(SimpleString output)
-	{
-		TestGroupData& group = currentGroup();
-		SimpleString buf = StringFromFormat("<testsuite errors=\"0\" failures=\"%d\" hostname=\"localhost\" name=\"%s\" tests=\"%d\" time=\"0.050\" timestamp=\"%s\">\n",
-				group.totalFailures_, group.name_.asCharString(), group.numberTests_, theTime);
-		CHECK_EQUAL(buf, output);
-	}
+		void CHECK_TEST_SUITE_START(SimpleString output)
+		{
+			TestGroupData& group = currentGroup();
+			SimpleString buf = StringFromFormat("<testsuite errors=\"0\" failures=\"%d\" hostname=\"localhost\" name=\"%s\" tests=\"%d\" time=\"0.050\" timestamp=\"%s\">\n", group.totalFailures_,
+					group.name_.asCharString(), group.numberTests_, theTime);
+			CHECK_EQUAL(buf, output);
+		}
 
-	void CHECK_XML_FILE()
-	{
-		size_t totalSize = currentGroup().numberTests_+ defaultSize + (currentGroup().totalFailures_ * 2);
-		SimpleStringCollection col;
-		buffer_.split("\n", col);
-		CHECK(col.size() >= totalSize);
-		CHECK_HAS_XML_HEADER(col[0]);
-		CHECK_TEST_SUITE_START(col[1]);
-		CHECK_PROPERTIES_START(col[2]);
-		CHECK_PROPERTIES_END(col[3]);
-		CHECK_TESTS(&col[4]);
-		CHECK_SYSTEM_OUT(col[col.size()-3]);
-		CHECK_SYSTEM_ERR(col[col.size()-2]);
-		CHECK_TEST_SUITE_END(col[col.size()-1]);
-	}
+		void CHECK_XML_FILE()
+		{
+			size_t totalSize = currentGroup().numberTests_ + defaultSize + (currentGroup().totalFailures_ * 2);
+			SimpleStringCollection col;
+			buffer_.split("\n", col);
+			CHECK(col.size() >= totalSize);
+			CHECK_HAS_XML_HEADER(col[0]);
+			CHECK_TEST_SUITE_START(col[1]);
+			CHECK_PROPERTIES_START(col[2]);
+			CHECK_PROPERTIES_END(col[3]);
+			CHECK_TESTS(&col[4]);
+			CHECK_SYSTEM_OUT(col[col.size() - 3]);
+			CHECK_SYSTEM_ERR(col[col.size() - 2]);
+			CHECK_TEST_SUITE_END(col[col.size() - 1]);
+		}
 
-	void CHECK_PROPERTIES_START(const SimpleString& output)
-	{
-		STRCMP_EQUAL("<properties>\n", output.asCharString());
-	}
+		void CHECK_PROPERTIES_START(const SimpleString& output)
+		{
+			STRCMP_EQUAL("<properties>\n", output.asCharString());
+		}
 
-	void CHECK_PROPERTIES_END(const SimpleString& output)
-	{
-		STRCMP_EQUAL("</properties>\n", output.asCharString());
-	}
+		void CHECK_PROPERTIES_END(const SimpleString& output)
+		{
+			STRCMP_EQUAL("</properties>\n", output.asCharString());
+		}
 
-	void CHECK_SYSTEM_OUT(const SimpleString& output)
-	{
-		STRCMP_EQUAL("<system-out></system-out>\n", output.asCharString());
-	}
+		void CHECK_SYSTEM_OUT(const SimpleString& output)
+		{
+			STRCMP_EQUAL("<system-out></system-out>\n", output.asCharString());
+		}
 
-	void CHECK_SYSTEM_ERR(const SimpleString& output)
-	{
-		STRCMP_EQUAL("<system-err></system-err>\n", output.asCharString());
-	}
+		void CHECK_SYSTEM_ERR(const SimpleString& output)
+		{
+			STRCMP_EQUAL("<system-err></system-err>\n", output.asCharString());
+		}
 
-	void CHECK_TEST_SUITE_END(const SimpleString& output)
-	{
-		STRCMP_EQUAL("</testsuite>", output.asCharString());
-	}
-	void CHECK_TESTS(SimpleString* arr)
-	{
-		for (int index = 0, curTest = 0; curTest < currentGroup().numberTests_; curTest++, index++) {
-			SimpleString buf = StringFromFormat ("<testcase classname=\"%s\" name=\"%s\" time=\"0.010\">\n",
-					currentGroup().name_.asCharString(), currentGroup().testData_[curTest].tst_->getName().asCharString());
-			CHECK_EQUAL(buf, arr[index]);
-			if (currentGroup().testData_[curTest].failure_) {
-				CHECK_FAILURE(arr, index, curTest);
+		void CHECK_TEST_SUITE_END(const SimpleString& output)
+		{
+			STRCMP_EQUAL("</testsuite>", output.asCharString());
+		}
+		void CHECK_TESTS(SimpleString* arr)
+		{
+			for (int index = 0, curTest = 0; curTest < currentGroup().numberTests_; curTest++, index++) {
+				SimpleString buf = StringFromFormat("<testcase classname=\"%s\" name=\"%s\" time=\"0.010\">\n", currentGroup().name_.asCharString(),
+						currentGroup().testData_[curTest].tst_->getName().asCharString());
+				CHECK_EQUAL(buf, arr[index]);
+				if (currentGroup().testData_[curTest].failure_) {
+					CHECK_FAILURE(arr, index, curTest);
+				}
+				buf = "</testcase>\n";
+				CHECK_EQUAL(buf, arr[++index]);
+
 			}
-			buf = "</testcase>\n";
-			CHECK_EQUAL(buf, arr[++index]);
-
 		}
-	}
-	void CHECK_FAILURE(SimpleString* arr, int& i, int curTest)
+		void CHECK_FAILURE(SimpleString* arr, int& i, int curTest)
+		{
+			Failure& f = *currentGroup().testData_[curTest].failure_;
+			i++;
+			SimpleString message = f.getMessage().asCharString();
+			message.replace('"', '\'');
+			message.replace('<', '[');
+			message.replace('>', ']');
+			message.replace("\n", "{newline}");
+			SimpleString buf = StringFromFormat("<failure message=\"%s:%d: %s\" type=\"AssertionFailedError\">\n", f.getFileName().asCharString(), f.getLineNumber(), message.asCharString());
+			CHECK_EQUAL(buf, arr[i]);
+			i++;
+			STRCMP_EQUAL("</failure>\n", arr[i].asCharString());
+		}
+	};
+
+	MockJUnitTestOutput * output;
+	TestResult *res;
+
+	void setup()
 	{
-		Failure& f = *currentGroup().testData_[curTest].failure_;
-		i++;
-		SimpleString message = f.getMessage().asCharString();
-		message.replace('"','\'');
-		message.replace('<','[');
-		message.replace('>',']');
-		message.replace("\n","{newline}");
-		SimpleString buf = StringFromFormat("<failure message=\"%s:%d: %s\" type=\"AssertionFailedError\">\n", f.getFileName().asCharString(), f.getLineNumber(), message.asCharString());
-		CHECK_EQUAL(buf, arr[i]);
-		i++;
-		STRCMP_EQUAL("</failure>\n", arr[i].asCharString());
+		output = new MockJUnitTestOutput();
+		res = new TestResult(*output);
+		output->setResult(res);
+		SetPlatformSpecificTimeInMillisMethod(MockGetPlatformSpecificTimeInMillis);
+		SetPlatformSpecificTimeStringMethod(MockGetPlatformSpecificTimeString);
 	}
-};
+	void teardown()
+	{
+		delete output;
+		delete res;
+		SetPlatformSpecificTimeInMillisMethod(0);
+		SetPlatformSpecificTimeStringMethod(0);
+	}
 
-MockJUnitTestOutput * output;
-TestResult *res;
-
-void setup()
-{
-	output = new MockJUnitTestOutput();
-	res = new TestResult(*output);
-	output->setResult(res);
-	SetPlatformSpecificTimeInMillisMethod(MockGetPlatformSpecificTimeInMillis);
-	SetPlatformSpecificTimeStringMethod(MockGetPlatformSpecificTimeString);
-}
-void teardown()
-{
-	delete output;
-	delete res;
-	SetPlatformSpecificTimeInMillisMethod(0);
-	SetPlatformSpecificTimeStringMethod(0);
-}
-
-void runTests()
-{
-	output->printTestsStarted();
-	output->runTests();
-	output->printTestsEnded(*res);
-}
+	void runTests()
+	{
+		output->printTestsStarted();
+		output->runTests();
+		output->printTestsEnded(*res);
+	}
 };
 
 TEST(JUnitOutputTest, oneTestInOneGroupAllPass)

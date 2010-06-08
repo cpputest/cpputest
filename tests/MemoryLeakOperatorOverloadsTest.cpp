@@ -1,4 +1,3 @@
-
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/MemoryLeakAllocator.h"
 #include "CppUTest/MemoryLeakDetector.h"
@@ -7,7 +6,8 @@
 #include "CppUTest/TestTestingFixture.h"
 
 #include "AllocationInCppFile.h"
-extern "C" {
+extern "C"
+{
 #include "AllocationInCFile.h"
 }
 
@@ -34,14 +34,14 @@ TEST(MemoryLeakOverridesToBeUsedInProductionCode, OperatorNewArrayMacroOverloadV
 {
 	char* leak = newArrayAllocation();
 	STRCMP_CONTAINS("AllocationInCppFile.cpp", memLeakDetector->report(mem_leak_period_checking));
-	delete [] leak;
+	delete[] leak;
 }
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, MallocOverrideWorks)
 {
 	char* leak = mallocAllocation();
 	STRCMP_CONTAINS("AllocationInCFile.c", memLeakDetector->report(mem_leak_period_checking));
-	freeAllocation (leak);
+	freeAllocation(leak);
 }
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, MallocWithButFreeWithoutLeakDetectionDoesntCrash)
@@ -63,9 +63,8 @@ TEST(MemoryLeakOverridesToBeUsedInProductionCode, OperatorNewArrayOverloadingWit
 {
 	char* leak = newArrayAllocationWithoutMacro();
 	STRCMP_CONTAINS("unknown", memLeakDetector->report(mem_leak_period_checking));
-	delete [] leak;
+	delete[] leak;
 }
-
 
 #else
 
@@ -77,7 +76,6 @@ TEST(MemoryLeakOverridesToBeUsedInProductionCode, MemoryOverridesAreDisabled)
 }
 
 #endif
-
 
 TEST_GROUP(OutOfMemoryTestsForOperatorNew)
 {
@@ -106,8 +104,7 @@ TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorThrowsAnExceptionWhenUsin
 		new char;
 		FAIL("Should have thrown an exception!")
 	}
-	catch (std::bad_alloc)
-	{
+	catch (std::bad_alloc) {
 	}
 }
 
@@ -117,8 +114,7 @@ TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorThrowsAnExceptionWhe
 		new char[10];
 		FAIL("Should have thrown an exception!")
 	}
-	catch (std::bad_alloc)
-	{
+	catch (std::bad_alloc) {
 	}
 }
 
@@ -146,8 +142,7 @@ TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorThrowsAnExceptionWhenUsin
 		new char;
 		FAIL("Should have thrown an exception!")
 	}
-	catch (std::bad_alloc)
-	{
+	catch (std::bad_alloc) {
 	}
 }
 
@@ -157,8 +152,7 @@ TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorThrowsAnExceptionWhe
 		new char[10];
 		FAIL("Should have thrown an exception!")
 	}
-	catch (std::bad_alloc)
-	{
+	catch (std::bad_alloc) {
 	}
 }
 #else
