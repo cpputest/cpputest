@@ -174,7 +174,7 @@ private:
 			MemoryLeakAllocator* allocAllocator, const char* freeFile,
 			int freeLine, MemoryLeakAllocator* freeAllocator);
 
-	int sizeOfMemoryWithCorruptionInfo(size_t size);
+	size_t sizeOfMemoryWithCorruptionInfo(size_t size);
 	MemoryLeakDetectorNode* getNodeFromMemoryPointer(char* memory, size_t size);
 
 	char* reallocateMemoryAndLeakInformation(MemoryLeakAllocator* allocator, char* memory, size_t size, const char* file, int line);

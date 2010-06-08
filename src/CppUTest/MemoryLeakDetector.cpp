@@ -278,12 +278,12 @@ void MemoryLeakDetector::reportFailure(const char* message, const char* allocFil
 	reporter_->fail(output_buffer_.toString());
 }
 
-int calculateIntAlignedSize(size_t size)
+size_t calculateIntAlignedSize(size_t size)
 {
 	return (sizeof(int) - (size % sizeof(int))) + size;
 }
 
-int MemoryLeakDetector::sizeOfMemoryWithCorruptionInfo(size_t size)
+size_t MemoryLeakDetector::sizeOfMemoryWithCorruptionInfo(size_t size)
 {
 	return calculateIntAlignedSize(size + memory_corruption_buffer_size);
 }

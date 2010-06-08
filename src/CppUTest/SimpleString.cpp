@@ -61,7 +61,7 @@ SimpleString::SimpleString(const char *otherBuffer)
 
 SimpleString::SimpleString(const char *other, size_t repeatCount)
 {
-	int len = PlatformSpecificStrLen(other) * repeatCount + 1;
+	size_t len = PlatformSpecificStrLen(other) * repeatCount + 1;
 	buffer_ = allocString(len);
 	char* next = buffer_;
 	for (size_t i = 0; i < repeatCount; i++) {
@@ -73,7 +73,7 @@ SimpleString::SimpleString(const char *other, size_t repeatCount)
 }
 SimpleString::SimpleString(const SimpleString& other)
 {
-	int len = other.size() + 1;
+	size_t len = other.size() + 1;
 	buffer_ = allocString(len);
 	PlatformSpecificStrCpy(buffer_, other.buffer_);
 }
@@ -82,7 +82,7 @@ SimpleString& SimpleString::operator=(const SimpleString& other)
 {
 	if (this != &other) {
 		deallocString(buffer_);
-		int len = other.size() + 1;
+		size_t len = other.size() + 1;
 		buffer_ = allocString(len);
 		PlatformSpecificStrCpy(buffer_, other.buffer_);
 	}
