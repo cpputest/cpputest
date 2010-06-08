@@ -41,7 +41,7 @@ MemoryLeakAllocator* MemoryLeakAllocator::currentNewAllocator = 0;
 MemoryLeakAllocator* MemoryLeakAllocator::currentNewArrayAllocator = 0;
 MemoryLeakAllocator* MemoryLeakAllocator::currentMallocAllocator = 0;
 
-int MemoryLeakAllocator::isOfEqualType(MemoryLeakAllocator* allocator)
+bool MemoryLeakAllocator::isOfEqualType(MemoryLeakAllocator* allocator)
 {
 	return PlatformSpecificStrCmp(this->name(), allocator->name()) == 0;
 }

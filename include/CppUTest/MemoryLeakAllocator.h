@@ -13,7 +13,7 @@ public:
 	virtual const char* alloc_name()=0;
 	virtual const char* free_name()=0;
 
-	virtual int isOfEqualType(MemoryLeakAllocator* allocator);
+	virtual bool isOfEqualType(MemoryLeakAllocator* allocator);
 	virtual ~MemoryLeakAllocator()
 	{
 	}
