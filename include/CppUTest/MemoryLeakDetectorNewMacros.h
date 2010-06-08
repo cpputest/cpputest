@@ -52,11 +52,14 @@
 
 void* operator new(size_t size, const char* file, int line) throw (std::bad_alloc);
 void* operator new[](size_t size, const char* file, int line) throw (std::bad_alloc);
+void* operator new(size_t size) throw(std::bad_alloc);
+void* operator new[](size_t size) throw(std::bad_alloc);
 
 #else
 void* operator new(size_t size, const char* file, int line);
 void* operator new[](size_t size, const char* file, int line);
-
+void* operator new(size_t size);
+void* operator new[](size_t size);
 #endif
 
 #define new new(__FILE__, __LINE__)
