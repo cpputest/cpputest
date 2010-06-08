@@ -88,6 +88,14 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
+SOURCE=.\AllocationInCFile.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\AllocationInCppFile.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\AllTests.cpp
 # End Source File
 # Begin Source File
@@ -117,6 +125,10 @@ SOURCE=.\MemoryLeakAllocatorTest.cpp
 # Begin Source File
 
 SOURCE=.\MemoryLeakDetectorTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\MemoryLeakOperatorOverloadsTest.cpp
 # End Source File
 # Begin Source File
 

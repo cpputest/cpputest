@@ -149,6 +149,14 @@ SOURCE=.\src\Platforms\VisualCpp\UtestPlatform.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
+SOURCE=.\tests\AllocationInCFile.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\tests\AllocationInCppFile.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\include\CppUTest\CommandLineArguments.h
 # End Source File
 # Begin Source File

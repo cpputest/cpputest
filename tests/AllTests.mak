@@ -51,6 +51,8 @@ CLEAN :"CppUTest - Win32 ReleaseCLEAN"
 !ELSE 
 CLEAN :
 !ENDIF 
+	-@erase "$(INTDIR)\AllocationInCFile.obj"
+	-@erase "$(INTDIR)\AllocationInCppFile.obj"
 	-@erase "$(INTDIR)\AllTests.obj"
 	-@erase "$(INTDIR)\CommandLineArgumentsTest.obj"
 	-@erase "$(INTDIR)\CommandLineTestRunnerTest.obj"
@@ -59,6 +61,7 @@ CLEAN :
 	-@erase "$(INTDIR)\MemoryLeakAllocator.obj"
 	-@erase "$(INTDIR)\MemoryLeakAllocatorTest.obj"
 	-@erase "$(INTDIR)\MemoryLeakDetectorTest.obj"
+	-@erase "$(INTDIR)\MemoryLeakOperatorOverloadsTest.obj"
 	-@erase "$(INTDIR)\MemoryLeakWarningTest.obj"
 	-@erase "$(INTDIR)\NullTestTest.obj"
 	-@erase "$(INTDIR)\PluginTest.obj"
@@ -90,6 +93,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\FailureTest.obj" \
 	"$(INTDIR)\JUnitOutputTest.obj" \
 	"$(INTDIR)\MemoryLeakAllocator.obj" \
+	"$(INTDIR)\MemoryLeakAllocatorTest.obj" \
 	"$(INTDIR)\MemoryLeakDetectorTest.obj" \
 	"$(INTDIR)\MemoryLeakWarningTest.obj" \
 	"$(INTDIR)\NullTestTest.obj" \
@@ -102,7 +106,9 @@ LINK32_OBJS= \
 	"$(INTDIR)\TestRegistryTest.obj" \
 	"$(INTDIR)\TestResultTest.obj" \
 	"$(INTDIR)\UtestTest.obj" \
-	"$(INTDIR)\MemoryLeakAllocatorTest.obj" \
+	"$(INTDIR)\AllocationInCppFile.obj" \
+	"$(INTDIR)\MemoryLeakOperatorOverloadsTest.obj" \
+	"$(INTDIR)\AllocationInCFile.obj" \
 	"..\Release\CppUTest.lib"
 
 "$(OUTDIR)\AllTests.exe" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
@@ -133,6 +139,10 @@ CLEAN :"CppUTest - Win32 DebugCLEAN"
 !ELSE 
 CLEAN :
 !ENDIF 
+	-@erase "$(INTDIR)\AllocationInCFile.obj"
+	-@erase "$(INTDIR)\AllocationInCFile.sbr"
+	-@erase "$(INTDIR)\AllocationInCppFile.obj"
+	-@erase "$(INTDIR)\AllocationInCppFile.sbr"
 	-@erase "$(INTDIR)\AllTests.obj"
 	-@erase "$(INTDIR)\AllTests.sbr"
 	-@erase "$(INTDIR)\CommandLineArgumentsTest.obj"
@@ -149,6 +159,8 @@ CLEAN :
 	-@erase "$(INTDIR)\MemoryLeakAllocatorTest.sbr"
 	-@erase "$(INTDIR)\MemoryLeakDetectorTest.obj"
 	-@erase "$(INTDIR)\MemoryLeakDetectorTest.sbr"
+	-@erase "$(INTDIR)\MemoryLeakOperatorOverloadsTest.obj"
+	-@erase "$(INTDIR)\MemoryLeakOperatorOverloadsTest.sbr"
 	-@erase "$(INTDIR)\MemoryLeakWarningTest.obj"
 	-@erase "$(INTDIR)\MemoryLeakWarningTest.sbr"
 	-@erase "$(INTDIR)\NullTestTest.obj"
@@ -191,6 +203,7 @@ BSC32_SBRS= \
 	"$(INTDIR)\FailureTest.sbr" \
 	"$(INTDIR)\JUnitOutputTest.sbr" \
 	"$(INTDIR)\MemoryLeakAllocator.sbr" \
+	"$(INTDIR)\MemoryLeakAllocatorTest.sbr" \
 	"$(INTDIR)\MemoryLeakDetectorTest.sbr" \
 	"$(INTDIR)\MemoryLeakWarningTest.sbr" \
 	"$(INTDIR)\NullTestTest.sbr" \
@@ -203,7 +216,9 @@ BSC32_SBRS= \
 	"$(INTDIR)\TestRegistryTest.sbr" \
 	"$(INTDIR)\TestResultTest.sbr" \
 	"$(INTDIR)\UtestTest.sbr" \
-	"$(INTDIR)\MemoryLeakAllocatorTest.sbr"
+	"$(INTDIR)\AllocationInCppFile.sbr" \
+	"$(INTDIR)\MemoryLeakOperatorOverloadsTest.sbr" \
+	"$(INTDIR)\AllocationInCFile.sbr"
 
 "$(OUTDIR)\AllTests.bsc" : "$(OUTDIR)" $(BSC32_SBRS)
     $(BSC32) @<<
@@ -219,6 +234,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\FailureTest.obj" \
 	"$(INTDIR)\JUnitOutputTest.obj" \
 	"$(INTDIR)\MemoryLeakAllocator.obj" \
+	"$(INTDIR)\MemoryLeakAllocatorTest.obj" \
 	"$(INTDIR)\MemoryLeakDetectorTest.obj" \
 	"$(INTDIR)\MemoryLeakWarningTest.obj" \
 	"$(INTDIR)\NullTestTest.obj" \
@@ -231,7 +247,9 @@ LINK32_OBJS= \
 	"$(INTDIR)\TestRegistryTest.obj" \
 	"$(INTDIR)\TestResultTest.obj" \
 	"$(INTDIR)\UtestTest.obj" \
-	"$(INTDIR)\MemoryLeakAllocatorTest.obj" \
+	"$(INTDIR)\AllocationInCppFile.obj" \
+	"$(INTDIR)\MemoryLeakOperatorOverloadsTest.obj" \
+	"$(INTDIR)\AllocationInCFile.obj" \
 	"..\lib\CppUTest.lib"
 
 "$(OUTDIR)\AllTests.exe" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
@@ -282,6 +300,38 @@ LINK32_OBJS= \
 
 
 !IF "$(CFG)" == "AllTests - Win32 Release" || "$(CFG)" == "AllTests - Win32 Debug"
+SOURCE=.\AllocationInCFile.c
+
+!IF  "$(CFG)" == "AllTests - Win32 Release"
+
+
+"$(INTDIR)\AllocationInCFile.obj" : $(SOURCE) "$(INTDIR)"
+
+
+!ELSEIF  "$(CFG)" == "AllTests - Win32 Debug"
+
+
+"$(INTDIR)\AllocationInCFile.obj"	"$(INTDIR)\AllocationInCFile.sbr" : $(SOURCE) "$(INTDIR)"
+
+
+!ENDIF 
+
+SOURCE=.\AllocationInCppFile.cpp
+
+!IF  "$(CFG)" == "AllTests - Win32 Release"
+
+
+"$(INTDIR)\AllocationInCppFile.obj" : $(SOURCE) "$(INTDIR)"
+
+
+!ELSEIF  "$(CFG)" == "AllTests - Win32 Debug"
+
+
+"$(INTDIR)\AllocationInCppFile.obj"	"$(INTDIR)\AllocationInCppFile.sbr" : $(SOURCE) "$(INTDIR)"
+
+
+!ENDIF 
+
 SOURCE=.\AllTests.cpp
 
 !IF  "$(CFG)" == "AllTests - Win32 Release"
@@ -408,6 +458,22 @@ SOURCE=.\MemoryLeakDetectorTest.cpp
 
 
 "$(INTDIR)\MemoryLeakDetectorTest.obj"	"$(INTDIR)\MemoryLeakDetectorTest.sbr" : $(SOURCE) "$(INTDIR)"
+
+
+!ENDIF 
+
+SOURCE=.\MemoryLeakOperatorOverloadsTest.cpp
+
+!IF  "$(CFG)" == "AllTests - Win32 Release"
+
+
+"$(INTDIR)\MemoryLeakOperatorOverloadsTest.obj" : $(SOURCE) "$(INTDIR)"
+
+
+!ELSEIF  "$(CFG)" == "AllTests - Win32 Debug"
+
+
+"$(INTDIR)\MemoryLeakOperatorOverloadsTest.obj"	"$(INTDIR)\MemoryLeakOperatorOverloadsTest.sbr" : $(SOURCE) "$(INTDIR)"
 
 
 !ENDIF 
