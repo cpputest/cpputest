@@ -100,6 +100,11 @@ int PlatformSpecificVSNprintf(char* str, unsigned int size, const char* format, 
     return vsnprintf(str, size, format, args);
 }
 
+char PlatformSpecificToLower(char c)
+{
+	return tolower(c);
+}
+
 void PlatformSpecificFlush() {
 	fflush(stdout);
 }

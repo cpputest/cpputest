@@ -224,7 +224,7 @@ bool Utest::shouldRun(const SimpleString& groupFilter, const SimpleString& nameF
 	return false;
 }
 
-bool Utest::assertTrue(bool condition, const char* conditionString, const char* fileName, int lineNumber)
+void Utest::assertTrue(bool condition, const char* conditionString, const char* fileName, int lineNumber)
 {
 	testResult_->countCheck();
 	if (!(condition)) {
@@ -233,56 +233,77 @@ bool Utest::assertTrue(bool condition, const char* conditionString, const char* 
 		message += ") failed";
 		Failure _f(this, fileName, lineNumber, message);
 		testResult_->addFailure(_f);
-		return false;
+		Utest::getCurrent()->exitCurrentTest();
 	}
-	return true;
 }
 
-bool Utest::assertCstrEqual(const char* expected, const char* actual, const char* fileName, int lineNumber)
+SimpleString Utest::stringFromOrNull(const char * expected)
+{
+    return (expected) ? StringFrom(expected) : "(null)";
+}
+
+void Utest::fail(const char *text, const char* fileName, int lineNumber)
+{
+	Failure _f(this, fileName, lineNumber, text);
+    testResult_->addFailure(_f);
+    Utest::getCurrent()->exitCurrentTest();
+}
+
+void Utest::failEqualsTest(const char * expected, const char* actual, const char * fileName, int lineNumber)
+{
+	EqualsFailure _f(this, fileName, lineNumber, stringFromOrNull(expected), stringFromOrNull(actual));
+    testResult_->addFailure(_f);
+    Utest::getCurrent()->exitCurrentTest();
+}
+
+void Utest::failContainsTest(const char * expected, const char* actual, const char * fileName, int lineNumber)
+{
+	ContainsFailure _f(this, fileName, lineNumber, StringFrom(expected), StringFrom(actual));
+    testResult_->addFailure(_f);
+    Utest::getCurrent()->exitCurrentTest();
+}
+
+void Utest::assertCstrEqual(const char* expected, const char* actual, const char* fileName, int lineNumber)
 {
 	testResult_->countCheck();
-	if (actual == 0 && expected == 0) return true;
-	if (actual == 0) {
-		EqualsFailure _f(this, fileName, lineNumber, StringFrom(expected), StringFrom("(null)"));
-		testResult_->addFailure(_f);
-		return false;
-	}
-	if (expected == 0) {
-		EqualsFailure _f(this, fileName, lineNumber, StringFrom("(null)"), StringFrom(actual));
-		testResult_->addFailure(_f);
-		return false;
-	}
-	if (PlatformSpecificStrCmp(expected, actual) != 0) {
-		EqualsFailure _f(this, fileName, lineNumber, StringFrom(expected), StringFrom(actual));
-		testResult_->addFailure(_f);
-		return false;
-	}
-	return true;
+	if (actual == 0 && expected == 0) return;
+	if (actual == 0 || expected == 0)
+		failEqualsTest (expected, actual, fileName, lineNumber);
+	if (PlatformSpecificStrCmp(expected, actual) != 0)
+		failEqualsTest (expected, actual, fileName, lineNumber);
 }
 
-bool Utest::assertCstrContains(const char* expected, const char* actual, const char* fileName, int lineNumber)
+void Utest::assertCstrNoCaseEqual(const char* expected, const char* actual, const char* fileName, int lineNumber)
 {
 	testResult_->countCheck();
-	if (actual == 0 && expected == 0) return true;
-	if (actual == 0) {
-		ContainsFailure _f(this, fileName, lineNumber, StringFrom(expected), StringFrom("(null)"));
-		testResult_->addFailure(_f);
-		return false;
-	}
-	if (expected == 0) {
-		ContainsFailure _f(this, fileName, lineNumber, StringFrom("(null)"), StringFrom(actual));
-		testResult_->addFailure(_f);
-		return false;
-	}
-	if (!SimpleString(actual).contains(expected)) {
-		ContainsFailure _f(this, fileName, lineNumber, StringFrom(expected), StringFrom(actual));
-		testResult_->addFailure(_f);
-		return false;
-	}
-	return true;
+	if (actual == 0 && expected == 0) return;
+	if (actual == 0 || expected == 0)
+		failEqualsTest (expected, actual, fileName, lineNumber);
+	if (!SimpleString(expected).equalsNoCase(actual))
+		failEqualsTest (expected, actual, fileName, lineNumber);
 }
 
-bool Utest::assertLongsEqual(long expected, long actual, const char* fileName, int lineNumber)
+void Utest::assertCstrContains(const char* expected, const char* actual, const char* fileName, int lineNumber)
+{
+	testResult_->countCheck();
+	if (actual == 0 && expected == 0) return;
+    if(actual == 0 || expected == 0)
+    	failContainsTest(expected, actual, fileName, lineNumber);
+    if (!SimpleString(actual).contains(expected))
+    	failContainsTest(expected, actual, fileName, lineNumber);
+}
+
+void Utest::assertCstrNoCaseContains(const char* expected, const char* actual, const char* fileName, int lineNumber)
+{
+	testResult_->countCheck();
+	if (actual == 0 && expected == 0) return;
+    if(actual == 0 || expected == 0)
+    	failContainsTest(expected, actual, fileName, lineNumber);
+    if (!SimpleString(actual).containsNoCase(expected))
+    	failContainsTest(expected, actual, fileName, lineNumber);
+}
+
+void Utest::assertLongsEqual(long expected, long actual, const char* fileName, int lineNumber)
 {
 	testResult_->countCheck();
 	if (expected != actual) {
@@ -297,39 +318,22 @@ bool Utest::assertLongsEqual(long expected, long actual, const char* fileName, i
 		SimpleString actualReported = aDecimal + " 0x" + aHex;
 		SimpleString expectedReported = eDecimal + " 0x" + eHex;
 
-		EqualsFailure _f(this, fileName, lineNumber, expectedReported, actualReported);
-		testResult_->addFailure(_f);
-		return false;
+		failEqualsTest(expectedReported.asCharString(), actualReported.asCharString(), fileName, lineNumber);
 	}
-	return true;
 }
 
-bool Utest::assertPointersEqual(void* expected, void* actual, const char* fileName, int lineNumber)
+void Utest::assertPointersEqual(void* expected, void* actual, const char* fileName, int lineNumber)
 {
 	testResult_->countCheck();
-	if (expected != actual) {
-		EqualsFailure _f(this, fileName, lineNumber, StringFrom(expected), StringFrom(actual));
-		testResult_->addFailure(_f);
-		return false;
-	}
-	return true;
+	if (expected != actual)
+		failEqualsTest(StringFrom(expected).asCharString(), StringFrom(actual).asCharString(), fileName, lineNumber);
 }
 
-bool Utest::assertDoublesEqual(double expected, double actual, double threshold, const char* fileName, int lineNumber)
+void Utest::assertDoublesEqual(double expected, double actual, double threshold, const char* fileName, int lineNumber)
 {
 	testResult_->countCheck();
-	if (PlatformSpecificFabs(expected - actual) > threshold) {
-		EqualsFailure _f(this, fileName, lineNumber, StringFrom(expected), StringFrom(actual));
-		testResult_->addFailure(_f);
-		return false;
-	}
-	return true;
-}
-
-void Utest::fail(const char *text, const char* fileName, int lineNumber)
-{
-	Failure _f(this, fileName, lineNumber, text);
-	testResult_->addFailure(_f);
+	if (PlatformSpecificFabs(expected - actual) > threshold)
+		failEqualsTest(StringFrom(expected).asCharString(), StringFrom(actual).asCharString(), fileName, lineNumber);
 }
 
 void Utest::print(const char *text, const char* fileName, int lineNumber)

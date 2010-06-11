@@ -101,9 +101,21 @@ static void _failMethodSTRCMP_EQUAL()
 	afterCheck = true;
 }
 
+static void _failMethodSTRCMP_NOCASE_EQUAL()
+{
+	STRCMP_NOCASE_EQUAL("a", "B");
+	afterCheck = true;
+}
+
 static void _failMethodSTRCMP_CONTAINS()
 {
 	STRCMP_CONTAINS("hello", "world");
+	afterCheck = true;
+}
+
+static void _failMethodSTRCMP_NOCASE_CONTAINS()
+{
+	STRCMP_NOCASE_CONTAINS("hello", "WORLD");
 	afterCheck = true;
 }
 
@@ -176,9 +188,19 @@ TEST(Utest, FailureWithSTRCMP_EQUAL)
 	testFailureWith(_failMethodSTRCMP_EQUAL);
 }
 
+TEST(Utest, FailureWithSTRCMP_NOCASE_EQUAL)
+{
+	testFailureWith(_failMethodSTRCMP_NOCASE_EQUAL);
+}
+
 TEST(Utest, FailureWithSTRCMP_CONTAINS)
 {
 	testFailureWith(_failMethodSTRCMP_CONTAINS);
+}
+
+TEST(Utest, FailureWithSTRCMP_NOCASE_CONTAINS)
+{
+	testFailureWith(_failMethodSTRCMP_NOCASE_CONTAINS);
 }
 
 TEST(Utest, FailureWithBYTES_EQUAL)
@@ -219,6 +241,9 @@ TEST(Utest, allMacros)
 	BYTES_EQUAL(0xab,0xab);
 	CHECK_EQUAL(100,100);
 	STRCMP_EQUAL("THIS", "THIS");
+	STRCMP_CONTAINS("THIS", "THISTHAT");
+	STRCMP_NOCASE_EQUAL("this", "THIS");
+	STRCMP_NOCASE_CONTAINS("this", "THISTHAT");
 	DOUBLES_EQUAL(1.0, 1.0, .01);
 	POINTERS_EQUAL(this, this);
 }
@@ -242,18 +267,14 @@ TEST(Utest, allMacrosFromFunctionThatReturnsAValue)
 
 TEST(Utest, AssertsActLikeStatements)
 {
-	if (fixture != 0)
-	CHECK(true)
-	else
-	CHECK(false)
+	if (fixture != 0) CHECK(true)
+	else CHECK(false)
 
 	if (fixture != 0) CHECK_EQUAL(true, true)
 	else CHECK_EQUAL(false, false)
 
-	if (fixture != 0)
-	STRCMP_EQUAL("", "")
-	else
-	STRCMP_EQUAL("", " ")
+	if (fixture != 0) STRCMP_EQUAL("", "")
+	else STRCMP_EQUAL("", " ")
 
 	if (fixture != 0)
 	STRCMP_CONTAINS("con", "contains")
@@ -272,8 +293,7 @@ TEST(Utest, AssertsActLikeStatements)
 
 	if (false)
 	FAIL("")
-	else
-	CHECK(true);;
+	else CHECK(true);;
 
 	if (true) ;
 	else

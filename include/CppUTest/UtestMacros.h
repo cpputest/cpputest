@@ -80,11 +80,11 @@
 
 //Check any boolean condition
 
-#define CHECK_LOCATION(condition, conditionString, file, line)\
-  {if (!Utest::getCurrent()->assertTrue(condition, conditionString, file, line)) Utest::getCurrent()->exitCurrentTest();}
-
 #define CHECK(condition)\
   CHECK_LOCATION(condition, #condition, __FILE__, __LINE__)
+
+#define CHECK_LOCATION(condition, conditionString, file, line)\
+  { Utest::getCurrent()->assertTrue(condition, conditionString, file, line); }
 
 //This check needs the operator!=(), and a StringFrom(YourType) function
 #define CHECK_EQUAL(expected,actual)\
@@ -109,20 +109,32 @@
   STRCMP_EQUAL_LOCATION(expected, actual, __FILE__, __LINE__)
 
 #define STRCMP_EQUAL_LOCATION(expected,actual, file, line)\
-  {if (!Utest::getCurrent()->assertCstrEqual(expected, actual, file, line)) Utest::getCurrent()->exitCurrentTest();}
+  { Utest::getCurrent()->assertCstrEqual(expected, actual, file, line); }
+
+#define STRCMP_NOCASE_EQUAL(expected,actual)\
+  STRCMP_NOCASE_EQUAL_LOCATION(expected, actual, __FILE__, __LINE__)
+
+#define STRCMP_NOCASE_EQUAL_LOCATION(expected,actual, file, line)\
+  { Utest::getCurrent()->assertCstrNoCaseEqual(expected, actual, file, line); }
 
 #define STRCMP_CONTAINS(expected,actual)\
   STRCMP_CONTAINS_LOCATION(expected, actual, __FILE__, __LINE__)
 
 #define STRCMP_CONTAINS_LOCATION(expected,actual, file, line)\
-  {if (!Utest::getCurrent()->assertCstrContains(expected, actual, file, line)) Utest::getCurrent()->exitCurrentTest();}
+  { Utest::getCurrent()->assertCstrContains(expected, actual, file, line); }
+
+#define STRCMP_NOCASE_CONTAINS(expected,actual)\
+  STRCMP_NOCASE_CONTAINS_LOCATION(expected, actual, __FILE__, __LINE__)
+
+#define STRCMP_NOCASE_CONTAINS_LOCATION(expected,actual, file, line)\
+  { Utest::getCurrent()->assertCstrNoCaseContains(expected, actual, file, line); }
 
 //Check two long integers for equality
 #define LONGS_EQUAL(expected,actual)\
   LONGS_EQUAL_LOCATION(expected,actual,__FILE__, __LINE__)
 
 #define LONGS_EQUAL_LOCATION(expected,actual,file,line)\
-  { if (!Utest::getCurrent()->assertLongsEqual(expected, actual,  file, line)) Utest::getCurrent()->exitCurrentTest(); }
+  { Utest::getCurrent()->assertLongsEqual(expected, actual,  file, line); }
 
 #define BYTES_EQUAL(expected, actual)\
     LONGS_EQUAL((expected) & 0xff,(actual) & 0xff)
@@ -131,14 +143,14 @@
     POINTERS_EQUAL_LOCATION((expected),(actual), __FILE__, __LINE__)
 
 #define POINTERS_EQUAL_LOCATION(expected,actual,file,line)\
-  { if (!Utest::getCurrent()->assertPointersEqual(expected, actual,  file, line)) Utest::getCurrent()->exitCurrentTest(); }
+  { Utest::getCurrent()->assertPointersEqual(expected, actual,  file, line); }
 
 //Check two doubles for equality within a tolerance threshold
 #define DOUBLES_EQUAL(expected,actual,threshold)\
   DOUBLES_EQUAL_LOCATION(expected,actual,threshold,__FILE__,__LINE__)
 
 #define DOUBLES_EQUAL_LOCATION(expected,actual,threshold,file,line)\
-  { if (!Utest::getCurrent()->assertDoublesEqual(expected, actual, threshold,  file, line)) Utest::getCurrent()->exitCurrentTest(); }
+  { Utest::getCurrent()->assertDoublesEqual(expected, actual, threshold,  file, line); }
 
 //Fail if you get to this macro
 //The macro FAIL may already be taken, so allow FAIL_TEST too

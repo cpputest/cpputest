@@ -61,15 +61,19 @@ public:
 	SimpleString& operator+=(const char*);
 
 	bool contains(const SimpleString& other) const;
+	bool containsNoCase(const SimpleString& other) const;
 	bool startsWith(const SimpleString& other) const;
 	bool endsWith(const SimpleString& other) const;
 	void split(const SimpleString& split,
 					SimpleStringCollection& outCollection) const;
+	bool equalsNoCase(const SimpleString& str) const;
 
 	size_t count(const SimpleString& str) const;
 
 	void replace(char to, char with);
 	void replace(const char* to, const char* with);
+
+	SimpleString toLower() const;
 
 	const char *asCharString() const;
 	size_t size() const;

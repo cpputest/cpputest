@@ -175,7 +175,7 @@ TEST(TestHarness_c, cpputest_realloc_larger)
 	char* mem2 = (char*) cpputest_realloc(mem1, 1000);
 
 	CHECK(mem2 != 0);
-	STRCMP_EQUAL(number_string, mem2)
+	STRCMP_EQUAL(number_string, mem2);
 
 	cpputest_free(mem2);
 }

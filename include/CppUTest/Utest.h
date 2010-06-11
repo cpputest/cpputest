@@ -44,6 +44,7 @@
 
 class TestResult;
 class TestPlugin;
+class Failure;
 
 class Utest
 {
@@ -74,63 +75,49 @@ public:
 	const SimpleString getGroup() const;
 	const SimpleString getFile() const;
 	int getLineNumber() const;
-	virtual const char* getProgressIndicator() const;
-
-	virtual void setup();
-	virtual void teardown();
-
-	static TestResult* getTestResult();
-	static Utest* getCurrent();
-
-	virtual bool assertTrue(bool condition, const char* conditionString,
-			const char* fileName, int lineNumber);
-	virtual bool assertCstrEqual(const char* expected, const char* actual,
-			const char* fileName, int lineNumber);
-	virtual bool assertCstrContains(const char* expected, const char* actual,
-			const char* fileName, int lineNumber);
-	virtual bool assertLongsEqual(long expected, long actual,
-			const char* fileName, int lineNumber);
-	virtual bool assertPointersEqual(void* expected, void* actual,
-			const char* fileName, int lineNumber);
-	virtual bool assertDoublesEqual(double expected, double actual,
-			double threshold, const char* fileName, int lineNumber);
-	virtual void fail(const char* text, const char* fileName, int lineNumber);
-	virtual void print(const char* text, const char* fileName, int lineNumber);
-	virtual void print(const SimpleString& text, const char* fileName,
-			int lineNumber);
-
-	void setFileName(const char* fileName);
-	void setLineNumber(int lineNumber);
-	void setGroupName(const char* groupName);
-	void setTestName(const char* testName);
-
-	virtual void exitCurrentTest();
+    const virtual char *getProgressIndicator() const;
+    virtual void setup();
+    virtual void teardown();
+    static TestResult *getTestResult();
+    static Utest *getCurrent();
+    virtual void assertTrue(bool condition, const char *conditionString, const char *fileName, int lineNumber);
+    virtual void assertCstrEqual(const char *expected, const char *actual, const char *fileName, int lineNumber);
+    virtual void assertCstrNoCaseEqual(const char *expected, const char *actual, const char *fileName, int lineNumber);
+    virtual void assertCstrContains(const char *expected, const char *actual, const char *fileName, int lineNumber);
+    virtual void assertCstrNoCaseContains(const char *expected, const char *actual, const char *fileName, int lineNumber);
+    virtual void assertLongsEqual(long  expected, long  actual, const char *fileName, int lineNumber);
+    virtual void assertPointersEqual(void *expected, void *actual, const char *fileName, int lineNumber);
+    virtual void assertDoublesEqual(double expected, double actual, double threshold, const char *fileName, int lineNumber);
+    virtual void fail(const char *text, const char *fileName, int lineNumber);
+    virtual void print(const char *text, const char *fileName, int lineNumber);
+    virtual void print(const SimpleString & text, const char *fileName, int lineNumber);
+    void setFileName(const char *fileName);
+    void setLineNumber(int lineNumber);
+    void setGroupName(const char *groupName);
+    void setTestName(const char *testName);
+    virtual void exitCurrentTest();
 protected:
-	virtual void runOneTest(TestPlugin* plugin, TestResult& result);
-
-	virtual void executePlatformSpecificRunOneTest(TestPlugin* plugin,
-			TestResult& result);
-	virtual bool executePlatformSpecificSetup();
-	virtual void executePlatformSpecificTestBody();
-	virtual void executePlatformSpecificTeardown();
-	virtual void executePlatformSpecificExitCurrentTest();
-
-	Utest();
-
-	Utest(const char* groupName, const char* testName, const char* fileName,
-			int lineNumber, Utest* nextTest);
-
-	virtual SimpleString getMacroName() const;
-
+    virtual void runOneTest(TestPlugin *plugin, TestResult & result);
+    virtual void executePlatformSpecificRunOneTest(TestPlugin *plugin, TestResult & result);
+    virtual bool executePlatformSpecificSetup();
+    virtual void executePlatformSpecificTestBody();
+    virtual void executePlatformSpecificTeardown();
+    virtual void executePlatformSpecificExitCurrentTest();
+    Utest();
+    Utest(const char *groupName, const char *testName, const char *fileName, int lineNumber, Utest *nextTest);
+    virtual SimpleString getMacroName() const;
 private:
+    const char *group_;
+    const char *name_;
+    const char *file_;
+    int lineNumber_;
+    Utest *next_;
+    static TestResult *testResult_;
+    static Utest *currentTest_;
 
-	const char* group_;
-	const char* name_;
-	const char* file_;
-	int lineNumber_;
-	Utest *next_;
-	static TestResult* testResult_;
-	static Utest* currentTest_;
+    SimpleString stringFromOrNull(const char * expected);
+    void failEqualsTest(const char * expected, const char* actual, const char * fileName, int lineNumber);
+    void failContainsTest(const char * expected, const char* actual, const char * fileName, int lineNumber);
 };
 
 //////////////////// NulLTest

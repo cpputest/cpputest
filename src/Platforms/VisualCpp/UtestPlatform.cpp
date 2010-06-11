@@ -255,6 +255,10 @@ int PlatformSpecificVSNprintf(char *str, unsigned int size, const char* format, 
    return _vsnprintf( str, size, format, (va_list) args);
 }
 
+char PlatformSpecificToLower(char c)
+{
+	return tolower(c);
+}
 
 //platform specific test running stuff
 #if 1

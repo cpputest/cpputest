@@ -176,10 +176,16 @@ int PlatformSpecificVSNprintf(char *str, unsigned int size, const char* format, 
    return vsnprintf( str, size, format, args);
 }
 
+char PlatformSpecificToLower(char c)
+{
+	return tolower(c);
+}
+
 PlatformSpecificFile PlatformSpecificFOpen(const char* filename, const char* flag)
 {
    return fopen(filename, flag);
 }
+
 
 void PlatformSpecificFPuts(const char* str, PlatformSpecificFile file)
 {

@@ -84,6 +84,31 @@ TEST(SimpleString, InEquality)
 	CHECK(s1 != s2);
 }
 
+TEST(SimpleString, CompareNoCaseWithoutCase)
+{
+	SimpleString s1("hello");
+	SimpleString s2("hello");
+
+	CHECK(s1.equalsNoCase(s2));
+}
+
+TEST(SimpleString, CompareNoCaseWithCase)
+{
+	SimpleString s1("hello");
+	SimpleString s2("HELLO");
+
+	CHECK(s1.equalsNoCase(s2));
+}
+
+TEST(SimpleString, CompareNoCaseWithCaseNotEqual)
+{
+	SimpleString s1("hello");
+	SimpleString s2("WORLD");
+
+	CHECK(!s1.equalsNoCase(s2));
+}
+
+
 TEST(SimpleString, asCharString)
 {
 	SimpleString s1("hello");
@@ -96,6 +121,14 @@ TEST(SimpleString, Size)
 	SimpleString s1("hello!");
 
 	LONGS_EQUAL(6, s1.size());
+}
+
+TEST(SimpleString, toLower)
+{
+	SimpleString s1("AbCdEfG");
+	SimpleString s2(s1.toLower());
+	STRCMP_EQUAL("abcdefg", s2.asCharString());
+	STRCMP_EQUAL("AbCdEfG", s1.asCharString());
 }
 
 TEST(SimpleString, Addition)

@@ -98,6 +98,12 @@ bool SimpleString::contains(const SimpleString& other) const
 	else return PlatformSpecificStrStr(buffer_, other.buffer_) != 0;
 }
 
+bool SimpleString::containsNoCase(const SimpleString& other) const
+{
+	return toLower().contains(other.toLower());
+}
+
+
 bool SimpleString::startsWith(const SimpleString& other) const
 {
 	if (PlatformSpecificStrLen(other.buffer_) == 0) return true;
@@ -190,6 +196,17 @@ void SimpleString::replace(const char* to, const char* with)
 	}
 }
 
+SimpleString SimpleString::toLower() const
+{
+	SimpleString str(*this);
+
+	size_t str_size = str.size();
+	for (size_t i = 0; i < str_size; i++)
+		str.buffer_[i] = PlatformSpecificToLower(str.buffer_[i]);
+
+	return str;
+}
+
 const char *SimpleString::asCharString() const
 {
 	return buffer_;
@@ -209,6 +226,12 @@ bool operator==(const SimpleString& left, const SimpleString& right)
 {
 	return 0 == PlatformSpecificStrCmp(left.asCharString(), right.asCharString());
 }
+
+bool SimpleString::equalsNoCase(const SimpleString& str) const
+{
+	return toLower() == str.toLower();
+}
+
 
 bool operator!=(const SimpleString& left, const SimpleString& right)
 {

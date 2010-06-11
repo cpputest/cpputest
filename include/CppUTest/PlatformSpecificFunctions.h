@@ -60,6 +60,7 @@ int PlatformSpecificStrNCmp(const char* s1, const char* s2, size_t size);
 char* PlatformSpecificStrStr(const char* s1, const char* s2);
 int PlatformSpecificVSNprintf(char *str, unsigned int size, const char* format,
 		va_list va_args_list);
+char PlatformSpecificToLower(char c);
 
 /* Misc */
 double PlatformSpecificFabs(double d);
