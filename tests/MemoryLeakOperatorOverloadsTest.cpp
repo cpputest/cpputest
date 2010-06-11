@@ -26,21 +26,21 @@ TEST_GROUP(MemoryLeakOverridesToBeUsedInProductionCode)
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, OperatorNewMacroOverloadViaIncludeFileWorks)
 {
 	char* leak = newAllocation();
-	STRCMP_CONTAINS("AllocationInCppFile.cpp", memLeakDetector->report(mem_leak_period_checking));
+	STRCMP_NOCASE_CONTAINS("AllocationInCppFile.cpp", memLeakDetector->report(mem_leak_period_checking));
 	delete leak;
 }
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, OperatorNewArrayMacroOverloadViaIncludeFileWorks)
 {
 	char* leak = newArrayAllocation();
-	STRCMP_CONTAINS("AllocationInCppFile.cpp", memLeakDetector->report(mem_leak_period_checking));
+	STRCMP_NOCASE_CONTAINS("AllocationInCppFile.cpp", memLeakDetector->report(mem_leak_period_checking));
 	delete[] leak;
 }
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, MallocOverrideWorks)
 {
 	char* leak = mallocAllocation();
-	STRCMP_CONTAINS("AllocationInCFile.c", memLeakDetector->report(mem_leak_period_checking));
+	STRCMP_NOCASE_CONTAINS("AllocationInCFile.c", memLeakDetector->report(mem_leak_period_checking));
 	freeAllocation(leak);
 }
 
