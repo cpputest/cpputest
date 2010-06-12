@@ -178,7 +178,7 @@ int PlatformSpecificVSNprintf(char *str, unsigned int size, const char* format, 
 
 char PlatformSpecificToLower(char c)
 {
-	return (char) tolower(c);
+	return (char) tolower((char) c);
 }
 
 PlatformSpecificFile PlatformSpecificFOpen(const char* filename, const char* flag)
