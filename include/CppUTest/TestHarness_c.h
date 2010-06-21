@@ -74,7 +74,7 @@ extern void FAIL_C_LOCATION(const char* fileName, int lineNumber);
 extern void CHECK_C_LOCATION(int condition, const char* conditionString,
 		const char* fileName, int lineNumber);
 
-#include <stdlib.h>
+#include <stddef.h>
 
 extern void* cpputest_malloc(size_t size);
 extern void* cpputest_calloc(size_t num, size_t size);

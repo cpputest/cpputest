@@ -40,6 +40,7 @@
 #include <setjmp.h>
 #include <string.h>
 #include <math.h>
+#include <ctype.h>
 
 #include "CppUTest/PlatformSpecificFunctions.h"
 
