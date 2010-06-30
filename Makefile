@@ -31,23 +31,25 @@ CPPUTEST_HOME = .
 CPP_PLATFORM = Gcc
 
 WARNINGFLAGS = -pedantic-errors -Wall -Wextra -Werror -Wshadow -Wswitch-default -Wswitch-enum -Wconversion
-CPPFLAGS += $(WARNINGFLAGS)
+MEMLEAK_DETECTOR_NEW_MACROS += -include include/CppUTest/MemoryLeakDetectorNewMacros.h
+MEMLEAK_DETECTOR_MALLOC_MACROS += -include include/CppUTest/MemoryLeakDetectorMallocMacros.h
 
 ifeq ($(CPPUTEST_USE_MEM_LEAK_DETECTION), N)
-CPPFLAGS += -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED
+CPPUTEST_CPPFLAGS += -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED
 endif
 
 ifeq ($(ENABLE_DEBUG), Y)
-CPPFLAGS += -g
+CPPUTEST_CPPFLAGS += -g
 endif
 
 ifeq ($(CPPUTEST_USE_STD_CPP_LIB), N)
-CPPFLAGS += -DCPPUTEST_STD_CPP_LIB_DISABLED
-CXXFLAGS += -nostdinc++
+CPPUTEST_CPPFLAGS += -DCPPUTEST_STD_CPP_LIB_DISABLED
+CPPUTEST_CXXFLAGS += -nostdinc++
 endif
 
-CXXFLAGS += -include include/CppUTest/MemoryLeakDetectorNewMacros.h
-CFLAGS += -include include/CppUTest/MemoryLeakDetectorMallocMacros.h
+CPPUTEST_CPPFLAGS += $(WARNINGFLAGS)
+CPPUTEST_CXXFLAGS += $(MEMLEAK_DETECTOR_NEW_MACROS)
+CPPUTEST_CFLAGS += $(MEMLEAK_DETECTOR_MALLOC_MACROS)
 
 #GCOVFLAGS = -fprofile-arcs -ftest-coverage
 
@@ -72,7 +74,6 @@ INCLUDES =\
   -I$(CPPUTEST_HOME)/include
 
 #Flags to pass to ar, ld
-LDFLAGS += 
 LD_LIBRARIES += -lstdc++
 
 include $(CPPUTEST_HOME)/build/ComponentMakefile

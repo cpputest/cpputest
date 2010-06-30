@@ -15,9 +15,10 @@
 #	TEST_SRC - unit test code build into the unit test runner
 #	MOCKS_SRC - mock objects build into the test runner
 #	INCLUDES - List of -I files
-#	CPPFLAGS - flags for the C++ compiler
-#	CFLAGS - C complier
-#	LDFLAGS - Linker flags
+#	CPPUTEST_CXXFLAGS - flags for the C++ compiler
+#	CPPUTEST_CPPFLAGS - flags for the C++ AND C compiler
+#	CPPUTEST_CFLAGS - C complier
+#	CPPUTEST_LDFLAGS - Linker flags
 #	TARGET_LIB -  the created library
 #	TEST_TARGET - the created test executable
 #	OTHER_MAKEFILE_TO_INCLUDE - a hook to use this makefile to make 
@@ -69,8 +70,7 @@ STUFF_TO_CLEAN += \
 #Other stuff needed
 CPPUTEST_LIB = $(CPPUTEST_HOME)/lib/libCppUTest.a 
 
-CPPFLAGS +=  $(INCLUDES) $(GCOVFLAGS)
-CFLAGS += $(INCLUDES) $(GCOVFLAGS)
+CPPUTEST_CPPFLAGS +=  $(INCLUDES) $(GCOVFLAGS)
 
 #The gcda files for gcov need to be deleted before each run
 #To avoid annoying messages.
@@ -82,7 +82,7 @@ ifneq "$(OTHER_MAKEFILE_TO_INCLUDE)" ""
 endif
 
 ifneq "$(MAP_FILE)" ""
-	LDFLAGS += -Wl,-map,$(MAP_FILE)
+	CPPUTEST_LDFLAGS += -Wl,-map,$(MAP_FILE)
 endif
 
 INCLUDES_DIRS_EXPANDED = $(call get_dirs_from_dirspec, $(INCLUDE_DIRS))
@@ -94,6 +94,12 @@ INCLUDES += $(foreach dir, $(MOCK_DIRS_EXPANDED), -I$(dir))
 DEP_FILES = $(call src_to_d, $(ALL_SRC))
 STUFF_TO_CLEAN += $(DEP_FILES) + $(PRODUCTION_CODE_START) + $(PRODUCTION_CODE_END)
 STUFF_TO_CLEAN += $(STDLIB_CODE_START) + $(MAP_FILE) + cpputest_*.xml junit_run_output
+
+# We'll use the CPPUTEST_CFLAGS etc so that you can override AND add to the CppUTest flags
+CFLAGS = $(CPPUTEST_CFLAGS) $(CPPUTEST_ADDITIONAL_CFLAGS)
+CPPFLAGS = $(CPPUTEST_CPPFLAGS) $(CPPUTEST_ADDITIONAL_CPPFLAGS)
+CXXFLAGS = $(CPPUTEST_CXXFLAGS) $(CPPUTEST_ADDITIONAL_CXXFLAGS)
+LDFLAGS = $(CPPUTEST_LDFLAGS) $(CPPUTEST_ADDITIONAL_LDFLAGS)
 
 # Targets
 .PHONY: all
