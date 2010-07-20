@@ -113,7 +113,7 @@ void JUnitTestOutput::print(long)
 {
 }
 
-void JUnitTestOutput::print(const Failure& failure)
+void JUnitTestOutput::print(const TestFailure& failure)
 {
 }
 

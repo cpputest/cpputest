@@ -28,7 +28,7 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/JUnitTestOutput.h"
 #include "CppUTest/TestResult.h"
-#include "CppUTest/Failure.h"
+#include "CppUTest/TestFailure.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
 struct JUnitTestCaseResultNode
@@ -40,7 +40,7 @@ struct JUnitTestCaseResultNode
 	;
 	SimpleString name_;
 	long execTime_;
-	Failure* failure_;
+	TestFailure* failure_;
 	JUnitTestCaseResultNode* next_;
 };
 
@@ -232,11 +232,11 @@ void JUnitTestOutput::print(long)
 {
 }
 
-void JUnitTestOutput::print(const Failure& failure)
+void JUnitTestOutput::print(const TestFailure& failure)
 {
 	if (impl_->results_.tail_->failure_ == 0) {
 		impl_->results_.failureCount_++;
-		impl_->results_.tail_->failure_ = new Failure(failure);
+		impl_->results_.tail_->failure_ = new TestFailure(failure);
 	}
 }
 

@@ -38,7 +38,7 @@
 #ifndef D_TestResult_h
 #define D_TestResult_h
 
-class Failure;
+class TestFailure;
 class TestOutput;
 class Utest;
 
@@ -60,7 +60,7 @@ public:
 	virtual void countCheck();
 	virtual void countFilteredOut();
 	virtual void countIgnored();
-	virtual void addFailure(const Failure& failure);
+	virtual void addFailure(const TestFailure& failure);
 	virtual void print(const char* text);
 	virtual void setProgressIndicator(const char*);
 

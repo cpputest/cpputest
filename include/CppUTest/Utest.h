@@ -44,7 +44,7 @@
 
 class TestResult;
 class TestPlugin;
-class Failure;
+class TestFailure;
 
 class Utest
 {

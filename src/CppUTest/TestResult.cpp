@@ -27,7 +27,7 @@
 
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TestResult.h"
-#include "CppUTest/Failure.h"
+#include "CppUTest/TestFailure.h"
 #include "CppUTest/TestOutput.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
@@ -76,7 +76,7 @@ void TestResult::currentTestEnded(Utest* /*test*/)
 
 }
 
-void TestResult::addFailure(const Failure& failure)
+void TestResult::addFailure(const TestFailure& failure)
 {
 	output_.print(failure);
 	failureCount_++;

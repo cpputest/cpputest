@@ -72,7 +72,7 @@
 #include "UtestMacros.h"
 #include "SimpleString.h"
 #include "TestResult.h"
-#include "Failure.h"
+#include "TestFailure.h"
 #include "TestPlugin.h"
 #include "MemoryLeakWarningPlugin.h"
 #endif

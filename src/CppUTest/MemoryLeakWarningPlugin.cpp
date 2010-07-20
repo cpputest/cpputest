@@ -125,7 +125,7 @@ void MemoryLeakWarningPlugin::postTestAction(Utest& test, TestResult& result)
 	int leaks = memLeakDetector_->totalMemoryLeaks(mem_leak_period_checking);
 
 	if (!ignoreAllWarnings_ && expectedLeaks_ != leaks && failureCount_ == result.getFailureCount()) {
-		Failure f(&test, memLeakDetector_->report(mem_leak_period_checking));
+		TestFailure f(&test, memLeakDetector_->report(mem_leak_period_checking));
 		result.addFailure(f);
 	}
 	memLeakDetector_->markCheckingPeriodLeaksAsNonCheckingPeriod();

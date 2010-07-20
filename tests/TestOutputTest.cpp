@@ -42,7 +42,7 @@ TEST_GROUP(TestOutput)
 	TestOutput* printer;
 	StringBufferTestOutput* mock;
 	Utest* tst;
-	Failure *f;
+	TestFailure *f;
 	TestResult* result;
 
 	void setup()
@@ -50,7 +50,7 @@ TEST_GROUP(TestOutput)
 		mock = new StringBufferTestOutput();
 		printer = mock;
 		tst = new Utest("group", "test", "file", 1);
-		f = new Failure(tst, "failfile", 2, "message");
+		f = new TestFailure(tst, "failfile", 2, "message");
 		result = new TestResult(*mock);
 		result->setTotalExecutionTime(10);
 		millisTime = 0;

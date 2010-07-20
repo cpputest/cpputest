@@ -149,7 +149,7 @@ void TestOutput::printTestRun(int number, int total)
 	}
 }
 
-void TestOutput::print(const Failure& failure)
+void TestOutput::print(const TestFailure& failure)
 {
 	print("\n");
 	print(failure.getFileName().asCharString());

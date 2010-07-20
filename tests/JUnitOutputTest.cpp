@@ -74,7 +74,7 @@ TEST_GROUP(JUnitOutputTest)
 			;
 			Utest* tst_;
 			SimpleString* testName_;
-			Failure* failure_;
+			TestFailure* failure_;
 		};
 
 		struct TestGroupData
@@ -192,7 +192,7 @@ TEST_GROUP(JUnitOutputTest)
 		void setFailure(int groupIndex, int testIndex, const char* fileName, int lineNumber, const char* message)
 		{
 			TestData& data = testGroupData_[groupIndex].testData_[testIndex];
-			data.failure_ = new Failure(data.tst_, fileName, lineNumber, message);
+			data.failure_ = new TestFailure(data.tst_, fileName, lineNumber, message);
 			testGroupData_[groupIndex].totalFailures_++;
 		}
 
@@ -265,7 +265,7 @@ TEST_GROUP(JUnitOutputTest)
 		}
 		void CHECK_FAILURE(SimpleString* arr, int& i, int curTest)
 		{
-			Failure& f = *currentGroup().testData_[curTest].failure_;
+			TestFailure& f = *currentGroup().testData_[curTest].failure_;
 			i++;
 			SimpleString message = f.getMessage().asCharString();
 			message.replace('"', '\'');

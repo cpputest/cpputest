@@ -35,24 +35,24 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef D_Failure_H
-#define D_Failure_H
+#ifndef D_TestFailure_H
+#define D_TestFailure_H
 
 #include "SimpleString.h"
 
 class Utest;
 class TestOutput;
 
-class Failure
+class TestFailure
 {
 
 public:
-	Failure(Utest*, const char* fileName, int lineNumber,
+	TestFailure(Utest*, const char* fileName, int lineNumber,
 			const SimpleString& theMessage);
-	Failure(Utest*, const SimpleString& theMessage);
-	Failure(Utest*, const char* fileName, int lineNumber);
-	Failure(const Failure&);
-	virtual ~Failure();
+	TestFailure(Utest*, const SimpleString& theMessage);
+	TestFailure(Utest*, const char* fileName, int lineNumber);
+	TestFailure(const TestFailure&);
+	virtual ~TestFailure();
 
 	virtual SimpleString getFileName() const;
 	virtual SimpleString getTestName() const;
@@ -65,11 +65,11 @@ protected:
 	int lineNumber_;
 	SimpleString message_;
 
-	Failure& operator=(const Failure&);
+	TestFailure& operator=(const TestFailure&);
 
 };
 
-class EqualsFailure: public Failure
+class EqualsFailure: public TestFailure
 {
 public:
 
@@ -81,7 +81,7 @@ private:
 	EqualsFailure& operator=(const EqualsFailure&);
 };
 
-class ContainsFailure: public Failure
+class ContainsFailure: public TestFailure
 {
 public:
 

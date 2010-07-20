@@ -231,7 +231,7 @@ void Utest::assertTrue(bool condition, const char* conditionString, const char* 
 		SimpleString message("CHECK(");
 		message += conditionString;
 		message += ") failed";
-		Failure _f(this, fileName, lineNumber, message);
+		TestFailure _f(this, fileName, lineNumber, message);
 		testResult_->addFailure(_f);
 		Utest::getCurrent()->exitCurrentTest();
 	}
@@ -244,7 +244,7 @@ SimpleString Utest::stringFromOrNull(const char * expected)
 
 void Utest::fail(const char *text, const char* fileName, int lineNumber)
 {
-	Failure _f(this, fileName, lineNumber, text);
+	TestFailure _f(this, fileName, lineNumber, text);
     testResult_->addFailure(_f);
     Utest::getCurrent()->exitCurrentTest();
 }
