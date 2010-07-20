@@ -93,10 +93,6 @@ SOURCE=.\src\CppUTest\CommandLineTestRunner.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\CppUTest\Failure.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\src\CppUTest\JUnitTestOutput.cpp
 # End Source File
 # Begin Source File
@@ -114,6 +110,10 @@ SOURCE=.\src\CppUTest\MemoryLeakWarningPlugin.cpp
 # Begin Source File
 
 SOURCE=.\src\CppUTest\SimpleString.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\CppUTest\TestFailure.cpp
 # End Source File
 # Begin Source File
 
@@ -165,10 +165,6 @@ SOURCE=.\include\CppUTest\CommandLineTestRunner.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\include\CppUTest\Failure.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\include\CppUTest\FindLeaksMalloc.h
 # End Source File
 # Begin Source File
@@ -198,6 +194,10 @@ SOURCE=.\include\CppUTest\SimpleString.h
 # Begin Source File
 
 SOURCE=.\include\CppUTest\Extensions\SimpleStringExtensions.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTest\TestFailure.h
 # End Source File
 # Begin Source File
 

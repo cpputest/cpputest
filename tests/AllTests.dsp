@@ -108,10 +108,6 @@ SOURCE=.\CommandLineTestRunnerTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\FailureTest.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\JUnitOutputTest.cpp
 # End Source File
 # Begin Source File
@@ -149,6 +145,10 @@ SOURCE=.\SetPluginTest.cpp
 # Begin Source File
 
 SOURCE=.\SimpleStringTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\TestFailureTest.cpp
 # End Source File
 # Begin Source File
 
