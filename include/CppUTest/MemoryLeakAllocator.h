@@ -6,8 +6,8 @@ struct MemoryLeakNode;
 class MemoryLeakAllocator
 {
 public:
-	virtual char* alloc_memory(size_t size)=0;
-	virtual void free_memory(char* memory)=0;
+	virtual char* alloc_memory(size_t size, const char* file, int line)=0;
+	virtual void free_memory(char* memory, const char* file, int line)=0;
 
 	virtual const char* name()=0;
 	virtual const char* alloc_name()=0;
@@ -43,8 +43,8 @@ private:
 class StandardMallocAllocator: public MemoryLeakAllocator
 {
 public:
-	char* alloc_memory(size_t size);
-	void free_memory(char* memory);
+	virtual char* alloc_memory(size_t size, const char* file, int line);
+	virtual void free_memory(char* memory, const char* file, int line);
 
 	const char* name();
 	const char* alloc_name();
@@ -58,8 +58,8 @@ public:
 class StandardNewAllocator: public MemoryLeakAllocator
 {
 public:
-	char* alloc_memory(size_t size);
-	void free_memory(char* memory);
+	virtual char* alloc_memory(size_t size, const char* file, int line);
+	virtual void free_memory(char* memory, const char* file, int line);
 
 	const char* name();
 	const char* alloc_name();
@@ -71,8 +71,8 @@ public:
 class StandardNewArrayAllocator: public MemoryLeakAllocator
 {
 public:
-	char* alloc_memory(size_t size);
-	void free_memory(char* memory);
+	virtual char* alloc_memory(size_t size, const char* file, int line);
+	virtual void free_memory(char* memory, const char* file, int line);
 
 	const char* name();
 	const char* alloc_name();
@@ -84,8 +84,8 @@ public:
 class NullUnknownAllocator: public MemoryLeakAllocator
 {
 public:
-	char* alloc_memory(size_t size);
-	void free_memory(char* memory);
+	virtual char* alloc_memory(size_t size, const char* file, int line);
+	virtual void free_memory(char* memory, const char* file, int line);
 
 	const char* name();
 	const char* alloc_name();

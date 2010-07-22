@@ -33,12 +33,12 @@
 /* Avoid using the memory leak detector INSIDE SimpleString as its used inside the detector */
 char* SimpleString::allocString(size_t _size) const
 {
-	return StandardNewArrayAllocator::defaultAllocator()->alloc_memory(_size);
+	return StandardNewArrayAllocator::defaultAllocator()->alloc_memory(_size, __FILE__, __LINE__);
 }
 
 void SimpleString::deallocString(char* str) const
 {
-	StandardNewArrayAllocator::defaultAllocator()->free_memory(str);
+	StandardNewArrayAllocator::defaultAllocator()->free_memory(str, __FILE__, __LINE__);
 }
 
 char* SimpleString::getEmptyString() const

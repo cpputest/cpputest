@@ -55,15 +55,15 @@ public:
 
 	int alloc_called;
 	int free_called;
-	char* alloc_memory(size_t size)
+	char* alloc_memory(size_t size, const char*, int)
 	{
 		alloc_called++;
-		return StandardNewAllocator::alloc_memory(size);
+		return StandardNewAllocator::alloc_memory(size, "file", 1);
 	}
-	void free_memory(char* memory)
+	void free_memory(char* memory, const char* file, int line)
 	{
 		free_called++;
-		StandardNewAllocator::free_memory(memory);
+		StandardNewAllocator::free_memory(memory, file, line);
 	}
 };
 
@@ -79,27 +79,27 @@ public:
 	int free_called;
 	int allocMemoryLeakNodeCalled;
 	int freeMemoryLeakNodeCalled;
-	char* alloc_memory(size_t size)
+	char* alloc_memory(size_t size, const char* file, int line)
 	{
 		alloc_called++;
-		return StandardMallocAllocator::alloc_memory(size);
+		return StandardMallocAllocator::alloc_memory(size, file, line);
 	}
-	void free_memory(char* memory)
+	void free_memory(char* memory, const char* file, int line)
 	{
 		free_called++;
-		StandardMallocAllocator::free_memory(memory);
+		StandardMallocAllocator::free_memory(memory, file, line);
 	}
 
 	char* allocMemoryLeakNode(size_t size)
 	{
 		allocMemoryLeakNodeCalled++;
-		return StandardMallocAllocator::alloc_memory(size);
+		return StandardMallocAllocator::alloc_memory(size, __FILE__, __LINE__);
 	}
 
 	void freeMemoryLeakNode(char* memory)
 	{
 		freeMemoryLeakNodeCalled++;
-		StandardMallocAllocator::free_memory(memory);
+		StandardMallocAllocator::free_memory(memory, __FILE__, __LINE__);
 	}
 };
 

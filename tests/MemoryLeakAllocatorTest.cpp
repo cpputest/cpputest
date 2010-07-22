@@ -69,7 +69,7 @@ TEST(MemoryLeakAllocatorTest, SetCurrentMallocAllocator)
 TEST(MemoryLeakAllocatorTest, MallocAllocation)
 {
 	allocator = new StandardMallocAllocator;
-	allocator->free_memory(allocator->alloc_memory(100));
+	allocator->free_memory(allocator->alloc_memory(100, "file", 1), "file", 1);
 }
 
 TEST(MemoryLeakAllocatorTest, MallocNames)
@@ -83,7 +83,7 @@ TEST(MemoryLeakAllocatorTest, MallocNames)
 TEST(MemoryLeakAllocatorTest, NewAllocation)
 {
 	allocator = new StandardNewAllocator;
-	allocator->free_memory(allocator->alloc_memory(100));
+	allocator->free_memory(allocator->alloc_memory(100, "file", 1), "file", 1);
 }
 
 TEST(MemoryLeakAllocatorTest, NewNames)
@@ -97,7 +97,7 @@ TEST(MemoryLeakAllocatorTest, NewNames)
 TEST(MemoryLeakAllocatorTest, NewArrayAllocation)
 {
 	allocator = new StandardNewArrayAllocator;
-	allocator->free_memory(allocator->alloc_memory(100));
+	allocator->free_memory(allocator->alloc_memory(100, "file", 1), "file", 1);
 }
 
 TEST(MemoryLeakAllocatorTest, NewArrayNames)
@@ -111,7 +111,7 @@ TEST(MemoryLeakAllocatorTest, NewArrayNames)
 TEST(MemoryLeakAllocatorTest, NullUnknownAllocation)
 {
 	allocator = new NullUnknownAllocator;
-	allocator->free_memory(allocator->alloc_memory(100));
+	allocator->free_memory(allocator->alloc_memory(100, "file", 1), "file", 1);
 }
 
 TEST(MemoryLeakAllocatorTest, NullUnknownNames)

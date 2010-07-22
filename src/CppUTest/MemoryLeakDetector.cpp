@@ -351,12 +351,12 @@ char* MemoryLeakDetector::allocMemory(MemoryLeakAllocator* allocator, size_t siz
 	char* memory;
 	MemoryLeakDetectorNode* node;
 	if (allocator->allocateMemoryLeakNodeSeparately()) {
-		memory = allocator->alloc_memory(sizeOfMemoryWithCorruptionInfo(size));
+		memory = allocator->alloc_memory(sizeOfMemoryWithCorruptionInfo(size), file, line);
 		if (memory == NULL) return NULL;
 		node = (MemoryLeakDetectorNode*) allocator->allocMemoryLeakNode(sizeof(MemoryLeakDetectorNode));
 	}
 	else {
-		memory = allocator->alloc_memory(sizeOfMemoryWithCorruptionInfo(size) + sizeof(MemoryLeakDetectorNode));
+		memory = allocator->alloc_memory(sizeOfMemoryWithCorruptionInfo(size) + sizeof(MemoryLeakDetectorNode), file, line);
 		if (memory == NULL) return NULL;
 		node = getNodeFromMemoryPointer(memory, size);
 	}
@@ -380,7 +380,7 @@ void MemoryLeakDetector::deallocMemory(MemoryLeakAllocator* allocator, void* mem
 		return;
 	}
 	checkForCorruption(node, file, line, allocator);
-	allocator->free_memory((char*) memory);
+	allocator->free_memory((char*) memory, file, line);
 }
 
 void MemoryLeakDetector::deallocMemory(MemoryLeakAllocator* allocator, void* memory)

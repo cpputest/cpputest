@@ -101,20 +101,20 @@ bool MemoryLeakAllocator::allocateMemoryLeakNodeSeparately()
 
 char* MemoryLeakAllocator::allocMemoryLeakNode(size_t size)
 {
-	return alloc_memory(size);
+	return alloc_memory(size, "MemoryLeakNode", 1);
 }
 
 void MemoryLeakAllocator::freeMemoryLeakNode(char* memory)
 {
-	free_memory(memory);
+	free_memory(memory, "MemoryLeakNode", 1);
 }
 
-char* StandardMallocAllocator::alloc_memory(size_t size)
+char* StandardMallocAllocator::alloc_memory(size_t size, const char*, int)
 {
 	return checkedMalloc(size);
 }
 
-void StandardMallocAllocator::free_memory(char* memory)
+void StandardMallocAllocator::free_memory(char* memory, const char*, int)
 {
 	PlatformSpecificFree(memory);
 }
@@ -145,12 +145,12 @@ MemoryLeakAllocator* StandardMallocAllocator::defaultAllocator()
 	return &allocator;
 }
 
-char* StandardNewAllocator::alloc_memory(size_t size)
+char* StandardNewAllocator::alloc_memory(size_t size, const char*, int)
 {
 	return checkedMalloc(size);
 }
 
-void StandardNewAllocator::free_memory(char* memory)
+void StandardNewAllocator::free_memory(char* memory, const char*, int)
 {
 	PlatformSpecificFree(memory);
 }
@@ -176,12 +176,12 @@ MemoryLeakAllocator* StandardNewAllocator::defaultAllocator()
 	return &allocator;
 }
 
-char* StandardNewArrayAllocator::alloc_memory(size_t size)
+char* StandardNewArrayAllocator::alloc_memory(size_t size, const char*, int)
 {
 	return checkedMalloc(size);
 }
 
-void StandardNewArrayAllocator::free_memory(char* memory)
+void StandardNewArrayAllocator::free_memory(char* memory, const char*, int)
 {
 	PlatformSpecificFree(memory);
 }
@@ -206,12 +206,12 @@ MemoryLeakAllocator* StandardNewArrayAllocator::defaultAllocator()
 	static StandardNewArrayAllocator allocator;
 	return &allocator;
 }
-char* NullUnknownAllocator::alloc_memory(size_t /*size*/)
+char* NullUnknownAllocator::alloc_memory(size_t /*size*/, const char*, int)
 {
 	return 0;
 }
 
-void NullUnknownAllocator::free_memory(char* /*memory*/)
+void NullUnknownAllocator::free_memory(char* /*memory*/, const char*, int)
 {
 }
 
