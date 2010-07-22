@@ -29,59 +29,59 @@
 #include "CppUTest/TestOutput.h"
 #include "CppUTest/TestRegistry.h"
 #include "CppUTest/TestTestingFixture.h"
-#include "CppUTest/Extensions/OrderedTest.h"
+#include "CppUTestExt/OrderedTest.h"
 
 TEST_GROUP(TestOrderedTest)
-{ TestTestingFixture* fixture;
-
-OrderedTest orderedTest;
-OrderedTest orderedTest2;
-OrderedTest orderedTest3;
-ExecFunctionTest normalTest;
-ExecFunctionTest normalTest2;
-ExecFunctionTest normalTest3;
-
-OrderedTest* orderedTestCache;
-void setup()
 {
-	orderedTestCache = OrderedTest::getOrderedTestHead();
-	OrderedTest::setOrderedTestHead(0);
+	TestTestingFixture* fixture;
 
-	fixture = new TestTestingFixture();
-	fixture->registry_->unDoLastAddTest();
-}
+	OrderedTest orderedTest;
+	OrderedTest orderedTest2;
+	OrderedTest orderedTest3;
+	ExecFunctionTest normalTest;
+	ExecFunctionTest normalTest2;
+	ExecFunctionTest normalTest3;
 
-void teardown()
-{
-	delete fixture;
-	OrderedTest::setOrderedTestHead(orderedTestCache);
-}
+	OrderedTest* orderedTestCache;
+	void setup()
+	{
+		orderedTestCache = OrderedTest::getOrderedTestHead();
+		OrderedTest::setOrderedTestHead(0);
 
-void InstallOrderedTest(OrderedTest* test, int level)
-{
-	OrderedTestInstaller(test, "testgroup", "testname", __FILE__, __LINE__, level);
-}
+		fixture = new TestTestingFixture();
+		fixture->registry_->unDoLastAddTest();
+	}
 
-void InstallNormalTest(Utest* test)
-{
-	TestInstaller(test, "testgroup", "testname", __FILE__, __LINE__);
-}
+	void teardown()
+	{
+		delete fixture;
+		OrderedTest::setOrderedTestHead(orderedTestCache);
+	}
 
-Utest* firstTest()
-{
-	return fixture->registry_->getFirstTest();
-}
+	void InstallOrderedTest(OrderedTest* test, int level)
+	{
+		OrderedTestInstaller(test, "testgroup", "testname", __FILE__, __LINE__, level);
+	}
 
-Utest* secondTest()
-{
-	return fixture->registry_->getFirstTest()->getNext();
-}
+	void InstallNormalTest(Utest* test)
+	{
+		TestInstaller(test, "testgroup", "testname", __FILE__, __LINE__);
+	}
+
+	Utest* firstTest()
+	{
+		return fixture->registry_->getFirstTest();
+	}
+
+	Utest* secondTest()
+	{
+		return fixture->registry_->getFirstTest()->getNext();
+	}
 };
 
 TEST(TestOrderedTest, TestInstallerSetsFields)
 {
-	OrderedTestInstaller(&orderedTest, "testgroup", "testname", "this.cpp", 10,
-			5);
+	OrderedTestInstaller(&orderedTest, "testgroup", "testname", "this.cpp", 10, 5);
 	STRCMP_EQUAL("testgroup", orderedTest.getGroup().asCharString());
 	STRCMP_EQUAL("testname", orderedTest.getName().asCharString());
 	STRCMP_EQUAL("this.cpp", orderedTest.getFile().asCharString());
@@ -146,7 +146,8 @@ TEST(TestOrderedTest, MultipleOrderedTests2)
 
 }
 TEST_GROUP_BASE(TestOrderedTestMacros, OrderedTest)
-{};
+{
+};
 
 static int testNumber = 0;
 

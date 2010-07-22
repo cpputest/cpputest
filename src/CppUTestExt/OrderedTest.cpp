@@ -27,7 +27,7 @@
 
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TestRegistry.h"
-#include "CppUTest/Extensions/OrderedTest.h"
+#include "CppUTestExt/OrderedTest.h"
 
 OrderedTest* OrderedTest::_orderedTestsHead = 0;
 
