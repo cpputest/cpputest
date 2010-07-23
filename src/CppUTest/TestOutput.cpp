@@ -178,5 +178,4 @@ void ConsoleTestOutput::print(const char* s)
 void ConsoleTestOutput::flush()
 {
 	PlatformSpecificFlush();
-	;
 }

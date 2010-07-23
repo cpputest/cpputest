@@ -26,9 +26,13 @@
  */
 
 #include "CppUTest/CommandLineTestRunner.h"
+#include "CppUTest/TestRegistry.h"
+#include "CppUTestExt/MemoryReporterPlugin.h"
 
 int main(int ac, const char** av)
 {
+	MemoryReporterPlugin plugin;
+	TestRegistry::getCurrentRegistry()->installPlugin(&plugin);
 	return CommandLineTestRunner::RunAllTests(ac, av);
 }
 

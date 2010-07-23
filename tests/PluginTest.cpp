@@ -32,6 +32,7 @@
 
 #define GENERIC_PLUGIN  "GenericPlugin"
 #define GENERIC_PLUGIN2 "GenericPlugin2"
+#define GENERIC_PLUGIN3 "GenericPlugin3"
 
 static int sequenceNumber;
 
@@ -42,24 +43,22 @@ public:
 		TestPlugin(name), preAction(0), postAction(0)
 	{
 	}
-	;
+
 	virtual ~DummyPlugin()
 	{
 	}
-	;
 
 	virtual void preTestAction(Utest&, TestResult&)
 	{
 		preAction++;
 		preActionSequence = sequenceNumber++;
 	}
-	;
+
 	virtual void postTestAction(Utest&, TestResult&)
 	{
 		postAction++;
 		postActionSequence = sequenceNumber++;
 	}
-	;
 
 	int preAction;
 	int preActionSequence;
@@ -67,16 +66,37 @@ public:
 	int postActionSequence;
 };
 
+class DummyPluginWhichAcceptsParameters: public DummyPlugin
+{
+public:
+	DummyPluginWhichAcceptsParameters(const SimpleString& name) :
+		DummyPlugin(name)
+	{
+	}
+
+	virtual bool parseArguments(int ac, const char** av, int index)
+	{
+		SimpleString argument (av[index]);
+		if (argument == "-paccept")
+			return true;
+		return TestPlugin::parseArguments(ac, av, index);
+	}
+
+};
+
+
 TEST_GROUP(PluginTest)
 {
 	DummyPlugin* firstPlugin;
-	DummyPlugin* secondPlugin;
+	DummyPluginWhichAcceptsParameters* secondPlugin;
+	DummyPlugin* thirdPlugin;
 	TestTestingFixture *genFixture;
 	TestRegistry *registry;
 	void setup()
 	{
 		firstPlugin = new DummyPlugin(GENERIC_PLUGIN);
-		secondPlugin = new DummyPlugin(GENERIC_PLUGIN2);
+		secondPlugin = new DummyPluginWhichAcceptsParameters(GENERIC_PLUGIN2);
+		thirdPlugin = new DummyPlugin(GENERIC_PLUGIN3);
 		genFixture = new TestTestingFixture;
 		registry = genFixture->registry_;
 		registry->installPlugin(firstPlugin);
@@ -87,12 +107,13 @@ TEST_GROUP(PluginTest)
 	{
 		delete firstPlugin;
 		delete secondPlugin;
+		delete thirdPlugin;
 		delete genFixture;
 	}
 };
 
 #define GENERIC_PLUGIN  "GenericPlugin"
-#define GENERIC_PLUGIN2 "GenericPlugin2"
+#define GENERIC_PLUGIN4 "GenericPlugin4"
 
 TEST(PluginTest, PluginHasName)
 {
@@ -107,9 +128,9 @@ TEST(PluginTest, InstallPlugin)
 
 TEST(PluginTest, InstallMultiplePlugins)
 {
-	registry->installPlugin(secondPlugin);
+	registry->installPlugin(thirdPlugin);
 	CHECK_EQUAL(firstPlugin, registry->getPluginByName(GENERIC_PLUGIN));
-	CHECK_EQUAL(secondPlugin, registry->getPluginByName(GENERIC_PLUGIN2));
+	CHECK_EQUAL(thirdPlugin, registry->getPluginByName(GENERIC_PLUGIN3));
 	CHECK_EQUAL(0, registry->getPluginByName("I do not exist"));
 }
 
@@ -123,23 +144,38 @@ TEST(PluginTest, ActionsAllRun)
 
 TEST(PluginTest, Sequence)
 {
-	registry->installPlugin(secondPlugin);
+	registry->installPlugin(thirdPlugin);
 	genFixture->runAllTests();
-	CHECK_EQUAL(1, secondPlugin->preActionSequence);
+	CHECK_EQUAL(1, thirdPlugin->preActionSequence);
 	CHECK_EQUAL(2, firstPlugin->preActionSequence);
 	CHECK_EQUAL(3, firstPlugin->postActionSequence);
-	CHECK_EQUAL(4, secondPlugin->postActionSequence);
+	CHECK_EQUAL(4, thirdPlugin->postActionSequence);
 }
 
 TEST(PluginTest, DisablesPluginsDontRun)
 {
-	registry->installPlugin(secondPlugin);
-	secondPlugin->disable();
+	registry->installPlugin(thirdPlugin);
+	thirdPlugin->disable();
 	genFixture->runAllTests();
-	CHECK(!secondPlugin->isEnabled());
-	secondPlugin->enable();
+	CHECK(!thirdPlugin->isEnabled());
+	thirdPlugin->enable();
 	genFixture->runAllTests();
 	CHECK_EQUAL(2, firstPlugin->preAction);
-	CHECK_EQUAL(1, secondPlugin->preAction);
-	CHECK(secondPlugin->isEnabled());
+	CHECK_EQUAL(1, thirdPlugin->preAction);
+	CHECK(thirdPlugin->isEnabled());
 }
+
+TEST(PluginTest, ParseArgumentsForUnknownArgumentsFails)
+{
+	registry->installPlugin(secondPlugin);
+	const char *cmd_line[] = {"nonsense", "andmorenonsense"};
+	CHECK(registry->getFirstPlugin()->parseAllArguments(2, cmd_line, 0) == false	);
+}
+
+TEST(PluginTest, ParseArgumentsContinuesAndSucceedsWhenAPluginCanParse)
+{
+	registry->installPlugin(secondPlugin);
+	const char *cmd_line[] = {"-paccept", "andmorenonsense"};
+	CHECK(registry->getFirstPlugin()->parseAllArguments(2, cmd_line, 0));
+}
+

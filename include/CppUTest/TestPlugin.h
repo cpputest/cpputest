@@ -49,16 +49,15 @@ public:
 	virtual void preTestAction(Utest&, TestResult&)
 	{
 	}
-	;
+
 	virtual void postTestAction(Utest&, TestResult&)
 	{
 	}
-	;
+
 	virtual bool parseArguments(int /* ac */, const char** /* av */, int /* index */ )
 	{
 		return false;
 	}
-	;
 
 	virtual void runAllPreTestAction(Utest&, TestResult&);
 	virtual void runAllPostTestAction(Utest&, TestResult&);

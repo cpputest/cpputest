@@ -48,7 +48,7 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
 		else if (argument.startsWith("-g")) SetGroupFilter(ac_, av_, i);
 		else if (argument.startsWith("-n")) SetNameFilter(ac_, av_, i);
 		else if (argument.startsWith("-o")) correctParameters = SetOutputType(ac_, av_, i);
-		else if (argument.startsWith("-p")) correctParameters = plugin->parseArguments(ac_, av_, i);
+		else if (argument.startsWith("-p")) correctParameters = plugin->parseAllArguments(ac_, av_, i);
 		else correctParameters = false;
 
 		if (correctParameters == false) {
