@@ -30,15 +30,30 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 #include "CppUTest/MemoryLeakAllocator.h"
 
+
+MemoryLeakAllocator* SimpleString::stringAllocator_ = NULL;
+
+MemoryLeakAllocator* SimpleString::getStringAllocator()
+{
+	if (stringAllocator_ == NULL)
+		setStringAllocator(StandardNewArrayAllocator::defaultAllocator());
+	return stringAllocator_;
+}
+
+void SimpleString::setStringAllocator(MemoryLeakAllocator* allocator)
+{
+	stringAllocator_ = allocator;
+}
+
 /* Avoid using the memory leak detector INSIDE SimpleString as its used inside the detector */
 char* SimpleString::allocString(size_t _size) const
 {
-	return StandardNewArrayAllocator::defaultAllocator()->alloc_memory(_size, __FILE__, __LINE__);
+	return getStringAllocator()->alloc_memory(_size, __FILE__, __LINE__);
 }
 
 void SimpleString::deallocString(char* str) const
 {
-	StandardNewArrayAllocator::defaultAllocator()->free_memory(str, __FILE__, __LINE__);
+	getStringAllocator()->free_memory(str, __FILE__, __LINE__);
 }
 
 char* SimpleString::getEmptyString() const

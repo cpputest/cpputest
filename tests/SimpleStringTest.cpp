@@ -28,11 +28,40 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/SimpleString.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
+#include "CppUTest/MemoryLeakAllocator.h"
 
 TEST_GROUP(SimpleString)
 {
-
 };
+
+TEST(SimpleString, defaultAllocatorIsNewArrayAllocator)
+{
+	POINTERS_EQUAL(MemoryLeakAllocator::getCurrentNewArrayAllocator(), SimpleString::getStringAllocator());
+}
+
+class MyOwnStringAllocator : public StandardMallocAllocator
+{
+public:
+	MyOwnStringAllocator() : memoryWasAllocated(false) {};
+	virtual ~MyOwnStringAllocator() {};
+
+	bool memoryWasAllocated;
+	char* alloc_memory(size_t size, const char* file, int line)
+	{
+		memoryWasAllocated = true;
+		return StandardMallocAllocator::alloc_memory(size, file, line);
+	}
+};
+
+TEST(SimpleString, allocatorForSimpleStringCanBeReplaced)
+{
+	MemoryLeakAllocator* defaultAllocator = SimpleString::getStringAllocator();
+	MyOwnStringAllocator myOwnAllocator;
+	SimpleString::setStringAllocator(&myOwnAllocator);
+	SimpleString simpleString;
+	CHECK(myOwnAllocator.memoryWasAllocated);
+	SimpleString::setStringAllocator(defaultAllocator);
+}
 
 TEST(SimpleString, CreateSequence)
 {

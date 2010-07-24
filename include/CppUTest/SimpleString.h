@@ -80,8 +80,12 @@ public:
 
 	static void padStringsToSameLength(SimpleString& str1, SimpleString& str2, char ch);
 
+	static MemoryLeakAllocator* getStringAllocator();
+	static void setStringAllocator(MemoryLeakAllocator* allocator);
 private:
 	char *buffer_;
+
+	static MemoryLeakAllocator* stringAllocator_;
 
 	char* allocString(size_t size) const;
 	void deallocString(char* str) const;
