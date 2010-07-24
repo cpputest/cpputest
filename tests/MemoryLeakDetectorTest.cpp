@@ -351,6 +351,24 @@ TEST(MemoryLeakDetectorTest, AllocOneTypeFreeAnotherTypeWithCheckingDisabled)
 	detector->enableAllocationTypeChecking();
 }
 
+TEST(MemoryLeakDetectorTest, mallocLeakGivesAdditionalWarning)
+{
+	char* mem = detector->allocMemory(mallocAllocator, 100, "ALLOC.c", 10);
+	detector->stopChecking();
+	SimpleString output = detector->report(mem_leak_period_checking);
+	STRCMP_CONTAINS("Memory leak reports about malloc and free can be caused by allocating using the cpputest version of free", output.asCharString());
+	PlatformSpecificFree(mem);
+}
+
+TEST(MemoryLeakDetectorTest, newLeakDoesNotGiveAdditionalWarning)
+{
+	char* mem = detector->allocMemory(newAllocator, 100, "ALLOC.c", 10);
+	detector->stopChecking();
+	SimpleString output = detector->report(mem_leak_period_checking);
+	CHECK(! output.contains("Memory leak reports about malloc and free"));
+	PlatformSpecificFree(mem);
+}
+
 TEST(MemoryLeakDetectorTest, MarkCheckingPeriodLeaksAsNonCheckingPeriod)
 {
 	char* mem = detector->allocMemory(newArrayAllocator, 100);
@@ -420,3 +438,4 @@ TEST(MemoryLeakDetectorTest, allocateWithANullAllocatorCausesNoProblems)
 	char* mem = detector->allocMemory(NullUnknownAllocator::defaultAllocator(), 2);
 	detector->deallocMemory(NullUnknownAllocator::defaultAllocator(), mem);
 }
+

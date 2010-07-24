@@ -417,10 +417,12 @@ void MemoryLeakDetector::ConstructMemoryLeakReport(MemLeakPeriod period)
 		leak = memoryTable_.getNextLeak(leak, period);
 	}
 	output_buffer_.add("%s %d\n", MEM_LEAK_FOOTER, total_leaks);
-	output_buffer_.add("NOTE:\n");
-	output_buffer_.add("\tMemory leak reports about malloc and free can be caused by allocating using the cpputest version of free,\n");
-	output_buffer_.add("\tbut deallocate using the standard free.\n");
-	output_buffer_.add("\tIf this is the case, check whether your malloc/free replacements are working (#define malloc cpputest_malloc etc).\n");
+	if (giveWarningOnUsingMalloc) {
+		output_buffer_.add("NOTE:\n");
+		output_buffer_.add("\tMemory leak reports about malloc and free can be caused by allocating using the cpputest version of free,\n");
+		output_buffer_.add("\tbut deallocate using the standard free.\n");
+		output_buffer_.add("\tIf this is the case, check whether your malloc/free replacements are working (#define malloc cpputest_malloc etc).\n");
+	}
 }
 
 const char* MemoryLeakDetector::report(MemLeakPeriod period)
