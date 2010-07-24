@@ -82,13 +82,14 @@ public:
 
 	static MemoryLeakAllocator* getStringAllocator();
 	static void setStringAllocator(MemoryLeakAllocator* allocator);
+
+	static char* allocStringBuffer(size_t size);
+	static void deallocStringBuffer(char* str);
 private:
 	char *buffer_;
 
 	static MemoryLeakAllocator* stringAllocator_;
 
-	char* allocString(size_t size) const;
-	void deallocString(char* str) const;
 	char* getEmptyString() const;
 };
 

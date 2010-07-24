@@ -46,19 +46,19 @@ void SimpleString::setStringAllocator(MemoryLeakAllocator* allocator)
 }
 
 /* Avoid using the memory leak detector INSIDE SimpleString as its used inside the detector */
-char* SimpleString::allocString(size_t _size) const
+char* SimpleString::allocStringBuffer(size_t _size)
 {
 	return getStringAllocator()->alloc_memory(_size, __FILE__, __LINE__);
 }
 
-void SimpleString::deallocString(char* str) const
+void SimpleString::deallocStringBuffer(char* str)
 {
 	getStringAllocator()->free_memory(str, __FILE__, __LINE__);
 }
 
 char* SimpleString::getEmptyString() const
 {
-	char* empty = allocString(1);
+	char* empty = allocStringBuffer(1);
 	empty[0] = '\0';
 	return empty;
 }
@@ -69,7 +69,7 @@ SimpleString::SimpleString(const char *otherBuffer)
 	}
 	else {
 		size_t len = PlatformSpecificStrLen(otherBuffer) + 1;
-		buffer_ = allocString(len);
+		buffer_ = allocStringBuffer(len);
 		PlatformSpecificStrCpy(buffer_, otherBuffer);
 	}
 }
@@ -77,7 +77,7 @@ SimpleString::SimpleString(const char *otherBuffer)
 SimpleString::SimpleString(const char *other, size_t repeatCount)
 {
 	size_t len = PlatformSpecificStrLen(other) * repeatCount + 1;
-	buffer_ = allocString(len);
+	buffer_ = allocStringBuffer(len);
 	char* next = buffer_;
 	for (size_t i = 0; i < repeatCount; i++) {
 		PlatformSpecificStrCpy(next, other);
@@ -89,16 +89,16 @@ SimpleString::SimpleString(const char *other, size_t repeatCount)
 SimpleString::SimpleString(const SimpleString& other)
 {
 	size_t len = other.size() + 1;
-	buffer_ = allocString(len);
+	buffer_ = allocStringBuffer(len);
 	PlatformSpecificStrCpy(buffer_, other.buffer_);
 }
 
 SimpleString& SimpleString::operator=(const SimpleString& other)
 {
 	if (this != &other) {
-		deallocString(buffer_);
+		deallocStringBuffer(buffer_);
 		size_t len = other.size() + 1;
-		buffer_ = allocString(len);
+		buffer_ = allocStringBuffer(len);
 		PlatformSpecificStrCpy(buffer_, other.buffer_);
 	}
 	return *this;
@@ -159,11 +159,11 @@ void SimpleString::split(const SimpleString& delimiter, SimpleStringCollection& 
 		prev = str;
 		str = PlatformSpecificStrStr(str, delimiter.buffer_) + 1;
 		size_t len = str - prev;
-		char* sub = allocString(len + 1);
+		char* sub = allocStringBuffer(len + 1);
 		PlatformSpecificStrNCpy(sub, prev, len);
 		sub[len] = '\0';
 		col[i] = sub;
-		deallocString(sub);
+		deallocStringBuffer(sub);
 	}
 	if (extraEndToken) {
 		col[num] = str;
@@ -188,7 +188,7 @@ void SimpleString::replace(const char* to, const char* with)
 	size_t newsize = len + (withlen * c) - (tolen * c) + 1;
 
 	if (newsize) {
-		char* newbuf = allocString(newsize);
+		char* newbuf = allocStringBuffer(newsize);
 		for (size_t i = 0, j = 0; i < len;) {
 			if (PlatformSpecificStrNCmp(&buffer_[i], to, tolen) == 0) {
 				PlatformSpecificStrNCpy(&newbuf[j], with, withlen);
@@ -201,7 +201,7 @@ void SimpleString::replace(const char* to, const char* with)
 				i++;
 			}
 		}
-		deallocString(buffer_);
+		deallocStringBuffer(buffer_);
 		buffer_ = newbuf;
 		buffer_[newsize - 1] = '\0';
 	}
@@ -234,7 +234,7 @@ size_t SimpleString::size() const
 
 SimpleString::~SimpleString()
 {
-	deallocString(buffer_);
+	deallocStringBuffer(buffer_);
 }
 
 bool operator==(const SimpleString& left, const SimpleString& right)
@@ -268,10 +268,10 @@ SimpleString& SimpleString::operator+=(const SimpleString& rhs)
 SimpleString& SimpleString::operator+=(const char* rhs)
 {
 	size_t len = this->size() + PlatformSpecificStrLen(rhs) + 1;
-	char* tbuffer = allocString(len);
+	char* tbuffer = allocStringBuffer(len);
 	PlatformSpecificStrCpy(tbuffer, this->buffer_);
 	PlatformSpecificStrCat(tbuffer, rhs);
-	deallocString(buffer_);
+	deallocStringBuffer(buffer_);
 	buffer_ = tbuffer;
 	return *this;
 }
@@ -393,11 +393,11 @@ SimpleString VStringFromFormat(const char* format, va_list args)
 		resultString = SimpleString(defaultBuffer);
 	}
 	else {
-		char* newBuffer = new char[size + 1];
+		char* newBuffer = SimpleString::allocStringBuffer(size + 1);
 		PlatformSpecificVSNprintf(newBuffer, size + 1, format, argsCopy);
 		resultString = SimpleString(newBuffer);
 
-		delete[] newBuffer;
+		SimpleString::deallocStringBuffer(newBuffer);
 	}
 	return resultString;
 }
