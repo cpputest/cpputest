@@ -356,7 +356,7 @@ TEST(MemoryLeakDetectorTest, mallocLeakGivesAdditionalWarning)
 	char* mem = detector->allocMemory(mallocAllocator, 100, "ALLOC.c", 10);
 	detector->stopChecking();
 	SimpleString output = detector->report(mem_leak_period_checking);
-	STRCMP_CONTAINS("Memory leak reports about malloc and free can be caused by allocating using the cpputest version of free", output.asCharString());
+	STRCMP_CONTAINS("Memory leak reports about malloc and free can be caused by allocating using the cpputest version of malloc", output.asCharString());
 	PlatformSpecificFree(mem);
 }
 
