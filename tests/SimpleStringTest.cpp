@@ -55,12 +55,11 @@ public:
 
 TEST(SimpleString, allocatorForSimpleStringCanBeReplaced)
 {
-	MemoryLeakAllocator* defaultAllocator = SimpleString::getStringAllocator();
 	MyOwnStringAllocator myOwnAllocator;
 	SimpleString::setStringAllocator(&myOwnAllocator);
 	SimpleString simpleString;
 	CHECK(myOwnAllocator.memoryWasAllocated);
-	SimpleString::setStringAllocator(defaultAllocator);
+	SimpleString::setStringAllocator(NULL);
 }
 
 TEST(SimpleString, CreateSequence)

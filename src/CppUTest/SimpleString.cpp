@@ -36,7 +36,7 @@ MemoryLeakAllocator* SimpleString::stringAllocator_ = NULL;
 MemoryLeakAllocator* SimpleString::getStringAllocator()
 {
 	if (stringAllocator_ == NULL)
-		setStringAllocator(StandardNewArrayAllocator::defaultAllocator());
+		return StandardNewArrayAllocator::defaultAllocator();
 	return stringAllocator_;
 }
 
