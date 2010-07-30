@@ -104,9 +104,21 @@ static void _failMethodCHECK_EQUAL()
 	afterCheck = true;
 }
 
-static void _failMethodSTRCMP_EQUAL()
+static void _failMethodSTRCMP_EQUAL_atBeginning()
 {
-	STRCMP_EQUAL("a", "b");
+	STRCMP_EQUAL("aaa", "bbb");
+	afterCheck = true;
+}
+
+static void _failMethodSTRCMP_EQUAL_inMiddle()
+{
+	STRCMP_EQUAL("aa", "ab");
+	afterCheck = true;
+}
+
+static void _failMethodSTRCMP_EQUAL_atEnd()
+{
+	STRCMP_EQUAL("abc", "ab");
 	afterCheck = true;
 }
 
@@ -192,9 +204,19 @@ TEST(Utest, FailureWithCHECK_EQUAL)
 	testFailureWith(_failMethodCHECK_EQUAL);
 }
 
-TEST(Utest, FailureWithSTRCMP_EQUAL)
+TEST(Utest, FailureWithSTRCMP_EQUAL_atBeginning)
 {
-	testFailureWithMethodShouldContain(_failMethodSTRCMP_EQUAL, "but was  <<!>b>");
+	testFailureWithMethodShouldContain(_failMethodSTRCMP_EQUAL_atBeginning, "but was  <<!>bbb>");
+}
+
+TEST(Utest, FailureWithSTRCMP_EQUAL_inMiddle)
+{
+	testFailureWithMethodShouldContain(_failMethodSTRCMP_EQUAL_inMiddle, "but was  <a<!>b>");
+}
+
+TEST(Utest, FailureWithSTRCMP_EQUAL_atEnd)
+{
+	testFailureWithMethodShouldContain(_failMethodSTRCMP_EQUAL_atEnd, "but was  <ab<!>>");
 }
 
 TEST(Utest, FailureWithSTRCMP_NOCASE_EQUAL)
