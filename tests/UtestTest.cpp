@@ -53,6 +53,15 @@ TEST_GROUP(Utest)
 		CHECK(!afterCheck);
 	}
 
+	void testFailureWithMethodShouldContain(void(*method)(), const char * expected)
+	{
+		fixture->setTestFunction(method);
+		fixture->runAllTests();
+		fixture->assertPrintContains(expected);
+		LONGS_EQUAL(1, fixture->getFailureCount());
+		CHECK(!afterCheck);
+	}
+
 };
 
 static void _passMethod()
@@ -103,7 +112,7 @@ static void _failMethodSTRCMP_EQUAL()
 
 static void _failMethodSTRCMP_NOCASE_EQUAL()
 {
-	STRCMP_NOCASE_EQUAL("a", "B");
+	STRCMP_NOCASE_EQUAL("ac", "AB");
 	afterCheck = true;
 }
 
@@ -185,12 +194,12 @@ TEST(Utest, FailureWithCHECK_EQUAL)
 
 TEST(Utest, FailureWithSTRCMP_EQUAL)
 {
-	testFailureWith(_failMethodSTRCMP_EQUAL);
+	testFailureWithMethodShouldContain(_failMethodSTRCMP_EQUAL, "but was  <<!>b>");
 }
 
 TEST(Utest, FailureWithSTRCMP_NOCASE_EQUAL)
 {
-	testFailureWith(_failMethodSTRCMP_NOCASE_EQUAL);
+	testFailureWithMethodShouldContain(_failMethodSTRCMP_NOCASE_EQUAL, "but was  <A<!>B>");
 }
 
 TEST(Utest, FailureWithSTRCMP_CONTAINS)

@@ -95,7 +95,7 @@ TEST(TestHarness_c, checkChar)
 
 void _failStringMethod()
 {
-	CHECK_EQUAL_C_STRING("Hello", "World");
+	CHECK_EQUAL_C_STRING("Hello", "Hello World");
 }
 
 TEST(TestHarness_c, checkString)
@@ -103,7 +103,7 @@ TEST(TestHarness_c, checkString)
 	CHECK_EQUAL_C_STRING("Hello", "Hello");
 	fixture->setTestFunction(_failStringMethod);
 	fixture->runAllTests();
-	fixture->assertPrintContains("expected <Hello>\n	but was  <World>");
+	fixture->assertPrintContains("expected <Hello>\n	but was  <Hello<!> World>");
 	fixture->assertPrintContains("arness_c");
 }
 

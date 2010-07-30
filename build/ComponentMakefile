@@ -11,7 +11,8 @@
 #    ComponentMakefileExampleParameters
 #
 # Inputs 
-#	SRC - srouce code built into the library
+#   SRC_FILES - Specific source files to build into library
+#	SRC_DIRS - Directories od source file to built into the library
 #	TEST_SRC - unit test code build into the unit test runner
 #	MOCKS_SRC - mock objects build into the test runner
 #	INCLUDES - List of -I files
@@ -37,7 +38,7 @@ src_to = $(subst .c,$1, $(subst .cpp,$1,$2))
 #Derived
 STUFF_TO_CLEAN += $(TEST_TARGET) $(TEST_TARGET).exe $(TARGET_LIB)
 
-SRC = $(call get_src_from_dir_list, $(SRC_DIRS))				        
+SRC += $(call get_src_from_dir_list, $(SRC_DIRS)) $(SRC_FILES)			        
 OBJ = $(call src_to_o,$(SRC))
 STUFF_TO_CLEAN += $(OBJ)
 

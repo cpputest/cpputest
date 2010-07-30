@@ -10,9 +10,8 @@
 2a. For unix/gcc (including cygwin)
 Use the command line to execute makeAndRunTests.sh
  > cd <someDirectory>/CppUTest
- > chmod +x *.sh
- > ./makeAndRunTests.sh
- 
+ > make
+  
  NOTE: the builds run their unit tests to verify the build
  NOTE: Older cygwin installs may report memory leaks.
 
