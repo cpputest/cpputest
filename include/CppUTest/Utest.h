@@ -125,7 +125,7 @@ private:
     void failContainsTest(const char * expected, const char* actual, const char * fileName, int lineNumber);
     int findStartOfCstrEqualsFailNoCase(const char * expected, const char* actual);
     int findStartOfCstrEqualsFail(const char * expected, const char* actual);
-    const char* formCStrEqualsFailMessage(const char* actual, int failStart);
+    char* formCStrEqualsFailMessage(const char* actual, int failStart);
 };
 
 //////////////////// NulLTest

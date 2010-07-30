@@ -264,12 +264,12 @@ int Utest::findStartOfCstrEqualsFail(const char * expected, const char* actual)
     return i;
 }
 
-const char* Utest::formCStrEqualsFailMessage(const char* actual, int failStart)
+char* Utest::formCStrEqualsFailMessage(const char* actual, int failStart)
 {
 	    const char * error = "<!>";
 	    char * message;
 
-	    message = new char[PlatformSpecificStrLen(actual) + PlatformSpecificStrLen(error) + 10];
+	    message = (char*)malloc(PlatformSpecificStrLen(actual) + PlatformSpecificStrLen(error) + 10);
 
 	    int j;
 	    for (j = 0; j < failStart; j++)
@@ -290,20 +290,20 @@ const char* Utest::formCStrEqualsFailMessage(const char* actual, int failStart)
 void Utest::failCstrEqualsTest(const char * expected, const char* actual, const char * fileName, int lineNumber)
 {
 	int failStart = findStartOfCstrEqualsFail(expected, actual);
-	const char * markedActual = formCStrEqualsFailMessage(actual, failStart);
+	char * markedActual = formCStrEqualsFailMessage(actual, failStart);
 	EqualsFailure _f(this, fileName, lineNumber, stringFromOrNull(expected), stringFromOrNull(markedActual));
     testResult_->addFailure(_f);
-    delete [] markedActual;
+    free(markedActual);
     Utest::getCurrent()->exitCurrentTest();
 }
 
 void Utest::failCstrEqualsTestNoCase(const char * expected, const char* actual, const char * fileName, int lineNumber)
 {
 	int failStart = findStartOfCstrEqualsFailNoCase(expected, actual);
-	const char * markedActual = formCStrEqualsFailMessage(actual, failStart);
+	char * markedActual = formCStrEqualsFailMessage(actual, failStart);
 	EqualsFailure _f(this, fileName, lineNumber, stringFromOrNull(expected), stringFromOrNull(markedActual));
     testResult_->addFailure(_f);
-    delete [] markedActual;
+    free(markedActual);
     Utest::getCurrent()->exitCurrentTest();
 }
 
