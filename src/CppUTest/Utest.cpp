@@ -65,8 +65,8 @@ private:
 	TestResult defaultTestResult;
 };
 
-TestResult* Utest::testResult_ = &OutsideTestRunnerUTest::instance().getTestResult();
-Utest* Utest::currentTest_ = &OutsideTestRunnerUTest::instance();
+
+
 
 Utest::Utest() :
 	group_("UndefinedTestGroup"), name_("UndefinedTest"), file_("UndefinedFile"), lineNumber_(0), next_(&NullTest::instance())
@@ -102,21 +102,20 @@ void Utest::runOneTest(TestPlugin* plugin, TestResult& result)
 void Utest::run(TestResult& result)
 {
 	//save test context, so that test class can be tested
-	Utest* savedTest = currentTest_;
-	TestResult* savedResult = testResult_;
+	Utest* savedTest = getCurrent();
+	TestResult* savedResult = getTestResult();
 
 	result.countRun();
-	testResult_ = &result;
-	currentTest_ = this;
+	setTestResult(&result);
+	setCurrentTest(this);
 
 	if (executePlatformSpecificSetup()) {
 		executePlatformSpecificTestBody();
 	}
 	executePlatformSpecificTeardown();
 
-	//restore
-	currentTest_ = savedTest;
-	testResult_ = savedResult;
+	setCurrentTest(savedTest);
+	setTestResult(savedResult);
 }
 
 void Utest::exitCurrentTest()
@@ -226,13 +225,13 @@ bool Utest::shouldRun(const SimpleString& groupFilter, const SimpleString& nameF
 
 void Utest::assertTrue(bool condition, const char* conditionString, const char* fileName, int lineNumber)
 {
-	testResult_->countCheck();
+	getTestResult()->countCheck();
 	if (!(condition)) {
 		SimpleString message("CHECK(");
 		message += conditionString;
 		message += ") failed";
 		TestFailure _f(this, fileName, lineNumber, message);
-		testResult_->addFailure(_f);
+		getTestResult()->addFailure(_f);
 		Utest::getCurrent()->exitCurrentTest();
 	}
 }
@@ -245,27 +244,27 @@ SimpleString Utest::stringFromOrNull(const char * expected)
 void Utest::fail(const char *text, const char* fileName, int lineNumber)
 {
 	TestFailure _f(this, fileName, lineNumber, text);
-    testResult_->addFailure(_f);
+	getTestResult()->addFailure(_f);
     Utest::getCurrent()->exitCurrentTest();
 }
 
 void Utest::failEqualsTest(const char * expected, const char* actual, const char * fileName, int lineNumber)
 {
 	EqualsFailure _f(this, fileName, lineNumber, stringFromOrNull(expected), stringFromOrNull(actual));
-    testResult_->addFailure(_f);
+	getTestResult()->addFailure(_f);
     Utest::getCurrent()->exitCurrentTest();
 }
 
 void Utest::failContainsTest(const char * expected, const char* actual, const char * fileName, int lineNumber)
 {
 	ContainsFailure _f(this, fileName, lineNumber, StringFrom(expected), StringFrom(actual));
-    testResult_->addFailure(_f);
+	getTestResult()->addFailure(_f);
     Utest::getCurrent()->exitCurrentTest();
 }
 
 void Utest::assertCstrEqual(const char* expected, const char* actual, const char* fileName, int lineNumber)
 {
-	testResult_->countCheck();
+	getTestResult()->countCheck();
 	if (actual == 0 && expected == 0) return;
 	if (actual == 0 || expected == 0)
 		failEqualsTest (expected, actual, fileName, lineNumber);
@@ -275,7 +274,7 @@ void Utest::assertCstrEqual(const char* expected, const char* actual, const char
 
 void Utest::assertCstrNoCaseEqual(const char* expected, const char* actual, const char* fileName, int lineNumber)
 {
-	testResult_->countCheck();
+	getTestResult()->countCheck();
 	if (actual == 0 && expected == 0) return;
 	if (actual == 0 || expected == 0)
 		failEqualsTest (expected, actual, fileName, lineNumber);
@@ -285,7 +284,7 @@ void Utest::assertCstrNoCaseEqual(const char* expected, const char* actual, cons
 
 void Utest::assertCstrContains(const char* expected, const char* actual, const char* fileName, int lineNumber)
 {
-	testResult_->countCheck();
+	getTestResult()->countCheck();
 	if (actual == 0 && expected == 0) return;
     if(actual == 0 || expected == 0)
     	failContainsTest(expected, actual, fileName, lineNumber);
@@ -295,7 +294,7 @@ void Utest::assertCstrContains(const char* expected, const char* actual, const c
 
 void Utest::assertCstrNoCaseContains(const char* expected, const char* actual, const char* fileName, int lineNumber)
 {
-	testResult_->countCheck();
+	getTestResult()->countCheck();
 	if (actual == 0 && expected == 0) return;
     if(actual == 0 || expected == 0)
     	failContainsTest(expected, actual, fileName, lineNumber);
@@ -305,7 +304,7 @@ void Utest::assertCstrNoCaseContains(const char* expected, const char* actual, c
 
 void Utest::assertLongsEqual(long expected, long actual, const char* fileName, int lineNumber)
 {
-	testResult_->countCheck();
+	getTestResult()->countCheck();
 	if (expected != actual) {
 		SimpleString aDecimal = StringFrom(actual);
 		SimpleString aHex = HexStringFrom(actual);
@@ -324,14 +323,14 @@ void Utest::assertLongsEqual(long expected, long actual, const char* fileName, i
 
 void Utest::assertPointersEqual(void* expected, void* actual, const char* fileName, int lineNumber)
 {
-	testResult_->countCheck();
+	getTestResult()->countCheck();
 	if (expected != actual)
 		failEqualsTest(StringFrom(expected).asCharString(), StringFrom(actual).asCharString(), fileName, lineNumber);
 }
 
 void Utest::assertDoublesEqual(double expected, double actual, double threshold, const char* fileName, int lineNumber)
 {
-	testResult_->countCheck();
+	getTestResult()->countCheck();
 	if (PlatformSpecificFabs(expected - actual) > threshold)
 		failEqualsTest(StringFrom(expected).asCharString(), StringFrom(actual).asCharString(), fileName, lineNumber);
 }
@@ -344,7 +343,7 @@ void Utest::print(const char *text, const char* fileName, int lineNumber)
 	stringToPrint += StringFrom(lineNumber);
 	stringToPrint += " ";
 	stringToPrint += text;
-	testResult_->print(stringToPrint.asCharString());
+	getTestResult()->print(stringToPrint.asCharString());
 }
 
 void Utest::print(const SimpleString& text, const char* fileName, int lineNumber)
@@ -352,13 +351,30 @@ void Utest::print(const SimpleString& text, const char* fileName, int lineNumber
 	print(text.asCharString(), fileName, lineNumber);
 }
 
+TestResult* Utest::testResult_ = NULL;
+Utest* Utest::currentTest_ = NULL;
+
+void Utest::setTestResult(TestResult* result)
+{
+	testResult_ = result;
+}
+
+void Utest::setCurrentTest(Utest* test)
+{
+	currentTest_ = test;
+}
+
 TestResult* Utest::getTestResult()
 {
+	if (testResult_ == NULL)
+		return &OutsideTestRunnerUTest::instance().getTestResult();
 	return testResult_;
 }
 
 Utest* Utest::getCurrent()
 {
+	if (currentTest_ == NULL)
+		return &OutsideTestRunnerUTest::instance();
 	return currentTest_;
 }
 

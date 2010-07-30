@@ -58,7 +58,6 @@ public:
 	virtual void testBody()
 	{
 	}
-	;
 
 	virtual void run(TestResult& result);
 	virtual void runOneTestWithPlugins(TestPlugin* plugin, TestResult& result);
@@ -112,8 +111,12 @@ private:
     const char *file_;
     int lineNumber_;
     Utest *next_;
-    static TestResult *testResult_;
-    static Utest *currentTest_;
+
+	void setTestResult(TestResult* result);
+	void setCurrentTest(Utest* test);
+
+	static Utest* currentTest_;
+	static TestResult* testResult_;
 
     SimpleString stringFromOrNull(const char * expected);
     void failEqualsTest(const char * expected, const char* actual, const char * fileName, int lineNumber);
