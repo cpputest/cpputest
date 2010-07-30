@@ -256,6 +256,18 @@ int Utest::findStartOfCstrEqualsFailNoCase(const char * expected, const char* ac
     return i;
 }
 
+char * Utest::newCstrEqualsFailNoCaseMessage(const char * expected, const char* actual)
+{
+	int failStart = findStartOfCstrEqualsFailNoCase(expected, actual);
+    return formCStrEqualsFailMessage(actual, failStart);
+}
+
+char * Utest::newCstrEqualsFailMessage(const char * expected, const char* actual)
+{
+	int failStart = findStartOfCstrEqualsFail(expected, actual);
+    return formCStrEqualsFailMessage(actual, failStart);
+}
+
 int Utest::findStartOfCstrEqualsFail(const char * expected, const char* actual)
 {
 	int i;
@@ -289,8 +301,7 @@ char* Utest::formCStrEqualsFailMessage(const char* actual, int failStart)
 
 void Utest::failCstrEqualsTest(const char * expected, const char* actual, const char * fileName, int lineNumber)
 {
-	int failStart = findStartOfCstrEqualsFail(expected, actual);
-	char * markedActual = formCStrEqualsFailMessage(actual, failStart);
+	char * markedActual = newCstrEqualsFailMessage(expected, actual);
 	EqualsFailure _f(this, fileName, lineNumber, stringFromOrNull(expected), stringFromOrNull(markedActual));
     testResult_->addFailure(_f);
     free(markedActual);
@@ -299,8 +310,7 @@ void Utest::failCstrEqualsTest(const char * expected, const char* actual, const 
 
 void Utest::failCstrEqualsTestNoCase(const char * expected, const char* actual, const char * fileName, int lineNumber)
 {
-	int failStart = findStartOfCstrEqualsFailNoCase(expected, actual);
-	char * markedActual = formCStrEqualsFailMessage(actual, failStart);
+	char * markedActual = newCstrEqualsFailNoCaseMessage(expected, actual);
 	EqualsFailure _f(this, fileName, lineNumber, stringFromOrNull(expected), stringFromOrNull(markedActual));
     testResult_->addFailure(_f);
     free(markedActual);
