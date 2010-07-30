@@ -50,6 +50,6 @@ generateCppUTestRelease() {
 
 #Main stuff
 SCRIPTS_DIR=scripts
-version=v2.2a
+version=v2.2
 generateCppUTestRelease $version
 
