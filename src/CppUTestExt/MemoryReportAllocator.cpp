@@ -26,13 +26,11 @@
  */
 
 #include "CppUTest/TestHarness.h"
-#include "CppUTest/TestOutput.h"
 #include "CppUTestExt/MemoryReportAllocator.h"
-#include "CppUTest/PlatformSpecificFunctions.h"
+#include "CppUTestExt/MemoryReportFormatter.h"
 
-MemoryReportAllocator::MemoryReportAllocator() : result_(NULL), realAllocator_(NULL)
+MemoryReportAllocator::MemoryReportAllocator() : result_(NULL), realAllocator_(NULL), formatter_(NULL)
 {
-
 }
 
 MemoryReportAllocator::~MemoryReportAllocator()
@@ -69,106 +67,22 @@ void MemoryReportAllocator::setTestResult(TestResult* result)
 	result_ = result;
 }
 
+void MemoryReportAllocator::setFormatter(MemoryReportFormatter* formatter)
+{
+	formatter_ = formatter;
+}
+
 char* MemoryReportAllocator::alloc_memory(size_t size, const char* file, int line)
 {
 	char* memory = realAllocator_->alloc_memory(size, file, line);
-	if (result_)
-		report_alloc_memory(size, memory, file, line);
+	if (result_ && formatter_)
+		formatter_->report_alloc_memory(result_, this, size, memory, file, line);
 	return memory;
 }
 
 void MemoryReportAllocator::free_memory(char* memory, const char* file, int line)
 {
 	realAllocator_->free_memory(memory, file, line);
-	if (result_)
-		report_free_memory(memory, file, line);
-}
-
-NormalMemoryReportAllocator::NormalMemoryReportAllocator()
-{
-}
-
-NormalMemoryReportAllocator::~NormalMemoryReportAllocator()
-{
-}
-
-void NormalMemoryReportAllocator::report_alloc_memory(size_t size, char* memory, const char* file, int line)
-{
-	result_->print(StringFromFormat("Allocation using %s of size: %d pointer: %p at %s:%d\n", alloc_name(), size, memory, file, line).asCharString());
-}
-
-void NormalMemoryReportAllocator::report_free_memory(char* memory, const char* file, int line)
-{
-	result_->print(StringFromFormat("Deallocation using %s of pointer: %p at %s:%d\n", free_name(),  memory, file, line).asCharString());
-}
-
-#define MAX_VARIABLE_NAME_LINE_PART 10
-#define MAX_VARIABLE_NAME_FILE_PART 53
-#define MAX_VARIABLE_NAME_SEPERATOR_PART 1
-#define MAX_VARIABLE_NAME_LENGTH MAX_VARIABLE_NAME_FILE_PART + MAX_VARIABLE_NAME_SEPERATOR_PART + MAX_VARIABLE_NAME_LINE_PART
-
-struct CodeReportingAllocationNode
-{
-	char variableName_[MAX_VARIABLE_NAME_LENGTH + 1];
-	void* memory_;
-	CodeReportingAllocationNode* next_;
-};
-
-CodeMemoryReportAllocator::CodeMemoryReportAllocator()
-	: codeReportingList_(NULL)
-{
-}
-
-CodeMemoryReportAllocator::~CodeMemoryReportAllocator()
-{
-	while (codeReportingList_) {
-		CodeReportingAllocationNode* oldNode = codeReportingList_;
-		codeReportingList_ = codeReportingList_->next_;
-		realAllocator_->free_memory((char*) oldNode, __FILE__, __LINE__);
-	}
-}
-
-
-void CodeMemoryReportAllocator::addNodeToList(const char* variableName, void* memory, CodeReportingAllocationNode* next)
-{
-	CodeReportingAllocationNode* newNode = (CodeReportingAllocationNode*) realAllocator_->alloc_memory(sizeof(CodeReportingAllocationNode), __FILE__, __LINE__);
-	newNode->memory_ = memory;
-	newNode->next_ = next;
-	PlatformSpecificStrNCpy(newNode->variableName_, variableName, MAX_VARIABLE_NAME_LENGTH);
-	codeReportingList_ = newNode;
-}
-
-CodeReportingAllocationNode* CodeMemoryReportAllocator::findNodeAndRemoveIt(void* memory)
-{
-	CodeReportingAllocationNode* current = codeReportingList_;
-	CodeReportingAllocationNode* previous = NULL;
-	while (current->memory_ != memory) {
-		previous = current;
-		current = current->next_;
-	}
-	if (previous)
-		previous->next_ = current->next_;
-	else
-		codeReportingList_ = current->next_;
-	return current;
-}
-
-void CodeMemoryReportAllocator::report_alloc_memory(size_t size, char* memory, const char* file, int line)
-{
-	SimpleString variableName = StringFromFormat("%s_%d", file, line);
-
-	if (PlatformSpecificStrCmp(realAllocator_->alloc_name(), "new") == 0)
-		result_->print(StringFromFormat("\tvoid* %s = new char[%d];\n", variableName.asCharString(), size).asCharString());
-	else
-		result_->print(StringFromFormat("\tvoid* %s = malloc(%d);\n", variableName.asCharString(), size).asCharString());
-
-	addNodeToList(variableName.asCharString(), memory, codeReportingList_);
-}
-
-void CodeMemoryReportAllocator::report_free_memory(char* memory, const char* file, int line)
-{
-	CodeReportingAllocationNode* node = findNodeAndRemoveIt(memory);
-
-	SimpleString variableName = node->variableName_;
-	result_->print(StringFromFormat("\tfree(%s) /* at: %s:%d */\n", variableName.asCharString(), file, line).asCharString());
+	if (result_ && formatter_)
+		formatter_->report_free_memory(result_, this, memory, file, line);
 }

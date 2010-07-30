@@ -25,39 +25,49 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef D_MemoryReporterPlugin_h
-#define D_MemoryReporterPlugin_h
 
-#include "CppUTest/TestPlugin.h"
-#include "CppUTestExt/MemoryReportAllocator.h"
+#ifndef D_MockFailure_h
+#define D_MockFailure_h
 
-class MemoryReportFormatter;
+#include "CppUTest/TestFailure.h"
 
-class MemoryReporterPlugin : public TestPlugin
+class MockFailure : public TestFailure
 {
-	MemoryReportFormatter* formatter_;
-
-	MemoryReportAllocator mallocAllocator;
-	MemoryReportAllocator newAllocator;
-	MemoryReportAllocator newArrayAllocator;
 public:
-    MemoryReporterPlugin();
-    virtual ~MemoryReporterPlugin();
+	MockFailure(Utest* test);
+	virtual ~MockFailure(){};
+};
 
-    virtual void preTestAction(Utest & test, TestResult & result);
-    virtual void postTestAction(Utest & test, TestResult & result);
-    virtual bool parseArguments(int, const char**, int);
+class MockFailureReporter
+{
+public:
+	virtual void failTest(const MockFailure& failure);
+	virtual Utest* getTestToFail();
+};
 
-protected:
-    virtual MemoryReportFormatter* createMemoryFormatter(const SimpleString& type);
+class MockExpectedFunctionsList;
 
-private:
-    void destroyMemoryFormatter(MemoryReportFormatter* formatter);
+class MockExpectedCallsDidntHappenFailure : public MockFailure
+{
+public:
+	MockExpectedCallsDidntHappenFailure(Utest* test, const MockExpectedFunctionsList& expectations);
+	virtual ~MockExpectedCallsDidntHappenFailure(){};
+};
 
-    void setGlobalMemoryReportAllocators();
-    void removeGlobalMemoryReportAllocators();
+class MockActualFunctionCall;
 
-    void initializeAllocator(MemoryReportAllocator* allocator, TestResult & result);
+class MockUnexpectedCallHappenedFailure : public MockFailure
+{
+public:
+	MockUnexpectedCallHappenedFailure(Utest* test, const SimpleString& name);
+	virtual ~MockUnexpectedCallHappenedFailure(){};
+};
+
+class MockUnexpectedAdditionalCall : public MockFailure
+{
+public:
+	MockUnexpectedAdditionalCall(Utest* test, int amountExpectations, const SimpleString& name);
+	virtual ~MockUnexpectedAdditionalCall(){};
 };
 
 #endif

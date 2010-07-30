@@ -28,6 +28,7 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TestOutput.h"
 #include "CppUTestExt/MemoryReportAllocator.h"
+#include "CppUTestExt/MemoryReportFormatter.h"
 
 void defaultFree(char* memory)
 {
@@ -44,10 +45,12 @@ TEST_GROUP(MemoryReportAllocator)
 	StringBufferTestOutput testOutput;
 	TestResult* testResult;
 	MemoryReportAllocator* stdCAllocator;
+	NormalMemoryReportFormatter formatter;
 
 	void setup()
 	{
-		stdCAllocator = new NormalMemoryReportAllocator;
+		stdCAllocator = new MemoryReportAllocator;
+		stdCAllocator->setFormatter(&formatter);
 		testResult = new TestResult(testOutput);
 		stdCAllocator->setRealAllocator(StandardMallocAllocator::defaultAllocator());
 		stdCAllocator->setTestResult(testResult);
@@ -78,57 +81,3 @@ TEST(MemoryReportAllocator, FreeAllocationLeadsToPrintout)
 	stdCAllocator->free_memory(memory, "file", 9);
 	STRCMP_EQUAL(StringFromFormat("Deallocation using free of pointer: %p at file:9\n", memory).asCharString(), testOutput.getOutput().asCharString());
 }
-
-TEST_GROUP(CodeMemoryReportAllocator)
-{
-	StringBufferTestOutput testOutput;
-	TestResult* testResult;
-	MemoryReportAllocator* allocator;
-
-	void setup()
-	{
-		allocator = new CodeMemoryReportAllocator;
-		testResult = new TestResult(testOutput);
-		allocator->setRealAllocator(StandardMallocAllocator::defaultAllocator());
-		allocator->setTestResult(testResult);
-	}
-
-	void teardown()
-	{
-		delete allocator;
-		delete testResult;
-	}
-};
-
-TEST(CodeMemoryReportAllocator, NoAllocationResultsInAnEmptyString)
-{
-	STRCMP_EQUAL("", testOutput.getOutput().asCharString());
-}
-
-TEST(CodeMemoryReportAllocator, mallocCreatesAnMallocCall)
-{
-	char* memory = allocator->alloc_memory(10, "file", 9);
-	STRCMP_EQUAL(StringFromFormat("\tvoid* file_9 = malloc(10);\n", memory).asCharString(), testOutput.getOutput().asCharString());
-	defaultFree(memory);
-}
-
-TEST(CodeMemoryReportAllocator, freeCreatesAnFreeCall)
-{
-	char* memory = allocator->alloc_memory(10, "file", 9);
-	testOutput.flush();
-	allocator->free_memory(memory, "boo", 6);
-	STRCMP_EQUAL("\tfree(file_9) /* at: boo:6 */\n", testOutput.getOutput().asCharString());
-}
-
-TEST(CodeMemoryReportAllocator, twoMallocAndTwoFree)
-{
-	char* memory1 = allocator->alloc_memory(10, "file", 2);
-	char* memory2 = allocator->alloc_memory(10, "boo", 4);
-	testOutput.flush();
-	allocator->free_memory(memory1, "foo", 6);
-	allocator->free_memory(memory2, "bar", 8);
-	STRCMP_CONTAINS("\tfree(file_2) /* at: foo:6 */\n", testOutput.getOutput().asCharString());
-	STRCMP_CONTAINS("\tfree(boo_4) /* at: bar:8 */\n", testOutput.getOutput().asCharString());
-}
-
-/* Write tests for the variable name lengths */

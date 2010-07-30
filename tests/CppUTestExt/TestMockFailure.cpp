@@ -25,39 +25,44 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef D_MemoryReporterPlugin_h
-#define D_MemoryReporterPlugin_h
+#include "CppUTest/TestHarness.h"
+#include "CppUTestExt/MockFailure.h"
+#include "CppUTestExt/MockExpectedFunctionCall.h"
+#include "CppUTestExt/MockExpectedFunctionsList.h"
 
-#include "CppUTest/TestPlugin.h"
-#include "CppUTestExt/MemoryReportAllocator.h"
 
-class MemoryReportFormatter;
-
-class MemoryReporterPlugin : public TestPlugin
+TEST_GROUP(MockFailureTest)
 {
-	MemoryReportFormatter* formatter_;
+	MockFailureReporter reporter;
 
-	MemoryReportAllocator mallocAllocator;
-	MemoryReportAllocator newAllocator;
-	MemoryReportAllocator newArrayAllocator;
-public:
-    MemoryReporterPlugin();
-    virtual ~MemoryReporterPlugin();
-
-    virtual void preTestAction(Utest & test, TestResult & result);
-    virtual void postTestAction(Utest & test, TestResult & result);
-    virtual bool parseArguments(int, const char**, int);
-
-protected:
-    virtual MemoryReportFormatter* createMemoryFormatter(const SimpleString& type);
-
-private:
-    void destroyMemoryFormatter(MemoryReportFormatter* formatter);
-
-    void setGlobalMemoryReportAllocators();
-    void removeGlobalMemoryReportAllocators();
-
-    void initializeAllocator(MemoryReportAllocator* allocator, TestResult & result);
 };
 
-#endif
+TEST(MockFailureTest, noErrorFailureSomethingGoneWrong)
+{
+	MockFailure failure(this);
+	STRCMP_EQUAL("Test failed with MockFailure without an error! Something went seriously wrong.", failure.getMessage().asCharString());
+}
+
+TEST(MockFailureTest, unexpectedCallHappened)
+{
+	MockUnexpectedCallHappenedFailure failure(this, "foobar");
+	STRCMP_EQUAL("MockFailure: Unexpected call to function: foobar. None expected but still happened.", failure.getMessage().asCharString());
+}
+
+TEST(MockFailureTest, expectedCallDidNotHappen)
+{
+	MockExpectedFunctionCall call;
+	call.withName("foobar");
+	MockExpectedFunctionsList list;
+	list.addExpectedCall(&call);
+
+	MockExpectedCallsDidntHappenFailure failure(this, list);
+	STRCMP_EQUAL("MockFailure: Excepted at least one call to \"foobar\" but it did not happen.", failure.getMessage().asCharString());
+}
+
+TEST(MockFailureTest, MockUnexpectedAdditionalCall)
+{
+	MockUnexpectedAdditionalCall failure(this, 1, "bar");
+	STRCMP_EQUAL("MockFailure: Expected 1 calls to \"bar\" but an additional (therefore unexpected) call happened.", failure.getMessage().asCharString());
+}
+

@@ -25,39 +25,20 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef D_MemoryReporterPlugin_h
-#define D_MemoryReporterPlugin_h
+#ifndef D_MockFunctionCall_h
+#define D_MockFunctionCall_h
 
-#include "CppUTest/TestPlugin.h"
-#include "CppUTestExt/MemoryReportAllocator.h"
-
-class MemoryReportFormatter;
-
-class MemoryReporterPlugin : public TestPlugin
+class MockFunctionCall
 {
-	MemoryReportFormatter* formatter_;
-
-	MemoryReportAllocator mallocAllocator;
-	MemoryReportAllocator newAllocator;
-	MemoryReportAllocator newArrayAllocator;
 public:
-    MemoryReporterPlugin();
-    virtual ~MemoryReporterPlugin();
+	MockFunctionCall(){};
+	virtual ~MockFunctionCall(){};
 
-    virtual void preTestAction(Utest & test, TestResult & result);
-    virtual void postTestAction(Utest & test, TestResult & result);
-    virtual bool parseArguments(int, const char**, int);
-
-protected:
-    virtual MemoryReportFormatter* createMemoryFormatter(const SimpleString& type);
-
-private:
-    void destroyMemoryFormatter(MemoryReportFormatter* formatter);
-
-    void setGlobalMemoryReportAllocators();
-    void removeGlobalMemoryReportAllocators();
-
-    void initializeAllocator(MemoryReportAllocator* allocator, TestResult & result);
+	virtual MockFunctionCall* withName(const SimpleString& name)=0;
+	virtual MockFunctionCall* withParameter(const SimpleString& name, int value)=0;
+	virtual MockFunctionCall* withParameter(const SimpleString& name, double value)=0;
+	virtual MockFunctionCall* withParameter(const SimpleString& name, const char* value)=0;
+	virtual MockFunctionCall* withParameter(const SimpleString& name, void* value)=0;
 };
 
 #endif

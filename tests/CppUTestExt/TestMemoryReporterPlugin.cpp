@@ -28,96 +28,153 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TestOutput.h"
 #include "CppUTestExt/MemoryReporterPlugin.h"
+#include "CppUTestExt/MemoryReportFormatter.h"
+#include "CppUTestExt/MockSupport.h"
+
+static MockSupport mock;
+
+class MockMemoryReportFormatter : public MemoryReportFormatter
+{
+public:
+	virtual void report_test_start(TestResult* , Utest& )
+	{
+		mock.actualCall("report_test_start");
+	}
+
+	virtual void report_test_end(TestResult* , Utest& )
+	{
+		mock.actualCall("report_test_end");
+	}
+
+	virtual void report_alloc_memory(TestResult* , MemoryLeakAllocator* , size_t , char* , const char* , int )
+	{
+		mock.actualCall("report_alloc_memory");
+	}
+
+	virtual void report_free_memory(TestResult* , MemoryLeakAllocator* , char* , const char* , int )
+	{
+		mock.actualCall("report_free_memory");
+	}
+};
+
+static MockMemoryReportFormatter formatterForPluginTest;
+
+class MemoryReporterPluginUnderTest : public MemoryReporterPlugin
+{
+public:
+	MockMemoryReportFormatter mockFormatter;
+	SimpleString type_;
+    MemoryReportFormatter* createMemoryFormatter(const SimpleString& type)
+    {
+    	type_ = type;
+    	return new MockMemoryReportFormatter;
+    }
+};
 
 TEST_GROUP(MemoryReporterPlugin)
 {
-	MemoryReporterPlugin* reporter;
+	MemoryReporterPluginUnderTest* reporter;
 	StringBufferTestOutput output;
 
 	TestResult* result;
 	Utest* test;
 
+	void setReportingToNormal()
+	{
+		const char *cmd_line[] = {"-pmemoryreport=normal"};
+		reporter->parseArguments(1, cmd_line, 0);
+	}
+
+	void setReportingToCode()
+	{
+		const char *cmd_line[] = {"-pmemoryreport=code"};
+		reporter->parseArguments(1, cmd_line, 0);
+	}
+
 	void setup()
 	{
 		result = new TestResult(output);
 		test = new Utest("groupname", "testname", "filename", 1);
-		reporter = new MemoryReporterPlugin;
-		reporter->setReporting(MEMORY_REPORT_TYPE_NORMAL);
+		reporter = new MemoryReporterPluginUnderTest;
 	}
 	void teardown()
 	{
 		delete reporter;
-		delete result;
 		delete test;
+		delete result;
+		mock.checkExpectations();
 	}
 };
 
+#if 0
+
 TEST(MemoryReporterPlugin, offReportsNothing)
 {
-	reporter->setReporting(MEMORY_REPORT_TYPE_OFF);
 	reporter->preTestAction(*test, *result);
 	char* memory = new char;
 	delete memory;
 	reporter->postTestAction(*test, *result);
-	STRCMP_EQUAL("", output.getOutput().asCharString());
+	STRCMP_EQUAL("", reporter->type_.asCharString());
 }
 
 TEST(MemoryReporterPlugin, meaninglessArgumentsAreIgnored)
 {
-	reporter->setReporting(MEMORY_REPORT_TYPE_OFF);
-
 	const char *cmd_line[] = {"-nothing", "-pnotmemoryreport=normal", "alsomeaningless", "-pmemoryreportnonsensebutnotus"};
 	CHECK(reporter->parseArguments(3, cmd_line, 1) == false);
-	LONGS_EQUAL(MEMORY_REPORT_TYPE_OFF, reporter->getReporting());
+	STRCMP_EQUAL("", reporter->type_.asCharString());
 }
 
 TEST(MemoryReporterPlugin, wrongArgumentsAreAcceptedButIgnored)
 {
-	reporter->setReporting(MEMORY_REPORT_TYPE_OFF);
-
 	const char *cmd_line[] = {"-nothing", "-pmemoryreport=makesnosense", "alsomeaningless", "-pmemoryreportnonsensebutnotus"};
 	CHECK(reporter->parseArguments(3, cmd_line, 1));
-	LONGS_EQUAL(MEMORY_REPORT_TYPE_OFF, reporter->getReporting());
+	STRCMP_EQUAL("makesnosense", reporter->type_.asCharString());
 }
 
 TEST(MemoryReporterPlugin, commandLineParameterTurnsOnNormalLogging)
 {
-	reporter->setReporting(MEMORY_REPORT_TYPE_OFF);
-
 	const char *cmd_line[] = {"-nothing", "-pmemoryreport=normal", "alsomeaningless" };
 	CHECK(reporter->parseArguments(3, cmd_line, 1));
-	LONGS_EQUAL(MEMORY_REPORT_TYPE_NORMAL, reporter->getReporting());
+	STRCMP_EQUAL("normal", reporter->type_.asCharString());
 }
 
 TEST(MemoryReporterPlugin, commandLineParameterTurnsOnCodeLogging)
 {
 	const char *cmd_line[] = {"-nothing", "-pmemoryreport=code", "alsomeaningless" };
 	CHECK(reporter->parseArguments(3, cmd_line, 1));
-	LONGS_EQUAL(MEMORY_REPORT_TYPE_CODE, reporter->getReporting());
+	STRCMP_EQUAL("code", reporter->type_.asCharString());
 }
 
 TEST(MemoryReporterPlugin, preTestActionReportsTest)
 {
+	setReportingToNormal();
+
+	mock.expectOneCall("report_test_start");
 	reporter->preTestAction(*test, *result);
-	STRCMP_EQUAL("TEST(groupname, testname)\n", output.getOutput().asCharString());
 }
 
 TEST(MemoryReporterPlugin, postTestActionReportsTest)
 {
+	mock.expectOneCall("report_test_end");
+
+	setReportingToNormal();
 	reporter->postTestAction(*test, *result);
-	STRCMP_EQUAL("ENDTEST(groupname, testname)\n", output.getOutput().asCharString());
 }
 
 TEST(MemoryReporterPlugin, newAllocationsAreReportedTest)
 {
+	mock.expectOneCall("report_alloc_memory");
+	mock.ignoreOtherCalls();
+
+	setReportingToNormal();
 	reporter->preTestAction(*test, *result);
 	char* memory = new char;
-	STRCMP_CONTAINS("Allocation using new", output.getOutput().asCharString());
 	delete memory;
 }
 
 TEST(MemoryReporterPlugin, whenUsingOnlyMallocAllocatorNoOtherOfTheAllocatorsAreUsed)
 {
+	setReportingToNormal();
 	reporter->preTestAction(*test, *result);
 	void* memory = malloc(100);
 	CHECK(!output.getOutput().contains("new"));
@@ -126,7 +183,7 @@ TEST(MemoryReporterPlugin, whenUsingOnlyMallocAllocatorNoOtherOfTheAllocatorsAre
 
 TEST(MemoryReporterPlugin, newAllocationsAreReportedTestUseCodeMode)
 {
-	reporter->setReporting(MEMORY_REPORT_TYPE_CODE);
+	setReportingToCode();
 	reporter->preTestAction(*test, *result);
 	char* memory = new char;
 	STRCMP_CONTAINS("new char", output.getOutput().asCharString());
@@ -135,6 +192,7 @@ TEST(MemoryReporterPlugin, newAllocationsAreReportedTestUseCodeMode)
 
 TEST(MemoryReporterPlugin, newArrayAllocationsAreReportedTest)
 {
+	setReportingToNormal();
 	reporter->preTestAction(*test, *result);
 	char* memory = new char [100];
 	STRCMP_CONTAINS("Allocation using new []", output.getOutput().asCharString());
@@ -143,24 +201,28 @@ TEST(MemoryReporterPlugin, newArrayAllocationsAreReportedTest)
 
 TEST(MemoryReporterPlugin, mallocAllocationsAreReportedTest)
 {
+	setReportingToNormal();
 	reporter->preTestAction(*test, *result);
 	void* memory = malloc(100);
 	STRCMP_CONTAINS("Allocation using malloc", output.getOutput().asCharString());
 	free(memory);
 }
 
-TEST(MemoryReporterPlugin, preActionReplacesAllocator)
+TEST(MemoryReporterPlugin, preActionReplacesAllocators)
 {
+	setReportingToNormal();
 	MemoryLeakAllocator* allocator = MemoryLeakAllocator::getCurrentMallocAllocator();
 	reporter->preTestAction(*test, *result);
 	CHECK(allocator != MemoryLeakAllocator::getCurrentMallocAllocator());
 }
 
-TEST(MemoryReporterPlugin, postActioReturnsAllocator)
+TEST(MemoryReporterPlugin, postActionRestoresAllocators)
 {
+	setReportingToNormal();
 	MemoryLeakAllocator* allocator = MemoryLeakAllocator::getCurrentMallocAllocator();
 	reporter->preTestAction(*test, *result);
 	reporter->postTestAction(*test, *result);
 	CHECK(allocator == MemoryLeakAllocator::getCurrentMallocAllocator());
 }
 
+#endif

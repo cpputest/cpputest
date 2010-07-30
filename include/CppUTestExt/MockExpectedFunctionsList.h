@@ -25,39 +25,43 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef D_MemoryReporterPlugin_h
-#define D_MemoryReporterPlugin_h
+#ifndef D_MockExpectedFunctionsList_h
+#define D_MockExpectedFunctionsList_h
 
-#include "CppUTest/TestPlugin.h"
-#include "CppUTestExt/MemoryReportAllocator.h"
+class MockExpectedFunctionCall;
 
-class MemoryReportFormatter;
-
-class MemoryReporterPlugin : public TestPlugin
+class MockExpectedFunctionsList
 {
-	MemoryReportFormatter* formatter_;
+	class MockExpectedFunctionsListNode
+	{
+	public:
+		MockExpectedFunctionCall* expectedCall_;
 
-	MemoryReportAllocator mallocAllocator;
-	MemoryReportAllocator newAllocator;
-	MemoryReportAllocator newArrayAllocator;
+		MockExpectedFunctionsListNode* next_;
+		MockExpectedFunctionsListNode(MockExpectedFunctionCall* expectedCall, MockExpectedFunctionsListNode* next)
+			: expectedCall_(expectedCall), next_(next) {};
+	};
+	MockExpectedFunctionsListNode* head_;
+
 public:
-    MemoryReporterPlugin();
-    virtual ~MemoryReporterPlugin();
+	MockExpectedFunctionsList();
+	~MockExpectedFunctionsList();
+	void deleteAllExpectationsAndClearList();
 
-    virtual void preTestAction(Utest & test, TestResult & result);
-    virtual void postTestAction(Utest & test, TestResult & result);
-    virtual bool parseArguments(int, const char**, int);
+	int size() const;
+	int amountOfExpectationsFor(const SimpleString& name) const;
+	bool hasUnfullfilledExpectations();
 
-protected:
-    virtual MemoryReportFormatter* createMemoryFormatter(const SimpleString& type);
+	MockExpectedFunctionCall* getExpectedCall() const;
+
+	void addExpectedCall(MockExpectedFunctionCall* call);
+
+	void addUnfilfilledExpectationsToList(MockExpectedFunctionsList* list) const;
+	void removeAllExpectationsExceptThisThatRelateTo(const SimpleString& name);
 
 private:
-    void destroyMemoryFormatter(MemoryReportFormatter* formatter);
-
-    void setGlobalMemoryReportAllocators();
-    void removeGlobalMemoryReportAllocators();
-
-    void initializeAllocator(MemoryReportAllocator* allocator, TestResult & result);
+	void pruneEmptyNodeFromList();
+	MockExpectedFunctionsList(const MockExpectedFunctionsList&);
 };
 
 #endif

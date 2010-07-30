@@ -25,39 +25,36 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef D_MemoryReporterPlugin_h
-#define D_MemoryReporterPlugin_h
+#ifndef D_MockActualFunctionCall_h
+#define D_MockActualFunctionCall_h
 
-#include "CppUTest/TestPlugin.h"
-#include "CppUTestExt/MemoryReportAllocator.h"
+#include "CppUTestExt/MockFunctionCall.h"
+#include "CppUTestExt/MockExpectedFunctionsList.h"
 
-class MemoryReportFormatter;
+class MockFailureReporter;
 
-class MemoryReporterPlugin : public TestPlugin
+class MockActualFunctionCall : public MockFunctionCall
 {
-	MemoryReportFormatter* formatter_;
-
-	MemoryReportAllocator mallocAllocator;
-	MemoryReportAllocator newAllocator;
-	MemoryReportAllocator newArrayAllocator;
+	SimpleString name_;
+	MockExpectedFunctionsList unfulfilledExpectations_;
+	MockFailureReporter* reporter_;
+	bool ignoreOtherCalls_;
+	const MockExpectedFunctionsList& allExpectations_;
 public:
-    MemoryReporterPlugin();
-    virtual ~MemoryReporterPlugin();
+	MockActualFunctionCall(MockFailureReporter* reporter, const MockExpectedFunctionsList& expectations);
+	virtual ~MockActualFunctionCall();
 
-    virtual void preTestAction(Utest & test, TestResult & result);
-    virtual void postTestAction(Utest & test, TestResult & result);
-    virtual bool parseArguments(int, const char**, int);
+	virtual MockFunctionCall* withName(const SimpleString& name);
+	virtual MockFunctionCall* withParameter(const SimpleString& name, int value);
+	virtual MockFunctionCall* withParameter(const SimpleString& name, double value);
+	virtual MockFunctionCall* withParameter(const SimpleString& name, const char* value);
+	virtual MockFunctionCall* withParameter(const SimpleString& name, void* value);
 
-protected:
-    virtual MemoryReportFormatter* createMemoryFormatter(const SimpleString& type);
+	MockExpectedFunctionsList* getExpectations();
 
-private:
-    void destroyMemoryFormatter(MemoryReportFormatter* formatter);
+	SimpleString toString() const;
 
-    void setGlobalMemoryReportAllocators();
-    void removeGlobalMemoryReportAllocators();
-
-    void initializeAllocator(MemoryReportAllocator* allocator, TestResult & result);
+	void ignoreOtherCalls();
 };
 
 #endif

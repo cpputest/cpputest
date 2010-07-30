@@ -25,39 +25,38 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef D_MemoryReporterPlugin_h
-#define D_MemoryReporterPlugin_h
+#include "CppUTest/TestHarness.h"
+#include "CppUTestExt/MockFailure.h"
+#include "CppUTestExt/MockExpectedFunctionCall.h"
+#include "CppUTestExt/MockExpectedFunctionsList.h"
 
-#include "CppUTest/TestPlugin.h"
-#include "CppUTestExt/MemoryReportAllocator.h"
-
-class MemoryReportFormatter;
-
-class MemoryReporterPlugin : public TestPlugin
+void MockFailureReporter::failTest(const MockFailure& failure)
 {
-	MemoryReportFormatter* formatter_;
+	getTestToFail()->getTestResult()->addFailure(failure);
+	getTestToFail()->exitCurrentTest();
+}
 
-	MemoryReportAllocator mallocAllocator;
-	MemoryReportAllocator newAllocator;
-	MemoryReportAllocator newArrayAllocator;
-public:
-    MemoryReporterPlugin();
-    virtual ~MemoryReporterPlugin();
+Utest* MockFailureReporter::getTestToFail()
+{
+	return Utest::getCurrent();
+}
 
-    virtual void preTestAction(Utest & test, TestResult & result);
-    virtual void postTestAction(Utest & test, TestResult & result);
-    virtual bool parseArguments(int, const char**, int);
+MockFailure::MockFailure(Utest* test) : TestFailure(test, "Test failed with MockFailure without an error! Something went seriously wrong.")
+{
+}
 
-protected:
-    virtual MemoryReportFormatter* createMemoryFormatter(const SimpleString& type);
+MockExpectedCallsDidntHappenFailure::MockExpectedCallsDidntHappenFailure(Utest* test, const MockExpectedFunctionsList& expectations) : MockFailure(test)
+{
+	MockExpectedFunctionCall* call = expectations.getExpectedCall();
+	message_ = StringFromFormat("MockFailure: Excepted at least one call to \"%s\" but it did not happen.", call->toString().asCharString());
+}
 
-private:
-    void destroyMemoryFormatter(MemoryReportFormatter* formatter);
+MockUnexpectedCallHappenedFailure::MockUnexpectedCallHappenedFailure(Utest* test, const SimpleString& name) : MockFailure(test)
+{
+	message_ = StringFromFormat("MockFailure: Unexpected call to function: %s. None expected but still happened.", name.asCharString());
+}
 
-    void setGlobalMemoryReportAllocators();
-    void removeGlobalMemoryReportAllocators();
-
-    void initializeAllocator(MemoryReportAllocator* allocator, TestResult & result);
-};
-
-#endif
+MockUnexpectedAdditionalCall::MockUnexpectedAdditionalCall(Utest* test, int amountExpectations, const SimpleString& name) : MockFailure(test)
+{
+	message_ = StringFromFormat("MockFailure: Expected %d calls to \"%s\" but an additional (therefore unexpected) call happened.", amountExpectations, name.asCharString());
+}

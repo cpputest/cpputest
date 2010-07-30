@@ -25,39 +25,14 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef D_MemoryReporterPlugin_h
-#define D_MemoryReporterPlugin_h
+#include "CppUTest/TestHarness.h"
 
-#include "CppUTest/TestPlugin.h"
-#include "CppUTestExt/MemoryReportAllocator.h"
-
-class MemoryReportFormatter;
-
-class MemoryReporterPlugin : public TestPlugin
+TEST_GROUP(MockActualFunctionCall)
 {
-	MemoryReportFormatter* formatter_;
-
-	MemoryReportAllocator mallocAllocator;
-	MemoryReportAllocator newAllocator;
-	MemoryReportAllocator newArrayAllocator;
-public:
-    MemoryReporterPlugin();
-    virtual ~MemoryReporterPlugin();
-
-    virtual void preTestAction(Utest & test, TestResult & result);
-    virtual void postTestAction(Utest & test, TestResult & result);
-    virtual bool parseArguments(int, const char**, int);
-
-protected:
-    virtual MemoryReportFormatter* createMemoryFormatter(const SimpleString& type);
-
-private:
-    void destroyMemoryFormatter(MemoryReportFormatter* formatter);
-
-    void setGlobalMemoryReportAllocators();
-    void removeGlobalMemoryReportAllocators();
-
-    void initializeAllocator(MemoryReportAllocator* allocator, TestResult & result);
 };
 
-#endif
+TEST(MockActualFunctionCall, fail)
+{
+//	MockExpectedFunctionsList emptyList;
+//	MockActualFunctionCall actual(emptyList);
+}

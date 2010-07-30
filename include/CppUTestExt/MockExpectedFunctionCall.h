@@ -25,35 +25,62 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef D_MemoryReportAllocator_h
-#define D_MemoryReportAllocator_h
+#ifndef D_MockExpectedFunctionCall_h
+#define D_MockExpectedFunctionCall_h
 
-#include "CppUTest/MemoryLeakAllocator.h"
+#include "CppUTestExt/MockFunctionCall.h"
 
-class MemoryReportFormatter;
-
-class MemoryReportAllocator : public MemoryLeakAllocator
+enum MockFunctionParameterType
 {
-protected:
-	TestResult* result_;
-	MemoryLeakAllocator* realAllocator_;
-	MemoryReportFormatter* formatter_;
+	MOCK_FUNCTION_PARAMETER_NONE,
+	MOCK_FUNCTION_PARAMETER_INT,
+	MOCK_FUNCTION_PARAMETER_DOUBLE,
+	MOCK_FUNCTION_PARAMETER_STRING,
+	MOCK_FUNCTION_PARAMETER_POINTER
+};
+
+union MockParameterValue{
+	int intValue_;
+	double doubleValue_;
+	const char* stringValue_;
+	void* pointerValue_;
+};
+
+struct MockFunctionParameter
+{
+	MockFunctionParameter(const SimpleString& name, MockFunctionParameterType type, MockFunctionParameter* next)
+	: name_(name), type_(type), nextParameter(next){}
+
+	SimpleString name_;
+	MockFunctionParameterType type_;
+	MockParameterValue value_;
+	MockFunctionParameter* nextParameter;
+};
+
+class MockExpectedFunctionCall : public MockFunctionCall
+{
+	SimpleString name_;
+	MockFunctionParameter* parameters_;
+	bool fulfilled_;
+
 public:
-	MemoryReportAllocator();
-	virtual ~MemoryReportAllocator();
+	MockExpectedFunctionCall();
+	virtual ~MockExpectedFunctionCall();
 
-	virtual void setFormatter(MemoryReportFormatter* formatter);
-	virtual void setTestResult(TestResult* result);
-	virtual void setRealAllocator(MemoryLeakAllocator* allocator);
+	virtual MockFunctionCall* withName(const SimpleString& name);
+	virtual MockFunctionCall* withParameter(const SimpleString& name, int value);
+	virtual MockFunctionCall* withParameter(const SimpleString& name, double value);
+	virtual MockFunctionCall* withParameter(const SimpleString& name, const char* value);
+	virtual MockFunctionCall* withParameter(const SimpleString& name, void* value);
 
-	virtual MemoryLeakAllocator* getRealAllocator();
+	virtual MockFunctionParameterType getParameterType(const SimpleString& name);
+	virtual MockParameterValue getParameterValue(const SimpleString& name);
 
-	virtual char* alloc_memory(size_t size, const char* file, int line);
-	virtual void free_memory(char* memory, const char* file, int line);
+	bool relatesTo(const SimpleString& functionName);
+	bool isFulfilled();
+	void setFulfilled();
 
-	virtual const char* name();
-	virtual const char* alloc_name();
-	virtual const char* free_name();
+	SimpleString toString();
 };
 
 #endif

@@ -27,99 +27,96 @@
 
 #include "CppUTest/TestHarness.h"
 #include "CppUTestExt/MemoryReporterPlugin.h"
+#include "CppUTestExt/MemoryReportFormatter.h"
 
 MemoryReporterPlugin::MemoryReporterPlugin()
-	: TestPlugin("MemoryReporterPlugin"), reportType_(MEMORY_REPORT_TYPE_OFF),
-	  mallocAllocator(NULL), newAllocator(NULL), newArrayAllocator(NULL)
+	: TestPlugin("MemoryReporterPlugin"), formatter_(NULL)
 {
 }
 
 MemoryReporterPlugin::~MemoryReporterPlugin()
 {
 	removeGlobalMemoryReportAllocators();
-}
-
-void MemoryReporterPlugin::setReporting(MemoryReportType reportType)
-{
-	reportType_ = reportType;
-}
-
-MemoryReportType MemoryReporterPlugin::getReporting()
-{
-	return reportType_;
+	destroyMemoryFormatter(formatter_);
 }
 
 bool MemoryReporterPlugin::parseArguments(int /* ac */, const char** av, int index)
 {
 	SimpleString argument (av[index]);
 	if (argument.contains("-pmemoryreport=")) {
+		argument.replace("-pmemoryreport=", "");
 
-		if (argument == ("-pmemoryreport=normal"))
-			reportType_ = MEMORY_REPORT_TYPE_NORMAL;
-		else if (argument == ("-pmemoryreport=code"))
-			reportType_ = MEMORY_REPORT_TYPE_CODE;
+		destroyMemoryFormatter(formatter_);
+		formatter_ = createMemoryFormatter(argument);
 		return true;
 	}
 	return false;
 }
 
-void MemoryReporterPlugin::setGlobalMemoryReportAllocators()
+MemoryReportFormatter* MemoryReporterPlugin::createMemoryFormatter(const SimpleString& type)
 {
-    mallocAllocator->setRealAllocator(MemoryLeakAllocator::getCurrentMallocAllocator());
-	MemoryLeakAllocator::setCurrentMallocAllocator(mallocAllocator);
-
-	newAllocator->setRealAllocator(MemoryLeakAllocator::getCurrentNewAllocator());
-	MemoryLeakAllocator::setCurrentNewAllocator(newAllocator);
-
-	newArrayAllocator->setRealAllocator(MemoryLeakAllocator::getCurrentNewArrayAllocator());
-	MemoryLeakAllocator::setCurrentNewArrayAllocator(newArrayAllocator);
+	if (type == "normal") {
+		return  new NormalMemoryReportFormatter;
+	}
+	else if (type == "code") {
+		return new CodeMemoryReportFormatter(StandardMallocAllocator::defaultAllocator());
+	}
+	return NULL;
 }
 
-#include <stdio.h>
+void MemoryReporterPlugin::destroyMemoryFormatter(MemoryReportFormatter* formatter)
+{
+	delete formatter;
+}
+
+
+void MemoryReporterPlugin::setGlobalMemoryReportAllocators()
+{
+    mallocAllocator.setRealAllocator(MemoryLeakAllocator::getCurrentMallocAllocator());
+	MemoryLeakAllocator::setCurrentMallocAllocator(&mallocAllocator);
+
+	newAllocator.setRealAllocator(MemoryLeakAllocator::getCurrentNewAllocator());
+	MemoryLeakAllocator::setCurrentNewAllocator(&newAllocator);
+
+	newArrayAllocator.setRealAllocator(MemoryLeakAllocator::getCurrentNewArrayAllocator());
+	MemoryLeakAllocator::setCurrentNewArrayAllocator(&newArrayAllocator);
+}
 
 void MemoryReporterPlugin::removeGlobalMemoryReportAllocators()
 {
-	if (MemoryLeakAllocator::getCurrentNewAllocator() == newAllocator)
-		MemoryLeakAllocator::setCurrentNewAllocator(newAllocator->getRealAllocator());
+	if (MemoryLeakAllocator::getCurrentNewAllocator() == &newAllocator)
+		MemoryLeakAllocator::setCurrentNewAllocator(newAllocator.getRealAllocator());
 
-	if (MemoryLeakAllocator::getCurrentNewArrayAllocator() == newArrayAllocator)
-		MemoryLeakAllocator::setCurrentNewArrayAllocator(newArrayAllocator->getRealAllocator());
+	if (MemoryLeakAllocator::getCurrentNewArrayAllocator() == &newArrayAllocator)
+		MemoryLeakAllocator::setCurrentNewArrayAllocator(newArrayAllocator.getRealAllocator());
 
-	if (MemoryLeakAllocator::getCurrentMallocAllocator() == mallocAllocator)
-		MemoryLeakAllocator::setCurrentMallocAllocator(mallocAllocator->getRealAllocator());
-
-    delete mallocAllocator; mallocAllocator = NULL;
-    delete newAllocator; newAllocator = NULL;
-    delete newArrayAllocator; newArrayAllocator = NULL;
+	if (MemoryLeakAllocator::getCurrentMallocAllocator() == &mallocAllocator)
+		MemoryLeakAllocator::setCurrentMallocAllocator(mallocAllocator.getRealAllocator());
 }
 
 
-void MemoryReporterPlugin::createAllocator(MemoryReportAllocator** allocator, TestResult & result)
+void MemoryReporterPlugin::initializeAllocator(MemoryReportAllocator* allocator, TestResult & result)
 {
-	if (reportType_ == MEMORY_REPORT_TYPE_CODE)
-		*allocator = new CodeMemoryReportAllocator();
-	else
-		*allocator = new NormalMemoryReportAllocator();
-    (*allocator)->setTestResult((&result));
+	allocator->setFormatter(formatter_);
+	allocator->setTestResult((&result));
 }
 
 void MemoryReporterPlugin::preTestAction(Utest& test, TestResult& result)
 {
-	if (reportType_ == MEMORY_REPORT_TYPE_OFF) return;
+	if (formatter_ == NULL) return;
 
-	createAllocator(&mallocAllocator, result);
-	createAllocator(&newAllocator, result);
-	createAllocator(&newArrayAllocator, result);
+	initializeAllocator(&mallocAllocator, result);
+	initializeAllocator(&newAllocator, result);
+	initializeAllocator(&newArrayAllocator, result);
 
 	setGlobalMemoryReportAllocators();
-	result.print(StringFromFormat("TEST(%s, %s)\n", test.getGroup().asCharString(), test.getName().asCharString()).asCharString());
+	formatter_->report_test_start(&result, test);
 }
 
 void MemoryReporterPlugin::postTestAction(Utest& test, TestResult& result)
 {
-	if (reportType_ == MEMORY_REPORT_TYPE_OFF) return;
+	if (formatter_ == NULL) return;
 
 	removeGlobalMemoryReportAllocators();
-	result.print(StringFromFormat("ENDTEST(%s, %s)\n", test.getGroup().asCharString(), test.getName().asCharString()).asCharString());
-
+	formatter_->report_test_end(&result, test);
 }

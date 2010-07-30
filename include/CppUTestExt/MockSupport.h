@@ -25,39 +25,43 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef D_MemoryReporterPlugin_h
-#define D_MemoryReporterPlugin_h
+#ifndef D_MockSupport_h
+#define D_MockSupport_h
 
-#include "CppUTest/TestPlugin.h"
-#include "CppUTestExt/MemoryReportAllocator.h"
+#include "CppUTestExt/MockFailure.h"
+#include "CppUTestExt/MockFunctionCall.h"
+#include "CppUTestExt/MockExpectedFunctionsList.h"
 
-class MemoryReportFormatter;
+class Utest;
 
-class MemoryReporterPlugin : public TestPlugin
+class MockSupport
 {
-	MemoryReportFormatter* formatter_;
-
-	MemoryReportAllocator mallocAllocator;
-	MemoryReportAllocator newAllocator;
-	MemoryReportAllocator newArrayAllocator;
-public:
-    MemoryReporterPlugin();
-    virtual ~MemoryReporterPlugin();
-
-    virtual void preTestAction(Utest & test, TestResult & result);
-    virtual void postTestAction(Utest & test, TestResult & result);
-    virtual bool parseArguments(int, const char**, int);
-
-protected:
-    virtual MemoryReportFormatter* createMemoryFormatter(const SimpleString& type);
-
 private:
-    void destroyMemoryFormatter(MemoryReportFormatter* formatter);
+	MockFailureReporter* reporter_;
+	MockFailureReporter defaultReporter_;
 
-    void setGlobalMemoryReportAllocators();
-    void removeGlobalMemoryReportAllocators();
+	MockExpectedFunctionsList expectations_;
+	bool ignoreOtherCalls_;
+	MockActualFunctionCall* lastActualFunctionCall_;
+protected:
+	virtual MockActualFunctionCall* createActualFunctionCall();
 
-    void initializeAllocator(MemoryReportAllocator* allocator, TestResult & result);
+public:
+	MockSupport();
+	virtual ~MockSupport();
+
+	virtual MockFunctionCall* expectOneCall(const SimpleString& functionName);
+	virtual MockFunctionCall* actualCall(const SimpleString& functionName);
+
+	virtual void ignoreOtherCalls();
+
+	virtual void clearExpectations();
+	virtual bool expectedCallsLeft();
+
+	virtual void checkExpectations();
+
+	virtual void setMockFailureReporter(MockFailureReporter* reporter);
 };
 
 #endif
+
