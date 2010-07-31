@@ -251,7 +251,7 @@ void Utest::fail(const char *text, const char* fileName, int lineNumber)
 int Utest::findStartOfCstrEqualsFailNoCase(const char * expected, const char* actual)
 {
 	int i;
-    for (i = 0; tolower(actual[i]) == tolower(expected[i]); i++)
+    for (i = 0; PlatformSpecificToLower(actual[i]) == PlatformSpecificToLower(expected[i]); i++)
         ;
     return i;
 }
@@ -281,7 +281,8 @@ char* Utest::formCStrEqualsFailMessage(const char* actual, int failStart)
 	    const char * error = "<!>";
 	    char * message;
 
-	    message = (char*)malloc(PlatformSpecificStrLen(actual) + PlatformSpecificStrLen(error) + 10);
+	    //cpputest_malloc is needed instead of new[] for vc6 compatibility
+	    message = (char*)cpputest_malloc(PlatformSpecificStrLen(actual) + PlatformSpecificStrLen(error) + 10);
 
 	    int j;
 	    for (j = 0; j < failStart; j++)
@@ -304,7 +305,7 @@ void Utest::failCstrEqualsTest(const char * expected, const char* actual, const 
 	char * markedActual = newCstrEqualsFailMessage(expected, actual);
 	EqualsFailure _f(this, fileName, lineNumber, stringFromOrNull(expected), stringFromOrNull(markedActual));
     testResult_->addFailure(_f);
-    free(markedActual);
+    cpputest_free(markedActual);
     Utest::getCurrent()->exitCurrentTest();
 }
 
@@ -313,7 +314,7 @@ void Utest::failCstrEqualsTestNoCase(const char * expected, const char* actual, 
 	char * markedActual = newCstrEqualsFailNoCaseMessage(expected, actual);
 	EqualsFailure _f(this, fileName, lineNumber, stringFromOrNull(expected), stringFromOrNull(markedActual));
     testResult_->addFailure(_f);
-    free(markedActual);
+    cpputest_free(markedActual);
     Utest::getCurrent()->exitCurrentTest();
 }
 

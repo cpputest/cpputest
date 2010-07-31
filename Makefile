@@ -107,6 +107,7 @@ test_all:
 	make clean
 	make cleanExtensions
 	$(SILENCE)echo Building examples 
+	make cleanExamples
 	make examples
 	make cleanExamples
 	$(SILENCE)echo Testing JUnit output
