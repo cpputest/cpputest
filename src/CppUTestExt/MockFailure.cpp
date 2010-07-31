@@ -56,7 +56,24 @@ MockUnexpectedCallHappenedFailure::MockUnexpectedCallHappenedFailure(Utest* test
 	message_ = StringFromFormat("MockFailure: Unexpected call to function: %s. None expected but still happened.", name.asCharString());
 }
 
-MockUnexpectedAdditionalCall::MockUnexpectedAdditionalCall(Utest* test, int amountExpectations, const SimpleString& name) : MockFailure(test)
+MockUnexpectedAdditionalCallFailure::MockUnexpectedAdditionalCallFailure(Utest* test, int amountExpectations, const SimpleString& name) : MockFailure(test)
 {
 	message_ = StringFromFormat("MockFailure: Expected %d calls to \"%s\" but an additional (therefore unexpected) call happened.", amountExpectations, name.asCharString());
 }
+
+MockUnexpectedParameterNameFailure::MockUnexpectedParameterNameFailure(Utest* test, const SimpleString& functionName, const SimpleString& parameterName) : MockFailure(test)
+{
+
+	message_ = StringFromFormat("MockFailure: Function \"%s\" was called with unexpected parameter with name: \"%s\".", functionName.asCharString(), parameterName.asCharString());
+}
+
+MockUnexpectedParameterValueFailure::MockUnexpectedParameterValueFailure(Utest* test, const SimpleString& functionName, const SimpleString& parameterName, const SimpleString& actualValue) : MockFailure(test)
+{
+	message_ = StringFromFormat("MockFailure: Function \"%s\" was called with an unexpected parameter value for parameter: \"%s\"\n\tvalue was <%s>", functionName.asCharString(), parameterName.asCharString(), actualValue.asCharString());
+}
+
+MockExpectedParameterDidntHappenFailure::MockExpectedParameterDidntHappenFailure(Utest* test, const SimpleString& functionName, const SimpleString& parameterName, const SimpleString& value) : MockFailure(test)
+{
+	message_ = StringFromFormat("MockFailure: Expected Function \"%s\" to be called with parameter: \"%s\" but it didn't happen.\n\tExpected value was <%s>", functionName.asCharString(), parameterName.asCharString(), value.asCharString());
+}
+

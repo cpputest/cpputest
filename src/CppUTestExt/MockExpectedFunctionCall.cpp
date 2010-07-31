@@ -28,7 +28,46 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTestExt/MockExpectedFunctionCall.h"
 
-MockExpectedFunctionCall::MockExpectedFunctionCall() : parameters_(NULL), fulfilled_(false)
+/* Type field works for now. Objects won't make it much better. Only these two switches, if more... change! */
+
+bool MockExpectedFunctionCall::parametersEqual(MockFunctionParameterType type, const MockParameterValue& p1, const MockParameterValue& p2)
+{
+	switch (type)
+	{
+		case MOCK_FUNCTION_PARAMETER_INT:
+			return p1.intValue_ == p2.intValue_;
+		case MOCK_FUNCTION_PARAMETER_NONE:
+		case MOCK_FUNCTION_PARAMETER_DOUBLE:
+		case MOCK_FUNCTION_PARAMETER_STRING:
+			return SimpleString(p1.stringValue_) == SimpleString(p2.stringValue_);
+		case MOCK_FUNCTION_PARAMETER_POINTER:
+		default:
+			FAIL("Not implemented");
+			;
+	}
+	return false;
+}
+SimpleString StringFrom(MockFunctionParameterType type, const MockParameterValue& parameter)
+{
+	switch (type)
+	{
+		case MOCK_FUNCTION_PARAMETER_INT:
+			return StringFrom(parameter.intValue_);
+		case MOCK_FUNCTION_PARAMETER_NONE:
+		case MOCK_FUNCTION_PARAMETER_DOUBLE:
+		case MOCK_FUNCTION_PARAMETER_STRING:
+			return parameter.stringValue_;
+		case MOCK_FUNCTION_PARAMETER_POINTER:
+		default:
+			FAIL("Not implemented");
+			;
+	}
+	return "";
+}
+
+
+MockExpectedFunctionCall::MockExpectedFunctionCall()
+	: parameters_(NULL), wasCallMade_(true)
 {
 }
 
@@ -43,6 +82,7 @@ MockExpectedFunctionCall::~MockExpectedFunctionCall()
 
 MockFunctionCall* MockExpectedFunctionCall::withName(const SimpleString& name)
 {
+	wasCallMade_ = false;
 	name_ = name;
 	return this;
 }
@@ -75,34 +115,87 @@ MockFunctionCall* MockExpectedFunctionCall::withParameter(const SimpleString& na
 	return this;
 }
 
+MockFunctionParameter* MockExpectedFunctionCall::getParameterByName(const SimpleString& name)
+{
+	for (MockFunctionParameter * p = parameters_; p; p = p->nextParameter)
+		if (p->name_ == name)
+			return p;
+	return NULL;
+}
+
 MockFunctionParameterType MockExpectedFunctionCall::getParameterType(const SimpleString& name)
 {
-	for (MockFunctionParameter * p = parameters_; p; p = p->nextParameter) {
-		if (p->name_ == name)
-			return p->type_;
-	}
-	return MOCK_FUNCTION_PARAMETER_NONE;
+	MockFunctionParameter * p = getParameterByName(name);
+	return (p) ? p->type_ : MOCK_FUNCTION_PARAMETER_NONE;
+}
+
+bool MockExpectedFunctionCall::hasParameterWithName(const SimpleString& name)
+{
+	MockFunctionParameter * p = getParameterByName(name);
+	return p != NULL;
 }
 
 MockParameterValue MockExpectedFunctionCall::getParameterValue(const SimpleString& name)
 {
-	for (MockFunctionParameter * p = parameters_; p; p = p->nextParameter) {
-		if (p->name_ == name)
-			return p->value_;
-	}
+	MockFunctionParameter * p = getParameterByName(name);
+	if (p) return p->value_;
+
 	MockParameterValue defaultValue;
 	defaultValue.intValue_ = 0;
 	return defaultValue;
 }
 
-bool MockExpectedFunctionCall::isFulfilled()
+SimpleString MockExpectedFunctionCall::getUnfulfilledParameterName() const
 {
-	return fulfilled_;
+	for (MockFunctionParameter * p = parameters_; p; p = p->nextParameter)
+		if (! p->fulfilled_)
+			return p->name_;
+	return "";
 }
 
-void MockExpectedFunctionCall::setFulfilled()
+bool MockExpectedFunctionCall::parametersFulfilled()
 {
-	fulfilled_ = true;
+	for (MockFunctionParameter * p = parameters_; p; p = p->nextParameter)
+		if (! p->fulfilled_)
+			return false;
+	return true;
+}
+
+bool MockExpectedFunctionCall::isFulfilled()
+{
+	return wasCallMade_ && parametersFulfilled();
+}
+
+void MockExpectedFunctionCall::callWasMade()
+{
+	wasCallMade_ = true;
+}
+
+void MockExpectedFunctionCall::resetExpectation()
+{
+	wasCallMade_ = false;
+	for (MockFunctionParameter * p = parameters_; p; p = p->nextParameter)
+		p->fulfilled_ = false;
+}
+
+void MockExpectedFunctionCall::parameterWasPassed(const SimpleString& name)
+{
+	for (MockFunctionParameter * p = parameters_; p; p = p->nextParameter) {
+		if (p->name_ == name)
+			p->fulfilled_ = true;
+	}
+}
+
+SimpleString MockExpectedFunctionCall::getParameterValueString(const SimpleString& name)
+{
+	MockFunctionParameter * p = getParameterByName(name);
+	return (p) ? StringFrom(p->type_, p->value_) : "failed";
+}
+
+bool MockExpectedFunctionCall::hasParameter(const MockFunctionParameter& parameter)
+{
+	MockFunctionParameter * p = getParameterByName(parameter.name_);
+	return (p) ? parametersEqual(p->type_, p->value_, parameter.value_) : false;
 }
 
 SimpleString MockExpectedFunctionCall::toString()

@@ -49,19 +49,25 @@ union MockParameterValue{
 struct MockFunctionParameter
 {
 	MockFunctionParameter(const SimpleString& name, MockFunctionParameterType type, MockFunctionParameter* next)
-	: name_(name), type_(type), nextParameter(next){}
+	: name_(name), type_(type), fulfilled_(false), nextParameter(next){}
 
 	SimpleString name_;
 	MockFunctionParameterType type_;
 	MockParameterValue value_;
+	bool fulfilled_;
 	MockFunctionParameter* nextParameter;
 };
+
+extern SimpleString StringFrom(MockFunctionParameterType type, const MockParameterValue& parameter);
 
 class MockExpectedFunctionCall : public MockFunctionCall
 {
 	SimpleString name_;
 	MockFunctionParameter* parameters_;
-	bool fulfilled_;
+	bool wasCallMade_;
+
+	bool parametersEqual(MockFunctionParameterType type, const MockParameterValue& p1, const MockParameterValue& p2);
+	MockFunctionParameter* getParameterByName(const SimpleString& name);
 
 public:
 	MockExpectedFunctionCall();
@@ -75,10 +81,19 @@ public:
 
 	virtual MockFunctionParameterType getParameterType(const SimpleString& name);
 	virtual MockParameterValue getParameterValue(const SimpleString& name);
+	virtual SimpleString getParameterValueString(const SimpleString& name);
+	virtual SimpleString getUnfulfilledParameterName() const;
 
-	bool relatesTo(const SimpleString& functionName);
-	bool isFulfilled();
-	void setFulfilled();
+	virtual bool hasParameterWithName(const SimpleString& name);
+	virtual bool hasParameter(const MockFunctionParameter& parameter);
+	virtual bool relatesTo(const SimpleString& functionName);
+
+	virtual bool isFulfilled();
+	virtual bool parametersFulfilled();
+
+	virtual void callWasMade();
+	virtual void parameterWasPassed(const SimpleString& name);
+	void resetExpectation();
 
 	SimpleString toString();
 };

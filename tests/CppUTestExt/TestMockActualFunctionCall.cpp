@@ -26,13 +26,71 @@
  */
 
 #include "CppUTest/TestHarness.h"
+#include "CppUTestExt/MockActualFunctionCall.h"
+#include "CppUTestExt/MockExpectedFunctionCall.h"
+#include "CppUTestExt/MockExpectedFunctionsList.h"
+#include "CppUTestExt/MockFailure.h"
+#include "TestMockFailure.h"
 
 TEST_GROUP(MockActualFunctionCall)
 {
+	MockExpectedFunctionsList* emptyList;
+	MockExpectedFunctionsList* list;
+	MockFailureReporter* reporter;
+
+	void setup()
+	{
+		emptyList = new MockExpectedFunctionsList;
+		list = new MockExpectedFunctionsList;
+		reporter = MockFailureReporterForTest::getReporter();
+	}
+
+	void teardown()
+	{
+		CHECK_MOCK_NO_FAILURE_LEFT();
+		delete emptyList;
+		delete list;
+	}
 };
 
-TEST(MockActualFunctionCall, fail)
+TEST(MockActualFunctionCall, unExpectedCall)
 {
-//	MockExpectedFunctionsList emptyList;
-//	MockActualFunctionCall actual(emptyList);
+	MockActualFunctionCall actualCall(reporter, *emptyList);
+	actualCall.withName("unexpected");
+	CHECK_MOCK_FAILURE_EXPECTED_CALL_HAPPENED("unexpected");
+}
+
+TEST(MockActualFunctionCall, unExpectedParameterName)
+{
+	MockExpectedFunctionCall* call1 = new MockExpectedFunctionCall();
+	call1->withName("func");
+	list->addExpectedCall(call1);
+
+	MockActualFunctionCall actualCall(reporter, *list);
+	actualCall.withName("func")->withParameter("integer", 1);
+	CHECK_MOCK_FAILURE_UNEXPECTED_PARAMETER_NAME("func", "integer");
+
+	list->deleteAllExpectationsAndClearList();
+
+}
+
+TEST(MockActualFunctionCall, multipleSameFunctionsExpectingAndHappenGradually)
+{
+	MockExpectedFunctionCall* call1 = new MockExpectedFunctionCall();
+	MockExpectedFunctionCall* call2 = new MockExpectedFunctionCall();
+	call1->withName("func");
+	call2->withName("func");
+	list->addExpectedCall(call1);
+	list->addExpectedCall(call2);
+
+	MockActualFunctionCall actualCall1(reporter, *list);
+	MockActualFunctionCall actualCall2(reporter, *list);
+
+	LONGS_EQUAL(2, list->amountOfUnfulfilledExpectations());
+	actualCall1.withName("func");
+	LONGS_EQUAL(1, list->amountOfUnfulfilledExpectations());
+	actualCall2.withName("func");
+	LONGS_EQUAL(0, list->amountOfUnfulfilledExpectations());
+
+	list->deleteAllExpectationsAndClearList();
 }

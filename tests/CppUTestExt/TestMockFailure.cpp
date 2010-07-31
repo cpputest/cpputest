@@ -60,9 +60,26 @@ TEST(MockFailureTest, expectedCallDidNotHappen)
 	STRCMP_EQUAL("MockFailure: Excepted at least one call to \"foobar\" but it did not happen.", failure.getMessage().asCharString());
 }
 
-TEST(MockFailureTest, MockUnexpectedAdditionalCall)
+TEST(MockFailureTest, MockUnexpectedAdditionalCallFailure)
 {
-	MockUnexpectedAdditionalCall failure(this, 1, "bar");
+	MockUnexpectedAdditionalCallFailure failure(this, 1, "bar");
 	STRCMP_EQUAL("MockFailure: Expected 1 calls to \"bar\" but an additional (therefore unexpected) call happened.", failure.getMessage().asCharString());
 }
 
+TEST(MockFailureTest, MockUnexpectedParameterNameFailure)
+{
+	MockUnexpectedParameterNameFailure failure(this, "foo", "bar");
+	STRCMP_EQUAL("MockFailure: Function \"foo\" was called with unexpected parameter with name: \"bar\".", failure.getMessage().asCharString());
+}
+
+TEST(MockFailureTest, MockUnexpectedParameterValueFailure)
+{
+	MockUnexpectedParameterValueFailure failure(this, "foo", "bar", "actual");
+	STRCMP_EQUAL("MockFailure: Function \"foo\" was called with an unexpected parameter value for parameter: \"bar\"\n\tvalue was <actual>", failure.getMessage().asCharString());
+}
+
+TEST(MockFailureTest, MockExpectedParameterDidntHappenFailure)
+{
+	MockExpectedParameterDidntHappenFailure failure(this, "foo", "bar", "actual");
+	STRCMP_EQUAL("MockFailure: Expected Function \"foo\" to be called with parameter: \"bar\" but it didn't happen.\n\tExpected value was <actual>", failure.getMessage().asCharString());
+}

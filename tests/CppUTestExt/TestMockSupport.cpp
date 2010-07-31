@@ -29,89 +29,22 @@
 #include "CppUTestExt/MockSupport.h"
 #include "CppUTestExt/MockExpectedFunctionCall.h"
 #include "CppUTestExt/MockFailure.h"
-
-#define CHECK_MOCK_FAILURE_EXPECTED_CALL_DID_NOT_HAPPEN(name) CHECK_MOCK_FAILURE_EXPECTED_CALL_DID_NOT_HAPPEN_LOCATION(name, __FILE__, __LINE__)
-#define CHECK_MOCK_FAILURE_EXPECTED_CALL_HAPPENED(name) CHECK_MOCK_FAILURE_EXPECTED_CALL_HAPPENED_LOCATION(name, __FILE__, __LINE__)
-#define CHECK_MOCK_NO_FAILURE() CHECK_MOCK_NO_FAILURE_LOCATION(__FILE__, __LINE__)
-#define CHECK_MOCK_FAILURE_UNEXPECTED_ADDITIONAL_CALL(totalExpectations, name) CHECK_MOCK_FAILURE_UNEXPECTED_ADDITIONAL_CALL_LOCATION(totalExpectations, name, __FILE__, __LINE__)
-#define CHECK_MOCK_FAILURE_DIFFERENT_PARAMETER_NAME_THAN_EXPECTED(functionName, expectedName, actualName) CHECK_MOCK_FAILURE_DIFFERENT_PARAMETER_NAME_THAN_EXPECTED_LOCATION(functionName, expectedName, actualName, __FILE__, __LINE__)
-
-class MockFailureReporterForTest : public MockFailureReporter
-{
-public:
-	SimpleString mockFailureString;
-	virtual void failTest(const MockFailure& failure)
-	{
-		mockFailureString = failure.getMessage();
-	}
-};
+#include "TestMockFailure.h"
 
 TEST_GROUP(MockSupportTest)
 {
 	MockSupport mock;
-	MockFailureReporterForTest reporter;
 
 	void setup()
 	{
-		mock.setMockFailureReporter(&reporter);
+		mock.setMockFailureReporter(MockFailureReporterForTest::getReporter());
 	}
 
 	void teardown()
 	{
+		CHECK_MOCK_NO_FAILURE_LEFT();
 		mock.clearExpectations();
 	}
-
-	void MOCK_FAILURES_EQUAL_LOCATION(const SimpleString& expected, const SimpleString& actual, const char* file, int line)
-	{
-		if (actual != expected)
-		{
-			SimpleString error = "MockFailures are different.\n";
-			error += "Expected MockFailure:\n\t";
-			error += expected;
-			error += "\nActual MockFailure:\n\t";
-			error += actual;
-			FAIL_LOCATION(error.asCharString(), file, line);
-		}
-	}
-
-	void CHECK_MOCK_FAILURE_EXPECTED_CALL_DID_NOT_HAPPEN_LOCATION(const char* name, const char* file, int line)
-	{
-		MockExpectedFunctionsList list;
-		MockExpectedFunctionCall call;
-		call.withName(name);
-		list.addExpectedCall(&call);
-		MockExpectedCallsDidntHappenFailure expectedFailure(this, list);
-		MOCK_FAILURES_EQUAL_LOCATION(expectedFailure.getMessage(), reporter.mockFailureString, file, line);
-	}
-
-	void CHECK_MOCK_FAILURE_EXPECTED_CALL_HAPPENED_LOCATION(const char* name, const char* file, int line)
-	{
-		MockUnexpectedCallHappenedFailure expectedFailure(this, name);
-		MOCK_FAILURES_EQUAL_LOCATION(expectedFailure.getMessage(), reporter.mockFailureString, file, line);
-	}
-
-	void CHECK_MOCK_NO_FAILURE_LOCATION(const char* file, int line)
-	{
-		MOCK_FAILURES_EQUAL_LOCATION("", reporter.mockFailureString, file, line);
-	}
-
-	void CHECK_MOCK_FAILURE_UNEXPECTED_ADDITIONAL_CALL_LOCATION(int totalExpectations, const char* name, const char* file, int line)
-	{
-		MockUnexpectedAdditionalCall expectedFailure(this, totalExpectations, name);
-		MOCK_FAILURES_EQUAL_LOCATION(expectedFailure.getMessage(), reporter.mockFailureString, file, line);
-	}
-
-#if 0
-	void CHECK_MOCK_FAILURE_DIFFERENT_PARAMETER_NAME_THAN_EXPECTED_LOCATION(const char* functionName, const char* expectedName, const char* actualName, const char* file, int line)
-	{
-		MockFailure expectedFailure(this);
-		expectedFailure.setFailureType(MOCK_UNEXPECTED_PARAMETER_NAME);
-		expectedFailure.setFunctionName(functionName);
-		expectedFailure.setExpectedParameterName(expectedName);
-		expectedFailure.setActualParameterName(actualName);
-		MOCK_FAILURES_EQUAL_LOCATION(expectedFailure.getMessage(), mock.mockFailureString, file, line);
-	}
-#endif
 };
 
 TEST(MockSupportTest, clearExpectations)
@@ -131,6 +64,7 @@ TEST(MockSupportTest, checkExpectationsClearsTheExpectations)
 	mock.expectOneCall("foobar");
 	mock.checkExpectations();
 	CHECK(! mock.expectedCallsLeft());
+	CHECK_MOCK_FAILURE_EXPECTED_CALL_DID_NOT_HAPPEN("foobar");
 }
 
 TEST(MockSupportTest, exceptACallThatHappens)
@@ -140,12 +74,10 @@ TEST(MockSupportTest, exceptACallThatHappens)
 	CHECK(! mock.expectedCallsLeft());
 }
 
-TEST(MockSupportTest, exceptACallThatDidNotHappens)
+TEST(MockSupportTest, exceptACallInceasesExpectedCallsLeft)
 {
 	mock.expectOneCall("func");
 	CHECK(mock.expectedCallsLeft());
-	mock.checkExpectations();
-	CHECK_MOCK_FAILURE_EXPECTED_CALL_DID_NOT_HAPPEN("func");
 }
 
 TEST(MockSupportTest, unexpectedCallHappened)
@@ -170,6 +102,16 @@ TEST(MockSupportTest, ignoreOtherStillFailsIfExpectedOneDidntHappen)
 	CHECK_MOCK_FAILURE_EXPECTED_CALL_DID_NOT_HAPPEN("foo");
 }
 
+TEST(MockSupportTest, expectMultipleCallsThatHappen)
+{
+	mock.expectOneCall("foo");
+	mock.expectOneCall("foo");
+	mock.actualCall("foo");
+	mock.actualCall("foo");
+	mock.checkExpectations();
+	CHECK_MOCK_NO_FAILURE();
+}
+
 TEST(MockSupportTest, expectOneCallHoweverMultipleHappened)
 {
 	mock.expectOneCall("foo");
@@ -180,9 +122,7 @@ TEST(MockSupportTest, expectOneCallHoweverMultipleHappened)
 	CHECK_MOCK_FAILURE_UNEXPECTED_ADDITIONAL_CALL(2, "foo");
 }
 
-#if 0
-
-TEST(MockSupportTest, expectOneIntegerParameterOfValue)
+TEST(MockSupportTest, expectOneIntegerParameterAndValue)
 {
 	mock.expectOneCall("foo")->withParameter("parameter", 10);
 	mock.actualCall("foo")->withParameter("parameter", 10);
@@ -190,14 +130,93 @@ TEST(MockSupportTest, expectOneIntegerParameterOfValue)
 	CHECK_MOCK_NO_FAILURE();
 }
 
-TEST(MockSupportTest, expectOneIntegerParameterOfValueAndValuesDueToParameterName)
+TEST(MockSupportTest, expectOneStringParameterAndValue)
+{
+	mock.expectOneCall("foo")->withParameter("parameter", "string");
+	mock.actualCall("foo")->withParameter("parameter", "string");
+	mock.checkExpectations();
+	CHECK_MOCK_NO_FAILURE();
+}
+
+TEST(MockSupportTest, expectOneStringParameterAndValueFails)
+{
+	mock.expectOneCall("foo")->withParameter("parameter", "string");
+	mock.actualCall("foo")->withParameter("parameter", "different");
+	CHECK_MOCK_FAILURE_UNEXPECTED_PARAMETER_VALUE("foo", "parameter", "different");
+}
+
+TEST(MockSupportTest, expectOneIntegerParameterAndFailsDueToParameterName)
 {
 	mock.expectOneCall("foo")->withParameter("parameter", 10);
 	mock.actualCall("foo")->withParameter("different", 10);
-	CHECK_MOCK_FAILURE_DIFFERENT_PARAMETER_NAME_THAN_EXPECTED("foo", "parameter", "different");
+	CHECK_MOCK_FAILURE_UNEXPECTED_PARAMETER_NAME("foo", "different");
 }
 
-TEST(MockSupportTest, usingWithWithoutAnyRecentExpectation)
+TEST(MockSupportTest, expectOneIntegerParameterAndFailsDueToValue)
 {
+	mock.expectOneCall("foo")->withParameter("parameter", 10);
+	mock.actualCall("foo")->withParameter("parameter", 8);
+	CHECK_MOCK_FAILURE_UNEXPECTED_PARAMETER_VALUE("foo", "parameter", "8");
 }
-#endif
+
+TEST(MockSupportTest, expectOneIntegerParameterAndFailsDueToTypes)
+{
+	mock.expectOneCall("foo")->withParameter("parameter", 10);
+	mock.actualCall("foo")->withParameter("parameter", "heh");
+	CHECK_MOCK_FAILURE_UNEXPECTED_PARAMETER_VALUE("foo", "parameter", "heh");
+}
+
+TEST(MockSupportTest, expectMultipleCallsWithDifferentParametersThatHappenOutOfOrder)
+{
+	mock.expectOneCall("foo")->withParameter("p1", 1);
+	mock.expectOneCall("foo")->withParameter("p1", 2);
+	mock.actualCall("foo")->withParameter("p1", 2);
+	mock.actualCall("foo")->withParameter("p1", 1);
+	mock.checkExpectations();
+	CHECK_MOCK_NO_FAILURE();
+}
+
+TEST(MockSupportTest, expectMultipleCallsWithMultipleDifferentParametersThatHappenOutOfOrder)
+{
+	mock.expectOneCall("foo")->withParameter("p1", 1)->withParameter("p2", 2);
+	mock.expectOneCall("foo")->withParameter("p1", 1)->withParameter("p2", 20);
+
+	mock.actualCall("foo")->withParameter("p1", 1)->withParameter("p2", 20);
+	mock.actualCall("foo")->withParameter("p1", 1)->withParameter("p2", 2);
+	mock.checkExpectations();
+	CHECK_MOCK_NO_FAILURE();
+}
+
+TEST(MockSupportTest, twiceCalledWithSameParameters)
+{
+	mock.expectOneCall("foo")->withParameter("p1", 1)->withParameter("p2", 2);
+	mock.expectOneCall("foo")->withParameter("p1", 1)->withParameter("p2", 2);
+	mock.actualCall("foo")->withParameter("p1", 1)->withParameter("p2", 2);
+	mock.actualCall("foo")->withParameter("p1", 1)->withParameter("p2", 2);
+	mock.checkExpectations();
+	CHECK_MOCK_NO_FAILURE();
+}
+
+TEST(MockSupportTest, calledWithoutParameters)
+{
+	mock.expectOneCall("foo")->withParameter("p1", 1);
+	mock.actualCall("foo");
+	mock.checkExpectations();
+	CHECK_MOCK_FAILURE_EXPECTED_PARAMETER_BUT_DID_NOT_HAPPEN("foo", "p1", "1");
+}
+
+TEST(MockSupportTest, newCallStartsWhileNotAllParametersWerePassed)
+{
+	mock.expectOneCall("foo")->withParameter("p1", 1);
+	mock.actualCall("foo");
+	mock.actualCall("foo");
+	CHECK_MOCK_FAILURE_EXPECTED_PARAMETER_BUT_DID_NOT_HAPPEN("foo", "p1", "1");
+}
+
+//TEST(MockSupportTest, calledWithoutMultipleParameters)
+//{
+//	mock.expectOneCall("foo")->withParameter("p1", 1)->withParameter("p2", 2);
+//	mock.actualCall("foo");
+//	mock.checkExpectations();
+//	CHECK_MOCK_FAILURE_EXPECTED_PARAMETER_BUT_DID_NOT_HAPPEN("foo", "p1", "1", "p2", "2");
+//}

@@ -37,6 +37,7 @@ TEST(MockExpectedFunctionCall, callWithoutParameterSetOrNotFound)
 	MockExpectedFunctionCall call;
 	LONGS_EQUAL(MOCK_FUNCTION_PARAMETER_NONE, call.getParameterType("nonexisting"));
 	LONGS_EQUAL(0, call.getParameterValue("nonexisting").intValue_);
+	CHECK(!call.hasParameterWithName("nonexisting"));
 }
 
 TEST(MockExpectedFunctionCall, callWithIntegerParameter)
@@ -45,6 +46,7 @@ TEST(MockExpectedFunctionCall, callWithIntegerParameter)
 	call.withParameter("integer", 1);
 	LONGS_EQUAL(MOCK_FUNCTION_PARAMETER_INT, call.getParameterType("integer"));
 	LONGS_EQUAL(1, call.getParameterValue("integer").intValue_);
+	CHECK(call.hasParameterWithName("integer"));
 }
 
 TEST(MockExpectedFunctionCall, callWithDoubleParameter)
@@ -96,3 +98,51 @@ TEST(MockExpectedFunctionCall, callWithThreeDifferentParameter)
 	STRCMP_EQUAL("hello world", call.getParameterValue("string").stringValue_);
 	DOUBLES_EQUAL(0.12, call.getParameterValue("double").doubleValue_, 0.05);
 }
+
+TEST(MockExpectedFunctionCall, withoutANameItsFulfilled)
+{
+	MockExpectedFunctionCall call;
+	CHECK(call.isFulfilled());
+}
+
+TEST(MockExpectedFunctionCall, withANameItsNotFulfilled)
+{
+	MockExpectedFunctionCall call;
+	call.withName("name");
+	CHECK(!call.isFulfilled());
+}
+
+TEST(MockExpectedFunctionCall, afterSettingCallFulfilledItsFulFilled)
+{
+	MockExpectedFunctionCall call;
+	call.withName("name");
+	call.callWasMade();
+	CHECK(call.isFulfilled());
+}
+
+TEST(MockExpectedFunctionCall, calledButNotWithParameterIsNotFulFilled)
+{
+	MockExpectedFunctionCall call;
+	call.withName("name")->withParameter("para", 1);
+	call.callWasMade();
+	CHECK(!call.isFulfilled());
+}
+
+TEST(MockExpectedFunctionCall, calledAndParametersAreFulfilled)
+{
+	MockExpectedFunctionCall call;
+	call.withName("name")->withParameter("para", 1);
+	call.callWasMade();
+	call.parameterWasPassed("para");
+	CHECK(call.isFulfilled());
+}
+
+TEST(MockExpectedFunctionCall, calledButNotAllParametersAreFulfilled)
+{
+	MockExpectedFunctionCall call;
+	call.withName("name")->withParameter("para", 1)->withParameter("two", 2);
+	call.callWasMade();
+	call.parameterWasPassed("para");
+	CHECK(! call.isFulfilled());
+}
+

@@ -63,11 +63,32 @@ public:
 	virtual ~MockUnexpectedCallHappenedFailure(){};
 };
 
-class MockUnexpectedAdditionalCall : public MockFailure
+class MockUnexpectedAdditionalCallFailure : public MockFailure
 {
 public:
-	MockUnexpectedAdditionalCall(Utest* test, int amountExpectations, const SimpleString& name);
-	virtual ~MockUnexpectedAdditionalCall(){};
+	MockUnexpectedAdditionalCallFailure(Utest* test, int amountExpectations, const SimpleString& name);
+	virtual ~MockUnexpectedAdditionalCallFailure(){};
+};
+
+class MockUnexpectedParameterNameFailure : public MockFailure
+{
+public:
+	MockUnexpectedParameterNameFailure(Utest* test, const SimpleString& functionName, const SimpleString& parameterName);
+	virtual ~MockUnexpectedParameterNameFailure(){};
+};
+
+class MockUnexpectedParameterValueFailure  : public MockFailure
+{
+public:
+	MockUnexpectedParameterValueFailure(Utest* test, const SimpleString& functionName, const SimpleString& parameterName, const SimpleString& actualValue);
+	virtual ~MockUnexpectedParameterValueFailure() {};
+};
+
+class MockExpectedParameterDidntHappenFailure : public MockFailure
+{
+public:
+	MockExpectedParameterDidntHappenFailure(Utest* test, const SimpleString& functionName, const SimpleString& parameterName, const SimpleString& value);
+	virtual ~MockExpectedParameterDidntHappenFailure(){};
 };
 
 #endif

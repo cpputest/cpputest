@@ -29,6 +29,7 @@
 #define D_MockExpectedFunctionsList_h
 
 class MockExpectedFunctionCall;
+class MockFunctionParameter;
 
 class MockExpectedFunctionsList
 {
@@ -50,14 +51,24 @@ public:
 
 	int size() const;
 	int amountOfExpectationsFor(const SimpleString& name) const;
-	bool hasUnfullfilledExpectations();
-
-	MockExpectedFunctionCall* getExpectedCall() const;
+	int amountOfUnfulfilledExpectations() const;
+	bool hasUnfullfilledExpectations() const;
+	bool hasFulfilledExpectations() const;
 
 	void addExpectedCall(MockExpectedFunctionCall* call);
 
 	void addUnfilfilledExpectationsToList(MockExpectedFunctionsList* list) const;
-	void removeAllExpectationsExceptThisThatRelateTo(const SimpleString& name);
+	void onlyKeepUnfulfilledExpectationsRelatedTo(const SimpleString& name);
+	void onlyKeepUnfulfilledExpectationsWithParameterName(const SimpleString& name);
+	void onlyKeepUnfulfilledExpectationsWithParameter(const MockFunctionParameter& parameter);
+	void removeOneFulfilledExpectation();
+
+	void resetExpectations();
+	void callWasMade();
+	void parameterWasPassed(const SimpleString& parameterName);
+
+	// To be removed
+	MockExpectedFunctionCall* getExpectedCall() const;
 
 private:
 	void pruneEmptyNodeFromList();

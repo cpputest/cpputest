@@ -47,6 +47,7 @@ void MockSupport::setMockFailureReporter(MockFailureReporter* reporter)
 void MockSupport::clearExpectations()
 {
 	delete lastActualFunctionCall_;
+	lastActualFunctionCall_ = NULL;
 	expectations_.deleteAllExpectationsAndClearList();
 }
 
@@ -67,6 +68,8 @@ MockActualFunctionCall* MockSupport::createActualFunctionCall()
 
 MockFunctionCall* MockSupport::actualCall(const SimpleString& functionName)
 {
+	if (lastActualFunctionCall_) lastActualFunctionCall_->finalizeCall();
+
 	MockActualFunctionCall* call = createActualFunctionCall();
 	if (ignoreOtherCalls_) call->ignoreOtherCalls();
 	call->withName(functionName);
@@ -85,7 +88,10 @@ bool MockSupport::expectedCallsLeft()
 
 void MockSupport::checkExpectations()
 {
-	if (expectedCallsLeft()) {
+	if (lastActualFunctionCall_ && !lastActualFunctionCall_->isFulfilled()) {
+		lastActualFunctionCall_->finalizeCall();
+	}
+	else if (expectedCallsLeft()) {
 		MockExpectedFunctionsList expectedCalls;
 		expectations_.addUnfilfilledExpectationsToList(&expectedCalls);
 		MockExpectedCallsDidntHappenFailure failure(reporter_->getTestToFail(), expectedCalls);

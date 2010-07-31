@@ -32,13 +32,15 @@
 #include "CppUTestExt/MockExpectedFunctionsList.h"
 
 class MockFailureReporter;
+class MockFunctionParameter;
 
 class MockActualFunctionCall : public MockFunctionCall
 {
-	SimpleString name_;
+	SimpleString functionName_;
 	MockExpectedFunctionsList unfulfilledExpectations_;
 	MockFailureReporter* reporter_;
 	bool ignoreOtherCalls_;
+	bool hasBeenFulfilled_;
 	const MockExpectedFunctionsList& allExpectations_;
 public:
 	MockActualFunctionCall(MockFailureReporter* reporter, const MockExpectedFunctionsList& expectations);
@@ -55,6 +57,12 @@ public:
 	SimpleString toString() const;
 
 	void ignoreOtherCalls();
+
+	bool isFulfilled() const;
+	void finalizeCall();
+private:
+	void failTestBecauseOfUnexpectedCall(const SimpleString& name);
+	void checkActualParameter(const MockFunctionParameter& actualParameter);
 };
 
 #endif
