@@ -90,7 +90,7 @@ TEST(MockSupportTest, ignoreOtherCallsExceptForTheExpectedOne)
 {
 	mock.expectOneCall("foo");
 	mock.ignoreOtherCalls();
-	mock.actualCall("bar");
+	mock.actualCall("bar")->withParameter("foo", 1);;
 	CHECK_MOCK_NO_FAILURE();
 }
 
@@ -134,6 +134,14 @@ TEST(MockSupportTest, expectOneStringParameterAndValue)
 {
 	mock.expectOneCall("foo")->withParameter("parameter", "string");
 	mock.actualCall("foo")->withParameter("parameter", "string");
+	mock.checkExpectations();
+	CHECK_MOCK_NO_FAILURE();
+}
+
+TEST(MockSupportTest, expectOnePointerParameterAndValue)
+{
+	mock.expectOneCall("foo")->withParameter("parameter", (void*) 0x01);
+	mock.actualCall("foo")->withParameter("parameter", (void*) 0x01);
 	mock.checkExpectations();
 	CHECK_MOCK_NO_FAILURE();
 }
@@ -211,6 +219,18 @@ TEST(MockSupportTest, newCallStartsWhileNotAllParametersWerePassed)
 	mock.actualCall("foo");
 	mock.actualCall("foo");
 	CHECK_MOCK_FAILURE_EXPECTED_PARAMETER_BUT_DID_NOT_HAPPEN("foo", "p1", "1");
+}
+
+TEST(MockSupportTest, threeExpectedAndActual)
+{
+	mock.expectOneCall("function1");
+	mock.expectOneCall("function2");
+	mock.expectOneCall("function3");
+	mock.actualCall("function1");
+	mock.actualCall("function2");
+	mock.actualCall("function3");
+	mock.checkExpectations();
+	CHECK_MOCK_NO_FAILURE();
 }
 
 //TEST(MockSupportTest, calledWithoutMultipleParameters)

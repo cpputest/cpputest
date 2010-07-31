@@ -125,7 +125,6 @@ void MockExpectedFunctionsList::removeOneFulfilledExpectation()
 	pruneEmptyNodeFromList();
 }
 
-
 void MockExpectedFunctionsList::pruneEmptyNodeFromList()
 {
 	MockExpectedFunctionsListNode* current = head_;
@@ -137,11 +136,8 @@ void MockExpectedFunctionsList::pruneEmptyNodeFromList()
 			toBeDeleted = current;
 			if (previous == NULL)
 				head_ = current = current->next_;
-			else {
-				previous->next_ = current->next_;
-				previous = current;
-				current = current->next_;
-			}
+			else
+				current = previous->next_ = current->next_;
 			delete toBeDeleted;
 		}
 		else {
@@ -176,12 +172,16 @@ void MockExpectedFunctionsList::resetExpectations()
 
 void MockExpectedFunctionsList::callWasMade()
 {
-	for (MockExpectedFunctionsListNode* p = head_; p; p = p->next_)
+	for (MockExpectedFunctionsListNode* p = head_; p; p = p->next_) {
+		CHECK(p->expectedCall_);
 		p->expectedCall_->callWasMade();
+	}
 }
 
 void MockExpectedFunctionsList::parameterWasPassed(const SimpleString& parameterName)
 {
-	for (MockExpectedFunctionsListNode* p = head_; p; p = p->next_)
+	for (MockExpectedFunctionsListNode* p = head_; p; p = p->next_) {
+		CHECK(p->expectedCall_);
 		p->expectedCall_->parameterWasPassed(parameterName);
+	}
 }

@@ -38,6 +38,10 @@ MockSupport::MockSupport() : reporter_(&defaultReporter_), ignoreOtherCalls_(fal
 MockSupport::~MockSupport()
 {
 }
+void MockSupport::crashOnFailure()
+{
+	reporter_->crashOnFailure();
+}
 
 void MockSupport::setMockFailureReporter(MockFailureReporter* reporter)
 {

@@ -61,6 +61,8 @@ public:
 	virtual void checkExpectations();
 
 	virtual void setMockFailureReporter(MockFailureReporter* reporter);
+
+	virtual void crashOnFailure();
 };
 
 #endif

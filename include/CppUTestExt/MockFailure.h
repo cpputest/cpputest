@@ -40,9 +40,16 @@ public:
 
 class MockFailureReporter
 {
+protected:
+	bool crashOnFailure_;
 public:
+	MockFailureReporter() : crashOnFailure_(false){};
+	virtual ~MockFailureReporter() {};
+
 	virtual void failTest(const MockFailure& failure);
 	virtual Utest* getTestToFail();
+
+	virtual void crashOnFailure() {crashOnFailure_ = true; }
 };
 
 class MockExpectedFunctionsList;

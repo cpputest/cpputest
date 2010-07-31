@@ -71,7 +71,6 @@ TEST(MockActualFunctionCall, unExpectedParameterName)
 	CHECK_MOCK_FAILURE_UNEXPECTED_PARAMETER_NAME("func", "integer");
 
 	list->deleteAllExpectationsAndClearList();
-
 }
 
 TEST(MockActualFunctionCall, multipleSameFunctionsExpectingAndHappenGradually)

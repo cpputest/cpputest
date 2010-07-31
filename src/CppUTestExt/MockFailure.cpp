@@ -33,6 +33,9 @@
 void MockFailureReporter::failTest(const MockFailure& failure)
 {
 	getTestToFail()->getTestResult()->addFailure(failure);
+	if (crashOnFailure_)
+		((MockFailureReporter*) 0x1)->failTest(failure);
+
 	getTestToFail()->exitCurrentTest();
 }
 

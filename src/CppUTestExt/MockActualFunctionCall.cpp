@@ -85,14 +85,14 @@ void MockActualFunctionCall::checkActualParameter(const MockFunctionParameter& a
 {
 	unfulfilledExpectations_.onlyKeepUnfulfilledExpectationsWithParameterName(actualParameter.name_);
 
-	if (unfulfilledExpectations_.size() == 0) {
+	if (unfulfilledExpectations_.size() == 0 && !ignoreOtherCalls_) {
 		MockUnexpectedParameterNameFailure failure(reporter_->getTestToFail(), functionName_, actualParameter.name_);
 		reporter_->failTest(failure);
 		return;
 	}
 
 	unfulfilledExpectations_.onlyKeepUnfulfilledExpectationsWithParameter(actualParameter);
-	if (unfulfilledExpectations_.size() == 0) {
+	if (unfulfilledExpectations_.size() == 0 && !ignoreOtherCalls_) {
 		MockUnexpectedParameterValueFailure failure(reporter_->getTestToFail(), functionName_, actualParameter.name_,
 				StringFrom(actualParameter.type_, actualParameter.value_).asCharString());
 		reporter_->failTest(failure);
@@ -106,7 +106,6 @@ void MockActualFunctionCall::checkActualParameter(const MockFunctionParameter& a
 		unfulfilledExpectations_.resetExpectations();
 	}
 }
-
 
 MockFunctionCall* MockActualFunctionCall::withParameter(const SimpleString& name, int value)
 {
@@ -130,9 +129,11 @@ MockFunctionCall* MockActualFunctionCall::withParameter(const SimpleString& name
 	return this;
 }
 
-MockFunctionCall* MockActualFunctionCall::withParameter(const SimpleString& /*name*/, void* /*value*/)
+MockFunctionCall* MockActualFunctionCall::withParameter(const SimpleString& name, void* value)
 {
-	FAIL("NOT IMPLEMENTED YET");
+	MockFunctionParameter actualParameter(name, MOCK_FUNCTION_PARAMETER_POINTER, NULL);
+	actualParameter.value_.pointerValue_ = value;
+	checkActualParameter(actualParameter);
 	return this;
 }
 
@@ -148,8 +149,8 @@ bool MockActualFunctionCall::isFulfilled() const
 
 void MockActualFunctionCall::finalizeCall()
 {
-	if (!hasBeenFulfilled_) {
-		MockExpectedFunctionCall* call = unfulfilledExpectations_.getExpectedCall();
+	MockExpectedFunctionCall* call = unfulfilledExpectations_.getExpectedCall();
+	if (!hasBeenFulfilled_ && call) {
 		SimpleString unFulfilledParameter = call->getUnfulfilledParameterName();
 		SimpleString value = call->getParameterValueString(unFulfilledParameter);
 		MockExpectedParameterDidntHappenFailure failure(reporter_->getTestToFail(), functionName_, unFulfilledParameter, value);

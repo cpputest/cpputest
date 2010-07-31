@@ -36,11 +36,12 @@ bool MockExpectedFunctionCall::parametersEqual(MockFunctionParameterType type, c
 	{
 		case MOCK_FUNCTION_PARAMETER_INT:
 			return p1.intValue_ == p2.intValue_;
-		case MOCK_FUNCTION_PARAMETER_NONE:
-		case MOCK_FUNCTION_PARAMETER_DOUBLE:
 		case MOCK_FUNCTION_PARAMETER_STRING:
 			return SimpleString(p1.stringValue_) == SimpleString(p2.stringValue_);
 		case MOCK_FUNCTION_PARAMETER_POINTER:
+			return p1.pointerValue_ == p2.pointerValue_;
+		case MOCK_FUNCTION_PARAMETER_NONE:
+		case MOCK_FUNCTION_PARAMETER_DOUBLE:
 		default:
 			FAIL("Not implemented");
 			;
@@ -53,11 +54,12 @@ SimpleString StringFrom(MockFunctionParameterType type, const MockParameterValue
 	{
 		case MOCK_FUNCTION_PARAMETER_INT:
 			return StringFrom(parameter.intValue_);
-		case MOCK_FUNCTION_PARAMETER_NONE:
-		case MOCK_FUNCTION_PARAMETER_DOUBLE:
 		case MOCK_FUNCTION_PARAMETER_STRING:
 			return parameter.stringValue_;
 		case MOCK_FUNCTION_PARAMETER_POINTER:
+			return StringFrom(parameter.pointerValue_);
+		case MOCK_FUNCTION_PARAMETER_NONE:
+		case MOCK_FUNCTION_PARAMETER_DOUBLE:
 		default:
 			FAIL("Not implemented");
 			;
