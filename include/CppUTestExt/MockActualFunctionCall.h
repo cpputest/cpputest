@@ -33,6 +33,7 @@
 
 class MockFailureReporter;
 class MockFunctionParameter;
+class MockParameterComparatorRepository;
 
 class MockActualFunctionCall : public MockFunctionCall
 {
@@ -42,15 +43,18 @@ class MockActualFunctionCall : public MockFunctionCall
 	bool ignoreOtherCalls_;
 	bool hasBeenFulfilled_;
 	const MockExpectedFunctionsList& allExpectations_;
+	MockParameterComparatorRepository* comparatorRepository_;
 public:
 	MockActualFunctionCall(MockFailureReporter* reporter, const MockExpectedFunctionsList& expectations);
 	virtual ~MockActualFunctionCall();
+	void setComparatorRepository(MockParameterComparatorRepository* repository);
 
 	virtual MockFunctionCall* withName(const SimpleString& name);
 	virtual MockFunctionCall* withParameter(const SimpleString& name, int value);
 	virtual MockFunctionCall* withParameter(const SimpleString& name, double value);
 	virtual MockFunctionCall* withParameter(const SimpleString& name, const char* value);
 	virtual MockFunctionCall* withParameter(const SimpleString& name, void* value);
+	virtual MockFunctionCall* withParameterOfType(const SimpleString& typeName, const SimpleString& name, void* value);
 
 	MockExpectedFunctionsList* getExpectations();
 

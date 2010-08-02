@@ -80,3 +80,9 @@ MockExpectedParameterDidntHappenFailure::MockExpectedParameterDidntHappenFailure
 	message_ = StringFromFormat("MockFailure: Expected Function \"%s\" to be called with parameter: \"%s\" but it didn't happen.\n\tExpected value was <%s>", functionName.asCharString(), parameterName.asCharString(), value.asCharString());
 }
 
+MockNoWayToCompareCustomTypeFailure::MockNoWayToCompareCustomTypeFailure(Utest* test, const SimpleString& typeName) : MockFailure(test)
+{
+	message_ = StringFromFormat("MockFailure: No way to compare type <%s>. Please install a ParameterTypeComparator.", typeName.asCharString());
+}
+
+

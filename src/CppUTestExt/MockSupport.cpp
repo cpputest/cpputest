@@ -48,6 +48,16 @@ void MockSupport::setMockFailureReporter(MockFailureReporter* reporter)
 	reporter_ = (reporter != NULL) ? reporter : &defaultReporter_;
 }
 
+void MockSupport::installComparator(const SimpleString& typeName, MockParameterComparator& comparator)
+{
+	comparatorRepository_.installComparator(typeName, comparator);
+}
+
+void MockSupport::removeAllComparators()
+{
+	comparatorRepository_.clear();
+}
+
 void MockSupport::clearExpectations()
 {
 	delete lastActualFunctionCall_;
@@ -58,6 +68,7 @@ void MockSupport::clearExpectations()
 MockFunctionCall* MockSupport::expectOneCall(const SimpleString& functionName)
 {
 	MockExpectedFunctionCall* call = new MockExpectedFunctionCall;
+	call->setComparatorRepository(&comparatorRepository_);
 	call->withName(functionName);
 	expectations_.addExpectedCall(call);
 	return call;
@@ -75,6 +86,8 @@ MockFunctionCall* MockSupport::actualCall(const SimpleString& functionName)
 	if (lastActualFunctionCall_) lastActualFunctionCall_->finalizeCall();
 
 	MockActualFunctionCall* call = createActualFunctionCall();
+	call->setComparatorRepository(&comparatorRepository_);
+
 	if (ignoreOtherCalls_) call->ignoreOtherCalls();
 	call->withName(functionName);
 	return call;

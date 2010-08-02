@@ -83,3 +83,9 @@ TEST(MockFailureTest, MockExpectedParameterDidntHappenFailure)
 	MockExpectedParameterDidntHappenFailure failure(this, "foo", "bar", "actual");
 	STRCMP_EQUAL("MockFailure: Expected Function \"foo\" to be called with parameter: \"bar\" but it didn't happen.\n\tExpected value was <actual>", failure.getMessage().asCharString());
 }
+
+TEST(MockFailureTest, MockNoWayToCompareCustomTypeFailure)
+{
+	MockNoWayToCompareCustomTypeFailure failure(this, "myType");
+	STRCMP_EQUAL("MockFailure: No way to compare type <myType>. Please install a ParameterTypeComparator.", failure.getMessage().asCharString());
+}

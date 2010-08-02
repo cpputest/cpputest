@@ -32,13 +32,18 @@
 #include "CppUTestExt/MockFailure.h"
 
 MockActualFunctionCall::MockActualFunctionCall(MockFailureReporter* reporter, const MockExpectedFunctionsList& allExpectations)
-	: reporter_(reporter), ignoreOtherCalls_(false), hasBeenFulfilled_(true), allExpectations_(allExpectations)
+	: reporter_(reporter), ignoreOtherCalls_(false), hasBeenFulfilled_(true), allExpectations_(allExpectations), comparatorRepository_(NULL)
 {
 	allExpectations.addUnfilfilledExpectationsToList(&unfulfilledExpectations_);
 }
 
 MockActualFunctionCall::~MockActualFunctionCall()
 {
+}
+
+void MockActualFunctionCall::setComparatorRepository(MockParameterComparatorRepository* repository)
+{
+	comparatorRepository_ = repository;
 }
 
 void MockActualFunctionCall::ignoreOtherCalls()
@@ -136,6 +141,21 @@ MockFunctionCall* MockActualFunctionCall::withParameter(const SimpleString& name
 	checkActualParameter(actualParameter);
 	return this;
 }
+
+MockFunctionCall* MockActualFunctionCall::withParameterOfType(const SimpleString& typeName, const SimpleString& name, void* value)
+{
+	if (comparatorRepository_ == NULL || comparatorRepository_->getComparatorForType(typeName) == NULL) {
+		MockNoWayToCompareCustomTypeFailure failure(reporter_->getTestToFail(), typeName);
+		reporter_->failTest(failure);
+		return this;
+	}
+	MockFunctionParameter actualParameter(name, MOCK_FUNCTION_PARAMETER_OBJECT, NULL);
+	actualParameter.value_.objectPointerValue_ = value;
+	actualParameter.typeName_ = typeName;
+	checkActualParameter(actualParameter);
+	return this;
+}
+
 
 SimpleString MockActualFunctionCall::toString() const
 {

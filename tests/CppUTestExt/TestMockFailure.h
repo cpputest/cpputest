@@ -37,7 +37,7 @@
 #define CHECK_MOCK_FAILURE_UNEXPECTED_PARAMETER_NAME(functionName, parameterName) CHECK_MOCK_FAILURE_UNEXPECTED_PARAMETER_NAME_LOCATION(functionName, parameterName, __FILE__, __LINE__)
 #define CHECK_MOCK_FAILURE_UNEXPECTED_PARAMETER_VALUE(functionName, parameterName, actualValue) CHECK_MOCK_FAILURE_UNEXPECTED_PARAMETER_VALUE_LOCATION(functionName, parameterName, actualValue, __FILE__, __LINE__)
 #define CHECK_MOCK_FAILURE_EXPECTED_PARAMETER_BUT_DID_NOT_HAPPEN(functionName, parameterName, value) CHECK_MOCK_FAILURE_EXPECTED_PARAMETER_BUT_DID_NOT_HAPPEN_LOCATION(functionName, parameterName, value, __FILE__, __LINE__)
-
+#define CHECK_MOCK_FAILURE_NO_WAY_TO_COMPARE_TYPE(typeName) CHECK_MOCK_FAILURE_NO_WAY_TO_COMPARE_TYPE_LOCATION(typeName, __FILE__, __LINE__)
 class MockFailureReporterForTest : public MockFailureReporter
 {
 public:
@@ -120,6 +120,12 @@ inline void CHECK_MOCK_FAILURE_UNEXPECTED_PARAMETER_VALUE_LOCATION(const char* f
 inline void CHECK_MOCK_FAILURE_EXPECTED_PARAMETER_BUT_DID_NOT_HAPPEN_LOCATION(const char* functionName, const char* parameterName, const char* value, const char* file, int line)
 {
 	MockExpectedParameterDidntHappenFailure expectedFailure(mockFailureTest(), functionName, parameterName, value);
+	MOCK_FAILURES_EQUAL_LOCATION(expectedFailure.getMessage(), mockFailureString(), file, line);
+}
+
+inline void CHECK_MOCK_FAILURE_NO_WAY_TO_COMPARE_TYPE_LOCATION(const char* typeName, const char* file, int line)
+{
+	MockNoWayToCompareCustomTypeFailure expectedFailure(mockFailureTest(), typeName);
 	MOCK_FAILURES_EQUAL_LOCATION(expectedFailure.getMessage(), mockFailureString(), file, line);
 }
 

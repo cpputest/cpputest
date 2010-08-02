@@ -39,6 +39,8 @@ public:
 	virtual MockFunctionCall* withParameter(const SimpleString& name, double value)=0;
 	virtual MockFunctionCall* withParameter(const SimpleString& name, const char* value)=0;
 	virtual MockFunctionCall* withParameter(const SimpleString& name, void* value)=0;
+	virtual MockFunctionCall* withParameterOfType(const SimpleString& typeName, const SimpleString& name, void* value)=0;
+
 };
 
 #endif

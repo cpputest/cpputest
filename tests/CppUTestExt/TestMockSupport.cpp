@@ -233,6 +233,48 @@ TEST(MockSupportTest, threeExpectedAndActual)
 	CHECK_MOCK_NO_FAILURE();
 }
 
+class MyTypeForTesting
+{
+public:
+	MyTypeForTesting(int val) : value(val){};
+	int value;
+};
+
+class MyTypeForTestingComparator : public MockParameterComparator
+{
+public:
+	virtual bool isEqual(void* object1, void* object2)
+	{
+		return ((MyTypeForTesting*)object1)->value == ((MyTypeForTesting*)object2)->value;
+	}
+	virtual SimpleString valueToString(void* object)
+	{
+		return StringFrom(((MyTypeForTesting*)object)->value);
+	}
+
+};
+
+
+TEST(MockSupportTest, customObjectParameterFailsWhenNotHavingAComparisonRepository)
+{
+	MyTypeForTesting object(1);
+	mock.expectOneCall("function")->withParameterOfType("MyTypeForTesting", "parameterName", &object);
+	mock.actualCall("function")->withParameterOfType("MyTypeForTesting", "parameterName", &object);
+	CHECK_MOCK_FAILURE_NO_WAY_TO_COMPARE_TYPE("MyTypeForTesting");
+}
+
+TEST(MockSupportTest, customObjectParameterSucceeds)
+{
+	MyTypeForTesting object(1);
+	MyTypeForTestingComparator comparator;
+	mock.installComparator("MyTypeForTesting", comparator);
+	mock.expectOneCall("function")->withParameterOfType("MyTypeForTesting", "parameterName", &object);
+	mock.actualCall("function")->withParameterOfType("MyTypeForTesting", "parameterName", &object);
+	mock.checkExpectations();
+	CHECK_MOCK_NO_FAILURE();
+	mock.removeAllComparators();
+}
+
 //TEST(MockSupportTest, calledWithoutMultipleParameters)
 //{
 //	mock.expectOneCall("foo")->withParameter("p1", 1)->withParameter("p2", 2);

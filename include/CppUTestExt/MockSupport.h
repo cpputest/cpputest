@@ -30,6 +30,7 @@
 
 #include "CppUTestExt/MockFailure.h"
 #include "CppUTestExt/MockFunctionCall.h"
+#include "CppUTestExt/MockExpectedFunctionCall.h"
 #include "CppUTestExt/MockExpectedFunctionsList.h"
 
 class Utest;
@@ -43,6 +44,7 @@ private:
 	MockExpectedFunctionsList expectations_;
 	bool ignoreOtherCalls_;
 	MockActualFunctionCall* lastActualFunctionCall_;
+	MockParameterComparatorRepository comparatorRepository_;
 protected:
 	virtual MockActualFunctionCall* createActualFunctionCall();
 
@@ -61,6 +63,8 @@ public:
 	virtual void checkExpectations();
 
 	virtual void setMockFailureReporter(MockFailureReporter* reporter);
+	virtual void installComparator(const SimpleString& typeName, MockParameterComparator& comparator);
+	virtual void removeAllComparators();
 
 	virtual void crashOnFailure();
 };

@@ -28,9 +28,49 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTestExt/MockExpectedFunctionCall.h"
 
+struct MockParameterComparatorRepositoryNode
+{
+	MockParameterComparatorRepositoryNode(const SimpleString& name, MockParameterComparator& comparator, MockParameterComparatorRepositoryNode* next)
+		: name_(name), comparator_(comparator), next_(next) {};
+	SimpleString name_;
+	MockParameterComparator& comparator_;
+	MockParameterComparatorRepositoryNode* next_;
+};
+
+MockParameterComparatorRepository::MockParameterComparatorRepository() : head_(NULL)
+{
+
+}
+
+MockParameterComparatorRepository::~MockParameterComparatorRepository()
+{
+	clear();
+}
+
+void MockParameterComparatorRepository::clear()
+{
+	while (head_) {
+		MockParameterComparatorRepositoryNode* next = head_->next_;
+		delete head_;
+		head_ = next;
+	}
+}
+
+void MockParameterComparatorRepository::installComparator(const SimpleString& name, MockParameterComparator& comparator)
+{
+	head_ = new MockParameterComparatorRepositoryNode(name, comparator, head_);
+}
+
+MockParameterComparator* MockParameterComparatorRepository::getComparatorForType(const SimpleString& name)
+{
+	for (MockParameterComparatorRepositoryNode* p = head_; p; p = p->next_)
+			if (p->name_ == name) return &p->comparator_;
+	return NULL;;
+}
+
 /* Type field works for now. Objects won't make it much better. Only these two switches, if more... change! */
 
-bool MockExpectedFunctionCall::parametersEqual(MockFunctionParameterType type, const MockParameterValue& p1, const MockParameterValue& p2)
+bool MockExpectedFunctionCall::parametersEqual(MockFunctionParameterType type, const SimpleString& typeName, const MockParameterValue& p1, const MockParameterValue& p2)
 {
 	switch (type)
 	{
@@ -40,6 +80,12 @@ bool MockExpectedFunctionCall::parametersEqual(MockFunctionParameterType type, c
 			return SimpleString(p1.stringValue_) == SimpleString(p2.stringValue_);
 		case MOCK_FUNCTION_PARAMETER_POINTER:
 			return p1.pointerValue_ == p2.pointerValue_;
+		case MOCK_FUNCTION_PARAMETER_OBJECT:
+			if (comparatorRepository_) {
+				MockParameterComparator* comparator = comparatorRepository_->getComparatorForType(typeName);
+				if (comparator) return comparator->isEqual(p1.objectPointerValue_, p2.objectPointerValue_);
+			}
+			return false;
 		case MOCK_FUNCTION_PARAMETER_NONE:
 		case MOCK_FUNCTION_PARAMETER_DOUBLE:
 		default:
@@ -48,7 +94,8 @@ bool MockExpectedFunctionCall::parametersEqual(MockFunctionParameterType type, c
 	}
 	return false;
 }
-SimpleString StringFrom(MockFunctionParameterType type, const MockParameterValue& parameter)
+
+SimpleString StringFrom(MockFunctionParameterType type, const MockParameterValue& parameter, MockParameterComparator* comparator)
 {
 	switch (type)
 	{
@@ -58,6 +105,9 @@ SimpleString StringFrom(MockFunctionParameterType type, const MockParameterValue
 			return parameter.stringValue_;
 		case MOCK_FUNCTION_PARAMETER_POINTER:
 			return StringFrom(parameter.pointerValue_);
+		case MOCK_FUNCTION_PARAMETER_OBJECT:
+				CHECK(comparator);
+				return comparator->valueToString(parameter.objectPointerValue_);
 		case MOCK_FUNCTION_PARAMETER_NONE:
 		case MOCK_FUNCTION_PARAMETER_DOUBLE:
 		default:
@@ -69,7 +119,7 @@ SimpleString StringFrom(MockFunctionParameterType type, const MockParameterValue
 
 
 MockExpectedFunctionCall::MockExpectedFunctionCall()
-	: parameters_(NULL), wasCallMade_(true)
+	: parameters_(NULL), wasCallMade_(true), comparatorRepository_(NULL)
 {
 }
 
@@ -80,6 +130,11 @@ MockExpectedFunctionCall::~MockExpectedFunctionCall()
 		delete parameters_;
 		parameters_ = next;
 	}
+}
+
+void MockExpectedFunctionCall::setComparatorRepository(MockParameterComparatorRepository* repository)
+{
+	comparatorRepository_ = repository;
 }
 
 MockFunctionCall* MockExpectedFunctionCall::withName(const SimpleString& name)
@@ -117,6 +172,14 @@ MockFunctionCall* MockExpectedFunctionCall::withParameter(const SimpleString& na
 	return this;
 }
 
+MockFunctionCall* MockExpectedFunctionCall::withParameterOfType(const SimpleString& typeName, const SimpleString& name, void* value)
+{
+	parameters_ = new MockFunctionParameter(name, MOCK_FUNCTION_PARAMETER_OBJECT, parameters_);
+	parameters_->value_.objectPointerValue_ = value;
+	parameters_->typeName_ = typeName;
+	return this;
+}
+
 MockFunctionParameter* MockExpectedFunctionCall::getParameterByName(const SimpleString& name)
 {
 	for (MockFunctionParameter * p = parameters_; p; p = p->nextParameter)
@@ -129,6 +192,12 @@ MockFunctionParameterType MockExpectedFunctionCall::getParameterType(const Simpl
 {
 	MockFunctionParameter * p = getParameterByName(name);
 	return (p) ? p->type_ : MOCK_FUNCTION_PARAMETER_NONE;
+}
+
+SimpleString MockExpectedFunctionCall::getParameterTypeName(const SimpleString& name)
+{
+	MockFunctionParameter * p = getParameterByName(name);
+	return (p) ? p->typeName_ : "";
 }
 
 bool MockExpectedFunctionCall::hasParameterWithName(const SimpleString& name)
@@ -191,13 +260,22 @@ void MockExpectedFunctionCall::parameterWasPassed(const SimpleString& name)
 SimpleString MockExpectedFunctionCall::getParameterValueString(const SimpleString& name)
 {
 	MockFunctionParameter * p = getParameterByName(name);
+	if (p->type_ == MOCK_FUNCTION_PARAMETER_OBJECT)
+	{
+		if (comparatorRepository_ == NULL)
+			return "No comparator repository was set.";
+		MockParameterComparator* comparator = comparatorRepository_->getComparatorForType(p->typeName_);
+		if (comparator == NULL)
+			return StringFromFormat("No comparator found for type: \"%s\"", p->typeName_.asCharString());
+		return comparator->valueToString(p->value_.objectPointerValue_);
+	}
 	return (p) ? StringFrom(p->type_, p->value_) : "failed";
 }
 
 bool MockExpectedFunctionCall::hasParameter(const MockFunctionParameter& parameter)
 {
 	MockFunctionParameter * p = getParameterByName(parameter.name_);
-	return (p) ? parametersEqual(p->type_, p->value_, parameter.value_) : false;
+	return (p) ? parametersEqual(p->type_, p->typeName_, p->value_, parameter.value_) : false;
 }
 
 SimpleString MockExpectedFunctionCall::toString()

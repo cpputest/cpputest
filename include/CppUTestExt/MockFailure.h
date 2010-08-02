@@ -98,4 +98,11 @@ public:
 	virtual ~MockExpectedParameterDidntHappenFailure(){};
 };
 
+class MockNoWayToCompareCustomTypeFailure : public MockFailure
+{
+public:
+	MockNoWayToCompareCustomTypeFailure(Utest* test, const SimpleString& typeName);
+	virtual ~MockNoWayToCompareCustomTypeFailure(){};
+};
+
 #endif
