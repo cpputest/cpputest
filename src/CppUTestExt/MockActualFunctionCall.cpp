@@ -32,7 +32,7 @@
 #include "CppUTestExt/MockFailure.h"
 
 MockActualFunctionCall::MockActualFunctionCall(MockFailureReporter* reporter, const MockExpectedFunctionsList& allExpectations)
-	: reporter_(reporter), ignoreOtherCalls_(false), hasBeenFulfilled_(true), allExpectations_(allExpectations), comparatorRepository_(NULL)
+	: reporter_(reporter), hasBeenFulfilled_(true), hasFailed_(false), allExpectations_(allExpectations), comparatorRepository_(NULL)
 {
 	allExpectations.addUnfilfilledExpectationsToList(&unfulfilledExpectations_);
 }
@@ -46,22 +46,23 @@ void MockActualFunctionCall::setComparatorRepository(MockParameterComparatorRepo
 	comparatorRepository_ = repository;
 }
 
-void MockActualFunctionCall::ignoreOtherCalls()
+void MockActualFunctionCall::failTest(const MockFailure& failure)
 {
-	ignoreOtherCalls_ = true;
-}
+	hasFailed_ = true;
+	reporter_->failTest(failure);
 
+}
 
 void MockActualFunctionCall::failTestBecauseOfUnexpectedCall(const SimpleString& name)
 {
 	int amountOfExpectationsFor = allExpectations_.amountOfExpectationsFor(name);
 	if (amountOfExpectationsFor) {
 		MockUnexpectedAdditionalCallFailure failure(reporter_->getTestToFail(), amountOfExpectationsFor, name);
-		reporter_->failTest(failure);
+		failTest(failure);
 	}
 	else {
 		MockUnexpectedCallHappenedFailure failure(reporter_->getTestToFail(), name);
-		reporter_->failTest(failure);
+		failTest(failure);
 	}
 }
 
@@ -71,7 +72,7 @@ MockFunctionCall* MockActualFunctionCall::withName(const SimpleString& name)
 	hasBeenFulfilled_ = false;
 	unfulfilledExpectations_.onlyKeepUnfulfilledExpectationsRelatedTo(name);
 
-	if (unfulfilledExpectations_.size() == 0 && !ignoreOtherCalls_) {
+	if (unfulfilledExpectations_.size() == 0) {
 		failTestBecauseOfUnexpectedCall(name);
 		return this;
 	}
@@ -90,17 +91,17 @@ void MockActualFunctionCall::checkActualParameter(const MockFunctionParameter& a
 {
 	unfulfilledExpectations_.onlyKeepUnfulfilledExpectationsWithParameterName(actualParameter.name_);
 
-	if (unfulfilledExpectations_.size() == 0 && !ignoreOtherCalls_) {
+	if (unfulfilledExpectations_.size() == 0) {
 		MockUnexpectedParameterNameFailure failure(reporter_->getTestToFail(), functionName_, actualParameter.name_);
-		reporter_->failTest(failure);
+		failTest(failure);
 		return;
 	}
 
 	unfulfilledExpectations_.onlyKeepUnfulfilledExpectationsWithParameter(actualParameter);
-	if (unfulfilledExpectations_.size() == 0 && !ignoreOtherCalls_) {
+	if (unfulfilledExpectations_.size() == 0) {
 		MockUnexpectedParameterValueFailure failure(reporter_->getTestToFail(), functionName_, actualParameter.name_,
-				StringFrom(actualParameter.type_, actualParameter.value_).asCharString());
-		reporter_->failTest(failure);
+				StringFrom(actualParameter.type_, actualParameter.value_, (comparatorRepository_) ? comparatorRepository_->getComparatorForType(actualParameter.type_) : NULL).asCharString());
+		failTest(failure);
 		return;
 	}
 
@@ -114,7 +115,7 @@ void MockActualFunctionCall::checkActualParameter(const MockFunctionParameter& a
 
 MockFunctionCall* MockActualFunctionCall::withParameter(const SimpleString& name, int value)
 {
-	MockFunctionParameter actualParameter(name, MOCK_FUNCTION_PARAMETER_INT, NULL);
+	MockFunctionParameter actualParameter(name, "int");
 	actualParameter.value_.intValue_ = value;
 	checkActualParameter(actualParameter);
 	return this;
@@ -128,7 +129,7 @@ MockFunctionCall* MockActualFunctionCall::withParameter(const SimpleString& /*na
 
 MockFunctionCall* MockActualFunctionCall::withParameter(const SimpleString& name, const char* value)
 {
-	MockFunctionParameter actualParameter(name, MOCK_FUNCTION_PARAMETER_STRING, NULL);
+	MockFunctionParameter actualParameter(name, "char*");
 	actualParameter.value_.stringValue_ = value;
 	checkActualParameter(actualParameter);
 	return this;
@@ -136,22 +137,21 @@ MockFunctionCall* MockActualFunctionCall::withParameter(const SimpleString& name
 
 MockFunctionCall* MockActualFunctionCall::withParameter(const SimpleString& name, void* value)
 {
-	MockFunctionParameter actualParameter(name, MOCK_FUNCTION_PARAMETER_POINTER, NULL);
+	MockFunctionParameter actualParameter(name, "void*");
 	actualParameter.value_.pointerValue_ = value;
 	checkActualParameter(actualParameter);
 	return this;
 }
 
-MockFunctionCall* MockActualFunctionCall::withParameterOfType(const SimpleString& typeName, const SimpleString& name, void* value)
+MockFunctionCall* MockActualFunctionCall::withParameterOfType(const SimpleString& type, const SimpleString& name, void* value)
 {
-	if (comparatorRepository_ == NULL || comparatorRepository_->getComparatorForType(typeName) == NULL) {
-		MockNoWayToCompareCustomTypeFailure failure(reporter_->getTestToFail(), typeName);
-		reporter_->failTest(failure);
+	if (comparatorRepository_ == NULL || comparatorRepository_->getComparatorForType(type) == NULL) {
+		MockNoWayToCompareCustomTypeFailure failure(reporter_->getTestToFail(), type);
+		failTest(failure);
 		return this;
 	}
-	MockFunctionParameter actualParameter(name, MOCK_FUNCTION_PARAMETER_OBJECT, NULL);
+	MockFunctionParameter actualParameter(name, type);
 	actualParameter.value_.objectPointerValue_ = value;
-	actualParameter.typeName_ = typeName;
 	checkActualParameter(actualParameter);
 	return this;
 }
@@ -167,6 +167,12 @@ bool MockActualFunctionCall::isFulfilled() const
 	return hasBeenFulfilled_;
 }
 
+bool MockActualFunctionCall::hasFailed() const
+{
+	return hasFailed_;
+}
+
+
 void MockActualFunctionCall::finalizeCall()
 {
 	MockExpectedFunctionCall* call = unfulfilledExpectations_.getExpectedCall();
@@ -174,7 +180,7 @@ void MockActualFunctionCall::finalizeCall()
 		SimpleString unFulfilledParameter = call->getUnfulfilledParameterName();
 		SimpleString value = call->getParameterValueString(unFulfilledParameter);
 		MockExpectedParameterDidntHappenFailure failure(reporter_->getTestToFail(), functionName_, unFulfilledParameter, value);
-		reporter_->failTest(failure);
+		failTest(failure);
 	}
 }
 

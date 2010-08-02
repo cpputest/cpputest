@@ -28,6 +28,16 @@
 #ifndef D_MockFunctionCall_h
 #define D_MockFunctionCall_h
 
+class MockParameterComparator
+{
+public:
+	MockParameterComparator() {};
+	virtual ~MockParameterComparator() {};
+
+	virtual bool isEqual(void* object1, void* object2)=0;
+	virtual SimpleString valueToString(void* object)=0;
+};
+
 class MockFunctionCall
 {
 public:
@@ -41,6 +51,19 @@ public:
 	virtual MockFunctionCall* withParameter(const SimpleString& name, void* value)=0;
 	virtual MockFunctionCall* withParameterOfType(const SimpleString& typeName, const SimpleString& name, void* value)=0;
 
+};
+
+class MockIgnoredCall : public MockFunctionCall
+{
+public:
+	virtual MockFunctionCall* withName(const SimpleString&) { return this;};
+	virtual MockFunctionCall* withParameter(const SimpleString&, int) { return this; };
+	virtual MockFunctionCall* withParameter(const SimpleString&, double) { return this; };
+	virtual MockFunctionCall* withParameter(const SimpleString&, const char*) { return this; };
+	virtual MockFunctionCall* withParameter(const SimpleString& , void*) { return this; };
+	virtual MockFunctionCall* withParameterOfType(const SimpleString&, const SimpleString&, void*) { return this; };
+
+	static MockFunctionCall* instance() { static MockIgnoredCall call; return &call; };
 };
 
 #endif

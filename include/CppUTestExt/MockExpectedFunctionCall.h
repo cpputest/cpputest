@@ -30,16 +30,6 @@
 
 #include "CppUTestExt/MockFunctionCall.h"
 
-enum MockFunctionParameterType
-{
-	MOCK_FUNCTION_PARAMETER_NONE,
-	MOCK_FUNCTION_PARAMETER_INT,
-	MOCK_FUNCTION_PARAMETER_DOUBLE,
-	MOCK_FUNCTION_PARAMETER_STRING,
-	MOCK_FUNCTION_PARAMETER_POINTER,
-	MOCK_FUNCTION_PARAMETER_OBJECT
-};
-
 union MockParameterValue{
 	int intValue_;
 	double doubleValue_;
@@ -50,26 +40,16 @@ union MockParameterValue{
 
 struct MockFunctionParameter
 {
-	MockFunctionParameter(const SimpleString& name, MockFunctionParameterType type, MockFunctionParameter* next)
-	: name_(name), type_(type), fulfilled_(false), nextParameter(next){}
+	MockFunctionParameter(const SimpleString& name, const SimpleString& type)
+		: name_(name), type_(type), fulfilled_(false), nextParameter(NULL){}
 
 	SimpleString name_;
-	MockFunctionParameterType type_;
-	SimpleString typeName_;
+	SimpleString type_;
 	MockParameterValue value_;
 	bool fulfilled_;
 	MockFunctionParameter* nextParameter;
 };
 
-class MockParameterComparator
-{
-public:
-	MockParameterComparator() {};
-	virtual ~MockParameterComparator() {};
-
-	virtual bool isEqual(void* object1, void* object2)=0;
-	virtual SimpleString valueToString(void* object)=0;
-};
 
 struct MockParameterComparatorRepositoryNode;
 class MockParameterComparatorRepository
@@ -85,16 +65,18 @@ public:
 	void clear();
 };
 
-extern SimpleString StringFrom(MockFunctionParameterType type, const MockParameterValue& parameter, MockParameterComparator* comparator = NULL);
+extern SimpleString StringFrom(const SimpleString& type, const MockParameterValue& parameter, MockParameterComparator* comparator = NULL);
 
 class MockExpectedFunctionCall : public MockFunctionCall
 {
 	SimpleString name_;
-	MockFunctionParameter* parameters_;
 	bool wasCallMade_;
+
+	MockFunctionParameter* parameters_;
 	MockParameterComparatorRepository* comparatorRepository_;
 
-	bool parametersEqual(MockFunctionParameterType type, const SimpleString& typeName, const MockParameterValue& p1, const MockParameterValue& p2);
+	MockFunctionParameter* addNewParameter(const SimpleString& name, const SimpleString& type);
+	bool parametersEqual(const SimpleString& type, const MockParameterValue& p1, const MockParameterValue& p2);
 	MockFunctionParameter* getParameterByName(const SimpleString& name);
 
 public:
@@ -110,8 +92,7 @@ public:
 	virtual MockFunctionCall* withParameter(const SimpleString& name, void* value);
 	virtual MockFunctionCall* withParameterOfType(const SimpleString& typeName, const SimpleString& name, void* value);
 
-	virtual MockFunctionParameterType getParameterType(const SimpleString& name);
-	virtual SimpleString getParameterTypeName(const SimpleString& name);
+	virtual SimpleString getParameterType(const SimpleString& name);
 	virtual MockParameterValue getParameterValue(const SimpleString& name);
 	virtual SimpleString getParameterValueString(const SimpleString& name);
 	virtual SimpleString getUnfulfilledParameterName() const;

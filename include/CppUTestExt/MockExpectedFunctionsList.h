@@ -54,6 +54,7 @@ public:
 	int amountOfUnfulfilledExpectations() const;
 	bool hasUnfullfilledExpectations() const;
 	bool hasFulfilledExpectations() const;
+	bool hasUnfulfilledExpectationWithName(const SimpleString& name) const;
 
 	void addExpectedCall(MockExpectedFunctionCall* call);
 

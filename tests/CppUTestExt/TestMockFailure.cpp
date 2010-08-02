@@ -49,15 +49,21 @@ TEST(MockFailureTest, unexpectedCallHappened)
 	STRCMP_EQUAL("MockFailure: Unexpected call to function: foobar. None expected but still happened.", failure.getMessage().asCharString());
 }
 
-TEST(MockFailureTest, expectedCallDidNotHappen)
+IGNORE_TEST(MockFailureTest, expectedCallDidNotHappen)
 {
 	MockExpectedFunctionCall call;
 	call.withName("foobar");
+	call.withName("world")->withParameter("boo", 2)->withParameter("hello", "world");
 	MockExpectedFunctionsList list;
 	list.addExpectedCall(&call);
 
 	MockExpectedCallsDidntHappenFailure failure(this, list);
-	STRCMP_EQUAL("MockFailure: Excepted at least one call to \"foobar\" but it did not happen.", failure.getMessage().asCharString());
+	STRCMP_EQUAL("MockFailure: Excepted call did not happen.\n"
+				 "\tEXPECTED calls that did NOT happen:\n"
+				 "\t\tfoobar -> no parameters\n"
+				 "\t\tworld -> int boo: <2>, char* hello: <world>\n"
+				 "\tACTUAL calls that did happen:\n"
+				 "\t\t<none>", failure.getMessage().asCharString());
 }
 
 TEST(MockFailureTest, MockUnexpectedAdditionalCallFailure)

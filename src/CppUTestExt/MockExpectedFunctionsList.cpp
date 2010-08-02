@@ -77,6 +77,14 @@ bool MockExpectedFunctionsList::hasUnfullfilledExpectations() const
 	return amountOfUnfulfilledExpectations() != 0;
 }
 
+bool MockExpectedFunctionsList::hasUnfulfilledExpectationWithName(const SimpleString& name) const
+{
+	for (MockExpectedFunctionsListNode* p = head_; p; p = p->next_)
+		if (p->expectedCall_->relatesTo(name) && ! p->expectedCall_->isFulfilled())
+			return true;
+	return false;
+}
+
 void MockExpectedFunctionsList::addExpectedCall(MockExpectedFunctionCall* call)
 {
 	head_ = new MockExpectedFunctionsListNode(call, head_);

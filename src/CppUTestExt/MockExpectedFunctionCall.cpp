@@ -68,58 +68,41 @@ MockParameterComparator* MockParameterComparatorRepository::getComparatorForType
 	return NULL;;
 }
 
-/* Type field works for now. Objects won't make it much better. Only these two switches, if more... change! */
-
-bool MockExpectedFunctionCall::parametersEqual(MockFunctionParameterType type, const SimpleString& typeName, const MockParameterValue& p1, const MockParameterValue& p2)
+bool MockExpectedFunctionCall::parametersEqual(const SimpleString& type, const MockParameterValue& p1, const MockParameterValue& p2)
 {
-	switch (type)
-	{
-		case MOCK_FUNCTION_PARAMETER_INT:
-			return p1.intValue_ == p2.intValue_;
-		case MOCK_FUNCTION_PARAMETER_STRING:
-			return SimpleString(p1.stringValue_) == SimpleString(p2.stringValue_);
-		case MOCK_FUNCTION_PARAMETER_POINTER:
-			return p1.pointerValue_ == p2.pointerValue_;
-		case MOCK_FUNCTION_PARAMETER_OBJECT:
-			if (comparatorRepository_) {
-				MockParameterComparator* comparator = comparatorRepository_->getComparatorForType(typeName);
-				if (comparator) return comparator->isEqual(p1.objectPointerValue_, p2.objectPointerValue_);
-			}
-			return false;
-		case MOCK_FUNCTION_PARAMETER_NONE:
-		case MOCK_FUNCTION_PARAMETER_DOUBLE:
-		default:
-			FAIL("Not implemented");
-			;
+	if (type == "int")
+		return p1.intValue_ == p2.intValue_;
+	else if (type == "char*")
+		return SimpleString(p1.stringValue_) == SimpleString(p2.stringValue_);
+	else if (type == "void*")
+		return p1.pointerValue_ == p2.pointerValue_;
+	else if (type == "double") {
+		FAIL("Not implemented"); }
+	else if (comparatorRepository_) {
+		MockParameterComparator* comparator = comparatorRepository_->getComparatorForType(type);
+		if (comparator) return comparator->isEqual(p1.objectPointerValue_, p2.objectPointerValue_);
 	}
 	return false;
 }
 
-SimpleString StringFrom(MockFunctionParameterType type, const MockParameterValue& parameter, MockParameterComparator* comparator)
+SimpleString StringFrom(const SimpleString& type, const MockParameterValue& parameter, MockParameterComparator* comparator)
 {
-	switch (type)
-	{
-		case MOCK_FUNCTION_PARAMETER_INT:
-			return StringFrom(parameter.intValue_);
-		case MOCK_FUNCTION_PARAMETER_STRING:
-			return parameter.stringValue_;
-		case MOCK_FUNCTION_PARAMETER_POINTER:
-			return StringFrom(parameter.pointerValue_);
-		case MOCK_FUNCTION_PARAMETER_OBJECT:
-				CHECK(comparator);
-				return comparator->valueToString(parameter.objectPointerValue_);
-		case MOCK_FUNCTION_PARAMETER_NONE:
-		case MOCK_FUNCTION_PARAMETER_DOUBLE:
-		default:
-			FAIL("Not implemented");
-			;
-	}
-	return "";
+	if (type == "int")
+		return StringFrom(parameter.intValue_);
+	else if (type == "char*")
+		return parameter.stringValue_;
+	else if (type == "void*")
+		return StringFrom(parameter.pointerValue_);
+	else if (type == "double") {
+		FAIL("Not implemented"); }
+
+	if (comparator == NULL)
+		return StringFromFormat("No comparator found for type: \"%s\"", type.asCharString());
+	return comparator->valueToString(parameter.objectPointerValue_);
 }
 
-
 MockExpectedFunctionCall::MockExpectedFunctionCall()
-	: parameters_(NULL), wasCallMade_(true), comparatorRepository_(NULL)
+	: wasCallMade_(true), parameters_(NULL), comparatorRepository_(NULL)
 {
 }
 
@@ -144,39 +127,53 @@ MockFunctionCall* MockExpectedFunctionCall::withName(const SimpleString& name)
 	return this;
 }
 
+
+MockFunctionParameter* MockExpectedFunctionCall::addNewParameter(const SimpleString& name, const SimpleString& type)
+{
+	MockFunctionParameter* newParameter = new MockFunctionParameter(name, type);
+
+	if (parameters_ == NULL)
+		parameters_ = newParameter;
+	else {
+		MockFunctionParameter* lastParameter = parameters_;
+		while (lastParameter->nextParameter) lastParameter = lastParameter->nextParameter;
+		lastParameter->nextParameter = newParameter;
+	}
+	return newParameter;
+}
+
 MockFunctionCall* MockExpectedFunctionCall::withParameter(const SimpleString& name, int value)
 {
-	parameters_ = new MockFunctionParameter(name, MOCK_FUNCTION_PARAMETER_INT, parameters_);
-	parameters_->value_.intValue_ = value;
+	MockFunctionParameter* newParameter = addNewParameter(name, "int");
+	newParameter->value_.intValue_ = value;
 	return this;
 }
 
 MockFunctionCall* MockExpectedFunctionCall::withParameter(const SimpleString& name, double value)
 {
-	parameters_ = new MockFunctionParameter(name, MOCK_FUNCTION_PARAMETER_DOUBLE, parameters_);
-	parameters_->value_.doubleValue_ = value;
+	MockFunctionParameter* newParameter = addNewParameter(name, "double");
+	newParameter->value_.doubleValue_ = value;
 	return this;
 }
 
 MockFunctionCall* MockExpectedFunctionCall::withParameter(const SimpleString& name, const char* value)
 {
-	parameters_ = new MockFunctionParameter(name, MOCK_FUNCTION_PARAMETER_STRING, parameters_);
-	parameters_->value_.stringValue_ = value;
+	MockFunctionParameter* newParameter = addNewParameter(name, "char*");
+	newParameter->value_.stringValue_ = value;
 	return this;
 }
 
 MockFunctionCall* MockExpectedFunctionCall::withParameter(const SimpleString& name, void* value)
 {
-	parameters_ = new MockFunctionParameter(name, MOCK_FUNCTION_PARAMETER_POINTER, parameters_);
-	parameters_->value_.pointerValue_ = value;
+	MockFunctionParameter* newParameter = addNewParameter(name, "void*");
+	newParameter->value_.pointerValue_ = value;
 	return this;
 }
 
-MockFunctionCall* MockExpectedFunctionCall::withParameterOfType(const SimpleString& typeName, const SimpleString& name, void* value)
+MockFunctionCall* MockExpectedFunctionCall::withParameterOfType(const SimpleString& type, const SimpleString& name, void* value)
 {
-	parameters_ = new MockFunctionParameter(name, MOCK_FUNCTION_PARAMETER_OBJECT, parameters_);
-	parameters_->value_.objectPointerValue_ = value;
-	parameters_->typeName_ = typeName;
+	MockFunctionParameter* newParameter = addNewParameter(name, type);
+	newParameter->value_.objectPointerValue_ = value;
 	return this;
 }
 
@@ -188,16 +185,10 @@ MockFunctionParameter* MockExpectedFunctionCall::getParameterByName(const Simple
 	return NULL;
 }
 
-MockFunctionParameterType MockExpectedFunctionCall::getParameterType(const SimpleString& name)
+SimpleString MockExpectedFunctionCall::getParameterType(const SimpleString& name)
 {
 	MockFunctionParameter * p = getParameterByName(name);
-	return (p) ? p->type_ : MOCK_FUNCTION_PARAMETER_NONE;
-}
-
-SimpleString MockExpectedFunctionCall::getParameterTypeName(const SimpleString& name)
-{
-	MockFunctionParameter * p = getParameterByName(name);
-	return (p) ? p->typeName_ : "";
+	return (p) ? p->type_ : "";
 }
 
 bool MockExpectedFunctionCall::hasParameterWithName(const SimpleString& name)
@@ -260,27 +251,38 @@ void MockExpectedFunctionCall::parameterWasPassed(const SimpleString& name)
 SimpleString MockExpectedFunctionCall::getParameterValueString(const SimpleString& name)
 {
 	MockFunctionParameter * p = getParameterByName(name);
-	if (p->type_ == MOCK_FUNCTION_PARAMETER_OBJECT)
-	{
-		if (comparatorRepository_ == NULL)
-			return "No comparator repository was set.";
-		MockParameterComparator* comparator = comparatorRepository_->getComparatorForType(p->typeName_);
-		if (comparator == NULL)
-			return StringFromFormat("No comparator found for type: \"%s\"", p->typeName_.asCharString());
-		return comparator->valueToString(p->value_.objectPointerValue_);
-	}
-	return (p) ? StringFrom(p->type_, p->value_) : "failed";
+	MockParameterComparator* comparator = NULL;
+
+	if (comparatorRepository_)
+		comparator = comparatorRepository_->getComparatorForType(p->type_);
+
+	return (p) ? StringFrom(p->type_, p->value_, comparator) : "failed";
 }
 
 bool MockExpectedFunctionCall::hasParameter(const MockFunctionParameter& parameter)
 {
 	MockFunctionParameter * p = getParameterByName(parameter.name_);
-	return (p) ? parametersEqual(p->type_, p->typeName_, p->value_, parameter.value_) : false;
+	return (p) ? parametersEqual(p->type_, p->value_, parameter.value_) : false;
 }
 
 SimpleString MockExpectedFunctionCall::toString()
 {
-	return name_;
+	SimpleString str;
+	str += "<";
+	str += name_;
+	str += "> -> ";
+	if (parameters_ == NULL)
+		str += "no parameters";
+	for (MockFunctionParameter * p = parameters_; p; p = p->nextParameter) {
+		str += p->type_;
+		str += " ";
+		str += p->name_;
+		str += ": <";
+		str += getParameterValueString(p->name_);
+		str += ">";
+		if (p->nextParameter) str += ", ";
+	}
+	return str;
 }
 
 bool MockExpectedFunctionCall::relatesTo(const SimpleString& functionName)

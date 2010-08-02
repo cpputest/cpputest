@@ -85,10 +85,12 @@ MockFunctionCall* MockSupport::actualCall(const SimpleString& functionName)
 {
 	if (lastActualFunctionCall_) lastActualFunctionCall_->finalizeCall();
 
+	if (!expectations_.hasUnfulfilledExpectationWithName(functionName) && ignoreOtherCalls_) {
+		return MockIgnoredCall::instance();
+	}
+
 	MockActualFunctionCall* call = createActualFunctionCall();
 	call->setComparatorRepository(&comparatorRepository_);
-
-	if (ignoreOtherCalls_) call->ignoreOtherCalls();
 	call->withName(functionName);
 	return call;
 }
@@ -106,7 +108,9 @@ bool MockSupport::expectedCallsLeft()
 void MockSupport::checkExpectations()
 {
 	if (lastActualFunctionCall_ && !lastActualFunctionCall_->isFulfilled()) {
-		lastActualFunctionCall_->finalizeCall();
+		if (! lastActualFunctionCall_->hasFailed()) {
+			lastActualFunctionCall_->finalizeCall();
+		}
 	}
 	else if (expectedCallsLeft()) {
 		MockExpectedFunctionsList expectedCalls;
