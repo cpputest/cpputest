@@ -66,7 +66,7 @@ void MockActualFunctionCall::failTestBecauseOfUnexpectedCall(const SimpleString&
 	}
 }
 
-MockFunctionCall* MockActualFunctionCall::withName(const SimpleString& name)
+MockFunctionCall& MockActualFunctionCall::withName(const SimpleString& name)
 {
 	functionName_ = name;
 	hasBeenFulfilled_ = false;
@@ -74,7 +74,7 @@ MockFunctionCall* MockActualFunctionCall::withName(const SimpleString& name)
 
 	if (unfulfilledExpectations_.size() == 0) {
 		failTestBecauseOfUnexpectedCall(name);
-		return this;
+		return *this;
 	}
 
 	unfulfilledExpectations_.callWasMade();
@@ -84,7 +84,7 @@ MockFunctionCall* MockActualFunctionCall::withName(const SimpleString& name)
 		unfulfilledExpectations_.resetExpectations();
 	}
 
-	return this;
+	return *this;
 }
 
 void MockActualFunctionCall::checkActualParameter(const MockFunctionParameter& actualParameter)
@@ -113,47 +113,47 @@ void MockActualFunctionCall::checkActualParameter(const MockFunctionParameter& a
 	}
 }
 
-MockFunctionCall* MockActualFunctionCall::withParameter(const SimpleString& name, int value)
+MockFunctionCall& MockActualFunctionCall::withParameter(const SimpleString& name, int value)
 {
 	MockFunctionParameter actualParameter(name, "int");
 	actualParameter.value_.intValue_ = value;
 	checkActualParameter(actualParameter);
-	return this;
+	return *this;
 }
 
-MockFunctionCall* MockActualFunctionCall::withParameter(const SimpleString& /*name*/, double /*value*/)
+MockFunctionCall& MockActualFunctionCall::withParameter(const SimpleString& /*name*/, double /*value*/)
 {
 	FAIL("NOT IMPLEMENTED YET");
-	return this;
+	return *this;
 }
 
-MockFunctionCall* MockActualFunctionCall::withParameter(const SimpleString& name, const char* value)
+MockFunctionCall& MockActualFunctionCall::withParameter(const SimpleString& name, const char* value)
 {
 	MockFunctionParameter actualParameter(name, "char*");
 	actualParameter.value_.stringValue_ = value;
 	checkActualParameter(actualParameter);
-	return this;
+	return *this;
 }
 
-MockFunctionCall* MockActualFunctionCall::withParameter(const SimpleString& name, void* value)
+MockFunctionCall& MockActualFunctionCall::withParameter(const SimpleString& name, void* value)
 {
 	MockFunctionParameter actualParameter(name, "void*");
 	actualParameter.value_.pointerValue_ = value;
 	checkActualParameter(actualParameter);
-	return this;
+	return *this;
 }
 
-MockFunctionCall* MockActualFunctionCall::withParameterOfType(const SimpleString& type, const SimpleString& name, void* value)
+MockFunctionCall& MockActualFunctionCall::withParameterOfType(const SimpleString& type, const SimpleString& name, void* value)
 {
 	if (comparatorRepository_ == NULL || comparatorRepository_->getComparatorForType(type) == NULL) {
 		MockNoWayToCompareCustomTypeFailure failure(reporter_->getTestToFail(), type);
 		failTest(failure);
-		return this;
+		return *this;
 	}
 	MockFunctionParameter actualParameter(name, type);
 	actualParameter.value_.objectPointerValue_ = value;
 	checkActualParameter(actualParameter);
-	return this;
+	return *this;
 }
 
 

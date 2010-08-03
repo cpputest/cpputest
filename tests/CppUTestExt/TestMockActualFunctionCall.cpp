@@ -67,7 +67,7 @@ TEST(MockActualFunctionCall, unExpectedParameterName)
 	list->addExpectedCall(call1);
 
 	MockActualFunctionCall actualCall(reporter, *list);
-	actualCall.withName("func")->withParameter("integer", 1);
+	actualCall.withName("func").withParameter("integer", 1);
 	CHECK_MOCK_FAILURE_UNEXPECTED_PARAMETER_NAME("func", "integer");
 
 	list->deleteAllExpectationsAndClearList();

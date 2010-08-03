@@ -120,11 +120,11 @@ void MockExpectedFunctionCall::setComparatorRepository(MockParameterComparatorRe
 	comparatorRepository_ = repository;
 }
 
-MockFunctionCall* MockExpectedFunctionCall::withName(const SimpleString& name)
+MockFunctionCall& MockExpectedFunctionCall::withName(const SimpleString& name)
 {
 	wasCallMade_ = false;
 	name_ = name;
-	return this;
+	return *this;
 }
 
 
@@ -142,39 +142,39 @@ MockFunctionParameter* MockExpectedFunctionCall::addNewParameter(const SimpleStr
 	return newParameter;
 }
 
-MockFunctionCall* MockExpectedFunctionCall::withParameter(const SimpleString& name, int value)
+MockFunctionCall& MockExpectedFunctionCall::withParameter(const SimpleString& name, int value)
 {
 	MockFunctionParameter* newParameter = addNewParameter(name, "int");
 	newParameter->value_.intValue_ = value;
-	return this;
+	return *this;
 }
 
-MockFunctionCall* MockExpectedFunctionCall::withParameter(const SimpleString& name, double value)
+MockFunctionCall& MockExpectedFunctionCall::withParameter(const SimpleString& name, double value)
 {
 	MockFunctionParameter* newParameter = addNewParameter(name, "double");
 	newParameter->value_.doubleValue_ = value;
-	return this;
+	return *this;
 }
 
-MockFunctionCall* MockExpectedFunctionCall::withParameter(const SimpleString& name, const char* value)
+MockFunctionCall& MockExpectedFunctionCall::withParameter(const SimpleString& name, const char* value)
 {
 	MockFunctionParameter* newParameter = addNewParameter(name, "char*");
 	newParameter->value_.stringValue_ = value;
-	return this;
+	return *this;
 }
 
-MockFunctionCall* MockExpectedFunctionCall::withParameter(const SimpleString& name, void* value)
+MockFunctionCall& MockExpectedFunctionCall::withParameter(const SimpleString& name, void* value)
 {
 	MockFunctionParameter* newParameter = addNewParameter(name, "void*");
 	newParameter->value_.pointerValue_ = value;
-	return this;
+	return *this;
 }
 
-MockFunctionCall* MockExpectedFunctionCall::withParameterOfType(const SimpleString& type, const SimpleString& name, void* value)
+MockFunctionCall& MockExpectedFunctionCall::withParameterOfType(const SimpleString& type, const SimpleString& name, void* value)
 {
 	MockFunctionParameter* newParameter = addNewParameter(name, type);
 	newParameter->value_.objectPointerValue_ = value;
-	return this;
+	return *this;
 }
 
 MockFunctionParameter* MockExpectedFunctionCall::getParameterByName(const SimpleString& name)

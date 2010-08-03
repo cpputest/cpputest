@@ -65,13 +65,13 @@ void MockSupport::clearExpectations()
 	expectations_.deleteAllExpectationsAndClearList();
 }
 
-MockFunctionCall* MockSupport::expectOneCall(const SimpleString& functionName)
+MockFunctionCall& MockSupport::expectOneCall(const SimpleString& functionName)
 {
 	MockExpectedFunctionCall* call = new MockExpectedFunctionCall;
 	call->setComparatorRepository(&comparatorRepository_);
 	call->withName(functionName);
 	expectations_.addExpectedCall(call);
-	return call;
+	return *call;
 }
 
 MockActualFunctionCall* MockSupport::createActualFunctionCall()
@@ -81,7 +81,7 @@ MockActualFunctionCall* MockSupport::createActualFunctionCall()
 	return lastActualFunctionCall_;
 }
 
-MockFunctionCall* MockSupport::actualCall(const SimpleString& functionName)
+MockFunctionCall& MockSupport::actualCall(const SimpleString& functionName)
 {
 	if (lastActualFunctionCall_) lastActualFunctionCall_->finalizeCall();
 
@@ -92,7 +92,7 @@ MockFunctionCall* MockSupport::actualCall(const SimpleString& functionName)
 	MockActualFunctionCall* call = createActualFunctionCall();
 	call->setComparatorRepository(&comparatorRepository_);
 	call->withName(functionName);
-	return call;
+	return *call;
 }
 
 void MockSupport::ignoreOtherCalls()

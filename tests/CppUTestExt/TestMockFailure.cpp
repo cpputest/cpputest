@@ -53,7 +53,7 @@ IGNORE_TEST(MockFailureTest, expectedCallDidNotHappen)
 {
 	MockExpectedFunctionCall call;
 	call.withName("foobar");
-	call.withName("world")->withParameter("boo", 2)->withParameter("hello", "world");
+	call.withName("world").withParameter("boo", 2).withParameter("hello", "world");
 	MockExpectedFunctionsList list;
 	list.addExpectedCall(&call);
 

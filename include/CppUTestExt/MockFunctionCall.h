@@ -44,26 +44,26 @@ public:
 	MockFunctionCall(){};
 	virtual ~MockFunctionCall(){};
 
-	virtual MockFunctionCall* withName(const SimpleString& name)=0;
-	virtual MockFunctionCall* withParameter(const SimpleString& name, int value)=0;
-	virtual MockFunctionCall* withParameter(const SimpleString& name, double value)=0;
-	virtual MockFunctionCall* withParameter(const SimpleString& name, const char* value)=0;
-	virtual MockFunctionCall* withParameter(const SimpleString& name, void* value)=0;
-	virtual MockFunctionCall* withParameterOfType(const SimpleString& typeName, const SimpleString& name, void* value)=0;
+	virtual MockFunctionCall& withName(const SimpleString& name)=0;
+	virtual MockFunctionCall& withParameter(const SimpleString& name, int value)=0;
+	virtual MockFunctionCall& withParameter(const SimpleString& name, double value)=0;
+	virtual MockFunctionCall& withParameter(const SimpleString& name, const char* value)=0;
+	virtual MockFunctionCall& withParameter(const SimpleString& name, void* value)=0;
+	virtual MockFunctionCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, void* value)=0;
 
 };
 
 class MockIgnoredCall : public MockFunctionCall
 {
 public:
-	virtual MockFunctionCall* withName(const SimpleString&) { return this;};
-	virtual MockFunctionCall* withParameter(const SimpleString&, int) { return this; };
-	virtual MockFunctionCall* withParameter(const SimpleString&, double) { return this; };
-	virtual MockFunctionCall* withParameter(const SimpleString&, const char*) { return this; };
-	virtual MockFunctionCall* withParameter(const SimpleString& , void*) { return this; };
-	virtual MockFunctionCall* withParameterOfType(const SimpleString&, const SimpleString&, void*) { return this; };
+	virtual MockFunctionCall& withName(const SimpleString&) { return *this;};
+	virtual MockFunctionCall& withParameter(const SimpleString&, int) { return *this; };
+	virtual MockFunctionCall& withParameter(const SimpleString&, double) { return *this; };
+	virtual MockFunctionCall& withParameter(const SimpleString&, const char*) { return *this; };
+	virtual MockFunctionCall& withParameter(const SimpleString& , void*) { return *this; };
+	virtual MockFunctionCall& withParameterOfType(const SimpleString&, const SimpleString&, void*) { return *this; };
 
-	static MockFunctionCall* instance() { static MockIgnoredCall call; return &call; };
+	static MockFunctionCall& instance() { static MockIgnoredCall call; return call; };
 };
 
 #endif

@@ -37,23 +37,12 @@ class Utest;
 
 class MockSupport
 {
-private:
-	MockFailureReporter* reporter_;
-	MockFailureReporter defaultReporter_;
-
-	MockExpectedFunctionsList expectations_;
-	bool ignoreOtherCalls_;
-	MockActualFunctionCall* lastActualFunctionCall_;
-	MockParameterComparatorRepository comparatorRepository_;
-protected:
-	virtual MockActualFunctionCall* createActualFunctionCall();
-
 public:
 	MockSupport();
 	virtual ~MockSupport();
 
-	virtual MockFunctionCall* expectOneCall(const SimpleString& functionName);
-	virtual MockFunctionCall* actualCall(const SimpleString& functionName);
+	virtual MockFunctionCall& expectOneCall(const SimpleString& functionName);
+	virtual MockFunctionCall& actualCall(const SimpleString& functionName);
 
 	virtual void ignoreOtherCalls();
 
@@ -67,6 +56,18 @@ public:
 	virtual void removeAllComparators();
 
 	virtual void crashOnFailure();
+
+protected:
+	virtual MockActualFunctionCall* createActualFunctionCall();
+
+private:
+	MockFailureReporter* reporter_;
+	MockFailureReporter defaultReporter_;
+
+	MockExpectedFunctionsList expectations_;
+	bool ignoreOtherCalls_;
+	MockActualFunctionCall* lastActualFunctionCall_;
+	MockParameterComparatorRepository comparatorRepository_;
 };
 
 #endif

@@ -38,25 +38,19 @@ class MockParameterComparatorRepository;
 
 class MockActualFunctionCall : public MockFunctionCall
 {
-	SimpleString functionName_;
-	MockExpectedFunctionsList unfulfilledExpectations_;
-	MockFailureReporter* reporter_;
-	bool hasBeenFulfilled_;
-	bool hasFailed_;
-	const MockExpectedFunctionsList& allExpectations_;
-	MockParameterComparatorRepository* comparatorRepository_;
 public:
 	MockActualFunctionCall(MockFailureReporter* reporter, const MockExpectedFunctionsList& expectations);
 	virtual ~MockActualFunctionCall();
-	void setComparatorRepository(MockParameterComparatorRepository* repository);
+	virtual void setComparatorRepository(MockParameterComparatorRepository* repository);
 
-	virtual MockFunctionCall* withName(const SimpleString& name);
-	virtual MockFunctionCall* withParameter(const SimpleString& name, int value);
-	virtual MockFunctionCall* withParameter(const SimpleString& name, double value);
-	virtual MockFunctionCall* withParameter(const SimpleString& name, const char* value);
-	virtual MockFunctionCall* withParameter(const SimpleString& name, void* value);
-	virtual MockFunctionCall* withParameterOfType(const SimpleString& type, const SimpleString& name, void* value);
+	virtual MockFunctionCall& withName(const SimpleString& name);
+	virtual MockFunctionCall& withParameter(const SimpleString& name, int value);
+	virtual MockFunctionCall& withParameter(const SimpleString& name, double value);
+	virtual MockFunctionCall& withParameter(const SimpleString& name, const char* value);
+	virtual MockFunctionCall& withParameter(const SimpleString& name, void* value);
+	virtual MockFunctionCall& withParameterOfType(const SimpleString& type, const SimpleString& name, void* value);
 
+	// TO BE REMOVED
 	MockExpectedFunctionsList* getExpectations();
 
 	SimpleString toString() const;
@@ -64,10 +58,21 @@ public:
 	bool isFulfilled() const;
 	bool hasFailed() const;
 	void finalizeCall();
+protected:
+	virtual void failTest(const MockFailure& failure);
+	virtual void failTestBecauseOfUnexpectedCall(const SimpleString& name);
+	virtual void checkActualParameter(const MockFunctionParameter& actualParameter);
+
 private:
-	void failTest(const MockFailure& failure);
-	void failTestBecauseOfUnexpectedCall(const SimpleString& name);
-	void checkActualParameter(const MockFunctionParameter& actualParameter);
+	SimpleString functionName_;
+	MockFailureReporter* reporter_;
+	bool hasBeenFulfilled_;
+	bool hasFailed_;
+
+	MockExpectedFunctionsList unfulfilledExpectations_;
+	const MockExpectedFunctionsList& allExpectations_;
+
+	MockParameterComparatorRepository* comparatorRepository_;
 };
 
 #endif

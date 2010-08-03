@@ -144,9 +144,9 @@ TEST(MockExpectedFunctionsList, removeAllExpectationsExceptThisThatRelateToLastO
 
 TEST(MockExpectedFunctionsList, onlyKeepUnfulfilledExpectationsWithParameterName)
 {
-	call1->withName("func")->withParameter("param", 1);
-	call2->withName("func")->withParameter("diffname", 1);
-	call3->withName("func")->withParameter("diffname", 1);
+	call1->withName("func").withParameter("param", 1);
+	call2->withName("func").withParameter("diffname", 1);
+	call3->withName("func").withParameter("diffname", 1);
 	call3->callWasMade();
 	call3->parameterWasPassed("diffname");
 	list->addExpectedCall(call1);
@@ -160,10 +160,10 @@ TEST(MockExpectedFunctionsList, onlyKeepUnfulfilledExpectationsWithParameter)
 {
 	MockFunctionParameter parameter("diffname", "int");
 	parameter.value_.intValue_ = 1;
-	call1->withName("func")->withParameter("param", 1);
-	call2->withName("func")->withParameter("diffname", 1);
-	call3->withName("func")->withParameter("diffname", 1);
-	call4->withName("func")->withParameter("diffname", 2);
+	call1->withName("func").withParameter("param", 1);
+	call2->withName("func").withParameter("diffname", 1);
+	call3->withName("func").withParameter("diffname", 1);
+	call4->withName("func").withParameter("diffname", 2);
 	call3->callWasMade();
 	call3->parameterWasPassed("diffname");
 	list->addExpectedCall(call1);

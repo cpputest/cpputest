@@ -69,15 +69,6 @@ extern SimpleString StringFrom(const SimpleString& type, const MockParameterValu
 
 class MockExpectedFunctionCall : public MockFunctionCall
 {
-	SimpleString name_;
-	bool wasCallMade_;
-
-	MockFunctionParameter* parameters_;
-	MockParameterComparatorRepository* comparatorRepository_;
-
-	MockFunctionParameter* addNewParameter(const SimpleString& name, const SimpleString& type);
-	bool parametersEqual(const SimpleString& type, const MockParameterValue& p1, const MockParameterValue& p2);
-	MockFunctionParameter* getParameterByName(const SimpleString& name);
 
 public:
 	MockExpectedFunctionCall();
@@ -85,12 +76,12 @@ public:
 
 	virtual void setComparatorRepository(MockParameterComparatorRepository* repository);
 
-	virtual MockFunctionCall* withName(const SimpleString& name);
-	virtual MockFunctionCall* withParameter(const SimpleString& name, int value);
-	virtual MockFunctionCall* withParameter(const SimpleString& name, double value);
-	virtual MockFunctionCall* withParameter(const SimpleString& name, const char* value);
-	virtual MockFunctionCall* withParameter(const SimpleString& name, void* value);
-	virtual MockFunctionCall* withParameterOfType(const SimpleString& typeName, const SimpleString& name, void* value);
+	virtual MockFunctionCall& withName(const SimpleString& name);
+	virtual MockFunctionCall& withParameter(const SimpleString& name, int value);
+	virtual MockFunctionCall& withParameter(const SimpleString& name, double value);
+	virtual MockFunctionCall& withParameter(const SimpleString& name, const char* value);
+	virtual MockFunctionCall& withParameter(const SimpleString& name, void* value);
+	virtual MockFunctionCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, void* value);
 
 	virtual SimpleString getParameterType(const SimpleString& name);
 	virtual MockParameterValue getParameterValue(const SimpleString& name);
@@ -106,9 +97,21 @@ public:
 
 	virtual void callWasMade();
 	virtual void parameterWasPassed(const SimpleString& name);
-	void resetExpectation();
+	virtual void resetExpectation();
 
-	SimpleString toString();
+	virtual SimpleString toString();
+
+private:
+	SimpleString name_;
+	bool wasCallMade_;
+
+	MockFunctionParameter* parameters_;
+	MockParameterComparatorRepository* comparatorRepository_;
+
+	MockFunctionParameter* addNewParameter(const SimpleString& name, const SimpleString& type);
+	bool parametersEqual(const SimpleString& type, const MockParameterValue& p1, const MockParameterValue& p2);
+	MockFunctionParameter* getParameterByName(const SimpleString& name);
+
 };
 
 #endif
