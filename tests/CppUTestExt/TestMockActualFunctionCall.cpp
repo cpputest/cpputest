@@ -62,15 +62,18 @@ TEST(MockActualFunctionCall, unExpectedCall)
 
 TEST(MockActualFunctionCall, unExpectedParameterName)
 {
-	MockExpectedFunctionCall* call1 = new MockExpectedFunctionCall();
-	call1->withName("func");
-	list->addExpectedCall(call1);
+	MockExpectedFunctionCall call1;
+	call1.withName("func");
+	list->addExpectedCall(&call1);
 
 	MockActualFunctionCall actualCall(reporter, *list);
 	actualCall.withName("func").withParameter("integer", 1);
-	CHECK_MOCK_FAILURE_UNEXPECTED_PARAMETER_NAME("func", "integer");
 
-	list->deleteAllExpectationsAndClearList();
+	MockFunctionParameter parameter("integer", "int");
+	parameter.value_.intValue_ = 1;
+
+	MockUnexpectedParameterFailure expectedFailure(mockFailureTest(), "func", parameter, *list);
+	CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 
 TEST(MockActualFunctionCall, multipleSameFunctionsExpectingAndHappenGradually)

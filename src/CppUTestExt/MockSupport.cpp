@@ -63,6 +63,7 @@ void MockSupport::clearExpectations()
 	delete lastActualFunctionCall_;
 	lastActualFunctionCall_ = NULL;
 	expectations_.deleteAllExpectationsAndClearList();
+	ignoreOtherCalls_ = false;
 }
 
 MockFunctionCall& MockSupport::expectOneCall(const SimpleString& functionName)
@@ -83,7 +84,7 @@ MockActualFunctionCall* MockSupport::createActualFunctionCall()
 
 MockFunctionCall& MockSupport::actualCall(const SimpleString& functionName)
 {
-	if (lastActualFunctionCall_) lastActualFunctionCall_->finalizeCall();
+	if (lastActualFunctionCall_) lastActualFunctionCall_->checkExpectations();
 
 	if (!expectations_.hasUnfulfilledExpectationWithName(functionName) && ignoreOtherCalls_) {
 		return MockIgnoredCall::instance();
@@ -109,13 +110,11 @@ void MockSupport::checkExpectations()
 {
 	if (lastActualFunctionCall_ && !lastActualFunctionCall_->isFulfilled()) {
 		if (! lastActualFunctionCall_->hasFailed()) {
-			lastActualFunctionCall_->finalizeCall();
+			lastActualFunctionCall_->checkExpectations();
 		}
 	}
 	else if (expectedCallsLeft()) {
-		MockExpectedFunctionsList expectedCalls;
-		expectations_.addUnfilfilledExpectationsToList(&expectedCalls);
-		MockExpectedCallsDidntHappenFailure failure(reporter_->getTestToFail(), expectedCalls);
+		MockExpectedCallsDidntHappenFailure failure(reporter_->getTestToFail(), expectations_);
 		clearExpectations();
 		reporter_->failTest(failure);
 	}

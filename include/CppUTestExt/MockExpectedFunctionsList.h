@@ -33,16 +33,6 @@ class MockFunctionParameter;
 
 class MockExpectedFunctionsList
 {
-	class MockExpectedFunctionsListNode
-	{
-	public:
-		MockExpectedFunctionCall* expectedCall_;
-
-		MockExpectedFunctionsListNode* next_;
-		MockExpectedFunctionsListNode(MockExpectedFunctionCall* expectedCall, MockExpectedFunctionsListNode* next)
-			: expectedCall_(expectedCall), next_(next) {};
-	};
-	MockExpectedFunctionsListNode* head_;
 
 public:
 	MockExpectedFunctionsList();
@@ -54,22 +44,40 @@ public:
 	int amountOfUnfulfilledExpectations() const;
 	bool hasUnfullfilledExpectations() const;
 	bool hasFulfilledExpectations() const;
+	bool isEmpty() const;
 	bool hasUnfulfilledExpectationWithName(const SimpleString& name) const;
 
 	void addExpectedCall(MockExpectedFunctionCall* call);
 
 	void addUnfilfilledExpectationsToList(MockExpectedFunctionsList* list) const;
+	void addExpectationsToList(MockExpectedFunctionsList* list) const;
+
+	void onlyKeepExpectationsRelatedTo(const SimpleString& name);
+	void onlyKeepExpectationsWithParameterName(const SimpleString& name);
 	void onlyKeepUnfulfilledExpectationsRelatedTo(const SimpleString& name);
-	void onlyKeepUnfulfilledExpectationsWithParameterName(const SimpleString& name);
 	void onlyKeepUnfulfilledExpectationsWithParameter(const MockFunctionParameter& parameter);
+
 	void removeOneFulfilledExpectation();
 
 	void resetExpectations();
 	void callWasMade();
 	void parameterWasPassed(const SimpleString& parameterName);
 
-	// To be removed
-	MockExpectedFunctionCall* getExpectedCall() const;
+	SimpleString unfulfilledFunctionsToString() const;
+	SimpleString fulfilledFunctionsToString() const;
+	SimpleString missingParametersToString() const;
+
+protected:
+	class MockExpectedFunctionsListNode
+	{
+	public:
+		MockExpectedFunctionCall* expectedCall_;
+
+		MockExpectedFunctionsListNode* next_;
+		MockExpectedFunctionsListNode(MockExpectedFunctionCall* expectedCall)
+			: expectedCall_(expectedCall), next_(NULL) {};
+	};
+	MockExpectedFunctionsListNode* head_;
 
 private:
 	void pruneEmptyNodeFromList();

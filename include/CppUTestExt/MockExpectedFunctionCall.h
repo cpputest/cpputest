@@ -51,20 +51,6 @@ struct MockFunctionParameter
 };
 
 
-struct MockParameterComparatorRepositoryNode;
-class MockParameterComparatorRepository
-{
-	MockParameterComparatorRepositoryNode* head_;
-public:
-	MockParameterComparatorRepository();
-	virtual ~MockParameterComparatorRepository();
-
-	virtual void installComparator(const SimpleString& name, MockParameterComparator& comparator);
-	virtual MockParameterComparator* getComparatorForType(const SimpleString& name);
-
-	void clear();
-};
-
 extern SimpleString StringFrom(const SimpleString& type, const MockParameterValue& parameter, MockParameterComparator* comparator = NULL);
 
 class MockExpectedFunctionCall : public MockFunctionCall
@@ -73,8 +59,6 @@ class MockExpectedFunctionCall : public MockFunctionCall
 public:
 	MockExpectedFunctionCall();
 	virtual ~MockExpectedFunctionCall();
-
-	virtual void setComparatorRepository(MockParameterComparatorRepository* repository);
 
 	virtual MockFunctionCall& withName(const SimpleString& name);
 	virtual MockFunctionCall& withParameter(const SimpleString& name, int value);
@@ -93,20 +77,19 @@ public:
 	virtual bool relatesTo(const SimpleString& functionName);
 
 	virtual bool isFulfilled();
-	virtual bool parametersFulfilled();
+	virtual bool areParametersFulfilled();
 
 	virtual void callWasMade();
 	virtual void parameterWasPassed(const SimpleString& name);
 	virtual void resetExpectation();
 
 	virtual SimpleString toString();
+	virtual SimpleString missingParametersToString();
 
 private:
-	SimpleString name_;
 	bool wasCallMade_;
 
 	MockFunctionParameter* parameters_;
-	MockParameterComparatorRepository* comparatorRepository_;
 
 	MockFunctionParameter* addNewParameter(const SimpleString& name, const SimpleString& type);
 	bool parametersEqual(const SimpleString& type, const MockParameterValue& p1, const MockParameterValue& p2);

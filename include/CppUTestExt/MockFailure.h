@@ -31,12 +31,10 @@
 
 #include "CppUTest/TestFailure.h"
 
-class MockFailure : public TestFailure
-{
-public:
-	MockFailure(Utest* test);
-	virtual ~MockFailure(){};
-};
+class MockExpectedFunctionsList;
+class MockActualFunctionCall;
+class MockFunctionParameter;
+class MockFailure;
 
 class MockFailureReporter
 {
@@ -52,7 +50,14 @@ public:
 	virtual void crashOnFailure() {crashOnFailure_ = true; }
 };
 
-class MockExpectedFunctionsList;
+class MockFailure : public TestFailure
+{
+public:
+	MockFailure(Utest* test);
+	virtual ~MockFailure(){};
+protected:
+	void addExpectationsAndCallHistory(const MockExpectedFunctionsList& expectations);
+};
 
 class MockExpectedCallsDidntHappenFailure : public MockFailure
 {
@@ -61,40 +66,24 @@ public:
 	virtual ~MockExpectedCallsDidntHappenFailure(){};
 };
 
-class MockActualFunctionCall;
-
 class MockUnexpectedCallHappenedFailure : public MockFailure
 {
 public:
-	MockUnexpectedCallHappenedFailure(Utest* test, const SimpleString& name);
+	MockUnexpectedCallHappenedFailure(Utest* test, const SimpleString& name, const MockExpectedFunctionsList& expectations);
 	virtual ~MockUnexpectedCallHappenedFailure(){};
 };
 
-class MockUnexpectedAdditionalCallFailure : public MockFailure
+class MockUnexpectedParameterFailure : public MockFailure
 {
 public:
-	MockUnexpectedAdditionalCallFailure(Utest* test, int amountExpectations, const SimpleString& name);
-	virtual ~MockUnexpectedAdditionalCallFailure(){};
-};
-
-class MockUnexpectedParameterNameFailure : public MockFailure
-{
-public:
-	MockUnexpectedParameterNameFailure(Utest* test, const SimpleString& functionName, const SimpleString& parameterName);
-	virtual ~MockUnexpectedParameterNameFailure(){};
-};
-
-class MockUnexpectedParameterValueFailure  : public MockFailure
-{
-public:
-	MockUnexpectedParameterValueFailure(Utest* test, const SimpleString& functionName, const SimpleString& parameterName, const SimpleString& actualValue);
-	virtual ~MockUnexpectedParameterValueFailure() {};
+	MockUnexpectedParameterFailure(Utest* test, const SimpleString& functionName, const MockFunctionParameter& parameter, const MockExpectedFunctionsList& expectations);
+	virtual ~MockUnexpectedParameterFailure(){};
 };
 
 class MockExpectedParameterDidntHappenFailure : public MockFailure
 {
 public:
-	MockExpectedParameterDidntHappenFailure(Utest* test, const SimpleString& functionName, const SimpleString& parameterName, const SimpleString& value);
+	MockExpectedParameterDidntHappenFailure(Utest* test, const SimpleString& functionName, const MockExpectedFunctionsList& expectations);
 	virtual ~MockExpectedParameterDidntHappenFailure(){};
 };
 

@@ -27,46 +27,7 @@
 
 #include "CppUTest/TestHarness.h"
 #include "CppUTestExt/MockExpectedFunctionCall.h"
-
-struct MockParameterComparatorRepositoryNode
-{
-	MockParameterComparatorRepositoryNode(const SimpleString& name, MockParameterComparator& comparator, MockParameterComparatorRepositoryNode* next)
-		: name_(name), comparator_(comparator), next_(next) {};
-	SimpleString name_;
-	MockParameterComparator& comparator_;
-	MockParameterComparatorRepositoryNode* next_;
-};
-
-MockParameterComparatorRepository::MockParameterComparatorRepository() : head_(NULL)
-{
-
-}
-
-MockParameterComparatorRepository::~MockParameterComparatorRepository()
-{
-	clear();
-}
-
-void MockParameterComparatorRepository::clear()
-{
-	while (head_) {
-		MockParameterComparatorRepositoryNode* next = head_->next_;
-		delete head_;
-		head_ = next;
-	}
-}
-
-void MockParameterComparatorRepository::installComparator(const SimpleString& name, MockParameterComparator& comparator)
-{
-	head_ = new MockParameterComparatorRepositoryNode(name, comparator, head_);
-}
-
-MockParameterComparator* MockParameterComparatorRepository::getComparatorForType(const SimpleString& name)
-{
-	for (MockParameterComparatorRepositoryNode* p = head_; p; p = p->next_)
-			if (p->name_ == name) return &p->comparator_;
-	return NULL;;
-}
+#include "CppUTest/PlatformSpecificFunctions.h"
 
 bool MockExpectedFunctionCall::parametersEqual(const SimpleString& type, const MockParameterValue& p1, const MockParameterValue& p2)
 {
@@ -76,12 +37,13 @@ bool MockExpectedFunctionCall::parametersEqual(const SimpleString& type, const M
 		return SimpleString(p1.stringValue_) == SimpleString(p2.stringValue_);
 	else if (type == "void*")
 		return p1.pointerValue_ == p2.pointerValue_;
-	else if (type == "double") {
-		FAIL("Not implemented"); }
-	else if (comparatorRepository_) {
-		MockParameterComparator* comparator = comparatorRepository_->getComparatorForType(type);
-		if (comparator) return comparator->isEqual(p1.objectPointerValue_, p2.objectPointerValue_);
-	}
+	else if (type == "double")
+		return (PlatformSpecificFabs(p1.doubleValue_ - p2.doubleValue_) < 0.005);
+
+	MockParameterComparator* comparator = getComparatorForType(type);
+	if (comparator)
+		return comparator->isEqual(p1.objectPointerValue_, p2.objectPointerValue_);
+
 	return false;
 }
 
@@ -93,8 +55,8 @@ SimpleString StringFrom(const SimpleString& type, const MockParameterValue& para
 		return parameter.stringValue_;
 	else if (type == "void*")
 		return StringFrom(parameter.pointerValue_);
-	else if (type == "double") {
-		FAIL("Not implemented"); }
+	else if (type == "double")
+		return StringFrom(parameter.doubleValue_);
 
 	if (comparator == NULL)
 		return StringFromFormat("No comparator found for type: \"%s\"", type.asCharString());
@@ -102,7 +64,7 @@ SimpleString StringFrom(const SimpleString& type, const MockParameterValue& para
 }
 
 MockExpectedFunctionCall::MockExpectedFunctionCall()
-	: wasCallMade_(true), parameters_(NULL), comparatorRepository_(NULL)
+	: wasCallMade_(true), parameters_(NULL)
 {
 }
 
@@ -115,15 +77,10 @@ MockExpectedFunctionCall::~MockExpectedFunctionCall()
 	}
 }
 
-void MockExpectedFunctionCall::setComparatorRepository(MockParameterComparatorRepository* repository)
-{
-	comparatorRepository_ = repository;
-}
-
 MockFunctionCall& MockExpectedFunctionCall::withName(const SimpleString& name)
 {
+	setName(name);
 	wasCallMade_ = false;
-	name_ = name;
 	return *this;
 }
 
@@ -215,7 +172,7 @@ SimpleString MockExpectedFunctionCall::getUnfulfilledParameterName() const
 	return "";
 }
 
-bool MockExpectedFunctionCall::parametersFulfilled()
+bool MockExpectedFunctionCall::areParametersFulfilled()
 {
 	for (MockFunctionParameter * p = parameters_; p; p = p->nextParameter)
 		if (! p->fulfilled_)
@@ -225,7 +182,7 @@ bool MockExpectedFunctionCall::parametersFulfilled()
 
 bool MockExpectedFunctionCall::isFulfilled()
 {
-	return wasCallMade_ && parametersFulfilled();
+	return wasCallMade_ && areParametersFulfilled();
 }
 
 void MockExpectedFunctionCall::callWasMade()
@@ -251,12 +208,7 @@ void MockExpectedFunctionCall::parameterWasPassed(const SimpleString& name)
 SimpleString MockExpectedFunctionCall::getParameterValueString(const SimpleString& name)
 {
 	MockFunctionParameter * p = getParameterByName(name);
-	MockParameterComparator* comparator = NULL;
-
-	if (comparatorRepository_)
-		comparator = comparatorRepository_->getComparatorForType(p->type_);
-
-	return (p) ? StringFrom(p->type_, p->value_, comparator) : "failed";
+	return (p) ? StringFrom(p->type_, p->value_, getComparatorForType(p->type_)) : "failed";
 }
 
 bool MockExpectedFunctionCall::hasParameter(const MockFunctionParameter& parameter)
@@ -268,9 +220,8 @@ bool MockExpectedFunctionCall::hasParameter(const MockFunctionParameter& paramet
 SimpleString MockExpectedFunctionCall::toString()
 {
 	SimpleString str;
-	str += "<";
-	str += name_;
-	str += "> -> ";
+	str += getName();
+	str += " -> ";
 	if (parameters_ == NULL)
 		str += "no parameters";
 	for (MockFunctionParameter * p = parameters_; p; p = p->nextParameter) {
@@ -285,7 +236,21 @@ SimpleString MockExpectedFunctionCall::toString()
 	return str;
 }
 
+SimpleString MockExpectedFunctionCall::missingParametersToString()
+{
+	SimpleString str;
+	for (MockFunctionParameter * p = parameters_; p; p = p->nextParameter) {
+		if (! p->fulfilled_) {
+			if (str != "") str += ", ";
+			str += p->type_;
+			str += " ";
+			str += p->name_;
+		}
+	}
+	return str;
+}
+
 bool MockExpectedFunctionCall::relatesTo(const SimpleString& functionName)
 {
-	return functionName == name_;
+	return functionName == getName();
 }

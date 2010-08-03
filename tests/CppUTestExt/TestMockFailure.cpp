@@ -35,6 +35,31 @@ TEST_GROUP(MockFailureTest)
 {
 	MockFailureReporter reporter;
 
+	MockExpectedFunctionsList *list;
+	MockExpectedFunctionCall* call1;
+	MockExpectedFunctionCall* call2;
+	MockExpectedFunctionCall* call3;
+
+	void setup ()
+	{
+		list = new MockExpectedFunctionsList;
+		call1 = new MockExpectedFunctionCall;
+		call2 = new MockExpectedFunctionCall;
+		call3 = new MockExpectedFunctionCall;
+	}
+	void teardown ()
+	{
+		delete list;
+		delete call1;
+		delete call2;
+		delete call3;
+	}
+	void addAllToList()
+	{
+		list->addExpectedCall(call1);
+		list->addExpectedCall(call2);
+		list->addExpectedCall(call3);
+	}
 };
 
 TEST(MockFailureTest, noErrorFailureSomethingGoneWrong)
@@ -45,49 +70,101 @@ TEST(MockFailureTest, noErrorFailureSomethingGoneWrong)
 
 TEST(MockFailureTest, unexpectedCallHappened)
 {
-	MockUnexpectedCallHappenedFailure failure(this, "foobar");
-	STRCMP_EQUAL("MockFailure: Unexpected call to function: foobar. None expected but still happened.", failure.getMessage().asCharString());
-}
-
-IGNORE_TEST(MockFailureTest, expectedCallDidNotHappen)
-{
-	MockExpectedFunctionCall call;
-	call.withName("foobar");
-	call.withName("world").withParameter("boo", 2).withParameter("hello", "world");
-	MockExpectedFunctionsList list;
-	list.addExpectedCall(&call);
-
-	MockExpectedCallsDidntHappenFailure failure(this, list);
-	STRCMP_EQUAL("MockFailure: Excepted call did not happen.\n"
+	MockUnexpectedCallHappenedFailure failure(this, "foobar", *list);
+	STRCMP_EQUAL("Mock Failure: Unexpected call to function: foobar\n"
 				 "\tEXPECTED calls that did NOT happen:\n"
-				 "\t\tfoobar -> no parameters\n"
-				 "\t\tworld -> int boo: <2>, char* hello: <world>\n"
+				 "\t\t<none>\n"
 				 "\tACTUAL calls that did happen:\n"
 				 "\t\t<none>", failure.getMessage().asCharString());
 }
 
-TEST(MockFailureTest, MockUnexpectedAdditionalCallFailure)
+TEST(MockFailureTest, expectedCallDidNotHappen)
 {
-	MockUnexpectedAdditionalCallFailure failure(this, 1, "bar");
-	STRCMP_EQUAL("MockFailure: Expected 1 calls to \"bar\" but an additional (therefore unexpected) call happened.", failure.getMessage().asCharString());
+	call1->withName("foobar");
+	call2->withName("world").withParameter("boo", 2).withParameter("hello", "world");
+	call3->withName("haphaphap");
+	call3->callWasMade();
+	addAllToList();
+
+	MockExpectedCallsDidntHappenFailure failure(this, *list);
+	STRCMP_EQUAL("Mock Failure: Expected call did not happen.\n"
+				 "\tEXPECTED calls that did NOT happen:\n"
+				 "\t\tfoobar -> no parameters\n"
+				 "\t\tworld -> int boo: <2>, char* hello: <world>\n"
+				 "\tACTUAL calls that did happen:\n"
+				 "\t\thaphaphap -> no parameters", failure.getMessage().asCharString());
 }
 
-TEST(MockFailureTest, MockUnexpectedParameterNameFailure)
+TEST(MockFailureTest, MockUnexpectedAdditionalCallFailure)
 {
-	MockUnexpectedParameterNameFailure failure(this, "foo", "bar");
-	STRCMP_EQUAL("MockFailure: Function \"foo\" was called with unexpected parameter with name: \"bar\".", failure.getMessage().asCharString());
+	call1->withName("bar");
+	call1->callWasMade();
+	list->addExpectedCall(call1);
+
+	MockUnexpectedCallHappenedFailure failure(this, "bar", *list);
+	STRCMP_CONTAINS("Mock Failure: Unexpected additional (2th) call to function: bar\n\tEXPECTED", failure.getMessage().asCharString());
+}
+
+TEST(MockFailureTest, MockUnexpectedParameterFailure)
+{
+	call1->withName("foo").withParameter("boo", 2);
+	call2->withName("foo").withParameter("boo", 10);
+	call3->withName("unrelated");
+	addAllToList();
+
+	MockFunctionParameter actualParameter("bar", "int");
+	actualParameter.value_.intValue_ = 2;
+
+	MockUnexpectedParameterFailure failure(this, "foo", actualParameter, *list);
+	STRCMP_EQUAL("Mock Failure: Unexpected parameter name to function \"foo\": bar\n"
+			     "\tEXPECTED calls that DID NOT happen related to function: foo\n"
+				 "\t\tfoo -> int boo: <2>\n"
+				 "\t\tfoo -> int boo: <10>\n"
+				 "\tACTUAL calls that DID happen related to function: foo\n"
+				 "\t\t<none>\n"
+			     "\tACTUAL unexpected parameter passed to function: foo\n"
+			     "\t\t       int bar: <2>", failure.getMessage().asCharString());
 }
 
 TEST(MockFailureTest, MockUnexpectedParameterValueFailure)
 {
-	MockUnexpectedParameterValueFailure failure(this, "foo", "bar", "actual");
-	STRCMP_EQUAL("MockFailure: Function \"foo\" was called with an unexpected parameter value for parameter: \"bar\"\n\tvalue was <actual>", failure.getMessage().asCharString());
+	call1->withName("foo").withParameter("boo", 2);
+	call2->withName("foo").withParameter("boo", 10);
+	call3->withName("unrelated");
+	addAllToList();
+
+	MockFunctionParameter actualParameter("boo", "int");
+	actualParameter.value_.intValue_ = 20;
+
+	MockUnexpectedParameterFailure failure(this, "foo", actualParameter, *list);
+	STRCMP_EQUAL("Mock Failure: Unexpected parameter value to parameter \"boo\" to function \"foo\": <20>\n"
+			     "\tEXPECTED calls that DID NOT happen related to function: foo\n"
+				 "\t\tfoo -> int boo: <2>\n"
+				 "\t\tfoo -> int boo: <10>\n"
+				 "\tACTUAL calls that DID happen related to function: foo\n"
+				 "\t\t<none>\n"
+			     "\tACTUAL unexpected parameter passed to function: foo\n"
+			     "\t\t       int boo: <20>", failure.getMessage().asCharString());
 }
 
 TEST(MockFailureTest, MockExpectedParameterDidntHappenFailure)
 {
-	MockExpectedParameterDidntHappenFailure failure(this, "foo", "bar", "actual");
-	STRCMP_EQUAL("MockFailure: Expected Function \"foo\" to be called with parameter: \"bar\" but it didn't happen.\n\tExpected value was <actual>", failure.getMessage().asCharString());
+	call1->withName("foo").withParameter("bar", 2).withParameter("boo", "str");
+	call2->withName("foo").withParameter("bar", 10).withParameter("boo", "bleh");
+	call2->callWasMade();
+	call2->parameterWasPassed("bar");
+	call2->parameterWasPassed("boo");
+	call3->withName("unrelated");
+	addAllToList();
+
+	MockExpectedParameterDidntHappenFailure failure(this, "foo", *list);
+	STRCMP_EQUAL("Mock Failure: Expected parameter for function \"foo\" did not happen.\n"
+			     "\tEXPECTED calls that DID NOT happen related to function: foo\n"
+				 "\t\tfoo -> int bar: <2>, char* boo: <str>\n"
+				 "\tACTUAL calls that DID happen related to function: foo\n"
+				 "\t\tfoo -> int bar: <10>, char* boo: <bleh>\n"
+				 "\tMISSING parameters that didn't happen:\n"
+			     "\t\tint bar, char* boo", failure.getMessage().asCharString());
 }
 
 TEST(MockFailureTest, MockNoWayToCompareCustomTypeFailure)

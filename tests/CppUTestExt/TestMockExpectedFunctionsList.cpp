@@ -142,18 +142,16 @@ TEST(MockExpectedFunctionsList, removeAllExpectationsExceptThisThatRelateToLastO
 	LONGS_EQUAL(1, list->size());
 }
 
-TEST(MockExpectedFunctionsList, onlyKeepUnfulfilledExpectationsWithParameterName)
+TEST(MockExpectedFunctionsList, onlyKeepExpectationsWithParameterName)
 {
 	call1->withName("func").withParameter("param", 1);
 	call2->withName("func").withParameter("diffname", 1);
 	call3->withName("func").withParameter("diffname", 1);
-	call3->callWasMade();
-	call3->parameterWasPassed("diffname");
 	list->addExpectedCall(call1);
 	list->addExpectedCall(call2);
 	list->addExpectedCall(call3);
-	list->onlyKeepUnfulfilledExpectationsWithParameterName("diffname");
-	LONGS_EQUAL(1, list->size());
+	list->onlyKeepExpectationsWithParameterName("diffname");
+	LONGS_EQUAL(2, list->size());
 }
 
 TEST(MockExpectedFunctionsList, onlyKeepUnfulfilledExpectationsWithParameter)
@@ -206,4 +204,25 @@ TEST(MockExpectedFunctionsList, amountOfExpectationsForHasNone)
 	call1->withName("foo");
 	list->addExpectedCall(call1);
 	LONGS_EQUAL(0, list->amountOfExpectationsFor("bar"));
+}
+
+TEST(MockExpectedFunctionsList, toString)
+{
+	call1->withName("foo");
+	call2->withName("bar");
+	call3->withName("blah");
+	call3->callWasMade();
+
+	list->addExpectedCall(call1);
+	list->addExpectedCall(call2);
+	list->addExpectedCall(call3);
+
+	SimpleString expectedString;
+	expectedString = StringFromFormat("\t\t%s\n\t\t%s", call1->toString().asCharString(), call2->toString().asCharString());
+	STRCMP_EQUAL(expectedString.asCharString(), list->unfulfilledFunctionsToString().asCharString());
+}
+
+TEST(MockExpectedFunctionsList, toStringOnEmptyList)
+{
+	STRCMP_EQUAL("\t\t<none>", list->unfulfilledFunctionsToString().asCharString());
 }

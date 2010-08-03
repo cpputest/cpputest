@@ -32,7 +32,7 @@
 #include "CppUTestExt/MockFailure.h"
 
 MockActualFunctionCall::MockActualFunctionCall(MockFailureReporter* reporter, const MockExpectedFunctionsList& allExpectations)
-	: reporter_(reporter), hasBeenFulfilled_(true), hasFailed_(false), allExpectations_(allExpectations), comparatorRepository_(NULL)
+	: reporter_(reporter), state_(CALL_SUCCEED), allExpectations_(allExpectations)
 {
 	allExpectations.addUnfilfilledExpectationsToList(&unfulfilledExpectations_);
 }
@@ -41,76 +41,57 @@ MockActualFunctionCall::~MockActualFunctionCall()
 {
 }
 
-void MockActualFunctionCall::setComparatorRepository(MockParameterComparatorRepository* repository)
+Utest* MockActualFunctionCall::getTest() const
 {
-	comparatorRepository_ = repository;
+	return reporter_->getTestToFail();
 }
 
 void MockActualFunctionCall::failTest(const MockFailure& failure)
 {
-	hasFailed_ = true;
+	setState(CALL_FAILED);
 	reporter_->failTest(failure);
-
 }
 
-void MockActualFunctionCall::failTestBecauseOfUnexpectedCall(const SimpleString& name)
+void MockActualFunctionCall::callSucceeded()
 {
-	int amountOfExpectationsFor = allExpectations_.amountOfExpectationsFor(name);
-	if (amountOfExpectationsFor) {
-		MockUnexpectedAdditionalCallFailure failure(reporter_->getTestToFail(), amountOfExpectationsFor, name);
-		failTest(failure);
-	}
-	else {
-		MockUnexpectedCallHappenedFailure failure(reporter_->getTestToFail(), name);
-		failTest(failure);
-	}
+	setState(CALL_SUCCEED);
+	unfulfilledExpectations_.removeOneFulfilledExpectation();
+	unfulfilledExpectations_.resetExpectations();
 }
 
 MockFunctionCall& MockActualFunctionCall::withName(const SimpleString& name)
 {
-	functionName_ = name;
-	hasBeenFulfilled_ = false;
-	unfulfilledExpectations_.onlyKeepUnfulfilledExpectationsRelatedTo(name);
+	setName(name);
+	setState(CALL_IN_PROGESS);
 
-	if (unfulfilledExpectations_.size() == 0) {
-		failTestBecauseOfUnexpectedCall(name);
+	unfulfilledExpectations_.onlyKeepUnfulfilledExpectationsRelatedTo(name);
+	if (unfulfilledExpectations_.isEmpty()) {
+		MockUnexpectedCallHappenedFailure failure(getTest(), name, allExpectations_);
+		failTest(failure);
 		return *this;
 	}
 
 	unfulfilledExpectations_.callWasMade();
-	hasBeenFulfilled_ = unfulfilledExpectations_.hasFulfilledExpectations();
-	if (hasBeenFulfilled_) {
-		unfulfilledExpectations_.removeOneFulfilledExpectation();
-		unfulfilledExpectations_.resetExpectations();
-	}
+
+	if (unfulfilledExpectations_.hasFulfilledExpectations())
+		callSucceeded();
 
 	return *this;
 }
 
 void MockActualFunctionCall::checkActualParameter(const MockFunctionParameter& actualParameter)
 {
-	unfulfilledExpectations_.onlyKeepUnfulfilledExpectationsWithParameterName(actualParameter.name_);
-
-	if (unfulfilledExpectations_.size() == 0) {
-		MockUnexpectedParameterNameFailure failure(reporter_->getTestToFail(), functionName_, actualParameter.name_);
-		failTest(failure);
-		return;
-	}
-
 	unfulfilledExpectations_.onlyKeepUnfulfilledExpectationsWithParameter(actualParameter);
-	if (unfulfilledExpectations_.size() == 0) {
-		MockUnexpectedParameterValueFailure failure(reporter_->getTestToFail(), functionName_, actualParameter.name_,
-				StringFrom(actualParameter.type_, actualParameter.value_, (comparatorRepository_) ? comparatorRepository_->getComparatorForType(actualParameter.type_) : NULL).asCharString());
+
+	if (unfulfilledExpectations_.isEmpty()) {
+		MockUnexpectedParameterFailure failure(getTest(), getName(), actualParameter, allExpectations_);
 		failTest(failure);
 		return;
 	}
 
 	unfulfilledExpectations_.parameterWasPassed(actualParameter.name_);
-	hasBeenFulfilled_ = unfulfilledExpectations_.hasFulfilledExpectations();
-	if (hasBeenFulfilled_) {
-		unfulfilledExpectations_.removeOneFulfilledExpectation();
-		unfulfilledExpectations_.resetExpectations();
-	}
+	if (unfulfilledExpectations_.hasFulfilledExpectations())
+		callSucceeded();
 }
 
 MockFunctionCall& MockActualFunctionCall::withParameter(const SimpleString& name, int value)
@@ -121,9 +102,11 @@ MockFunctionCall& MockActualFunctionCall::withParameter(const SimpleString& name
 	return *this;
 }
 
-MockFunctionCall& MockActualFunctionCall::withParameter(const SimpleString& /*name*/, double /*value*/)
+MockFunctionCall& MockActualFunctionCall::withParameter(const SimpleString& name, double value)
 {
-	FAIL("NOT IMPLEMENTED YET");
+	MockFunctionParameter actualParameter(name, "double");
+	actualParameter.value_.doubleValue_ = value;
+	checkActualParameter(actualParameter);
 	return *this;
 }
 
@@ -145,8 +128,8 @@ MockFunctionCall& MockActualFunctionCall::withParameter(const SimpleString& name
 
 MockFunctionCall& MockActualFunctionCall::withParameterOfType(const SimpleString& type, const SimpleString& name, void* value)
 {
-	if (comparatorRepository_ == NULL || comparatorRepository_->getComparatorForType(type) == NULL) {
-		MockNoWayToCompareCustomTypeFailure failure(reporter_->getTestToFail(), type);
+	if (getComparatorForType(type) == NULL) {
+		MockNoWayToCompareCustomTypeFailure failure(getTest(), type);
 		failTest(failure);
 		return *this;
 	}
@@ -156,31 +139,37 @@ MockFunctionCall& MockActualFunctionCall::withParameterOfType(const SimpleString
 	return *this;
 }
 
-
-SimpleString MockActualFunctionCall::toString() const
-{
-	return functionName_;
-}
-
 bool MockActualFunctionCall::isFulfilled() const
 {
-	return hasBeenFulfilled_;
+	return state_ == CALL_SUCCEED;
 }
 
 bool MockActualFunctionCall::hasFailed() const
 {
-	return hasFailed_;
+	return state_ == CALL_FAILED;
 }
 
-
-void MockActualFunctionCall::finalizeCall()
+void MockActualFunctionCall::checkExpectations()
 {
-	MockExpectedFunctionCall* call = unfulfilledExpectations_.getExpectedCall();
-	if (!hasBeenFulfilled_ && call) {
-		SimpleString unFulfilledParameter = call->getUnfulfilledParameterName();
-		SimpleString value = call->getParameterValueString(unFulfilledParameter);
-		MockExpectedParameterDidntHappenFailure failure(reporter_->getTestToFail(), functionName_, unFulfilledParameter, value);
-		failTest(failure);
-	}
+	if (state_ != CALL_IN_PROGESS) return;
+
+	if (! unfulfilledExpectations_.hasUnfullfilledExpectations())
+		FAIL("Actual call is in progress. Checking expectations. But no unfulfilled expectations. Cannot happen.")
+
+	MockExpectedParameterDidntHappenFailure failure(getTest(), getName(), allExpectations_);
+	failTest(failure);
 }
 
+void MockActualFunctionCall::checkStateConsistency(ActualCallState oldState, ActualCallState newState)
+{
+	if (oldState == newState)
+		FAIL(StringFromFormat("State change to the same state: %d.", newState).asCharString());
+	if (oldState == CALL_FAILED)
+		FAIL("State was already failed. Cannot change state again.");
+}
+
+void MockActualFunctionCall::setState(ActualCallState state)
+{
+	checkStateConsistency(state_, state);
+	state_ = state;
+}

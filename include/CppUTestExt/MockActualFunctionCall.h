@@ -34,14 +34,12 @@
 class MockFailureReporter;
 class MockFailure;
 class MockFunctionParameter;
-class MockParameterComparatorRepository;
 
 class MockActualFunctionCall : public MockFunctionCall
 {
 public:
 	MockActualFunctionCall(MockFailureReporter* reporter, const MockExpectedFunctionsList& expectations);
 	virtual ~MockActualFunctionCall();
-	virtual void setComparatorRepository(MockParameterComparatorRepository* repository);
 
 	virtual MockFunctionCall& withName(const SimpleString& name);
 	virtual MockFunctionCall& withParameter(const SimpleString& name, int value);
@@ -50,29 +48,30 @@ public:
 	virtual MockFunctionCall& withParameter(const SimpleString& name, void* value);
 	virtual MockFunctionCall& withParameterOfType(const SimpleString& type, const SimpleString& name, void* value);
 
-	// TO BE REMOVED
-	MockExpectedFunctionsList* getExpectations();
-
-	SimpleString toString() const;
-
 	bool isFulfilled() const;
 	bool hasFailed() const;
-	void finalizeCall();
+
+	void checkExpectations();
 protected:
+	virtual Utest* getTest() const;
+	virtual void callSucceeded();
 	virtual void failTest(const MockFailure& failure);
-	virtual void failTestBecauseOfUnexpectedCall(const SimpleString& name);
 	virtual void checkActualParameter(const MockFunctionParameter& actualParameter);
 
 private:
-	SimpleString functionName_;
 	MockFailureReporter* reporter_;
-	bool hasBeenFulfilled_;
-	bool hasFailed_;
+
+	enum ActualCallState {
+		CALL_IN_PROGESS,
+		CALL_FAILED,
+		CALL_SUCCEED
+	};
+	void setState(ActualCallState state);
+	void checkStateConsistency(ActualCallState oldState, ActualCallState newState);
+	ActualCallState state_;
 
 	MockExpectedFunctionsList unfulfilledExpectations_;
 	const MockExpectedFunctionsList& allExpectations_;
-
-	MockParameterComparatorRepository* comparatorRepository_;
 };
 
 #endif

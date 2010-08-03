@@ -28,6 +28,12 @@
 #ifndef D_MockFunctionCall_h
 #define D_MockFunctionCall_h
 
+/*
+ * MockParameterComparator is an interface that needs to be used when creating Comparators.
+ * This is needed when comparing parameters of non-native type.
+ *
+ */
+
 class MockParameterComparator
 {
 public:
@@ -38,11 +44,17 @@ public:
 	virtual SimpleString valueToString(void* object)=0;
 };
 
+/*
+ * MockFunctionCall is the main interface for recording and actualizing mock calls.
+ *
+ */
+
+class MockParameterComparatorRepository;
 class MockFunctionCall
 {
 public:
-	MockFunctionCall(){};
-	virtual ~MockFunctionCall(){};
+	MockFunctionCall();
+	virtual ~MockFunctionCall();
 
 	virtual MockFunctionCall& withName(const SimpleString& name)=0;
 	virtual MockFunctionCall& withParameter(const SimpleString& name, int value)=0;
@@ -51,7 +63,36 @@ public:
 	virtual MockFunctionCall& withParameter(const SimpleString& name, void* value)=0;
 	virtual MockFunctionCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, void* value)=0;
 
+	virtual void setComparatorRepository(MockParameterComparatorRepository* repository);
+
+protected:
+	void setName(const SimpleString& name);
+	SimpleString getName() const;
+	MockParameterComparator* getComparatorForType(const SimpleString& type) const;
+private:
+	SimpleString functionName_;
+	MockParameterComparatorRepository* comparatorRepository_;
 };
+
+/*
+ * MockParameterComparatorRepository is a class which stores comparators which can be used for comparing non-native types
+ *
+ */
+
+struct MockParameterComparatorRepositoryNode;
+class MockParameterComparatorRepository
+{
+	MockParameterComparatorRepositoryNode* head_;
+public:
+	MockParameterComparatorRepository();
+	virtual ~MockParameterComparatorRepository();
+
+	virtual void installComparator(const SimpleString& name, MockParameterComparator& comparator);
+	virtual MockParameterComparator* getComparatorForType(const SimpleString& name);
+
+	void clear();
+};
+
 
 class MockIgnoredCall : public MockFunctionCall
 {
