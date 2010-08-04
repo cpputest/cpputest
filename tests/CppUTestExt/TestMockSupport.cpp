@@ -325,7 +325,6 @@ public:
 	{
 		return StringFrom(((MyTypeForTesting*)object)->value);
 	}
-
 };
 
 

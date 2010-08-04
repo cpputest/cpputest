@@ -123,7 +123,7 @@ TEST(MockFailureTest, MockUnexpectedParameterFailure)
 				 "\tACTUAL calls that DID happen related to function: foo\n"
 				 "\t\t<none>\n"
 			     "\tACTUAL unexpected parameter passed to function: foo\n"
-			     "\t\t       int bar: <2>", failure.getMessage().asCharString());
+			     "\t\tint bar: <2>", failure.getMessage().asCharString());
 }
 
 TEST(MockFailureTest, MockUnexpectedParameterValueFailure)
@@ -144,7 +144,7 @@ TEST(MockFailureTest, MockUnexpectedParameterValueFailure)
 				 "\tACTUAL calls that DID happen related to function: foo\n"
 				 "\t\t<none>\n"
 			     "\tACTUAL unexpected parameter passed to function: foo\n"
-			     "\t\t       int boo: <20>", failure.getMessage().asCharString());
+			     "\t\tint boo: <20>", failure.getMessage().asCharString());
 }
 
 TEST(MockFailureTest, MockExpectedParameterDidntHappenFailure)

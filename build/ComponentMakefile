@@ -71,6 +71,10 @@ STUFF_TO_CLEAN += \
 #Other stuff needed
 CPPUTEST_LIB = $(CPPUTEST_HOME)/lib/libCppUTest.a 
 
+ifdef CPPUTEST_USE_EXTENSIONS
+CPPUTEST_LIB += $(CPPUTEST_HOME)/lib/libCppUTestExt.a
+endif
+
 CPPUTEST_CPPFLAGS +=  $(INCLUDES) $(GCOVFLAGS)
 
 #The gcda files for gcov need to be deleted before each run

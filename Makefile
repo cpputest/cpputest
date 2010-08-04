@@ -117,7 +117,7 @@ test_all:
 	make clean
 	
 .PHONY: examples
-examples: $(TEST_TARGET) 
+examples: $(TEST_TARGET) extensions
 	make -C examples  all
 
 extensions:
@@ -126,6 +126,6 @@ extensions:
 cleanExtensions:
 	make -f Makefile_CppUTestExt clean
 	
-cleanExamples: 
+cleanExamples: clean cleanExtensions
 	make -C examples clean 
 	

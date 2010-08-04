@@ -9,6 +9,8 @@ SILENCE = @
 
 #---- Outputs ----#
 COMPONENT_NAME = CppUTestExamples
+CPPUTEST_USE_EXTENSIONS = Y
+
 TARGET_LIB = \
 	lib/lib$(COMPONENT_NAME).a
 	
@@ -19,11 +21,16 @@ TEST_TARGET = \
 CPPUTEST_HOME = ..
 CPP_PLATFORM = Gcc
 
-#CFLAGS are set to override malloc and free to get memory leak detection in C programs
-CFLAGS += -Dmalloc=cpputest_malloc -Dfree=cpputest_free
-CPPFLAGS += -Wall
-CPPFLAGS += -Werror
-CPPFLAGS += -g
+CPPUTEST_CPPFLAGS += -Wall
+CPPUTEST_CPPFLAGS += -Werror
+CPPUTEST_CPPFLAGS += -g
+
+
+MEMLEAK_DETECTOR_NEW_MACROS += -include ExamplesNewOverrides.h
+MEMLEAK_DETECTOR_MALLOC_MACROS += -include ../include/CppUTest/MemoryLeakDetectorMallocMacros.h
+
+CPPUTEST_CXXFLAGS += $(MEMLEAK_DETECTOR_NEW_MACROS)
+CPPUTEST_CFLAGS += $(MEMLEAK_DETECTOR_MALLOC_MACROS)
 
 #GCOVFLAGS = -fprofile-arcs -ftest-coverage
 

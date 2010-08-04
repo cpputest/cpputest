@@ -135,6 +135,7 @@ MockFunctionCall& MockActualFunctionCall::withParameterOfType(const SimpleString
 	}
 	MockFunctionParameter actualParameter(name, type);
 	actualParameter.value_.objectPointerValue_ = value;
+	actualParameter.comparator_ = getComparatorForType(type);
 	checkActualParameter(actualParameter);
 	return *this;
 }

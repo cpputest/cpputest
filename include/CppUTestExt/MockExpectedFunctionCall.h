@@ -41,17 +41,18 @@ union MockParameterValue{
 struct MockFunctionParameter
 {
 	MockFunctionParameter(const SimpleString& name, const SimpleString& type)
-		: name_(name), type_(type), fulfilled_(false), nextParameter(NULL){}
+		: name_(name), type_(type), fulfilled_(false), comparator_(NULL), nextParameter(NULL){}
 
 	SimpleString name_;
 	SimpleString type_;
 	MockParameterValue value_;
 	bool fulfilled_;
+	MockParameterComparator* comparator_;
 	MockFunctionParameter* nextParameter;
 };
 
 
-extern SimpleString StringFrom(const SimpleString& type, const MockParameterValue& parameter, MockParameterComparator* comparator = NULL);
+extern SimpleString StringFrom(const MockFunctionParameter& parameter);
 
 class MockExpectedFunctionCall : public MockFunctionCall
 {
@@ -90,7 +91,7 @@ private:
 	MockFunctionParameter* parameters_;
 
 	MockFunctionParameter* addNewParameter(const SimpleString& name, const SimpleString& type);
-	bool parametersEqual(const SimpleString& type, const MockParameterValue& p1, const MockParameterValue& p2);
+	bool parametersEqual(const MockFunctionParameter& p1, const MockFunctionParameter& p2);
 	MockFunctionParameter* getParameterByName(const SimpleString& name);
 
 };

@@ -81,7 +81,7 @@ MockExpectedCallsDidntHappenFailure::MockExpectedCallsDidntHappenFailure(Utest* 
 	addExpectationsAndCallHistory(expectations);
 }
 
-MockUnexpectedCallHappenedFailure::MockUnexpectedCallHappenedFailure(Utest* test, const SimpleString& name, const MockExpectedFunctionsList& expectations)  : MockFailure(test)
+MockUnexpectedCallHappenedFailure::MockUnexpectedCallHappenedFailure(Utest* test, const SimpleString& name, const MockExpectedFunctionsList& expectations) : MockFailure(test)
 {
 	int amountOfExpectations = expectations.amountOfExpectationsFor(name);
 	if (amountOfExpectations)
@@ -111,7 +111,7 @@ MockUnexpectedParameterFailure::MockUnexpectedParameterFailure(Utest* test, cons
 		message_ += "\" to function \"";
 		message_ += functionName;
 		message_ += "\": <";
-		message_ += StringFrom(parameter.type_, parameter.value_);
+		message_ += StringFrom(parameter);
 		message_ += ">";
 	}
 
@@ -122,12 +122,12 @@ MockUnexpectedParameterFailure::MockUnexpectedParameterFailure(Utest* test, cons
 	message_ += functionName;
 	message_ += "\n";
 
-	message_ += "\t\t       ";
+	message_ += "\t\t";
 	message_ += parameter.type_;
 	message_ += " ";
 	message_ += parameter.name_;
 	message_ += ": <";
-	message_ += StringFrom(parameter.type_, parameter.value_);
+	message_ += StringFrom(parameter);
 	message_ += ">";
 }
 

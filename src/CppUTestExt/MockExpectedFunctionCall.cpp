@@ -29,38 +29,40 @@
 #include "CppUTestExt/MockExpectedFunctionCall.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
-bool MockExpectedFunctionCall::parametersEqual(const SimpleString& type, const MockParameterValue& p1, const MockParameterValue& p2)
+bool MockExpectedFunctionCall::parametersEqual(const MockFunctionParameter& p1, const MockFunctionParameter& p2)
 {
-	if (type == "int")
-		return p1.intValue_ == p2.intValue_;
-	else if (type == "char*")
-		return SimpleString(p1.stringValue_) == SimpleString(p2.stringValue_);
-	else if (type == "void*")
-		return p1.pointerValue_ == p2.pointerValue_;
-	else if (type == "double")
-		return (PlatformSpecificFabs(p1.doubleValue_ - p2.doubleValue_) < 0.005);
+	if (p1.type_ != p2.type_) return false;
 
-	MockParameterComparator* comparator = getComparatorForType(type);
-	if (comparator)
-		return comparator->isEqual(p1.objectPointerValue_, p2.objectPointerValue_);
+	if (p1.type_ == "int")
+		return p1.value_.intValue_ == p2.value_.intValue_;
+	else if (p1.type_ == "char*")
+		return SimpleString(p1.value_.stringValue_) == SimpleString(p2.value_.stringValue_);
+	else if (p1.type_ == "void*")
+		return p1.value_.pointerValue_ == p2.value_.pointerValue_;
+	else if (p1.type_ == "double")
+		return (PlatformSpecificFabs(p1.value_.doubleValue_ - p2.value_.doubleValue_) < 0.005);
+
+	if (p1.comparator_)
+		return p1.comparator_->isEqual(p1.value_.objectPointerValue_, p2.value_.objectPointerValue_);
 
 	return false;
 }
 
-SimpleString StringFrom(const SimpleString& type, const MockParameterValue& parameter, MockParameterComparator* comparator)
+SimpleString StringFrom(const MockFunctionParameter& parameter)
 {
-	if (type == "int")
-		return StringFrom(parameter.intValue_);
-	else if (type == "char*")
-		return parameter.stringValue_;
-	else if (type == "void*")
-		return StringFrom(parameter.pointerValue_);
-	else if (type == "double")
-		return StringFrom(parameter.doubleValue_);
+	if (parameter.type_ == "int")
+		return StringFrom(parameter.value_.intValue_);
+	else if (parameter.type_ == "char*")
+		return parameter.value_.stringValue_;
+	else if (parameter.type_ == "void*")
+		return StringFrom(parameter.value_.pointerValue_);
+	else if (parameter.type_ == "double")
+		return StringFrom(parameter.value_.doubleValue_);
 
-	if (comparator == NULL)
-		return StringFromFormat("No comparator found for type: \"%s\"", type.asCharString());
-	return comparator->valueToString(parameter.objectPointerValue_);
+	if (parameter.comparator_)
+		return parameter.comparator_->valueToString(parameter.value_.objectPointerValue_);
+
+	return StringFromFormat("No comparator found for type: \"%s\"", parameter.type_.asCharString());
 }
 
 MockExpectedFunctionCall::MockExpectedFunctionCall()
@@ -131,6 +133,7 @@ MockFunctionCall& MockExpectedFunctionCall::withParameterOfType(const SimpleStri
 {
 	MockFunctionParameter* newParameter = addNewParameter(name, type);
 	newParameter->value_.objectPointerValue_ = value;
+	newParameter->comparator_ = getComparatorForType(type);
 	return *this;
 }
 
@@ -200,13 +203,13 @@ void MockExpectedFunctionCall::parameterWasPassed(const SimpleString& name)
 SimpleString MockExpectedFunctionCall::getParameterValueString(const SimpleString& name)
 {
 	MockFunctionParameter * p = getParameterByName(name);
-	return (p) ? StringFrom(p->type_, p->value_, getComparatorForType(p->type_)) : "failed";
+	return (p) ? StringFrom(*p) : "failed";
 }
 
 bool MockExpectedFunctionCall::hasParameter(const MockFunctionParameter& parameter)
 {
 	MockFunctionParameter * p = getParameterByName(parameter.name_);
-	return (p) ? parametersEqual(p->type_, p->value_, parameter.value_) : false;
+	return (p) ? parametersEqual(*p, parameter) : false;
 }
 
 SimpleString MockExpectedFunctionCall::callToString()
