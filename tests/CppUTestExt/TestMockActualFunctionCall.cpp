@@ -47,7 +47,7 @@ TEST_GROUP(MockActualFunctionCall)
 
 	void teardown()
 	{
-		CHECK_MOCK_NO_FAILURE_LEFT();
+		CHECK_NO_MOCK_FAILURE();
 		delete emptyList;
 		delete list;
 	}
@@ -57,7 +57,9 @@ TEST(MockActualFunctionCall, unExpectedCall)
 {
 	MockActualFunctionCall actualCall(reporter, *emptyList);
 	actualCall.withName("unexpected");
-	CHECK_MOCK_FAILURE_EXPECTED_CALL_HAPPENED("unexpected");
+
+	MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "unexpected", *list);
+	CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 
 TEST(MockActualFunctionCall, unExpectedParameterName)

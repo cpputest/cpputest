@@ -175,7 +175,7 @@ TEST(MockExpectedFunctionsList, onlyKeepUnfulfilledExpectationsWithParameter)
 TEST(MockExpectedFunctionsList, addUnfilfilledExpectationsWithEmptyList)
 {
 	MockExpectedFunctionsList newList;
-	list->addUnfilfilledExpectationsToList(&newList);
+	newList.addUnfilfilledExpectations(*list);
 	LONGS_EQUAL(0, newList.size());
 }
 
@@ -186,7 +186,7 @@ TEST(MockExpectedFunctionsList, addUnfilfilledExpectationsMultipleUnfulfilledExp
 	list->addExpectedCall(call2);
 	list->addExpectedCall(call3);
 	MockExpectedFunctionsList newList;
-	list->addUnfilfilledExpectationsToList(&newList);
+	newList.addUnfilfilledExpectations(*list);
 	LONGS_EQUAL(2, newList.size());
 }
 
@@ -206,7 +206,7 @@ TEST(MockExpectedFunctionsList, amountOfExpectationsForHasNone)
 	LONGS_EQUAL(0, list->amountOfExpectationsFor("bar"));
 }
 
-TEST(MockExpectedFunctionsList, toString)
+TEST(MockExpectedFunctionsList, callToString)
 {
 	call1->withName("foo");
 	call2->withName("bar");
@@ -218,11 +218,11 @@ TEST(MockExpectedFunctionsList, toString)
 	list->addExpectedCall(call3);
 
 	SimpleString expectedString;
-	expectedString = StringFromFormat("\t\t%s\n\t\t%s", call1->toString().asCharString(), call2->toString().asCharString());
+	expectedString = StringFromFormat("%s\n%s", call1->callToString().asCharString(), call2->callToString().asCharString());
 	STRCMP_EQUAL(expectedString.asCharString(), list->unfulfilledFunctionsToString().asCharString());
 }
 
 TEST(MockExpectedFunctionsList, toStringOnEmptyList)
 {
-	STRCMP_EQUAL("\t\t<none>", list->unfulfilledFunctionsToString().asCharString());
+	STRCMP_EQUAL("<none>", list->unfulfilledFunctionsToString().asCharString());
 }

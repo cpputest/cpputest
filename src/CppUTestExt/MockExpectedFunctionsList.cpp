@@ -104,36 +104,48 @@ void MockExpectedFunctionsList::addExpectedCall(MockExpectedFunctionCall* call)
 	}
 }
 
-void MockExpectedFunctionsList::addUnfilfilledExpectationsToList(MockExpectedFunctionsList* list) const
+void MockExpectedFunctionsList::addUnfilfilledExpectations(const MockExpectedFunctionsList& list)
 {
-	for (MockExpectedFunctionsListNode* p = head_; p; p = p->next_)
+	for (MockExpectedFunctionsListNode* p = list.head_; p; p = p->next_)
 		if (! p->expectedCall_->isFulfilled())
-			list->addExpectedCall(p->expectedCall_);
+			addExpectedCall(p->expectedCall_);
 }
 
-void MockExpectedFunctionsList::addExpectationsToList(MockExpectedFunctionsList* list) const
+void MockExpectedFunctionsList::addExpectationsRelatedTo(const SimpleString& name, const MockExpectedFunctionsList& list)
 {
-	for (MockExpectedFunctionsListNode* p = head_; p; p = p->next_)
-			list->addExpectedCall(p->expectedCall_);
+	for (MockExpectedFunctionsListNode* p = list.head_; p; p = p->next_)
+		if (p->expectedCall_->relatesTo(name))
+			addExpectedCall(p->expectedCall_);
+}
+
+void MockExpectedFunctionsList::addExpectations(const MockExpectedFunctionsList& list)
+{
+	for (MockExpectedFunctionsListNode* p = list.head_; p; p = p->next_)
+		addExpectedCall(p->expectedCall_);
 }
 
 void MockExpectedFunctionsList::onlyKeepExpectationsRelatedTo(const SimpleString& name)
 {
-	for (MockExpectedFunctionsListNode* p = head_; p; p = p->next_) {
+	for (MockExpectedFunctionsListNode* p = head_; p; p = p->next_)
 		if (! p->expectedCall_->relatesTo(name))
 			p->expectedCall_ = NULL;
-	}
+
 	pruneEmptyNodeFromList();
 }
 
+void MockExpectedFunctionsList::onlyKeepUnfulfilledExpectations()
+{
+	for (MockExpectedFunctionsListNode* p = head_; p; p = p->next_)
+		if (p->expectedCall_->isFulfilled())
+			p->expectedCall_ = NULL;
+
+	pruneEmptyNodeFromList();
+}
 
 void MockExpectedFunctionsList::onlyKeepUnfulfilledExpectationsRelatedTo(const SimpleString& name)
 {
-	for (MockExpectedFunctionsListNode* p = head_; p; p = p->next_) {
-		if (! p->expectedCall_->relatesTo(name) || p->expectedCall_->isFulfilled())
-			p->expectedCall_ = NULL;
-	}
-	pruneEmptyNodeFromList();
+	onlyKeepUnfulfilledExpectations();
+	onlyKeepExpectationsRelatedTo(name);
 }
 
 void MockExpectedFunctionsList::onlyKeepExpectationsWithParameterName(const SimpleString& name)
@@ -144,12 +156,18 @@ void MockExpectedFunctionsList::onlyKeepExpectationsWithParameterName(const Simp
 	pruneEmptyNodeFromList();
 }
 
-void MockExpectedFunctionsList::onlyKeepUnfulfilledExpectationsWithParameter(const MockFunctionParameter& parameter)
+void MockExpectedFunctionsList::onlyKeepExpectationsWithParameter(const MockFunctionParameter& parameter)
 {
 	for (MockExpectedFunctionsListNode* p = head_; p; p = p->next_)
-		if (! p->expectedCall_->hasParameter(parameter) || p->expectedCall_->isFulfilled())
+		if (! p->expectedCall_->hasParameter(parameter))
 			p->expectedCall_ = NULL;
 	pruneEmptyNodeFromList();
+}
+
+void MockExpectedFunctionsList::onlyKeepUnfulfilledExpectationsWithParameter(const MockFunctionParameter& parameter)
+{
+	onlyKeepUnfulfilledExpectations();
+	onlyKeepExpectationsWithParameter(parameter);
 }
 
 void MockExpectedFunctionsList::removeOneFulfilledExpectation()
@@ -203,46 +221,42 @@ void MockExpectedFunctionsList::resetExpectations()
 
 void MockExpectedFunctionsList::callWasMade()
 {
-	for (MockExpectedFunctionsListNode* p = head_; p; p = p->next_) {
-		CHECK(p->expectedCall_);
+	for (MockExpectedFunctionsListNode* p = head_; p; p = p->next_)
 		p->expectedCall_->callWasMade();
-	}
 }
 
 void MockExpectedFunctionsList::parameterWasPassed(const SimpleString& parameterName)
 {
-	for (MockExpectedFunctionsListNode* p = head_; p; p = p->next_) {
-		CHECK(p->expectedCall_);
+	for (MockExpectedFunctionsListNode* p = head_; p; p = p->next_)
 		p->expectedCall_->parameterWasPassed(parameterName);
-	}
 }
 
-SimpleString MockExpectedFunctionsList::unfulfilledFunctionsToString() const
+SimpleString MockExpectedFunctionsList::functionsToString(const SimpleString& linePrefix, bool wasFulfilled) const
 {
 	SimpleString str;
 	for (MockExpectedFunctionsListNode* p = head_; p; p = p->next_) {
-		if (! p->expectedCall_->isFulfilled()) {
+		if (p->expectedCall_->isFulfilled() == wasFulfilled) {
 			if (str != "") str += "\n";
-			str += "\t\t";
-			str += p->expectedCall_->toString();
+			str += linePrefix;
+			str += p->expectedCall_->callToString();
 		}
 	}
-	if (str == "") str = "\t\t<none>";
+	if (str == "") {
+		str += linePrefix;
+		str += "<none>";
+	}
 	return str;
+
 }
 
-SimpleString MockExpectedFunctionsList::fulfilledFunctionsToString() const
+SimpleString MockExpectedFunctionsList::unfulfilledFunctionsToString(const SimpleString& linePrefix) const
 {
-	SimpleString str;
-	for (MockExpectedFunctionsListNode* p = head_; p; p = p->next_) {
-		if (p->expectedCall_->isFulfilled()) {
-			if (str != "") str += "\n";
-			str += "\t\t";
-			str += p->expectedCall_->toString();
-		}
-	}
-	if (str == "") str = "\t\t<none>";
-	return str;
+	return functionsToString(linePrefix, false);
+}
+
+SimpleString MockExpectedFunctionsList::fulfilledFunctionsToString(const SimpleString& linePrefix) const
+{
+	return functionsToString(linePrefix, true);
 }
 
 SimpleString MockExpectedFunctionsList::missingParametersToString() const
@@ -254,7 +268,9 @@ SimpleString MockExpectedFunctionsList::missingParametersToString() const
 			str += p->expectedCall_->missingParametersToString();
 		}
 	}
-	if (str == "") str = "\t\t<none>";
+
+	if (str == "")
+		str = "<none>";
 	return str;
 }
 

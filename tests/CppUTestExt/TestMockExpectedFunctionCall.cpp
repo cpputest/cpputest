@@ -283,7 +283,7 @@ TEST(MockExpectedFunctionCall, calledButNotAllParametersAreFulfilled)
 TEST(MockExpectedFunctionCall, toStringForNoParameters)
 {
 	call->withName("name");
-	STRCMP_EQUAL("name -> no parameters", call->toString().asCharString());
+	STRCMP_EQUAL("name -> no parameters", call->callToString().asCharString());
 }
 
 TEST(MockExpectedFunctionCall, toStringForMultipleParameters)
@@ -291,6 +291,6 @@ TEST(MockExpectedFunctionCall, toStringForMultipleParameters)
 	call->withName("name");
 	call->withParameter("string", "value");
 	call->withParameter("integer", 10);
-	STRCMP_EQUAL("name -> char* string: <value>, int integer: <10>", call->toString().asCharString());
+	STRCMP_EQUAL("name -> char* string: <value>, int integer: <10>", call->callToString().asCharString());
 }
 

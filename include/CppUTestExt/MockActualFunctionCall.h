@@ -48,26 +48,28 @@ public:
 	virtual MockFunctionCall& withParameter(const SimpleString& name, void* value);
 	virtual MockFunctionCall& withParameterOfType(const SimpleString& type, const SimpleString& name, void* value);
 
-	bool isFulfilled() const;
-	bool hasFailed() const;
+	virtual bool isFulfilled() const;
+	virtual bool hasFailed() const;
 
-	void checkExpectations();
+	virtual void checkExpectations();
+
 protected:
 	virtual Utest* getTest() const;
-	virtual void callSucceeded();
+	virtual void callHasSucceeded();
 	virtual void failTest(const MockFailure& failure);
 	virtual void checkActualParameter(const MockFunctionParameter& actualParameter);
-
-private:
-	MockFailureReporter* reporter_;
 
 	enum ActualCallState {
 		CALL_IN_PROGESS,
 		CALL_FAILED,
 		CALL_SUCCEED
 	};
-	void setState(ActualCallState state);
-	void checkStateConsistency(ActualCallState oldState, ActualCallState newState);
+	virtual void setState(ActualCallState state);
+	virtual void checkStateConsistency(ActualCallState oldState, ActualCallState newState);
+
+private:
+	MockFailureReporter* reporter_;
+
 	ActualCallState state_;
 
 	MockExpectedFunctionsList unfulfilledExpectations_;

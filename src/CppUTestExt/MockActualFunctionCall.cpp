@@ -34,7 +34,7 @@
 MockActualFunctionCall::MockActualFunctionCall(MockFailureReporter* reporter, const MockExpectedFunctionsList& allExpectations)
 	: reporter_(reporter), state_(CALL_SUCCEED), allExpectations_(allExpectations)
 {
-	allExpectations.addUnfilfilledExpectationsToList(&unfulfilledExpectations_);
+	unfulfilledExpectations_.addUnfilfilledExpectations(allExpectations);
 }
 
 MockActualFunctionCall::~MockActualFunctionCall()
@@ -52,7 +52,7 @@ void MockActualFunctionCall::failTest(const MockFailure& failure)
 	reporter_->failTest(failure);
 }
 
-void MockActualFunctionCall::callSucceeded()
+void MockActualFunctionCall::callHasSucceeded()
 {
 	setState(CALL_SUCCEED);
 	unfulfilledExpectations_.removeOneFulfilledExpectation();
@@ -74,7 +74,7 @@ MockFunctionCall& MockActualFunctionCall::withName(const SimpleString& name)
 	unfulfilledExpectations_.callWasMade();
 
 	if (unfulfilledExpectations_.hasFulfilledExpectations())
-		callSucceeded();
+		callHasSucceeded();
 
 	return *this;
 }
@@ -91,7 +91,7 @@ void MockActualFunctionCall::checkActualParameter(const MockFunctionParameter& a
 
 	unfulfilledExpectations_.parameterWasPassed(actualParameter.name_);
 	if (unfulfilledExpectations_.hasFulfilledExpectations())
-		callSucceeded();
+		callHasSucceeded();
 }
 
 MockFunctionCall& MockActualFunctionCall::withParameter(const SimpleString& name, int value)

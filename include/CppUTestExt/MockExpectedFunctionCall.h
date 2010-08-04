@@ -70,7 +70,6 @@ public:
 	virtual SimpleString getParameterType(const SimpleString& name);
 	virtual MockParameterValue getParameterValue(const SimpleString& name);
 	virtual SimpleString getParameterValueString(const SimpleString& name);
-	virtual SimpleString getUnfulfilledParameterName() const;
 
 	virtual bool hasParameterWithName(const SimpleString& name);
 	virtual bool hasParameter(const MockFunctionParameter& parameter);
@@ -83,12 +82,11 @@ public:
 	virtual void parameterWasPassed(const SimpleString& name);
 	virtual void resetExpectation();
 
-	virtual SimpleString toString();
+	virtual SimpleString callToString();
 	virtual SimpleString missingParametersToString();
 
 private:
 	bool wasCallMade_;
-
 	MockFunctionParameter* parameters_;
 
 	MockFunctionParameter* addNewParameter(const SimpleString& name, const SimpleString& type);

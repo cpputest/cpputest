@@ -51,9 +51,27 @@ MockFailure::MockFailure(Utest* test) : TestFailure(test, "Test failed with Mock
 void MockFailure::addExpectationsAndCallHistory(const MockExpectedFunctionsList& expectations)
 {
 	message_ += "\tEXPECTED calls that did NOT happen:\n";
-	message_ += expectations.unfulfilledFunctionsToString();
+	message_ += expectations.unfulfilledFunctionsToString("\t\t");
 	message_ += "\n\tACTUAL calls that did happen:\n";
-	message_ += expectations.fulfilledFunctionsToString();
+	message_ += expectations.fulfilledFunctionsToString("\t\t");
+}
+
+void MockFailure::addExpectationsAndCallHistoryRelatedTo(const SimpleString& name, const MockExpectedFunctionsList& expectations)
+{
+	MockExpectedFunctionsList expectationsForFunction;
+	expectationsForFunction.addExpectationsRelatedTo(name, expectations);
+
+	message_ += "\tEXPECTED calls that DID NOT happen related to function: ";
+	message_ += name;
+	message_ += "\n";
+
+	message_ += expectationsForFunction.unfulfilledFunctionsToString("\t\t");
+
+	message_ += "\n\tACTUAL calls that DID happen related to function: ";
+	message_ += name;
+	message_ += "\n";
+
+	message_ += expectationsForFunction.fulfilledFunctionsToString("\t\t");
 }
 
 
@@ -77,12 +95,8 @@ MockUnexpectedCallHappenedFailure::MockUnexpectedCallHappenedFailure(Utest* test
 
 MockUnexpectedParameterFailure::MockUnexpectedParameterFailure(Utest* test, const SimpleString& functionName, const MockFunctionParameter& parameter, const MockExpectedFunctionsList& expectations)  : MockFailure(test)
 {
-	MockExpectedFunctionsList expectationsForFunction;
-	expectations.addExpectationsToList(&expectationsForFunction);
-	expectationsForFunction.onlyKeepExpectationsRelatedTo(functionName);
-
 	MockExpectedFunctionsList expectationsForFunctionWithParameterName;
-	expectationsForFunction.addExpectationsToList(&expectationsForFunctionWithParameterName);
+	expectationsForFunctionWithParameterName.addExpectationsRelatedTo(functionName, expectations);
 	expectationsForFunctionWithParameterName.onlyKeepExpectationsWithParameterName(parameter.name_);
 
 	if (expectationsForFunctionWithParameterName.isEmpty()) {
@@ -101,17 +115,8 @@ MockUnexpectedParameterFailure::MockUnexpectedParameterFailure(Utest* test, cons
 		message_ += ">";
 	}
 
-	message_ += "\n\tEXPECTED calls that DID NOT happen related to function: ";
-	message_ += functionName;
 	message_ += "\n";
-
-	message_ += expectationsForFunction.unfulfilledFunctionsToString();
-
-	message_ += "\n\tACTUAL calls that DID happen related to function: ";
-	message_ += functionName;
-	message_ += "\n";
-
-	message_ += expectationsForFunction.fulfilledFunctionsToString();
+	addExpectationsAndCallHistoryRelatedTo(functionName, expectations);
 
 	message_ += "\n\tACTUAL unexpected parameter passed to function: ";
 	message_ += functionName;
@@ -129,37 +134,17 @@ MockUnexpectedParameterFailure::MockUnexpectedParameterFailure(Utest* test, cons
 MockExpectedParameterDidntHappenFailure::MockExpectedParameterDidntHappenFailure(Utest* test, const SimpleString& functionName, const MockExpectedFunctionsList& expectations) : MockFailure(test)
 {
 	MockExpectedFunctionsList expectationsForFunction;
-	expectations.addExpectationsToList(&expectationsForFunction);
-	expectationsForFunction.onlyKeepExpectationsRelatedTo(functionName);
+	expectationsForFunction.addExpectationsRelatedTo(functionName, expectations);
 
 	message_ = "Mock Failure: Expected parameter for function \"";
 	message_ += functionName;
 	message_ += "\" did not happen.\n";
 
-	message_ += "\tEXPECTED calls that DID NOT happen related to function: ";
-	message_ += functionName;
-	message_ += "\n";
-
-	message_ += expectationsForFunction.unfulfilledFunctionsToString();
-
-	message_ += "\n\tACTUAL calls that DID happen related to function: ";
-	message_ += functionName;
-	message_ += "\n";
-
-	message_ += expectationsForFunction.fulfilledFunctionsToString();
+	addExpectationsAndCallHistoryRelatedTo(functionName, expectations);
 
 	message_ += "\n\tMISSING parameters that didn't happen:\n";
 	message_ += "\t\t";
 	message_ += expectationsForFunction.missingParametersToString();
-#if 0
-	message_ += "\t\t       ";
-	message_ += parameter.type_;
-	message_ += " ";
-	message_ += parameter.name_;
-	message_ += ": <";
-	message_ += StringFrom(parameter.type_, parameter.value_);
-	message_ += ">";
-#endif
 }
 
 MockNoWayToCompareCustomTypeFailure::MockNoWayToCompareCustomTypeFailure(Utest* test, const SimpleString& typeName) : MockFailure(test)

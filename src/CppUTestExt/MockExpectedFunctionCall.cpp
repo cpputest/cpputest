@@ -164,14 +164,6 @@ MockParameterValue MockExpectedFunctionCall::getParameterValue(const SimpleStrin
 	return defaultValue;
 }
 
-SimpleString MockExpectedFunctionCall::getUnfulfilledParameterName() const
-{
-	for (MockFunctionParameter * p = parameters_; p; p = p->nextParameter)
-		if (! p->fulfilled_)
-			return p->name_;
-	return "";
-}
-
 bool MockExpectedFunctionCall::areParametersFulfilled()
 {
 	for (MockFunctionParameter * p = parameters_; p; p = p->nextParameter)
@@ -217,7 +209,7 @@ bool MockExpectedFunctionCall::hasParameter(const MockFunctionParameter& paramet
 	return (p) ? parametersEqual(p->type_, p->value_, parameter.value_) : false;
 }
 
-SimpleString MockExpectedFunctionCall::toString()
+SimpleString MockExpectedFunctionCall::callToString()
 {
 	SimpleString str;
 	str += getName();
@@ -225,12 +217,7 @@ SimpleString MockExpectedFunctionCall::toString()
 	if (parameters_ == NULL)
 		str += "no parameters";
 	for (MockFunctionParameter * p = parameters_; p; p = p->nextParameter) {
-		str += p->type_;
-		str += " ";
-		str += p->name_;
-		str += ": <";
-		str += getParameterValueString(p->name_);
-		str += ">";
+		str += StringFromFormat("%s %s: <%s>", p->type_.asCharString(), p->name_.asCharString(), getParameterValueString(p->name_).asCharString());
 		if (p->nextParameter) str += ", ";
 	}
 	return str;
@@ -242,9 +229,7 @@ SimpleString MockExpectedFunctionCall::missingParametersToString()
 	for (MockFunctionParameter * p = parameters_; p; p = p->nextParameter) {
 		if (! p->fulfilled_) {
 			if (str != "") str += ", ";
-			str += p->type_;
-			str += " ";
-			str += p->name_;
+			str += StringFromFormat("%s %s", p->type_.asCharString(), p->name_.asCharString());
 		}
 	}
 	return str;

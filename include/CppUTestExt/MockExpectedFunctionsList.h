@@ -36,38 +36,43 @@ class MockExpectedFunctionsList
 
 public:
 	MockExpectedFunctionsList();
-	~MockExpectedFunctionsList();
-	void deleteAllExpectationsAndClearList();
+	virtual ~MockExpectedFunctionsList();
+	virtual void deleteAllExpectationsAndClearList();
 
-	int size() const;
-	int amountOfExpectationsFor(const SimpleString& name) const;
-	int amountOfUnfulfilledExpectations() const;
-	bool hasUnfullfilledExpectations() const;
-	bool hasFulfilledExpectations() const;
-	bool isEmpty() const;
-	bool hasUnfulfilledExpectationWithName(const SimpleString& name) const;
+	virtual int size() const;
+	virtual int amountOfExpectationsFor(const SimpleString& name) const;
+	virtual int amountOfUnfulfilledExpectations() const;
+	virtual bool hasUnfullfilledExpectations() const;
+	virtual bool hasFulfilledExpectations() const;
+	virtual bool isEmpty() const;
+	virtual bool hasUnfulfilledExpectationWithName(const SimpleString& name) const;
 
-	void addExpectedCall(MockExpectedFunctionCall* call);
+	virtual void addExpectedCall(MockExpectedFunctionCall* call);
+	virtual void addExpectations(const MockExpectedFunctionsList& list);
+	virtual void addExpectationsRelatedTo(const SimpleString& name, const MockExpectedFunctionsList& list);
+	virtual void addUnfilfilledExpectations(const MockExpectedFunctionsList& list);
 
-	void addUnfilfilledExpectationsToList(MockExpectedFunctionsList* list) const;
-	void addExpectationsToList(MockExpectedFunctionsList* list) const;
+	virtual void onlyKeepExpectationsRelatedTo(const SimpleString& name);
+	virtual void onlyKeepExpectationsWithParameter(const MockFunctionParameter& parameter);
+	virtual void onlyKeepExpectationsWithParameterName(const SimpleString& name);
+	virtual void onlyKeepUnfulfilledExpectations();
+	virtual void onlyKeepUnfulfilledExpectationsRelatedTo(const SimpleString& name);
+	virtual void onlyKeepUnfulfilledExpectationsWithParameter(const MockFunctionParameter& parameter);
 
-	void onlyKeepExpectationsRelatedTo(const SimpleString& name);
-	void onlyKeepExpectationsWithParameterName(const SimpleString& name);
-	void onlyKeepUnfulfilledExpectationsRelatedTo(const SimpleString& name);
-	void onlyKeepUnfulfilledExpectationsWithParameter(const MockFunctionParameter& parameter);
+	virtual void removeOneFulfilledExpectation();
 
-	void removeOneFulfilledExpectation();
+	virtual void resetExpectations();
+	virtual void callWasMade();
+	virtual void parameterWasPassed(const SimpleString& parameterName);
 
-	void resetExpectations();
-	void callWasMade();
-	void parameterWasPassed(const SimpleString& parameterName);
-
-	SimpleString unfulfilledFunctionsToString() const;
-	SimpleString fulfilledFunctionsToString() const;
-	SimpleString missingParametersToString() const;
+	virtual SimpleString unfulfilledFunctionsToString(const SimpleString& linePrefix = "") const;
+	virtual SimpleString fulfilledFunctionsToString(const SimpleString& linePrefix = "") const;
+	virtual SimpleString missingParametersToString() const;
 
 protected:
+	virtual void pruneEmptyNodeFromList();
+	virtual SimpleString functionsToString(const SimpleString& linePrefix, bool wasFulfilled) const;
+
 	class MockExpectedFunctionsListNode
 	{
 	public:
@@ -77,10 +82,9 @@ protected:
 		MockExpectedFunctionsListNode(MockExpectedFunctionCall* expectedCall)
 			: expectedCall_(expectedCall), next_(NULL) {};
 	};
+private:
 	MockExpectedFunctionsListNode* head_;
 
-private:
-	void pruneEmptyNodeFromList();
 	MockExpectedFunctionsList(const MockExpectedFunctionsList&);
 };
 

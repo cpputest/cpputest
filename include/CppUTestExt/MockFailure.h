@@ -57,6 +57,7 @@ public:
 	virtual ~MockFailure(){};
 protected:
 	void addExpectationsAndCallHistory(const MockExpectedFunctionsList& expectations);
+	void addExpectationsAndCallHistoryRelatedTo(const SimpleString& function, const MockExpectedFunctionsList& expectations);
 };
 
 class MockExpectedCallsDidntHappenFailure : public MockFailure

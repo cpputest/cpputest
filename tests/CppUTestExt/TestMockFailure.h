@@ -29,13 +29,8 @@
 #ifndef D_TestMockFailure_h
 #define D_TestMockFailure_h
 
-#define CHECK_MOCK_FAILURE_EXPECTED_CALL_HAPPENED(name) CHECK_MOCK_FAILURE_EXPECTED_CALL_HAPPENED_LOCATION(name, __FILE__, __LINE__)
-#define CHECK_MOCK_NO_FAILURE_LEFT() CHECK_MOCK_NO_FAILURE_LEFT_LOCATION(__FILE__, __LINE__)
-#define CHECK_MOCK_NO_FAILURE() CHECK_MOCK_NO_FAILURE_LEFT_LOCATION(__FILE__, __LINE__)
-#define CHECK_MOCK_FAILURE_EXPECTED_CALL_DID_NOT_HAPPEN(name) CHECK_MOCK_FAILURE_EXPECTED_CALL_DID_NOT_HAPPEN_LOCATION(name, __FILE__, __LINE__)
-#define CHECK_MOCK_FAILURE_NO_WAY_TO_COMPARE_TYPE(typeName) CHECK_MOCK_FAILURE_NO_WAY_TO_COMPARE_TYPE_LOCATION(typeName, __FILE__, __LINE__)
-
 #define CHECK_EXPECTED_MOCK_FAILURE(expectedFailure) CHECK_EXPECTED_MOCK_FAILURE_LOCATION(expectedFailure, __FILE__, __LINE__)
+#define CHECK_NO_MOCK_FAILURE() CHECK_NO_MOCK_FAILURE_LOCATION(__FILE__, __LINE__)
 
 class MockFailureReporterForTest : public MockFailureReporter
 {
@@ -63,20 +58,6 @@ inline SimpleString mockFailureString()
 	return MockFailureReporterForTest::getReporter()->mockFailureString;
 }
 
-inline void MOCK_FAILURES_EQUAL_LOCATION(const SimpleString& expected, const SimpleString& actual, const char* file, int line)
-{
-	if (actual != expected)
-	{
-		SimpleString error = "MockFailures are different.\n";
-		error += "Expected MockFailure:\n\t";
-		error += expected;
-		error += "\nActual MockFailure:\n\t";
-		error += actual;
-		FAIL_LOCATION(error.asCharString(), file, line);
-	}
-	MockFailureReporterForTest::getReporter()->mockFailureString = "";
-}
-
 inline void CHECK_EXPECTED_MOCK_FAILURE_LOCATION(const MockFailure& expectedFailure, const char* file, int line)
 {
 	SimpleString expectedFailureString = expectedFailure.getMessage();
@@ -93,32 +74,15 @@ inline void CHECK_EXPECTED_MOCK_FAILURE_LOCATION(const MockFailure& expectedFail
 	}
 }
 
-inline void CHECK_MOCK_FAILURE_EXPECTED_CALL_DID_NOT_HAPPEN_LOCATION(const char* name, const char* file, int line)
+inline void CHECK_NO_MOCK_FAILURE_LOCATION(const char* file, int line)
 {
-	MockExpectedFunctionsList list;
-	MockExpectedFunctionCall call;
-	call.withName(name);
-	list.addExpectedCall(&call);
-	MockExpectedCallsDidntHappenFailure expectedFailure(mockFailureTest(), list);
-	MOCK_FAILURES_EQUAL_LOCATION(expectedFailure.getMessage(), mockFailureString(), file, line);
-}
+	if (mockFailureString() != "") {
+		SimpleString error = "Unexpected mock failure:\n";
+		error += mockFailureString();
+		FAIL_LOCATION(error.asCharString(), file, line);
 
-inline void CHECK_MOCK_FAILURE_EXPECTED_CALL_HAPPENED_LOCATION(const char* name, const char* file, int line)
-{
-	MockExpectedFunctionsList expectations;
-	MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), name, expectations);
-	MOCK_FAILURES_EQUAL_LOCATION(expectedFailure.getMessage(), mockFailureString(), file, line);
-}
-
-inline void CHECK_MOCK_NO_FAILURE_LEFT_LOCATION(const char* file, int line)
-{
-	MOCK_FAILURES_EQUAL_LOCATION("", mockFailureString(), file, line);
-}
-
-inline void CHECK_MOCK_FAILURE_NO_WAY_TO_COMPARE_TYPE_LOCATION(const char* typeName, const char* file, int line)
-{
-	MockNoWayToCompareCustomTypeFailure expectedFailure(mockFailureTest(), typeName);
-	MOCK_FAILURES_EQUAL_LOCATION(expectedFailure.getMessage(), mockFailureString(), file, line);
+	}
+	MockFailureReporterForTest::getReporter()->mockFailureString = "";
 }
 
 #endif
