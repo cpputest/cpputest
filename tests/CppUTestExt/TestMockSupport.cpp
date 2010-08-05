@@ -118,6 +118,19 @@ TEST(MockSupportTest, ignoreOtherCallsExceptForTheExpectedOne)
 	mock.clearExpectations();
 }
 
+TEST(MockSupportTest, ignoreOtherCallsDoesntIgnoreMultipleCallsOfTheSameFunction)
+{
+	mock.expectOneCall("foo");
+	mock.ignoreOtherCalls();
+	mock.actualCall("bar");
+	mock.actualCall("foo");
+	mock.actualCall("foo");
+
+	addFunctionToExpectationsList("foo")->callWasMade();
+	MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "foo", *expectationsList);
+	CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
 TEST(MockSupportTest, ignoreOtherStillFailsIfExpectedOneDidntHappen)
 {
 	mock.expectOneCall("foo");
@@ -348,4 +361,17 @@ TEST(MockSupportTest, customObjectParameterSucceeds)
 	mock.checkExpectations();
 	CHECK_NO_MOCK_FAILURE();
 	mock.removeAllComparators();
+}
+
+TEST(MockSupportTest, disableEnable)
+{
+	mock.disable();
+	mock.expectOneCall("function");
+	mock.actualCall("differenFunction");
+	CHECK(! mock.expectedCallsLeft());
+	mock.enable();
+	mock.expectOneCall("function");
+	CHECK(mock.expectedCallsLeft());
+	mock.actualCall("function");
+	CHECK_NO_MOCK_FAILURE();
 }

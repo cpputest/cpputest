@@ -44,6 +44,8 @@ public:
 	virtual MockFunctionCall& expectOneCall(const SimpleString& functionName);
 	virtual MockFunctionCall& actualCall(const SimpleString& functionName);
 
+	virtual void disable();
+	virtual void enable();
 	virtual void ignoreOtherCalls();
 
 	virtual void clearExpectations();
@@ -66,6 +68,7 @@ private:
 
 	MockExpectedFunctionsList expectations_;
 	bool ignoreOtherCalls_;
+	bool enabled_;
 	MockActualFunctionCall* lastActualFunctionCall_;
 	MockParameterComparatorRepository comparatorRepository_;
 };

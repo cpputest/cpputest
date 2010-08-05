@@ -44,8 +44,8 @@ public:
 	virtual int amountOfUnfulfilledExpectations() const;
 	virtual bool hasUnfullfilledExpectations() const;
 	virtual bool hasFulfilledExpectations() const;
+	virtual bool hasExpectationWithName(const SimpleString& name) const;
 	virtual bool isEmpty() const;
-	virtual bool hasUnfulfilledExpectationWithName(const SimpleString& name) const;
 
 	virtual void addExpectedCall(MockExpectedFunctionCall* call);
 	virtual void addExpectations(const MockExpectedFunctionsList& list);

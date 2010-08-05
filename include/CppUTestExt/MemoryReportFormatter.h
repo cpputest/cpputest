@@ -35,6 +35,9 @@ class MemoryReportFormatter
 {
 public:
 
+	virtual void report_testgroup_start(TestResult* result, Utest& test)=0;
+	virtual void report_testgroup_end(TestResult* result, Utest& test)=0;
+
 	virtual void report_test_start(TestResult* result, Utest& test)=0;
 	virtual void report_test_end(TestResult* result, Utest& test)=0;
 
@@ -47,6 +50,9 @@ class NormalMemoryReportFormatter : public MemoryReportFormatter
 public:
 	NormalMemoryReportFormatter();
 	virtual ~NormalMemoryReportFormatter();
+
+	virtual void report_testgroup_start(TestResult* /*result*/, Utest& /*test*/){};
+	virtual void report_testgroup_end(TestResult* /*result*/, Utest& /*test*/){};
 
 	virtual void report_test_start(TestResult* result, Utest& test);
 	virtual void report_test_end(TestResult* result, Utest& test);
@@ -66,6 +72,9 @@ private:
 public:
     CodeMemoryReportFormatter(MemoryLeakAllocator* internalAllocator);
 	virtual ~CodeMemoryReportFormatter();
+
+	virtual void report_testgroup_start(TestResult* /*result*/, Utest& /*test*/){};
+	virtual void report_testgroup_end(TestResult* /*result*/, Utest& /*test*/){};
 
 	virtual void report_test_start(TestResult* result, Utest& test);
 	virtual void report_test_end(TestResult* result, Utest& test);

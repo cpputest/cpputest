@@ -52,6 +52,18 @@ static MockSupport reporterMock;
 class MockMemoryReportFormatter : public MemoryReportFormatter
 {
 public:
+	virtual void report_testgroup_start(TestResult* result, Utest& test)
+	{
+		TemporaryDefaultNewAllocator tempAlloc;
+		formatterMock.actualCall("report_testgroup_start").withParameter("result", result).withParameter("test", &test);
+	}
+
+	virtual void report_testgroup_end(TestResult* result, Utest& test)
+	{
+		TemporaryDefaultNewAllocator tempAlloc;
+		formatterMock.actualCall("report_testgroup_end").withParameter("result", result).withParameter("test", &test);
+	}
+
 	virtual void report_test_start(TestResult* result, Utest& test)
 	{
 		TemporaryDefaultNewAllocator tempAlloc;
@@ -113,13 +125,6 @@ TEST_GROUP(MemoryReporterPlugin)
 	TestResult* result;
 	Utest* test;
 
-	void setReportingToNormal()
-	{
-		reporterMock.ignoreOtherCalls();
-		const char *cmd_line[] = {"-pmemoryreport=normal"};
-		reporter->parseArguments(1, cmd_line, 0);
-	}
-
 	void setup()
 	{
 		result = new TestResult(output);
@@ -127,7 +132,13 @@ TEST_GROUP(MemoryReporterPlugin)
 		reporter = new MemoryReporterPluginUnderTest;
 
 		formatterMock.installComparator("MemoryLeakAllocator", memLeakAllocatorComparator);
-//		mock.crashOnFailure();
+
+		reporterMock.disable();
+		const char *cmd_line[] = {"-pmemoryreport=normal"};
+		reporter->parseArguments(1, cmd_line, 0);
+		reporterMock.enable();
+
+		//		mock.crashOnFailure();
 	}
 	void teardown()
 	{
@@ -142,10 +153,11 @@ TEST_GROUP(MemoryReporterPlugin)
 
 TEST(MemoryReporterPlugin, offReportsNothing)
 {
-	reporter->preTestAction(*test, *result);
+	MemoryReporterPluginUnderTest freshReporter;
+	freshReporter.preTestAction(*test, *result);
 	char* memory = new char;
 	delete memory;
-	reporter->postTestAction(*test, *result);
+	freshReporter.postTestAction(*test, *result);
 }
 
 TEST(MemoryReporterPlugin, meaninglessArgumentsAreIgnored)
@@ -157,14 +169,14 @@ TEST(MemoryReporterPlugin, meaninglessArgumentsAreIgnored)
 TEST(MemoryReporterPlugin, commandLineParameterTurnsOnNormalLogging)
 {
 	reporterMock.expectOneCall("createMemoryFormatter").withParameter("type", "normal");
+
 	const char *cmd_line[] = {"-nothing", "-pmemoryreport=normal", "alsomeaningless" };
 	CHECK(reporter->parseArguments(3, cmd_line, 1));
 }
 
 TEST(MemoryReporterPlugin, preTestActionReportsTest)
 {
-	setReportingToNormal();
-
+	formatterMock.expectOneCall("report_testgroup_start").withParameter("result", result).withParameter("test", test);
 	formatterMock.expectOneCall("report_test_start").withParameter("result", result).withParameter("test", test);
 	reporter->preTestAction(*test, *result);
 }
@@ -172,17 +184,17 @@ TEST(MemoryReporterPlugin, preTestActionReportsTest)
 TEST(MemoryReporterPlugin, postTestActionReportsTest)
 {
 	formatterMock.expectOneCall("report_test_end").withParameter("result", result).withParameter("test", test);;
+	formatterMock.expectOneCall("report_testgroup_end").withParameter("result", result).withParameter("test", test);;
 
-	setReportingToNormal();
 	reporter->postTestAction(*test, *result);
 }
 
 TEST(MemoryReporterPlugin, newAllocationsAreReportedTest)
 {
 	formatterMock.expectOneCall("report_alloc_memory").withParameter("result", result).withParameterOfType("MemoryLeakAllocator", "allocator", StandardNewAllocator::defaultAllocator());
+	formatterMock.expectOneCall("report_free_memory").withParameter("result", result).withParameterOfType("MemoryLeakAllocator", "allocator", StandardNewAllocator::defaultAllocator());
 	formatterMock.ignoreOtherCalls();
 
-	setReportingToNormal();
 	reporter->preTestAction(*test, *result);
 	char* memory = new char;
 	delete memory;
@@ -193,8 +205,8 @@ TEST(MemoryReporterPlugin, whenUsingOnlyMallocAllocatorNoOtherOfTheAllocatorsAre
 	formatterMock.expectOneCall("report_test_start").withParameter("result", result).withParameter("test", test);
 	formatterMock.expectOneCall("report_alloc_memory").withParameter("result", result).withParameterOfType("MemoryLeakAllocator", "allocator", StandardMallocAllocator::defaultAllocator());
 	formatterMock.expectOneCall("report_free_memory").withParameter("result", result).withParameterOfType("MemoryLeakAllocator", "allocator", StandardMallocAllocator::defaultAllocator());
+	formatterMock.ignoreOtherCalls();
 
-	setReportingToNormal();
 	reporter->preTestAction(*test, *result);
 	void* memory = malloc(100);
 	free(memory);
@@ -203,9 +215,9 @@ TEST(MemoryReporterPlugin, whenUsingOnlyMallocAllocatorNoOtherOfTheAllocatorsAre
 TEST(MemoryReporterPlugin, newArrayAllocationsAreReportedTest)
 {
 	formatterMock.expectOneCall("report_alloc_memory").withParameter("result", result).withParameterOfType("MemoryLeakAllocator", "allocator", StandardNewArrayAllocator::defaultAllocator());
+	formatterMock.expectOneCall("report_free_memory").withParameter("result", result).withParameterOfType("MemoryLeakAllocator", "allocator", StandardNewArrayAllocator::defaultAllocator());
 	formatterMock.ignoreOtherCalls();
 
-	setReportingToNormal();
 	reporter->preTestAction(*test, *result);
 	char* memory = new char [100];
 	delete [] memory;
@@ -213,9 +225,8 @@ TEST(MemoryReporterPlugin, newArrayAllocationsAreReportedTest)
 
 TEST(MemoryReporterPlugin, mallocAllocationsAreReportedTest)
 {
-	setReportingToNormal();
-
 	formatterMock.expectOneCall("report_alloc_memory").withParameter("result", result).withParameterOfType("MemoryLeakAllocator", "allocator", StandardMallocAllocator::defaultAllocator());
+	formatterMock.expectOneCall("report_free_memory").withParameter("result", result).withParameterOfType("MemoryLeakAllocator", "allocator", StandardMallocAllocator::defaultAllocator());
 	formatterMock.ignoreOtherCalls();
 
 	reporter->preTestAction(*test, *result);
@@ -223,11 +234,52 @@ TEST(MemoryReporterPlugin, mallocAllocationsAreReportedTest)
 	free(memory);
 }
 
+TEST(MemoryReporterPlugin, startOfANewTestWillReportTheTestGroupStart)
+{
+	formatterMock.expectOneCall("report_testgroup_start").withParameter("result", result).withParameter("test", test);
+	formatterMock.expectOneCall("report_test_start").withParameter("result", result).withParameter("test", test);
+	formatterMock.expectOneCall("report_test_end").withParameter("result", result).withParameter("test", test);
+	formatterMock.expectOneCall("report_test_start").withParameter("result", result).withParameter("test", test);
+	formatterMock.expectOneCall("report_test_end").withParameter("result", result).withParameter("test", test);
+	formatterMock.ignoreOtherCalls();
+
+	reporter->preTestAction(*test, *result);
+	reporter->postTestAction(*test, *result);
+	reporter->preTestAction(*test, *result);
+	reporter->postTestAction(*test, *result);
+}
+
+class UtestForMemoryReportingPlugingTest : public Utest
+{
+public:
+	UtestForMemoryReportingPlugingTest(const char* groupname, Utest* test) : Utest(groupname, "testname", "filename", 1, test)
+	{
+
+	}
+};
+
+TEST(MemoryReporterPlugin, endOfaTestGroupWillReportSo)
+{
+	UtestForMemoryReportingPlugingTest fourthTest("differentGroupName", NULL);
+	UtestForMemoryReportingPlugingTest thirdTest("differentGroupName", &fourthTest);
+	UtestForMemoryReportingPlugingTest secondTest("groupname", &thirdTest);
+	UtestForMemoryReportingPlugingTest firstTest("groupname", &secondTest);
+
+	formatterMock.expectOneCall("report_testgroup_end").withParameter("result", result).withParameter("test", &secondTest);
+	formatterMock.ignoreOtherCalls();
+
+	reporter->preTestAction(firstTest, *result);
+	reporter->postTestAction(firstTest, *result);
+	reporter->preTestAction(secondTest, *result);
+	reporter->postTestAction(secondTest, *result);
+	reporter->preTestAction(thirdTest, *result);
+	reporter->postTestAction(thirdTest, *result);
+}
+
 TEST(MemoryReporterPlugin, preActionReplacesAllocators)
 {
 	formatterMock.ignoreOtherCalls();
 
-	setReportingToNormal();
 	MemoryLeakAllocator* allocator = MemoryLeakAllocator::getCurrentMallocAllocator();
 	reporter->preTestAction(*test, *result);
 	CHECK(allocator != MemoryLeakAllocator::getCurrentMallocAllocator());
@@ -237,7 +289,6 @@ TEST(MemoryReporterPlugin, postActionRestoresAllocators)
 {
 	formatterMock.ignoreOtherCalls();
 
-	setReportingToNormal();
 	MemoryLeakAllocator* allocator = MemoryLeakAllocator::getCurrentMallocAllocator();
 	reporter->preTestAction(*test, *result);
 	reporter->postTestAction(*test, *result);

@@ -110,6 +110,12 @@ void MemoryReporterPlugin::preTestAction(Utest& test, TestResult& result)
 	initializeAllocator(&newArrayAllocator, result);
 
 	setGlobalMemoryReportAllocators();
+
+	if (test.getGroup() != currentTestGroup_) {
+		formatter_->report_testgroup_start(&result, test);
+		currentTestGroup_ = test.getGroup();
+	}
+
 	formatter_->report_test_start(&result, test);
 }
 
@@ -119,4 +125,7 @@ void MemoryReporterPlugin::postTestAction(Utest& test, TestResult& result)
 
 	removeGlobalMemoryReportAllocators();
 	formatter_->report_test_end(&result, test);
+
+	if (test.getNext()->getGroup() != currentTestGroup_)
+		formatter_->report_testgroup_end(&result, test);
 }

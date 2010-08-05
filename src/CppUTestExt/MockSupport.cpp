@@ -31,7 +31,7 @@
 #include "CppUTestExt/MockExpectedFunctionCall.h"
 #include "CppUTestExt/MockFailure.h"
 
-MockSupport::MockSupport() : reporter_(&defaultReporter_), ignoreOtherCalls_(false), lastActualFunctionCall_(NULL)
+MockSupport::MockSupport() : reporter_(&defaultReporter_), ignoreOtherCalls_(false), enabled_(true), lastActualFunctionCall_(NULL)
 {
 }
 
@@ -69,6 +69,8 @@ void MockSupport::clearExpectations()
 
 MockFunctionCall& MockSupport::expectOneCall(const SimpleString& functionName)
 {
+	if (!enabled_) return MockIgnoredCall::instance();
+
 	MockExpectedFunctionCall* call = new MockExpectedFunctionCall;
 	call->setComparatorRepository(&comparatorRepository_);
 	call->withName(functionName);
@@ -85,9 +87,11 @@ MockActualFunctionCall* MockSupport::createActualFunctionCall()
 
 MockFunctionCall& MockSupport::actualCall(const SimpleString& functionName)
 {
+	if (!enabled_) return MockIgnoredCall::instance();
+
 	if (lastActualFunctionCall_) lastActualFunctionCall_->checkExpectations();
 
-	if (!expectations_.hasUnfulfilledExpectationWithName(functionName) && ignoreOtherCalls_) {
+	if (!expectations_.hasExpectationWithName(functionName) && ignoreOtherCalls_) {
 		return MockIgnoredCall::instance();
 	}
 
@@ -101,6 +105,17 @@ void MockSupport::ignoreOtherCalls()
 {
 	ignoreOtherCalls_ = true;
 }
+
+void MockSupport::disable()
+{
+	enabled_ = false;
+}
+
+void MockSupport::enable()
+{
+	enabled_ = true;
+}
+
 
 bool MockSupport::expectedCallsLeft()
 {

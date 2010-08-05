@@ -40,6 +40,8 @@ class MemoryReporterPlugin : public TestPlugin
 	MemoryReportAllocator mallocAllocator;
 	MemoryReportAllocator newAllocator;
 	MemoryReportAllocator newArrayAllocator;
+
+	SimpleString currentTestGroup_;
 public:
     MemoryReporterPlugin();
     virtual ~MemoryReporterPlugin();
