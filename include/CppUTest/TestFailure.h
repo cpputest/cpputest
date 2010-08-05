@@ -104,7 +104,7 @@ public:
 class StringEqualFailure : public TestFailure
 {
 public:
-	StringEqualFailure(Utest* test, const char* fileName, int lineNumber, const char* expected, const char* actual);
+	StringEqualFailure(Utest* test, const char* fileName, int lineNumber, const char* expected, const char* actual, bool jamesvariant = false);
 };
 
 class StringEqualNoCaseFailure : public TestFailure

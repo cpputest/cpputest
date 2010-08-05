@@ -123,32 +123,57 @@ LongsEqualFailure::LongsEqualFailure(Utest* test, const char* fileName, int line
 	message_ = StringFromFormat("expected <%s>\n\tbut was  <%s>", expectedReported.asCharString(), actualReported.asCharString());
 }
 
-StringEqualFailure::StringEqualFailure(Utest* test, const char* fileName, int lineNumber, const char* expected, const char* actual) : TestFailure(test, fileName, lineNumber)
+SimpleString subStringForFailure(const SimpleString& str, int pos)
+{
+	SimpleString finalString = StringFromFormat("     %s     ", str.asCharString());
+	return finalString.subString(pos, 10);
+}
+
+StringEqualFailure::StringEqualFailure(Utest* test, const char* fileName, int lineNumber, const char* expected, const char* actual, bool jamesvariant) : TestFailure(test, fileName, lineNumber)
 {
 	int failStart;
-    for (failStart = 0; actual[failStart] == expected[failStart]; failStart++)
-    	;
+	for (failStart = 0; actual[failStart] == expected[failStart]; failStart++)
+		;
+	if (jamesvariant) {
 
-    const char * error = "<!>";
-	char * message;
+		const char * error = "<!>";
+		char * message;
 
-	//cpputest_malloc is needed instead of new[] for vc6 compatibility
-	message = (char*)cpputest_malloc(PlatformSpecificStrLen(actual) + PlatformSpecificStrLen(error) + 10);
+		//cpputest_malloc is needed instead of new[] for vc6 compatibility
+		message = (char*)cpputest_malloc(PlatformSpecificStrLen(actual) + PlatformSpecificStrLen(error) + 10);
 
-	int j;
-	for (j = 0; j < failStart; j++)
-		message[j] = actual[j];
+		int j;
+		for (j = 0; j < failStart; j++)
+			message[j] = actual[j];
 
-	for (int k = 0; k < (int)PlatformSpecificStrLen(error); j++, k++)
-		message[j] = error[k];
+		for (int k = 0; k < (int)PlatformSpecificStrLen(error); j++, k++)
+			message[j] = error[k];
 
-	for (int i = failStart; actual[i]; i++, j++)
-		message[j] = actual[i];
+		for (int i = failStart; actual[i]; i++, j++)
+			message[j] = actual[i];
 
-	message[j] = '\0';
+		message[j] = '\0';
 
-	message_ = StringFromFormat("expected <%s>\n\tbut was  <%s>", expected, message);
-	cpputest_free(message);
+		message_ = StringFromFormat("expected <%s>\n\tbut was  <%s>", expected, message);
+		cpputest_free(message);
+	}
+	else {
+		message_ = StringFromFormat("expected <%s>\n\tbut was  <%s>\n", expected, actual);
+
+		SimpleString differentString;
+		differentString = StringFromFormat("difference starts at position %d at: <", failStart);
+		size_t len = differentString.size();
+		SimpleString markString;
+		markString += "\t";
+		markString += SimpleString(" ", len+5);
+		markString += "^";
+
+		message_ += "\t";
+		message_ += differentString;
+		message_ += subStringForFailure(actual, failStart);
+		message_ += ">\n";
+		message_ += markString;
+	}
 }
 
 StringEqualNoCaseFailure::StringEqualNoCaseFailure(Utest* test, const char* fileName, int lineNumber, const char* expected, const char* actual) : TestFailure(test, fileName, lineNumber)

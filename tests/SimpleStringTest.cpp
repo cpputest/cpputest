@@ -287,6 +287,42 @@ TEST(SimpleString, replaceStringWithString)
 	STRCMP_EQUAL("boohoo baa boohoo baa boohoo", str.asCharString());
 }
 
+TEST(SimpleString, subStringFromEmptyString)
+{
+	SimpleString str("");
+	STRCMP_EQUAL("", str.subString(0, 1).asCharString());
+}
+
+TEST(SimpleString, subStringFromSmallString)
+{
+	SimpleString str("H");
+	STRCMP_EQUAL("H", str.subString(0, 1).asCharString());
+}
+
+TEST(SimpleString, subStringFromPos0)
+{
+	SimpleString str("Hello World");
+	STRCMP_EQUAL("Hello", str.subString(0, 5).asCharString());
+}
+
+TEST(SimpleString, subStringFromPos1)
+{
+	SimpleString str("Hello World");
+	STRCMP_EQUAL("ello ", str.subString(1, 5).asCharString());
+}
+
+TEST(SimpleString, subStringFromPos5WithAmountLargerThanString)
+{
+	SimpleString str("Hello World");
+	STRCMP_EQUAL("World", str.subString(6, 10).asCharString());
+}
+
+TEST(SimpleString, subStringBeginPosOutOfBounds)
+{
+	SimpleString str("Hello World");
+	STRCMP_EQUAL("", str.subString(13, 5).asCharString());
+}
+
 TEST(SimpleString, ContainsNull)
 {
 	SimpleString s(0);

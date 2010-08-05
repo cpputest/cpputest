@@ -289,6 +289,19 @@ void SimpleString::padStringsToSameLength(SimpleString& str1, SimpleString& str2
 	str1 = SimpleString(pad, str2.size() - str1.size()) + str1;
 }
 
+SimpleString SimpleString::subString(size_t beginPos, size_t amount) const
+{
+	if (beginPos > size()-1) return "";
+
+	SimpleString newString = buffer_ + beginPos;
+
+	if (newString.size() > amount)
+		newString.buffer_[amount] = '\0';
+
+	return newString;
+}
+
+
 SimpleString StringFrom(bool value)
 {
 	return SimpleString(StringFromFormat("%s", value ? "true" : "false"));

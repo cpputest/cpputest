@@ -74,6 +74,7 @@ public:
 	void replace(const char* to, const char* with);
 
 	SimpleString toLower() const;
+	SimpleString subString(size_t beginPos, size_t amount) const;
 
 	const char *asCharString() const;
 	size_t size() const;

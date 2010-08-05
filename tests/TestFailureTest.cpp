@@ -86,31 +86,43 @@ TEST(TestFailure, LongsEqualFailure)
 
 TEST(TestFailure, StringsEqualFailure)
 {
-	StringEqualFailure f(test, failFileName, failLineNumber, "abc", "abd");
+	StringEqualFailure f(test, failFileName, failLineNumber, "abc", "abd", true);
 	FAILURE_EQUAL("expected <abc>\n\tbut was  <ab<!>d>", f);
 }
 
-TEST(TestFailure, FailureWithSTRCMP_EQUAL_atEnd)
+TEST(TestFailure, StringsEqualFailureNewVariant)
 {
-	StringEqualFailure f(test, failFileName, failLineNumber, "abc", "ab");
+	StringEqualFailure f(test, failFileName, failLineNumber, "abc", "abd", false);
+	FAILURE_EQUAL("expected <abc>\n"
+			    "\tbut was  <abd>\n"
+			    "\tdifference starts at position 2 at: <   abd    >\n"
+			    "\t                                          ^", f);
+}
+
+TEST(TestFailure, StringEqualFailureWithMarkAtTheEnd)
+{
+	StringEqualFailure f(test, failFileName, failLineNumber, "abc", "ab", true);
 	FAILURE_EQUAL("expected <abc>\n\tbut was  <ab<!>>", f);
 }
 
-TEST(TestFailure, _failMethodSTRCMP_NOCASE_EQUAL)
+TEST(TestFailure, StringsEqualFailureNewVariantAtTheEnd)
 {
-	StringEqualNoCaseFailure f(test, failFileName, failLineNumber, "ac", "AB");
-	FAILURE_EQUAL("expected <ac>\n\tbut was  <A<!>B>", f);
+	StringEqualFailure f(test, failFileName, failLineNumber, "EndOfALongerString", "EndOfALongerStrinG", false);
+	FAILURE_EQUAL("expected <EndOfALongerString>\n"
+			    "\tbut was  <EndOfALongerStrinG>\n"
+			    "\tdifference starts at position 17 at: <StrinG    >\n"
+			    "\t                                           ^", f);
 }
 
-TEST(TestFailure, FailureWithSTRCMP_EQUAL_inMiddle)
+TEST(TestFailure, StringEqualsFailureWithMarkInTheMiddle)
 {
-	StringEqualFailure f(test, failFileName, failLineNumber, "aa", "ab");
+	StringEqualFailure f(test, failFileName, failLineNumber, "aa", "ab", true);
 	FAILURE_EQUAL("expected <aa>\n\tbut was  <a<!>b>", f);
 }
 
-TEST(TestFailure, FailureWithSTRCMP_EQUAL_atBeginning)
+TEST(TestFailure, StringEqualsFailureWithMarkAtTheBeginning)
 {
-	StringEqualFailure f(test, failFileName, failLineNumber, "aaa", "bbb");
+	StringEqualFailure f(test, failFileName, failLineNumber, "aaa", "bbb", true);
 	FAILURE_EQUAL("expected <aaa>\n\tbut was  <<!>bbb>", f);
 }
 
@@ -120,3 +132,8 @@ TEST(TestFailure, StringsEqualNoCaseFailure)
 	FAILURE_EQUAL("expected <ABC>\n\tbut was  <ab<!>d>", f);
 }
 
+TEST(TestFailure, StringEqualsNoCaseFailure2)
+{
+	StringEqualNoCaseFailure f(test, failFileName, failLineNumber, "ac", "AB");
+	FAILURE_EQUAL("expected <ac>\n\tbut was  <A<!>B>", f);
+}
