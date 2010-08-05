@@ -33,134 +33,37 @@
 #define TESTOUPUT_EQUAL(a) STRCMP_EQUAL_LOCATION(a, testOutput.getOutput().asCharString(), __FILE__, __LINE__);
 #define TESTOUPUT_CONTAINS(a) STRCMP_CONTAINS_LOCATION(a, testOutput.getOutput().asCharString(), __FILE__, __LINE__);
 
-TEST_GROUP(CodeMemoryReportFormatter)
+TEST_GROUP(NormalMemoryReportFormatter)
 {
-	MemoryLeakAllocator* cAllocator;
-	MemoryLeakAllocator* newAllocator;
-	MemoryLeakAllocator* newArrayAllocator;
 	char* memory01;
-	char* memory02;
 
 	StringBufferTestOutput testOutput;
 	TestResult* testResult;
-	CodeMemoryReportFormatter* formatter;
+	NormalMemoryReportFormatter formatter;
 
 	void setup()
 	{
-		cAllocator = StandardMallocAllocator::defaultAllocator();
-		newAllocator = StandardNewAllocator::defaultAllocator();
-		newArrayAllocator= StandardNewArrayAllocator::defaultAllocator();
 		memory01 = (char*) 0x01;
-		memory02 = (char*) 0x02;
-
-		formatter = new CodeMemoryReportFormatter(cAllocator);
 		testResult = new TestResult(testOutput);
 	}
 
 	void teardown()
 	{
 		delete testResult;
-		delete formatter;
 	}
 };
 
 
-TEST(CodeMemoryReportFormatter, mallocCreatesAnMallocCall)
+TEST(NormalMemoryReportFormatter, mallocCreatesAnMallocCall)
 {
-	formatter->report_alloc_memory(testResult, cAllocator, 10, memory01, "file", 9);
-	TESTOUPUT_EQUAL("\tvoid* file_9 = malloc(10);\n");
+//	formatter->report_alloc_memory(testResult, StandardMallocAllocator::defaultAllocator(), 10, memory01, "file", 9);
+//	TESTOUPUT_EQUAL("\tvoid* file_9 = malloc(10);\n");
 }
 
-TEST(CodeMemoryReportFormatter, freeCreatesAnFreeCall)
+TEST(NormalMemoryReportFormatter, freeCreatesAnFreeCall)
 {
-	formatter->report_alloc_memory(testResult, cAllocator, 10, memory01, "file", 9);
-	testOutput.flush();
-	formatter->report_free_memory(testResult, cAllocator, memory01, "boo", 6);
-	TESTOUPUT_EQUAL("\tfree(file_9); /* at boo:6 */\n");
+//	formatter->report_alloc_memory(testResult, cAllocator, 10, memory01, "file", 9);
+//	testOutput.flush();
+//	formatter->report_free_memory(testResult, cAllocator, memory01, "boo", 6);
+//	TESTOUPUT_EQUAL("\tfree(file_9); /* at boo:6 */\n");
 }
-
-TEST(CodeMemoryReportFormatter, twoMallocAndTwoFree)
-{
-	formatter->report_alloc_memory(testResult, cAllocator, 10, memory01, "file", 2);
-	formatter->report_alloc_memory(testResult, cAllocator, 10, memory02, "boo", 4);
-	testOutput.flush();
-	formatter->report_free_memory(testResult, cAllocator, memory01, "foo", 6);
-	formatter->report_free_memory(testResult, cAllocator, memory02, "bar", 8);
-	TESTOUPUT_CONTAINS("\tfree(file_2); /* at foo:6 */\n");
-	TESTOUPUT_CONTAINS("\tfree(boo_4); /* at bar:8 */\n");
-}
-
-TEST(CodeMemoryReportFormatter, variableNamesShouldNotContainSlahses)
-{
-	formatter->report_alloc_memory(testResult, cAllocator, 10, memory01, "dir/file", 2);
-	TESTOUPUT_CONTAINS("\tvoid* file_2");
-}
-
-TEST(CodeMemoryReportFormatter, variableNamesShouldNotContainDotButUseUnderscore)
-{
-	formatter->report_alloc_memory(testResult, cAllocator, 10, memory01, "foo.cpp", 2);
-	TESTOUPUT_CONTAINS("foo_cpp");
-}
-
-TEST(CodeMemoryReportFormatter, newArrayAllocatorGeneratesNewArrayCode)
-{
-	formatter->report_alloc_memory(testResult, newArrayAllocator, 10, memory01, "file", 8);
-	TESTOUPUT_CONTAINS("char* file_8 = new char[10]; /* using new [] */");
-}
-
-TEST(CodeMemoryReportFormatter, newArrayGeneratesNewCode)
-{
-	formatter->report_alloc_memory(testResult, newAllocator, 6, memory01, "file", 4);
-	TESTOUPUT_CONTAINS("new char[6]; /* using new */");
-}
-
-TEST(CodeMemoryReportFormatter, NewAllocatorGeneratesDeleteCode)
-{
-	formatter->report_alloc_memory(testResult, newAllocator, 10, memory01, "file", 8);
-	testOutput.flush();
-	formatter->report_free_memory(testResult, newAllocator, memory01, "boo", 4);
-	TESTOUPUT_CONTAINS("delete [] file_8; /* using delete at boo:4 */");
-}
-
-TEST(CodeMemoryReportFormatter, NewArrayAllocatorGeneratesDeleteArrayCode)
-{
-	formatter->report_alloc_memory(testResult, newArrayAllocator, 10, memory01, "file", 8);
-	testOutput.flush();
-	formatter->report_free_memory(testResult, newArrayAllocator, memory01, "boo", 4);
-	TESTOUPUT_CONTAINS("delete [] file_8; /* using delete [] at boo:4 */");
-}
-
-TEST(CodeMemoryReportFormatter, allocationUsingMallocOnTheSameLineDoesntGenerateVariableTwice)
-{
-	formatter->report_alloc_memory(testResult, cAllocator, 10, memory01, "file", 8);
-	testOutput.flush();
-	formatter->report_alloc_memory(testResult, cAllocator, 10, memory02, "file", 8);
-	CHECK(! testOutput.getOutput().contains("void*"));
-}
-
-TEST(CodeMemoryReportFormatter, allocationUsingNewcOnTheSameLineDoesntGenerateVariableTwice)
-{
-	formatter->report_alloc_memory(testResult, newAllocator, 10, memory01, "file", 8);
-	testOutput.flush();
-	formatter->report_alloc_memory(testResult, newAllocator, 10, memory01, "file", 8);
-	CHECK(! testOutput.getOutput().contains("char*"));
-}
-
-TEST(CodeMemoryReportFormatter, testStartGeneratesTESTcode)
-{
-	Utest test("groupName", "testName", "fileName", 1);
-	formatter->report_test_start(testResult, test);
-	TESTOUPUT_EQUAL("*/\nTEST(groupName_memoryReport, testName)\n{ /* at fileName:1 */\n");
-}
-
-TEST(CodeMemoryReportFormatter, testEndGeneratesTESTcode)
-{
-	Utest test("groupName", "testName", "fileName", 1);
-	formatter->report_test_end(testResult, test);
-	TESTOUPUT_EQUAL("}/*");
-}
-
-// TODO: do!
-/* Dealloc without alloc */
-
-/* Write tests for the variable name lengths */

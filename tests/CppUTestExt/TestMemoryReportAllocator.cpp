@@ -30,6 +30,9 @@
 #include "CppUTestExt/MemoryReportAllocator.h"
 #include "CppUTestExt/MemoryReportFormatter.h"
 
+#define TESTOUPUT_EQUAL(a) STRCMP_EQUAL_LOCATION(a, testOutput.getOutput().asCharString(), __FILE__, __LINE__);
+#define TESTOUPUT_CONTAINS(a) STRCMP_CONTAINS_LOCATION(a, testOutput.getOutput().asCharString(), __FILE__, __LINE__);
+
 void defaultFree(char* memory)
 {
 	StandardMallocAllocator::defaultAllocator()->free_memory(memory, __FILE__, __LINE__);
@@ -44,40 +47,35 @@ TEST_GROUP(MemoryReportAllocator)
 {
 	StringBufferTestOutput testOutput;
 	TestResult* testResult;
-	MemoryReportAllocator* stdCAllocator;
 	NormalMemoryReportFormatter formatter;
+
+	char* memory01;
 
 	void setup()
 	{
-		stdCAllocator = new MemoryReportAllocator;
-		stdCAllocator->setFormatter(&formatter);
+		memory01 = (char*) 0x01;
 		testResult = new TestResult(testOutput);
-		stdCAllocator->setRealAllocator(StandardMallocAllocator::defaultAllocator());
-		stdCAllocator->setTestResult(testResult);
 	}
 
 	void teardown()
 	{
-		delete stdCAllocator;
 		delete testResult;
 	}
 };
 
 TEST(MemoryReportAllocator, NoAllocationResultsInAnEmptyString)
 {
-	STRCMP_EQUAL("", testOutput.getOutput().asCharString());
+	TESTOUPUT_EQUAL("");
 }
 
 TEST(MemoryReportAllocator, MallocAllocationLeadsToPrintout)
 {
-	char* memory = stdCAllocator->alloc_memory(10, "file", 9);
-	STRCMP_EQUAL(StringFromFormat("Allocation using malloc of size: 10 pointer: %p at file:9\n", memory).asCharString(), testOutput.getOutput().asCharString());
-	defaultFree(memory);
+	formatter.report_alloc_memory(testResult, StandardMallocAllocator::defaultAllocator(), 10, memory01, "file", 9);
+	TESTOUPUT_EQUAL(StringFromFormat("\tAllocation using malloc of size: 10 pointer: %p at file:9\n", memory01).asCharString());
 }
 
 TEST(MemoryReportAllocator, FreeAllocationLeadsToPrintout)
 {
-	char* memory = defaultAlloc(10);
-	stdCAllocator->free_memory(memory, "file", 9);
-	STRCMP_EQUAL(StringFromFormat("Deallocation using free of pointer: %p at file:9\n", memory).asCharString(), testOutput.getOutput().asCharString());
+	formatter.report_free_memory(testResult, StandardMallocAllocator::defaultAllocator(), memory01, "file", 9);
+	TESTOUPUT_EQUAL(StringFromFormat("\tDeallocation using free of pointer: %p at file:9\n", memory01).asCharString());
 }

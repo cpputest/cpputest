@@ -51,12 +51,12 @@ void NormalMemoryReportFormatter::report_test_end(TestResult* result, Utest& tes
 
 void NormalMemoryReportFormatter::report_alloc_memory(TestResult* result, MemoryLeakAllocator* allocator, size_t size, char* memory, const char* file, int line)
 {
-	result->print(StringFromFormat("Allocation using %s of size: %d pointer: %p at %s:%d\n", allocator->alloc_name(), size, memory, file, line).asCharString());
+	result->print(StringFromFormat("\tAllocation using %s of size: %d pointer: %p at %s:%d\n", allocator->alloc_name(), size, memory, file, line).asCharString());
 }
 
 void NormalMemoryReportFormatter::report_free_memory(TestResult* result, MemoryLeakAllocator* allocator, char* memory, const char* file, int line)
 {
-	result->print(StringFromFormat("Deallocation using %s of pointer: %p at %s:%d\n", allocator->free_name(),  memory, file, line).asCharString());
+	result->print(StringFromFormat("\tDeallocation using %s of pointer: %p at %s:%d\n", allocator->free_name(),  memory, file, line).asCharString());
 }
 
 #define MAX_VARIABLE_NAME_LINE_PART 10
