@@ -49,15 +49,9 @@ class TestFailure;
 class Utest
 {
 public:
-
 	Utest(const char* groupName, const char* testName, const char* fileName,
 			int lineNumber);
-
 	virtual ~Utest();
-
-	virtual void testBody()
-	{
-	}
 
 	virtual void run(TestResult& result);
 	virtual void runOneTestWithPlugins(TestPlugin* plugin, TestResult& result);
@@ -68,17 +62,20 @@ public:
 	virtual bool isNull() const;
 	virtual int countTests();
 
-	bool shouldRun(const SimpleString& groupFilter,
-			const SimpleString& nameFilter) const;
+	bool shouldRun(const SimpleString& groupFilter, const SimpleString& nameFilter) const;
 	const SimpleString getName() const;
 	const SimpleString getGroup() const;
 	const SimpleString getFile() const;
 	int getLineNumber() const;
     const virtual char *getProgressIndicator() const;
+
     virtual void setup();
     virtual void teardown();
-    static TestResult *getTestResult();
+	virtual void testBody();
+
+	static TestResult *getTestResult();
     static Utest *getCurrent();
+
     virtual void assertTrue(bool condition, const char *conditionString, const char *fileName, int lineNumber);
     virtual void assertCstrEqual(const char *expected, const char *actual, const char *fileName, int lineNumber);
     virtual void assertCstrNoCaseEqual(const char *expected, const char *actual, const char *fileName, int lineNumber);
@@ -88,12 +85,15 @@ public:
     virtual void assertPointersEqual(void *expected, void *actual, const char *fileName, int lineNumber);
     virtual void assertDoublesEqual(double expected, double actual, double threshold, const char *fileName, int lineNumber);
     virtual void fail(const char *text, const char *fileName, int lineNumber);
+
     virtual void print(const char *text, const char *fileName, int lineNumber);
     virtual void print(const SimpleString & text, const char *fileName, int lineNumber);
+
     void setFileName(const char *fileName);
     void setLineNumber(int lineNumber);
     void setGroupName(const char *groupName);
     void setTestName(const char *testName);
+
     virtual void exitCurrentTest();
 protected:
     virtual void runOneTest(TestPlugin *plugin, TestResult & result);
@@ -102,8 +102,10 @@ protected:
     virtual void executePlatformSpecificTestBody();
     virtual void executePlatformSpecificTeardown();
     virtual void executePlatformSpecificExitCurrentTest();
+
     Utest();
     Utest(const char *groupName, const char *testName, const char *fileName, int lineNumber, Utest *nextTest);
+
     virtual SimpleString getMacroName() const;
 private:
     const char *group_;
@@ -118,16 +120,7 @@ private:
 	static Utest* currentTest_;
 	static TestResult* testResult_;
 
-    SimpleString stringFromOrNull(const char * expected);
-    void failEqualsTest(const char * expected, const char* actual, const char * fileName, int lineNumber);
-    void failCstrEqualsTest(const char * expected, const char* actual, const char * fileName, int lineNumber);
-    void failCstrEqualsTestNoCase(const char * expected, const char* actual, const char * fileName, int lineNumber);
-    void failContainsTest(const char * expected, const char* actual, const char * fileName, int lineNumber);
-    int findStartOfCstrEqualsFailNoCase(const char * expected, const char* actual);
-    int findStartOfCstrEqualsFail(const char * expected, const char* actual);
-    char * newCstrEqualsFailMessage(const char * expected, const char* actual);
-	char * newCstrEqualsFailNoCaseMessage(const char * expected, const char* actual);
-    char* formCStrEqualsFailMessage(const char* actual, int failStart);
+    void failWith(const TestFailure& failure);
 };
 
 //////////////////// NulLTest

@@ -72,25 +72,45 @@ protected:
 class EqualsFailure: public TestFailure
 {
 public:
-
-	EqualsFailure(Utest*, const char* fileName, int lineNumber,
-			const SimpleString& expected, const SimpleString& actual);
-
-private:
-	EqualsFailure(const EqualsFailure&);
-	EqualsFailure& operator=(const EqualsFailure&);
+	EqualsFailure(Utest*, const char* fileName, int lineNumber, const char* expected, const char* actual);
+	EqualsFailure(Utest*, const char* fileName, int lineNumber, const SimpleString& expected, const SimpleString& actual);
 };
 
 class ContainsFailure: public TestFailure
 {
 public:
+	ContainsFailure(Utest*, const char* fileName, int lineNumber, const SimpleString& expected, const SimpleString& actual);
 
-	ContainsFailure(Utest*, const char* fileName, int lineNumber,
-			const SimpleString& expected, const SimpleString& actual);
+};
 
-private:
-	ContainsFailure(const ContainsFailure&);
-	ContainsFailure& operator=(const ContainsFailure&);
+class CheckFailure : public TestFailure
+{
+public:
+	CheckFailure(Utest* test, const char* fileName, int lineNumber, const SimpleString& conditionString);
+};
+
+class FailFailure : public TestFailure
+{
+public:
+	FailFailure(Utest* test, const char* fileName, int lineNumber, const SimpleString& message);
+};
+
+class LongsEqualFailure : public TestFailure
+{
+public:
+	LongsEqualFailure(Utest* test, const char* fileName, int lineNumber, long expected, long actual);
+};
+
+class StringEqualFailure : public TestFailure
+{
+public:
+	StringEqualFailure(Utest* test, const char* fileName, int lineNumber, const char* expected, const char* actual);
+};
+
+class StringEqualNoCaseFailure : public TestFailure
+{
+public:
+	StringEqualNoCaseFailure(Utest* test, const char* fileName, int lineNumber, const char* expected, const char* actual);
 };
 
 #endif

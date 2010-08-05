@@ -293,6 +293,11 @@ TEST(SimpleString, ContainsNull)
 	CHECK(!s.contains("something"));
 }
 
+TEST(SimpleString, NULLReportsNullString)
+{
+	STRCMP_EQUAL("(null)", StringFromOrNull((char*) NULL).asCharString());
+}
+
 TEST(SimpleString, Characters)
 {
 	SimpleString s(StringFrom('a'));

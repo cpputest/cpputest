@@ -299,6 +299,11 @@ SimpleString StringFrom(const char *value)
 	return SimpleString(value);
 }
 
+SimpleString StringFromOrNull(const char * expected)
+{
+    return (expected) ? StringFrom(expected) : "(null)";
+}
+
 SimpleString StringFrom(int value)
 {
 	return StringFromFormat("%d", value);

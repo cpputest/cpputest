@@ -56,14 +56,12 @@ TEST_GROUP(NormalMemoryReportFormatter)
 
 TEST(NormalMemoryReportFormatter, mallocCreatesAnMallocCall)
 {
-//	formatter->report_alloc_memory(testResult, StandardMallocAllocator::defaultAllocator(), 10, memory01, "file", 9);
-//	TESTOUPUT_EQUAL("\tvoid* file_9 = malloc(10);\n");
+	formatter.report_alloc_memory(testResult, StandardMallocAllocator::defaultAllocator(), 10, memory01, "file", 9);
+	TESTOUPUT_EQUAL(StringFromFormat("\tAllocation using malloc of size: 10 pointer: %p at file:9\n", memory01).asCharString());
 }
 
 TEST(NormalMemoryReportFormatter, freeCreatesAnFreeCall)
 {
-//	formatter->report_alloc_memory(testResult, cAllocator, 10, memory01, "file", 9);
-//	testOutput.flush();
-//	formatter->report_free_memory(testResult, cAllocator, memory01, "boo", 6);
-//	TESTOUPUT_EQUAL("\tfree(file_9); /* at boo:6 */\n");
+	formatter.report_free_memory(testResult, StandardMallocAllocator::defaultAllocator(), memory01, "boo", 6);
+	TESTOUPUT_EQUAL(StringFromFormat("\tDeallocation using free of pointer: %p at boo:6\n", memory01).asCharString());
 }

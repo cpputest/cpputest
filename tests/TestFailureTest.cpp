@@ -51,6 +51,7 @@ TEST_GROUP(TestFailure)
 	}
 	;
 };
+#define FAILURE_EQUAL(a, b) STRCMP_EQUAL_LOCATION(a, b.getMessage().asCharString(), __FILE__, __LINE__)
 
 TEST(TestFailure, CreateFailure)
 {
@@ -62,4 +63,36 @@ TEST(TestFailure, CreateFailure)
 TEST(TestFailure, CreatePassingEqualsFailure)
 {
 	EqualsFailure f(test, failFileName, failLineNumber, "expected", "actual");
+	FAILURE_EQUAL("expected <expected>\n\tbut was  <actual>", f);
 }
+
+TEST(TestFailure, CheckFailure)
+{
+	CheckFailure f(test, failFileName, failLineNumber, "chk");
+	FAILURE_EQUAL("CHECK(chk) failed", f);
+}
+
+TEST(TestFailure, FailFailure)
+{
+	FailFailure f(test, failFileName, failLineNumber, "chk");
+	FAILURE_EQUAL("chk", f);
+}
+
+TEST(TestFailure, LongsEqualFailure)
+{
+	LongsEqualFailure f(test, failFileName, failLineNumber, 1, 2);
+	FAILURE_EQUAL("expected <1 0x1>\n\tbut was  <2 0x2>", f);
+}
+
+TEST(TestFailure, StringsEqualFailure)
+{
+	StringEqualFailure f(test, failFileName, failLineNumber, "abc", "abd");
+	FAILURE_EQUAL("expected <abc>\n\tbut was  <ab<!>d>", f);
+}
+
+TEST(TestFailure, StringsEqualNoCaseFailure)
+{
+	StringEqualNoCaseFailure f(test, failFileName, failLineNumber, "ABC", "abd");
+	FAILURE_EQUAL("expected <ABC>\n\tbut was  <ab<!>d>", f);
+}
+

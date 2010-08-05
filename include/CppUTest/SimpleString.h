@@ -117,6 +117,7 @@ SimpleString StringFrom(bool value);
 SimpleString StringFrom(void* value);
 SimpleString StringFrom(char value);
 SimpleString StringFrom(const char *value);
+SimpleString StringFromOrNull(const char * value);
 SimpleString StringFrom(long value);
 SimpleString StringFrom(int value);
 SimpleString HexStringFrom(long value);

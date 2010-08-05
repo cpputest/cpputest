@@ -49,23 +49,18 @@ public:
 	virtual void exitCurrentTest()
 	{
 	}
-	;
 	virtual ~OutsideTestRunnerUTest()
 	{
 	}
-	;
 private:
 	OutsideTestRunnerUTest() :
 		Utest("\n\t NOTE: Assertion happened without being in a test run (perhaps in main?)", "\n\t       Something is very wrong. Check this assertion and fix", "unknown file", 0),
 				defaultTestResult(defaultOutput)
 	{
 	}
-	;
 	ConsoleTestOutput defaultOutput;
 	TestResult defaultTestResult;
 };
-
-
 
 
 Utest::Utest() :
@@ -210,6 +205,10 @@ void Utest::setup()
 {
 }
 
+void Utest::testBody()
+{
+}
+
 void Utest::teardown()
 {
 }
@@ -223,113 +222,22 @@ bool Utest::shouldRun(const SimpleString& groupFilter, const SimpleString& nameF
 	return false;
 }
 
+void Utest::failWith(const TestFailure& failure)
+{
+	getTestResult()->addFailure(failure);
+    Utest::getCurrent()->exitCurrentTest();
+}
+
 void Utest::assertTrue(bool condition, const char* conditionString, const char* fileName, int lineNumber)
 {
 	getTestResult()->countCheck();
-	if (!(condition)) {
-		SimpleString message("CHECK(");
-		message += conditionString;
-		message += ") failed";
-		TestFailure _f(this, fileName, lineNumber, message);
-		getTestResult()->addFailure(_f);
-		Utest::getCurrent()->exitCurrentTest();
-	}
-}
-
-SimpleString Utest::stringFromOrNull(const char * expected)
-{
-    return (expected) ? StringFrom(expected) : "(null)";
+	if (!condition)
+		failWith(CheckFailure(this, fileName, lineNumber, conditionString));
 }
 
 void Utest::fail(const char *text, const char* fileName, int lineNumber)
 {
-	TestFailure _f(this, fileName, lineNumber, text);
-	getTestResult()->addFailure(_f);
-    Utest::getCurrent()->exitCurrentTest();
-}
-
-int Utest::findStartOfCstrEqualsFailNoCase(const char * expected, const char* actual)
-{
-	int i;
-    for (i = 0; PlatformSpecificToLower(actual[i]) == PlatformSpecificToLower(expected[i]); i++)
-        ;
-    return i;
-}
-
-char * Utest::newCstrEqualsFailNoCaseMessage(const char * expected, const char* actual)
-{
-	int failStart = findStartOfCstrEqualsFailNoCase(expected, actual);
-    return formCStrEqualsFailMessage(actual, failStart);
-}
-
-char * Utest::newCstrEqualsFailMessage(const char * expected, const char* actual)
-{
-	int failStart = findStartOfCstrEqualsFail(expected, actual);
-    return formCStrEqualsFailMessage(actual, failStart);
-}
-
-int Utest::findStartOfCstrEqualsFail(const char * expected, const char* actual)
-{
-	int i;
-    for (i = 0; actual[i] == expected[i]; i++)
-        ;
-    return i;
-}
-
-char* Utest::formCStrEqualsFailMessage(const char* actual, int failStart)
-{
-	    const char * error = "<!>";
-	    char * message;
-
-	    //cpputest_malloc is needed instead of new[] for vc6 compatibility
-	    message = (char*)cpputest_malloc(PlatformSpecificStrLen(actual) + PlatformSpecificStrLen(error) + 10);
-
-	    int j;
-	    for (j = 0; j < failStart; j++)
-	        message[j] = actual[j];
-
-	    for (int k = 0; k < (int)PlatformSpecificStrLen(error); j++, k++)
-	        message[j] = error[k];
-
-	    for (int i = failStart; actual[i]; i++, j++)
-	        message[j] = actual[i];
-
-	    message[j] = 0;
-
-	    return message;
-}
-
-
-void Utest::failCstrEqualsTest(const char * expected, const char* actual, const char * fileName, int lineNumber)
-{
-	char * markedActual = newCstrEqualsFailMessage(expected, actual);
-	EqualsFailure _f(this, fileName, lineNumber, stringFromOrNull(expected), stringFromOrNull(markedActual));
-    testResult_->addFailure(_f);
-    cpputest_free(markedActual);
-    Utest::getCurrent()->exitCurrentTest();
-}
-
-void Utest::failCstrEqualsTestNoCase(const char * expected, const char* actual, const char * fileName, int lineNumber)
-{
-	char * markedActual = newCstrEqualsFailNoCaseMessage(expected, actual);
-	EqualsFailure _f(this, fileName, lineNumber, stringFromOrNull(expected), stringFromOrNull(markedActual));
-    testResult_->addFailure(_f);
-    cpputest_free(markedActual);
-    Utest::getCurrent()->exitCurrentTest();
-}
-
-void Utest::failEqualsTest(const char * expected, const char* actual, const char * fileName, int lineNumber)
-{
-	EqualsFailure _f(this, fileName, lineNumber, stringFromOrNull(expected), stringFromOrNull(actual));
-	getTestResult()->addFailure(_f);
-    Utest::getCurrent()->exitCurrentTest();
-}
-
-void Utest::failContainsTest(const char * expected, const char* actual, const char * fileName, int lineNumber)
-{
-	ContainsFailure _f(this, fileName, lineNumber, StringFrom(expected), StringFrom(actual));
-	getTestResult()->addFailure(_f);
-    Utest::getCurrent()->exitCurrentTest();
+	failWith(FailFailure(this, fileName, lineNumber, text));
 }
 
 void Utest::assertCstrEqual(const char* expected, const char* actual, const char* fileName, int lineNumber)
@@ -337,9 +245,9 @@ void Utest::assertCstrEqual(const char* expected, const char* actual, const char
 	getTestResult()->countCheck();
 	if (actual == 0 && expected == 0) return;
 	if (actual == 0 || expected == 0)
-		failEqualsTest (expected, actual, fileName, lineNumber);
+		failWith(StringEqualFailure(this, fileName, lineNumber, expected, actual));
 	if (PlatformSpecificStrCmp(expected, actual) != 0)
-		failCstrEqualsTest (expected, actual, fileName, lineNumber);
+		failWith(StringEqualFailure(this, fileName, lineNumber, expected, actual));
 }
 
 void Utest::assertCstrNoCaseEqual(const char* expected, const char* actual, const char* fileName, int lineNumber)
@@ -347,9 +255,9 @@ void Utest::assertCstrNoCaseEqual(const char* expected, const char* actual, cons
 	getTestResult()->countCheck();
 	if (actual == 0 && expected == 0) return;
 	if (actual == 0 || expected == 0)
-		failEqualsTest (expected, actual, fileName, lineNumber);
+		failWith(StringEqualNoCaseFailure(this, fileName, lineNumber, expected, actual));
 	if (!SimpleString(expected).equalsNoCase(actual))
-		failCstrEqualsTestNoCase(expected, actual, fileName, lineNumber);
+		failWith(StringEqualNoCaseFailure(this, fileName, lineNumber, expected, actual));
 }
 
 void Utest::assertCstrContains(const char* expected, const char* actual, const char* fileName, int lineNumber)
@@ -357,9 +265,9 @@ void Utest::assertCstrContains(const char* expected, const char* actual, const c
 	getTestResult()->countCheck();
 	if (actual == 0 && expected == 0) return;
     if(actual == 0 || expected == 0)
-    	failContainsTest(expected, actual, fileName, lineNumber);
+    	failWith(ContainsFailure(this, fileName, lineNumber, expected, actual));
     if (!SimpleString(actual).contains(expected))
-    	failContainsTest(expected, actual, fileName, lineNumber);
+    	failWith(ContainsFailure(this, fileName, lineNumber, expected, actual));
 }
 
 void Utest::assertCstrNoCaseContains(const char* expected, const char* actual, const char* fileName, int lineNumber)
@@ -367,27 +275,18 @@ void Utest::assertCstrNoCaseContains(const char* expected, const char* actual, c
 	getTestResult()->countCheck();
 	if (actual == 0 && expected == 0) return;
     if(actual == 0 || expected == 0)
-    	failContainsTest(expected, actual, fileName, lineNumber);
+    	failWith(ContainsFailure(this, fileName, lineNumber, expected, actual));
     if (!SimpleString(actual).containsNoCase(expected))
-    	failContainsTest(expected, actual, fileName, lineNumber);
+    	failWith(ContainsFailure(this, fileName, lineNumber, expected, actual));
 }
 
 void Utest::assertLongsEqual(long expected, long actual, const char* fileName, int lineNumber)
 {
 	getTestResult()->countCheck();
 	if (expected != actual) {
-		SimpleString aDecimal = StringFrom(actual);
-		SimpleString aHex = HexStringFrom(actual);
-		SimpleString eDecimal = StringFrom(expected);
-		SimpleString eHex = HexStringFrom(expected);
-
-		SimpleString::padStringsToSameLength(aDecimal, eDecimal, ' ');
-		SimpleString::padStringsToSameLength(aHex, eHex, '0');
-
-		SimpleString actualReported = aDecimal + " 0x" + aHex;
-		SimpleString expectedReported = eDecimal + " 0x" + eHex;
-
-		failEqualsTest(expectedReported.asCharString(), actualReported.asCharString(), fileName, lineNumber);
+		LongsEqualFailure f(this, fileName, lineNumber, expected, actual);
+		getTestResult()->addFailure(f);
+	    Utest::getCurrent()->exitCurrentTest();
 	}
 }
 
@@ -395,14 +294,14 @@ void Utest::assertPointersEqual(void* expected, void* actual, const char* fileNa
 {
 	getTestResult()->countCheck();
 	if (expected != actual)
-		failEqualsTest(StringFrom(expected).asCharString(), StringFrom(actual).asCharString(), fileName, lineNumber);
+		failWith(EqualsFailure(this, fileName, lineNumber, StringFrom(expected), StringFrom(actual)));
 }
 
 void Utest::assertDoublesEqual(double expected, double actual, double threshold, const char* fileName, int lineNumber)
 {
 	getTestResult()->countCheck();
 	if (PlatformSpecificFabs(expected - actual) > threshold)
-		failEqualsTest(StringFrom(expected).asCharString(), StringFrom(actual).asCharString(), fileName, lineNumber);
+		failWith(EqualsFailure(this, fileName, lineNumber, StringFrom(expected), StringFrom(actual)));
 }
 
 void Utest::print(const char *text, const char* fileName, int lineNumber)
