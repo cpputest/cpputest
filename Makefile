@@ -102,9 +102,7 @@ test_all:
 	make CLFAGS="" CXXFLAGS="" CPPFLAGS="-Iinclude -DCPPUTEST_STD_CPP_LIB_DISABLED -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED"
 	make CFLAGS="" CXXFLAGS="" CPPFLAGS="-DCPPUTEST_STD_CPP_LIB_DISABLED -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED" clean
 	$(SILENCE)echo Building extensions
-	make
 	make extensions
-	make clean
 	make cleanExtensions
 	$(SILENCE)echo Building examples 
 	make cleanExamples
@@ -120,10 +118,10 @@ test_all:
 examples: $(TEST_TARGET) extensions
 	make -C examples  all
 
-extensions:
+extensions: $(TEST_TARGET)
 	make -f Makefile_CppUTestExt all
 
-cleanExtensions:
+cleanExtensions: clean
 	make -f Makefile_CppUTestExt clean
 	
 cleanExamples: clean cleanExtensions
