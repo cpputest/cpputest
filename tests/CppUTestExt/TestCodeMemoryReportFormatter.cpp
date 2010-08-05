@@ -122,6 +122,12 @@ TEST(CodeMemoryReportFormatter, NewAllocatorGeneratesDeleteCode)
 	TESTOUPUT_CONTAINS("delete [] file_8; /* using delete at boo:4 */");
 }
 
+TEST(CodeMemoryReportFormatter, DeleteNullWorksFine)
+{
+	formatter->report_free_memory(testResult, newAllocator, NULL, "boo", 4);
+	TESTOUPUT_CONTAINS("delete [] NULL; /* using delete at boo:4 */");
+}
+
 TEST(CodeMemoryReportFormatter, NewArrayAllocatorGeneratesDeleteArrayCode)
 {
 	formatter->report_alloc_memory(testResult, newArrayAllocator, 10, memory01, "file", 8);
@@ -146,6 +152,15 @@ TEST(CodeMemoryReportFormatter, allocationUsingNewcOnTheSameLineDoesntGenerateVa
 	CHECK(! testOutput.getOutput().contains("char*"));
 }
 
+TEST(CodeMemoryReportFormatter, allocationUsingNewcOnTheSameLineDoesntGenerateVariableTwiceExceptWhenInANewTest)
+{
+	formatter->report_alloc_memory(testResult, newAllocator, 10, memory01, "file", 8);
+	formatter->report_test_start(testResult, *this);
+	testOutput.flush();
+	formatter->report_alloc_memory(testResult, newAllocator, 10, memory01, "file", 8);
+	CHECK(testOutput.getOutput().contains("char*"));
+}
+
 TEST(CodeMemoryReportFormatter, testStartGeneratesTESTcode)
 {
 	Utest test("groupName", "testName", "fileName", 1);
@@ -160,7 +175,14 @@ TEST(CodeMemoryReportFormatter, testEndGeneratesTESTcode)
 	TESTOUPUT_EQUAL("}/*");
 }
 
+TEST(CodeMemoryReportFormatter, TestGroupGeneratesTestGroupCode)
+{
+	Utest test("groupName", "testName", "fileName", 1);
+	formatter->report_testgroup_start(testResult, test);
+	TESTOUPUT_EQUAL("*/TEST_GROUP(groupName_memoryReport)\n{\n};\n/*");
+}
+
 // TODO: do!
 /* Dealloc without alloc */
-
+/* Remove the ugly comments by controlling the output! */
 /* Write tests for the variable name lengths */

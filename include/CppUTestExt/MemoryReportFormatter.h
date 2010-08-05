@@ -51,7 +51,7 @@ public:
 	NormalMemoryReportFormatter();
 	virtual ~NormalMemoryReportFormatter();
 
-	virtual void report_testgroup_start(TestResult* /*result*/, Utest& /*test*/){};
+	virtual void report_testgroup_start(TestResult* /*result*/, Utest& /*test*/);
 	virtual void report_testgroup_end(TestResult* /*result*/, Utest& /*test*/){};
 
 	virtual void report_test_start(TestResult* result, Utest& test);
@@ -73,7 +73,7 @@ public:
     CodeMemoryReportFormatter(MemoryLeakAllocator* internalAllocator);
 	virtual ~CodeMemoryReportFormatter();
 
-	virtual void report_testgroup_start(TestResult* /*result*/, Utest& /*test*/){};
+	virtual void report_testgroup_start(TestResult* result, Utest& test);
 	virtual void report_testgroup_end(TestResult* /*result*/, Utest& /*test*/){};
 
 	virtual void report_test_start(TestResult* result, Utest& test);
@@ -87,6 +87,7 @@ private:
 	void addNodeToList(const char* variableName, void* memory, CodeReportingAllocationNode* next);
 	CodeReportingAllocationNode* findNode(void* memory);
     bool variableExists(const SimpleString& variableName);
+    void clearReporting();
 
     bool isNewAllocator(MemoryLeakAllocator* allocator);
 	SimpleString createVariableNameFromFileLineInfo(const char *file, int line);

@@ -31,14 +31,16 @@
 #include "CppUTestExt/MemoryReportFormatter.h"
 #include "CppUTestExt/MockSupport.h"
 
+static MemoryLeakAllocator* previousNewAllocator;
+
 class TemporaryDefaultNewAllocator
 {
 	MemoryLeakAllocator* newAllocator;
 public:
-	TemporaryDefaultNewAllocator()
+	TemporaryDefaultNewAllocator(MemoryLeakAllocator* oldAllocator)
 	{
 		newAllocator = MemoryLeakAllocator::getCurrentNewAllocator();
-		MemoryLeakAllocator::setCurrentNewAllocator(StandardNewAllocator::defaultAllocator());
+		MemoryLeakAllocator::setCurrentNewAllocator(oldAllocator);
 	}
 	~TemporaryDefaultNewAllocator()
 	{
@@ -54,37 +56,37 @@ class MockMemoryReportFormatter : public MemoryReportFormatter
 public:
 	virtual void report_testgroup_start(TestResult* result, Utest& test)
 	{
-		TemporaryDefaultNewAllocator tempAlloc;
+		TemporaryDefaultNewAllocator tempAlloc(previousNewAllocator);
 		formatterMock.actualCall("report_testgroup_start").withParameter("result", result).withParameter("test", &test);
 	}
 
 	virtual void report_testgroup_end(TestResult* result, Utest& test)
 	{
-		TemporaryDefaultNewAllocator tempAlloc;
+		TemporaryDefaultNewAllocator tempAlloc(previousNewAllocator);
 		formatterMock.actualCall("report_testgroup_end").withParameter("result", result).withParameter("test", &test);
 	}
 
 	virtual void report_test_start(TestResult* result, Utest& test)
 	{
-		TemporaryDefaultNewAllocator tempAlloc;
+		TemporaryDefaultNewAllocator tempAlloc(previousNewAllocator);
 		formatterMock.actualCall("report_test_start").withParameter("result", result).withParameter("test", &test);
 	}
 
 	virtual void report_test_end(TestResult* result, Utest& test)
 	{
-		TemporaryDefaultNewAllocator tempAlloc;
+		TemporaryDefaultNewAllocator tempAlloc(previousNewAllocator);
 		formatterMock.actualCall("report_test_end").withParameter("result", result).withParameter("test", &test);
 	}
 
 	virtual void report_alloc_memory(TestResult* result, MemoryLeakAllocator* allocator, size_t, char* , const char* , int )
 	{
-		TemporaryDefaultNewAllocator tempAlloc;
+		TemporaryDefaultNewAllocator tempAlloc(previousNewAllocator);
 		formatterMock.actualCall("report_alloc_memory").withParameter("result", result).withParameterOfType("MemoryLeakAllocator", "allocator", allocator);
 	}
 
 	virtual void report_free_memory(TestResult* result, MemoryLeakAllocator* allocator, char* , const char* , int )
 	{
-		TemporaryDefaultNewAllocator tempAlloc;
+		TemporaryDefaultNewAllocator tempAlloc(previousNewAllocator);
 		formatterMock.actualCall("report_free_memory").withParameter("result", result).withParameterOfType("MemoryLeakAllocator", "allocator", allocator);
 	}
 };
@@ -127,6 +129,7 @@ TEST_GROUP(MemoryReporterPlugin)
 
 	void setup()
 	{
+		previousNewAllocator = MemoryLeakAllocator::getCurrentNewAllocator();
 		result = new TestResult(output);
 		test = new Utest("groupname", "testname", "filename", 1);
 		reporter = new MemoryReporterPluginUnderTest;

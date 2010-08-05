@@ -59,6 +59,21 @@ void NormalMemoryReportFormatter::report_free_memory(TestResult* result, MemoryL
 	result->print(StringFromFormat("\tDeallocation using %s of pointer: %p at %s:%d\n", allocator->free_name(),  memory, file, line).asCharString());
 }
 
+void NormalMemoryReportFormatter::report_testgroup_start(TestResult* result, Utest& test)
+{
+	const int line_size = 80;
+
+	SimpleString groupName = StringFromFormat("TEST GROUP(%s)", test.getGroup().asCharString());
+	int beginPos = (line_size/2) - (groupName.size()/2);
+
+	SimpleString line("-", beginPos);
+	line += groupName;
+	line += SimpleString("-", line_size - line.size());
+	line += "\n";
+	result->print(line.asCharString());
+}
+
+
 #define MAX_VARIABLE_NAME_LINE_PART 10
 #define MAX_VARIABLE_NAME_FILE_PART 53
 #define MAX_VARIABLE_NAME_SEPERATOR_PART 1
@@ -78,13 +93,17 @@ CodeMemoryReportFormatter::CodeMemoryReportFormatter(MemoryLeakAllocator* intern
 
 CodeMemoryReportFormatter::~CodeMemoryReportFormatter()
 {
+	clearReporting();
+}
+
+void CodeMemoryReportFormatter::clearReporting()
+{
 	while (codeReportingList_) {
 		CodeReportingAllocationNode* oldNode = codeReportingList_;
 		codeReportingList_ = codeReportingList_->next_;
 		internalAllocator_->free_memory((char*) oldNode, __FILE__, __LINE__);
 	}
 }
-
 
 void CodeMemoryReportFormatter::addNodeToList(const char* variableName, void* memory, CodeReportingAllocationNode* next)
 {
@@ -156,6 +175,7 @@ SimpleString CodeMemoryReportFormatter::getDeallocationString(MemoryLeakAllocato
 
 void CodeMemoryReportFormatter::report_test_start(TestResult* result, Utest& test)
 {
+	clearReporting();
 	result->print(StringFromFormat("*/\nTEST(%s_memoryReport, %s)\n{ /* at %s:%d */\n",
 			test.getGroup().asCharString(), test.getName().asCharString(), test.getFile().asCharString(), test.getLineNumber()).asCharString());
 }
@@ -163,6 +183,12 @@ void CodeMemoryReportFormatter::report_test_start(TestResult* result, Utest& tes
 void CodeMemoryReportFormatter::report_test_end(TestResult* result, Utest&)
 {
 	result->print("}/*");
+}
+
+void CodeMemoryReportFormatter::report_testgroup_start(TestResult* result, Utest& test)
+{
+	result->print(StringFromFormat("*/TEST_GROUP(%s_memoryReport)\n{\n};\n/*",
+			test.getGroup().asCharString()).asCharString());
 }
 
 void CodeMemoryReportFormatter::report_alloc_memory(TestResult* result, MemoryLeakAllocator* allocator, size_t size, char* memory, const char* file, int line)
@@ -174,7 +200,11 @@ void CodeMemoryReportFormatter::report_alloc_memory(TestResult* result, MemoryLe
 
 void CodeMemoryReportFormatter::report_free_memory(TestResult* result, MemoryLeakAllocator* allocator, char* memory, const char* file, int line)
 {
+	SimpleString variableName;
 	CodeReportingAllocationNode* node = findNode(memory);
-	SimpleString variableName = node->variableName_;
+
+	if (memory == NULL) variableName = "NULL";
+	else variableName = node->variableName_;
+
 	result->print(StringFromFormat("\t%s\n", getDeallocationString(allocator, variableName, file, line).asCharString()).asCharString());
 }

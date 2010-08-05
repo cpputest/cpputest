@@ -120,7 +120,6 @@ public:
 	virtual ~NullTestPlugin()
 	{
 	}
-	;
 
 	virtual void runAllPreTestAction(Utest& test, TestResult& result);
 	virtual void runAllPostTestAction(Utest& test, TestResult& result);
