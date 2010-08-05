@@ -104,30 +104,6 @@ static void _failMethodCHECK_EQUAL()
 	afterCheck = true;
 }
 
-static void _failMethodSTRCMP_EQUAL_atBeginning()
-{
-	STRCMP_EQUAL("aaa", "bbb");
-	afterCheck = true;
-}
-
-static void _failMethodSTRCMP_EQUAL_inMiddle()
-{
-	STRCMP_EQUAL("aa", "ab");
-	afterCheck = true;
-}
-
-static void _failMethodSTRCMP_EQUAL_atEnd()
-{
-	STRCMP_EQUAL("abc", "ab");
-	afterCheck = true;
-}
-
-static void _failMethodSTRCMP_NOCASE_EQUAL()
-{
-	STRCMP_NOCASE_EQUAL("ac", "AB");
-	afterCheck = true;
-}
-
 static void _failMethodSTRCMP_CONTAINS()
 {
 	STRCMP_CONTAINS("hello", "world");
@@ -202,26 +178,6 @@ TEST(Utest, FailureWithCHECK)
 TEST(Utest, FailureWithCHECK_EQUAL)
 {
 	testFailureWith(_failMethodCHECK_EQUAL);
-}
-
-TEST(Utest, FailureWithSTRCMP_EQUAL_atBeginning)
-{
-	testFailureWithMethodShouldContain(_failMethodSTRCMP_EQUAL_atBeginning, "but was  <<!>bbb>");
-}
-
-TEST(Utest, FailureWithSTRCMP_EQUAL_inMiddle)
-{
-	testFailureWithMethodShouldContain(_failMethodSTRCMP_EQUAL_inMiddle, "but was  <a<!>b>");
-}
-
-TEST(Utest, FailureWithSTRCMP_EQUAL_atEnd)
-{
-	testFailureWithMethodShouldContain(_failMethodSTRCMP_EQUAL_atEnd, "but was  <ab<!>>");
-}
-
-TEST(Utest, FailureWithSTRCMP_NOCASE_EQUAL)
-{
-	testFailureWithMethodShouldContain(_failMethodSTRCMP_NOCASE_EQUAL, "but was  <A<!>B>");
 }
 
 TEST(Utest, FailureWithSTRCMP_CONTAINS)

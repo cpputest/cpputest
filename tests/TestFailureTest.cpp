@@ -90,6 +90,30 @@ TEST(TestFailure, StringsEqualFailure)
 	FAILURE_EQUAL("expected <abc>\n\tbut was  <ab<!>d>", f);
 }
 
+TEST(TestFailure, FailureWithSTRCMP_EQUAL_atEnd)
+{
+	StringEqualFailure f(test, failFileName, failLineNumber, "abc", "ab");
+	FAILURE_EQUAL("expected <abc>\n\tbut was  <ab<!>>", f);
+}
+
+TEST(TestFailure, _failMethodSTRCMP_NOCASE_EQUAL)
+{
+	StringEqualNoCaseFailure f(test, failFileName, failLineNumber, "ac", "AB");
+	FAILURE_EQUAL("expected <ac>\n\tbut was  <A<!>B>", f);
+}
+
+TEST(TestFailure, FailureWithSTRCMP_EQUAL_inMiddle)
+{
+	StringEqualFailure f(test, failFileName, failLineNumber, "aa", "ab");
+	FAILURE_EQUAL("expected <aa>\n\tbut was  <a<!>b>", f);
+}
+
+TEST(TestFailure, FailureWithSTRCMP_EQUAL_atBeginning)
+{
+	StringEqualFailure f(test, failFileName, failLineNumber, "aaa", "bbb");
+	FAILURE_EQUAL("expected <aaa>\n\tbut was  <<!>bbb>", f);
+}
+
 TEST(TestFailure, StringsEqualNoCaseFailure)
 {
 	StringEqualNoCaseFailure f(test, failFileName, failLineNumber, "ABC", "abd");

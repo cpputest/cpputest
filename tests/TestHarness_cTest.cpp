@@ -103,7 +103,9 @@ TEST(TestHarness_c, checkString)
 	CHECK_EQUAL_C_STRING("Hello", "Hello");
 	fixture->setTestFunction(_failStringMethod);
 	fixture->runAllTests();
-	fixture->assertPrintContains("expected <Hello>\n	but was  <Hello<!> World>");
+
+	StringEqualFailure failure(this, "file", 1, "Hello", "Hello World");
+	fixture->assertPrintContains(failure.getMessage());
 	fixture->assertPrintContains("arness_c");
 }
 
