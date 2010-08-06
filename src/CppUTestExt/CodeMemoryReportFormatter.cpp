@@ -122,7 +122,7 @@ bool CodeMemoryReportFormatter::variableExists(const SimpleString& variableName)
 SimpleString CodeMemoryReportFormatter::getAllocationString(MemoryLeakAllocator* allocator, const SimpleString& variableName, size_t size)
 {
 	if (isNewAllocator(allocator))
-		return StringFromFormat("%s%s = new char[%d]; /* using %s */", variableExists(variableName) ? "" : "char* ", variableName.asCharString(), size, allocator->alloc_name());
+		return StringFromFormat("char* %s = new char[%d]; /* using %s */", variableName.asCharString(), size, allocator->alloc_name());
 	else
 		return StringFromFormat("void* %s = malloc(%d);", variableName.asCharString(), size);
 }
