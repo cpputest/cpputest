@@ -94,8 +94,13 @@ SimpleString CodeMemoryReportFormatter::createVariableNameFromFileLineInfo(const
 {
     SimpleString fileNameOnly = extractFileNameFromPath(file);
     fileNameOnly.replace(".", "_");
-    SimpleString variableName = StringFromFormat("%s_%d", fileNameOnly.asCharString(), line);
-    return variableName;
+
+    for (int i = 1; i < 100000; i++) {
+		SimpleString variableName = StringFromFormat("%s_%d_%d", fileNameOnly.asCharString(), line, i);
+		if (!variableExists(variableName))
+			return variableName;
+    }
+    return "";
 }
 
 bool CodeMemoryReportFormatter::isNewAllocator(MemoryLeakAllocator* allocator)
@@ -119,7 +124,7 @@ SimpleString CodeMemoryReportFormatter::getAllocationString(MemoryLeakAllocator*
 	if (isNewAllocator(allocator))
 		return StringFromFormat("%s%s = new char[%d]; /* using %s */", variableExists(variableName) ? "" : "char* ", variableName.asCharString(), size, allocator->alloc_name());
 	else
-		return StringFromFormat("%s%s = malloc(%d);", variableExists(variableName) ? "" : "void* ", variableName.asCharString(), size);
+		return StringFromFormat("void* %s = malloc(%d);", variableName.asCharString(), size);
 }
 
 SimpleString CodeMemoryReportFormatter::getDeallocationString(MemoryLeakAllocator* allocator, const SimpleString& variableName, const char* file, int line)
