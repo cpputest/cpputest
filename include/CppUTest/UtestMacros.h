@@ -95,7 +95,7 @@
   {\
 	 { \
       Utest::getTestResult()->countCheck();\
-  	   EqualsFailure _f(Utest::getCurrent(), file, line, StringFrom(expected), StringFrom(actual)); \
+  	   CheckEqualFailure _f(Utest::getCurrent(), file, line, StringFrom(expected), StringFrom(actual)); \
       Utest::getTestResult()->addFailure(_f);\
     } \
     Utest::getCurrent()->exitCurrentTest(); \

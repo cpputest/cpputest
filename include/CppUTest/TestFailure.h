@@ -60,6 +60,10 @@ public:
 	virtual SimpleString getMessage() const;
 
 protected:
+
+	SimpleString createButWasString(const SimpleString& expected, const SimpleString& actual);
+	SimpleString createDifferenceAtPosString(const SimpleString& actual, int position);
+
 	SimpleString testName_;
 	SimpleString fileName_;
 	int lineNumber_;
@@ -74,6 +78,12 @@ class EqualsFailure: public TestFailure
 public:
 	EqualsFailure(Utest*, const char* fileName, int lineNumber, const char* expected, const char* actual);
 	EqualsFailure(Utest*, const char* fileName, int lineNumber, const SimpleString& expected, const SimpleString& actual);
+};
+
+class CheckEqualFailure : public TestFailure
+{
+public:
+	CheckEqualFailure(Utest* test, const char* fileName, int lineNumber, const SimpleString& expected, const SimpleString& actual);
 };
 
 class ContainsFailure: public TestFailure
@@ -104,7 +114,7 @@ public:
 class StringEqualFailure : public TestFailure
 {
 public:
-	StringEqualFailure(Utest* test, const char* fileName, int lineNumber, const char* expected, const char* actual, bool jamesvariant = false);
+	StringEqualFailure(Utest* test, const char* fileName, int lineNumber, const char* expected, const char* actual);
 };
 
 class StringEqualNoCaseFailure : public TestFailure
