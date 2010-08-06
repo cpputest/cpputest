@@ -25,33 +25,23 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef D_MemoryReportFormatter_h
-#define D_MemoryReportFormatter_h
+#ifndef D_CodeMemoryReportFormatter_h
+#define D_CodeMemoryReportFormatter_h
 
-class TestOutput;
-class Utest;
+#include "CppUTestExt/MemoryReportFormatter.h"
 
-class MemoryReportFormatter
+class CodeReportingAllocationNode;
+class CodeMemoryReportFormatter : public MemoryReportFormatter
 {
+private:
+	CodeReportingAllocationNode* codeReportingList_;
+	MemoryLeakAllocator* internalAllocator_;
+
 public:
+    CodeMemoryReportFormatter(MemoryLeakAllocator* internalAllocator);
+	virtual ~CodeMemoryReportFormatter();
 
-	virtual void report_testgroup_start(TestResult* result, Utest& test)=0;
-	virtual void report_testgroup_end(TestResult* result, Utest& test)=0;
-
-	virtual void report_test_start(TestResult* result, Utest& test)=0;
-	virtual void report_test_end(TestResult* result, Utest& test)=0;
-
-	virtual void report_alloc_memory(TestResult* result, MemoryLeakAllocator* allocator, size_t size, char* memory, const char* file, int line)=0;
-	virtual void report_free_memory(TestResult* result, MemoryLeakAllocator* allocator, char* memory, const char* file, int line)=0;
-};
-
-class NormalMemoryReportFormatter : public MemoryReportFormatter
-{
-public:
-	NormalMemoryReportFormatter();
-	virtual ~NormalMemoryReportFormatter();
-
-	virtual void report_testgroup_start(TestResult* /*result*/, Utest& /*test*/);
+	virtual void report_testgroup_start(TestResult* result, Utest& test);
 	virtual void report_testgroup_end(TestResult* /*result*/, Utest& /*test*/){};
 
 	virtual void report_test_start(TestResult* result, Utest& test);
@@ -59,6 +49,19 @@ public:
 
 	virtual void report_alloc_memory(TestResult* result, MemoryLeakAllocator* allocator, size_t size, char* memory, const char* file, int line);
 	virtual void report_free_memory(TestResult* result, MemoryLeakAllocator* allocator, char* memory, const char* file, int line);
+
+private:
+
+	void addNodeToList(const char* variableName, void* memory, CodeReportingAllocationNode* next);
+	CodeReportingAllocationNode* findNode(void* memory);
+    bool variableExists(const SimpleString& variableName);
+    void clearReporting();
+
+    bool isNewAllocator(MemoryLeakAllocator* allocator);
+	SimpleString createVariableNameFromFileLineInfo(const char *file, int line);
+
+    SimpleString getAllocationString(MemoryLeakAllocator* allocator, const SimpleString& variableName, size_t size);
+    SimpleString getDeallocationString(MemoryLeakAllocator* allocator, const SimpleString& variableName, const char* file, int line);
 };
 
 #endif

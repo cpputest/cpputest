@@ -28,6 +28,7 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTestExt/MemoryReporterPlugin.h"
 #include "CppUTestExt/MemoryReportFormatter.h"
+#include "CppUTestExt/CodeMemoryReportFormatter.h"
 
 MemoryReporterPlugin::MemoryReporterPlugin()
 	: TestPlugin("MemoryReporterPlugin"), formatter_(NULL)
