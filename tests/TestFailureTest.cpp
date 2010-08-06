@@ -95,8 +95,8 @@ TEST(TestFailure, StringsEqualFailureNewVariant)
 	StringEqualFailure f(test, failFileName, failLineNumber, "abc", "abd", false);
 	FAILURE_EQUAL("expected <abc>\n"
 			    "\tbut was  <abd>\n"
-			    "\tdifference starts at position 2 at: <   abd    >\n"
-			    "\t                                          ^", f);
+			    "\tdifference starts at position 2 at: <        abd         >\n"
+			    "\t                                               ^", f);
 }
 
 TEST(TestFailure, StringEqualFailureWithMarkAtTheEnd)
@@ -110,8 +110,20 @@ TEST(TestFailure, StringsEqualFailureNewVariantAtTheEnd)
 	StringEqualFailure f(test, failFileName, failLineNumber, "EndOfALongerString", "EndOfALongerStrinG", false);
 	FAILURE_EQUAL("expected <EndOfALongerString>\n"
 			    "\tbut was  <EndOfALongerStrinG>\n"
-			    "\tdifference starts at position 17 at: <StrinG    >\n"
-			    "\t                                           ^", f);
+			    "\tdifference starts at position 17 at: <ongerStrinG         >\n"
+			    "\t                                                ^", f);
+}
+
+TEST(TestFailure, StringsEqualFailureWithNewLinesAndTabs)
+{
+	StringEqualFailure f(test, failFileName, failLineNumber,
+			"StringWith\t\nDifferentString",
+			"StringWith\t\ndifferentString", false);
+
+	FAILURE_EQUAL("expected <StringWith\t\nDifferentString>\n"
+			    "\tbut was  <StringWith\t\ndifferentString>\n"
+			    "\tdifference starts at position 12 at: <ringWith\t\ndifferentS>\n"
+			    "\t                                              \t\n^", f);
 }
 
 TEST(TestFailure, StringEqualsFailureWithMarkInTheMiddle)

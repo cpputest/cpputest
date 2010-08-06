@@ -75,6 +75,7 @@ public:
 
 	SimpleString toLower() const;
 	SimpleString subString(size_t beginPos, size_t amount) const;
+	void copyToBuffer(char* buffer, size_t bufferSize) const;
 
 	const char *asCharString() const;
 	size_t size() const;

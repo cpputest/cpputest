@@ -29,6 +29,7 @@
 #include "CppUTest/SimpleString.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 #include "CppUTest/MemoryLeakAllocator.h"
+#include <stdlib.h>
 
 TEST_GROUP(SimpleString)
 {
@@ -321,6 +322,34 @@ TEST(SimpleString, subStringBeginPosOutOfBounds)
 {
 	SimpleString str("Hello World");
 	STRCMP_EQUAL("", str.subString(13, 5).asCharString());
+}
+
+TEST(SimpleString, copyInBufferNormal)
+{
+	SimpleString str("Hello World");
+	int bufferSize = str.size()+1;
+	char* buffer = (char*) malloc(bufferSize);
+	str.copyToBuffer(buffer, bufferSize);
+	STRCMP_EQUAL(str.asCharString(), buffer);
+	free(buffer);
+}
+
+TEST(SimpleString, copyInBufferWithEmptyBuffer)
+{
+	SimpleString str("Hello World");
+	char* buffer= NULL;
+	str.copyToBuffer(buffer, 0);
+	POINTERS_EQUAL(NULL, buffer);
+}
+
+TEST(SimpleString, copyInBufferWithBiggerBufferThanNeeded)
+{
+	SimpleString str("Hello");
+	int bufferSize = 20;
+	char* buffer= (char*) malloc(bufferSize);
+	str.copyToBuffer(buffer, bufferSize);
+	STRCMP_EQUAL(str.asCharString(), buffer);
+	free(buffer);
 }
 
 TEST(SimpleString, ContainsNull)

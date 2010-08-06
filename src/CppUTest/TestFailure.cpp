@@ -29,6 +29,7 @@
 #include "CppUTest/TestFailure.h"
 #include "CppUTest/TestOutput.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
+#include <stdlib.h>
 
 TestFailure::TestFailure(Utest* test, const char* fileName, int lineNumber, const SimpleString& theMessage) :
 	testName_(test->getFormattedName()), fileName_(fileName), lineNumber_(lineNumber), message_(theMessage)
@@ -123,10 +124,33 @@ LongsEqualFailure::LongsEqualFailure(Utest* test, const char* fileName, int line
 	message_ = StringFromFormat("expected <%s>\n\tbut was  <%s>", expectedReported.asCharString(), actualReported.asCharString());
 }
 
-SimpleString subStringForFailure(const SimpleString& str, int pos)
+SimpleString removeAllPrintableCharactersFrom(const SimpleString& str)
 {
-	SimpleString finalString = StringFromFormat("     %s     ", str.asCharString());
-	return finalString.subString(pos, 10);
+	int bufferSize = str.size()+1;
+	char* buffer = (char*) malloc(bufferSize);
+	str.copyToBuffer(buffer, bufferSize);
+
+	for (int i = 0; i < bufferSize-1; i++)
+		if (buffer[i] != '\t' && buffer[i] != '\n')
+			buffer[i] = ' ';
+
+	SimpleString result(buffer);
+	free(buffer);
+	return result;
+}
+
+SimpleString addMarkerToString(const SimpleString& str, int markerPos)
+{
+	int bufferSize = str.size()+1;
+	char* buffer = (char*) malloc(bufferSize);
+	str.copyToBuffer(buffer, bufferSize);
+
+	buffer[markerPos] = '^';
+
+	SimpleString result(buffer);
+	free(buffer);
+	return result;
+
 }
 
 StringEqualFailure::StringEqualFailure(Utest* test, const char* fileName, int lineNumber, const char* expected, const char* actual, bool jamesvariant) : TestFailure(test, fileName, lineNumber)
@@ -160,19 +184,20 @@ StringEqualFailure::StringEqualFailure(Utest* test, const char* fileName, int li
 	else {
 		message_ = StringFromFormat("expected <%s>\n\tbut was  <%s>\n", expected, actual);
 
-		SimpleString differentString;
-		differentString = StringFromFormat("difference starts at position %d at: <", failStart);
-		size_t len = differentString.size();
-		SimpleString markString;
-		markString += "\t";
-		markString += SimpleString(" ", len+5);
-		markString += "^";
+		const int extraCharactersWindow = 20;
+		const int halfOfExtraCharactersWindow = extraCharactersWindow / 2;
 
-		message_ += "\t";
-		message_ += differentString;
-		message_ += subStringForFailure(actual, failStart);
-		message_ += ">\n";
-		message_ += markString;
+		SimpleString paddingForPreventingOutOfBounds (" ", halfOfExtraCharactersWindow);
+		SimpleString actualString = paddingForPreventingOutOfBounds + actual + paddingForPreventingOutOfBounds;
+		SimpleString differentString = StringFromFormat("difference starts at position %d at: <", failStart);
+
+		message_ += StringFromFormat("\t%s%s>\n", differentString.asCharString(), actualString.subString(failStart, extraCharactersWindow).asCharString());
+
+		SimpleString markString = actualString.subString(failStart, halfOfExtraCharactersWindow+1);
+		markString = removeAllPrintableCharactersFrom(markString);
+		markString = addMarkerToString(markString, halfOfExtraCharactersWindow);
+
+		message_ += StringFromFormat("\t%s%s", SimpleString(" ", differentString.size()).asCharString(), markString.asCharString());
 	}
 }
 
