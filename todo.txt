@@ -1,3 +1,14 @@
 Add -xg and xn to exclude tests based on some character string in
 the name or group.
 
+To get better info when the assert is in a helper function:
+
+1) if the test case file and the file where the error is are different, 
+print two error lines one pointing to the test case and the other 
+to the assert
+
+2) if the failure line number is before the test case line number, 
+print two error lines one pointing to the test case and the other 
+to the assert
+
+

@@ -41,7 +41,7 @@ TEST_GROUP(TestFailure)
 
 	void setup()
 	{
-		test = new NullTest();
+		test = new NullTest(failFileName, failLineNumber-1);
 		printer = new StringBufferTestOutput();
 	}
 	void teardown()
@@ -58,6 +58,13 @@ TEST(TestFailure, CreateFailure)
 	TestFailure f1(test, failFileName, failLineNumber, "the failure message");
 	TestFailure f2(test, "the failure message");
 	TestFailure f3(test, failFileName, failLineNumber);
+}
+
+TEST(TestFailure, GetTestFileAndLineFromFailure)
+{
+	TestFailure f1(test, failFileName, failLineNumber, "the failure message");
+	STRCMP_EQUAL(failFileName, f1.getTestFileName().asCharString());
+	LONGS_EQUAL(1, f1.getTestFileLineNumber());
 }
 
 TEST(TestFailure, CreatePassingEqualsFailure)

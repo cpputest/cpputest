@@ -43,6 +43,7 @@ TEST_GROUP(TestOutput)
 	StringBufferTestOutput* mock;
 	Utest* tst;
 	TestFailure *f;
+	TestFailure *f2;
 	TestResult* result;
 
 	void setup()
@@ -51,6 +52,7 @@ TEST_GROUP(TestOutput)
 		printer = mock;
 		tst = new Utest("group", "test", "file", 1);
 		f = new TestFailure(tst, "failfile", 2, "message");
+		f2 = new TestFailure(tst, "file", 2, "message");
 		result = new TestResult(*mock);
 		result->setTotalExecutionTime(10);
 		millisTime = 0;
@@ -61,6 +63,7 @@ TEST_GROUP(TestOutput)
 		delete printer;
 		delete tst;
 		delete f;
+		delete f2;
 		delete result;
 		SetPlatformSpecificTimeInMillisMethod(0);
 	}
@@ -145,10 +148,19 @@ TEST(TestOutput, PrintTestRunOnlyOne)
 	STRCMP_EQUAL("", mock->getOutput().asCharString());
 }
 
-TEST(TestOutput, PrintFailure)
+TEST(TestOutput, PrintWithFailureInSameFile)
+{
+	printer->print(*f2);
+	STRCMP_EQUAL("\nfile:2: error: Failure in TEST(group, test)\n\tmessage\n\n", mock->getOutput().asCharString());
+}
+
+TEST(TestOutput, PrintFailureWithFailInDifferentFile)
 {
 	printer->print(*f);
-	STRCMP_EQUAL("\nfailfile:2: error: Failure in TEST(group, test)\n\tmessage\n\n", mock->getOutput().asCharString());
+	const char* expected =
+			"\nfile:1: error: Failure in TEST(group, test)"
+			"\nfailfile:2: error:\n\tmessage\n\n";
+	STRCMP_EQUAL(expected, mock->getOutput().asCharString());
 }
 
 TEST(TestOutput, PrintTestStarts)

@@ -151,14 +151,38 @@ void TestOutput::printTestRun(int number, int total)
 
 void TestOutput::print(const TestFailure& failure)
 {
-	print("\n");
-	print(failure.getFileName().asCharString());
-	print(":");
-	print(failure.getLineNumber());
-	print(":");
-	print(" error: ");
-	print("Failure in ");
-	print(failure.getTestName().asCharString());
+	SimpleString testFile = failure.getTestFileName();
+	SimpleString failFile = failure.getFileName();
+
+	if (testFile != failFile)
+	{
+		print("\n");
+		print(testFile.asCharString());
+		print(":");
+		print(failure.getTestFileLineNumber());
+		print(":");
+		print(" error: ");
+		print("Failure in ");
+		print(failure.getTestName().asCharString());
+		print("\n");
+		print(failFile.asCharString());
+		print(":");
+		print(failure.getLineNumber());
+		print(":");
+		print(" error:");
+
+	}
+	else
+	{
+		print("\n");
+		print(failure.getFileName().asCharString());
+		print(":");
+		print(failure.getLineNumber());
+		print(":");
+		print(" error: ");
+		print("Failure in ");
+		print(failure.getTestName().asCharString());
+	}
 	print("\n");
 	print("\t");
 	print(failure.getMessage().asCharString());

@@ -355,6 +355,11 @@ NullTest::NullTest() :
 {
 }
 
+NullTest::NullTest(const char* fileName, int lineNumber) :
+	Utest("NullGroup", "NullName", fileName, lineNumber, 0)
+{
+}
+
 NullTest::~NullTest()
 {
 }

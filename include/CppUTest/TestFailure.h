@@ -58,12 +58,15 @@ public:
 	virtual SimpleString getTestName() const;
 	virtual int getLineNumber() const;
 	virtual SimpleString getMessage() const;
+	virtual SimpleString getTestFileName() const;
+	virtual int getTestFileLineNumber() const;
 
 protected:
 
 	SimpleString createButWasString(const SimpleString& expected, const SimpleString& actual);
 	SimpleString createDifferenceAtPosString(const SimpleString& actual, int position);
 
+	const Utest* test_;
 	SimpleString testName_;
 	SimpleString fileName_;
 	int lineNumber_;

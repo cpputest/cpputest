@@ -129,6 +129,7 @@ class NullTest: public Utest
 {
 public:
 	explicit NullTest();
+	explicit NullTest(const char* fileName, int lineNumber);
 	virtual ~NullTest();
 
 	void testBody()
