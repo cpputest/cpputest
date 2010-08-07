@@ -30,52 +30,15 @@
 #include "CppUTestExt/MemoryReportAllocator.h"
 #include "CppUTestExt/MemoryReportFormatter.h"
 
-#define TESTOUPUT_EQUAL(a) STRCMP_EQUAL_LOCATION(a, testOutput.getOutput().asCharString(), __FILE__, __LINE__);
-#define TESTOUPUT_CONTAINS(a) STRCMP_CONTAINS_LOCATION(a, testOutput.getOutput().asCharString(), __FILE__, __LINE__);
-
-void defaultFree(char* memory)
-{
-	StandardMallocAllocator::defaultAllocator()->free_memory(memory, __FILE__, __LINE__);
-}
-
-char* defaultAlloc(size_t size)
-{
-	return StandardMallocAllocator::defaultAllocator()->alloc_memory(size	, __FILE__, __LINE__);
-}
-
 TEST_GROUP(MemoryReportAllocator)
 {
-	StringBufferTestOutput testOutput;
-	TestResult* testResult;
-	NormalMemoryReportFormatter formatter;
-
-	char* memory01;
-
-	void setup()
-	{
-		memory01 = (char*) 0x01;
-		testResult = new TestResult(testOutput);
-	}
-
-	void teardown()
-	{
-		delete testResult;
-	}
 };
 
-TEST(MemoryReportAllocator, NoAllocationResultsInAnEmptyString)
+TEST(MemoryReportAllocator, FunctionsAreForwardedForMallocAllocator)
 {
-	TESTOUPUT_EQUAL("");
-}
+	MemoryReportAllocator allocator;
+	allocator.setRealAllocator(StandardMallocAllocator::getCurrentMallocAllocator());
 
-TEST(MemoryReportAllocator, MallocAllocationLeadsToPrintout)
-{
-	formatter.report_alloc_memory(testResult, StandardMallocAllocator::defaultAllocator(), 10, memory01, "file", 9);
-	TESTOUPUT_EQUAL(StringFromFormat("\tAllocation using malloc of size: 10 pointer: %p at file:9\n", memory01).asCharString());
-}
+	CHECK(StandardMallocAllocator::getCurrentMallocAllocator()->allocateMemoryLeakNodeSeparately() == allocator.allocateMemoryLeakNodeSeparately());
 
-TEST(MemoryReportAllocator, FreeAllocationLeadsToPrintout)
-{
-	formatter.report_free_memory(testResult, StandardMallocAllocator::defaultAllocator(), memory01, "file", 9);
-	TESTOUPUT_EQUAL(StringFromFormat("\tDeallocation using free of pointer: %p at file:9\n", memory01).asCharString());
 }
