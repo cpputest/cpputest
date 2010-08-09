@@ -197,7 +197,7 @@ void JUnitTestOutput::writeFailure(JUnitTestCaseResultNode* node)
 	SimpleString buf = StringFromFormat(
 			"<failure message=\"%s:%d: %s\" type=\"AssertionFailedError\">\n",
 			node->failure_->getFileName().asCharString(),
-			node->failure_->getLineNumber(), message.asCharString());
+			node->failure_->getFailureLineNumber(), message.asCharString());
 	writeToFile(buf.asCharString());
 	writeToFile("</failure>\n");
 }

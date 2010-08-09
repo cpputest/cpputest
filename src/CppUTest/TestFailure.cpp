@@ -61,24 +61,25 @@ SimpleString addMarkerToString(const SimpleString& str, int markerPos)
 }
 
 TestFailure::TestFailure(Utest* test, const char* fileName, int lineNumber, const SimpleString& theMessage) :
-	test_(test), testName_(test->getFormattedName()), fileName_(fileName), lineNumber_(lineNumber), message_(theMessage)
+	testName_(test->getFormattedName()), fileName_(fileName), lineNumber_(lineNumber), testFileName_(test->getFile()), testLineNumber_(test->getLineNumber()), message_(theMessage)
 {
 }
 
 TestFailure::TestFailure(Utest* test, const SimpleString& theMessage) :
-    test_(test), testName_(test->getFormattedName()), fileName_(test->getFile()), lineNumber_(test->getLineNumber()), message_(theMessage)
+    testName_(test->getFormattedName()), fileName_(test->getFile()), lineNumber_(test->getLineNumber()), testFileName_(test->getFile()), testLineNumber_(test->getLineNumber()), message_(theMessage)
 {
 }
 
 TestFailure::TestFailure(Utest* test, const char* fileName, int lineNum) :
-	test_(test), testName_(test->getFormattedName()), fileName_(fileName), lineNumber_(lineNum), message_("no message")
+	testName_(test->getFormattedName()), fileName_(fileName), lineNumber_(lineNum), testFileName_(test->getFile()), testLineNumber_(test->getLineNumber()), message_("no message")
 {
 }
 
 TestFailure::TestFailure(const TestFailure& f) :
-	test_(f.test_), testName_(f.testName_), fileName_(f.fileName_), lineNumber_(f.lineNumber_), message_(f.message_)
+	testName_(f.testName_), fileName_(f.fileName_), lineNumber_(f.lineNumber_), testFileName_(f.testFileName_), testLineNumber_(f.testLineNumber_), message_(f.message_)
 {
 }
+
 
 TestFailure::~TestFailure()
 {
@@ -91,7 +92,7 @@ SimpleString TestFailure::getFileName() const
 
 SimpleString TestFailure::getTestFileName() const
 {
-	return test_->getFile();
+	return testFileName_;
 }
 
 SimpleString TestFailure::getTestName() const
@@ -99,19 +100,29 @@ SimpleString TestFailure::getTestName() const
 	return testName_;
 }
 
-int TestFailure::getLineNumber() const
+int TestFailure::getFailureLineNumber() const
 {
 	return lineNumber_;
 }
 
-int TestFailure::getTestFileLineNumber() const
+int TestFailure::getTestLineNumber() const
 {
-	return test_->getLineNumber();
+	return testLineNumber_;
 }
 
 SimpleString TestFailure::getMessage() const
 {
 	return message_;
+}
+
+bool TestFailure::isOutsideTestFile() const
+{
+	return testFileName_ != fileName_;
+}
+
+bool TestFailure::isInHelperFunction() const
+{
+	return lineNumber_ < testLineNumber_;
 }
 
 SimpleString TestFailure::createButWasString(const SimpleString& expected, const SimpleString& actual)

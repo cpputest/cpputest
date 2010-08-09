@@ -151,42 +151,49 @@ void TestOutput::printTestRun(int number, int total)
 
 void TestOutput::print(const TestFailure& failure)
 {
-	SimpleString testFile = failure.getTestFileName();
-	SimpleString failFile = failure.getFileName();
-
-	if (testFile != failFile)
-	{
-		print("\n");
-		print(testFile.asCharString());
-		print(":");
-		print(failure.getTestFileLineNumber());
-		print(":");
-		print(" error: ");
-		print("Failure in ");
-		print(failure.getTestName().asCharString());
-		print("\n");
-		print(failFile.asCharString());
-		print(":");
-		print(failure.getLineNumber());
-		print(":");
-		print(" error:");
-
-	}
+	if (failure.isOutsideTestFile() || failure.isInHelperFunction())
+		printFileAndLineForTestAndFailure(failure);
 	else
-	{
-		print("\n");
-		print(failure.getFileName().asCharString());
-		print(":");
-		print(failure.getLineNumber());
-		print(":");
-		print(" error: ");
-		print("Failure in ");
-		print(failure.getTestName().asCharString());
-	}
+		printFileAndLineForFailure(failure);
+
+	printFailureMessage(failure.getMessage());
+}
+
+void TestOutput::printFileAndLineForTestAndFailure(const TestFailure& failure)
+{
+	printEclipseErrorInFileOnLine(failure.getTestFileName(), failure.getTestLineNumber());
+	printFailureInTest(failure.getTestName());
+	printEclipseErrorInFileOnLine(failure.getFileName(), failure.getFailureLineNumber());
+}
+
+void TestOutput::printFileAndLineForFailure(const TestFailure& failure)
+{
+	printEclipseErrorInFileOnLine(failure.getFileName(), failure.getFailureLineNumber());
+	printFailureInTest(failure.getTestName());
+}
+
+void TestOutput::printFailureInTest(SimpleString testName)
+{
+	print(" Failure in ");
+	print(testName.asCharString());
+}
+
+void TestOutput::printFailureMessage(SimpleString reason)
+{
 	print("\n");
 	print("\t");
-	print(failure.getMessage().asCharString());
+	print(reason.asCharString());
 	print("\n\n");
+}
+
+void TestOutput::printEclipseErrorInFileOnLine(SimpleString file, int lineNumber)
+{
+	print("\n");
+	print(file.asCharString());
+	print(":");
+	print(lineNumber);
+	print(":");
+	print(" error:");
 }
 
 void ConsoleTestOutput::print(const char* s)

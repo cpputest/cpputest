@@ -64,7 +64,7 @@ TEST(TestFailure, GetTestFileAndLineFromFailure)
 {
 	TestFailure f1(test, failFileName, failLineNumber, "the failure message");
 	STRCMP_EQUAL(failFileName, f1.getTestFileName().asCharString());
-	LONGS_EQUAL(1, f1.getTestFileLineNumber());
+	LONGS_EQUAL(1, f1.getTestLineNumber());
 }
 
 TEST(TestFailure, CreatePassingEqualsFailure)

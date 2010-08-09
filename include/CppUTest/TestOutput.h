@@ -70,6 +70,11 @@ public:
 private:
 
 	virtual void printProgressIndicator();
+	void printFileAndLineForTestAndFailure(const TestFailure& failure);
+	void printFileAndLineForFailure(const TestFailure& failure);
+	void printFailureInTest(SimpleString testName);
+	void printFailureMessage(SimpleString reason);
+	void printEclipseErrorInFileOnLine(SimpleString testFile, int lineNumber);
 
 	TestOutput(const TestOutput&);
 	TestOutput& operator=(const TestOutput&);

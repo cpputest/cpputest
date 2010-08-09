@@ -272,7 +272,7 @@ TEST_GROUP(JUnitOutputTest)
 			message.replace('<', '[');
 			message.replace('>', ']');
 			message.replace("\n", "{newline}");
-			SimpleString buf = StringFromFormat("<failure message=\"%s:%d: %s\" type=\"AssertionFailedError\">\n", f.getFileName().asCharString(), f.getLineNumber(), message.asCharString());
+			SimpleString buf = StringFromFormat("<failure message=\"%s:%d: %s\" type=\"AssertionFailedError\">\n", f.getFileName().asCharString(), f.getFailureLineNumber(), message.asCharString());
 			CHECK_EQUAL(buf, arr[i]);
 			i++;
 			STRCMP_EQUAL("</failure>\n", arr[i].asCharString());

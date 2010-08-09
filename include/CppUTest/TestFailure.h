@@ -56,20 +56,24 @@ public:
 
 	virtual SimpleString getFileName() const;
 	virtual SimpleString getTestName() const;
-	virtual int getLineNumber() const;
+	virtual int getFailureLineNumber() const;
 	virtual SimpleString getMessage() const;
 	virtual SimpleString getTestFileName() const;
-	virtual int getTestFileLineNumber() const;
+	virtual int getTestLineNumber() const;
+	bool isOutsideTestFile() const;
+	bool isInHelperFunction() const;
+
 
 protected:
 
 	SimpleString createButWasString(const SimpleString& expected, const SimpleString& actual);
 	SimpleString createDifferenceAtPosString(const SimpleString& actual, int position);
 
-	const Utest* test_;
 	SimpleString testName_;
 	SimpleString fileName_;
 	int lineNumber_;
+	SimpleString testFileName_;
+	int testLineNumber_;
 	SimpleString message_;
 
 	TestFailure& operator=(const TestFailure&);
