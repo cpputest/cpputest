@@ -72,7 +72,11 @@ public:
 	virtual SimpleString getName() const;
 	virtual SimpleString getType() const;
 
-	virtual MockParameterValue getValue();
+	virtual int getIntValue();
+	virtual double getDoubleValue();
+	virtual const char* getStringValue();
+	virtual void* getPointerValue();
+	virtual void* getObjectPointer();
 private:
 	SimpleString name_;
 	SimpleString type_;

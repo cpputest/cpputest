@@ -29,8 +29,9 @@
 #include "CppUTestExt/MockFunctionCall.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
-MockNamedValue::MockNamedValue(const SimpleString& name) : name_(name), type_("integer"), comparator_(NULL)
+MockNamedValue::MockNamedValue(const SimpleString& name) : name_(name), type_("int"), comparator_(NULL)
 {
+	value_.intValue_ = 0;
 }
 
 MockNamedValue::~MockNamedValue()
@@ -77,9 +78,33 @@ SimpleString MockNamedValue::getType() const
 	return type_;
 }
 
-MockParameterValue MockNamedValue::getValue()
+int MockNamedValue::getIntValue()
 {
-	return value_;
+	STRCMP_EQUAL("int", type_.asCharString());
+	return value_.intValue_;
+}
+
+double MockNamedValue::getDoubleValue()
+{
+	STRCMP_EQUAL("double", type_.asCharString());
+	return value_.doubleValue_;
+}
+
+const char* MockNamedValue::getStringValue()
+{
+	STRCMP_EQUAL("char*", type_.asCharString());
+	return value_.stringValue_;
+}
+
+void* MockNamedValue::getPointerValue()
+{
+	STRCMP_EQUAL("void*", type_.asCharString());
+	return value_.pointerValue_;
+}
+
+void* MockNamedValue::getObjectPointer()
+{
+	return value_.objectPointerValue_;
 }
 
 void MockNamedValue::setComparator(MockNamedValueComparator* comparator)

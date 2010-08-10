@@ -99,7 +99,7 @@ TEST_GROUP(MockExpectedFunctionCall)
 TEST(MockExpectedFunctionCall, callWithoutParameterSetOrNotFound)
 {
 	STRCMP_EQUAL("", call->getParameterType("nonexisting").asCharString());
-	LONGS_EQUAL(0, call->getParameterValue("nonexisting").intValue_);
+	LONGS_EQUAL(0, call->getParameter("nonexisting").getIntValue());
 	CHECK(!call->hasParameterWithName("nonexisting"));
 }
 
@@ -107,7 +107,7 @@ TEST(MockExpectedFunctionCall, callWithIntegerParameter)
 {
 	call->withParameter("integer", 1);
 	STRCMP_EQUAL("int", call->getParameterType("integer").asCharString());
-	LONGS_EQUAL(1, call->getParameterValue("integer").intValue_);
+	LONGS_EQUAL(1, call->getParameter("integer").getIntValue());
 	CHECK(call->hasParameterWithName("integer"));
 }
 
@@ -115,14 +115,14 @@ TEST(MockExpectedFunctionCall, callWithDoubleParameter)
 {
 	call->withParameter("double", 1.2);
 	STRCMP_EQUAL("double", call->getParameterType("double").asCharString());
-	DOUBLES_EQUAL(1.2, call->getParameterValue("double").doubleValue_, 0.05);
+	DOUBLES_EQUAL(1.2, call->getParameter("double").getDoubleValue(), 0.05);
 }
 
 TEST(MockExpectedFunctionCall, callWithStringParameter)
 {
 	call->withParameter("string", "hello world");
 	STRCMP_EQUAL("char*", call->getParameterType("string").asCharString());
-	STRCMP_EQUAL("hello world", call->getParameterValue("string").stringValue_);
+	STRCMP_EQUAL("hello world", call->getParameter("string").getStringValue());
 }
 
 TEST(MockExpectedFunctionCall, callWithPointerParameter)
@@ -130,14 +130,14 @@ TEST(MockExpectedFunctionCall, callWithPointerParameter)
 	void* ptr = (void*) 0x123;
 	call->withParameter("pointer", ptr);
 	STRCMP_EQUAL("void*", call->getParameterType("pointer").asCharString());
-	POINTERS_EQUAL(ptr, call->getParameterValue("pointer").pointerValue_);
+	POINTERS_EQUAL(ptr, call->getParameter("pointer").getPointerValue());
 }
 
 TEST(MockExpectedFunctionCall, callWithObjectParameter)
 {
 	void* ptr = (void*) 0x123;
 	call->withParameterOfType("class", "object", ptr);
-	POINTERS_EQUAL(ptr, call->getParameterValue("object").objectPointerValue_);
+	POINTERS_EQUAL(ptr, call->getParameter("object").getObjectPointer());
 	STRCMP_EQUAL("class", call->getParameterType("object").asCharString());
 }
 
@@ -195,7 +195,7 @@ TEST(MockExpectedFunctionCall, getParameterValueOfObjectType)
 	TypeForTestingExpectedFunctionCall type(1);
 	call->setComparatorRepository(&repository);
 	call->withParameterOfType("type", "name", &type);
-	POINTERS_EQUAL(&type, call->getParameterValue("name").objectPointerValue_);
+	POINTERS_EQUAL(&type, call->getParameter("name").getObjectPointer());
 	STRCMP_EQUAL("1", call->getParameterValueString("name").asCharString());
 }
 
@@ -222,8 +222,8 @@ TEST(MockExpectedFunctionCall, callWithTwoIntegerParameter)
 	call->withParameter("integer2", 2);
 	STRCMP_EQUAL("int", call->getParameterType("integer1").asCharString());
 	STRCMP_EQUAL("int", call->getParameterType("integer2").asCharString());
-	LONGS_EQUAL(1, call->getParameterValue("integer1").intValue_);
-	LONGS_EQUAL(2, call->getParameterValue("integer2").intValue_);
+	LONGS_EQUAL(1, call->getParameter("integer1").getIntValue());
+	LONGS_EQUAL(2, call->getParameter("integer2").getIntValue());
 }
 
 TEST(MockExpectedFunctionCall, callWithThreeDifferentParameter)
@@ -234,9 +234,9 @@ TEST(MockExpectedFunctionCall, callWithThreeDifferentParameter)
 	STRCMP_EQUAL("int", call->getParameterType("integer").asCharString());
 	STRCMP_EQUAL("char*", call->getParameterType("string").asCharString());
 	STRCMP_EQUAL("double", call->getParameterType("double").asCharString());
-	LONGS_EQUAL(1, call->getParameterValue("integer").intValue_);
-	STRCMP_EQUAL("hello world", call->getParameterValue("string").stringValue_);
-	DOUBLES_EQUAL(0.12, call->getParameterValue("double").doubleValue_, 0.05);
+	LONGS_EQUAL(1, call->getParameter("integer").getIntValue());
+	STRCMP_EQUAL("hello world", call->getParameter("string").getStringValue());
+	DOUBLES_EQUAL(0.12, call->getParameter("double").getDoubleValue(), 0.05);
 }
 
 TEST(MockExpectedFunctionCall, withoutANameItsFulfilled)

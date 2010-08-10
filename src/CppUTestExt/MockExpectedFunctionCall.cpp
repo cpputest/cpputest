@@ -132,14 +132,10 @@ bool MockExpectedFunctionCall::hasParameterWithName(const SimpleString& name)
 	return p != NULL;
 }
 
-MockParameterValue MockExpectedFunctionCall::getParameterValue(const SimpleString& name)
+MockNamedValue MockExpectedFunctionCall::getParameter(const SimpleString& name)
 {
-	MockNamedValue * p = getParameterByName(name);
-	if (p) return p->getValue();
-
-	MockParameterValue defaultValue;
-	defaultValue.intValue_ = 0;
-	return defaultValue;
+	MockNamedValue* parameter = getParameterByName(name);
+	return (parameter) ? *parameter : MockNamedValue("");
 }
 
 bool MockExpectedFunctionCall::areParametersFulfilled()

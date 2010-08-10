@@ -46,8 +46,8 @@ public:
 	virtual MockFunctionCall& withParameter(const SimpleString& name, void* value);
 	virtual MockFunctionCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, void* value);
 
+	virtual MockNamedValue getParameter(const SimpleString& name);
 	virtual SimpleString getParameterType(const SimpleString& name);
-	virtual MockParameterValue getParameterValue(const SimpleString& name);
 	virtual SimpleString getParameterValueString(const SimpleString& name);
 
 	virtual bool hasParameterWithName(const SimpleString& name);
@@ -85,10 +85,9 @@ private:
 	bool wasCallMade_;
 	MockFunctionParameterNode* parameters_;
 
+	MockNamedValue* getParameterByName(const SimpleString& name);
 	MockNamedValue* addNewParameter(const SimpleString& name);
 	bool parametersEqual(const MockNamedValue& p1, const MockNamedValue& p2);
-	MockNamedValue* getParameterByName(const SimpleString& name);
-
 };
 
 #endif
