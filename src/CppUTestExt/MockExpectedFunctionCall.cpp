@@ -27,42 +27,15 @@
 
 #include "CppUTest/TestHarness.h"
 #include "CppUTestExt/MockExpectedFunctionCall.h"
-#include "CppUTest/PlatformSpecificFunctions.h"
 
-bool MockExpectedFunctionCall::parametersEqual(const MockFunctionParameter& p1, const MockFunctionParameter& p2)
+bool MockExpectedFunctionCall::parametersEqual(const MockNamedValue& p1, const MockNamedValue& p2)
 {
-	if (p1.type_ != p2.type_) return false;
-
-	if (p1.type_ == "int")
-		return p1.value_.intValue_ == p2.value_.intValue_;
-	else if (p1.type_ == "char*")
-		return SimpleString(p1.value_.stringValue_) == SimpleString(p2.value_.stringValue_);
-	else if (p1.type_ == "void*")
-		return p1.value_.pointerValue_ == p2.value_.pointerValue_;
-	else if (p1.type_ == "double")
-		return (PlatformSpecificFabs(p1.value_.doubleValue_ - p2.value_.doubleValue_) < 0.005);
-
-	if (p1.comparator_)
-		return p1.comparator_->isEqual(p1.value_.objectPointerValue_, p2.value_.objectPointerValue_);
-
-	return false;
+	return p1.equals(p2);
 }
 
-SimpleString StringFrom(const MockFunctionParameter& parameter)
+SimpleString StringFrom(const MockNamedValue& parameter)
 {
-	if (parameter.type_ == "int")
-		return StringFrom(parameter.value_.intValue_);
-	else if (parameter.type_ == "char*")
-		return parameter.value_.stringValue_;
-	else if (parameter.type_ == "void*")
-		return StringFrom(parameter.value_.pointerValue_);
-	else if (parameter.type_ == "double")
-		return StringFrom(parameter.value_.doubleValue_);
-
-	if (parameter.comparator_)
-		return parameter.comparator_->valueToString(parameter.value_.objectPointerValue_);
-
-	return StringFromFormat("No comparator found for type: \"%s\"", parameter.type_.asCharString());
+	return parameter.toString();
 }
 
 MockExpectedFunctionCall::MockExpectedFunctionCall()
@@ -73,7 +46,8 @@ MockExpectedFunctionCall::MockExpectedFunctionCall()
 MockExpectedFunctionCall::~MockExpectedFunctionCall()
 {
 	while (parameters_) {
-		MockFunctionParameter* next = parameters_->nextParameter;
+		MockFunctionParameterNode* next = parameters_->next_;
+		delete parameters_->data_;
 		delete parameters_;
 		parameters_ = next;
 	}
@@ -87,80 +61,81 @@ MockFunctionCall& MockExpectedFunctionCall::withName(const SimpleString& name)
 }
 
 
-MockFunctionParameter* MockExpectedFunctionCall::addNewParameter(const SimpleString& name, const SimpleString& type)
+MockNamedValue* MockExpectedFunctionCall::addNewParameter(const SimpleString& name)
 {
-	MockFunctionParameter* newParameter = new MockFunctionParameter(name, type);
+	MockExpectedFunctionParameter* newParameter = new MockExpectedFunctionParameter(name);
+	MockFunctionParameterNode* newParameterNode = new MockFunctionParameterNode(newParameter);
 
 	if (parameters_ == NULL)
-		parameters_ = newParameter;
+		parameters_ = newParameterNode;
 	else {
-		MockFunctionParameter* lastParameter = parameters_;
-		while (lastParameter->nextParameter) lastParameter = lastParameter->nextParameter;
-		lastParameter->nextParameter = newParameter;
+		MockFunctionParameterNode* lastParameter = parameters_;
+		while (lastParameter->next_) lastParameter = lastParameter->next_;
+		lastParameter->next_ = newParameterNode;
 	}
 	return newParameter;
 }
 
 MockFunctionCall& MockExpectedFunctionCall::withParameter(const SimpleString& name, int value)
 {
-	MockFunctionParameter* newParameter = addNewParameter(name, "int");
-	newParameter->value_.intValue_ = value;
+	MockNamedValue* newParameter = addNewParameter(name);
+	newParameter->setValue(value);
 	return *this;
 }
 
 MockFunctionCall& MockExpectedFunctionCall::withParameter(const SimpleString& name, double value)
 {
-	MockFunctionParameter* newParameter = addNewParameter(name, "double");
-	newParameter->value_.doubleValue_ = value;
+	MockNamedValue* newParameter = addNewParameter(name);
+	newParameter->setValue(value);
 	return *this;
 }
 
 MockFunctionCall& MockExpectedFunctionCall::withParameter(const SimpleString& name, const char* value)
 {
-	MockFunctionParameter* newParameter = addNewParameter(name, "char*");
-	newParameter->value_.stringValue_ = value;
+	MockNamedValue* newParameter = addNewParameter(name);
+	newParameter->setValue(value);
 	return *this;
 }
 
 MockFunctionCall& MockExpectedFunctionCall::withParameter(const SimpleString& name, void* value)
 {
-	MockFunctionParameter* newParameter = addNewParameter(name, "void*");
-	newParameter->value_.pointerValue_ = value;
+	MockNamedValue* newParameter = addNewParameter(name);
+	newParameter->setValue(value);
 	return *this;
 }
 
 MockFunctionCall& MockExpectedFunctionCall::withParameterOfType(const SimpleString& type, const SimpleString& name, void* value)
 {
-	MockFunctionParameter* newParameter = addNewParameter(name, type);
-	newParameter->value_.objectPointerValue_ = value;
-	newParameter->comparator_ = getComparatorForType(type);
+	MockNamedValue* newParameter = addNewParameter(name);
+	newParameter->setObjectPointer(type, value);
+	newParameter->setComparator(getComparatorForType(type));
 	return *this;
 }
 
-MockFunctionParameter* MockExpectedFunctionCall::getParameterByName(const SimpleString& name)
+MockNamedValue* MockExpectedFunctionCall::getParameterByName(const SimpleString& name)
 {
-	for (MockFunctionParameter * p = parameters_; p; p = p->nextParameter)
-		if (p->name_ == name)
-			return p;
+	for (MockFunctionParameterNode * p = parameters_; p; p = p->next_)
+		if (p->data_->getName() == name)
+			return p->data_;
 	return NULL;
 }
 
 SimpleString MockExpectedFunctionCall::getParameterType(const SimpleString& name)
 {
-	MockFunctionParameter * p = getParameterByName(name);
-	return (p) ? p->type_ : "";
+	MockNamedValue * p = getParameterByName(name);
+	return (p) ? p->getType() : "";
 }
 
 bool MockExpectedFunctionCall::hasParameterWithName(const SimpleString& name)
 {
-	MockFunctionParameter * p = getParameterByName(name);
+	MockNamedValue * p = getParameterByName(name);
 	return p != NULL;
 }
 
 MockParameterValue MockExpectedFunctionCall::getParameterValue(const SimpleString& name)
 {
-	MockFunctionParameter * p = getParameterByName(name);
-	if (p) return p->value_;
+	MockNamedValue * p = getParameterByName(name);
+	if (p) return p->getValue();
 
 	MockParameterValue defaultValue;
 	defaultValue.intValue_ = 0;
@@ -169,8 +144,8 @@ MockParameterValue MockExpectedFunctionCall::getParameterValue(const SimpleStrin
 
 bool MockExpectedFunctionCall::areParametersFulfilled()
 {
-	for (MockFunctionParameter * p = parameters_; p; p = p->nextParameter)
-		if (! p->fulfilled_)
+	for (MockFunctionParameterNode * p = parameters_; p; p = p->next_)
+		if (! p->data_->fulfilled_)
 			return false;
 	return true;
 }
@@ -188,27 +163,27 @@ void MockExpectedFunctionCall::callWasMade()
 void MockExpectedFunctionCall::resetExpectation()
 {
 	wasCallMade_ = false;
-	for (MockFunctionParameter * p = parameters_; p; p = p->nextParameter)
-		p->fulfilled_ = false;
+	for (MockFunctionParameterNode * p = parameters_; p; p = p->next_)
+		p->data_->fulfilled_ = false;
 }
 
 void MockExpectedFunctionCall::parameterWasPassed(const SimpleString& name)
 {
-	for (MockFunctionParameter * p = parameters_; p; p = p->nextParameter) {
-		if (p->name_ == name)
-			p->fulfilled_ = true;
+	for (MockFunctionParameterNode * p = parameters_; p; p = p->next_) {
+		if (p->data_->getName() == name)
+			p->data_->fulfilled_ = true;
 	}
 }
 
 SimpleString MockExpectedFunctionCall::getParameterValueString(const SimpleString& name)
 {
-	MockFunctionParameter * p = getParameterByName(name);
+	MockNamedValue * p = getParameterByName(name);
 	return (p) ? StringFrom(*p) : "failed";
 }
 
-bool MockExpectedFunctionCall::hasParameter(const MockFunctionParameter& parameter)
+bool MockExpectedFunctionCall::hasParameter(const MockNamedValue& parameter)
 {
-	MockFunctionParameter * p = getParameterByName(parameter.name_);
+	MockNamedValue * p = getParameterByName(parameter.getName());
 	return (p) ? parametersEqual(*p, parameter) : false;
 }
 
@@ -219,9 +194,9 @@ SimpleString MockExpectedFunctionCall::callToString()
 	str += " -> ";
 	if (parameters_ == NULL)
 		str += "no parameters";
-	for (MockFunctionParameter * p = parameters_; p; p = p->nextParameter) {
-		str += StringFromFormat("%s %s: <%s>", p->type_.asCharString(), p->name_.asCharString(), getParameterValueString(p->name_).asCharString());
-		if (p->nextParameter) str += ", ";
+	for (MockFunctionParameterNode * p = parameters_; p; p = p->next_) {
+		str += StringFromFormat("%s %s: <%s>", p->data_->getType().asCharString(), p->data_->getName().asCharString(), getParameterValueString(p->data_->getName()).asCharString());
+		if (p->next_) str += ", ";
 	}
 	return str;
 }
@@ -229,10 +204,10 @@ SimpleString MockExpectedFunctionCall::callToString()
 SimpleString MockExpectedFunctionCall::missingParametersToString()
 {
 	SimpleString str;
-	for (MockFunctionParameter * p = parameters_; p; p = p->nextParameter) {
-		if (! p->fulfilled_) {
+	for (MockFunctionParameterNode * p = parameters_; p; p = p->next_) {
+		if (! p->data_->fulfilled_) {
 			if (str != "") str += ", ";
-			str += StringFromFormat("%s %s", p->type_.asCharString(), p->name_.asCharString());
+			str += StringFromFormat("%s %s", p->data_->getType().asCharString(), p->data_->getName().asCharString());
 		}
 	}
 	return str;

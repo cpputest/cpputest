@@ -36,7 +36,7 @@ public:
 };
 
 
-class TypeForTestingExpectedFunctionCallComparator : public MockParameterComparator
+class TypeForTestingExpectedFunctionCallComparator : public MockNamedValueComparator
 {
 public:
 	TypeForTestingExpectedFunctionCallComparator() {}
@@ -53,28 +53,28 @@ public:
 
 };
 
-TEST_GROUP(MockParameterComparatorRepository)
+TEST_GROUP(MockNamedValueComparatorRepository)
 {
 };
 
-TEST(MockParameterComparatorRepository, getComparatorForNonExistingName)
+TEST(MockNamedValueComparatorRepository, getComparatorForNonExistingName)
 {
-	MockParameterComparatorRepository repository;
+	MockNamedValueComparatorRepository repository;
 	POINTERS_EQUAL(NULL, repository.getComparatorForType("typeName"));
 }
 
-TEST(MockParameterComparatorRepository, installComparator)
+TEST(MockNamedValueComparatorRepository, installComparator)
 {
 	TypeForTestingExpectedFunctionCallComparator comparator;
-	MockParameterComparatorRepository repository;
+	MockNamedValueComparatorRepository repository;
 	repository.installComparator("typeName", comparator);
 	POINTERS_EQUAL(&comparator, repository.getComparatorForType("typeName"));
 }
 
-TEST(MockParameterComparatorRepository, installMultipleComparator)
+TEST(MockNamedValueComparatorRepository, installMultipleComparator)
 {
 	TypeForTestingExpectedFunctionCallComparator comparator1, comparator2, comparator3;
-	MockParameterComparatorRepository repository;
+	MockNamedValueComparatorRepository repository;
 	repository.installComparator("type1", comparator1);
 	repository.installComparator("type2", comparator2);
 	repository.installComparator("type3", comparator3);
@@ -144,8 +144,8 @@ TEST(MockExpectedFunctionCall, callWithObjectParameter)
 TEST(MockExpectedFunctionCall, callWithObjectParameterUnequalComparison)
 {
 	TypeForTestingExpectedFunctionCall type(1), unequalType(2);
-	MockFunctionParameter parameter ("name", "type");
-	parameter.value_.objectPointerValue_ = &unequalType;
+	MockNamedValue parameter ("name");
+	parameter.setObjectPointer("type", &unequalType);
 	call->withParameterOfType("type", "name", &type);
 	CHECK (!call->hasParameter(parameter));
 }
@@ -153,20 +153,20 @@ TEST(MockExpectedFunctionCall, callWithObjectParameterUnequalComparison)
 TEST(MockExpectedFunctionCall, callWithObjectParameterEqualComparisonButFailsWithoutRepository)
 {
 	TypeForTestingExpectedFunctionCall type(1), equalType(1);
-	MockFunctionParameter parameter ("name", "type");
-	parameter.value_.objectPointerValue_ = &equalType;
+	MockNamedValue parameter ("name");
+	parameter.setObjectPointer("type", &equalType);
 	call->withParameterOfType("type", "name", &type);
 	CHECK (!call->hasParameter(parameter));
 }
 
 TEST(MockExpectedFunctionCall, callWithObjectParameterEqualComparisonButFailsWithoutComparator)
 {
-	MockParameterComparatorRepository repository;
+	MockNamedValueComparatorRepository repository;
 	call->setComparatorRepository(&repository);
 
 	TypeForTestingExpectedFunctionCall type(1), equalType(1);
-	MockFunctionParameter parameter ("name", "type");
-	parameter.value_.objectPointerValue_ = &equalType;
+	MockNamedValue parameter ("name");
+	parameter.setObjectPointer("type", &equalType);
 	call->withParameterOfType("type", "name", &type);
 	CHECK (!call->hasParameter(parameter));
 }
@@ -174,12 +174,12 @@ TEST(MockExpectedFunctionCall, callWithObjectParameterEqualComparisonButFailsWit
 TEST(MockExpectedFunctionCall, callWithObjectParameterEqualComparison)
 {
 	TypeForTestingExpectedFunctionCallComparator comparator;
-	MockParameterComparatorRepository repository;
+	MockNamedValueComparatorRepository repository;
 	repository.installComparator("type", comparator);
 
 	TypeForTestingExpectedFunctionCall type(1), equalType(1);
-	MockFunctionParameter parameter ("name", "type");
-	parameter.value_.objectPointerValue_ = &equalType;
+	MockNamedValue parameter ("name");
+	parameter.setObjectPointer("type", &equalType);
 
 	call->setComparatorRepository(&repository);
 	call->withParameterOfType("type", "name", &type);
@@ -189,7 +189,7 @@ TEST(MockExpectedFunctionCall, callWithObjectParameterEqualComparison)
 TEST(MockExpectedFunctionCall, getParameterValueOfObjectType)
 {
 	TypeForTestingExpectedFunctionCallComparator comparator;
-	MockParameterComparatorRepository repository;
+	MockNamedValueComparatorRepository repository;
 	repository.installComparator("type", comparator);
 
 	TypeForTestingExpectedFunctionCall type(1);
@@ -209,7 +209,7 @@ TEST(MockExpectedFunctionCall, getParameterValueOfObjectTypeWithoutRepository)
 TEST(MockExpectedFunctionCall, getParameterValueOfObjectTypeWithoutComparator)
 {
 	TypeForTestingExpectedFunctionCall type(1);
-	MockParameterComparatorRepository repository;
+	MockNamedValueComparatorRepository repository;
 	call->setComparatorRepository(&repository);
 	call->withParameterOfType("type", "name", &type);
 	STRCMP_EQUAL("No comparator found for type: \"type\"", call->getParameterValueString("name").asCharString());

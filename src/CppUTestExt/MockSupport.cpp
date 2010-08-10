@@ -49,7 +49,7 @@ void MockSupport::setMockFailureReporter(MockFailureReporter* reporter)
 	reporter_ = (reporter != NULL) ? reporter : &defaultReporter_;
 }
 
-void MockSupport::installComparator(const SimpleString& typeName, MockParameterComparator& comparator)
+void MockSupport::installComparator(const SimpleString& typeName, MockNamedValueComparator& comparator)
 {
 	comparatorRepository_.installComparator(typeName, comparator);
 }

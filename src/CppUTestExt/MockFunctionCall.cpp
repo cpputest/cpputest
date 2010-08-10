@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2007, Michael Feathers, James Grenning and Bas Vodde
  * All rights reserved.
@@ -28,43 +27,139 @@
 
 #include "CppUTest/TestHarness.h"
 #include "CppUTestExt/MockFunctionCall.h"
+#include "CppUTest/PlatformSpecificFunctions.h"
 
-struct MockParameterComparatorRepositoryNode
+MockNamedValue::MockNamedValue(const SimpleString& name) : name_(name), type_("integer"), comparator_(NULL)
 {
-	MockParameterComparatorRepositoryNode(const SimpleString& name, MockParameterComparator& comparator, MockParameterComparatorRepositoryNode* next)
+}
+
+MockNamedValue::~MockNamedValue()
+{
+}
+
+void MockNamedValue::setValue(int value)
+{
+	type_ = "int";
+	value_.intValue_ = value;
+}
+
+void MockNamedValue::setValue(double value)
+{
+	type_ = "double";
+	value_.doubleValue_ = value;
+}
+
+void MockNamedValue::setValue(void* value)
+{
+	type_ = "void*";
+	value_.pointerValue_ = value;
+}
+
+void MockNamedValue::setValue(const char* value)
+{
+	type_ = "char*";
+	value_.stringValue_ = value;
+}
+
+void MockNamedValue::setObjectPointer(const SimpleString& type, void* objectPtr)
+{
+	type_ = type;
+	value_.objectPointerValue_ = objectPtr;
+}
+
+SimpleString MockNamedValue::getName() const
+{
+	return name_;
+}
+
+SimpleString MockNamedValue::getType() const
+{
+	return type_;
+}
+
+MockParameterValue MockNamedValue::getValue()
+{
+	return value_;
+}
+
+void MockNamedValue::setComparator(MockNamedValueComparator* comparator)
+{
+	comparator_ = comparator;
+}
+
+bool MockNamedValue::equals(const MockNamedValue& p) const
+{
+	if (type_ != p.type_) return false;
+
+	if (type_ == "int")
+		return value_.intValue_ == p.value_.intValue_;
+	else if (type_ == "char*")
+		return SimpleString(value_.stringValue_) == SimpleString(p.value_.stringValue_);
+	else if (type_ == "void*")
+		return value_.pointerValue_ == p.value_.pointerValue_;
+	else if (type_ == "double")
+		return (PlatformSpecificFabs(value_.doubleValue_ - p.value_.doubleValue_) < 0.005);
+
+	if (comparator_)
+		return comparator_->isEqual(value_.objectPointerValue_, p.value_.objectPointerValue_);
+
+	return false;
+}
+
+SimpleString MockNamedValue::toString() const
+{
+	if (type_ == "int")
+		return StringFrom(value_.intValue_);
+	else if (type_ == "char*")
+		return value_.stringValue_;
+	else if (type_ == "void*")
+		return StringFrom(value_.pointerValue_);
+	else if (type_ == "double")
+		return StringFrom(value_.doubleValue_);
+
+	if (comparator_)
+		return comparator_->valueToString(value_.objectPointerValue_);
+
+	return StringFromFormat("No comparator found for type: \"%s\"", type_.asCharString());
+
+}
+
+struct MockNamedValueComparatorRepositoryNode
+{
+	MockNamedValueComparatorRepositoryNode(const SimpleString& name, MockNamedValueComparator& comparator, MockNamedValueComparatorRepositoryNode* next)
 		: name_(name), comparator_(comparator), next_(next) {};
 	SimpleString name_;
-	MockParameterComparator& comparator_;
-	MockParameterComparatorRepositoryNode* next_;
+	MockNamedValueComparator& comparator_;
+	MockNamedValueComparatorRepositoryNode* next_;
 };
 
-MockParameterComparatorRepository::MockParameterComparatorRepository() : head_(NULL)
+MockNamedValueComparatorRepository::MockNamedValueComparatorRepository() : head_(NULL)
 {
 
 }
 
-MockParameterComparatorRepository::~MockParameterComparatorRepository()
+MockNamedValueComparatorRepository::~MockNamedValueComparatorRepository()
 {
 	clear();
 }
 
-void MockParameterComparatorRepository::clear()
+void MockNamedValueComparatorRepository::clear()
 {
 	while (head_) {
-		MockParameterComparatorRepositoryNode* next = head_->next_;
+		MockNamedValueComparatorRepositoryNode* next = head_->next_;
 		delete head_;
 		head_ = next;
 	}
 }
 
-void MockParameterComparatorRepository::installComparator(const SimpleString& name, MockParameterComparator& comparator)
+void MockNamedValueComparatorRepository::installComparator(const SimpleString& name, MockNamedValueComparator& comparator)
 {
-	head_ = new MockParameterComparatorRepositoryNode(name, comparator, head_);
+	head_ = new MockNamedValueComparatorRepositoryNode(name, comparator, head_);
 }
 
-MockParameterComparator* MockParameterComparatorRepository::getComparatorForType(const SimpleString& name)
+MockNamedValueComparator* MockNamedValueComparatorRepository::getComparatorForType(const SimpleString& name)
 {
-	for (MockParameterComparatorRepositoryNode* p = head_; p; p = p->next_)
+	for (MockNamedValueComparatorRepositoryNode* p = head_; p; p = p->next_)
 			if (p->name_ == name) return &p->comparator_;
 	return NULL;;
 }
@@ -77,7 +172,7 @@ MockFunctionCall::~MockFunctionCall()
 {
 }
 
-void MockFunctionCall::setComparatorRepository(MockParameterComparatorRepository* repository)
+void MockFunctionCall::setComparatorRepository(MockNamedValueComparatorRepository* repository)
 {
 	comparatorRepository_ = repository;
 }
@@ -92,7 +187,7 @@ SimpleString MockFunctionCall::getName() const
 	return functionName_;
 }
 
-MockParameterComparator* MockFunctionCall::getComparatorForType(const SimpleString& type) const
+MockNamedValueComparator* MockFunctionCall::getComparatorForType(const SimpleString& type) const
 {
 	if (comparatorRepository_)
 		return comparatorRepository_->getComparatorForType(type);

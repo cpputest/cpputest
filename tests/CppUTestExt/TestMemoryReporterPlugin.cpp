@@ -104,7 +104,7 @@ public:
     }
 };
 
-class MemoryLeakAllocatorComparator : public MockParameterComparator
+class MemoryLeakAllocatorComparator : public MockNamedValueComparator
 {
 public:
 	bool isEqual(void* object1, void* object2)

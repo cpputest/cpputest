@@ -54,7 +54,7 @@ public:
 	virtual void checkExpectations();
 
 	virtual void setMockFailureReporter(MockFailureReporter* reporter);
-	virtual void installComparator(const SimpleString& typeName, MockParameterComparator& comparator);
+	virtual void installComparator(const SimpleString& typeName, MockNamedValueComparator& comparator);
 	virtual void removeAllComparators();
 
 	virtual void crashOnFailure();
@@ -70,7 +70,7 @@ private:
 	bool ignoreOtherCalls_;
 	bool enabled_;
 	MockActualFunctionCall* lastActualFunctionCall_;
-	MockParameterComparatorRepository comparatorRepository_;
+	MockNamedValueComparatorRepository comparatorRepository_;
 };
 
 #endif

@@ -33,7 +33,7 @@
 
 class MockExpectedFunctionsList;
 class MockActualFunctionCall;
-class MockFunctionParameter;
+class MockNamedValue;
 class MockFailure;
 
 class MockFailureReporter
@@ -77,7 +77,7 @@ public:
 class MockUnexpectedParameterFailure : public MockFailure
 {
 public:
-	MockUnexpectedParameterFailure(Utest* test, const SimpleString& functionName, const MockFunctionParameter& parameter, const MockExpectedFunctionsList& expectations);
+	MockUnexpectedParameterFailure(Utest* test, const SimpleString& functionName, const MockNamedValue& parameter, const MockExpectedFunctionsList& expectations);
 	virtual ~MockUnexpectedParameterFailure(){};
 };
 

@@ -202,8 +202,8 @@ TEST(MockSupportTest, expectOnePointerParameterAndValue)
 
 TEST(MockSupportTest, expectOneStringParameterAndValueFails)
 {
-	MockFunctionParameter parameter("parameter", "char*");
-	parameter.value_.stringValue_ = "different";
+	MockNamedValue parameter("parameter");
+	parameter.setValue("different");
 	addFunctionToExpectationsList("foo")->withParameter("parameter", "string");
 	MockUnexpectedParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, *expectationsList);
 
@@ -215,8 +215,8 @@ TEST(MockSupportTest, expectOneStringParameterAndValueFails)
 
 TEST(MockSupportTest, expectOneIntegerParameterAndFailsDueToParameterName)
 {
-	MockFunctionParameter parameter("different", "int");
-	parameter.value_.intValue_ = 10;
+	MockNamedValue parameter("different");
+	parameter.setValue(10);
 	addFunctionToExpectationsList("foo")->withParameter("parameter", 10);
 	MockUnexpectedParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, *expectationsList);
 
@@ -228,8 +228,8 @@ TEST(MockSupportTest, expectOneIntegerParameterAndFailsDueToParameterName)
 
 TEST(MockSupportTest, expectOneIntegerParameterAndFailsDueToValue)
 {
-	MockFunctionParameter parameter("parameter", "int");
-	parameter.value_.intValue_ = 8;
+	MockNamedValue parameter("parameter");
+	parameter.setValue(8);
 	addFunctionToExpectationsList("foo")->withParameter("parameter", 10);
 	MockUnexpectedParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, *expectationsList);
 
@@ -241,8 +241,8 @@ TEST(MockSupportTest, expectOneIntegerParameterAndFailsDueToValue)
 
 TEST(MockSupportTest, expectOneIntegerParameterAndFailsDueToTypes)
 {
-	MockFunctionParameter parameter("parameter", "char*");
-	parameter.value_.stringValue_ = "heh";
+	MockNamedValue parameter("parameter");
+	parameter.setValue("heh");
 	addFunctionToExpectationsList("foo")->withParameter("parameter", 10);
 	MockUnexpectedParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, *expectationsList);
 
@@ -327,7 +327,7 @@ public:
 	int value;
 };
 
-class MyTypeForTestingComparator : public MockParameterComparator
+class MyTypeForTestingComparator : public MockNamedValueComparator
 {
 public:
 	virtual bool isEqual(void* object1, void* object2)

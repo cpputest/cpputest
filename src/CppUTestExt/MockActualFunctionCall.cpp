@@ -79,7 +79,7 @@ MockFunctionCall& MockActualFunctionCall::withName(const SimpleString& name)
 	return *this;
 }
 
-void MockActualFunctionCall::checkActualParameter(const MockFunctionParameter& actualParameter)
+void MockActualFunctionCall::checkActualParameter(const MockNamedValue& actualParameter)
 {
 	unfulfilledExpectations_.onlyKeepUnfulfilledExpectationsWithParameter(actualParameter);
 
@@ -89,39 +89,39 @@ void MockActualFunctionCall::checkActualParameter(const MockFunctionParameter& a
 		return;
 	}
 
-	unfulfilledExpectations_.parameterWasPassed(actualParameter.name_);
+	unfulfilledExpectations_.parameterWasPassed(actualParameter.getName());
 	if (unfulfilledExpectations_.hasFulfilledExpectations())
 		callHasSucceeded();
 }
 
 MockFunctionCall& MockActualFunctionCall::withParameter(const SimpleString& name, int value)
 {
-	MockFunctionParameter actualParameter(name, "int");
-	actualParameter.value_.intValue_ = value;
+	MockNamedValue actualParameter(name);
+	actualParameter.setValue(value);
 	checkActualParameter(actualParameter);
 	return *this;
 }
 
 MockFunctionCall& MockActualFunctionCall::withParameter(const SimpleString& name, double value)
 {
-	MockFunctionParameter actualParameter(name, "double");
-	actualParameter.value_.doubleValue_ = value;
+	MockNamedValue actualParameter(name);
+	actualParameter.setValue(value);
 	checkActualParameter(actualParameter);
 	return *this;
 }
 
 MockFunctionCall& MockActualFunctionCall::withParameter(const SimpleString& name, const char* value)
 {
-	MockFunctionParameter actualParameter(name, "char*");
-	actualParameter.value_.stringValue_ = value;
+	MockNamedValue actualParameter(name);
+	actualParameter.setValue(value);
 	checkActualParameter(actualParameter);
 	return *this;
 }
 
 MockFunctionCall& MockActualFunctionCall::withParameter(const SimpleString& name, void* value)
 {
-	MockFunctionParameter actualParameter(name, "void*");
-	actualParameter.value_.pointerValue_ = value;
+	MockNamedValue actualParameter(name);
+	actualParameter.setValue(value);
 	checkActualParameter(actualParameter);
 	return *this;
 }
@@ -133,9 +133,9 @@ MockFunctionCall& MockActualFunctionCall::withParameterOfType(const SimpleString
 		failTest(failure);
 		return *this;
 	}
-	MockFunctionParameter actualParameter(name, type);
-	actualParameter.value_.objectPointerValue_ = value;
-	actualParameter.comparator_ = getComparatorForType(type);
+	MockNamedValue actualParameter(name);
+	actualParameter.setObjectPointer(type, value);
+	actualParameter.setComparator(getComparatorForType(type));
 	checkActualParameter(actualParameter);
 	return *this;
 }

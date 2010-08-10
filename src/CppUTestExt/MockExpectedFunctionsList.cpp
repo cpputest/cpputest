@@ -156,7 +156,7 @@ void MockExpectedFunctionsList::onlyKeepExpectationsWithParameterName(const Simp
 	pruneEmptyNodeFromList();
 }
 
-void MockExpectedFunctionsList::onlyKeepExpectationsWithParameter(const MockFunctionParameter& parameter)
+void MockExpectedFunctionsList::onlyKeepExpectationsWithParameter(const MockNamedValue& parameter)
 {
 	for (MockExpectedFunctionsListNode* p = head_; p; p = p->next_)
 		if (! p->expectedCall_->hasParameter(parameter))
@@ -164,7 +164,7 @@ void MockExpectedFunctionsList::onlyKeepExpectationsWithParameter(const MockFunc
 	pruneEmptyNodeFromList();
 }
 
-void MockExpectedFunctionsList::onlyKeepUnfulfilledExpectationsWithParameter(const MockFunctionParameter& parameter)
+void MockExpectedFunctionsList::onlyKeepUnfulfilledExpectationsWithParameter(const MockNamedValue& parameter)
 {
 	onlyKeepUnfulfilledExpectations();
 	onlyKeepExpectationsWithParameter(parameter);

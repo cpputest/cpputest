@@ -71,8 +71,8 @@ TEST(MockActualFunctionCall, unExpectedParameterName)
 	MockActualFunctionCall actualCall(reporter, *list);
 	actualCall.withName("func").withParameter("integer", 1);
 
-	MockFunctionParameter parameter("integer", "int");
-	parameter.value_.intValue_ = 1;
+	MockNamedValue parameter("integer");
+	parameter.setValue(1);
 
 	MockUnexpectedParameterFailure expectedFailure(mockFailureTest(), "func", parameter, *list);
 	CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);

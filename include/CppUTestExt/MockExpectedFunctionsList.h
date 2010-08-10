@@ -29,7 +29,7 @@
 #define D_MockExpectedFunctionsList_h
 
 class MockExpectedFunctionCall;
-class MockFunctionParameter;
+class MockNamedValue;
 
 class MockExpectedFunctionsList
 {
@@ -53,11 +53,11 @@ public:
 	virtual void addUnfilfilledExpectations(const MockExpectedFunctionsList& list);
 
 	virtual void onlyKeepExpectationsRelatedTo(const SimpleString& name);
-	virtual void onlyKeepExpectationsWithParameter(const MockFunctionParameter& parameter);
+	virtual void onlyKeepExpectationsWithParameter(const MockNamedValue& parameter);
 	virtual void onlyKeepExpectationsWithParameterName(const SimpleString& name);
 	virtual void onlyKeepUnfulfilledExpectations();
 	virtual void onlyKeepUnfulfilledExpectationsRelatedTo(const SimpleString& name);
-	virtual void onlyKeepUnfulfilledExpectationsWithParameter(const MockFunctionParameter& parameter);
+	virtual void onlyKeepUnfulfilledExpectationsWithParameter(const MockNamedValue& parameter);
 
 	virtual void removeOneFulfilledExpectation();
 

@@ -112,8 +112,8 @@ TEST(MockFailureTest, MockUnexpectedParameterFailure)
 	call3->withName("unrelated");
 	addAllToList();
 
-	MockFunctionParameter actualParameter("bar", "int");
-	actualParameter.value_.intValue_ = 2;
+	MockNamedValue actualParameter("bar");
+	actualParameter.setValue(2);
 
 	MockUnexpectedParameterFailure failure(this, "foo", actualParameter, *list);
 	STRCMP_EQUAL("Mock Failure: Unexpected parameter name to function \"foo\": bar\n"
@@ -133,8 +133,8 @@ TEST(MockFailureTest, MockUnexpectedParameterValueFailure)
 	call3->withName("unrelated");
 	addAllToList();
 
-	MockFunctionParameter actualParameter("boo", "int");
-	actualParameter.value_.intValue_ = 20;
+	MockNamedValue actualParameter("boo");
+	actualParameter.setValue(20);
 
 	MockUnexpectedParameterFailure failure(this, "foo", actualParameter, *list);
 	STRCMP_EQUAL("Mock Failure: Unexpected parameter value to parameter \"boo\" to function \"foo\": <20>\n"

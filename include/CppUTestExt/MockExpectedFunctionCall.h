@@ -30,29 +30,7 @@
 
 #include "CppUTestExt/MockFunctionCall.h"
 
-union MockParameterValue{
-	int intValue_;
-	double doubleValue_;
-	const char* stringValue_;
-	void* pointerValue_;
-	void* objectPointerValue_;
-};
-
-struct MockFunctionParameter
-{
-	MockFunctionParameter(const SimpleString& name, const SimpleString& type)
-		: name_(name), type_(type), fulfilled_(false), comparator_(NULL), nextParameter(NULL){}
-
-	SimpleString name_;
-	SimpleString type_;
-	MockParameterValue value_;
-	bool fulfilled_;
-	MockParameterComparator* comparator_;
-	MockFunctionParameter* nextParameter;
-};
-
-
-extern SimpleString StringFrom(const MockFunctionParameter& parameter);
+extern SimpleString StringFrom(const MockNamedValue& parameter);
 
 class MockExpectedFunctionCall : public MockFunctionCall
 {
@@ -73,7 +51,7 @@ public:
 	virtual SimpleString getParameterValueString(const SimpleString& name);
 
 	virtual bool hasParameterWithName(const SimpleString& name);
-	virtual bool hasParameter(const MockFunctionParameter& parameter);
+	virtual bool hasParameter(const MockNamedValue& parameter);
 	virtual bool relatesTo(const SimpleString& functionName);
 
 	virtual bool isFulfilled();
@@ -87,12 +65,29 @@ public:
 	virtual SimpleString missingParametersToString();
 
 private:
-	bool wasCallMade_;
-	MockFunctionParameter* parameters_;
 
-	MockFunctionParameter* addNewParameter(const SimpleString& name, const SimpleString& type);
-	bool parametersEqual(const MockFunctionParameter& p1, const MockFunctionParameter& p2);
-	MockFunctionParameter* getParameterByName(const SimpleString& name);
+	class MockExpectedFunctionParameter : public MockNamedValue
+	{
+	public:
+		MockExpectedFunctionParameter(const SimpleString& name)
+			: MockNamedValue(name), fulfilled_(false) {}
+
+		bool fulfilled_;
+	};
+
+	struct MockFunctionParameterNode
+	{
+		MockFunctionParameterNode(MockExpectedFunctionParameter* data) : data_(data), next_(NULL) {}
+		MockExpectedFunctionParameter* data_;
+		MockFunctionParameterNode* next_;
+	};
+
+	bool wasCallMade_;
+	MockFunctionParameterNode* parameters_;
+
+	MockNamedValue* addNewParameter(const SimpleString& name);
+	bool parametersEqual(const MockNamedValue& p1, const MockNamedValue& p2);
+	MockNamedValue* getParameterByName(const SimpleString& name);
 
 };
 

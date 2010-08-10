@@ -18,7 +18,7 @@ public:
 	}
 };
 
-class EventComparator : public MockParameterComparator
+class EventComparator : public MockNamedValueComparator
 {
 public:
 	virtual bool isEqual(void* object1, void* object2)

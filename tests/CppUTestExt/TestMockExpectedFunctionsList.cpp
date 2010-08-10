@@ -156,8 +156,8 @@ TEST(MockExpectedFunctionsList, onlyKeepExpectationsWithParameterName)
 
 TEST(MockExpectedFunctionsList, onlyKeepUnfulfilledExpectationsWithParameter)
 {
-	MockFunctionParameter parameter("diffname", "int");
-	parameter.value_.intValue_ = 1;
+	MockNamedValue parameter("diffname");
+	parameter.setValue(1);
 	call1->withName("func").withParameter("param", 1);
 	call2->withName("func").withParameter("diffname", 1);
 	call3->withName("func").withParameter("diffname", 1);

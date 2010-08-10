@@ -33,7 +33,7 @@
 
 class MockFailureReporter;
 class MockFailure;
-class MockFunctionParameter;
+class MockNamedValue;
 
 class MockActualFunctionCall : public MockFunctionCall
 {
@@ -57,7 +57,7 @@ protected:
 	virtual Utest* getTest() const;
 	virtual void callHasSucceeded();
 	virtual void failTest(const MockFailure& failure);
-	virtual void checkActualParameter(const MockFunctionParameter& actualParameter);
+	virtual void checkActualParameter(const MockNamedValue& actualParameter);
 
 	enum ActualCallState {
 		CALL_IN_PROGESS,

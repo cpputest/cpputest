@@ -93,21 +93,21 @@ MockUnexpectedCallHappenedFailure::MockUnexpectedCallHappenedFailure(Utest* test
 	addExpectationsAndCallHistory(expectations);
 }
 
-MockUnexpectedParameterFailure::MockUnexpectedParameterFailure(Utest* test, const SimpleString& functionName, const MockFunctionParameter& parameter, const MockExpectedFunctionsList& expectations)  : MockFailure(test)
+MockUnexpectedParameterFailure::MockUnexpectedParameterFailure(Utest* test, const SimpleString& functionName, const MockNamedValue& parameter, const MockExpectedFunctionsList& expectations)  : MockFailure(test)
 {
 	MockExpectedFunctionsList expectationsForFunctionWithParameterName;
 	expectationsForFunctionWithParameterName.addExpectationsRelatedTo(functionName, expectations);
-	expectationsForFunctionWithParameterName.onlyKeepExpectationsWithParameterName(parameter.name_);
+	expectationsForFunctionWithParameterName.onlyKeepExpectationsWithParameterName(parameter.getName());
 
 	if (expectationsForFunctionWithParameterName.isEmpty()) {
 		message_ = "Mock Failure: Unexpected parameter name to function \"";
 		message_ += functionName;
 		message_ += "\": ";
-		message_ += parameter.name_;
+		message_ += parameter.getName();
 	}
 	else {
 		message_ = "Mock Failure: Unexpected parameter value to parameter \"";
-		message_ += parameter.name_;
+		message_ += parameter.getName();
 		message_ += "\" to function \"";
 		message_ += functionName;
 		message_ += "\": <";
@@ -123,9 +123,9 @@ MockUnexpectedParameterFailure::MockUnexpectedParameterFailure(Utest* test, cons
 	message_ += "\n";
 
 	message_ += "\t\t";
-	message_ += parameter.type_;
+	message_ += parameter.getType();
 	message_ += " ";
-	message_ += parameter.name_;
+	message_ += parameter.getName();
 	message_ += ": <";
 	message_ += StringFrom(parameter);
 	message_ += ">";
