@@ -34,6 +34,7 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/MemoryLeakDetector.h"
 #include "CppUTest/MemoryLeakAllocator.h"
+#include "CppUTest/PlatformSpecificFunctions.h"
 
 extern "C"
 {
@@ -112,7 +113,9 @@ void* cpputest_malloc_location(size_t size, const char* file, int line)
 
 void* cpputest_calloc_location(size_t num, size_t size, const char* file, int line)
 {
-	return cpputest_malloc_location(num * size, file, line);
+	void* mem = cpputest_malloc_location(num * size, file, line);
+	PlatformSpecificMemset(mem, 0, num*size);
+	return mem;
 }
 
 void* cpputest_realloc_location(void* memory, size_t size, const char* file, int line)

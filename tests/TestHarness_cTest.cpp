@@ -191,3 +191,11 @@ TEST(TestHarness_c, macros)
 	free(mem1);
 	free(mem3);
 }
+
+TEST(TestHarness_c, callocInitializedToZero)
+{
+	char* mem = (char*) calloc(20, sizeof(char));
+	for (int i = 0; i < 20; i++)
+		CHECK(mem[i] == 0);
+	free(mem);
+}

@@ -82,5 +82,5 @@ void* PlatformSpecificMalloc(size_t size);
 void* PlatformSpecificRealloc(void* memory, size_t size);
 void PlatformSpecificFree(void* memory);
 void* PlatformSpecificMemCpy(void* s1, const void* s2, size_t size);
-
+void* PlatformSpecificMemset(void* mem, int c, size_t size);
 #endif
