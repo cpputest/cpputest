@@ -80,7 +80,7 @@ CPPUTEST_CPPFLAGS +=  $(INCLUDES) $(GCOVFLAGS)
 #The gcda files for gcov need to be deleted before each run
 #To avoid annoying messages.
 GCOV_CLEAN = $(SILENCE)rm -f $(GCOV_GCDA_FILES) $(GCOV_OUTPUT) $(GCOV_REPORT) $(GCOV_ERROR)
-RUN_TEST_TARGET = $(SILENCE)  $(GCOV_CLEAN) ; echo "Running $(TEST_TARGET)"; ./$(TEST_TARGET)
+RUN_TEST_TARGET = $(SILENCE)  $(GCOV_CLEAN) ; echo "Running $(TEST_TARGET)"; ./$(TEST_TARGET) $(CPPUTEST_EXE_FLAGS)
 
 ifneq "$(OTHER_MAKEFILE_TO_INCLUDE)" ""
 -include $(OTHER_MAKEFILE_TO_INCLUDE)
