@@ -330,6 +330,7 @@ static void _teardownMethod()
 
 TEST(Utest, TeardownCalledAfterTestFailure)
 {
+	teardownCalled = 0;
 	IGNORE_ALL_LEAKS_IN_TEST();
 	fixture->setTeardown(_teardownMethod);
 	fixture->setTestFunction(_failMethod);

@@ -1,8 +1,13 @@
 #/bin/sh -x
 #source in release generator script
 
-mkdir -p Releases
 GENERATED_FILES=""
+release_dir=Releases
+scripts_dir=scripts
+version=v2.2c
+zip_root=CppUTest-${version}
+zip_file=${zip_root}.zip
+
 exitIfFileExists() {
   if [ -e $1 ]
     then 
@@ -43,10 +48,11 @@ generateVersionFile() {
 }
 
 zipIt() {
-    zip -r Releases/CppUTest-${1}.zip \
+    mkdir -p ${release_dir}
+    zip -r ${release_dir}/${zip_file} \
            $GENERATED_FILES \
            .\
-           -x@${SCRIPTS_DIR}/zipExclude.txt
+           -x@${scripts_dir}/zipExclude.txt
 }
 
 cleanUp() {
@@ -54,7 +60,6 @@ cleanUp() {
 }
 
 generateCppUTestRelease() {
-    version=$1
     dateTime=$(date +%F-%H-%M)
     generateVersionFile $version $dateTime
     generateMakeScript makeAll $dateTime $version all
@@ -63,9 +68,17 @@ generateCppUTestRelease() {
     cleanUp
 }
 
+openAndMakeRelease()
+{
+    cd ${release_dir}
+    rm -rf ${zip_root}
+    unzip ${zip_file} -d ${zip_root}
+    cd ${zip_root}
+    ./makeAll.sh
+    cd ..
+}
 
-#Main stuff
-SCRIPTS_DIR=scripts
-version=v2.2b
-generateCppUTestRelease $version
 
+#Main
+generateCppUTestRelease
+openAndMakeRelease
