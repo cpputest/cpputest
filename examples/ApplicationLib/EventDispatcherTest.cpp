@@ -3,18 +3,16 @@
 #include "CppUTestExt/MockSupport.h"
 #include "EventDispatcher.h"
 
-MockSupport mock;
-
 class ObserverMock : public EventObserver
 {
 public:
 	virtual void notify(const Event& event, int timeOutInSeconds)
 	{
-		mock.actualCall("notify").withParameterOfType("Event", "event", (void*) &event).withParameter("timeOutInSeconds", timeOutInSeconds);
+		mock().actualCall("notify").withParameterOfType("Event", "event", (void*) &event).withParameter("timeOutInSeconds", timeOutInSeconds);
 	}
 	virtual void notifyRegistration(EventObserver* newObserver)
 	{
-		mock.actualCall("notifyRegistration").withParameter("newObserver", newObserver);
+		mock().actualCall("notifyRegistration").withParameter("newObserver", newObserver);
 	}
 };
 
@@ -42,12 +40,12 @@ TEST_GROUP(EventDispatcher)
 	void setup()
 	{
 		dispatcher = new EventDispatcher;
-		mock.installComparator("Event", eventComparator);
+		mock().installComparator("Event", eventComparator);
 	}
 	void teardown()
 	{
 		delete dispatcher;
-		mock.removeAllComparators();
+		mock().removeAllComparators();
 	}
 };
 
@@ -55,17 +53,17 @@ TEST_GROUP(EventDispatcher)
 TEST(EventDispatcher, EventWithoutRegistrationsResultsIntoNoCalls)
 {
 	dispatcher->dispatchEvent(event, 10);
-	mock.checkExpectations();
+	mock().checkExpectations();
 }
 
 TEST(EventDispatcher, EventWithRegistrationForEventResultsIntoCallback)
 {
-	mock.expectOneCall("notify").withParameterOfType("Event", "event", &event).withParameter("timeOutInSeconds", 10);
+	mock().expectOneCall("notify").withParameterOfType("Event", "event", &event).withParameter("timeOutInSeconds", 10);
 	event.type = IMPORTANT_EVENT;
 
 	dispatcher->registerObserver(IMPORTANT_EVENT, &observer);
 	dispatcher->dispatchEvent(event, 10);
-	mock.checkExpectations();
+	mock().checkExpectations();
 }
 
 TEST(EventDispatcher, DifferentEventWithRegistrationDoesNotResultIntoCallback)
@@ -73,18 +71,18 @@ TEST(EventDispatcher, DifferentEventWithRegistrationDoesNotResultIntoCallback)
 	event.type = LESS_IMPORTANT_EVENT;
 	dispatcher->registerObserver(IMPORTANT_EVENT, &observer);
 	dispatcher->dispatchEvent(event, 10);
-	mock.checkExpectations();
+	mock().checkExpectations();
 }
 
 TEST(EventDispatcher, RegisterTwoObserversResultIntoTwoCallsAndARegistrationNotification)
 {
-	mock.expectOneCall("notify").withParameterOfType("Event", "event", &event).withParameter("timeOutInSeconds", 10);
-	mock.expectOneCall("notify").withParameterOfType("Event", "event", &event).withParameter("timeOutInSeconds", 10);
-	mock.expectOneCall("notifyRegistration").withParameter("newObserver", &observer);
+	mock().expectOneCall("notify").withParameterOfType("Event", "event", &event).withParameter("timeOutInSeconds", 10);
+	mock().expectOneCall("notify").withParameterOfType("Event", "event", &event).withParameter("timeOutInSeconds", 10);
+	mock().expectOneCall("notifyRegistration").withParameter("newObserver", &observer);
 
 	event.type = IMPORTANT_EVENT;
 	dispatcher->registerObserver(IMPORTANT_EVENT, &observer);
 	dispatcher->registerObserver(IMPORTANT_EVENT, &observer);
 	dispatcher->dispatchEvent(event, 10);
-	mock.checkExpectations();
+	mock().checkExpectations();
 }

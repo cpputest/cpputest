@@ -31,6 +31,18 @@
 #include "CppUTestExt/MockExpectedFunctionCall.h"
 #include "CppUTestExt/MockFailure.h"
 
+#define MOCK_SUPPORT_SCOPE_PREFIX "!!!$$$MockingSupportScope$$$!!!"
+
+static MockSupport global_mock;
+
+MockSupport& mock(const SimpleString& mockName)
+{
+	if (mockName != "")
+		return *global_mock.getMockSupportScope(mockName);
+	return global_mock;
+}
+
+
 MockSupport::MockSupport()
 	: reporter_(&defaultReporter_), ignoreOtherCalls_(false), enabled_(true), lastActualFunctionCall_(NULL), data_(NULL)
 {
@@ -60,14 +72,24 @@ void MockSupport::removeAllComparators()
 	comparatorRepository_.clear();
 }
 
-void MockSupport::clearExpectations()
+void MockSupport::clear()
 {
 	delete lastActualFunctionCall_;
 	lastActualFunctionCall_ = NULL;
 	expectations_.deleteAllExpectationsAndClearList();
 	ignoreOtherCalls_ = false;
 
+	if (data_) {
+		for (MockNamedValueListNode* p = data_->begin(); p; p = p->next())
+			if (p->getType() == "MockSupport" && p->getName().contains(MOCK_SUPPORT_SCOPE_PREFIX)) {
+				MockSupport* support = (MockSupport*) p->item()->getObjectPointer();
+				support->clear();
+				delete support;
+			}
+		data_->clear();
+	}
 	delete data_;
+	data_ = NULL;
 }
 
 MockFunctionCall& MockSupport::expectOneCall(const SimpleString& functionName)
@@ -119,7 +141,6 @@ void MockSupport::enable()
 	enabled_ = true;
 }
 
-
 bool MockSupport::expectedCallsLeft()
 {
 	return expectations_.hasUnfullfilledExpectations();
@@ -134,28 +155,80 @@ void MockSupport::checkExpectations()
 	}
 	else if (expectedCallsLeft()) {
 		MockExpectedCallsDidntHappenFailure failure(reporter_->getTestToFail(), expectations_);
-		clearExpectations();
+		clear();
 		reporter_->failTest(failure);
 	}
-	clearExpectations();
+	clear();
 }
 
 bool MockSupport::hasData(const SimpleString& name)
 {
-	return data_ && data_->getName() == name;
+	if (data_ == NULL)
+		return false;
+	return data_->getValueByName(name) != NULL;
+}
+
+
+MockNamedValue* MockSupport::createAndStoreData(const SimpleString& name)
+{
+	if (data_ == NULL)
+		data_ = new MockNamedValueList;
+
+	MockNamedValue* newData = new MockNamedValue(name);
+	data_->add(newData);
+	return newData;
 }
 
 void MockSupport::setData(const SimpleString& name, int value)
 {
-	data_ = new MockNamedValue(name);
-	data_->setValue(value);
+	MockNamedValue* newData = createAndStoreData(name);
+	newData->setValue(value);
+}
+
+void MockSupport::setData(const SimpleString& name, const char* value)
+{
+	MockNamedValue* newData = createAndStoreData(name);
+	newData->setValue(value);
+}
+
+void MockSupport::setData(const SimpleString& name, double value)
+{
+	MockNamedValue* newData = createAndStoreData(name);
+	newData->setValue(value);
+}
+
+void MockSupport::setData(const SimpleString& name, void* value)
+{
+	MockNamedValue* newData = createAndStoreData(name);
+	newData->setValue(value);
+}
+
+void MockSupport::setDataObject(const SimpleString& name, const SimpleString& type, void* value)
+{
+	MockNamedValue* newData = createAndStoreData(name);
+	newData->setObjectPointer(type, value);
 }
 
 MockNamedValue MockSupport::getData(const SimpleString& name)
 {
-	name.size();
-	if (data_)
-		return *data_;
-	return MockNamedValue("");
+	if (data_ == NULL)
+		return MockNamedValue("");
+
+	MockNamedValue* value = data_->getValueByName(name);
+	if (value == NULL)
+		return MockNamedValue("");
+	return *value;
+}
+
+MockSupport* MockSupport::getMockSupportScope(const SimpleString& name)
+{
+	SimpleString mockingSupportName = MOCK_SUPPORT_SCOPE_PREFIX;
+	mockingSupportName += name;
+
+	if (!hasData(mockingSupportName))
+		setDataObject(mockingSupportName, "MockSupport", new MockSupport);
+
+	STRCMP_EQUAL("MockSupport", getData(mockingSupportName).getType().asCharString());
+	return (MockSupport*) getData(mockingSupportName).getObjectPointer();
 }
 

@@ -79,6 +79,7 @@ inline void CHECK_NO_MOCK_FAILURE_LOCATION(const char* file, int line)
 	if (mockFailureString() != "") {
 		SimpleString error = "Unexpected mock failure:\n";
 		error += mockFailureString();
+		MockFailureReporterForTest::getReporter()->mockFailureString = "";
 		FAIL_LOCATION(error.asCharString(), file, line);
 
 	}

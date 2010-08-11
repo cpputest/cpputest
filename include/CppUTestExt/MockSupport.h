@@ -34,12 +34,18 @@
 #include "CppUTestExt/MockExpectedFunctionsList.h"
 
 class Utest;
+class MockSupport;
+
+/* This allows access to "the global" mocking support for easier testing */
+MockSupport& mock(const SimpleString& mockName = "");
 
 class MockSupport
 {
 public:
 	MockSupport();
 	virtual ~MockSupport();
+
+	virtual void clear();
 
 	virtual MockFunctionCall& expectOneCall(const SimpleString& functionName);
 	virtual MockFunctionCall& actualCall(const SimpleString& functionName);
@@ -48,9 +54,7 @@ public:
 	virtual void enable();
 	virtual void ignoreOtherCalls();
 
-	virtual void clearExpectations();
 	virtual bool expectedCallsLeft();
-
 	virtual void checkExpectations();
 
 	virtual void setMockFailureReporter(MockFailureReporter* reporter);
@@ -61,7 +65,14 @@ public:
 
 	bool hasData(const SimpleString& name);
 	void setData(const SimpleString& name, int value);
+	void setData(const SimpleString& name, const char* value);
+	void setData(const SimpleString& name, double value);
+	void setData(const SimpleString& name, void* value);
+	void setDataObject(const SimpleString& name, const SimpleString& type, void* value);
 	MockNamedValue getData(const SimpleString& name);
+
+	MockSupport* getMockSupportScope(const SimpleString& name);
+
 protected:
 	virtual MockActualFunctionCall* createActualFunctionCall();
 
@@ -75,7 +86,10 @@ private:
 	MockActualFunctionCall* lastActualFunctionCall_;
 	MockNamedValueComparatorRepository comparatorRepository_;
 
-	MockNamedValue* data_;
+	MockNamedValueList* data_;
+
+	MockNamedValue* createAndStoreData(const SimpleString& name);
+
 };
 
 #endif
