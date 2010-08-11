@@ -59,6 +59,9 @@ public:
 
 	virtual void crashOnFailure();
 
+	bool hasData(const SimpleString& name);
+	void setData(const SimpleString& name, int value);
+	MockNamedValue getData(const SimpleString& name);
 protected:
 	virtual MockActualFunctionCall* createActualFunctionCall();
 
@@ -71,6 +74,8 @@ private:
 	bool enabled_;
 	MockActualFunctionCall* lastActualFunctionCall_;
 	MockNamedValueComparatorRepository comparatorRepository_;
+
+	MockNamedValue* data_;
 };
 
 #endif

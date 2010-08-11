@@ -30,6 +30,7 @@
 #include "CppUTestExt/MemoryReporterPlugin.h"
 #include "CppUTestExt/MemoryReportFormatter.h"
 #include "CppUTestExt/MockSupport.h"
+#include "CppUTestExt/MockNamedValue.h"
 
 static MemoryLeakAllocator* previousNewAllocator;
 

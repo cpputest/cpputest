@@ -31,7 +31,8 @@
 #include "CppUTestExt/MockExpectedFunctionCall.h"
 #include "CppUTestExt/MockFailure.h"
 
-MockSupport::MockSupport() : reporter_(&defaultReporter_), ignoreOtherCalls_(false), enabled_(true), lastActualFunctionCall_(NULL)
+MockSupport::MockSupport()
+	: reporter_(&defaultReporter_), ignoreOtherCalls_(false), enabled_(true), lastActualFunctionCall_(NULL), data_(NULL)
 {
 }
 
@@ -65,6 +66,8 @@ void MockSupport::clearExpectations()
 	lastActualFunctionCall_ = NULL;
 	expectations_.deleteAllExpectationsAndClearList();
 	ignoreOtherCalls_ = false;
+
+	delete data_;
 }
 
 MockFunctionCall& MockSupport::expectOneCall(const SimpleString& functionName)
@@ -136,3 +139,23 @@ void MockSupport::checkExpectations()
 	}
 	clearExpectations();
 }
+
+bool MockSupport::hasData(const SimpleString& name)
+{
+	return data_ && data_->getName() == name;
+}
+
+void MockSupport::setData(const SimpleString& name, int value)
+{
+	data_ = new MockNamedValue(name);
+	data_->setValue(value);
+}
+
+MockNamedValue MockSupport::getData(const SimpleString& name)
+{
+	name.size();
+	if (data_)
+		return *data_;
+	return MockNamedValue("");
+}
+

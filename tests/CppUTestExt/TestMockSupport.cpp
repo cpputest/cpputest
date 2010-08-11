@@ -375,3 +375,58 @@ TEST(MockSupportTest, disableEnable)
 	mock.actualCall("function");
 	CHECK_NO_MOCK_FAILURE();
 }
+
+TEST(MockSupportTest, setDataForIntegerValues)
+{
+	mock.setData("data", 10);
+	LONGS_EQUAL(10, mock.getData("data").getIntValue());
+}
+
+TEST(MockSupportTest, hasDataBeenSet)
+{
+	CHECK(!mock.hasData("data"));
+	mock.setData("data", 10);
+	CHECK(mock.hasData("data"));
+}
+
+TEST(MockSupportTest, uninitializedData)
+{
+	LONGS_EQUAL(0, mock.getData("nonexisting").getIntValue());
+	STRCMP_EQUAL("int", mock.getData("nonexisting").getType().asCharString());
+}
+#if 0
+TEST(MockSupportTest, setMultipleData)
+{
+	mock.setData("data", 1);
+	mock.setData("data2", 10);
+	LONGS_EQUAL(1, mock.getData("data").getIntValue());
+	LONGS_EQUAL(10, mock.getData("data2").getIntValue());
+}
+
+TEST(MockSupportTest, setDataString)
+{
+	mock.setData("data", "string");
+	STRCMP_EQUAL("string", mock.getData("data").getStringValue());
+}
+
+TEST(MockSupportTest, setDataDouble)
+{
+	mock.setData("data", 1.0);
+	DOUBLES_EQUAL(1.0, mock.getData("data").getDoubleValue(), 0.05);
+}
+
+TEST(MockSupportTest, setDataPointer)
+{
+	void * ptr = 0x001;
+	mock.setData("data", ptr);
+	POINTERS_EQUAL(ptr, mock.getData("data").getPointerValue());
+}
+
+TEST(MockSupportTest, setDataObject)
+{
+	void * ptr = 0x001;
+	mock.setDataObject("data", "type", ptr);
+	POINTERS_EQUAL(ptr, mock.getData("data").getObjectPointer());
+	STRCMP_EQUAL("type", mock.getData("data").getType());
+}
+#endif

@@ -29,6 +29,7 @@
 #define D_MockExpectedFunctionCall_h
 
 #include "CppUTestExt/MockFunctionCall.h"
+#include "CppUTestExt/MockNamedValue.h"
 
 extern SimpleString StringFrom(const MockNamedValue& parameter);
 
@@ -72,6 +73,8 @@ private:
 		MockExpectedFunctionParameter(const SimpleString& name)
 			: MockNamedValue(name), fulfilled_(false) {}
 
+		void setFulfilled(bool b) { fulfilled_ = b; };
+		bool isFulfilled() const { return fulfilled_;};
 		bool fulfilled_;
 	};
 
@@ -82,11 +85,14 @@ private:
 		MockFunctionParameterNode* next_;
 	};
 
+	MockExpectedFunctionParameter* toParameter(MockNamedValueListNode* node)
+	{
+		return (MockExpectedFunctionParameter*) node->itemToBeRenamed();
+	}
 	bool wasCallMade_;
-	MockFunctionParameterNode* parameters_;
+//	MockFunctionParameterNode* parameters_;
+	MockNamedValueList* parameters_;
 
-	MockNamedValue* getParameterByName(const SimpleString& name);
-	MockNamedValue* addNewParameter(const SimpleString& name);
 	bool parametersEqual(const MockNamedValue& p1, const MockNamedValue& p2);
 };
 

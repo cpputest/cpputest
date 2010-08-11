@@ -29,73 +29,12 @@
 #define D_MockFunctionCall_h
 
 /*
- * MockParameterComparator is an interface that needs to be used when creating Comparators.
- * This is needed when comparing values of non-native type.
- */
-
-class MockNamedValueComparator
-{
-public:
-	MockNamedValueComparator() {};
-	virtual ~MockNamedValueComparator() {};
-
-	virtual bool isEqual(void* object1, void* object2)=0;
-	virtual SimpleString valueToString(void* object)=0;
-};
-
-
-/*
- * MockNamedValue is the generic value class used. It encapsulates basic types and can use them "as if one"
- * Also it enables other types by putting object pointers. They can be compared with comparators.
- *
- * Basically this class ties together a Name, a Value, a Type, and a Comparator
- */
-
-class MockNamedValue
-{
-public:
-	MockNamedValue(const SimpleString& name);
-	virtual ~MockNamedValue();
-
-	virtual void setValue(int value);
-	virtual void setValue(double value);
-	virtual void setValue(void* value);
-	virtual void setValue(const char* value);
-	virtual void setObjectPointer(const SimpleString& type, void* objectPtr);
-
-	virtual void setComparator(MockNamedValueComparator* comparator);
-
-	virtual bool equals(const MockNamedValue& p) const;
-
-	virtual SimpleString toString() const;
-
-	virtual SimpleString getName() const;
-	virtual SimpleString getType() const;
-
-	virtual int getIntValue();
-	virtual double getDoubleValue();
-	virtual const char* getStringValue();
-	virtual void* getPointerValue();
-	virtual void* getObjectPointer();
-private:
-	SimpleString name_;
-	SimpleString type_;
-	union {
-		int intValue_;
-		double doubleValue_;
-		const char* stringValue_;
-		void* pointerValue_;
-		void* objectPointerValue_;
-	} value_;
-	MockNamedValueComparator* comparator_;
-};
-
-/*
  * MockFunctionCall is the main interface for recording and actualizing mock calls.
  *
  */
-
+class MockNamedValueComparator;
 class MockNamedValueComparatorRepository;
+
 class MockFunctionCall
 {
 public:
@@ -119,26 +58,6 @@ private:
 	SimpleString functionName_;
 	MockNamedValueComparatorRepository* comparatorRepository_;
 };
-
-/*
- * MockParameterComparatorRepository is a class which stores comparators which can be used for comparing non-native types
- *
- */
-
-struct MockNamedValueComparatorRepositoryNode;
-class MockNamedValueComparatorRepository
-{
-	MockNamedValueComparatorRepositoryNode* head_;
-public:
-	MockNamedValueComparatorRepository();
-	virtual ~MockNamedValueComparatorRepository();
-
-	virtual void installComparator(const SimpleString& name, MockNamedValueComparator& comparator);
-	virtual MockNamedValueComparator* getComparatorForType(const SimpleString& name);
-
-	void clear();
-};
-
 
 class MockIgnoredCall : public MockFunctionCall
 {
