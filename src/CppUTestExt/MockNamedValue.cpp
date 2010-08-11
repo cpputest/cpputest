@@ -160,7 +160,7 @@ MockNamedValueListNode* MockNamedValueListNode::next()
 	return next_;
 }
 
-MockNamedValue* MockNamedValueListNode::itemToBeRenamed()
+MockNamedValue* MockNamedValueListNode::item()
 {
 	return data_;
 }
@@ -215,7 +215,7 @@ MockNamedValue* MockNamedValueList::getValueByName(const SimpleString& name)
 {
 	for (MockNamedValueListNode * p = head_; p; p = p->next())
 		if (p->getName() == name)
-			return p->itemToBeRenamed();
+			return p->item();
 	return NULL;
 }
 

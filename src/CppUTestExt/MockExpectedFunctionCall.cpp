@@ -28,11 +28,6 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTestExt/MockExpectedFunctionCall.h"
 
-bool MockExpectedFunctionCall::parametersEqual(const MockNamedValue& p1, const MockNamedValue& p2)
-{
-	return p1.equals(p2);
-}
-
 SimpleString StringFrom(const MockNamedValue& parameter)
 {
 	return parameter.toString();
@@ -119,7 +114,7 @@ MockNamedValue MockExpectedFunctionCall::getParameter(const SimpleString& name)
 bool MockExpectedFunctionCall::areParametersFulfilled()
 {
 	for (MockNamedValueListNode* p = parameters_->begin(); p; p = p->next())
-		if (! toParameter(p)->isFulfilled())
+		if (! item(p)->isFulfilled())
 			return false;
 	return true;
 }
@@ -138,14 +133,14 @@ void MockExpectedFunctionCall::resetExpectation()
 {
 	wasCallMade_ = false;
 	for (MockNamedValueListNode* p = parameters_->begin(); p; p = p->next())
-		toParameter(p)->setFulfilled(false);
+		item(p)->setFulfilled(false);
 }
 
 void MockExpectedFunctionCall::parameterWasPassed(const SimpleString& name)
 {
 	for (MockNamedValueListNode* p = parameters_->begin(); p; p = p->next()) {
 		if (p->getName() == name)
-			toParameter(p)->setFulfilled(true);
+			item(p)->setFulfilled(true);
 
 	}
 }
@@ -159,7 +154,7 @@ SimpleString MockExpectedFunctionCall::getParameterValueString(const SimpleStrin
 bool MockExpectedFunctionCall::hasParameter(const MockNamedValue& parameter)
 {
 	MockNamedValue * p = parameters_->getValueByName(parameter.getName());
-	return (p) ? parametersEqual(*p, parameter) : false;
+	return (p) ? p->equals(parameter) : false;
 }
 
 SimpleString MockExpectedFunctionCall::callToString()
@@ -180,7 +175,7 @@ SimpleString MockExpectedFunctionCall::missingParametersToString()
 {
 	SimpleString str;
 	for (MockNamedValueListNode* p = parameters_->begin(); p; p = p->next()) {
-		if (! toParameter(p)->isFulfilled()) {
+		if (! item(p)->isFulfilled()) {
 			if (str != "") str += ", ";
 			str += StringFromFormat("%s %s", p->getType().asCharString(), p->getName().asCharString());
 		}
@@ -192,3 +187,26 @@ bool MockExpectedFunctionCall::relatesTo(const SimpleString& functionName)
 {
 	return functionName == getName();
 }
+
+MockExpectedFunctionCall::MockExpectedFunctionParameter* MockExpectedFunctionCall::item(MockNamedValueListNode* node)
+{
+	return (MockExpectedFunctionParameter*) node->item();
+}
+
+MockExpectedFunctionCall::MockExpectedFunctionParameter::MockExpectedFunctionParameter(const SimpleString& name)
+			: MockNamedValue(name), fulfilled_(false)
+{
+}
+
+void MockExpectedFunctionCall::MockExpectedFunctionParameter::setFulfilled(bool b)
+{
+	fulfilled_ = b;
+}
+
+bool MockExpectedFunctionCall::MockExpectedFunctionParameter::isFulfilled() const
+{
+	return fulfilled_;
+}
+
+
+

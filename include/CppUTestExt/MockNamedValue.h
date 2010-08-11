@@ -42,7 +42,6 @@ public:
 	virtual SimpleString valueToString(void* object)=0;
 };
 
-
 /*
  * MockNamedValue is the generic value class used. It encapsulates basic types and can use them "as if one"
  * Also it enables other types by putting object pointers. They can be compared with comparators.
@@ -98,7 +97,7 @@ public:
 	SimpleString getType() const;
 
 	MockNamedValueListNode* next();
-	MockNamedValue* itemToBeRenamed();
+	MockNamedValue* item();
 
 	void destroy();
 	void setNext(MockNamedValueListNode* node);

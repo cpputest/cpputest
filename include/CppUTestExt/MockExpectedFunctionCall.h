@@ -70,30 +70,18 @@ private:
 	class MockExpectedFunctionParameter : public MockNamedValue
 	{
 	public:
-		MockExpectedFunctionParameter(const SimpleString& name)
-			: MockNamedValue(name), fulfilled_(false) {}
+		MockExpectedFunctionParameter(const SimpleString& name);
+		void setFulfilled(bool b);
+		bool isFulfilled() const;
 
-		void setFulfilled(bool b) { fulfilled_ = b; };
-		bool isFulfilled() const { return fulfilled_;};
+	private:
 		bool fulfilled_;
 	};
 
-	struct MockFunctionParameterNode
-	{
-		MockFunctionParameterNode(MockExpectedFunctionParameter* data) : data_(data), next_(NULL) {}
-		MockExpectedFunctionParameter* data_;
-		MockFunctionParameterNode* next_;
-	};
+	MockExpectedFunctionParameter* item(MockNamedValueListNode* node);
 
-	MockExpectedFunctionParameter* toParameter(MockNamedValueListNode* node)
-	{
-		return (MockExpectedFunctionParameter*) node->itemToBeRenamed();
-	}
 	bool wasCallMade_;
-//	MockFunctionParameterNode* parameters_;
 	MockNamedValueList* parameters_;
-
-	bool parametersEqual(const MockNamedValue& p1, const MockNamedValue& p2);
 };
 
 #endif
