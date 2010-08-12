@@ -50,7 +50,6 @@ endif
 CPPUTEST_CPPFLAGS += $(WARNINGFLAGS)
 CPPUTEST_CXXFLAGS += $(MEMLEAK_DETECTOR_NEW_MACROS)
 CPPUTEST_CFLAGS += $(MEMLEAK_DETECTOR_MALLOC_MACROS)
-CPPUTEST_EXE_FLAGS += -r
 
 #GCOVFLAGS = -fprofile-arcs -ftest-coverage
 
@@ -83,6 +82,7 @@ include $(CPPUTEST_HOME)/build/ComponentMakefile
 test_all:
 	$(SILENCE)echo Building with the default flags.
 	make
+	./$(TEST_TARGET) -r
 	make clean
 	$(SILENCE)echo Building with the STDC++ new disabled. 
 	make CPPUTEST_DISABLE_STD_CPP_LIB=Y
