@@ -80,12 +80,13 @@ void MockSupport::clear()
 	ignoreOtherCalls_ = false;
 
 	if (data_) {
-		for (MockNamedValueListNode* p = data_->begin(); p; p = p->next())
-			if (p->getType() == "MockSupport" && p->getName().contains(MOCK_SUPPORT_SCOPE_PREFIX)) {
-				MockSupport* support = (MockSupport*) p->item()->getObjectPointer();
+		for (MockNamedValueListNode* p = data_->begin(); p; p = p->next()) {
+			MockSupport* support = getMockSupport(p);
+			if (support) {
 				support->clear();
 				delete support;
 			}
+		}
 		data_->clear();
 	}
 	delete data_;
@@ -134,30 +135,75 @@ void MockSupport::ignoreOtherCalls()
 void MockSupport::disable()
 {
 	enabled_ = false;
+
+	if (data_)
+		for (MockNamedValueListNode* p = data_->begin(); p; p = p->next())
+			if (getMockSupport(p)) getMockSupport(p)->disable();
 }
 
 void MockSupport::enable()
 {
 	enabled_ = true;
+
+	if (data_)
+		for (MockNamedValueListNode* p = data_->begin(); p; p = p->next())
+			if (getMockSupport(p)) getMockSupport(p)->enable();
 }
 
 bool MockSupport::expectedCallsLeft()
 {
-	return expectations_.hasUnfullfilledExpectations();
+	int callsLeft = expectations_.hasUnfullfilledExpectations();
+
+	if (data_)
+		for (MockNamedValueListNode* p = data_->begin(); p; p = p->next())
+			if (getMockSupport(p)) callsLeft += getMockSupport(p)->expectedCallsLeft();
+	return callsLeft;
+}
+
+bool MockSupport::wasLastCallFulfilled()
+{
+	if (lastActualFunctionCall_ && !lastActualFunctionCall_->isFulfilled())
+		return false;
+
+	if (data_)
+		for (MockNamedValueListNode* p = data_->begin(); p; p = p->next())
+			if (getMockSupport(p) && !getMockSupport(p)->wasLastCallFulfilled())
+					return false;
+	return true;
+}
+
+void MockSupport::failTestWithForUnexpectedCalls()
+{
+    MockExpectedFunctionsList expectationsList;
+    expectationsList.addExpectations(expectations_);
+    if(data_)
+        for(MockNamedValueListNode *p = data_->begin();p;p = p->next())
+            if(getMockSupport(p))
+                expectationsList.addExpectations(getMockSupport(p)->expectations_);
+
+    MockExpectedCallsDidntHappenFailure failure(reporter_->getTestToFail(), expectationsList);
+    clear();
+    reporter_->failTest(failure);
+}
+
+void MockSupport::checkExpectationsOfLastCall()
+{
+    if(lastActualFunctionCall_)
+        lastActualFunctionCall_->checkExpectations();
+
+    if(data_)
+        for(MockNamedValueListNode *p = data_->begin();p;p = p->next())
+            if(getMockSupport(p) && getMockSupport(p)->lastActualFunctionCall_)
+                getMockSupport(p)->lastActualFunctionCall_->checkExpectations();
 }
 
 void MockSupport::checkExpectations()
 {
-	if (lastActualFunctionCall_ && !lastActualFunctionCall_->isFulfilled()) {
-		if (! lastActualFunctionCall_->hasFailed()) {
-			lastActualFunctionCall_->checkExpectations();
-		}
+	if (!wasLastCallFulfilled()) {
+		checkExpectationsOfLastCall();
 	}
-	else if (expectedCallsLeft()) {
-		MockExpectedCallsDidntHappenFailure failure(reporter_->getTestToFail(), expectations_);
-		clear();
-		reporter_->failTest(failure);
-	}
+	else if (expectedCallsLeft())
+		failTestWithForUnexpectedCalls();
 	clear();
 }
 
@@ -230,5 +276,12 @@ MockSupport* MockSupport::getMockSupportScope(const SimpleString& name)
 
 	STRCMP_EQUAL("MockSupport", getData(mockingSupportName).getType().asCharString());
 	return (MockSupport*) getData(mockingSupportName).getObjectPointer();
+}
+
+MockSupport* MockSupport::getMockSupport(MockNamedValueListNode* node)
+{
+	if (node->getType() == "MockSupport" && node->getName().contains(MOCK_SUPPORT_SCOPE_PREFIX))
+		return  (MockSupport*) node->item()->getObjectPointer();
+	return NULL;
 }
 

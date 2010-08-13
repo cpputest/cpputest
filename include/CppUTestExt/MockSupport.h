@@ -45,23 +45,9 @@ public:
 	MockSupport();
 	virtual ~MockSupport();
 
-	virtual void clear();
-
 	virtual MockFunctionCall& expectOneCall(const SimpleString& functionName);
 	virtual MockFunctionCall& actualCall(const SimpleString& functionName);
-
-	virtual void disable();
-	virtual void enable();
 	virtual void ignoreOtherCalls();
-
-	virtual bool expectedCallsLeft();
-	virtual void checkExpectations();
-
-	virtual void setMockFailureReporter(MockFailureReporter* reporter);
-	virtual void installComparator(const SimpleString& typeName, MockNamedValueComparator& comparator);
-	virtual void removeAllComparators();
-
-	virtual void crashOnFailure();
 
 	bool hasData(const SimpleString& name);
 	void setData(const SimpleString& name, int value);
@@ -71,25 +57,37 @@ public:
 	void setDataObject(const SimpleString& name, const SimpleString& type, void* value);
 	MockNamedValue getData(const SimpleString& name);
 
+	virtual void setMockFailureReporter(MockFailureReporter* reporter);
+	virtual void installComparator(const SimpleString& typeName, MockNamedValueComparator& comparator);
+	virtual void removeAllComparators();
+
+	virtual void crashOnFailure();
+
 	MockSupport* getMockSupportScope(const SimpleString& name);
-
+    virtual void disable();
+    virtual void enable();
+    virtual void checkExpectations();
+    virtual bool expectedCallsLeft();
+    virtual void clear();
 protected:
-	virtual MockActualFunctionCall* createActualFunctionCall();
-
+    virtual MockActualFunctionCall *createActualFunctionCall();
 private:
-	MockFailureReporter* reporter_;
-	MockFailureReporter defaultReporter_;
+    MockFailureReporter *reporter_;
+    MockFailureReporter defaultReporter_;
+    MockExpectedFunctionsList expectations_;
+    bool ignoreOtherCalls_;
+    bool enabled_;
+    MockActualFunctionCall *lastActualFunctionCall_;
+    MockNamedValueComparatorRepository comparatorRepository_;
+    MockNamedValueList *data_;
+    void checkExpectationsOfLastCall();
 
-	MockExpectedFunctionsList expectations_;
-	bool ignoreOtherCalls_;
-	bool enabled_;
-	MockActualFunctionCall* lastActualFunctionCall_;
-	MockNamedValueComparatorRepository comparatorRepository_;
-
-	MockNamedValueList* data_;
+    bool wasLastCallFulfilled();
+    void failTestWithForUnexpectedCalls();
 
 	MockNamedValue* createAndStoreData(const SimpleString& name);
 
+	MockSupport* getMockSupport(MockNamedValueListNode* node);
 };
 
 #endif

@@ -445,3 +445,52 @@ TEST(MockSupportTest, usingTwoMockSupportsByName)
 	LONGS_EQUAL(1, mock("first").expectedCallsLeft());
 	mock("first").clear();
 }
+
+TEST(MockSupportTest, EnableDisableWorkHierarchically)
+{
+	mock("first");
+
+	mock().disable();
+	mock("first").expectOneCall("boo");
+	LONGS_EQUAL(0, mock("first").expectedCallsLeft());
+
+	mock().enable();
+	mock("first").expectOneCall("boo");
+	LONGS_EQUAL(1, mock("first").expectedCallsLeft());
+
+	mock("first").clear();
+}
+
+TEST(MockSupportTest, ExpectedCallsLeftWorksHierarchically)
+{
+	mock("first").expectOneCall("foobar");
+	LONGS_EQUAL(1, mock().expectedCallsLeft());
+	mock().clear();
+}
+
+TEST(MockSupportTest, checkExpectationsWorksHierarchically)
+{
+	mock("first").expectOneCall("foobar");
+	mock("second").expectOneCall("helloworld");
+
+	addFunctionToExpectationsList("foobar");
+	addFunctionToExpectationsList("helloworld");
+	MockExpectedCallsDidntHappenFailure expectedFailure(mockFailureTest(), *expectationsList);
+
+	mock().checkExpectations();
+	CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
+TEST(MockSupportTest, checkExpectationsWorksHierarchicallyForLastCallNotFinished)
+{
+	mock("first").setMockFailureReporter(MockFailureReporterForTest::getReporter());
+
+	mock("first").expectOneCall("foobar").withParameter("boo", 1);
+	mock("first").actualCall("foobar");
+
+	addFunctionToExpectationsList("foobar")->withParameter("boo", 1);
+	MockExpectedParameterDidntHappenFailure expectedFailure(mockFailureTest(), "foobar", *expectationsList);
+
+	mock().checkExpectations();
+	CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
