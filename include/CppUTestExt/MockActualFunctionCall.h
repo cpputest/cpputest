@@ -48,6 +48,12 @@ public:
 	virtual MockFunctionCall& withParameter(const SimpleString& name, void* value);
 	virtual MockFunctionCall& withParameterOfType(const SimpleString& type, const SimpleString& name, void* value);
 
+	virtual MockFunctionCall& andReturnValue(int value);
+	virtual MockFunctionCall& andReturnValue(double value);
+	virtual MockFunctionCall& andReturnValue(const char* value);
+	virtual MockFunctionCall& andReturnValue(void* value);
+	virtual MockNamedValue returnValue();
+
 	virtual bool isFulfilled() const;
 	virtual bool hasFailed() const;
 

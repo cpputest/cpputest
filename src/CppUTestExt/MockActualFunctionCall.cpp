@@ -174,3 +174,37 @@ void MockActualFunctionCall::setState(ActualCallState state)
 	checkStateConsistency(state_, state);
 	state_ = state;
 }
+
+MockFunctionCall& MockActualFunctionCall::andReturnValue(int)
+{
+	FAIL("andReturnValue cannot be called on an ActualFunctionCall. Use returnValue instead to get the value.");
+	return *this;
+}
+
+MockFunctionCall& MockActualFunctionCall::andReturnValue(const char*)
+{
+	FAIL("andReturnValue cannot be called on an ActualFunctionCall. Use returnValue instead to get the value.");
+	return *this;
+}
+
+MockFunctionCall& MockActualFunctionCall::andReturnValue(double)
+{
+	FAIL("andReturnValue cannot be called on an ActualFunctionCall. Use returnValue instead to get the value.");
+	return *this;
+}
+
+MockFunctionCall& MockActualFunctionCall::andReturnValue(void*)
+{
+	FAIL("andReturnValue cannot be called on an ActualFunctionCall. Use returnValue instead to get the value.");
+	return *this;
+}
+
+MockNamedValue MockActualFunctionCall::returnValue()
+{
+	if (allExpectations_.hasDuplicateReturnValueFor(getName())) {
+		MockCannotSetDifferentReturnValuesForSameFunctionFailure failure(getTest(), getName());
+		failTest(failure);
+		return MockNamedValue("");
+	}
+	return allExpectations_.returnValueForFunction(getName());
+}

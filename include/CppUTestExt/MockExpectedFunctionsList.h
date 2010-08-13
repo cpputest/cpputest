@@ -65,6 +65,8 @@ public:
 	virtual void callWasMade();
 	virtual void parameterWasPassed(const SimpleString& parameterName);
 
+	virtual bool hasDuplicateReturnValueFor(const SimpleString& functionName) const;
+	virtual MockNamedValue returnValueForFunction(const SimpleString& functionName) const;
 	virtual SimpleString unfulfilledFunctionsToString(const SimpleString& linePrefix = "") const;
 	virtual SimpleString fulfilledFunctionsToString(const SimpleString& linePrefix = "") const;
 	virtual SimpleString missingParametersToString() const;

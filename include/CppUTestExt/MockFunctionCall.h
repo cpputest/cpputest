@@ -35,6 +35,8 @@
 class MockNamedValueComparator;
 class MockNamedValueComparatorRepository;
 
+#include "CppUTestExt/MockNamedValue.h"
+
 class MockFunctionCall
 {
 public:
@@ -47,6 +49,12 @@ public:
 	virtual MockFunctionCall& withParameter(const SimpleString& name, const char* value)=0;
 	virtual MockFunctionCall& withParameter(const SimpleString& name, void* value)=0;
 	virtual MockFunctionCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, void* value)=0;
+
+	virtual MockFunctionCall& andReturnValue(int value)=0;
+	virtual MockFunctionCall& andReturnValue(double value)=0;
+	virtual MockFunctionCall& andReturnValue(const char* value)=0;
+	virtual MockFunctionCall& andReturnValue(void* value)=0;
+	virtual MockNamedValue returnValue()=0;
 
 	virtual void setComparatorRepository(MockNamedValueComparatorRepository* repository);
 
@@ -62,12 +70,18 @@ private:
 class MockIgnoredCall : public MockFunctionCall
 {
 public:
-	virtual MockFunctionCall& withName(const SimpleString&) { return *this;};
-	virtual MockFunctionCall& withParameter(const SimpleString&, int) { return *this; };
-	virtual MockFunctionCall& withParameter(const SimpleString&, double) { return *this; };
-	virtual MockFunctionCall& withParameter(const SimpleString&, const char*) { return *this; };
-	virtual MockFunctionCall& withParameter(const SimpleString& , void*) { return *this; };
-	virtual MockFunctionCall& withParameterOfType(const SimpleString&, const SimpleString&, void*) { return *this; };
+	virtual MockFunctionCall& withName(const SimpleString&) { return *this;}
+	virtual MockFunctionCall& withParameter(const SimpleString&, int) { return *this; }
+	virtual MockFunctionCall& withParameter(const SimpleString&, double) { return *this; }
+	virtual MockFunctionCall& withParameter(const SimpleString&, const char*) { return *this; }
+	virtual MockFunctionCall& withParameter(const SimpleString& , void*) { return *this; }
+	virtual MockFunctionCall& withParameterOfType(const SimpleString&, const SimpleString&, void*) { return *this; }
+
+	virtual MockFunctionCall& andReturnValue(int) { return *this; }
+	virtual MockFunctionCall& andReturnValue(double) { return *this;}
+	virtual MockFunctionCall& andReturnValue(const char*) { return *this; }
+	virtual MockFunctionCall& andReturnValue(void*) { return *this; }
+	virtual MockNamedValue returnValue() { return MockNamedValue(""); }
 
 	static MockFunctionCall& instance() { static MockIgnoredCall call; return call; };
 };

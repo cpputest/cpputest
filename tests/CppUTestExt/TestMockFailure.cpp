@@ -172,3 +172,12 @@ TEST(MockFailureTest, MockNoWayToCompareCustomTypeFailure)
 	MockNoWayToCompareCustomTypeFailure failure(this, "myType");
 	STRCMP_EQUAL("MockFailure: No way to compare type <myType>. Please install a ParameterTypeComparator.", failure.getMessage().asCharString());
 }
+
+TEST(MockFailureTest, MockCannotSetDifferentReturnValuesForSameFunctionFailure)
+{
+	MockCannotSetDifferentReturnValuesForSameFunctionFailure failure(this, "foo");
+	STRCMP_EQUAL("MockFailure: Cannot set different return values to the same function: foo\n"
+			     "\tReason: There is no defined order in expected calls.\n"
+			     "\tYou can probably achieve the same thing using MockSupport::setData", failure.getMessage().asCharString());
+}
+

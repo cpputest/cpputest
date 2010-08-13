@@ -34,7 +34,7 @@ SimpleString StringFrom(const MockNamedValue& parameter)
 }
 
 MockExpectedFunctionCall::MockExpectedFunctionCall()
-	: wasCallMade_(true)
+	: wasCallMade_(true), returnValue_("")
 {
 	parameters_ = new MockNamedValueList();
 }
@@ -206,6 +206,36 @@ void MockExpectedFunctionCall::MockExpectedFunctionParameter::setFulfilled(bool 
 bool MockExpectedFunctionCall::MockExpectedFunctionParameter::isFulfilled() const
 {
 	return fulfilled_;
+}
+
+MockFunctionCall& MockExpectedFunctionCall::andReturnValue(int value)
+{
+	returnValue_.setValue(value);
+	return *this;
+}
+
+MockFunctionCall& MockExpectedFunctionCall::andReturnValue(const char* value)
+{
+	returnValue_.setValue(value);
+	return *this;
+}
+
+MockFunctionCall& MockExpectedFunctionCall::andReturnValue(double value)
+{
+	returnValue_.setValue(value);
+	return *this;
+}
+
+MockFunctionCall& MockExpectedFunctionCall::andReturnValue(void* value)
+{
+	returnValue_.setValue(value);
+	return *this;
+}
+
+
+MockNamedValue MockExpectedFunctionCall::returnValue()
+{
+	return returnValue_;
 }
 
 

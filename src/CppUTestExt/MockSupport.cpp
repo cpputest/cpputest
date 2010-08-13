@@ -285,3 +285,10 @@ MockSupport* MockSupport::getMockSupport(MockNamedValueListNode* node)
 	return NULL;
 }
 
+MockNamedValue MockSupport::returnValue()
+{
+	if (lastActualFunctionCall_) return lastActualFunctionCall_->returnValue();
+	return MockNamedValue("");
+}
+
+

@@ -47,6 +47,12 @@ public:
 	virtual MockFunctionCall& withParameter(const SimpleString& name, void* value);
 	virtual MockFunctionCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, void* value);
 
+	virtual MockFunctionCall& andReturnValue(int value);
+	virtual MockFunctionCall& andReturnValue(double value);
+	virtual MockFunctionCall& andReturnValue(const char* value);
+	virtual MockFunctionCall& andReturnValue(void* value);
+	virtual MockNamedValue returnValue();
+
 	virtual MockNamedValue getParameter(const SimpleString& name);
 	virtual SimpleString getParameterType(const SimpleString& name);
 	virtual SimpleString getParameterValueString(const SimpleString& name);
@@ -82,6 +88,7 @@ private:
 
 	bool wasCallMade_;
 	MockNamedValueList* parameters_;
+	MockNamedValue returnValue_;
 };
 
 #endif

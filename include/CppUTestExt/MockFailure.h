@@ -95,4 +95,10 @@ public:
 	virtual ~MockNoWayToCompareCustomTypeFailure(){};
 };
 
+class MockCannotSetDifferentReturnValuesForSameFunctionFailure : public MockFailure
+{
+public:
+	MockCannotSetDifferentReturnValuesForSameFunctionFailure(Utest* test, const SimpleString& functionName);
+	virtual ~MockCannotSetDifferentReturnValuesForSameFunctionFailure(){}
+};
 #endif

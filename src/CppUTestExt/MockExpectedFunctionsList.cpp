@@ -274,3 +274,26 @@ SimpleString MockExpectedFunctionsList::missingParametersToString() const
 	return str;
 }
 
+bool MockExpectedFunctionsList::hasDuplicateReturnValueFor(const SimpleString& functionName) const
+{
+	MockExpectedFunctionCall* functionWithReturnValue = NULL;
+
+	for (MockExpectedFunctionsListNode* p = head_; p; p = p->next_) {
+		if (p->expectedCall_->relatesTo(functionName)) {
+			if (functionWithReturnValue && !p->expectedCall_->returnValue().equals(functionWithReturnValue->returnValue()))
+					return true;
+			else
+				functionWithReturnValue = p->expectedCall_;
+		}
+	}
+	return false;
+}
+
+MockNamedValue MockExpectedFunctionsList::returnValueForFunction(const SimpleString& functionName) const
+{
+	for (MockExpectedFunctionsListNode* p = head_; p; p = p->next_)
+		if (p->expectedCall_->relatesTo(functionName))
+			return p->expectedCall_->returnValue();
+	return MockNamedValue("");
+}
+

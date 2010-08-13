@@ -494,3 +494,40 @@ TEST(MockSupportTest, checkExpectationsWorksHierarchicallyForLastCallNotFinished
 	mock().checkExpectations();
 	CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
+
+TEST(MockSupportTest, IntegerReturnValue)
+{
+	mock().expectOneCall("foo").andReturnValue(1);
+	LONGS_EQUAL(1, mock().actualCall("foo").returnValue().getIntValue());
+	LONGS_EQUAL(1, mock().returnValue().getIntValue());
+}
+
+TEST(MockSupportTest, IntegerReturnValueSetsDifferentValues)
+{
+	mock().expectOneCall("foo").andReturnValue(1);
+	mock().expectOneCall("foo").andReturnValue(2);
+
+	mock().actualCall("foo").returnValue();
+
+	MockCannotSetDifferentReturnValuesForSameFunctionFailure expectedFailure(mockFailureTest(), "foo");
+	CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
+TEST(MockSupportTest, StringReturnValue)
+{
+	mock().expectOneCall("foo").andReturnValue("hello world");
+	STRCMP_EQUAL("hello world", mock().actualCall("foo").returnValue().getStringValue());
+}
+
+TEST(MockSupportTest, DoubleReturnValue)
+{
+	mock().expectOneCall("foo").andReturnValue(1.0);
+	DOUBLES_EQUAL(1.0, mock().actualCall("foo").returnValue().getDoubleValue(), 0.05);
+}
+
+TEST(MockSupportTest, PointerReturnValue)
+{
+	void* ptr = (void*) 0x001;
+	mock().expectOneCall("foo").andReturnValue(ptr);
+	POINTERS_EQUAL(ptr, mock().actualCall("foo").returnValue().getPointerValue());
+}

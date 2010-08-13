@@ -48,6 +48,7 @@ public:
 	virtual MockFunctionCall& expectOneCall(const SimpleString& functionName);
 	virtual MockFunctionCall& actualCall(const SimpleString& functionName);
 	virtual void ignoreOtherCalls();
+	virtual MockNamedValue returnValue();
 
 	bool hasData(const SimpleString& name);
 	void setData(const SimpleString& name, int value);
