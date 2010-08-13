@@ -31,6 +31,19 @@
 extern void* cpputest_malloc_location(size_t size, const char* file, int line);
 extern void cpputest_free_location(void* buffer, const char* file, int line);
 
+/* NOTE on strdup!
+ *
+ * strdup was implemented earlier, however it is *not* an Standard C function but a POSIX function.
+ * Because of that, it can lead to portability issues by providing more than is available on the local platform.
+ * For that reason, strdup is *not* implemented as a macro. If you still want to use it, an easy implementation would be:
+ *
+ * size_t length = 1 + strlen(str);
+ * char* result = (char*) cpputest_malloc_location(length, file, line);
+ * memcpy(result, str, length);
+ * return result;
+ *
+ */
+
 #define malloc(a) cpputest_malloc_location(a, __FILE__, __LINE__)
 #define calloc(a, b) cpputest_calloc_location(a, b, __FILE__, __LINE__)
 #define realloc(a, b) cpputest_realloc_location(a, b, __FILE__, __LINE__)
