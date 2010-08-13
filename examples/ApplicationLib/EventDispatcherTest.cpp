@@ -53,7 +53,6 @@ TEST_GROUP(EventDispatcher)
 TEST(EventDispatcher, EventWithoutRegistrationsResultsIntoNoCalls)
 {
 	dispatcher->dispatchEvent(event, 10);
-	mock().checkExpectations();
 }
 
 TEST(EventDispatcher, EventWithRegistrationForEventResultsIntoCallback)
@@ -63,7 +62,6 @@ TEST(EventDispatcher, EventWithRegistrationForEventResultsIntoCallback)
 
 	dispatcher->registerObserver(IMPORTANT_EVENT, &observer);
 	dispatcher->dispatchEvent(event, 10);
-	mock().checkExpectations();
 }
 
 TEST(EventDispatcher, DifferentEventWithRegistrationDoesNotResultIntoCallback)
@@ -84,5 +82,4 @@ TEST(EventDispatcher, RegisterTwoObserversResultIntoTwoCallsAndARegistrationNoti
 	dispatcher->registerObserver(IMPORTANT_EVENT, &observer);
 	dispatcher->registerObserver(IMPORTANT_EVENT, &observer);
 	dispatcher->dispatchEvent(event, 10);
-	mock().checkExpectations();
 }
