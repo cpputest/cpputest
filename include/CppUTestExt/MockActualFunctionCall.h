@@ -54,6 +54,8 @@ public:
 	virtual MockFunctionCall& andReturnValue(void* value);
 	virtual MockNamedValue returnValue();
 
+	virtual MockFunctionCall& onObject(void* objectPtr);
+
 	virtual bool isFulfilled() const;
 	virtual bool hasFailed() const;
 

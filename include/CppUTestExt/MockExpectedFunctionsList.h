@@ -44,6 +44,7 @@ public:
 	virtual int amountOfUnfulfilledExpectations() const;
 	virtual bool hasUnfullfilledExpectations() const;
 	virtual bool hasFulfilledExpectations() const;
+	virtual bool hasUnfulfilledExpectationsBecauseOfMissingParameters() const;
 	virtual bool hasExpectationWithName(const SimpleString& name) const;
 	virtual bool isEmpty() const;
 
@@ -55,14 +56,17 @@ public:
 	virtual void onlyKeepExpectationsRelatedTo(const SimpleString& name);
 	virtual void onlyKeepExpectationsWithParameter(const MockNamedValue& parameter);
 	virtual void onlyKeepExpectationsWithParameterName(const SimpleString& name);
+	virtual void onlyKeepExpectationsOnObject(void* objectPtr);
 	virtual void onlyKeepUnfulfilledExpectations();
 	virtual void onlyKeepUnfulfilledExpectationsRelatedTo(const SimpleString& name);
 	virtual void onlyKeepUnfulfilledExpectationsWithParameter(const MockNamedValue& parameter);
+	virtual void onlyKeepUnfulfilledExpectationsOnObject(void* objectPtr);
 
 	virtual void removeOneFulfilledExpectation();
 
 	virtual void resetExpectations();
 	virtual void callWasMade();
+	virtual void wasPassedToObject();
 	virtual void parameterWasPassed(const SimpleString& parameterName);
 
 	virtual bool hasDuplicateReturnValueFor(const SimpleString& functionName) const;

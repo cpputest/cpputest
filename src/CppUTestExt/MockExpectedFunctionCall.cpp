@@ -34,7 +34,7 @@ SimpleString StringFrom(const MockNamedValue& parameter)
 }
 
 MockExpectedFunctionCall::MockExpectedFunctionCall()
-	: wasCallMade_(true), returnValue_("")
+	: wasCallMade_(true), returnValue_(""), objectPtr_(NULL), wasPassedToObject_(true)
 {
 	parameters_ = new MockNamedValueList();
 }
@@ -121,7 +121,7 @@ bool MockExpectedFunctionCall::areParametersFulfilled()
 
 bool MockExpectedFunctionCall::isFulfilled()
 {
-	return wasCallMade_ && areParametersFulfilled();
+	return wasCallMade_ && areParametersFulfilled() && wasPassedToObject_;;
 }
 
 void MockExpectedFunctionCall::callWasMade()
@@ -129,9 +129,15 @@ void MockExpectedFunctionCall::callWasMade()
 	wasCallMade_ = true;
 }
 
+void MockExpectedFunctionCall::wasPassedToObject()
+{
+	wasPassedToObject_ = true;
+}
+
 void MockExpectedFunctionCall::resetExpectation()
 {
 	wasCallMade_ = false;
+	wasPassedToObject_ = (objectPtr_ == NULL);
 	for (MockNamedValueListNode* p = parameters_->begin(); p; p = p->next())
 		item(p)->setFulfilled(false);
 }
@@ -160,6 +166,9 @@ bool MockExpectedFunctionCall::hasParameter(const MockNamedValue& parameter)
 SimpleString MockExpectedFunctionCall::callToString()
 {
 	SimpleString str;
+	if (objectPtr_)
+		str = StringFromFormat("(object address: %p)::", objectPtr_);
+
 	str += getName();
 	str += " -> ";
 	if (parameters_->begin() == NULL)
@@ -186,6 +195,11 @@ SimpleString MockExpectedFunctionCall::missingParametersToString()
 bool MockExpectedFunctionCall::relatesTo(const SimpleString& functionName)
 {
 	return functionName == getName();
+}
+
+bool MockExpectedFunctionCall::relatesToObject(void*objectPtr) const
+{
+	return objectPtr_ == objectPtr;
 }
 
 MockExpectedFunctionCall::MockExpectedFunctionParameter* MockExpectedFunctionCall::item(MockNamedValueListNode* node)
@@ -229,6 +243,13 @@ MockFunctionCall& MockExpectedFunctionCall::andReturnValue(double value)
 MockFunctionCall& MockExpectedFunctionCall::andReturnValue(void* value)
 {
 	returnValue_.setValue(value);
+	return *this;
+}
+
+MockFunctionCall& MockExpectedFunctionCall::onObject(void* objectPtr)
+{
+	wasPassedToObject_ = false;
+	objectPtr_ = objectPtr;
 	return *this;
 }
 

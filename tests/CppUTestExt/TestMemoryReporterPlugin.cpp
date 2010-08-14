@@ -94,10 +94,9 @@ static MockMemoryReportFormatter formatterForPluginTest;
 class MemoryReporterPluginUnderTest : public MemoryReporterPlugin
 {
 public:
-	MockMemoryReportFormatter mockFormatter;
     MemoryReportFormatter* createMemoryFormatter(const SimpleString& type)
     {
-    	mock("reporter").actualCall("createMemoryFormatter").withParameter("type", type.asCharString());
+    	mock("reporter").actualCall("createMemoryFormatter").onObject(this).withParameter("type", type.asCharString());
     	return new MockMemoryReportFormatter;
     }
 };
@@ -146,8 +145,6 @@ TEST_GROUP(MemoryReporterPlugin)
 		delete reporter;
 		delete test;
 		delete result;
-//		check_all_mock_expectations();
-//		clear_all_mock_comparators();
 		mock("formatter").checkExpectations();
 		mock("formatter").removeAllComparators();
 		mock("reporter").checkExpectations();
@@ -172,7 +169,7 @@ TEST(MemoryReporterPlugin, meaninglessArgumentsAreIgnored)
 
 TEST(MemoryReporterPlugin, commandLineParameterTurnsOnNormalLogging)
 {
-	mock("reporter").expectOneCall("createMemoryFormatter").withParameter("type", "normal");
+	mock("reporter").expectOneCall("createMemoryFormatter").onObject(reporter).withParameter("type", "normal");
 
 	const char *cmd_line[] = {"-nothing", "-pmemoryreport=normal", "alsomeaningless" };
 	CHECK(reporter->parseArguments(3, cmd_line, 1));

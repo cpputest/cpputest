@@ -181,3 +181,37 @@ TEST(MockFailureTest, MockCannotSetDifferentReturnValuesForSameFunctionFailure)
 			     "\tYou can probably achieve the same thing using MockSupport::setData", failure.getMessage().asCharString());
 }
 
+TEST(MockFailureTest, MockUnexpectedObjectFailure)
+{
+	call1->withName("foo").onObject((void*) 0x02);
+	call2->withName("foo").onObject((void*) 0x03);
+	call2->callWasMade();
+	call2->wasPassedToObject();
+	call3->withName("unrelated");
+	addAllToList();
+
+	MockUnexpectedObjectFailure failure(this, "foo", (void*)0x1, *list);
+	STRCMP_EQUAL("MockFailure: Function called on a unexpected object: foo\n"
+			     "\tActual object for call has address: <0x1>\n"
+				 "\tEXPECTED calls that DID NOT happen related to function: foo\n"
+				 "\t\t(object address: 0x2)::foo -> no parameters\n"
+				 "\tACTUAL calls that DID happen related to function: foo\n"
+				 "\t\t(object address: 0x3)::foo -> no parameters", failure.getMessage().asCharString());
+}
+
+TEST(MockFailureTest, MockExpectedObjectDidntHappenFailure)
+{
+	call1->withName("foo").onObject((void*) 0x02);
+	call2->withName("foo").onObject((void*) 0x03);
+	call2->callWasMade();
+	call2->wasPassedToObject();
+	call3->withName("unrelated");
+	addAllToList();
+
+	MockExpectedObjectDidntHappenFailure failure(this, "foo", *list);
+	STRCMP_EQUAL("Mock Failure: Expected call on object for function \"foo\" but it did not happen.\n"
+			     "\tEXPECTED calls that DID NOT happen related to function: foo\n"
+				 "\t\t(object address: 0x2)::foo -> no parameters\n"
+				 "\tACTUAL calls that DID happen related to function: foo\n"
+				 "\t\t(object address: 0x3)::foo -> no parameters", failure.getMessage().asCharString());
+}

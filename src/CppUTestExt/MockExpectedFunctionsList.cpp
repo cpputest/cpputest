@@ -164,10 +164,25 @@ void MockExpectedFunctionsList::onlyKeepExpectationsWithParameter(const MockName
 	pruneEmptyNodeFromList();
 }
 
+void MockExpectedFunctionsList::onlyKeepExpectationsOnObject(void* objectPtr)
+{
+	for (MockExpectedFunctionsListNode* p = head_; p; p = p->next_)
+		if (! p->expectedCall_->relatesToObject(objectPtr))
+			p->expectedCall_ = NULL;
+	pruneEmptyNodeFromList();
+}
+
+
 void MockExpectedFunctionsList::onlyKeepUnfulfilledExpectationsWithParameter(const MockNamedValue& parameter)
 {
 	onlyKeepUnfulfilledExpectations();
 	onlyKeepExpectationsWithParameter(parameter);
+}
+
+void MockExpectedFunctionsList::onlyKeepUnfulfilledExpectationsOnObject(void* objectPtr)
+{
+	onlyKeepUnfulfilledExpectations();
+	onlyKeepExpectationsOnObject(objectPtr);
 }
 
 void MockExpectedFunctionsList::removeOneFulfilledExpectation()
@@ -224,6 +239,13 @@ void MockExpectedFunctionsList::callWasMade()
 	for (MockExpectedFunctionsListNode* p = head_; p; p = p->next_)
 		p->expectedCall_->callWasMade();
 }
+
+void MockExpectedFunctionsList::wasPassedToObject()
+{
+	for (MockExpectedFunctionsListNode* p = head_; p; p = p->next_)
+		p->expectedCall_->wasPassedToObject();
+}
+
 
 void MockExpectedFunctionsList::parameterWasPassed(const SimpleString& parameterName)
 {
@@ -286,6 +308,14 @@ bool MockExpectedFunctionsList::hasDuplicateReturnValueFor(const SimpleString& f
 				functionWithReturnValue = p->expectedCall_;
 		}
 	}
+	return false;
+}
+
+bool MockExpectedFunctionsList::hasUnfulfilledExpectationsBecauseOfMissingParameters() const
+{
+	for (MockExpectedFunctionsListNode* p = head_; p; p = p->next_)
+		if (! p->expectedCall_->areParametersFulfilled())
+			return true;
 	return false;
 }
 

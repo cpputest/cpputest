@@ -157,8 +157,14 @@ void MockActualFunctionCall::checkExpectations()
 	if (! unfulfilledExpectations_.hasUnfullfilledExpectations())
 		FAIL("Actual call is in progress. Checking expectations. But no unfulfilled expectations. Cannot happen.")
 
-	MockExpectedParameterDidntHappenFailure failure(getTest(), getName(), allExpectations_);
-	failTest(failure);
+	if (unfulfilledExpectations_.hasUnfulfilledExpectationsBecauseOfMissingParameters()) {
+		MockExpectedParameterDidntHappenFailure failure(getTest(), getName(), allExpectations_);
+		failTest(failure);
+	}
+	else {
+		MockExpectedObjectDidntHappenFailure failure(getTest(), getName(), allExpectations_);
+		failTest(failure);
+	}
 }
 
 void MockActualFunctionCall::checkStateConsistency(ActualCallState oldState, ActualCallState newState)
@@ -208,3 +214,21 @@ MockNamedValue MockActualFunctionCall::returnValue()
 	}
 	return allExpectations_.returnValueForFunction(getName());
 }
+
+MockFunctionCall& MockActualFunctionCall::onObject(void* objectPtr)
+{
+	unfulfilledExpectations_.onlyKeepUnfulfilledExpectationsOnObject(objectPtr);
+
+	if (unfulfilledExpectations_.isEmpty()) {
+		MockUnexpectedObjectFailure failure(getTest(), getName(), objectPtr, allExpectations_);
+		failTest(failure);
+		return *this;
+	}
+
+	unfulfilledExpectations_.wasPassedToObject();
+
+	if (unfulfilledExpectations_.hasFulfilledExpectations())
+		callHasSucceeded();
+	return *this;
+}
+

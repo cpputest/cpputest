@@ -56,6 +56,8 @@ public:
 	virtual MockFunctionCall& andReturnValue(void* value)=0;
 	virtual MockNamedValue returnValue()=0;
 
+	virtual MockFunctionCall& onObject(void* objectPtr)=0;
+
 	virtual void setComparatorRepository(MockNamedValueComparatorRepository* repository);
 
 protected:
@@ -82,6 +84,8 @@ public:
 	virtual MockFunctionCall& andReturnValue(const char*) { return *this; }
 	virtual MockFunctionCall& andReturnValue(void*) { return *this; }
 	virtual MockNamedValue returnValue() { return MockNamedValue(""); }
+
+	virtual MockFunctionCall& onObject(void* ) { return *this; }
 
 	static MockFunctionCall& instance() { static MockIgnoredCall call; return call; };
 };

@@ -101,4 +101,19 @@ public:
 	MockCannotSetDifferentReturnValuesForSameFunctionFailure(Utest* test, const SimpleString& functionName);
 	virtual ~MockCannotSetDifferentReturnValuesForSameFunctionFailure(){}
 };
+
+class MockUnexpectedObjectFailure : public MockFailure
+{
+public:
+	MockUnexpectedObjectFailure(Utest* test, const SimpleString& functionName, void* expected, const MockExpectedFunctionsList& expectations);
+	virtual ~MockUnexpectedObjectFailure(){}
+};
+
+class MockExpectedObjectDidntHappenFailure : public MockFailure
+{
+public:
+	MockExpectedObjectDidntHappenFailure(Utest* test, const SimpleString& functionName, const MockExpectedFunctionsList& expectations);
+	virtual ~MockExpectedObjectDidntHappenFailure(){}
+};
+
 #endif

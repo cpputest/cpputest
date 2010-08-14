@@ -53,6 +53,8 @@ public:
 	virtual MockFunctionCall& andReturnValue(void* value);
 	virtual MockNamedValue returnValue();
 
+	virtual MockFunctionCall& onObject(void* objectPtr);
+
 	virtual MockNamedValue getParameter(const SimpleString& name);
 	virtual SimpleString getParameterType(const SimpleString& name);
 	virtual SimpleString getParameterValueString(const SimpleString& name);
@@ -60,12 +62,14 @@ public:
 	virtual bool hasParameterWithName(const SimpleString& name);
 	virtual bool hasParameter(const MockNamedValue& parameter);
 	virtual bool relatesTo(const SimpleString& functionName);
+	virtual bool relatesToObject(void*objectPtr) const;
 
 	virtual bool isFulfilled();
 	virtual bool areParametersFulfilled();
 
 	virtual void callWasMade();
 	virtual void parameterWasPassed(const SimpleString& name);
+	virtual void wasPassedToObject();
 	virtual void resetExpectation();
 
 	virtual SimpleString callToString();
@@ -89,6 +93,8 @@ private:
 	bool wasCallMade_;
 	MockNamedValueList* parameters_;
 	MockNamedValue returnValue_;
+	void* objectPtr_;
+	bool wasPassedToObject_;
 };
 
 #endif

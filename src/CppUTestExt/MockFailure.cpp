@@ -159,4 +159,17 @@ MockCannotSetDifferentReturnValuesForSameFunctionFailure::MockCannotSetDifferent
 								"\tYou can probably achieve the same thing using MockSupport::setData", functionName.asCharString());
 }
 
+MockUnexpectedObjectFailure::MockUnexpectedObjectFailure(Utest* test, const SimpleString& functionName, void* actual, const MockExpectedFunctionsList& expectations) : MockFailure(test)
+{
+	message_ = StringFromFormat ("MockFailure: Function called on a unexpected object: %s\n"
+								 "\tActual object for call has address: <%p>\n", functionName.asCharString(),actual);
+	addExpectationsAndCallHistoryRelatedTo(functionName, expectations);
+}
+
+MockExpectedObjectDidntHappenFailure::MockExpectedObjectDidntHappenFailure(Utest* test, const SimpleString& functionName, const MockExpectedFunctionsList& expectations) : MockFailure(test)
+{
+	message_ = StringFromFormat("Mock Failure: Expected call on object for function \"%s\" but it did not happen.\n", functionName.asCharString());
+	addExpectationsAndCallHistoryRelatedTo(functionName, expectations);
+}
+
 

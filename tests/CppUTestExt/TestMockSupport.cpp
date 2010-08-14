@@ -531,3 +531,40 @@ TEST(MockSupportTest, PointerReturnValue)
 	mock().expectOneCall("foo").andReturnValue(ptr);
 	POINTERS_EQUAL(ptr, mock().actualCall("foo").returnValue().getPointerValue());
 }
+
+TEST(MockSupportTest, OnObject)
+{
+	void* objectPtr = (void*) 0x001;
+	mock().expectOneCall("boo").onObject(objectPtr);
+	mock().actualCall("boo").onObject(objectPtr);
+}
+
+TEST(MockSupportTest, OnObjectFails)
+{
+	void* objectPtr = (void*) 0x001;
+	void* objectPtr2 = (void*) 0x002;
+	addFunctionToExpectationsList("boo")->onObject(objectPtr);
+
+	mock().expectOneCall("boo").onObject(objectPtr);
+	mock().actualCall("boo").onObject(objectPtr2);
+
+	MockUnexpectedObjectFailure expectedFailure(mockFailureTest(), "boo", objectPtr2, *expectationsList);
+	CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
+TEST(MockSupportTest, OnObjectExpectedButNotCalled)
+{
+	void* objectPtr = (void*) 0x001;
+	addFunctionToExpectationsList("boo")->onObject(objectPtr);
+	addFunctionToExpectationsList("boo")->onObject(objectPtr);
+
+	mock().expectOneCall("boo").onObject(objectPtr);
+	mock().expectOneCall("boo").onObject(objectPtr);
+	mock().actualCall("boo");
+	mock().actualCall("boo");
+
+	MockExpectedObjectDidntHappenFailure expectedFailure(mockFailureTest(), "boo", *expectationsList);
+	CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+	mock().checkExpectations();
+	CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
