@@ -47,7 +47,6 @@ public:
 
 	virtual MockFunctionCall& expectOneCall(const SimpleString& functionName);
 	virtual MockFunctionCall& actualCall(const SimpleString& functionName);
-	virtual void ignoreOtherCalls();
 	virtual MockNamedValue returnValue();
 
 	bool hasData(const SimpleString& name);
@@ -58,18 +57,27 @@ public:
 	void setDataObject(const SimpleString& name, const SimpleString& type, void* value);
 	MockNamedValue getData(const SimpleString& name);
 
+	MockSupport* getMockSupportScope(const SimpleString& name);
+
+	/*
+	 * The following functions are recursively through the lower MockSupports scopes
+	 * This means, if you do mock().disable() it will disable *all* mocking scopes, including mock("myScope").
+  	 */
+
+	virtual void disable();
+    virtual void enable();
+	virtual void ignoreOtherCalls();
+
+    virtual void checkExpectations();
+    virtual bool expectedCallsLeft();
+
+    virtual void clear();
 	virtual void setMockFailureReporter(MockFailureReporter* reporter);
+	virtual void crashOnFailure();
+
 	virtual void installComparator(const SimpleString& typeName, MockNamedValueComparator& comparator);
 	virtual void removeAllComparators();
 
-	virtual void crashOnFailure();
-
-	MockSupport* getMockSupportScope(const SimpleString& name);
-    virtual void disable();
-    virtual void enable();
-    virtual void checkExpectations();
-    virtual bool expectedCallsLeft();
-    virtual void clear();
 protected:
     virtual MockActualFunctionCall *createActualFunctionCall();
 private:
@@ -81,8 +89,8 @@ private:
     MockActualFunctionCall *lastActualFunctionCall_;
     MockNamedValueComparatorRepository comparatorRepository_;
     MockNamedValueList *data_;
-    void checkExpectationsOfLastCall();
 
+    void checkExpectationsOfLastCall();
     bool wasLastCallFulfilled();
     void failTestWithForUnexpectedCalls();
 

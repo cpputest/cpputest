@@ -483,8 +483,6 @@ TEST(MockSupportTest, checkExpectationsWorksHierarchically)
 
 TEST(MockSupportTest, checkExpectationsWorksHierarchicallyForLastCallNotFinished)
 {
-	mock("first").setMockFailureReporter(MockFailureReporterForTest::getReporter());
-
 	mock("first").expectOneCall("foobar").withParameter("boo", 1);
 	mock("first").actualCall("foobar");
 
@@ -492,6 +490,14 @@ TEST(MockSupportTest, checkExpectationsWorksHierarchicallyForLastCallNotFinished
 	MockExpectedParameterDidntHappenFailure expectedFailure(mockFailureTest(), "foobar", *expectationsList);
 
 	mock().checkExpectations();
+	CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
+TEST(MockSupportTest, reporterIsInheritedInHierarchicalMocks)
+{
+	mock("differentScope").actualCall("foobar");
+
+	MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "foobar", *expectationsList);
 	CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 

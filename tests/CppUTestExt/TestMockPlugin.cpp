@@ -31,26 +31,59 @@
 
 TEST_GROUP(MockPlugin)
 {
+	Utest *test;
+	StringBufferTestOutput *output;
+	TestResult *result;
+	MockExpectedFunctionsList *expectationsList;
+	MockExpectedFunctionCall *call;
+
+	MockSupportPlugin *plugin;
+
+	void setup()
+	{
+		test = new Utest("group", "name", "file", 1);
+		output = new StringBufferTestOutput;
+		result = new TestResult(*output);
+		expectationsList = new MockExpectedFunctionsList;
+		call = new MockExpectedFunctionCall;
+		expectationsList->addExpectedCall(call);
+		plugin = new MockSupportPlugin;;
+	}
+
+	void teardown()
+	{
+		delete test;
+		delete output;
+		delete result;
+		delete expectationsList;
+		delete call;
+		delete plugin;
+	}
 };
 
 TEST(MockPlugin, checkExpectationsAndClearAtEnd)
 {
-	Utest test("group", "name", "file", 1);
-	StringBufferTestOutput output;
-	TestResult result(output);
+	call->withName("foobar");
+	MockExpectedCallsDidntHappenFailure expectedFailure(test, *expectationsList);
 
-	MockExpectedFunctionsList expectationsList;
-	MockExpectedFunctionCall call;
-	call.withName("foobar");
-	expectationsList.addExpectedCall(&call);
-	MockExpectedCallsDidntHappenFailure expectedFailure(&test, expectationsList);
-
-	MockSupportPlugin plugin;
 	mock().expectOneCall("foobar");
 
-	plugin.postTestAction(test, result);
+	plugin->postTestAction(*test, *result);
 
-	STRCMP_CONTAINS(expectedFailure.getMessage().asCharString(), output.getOutput().asCharString())
+	STRCMP_CONTAINS(expectedFailure.getMessage().asCharString(), output->getOutput().asCharString())
 	LONGS_EQUAL(0, mock().expectedCallsLeft());
 //	clear makes sure there are no memory leaks.
+}
+
+TEST(MockPlugin, checkExpectationsWorksAlsoWithHierachicalObjects)
+{
+	call->withName("foobar").onObject((void*) 1);
+	MockExpectedObjectDidntHappenFailure expectedFailure(test, "foobar", *expectationsList);
+
+	mock("differentScope").expectOneCall("foobar").onObject((void*) 1);
+	mock("differentScope").actualCall("foobar");
+
+	plugin->postTestAction(*test, *result);
+
+	STRCMP_CONTAINS(expectedFailure.getMessage().asCharString(), output->getOutput().asCharString())
 }

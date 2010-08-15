@@ -61,6 +61,7 @@ public:
 
 	virtual void checkExpectations();
 
+	virtual void setMockFailureReporter(MockFailureReporter* reporter);
 protected:
 	virtual Utest* getTest() const;
 	virtual void callHasSucceeded();

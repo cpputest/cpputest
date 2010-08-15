@@ -145,10 +145,6 @@ TEST_GROUP(MemoryReporterPlugin)
 		delete reporter;
 		delete test;
 		delete result;
-		mock("formatter").checkExpectations();
-		mock("formatter").removeAllComparators();
-		mock("reporter").checkExpectations();
-		mock().clear();
 	}
 };
 

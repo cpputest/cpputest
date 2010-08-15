@@ -41,6 +41,12 @@ MockActualFunctionCall::~MockActualFunctionCall()
 {
 }
 
+void MockActualFunctionCall::setMockFailureReporter(MockFailureReporter* reporter)
+{
+	reporter_ = reporter;
+}
+
+
 Utest* MockActualFunctionCall::getTest() const
 {
 	return reporter_->getTestToFail();

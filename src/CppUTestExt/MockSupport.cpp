@@ -60,6 +60,18 @@ void MockSupport::crashOnFailure()
 void MockSupport::setMockFailureReporter(MockFailureReporter* reporter)
 {
 	reporter_ = (reporter != NULL) ? reporter : &defaultReporter_;
+
+	if (lastActualFunctionCall_)
+		lastActualFunctionCall_->setMockFailureReporter(reporter_);
+
+	if (data_) {
+		for (MockNamedValueListNode* p = data_->begin(); p; p = p->next()) {
+			MockSupport* support = getMockSupport(p);
+			if (support && support->lastActualFunctionCall_)
+				support->lastActualFunctionCall_->setMockFailureReporter(reporter_);
+		}
+	}
+
 }
 
 void MockSupport::installComparator(const SimpleString& typeName, MockNamedValueComparator& comparator)
@@ -271,11 +283,15 @@ MockSupport* MockSupport::getMockSupportScope(const SimpleString& name)
 	SimpleString mockingSupportName = MOCK_SUPPORT_SCOPE_PREFIX;
 	mockingSupportName += name;
 
-	if (!hasData(mockingSupportName))
-		setDataObject(mockingSupportName, "MockSupport", new MockSupport);
+	if (hasData(mockingSupportName)) {
+		STRCMP_EQUAL("MockSupport", getData(mockingSupportName).getType().asCharString());
+		return (MockSupport*) getData(mockingSupportName).getObjectPointer();
+	}
 
-	STRCMP_EQUAL("MockSupport", getData(mockingSupportName).getType().asCharString());
-	return (MockSupport*) getData(mockingSupportName).getObjectPointer();
+	MockSupport *newMock = new MockSupport;
+	newMock->setMockFailureReporter(reporter_);
+	setDataObject(mockingSupportName, "MockSupport", newMock);
+	return newMock;
 }
 
 MockSupport* MockSupport::getMockSupport(MockNamedValueListNode* node)
