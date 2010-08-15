@@ -136,6 +136,7 @@ public:
 	virtual ~MockNamedValueComparatorRepository();
 
 	virtual void installComparator(const SimpleString& name, MockNamedValueComparator& comparator);
+	virtual void installComparators(const MockNamedValueComparatorRepository& repository);
 	virtual MockNamedValueComparator* getComparatorForType(const SimpleString& name);
 
 	void clear();

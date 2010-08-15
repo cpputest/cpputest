@@ -461,6 +461,19 @@ TEST(MockSupportTest, EnableDisableWorkHierarchically)
 	mock("first").clear();
 }
 
+TEST(MockSupportTest, EnableDisableWorkHierarchicallyWhenSupportIsDynamicallyCreated)
+{
+	mock().disable();
+	mock("first").expectOneCall("boo");
+	LONGS_EQUAL(0, mock("first").expectedCallsLeft());
+
+	mock().enable();
+	mock("second").expectOneCall("boo");
+	LONGS_EQUAL(1, mock("second").expectedCallsLeft());
+
+	mock().clear();
+}
+
 TEST(MockSupportTest, ExpectedCallsLeftWorksHierarchically)
 {
 	mock("first").expectOneCall("foobar");
@@ -479,6 +492,21 @@ TEST(MockSupportTest, checkExpectationsWorksHierarchically)
 
 	mock().checkExpectations();
 	CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
+TEST(MockSupportTest, ignoreOtherCallsWorksHierarchically)
+{
+	mock("first");
+	mock().ignoreOtherCalls();
+	mock("first").actualCall("boo");
+	CHECK_NO_MOCK_FAILURE();
+}
+
+TEST(MockSupportTest, ignoreOtherCallsWorksHierarchicallyWhenDynamicallyCreated)
+{
+	mock().ignoreOtherCalls();
+	mock("first").actualCall("boo");
+	CHECK_NO_MOCK_FAILURE();
 }
 
 TEST(MockSupportTest, checkExpectationsWorksHierarchicallyForLastCallNotFinished)
@@ -500,6 +528,55 @@ TEST(MockSupportTest, reporterIsInheritedInHierarchicalMocks)
 	MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "foobar", *expectationsList);
 	CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
+
+TEST(MockSupportTest, installComparatorWorksHierarchicalOnBothExistingAndDynamicallyCreatedMockSupports)
+{
+	MyTypeForTesting object(1);
+	MyTypeForTestingComparator comparator;
+
+	mock("existing");
+	mock().installComparator("MyTypeForTesting", comparator);
+	mock("existing").expectOneCall("function").withParameterOfType("MyTypeForTesting", "parameterName", &object);
+	mock("existing").actualCall("function").withParameterOfType("MyTypeForTesting", "parameterName", &object);
+	mock("dynamic").expectOneCall("function").withParameterOfType("MyTypeForTesting", "parameterName", &object);
+	mock("dynamic").actualCall("function").withParameterOfType("MyTypeForTesting", "parameterName", &object);
+
+	mock().checkExpectations();
+	CHECK_NO_MOCK_FAILURE();
+	mock().removeAllComparators();
+}
+
+TEST(MockSupportTest, installComparatorsWorksHierarchical)
+{
+	MyTypeForTesting object(1);
+	MyTypeForTestingComparator comparator;
+	MockNamedValueComparatorRepository repos;
+	repos.installComparator("MyTypeForTesting", comparator);
+
+	mock("existing");
+	mock().installComparators(repos);
+	mock("existing").expectOneCall("function").withParameterOfType("MyTypeForTesting", "parameterName", &object);
+	mock("existing").actualCall("function").withParameterOfType("MyTypeForTesting", "parameterName", &object);
+
+	mock().checkExpectations();
+	CHECK_NO_MOCK_FAILURE();
+	mock().removeAllComparators();
+}
+
+TEST(MockSupportTest, removeComparatorsWorksHierachically)
+{
+	MyTypeForTesting object(1);
+	MyTypeForTestingComparator comparator;
+
+	mock("scope").installComparator("MyTypeForTesting", comparator);
+	mock().removeAllComparators();
+	mock("scope").expectOneCall("function").withParameterOfType("MyTypeForTesting", "parameterName", &object);
+	mock("scope").actualCall("function").withParameterOfType("MyTypeForTesting", "parameterName", &object);
+
+	MockNoWayToCompareCustomTypeFailure expectedFailure(mockFailureTest(), "MyTypeForTesting");
+	CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
 
 TEST(MockSupportTest, IntegerReturnValue)
 {

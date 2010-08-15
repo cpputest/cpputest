@@ -42,9 +42,8 @@ MockSupport& mock(const SimpleString& mockName)
 	return global_mock;
 }
 
-
 MockSupport::MockSupport()
-	: reporter_(&defaultReporter_), ignoreOtherCalls_(false), enabled_(true), lastActualFunctionCall_(NULL), data_(NULL)
+	: reporter_(&defaultReporter_), ignoreOtherCalls_(false), enabled_(true), lastActualFunctionCall_(NULL)
 {
 }
 
@@ -64,45 +63,50 @@ void MockSupport::setMockFailureReporter(MockFailureReporter* reporter)
 	if (lastActualFunctionCall_)
 		lastActualFunctionCall_->setMockFailureReporter(reporter_);
 
-	if (data_) {
-		for (MockNamedValueListNode* p = data_->begin(); p; p = p->next()) {
-			MockSupport* support = getMockSupport(p);
-			if (support && support->lastActualFunctionCall_)
-				support->lastActualFunctionCall_->setMockFailureReporter(reporter_);
-		}
-	}
-
+	for (MockNamedValueListNode* p = data_.begin(); p; p = p->next())
+		if (getMockSupport(p)) getMockSupport(p)->setMockFailureReporter(reporter_);
 }
 
 void MockSupport::installComparator(const SimpleString& typeName, MockNamedValueComparator& comparator)
 {
 	comparatorRepository_.installComparator(typeName, comparator);
+
+	for (MockNamedValueListNode* p = data_.begin(); p; p = p->next())
+		if (getMockSupport(p)) getMockSupport(p)->installComparator(typeName, comparator);
+}
+
+void MockSupport::installComparators(const MockNamedValueComparatorRepository& repository)
+{
+	comparatorRepository_.installComparators(repository);
+
+	for (MockNamedValueListNode* p = data_.begin(); p; p = p->next())
+		if (getMockSupport(p)) getMockSupport(p)->installComparators(repository);
 }
 
 void MockSupport::removeAllComparators()
 {
 	comparatorRepository_.clear();
+	for (MockNamedValueListNode* p = data_.begin(); p; p = p->next())
+		if (getMockSupport(p)) getMockSupport(p)->removeAllComparators();
 }
 
 void MockSupport::clear()
 {
 	delete lastActualFunctionCall_;
 	lastActualFunctionCall_ = NULL;
+
 	expectations_.deleteAllExpectationsAndClearList();
 	ignoreOtherCalls_ = false;
+	enabled_ = true;
 
-	if (data_) {
-		for (MockNamedValueListNode* p = data_->begin(); p; p = p->next()) {
-			MockSupport* support = getMockSupport(p);
-			if (support) {
-				support->clear();
-				delete support;
-			}
+	for (MockNamedValueListNode* p = data_.begin(); p; p = p->next()) {
+		MockSupport* support = getMockSupport(p);
+		if (support) {
+			support->clear();
+			delete support;
 		}
-		data_->clear();
 	}
-	delete data_;
-	data_ = NULL;
+	data_.clear();
 }
 
 MockFunctionCall& MockSupport::expectOneCall(const SimpleString& functionName)
@@ -119,6 +123,7 @@ MockFunctionCall& MockSupport::expectOneCall(const SimpleString& functionName)
 MockActualFunctionCall* MockSupport::createActualFunctionCall()
 {
 	if (lastActualFunctionCall_) delete lastActualFunctionCall_;
+
 	lastActualFunctionCall_ = new MockActualFunctionCall(reporter_, expectations_);
 	return lastActualFunctionCall_;
 }
@@ -142,33 +147,34 @@ MockFunctionCall& MockSupport::actualCall(const SimpleString& functionName)
 void MockSupport::ignoreOtherCalls()
 {
 	ignoreOtherCalls_ = true;
+
+	for (MockNamedValueListNode* p = data_.begin(); p; p = p->next())
+		if (getMockSupport(p)) getMockSupport(p)->ignoreOtherCalls();
 }
 
 void MockSupport::disable()
 {
 	enabled_ = false;
 
-	if (data_)
-		for (MockNamedValueListNode* p = data_->begin(); p; p = p->next())
-			if (getMockSupport(p)) getMockSupport(p)->disable();
+	for (MockNamedValueListNode* p = data_.begin(); p; p = p->next())
+		if (getMockSupport(p)) getMockSupport(p)->disable();
 }
 
 void MockSupport::enable()
 {
 	enabled_ = true;
 
-	if (data_)
-		for (MockNamedValueListNode* p = data_->begin(); p; p = p->next())
-			if (getMockSupport(p)) getMockSupport(p)->enable();
+	for (MockNamedValueListNode* p = data_.begin(); p; p = p->next())
+		if (getMockSupport(p)) getMockSupport(p)->enable();
 }
 
 bool MockSupport::expectedCallsLeft()
 {
 	int callsLeft = expectations_.hasUnfullfilledExpectations();
 
-	if (data_)
-		for (MockNamedValueListNode* p = data_->begin(); p; p = p->next())
-			if (getMockSupport(p)) callsLeft += getMockSupport(p)->expectedCallsLeft();
+	for (MockNamedValueListNode* p = data_.begin(); p; p = p->next())
+		if (getMockSupport(p)) callsLeft += getMockSupport(p)->expectedCallsLeft();
+
 	return callsLeft;
 }
 
@@ -177,10 +183,10 @@ bool MockSupport::wasLastCallFulfilled()
 	if (lastActualFunctionCall_ && !lastActualFunctionCall_->isFulfilled())
 		return false;
 
-	if (data_)
-		for (MockNamedValueListNode* p = data_->begin(); p; p = p->next())
-			if (getMockSupport(p) && !getMockSupport(p)->wasLastCallFulfilled())
-					return false;
+	for (MockNamedValueListNode* p = data_.begin(); p; p = p->next())
+		if (getMockSupport(p) && !getMockSupport(p)->wasLastCallFulfilled())
+				return false;
+
 	return true;
 }
 
@@ -188,10 +194,10 @@ void MockSupport::failTestWithForUnexpectedCalls()
 {
     MockExpectedFunctionsList expectationsList;
     expectationsList.addExpectations(expectations_);
-    if(data_)
-        for(MockNamedValueListNode *p = data_->begin();p;p = p->next())
-            if(getMockSupport(p))
-                expectationsList.addExpectations(getMockSupport(p)->expectations_);
+
+    for(MockNamedValueListNode *p = data_.begin();p;p = p->next())
+		if(getMockSupport(p))
+			expectationsList.addExpectations(getMockSupport(p)->expectations_);
 
     MockExpectedCallsDidntHappenFailure failure(reporter_->getTestToFail(), expectationsList);
     clear();
@@ -203,37 +209,28 @@ void MockSupport::checkExpectationsOfLastCall()
     if(lastActualFunctionCall_)
         lastActualFunctionCall_->checkExpectations();
 
-    if(data_)
-        for(MockNamedValueListNode *p = data_->begin();p;p = p->next())
-            if(getMockSupport(p) && getMockSupport(p)->lastActualFunctionCall_)
-                getMockSupport(p)->lastActualFunctionCall_->checkExpectations();
+	for(MockNamedValueListNode *p = data_.begin();p;p = p->next())
+		if(getMockSupport(p) && getMockSupport(p)->lastActualFunctionCall_)
+			getMockSupport(p)->lastActualFunctionCall_->checkExpectations();
 }
 
 void MockSupport::checkExpectations()
 {
-	if (!wasLastCallFulfilled()) {
+	if (!wasLastCallFulfilled())
 		checkExpectationsOfLastCall();
-	}
 	else if (expectedCallsLeft())
 		failTestWithForUnexpectedCalls();
-	clear();
 }
 
 bool MockSupport::hasData(const SimpleString& name)
 {
-	if (data_ == NULL)
-		return false;
-	return data_->getValueByName(name) != NULL;
+	return data_.getValueByName(name) != NULL;
 }
-
 
 MockNamedValue* MockSupport::createAndStoreData(const SimpleString& name)
 {
-	if (data_ == NULL)
-		data_ = new MockNamedValueList;
-
 	MockNamedValue* newData = new MockNamedValue(name);
-	data_->add(newData);
+	data_.add(newData);
 	return newData;
 }
 
@@ -269,10 +266,7 @@ void MockSupport::setDataObject(const SimpleString& name, const SimpleString& ty
 
 MockNamedValue MockSupport::getData(const SimpleString& name)
 {
-	if (data_ == NULL)
-		return MockNamedValue("");
-
-	MockNamedValue* value = data_->getValueByName(name);
+	MockNamedValue* value = data_.getValueByName(name);
 	if (value == NULL)
 		return MockNamedValue("");
 	return *value;
@@ -289,7 +283,12 @@ MockSupport* MockSupport::getMockSupportScope(const SimpleString& name)
 	}
 
 	MockSupport *newMock = new MockSupport;
+
 	newMock->setMockFailureReporter(reporter_);
+	if (ignoreOtherCalls_) newMock->ignoreOtherCalls();
+	if (!enabled_) newMock->disable();
+	newMock->installComparators(comparatorRepository_);
+
 	setDataObject(mockingSupportName, "MockSupport", newMock);
 	return newMock;
 }
@@ -306,5 +305,4 @@ MockNamedValue MockSupport::returnValue()
 	if (lastActualFunctionCall_) return lastActualFunctionCall_->returnValue();
 	return MockNamedValue("");
 }
-
 

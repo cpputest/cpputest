@@ -76,11 +76,13 @@ public:
 	virtual void crashOnFailure();
 
 	virtual void installComparator(const SimpleString& typeName, MockNamedValueComparator& comparator);
+	virtual void installComparators(const MockNamedValueComparatorRepository& repository);
 	virtual void removeAllComparators();
 
 protected:
     virtual MockActualFunctionCall *createActualFunctionCall();
 private:
+
     MockFailureReporter *reporter_;
     MockFailureReporter defaultReporter_;
     MockExpectedFunctionsList expectations_;
@@ -88,7 +90,7 @@ private:
     bool enabled_;
     MockActualFunctionCall *lastActualFunctionCall_;
     MockNamedValueComparatorRepository comparatorRepository_;
-    MockNamedValueList *data_;
+    MockNamedValueList data_;
 
     void checkExpectationsOfLastCall();
     bool wasLastCallFulfilled();
