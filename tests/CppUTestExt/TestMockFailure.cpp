@@ -29,7 +29,7 @@
 #include "CppUTestExt/MockFailure.h"
 #include "CppUTestExt/MockExpectedFunctionCall.h"
 #include "CppUTestExt/MockExpectedFunctionsList.h"
-
+#include "TestMockFailure.h"
 
 TEST_GROUP(MockFailureTest)
 {
@@ -53,6 +53,7 @@ TEST_GROUP(MockFailureTest)
 		delete call1;
 		delete call2;
 		delete call3;
+		CHECK_NO_MOCK_FAILURE();
 	}
 	void addAllToList()
 	{

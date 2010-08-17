@@ -55,6 +55,16 @@ MockSupportPlugin::MockSupportPlugin(const SimpleString& name)
 {
 }
 
+MockSupportPlugin::~MockSupportPlugin()
+{
+	repository_.clear();
+}
+
+void MockSupportPlugin::preTestAction(Utest&, TestResult&)
+{
+	mock().installComparators(repository_);
+}
+
 void MockSupportPlugin::postTestAction(Utest& test, TestResult& result)
 {
 	MockSupportPluginReporter reporter(test, result);
@@ -62,4 +72,11 @@ void MockSupportPlugin::postTestAction(Utest& test, TestResult& result)
 	mock().checkExpectations();
 	mock().clear();
 	mock().setMockFailureReporter(NULL);
+	mock().removeAllComparators();
 }
+
+void MockSupportPlugin::installComparator(const SimpleString& name, MockNamedValueComparator& comparator)
+{
+	repository_.installComparator(name, comparator);
+}
+

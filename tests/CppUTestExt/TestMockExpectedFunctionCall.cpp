@@ -27,6 +27,8 @@
 
 #include "CppUTest/TestHarness.h"
 #include "CppUTestExt/MockExpectedFunctionCall.h"
+#include "CppUTestExt/MockFailure.h"
+#include "TestMockFailure.h"
 
 class TypeForTestingExpectedFunctionCall
 {
@@ -55,6 +57,10 @@ public:
 
 TEST_GROUP(MockNamedValueComparatorRepository)
 {
+	void teardown()
+	{
+		CHECK_NO_MOCK_FAILURE();
+	}
 };
 
 TEST(MockNamedValueComparatorRepository, getComparatorForNonExistingName)
@@ -93,6 +99,7 @@ TEST_GROUP(MockExpectedFunctionCall)
 	void teardown()
 	{
 		delete call;
+		CHECK_NO_MOCK_FAILURE();
 	}
 };
 

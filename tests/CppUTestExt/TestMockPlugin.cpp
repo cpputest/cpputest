@@ -28,6 +28,7 @@
 #include "CppUTest/TestOutput.h"
 #include "CppUTestExt/MockSupport.h"
 #include "CppUTestExt/MockSupportPlugin.h"
+#include "TestMockFailure.h"
 
 TEST_GROUP(MockPlugin)
 {
@@ -41,6 +42,8 @@ TEST_GROUP(MockPlugin)
 
 	void setup()
 	{
+		mock().setMockFailureReporter(MockFailureReporterForTest::getReporter());
+
 		test = new Utest("group", "name", "file", 1);
 		output = new StringBufferTestOutput;
 		result = new TestResult(*output);
@@ -58,6 +61,9 @@ TEST_GROUP(MockPlugin)
 		delete expectationsList;
 		delete call;
 		delete plugin;
+
+		CHECK_NO_MOCK_FAILURE();
+		mock().setMockFailureReporter(NULL);
 	}
 };
 
@@ -86,4 +92,46 @@ TEST(MockPlugin, checkExpectationsWorksAlsoWithHierachicalObjects)
 	plugin->postTestAction(*test, *result);
 
 	STRCMP_CONTAINS(expectedFailure.getMessage().asCharString(), output->getOutput().asCharString())
+}
+
+class DummyComparator : public MockNamedValueComparator
+{
+public:
+	bool isEqual(void* object1, void* object2)
+	{
+		return object1 == object2;
+	}
+	SimpleString valueToString(void*)
+	{
+		return "string";
+	}
+
+};
+
+TEST(MockPlugin, installComparatorRecordsTheComparatorButNotInstallsItYet)
+{
+	DummyComparator comparator;
+	plugin->installComparator("myType", comparator);
+	mock().expectOneCall("foo").withParameterOfType("myType", "name", &comparator);
+	mock().actualCall("foo").withParameterOfType("myType", "name", &comparator);
+
+	MockNoWayToCompareCustomTypeFailure failure(test, "myType");
+	CHECK_EXPECTED_MOCK_FAILURE(failure);
+}
+
+TEST(MockPlugin, preTestActionWillEnableMultipleComparatorsToTheGlobalMockSupportSpace)
+{
+	DummyComparator comparator;
+	DummyComparator comparator2;
+	plugin->installComparator("myType", comparator);
+	plugin->installComparator("myOtherType", comparator2);
+
+	plugin->preTestAction(*test, *result);
+	mock().expectOneCall("foo").withParameterOfType("myType", "name", &comparator);
+	mock().expectOneCall("foo").withParameterOfType("myOtherType", "name", &comparator);
+	mock().actualCall("foo").withParameterOfType("myType", "name", &comparator);
+	mock().actualCall("foo").withParameterOfType("myOtherType", "name", &comparator);
+
+	CHECK_NO_MOCK_FAILURE();
+	LONGS_EQUAL(0, result->getFailureCount());
 }

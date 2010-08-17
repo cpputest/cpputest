@@ -55,6 +55,8 @@ TEST_GROUP(MockSupportTest)
 		newCall->withName(name);
 		expectationsList->addExpectedCall(newCall);
 		return newCall;
+
+		mock().setMockFailureReporter(NULL);
 	}
 };
 

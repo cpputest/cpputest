@@ -28,6 +28,8 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTestExt/MockExpectedFunctionsList.h"
 #include "CppUTestExt/MockExpectedFunctionCall.h"
+#include "CppUTestExt/MockFailure.h"
+#include "TestMockFailure.h"
 
 TEST_GROUP(MockExpectedFunctionsList)
 {
@@ -54,6 +56,7 @@ TEST_GROUP(MockExpectedFunctionsList)
 		delete call3;
 		delete call4;
 		delete list;
+		CHECK_NO_MOCK_FAILURE();
 	}
 };
 
