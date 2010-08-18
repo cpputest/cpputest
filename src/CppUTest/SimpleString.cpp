@@ -305,7 +305,7 @@ void SimpleString::copyToBuffer(char* bufferToCopy, size_t bufferSize) const
 {
 	if (bufferToCopy == NULL || bufferSize == 0) return;
 
-	int sizeToCopy = (bufferSize-1 < size()) ? bufferSize-1 : size();
+	size_t sizeToCopy = (bufferSize-1 < size()) ? bufferSize-1 : size();
 
 	PlatformSpecificStrNCpy(bufferToCopy, buffer_, sizeToCopy);
 	bufferToCopy[sizeToCopy] = '\0';

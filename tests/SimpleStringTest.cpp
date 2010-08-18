@@ -327,7 +327,7 @@ TEST(SimpleString, subStringBeginPosOutOfBounds)
 TEST(SimpleString, copyInBufferNormal)
 {
 	SimpleString str("Hello World");
-	int bufferSize = str.size()+1;
+	size_t bufferSize = str.size()+1;
 	char* buffer = (char*) malloc(bufferSize);
 	str.copyToBuffer(buffer, bufferSize);
 	STRCMP_EQUAL(str.asCharString(), buffer);

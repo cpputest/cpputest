@@ -33,11 +33,11 @@
 
 SimpleString removeAllPrintableCharactersFrom(const SimpleString& str)
 {
-	int bufferSize = str.size()+1;
+	size_t bufferSize = str.size()+1;
 	char* buffer = (char*) malloc(bufferSize);
 	str.copyToBuffer(buffer, bufferSize);
 
-	for (int i = 0; i < bufferSize-1; i++)
+	for (size_t i = 0; i < bufferSize-1; i++)
 		if (buffer[i] != '\t' && buffer[i] != '\n')
 			buffer[i] = ' ';
 
@@ -48,7 +48,7 @@ SimpleString removeAllPrintableCharactersFrom(const SimpleString& str)
 
 SimpleString addMarkerToString(const SimpleString& str, int markerPos)
 {
-	int bufferSize = str.size()+1;
+	size_t bufferSize = str.size()+1;
 	char* buffer = (char*) malloc(bufferSize);
 	str.copyToBuffer(buffer, bufferSize);
 
