@@ -148,6 +148,26 @@ TEST(MemoryLeakDetectorTest, OneLeak)
 	LONGS_EQUAL(0, newAllocator->free_called);
 }
 
+#include <stdio.h>
+
+TEST(MemoryLeakDetectorTest, OneHundredLeaks)
+{
+	const int amount_alloc = 100;
+	char *mem[amount_alloc];
+	for (int i = 0; i < amount_alloc; i++)
+		mem[i] = detector->allocMemory(mallocAllocator, 3);
+	detector->stopChecking();
+
+	SimpleString output = detector->report(mem_leak_period_checking);
+
+	STRCMP_CONTAINS(MEM_LEAK_HEADER, output.asCharString());
+	STRCMP_CONTAINS(MEM_LEAK_FOOTER, output.asCharString());
+	STRCMP_CONTAINS(MEM_LEAK_ADDITION_MALLOC_WARNING, output.asCharString());
+
+	for (int i = 0; i < amount_alloc; i++)
+		PlatformSpecificFree(mem[i]);
+}
+
 TEST(MemoryLeakDetectorTest, OneLeakOutsideCheckingPeriod)
 {
 	detector->stopChecking();
@@ -439,3 +459,57 @@ TEST(MemoryLeakDetectorTest, allocateWithANullAllocatorCausesNoProblems)
 	detector->deallocMemory(NullUnknownAllocator::defaultAllocator(), mem);
 }
 
+
+TEST_GROUP(SimpleStringBuffer)
+{
+};
+
+TEST(SimpleStringBuffer, simpleTest)
+{
+	SimpleStringBuffer buffer;
+	buffer.add("Hello");
+	buffer.add(" World");
+	STRCMP_EQUAL("Hello World", buffer.toString());
+}
+
+TEST(SimpleStringBuffer, writePastLimit)
+{
+	SimpleStringBuffer buffer;
+	for (int i = 0; i < SimpleStringBuffer::SIMPLE_STRING_BUFFER_LEN * 2; i++)
+		buffer.add("h");
+	SimpleString str("h", SimpleStringBuffer::SIMPLE_STRING_BUFFER_LEN-1);
+	STRCMP_EQUAL(str.asCharString(), buffer.toString());
+}
+
+TEST(SimpleStringBuffer, setWriteLimit)
+{
+	SimpleStringBuffer buffer;
+	buffer.setWriteLimit(10);
+	for (int i = 0; i < SimpleStringBuffer::SIMPLE_STRING_BUFFER_LEN ; i++)
+		buffer.add("h");
+	SimpleString str("h", 10);
+	STRCMP_EQUAL(str.asCharString(), buffer.toString());
+}
+
+TEST(SimpleStringBuffer, setWriteLimitTooHighIsIgnored)
+{
+	SimpleStringBuffer buffer;
+	buffer.setWriteLimit(SimpleStringBuffer::SIMPLE_STRING_BUFFER_LEN+10);
+	for (int i = 0; i < SimpleStringBuffer::SIMPLE_STRING_BUFFER_LEN+10; i++)
+		buffer.add("h");
+	SimpleString str("h", SimpleStringBuffer::SIMPLE_STRING_BUFFER_LEN-1);
+	STRCMP_EQUAL(str.asCharString(), buffer.toString());
+}
+
+TEST(SimpleStringBuffer, resetWriteLimit)
+{
+	SimpleStringBuffer buffer;
+	buffer.setWriteLimit(10);
+	for (int i = 0; i < SimpleStringBuffer::SIMPLE_STRING_BUFFER_LEN ; i++)
+		buffer.add("h");
+	buffer.resetWriteLimit();
+	buffer.add(SimpleString("h", 10).asCharString());
+
+	SimpleString str("h", 20);
+	STRCMP_EQUAL(str.asCharString(), buffer.toString());
+}
