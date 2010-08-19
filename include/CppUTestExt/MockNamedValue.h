@@ -42,6 +42,23 @@ public:
 	virtual SimpleString valueToString(void* object)=0;
 };
 
+class MockFunctionComparator : public MockNamedValueComparator
+{
+public:
+	typedef bool (*isEqualFunction)(void*, void*);
+	typedef SimpleString (*valueToStringFunction)(void*);
+
+	MockFunctionComparator(isEqualFunction equal, valueToStringFunction valToString)
+		: equal_(equal), valueToString_(valToString) {}
+	virtual ~MockFunctionComparator(){};
+
+	virtual bool isEqual(void* object1, void* object2){ return equal_(object1, object2); }
+	virtual SimpleString valueToString(void* object) { return valueToString_(object); }
+private:
+	isEqualFunction equal_;
+	valueToStringFunction valueToString_;
+};
+
 /*
  * MockNamedValue is the generic value class used. It encapsulates basic types and can use them "as if one"
  * Also it enables other types by putting object pointers. They can be compared with comparators.

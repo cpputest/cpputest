@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2007, Michael Feathers, James Grenning and Bas Vodde
  * All rights reserved.
@@ -25,45 +24,32 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#include "CppUTest/TestHarness.h"
 
-extern "C" {
-	#include "CppUTestExt/MockSupport_c.h"
-}
+#ifndef D_MockSupport_c_h
+#define D_MockSupport_c_h
 
-TEST_GROUP(MockSupport_c)
+struct MockFunctionCall_c
 {
+	MockFunctionCall_c* (*withIntParamaters)(const char* name, int value);
+	MockFunctionCall_c* (*withDoubleParameters)(const char* name, double value);
+	MockFunctionCall_c* (*withStringParameters)(const char* name, const char* value);
+	MockFunctionCall_c* (*withPointerParameters)(const char* name, void* value);
+	MockFunctionCall_c* (*withParameterOfType)(const char* type, const char* name, void* value);
 };
 
-TEST(MockSupport_c, expectAndActualOneCall)
-{
-	mock_c()->expectOneCall("boo");
-	mock_c()->actualCall("boo");
-}
+typedef int (*MockTypeEqualFunction_c)(void* object1, void* object2);
+typedef char* (*MockTypeValueToStringFunction_c)(void* object1);
 
-TEST(MockSupport_c, expectAndActualParameters)
+struct MockSupport_c
 {
-	mock_c()->expectOneCall("boo")->withIntParamaters("integer", 1)->withDoubleParameters("doube", 1.0)->
-			withStringParameters("string", "string")->withPointerParameters("pointer", (void*) 1);
-	mock_c()->actualCall("boo")->withIntParamaters("integer", 1)->withDoubleParameters("doube", 1.0)->
-			withStringParameters("string", "string")->withPointerParameters("pointer", (void*) 1);
-}
+	MockFunctionCall_c* (*expectOneCall)(const char* name);
+	MockFunctionCall_c* (*actualCall)(const char* name);
 
-int typeNameIsEqual(void* object1, void* object2)
-{
-	return object1 == object2;
+	void (*installComparator) (const char* typeName, MockTypeEqualFunction_c isEqual, MockTypeValueToStringFunction_c valueToString);
+	void (*removeAllComparators)();
+};
 
-}
 
-char* typeNameValueToString(void* object)
-{
-	return (char*) object;
-}
+MockSupport_c* mock_c();
 
-TEST(MockSupport_c, expectAndActualParametersOnObject)
-{
-	mock_c()->installComparator("typeName", typeNameIsEqual, typeNameValueToString);
-	mock_c()->expectOneCall("boo")->withParameterOfType("typeName", "name", (void*) 1);
-	mock_c()->actualCall("boo")->withParameterOfType("typeName", "name", (void*) 1);
-	mock_c()->removeAllComparators();
-}
+#endif

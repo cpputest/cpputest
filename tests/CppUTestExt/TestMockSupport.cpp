@@ -363,6 +363,28 @@ TEST(MockSupportTest, customObjectParameterSucceeds)
 	mock().removeAllComparators();
 }
 
+bool myTypeIsEqual(void* object1, void* object2)
+{
+	return ((MyTypeForTesting*)object1)->value == ((MyTypeForTesting*)object2)->value;
+}
+
+SimpleString myTypeValueToString(void* object)
+{
+	return StringFrom(((MyTypeForTesting*)object)->value);
+}
+
+TEST(MockSupportTest, customObjectWithFunctionComparator)
+{
+	MyTypeForTesting object(1);
+	MockFunctionComparator comparator(myTypeIsEqual, myTypeValueToString);
+	mock().installComparator("MyTypeForTesting", comparator);
+	mock().expectOneCall("function").withParameterOfType("MyTypeForTesting", "parameterName", &object);
+	mock().actualCall("function").withParameterOfType("MyTypeForTesting", "parameterName", &object);
+	mock().checkExpectations();
+	CHECK_NO_MOCK_FAILURE();
+	mock().removeAllComparators();
+}
+
 TEST(MockSupportTest, disableEnable)
 {
 	mock().disable();
