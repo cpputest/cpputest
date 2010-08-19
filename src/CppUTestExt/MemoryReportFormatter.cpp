@@ -59,10 +59,10 @@ void NormalMemoryReportFormatter::report_free_memory(TestResult* result, MemoryL
 
 void NormalMemoryReportFormatter::report_testgroup_start(TestResult* result, Utest& test)
 {
-	const int line_size = 80;
+	const size_t line_size = 80;
 
 	SimpleString groupName = StringFromFormat("TEST GROUP(%s)", test.getGroup().asCharString());
-	int beginPos = (line_size/2) - (groupName.size()/2);
+	size_t beginPos = (line_size/2) - (groupName.size()/2);
 
 	SimpleString line("-", beginPos);
 	line += groupName;
