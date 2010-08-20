@@ -323,7 +323,7 @@ char* MemoryLeakDetector::reallocateMemoryAndLeakInformation(MemoryLeakAllocator
 {
 	char* new_memory = (char*) (PlatformSpecificRealloc(memory, sizeOfMemoryWithCorruptionInfo(size)));
 	if (new_memory == NULL) return NULL;
-	MemoryLeakDetectorNode *node = (MemoryLeakDetectorNode*) (allocator->allocMemoryLeakNode(size));
+	MemoryLeakDetectorNode *node = (MemoryLeakDetectorNode*) (allocator->allocMemoryLeakNode(sizeof(MemoryLeakDetectorNode)));
 	storeLeakInformation(node, new_memory, size, allocator, file, line);
 	return node->memory_;
 }

@@ -342,6 +342,7 @@ TEST(MemoryLeakDetectorTest, OneRealloc)
 	LONGS_EQUAL(2, mallocAllocator->freeMemoryLeakNodeCalled);
 }
 
+
 TEST(MemoryLeakDetectorTest, AllocAndFreeWithDifferenceInstancesOfTheSameAllocatorType)
 {
 	StandardNewArrayAllocator newArrayAllocatorTwo;
@@ -512,4 +513,15 @@ TEST(SimpleStringBuffer, resetWriteLimit)
 
 	SimpleString str("h", 20);
 	STRCMP_EQUAL(str.asCharString(), buffer.toString());
+}
+
+TEST_GROUP(ReallocBugReported) { };
+
+TEST(ReallocBugReported, ThisSituationShouldntCrash)
+{
+	StandardMallocAllocator allocator;
+	MemoryLeakDetector detector;
+	char* mem = detector.allocMemory(&allocator, 5, "file", 1);
+	mem = detector.reallocMemory(&allocator, mem, 19, "file", 1);
+	detector.deallocMemory(&allocator, mem);
 }
