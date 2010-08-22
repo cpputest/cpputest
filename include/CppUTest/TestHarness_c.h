@@ -91,4 +91,17 @@ extern void cpputest_free_location(void* buffer, const char* file, int line);
 void cpputest_malloc_set_out_of_memory();
 void cpputest_malloc_set_not_out_of_memory();
 
+/*
+ * Small additional macro for unused arguments. This is common when stubbing, but in C you cannot remove the
+ * name of the parameter (as in C++).
+ */
+
+#ifndef PUNUSED
+#if defined(__GNUC__)
+# define PUNUSED(x) PUNUSED_ ##x __attribute__((unused))
+#else
+# define PUNUSED(x) x
+#endif
+#endif
+
 #endif
