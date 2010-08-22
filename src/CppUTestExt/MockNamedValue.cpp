@@ -79,31 +79,31 @@ SimpleString MockNamedValue::getType() const
 	return type_;
 }
 
-int MockNamedValue::getIntValue()
+int MockNamedValue::getIntValue() const
 {
 	STRCMP_EQUAL("int", type_.asCharString());
 	return value_.intValue_;
 }
 
-double MockNamedValue::getDoubleValue()
+double MockNamedValue::getDoubleValue() const
 {
 	STRCMP_EQUAL("double", type_.asCharString());
 	return value_.doubleValue_;
 }
 
-const char* MockNamedValue::getStringValue()
+const char* MockNamedValue::getStringValue() const
 {
 	STRCMP_EQUAL("char*", type_.asCharString());
 	return value_.stringValue_;
 }
 
-void* MockNamedValue::getPointerValue()
+void* MockNamedValue::getPointerValue() const
 {
 	STRCMP_EQUAL("void*", type_.asCharString());
 	return value_.pointerValue_;
 }
 
-void* MockNamedValue::getObjectPointer()
+void* MockNamedValue::getObjectPointer() const
 {
 	return value_.objectPointerValue_;
 }

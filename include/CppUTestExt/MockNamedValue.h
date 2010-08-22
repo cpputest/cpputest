@@ -87,11 +87,11 @@ public:
 	virtual SimpleString getName() const;
 	virtual SimpleString getType() const;
 
-	virtual int getIntValue();
-	virtual double getDoubleValue();
-	virtual const char* getStringValue();
-	virtual void* getPointerValue();
-	virtual void* getObjectPointer();
+	virtual int getIntValue() const;
+	virtual double getDoubleValue() const;
+	virtual const char* getStringValue() const;
+	virtual void* getPointerValue() const;
+	virtual void* getObjectPointer() const;
 private:
 	SimpleString name_;
 	SimpleString type_;

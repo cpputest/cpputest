@@ -60,12 +60,27 @@ extern "C" {
 
 MockFunctionCall_c* expectOneCall_c(const char* name);
 MockFunctionCall_c* actualCall_c(const char* name);
+void setIntData_c(const char* name, int value);
+void setDoubleData_c(const char* name, double value);
+void setStringData_c(const char* name, const char* value);
+void setPointerData_c(const char* name, void* value);
+void setDataObject_c(const char* name, const char* type, void* value);
+MockValue_c getData_c(const char* name);
+
+void checkExpectations_c();
+int expectedCallsLeft_c();
+void clear_c();
 
 MockFunctionCall_c* withIntParamaters_c(const char* name, int value);
 MockFunctionCall_c* withDoubleParameters_c(const char* name, double value);
 MockFunctionCall_c* withStringParameters_c(const char* name, const char* value);
 MockFunctionCall_c* withPointerParameters_c(const char* name, void* value);
 MockFunctionCall_c* withParameterOfType_c(const char* type, const char* name, void* value);
+MockFunctionCall_c* andReturnIntValue_c(int value);
+MockFunctionCall_c* andReturnDoubleValue_c(double value);
+MockFunctionCall_c* andReturnStringValue_c(const char* value);
+MockFunctionCall_c* andReturnPointerValue_c(void* value);
+MockValue_c returnValue_c();
 
 
 void installComparator_c (const char* typeName, MockTypeEqualFunction_c isEqual, MockTypeValueToStringFunction_c valueToString)
@@ -89,12 +104,27 @@ static MockFunctionCall_c gFunctionCall = {
 		withDoubleParameters_c,
 		withStringParameters_c,
 		withPointerParameters_c,
-		withParameterOfType_c
+		withParameterOfType_c,
+		andReturnIntValue_c,
+		andReturnDoubleValue_c,
+		andReturnStringValue_c,
+		andReturnPointerValue_c,
+		returnValue_c
 };
 
 static MockSupport_c gMockSupport = {
 		expectOneCall_c,
 		actualCall_c,
+		returnValue_c,
+		setIntData_c,
+		setDoubleData_c,
+		setStringData_c,
+		setPointerData_c,
+		setDataObject_c,
+		getData_c,
+		checkExpectations_c,
+		expectedCallsLeft_c,
+		clear_c,
 		installComparator_c,
 		removeAllComparators_c
 };
@@ -129,6 +159,60 @@ MockFunctionCall_c* withParameterOfType_c(const char* type, const char* name, vo
 	return &gFunctionCall;
 }
 
+MockFunctionCall_c* andReturnIntValue_c(int value)
+{
+	currentCall = &currentCall->andReturnValue(value);
+	return &gFunctionCall;
+}
+
+MockFunctionCall_c* andReturnDoubleValue_c(double value)
+{
+	currentCall = &currentCall->andReturnValue(value);
+	return &gFunctionCall;
+}
+
+MockFunctionCall_c* andReturnStringValue_c(const char* value)
+{
+	currentCall = &currentCall->andReturnValue(value);
+	return &gFunctionCall;
+}
+
+MockFunctionCall_c* andReturnPointerValue_c(void* value)
+{
+	currentCall = &currentCall->andReturnValue(value);
+	return &gFunctionCall;
+}
+
+static MockValue_c getMockValueCFromNamedValue(const MockNamedValue& namedValue)
+{
+	MockValue_c returnValue;
+	if (strcmp(namedValue.getType().asCharString(), "int") == 0) {
+		returnValue.type = MOCKVALUETYPE_INTEGER;
+		returnValue.value.intValue = namedValue.getIntValue();
+	}
+	else if (strcmp(namedValue.getType().asCharString(), "double") == 0) {
+		returnValue.type = MOCKVALUETYPE_DOUBLE;
+		returnValue.value.doubleValue = namedValue.getDoubleValue();
+	}
+	else if (strcmp(namedValue.getType().asCharString(), "char*") == 0) {
+		returnValue.type = MOCKVALUETYPE_STRING;
+		returnValue.value.stringValue = namedValue.getStringValue();
+	}
+	else if (strcmp(namedValue.getType().asCharString(), "void*") == 0) {
+		returnValue.type = MOCKVALUETYPE_POINTER;
+		returnValue.value.pointerValue = namedValue.getPointerValue();
+	}
+	else {
+		returnValue.type = MOCKVALUETYPE_OBJECT;
+		returnValue.value.objectValue = namedValue.getObjectPointer();
+	}
+	return returnValue;
+}
+
+MockValue_c returnValue_c()
+{
+	return getMockValueCFromNamedValue(currentCall->returnValue());
+}
 
 MockFunctionCall_c* expectOneCall_c(const char* name)
 {
@@ -142,9 +226,60 @@ MockFunctionCall_c* actualCall_c(const char* name)
 	return &gFunctionCall;
 }
 
+void setIntData_c(const char* name, int value)
+{
+	return currentMockSupport->setData(name, value);
+}
+
+void setDoubleData_c(const char* name, double value)
+{
+	return currentMockSupport->setData(name, value);
+}
+
+void setStringData_c(const char* name, const char* value)
+{
+	return currentMockSupport->setData(name, value);
+}
+
+void setPointerData_c(const char* name, void* value)
+{
+	return currentMockSupport->setData(name, value);
+}
+
+void setDataObject_c(const char* name, const char* type, void* value)
+{
+	return currentMockSupport->setDataObject(name, type, value);
+}
+
+MockValue_c getData_c(const char* name)
+{
+	return getMockValueCFromNamedValue(currentMockSupport->getData(name));
+}
+
+void checkExpectations_c()
+{
+	currentMockSupport->checkExpectations();
+}
+
+int expectedCallsLeft_c()
+{
+	return currentMockSupport->expectedCallsLeft();
+}
+
+void clear_c()
+{
+	currentMockSupport->clear();
+}
+
 MockSupport_c* mock_c()
 {
 	currentMockSupport = &mock();
+	return &gMockSupport;
+}
+
+MockSupport_c* mock_scope_c(const char* scope)
+{
+	currentMockSupport = &mock(scope);
 	return &gMockSupport;
 }
 

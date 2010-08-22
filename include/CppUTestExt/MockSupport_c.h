@@ -28,22 +28,65 @@
 #ifndef D_MockSupport_c_h
 #define D_MockSupport_c_h
 
-struct MockFunctionCall_c
+typedef enum {
+	MOCKVALUETYPE_INTEGER,
+	MOCKVALUETYPE_DOUBLE,
+	MOCKVALUETYPE_STRING,
+	MOCKVALUETYPE_POINTER,
+	MOCKVALUETYPE_OBJECT
+} MockValueType_c;
+
+typedef struct SMockValue_c
+{
+	MockValueType_c type;
+	union  {
+		int intValue;
+		double doubleValue;
+		const char* stringValue;
+		void* pointerValue;
+		void* objectValue;
+	} value;
+} MockValue_c;
+
+typedef struct SMockFunctionCall_c MockFunctionCall_c;
+struct SMockFunctionCall_c
 {
 	MockFunctionCall_c* (*withIntParamaters)(const char* name, int value);
 	MockFunctionCall_c* (*withDoubleParameters)(const char* name, double value);
 	MockFunctionCall_c* (*withStringParameters)(const char* name, const char* value);
 	MockFunctionCall_c* (*withPointerParameters)(const char* name, void* value);
 	MockFunctionCall_c* (*withParameterOfType)(const char* type, const char* name, void* value);
+
+	MockFunctionCall_c* (*andReturnIntValue)(int value);
+	MockFunctionCall_c* (*andReturnDoubleValue)(double value);
+	MockFunctionCall_c* (*andReturnStringValue)(const char* value);
+	MockFunctionCall_c* (*andReturnPointerValue)(void* value);
+
+	MockValue_c (*returnValue)();
+
 };
 
 typedef int (*MockTypeEqualFunction_c)(void* object1, void* object2);
 typedef char* (*MockTypeValueToStringFunction_c)(void* object1);
 
-struct MockSupport_c
+typedef struct SMockSupport_c MockSupport_c;
+struct SMockSupport_c
 {
 	MockFunctionCall_c* (*expectOneCall)(const char* name);
 	MockFunctionCall_c* (*actualCall)(const char* name);
+	MockValue_c (*returnValue)();
+
+	void (*setIntData) (const char* name, int value);
+	void (*setDoubleData) (const char* name, double value);
+	void (*setStringData) (const char* name, const char* value);
+	void (*setPointerData) (const char* name, void* value);
+	void (*setDataObject) (const char* name, const char* type, void* value);
+	MockValue_c (*getData)(const char* name);
+
+	void (*checkExpectations)();
+	int (*expectedCallsLeft)();
+
+	void (*clear)();
 
 	void (*installComparator) (const char* typeName, MockTypeEqualFunction_c isEqual, MockTypeValueToStringFunction_c valueToString);
 	void (*removeAllComparators)();
@@ -51,5 +94,6 @@ struct MockSupport_c
 
 
 MockSupport_c* mock_c();
+MockSupport_c* mock_scope_c(const char* scope);
 
 #endif
