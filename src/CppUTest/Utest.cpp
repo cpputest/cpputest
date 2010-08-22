@@ -290,7 +290,7 @@ void Utest::assertLongsEqual(long expected, long actual, const char* fileName, i
 	}
 }
 
-void Utest::assertPointersEqual(void* expected, void* actual, const char* fileName, int lineNumber)
+void Utest::assertPointersEqual(const void* expected, const void* actual, const char* fileName, int lineNumber)
 {
 	getTestResult()->countCheck();
 	if (expected != actual)

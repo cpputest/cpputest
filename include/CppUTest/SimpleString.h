@@ -116,7 +116,7 @@ private:
 };
 
 SimpleString StringFrom(bool value);
-SimpleString StringFrom(void* value);
+SimpleString StringFrom(const void* value);
 SimpleString StringFrom(char value);
 SimpleString StringFrom(const char *value);
 SimpleString StringFromOrNull(const char * value);

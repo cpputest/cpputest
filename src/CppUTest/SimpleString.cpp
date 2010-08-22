@@ -337,7 +337,7 @@ SimpleString StringFrom(long value)
 	return StringFromFormat("%ld", value);
 }
 
-SimpleString StringFrom(void* value)
+SimpleString StringFrom(const void* value)
 {
 	return SimpleString("0x") + HexStringFrom((long) value);
 }

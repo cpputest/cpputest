@@ -82,7 +82,7 @@ public:
     virtual void assertCstrContains(const char *expected, const char *actual, const char *fileName, int lineNumber);
     virtual void assertCstrNoCaseContains(const char *expected, const char *actual, const char *fileName, int lineNumber);
     virtual void assertLongsEqual(long  expected, long  actual, const char *fileName, int lineNumber);
-    virtual void assertPointersEqual(void *expected, void *actual, const char *fileName, int lineNumber);
+    virtual void assertPointersEqual(const void *expected, const void *actual, const char *fileName, int lineNumber);
     virtual void assertDoublesEqual(double expected, double actual, double threshold, const char *fileName, int lineNumber);
     virtual void fail(const char *text, const char *fileName, int lineNumber);
 
