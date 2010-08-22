@@ -29,6 +29,7 @@
 extern "C" {
 	#include "CppUTestExt/MockSupport_c.h"
 }
+#include <string.h>
 
 static MockSupport* currentMockSupport = NULL;
 static MockFunctionCall* currentCall = NULL;
