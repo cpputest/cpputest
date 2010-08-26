@@ -2,6 +2,20 @@
 #Set this to @ to keep the makefile quiet
 SILENCE = @
 
+#Set to Y to disable the memory leak detection. Enabled by default
+ifeq ($(CPPUTEST_DISABLE_MEM_LEAK_DETECTION), Y)
+	CPPUTEST_USE_MEM_LEAK_DETECTION = N
+else
+	CPPUTEST_USE_MEM_LEAK_DETECTION = Y
+endif
+
+#Set to N to remove the dependency with StdC++ new header file and operator new std_badalloc throw
+ifeq ($(CPPUTEST_DISABLE_STD_CPP_LIB), Y)
+	CPPUTEST_USE_STD_CPP_LIB = N
+else
+	CPPUTEST_USE_STD_CPP_LIB = Y
+endif
+
 # Set to Y for enabling debug
 ENABLE_DEBUG = Y
 
@@ -19,8 +33,17 @@ WARNINGFLAGS = -pedantic-errors -Wall -Wextra -Werror -Wshadow -Wswitch-default 
 MEMLEAK_DETECTOR_NEW_MACROS += -include include/CppUTest/MemoryLeakDetectorNewMacros.h
 MEMLEAK_DETECTOR_MALLOC_MACROS += -include include/CppUTest/MemoryLeakDetectorMallocMacros.h
 
+ifeq ($(CPPUTEST_USE_MEM_LEAK_DETECTION), N)
+CPPUTEST_CPPFLAGS += -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED
+endif
+
 ifeq ($(ENABLE_DEBUG), Y)
 CPPUTEST_CPPFLAGS += -g
+endif
+
+ifeq ($(CPPUTEST_USE_STD_CPP_LIB), N)
+CPPUTEST_CPPFLAGS += -DCPPUTEST_STD_CPP_LIB_DISABLED
+CPPUTEST_CXXFLAGS += -nostdinc++
 endif
 
 CPPUTEST_CPPFLAGS += $(WARNINGFLAGS)

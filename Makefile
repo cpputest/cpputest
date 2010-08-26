@@ -85,26 +85,23 @@ test_all:
 	./$(TEST_TARGET) -r
 	make clean
 	$(SILENCE)echo Building with the STDC++ new disabled. 
-	make CPPUTEST_DISABLE_STD_CPP_LIB=Y
-	make CPPUTEST_DISABLE_STD_CPP_LIB=Y clean
+	make CPPUTEST_DISABLE_STD_CPP_LIB=Y extensions 
+	make CPPUTEST_DISABLE_STD_CPP_LIB=Y cleanExtensions
 	$(SILENCE)echo Building with Memory Leak Detection disabled
-	make CPPUTEST_DISABLE_MEM_LEAK_DETECTION=Y
-	make CPPUTEST_DISABLE_MEM_LEAK_DETECTION=Y clean
+	make CPPUTEST_DISABLE_MEM_LEAK_DETECTION=Y extensions
+	make CPPUTEST_DISABLE_MEM_LEAK_DETECTION=Y cleanExtensions
 	$(SILENCE)echo Building with Memory Leak Detection disabled and STD C++ disabled
-	make CPPUTEST_DISABLE_MEM_LEAK_DETECTION=Y CPPUTEST_DISABLE_STD_CPP_LIB=Y
-	make CPPUTEST_DISABLE_MEM_LEAK_DETECTION=Y CPPUTEST_DISABLE_STD_CPP_LIB=Y clean
+	make CPPUTEST_DISABLE_MEM_LEAK_DETECTION=Y CPPUTEST_DISABLE_STD_CPP_LIB=Y extensions
+	make CPPUTEST_DISABLE_MEM_LEAK_DETECTION=Y CPPUTEST_DISABLE_STD_CPP_LIB=Y cleanExtensions
 	$(SILENCE)echo Building with debug disabled
-	make ENABLE_DEBUG=N 
-	make ENABLE_DEBUG=N clean
+	make ENABLE_DEBUG=N extensions
+	make ENABLE_DEBUG=N cleanExtensions
 	$(SILENCE)echo Building with overridden CXXFLAGS and CFLAGS and CPPFLAGS
 	make CLFAGS="" CXXFLAGS="" CPPFLAGS="-Iinclude"
 	make CFLAGS="" CXXFLAGS="" clean
 	$(SILENCE)echo Building with overridden CXXFLAGS and CFLAGS and memory leak and STDC++ disabled
 	make CLFAGS="" CXXFLAGS="" CPPFLAGS="-Iinclude -DCPPUTEST_STD_CPP_LIB_DISABLED -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED"
 	make CFLAGS="" CXXFLAGS="" CPPFLAGS="-DCPPUTEST_STD_CPP_LIB_DISABLED -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED" clean
-	$(SILENCE)echo Building extensions
-	make extensions
-	make cleanExtensions
 	$(SILENCE)echo Building examples 
 	make cleanExamples
 	make examples
@@ -120,10 +117,10 @@ examples: $(TEST_TARGET) extensions
 	make -C examples  all
 
 extensions: $(TEST_TARGET)
-	make -f Makefile_CppUTestExt all
+	make -f Makefile_CppUTestExt all CPPUTEST_DISABLE_STD_CPP_LIB=$(CPPUTEST_USE_STD_CPP_LIB) CPPUTEST_USE_MEM_LEAK_DETECTION=$(CPPUTEST_USE_MEM_LEAK_DETECTION)
 
 cleanExtensions: clean
-	make -f Makefile_CppUTestExt clean
+	make -f Makefile_CppUTestExt clean CPPUTEST_DISABLE_STD_CPP_LIB=$(CPPUTEST_USE_STD_CPP_LIB) CPPUTEST_USE_MEM_LEAK_DETECTION=$(CPPUTEST_USE_MEM_LEAK_DETECTION)
 	
 cleanExamples: clean cleanExtensions
 	make -C examples clean 

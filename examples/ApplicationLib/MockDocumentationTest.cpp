@@ -187,7 +187,7 @@ static char* toStringMethod(void* object1)
 
 TEST(MockDocumentation, CInterface)
 {
-	void* object;
+	void* object = (void*) 0x1;
 
 	mock_c()->expectOneCall("foo")->withIntParamaters("integer", 10)->andReturnDoubleValue(1.11);
 	mock_c()->actualCall("foo")->withIntParamaters("integer", 10)->returnValue().value.doubleValue;

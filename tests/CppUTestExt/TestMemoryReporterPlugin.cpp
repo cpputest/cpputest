@@ -193,22 +193,20 @@ TEST(MemoryReporterPlugin, newAllocationsAreReportedTest)
 	mock("formatter").ignoreOtherCalls();
 
 	reporter->preTestAction(*test, *result);
-	char* memory = new char;
-	delete memory;
+	char *memory = MemoryLeakAllocator::getCurrentNewAllocator()->allocMemoryLeakNode(100);
+	MemoryLeakAllocator::getCurrentNewAllocator()->free_memory(memory, "unknown", 1);
 }
 
 TEST(MemoryReporterPlugin, whenUsingOnlyMallocAllocatorNoOtherOfTheAllocatorsAreUsed)
 {
 	mock("formatter").expectOneCall("report_test_start").withParameter("result", result).withParameter("test", test);
 	mock("formatter").expectOneCall("report_alloc_memory").withParameter("result", result).withParameterOfType("MemoryLeakAllocator", "allocator", StandardMallocAllocator::defaultAllocator());
-	mock("formatter").expectOneCall("report_alloc_memory").withParameter("result", result).withParameterOfType("MemoryLeakAllocator", "allocator", StandardMallocAllocator::defaultAllocator());
-	mock("formatter").expectOneCall("report_free_memory").withParameter("result", result).withParameterOfType("MemoryLeakAllocator", "allocator", StandardMallocAllocator::defaultAllocator());
 	mock("formatter").expectOneCall("report_free_memory").withParameter("result", result).withParameterOfType("MemoryLeakAllocator", "allocator", StandardMallocAllocator::defaultAllocator());
 	mock("formatter").ignoreOtherCalls();
 
 	reporter->preTestAction(*test, *result);
-	void* memory = malloc(100);
-	free(memory);
+	char *memory = MemoryLeakAllocator::getCurrentMallocAllocator()->allocMemoryLeakNode(100);
+	MemoryLeakAllocator::getCurrentMallocAllocator()->free_memory(memory, "unknown", 1);
 }
 
 TEST(MemoryReporterPlugin, newArrayAllocationsAreReportedTest)
@@ -218,21 +216,19 @@ TEST(MemoryReporterPlugin, newArrayAllocationsAreReportedTest)
 	mock("formatter").ignoreOtherCalls();
 
 	reporter->preTestAction(*test, *result);
-	char* memory = new char [100];
-	delete [] memory;
+	char *memory = MemoryLeakAllocator::getCurrentNewArrayAllocator()->allocMemoryLeakNode(100);
+	MemoryLeakAllocator::getCurrentNewArrayAllocator()->free_memory(memory, "unknown", 1);
 }
 
 TEST(MemoryReporterPlugin, mallocAllocationsAreReportedTest)
 {
 	mock("formatter").expectOneCall("report_alloc_memory").withParameter("result", result).withParameterOfType("MemoryLeakAllocator", "allocator", StandardMallocAllocator::defaultAllocator());
-	mock("formatter").expectOneCall("report_alloc_memory").withParameter("result", result).withParameterOfType("MemoryLeakAllocator", "allocator", StandardMallocAllocator::defaultAllocator());
-	mock("formatter").expectOneCall("report_free_memory").withParameter("result", result).withParameterOfType("MemoryLeakAllocator", "allocator", StandardMallocAllocator::defaultAllocator());
 	mock("formatter").expectOneCall("report_free_memory").withParameter("result", result).withParameterOfType("MemoryLeakAllocator", "allocator", StandardMallocAllocator::defaultAllocator());
 	mock("formatter").ignoreOtherCalls();
 
 	reporter->preTestAction(*test, *result);
-	void* memory = malloc(100);
-	free(memory);
+	char *memory = MemoryLeakAllocator::getCurrentMallocAllocator()->allocMemoryLeakNode(100);
+	MemoryLeakAllocator::getCurrentMallocAllocator()->free_memory(memory, "unknown", 1);
 }
 
 TEST(MemoryReporterPlugin, startOfANewTestWillReportTheTestGroupStart)
