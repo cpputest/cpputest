@@ -34,6 +34,7 @@ class Utest;
 class MemoryReportFormatter
 {
 public:
+	virtual ~MemoryReportFormatter(){}
 
 	virtual void report_testgroup_start(TestResult* result, Utest& test)=0;
 	virtual void report_testgroup_end(TestResult* result, Utest& test)=0;

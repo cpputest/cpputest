@@ -29,6 +29,25 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTestExt/MockSupport.h"
 
+extern "C" {
+	#include "CppUTestExt/MockSupport_c.h"
+}
+
+TEST_GROUP(FirstTestGroup)
+{
+};
+
+TEST(FirstTestGroup, FirsTest)
+{
+//	FAIL("Fail me!");
+}
+
+TEST(FirstTestGroup, SecondTest)
+{
+//	STRCMP_EQUAL("hello", "world");
+}
+
+
 TEST_GROUP(MockDocumentation)
 {
 };
@@ -84,6 +103,29 @@ TEST(MockDocumentation, parameters)
 	parameters_function(2, "hah");
 }
 
+class MyTypeComparator : public MockNamedValueComparator
+{
+public:
+	virtual bool isEqual(void* object1, void* object2)
+	{
+		return object1 == object2;
+	}
+	virtual SimpleString valueToString(void* object)
+	{
+		return StringFrom(object);
+	}
+};
+
+TEST(MockDocumentation, ObjectParameters)
+{
+	void* object = (void*) 1;
+	MyTypeComparator comparator;
+	mock().installComparator("myType", comparator);
+	mock().expectOneCall("function").withParameterOfType("myType", "parameterName", object);
+	mock().clear();
+	mock().removeAllComparators();
+}
+
 TEST(MockDocumentation, returnValue)
 {
 	mock().expectOneCall("function").andReturnValue(10);
@@ -103,4 +145,95 @@ TEST(MockDocumentation, setData)
 
 	LONGS_EQUAL(10, value);
 	POINTERS_EQUAL(pobject, &object);
+}
+
+void doSomethingThatWouldOtherwiseBlowUpTheMockingFramework()
+{
+}
+
+TEST(MockDocumentation, otherMockSupport)
+{
+	mock().crashOnFailure();
+//	mock().actualCall("unex");
+
+	mock().expectOneCall("foo");
+	mock().ignoreOtherCalls();
+
+	mock().disable();
+	doSomethingThatWouldOtherwiseBlowUpTheMockingFramework();
+	mock().enable();
+
+	mock().clear();
+
+}
+
+TEST(MockDocumentation, scope)
+{
+	mock("xmlparser").expectOneCall("open");
+	mock("filesystem").ignoreOtherCalls();
+
+	mock("xmlparser").actualCall("open");
+}
+
+static  int equalMethod(void* object1, void* object2)
+{
+	return object1 == object2;
+}
+
+static char* toStringMethod(void* object1)
+{
+	return (char*) "string";
+}
+
+TEST(MockDocumentation, CInterface)
+{
+	void* object;
+
+	mock_c()->expectOneCall("foo")->withIntParamaters("integer", 10)->andReturnDoubleValue(1.11);
+	mock_c()->actualCall("foo")->withIntParamaters("integer", 10)->returnValue().value.doubleValue;
+
+	mock_c()->installComparator("type", equalMethod, toStringMethod);
+	mock_scope_c("scope")->expectOneCall("bar")->withParameterOfType("type", "name", object);
+	mock_scope_c("scope")->actualCall("bar")->withParameterOfType("type", "name", object);
+	mock_c()->removeAllComparators();
+
+	mock_c()->setIntData("important", 10);
+	mock_c()->checkExpectations();
+	mock_c()->clear();
+}
+
+TEST_GROUP(FooTestGroup)
+{
+	void setup()
+	{
+		// Init stuff
+	}
+
+	void teardown()
+	{
+		// Uninit stuff
+	}
+};
+
+TEST(FooTestGroup, Foo)
+{
+	// Test FOO
+}
+
+TEST(FooTestGroup, MoreFoo)
+{
+	// Test more FOO
+}
+
+TEST_GROUP(BarTestGroup)
+{
+	void setup()
+	{
+		// Init Bar
+	}
+};
+
+TEST(BarTestGroup, Bar)
+{
+	// Test Bar
 }
