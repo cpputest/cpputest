@@ -28,8 +28,8 @@
 #include "CircularBuffer.h"
 #include "Printer.h"
 
-CircularBuffer::CircularBuffer(int capacity) :
-	index(0), outdex(0), capacity(capacity), empty(true), full(false)
+CircularBuffer::CircularBuffer(int _capacity) :
+	index(0), outdex(0), capacity(_capacity), empty(true), full(false)
 {
 	buffer = new int[this->capacity];
 }

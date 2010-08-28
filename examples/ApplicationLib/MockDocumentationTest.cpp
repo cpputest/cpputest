@@ -180,7 +180,7 @@ static  int equalMethod(void* object1, void* object2)
 	return object1 == object2;
 }
 
-static char* toStringMethod(void* object1)
+static char* toStringMethod(void*)
 {
 	return (char*) "string";
 }

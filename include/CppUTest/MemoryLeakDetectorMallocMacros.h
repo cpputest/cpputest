@@ -24,7 +24,6 @@
 #endif
 
 #if CPPUTEST_USE_MEM_LEAK_DETECTION
-#define CPPUTEST_USE_MALLOC_MACROS 1
 
 #include <stdlib.h>
 

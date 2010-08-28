@@ -23,6 +23,7 @@ Test Macros
     * TEST_GROUP_BASE(group, base) - Same as TEST_GROUP, just use a different 
                           base class than Utest
     * TEST_SETUP() - Declare a void setup method in a TEST_GROUP
+            - this is the same as declaring void setup()
     * TEST_TEARDOWN() - Declare a void setup method in a TEST_GROUP
     * EXPORT_TEST_GROUP(group) - Export the name of a test group so it can 
       be linked in from a library
@@ -30,9 +31,9 @@ Test Macros
 
 Set up and tear down support
 
-    * Each TEST_GROUP may contain setup or teardown methods
-    * Setup is called prior to each TEST body and Teardown is called after 
-      the test body
+    * Each TEST_GROUP may contain a setup and/or  a teardown method.
+    * setup() is called prior to each TEST body and teardown() is 
+      called after the test body.
 
 
 Assertion Macros
@@ -46,6 +47,7 @@ The failure of one of these macros causes the current test to immediately exit
       using strcmp
     * LONGS_EQUAL(expected, actual) - Compares two numbers
     * BYTES_EQUAL(expected, actual) - Compares two numbers, eight bits wide
+    * POINTERS_EQUAL(expected, actual) - Compares two const void * 
     * DOUBLES_EQUAL(expected, actual, tolerance) - Compares two doubles 
       within some tolerance
     * FAIL(text) - always fails
@@ -61,15 +63,18 @@ Customize CHECK_EQUAL to work with your types that support operator==()
 
 Building default checks with TestPlugin
 
-    * CppUTest can support extra checking functionality by inserting TestPlugins
-    * TestPlugin is derived from the TestPlugin class and can be inserted in the
-      TestRegistry via the installPlugin method.
-    * All TestPlugins are called before and after running all tests and before and
-      after running a single test (like Setup and Teardown). TestPlugins are typically
-      inserted in the main.
-    * TestPlugins can be used for, for example, system stability and resource handling
-      like files, memory or network connection clean-up.
-    * In CppUTest, the memory leak detection is done via a default enabled TestPlugin
+    * CppUTest can support extra checking functionality by 
+      inserting TestPlugins
+    * TestPlugin is derived from the TestPlugin class and can be 
+      inserted in the TestRegistry via the installPlugin method.
+    * All TestPlugins are called before and after running all tests 
+      and before and after running a single test (like Setup and 
+      Teardown). TestPlugins are typically inserted in the main.
+    * TestPlugins can be used for, for example, system stability 
+      and resource handling like files, memory or network connection 
+      clean-up.
+    * In CppUTest, the memory leak detection is done via a default 
+      enabled TestPlugin
 
 Example of a main with a TestPlugin:
 

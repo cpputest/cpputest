@@ -17,8 +17,8 @@ endif
 CPP_PLATFORM = Gcc
 
 #CFLAGS are set to override malloc and free to get memory leak detection in C programs
-CFLAGS = -Dmalloc=cpputest_malloc -Dfree=cpputest_free
-CPPFLAGS =
+CXXFLAGS += -include $(CPPUTEST_HOME)include/CppUTest/MemoryLeakDetectorNewMacros.h
+CFLAGS += -include $(CPPUTEST_HOME)include/CppUTest/MemoryLeakDetectorMallocMacros.h
 #GCOVFLAGS = -fprofile-arcs -ftest-coverage
 
 #includes for all compiles
@@ -55,5 +55,6 @@ MOCKS_SRC_DIRS = \
 
 #Flags to pass to ld
 LDFLAGS +=
-	
+LD_LIBRARIES += -lstdc++
+
 include $(CPPUTEST_HOME)/build/ComponentMakefile

@@ -23,7 +23,9 @@ sed '-e s/^Lines.*://g' \
     '-e s/^[0-9]\./  &/g' \
     '-e s/^[0-9][0-9]\./ &/g' \
     '-e s/of.*File/ /g' \
-    "-e s/'//g" 
+    "-e s/'//g" \
+    '-e s/^.*\/usr\/.*$//g' \
+    '-e s/^.*\.$//g' 
 }
 
 getFileNameRootFromErrorFile() {

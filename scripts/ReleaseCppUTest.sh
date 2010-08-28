@@ -4,7 +4,7 @@
 GENERATED_FILES=""
 release_dir=Releases
 scripts_dir=scripts
-version=v2.2c
+version=v2.2d
 zip_root=CppUTest-${version}
 zip_file=${zip_root}.zip
 

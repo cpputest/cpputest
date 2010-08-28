@@ -90,8 +90,8 @@ TEST(CircularBuffer, GetPutAFew)
 
 TEST(CircularBuffer, Capacity)
 {
-	CircularBuffer buffer(2);
-	LONGS_EQUAL(2, buffer.Capacity());
+	CircularBuffer b(2);
+	LONGS_EQUAL(2, b.Capacity());
 }
 
 TEST(CircularBuffer, IsFull)
