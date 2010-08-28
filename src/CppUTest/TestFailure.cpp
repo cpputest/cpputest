@@ -164,34 +164,21 @@ EqualsFailure::EqualsFailure(Utest* test, const char* fileName, int lineNumber, 
 	message_ = createButWasString(expected, actual);
 }
 
+static SimpleString StringFromOrNan(double d)
+{
+	if (d != d)
+		return "Nan - Not a number";
+	return StringFrom(d);
+}
+
 DoublesEqualFailure::DoublesEqualFailure(Utest* test, const char* fileName, int lineNumber, double expected, double actual, double threshold)  : TestFailure(test, fileName, lineNumber)
 {
-	bool hasAnInvalidNumber = false;
-	SimpleString notANumberString = "Nan - Not a number";
-
-	SimpleString expectedString = StringFrom(expected);
-	SimpleString actualString = StringFrom(actual);
-	SimpleString thresholdString = StringFrom(threshold);
-
-	if (expectedString == "nan") {
-		expectedString = notANumberString;
-		hasAnInvalidNumber = true;
-	}
-	if (actualString == "nan") {
-		actualString = notANumberString;
-		hasAnInvalidNumber = true;
-	}
-	if (thresholdString == "nan") {
-		thresholdString = notANumberString;
-		hasAnInvalidNumber = true;
-	}
-
-	message_ = createButWasString(expectedString, actualString);
+	message_ = createButWasString(StringFromOrNan(expected), StringFromOrNan(actual));
 	message_ += " threshold used was <";
-	message_ += thresholdString;
+	message_ += StringFromOrNan(threshold);
 	message_ += ">";
 
-	if (hasAnInvalidNumber)
+	if (double_is_nan(expected) || double_is_nan(actual) || double_is_nan(threshold))
 		message_ += "\n\tCannot make comparisons with Nan";
 }
 
