@@ -87,6 +87,12 @@ public:
 	EqualsFailure(Utest*, const char* fileName, int lineNumber, const SimpleString& expected, const SimpleString& actual);
 };
 
+class DoublesEqualFailure: public TestFailure
+{
+public:
+	DoublesEqualFailure(Utest*, const char* fileName, int lineNumber, double expected, double actual, double threshold);
+};
+
 class CheckEqualFailure : public TestFailure
 {
 public:

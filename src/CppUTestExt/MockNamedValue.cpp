@@ -124,7 +124,7 @@ bool MockNamedValue::equals(const MockNamedValue& p) const
 	else if (type_ == "void*")
 		return value_.pointerValue_ == p.value_.pointerValue_;
 	else if (type_ == "double")
-		return (PlatformSpecificFabs(value_.doubleValue_ - p.value_.doubleValue_) < 0.005);
+		return (doubles_equal(value_.doubleValue_, p.value_.doubleValue_, 0.005));
 
 	if (comparator_)
 		return comparator_->isEqual(value_.objectPointerValue_, p.value_.objectPointerValue_);

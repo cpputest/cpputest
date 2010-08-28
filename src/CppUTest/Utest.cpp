@@ -30,6 +30,13 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 #include "CppUTest/TestOutput.h"
 
+bool doubles_equal(double d1, double d2, double threshold)
+{
+	if (d1 != d1 || d2 != d2 || threshold != threshold)
+		return false;
+	return PlatformSpecificFabs(d1 - d2) < threshold;
+}
+
 /* Sometimes stubs use the CppUTest assertions.
  * Its not correct to do so, but this small helper class will prevent a segmentation fault and instead
  * will give an error message and also the file/line of the check that was executed outside the tests.
@@ -300,8 +307,8 @@ void Utest::assertPointersEqual(const void* expected, const void* actual, const 
 void Utest::assertDoublesEqual(double expected, double actual, double threshold, const char* fileName, int lineNumber)
 {
 	getTestResult()->countCheck();
-	if (PlatformSpecificFabs(expected - actual) > threshold)
-		failWith(EqualsFailure(this, fileName, lineNumber, StringFrom(expected), StringFrom(actual)));
+	if (!doubles_equal(expected, actual, threshold))
+		failWith(DoublesEqualFailure(this, fileName, lineNumber, expected, actual, threshold));
 }
 
 void Utest::print(const char *text, const char* fileName, int lineNumber)

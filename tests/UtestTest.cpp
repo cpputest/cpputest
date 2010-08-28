@@ -170,6 +170,20 @@ TEST(Utest, FailureWithDOUBLES_EQUAL)
 	testFailureWith(_failMethodDOUBLES_EQUAL);
 }
 
+#include "CppUTest/PlatformSpecificFunctions.h"
+
+TEST(Utest, compareDoubles)
+{
+	double zero = 0.0;
+	double nan = zero / zero;
+	CHECK(doubles_equal(1.0, 1.001, 0.01));
+	CHECK(!doubles_equal(nan, 1.001, 0.01));
+	CHECK(!doubles_equal(1.0, nan, 0.01));
+	CHECK(!doubles_equal(1.0, 1.001, nan));
+	CHECK(!doubles_equal(1.0, 1.1, 0.05));
+}
+
+
 TEST(Utest, FailureWithCHECK)
 {
 	testFailureWith(_failMethodCHECK);
@@ -406,4 +420,3 @@ TEST(UtestMyOwn, NullParameters)
 	TestRegistry* reg = TestRegistry::getCurrentRegistry();
 	nullTest.shouldRun(reg->getGroupFilter(), reg->getNameFilter());
 }
-
