@@ -9,9 +9,7 @@ SILENCE = @
 
 #--- Inputs ----#
 COMPONENT_NAME = CppUTestExamples
-ifndef CPPUTEST_HOME
-	CPPUTEST_HOME = ..
-endif
+CPPUTEST_HOME = ..
 
 CPPUTEST_USE_EXTENSIONS = Y
 CPP_PLATFORM = Gcc

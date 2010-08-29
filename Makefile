@@ -78,4 +78,10 @@ cleanExtensions: clean
 	
 cleanExamples: clean cleanExtensions
 	make -C examples clean 
-	
+
+.PHONY: everythingInstall
+everythingInstall: all extensions examples
+
+.PHONY: cleanEverythingInstall
+cleanEverythingInstall: clean cleanExtensions cleanExamples
+
