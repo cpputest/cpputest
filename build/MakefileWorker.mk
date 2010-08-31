@@ -227,8 +227,6 @@ all: start $(TEST_TARGET)
 
 .PHONY: start
 start: $(TEST_TARGET) 
-	$(SILENCE)pwd
-	$(SILENCE)echo "CPPUTEST_HOME=$(CPPUTEST_HOME)"
 	$(SILENCE)START_TIME=$(call time)
 
 .PHONY: all_no_tests

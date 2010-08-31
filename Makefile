@@ -1,6 +1,5 @@
 #Set this to @ to keep the makefile quiet
 SILENCE = @
-TIME = time
 
 #--- Inputs ----#
 COMPONENT_NAME = CppUTest
@@ -21,7 +20,7 @@ include $(CPPUTEST_HOME)/build/MakefileWorker.mk
 
 #these are a sample of the other alternative flag settings
 .PHONY: test_all
-test_all:
+test_all: start
 	$(SILENCE)echo Building with the default flags.
 	$(TIME) make
 	./$(TEST_TARGET) -r
@@ -61,16 +60,16 @@ test_all:
 	
 .PHONY: examples
 examples: $(TEST_TARGET) extensions
-	make -C examples  all
+	$(TIME) make -C examples  all
 
 extensions: $(TEST_TARGET)
-	make -f Makefile_CppUTestExt all CPPUTEST_USE_STD_CPP_LIB=$(CPPUTEST_USE_STD_CPP_LIB) CPPUTEST_USE_MEM_LEAK_DETECTION=$(CPPUTEST_USE_MEM_LEAK_DETECTION)
+	$(TIME) make -f Makefile_CppUTestExt all CPPUTEST_USE_STD_CPP_LIB=$(CPPUTEST_USE_STD_CPP_LIB) CPPUTEST_USE_MEM_LEAK_DETECTION=$(CPPUTEST_USE_MEM_LEAK_DETECTION)
 
 cleanExtensions: clean
-	make -f Makefile_CppUTestExt clean CPPUTEST_USE_STD_CPP_LIB=$(CPPUTEST_USE_STD_CPP_LIB) CPPUTEST_USE_MEM_LEAK_DETECTION=$(CPPUTEST_USE_MEM_LEAK_DETECTION)
+	$(TIME) make -f Makefile_CppUTestExt clean CPPUTEST_USE_STD_CPP_LIB=$(CPPUTEST_USE_STD_CPP_LIB) CPPUTEST_USE_MEM_LEAK_DETECTION=$(CPPUTEST_USE_MEM_LEAK_DETECTION)
 	
 cleanExamples: clean cleanExtensions
-	make -C examples clean 
+	$(TIME) make -C examples clean 
 
 .PHONY: everythingInstall
 everythingInstall: all extensions examples
