@@ -32,10 +32,6 @@
 #   CPPUTEST_LIB_DIR - a directory where libs go
 #   CPPUTEST_ENABLE_DEBUG - build for debug
 #   CPPUTEST_USE_MEM_LEAK_DETECTION - Links with overridden new and delete
-#   CPPUTEST_USE_MEM_LEAK_DETECTION_FOR_CPP_WITH_FILE_AND_LINE 
-#					- Causes each production code cpp file to include
-#					  the defines that give line numbers of where a leak originates
-#   CPPUTEST_USE_MEM_LEAK_DETECTION_FOR_MALLOC - 
 #   CPPUTEST_USE_STD_CPP_LIB - Set to N to keep the standard library out
 #		of the test harness
 #   CPPUTEST_USE_GCOV - Turn on coverage analysis
@@ -66,17 +62,6 @@ endif
 # new and delete for memory leak detection on by default
 ifndef CPPUTEST_USE_MEM_LEAK_DETECTION
 	CPPUTEST_USE_MEM_LEAK_DETECTION = Y
-endif
-
-# 'new' line numbers, helpful for when hunting for a leak.
-# Off by default because it adds to compile time
-ifndef CPPUTEST_USE_MEM_LEAK_DETECTION_FOR_CPP_WITH_FILE_AND_LINE
-	CPPUTEST_USE_MEM_LEAK_DETECTION_FOR_CPP_WITH_FILE_AND_LINE = N
-endif
-
-# Look for leaks in malloc, etc. On by default
-ifndef CPPUTEST_USE_MEM_LEAK_DETECTION_FOR_MALLOC
-	CPPUTEST_USE_MEM_LEAK_DETECTION_FOR_MALLOC = Y
 endif
 
 # Allow CppUTest to include stdlib.h by default
@@ -117,16 +102,13 @@ endif
 # --------------------------------------
 # derived flags in the followinf area
 # --------------------------------------
-ifeq ($(CPPUTEST_USE_MEM_LEAK_DETECTION_FOR_CPP_WITH_FILE_AND_LINE), Y)
-	MEMLEAK_DETECTOR_NEW_MACROS += -include $(CPPUTEST_HOME)/include/CppUTest/MemoryLeakDetectorNewMacros.h
-endif
-
-ifeq ($(CPPUTEST_USE_MEM_LEAK_DETECTION_FOR_MALLOC), Y)
-    MEMLEAK_DETECTOR_MALLOC_MACROS += -include $(CPPUTEST_HOME)/include/CppUTest/MemoryLeakDetectorMallocMacros.h
-endif
-
 ifeq ($(CPPUTEST_USE_MEM_LEAK_DETECTION), N)
 	CPPUTEST_CPPFLAGS += -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED
+else
+    ifndef MEMLEAK_DETECTOR_NEW_MACROS
+	    	MEMLEAK_DETECTOR_NEW_MACROS = -include $(CPPUTEST_HOME)/include/CppUTest/MemoryLeakDetectorNewMacros.h
+    endif
+    MEMLEAK_DETECTOR_MALLOC_MACROS = -include $(CPPUTEST_HOME)/include/CppUTest/MemoryLeakDetectorMallocMacros.h	
 endif
 
 ifeq ($(CPPUTEST_ENABLE_DEBUG), Y)

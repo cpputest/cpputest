@@ -1,6 +1,8 @@
 
 #Set this to @ to keep the makefile quiet
-SILENCE = @
+ifndef SILENCE
+	SILENCE = @
+endif
 
 #---- Outputs ----#
 COMPONENT_NAME = CppUTestExt
@@ -11,26 +13,12 @@ CPP_PLATFORM = Gcc
 
 WARNINGFLAGS = -pedantic-errors -Wall -Wextra -Werror -Wshadow -Wswitch-default -Wswitch-enum -Wconversion
 
-
-#GCOVFLAGS = -fprofile-arcs -ftest-coverage
-
-#SRC_DIRS is a list of source directories that make up the target library
-#If test files are in these directories, their IMPORT_TEST_GROUPs need
-#to be included in main to force them to be linked in.  By convention
-#put them into an AllTests.h file in each directory
 SRC_DIRS = src/CppUTestExt
 	
-#TEST_SRC_DIRS is a list of directories including 
-# - A test main (AllTests.cpp by convention)
-# - OBJ files in these directories are included in the TEST_TARGET
-# - Consequently - AllTests.h containing the IMPORT_TEST_GROUPS is not needed
-# - 
 TEST_SRC_DIRS = tests/CppUTestExt
 
-#includes for all compiles	
 INCLUDE_DIRS = $(CPPUTEST_HOME)/include
 
-#Flags to pass to ar, ld
 LD_LIBRARIES += -lstdc++ -L$(CPPUTEST_HOME)/lib -lCppUTest
 
 include $(CPPUTEST_HOME)/build/MakefileWorker.mk
