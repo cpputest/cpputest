@@ -222,11 +222,13 @@ LDFLAGS = $(CPPUTEST_LDFLAGS) $(CPPUTEST_ADDITIONAL_LDFLAGS)
 # Targets
 
 .PHONY: all
-all: $(TEST_TARGET)  start_time
+all: start $(TEST_TARGET)  
 	$(RUN_TEST_TARGET)	
 
-.PHONY: start_time
-start_time: $(TEST_TARGET) 
+.PHONY: start
+start: $(TEST_TARGET) 
+	$(SILENCE)pwd
+	$(SILENCE)echo "CPPUTEST_HOME=$(CPPUTEST_HOME)"
 	$(SILENCE)START_TIME=$(call time)
 
 .PHONY: all_no_tests
@@ -235,6 +237,9 @@ all_no_tests: $(TEST_TARGET)
 .PHONY: flags
 flags: 
 	$(SILENCE)echo Compile with these flags:
+	$(SILENCE)for f in $(CXXFLAGS) ; do \
+		echo "    Cxx $$f" ; \
+	done
 	$(SILENCE)for f in $(CPPFLAGS) ; do \
 		echo "    C++ $$f" ; \
 	done

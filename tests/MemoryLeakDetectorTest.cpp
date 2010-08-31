@@ -164,8 +164,9 @@ TEST(MemoryLeakDetectorTest, OneHundredLeaks)
 	STRCMP_CONTAINS(MEM_LEAK_FOOTER, output.asCharString());
 	STRCMP_CONTAINS(MEM_LEAK_ADDITION_MALLOC_WARNING, output.asCharString());
 
-	for (int i = 0; i < amount_alloc; i++)
-		PlatformSpecificFree(mem[i]);
+	//don't reuse i for vc6 compatibility
+	for (int j = 0; j < amount_alloc; j++)
+		PlatformSpecificFree(mem[j]);
 }
 
 TEST(MemoryLeakDetectorTest, OneLeakOutsideCheckingPeriod)

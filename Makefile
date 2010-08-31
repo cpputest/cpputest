@@ -5,9 +5,7 @@ TIME = time
 #--- Inputs ----#
 COMPONENT_NAME = CppUTest
 CPP_PLATFORM = Gcc
-ifndef CPPUTEST_HOME
-	CPPUTEST_HOME = $(pwd)
-endif
+CPPUTEST_HOME = .
 
 SRC_DIRS = \
 	src/CppUTest \
