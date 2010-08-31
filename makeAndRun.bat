@@ -13,5 +13,5 @@ msdev CppUTest.dsp /MAKE "CppUTest - Debug" %1
 msdev tests\AllTests.dsp /MAKE "AllTests - Debug" %1
 if "%1" EQU "/clean" goto end
 if "%1" EQU "/CLEAN" goto end
-tests\Debug\AllTests -v
+tests\Debug\AllTests
 :end
