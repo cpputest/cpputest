@@ -224,6 +224,10 @@ double PlatformSpecificFabs(double d)
    return fabs(d);
 }
 
+int PlatformSpecificIsNan(double d)
+{
+	return _isnan(d);
+}
 
 
 
