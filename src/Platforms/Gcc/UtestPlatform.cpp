@@ -241,5 +241,5 @@ double PlatformSpecificFabs(double d)
 
 int PlatformSpecificIsNan(double d)
 {
-	return isnan(d);
+	return isnan((float)d);
 }
