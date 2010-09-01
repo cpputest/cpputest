@@ -297,7 +297,7 @@ clean:
 #realclean gets rid of all gcov, o and d files in the directory tree
 #not just the ones made by this makefile
 .PHONY: realclean
-realclean:
+realclean: clean
 	$(SILENCE)rm -rf gcov
 	$(SILENCE)find . -name "*.gdcno" | xargs rm -f
 	$(SILENCE)find . -name "*.[do]" | xargs rm -f	
@@ -305,6 +305,9 @@ realclean:
 gcov: test
 	$(SILENCE)for d in $(SRC_DIRS) ; do \
 		gcov --object-directory $(CPPUTEST_OBJS_DIR)/$$d $$d/*.c $$d/*.cpp >> $(GCOV_OUTPUT) 2>>$(GCOV_ERROR) ; \
+	done
+	$(SILENCE)for f in $(SRC_FILES) ; do \
+		gcov --object-directory $(CPPUTEST_OBJS_DIR)/$$f $$f >> $(GCOV_OUTPUT) 2>>$(GCOV_ERROR) ; \
 	done
 	$(CPPUTEST_HOME)/scripts/filterGcov.sh $(GCOV_OUTPUT) $(GCOV_ERROR) $(GCOV_REPORT) $(TEST_OUTPUT)
 	$(SILENCE)cat $(GCOV_REPORT)

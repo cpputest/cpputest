@@ -22,7 +22,8 @@ include $(CPPUTEST_HOME)/build/MakefileWorker.mk
 .PHONY: test_all
 test_all: start
 	$(SILENCE)echo Building with the default flags.
-	$(TIME) make
+	make clean
+	$(TIME) make 
 	./$(TEST_TARGET) -r
 	make clean
 	$(SILENCE)echo Building with the STDC++ new disabled. 
