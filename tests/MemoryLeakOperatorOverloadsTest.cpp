@@ -21,6 +21,54 @@ TEST_GROUP(MemoryLeakOverridesToBeUsedInProductionCode)
 
 };
 
+TEST(MemoryLeakOverridesToBeUsedInProductionCode, UseNativeMallocByTemporarlySwitchingOffMalloc)
+{
+	int memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
+#if CPPUTEST_USE_MALLOC_MACROS
+	#undef malloc
+	#undef free
+#endif
+	void* memory = malloc(10);
+	LONGS_EQUAL(memLeaks, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
+	free (memory);
+#if CPPUTEST_USE_MALLOC_MACROS
+#include "CppUTest/MemoryLeakDetectorMallocMacros.h"
+#endif
+}
+
+/* TEST... allowing for a new overload in a class */
+class NewDummyClass
+{
+public:
+
+
+#if CPPUTEST_USE_NEW_MACROS
+	#undef new
+#endif
+	void* operator new (size_t size, int additional)
+#if CPPUTEST_USE_NEW_MACROS
+	#include "CppUTest/MemoryLeakDetectorNewMacros.h"
+#endif
+	{
+		return malloc(size * additional);
+	}
+};
+
+
+TEST(MemoryLeakOverridesToBeUsedInProductionCode, UseNativeNewByTemporarlySwitchingOffNew)
+{
+#if CPPUTEST_USE_NEW_MACROS
+	#undef new
+	#undef delete
+#endif
+	char* memory = new char[10];
+	delete [] memory;
+#if CPPUTEST_USE_NEW_MACROS
+	#include "CppUTest/MemoryLeakDetectorNewMacros.h"
+#endif
+}
+
+
 #if CPPUTEST_USE_MEM_LEAK_DETECTION
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, OperatorNewMacroOverloadViaIncludeFileWorks)

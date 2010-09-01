@@ -36,7 +36,6 @@
 #endif
 
 #if CPPUTEST_USE_MEM_LEAK_DETECTION
-#define CPPUTEST_USE_NEW_MACROS 1
 
 #ifndef CPPUTEST_USE_STD_CPP_LIB
 #ifdef CPPUTEST_STD_CPP_LIB_DISABLED
@@ -46,26 +45,38 @@
 #endif
 #endif
 
+/* This #ifndef prevents <new> from being included twice and enables the file to be included anywhere */
+#ifndef CPPUTEST_USE_NEW_MACROS
+
 #if CPPUTEST_USE_STD_CPP_LIB
+	#include <new>
 
-#include <new>
+		void* operator new(size_t size, const char* file, int line) throw (std::bad_alloc);
+		void* operator new[](size_t size, const char* file, int line) throw (std::bad_alloc);
+		void* operator new(size_t size) throw(std::bad_alloc);
+		void* operator new[](size_t size) throw(std::bad_alloc);
 
-void* operator new(size_t size, const char* file, int line) throw (std::bad_alloc);
-void* operator new[](size_t size, const char* file, int line) throw (std::bad_alloc);
-void* operator new(size_t size) throw(std::bad_alloc);
-void* operator new[](size_t size) throw(std::bad_alloc);
+	#else
 
-#else
-void* operator new(size_t size, const char* file, int line);
-void* operator new[](size_t size, const char* file, int line);
-void* operator new(size_t size);
-void* operator new[](size_t size);
+		void* operator new(size_t size, const char* file, int line);
+		void* operator new[](size_t size, const char* file, int line);
+		void* operator new(size_t size);
+		void* operator new[](size_t size);
+	#endif
 #endif
+
 
 #define new new(__FILE__, __LINE__)
 
-extern "C" {
-	#include "MemoryLeakDetectorMallocMacros.h"
-}
+#ifndef CPPUTEST_USE_NEW_MACROS
+	extern "C" {
+#endif
+		#include "MemoryLeakDetectorMallocMacros.h"
+#ifndef CPPUTEST_USE_NEW_MACROS
+	}
+#endif
+
+
+#define CPPUTEST_USE_NEW_MACROS 1
 
 #endif

@@ -32,7 +32,7 @@
 #   CPPUTEST_LIB_DIR - a directory where libs go
 #   CPPUTEST_ENABLE_DEBUG - build for debug
 #   CPPUTEST_USE_MEM_LEAK_DETECTION - Links with overridden new and delete
-#   CPPUTEST_USE_STD_CPP_LIB - Set to N to keep the standard library out
+#   CPPUTEST_USE_STD_CPP_LIB - Set to N to keep the standard C++ library out
 #		of the test harness
 #   CPPUTEST_USE_GCOV - Turn on coverage analysis
 #		Clean then build with this flag set to Y, then 'make gcov'
@@ -64,7 +64,7 @@ ifndef CPPUTEST_USE_MEM_LEAK_DETECTION
 	CPPUTEST_USE_MEM_LEAK_DETECTION = Y
 endif
 
-# Allow CppUTest to include stdlib.h by default
+# Use the standard C++ library
 ifndef CPPUTEST_USE_STD_CPP_LIB
 	CPPUTEST_USE_STD_CPP_LIB = Y
 endif
@@ -100,15 +100,17 @@ ifndef CPPUTEST_USE_EXTENSIONS
 endif
 
 # --------------------------------------
-# derived flags in the followinf area
+# derived flags in the following area
 # --------------------------------------
 ifeq ($(CPPUTEST_USE_MEM_LEAK_DETECTION), N)
 	CPPUTEST_CPPFLAGS += -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED
 else
-    ifndef MEMLEAK_DETECTOR_NEW_MACROS
-	    	MEMLEAK_DETECTOR_NEW_MACROS = -include $(CPPUTEST_HOME)/include/CppUTest/MemoryLeakDetectorNewMacros.h
+    ifndef CPPUTEST_MEMLEAK_DETECTOR_NEW_MACRO_FILE
+	    	CPPUTEST_MEMLEAK_DETECTOR_NEW_MACRO_FILE = -include $(CPPUTEST_HOME)/include/CppUTest/MemoryLeakDetectorNewMacros.h
     endif
-    MEMLEAK_DETECTOR_MALLOC_MACROS = -include $(CPPUTEST_HOME)/include/CppUTest/MemoryLeakDetectorMallocMacros.h	
+    ifndef CPPUTEST_MEMLEAK_DETECTOR_MALLOC_MACRO_FILE
+	    CPPUTEST_MEMLEAK_DETECTOR_MALLOC_MACRO_FILE = -include $(CPPUTEST_HOME)/include/CppUTest/MemoryLeakDetectorMallocMacros.h
+	endif	
 endif
 
 ifeq ($(CPPUTEST_ENABLE_DEBUG), Y)
@@ -125,8 +127,8 @@ ifeq ($(CPPUTEST_USE_GCOV), Y)
 endif
 
 CPPUTEST_CPPFLAGS += $(CPPUTEST_WARNINGFLAGS)
-CPPUTEST_CXXFLAGS += $(MEMLEAK_DETECTOR_NEW_MACROS)
-CPPUTEST_CFLAGS += $(MEMLEAK_DETECTOR_MALLOC_MACROS)
+CPPUTEST_CXXFLAGS += $(CPPUTEST_MEMLEAK_DETECTOR_NEW_MACRO_FILE)
+CPPUTEST_CFLAGS += $(CPPUTEST_MEMLEAK_DETECTOR_MALLOC_MACRO_FILE)
 
 TARGET_MAP = $(COMPONENT_NAME).map.txt
 ifeq ($(CPPUTEST_MAP_FILE), Y)

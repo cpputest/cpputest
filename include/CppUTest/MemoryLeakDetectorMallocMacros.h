@@ -25,10 +25,15 @@
 
 #if CPPUTEST_USE_MEM_LEAK_DETECTION
 
+/* This prevents the declaration from done twice and makes sure the file only #defines malloc, so it can be included anywhere */
+#ifndef CPPUTEST_USE_MALLOC_MACROS
+
 #include <stdlib.h>
 
 extern void* cpputest_malloc_location(size_t size, const char* file, int line);
 extern void cpputest_free_location(void* buffer, const char* file, int line);
+
+#endif
 
 /* NOTE on strdup!
  *
@@ -48,4 +53,5 @@ extern void cpputest_free_location(void* buffer, const char* file, int line);
 #define realloc(a, b) cpputest_realloc_location(a, b, __FILE__, __LINE__)
 #define free(a) cpputest_free_location(a, __FILE__, __LINE__)
 
+#define CPPUTEST_USE_MALLOC_MACROS 1
 #endif
