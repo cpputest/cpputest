@@ -46,7 +46,6 @@ class TestResult;
 class TestPlugin;
 class TestFailure;
 
-extern bool double_is_nan(double d);
 extern bool doubles_equal(double d1, double d2, double threshold);
 
 class Utest

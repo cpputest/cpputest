@@ -30,14 +30,9 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 #include "CppUTest/TestOutput.h"
 
-extern bool double_is_nan(double d)
-{
-	return d != d;
-}
-
 bool doubles_equal(double d1, double d2, double threshold)
 {
-	if (double_is_nan(d1) || double_is_nan(d2) || double_is_nan(threshold))
+	if (PlatformSpecificIsNan(d1) || PlatformSpecificIsNan(d2) || PlatformSpecificIsNan(threshold))
 		return false;
 	return PlatformSpecificFabs(d1 - d2) < threshold;
 }

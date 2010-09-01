@@ -178,7 +178,7 @@ DoublesEqualFailure::DoublesEqualFailure(Utest* test, const char* fileName, int 
 	message_ += StringFromOrNan(threshold);
 	message_ += ">";
 
-	if (double_is_nan(expected) || double_is_nan(actual) || double_is_nan(threshold))
+	if (PlatformSpecificIsNan(expected) || PlatformSpecificIsNan(actual) || PlatformSpecificIsNan(threshold))
 		message_ += "\n\tCannot make comparisons with Nan";
 }
 

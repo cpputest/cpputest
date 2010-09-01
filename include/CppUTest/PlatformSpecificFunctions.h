@@ -64,6 +64,7 @@ char PlatformSpecificToLower(char c);
 
 /* Misc */
 double PlatformSpecificFabs(double d);
+int PlatformSpecificIsNan(double d);
 int PlatformSpecificAtExit(void(*func)());
 
 /* IO operations */
