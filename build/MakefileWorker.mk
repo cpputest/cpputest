@@ -153,30 +153,32 @@ TEST_TARGET = \
 #Helper Functions
 get_src_from_dir  = $(wildcard $1/*.cpp) $(wildcard $1/*.c)
 get_dirs_from_dirspec  = $(wildcard $1)
-get_src_from_dir_list = $(foreach dir, $1, $(call get_src_from_dir,$(dir)))				        
-src_to_o = $(subst .c,.o, $(subst .cpp,.o,$1))
-src_to_d = $(subst .c,.d, $(subst .cpp,.d,$1))
-change_o_file_location = $(patsubst %.o,$(CPPUTEST_OBJS_DIR)/%.o, $1)
-change_d_file_location = $(patsubst %.d,$(CPPUTEST_OBJS_DIR)/%.d, $1)
-src_to = $(subst .c,$1, $(subst .cpp,$1,$2))
+get_src_from_dir_list = $(foreach dir, $1, $(call get_src_from_dir,$(dir)))
+__src_to = $(subst .c,$1, $(subst .cpp,$1,$2))
+src_to = $(addprefix $(CPPUTEST_OBJS_DIR)/,$(call __src_to,$1,$2))
+src_to_o = $(call src_to,.o,$1)
+src_to_d = $(call src_to,.d,$1)
+src_to_gcda = $(call src_to,.gcda,$1)
+src_to_gcno = $(call src_to,.gcno,$1)
 time = $(shell date +%s)
 delta_t = $(eval minus, $1, $2)
+debug_print_list = $(foreach word,$1,echo "  $(word)";) echo;
 
 #Derived
 STUFF_TO_CLEAN += $(TEST_TARGET) $(TEST_TARGET).exe $(TARGET_LIB) $(TARGET_MAP)
 
 SRC += $(call get_src_from_dir_list, $(SRC_DIRS)) $(SRC_FILES)			        
-OBJ = $(call change_o_file_location, $(call src_to_o,$(SRC)))
+OBJ = $(call src_to_o,$(SRC))
 
 STUFF_TO_CLEAN += $(OBJ)
 
 TEST_SRC = $(call get_src_from_dir_list, $(TEST_SRC_DIRS))
-TEST_OBJS = $(call change_o_file_location, $(call src_to_o,$(TEST_SRC)))
+TEST_OBJS = $(call src_to_o,$(TEST_SRC))
 STUFF_TO_CLEAN += $(TEST_OBJS)
 
 
 MOCKS_SRC = $(call get_src_from_dir_list, $(MOCKS_SRC_DIRS))
-MOCKS_OBJS = $(call change_o_file_location, $(call src_to_o,$(MOCKS_SRC)))
+MOCKS_OBJS = $(call src_to_o,$(MOCKS_SRC))
 STUFF_TO_CLEAN += $(MOCKS_OBJS)
 
 ALL_SRC = $(SRC) $(TEST_SRC) $(MOCKS_SRC)
@@ -185,8 +187,8 @@ ALL_SRC = $(SRC) $(TEST_SRC) $(MOCKS_SRC)
 GCOV_OUTPUT = gcov_output.txt
 GCOV_REPORT = gcov_report.txt
 GCOV_ERROR = gcov_error.txt
-GCOV_GCDA_FILES = $(call src_to,.gcda, $(ALL_SRC))
-GCOV_GCNO_FILES = $(call src_to,.gcno, $(ALL_SRC))
+GCOV_GCDA_FILES = $(call src_to_gcda, $(ALL_SRC))
+GCOV_GCNO_FILES = $(call src_to_gcno, $(ALL_SRC))
 TEST_OUTPUT = $(TEST_TARGET).txt
 STUFF_TO_CLEAN += \
 	$(GCOV_OUTPUT)\
@@ -212,8 +214,8 @@ INCLUDES += $(foreach dir, $(MOCK_DIRS_EXPANDED), -I$(dir))
 
 
 DEP_FILES = $(call src_to_d, $(ALL_SRC))
-STUFF_TO_CLEAN += $(DEP_FILES) + $(PRODUCTION_CODE_START) + $(PRODUCTION_CODE_END)
-STUFF_TO_CLEAN += $(STDLIB_CODE_START) + $(MAP_FILE) + cpputest_*.xml junit_run_output
+STUFF_TO_CLEAN += $(DEP_FILES) $(PRODUCTION_CODE_START) $(PRODUCTION_CODE_END)
+STUFF_TO_CLEAN += $(STDLIB_CODE_START) $(MAP_FILE) cpputest_*.xml junit_run_output
 
 # We'll use the CPPUTEST_CFLAGS etc so that you can override AND add to the CppUTest flags
 CFLAGS = $(CPPUTEST_CFLAGS) $(CPPUTEST_ADDITIONAL_CFLAGS)
@@ -236,22 +238,17 @@ all_no_tests: $(TEST_TARGET)
 
 .PHONY: flags
 flags: 
-	$(SILENCE)echo Compile with these flags:
-	$(SILENCE)for f in $(CXXFLAGS) ; do \
-		echo "    Cxx $$f" ; \
-	done
-	$(SILENCE)for f in $(CPPFLAGS) ; do \
-		echo "    C++ $$f" ; \
-	done
-	$(SILENCE)for f in $(CFLAGS) ; do \
-		echo "    C   $$f" ; \
-	done
-	$(SILENCE)for f in $(LDFLAGS) ; do \
-		echo "    LD   $$f" ; \
-	done
-	$(SILENCE)for f in $(ARFLAGS) ; do \
-		echo "    AR   $$f" ; \
-	done
+	@echo
+	@echo "Compile C and C++ source with CPPFLAGS:"
+	@$(call debug_print_list,$(CPPFLAGS))
+	@echo "Compile C++ source with CXXFLAGS:"
+	@$(call debug_print_list,$(CXXFLAGS))
+	@echo "Compile C source with CFLAGS:"
+	@$(call debug_print_list,$(CFLAGS))
+	@echo "Link with LDFLAGS:"
+	@$(call debug_print_list,$(LDFLAGS))
+	@echo "Create libraries with ARFLAGS:"
+	@$(call debug_print_list,$(ARFLAGS))
 	
 	
 $(TEST_TARGET): $(TEST_OBJS) $(MOCKS_OBJS)  $(PRODUCTION_CODE_START) $(TARGET_LIB) $(USER_LIBS) $(PRODUCTION_CODE_END) $(CPPUTEST_LIB) $(STDLIB_CODE_START) 
@@ -290,7 +287,7 @@ endif
 clean:
 	$(SILENCE)echo Making clean
 	$(SILENCE)$(RM) $(STUFF_TO_CLEAN)
-	$(SILENCE)rm -rf gcov
+	$(SILENCE)rm -rf gcov $(CPPUTEST_OBJS_DIR)
 	$(SILENCE)find . -name "*.gcno" | xargs rm -f
 	$(SILENCE)find . -name "*.gcda" | xargs rm -f
 	
@@ -321,14 +318,25 @@ format:
 	$(CPPUTEST_HOME)/scripts/reformat.sh $(PROJECT_HOME_DIR)
 	
 debug:
-	echo Stuff to clean
-	$(SILENCE)for f in $(STUFF_TO_CLEAN) ; do \
-		echo "$$f" ; \
-	done
-	echo Includes
-	$(SILENCE)for i in $(INCLUDES) ; do \
-		echo "$$i" ; \
-	done
+	@echo
+	@echo "Target Source files:"
+	@$(call debug_print_list,$(SRC))
+	@echo "Target Object files:"
+	@$(call debug_print_list,$(OBJ))
+	@echo "Test Source files:"
+	@$(call debug_print_list,$(TEST_SRC))
+	@echo "Test Object files:"
+	@$(call debug_print_list,$(TEST_OBJS))
+	@echo "Mock Source files:"
+	@$(call debug_print_list,$(MOCKS_SRC))
+	@echo "Mock Object files:"
+	@$(call debug_print_list,$(MOCKS_OBJS))
+	@echo "All Input Dependency files:"
+	@$(call debug_print_list,$(DEP_FILES))
+	@echo Stuff to clean:
+	@$(call debug_print_list,$(STUFF_TO_CLEAN))
+	@echo Includes:
+	@$(call debug_print_list,$(INCLUDES))
 
 ifneq "$(OTHER_MAKEFILE_TO_INCLUDE)" ""
 -include $(OTHER_MAKEFILE_TO_INCLUDE)
