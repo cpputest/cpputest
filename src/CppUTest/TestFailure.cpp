@@ -166,7 +166,7 @@ EqualsFailure::EqualsFailure(Utest* test, const char* fileName, int lineNumber, 
 
 static SimpleString StringFromOrNan(double d)
 {
-	if (d != d)
+	if (PlatformSpecificIsNan(d))
 		return "Nan - Not a number";
 	return StringFrom(d);
 }

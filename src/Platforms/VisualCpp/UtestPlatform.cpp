@@ -11,6 +11,7 @@
 #include <setjmp.h>
 #include <string.h>
 #include <math.h>
+#include <float.h>
 #include "CppUTest/PlatformSpecificFunctions.h"
 
 #include <windows.h>
