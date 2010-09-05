@@ -306,3 +306,28 @@ MockNamedValue MockSupport::returnValue()
 	return MockNamedValue("");
 }
 
+int MockSupport::intReturnValue()
+{
+	return returnValue().getIntValue();
+}
+
+const char* MockSupport::stringReturnValue()
+{
+	return returnValue().getStringValue();
+}
+
+double MockSupport::doubleReturnValue()
+{
+	return returnValue().getDoubleValue();
+}
+
+void* MockSupport::pointerReturnValue()
+{
+	return returnValue().getPointerValue();
+}
+
+bool MockSupport::hasReturnValue()
+{
+	if (lastActualFunctionCall_) return lastActualFunctionCall_->hasReturnValue();
+	return false;
+}

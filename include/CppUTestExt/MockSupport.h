@@ -47,7 +47,12 @@ public:
 
 	virtual MockFunctionCall& expectOneCall(const SimpleString& functionName);
 	virtual MockFunctionCall& actualCall(const SimpleString& functionName);
+	virtual bool hasReturnValue();
 	virtual MockNamedValue returnValue();
+	virtual int intReturnValue();
+	virtual const char* stringReturnValue();
+	virtual double doubleReturnValue();
+	virtual void* pointerReturnValue();
 
 	bool hasData(const SimpleString& name);
 	void setData(const SimpleString& name, int value);

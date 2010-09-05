@@ -296,6 +296,22 @@ TEST(MockSupportTest, calledWithoutParameters)
 
 }
 
+IGNORE_TEST(MockSupportTest, ignoreOtherParameters)
+{
+	mock().expectOneCall("foo").withParameter("p1", 1).ignoreOtherParameters();
+	mock().actualCall("foo").withParameter("p1", 1).withParameter("p2", 2);
+	mock().checkExpectations();
+	CHECK_NO_MOCK_FAILURE();
+}
+
+IGNORE_TEST(MockSupportTest, ignoreOtherParametersButExpectedParameterDidntHappen)
+{
+	mock().expectOneCall("foo").withParameter("p1", 1).ignoreOtherParameters();
+	mock().actualCall("foo").withParameter("p2", 2).withParameter("p3", 3).withParameter("p4", 4);
+	mock().checkExpectations();
+	CHECK_NO_MOCK_FAILURE();
+}
+
 TEST(MockSupportTest, newCallStartsWhileNotAllParametersWerePassed)
 {
 	addFunctionToExpectationsList("foo")->withParameter("p1", 1);
@@ -601,12 +617,24 @@ TEST(MockSupportTest, removeComparatorsWorksHierachically)
 	CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 
+TEST(MockSupportTest, hasReturnValue)
+{
+	CHECK(!mock().hasReturnValue());
+	mock().expectOneCall("foo");
+	CHECK(!mock().actualCall("foo").hasReturnValue());
+	CHECK(!mock().hasReturnValue());
+
+	mock().expectOneCall("foo2").andReturnValue(1);
+	CHECK(mock().actualCall("foo2").hasReturnValue());
+	CHECK(mock().hasReturnValue());
+}
 
 TEST(MockSupportTest, IntegerReturnValue)
 {
 	mock().expectOneCall("foo").andReturnValue(1);
 	LONGS_EQUAL(1, mock().actualCall("foo").returnValue().getIntValue());
 	LONGS_EQUAL(1, mock().returnValue().getIntValue());
+	LONGS_EQUAL(1, mock().intReturnValue());
 }
 
 TEST(MockSupportTest, IntegerReturnValueSetsDifferentValues)
@@ -624,12 +652,14 @@ TEST(MockSupportTest, StringReturnValue)
 {
 	mock().expectOneCall("foo").andReturnValue("hello world");
 	STRCMP_EQUAL("hello world", mock().actualCall("foo").returnValue().getStringValue());
+	STRCMP_EQUAL("hello world", mock().stringReturnValue());
 }
 
 TEST(MockSupportTest, DoubleReturnValue)
 {
 	mock().expectOneCall("foo").andReturnValue(1.0);
 	DOUBLES_EQUAL(1.0, mock().actualCall("foo").returnValue().getDoubleValue(), 0.05);
+	DOUBLES_EQUAL(1.0, mock().doubleReturnValue(), 0.05);
 }
 
 TEST(MockSupportTest, PointerReturnValue)
@@ -637,6 +667,7 @@ TEST(MockSupportTest, PointerReturnValue)
 	void* ptr = (void*) 0x001;
 	mock().expectOneCall("foo").andReturnValue(ptr);
 	POINTERS_EQUAL(ptr, mock().actualCall("foo").returnValue().getPointerValue());
+	POINTERS_EQUAL(ptr, mock().pointerReturnValue());
 }
 
 TEST(MockSupportTest, OnObject)

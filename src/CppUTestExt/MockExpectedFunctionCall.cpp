@@ -224,24 +224,28 @@ bool MockExpectedFunctionCall::MockExpectedFunctionParameter::isFulfilled() cons
 
 MockFunctionCall& MockExpectedFunctionCall::andReturnValue(int value)
 {
+	returnValue_.setName("returnValue");
 	returnValue_.setValue(value);
 	return *this;
 }
 
 MockFunctionCall& MockExpectedFunctionCall::andReturnValue(const char* value)
 {
+	returnValue_.setName("returnValue");
 	returnValue_.setValue(value);
 	return *this;
 }
 
 MockFunctionCall& MockExpectedFunctionCall::andReturnValue(double value)
 {
+	returnValue_.setName("returnValue");
 	returnValue_.setValue(value);
 	return *this;
 }
 
 MockFunctionCall& MockExpectedFunctionCall::andReturnValue(void* value)
 {
+	returnValue_.setName("returnValue");
 	returnValue_.setValue(value);
 	return *this;
 }
@@ -253,6 +257,10 @@ MockFunctionCall& MockExpectedFunctionCall::onObject(void* objectPtr)
 	return *this;
 }
 
+bool MockExpectedFunctionCall::hasReturnValue()
+{
+	return ! returnValue_.getName().isEmpty();
+}
 
 MockNamedValue MockExpectedFunctionCall::returnValue()
 {

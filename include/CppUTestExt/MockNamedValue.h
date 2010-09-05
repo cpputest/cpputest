@@ -79,6 +79,7 @@ public:
 	virtual void setObjectPointer(const SimpleString& type, void* objectPtr);
 
 	virtual void setComparator(MockNamedValueComparator* comparator);
+	virtual void setName(const char* name);
 
 	virtual bool equals(const MockNamedValue& p) const;
 

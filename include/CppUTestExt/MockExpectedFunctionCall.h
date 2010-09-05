@@ -51,6 +51,7 @@ public:
 	virtual MockFunctionCall& andReturnValue(double value);
 	virtual MockFunctionCall& andReturnValue(const char* value);
 	virtual MockFunctionCall& andReturnValue(void* value);
+	virtual bool hasReturnValue();
 	virtual MockNamedValue returnValue();
 
 	virtual MockFunctionCall& onObject(void* objectPtr);

@@ -221,6 +221,11 @@ MockNamedValue MockActualFunctionCall::returnValue()
 	return allExpectations_.returnValueForFunction(getName());
 }
 
+bool MockActualFunctionCall::hasReturnValue()
+{
+	return ! returnValue().getName().isEmpty();
+}
+
 MockFunctionCall& MockActualFunctionCall::onObject(void* objectPtr)
 {
 	unfulfilledExpectations_.onlyKeepUnfulfilledExpectationsOnObject(objectPtr);

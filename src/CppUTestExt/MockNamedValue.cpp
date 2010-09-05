@@ -69,6 +69,11 @@ void MockNamedValue::setObjectPointer(const SimpleString& type, void* objectPtr)
 	value_.objectPointerValue_ = objectPtr;
 }
 
+void MockNamedValue::setName(const char* name)
+{
+	name_ = name;
+}
+
 SimpleString MockNamedValue::getName() const
 {
 	return name_;
