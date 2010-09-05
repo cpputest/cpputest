@@ -232,6 +232,13 @@ size_t SimpleString::size() const
 	return PlatformSpecificStrLen(buffer_);
 }
 
+bool SimpleString::isEmpty() const
+{
+	return size() == 0;
+}
+
+
+
 SimpleString::~SimpleString()
 {
 	deallocStringBuffer(buffer_);
