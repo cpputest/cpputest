@@ -300,6 +300,7 @@ TEST(Utest, AssertsActLikeStatements)
 	else
 	FAIL("")
 
+	SUCCESS();
 }
 
 IGNORE_TEST(Utest, IgnoreTestSupportsAllMacros)
