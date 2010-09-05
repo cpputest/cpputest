@@ -34,7 +34,7 @@ SimpleString StringFrom(const MockNamedValue& parameter)
 }
 
 MockExpectedFunctionCall::MockExpectedFunctionCall()
-	: wasCallMade_(true), returnValue_(""), objectPtr_(NULL), wasPassedToObject_(true)
+	: ignoreOtherParameters_(false), parametersWereIgnored_(false), wasCallMade_(true), returnValue_(""), objectPtr_(NULL), wasPassedToObject_(true)
 {
 	parameters_ = new MockNamedValueList();
 }
@@ -119,15 +119,39 @@ bool MockExpectedFunctionCall::areParametersFulfilled()
 	return true;
 }
 
+bool MockExpectedFunctionCall::areIgnoredParametersFulfilled()
+{
+	if (ignoreOtherParameters_)
+		return parametersWereIgnored_;
+	return true;
+}
+
+void MockExpectedFunctionCall::ignoreOtherParameters()
+{
+	ignoreOtherParameters_ = true;
+}
+
 bool MockExpectedFunctionCall::isFulfilled()
 {
-	return wasCallMade_ && areParametersFulfilled() && wasPassedToObject_;;
+	return isFulfilledWithoutIgnoredParameters() && areIgnoredParametersFulfilled();
 }
+
+bool MockExpectedFunctionCall::isFulfilledWithoutIgnoredParameters()
+{
+	return wasCallMade_ && areParametersFulfilled() && wasPassedToObject_;
+}
+
 
 void MockExpectedFunctionCall::callWasMade()
 {
 	wasCallMade_ = true;
 }
+
+void MockExpectedFunctionCall::parametersWereIgnored()
+{
+	parametersWereIgnored_ = true;
+}
+
 
 void MockExpectedFunctionCall::wasPassedToObject()
 {
@@ -147,7 +171,6 @@ void MockExpectedFunctionCall::parameterWasPassed(const SimpleString& name)
 	for (MockNamedValueListNode* p = parameters_->begin(); p; p = p->next()) {
 		if (p->getName() == name)
 			item(p)->setFulfilled(true);
-
 	}
 }
 
@@ -160,7 +183,7 @@ SimpleString MockExpectedFunctionCall::getParameterValueString(const SimpleStrin
 bool MockExpectedFunctionCall::hasParameter(const MockNamedValue& parameter)
 {
 	MockNamedValue * p = parameters_->getValueByName(parameter.getName());
-	return (p) ? p->equals(parameter) : false;
+	return (p) ? p->equals(parameter) : ignoreOtherParameters_;
 }
 
 SimpleString MockExpectedFunctionCall::callToString()

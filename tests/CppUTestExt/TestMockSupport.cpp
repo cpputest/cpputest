@@ -296,7 +296,7 @@ TEST(MockSupportTest, calledWithoutParameters)
 
 }
 
-IGNORE_TEST(MockSupportTest, ignoreOtherParameters)
+TEST(MockSupportTest, ignoreOtherParameters)
 {
 	mock().expectOneCall("foo").withParameter("p1", 1).ignoreOtherParameters();
 	mock().actualCall("foo").withParameter("p1", 1).withParameter("p2", 2);
@@ -304,12 +304,23 @@ IGNORE_TEST(MockSupportTest, ignoreOtherParameters)
 	CHECK_NO_MOCK_FAILURE();
 }
 
-IGNORE_TEST(MockSupportTest, ignoreOtherParametersButExpectedParameterDidntHappen)
+TEST(MockSupportTest, ignoreOtherParametersButStillPassAll)
 {
+	mock().expectOneCall("foo").withParameter("p1", 1).ignoreOtherParameters();
+	mock().actualCall("foo").withParameter("p1", 1);
+	mock().checkExpectations();
+	CHECK_NO_MOCK_FAILURE();
+}
+
+TEST(MockSupportTest, ignoreOtherParametersButExpectedParameterDidntHappen)
+{
+	addFunctionToExpectationsList("foo")->withParameter("p1", 1);
+	MockExpectedParameterDidntHappenFailure expectedFailure(mockFailureTest(), "foo", *expectationsList);
+
 	mock().expectOneCall("foo").withParameter("p1", 1).ignoreOtherParameters();
 	mock().actualCall("foo").withParameter("p2", 2).withParameter("p3", 3).withParameter("p4", 4);
 	mock().checkExpectations();
-	CHECK_NO_MOCK_FAILURE();
+	CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 
 TEST(MockSupportTest, newCallStartsWhileNotAllParametersWerePassed)

@@ -46,6 +46,7 @@ public:
 	virtual MockFunctionCall& withParameter(const SimpleString& name, const char* value);
 	virtual MockFunctionCall& withParameter(const SimpleString& name, void* value);
 	virtual MockFunctionCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, void* value);
+	virtual void ignoreOtherParameters();
 
 	virtual MockFunctionCall& andReturnValue(int value);
 	virtual MockFunctionCall& andReturnValue(double value);
@@ -66,10 +67,13 @@ public:
 	virtual bool relatesToObject(void*objectPtr) const;
 
 	virtual bool isFulfilled();
+	virtual bool isFulfilledWithoutIgnoredParameters();
 	virtual bool areParametersFulfilled();
+	virtual bool areIgnoredParametersFulfilled();
 
 	virtual void callWasMade();
 	virtual void parameterWasPassed(const SimpleString& name);
+	virtual void parametersWereIgnored();
 	virtual void wasPassedToObject();
 	virtual void resetExpectation();
 
@@ -91,6 +95,8 @@ private:
 
 	MockExpectedFunctionParameter* item(MockNamedValueListNode* node);
 
+	bool ignoreOtherParameters_;
+	bool parametersWereIgnored_;
 	bool wasCallMade_;
 	MockNamedValueList* parameters_;
 	MockNamedValue returnValue_;
