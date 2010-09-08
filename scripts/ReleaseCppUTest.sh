@@ -1,6 +1,11 @@
 #/bin/sh -x
 #source in release generator script
 
+if [ ! -d "scripts" ]; then
+  echo "You have to run this script from the CPPUTEST_HOME directory!";
+  exit
+fi
+
 GENERATED_FILES=""
 release_dir=Releases
 scripts_dir=scripts
