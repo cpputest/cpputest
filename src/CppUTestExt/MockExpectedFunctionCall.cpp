@@ -194,12 +194,17 @@ SimpleString MockExpectedFunctionCall::callToString()
 
 	str += getName();
 	str += " -> ";
-	if (parameters_->begin() == NULL)
-		str += "no parameters";
+	if (parameters_->begin() == NULL) {
+		str += (ignoreOtherParameters_) ? "all parameters ignored" : "no parameters";
+		return str;
+	}
+
 	for (MockNamedValueListNode* p = parameters_->begin(); p; p = p->next()) {
 		str += StringFromFormat("%s %s: <%s>", p->getType().asCharString(), p->getName().asCharString(), getParameterValueString(p->getName()).asCharString());
 		if (p->next()) str += ", ";
 	}
+	if (ignoreOtherParameters_)
+		str += ", other parameters are ignored";
 	return str;
 }
 

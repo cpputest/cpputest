@@ -314,7 +314,7 @@ TEST(MockSupportTest, ignoreOtherParametersButStillPassAll)
 
 TEST(MockSupportTest, ignoreOtherParametersButExpectedParameterDidntHappen)
 {
-	addFunctionToExpectationsList("foo")->withParameter("p1", 1);
+	addFunctionToExpectationsList("foo")->withParameter("p1", 1).ignoreOtherParameters();
 	MockExpectedParameterDidntHappenFailure expectedFailure(mockFailureTest(), "foo", *expectationsList);
 
 	mock().expectOneCall("foo").withParameter("p1", 1).ignoreOtherParameters();
