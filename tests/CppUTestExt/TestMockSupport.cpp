@@ -770,5 +770,4 @@ TEST(MockSupportTest, tracing)
 
 	STRCMP_CONTAINS("boo", mock().getTraceOutput());
 	STRCMP_CONTAINS("foo", mock().getTraceOutput());
-	UT_PRINT(mock().getTraceOutput());
 }
