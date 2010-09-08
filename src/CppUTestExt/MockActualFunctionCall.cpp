@@ -163,8 +163,7 @@ void MockActualFunctionCall::checkExpectations()
 	if (! unfulfilledExpectations_.hasUnfullfilledExpectations())
 		FAIL("Actual call is in progress. Checking expectations. But no unfulfilled expectations. Cannot happen.")
 
-	unfulfilledExpectations_.removeOneFulfilledExpectationWithIgnoredParameters();
-	if (! unfulfilledExpectations_.hasUnfullfilledExpectations()) {
+	if (unfulfilledExpectations_.removeOneFulfilledExpectationWithIgnoredParameters()) {
 		callHasSucceeded();
 		return;
 	}

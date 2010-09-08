@@ -196,16 +196,19 @@ void MockExpectedFunctionsList::removeOneFulfilledExpectation()
 	pruneEmptyNodeFromList();
 }
 
-void MockExpectedFunctionsList::removeOneFulfilledExpectationWithIgnoredParameters()
+bool MockExpectedFunctionsList::removeOneFulfilledExpectationWithIgnoredParameters()
 {
+	bool foundOneIgnoredParameterExpectedFunction = false;
 	for (MockExpectedFunctionsListNode* p = head_; p; p = p->next_) {
 		if (p->expectedCall_->isFulfilledWithoutIgnoredParameters()) {
 			p->expectedCall_->parametersWereIgnored();
 			p->expectedCall_ = NULL;
+			foundOneIgnoredParameterExpectedFunction = true;
 			break;
 		}
 	}
 	pruneEmptyNodeFromList();
+	return foundOneIgnoredParameterExpectedFunction;
 }
 
 

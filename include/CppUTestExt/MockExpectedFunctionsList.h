@@ -63,7 +63,7 @@ public:
 	virtual void onlyKeepUnfulfilledExpectationsOnObject(void* objectPtr);
 
 	virtual void removeOneFulfilledExpectation();
-	virtual void removeOneFulfilledExpectationWithIgnoredParameters();
+	virtual bool removeOneFulfilledExpectationWithIgnoredParameters();
 
 	virtual void resetExpectations();
 	virtual void callWasMade();
