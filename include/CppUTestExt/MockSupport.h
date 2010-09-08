@@ -46,6 +46,7 @@ public:
 	virtual ~MockSupport();
 
 	virtual MockFunctionCall& expectOneCall(const SimpleString& functionName);
+	virtual MockFunctionCall& expectNCalls(int amount, const SimpleString& functionName);
 	virtual MockFunctionCall& actualCall(const SimpleString& functionName);
 	virtual bool hasReturnValue();
 	virtual MockNamedValue returnValue();
@@ -64,6 +65,7 @@ public:
 
 	MockSupport* getMockSupportScope(const SimpleString& name);
 
+	const char* getTraceOutput();
 	/*
 	 * The following functions are recursively through the lower MockSupports scopes
 	 * This means, if you do mock().disable() it will disable *all* mocking scopes, including mock("myScope").
@@ -71,6 +73,7 @@ public:
 
 	virtual void disable();
     virtual void enable();
+    virtual void tracing(bool enabled);
 	virtual void ignoreOtherCalls();
 
     virtual void checkExpectations();
@@ -94,8 +97,11 @@ private:
     bool ignoreOtherCalls_;
     bool enabled_;
     MockActualFunctionCall *lastActualFunctionCall_;
+	MockFunctionCallComposite compositeCalls_;
     MockNamedValueComparatorRepository comparatorRepository_;
     MockNamedValueList data_;
+
+    bool tracing_;
 
     void checkExpectationsOfLastCall();
     bool wasLastCallFulfilled();

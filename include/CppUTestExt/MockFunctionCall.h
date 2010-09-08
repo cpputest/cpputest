@@ -71,6 +71,36 @@ private:
 	MockNamedValueComparatorRepository* comparatorRepository_;
 };
 
+struct MockFunctionCallCompositeNode;
+class MockFunctionCallComposite : public MockFunctionCall
+{
+public:
+	MockFunctionCallComposite();
+	virtual ~MockFunctionCallComposite();
+
+	virtual MockFunctionCall& withName(const SimpleString&);
+	virtual MockFunctionCall& withParameter(const SimpleString&, int);
+	virtual MockFunctionCall& withParameter(const SimpleString&, double);
+	virtual MockFunctionCall& withParameter(const SimpleString&, const char*);
+	virtual MockFunctionCall& withParameter(const SimpleString& , void*);
+	virtual MockFunctionCall& withParameterOfType(const SimpleString&, const SimpleString&, void*);
+	virtual void ignoreOtherParameters();
+
+	virtual MockFunctionCall& andReturnValue(int);
+	virtual MockFunctionCall& andReturnValue(double);
+	virtual MockFunctionCall& andReturnValue(const char*);
+	virtual MockFunctionCall& andReturnValue(void*);
+	virtual bool hasReturnValue();
+	virtual MockNamedValue returnValue();
+
+	virtual MockFunctionCall& onObject(void* );
+
+	virtual void add(MockFunctionCall& call);
+	virtual void clear();
+private:
+	MockFunctionCallCompositeNode* head_;
+};
+
 class MockIgnoredCall : public MockFunctionCall
 {
 public:
@@ -91,6 +121,37 @@ public:
 	virtual MockFunctionCall& onObject(void* ) { return *this; }
 
 	static MockFunctionCall& instance() { static MockIgnoredCall call; return call; };
+};
+
+class MockFunctionCallTrace : public MockFunctionCall
+{
+public:
+	MockFunctionCallTrace();
+	virtual ~MockFunctionCallTrace();
+
+	virtual MockFunctionCall& withName(const SimpleString& name);
+	virtual MockFunctionCall& withParameter(const SimpleString& name, int value);
+	virtual MockFunctionCall& withParameter(const SimpleString& name, double value);
+	virtual MockFunctionCall& withParameter(const SimpleString& name, const char* value);
+	virtual MockFunctionCall& withParameter(const SimpleString& name, void* value);
+	virtual MockFunctionCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, void* value);
+	virtual void ignoreOtherParameters();
+
+	virtual MockFunctionCall& andReturnValue(int value);
+	virtual MockFunctionCall& andReturnValue(double value);
+	virtual MockFunctionCall& andReturnValue(const char* value);
+	virtual MockFunctionCall& andReturnValue(void* value);
+	virtual bool hasReturnValue();
+	virtual MockNamedValue returnValue();
+
+	virtual MockFunctionCall& onObject(void* objectPtr);
+
+	const char* getTraceOutput();
+	void clear();
+	static MockFunctionCallTrace& instance();
+
+private:
+	SimpleString traceBuffer_;
 };
 
 #endif

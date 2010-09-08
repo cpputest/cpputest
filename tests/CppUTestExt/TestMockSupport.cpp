@@ -729,3 +729,46 @@ TEST(MockSupportTest, OnObjectExpectedButNotCalled)
 	mock().checkExpectations();
 	CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
+
+TEST(MockSupportTest, expectMultipleCalls)
+{
+	mock().expectNCalls(2, "boo");
+	mock().actualCall("boo");
+	mock().actualCall("boo");
+	mock().checkExpectations();
+	CHECK_NO_MOCK_FAILURE();
+}
+
+TEST(MockSupportTest, expectMultipleCallsWithParameters)
+{
+	mock().expectNCalls(2, "boo").withParameter("double", 1.0).withParameter("int", 1).withParameter("string", "string");
+	mock().actualCall("boo").withParameter("double", 1.0).withParameter("int", 1).withParameter("string", "string");
+	mock().actualCall("boo").withParameter("double", 1.0).withParameter("int", 1).withParameter("string", "string");
+	mock().checkExpectations();
+	CHECK_NO_MOCK_FAILURE();
+}
+
+TEST(MockSupportTest, expectMultipleMultipleCallsWithParameters)
+{
+	mock().expectNCalls(2, "boo").withParameter("double", 1.0).ignoreOtherParameters();
+	mock().expectNCalls(2, "boo").withParameter("double", 1.0).ignoreOtherParameters();
+	mock().actualCall("boo").withParameter("double", 1.0).withParameter("int", 1).withParameter("string", "string");
+	mock().actualCall("boo").withParameter("double", 1.0).withParameter("int", 1).withParameter("string", "string");
+	mock().actualCall("boo").withParameter("double", 1.0).withParameter("int", 1).withParameter("string", "string");
+	mock().actualCall("boo").withParameter("double", 1.0).withParameter("int", 1).withParameter("string", "string");
+	mock().checkExpectations();
+	CHECK_NO_MOCK_FAILURE();
+}
+
+TEST(MockSupportTest, tracing)
+{
+	mock().tracing(true);
+
+	mock().actualCall("boo").withParameter("double", 1.0).withParameter("int", 1).withParameter("string", "string");
+	mock("scope").actualCall("foo").withParameter("double", 1.0).withParameter("int", 1).withParameter("string", "string");
+	mock().checkExpectations();
+
+	STRCMP_CONTAINS("boo", mock().getTraceOutput());
+	STRCMP_CONTAINS("foo", mock().getTraceOutput());
+	UT_PRINT(mock().getTraceOutput());
+}

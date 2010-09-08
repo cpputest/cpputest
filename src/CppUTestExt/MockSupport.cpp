@@ -43,7 +43,7 @@ MockSupport& mock(const SimpleString& mockName)
 }
 
 MockSupport::MockSupport()
-	: reporter_(&defaultReporter_), ignoreOtherCalls_(false), enabled_(true), lastActualFunctionCall_(NULL)
+	: reporter_(&defaultReporter_), ignoreOtherCalls_(false), enabled_(true), lastActualFunctionCall_(NULL), tracing_(false)
 {
 }
 
@@ -95,7 +95,11 @@ void MockSupport::clear()
 	delete lastActualFunctionCall_;
 	lastActualFunctionCall_ = NULL;
 
+	tracing_ = false;
+	MockFunctionCallTrace::instance().clear();
+
 	expectations_.deleteAllExpectationsAndClearList();
+	compositeCalls_.clear();
 	ignoreOtherCalls_ = false;
 	enabled_ = true;
 
@@ -120,6 +124,16 @@ MockFunctionCall& MockSupport::expectOneCall(const SimpleString& functionName)
 	return *call;
 }
 
+MockFunctionCall& MockSupport::expectNCalls(int amount, const SimpleString& functionName)
+{
+	compositeCalls_.clear();
+
+	for (int i = 0; i < amount; i++)
+		compositeCalls_.add(expectOneCall(functionName));
+	return compositeCalls_;
+}
+
+
 MockActualFunctionCall* MockSupport::createActualFunctionCall()
 {
 	if (lastActualFunctionCall_) delete lastActualFunctionCall_;
@@ -131,6 +145,7 @@ MockActualFunctionCall* MockSupport::createActualFunctionCall()
 MockFunctionCall& MockSupport::actualCall(const SimpleString& functionName)
 {
 	if (!enabled_) return MockIgnoredCall::instance();
+	if (tracing_) return MockFunctionCallTrace::instance().withName(functionName);
 
 	if (lastActualFunctionCall_) lastActualFunctionCall_->checkExpectations();
 
@@ -166,6 +181,19 @@ void MockSupport::enable()
 
 	for (MockNamedValueListNode* p = data_.begin(); p; p = p->next())
 		if (getMockSupport(p)) getMockSupport(p)->enable();
+}
+
+void MockSupport::tracing(bool enabled)
+{
+	tracing_ = enabled;
+
+	for (MockNamedValueListNode* p = data_.begin(); p; p = p->next())
+		if (getMockSupport(p)) getMockSupport(p)->tracing(enabled);
+}
+
+const char* MockSupport::getTraceOutput()
+{
+	return MockFunctionCallTrace::instance().getTraceOutput();
 }
 
 bool MockSupport::expectedCallsLeft()
@@ -287,6 +315,7 @@ MockSupport* MockSupport::getMockSupportScope(const SimpleString& name)
 	newMock->setMockFailureReporter(reporter_);
 	if (ignoreOtherCalls_) newMock->ignoreOtherCalls();
 	if (!enabled_) newMock->disable();
+	newMock->tracing(tracing_);
 	newMock->installComparators(comparatorRepository_);
 
 	setDataObject(mockingSupportName, "MockSupport", newMock);

@@ -178,10 +178,21 @@ void MockActualFunctionCall::checkExpectations()
 	}
 }
 
+const char* MockActualFunctionCall::stringFromState(ActualCallState state)
+{
+	switch (state) {
+	case CALL_IN_PROGESS: return "In progress";
+	case CALL_FAILED: return "Failed";
+	case CALL_SUCCEED: return "Succeed";
+	default: ;
+	}
+	return "No valid state info";
+}
+
 void MockActualFunctionCall::checkStateConsistency(ActualCallState oldState, ActualCallState newState)
 {
 	if (oldState == newState)
-		FAIL(StringFromFormat("State change to the same state: %d.", newState).asCharString());
+		FAIL(StringFromFormat("State change to the same state: %s.", stringFromState(newState)).asCharString());
 	if (oldState == CALL_FAILED)
 		FAIL("State was already failed. Cannot change state again.");
 }

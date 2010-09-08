@@ -74,6 +74,7 @@ protected:
 		CALL_FAILED,
 		CALL_SUCCEED
 	};
+	virtual const char* stringFromState(ActualCallState state);
 	virtual void setState(ActualCallState state);
 	virtual void checkStateConsistency(ActualCallState oldState, ActualCallState newState);
 

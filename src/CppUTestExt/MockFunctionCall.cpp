@@ -59,3 +59,249 @@ MockNamedValueComparator* MockFunctionCall::getComparatorForType(const SimpleStr
 	return NULL;
 }
 
+struct MockFunctionCallCompositeNode
+{
+	MockFunctionCallCompositeNode(MockFunctionCall& functionCall, MockFunctionCallCompositeNode* next) : next_(next), call_(functionCall){}
+
+	MockFunctionCallCompositeNode* next_;
+	MockFunctionCall& call_;
+};
+
+MockFunctionCallComposite::MockFunctionCallComposite() : head_(NULL)
+{
+}
+
+MockFunctionCallComposite::~MockFunctionCallComposite()
+{
+
+}
+
+void MockFunctionCallComposite::add(MockFunctionCall& call)
+{
+	head_ = new MockFunctionCallCompositeNode(call, head_);
+}
+
+void MockFunctionCallComposite::clear()
+{
+	while (head_) {
+		MockFunctionCallCompositeNode* next = head_->next_;
+		delete head_;
+		head_ = next;
+	}
+}
+
+MockFunctionCall& MockFunctionCallComposite::withName(const SimpleString& name)
+{
+	for (MockFunctionCallCompositeNode* node = head_; node != NULL; node = node->next_)
+		node->call_.withName(name);
+	return *this;
+}
+
+MockFunctionCall& MockFunctionCallComposite::withParameter(const SimpleString& name, int value)
+{
+	for (MockFunctionCallCompositeNode* node = head_; node != NULL; node = node->next_)
+		node->call_.withParameter(name, value);
+	return *this;
+}
+
+MockFunctionCall& MockFunctionCallComposite::withParameter(const SimpleString& name, double value)
+{
+	for (MockFunctionCallCompositeNode* node = head_; node != NULL; node = node->next_)
+		node->call_.withParameter(name, value);
+	return *this;
+
+}
+
+MockFunctionCall& MockFunctionCallComposite::withParameter(const SimpleString& name, const char* value)
+{
+	for (MockFunctionCallCompositeNode* node = head_; node != NULL; node = node->next_)
+		node->call_.withParameter(name, value);
+	return *this;
+}
+
+MockFunctionCall& MockFunctionCallComposite::withParameter(const SimpleString& name, void* value)
+{
+	for (MockFunctionCallCompositeNode* node = head_; node != NULL; node = node->next_)
+		node->call_.withParameter(name, value);
+	return *this;
+}
+
+MockFunctionCall& MockFunctionCallComposite::withParameterOfType(const SimpleString& typeName, const SimpleString& name, void* value)
+{
+	for (MockFunctionCallCompositeNode* node = head_; node != NULL; node = node->next_)
+		node->call_.withParameterOfType(typeName, name, value);
+	return *this;
+
+}
+
+void MockFunctionCallComposite::ignoreOtherParameters()
+{
+	for (MockFunctionCallCompositeNode* node = head_; node != NULL; node = node->next_)
+		node->call_.ignoreOtherParameters();
+}
+
+MockFunctionCall& MockFunctionCallComposite::andReturnValue(int value)
+{
+	for (MockFunctionCallCompositeNode* node = head_; node != NULL; node = node->next_)
+		node->call_.andReturnValue(value);
+	return *this;
+}
+
+MockFunctionCall& MockFunctionCallComposite::MockFunctionCallComposite::andReturnValue(double value)
+{
+	for (MockFunctionCallCompositeNode* node = head_; node != NULL; node = node->next_)
+		node->call_.andReturnValue(value);
+	return *this;
+}
+
+MockFunctionCall& MockFunctionCallComposite::andReturnValue(const char* value)
+{
+	for (MockFunctionCallCompositeNode* node = head_; node != NULL; node = node->next_)
+		node->call_.andReturnValue(value);
+	return *this;
+}
+
+MockFunctionCall& MockFunctionCallComposite::andReturnValue(void* value)
+{
+	for (MockFunctionCallCompositeNode* node = head_; node != NULL; node = node->next_)
+		node->call_.andReturnValue(value);
+	return *this;
+}
+
+bool MockFunctionCallComposite::hasReturnValue()
+{
+	return head_->call_.hasReturnValue();
+}
+
+MockNamedValue MockFunctionCallComposite::returnValue()
+{
+	return head_->call_.returnValue();
+}
+
+MockFunctionCall& MockFunctionCallComposite::onObject(void* object)
+{
+	for (MockFunctionCallCompositeNode* node = head_; node != NULL; node = node->next_)
+		node->call_.onObject(object);
+	return *this;
+}
+
+
+MockFunctionCallTrace::MockFunctionCallTrace()
+{
+}
+
+MockFunctionCallTrace::~MockFunctionCallTrace()
+{
+}
+
+MockFunctionCall& MockFunctionCallTrace::withName(const SimpleString& name)
+{
+	traceBuffer_ += "\nFunction name: ";
+	traceBuffer_ += name;
+	return *this;
+}
+
+MockFunctionCall& MockFunctionCallTrace::withParameter(const SimpleString& name, int value)
+{
+	traceBuffer_ += " ";
+	traceBuffer_ += name;
+	traceBuffer_ += ":";
+	traceBuffer_ += StringFrom(value);
+	return *this;
+}
+
+MockFunctionCall& MockFunctionCallTrace::withParameter(const SimpleString& name, double value)
+{
+	traceBuffer_ += " ";
+	traceBuffer_ += name;
+	traceBuffer_ += ":";
+	traceBuffer_ += StringFrom(value);
+	return *this;
+}
+
+MockFunctionCall& MockFunctionCallTrace::withParameter(const SimpleString& name, const char* value)
+{
+	traceBuffer_ += " ";
+	traceBuffer_ += name;
+	traceBuffer_ += ":";
+	traceBuffer_ += StringFrom(value);
+	return *this;
+}
+
+MockFunctionCall& MockFunctionCallTrace::withParameter(const SimpleString& name, void* value)
+{
+	traceBuffer_ += " ";
+	traceBuffer_ += name;
+	traceBuffer_ += ":";
+	traceBuffer_ += StringFrom(value);
+	return *this;
+}
+
+MockFunctionCall& MockFunctionCallTrace::withParameterOfType(const SimpleString& typeName, const SimpleString& name, void* value)
+{
+	traceBuffer_ += " ";
+	traceBuffer_ += typeName;
+	traceBuffer_ += " ";
+	traceBuffer_ += name;
+	traceBuffer_ += ":";
+	traceBuffer_ += StringFrom(value);
+	return *this;
+}
+
+void MockFunctionCallTrace::ignoreOtherParameters()
+{
+}
+
+MockFunctionCall& MockFunctionCallTrace::andReturnValue(int)
+{
+	return *this;
+}
+
+MockFunctionCall& MockFunctionCallTrace::andReturnValue(double)
+{
+	return *this;
+}
+
+MockFunctionCall& MockFunctionCallTrace::andReturnValue(const char*)
+{
+	return *this;
+}
+
+MockFunctionCall& MockFunctionCallTrace::andReturnValue(void*)
+{
+	return *this;
+}
+
+bool MockFunctionCallTrace::hasReturnValue()
+{
+	return false;
+}
+
+MockNamedValue MockFunctionCallTrace::returnValue()
+{
+	return MockNamedValue("");
+}
+
+MockFunctionCall& MockFunctionCallTrace::onObject(void* objectPtr)
+{
+	traceBuffer_ += StringFrom(objectPtr);
+	return *this;
+}
+
+void MockFunctionCallTrace::clear()
+{
+	traceBuffer_ = "";
+}
+
+const char* MockFunctionCallTrace::getTraceOutput()
+{
+	return traceBuffer_.asCharString();
+}
+
+MockFunctionCallTrace& MockFunctionCallTrace::instance()
+{
+	static MockFunctionCallTrace call;
+	return call;
+}
+
+

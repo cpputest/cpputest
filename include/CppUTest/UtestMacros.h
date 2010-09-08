@@ -178,6 +178,7 @@
 #define UT_PRINT(text) \
    UT_PRINT_LOCATION(text, __FILE__, __LINE__)
 
+#define UT_CRASH() { UT_PRINT("Going to crash here\n"); Utest* ptr = (Utest*) 0x0; ptr->countTests(); }
 #define RUN_ALL_TESTS(ac, av) CommandLineTestRunner::RunAllTests(ac, av)
 
 #endif /*D_UTestMacros_h*/
