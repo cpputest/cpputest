@@ -115,6 +115,7 @@ endif
 
 ifeq ($(CPPUTEST_ENABLE_DEBUG), Y)
 	CPPUTEST_CPPFLAGS += -g
+	CPPUTEST_CFLAGS += -g
 endif
 
 ifeq ($(CPPUTEST_USE_STD_CPP_LIB), N)
@@ -124,6 +125,7 @@ endif
 
 ifeq ($(CPPUTEST_USE_GCOV), Y)
 	CPPUTEST_CPPFLAGS += -fprofile-arcs -ftest-coverage
+	CPPUTEST_CFLAGS += -fprofile-arcs -ftest-coverage
 endif
 
 CPPUTEST_CPPFLAGS += $(CPPUTEST_WARNINGFLAGS)
@@ -160,6 +162,7 @@ src_to_o = $(call src_to,.o,$1)
 src_to_d = $(call src_to,.d,$1)
 src_to_gcda = $(call src_to,.gcda,$1)
 src_to_gcno = $(call src_to,.gcno,$1)
+make_dotdot_a_subdir = $(subst ..,_dot_dot, $1)
 time = $(shell date +%s)
 delta_t = $(eval minus, $1, $2)
 debug_print_list = $(foreach word,$1,echo "  $(word)";) echo;
@@ -247,6 +250,8 @@ flags:
 	@$(call debug_print_list,$(CFLAGS))
 	@echo "Link with LDFLAGS:"
 	@$(call debug_print_list,$(LDFLAGS))
+	@echo "Link with LD_LIBRARIES:"
+	@$(call debug_print_list,$(LD_LIBRARIES))
 	@echo "Create libraries with ARFLAGS:"
 	@$(call debug_print_list,$(ARFLAGS))
 	
