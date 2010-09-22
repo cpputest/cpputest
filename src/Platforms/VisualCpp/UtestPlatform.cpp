@@ -1,3 +1,4 @@
+#include "Platform.h"
 #include <stdlib.h>
 #include "CppUTest/TestHarness.h"
 #undef malloc
