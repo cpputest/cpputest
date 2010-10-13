@@ -299,8 +299,6 @@ TEST(Utest, AssertsActLikeStatements)
 	if (true) ;
 	else
 	FAIL("")
-
-	SUCCESS();
 }
 
 IGNORE_TEST(Utest, IgnoreTestSupportsAllMacros)

@@ -162,10 +162,6 @@
   { Utest::getCurrent()->fail(text,  file, line); Utest::getCurrent()->exitCurrentTest(); }
 #endif
 
-#ifndef SUCCESS
-#define SUCCESS() CHECK(1)
-#endif
-
 #define FAIL_TEST(text)\
   FAIL_TEST_LOCATION(text, __FILE__,__LINE__)
 
