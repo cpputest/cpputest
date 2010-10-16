@@ -40,6 +40,11 @@
 #   CPPUTEST_WARNINGFLAGS - overly picky by default
 #	OTHER_MAKEFILE_TO_INCLUDE - a hook to use this makefile to make 
 #		other targets. Like CSlim, which is part of fitnesse
+#	CPPUTEST_USE_VPATH - Use Make's VPATH functionality to support user 
+#		specification of source files and directories that aren't below 
+#		the user's Makefile in the directory tree, like:
+#			SRC_DIRS += ../../lib/foo
+#		It defaults to N, and shouldn't be necessary except in the above case.
 #----------
 #
 #  Other flags users can initialize to sneak in their settings
@@ -99,6 +104,15 @@ ifndef CPPUTEST_USE_EXTENSIONS
 	CPPUTEST_USE_EXTENSIONS = N
 endif
 
+# No VPATH is default
+ifndef CPPUTEST_USE_VPATH
+	CPPUTEST_USE_VPATH := N
+endif
+# Make empty, instead of 'N', for usage in $(if ) conditionals
+ifneq ($(CPPUTEST_USE_VPATH), Y)
+	CPPUTEST_USE_VPATH := 
+endif
+
 # --------------------------------------
 # derived flags in the following area
 # --------------------------------------
@@ -115,7 +129,6 @@ endif
 
 ifeq ($(CPPUTEST_ENABLE_DEBUG), Y)
 	CPPUTEST_CPPFLAGS += -g
-	CPPUTEST_CFLAGS += -g
 endif
 
 ifeq ($(CPPUTEST_USE_STD_CPP_LIB), N)
@@ -125,7 +138,6 @@ endif
 
 ifeq ($(CPPUTEST_USE_GCOV), Y)
 	CPPUTEST_CPPFLAGS += -fprofile-arcs -ftest-coverage
-	CPPUTEST_CFLAGS += -fprofile-arcs -ftest-coverage
 endif
 
 CPPUTEST_CPPFLAGS += $(CPPUTEST_WARNINGFLAGS)
@@ -156,13 +168,12 @@ TEST_TARGET = \
 get_src_from_dir  = $(wildcard $1/*.cpp) $(wildcard $1/*.c)
 get_dirs_from_dirspec  = $(wildcard $1)
 get_src_from_dir_list = $(foreach dir, $1, $(call get_src_from_dir,$(dir)))
-__src_to = $(subst .c,$1, $(subst .cpp,$1,$2))
+__src_to = $(subst .c,$1, $(subst .cpp,$1,$(if $(CPPUTEST_USE_VPATH),$(notdir $2),$2)))
 src_to = $(addprefix $(CPPUTEST_OBJS_DIR)/,$(call __src_to,$1,$2))
 src_to_o = $(call src_to,.o,$1)
 src_to_d = $(call src_to,.d,$1)
 src_to_gcda = $(call src_to,.gcda,$1)
 src_to_gcno = $(call src_to,.gcno,$1)
-make_dotdot_a_subdir = $(subst ..,_dot_dot, $1)
 time = $(shell date +%s)
 delta_t = $(eval minus, $1, $2)
 debug_print_list = $(foreach word,$1,echo "  $(word)";) echo;
@@ -185,6 +196,14 @@ MOCKS_OBJS = $(call src_to_o,$(MOCKS_SRC))
 STUFF_TO_CLEAN += $(MOCKS_OBJS)
 
 ALL_SRC = $(SRC) $(TEST_SRC) $(MOCKS_SRC)
+
+# If we're using VPATH
+ifeq ($(CPPUTEST_USE_VPATH), Y)
+	# gather all the source directories and add them
+	VPATH += $(sort $(dir $(ALL_SRC)))
+	# Add the component name to the objs dir path, to differentiate between same-name objects
+	CPPUTEST_OBJS_DIR := $(addsuffix /$(COMPONENT_NAME),$(CPPUTEST_OBJS_DIR))
+endif
 
 #Test coverage with gcov
 GCOV_OUTPUT = gcov_output.txt
@@ -250,8 +269,6 @@ flags:
 	@$(call debug_print_list,$(CFLAGS))
 	@echo "Link with LDFLAGS:"
 	@$(call debug_print_list,$(LDFLAGS))
-	@echo "Link with LD_LIBRARIES:"
-	@$(call debug_print_list,$(LD_LIBRARIES))
 	@echo "Create libraries with ARFLAGS:"
 	@$(call debug_print_list,$(ARFLAGS))
 	
@@ -275,12 +292,14 @@ vtest: $(TEST_TARGET)
 $(CPPUTEST_OBJS_DIR)/%.o: %.cpp
 	@echo compiling $(notdir $<)
 	$(SILENCE)mkdir -p $(dir $@)
-	$(SILENCE)$(COMPILE.cpp) -MMD -MP $(OUTPUT_OPTION) $<
+	$(SILENCE)$(COMPILE.cpp) -M -MF $(subst .o,.d,$@) -MT "$@ $(subst .o,.d,$@)" $<
+	$(SILENCE)$(COMPILE.cpp) $(OUTPUT_OPTION) $<
 
 $(CPPUTEST_OBJS_DIR)/%.o: %.c
 	@echo compiling $(notdir $<)
 	$(SILENCE)mkdir -p $(dir $@)
-	$(SILENCE)$(COMPILE.c) -MMD -MP  $(OUTPUT_OPTION) $<
+	$(SILENCE)$(COMPILE.c) -M -MF $(subst .o,.d,$@) -MT "$@ $(subst .o,.d,$@)" $<
+	$(SILENCE)$(COMPILE.c) $(OUTPUT_OPTION) $<
 
 ifneq "$(MAKECMDGOALS)" "clean"
 -include $(DEP_FILES)
@@ -303,12 +322,16 @@ realclean: clean
 	$(SILENCE)find . -name "*.[do]" | xargs rm -f	
 
 gcov: test
+ifeq ($(CPPUTEST_USE_VPATH), Y)
+	$(SILENCE)gcov --object-directory $(CPPUTEST_OBJS_DIR) $(SRC) >> $(GCOV_OUTPUT) 2>> $(GCOV_ERROR)
+else
 	$(SILENCE)for d in $(SRC_DIRS) ; do \
 		gcov --object-directory $(CPPUTEST_OBJS_DIR)/$$d $$d/*.c $$d/*.cpp >> $(GCOV_OUTPUT) 2>>$(GCOV_ERROR) ; \
 	done
 	$(SILENCE)for f in $(SRC_FILES) ; do \
 		gcov --object-directory $(CPPUTEST_OBJS_DIR)/$$f $$f >> $(GCOV_OUTPUT) 2>>$(GCOV_ERROR) ; \
 	done
+endif
 	$(CPPUTEST_HOME)/scripts/filterGcov.sh $(GCOV_OUTPUT) $(GCOV_ERROR) $(GCOV_REPORT) $(TEST_OUTPUT)
 	$(SILENCE)cat $(GCOV_REPORT)
 	$(SILENCE)mkdir -p gcov

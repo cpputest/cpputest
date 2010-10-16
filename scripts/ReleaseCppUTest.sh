@@ -9,7 +9,7 @@ fi
 GENERATED_FILES=""
 release_dir=Releases
 scripts_dir=scripts
-version=v2.2d
+version=v2.2e
 zip_root=CppUTest-${version}
 zip_file=${zip_root}.zip
 

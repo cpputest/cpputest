@@ -58,6 +58,9 @@ test_all: start
 	$(TIME) make CPPUTEST_USE_GCOV=Y
 	make gcov
 	make clean
+	$(SILENCE)echo Testing VPATH usage
+	$(TIME) make CPPUTEST_USE_VPATH=Y everythingInstall
+	make CPPUTEST_USE_VPATH=Y cleanEverythingInstall
 	
 .PHONY: examples
 examples: $(TEST_TARGET) extensions
