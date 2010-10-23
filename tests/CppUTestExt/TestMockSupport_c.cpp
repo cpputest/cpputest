@@ -27,6 +27,7 @@
 #include "CppUTest/TestHarness.h"
 
 extern "C" {
+	#include "CppUTest/TestHarness_c.h"
 	#include "CppUTestExt/MockSupport_c.h"
 	#include "TestMockSupport_cCFile.h"
 }
@@ -56,9 +57,9 @@ int typeNameIsEqual(void* object1, void* object2)
 
 }
 
-char* typeNameValueToString(void* object)
+char* typeNameValueToString(void* PUNUSED(object))
 {
-	return (char*) object;
+	return (char*) "valueToString";
 }
 
 TEST(MockSupport_c, expectAndActualParametersOnObject)
@@ -66,6 +67,7 @@ TEST(MockSupport_c, expectAndActualParametersOnObject)
 	mock_c()->installComparator("typeName", typeNameIsEqual, typeNameValueToString);
 	mock_c()->expectOneCall("boo")->withParameterOfType("typeName", "name", (void*) 1);
 	mock_c()->actualCall("boo")->withParameterOfType("typeName", "name", (void*) 1);
+	mock_c()->checkExpectations();
 	mock_c()->removeAllComparators();
 }
 
