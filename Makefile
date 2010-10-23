@@ -5,6 +5,7 @@ SILENCE = @
 COMPONENT_NAME = CppUTest
 CPP_PLATFORM = Gcc
 CPPUTEST_HOME = .
+OLD_MAKE = oldmake
 
 SRC_DIRS = \
 	src/CppUTest \
@@ -20,7 +21,7 @@ include $(CPPUTEST_HOME)/build/MakefileWorker.mk
 
 #these are a sample of the other alternative flag settings
 .PHONY: test_all
-test_all: start
+test_all: start test_old_make
 	$(SILENCE)echo Building with the default flags.
 	make clean
 	$(TIME) make 
@@ -62,6 +63,18 @@ test_all: start
 	$(TIME) make CPPUTEST_USE_VPATH=Y everythingInstall
 	make CPPUTEST_USE_VPATH=Y cleanEverythingInstall
 	
+HAS_OLD_MAKE = $(shell $(OLD_MAKE) -v 2>/dev/null)
+
+test_old_make:
+	$(SILENCE)if [ "$(HAS_OLD_MAKE)" = "" ]; then \
+		echo "Old make with the name $(OLD_MAKE) not found. Skipping testing with old make version"; \
+	else \
+		$(OLD_MAKE) -f Makefile_for_old_make clean && \
+		$(OLD_MAKE) -f Makefile_for_old_make && \
+		$(OLD_MAKE) -f Makefile_for_old_make extensions && \
+		$(OLD_MAKE) -f Makefile_for_old_make clean; \
+	fi
+
 .PHONY: examples
 examples: $(TEST_TARGET) extensions
 	$(TIME) make -C examples  all
