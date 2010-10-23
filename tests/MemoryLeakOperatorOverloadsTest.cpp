@@ -11,6 +11,17 @@ extern "C"
 #include "AllocationInCFile.h"
 }
 
+TEST_GROUP(BasicBehavior)
+{
+
+};
+
+TEST(BasicBehavior, CanDeleteNullPointers)
+{
+	delete (char*) NULL;
+	delete [] (char*) NULL;
+}
+
 TEST_GROUP(MemoryLeakOverridesToBeUsedInProductionCode)
 {
 	MemoryLeakDetector* memLeakDetector;
@@ -20,6 +31,7 @@ TEST_GROUP(MemoryLeakOverridesToBeUsedInProductionCode)
 	}
 
 };
+
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, UseNativeMallocByTemporarlySwitchingOffMalloc)
 {
