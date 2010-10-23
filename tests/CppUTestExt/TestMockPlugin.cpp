@@ -132,6 +132,7 @@ TEST(MockPlugin, preTestActionWillEnableMultipleComparatorsToTheGlobalMockSuppor
 	mock().actualCall("foo").withParameterOfType("myType", "name", &comparator);
 	mock().actualCall("foo").withParameterOfType("myOtherType", "name", &comparator);
 
+	mock().checkExpectations();
 	CHECK_NO_MOCK_FAILURE();
 	LONGS_EQUAL(0, result->getFailureCount());
 }
