@@ -62,16 +62,14 @@ public:
 	virtual void onlyKeepUnfulfilledExpectationsWithParameter(const MockNamedValue& parameter);
 	virtual void onlyKeepUnfulfilledExpectationsOnObject(void* objectPtr);
 
-	virtual void removeOneFulfilledExpectation();
-	virtual bool removeOneFulfilledExpectationWithIgnoredParameters();
+	virtual MockExpectedFunctionCall* removeOneFulfilledExpectation();
+	virtual MockExpectedFunctionCall* removeOneFulfilledExpectationWithIgnoredParameters();
 
 	virtual void resetExpectations();
 	virtual void callWasMade();
 	virtual void wasPassedToObject();
 	virtual void parameterWasPassed(const SimpleString& parameterName);
 
-	virtual bool hasDuplicateReturnValueFor(const SimpleString& functionName) const;
-	virtual MockNamedValue returnValueForFunction(const SimpleString& functionName) const;
 	virtual SimpleString unfulfilledFunctionsToString(const SimpleString& linePrefix = "") const;
 	virtual SimpleString fulfilledFunctionsToString(const SimpleString& linePrefix = "") const;
 	virtual SimpleString missingParametersToString() const;

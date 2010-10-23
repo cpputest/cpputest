@@ -66,6 +66,7 @@ public:
 protected:
 	virtual Utest* getTest() const;
 	virtual void callHasSucceeded();
+	virtual void finnalizeCallWhenFulfilled();
 	virtual void failTest(const MockFailure& failure);
 	virtual void checkActualParameter(const MockNamedValue& actualParameter);
 
@@ -82,6 +83,7 @@ private:
 	MockFailureReporter* reporter_;
 
 	ActualCallState state_;
+	MockExpectedFunctionCall* _fulfilledExpectation;
 
 	MockExpectedFunctionsList unfulfilledExpectations_;
 	const MockExpectedFunctionsList& allExpectations_;

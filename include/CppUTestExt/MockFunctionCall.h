@@ -49,7 +49,7 @@ public:
 	virtual MockFunctionCall& withParameter(const SimpleString& name, const char* value)=0;
 	virtual MockFunctionCall& withParameter(const SimpleString& name, void* value)=0;
 	virtual MockFunctionCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, void* value)=0;
-	virtual void ignoreOtherParameters() {};
+	virtual MockFunctionCall& ignoreOtherParameters() { return *this;};
 
 	virtual MockFunctionCall& andReturnValue(int value)=0;
 	virtual MockFunctionCall& andReturnValue(double value)=0;
@@ -84,7 +84,7 @@ public:
 	virtual MockFunctionCall& withParameter(const SimpleString&, const char*);
 	virtual MockFunctionCall& withParameter(const SimpleString& , void*);
 	virtual MockFunctionCall& withParameterOfType(const SimpleString&, const SimpleString&, void*);
-	virtual void ignoreOtherParameters();
+	virtual MockFunctionCall& ignoreOtherParameters();
 
 	virtual MockFunctionCall& andReturnValue(int);
 	virtual MockFunctionCall& andReturnValue(double);
@@ -135,7 +135,7 @@ public:
 	virtual MockFunctionCall& withParameter(const SimpleString& name, const char* value);
 	virtual MockFunctionCall& withParameter(const SimpleString& name, void* value);
 	virtual MockFunctionCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, void* value);
-	virtual void ignoreOtherParameters();
+	virtual MockFunctionCall& ignoreOtherParameters();
 
 	virtual MockFunctionCall& andReturnValue(int value);
 	virtual MockFunctionCall& andReturnValue(double value);

@@ -32,7 +32,7 @@
 #include "CppUTestExt/MockFailure.h"
 
 MockActualFunctionCall::MockActualFunctionCall(MockFailureReporter* reporter, const MockExpectedFunctionsList& allExpectations)
-	: reporter_(reporter), state_(CALL_SUCCEED), allExpectations_(allExpectations)
+	: reporter_(reporter), state_(CALL_SUCCEED), _fulfilledExpectation(NULL), allExpectations_(allExpectations)
 {
 	unfulfilledExpectations_.addUnfilfilledExpectations(allExpectations);
 }
@@ -58,10 +58,17 @@ void MockActualFunctionCall::failTest(const MockFailure& failure)
 	reporter_->failTest(failure);
 }
 
+void MockActualFunctionCall::finnalizeCallWhenFulfilled()
+{
+	if (unfulfilledExpectations_.hasFulfilledExpectations()) {
+		_fulfilledExpectation = unfulfilledExpectations_.removeOneFulfilledExpectation();
+		callHasSucceeded();
+	}
+}
+
 void MockActualFunctionCall::callHasSucceeded()
 {
 	setState(CALL_SUCCEED);
-	unfulfilledExpectations_.removeOneFulfilledExpectation();
 	unfulfilledExpectations_.resetExpectations();
 }
 
@@ -79,8 +86,7 @@ MockFunctionCall& MockActualFunctionCall::withName(const SimpleString& name)
 
 	unfulfilledExpectations_.callWasMade();
 
-	if (unfulfilledExpectations_.hasFulfilledExpectations())
-		callHasSucceeded();
+	finnalizeCallWhenFulfilled();
 
 	return *this;
 }
@@ -96,8 +102,7 @@ void MockActualFunctionCall::checkActualParameter(const MockNamedValue& actualPa
 	}
 
 	unfulfilledExpectations_.parameterWasPassed(actualParameter.getName());
-	if (unfulfilledExpectations_.hasFulfilledExpectations())
-		callHasSucceeded();
+	finnalizeCallWhenFulfilled();
 }
 
 MockFunctionCall& MockActualFunctionCall::withParameter(const SimpleString& name, int value)
@@ -163,7 +168,8 @@ void MockActualFunctionCall::checkExpectations()
 	if (! unfulfilledExpectations_.hasUnfullfilledExpectations())
 		FAIL("Actual call is in progress. Checking expectations. But no unfulfilled expectations. Cannot happen.")
 
-	if (unfulfilledExpectations_.removeOneFulfilledExpectationWithIgnoredParameters()) {
+	_fulfilledExpectation = unfulfilledExpectations_.removeOneFulfilledExpectationWithIgnoredParameters();
+	if (_fulfilledExpectation) {
 		callHasSucceeded();
 		return;
 	}
@@ -229,12 +235,10 @@ MockFunctionCall& MockActualFunctionCall::andReturnValue(void*)
 
 MockNamedValue MockActualFunctionCall::returnValue()
 {
-	if (allExpectations_.hasDuplicateReturnValueFor(getName())) {
-		MockCannotSetDifferentReturnValuesForSameFunctionFailure failure(getTest(), getName());
-		failTest(failure);
-		return MockNamedValue("");
-	}
-	return allExpectations_.returnValueForFunction(getName());
+	checkExpectations();
+	if (_fulfilledExpectation)
+		return _fulfilledExpectation->returnValue();
+	return MockNamedValue("no return value");
 }
 
 bool MockActualFunctionCall::hasReturnValue()
@@ -254,8 +258,7 @@ MockFunctionCall& MockActualFunctionCall::onObject(void* objectPtr)
 
 	unfulfilledExpectations_.wasPassedToObject();
 
-	if (unfulfilledExpectations_.hasFulfilledExpectations())
-		callHasSucceeded();
+	finnalizeCallWhenFulfilled();
 	return *this;
 }
 

@@ -185,30 +185,31 @@ void MockExpectedFunctionsList::onlyKeepUnfulfilledExpectationsOnObject(void* ob
 	onlyKeepExpectationsOnObject(objectPtr);
 }
 
-void MockExpectedFunctionsList::removeOneFulfilledExpectation()
+MockExpectedFunctionCall* MockExpectedFunctionsList::removeOneFulfilledExpectation()
 {
 	for (MockExpectedFunctionsListNode* p = head_; p; p = p->next_) {
 		if (p->expectedCall_->isFulfilled()) {
+			MockExpectedFunctionCall* fulfilledCall = p->expectedCall_;
 			p->expectedCall_ = NULL;
-			break;
+			pruneEmptyNodeFromList();
+			return fulfilledCall;
 		}
 	}
-	pruneEmptyNodeFromList();
+	return NULL;
 }
 
-bool MockExpectedFunctionsList::removeOneFulfilledExpectationWithIgnoredParameters()
+MockExpectedFunctionCall* MockExpectedFunctionsList::removeOneFulfilledExpectationWithIgnoredParameters()
 {
-	bool foundOneIgnoredParameterExpectedFunction = false;
 	for (MockExpectedFunctionsListNode* p = head_; p; p = p->next_) {
 		if (p->expectedCall_->isFulfilledWithoutIgnoredParameters()) {
+			MockExpectedFunctionCall* fulfilledCall = p->expectedCall_;
 			p->expectedCall_->parametersWereIgnored();
 			p->expectedCall_ = NULL;
-			foundOneIgnoredParameterExpectedFunction = true;
-			break;
+			pruneEmptyNodeFromList();
+			return fulfilledCall;
 		}
 	}
-	pruneEmptyNodeFromList();
-	return foundOneIgnoredParameterExpectedFunction;
+	return NULL;
 }
 
 
@@ -312,34 +313,11 @@ SimpleString MockExpectedFunctionsList::missingParametersToString() const
 	return str;
 }
 
-bool MockExpectedFunctionsList::hasDuplicateReturnValueFor(const SimpleString& functionName) const
-{
-	MockExpectedFunctionCall* functionWithReturnValue = NULL;
-
-	for (MockExpectedFunctionsListNode* p = head_; p; p = p->next_) {
-		if (p->expectedCall_->relatesTo(functionName)) {
-			if (functionWithReturnValue && !p->expectedCall_->returnValue().equals(functionWithReturnValue->returnValue()))
-					return true;
-			else
-				functionWithReturnValue = p->expectedCall_;
-		}
-	}
-	return false;
-}
-
 bool MockExpectedFunctionsList::hasUnfulfilledExpectationsBecauseOfMissingParameters() const
 {
 	for (MockExpectedFunctionsListNode* p = head_; p; p = p->next_)
 		if (! p->expectedCall_->areParametersFulfilled())
 			return true;
 	return false;
-}
-
-MockNamedValue MockExpectedFunctionsList::returnValueForFunction(const SimpleString& functionName) const
-{
-	for (MockExpectedFunctionsListNode* p = head_; p; p = p->next_)
-		if (p->expectedCall_->relatesTo(functionName))
-			return p->expectedCall_->returnValue();
-	return MockNamedValue("");
 }
 

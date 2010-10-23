@@ -152,13 +152,6 @@ MockNoWayToCompareCustomTypeFailure::MockNoWayToCompareCustomTypeFailure(Utest* 
 	message_ = StringFromFormat("MockFailure: No way to compare type <%s>. Please install a ParameterTypeComparator.", typeName.asCharString());
 }
 
-MockCannotSetDifferentReturnValuesForSameFunctionFailure::MockCannotSetDifferentReturnValuesForSameFunctionFailure(Utest* test, const SimpleString& functionName) : MockFailure(test)
-{
-	message_ = StringFromFormat("MockFailure: Cannot set different return values to the same function: %s\n"
-							    "\tReason: There is no defined order in expected calls.\n"
-								"\tYou can probably achieve the same thing using MockSupport::setData", functionName.asCharString());
-}
-
 MockUnexpectedObjectFailure::MockUnexpectedObjectFailure(Utest* test, const SimpleString& functionName, void* actual, const MockExpectedFunctionsList& expectations) : MockFailure(test)
 {
 	message_ = StringFromFormat ("MockFailure: Function called on a unexpected object: %s\n"

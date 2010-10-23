@@ -126,9 +126,10 @@ bool MockExpectedFunctionCall::areIgnoredParametersFulfilled()
 	return true;
 }
 
-void MockExpectedFunctionCall::ignoreOtherParameters()
+MockFunctionCall& MockExpectedFunctionCall::ignoreOtherParameters()
 {
 	ignoreOtherParameters_ = true;
+	return *this;
 }
 
 bool MockExpectedFunctionCall::isFulfilled()
