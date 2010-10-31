@@ -72,7 +72,7 @@ void checkExpectations_c();
 int expectedCallsLeft_c();
 void clear_c();
 
-MockFunctionCall_c* withIntParamaters_c(const char* name, int value);
+MockFunctionCall_c* withIntParameters_c(const char* name, int value);
 MockFunctionCall_c* withDoubleParameters_c(const char* name, double value);
 MockFunctionCall_c* withStringParameters_c(const char* name, const char* value);
 MockFunctionCall_c* withPointerParameters_c(const char* name, void* value);
@@ -101,7 +101,7 @@ void removeAllComparators_c()
 }
 
 static MockFunctionCall_c gFunctionCall = {
-		withIntParamaters_c,
+		withIntParameters_c,
 		withDoubleParameters_c,
 		withStringParameters_c,
 		withPointerParameters_c,
@@ -130,7 +130,7 @@ static MockSupport_c gMockSupport = {
 		removeAllComparators_c
 };
 
-MockFunctionCall_c* withIntParamaters_c(const char* name, int value)
+MockFunctionCall_c* withIntParameters_c(const char* name, int value)
 {
 	currentCall = &currentCall->withParameter(name, value);
 	return &gFunctionCall;

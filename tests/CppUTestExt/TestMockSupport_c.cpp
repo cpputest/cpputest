@@ -45,9 +45,9 @@ TEST(MockSupport_c, expectAndActualOneCall)
 
 TEST(MockSupport_c, expectAndActualParameters)
 {
-	mock_c()->expectOneCall("boo")->withIntParamaters("integer", 1)->withDoubleParameters("doube", 1.0)->
+	mock_c()->expectOneCall("boo")->withIntParameters("integer", 1)->withDoubleParameters("doube", 1.0)->
 			withStringParameters("string", "string")->withPointerParameters("pointer", (void*) 1);
-	mock_c()->actualCall("boo")->withIntParamaters("integer", 1)->withDoubleParameters("doube", 1.0)->
+	mock_c()->actualCall("boo")->withIntParameters("integer", 1)->withDoubleParameters("doube", 1.0)->
 			withStringParameters("string", "string")->withPointerParameters("pointer", (void*) 1);
 }
 

@@ -51,7 +51,7 @@ typedef struct SMockValue_c
 typedef struct SMockFunctionCall_c MockFunctionCall_c;
 struct SMockFunctionCall_c
 {
-	MockFunctionCall_c* (*withIntParamaters)(const char* name, int value);
+	MockFunctionCall_c* (*withIntParameters)(const char* name, int value);
 	MockFunctionCall_c* (*withDoubleParameters)(const char* name, double value);
 	MockFunctionCall_c* (*withStringParameters)(const char* name, const char* value);
 	MockFunctionCall_c* (*withPointerParameters)(const char* name, void* value);

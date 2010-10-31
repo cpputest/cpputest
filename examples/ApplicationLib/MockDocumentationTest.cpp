@@ -189,8 +189,8 @@ TEST(MockDocumentation, CInterface)
 {
 	void* object = (void*) 0x1;
 
-	mock_c()->expectOneCall("foo")->withIntParamaters("integer", 10)->andReturnDoubleValue(1.11);
-	mock_c()->actualCall("foo")->withIntParamaters("integer", 10)->returnValue().value.doubleValue;
+	mock_c()->expectOneCall("foo")->withIntParameters("integer", 10)->andReturnDoubleValue(1.11);
+	mock_c()->actualCall("foo")->withIntParameters("integer", 10)->returnValue().value.doubleValue;
 
 	mock_c()->installComparator("type", equalMethod, toStringMethod);
 	mock_scope_c("scope")->expectOneCall("bar")->withParameterOfType("type", "name", object);
