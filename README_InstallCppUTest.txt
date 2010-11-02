@@ -8,7 +8,6 @@
 2. Build CppUTest and examples
 
 2a. For unix/gcc (including cygwin)
-Use the command line to execute makeAndRunTests.sh
  > cd <someDirectory>/CppUTest
  > make
   
@@ -31,7 +30,17 @@ Use the command line to execute makeAndRunTests.sh
  
  NOTE: VC6 test runs may report memory leaks.
 
-3c. For Microsoft Visual Studio .NET
+3c. For Microsoft Visual Studio 2008
+ Double click <someDirectory>/CppUTest/CppUTest.sln
+ 
+ If Visual studio reports that the solution file was created with a
+ newer version of Visual Studio, then try 3d
+ 
+ Then press control-F5 to "Start without debugging"
+ 
+ See CppUTest build and run its tests.
+ 
+3d. For Older Microsoft Visual Studio .NET
  Double click <someDirectory>/CppUTest/CppUTest.dsw
  Allow VS.NET to convert the files by clicking "yes to all"
  Run without debugging, see the test results in the command window
