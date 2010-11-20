@@ -269,6 +269,8 @@ flags:
 	@$(call debug_print_list,$(CFLAGS))
 	@echo "Link with LDFLAGS:"
 	@$(call debug_print_list,$(LDFLAGS))
+	@echo "Link with LD_LIBRARIES:"
+	@$(call debug_print_list,$(LD_LIBRARIES))
 	@echo "Create libraries with ARFLAGS:"
 	@$(call debug_print_list,$(ARFLAGS))
 	
@@ -292,14 +294,12 @@ vtest: $(TEST_TARGET)
 $(CPPUTEST_OBJS_DIR)/%.o: %.cpp
 	@echo compiling $(notdir $<)
 	$(SILENCE)mkdir -p $(dir $@)
-	$(SILENCE)$(COMPILE.cpp) -M -MF $(subst .o,.d,$@) -MT "$@ $(subst .o,.d,$@)" $<
-	$(SILENCE)$(COMPILE.cpp) $(OUTPUT_OPTION) $<
+	$(SILENCE)$(COMPILE.cpp) -MMD -MP $(OUTPUT_OPTION) $<
 
 $(CPPUTEST_OBJS_DIR)/%.o: %.c
 	@echo compiling $(notdir $<)
 	$(SILENCE)mkdir -p $(dir $@)
-	$(SILENCE)$(COMPILE.c) -M -MF $(subst .o,.d,$@) -MT "$@ $(subst .o,.d,$@)" $<
-	$(SILENCE)$(COMPILE.c) $(OUTPUT_OPTION) $<
+	$(SILENCE)$(COMPILE.c) -MMD -MP  $(OUTPUT_OPTION) $<
 
 ifneq "$(MAKECMDGOALS)" "clean"
 -include $(DEP_FILES)
