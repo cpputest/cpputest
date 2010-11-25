@@ -7,9 +7,9 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-typedef struct ClassName ClassName;
+typedef struct _ClassName * ClassName;
 
-ClassName* ClassName_Create(void);
-void ClassName_Destroy(ClassName*);
+ClassName ClassName_Create(void);
+void ClassName_Destroy(ClassName);
 
 #endif  // D_ClassName_H

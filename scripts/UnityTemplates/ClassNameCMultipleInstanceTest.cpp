@@ -8,7 +8,7 @@ extern "C"
 
 TEST_GROUP(ClassName)
 {
-    ClassName* aClassName;
+    ClassName aClassName;
 
     void setup()
     {

@@ -3,19 +3,18 @@
 #include <memory.h>
 
 //static local variables
-struct ClassName
+typedef struct _ClassName
 {
     int placeHolderForHiddenStructElements;
-};
+} _ClassName;
 
-ClassName* ClassName_Create(void)
+ClassName ClassName_Create(void)
 {
-     ClassName* self = malloc(sizeof(ClassName));
-     memset(self, 0, sizeof(ClassName));
+     ClassName self = calloc(1, sizeof(_ClassName));
      return self;
 }
 
-void ClassName_Destroy(ClassName* self)
+void ClassName_Destroy(ClassName self)
 {
     free(self);
 }
