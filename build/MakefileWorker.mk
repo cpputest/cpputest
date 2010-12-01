@@ -54,6 +54,10 @@
 #	CPPUTEST_LDFLAGS - Linker flags
 #----------
 
+#Kludge for mingw, it does not have cc.exe, but gcc.exe will do
+ifneq ($(findstring mingw,$(PATH)), "")
+	CC := gcc
+endif
 
 ifndef COMPONENT_NAME
     COMPONENT_NAME = name_this_in_the_makefile
