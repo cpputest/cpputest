@@ -249,6 +249,9 @@ CPPFLAGS = $(CPPUTEST_CPPFLAGS) $(CPPUTEST_ADDITIONAL_CPPFLAGS)
 CXXFLAGS = $(CPPUTEST_CXXFLAGS) $(CPPUTEST_ADDITIONAL_CXXFLAGS)
 LDFLAGS = $(CPPUTEST_LDFLAGS) $(CPPUTEST_ADDITIONAL_LDFLAGS)
 
+# Some macros for programs to be overridden. For some reason, these are not in Make defaults
+RANLIB = ranlib
+
 # Targets
 
 .PHONY: all
@@ -287,7 +290,7 @@ $(TARGET_LIB): $(OBJ)
 	$(SILENCE)echo Building archive $@
 	$(SILENCE)mkdir -p lib
 	$(SILENCE)$(AR) $(ARFLAGS) $@ $^
-	$(SILENCE)ranlib $@
+	$(SILENCE)$(RANLIB) $@
 
 test: $(TEST_TARGET)
 	$(RUN_TEST_TARGET) | tee $(TEST_OUTPUT)
