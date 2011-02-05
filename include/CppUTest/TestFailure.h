@@ -109,7 +109,7 @@ public:
 class CheckFailure : public TestFailure
 {
 public:
-	CheckFailure(Utest* test, const char* fileName, int lineNumber, const SimpleString& conditionString);
+	CheckFailure(Utest* test, const char* fileName, int lineNumber, const SimpleString& checkString, const SimpleString& conditionString);
 };
 
 class FailFailure : public TestFailure

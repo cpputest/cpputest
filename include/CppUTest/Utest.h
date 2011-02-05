@@ -78,7 +78,7 @@ public:
 	static TestResult *getTestResult();
     static Utest *getCurrent();
 
-    virtual void assertTrue(bool condition, const char *conditionString, const char *fileName, int lineNumber);
+    virtual void assertTrue(bool condition, const char *checkString, const char *conditionString, const char *fileName, int lineNumber);
     virtual void assertCstrEqual(const char *expected, const char *actual, const char *fileName, int lineNumber);
     virtual void assertCstrNoCaseEqual(const char *expected, const char *actual, const char *fileName, int lineNumber);
     virtual void assertCstrContains(const char *expected, const char *actual, const char *fileName, int lineNumber);

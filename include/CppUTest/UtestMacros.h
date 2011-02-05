@@ -81,10 +81,19 @@
 //Check any boolean condition
 
 #define CHECK(condition)\
-  CHECK_LOCATION(condition, #condition, __FILE__, __LINE__)
+  CHECK_LOCATION_TRUE(condition, "CHECK", #condition, __FILE__, __LINE__)
 
-#define CHECK_LOCATION(condition, conditionString, file, line)\
-  { Utest::getCurrent()->assertTrue(condition, conditionString, file, line); }
+#define CHECK_TRUE(condition)\
+  CHECK_LOCATION_TRUE(condition, "CHECK_TRUE", #condition, __FILE__, __LINE__)
+
+#define CHECK_FALSE(condition)\
+  CHECK_LOCATION_FALSE(condition, "CHECK_FALSE", #condition, __FILE__, __LINE__)
+
+#define CHECK_LOCATION_TRUE(condition, checkString, conditionString, file, line)\
+  { Utest::getCurrent()->assertTrue((condition) != 0, checkString, conditionString, file, line); }
+
+#define CHECK_LOCATION_FALSE(condition, checkString, conditionString, file, line)\
+  { Utest::getCurrent()->assertTrue((condition) == 0, checkString, conditionString, file, line); }
 
 //This check needs the operator!=(), and a StringFrom(YourType) function
 #define CHECK_EQUAL(expected,actual)\

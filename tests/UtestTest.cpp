@@ -98,6 +98,18 @@ static void _failMethodCHECK()
 	afterCheck = true;
 }
 
+static void _failMethodCHECK_TRUE()
+{
+	CHECK_TRUE(false);
+	afterCheck = true;
+}
+
+static void _failMethodCHECK_FALSE()
+{
+	CHECK_FALSE(true);
+	afterCheck = true;
+}
+
 static void _failMethodCHECK_EQUAL()
 {
 	CHECK_EQUAL(1, 2);
@@ -187,6 +199,18 @@ TEST(Utest, compareDoubles)
 TEST(Utest, FailureWithCHECK)
 {
 	testFailureWith(_failMethodCHECK);
+}
+
+TEST(Utest, FailureWithCHECK_TRUE)
+{
+	testFailureWith(_failMethodCHECK_TRUE);
+	fixture->assertPrintContains("CHECK_TRUE");
+}
+
+TEST(Utest, FailureWithCHECK_FALSE)
+{
+	testFailureWith(_failMethodCHECK_FALSE);
+	fixture->assertPrintContains("CHECK_FALSE");
 }
 
 TEST(Utest, FailureWithCHECK_EQUAL)

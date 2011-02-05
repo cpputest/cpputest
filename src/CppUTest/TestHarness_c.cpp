@@ -73,7 +73,7 @@ void FAIL_C_LOCATION(const char* fileName, int lineNumber)
 
 void CHECK_C_LOCATION(int condition, const char* conditionString, const char* fileName, int lineNumber)
 {
-	CHECK_LOCATION(((condition) == 0 ? false : true), conditionString, fileName, lineNumber);
+	CHECK_LOCATION_TRUE(((condition) == 0 ? false : true), "CHECK_C", conditionString, fileName, lineNumber);
 }
 
 void cpputest_malloc_set_out_of_memory()

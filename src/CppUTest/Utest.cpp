@@ -235,11 +235,11 @@ void Utest::failWith(const TestFailure& failure)
     Utest::getCurrent()->exitCurrentTest();
 }
 
-void Utest::assertTrue(bool condition, const char* conditionString, const char* fileName, int lineNumber)
+void Utest::assertTrue(bool condition, const char * checkString, const char* conditionString, const char* fileName, int lineNumber)
 {
 	getTestResult()->countCheck();
 	if (!condition)
-		failWith(CheckFailure(this, fileName, lineNumber, conditionString));
+		failWith(CheckFailure(this, fileName, lineNumber, checkString, conditionString));
 }
 
 void Utest::fail(const char *text, const char* fileName, int lineNumber)

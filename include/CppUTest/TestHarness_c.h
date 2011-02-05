@@ -88,8 +88,8 @@ extern void* cpputest_realloc_location(void* memory, size_t size,
 		const char* file, int line);
 extern void cpputest_free_location(void* buffer, const char* file, int line);
 
-void cpputest_malloc_set_out_of_memory();
-void cpputest_malloc_set_not_out_of_memory();
+void cpputest_malloc_set_out_of_memory(void);
+void cpputest_malloc_set_not_out_of_memory(void);
 
 /*
  * Small additional macro for unused arguments. This is common when stubbing, but in C you cannot remove the

@@ -2,15 +2,14 @@
 #include <stdlib.h>
 #include <memory.h>
 
-//static local variables
-typedef struct _ClassName
+typedef struct ClassNameStruct
 {
     int placeHolderForHiddenStructElements;
-} _ClassName;
+} ClassNameStruct;
 
 ClassName ClassName_Create(void)
 {
-     ClassName self = calloc(1, sizeof(_ClassName));
+     ClassName self = calloc(1, sizeof(ClassNameStruct));
      return self;
 }
 

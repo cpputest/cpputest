@@ -1,15 +1,15 @@
 #ifndef D_ClassName_H
 #define D_ClassName_H
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  ClassName is responsible for ...
-//
-///////////////////////////////////////////////////////////////////////////////
+/**********************************************************************
+ *
+ * ClassName is responsible for ...
+ *
+ **********************************************************************/
 
-typedef struct _ClassName * ClassName;
+typedef struct ClassNameStruct * ClassName;
 
 ClassName ClassName_Create(void);
 void ClassName_Destroy(ClassName);
 
-#endif  // D_ClassName_H
+#endif  /* D_FakeClassName_H */

@@ -1,7 +1,5 @@
 #include "ClassName.h"
 #include "IO.h"
-//static local variables
-
 
 void ClassName_Create(void)
 {

@@ -199,9 +199,10 @@ ContainsFailure::ContainsFailure(Utest* test, const char* fileName, int lineNumb
 	message_ = StringFromFormat(format, actual.asCharString(), expected.asCharString());
 }
 
-CheckFailure::CheckFailure(Utest* test, const char* fileName, int lineNumber, const SimpleString& conditionString) : TestFailure(test, fileName, lineNumber)
+CheckFailure::CheckFailure(Utest* test, const char* fileName, int lineNumber, const SimpleString& checkString, const SimpleString& conditionString) : TestFailure(test, fileName, lineNumber)
 {
-	message_ = "CHECK(";
+	message_ = checkString;
+	message_ += "(";
 	message_ += conditionString;
 	message_ += ") failed";
 }

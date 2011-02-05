@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <memory.h>
 
-//static local variables
 typedef struct ClassName
 {
     int placeHolderForHiddenStructElements;

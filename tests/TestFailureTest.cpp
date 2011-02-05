@@ -99,7 +99,7 @@ TEST(TestFailure, CheckEqualFailure)
 
 TEST(TestFailure, CheckFailure)
 {
-	CheckFailure f(test, failFileName, failLineNumber, "chk");
+	CheckFailure f(test, failFileName, failLineNumber, "CHECK", "chk");
 	FAILURE_EQUAL("CHECK(chk) failed", f);
 }
 
