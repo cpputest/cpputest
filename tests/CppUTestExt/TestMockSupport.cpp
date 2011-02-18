@@ -335,6 +335,23 @@ TEST(MockSupportTest, ignoreOtherParametersMultipleCalls)
 	CHECK_NO_MOCK_FAILURE();
 }
 
+TEST(MockSupportTest, ignoreOtherParametersMultipleCallsButOneDidntHappen)
+{
+	MockExpectedFunctionCall* call = addFunctionToExpectationsList("boo");
+	call->ignoreOtherParameters();
+	call->callWasMade();
+	call->parametersWereIgnored();
+	call->ignoreOtherParameters();
+	addFunctionToExpectationsList("boo")->ignoreOtherParameters();
+	mock().expectOneCall("boo").ignoreOtherParameters();
+	mock().expectOneCall("boo").ignoreOtherParameters();
+	mock().actualCall("boo");
+	mock().checkExpectations();
+	MockExpectedCallsDidntHappenFailure expectedFailure(mockFailureTest(), *expectationsList);
+	CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
+
 TEST(MockSupportTest, newCallStartsWhileNotAllParametersWerePassed)
 {
 	addFunctionToExpectationsList("foo")->withParameter("p1", 1);

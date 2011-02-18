@@ -244,9 +244,9 @@ void MockSupport::checkExpectationsOfLastCall()
 
 void MockSupport::checkExpectations()
 {
-	if (!wasLastCallFulfilled())
-		checkExpectationsOfLastCall();
-	else if (expectedCallsLeft())
+	checkExpectationsOfLastCall();
+
+	if (wasLastCallFulfilled() && expectedCallsLeft())
 		failTestWithForUnexpectedCalls();
 }
 
