@@ -6,7 +6,7 @@
 
 char* mallocAllocation()
 {
-	return malloc(10UL);
+	return (char*) malloc(10UL);
 }
 
 void freeAllocation(void* memory)
