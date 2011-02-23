@@ -1,32 +1,54 @@
 module CppUTestToUnityUtils
   
   def convert_test_filename_to_unity_filename(testpath)
-    testpath.sub(/^tests\/(.*)\.cpp/, "unity/\\1.c")
+    testpath.sub(/tests\/(.*)\.cpp/, "unity/\\1.c")
   end
   
   def convert_test_filename_to_unity_testrunner_filename(testpath)
-    testpath.sub(/^tests\/(.*)\.cpp/, "unity/\\1_runner.c")
+    testpath.sub(/tests\/(.*)\.cpp/, "unity/\\1_runner.c")
   end
   
   def convert_one_liners(line, group)
     line.sub!(/#include "CppUTest\/TestHarness.h\"/, "#include \"unity_fixture.h\"" )
     line.sub!(/FAIL\(/, 'TEST_FAIL(')
     line.sub!(/CHECK\(/, "TEST_ASSERT_TRUE(")
+    line.sub!(/CHECK_TRUE\(/, "TEST_ASSERT_TRUE(")
+    line.sub!(/CHECK_FALSE\(/, "TEST_ASSERT_FALSE(")
     line.sub!(/LONGS_EQUAL\(/, "TEST_ASSERT_EQUAL(")
     line.sub!(/BYTES_EQUAL\(/, "TEST_ASSERT_EQUAL_HEX8(")
     line.sub!(/STRCMP_EQUAL\(/, "TEST_ASSERT_EQUAL_STRING(")
     line.sub!(/DOUBLES_EQUAL\(/, "TEST_ASSERT_FLOAT_WITHIN(")
-    line.sub!(/ POINTERS_EQUAL\(/, " TEST_POINTERS_EQUAL(")
+    line.sub!(/ POINTERS_EQUAL\(/, " TEST_ASSERT_POINTERS_EQUAL(")
     line.sub!(/CHECK_EQUAL\(true,/, "TEST_ASSERT_TRUE(")
     line.sub!(/CHECK_EQUAL\(false,/, "TEST_ASSERT_FALSE(")
     line.sub!(/CHECK_EQUAL\(/, "TEST_ASSERT_EQUAL(")
-    line.sub!(/static void setup\(/, "TEST_SETUP(" + group)
-    line.sub!(/static void teardown\(/, "TEST_TEAR_DOWN(" + group)
+    #line.sub!(/static void setup\(/, "TEST_SETUP(" + group)
+    #line.sub!(/static void teardown\(/, "TEST_TEAR_DOWN(" + group)
   end
 
-  def convert_macros(lines, group)
+  def convert_setup(lines, group)
     lines.each do | line |
-      convert_one_liners(line, group)
+        if line.sub!(/static void setup\(/, "TEST_SETUP(" + group)
+          return 
+        end
+    end
+  end
+
+  def convert_teardown(lines, group)
+    lines.each do | line |
+      if line.sub!(/static void teardown\(/, "TEST_TEAR_DOWN(" + group)
+        return
+      end
+    end
+  end
+
+  def convert_macros(lines, groups)
+    groups.each do | group |
+      lines.each do | line |
+        convert_one_liners(line, group)
+      end
+      convert_setup(lines, group)
+      convert_teardown(lines, group)
     end
   end
 
@@ -38,6 +60,18 @@ module CppUTestToUnityUtils
       end
     end
     @test_group
+  end
+
+  def get_test_groups(lines)
+    @test_groups = []
+    i = 0
+    lines.each do | line |
+      if /TEST_GROUP/ =~ line
+        @test_groups[i] = line.split(/[()]/)[1]
+        i = i + 1
+      end
+    end
+    @test_groups
   end
 
   def adjust_tabs(lines)
@@ -54,6 +88,10 @@ module CppUTestToUnityUtils
 
   def convert_member_to_static(line)
     line.gsub!(/^\s*(\w)/, "static \\1")
+  end 
+ 
+  def add_semicolon_to_end_of_test_group_line(line)
+    line.gsub!(/\)/, ");")
   end 
  
   def consume_closing_curley_brace(line)
@@ -77,6 +115,7 @@ module CppUTestToUnityUtils
 
       if !in_test_group
         if line.match(group)
+          add_semicolon_to_end_of_test_group_line(line)
           in_test_group = true
         end
         next
@@ -151,9 +190,7 @@ end
 
   def generate_group_runner(group, lines)
     group_runner = []
-    group_runner << "//Generated code, edit at your own risk\n\n"
-    group_runner << "#include \"unity_fixture.h\"\n"
-    group_runner << "\n"
+    group_runner << "/* Make sure you invoke RUN_TEST_GROUP(" + group + ") from unity main */\n\n"
     group_runner << "TEST_GROUP_RUNNER(" + group + ")\n"
     group_runner << "{\n"
     lines.each do | line |
@@ -165,7 +202,17 @@ end
          group_runner <<  temp + ";\n"
       end
     end
-      group_runner << "}\n"
+      group_runner << "}\n\n"
+  end
+  
+  def generate_group_runners(groups, lines)
+    group_runners = []
+    group_runners << "/* Generated code, edit at your own risk */\n\n"
+    group_runners << "#include \"unity_fixture.h\"\n\n"
+    groups.each do | group |
+      group_runners.concat generate_group_runner(group, lines)
+    end
+    group_runners
   end
 
   def generate_group_runner_plainUnity(group, lines)

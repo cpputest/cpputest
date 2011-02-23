@@ -40,6 +40,8 @@ Assertion Macros
 The failure of one of these macros causes the current test to immediately exit
 
     * CHECK(boolean condition) - checks any boolean result
+    * CHECK_TRUE(boolean condition) - checks for true
+    * CHECK_FALSE(boolean condition) - checks for false
     * CHECK_EQUAL(expected, actual) - checks for equality between entities 
       using ==. So if you have a class that supports operator==() you can use 
       this macro to compare two instances.
