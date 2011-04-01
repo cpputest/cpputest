@@ -4,7 +4,7 @@
 #include "CppUTest/TestOutput.h"
 #include "CppUTest/TestRegistry.h"
 #include "CppUTest/TestTestingFixture.h"
-#include "CppuTest/PlatformSpecificFunctions.h"
+#include "CppUTest/PlatformSpecificFunctions.h"
 #include "AllocationInCppFile.h"
 extern "C"
 {
@@ -29,7 +29,7 @@ TEST(BasicBehavior, deleteArrayInvalidatesMemory)
 	unsigned char* memory = new unsigned char[10];
 	PlatformSpecificMemset(memory, 0xAB, 10);
 	delete [] memory;
-	CHECK(memory[5] == 0xCD);
+	CHECK(memory[5] != 0xCB);
 }
 
 TEST(BasicBehavior, deleteInvalidatesMemory)
@@ -37,7 +37,7 @@ TEST(BasicBehavior, deleteInvalidatesMemory)
 	unsigned char* memory = new unsigned char;
 	*memory = 0xAD;
 	delete memory;
-	CHECK(*memory == 0xCD);
+	CHECK(*memory != 0xAD);
 }
 #endif
 
@@ -46,7 +46,7 @@ TEST(BasicBehavior, freeInvalidatesMemory)
 	unsigned char* memory = (unsigned char*) cpputest_malloc(sizeof(unsigned char));
 	*memory = 0xAD;
 	cpputest_free(memory);
-	CHECK(*memory == 0xCD);
+	CHECK(*memory != 0xAD);
 }
 
 TEST_GROUP(MemoryLeakOverridesToBeUsedInProductionCode)
