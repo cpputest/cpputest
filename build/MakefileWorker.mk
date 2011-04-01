@@ -120,6 +120,9 @@ endif
 # --------------------------------------
 # derived flags in the following area
 # --------------------------------------
+
+CPPUTEST_CPPFLAGS += -DCPPUTEST_COMPILATION
+
 ifeq ($(CPPUTEST_USE_MEM_LEAK_DETECTION), N)
 	CPPUTEST_CPPFLAGS += -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED
 else
