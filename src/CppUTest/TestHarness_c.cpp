@@ -125,6 +125,7 @@ void* cpputest_realloc_location(void* memory, size_t size, const char* file, int
 
 void cpputest_free_location(void* buffer, const char* file, int line)
 {
+	MemoryLeakWarningPlugin::getGlobalDetector()->invalidateMemory((char*) buffer);
 	MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(MemoryLeakAllocator::getCurrentMallocAllocator(), (char*) buffer, file, line);
 }
 

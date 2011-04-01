@@ -169,6 +169,7 @@ void* operator new(size_t size, const char* file, int line) UT_THROW(std::bad_al
 
 void operator delete(void* mem) UT_THROW_EMPTY()
 {
+	MemoryLeakWarningPlugin::getGlobalDetector()->invalidateMemory((char*) mem);
 	MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(MemoryLeakAllocator::getCurrentNewAllocator(), (char*) mem);
 }
 
@@ -188,6 +189,7 @@ void* operator new [](size_t size, const char* file, int line) UT_THROW(std::bad
 
 void operator delete[](void* mem) UT_THROW_EMPTY()
 {
+	MemoryLeakWarningPlugin::getGlobalDetector()->invalidateMemory((char*) mem);
 	MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(MemoryLeakAllocator::getCurrentNewArrayAllocator(), (char*) mem);
 }
 

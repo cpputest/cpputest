@@ -4,7 +4,7 @@
 #include "CppUTest/TestOutput.h"
 #include "CppUTest/TestRegistry.h"
 #include "CppUTest/TestTestingFixture.h"
-
+#include "CppuTest/PlatformSpecificFunctions.h"
 #include "AllocationInCppFile.h"
 extern "C"
 {
@@ -20,6 +20,33 @@ TEST(BasicBehavior, CanDeleteNullPointers)
 {
 	delete (char*) NULL;
 	delete [] (char*) NULL;
+}
+
+#ifndef CPPUTEST_MEM_LEAK_DETECTION_DISABLED
+
+TEST(BasicBehavior, deleteArrayInvalidatesMemory)
+{
+	unsigned char* memory = new unsigned char[10];
+	PlatformSpecificMemset(memory, 0xAB, 10);
+	delete [] memory;
+	CHECK(memory[5] == 0xCD);
+}
+
+TEST(BasicBehavior, deleteInvalidatesMemory)
+{
+	unsigned char* memory = new unsigned char;
+	*memory = 0xAD;
+	delete memory;
+	CHECK(*memory == 0xCD);
+}
+#endif
+
+TEST(BasicBehavior, freeInvalidatesMemory)
+{
+	unsigned char* memory = (unsigned char*) cpputest_malloc(sizeof(unsigned char));
+	*memory = 0xAD;
+	cpputest_free(memory);
+	CHECK(*memory == 0xCD);
 }
 
 TEST_GROUP(MemoryLeakOverridesToBeUsedInProductionCode)
