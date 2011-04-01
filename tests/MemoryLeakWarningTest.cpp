@@ -84,7 +84,6 @@ TEST_GROUP(MemoryLeakWarningTest)
 void _testTwoLeaks()
 {
 	leak1 = detector->allocMemory(allocator, 10);
-	;
 	leak2 = (long*) detector->allocMemory(allocator, 4);
 }
 
@@ -122,4 +121,3 @@ TEST(MemoryLeakWarningTest, FailingTestDoesNotReportMemoryLeaks)
 	fixture->runAllTests();
 	LONGS_EQUAL(1, fixture->getFailureCount());
 }
-
