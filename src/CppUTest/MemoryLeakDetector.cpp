@@ -144,6 +144,17 @@ MemoryLeakDetectorNode* MemoryLeakDetectorList::removeNode(char* memory)
 	return 0;
 }
 
+MemoryLeakDetectorNode* MemoryLeakDetectorList::retrieveNode(char* memory)
+{
+  MemoryLeakDetectorNode* cur = head_;
+  while (cur) {
+    if (cur->memory_ == memory)
+      return cur;
+    cur = cur->next_;
+  }
+  return NULL;
+}
+
 MemoryLeakDetectorNode* MemoryLeakDetectorList::getLeakFrom(MemoryLeakDetectorNode* node, MemLeakPeriod period)
 {
 	for (MemoryLeakDetectorNode* cur = node; cur; cur = cur->next_)
@@ -198,6 +209,11 @@ void MemoryLeakDetectorTable::addNewNode(MemoryLeakDetectorNode* node)
 MemoryLeakDetectorNode* MemoryLeakDetectorTable::removeNode(char* memory)
 {
 	return table_[hash(memory)].removeNode(memory);
+}
+
+MemoryLeakDetectorNode* MemoryLeakDetectorTable::retrieveNode(char* memory)
+{
+  return table_[hash(memory)].retrieveNode(memory);
 }
 
 bool MemoryLeakDetectorTable::hasLeaks(MemLeakPeriod period)
@@ -326,6 +342,13 @@ char* MemoryLeakDetector::reallocateMemoryAndLeakInformation(MemoryLeakAllocator
 	MemoryLeakDetectorNode *node = (MemoryLeakDetectorNode*) (allocator->allocMemoryLeakNode(sizeof(MemoryLeakDetectorNode)));
 	storeLeakInformation(node, new_memory, size, allocator, file, line);
 	return node->memory_;
+}
+
+void MemoryLeakDetector::invalidateMemory(char* memory)
+{
+  MemoryLeakDetectorNode* node = memoryTable_.retrieveNode(memory);
+  if (node)
+    PlatformSpecificMemset(memory, 0xCD, node->size_);
 }
 
 void MemoryLeakDetector::addMemoryCorruptionInformation(char* memory)

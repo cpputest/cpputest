@@ -92,6 +92,7 @@ struct MemoryLeakDetectorList
 	{}
 
 	void addNewNode(MemoryLeakDetectorNode* node);
+	MemoryLeakDetectorNode* retrieveNode(char* memory);
 	MemoryLeakDetectorNode* removeNode(char* memory);
 
 	MemoryLeakDetectorNode* getFirstLeak(MemLeakPeriod period);
@@ -115,6 +116,7 @@ struct MemoryLeakDetectorTable
 	void clearAllAccounting(MemLeakPeriod period);
 
 	void addNewNode(MemoryLeakDetectorNode* node);
+	MemoryLeakDetectorNode* retrieveNode(char* memory);
 	MemoryLeakDetectorNode* removeNode(char* memory);
 
 	bool hasLeaks(MemLeakPeriod period);
@@ -165,6 +167,7 @@ public:
 	void deallocMemory(MemoryLeakAllocator* allocator, void* memory, const char* file, int line);
 	char* reallocMemory(MemoryLeakAllocator* allocator, char* memory, size_t size, const char* file, int line);
 
+	void invalidateMemory(char* memory);
 	void removeMemoryLeakInformationWithoutCheckingOrDeallocating(void* memory);
 	enum
 	{
