@@ -76,8 +76,8 @@ TEST(MockExpectedFunctionsList, addingCalls)
 
 TEST(MockExpectedFunctionsList, listWithFulfilledExpectationHasNoUnfillfilledOnes)
 {
-	call1->callWasMade();
-	call2->callWasMade();
+	call1->callWasMade(1);
+	call2->callWasMade(2);
 	list->addExpectedCall(call1);
 	list->addExpectedCall(call2);
 	CHECK(! list->hasUnfullfilledExpectations());
@@ -85,8 +85,8 @@ TEST(MockExpectedFunctionsList, listWithFulfilledExpectationHasNoUnfillfilledOne
 
 TEST(MockExpectedFunctionsList, listWithUnFulfilledExpectationHasNoUnfillfilledOnes)
 {
-	call1->callWasMade();
-	call3->callWasMade();
+	call1->callWasMade(1);
+	call3->callWasMade(2);
 	list->addExpectedCall(call1);
 	list->addExpectedCall(call2);
 	list->addExpectedCall(call3);
@@ -105,7 +105,7 @@ TEST(MockExpectedFunctionsList, onlyKeepUnfulfilledExpectationsRelatedTo)
 	call1->withName("relate");
 	call2->withName("unrelate");
 	call3->withName("relate");
-	call3->callWasMade();
+	call3->callWasMade(1);
 	list->addExpectedCall(call1);
 	list->addExpectedCall(call2);
 	list->addExpectedCall(call3);
@@ -165,7 +165,7 @@ TEST(MockExpectedFunctionsList, onlyKeepUnfulfilledExpectationsWithParameter)
 	call2->withName("func").withParameter("diffname", 1);
 	call3->withName("func").withParameter("diffname", 1);
 	call4->withName("func").withParameter("diffname", 2);
-	call3->callWasMade();
+	call3->callWasMade(1);
 	call3->parameterWasPassed("diffname");
 	list->addExpectedCall(call1);
 	list->addExpectedCall(call2);
@@ -184,7 +184,7 @@ TEST(MockExpectedFunctionsList, addUnfilfilledExpectationsWithEmptyList)
 
 TEST(MockExpectedFunctionsList, addUnfilfilledExpectationsMultipleUnfulfilledExpectations)
 {
-	call2->callWasMade();
+	call2->callWasMade(1);
 	list->addExpectedCall(call1);
 	list->addExpectedCall(call2);
 	list->addExpectedCall(call3);
@@ -209,12 +209,12 @@ TEST(MockExpectedFunctionsList, amountOfExpectationsForHasNone)
 	LONGS_EQUAL(0, list->amountOfExpectationsFor("bar"));
 }
 
-TEST(MockExpectedFunctionsList, callToString)
+TEST(MockExpectedFunctionsList, callToStringForUnfulfilledFunctions)
 {
 	call1->withName("foo");
 	call2->withName("bar");
 	call3->withName("blah");
-	call3->callWasMade();
+	call3->callWasMade(1);
 
 	list->addExpectedCall(call1);
 	list->addExpectedCall(call2);
@@ -224,6 +224,24 @@ TEST(MockExpectedFunctionsList, callToString)
 	expectedString = StringFromFormat("%s\n%s", call1->callToString().asCharString(), call2->callToString().asCharString());
 	STRCMP_EQUAL(expectedString.asCharString(), list->unfulfilledFunctionsToString().asCharString());
 }
+
+TEST(MockExpectedFunctionsList, callToStringForFulfilledFunctions)
+{
+	call1->withName("foo");
+	call2->withName("bar");
+
+	call2->callWasMade(1);
+	call1->callWasMade(2);
+
+	list->addExpectedCall(call1);
+	list->addExpectedCall(call2);
+
+	SimpleString expectedString;
+	expectedString = StringFromFormat("%s\n%s", call2->callToString().asCharString(), call1->callToString().asCharString());
+	STRCMP_EQUAL(expectedString.asCharString(), list->fulfilledFunctionsToString().asCharString());
+}
+
+
 
 TEST(MockExpectedFunctionsList, toStringOnEmptyList)
 {

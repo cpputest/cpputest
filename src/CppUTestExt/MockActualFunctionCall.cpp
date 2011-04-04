@@ -31,8 +31,8 @@
 #include "CppUTestExt/MockExpectedFunctionCall.h"
 #include "CppUTestExt/MockFailure.h"
 
-MockActualFunctionCall::MockActualFunctionCall(MockFailureReporter* reporter, const MockExpectedFunctionsList& allExpectations)
-	: reporter_(reporter), state_(CALL_SUCCEED), _fulfilledExpectation(NULL), allExpectations_(allExpectations)
+MockActualFunctionCall::MockActualFunctionCall(int callOrder, MockFailureReporter* reporter, const MockExpectedFunctionsList& allExpectations)
+	: callOrder_(callOrder), reporter_(reporter), state_(CALL_SUCCEED), _fulfilledExpectation(NULL), allExpectations_(allExpectations)
 {
 	unfulfilledExpectations_.addUnfilfilledExpectations(allExpectations);
 }
@@ -84,7 +84,7 @@ MockFunctionCall& MockActualFunctionCall::withName(const SimpleString& name)
 		return *this;
 	}
 
-	unfulfilledExpectations_.callWasMade();
+	unfulfilledExpectations_.callWasMade(callOrder_);
 
 	finnalizeCallWhenFulfilled();
 

@@ -55,7 +55,7 @@ TEST_GROUP(MockActualFunctionCall)
 
 TEST(MockActualFunctionCall, unExpectedCall)
 {
-	MockActualFunctionCall actualCall(reporter, *emptyList);
+	MockActualFunctionCall actualCall(1, reporter, *emptyList);
 	actualCall.withName("unexpected");
 
 	MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "unexpected", *list);
@@ -68,7 +68,7 @@ TEST(MockActualFunctionCall, unExpectedParameterName)
 	call1.withName("func");
 	list->addExpectedCall(&call1);
 
-	MockActualFunctionCall actualCall(reporter, *list);
+	MockActualFunctionCall actualCall(1, reporter, *list);
 	actualCall.withName("func").withParameter("integer", 1);
 
 	MockNamedValue parameter("integer");
@@ -87,8 +87,8 @@ TEST(MockActualFunctionCall, multipleSameFunctionsExpectingAndHappenGradually)
 	list->addExpectedCall(call1);
 	list->addExpectedCall(call2);
 
-	MockActualFunctionCall actualCall1(reporter, *list);
-	MockActualFunctionCall actualCall2(reporter, *list);
+	MockActualFunctionCall actualCall1(1, reporter, *list);
+	MockActualFunctionCall actualCall2(2, reporter, *list);
 
 	LONGS_EQUAL(2, list->amountOfUnfulfilledExpectations());
 	actualCall1.withName("func");

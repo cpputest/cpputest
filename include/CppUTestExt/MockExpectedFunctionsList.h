@@ -66,7 +66,7 @@ public:
 	virtual MockExpectedFunctionCall* removeOneFulfilledExpectationWithIgnoredParameters();
 
 	virtual void resetExpectations();
-	virtual void callWasMade();
+	virtual void callWasMade(int callOrder);
 	virtual void wasPassedToObject();
 	virtual void parameterWasPassed(const SimpleString& parameterName);
 
@@ -76,7 +76,6 @@ public:
 
 protected:
 	virtual void pruneEmptyNodeFromList();
-	virtual SimpleString functionsToString(const SimpleString& linePrefix, bool wasFulfilled) const;
 
 	class MockExpectedFunctionsListNode
 	{
@@ -87,6 +86,8 @@ protected:
 		MockExpectedFunctionsListNode(MockExpectedFunctionCall* expectedCall)
 			: expectedCall_(expectedCall), next_(NULL) {};
 	};
+
+	virtual MockExpectedFunctionsListNode* findNodeWithCallOrderOf(int callOrder) const;
 private:
 	MockExpectedFunctionsListNode* head_;
 

@@ -52,7 +52,7 @@ void MockFailure::addExpectationsAndCallHistory(const MockExpectedFunctionsList&
 {
 	message_ += "\tEXPECTED calls that did NOT happen:\n";
 	message_ += expectations.unfulfilledFunctionsToString("\t\t");
-	message_ += "\n\tACTUAL calls that did happen:\n";
+	message_ += "\n\tACTUAL calls that did happen (in call order):\n";
 	message_ += expectations.fulfilledFunctionsToString("\t\t");
 }
 

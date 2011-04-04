@@ -260,21 +260,21 @@ TEST(MockExpectedFunctionCall, withANameItsNotFulfilled)
 TEST(MockExpectedFunctionCall, afterSettingCallFulfilledItsFulFilled)
 {
 	call->withName("name");
-	call->callWasMade();
+	call->callWasMade(1);
 	CHECK(call->isFulfilled());
 }
 
 TEST(MockExpectedFunctionCall, calledButNotWithParameterIsNotFulFilled)
 {
 	call->withName("name").withParameter("para", 1);
-	call->callWasMade();
+	call->callWasMade(1);
 	CHECK(!call->isFulfilled());
 }
 
 TEST(MockExpectedFunctionCall, calledAndParametersAreFulfilled)
 {
 	call->withName("name").withParameter("para", 1);
-	call->callWasMade();
+	call->callWasMade(1);
 	call->parameterWasPassed("para");
 	CHECK(call->isFulfilled());
 }
@@ -282,7 +282,7 @@ TEST(MockExpectedFunctionCall, calledAndParametersAreFulfilled)
 TEST(MockExpectedFunctionCall, calledButNotAllParametersAreFulfilled)
 {
 	call->withName("name").withParameter("para", 1).withParameter("two", 2);
-	call->callWasMade();
+	call->callWasMade(1);
 	call->parameterWasPassed("para");
 	CHECK(! call->isFulfilled());
 }

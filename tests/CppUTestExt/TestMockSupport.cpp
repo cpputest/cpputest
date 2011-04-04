@@ -126,7 +126,7 @@ TEST(MockSupportTest, ignoreOtherCallsDoesntIgnoreMultipleCallsOfTheSameFunction
 	mock().actualCall("foo");
 	mock().actualCall("foo");
 
-	addFunctionToExpectationsList("foo")->callWasMade();
+	addFunctionToExpectationsList("foo")->callWasMade(1);
 	MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "foo", *expectationsList);
 	CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
@@ -155,8 +155,8 @@ TEST(MockSupportTest, expectMultipleCallsThatHappen)
 
 TEST(MockSupportTest, expectOneCallHoweverMultipleHappened)
 {
-	addFunctionToExpectationsList("foo")->callWasMade();
-	addFunctionToExpectationsList("foo")->callWasMade();
+	addFunctionToExpectationsList("foo")->callWasMade(1);
+	addFunctionToExpectationsList("foo")->callWasMade(2);
 	MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "foo", *expectationsList);
 
 	mock().expectOneCall("foo");
@@ -339,7 +339,7 @@ TEST(MockSupportTest, ignoreOtherParametersMultipleCallsButOneDidntHappen)
 {
 	MockExpectedFunctionCall* call = addFunctionToExpectationsList("boo");
 	call->ignoreOtherParameters();
-	call->callWasMade();
+	call->callWasMade(1);
 	call->parametersWereIgnored();
 	call->ignoreOtherParameters();
 	addFunctionToExpectationsList("boo")->ignoreOtherParameters();

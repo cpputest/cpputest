@@ -75,7 +75,7 @@ TEST(MockFailureTest, unexpectedCallHappened)
 	STRCMP_EQUAL("Mock Failure: Unexpected call to function: foobar\n"
 				 "\tEXPECTED calls that did NOT happen:\n"
 				 "\t\t<none>\n"
-				 "\tACTUAL calls that did happen:\n"
+				 "\tACTUAL calls that did happen (in call order):\n"
 				 "\t\t<none>", failure.getMessage().asCharString());
 }
 
@@ -84,7 +84,7 @@ TEST(MockFailureTest, expectedCallDidNotHappen)
 	call1->withName("foobar");
 	call2->withName("world").withParameter("boo", 2).withParameter("hello", "world");
 	call3->withName("haphaphap");
-	call3->callWasMade();
+	call3->callWasMade(1);
 	addAllToList();
 
 	MockExpectedCallsDidntHappenFailure failure(this, *list);
@@ -92,14 +92,14 @@ TEST(MockFailureTest, expectedCallDidNotHappen)
 				 "\tEXPECTED calls that did NOT happen:\n"
 				 "\t\tfoobar -> no parameters\n"
 				 "\t\tworld -> int boo: <2>, char* hello: <world>\n"
-				 "\tACTUAL calls that did happen:\n"
+				 "\tACTUAL calls that did happen (in call order):\n"
 				 "\t\thaphaphap -> no parameters", failure.getMessage().asCharString());
 }
 
 TEST(MockFailureTest, MockUnexpectedAdditionalCallFailure)
 {
 	call1->withName("bar");
-	call1->callWasMade();
+	call1->callWasMade(1);
 	list->addExpectedCall(call1);
 
 	MockUnexpectedCallHappenedFailure failure(this, "bar", *list);
@@ -152,7 +152,7 @@ TEST(MockFailureTest, MockExpectedParameterDidntHappenFailure)
 {
 	call1->withName("foo").withParameter("bar", 2).withParameter("boo", "str");
 	call2->withName("foo").withParameter("bar", 10).withParameter("boo", "bleh");
-	call2->callWasMade();
+	call2->callWasMade(1);
 	call2->parameterWasPassed("bar");
 	call2->parameterWasPassed("boo");
 	call3->withName("unrelated");
@@ -178,7 +178,7 @@ TEST(MockFailureTest, MockUnexpectedObjectFailure)
 {
 	call1->withName("foo").onObject((void*) 0x02);
 	call2->withName("foo").onObject((void*) 0x03);
-	call2->callWasMade();
+	call2->callWasMade(1);
 	call2->wasPassedToObject();
 	call3->withName("unrelated");
 	addAllToList();
@@ -196,7 +196,7 @@ TEST(MockFailureTest, MockExpectedObjectDidntHappenFailure)
 {
 	call1->withName("foo").onObject((void*) 0x02);
 	call2->withName("foo").onObject((void*) 0x03);
-	call2->callWasMade();
+	call2->callWasMade(1);
 	call2->wasPassedToObject();
 	call3->withName("unrelated");
 	addAllToList();

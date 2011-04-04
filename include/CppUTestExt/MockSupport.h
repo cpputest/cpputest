@@ -90,6 +90,7 @@ public:
 protected:
     virtual MockActualFunctionCall *createActualFunctionCall();
 private:
+    static int callOrder_;
 
     MockFailureReporter *reporter_;
     MockFailureReporter defaultReporter_;

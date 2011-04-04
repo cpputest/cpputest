@@ -34,6 +34,7 @@
 #define MOCK_SUPPORT_SCOPE_PREFIX "!!!$$$MockingSupportScope$$$!!!"
 
 static MockSupport global_mock;
+int MockSupport::callOrder_ = 0;
 
 MockSupport& mock(const SimpleString& mockName)
 {
@@ -102,6 +103,7 @@ void MockSupport::clear()
 	compositeCalls_.clear();
 	ignoreOtherCalls_ = false;
 	enabled_ = true;
+	callOrder_ = 0;
 
 	for (MockNamedValueListNode* p = data_.begin(); p; p = p->next()) {
 		MockSupport* support = getMockSupport(p);
@@ -138,7 +140,7 @@ MockActualFunctionCall* MockSupport::createActualFunctionCall()
 {
 	if (lastActualFunctionCall_) delete lastActualFunctionCall_;
 
-	lastActualFunctionCall_ = new MockActualFunctionCall(reporter_, expectations_);
+	lastActualFunctionCall_ = new MockActualFunctionCall(++callOrder_, reporter_, expectations_);
 	return lastActualFunctionCall_;
 }
 

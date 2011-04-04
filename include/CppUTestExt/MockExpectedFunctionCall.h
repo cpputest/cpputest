@@ -71,7 +71,7 @@ public:
 	virtual bool areParametersFulfilled();
 	virtual bool areIgnoredParametersFulfilled();
 
-	virtual void callWasMade();
+	virtual void callWasMade(int callOrder);
 	virtual void parameterWasPassed(const SimpleString& name);
 	virtual void parametersWereIgnored();
 	virtual void wasPassedToObject();
@@ -80,6 +80,8 @@ public:
 	virtual SimpleString callToString();
 	virtual SimpleString missingParametersToString();
 
+	enum { NOT_CALLED_YET = -1};
+	virtual int getCallOrder() const;
 private:
 
 	class MockExpectedFunctionParameter : public MockNamedValue
@@ -97,7 +99,7 @@ private:
 
 	bool ignoreOtherParameters_;
 	bool parametersWereIgnored_;
-	bool wasCallMade_;
+	int callOrder_;
 	MockNamedValueList* parameters_;
 	MockNamedValue returnValue_;
 	void* objectPtr_;
