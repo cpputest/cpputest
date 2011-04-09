@@ -138,18 +138,21 @@ MockFunctionCall& MockSupport::expectNCalls(int amount, const SimpleString& func
 
 MockActualFunctionCall* MockSupport::createActualFunctionCall()
 {
-	if (lastActualFunctionCall_) delete lastActualFunctionCall_;
-
 	lastActualFunctionCall_ = new MockActualFunctionCall(++callOrder_, reporter_, expectations_);
 	return lastActualFunctionCall_;
 }
 
 MockFunctionCall& MockSupport::actualCall(const SimpleString& functionName)
 {
+	if (lastActualFunctionCall_) {
+		lastActualFunctionCall_->checkExpectations();
+		delete lastActualFunctionCall_;
+		lastActualFunctionCall_ = NULL;
+	}
+
 	if (!enabled_) return MockIgnoredCall::instance();
 	if (tracing_) return MockFunctionCallTrace::instance().withName(functionName);
 
-	if (lastActualFunctionCall_) lastActualFunctionCall_->checkExpectations();
 
 	if (!expectations_.hasExpectationWithName(functionName) && ignoreOtherCalls_) {
 		return MockIgnoredCall::instance();

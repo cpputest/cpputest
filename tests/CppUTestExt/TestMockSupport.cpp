@@ -802,6 +802,15 @@ TEST(MockSupportTest, expectMultipleMultipleCallsWithParameters)
 	CHECK_NO_MOCK_FAILURE();
 }
 
+TEST(MockSupportTest, whenCallingDisabledOrIgnoredActualCallsThenTheyDontReturnPreviousCallsValues)
+{
+	mock().expectOneCall("boo").ignoreOtherParameters().andReturnValue(10);
+	mock().ignoreOtherCalls();
+	mock().actualCall("boo");
+	mock().actualCall("An Ignored Call");
+	CHECK(!mock().hasReturnValue());
+}
+
 TEST(MockSupportTest, tracing)
 {
 	mock().tracing(true);
