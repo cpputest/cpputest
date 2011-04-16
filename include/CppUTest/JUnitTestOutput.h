@@ -48,6 +48,7 @@ public:
 	virtual void printCurrentGroupEnded(const TestResult& res);
 
 	virtual void verbose();
+	virtual void printBuffer(const char*);
 	virtual void print(const char*);
 	virtual void print(long);
 	virtual void print(const TestFailure& failure);

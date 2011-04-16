@@ -224,6 +224,10 @@ void JUnitTestOutput::verbose()
 {
 }
 
+void JUnitTestOutput::printBuffer(const char*)
+{
+}
+
 void JUnitTestOutput::print(const char*)
 {
 }

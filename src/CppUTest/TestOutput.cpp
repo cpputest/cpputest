@@ -43,6 +43,11 @@ void TestOutput::verbose()
 	verbose_ = true;
 }
 
+void TestOutput::print(const char* str)
+{
+	printBuffer(str);
+}
+
 void TestOutput::print(long n)
 {
 	print(StringFrom(n).asCharString());
@@ -196,7 +201,7 @@ void TestOutput::printEclipseErrorInFileOnLine(SimpleString file, int lineNumber
 	print(" error:");
 }
 
-void ConsoleTestOutput::print(const char* s)
+void ConsoleTestOutput::printBuffer(const char* s)
 {
 	while (*s) {
 		if ('\n' == *s) PlatformSpecificPutchar('\r');

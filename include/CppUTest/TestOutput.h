@@ -57,7 +57,8 @@ public:
 	virtual void printCurrentGroupEnded(const TestResult& res);
 
 	virtual void verbose();
-	virtual void print(const char*)=0;
+	virtual void printBuffer(const char*)=0;
+	virtual void print(const char*);
 	virtual void print(long);
 	virtual void printDouble(double);
 	virtual void printHex(long);
@@ -107,7 +108,7 @@ public:
 	}
 	;
 
-	virtual void print(const char* s);
+	virtual void printBuffer(const char* s);
 	virtual void flush();
 
 private:
@@ -136,7 +137,7 @@ public:
 	}
 	;
 
-	void print(const char* s)
+	void printBuffer(const char* s)
 	{
 		output += s;
 	}
