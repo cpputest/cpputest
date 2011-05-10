@@ -108,7 +108,7 @@ private:
     bool wasLastCallFulfilled();
     void failTestWithForUnexpectedCalls();
 
-	MockNamedValue* createAndStoreData(const SimpleString& name);
+	MockNamedValue* retrieveDataFromStore(const SimpleString& name);
 
 	MockSupport* getMockSupport(MockNamedValueListNode* node);
 };

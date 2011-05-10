@@ -467,6 +467,14 @@ TEST(MockSupportTest, hasDataBeenSet)
 	CHECK(mock().hasData("data"));
 }
 
+TEST(MockSupportTest, dataCanBeChanged)
+{
+	mock().setData("data", 10);
+	mock().setData("data", 15);
+	LONGS_EQUAL(15, mock().getData("data").getIntValue());
+
+}
+
 TEST(MockSupportTest, uninitializedData)
 {
 	LONGS_EQUAL(0, mock().getData("nonexisting").getIntValue());

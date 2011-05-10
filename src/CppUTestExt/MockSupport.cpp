@@ -260,40 +260,43 @@ bool MockSupport::hasData(const SimpleString& name)
 	return data_.getValueByName(name) != NULL;
 }
 
-MockNamedValue* MockSupport::createAndStoreData(const SimpleString& name)
+MockNamedValue* MockSupport::retrieveDataFromStore(const SimpleString& name)
 {
-	MockNamedValue* newData = new MockNamedValue(name);
-	data_.add(newData);
+	MockNamedValue* newData = data_.getValueByName(name);
+	if (newData == NULL) {
+		newData = new MockNamedValue(name);
+		data_.add(newData);
+	}
 	return newData;
 }
 
 void MockSupport::setData(const SimpleString& name, int value)
 {
-	MockNamedValue* newData = createAndStoreData(name);
+	MockNamedValue* newData = retrieveDataFromStore(name);
 	newData->setValue(value);
 }
 
 void MockSupport::setData(const SimpleString& name, const char* value)
 {
-	MockNamedValue* newData = createAndStoreData(name);
+	MockNamedValue* newData = retrieveDataFromStore(name);
 	newData->setValue(value);
 }
 
 void MockSupport::setData(const SimpleString& name, double value)
 {
-	MockNamedValue* newData = createAndStoreData(name);
+	MockNamedValue* newData = retrieveDataFromStore(name);
 	newData->setValue(value);
 }
 
 void MockSupport::setData(const SimpleString& name, void* value)
 {
-	MockNamedValue* newData = createAndStoreData(name);
+	MockNamedValue* newData = retrieveDataFromStore(name);
 	newData->setValue(value);
 }
 
 void MockSupport::setDataObject(const SimpleString& name, const SimpleString& type, void* value)
 {
-	MockNamedValue* newData = createAndStoreData(name);
+	MockNamedValue* newData = retrieveDataFromStore(name);
 	newData->setObjectPointer(type, value);
 }
 
