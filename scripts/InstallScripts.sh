@@ -1,5 +1,5 @@
 #/bin/bash -x
-CPP_U_TEST=$(pwd)/..
+CPPUTEST_HOME=$(pwd)/..
 
 EXE_DIR=${EXE_DIR:-/usr/local/bin}
 test -f ${EXE_DIR} || mkdir -p ${EXE_DIR}
@@ -9,6 +9,6 @@ NEW_SCRIPTS="NewCIoDriver NewClass NewInterface NewCModule NewCmiModule NewProje
 
 for file in $NEW_SCRIPTS ; do
    rm -f ${EXE_DIR}/${file}
-   ln -s ${CPP_U_TEST}/scripts/${file}.sh ${EXE_DIR}/${file}
+   ln -s ${CPPUTEST_HOME}/scripts/${file}.sh ${EXE_DIR}/${file}
    chmod a+x ${EXE_DIR}/${file}
 done

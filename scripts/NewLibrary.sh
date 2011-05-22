@@ -1,5 +1,5 @@
 #!/bin/bash -x
-TEMPLATE_DIR=${CPP_U_TEST}/scripts/templates
+TEMPLATE_DIR=${CPPUTEST_HOME}/scripts/templates
 LIBRARY=$1
 
 if [ -e ${LIBRARY} ] ; then

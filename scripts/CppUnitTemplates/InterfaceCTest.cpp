@@ -5,7 +5,7 @@ extern "C"
 #include "FakeClassName.h"
 }
 
-TEST_GROUP(ClassName)
+TEST_GROUP(FakeClassName)
 {
     void setup()
     {
@@ -18,7 +18,7 @@ TEST_GROUP(ClassName)
     }
 };
 
-TEST(ClassName, Create)
+TEST(FakeClassName, Create)
 {
   FAIL("Start here");
 }

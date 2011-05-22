@@ -7,12 +7,12 @@
 
 #Test for env var set.
 checkForCppUTestToolsEnvVariable() {
-	if [ -z "$CPP_U_TEST" ] ; then
-	   echo "CPP_U_TEST not set"
+	if [ -z "$CPPUTEST_HOME" ] ; then
+	   echo "CPPUTEST_HOME not set"
 	   exit 1
 	fi
-	if [ ! -d "$CPP_U_TEST" ] ; then
-	   echo "CPP_U_TEST not set to a directory"
+	if [ ! -d "$CPPUTEST_HOME" ] ; then
+	   echo "CPPUTEST_HOME not set to a directory"
 	   exit 2
 	fi
 }
@@ -30,7 +30,7 @@ testSuffix=Test
 #identify the template files
 if [ "$CPP_SOURCE_TEMPLATES" == "" ]
   then
-    TEMPLATE_DIR=$CPP_U_TEST/scripts/templates
+    TEMPLATE_DIR=$CPPUTEST_HOME/scripts/templates
   else
     TEMPLATE_DIR=$CPP_SOURCE_TEMPLATES
 fi
