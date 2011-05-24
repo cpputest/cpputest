@@ -193,6 +193,11 @@ TEST(Utest, compareDoubles)
 	CHECK(!doubles_equal(1.0, nan, 0.01));
 	CHECK(!doubles_equal(1.0, 1.001, nan));
 	CHECK(!doubles_equal(1.0, 1.1, 0.05));
+
+	double a = 1.2345678;
+	CHECK(doubles_equal(a, a, 0.000000001));
+
+
 }
 
 

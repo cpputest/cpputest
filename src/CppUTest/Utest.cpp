@@ -34,7 +34,7 @@ bool doubles_equal(double d1, double d2, double threshold)
 {
 	if (PlatformSpecificIsNan(d1) || PlatformSpecificIsNan(d2) || PlatformSpecificIsNan(threshold))
 		return false;
-	return PlatformSpecificFabs(d1 - d2) < threshold;
+	return PlatformSpecificFabs(d1 - d2) <= threshold;
 }
 
 /* Sometimes stubs use the CppUTest assertions.
