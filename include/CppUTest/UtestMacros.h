@@ -152,7 +152,7 @@
     POINTERS_EQUAL_LOCATION((expected),(actual), __FILE__, __LINE__)
 
 #define POINTERS_EQUAL_LOCATION(expected,actual,file,line)\
-  { Utest::getCurrent()->assertPointersEqual(expected, actual,  file, line); }
+  { Utest::getCurrent()->assertPointersEqual((void *)expected, (void *)actual,  file, line); }
 
 //Check two doubles for equality within a tolerance threshold
 #define DOUBLES_EQUAL(expected,actual,threshold)\
