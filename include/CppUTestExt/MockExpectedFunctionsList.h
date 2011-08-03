@@ -46,6 +46,7 @@ public:
 	virtual bool hasFulfilledExpectations() const;
 	virtual bool hasUnfulfilledExpectationsBecauseOfMissingParameters() const;
 	virtual bool hasExpectationWithName(const SimpleString& name) const;
+	virtual bool hasCallsOutOfOrder() const;
 	virtual bool isEmpty() const;
 
 	virtual void addExpectedCall(MockExpectedFunctionCall* call);

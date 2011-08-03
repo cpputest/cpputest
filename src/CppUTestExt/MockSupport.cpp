@@ -35,6 +35,7 @@
 
 static MockSupport global_mock;
 int MockSupport::callOrder_ = 0;
+int MockSupport::expectedCallOrder_ = 0;
 
 MockSupport& mock(const SimpleString& mockName)
 {
@@ -44,7 +45,7 @@ MockSupport& mock(const SimpleString& mockName)
 }
 
 MockSupport::MockSupport()
-	: reporter_(&defaultReporter_), ignoreOtherCalls_(false), enabled_(true), lastActualFunctionCall_(NULL), tracing_(false)
+	: strictOrdering_(false), reporter_(&defaultReporter_), ignoreOtherCalls_(false), enabled_(true), lastActualFunctionCall_(NULL), tracing_(false)
 {
 }
 
@@ -104,6 +105,8 @@ void MockSupport::clear()
 	ignoreOtherCalls_ = false;
 	enabled_ = true;
 	callOrder_ = 0;
+	expectedCallOrder_ = 0;
+	strictOrdering_ = false;
 
 	for (MockNamedValueListNode* p = data_.begin(); p; p = p->next()) {
 		MockSupport* support = getMockSupport(p);
@@ -115,6 +118,11 @@ void MockSupport::clear()
 	data_.clear();
 }
 
+void MockSupport::strictOrder()
+{
+	strictOrdering_ = true;
+}
+
 MockFunctionCall& MockSupport::expectOneCall(const SimpleString& functionName)
 {
 	if (!enabled_) return MockIgnoredCall::instance();
@@ -122,6 +130,8 @@ MockFunctionCall& MockSupport::expectOneCall(const SimpleString& functionName)
 	MockExpectedFunctionCall* call = new MockExpectedFunctionCall;
 	call->setComparatorRepository(&comparatorRepository_);
 	call->withName(functionName);
+	if (strictOrdering_)
+		call->withCallOrder(++expectedCallOrder_);
 	expectations_.addExpectedCall(call);
 	return *call;
 }
@@ -223,7 +233,7 @@ bool MockSupport::wasLastCallFulfilled()
 	return true;
 }
 
-void MockSupport::failTestWithForUnexpectedCalls()
+void MockSupport::failTestWithUnexpectedCalls()
 {
     MockExpectedFunctionsList expectationsList;
     expectationsList.addExpectations(expectations_);
@@ -233,6 +243,20 @@ void MockSupport::failTestWithForUnexpectedCalls()
 			expectationsList.addExpectations(getMockSupport(p)->expectations_);
 
     MockExpectedCallsDidntHappenFailure failure(reporter_->getTestToFail(), expectationsList);
+    clear();
+    reporter_->failTest(failure);
+}
+
+void MockSupport::failTestWithOutOfOrderCalls()
+{
+    MockExpectedFunctionsList expectationsList;
+    expectationsList.addExpectations(expectations_);
+
+    for(MockNamedValueListNode *p = data_.begin();p;p = p->next())
+		if(getMockSupport(p))
+			expectationsList.addExpectations(getMockSupport(p)->expectations_);
+
+    MockCallOrderFailure failure(reporter_->getTestToFail(), expectationsList);
     clear();
     reporter_->failTest(failure);
 }
@@ -252,7 +276,10 @@ void MockSupport::checkExpectations()
 	checkExpectationsOfLastCall();
 
 	if (wasLastCallFulfilled() && expectedCallsLeft())
-		failTestWithForUnexpectedCalls();
+		failTestWithUnexpectedCalls();
+
+	if (expectations_.hasCallsOutOfOrder())
+		failTestWithOutOfOrderCalls();
 }
 
 bool MockSupport::hasData(const SimpleString& name)

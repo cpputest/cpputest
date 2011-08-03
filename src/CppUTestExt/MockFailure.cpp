@@ -93,6 +93,13 @@ MockUnexpectedCallHappenedFailure::MockUnexpectedCallHappenedFailure(Utest* test
 	addExpectationsAndCallHistory(expectations);
 }
 
+MockCallOrderFailure::MockCallOrderFailure(Utest* test, const MockExpectedFunctionsList& expectations) : MockFailure(test)
+{
+	message_ = "Mock Failure: Out of order calls";
+	message_ += "\n";
+	addExpectationsAndCallHistory(expectations);
+}
+
 MockUnexpectedParameterFailure::MockUnexpectedParameterFailure(Utest* test, const SimpleString& functionName, const MockNamedValue& parameter, const MockExpectedFunctionsList& expectations)  : MockFailure(test)
 {
 	MockExpectedFunctionsList expectationsForFunctionWithParameterName;

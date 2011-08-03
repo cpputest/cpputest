@@ -74,6 +74,13 @@ public:
 	virtual ~MockUnexpectedCallHappenedFailure(){};
 };
 
+class MockCallOrderFailure : public MockFailure
+{
+public:
+	MockCallOrderFailure(Utest* test, const MockExpectedFunctionsList& expectations);
+	virtual ~MockCallOrderFailure(){};
+};
+
 class MockUnexpectedParameterFailure : public MockFailure
 {
 public:

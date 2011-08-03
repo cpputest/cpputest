@@ -55,9 +55,19 @@ TEST_GROUP(MockSupportTest)
 		newCall->withName(name);
 		expectationsList->addExpectedCall(newCall);
 		return newCall;
-
+//Bas - what is this?
 		mock().setMockFailureReporter(NULL);
 	}
+
+	MockExpectedFunctionCall* addFunctionToExpectationsList(const SimpleString& name, int order)
+	{
+		MockExpectedFunctionCall* newCall = new MockExpectedFunctionCall;
+		newCall->withName(name);
+		newCall->withCallOrder(order);
+		expectationsList->addExpectedCall(newCall);
+		return newCall;
+	}
+
 };
 
 TEST(MockSupportTest, clear)
@@ -149,6 +159,93 @@ TEST(MockSupportTest, expectMultipleCallsThatHappen)
 	mock().expectOneCall("foo");
 	mock().actualCall("foo");
 	mock().actualCall("foo");
+	mock().checkExpectations();
+	CHECK_NO_MOCK_FAILURE();
+}
+
+TEST(MockSupportTest, strictOrderObserved)
+{
+	mock().strictOrder();
+	mock().expectOneCall("foo1");
+	mock().expectOneCall("foo2");
+	mock().actualCall("foo1");
+	mock().actualCall("foo2");
+	mock().checkExpectations();
+	CHECK_NO_MOCK_FAILURE();
+}
+
+TEST(MockSupportTest, someStrictOrderObserved)
+{
+	mock().expectOneCall("foo3").withCallOrder(3);
+	mock().expectOneCall("foo1");
+	mock().expectOneCall("foo2");
+	mock().actualCall("foo2");
+	mock().actualCall("foo1");
+	mock().actualCall("foo3");
+	mock().checkExpectations();
+	CHECK_NO_MOCK_FAILURE();
+}
+
+TEST(MockSupportTest, strictOrderViolated)
+{
+	mock().strictOrder();
+	addFunctionToExpectationsList("foo1", 1)->callWasMade(1);
+	addFunctionToExpectationsList("foo1", 2)->callWasMade(3);
+	addFunctionToExpectationsList("foo2", 3)->callWasMade(2);
+	MockCallOrderFailure expectedFailure(mockFailureTest(), *expectationsList);
+	mock().expectOneCall("foo1");
+	mock().expectOneCall("foo1");
+	mock().expectOneCall("foo2");
+	mock().actualCall("foo1");
+	mock().actualCall("foo2");
+	mock().actualCall("foo1");
+	mock().checkExpectations();
+	CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
+TEST(MockSupportTest, strictOrderNotViolatedWithTwoMocks)
+{
+	mock("mock1").strictOrder();
+	mock("mock2").strictOrder();
+	mock("mock1").expectOneCall("foo1");
+	mock("mock2").expectOneCall("foo2");
+
+	mock("mock1").actualCall("foo1");
+	mock("mock2").actualCall("foo2");
+
+	mock("mock1").checkExpectations();
+	mock("mock2").checkExpectations();
+	CHECK_NO_MOCK_FAILURE();
+}
+
+IGNORE_TEST(MockSupportTest, strictOrderViolatedWithTwoMocks)
+{
+	//this test and scenario needs a decent failure message.
+	mock("mock1").strictOrder();
+	mock("mock2").strictOrder();
+	mock("mock1").expectOneCall("foo1");
+	mock("mock2").expectOneCall("foo2");
+
+	mock("mock2").actualCall("foo2");
+	mock("mock1").actualCall("foo1");
+
+	mock("mock1").checkExpectations();
+	mock("mock2").checkExpectations();
+	CHECK_NO_MOCK_FAILURE();
+}
+
+TEST(MockSupportTest, usingNCalls)
+{
+	mock().strictOrder();
+	mock().expectOneCall("foo1");
+	mock().expectNCalls(2, "foo2");
+	mock().expectOneCall("foo1");
+
+	mock().actualCall("foo1");
+	mock().actualCall("foo2");
+	mock().actualCall("foo2");
+	mock().actualCall("foo1");
+
 	mock().checkExpectations();
 	CHECK_NO_MOCK_FAILURE();
 }

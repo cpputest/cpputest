@@ -34,7 +34,7 @@ SimpleString StringFrom(const MockNamedValue& parameter)
 }
 
 MockExpectedFunctionCall::MockExpectedFunctionCall()
-	: ignoreOtherParameters_(false), parametersWereIgnored_(false), callOrder_(0), returnValue_(""), objectPtr_(NULL), wasPassedToObject_(true)
+	: ignoreOtherParameters_(false), parametersWereIgnored_(false), callOrder_(0), expectedCallOrder_(NO_EXPECTED_CALL_ORDER), outOfOrder_(true), returnValue_(""), objectPtr_(NULL), wasPassedToObject_(true)
 {
 	parameters_ = new MockNamedValueList();
 }
@@ -146,6 +146,12 @@ bool MockExpectedFunctionCall::isFulfilledWithoutIgnoredParameters()
 void MockExpectedFunctionCall::callWasMade(int callOrder)
 {
 	callOrder_ = callOrder;
+	if (expectedCallOrder_ == NO_EXPECTED_CALL_ORDER)
+		outOfOrder_ = false;
+	else if (callOrder_ == expectedCallOrder_)
+		outOfOrder_ = false;
+	else
+		outOfOrder_ = true;
 }
 
 void MockExpectedFunctionCall::parametersWereIgnored()
@@ -195,6 +201,10 @@ SimpleString MockExpectedFunctionCall::callToString()
 
 	str += getName();
 	str += " -> ";
+	if (expectedCallOrder_ != NO_EXPECTED_CALL_ORDER) {
+		str += StringFromFormat("expected call order: <%d> -> ", expectedCallOrder_);
+	}
+
 	if (parameters_->begin() == NULL) {
 		str += (ignoreOtherParameters_) ? "all parameters ignored" : "no parameters";
 		return str;
@@ -301,5 +311,14 @@ int MockExpectedFunctionCall::getCallOrder() const
 	return callOrder_;
 }
 
+MockFunctionCall& MockExpectedFunctionCall::withCallOrder(int callOrder)
+{
+	expectedCallOrder_ = callOrder;
+	return *this;
+}
 
+bool MockExpectedFunctionCall::isOutOfOrder() const
+{
+	return outOfOrder_;
+}
 

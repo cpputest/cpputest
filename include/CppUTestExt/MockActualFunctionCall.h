@@ -42,6 +42,7 @@ public:
 	virtual ~MockActualFunctionCall();
 
 	virtual MockFunctionCall& withName(const SimpleString& name);
+	virtual MockFunctionCall& withCallOrder(int);
 	virtual MockFunctionCall& withParameter(const SimpleString& name, int value);
 	virtual MockFunctionCall& withParameter(const SimpleString& name, double value);
 	virtual MockFunctionCall& withParameter(const SimpleString& name, const char* value);

@@ -91,6 +91,11 @@ MockFunctionCall& MockActualFunctionCall::withName(const SimpleString& name)
 	return *this;
 }
 
+MockFunctionCall& MockActualFunctionCall::withCallOrder(int)
+{
+	return *this;
+}
+
 void MockActualFunctionCall::checkActualParameter(const MockNamedValue& actualParameter)
 {
 	unfulfilledExpectations_.onlyKeepUnfulfilledExpectationsWithParameter(actualParameter);

@@ -44,6 +44,7 @@ public:
 	virtual ~MockFunctionCall();
 
 	virtual MockFunctionCall& withName(const SimpleString& name)=0;
+	virtual MockFunctionCall& withCallOrder(int)=0;
 	virtual MockFunctionCall& withParameter(const SimpleString& name, int value)=0;
 	virtual MockFunctionCall& withParameter(const SimpleString& name, double value)=0;
 	virtual MockFunctionCall& withParameter(const SimpleString& name, const char* value)=0;
@@ -79,6 +80,7 @@ public:
 	virtual ~MockFunctionCallComposite();
 
 	virtual MockFunctionCall& withName(const SimpleString&);
+	virtual MockFunctionCall& withCallOrder(int);
 	virtual MockFunctionCall& withParameter(const SimpleString&, int);
 	virtual MockFunctionCall& withParameter(const SimpleString&, double);
 	virtual MockFunctionCall& withParameter(const SimpleString&, const char*);
@@ -105,6 +107,7 @@ class MockIgnoredCall : public MockFunctionCall
 {
 public:
 	virtual MockFunctionCall& withName(const SimpleString&) { return *this;}
+	virtual MockFunctionCall& withCallOrder(int) { return *this; }
 	virtual MockFunctionCall& withParameter(const SimpleString&, int) { return *this; }
 	virtual MockFunctionCall& withParameter(const SimpleString&, double) { return *this; }
 	virtual MockFunctionCall& withParameter(const SimpleString&, const char*) { return *this; }
@@ -130,6 +133,7 @@ public:
 	virtual ~MockFunctionCallTrace();
 
 	virtual MockFunctionCall& withName(const SimpleString& name);
+	virtual MockFunctionCall& withCallOrder(int);
 	virtual MockFunctionCall& withParameter(const SimpleString& name, int value);
 	virtual MockFunctionCall& withParameter(const SimpleString& name, double value);
 	virtual MockFunctionCall& withParameter(const SimpleString& name, const char* value);

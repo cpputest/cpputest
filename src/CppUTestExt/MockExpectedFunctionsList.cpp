@@ -42,6 +42,14 @@ MockExpectedFunctionsList::~MockExpectedFunctionsList()
 	}
 }
 
+bool MockExpectedFunctionsList::hasCallsOutOfOrder() const
+{
+	for (MockExpectedFunctionsListNode* p = head_; p; p = p->next_)
+		if (p->expectedCall_->isOutOfOrder())
+			return true;
+	return false;
+}
+
 int MockExpectedFunctionsList::size() const
 {
 	int count = 0;
@@ -85,9 +93,9 @@ bool MockExpectedFunctionsList::hasUnfullfilledExpectations() const
 
 bool MockExpectedFunctionsList::hasExpectationWithName(const SimpleString& name) const
 {
-	for (MockExpectedFunctionsListNode* p = head_; p; p = p->next_)
-		if (p->expectedCall_->relatesTo(name))
-			return true;
+		for (MockExpectedFunctionsListNode* p = head_; p; p = p->next_)
+			if (p->expectedCall_->relatesTo(name))
+				return true;
 	return false;
 }
 

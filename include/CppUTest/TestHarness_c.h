@@ -90,6 +90,9 @@ extern void cpputest_free_location(void* buffer, const char* file, int line);
 
 void cpputest_malloc_set_out_of_memory(void);
 void cpputest_malloc_set_not_out_of_memory(void);
+void cpputest_malloc_set_out_of_memory_countdown(int);
+void cpputest_malloc_count_reset(void);
+int cpputest_malloc_get_count(void);
 
 /*
  * Small additional macro for unused arguments. This is common when stubbing, but in C you cannot remove the

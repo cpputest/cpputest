@@ -7,6 +7,8 @@ CPP_PLATFORM = Gcc
 CPPUTEST_HOME = .
 OLD_MAKE = oldmake
 
+CPPUTEST_ENABLE_DEBUG = Y
+
 SRC_DIRS = \
 	src/CppUTest \
 	src/Platforms/$(CPP_PLATFORM)

@@ -83,6 +83,18 @@ TEST(MockExpectedFunctionsList, listWithFulfilledExpectationHasNoUnfillfilledOne
 	CHECK(! list->hasUnfullfilledExpectations());
 }
 
+TEST(MockExpectedFunctionsList, listWithFulfilledExpectationButOutOfOrder)
+{
+	call1->withCallOrder(1);
+	call2->withCallOrder(2);
+	list->addExpectedCall(call1);
+	list->addExpectedCall(call2);
+	call2->callWasMade(1);
+	call1->callWasMade(2);
+	CHECK(! list->hasUnfullfilledExpectations());
+	CHECK(list->hasCallsOutOfOrder());
+}
+
 TEST(MockExpectedFunctionsList, listWithUnFulfilledExpectationHasNoUnfillfilledOnes)
 {
 	call1->callWasMade(1);
