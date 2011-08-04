@@ -37,3 +37,7 @@ IMPORT_TEST_GROUP( TestHarness_c);
 IMPORT_TEST_GROUP( CommandLineTestRunner);
 IMPORT_TEST_GROUP( JUnitOutputTest);
 IMPORT_TEST_GROUP( MemoryLeakDetectorTest);
+
+/* In allTest.cpp */
+IMPORT_TEST_GROUP(CheatSheet);
+
