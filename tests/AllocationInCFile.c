@@ -1,6 +1,6 @@
-#include <stdlib.h>
 #include "AllocationInCFile.h"
 #include "CppUTest/MemoryLeakDetectorMallocMacros.h"
+#include "CppUTest/StandardCLibrary.h"
 
 /* This file is for simulating overloads of malloc */
 

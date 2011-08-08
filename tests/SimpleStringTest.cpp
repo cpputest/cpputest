@@ -29,7 +29,6 @@
 #include "CppUTest/SimpleString.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 #include "CppUTest/MemoryLeakAllocator.h"
-#include <stdlib.h>
 
 TEST_GROUP(SimpleString)
 {

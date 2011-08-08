@@ -29,8 +29,6 @@ extern "C"
 {
 #define _WCHART
 #include "CppUTest/TestHarness_c.h"
-#include "stdlib.h"
-
 }
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TestRegistry.h"

@@ -3,7 +3,11 @@ SILENCE = @
 
 #--- Inputs ----#
 COMPONENT_NAME = CppUTest
-CPP_PLATFORM = Gcc
+ifeq ($(CPPUTEST_USE_STD_C_LIB), N)
+	CPP_PLATFORM = GccNoStdC
+else
+	CPP_PLATFORM = Gcc
+endif
 CPPUTEST_HOME = .
 OLD_MAKE = oldmake
 
@@ -44,6 +48,9 @@ test_all: start test_old_make
 	$(SILENCE)echo Building with overridden CXXFLAGS and CFLAGS and CPPFLAGS
 	$(TIME) make CLFAGS="" CXXFLAGS="" CPPFLAGS="-Iinclude"
 	make CFLAGS="" CXXFLAGS="" clean
+	$(SILENCE)echo Building without Standard C library includes
+	$(TIME) make CPPUTEST_USE_STD_C_LIB=N all_no_tests
+	make CPPUTEST_USE_STD_C_LIB=N clean
 	$(SILENCE)echo Building with overridden CXXFLAGS and CFLAGS and memory leak and STDC++ disabled
 	$(TIME) make CLFAGS="" CXXFLAGS="" CPPFLAGS="-Iinclude -DCPPUTEST_STD_CPP_LIB_DISABLED -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED"
 	make CFLAGS="" CXXFLAGS="" CPPFLAGS="-DCPPUTEST_STD_CPP_LIB_DISABLED -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED" clean

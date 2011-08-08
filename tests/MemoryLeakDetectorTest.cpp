@@ -148,8 +148,6 @@ TEST(MemoryLeakDetectorTest, OneLeak)
 	LONGS_EQUAL(0, newAllocator->free_called);
 }
 
-#include <stdio.h>
-
 TEST(MemoryLeakDetectorTest, OneHundredLeaks)
 {
 	const int amount_alloc = 100;
