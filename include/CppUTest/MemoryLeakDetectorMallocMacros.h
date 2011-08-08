@@ -28,7 +28,7 @@
 /* This prevents the declaration from done twice and makes sure the file only #defines malloc, so it can be included anywhere */
 #ifndef CPPUTEST_USE_MALLOC_MACROS
 
-#include <stdlib.h>
+#include "StandardCLibrary.h"
 
 extern void* cpputest_malloc_location(size_t size, const char* file, int line);
 extern void* cpputest_calloc_location(size_t count, size_t size, const char* file, int line);

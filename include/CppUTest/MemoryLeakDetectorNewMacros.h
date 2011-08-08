@@ -25,7 +25,7 @@
  * TestHarness.h is only included in test code.
  */
 
-#include <stdlib.h>
+#include "StandardCLibrary.h"
 
 #ifndef CPPUTEST_USE_MEM_LEAK_DETECTION
 #ifdef CPPUTEST_MEM_LEAK_DETECTION_DISABLED

@@ -38,8 +38,7 @@
 #ifndef D_SimpleString_h
 #define D_SimpleString_h
 
-#include <stdarg.h>
-#include <stddef.h>
+#include "StandardCLibrary.h"
 
 class SimpleStringCollection;
 class MemoryLeakAllocator;

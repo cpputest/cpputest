@@ -31,7 +31,7 @@ enum MemLeakPeriod
 
 class MemoryLeakAllocator;
 
-#include <stdlib.h>
+#include "StandardCLibrary.h"
 
 class MemoryLeakFailure
 {

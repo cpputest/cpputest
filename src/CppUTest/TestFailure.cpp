@@ -29,12 +29,11 @@
 #include "CppUTest/TestFailure.h"
 #include "CppUTest/TestOutput.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
-#include <stdlib.h>
 
 SimpleString removeAllPrintableCharactersFrom(const SimpleString& str)
 {
 	size_t bufferSize = str.size()+1;
-	char* buffer = (char*) malloc(bufferSize);
+	char* buffer = (char*) PlatformSpecificMalloc(bufferSize);
 	str.copyToBuffer(buffer, bufferSize);
 
 	for (size_t i = 0; i < bufferSize-1; i++)
@@ -42,20 +41,20 @@ SimpleString removeAllPrintableCharactersFrom(const SimpleString& str)
 			buffer[i] = ' ';
 
 	SimpleString result(buffer);
-	free(buffer);
+	PlatformSpecificFree(buffer);
 	return result;
 }
 
 SimpleString addMarkerToString(const SimpleString& str, int markerPos)
 {
 	size_t bufferSize = str.size()+1;
-	char* buffer = (char*) malloc(bufferSize);
+	char* buffer = (char*) PlatformSpecificMalloc(bufferSize);
 	str.copyToBuffer(buffer, bufferSize);
 
 	buffer[markerPos] = '^';
 
 	SimpleString result(buffer);
-	free(buffer);
+	PlatformSpecificFree(buffer);
 	return result;
 
 }
