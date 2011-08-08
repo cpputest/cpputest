@@ -156,7 +156,13 @@ endif
 # derived flags in the following area
 # --------------------------------------
 
-
+# Without the C library, we'll need to disable the C++ library and ... 
+ifeq ($(CPPUTEST_USE_STD_C_LIB), N)
+	CPPUTEST_USE_STD_CPP_LIB = N
+	CPPUTEST_USE_MEM_LEAK_DETECTION = N
+	CPPUTEST_CPPFLAGS += -DCPPUTEST_STD_C_LIB_DISABLED
+	CPPUTEST_CPPFLAGS += -nostdinc
+endif
 
 CPPUTEST_CPPFLAGS += -DCPPUTEST_COMPILATION
 
@@ -173,13 +179,6 @@ endif
 
 ifeq ($(CPPUTEST_ENABLE_DEBUG), Y)
 	CPPUTEST_CPPFLAGS += -g
-endif
-
-# Without the C library, we'll need to disable the C++ library and ... 
-ifeq ($(CPPUTEST_USE_STD_C_LIB), N)
-	CPPUTEST_USE_STD_CPP_LIB = N
-	CPPUTEST_CPPFLAGS += -DCPPUTEST_STD_C_LIB_DISABLED
-	CPPUTEST_CPPFLAGS += -nostdinc
 endif
 
 ifeq ($(CPPUTEST_USE_STD_CPP_LIB), N)

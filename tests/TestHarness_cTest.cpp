@@ -214,6 +214,7 @@ TEST(TestHarness_c, cpputest_realloc_larger)
 
 	cpputest_free(mem2);
 }
+#if CPPUTEST_USE_MEM_LEAK_DETECTION
 
 TEST(TestHarness_c, macros)
 {
@@ -231,3 +232,5 @@ TEST(TestHarness_c, callocInitializedToZero)
 		CHECK(mem[i] == 0);
 	free(mem);
 }
+#endif
+
