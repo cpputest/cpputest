@@ -47,6 +47,7 @@ TEST_GROUP(MockSupportTest)
 		CHECK_NO_MOCK_FAILURE();
 		expectationsList->deleteAllExpectationsAndClearList();
 		delete expectationsList;
+		mock().setMockFailureReporter(NULL);
 	}
 
 	MockExpectedFunctionCall* addFunctionToExpectationsList(const SimpleString& name)
@@ -55,8 +56,6 @@ TEST_GROUP(MockSupportTest)
 		newCall->withName(name);
 		expectationsList->addExpectedCall(newCall);
 		return newCall;
-//Bas - what is this?
-		mock().setMockFailureReporter(NULL);
 	}
 
 	MockExpectedFunctionCall* addFunctionToExpectationsList(const SimpleString& name, int order)
