@@ -122,6 +122,7 @@ SimpleString StringFrom(const char *value);
 SimpleString StringFromOrNull(const char * value);
 SimpleString StringFrom(long value);
 SimpleString StringFrom(int value);
+SimpleString StringFrom(size_t value);
 SimpleString HexStringFrom(long value);
 SimpleString StringFrom(double value, int precision = 6);
 SimpleString StringFrom(const SimpleString& other);

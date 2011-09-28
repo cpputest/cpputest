@@ -377,6 +377,12 @@ TEST(SimpleString, Doubles)
 	STRCMP_EQUAL("1.20", s.asCharString());
 }
 
+TEST(SimpleString, Sizes)
+{
+	size_t size = 10;
+	STRCMP_EQUAL("10", StringFrom(size).asCharString());
+}
+
 TEST(SimpleString, HexStrings)
 {
 	SimpleString h1 = HexStringFrom(0xffff);
