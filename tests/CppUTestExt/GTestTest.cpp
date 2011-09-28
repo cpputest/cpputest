@@ -60,6 +60,23 @@ TEST(GTestSimpleTest, GTestExpectStreq)
 	EXPECT_STREQ("hello world", "hello world");
 }
 
+#ifdef CPPUTEST_USE_REAL_GTEST
+
+/* Death tests are IMHO not a good idea at all. But for compatibility reason, we'll support it */
+
+static void crashMe ()
+{
+	fprintf(stderr, "Crash me!");
+	*((int*) 0) = 10;
+}
+
+TEST(GTestSimpleTest, GTestDeathTest)
+{
+	ASSERT_DEATH(crashMe(), "Crash me!");
+}
+
+#endif
+
 class GTestTestingFixtureTest : public testing::Test {
 protected:
 	bool setup_was_called;
@@ -118,7 +135,7 @@ TEST(GTestConvertor, correctNumberOfTestsInTheTestCases)
 
 	STRCMP_EQUAL("GTestSimpleTest", firstTestCase->name());
 	STRCMP_EQUAL("GTestTestingFixtureTest", secondTestCase->name());
-	LONGS_EQUAL(6, firstTestCase->total_test_count());
+	LONGS_EQUAL(7, firstTestCase->total_test_count());
 	LONGS_EQUAL(2, secondTestCase->total_test_count());
 }
 
@@ -130,7 +147,7 @@ TEST(GTestConvertor, testsGetAddedToCurrentTestRegistry)
 	GTestConvertor convertor(false);
 	convertor.addAllGTestToTestRegistry();
 
-	LONGS_EQUAL(8, TestRegistry::getCurrentRegistry()->countTests());
+	LONGS_EQUAL(9, TestRegistry::getCurrentRegistry()->countTests());
 }
 
 class GTestExceptionCatchingExecFunctionUTest : public ExecFunctionTest

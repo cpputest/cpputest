@@ -57,20 +57,29 @@
 #define GTEST_VERSION_GTEST_1_5
 #endif
 
-#ifdef GTEST_VERSION_GTEST_1_5
 /*
- * Old GTest has the factory_ even more hidden making it even harder to create the darn test.
- * Why do they have to hide creating tests so much!
+ * We really need some of its internals as they don't have a public interface.
+ *
  */
 #define GTEST_IMPLEMENTATION_ 1
 #include "src/gtest-internal-inl.h"
-#endif
 
 
 #include "CppUTestExt/GTestConvertor.h"
 #include "CppUTest/TestRegistry.h"
 #include "CppUTest/TestFailure.h"
 #include "CppUTest/TestResult.h"
+
+/* Store some of the flags as we'll need to reset them each test to avoid leaking memory */
+
+static ::testing::internal::String GTestFlagcolor;
+static ::testing::internal::String GTestFlagfilter;
+static ::testing::internal::String GTestFlagoutput;
+static ::testing::internal::String GTestFlagdeath_test_style;
+static ::testing::internal::String GTestFlaginternal_run_death_test;
+#ifndef GTEST_VERSION_GTEST_1_5
+static ::testing::internal::String GTestFlagstream_result_to;
+#endif
 
 /* Left a global to avoid a header dependency to gtest.h */
 
@@ -94,7 +103,7 @@ public:
 	}
 };
 
-GTest::GTest(const ::testing::TestInfo* testinfo, GTest* next) : testinfo_(testinfo), next_(next)
+GTest::GTest(::testing::TestInfo* testinfo, GTest* next) : testinfo_(testinfo), next_(next)
 {
 	setGroupName(testinfo->test_case_name());
 	setTestName(testinfo->name());
@@ -102,11 +111,22 @@ GTest::GTest(const ::testing::TestInfo* testinfo, GTest* next) : testinfo_(testi
 
 void GTest::setup()
 {
+	::testing::GTEST_FLAG(color) = GTestFlagcolor;
+	::testing::GTEST_FLAG(filter) = GTestFlagfilter;
+	::testing::GTEST_FLAG(output) = GTestFlagoutput;
+	::testing::GTEST_FLAG(death_test_style) = GTestFlagdeath_test_style;
+	::testing::internal::GTEST_FLAG(internal_run_death_test) = GTestFlaginternal_run_death_test;
+	#ifndef GTEST_VERSION_GTEST_1_5
+	::testing::GTEST_FLAG(stream_result_to) = GTestFlagstream_result_to;
+	#endif
+
 #ifdef GTEST_VERSION_GTEST_1_5
 	test_ = testinfo_->impl()->factory_->CreateTest();
 #else
 	test_ = testinfo_->factory_->CreateTest();
 #endif
+
+	::testing::UnitTest::GetInstance()->impl()->set_current_test_info(testinfo_);
 	try {
 		test_->SetUp();
 	}
@@ -123,6 +143,7 @@ void GTest::teardown()
 	catch (GTestException& ex)
 	{
 	}
+	::testing::UnitTest::GetInstance()->impl()->set_current_test_info(NULL);
 	delete test_;
 
 	/* These are reset in String which allocates a string and makes the memory leak detector
@@ -137,6 +158,8 @@ void GTest::teardown()
 #ifndef GTEST_VERSION_GTEST_1_5
 	::testing::GTEST_FLAG(stream_result_to) = NULL;
 #endif
+
+	::testing::internal::DeathTest::set_last_death_test_message(NULL);
 }
 
 void GTest::testBody()
@@ -180,33 +203,46 @@ GTestConvertor::~GTestConvertor()
 }
 
 
-void GTestConvertor::addNewTestCaseForTestInfo(const ::testing::TestInfo* testinfo)
+void GTestConvertor::addNewTestCaseForTestInfo(::testing::TestInfo* testinfo)
 {
 	first_ = new GTest(testinfo, first_);
 	TestRegistry::getCurrentRegistry()->addTest(first_);
 }
 
-void GTestConvertor::addAllTestsFromTestCaseToTestRegistry(const ::testing::TestCase* testcase)
+void GTestConvertor::addAllTestsFromTestCaseToTestRegistry(::testing::TestCase* testcase)
 {
 	int currentTestCount = 0;
-	const ::testing::TestInfo* currentTest = testcase->GetTestInfo(currentTestCount);
+	::testing::TestInfo* currentTest = (::testing::TestInfo*) testcase->GetTestInfo(currentTestCount);
 	while (currentTest) {
 		addNewTestCaseForTestInfo(currentTest);
 		currentTestCount++;
-		currentTest = testcase->GetTestInfo(currentTestCount);
+		currentTest = (::testing::TestInfo*) testcase->GetTestInfo(currentTestCount);
 	}
 }
 
 void GTestConvertor::addAllGTestToTestRegistry()
 {
+//	int argc = 1;
+//	char* argv = "gtest";
+//	::testing::InitGoogleTest(&argc, &argv);
+
+	GTestFlagcolor = ::testing::GTEST_FLAG(color);
+	GTestFlagfilter = ::testing::GTEST_FLAG(filter);
+	GTestFlagoutput = ::testing::GTEST_FLAG(output);
+	GTestFlagdeath_test_style = ::testing::GTEST_FLAG(death_test_style);
+	GTestFlaginternal_run_death_test = ::testing::internal::GTEST_FLAG(internal_run_death_test);
+	#ifndef GTEST_VERSION_GTEST_1_5
+	GTestFlagstream_result_to = ::testing::GTEST_FLAG(stream_result_to);
+	#endif
+
 	::testing::UnitTest* unitTests = ::testing::UnitTest::GetInstance();
 
 	int currentUnitTestCount = 0;
-	const ::testing::TestCase* currentTestCase = unitTests->GetTestCase(currentUnitTestCount);
+	::testing::TestCase* currentTestCase = (::testing::TestCase*) unitTests->GetTestCase(currentUnitTestCount);
 	while (currentTestCase) {
 		addAllTestsFromTestCaseToTestRegistry(currentTestCase);
 		currentUnitTestCount++;
-		currentTestCase = unitTests->GetTestCase(currentUnitTestCount);
+		currentTestCase = (::testing::TestCase*) unitTests->GetTestCase(currentUnitTestCount);
 	}
 }
 #else

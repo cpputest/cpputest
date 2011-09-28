@@ -48,11 +48,11 @@ public:
 
 class GTest : public Utest
 {
-	const ::testing::TestInfo* testinfo_;
+	::testing::TestInfo* testinfo_;
 	::testing::Test* test_;
 	GTest* next_;
 public:
-	GTest(const ::testing::TestInfo* testinfo, GTest* next);
+	GTest(::testing::TestInfo* testinfo, GTest* next);
 
     virtual void setup();
     virtual void teardown();
@@ -68,11 +68,12 @@ public:
 	GTestConvertor(bool shouldSimulateFailureAtCreationToAllocateThreadLocalData = true);
 	virtual ~GTestConvertor();
 
-	void simulateGTestFailureToPreAllocateAllTheThreadLocalData();
-	void addAllGTestToTestRegistry();
-	void addNewTestCaseForTestInfo(const ::testing::TestInfo* testinfo);
-	void addAllTestsFromTestCaseToTestRegistry(const ::testing::TestCase* testcase);
+	virtual void addAllGTestToTestRegistry();
+protected:
+	virtual void simulateGTestFailureToPreAllocateAllTheThreadLocalData();
 
+	virtual void addNewTestCaseForTestInfo(::testing::TestInfo* testinfo);
+	virtual void addAllTestsFromTestCaseToTestRegistry(::testing::TestCase* testcase);
 private:
 	GTestResultReporter* reporter_;
 	GTest* first_;
