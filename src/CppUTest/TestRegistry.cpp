@@ -188,3 +188,26 @@ Utest* TestRegistry::getTestWithNext(Utest* test)
 		current = current->getNext();
 	return current;
 }
+
+Utest* TestRegistry::findTestWithName(const SimpleString& name)
+{
+	Utest* current = tests_;
+	while (!current->isNull()) {
+		if (current->getName() == name)
+			return current;
+		current = current->getNext();
+	}
+	return NULL;
+}
+
+Utest* TestRegistry::findTestWithGroup(const SimpleString& group)
+{
+	Utest* current = tests_;
+	while (!current->isNull()) {
+		if (current->getGroup() == group)
+			return current;
+		current = current->getNext();
+	}
+	return NULL;
+}
+

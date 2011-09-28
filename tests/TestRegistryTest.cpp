@@ -229,3 +229,29 @@ TEST(TestRegistry, reallyUndoLastTest)
 	CHECK(test1->hasRun_);
 	CHECK(!test2->hasRun_);
 }
+
+TEST(TestRegistry, findTestWithNameDoesntExist)
+{
+	CHECK(myRegistry->findTestWithName("ThisTestDoesntExists") == NULL);
+}
+
+TEST(TestRegistry, findTestWithName)
+{
+	test1->setTestName("NameOfATestThatDoesExist");
+	myRegistry->addTest(test1);
+	CHECK(myRegistry->findTestWithName("NameOfATestThatDoesExist"));
+}
+
+TEST(TestRegistry, findTestWithGroupDoesntExist)
+{
+	CHECK(myRegistry->findTestWithGroup("ThisTestGroupDoesntExists") == NULL);
+}
+
+TEST(TestRegistry, findTestWithGroup)
+{
+	test1->setGroupName("GroupOfATestThatDoesExist");
+	myRegistry->addTest(test1);
+	CHECK(myRegistry->findTestWithGroup("GroupOfATestThatDoesExist"));
+}
+
+

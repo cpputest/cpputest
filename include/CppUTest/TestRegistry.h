@@ -68,6 +68,9 @@ public:
 	virtual Utest* getLastTest();
 	virtual Utest* getTestWithNext(Utest* test);
 
+	virtual Utest* findTestWithName(const SimpleString& name);
+	virtual Utest* findTestWithGroup(const SimpleString& name);
+
 	static TestRegistry* getCurrentRegistry();
 	virtual void setCurrentRegistry(TestRegistry* registry);
 	void cleanup();
