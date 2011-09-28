@@ -26,7 +26,7 @@
  * Not on as warning are as errors :P
  */
 
-typedef unsigned long size_t;
+typedef unsigned int size_t;
 typedef char* va_list;
 #define NULL (0)
 extern void*	malloc(size_t);
