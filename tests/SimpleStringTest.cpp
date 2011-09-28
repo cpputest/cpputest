@@ -380,7 +380,7 @@ TEST(SimpleString, Doubles)
 TEST(SimpleString, Sizes)
 {
 	size_t size = 10;
-	STRCMP_EQUAL("10", StringFrom(size).asCharString());
+	STRCMP_EQUAL("10", StringFrom((int) size).asCharString());
 }
 
 TEST(SimpleString, HexStrings)
