@@ -54,6 +54,10 @@ test_all: start test_old_make
 	$(SILENCE)echo Building with overridden CXXFLAGS and CFLAGS and memory leak and STDC++ disabled
 	$(TIME) make CLFAGS="" CXXFLAGS="" CPPFLAGS="-Iinclude -DCPPUTEST_STD_CPP_LIB_DISABLED -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED"
 	make CFLAGS="" CXXFLAGS="" CPPFLAGS="-DCPPUTEST_STD_CPP_LIB_DISABLED -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED" clean
+	$(SILENCE)echo Building CppUTest with Google Test 
+	$(SILENCE) if [ -z $$GTEST_HOME ]; then  \
+	   echo "******** WARNING: Can't test with CPPUTEST_USE_REAL_GTEST because can't find Google Test -- no GTEST_HOME set ********"; \
+	   else $(TIME) make extensions CPPUTEST_USE_REAL_GTEST=Y; fi
 	$(SILENCE)echo Building examples 
 	make cleanExamples
 	$(TIME) make examples
@@ -86,16 +90,16 @@ test_old_make:
 
 .PHONY: examples
 examples: $(TEST_TARGET) extensions
-	$(TIME) make -C examples  all
+	$(TIME) make -C examples  all $(MAKEFLAGS)
 
 extensions: $(TEST_TARGET)
-	$(TIME) make -f Makefile_CppUTestExt all CPPUTEST_USE_STD_CPP_LIB=$(CPPUTEST_USE_STD_CPP_LIB) CPPUTEST_USE_MEM_LEAK_DETECTION=$(CPPUTEST_USE_MEM_LEAK_DETECTION)
+	$(TIME) make -f Makefile_CppUTestExt all $(MAKEFLAGS)
 
 cleanExtensions: clean
-	$(TIME) make -f Makefile_CppUTestExt clean CPPUTEST_USE_STD_CPP_LIB=$(CPPUTEST_USE_STD_CPP_LIB) CPPUTEST_USE_MEM_LEAK_DETECTION=$(CPPUTEST_USE_MEM_LEAK_DETECTION)
+	$(TIME) make -f Makefile_CppUTestExt clean $(MAKEFLAGS)
 	
 cleanExamples: clean cleanExtensions
-	$(TIME) make -C examples clean 
+	$(TIME) make -C examples clean $(MAKEFLAGS)
 
 .PHONY: everythingInstall
 everythingInstall: all extensions examples

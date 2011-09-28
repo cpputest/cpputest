@@ -33,6 +33,13 @@ ifndef CPPUTEST_LIB_DIR
     CPPUTEST_LIB_DIR = lib
 endif
 
+# Use the real gtest or use the fake simulation
+ifdef CPPUTEST_USE_REAL_GTEST
+	CPPUTEST_USE_REAL_GTEST = Y
+else
+	CPPUTEST_USE_REAL_GTEST = N
+endif
+
 # --------------------------------------
 # derived flags in the following area
 # --------------------------------------
@@ -49,6 +56,17 @@ endif
 
 ifeq ($(CPPUTEST_ENABLE_DEBUG), Y)
 	CPPUTEST_CPPFLAGS += -g
+endif
+
+ifeq ($(CPPUTEST_USE_REAL_GTEST), Y)
+	ifndef GTEST_HOME
+$(error CPPUTEST_USE_REAL_GTEST defined, but GTEST_HOME not, so can't use real gtest! Please define GTEST_HOME to the gtest location)
+	endif
+	CPPUTEST_CPPFLAGS += -I$(GTEST_HOME)/include
+	LD_LIBRARIES += $(GTEST_HOME)/lib/.libs/libgtest.a
+	CPPUTEST_CPPFLAGS += -DCPPUTEST_USE_REAL_GTEST
+else
+	CPPUTEST_CPPFLAGS += -Iinclude/CppUTestGTest
 endif
 
 ifeq ($(CPPUTEST_USE_STD_CPP_LIB), N)

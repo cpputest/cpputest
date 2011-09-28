@@ -29,9 +29,15 @@
 #include "CppUTest/TestRegistry.h"
 #include "CppUTestExt/MemoryReporterPlugin.h"
 #include "CppUTestExt/MockSupportPlugin.h"
+#include "CppUTestExt/GTestConvertor.h"
 
 int main(int ac, const char** av)
 {
+#ifdef CPPUTEST_USE_REAL_GTEST
+	GTestConvertor convertor;
+	convertor.addAllGTestToTestRegistry();
+#endif
+
 	MemoryReporterPlugin plugin;
 	MockSupportPlugin mockPlugin;
 	TestRegistry::getCurrentRegistry()->installPlugin(&plugin);

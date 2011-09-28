@@ -36,6 +36,8 @@
 #		of the test harness
 #   CPPUTEST_USE_GCOV - Turn on coverage analysis
 #		Clean then build with this flag set to Y, then 'make gcov'
+#   CPPUTEST_USE_REAL_GTEST - Expect to link to gtest too. This enables the ability to
+#       run Google Test tests as CppUTest tests using the GTestConvertor.
 #   CPPUTEST_MAPFILE - generate a map file
 #   CPPUTEST_WARNINGFLAGS - overly picky by default
 #	OTHER_MAKEFILE_TO_INCLUDE - a hook to use this makefile to make 
@@ -105,6 +107,13 @@ ifndef CPPUTEST_USE_STD_CPP_LIB
 	CPPUTEST_USE_STD_CPP_LIB = Y
 endif
 
+# Use the real gtest or use the fake simulation
+ifdef CPPUTEST_USE_REAL_GTEST
+	CPPUTEST_USE_REAL_GTEST = Y
+else
+	CPPUTEST_USE_REAL_GTEST = N
+endif
+
 # Use gcov, off by default
 ifndef CPPUTEST_USE_GCOV
 	CPPUTEST_USE_GCOV = N
@@ -118,7 +127,9 @@ endif
 ifndef CPPUTEST_WARNINGFLAGS
 	CPPUTEST_WARNINGFLAGS =  -Wall -Wextra -Werror -Wshadow -Wswitch-default -Wswitch-enum -Wconversion
 ifeq ($(CPPUTEST_PEDANTIC_ERRORS), Y)
+ifdef ($(CPPUTEST_USE_REALGTEST, N)
 	CPPUTEST_WARNINGFLAGS += -pedantic-errors
+endif
 endif 
 	CPPUTEST_CXX_WARNINGFLAGS = -Woverloaded-virtual
 endif
@@ -184,6 +195,17 @@ endif
 ifeq ($(CPPUTEST_USE_STD_CPP_LIB), N)
 	CPPUTEST_CPPFLAGS += -DCPPUTEST_STD_CPP_LIB_DISABLED
 	CPPUTEST_CXXFLAGS += -nostdinc++
+endif
+
+ifeq ($(CPPUTEST_USE_REAL_GTEST), Y)
+	ifndef GTEST_HOME
+$(error CPPUTEST_USE_REAL_GTEST defined, but GTEST_HOME not, so can't use real gtest! Please define GTEST_HOME to the gtest location)
+	endif
+	CPPUTEST_CPPFLAGS += -I$(GTEST_HOME)/include
+	LD_LIBRARIES += $(GTEST_HOME)/lib/.libs/libgtest.a
+	CPPUTEST_CPPFLAGS += -DCPPUTEST_USE_REAL_GTEST
+else
+	CPPUTEST_CPPFLAGS += -Iinclude/CppUTestGTest
 endif
 
 ifeq ($(CPPUTEST_USE_GCOV), Y)
