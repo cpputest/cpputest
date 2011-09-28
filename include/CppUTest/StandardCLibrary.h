@@ -26,7 +26,12 @@
  * Not on as warning are as errors :P
  */
 
+#ifdef __SIZE_TYPE__
+typedef __SIZE_TYPE__ size_t;
+#else
 typedef unsigned int size_t;
+#endif
+
 typedef char* va_list;
 #define NULL (0)
 extern void*	malloc(size_t);
