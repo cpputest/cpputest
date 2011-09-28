@@ -125,13 +125,13 @@ endif
 
 # Default warnings
 ifndef CPPUTEST_WARNINGFLAGS
+ifdef ($(CPPUTEST_USE_REALGTEST, N)
 	CPPUTEST_WARNINGFLAGS =  -Wall -Wextra -Werror -Wshadow -Wswitch-default -Wswitch-enum -Wconversion
 ifeq ($(CPPUTEST_PEDANTIC_ERRORS), Y)
-ifdef ($(CPPUTEST_USE_REALGTEST, N)
 	CPPUTEST_WARNINGFLAGS += -pedantic-errors
-endif
 endif 
 	CPPUTEST_CXX_WARNINGFLAGS = -Woverloaded-virtual
+endif
 endif
 
 # Default dir for temporary files (d, o)
@@ -201,8 +201,9 @@ ifeq ($(CPPUTEST_USE_REAL_GTEST), Y)
 	ifndef GTEST_HOME
 $(error CPPUTEST_USE_REAL_GTEST defined, but GTEST_HOME not, so can't use real gtest! Please define GTEST_HOME to the gtest location)
 	endif
-	CPPUTEST_CPPFLAGS += -I$(GTEST_HOME)/include
-	LD_LIBRARIES += $(GTEST_HOME)/lib/.libs/libgtest.a
+	CPPUTEST_CPPFLAGS += -I$(GTEST_HOME)/include -I$(GTEST_HOME)
+	GTEST_LIBRARY = $(GTEST_HOME)/lib/.libs/libgtest.a
+	LD_LIBRARIES += $(GTEST_LIBRARY)
 	CPPUTEST_CPPFLAGS += -DCPPUTEST_USE_REAL_GTEST
 else
 	CPPUTEST_CPPFLAGS += -Iinclude/CppUTestGTest

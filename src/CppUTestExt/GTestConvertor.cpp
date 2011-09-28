@@ -51,6 +51,22 @@
 #include "gtest/gtest-spi.h"
 #include "gtest/gtest-death-test.h"
 
+#ifdef ADD_FAILURE_AT
+#define GTEST_VERSION_GTEST_1_6
+#else
+#define GTEST_VERSION_GTEST_1_5
+#endif
+
+#ifdef GTEST_VERSION_GTEST_1_5
+/*
+ * Old GTest has the factory_ even more hidden making it even harder to create the darn test.
+ * Why do they have to hide creating tests so much!
+ */
+#define GTEST_IMPLEMENTATION_ 1
+#include "src/gtest-internal-inl.h"
+#endif
+
+
 #include "CppUTestExt/GTestConvertor.h"
 #include "CppUTest/TestRegistry.h"
 #include "CppUTest/TestFailure.h"
@@ -86,7 +102,11 @@ GTest::GTest(const ::testing::TestInfo* testinfo, GTest* next) : testinfo_(testi
 
 void GTest::setup()
 {
+#ifdef GTEST_VERSION_GTEST_1_5
+	test_ = testinfo_->impl()->factory_->CreateTest();
+#else
 	test_ = testinfo_->factory_->CreateTest();
+#endif
 	try {
 		test_->SetUp();
 	}
@@ -112,9 +132,11 @@ void GTest::teardown()
 	::testing::GTEST_FLAG(color) = NULL;
 	::testing::GTEST_FLAG(filter) = NULL;
 	::testing::GTEST_FLAG(output) = NULL;
-	::testing::GTEST_FLAG(stream_result_to) = NULL;
 	::testing::GTEST_FLAG(death_test_style) = NULL;
 	::testing::internal::GTEST_FLAG(internal_run_death_test) = NULL;
+#ifndef GTEST_VERSION_GTEST_1_5
+	::testing::GTEST_FLAG(stream_result_to) = NULL;
+#endif
 }
 
 void GTest::testBody()
