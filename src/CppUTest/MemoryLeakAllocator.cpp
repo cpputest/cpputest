@@ -41,6 +41,20 @@ MemoryLeakAllocator* MemoryLeakAllocator::currentNewAllocator = 0;
 MemoryLeakAllocator* MemoryLeakAllocator::currentNewArrayAllocator = 0;
 MemoryLeakAllocator* MemoryLeakAllocator::currentMallocAllocator = 0;
 
+MemoryLeakAllocator::MemoryLeakAllocator() :hasBeenDestroyed_(false)
+{
+}
+
+MemoryLeakAllocator::~MemoryLeakAllocator()
+{
+	hasBeenDestroyed_ = true;
+}
+
+bool MemoryLeakAllocator::hasBeenDestroyed()
+{
+	return hasBeenDestroyed_;
+}
+
 bool MemoryLeakAllocator::isOfEqualType(MemoryLeakAllocator* allocator)
 {
 	return PlatformSpecificStrCmp(this->name(), allocator->name()) == 0;

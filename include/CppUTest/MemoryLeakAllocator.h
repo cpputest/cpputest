@@ -6,6 +6,11 @@ struct MemoryLeakNode;
 class MemoryLeakAllocator
 {
 public:
+	MemoryLeakAllocator();
+	virtual ~MemoryLeakAllocator();
+
+	bool hasBeenDestroyed();
+
 	virtual char* alloc_memory(size_t size, const char* file, int line)=0;
 	virtual void free_memory(char* memory, const char* file, int line)=0;
 
@@ -14,9 +19,6 @@ public:
 	virtual const char* free_name()=0;
 
 	virtual bool isOfEqualType(MemoryLeakAllocator* allocator);
-	virtual ~MemoryLeakAllocator()
-	{
-	}
 
 	virtual bool allocateMemoryLeakNodeSeparately();
 	virtual char* allocMemoryLeakNode(size_t size);
@@ -38,6 +40,7 @@ private:
 	static MemoryLeakAllocator* currentNewAllocator;
 	static MemoryLeakAllocator* currentNewArrayAllocator;
 	static MemoryLeakAllocator* currentMallocAllocator;
+	bool hasBeenDestroyed_;
 };
 
 class StandardMallocAllocator: public MemoryLeakAllocator

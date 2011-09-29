@@ -421,8 +421,10 @@ void MemoryLeakDetector::deallocMemory(MemoryLeakAllocator* allocator, void* mem
 		reportFailure(MEM_LEAK_DEALLOC_NON_ALLOCATED, "<unknown>", 0, 0, NullUnknownAllocator::defaultAllocator(), file, line, allocator);
 		return;
 	}
-	checkForCorruption(node, file, line, allocator);
-	allocator->free_memory((char*) memory, file, line);
+	if (!allocator->hasBeenDestroyed()) {
+		checkForCorruption(node, file, line, allocator);
+		allocator->free_memory((char*) memory, file, line);
+	}
 }
 
 void MemoryLeakDetector::deallocMemory(MemoryLeakAllocator* allocator, void* memory)
