@@ -150,46 +150,6 @@ TEST(GTestConvertor, testsGetAddedToCurrentTestRegistry)
 	LONGS_EQUAL(9, TestRegistry::getCurrentRegistry()->countTests());
 }
 
-class GTestExceptionCatchingExecFunctionUTest : public ExecFunctionTest
-{
-public:
-
-	void testBody()
-	{
-		try {
-			ExecFunctionTest::testBody();
-		}
-		catch (GTestException& ex)
-		{
-		}
-	}
-
-	virtual void setup()
-	{
-		try {
-			ExecFunctionTest::setup();
-		}
-		catch (GTestException& ex)
-		{
-		}
-	}
-	virtual void teardown()
-	{
-		try {
-			ExecFunctionTest::teardown();
-		}
-		catch (GTestException& ex)
-		{
-		}
-	}
-
-	virtual void run(TestResult& result)
-	{
-			ExecFunctionTest::run(result);
-	}
-
-};
-
 #endif
 
 TEST_GROUP(gtest)
@@ -253,10 +213,6 @@ TEST_GROUP(gtestMacros)
 	{
 		fixture = new TestTestingFixture();
 		afterCheck = false;
-#ifdef CPPUTEST_USE_REAL_GTEST
-		delete fixture->genTest_;
-		fixture->genTest_ = new GTestExceptionCatchingExecFunctionUTest();
-#endif
 	}
 	void teardown()
 	{

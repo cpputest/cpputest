@@ -25,56 +25,9 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef GTESTCONVERTOR_H_
-#define GTESTCONVERTOR_H_
+#ifndef CPPUTEST_GMOCK_H_
+#define CPPUTEST_GMOCK_H_
 
-#include "CppUTest/Utest.h"
-
-#ifdef CPPUTEST_USE_REAL_GTEST
-
-class GTestResultReporter;
-
-namespace testing {
-	class TestInfo;
-	class TestCase;
-	class Test;
-}
-
-class GTest : public Utest
-{
-	::testing::TestInfo* testinfo_;
-	::testing::Test* test_;
-	GTest* next_;
-public:
-	GTest(::testing::TestInfo* testinfo, GTest* next);
-
-    virtual void setup();
-    virtual void teardown();
-	virtual void testBody();
-
-	GTest* nextGTest();
-};
-
-
-class GTestConvertor
-{
-public:
-	GTestConvertor(bool shouldSimulateFailureAtCreationToAllocateThreadLocalData = true);
-	virtual ~GTestConvertor();
-
-	virtual void addAllGTestToTestRegistry();
-protected:
-	virtual void simulateGTestFailureToPreAllocateAllTheThreadLocalData();
-
-	virtual void addNewTestCaseForTestInfo(::testing::TestInfo* testinfo);
-	virtual void addAllTestsFromTestCaseToTestRegistry(::testing::TestCase* testcase);
-
-	virtual void createDummyInSequenceToAndFailureReporterAvoidMemoryLeakInGMock();
-private:
-	GTestResultReporter* reporter_;
-	GTest* first_;
-};
-
-#endif
+/* This is to be done. Implement the GMock interface with CppUTest Mocking */
 
 #endif

@@ -50,6 +50,7 @@
 #include "gtest/gtest.h"
 #include "gtest/gtest-spi.h"
 #include "gtest/gtest-death-test.h"
+#include "gmock/gmock.h"
 
 #ifdef ADD_FAILURE_AT
 #define GTEST_VERSION_GTEST_1_6
@@ -81,6 +82,42 @@ static ::testing::internal::String GTestFlaginternal_run_death_test;
 static ::testing::internal::String GTestFlagstream_result_to;
 #endif
 
+static void storeValuesOfGTestFLags()
+{
+	GTestFlagcolor = ::testing::GTEST_FLAG(color);
+	GTestFlagfilter = ::testing::GTEST_FLAG(filter);
+	GTestFlagoutput = ::testing::GTEST_FLAG(output);
+	GTestFlagdeath_test_style = ::testing::GTEST_FLAG(death_test_style);
+	GTestFlaginternal_run_death_test = ::testing::internal::GTEST_FLAG(internal_run_death_test);
+	#ifndef GTEST_VERSION_GTEST_1_5
+	GTestFlagstream_result_to = ::testing::GTEST_FLAG(stream_result_to);
+	#endif
+}
+
+static void resetValuesOfGTestFlags()
+{
+	::testing::GTEST_FLAG(color) = GTestFlagcolor;
+	::testing::GTEST_FLAG(filter) = GTestFlagfilter;
+	::testing::GTEST_FLAG(output) = GTestFlagoutput;
+	::testing::GTEST_FLAG(death_test_style) = GTestFlagdeath_test_style;
+	::testing::internal::GTEST_FLAG(internal_run_death_test) = GTestFlaginternal_run_death_test;
+	#ifndef GTEST_VERSION_GTEST_1_5
+	::testing::GTEST_FLAG(stream_result_to) = GTestFlagstream_result_to;
+	#endif
+}
+
+void setGTestFLagValuesToNULLToAvoidMemoryLeaks()
+{
+	::testing::GTEST_FLAG(color) = NULL;
+	::testing::GTEST_FLAG(filter) = NULL;
+	::testing::GTEST_FLAG(output) = NULL;
+	::testing::GTEST_FLAG(death_test_style) = NULL;
+	::testing::internal::GTEST_FLAG(internal_run_death_test) = NULL;
+	#ifndef GTEST_VERSION_GTEST_1_5
+	::testing::GTEST_FLAG(stream_result_to) = NULL;
+	#endif
+}
+
 /* Left a global to avoid a header dependency to gtest.h */
 
 class GTestDummyResultReporter : public ::testing::ScopedFakeTestPartResultReporter
@@ -99,7 +136,16 @@ public:
 	{
 		FailFailure failure(Utest::getCurrent(), result.file_name(), result.line_number(), result.message());
 		Utest::getCurrent()->getTestResult()->addFailure(failure);
-		throw GTestException();
+
+		/*
+		 * When using GMock, it throws an exception fromt he destructor leaving
+		 * the system in an unstable state.
+		 * Therefore, when the test fails because of failed gmock expectation
+		 * then don't throw the exception, but let it return. Usually this should
+		 * already be at the end of the test, so it doesn't matter much
+		 */
+		if (!SimpleString(result.message()).contains("Actual: never called"))
+			throw CppUTestFailedException();
 	}
 };
 
@@ -111,16 +157,9 @@ GTest::GTest(::testing::TestInfo* testinfo, GTest* next) : testinfo_(testinfo), 
 
 void GTest::setup()
 {
-	::testing::GTEST_FLAG(color) = GTestFlagcolor;
-	::testing::GTEST_FLAG(filter) = GTestFlagfilter;
-	::testing::GTEST_FLAG(output) = GTestFlagoutput;
-	::testing::GTEST_FLAG(death_test_style) = GTestFlagdeath_test_style;
-	::testing::internal::GTEST_FLAG(internal_run_death_test) = GTestFlaginternal_run_death_test;
-	#ifndef GTEST_VERSION_GTEST_1_5
-	::testing::GTEST_FLAG(stream_result_to) = GTestFlagstream_result_to;
-	#endif
+	resetValuesOfGTestFlags();
 
-#ifdef GTEST_VERSION_GTEST_1_5
+	#ifdef GTEST_VERSION_GTEST_1_5
 	test_ = testinfo_->impl()->factory_->CreateTest();
 #else
 	test_ = testinfo_->factory_->CreateTest();
@@ -130,7 +169,7 @@ void GTest::setup()
 	try {
 		test_->SetUp();
 	}
-	catch (GTestException& ex)
+	catch (CppUTestFailedException& ex)
 	{
 	}
 }
@@ -140,25 +179,13 @@ void GTest::teardown()
 	try {
 		test_->TearDown();
 	}
-	catch (GTestException& ex)
+	catch (CppUTestFailedException& ex)
 	{
 	}
 	::testing::UnitTest::GetInstance()->impl()->set_current_test_info(NULL);
 	delete test_;
 
-	/* These are reset in String which allocates a string and makes the memory leak detector
-	 * unhappy. So therefore reset them to NULL.
-	 */
-
-	::testing::GTEST_FLAG(color) = NULL;
-	::testing::GTEST_FLAG(filter) = NULL;
-	::testing::GTEST_FLAG(output) = NULL;
-	::testing::GTEST_FLAG(death_test_style) = NULL;
-	::testing::internal::GTEST_FLAG(internal_run_death_test) = NULL;
-#ifndef GTEST_VERSION_GTEST_1_5
-	::testing::GTEST_FLAG(stream_result_to) = NULL;
-#endif
-
+	setGTestFLagValuesToNULLToAvoidMemoryLeaks();
 	::testing::internal::DeathTest::set_last_death_test_message(NULL);
 }
 
@@ -167,7 +194,7 @@ void GTest::testBody()
 	try {
 		test_->TestBody();
 	}
-	catch (GTestException& ex)
+	catch (CppUTestFailedException& ex)
 	{
 	}
 }
@@ -202,7 +229,6 @@ GTestConvertor::~GTestConvertor()
 	}
 }
 
-
 void GTestConvertor::addNewTestCaseForTestInfo(::testing::TestInfo* testinfo)
 {
 	first_ = new GTest(testinfo, first_);
@@ -220,20 +246,24 @@ void GTestConvertor::addAllTestsFromTestCaseToTestRegistry(::testing::TestCase* 
 	}
 }
 
+void GTestConvertor::createDummyInSequenceToAndFailureReporterAvoidMemoryLeakInGMock()
+{
+#ifdef CPPUTEST_USE_REAL_GMOCK
+	::testing::InSequence seq;
+	::testing::internal::GetFailureReporter();
+#endif
+}
+
 void GTestConvertor::addAllGTestToTestRegistry()
 {
-//	int argc = 1;
-//	char* argv = "gtest";
-//	::testing::InitGoogleTest(&argc, &argv);
+	createDummyInSequenceToAndFailureReporterAvoidMemoryLeakInGMock();
+	storeValuesOfGTestFLags();
 
-	GTestFlagcolor = ::testing::GTEST_FLAG(color);
-	GTestFlagfilter = ::testing::GTEST_FLAG(filter);
-	GTestFlagoutput = ::testing::GTEST_FLAG(output);
-	GTestFlagdeath_test_style = ::testing::GTEST_FLAG(death_test_style);
-	GTestFlaginternal_run_death_test = ::testing::internal::GTEST_FLAG(internal_run_death_test);
-	#ifndef GTEST_VERSION_GTEST_1_5
-	GTestFlagstream_result_to = ::testing::GTEST_FLAG(stream_result_to);
-	#endif
+#ifdef CPPUTEST_USE_REAL_GMOCK
+	int argc = 2;
+	const char * argv[] = {"NameOfTheProgram", "--gmock_catch_leaked_mocks=0"};
+	::testing::InitGoogleMock(&argc, (char**) argv);
+#endif
 
 	::testing::UnitTest* unitTests = ::testing::UnitTest::GetInstance();
 

@@ -58,6 +58,10 @@ test_all: start test_old_make
 	$(SILENCE) if [ -z $$GTEST_HOME ]; then  \
 	   echo "******** WARNING: Can't test with CPPUTEST_USE_REAL_GTEST because can't find Google Test -- no GTEST_HOME set ********"; \
 	   else $(TIME) make extensions CPPUTEST_USE_REAL_GTEST=Y; fi
+	$(SILENCE)echo Building CppUTest with Google Mock 
+	$(SILENCE) if [ -z $$GMOCK_HOME ]; then  \
+	   echo "******** WARNING: Can't test with CPPUTEST_USE_REAL_GMOCK because can't find Google Mock -- no GMOCK_HOME set ********"; \
+	   else $(TIME) make extensions CPPUTEST_USE_REAL_GMOCK=Y; fi
 	$(SILENCE)echo Building examples 
 	make cleanExamples
 	$(TIME) make examples

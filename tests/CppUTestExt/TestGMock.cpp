@@ -25,56 +25,38 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef GTESTCONVERTOR_H_
-#define GTESTCONVERTOR_H_
+#include "CppUTestExt/GMock.h"
+#include "CppUTest/TestHarness.h"
+#include "CppUTest/TestOutput.h"
+#include "CppUTest/TestRegistry.h"
+#include "CppUTest/TestTestingFixture.h"
 
-#include "CppUTest/Utest.h"
+#ifdef CPPUTEST_USE_REAL_GMOCK
 
-#ifdef CPPUTEST_USE_REAL_GTEST
+TEST_GROUP(GMock)
+{
+};
 
-class GTestResultReporter;
+class myMock
+{
+public:
+	MOCK_METHOD0(methodName, void());
+};
 
-namespace testing {
-	class TestInfo;
-	class TestCase;
-	class Test;
+static void failedMockCall()
+{
+	myMock mock;
+	EXPECT_CALL(mock, methodName());
 }
 
-class GTest : public Utest
+TEST(GMock, fail)
 {
-	::testing::TestInfo* testinfo_;
-	::testing::Test* test_;
-	GTest* next_;
-public:
-	GTest(::testing::TestInfo* testinfo, GTest* next);
-
-    virtual void setup();
-    virtual void teardown();
-	virtual void testBody();
-
-	GTest* nextGTest();
-};
-
-
-class GTestConvertor
-{
-public:
-	GTestConvertor(bool shouldSimulateFailureAtCreationToAllocateThreadLocalData = true);
-	virtual ~GTestConvertor();
-
-	virtual void addAllGTestToTestRegistry();
-protected:
-	virtual void simulateGTestFailureToPreAllocateAllTheThreadLocalData();
-
-	virtual void addNewTestCaseForTestInfo(::testing::TestInfo* testinfo);
-	virtual void addAllTestsFromTestCaseToTestRegistry(::testing::TestCase* testcase);
-
-	virtual void createDummyInSequenceToAndFailureReporterAvoidMemoryLeakInGMock();
-private:
-	GTestResultReporter* reporter_;
-	GTest* first_;
-};
+	TestTestingFixture fixture;
+	fixture.setTestFunction(failedMockCall);
+	fixture.runAllTests();
+	LONGS_EQUAL(1, fixture.getFailureCount());
+}
 
 #endif
 
-#endif
+

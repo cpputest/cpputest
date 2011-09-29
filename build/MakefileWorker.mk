@@ -114,6 +114,14 @@ else
 	CPPUTEST_USE_REAL_GTEST = N
 endif
 
+# Use gmock
+ifdef CPPUTEST_USE_REAL_GMOCK
+	CPPUTEST_USE_REAL_GMOCK = Y
+else
+	CPPUTEST_USE_REAL_GMOCK = N
+endif
+
+
 # Use gcov, off by default
 ifndef CPPUTEST_USE_GCOV
 	CPPUTEST_USE_GCOV = N
@@ -197,6 +205,20 @@ ifeq ($(CPPUTEST_USE_STD_CPP_LIB), N)
 	CPPUTEST_CXXFLAGS += -nostdinc++
 endif
 
+ifeq ($(CPPUTEST_USE_REAL_GMOCK), Y)
+	ifndef GMOCK_HOME
+$(error CPPUTEST_USE_REAL_GMOCK defined, but GMOCK_HOME not, so can't use real gmock! Please define GMOCK_HOME to the gmock location)
+	endif
+	GTEST_HOME = $(GMOCK_HOME)/gtest
+	CPPUTEST_USE_REAL_GTEST = Y
+	CPPUTEST_CPPFLAGS += -I$(GMOCK_HOME)/include
+	GMOCK_LIBRARY = $(GMOCK_HOME)/lib/.libs/libgmock.a
+	LD_LIBRARIES += $(GMOCK_LIBRARY)
+	CPPUTEST_CPPFLAGS += -DCPPUTEST_USE_REAL_GMOCK
+else
+	CPPUTEST_CPPFLAGS += -Iinclude/CppUTestExt/CppUTestGMock
+endif
+
 ifeq ($(CPPUTEST_USE_REAL_GTEST), Y)
 	ifndef GTEST_HOME
 $(error CPPUTEST_USE_REAL_GTEST defined, but GTEST_HOME not, so can't use real gtest! Please define GTEST_HOME to the gtest location)
@@ -206,7 +228,11 @@ $(error CPPUTEST_USE_REAL_GTEST defined, but GTEST_HOME not, so can't use real g
 	LD_LIBRARIES += $(GTEST_LIBRARY)
 	CPPUTEST_CPPFLAGS += -DCPPUTEST_USE_REAL_GTEST
 else
-	CPPUTEST_CPPFLAGS += -Iinclude/CppUTestGTest
+	CPPUTEST_CPPFLAGS += -Iinclude/CppUTestExt/CppUTestGTest
+endif
+
+ifeq ($(CPPUTEST_USE_GCOV), Y)
+	CPPUTEST_CPPFLAGS += -fprofile-arcs -ftest-coverage
 endif
 
 ifeq ($(CPPUTEST_USE_GCOV), Y)

@@ -33,15 +33,6 @@
 
 #include "SimpleString.h"
 
-/*! \brief UTest.h
- * \ingroup someGroup
- *
- * Something about UTest.h
- *
- * \see TEST_GROUP
- * \see TEST
- */
-
 class TestResult;
 class TestPlugin;
 class TestFailure;
@@ -175,6 +166,14 @@ public:
 	{
 		if (teardown_) teardown_();
 	}
+};
+
+//////////////////// CppUTestFailedException
+
+class CppUTestFailedException
+{
+public:
+	int dummy_;
 };
 
 //////////////////// TestInstaller

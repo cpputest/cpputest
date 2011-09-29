@@ -111,10 +111,26 @@ void Utest::run(TestResult& result)
 	setTestResult(&result);
 	setCurrentTest(this);
 
-	if (executePlatformSpecificSetup()) {
-		executePlatformSpecificTestBody();
+#if CPPUTEST_USE_STD_CPP_LIB
+	try {
+#endif
+			if (executePlatformSpecificSetup()) {
+			executePlatformSpecificTestBody();
+		}
+		executePlatformSpecificTeardown();
+
+#if CPPUTEST_USE_STD_CPP_LIB
 	}
-	executePlatformSpecificTeardown();
+	catch (CppUTestFailedException& ex)
+	{
+		try {
+			executePlatformSpecificTeardown();
+		}
+		catch (CppUTestFailedException& ex2)
+		{
+		}
+	}
+#endif
 
 	setCurrentTest(savedTest);
 	setTestResult(savedResult);
