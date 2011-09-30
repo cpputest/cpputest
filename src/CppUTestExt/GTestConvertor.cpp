@@ -144,7 +144,8 @@ public:
 		 * then don't throw the exception, but let it return. Usually this should
 		 * already be at the end of the test, so it doesn't matter much
 		 */
-		if (!SimpleString(result.message()).contains("Actual: never called"))
+		if (!SimpleString(result.message()).contains("Actual: never called") &&
+			!SimpleString(result.message()).contains("Actual function call count doesn't match"))
 			throw CppUTestFailedException();
 	}
 };

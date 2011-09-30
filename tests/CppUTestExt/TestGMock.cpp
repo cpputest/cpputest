@@ -35,6 +35,17 @@
 
 TEST_GROUP(GMock)
 {
+	TestTestingFixture *fixture;
+	void setup()
+	{
+		fixture = new TestTestingFixture;
+	}
+
+	void teardown()
+	{
+		delete fixture;
+
+	}
 };
 
 class myMock
@@ -49,12 +60,26 @@ static void failedMockCall()
 	EXPECT_CALL(mock, methodName());
 }
 
-TEST(GMock, fail)
+TEST(GMock, GMockFailuresWorkAsExpected)
 {
-	TestTestingFixture fixture;
-	fixture.setTestFunction(failedMockCall);
-	fixture.runAllTests();
-	LONGS_EQUAL(1, fixture.getFailureCount());
+	fixture->setTestFunction(failedMockCall);
+	fixture->runAllTests();
+	LONGS_EQUAL(1, fixture->getFailureCount());
+}
+
+static void failedMockCallAfterOneSuccess()
+{
+	myMock mock;
+	EXPECT_CALL(mock, methodName()).Times(2);
+
+	mock.methodName();
+}
+
+TEST(GMock, GMockFailuresWorkAsExpectedWithTwoExpectedCallButJustOneActual)
+{
+	fixture->setTestFunction(failedMockCallAfterOneSuccess);
+	fixture->runAllTests();
+	LONGS_EQUAL(1, fixture->getFailureCount());
 }
 
 #endif
