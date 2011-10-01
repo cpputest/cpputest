@@ -149,7 +149,7 @@ void* operator new [](size_t size, const char* file, int line) UT_THROW(std::bad
 
 void operator delete[](void* mem) UT_THROW_EMPTY()
 {
-	return operator_delete_array_fptr(mem);
+	 operator_delete_array_fptr(mem);
 }
 
 #endif
