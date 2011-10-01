@@ -121,3 +121,92 @@ TEST(MemoryLeakWarningTest, FailingTestDoesNotReportMemoryLeaks)
 	fixture->runAllTests();
 	LONGS_EQUAL(1, fixture->getFailureCount());
 }
+
+bool memoryLeakDetectorWasDeleted = false;
+bool memoryLeakFailureWasDelete = false;
+
+class DummyMemoryLeakDetector : public MemoryLeakDetector
+{
+public:
+	virtual ~DummyMemoryLeakDetector()
+	{
+		memoryLeakDetectorWasDeleted = true;
+	}
+};
+
+class DummyMemoryLeakFailure : public MemoryLeakFailure
+{
+	virtual ~DummyMemoryLeakFailure()
+	{
+		memoryLeakFailureWasDelete = true;
+	}
+	virtual void fail(char*)
+	{
+	}
+};
+
+TEST_GROUP(MemoryLeakWarningGlobalDetectorTest)
+{
+	MemoryLeakDetector* detector;
+	MemoryLeakFailure* failureReporter;
+
+	DummyMemoryLeakDetector * dummyDetector;
+	MemoryLeakFailure* dummyReporter;
+
+	void setup()
+	{
+		detector = MemoryLeakWarningPlugin::getGlobalDetector();
+		failureReporter = MemoryLeakWarningPlugin::getGlobalFailureReporter();
+
+		memoryLeakDetectorWasDeleted = false;
+		memoryLeakFailureWasDelete = false;
+
+		MemoryLeakWarningPlugin::turnOffNewDeleteOverloads();
+
+		dummyDetector = new DummyMemoryLeakDetector;
+		dummyReporter = new DummyMemoryLeakFailure;
+	}
+
+	void teardown()
+	{
+		if (!memoryLeakDetectorWasDeleted) delete dummyDetector;
+		if (!memoryLeakFailureWasDelete) delete dummyReporter;
+
+		MemoryLeakWarningPlugin::setGlobalDetector(detector, failureReporter);
+		MemoryLeakWarningPlugin::turnOnNewDeleteOverloads();
+	}
+};
+
+TEST(MemoryLeakWarningGlobalDetectorTest, turnOffNewOverloadsCausesNoAdditionalLeaks)
+{
+	int storedAmountOfLeaks = detector->totalMemoryLeaks(mem_leak_period_all);
+
+	char* arrayMemory = new char[100];
+	char* nonArrayMemory = new char;
+
+	LONGS_EQUAL(storedAmountOfLeaks, detector->totalMemoryLeaks(mem_leak_period_all));
+
+	delete [] arrayMemory;
+	delete nonArrayMemory;
+}
+
+TEST(MemoryLeakWarningGlobalDetectorTest, destroyGlobalDetector)
+{
+	MemoryLeakWarningPlugin::setGlobalDetector(dummyDetector, dummyReporter);
+
+	MemoryLeakWarningPlugin::destroyGlobalDetector();
+
+	CHECK(memoryLeakDetectorWasDeleted);
+	CHECK(memoryLeakFailureWasDelete);
+}
+
+TEST(MemoryLeakWarningGlobalDetectorTest, MemoryWarningPluginCanBeSetToDestroyTheGlobalDetector)
+{
+	MemoryLeakWarningPlugin* plugin = new MemoryLeakWarningPlugin("dummy");
+	plugin->destroyGlobalDetectorAndTurnOffMemoryLeakDetectionInDestructor(true);
+	MemoryLeakWarningPlugin::setGlobalDetector(dummyDetector, dummyReporter);
+
+	delete plugin;
+
+	CHECK(memoryLeakDetectorWasDeleted);
+}

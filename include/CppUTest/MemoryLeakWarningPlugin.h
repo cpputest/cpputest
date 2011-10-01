@@ -74,6 +74,7 @@ void operator delete[](void* mem);
 #endif
 
 class MemoryLeakDetector;
+class MemoryLeakFailure;
 
 class MemoryLeakWarningPlugin: public TestPlugin
 {
@@ -90,13 +91,23 @@ public:
 	void ignoreAllLeaksInTest();
 	void expectLeaksInTest(int n);
 
+	void destroyGlobalDetectorAndTurnOffMemoryLeakDetectionInDestructor(bool des);
+
 	MemoryLeakDetector* getMemoryLeakDetector();
+
 	static MemoryLeakWarningPlugin* getFirstPlugin();
 
 	static MemoryLeakDetector* getGlobalDetector();
+	static MemoryLeakFailure* getGlobalFailureReporter();
+	static void setGlobalDetector(MemoryLeakDetector* detector, MemoryLeakFailure* reporter);
+	static void destroyGlobalDetector();
+
+	static void turnOffNewDeleteOverloads();
+	static void turnOnNewDeleteOverloads();
 private:
 	MemoryLeakDetector* memLeakDetector_;
 	bool ignoreAllWarnings_;
+	bool destroyGlobalDetectorAndTurnOfMemoryLeakDetectionInDestructor_;
 	int expectedLeaks_;
 	int failureCount_;
 

@@ -31,49 +31,207 @@
 #include "CppUTest/MemoryLeakAllocator.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
+#if CPPUTEST_USE_MEM_LEAK_DETECTION
+#undef new
+
+#if CPPUTEST_USE_STD_CPP_LIB
+#define UT_THROW_BAD_ALLOC_WHEN_NULL(memory) if (memory == NULL) throw std::bad_alloc();
+#define UT_THROW(except) throw (except)
+#define UT_THROW_EMPTY() throw ()
+#else
+#define UT_THROW_BAD_ALLOC_WHEN_NULL(memory)
+#define UT_THROW(except)
+#define UT_THROW_EMPTY()
+#endif
+
+
+static void* mem_leak_operator_new (size_t size) UT_THROW(std::bad_alloc)
+{
+	void* memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(MemoryLeakAllocator::getCurrentNewAllocator(), size);
+	UT_THROW_BAD_ALLOC_WHEN_NULL(memory);
+	return memory;
+}
+
+static void* mem_leak_operator_new_debug (size_t size, const char* file, int line) UT_THROW(std::bad_alloc)
+{
+	void *memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(MemoryLeakAllocator::getCurrentNewAllocator(), size, (char*) file, line);
+	UT_THROW_BAD_ALLOC_WHEN_NULL(memory);
+	return memory;
+}
+
+static void* mem_leak_operator_new_array (size_t size) UT_THROW(std::bad_alloc)
+{
+	void* memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(MemoryLeakAllocator::getCurrentNewArrayAllocator(), size);
+	UT_THROW_BAD_ALLOC_WHEN_NULL(memory);
+	return memory;
+}
+
+static void* mem_leak_operator_new_array_debug (size_t size, const char* file, int line) UT_THROW(std::bad_alloc)
+{
+	void* memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(MemoryLeakAllocator::getCurrentNewArrayAllocator(), size, (char*) file, line);
+	UT_THROW_BAD_ALLOC_WHEN_NULL(memory);
+	return memory;
+}
+
+static void mem_leak_operator_delete (void* mem) UT_THROW_EMPTY()
+{
+	MemoryLeakWarningPlugin::getGlobalDetector()->invalidateMemory((char*) mem);
+	MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(MemoryLeakAllocator::getCurrentNewAllocator(), (char*) mem);
+}
+
+static void mem_leak_operator_delete_array (void* mem) UT_THROW_EMPTY()
+{
+	MemoryLeakWarningPlugin::getGlobalDetector()->invalidateMemory((char*) mem);
+	MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(MemoryLeakAllocator::getCurrentNewArrayAllocator(), (char*) mem);
+}
+
+static void* normal_operator_new (size_t size) UT_THROW(std::bad_alloc)
+{
+	return PlatformSpecificMalloc(size);
+}
+
+static void* normal_operator_new_debug (size_t size, const char* /*file*/, int /*line*/) UT_THROW(std::bad_alloc)
+{
+	return PlatformSpecificMalloc(size);
+}
+
+static void* normal_operator_new_array (size_t size) UT_THROW(std::bad_alloc)
+{
+	return PlatformSpecificMalloc(size);
+}
+
+static void* normal_operator_new_array_debug (size_t size, const char* /*file*/, int /*line*/) UT_THROW(std::bad_alloc)
+{
+	return PlatformSpecificMalloc(size);
+}
+
+static void normal_operator_delete (void* mem) UT_THROW_EMPTY()
+{
+	PlatformSpecificFree(mem);
+}
+
+static void normal_operator_delete_array (void* mem) UT_THROW_EMPTY()
+{
+	PlatformSpecificFree(mem);
+}
+
+static void *(*operator_new_fptr)(size_t size) UT_THROW(std::bad_alloc) = mem_leak_operator_new;
+static void *(*operator_new_debug_fptr)(size_t size, const char* file, int line) UT_THROW(std::bad_alloc) = mem_leak_operator_new_debug;
+static void *(*operator_new_array_fptr)(size_t size) UT_THROW(std::bad_alloc) = mem_leak_operator_new_array;
+static void *(*operator_new_array_debug_fptr)(size_t size, const char* file, int line) UT_THROW(std::bad_alloc) = mem_leak_operator_new_array_debug;
+static void (*operator_delete_fptr)(void* mem) UT_THROW_EMPTY() = mem_leak_operator_delete;
+static void (*operator_delete_array_fptr)(void* mem) UT_THROW_EMPTY() = mem_leak_operator_delete_array;
+
+void* operator new(size_t size) UT_THROW(std::bad_alloc)
+{
+	return operator_new_fptr(size);
+}
+
+void* operator new(size_t size, const char* file, int line) UT_THROW(std::bad_alloc)
+{
+	return operator_new_debug_fptr(size, file, line);
+}
+
+void operator delete(void* mem) UT_THROW_EMPTY()
+{
+	operator_delete_fptr(mem);
+}
+
+void* operator new[](size_t size) UT_THROW(std::bad_alloc)
+{
+	return operator_new_array_fptr(size);
+}
+
+void* operator new [](size_t size, const char* file, int line) UT_THROW(std::bad_alloc)
+{
+	return operator_new_array_debug_fptr(size, file, line);
+}
+
+void operator delete[](void* mem) UT_THROW_EMPTY()
+{
+	return operator_delete_array_fptr(mem);
+}
+
+#endif
+
+void MemoryLeakWarningPlugin::turnOffNewDeleteOverloads()
+{
+#if CPPUTEST_USE_MEM_LEAK_DETECTION
+	operator_new_fptr = normal_operator_new;
+	operator_new_debug_fptr = normal_operator_new_debug;
+	operator_new_array_fptr = normal_operator_new_array;
+	operator_new_array_debug_fptr = normal_operator_new_array_debug;
+	operator_delete_fptr = normal_operator_delete;
+	operator_delete_array_fptr = normal_operator_delete_array;
+#endif
+}
+
+void MemoryLeakWarningPlugin::turnOnNewDeleteOverloads()
+{
+#if CPPUTEST_USE_MEM_LEAK_DETECTION
+	operator_new_fptr = mem_leak_operator_new;
+	operator_new_debug_fptr = mem_leak_operator_new_debug;
+	operator_new_array_fptr = mem_leak_operator_new_array;
+	operator_new_array_debug_fptr = mem_leak_operator_new_array_debug;
+	operator_delete_fptr = mem_leak_operator_delete;
+	operator_delete_array_fptr = mem_leak_operator_delete_array;
+#endif
+}
+
 class MemoryLeakWarningReporter: public MemoryLeakFailure
 {
 public:
 	virtual ~MemoryLeakWarningReporter()
 	{
 	}
-	;
+
 	virtual void fail(char* fail_string)
 	{
 		FAIL(fail_string);
 	}
 };
 
-static MemoryLeakWarningReporter* globalReporter = 0;
+static MemoryLeakFailure* globalReporter = 0;
 static MemoryLeakDetector* globalDetector = 0;
-
-void destroyDetector()
-{
-	PlatformSpecificFree(globalDetector);
-	globalReporter->~MemoryLeakWarningReporter();
-	PlatformSpecificFree(globalReporter);
-	globalReporter = 0;
-	globalDetector = 0;
-}
 
 MemoryLeakDetector* MemoryLeakWarningPlugin::getGlobalDetector()
 {
 	if (globalDetector == 0) {
+		turnOffNewDeleteOverloads();
 
-		/*  Want to void using operator new here, however.. still need to init the vtable.
-		 *  Now just memcpy a local stack variable in the malloced memory. Ought to work everywhere :))
-		 */
-		MemoryLeakWarningReporter reporter;
-		globalReporter = (MemoryLeakWarningReporter*) PlatformSpecificMalloc(sizeof(MemoryLeakWarningReporter));
-		PlatformSpecificMemCpy(globalReporter, &reporter, sizeof(MemoryLeakWarningReporter));
-
-		globalDetector = (MemoryLeakDetector*) PlatformSpecificMalloc(sizeof(MemoryLeakDetector));
-		if (globalDetector == 0)
-		FAIL("operator new(size, bool) not enough memory");
+		globalReporter = new MemoryLeakWarningReporter;
+		globalDetector = new MemoryLeakDetector;
 		globalDetector->init(globalReporter);
+
+		turnOnNewDeleteOverloads();
 	}
 	return globalDetector;
 }
+
+MemoryLeakFailure* MemoryLeakWarningPlugin::getGlobalFailureReporter()
+{
+	return globalReporter;
+}
+
+void MemoryLeakWarningPlugin::destroyGlobalDetectorAndTurnOffMemoryLeakDetectionInDestructor(bool des)
+{
+	destroyGlobalDetectorAndTurnOfMemoryLeakDetectionInDestructor_ = des;
+}
+
+void MemoryLeakWarningPlugin::setGlobalDetector(MemoryLeakDetector* detector, MemoryLeakFailure* reporter)
+{
+	globalDetector = detector;
+	globalReporter = reporter;
+}
+
+void MemoryLeakWarningPlugin::destroyGlobalDetector()
+{
+	turnOffNewDeleteOverloads();
+	delete globalDetector;
+	delete globalReporter;
+	globalDetector = NULL;
+}
+
 
 MemoryLeakWarningPlugin* MemoryLeakWarningPlugin::firstPlugin_ = 0;
 
@@ -98,7 +256,7 @@ void MemoryLeakWarningPlugin::expectLeaksInTest(int n)
 }
 
 MemoryLeakWarningPlugin::MemoryLeakWarningPlugin(const SimpleString& name, MemoryLeakDetector* localDetector) :
-	TestPlugin(name), ignoreAllWarnings_(false), expectedLeaks_(0)
+	TestPlugin(name), ignoreAllWarnings_(false), destroyGlobalDetectorAndTurnOfMemoryLeakDetectionInDestructor_(false), expectedLeaks_(0)
 {
 	if (firstPlugin_ == 0) firstPlugin_ = this;
 
@@ -111,6 +269,11 @@ MemoryLeakWarningPlugin::MemoryLeakWarningPlugin(const SimpleString& name, Memor
 MemoryLeakWarningPlugin::~MemoryLeakWarningPlugin()
 {
 	if (this == firstPlugin_) firstPlugin_ = 0;
+
+	if (destroyGlobalDetectorAndTurnOfMemoryLeakDetectionInDestructor_) {
+		MemoryLeakWarningPlugin::turnOffNewDeleteOverloads();
+		MemoryLeakWarningPlugin::destroyGlobalDetector();
+	}
 }
 
 void MemoryLeakWarningPlugin::preTestAction(Utest& /*test*/, TestResult& result)
@@ -139,58 +302,3 @@ const char* MemoryLeakWarningPlugin::FinalReport(int toBeDeletedLeaks)
 	if (leaks != toBeDeletedLeaks) return memLeakDetector_->report(mem_leak_period_enabled);
 	return "";
 }
-
-#if CPPUTEST_USE_MEM_LEAK_DETECTION
-#undef new
-
-#if CPPUTEST_USE_STD_CPP_LIB
-#define UT_THROW_BAD_ALLOC_WHEN_NULL(memory) if (memory == NULL) throw std::bad_alloc();
-#define UT_THROW(except) throw (except)
-#define UT_THROW_EMPTY() throw ()
-#else
-#define UT_THROW_BAD_ALLOC_WHEN_NULL(memory)
-#define UT_THROW(except)
-#define UT_THROW_EMPTY()
-#endif
-
-void* operator new(size_t size) UT_THROW(std::bad_alloc)
-{
-	void* memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(MemoryLeakAllocator::getCurrentNewAllocator(), size);
-	UT_THROW_BAD_ALLOC_WHEN_NULL(memory);
-	return memory;
-}
-
-void* operator new(size_t size, const char* file, int line) UT_THROW(std::bad_alloc)
-{
-	void *memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(MemoryLeakAllocator::getCurrentNewAllocator(), size, (char*) file, line);
-	UT_THROW_BAD_ALLOC_WHEN_NULL(memory);
-	return memory;
-}
-
-void operator delete(void* mem) UT_THROW_EMPTY()
-{
-	MemoryLeakWarningPlugin::getGlobalDetector()->invalidateMemory((char*) mem);
-	MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(MemoryLeakAllocator::getCurrentNewAllocator(), (char*) mem);
-}
-
-void* operator new[](size_t size) UT_THROW(std::bad_alloc)
-{
-	void* memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(MemoryLeakAllocator::getCurrentNewArrayAllocator(), size);
-	UT_THROW_BAD_ALLOC_WHEN_NULL(memory);
-	return memory;
-}
-
-void* operator new [](size_t size, const char* file, int line) UT_THROW(std::bad_alloc)
-{
-	void* memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(MemoryLeakAllocator::getCurrentNewArrayAllocator(), size, (char*) file, line);
-	UT_THROW_BAD_ALLOC_WHEN_NULL(memory);
-	return memory;
-}
-
-void operator delete[](void* mem) UT_THROW_EMPTY()
-{
-	MemoryLeakWarningPlugin::getGlobalDetector()->invalidateMemory((char*) mem);
-	MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(MemoryLeakAllocator::getCurrentNewArrayAllocator(), (char*) mem);
-}
-
-#endif

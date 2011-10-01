@@ -140,7 +140,7 @@ class MemoryLeakDetector
 {
 public:
 	MemoryLeakDetector();
-	~MemoryLeakDetector()
+	virtual ~MemoryLeakDetector()
 	{
 	}
 

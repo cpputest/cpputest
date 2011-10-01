@@ -54,6 +54,7 @@ int CommandLineTestRunner::RunAllTests(int ac, const char** av)
 	ConsoleTestOutput output;
 
 	MemoryLeakWarningPlugin memLeakWarn(DEF_PLUGIN_MEM_LEAK);
+	memLeakWarn.destroyGlobalDetectorAndTurnOffMemoryLeakDetectionInDestructor(true);
 	TestRegistry::getCurrentRegistry()->installPlugin(&memLeakWarn);
 
 	{
