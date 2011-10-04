@@ -51,13 +51,13 @@ TEST_GROUP(GMock)
 class myMock
 {
 public:
-	MOCK_METHOD0(methodName, void());
+	MOCK_METHOD0(methodName, int());
 };
 
 static void failedMockCall()
 {
 	myMock mock;
-	EXPECT_CALL(mock, methodName());
+	EXPECT_CALL(mock, methodName()).WillOnce(Return(1));
 }
 
 TEST(GMock, GMockFailuresWorkAsExpected)
@@ -70,7 +70,7 @@ TEST(GMock, GMockFailuresWorkAsExpected)
 static void failedMockCallAfterOneSuccess()
 {
 	myMock mock;
-	EXPECT_CALL(mock, methodName()).Times(2);
+	EXPECT_CALL(mock, methodName()).Times(2).WillRepeatedly(Return(1));
 
 	mock.methodName();
 }
@@ -80,6 +80,12 @@ TEST(GMock, GMockFailuresWorkAsExpectedWithTwoExpectedCallButJustOneActual)
 	fixture->setTestFunction(failedMockCallAfterOneSuccess);
 	fixture->runAllTests();
 	LONGS_EQUAL(1, fixture->getFailureCount());
+}
+
+TEST(GMock, GMockNiceMocksWorkFine)
+{
+	NiceMock<myMock> mock;
+	mock.methodName();
 }
 
 #endif
