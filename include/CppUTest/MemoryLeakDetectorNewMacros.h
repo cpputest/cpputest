@@ -68,15 +68,6 @@
 
 #define new new(__FILE__, __LINE__)
 
-#ifndef CPPUTEST_USE_NEW_MACROS
-	extern "C" {
-#endif
-		#include "MemoryLeakDetectorMallocMacros.h"
-#ifndef CPPUTEST_USE_NEW_MACROS
-	}
-#endif
-
-
 #define CPPUTEST_USE_NEW_MACROS 1
 
 #endif
