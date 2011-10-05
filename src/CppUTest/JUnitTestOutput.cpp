@@ -136,10 +136,11 @@ void JUnitTestOutput::printCurrentTestStarted(const Utest& test)
 	impl_->results_.tail_->name_ = test.getName();
 }
 
-static SimpleString createFileName(const SimpleString& group)
+SimpleString JUnitTestOutput::createFileName(const SimpleString& group)
 {
 	SimpleString fileName = "cpputest_";
 	fileName += group;
+	fileName.replace('/', '_');
 	fileName += ".xml";
 	return fileName;
 }

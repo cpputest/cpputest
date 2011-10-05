@@ -56,6 +56,8 @@ public:
 
 	virtual void flush();
 
+	virtual SimpleString createFileName(const SimpleString& group);
+
 protected:
 
 	JUnitTestOutputImpl* impl_;

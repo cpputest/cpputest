@@ -364,3 +364,15 @@ TEST(JUnitOutputTest, messageWithNewLine)
 	output->setFailure(0, 0, "file", 1, "Test \n failed");
 	runTests();
 }
+
+TEST(JUnitOutputTest, createNormalFilename)
+{
+	STRCMP_EQUAL("cpputest_group.xml", output->createFileName("group").asCharString());
+}
+
+TEST(JUnitOutputTest, escapeSlashesInFilenames)
+{
+	STRCMP_EQUAL("cpputest_group_weird_name.xml", output->createFileName("group/weird/name").asCharString());
+}
+
+
