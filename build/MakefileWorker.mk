@@ -64,7 +64,9 @@ UNKNWOWN_OS_STR = Unknown
 
 ifeq ($(findstring $(MINGW_STR),$(UNAME_OUTPUT)),$(MINGW_STR))
 	UNAME_OS = $(MINGW_STR)
-else ifeq ($(findstring $(MACOSX_STR),$(UNAME_OUTPUT)),$(MACOSX_STR))
+endif
+
+ifeq ($(findstring $(MACOSX_STR),$(UNAME_OUTPUT)),$(MACOSX_STR))
 	UNAME_OS = $(MACOSX_STR)
 else
 	UNAME_OS = $(UNKNWOWN_OS_STR)
