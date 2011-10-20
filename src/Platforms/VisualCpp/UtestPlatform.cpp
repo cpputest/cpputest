@@ -69,6 +69,11 @@ void Utest::executePlatformSpecificExitCurrentTest()
 
 #endif
 
+TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
+{
+	return TestOutput::vistualStudio;
+}
+
 ///////////// Time in millis
 
 static long TimeInMillisImplementation()

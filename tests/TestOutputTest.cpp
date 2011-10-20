@@ -175,6 +175,17 @@ TEST(TestOutput, PrintFailureWithFailInHelper)
 	STRCMP_EQUAL(expected, mock->getOutput().asCharString());
 }
 
+TEST(TestOutput, PrintInVisualStudioFormat)
+{
+	TestOutput::setWorkingEnvironment(TestOutput::vistualStudio);
+	printer->print(*f3);
+	const char* expected =
+			"\nfile(10): error: Failure in TEST(group, test)"
+			"\nfile(2): error:\n\tmessage\n\n";
+	STRCMP_EQUAL(expected, mock->getOutput().asCharString());
+	TestOutput::setWorkingEnvironment(TestOutput::detectEnvironment);
+}
+
 TEST(TestOutput, PrintTestStarts)
 {
 	printer->printTestsStarted();

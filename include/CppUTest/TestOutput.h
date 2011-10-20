@@ -68,14 +68,22 @@ public:
 
 	virtual void flush();
 
-private:
+	enum WorkingEnvironment {vistualStudio, eclipse, detectEnvironment};
+
+	static void setWorkingEnvironment(WorkingEnvironment workEnvironment);
+	static WorkingEnvironment getWorkingEnvironment();
+
+protected:
+
+	virtual void printEclipseErrorInFileOnLine(SimpleString file, int lineNumber);
+	virtual void printVistualStudioErrorInFileOnLine(SimpleString file, int lineNumber);
 
 	virtual void printProgressIndicator();
 	void printFileAndLineForTestAndFailure(const TestFailure& failure);
 	void printFileAndLineForFailure(const TestFailure& failure);
 	void printFailureInTest(SimpleString testName);
 	void printFailureMessage(SimpleString reason);
-	void printEclipseErrorInFileOnLine(SimpleString testFile, int lineNumber);
+	void printErrorInFileOnLineFormattedForWorkingEnvironment(SimpleString testFile, int lineNumber);
 
 	TestOutput(const TestOutput&);
 	TestOutput& operator=(const TestOutput&);
@@ -83,6 +91,8 @@ private:
 	int dotCount_;
 	bool verbose_;
 	const char* progressIndication_;
+
+	static WorkingEnvironment workingEnvironment_;
 };
 
 TestOutput& operator<<(TestOutput&, const char*);

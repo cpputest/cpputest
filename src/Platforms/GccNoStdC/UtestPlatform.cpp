@@ -75,6 +75,11 @@ void SetPlatformSpecificTimeInMillisMethod(long (*platformSpecific) ())
 	(void) platformSpecific;
 }
 
+TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
+{
+	return TestOutput::eclipse;
+}
+
 ///////////// Time in String
 
 const char* GetPlatformSpecificTimeString()

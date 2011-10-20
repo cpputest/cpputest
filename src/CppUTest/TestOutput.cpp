@@ -29,6 +29,21 @@
 #include "CppUTest/TestOutput.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
+TestOutput::WorkingEnvironment TestOutput::workingEnvironment_ = TestOutput::detectEnvironment;
+
+void TestOutput::setWorkingEnvironment(TestOutput::WorkingEnvironment workEnvironment)
+{
+	workingEnvironment_ = workEnvironment;
+}
+
+TestOutput::WorkingEnvironment TestOutput::getWorkingEnvironment()
+{
+	if (workingEnvironment_ == TestOutput::detectEnvironment)
+		return PlatformSpecificGetWorkingEnvironment();
+	return workingEnvironment_;
+}
+
+
 TestOutput::TestOutput() :
 	dotCount_(0), verbose_(false), progressIndication_(".")
 {
@@ -166,14 +181,14 @@ void TestOutput::print(const TestFailure& failure)
 
 void TestOutput::printFileAndLineForTestAndFailure(const TestFailure& failure)
 {
-	printEclipseErrorInFileOnLine(failure.getTestFileName(), failure.getTestLineNumber());
+	printErrorInFileOnLineFormattedForWorkingEnvironment(failure.getTestFileName(), failure.getTestLineNumber());
 	printFailureInTest(failure.getTestName());
-	printEclipseErrorInFileOnLine(failure.getFileName(), failure.getFailureLineNumber());
+	printErrorInFileOnLineFormattedForWorkingEnvironment(failure.getFileName(), failure.getFailureLineNumber());
 }
 
 void TestOutput::printFileAndLineForFailure(const TestFailure& failure)
 {
-	printEclipseErrorInFileOnLine(failure.getFileName(), failure.getFailureLineNumber());
+	printErrorInFileOnLineFormattedForWorkingEnvironment(failure.getFileName(), failure.getFailureLineNumber());
 	printFailureInTest(failure.getTestName());
 }
 
@@ -191,6 +206,14 @@ void TestOutput::printFailureMessage(SimpleString reason)
 	print("\n\n");
 }
 
+void TestOutput::printErrorInFileOnLineFormattedForWorkingEnvironment(SimpleString file, int lineNumber)
+{
+	if (TestOutput::getWorkingEnvironment() == TestOutput::vistualStudio)
+		printVistualStudioErrorInFileOnLine(file, lineNumber);
+	else
+		printEclipseErrorInFileOnLine(file, lineNumber);
+}
+
 void TestOutput::printEclipseErrorInFileOnLine(SimpleString file, int lineNumber)
 {
 	print("\n");
@@ -198,6 +221,16 @@ void TestOutput::printEclipseErrorInFileOnLine(SimpleString file, int lineNumber
 	print(":");
 	print(lineNumber);
 	print(":");
+	print(" error:");
+}
+
+void TestOutput::printVistualStudioErrorInFileOnLine(SimpleString file, int lineNumber)
+{
+	print("\n");
+	print(file.asCharString());
+	print("(");
+	print(lineNumber);
+	print("):");
 	print(" error:");
 }
 

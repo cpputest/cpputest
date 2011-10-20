@@ -79,6 +79,11 @@ void SetPlatformSpecificTimeInMillisMethod(long (*platformSpecific) ()) {
 	timeInMillisFp = (platformSpecific == 0) ? TimeInMillisImplementation : platformSpecific;
 }
 
+TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
+{
+	return TestOutput::eclipse;
+}
+
 ///////////// Time in String
 
 static SimpleString TimeStringImplementation() {

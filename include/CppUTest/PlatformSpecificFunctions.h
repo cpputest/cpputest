@@ -28,6 +28,7 @@
 #ifndef PLATFORMSPECIFICFUNCTIONS_H_
 #define PLATFORMSPECIFICFUNCTIONS_H_
 
+#include "CppUTest/TestOutput.h"
 /* Platform specific interface we use in order to minimize dependencies with LibC.
  * This enables porting to different embedded platforms.
  *
@@ -41,6 +42,8 @@
  *  void Utest::executePlatformSpecificRunOneTest(TestPlugin* plugin, TestResult& result)
  *  void Utest::executePlatformSpecificExitCurrentTest()
  */
+
+TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment();
 
 /* Time operations */
 long GetPlatformSpecificTimeInMillis();

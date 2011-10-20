@@ -91,6 +91,11 @@ void Utest::executePlatformSpecificExitCurrentTest()
    longjmp(test_exit_jmp_buf[jmp_buf_index], 1);
 }
 
+TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
+{
+	return TestOutput::eclipse;
+}
+
 ///////////// Time in millis
 
 static long TimeInMillisImplementation()
