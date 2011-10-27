@@ -59,9 +59,12 @@ TEST_GROUP(TestOutput)
 		result->setTotalExecutionTime(10);
 		millisTime = 0;
 		SetPlatformSpecificTimeInMillisMethod(MockGetPlatformSpecificTimeInMillis);
+		TestOutput::setWorkingEnvironment(TestOutput::eclipse);
+
 	}
 	void teardown()
 	{
+		TestOutput::setWorkingEnvironment(TestOutput::detectEnvironment);
 		delete printer;
 		delete tst;
 		delete f;
@@ -183,7 +186,6 @@ TEST(TestOutput, PrintInVisualStudioFormat)
 			"\nfile(10): error: Failure in TEST(group, test)"
 			"\nfile(2): error:\n\tmessage\n\n";
 	STRCMP_EQUAL(expected, mock->getOutput().asCharString());
-	TestOutput::setWorkingEnvironment(TestOutput::detectEnvironment);
 }
 
 TEST(TestOutput, PrintTestStarts)
