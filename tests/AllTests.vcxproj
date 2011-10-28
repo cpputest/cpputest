@@ -84,7 +84,7 @@
       <OutputFile>.\Release/AllTests.bsc</OutputFile>
     </Bscmake>
     <PostBuildEvent>
-      <Command>$(TargetPath)</Command>
+      <Command>"$(TargetPath)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -130,7 +130,7 @@
       <OutputFile>.\Debug/AllTests.bsc</OutputFile>
     </Bscmake>
     <PostBuildEvent>
-      <Command>$(TargetPath)</Command>
+      <Command>"$(TargetPath)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
