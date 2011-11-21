@@ -53,8 +53,14 @@ MOCKS_SRC_DIRS = \
 	
 
 
+CPPUTEST_WARNINGFLAGS = -Wall -Werror -Wswitch-default 
+#CPPUTEST_WARNINGFLAGS += -Wconversion -Wswitch-enum 
+
+include $(CPPUTEST_HOME)/build/MakefileWorker.mk
+
+
 #Flags to pass to ld
 LDFLAGS +=
-LD_LIBRARIES += -lstdc++
+LD_LIBRARIES += 
 
 include $(CPPUTEST_HOME)/build/ComponentMakefile
