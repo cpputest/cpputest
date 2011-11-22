@@ -143,12 +143,12 @@ void Utest::run(TestResult& result)
 
 #if CPPUTEST_USE_STD_CPP_LIB
 	}
-	catch (CppUTestFailedException& ex)
+	catch (CppUTestFailedException&)
 	{
 		try {
 			executePlatformSpecificTeardown();
 		}
-		catch (CppUTestFailedException& ex2)
+		catch (CppUTestFailedException&)
 		{
 		}
 	}
