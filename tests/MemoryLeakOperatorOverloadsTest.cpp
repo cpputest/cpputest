@@ -1,5 +1,5 @@
 #include "CppUTest/TestHarness.h"
-#include "CppUTest/MemoryLeakAllocator.h"
+#include "CppUTest/TestMemoryAllocator.h"
 #include "CppUTest/MemoryLeakDetector.h"
 #include "CppUTest/TestOutput.h"
 #include "CppUTest/TestRegistry.h"
@@ -79,20 +79,41 @@ TEST(MemoryLeakOverridesToBeUsedInProductionCode, UseNativeMallocByTemporarlySwi
 class NewDummyClass
 {
 public:
-
+	static bool overloaded_new_called;
 
 #if CPPUTEST_USE_NEW_MACROS
 	#undef new
 #endif
-	void* operator new (size_t size, int additional)
+	void* operator new (size_t size)
 #if CPPUTEST_USE_NEW_MACROS
 	#include "CppUTest/MemoryLeakDetectorNewMacros.h"
 #endif
 	{
-		return malloc(size * additional);
+		overloaded_new_called = true;
+		return malloc(size);
+	}
+	void dummyFunction()
+	{
+		char* memory = new char;
+		delete memory;
 	}
 };
+bool NewDummyClass::overloaded_new_called = false;
 
+TEST(MemoryLeakOverridesToBeUsedInProductionCode, NoSideEffectsFromTurningOffNewMacros)
+{
+	/*
+	 * Interesting effect of wrapping the operator new around the macro is
+	 * that the actual new that is called is a different one than expected.
+	 *
+	 * The overloaded operator new doesn't actually ever get called.
+	 *
+	 * This might come as a surprise, so it is important to realize!
+	 */
+	NewDummyClass dummy;
+	dummy.dummyFunction();
+	// CHECK(dummy.overloaded_new_called);
+}
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, UseNativeNewByTemporarlySwitchingOffNew)
 {
@@ -166,17 +187,17 @@ TEST(MemoryLeakOverridesToBeUsedInProductionCode, MemoryOverridesAreDisabled)
 
 TEST_GROUP(OutOfMemoryTestsForOperatorNew)
 {
-	MemoryLeakAllocator* no_memory_allocator;
+	TestMemoryAllocator* no_memory_allocator;
 	void setup()
 	{
 		no_memory_allocator = new NullUnknownAllocator;
-		MemoryLeakAllocator::setCurrentNewAllocator(no_memory_allocator);
-		MemoryLeakAllocator::setCurrentNewArrayAllocator(no_memory_allocator);
+		setCurrentNewAllocator(no_memory_allocator);
+		setCurrentNewArrayAllocator(no_memory_allocator);
 	}
 	void teardown()
 	{
-		MemoryLeakAllocator::setCurrentNewAllocatorToDefault();
-		MemoryLeakAllocator::setCurrentNewArrayAllocatorToDefault();
+		setCurrentNewAllocatorToDefault();
+		setCurrentNewArrayAllocatorToDefault();
 		delete no_memory_allocator;
 	}
 };

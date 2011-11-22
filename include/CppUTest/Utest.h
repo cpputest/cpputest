@@ -88,6 +88,11 @@ public:
     void setTestName(const char *testName);
 
     virtual void exitCurrentTest();
+
+    static void crash();
+    static void setCrashMethod(void (*crashme)());
+    static void resetCrashMethod();
+
 protected:
     virtual void runOneTest(TestPlugin *plugin, TestResult & result);
     virtual void executePlatformSpecificRunOneTest(TestPlugin *plugin, TestResult & result);

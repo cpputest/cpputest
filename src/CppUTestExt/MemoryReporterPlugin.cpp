@@ -60,7 +60,7 @@ MemoryReportFormatter* MemoryReporterPlugin::createMemoryFormatter(const SimpleS
 		return  new NormalMemoryReportFormatter;
 	}
 	else if (type == "code") {
-		return new CodeMemoryReportFormatter(StandardMallocAllocator::defaultAllocator());
+		return new CodeMemoryReportFormatter(defaultMallocAllocator());
 	}
 	return NULL;
 }
@@ -73,26 +73,26 @@ void MemoryReporterPlugin::destroyMemoryFormatter(MemoryReportFormatter* formatt
 
 void MemoryReporterPlugin::setGlobalMemoryReportAllocators()
 {
-    mallocAllocator.setRealAllocator(MemoryLeakAllocator::getCurrentMallocAllocator());
-	MemoryLeakAllocator::setCurrentMallocAllocator(&mallocAllocator);
+    mallocAllocator.setRealAllocator(getCurrentMallocAllocator());
+	setCurrentMallocAllocator(&mallocAllocator);
 
-	newAllocator.setRealAllocator(MemoryLeakAllocator::getCurrentNewAllocator());
-	MemoryLeakAllocator::setCurrentNewAllocator(&newAllocator);
+	newAllocator.setRealAllocator(getCurrentNewAllocator());
+	setCurrentNewAllocator(&newAllocator);
 
-	newArrayAllocator.setRealAllocator(MemoryLeakAllocator::getCurrentNewArrayAllocator());
-	MemoryLeakAllocator::setCurrentNewArrayAllocator(&newArrayAllocator);
+	newArrayAllocator.setRealAllocator(getCurrentNewArrayAllocator());
+	setCurrentNewArrayAllocator(&newArrayAllocator);
 }
 
 void MemoryReporterPlugin::removeGlobalMemoryReportAllocators()
 {
-	if (MemoryLeakAllocator::getCurrentNewAllocator() == &newAllocator)
-		MemoryLeakAllocator::setCurrentNewAllocator(newAllocator.getRealAllocator());
+	if (getCurrentNewAllocator() == &newAllocator)
+		setCurrentNewAllocator(newAllocator.getRealAllocator());
 
-	if (MemoryLeakAllocator::getCurrentNewArrayAllocator() == &newArrayAllocator)
-		MemoryLeakAllocator::setCurrentNewArrayAllocator(newArrayAllocator.getRealAllocator());
+	if (getCurrentNewArrayAllocator() == &newArrayAllocator)
+		setCurrentNewArrayAllocator(newArrayAllocator.getRealAllocator());
 
-	if (MemoryLeakAllocator::getCurrentMallocAllocator() == &mallocAllocator)
-		MemoryLeakAllocator::setCurrentMallocAllocator(mallocAllocator.getRealAllocator());
+	if (getCurrentMallocAllocator() == &mallocAllocator)
+		setCurrentMallocAllocator(mallocAllocator.getRealAllocator());
 }
 
 

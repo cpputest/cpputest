@@ -28,7 +28,7 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/MemoryLeakWarningPlugin.h"
 #include "CppUTest/MemoryLeakDetector.h"
-#include "CppUTest/MemoryLeakAllocator.h"
+#include "CppUTest/TestMemoryAllocator.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
 #if CPPUTEST_USE_MEM_LEAK_DETECTION
@@ -44,31 +44,30 @@
 #define UT_THROW_EMPTY()
 #endif
 
-
 static void* mem_leak_operator_new (size_t size) UT_THROW(std::bad_alloc)
 {
-	void* memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(MemoryLeakAllocator::getCurrentNewAllocator(), size);
+	void* memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewAllocator(), size);
 	UT_THROW_BAD_ALLOC_WHEN_NULL(memory);
 	return memory;
 }
 
 static void* mem_leak_operator_new_debug (size_t size, const char* file, int line) UT_THROW(std::bad_alloc)
 {
-	void *memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(MemoryLeakAllocator::getCurrentNewAllocator(), size, (char*) file, line);
+	void *memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewAllocator(), size, (char*) file, line);
 	UT_THROW_BAD_ALLOC_WHEN_NULL(memory);
 	return memory;
 }
 
 static void* mem_leak_operator_new_array (size_t size) UT_THROW(std::bad_alloc)
 {
-	void* memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(MemoryLeakAllocator::getCurrentNewArrayAllocator(), size);
+	void* memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewArrayAllocator(), size);
 	UT_THROW_BAD_ALLOC_WHEN_NULL(memory);
 	return memory;
 }
 
 static void* mem_leak_operator_new_array_debug (size_t size, const char* file, int line) UT_THROW(std::bad_alloc)
 {
-	void* memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(MemoryLeakAllocator::getCurrentNewArrayAllocator(), size, (char*) file, line);
+	void* memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewArrayAllocator(), size, (char*) file, line);
 	UT_THROW_BAD_ALLOC_WHEN_NULL(memory);
 	return memory;
 }
@@ -76,13 +75,13 @@ static void* mem_leak_operator_new_array_debug (size_t size, const char* file, i
 static void mem_leak_operator_delete (void* mem) UT_THROW_EMPTY()
 {
 	MemoryLeakWarningPlugin::getGlobalDetector()->invalidateMemory((char*) mem);
-	MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(MemoryLeakAllocator::getCurrentNewAllocator(), (char*) mem);
+	MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(getCurrentNewAllocator(), (char*) mem);
 }
 
 static void mem_leak_operator_delete_array (void* mem) UT_THROW_EMPTY()
 {
 	MemoryLeakWarningPlugin::getGlobalDetector()->invalidateMemory((char*) mem);
-	MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(MemoryLeakAllocator::getCurrentNewArrayAllocator(), (char*) mem);
+	MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(getCurrentNewArrayAllocator(), (char*) mem);
 }
 
 static void* normal_operator_new (size_t size) UT_THROW(std::bad_alloc)
@@ -178,6 +177,15 @@ void MemoryLeakWarningPlugin::turnOnNewDeleteOverloads()
 #endif
 }
 
+void crash_on_allocation_number(unsigned alloc_number)
+{
+	static CrashOnAllocationAllocator crashAllocator;
+	crashAllocator.setNumberToCrashOn(alloc_number);
+	setCurrentMallocAllocator(&crashAllocator);
+	setCurrentNewAllocator(&crashAllocator);
+	setCurrentNewArrayAllocator(&crashAllocator);
+}
+
 class MemoryLeakWarningReporter: public MemoryLeakFailure
 {
 public:
@@ -200,8 +208,7 @@ MemoryLeakDetector* MemoryLeakWarningPlugin::getGlobalDetector()
 		turnOffNewDeleteOverloads();
 
 		globalReporter = new MemoryLeakWarningReporter;
-		globalDetector = new MemoryLeakDetector;
-		globalDetector->init(globalReporter);
+		globalDetector = new MemoryLeakDetector(globalReporter);
 
 		turnOnNewDeleteOverloads();
 	}

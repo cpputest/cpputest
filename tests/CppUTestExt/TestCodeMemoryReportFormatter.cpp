@@ -35,9 +35,9 @@
 
 TEST_GROUP(CodeMemoryReportFormatter)
 {
-	MemoryLeakAllocator* cAllocator;
-	MemoryLeakAllocator* newAllocator;
-	MemoryLeakAllocator* newArrayAllocator;
+	TestMemoryAllocator* cAllocator;
+	TestMemoryAllocator* newAllocator;
+	TestMemoryAllocator* newArrayAllocator;
 	char* memory01;
 	char* memory02;
 
@@ -47,9 +47,9 @@ TEST_GROUP(CodeMemoryReportFormatter)
 
 	void setup()
 	{
-		cAllocator = StandardMallocAllocator::defaultAllocator();
-		newAllocator = StandardNewAllocator::defaultAllocator();
-		newArrayAllocator= StandardNewArrayAllocator::defaultAllocator();
+		cAllocator = defaultMallocAllocator();
+		newAllocator = defaultNewAllocator();
+		newArrayAllocator= defaultNewArrayAllocator();
 		memory01 = (char*) 0x01;
 		memory02 = (char*) 0x02;
 

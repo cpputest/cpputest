@@ -926,3 +926,13 @@ TEST(MockSupportTest, tracing)
 	STRCMP_CONTAINS("boo", mock().getTraceOutput());
 	STRCMP_CONTAINS("foo", mock().getTraceOutput());
 }
+
+IGNORE_TEST(MockSupportTest, testForPerformanceProfiling)
+{
+	/* TO fix! */
+	mock().expectNCalls(1000, "SimpleFunction");
+	for (int i = 0; i < 1000; i++) {
+		mock().actualCall("SimpleFunction");
+	}
+
+}

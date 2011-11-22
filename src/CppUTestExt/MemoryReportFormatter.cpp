@@ -47,12 +47,12 @@ void NormalMemoryReportFormatter::report_test_end(TestResult* result, Utest& tes
 	result->print(StringFromFormat("ENDTEST(%s, %s)\n", test.getGroup().asCharString(), test.getName().asCharString()).asCharString());
 }
 
-void NormalMemoryReportFormatter::report_alloc_memory(TestResult* result, MemoryLeakAllocator* allocator, size_t size, char* memory, const char* file, int line)
+void NormalMemoryReportFormatter::report_alloc_memory(TestResult* result, TestMemoryAllocator* allocator, size_t size, char* memory, const char* file, int line)
 {
 	result->print(StringFromFormat("\tAllocation using %s of size: %d pointer: %p at %s:%d\n", allocator->alloc_name(), size, memory, file, line).asCharString());
 }
 
-void NormalMemoryReportFormatter::report_free_memory(TestResult* result, MemoryLeakAllocator* allocator, char* memory, const char* file, int line)
+void NormalMemoryReportFormatter::report_free_memory(TestResult* result, TestMemoryAllocator* allocator, char* memory, const char* file, int line)
 {
 	result->print(StringFromFormat("\tDeallocation using %s of pointer: %p at %s:%d\n", allocator->free_name(),  memory, file, line).asCharString());
 }

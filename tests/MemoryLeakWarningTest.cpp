@@ -30,7 +30,7 @@
 #include "CppUTest/TestOutput.h"
 #include "CppUTest/MemoryLeakWarningPlugin.h"
 #include "CppUTest/MemoryLeakDetector.h"
-#include "CppUTest/MemoryLeakAllocator.h"
+#include "CppUTest/TestMemoryAllocator.h"
 #include "CppUTest/TestTestingFixture.h"
 
 static char* leak1;
@@ -50,7 +50,7 @@ public:
 static MemoryLeakDetector* detector;
 static MemoryLeakWarningPlugin* memPlugin;
 static DummyReporter dummy;
-static MemoryLeakAllocator* allocator;
+static TestMemoryAllocator* allocator;
 
 TEST_GROUP(MemoryLeakWarningTest)
 {
@@ -59,9 +59,8 @@ TEST_GROUP(MemoryLeakWarningTest)
 	void setup()
 	{
 		fixture = new TestTestingFixture();
-		detector = new MemoryLeakDetector();
-		allocator = new StandardNewAllocator;
-		detector->init(&dummy);
+		detector = new MemoryLeakDetector(&dummy);
+		allocator = new TestMemoryAllocator;
 		memPlugin = new MemoryLeakWarningPlugin("TestMemoryLeakWarningPlugin", detector);
 		fixture->registry_->installPlugin(memPlugin);
 		memPlugin->enable();
@@ -128,6 +127,7 @@ bool memoryLeakFailureWasDelete = false;
 class DummyMemoryLeakDetector : public MemoryLeakDetector
 {
 public:
+	DummyMemoryLeakDetector(MemoryLeakFailure* reporter) : MemoryLeakDetector(reporter) {}
 	virtual ~DummyMemoryLeakDetector()
 	{
 		memoryLeakDetectorWasDeleted = true;
@@ -145,6 +145,9 @@ class DummyMemoryLeakFailure : public MemoryLeakFailure
 	}
 };
 
+
+static bool cpputestHasCrashed;
+
 TEST_GROUP(MemoryLeakWarningGlobalDetectorTest)
 {
 	MemoryLeakDetector* detector;
@@ -152,6 +155,11 @@ TEST_GROUP(MemoryLeakWarningGlobalDetectorTest)
 
 	DummyMemoryLeakDetector * dummyDetector;
 	MemoryLeakFailure* dummyReporter;
+
+	static void crashMethod()
+	{
+		cpputestHasCrashed = true;
+	}
 
 	void setup()
 	{
@@ -163,9 +171,12 @@ TEST_GROUP(MemoryLeakWarningGlobalDetectorTest)
 
 		MemoryLeakWarningPlugin::turnOffNewDeleteOverloads();
 
-		dummyDetector = new DummyMemoryLeakDetector;
 		dummyReporter = new DummyMemoryLeakFailure;
-	}
+		dummyDetector = new DummyMemoryLeakDetector(dummyReporter);
+
+		Utest::setCrashMethod(crashMethod);
+		cpputestHasCrashed = false;
+}
 
 	void teardown()
 	{
@@ -174,6 +185,12 @@ TEST_GROUP(MemoryLeakWarningGlobalDetectorTest)
 
 		MemoryLeakWarningPlugin::setGlobalDetector(detector, failureReporter);
 		MemoryLeakWarningPlugin::turnOnNewDeleteOverloads();
+
+		Utest::resetCrashMethod();
+
+		setCurrentMallocAllocatorToDefault();
+		setCurrentNewAllocatorToDefault();
+		setCurrentNewArrayAllocatorToDefault();
 	}
 };
 
@@ -210,3 +227,49 @@ TEST(MemoryLeakWarningGlobalDetectorTest, MemoryWarningPluginCanBeSetToDestroyTh
 
 	CHECK(memoryLeakDetectorWasDeleted);
 }
+
+#ifndef CPPUTEST_MEM_LEAK_DETECTION_DISABLED
+
+TEST(MemoryLeakWarningGlobalDetectorTest, crashOnLeakWithOperatorNew)
+{
+	MemoryLeakWarningPlugin::setGlobalDetector(dummyDetector, dummyReporter);
+
+	MemoryLeakWarningPlugin::turnOnNewDeleteOverloads();
+
+	crash_on_allocation_number(1);
+	char* memory = new char[100];
+	CHECK(cpputestHasCrashed);
+	delete memory;
+
+	MemoryLeakWarningPlugin::turnOffNewDeleteOverloads();
+
+}
+
+TEST(MemoryLeakWarningGlobalDetectorTest, crashOnLeakWithOperatorNewArray)
+{
+	MemoryLeakWarningPlugin::setGlobalDetector(dummyDetector, dummyReporter);
+
+	MemoryLeakWarningPlugin::turnOnNewDeleteOverloads();
+
+	crash_on_allocation_number(1);
+	char* memory = new char;
+	CHECK(cpputestHasCrashed);
+	delete memory;
+
+	MemoryLeakWarningPlugin::turnOffNewDeleteOverloads();
+}
+
+#endif
+
+TEST(MemoryLeakWarningGlobalDetectorTest, crashOnLeakWithOperatorMalloc)
+{
+	MemoryLeakWarningPlugin::setGlobalDetector(dummyDetector, dummyReporter);
+
+	crash_on_allocation_number(1);
+	char* memory = (char*) cpputest_malloc(10);
+	CHECK(cpputestHasCrashed);
+	cpputest_free(memory);
+
+	MemoryLeakWarningPlugin::turnOffNewDeleteOverloads();
+}
+

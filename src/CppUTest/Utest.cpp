@@ -89,6 +89,28 @@ Utest::~Utest()
 {
 }
 
+static void defaultCrashMethod()
+{
+	Utest* ptr = (Utest*) 0x0; ptr->countTests();
+}
+
+static void (*pleaseCrashMeRightNow) () = defaultCrashMethod;
+
+void Utest::setCrashMethod(void (*crashme)())
+{
+	pleaseCrashMeRightNow = crashme;
+}
+
+void Utest::resetCrashMethod()
+{
+	pleaseCrashMeRightNow = defaultCrashMethod;
+}
+
+void Utest::crash()
+{
+	pleaseCrashMeRightNow();
+}
+
 void Utest::runOneTestWithPlugins(TestPlugin* plugin, TestResult& result)
 {
 	executePlatformSpecificRunOneTest(plugin, result);

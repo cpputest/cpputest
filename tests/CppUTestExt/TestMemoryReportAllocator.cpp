@@ -37,8 +37,8 @@ TEST_GROUP(MemoryReportAllocator)
 TEST(MemoryReportAllocator, FunctionsAreForwardedForMallocAllocator)
 {
 	MemoryReportAllocator allocator;
-	allocator.setRealAllocator(StandardMallocAllocator::getCurrentMallocAllocator());
+	allocator.setRealAllocator(getCurrentMallocAllocator());
 
-	CHECK(StandardMallocAllocator::getCurrentMallocAllocator()->allocateMemoryLeakNodeSeparately() == allocator.allocateMemoryLeakNodeSeparately());
+	CHECK(getCurrentMallocAllocator()->allocateMemoryLeakNodeSeparately() == allocator.allocateMemoryLeakNodeSeparately());
 
 }

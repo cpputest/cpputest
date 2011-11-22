@@ -43,7 +43,7 @@ struct CodeReportingAllocationNode
 	CodeReportingAllocationNode* next_;
 };
 
-CodeMemoryReportFormatter::CodeMemoryReportFormatter(MemoryLeakAllocator* internalAllocator)
+CodeMemoryReportFormatter::CodeMemoryReportFormatter(TestMemoryAllocator* internalAllocator)
 	: codeReportingList_(NULL), internalAllocator_(internalAllocator)
 {
 }
@@ -103,9 +103,9 @@ SimpleString CodeMemoryReportFormatter::createVariableNameFromFileLineInfo(const
     return "";
 }
 
-bool CodeMemoryReportFormatter::isNewAllocator(MemoryLeakAllocator* allocator)
+bool CodeMemoryReportFormatter::isNewAllocator(TestMemoryAllocator* allocator)
 {
-    return PlatformSpecificStrCmp(allocator->alloc_name(), StandardNewAllocator::defaultAllocator()->alloc_name()) == 0 || PlatformSpecificStrCmp(allocator->alloc_name(), StandardNewArrayAllocator::defaultAllocator()->alloc_name()) == 0;
+    return PlatformSpecificStrCmp(allocator->alloc_name(), defaultNewAllocator()->alloc_name()) == 0 || PlatformSpecificStrCmp(allocator->alloc_name(), defaultNewArrayAllocator()->alloc_name()) == 0;
 }
 
 bool CodeMemoryReportFormatter::variableExists(const SimpleString& variableName)
@@ -119,7 +119,7 @@ bool CodeMemoryReportFormatter::variableExists(const SimpleString& variableName)
 	return false;
 }
 
-SimpleString CodeMemoryReportFormatter::getAllocationString(MemoryLeakAllocator* allocator, const SimpleString& variableName, size_t size)
+SimpleString CodeMemoryReportFormatter::getAllocationString(TestMemoryAllocator* allocator, const SimpleString& variableName, size_t size)
 {
 	if (isNewAllocator(allocator))
 		return StringFromFormat("char* %s = new char[%d]; /* using %s */", variableName.asCharString(), size, allocator->alloc_name());
@@ -127,7 +127,7 @@ SimpleString CodeMemoryReportFormatter::getAllocationString(MemoryLeakAllocator*
 		return StringFromFormat("void* %s = malloc(%d);", variableName.asCharString(), size);
 }
 
-SimpleString CodeMemoryReportFormatter::getDeallocationString(MemoryLeakAllocator* allocator, const SimpleString& variableName, const char* file, int line)
+SimpleString CodeMemoryReportFormatter::getDeallocationString(TestMemoryAllocator* allocator, const SimpleString& variableName, const char* file, int line)
 {
 	if (isNewAllocator(allocator))
 		return StringFromFormat("delete [] %s; /* using %s at %s:%d */", variableName.asCharString(), allocator->free_name(), file, line);
@@ -153,14 +153,14 @@ void CodeMemoryReportFormatter::report_testgroup_start(TestResult* result, Utest
 			test.getGroup().asCharString()).asCharString());
 }
 
-void CodeMemoryReportFormatter::report_alloc_memory(TestResult* result, MemoryLeakAllocator* allocator, size_t size, char* memory, const char* file, int line)
+void CodeMemoryReportFormatter::report_alloc_memory(TestResult* result, TestMemoryAllocator* allocator, size_t size, char* memory, const char* file, int line)
 {
 	SimpleString variableName = createVariableNameFromFileLineInfo(file, line);
 	result->print(StringFromFormat("\t%s\n", getAllocationString(allocator, variableName, size).asCharString()).asCharString());
 	addNodeToList(variableName.asCharString(), memory, codeReportingList_);
 }
 
-void CodeMemoryReportFormatter::report_free_memory(TestResult* result, MemoryLeakAllocator* allocator, char* memory, const char* file, int line)
+void CodeMemoryReportFormatter::report_free_memory(TestResult* result, TestMemoryAllocator* allocator, char* memory, const char* file, int line)
 {
 	SimpleString variableName;
 	CodeReportingAllocationNode* node = findNode(memory);

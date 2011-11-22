@@ -33,7 +33,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/MemoryLeakDetector.h"
-#include "CppUTest/MemoryLeakAllocator.h"
+#include "CppUTest/TestMemoryAllocator.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
 extern "C"
@@ -92,13 +92,13 @@ int cpputest_malloc_get_count()
 
 void cpputest_malloc_set_out_of_memory()
 {
-	MemoryLeakAllocator::setCurrentMallocAllocator(NullUnknownAllocator::defaultAllocator());
+	setCurrentMallocAllocator(NullUnknownAllocator::defaultAllocator());
 }
 
 void cpputest_malloc_set_not_out_of_memory()
 {
 	malloc_out_of_memory_counter = NO_COUNTDOWN;
-	MemoryLeakAllocator::setCurrentMallocAllocatorToDefault();
+	setCurrentMallocAllocatorToDefault();
 }
 
 void cpputest_malloc_set_out_of_memory_countdown(int count)
@@ -146,7 +146,7 @@ void* cpputest_malloc_location(size_t size, const char* file, int line)
 {
 	countdown();
 	malloc_count++;
-	return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(MemoryLeakAllocator::getCurrentMallocAllocator(), size, file, line);
+	return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentMallocAllocator(), size, file, line);
 }
 
 void* cpputest_calloc_location(size_t num, size_t size, const char* file, int line)
@@ -158,13 +158,13 @@ void* cpputest_calloc_location(size_t num, size_t size, const char* file, int li
 
 void* cpputest_realloc_location(void* memory, size_t size, const char* file, int line)
 {
-	return MemoryLeakWarningPlugin::getGlobalDetector()->reallocMemory(MemoryLeakAllocator::getCurrentMallocAllocator(), (char*) memory, size, file, line);
+	return MemoryLeakWarningPlugin::getGlobalDetector()->reallocMemory(getCurrentMallocAllocator(), (char*) memory, size, file, line);
 }
 
 void cpputest_free_location(void* buffer, const char* file, int line)
 {
 	MemoryLeakWarningPlugin::getGlobalDetector()->invalidateMemory((char*) buffer);
-	MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(MemoryLeakAllocator::getCurrentMallocAllocator(), (char*) buffer, file, line);
+	MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(getCurrentMallocAllocator(), (char*) buffer, file, line);
 }
 
 }

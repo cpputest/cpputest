@@ -73,6 +73,8 @@ void operator delete[](void* mem);
 
 #endif
 
+extern void crash_on_allocation_number(unsigned alloc_number);
+
 class MemoryLeakDetector;
 class MemoryLeakFailure;
 

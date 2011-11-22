@@ -41,7 +41,7 @@
 #include "StandardCLibrary.h"
 
 class SimpleStringCollection;
-class MemoryLeakAllocator;
+class TestMemoryAllocator;
 
 class SimpleString
 {
@@ -82,15 +82,15 @@ public:
 
 	static void padStringsToSameLength(SimpleString& str1, SimpleString& str2, char ch);
 
-	static MemoryLeakAllocator* getStringAllocator();
-	static void setStringAllocator(MemoryLeakAllocator* allocator);
+	static TestMemoryAllocator* getStringAllocator();
+	static void setStringAllocator(TestMemoryAllocator* allocator);
 
 	static char* allocStringBuffer(size_t size);
 	static void deallocStringBuffer(char* str);
 private:
 	char *buffer_;
 
-	static MemoryLeakAllocator* stringAllocator_;
+	static TestMemoryAllocator* stringAllocator_;
 
 	char* getEmptyString() const;
 };

@@ -28,19 +28,19 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/SimpleString.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
-#include "CppUTest/MemoryLeakAllocator.h"
+#include "CppUTest/TestMemoryAllocator.h"
 
 
-MemoryLeakAllocator* SimpleString::stringAllocator_ = NULL;
+TestMemoryAllocator* SimpleString::stringAllocator_ = NULL;
 
-MemoryLeakAllocator* SimpleString::getStringAllocator()
+TestMemoryAllocator* SimpleString::getStringAllocator()
 {
 	if (stringAllocator_ == NULL)
-		return StandardNewArrayAllocator::defaultAllocator();
+		return defaultNewArrayAllocator();
 	return stringAllocator_;
 }
 
-void SimpleString::setStringAllocator(MemoryLeakAllocator* allocator)
+void SimpleString::setStringAllocator(TestMemoryAllocator* allocator)
 {
 	stringAllocator_ = allocator;
 }

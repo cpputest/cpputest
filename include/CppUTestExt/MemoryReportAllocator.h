@@ -28,15 +28,15 @@
 #ifndef D_MemoryReportAllocator_h
 #define D_MemoryReportAllocator_h
 
-#include "CppUTest/MemoryLeakAllocator.h"
+#include "CppUTest/TestMemoryAllocator.h"
 
 class MemoryReportFormatter;
 
-class MemoryReportAllocator : public MemoryLeakAllocator
+class MemoryReportAllocator : public TestMemoryAllocator
 {
 protected:
 	TestResult* result_;
-	MemoryLeakAllocator* realAllocator_;
+	TestMemoryAllocator* realAllocator_;
 	MemoryReportFormatter* formatter_;
 public:
 	MemoryReportAllocator();
@@ -44,10 +44,10 @@ public:
 
 	virtual void setFormatter(MemoryReportFormatter* formatter);
 	virtual void setTestResult(TestResult* result);
-	virtual void setRealAllocator(MemoryLeakAllocator* allocator);
+	virtual void setRealAllocator(TestMemoryAllocator* allocator);
 
 	virtual bool allocateMemoryLeakNodeSeparately();
-	virtual MemoryLeakAllocator* getRealAllocator();
+	virtual TestMemoryAllocator* getRealAllocator();
 
 	virtual char* alloc_memory(size_t size, const char* file, int line);
 	virtual void free_memory(char* memory, const char* file, int line);

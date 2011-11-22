@@ -35,10 +35,10 @@ class CodeMemoryReportFormatter : public MemoryReportFormatter
 {
 private:
 	CodeReportingAllocationNode* codeReportingList_;
-	MemoryLeakAllocator* internalAllocator_;
+	TestMemoryAllocator* internalAllocator_;
 
 public:
-    CodeMemoryReportFormatter(MemoryLeakAllocator* internalAllocator);
+    CodeMemoryReportFormatter(TestMemoryAllocator* internalAllocator);
 	virtual ~CodeMemoryReportFormatter();
 
 	virtual void report_testgroup_start(TestResult* result, Utest& test);
@@ -47,8 +47,8 @@ public:
 	virtual void report_test_start(TestResult* result, Utest& test);
 	virtual void report_test_end(TestResult* result, Utest& test);
 
-	virtual void report_alloc_memory(TestResult* result, MemoryLeakAllocator* allocator, size_t size, char* memory, const char* file, int line);
-	virtual void report_free_memory(TestResult* result, MemoryLeakAllocator* allocator, char* memory, const char* file, int line);
+	virtual void report_alloc_memory(TestResult* result, TestMemoryAllocator* allocator, size_t size, char* memory, const char* file, int line);
+	virtual void report_free_memory(TestResult* result, TestMemoryAllocator* allocator, char* memory, const char* file, int line);
 
 private:
 
@@ -57,11 +57,11 @@ private:
     bool variableExists(const SimpleString& variableName);
     void clearReporting();
 
-    bool isNewAllocator(MemoryLeakAllocator* allocator);
+    bool isNewAllocator(TestMemoryAllocator* allocator);
 	SimpleString createVariableNameFromFileLineInfo(const char *file, int line);
 
-    SimpleString getAllocationString(MemoryLeakAllocator* allocator, const SimpleString& variableName, size_t size);
-    SimpleString getDeallocationString(MemoryLeakAllocator* allocator, const SimpleString& variableName, const char* file, int line);
+    SimpleString getAllocationString(TestMemoryAllocator* allocator, const SimpleString& variableName, size_t size);
+    SimpleString getDeallocationString(TestMemoryAllocator* allocator, const SimpleString& variableName, const char* file, int line);
 };
 
 #endif

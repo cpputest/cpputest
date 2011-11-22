@@ -65,7 +65,6 @@
 	#endif
 #endif
 
-
 #define new new(__FILE__, __LINE__)
 
 #define CPPUTEST_USE_NEW_MACROS 1
