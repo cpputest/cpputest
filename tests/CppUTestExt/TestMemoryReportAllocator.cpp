@@ -39,6 +39,6 @@ TEST(MemoryReportAllocator, FunctionsAreForwardedForMallocAllocator)
 	MemoryReportAllocator allocator;
 	allocator.setRealAllocator(getCurrentMallocAllocator());
 
-	CHECK(getCurrentMallocAllocator()->allocateMemoryLeakNodeSeparately() == allocator.allocateMemoryLeakNodeSeparately());
+	STRCMP_EQUAL("malloc", allocator.alloc_name());
 
 }

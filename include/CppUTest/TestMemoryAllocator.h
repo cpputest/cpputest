@@ -22,9 +22,8 @@ extern TestMemoryAllocator* defaultMallocAllocator();
 class TestMemoryAllocator
 {
 public:
-	TestMemoryAllocator(const char* name_str = "generic", const char* alloc_name_str = "alloc", const char* free_name_str = "free", bool allocateNodesSeperately = false);
+	TestMemoryAllocator(const char* name_str = "generic", const char* alloc_name_str = "alloc", const char* free_name_str = "free");
 	virtual ~TestMemoryAllocator();
-
 	bool hasBeenDestroyed();
 
 	virtual char* alloc_memory(size_t size, const char* file, int line);
@@ -36,7 +35,6 @@ public:
 
 	virtual bool isOfEqualType(TestMemoryAllocator* allocator);
 
-	virtual bool allocateMemoryLeakNodeSeparately();
 	virtual char* allocMemoryLeakNode(size_t size);
 	virtual void freeMemoryLeakNode(char* memory);
 
@@ -46,11 +44,7 @@ protected:
 	const char* alloc_name_;
 	const char* free_name_;
 
-	static TestMemoryAllocator* currentNewAllocator;
-	static TestMemoryAllocator* currentNewArrayAllocator;
-	static TestMemoryAllocator* currentMallocAllocator;
 	bool hasBeenDestroyed_;
-	bool allocateNodesSeperately_;
 };
 
 class CrashOnAllocationAllocator : public TestMemoryAllocator
@@ -76,3 +70,4 @@ public:
 };
 
 #endif
+

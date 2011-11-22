@@ -46,7 +46,6 @@ public:
 	virtual void setTestResult(TestResult* result);
 	virtual void setRealAllocator(TestMemoryAllocator* allocator);
 
-	virtual bool allocateMemoryLeakNodeSeparately();
 	virtual TestMemoryAllocator* getRealAllocator();
 
 	virtual char* alloc_memory(size_t size, const char* file, int line);

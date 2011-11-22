@@ -104,14 +104,14 @@ void setCurrentMallocAllocatorToDefault()
 
 TestMemoryAllocator* defaultMallocAllocator()
 {
-	static TestMemoryAllocator allocator("Standard Malloc Allocator", "malloc", "free", true);
+	static TestMemoryAllocator allocator("Standard Malloc Allocator", "malloc", "free");
 	return &allocator;
 }
 
 /////////////////////////////////////////////
 
-TestMemoryAllocator::TestMemoryAllocator(const char* name_str, const char* alloc_name_str, const char* free_name_str, bool allocateNodesSeperately)
-	: name_(name_str), alloc_name_(alloc_name_str), free_name_(free_name_str), hasBeenDestroyed_(false), allocateNodesSeperately_(allocateNodesSeperately)
+TestMemoryAllocator::TestMemoryAllocator(const char* name_str, const char* alloc_name_str, const char* free_name_str)
+	: name_(name_str), alloc_name_(alloc_name_str), free_name_(free_name_str), hasBeenDestroyed_(false)
 {
 }
 
@@ -128,12 +128,6 @@ bool TestMemoryAllocator::hasBeenDestroyed()
 bool TestMemoryAllocator::isOfEqualType(TestMemoryAllocator* allocator)
 {
 	return PlatformSpecificStrCmp(this->name(), allocator->name()) == 0;
-}
-
-
-bool TestMemoryAllocator::allocateMemoryLeakNodeSeparately()
-{
-	return allocateNodesSeperately_;
 }
 
 char* TestMemoryAllocator::allocMemoryLeakNode(size_t size)

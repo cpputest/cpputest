@@ -103,12 +103,6 @@ public:
 		freeMemoryLeakNodeCalled++;
 		TestMemoryAllocator::free_memory(memory, __FILE__, __LINE__);
 	}
-
-	void setAllocateMemoryLeakNodeSeparately()
-	{
-		allocateNodesSeperately_ = true;
-	}
-
 };
 
 TEST_GROUP(MemoryLeakDetectorTest)
@@ -342,16 +336,15 @@ TEST(MemoryLeakDetectorTest, OneAllocAndFree)
 
 TEST(MemoryLeakDetectorTest, OneRealloc)
 {
-	testAllocator->setAllocateMemoryLeakNodeSeparately();
-	char* mem1 = detector->allocMemory(testAllocator, 10, "file.cpp", 1234);
+	char* mem1 = detector->allocMemory(testAllocator, 10, "file.cpp", 1234, true);
 
-	char* mem2 = detector->reallocMemory(testAllocator, mem1, 1000, "other.cpp", 5678);
+	char* mem2 = detector->reallocMemory(testAllocator, mem1, 1000, "other.cpp", 5678, true);
 
 	LONGS_EQUAL(1, detector->totalMemoryLeaks(mem_leak_period_checking));
 	SimpleString output = detector->report(mem_leak_period_checking);
 	CHECK(output.contains("other.cpp"));
 
-	detector->deallocMemory(testAllocator, mem2);
+	detector->deallocMemory(testAllocator, mem2, true);
 	LONGS_EQUAL(0, detector->totalMemoryLeaks(mem_leak_period_all));
 	detector->stopChecking();
 	LONGS_EQUAL(1, testAllocator->alloc_called);

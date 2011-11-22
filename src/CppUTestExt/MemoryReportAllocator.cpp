@@ -57,11 +57,6 @@ void MemoryReportAllocator::setRealAllocator(TestMemoryAllocator* allocator)
 	realAllocator_ = allocator;
 }
 
-bool MemoryReportAllocator::allocateMemoryLeakNodeSeparately()
-{
-	return realAllocator_->allocateMemoryLeakNodeSeparately();
-}
-
 TestMemoryAllocator* MemoryReportAllocator::getRealAllocator()
 {
 	return realAllocator_;
