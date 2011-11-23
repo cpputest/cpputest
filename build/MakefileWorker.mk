@@ -61,6 +61,7 @@ UNAME_OUTPUT = "$(shell uname -a)"
 MACOSX_STR = Darwin
 MINGW_STR = MINGW
 UNKNWOWN_OS_STR = Unknown
+UNAME_OS = $(UNKNWOWN_OS_STR)
 
 ifeq ($(findstring $(MINGW_STR),$(UNAME_OUTPUT)),$(MINGW_STR))
 	UNAME_OS = $(MINGW_STR)
@@ -68,8 +69,8 @@ endif
 
 ifeq ($(findstring $(MACOSX_STR),$(UNAME_OUTPUT)),$(MACOSX_STR))
 	UNAME_OS = $(MACOSX_STR)
-else
-	UNAME_OS = $(UNKNWOWN_OS_STR)
+#else
+#	UNAME_OS = $(UNKNWOWN_OS_STR)
 endif
 
 #Kludge for mingw, it does not have cc.exe, but gcc.exe will do
@@ -361,6 +362,7 @@ all_no_tests: $(TEST_TARGET)
 .PHONY: flags
 flags: 
 	@echo
+	@echo "OS ${UNAME_OS} from ${UNAME_OUTPUT}"
 	@echo "Compile C and C++ source with CPPFLAGS:"
 	@$(call debug_print_list,$(CPPFLAGS))
 	@echo "Compile C++ source with CXXFLAGS:"

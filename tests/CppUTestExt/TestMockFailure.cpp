@@ -186,12 +186,12 @@ TEST(MockFailureTest, MockUnexpectedObjectFailure)
 	MockUnexpectedObjectFailure failure(this, "foo", (void*)0x1, *list);
 	STRCMP_EQUAL(StringFromFormat (
 			     "MockFailure: Function called on a unexpected object: foo\n"
-			     "\tActual object for call has address: <0x1>\n"
+			     "\tActual object for call has address: <%p>\n"
 				 "\tEXPECTED calls that DID NOT happen related to function: foo\n"
 				 "\t\t(object address: %p)::foo -> no parameters\n"
 				 "\tACTUAL calls that DID happen related to function: foo\n"
 				 "\t\t(object address: %p)::foo -> no parameters",
-			     (void*) 0x02, (void*) 0x03).asCharString(), failure.getMessage().asCharString());
+				 (void*) 0x01, (void*) 0x02, (void*) 0x03).asCharString(), failure.getMessage().asCharString());
 }
 
 TEST(MockFailureTest, MockExpectedObjectDidntHappenFailure)

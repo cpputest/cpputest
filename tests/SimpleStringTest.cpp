@@ -326,7 +326,7 @@ TEST(SimpleString, subStringBeginPosOutOfBounds)
 TEST(SimpleString, copyInBufferNormal)
 {
 	SimpleString str("Hello World");
-	size_t bufferSize = str.size()+1;
+	int bufferSize = str.size()+1;
 	char* buffer = (char*) malloc(bufferSize);
 	str.copyToBuffer(buffer, bufferSize);
 	STRCMP_EQUAL(str.asCharString(), buffer);
@@ -393,6 +393,18 @@ TEST(SimpleString, StringFromFormat)
 {
 	SimpleString h1 = StringFromFormat("%s %s! %d", "Hello", "World", 2009);
 	STRCMP_EQUAL("Hello World! 2009", h1.asCharString());
+}
+
+TEST(SimpleString, StringFromFormatpointer)
+{
+	//this is not a great test. but %p is odd on mingw
+	SimpleString h1 = StringFromFormat("%p", 1);
+	if (h1.size() == 3)
+		STRCMP_EQUAL("0x1", h1.asCharString())
+	else if (h1.size() == 8)
+		STRCMP_EQUAL("00000001", h1.asCharString())
+	else
+		FAIL("Off %p behavior")
 }
 
 TEST(SimpleString, StringFromFormatLarge)
