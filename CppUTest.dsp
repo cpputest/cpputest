@@ -73,6 +73,11 @@ BSC32=bscmake.exe
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo /out:"lib\CppUTest.lib"
+# Begin Special Build Tool
+SOURCE="$(InputPath)"
+PreLink_Cmds=del lib\vc6\CppUTest.lib	del lib\CppUTest.lib
+PostBuild_Cmds=copy lib\CppUTest.lib lib\vc6\CppUTest.lib
+# End Special Build Tool
 
 !ENDIF 
 

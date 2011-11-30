@@ -71,6 +71,15 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <OutputFile>.\Debug/CppUTest.bsc</OutputFile>
     </Bscmake>
+    <PreBuildEvent>
+      <Command>del lib\vs2010\CppUTest.lib
+
+</Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>copy Debug\CppUTest.lib lib\vs2010\CppUTest.lib
+</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>

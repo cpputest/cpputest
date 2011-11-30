@@ -114,6 +114,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
+				CommandLine="pwd"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
