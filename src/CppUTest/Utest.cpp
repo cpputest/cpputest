@@ -258,11 +258,9 @@ void Utest::teardown()
 {
 }
 
-bool Utest::shouldRun(const SimpleString& groupFilter, const SimpleString& nameFilter) const
+bool Utest::shouldRun(const TestFilter& groupFilter, const TestFilter& nameFilter) const
 {
-	SimpleString group(group_);
-	SimpleString name(name_);
-	if (group.contains(groupFilter) && name.contains(nameFilter)) return true;
+	if (groupFilter.match(group_) && nameFilter.match(name_)) return true;
 
 	return false;
 }

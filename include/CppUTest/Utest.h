@@ -36,6 +36,7 @@
 class TestResult;
 class TestPlugin;
 class TestFailure;
+class TestFilter;
 
 extern bool doubles_equal(double d1, double d2, double threshold);
 
@@ -55,7 +56,7 @@ public:
 	virtual bool isNull() const;
 	virtual int countTests();
 
-	bool shouldRun(const SimpleString& groupFilter, const SimpleString& nameFilter) const;
+	bool shouldRun(const TestFilter& groupFilter, const TestFilter& nameFilter) const;
 	const SimpleString getName() const;
 	const SimpleString getGroup() const;
 	const SimpleString getFile() const;

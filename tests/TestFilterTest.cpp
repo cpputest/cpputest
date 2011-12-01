@@ -25,66 +25,73 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// TESTREGISTRY.H
-//
-// TestRegistry is a collection of tests that can be run
-//
-///////////////////////////////////////////////////////////////////////////////
+#include "CppUTest/TestHarness.h"
+#include "CppUTest/TestFilter.h"
 
-#ifndef D_TestRegistry_h
-#define D_TestRegistry_h
-
-#include "SimpleString.h"
-#include "TestFilter.h"
-
-class Utest;
-class TestResult;
-class TestPlugin;
-
-class TestRegistry
+TEST_GROUP(TestFilter)
 {
-public:
-	TestRegistry();
-	virtual ~TestRegistry();
-
-	virtual void addTest(Utest *test);
-	virtual void unDoLastAddTest();
-	virtual int countTests();
-	virtual void runAllTests(TestResult& result);
-	virtual void nameFilter(const TestFilter& filter);
-	virtual void groupFilter(const TestFilter& filter);
-
-	virtual void installPlugin(TestPlugin* plugin);
-	virtual void resetPlugins();
-	virtual TestPlugin* getFirstPlugin();
-	virtual TestPlugin* getPluginByName(const SimpleString& name);
-	virtual void removePluginByName(const SimpleString& name);
-
-	TestFilter getGroupFilter();
-	TestFilter getNameFilter();
-
-	virtual Utest* getFirstTest();
-	virtual Utest* getLastTest();
-	virtual Utest* getTestWithNext(Utest* test);
-
-	virtual Utest* findTestWithName(const SimpleString& name);
-	virtual Utest* findTestWithGroup(const SimpleString& name);
-
-	static TestRegistry* getCurrentRegistry();
-	virtual void setCurrentRegistry(TestRegistry* registry);
-private:
-
-	bool testShouldRun(Utest* test, TestResult& result);
-	bool endOfGroup(Utest* test);
-
-	Utest * tests_;
-	TestFilter nameFilter_;
-	TestFilter groupFilter_;
-	TestPlugin* firstPlugin_;
-	static TestRegistry* currentRegistry_;
-
 };
 
-#endif
+TEST(TestFilter, emptyFilterMatchesEverything)
+{
+	TestFilter filter;
+	CHECK(filter.match("random_name"));
+	CHECK(filter.match(""));
+	CHECK(filter.match("*&%#^&%$(*&^@#(&*@#^(&*$^@#"));
+}
+
+TEST(TestFilter, defaultAbsoluteMismatches)
+{
+	TestFilter filter("filtername");
+	CHECK(!filter.match("notevenclose"));
+	CHECK(!filter.match("filterrname"));
+	CHECK(!filter.match(""));
+}
+
+TEST(TestFilter, strictMatching)
+{
+	TestFilter filter("filter");
+	filter.strictMatching();
+	CHECK(filter.match("filter"));
+	CHECK(!filter.match("filterr"));
+	CHECK(!filter.match(" filter"));
+}
+
+TEST(TestFilter, equality)
+{
+	TestFilter filter1("filter");
+	TestFilter filter2("filter");
+	TestFilter filter3("filter3");
+	CHECK(filter1 == filter2);
+	CHECK(! (filter1 == filter3));
+}
+
+TEST(TestFilter, equalityWithStrictness)
+{
+	TestFilter filter1("filter");
+	TestFilter filter2("filter");
+	filter2.strictMatching();
+	CHECK(! (filter1 == filter2));
+}
+
+TEST(TestFilter, notEqual)
+{
+	TestFilter filter1("filter");
+	TestFilter filter2("filter");
+	TestFilter filter3("filter3");
+	CHECK(filter1 != filter3);
+	CHECK(! (filter1 != filter2));
+}
+
+TEST(TestFilter, stringFrom)
+{
+	TestFilter filter("filter");
+	STRCMP_EQUAL("TestFilter: \"filter\"", StringFrom(filter).asCharString());
+}
+
+TEST(TestFilter, stringFromWithStrictMatching)
+{
+	TestFilter filter("filter");
+	filter.strictMatching();
+	STRCMP_EQUAL("TestFilter: \"filter\" with strict matching", StringFrom(filter).asCharString());
+}

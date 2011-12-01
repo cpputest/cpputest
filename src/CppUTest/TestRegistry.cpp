@@ -29,21 +29,12 @@
 #include "CppUTest/TestRegistry.h"
 
 TestRegistry::TestRegistry() :
-	tests_(&NullTest::instance()), nameFilter_(0), groupFilter_(0), firstPlugin_(NullTestPlugin::instance())
+	tests_(&NullTest::instance()), firstPlugin_(NullTestPlugin::instance())
 {
 }
 
 TestRegistry::~TestRegistry()
 {
-	cleanup();
-}
-
-void TestRegistry::cleanup()
-{
-	delete nameFilter_;
-	delete groupFilter_;
-	nameFilter_ = 0;
-	groupFilter_ = 0;
 }
 
 void TestRegistry::addTest(Utest *test)
@@ -108,33 +99,29 @@ void TestRegistry::unDoLastAddTest()
 
 }
 
-void TestRegistry::nameFilter(SimpleString f)
+void TestRegistry::nameFilter(const TestFilter& f)
 {
-	delete nameFilter_;
-	nameFilter_ = new SimpleString(f);
+	nameFilter_ = f;
 }
 
-void TestRegistry::groupFilter(SimpleString f)
+void TestRegistry::groupFilter(const TestFilter& f)
 {
-	delete groupFilter_;
-	groupFilter_ = new SimpleString(f);
+	groupFilter_ = f;
 }
 
-SimpleString TestRegistry::getGroupFilter()
+TestFilter TestRegistry::getGroupFilter()
 {
-	return *groupFilter_;
+	return groupFilter_;
 }
 
-SimpleString TestRegistry::getNameFilter()
+TestFilter TestRegistry::getNameFilter()
 {
-	return *nameFilter_;
+	return nameFilter_;
 }
 
 bool TestRegistry::testShouldRun(Utest* test, TestResult& result)
 {
-	if (groupFilter_ == 0) groupFilter_ = new SimpleString();
-	if (nameFilter_ == 0) nameFilter_ = new SimpleString();
-	if (test->shouldRun(*groupFilter_, *nameFilter_)) return true;
+	if (test->shouldRun(groupFilter_, nameFilter_)) return true;
 	else {
 		result.countFilteredOut();
 		return false;

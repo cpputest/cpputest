@@ -79,7 +79,6 @@ int CommandLineTestRunner::runAllTestsMain()
 
 	testResult = runAllTests();
 
-	TestRegistry::getCurrentRegistry()->cleanup();
 	return testResult;
 }
 
@@ -131,12 +130,12 @@ int CommandLineTestRunner::getRepeatCount()
 	return arguments_->getRepeatCount();
 }
 
-SimpleString CommandLineTestRunner::getGroupFilter()
+TestFilter CommandLineTestRunner::getGroupFilter()
 {
 	return arguments_->getGroupFilter();
 }
 
-SimpleString CommandLineTestRunner::getNameFilter()
+TestFilter CommandLineTestRunner::getNameFilter()
 {
 	return arguments_->getNameFilter();
 }

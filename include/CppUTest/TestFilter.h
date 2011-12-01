@@ -25,66 +25,33 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// TESTREGISTRY.H
-//
-// TestRegistry is a collection of tests that can be run
-//
-///////////////////////////////////////////////////////////////////////////////
-
-#ifndef D_TestRegistry_h
-#define D_TestRegistry_h
+#ifndef TESTFILTER_H_
+#define TESTFILTER_H_
 
 #include "SimpleString.h"
-#include "TestFilter.h"
 
-class Utest;
-class TestResult;
-class TestPlugin;
-
-class TestRegistry
+class TestFilter
 {
 public:
-	TestRegistry();
-	virtual ~TestRegistry();
 
-	virtual void addTest(Utest *test);
-	virtual void unDoLastAddTest();
-	virtual int countTests();
-	virtual void runAllTests(TestResult& result);
-	virtual void nameFilter(const TestFilter& filter);
-	virtual void groupFilter(const TestFilter& filter);
+	TestFilter();
+	TestFilter(const char* filter);
+	TestFilter(const SimpleString& filter);
 
-	virtual void installPlugin(TestPlugin* plugin);
-	virtual void resetPlugins();
-	virtual TestPlugin* getFirstPlugin();
-	virtual TestPlugin* getPluginByName(const SimpleString& name);
-	virtual void removePluginByName(const SimpleString& name);
+	bool match(const SimpleString& name) const;
 
-	TestFilter getGroupFilter();
-	TestFilter getNameFilter();
+	void strictMatching();
 
-	virtual Utest* getFirstTest();
-	virtual Utest* getLastTest();
-	virtual Utest* getTestWithNext(Utest* test);
+	bool operator==(const TestFilter& filter) const;
+	bool operator!=(const TestFilter& filter) const;
 
-	virtual Utest* findTestWithName(const SimpleString& name);
-	virtual Utest* findTestWithGroup(const SimpleString& name);
-
-	static TestRegistry* getCurrentRegistry();
-	virtual void setCurrentRegistry(TestRegistry* registry);
+	SimpleString asString() const;
 private:
-
-	bool testShouldRun(Utest* test, TestResult& result);
-	bool endOfGroup(Utest* test);
-
-	Utest * tests_;
-	TestFilter nameFilter_;
-	TestFilter groupFilter_;
-	TestPlugin* firstPlugin_;
-	static TestRegistry* currentRegistry_;
-
+	SimpleString filter_;
+	bool strictMatching_;
 };
 
+SimpleString StringFrom(const TestFilter& filter);
+
 #endif
+

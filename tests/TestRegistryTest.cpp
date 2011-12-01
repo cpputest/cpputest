@@ -48,7 +48,7 @@ public:
 	{
 		hasRun_ = true;
 	}
-	;
+
 	bool hasRun_;
 };
 
@@ -68,11 +68,10 @@ public:
 	{
 		resetCount();
 	}
-	;
+
 	virtual ~MockTestResult()
 	{
 	}
-	;
 
 	void resetCount()
 	{
@@ -142,6 +141,14 @@ TEST_GROUP(TestRegistry)
 		delete result;
 		delete output;
 	}
+
+	void addAndRunAllTests()
+	{
+		myRegistry->addTest(test1);
+		myRegistry->addTest(test2);
+		myRegistry->addTest(test3);
+		myRegistry->runAllTests(*result);
+	}
 };
 
 TEST(TestRegistry, registryMyRegistryAndReset)
@@ -193,10 +200,7 @@ TEST(TestRegistry, runTwoTestsCheckResultFunctionsCalled)
 
 TEST(TestRegistry, runThreeTestsandTwoGroupsCheckResultFunctionsCalled)
 {
-	myRegistry->addTest(test1);
-	myRegistry->addTest(test2);
-	myRegistry->addTest(test3);
-	myRegistry->runAllTests(*result);
+	addAndRunAllTests();
 	LONGS_EQUAL(2, mockResult->countCurrentGroupStarted);
 	LONGS_EQUAL(2, mockResult->countCurrentGroupEnded);
 	LONGS_EQUAL(3, mockResult->countCurrentTestStarted);
@@ -254,4 +258,23 @@ TEST(TestRegistry, findTestWithGroup)
 	CHECK(myRegistry->findTestWithGroup("GroupOfATestThatDoesExist"));
 }
 
+TEST(TestRegistry, nameFilterWorks)
+{
+	test1->setTestName("testname");
+	test2->setTestName("noname");
+	myRegistry->nameFilter("testname");
+	addAndRunAllTests();
+	CHECK(test1->hasRun_);
+	CHECK(!test2->hasRun_);
+}
+
+TEST(TestRegistry, groupFilterWorks)
+{
+	test1->setGroupName("groupname");
+	test2->setGroupName("noname");
+	myRegistry->groupFilter("groupname");
+	addAndRunAllTests();
+	CHECK(test1->hasRun_);
+	CHECK(!test2->hasRun_);
+}
 

@@ -323,6 +323,38 @@ TEST(SimpleString, subStringBeginPosOutOfBounds)
 	STRCMP_EQUAL("", str.subString(13, 5).asCharString());
 }
 
+TEST(SimpleString, subStringFromTillNormal)
+{
+	SimpleString str("Hello World");
+	STRCMP_EQUAL("Hello", str.subStringFromTill('H', ' ').asCharString());
+}
+
+TEST(SimpleString, subStringFromTillOutOfBounds)
+{
+	SimpleString str("Hello World");
+	STRCMP_EQUAL("Hello World", str.subStringFromTill('H', '!').asCharString());
+}
+
+TEST(SimpleString, subStringFromTillStartDoesntExist)
+{
+	SimpleString str("Hello World");
+	STRCMP_EQUAL("", str.subStringFromTill('!', ' ').asCharString());
+}
+
+TEST(SimpleString, findNormal)
+{
+	SimpleString str("Hello World");
+	LONGS_EQUAL(0, str.find('H'));
+	LONGS_EQUAL(1, str.find('e'));
+	LONGS_EQUAL(-1, str.find('!'));
+}
+
+TEST(SimpleString, at)
+{
+	SimpleString str("Hello World");
+	BYTES_EQUAL('H', str.at(0));
+}
+
 TEST(SimpleString, copyInBufferNormal)
 {
 	SimpleString str("Hello World");

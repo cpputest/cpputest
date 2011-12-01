@@ -31,12 +31,7 @@
 #include "TestHarness.h"
 #include "TestOutput.h"
 #include "CommandLineArguments.h"
-
-///////////////////////////////////////////////////////////////////////////////
-//
-// Main entry point for running a collection of unit tests
-//
-///////////////////////////////////////////////////////////////////////////////
+#include "TestFilter.h"
 
 class JUnitTestOutput;
 
@@ -68,8 +63,8 @@ private:
 	void initializeTestRun();
 	bool isVerbose();
 	int getRepeatCount();
-	SimpleString getGroupFilter();
-	SimpleString getNameFilter();
+	TestFilter getGroupFilter();
+	TestFilter getNameFilter();
 };
 
 #endif

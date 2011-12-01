@@ -308,6 +308,31 @@ SimpleString SimpleString::subString(size_t beginPos, size_t amount) const
 	return newString;
 }
 
+char SimpleString::at(int pos) const
+{
+	return buffer_[pos];
+}
+
+int SimpleString::find(char ch) const
+{
+	int length = size();
+	for (int i = 0; i < length; i++)
+		if (buffer_[i] == ch) return i;
+	return -1;
+}
+
+SimpleString SimpleString::subStringFromTill(char startChar, char lastExcludedChar) const
+{
+	int beginPos = find(startChar);
+	int endPos = find(lastExcludedChar);
+
+	if (beginPos == -1) return "";
+	if (endPos == -1) return *this;
+
+	return subString(beginPos, endPos - beginPos);
+}
+
+
 void SimpleString::copyToBuffer(char* bufferToCopy, size_t bufferSize) const
 {
 	if (bufferToCopy == NULL || bufferSize == 0) return;

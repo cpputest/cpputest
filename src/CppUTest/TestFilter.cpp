@@ -25,66 +25,54 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// TESTREGISTRY.H
-//
-// TestRegistry is a collection of tests that can be run
-//
-///////////////////////////////////////////////////////////////////////////////
+#include "CppUTest/TestFilter.h"
 
-#ifndef D_TestRegistry_h
-#define D_TestRegistry_h
-
-#include "SimpleString.h"
-#include "TestFilter.h"
-
-class Utest;
-class TestResult;
-class TestPlugin;
-
-class TestRegistry
+TestFilter::TestFilter() : strictMatching_(false)
 {
-public:
-	TestRegistry();
-	virtual ~TestRegistry();
+}
 
-	virtual void addTest(Utest *test);
-	virtual void unDoLastAddTest();
-	virtual int countTests();
-	virtual void runAllTests(TestResult& result);
-	virtual void nameFilter(const TestFilter& filter);
-	virtual void groupFilter(const TestFilter& filter);
+TestFilter::TestFilter(const SimpleString& filter) : strictMatching_(false)
+{
+	filter_ = filter;
+}
 
-	virtual void installPlugin(TestPlugin* plugin);
-	virtual void resetPlugins();
-	virtual TestPlugin* getFirstPlugin();
-	virtual TestPlugin* getPluginByName(const SimpleString& name);
-	virtual void removePluginByName(const SimpleString& name);
+TestFilter::TestFilter(const char* filter) : strictMatching_(false)
+{
+	filter_ = filter;
+}
 
-	TestFilter getGroupFilter();
-	TestFilter getNameFilter();
+void TestFilter::strictMatching()
+{
+	strictMatching_ = true;
+}
 
-	virtual Utest* getFirstTest();
-	virtual Utest* getLastTest();
-	virtual Utest* getTestWithNext(Utest* test);
+bool TestFilter::match(const SimpleString& name) const
+{
+	if (strictMatching_)
+		return name == filter_;
+	return name.contains(filter_);
+}
 
-	virtual Utest* findTestWithName(const SimpleString& name);
-	virtual Utest* findTestWithGroup(const SimpleString& name);
+bool TestFilter::operator==(const TestFilter& filter) const
+{
+	return (filter_ == filter.filter_ && strictMatching_ == filter.strictMatching_);
+}
 
-	static TestRegistry* getCurrentRegistry();
-	virtual void setCurrentRegistry(TestRegistry* registry);
-private:
+bool TestFilter::operator!=(const TestFilter& filter) const
+{
+	return !(filter == *this);
+}
 
-	bool testShouldRun(Utest* test, TestResult& result);
-	bool endOfGroup(Utest* test);
+SimpleString TestFilter::asString() const
+{
+	SimpleString textFilter =  StringFromFormat("TestFilter: \"%s\"", filter_.asCharString());
+	if (strictMatching_)
+		textFilter += " with strict matching";
+	return textFilter;
+}
 
-	Utest * tests_;
-	TestFilter nameFilter_;
-	TestFilter groupFilter_;
-	TestPlugin* firstPlugin_;
-	static TestRegistry* currentRegistry_;
+SimpleString StringFrom(const TestFilter& filter)
+{
+	return filter.asString();
+}
 
-};
-
-#endif
