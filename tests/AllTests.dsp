@@ -152,6 +152,10 @@ SOURCE=.\TestFailureTest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\TestFilterTest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\TestHarness_cTest.cpp
 # End Source File
 # Begin Source File

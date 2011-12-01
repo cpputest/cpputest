@@ -88,7 +88,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy lib\CppUTest.lib lib\vs2008&#x0D;&#x0A;copy lib\vc90.pdb lib\vs2008&#x0D;&#x0A;"
+				CommandLine="copy lib\CppUTest.lib lib\vs2008&#x0D;&#x0A;copy Debug\vc90.pdb lib\vs2008&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -202,6 +202,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\CppUTest\TestFilter.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\src\CppUTest\TestHarness_c.cpp"
 				>
 			</File>
@@ -297,6 +301,10 @@
 			</File>
 			<File
 				RelativePath=".\include\CppUTest\TestFailure.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTest\TestFilter.h"
 				>
 			</File>
 			<File

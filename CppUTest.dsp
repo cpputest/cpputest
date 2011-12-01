@@ -118,6 +118,10 @@ SOURCE=.\src\CppUTest\TestFailure.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\CppUTest\TestFilter.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\CppUTest\TestHarness_c.cpp
 # End Source File
 # Begin Source File
@@ -195,6 +199,10 @@ SOURCE=.\include\CppUTest\StandardCLibrary.h
 # Begin Source File
 
 SOURCE=.\include\CppUTest\TestFailure.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTest\TestFilter.h
 # End Source File
 # Begin Source File
 
