@@ -76,7 +76,7 @@ LIB32=link.exe -lib
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
 PreLink_Cmds=del lib\vc6\CppUTest.lib	del lib\CppUTest.lib
-PostBuild_Cmds=copy lib\CppUTest.lib lib\vc6\CppUTest.lib
+PostBuild_Cmds=copy lib\CppUTest.lib lib\vc6\CppUTest.lib	copy Debug\vc60.pdb lib\vc6\vc60.pdb
 # End Special Build Tool
 
 !ENDIF 

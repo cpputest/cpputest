@@ -72,12 +72,13 @@
       <OutputFile>.\Debug/CppUTest.bsc</OutputFile>
     </Bscmake>
     <PreBuildEvent>
-      <Command>del lib\vs2010\CppUTest.lib
-
-</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>copy Debug\CppUTest.lib lib\vs2010\CppUTest.lib
+      <Command>copy $(OutDir)CppUTest.lib lib\vs2010
+copy $(OutDir)CppUTest.lib lib\CppUTest.lib
+copy $(OutDir)vc100.pdb lib\vs2010
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
