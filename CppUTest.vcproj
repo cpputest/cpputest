@@ -26,7 +26,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="del lib\CppUTest.lib&#x0D;&#x0A;del lib\vs2008\CppUTest.lib&#x0D;&#x0A;del lib\vs2008\vc90.pdb&#x0D;&#x0A;"
+				CommandLine="if exist  lib\CppUTest.lib del lib\CppUTest.lib&#x0D;&#x0A;if exist  lib\vs2008\CppUTest.lib del lib\vs2008\CppUTest.lib&#x0D;&#x0A;if exist  lib\vs2008\vc90.pdb del lib\vs2008\vc90.pdb&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
