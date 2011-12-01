@@ -114,7 +114,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="pwd"
+				CommandLine=""
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -193,6 +193,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="Debug\AllTests.exe"
 			/>
 		</Configuration>
 	</Configurations>

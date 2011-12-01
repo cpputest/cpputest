@@ -4,6 +4,6 @@ rem *
 rem * this path works on my machine
 rem ****PATH=C:\Windows\Microsoft.NET\Framework\v3.5;c:\windows;c:\windows\system32
 
-msbuild /t:rebuild CppUTest_VS2008.sln
-tests\Debug\AllTests
-:end
+msbuild /t:rebuild /verbosity:detailed CppUTest_VS2008.sln
+set test_exe=tests\Debug\AllTests.exe
+if exist %test_exe% %test_exe% -v

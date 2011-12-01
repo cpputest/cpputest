@@ -88,7 +88,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy lib\CppUTest.lib lib\vs2008&#x0D;&#x0A;copy Debug\vc90.pdb lib\vs2008&#x0D;&#x0A;"
+				CommandLine="copy lib\CppUTest.lib lib\vs2008\CppUTest.lib&#x0D;&#x0A;copy Debug\vc90.pdb lib\vs2008\vc90.pdb&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
