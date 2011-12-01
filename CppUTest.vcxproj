@@ -117,6 +117,7 @@
     <ClCompile Include="src\CppUTest\MemoryLeakWarningPlugin.cpp" />
     <ClCompile Include="src\CppUTest\SimpleString.cpp" />
     <ClCompile Include="src\CppUTest\TestFailure.cpp" />
+    <ClCompile Include="src\CppUTest\TestFilter.cpp" />
     <ClCompile Include="src\CppUTest\TestHarness_c.cpp" />
     <ClCompile Include="src\CppUTest\TestMemoryAllocator.cpp" />
     <ClCompile Include="src\CppUTest\TestOutput.cpp" />
@@ -142,6 +143,7 @@
     <ClInclude Include="include\CppUTest\SimpleString.h" />
     <ClInclude Include="include\CppUTest\StandardCLibrary.h" />
     <ClInclude Include="include\CppUTest\TestFailure.h" />
+    <ClInclude Include="include\CppUTest\TestFilter.h" />
     <ClInclude Include="include\CppUTest\TestHarness.h" />
     <ClInclude Include="include\CppUTest\TestHarness_c.h" />
     <ClInclude Include="include\CppUTest\TestMemoryAllocator.h" />
