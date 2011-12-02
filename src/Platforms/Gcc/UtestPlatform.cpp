@@ -42,6 +42,9 @@
 #include <math.h>
 #include <ctype.h>
 #include <unistd.h>
+#ifndef mingw32
+#include <sys/wait.h>
+#endif
 
 #include "CppUTest/PlatformSpecificFunctions.h"
 
@@ -82,6 +85,11 @@ void Utest::executePlatformSpecificRunOneTest(TestPlugin* plugin, TestResult& re
     if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
        jmp_buf_index++;
 
+#ifdef mingw32
+       printf("-p doesn't work on MinGW as it is lacking fork. Running inside the process\b");
+	   runOneTest(plugin, result);
+#else
+
        int info;
        pid_t pid = (isRunInSeperateProcess()) ? fork() : 0;
 
@@ -94,7 +102,7 @@ void Utest::executePlatformSpecificRunOneTest(TestPlugin* plugin, TestResult& re
 		    runOneTest(plugin, result);
 		    if (isRunInSeperateProcess()) exit(result.getFailureCount() );
 		}
-
+#endif
        jmp_buf_index--;
     }
 }
