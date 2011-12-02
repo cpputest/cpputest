@@ -42,7 +42,7 @@
 #include <math.h>
 #include <ctype.h>
 #include <unistd.h>
-#ifndef mingw32
+#ifndef __MINGW32__
 #include <sys/wait.h>
 #endif
 
@@ -85,7 +85,7 @@ void Utest::executePlatformSpecificRunOneTest(TestPlugin* plugin, TestResult& re
     if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
        jmp_buf_index++;
 
-#ifdef mingw32
+#ifdef __MINGW32__
        printf("-p doesn't work on MinGW as it is lacking fork. Running inside the process\b");
 	   runOneTest(plugin, result);
 #else
