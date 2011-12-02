@@ -41,6 +41,8 @@
 #include <string.h>
 #include <math.h>
 #include <ctype.h>
+#include <unistd.h>
+#include <sys/wait.h>
 
 #include "CppUTest/PlatformSpecificFunctions.h"
 
@@ -80,7 +82,20 @@ void Utest::executePlatformSpecificRunOneTest(TestPlugin* plugin, TestResult& re
 {
     if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
        jmp_buf_index++;
-       runOneTest(plugin, result);
+
+       int info;
+       pid_t pid = (isRunInSeperateProcess()) ? fork() : 0;
+
+       if (pid) {
+    	   wait(&info);
+    	   if (WIFEXITED(info) && WEXITSTATUS(info) > result.getFailureCount())
+    		   result.addFailure(TestFailure(this, "failed in seperate process"));
+       }
+       else {
+		    runOneTest(plugin, result);
+		    if (isRunInSeperateProcess()) exit(result.getFailureCount() );
+		}
+
        jmp_buf_index--;
     }
 }

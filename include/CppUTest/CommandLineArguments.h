@@ -47,6 +47,7 @@ public:
 	TestFilter getNameFilter() const;
 	bool isJUnitOutput() const;
 	bool isEclipseOutput() const;
+	bool runTestsInSeperateProcess() const;
 	const char* usage() const;
 
 private:
@@ -59,6 +60,7 @@ private:
 	const char** av_;
 
 	bool verbose_;
+	bool runTestsAsSeperateProcess_;
 	int repeat_;
 	TestFilter groupFilter_;
 	TestFilter nameFilter_;
@@ -70,7 +72,7 @@ private:
 	void SetStrictGroupFilter(int ac, const char** av, int& index);
 	void SetNameFilter(int ac, const char** av, int& index);
 	void SetStrictNameFilter(int ac, const char** av, int& index);
-	void SetTestToRunBasedOnVerboseOutput(int ac, const char** av, int& index);
+	void SetTestToRunBasedOnVerboseOutput(int ac, const char** av, int& index, const char* parameterName);
 	bool SetOutputType(int ac, const char** av, int& index);
 
 	CommandLineArguments(const CommandLineArguments&);

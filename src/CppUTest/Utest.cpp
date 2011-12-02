@@ -71,17 +71,17 @@ private:
 
 
 Utest::Utest() :
-	group_("UndefinedTestGroup"), name_("UndefinedTest"), file_("UndefinedFile"), lineNumber_(0), next_(&NullTest::instance())
+	group_("UndefinedTestGroup"), name_("UndefinedTest"), file_("UndefinedFile"), lineNumber_(0), next_(&NullTest::instance()), isRunAsSeperateProcess_(false)
 {
 }
 
 Utest::Utest(const char* groupName, const char* testName, const char* fileName, int lineNumber) :
-	group_(groupName), name_(testName), file_(fileName), lineNumber_(lineNumber), next_(&NullTest::instance())
+	group_(groupName), name_(testName), file_(fileName), lineNumber_(lineNumber), next_(&NullTest::instance()), isRunAsSeperateProcess_(false)
 {
 }
 
 Utest::Utest(const char* groupName, const char* testName, const char* fileName, int lineNumber, Utest* nextTest) :
-	group_(groupName), name_(testName), file_(fileName), lineNumber_(lineNumber), next_(nextTest)
+	group_(groupName), name_(testName), file_(fileName), lineNumber_(lineNumber), next_(nextTest), isRunAsSeperateProcess_(false)
 {
 }
 
@@ -215,6 +215,17 @@ const char* Utest::getProgressIndicator() const
 {
 	return ".";
 }
+
+bool Utest::isRunInSeperateProcess() const
+{
+	return isRunAsSeperateProcess_;
+}
+
+void Utest::setRunInSeperateProcess()
+{
+	isRunAsSeperateProcess_ = true;
+}
+
 
 void Utest::setFileName(const char* fileName)
 {

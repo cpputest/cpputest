@@ -87,6 +87,7 @@ void CommandLineTestRunner::initializeTestRun()
 	TestRegistry::getCurrentRegistry()->groupFilter(arguments_->getGroupFilter());
 	TestRegistry::getCurrentRegistry()->nameFilter(arguments_->getNameFilter());
 	if (arguments_->isVerbose()) output_->verbose();
+	if (arguments_->runTestsInSeperateProcess()) TestRegistry::getCurrentRegistry()->setRunTestsInSeperateProcess();
 }
 
 int CommandLineTestRunner::runAllTests()

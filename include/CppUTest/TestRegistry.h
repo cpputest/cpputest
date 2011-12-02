@@ -74,6 +74,8 @@ public:
 
 	static TestRegistry* getCurrentRegistry();
 	virtual void setCurrentRegistry(TestRegistry* registry);
+
+	virtual void setRunTestsInSeperateProcess();
 private:
 
 	bool testShouldRun(Utest* test, TestResult& result);
@@ -84,6 +86,7 @@ private:
 	TestFilter groupFilter_;
 	TestPlugin* firstPlugin_;
 	static TestRegistry* currentRegistry_;
+	bool runInSeperateProcess_;
 
 };
 

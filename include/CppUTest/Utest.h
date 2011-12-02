@@ -94,6 +94,9 @@ public:
     static void setCrashMethod(void (*crashme)());
     static void resetCrashMethod();
 
+    virtual bool isRunInSeperateProcess() const;
+    virtual void setRunInSeperateProcess();
+
 protected:
     virtual void runOneTest(TestPlugin *plugin, TestResult & result);
     virtual void executePlatformSpecificRunOneTest(TestPlugin *plugin, TestResult & result);
@@ -112,6 +115,7 @@ private:
     const char *file_;
     int lineNumber_;
     Utest *next_;
+    bool isRunAsSeperateProcess_;
 
 	void setTestResult(TestResult* result);
 	void setCurrentTest(Utest* test);

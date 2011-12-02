@@ -102,6 +102,14 @@ TEST(CommandLineArguments, repeatSetDefaultsToTwo)
 	LONGS_EQUAL(2, args->getRepeatCount());
 }
 
+TEST(CommandLineArguments, runningTestsInSeperateProcesses)
+{
+	int argc = 2;
+	const char* argv[] = { "tests.exe", "-p" };
+	CHECK(newArgumentParser(argc, argv));
+	CHECK(args->runTestsInSeperateProcess());
+}
+
 TEST(CommandLineArguments, setGroupFilter)
 {
 	int argc = 3;
@@ -169,6 +177,20 @@ TEST(CommandLineArguments, setTestToRunUsingVerboseOutput)
 {
 	int argc = 2;
 	const char* argv[] = { "tests.exe", "TEST(testgroup, testname) - stuff" };
+	CHECK(newArgumentParser(argc, argv));
+
+	TestFilter nameFilter("testname");
+	TestFilter groupFilter("testgroup");
+	nameFilter.strictMatching();
+	groupFilter.strictMatching();
+	CHECK_EQUAL(nameFilter, args->getNameFilter());
+	CHECK_EQUAL(groupFilter, args->getGroupFilter());
+}
+
+TEST(CommandLineArguments, setTestToRunUsingVerboseOutputOfIgnoreTest)
+{
+	int argc = 2;
+	const char* argv[] = { "tests.exe", "IGNORE_TEST(testgroup, testname) - stuff" };
 	CHECK(newArgumentParser(argc, argv));
 
 	TestFilter nameFilter("testname");

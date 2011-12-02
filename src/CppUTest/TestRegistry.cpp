@@ -29,7 +29,7 @@
 #include "CppUTest/TestRegistry.h"
 
 TestRegistry::TestRegistry() :
-	tests_(&NullTest::instance()), firstPlugin_(NullTestPlugin::instance())
+	tests_(&NullTest::instance()), firstPlugin_(NullTestPlugin::instance()), runInSeperateProcess_(false)
 {
 }
 
@@ -48,6 +48,7 @@ void TestRegistry::runAllTests(TestResult& result)
 
 	result.testsStarted();
 	for (Utest *test = tests_; !test->isNull(); test = test->getNext()) {
+		if (runInSeperateProcess_) test->setRunInSeperateProcess();
 
 		if (groupStart) {
 			result.currentGroupStarted(test);
@@ -118,6 +119,12 @@ TestFilter TestRegistry::getNameFilter()
 {
 	return nameFilter_;
 }
+
+void TestRegistry::setRunTestsInSeperateProcess()
+{
+	runInSeperateProcess_ = true;
+}
+
 
 bool TestRegistry::testShouldRun(Utest* test, TestResult& result)
 {

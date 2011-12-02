@@ -44,7 +44,7 @@ public:
 		Utest(group, "Name", "File", testLineNumber), hasRun_(false)
 	{
 	}
-	void testBody()
+	virtual void runOneTestWithPlugins(TestPlugin*, TestResult&)
 	{
 		hasRun_ = true;
 	}
@@ -276,5 +276,13 @@ TEST(TestRegistry, groupFilterWorks)
 	addAndRunAllTests();
 	CHECK(test1->hasRun_);
 	CHECK(!test2->hasRun_);
+}
+
+TEST(TestRegistry, runTestInSeperateProcess)
+{
+	myRegistry->setRunTestsInSeperateProcess();
+	myRegistry->addTest(test1);
+	myRegistry->runAllTests(*result);
+	CHECK(test1->isRunInSeperateProcess());
 }
 

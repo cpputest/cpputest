@@ -30,7 +30,7 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 
 CommandLineArguments::CommandLineArguments(int ac, const char** av) :
-	ac_(ac), av_(av), verbose_(false), repeat_(1), groupFilter_(""), nameFilter_(""), outputType_(OUTPUT_ECLIPSE)
+	ac_(ac), av_(av), verbose_(false), runTestsAsSeperateProcess_(false), repeat_(1), groupFilter_(""), nameFilter_(""), outputType_(OUTPUT_ECLIPSE)
 {
 }
 
@@ -44,12 +44,14 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
 	for (int i = 1; i < ac_; i++) {
 		SimpleString argument = av_[i];
 		if (argument == "-v") verbose_ = true;
+		else if (argument == "-p") runTestsAsSeperateProcess_ = true;
 		else if (argument.startsWith("-r")) SetRepeatCount(ac_, av_, i);
 		else if (argument.startsWith("-g")) SetGroupFilter(ac_, av_, i);
 		else if (argument.startsWith("-sg")) SetStrictGroupFilter(ac_, av_, i);
 		else if (argument.startsWith("-n")) SetNameFilter(ac_, av_, i);
 		else if (argument.startsWith("-sn")) SetStrictNameFilter(ac_, av_, i);
-		else if (argument.startsWith("TEST(")) SetTestToRunBasedOnVerboseOutput(ac_, av_, i);
+		else if (argument.startsWith("TEST(")) SetTestToRunBasedOnVerboseOutput(ac_, av_, i, "TEST(");
+		else if (argument.startsWith("IGNORE_TEST(")) SetTestToRunBasedOnVerboseOutput(ac_, av_, i, "IGNORE_TEST(");
 		else if (argument.startsWith("-o")) correctParameters = SetOutputType(ac_, av_, i);
 		else if (argument.startsWith("-p")) correctParameters = plugin->parseAllArguments(ac_, av_, i);
 		else correctParameters = false;
@@ -70,6 +72,12 @@ bool CommandLineArguments::isVerbose() const
 {
 	return verbose_;
 }
+
+bool CommandLineArguments::runTestsInSeperateProcess() const
+{
+	return runTestsAsSeperateProcess_;
+}
+
 
 int CommandLineArguments::getRepeatCount() const
 {
@@ -132,9 +140,9 @@ void CommandLineArguments::SetStrictNameFilter(int ac, const char** av, int& ind
 	nameFilter_.strictMatching();
 }
 
-void CommandLineArguments::SetTestToRunBasedOnVerboseOutput(int ac, const char** av, int& index)
+void CommandLineArguments::SetTestToRunBasedOnVerboseOutput(int ac, const char** av, int& index, const char* parameterName)
 {
-	SimpleString wholename = getParameterField(ac, av, index, "TEST(");
+	SimpleString wholename = getParameterField(ac, av, index, parameterName);
 	SimpleString testname = wholename.subStringFromTill(',', ')');
 	testname = testname.subString(2, testname.size());
 	groupFilter_ = wholename.subStringFromTill(wholename.at(0), ',');
