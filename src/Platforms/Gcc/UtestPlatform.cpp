@@ -86,7 +86,8 @@ void Utest::executePlatformSpecificRunOneTest(TestPlugin* plugin, TestResult& re
        jmp_buf_index++;
 
 #ifdef __MINGW32__
-       printf("-p doesn't work on MinGW as it is lacking fork. Running inside the process\b");
+       if (isRunInSeperateProcess())
+    	   printf("-p doesn't work on MinGW as it is lacking fork. Running inside the process\b");
 	   runOneTest(plugin, result);
 #else
 
