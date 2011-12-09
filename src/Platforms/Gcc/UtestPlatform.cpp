@@ -88,7 +88,7 @@ void executePlatformSpecificRunOneTest(UtestShell* shell, TestPlugin* plugin, Te
 #ifdef __MINGW32__
        if (shell->isRunInSeperateProcess())
     	   printf("-p doesn't work on MinGW as it is lacking fork. Running inside the process\b");
-	   runOneTest(plugin, result);
+       shell->runOneTest(plugin, result);
 #else
 
        int info;
