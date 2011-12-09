@@ -31,10 +31,10 @@
 
 class MockSupportPluginReporter : public MockFailureReporter
 {
-	Utest& test_;
+	UtestShell& test_;
 	TestResult& result_;
 public:
-	MockSupportPluginReporter(Utest& test, TestResult& result)
+	MockSupportPluginReporter(UtestShell& test, TestResult& result)
 		: test_(test), result_(result)
 	{
 	}
@@ -44,7 +44,7 @@ public:
 		result_.addFailure(failure);
 	}
 
-	virtual Utest* getTestToFail()
+	virtual UtestShell* getTestToFail()
 	{
 		return &test_;
 	}
@@ -60,12 +60,12 @@ MockSupportPlugin::~MockSupportPlugin()
 	repository_.clear();
 }
 
-void MockSupportPlugin::preTestAction(Utest&, TestResult&)
+void MockSupportPlugin::preTestAction(UtestShell&, TestResult&)
 {
 	mock().installComparators(repository_);
 }
 
-void MockSupportPlugin::postTestAction(Utest& test, TestResult& result)
+void MockSupportPlugin::postTestAction(UtestShell& test, TestResult& result)
 {
 	MockSupportPluginReporter reporter(test, result);
 	mock().setMockFailureReporter(&reporter);

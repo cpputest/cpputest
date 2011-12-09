@@ -36,7 +36,7 @@
 #ifndef D_TestPlugin_h
 #define D_TestPlugin_h
 
-class Utest;
+class UtestShell;
 class TestResult;
 
 class TestPlugin
@@ -46,11 +46,11 @@ public:
 	TestPlugin(const SimpleString& name);
 	virtual ~TestPlugin();
 
-	virtual void preTestAction(Utest&, TestResult&)
+	virtual void preTestAction(UtestShell&, TestResult&)
 	{
 	}
 
-	virtual void postTestAction(Utest&, TestResult&)
+	virtual void postTestAction(UtestShell&, TestResult&)
 	{
 	}
 
@@ -59,8 +59,8 @@ public:
 		return false;
 	}
 
-	virtual void runAllPreTestAction(Utest&, TestResult&);
-	virtual void runAllPostTestAction(Utest&, TestResult&);
+	virtual void runAllPreTestAction(UtestShell&, TestResult&);
+	virtual void runAllPostTestAction(UtestShell&, TestResult&);
 	virtual bool parseAllArguments(int ac, const char** av, int index);
 	virtual bool parseAllArguments(int ac, char** av, int index);
 
@@ -99,7 +99,7 @@ class SetPointerPlugin: public TestPlugin
 public:
 	SetPointerPlugin(const SimpleString& name);
 	virtual ~SetPointerPlugin();
-	virtual void postTestAction(Utest&, TestResult&);
+	virtual void postTestAction(UtestShell&, TestResult&);
 
 	enum
 	{
@@ -121,8 +121,8 @@ public:
 	{
 	}
 
-	virtual void runAllPreTestAction(Utest& test, TestResult& result);
-	virtual void runAllPostTestAction(Utest& test, TestResult& result);
+	virtual void runAllPreTestAction(UtestShell& test, TestResult& result);
+	virtual void runAllPostTestAction(UtestShell& test, TestResult& result);
 
 	static NullTestPlugin* instance();
 };

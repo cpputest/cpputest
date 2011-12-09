@@ -53,7 +53,7 @@ void JUnitTestOutput::printTestsStarted()
 {
 }
 
-void JUnitTestOutput::printCurrentGroupStarted(const Utest& test)
+void JUnitTestOutput::printCurrentGroupStarted(const UtestShell& test)
 {
 }
 
@@ -69,7 +69,7 @@ void JUnitTestOutput::printCurrentGroupEnded(const TestResult& result)
 {
 }
 
-void JUnitTestOutput::printCurrentTestStarted(const Utest& test)
+void JUnitTestOutput::printCurrentTestStarted(const UtestShell& test)
 {
 }
 

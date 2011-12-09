@@ -4,9 +4,9 @@
 #include <time.h>
 #include <sys/time.h>
 
-void Utest::executePlatformSpecificTestBody()
+void executePlatformSpecificTestBody(Utest* test)
 {
-	testBody();
+	test->testBody();
 }
 
 

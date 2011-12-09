@@ -72,7 +72,7 @@ TEST_GROUP(JUnitOutputTest)
 			{
 			}
 			;
-			Utest* tst_;
+			UtestShell* tst_;
 			SimpleString* testName_;
 			TestFailure* failure_;
 		};
@@ -162,7 +162,7 @@ TEST_GROUP(JUnitOutputTest)
 				TestData& testData = testGroupData_[index].testData_[i];
 				testData.testName_ = new SimpleString(basename);
 				*testData.testName_ += StringFrom((long) i);
-				testData.tst_ = new Utest(group, testData.testName_->asCharString(), "file", 1);
+				testData.tst_ = new UtestShell(group, testData.testName_->asCharString(), "file", 1);
 			}
 		}
 		void runTests()

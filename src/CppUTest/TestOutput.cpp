@@ -90,7 +90,7 @@ TestOutput& operator<<(TestOutput& p, long int i)
 	return p;
 }
 
-void TestOutput::printCurrentTestStarted(const Utest& test)
+void TestOutput::printCurrentTestStarted(const UtestShell& test)
 {
 	if (verbose_) print(test.getFormattedName().asCharString());
 }
@@ -122,7 +122,7 @@ void TestOutput::printTestsStarted()
 {
 }
 
-void TestOutput::printCurrentGroupStarted(const Utest& /*test*/)
+void TestOutput::printCurrentGroupStarted(const UtestShell& /*test*/)
 {
 }
 

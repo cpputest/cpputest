@@ -39,12 +39,12 @@ void MockFailureReporter::failTest(const MockFailure& failure)
 	getTestToFail()->exitCurrentTest();
 }
 
-Utest* MockFailureReporter::getTestToFail()
+UtestShell* MockFailureReporter::getTestToFail()
 {
-	return Utest::getCurrent();
+	return UtestShell::getCurrent();
 }
 
-MockFailure::MockFailure(Utest* test) : TestFailure(test, "Test failed with MockFailure without an error! Something went seriously wrong.")
+MockFailure::MockFailure(UtestShell* test) : TestFailure(test, "Test failed with MockFailure without an error! Something went seriously wrong.")
 {
 }
 
@@ -75,13 +75,13 @@ void MockFailure::addExpectationsAndCallHistoryRelatedTo(const SimpleString& nam
 }
 
 
-MockExpectedCallsDidntHappenFailure::MockExpectedCallsDidntHappenFailure(Utest* test, const MockExpectedFunctionsList& expectations) : MockFailure(test)
+MockExpectedCallsDidntHappenFailure::MockExpectedCallsDidntHappenFailure(UtestShell* test, const MockExpectedFunctionsList& expectations) : MockFailure(test)
 {
 	message_ = "Mock Failure: Expected call did not happen.\n";
 	addExpectationsAndCallHistory(expectations);
 }
 
-MockUnexpectedCallHappenedFailure::MockUnexpectedCallHappenedFailure(Utest* test, const SimpleString& name, const MockExpectedFunctionsList& expectations) : MockFailure(test)
+MockUnexpectedCallHappenedFailure::MockUnexpectedCallHappenedFailure(UtestShell* test, const SimpleString& name, const MockExpectedFunctionsList& expectations) : MockFailure(test)
 {
 	int amountOfExpectations = expectations.amountOfExpectationsFor(name);
 	if (amountOfExpectations)
@@ -93,14 +93,14 @@ MockUnexpectedCallHappenedFailure::MockUnexpectedCallHappenedFailure(Utest* test
 	addExpectationsAndCallHistory(expectations);
 }
 
-MockCallOrderFailure::MockCallOrderFailure(Utest* test, const MockExpectedFunctionsList& expectations) : MockFailure(test)
+MockCallOrderFailure::MockCallOrderFailure(UtestShell* test, const MockExpectedFunctionsList& expectations) : MockFailure(test)
 {
 	message_ = "Mock Failure: Out of order calls";
 	message_ += "\n";
 	addExpectationsAndCallHistory(expectations);
 }
 
-MockUnexpectedParameterFailure::MockUnexpectedParameterFailure(Utest* test, const SimpleString& functionName, const MockNamedValue& parameter, const MockExpectedFunctionsList& expectations)  : MockFailure(test)
+MockUnexpectedParameterFailure::MockUnexpectedParameterFailure(UtestShell* test, const SimpleString& functionName, const MockNamedValue& parameter, const MockExpectedFunctionsList& expectations)  : MockFailure(test)
 {
 	MockExpectedFunctionsList expectationsForFunctionWithParameterName;
 	expectationsForFunctionWithParameterName.addExpectationsRelatedTo(functionName, expectations);
@@ -138,7 +138,7 @@ MockUnexpectedParameterFailure::MockUnexpectedParameterFailure(Utest* test, cons
 	message_ += ">";
 }
 
-MockExpectedParameterDidntHappenFailure::MockExpectedParameterDidntHappenFailure(Utest* test, const SimpleString& functionName, const MockExpectedFunctionsList& expectations) : MockFailure(test)
+MockExpectedParameterDidntHappenFailure::MockExpectedParameterDidntHappenFailure(UtestShell* test, const SimpleString& functionName, const MockExpectedFunctionsList& expectations) : MockFailure(test)
 {
 	MockExpectedFunctionsList expectationsForFunction;
 	expectationsForFunction.addExpectationsRelatedTo(functionName, expectations);
@@ -154,19 +154,19 @@ MockExpectedParameterDidntHappenFailure::MockExpectedParameterDidntHappenFailure
 	message_ += expectationsForFunction.missingParametersToString();
 }
 
-MockNoWayToCompareCustomTypeFailure::MockNoWayToCompareCustomTypeFailure(Utest* test, const SimpleString& typeName) : MockFailure(test)
+MockNoWayToCompareCustomTypeFailure::MockNoWayToCompareCustomTypeFailure(UtestShell* test, const SimpleString& typeName) : MockFailure(test)
 {
 	message_ = StringFromFormat("MockFailure: No way to compare type <%s>. Please install a ParameterTypeComparator.", typeName.asCharString());
 }
 
-MockUnexpectedObjectFailure::MockUnexpectedObjectFailure(Utest* test, const SimpleString& functionName, void* actual, const MockExpectedFunctionsList& expectations) : MockFailure(test)
+MockUnexpectedObjectFailure::MockUnexpectedObjectFailure(UtestShell* test, const SimpleString& functionName, void* actual, const MockExpectedFunctionsList& expectations) : MockFailure(test)
 {
 	message_ = StringFromFormat ("MockFailure: Function called on a unexpected object: %s\n"
 								 "\tActual object for call has address: <%p>\n", functionName.asCharString(),actual);
 	addExpectationsAndCallHistoryRelatedTo(functionName, expectations);
 }
 
-MockExpectedObjectDidntHappenFailure::MockExpectedObjectDidntHappenFailure(Utest* test, const SimpleString& functionName, const MockExpectedFunctionsList& expectations) : MockFailure(test)
+MockExpectedObjectDidntHappenFailure::MockExpectedObjectDidntHappenFailure(UtestShell* test, const SimpleString& functionName, const MockExpectedFunctionsList& expectations) : MockFailure(test)
 {
 	message_ = StringFromFormat("Mock Failure: Expected call on object for function \"%s\" but it did not happen.\n", functionName.asCharString());
 	addExpectationsAndCallHistoryRelatedTo(functionName, expectations);

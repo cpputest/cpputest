@@ -134,8 +134,8 @@ public:
 
 	virtual void ReportTestPartResult(const ::testing::TestPartResult& result)
 	{
-		FailFailure failure(Utest::getCurrent(), result.file_name(), result.line_number(), result.message());
-		Utest::getCurrent()->getTestResult()->addFailure(failure);
+		FailFailure failure(UtestShell::getCurrent(), result.file_name(), result.line_number(), result.message());
+		UtestShell::getCurrent()->getTestResult()->addFailure(failure);
 
 		/*
 		 * When using GMock, it throws an exception fromt he destructor leaving

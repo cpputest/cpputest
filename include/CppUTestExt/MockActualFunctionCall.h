@@ -65,7 +65,7 @@ public:
 
 	virtual void setMockFailureReporter(MockFailureReporter* reporter);
 protected:
-	virtual Utest* getTest() const;
+	virtual UtestShell* getTest() const;
 	virtual void callHasSucceeded();
 	virtual void finnalizeCallWhenFulfilled();
 	virtual void failTest(const MockFailure& failure);

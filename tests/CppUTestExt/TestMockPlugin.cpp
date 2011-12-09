@@ -32,7 +32,7 @@
 
 TEST_GROUP(MockPlugin)
 {
-	Utest *test;
+	UtestShell *test;
 	StringBufferTestOutput *output;
 	TestResult *result;
 	MockExpectedFunctionsList *expectationsList;
@@ -44,7 +44,7 @@ TEST_GROUP(MockPlugin)
 	{
 		mock().setMockFailureReporter(MockFailureReporterForTest::getReporter());
 
-		test = new Utest("group", "name", "file", 1);
+		test = new UtestShell("group", "name", "file", 1);
 		output = new StringBufferTestOutput;
 		result = new TestResult(*output);
 		expectationsList = new MockExpectedFunctionsList;

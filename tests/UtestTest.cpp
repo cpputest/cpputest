@@ -32,7 +32,7 @@
 
 static bool afterCheck;
 
-TEST_GROUP(Utest)
+TEST_GROUP(UtestShell)
 {
 	TestTestingFixture* fixture;
 	void setup()
@@ -151,40 +151,40 @@ static void _failMethodDOUBLES_EQUAL()
 	afterCheck = true;
 }
 
-TEST(Utest, FailurePrintsSomething)
+TEST(UtestShell, FailurePrintsSomething)
 {
 	testFailureWith(_failMethod);
 	fixture->assertPrintContains(__FILE__);
 	fixture->assertPrintContains("This test fails");
 }
 
-TEST(Utest, FailureWithFailTest)
+TEST(UtestShell, FailureWithFailTest)
 {
 	testFailureWith(_failMethodFAIL_TEST);
 }
 
-TEST(Utest, FailurePrintHexOutputForLongInts)
+TEST(UtestShell, FailurePrintHexOutputForLongInts)
 {
 	testFailureWith(_failMethodLONGS_EQUAL);
 	fixture->assertPrintContains("expected <  1 0x01>");
 	fixture->assertPrintContains("but was  <255 0xff>");
 }
 
-TEST(Utest, FailurePrintHexOutputForPointers)
+TEST(UtestShell, FailurePrintHexOutputForPointers)
 {
 	testFailureWith(_failMethodPOINTERS_EQUAL);
 	fixture->assertPrintContains("expected <0xa5a5>");
 	fixture->assertPrintContains("but was  <0xf0f0>");
 }
 
-TEST(Utest, FailureWithDOUBLES_EQUAL)
+TEST(UtestShell, FailureWithDOUBLES_EQUAL)
 {
 	testFailureWith(_failMethodDOUBLES_EQUAL);
 }
 
 #include "CppUTest/PlatformSpecificFunctions.h"
 
-TEST(Utest, compareDoubles)
+TEST(UtestShell, compareDoubles)
 {
 	double zero = 0.0;
 	double nan = zero / zero;
@@ -201,44 +201,44 @@ TEST(Utest, compareDoubles)
 }
 
 
-TEST(Utest, FailureWithCHECK)
+TEST(UtestShell, FailureWithCHECK)
 {
 	testFailureWith(_failMethodCHECK);
 }
 
-TEST(Utest, FailureWithCHECK_TRUE)
+TEST(UtestShell, FailureWithCHECK_TRUE)
 {
 	testFailureWith(_failMethodCHECK_TRUE);
 	fixture->assertPrintContains("CHECK_TRUE");
 }
 
-TEST(Utest, FailureWithCHECK_FALSE)
+TEST(UtestShell, FailureWithCHECK_FALSE)
 {
 	testFailureWith(_failMethodCHECK_FALSE);
 	fixture->assertPrintContains("CHECK_FALSE");
 }
 
-TEST(Utest, FailureWithCHECK_EQUAL)
+TEST(UtestShell, FailureWithCHECK_EQUAL)
 {
 	testFailureWith(_failMethodCHECK_EQUAL);
 }
 
-TEST(Utest, FailureWithSTRCMP_CONTAINS)
+TEST(UtestShell, FailureWithSTRCMP_CONTAINS)
 {
 	testFailureWith(_failMethodSTRCMP_CONTAINS);
 }
 
-TEST(Utest, FailureWithSTRCMP_NOCASE_CONTAINS)
+TEST(UtestShell, FailureWithSTRCMP_NOCASE_CONTAINS)
 {
 	testFailureWith(_failMethodSTRCMP_NOCASE_CONTAINS);
 }
 
-TEST(Utest, FailureWithBYTES_EQUAL)
+TEST(UtestShell, FailureWithBYTES_EQUAL)
 {
 	testFailureWith(_failMethodBYTES_EQUAL);
 }
 
-TEST(Utest, SuccessPrintsNothing)
+TEST(UtestShell, SuccessPrintsNothing)
 {
 	fixture->setTestFunction(_passMethod);
 	fixture->runAllTests();
@@ -247,7 +247,7 @@ TEST(Utest, SuccessPrintsNothing)
 	CHECK(afterCheck);
 }
 
-TEST(Utest, PrintPrintsWhateverPrintPrints)
+TEST(UtestShell, PrintPrintsWhateverPrintPrints)
 {
 	fixture->setTestFunction(_passPrint);
 	fixture->runAllTests();
@@ -256,7 +256,7 @@ TEST(Utest, PrintPrintsWhateverPrintPrints)
 	fixture->assertPrintContains(__FILE__);
 }
 
-TEST(Utest, PrintPrintsPrintf)
+TEST(UtestShell, PrintPrintsPrintf)
 {
 	fixture->setTestFunction(_passPrintF);
 	fixture->runAllTests();
@@ -264,7 +264,7 @@ TEST(Utest, PrintPrintsPrintf)
 	fixture->assertPrintContains("Hello World! 2009");
 }
 
-TEST(Utest, allMacros)
+TEST(UtestShell, allMacros)
 {
 	CHECK(0 == 0);
 	LONGS_EQUAL(1,1);
@@ -290,12 +290,12 @@ static int functionThatReturnsAValue()
 	return 0;
 }
 
-TEST(Utest, allMacrosFromFunctionThatReturnsAValue)
+TEST(UtestShell, allMacrosFromFunctionThatReturnsAValue)
 {
 	functionThatReturnsAValue();
 }
 
-TEST(Utest, AssertsActLikeStatements)
+TEST(UtestShell, AssertsActLikeStatements)
 {
 	if (fixture != 0) CHECK(true)
 	else CHECK(false)
@@ -330,7 +330,7 @@ TEST(Utest, AssertsActLikeStatements)
 	FAIL("")
 }
 
-IGNORE_TEST(Utest, IgnoreTestSupportsAllMacros)
+IGNORE_TEST(UtestShell, IgnoreTestSupportsAllMacros)
 {
 	CHECK(true);
 	CHECK_EQUAL(true, true);
@@ -340,12 +340,12 @@ IGNORE_TEST(Utest, IgnoreTestSupportsAllMacros)
 	FAIL("");
 }
 
-IGNORE_TEST(Utest, IgnoreTestAccessingFixture)
+IGNORE_TEST(UtestShell, IgnoreTestAccessingFixture)
 {
 	CHECK(fixture != 0);
 }
 
-TEST(Utest, MacrosUsedInSetup)
+TEST(UtestShell, MacrosUsedInSetup)
 {
 	IGNORE_ALL_LEAKS_IN_TEST();
 	fixture->setSetup(_failMethod);
@@ -354,7 +354,7 @@ TEST(Utest, MacrosUsedInSetup)
 	LONGS_EQUAL(1, fixture->getFailureCount());
 }
 
-TEST(Utest, MacrosUsedInTearDown)
+TEST(UtestShell, MacrosUsedInTearDown)
 {
 	IGNORE_ALL_LEAKS_IN_TEST();
 	fixture->setTeardown(_failMethod);
@@ -370,7 +370,7 @@ static void _teardownMethod()
 	teardownCalled++;
 }
 
-TEST(Utest, TeardownCalledAfterTestFailure)
+TEST(UtestShell, TeardownCalledAfterTestFailure)
 {
 	teardownCalled = 0;
 	IGNORE_ALL_LEAKS_IN_TEST();
@@ -388,7 +388,7 @@ static void _stopAfterFailureMethod()
 	stopAfterFailure++;
 }
 
-TEST(Utest, TestStopsAfterTestFailure)
+TEST(UtestShell, TestStopsAfterTestFailure)
 {
 	IGNORE_ALL_LEAKS_IN_TEST();
 	stopAfterFailure = 0;
@@ -398,7 +398,7 @@ TEST(Utest, TestStopsAfterTestFailure)
 	LONGS_EQUAL(0, stopAfterFailure);
 }
 
-TEST(Utest, TestStopsAfterSetupFailure)
+TEST(UtestShell, TestStopsAfterSetupFailure)
 {
 	stopAfterFailure = 0;
 	fixture->setSetup(_stopAfterFailureMethod);
@@ -428,7 +428,7 @@ static void _destructorCalledForLocalObjects()
 }
 
 /* This test can only pass when we use exception handling instead of longjmp */
-IGNORE_TEST(Utest, DestructorIsCalledForLocalObjectsWhenTheTestFails)
+IGNORE_TEST(UtestShell, DestructorIsCalledForLocalObjectsWhenTheTestFails)
 {
 	fixture->setTestFunction(_destructorCalledForLocalObjects);
 	fixture->runAllTests();
@@ -464,7 +464,7 @@ TEST(UtestMyOwn, test)
 	CHECK(inTest);
 }
 
-class NullParameterTest: public Utest
+class NullParameterTest: public UtestShell
 {
 };
 
@@ -473,6 +473,38 @@ TEST(UtestMyOwn, NullParameters)
 	NullParameterTest nullTest; /* Bug fix tests for creating a test without a name, fix in SimpleString */
 	TestRegistry* reg = TestRegistry::getCurrentRegistry();
 	nullTest.shouldRun(reg->getGroupFilter(), reg->getNameFilter());
+}
+
+class AllocateAndDeallocateInConstructorAndDestructor
+{
+	char* memory_;
+	char* morememory_;
+public:
+	AllocateAndDeallocateInConstructorAndDestructor()
+	{
+		memory_ = new char[100];
+		morememory_ = NULL;
+	}
+	void allocateMoreMemory()
+	{
+		morememory_ = new char[123];
+	}
+
+	~AllocateAndDeallocateInConstructorAndDestructor()
+	{
+		delete [] memory_;
+		delete [] morememory_;
+	}
+};
+
+TEST_GROUP(CanHaveMemberVariablesInTestGroupThatAllocateMemoryWithoutCausingMemoryLeaks)
+{
+	AllocateAndDeallocateInConstructorAndDestructor dummy;
+};
+
+TEST(CanHaveMemberVariablesInTestGroupThatAllocateMemoryWithoutCausingMemoryLeaks, testInTestGroupName)
+{
+	dummy.allocateMoreMemory();
 }
 
 

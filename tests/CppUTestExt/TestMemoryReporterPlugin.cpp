@@ -52,25 +52,25 @@ public:
 class MockMemoryReportFormatter : public MemoryReportFormatter
 {
 public:
-	virtual void report_testgroup_start(TestResult* result, Utest& test)
+	virtual void report_testgroup_start(TestResult* result, UtestShell& test)
 	{
 		TemporaryDefaultNewAllocator tempAlloc(previousNewAllocator);
 		mock("formatter").actualCall("report_testgroup_start").withParameter("result", result).withParameter("test", &test);
 	}
 
-	virtual void report_testgroup_end(TestResult* result, Utest& test)
+	virtual void report_testgroup_end(TestResult* result, UtestShell& test)
 	{
 		TemporaryDefaultNewAllocator tempAlloc(previousNewAllocator);
 		mock("formatter").actualCall("report_testgroup_end").withParameter("result", result).withParameter("test", &test);
 	}
 
-	virtual void report_test_start(TestResult* result, Utest& test)
+	virtual void report_test_start(TestResult* result, UtestShell& test)
 	{
 		TemporaryDefaultNewAllocator tempAlloc(previousNewAllocator);
 		mock("formatter").actualCall("report_test_start").withParameter("result", result).withParameter("test", &test);
 	}
 
-	virtual void report_test_end(TestResult* result, Utest& test)
+	virtual void report_test_end(TestResult* result, UtestShell& test)
 	{
 		TemporaryDefaultNewAllocator tempAlloc(previousNewAllocator);
 		mock("formatter").actualCall("report_test_end").withParameter("result", result).withParameter("test", &test);
@@ -122,13 +122,13 @@ TEST_GROUP(MemoryReporterPlugin)
 	TestMemoryAllocatorComparator memLeakAllocatorComparator;
 
 	TestResult* result;
-	Utest* test;
+	UtestShell* test;
 
 	void setup()
 	{
 		previousNewAllocator = getCurrentNewAllocator();
 		result = new TestResult(output);
-		test = new Utest("groupname", "testname", "filename", 1);
+		test = new UtestShell("groupname", "testname", "filename", 1);
 		reporter = new MemoryReporterPluginUnderTest;
 
 		mock("formatter").installComparator("TestMemoryAllocator", memLeakAllocatorComparator);
@@ -246,10 +246,10 @@ TEST(MemoryReporterPlugin, startOfANewTestWillReportTheTestGroupStart)
 	reporter->postTestAction(*test, *result);
 }
 
-class UtestForMemoryReportingPlugingTest : public Utest
+class UtestForMemoryReportingPlugingTest : public UtestShell
 {
 public:
-	UtestForMemoryReportingPlugingTest(const char* groupname, Utest* test) : Utest(groupname, "testname", "filename", 1, test)
+	UtestForMemoryReportingPlugingTest(const char* groupname, UtestShell* test) : UtestShell(groupname, "testname", "filename", 1, test)
 	{
 
 	}

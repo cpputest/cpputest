@@ -155,7 +155,7 @@ TEST(CodeMemoryReportFormatter, allocationUsingNewcOnTheSameLineDoesntGenerateTh
 TEST(CodeMemoryReportFormatter, allocationUsingNewcOnTheSameLineDoesntGenerateVariableTwiceExceptWhenInANewTest)
 {
 	formatter->report_alloc_memory(testResult, newAllocator, 10, memory01, "file", 8);
-	formatter->report_test_start(testResult, *this);
+	formatter->report_test_start(testResult, *UtestShell::getCurrent());
 	testOutput.flush();
 	formatter->report_alloc_memory(testResult, newAllocator, 10, memory01, "file", 8);
 	CHECK(testOutput.getOutput().contains("char*"));
@@ -163,21 +163,21 @@ TEST(CodeMemoryReportFormatter, allocationUsingNewcOnTheSameLineDoesntGenerateVa
 
 TEST(CodeMemoryReportFormatter, testStartGeneratesTESTcode)
 {
-	Utest test("groupName", "testName", "fileName", 1);
+	UtestShell test("groupName", "testName", "fileName", 1);
 	formatter->report_test_start(testResult, test);
 	TESTOUPUT_EQUAL("*/\nTEST(groupName_memoryReport, testName)\n{ /* at fileName:1 */\n");
 }
 
 TEST(CodeMemoryReportFormatter, testEndGeneratesTESTcode)
 {
-	Utest test("groupName", "testName", "fileName", 1);
+	UtestShell test("groupName", "testName", "fileName", 1);
 	formatter->report_test_end(testResult, test);
 	TESTOUPUT_EQUAL("}/*");
 }
 
 TEST(CodeMemoryReportFormatter, TestGroupGeneratesTestGroupCode)
 {
-	Utest test("groupName", "testName", "fileName", 1);
+	UtestShell test("groupName", "testName", "fileName", 1);
 	formatter->report_testgroup_start(testResult, test);
 	TESTOUPUT_EQUAL("*/TEST_GROUP(groupName_memoryReport)\n{\n};\n/*");
 }

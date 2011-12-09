@@ -49,7 +49,7 @@ TEST_GROUP(SetPointerPluginTest)
 	}
 };
 
-class FunctionPointerUtest: public Utest
+class FunctionPointerUtest: public UtestShell
 {
 public:
 	void setup()
@@ -80,7 +80,7 @@ TEST(SetPointerPluginTest, installTwoFunctionPointer)
 	delete tst;
 }
 
-class MaxFunctionPointerUtest: public Utest
+class MaxFunctionPointerUtest: public UtestShell
 {
 public:
 	int numOfFpSets;
@@ -112,7 +112,7 @@ double orig_double = 3.0;
 double* orig_double_ptr = &orig_double;
 double stub_double = 4.0;
 
-class SetDoublePointerUtest: public Utest
+class SetDoublePointerUtest: public UtestShell
 {
 public:
 	void setup()

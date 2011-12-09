@@ -35,12 +35,11 @@
 
 /* For test execution control (long_jmp set_jmp) */
 
-/*  bool Utest::executePlatformSpecificSetup()
- *  void Utest::executePlatformSpecificTestBody()
- *  void Utest::executePlatformSpecificTeardown()
- *  void Utest::executePlatformSpecificRunOneTest(TestPlugin* plugin, TestResult& result)
- *  void Utest::executePlatformSpecificExitCurrentTest()
- */
+extern bool executePlatformSpecificSetup(Utest* test);
+extern void executePlatformSpecificTestBody(Utest* test);
+extern void executePlatformSpecificTeardown(Utest* test);
+extern void executePlatformSpecificRunOneTest(UtestShell* shell, TestPlugin* plugin, TestResult& result);
+extern void executePlatformSpecificExitCurrentTest();
 
 #include "CppUTest/TestOutput.h"
 TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment();

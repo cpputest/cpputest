@@ -37,8 +37,8 @@ public:
 	MockSupportPlugin(const SimpleString& name = "MockSupportPLugin");
 	virtual ~MockSupportPlugin();
 
-	virtual void preTestAction(Utest&, TestResult&);
-	virtual void postTestAction(Utest&, TestResult&);
+	virtual void preTestAction(UtestShell&, TestResult&);
+	virtual void postTestAction(UtestShell&, TestResult&);
 
 	virtual void installComparator(const SimpleString& name, MockNamedValueComparator& comparator);
 private:

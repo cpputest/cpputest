@@ -56,9 +56,11 @@
 #define TEST(testGroup, testName) \
   class TEST_##testGroup##_##testName##_Test : public TEST_GROUP_##CppUTestGroup##testGroup \
 { public: TEST_##testGroup##_##testName##_Test () : TEST_GROUP_##CppUTestGroup##testGroup () {} \
-       void testBody(); } \
-    TEST_##testGroup##_##testName##_Instance; \
-  TestInstaller TEST_##testGroup##_##testName##_Installer(&TEST_##testGroup##_##testName##_Instance, #testGroup, #testName, __FILE__,__LINE__); \
+       void testBody(); }; \
+  class TEST_##testGroup##_##testName##_TestShell : public UtestShell { \
+	  virtual Utest* createTest() { return new TEST_##testGroup##_##testName##_Test; } \
+  } TEST_##testGroup##_##testName##_TestShell_instance; \
+  TestInstaller TEST_##testGroup##_##testName##_Installer(TEST_##testGroup##_##testName##_TestShell_instance, #testGroup, #testName, __FILE__,__LINE__); \
 	void TEST_##testGroup##_##testName##_Test::testBody()
 
 #define IGNORE_TEST(testGroup, testName)\
@@ -69,9 +71,11 @@
     virtual const char* getProgressIndicator() const {return "!";} \
   protected:  virtual SimpleString getMacroName() const \
       { return "IGNORE_TEST"; } \
-  public: void testBodyThatNeverRuns (); } \
-    TEST_##testGroup##_##testName##_Instance; \
-  TestInstaller TEST_##testGroup##testName##_Installer(&TEST_##testGroup##_##testName##_Instance, #testGroup, #testName, __FILE__,__LINE__); \
+  public: void testBodyThatNeverRuns (); }; \
+  class IGNORE##testGroup##_##testName##_TestShell : public UtestShell { \
+	  virtual Utest* createTest() { return new IGNORE##testGroup##_##testName##_Test; } \
+  } IGNORE##testGroup##_##testName##_TestShell_instance; \
+   TestInstaller TEST_##testGroup##testName##_Installer(IGNORE##testGroup##_##testName##_TestShell_instance, #testGroup, #testName, __FILE__,__LINE__); \
 	void IGNORE##testGroup##_##testName##_Test::testBodyThatNeverRuns ()
 
 #define IMPORT_TEST_GROUP(testGroup) \
@@ -90,10 +94,10 @@
   CHECK_LOCATION_FALSE(condition, "CHECK_FALSE", #condition, __FILE__, __LINE__)
 
 #define CHECK_LOCATION_TRUE(condition, checkString, conditionString, file, line)\
-  { Utest::getCurrent()->assertTrue((condition) != 0, checkString, conditionString, file, line); }
+  { UtestShell::getCurrent()->assertTrue((condition) != 0, checkString, conditionString, file, line); }
 
 #define CHECK_LOCATION_FALSE(condition, checkString, conditionString, file, line)\
-  { Utest::getCurrent()->assertTrue((condition) == 0, checkString, conditionString, file, line); }
+  { UtestShell::getCurrent()->assertTrue((condition) == 0, checkString, conditionString, file, line); }
 
 //This check needs the operator!=(), and a StringFrom(YourType) function
 #define CHECK_EQUAL(expected,actual)\
@@ -103,14 +107,14 @@
   if ((expected) != (actual))\
   {\
 	 { \
-      Utest::getTestResult()->countCheck();\
-  	   CheckEqualFailure _f(Utest::getCurrent(), file, line, StringFrom(expected), StringFrom(actual)); \
-      Utest::getTestResult()->addFailure(_f);\
+      UtestShell::getTestResult()->countCheck();\
+  	   CheckEqualFailure _f(UtestShell::getCurrent(), file, line, StringFrom(expected), StringFrom(actual)); \
+      UtestShell::getTestResult()->addFailure(_f);\
     } \
-    Utest::getCurrent()->exitCurrentTest(); \
+    UtestShell::getCurrent()->exitCurrentTest(); \
   }\
   else\
-	 Utest::getTestResult()->countCheck();
+	 UtestShell::getTestResult()->countCheck();
 
 //This check checks for char* string equality using strcmp.
 //This makes up for the fact that CHECK_EQUAL only compares the pointers to char*'s
@@ -118,32 +122,32 @@
   STRCMP_EQUAL_LOCATION(expected, actual, __FILE__, __LINE__)
 
 #define STRCMP_EQUAL_LOCATION(expected,actual, file, line)\
-  { Utest::getCurrent()->assertCstrEqual(expected, actual, file, line); }
+  { UtestShell::getCurrent()->assertCstrEqual(expected, actual, file, line); }
 
 #define STRCMP_NOCASE_EQUAL(expected,actual)\
   STRCMP_NOCASE_EQUAL_LOCATION(expected, actual, __FILE__, __LINE__)
 
 #define STRCMP_NOCASE_EQUAL_LOCATION(expected,actual, file, line)\
-  { Utest::getCurrent()->assertCstrNoCaseEqual(expected, actual, file, line); }
+  { UtestShell::getCurrent()->assertCstrNoCaseEqual(expected, actual, file, line); }
 
 #define STRCMP_CONTAINS(expected,actual)\
   STRCMP_CONTAINS_LOCATION(expected, actual, __FILE__, __LINE__)
 
 #define STRCMP_CONTAINS_LOCATION(expected,actual, file, line)\
-  { Utest::getCurrent()->assertCstrContains(expected, actual, file, line); }
+  { UtestShell::getCurrent()->assertCstrContains(expected, actual, file, line); }
 
 #define STRCMP_NOCASE_CONTAINS(expected,actual)\
   STRCMP_NOCASE_CONTAINS_LOCATION(expected, actual, __FILE__, __LINE__)
 
 #define STRCMP_NOCASE_CONTAINS_LOCATION(expected,actual, file, line)\
-  { Utest::getCurrent()->assertCstrNoCaseContains(expected, actual, file, line); }
+  { UtestShell::getCurrent()->assertCstrNoCaseContains(expected, actual, file, line); }
 
 //Check two long integers for equality
 #define LONGS_EQUAL(expected,actual)\
   LONGS_EQUAL_LOCATION(expected,actual,__FILE__, __LINE__)
 
 #define LONGS_EQUAL_LOCATION(expected,actual,file,line)\
-  { Utest::getCurrent()->assertLongsEqual((long)expected, (long)actual,  file, line); }
+  { UtestShell::getCurrent()->assertLongsEqual((long)expected, (long)actual,  file, line); }
 
 #define BYTES_EQUAL(expected, actual)\
     LONGS_EQUAL((expected) & 0xff,(actual) & 0xff)
@@ -152,14 +156,14 @@
     POINTERS_EQUAL_LOCATION((expected),(actual), __FILE__, __LINE__)
 
 #define POINTERS_EQUAL_LOCATION(expected,actual,file,line)\
-  { Utest::getCurrent()->assertPointersEqual((void *)expected, (void *)actual,  file, line); }
+  { UtestShell::getCurrent()->assertPointersEqual((void *)expected, (void *)actual,  file, line); }
 
 //Check two doubles for equality within a tolerance threshold
 #define DOUBLES_EQUAL(expected,actual,threshold)\
   DOUBLES_EQUAL_LOCATION(expected,actual,threshold,__FILE__,__LINE__)
 
 #define DOUBLES_EQUAL_LOCATION(expected,actual,threshold,file,line)\
-  { Utest::getCurrent()->assertDoublesEqual(expected, actual, threshold,  file, line); }
+  { UtestShell::getCurrent()->assertDoublesEqual(expected, actual, threshold,  file, line); }
 
 //Fail if you get to this macro
 //The macro FAIL may already be taken, so allow FAIL_TEST too
@@ -168,22 +172,22 @@
   FAIL_LOCATION(text, __FILE__,__LINE__)
 
 #define FAIL_LOCATION(text, file, line)\
-  { Utest::getCurrent()->fail(text,  file, line); Utest::getCurrent()->exitCurrentTest(); }
+  { UtestShell::getCurrent()->fail(text,  file, line); UtestShell::getCurrent()->exitCurrentTest(); }
 #endif
 
 #define FAIL_TEST(text)\
   FAIL_TEST_LOCATION(text, __FILE__,__LINE__)
 
 #define FAIL_TEST_LOCATION(text, file,line)\
-  { Utest::getCurrent()->fail(text, file, line); Utest::getCurrent()->exitCurrentTest(); }
+  { UtestShell::getCurrent()->fail(text, file, line); UtestShell::getCurrent()->exitCurrentTest(); }
 
 #define UT_PRINT_LOCATION(text, file, line) \
-   { Utest::getCurrent()->print(text, file, line); }
+   { UtestShell::getCurrent()->print(text, file, line); }
 
 #define UT_PRINT(text) \
    UT_PRINT_LOCATION(text, __FILE__, __LINE__)
 
-#define UT_CRASH() { Utest::crash(); }
+#define UT_CRASH() { UtestShell::crash(); }
 #define RUN_ALL_TESTS(ac, av) CommandLineTestRunner::RunAllTests(ac, av)
 
 #endif /*D_UTestMacros_h*/

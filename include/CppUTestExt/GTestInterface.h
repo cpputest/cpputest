@@ -32,17 +32,21 @@
 #define TEST(testGroup, testName) \
   class TEST_##testGroup##_##testName##_Test : public Utest \
 { public: TEST_##testGroup##_##testName##_Test () : Utest () {} \
-       void testBody(); } \
-    TEST_##testGroup##_##testName##_Instance; \
-  TestInstaller TEST_##testGroup##_##testName##_Installer(&TEST_##testGroup##_##testName##_Instance, #testGroup, #testName, __FILE__,__LINE__); \
+       void testBody(); }; \
+  class TEST_##testGroup##_##testName##_TestShell : public UtestShell \
+{  public: virtual Utest* createTest() { return new TEST_##testGroup##_##testName##_Test; } \
+  } TEST_##testGroup##_##testName##_TestShell_Instance; \
+  TestInstaller TEST_##testGroup##_##testName##_Installer(TEST_##testGroup##_##testName##_TestShell_Instance, #testGroup, #testName, __FILE__,__LINE__); \
 	void TEST_##testGroup##_##testName##_Test::testBody()
 
 #define TEST_F(testGroup, testName) \
   class TEST_##testGroup##_##testName##_Test : public testGroup \
 { public: TEST_##testGroup##_##testName##_Test () : testGroup () {} \
-       void testBody(); } \
-    TEST_##testGroup##_##testName##_Instance; \
-  TestInstaller TEST_##testGroup##_##testName##_Installer(&TEST_##testGroup##_##testName##_Instance, #testGroup, #testName, __FILE__,__LINE__); \
+       void testBody(); }; \
+  class TEST_##testGroup##_##testName##_TestShell : public UtestShell { \
+	  virtual Utest* createTest() { return new TEST_##testGroup##_##testName##_Test; } \
+  } TEST_##testGroup##_##testName##_TestShell_instance; \
+  TestInstaller TEST_##testGroup##_##testName##_Installer(TEST_##testGroup##_##testName##_TestShell_instance, #testGroup, #testName, __FILE__,__LINE__); \
 	void TEST_##testGroup##_##testName##_Test::testBody()
 
 /*
@@ -57,23 +61,23 @@
   if ((expected) != (actual))\
   {\
 	 { \
-      Utest::getTestResult()->countCheck();\
-  	   CheckEqualFailure _f(Utest::getCurrent(), __FILE__, __LINE__, StringFrom(expected), StringFrom(actual)); \
-      Utest::getTestResult()->addFailure(_f);\
+      UtestShell::getTestResult()->countCheck();\
+  	   CheckEqualFailure _f(UtestShell::getCurrent(), __FILE__, __LINE__, StringFrom(expected), StringFrom(actual)); \
+      UtestShell::getTestResult()->addFailure(_f);\
     } \
-    Utest::getCurrent()->exitCurrentTest(); \
+    UtestShell::getCurrent()->exitCurrentTest(); \
   }\
   else\
-	 Utest::getTestResult()->countCheck();
+	 UtestShell::getTestResult()->countCheck();
 
 #define EXPECT_TRUE(condition) \
-	{ Utest::getCurrent()->assertTrue((condition) != 0, "EXPECT_TRUE", #condition, __FILE__, __LINE__); }
+	{ UtestShell::getCurrent()->assertTrue((condition) != 0, "EXPECT_TRUE", #condition, __FILE__, __LINE__); }
 
 #define EXPECT_FALSE(condition) \
-	{ Utest::getCurrent()->assertTrue((condition) == 0, "EXPECT_FALSE", #condition, __FILE__, __LINE__); }
+	{ UtestShell::getCurrent()->assertTrue((condition) == 0, "EXPECT_FALSE", #condition, __FILE__, __LINE__); }
 
 #define EXPECT_STREQ(expected, actual) \
-	{ Utest::getCurrent()->assertCstrEqual(expected, actual, __FILE__, __LINE__); }
+	{ UtestShell::getCurrent()->assertCstrEqual(expected, actual, __FILE__, __LINE__); }
 
 #define ASSERT_EQ(expected, actual) EXPECT_EQ(expected, actual)
 

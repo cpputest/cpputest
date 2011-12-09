@@ -135,19 +135,19 @@ SimpleString CodeMemoryReportFormatter::getDeallocationString(TestMemoryAllocato
 		return StringFromFormat("free(%s); /* at %s:%d */", variableName.asCharString(), file, line);
 }
 
-void CodeMemoryReportFormatter::report_test_start(TestResult* result, Utest& test)
+void CodeMemoryReportFormatter::report_test_start(TestResult* result, UtestShell& test)
 {
 	clearReporting();
 	result->print(StringFromFormat("*/\nTEST(%s_memoryReport, %s)\n{ /* at %s:%d */\n",
 			test.getGroup().asCharString(), test.getName().asCharString(), test.getFile().asCharString(), test.getLineNumber()).asCharString());
 }
 
-void CodeMemoryReportFormatter::report_test_end(TestResult* result, Utest&)
+void CodeMemoryReportFormatter::report_test_end(TestResult* result, UtestShell&)
 {
 	result->print("}/*");
 }
 
-void CodeMemoryReportFormatter::report_testgroup_start(TestResult* result, Utest& test)
+void CodeMemoryReportFormatter::report_testgroup_start(TestResult* result, UtestShell& test)
 {
 	result->print(StringFromFormat("*/TEST_GROUP(%s_memoryReport)\n{\n};\n/*",
 			test.getGroup().asCharString()).asCharString());

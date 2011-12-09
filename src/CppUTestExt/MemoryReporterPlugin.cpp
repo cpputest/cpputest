@@ -102,7 +102,7 @@ void MemoryReporterPlugin::initializeAllocator(MemoryReportAllocator* allocator,
 	allocator->setTestResult((&result));
 }
 
-void MemoryReporterPlugin::preTestAction(Utest& test, TestResult& result)
+void MemoryReporterPlugin::preTestAction(UtestShell& test, TestResult& result)
 {
 	if (formatter_ == NULL) return;
 
@@ -120,7 +120,7 @@ void MemoryReporterPlugin::preTestAction(Utest& test, TestResult& result)
 	formatter_->report_test_start(&result, test);
 }
 
-void MemoryReporterPlugin::postTestAction(Utest& test, TestResult& result)
+void MemoryReporterPlugin::postTestAction(UtestShell& test, TestResult& result)
 {
 	if (formatter_ == NULL) return;
 

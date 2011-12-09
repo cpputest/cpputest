@@ -46,8 +46,8 @@ public:
     MemoryReporterPlugin();
     virtual ~MemoryReporterPlugin();
 
-    virtual void preTestAction(Utest & test, TestResult & result);
-    virtual void postTestAction(Utest & test, TestResult & result);
+    virtual void preTestAction(UtestShell & test, TestResult & result);
+    virtual void postTestAction(UtestShell & test, TestResult & result);
     virtual bool parseArguments(int, const char**, int);
 
 protected:

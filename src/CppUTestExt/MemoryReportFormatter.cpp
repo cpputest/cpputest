@@ -37,12 +37,12 @@ NormalMemoryReportFormatter::~NormalMemoryReportFormatter()
 {
 }
 
-void NormalMemoryReportFormatter::report_test_start(TestResult* result, Utest& test)
+void NormalMemoryReportFormatter::report_test_start(TestResult* result, UtestShell& test)
 {
 	result->print(StringFromFormat("TEST(%s, %s)\n", test.getGroup().asCharString(), test.getName().asCharString()).asCharString());
 }
 
-void NormalMemoryReportFormatter::report_test_end(TestResult* result, Utest& test)
+void NormalMemoryReportFormatter::report_test_end(TestResult* result, UtestShell& test)
 {
 	result->print(StringFromFormat("ENDTEST(%s, %s)\n", test.getGroup().asCharString(), test.getName().asCharString()).asCharString());
 }
@@ -57,7 +57,7 @@ void NormalMemoryReportFormatter::report_free_memory(TestResult* result, TestMem
 	result->print(StringFromFormat("\tDeallocation using %s of pointer: %p at %s:%d\n", allocator->free_name(),  memory, file, line).asCharString());
 }
 
-void NormalMemoryReportFormatter::report_testgroup_start(TestResult* result, Utest& test)
+void NormalMemoryReportFormatter::report_testgroup_start(TestResult* result, UtestShell& test)
 {
 	const size_t line_size = 80;
 

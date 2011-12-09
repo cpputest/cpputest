@@ -40,7 +40,7 @@
 
 class TestFailure;
 class TestOutput;
-class Utest;
+class UtestShell;
 
 class TestResult
 {
@@ -50,10 +50,10 @@ public:
 
 	virtual void testsStarted();
 	virtual void testsEnded();
-	virtual void currentGroupStarted(Utest* test);
-	virtual void currentGroupEnded(Utest* test);
-	virtual void currentTestStarted(Utest* test);
-	virtual void currentTestEnded(Utest* test);
+	virtual void currentGroupStarted(UtestShell* test);
+	virtual void currentGroupEnded(UtestShell* test);
+	virtual void currentTestStarted(UtestShell* test);
+	virtual void currentTestEnded(UtestShell* test);
 
 	virtual void countTest();
 	virtual void countRun();

@@ -28,21 +28,25 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TestRegistry.h"
 
+class TestInstallerTestUtestShell : public UtestShell
+{
+};
+
+
 // this is file scope because the test is installed
 // with all other tests, which also happen to be
 // created as static instances at file scope
-
-static NullTest nullTest;
 
 TEST_GROUP(TestInstaller)
 {
 	TestInstaller* testInstaller;
 	TestRegistry* myRegistry;
+	TestInstallerTestUtestShell shell;
 	void setup()
 	{
 		myRegistry = new TestRegistry();
 		myRegistry->setCurrentRegistry(myRegistry);
-		testInstaller = new TestInstaller(&nullTest, "TestInstaller", "test", __FILE__, __LINE__);
+		testInstaller = new TestInstaller(shell, "TestInstaller", "test", __FILE__, __LINE__);
 	}
 	void teardown()
 	{

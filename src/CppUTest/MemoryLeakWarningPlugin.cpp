@@ -283,13 +283,13 @@ MemoryLeakWarningPlugin::~MemoryLeakWarningPlugin()
 	}
 }
 
-void MemoryLeakWarningPlugin::preTestAction(Utest& /*test*/, TestResult& result)
+void MemoryLeakWarningPlugin::preTestAction(UtestShell& /*test*/, TestResult& result)
 {
 	memLeakDetector_->startChecking();
 	failureCount_ = result.getFailureCount();
 }
 
-void MemoryLeakWarningPlugin::postTestAction(Utest& test, TestResult& result)
+void MemoryLeakWarningPlugin::postTestAction(UtestShell& test, TestResult& result)
 {
 	memLeakDetector_->stopChecking();
 	int leaks = memLeakDetector_->totalMemoryLeaks(mem_leak_period_checking);

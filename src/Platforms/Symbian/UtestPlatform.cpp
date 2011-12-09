@@ -36,30 +36,34 @@
 #include <stdlib.h>
 #include "CppUTest/PlatformSpecificFunctions.h"
 
-void Utest::executePlatformSpecificTestBody()
+void executePlatformSpecificTestBody(Utest* test)
 {
 	TInt err(KErrNone);
-	TRAP(err, testBody());
+	TRAP(err, test->testBody());
 	if(err != KErrNone) {
 		Utest::getCurrent()->fail("Leave in test method", "", 0);
 	}
 }
 
-void Utest::executePlatformSpecificExitCurrentTest() {
+void executePlatformSpecificExitCurrentTest()
+{
 	User::Leave(KErrNone);
 }
 
-bool Utest::executePlatformSpecificSetup() {
-	setup();
+bool executePlatformSpecificSetup(Utest* test)
+{
+	test->setup();
 	return true;
 }
 
-void Utest::executePlatformSpecificRunOneTest(TestPlugin* plugin, TestResult& result) {
-	runOneTest(plugin, result);
+void executePlatformSpecificRunOneTest(UtestShell* shell, TestPlugin* plugin, TestResult& result)
+{
+	shell->runOneTest(plugin, result);
 }
 
-void Utest::executePlatformSpecificTeardown() {
-	teardown();
+void executePlatformSpecificTeardown(Utest* test)
+{
+	test->teardown();
 }
 
 static long TimeInMillisImplementation() {

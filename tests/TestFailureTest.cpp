@@ -39,12 +39,12 @@ static const double nan = zero / zero;
 
 TEST_GROUP(TestFailure)
 {
-	Utest* test;
+	UtestShell* test;
 	StringBufferTestOutput* printer;
 
 	void setup()
 	{
-		test = new NullTest(failFileName, failLineNumber-1);
+		test = new NullTestShell(failFileName, failLineNumber-1);
 		printer = new StringBufferTestOutput();
 	}
 	void teardown()

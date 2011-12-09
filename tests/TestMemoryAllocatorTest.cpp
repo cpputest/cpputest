@@ -33,6 +33,11 @@ TEST_GROUP(TestMemoryAllocatorTest)
 {
 	TestMemoryAllocator* allocator;
 
+	void setup()
+	{
+		allocator = NULL;
+	}
+
 	void teardown()
 	{
 		if (allocator) delete allocator;

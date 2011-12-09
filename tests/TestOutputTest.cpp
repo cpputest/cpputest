@@ -41,7 +41,7 @@ TEST_GROUP(TestOutput)
 {
 	TestOutput* printer;
 	StringBufferTestOutput* mock;
-	Utest* tst;
+	UtestShell* tst;
 	TestFailure *f;
 	TestFailure *f2;
 	TestFailure *f3;
@@ -51,7 +51,7 @@ TEST_GROUP(TestOutput)
 	{
 		mock = new StringBufferTestOutput();
 		printer = mock;
-		tst = new Utest("group", "test", "file", 10);
+		tst = new UtestShell("group", "test", "file", 10);
 		f = new TestFailure(tst, "failfile", 20, "message");
 		f2 = new TestFailure(tst, "file", 20, "message");
 		f3 = new TestFailure(tst, "file", 2, "message");

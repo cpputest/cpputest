@@ -53,6 +53,7 @@ TEST_GROUP(CommandLineArguments)
 	void setup()
 	{
 		plugin = new OptionsPlugin("options");
+		args = NULL;
 	}
 	void teardown()
 	{

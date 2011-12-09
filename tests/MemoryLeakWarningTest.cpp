@@ -174,7 +174,7 @@ TEST_GROUP(MemoryLeakWarningGlobalDetectorTest)
 		dummyReporter = new DummyMemoryLeakFailure;
 		dummyDetector = new DummyMemoryLeakDetector(dummyReporter);
 
-		Utest::setCrashMethod(crashMethod);
+		UtestShell::setCrashMethod(crashMethod);
 		cpputestHasCrashed = false;
 }
 
@@ -186,7 +186,7 @@ TEST_GROUP(MemoryLeakWarningGlobalDetectorTest)
 		MemoryLeakWarningPlugin::setGlobalDetector(detector, failureReporter);
 		MemoryLeakWarningPlugin::turnOnNewDeleteOverloads();
 
-		Utest::resetCrashMethod();
+		UtestShell::resetCrashMethod();
 
 		setCurrentMallocAllocatorToDefault();
 		setCurrentNewAllocatorToDefault();

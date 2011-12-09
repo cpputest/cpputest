@@ -34,32 +34,32 @@
 #include "CppUTest/TestRegistry.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
-bool Utest::executePlatformSpecificSetup()
+bool executePlatformSpecificSetup(Utest* test)
 {
 	/* To be implemented */
-    setup();
+   test->setup();
    return false;
 }
 
-void Utest::executePlatformSpecificTestBody()
+void executePlatformSpecificTestBody(Utest* test)
 {
 	/* To be implemented */
-	testBody();
+	test->testBody();
 }
 
-void Utest::executePlatformSpecificTeardown()
+void executePlatformSpecificTeardown(Utest* test)
 {
 	/* To be implemented */
-	teardown();
+	test->teardown();
 }
 
-void Utest::executePlatformSpecificRunOneTest(TestPlugin* plugin, TestResult& result)
+void executePlatformSpecificRunOneTest(UtestShell* shell, TestPlugin* plugin, TestResult& result)
 {
 	/* To be implemented */
-	runOneTest(plugin, result);
+	shell->runOneTest(plugin, result);
 }
 
-void Utest::executePlatformSpecificExitCurrentTest()
+void executePlatformSpecificExitCurrentTest()
 {
 	/* To be implemented */
 }

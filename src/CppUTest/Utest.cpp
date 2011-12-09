@@ -41,7 +41,7 @@ bool doubles_equal(double d1, double d2, double threshold)
  * Its not correct to do so, but this small helper class will prevent a segmentation fault and instead
  * will give an error message and also the file/line of the check that was executed outside the tests.
  */
-class OutsideTestRunnerUTest: public Utest
+class OutsideTestRunnerUTest: public UtestShell
 {
 public:
 	static OutsideTestRunnerUTest& instance()
@@ -61,7 +61,7 @@ public:
 	}
 private:
 	OutsideTestRunnerUTest() :
-		Utest("\n\t NOTE: Assertion happened without being in a test run (perhaps in main?)", "\n\t       Something is very wrong. Check this assertion and fix", "unknown file", 0),
+		UtestShell("\n\t NOTE: Assertion happened without being in a test run (perhaps in main?)", "\n\t       Something is very wrong. Check this assertion and fix", "unknown file", 0),
 				defaultTestResult(defaultOutput)
 	{
 	}
@@ -70,136 +70,126 @@ private:
 };
 
 
-Utest::Utest() :
-	group_("UndefinedTestGroup"), name_("UndefinedTest"), file_("UndefinedFile"), lineNumber_(0), next_(&NullTest::instance()), isRunAsSeperateProcess_(false)
+UtestShell::UtestShell() :
+	group_("UndefinedTestGroup"), name_("UndefinedTest"), file_("UndefinedFile"), lineNumber_(0), next_(&NullTestShell::instance()), isRunAsSeperateProcess_(false)
 {
 }
 
-Utest::Utest(const char* groupName, const char* testName, const char* fileName, int lineNumber) :
-	group_(groupName), name_(testName), file_(fileName), lineNumber_(lineNumber), next_(&NullTest::instance()), isRunAsSeperateProcess_(false)
+UtestShell::UtestShell(const char* groupName, const char* testName, const char* fileName, int lineNumber) :
+		group_(groupName), name_(testName), file_(fileName), lineNumber_(lineNumber), next_(&NullTestShell::instance()), isRunAsSeperateProcess_(false)
 {
 }
 
-Utest::Utest(const char* groupName, const char* testName, const char* fileName, int lineNumber, Utest* nextTest) :
+UtestShell::UtestShell(const char* groupName, const char* testName, const char* fileName, int lineNumber, UtestShell* nextTest) :
 	group_(groupName), name_(testName), file_(fileName), lineNumber_(lineNumber), next_(nextTest), isRunAsSeperateProcess_(false)
 {
 }
 
-Utest::~Utest()
+UtestShell::~UtestShell()
 {
 }
 
 static void defaultCrashMethod()
 {
-	Utest* ptr = (Utest*) 0x0; ptr->countTests();
+	UtestShell* ptr = (UtestShell*) 0x0; ptr->countTests();
 }
 
 static void (*pleaseCrashMeRightNow) () = defaultCrashMethod;
 
-void Utest::setCrashMethod(void (*crashme)())
+void UtestShell::setCrashMethod(void (*crashme)())
 {
 	pleaseCrashMeRightNow = crashme;
 }
 
-void Utest::resetCrashMethod()
+void UtestShell::resetCrashMethod()
 {
 	pleaseCrashMeRightNow = defaultCrashMethod;
 }
 
-void Utest::crash()
+void UtestShell::crash()
 {
 	pleaseCrashMeRightNow();
 }
 
-void Utest::runOneTestWithPlugins(TestPlugin* plugin, TestResult& result)
+void UtestShell::runOneTestWithPlugins(TestPlugin* plugin, TestResult& result)
 {
-	executePlatformSpecificRunOneTest(plugin, result);
+	executePlatformSpecificRunOneTest(this, plugin, result);
 }
 
-void Utest::runOneTest(TestPlugin* plugin, TestResult& result)
+Utest* UtestShell::createTest()
+{
+	return new Utest();
+}
+
+void UtestShell::destroyTest(Utest* test)
+{
+	delete test;
+}
+
+void UtestShell::runOneTest(TestPlugin* plugin, TestResult& result)
 {
 	plugin->runAllPreTestAction(*this, result);
-	run(result);
+
+	//save test context, so that test class can be tested
+	UtestShell* savedTest = UtestShell::getCurrent();
+	TestResult* savedResult = UtestShell::getTestResult();
+
+	result.countRun();
+	UtestShell::setTestResult(&result);
+	UtestShell::setCurrentTest(this);
+
+	Utest* testToRun = createTest();
+	testToRun->run();
+	destroyTest(testToRun);
+
+	UtestShell::setCurrentTest(savedTest);
+	UtestShell::setTestResult(savedResult);
+
 	plugin->runAllPostTestAction(*this, result);
 }
 
-void Utest::run(TestResult& result)
-{
-	//save test context, so that test class can be tested
-	Utest* savedTest = getCurrent();
-	TestResult* savedResult = getTestResult();
-
-	result.countRun();
-	setTestResult(&result);
-	setCurrentTest(this);
-
-#if CPPUTEST_USE_STD_CPP_LIB
-	try {
-#endif
-			if (executePlatformSpecificSetup()) {
-			executePlatformSpecificTestBody();
-		}
-		executePlatformSpecificTeardown();
-
-#if CPPUTEST_USE_STD_CPP_LIB
-	}
-	catch (CppUTestFailedException&)
-	{
-		try {
-			executePlatformSpecificTeardown();
-		}
-		catch (CppUTestFailedException&)
-		{
-		}
-	}
-#endif
-
-	setCurrentTest(savedTest);
-	setTestResult(savedResult);
-}
-
-void Utest::exitCurrentTest()
+void UtestShell::exitCurrentTest()
 {
 	executePlatformSpecificExitCurrentTest();
 }
 
-Utest *Utest::getNext() const
+UtestShell *UtestShell::getNext() const
 {
 	return next_;
 }
 
-Utest* Utest::addTest(Utest *test)
+UtestShell* UtestShell::addTest(UtestShell *test)
 {
 	next_ = test;
 	return this;
 }
 
-int Utest::countTests()
+int UtestShell::countTests()
 {
 	return next_->countTests() + 1;
 }
 
-bool Utest::isNull() const
+bool UtestShell::isNull() const
 {
 	return false;
 }
 
-SimpleString Utest::getMacroName() const
+SimpleString UtestShell::getMacroName() const
 {
 	return "TEST";
 }
 
-const SimpleString Utest::getName() const
+const SimpleString UtestShell::getName() const
 {
 	return SimpleString(name_);
 }
 
-const SimpleString Utest::getGroup() const
+const SimpleString UtestShell::getGroup() const
 {
 	return SimpleString(group_);
 }
 
-SimpleString Utest::getFormattedName() const
+SimpleString UtestShell::getFormattedName() const
 {
 	SimpleString formattedName(getMacroName());
 	formattedName += "(";
@@ -211,50 +201,217 @@ SimpleString Utest::getFormattedName() const
 	return formattedName;
 }
 
-const char* Utest::getProgressIndicator() const
+const char* UtestShell::getProgressIndicator() const
 {
 	return ".";
 }
 
-bool Utest::isRunInSeperateProcess() const
+bool UtestShell::isRunInSeperateProcess() const
 {
 	return isRunAsSeperateProcess_;
 }
 
-void Utest::setRunInSeperateProcess()
+void UtestShell::setRunInSeperateProcess()
 {
 	isRunAsSeperateProcess_ = true;
 }
 
 
-void Utest::setFileName(const char* fileName)
+void UtestShell::setFileName(const char* fileName)
 {
 	file_ = fileName;
 }
 
-void Utest::setLineNumber(int lineNumber)
+void UtestShell::setLineNumber(int lineNumber)
 {
 	lineNumber_ = lineNumber;
 }
 
-void Utest::setGroupName(const char* groupName)
+void UtestShell::setGroupName(const char* groupName)
 {
 	group_ = groupName;
 }
 
-void Utest::setTestName(const char* testName)
+void UtestShell::setTestName(const char* testName)
 {
 	name_ = testName;
 }
 
-const SimpleString Utest::getFile() const
+const SimpleString UtestShell::getFile() const
 {
 	return SimpleString(file_);
 }
 
-int Utest::getLineNumber() const
+int UtestShell::getLineNumber() const
 {
 	return lineNumber_;
+}
+
+bool UtestShell::shouldRun(const TestFilter& groupFilter, const TestFilter& nameFilter) const
+{
+	if (groupFilter.match(group_) && nameFilter.match(name_)) return true;
+
+	return false;
+}
+
+void UtestShell::failWith(const TestFailure& failure)
+{
+	getTestResult()->addFailure(failure);
+    UtestShell::getCurrent()->exitCurrentTest();
+}
+
+void UtestShell::assertTrue(bool condition, const char * checkString, const char* conditionString, const char* fileName, int lineNumber)
+{
+	getTestResult()->countCheck();
+	if (!condition)
+		failWith(CheckFailure(this, fileName, lineNumber, checkString, conditionString));
+}
+
+void UtestShell::fail(const char *text, const char* fileName, int lineNumber)
+{
+	failWith(FailFailure(this, fileName, lineNumber, text));
+}
+
+void UtestShell::assertCstrEqual(const char* expected, const char* actual, const char* fileName, int lineNumber)
+{
+	getTestResult()->countCheck();
+	if (actual == 0 && expected == 0) return;
+	if (actual == 0 || expected == 0)
+		failWith(StringEqualFailure(this, fileName, lineNumber, expected, actual));
+	if (PlatformSpecificStrCmp(expected, actual) != 0)
+		failWith(StringEqualFailure(this, fileName, lineNumber, expected, actual));
+}
+
+void UtestShell::assertCstrNoCaseEqual(const char* expected, const char* actual, const char* fileName, int lineNumber)
+{
+	getTestResult()->countCheck();
+	if (actual == 0 && expected == 0) return;
+	if (actual == 0 || expected == 0)
+		failWith(StringEqualNoCaseFailure(this, fileName, lineNumber, expected, actual));
+	if (!SimpleString(expected).equalsNoCase(actual))
+		failWith(StringEqualNoCaseFailure(this, fileName, lineNumber, expected, actual));
+}
+
+void UtestShell::assertCstrContains(const char* expected, const char* actual, const char* fileName, int lineNumber)
+{
+	getTestResult()->countCheck();
+	if (actual == 0 && expected == 0) return;
+    if(actual == 0 || expected == 0)
+    	failWith(ContainsFailure(this, fileName, lineNumber, expected, actual));
+    if (!SimpleString(actual).contains(expected))
+    	failWith(ContainsFailure(this, fileName, lineNumber, expected, actual));
+}
+
+void UtestShell::assertCstrNoCaseContains(const char* expected, const char* actual, const char* fileName, int lineNumber)
+{
+	getTestResult()->countCheck();
+	if (actual == 0 && expected == 0) return;
+    if(actual == 0 || expected == 0)
+    	failWith(ContainsFailure(this, fileName, lineNumber, expected, actual));
+    if (!SimpleString(actual).containsNoCase(expected))
+    	failWith(ContainsFailure(this, fileName, lineNumber, expected, actual));
+}
+
+void UtestShell::assertLongsEqual(long expected, long actual, const char* fileName, int lineNumber)
+{
+	getTestResult()->countCheck();
+	if (expected != actual) {
+		LongsEqualFailure f(this, fileName, lineNumber, expected, actual);
+		getTestResult()->addFailure(f);
+	    UtestShell::getCurrent()->exitCurrentTest();
+	}
+}
+
+void UtestShell::assertPointersEqual(const void* expected, const void* actual, const char* fileName, int lineNumber)
+{
+	getTestResult()->countCheck();
+	if (expected != actual)
+		failWith(EqualsFailure(this, fileName, lineNumber, StringFrom(expected), StringFrom(actual)));
+}
+
+void UtestShell::assertDoublesEqual(double expected, double actual, double threshold, const char* fileName, int lineNumber)
+{
+	getTestResult()->countCheck();
+	if (!doubles_equal(expected, actual, threshold))
+		failWith(DoublesEqualFailure(this, fileName, lineNumber, expected, actual, threshold));
+}
+
+void UtestShell::print(const char *text, const char* fileName, int lineNumber)
+{
+	SimpleString stringToPrint = "\n";
+	stringToPrint += fileName;
+	stringToPrint += ":";
+	stringToPrint += StringFrom(lineNumber);
+	stringToPrint += " ";
+	stringToPrint += text;
+	getTestResult()->print(stringToPrint.asCharString());
+}
+
+void UtestShell::print(const SimpleString& text, const char* fileName, int lineNumber)
+{
+	print(text.asCharString(), fileName, lineNumber);
+}
+
+TestResult* UtestShell::testResult_ = NULL;
+UtestShell* UtestShell::currentTest_ = NULL;
+
+void UtestShell::setTestResult(TestResult* result)
+{
+	testResult_ = result;
+}
+
+void UtestShell::setCurrentTest(UtestShell* test)
+{
+	currentTest_ = test;
+}
+
+TestResult* UtestShell::getTestResult()
+{
+	if (testResult_ == NULL)
+		return &OutsideTestRunnerUTest::instance().getTestResult();
+	return testResult_;
+}
+
+UtestShell* UtestShell::getCurrent()
+{
+	if (currentTest_ == NULL)
+		return &OutsideTestRunnerUTest::instance();
+	return currentTest_;
+}
+
+////////////// Utest ////////////
+
+Utest::Utest()
+{
+}
+
+Utest::~Utest()
+{
+}
+
+void Utest::run()
+{
+
+#if CPPUTEST_USE_STD_CPP_LIB
+	try {
+#endif
+		if (executePlatformSpecificSetup(this)) {
+			executePlatformSpecificTestBody(this);
+		}
+		executePlatformSpecificTeardown(this);
+
+#if CPPUTEST_USE_STD_CPP_LIB
+	}
+	catch (CppUTestFailedException&)
+	{
+		try {
+			executePlatformSpecificTeardown(this);
+		}
+		catch (CppUTestFailedException&)
+		{
+		}
+	}
+#endif
 }
 
 void Utest::setup()
@@ -269,185 +426,80 @@ void Utest::teardown()
 {
 }
 
-bool Utest::shouldRun(const TestFilter& groupFilter, const TestFilter& nameFilter) const
-{
-	if (groupFilter.match(group_) && nameFilter.match(name_)) return true;
 
-	return false;
-}
-
-void Utest::failWith(const TestFailure& failure)
-{
-	getTestResult()->addFailure(failure);
-    Utest::getCurrent()->exitCurrentTest();
-}
-
-void Utest::assertTrue(bool condition, const char * checkString, const char* conditionString, const char* fileName, int lineNumber)
-{
-	getTestResult()->countCheck();
-	if (!condition)
-		failWith(CheckFailure(this, fileName, lineNumber, checkString, conditionString));
-}
-
-void Utest::fail(const char *text, const char* fileName, int lineNumber)
-{
-	failWith(FailFailure(this, fileName, lineNumber, text));
-}
-
-void Utest::assertCstrEqual(const char* expected, const char* actual, const char* fileName, int lineNumber)
-{
-	getTestResult()->countCheck();
-	if (actual == 0 && expected == 0) return;
-	if (actual == 0 || expected == 0)
-		failWith(StringEqualFailure(this, fileName, lineNumber, expected, actual));
-	if (PlatformSpecificStrCmp(expected, actual) != 0)
-		failWith(StringEqualFailure(this, fileName, lineNumber, expected, actual));
-}
-
-void Utest::assertCstrNoCaseEqual(const char* expected, const char* actual, const char* fileName, int lineNumber)
-{
-	getTestResult()->countCheck();
-	if (actual == 0 && expected == 0) return;
-	if (actual == 0 || expected == 0)
-		failWith(StringEqualNoCaseFailure(this, fileName, lineNumber, expected, actual));
-	if (!SimpleString(expected).equalsNoCase(actual))
-		failWith(StringEqualNoCaseFailure(this, fileName, lineNumber, expected, actual));
-}
-
-void Utest::assertCstrContains(const char* expected, const char* actual, const char* fileName, int lineNumber)
-{
-	getTestResult()->countCheck();
-	if (actual == 0 && expected == 0) return;
-    if(actual == 0 || expected == 0)
-    	failWith(ContainsFailure(this, fileName, lineNumber, expected, actual));
-    if (!SimpleString(actual).contains(expected))
-    	failWith(ContainsFailure(this, fileName, lineNumber, expected, actual));
-}
-
-void Utest::assertCstrNoCaseContains(const char* expected, const char* actual, const char* fileName, int lineNumber)
-{
-	getTestResult()->countCheck();
-	if (actual == 0 && expected == 0) return;
-    if(actual == 0 || expected == 0)
-    	failWith(ContainsFailure(this, fileName, lineNumber, expected, actual));
-    if (!SimpleString(actual).containsNoCase(expected))
-    	failWith(ContainsFailure(this, fileName, lineNumber, expected, actual));
-}
-
-void Utest::assertLongsEqual(long expected, long actual, const char* fileName, int lineNumber)
-{
-	getTestResult()->countCheck();
-	if (expected != actual) {
-		LongsEqualFailure f(this, fileName, lineNumber, expected, actual);
-		getTestResult()->addFailure(f);
-	    Utest::getCurrent()->exitCurrentTest();
-	}
-}
-
-void Utest::assertPointersEqual(const void* expected, const void* actual, const char* fileName, int lineNumber)
-{
-	getTestResult()->countCheck();
-	if (expected != actual)
-		failWith(EqualsFailure(this, fileName, lineNumber, StringFrom(expected), StringFrom(actual)));
-}
-
-void Utest::assertDoublesEqual(double expected, double actual, double threshold, const char* fileName, int lineNumber)
-{
-	getTestResult()->countCheck();
-	if (!doubles_equal(expected, actual, threshold))
-		failWith(DoublesEqualFailure(this, fileName, lineNumber, expected, actual, threshold));
-}
-
-void Utest::print(const char *text, const char* fileName, int lineNumber)
-{
-	SimpleString stringToPrint = "\n";
-	stringToPrint += fileName;
-	stringToPrint += ":";
-	stringToPrint += StringFrom(lineNumber);
-	stringToPrint += " ";
-	stringToPrint += text;
-	getTestResult()->print(stringToPrint.asCharString());
-}
-
-void Utest::print(const SimpleString& text, const char* fileName, int lineNumber)
-{
-	print(text.asCharString(), fileName, lineNumber);
-}
-
-TestResult* Utest::testResult_ = NULL;
-Utest* Utest::currentTest_ = NULL;
-
-void Utest::setTestResult(TestResult* result)
-{
-	testResult_ = result;
-}
-
-void Utest::setCurrentTest(Utest* test)
-{
-	currentTest_ = test;
-}
-
-TestResult* Utest::getTestResult()
-{
-	if (testResult_ == NULL)
-		return &OutsideTestRunnerUTest::instance().getTestResult();
-	return testResult_;
-}
-
-Utest* Utest::getCurrent()
-{
-	if (currentTest_ == NULL)
-		return &OutsideTestRunnerUTest::instance();
-	return currentTest_;
-}
-
-////////////// NullTest ////////////
+////////////// NullTestShell ////////////
 
 
-NullTest::NullTest() :
-	Utest("NullGroup", "NullName", "NullFile", -1, 0)
+NullTestShell::NullTestShell() :
+	UtestShell("NullGroup", "NullName", "NullFile", -1, 0)
 {
 }
 
-NullTest::NullTest(const char* fileName, int lineNumber) :
-	Utest("NullGroup", "NullName", fileName, lineNumber, 0)
+NullTestShell::NullTestShell(const char* fileName, int lineNumber) :
+	UtestShell("NullGroup", "NullName", fileName, lineNumber, 0)
 {
 }
 
-NullTest::~NullTest()
+NullTestShell::~NullTestShell()
 {
 }
 
-NullTest& NullTest::instance()
+NullTestShell& NullTestShell::instance()
 {
-	static NullTest _instance;
+	static NullTestShell _instance;
 	return _instance;
 }
 
-int NullTest::countTests()
+int NullTestShell::countTests()
 {
 	return 0;
 }
 
-Utest* NullTest::getNext() const
+UtestShell* NullTestShell::getNext() const
 {
 	return &instance();
 }
 
-bool NullTest::isNull() const
+bool NullTestShell::isNull() const
 {
 	return true;
 }
 
+void NullTestShell::testBody()
+{
+}
+
+//////////////////// ExecFunctionTest
+
+ExecFunctionTest::ExecFunctionTest(ExecFunctionTestShell* shell)
+	: shell_(shell)
+{
+}
+
+void ExecFunctionTest::testBody()
+{
+	if (shell_->testFunction_) shell_->testFunction_();
+}
+
+void ExecFunctionTest::setup()
+{
+	if (shell_->setup_) shell_->setup_();
+}
+
+void ExecFunctionTest::teardown()
+{
+	if (shell_->teardown_) shell_->teardown_();
+}
+
 ////////////// TestInstaller ////////////
 
-TestInstaller::TestInstaller(Utest* t, const char* groupName, const char* testName, const char* fileName, int lineNumber)
+TestInstaller::TestInstaller(UtestShell& shell, const char* groupName, const char* testName, const char* fileName, int lineNumber)
 {
-	t->setGroupName(groupName);
-	t->setTestName(testName);
-	t->setFileName(fileName);
-	t->setLineNumber(lineNumber);
-	TestRegistry::getCurrentRegistry()->addTest(t);
+	shell.setGroupName(groupName);
+	shell.setTestName(testName);
+	shell.setFileName(fileName);
+	shell.setLineNumber(lineNumber);
+	TestRegistry::getCurrentRegistry()->addTest(&shell);
 }
 
 TestInstaller::~TestInstaller()

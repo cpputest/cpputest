@@ -42,9 +42,9 @@ public:
 
 	virtual void printTestsStarted();
 	virtual void printTestsEnded(const TestResult& result);
-	virtual void printCurrentTestStarted(const Utest& test);
+	virtual void printCurrentTestStarted(const UtestShell& test);
 	virtual void printCurrentTestEnded(const TestResult& res);
-	virtual void printCurrentGroupStarted(const Utest& test);
+	virtual void printCurrentGroupStarted(const UtestShell& test);
 	virtual void printCurrentGroupEnded(const TestResult& res);
 
 	virtual void verbose();

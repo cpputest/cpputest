@@ -37,9 +37,9 @@ TEST_GROUP(TestOrderedTest)
 OrderedTest orderedTest;
 OrderedTest orderedTest2;
 OrderedTest orderedTest3;
-ExecFunctionTest normalTest;
-ExecFunctionTest normalTest2;
-ExecFunctionTest normalTest3;
+ExecFunctionTestShell normalTest;
+ExecFunctionTestShell normalTest2;
+ExecFunctionTestShell normalTest3;
 
 OrderedTest* orderedTestCache;
 void setup()
@@ -62,17 +62,17 @@ void InstallOrderedTest(OrderedTest* test, int level)
 	OrderedTestInstaller(test, "testgroup", "testname", __FILE__, __LINE__, level);
 }
 
-void InstallNormalTest(Utest* test)
+void InstallNormalTest(UtestShell* test)
 {
 	TestInstaller(test, "testgroup", "testname", __FILE__, __LINE__);
 }
 
-Utest* firstTest()
+UtestShell* firstTest()
 {
 	return fixture->registry_->getFirstTest();
 }
 
-Utest* secondTest()
+UtestShell* secondTest()
 {
 	return fixture->registry_->getFirstTest()->getNext();
 }
@@ -128,7 +128,7 @@ TEST(TestOrderedTest, MultipleOrderedTests)
 	InstallNormalTest(&normalTest3);
 	InstallOrderedTest(&orderedTest3, 7);
 
-	Utest * firstOrderedTest = firstTest()->getNext()->getNext()->getNext();
+	UtestShell * firstOrderedTest = firstTest()->getNext()->getNext()->getNext();
 	CHECK(firstOrderedTest == &orderedTest2);
 	CHECK(firstOrderedTest->getNext() == &orderedTest);
 	CHECK(firstOrderedTest->getNext()->getNext() == &orderedTest3);

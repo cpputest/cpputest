@@ -59,17 +59,17 @@ SimpleString addMarkerToString(const SimpleString& str, int markerPos)
 
 }
 
-TestFailure::TestFailure(Utest* test, const char* fileName, int lineNumber, const SimpleString& theMessage) :
+TestFailure::TestFailure(UtestShell* test, const char* fileName, int lineNumber, const SimpleString& theMessage) :
 	testName_(test->getFormattedName()), fileName_(fileName), lineNumber_(lineNumber), testFileName_(test->getFile()), testLineNumber_(test->getLineNumber()), message_(theMessage)
 {
 }
 
-TestFailure::TestFailure(Utest* test, const SimpleString& theMessage) :
+TestFailure::TestFailure(UtestShell* test, const SimpleString& theMessage) :
     testName_(test->getFormattedName()), fileName_(test->getFile()), lineNumber_(test->getLineNumber()), testFileName_(test->getFile()), testLineNumber_(test->getLineNumber()), message_(theMessage)
 {
 }
 
-TestFailure::TestFailure(Utest* test, const char* fileName, int lineNum) :
+TestFailure::TestFailure(UtestShell* test, const char* fileName, int lineNum) :
 	testName_(test->getFormattedName()), fileName_(fileName), lineNumber_(lineNum), testFileName_(test->getFile()), testLineNumber_(test->getLineNumber()), message_("no message")
 {
 }
@@ -151,13 +151,13 @@ SimpleString TestFailure::createDifferenceAtPosString(const SimpleString& actual
 	return result;
 }
 
-EqualsFailure::EqualsFailure(Utest* test, const char* fileName, int lineNumber, const char* expected, const char* actual) :
+EqualsFailure::EqualsFailure(UtestShell* test, const char* fileName, int lineNumber, const char* expected, const char* actual) :
 	TestFailure(test, fileName, lineNumber)
 {
 	message_ = createButWasString(StringFromOrNull(expected), StringFromOrNull(actual));
 }
 
-EqualsFailure::EqualsFailure(Utest* test, const char* fileName, int lineNumber, const SimpleString& expected, const SimpleString& actual)
+EqualsFailure::EqualsFailure(UtestShell* test, const char* fileName, int lineNumber, const SimpleString& expected, const SimpleString& actual)
 	: TestFailure(test, fileName, lineNumber)
 {
 	message_ = createButWasString(expected, actual);
@@ -170,7 +170,7 @@ static SimpleString StringFromOrNan(double d)
 	return StringFrom(d);
 }
 
-DoublesEqualFailure::DoublesEqualFailure(Utest* test, const char* fileName, int lineNumber, double expected, double actual, double threshold)  : TestFailure(test, fileName, lineNumber)
+DoublesEqualFailure::DoublesEqualFailure(UtestShell* test, const char* fileName, int lineNumber, double expected, double actual, double threshold)  : TestFailure(test, fileName, lineNumber)
 {
 	message_ = createButWasString(StringFromOrNan(expected), StringFromOrNan(actual));
 	message_ += " threshold used was <";
@@ -181,7 +181,7 @@ DoublesEqualFailure::DoublesEqualFailure(Utest* test, const char* fileName, int 
 		message_ += "\n\tCannot make comparisons with Nan";
 }
 
-CheckEqualFailure::CheckEqualFailure(Utest* test, const char* fileName, int lineNumber, const SimpleString& expected, const SimpleString& actual) : TestFailure(test, fileName, lineNumber)
+CheckEqualFailure::CheckEqualFailure(UtestShell* test, const char* fileName, int lineNumber, const SimpleString& expected, const SimpleString& actual) : TestFailure(test, fileName, lineNumber)
 {
 	int failStart;
 	for (failStart = 0; actual.asCharString()[failStart] == expected.asCharString()[failStart]; failStart++)
@@ -191,14 +191,14 @@ CheckEqualFailure::CheckEqualFailure(Utest* test, const char* fileName, int line
 
 }
 
-ContainsFailure::ContainsFailure(Utest* test, const char* fileName, int lineNumber, const SimpleString& expected, const SimpleString& actual) :
+ContainsFailure::ContainsFailure(UtestShell* test, const char* fileName, int lineNumber, const SimpleString& expected, const SimpleString& actual) :
 	TestFailure(test, fileName, lineNumber)
 {
 	const char* format = "actual <%s>\n\tdid not contain  <%s>";
 	message_ = StringFromFormat(format, actual.asCharString(), expected.asCharString());
 }
 
-CheckFailure::CheckFailure(Utest* test, const char* fileName, int lineNumber, const SimpleString& checkString, const SimpleString& conditionString) : TestFailure(test, fileName, lineNumber)
+CheckFailure::CheckFailure(UtestShell* test, const char* fileName, int lineNumber, const SimpleString& checkString, const SimpleString& conditionString) : TestFailure(test, fileName, lineNumber)
 {
 	message_ = checkString;
 	message_ += "(";
@@ -206,12 +206,12 @@ CheckFailure::CheckFailure(Utest* test, const char* fileName, int lineNumber, co
 	message_ += ") failed";
 }
 
-FailFailure::FailFailure(Utest* test, const char* fileName, int lineNumber, const SimpleString& message) : TestFailure(test, fileName, lineNumber)
+FailFailure::FailFailure(UtestShell* test, const char* fileName, int lineNumber, const SimpleString& message) : TestFailure(test, fileName, lineNumber)
 {
 	message_ = message;
 }
 
-LongsEqualFailure::LongsEqualFailure(Utest* test, const char* fileName, int lineNumber, long expected, long actual) : TestFailure(test, fileName, lineNumber)
+LongsEqualFailure::LongsEqualFailure(UtestShell* test, const char* fileName, int lineNumber, long expected, long actual) : TestFailure(test, fileName, lineNumber)
 {
 	SimpleString aDecimal = StringFrom(actual);
 	SimpleString aHex = HexStringFrom(actual);
@@ -227,7 +227,7 @@ LongsEqualFailure::LongsEqualFailure(Utest* test, const char* fileName, int line
 }
 
 
-StringEqualFailure::StringEqualFailure(Utest* test, const char* fileName, int lineNumber, const char* expected, const char* actual) : TestFailure(test, fileName, lineNumber)
+StringEqualFailure::StringEqualFailure(UtestShell* test, const char* fileName, int lineNumber, const char* expected, const char* actual) : TestFailure(test, fileName, lineNumber)
 {
 	int failStart;
 	for (failStart = 0; actual[failStart] == expected[failStart]; failStart++)
@@ -236,7 +236,7 @@ StringEqualFailure::StringEqualFailure(Utest* test, const char* fileName, int li
 	message_ += createDifferenceAtPosString(actual, failStart);
 }
 
-StringEqualNoCaseFailure::StringEqualNoCaseFailure(Utest* test, const char* fileName, int lineNumber, const char* expected, const char* actual) : TestFailure(test, fileName, lineNumber)
+StringEqualNoCaseFailure::StringEqualNoCaseFailure(UtestShell* test, const char* fileName, int lineNumber, const char* expected, const char* actual) : TestFailure(test, fileName, lineNumber)
 {
 	int failStart;
     for (failStart = 0; PlatformSpecificToLower(actual[failStart]) == PlatformSpecificToLower(expected[failStart]); failStart++)

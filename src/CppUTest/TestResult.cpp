@@ -46,19 +46,19 @@ TestResult::~TestResult()
 {
 }
 
-void TestResult::currentGroupStarted(Utest* test)
+void TestResult::currentGroupStarted(UtestShell* test)
 {
 	output_.printCurrentGroupStarted(*test);
 	currentGroupTimeStarted_ = GetPlatformSpecificTimeInMillis();
 }
 
-void TestResult::currentGroupEnded(Utest* /*test*/)
+void TestResult::currentGroupEnded(UtestShell* /*test*/)
 {
 	currentGroupTotalExecutionTime_ = GetPlatformSpecificTimeInMillis() - currentGroupTimeStarted_;
 	output_.printCurrentGroupEnded(*this);
 }
 
-void TestResult::currentTestStarted(Utest* test)
+void TestResult::currentTestStarted(UtestShell* test)
 {
 	output_.printCurrentTestStarted(*test);
 	currentTestTimeStarted_ = GetPlatformSpecificTimeInMillis();
@@ -69,7 +69,7 @@ void TestResult::print(const char* text)
 	output_.print(text);
 }
 
-void TestResult::currentTestEnded(Utest* /*test*/)
+void TestResult::currentTestEnded(UtestShell* /*test*/)
 {
 	currentTestTotalExecutionTime_ = GetPlatformSpecificTimeInMillis() - currentTestTimeStarted_;
 	output_.printCurrentTestEnded(*this);

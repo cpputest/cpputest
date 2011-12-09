@@ -36,7 +36,7 @@ public:
 	{
 		output_ = new StringBufferTestOutput();
 		result_ = new TestResult(*output_);
-		genTest_ = new ExecFunctionTest();
+		genTest_ = new ExecFunctionTestShell();
 		registry_ = new TestRegistry();
 
 		registry_->setCurrentRegistry(registry_);
@@ -98,7 +98,7 @@ public:
 	}
 
 	TestRegistry* registry_;
-	ExecFunctionTest* genTest_;
+	ExecFunctionTestShell* genTest_;
 	StringBufferTestOutput* output_;
 	TestResult * result_;
 };

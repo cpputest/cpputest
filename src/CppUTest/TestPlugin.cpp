@@ -48,13 +48,13 @@ TestPlugin* TestPlugin::addPlugin(TestPlugin* plugin)
 	return this;
 }
 
-void TestPlugin::runAllPreTestAction(Utest& test, TestResult& result)
+void TestPlugin::runAllPreTestAction(UtestShell& test, TestResult& result)
 {
 	if (enabled_) preTestAction(test, result);
 	next_->runAllPreTestAction(test, result);
 }
 
-void TestPlugin::runAllPostTestAction(Utest& test, TestResult& result)
+void TestPlugin::runAllPostTestAction(UtestShell& test, TestResult& result)
 {
 	next_ ->runAllPostTestAction(test, result);
 	if (enabled_) postTestAction(test, result);
@@ -144,7 +144,7 @@ void CppUTestStore(void**function, void*value)
 	pointerTableIndex++;
 }
 
-void SetPointerPlugin::postTestAction(Utest& /*test*/, TestResult& /*result*/)
+void SetPointerPlugin::postTestAction(UtestShell& /*test*/, TestResult& /*result*/)
 {
 	for (int i = pointerTableIndex - 1; i >= 0; i--)
 		*((void**) setlist[i].orig) = setlist[i].orig_value;
@@ -164,10 +164,10 @@ NullTestPlugin* NullTestPlugin::instance()
 	return &_instance;
 }
 
-void NullTestPlugin::runAllPreTestAction(Utest&, TestResult&)
+void NullTestPlugin::runAllPreTestAction(UtestShell&, TestResult&)
 {
 }
 
-void NullTestPlugin::runAllPostTestAction(Utest&, TestResult&)
+void NullTestPlugin::runAllPostTestAction(UtestShell&, TestResult&)
 {
 }

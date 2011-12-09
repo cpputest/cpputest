@@ -27,13 +27,13 @@
 
 #include "CppUTest/TestHarness.h"
 
-TEST_GROUP(NullTest)
+TEST_GROUP(NullTestShell)
 {
-	NullTest* nullTest;
+	NullTestShell* nullTest;
 
 	TEST_SETUP()
 	{
-		nullTest = new NullTest();
+		nullTest = new NullTestShell();
 	}
 
 	TEST_TEARDOWN()
@@ -42,18 +42,18 @@ TEST_GROUP(NullTest)
 	}
 };
 
-TEST(NullTest, Create)
+TEST(NullTestShell, Create)
 {
 }
 
-TEST(NullTest, InstanceAlwaysTheSame)
+TEST(NullTestShell, InstanceAlwaysTheSame)
 {
-	NullTest& _instance = NullTest::instance();
-	CHECK(&_instance == &NullTest::instance());
+	NullTestShell& _instance = NullTestShell::instance();
+	CHECK(&_instance == &NullTestShell::instance());
 }
 
-TEST(NullTest, NullTestsDontCount)
+TEST(NullTestShell, NullTestsDontCount)
 {
-	NullTest& _instance = NullTest::instance();
+	NullTestShell& _instance = NullTestShell::instance();
 	CHECK(_instance.countTests() == 0);
 }

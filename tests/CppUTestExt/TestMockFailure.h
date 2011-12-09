@@ -48,7 +48,7 @@ public:
 	}
 };
 
-inline Utest* mockFailureTest()
+inline UtestShell* mockFailureTest()
 {
 	return MockFailureReporterForTest::getReporter()->getTestToFail();
 }

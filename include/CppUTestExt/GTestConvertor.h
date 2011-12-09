@@ -40,7 +40,7 @@ namespace testing {
 	class Test;
 }
 
-class GTest : public Utest
+class GTest : public UtestShell
 {
 	::testing::TestInfo* testinfo_;
 	::testing::Test* test_;

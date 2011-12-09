@@ -37,11 +37,11 @@ void stub()
 const int testLineNumber = 1;
 }
 
-class MockTest: public Utest
+class MockTest: public UtestShell
 {
 public:
 	MockTest(const char* group = "Group") :
-		Utest(group, "Name", "File", testLineNumber), hasRun_(false)
+		UtestShell(group, "Name", "File", testLineNumber), hasRun_(false)
 	{
 	}
 	virtual void runOneTestWithPlugins(TestPlugin*, TestResult&)
@@ -91,19 +91,19 @@ public:
 	{
 		countTestsEnded++;
 	}
-	virtual void currentTestStarted(Utest* /*test*/)
+	virtual void currentTestStarted(UtestShell* /*test*/)
 	{
 		countCurrentTestStarted++;
 	}
-	virtual void currentTestEnded(Utest* /*test*/)
+	virtual void currentTestEnded(UtestShell* /*test*/)
 	{
 		countCurrentTestEnded++;
 	}
-	virtual void currentGroupStarted(Utest* /*test*/)
+	virtual void currentGroupStarted(UtestShell* /*test*/)
 	{
 		countCurrentGroupStarted++;
 	}
-	virtual void currentGroupEnded(Utest* /*test*/)
+	virtual void currentGroupEnded(UtestShell* /*test*/)
 	{
 		countCurrentGroupEnded++;
 	}

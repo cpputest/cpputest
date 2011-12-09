@@ -51,64 +51,66 @@
 static jmp_buf test_exit_jmp_buf[10];
 static int jmp_buf_index = 0;
 
-bool Utest::executePlatformSpecificSetup()
+bool executePlatformSpecificSetup(Utest* test)
 {
    if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
       jmp_buf_index++;
-      setup();
+      test->setup();
       jmp_buf_index--;
       return true;
    }
    return false;
 }
 
-void Utest::executePlatformSpecificTestBody()
+void executePlatformSpecificTestBody(Utest* test)
 {
    if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
       jmp_buf_index++;
-      testBody();
+      test->testBody();
       jmp_buf_index--;
    }
 }
 
-void Utest::executePlatformSpecificTeardown()
+void executePlatformSpecificTeardown(Utest* test)
 {
    if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
       jmp_buf_index++;
-      teardown();
+      test->teardown();
       jmp_buf_index--;
    }
 }
 
-void Utest::executePlatformSpecificRunOneTest(TestPlugin* plugin, TestResult& result)
+void executePlatformSpecificRunOneTest(UtestShell* shell, TestPlugin* plugin, TestResult& result)
 {
     if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
        jmp_buf_index++;
 
 #ifdef __MINGW32__
-       if (isRunInSeperateProcess())
+       if (shell->isRunInSeperateProcess())
     	   printf("-p doesn't work on MinGW as it is lacking fork. Running inside the process\b");
 	   runOneTest(plugin, result);
 #else
 
        int info;
-       pid_t pid = (isRunInSeperateProcess()) ? fork() : 0;
+       pid_t pid = (shell->isRunInSeperateProcess()) ? fork() : 0;
 
        if (pid) {
     	   wait(&info);
     	   if (WIFEXITED(info) && WEXITSTATUS(info) > result.getFailureCount())
-    		   result.addFailure(TestFailure(this, "failed in seperate process"));
+    		   result.addFailure(TestFailure(shell, "failed in seperate process"));
+    	   else if (!WIFEXITED(info))
+    		   result.addFailure(TestFailure(shell, "failed in seperate process"));
        }
        else {
-		    runOneTest(plugin, result);
-		    if (isRunInSeperateProcess()) exit(result.getFailureCount() );
+    	   shell->runOneTest(plugin, result);
+		    if (shell->isRunInSeperateProcess()) exit(result.getFailureCount() );
 		}
 #endif
        jmp_buf_index--;
     }
 }
 
-void Utest::executePlatformSpecificExitCurrentTest()
+void executePlatformSpecificExitCurrentTest()
 {
    jmp_buf_index--;
    longjmp(test_exit_jmp_buf[jmp_buf_index], 1);

@@ -283,46 +283,46 @@ char PlatformSpecificToLower(char c)
 static jmp_buf test_exit_jmp_buf[10];
 static int jmp_buf_index = 0;
 
-bool Utest::executePlatformSpecificSetup()
+bool executePlatformSpecificSetup(Utest* test)
 {
    if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
       jmp_buf_index++;
-      setup();
+      test->setup();
       jmp_buf_index--;
       return true;
    }
    return false;
 }
 
-void Utest::executePlatformSpecificTestBody()
+void executePlatformSpecificTestBody(Utest* test)
 {
    if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
       jmp_buf_index++;
-      testBody();
+      test->testBody();
       jmp_buf_index--;
    }
 }
 
-void Utest::executePlatformSpecificTeardown()
+void executePlatformSpecificTeardown(Utest* test)
 {
    if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
       jmp_buf_index++;
-      teardown();
+      test->teardown();
       jmp_buf_index--;
    }
 }
 
-void Utest::executePlatformSpecificRunOneTest(TestPlugin* plugin, TestResult& result)
+void executePlatformSpecificRunOneTest(UtestShell* shell, TestPlugin* plugin, TestResult& result)
 {
     if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
        jmp_buf_index++;
-       runOneTest(plugin, result);
+       shell->runOneTest(plugin, result);
        jmp_buf_index--;
     }
 }
 
 
-void Utest::executePlatformSpecificExitCurrentTest()
+void executePlatformSpecificExitCurrentTest()
 {
    jmp_buf_index--;
    longjmp(test_exit_jmp_buf[jmp_buf_index], 1);

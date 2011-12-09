@@ -33,7 +33,7 @@
 #include "CppUTestExt/MockExpectedFunctionCall.h"
 #include "CppUTestExt/MockExpectedFunctionsList.h"
 
-class Utest;
+class UtestShell;
 class MockSupport;
 
 /* This allows access to "the global" mocking support for easier testing */

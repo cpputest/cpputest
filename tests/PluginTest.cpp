@@ -48,13 +48,13 @@ public:
 	{
 	}
 
-	virtual void preTestAction(Utest&, TestResult&)
+	virtual void preTestAction(UtestShell&, TestResult&)
 	{
 		preAction++;
 		preActionSequence = sequenceNumber++;
 	}
 
-	virtual void postTestAction(Utest&, TestResult&)
+	virtual void postTestAction(UtestShell&, TestResult&)
 	{
 		postAction++;
 		postActionSequence = sequenceNumber++;

@@ -39,7 +39,7 @@
 #include "SimpleString.h"
 #include "TestFilter.h"
 
-class Utest;
+class UtestShell;
 class TestResult;
 class TestPlugin;
 
@@ -49,7 +49,7 @@ public:
 	TestRegistry();
 	virtual ~TestRegistry();
 
-	virtual void addTest(Utest *test);
+	virtual void addTest(UtestShell *test);
 	virtual void unDoLastAddTest();
 	virtual int countTests();
 	virtual void runAllTests(TestResult& result);
@@ -65,12 +65,12 @@ public:
 	TestFilter getGroupFilter();
 	TestFilter getNameFilter();
 
-	virtual Utest* getFirstTest();
-	virtual Utest* getLastTest();
-	virtual Utest* getTestWithNext(Utest* test);
+	virtual UtestShell* getFirstTest();
+	virtual UtestShell* getLastTest();
+	virtual UtestShell* getTestWithNext(UtestShell* test);
 
-	virtual Utest* findTestWithName(const SimpleString& name);
-	virtual Utest* findTestWithGroup(const SimpleString& name);
+	virtual UtestShell* findTestWithName(const SimpleString& name);
+	virtual UtestShell* findTestWithGroup(const SimpleString& name);
 
 	static TestRegistry* getCurrentRegistry();
 	virtual void setCurrentRegistry(TestRegistry* registry);
@@ -78,10 +78,10 @@ public:
 	virtual void setRunTestsInSeperateProcess();
 private:
 
-	bool testShouldRun(Utest* test, TestResult& result);
-	bool endOfGroup(Utest* test);
+	bool testShouldRun(UtestShell* test, TestResult& result);
+	bool endOfGroup(UtestShell* test);
 
-	Utest * tests_;
+	UtestShell * tests_;
 	TestFilter nameFilter_;
 	TestFilter groupFilter_;
 	TestPlugin* firstPlugin_;
