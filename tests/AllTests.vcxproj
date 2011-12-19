@@ -95,7 +95,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\include;..\include\Platforms\VisualCpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\include;C:\workspace\cpputest\include\CppUTestExt\CppUTestGTest;C:\workspace\cpputest\include\CppUTestExt\CppUTestGMock;..\include\Platforms\VisualCpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CONSOLE;WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -107,7 +107,7 @@
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <ForcedIncludeFiles>..\include\Platforms\VisualCpp\Platform.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <ForcedIncludeFiles>..\include\Platforms\VisualCpp\Platform.h;..\include\CppUTest\MemoryLeakDetectorMallocMacros.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -142,10 +142,26 @@
   <ItemGroup>
     <ClCompile Include="AllocationInCFile.c" />
     <ClCompile Include="AllocationInCppFile.cpp" />
-    <ClCompile Include="AllTests.cpp" />
     <ClCompile Include="CheatSheetTest.cpp" />
     <ClCompile Include="CommandLineArgumentsTest.cpp" />
     <ClCompile Include="CommandLineTestRunnerTest.cpp" />
+    <ClCompile Include="CppUTestExt\AllTests.cpp" />
+    <ClCompile Include="CppUTestExt\TestCodeMemoryReportFormatter.cpp" />
+    <ClCompile Include="CppUTestExt\TestGMock.cpp" />
+    <ClCompile Include="CppUTestExt\TestGTest.cpp" />
+    <ClCompile Include="CppUTestExt\TestMemoryReportAllocator.cpp" />
+    <ClCompile Include="CppUTestExt\TestMemoryReporterPlugin.cpp" />
+    <ClCompile Include="CppUTestExt\TestMemoryReportFormatter.cpp" />
+    <ClCompile Include="CppUTestExt\TestMockActualFunctionCall.cpp" />
+    <ClCompile Include="CppUTestExt\TestMockCheatSheet.cpp" />
+    <ClCompile Include="CppUTestExt\TestMockExpectedFunctionCall.cpp" />
+    <ClCompile Include="CppUTestExt\TestMockExpectedFunctionsList.cpp" />
+    <ClCompile Include="CppUTestExt\TestMockFailure.cpp" />
+    <ClCompile Include="CppUTestExt\TestMockPlugin.cpp" />
+    <ClCompile Include="CppUTestExt\TestMockSupport.cpp" />
+    <ClCompile Include="CppUTestExt\TestMockSupport_c.cpp" />
+    <ClCompile Include="CppUTestExt\TestMockSupport_cCFile.c" />
+    <ClCompile Include="CppUTestExt\TestOrderedTest.cpp" />
     <ClCompile Include="JUnitOutputTest.cpp" />
     <ClCompile Include="MemoryLeakDetectorTest.cpp" />
     <ClCompile Include="MemoryLeakOperatorOverloadsTest.cpp" />
@@ -170,6 +186,8 @@
     <ClInclude Include="AllocationInCFile.h" />
     <ClInclude Include="AllocationInCppFile.h" />
     <ClInclude Include="AllTests.h" />
+    <ClInclude Include="CppUTestExt\TestMockFailure.h" />
+    <ClInclude Include="CppUTestExt\TestMockSupport_cCFile.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

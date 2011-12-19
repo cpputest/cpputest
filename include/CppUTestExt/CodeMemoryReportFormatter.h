@@ -30,7 +30,7 @@
 
 #include "CppUTestExt/MemoryReportFormatter.h"
 
-class CodeReportingAllocationNode;
+struct CodeReportingAllocationNode;
 class CodeMemoryReportFormatter : public MemoryReportFormatter
 {
 private:

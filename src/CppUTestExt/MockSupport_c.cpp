@@ -43,7 +43,7 @@ public:
 
 	virtual bool isEqual(void* object1, void* object2)
 	{
-		return (bool) equal_(object1, object2);
+		return equal_(object1, object2) != 0;
 	}
 	virtual SimpleString valueToString(void* object)
 	{

@@ -154,7 +154,7 @@ MockFunctionCall& MockFunctionCallComposite::andReturnValue(int value)
 	return *this;
 }
 
-MockFunctionCall& MockFunctionCallComposite::MockFunctionCallComposite::andReturnValue(double value)
+MockFunctionCall& MockFunctionCallComposite::andReturnValue(double value)
 {
 	for (MockFunctionCallCompositeNode* node = head_; node != NULL; node = node->next_)
 		node->call_.andReturnValue(value);

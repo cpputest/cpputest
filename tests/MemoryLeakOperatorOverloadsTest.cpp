@@ -64,12 +64,15 @@ TEST(MemoryLeakOverridesToBeUsedInProductionCode, UseNativeMallocByTemporarlySwi
 {
 	int memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
 #if CPPUTEST_USE_MALLOC_MACROS
+	#define saved_malloc malloc
+	#define saved_free free
 	#undef malloc
 	#undef free
 #endif
 	void* memory = malloc(10);
 	LONGS_EQUAL(memLeaks, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
 	free (memory);
+
 #if CPPUTEST_USE_MALLOC_MACROS
 #include "CppUTest/MemoryLeakDetectorMallocMacros.h"
 #endif

@@ -218,7 +218,7 @@ bool MockSupport::expectedCallsLeft()
 	for (MockNamedValueListNode* p = data_.begin(); p; p = p->next())
 		if (getMockSupport(p)) callsLeft += getMockSupport(p)->expectedCallsLeft();
 
-	return callsLeft;
+	return callsLeft != 0;
 }
 
 bool MockSupport::wasLastCallFulfilled()
