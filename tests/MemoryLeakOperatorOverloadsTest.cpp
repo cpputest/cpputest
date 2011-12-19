@@ -215,7 +215,7 @@ TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorThrowsAnExceptionWhenUsin
 		new char;
 		FAIL("Should have thrown an exception!")
 	}
-	catch (std::bad_alloc) {
+	catch (std::bad_alloc&) {
 	}
 }
 
@@ -225,7 +225,7 @@ TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorThrowsAnExceptionWhe
 		new char[10];
 		FAIL("Should have thrown an exception!")
 	}
-	catch (std::bad_alloc) {
+	catch (std::bad_alloc&) {
 	}
 }
 
@@ -253,7 +253,7 @@ TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorThrowsAnExceptionWhenUsin
 		new char;
 		FAIL("Should have thrown an exception!")
 	}
-	catch (std::bad_alloc) {
+	catch (std::bad_alloc&) {
 	}
 }
 
@@ -263,7 +263,7 @@ TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorThrowsAnExceptionWhe
 		new char[10];
 		FAIL("Should have thrown an exception!")
 	}
-	catch (std::bad_alloc) {
+	catch (std::bad_alloc&) {
 	}
 }
 #else
