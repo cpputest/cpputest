@@ -69,8 +69,8 @@ endif
 
 ifeq ($(findstring $(MACOSX_STR),$(UNAME_OUTPUT)),$(MACOSX_STR))
 	UNAME_OS = $(MACOSX_STR)
-#else
-#	UNAME_OS = $(UNKNWOWN_OS_STR)
+	#lion has a problem with the 'v' part of -a
+	UNAME_OUTPUT = "$(shell uname -pmnrs)"
 endif
 
 #Kludge for mingw, it does not have cc.exe, but gcc.exe will do
@@ -238,9 +238,9 @@ ifeq ($(CPPUTEST_USE_GCOV), Y)
 	CPPUTEST_CPPFLAGS += -fprofile-arcs -ftest-coverage
 endif
 
+CPPUTEST_CPPFLAGS += $(CPPUTEST_MEMLEAK_DETECTOR_MALLOC_MACRO_FILE)
 CPPUTEST_CPPFLAGS += $(CPPUTEST_WARNINGFLAGS)
 CPPUTEST_CXXFLAGS += $(CPPUTEST_MEMLEAK_DETECTOR_NEW_MACRO_FILE) $(CPPUTEST_CXX_WARNINGFLAGS)
-CPPUTEST_CFLAGS += $(CPPUTEST_MEMLEAK_DETECTOR_MALLOC_MACRO_FILE)
 
 TARGET_MAP = $(COMPONENT_NAME).map.txt
 ifeq ($(CPPUTEST_MAP_FILE), Y)
@@ -375,8 +375,7 @@ flags:
 	@$(call debug_print_list,$(LD_LIBRARIES))
 	@echo "Create libraries with ARFLAGS:"
 	@$(call debug_print_list,$(ARFLAGS))
-	
-	
+
 $(TEST_TARGET): $(TEST_OBJS) $(MOCKS_OBJS)  $(PRODUCTION_CODE_START) $(TARGET_LIB) $(USER_LIBS) $(PRODUCTION_CODE_END) $(CPPUTEST_LIB) $(STDLIB_CODE_START) 
 	$(SILENCE)echo Linking $@
 	$(SILENCE)$(LINK.o) -o $@ $^ $(LD_LIBRARIES)
@@ -445,6 +444,7 @@ endif
 format: 
 	$(CPPUTEST_HOME)/scripts/reformat.sh $(PROJECT_HOME_DIR)
 	
+.PHONEY: debug
 debug:
 	@echo
 	@echo "Target Source files:"

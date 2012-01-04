@@ -79,6 +79,8 @@ test_all: start test_old_make
 	$(SILENCE)echo Testing VPATH usage
 	$(TIME) make CPPUTEST_USE_VPATH=Y everythingInstall
 	make CPPUTEST_USE_VPATH=Y cleanEverythingInstall
+	make flags
+	make debug
 	
 HAS_OLD_MAKE = $(shell $(OLD_MAKE) -v 2>/dev/null)
 
