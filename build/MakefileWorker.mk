@@ -362,7 +362,7 @@ all_no_tests: $(TEST_TARGET)
 .PHONY: flags
 flags: 
 	@echo
-	@echo "OS ${UNAME_OS} from ${UNAME_OUTPUT}"
+	@echo "OS ${UNAME_OS}"
 	@echo "Compile C and C++ source with CPPFLAGS:"
 	@$(call debug_print_list,$(CPPFLAGS))
 	@echo "Compile C++ source with CXXFLAGS:"
