@@ -237,7 +237,6 @@ void TestOutput::printVistualStudioErrorInFileOnLine(SimpleString file, int line
 void ConsoleTestOutput::printBuffer(const char* s)
 {
 	while (*s) {
-		if ('\n' == *s) PlatformSpecificPutchar('\r');
 		PlatformSpecificPutchar(*s);
 		s++;
 	}
