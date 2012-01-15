@@ -32,6 +32,7 @@
 #include <stdlib.h>
 #include <setjmp.h>
 #include <string.h>
+#include <ctype.h>
 #include <math.h>
 #include "CppUTest/TestHarness.h"
 #undef malloc
