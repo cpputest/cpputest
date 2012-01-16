@@ -133,15 +133,10 @@ SimpleString VStringFromFormat(const char* format, va_list args);
 
 #if CPPUTEST_USE_STD_CPP_LIB
 
-//<string> overrides malloc and malloc needs to be restored after <string>
-#ifdef malloc
-#define malloc_overriden
-#endif
-
 #undef new
 #include <string>
 
-#ifdef malloc_overriden
+#ifdef CPPUTEST_USE_MALLOC_MACROS
 #include "CppUTest/MemoryLeakDetectorMallocMacros.h"
 #endif
 

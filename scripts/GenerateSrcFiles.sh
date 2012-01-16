@@ -8,11 +8,11 @@
 #Test for env var set.
 checkForCppUTestToolsEnvVariable() {
 	if [ -z "$CPPUTEST_HOME" ] ; then
-	   echo "CPPUTEST_HOME not set"
+	   echo "CPPUTEST_HOME not set. You must set CPPUTEST_HOME to the top level CppUTest directory"
 	   exit 1
 	fi
 	if [ ! -d "$CPPUTEST_HOME" ] ; then
-	   echo "CPPUTEST_HOME not set to a directory"
+	   echo "CPPUTEST_HOME not set to a directory.  You must set CPPUTEST_HOME to the top level CppUTest directory"
 	   exit 2
 	fi
 }
