@@ -13,7 +13,6 @@ extern "C"
 
 TEST_GROUP(BasicBehavior)
 {
-
 };
 
 TEST(BasicBehavior, CanDeleteNullPointers)
@@ -59,6 +58,17 @@ TEST_GROUP(MemoryLeakOverridesToBeUsedInProductionCode)
 
 };
 
+#if CPPUTEST_USE_MALLOC_MACROS
+
+TEST(MemoryLeakOverridesToBeUsedInProductionCode, MallocOverrideIsUsed)
+{
+	int memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
+	void* memory = malloc(10);
+	LONGS_EQUAL(memLeaks+1, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
+	free (memory);
+}
+
+#endif
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, UseNativeMallocByTemporarlySwitchingOffMalloc)
 {
