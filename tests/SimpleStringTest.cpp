@@ -407,6 +407,12 @@ TEST(SimpleString, Doubles)
 	STRCMP_EQUAL("1.2", s.asCharString());
 }
 
+TEST(SimpleString, SmallDoubles)
+{
+	SimpleString s(StringFrom(1.2e-10));
+	STRCMP_EQUAL("1.2e-10", s.asCharString());
+}
+
 TEST(SimpleString, Sizes)
 {
 	size_t size = 10;

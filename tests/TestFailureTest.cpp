@@ -191,13 +191,6 @@ TEST(TestFailure, StringsEqualNoCaseFailure2)
 			    "\t                                               ^", f);
 }
 
-TEST(TestFailure, SmallDoublesEqualNormal)
-{
-	DoublesEqualFailure f(test, failFileName, failLineNumber, 1.0e-7, 1.01e-7, 1.0e-10);
-	FAILURE_EQUAL("expected <1e-07>\n"
-			    "\tbut was  <1.01e-07> threshold used was <1e-10>", f);
-}
-
 TEST(TestFailure, DoublesEqualNormal)
 {
 	DoublesEqualFailure f(test, failFileName, failLineNumber, 1.0, 2.0, 3.0);
