@@ -73,7 +73,7 @@ TEST(TestHarness_c, checkReal)
 	CHECK_EQUAL_C_REAL(1.0, 1.1, 0.5);
 	fixture->setTestFunction(_failRealMethod);
 	fixture->runAllTests();
-	fixture->assertPrintContains("expected <1.000000>\n	but was  <2.000000>");
+	fixture->assertPrintContains("expected <1>\n	but was  <2>");
 	fixture->assertPrintContains("arness_c");
 }
 

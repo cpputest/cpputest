@@ -70,7 +70,7 @@ void TestOutput::print(long n)
 
 void TestOutput::printDouble(double d)
 {
-	print(StringFrom(d, 3).asCharString());
+	print(StringFrom(d).asCharString());
 }
 
 void TestOutput::printHex(long n)

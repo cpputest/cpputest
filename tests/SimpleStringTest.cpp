@@ -404,9 +404,7 @@ TEST(SimpleString, Characters)
 TEST(SimpleString, Doubles)
 {
 	SimpleString s(StringFrom(1.2));
-	STRCMP_EQUAL("1.200000", s.asCharString());
-	s = StringFrom(1.2, 2);
-	STRCMP_EQUAL("1.20", s.asCharString());
+	STRCMP_EQUAL("1.2", s.asCharString());
 }
 
 TEST(SimpleString, Sizes)

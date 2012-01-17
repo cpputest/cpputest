@@ -191,33 +191,40 @@ TEST(TestFailure, StringsEqualNoCaseFailure2)
 			    "\t                                               ^", f);
 }
 
+TEST(TestFailure, SmallDoublesEqualNormal)
+{
+	DoublesEqualFailure f(test, failFileName, failLineNumber, 1.0e-7, 1.01e-7, 1.0e-10);
+	FAILURE_EQUAL("expected <1e-07>\n"
+			    "\tbut was  <1.01e-07> threshold used was <1e-10>", f);
+}
+
 TEST(TestFailure, DoublesEqualNormal)
 {
 	DoublesEqualFailure f(test, failFileName, failLineNumber, 1.0, 2.0, 3.0);
-	FAILURE_EQUAL("expected <1.000000>\n"
-			    "\tbut was  <2.000000> threshold used was <3.000000>", f);
+	FAILURE_EQUAL("expected <1>\n"
+			    "\tbut was  <2> threshold used was <3>", f);
 }
 
 TEST(TestFailure, DoublesEqualExpectedIsNaN)
 {
 	DoublesEqualFailure f(test, failFileName, failLineNumber, nan, 2.0, 3.0);
 	FAILURE_EQUAL("expected <Nan - Not a number>\n"
-			    "\tbut was  <2.000000> threshold used was <3.000000>\n"
+			    "\tbut was  <2> threshold used was <3>\n"
 			    "\tCannot make comparisons with Nan", f);
 }
 
 TEST(TestFailure, DoublesEqualActualIsNaN)
 {
 	DoublesEqualFailure f(test, failFileName, failLineNumber, 1.0, nan, 3.0);
-	FAILURE_EQUAL("expected <1.000000>\n"
-			    "\tbut was  <Nan - Not a number> threshold used was <3.000000>\n"
+	FAILURE_EQUAL("expected <1>\n"
+			    "\tbut was  <Nan - Not a number> threshold used was <3>\n"
 			    "\tCannot make comparisons with Nan", f);
 }
 
 TEST(TestFailure, DoublesEqualThresholdIsNaN)
 {
 	DoublesEqualFailure f(test, failFileName, failLineNumber, 1.0, 2.0, nan);
-	FAILURE_EQUAL("expected <1.000000>\n"
-			    "\tbut was  <2.000000> threshold used was <Nan - Not a number>\n"
+	FAILURE_EQUAL("expected <1>\n"
+			    "\tbut was  <2> threshold used was <Nan - Not a number>\n"
 			    "\tCannot make comparisons with Nan", f);
 }

@@ -167,7 +167,7 @@ static SimpleString StringFromOrNan(double d)
 {
 	if (PlatformSpecificIsNan(d))
 		return "Nan - Not a number";
-	return StringFrom(d);
+	return StringFrom(d, 6);
 }
 
 DoublesEqualFailure::DoublesEqualFailure(UtestShell* test, const char* fileName, int lineNumber, double expected, double actual, double threshold)  : TestFailure(test, fileName, lineNumber)

@@ -91,7 +91,7 @@ TEST(TestOutput, PrintLong)
 TEST(TestOutput, PrintDouble)
 {
 	printer->printDouble(12.34);
-	STRCMP_EQUAL("12.340", mock->getOutput().asCharString());
+	STRCMP_EQUAL("12.34", mock->getOutput().asCharString());
 }
 
 TEST(TestOutput, StreamOperators)

@@ -381,7 +381,7 @@ SimpleString HexStringFrom(long value)
 
 SimpleString StringFrom(double value, int precision)
 {
-	SimpleString format = StringFromFormat("%%.%df", precision);
+	SimpleString format = StringFromFormat("%%.%dg", precision);
 	return StringFromFormat(format.asCharString(), value);
 }
 
