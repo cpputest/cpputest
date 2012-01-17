@@ -133,16 +133,7 @@ SimpleString VStringFromFormat(const char* format, va_list args);
 
 #if CPPUTEST_USE_STD_CPP_LIB
 
-#undef new
 #include <string>
-
-#ifdef CPPUTEST_USE_MALLOC_MACROS
-#include "CppUTest/MemoryLeakDetectorMallocMacros.h"
-#endif
-
-#if CPPUTEST_USE_NEW_MACROS
-#include "CppUTest/MemoryLeakDetectorNewMacros.h"
-#endif
 #include <stdint.h>
 
 SimpleString StringFrom(const std::string& other);

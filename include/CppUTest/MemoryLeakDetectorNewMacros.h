@@ -48,8 +48,10 @@
 /* This #ifndef prevents <new> from being included twice and enables the file to be included anywhere */
 #ifndef CPPUTEST_USE_NEW_MACROS
 
-#if CPPUTEST_USE_STD_CPP_LIB
+	#if CPPUTEST_USE_STD_CPP_LIB
 	#include <new>
+	#include <memory>
+	#include <string>
 
 		void* operator new(size_t size, const char* file, int line) throw (std::bad_alloc);
 		void* operator new[](size_t size, const char* file, int line) throw (std::bad_alloc);
