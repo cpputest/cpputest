@@ -410,7 +410,7 @@ TEST(SimpleString, Doubles)
 TEST(SimpleString, SmallDoubles)
 {
 	SimpleString s(StringFrom(1.2e-10));
-	STRCMP_EQUAL("1.2e-10", s.asCharString());
+	STRCMP_CONTAINS("1.2e", s.asCharString());
 }
 
 TEST(SimpleString, Sizes)
