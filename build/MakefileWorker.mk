@@ -319,7 +319,6 @@ STUFF_TO_CLEAN += \
 	$(GCOV_GCNO_FILES)\
 	$(TEST_OUTPUT)
 
-
 CPPUTEST_CPPFLAGS +=  $(INCLUDES) 
 
 #The gcda files for gcov need to be deleted before each run
@@ -342,6 +341,8 @@ CFLAGS = $(CPPUTEST_CFLAGS) $(CPPUTEST_ADDITIONAL_CFLAGS)
 CPPFLAGS = $(CPPUTEST_CPPFLAGS) $(CPPUTEST_ADDITIONAL_CPPFLAGS)
 CXXFLAGS = $(CPPUTEST_CXXFLAGS) $(CPPUTEST_ADDITIONAL_CXXFLAGS)
 LDFLAGS = $(CPPUTEST_LDFLAGS) $(CPPUTEST_ADDITIONAL_LDFLAGS)
+
+DEP_FLAGS=-MMD -MP
 
 # Some macros for programs to be overridden. For some reason, these are not in Make defaults
 RANLIB = ranlib
@@ -395,12 +396,12 @@ vtest: $(TEST_TARGET)
 $(CPPUTEST_OBJS_DIR)/%.o: %.cpp
 	@echo compiling $(notdir $<)
 	$(SILENCE)mkdir -p $(dir $@)
-	$(SILENCE)$(COMPILE.cpp) -MMD -MP $(OUTPUT_OPTION) $<
+	$(SILENCE)$(COMPILE.cpp) $(DEP_FLAGS) $(OUTPUT_OPTION) $<
 
 $(CPPUTEST_OBJS_DIR)/%.o: %.c
 	@echo compiling $(notdir $<)
 	$(SILENCE)mkdir -p $(dir $@)
-	$(SILENCE)$(COMPILE.c) -MMD -MP  $(OUTPUT_OPTION) $<
+	$(SILENCE)$(COMPILE.c) $(DEP_FLAGS)  $(OUTPUT_OPTION) $<
 
 ifneq "$(MAKECMDGOALS)" "clean"
 -include $(DEP_FILES)
