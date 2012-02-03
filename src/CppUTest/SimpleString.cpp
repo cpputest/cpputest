@@ -459,6 +459,7 @@ SimpleString VStringFromFormat(const char* format, va_list args)
 
 		SimpleString::deallocStringBuffer(newBuffer);
 	}
+	va_end(argsCopy);
 	return resultString;
 }
 
