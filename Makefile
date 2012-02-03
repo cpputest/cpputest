@@ -73,8 +73,17 @@ test_all: start test_old_make
 	make clean
 	make CPPUTEST_MAP_FILE=map.txt
 	make clean
-	$(TIME) make CPPUTEST_USE_GCOV=Y
+	@echo Testing GCOV usage
+	$(TIME) make CPPUTEST_USE_GCOV=Y everythingInstall
 	make gcov
+	make -f Makefile_CppUTestExt gcov
+	make -C examples gcov
+	make cleanEverythingInstall
+	@echo Testing VPATH usage
+	$(TIME) make CPPUTEST_USE_GCOV=Y CPPUTEST_USE_VPATH=Y everythingInstall
+	make CPPUTEST_USE_VPATH=Y gcov
+	make CPPUTEST_USE_VPATH=Y -f Makefile_CppUTestExt gcov
+	make CPPUTEST_USE_VPATH=Y -C examples gcov	
 	make clean
 	@echo Testing VPATH usage
 	$(TIME) make CPPUTEST_USE_VPATH=Y everythingInstall
