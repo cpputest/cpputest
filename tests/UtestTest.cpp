@@ -187,11 +187,11 @@ TEST(UtestShell, FailureWithDOUBLES_EQUAL)
 TEST(UtestShell, compareDoubles)
 {
 	double zero = 0.0;
-	double nan = zero / zero;
+	double not_a_number = zero / zero;
 	CHECK(doubles_equal(1.0, 1.001, 0.01));
-	CHECK(!doubles_equal(nan, 1.001, 0.01));
-	CHECK(!doubles_equal(1.0, nan, 0.01));
-	CHECK(!doubles_equal(1.0, 1.001, nan));
+	CHECK(!doubles_equal(not_a_number, 1.001, 0.01));
+	CHECK(!doubles_equal(1.0, not_a_number, 0.01));
+	CHECK(!doubles_equal(1.0, 1.001, not_a_number));
 	CHECK(!doubles_equal(1.0, 1.1, 0.05));
 
 	double a = 1.2345678;
