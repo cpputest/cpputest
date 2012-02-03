@@ -28,45 +28,45 @@ include $(CPPUTEST_HOME)/build/MakefileWorker.mk
 #these are a sample of the other alternative flag settings
 .PHONY: test_all
 test_all: start test_old_make
-	$(SILENCE)echo Building with the default flags.
+	@echo Building with the default flags.
 	make clean
 	$(TIME) make 
 	./$(TEST_TARGET) -r
 	make clean
-	$(SILENCE)echo Building with the STDC++ new disabled. 
+	@echo Building with the STDC++ new disabled. 
 	$(TIME) make CPPUTEST_USE_STD_CPP_LIB=Y extensions 
 	make CPPUTEST_USE_STD_CPP_LIB=Y cleanExtensions
-	$(SILENCE)echo Building with Memory Leak Detection disabled
+	@echo Building with Memory Leak Detection disabled
 	$(TIME) make CPPUTEST_USE_MEM_LEAK_DETECTION=N extensions
 	make CPPUTEST_USE_MEM_LEAK_DETECTION=N cleanExtensions
-	$(SILENCE)echo Building with Memory Leak Detection disabled and STD C++ disabled
+	@echo Building with Memory Leak Detection disabled and STD C++ disabled
 	$(TIME) make CPPUTEST_USE_MEM_LEAK_DETECTION=N CPPUTEST_USE_STD_CPP_LIB=Y extensions
 	make CPPUTEST_USE_MEM_LEAK_DETECTION=N CPPUTEST_USE_STD_CPP_LIB=Y cleanExtensions
-	$(SILENCE)echo Building with debug disabled
+	@echo Building with debug disabled
 	$(TIME) make CPPUTEST_ENABLE_DEBUG=N extensions
 	make CPPUTEST_ENABLE_DEBUG=N cleanExtensions
-	$(SILENCE)echo Building with overridden CXXFLAGS and CFLAGS and CPPFLAGS
+	@echo Building with overridden CXXFLAGS and CFLAGS and CPPFLAGS
 	$(TIME) make CLFAGS="" CXXFLAGS="" CPPFLAGS="-Iinclude"
 	make CFLAGS="" CXXFLAGS="" clean
-	$(SILENCE)echo Building without Standard C library includes
+	@echo Building without Standard C library includes
 	$(TIME) make CPPUTEST_USE_STD_C_LIB=N all_no_tests
 	make CPPUTEST_USE_STD_C_LIB=N clean
-	$(SILENCE)echo Building with overridden CXXFLAGS and CFLAGS and memory leak and STDC++ disabled
+	@echo Building with overridden CXXFLAGS and CFLAGS and memory leak and STDC++ disabled
 	$(TIME) make CLFAGS="" CXXFLAGS="" CPPFLAGS="-Iinclude -DCPPUTEST_STD_CPP_LIB_DISABLED -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED"
 	make CFLAGS="" CXXFLAGS="" CPPFLAGS="-DCPPUTEST_STD_CPP_LIB_DISABLED -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED" clean
-	$(SILENCE)echo Building CppUTest with Google Test 
+	@echo Building CppUTest with Google Test 
 	$(SILENCE) if [ -z $$GTEST_HOME ]; then  \
 	   echo "******** WARNING: Can't test with CPPUTEST_USE_REAL_GTEST because can't find Google Test -- no GTEST_HOME set ********"; \
 	   else $(TIME) make extensions CPPUTEST_USE_REAL_GTEST=Y; fi
-	$(SILENCE)echo Building CppUTest with Google Mock 
+	@echo Building CppUTest with Google Mock 
 	$(SILENCE) if [ -z $$GMOCK_HOME ]; then  \
 	   echo "******** WARNING: Can't test with CPPUTEST_USE_REAL_GMOCK because can't find Google Mock -- no GMOCK_HOME set ********"; \
 	   else $(TIME) make extensions CPPUTEST_USE_REAL_GMOCK=Y; fi
-	$(SILENCE)echo Building examples 
+	@echo Building examples 
 	make cleanExamples
 	$(TIME) make examples
 	make cleanExamples
-	$(SILENCE)echo Testing JUnit output
+	@echo Testing JUnit output
 	$(TIME) make
 	$(SILENCE)./$(TEST_TARGET) -ojunit > junit_run_output
 	$(SILENCE)if [ -s junit_run_output ]; then echo "JUnit run has output. Build failed!"; exit 1; fi
@@ -76,7 +76,7 @@ test_all: start test_old_make
 	$(TIME) make CPPUTEST_USE_GCOV=Y
 	make gcov
 	make clean
-	$(SILENCE)echo Testing VPATH usage
+	@echo Testing VPATH usage
 	$(TIME) make CPPUTEST_USE_VPATH=Y everythingInstall
 	make CPPUTEST_USE_VPATH=Y cleanEverythingInstall
 	make flags

@@ -378,11 +378,11 @@ flags:
 	@$(call debug_print_list,$(ARFLAGS))
 
 $(TEST_TARGET): $(TEST_OBJS) $(MOCKS_OBJS)  $(PRODUCTION_CODE_START) $(TARGET_LIB) $(USER_LIBS) $(PRODUCTION_CODE_END) $(CPPUTEST_LIB) $(STDLIB_CODE_START) 
-	$(SILENCE)echo Linking $@
+	@echo Linking $@
 	$(SILENCE)$(LINK.o) -o $@ $^ $(LD_LIBRARIES)
 
 $(TARGET_LIB): $(OBJ)
-	$(SILENCE)echo Building archive $@
+	@echo Building archive $@
 	$(SILENCE)mkdir -p lib
 	$(SILENCE)$(AR) $(ARFLAGS) $@ $^
 	$(SILENCE)$(RANLIB) $@
@@ -409,7 +409,7 @@ endif
 
 .PHONY: clean
 clean:
-	$(SILENCE)echo Making clean
+	@echo Making clean
 	$(SILENCE)$(RM) $(STUFF_TO_CLEAN)
 	$(SILENCE)rm -rf gcov $(CPPUTEST_OBJS_DIR)
 	$(SILENCE)find . -name "*.gcno" | xargs rm -f
@@ -439,7 +439,7 @@ endif
 	$(SILENCE)mkdir -p gcov
 	$(SILENCE)mv *.gcov gcov
 	$(SILENCE)mv gcov_* gcov
-	$(SILENCE)echo "See gcov directory for details"
+	@echo "See gcov directory for details"
  
 .PHONEY: format
 format: 
