@@ -28,6 +28,14 @@ sed '-e s/^Lines.*://g' \
     '-e s/^.*\.$//g' 
 }
 
+flattenPaths() {
+sed \
+    -e 's/\/[^/][^/]*\/[^/][^/]*\/\.\.\/\.\.\//\//g' \
+    -e 's/\/[^/][^/]*\/[^/][^/]*\/\.\.\/\.\.\//\//g' \
+    -e 's/\/[^/][^/]*\/[^/][^/]*\/\.\.\/\.\.\//\//g' \
+    -e 's/\/[^/][^/]*\/\.\.\//\//g'
+}
+
 getFileNameRootFromErrorFile() {
 sed '-e s/gc..:cannot open .* file//g' ${ERROR_FILE}
 }
@@ -48,9 +56,8 @@ createHtmlOutput() {
     sed "-e s/.*/&<br>/g" < ${TEST_RESULTS}
 }
 
-
-flattenGcovOutput | getRidOfCruft  > ${TEMP_FILE1}
-getFileNameRootFromErrorFile | writeEachNoTestCoverageFile > ${TEMP_FILE2}
+flattenGcovOutput | getRidOfCruft | flattenPaths  > ${TEMP_FILE1}
+getFileNameRootFromErrorFile | writeEachNoTestCoverageFile | flattenPaths > ${TEMP_FILE2}
 cat ${TEMP_FILE1}  ${TEMP_FILE2} | sort | uniq > ${OUTPUT_FILE}
 createHtmlOutput < ${OUTPUT_FILE} > ${HTML_OUTPUT_FILE}
 rm -f ${TEMP_FILE1} ${TEMP_FILE2} 
