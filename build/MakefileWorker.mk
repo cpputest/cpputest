@@ -27,6 +27,10 @@
 # and where to put and name outputs
 # See below to determine defaults
 #   COMPONENT_NAME - the name of the thing being built
+#   TEST_TARGET - name the test executable. By default it is 
+#			$(COMPONENT_NAME)_tests
+#		Helpful if you want 1 > make files in the same directory with different
+#		executables as output.
 #   CPPUTEST_HOME - where CppUTest home dir found
 #   CPPUTEST_OBJS_DIR - a directory where o and d files go
 #   CPPUTEST_LIB_DIR - a directory where libs go
@@ -259,8 +263,9 @@ LD_LIBRARIES += -lstdc++ -lgcov
 TARGET_LIB = \
     $(CPPUTEST_LIB_DIR)/lib$(COMPONENT_NAME).a
     
-TEST_TARGET = \
-    $(COMPONENT_NAME)_tests
+ifndef TEST_TARGET
+TEST_TARGET = $(COMPONENT_NAME)_tests
+endif
 
 #Helper Functions
 get_src_from_dir  = $(wildcard $1/*.cpp) $(wildcard $1/*.c)
