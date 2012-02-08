@@ -66,6 +66,7 @@
     <Lib>
       <OutputFile>$(OutDir)CppUTest.lib</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
+      <AdditionalDependencies>winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -81,6 +82,9 @@ copy $(OutDir)CppUTest.lib lib\CppUTest.lib
 copy $(OutDir)vc100.pdb lib\vs2010
 </Command>
     </PostBuildEvent>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>

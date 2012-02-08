@@ -54,7 +54,7 @@
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="4"
-				ForcedIncludeFiles="..\include\Platforms\VisualCpp\Platform.h"
+				ForcedIncludeFiles="..\include\Platforms\VisualCpp\Platform.h;..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -69,6 +69,8 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				LinkLibraryDependencies="true"
+				AdditionalDependencies="winmm.lib"
 				OutputFile=".\lib\CppUTest.lib"
 				SuppressStartupBanner="true"
 			/>
@@ -174,11 +176,19 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
+				RelativePath=".\src\CppUTestExt\CodeMemoryReportFormatter.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\src\CppUTest\CommandLineArguments.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\src\CppUTest\CommandLineTestRunner.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\CppUTestExt\GTestConvertor.cpp"
 				>
 			</File>
 			<File
@@ -191,6 +201,58 @@
 			</File>
 			<File
 				RelativePath=".\src\CppUTest\MemoryLeakWarningPlugin.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\CppUTestExt\MemoryReportAllocator.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\CppUTestExt\MemoryReporterPlugin.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\CppUTestExt\MemoryReportFormatter.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\CppUTestExt\MockActualFunctionCall.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\CppUTestExt\MockExpectedFunctionCall.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\CppUTestExt\MockExpectedFunctionsList.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\CppUTestExt\MockFailure.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\CppUTestExt\MockFunctionCall.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\CppUTestExt\MockNamedValue.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\CppUTestExt\MockSupport.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\CppUTestExt\MockSupport_c.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\CppUTestExt\MockSupportPlugin.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\CppUTestExt\OrderedTest.cpp"
 				>
 			</File>
 			<File
@@ -351,6 +413,10 @@
 				RelativePath=".\include\CppUTest\VirtualCall.h"
 				>
 			</File>
+		</Filter>
+		<Filter
+			Name="ext"
+			>
 		</Filter>
 	</Files>
 	<Globals>

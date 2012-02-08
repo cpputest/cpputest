@@ -133,7 +133,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\include,..\include\Platforms\VisualCpp"
+				AdditionalIncludeDirectories="..\include;..\include\Platforms\VisualCpp;..\include\CppUTestExt\CppUTestGMock;..\include\CppUTestExt\CppUTestGTest"
 				PreprocessorDefinitions="_CONSOLE;WIN32;_DEBUG"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -145,7 +145,7 @@
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="4"
-				ForcedIncludeFiles="..\include\Platforms\VisualCpp\Platform.h"
+				ForcedIncludeFiles="..\include\Platforms\VisualCpp\Platform.h;..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -160,7 +160,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="..\lib\CppUTest.lib odbc32.lib odbccp32.lib winmm.lib"
+				AdditionalDependencies="..\lib\CppUTest.lib $(NOINHERIT)"
 				OutputFile=".\Debug/AllTests.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
@@ -213,7 +213,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\AllTests.cpp"
+				RelativePath=".\CppUTestExt\AllTests.cpp"
 				>
 			</File>
 			<File
@@ -326,6 +326,82 @@
 			Name="Resource Files"
 			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 			>
+		</Filter>
+		<Filter
+			Name="ext"
+			>
+			<File
+				RelativePath=".\CppUTestExt\TestCodeMemoryReportFormatter.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CppUTestExt\TestGMock.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CppUTestExt\TestGTest.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CppUTestExt\TestMemoryReportAllocator.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CppUTestExt\TestMemoryReporterPlugin.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CppUTestExt\TestMemoryReportFormatter.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CppUTestExt\TestMockActualFunctionCall.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CppUTestExt\TestMockCheatSheet.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CppUTestExt\TestMockExpectedFunctionCall.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CppUTestExt\TestMockExpectedFunctionsList.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CppUTestExt\TestMockFailure.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CppUTestExt\TestMockFailure.h"
+				>
+			</File>
+			<File
+				RelativePath=".\CppUTestExt\TestMockPlugin.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CppUTestExt\TestMockSupport.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CppUTestExt\TestMockSupport_c.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CppUTestExt\TestMockSupport_cCFile.c"
+				>
+			</File>
+			<File
+				RelativePath=".\CppUTestExt\TestMockSupport_cCFile.h"
+				>
+			</File>
+			<File
+				RelativePath=".\CppUTestExt\TestOrderedTest.cpp"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>
