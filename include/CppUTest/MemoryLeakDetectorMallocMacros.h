@@ -38,7 +38,7 @@ extern "C"
 
 extern void* cpputest_malloc_location(size_t size, const char* file, int line);
 extern void* cpputest_calloc_location(size_t count, size_t size, const char* file, int line);
-extern void* cpputest_ralloc_location(void *, size_t, const char* file, int line);
+extern void* cpputest_realloc_location(void *, size_t, const char* file, int line);
 extern void cpputest_free_location(void* buffer, const char* file, int line);
 
 #ifdef __cplusplus

@@ -214,15 +214,27 @@ TEST(TestHarness_c, cpputest_realloc_larger)
 
 	cpputest_free(mem2);
 }
+
 #if CPPUTEST_USE_MEM_LEAK_DETECTION
+
+#include "CppUTest/MemoryLeakDetector.h"
 
 TEST(TestHarness_c, macros)
 {
+	MemoryLeakDetector* memLeakDetector = MemoryLeakWarningPlugin::getGlobalDetector();
+	int memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
 	void* mem1 = malloc(10);
 	void* mem2 = calloc(10, 20);
 	void* mem3 = realloc(mem2, 100);
+#if CPPUTEST_USE_MALLOC_MACROS
+	LONGS_EQUAL(memLeaks + 2, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
+#endif
 	free(mem1);
 	free(mem3);
+#if CPPUTEST_USE_MALLOC_MACROS
+	LONGS_EQUAL(memLeaks, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
+#endif
+
 }
 
 TEST(TestHarness_c, callocInitializedToZero)
