@@ -1,3 +1,6 @@
+
+#ifndef CPPUTEST_STD_C_LIB_DISABLED
+
 #include "AllocLetTestFree.h"
 #include <stdlib.h>
 #include <memory.h>
@@ -9,12 +12,14 @@ typedef struct AllocLetTestFreeStruct
 
 AllocLetTestFree AllocLetTestFree_Create(void)
 {
-     AllocLetTestFree self = calloc(1, sizeof(AllocLetTestFreeStruct));
-     return self;
+	size_t count = 1;
+    AllocLetTestFree self = calloc(count, sizeof(AllocLetTestFreeStruct));
+    return self;
 }
 
 void AllocLetTestFree_Destroy(AllocLetTestFree self)
 {
+	self->placeHolderForHiddenStructElements = 1;
 }
 
-
+#endif
