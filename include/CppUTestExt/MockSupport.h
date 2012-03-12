@@ -90,6 +90,7 @@ public:
 
 protected:
     virtual MockActualFunctionCall *createActualFunctionCall();
+    virtual void failTest(MockFailure& failure);
 private:
     static int callOrder_;
     static int expectedCallOrder_;

@@ -927,6 +927,16 @@ TEST(MockSupportTest, tracing)
 	STRCMP_CONTAINS("foo", mock().getTraceOutput());
 }
 
+TEST(MockSupportTest, shouldntFailTwice)
+{
+	mock().expectOneCall("foo");
+	mock().actualCall("bar");
+	mock().checkExpectations();
+	LONGS_EQUAL(1, MockFailureReporterForTest::getReporter()->getAmountOfTestFailures());
+	CLEAR_MOCK_FAILURE();
+}
+
+
 IGNORE_TEST(MockSupportTest, testForPerformanceProfiling)
 {
 	/* TO fix! */

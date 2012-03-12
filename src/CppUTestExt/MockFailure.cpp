@@ -33,6 +33,7 @@
 void MockFailureReporter::failTest(const MockFailure& failure)
 {
 	getTestToFail()->getTestResult()->addFailure(failure);
+
 	if (crashOnFailure_)
 		UT_CRASH();
 
@@ -42,6 +43,11 @@ void MockFailureReporter::failTest(const MockFailure& failure)
 UtestShell* MockFailureReporter::getTestToFail()
 {
 	return UtestShell::getCurrent();
+}
+
+int MockFailureReporter::getAmountOfTestFailures()
+{
+	return getTestToFail()->getTestResult()->getFailureCount();
 }
 
 MockFailure::MockFailure(UtestShell* test) : TestFailure(test, "Test failed with MockFailure without an error! Something went seriously wrong.")

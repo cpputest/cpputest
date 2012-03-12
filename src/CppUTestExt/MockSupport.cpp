@@ -244,7 +244,7 @@ void MockSupport::failTestWithUnexpectedCalls()
 
     MockExpectedCallsDidntHappenFailure failure(reporter_->getTestToFail(), expectationsList);
     clear();
-    reporter_->failTest(failure);
+    failTest(failure);
 }
 
 void MockSupport::failTestWithOutOfOrderCalls()
@@ -258,7 +258,13 @@ void MockSupport::failTestWithOutOfOrderCalls()
 
     MockCallOrderFailure failure(reporter_->getTestToFail(), expectationsList);
     clear();
-    reporter_->failTest(failure);
+    failTest(failure);
+}
+
+void MockSupport::failTest(MockFailure& failure)
+{
+	if (reporter_->getAmountOfTestFailures() == 0)
+		reporter_->failTest(failure);
 }
 
 void MockSupport::checkExpectationsOfLastCall()

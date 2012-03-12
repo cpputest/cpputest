@@ -46,6 +46,7 @@ public:
 
 	virtual void failTest(const MockFailure& failure);
 	virtual UtestShell* getTestToFail();
+	virtual int getAmountOfTestFailures();
 
 	virtual void crashOnFailure() {crashOnFailure_ = true; }
 };
