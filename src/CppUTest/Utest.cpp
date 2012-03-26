@@ -491,6 +491,31 @@ void ExecFunctionTest::teardown()
 	if (shell_->teardown_) shell_->teardown_();
 }
 
+/////////////// IgnoredUtestShell /////////////
+IgnoredUtestShell::IgnoredUtestShell()
+{
+}
+
+IgnoredUtestShell::~IgnoredUtestShell()
+{
+}
+
+const char* IgnoredUtestShell::getProgressIndicator() const
+{
+	return "!";
+}
+
+SimpleString IgnoredUtestShell::getMacroName() const
+{
+	return "IGNORE_TEST";
+}
+
+void IgnoredUtestShell::runOneTestWithPlugins(TestPlugin* plugin, TestResult& result)
+{
+	result.countIgnored();
+}
+
+
 ////////////// TestInstaller ////////////
 
 TestInstaller::TestInstaller(UtestShell& shell, const char* groupName, const char* testName, const char* fileName, int lineNumber)

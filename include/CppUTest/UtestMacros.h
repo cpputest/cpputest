@@ -30,12 +30,13 @@
 
 /*! \brief Define a group of tests
  *
- * All tests in a TEST_GROUP share the same setup
- * and teardown.  setup is run before the opening
- * curly brace of the test group and teardown is
- * called after the closing curly brace of the test group.
+ * All tests in a TEST_GROUP share the same setup()
+ * and teardown().  setup() is run before the opening
+ * curly brace of each TEST and teardown() is
+ * called after the closing curly brace of TEST.
  *
  */
+
 
 #define TEST_GROUP_BASE(testGroup, baseclass) \
   int externTestGroup##testGroup = 0; \
@@ -66,13 +67,8 @@
 #define IGNORE_TEST(testGroup, testName)\
   class IGNORE##testGroup##_##testName##_Test : public TEST_GROUP_##CppUTestGroup##testGroup \
 { public: IGNORE##testGroup##_##testName##_Test () : TEST_GROUP_##CppUTestGroup##testGroup () {} \
-    virtual void run (TestResult& result_parameter) { \
-    	result_parameter.countIgnored(); } \
-    virtual const char* getProgressIndicator() const {return "!";} \
-  protected:  virtual SimpleString getMacroName() const \
-      { return "IGNORE_TEST"; } \
   public: void testBodyThatNeverRuns (); }; \
-  class IGNORE##testGroup##_##testName##_TestShell : public UtestShell { \
+  class IGNORE##testGroup##_##testName##_TestShell : public IgnoredUtestShell { \
 	  virtual Utest* createTest() { return new IGNORE##testGroup##_##testName##_Test; } \
   } IGNORE##testGroup##_##testName##_TestShell_instance; \
    TestInstaller TEST_##testGroup##testName##_Installer(IGNORE##testGroup##_##testName##_TestShell_instance, #testGroup, #testName, __FILE__,__LINE__); \

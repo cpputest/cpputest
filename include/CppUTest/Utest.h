@@ -200,6 +200,26 @@ public:
 	int dummy_;
 };
 
+//////////////////// IgnoredTest
+
+class IgnoredUtestShell : public UtestShell
+{
+public:
+	IgnoredUtestShell();
+	virtual ~IgnoredUtestShell();
+	explicit IgnoredUtestShell(const char* groupName, const char* testName,
+			const char* fileName, int lineNumber);
+	virtual const char* getProgressIndicator() const;
+	protected:  virtual SimpleString getMacroName() const;
+    virtual void runOneTestWithPlugins(TestPlugin* plugin, TestResult& result);
+
+private:
+
+	IgnoredUtestShell(const IgnoredUtestShell&);
+	IgnoredUtestShell& operator=(const IgnoredUtestShell&);
+
+};
+
 //////////////////// TestInstaller
 
 class TestInstaller
