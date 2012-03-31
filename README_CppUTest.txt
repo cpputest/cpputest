@@ -25,8 +25,8 @@ Test Macros
     * TEST_SETUP() - Declare a void setup method in a TEST_GROUP
             - this is the same as declaring void setup()
     * TEST_TEARDOWN() - Declare a void setup method in a TEST_GROUP
-    * EXPORT_TEST_GROUP(group) - Export the name of a test group so it can 
-      be linked in from a library
+    * IMPORT_TEST_GROUP(group) - Export the name of a test group so it can 
+      be linked in from a library. Needs to be done in main.
 
 
 Set up and tear down support
