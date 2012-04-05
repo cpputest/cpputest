@@ -510,7 +510,7 @@ SimpleString IgnoredUtestShell::getMacroName() const
 	return "IGNORE_TEST";
 }
 
-void IgnoredUtestShell::runOneTestWithPlugins(TestPlugin* plugin, TestResult& result)
+void IgnoredUtestShell::runOneTestWithPlugins(TestPlugin* /* plugin */, TestResult& result)
 {
 	result.countIgnored();
 }
