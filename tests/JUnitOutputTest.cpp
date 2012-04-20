@@ -201,12 +201,12 @@ TEST_GROUP(JUnitOutputTest)
 			STRCMP_EQUAL("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n", string.asCharString());
 		}
 
-		void CHECK_TEST_SUITE_START(SimpleString output)
+		void CHECK_TEST_SUITE_START(SimpleString out)
 		{
 			TestGroupData& group = currentGroup();
 			SimpleString buf = StringFromFormat("<testsuite errors=\"0\" failures=\"%d\" hostname=\"localhost\" name=\"%s\" tests=\"%d\" time=\"0.050\" timestamp=\"%s\">\n", group.totalFailures_,
 					group.name_.asCharString(), group.numberTests_, theTime);
-			CHECK_EQUAL(buf, output);
+			CHECK_EQUAL(buf, out);
 		}
 
 		void CHECK_XML_FILE()
@@ -225,30 +225,31 @@ TEST_GROUP(JUnitOutputTest)
 			CHECK_TEST_SUITE_END(col[col.size() - 1]);
 		}
 
-		void CHECK_PROPERTIES_START(const SimpleString& output)
+		void CHECK_PROPERTIES_START(const SimpleString& out)
 		{
-			STRCMP_EQUAL("<properties>\n", output.asCharString());
+			STRCMP_EQUAL("<properties>\n", out.asCharString());
 		}
 
-		void CHECK_PROPERTIES_END(const SimpleString& output)
+		void CHECK_PROPERTIES_END(const SimpleString& out)
 		{
-			STRCMP_EQUAL("</properties>\n", output.asCharString());
+			STRCMP_EQUAL("</properties>\n", out.asCharString());
 		}
 
-		void CHECK_SYSTEM_OUT(const SimpleString& output)
+		void CHECK_SYSTEM_OUT(const SimpleString& out)
 		{
-			STRCMP_EQUAL("<system-out></system-out>\n", output.asCharString());
+			STRCMP_EQUAL("<system-out></system-out>\n", out.asCharString());
 		}
 
-		void CHECK_SYSTEM_ERR(const SimpleString& output)
+		void CHECK_SYSTEM_ERR(const SimpleString& out)
 		{
-			STRCMP_EQUAL("<system-err></system-err>\n", output.asCharString());
+			STRCMP_EQUAL("<system-err></system-err>\n", out.asCharString());
 		}
 
-		void CHECK_TEST_SUITE_END(const SimpleString& output)
+		void CHECK_TEST_SUITE_END(const SimpleString& out)
 		{
-			STRCMP_EQUAL("</testsuite>", output.asCharString());
+			STRCMP_EQUAL("</testsuite>", out.asCharString());
 		}
+
 		void CHECK_TESTS(SimpleString* arr)
 		{
 			for (int index = 0, curTest = 0; curTest < currentGroup().numberTests_; curTest++, index++) {
