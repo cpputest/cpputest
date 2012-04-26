@@ -427,13 +427,15 @@ static void _destructorCalledForLocalObjects()
 	FAIL("fail");
 }
 
-/* This test can only pass when we use exception handling instead of longjmp */
-IGNORE_TEST(UtestShell, DestructorIsCalledForLocalObjectsWhenTheTestFails)
+#if CPPUTEST_USE_STD_CPP_LIB
+TEST(UtestShell, DestructorIsCalledForLocalObjectsWhenTheTestFails)
 {
 	fixture->setTestFunction(_destructorCalledForLocalObjects);
 	fixture->runAllTests();
 	CHECK(destructorWasCalledOnFailedTest);
 }
+
+#endif
 
 TEST_BASE(MyOwnTest)
 {

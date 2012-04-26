@@ -36,34 +36,30 @@
 #include <stdlib.h>
 #include "CppUTest/PlatformSpecificFunctions.h"
 
-void executePlatformSpecificTestBody(Utest* test)
+static jmp_buf test_exit_jmp_buf[10];
+static int jmp_buf_index = 0;
+
+bool PlatformSpecificSetJmp(void (*function) (void* data), void* data)
 {
-	TInt err(KErrNone);
-	TRAP(err, test->testBody());
-	if(err != KErrNone) {
-		Utest::getCurrent()->fail("Leave in test method", "", 0);
+	if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
+	    jmp_buf_index++;
+		function(data);
+	    jmp_buf_index--;
+		return true;
 	}
+	return false;
 }
 
-void executePlatformSpecificExitCurrentTest()
+void PlatformSpecificLongJmp()
 {
-	User::Leave(KErrNone);
+	jmp_buf_index--;
+	longjmp(test_exit_jmp_buf[jmp_buf_index], 1);
 }
 
-bool executePlatformSpecificSetup(Utest* test)
+void PlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
 {
-	test->setup();
-	return true;
-}
-
-void executePlatformSpecificRunOneTest(UtestShell* shell, TestPlugin* plugin, TestResult& result)
-{
-	shell->runOneTest(plugin, result);
-}
-
-void executePlatformSpecificTeardown(Utest* test)
-{
-	test->teardown();
+   printf("-p doesn't work on this platform as it is not implemented. Running inside the process\b");
+   shell->runOneTest(plugin, result);
 }
 
 static long TimeInMillisImplementation() {

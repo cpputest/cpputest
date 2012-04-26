@@ -39,6 +39,11 @@
 #ifndef PLATFORMSPECIFICFUNCTIONS_C_H_
 #define PLATFORMSPECIFICFUNCTIONS_C_H_
 
+/* Jumping operations. They manage their own jump buffers */
+bool PlatformSpecificSetJmp(void (*function) (void* data), void* data);
+void PlatformSpecificLongJmp();
+void PlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result);
+
 /* Time operations */
 long GetPlatformSpecificTimeInMillis();
 void SetPlatformSpecificTimeInMillisMethod(long(*platformSpecific)());

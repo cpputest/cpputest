@@ -19,55 +19,33 @@
 #include <mmsystem.h>
 
 
-#if 0 //from GCC
+#include <setjmp.h>
+
 static jmp_buf test_exit_jmp_buf[10];
 static int jmp_buf_index = 0;
 
-bool Utest::executePlatformSpecificSetup()
+bool PlatformSpecificSetJmp(void (*function) (void* data), void* data)
 {
-   if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
-      jmp_buf_index++;
-      setup();
-      jmp_buf_index--;
-      return true;
-   }
-   return false;
+	if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
+	    jmp_buf_index++;
+		function(data);
+	    jmp_buf_index--;
+		return true;
+	}
+	return false;
 }
 
-void Utest::executePlatformSpecificTestBody()
+void PlatformSpecificLongJmp()
 {
-   if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
-      jmp_buf_index++;
-      testBody();
-      jmp_buf_index--;
-   }
+	jmp_buf_index--;
+	longjmp(test_exit_jmp_buf[jmp_buf_index], 1);
 }
 
-void Utest::executePlatformSpecificTeardown()
+void PlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
 {
-   if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
-      jmp_buf_index++;
-      teardown();
-      jmp_buf_index--;
-   }
+   printf("-p doesn't work on this platform as it is not implemented. Running inside the process\b");
+   shell->runOneTest(plugin, result);
 }
-
-void Utest::executePlatformSpecificRunOneTest(TestPlugin* plugin_, TestResult& result_)
-{
-    if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
-       jmp_buf_index++;
-       runOneTest(plugin_, result_);
-       jmp_buf_index--;
-    }
-}
-
-void Utest::executePlatformSpecificExitCurrentTest()
-{
-   jmp_buf_index--;
-   longjmp(test_exit_jmp_buf[jmp_buf_index], 1);
-}
-
-#endif
 
 TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
 {
@@ -236,36 +214,6 @@ int PlatformSpecificIsNan(double d)
 	return _isnan(d);
 }
 
-
-
-
-/////// clean up the rest
-
-#if 0
-
-void TestRegistry::platformSpecificRunOneTest(Utest* test, TestResult& result_)
-{
-    try {
-        runOneTest(test, result_) ;
-    }
-    catch (int) {
-        //exiting test early
-    }
-
-}
-
-void Utest::executePlatformSpecificTestBody()
-{
-	testBody();
-}
-
-void PlatformSpecificExitCurrentTestImpl()
-{
-    throw(1);
-}
-
-#endif
-
 int PlatformSpecificVSNprintf(char *str, unsigned int size, const char* format, void* args)
 {
    return _vsnprintf( str, size, format, (va_list) args);
@@ -276,114 +224,4 @@ char PlatformSpecificToLower(char c)
 	return tolower(c);
 }
 
-//platform specific test running stuff
-#if 1
-#include <setjmp.h>
-
-static jmp_buf test_exit_jmp_buf[10];
-static int jmp_buf_index = 0;
-
-bool executePlatformSpecificSetup(Utest* test)
-{
-   if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
-      jmp_buf_index++;
-      test->setup();
-      jmp_buf_index--;
-      return true;
-   }
-   return false;
-}
-
-void executePlatformSpecificTestBody(Utest* test)
-{
-   if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
-      jmp_buf_index++;
-      test->testBody();
-      jmp_buf_index--;
-   }
-}
-
-void executePlatformSpecificTeardown(Utest* test)
-{
-   if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
-      jmp_buf_index++;
-      test->teardown();
-      jmp_buf_index--;
-   }
-}
-
-void executePlatformSpecificRunOneTest(UtestShell* shell, TestPlugin* plugin, TestResult& result)
-{
-    if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
-       jmp_buf_index++;
-       shell->runOneTest(plugin, result);
-       jmp_buf_index--;
-    }
-}
-
-
-void executePlatformSpecificExitCurrentTest()
-{
-   jmp_buf_index--;
-   longjmp(test_exit_jmp_buf[jmp_buf_index], 1);
-}
-
-/*
-void PlatformSpecificExitCurrentTestImpl()
-{
-   jmp_buf_index--;
-   longjmp(test_exit_jmp_buf[jmp_buf_index], 1);
-}
-*/
-#endif
-
-//static jmp_buf test_exit_jmp_buf[10];
-//static int jmp_buf_index = 0;
-
-
-#if 0
-bool Utest::executePlatformSpecificSetup()
-{
-	try {
-      setup();
-	}
-	catch (int) {
-		return false;
-	}
-    return true;
-}
-
-void Utest::executePlatformSpecificTestBody()
-{
-	try {
-      testBody();
-	}
-	catch (int) {
-	}
-
-}
-
-void Utest::executePlatformSpecificTeardown()
-{
-	try {
-      teardown();
-	}
-	catch (int) {
-	}
-
-}
-
-void PlatformSpecificExitCurrentTestImpl()
-{
-	throw(1);
-}
-
-
-void (*PlatformSpecificExitCurrentTest)() = PlatformSpecificExitCurrentTestImpl;
-
-void FakePlatformSpecificExitCurrentTest()
-{
-}
-
-#endif
 

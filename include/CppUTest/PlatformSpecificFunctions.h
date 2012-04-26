@@ -28,21 +28,13 @@
 #ifndef PLATFORMSPECIFICFUNCTIONS_H_
 #define PLATFORMSPECIFICFUNCTIONS_H_
 
+#include "CppUTest/TestOutput.h"
+TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment();
+
 /* Platform specific interface we use in order to minimize dependencies with LibC.
  * This enables porting to different embedded platforms.
  *
  */
-
-/* For test execution control (long_jmp set_jmp) */
-
-extern bool executePlatformSpecificSetup(Utest* test);
-extern void executePlatformSpecificTestBody(Utest* test);
-extern void executePlatformSpecificTeardown(Utest* test);
-extern void executePlatformSpecificRunOneTest(UtestShell* shell, TestPlugin* plugin, TestResult& result);
-extern void executePlatformSpecificExitCurrentTest();
-
-#include "CppUTest/TestOutput.h"
-TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment();
 
 extern "C"
 {

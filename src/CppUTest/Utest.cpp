@@ -69,6 +69,58 @@ private:
 	TestResult defaultTestResult;
 };
 
+/*
+ * Below helpers are used for the PlatformSpecificSetJmp and LongJmp. They pass a method for what needs to happen after
+ * the jump, so that the stack stays right.
+ *
+ */
+
+void helperDoTestSetup(void* data)
+{
+    ((Utest*)data)->setup();
+}
+
+void helperDoTestBody(void* data)
+{
+    ((Utest*)data)->testBody();
+}
+
+void helperDoTestTeardown(void* data)
+{
+    ((Utest*)data)->teardown();
+}
+
+struct HelperTestRunInfo
+{
+	HelperTestRunInfo(UtestShell* shell, TestPlugin* plugin, TestResult* result) : shell_(shell), plugin_(plugin), result_(result){};
+
+	UtestShell* shell_;
+	TestPlugin* plugin_;
+	TestResult* result_;
+};
+
+void helperDoRunOneTest(void* data)
+{
+	HelperTestRunInfo* runInfo = (HelperTestRunInfo*) data;
+
+	UtestShell* shell = runInfo->shell_;
+	TestPlugin* plugin = runInfo->plugin_;
+	TestResult* result = runInfo->result_;
+
+	shell->runOneTest(plugin, *result);
+}
+
+void helperDoRunOneTestSeperateProcess(void* data)
+{
+	HelperTestRunInfo* runInfo = (HelperTestRunInfo*) data;
+
+	UtestShell* shell = runInfo->shell_;
+	TestPlugin* plugin = runInfo->plugin_;
+	TestResult* result = runInfo->result_;
+	PlatformSpecificRunTestInASeperateProcess(shell, plugin, result);
+}
+
+/******************************** */
 
 UtestShell::UtestShell() :
 	group_("UndefinedTestGroup"), name_("UndefinedTest"), file_("UndefinedFile"), lineNumber_(0), next_(&NullTestShell::instance()), isRunAsSeperateProcess_(false)
@@ -113,7 +165,11 @@ void UtestShell::crash()
 
 void UtestShell::runOneTestWithPlugins(TestPlugin* plugin, TestResult& result)
 {
-	executePlatformSpecificRunOneTest(this, plugin, result);
+	HelperTestRunInfo runInfo(this, plugin, &result);
+	if (isRunInSeperateProcess())
+		PlatformSpecificSetJmp(helperDoRunOneTestSeperateProcess, &runInfo);
+	else
+		PlatformSpecificSetJmp(helperDoRunOneTest, &runInfo);
 }
 
 Utest* UtestShell::createTest()
@@ -150,7 +206,11 @@ void UtestShell::runOneTest(TestPlugin* plugin, TestResult& result)
 
 void UtestShell::exitCurrentTest()
 {
-	executePlatformSpecificExitCurrentTest();
+#if CPPUTEST_USE_STD_CPP_LIB
+	throw CppUTestFailedException();
+#else
+	PlatformSpecificLongJmp();
+#endif
 }
 
 UtestShell *UtestShell::getNext() const
@@ -389,30 +449,35 @@ Utest::~Utest()
 {
 }
 
+#if CPPUTEST_USE_STD_CPP_LIB
+
 void Utest::run()
 {
-
-#if CPPUTEST_USE_STD_CPP_LIB
 	try {
-#endif
-		if (executePlatformSpecificSetup(this)) {
-			executePlatformSpecificTestBody(this);
-		}
-		executePlatformSpecificTeardown(this);
-
-#if CPPUTEST_USE_STD_CPP_LIB
+		setup();
+		testBody();
 	}
 	catch (CppUTestFailedException&)
-	{
-		try {
-			executePlatformSpecificTeardown(this);
-		}
-		catch (CppUTestFailedException&)
-		{
-		}
+	{}
+
+	try {
+		teardown();
 	}
-#endif
+	catch (CppUTestFailedException&)
+	{}
+
 }
+#else
+
+void Utest::run()
+{
+	if (PlatformSpecificSetJmp(helperDoTestSetup, this)) {
+		PlatformSpecificSetJmp(helperDoTestBody, this);
+	}
+	PlatformSpecificSetJmp(helperDoTestTeardown, this);
+}
+
+#endif
 
 void Utest::setup()
 {

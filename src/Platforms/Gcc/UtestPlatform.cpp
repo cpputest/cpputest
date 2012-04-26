@@ -51,69 +51,45 @@
 static jmp_buf test_exit_jmp_buf[10];
 static int jmp_buf_index = 0;
 
-bool executePlatformSpecificSetup(Utest* test)
+bool PlatformSpecificSetJmp(void (*function) (void* data), void* data)
 {
-   if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
-      jmp_buf_index++;
-      test->setup();
-      jmp_buf_index--;
-      return true;
-   }
-   return false;
+	if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
+	    jmp_buf_index++;
+		function(data);
+	    jmp_buf_index--;
+		return true;
+	}
+	return false;
 }
 
-void executePlatformSpecificTestBody(Utest* test)
+void PlatformSpecificLongJmp()
 {
-   if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
-      jmp_buf_index++;
-      test->testBody();
-      jmp_buf_index--;
-   }
+	jmp_buf_index--;
+	longjmp(test_exit_jmp_buf[jmp_buf_index], 1);
 }
 
-void executePlatformSpecificTeardown(Utest* test)
+void PlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
 {
-   if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
-      jmp_buf_index++;
-      test->teardown();
-      jmp_buf_index--;
-   }
-}
-
-void executePlatformSpecificRunOneTest(UtestShell* shell, TestPlugin* plugin, TestResult& result)
-{
-    if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
-       jmp_buf_index++;
-
 #ifdef __MINGW32__
-       if (shell->isRunInSeperateProcess())
-    	   printf("-p doesn't work on MinGW as it is lacking fork. Running inside the process\b");
-       shell->runOneTest(plugin, result);
+   printf("-p doesn't work on MinGW as it is lacking fork. Running inside the process\b");
+   shell->runOneTest(plugin, result);
 #else
 
-       int info;
-       pid_t pid = (shell->isRunInSeperateProcess()) ? fork() : 0;
+   int info;
+   pid_t pid = fork();
 
-       if (pid) {
-    	   wait(&info);
-    	   if (WIFEXITED(info) && WEXITSTATUS(info) > result.getFailureCount())
-    		   result.addFailure(TestFailure(shell, "failed in seperate process"));
-    	   else if (!WIFEXITED(info))
-    		   result.addFailure(TestFailure(shell, "failed in seperate process"));
-       }
-       else {
-    	   shell->runOneTest(plugin, result);
-		    if (shell->isRunInSeperateProcess()) exit(result.getFailureCount() );
-		}
+   if (pid) {
+	   wait(&info);
+	   if (WIFEXITED(info) && WEXITSTATUS(info) > result->getFailureCount())
+		   result->addFailure(TestFailure(shell, "failed in seperate process"));
+	   else if (!WIFEXITED(info))
+		   result->addFailure(TestFailure(shell, "failed in seperate process"));
+   }
+   else {
+	   shell->runOneTest(plugin, *result);
+	   exit(result->getFailureCount() );
+	}
 #endif
-       jmp_buf_index--;
-    }
-}
-
-void executePlatformSpecificExitCurrentTest()
-{
-   jmp_buf_index--;
-   longjmp(test_exit_jmp_buf[jmp_buf_index], 1);
 }
 
 TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()

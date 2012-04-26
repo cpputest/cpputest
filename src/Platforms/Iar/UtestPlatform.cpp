@@ -45,48 +45,27 @@
 static jmp_buf test_exit_jmp_buf[10];
 static int jmp_buf_index = 0;
 
-bool executePlatformSpecificSetup(Utest* test)
+bool PlatformSpecificSetJmp(void (*function) (void* data), void* data)
 {
-   if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
-      jmp_buf_index++;
-      test->setup();
-      jmp_buf_index--;
-      return true;
-   }
-   return false;
+	if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
+	    jmp_buf_index++;
+		function(data);
+	    jmp_buf_index--;
+		return true;
+	}
+	return false;
 }
 
-void executePlatformSpecificTestBody(Utest* test)
+void PlatformSpecificLongJmp()
 {
-   if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
-      jmp_buf_index++;
-      test->testBody();
-      jmp_buf_index--;
-   }
+	jmp_buf_index--;
+	longjmp(test_exit_jmp_buf[jmp_buf_index], 1);
 }
 
-void executePlatformSpecificTeardown(Utest* test)
+void PlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
 {
-   if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
-      jmp_buf_index++;
-      test->teardown();
-      jmp_buf_index--;
-   }
-}
-
-void executePlatformSpecificRunOneTest(UtestShell* shell, TestPlugin* plugin, TestResult& result)
-{
-    if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
-       jmp_buf_index++;
-       shell->runOneTest(plugin, result);
-       jmp_buf_index--;
-    }
-}
-
-void executePlatformSpecificExitCurrentTest()
-{
-   jmp_buf_index--;
-   longjmp(test_exit_jmp_buf[jmp_buf_index], 1);
+   printf("-p doesn't work on this platform as it is not implemented. Running inside the process\b");
+   shell->runOneTest(plugin, result);
 }
 
 TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()

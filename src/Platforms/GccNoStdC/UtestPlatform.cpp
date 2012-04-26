@@ -34,32 +34,18 @@
 #include "CppUTest/TestRegistry.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
-bool executePlatformSpecificSetup(Utest* test)
+bool PlatformSpecificSetJmp(void (*function) (void* data), void* data)
 {
 	/* To be implemented */
-   test->setup();
-   return false;
+	return false;
 }
 
-void executePlatformSpecificTestBody(Utest* test)
+void PlatformSpecificLongJmp()
 {
 	/* To be implemented */
-	test->testBody();
 }
 
-void executePlatformSpecificTeardown(Utest* test)
-{
-	/* To be implemented */
-	test->teardown();
-}
-
-void executePlatformSpecificRunOneTest(UtestShell* shell, TestPlugin* plugin, TestResult& result)
-{
-	/* To be implemented */
-	shell->runOneTest(plugin, result);
-}
-
-void executePlatformSpecificExitCurrentTest()
+void PlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
 {
 	/* To be implemented */
 }
