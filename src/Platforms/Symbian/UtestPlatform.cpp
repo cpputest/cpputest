@@ -59,7 +59,7 @@ void PlatformSpecificLongJmp()
 void PlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
 {
    printf("-p doesn't work on this platform as it is not implemented. Running inside the process\b");
-   shell->runOneTest(plugin, result);
+   shell->runOneTest(plugin, *result);
 }
 
 static long TimeInMillisImplementation() {
