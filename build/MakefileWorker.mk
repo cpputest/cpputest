@@ -140,7 +140,7 @@ endif
 
 # Default warnings
 ifndef CPPUTEST_WARNINGFLAGS
-ifeq ($(CPPUTEST_USE_REALGTEST), N)
+ifeq ($(CPPUTEST_USE_REAL_GTEST), N)
 	CPPUTEST_WARNINGFLAGS =  -Wall -Wextra -Werror -Wshadow -Wswitch-default -Wswitch-enum -Wconversion
 ifeq ($(CPPUTEST_PEDANTIC_ERRORS), Y)
 	CPPUTEST_WARNINGFLAGS += -pedantic-errors

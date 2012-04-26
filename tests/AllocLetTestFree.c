@@ -21,5 +21,8 @@ void AllocLetTestFree_Destroy(AllocLetTestFree self)
 {
 	self = NULL;
 }
+#else
+
+int thisSourceFileCannotBeEmptyBecauseThenTheCompilerWillGiveAVeryWeirdErrorMessage = 0;
 
 #endif

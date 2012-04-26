@@ -420,6 +420,8 @@ public:
 	}
 };
 
+#if CPPUTEST_USE_STD_CPP_LIB
+
 static void _destructorCalledForLocalObjects()
 {
 	DestructorOughtToBeCalled pleaseCallTheDestructor;
@@ -427,7 +429,6 @@ static void _destructorCalledForLocalObjects()
 	FAIL("fail");
 }
 
-#if CPPUTEST_USE_STD_CPP_LIB
 TEST(UtestShell, DestructorIsCalledForLocalObjectsWhenTheTestFails)
 {
 	fixture->setTestFunction(_destructorCalledForLocalObjects);

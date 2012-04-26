@@ -36,6 +36,8 @@
 
 bool PlatformSpecificSetJmp(void (*function) (void* data), void* data)
 {
+	(void) data;
+	(void) function;
 	/* To be implemented */
 	return false;
 }
@@ -47,6 +49,9 @@ void PlatformSpecificLongJmp()
 
 void PlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
 {
+	(void) shell;
+	(void) plugin;
+	(void) result;
 	/* To be implemented */
 }
 

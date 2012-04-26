@@ -21,11 +21,12 @@ void bar(double param_double, const char* param_string)
 }
 
 /* Production code calls to the methods we stubbed */
-void productionCodeFooCalls()
+int productionCodeFooCalls()
 {
 	int return_value;
 	return_value = foo("value_string", 10);
 	return_value = foo("value_string", 10);
+	return return_value;
 }
 
 void productionCodeBarCalls()
