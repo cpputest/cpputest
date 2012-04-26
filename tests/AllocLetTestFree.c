@@ -19,7 +19,10 @@ AllocLetTestFree AllocLetTestFree_Create(void)
 
 void AllocLetTestFree_Destroy(AllocLetTestFree self)
 {
+	void* no_use = self;
 	self = NULL;
+	self = no_use;
+
 }
 #else
 
