@@ -64,11 +64,16 @@
 UNAME_OUTPUT = "$(shell uname -a)"
 MACOSX_STR = Darwin
 MINGW_STR = MINGW
+CYGWIN_STR = CYGWIN
 UNKNWOWN_OS_STR = Unknown
 UNAME_OS = $(UNKNWOWN_OS_STR)
 
 ifeq ($(findstring $(MINGW_STR),$(UNAME_OUTPUT)),$(MINGW_STR))
 	UNAME_OS = $(MINGW_STR)
+endif
+
+ifeq ($(findstring $(CYGWIN_STR),$(UNAME_OUTPUT)),$(CYGWIN_STR))
+	UNAME_OS = $(CYGWIN_STR)
 endif
 
 ifeq ($(findstring $(MACOSX_STR),$(UNAME_OUTPUT)),$(MACOSX_STR))
@@ -78,15 +83,21 @@ ifeq ($(findstring $(MACOSX_STR),$(UNAME_OUTPUT)),$(MACOSX_STR))
 endif
 
 #Kludge for mingw, it does not have cc.exe, but gcc.exe will do
+ifeq ($(UNAME_OS),$(MINGW_STR))
+	CC := gcc
+endif
+
 #And another kludge. Exception handling in gcc 4.6.2 is broken when linking the
 # Standard C++ library as a shared library. Unbelievable.
 ifeq ($(UNAME_OS),$(MINGW_STR))
-	CC := gcc
   CPPUTEST_LDFLAGS += -static
 endif
+ifeq ($(UNAME_OS),$(CYGWIN_STR))
+  CPPUTEST_LDFLAGS += -static
+endif
+  
 
 #Kludge for MacOsX gcc compiler on Darwin9 who can't handle pendantic
-
 ifeq ($(UNAME_OS),$(MACOSX_STR))
 ifeq ($(findstring Version 9,$(UNAME_OUTPUT)),Version 9)
 	CPPUTEST_PEDANTIC_ERRORS = N
