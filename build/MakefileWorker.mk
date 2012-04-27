@@ -78,8 +78,11 @@ ifeq ($(findstring $(MACOSX_STR),$(UNAME_OUTPUT)),$(MACOSX_STR))
 endif
 
 #Kludge for mingw, it does not have cc.exe, but gcc.exe will do
+#And another kludge. Exception handling in gcc 4.6.2 is broken when linking the
+# Standard C++ library as a shared library. Unbelievable.
 ifeq ($(UNAME_OS),$(MINGW_STR))
 	CC := gcc
+  CPPUTEST_LDFLAGS += -static
 endif
 
 #Kludge for MacOsX gcc compiler on Darwin9 who can't handle pendantic
@@ -386,7 +389,7 @@ flags:
 
 $(TEST_TARGET): $(TEST_OBJS) $(MOCKS_OBJS)  $(PRODUCTION_CODE_START) $(TARGET_LIB) $(USER_LIBS) $(PRODUCTION_CODE_END) $(CPPUTEST_LIB) $(STDLIB_CODE_START) 
 	@echo Linking $@
-	$(SILENCE)$(LINK.o) -o $@ $^ $(LD_LIBRARIES)
+	$(LINK.o) -o $@ $^ $(LD_LIBRARIES)
 
 $(TARGET_LIB): $(OBJ)
 	@echo Building archive $@
