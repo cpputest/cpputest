@@ -85,8 +85,8 @@ TEST_GROUP(JUnitOutputTest)
 			}
 			;
 
-			int numberTests_;
-			int totalFailures_;
+			size_t numberTests_;
+			size_t totalFailures_;
 			SimpleString name_;
 
 			TestData* testData_;
@@ -121,8 +121,8 @@ TEST_GROUP(JUnitOutputTest)
 
 		virtual ~MockJUnitTestOutput()
 		{
-			for (int i = 0; i < testGroupSize; i++) {
-				for (int j = 0; j < testGroupData_[i].numberTests_; j++) {
+			for (size_t i = 0; i < testGroupSize; i++) {
+				for (size_t j = 0; j < testGroupData_[i].numberTests_; j++) {
 					delete testGroupData_[i].testData_[j].tst_;
 					delete testGroupData_[i].testData_[j].testName_;
 					if (testGroupData_[i].testData_[j].failure_) delete testGroupData_[i].testData_[j].failure_;
@@ -174,7 +174,7 @@ TEST_GROUP(JUnitOutputTest)
 
 				millisTime = 0;
 				res_->currentGroupStarted(data.testData_[0].tst_);
-				for (int j = 0; j < data.numberTests_; j++) {
+				for (size_t j = 0; j < data.numberTests_; j++) {
 					TestData& testData = data.testData_[j];
 
 					millisTime = 0;
@@ -252,7 +252,7 @@ TEST_GROUP(JUnitOutputTest)
 
 		void CHECK_TESTS(SimpleString* arr)
 		{
-			for (int index = 0, curTest = 0; curTest < currentGroup().numberTests_; curTest++, index++) {
+			for (size_t index = 0, curTest = 0; curTest < currentGroup().numberTests_; curTest++, index++) {
 				SimpleString buf = StringFromFormat("<testcase classname=\"%s\" name=\"%s\" time=\"0.010\">\n", currentGroup().name_.asCharString(),
 						currentGroup().testData_[curTest].tst_->getName().asCharString());
 				CHECK_EQUAL(buf, arr[index]);
@@ -264,7 +264,7 @@ TEST_GROUP(JUnitOutputTest)
 
 			}
 		}
-		void CHECK_FAILURE(SimpleString* arr, int& i, int curTest)
+		void CHECK_FAILURE(SimpleString* arr, size_t& i, size_t curTest)
 		{
 			TestFailure& f = *currentGroup().testData_[curTest].failure_;
 			i++;

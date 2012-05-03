@@ -130,11 +130,11 @@ SimpleString TestFailure::createButWasString(const SimpleString& expected, const
 	return StringFromFormat(format, expected.asCharString(), actual.asCharString());
 }
 
-SimpleString TestFailure::createDifferenceAtPosString(const SimpleString& actual, int position)
+SimpleString TestFailure::createDifferenceAtPosString(const SimpleString& actual, size_t position)
 {
 	SimpleString result;
-	const int extraCharactersWindow = 20;
-	const int halfOfExtraCharactersWindow = extraCharactersWindow / 2;
+	const size_t extraCharactersWindow = 20;
+	const size_t halfOfExtraCharactersWindow = extraCharactersWindow / 2;
 
 	SimpleString paddingForPreventingOutOfBounds (" ", halfOfExtraCharactersWindow);
 	SimpleString actualString = paddingForPreventingOutOfBounds + actual + paddingForPreventingOutOfBounds;

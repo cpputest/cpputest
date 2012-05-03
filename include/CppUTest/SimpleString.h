@@ -61,6 +61,7 @@ public:
 
 	char at(int pos) const;
 	int find(char ch) const;
+	int findFrom(size_t starting_position, char ch) const;
 	bool contains(const SimpleString& other) const;
 	bool containsNoCase(const SimpleString& other) const;
 	bool startsWith(const SimpleString& other) const;

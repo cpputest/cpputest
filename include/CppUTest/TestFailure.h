@@ -67,7 +67,7 @@ public:
 protected:
 
 	SimpleString createButWasString(const SimpleString& expected, const SimpleString& actual);
-	SimpleString createDifferenceAtPosString(const SimpleString& actual, int position);
+	SimpleString createDifferenceAtPosString(const SimpleString& actual, size_t position);
 
 	SimpleString testName_;
 	SimpleString fileName_;

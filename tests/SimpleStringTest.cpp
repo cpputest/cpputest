@@ -332,13 +332,19 @@ TEST(SimpleString, subStringFromTillNormal)
 TEST(SimpleString, subStringFromTillOutOfBounds)
 {
 	SimpleString str("Hello World");
-	STRCMP_EQUAL("Hello World", str.subStringFromTill('H', '!').asCharString());
+	STRCMP_EQUAL("World", str.subStringFromTill('W', '!').asCharString());
 }
 
 TEST(SimpleString, subStringFromTillStartDoesntExist)
 {
 	SimpleString str("Hello World");
 	STRCMP_EQUAL("", str.subStringFromTill('!', ' ').asCharString());
+}
+
+TEST(SimpleString, subStringFromTillWhenTheEndAppearsBeforeTheStart)
+{
+	SimpleString str("Hello World");
+	STRCMP_EQUAL("World", str.subStringFromTill('W', 'H').asCharString());
 }
 
 TEST(SimpleString, findNormal)
@@ -376,7 +382,7 @@ TEST(SimpleString, copyInBufferWithEmptyBuffer)
 TEST(SimpleString, copyInBufferWithBiggerBufferThanNeeded)
 {
 	SimpleString str("Hello");
-	int bufferSize = 20;
+	size_t bufferSize = 20;
 	char* buffer= (char*) malloc(bufferSize);
 	str.copyToBuffer(buffer, bufferSize);
 	STRCMP_EQUAL(str.asCharString(), buffer);
@@ -450,7 +456,7 @@ TEST(SimpleString, StringFromFormatLarge)
 	LONGS_EQUAL(10, h1.count(s));
 }
 
-static int WrappedUpVSNPrintf(char* buf, int n, const char* format, ...)
+static int WrappedUpVSNPrintf(char* buf, size_t n, const char* format, ...)
 {
 	va_list arguments;
 	va_start(arguments, format);

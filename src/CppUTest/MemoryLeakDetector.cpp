@@ -50,7 +50,7 @@ void SimpleStringBuffer::add(const char* format, ...)
 
 	va_list arguments;
 	va_start(arguments, format);
-	count = PlatformSpecificVSNprintf(buffer_ + positions_filled_, positions_left+1, format, arguments);
+	count = PlatformSpecificVSNprintf(buffer_ + positions_filled_, (size_t) (positions_left+1), format, arguments);
 	if (count > 0) positions_filled_ += count;
 	if (positions_filled_ > write_limit_) positions_filled_ = write_limit_;
 	va_end(arguments);
@@ -243,7 +243,7 @@ MemoryLeakDetectorNode* MemoryLeakDetectorTable::getFirstLeak(MemLeakPeriod peri
 
 MemoryLeakDetectorNode* MemoryLeakDetectorTable::getNextLeak(MemoryLeakDetectorNode* leak, MemLeakPeriod period)
 {
-	int i = hash(leak->memory_);
+	unsigned long i = hash(leak->memory_);
 	MemoryLeakDetectorNode* node = table_[i].getNextLeak(leak, period);
 	if (node) return node;
 

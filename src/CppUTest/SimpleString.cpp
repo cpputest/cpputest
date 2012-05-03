@@ -158,7 +158,7 @@ void SimpleString::split(const SimpleString& delimiter, SimpleStringCollection& 
 	for (size_t i = 0; i < num; ++i) {
 		prev = str;
 		str = PlatformSpecificStrStr(str, delimiter.buffer_) + 1;
-		size_t len = str - prev;
+		size_t len = (size_t) (str - prev);
 		char* sub = allocStringBuffer(len + 1);
 		PlatformSpecificStrNCpy(sub, prev, len);
 		sub[len] = '\0';
@@ -315,19 +315,24 @@ char SimpleString::at(int pos) const
 
 int SimpleString::find(char ch) const
 {
-	int length = size();
-	for (int i = 0; i < length; i++)
-		if (buffer_[i] == ch) return i;
+	return findFrom(0, ch);
+}
+
+int SimpleString::findFrom(size_t starting_position, char ch) const
+{
+	size_t length = size();
+	for (size_t i = starting_position; i < length; i++)
+		if (buffer_[i] == ch) return (int) i;
 	return -1;
 }
 
 SimpleString SimpleString::subStringFromTill(char startChar, char lastExcludedChar) const
 {
 	int beginPos = find(startChar);
-	int endPos = find(lastExcludedChar);
+	int endPos = findFrom(beginPos, lastExcludedChar);
 
 	if (beginPos == -1) return "";
-	if (endPos == -1) return *this;
+	if (endPos == -1) return subString(beginPos, size());
 
 	return subString(beginPos, endPos - beginPos);
 }
