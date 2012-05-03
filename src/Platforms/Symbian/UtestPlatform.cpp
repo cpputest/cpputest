@@ -101,7 +101,7 @@ void SetPlatformSpecificTimeStringMethod(SimpleString (*platformMethod) ()) {
 	timeStringFp = (platformMethod == 0) ? TimeStringImplementation : platformMethod;
 }
 
-int PlatformSpecificVSNprintf(char* str, unsigned int size, const char* format, va_list args) {
+int PlatformSpecificVSNprintf(char* str, size_t size, const char* format, va_list args) {
     return vsnprintf(str, size, format, args);
 }
 

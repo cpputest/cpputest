@@ -149,7 +149,7 @@ char* PlatformSpecificStrStr(const char* s1, const char* s2)
 	return NULL;
 }
 
-int PlatformSpecificVSNprintf(char *str, unsigned int size, const char* format, va_list args)
+int PlatformSpecificVSNprintf(char *str, size_t size, const char* format, va_list args)
 {
 	/* To be implemented */
 	(void) size;
