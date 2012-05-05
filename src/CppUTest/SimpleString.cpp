@@ -329,12 +329,12 @@ int SimpleString::findFrom(size_t starting_position, char ch) const
 SimpleString SimpleString::subStringFromTill(char startChar, char lastExcludedChar) const
 {
 	int beginPos = find(startChar);
-	int endPos = findFrom(beginPos, lastExcludedChar);
+	if (beginPos < 0) return "";
 
-	if (beginPos == -1) return "";
-	if (endPos == -1) return subString(beginPos, size());
+	int endPos = findFrom((size_t)beginPos, lastExcludedChar);
+	if (endPos == -1) return subString((size_t)beginPos, size());
 
-	return subString(beginPos, endPos - beginPos);
+	return subString((size_t)beginPos, (size_t) (endPos - beginPos));
 }
 
 
@@ -458,8 +458,9 @@ SimpleString VStringFromFormat(const char* format, va_list args)
 		resultString = SimpleString(defaultBuffer);
 	}
 	else {
-		char* newBuffer = SimpleString::allocStringBuffer(size + 1);
-		PlatformSpecificVSNprintf(newBuffer, size + 1, format, argsCopy);
+		size_t newBufferSize = (size_t) size + 1;
+		char* newBuffer = SimpleString::allocStringBuffer(newBufferSize);
+		PlatformSpecificVSNprintf(newBuffer, newBufferSize, format, argsCopy);
 		resultString = SimpleString(newBuffer);
 
 		SimpleString::deallocStringBuffer(newBuffer);

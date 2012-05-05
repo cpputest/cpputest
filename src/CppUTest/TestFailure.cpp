@@ -183,7 +183,7 @@ DoublesEqualFailure::DoublesEqualFailure(UtestShell* test, const char* fileName,
 
 CheckEqualFailure::CheckEqualFailure(UtestShell* test, const char* fileName, int lineNumber, const SimpleString& expected, const SimpleString& actual) : TestFailure(test, fileName, lineNumber)
 {
-	int failStart;
+	size_t failStart;
 	for (failStart = 0; actual.asCharString()[failStart] == expected.asCharString()[failStart]; failStart++)
 		;
 	message_ = createButWasString(expected, actual);
@@ -229,7 +229,7 @@ LongsEqualFailure::LongsEqualFailure(UtestShell* test, const char* fileName, int
 
 StringEqualFailure::StringEqualFailure(UtestShell* test, const char* fileName, int lineNumber, const char* expected, const char* actual) : TestFailure(test, fileName, lineNumber)
 {
-	int failStart;
+	size_t failStart;
 	for (failStart = 0; actual[failStart] == expected[failStart]; failStart++)
 		;
 	message_ = createButWasString(expected, actual);
@@ -238,7 +238,7 @@ StringEqualFailure::StringEqualFailure(UtestShell* test, const char* fileName, i
 
 StringEqualNoCaseFailure::StringEqualNoCaseFailure(UtestShell* test, const char* fileName, int lineNumber, const char* expected, const char* actual) : TestFailure(test, fileName, lineNumber)
 {
-	int failStart;
+	size_t failStart;
     for (failStart = 0; PlatformSpecificToLower(actual[failStart]) == PlatformSpecificToLower(expected[failStart]); failStart++)
     	;
 	message_ = createButWasString(expected, actual);
