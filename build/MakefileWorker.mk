@@ -65,6 +65,7 @@ UNAME_OUTPUT = "$(shell uname -a)"
 MACOSX_STR = Darwin
 MINGW_STR = MINGW
 CYGWIN_STR = CYGWIN
+LINUX_STR = Linux
 UNKNWOWN_OS_STR = Unknown
 UNAME_OS = $(UNKNWOWN_OS_STR)
 
@@ -74,6 +75,10 @@ endif
 
 ifeq ($(findstring $(CYGWIN_STR),$(UNAME_OUTPUT)),$(CYGWIN_STR))
 	UNAME_OS = $(CYGWIN_STR)
+endif
+
+ifeq ($(findstring $(LINUX_STR),$(UNAME_OUTPUT)),$(LINUX_STR))
+	UNAME_OS = $(LINUX_STR)
 endif
 
 ifeq ($(findstring $(MACOSX_STR),$(UNAME_OUTPUT)),$(MACOSX_STR))
@@ -159,6 +164,9 @@ ifeq ($(CPPUTEST_USE_REAL_GTEST), N)
 ifeq ($(CPPUTEST_PEDANTIC_ERRORS), Y)
 	CPPUTEST_WARNINGFLAGS += -pedantic-errors
 endif 
+ifeq ($(UNAME_OS),$(LINUX_STR))
+	CPPUTEST_WARNINGFLAGS += -Wsign-conversion
+endif
 	CPPUTEST_CXX_WARNINGFLAGS = -Woverloaded-virtual
 endif
 endif
