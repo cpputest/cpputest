@@ -158,7 +158,7 @@ TEST_GROUP(JUnitOutputTest)
 			testGroupData_[index].numberTests_ = amount;
 
 			testGroupData_[index].testData_ = new TestData[amount];
-			for (int i = 0; i < amount; i++) {
+			for (size_t i = 0; i < amount; i++) {
 				TestData& testData = testGroupData_[index].testData_[i];
 				testData.testName_ = new SimpleString(basename);
 				*testData.testName_ += StringFrom((long) i);
