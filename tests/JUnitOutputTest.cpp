@@ -152,7 +152,7 @@ TEST_GROUP(JUnitOutputTest)
 			fileBalance--;
 		}
 
-		void createTestsInGroup(int index, int amount, const char* group, const char* basename)
+		void createTestsInGroup(int index, size_t amount, const char* group, const char* basename)
 		{
 			testGroupData_[index].name_ = group;
 			testGroupData_[index].numberTests_ = amount;
