@@ -38,7 +38,7 @@ static char* typeNameValueToString(void* object)
 	return (char*) object;
 }
 
-void all_mock_support_c_calls()
+void all_mock_support_c_calls(void)
 {
 	mock_c()->expectOneCall("boo");
 	mock_c()->actualCall("boo");

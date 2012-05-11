@@ -62,7 +62,7 @@ struct SMockFunctionCall_c
 	MockFunctionCall_c* (*andReturnStringValue)(const char* value);
 	MockFunctionCall_c* (*andReturnPointerValue)(void* value);
 
-	MockValue_c (*returnValue)();
+	MockValue_c (*returnValue)(void);
 
 };
 
@@ -74,7 +74,7 @@ struct SMockSupport_c
 {
 	MockFunctionCall_c* (*expectOneCall)(const char* name);
 	MockFunctionCall_c* (*actualCall)(const char* name);
-	MockValue_c (*returnValue)();
+	MockValue_c (*returnValue)(void);
 
 	void (*setIntData) (const char* name, int value);
 	void (*setDoubleData) (const char* name, double value);
@@ -83,17 +83,17 @@ struct SMockSupport_c
 	void (*setDataObject) (const char* name, const char* type, void* value);
 	MockValue_c (*getData)(const char* name);
 
-	void (*checkExpectations)();
-	int (*expectedCallsLeft)();
+	void (*checkExpectations)(void);
+	int (*expectedCallsLeft)(void);
 
-	void (*clear)();
+	void (*clear)(void);
 
 	void (*installComparator) (const char* typeName, MockTypeEqualFunction_c isEqual, MockTypeValueToStringFunction_c valueToString);
-	void (*removeAllComparators)();
+	void (*removeAllComparators)(void);
 };
 
 
-MockSupport_c* mock_c();
+MockSupport_c* mock_c(void);
 MockSupport_c* mock_scope_c(const char* scope);
 
 #endif

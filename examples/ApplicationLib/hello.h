@@ -28,7 +28,7 @@
 #ifndef HELLO_H_
 #define HELLO_H_
 
-extern void printHelloWorld();
+extern void printHelloWorld(void);
 
 extern int (*PrintFormated)(const char*, ...);
 
