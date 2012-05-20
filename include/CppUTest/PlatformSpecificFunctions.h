@@ -31,6 +31,8 @@
 #include "CppUTest/TestOutput.h"
 TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment();
 
+void PlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result);
+
 /* Platform specific interface we use in order to minimize dependencies with LibC.
  * This enables porting to different embedded platforms.
  *

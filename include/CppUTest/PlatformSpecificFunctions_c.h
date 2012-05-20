@@ -40,16 +40,15 @@
 #define PLATFORMSPECIFICFUNCTIONS_C_H_
 
 /* Jumping operations. They manage their own jump buffers */
-bool PlatformSpecificSetJmp(void (*function) (void* data), void* data);
-void PlatformSpecificLongJmp();
-void PlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result);
+int PlatformSpecificSetJmp(void (*function) (void*), void* data);
+void PlatformSpecificLongJmp(void);
 
 /* Time operations */
-long GetPlatformSpecificTimeInMillis();
-void SetPlatformSpecificTimeInMillisMethod(long(*platformSpecific)());
+long GetPlatformSpecificTimeInMillis(void);
+void SetPlatformSpecificTimeInMillisMethod(long(*platformSpecific)(void));
 
-const char* GetPlatformSpecificTimeString();
-void SetPlatformSpecificTimeStringMethod(const char* (*platformMethod)());
+const char* GetPlatformSpecificTimeString(void);
+void SetPlatformSpecificTimeStringMethod(const char* (*platformMethod)(void));
 
 /* String operations */
 int PlatformSpecificAtoI(const char*str);
@@ -69,7 +68,7 @@ char PlatformSpecificToLower(char c);
 /* Misc */
 double PlatformSpecificFabs(double d);
 int PlatformSpecificIsNan(double d);
-int PlatformSpecificAtExit(void(*func)());
+int PlatformSpecificAtExit(void(*func)(void));
 
 /* IO operations */
 typedef void* PlatformSpecificFile;
@@ -80,7 +79,7 @@ void PlatformSpecificFPuts(const char* str, PlatformSpecificFile file);
 void PlatformSpecificFClose(PlatformSpecificFile file);
 
 int PlatformSpecificPutchar(int c);
-void PlatformSpecificFlush();
+void PlatformSpecificFlush(void);
 
 /* Dynamic Memory operations */
 void* PlatformSpecificMalloc(size_t size);

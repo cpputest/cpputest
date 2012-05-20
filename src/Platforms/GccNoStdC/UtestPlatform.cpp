@@ -34,12 +34,12 @@
 #include "CppUTest/TestRegistry.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
-bool PlatformSpecificSetJmp(void (*function) (void* data), void* data)
+int PlatformSpecificSetJmp(void (*function) (void* data), void* data)
 {
 	(void) data;
 	(void) function;
 	/* To be implemented */
-	return false;
+	return 0;
 }
 
 void PlatformSpecificLongJmp()
