@@ -38,6 +38,16 @@ TEST(BasicBehavior, deleteInvalidatesMemory)
 	delete memory;
 	CHECK(*memory != 0xAD);
 }
+
+TEST(BasicBehavior, bothMallocAndFreeAreOverloaded)
+{
+	void* memory = cpputest_malloc_location(sizeof(char), "file", 10);
+	free(memory);
+
+	memory = malloc(sizeof(unsigned char));
+	cpputest_free_location(memory, "file", 10);
+}
+
 #endif
 
 TEST(BasicBehavior, freeInvalidatesMemory)
