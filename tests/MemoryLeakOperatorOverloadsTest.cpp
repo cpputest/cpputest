@@ -39,6 +39,8 @@ TEST(BasicBehavior, deleteInvalidatesMemory)
 	CHECK(*memory != 0xAD);
 }
 
+/* Working on this test ;) */
+#if 0
 /* This include is added because *sometimes* the cstdlib does an #undef. This should have been prevented */
 #if CPPUTEST_USE_STD_CPP_LIB
 #include <cstdlib>
@@ -52,8 +54,10 @@ TEST(BasicBehavior, bothMallocAndFreeAreOverloaded)
 	memory = malloc(sizeof(unsigned char));
 	cpputest_free_location(memory, "file", 10);
 }
+#endif
 
 #endif
+
 
 TEST(BasicBehavior, freeInvalidatesMemory)
 {
