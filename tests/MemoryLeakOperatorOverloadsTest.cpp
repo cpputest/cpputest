@@ -39,6 +39,10 @@ TEST(BasicBehavior, deleteInvalidatesMemory)
 	CHECK(*memory != 0xAD);
 }
 
+#if CPPUTEST_USE_STD_CPP_LIB
+#include <cstdlib>
+#endif
+
 TEST(BasicBehavior, bothMallocAndFreeAreOverloaded)
 {
 	void* memory = cpputest_malloc_location(sizeof(char), "file", 10);
