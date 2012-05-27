@@ -39,6 +39,7 @@ TEST(BasicBehavior, deleteInvalidatesMemory)
 	CHECK(*memory != 0xAD);
 }
 
+/* This include is added because *sometimes* the cstdlib does an #undef. This should have been prevented */
 #if CPPUTEST_USE_STD_CPP_LIB
 #include <cstdlib>
 #endif

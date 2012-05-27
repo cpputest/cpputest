@@ -48,6 +48,13 @@ extern void     free(void *);
 /* Needed for size_t */
 #include <stddef.h>
 
+/* Sometimes the C++ library does an #undef in stdlib of malloc and free. We want to prevent that */
+#ifdef __cplusplus
+#if CPPUTEST_USE_STD_CPP_LIB
+#include <cstdlib>
+#endif
+#endif
+
 /* Needed for malloc */
 #include <stdlib.h>
 
