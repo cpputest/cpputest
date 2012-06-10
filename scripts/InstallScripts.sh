@@ -1,4 +1,4 @@
-#/bin/bash -x
+#!/bin/bash -x
 CPPUTEST_HOME=$(pwd)/..
 
 EXE_DIR=${EXE_DIR:-/usr/local/bin}

@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/bin/ruby
 require File.join(File.dirname(__FILE__),  'cpp_u_test_to_unity_utils.rb')
 include CppUTestToUnityUtils
 

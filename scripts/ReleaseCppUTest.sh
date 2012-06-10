@@ -1,4 +1,4 @@
-#/bin/sh -x
+#!/bin/sh -x
 #source in release generator script
 
 if [ ! -d "scripts" ]; then
