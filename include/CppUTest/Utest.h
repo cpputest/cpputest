@@ -102,6 +102,7 @@ public:
     void setTestName(const char *testName);
 
     virtual void exitCurrentTest();
+    virtual void exitCurrentTestWithoutException();
 
     static void crash();
     static void setCrashMethod(void (*crashme)());

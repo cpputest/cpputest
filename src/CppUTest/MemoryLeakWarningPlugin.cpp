@@ -195,7 +195,9 @@ public:
 
 	virtual void fail(char* fail_string)
 	{
-		FAIL(fail_string);
+		UtestShell* currentTest = UtestShell::getCurrent();
+		currentTest->getTestResult()->addFailure(FailFailure(currentTest, currentTest->getName().asCharString(), currentTest->getLineNumber(), fail_string));
+		currentTest->exitCurrentTestWithoutException();
 	}
 };
 

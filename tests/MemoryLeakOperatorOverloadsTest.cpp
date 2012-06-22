@@ -3,8 +3,8 @@
 #include "CppUTest/MemoryLeakDetector.h"
 #include "CppUTest/TestOutput.h"
 #include "CppUTest/TestRegistry.h"
-#include "CppUTest/TestTestingFixture.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
+#include "CppUTest/TestTestingFixture.h"
 #include "AllocationInCppFile.h"
 extern "C"
 {
@@ -37,6 +37,27 @@ TEST(BasicBehavior, deleteInvalidatesMemory)
 	*memory = 0xAD;
 	delete memory;
 	CHECK(*memory != 0xAD);
+}
+
+void deleteUnallocatedMemory()
+{
+	delete (char*) 0x1234678;
+	FAIL("Should never come here");
+}
+
+TEST(BasicBehavior, deleteWillNotThrowAnExceptionWhenDeletingUnallocatedMemoryButCanStillCauseTestFailures)
+{
+	/*
+	 * Test failure might cause an exception. But according to C++ standard, you aren't allowed
+	 * to throw exceptions in the delete function. If you do that, it will call std::terminate.
+	 * Therefore, the delete will need to fail without exceptions.
+	 */
+	MemoryLeakFailure* defaultReporter = MemoryLeakWarningPlugin::getGlobalFailureReporter();
+	TestTestingFixture fixture;
+	fixture.setTestFunction(deleteUnallocatedMemory);
+	fixture.runAllTests();
+	LONGS_EQUAL(1, fixture.getFailureCount());
+	POINTERS_EQUAL(defaultReporter, MemoryLeakWarningPlugin::getGlobalFailureReporter());
 }
 
 #endif

@@ -68,6 +68,11 @@ void PlatformSpecificLongJmp()
 	longjmp(test_exit_jmp_buf[jmp_buf_index], 1);
 }
 
+void PlatformSpecificRestoreJumpBuffer()
+{
+	jmp_buf_index--;
+}
+
 void PlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
 {
 #ifdef __MINGW32__

@@ -56,6 +56,11 @@ void PlatformSpecificLongJmp()
 	longjmp(test_exit_jmp_buf[jmp_buf_index], 1);
 }
 
+void PlatformSpecificRestoreJumpBuffer()
+{
+	jmp_buf_index--;
+}
+
 void PlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
 {
    printf("-p doesn't work on this platform as it is not implemented. Running inside the process\b");

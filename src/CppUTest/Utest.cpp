@@ -208,9 +208,13 @@ void UtestShell::exitCurrentTest()
 {
 #if CPPUTEST_USE_STD_CPP_LIB
 	throw CppUTestFailedException();
-#else
-	PlatformSpecificLongJmp();
 #endif
+	exitCurrentTestWithoutException();
+}
+
+void UtestShell::exitCurrentTestWithoutException()
+{
+	PlatformSpecificLongJmp();
 }
 
 UtestShell *UtestShell::getNext() const
@@ -454,17 +458,22 @@ Utest::~Utest()
 void Utest::run()
 {
 	try {
-		setup();
-		testBody();
+		if (PlatformSpecificSetJmp(helperDoTestSetup, this)) {
+			PlatformSpecificSetJmp(helperDoTestBody, this);
+		}
 	}
 	catch (CppUTestFailedException&)
-	{}
+	{
+		PlatformSpecificRestoreJumpBuffer();
+	}
 
 	try {
-		teardown();
+		PlatformSpecificSetJmp(helperDoTestTeardown, this);
 	}
 	catch (CppUTestFailedException&)
-	{}
+	{
+		PlatformSpecificRestoreJumpBuffer();
+	}
 
 }
 #else

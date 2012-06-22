@@ -187,7 +187,7 @@ private:
 
 	void storeLeakInformation(MemoryLeakDetectorNode * node, char *new_memory, size_t size, TestMemoryAllocator *allocator, const char *file, int line);
     void ConstructMemoryLeakReport(MemLeakPeriod period);
-	void reportFailure(const char* message, const char* allocFile,
+    void reportFailure(const char* message, const char* allocFile,
 			int allocLine, size_t allocSize,
 			TestMemoryAllocator* allocAllocator, const char* freeFile,
 			int freeLine, TestMemoryAllocator* freeAllocator);

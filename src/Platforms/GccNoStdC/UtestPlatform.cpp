@@ -47,6 +47,12 @@ void PlatformSpecificLongJmp()
 	/* To be implemented */
 }
 
+void PlatformSpecificRestoreJumpBuffer()
+{
+	/* To be implemented */
+}
+
+
 void PlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
 {
 	(void) shell;

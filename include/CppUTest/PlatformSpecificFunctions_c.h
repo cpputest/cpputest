@@ -42,6 +42,7 @@
 /* Jumping operations. They manage their own jump buffers */
 int PlatformSpecificSetJmp(void (*function) (void*), void* data);
 void PlatformSpecificLongJmp(void);
+void PlatformSpecificRestoreJumpBuffer(void);
 
 /* Time operations */
 long GetPlatformSpecificTimeInMillis(void);
