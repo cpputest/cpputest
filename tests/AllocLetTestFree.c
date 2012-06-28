@@ -1,5 +1,7 @@
 
-#ifndef CPPUTEST_STD_C_LIB_DISABLED
+#include "CppUTest/StandardCLibrary.h"
+
+#if CPPUTEST_USE_STD_C_LIB
 
 #include "AllocLetTestFree.h"
 #include <stdlib.h>
@@ -24,8 +26,4 @@ void AllocLetTestFree_Destroy(AllocLetTestFree self)
 	self = no_use;
 
 }
-#else
-
-int thisSourceFileCannotBeEmptyBecauseThenTheCompilerWillGiveAVeryWeirdErrorMessage = 0;
-
 #endif
