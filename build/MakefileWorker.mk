@@ -414,7 +414,7 @@ $(TEST_TARGET): $(TEST_OBJS) $(MOCKS_OBJS)  $(PRODUCTION_CODE_START) $(TARGET_LI
 
 $(TARGET_LIB): $(OBJ)
 	@echo Building archive $@
-	$(SILENCE)mkdir -p lib
+	$(SILENCE)mkdir -p $(dir $@)
 	$(SILENCE)$(AR) $(ARFLAGS) $@ $^
 	$(SILENCE)$(RANLIB) $@
 
