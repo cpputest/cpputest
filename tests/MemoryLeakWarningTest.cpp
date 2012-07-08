@@ -273,3 +273,24 @@ TEST(MemoryLeakWarningGlobalDetectorTest, crashOnLeakWithOperatorMalloc)
 	MemoryLeakWarningPlugin::turnOffNewDeleteOverloads();
 }
 
+
+#if CPPUTEST_USE_STD_CPP_LIB
+
+TEST(MemoryLeakWarningGlobalDetectorTest, turnOffNewOverloadsNoThrowCausesNoAdditionalLeaks)
+{
+#undef new
+	int storedAmountOfLeaks = detector->totalMemoryLeaks(mem_leak_period_all);
+
+	char* nonMemoryNoThrow = new (std::nothrow) char;
+	char* nonArrayMemoryNoThrow = new (std::nothrow) char[10];
+
+	LONGS_EQUAL(storedAmountOfLeaks, detector->totalMemoryLeaks(mem_leak_period_all));
+
+	delete nonMemoryNoThrow;
+	delete nonArrayMemoryNoThrow;
+#if CPPUTEST_USE_NEW_MACROS
+	#include "CppUTest/MemoryLeakDetectorNewMacros.h"
+#endif
+}
+
+#endif

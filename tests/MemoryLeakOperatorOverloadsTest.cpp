@@ -248,6 +248,7 @@ TEST_GROUP(OutOfMemoryTestsForOperatorNew)
 		setCurrentNewAllocator(no_memory_allocator);
 		setCurrentNewArrayAllocator(no_memory_allocator);
 	}
+
 	void teardown()
 	{
 		setCurrentNewAllocatorToDefault();
@@ -317,6 +318,17 @@ TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorThrowsAnExceptionWhe
 	catch (std::bad_alloc&) {
 	}
 }
+
+TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorReturnsNullWithoutOverride)
+{
+	POINTERS_EQUAL(NULL, new (std::nothrow) char);
+}
+
+TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorReturnsNullWithoutOverride)
+{
+	POINTERS_EQUAL(NULL, new (std::nothrow) char[10]);
+}
+
 #else
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorReturnsNullWithoutOverride)
