@@ -101,7 +101,7 @@ static void* normal_operator_new (size_t size) UT_THROW(std::bad_alloc)
 	return memory;
 }
 
-static void* normal_operator_new_nothrow (size_t size) UT_THROW(std::bad_alloc)
+static void* normal_operator_new_nothrow (size_t size) UT_THROW_EMPTY()
 {
 	return PlatformSpecificMalloc(size);
 }
@@ -120,7 +120,7 @@ static void* normal_operator_new_array (size_t size) UT_THROW(std::bad_alloc)
 	return memory;
 }
 
-static void* normal_operator_new_array_nothrow (size_t size) UT_THROW(std::bad_alloc)
+static void* normal_operator_new_array_nothrow (size_t size) UT_THROW_EMPTY()
 {
 	return PlatformSpecificMalloc(size);
 }
