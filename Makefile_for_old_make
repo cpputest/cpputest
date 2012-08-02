@@ -110,7 +110,7 @@ CPPUTEST_CFLAGS += $(CPPUTEST_MEMLEAK_DETECTOR_MALLOC_MACRO_FILE)
 CPPUTEST_LIB = $(CPPUTEST_HOME)/lib/libCppUTest.a 
 CPPUTEST_EXT_LIB += $(CPPUTEST_HOME)/lib/libCppUTestExt.a
 
-LD_LIBRARIES += -lstdc++ -lgcov
+LD_LIBRARIES += -lstdc++
 
 CPPUTEST_SRC_DIRS = src/CppUTest src/Platforms/Gcc
 CPPUTEST_EXT_SRC_DIRS = src/CppUTestExt 
@@ -177,7 +177,7 @@ $(CPPUTEST_CPP_OBJS): %.o: %.cpp
 $(CPPUTEST_C_OBJS): %.o: %.c
 	@echo compiling $(notdir $<)
 	$(SILENCE)mkdir -p $(dir $@)
-	$(SILENCE)$(CC) $(CPPFLAGS) $(CFLAGS) -M -MF $(subst .o,.d,$@) -MT "$@ $(subst .o,.d,$@)" $<
+	$(SILENCE)$(CC) $(CPPFLAGS) $(CFLAGS) -M -MT "$@ $(subst .o,.d,$@)" $<
 	$(SILENCE)$(CC) $(CPPFLAGS) $(CFLAGS) -c $(OUTPUT_OPTION) $<
 
 $(CPPUTEST_TEST_CPP_OBJS): %.o: %.cpp
@@ -189,7 +189,7 @@ $(CPPUTEST_TEST_CPP_OBJS): %.o: %.cpp
 $(CPPUTEST_TEST_C_OBJS): %.o: %.c
 	@echo compiling $(notdir $<)
 	$(SILENCE)mkdir -p $(dir $@)
-	$(SILENCE)$(CC) $(CPPFLAGS) $(CFLAGS) -M -MF $(subst .o,.d,$@) -MT "$@ $(subst .o,.d,$@)" $<
+	$(SILENCE)$(CC) $(CPPFLAGS) $(CFLAGS) -M -MT "$@ $(subst .o,.d,$@)" $<
 	$(SILENCE)$(CC) $(CPPFLAGS) $(CFLAGS) -c $(OUTPUT_OPTION) $<
 
 extensions: $(CPPUTEST_EXT_TEST_TARGET)
@@ -213,7 +213,7 @@ $(CPPUTEST_EXT_CPP_OBJS): %.o: %.cpp
 $(CPPUTEST_EXT_C_OBJS): %.o: %.c
 	@echo compiling $(notdir $<)
 	$(SILENCE)mkdir -p $(dir $@)
-	$(SILENCE)$(CC) $(CPPFLAGS) $(CFLAGS) -M -MF $(subst .o,.d,$@) -MT "$@ $(subst .o,.d,$@)" $<
+	$(SILENCE)$(CC) $(CPPFLAGS) $(CFLAGS) -M -MT "$@ $(subst .o,.d,$@)" $<
 	$(SILENCE)$(CC) $(CPPFLAGS) $(CFLAGS) -c $(OUTPUT_OPTION) $<
 
 $(CPPUTEST_EXT_TEST_CPP_OBJS): %.o: %.cpp
@@ -225,7 +225,7 @@ $(CPPUTEST_EXT_TEST_CPP_OBJS): %.o: %.cpp
 $(CPPUTEST_EXT_TEST_C_OBJS): %.o: %.c
 	@echo compiling $(notdir $<)
 	$(SILENCE)mkdir -p $(dir $@)
-	$(SILENCE)$(CC) $(CPPFLAGS) $(CFLAGS) -M -MF $(subst .o,.d,$@) -MT "$@ $(subst .o,.d,$@)" $<
+	$(SILENCE)$(CC) $(CPPFLAGS) $(CFLAGS) -M -MT "$@ $(subst .o,.d,$@)" $<
 	$(SILENCE)$(CC) $(CPPFLAGS) $(CFLAGS) -c $(OUTPUT_OPTION) $<
 
 ############ Clean targets ##################
