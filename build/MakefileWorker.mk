@@ -285,7 +285,11 @@ ifeq ($(CPPUTEST_USE_EXTENSIONS), Y)
 CPPUTEST_LIB += $(CPPUTEST_HOME)/lib/libCppUTestExt.a
 endif
 
-LD_LIBRARIES += -lstdc++ -lgcov
+LD_LIBRARIES += -lstdc++
+
+ifeq ($(CPPUTEST_USE_GCOV), Y)
+	LD_LIBRARIES += -lgcov
+endif
 
 TARGET_LIB = \
     $(CPPUTEST_LIB_DIR)/lib$(COMPONENT_NAME).a
