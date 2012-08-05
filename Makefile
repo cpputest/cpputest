@@ -84,7 +84,7 @@ test_all: start test_old_make
 	make CPPUTEST_USE_VPATH=Y gcov
 	make CPPUTEST_USE_VPATH=Y -f Makefile_CppUTestExt gcov
 	make CPPUTEST_USE_VPATH=Y -C examples gcov	
-	make clean
+	make clean cleanExamples
 	@echo Testing VPATH usage
 	$(TIME) make CPPUTEST_USE_VPATH=Y everythingInstall
 	make CPPUTEST_USE_VPATH=Y cleanEverythingInstall
