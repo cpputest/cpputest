@@ -236,6 +236,7 @@ endif
 ifeq ($(CPPUTEST_ENABLE_DEBUG), Y)
 	CPPUTEST_CXXFLAGS += -g
 	CPPUTEST_CFLAGS += -g
+	CPPUTEST_LDFLAGS += -g
 endif
 
 ifeq ($(CPPUTEST_USE_STD_CPP_LIB), N)
@@ -517,6 +518,4 @@ debug:
 	@echo Includes:
 	@$(call debug_print_list,$(INCLUDES))
 
-ifneq "$(OTHER_MAKEFILE_TO_INCLUDE)" ""
 -include $(OTHER_MAKEFILE_TO_INCLUDE)
-endif
