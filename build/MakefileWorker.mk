@@ -62,11 +62,14 @@
 
 # Some behavior is weird on some platforms. Need to discover the platform.
 UNAME_OUTPUT = "$(shell uname -a)"
+CC_VERSION_OUTPUT ="$(shell $(CXX) -v 2>&1)"
 MACOSX_STR = Darwin
 MINGW_STR = MINGW
 CYGWIN_STR = CYGWIN
 LINUX_STR = Linux
 UNKNWOWN_OS_STR = Unknown
+CLANG_STR = clang 
+
 UNAME_OS = $(UNKNWOWN_OS_STR)
 
 ifeq ($(findstring $(MINGW_STR),$(UNAME_OUTPUT)),$(MINGW_STR))
@@ -85,6 +88,10 @@ ifeq ($(findstring $(MACOSX_STR),$(UNAME_OUTPUT)),$(MACOSX_STR))
 	UNAME_OS = $(MACOSX_STR)
 	#lion has a problem with the 'v' part of -a
 	UNAME_OUTPUT = "$(shell uname -pmnrs)"
+endif
+
+ifeq ($(findstring $(CLANG_STR),$(CC_VERSION_OUTPUT)),$(CLANG_STR))
+	COMPILER_NAME = $(CLANG_STR)
 endif
 
 #Kludge for mingw, it does not have cc.exe, but gcc.exe will do
@@ -233,7 +240,9 @@ endif
 
 ifeq ($(CPPUTEST_USE_STD_CPP_LIB), N)
 	CPPUTEST_CPPFLAGS += -DCPPUTEST_STD_CPP_LIB_DISABLED
+ifeq ($(CPPUTEST_USE_STD_C_LIB), Y)
 	CPPUTEST_CXXFLAGS += -nostdinc++
+endif
 endif
 
 ifeq ($(CPPUTEST_USE_REAL_GMOCK), Y)
@@ -286,10 +295,6 @@ CPPUTEST_LIB += $(CPPUTEST_HOME)/lib/libCppUTestExt.a
 endif
 
 LD_LIBRARIES += -lstdc++
-
-ifeq ($(CPPUTEST_USE_GCOV), Y)
-	LD_LIBRARIES += -lgcov
-endif
 
 TARGET_LIB = \
     $(CPPUTEST_LIB_DIR)/lib$(COMPONENT_NAME).a
@@ -359,6 +364,16 @@ STUFF_TO_CLEAN += \
 #To avoid annoying messages.
 GCOV_CLEAN = $(SILENCE)rm -f $(GCOV_GCDA_FILES) $(GCOV_OUTPUT) $(GCOV_REPORT) $(GCOV_ERROR)
 RUN_TEST_TARGET = $(SILENCE)  $(GCOV_CLEAN) ; echo "Running $(TEST_TARGET)"; ./$(TEST_TARGET) $(CPPUTEST_EXE_FLAGS)
+
+ifeq ($(CPPUTEST_USE_GCOV), Y)
+
+	ifeq ($(COMPILER_NAME),$(CLANG_STR))
+		LD_LIBRARIES += --coverage
+	else
+		LD_LIBRARIES += -lgcov
+	endif
+endif
+
 
 INCLUDES_DIRS_EXPANDED = $(call get_dirs_from_dirspec, $(INCLUDE_DIRS))
 INCLUDES += $(foreach dir, $(INCLUDES_DIRS_EXPANDED), -I$(dir))
