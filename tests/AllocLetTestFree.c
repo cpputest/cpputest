@@ -4,8 +4,6 @@
 #if CPPUTEST_USE_STD_C_LIB
 
 #include "AllocLetTestFree.h"
-#include <stdlib.h>
-#include <memory.h>
 
 typedef struct AllocLetTestFreeStruct
 {
