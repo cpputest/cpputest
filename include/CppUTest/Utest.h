@@ -78,7 +78,7 @@ public:
 	const SimpleString getGroup() const;
 	const SimpleString getFile() const;
 	int getLineNumber() const;
-    const virtual char *getProgressIndicator() const;
+    virtual const char *getProgressIndicator() const;
 
 	static TestResult *getTestResult();
     static UtestShell *getCurrent();
