@@ -20,6 +20,8 @@
 #				in a directory can be built for test (hopefully a temporary situation)
 #	TEST_SRC_DIRS - Directories containing unit test code build into the unit test runner
 #				These do not go in a library. They are explicitly included in the test runner
+#	TEST_SRC_FILES - Specific source files to build into the unit test runner
+#				These do not go in a library. They are explicitly included in the test runner
 #	MOCKS_SRC_DIRS - Directories containing mock source files to build into the test runner
 #				These do not go in a library. They are explicitly included in the test runner
 #----------
@@ -321,12 +323,12 @@ debug_print_list = $(foreach word,$1,echo "  $(word)";) echo;
 #Derived
 STUFF_TO_CLEAN += $(TEST_TARGET) $(TEST_TARGET).exe $(TARGET_LIB) $(TARGET_MAP)
 
-SRC += $(call get_src_from_dir_list, $(SRC_DIRS)) $(SRC_FILES)			        
+SRC += $(call get_src_from_dir_list, $(SRC_DIRS)) $(SRC_FILES)
 OBJ = $(call src_to_o,$(SRC))
 
 STUFF_TO_CLEAN += $(OBJ)
 
-TEST_SRC = $(call get_src_from_dir_list, $(TEST_SRC_DIRS))
+TEST_SRC = $(call get_src_from_dir_list, $(TEST_SRC_DIRS)) $(TEST_SRC_FILES)
 TEST_OBJS = $(call src_to_o,$(TEST_SRC))
 STUFF_TO_CLEAN += $(TEST_OBJS)
 

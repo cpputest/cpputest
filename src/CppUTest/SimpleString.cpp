@@ -150,7 +150,7 @@ size_t SimpleString::count(const SimpleString& substr) const
 void SimpleString::split(const SimpleString& delimiter, SimpleStringCollection& col) const
 {
 	size_t num = count(delimiter);
-	size_t extraEndToken = (endsWith(delimiter)) ? 0 : 1;
+	size_t extraEndToken = (endsWith(delimiter)) ? 0 : 1U;
 	col.allocate(num + extraEndToken);
 
 	char* str = buffer_;
