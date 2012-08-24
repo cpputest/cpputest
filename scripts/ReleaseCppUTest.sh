@@ -9,7 +9,7 @@ fi
 GENERATED_FILES=""
 release_dir=Releases
 scripts_dir=scripts
-version=v3.2
+version=v3.3
 zip_root=CppUTest-${version}
 tar_root=CppUTest-${version}_tar
 clean_unzip_root=${zip_root}_clean_unzip
