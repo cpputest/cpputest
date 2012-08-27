@@ -51,6 +51,7 @@ public:
     virtual void setup();
     virtual void teardown();
 	virtual void testBody();
+	virtual Utest* createTest();
 
 	GTest* nextGTest();
 };

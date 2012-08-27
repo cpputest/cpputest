@@ -205,6 +205,37 @@ GTest* GTest::nextGTest()
 	return next_;
 }
 
+class GTestUTest: public Utest {
+public:
+	GTestUTest(GTest * shell) : shell_(shell)
+	{
+
+	}
+
+	void testBody()
+	{
+		shell_->testBody();
+	}
+
+	void setup()
+	{
+		shell_->setup();
+	}
+
+	void teardown()
+	{
+		shell_->teardown();
+	}
+
+private:
+	GTest * shell_;
+};
+
+Utest* GTest::createTest()
+{
+	return new GTestUTest(this);
+};
+
 void GTestConvertor::simulateGTestFailureToPreAllocateAllTheThreadLocalData()
 {
 	GTestDummyResultReporter *dummyReporter = new GTestDummyResultReporter();
