@@ -31,6 +31,23 @@
 #include "CppUTest/TestMemoryAllocator.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
+void* cpputest_malloc_location_with_leak_detection(size_t size, const char* file, int line)
+{
+	return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentMallocAllocator(), size, file, line, true);
+}
+
+void* cpputest_realloc_location_with_leak_detection(void* memory, size_t size, const char* file, int line)
+{
+	return MemoryLeakWarningPlugin::getGlobalDetector()->reallocMemory(getCurrentMallocAllocator(), (char*) memory, size, file, line, true);
+}
+
+void cpputest_free_location_with_leak_detection(void* buffer, const char* file, int line)
+{
+	MemoryLeakWarningPlugin::getGlobalDetector()->invalidateMemory((char*) buffer);
+	MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(getCurrentMallocAllocator(), (char*) buffer, file, line, true);
+}
+
+
 #if CPPUTEST_USE_MEM_LEAK_DETECTION
 #undef new
 
@@ -324,8 +341,6 @@ MemoryLeakWarningPlugin::MemoryLeakWarningPlugin(const SimpleString& name, Memor
 
 MemoryLeakWarningPlugin::~MemoryLeakWarningPlugin()
 {
-	if (this == firstPlugin_) firstPlugin_ = 0;
-
 	if (destroyGlobalDetectorAndTurnOfMemoryLeakDetectionInDestructor_) {
 		MemoryLeakWarningPlugin::turnOffNewDeleteOverloads();
 		MemoryLeakWarningPlugin::destroyGlobalDetector();
