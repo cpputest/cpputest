@@ -200,9 +200,13 @@ TEST(MemoryLeakWarningGlobalDetectorTest, turnOffNewOverloadsCausesNoAdditionalL
 
 	char* arrayMemory = new char[100];
 	char* nonArrayMemory = new char;
+	char* mallocMemory = (char*) cpputest_malloc_location_with_leak_detection(10, "file", 10);
+	char* reallocMemory = (char*) cpputest_realloc_location_with_leak_detection(NULL, 10, "file", 10);
 
 	LONGS_EQUAL(storedAmountOfLeaks, detector->totalMemoryLeaks(mem_leak_period_all));
 
+	cpputest_free_location_with_leak_detection(mallocMemory, "file", 10);
+	cpputest_free_location_with_leak_detection(reallocMemory, "file", 10);
 	delete [] arrayMemory;
 	delete nonArrayMemory;
 }
@@ -259,11 +263,11 @@ TEST(MemoryLeakWarningGlobalDetectorTest, crashOnLeakWithOperatorNewArray)
 	MemoryLeakWarningPlugin::turnOffNewDeleteOverloads();
 }
 
-#endif
-
 TEST(MemoryLeakWarningGlobalDetectorTest, crashOnLeakWithOperatorMalloc)
 {
 	MemoryLeakWarningPlugin::setGlobalDetector(dummyDetector, dummyReporter);
+
+	MemoryLeakWarningPlugin::turnOnNewDeleteOverloads();
 
 	crash_on_allocation_number(1);
 	char* memory = (char*) cpputest_malloc(10);
@@ -273,6 +277,7 @@ TEST(MemoryLeakWarningGlobalDetectorTest, crashOnLeakWithOperatorMalloc)
 	MemoryLeakWarningPlugin::turnOffNewDeleteOverloads();
 }
 
+#endif
 
 #if CPPUTEST_USE_STD_CPP_LIB
 
