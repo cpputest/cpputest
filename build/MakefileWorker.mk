@@ -71,6 +71,7 @@ UNAME_OUTPUT = "$(shell uname -a)"
 CC_VERSION_OUTPUT ="$(shell $(CXX) -v 2>&1)"
 MACOSX_STR = Darwin
 MINGW_STR = MINGW
+XILINX_MINGW_STR = MinGW
 CYGWIN_STR = CYGWIN
 LINUX_STR = Linux
 UNKNWOWN_OS_STR = Unknown
@@ -79,6 +80,10 @@ CLANG_STR = clang
 UNAME_OS = $(UNKNWOWN_OS_STR)
 
 ifeq ($(findstring $(MINGW_STR),$(UNAME_OUTPUT)),$(MINGW_STR))
+	UNAME_OS = $(MINGW_STR)
+endif
+
+ifeq ($(findstring $(XILINX_MINGW_STR),$(UNAME_OUTPUT)),$(XILINX_MINGW_STR))
 	UNAME_OS = $(MINGW_STR)
 endif
 
