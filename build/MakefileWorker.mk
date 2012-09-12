@@ -458,7 +458,7 @@ test-deps: $(TEST_DEPS)
 
 $(TEST_TARGET): $(TEST_DEPS)
 	@echo Linking $@
-	$(LINK.o) -o $@ $^ $(LD_LIBRARIES)
+	$(SILENCE)$(LINK.o) -o $@ $^ $(LD_LIBRARIES)
 
 $(TARGET_LIB): $(OBJ)
 	@echo Building archive $@
