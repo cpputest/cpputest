@@ -40,19 +40,16 @@ namespace testing {
 	class Test;
 }
 
-class GTest : public UtestShell
+class GTestShell : public UtestShell
 {
 	::testing::TestInfo* testinfo_;
-	::testing::Test* test_;
-	GTest* next_;
+	GTestShell* next_;
 public:
-	GTest(::testing::TestInfo* testinfo, GTest* next);
+	GTestShell(::testing::TestInfo* testinfo, GTestShell* next);
 
-    virtual void setup();
-    virtual void teardown();
-	virtual void testBody();
+	virtual Utest* createTest();
 
-	GTest* nextGTest();
+	GTestShell* nextGTest();
 };
 
 
@@ -72,7 +69,7 @@ protected:
 	virtual void createDummyInSequenceToAndFailureReporterAvoidMemoryLeakInGMock();
 private:
 	GTestResultReporter* reporter_;
-	GTest* first_;
+	GTestShell* first_;
 };
 
 #endif
