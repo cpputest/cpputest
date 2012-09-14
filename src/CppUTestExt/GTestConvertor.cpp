@@ -150,60 +150,77 @@ public:
 	}
 };
 
-GTest::GTest(::testing::TestInfo* testinfo, GTest* next) : testinfo_(testinfo), next_(next)
+GTestShell::GTestShell(::testing::TestInfo* testinfo, GTestShell* next) : testinfo_(testinfo), next_(next)
 {
 	setGroupName(testinfo->test_case_name());
 	setTestName(testinfo->name());
 }
 
-void GTest::setup()
-{
-	resetValuesOfGTestFlags();
-
-	#ifdef GTEST_VERSION_GTEST_1_5
-	test_ = testinfo_->impl()->factory_->CreateTest();
-#else
-	test_ = testinfo_->factory_->CreateTest();
-#endif
-
-	::testing::UnitTest::GetInstance()->impl()->set_current_test_info(testinfo_);
-	try {
-		test_->SetUp();
-	}
-	catch (CppUTestFailedException& ex)
-	{
-	}
-}
-
-void GTest::teardown()
-{
-	try {
-		test_->TearDown();
-	}
-	catch (CppUTestFailedException& ex)
-	{
-	}
-	::testing::UnitTest::GetInstance()->impl()->set_current_test_info(NULL);
-	delete test_;
-
-	setGTestFLagValuesToNULLToAvoidMemoryLeaks();
-	::testing::internal::DeathTest::set_last_death_test_message(NULL);
-}
-
-void GTest::testBody()
-{
-	try {
-		test_->TestBody();
-	}
-	catch (CppUTestFailedException& ex)
-	{
-	}
-}
-
-GTest* GTest::nextGTest()
+GTestShell* GTestShell::nextGTest()
 {
 	return next_;
 }
+
+class GTestUTest: public Utest {
+public:
+	GTestUTest(::testing::TestInfo* testinfo) : testinfo_(testinfo), test_(NULL)
+	{
+
+	}
+
+	void testBody()
+	{
+		try {
+			test_->TestBody();
+		}
+		catch (CppUTestFailedException& ex)
+		{
+		}
+	}
+
+	void setup()
+	{
+		resetValuesOfGTestFlags();
+
+		#ifdef GTEST_VERSION_GTEST_1_5
+		test_ = testinfo_->impl()->factory_->CreateTest();
+	#else
+		test_ = testinfo_->factory_->CreateTest();
+	#endif
+
+		::testing::UnitTest::GetInstance()->impl()->set_current_test_info(testinfo_);
+		try {
+			test_->SetUp();
+		}
+		catch (CppUTestFailedException& ex)
+		{
+		}
+	}
+
+	void teardown()
+	{
+		try {
+			test_->TearDown();
+		}
+		catch (CppUTestFailedException& ex)
+		{
+		}
+		::testing::UnitTest::GetInstance()->impl()->set_current_test_info(NULL);
+		delete test_;
+
+		setGTestFLagValuesToNULLToAvoidMemoryLeaks();
+		::testing::internal::DeathTest::set_last_death_test_message(NULL);
+	}
+
+private:
+	::testing::Test* test_;
+	::testing::TestInfo* testinfo_;
+};
+
+Utest* GTestShell::createTest()
+{
+	return new GTestUTest(testinfo_);
+};
 
 void GTestConvertor::simulateGTestFailureToPreAllocateAllTheThreadLocalData()
 {
@@ -224,7 +241,7 @@ GTestConvertor::~GTestConvertor()
 	delete reporter_;
 
 	while (first_) {
-		GTest* next = first_->nextGTest();
+		GTestShell* next = first_->nextGTest();
 		delete first_;
 		first_ = next;
 	}
@@ -232,7 +249,7 @@ GTestConvertor::~GTestConvertor()
 
 void GTestConvertor::addNewTestCaseForTestInfo(::testing::TestInfo* testinfo)
 {
-	first_ = new GTest(testinfo, first_);
+	first_ = new GTestShell(testinfo, first_);
 	TestRegistry::getCurrentRegistry()->addTest(first_);
 }
 
