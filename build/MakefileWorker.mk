@@ -346,7 +346,7 @@ OBJ = $(call src_to_o,$(SRC))
 
 STUFF_TO_CLEAN += $(OBJ)
 
-TEST_SRC = $(call get_src_from_dir_list, $(TEST_SRC_DIRS)) $(TEST_SRC_FILES)
+TEST_SRC += $(call get_src_from_dir_list, $(TEST_SRC_DIRS)) $(TEST_SRC_FILES)
 TEST_OBJS = $(call src_to_o,$(TEST_SRC))
 STUFF_TO_CLEAN += $(TEST_OBJS)
 
