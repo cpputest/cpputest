@@ -341,6 +341,19 @@ MockNamedValue MockSupport::getData(const SimpleString& name)
 	return *value;
 }
 
+MockSupport* MockSupport::createDerivedMockSupport()
+{
+	MockSupport* newMock = new MockSupport;
+	newMock->setMockFailureReporter(reporter_);
+	if (ignoreOtherCalls_) newMock->ignoreOtherCalls();
+
+	if (!enabled_) newMock->disable();
+
+	newMock->tracing(tracing_);
+	newMock->installComparators(comparatorRepository_);
+	return newMock;
+}
+
 MockSupport* MockSupport::getMockSupportScope(const SimpleString& name)
 {
 	SimpleString mockingSupportName = MOCK_SUPPORT_SCOPE_PREFIX;
@@ -351,13 +364,7 @@ MockSupport* MockSupport::getMockSupportScope(const SimpleString& name)
 		return (MockSupport*) getData(mockingSupportName).getObjectPointer();
 	}
 
-	MockSupport *newMock = new MockSupport;
-
-	newMock->setMockFailureReporter(reporter_);
-	if (ignoreOtherCalls_) newMock->ignoreOtherCalls();
-	if (!enabled_) newMock->disable();
-	newMock->tracing(tracing_);
-	newMock->installComparators(comparatorRepository_);
+	MockSupport *newMock = createDerivedMockSupport();
 
 	setDataObject(mockingSupportName, "MockSupport", newMock);
 	return newMock;
