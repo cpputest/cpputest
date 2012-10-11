@@ -80,6 +80,7 @@ TEST(BasicBehavior, bothMallocAndFreeAreOverloaded)
 
 #endif
 
+#if CPPUTEST_USE_MEM_LEAK_DETECTION
 
 TEST(BasicBehavior, freeInvalidatesMemory)
 {
@@ -88,6 +89,7 @@ TEST(BasicBehavior, freeInvalidatesMemory)
 	cpputest_free(memory);
 	CHECK(*memory != 0xAD);
 }
+#endif
 
 TEST_GROUP(MemoryLeakOverridesToBeUsedInProductionCode)
 {

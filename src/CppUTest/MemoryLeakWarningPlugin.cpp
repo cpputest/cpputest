@@ -31,6 +31,70 @@
 #include "CppUTest/TestMemoryAllocator.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
+/********** Enabling and disabling for C also *********/
+
+#if CPPUTEST_USE_MEM_LEAK_DETECTION
+
+static void* mem_leak_malloc(size_t size, const char* file, int line)
+{
+	return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentMallocAllocator(), size, file, line, true);
+}
+
+static void mem_leak_free(void* buffer, const char* file, int line)
+{
+	MemoryLeakWarningPlugin::getGlobalDetector()->invalidateMemory((char*) buffer);
+	MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(getCurrentMallocAllocator(), (char*) buffer, file, line, true);
+}
+
+static void* mem_leak_realloc(void* memory, size_t size, const char* file, int line)
+{
+	return MemoryLeakWarningPlugin::getGlobalDetector()->reallocMemory(getCurrentMallocAllocator(), (char*) memory, size, file, line, true);
+}
+
+#endif
+
+static void* normal_malloc(size_t size, const char*, int)
+{
+	return PlatformSpecificMalloc(size);
+}
+
+static void* normal_realloc(void* memory, size_t size, const char*, int)
+{
+	return PlatformSpecificRealloc(memory, size);
+}
+
+static void normal_free(void* buffer, const char*, int)
+{
+	PlatformSpecificFree(buffer);
+}
+
+#if CPPUTEST_USE_MEM_LEAK_DETECTION
+static void *(*malloc_fptr)(size_t size, const char* file, int line) = mem_leak_malloc;
+static void (*free_fptr)(void* mem, const char* file, int line) = mem_leak_free;
+static void*(*realloc_fptr)(void* memory, size_t size, const char* file, int line) = mem_leak_realloc;
+#else
+static void *(*malloc_fptr)(size_t size, const char* file, int line) = normal_malloc;
+static void (*free_fptr)(void* mem, const char* file, int line) = normal_free;
+static void*(*realloc_fptr)(void* memory, size_t size, const char* file, int line) = normal_realloc;
+#endif
+
+void* cpputest_malloc_location_with_leak_detection(size_t size, const char* file, int line)
+{
+	return malloc_fptr(size, file, line);
+}
+
+void* cpputest_realloc_location_with_leak_detection(void* memory, size_t size, const char* file, int line)
+{
+	return realloc_fptr(memory, size, file, line);
+}
+
+void cpputest_free_location_with_leak_detection(void* buffer, const char* file, int line)
+{
+	free_fptr(buffer, file, line);
+}
+
+/********** C++ *************/
+
 #if CPPUTEST_USE_MEM_LEAK_DETECTION
 #undef new
 
@@ -207,6 +271,10 @@ void MemoryLeakWarningPlugin::turnOffNewDeleteOverloads()
 	operator_new_array_debug_fptr = normal_operator_new_array_debug;
 	operator_delete_fptr = normal_operator_delete;
 	operator_delete_array_fptr = normal_operator_delete_array;
+	malloc_fptr = normal_malloc;
+	realloc_fptr = normal_realloc;
+	free_fptr = normal_free;
+
 #endif
 }
 
@@ -221,6 +289,9 @@ void MemoryLeakWarningPlugin::turnOnNewDeleteOverloads()
 	operator_new_array_debug_fptr = mem_leak_operator_new_array_debug;
 	operator_delete_fptr = mem_leak_operator_delete;
 	operator_delete_array_fptr = mem_leak_operator_delete_array;
+	malloc_fptr = mem_leak_malloc;
+	realloc_fptr = mem_leak_realloc;
+	free_fptr = mem_leak_free;
 #endif
 }
 
@@ -324,8 +395,6 @@ MemoryLeakWarningPlugin::MemoryLeakWarningPlugin(const SimpleString& name, Memor
 
 MemoryLeakWarningPlugin::~MemoryLeakWarningPlugin()
 {
-	if (this == firstPlugin_) firstPlugin_ = 0;
-
 	if (destroyGlobalDetectorAndTurnOfMemoryLeakDetectionInDestructor_) {
 		MemoryLeakWarningPlugin::turnOffNewDeleteOverloads();
 		MemoryLeakWarningPlugin::destroyGlobalDetector();
@@ -358,3 +427,5 @@ const char* MemoryLeakWarningPlugin::FinalReport(int toBeDeletedLeaks)
 	if (leaks != toBeDeletedLeaks) return memLeakDetector_->report(mem_leak_period_enabled);
 	return "";
 }
+
+

@@ -65,6 +65,7 @@ int CommandLineTestRunner::RunAllTests(int ac, const char** av)
 	if (result == 0) {
 		output << memLeakWarn.FinalReport(0);
 	}
+	TestRegistry::getCurrentRegistry()->removePluginByName(DEF_PLUGIN_MEM_LEAK);
 	return result;
 }
 
@@ -79,6 +80,7 @@ int CommandLineTestRunner::runAllTestsMain()
 
 	testResult = runAllTests();
 
+	TestRegistry::getCurrentRegistry()->removePluginByName(DEF_PLUGIN_SET_POINTER);
 	return testResult;
 }
 

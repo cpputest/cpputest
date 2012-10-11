@@ -9,9 +9,13 @@ fi
 GENERATED_FILES=""
 release_dir=Releases
 scripts_dir=scripts
-version=v2.4a
+version=v3.3
 zip_root=CppUTest-${version}
+tar_root=CppUTest-${version}_tar
+clean_unzip_root=${zip_root}_clean_unzip
+clean_untar_root=${zip_root}_clean_untar
 zip_file=${zip_root}.zip
+tar_file=${zip_root}.tar.gz
 
 exitIfFileExists() {
   if [ -e $1 ]
@@ -51,6 +55,10 @@ zipIt() {
            $GENERATED_FILES \
            .\
            -x@${scripts_dir}/zipExclude.txt
+	tar -cvpzf ${release_dir}/${tar_file} \
+           -X ./${scripts_dir}/zipExclude.txt \
+           $GENERATED_FILES \
+           .
 }
 
 cleanUp() {
@@ -69,9 +77,24 @@ generateCppUTestRelease() {
 openAndMakeRelease()
 {
     cd ${release_dir}
+
+	# unzip and untar the code and make sure it is the same
+    rm -rf ${clean_unzip_root}
+    unzip ${zip_file} -d ${clean_unzip_root}
+    rm -rf ${clean_untar_root}
+	mkdir ${clean_untar_root}
+	tar -xvzpf ${tar_file} -C ${clean_untar_root}
+
     rm -rf ${zip_root}
     unzip ${zip_file} -d ${zip_root}
     cd ${zip_root}
+    ./makeAll.sh
+    cd ..
+
+    rm -rf ${tar_root}
+	mkdir ${tar_root}
+    tar -xvzpf ${tar_file} -C ${tar_root}
+    cd ${tar_root}
     ./makeAll.sh
     cd ../..
 }

@@ -118,4 +118,8 @@ private:
 	static MemoryLeakWarningPlugin* firstPlugin_;
 };
 
+extern void* cpputest_malloc_location_with_leak_detection(size_t size, const char* file, int line);
+extern void* cpputest_realloc_location_with_leak_detection(void* memory, size_t size, const char* file, int line);
+extern void cpputest_free_location_with_leak_detection(void* buffer, const char* file, int line);
+
 #endif

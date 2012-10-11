@@ -24,3 +24,6 @@
 *UnityTemplates*
 *platforms*
 *.DS_Store
+*.git*
+*.gitignore
+*.swp

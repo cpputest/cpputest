@@ -168,14 +168,14 @@
   FAIL_LOCATION(text, __FILE__,__LINE__)
 
 #define FAIL_LOCATION(text, file, line)\
-  { UtestShell::getCurrent()->fail(text,  file, line); UtestShell::getCurrent()->exitCurrentTest(); }
+  { UtestShell::getCurrent()->fail(text,  file, line); }
 #endif
 
 #define FAIL_TEST(text)\
   FAIL_TEST_LOCATION(text, __FILE__,__LINE__)
 
 #define FAIL_TEST_LOCATION(text, file,line)\
-  { UtestShell::getCurrent()->fail(text, file, line); UtestShell::getCurrent()->exitCurrentTest(); }
+  { UtestShell::getCurrent()->fail(text, file, line); }
 
 #define UT_PRINT_LOCATION(text, file, line) \
    { UtestShell::getCurrent()->print(text, file, line); }

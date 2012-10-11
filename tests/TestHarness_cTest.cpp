@@ -146,6 +146,8 @@ TEST(TestHarness_c, checkCheck)
 	LONGS_EQUAL(1, fixture->getFailureCount());
 }
 
+#if CPPUTEST_USE_MEM_LEAK_DETECTION
+
 TEST(TestHarness_c, cpputest_malloc_out_of_memory)
 {
 	cpputest_malloc_set_out_of_memory();
@@ -214,8 +216,6 @@ TEST(TestHarness_c, cpputest_realloc_larger)
 
 	cpputest_free(mem2);
 }
-
-#if CPPUTEST_USE_MEM_LEAK_DETECTION
 
 #include "CppUTest/MemoryLeakDetector.h"
 
