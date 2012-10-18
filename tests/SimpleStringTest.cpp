@@ -443,6 +443,8 @@ TEST(SimpleString, StringFromFormatpointer)
 	SimpleString h1 = StringFromFormat("%p", 1);
 	if (h1.size() == 3)
 		STRCMP_EQUAL("0x1", h1.asCharString())
+    else if (h1.size() == 1)
+		STRCMP_EQUAL("1", h1.asCharString())        // Solaris
 	else if (h1.size() == 8)
 		STRCMP_EQUAL("00000001", h1.asCharString())
 	else
