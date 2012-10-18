@@ -413,6 +413,9 @@ CPPFLAGS = $(CPPUTEST_CPPFLAGS) $(CPPUTEST_ADDITIONAL_CPPFLAGS)
 CXXFLAGS = $(CPPUTEST_CXXFLAGS) $(CPPUTEST_ADDITIONAL_CXXFLAGS)
 LDFLAGS = $(CPPUTEST_LDFLAGS) $(CPPUTEST_ADDITIONAL_LDFLAGS)
 
+# Don't consider creating the archive a warning condition that does STDERR output
+ARFLAGS := $(ARFLAGS)c
+
 DEP_FLAGS=-MMD -MP
 
 # Some macros for programs to be overridden. For some reason, these are not in Make defaults
