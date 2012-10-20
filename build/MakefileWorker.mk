@@ -62,7 +62,7 @@
 #  Other flags users can initialize to sneak in their settings
 #	CPPUTEST_CXXFLAGS - flags for the C++ compiler
 #	CPPUTEST_CPPFLAGS - flags for the C++ AND C preprocessor
-#	CPPUTEST_CFLAGS   - flags for the C complier
+#	CPPUTEST_CFLAGS   - flags for the C compiler
 #	CPPUTEST_LDFLAGS  - Linker flags
 #----------
 
