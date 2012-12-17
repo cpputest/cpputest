@@ -222,11 +222,7 @@ ifneq ($(CPPUTEST_USE_VPATH), Y)
 	CPPUTEST_USE_VPATH := 
 endif
 
-ifndef TARGET_PLATFORM
 CPPUTEST_LIB_LINK_DIR = $(CPPUTEST_LIB_DIR)
-else
-CPPUTEST_LIB_LINK_DIR = $(CPPUTEST_LIB_DIR)/$(TARGET_PLATFORM)
-endif
 
 # --------------------------------------
 # derived flags in the following area
@@ -321,7 +317,11 @@ TARGET_LIB = \
     $(CPPUTEST_LIB_DIR)/lib$(COMPONENT_NAME).a
     
 ifndef TEST_TARGET
-TEST_TARGET = $(COMPONENT_NAME)_tests
+	ifndef TARGET_PLATFORM
+		TEST_TARGET = $(COMPONENT_NAME)_tests
+	else
+		TEST_TARGET = $(COMPONENT_NAME)_$(TARGET_PLATFORM)_tests
+	endif
 endif
 
 #Helper Functions

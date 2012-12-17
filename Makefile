@@ -51,6 +51,8 @@ test_all: start test_old_make
 	@echo Building without Standard C library includes
 	$(TIME) make CPPUTEST_USE_STD_C_LIB=N all_no_tests
 	make CPPUTEST_USE_STD_C_LIB=N clean
+	@echo Building with a different TARGET_PLATFORM
+	make TARGET_PLATFORM=real_platform
 	@echo Building with overridden CXXFLAGS and CFLAGS and memory leak and STDC++ disabled
 	$(TIME) make CLFAGS="" CXXFLAGS="" CPPFLAGS="-Iinclude -DCPPUTEST_STD_CPP_LIB_DISABLED -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED"
 	make CFLAGS="" CXXFLAGS="" CPPFLAGS="-DCPPUTEST_STD_CPP_LIB_DISABLED -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED" clean
