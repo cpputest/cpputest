@@ -6,8 +6,10 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 #include "CppUTest/TestTestingFixture.h"
 #include "AllocationInCppFile.h"
+
 extern "C"
 {
+#include "CppuTest/TestHarness_c.h"
 #include "AllocationInCFile.h"
 }
 

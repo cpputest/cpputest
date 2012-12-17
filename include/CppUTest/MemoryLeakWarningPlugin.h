@@ -42,10 +42,6 @@
 #define IGNORE_ALL_LEAKS_IN_TEST() MemoryLeakWarningPlugin::getFirstPlugin()->ignoreAllLeaksInTest();
 #define EXPECT_N_LEAKS(n)          MemoryLeakWarningPlugin::getFirstPlugin()->expectLeaksInTest(n);
 
-extern "C" { /* include for size_t definition */
-#include "TestHarness_c.h"
-}
-
 #if CPPUTEST_USE_MEM_LEAK_DETECTION
 
 #undef new

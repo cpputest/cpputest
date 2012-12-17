@@ -25,25 +25,9 @@
  * TestHarness.h is only included in test code.
  */
 
-#ifndef CPPUTEST_USE_MEM_LEAK_DETECTION
-#ifdef CPPUTEST_MEM_LEAK_DETECTION_DISABLED
-#define CPPUTEST_USE_MEM_LEAK_DETECTION 0
-#else
-#define CPPUTEST_USE_MEM_LEAK_DETECTION 1
-#endif
-#endif
+#include "CppUTestConfig.h"
 
 #if CPPUTEST_USE_MEM_LEAK_DETECTION
-
-#ifndef CPPUTEST_USE_STD_CPP_LIB
-#ifdef CPPUTEST_STD_CPP_LIB_DISABLED
-#define CPPUTEST_USE_STD_CPP_LIB 0
-#else
-#define CPPUTEST_USE_STD_CPP_LIB 1
-#endif
-#endif
-
-#include "StandardCLibrary.h"
 
 /* This #ifndef prevents <new> from being included twice and enables the file to be included anywhere */
 #ifndef CPPUTEST_USE_NEW_MACROS

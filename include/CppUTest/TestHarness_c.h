@@ -27,8 +27,6 @@
 
 /******************************************************************************
  *
- * TESTHARNESS_c.H
- *
  * Provides an interface for when working with pure C
  *
  * Remember to use extern "C" when including in a cpp file!
@@ -37,6 +35,8 @@
 
 #ifndef D_TestHarness_c_h
 #define D_TestHarness_c_h
+
+#include "CppUTestConfig.h"
 
 #define CHECK_EQUAL_C_INT(expected,actual) \
   CHECK_EQUAL_C_INT_LOCATION(expected,actual,__FILE__,__LINE__)
@@ -73,8 +73,6 @@ extern void FAIL_TEXT_C_LOCATION(const char* text, const char* fileName,
 extern void FAIL_C_LOCATION(const char* fileName, int lineNumber);
 extern void CHECK_C_LOCATION(int condition, const char* conditionString,
 		const char* fileName, int lineNumber);
-
-#include "StandardCLibrary.h"
 
 extern void* cpputest_malloc(size_t size);
 extern void* cpputest_calloc(size_t num, size_t size);

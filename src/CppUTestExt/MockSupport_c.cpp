@@ -25,6 +25,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "CppUTest/CppUTestConfig.h"
 #include "CppUTestExt/MockSupport.h"
 extern "C" {
 	#include "CppUTestExt/MockSupport_c.h"
