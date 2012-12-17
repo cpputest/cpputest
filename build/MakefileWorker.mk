@@ -62,8 +62,8 @@
 #  Other flags users can initialize to sneak in their settings
 #	CPPUTEST_CXXFLAGS - flags for the C++ compiler
 #	CPPUTEST_CPPFLAGS - flags for the C++ AND C preprocessor
-#	CPPUTEST_CFLAGS - C complier
-#	CPPUTEST_LDFLAGS - Linker flags
+#	CPPUTEST_CFLAGS   - flags for the C compiler
+#	CPPUTEST_LDFLAGS  - Linker flags
 #----------
 
 # Some behavior is weird on some platforms. Need to discover the platform.
@@ -73,6 +73,9 @@ MACOSX_STR = Darwin
 MINGW_STR = MINGW
 CYGWIN_STR = CYGWIN
 LINUX_STR = Linux
+SUNOS_STR = SunOS
+SUNSTUDIO_CXX_ERR_STR = CC -flags
+SUNSTUDIO_CXX_STR = SunStudio
 UNKNWOWN_OS_STR = Unknown
 CLANG_STR = clang 
 
@@ -94,6 +97,16 @@ ifeq ($(findstring $(MACOSX_STR),$(UNAME_OUTPUT)),$(MACOSX_STR))
 	UNAME_OS = $(MACOSX_STR)
 	#lion has a problem with the 'v' part of -a
 	UNAME_OUTPUT = "$(shell uname -pmnrs)"
+endif
+
+ifeq ($(findstring $(SUNOS_STR),$(UNAME_OUTPUT)),$(SUNOS_STR))
+	UNAME_OS = $(SUNOS_STR)
+
+# If using Sun Studio, many flags are different.
+ifeq ($(findstring $(SUNSTUDIO_CXX_ERR_STR),$(CC_VERSION_OUTPUT)),$(SUNSTUDIO_CXX_ERR_STR))
+	CC_VERSION_OUTPUT ="$(shell $(CXX) -V 2>&1)"
+	COMPILER_NAME = $(SUNSTUDIO_CXX_STR)
+endif
 endif
 
 ifeq ($(findstring $(CLANG_STR),$(CC_VERSION_OUTPUT)),$(CLANG_STR))
@@ -183,6 +196,10 @@ endif
 	CPPUTEST_CXX_WARNINGFLAGS = -Woverloaded-virtual
 	CPPUTEST_C_WARNINGFLAGS = -Wstrict-prototypes
 endif
+ifeq ($(COMPILER_NAME),$(SUNSTUDIO_CXX_STR))
+	CPPUTEST_CXX_WARNINGFLAGS = 
+	CPPUTEST_C_WARNINGFLAGS = 
+endif
 endif
 
 # Default dir for temporary files (d, o)
@@ -233,7 +250,9 @@ ifeq ($(CPPUTEST_USE_STD_C_LIB), N)
 	CPPUTEST_USE_STD_CPP_LIB = N
 	CPPUTEST_USE_MEM_LEAK_DETECTION = N
 	CPPUTEST_CPPFLAGS += -DCPPUTEST_STD_C_LIB_DISABLED
+ifneq ($(COMPILER_NAME),$(SUNSTUDIO_CXX_STR))
 	CPPUTEST_CPPFLAGS += -nostdinc
+endif
 endif
 
 CPPUTEST_CPPFLAGS += -DCPPUTEST_COMPILATION
@@ -258,7 +277,9 @@ endif
 ifeq ($(CPPUTEST_USE_STD_CPP_LIB), N)
 	CPPUTEST_CPPFLAGS += -DCPPUTEST_STD_CPP_LIB_DISABLED
 ifeq ($(CPPUTEST_USE_STD_C_LIB), Y)
+ifneq ($(COMPILER_NAME),$(SUNSTUDIO_CXX_STR))
 	CPPUTEST_CXXFLAGS += -nostdinc++
+endif
 endif
 endif
 
