@@ -27,8 +27,6 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-// FAILURE.H
-//
 // Failure is a class which holds information for a specific
 // test failure. It can be overriden for more complex failure messages
 //

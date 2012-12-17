@@ -30,8 +30,6 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-//  TestOutput.h
-//
 //  This is a minimal printer inteface.
 //  We kept streams out too keep footprint small, and so the test
 //  harness could be used with less capable compilers so more
@@ -170,4 +168,4 @@ private:
 
 };
 
-#endif  // D_TestOutput_h
+#endif
