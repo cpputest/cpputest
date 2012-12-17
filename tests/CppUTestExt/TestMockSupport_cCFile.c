@@ -70,6 +70,11 @@ void all_mock_support_c_calls(void)
 	mock_c()->actualCall("boo4")->returnValue();
 	mock_c()->returnValue();
 
+	mock_c()->disable();
+	mock_c()->actualCall("disabled");
+	mock_c()->enable();
+	mock_c()->checkExpectations();
+
 	mock_scope_c("scope")->expectOneCall("boo");
 	mock_scope_c("other")->expectedCallsLeft();
 	mock_scope_c("scope")->expectedCallsLeft();

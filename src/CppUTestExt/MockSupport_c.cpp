@@ -61,6 +61,8 @@ extern "C" {
 
 MockFunctionCall_c* expectOneCall_c(const char* name);
 MockFunctionCall_c* actualCall_c(const char* name);
+void disable_c(void);
+void enable_c(void);
 void setIntData_c(const char* name, int value);
 void setDoubleData_c(const char* name, double value);
 void setStringData_c(const char* name, const char* value);
@@ -117,6 +119,8 @@ static MockSupport_c gMockSupport = {
 		expectOneCall_c,
 		actualCall_c,
 		returnValue_c,
+		enable_c,
+		disable_c,
 		setIntData_c,
 		setDoubleData_c,
 		setStringData_c,
@@ -225,6 +229,16 @@ MockFunctionCall_c* actualCall_c(const char* name)
 {
 	currentCall = &currentMockSupport->actualCall(name);
 	return &gFunctionCall;
+}
+
+void disable_c(void)
+{
+	currentMockSupport->disable();
+}
+
+void enable_c(void)
+{
+	currentMockSupport->enable();
 }
 
 void setIntData_c(const char* name, int value)

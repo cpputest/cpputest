@@ -76,6 +76,9 @@ struct SMockSupport_c
 	MockFunctionCall_c* (*actualCall)(const char* name);
 	MockValue_c (*returnValue)(void);
 
+	void (*enable)(void);
+	void (*disable)(void);
+
 	void (*setIntData) (const char* name, int value);
 	void (*setDoubleData) (const char* name, double value);
 	void (*setStringData) (const char* name, const char* value);
