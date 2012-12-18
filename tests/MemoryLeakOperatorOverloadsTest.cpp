@@ -9,7 +9,7 @@
 
 extern "C"
 {
-#include "CppuTest/TestHarness_c.h"
+#include "CppUTest/TestHarness_c.h"
 #include "AllocationInCFile.h"
 }
 
