@@ -35,7 +35,7 @@
 
 extern "C"
 {
-#include "CppuTest/TestHarness_c.h"
+#include "CppUTest/TestHarness_c.h"
 }
 static char* leak1;
 static long* leak2;
