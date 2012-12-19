@@ -134,12 +134,12 @@ SetPointerPlugin::~SetPointerPlugin()
 {
 }
 
-void CppUTestStore(void**function, void*value)
+void CppUTestStore(void**function)
 {
 	if (pointerTableIndex >= SetPointerPlugin::MAX_SET) {
 		FAIL("Maximum number of function pointers installed!");
 	}
-	setlist[pointerTableIndex].orig_value = value;
+	setlist[pointerTableIndex].orig_value = *function;
 	setlist[pointerTableIndex].orig = function;
 	pointerTableIndex++;
 }
