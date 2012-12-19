@@ -71,6 +71,8 @@ public:
 	virtual void wasPassedToObject();
 	virtual void parameterWasPassed(const SimpleString& parameterName);
 
+	virtual MockNamedValue getNamedParameter(const SimpleString& parameterName);
+
 	virtual SimpleString unfulfilledFunctionsToString(const SimpleString& linePrefix = "") const;
 	virtual SimpleString fulfilledFunctionsToString(const SimpleString& linePrefix = "") const;
 	virtual SimpleString missingParametersToString() const;

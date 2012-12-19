@@ -156,73 +156,75 @@ MockFunctionCall& MockActualFunctionCall::withParameterOfType(const SimpleString
 	return *this;
 }
 
-MockFunctionCall& MockActualFunctionCall::setOutputParameter(const SimpleString& name, int *value)
+MockNamedValue MockActualFunctionCall::processOutputParameter(const SimpleString& name)
 {
+	unfulfilledExpectations_.onlyKeepExpectationsWithParameterName(name);
+
+	if (unfulfilledExpectations_.isEmpty()) {
+		MockUnexpectedParameterFailure failure(getTest(), getName(), name, allExpectations_);
+		failTest(failure);
+		return MockNamedValue("");
+	}
+
+	MockNamedValue v = unfulfilledExpectations_.getNamedParameter(name);
+	if (v.getName() != name) {
+		MockUnexpectedParameterFailure failure(getTest(), getName(), name, allExpectations_);
+		failTest(failure);
+	}
+
 	unfulfilledExpectations_.parameterWasPassed(name);
 	finnalizeCallWhenFulfilled();
-
-	if (_fulfilledExpectation) {
-		MockNamedValue val = _fulfilledExpectation->getParameter(name);
-		*value = val.getIntValue();
-	}
-	return *this;
+	return v;
 }
 
-MockFunctionCall& MockActualFunctionCall::withOutputParameter(const SimpleString&, int) {
-	FAIL("withOutputParameter cannot be called on an ActualFunctionCall. Use setOutputParameter instead to set the value.");
-	return *this;
-}
-
-MockFunctionCall& MockActualFunctionCall::setOutputParameter(const SimpleString& name, double *value)
+MockFunctionCall& MockActualFunctionCall::andOutputParameter(const SimpleString& name, int *value)
 {
-	unfulfilledExpectations_.parameterWasPassed(name);
-	finnalizeCallWhenFulfilled();
-
-	if (_fulfilledExpectation) {
-		MockNamedValue val = _fulfilledExpectation->getParameter(name);
-		*value = val.getDoubleValue();
-	}
+	MockNamedValue v = processOutputParameter(name);
+	*value = v.getIntValue();
 	return *this;
 }
 
-MockFunctionCall& MockActualFunctionCall::withOutputParameter(const SimpleString&, double) {
-	FAIL("withOutputParameter cannot be called on an ActualFunctionCall. Use setOutputParameter instead to set the value.");
+MockFunctionCall& MockActualFunctionCall::andOutputParameter(const SimpleString&, int) {
+	FAIL("andOutputParameter cannot be called on an ActualFunctionCall. Use andOutputParameter instead to set the value.");
 	return *this;
 }
 
-MockFunctionCall& MockActualFunctionCall::setOutputParameter(const SimpleString& name, const char* *value)
+MockFunctionCall& MockActualFunctionCall::andOutputParameter(const SimpleString& name, double *value)
 {
-	unfulfilledExpectations_.parameterWasPassed(name);
-	finnalizeCallWhenFulfilled();
-
-	if (_fulfilledExpectation) {
-		MockNamedValue val = _fulfilledExpectation->getParameter(name);
-		*value = val.getStringValue();
-	}
+	MockNamedValue v = processOutputParameter(name);
+	*value = v.getDoubleValue();
 	return *this;
 }
 
-MockFunctionCall& MockActualFunctionCall::withOutputParameter(const SimpleString&, const char*) {
-	FAIL("withOutputParameter cannot be called on an ActualFunctionCall. Use setOutputParameter instead to set the value.");
+MockFunctionCall& MockActualFunctionCall::andOutputParameter(const SimpleString&, double) {
+	FAIL("andOutputParameter cannot be called on an ActualFunctionCall. Use andOutputParameter instead to set the value.");
 	return *this;
 }
 
-MockFunctionCall& MockActualFunctionCall::setOutputParameter(const SimpleString& name, void* *value)
+MockFunctionCall& MockActualFunctionCall::andOutputParameter(const SimpleString& name, const char* *value)
 {
-	unfulfilledExpectations_.parameterWasPassed(name);
-	finnalizeCallWhenFulfilled();
-
-	if (_fulfilledExpectation) {
-		MockNamedValue val = _fulfilledExpectation->getParameter(name);
-		*value = val.getPointerValue();
-	}
+	MockNamedValue v = processOutputParameter(name);
+	*value = v.getStringValue();
 	return *this;
 }
 
-MockFunctionCall& MockActualFunctionCall::withOutputParameter(const SimpleString&, void*) {
-	FAIL("withOutputParameter cannot be called on an ActualFunctionCall. Use setOutputParameter instead to set the value.");
+MockFunctionCall& MockActualFunctionCall::andOutputParameter(const SimpleString&, const char*) {
+	FAIL("andOutputParameter cannot be called on an ActualFunctionCall. Use andOutputParameter instead to set the value.");
 	return *this;
 }
+
+MockFunctionCall& MockActualFunctionCall::andOutputParameter(const SimpleString& name, void* *value)
+{
+	MockNamedValue v = processOutputParameter(name);
+	*value = v.getPointerValue();
+	return *this;
+}
+
+MockFunctionCall& MockActualFunctionCall::andOutputParameter(const SimpleString&, void*) {
+	FAIL("andOutputParameter cannot be called on an ActualFunctionCall. Use andOutputParameter instead to set the value.");
+	return *this;
+}
+
 
 bool MockActualFunctionCall::isFulfilled() const
 {

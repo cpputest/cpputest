@@ -246,6 +246,49 @@ TEST(MockExpectedFunctionCall, callWithThreeDifferentParameter)
 	DOUBLES_EQUAL(0.12, call->getParameter("double").getDoubleValue(), 0.05);
 }
 
+TEST(MockExpectedFunctionCall, callWithIntegerOutputParameter)
+{
+	call->andOutputParameter("integer", 1);
+	STRCMP_EQUAL("int", call->getParameterType("integer").asCharString());
+	LONGS_EQUAL(1, call->getParameter("integer").getIntValue());
+	CHECK(call->hasParameterWithName("integer"));
+}
+
+TEST(MockExpectedFunctionCall, callWithDoubleOutputParameter)
+{
+	call->andOutputParameter("double", 1.2);
+	STRCMP_EQUAL("double", call->getParameterType("double").asCharString());
+	DOUBLES_EQUAL(1.2, call->getParameter("double").getDoubleValue(), 0.05);
+}
+
+TEST(MockExpectedFunctionCall, callWithStringOutputParameter)
+{
+	call->andOutputParameter("string", "hello world");
+	STRCMP_EQUAL("char*", call->getParameterType("string").asCharString());
+	STRCMP_EQUAL("hello world", call->getParameter("string").getStringValue());
+}
+
+TEST(MockExpectedFunctionCall, callWithPointerOutputParameter)
+{
+	void* ptr = (void*) 0x123;
+	call->andOutputParameter("pointer", ptr);
+	STRCMP_EQUAL("void*", call->getParameterType("pointer").asCharString());
+	POINTERS_EQUAL(ptr, call->getParameter("pointer").getPointerValue());
+}
+
+TEST(MockExpectedFunctionCall, callWithMixedParameter)
+{
+	call->withParameter("integer", 1);
+	call->andOutputParameter("string", "hello world");
+	call->withParameter("double", 0.12);
+	STRCMP_EQUAL("int", call->getParameterType("integer").asCharString());
+	STRCMP_EQUAL("char*", call->getParameterType("string").asCharString());
+	STRCMP_EQUAL("double", call->getParameterType("double").asCharString());
+	LONGS_EQUAL(1, call->getParameter("integer").getIntValue());
+	STRCMP_EQUAL("hello world", call->getParameter("string").getStringValue());
+	DOUBLES_EQUAL(0.12, call->getParameter("double").getDoubleValue(), 0.05);
+}
+
 TEST(MockExpectedFunctionCall, withoutANameItsFulfilled)
 {
 	CHECK(call->isFulfilled());

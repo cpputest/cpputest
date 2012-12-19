@@ -79,14 +79,14 @@ MockFunctionCall_c* withStringParameters_c(const char* name, const char* value);
 MockFunctionCall_c* withPointerParameters_c(const char* name, void* value);
 MockFunctionCall_c* withParameterOfType_c(const char* type, const char* name, void* value);
 
-MockFunctionCall_c* setIntOutputParameters_c(const char* name, int *value);
-MockFunctionCall_c* withIntOutputParameters_c(const char* name, int value);
-MockFunctionCall_c* setDoubleOutputParameters_c(const char* name, double *value);
-MockFunctionCall_c* withDoubleOutputParameters_c(const char* name, double value);
-MockFunctionCall_c* setStringOutputParameters_c(const char* name, const char* *value);
-MockFunctionCall_c* withStringOutputParameters_c(const char* name, const char* value);
-MockFunctionCall_c* setPointerOutputParameters_c(const char* name, void* *value);
-MockFunctionCall_c* withPointerOutputParameters_c(const char* name, void* value);
+MockFunctionCall_c* _andIntOutputParameters_c(const char* name, int *value);
+MockFunctionCall_c* andIntOutputParameters_c(const char* name, int value);
+MockFunctionCall_c* _andDoubleOutputParameters_c(const char* name, double *value);
+MockFunctionCall_c* andDoubleOutputParameters_c(const char* name, double value);
+MockFunctionCall_c* _andStringOutputParameters_c(const char* name, const char* *value);
+MockFunctionCall_c* andStringOutputParameters_c(const char* name, const char* value);
+MockFunctionCall_c* _andPointerOutputParameters_c(const char* name, void* *value);
+MockFunctionCall_c* andPointerOutputParameters_c(const char* name, void* value);
 
 MockFunctionCall_c* andReturnIntValue_c(int value);
 MockFunctionCall_c* andReturnDoubleValue_c(double value);
@@ -117,14 +117,14 @@ static MockFunctionCall_c gFunctionCall = {
 		withStringParameters_c,
 		withPointerParameters_c,
 		withParameterOfType_c,
-		setIntOutputParameters_c,
-		withIntOutputParameters_c,
-		setDoubleOutputParameters_c,
-		withDoubleOutputParameters_c,
-		setStringOutputParameters_c,
-		withStringOutputParameters_c,
-		setPointerOutputParameters_c,
-		withPointerOutputParameters_c,
+		_andIntOutputParameters_c,
+		andIntOutputParameters_c,
+		_andDoubleOutputParameters_c,
+		andDoubleOutputParameters_c,
+		_andStringOutputParameters_c,
+		andStringOutputParameters_c,
+		_andPointerOutputParameters_c,
+		andPointerOutputParameters_c,
 		andReturnIntValue_c,
 		andReturnDoubleValue_c,
 		andReturnStringValue_c,
@@ -181,43 +181,43 @@ MockFunctionCall_c* withParameterOfType_c(const char* type, const char* name, vo
 	return &gFunctionCall;
 }
 
-MockFunctionCall_c* setIntOutputParameters_c(const char* name, int *value) {
-	currentCall = &currentCall->setOutputParameter(name, value);
+MockFunctionCall_c* _andIntOutputParameters_c(const char* name, int *value) {
+	currentCall = &currentCall->andOutputParameter(name, value);
 	return &gFunctionCall;
 }
 
-MockFunctionCall_c* withIntOutputParameters_c(const char* name, int value) {
-	currentCall = &currentCall->withOutputParameter(name, value);
+MockFunctionCall_c* andIntOutputParameters_c(const char* name, int value) {
+	currentCall = &currentCall->andOutputParameter(name, value);
 	return &gFunctionCall;
 }
 
-MockFunctionCall_c* setDoubleOutputParameters_c(const char* name, double *value) {
-	currentCall = &currentCall->setOutputParameter(name, value);
+MockFunctionCall_c* _andDoubleOutputParameters_c(const char* name, double *value) {
+	currentCall = &currentCall->andOutputParameter(name, value);
 	return &gFunctionCall;
 }
 
-MockFunctionCall_c* withDoubleOutputParameters_c(const char* name, double value) {
-	currentCall = &currentCall->withOutputParameter(name, value);
+MockFunctionCall_c* andDoubleOutputParameters_c(const char* name, double value) {
+	currentCall = &currentCall->andOutputParameter(name, value);
 	return &gFunctionCall;
 }
 
-MockFunctionCall_c* setStringOutputParameters_c(const char* name, const char* *value) {
-	currentCall = &currentCall->setOutputParameter(name, value);
+MockFunctionCall_c* _andStringOutputParameters_c(const char* name, const char* *value) {
+	currentCall = &currentCall->andOutputParameter(name, value);
 	return &gFunctionCall;
 }
 
-MockFunctionCall_c* withStringOutputParameters_c(const char* name, const char* value) {
-	currentCall = &currentCall->withOutputParameter(name, value);
+MockFunctionCall_c* andStringOutputParameters_c(const char* name, const char* value) {
+	currentCall = &currentCall->andOutputParameter(name, value);
 	return &gFunctionCall;
 }
 
-MockFunctionCall_c* setPointerOutputParameters_c(const char* name, void* *value) {
-	currentCall = &currentCall->setOutputParameter(name, value);
+MockFunctionCall_c* _andPointerOutputParameters_c(const char* name, void* *value) {
+	currentCall = &currentCall->andOutputParameter(name, value);
 	return &gFunctionCall;
 }
 
-MockFunctionCall_c* withPointerOutputParameters_c(const char* name, void* value) {
-	currentCall = &currentCall->withOutputParameter(name, value);
+MockFunctionCall_c* andPointerOutputParameters_c(const char* name, void* value) {
+	currentCall = &currentCall->andOutputParameter(name, value);
 	return &gFunctionCall;
 }
 

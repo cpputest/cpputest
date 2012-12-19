@@ -98,3 +98,98 @@ TEST(MockActualFunctionCall, multipleSameFunctionsExpectingAndHappenGradually)
 
 	list->deleteAllExpectationsAndClearList();
 }
+
+TEST(MockActualFunctionCall, callAndIntOutputParameter)
+{
+	MockExpectedFunctionCall* call1 = new MockExpectedFunctionCall();
+	call1->withName("func");
+	call1->andOutputParameter("int", 1);
+	list->addExpectedCall(call1);
+
+	MockActualFunctionCall actualCall1(1, reporter, *list);
+	int i;
+
+	actualCall1.withName("func");
+	actualCall1.andOutputParameter("int", &i);
+	LONGS_EQUAL(1, i);
+
+	list->deleteAllExpectationsAndClearList();
+}
+
+TEST(MockActualFunctionCall, callAndDoubleOutputParameter)
+{
+	MockExpectedFunctionCall* call1 = new MockExpectedFunctionCall();
+	call1->withName("func");
+	call1->andOutputParameter("double", 1.1);
+	list->addExpectedCall(call1);
+
+	MockActualFunctionCall actualCall1(1, reporter, *list);
+	double d;
+
+	actualCall1.withName("func");
+	actualCall1.andOutputParameter("double", &d);
+	LONGS_EQUAL(1.1, d);
+
+	list->deleteAllExpectationsAndClearList();
+}
+
+TEST(MockActualFunctionCall, callAndStringOutputParameter)
+{
+	MockExpectedFunctionCall* call1 = new MockExpectedFunctionCall();
+	call1->withName("func");
+	call1->andOutputParameter("string", "abc");
+	list->addExpectedCall(call1);
+
+	MockActualFunctionCall actualCall1(1, reporter, *list);
+	const char* str;
+
+	actualCall1.withName("func");
+	actualCall1.andOutputParameter("string", &str);
+	LONGS_EQUAL("abc", str);
+
+	list->deleteAllExpectationsAndClearList();
+}
+
+TEST(MockActualFunctionCall, callAndPointerOutputParameter)
+{
+	void* ptr = (void*) 0x123;
+	MockExpectedFunctionCall* call1 = new MockExpectedFunctionCall();
+	call1->withName("func");
+	call1->andOutputParameter("pointer", ptr);
+	list->addExpectedCall(call1);
+
+	MockActualFunctionCall actualCall1(1, reporter, *list);
+	void* ptrOut = NULL;
+
+	actualCall1.withName("func");
+	actualCall1.andOutputParameter("pointer", &ptrOut);
+	POINTERS_EQUAL(ptr, ptrOut);
+
+	list->deleteAllExpectationsAndClearList();
+}
+
+TEST(MockActualFunctionCall, testMixedOutputParameters)
+{
+	void* ptr = (void*) 0x123;
+	MockExpectedFunctionCall* call1 = new MockExpectedFunctionCall();
+	call1->withName("func");
+	call1->andOutputParameter("pointer", ptr);
+	call1->andOutputParameter("double", 1.1);
+	call1->andOutputParameter("double2", 1.2);
+	list->addExpectedCall(call1);
+
+	MockActualFunctionCall actualCall1(1, reporter, *list);
+	void* ptrOut = NULL;
+	double d;
+	double d2;
+
+	actualCall1.withName("func");
+	actualCall1.andOutputParameter("pointer", &ptrOut);
+	actualCall1.andOutputParameter("double", &d);
+	actualCall1.andOutputParameter("double2", &d2);
+	POINTERS_EQUAL(ptr, ptrOut);
+	DOUBLES_EQUAL(1.1, d, 0.05);
+	DOUBLES_EQUAL(1.2, d2, 0.05);
+
+	list->deleteAllExpectationsAndClearList();
+}
