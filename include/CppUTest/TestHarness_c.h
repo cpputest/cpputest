@@ -29,8 +29,6 @@
  *
  * Provides an interface for when working with pure C
  *
- * Remember to use extern "C" when including in a cpp file!
- *
  *******************************************************************************/
 
 #ifndef D_TestHarness_c_h
@@ -58,6 +56,12 @@
 
 #define CHECK_C(condition) \
   CHECK_C_LOCATION(condition, #condition, __FILE__,__LINE__)
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 
 /* CHECKS that can be used from C code */
 extern void CHECK_EQUAL_C_INT_LOCATION(int expected, int actual,
@@ -91,6 +95,11 @@ void cpputest_malloc_set_not_out_of_memory(void);
 void cpputest_malloc_set_out_of_memory_countdown(int);
 void cpputest_malloc_count_reset(void);
 int cpputest_malloc_get_count(void);
+
+#ifdef __cplusplus
+}
+#endif
+
 
 /*
  * Small additional macro for unused arguments. This is common when stubbing, but in C you cannot remove the

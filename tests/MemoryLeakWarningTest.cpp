@@ -32,11 +32,8 @@
 #include "CppUTest/MemoryLeakDetector.h"
 #include "CppUTest/TestMemoryAllocator.h"
 #include "CppUTest/TestTestingFixture.h"
-
-extern "C"
-{
 #include "CppUTest/TestHarness_c.h"
-}
+
 static char* leak1;
 static long* leak2;
 

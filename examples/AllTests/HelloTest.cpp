@@ -25,10 +25,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-extern "C"
-{
 #include "hello.h"
-}
 
 #include <stdio.h>
 #include <stdarg.h>

@@ -28,6 +28,10 @@
 #ifndef D_MockSupport_c_h
 #define D_MockSupport_c_h
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef enum {
 	MOCKVALUETYPE_INTEGER,
 	MOCKVALUETYPE_DOUBLE,
@@ -98,5 +102,9 @@ struct SMockSupport_c
 
 MockSupport_c* mock_c(void);
 MockSupport_c* mock_scope_c(const char* scope);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

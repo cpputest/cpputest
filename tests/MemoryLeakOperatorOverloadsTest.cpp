@@ -7,11 +7,8 @@
 #include "CppUTest/TestTestingFixture.h"
 #include "AllocationInCppFile.h"
 
-extern "C"
-{
 #include "CppUTest/TestHarness_c.h"
 #include "AllocationInCFile.h"
-}
 
 TEST_GROUP(BasicBehavior)
 {

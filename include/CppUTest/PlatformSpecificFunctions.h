@@ -38,10 +38,6 @@ void PlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* pl
  *
  */
 
-extern "C"
-{
 #include "CppUTest/PlatformSpecificFunctions_c.h"
-}
-
 
 #endif

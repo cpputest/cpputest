@@ -26,11 +26,9 @@
  */
 #include "CppUTest/TestHarness.h"
 
-extern "C" {
-	#include "CppUTest/TestHarness_c.h"
-	#include "CppUTestExt/MockSupport_c.h"
-	#include "TestMockSupport_cCFile.h"
-}
+#include "CppUTest/TestHarness_c.h"
+#include "CppUTestExt/MockSupport_c.h"
+#include "TestMockSupport_cCFile.h"
 
 TEST_GROUP(MockSupport_c)
 {
