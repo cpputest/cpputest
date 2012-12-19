@@ -49,7 +49,7 @@ TEST_GROUP(MockDocumentation)
 {
 };
 
-void productionCode()
+static void productionCode()
 {
 	mock().actualCall("productionCode");
 }
@@ -88,7 +88,7 @@ TEST(MockDocumentation, SimpleScenarioObject)
 	delete object;
 }
 
-void parameters_function(int p1, const char* p2)
+static void parameters_function(int p1, const char* p2)
 {
 	void* object = (void*) 1;
 	mock().actualCall("function").onObject(object).withParameter("p1", p1).withParameter("p2", p2);
@@ -146,7 +146,7 @@ TEST(MockDocumentation, setData)
 	POINTERS_EQUAL(pobject, &object);
 }
 
-void doSomethingThatWouldOtherwiseBlowUpTheMockingFramework()
+static void doSomethingThatWouldOtherwiseBlowUpTheMockingFramework()
 {
 }
 

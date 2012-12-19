@@ -113,7 +113,6 @@ TEST_GROUP(PluginTest)
 };
 
 #define GENERIC_PLUGIN  "GenericPlugin"
-#define GENERIC_PLUGIN4 "GenericPlugin4"
 
 TEST(PluginTest, PluginHasName)
 {

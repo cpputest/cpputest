@@ -32,7 +32,7 @@
 extern "C" {
 #endif
 
-extern void all_mock_support_c_calls();
+extern void all_mock_support_c_calls(void);
 
 #ifdef __cplusplus
 }

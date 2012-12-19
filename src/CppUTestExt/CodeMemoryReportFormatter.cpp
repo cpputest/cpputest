@@ -64,7 +64,7 @@ void CodeMemoryReportFormatter::clearReporting()
 
 void CodeMemoryReportFormatter::addNodeToList(const char* variableName, void* memory, CodeReportingAllocationNode* next)
 {
-	CodeReportingAllocationNode* newNode = (CodeReportingAllocationNode*) internalAllocator_->alloc_memory(sizeof(CodeReportingAllocationNode), __FILE__, __LINE__);
+	CodeReportingAllocationNode* newNode = (CodeReportingAllocationNode*) (void*) internalAllocator_->alloc_memory(sizeof(CodeReportingAllocationNode), __FILE__, __LINE__);
 	newNode->memory_ = memory;
 	newNode->next_ = next;
 	PlatformSpecificStrNCpy(newNode->variableName_, variableName, MAX_VARIABLE_NAME_LENGTH);

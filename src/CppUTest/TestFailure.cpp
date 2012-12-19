@@ -30,7 +30,7 @@
 #include "CppUTest/TestOutput.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
-SimpleString removeAllPrintableCharactersFrom(const SimpleString& str)
+static SimpleString removeAllPrintableCharactersFrom(const SimpleString& str)
 {
 	size_t bufferSize = str.size()+1;
 	char* buffer = (char*) PlatformSpecificMalloc(bufferSize);
@@ -45,7 +45,7 @@ SimpleString removeAllPrintableCharactersFrom(const SimpleString& str)
 	return result;
 }
 
-SimpleString addMarkerToString(const SimpleString& str, int markerPos)
+static SimpleString addMarkerToString(const SimpleString& str, int markerPos)
 {
 	size_t bufferSize = str.size()+1;
 	char* buffer = (char*) PlatformSpecificMalloc(bufferSize);

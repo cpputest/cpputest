@@ -49,13 +49,13 @@ TEST(MockSupport_c, expectAndActualParameters)
 			withStringParameters("string", "string")->withPointerParameters("pointer", (void*) 1);
 }
 
-int typeNameIsEqual(void* object1, void* object2)
+static int typeNameIsEqual(void* object1, void* object2)
 {
 	return object1 == object2;
 
 }
 
-char* typeNameValueToString(void* PUNUSED(object))
+static char* typeNameValueToString(void* PUNUSED(object))
 {
 	return (char*) "valueToString";
 }

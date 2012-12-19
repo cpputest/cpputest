@@ -75,17 +75,17 @@ private:
  *
  */
 
-void helperDoTestSetup(void* data)
+static void helperDoTestSetup(void* data)
 {
     ((Utest*)data)->setup();
 }
 
-void helperDoTestBody(void* data)
+static void helperDoTestBody(void* data)
 {
     ((Utest*)data)->testBody();
 }
 
-void helperDoTestTeardown(void* data)
+static void helperDoTestTeardown(void* data)
 {
     ((Utest*)data)->teardown();
 }
@@ -99,7 +99,7 @@ struct HelperTestRunInfo
 	TestResult* result_;
 };
 
-void helperDoRunOneTest(void* data)
+static void helperDoRunOneTest(void* data)
 {
 	HelperTestRunInfo* runInfo = (HelperTestRunInfo*) data;
 
@@ -110,7 +110,7 @@ void helperDoRunOneTest(void* data)
 	shell->runOneTest(plugin, *result);
 }
 
-void helperDoRunOneTestSeperateProcess(void* data)
+static void helperDoRunOneTestSeperateProcess(void* data)
 {
 	HelperTestRunInfo* runInfo = (HelperTestRunInfo*) data;
 
@@ -208,8 +208,9 @@ void UtestShell::exitCurrentTest()
 {
 #if CPPUTEST_USE_STD_CPP_LIB
 	throw CppUTestFailedException();
-#endif
+#else
 	exitCurrentTestWithoutException();
+#endif
 }
 
 void UtestShell::exitCurrentTestWithoutException()
@@ -441,6 +442,11 @@ UtestShell* UtestShell::getCurrent()
 	if (currentTest_ == NULL)
 		return &OutsideTestRunnerUTest::instance();
 	return currentTest_;
+}
+
+
+ExecFunctionTestShell::~ExecFunctionTestShell()
+{
 }
 
 ////////////// Utest ////////////

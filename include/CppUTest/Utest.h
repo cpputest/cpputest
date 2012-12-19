@@ -191,6 +191,7 @@ public:
 	{
 	}
 	Utest* createTest() { return new ExecFunctionTest(this); };
+	virtual ~ExecFunctionTestShell();
 };
 
 //////////////////// CppUTestFailedException

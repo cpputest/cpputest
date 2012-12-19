@@ -185,6 +185,16 @@ endif
 endif
 endif
 
+#Wonderful extra compiler warnings with clang
+ifeq ($(COMPILER_NAME),$(CLANG_STR))
+# -Wno-disabled-macro-expansion -> Have to disable the macro expansion warning as the operator new overload warns on that.
+# -Wno-padded -> I sort-of like this warning but if there is a bool at the end of the class, it seems impossible to remove it! (except by making padding explicit)
+# -Wno-global-constructors Wno-exit-time-destructors -> Great warnings, but in CppUTest it is impossible to avoid as the automatic test registration depends on the global ctor and dtor
+# -Wno-weak-vtables -> The TEST_GROUP macro declares a class and will automatically inline its methods. Thats ok as they are only in one translation unit. Unfortunately, the warning can't detect that, so it must be disabled. 
+	CPPUTEST_CXX_WARNINGFLAGS += -Weverything -Wno-disabled-macro-expansion -Wno-padded -Wno-global-constructors -Wno-exit-time-destructors -Wno-weak-vtables
+	CPPUTEST_C_WARNINGFLAGS += -Weverything -Wno-padded
+endif
+
 # Default dir for temporary files (d, o)
 ifndef CPPUTEST_OBJS_DIR
 ifndef TARGET_PLATFORM

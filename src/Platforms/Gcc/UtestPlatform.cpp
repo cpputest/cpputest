@@ -62,7 +62,7 @@ int PlatformSpecificSetJmp(void (*function) (void* data), void* data)
 	return 0;
 }
 
-void PlatformSpecificLongJmp()
+__attribute__((__noreturn__)) void PlatformSpecificLongJmp()
 {
 	jmp_buf_index--;
 	longjmp(test_exit_jmp_buf[jmp_buf_index], 1);
@@ -182,6 +182,11 @@ char* PlatformSpecificStrStr(const char* s1, const char* s2)
 {
    return (char*) strstr(s1, s2);
 }
+
+/* Wish we could add an attribute to the format for discovering mis-use... but the __attribute__(format) seems to not work on va_list */
+#ifdef __clang__
+#pragma clang diagnostic ignored "-Wformat-nonliteral"
+#endif
 
 int PlatformSpecificVSNprintf(char *str, size_t size, const char* format, va_list args)
 {

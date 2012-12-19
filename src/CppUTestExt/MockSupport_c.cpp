@@ -85,13 +85,13 @@ MockFunctionCall_c* andReturnPointerValue_c(void* value);
 MockValue_c returnValue_c();
 
 
-void installComparator_c (const char* typeName, MockTypeEqualFunction_c isEqual, MockTypeValueToStringFunction_c valueToString)
+static void installComparator_c (const char* typeName, MockTypeEqualFunction_c isEqual, MockTypeValueToStringFunction_c valueToString)
 {
 	comparatorList_ = new MockCFunctionComparatorNode(comparatorList_, isEqual, valueToString);
 	currentMockSupport->installComparator(typeName, *comparatorList_);
 }
 
-void removeAllComparators_c()
+static void removeAllComparators_c()
 {
 	while (comparatorList_) {
 		MockCFunctionComparatorNode *next = comparatorList_->next_;
