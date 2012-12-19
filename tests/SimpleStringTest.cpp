@@ -439,12 +439,14 @@ TEST(SimpleString, StringFromFormat)
 
 TEST(SimpleString, StringFromFormatpointer)
 {
-	//this is not a great test. but %p is odd on mingw
+	//this is not a great test. but %p is odd on mingw and even more odd on Solaris.
 	SimpleString h1 = StringFromFormat("%p", 1);
 	if (h1.size() == 3)
 		STRCMP_EQUAL("0x1", h1.asCharString())
 	else if (h1.size() == 8)
 		STRCMP_EQUAL("00000001", h1.asCharString())
+	else if (h1.size() == 1)
+		STRCMP_EQUAL("1", h1.asCharString())
 	else
 		FAIL("Off %p behavior")
 }
