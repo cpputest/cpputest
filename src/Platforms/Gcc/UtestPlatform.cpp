@@ -51,28 +51,6 @@
 static jmp_buf test_exit_jmp_buf[10];
 static int jmp_buf_index = 0;
 
-int PlatformSpecificSetJmp(void (*function) (void* data), void* data)
-{
-	if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
-	    jmp_buf_index++;
-		function(data);
-	    jmp_buf_index--;
-		return 1;
-	}
-	return 0;
-}
-
-__attribute__((__noreturn__)) void PlatformSpecificLongJmp()
-{
-	jmp_buf_index--;
-	longjmp(test_exit_jmp_buf[jmp_buf_index], 1);
-}
-
-void PlatformSpecificRestoreJumpBuffer()
-{
-	jmp_buf_index--;
-}
-
 void PlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
 {
 #ifdef __MINGW32__
@@ -100,6 +78,31 @@ void PlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* pl
 TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
 {
 	return TestOutput::eclipse;
+}
+
+
+extern "C" {
+
+int PlatformSpecificSetJmp(void (*function) (void* data), void* data)
+{
+	if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
+	    jmp_buf_index++;
+		function(data);
+	    jmp_buf_index--;
+		return 1;
+	}
+	return 0;
+}
+
+__attribute__((__noreturn__)) void PlatformSpecificLongJmp()
+{
+	jmp_buf_index--;
+	longjmp(test_exit_jmp_buf[jmp_buf_index], 1);
+}
+
+void PlatformSpecificRestoreJumpBuffer()
+{
+	jmp_buf_index--;
 }
 
 ///////////// Time in millis
@@ -258,4 +261,6 @@ double PlatformSpecificFabs(double d)
 int PlatformSpecificIsNan(double d)
 {
 	return isnan((float)d);
+}
+
 }
