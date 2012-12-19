@@ -156,6 +156,74 @@ MockFunctionCall& MockActualFunctionCall::withParameterOfType(const SimpleString
 	return *this;
 }
 
+MockFunctionCall& MockActualFunctionCall::setOutputParameter(const SimpleString& name, int *value)
+{
+	unfulfilledExpectations_.parameterWasPassed(name);
+	finnalizeCallWhenFulfilled();
+
+	if (_fulfilledExpectation) {
+		MockNamedValue val = _fulfilledExpectation->getParameter(name);
+		*value = val.getIntValue();
+	}
+	return *this;
+}
+
+MockFunctionCall& MockActualFunctionCall::withOutputParameter(const SimpleString&, int) {
+	FAIL("withOutputParameter cannot be called on an ActualFunctionCall. Use setOutputParameter instead to set the value.");
+	return *this;
+}
+
+MockFunctionCall& MockActualFunctionCall::setOutputParameter(const SimpleString& name, double *value)
+{
+	unfulfilledExpectations_.parameterWasPassed(name);
+	finnalizeCallWhenFulfilled();
+
+	if (_fulfilledExpectation) {
+		MockNamedValue val = _fulfilledExpectation->getParameter(name);
+		*value = val.getDoubleValue();
+	}
+	return *this;
+}
+
+MockFunctionCall& MockActualFunctionCall::withOutputParameter(const SimpleString&, double) {
+	FAIL("withOutputParameter cannot be called on an ActualFunctionCall. Use setOutputParameter instead to set the value.");
+	return *this;
+}
+
+MockFunctionCall& MockActualFunctionCall::setOutputParameter(const SimpleString& name, const char* *value)
+{
+	unfulfilledExpectations_.parameterWasPassed(name);
+	finnalizeCallWhenFulfilled();
+
+	if (_fulfilledExpectation) {
+		MockNamedValue val = _fulfilledExpectation->getParameter(name);
+		*value = val.getStringValue();
+	}
+	return *this;
+}
+
+MockFunctionCall& MockActualFunctionCall::withOutputParameter(const SimpleString&, const char*) {
+	FAIL("withOutputParameter cannot be called on an ActualFunctionCall. Use setOutputParameter instead to set the value.");
+	return *this;
+}
+
+MockFunctionCall& MockActualFunctionCall::setOutputParameter(const SimpleString& name, void* *value)
+{
+	unfulfilledExpectations_.parameterWasPassed(name);
+	finnalizeCallWhenFulfilled();
+
+	if (_fulfilledExpectation) {
+		MockNamedValue val = _fulfilledExpectation->getParameter(name);
+		*value = val.getPointerValue();
+	}
+	return *this;
+}
+
+MockFunctionCall& MockActualFunctionCall::withOutputParameter(const SimpleString&, void*) {
+	FAIL("withOutputParameter cannot be called on an ActualFunctionCall. Use setOutputParameter instead to set the value.");
+	return *this;
+}
+
 bool MockActualFunctionCall::isFulfilled() const
 {
 	return state_ == CALL_SUCCEED;
