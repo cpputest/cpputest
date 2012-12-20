@@ -78,7 +78,7 @@
   extern int externTestGroup##testGroup;\
   int* p##testGroup = &externTestGroup##testGroup
 
-//Check any boolean condition
+// Different checking macros
 
 #define CHECK(condition)\
   CHECK_LOCATION_TRUE(condition, "CHECK", #condition, __FILE__, __LINE__)
