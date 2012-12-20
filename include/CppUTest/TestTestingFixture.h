@@ -86,14 +86,7 @@ public:
 	static void assertPrintContains(StringBufferTestOutput* output,
 			const SimpleString& contains)
 	{
-		if (output->getOutput().contains(contains)) return;
-		SimpleString message("\tActual <");
-		message += output->getOutput().asCharString();
-		message += ">\n";
-		message += "\tdid not contain <";
-		message += contains.asCharString();
-		message += ">\n";
-		FAIL(message.asCharString());
+		STRCMP_CONTAINS(contains.asCharString(), output->getOutput().asCharString());
 
 	}
 
