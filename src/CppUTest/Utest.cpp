@@ -327,9 +327,14 @@ void UtestShell::failWith(const TestFailure& failure)
 
 void UtestShell::assertTrue(bool condition, const char * checkString, const char* conditionString, const char* fileName, int lineNumber)
 {
+	assertTrueText(condition, checkString, conditionString, "", fileName, lineNumber);
+}
+
+void UtestShell::assertTrueText(bool condition, const char *checkString, const char *conditionString, const char* text, const char *fileName, int lineNumber)
+{
 	getTestResult()->countCheck();
 	if (!condition)
-		failWith(CheckFailure(this, fileName, lineNumber, checkString, conditionString));
+		failWith(CheckFailure(this, fileName, lineNumber, checkString, conditionString, text));
 }
 
 void UtestShell::fail(const char *text, const char* fileName, int lineNumber)

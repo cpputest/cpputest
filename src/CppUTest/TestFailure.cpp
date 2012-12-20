@@ -198,9 +198,15 @@ ContainsFailure::ContainsFailure(UtestShell* test, const char* fileName, int lin
 	message_ = StringFromFormat(format, actual.asCharString(), expected.asCharString());
 }
 
-CheckFailure::CheckFailure(UtestShell* test, const char* fileName, int lineNumber, const SimpleString& checkString, const SimpleString& conditionString) : TestFailure(test, fileName, lineNumber)
+CheckFailure::CheckFailure(UtestShell* test, const char* fileName, int lineNumber, const SimpleString& checkString, const SimpleString& conditionString, const SimpleString& text) : TestFailure(test, fileName, lineNumber)
 {
-	message_ = checkString;
+	message_ = "";
+	if (!text.isEmpty()) {
+		message_ += "Message: ";
+		message_ += text;
+		message_ += "\n\t";
+	}
+	message_ += checkString;
 	message_ += "(";
 	message_ += conditionString;
 	message_ += ") failed";

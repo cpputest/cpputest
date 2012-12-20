@@ -28,6 +28,8 @@
 #ifndef D_TestTestingFixture_H
 #define D_TestTestingFixture_H
 
+#include "TestRegistry.h"
+
 class TestTestingFixture
 {
 public:
