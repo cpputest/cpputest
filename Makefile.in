@@ -1,126 +1,108 @@
-#Set this to @ to keep the makefile quiet
-SILENCE = @
 
-#--- Inputs ----#
-COMPONENT_NAME = CppUTest
-ifeq ($(CPPUTEST_USE_STD_C_LIB), N)
-	CPP_PLATFORM = GccNoStdC
-else
-	CPP_PLATFORM = Gcc
+
+SILENCE = @SILENCE@
+
+CPPUTEST_NAME = @PACKAGE_NAME@
+
+CPPUTEST_OBJS_DIR = @CPPUTEST_OBJS_DIR@
+CPPUTEST_LIB_DIR = @CPPUTEST_LIB_DIR@
+CPPUTEST_USE_STD_C_LIB = @CPPUTEST_USE_STD_C_LIB@
+CPPUTEST_TEST_EXEC = @CPPUTEST_TEST_EXEC@
+
+CC = @CC@
+CXX = @CXX@
+CPP = @CPP@
+LD = @LD@
+
+CFLAGS = @CFLAGS@ @CPPUTEST_CFLAGS@ @CPPUTEST_ADDITIONAL_CFLAGS@
+CPPFLAGS = @CPPFLAGS@ @CPPUTEST_CPPFLAGS@ @CPPUTEST_ADDITIONAL_CPPFLAGS@
+CXXFLAGS = @CXXFLAGS@ @CPPUTEST_CXXFLAGS@ @CPPUTEST_ADDITIONAL_CXXFLAGS@
+LDFLAGS = @LDFLAGS@ @CPPUTEST_LDFLAGS@ @CPPUTEST_LDFLAGS@
+
+srcdir = @srcdir@
+
+CPPUTEST_SRC_DIRS = @CPPUTEST_SRC_DIRS@
+CPPUTEST_TEST_DIRS = @CPPUTEST_TEST_DIRS@
+
+# Helper macros
+__src_to = $(subst .c,$1, $(subst .cpp,$1,$2))
+convert_to_obj_files=$(addprefix $(CPPUTEST_OBJS_DIR)/$1/,$(call __src_to,.o,$(call notdir,$2)))
+get_obj_files_from_src_dir = $(call convert_to_obj_files,$1,$(call get_src_from_dir,$(srcdir)/$1))
+get_obj_files_from_multiple_CPPUTEST_SRC_DIRS = $(foreach dir,$1,$(call get_obj_files_from_src_dir,$(dir))) 
+
+CPPUTEST_OBJ = $(call get_obj_files_from_multiple_CPPUTEST_SRC_DIRS,$(CPPUTEST_SRC_DIRS))
+CPPUTEST_TEST_OBJ = $(call get_obj_files_from_multiple_CPPUTEST_SRC_DIRS,$(CPPUTEST_TEST_DIRS))
+
+CPPUTEST_LIB = @CPPUTEST_LIB@
+
+
+CPPUTEST_TEST_EXEC = $(CPPUTEST_NAME)_tests
+
+#Helper Functions
+get_src_from_dir  = $(wildcard $1/*.cpp) $(wildcard $1/*.c)
+get_dirs_from_dirspec  = $(wildcard $1)
+get_src_from_dir_list = $(foreach dir, $1, $(call get_src_from_dir,$(dir)))
+src_to = $(addprefix $(CPPUTEST_OBJS_DIR)/,$(call __src_to,$1,$2))
+src_to_o = $(call src_to,.o,$1)
+src_to_d = $(call src_to,.d,$1)
+src_to_gcda = $(call src_to,.gcda,$1)
+src_to_gcno = $(call src_to,.gcno,$1)
+time = $(shell date +%s)
+delta_t = $(eval minus, $1, $2)
+debug_print_list = $(foreach word,$1,echo "  $(word)";) echo;
+
+ALL_SRC = $(SRC) $(TEST_SRC)
+
+RUN_TEST_TARGET = $(SILENCE)echo "Running $(CPPUTEST_TEST_EXEC)"; ./$(CPPUTEST_TEST_EXEC) $(CPPUTEST_EXE_FLAGS)
+
+LD_LIBRARIES += -lstdc++
+
+DEP_FILES = $(call src_to_d, $(ALL_SRC))
+
+# Don't consider creating the archive a warning condition that does STDERR output
+ARFLAGS := $(ARFLAGS)c
+
+DEP_FLAGS=-MMD -MP
+
+# Some macros for programs to be overridden. For some reason, these are not in Make defaults
+RANLIB = ranlib
+
+# Targets
+
+.PHONY: all
+all: start $(CPPUTEST_TEST_EXEC)  
+	$(RUN_TEST_TARGET)	
+
+.PHONY: start
+start: $(CPPUTEST_TEST_EXEC) 
+	$(SILENCE)START_TIME=$(call time)
+
+TEST_DEPS = $(CPPUTEST_TEST_OBJ) $(CPPUTEST_LIB)
+test-deps: $(TEST_DEPS)
+
+$(CPPUTEST_TEST_EXEC): $(TEST_DEPS)
+	@echo Linking $@
+	$(SILENCE)$(LINK.o) -o $@ $^ $(LD_LIBRARIES)
+
+$(CPPUTEST_LIB): $(CPPUTEST_OBJ)
+	@echo Building archive $@
+	$(SILENCE)mkdir -p $(dir $@)
+	$(SILENCE)$(AR) $(ARFLAGS) $@ $^
+	$(SILENCE)$(RANLIB) $@
+
+test: $(CPPUTEST_TEST_EXEC)
+	$(RUN_TEST_TARGET) | tee $(TEST_OUTPUT)
+	
+$(CPPUTEST_OBJS_DIR)/%.o: $(srcdir)/%.cpp
+	@echo compiling $(notdir $<)
+	$(SILENCE)mkdir -p $(dir $@)
+	$(SILENCE)$(COMPILE.cpp) $(DEP_FLAGS) $(OUTPUT_OPTION) $<
+
+$(CPPUTEST_OBJS_DIR)/%.o: $(srcdir)/%.c
+	@echo compiling $(notdir $<)
+	$(SILENCE)mkdir -p $(dir $@)
+	$(SILENCE)$(COMPILE.c) $(DEP_FLAGS)  $(OUTPUT_OPTION) $<
+
+ifneq "$(MAKECMDGOALS)" "clean"
+-include $(DEP_FILES)
 endif
-CPPUTEST_HOME = .
-OLD_MAKE = oldmake
-
-CPPUTEST_ENABLE_DEBUG = Y
-
-SRC_DIRS = \
-	src/CppUTest \
-	src/Platforms/$(CPP_PLATFORM)
-	
-TEST_SRC_DIRS = \
-	tests
-
-INCLUDE_DIRS =\
-  include
-
-include $(CPPUTEST_HOME)/build/MakefileWorker.mk
-
-#these are a sample of the other alternative flag settings
-.PHONY: test_all
-test_all: start test_old_make
-	@echo Building with the default flags.
-	make clean
-	$(TIME) make 
-	./$(TEST_TARGET) -r
-	make clean
-	@echo Building with the STDC++ new disabled. 
-	$(TIME) make CPPUTEST_USE_STD_CPP_LIB=Y extensions 
-	make CPPUTEST_USE_STD_CPP_LIB=Y cleanExtensions
-	@echo Building with Memory Leak Detection disabled
-	$(TIME) make CPPUTEST_USE_MEM_LEAK_DETECTION=N extensions
-	make CPPUTEST_USE_MEM_LEAK_DETECTION=N cleanExtensions
-	@echo Building with Memory Leak Detection disabled and STD C++ disabled
-	$(TIME) make CPPUTEST_USE_MEM_LEAK_DETECTION=N CPPUTEST_USE_STD_CPP_LIB=Y extensions
-	make CPPUTEST_USE_MEM_LEAK_DETECTION=N CPPUTEST_USE_STD_CPP_LIB=Y cleanExtensions
-	@echo Building with debug disabled
-	$(TIME) make CPPUTEST_ENABLE_DEBUG=N extensions
-	make CPPUTEST_ENABLE_DEBUG=N cleanExtensions
-	@echo Building with overridden CXXFLAGS and CFLAGS and CPPFLAGS
-	$(TIME) make CLFAGS="" CXXFLAGS="" CPPFLAGS="-Iinclude"
-	make CFLAGS="" CXXFLAGS="" clean
-	@echo Building without Standard C library includes
-	$(TIME) make CPPUTEST_USE_STD_C_LIB=N all_no_tests
-	make CPPUTEST_USE_STD_C_LIB=N clean
-	@echo Building with a different TARGET_PLATFORM
-	make TARGET_PLATFORM=real_platform
-	@echo Building with overridden CXXFLAGS and CFLAGS and memory leak and STDC++ disabled
-	$(TIME) make CLFAGS="" CXXFLAGS="" CPPFLAGS="-Iinclude -DCPPUTEST_STD_CPP_LIB_DISABLED -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED"
-	make CFLAGS="" CXXFLAGS="" CPPFLAGS="-DCPPUTEST_STD_CPP_LIB_DISABLED -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED" clean
-	@echo Building CppUTest with Google Test 
-	$(SILENCE) if [ -z $$GTEST_HOME ]; then  \
-	   echo "******** WARNING: Can't test with CPPUTEST_USE_REAL_GTEST because can't find Google Test -- no GTEST_HOME set ********"; \
-	   else $(TIME) make extensions CPPUTEST_USE_REAL_GTEST=Y; fi
-	@echo Building CppUTest with Google Mock 
-	$(SILENCE) if [ -z $$GMOCK_HOME ]; then  \
-	   echo "******** WARNING: Can't test with CPPUTEST_USE_REAL_GMOCK because can't find Google Mock -- no GMOCK_HOME set ********"; \
-	   else $(TIME) make extensions CPPUTEST_USE_REAL_GMOCK=Y; fi
-	@echo Building examples 
-	make cleanExamples
-	$(TIME) make examples
-	make cleanExamples
-	@echo Testing JUnit output
-	$(TIME) make
-	$(SILENCE)./$(TEST_TARGET) -ojunit > junit_run_output
-	$(SILENCE)if [ -s junit_run_output ]; then echo "JUnit run has output. Build failed!"; exit 1; fi
-	make clean
-	make CPPUTEST_MAP_FILE=map.txt
-	make clean
-	@echo Testing GCOV usage
-	$(TIME) make CPPUTEST_USE_GCOV=Y everythingInstall
-	make gcov
-	make -f Makefile_CppUTestExt gcov
-	make -C examples gcov
-	make cleanEverythingInstall
-	@echo Testing VPATH usage
-	$(TIME) make CPPUTEST_USE_GCOV=Y CPPUTEST_USE_VPATH=Y everythingInstall
-	make CPPUTEST_USE_VPATH=Y gcov
-	make CPPUTEST_USE_VPATH=Y -f Makefile_CppUTestExt gcov
-	make CPPUTEST_USE_VPATH=Y -C examples gcov	
-	make clean cleanExamples
-	@echo Testing VPATH usage
-	$(TIME) make CPPUTEST_USE_VPATH=Y everythingInstall
-	make CPPUTEST_USE_VPATH=Y cleanEverythingInstall
-	make flags
-	make debug
-	
-HAS_OLD_MAKE = $(shell $(OLD_MAKE) -v 2>/dev/null)
-
-test_old_make:
-	$(SILENCE)if [ "$(HAS_OLD_MAKE)" = "" ]; then \
-		echo "Old make with the name $(OLD_MAKE) not found. Skipping testing with old make version"; \
-	else \
-		$(OLD_MAKE) -f Makefile_for_old_make clean && \
-		$(OLD_MAKE) -f Makefile_for_old_make && \
-		$(OLD_MAKE) -f Makefile_for_old_make extensions && \
-		$(OLD_MAKE) -f Makefile_for_old_make clean; \
-	fi
-
-.PHONY: examples
-examples: $(TEST_TARGET) extensions
-	+$(TIME) $(MAKE) -C examples  all CPPUTEST_USE_STD_CPP_LIB=$(CPPUTEST_USE_STD_CPP_LIB) CPPUTEST_USE_REAL_GTEST=$(CPPUTEST_USE_REAL_GTEST) CPPUTEST_USE_MEM_LEAK_DETECTION=$(CPPUTEST_USE_MEM_LEAK_DETECTION)
-
-extensions: $(TEST_TARGET)
-	+$(TIME) $(MAKE) -f Makefile_CppUTestExt all CPPUTEST_USE_STD_CPP_LIB=$(CPPUTEST_USE_STD_CPP_LIB) CPPUTEST_USE_REAL_GTEST=$(CPPUTEST_USE_REAL_GTEST) CPPUTEST_USE_MEM_LEAK_DETECTION=$(CPPUTEST_USE_MEM_LEAK_DETECTION) TARGET_PLATFORM=$(TARGET_PLATFORM)
-
-cleanExtensions: clean
-	+$(TIME) $(MAKE) -f Makefile_CppUTestExt clean CPPUTEST_USE_STD_CPP_LIB=$(CPPUTEST_USE_STD_CPP_LIB) CPPUTEST_USE_REAL_GTEST=$(CPPUTEST_USE_REAL_GTEST) CPPUTEST_USE_MEM_LEAK_DETECTION=$(CPPUTEST_USE_MEM_LEAK_DETECTION) TARGET_PLATFORM=$(TARGET_PLATFORM)
-
-cleanExamples: clean cleanExtensions
-	+$(TIME) $(MAKE) -C examples clean CPPUTEST_USE_STD_CPP_LIB=$(CPPUTEST_USE_STD_CPP_LIB) CPPUTEST_USE_REAL_GTEST=$(CPPUTEST_USE_REAL_GTEST) CPPUTEST_USE_MEM_LEAK_DETECTION=$(CPPUTEST_USE_MEM_LEAK_DETECTION)
-
-.PHONY: everythingInstall
-everythingInstall: all extensions examples
-
-.PHONY: cleanEverythingInstall
-cleanEverythingInstall: clean cleanExtensions cleanExamples
-
