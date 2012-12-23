@@ -16,6 +16,7 @@ AM_SILENT_RULES([yes])
 
 # Checking for warning flags on the compiler
 saved_cflags="$CFLAGS"
+saved_cxxflags="$CXXFLAGS"
 
 # FLag -Werror. 
 CFLAGS=-Werror
@@ -47,22 +48,48 @@ AC_MSG_CHECKING([whether CC and CXX supports -Wshadow])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS+=" -Wshadow"; CPPUTEST_CXXWARNINGFLAGS+=" -Wshadow" ], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 
-# FLag -Wswitch-default. 
+# FLag -Wswitch-default
 CFLAGS=-Wswitch-default
 AC_MSG_CHECKING([whether CC and CXX supports -Wswitch-default])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS+=" -Wswitch-default"; CPPUTEST_CXXWARNINGFLAGS+=" -Wswitch-default" ], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 
-# FLag -Wswitch-enum. 
+# FLag -Wswitch-enum
 CFLAGS=-Wswitch-enum
 AC_MSG_CHECKING([whether CC and CXX supports -Wswitch-enum])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS+=" -Wswitch-enum"; CPPUTEST_CXXWARNINGFLAGS+=" -Wswitch-enum" ], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 
-# FLag -Wconversion. 
+# FLag -Wconversion 
 CFLAGS=-Wconversion
 AC_MSG_CHECKING([whether CC and CXX supports -Wconversion])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS+=" -Wconversion"; CPPUTEST_CXXWARNINGFLAGS+=" -Wconversion" ], [AC_MSG_RESULT([no])])
+CFLAGS="$saved_cflags"
+
+# FLag -pedantic-errors 
+CFLAGS=-pedantic-errors
+AC_MSG_CHECKING([whether CC and CXX supports -pedantic-errors])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS+=" -pedantic-errors"; CPPUTEST_CXXWARNINGFLAGS+=" -pedantic-errors" ], [AC_MSG_RESULT([no])])
+CFLAGS="$saved_cflags"
+
+# FLag -Wsign-conversion 
+CFLAGS=-Wsign-conversion
+AC_MSG_CHECKING([whether CC and CXX supports -Wsign-conversion])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS+=" -Wsign-conversion"; CPPUTEST_CXXWARNINGFLAGS+=" -Wsign-conversion" ], [AC_MSG_RESULT([no])])
+CFLAGS="$saved_cflags"
+
+# FLag -Woverloaded-virtual 
+AC_LANG_PUSH([C++])
+CXXFLAGS=-Woverloaded-virtual
+AC_MSG_CHECKING([whether CXX supports -Woverloaded-virtual])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CXXWARNINGFLAGS+=" -Woverloaded-virtual" ], [AC_MSG_RESULT([no])])
+CXXFLAGS="$saved_cxxflags"
+AC_LANG_POP
+
+# FLag -Wstrict-prototypes 
+CFLAGS=-Wstrict-prototypes
+AC_MSG_CHECKING([whether CC supports -Wstrict-prototypes])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS+=" -Wstrict-prototypes" ], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 
 # Disable some warnings as CppUTest has this and can't be prevented at the moment.
@@ -127,37 +154,50 @@ AC_ARG_ENABLE([std-cpp], [  --disable-std-cpp   disable the use of Standard C++ 
 AC_ARG_ENABLE([memory-leak-detection], [  --disable-memory-leak-detection   disable memory leak detection], 
    [memory_leak_detection=${enableval}], [memory_leak_detection=yes])
 
+AC_ARG_ENABLE([extensions], [  --disable-extensions   disable CppUTest extension library], 
+   [cpputest_ext=${enableval}], [cpputest_ext=yes])
+
 ############################## Values ########################################
 CPPUTEST_CFLAGS+="${CPPUTEST_CWARNINGFLAGS}"
 CPPUTEST_CXXFLAGS+="${CPPUTEST_CXXWARNINGFLAGS}"
-
-
 CPP_PLATFORM="Gcc"
-CPPUTEST_MEMLEAK_DETECTOR_NEW_MACRO_FILE="${srcdir}/include/CppUTest/MemoryLeakDetectorNewMacros.h"
-CPPUTEST_MEMLEAK_DETECTOR_MALLOC_MACRO_FILE="${srcdir}/include/CppUTest/MemoryLeakDetectorMallocMacros.h"
-
 
 ### Setting include #####
 
 CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I ${srcdir}/include"
 
 ############################## Setting options ###############################
-if test "x${verbose}" = xno; then
-	SILENCE=@
+
+if test "x${cpputest_ext}" = xyes; then
+	CPPUTEST_EXT_LIB=" libCppUTestExt.a"
+	CPPUTEST_EXT_TESTS=" CppUTestExtTests"
 fi
-	
+
 # Dealing with not having a Standard C library... (usually for Kernel development)
 if test "x${use_std_c}" = xno; then
+	use_std_cpp=no
+	memory_leak_detection=no
+    CPPUTEST_CPPFLAGS+=" -nostdinc"
+    CPPUTEST_LDFLAGS+=" -nodefaultlibs"
+    AC_DEFINE([CPPUTEST_STD_C_LIB_DISABLED], [1], [Standard C library disabled])
     CPP_PLATFORM="GccNoStdC"
-    AC_SUBST([CPPUTEST_USE_STD_C_LIB], [N])
 fi
+
+if test "x${use_std_cpp}" = xno; then
+	AC_DEFINE([CPPUTEST_STD_CPP_LIB_DISABLED], 1, [Standard C++ library disabled])
+	if test "x${use_std_c}" = xyes; then
+    	CPPUTEST_CPPFLAGS+=" -nostdinc++"
+    fi
+fi
+
+CPPUTEST_LDFLAGS+=" -lstdc++"
 
 # Dealing with memory leak detection
 if test "x${memory_leak_detection}" = xno; then
 	AC_DEFINE([CPPUTEST_MEM_LEAK_DETECTION_DISABLED], 1, [memory leak detection disabled])
 else
-	CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} -include ${CPPUTEST_MEMLEAK_DETECTOR_NEW_MACRO_FILE}"
-	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -include ${CPPUTEST_MEMLEAK_DETECTOR_MALLOC_MACRO_FILE}"
+	CPPUTEST_CXXFLAGS+="${CPPUTEST_CXXFLAGS} -include ${srcdir}/include/CppUTest/MemoryLeakDetectorNewMacros.h"
+	CPPUTEST_CPPFLAGS+="${CPPUTEST_CPPFLAGS} -include ${srcdir}/include/CppUTest/MemoryLeakDetectorMallocMacros.h"
 fi
 
 
@@ -169,10 +209,10 @@ AC_SUBST([CPPUTEST_CFLAGS])
 AC_SUBST([CPPUTEST_CPPFLAGS])
 AC_SUBST([CPPUTEST_CXXFLAGS])
 
-AC_SUBST([CPPUTEST_SRC_DIRS], "src/CppUTest src/Platforms/${CPP_PLATFORM}")
-AC_SUBST([CPPUTEST_TEST_DIRS], tests)
-AC_SUBST([CPPUTEST_LIB], ${CPPUTEST_LIB_DIR}/libCppUTest.a)
-AC_SUBST([CPPUTEST_TEST_EXEC], CppUTest_tests)
+AC_SUBST([CPP_PLATFORM])
+
+AC_SUBST([CPPUTEST_EXT_LIB])
+AC_SUBST([CPPUTEST_EXT_TESTS])
 
 # Replacement of tool flags
 AC_SUBST([CPPUTEST_CFLAGS])
@@ -183,6 +223,8 @@ AC_SUBST([CPPUTEST_CPPFLAGS])
 AC_SUBST([CPPUTEST_ADDITIONAL_CPPFLAGS])
 AC_SUBST([CPPUTEST_LDFLAGS])
 AC_SUBST([CPPUTEST_ADDITIONAL_LDFLAGS])
+
+AC_DEFINE([CPPUTEST_COMPILATION], [1], [Compiling CppUTest itself])
 
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
