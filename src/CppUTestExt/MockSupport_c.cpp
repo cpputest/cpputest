@@ -26,9 +26,9 @@
  */
 
 #include "CppUTest/CppUTestConfig.h"
+#include "CppUTest/PlatformSpecificFunctions_c.h"
 #include "CppUTestExt/MockSupport.h"
 #include "CppUTestExt/MockSupport_c.h"
-#include <string.h>
 
 static MockSupport* currentMockSupport = NULL;
 static MockFunctionCall* currentCall = NULL;
@@ -190,19 +190,19 @@ MockFunctionCall_c* andReturnPointerValue_c(void* value)
 static MockValue_c getMockValueCFromNamedValue(const MockNamedValue& namedValue)
 {
 	MockValue_c returnValue;
-	if (strcmp(namedValue.getType().asCharString(), "int") == 0) {
+	if (PlatformSpecificStrCmp(namedValue.getType().asCharString(), "int") == 0) {
 		returnValue.type = MOCKVALUETYPE_INTEGER;
 		returnValue.value.intValue = namedValue.getIntValue();
 	}
-	else if (strcmp(namedValue.getType().asCharString(), "double") == 0) {
+	else if (PlatformSpecificStrCmp(namedValue.getType().asCharString(), "double") == 0) {
 		returnValue.type = MOCKVALUETYPE_DOUBLE;
 		returnValue.value.doubleValue = namedValue.getDoubleValue();
 	}
-	else if (strcmp(namedValue.getType().asCharString(), "char*") == 0) {
+	else if (PlatformSpecificStrCmp(namedValue.getType().asCharString(), "char*") == 0) {
 		returnValue.type = MOCKVALUETYPE_STRING;
 		returnValue.value.stringValue = namedValue.getStringValue();
 	}
-	else if (strcmp(namedValue.getType().asCharString(), "void*") == 0) {
+	else if (PlatformSpecificStrCmp(namedValue.getType().asCharString(), "void*") == 0) {
 		returnValue.type = MOCKVALUETYPE_POINTER;
 		returnValue.value.pointerValue = namedValue.getPointerValue();
 	}
