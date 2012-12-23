@@ -29,6 +29,10 @@
 #ifndef CPPUTESTCONFIG_H_
 #define CPPUTESTCONFIG_H_
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 /*
  * This file is added for some specific CppUTest configurations that earlier were spread out into multiple files.
  *
