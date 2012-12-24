@@ -144,18 +144,27 @@ AC_FUNC_MALLOC
 AC_FUNC_REALLOC
 AC_CHECK_FUNCS([gettimeofday memset strstr])
 
+AC_CHECK_PROG([CPPUTEST_HAS_GCC], [gcc], [yes], [no])
+
+
 # Different features
-AC_ARG_ENABLE([std-c], [  --disable-std-c   disable the use of Standard C Library (warning: requires implementing Platforms/GccNoStdC) ], 
+AC_ARG_ENABLE([std-c], [AC_HELP_STRING([--disable-std-c], [disable the use of Standard C Library (warning: requires implementing Platforms/GccNoStdC) ])], 
    [use_std_c=${enableval}], [use_std_c=yes])
 
-AC_ARG_ENABLE([std-cpp], [  --disable-std-cpp   disable the use of Standard C++ Library], 
+AC_ARG_ENABLE([std-cpp], [AC_HELP_STRING([--disable-std-cpp], [disable the use of Standard C++ Library])], 
    [use_std_cpp=${enableval}], [use_std_cpp=yes])
 
-AC_ARG_ENABLE([memory-leak-detection], [  --disable-memory-leak-detection   disable memory leak detection], 
+AC_ARG_ENABLE([memory-leak-detection], [AC_HELP_STRING([--disable-memory-leak-detection], [disable memory leak detection])], 
    [memory_leak_detection=${enableval}], [memory_leak_detection=yes])
 
-AC_ARG_ENABLE([extensions], [  --disable-extensions   disable CppUTest extension library], 
+AC_ARG_ENABLE([extensions], [AC_HELP_STRING([--disable-extensions], [disable CppUTest extension library])], 
    [cpputest_ext=${enableval}], [cpputest_ext=yes])
+
+AC_ARG_ENABLE([generate-map-file], [AC_HELP_STRING([--enable-generate-map-file], [enable the creation of a map file])], 
+   [generate_map_file=${enableval}], [generate_map_file=no])
+
+AC_ARG_ENABLE([coverage], [AC_HELP_STRING([--enable-coverage], [enable running with coverage])], 
+   [coverage=${enableval}], [coverage=no])
 
 ############################## Values ########################################
 CPPUTEST_CFLAGS+="${CPPUTEST_CWARNINGFLAGS}"
@@ -165,6 +174,7 @@ CPP_PLATFORM="Gcc"
 ### Setting include #####
 
 CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I ${srcdir}/include"
+CPPUTEST_LDFLAGS+=" -lstdc++"
 
 ############################## Setting options ###############################
 
@@ -183,14 +193,13 @@ if test "x${use_std_c}" = xno; then
     CPP_PLATFORM="GccNoStdC"
 fi
 
+# Using standard C++
 if test "x${use_std_cpp}" = xno; then
 	AC_DEFINE([CPPUTEST_STD_CPP_LIB_DISABLED], 1, [Standard C++ library disabled])
 	if test "x${use_std_c}" = xyes; then
     	CPPUTEST_CPPFLAGS+=" -nostdinc++"
     fi
 fi
-
-CPPUTEST_LDFLAGS+=" -lstdc++"
 
 # Dealing with memory leak detection
 if test "x${memory_leak_detection}" = xno; then
@@ -200,6 +209,17 @@ else
 	CPPUTEST_CPPFLAGS+="${CPPUTEST_CPPFLAGS} -include ${srcdir}/include/CppUTest/MemoryLeakDetectorMallocMacros.h"
 fi
 
+# Generating map files.
+if test "x${generate_map_file}" = xyes; then
+	CPPUTEST_LDFLAGS+=" -Wl,-map,$<.map.txt"
+	MOSTLYCLEANFILES+=" *.map.txt"
+fi
+
+if test "x${coverage}" = xyes; then
+	CPPUTEST_CXXFLAGS+=" -fprofile-arcs -ftest-coverage"
+	CPPUTEST_CFLAGS+=" -fprofile-arcs -ftest-coverage"
+	MOSTLYCLEANFILES+=" *.gcda *.gcno"
+fi
 
 # Variables to substitute
 
@@ -224,6 +244,8 @@ AC_SUBST([CPPUTEST_ADDITIONAL_CPPFLAGS])
 AC_SUBST([CPPUTEST_LDFLAGS])
 AC_SUBST([CPPUTEST_ADDITIONAL_LDFLAGS])
 
+AC_SUBST([MOSTLYCLEANFILES])
+AC_SUBST([CPPUTEST_HAS_GCC])
 AC_DEFINE([CPPUTEST_COMPILATION], [1], [Compiling CppUTest itself])
 
 AC_CONFIG_FILES([Makefile])
@@ -238,5 +260,8 @@ Features configured in ${PACKAGE_NAME}:
    Memory Leak Detection:       ${memory_leak_detection}
    Using Standard C++ Library:  ${use_std_cpp}
    Using Standard C Library:    ${use_std_c}
+   Compiling extensions:        ${cpputest_ext}
+   Generating map file:         ${generate_map_file}
+   Compiling w coverage info:   ${coverage}
 
 ----------------------------------------------------------------"
