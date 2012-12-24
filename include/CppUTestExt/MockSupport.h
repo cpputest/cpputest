@@ -89,7 +89,7 @@ public:
 	virtual void removeAllComparators();
 
 protected:
-	MockSupport* createDerivedMockSupport();
+	MockSupport* clone();
     virtual MockActualFunctionCall *createActualFunctionCall();
     virtual void failTest(MockFailure& failure);
 private:
