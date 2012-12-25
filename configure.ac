@@ -178,10 +178,7 @@ CPPUTEST_LDFLAGS+=" -lstdc++"
 
 ############################## Setting options ###############################
 
-if test "x${cpputest_ext}" = xyes; then
-	CPPUTEST_EXT_LIB=" libCppUTestExt.a"
-	CPPUTEST_EXT_TESTS=" CppUTestExtTests"
-fi
+AM_CONDITIONAL([INCLUDE_CPPUTEST_EXT], [test "x${cpputest_ext}" = xyes]) 
 
 # Dealing with not having a Standard C library... (usually for Kernel development)
 if test "x${use_std_c}" = xno; then
@@ -231,8 +228,7 @@ AC_SUBST([CPPUTEST_CXXFLAGS])
 
 AC_SUBST([CPP_PLATFORM])
 
-AC_SUBST([CPPUTEST_EXT_LIB])
-AC_SUBST([CPPUTEST_EXT_TESTS])
+AC_SUBST([INCLUDE_CPPUTEST_EXT])
 
 # Replacement of tool flags
 AC_SUBST([CPPUTEST_CFLAGS])
