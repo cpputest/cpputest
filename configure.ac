@@ -13,6 +13,7 @@ AC_PROG_CPP([clang gcc])
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AM_PROG_CC_C_O
+AC_PROG_RANLIB
 AM_SILENT_RULES([yes])
 
 AC_CHECK_HEADERS([stddef.h stdint.h stdlib.h string.h sys/time.h unistd.h])
