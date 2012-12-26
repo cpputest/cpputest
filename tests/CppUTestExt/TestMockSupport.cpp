@@ -202,6 +202,20 @@ TEST(MockSupportTest, strictOrderViolated)
 	CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 
+TEST(MockSupportTest, strictOrderViolatedWithinAScope)
+{
+	mock().strictOrder();
+	addFunctionToExpectationsList("foo1", 1)->callWasMade(2);
+	addFunctionToExpectationsList("foo2", 2)->callWasMade(1);
+	MockCallOrderFailure expectedFailure(mockFailureTest(), *expectationsList);
+	mock("scope").expectOneCall("foo1");
+	mock("scope").expectOneCall("foo2");
+	mock("scope").actualCall("foo2");
+	mock("scope").actualCall("foo1");
+	mock("scope").checkExpectations();
+	CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
 TEST(MockSupportTest, strictOrderNotViolatedWithTwoMocks)
 {
 	mock("mock1").strictOrder();
