@@ -94,7 +94,10 @@ int PlatformSpecificSetJmp(void (*function) (void* data), void* data)
 	return 0;
 }
 
-__attribute__((__noreturn__)) void PlatformSpecificLongJmp()
+#if defined(__clang__) && (__clang_major__ > 3)
+__attribute__((__noreturn__))
+#endif
+void PlatformSpecificLongJmp()
 {
 	jmp_buf_index--;
 	longjmp(test_exit_jmp_buf[jmp_buf_index], 1);
