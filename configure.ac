@@ -2,7 +2,6 @@
 AC_PREREQ([2.69])
 AC_INIT([CppUTest], [3.3], [https://github.com/cpputest/cpputest])
 AM_INIT_AUTOMAKE
-LT_INIT
 AC_CONFIG_SRCDIR([src/CppUTest/Utest.cpp])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([cpputest.pc])
@@ -297,6 +296,7 @@ AC_SUBST([ALL_FILES_IN_GIT])
 
 AC_DEFINE([CPPUTEST_COMPILATION], [1], [Compiling CppUTest itself])
 
+LT_INIT
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
 
