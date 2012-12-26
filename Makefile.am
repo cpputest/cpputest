@@ -14,6 +14,7 @@ endif
 
 TESTS = $(check_PROGRAMS)
 
+EXTRA_DIST = $(ALL_FILES_IN_GIT)
 
 libCppUTest_a_CPPFLAGS = -I$(srcdir)/include -I$(srcdir)/include/CppUTestExt/CppUTestGTest -I$(srcdir)/include/CppUTestExt/CppUTestGMock $(AM_CPPFLAGS) $(CPPUTEST_CPPFLAGS)
 libCppUTest_a_CFLAGS = $(AM_CFLAGS) $(CPPUTEST_CFLAGS)
@@ -167,7 +168,7 @@ CppUTestExtTests_SOURCES = \
 
 RUN_CPPUTEST_TESTS = ./$(CPPUTEST_TESTS) -r
 #RUN_CPPUTEST_EXT_TESTS = ./$(CPPUTEST_EXT_TESTS) -r
-	
+
 check_all: $(check_PROGRAMS)
 	
 	@echo "Building without extensions"
