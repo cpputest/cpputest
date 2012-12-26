@@ -6,9 +6,9 @@ AC_CONFIG_SRCDIR([src/CppUTest/Utest.cpp])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([cpputest.pc])
 
-AC_PROG_CXX([clang g++])
 AC_PROG_CC([clang gcc])
 AC_PROG_CPP([clang gcc])
+AC_PROG_CXX([clang++ g++])
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AM_PROG_CC_C_O
@@ -269,11 +269,9 @@ fi
 
 
 ############################## Values ########################################
-CPPUTEST_LDADD+=" -lstdc++"
 
 ### All files in git
 ALL_FILES_IN_GIT="`git --git-dir=${srcdir}/.git ls-files | tr '[ \n]' ' '`"
-
 
 # Variables to substitute
 
