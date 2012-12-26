@@ -2,6 +2,7 @@
 AC_PREREQ([2.69])
 AC_INIT([CppUTest], [3.3], [https://github.com/cpputest/cpputest])
 AM_INIT_AUTOMAKE
+LT_INIT
 AC_CONFIG_SRCDIR([src/CppUTest/Utest.cpp])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([cpputest.pc])
@@ -12,7 +13,6 @@ AC_PROG_CPP([clang gcc])
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AM_PROG_CC_C_O
-AC_PROG_LIBTOOL
 AM_SILENT_RULES([yes])
 
 AC_CHECK_HEADERS([stddef.h stdint.h stdlib.h string.h sys/time.h unistd.h])
