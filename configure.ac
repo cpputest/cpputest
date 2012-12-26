@@ -11,9 +11,32 @@ AC_PROG_CC([clang gcc])
 AC_PROG_CPP([clang gcc])
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
-AC_PROG_RANLIB
 AM_PROG_CC_C_O
+AC_PROG_LIBTOOL
 AM_SILENT_RULES([yes])
+
+AC_CHECK_HEADERS([stddef.h stdint.h stdlib.h string.h sys/time.h unistd.h])
+
+AC_CHECK_HEADER_STDBOOL
+AC_C_INLINE
+AC_TYPE_INT16_T
+AC_TYPE_INT32_T
+AC_TYPE_INT64_T
+AC_TYPE_INT8_T
+AC_TYPE_PID_T
+AC_TYPE_SIZE_T
+AC_TYPE_UINT16_T
+AC_TYPE_UINT32_T
+AC_TYPE_UINT64_T
+AC_TYPE_UINT8_T
+
+# Checks for library functions.
+AC_FUNC_FORK
+AC_FUNC_MALLOC
+AC_FUNC_REALLOC
+AC_CHECK_FUNCS([gettimeofday memset strstr])
+
+AC_CHECK_PROG([CPPUTEST_HAS_GCC], [gcc], [yes], [no])
 
 # Checking for warning flags on the compiler
 saved_cflags="$CFLAGS"
@@ -124,36 +147,15 @@ AC_MSG_CHECKING([whether CC and CXX supports -Wno-weak-vtables])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS+=" -Wno-weak-vtables"; CPPUTEST_CXXWARNINGFLAGS+=" -Wno-weak-vtables" ], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 
-AC_CHECK_HEADERS([stddef.h stdint.h stdlib.h string.h sys/time.h unistd.h])
-
-AC_CHECK_HEADER_STDBOOL
-AC_C_INLINE
-AC_TYPE_INT16_T
-AC_TYPE_INT32_T
-AC_TYPE_INT64_T
-AC_TYPE_INT8_T
-AC_TYPE_PID_T
-AC_TYPE_SIZE_T
-AC_TYPE_UINT16_T
-AC_TYPE_UINT32_T
-AC_TYPE_UINT64_T
-AC_TYPE_UINT8_T
-
-# Checks for library functions.
-AC_FUNC_FORK
-AC_FUNC_MALLOC
-AC_FUNC_REALLOC
-AC_CHECK_FUNCS([gettimeofday memset strstr])
-
-AC_CHECK_PROG([CPPUTEST_HAS_GCC], [gcc], [yes], [no])
-
-
 # Different features
 AC_ARG_ENABLE([std-c], [AC_HELP_STRING([--disable-std-c], [disable the use of Standard C Library (warning: requires implementing Platforms/GccNoStdC) ])], 
    [use_std_c=${enableval}], [use_std_c=yes])
 
 AC_ARG_ENABLE([std-cpp], [AC_HELP_STRING([--disable-std-cpp], [disable the use of Standard C++ Library])], 
    [use_std_cpp=${enableval}], [use_std_cpp=yes])
+
+AC_ARG_ENABLE([cpputest-flags], [AC_HELP_STRING([--disable-cpputest-flags], [disable CFLAGS/CPPFLAGS/CXXFLAGS set by CppUTest])], 
+   [cpputest_flags=${enableval}], [cpputest_flags=yes])
 
 AC_ARG_ENABLE([memory-leak-detection], [AC_HELP_STRING([--disable-memory-leak-detection], [disable memory leak detection])], 
    [memory_leak_detection=${enableval}], [memory_leak_detection=yes])
@@ -167,18 +169,11 @@ AC_ARG_ENABLE([generate-map-file], [AC_HELP_STRING([--enable-generate-map-file],
 AC_ARG_ENABLE([coverage], [AC_HELP_STRING([--enable-coverage], [enable running with coverage])], 
    [coverage=${enableval}], [coverage=no])
 
-############################## Values ########################################
-CPPUTEST_CFLAGS+="${CPPUTEST_CWARNINGFLAGS}"
-CPPUTEST_CXXFLAGS+="${CPPUTEST_CXXWARNINGFLAGS}"
-CPP_PLATFORM="Gcc"
+AC_ARG_ENABLE([real-gtest], [AC_HELP_STRING([--enable-real-gtest], [enable using real GTest rather than faking it. Requires GTEST_HOME to be set])], 
+   [real_gtest=${enableval}], [real_gtest=no])
 
-### Setting include #####
-
-CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I ${srcdir}/include"
-CPPUTEST_LDFLAGS+=" -lstdc++"
-
-### All files in git
-ALL_FILES_IN_GIT="`git --git-dir=${srcdir}/.git ls-files | tr '[ \n]' ' '`"
+AC_ARG_ENABLE([gmock], [AC_HELP_STRING([--enable-gmock], [enable using GMock. Requires GMOCK_HOME to be set])], 
+   [use_gmock=${enableval}], [use_gmock=no])
 
 ############################## Setting options ###############################
 
@@ -192,6 +187,8 @@ if test "x${use_std_c}" = xno; then
     CPPUTEST_LDFLAGS+=" -nodefaultlibs"
     AC_DEFINE([CPPUTEST_STD_C_LIB_DISABLED], [1], [Standard C library disabled])
     CPP_PLATFORM="GccNoStdC"
+else
+	CPP_PLATFORM="Gcc"
 fi
 
 # Using standard C++
@@ -206,8 +203,8 @@ fi
 if test "x${memory_leak_detection}" = xno; then
 	AC_DEFINE([CPPUTEST_MEM_LEAK_DETECTION_DISABLED], 1, [memory leak detection disabled])
 else
-	CPPUTEST_CXXFLAGS+="${CPPUTEST_CXXFLAGS} -include ${srcdir}/include/CppUTest/MemoryLeakDetectorNewMacros.h"
-	CPPUTEST_CPPFLAGS+="${CPPUTEST_CPPFLAGS} -include ${srcdir}/include/CppUTest/MemoryLeakDetectorMallocMacros.h"
+	CPPUTEST_CXXFLAGS+=" -include ${srcdir}/include/CppUTest/MemoryLeakDetectorNewMacros.h"
+	CPPUTEST_CPPFLAGS+=" -include ${srcdir}/include/CppUTest/MemoryLeakDetectorMallocMacros.h"
 fi
 
 # Generating map files.
@@ -222,6 +219,62 @@ if test "x${coverage}" = xyes; then
 	MOSTLYCLEANFILES+=" *.gcda *.gcno"
 fi
 
+if test "x${use_gmock}" = xyes; then
+	AC_ARG_VAR([GMOCK_HOME], [Location of the GMock])
+	if test -z ${GMOCK_HOME}; then 
+		AC_MSG_ERROR([
+-------------------------------------
+Compiling with --enable-gmock will require the GMOCK_HOME
+to be set.
+-------------------------------------])
+	fi
+	real_gtest=yes
+	GTEST_HOME=${GMOCK_HOME}/gtest
+	CPPUTEST_CPPFLAGS+=" -I${GMOCK_HOME}/include"
+	CPPUTEST_LDADD+=" ${GMOCK_HOME}/lib/libgmock.la"
+	AC_DEFINE([CPPUTEST_USE_REAL_GMOCK], [1], [Use GMock])
+else
+	CPPUTEST_CPPFLAGS+=" -I${srcdir}/include/CppUTestExt/CppUTestGMock"
+fi
+
+if test "x${real_gtest}" = xyes; then
+	AC_ARG_VAR([GTEST_HOME], [Location of the GTest source])
+	if test -z ${GTEST_HOME}; then 
+		AC_MSG_ERROR([
+-------------------------------------
+Compiling with --enable-real-gtest requires you to 
+set the GTEST_HOME to the GTest source directory
+-------------------------------------])
+	fi
+	CPPUTEST_CPPFLAGS+=" -I${GTEST_HOME}/include -I${GTEST_HOME} -Isomething"
+	CPPUTEST_LDADD+=" ${GTEST_HOME}/lib/libgtest.la"
+	AC_DEFINE([CPPUTEST_USE_REAL_GTEST], [1], [Using the real gtest])
+	
+	# Turn warnings off. Gtest doesn't like it!
+	CPPUTEST_CWARNINGFLAGS=""
+	CPPUTEST_CXXWARNINGFLAGS=""
+else
+	CPPUTEST_CPPFLAGS+=" -I${srcdir}/include/CppUTestExt/CppUTestGTest"
+fi
+
+CPPUTEST_CFLAGS+=" ${CPPUTEST_CWARNINGFLAGS}"
+CPPUTEST_CXXFLAGS+=" ${CPPUTEST_CXXWARNINGFLAGS}"
+CPPUTEST_CPPFLAGS+=" -I ${srcdir}/include ${CPPUTEST_CPPWARNINGFLAGS}"
+
+if test "x${cpputest_flags}" = xno; then
+	CPPUTEST_CFLAGS=""
+	CPPUTEST_CXXFLAGS=""
+	CPPUTEST_CPPFLAGS=""
+fi
+
+
+############################## Values ########################################
+CPPUTEST_LDADD+=" -lstdc++"
+
+### All files in git
+ALL_FILES_IN_GIT="`git --git-dir=${srcdir}/.git ls-files | tr '[ \n]' ' '`"
+
+
 # Variables to substitute
 
 AC_SUBST([CPP_PLATFORM])
@@ -235,8 +288,7 @@ AC_SUBST([CPPUTEST_CXXFLAGS])
 AC_SUBST([CPPUTEST_ADDITIONAL_CXXFLAGS])
 AC_SUBST([CPPUTEST_CPPFLAGS])
 AC_SUBST([CPPUTEST_ADDITIONAL_CPPFLAGS])
-AC_SUBST([CPPUTEST_LDFLAGS])
-AC_SUBST([CPPUTEST_ADDITIONAL_LDFLAGS])
+AC_SUBST([CPPUTEST_LDADD])
 
 AC_SUBST([MOSTLYCLEANFILES])
 AC_SUBST([CPPUTEST_HAS_GCC])
@@ -253,11 +305,18 @@ echo \
 ${PACKAGE_NAME} Version ${PACKAGE_VERSION}
 
 Features configured in ${PACKAGE_NAME}:
-   Memory Leak Detection:       ${memory_leak_detection}
-   Using Standard C++ Library:  ${use_std_cpp}
-   Using Standard C Library:    ${use_std_c}
-   Compiling extensions:        ${cpputest_ext}
-   Generating map file:         ${generate_map_file}
-   Compiling w coverage info:   ${coverage}
+   Memory Leak Detection:               ${memory_leak_detection}
+   Compiling extensions:                ${cpputest_ext}
+   Disable CppUTest compile/link flags: ${cpputest_flags}
 
+   Using Standard C++ Library:          ${use_std_cpp}
+   Using Standard C Library:            ${use_std_c}
+
+   Generating map file:                 ${generate_map_file}
+   Compiling w coverage info:           ${coverage}
+
+   Use 'real' GTest:                    ${real_gtest}
+   Able to use GMock:                   ${use_gmock}
+
+      
 ----------------------------------------------------------------"

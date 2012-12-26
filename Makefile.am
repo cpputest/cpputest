@@ -4,8 +4,8 @@ CPPUTEST_TESTS = CppUTestTests
 EXTRA_LIBRARIES = libCppUTestExt.a
 EXTRA_PROGRAMS = CppUTestExtTests
 
-lib_LIBRARIES = libCppUTest.a $(CPPUTEST_EXT_LIB)
-check_PROGRAMS = $(CPPUTEST_TESTS) $(CPPUTEST_EXT_TESTS)
+lib_LIBRARIES = libCppUTest.a
+check_PROGRAMS = $(CPPUTEST_TESTS)
 
 if INCLUDE_CPPUTEST_EXT
 lib_LIBRARIES+= libCppUTestExt.a
@@ -16,9 +16,9 @@ TESTS = $(check_PROGRAMS)
 
 EXTRA_DIST = $(ALL_FILES_IN_GIT)
 
-libCppUTest_a_CPPFLAGS = -I$(srcdir)/include -I$(srcdir)/include/CppUTestExt/CppUTestGTest -I$(srcdir)/include/CppUTestExt/CppUTestGMock $(AM_CPPFLAGS) $(CPPUTEST_CPPFLAGS)
-libCppUTest_a_CFLAGS = $(AM_CFLAGS) $(CPPUTEST_CFLAGS)
-libCppUTest_a_CXXFLAGS = $(AM_CXXFLAGS) $(CPPUTEST_CXXFLAGS)
+libCppUTest_a_CPPFLAGS = $(AM_CPPFLAGS) $(CPPUTEST_CPPFLAGS) $(CPPUTEST_ADDITIONAL_CPPFLAGS)
+libCppUTest_a_CFLAGS = $(AM_CFLAGS) $(CPPUTEST_CFLAGS) $(CPPUTEST_ADDITIONAL_CFLAGS)
+libCppUTest_a_CXXFLAGS = $(AM_CXXFLAGS) $(CPPUTEST_CXXFLAGS) $(CPPUTEST_ADDITIONAL_CXXFLAGS)
 
 libCppUTest_a_SOURCES = \
 	src/CppUTest/CommandLineArguments.cpp \
@@ -110,7 +110,7 @@ endif
 CppUTestTests_CPPFLAGS = $(libCppUTest_a_CPPFLAGS)
 CppUTestTests_CFLAGS = $(libCppUTest_a_CFLAGS)
 CppUTestTests_CXXFLAGS = $(libCppUTest_a_CXXFLAGS) 
-CppUTestTests_LDADD = libCppUTest.a $(CPPUTEST_LDFLAGS)
+CppUTestTests_LDADD = libCppUTest.a $(CPPUTEST_LDADD)
 
 CppUTestTests_SOURCES = \
 	tests/AllTests.cpp \
@@ -145,7 +145,7 @@ CppUTestTests_SOURCES = \
 CppUTestExtTests_CPPFLAGS = $(libCppUTestExt_a_CPPFLAGS)
 CppUTestExtTests_CFLAGS = $(libCppUTestExt_a_CFLAGS)
 CppUTestExtTests_CXXFLAGS = $(libCppUTestExt_a_CXXFLAGS) 
-CppUTestExtTests_LDADD = libCppUTestExt.a libCppUTest.a $(CPPUTEST_LDFLAGS)
+CppUTestExtTests_LDADD = libCppUTestExt.a libCppUTest.a $(CPPUTEST_LDADD)
 
 CppUTestExtTests_SOURCES = \
 	tests/CppUTestExt/AllTests.cpp \
@@ -169,7 +169,7 @@ CppUTestExtTests_SOURCES = \
 RUN_CPPUTEST_TESTS = ./$(CPPUTEST_TESTS) -r
 #RUN_CPPUTEST_EXT_TESTS = ./$(CPPUTEST_EXT_TESTS) -r
 
-check_all: $(check_PROGRAMS)
+check_all:
 	
 	@echo "Building without extensions"
 	make distclean; $(srcdir)/configure --disable-extensions; make check
@@ -214,7 +214,16 @@ check_all: $(check_PROGRAMS)
 
 	@echo "Compiling and running the examples. This will use the old Makefile"
 	make distclean; ../configure; make; $(MAKE) -C $(srcdir)/examples all clean CPPUTEST_LIB_LINK_DIR="`pwd`"
-		
+
+	@echo "Build using real gtest"
+	make distclean; $(srcdir)/configure --enable-real-gtest; make check
+
+	@echo "Build using gmock"
+	make distclean; $(srcdir)/configure --enable-gmock; make check
+	
+	@echo "Building with all flags turned off"
+	make distclean; $(srcdir)/configure --disable-cpputest-flags CFLAGS="" CXXFLAGS="" CPPFLAGS="-I $(srcdir)/include -I$(srcdir)/include/CppUTestExt/CppUTestGTest -I$(srcdir)/include/CppUTestExt/CppUTestGMock" --disable-dependency-tracking; make check
+			
 	@echo "Last... one normal build and test"
 	make distclean; $(srcdir)/configure; make check; $(RUN_CPPUTEST_TESTS); $(RUN_CPPUTEST_EXT_TESTS)
 	
