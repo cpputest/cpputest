@@ -4,6 +4,7 @@ AC_INIT([CppUTest], [3.3], [https://github.com/cpputest/cpputest])
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([src/CppUTest/Utest.cpp])
 AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_FILES([cpputest.pc])
 
 AC_PROG_CXX([clang g++])
 AC_PROG_CC([clang gcc])
@@ -176,6 +177,9 @@ CPP_PLATFORM="Gcc"
 CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I ${srcdir}/include"
 CPPUTEST_LDFLAGS+=" -lstdc++"
 
+### All files in git
+ALL_FILES_IN_GIT="`git --git-dir=${srcdir}/.git ls-files | tr '[ \n]' ' '`"
+
 ############################## Setting options ###############################
 
 AM_CONDITIONAL([INCLUDE_CPPUTEST_EXT], [test "x${cpputest_ext}" = xyes]) 
@@ -220,12 +224,6 @@ fi
 
 # Variables to substitute
 
-AC_SUBST([SILENCE])
-
-AC_SUBST([CPPUTEST_CFLAGS])
-AC_SUBST([CPPUTEST_CPPFLAGS])
-AC_SUBST([CPPUTEST_CXXFLAGS])
-
 AC_SUBST([CPP_PLATFORM])
 
 AC_SUBST([INCLUDE_CPPUTEST_EXT])
@@ -242,6 +240,8 @@ AC_SUBST([CPPUTEST_ADDITIONAL_LDFLAGS])
 
 AC_SUBST([MOSTLYCLEANFILES])
 AC_SUBST([CPPUTEST_HAS_GCC])
+AC_SUBST([ALL_FILES_IN_GIT])
+
 AC_DEFINE([CPPUTEST_COMPILATION], [1], [Compiling CppUTest itself])
 
 AC_CONFIG_FILES([Makefile])
