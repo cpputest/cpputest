@@ -198,7 +198,7 @@ check_all:
 
 	@echo "Does the system have clang and is a Mac? $(CPPUTEST_HAS_CLANG)"
 	if test "x$(CPPUTEST_HAS_CLANG)" = xyes && test "x$(CPPUTEST_ON_MACOSX)" = xyes; then \
-	   echo "Compiling with clang"; make distclean; ../configure CC="clang" CXX="clang++"; make check; \ 
+	   echo "Compiling with clang"; make distclean; ../configure CC="clang" CXX="clang++"; make check; \
 	fi
 
 	@echo Testing JUnit output
