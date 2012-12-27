@@ -165,6 +165,7 @@ CppUTestExtTests_SOURCES = \
 	tests/CppUTestExt/TestMemoryReportFormatter.cpp \
 	tests/CppUTestExt/TestMemoryReporterPlugin.cpp \
 	tests/CppUTestExt/TestMockPlugin.cpp
+	
 
 RUN_CPPUTEST_TESTS = ./$(CPPUTEST_TESTS) -r
 #RUN_CPPUTEST_EXT_TESTS = ./$(CPPUTEST_EXT_TESTS) -r
@@ -191,7 +192,7 @@ check_all:
 	if [ -s CppUTest.o.map.txt ]; then echo "Generating map file failed. Build failed!"; exit 1; fi
 	
 	@echo "Does the system have gcc? $(CPPUTEST_HAS_GCC)"
-	if test "x$(CPPUTEST_HAS_GCC)" = xyes; then echo "Compiling with gcc"; make distclean; ../configure CC="gcc" CXX="gcc"; make check; fi
+	if test "x$(CPPUTEST_HAS_GCC)" = xyes; then echo "Compiling with gcc"; make distclean; ../configure CC="gcc" CXX="g++"; make check; fi
 
 	@echo Testing JUnit output
 	make distclean; $(srcdir)/configure; make check

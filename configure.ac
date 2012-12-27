@@ -6,9 +6,21 @@ AC_CONFIG_SRCDIR([src/CppUTest/Utest.cpp])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([cpputest.pc])
 
-AC_PROG_CC([clang gcc])
-AC_PROG_CPP([clang gcc])
-AC_PROG_CXX([clang++ g++])
+AC_CANONICAL_HOST
+
+case "x$build_os" in
+	*darwin*)
+		AC_PROG_CC([clang gcc])
+		AC_PROG_CPP([clang gcc])
+		AC_PROG_CXX([clang++ g++])
+	;;
+	*)
+		AC_PROG_CC
+		AC_PROG_CPP
+		AC_PROG_CXX
+	;;
+esac
+	
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AM_PROG_CC_C_O
@@ -184,7 +196,7 @@ if test "x${use_std_c}" = xno; then
 	use_std_cpp=no
 	memory_leak_detection=no
     CPPUTEST_CPPFLAGS+=" -nostdinc"
-    CPPUTEST_LDFLAGS+=" -nodefaultlibs"
+    CPPUTEST_LDFLAGS+=" -nostdlib"
     AC_DEFINE([CPPUTEST_STD_C_LIB_DISABLED], [1], [Standard C library disabled])
     CPP_PLATFORM="GccNoStdC"
 else
