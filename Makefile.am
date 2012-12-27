@@ -196,14 +196,24 @@ check_all:
 	@echo "Does the system have gcc? $(CPPUTEST_HAS_GCC)"
 	if test "x$(CPPUTEST_HAS_GCC)" = xyes; then echo "Compiling with gcc"; make distclean; ../configure CC="gcc" CXX="g++"; make check; fi
 
+	@echo "Does the system have clang and is a Mac? $(CPPUTEST_HAS_CLANG)"
+	if test "x$(CPPUTEST_HAS_CLANG)" = xyes && test "x$(CPPUTEST_ON_MACOSX)" = xyes; then \
+	   echo "Compiling with clang"; make distclean; ../configure CC="clang" CXX="clang++"; make check; \ 
+	fi
+
 	@echo Testing JUnit output
 	make distclean; $(srcdir)/configure; make check
 	./$(CPPUTEST_TESTS) -ojunit > junit_run_output
 	if [ -s junit_run_output ]; then echo "JUnit run has output. Build failed!"; exit 1; fi
 	rm junit_run_output; rm cpputest_*.xml
 	
-	@echo "Compile with coverage"
-	make distclean; $(srcdir)/configure -enable-coverage; make check
+	@echo "Compile with coverage (switch to clang for Mac OSX)"
+	if test "x$(CPPUTEST_HAS_CLANG)" = xyes && test "x$(CPPUTEST_ON_MACOSX)" = xyes; then \
+	   echo "Compiling with clang"; make distclean; ../configure CC="clang" CXX="clang++" --enable-coverage; make check; \
+	else \
+		make distclean; $(srcdir)/configure -enable-coverage; make check; \
+	fi
+	
 	./$(CPPUTEST_TESTS) >> test_output.txt; $(CPPUTESTEXT_TESTS) >> test_output.txt 
 	$(SILENCE)for f in `ls *.gcno` ; do \
 		gcov $(CppUTestExtTests_SOURCES) $(CppUTestTests_SOURCES) $(libCppUTest_a_SOURCES) $(libCppUTestExt_a_SOURCES) -o $$f 1>>gcov_output.txt 2>>gcov_error.txt; \

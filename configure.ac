@@ -11,17 +11,14 @@ AC_CANONICAL_HOST
 
 case "x$build_os" in
 	*darwin*)
-		AC_PROG_CC([clang gcc])
-		AC_PROG_CPP([clang gcc])
-		AC_PROG_CXX([clang++ g++])
-	;;
-	*)
-		AC_PROG_CC
-		AC_PROG_CPP
-		AC_PROG_CXX
-	;;
+		AC_SUBST([CPPUTEST_ON_MACOSX], [yes])
+   ;;
 esac
-	
+
+
+AC_PROG_CC
+AC_PROG_CPP
+AC_PROG_CXX
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AM_PROG_CC_C_O
@@ -49,6 +46,7 @@ AC_FUNC_REALLOC
 AC_CHECK_FUNCS([gettimeofday memset strstr])
 
 AC_CHECK_PROG([CPPUTEST_HAS_GCC], [gcc], [yes], [no])
+AC_CHECK_PROG([CPPUTEST_HAS_CLANG], [clang], [yes], [no])
 
 # Checking for warning flags on the compiler
 saved_cflags="$CFLAGS"
@@ -207,7 +205,7 @@ fi
 if test "x${use_std_cpp}" = xno; then
 	AC_DEFINE([CPPUTEST_STD_CPP_LIB_DISABLED], 1, [Standard C++ library disabled])
 	if test "x${use_std_c}" = xyes; then
-    	CPPUTEST_CPPFLAGS+=" -nostdinc++"
+    	CPPUTEST_CXXFLAGS+=" -nostdinc++"
     fi
 fi
 
@@ -226,8 +224,8 @@ if test "x${generate_map_file}" = xyes; then
 fi
 
 if test "x${coverage}" = xyes; then
-	CPPUTEST_CXXFLAGS+=" -fprofile-arcs -ftest-coverage"
-	CPPUTEST_CFLAGS+=" -fprofile-arcs -ftest-coverage"
+	CPPUTEST_CXXFLAGS+=" --coverage"
+	CPPUTEST_CFLAGS+=" --coverage"
 	MOSTLYCLEANFILES+=" *.gcda *.gcno"
 fi
 
@@ -302,6 +300,7 @@ AC_SUBST([CPPUTEST_LDADD])
 
 AC_SUBST([MOSTLYCLEANFILES])
 AC_SUBST([CPPUTEST_HAS_GCC])
+AC_SUBST([CPPUTEST_HAS_CLANG])
 AC_SUBST([ALL_FILES_IN_GIT])
 
 AC_DEFINE([CPPUTEST_COMPILATION], [1], [Compiling CppUTest itself])
