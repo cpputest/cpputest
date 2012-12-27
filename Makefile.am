@@ -1,4 +1,6 @@
 
+ACLOCAL_AMFLAGS = -I m4
+
 CPPUTEST_TESTS = CppUTestTests
 
 EXTRA_LIBRARIES = libCppUTestExt.a
