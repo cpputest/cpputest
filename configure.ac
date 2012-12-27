@@ -47,6 +47,7 @@ AC_CHECK_FUNCS([gettimeofday memset strstr])
 
 AC_CHECK_PROG([CPPUTEST_HAS_GCC], [gcc], [yes], [no])
 AC_CHECK_PROG([CPPUTEST_HAS_CLANG], [clang], [yes], [no])
+AC_CHECK_PROG([CPPUTEST_HAS_LCOV], [lcov], [yes], [no])
 
 # Checking for warning flags on the compiler
 saved_cflags="$CFLAGS"

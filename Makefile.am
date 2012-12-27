@@ -220,8 +220,7 @@ check_all:
 	done
 	$(srcdir)/scripts/filterGcov.sh gcov_output.txt gcov_error.txt gcov_report.txt test_output.txt
 	cat gcov_report.txt
-	lcov -c -d . -o coverage.info
-	genhtml -o test_coverage coverage.info
+	if test "x$(CPPUTEST_HAS_LCOV)" = xyes; then  lcov -c -d . -o coverage.info; genhtml -o test_coverage coverage.info; fi
 	rm gcov_output.txt gcov_error.txt gcov_report.txt test_output.txt gcov_report.txt.html coverage.info
 	rm -rf test_coverage
 
