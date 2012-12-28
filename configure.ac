@@ -242,7 +242,17 @@ to be set.
 	real_gtest=yes
 	GTEST_HOME=${GMOCK_HOME}/gtest
 	CPPUTEST_CPPFLAGS+=" -I${GMOCK_HOME}/include"
-	CPPUTEST_LDADD+=" ${GMOCK_HOME}/lib/libgmock.la"
+	if test -e ${GMOCK_HOME}/lib/libgmock.la; then \
+		CPPUTEST_LDADD+=" ${GMOCK_HOME}/lib/libgmock.la"; \
+	elif test -e ${GMOCK_HOME}/libgmock.a; then \
+		CPPUTEST_LDADD+=" ${GMOCK_HOME}/libgmock.a"; \
+	else \
+		AC_MSG_ERROR([
+-------------------------------------
+GMOCK_HOME was set, but couldn't find the compiled library.
+Did you compile it?
+-------------------------------------]);
+	fi	
 	AC_DEFINE([CPPUTEST_USE_REAL_GMOCK], [1], [Use GMock])
 else
 	CPPUTEST_CPPFLAGS+=" -I${srcdir}/include/CppUTestExt/CppUTestGMock"
@@ -258,7 +268,18 @@ set the GTEST_HOME to the GTest source directory
 -------------------------------------])
 	fi
 	CPPUTEST_CPPFLAGS+=" -I${GTEST_HOME}/include -I${GTEST_HOME} -Isomething"
-	CPPUTEST_LDADD+=" ${GTEST_HOME}/lib/libgtest.la"
+
+	if test -e ${GTEST_HOME}/lib/libgtest.la; then \
+		CPPUTEST_LDADD+=" ${GTEST_HOME}/lib/libgtest.la"; \
+	elif test -e ${GTEST_HOME}/libgtest.a; then \
+		CPPUTEST_LDADD+=" ${GTEST_HOME}/libgtest.a"; \
+	else \
+		AC_MSG_ERROR([
+-------------------------------------
+GTEST_HOME was set, but couldn't find the compiled library.
+Did you compile it?
+-------------------------------------]);
+	fi	
 	AC_DEFINE([CPPUTEST_USE_REAL_GTEST], [1], [Using the real gtest])
 	
 	# Turn warnings off. Gtest doesn't like it!
