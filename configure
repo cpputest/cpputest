@@ -5917,7 +5917,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 CFLAGS="$saved_cflags"
 
 # FLag -Weverything.
-CFLAGS=-Weverything
+CFLAGS="-Werror -Weverything"
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether CC and CXX supports -Weverything" >&5
 $as_echo_n "checking whether CC and CXX supports -Weverything... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -5942,7 +5942,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 CFLAGS="$saved_cflags"
 
 # FLag -Wall.
-CFLAGS=-Wall
+CFLAGS="-Werror -Wall"
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether CC and CXX supports -Wall" >&5
 $as_echo_n "checking whether CC and CXX supports -Wall... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -5967,7 +5967,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 CFLAGS="$saved_cflags"
 
 # FLag -Wextra.
-CFLAGS=-Wextra
+CFLAGS="-Werror -Wextra"
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether CC and CXX supports -Wextra" >&5
 $as_echo_n "checking whether CC and CXX supports -Wextra... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -5992,7 +5992,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 CFLAGS="$saved_cflags"
 
 # FLag -Wshadow.
-CFLAGS=-Wshadow
+CFLAGS="-Werror -Wshadow"
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether CC and CXX supports -Wshadow" >&5
 $as_echo_n "checking whether CC and CXX supports -Wshadow... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -6017,7 +6017,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 CFLAGS="$saved_cflags"
 
 # FLag -Wswitch-default
-CFLAGS=-Wswitch-default
+CFLAGS="-Werror -Wswitch-default"
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether CC and CXX supports -Wswitch-default" >&5
 $as_echo_n "checking whether CC and CXX supports -Wswitch-default... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -6042,7 +6042,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 CFLAGS="$saved_cflags"
 
 # FLag -Wswitch-enum
-CFLAGS=-Wswitch-enum
+CFLAGS="-Werror -Wswitch-enum"
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether CC and CXX supports -Wswitch-enum" >&5
 $as_echo_n "checking whether CC and CXX supports -Wswitch-enum... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -6067,7 +6067,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 CFLAGS="$saved_cflags"
 
 # FLag -Wconversion
-CFLAGS=-Wconversion
+CFLAGS="-Werror -Wconversion"
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether CC and CXX supports -Wconversion" >&5
 $as_echo_n "checking whether CC and CXX supports -Wconversion... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -6092,7 +6092,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 CFLAGS="$saved_cflags"
 
 # FLag -pedantic-errors
-CFLAGS=-pedantic-errors
+CFLAGS="-Werror -pedantic-errors"
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether CC and CXX supports -pedantic-errors" >&5
 $as_echo_n "checking whether CC and CXX supports -pedantic-errors... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -6117,7 +6117,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 CFLAGS="$saved_cflags"
 
 # FLag -Wsign-conversion
-CFLAGS=-Wsign-conversion
+CFLAGS="-Werror -Wsign-conversion"
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether CC and CXX supports -Wsign-conversion" >&5
 $as_echo_n "checking whether CC and CXX supports -Wsign-conversion... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -6148,7 +6148,7 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-CXXFLAGS=-Woverloaded-virtual
+CXXFLAGS="-Werror -Woverloaded-virtual"
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether CXX supports -Woverloaded-virtual" >&5
 $as_echo_n "checking whether CXX supports -Woverloaded-virtual... " >&6; }
 
@@ -6180,7 +6180,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 # FLag -Wstrict-prototypes
-CFLAGS=-Wstrict-prototypes
+CFLAGS="-Werror -Wstrict-prototypes"
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether CC supports -Wstrict-prototypes" >&5
 $as_echo_n "checking whether CC supports -Wstrict-prototypes... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -6206,7 +6206,7 @@ CFLAGS="$saved_cflags"
 
 # Disable some warnings as CppUTest has this and can't be prevented at the moment.
 # FLag -Wno-disabled-macro-expansion.
-CFLAGS=-Wno-disabled-macro-expansion
+CFLAGS="-Werror -Wno-disabled-macro-expansion"
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether CC and CXX supports -Wno-disabled-macro-expansion" >&5
 $as_echo_n "checking whether CC and CXX supports -Wno-disabled-macro-expansion... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -6231,7 +6231,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 CFLAGS="$saved_cflags"
 
 # FLag -Wno-padded.
-CFLAGS=-Wno-padded
+CFLAGS="-Werror -Wno-padded"
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether CC and CXX supports -Wno-padded" >&5
 $as_echo_n "checking whether CC and CXX supports -Wno-padded... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -6256,7 +6256,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 CFLAGS="$saved_cflags"
 
 # FLag -Wno-global-constructors.
-CFLAGS=-Wno-global-constructors
+CFLAGS="-Werror -Wno-global-constructors"
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether CC and CXX supports -Wno-global-constructors" >&5
 $as_echo_n "checking whether CC and CXX supports -Wno-global-constructors... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -6281,7 +6281,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 CFLAGS="$saved_cflags"
 
 # FLag -Wno-exit-time-destructors.
-CFLAGS=-Wno-exit-time-destructors
+CFLAGS="-Werror -Wno-exit-time-destructors"
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether CC and CXX supports -Wno-exit-time-destructors" >&5
 $as_echo_n "checking whether CC and CXX supports -Wno-exit-time-destructors... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -6306,7 +6306,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 CFLAGS="$saved_cflags"
 
 # FLag -Wno-weak-vtables.
-CFLAGS=-Wno-weak-vtables
+CFLAGS="-Werror -Wno-weak-vtables"
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether CC and CXX supports -Wno-weak-vtables" >&5
 $as_echo_n "checking whether CC and CXX supports -Wno-weak-vtables... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext

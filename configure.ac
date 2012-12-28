@@ -60,100 +60,100 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNIN
 CFLAGS="$saved_cflags"
 
 # FLag -Weverything. 
-CFLAGS=-Weverything
+CFLAGS="-Werror -Weverything"
 AC_MSG_CHECKING([whether CC and CXX supports -Weverything])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS+=" -Weverything"; CPPUTEST_CXXWARNINGFLAGS+=" -Weverything" ], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 
 # FLag -Wall. 
-CFLAGS=-Wall
+CFLAGS="-Werror -Wall"
 AC_MSG_CHECKING([whether CC and CXX supports -Wall])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS+=" -Wall"; CPPUTEST_CXXWARNINGFLAGS+=" -Wall" ], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 
 # FLag -Wextra. 
-CFLAGS=-Wextra
+CFLAGS="-Werror -Wextra"
 AC_MSG_CHECKING([whether CC and CXX supports -Wextra])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS+=" -Wextra"; CPPUTEST_CXXWARNINGFLAGS+=" -Wextra" ], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 
 # FLag -Wshadow. 
-CFLAGS=-Wshadow
+CFLAGS="-Werror -Wshadow"
 AC_MSG_CHECKING([whether CC and CXX supports -Wshadow])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS+=" -Wshadow"; CPPUTEST_CXXWARNINGFLAGS+=" -Wshadow" ], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 
 # FLag -Wswitch-default
-CFLAGS=-Wswitch-default
+CFLAGS="-Werror -Wswitch-default"
 AC_MSG_CHECKING([whether CC and CXX supports -Wswitch-default])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS+=" -Wswitch-default"; CPPUTEST_CXXWARNINGFLAGS+=" -Wswitch-default" ], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 
 # FLag -Wswitch-enum
-CFLAGS=-Wswitch-enum
+CFLAGS="-Werror -Wswitch-enum"
 AC_MSG_CHECKING([whether CC and CXX supports -Wswitch-enum])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS+=" -Wswitch-enum"; CPPUTEST_CXXWARNINGFLAGS+=" -Wswitch-enum" ], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 
 # FLag -Wconversion 
-CFLAGS=-Wconversion
+CFLAGS="-Werror -Wconversion"
 AC_MSG_CHECKING([whether CC and CXX supports -Wconversion])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS+=" -Wconversion"; CPPUTEST_CXXWARNINGFLAGS+=" -Wconversion" ], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 
 # FLag -pedantic-errors 
-CFLAGS=-pedantic-errors
+CFLAGS="-Werror -pedantic-errors"
 AC_MSG_CHECKING([whether CC and CXX supports -pedantic-errors])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS+=" -pedantic-errors"; CPPUTEST_CXXWARNINGFLAGS+=" -pedantic-errors" ], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 
 # FLag -Wsign-conversion 
-CFLAGS=-Wsign-conversion
+CFLAGS="-Werror -Wsign-conversion"
 AC_MSG_CHECKING([whether CC and CXX supports -Wsign-conversion])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS+=" -Wsign-conversion"; CPPUTEST_CXXWARNINGFLAGS+=" -Wsign-conversion" ], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 
 # FLag -Woverloaded-virtual 
 AC_LANG_PUSH([C++])
-CXXFLAGS=-Woverloaded-virtual
+CXXFLAGS="-Werror -Woverloaded-virtual"
 AC_MSG_CHECKING([whether CXX supports -Woverloaded-virtual])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CXXWARNINGFLAGS+=" -Woverloaded-virtual" ], [AC_MSG_RESULT([no])])
 CXXFLAGS="$saved_cxxflags"
 AC_LANG_POP
 
 # FLag -Wstrict-prototypes 
-CFLAGS=-Wstrict-prototypes
+CFLAGS="-Werror -Wstrict-prototypes"
 AC_MSG_CHECKING([whether CC supports -Wstrict-prototypes])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS+=" -Wstrict-prototypes" ], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 
 # Disable some warnings as CppUTest has this and can't be prevented at the moment.
 # FLag -Wno-disabled-macro-expansion. 
-CFLAGS=-Wno-disabled-macro-expansion
+CFLAGS="-Werror -Wno-disabled-macro-expansion"
 AC_MSG_CHECKING([whether CC and CXX supports -Wno-disabled-macro-expansion])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS+=" -Wno-disabled-macro-expansion"; CPPUTEST_CXXWARNINGFLAGS+=" -Wno-disabled-macro-expansion" ], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 
 # FLag -Wno-padded. 
-CFLAGS=-Wno-padded
+CFLAGS="-Werror -Wno-padded"
 AC_MSG_CHECKING([whether CC and CXX supports -Wno-padded])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS+=" -Wno-padded"; CPPUTEST_CXXWARNINGFLAGS+=" -Wno-padded" ], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 
 # FLag -Wno-global-constructors. 
-CFLAGS=-Wno-global-constructors
+CFLAGS="-Werror -Wno-global-constructors"
 AC_MSG_CHECKING([whether CC and CXX supports -Wno-global-constructors])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS+=" -Wno-global-constructors"; CPPUTEST_CXXWARNINGFLAGS+=" -Wno-global-constructors" ], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 
 # FLag -Wno-exit-time-destructors. 
-CFLAGS=-Wno-exit-time-destructors
+CFLAGS="-Werror -Wno-exit-time-destructors"
 AC_MSG_CHECKING([whether CC and CXX supports -Wno-exit-time-destructors])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS+=" -Wno-exit-time-destructors"; CPPUTEST_CXXWARNINGFLAGS+=" -Wno-exit-time-destructors" ], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 
 # FLag -Wno-weak-vtables. 
-CFLAGS=-Wno-weak-vtables
+CFLAGS="-Werror -Wno-weak-vtables"
 AC_MSG_CHECKING([whether CC and CXX supports -Wno-weak-vtables])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS+=" -Wno-weak-vtables"; CPPUTEST_CXXWARNINGFLAGS+=" -Wno-weak-vtables" ], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
