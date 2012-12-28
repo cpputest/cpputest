@@ -110,11 +110,9 @@ public:
 	explicit ConsoleTestOutput()
 	{
 	}
-	;
 	virtual ~ConsoleTestOutput()
 	{
 	}
-	;
 
 	virtual void printBuffer(const char* s);
 	virtual void flush();
