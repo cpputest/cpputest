@@ -141,22 +141,28 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNIN
 CFLAGS="$saved_cflags"
 
 # FLag -Wno-global-constructors. 
-CFLAGS="-Werror -Wno-global-constructors"
-AC_MSG_CHECKING([whether CC and CXX supports -Wno-global-constructors])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS+=" -Wno-global-constructors"; CPPUTEST_CXXWARNINGFLAGS+=" -Wno-global-constructors" ], [AC_MSG_RESULT([no])])
-CFLAGS="$saved_cflags"
+AC_LANG_PUSH([C++])
+CXXFLAGS="-Werror -Wno-global-constructors"
+AC_MSG_CHECKING([whether CXX supports -Wno-global-constructors])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CXXWARNINGFLAGS+=" -Wno-global-constructors" ], [AC_MSG_RESULT([no])])
+CXXFLAGS="$saved_cxxflags"
+AC_LANG_POP
 
 # FLag -Wno-exit-time-destructors. 
-CFLAGS="-Werror -Wno-exit-time-destructors"
-AC_MSG_CHECKING([whether CC and CXX supports -Wno-exit-time-destructors])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS+=" -Wno-exit-time-destructors"; CPPUTEST_CXXWARNINGFLAGS+=" -Wno-exit-time-destructors" ], [AC_MSG_RESULT([no])])
-CFLAGS="$saved_cflags"
+AC_LANG_PUSH([C++])
+CXXFLAGS="-Werror -Wno-exit-time-destructors"
+AC_MSG_CHECKING([whether CXX supports -Wno-exit-time-destructors])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CXXWARNINGFLAGS+=" -Wno-exit-time-destructors" ], [AC_MSG_RESULT([no])])
+CXXFLAGS="$saved_cxxflags"
+AC_LANG_POP
 
 # FLag -Wno-weak-vtables. 
-CFLAGS="-Werror -Wno-weak-vtables"
-AC_MSG_CHECKING([whether CC and CXX supports -Wno-weak-vtables])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS+=" -Wno-weak-vtables"; CPPUTEST_CXXWARNINGFLAGS+=" -Wno-weak-vtables" ], [AC_MSG_RESULT([no])])
-CFLAGS="$saved_cflags"
+AC_LANG_PUSH([C++])
+CXXFLAGS="-Werror -Wno-weak-vtables"
+AC_MSG_CHECKING([whether CXX supports -Wno-weak-vtables])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CXXWARNINGFLAGS+=" -Wno-weak-vtables" ], [AC_MSG_RESULT([no])])
+CXXFLAGS="$saved_cxxflags"
+AC_LANG_POP
 
 # Different features
 AC_ARG_ENABLE([std-c], [AC_HELP_STRING([--disable-std-c], [disable the use of Standard C Library (warning: requires implementing Platforms/GccNoStdC) ])], 
