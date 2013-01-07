@@ -6573,7 +6573,9 @@ fi
 ############################## Values ########################################
 
 ### All files in git
-ALL_FILES_IN_GIT="`git --git-dir=${srcdir}/.git ls-files | tr ' \n' ' '`"
+if test -e "${srcdir}/.git"; then
+	ALL_FILES_IN_GIT="`git --git-dir=${srcdir}/.git ls-files | tr ' \n' ' '`"
+fi
 
 # Variables to substitute
 
@@ -19542,6 +19544,14 @@ echo \
 "----------------------------------------------------------------
 
 ${PACKAGE_NAME} Version ${PACKAGE_VERSION}
+
+Current compiler options:
+   CC:                                  ${CC}
+   CXX:                                 ${CXX}
+   Default CFLAGS:                      ${CFLAGS}
+   Default CXXFLAGS:                    ${CFLAGS}
+   CppUTest CFLAGS:                     ${CPPUTEST_CFLAGS}
+   CppUTest CXXFLAGS:                   ${CPPUTEST_CFLAGS}
 
 Features configured in ${PACKAGE_NAME}:
    Memory Leak Detection:               ${memory_leak_detection}
