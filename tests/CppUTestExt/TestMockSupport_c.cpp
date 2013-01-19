@@ -26,11 +26,9 @@
  */
 #include "CppUTest/TestHarness.h"
 
-extern "C" {
-	#include "CppUTest/TestHarness_c.h"
-	#include "CppUTestExt/MockSupport_c.h"
-	#include "TestMockSupport_cCFile.h"
-}
+#include "CppUTest/TestHarness_c.h"
+#include "CppUTestExt/MockSupport_c.h"
+#include "TestMockSupport_cCFile.h"
 
 TEST_GROUP(MockSupport_c)
 {
@@ -51,13 +49,13 @@ TEST(MockSupport_c, expectAndActualParameters)
 			withStringParameters("string", "string")->withPointerParameters("pointer", (void*) 1);
 }
 
-int typeNameIsEqual(void* object1, void* object2)
+static int typeNameIsEqual(void* object1, void* object2)
 {
 	return object1 == object2;
 
 }
 
-char* typeNameValueToString(void* PUNUSED(object))
+static char* typeNameValueToString(void* PUNUSED(object))
 {
 	return (char*) "valueToString";
 }

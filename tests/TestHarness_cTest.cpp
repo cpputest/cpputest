@@ -25,11 +25,8 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-extern "C"
-{
-#define _WCHART
 #include "CppUTest/TestHarness_c.h"
-}
+
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TestRegistry.h"
 #include "CppUTest/TestOutput.h"
@@ -49,7 +46,7 @@ TEST_GROUP(TestHarness_c)
 	}
 };
 
-void _failIntMethod()
+static void _failIntMethod()
 {
 	CHECK_EQUAL_C_INT(1, 2);
 }
@@ -63,7 +60,7 @@ TEST(TestHarness_c, checkInt)
 	fixture->assertPrintContains("arness_c");
 }
 
-void _failRealMethod()
+static void _failRealMethod()
 {
 	CHECK_EQUAL_C_REAL(1.0, 2.0, 0.5);
 }
@@ -77,7 +74,7 @@ TEST(TestHarness_c, checkReal)
 	fixture->assertPrintContains("arness_c");
 }
 
-void _failCharMethod()
+static void _failCharMethod()
 {
 	CHECK_EQUAL_C_CHAR('a', 'c');
 }
@@ -91,7 +88,7 @@ TEST(TestHarness_c, checkChar)
 	fixture->assertPrintContains("arness_c");
 }
 
-void _failStringMethod()
+static void _failStringMethod()
 {
 	CHECK_EQUAL_C_STRING("Hello", "Hello World");
 }
@@ -107,7 +104,7 @@ TEST(TestHarness_c, checkString)
 	fixture->assertPrintContains("arness_c");
 }
 
-void _failTextMethod()
+static void _failTextMethod()
 {
 	FAIL_TEXT_C("Booo");
 }
@@ -120,7 +117,7 @@ TEST(TestHarness_c, checkFailText)
 	fixture->assertPrintContains("arness_c");
 }
 
-void _failMethod()
+static void _failMethod()
 {
 	FAIL_C();
 }
@@ -133,7 +130,7 @@ TEST(TestHarness_c, checkFail)
 	fixture->assertPrintContains("arness_c");
 }
 
-void _CheckMethod()
+static void _CheckMethod()
 {
 	CHECK_C(false);
 }

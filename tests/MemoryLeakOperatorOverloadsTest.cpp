@@ -6,10 +6,9 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 #include "CppUTest/TestTestingFixture.h"
 #include "AllocationInCppFile.h"
-extern "C"
-{
+
+#include "CppUTest/TestHarness_c.h"
 #include "AllocationInCFile.h"
-}
 
 TEST_GROUP(BasicBehavior)
 {
@@ -39,7 +38,7 @@ TEST(BasicBehavior, deleteInvalidatesMemory)
 	CHECK(*memory != 0xAD);
 }
 
-void deleteUnallocatedMemory()
+static void deleteUnallocatedMemory()
 {
 	delete (char*) 0x1234678;
 	FAIL("Should never come here");
@@ -62,7 +61,7 @@ TEST(BasicBehavior, deleteWillNotThrowAnExceptionWhenDeletingUnallocatedMemoryBu
 
 #endif
 
-#if CPPUTEST_USE_MALLOC_MACROS
+#ifdef CPPUTEST_USE_MALLOC_MACROS
 
 /* This include is added because *sometimes* the cstdlib does an #undef. This should have been prevented */
 #if CPPUTEST_USE_STD_CPP_LIB
@@ -101,7 +100,7 @@ TEST_GROUP(MemoryLeakOverridesToBeUsedInProductionCode)
 
 };
 
-#if CPPUTEST_USE_MALLOC_MACROS
+#ifdef CPPUTEST_USE_MALLOC_MACROS
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, MallocOverrideIsUsed)
 {
@@ -116,9 +115,7 @@ TEST(MemoryLeakOverridesToBeUsedInProductionCode, MallocOverrideIsUsed)
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, UseNativeMallocByTemporarlySwitchingOffMalloc)
 {
 	int memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
-#if CPPUTEST_USE_MALLOC_MACROS
-	#define saved_malloc malloc
-	#define saved_free free
+#ifdef CPPUTEST_USE_MALLOC_MACROS
 	#undef malloc
 	#undef free
 #endif
@@ -126,7 +123,7 @@ TEST(MemoryLeakOverridesToBeUsedInProductionCode, UseNativeMallocByTemporarlySwi
 	LONGS_EQUAL(memLeaks, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
 	free (memory);
 
-#if CPPUTEST_USE_MALLOC_MACROS
+#ifdef CPPUTEST_USE_MALLOC_MACROS
 #include "CppUTest/MemoryLeakDetectorMallocMacros.h"
 #endif
 }
@@ -137,11 +134,11 @@ class NewDummyClass
 public:
 	static bool overloaded_new_called;
 
-#if CPPUTEST_USE_NEW_MACROS
+#ifdef CPPUTEST_USE_NEW_MACROS
 	#undef new
 #endif
 	void* operator new (size_t size)
-#if CPPUTEST_USE_NEW_MACROS
+#ifdef CPPUTEST_USE_NEW_MACROS
 	#include "CppUTest/MemoryLeakDetectorNewMacros.h"
 #endif
 	{
@@ -173,13 +170,13 @@ TEST(MemoryLeakOverridesToBeUsedInProductionCode, NoSideEffectsFromTurningOffNew
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, UseNativeNewByTemporarlySwitchingOffNew)
 {
-#if CPPUTEST_USE_NEW_MACROS
+#ifdef CPPUTEST_USE_NEW_MACROS
 	#undef new
 	#undef delete
 #endif
 	char* memory = new char[10];
 	delete [] memory;
-#if CPPUTEST_USE_NEW_MACROS
+#ifdef CPPUTEST_USE_NEW_MACROS
 	#include "CppUTest/MemoryLeakDetectorNewMacros.h"
 #endif
 }

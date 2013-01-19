@@ -25,11 +25,10 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "CppUTest/CppUTestConfig.h"
+#include "CppUTest/PlatformSpecificFunctions_c.h"
 #include "CppUTestExt/MockSupport.h"
-extern "C" {
-	#include "CppUTestExt/MockSupport_c.h"
-}
-#include <string.h>
+#include "CppUTestExt/MockSupport_c.h"
 
 static MockSupport* currentMockSupport = NULL;
 static MockFunctionCall* currentCall = NULL;
@@ -61,6 +60,8 @@ extern "C" {
 
 MockFunctionCall_c* expectOneCall_c(const char* name);
 MockFunctionCall_c* actualCall_c(const char* name);
+void disable_c(void);
+void enable_c(void);
 void setIntData_c(const char* name, int value);
 void setDoubleData_c(const char* name, double value);
 void setStringData_c(const char* name, const char* value);
@@ -84,13 +85,13 @@ MockFunctionCall_c* andReturnPointerValue_c(void* value);
 MockValue_c returnValue_c();
 
 
-void installComparator_c (const char* typeName, MockTypeEqualFunction_c isEqual, MockTypeValueToStringFunction_c valueToString)
+static void installComparator_c (const char* typeName, MockTypeEqualFunction_c isEqual, MockTypeValueToStringFunction_c valueToString)
 {
 	comparatorList_ = new MockCFunctionComparatorNode(comparatorList_, isEqual, valueToString);
 	currentMockSupport->installComparator(typeName, *comparatorList_);
 }
 
-void removeAllComparators_c()
+static void removeAllComparators_c()
 {
 	while (comparatorList_) {
 		MockCFunctionComparatorNode *next = comparatorList_->next_;
@@ -117,6 +118,8 @@ static MockSupport_c gMockSupport = {
 		expectOneCall_c,
 		actualCall_c,
 		returnValue_c,
+		enable_c,
+		disable_c,
 		setIntData_c,
 		setDoubleData_c,
 		setStringData_c,
@@ -187,19 +190,19 @@ MockFunctionCall_c* andReturnPointerValue_c(void* value)
 static MockValue_c getMockValueCFromNamedValue(const MockNamedValue& namedValue)
 {
 	MockValue_c returnValue;
-	if (strcmp(namedValue.getType().asCharString(), "int") == 0) {
+	if (PlatformSpecificStrCmp(namedValue.getType().asCharString(), "int") == 0) {
 		returnValue.type = MOCKVALUETYPE_INTEGER;
 		returnValue.value.intValue = namedValue.getIntValue();
 	}
-	else if (strcmp(namedValue.getType().asCharString(), "double") == 0) {
+	else if (PlatformSpecificStrCmp(namedValue.getType().asCharString(), "double") == 0) {
 		returnValue.type = MOCKVALUETYPE_DOUBLE;
 		returnValue.value.doubleValue = namedValue.getDoubleValue();
 	}
-	else if (strcmp(namedValue.getType().asCharString(), "char*") == 0) {
+	else if (PlatformSpecificStrCmp(namedValue.getType().asCharString(), "char*") == 0) {
 		returnValue.type = MOCKVALUETYPE_STRING;
 		returnValue.value.stringValue = namedValue.getStringValue();
 	}
-	else if (strcmp(namedValue.getType().asCharString(), "void*") == 0) {
+	else if (PlatformSpecificStrCmp(namedValue.getType().asCharString(), "void*") == 0) {
 		returnValue.type = MOCKVALUETYPE_POINTER;
 		returnValue.value.pointerValue = namedValue.getPointerValue();
 	}
@@ -225,6 +228,16 @@ MockFunctionCall_c* actualCall_c(const char* name)
 {
 	currentCall = &currentMockSupport->actualCall(name);
 	return &gFunctionCall;
+}
+
+void disable_c(void)
+{
+	currentMockSupport->disable();
+}
+
+void enable_c(void)
+{
+	currentMockSupport->enable();
 }
 
 void setIntData_c(const char* name, int value)

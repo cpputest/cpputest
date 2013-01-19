@@ -9,27 +9,12 @@
  *
  */
 
-/* Warning for maintainers:
- * This macro code is duplicate from TestHarness.h. The reason for this is to make the two files
- * completely independent from each other. NewMacros file can be included in production code whereas
- * TestHarness.h is only included in test code.
- */
-
-
-#ifndef CPPUTEST_USE_MEM_LEAK_DETECTION
-#ifdef CPPUTEST_MEM_LEAK_DETECTION_DISABLED
-#define CPPUTEST_USE_MEM_LEAK_DETECTION 0
-#else
-#define CPPUTEST_USE_MEM_LEAK_DETECTION 1
-#endif
-#endif
+#include "CppUTestConfig.h"
 
 #if CPPUTEST_USE_MEM_LEAK_DETECTION
 
 /* This prevents the declaration from done twice and makes sure the file only #defines malloc, so it can be included anywhere */
 #ifndef CPPUTEST_USE_MALLOC_MACROS
-
-#include "StandardCLibrary.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -46,7 +31,6 @@ extern void cpputest_free_location(void* buffer, const char* file, int line);
 #endif
 
 extern void crash_on_allocation_number(unsigned number);
-
 
 #endif
 

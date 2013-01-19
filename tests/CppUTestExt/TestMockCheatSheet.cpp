@@ -4,7 +4,7 @@
 #include "CppUTestExt/MockSupport.h"
 
 /* Stubbed out product code using linker, function pointer, or overriding */
-int foo(const char* param_string, int param_int)
+static int foo(const char* param_string, int param_int)
 {
 	/* Tell CppUTest Mocking what we mock. Also return recorded value */
 	return mock().actualCall("Foo")
@@ -13,7 +13,7 @@ int foo(const char* param_string, int param_int)
 			.returnValue().getIntValue();
 }
 
-void bar(double param_double, const char* param_string)
+static void bar(double param_double, const char* param_string)
 {
 	mock().actualCall("Bar")
 		.withParameter("param_double", param_double)
@@ -21,7 +21,7 @@ void bar(double param_double, const char* param_string)
 }
 
 /* Production code calls to the methods we stubbed */
-int productionCodeFooCalls()
+static int productionCodeFooCalls()
 {
 	int return_value;
 	return_value = foo("value_string", 10);
@@ -29,7 +29,7 @@ int productionCodeFooCalls()
 	return return_value;
 }
 
-void productionCodeBarCalls()
+static void productionCodeBarCalls()
 {
 	bar(1.5, "more");
 	bar(1.5, "more");

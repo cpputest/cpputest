@@ -42,10 +42,6 @@
 #define IGNORE_ALL_LEAKS_IN_TEST() MemoryLeakWarningPlugin::getFirstPlugin()->ignoreAllLeaksInTest();
 #define EXPECT_N_LEAKS(n)          MemoryLeakWarningPlugin::getFirstPlugin()->expectLeaksInTest(n);
 
-extern "C" { /* include for size_t definition */
-#include "TestHarness_c.h"
-}
-
 #if CPPUTEST_USE_MEM_LEAK_DETECTION
 
 #undef new
@@ -57,17 +53,16 @@ void* operator new(size_t size) throw(std::bad_alloc);
 void* operator new[](size_t size) throw(std::bad_alloc);
 void* operator new(size_t size, const std::nothrow_t&) throw();
 void* operator new[](size_t size, const std::nothrow_t&) throw();
-void operator delete(void* mem) throw();
-void operator delete[](void* mem) throw();
 
 #else
 
 void* operator new(size_t size);
 void* operator new[](size_t size);
-void operator delete(void* mem);
-void operator delete[](void* mem);
 
 #endif
+
+void operator delete(void* mem) throw();
+void operator delete[](void* mem) throw();
 
 #if CPPUTEST_USE_NEW_MACROS
 #include "MemoryLeakDetectorNewMacros.h"

@@ -84,6 +84,7 @@ public:
     static UtestShell *getCurrent();
 
     virtual void assertTrue(bool condition, const char *checkString, const char *conditionString, const char *fileName, int lineNumber);
+    virtual void assertTrueText(bool condition, const char *checkString, const char *conditionString, const char* text, const char *fileName, int lineNumber);
     virtual void assertCstrEqual(const char *expected, const char *actual, const char *fileName, int lineNumber);
     virtual void assertCstrNoCaseEqual(const char *expected, const char *actual, const char *fileName, int lineNumber);
     virtual void assertCstrContains(const char *expected, const char *actual, const char *fileName, int lineNumber);
@@ -191,6 +192,7 @@ public:
 	{
 	}
 	Utest* createTest() { return new ExecFunctionTest(this); };
+	virtual ~ExecFunctionTestShell();
 };
 
 //////////////////// CppUTestFailedException

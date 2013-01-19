@@ -25,21 +25,15 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// TESTHARNESS_c.H
-//
-//
-///////////////////////////////////////////////////////////////////////////////
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/MemoryLeakDetector.h"
 #include "CppUTest/TestMemoryAllocator.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
+#include "CppUTest/TestHarness_c.h"
 
 extern "C"
 {
 
-#include "CppUTest/TestHarness_c.h"
 
 void CHECK_EQUAL_C_INT_LOCATION(int expected, int actual, const char* fileName, int lineNumber)
 {

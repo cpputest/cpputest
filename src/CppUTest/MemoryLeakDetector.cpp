@@ -316,7 +316,7 @@ void MemoryLeakDetector::reportFailure(const char* message, const char* allocFil
 	reporter_->fail(output_buffer_.toString());
 }
 
-size_t calculateIntAlignedSize(size_t size)
+static size_t calculateIntAlignedSize(size_t size)
 {
 	return (sizeof(int) - (size % sizeof(int))) + size;
 }
@@ -328,7 +328,7 @@ size_t MemoryLeakDetector::sizeOfMemoryWithCorruptionInfo(size_t size)
 
 MemoryLeakDetectorNode* MemoryLeakDetector::getNodeFromMemoryPointer(char* memory, size_t memory_size)
 {
-	return (MemoryLeakDetectorNode*) (memory + sizeOfMemoryWithCorruptionInfo(memory_size));
+	return (MemoryLeakDetectorNode*) (void*) (memory + sizeOfMemoryWithCorruptionInfo(memory_size));
 }
 
 void MemoryLeakDetector::storeLeakInformation(MemoryLeakDetectorNode * node, char *new_memory, size_t size, TestMemoryAllocator *allocator, const char *file, int line)
@@ -342,7 +342,7 @@ char* MemoryLeakDetector::reallocateMemoryAndLeakInformation(TestMemoryAllocator
 {
 	char* new_memory = (char*) (PlatformSpecificRealloc(memory, sizeOfMemoryWithCorruptionInfo(size)));
 	if (new_memory == NULL) return NULL;
-	MemoryLeakDetectorNode *node = (MemoryLeakDetectorNode*) (allocator->allocMemoryLeakNode(sizeof(MemoryLeakDetectorNode)));
+	MemoryLeakDetectorNode *node = (MemoryLeakDetectorNode*) (void*) (allocator->allocMemoryLeakNode(sizeof(MemoryLeakDetectorNode)));
 	storeLeakInformation(node, new_memory, size, allocator, file, line);
 	return node->memory_;
 }
@@ -398,7 +398,7 @@ char* MemoryLeakDetector::allocMemory(TestMemoryAllocator* allocator, size_t siz
 	if (allocatNodesSeperately) {
 		memory = allocator->alloc_memory(sizeOfMemoryWithCorruptionInfo(size), file, line);
 		if (memory == NULL) return NULL;
-		node = (MemoryLeakDetectorNode*) allocator->allocMemoryLeakNode(sizeof(MemoryLeakDetectorNode));
+		node = (MemoryLeakDetectorNode*) (void*) allocator->allocMemoryLeakNode(sizeof(MemoryLeakDetectorNode));
 	}
 	else {
 		memory = allocator->alloc_memory(sizeOfMemoryWithCorruptionInfo(size) + sizeof(MemoryLeakDetectorNode), file, line);

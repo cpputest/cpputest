@@ -19,7 +19,7 @@ TEST_SRC_DIRS = tests/CppUTestExt
 
 INCLUDE_DIRS = $(CPPUTEST_HOME)/include
 
-LD_LIBRARIES += -lstdc++ -L$(CPPUTEST_HOME)/lib -lCppUTest
+LD_LIBRARIES += -lstdc++ -L$(CPPUTEST_LIB_DIR)/$(TARGET_PLATFORM) -lCppUTest
 
 include $(CPPUTEST_HOME)/build/MakefileWorker.mk
 

@@ -40,19 +40,15 @@ static const double not_a_number = zero / zero;
 TEST_GROUP(TestFailure)
 {
 	UtestShell* test;
-	StringBufferTestOutput* printer;
 
 	void setup()
 	{
 		test = new NullTestShell(failFileName, failLineNumber-1);
-		printer = new StringBufferTestOutput();
 	}
 	void teardown()
 	{
 		delete test;
-		delete printer;
 	}
-	;
 };
 #define FAILURE_EQUAL(a, b) STRCMP_EQUAL_LOCATION(a, b.getMessage().asCharString(), __FILE__, __LINE__)
 
@@ -101,6 +97,13 @@ TEST(TestFailure, CheckFailure)
 {
 	CheckFailure f(test, failFileName, failLineNumber, "CHECK", "chk");
 	FAILURE_EQUAL("CHECK(chk) failed", f);
+}
+
+TEST(TestFailure, CheckFailureWithText)
+{
+	CheckFailure f(test, failFileName, failLineNumber, "CHECK", "chk", "text");
+	FAILURE_EQUAL("Message: text\n"
+			      "\tCHECK(chk) failed", f);
 }
 
 TEST(TestFailure, FailFailure)

@@ -26,6 +26,7 @@
  */
 
 #include "EventDispatcher.h"
+using namespace std;
 
 EventDispatcher::EventDispatcher()
 {

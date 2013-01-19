@@ -25,6 +25,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "CppUTest/CppUTestConfig.h"
 #include "CppUTest/Utest.h"
 #include "CppUTest/TestResult.h"
 #include "CppUTest/TestFailure.h"
