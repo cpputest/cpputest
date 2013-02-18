@@ -58,6 +58,7 @@ public:
 	virtual TestPlugin* getFirstPlugin();
 	virtual TestPlugin* getPluginByName(const SimpleString& name);
 	virtual void removePluginByName(const SimpleString& name);
+	virtual int countPlugins();
 
 	TestFilter getGroupFilter();
 	TestFilter getNameFilter();
