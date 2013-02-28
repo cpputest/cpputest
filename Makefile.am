@@ -57,7 +57,7 @@ include_cpputest_HEADERS = \
 	include/CppUTest/TestRegistry.h \
 	include/CppUTest/MemoryLeakDetector.h \
 	include/CppUTest/TestFailure.h \
-	include/CppUTest/TestResult.h
+	include/CppUTest/TestResult.h \
 	include/CppUTest/MemoryLeakDetectorMallocMacros.h \
 	include/CppUTest/TestFilter.h \
 	include/CppUTest/TestTestingFixture.h \
