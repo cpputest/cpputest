@@ -189,6 +189,22 @@
 #define UT_PRINT(text) \
    UT_PRINT_LOCATION(text, __FILE__, __LINE__)
 
+#if CPPUTEST_USE_STD_CPP_LIB
+#define CHECK_THROWS(expected, expression) \
+	SimpleString msg("expected to throw "#expected "\nbut threw nothing"); \
+	bool caught_expected = false; \
+	try { \
+		(expression); \
+	} catch(const expected & e) { \
+		caught_expected = true; \
+	} catch(...) { \
+		msg = "expected to throw " #expected "\nbut threw a different type"; \
+	} \
+	if (!caught_expected) { \
+		UtestShell::getCurrent()->fail(msg.asCharString(), __FILE__, __LINE__); \
+	}
+#endif /* CPPUTEST_USE_STD_CPP_LIB */
+
 #define UT_CRASH() { UtestShell::crash(); }
 #define RUN_ALL_TESTS(ac, av) CommandLineTestRunner::RunAllTests(ac, av)
 
