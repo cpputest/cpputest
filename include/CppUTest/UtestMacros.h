@@ -78,16 +78,22 @@
   extern int externTestGroup##testGroup;\
   int* p##testGroup = &externTestGroup##testGroup
 
-//Check any boolean condition
+// Different checking macros
 
 #define CHECK(condition)\
   CHECK_LOCATION_TRUE(condition, "CHECK", #condition, __FILE__, __LINE__)
+
+#define CHECK_TEXT(condition, text) \
+  CHECK_LOCATION_TEXT(condition, "CHECK", #condition, text, __FILE__, __LINE__)
 
 #define CHECK_TRUE(condition)\
   CHECK_LOCATION_TRUE(condition, "CHECK_TRUE", #condition, __FILE__, __LINE__)
 
 #define CHECK_FALSE(condition)\
   CHECK_LOCATION_FALSE(condition, "CHECK_FALSE", #condition, __FILE__, __LINE__)
+
+#define CHECK_LOCATION_TEXT(condition, checkString, conditionString, text, file, line) \
+	{ UtestShell::getCurrent()->assertTrueText((condition) != 0, checkString, conditionString, text, file, line); }
 
 #define CHECK_LOCATION_TRUE(condition, checkString, conditionString, file, line)\
   { UtestShell::getCurrent()->assertTrue((condition) != 0, checkString, conditionString, file, line); }

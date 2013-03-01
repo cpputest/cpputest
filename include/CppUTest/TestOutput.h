@@ -30,8 +30,6 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-//  TestOutput.h
-//
 //  This is a minimal printer inteface.
 //  We kept streams out too keep footprint small, and so the test
 //  harness could be used with less capable compilers so more
@@ -112,11 +110,9 @@ public:
 	explicit ConsoleTestOutput()
 	{
 	}
-	;
 	virtual ~ConsoleTestOutput()
 	{
 	}
-	;
 
 	virtual void printBuffer(const char* s);
 	virtual void flush();
@@ -142,10 +138,7 @@ public:
 	{
 	}
 	;
-	virtual ~StringBufferTestOutput()
-	{
-	}
-	;
+	virtual ~StringBufferTestOutput();
 
 	void printBuffer(const char* s)
 	{
@@ -170,4 +163,4 @@ private:
 
 };
 
-#endif  // D_TestOutput_h
+#endif

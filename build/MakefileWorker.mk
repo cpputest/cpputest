@@ -62,19 +62,25 @@
 #  Other flags users can initialize to sneak in their settings
 #	CPPUTEST_CXXFLAGS - flags for the C++ compiler
 #	CPPUTEST_CPPFLAGS - flags for the C++ AND C preprocessor
-#	CPPUTEST_CFLAGS - C complier
+#	CPPUTEST_CFLAGS - flags for the C complier
 #	CPPUTEST_LDFLAGS - Linker flags
 #----------
 
 # Some behavior is weird on some platforms. Need to discover the platform.
+
+# Platforms
 UNAME_OUTPUT = "$(shell uname -a)"
-CC_VERSION_OUTPUT ="$(shell $(CXX) -v 2>&1)"
 MACOSX_STR = Darwin
 MINGW_STR = MINGW
 CYGWIN_STR = CYGWIN
 LINUX_STR = Linux
+SUNOS_STR = SunOS
 UNKNWOWN_OS_STR = Unknown
+
+# Compilers
+CC_VERSION_OUTPUT ="$(shell $(CXX) -v 2>&1)"
 CLANG_STR = clang 
+SUNSTUDIO_CXX_STR = SunStudio
 
 UNAME_OS = $(UNKNWOWN_OS_STR)
 
@@ -94,6 +100,16 @@ ifeq ($(findstring $(MACOSX_STR),$(UNAME_OUTPUT)),$(MACOSX_STR))
 	UNAME_OS = $(MACOSX_STR)
 	#lion has a problem with the 'v' part of -a
 	UNAME_OUTPUT = "$(shell uname -pmnrs)"
+endif
+
+ifeq ($(findstring $(SUNOS_STR),$(UNAME_OUTPUT)),$(SUNOS_STR))
+	UNAME_OS = $(SUNOS_STR)
+
+	SUNSTUDIO_CXX_ERR_STR = CC -flags
+ifeq ($(findstring $(SUNSTUDIO_CXX_ERR_STR),$(CC_VERSION_OUTPUT)),$(SUNSTUDIO_CXX_ERR_STR))
+	CC_VERSION_OUTPUT ="$(shell $(CXX) -V 2>&1)"
+	COMPILER_NAME = $(SUNSTUDIO_CXX_STR)
+endif
 endif
 
 ifeq ($(findstring $(CLANG_STR),$(CC_VERSION_OUTPUT)),$(CLANG_STR))
@@ -183,6 +199,22 @@ endif
 	CPPUTEST_CXX_WARNINGFLAGS = -Woverloaded-virtual
 	CPPUTEST_C_WARNINGFLAGS = -Wstrict-prototypes
 endif
+endif
+
+#Wonderful extra compiler warnings with clang
+ifeq ($(COMPILER_NAME),$(CLANG_STR))
+# -Wno-disabled-macro-expansion -> Have to disable the macro expansion warning as the operator new overload warns on that.
+# -Wno-padded -> I sort-of like this warning but if there is a bool at the end of the class, it seems impossible to remove it! (except by making padding explicit)
+# -Wno-global-constructors Wno-exit-time-destructors -> Great warnings, but in CppUTest it is impossible to avoid as the automatic test registration depends on the global ctor and dtor
+# -Wno-weak-vtables -> The TEST_GROUP macro declares a class and will automatically inline its methods. Thats ok as they are only in one translation unit. Unfortunately, the warning can't detect that, so it must be disabled. 
+	CPPUTEST_CXX_WARNINGFLAGS += -Weverything -Wno-disabled-macro-expansion -Wno-padded -Wno-global-constructors -Wno-exit-time-destructors -Wno-weak-vtables
+	CPPUTEST_C_WARNINGFLAGS += -Weverything -Wno-padded
+endif
+
+# Uhm. Maybe put some warning flags for SunStudio here?
+ifeq ($(COMPILER_NAME),$(SUNSTUDIO_CXX_STR))
+	CPPUTEST_CXX_WARNINGFLAGS = 
+	CPPUTEST_C_WARNINGFLAGS = 
 endif
 
 # Default dir for temporary files (d, o)
@@ -321,7 +353,11 @@ TARGET_LIB = \
     $(CPPUTEST_LIB_DIR)/lib$(COMPONENT_NAME).a
     
 ifndef TEST_TARGET
-TEST_TARGET = $(COMPONENT_NAME)_tests
+	ifndef TARGET_PLATFORM
+		TEST_TARGET = $(COMPONENT_NAME)_tests
+	else
+		TEST_TARGET = $(COMPONENT_NAME)_$(TARGET_PLATFORM)_tests
+	endif
 endif
 
 #Helper Functions
@@ -412,6 +448,9 @@ CFLAGS = $(CPPUTEST_CFLAGS) $(CPPUTEST_ADDITIONAL_CFLAGS)
 CPPFLAGS = $(CPPUTEST_CPPFLAGS) $(CPPUTEST_ADDITIONAL_CPPFLAGS)
 CXXFLAGS = $(CPPUTEST_CXXFLAGS) $(CPPUTEST_ADDITIONAL_CXXFLAGS)
 LDFLAGS = $(CPPUTEST_LDFLAGS) $(CPPUTEST_ADDITIONAL_LDFLAGS)
+
+# Don't consider creating the archive a warning condition that does STDERR output
+ARFLAGS := $(ARFLAGS)c
 
 DEP_FLAGS=-MMD -MP
 

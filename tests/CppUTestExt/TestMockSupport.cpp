@@ -529,12 +529,12 @@ TEST(MockSupportTest, customObjectParameterSucceeds)
 	mock().removeAllComparators();
 }
 
-bool myTypeIsEqual(void* object1, void* object2)
+static bool myTypeIsEqual(void* object1, void* object2)
 {
 	return ((MyTypeForTesting*)object1)->value == ((MyTypeForTesting*)object2)->value;
 }
 
-SimpleString myTypeValueToString(void* object)
+static SimpleString myTypeValueToString(void* object)
 {
 	return StringFrom(((MyTypeForTesting*)object)->value);
 }

@@ -3,19 +3,19 @@
 #include "CppUTest/TestOutput.h"
 #include "CppUTest/TestPlugin.h"
 
-void orig_func1()
+static void orig_func1()
 {
 }
 
-void stub_func1()
+static void stub_func1()
 {
 }
 
-void orig_func2()
+static void orig_func2()
 {
 }
 
-void stub_func2()
+static void stub_func2()
 {
 }
 

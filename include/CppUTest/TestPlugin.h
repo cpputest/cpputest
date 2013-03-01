@@ -25,14 +25,6 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// TESTPlugin.H
-//
-// This file contains the ability to plugin_ general checks to all tests.
-//
-///////////////////////////////////////////////////////////////////////////////
-
 #ifndef D_TestPlugin_h
 #define D_TestPlugin_h
 
@@ -92,7 +84,7 @@ private:
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-extern void CppUTestStore(void **location, void *value);
+extern void CppUTestStore(void **location);
 
 class SetPointerPlugin: public TestPlugin
 {
@@ -107,8 +99,7 @@ public:
 	};
 };
 
-/* C++ standard says we cannot cast function pointers to object pointers. Extra casting to fool the compiler */
-#define UT_PTR_SET(a, b) { CppUTestStore( (void**)&a, *((void**) &a)); a = b; }
+#define UT_PTR_SET(a, b) { CppUTestStore( (void**)&a ); a = b; }
 
 ///////////// Null Plugin
 

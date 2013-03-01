@@ -27,8 +27,6 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-// FAILURE.H
-//
 // Failure is a class which holds information for a specific
 // test failure. It can be overriden for more complex failure messages
 //
@@ -109,7 +107,7 @@ public:
 class CheckFailure : public TestFailure
 {
 public:
-	CheckFailure(UtestShell* test, const char* fileName, int lineNumber, const SimpleString& checkString, const SimpleString& conditionString);
+	CheckFailure(UtestShell* test, const char* fileName, int lineNumber, const SimpleString& checkString, const SimpleString& conditionString, const SimpleString& textString = "");
 };
 
 class FailFailure : public TestFailure

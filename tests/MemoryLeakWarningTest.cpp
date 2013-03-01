@@ -32,6 +32,7 @@
 #include "CppUTest/MemoryLeakDetector.h"
 #include "CppUTest/TestMemoryAllocator.h"
 #include "CppUTest/TestTestingFixture.h"
+#include "CppUTest/TestHarness_c.h"
 
 static char* leak1;
 static long* leak2;
@@ -80,10 +81,10 @@ TEST_GROUP(MemoryLeakWarningTest)
 	}
 };
 
-void _testTwoLeaks()
+static void _testTwoLeaks()
 {
 	leak1 = detector->allocMemory(allocator, 10);
-	leak2 = (long*) detector->allocMemory(allocator, 4);
+	leak2 = (long*) (void*) detector->allocMemory(allocator, 4);
 }
 
 TEST(MemoryLeakWarningTest, TwoLeaks)
@@ -94,11 +95,11 @@ TEST(MemoryLeakWarningTest, TwoLeaks)
 	fixture->assertPrintContains("Total number of leaks:  2");
 }
 
-void _testIgnore2()
+static void _testIgnore2()
 {
 	memPlugin->expectLeaksInTest(2);
 	leak1 = detector->allocMemory(allocator, 10);
-	leak2 = (long*) detector->allocMemory(allocator, 4);
+	leak2 = (long*) (void*) detector->allocMemory(allocator, 4);
 }
 
 TEST(MemoryLeakWarningTest, Ignore2)
@@ -293,7 +294,7 @@ TEST(MemoryLeakWarningGlobalDetectorTest, turnOffNewOverloadsNoThrowCausesNoAddi
 
 	delete nonMemoryNoThrow;
 	delete nonArrayMemoryNoThrow;
-#if CPPUTEST_USE_NEW_MACROS
+#ifdef CPPUTEST_USE_NEW_MACROS
 	#include "CppUTest/MemoryLeakDetectorNewMacros.h"
 #endif
 }

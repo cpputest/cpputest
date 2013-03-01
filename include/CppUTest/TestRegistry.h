@@ -27,11 +27,8 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-// TESTREGISTRY.H
-//
 // TestRegistry is a collection of tests that can be run
 //
-///////////////////////////////////////////////////////////////////////////////
 
 #ifndef D_TestRegistry_h
 #define D_TestRegistry_h
@@ -61,6 +58,7 @@ public:
 	virtual TestPlugin* getFirstPlugin();
 	virtual TestPlugin* getPluginByName(const SimpleString& name);
 	virtual void removePluginByName(const SimpleString& name);
+	virtual int countPlugins();
 
 	TestFilter getGroupFilter();
 	TestFilter getNameFilter();

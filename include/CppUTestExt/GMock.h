@@ -42,7 +42,7 @@ using testing::Return;
 using testing::NiceMock;
 #endif
 
-#if CPPUTEST_USE_NEW_MACROS
+#ifdef CPPUTEST_USE_NEW_MACROS
 #include "CppUTest/MemoryLeakDetectorNewMacros.h"
 #endif
 

@@ -31,13 +31,15 @@
  *
  * Provides an interface for when working with pure C
  *
- * Remember to use extern "C" when including in a cpp file!
- *
  *******************************************************************************/
 
 
 #ifndef PLATFORMSPECIFICFUNCTIONS_C_H_
 #define PLATFORMSPECIFICFUNCTIONS_C_H_
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /* Jumping operations. They manage their own jump buffers */
 int PlatformSpecificSetJmp(void (*function) (void*), void* data);
@@ -88,5 +90,9 @@ void* PlatformSpecificRealloc(void* memory, size_t size);
 void PlatformSpecificFree(void* memory);
 void* PlatformSpecificMemCpy(void* s1, const void* s2, size_t size);
 void* PlatformSpecificMemset(void* mem, int c, size_t size);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* PLATFORMSPECIFICFUNCTIONS_C_H_ */

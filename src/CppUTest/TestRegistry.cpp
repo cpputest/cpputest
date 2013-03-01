@@ -162,6 +162,15 @@ void TestRegistry::removePluginByName(const SimpleString& name)
 	firstPlugin_->removePluginByName(name);
 }
 
+int TestRegistry::countPlugins()
+{
+	int count = 0;
+	for (TestPlugin* plugin = firstPlugin_; plugin != NullTestPlugin::instance(); plugin = plugin->getNext())
+		count++;
+	return count;
+}
+
+
 UtestShell* TestRegistry::getFirstTest()
 {
 	return tests_;

@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros">
+    <CPPUTEST_INCLUDE_PATHS>$(CPPUTEST_HOME)\include;$(CPPUTEST_HOME)\include\CppUTestExt\CppUTestGTest;$(CPPUTEST_HOME)\include\CppUTestExt\CppUTestGMock;$(CPPUTEST_HOME)\include\Platforms\VisualCpp</CPPUTEST_INCLUDE_PATHS>
+    <CPPUTEST_LIB_PATHS>$(CPPUTEST_HOME)\lib</CPPUTEST_LIB_PATHS>
+    <CPPUTEST_FORCED_INCLUDES>$(CPPUTEST_HOME)\include\Platforms\VisualCpp\Platform.h;$(CPPUTEST_HOME)\include\CppUTest\MemoryLeakDetectorMallocMacros.h;</CPPUTEST_FORCED_INCLUDES>
+    <CPPUTEST_LIB_DEPENDENCIES>CppUTest.lib</CPPUTEST_LIB_DEPENDENCIES>
+  </PropertyGroup>
+  <PropertyGroup />
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(CPPUTEST_INCLUDE_PATHS);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>$(CPPUTEST_FORCED_INCLUDES);%(ForcedIncludeFiles)</ForcedIncludeFiles>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>$(CPPUTEST_LIB_DEPENDENCIES);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(CPPUTEST_LIB_PATHS);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent>
+      <Command>$(TargetPath)</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <BuildMacro Include="CPPUTEST_HOME">
+      <Value>$(CPPUTEST_HOME)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+    <BuildMacro Include="CPPUTEST_INCLUDE_PATHS">
+      <Value>$(CPPUTEST_INCLUDE_PATHS)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+    <BuildMacro Include="CPPUTEST_LIB_PATHS">
+      <Value>$(CPPUTEST_LIB_PATHS)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+    <BuildMacro Include="CPPUTEST_FORCED_INCLUDES">
+      <Value>$(CPPUTEST_FORCED_INCLUDES)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+    <BuildMacro Include="CPPUTEST_LIB_DEPENDENCIES">
+      <Value>$(CPPUTEST_LIB_DEPENDENCIES)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

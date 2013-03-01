@@ -3,6 +3,7 @@
  */
 #undef new
 #include "CppUTest/MemoryLeakDetectorNewMacros.h"
+#include "AllocationInCppFile.h"
 
 char* newAllocation()
 {

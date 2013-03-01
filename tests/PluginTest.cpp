@@ -113,7 +113,6 @@ TEST_GROUP(PluginTest)
 };
 
 #define GENERIC_PLUGIN  "GenericPlugin"
-#define GENERIC_PLUGIN4 "GenericPlugin4"
 
 TEST(PluginTest, PluginHasName)
 {
@@ -124,6 +123,7 @@ TEST(PluginTest, InstallPlugin)
 {
 	CHECK_EQUAL(firstPlugin, registry->getFirstPlugin());
 	CHECK_EQUAL(firstPlugin, registry->getPluginByName(GENERIC_PLUGIN));
+	LONGS_EQUAL(1, registry->countPlugins());
 }
 
 TEST(PluginTest, InstallMultiplePlugins)
@@ -150,6 +150,7 @@ TEST(PluginTest, Sequence)
 	CHECK_EQUAL(2, firstPlugin->preActionSequence);
 	CHECK_EQUAL(3, firstPlugin->postActionSequence);
 	CHECK_EQUAL(4, thirdPlugin->postActionSequence);
+	LONGS_EQUAL(2, registry->countPlugins());
 }
 
 TEST(PluginTest, DisablesPluginsDontRun)
