@@ -400,3 +400,36 @@ TEST(UnitTestMacros, allMacrosFromFunctionThatReturnsAValue)
 {
 	functionThatReturnsAValue();
 }
+
+#if CPPUTEST_USE_STD_CPP_LIB
+static void _failingTestMethod_NoThrowWithCHECK_THROWS()
+{
+	CHECK_THROWS(int, (void) (1+2));
+	lineOfCodeExecutedAfterCheck = true;
+}
+
+TEST(UnitTestMacros, FailureWithCHECK_THROWS_whenDoesntThrow)
+{
+	runTestWithMethod(_failingTestMethod_NoThrowWithCHECK_THROWS);
+	CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected to throw int");
+	CHECK_TEST_FAILS_PROPER_WITH_TEXT("but threw nothing");
+}
+
+TEST(UnitTestMacros, SuccessWithCHECK_THROWS)
+{
+	CHECK_THROWS(int, throw 4);
+}
+
+static void _failingTestMethod_WrongThrowWithCHECK_THROWS()
+{
+	CHECK_THROWS(int, throw 4.3);
+	lineOfCodeExecutedAfterCheck = true;
+}
+
+TEST(UnitTestMacros, FailureWithCHECK_THROWS_whenWrongThrow)
+{
+	runTestWithMethod(_failingTestMethod_WrongThrowWithCHECK_THROWS);
+	CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected to throw int");
+	CHECK_TEST_FAILS_PROPER_WITH_TEXT("but threw a different type");
+}
+#endif
