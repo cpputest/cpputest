@@ -50,6 +50,7 @@ else (REAL_GTEST)
     include_directories(${CppUTestRootDirectory}/include/CppUTestExt/CppUTestGTest)
 endif (REAL_GTEST)
 
+include(CppUTestWarningFlags)
 set(CPPUTEST_C_FLAGS "${CPPUTEST_C_FLAGS} ${CPPUTEST_C_WARNING_FLAGS}")
 set(CPPUTEST_CXX_FLAGS "${CPPUTEST_CXX_FLAGS} ${CPPUTEST_CXX_WARNING_FLAGS}")
 
