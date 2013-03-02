@@ -31,17 +31,66 @@
 #include "CppUTest/TestTestingFixture.h"
 #include "CppUTest/TestPlugin.h"
 
+class DummyPluginWhichCountsThePlugins : public TestPlugin
+{
+public:
+
+	bool returnValue;
+	int amountOfPlugins;
+
+	DummyPluginWhichCountsThePlugins(const SimpleString& name, TestRegistry* registry) :
+		TestPlugin(name), returnValue(true), amountOfPlugins(0), registry_(registry)
+	{
+	}
+
+	virtual bool parseArguments(int, const char**, int)
+	{
+		/* Remove ourselves from the count */
+		amountOfPlugins = registry_->countPlugins() - 1;
+		return returnValue;
+	}
+private:
+	TestRegistry* registry_;
+
+};
+
+
 TEST_GROUP(CommandLineTestRunner)
 {
+	TestRegistry registry;
+	StringBufferTestOutput output;
+	DummyPluginWhichCountsThePlugins* pluginCountingPlugin;
+
 	void setup()
 	{
+		pluginCountingPlugin = new DummyPluginWhichCountsThePlugins("PluginCountingPlugin", &registry);
 	}
 	void teardown()
 	{
+		delete pluginCountingPlugin;
 	}
 };
 
-IGNORE_TEST(CommandLineTestRunner, HmmmmWhatToWrite)
+TEST(CommandLineTestRunner, OnePluginGetsInstalledDuringTheRunningTheTests)
 {
-	//TODO: maybe some tests are in order
+	const char* argv[] = { "tests.exe", "-psomething"};
+
+	registry.installPlugin(pluginCountingPlugin);
+
+	CommandLineTestRunner commandLineTestRunner(2, argv, &output, &registry);
+	commandLineTestRunner.runAllTestsMain();
+	registry.removePluginByName("PluginCountingPlugin");
+
+	LONGS_EQUAL(0, registry.countPlugins());
+	LONGS_EQUAL(1, pluginCountingPlugin->amountOfPlugins);
+}
+
+TEST(CommandLineTestRunner, NoPluginsAreInstalledAtTheEndOfARunWhenTheArgumentsAreInvalid)
+{
+	const char* argv[] = { "tests.exe", "-fdskjnfkds"};
+
+	CommandLineTestRunner commandLineTestRunner(2, argv, &output, &registry);
+	commandLineTestRunner.runAllTestsMain();
+
+	LONGS_EQUAL(0, registry.countPlugins());
 }
