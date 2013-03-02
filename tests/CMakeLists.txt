@@ -31,6 +31,11 @@ set(CppUTestTests_src
         UtestTest.cpp
 )
 
+if (MSVC)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /wd4723")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4723")
+endif (MSVC)
+
 add_executable(CppUTestTests ${CppUTestTests_src})
 target_link_libraries(CppUTestTests CppUTest)
 add_test(CppUTestTests CppUTestTests)
