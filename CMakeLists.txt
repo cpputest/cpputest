@@ -6,17 +6,17 @@ set(CppUTest_version_minor 3)
 # 2.6.3 is needed for ctest support
 cmake_minimum_required(VERSION 2.6.3)
 
-option(STD_C "Disable the use of standard C library" TRUE)
-option(STD_CPP "Disable the use of standard C++ library" TRUE)
-option(CPPUTEST_FLAGS "Disable CFLAGS/CPPFLAGS/CXXFLAGS set by CppUTest" TRUE)
-option(MEMORY_LEAK_DETECTION "Disable memory leak detection" TRUE)
-option(EXTENSIONS "Disable CppUTest extenstion library" TRUE)
-option(MAP_FILE "Enable the creation of a map file" FALSE)
-option(COVERAGE "Enable running with coverage" FALSE)
-option(REAL_GTEST "Enable using real GTest rather than faking it" FALSE)
-option(GMOCK "Enable using GMock" FALSE)
+option(STD_C "Use the standard C library" ON)
+option(STD_CPP "Use the standard C++ library" ON)
+option(CPPUTEST_FLAGS "Use the CFLAGS/CXXFLAGS/LDFLAGS set by CppUTest" ON)
+option(MEMORY_LEAK_DETECTION "Enable memory leak detection" ON)
+option(EXTENSIONS "Use the CppUTest extenstion library" ON)
+option(MAP_FILE "Enable the creation of a map file" OFF)
+option(COVERAGE "Enable running with coverage" OFF)
+option(REAL_GTEST "Enable using real GTest rather than faking it" OFF)
+option(GMOCK "Enable using GMock" OFF)
 
-option(TESTS "Compile and make tests for the code?" TRUE)
+option(TESTS "Compile and make tests for the code?" ON)
 
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/Modules" CACHE STRING "Path to cmake modules")
 
@@ -26,15 +26,7 @@ endif(NOT CMAKE_BUILD_TYPE)
 
 set(CppUTestRootDirectory ${PROJECT_SOURCE_DIR})
 
-set(CPP_PLATFORM Gcc)
-
-if (NOT STD_C)
-    set(STD_CPP FALSE)
-    set(MEMORY_LEAK_DETECTION FALSE)
-    message("Standard C library disable")
-    set(CPP_PLATFORM GccNoStdC)
-endif (NOT STD_C)
-
+include(CppUTestConfigurationOptions)
 include(CTest)
 
 include_directories(${CppUTestRootDirectory}/include)
