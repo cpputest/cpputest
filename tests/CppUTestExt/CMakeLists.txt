@@ -17,5 +17,5 @@ set(CppUTestExtTests_src
 )
 
 add_executable(CppUTestExtTests ${CppUTestExtTests_src})
-target_link_libraries(CppUTestExtTests CppUTest CppUTestExt)
+target_link_libraries(CppUTestExtTests CppUTest CppUTestExt ${CPPUNIT_EXTERNAL_LIBRARIES})
 add_test(CppUTestExtTests CppUTestExtTests)

@@ -12,6 +12,8 @@ else (MSVC)
     set(CPP_PLATFORM GccNoStdC)
 endif (MSVC)
 
+include(CppUTestWarningFlags)
+
 if (NOT STD_CPP)
     add_definitions(-DCPPUTEST_STD_CPP_LIB_DISABLED=1)
     if (STD_C AND NOT MSVC)
@@ -41,16 +43,34 @@ if (COVERAGE AND NOT MSVC)
 endif (COVERAGE AND NOT MSVC)
 
 if (GMOCK)
+    set(GMOCK_HOME $ENV{GMOCK_HOME})
+    if (NOT GMOCK_HOME)
+        message(FATAL_ERROR "Trying to compile with GMock support, but environment variable $GMOCK_HOME is not set")
+    endif (NOT GMOCK_HOME)
+
+    # GMock pulls in gtest.
+    set(REAL_GTEST OFF)
+
+    include_directories(${GMOCK_HOME}/include ${GMOCK_HOME}/gtest ${GMOCK_HOME}/gtest/include)
+    add_subdirectory(${GMOCK_HOME} "${CMAKE_CURRENT_BINARY_DIR}/gmock")
+    set(CPPUNIT_EXTERNAL_LIBRARIES ${CPPUNIT_EXTERNAL_LIBARIES} gmock gtest)
 else (GMOCK)
     include_directories(${CppUTestRootDirectory}/include/CppUTestExt/CppUTestGMock)
 endif (GMOCK)
 
-if (REAL_GTEST)
-else (REAL_GTEST)
-    include_directories(${CppUTestRootDirectory}/include/CppUTestExt/CppUTestGTest)
-endif (REAL_GTEST)
+if (REAL_GTEST AND NOT USED_REAL_GTEST)
+    set(GTEST_HOME $ENV{GTEST_HOME})
+    if (NOT GTEST_HOME)
+        message(FATAL_ERROR "Trying to compile with gtest support, but environment variable $GTEST_HOME is not set")
+    endif (NOT GTEST_HOME)
 
-include(CppUTestWarningFlags)
+    include_directories(${GTEST_HOME} ${GTEST_HOME}/include)
+    add_subdirectory(${GTEST_HOME} "${CMAKE_CURRENT_BINARY_DIR}/gtest")
+    set(CPPUNIT_EXTERNAL_LIBRARIES ${CPPUNIT_EXTERNAL_LIBARIES} gtest)
+elseif (NOT USED_REAL_GTEST)
+    include_directories(${CppUTestRootDirectory}/include/CppUTestExt/CppUTestGTest)
+endif (REAL_GTEST AND NOT USED_REAL_GTEST)
+
 set(CPPUTEST_C_FLAGS "${CPPUTEST_C_FLAGS} ${CPPUTEST_C_WARNING_FLAGS}")
 set(CPPUTEST_CXX_FLAGS "${CPPUTEST_CXX_FLAGS} ${CPPUTEST_CXX_WARNING_FLAGS}")
 

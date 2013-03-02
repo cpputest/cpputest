@@ -33,6 +33,7 @@ set(CppUTestExt_headers
 )
 
 add_library(CppUTestExt STATIC ${CppUTestExt_src})
+target_link_libraries(CppUTestExt ${CPPUNIT_EXTERNAL_LIBRARIES})
 install(FILES ${CppUTestExt_headers} DESTINATION include/CppUTestExt)
 install(TARGETS CppUTestExt
     RUNTIME DESTINATION bin
