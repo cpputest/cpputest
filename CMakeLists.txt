@@ -39,3 +39,30 @@ endif (EXTENSIONS)
 if (TESTS)
     add_subdirectory(tests)
 endif (TESTS)
+
+message("
+-------------------------------------------------------
+CppUTest Version ${CppUTest_version_major}.${CppUTest_version_minor}
+
+Current compiler options:
+    CC:                                 ${CMAKE_C_COMPILER}
+    CXX:                                ${CMAKE_CXX_COMPILER}
+    CppUTest CFLAGS:                    ${CPPUTEST_C_FLAGS}
+    CppUTest CXXFLAGS:                  ${CPPUTEST_CXX_FLAGS}
+    CppUTest LDFLAGS:                   ${CPPUTEST_LD_FLAGS}
+
+Features configure in CppUTest:
+    Memory Leak Detection:              ${MEMORY_LEAK_DETECTION}
+    Compiling Extensions:               ${EXTENSIONS}
+    Use CppUTest flags:                 ${CPPUTEST_FLAGS}
+
+    Using Standard C library:           ${STD_C}
+    Using Standard C++ library:         ${STD_CPP}
+
+    Generating map file:                ${MAP_FILE}
+    Compiling with coverage:            ${COVERAGE}
+
+    Use 'real' GTest:                   ${USED_REAL_GTEST}
+    Able to use GMock:                  ${GMOCK}
+-------------------------------------------------------
+")

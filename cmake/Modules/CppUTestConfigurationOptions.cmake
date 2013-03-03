@@ -50,6 +50,7 @@ if (GMOCK)
 
     # GMock pulls in gtest.
     set(REAL_GTEST OFF)
+    set(USED_REAL_GTEST ON)
 
     include_directories(${GMOCK_HOME}/include ${GMOCK_HOME}/gtest ${GMOCK_HOME}/gtest/include)
     add_subdirectory(${GMOCK_HOME} "${CMAKE_CURRENT_BINARY_DIR}/gmock")
@@ -63,6 +64,8 @@ if (REAL_GTEST AND NOT USED_REAL_GTEST)
     if (NOT GTEST_HOME)
         message(FATAL_ERROR "Trying to compile with gtest support, but environment variable $GTEST_HOME is not set")
     endif (NOT GTEST_HOME)
+
+    set(USED_REAL_GTEST ON)
 
     include_directories(${GTEST_HOME} ${GTEST_HOME}/include)
     add_subdirectory(${GTEST_HOME} "${CMAKE_CURRENT_BINARY_DIR}/gtest")
