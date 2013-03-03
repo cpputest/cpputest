@@ -29,6 +29,13 @@ set(CppUTestRootDirectory ${PROJECT_SOURCE_DIR})
 include(CppUTestConfigurationOptions)
 include(CTest)
 
+configure_file (
+    "${PROJECT_SOURCE_DIR}/config.h.cmake"
+    "${PROJECT_BINARY_DIR}/config.h"
+    )
+include_directories(${PROJECT_BINARY_DIR})
+add_definitions(-DHAVE_CONFIG_H)
+
 include_directories(${CppUTestRootDirectory}/include)
 add_subdirectory(src/CppUTest)
 
