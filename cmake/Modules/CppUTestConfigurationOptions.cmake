@@ -12,7 +12,7 @@ else (MSVC)
     set(CPP_PLATFORM GccNoStdC)
 endif (MSVC)
 
-include(CppUTestWarningFlags)
+include("${CppUTestRootDirectory}/cmake/Modules/CppUTestWarningFlags.cmake")
 
 if (NOT STD_CPP)
     set(CPPUTEST_STD_CPP_LIB_DISABLED 1)

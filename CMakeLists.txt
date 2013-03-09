@@ -18,15 +18,13 @@ option(GMOCK "Enable using GMock" OFF)
 
 option(TESTS "Compile and make tests for the code?" ON)
 
-set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/Modules" CACHE STRING "Path to cmake modules")
-
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "What kind of build this is" FORCE)
 endif(NOT CMAKE_BUILD_TYPE)
 
 set(CppUTestRootDirectory ${PROJECT_SOURCE_DIR})
 
-include(CppUTestConfigurationOptions)
+include("${CppUTestRootDirectory}/cmake/Modules/CppUTestConfigurationOptions.cmake")
 include(CTest)
 
 configure_file (
