@@ -195,7 +195,7 @@
 	bool caught_expected = false; \
 	try { \
 		(expression); \
-	} catch(const expected & e) { \
+	} catch(const expected &) { \
 		caught_expected = true; \
 	} catch(...) { \
 		msg = "expected to throw " #expected "\nbut threw a different type"; \
