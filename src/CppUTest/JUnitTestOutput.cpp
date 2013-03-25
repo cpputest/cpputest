@@ -34,27 +34,25 @@
 struct JUnitTestCaseResultNode
 {
 	JUnitTestCaseResultNode() :
-		execTime_(0), failure_(0), skipped_(0), next_(0)
+		execTime_(0), failure_(0), next_(0)
 	{
 	}
 	;
 	SimpleString name_;
 	long execTime_;
 	TestFailure* failure_;
-	int skipped_;
 	JUnitTestCaseResultNode* next_;
 };
 
 struct JUnitTestGroupResult
 {
 	JUnitTestGroupResult() :
-		testCount_(0), failureCount_(0), skippedCount_(0), groupExecTime_(0), head_(0), tail_(0)
+		testCount_(0), failureCount_(0), groupExecTime_(0), head_(0), tail_(0)
 	{
 	}
 	;
 	int testCount_;
 	int failureCount_;
-	int skippedCount_;
 	long startTime_;
 	long groupExecTime_;
 	SimpleString group_;
@@ -83,7 +81,6 @@ void JUnitTestOutput::resetTestGroupResult()
 {
 	impl_->results_.testCount_ = 0;
 	impl_->results_.failureCount_ = 0;
-	impl_->results_.skippedCount_ = 0;
 	impl_->results_.group_ = "";
 	JUnitTestCaseResultNode* cur = impl_->results_.head_;
 	while (cur) {
@@ -109,8 +106,6 @@ void JUnitTestOutput::printCurrentTestEnded(const TestResult& result)
 {
 	impl_->results_.tail_->execTime_
 			= result.getCurrentTestTotalExecutionTime();
-	impl_->results_.tail_->skipped_
-      = result.getIgnoredCount();
 }
 
 void JUnitTestOutput::printTestsEnded(const TestResult& /*result*/)
@@ -120,7 +115,6 @@ void JUnitTestOutput::printTestsEnded(const TestResult& /*result*/)
 void JUnitTestOutput::printCurrentGroupEnded(const TestResult& result)
 {
 	impl_->results_.groupExecTime_ = result.getCurrentGroupTotalExecutionTime();
-	impl_->results_.skippedCount_ = result.getIgnoredCount();
 	writeTestGroupToFile();
 	resetTestGroupResult();
 }
@@ -161,10 +155,9 @@ void JUnitTestOutput::writeTestSuiteSummery()
 	SimpleString
 			buf =
 					StringFromFormat(
-							"<testsuite errors=\"0\" failures=\"%d\" hostname=\"localhost\" name=\"%s\" skips=\"%d\" tests=\"%d\" time=\"%d.%03d\" timestamp=\"%s\">\n",
+							"<testsuite errors=\"0\" failures=\"%d\" hostname=\"localhost\" name=\"%s\" tests=\"%d\" time=\"%d.%03d\" timestamp=\"%s\">\n",
 							impl_->results_.failureCount_,
 							impl_->results_.group_.asCharString(),
-							impl_->results_.skippedCount_,
 							impl_->results_.testCount_,
 							(int) (impl_->results_.groupExecTime_ / 1000), (int) (impl_->results_.groupExecTime_ % 1000),
 							GetPlatformSpecificTimeString());
@@ -189,10 +182,6 @@ void JUnitTestOutput::writeTestCases()
 
 		if (cur->failure_) {
 			writeFailure(cur);
-		}
-		else if(cur->skipped_)
-		{
-			writeToFile("<skipped />\n");
 		}
 		writeToFile("</testcase>\n");
 		cur = cur->next_;
