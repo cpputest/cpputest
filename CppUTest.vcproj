@@ -122,6 +122,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
+				AdditionalIncludeDirectories=".\include,.\include\Platforms\VisualCpp"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				StringPooling="true"
 				RuntimeLibrary="0"
@@ -146,6 +147,8 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				LinkLibraryDependencies="true"
+				AdditionalDependencies="winmm.lib"
 				OutputFile=".\Release\CppUTest.lib"
 				SuppressStartupBanner="true"
 			/>
