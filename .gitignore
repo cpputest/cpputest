@@ -41,3 +41,6 @@ Debug
 *.tlog
 *.cache
 *.user
+_build_
+_build
+build

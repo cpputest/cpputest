@@ -48,6 +48,10 @@
 
 #include "CppUTest/PlatformSpecificFunctions.h"
 
+#ifndef __has_attribute
+  #define __has_attribute(x) 0
+#endif
+
 static jmp_buf test_exit_jmp_buf[10];
 static int jmp_buf_index = 0;
 
@@ -94,8 +98,8 @@ int PlatformSpecificSetJmp(void (*function) (void* data), void* data)
 	return 0;
 }
 
-#if defined(__clang__) && (__clang_major__ > 3)
-__attribute__((__noreturn__))
+#if __has_attribute(noreturn)
+__attribute__((noreturn))
 #endif
 void PlatformSpecificLongJmp()
 {

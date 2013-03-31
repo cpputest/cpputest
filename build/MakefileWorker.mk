@@ -387,7 +387,7 @@ TEST_OBJS = $(call src_to_o,$(TEST_SRC))
 STUFF_TO_CLEAN += $(TEST_OBJS)
 
 
-MOCKS_SRC = $(call get_src_from_dir_list, $(MOCKS_SRC_DIRS))
+MOCKS_SRC += $(call get_src_from_dir_list, $(MOCKS_SRC_DIRS))
 MOCKS_OBJS = $(call src_to_o,$(MOCKS_SRC))
 STUFF_TO_CLEAN += $(MOCKS_OBJS)
 
