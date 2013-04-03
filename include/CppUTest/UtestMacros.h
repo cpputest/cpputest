@@ -191,6 +191,7 @@
 
 #if CPPUTEST_USE_STD_CPP_LIB
 #define CHECK_THROWS(expected, expression) \
+	{ \
 	SimpleString msg("expected to throw "#expected "\nbut threw nothing"); \
 	bool caught_expected = false; \
 	try { \
@@ -202,6 +203,7 @@
 	} \
 	if (!caught_expected) { \
 		UtestShell::getCurrent()->fail(msg.asCharString(), __FILE__, __LINE__); \
+	} \
 	}
 #endif /* CPPUTEST_USE_STD_CPP_LIB */
 
