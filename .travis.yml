@@ -3,6 +3,6 @@ compiler:
   - clang
   - gcc
 script:
-  - cmake .
+  - cmake . -DCMAKE_BUILD_TYPE=Debug
   - make
   - ctest -V
