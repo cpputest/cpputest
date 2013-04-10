@@ -16,7 +16,7 @@ else (MSVC)
 
     macro(check_and_append_cxx_warning_flags)
       foreach (flag ${ARGN})
-        check_c_compiler_flag("-${flag}" WARNING_CXX_FLAG_${flag})
+        check_cxx_compiler_flag("-${flag}" WARNING_CXX_FLAG_${flag})
         if (WARNING_CXX_FLAG_${flag})
             set(CPPUTEST_CXX_WARNING_FLAGS "${CPPUTEST_CXX_WARNING_FLAGS} -${flag}")
         endif (WARNING_CXX_FLAG_${flag})
@@ -34,7 +34,6 @@ else (MSVC)
         Wconversion
         pedantic-errors
         Wsign-conversion
-        Woverloaded-virtual
         Wno-padded
         Wno-disabled-macro-expansion
         )
@@ -44,6 +43,7 @@ else (MSVC)
         )
 
     set(WARNING_CXX_ONLY_FLAGS
+        Woverloaded-virtual
         Wno-global-constructors
         Wno-exit-time-destructors
         Wno-weak-vtables
