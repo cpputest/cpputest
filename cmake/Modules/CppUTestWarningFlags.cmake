@@ -36,6 +36,7 @@ else (MSVC)
         Wsign-conversion
         Wno-padded
         Wno-disabled-macro-expansion
+        Wno-missing-variable-declarations
         )
 
     set(WARNING_C_ONLY_FLAGS
