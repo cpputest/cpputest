@@ -280,6 +280,34 @@ TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorThrowsAnExceptionWhe
 	}
 }
 
+class ClassThatThrowsAnExceptionInTheConstructor
+{
+public:
+	ClassThatThrowsAnExceptionInTheConstructor(){
+		throw 1;
+	}
+};
+
+TEST_GROUP(TestForExceptionsInConstructor)
+{
+};
+
+TEST(TestForExceptionsInConstructor,ConstructorThrowsAnException)
+{
+	try {
+		new ClassThatThrowsAnExceptionInTheConstructor();
+	}catch(...){
+	}
+}
+
+TEST(TestForExceptionsInConstructor,ConstructorThrowsAnExceptionAllocatedAsArray)
+{
+	try {
+		new ClassThatThrowsAnExceptionInTheConstructor[10];
+	}catch(...){
+	}
+}
+
 #else
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorReturnsNull)

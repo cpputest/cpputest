@@ -63,6 +63,8 @@ void* operator new[](size_t size);
 
 void operator delete(void* mem) throw();
 void operator delete[](void* mem) throw();
+void operator delete(void* mem, const char* file, int line) throw();
+void operator delete[](void* mem, const char* file, int line) throw();
 
 #if CPPUTEST_USE_NEW_MACROS
 #include "MemoryLeakDetectorNewMacros.h"
