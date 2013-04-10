@@ -4,9 +4,10 @@ compiler:
   - gcc
 
 script:
+  - mkdir temp_for_build && cd temp_for_build
   - wget https://googlemock.googlecode.com/files/gmock-1.6.0.zip
   - unzip gmock-1.6.0.zip
   - cd gmock-1.6.0 && ./configure && make && cd ..
   - export GMOCK_HOME=gmock-1.6.0
   - export GTEST_HOME=gmock-1.6.0/gtest
-  - mkdir temp_for_build && cd temp_for_build && ../configure && make check_all
+  - ../configure && make check_all
