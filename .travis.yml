@@ -2,5 +2,9 @@ language: cpp
 compiler:
   - clang
   - gcc
+
 script:
+  - wget https://googlemock.googlecode.com/files/gmock-1.6.0.zip
+  - unzip gmock-1.6.0.zip
+  - export GMOCK_HOME=gmock-1.6.0
   - mkdir temp_for_build && cd temp_for_build && ../configure && make check_all
