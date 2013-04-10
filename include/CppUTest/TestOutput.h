@@ -137,7 +137,7 @@ public:
 	explicit StringBufferTestOutput()
 	{
 	}
-	;
+
 	virtual ~StringBufferTestOutput();
 
 	void printBuffer(const char* s)

@@ -232,7 +232,7 @@ MockNamedValueListNode* MockNamedValueList::begin()
 struct MockNamedValueComparatorRepositoryNode
 {
 	MockNamedValueComparatorRepositoryNode(const SimpleString& name, MockNamedValueComparator& comparator, MockNamedValueComparatorRepositoryNode* next)
-		: name_(name), comparator_(comparator), next_(next) {};
+		: name_(name), comparator_(comparator), next_(next) {}
 	SimpleString name_;
 	MockNamedValueComparator& comparator_;
 	MockNamedValueComparatorRepositoryNode* next_;

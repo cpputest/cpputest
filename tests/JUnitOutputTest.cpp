@@ -71,7 +71,7 @@ TEST_GROUP(JUnitOutputTest)
 				tst_(0), testName_(0), failure_(0)
 			{
 			}
-			;
+
 			UtestShell* tst_;
 			SimpleString* testName_;
 			TestFailure* failure_;
@@ -83,7 +83,6 @@ TEST_GROUP(JUnitOutputTest)
 				numberTests_(0), totalFailures_(0), name_(""), testData_(0)
 			{
 			}
-			;
 
 			size_t numberTests_;
 			size_t totalFailures_;
@@ -112,7 +111,6 @@ TEST_GROUP(JUnitOutputTest)
 				testGroupData_[i].totalFailures_ = 0;
 			}
 		}
-		;
 
 		void setResult(TestResult* testRes)
 		{
