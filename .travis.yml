@@ -3,4 +3,4 @@ compiler:
   - clang
   - gcc
 script:
-  - ./configure && make check_all
+  - mkdir temp_for_build && cd temp_for_build && ../configure && make check_all
