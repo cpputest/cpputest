@@ -2,7 +2,20 @@ language: cpp
 compiler:
   - clang
   - gcc
+install:
+  - wget https://googlemock.googlecode.com/files/gmock-1.6.0.zip
+  - unzip gmock-1.6.0.zip
+  - cd gmock-1.6.0
+  - ./configure && make
+  - cd ..
 script:
-  - cmake . -DCMAKE_BUILD_TYPE=Debug
-  - make
-  - ctest -V
+  - export GMOCK_HOME=$TRAVIS_BUILD_DIR/gmock-1.6.0
+  - export GTEST_HOME=$TRAVIS_BUILD_DIR/gmock-1.6.0/gtest
+  - export AUTOTOOLS_BUILD_DIR=$TRAVIS_BUILD_DIR/autotools_build
+  - export CMAKE_BUILD_DIR=$TRAVIS_BUILD_DIR/cmake_build
+  - export CFLAGS=-g
+  - export CXXFLAGS=-g
+  - mkdir $AUTOTOOLS_BUILD_DIR && cd $AUTOTOOLS_BUILD_DIR
+  - $TRAVIS_BUILD_DIR/configure && make check_all
+  - mkdir $CMAKE_BUILD_DIR && cd $CMAKE_BUILD_DIR
+  - cmake $TRAVIS_BUILD_DIR -DCMAKE_BUILD_TYPE=Debug && make && ctest -V
