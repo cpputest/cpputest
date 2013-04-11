@@ -15,6 +15,12 @@ set(CppUTestExtTests_src
         TestMemoryReporterPlugin.cpp
         TestMockPlugin.cpp
 )
+if (GMOCK)
+  list(APPEND CppUTestExtTests_src TestGMock.cpp TestGTest.cpp)
+endif (GMOCK)
+if (REAL_GTEST)
+  list(APPEND CppUTestExtTests_src TestGTest.cpp)
+endif (REAL_GTEST)
 
 add_executable(CppUTestExtTests ${CppUTestExtTests_src})
 target_link_libraries(CppUTestExtTests CppUTest CppUTestExt ${CPPUNIT_EXTERNAL_LIBRARIES})

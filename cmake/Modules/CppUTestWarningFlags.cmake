@@ -24,7 +24,6 @@ else (MSVC)
     endmacro(check_and_append_cxx_warning_flags)
 
     set(WARNING_C_FLAGS
-        Werror
         Weverything
         Wall
         Wextra
@@ -32,7 +31,6 @@ else (MSVC)
         Wswitch-default
         Wswitch-enum
         Wconversion
-        pedantic-errors
         Wsign-conversion
         Wno-padded
         Wno-disabled-macro-expansion
@@ -49,6 +47,10 @@ else (MSVC)
         Wno-exit-time-destructors
         Wno-weak-vtables
         )
+
+    if (NOT GMOCK AND NOT REAL_GTEST)
+      list(APPEND WARNING_C_FLAGS Werror pedantic-errors)
+    endif (NOT GMOCK AND NOT REAL_GTEST)
 
     check_and_append_c_warning_flags(${WARNING_C_FLAGS})
     check_and_append_c_warning_flags(${WARNING_C_ONLY_FLAGS})
