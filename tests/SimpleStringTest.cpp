@@ -42,8 +42,8 @@ TEST(SimpleString, defaultAllocatorIsNewArrayAllocator)
 class MyOwnStringAllocator : public TestMemoryAllocator
 {
 public:
-	MyOwnStringAllocator() : memoryWasAllocated(false) {};
-	virtual ~MyOwnStringAllocator() {};
+	MyOwnStringAllocator() : memoryWasAllocated(false) {}
+	virtual ~MyOwnStringAllocator() {}
 
 	bool memoryWasAllocated;
 	char* alloc_memory(size_t size, const char* file, int line)

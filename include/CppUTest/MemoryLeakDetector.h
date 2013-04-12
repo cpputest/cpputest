@@ -64,7 +64,7 @@ public:
 	virtual ~MemoryLeakFailure()
 	{
 	}
-	;
+
 	virtual void fail(char* fail_string)=0;
 };
 

@@ -44,7 +44,6 @@ public:
 		registry_->setCurrentRegistry(registry_);
 		registry_->addTest(genTest_);
 	}
-	;
 
 	virtual ~TestTestingFixture()
 	{

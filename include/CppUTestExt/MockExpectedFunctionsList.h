@@ -85,7 +85,7 @@ protected:
 
 		MockExpectedFunctionsListNode* next_;
 		MockExpectedFunctionsListNode(MockExpectedFunctionCall* expectedCall)
-			: expectedCall_(expectedCall), next_(NULL) {};
+			: expectedCall_(expectedCall), next_(NULL) {}
 	};
 
 	virtual MockExpectedFunctionsListNode* findNodeWithCallOrderOf(int callOrder) const;

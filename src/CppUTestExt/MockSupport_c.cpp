@@ -38,7 +38,7 @@ class MockCFunctionComparatorNode : public MockNamedValueComparator
 public:
 	MockCFunctionComparatorNode(MockCFunctionComparatorNode* next, MockTypeEqualFunction_c equal, MockTypeValueToStringFunction_c toString)
 		: next_(next), equal_(equal), toString_(toString) {}
-	virtual ~MockCFunctionComparatorNode() {};
+	virtual ~MockCFunctionComparatorNode() {}
 
 	virtual bool isEqual(void* object1, void* object2)
 	{
