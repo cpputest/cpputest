@@ -241,6 +241,8 @@ TEST(MemoryLeakOverridesToBeUsedInProductionCode, MemoryOverridesAreDisabled)
 TEST_GROUP(OutOfMemoryTestsForOperatorNew)
 {
 	TestMemoryAllocator* no_memory_allocator;
+	char * allocatedChar;
+
 	void setup()
 	{
 		no_memory_allocator = new NullUnknownAllocator;
@@ -262,12 +264,12 @@ TEST_GROUP(OutOfMemoryTestsForOperatorNew)
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorThrowsAnExceptionWhenUsingStdCppNew)
 {
-	CHECK_THROWS(std::bad_alloc, new char);
+	CHECK_THROWS(std::bad_alloc, allocatedChar = new char);
 }
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorThrowsAnExceptionWhenUsingStdCppNew)
 {
-	CHECK_THROWS(std::bad_alloc, new char[10]);
+	CHECK_THROWS(std::bad_alloc, allocatedChar = new char[10]);
 }
 
 class ClassThatThrowsAnExceptionInTheConstructor
@@ -312,12 +314,12 @@ TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorReturnsNull)
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorThrowsAnExceptionWhenUsingStdCppNewWithoutOverride)
 {
-	CHECK_THROWS(std::bad_alloc, new char);
+	CHECK_THROWS(std::bad_alloc, allocatedChar = new char);
 }
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorThrowsAnExceptionWhenUsingStdCppNewWithoutOverride)
 {
-	CHECK_THROWS(std::bad_alloc, new char[10]);
+	CHECK_THROWS(std::bad_alloc, allocatedChar = new char[10]);
 }
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorReturnsNullWithoutOverride)
