@@ -92,7 +92,7 @@ static void helperDoTestTeardown(void* data)
 
 struct HelperTestRunInfo
 {
-	HelperTestRunInfo(UtestShell* shell, TestPlugin* plugin, TestResult* result) : shell_(shell), plugin_(plugin), result_(result){};
+	HelperTestRunInfo(UtestShell* shell, TestPlugin* plugin, TestResult* result) : shell_(shell), plugin_(plugin), result_(result){}
 
 	UtestShell* shell_;
 	TestPlugin* plugin_;

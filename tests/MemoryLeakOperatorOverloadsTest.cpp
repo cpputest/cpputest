@@ -241,6 +241,8 @@ TEST(MemoryLeakOverridesToBeUsedInProductionCode, MemoryOverridesAreDisabled)
 TEST_GROUP(OutOfMemoryTestsForOperatorNew)
 {
 	TestMemoryAllocator* no_memory_allocator;
+	char * allocatedChar;
+
 	void setup()
 	{
 		no_memory_allocator = new NullUnknownAllocator;
@@ -262,28 +264,18 @@ TEST_GROUP(OutOfMemoryTestsForOperatorNew)
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorThrowsAnExceptionWhenUsingStdCppNew)
 {
-	try {
-		new char;
-		FAIL("Should have thrown an exception!")
-	}
-	catch (std::bad_alloc&) {
-	}
+	CHECK_THROWS(std::bad_alloc, allocatedChar = new char);
 }
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorThrowsAnExceptionWhenUsingStdCppNew)
 {
-	try {
-		new char[10];
-		FAIL("Should have thrown an exception!")
-	}
-	catch (std::bad_alloc&) {
-	}
+	CHECK_THROWS(std::bad_alloc, allocatedChar = new char[10]);
 }
 
 class ClassThatThrowsAnExceptionInTheConstructor
 {
 public:
-	ClassThatThrowsAnExceptionInTheConstructor(){
+	ClassThatThrowsAnExceptionInTheConstructor() __no_return__ {
 		throw 1;
 	}
 };
@@ -294,18 +286,12 @@ TEST_GROUP(TestForExceptionsInConstructor)
 
 TEST(TestForExceptionsInConstructor,ConstructorThrowsAnException)
 {
-	try {
-		new ClassThatThrowsAnExceptionInTheConstructor();
-	}catch(...){
-	}
+	CHECK_THROWS(int, new ClassThatThrowsAnExceptionInTheConstructor());
 }
 
 TEST(TestForExceptionsInConstructor,ConstructorThrowsAnExceptionAllocatedAsArray)
 {
-	try {
-		new ClassThatThrowsAnExceptionInTheConstructor[10];
-	}catch(...){
-	}
+	CHECK_THROWS(int, new ClassThatThrowsAnExceptionInTheConstructor[10]);
 }
 
 #else
@@ -328,22 +314,12 @@ TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorReturnsNull)
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorThrowsAnExceptionWhenUsingStdCppNewWithoutOverride)
 {
-	try {
-		new char;
-		FAIL("Should have thrown an exception!")
-	}
-	catch (std::bad_alloc&) {
-	}
+	CHECK_THROWS(std::bad_alloc, allocatedChar = new char);
 }
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorThrowsAnExceptionWhenUsingStdCppNewWithoutOverride)
 {
-	try {
-		new char[10];
-		FAIL("Should have thrown an exception!")
-	}
-	catch (std::bad_alloc&) {
-	}
+	CHECK_THROWS(std::bad_alloc, allocatedChar = new char[10]);
 }
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorReturnsNullWithoutOverride)

@@ -191,7 +191,7 @@ public:
 				tear), testFunction_(0)
 	{
 	}
-	Utest* createTest() { return new ExecFunctionTest(this); };
+	Utest* createTest() { return new ExecFunctionTest(this); }
 	virtual ~ExecFunctionTestShell();
 };
 

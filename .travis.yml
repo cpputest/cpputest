@@ -2,12 +2,20 @@ language: cpp
 compiler:
   - clang
   - gcc
-
-script:
-  - mkdir temp_for_build && cd temp_for_build
+install:
   - wget https://googlemock.googlecode.com/files/gmock-1.6.0.zip
   - unzip gmock-1.6.0.zip
-  - cd gmock-1.6.0 && ./configure && make && cd ..
-  - export GMOCK_HOME=gmock-1.6.0
-  - export GTEST_HOME=gmock-1.6.0/gtest
-  - ../configure && make check_all
+  - cd gmock-1.6.0
+  - ./configure && make
+  - cd ..
+script:
+  - export GMOCK_HOME=$TRAVIS_BUILD_DIR/gmock-1.6.0
+  - export GTEST_HOME=$TRAVIS_BUILD_DIR/gmock-1.6.0/gtest
+  - export AUTOTOOLS_BUILD_DIR=$TRAVIS_BUILD_DIR/autotools_build
+  - export CMAKE_BUILD_DIR=$TRAVIS_BUILD_DIR/cmake_build
+  - function mkcd () { mkdir -p "$@" && eval cd "\"\$$#\""; }
+  - export CFLAGS=-g; export CXXFLAGS=-g
+  - if [ $CC != "clang" ]; then mkcd $AUTOTOOLS_BUILD_DIR && ../configure && make check_all; fi
+  - mkcd $CMAKE_BUILD_DIR && cmake .. -DCMAKE_BUILD_TYPE=Debug && make && ctest -V
+  - cmake .. -DGMOCK=ON && make && ctest -V
+  - cmake .. -DGMOCK=OFF -DREAL_GTEST=ON && make && ctest -V
