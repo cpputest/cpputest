@@ -36,7 +36,7 @@ public:
 	virtual ~MemoryLeakFailureForTest()
 	{
 	}
-	;
+
 	virtual void fail(char* fail_string)
 	{
 		*message = fail_string;

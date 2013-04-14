@@ -35,8 +35,8 @@
 class MockNamedValueComparator
 {
 public:
-	MockNamedValueComparator() {};
-	virtual ~MockNamedValueComparator() {};
+	MockNamedValueComparator() {}
+	virtual ~MockNamedValueComparator() {}
 
 	virtual bool isEqual(void* object1, void* object2)=0;
 	virtual SimpleString valueToString(void* object)=0;
@@ -50,7 +50,7 @@ public:
 
 	MockFunctionComparator(isEqualFunction equal, valueToStringFunction valToString)
 		: equal_(equal), valueToString_(valToString) {}
-	virtual ~MockFunctionComparator(){};
+	virtual ~MockFunctionComparator(){}
 
 	virtual bool isEqual(void* object1, void* object2){ return equal_(object1, object2); }
 	virtual SimpleString valueToString(void* object) { return valueToString_(object); }

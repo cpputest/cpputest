@@ -88,7 +88,6 @@ public:
 		numOfFpSets(num)
 	{
 	}
-	;
 
 	void setup()
 	{
