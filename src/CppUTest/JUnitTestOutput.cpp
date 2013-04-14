@@ -37,7 +37,7 @@ struct JUnitTestCaseResultNode
 		execTime_(0), failure_(0), next_(0)
 	{
 	}
-	;
+
 	SimpleString name_;
 	long execTime_;
 	TestFailure* failure_;
@@ -50,7 +50,7 @@ struct JUnitTestGroupResult
 		testCount_(0), failureCount_(0), groupExecTime_(0), head_(0), tail_(0)
 	{
 	}
-	;
+
 	int testCount_;
 	int failureCount_;
 	long startTime_;
