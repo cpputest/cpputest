@@ -50,7 +50,7 @@ public:
 	virtual MockFunctionCall& withParameter(const SimpleString& name, const char* value)=0;
 	virtual MockFunctionCall& withParameter(const SimpleString& name, void* value)=0;
 	virtual MockFunctionCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, void* value)=0;
-	virtual MockFunctionCall& ignoreOtherParameters() { return *this;};
+	virtual MockFunctionCall& ignoreOtherParameters() { return *this;}
 
 	virtual MockFunctionCall& andReturnValue(int value)=0;
 	virtual MockFunctionCall& andReturnValue(double value)=0;
@@ -123,7 +123,7 @@ public:
 
 	virtual MockFunctionCall& onObject(void* ) { return *this; }
 
-	static MockFunctionCall& instance() { static MockIgnoredCall call; return call; };
+	static MockFunctionCall& instance() { static MockIgnoredCall call; return call; }
 };
 
 class MockFunctionCallTrace : public MockFunctionCall
