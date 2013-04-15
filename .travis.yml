@@ -2,12 +2,26 @@ language: cpp
 compiler:
   - clang
   - gcc
-
-script:
-  - mkdir temp_for_build && cd temp_for_build
+env:
+  - BUILDTOOL=autotools
+  - BUILDTOOL=cmake
+install:
   - wget https://googlemock.googlecode.com/files/gmock-1.6.0.zip
   - unzip gmock-1.6.0.zip
-  - cd gmock-1.6.0 && ./configure && make && cd ..
-  - export GMOCK_HOME=gmock-1.6.0
-  - export GTEST_HOME=gmock-1.6.0/gtest
-  - ../configure && make check_all
+  - cd gmock-1.6.0
+  - ./configure && make
+  - cd ..
+before_script:
+  # begin clang workaround
+  - export CMAKE_BUILD_TYPE=RelWithDebInfo
+  - if [ $CC = "clang" ]; then export CFLAGS=-g; export CXXFLAGS=-g; export CMAKE_BUILD_TYPE=Debug; fi
+  # end clang workaround
+  - export GMOCK_HOME=$TRAVIS_BUILD_DIR/gmock-1.6.0
+  - export GTEST_HOME=$TRAVIS_BUILD_DIR/gmock-1.6.0/gtest
+  - export CPPUTEST_BUILD_DIR=$TRAVIS_BUILD_DIR/cpputest_build
+  - mkdir -p $CPPUTEST_BUILD_DIR && cd $CPPUTEST_BUILD_DIR
+script:
+  - if [ $BUILDTOOL = "autotools" ]; then ../configure && make check_all; fi
+  - if [ $BUILDTOOL = "cmake" ]; then cmake .. -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE && make && ctest -V; fi
+  - if [ $BUILDTOOL = "cmake" ]; then cmake .. -DGMOCK=ON && make && ctest -V; fi
+  - if [ $BUILDTOOL = "cmake" ]; then cmake .. -DGMOCK=OFF -DREAL_GTEST=ON && make && ctest -V; fi
