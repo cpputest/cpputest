@@ -35,6 +35,7 @@ else (MSVC)
         Woverloaded-virtual
         Wno-padded
         Wno-disabled-macro-expansion
+        Wno-missing-variable-declarations
         )
 
     if (NOT GMOCK AND NOT REAL_GTEST)
