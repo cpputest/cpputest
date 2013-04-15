@@ -283,7 +283,7 @@ TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorThrowsAnExceptionWhe
 class ClassThatThrowsAnExceptionInTheConstructor
 {
 public:
-	ClassThatThrowsAnExceptionInTheConstructor(){
+	ClassThatThrowsAnExceptionInTheConstructor() __attribute__((noreturn)){
 		throw 1;
 	}
 };
