@@ -5,8 +5,10 @@ set(CppUTestExtTests_src
         TestCodeMemoryReportFormatter.cpp
         TestMockCheatSheet.cpp
         TestMockSupport_c.cpp
+        TestGMock.cpp
         TestMockExpectedFunctionCall.cpp
         TestMockSupport_cCFile.c
+        TestGTest.cpp
         TestMockExpectedFunctionsList.cpp
         TestMemoryReportAllocator.cpp
         TestMockFailure.cpp
