@@ -5734,6 +5734,7 @@ fi
 # Checking for warning flags on the compiler
 saved_cflags="$CFLAGS"
 saved_cxxflags="$CXXFLAGS"
+saved_ldflags="$LDFLAGS"
 
 # FLag -Werror.
 CFLAGS=-Werror
@@ -6210,6 +6211,33 @@ ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
+#### Check whether some linker options are supported...  ?
+
+LDFLAGS=
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether LD supports -Qunused-arguments" >&5
+$as_echo_n "checking whether LD supports -Qunused-arguments... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }; CPPUTEST_NO_UNUSED_ARGUMENT_WARNING+=" -Qunused-arguments"
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LDFLAGS="$saved_ldflags"
+
 # Different features
 # Check whether --enable-std-c was given.
 if test "${enable_std_c+set}" = set; then :
@@ -6317,7 +6345,7 @@ $as_echo "#define CPPUTEST_STD_CPP_LIB_DISABLED 1" >>confdefs.h
     	CPPUTEST_CXXFLAGS+=" -nostdinc++"
 
     	# Since automake passes the CXXFLAGS to the linker, this will cause warnings with clang 3.2 (which become errors)
-    	CPPUTEST_LDFLAGS+="-Qunused-arguments"
+    	CPPUTEST_LDFLAGS+=$CPPUTEST_NO_UNUSED_ARGUMENT_WARNING
 
     fi
 fi
@@ -19393,10 +19421,11 @@ Current compiler options:
    CXX:                                 ${CXX}
    LD:                                  ${LD}
    Default CFLAGS:                      ${CFLAGS}
-   Default CXXFLAGS:                    ${CFLAGS}
+   Default CXXFLAGS:                    ${CXXFLAGS}
    CppUTest CFLAGS:                     ${CPPUTEST_CFLAGS}
    CppUTest CXXFLAGS:                   ${CPPUTEST_CXXFLAGS}
    CppUTest CPPFLAGS:                   ${CPPUTEST_CPPFLAGS}
+   CppUTest LDFLAGS:                    ${CPPUTEST_LDFLAGS}
 
 Features configured in ${PACKAGE_NAME}:
    Memory Leak Detection:               ${memory_leak_detection}
