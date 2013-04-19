@@ -160,8 +160,8 @@ am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
 am__v_lt_0 = --silent
 CppUTestExtTests_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
 	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXXLD) \
-	$(CppUTestExtTests_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) \
-	$(LDFLAGS) -o $@
+	$(CppUTestExtTests_CXXFLAGS) $(CXXFLAGS) \
+	$(CppUTestExtTests_LDFLAGS) $(LDFLAGS) -o $@
 am_CppUTestTests_OBJECTS = CppUTestTests-AllTests.$(OBJEXT) \
 	CppUTestTests-SetPluginTest.$(OBJEXT) \
 	CppUTestTests-CheatSheetTest.$(OBJEXT) \
@@ -194,8 +194,8 @@ CppUTestTests_OBJECTS = $(am_CppUTestTests_OBJECTS)
 CppUTestTests_DEPENDENCIES = libCppUTest.a $(am__DEPENDENCIES_1)
 CppUTestTests_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
 	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXXLD) \
-	$(CppUTestTests_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) \
-	-o $@
+	$(CppUTestTests_CXXFLAGS) $(CXXFLAGS) $(CppUTestTests_LDFLAGS) \
+	$(LDFLAGS) -o $@
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -296,6 +296,7 @@ CPPUTEST_HAS_CLANG = @CPPUTEST_HAS_CLANG@
 CPPUTEST_HAS_GCC = @CPPUTEST_HAS_GCC@
 CPPUTEST_HAS_LCOV = @CPPUTEST_HAS_LCOV@
 CPPUTEST_LDADD = @CPPUTEST_LDADD@
+CPPUTEST_LDFLAGS = @CPPUTEST_LDFLAGS@
 CPPUTEST_ON_MACOSX = @CPPUTEST_ON_MACOSX@
 CPP_PLATFORM = @CPP_PLATFORM@
 CXX = @CXX@
@@ -509,6 +510,7 @@ CppUTestTests_CPPFLAGS = $(libCppUTest_a_CPPFLAGS)
 CppUTestTests_CFLAGS = $(libCppUTest_a_CFLAGS)
 CppUTestTests_CXXFLAGS = $(libCppUTest_a_CXXFLAGS) 
 CppUTestTests_LDADD = libCppUTest.a $(CPPUTEST_LDADD)
+CppUTestTests_LDFLAGS = $(AM_LDFLAGS) $(CPPUTEST_LDFLAGS) $(CPPUTEST_ADDITIONAL_LDFLAGS)
 CppUTestTests_SOURCES = \
 	tests/AllTests.cpp \
 	tests/SetPluginTest.cpp \
@@ -543,6 +545,7 @@ CppUTestExtTests_CPPFLAGS = $(libCppUTestExt_a_CPPFLAGS)
 CppUTestExtTests_CFLAGS = $(libCppUTestExt_a_CFLAGS)
 CppUTestExtTests_CXXFLAGS = $(libCppUTestExt_a_CXXFLAGS) 
 CppUTestExtTests_LDADD = libCppUTestExt.a libCppUTest.a $(CPPUTEST_LDADD)
+CppUTestExtTests_LDFLAGS = $(CppUTestTests_LDFLAGS)
 CppUTestExtTests_SOURCES = \
 	tests/CppUTestExt/AllTests.cpp \
 	tests/CppUTestExt/TestMockActualFunctionCall.cpp \
