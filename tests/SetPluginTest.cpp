@@ -107,9 +107,9 @@ IGNORE_TEST(SetPointerPluginTest, installTooMuchFunctionPointer)
 	delete tst;
 }
 
-double orig_double = 3.0;
-double* orig_double_ptr = &orig_double;
-double stub_double = 4.0;
+static double orig_double = 3.0;
+static double* orig_double_ptr = &orig_double;
+static double stub_double = 4.0;
 
 class SetDoublePointerUtest: public UtestShell
 {
