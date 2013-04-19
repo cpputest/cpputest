@@ -6314,6 +6314,10 @@ $as_echo "#define CPPUTEST_STD_CPP_LIB_DISABLED 1" >>confdefs.h
 
 	if test "x${use_std_c}" = xyes; then
     	CPPUTEST_CXXFLAGS+=" -nostdinc++"
+
+    	# Since automake passes the CXXFLAGS to the linker, this will cause warnings with clang 3.2 (which become errors)
+    	CPPUTEST_LDFLAGS+="-Qunused-arguments"
+
     fi
 fi
 
