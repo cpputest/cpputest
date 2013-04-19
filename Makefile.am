@@ -120,6 +120,7 @@ CppUTestTests_CPPFLAGS = $(libCppUTest_a_CPPFLAGS)
 CppUTestTests_CFLAGS = $(libCppUTest_a_CFLAGS)
 CppUTestTests_CXXFLAGS = $(libCppUTest_a_CXXFLAGS) 
 CppUTestTests_LDADD = libCppUTest.a $(CPPUTEST_LDADD)
+CppUTestTests_LDFLAGS = $(AM_LDFLAGS) $(CPPUTEST_LDFLAGS) $(CPPUTEST_ADDITIONAL_LDFLAGS)
 
 CppUTestTests_SOURCES = \
 	tests/AllTests.cpp \
@@ -155,6 +156,7 @@ CppUTestExtTests_CPPFLAGS = $(libCppUTestExt_a_CPPFLAGS)
 CppUTestExtTests_CFLAGS = $(libCppUTestExt_a_CFLAGS)
 CppUTestExtTests_CXXFLAGS = $(libCppUTestExt_a_CXXFLAGS) 
 CppUTestExtTests_LDADD = libCppUTestExt.a libCppUTest.a $(CPPUTEST_LDADD)
+CppUTestExtTests_LDFLAGS = $(CppUTestTests_LDFLAGS)
 
 CppUTestExtTests_SOURCES = \
 	tests/CppUTestExt/AllTests.cpp \
