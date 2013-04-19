@@ -31,23 +31,29 @@
 #include "CppUTest/TestFailure.h"
 
 #define TEST(testGroup, testName) \
+  /* external declaration */ \
+  class TEST_##testGroup##_##testName##_TestShell; \
+  extern TEST_##testGroup##_##testName##_TestShell TEST_##testGroup##_##testName##_TestShell; \
   class TEST_##testGroup##_##testName##_Test : public Utest \
 { public: TEST_##testGroup##_##testName##_Test () : Utest () {} \
        void testBody(); }; \
   class TEST_##testGroup##_##testName##_TestShell : public UtestShell \
 {  public: virtual Utest* createTest() { return new TEST_##testGroup##_##testName##_Test; } \
   } TEST_##testGroup##_##testName##_TestShell_Instance; \
-  TestInstaller TEST_##testGroup##_##testName##_Installer(TEST_##testGroup##_##testName##_TestShell_Instance, #testGroup, #testName, __FILE__,__LINE__); \
+  static TestInstaller TEST_##testGroup##_##testName##_Installer(TEST_##testGroup##_##testName##_TestShell_Instance, #testGroup, #testName, __FILE__,__LINE__); \
 	void TEST_##testGroup##_##testName##_Test::testBody()
 
 #define TEST_F(testGroup, testName) \
+/* external declaration */ \
+  class TEST_##testGroup##_##testName##_TestShell; \
+  extern TEST_##testGroup##_##testName##_TestShell TEST_##testGroup##_##testName##_TestShell; \
   class TEST_##testGroup##_##testName##_Test : public testGroup \
 { public: TEST_##testGroup##_##testName##_Test () : testGroup () {} \
        void testBody(); }; \
   class TEST_##testGroup##_##testName##_TestShell : public UtestShell { \
 	  virtual Utest* createTest() { return new TEST_##testGroup##_##testName##_Test; } \
   } TEST_##testGroup##_##testName##_TestShell_instance; \
-  TestInstaller TEST_##testGroup##_##testName##_Installer(TEST_##testGroup##_##testName##_TestShell_instance, #testGroup, #testName, __FILE__,__LINE__); \
+  static TestInstaller TEST_##testGroup##_##testName##_Installer(TEST_##testGroup##_##testName##_TestShell_instance, #testGroup, #testName, __FILE__,__LINE__); \
 	void TEST_##testGroup##_##testName##_Test::testBody()
 
 /*
