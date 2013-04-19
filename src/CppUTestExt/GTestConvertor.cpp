@@ -295,6 +295,7 @@ void GTestConvertor::addAllGTestToTestRegistry()
 }
 #else
 
+extern int totallyDummySymbolToNotCauseAnyLinkerWarningsAboutEmptyCompilationUnits;
 int totallyDummySymbolToNotCauseAnyLinkerWarningsAboutEmptyCompilationUnits = 0;
 
 #endif
