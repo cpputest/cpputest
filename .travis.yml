@@ -12,10 +12,6 @@ install:
   - ./configure && make
   - cd ..
 before_script:
-  # begin clang workaround
-  - export CMAKE_BUILD_TYPE=RelWithDebInfo
-  - if [ $CC = "clang" ]; then export CFLAGS=-g; export CXXFLAGS=-g; export CMAKE_BUILD_TYPE=Debug; fi
-  # end clang workaround
   - export GMOCK_HOME=$TRAVIS_BUILD_DIR/gmock-1.6.0
   - export GTEST_HOME=$TRAVIS_BUILD_DIR/gmock-1.6.0/gtest
   - export CPPUTEST_BUILD_DIR=$TRAVIS_BUILD_DIR/cpputest_build
