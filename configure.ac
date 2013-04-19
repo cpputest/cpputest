@@ -212,6 +212,10 @@ if test "x${use_std_cpp}" = xno; then
 	AC_DEFINE([CPPUTEST_STD_CPP_LIB_DISABLED], 1, [Standard C++ library disabled])
 	if test "x${use_std_c}" = xyes; then
     	CPPUTEST_CXXFLAGS+=" -nostdinc++"
+    	
+    	# Since automake passes the CXXFLAGS to the linker, this will cause warnings with clang 3.2 (which become errors)
+    	CPPUTEST_LDFLAGS+="-Qunused-arguments"
+    	
     fi
 fi
 
