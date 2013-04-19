@@ -326,10 +326,12 @@ TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorReturnsNull)
 
 #if CPPUTEST_USE_STD_CPP_LIB
 
+static char* some_memory;
+
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorThrowsAnExceptionWhenUsingStdCppNewWithoutOverride)
 {
 	try {
-		new char;
+		some_memory = new char;
 		FAIL("Should have thrown an exception!")
 	}
 	catch (std::bad_alloc&) {
@@ -339,7 +341,7 @@ TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorThrowsAnExceptionWhenUsin
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorThrowsAnExceptionWhenUsingStdCppNewWithoutOverride)
 {
 	try {
-		new char[10];
+		some_memory = new char[10];
 		FAIL("Should have thrown an exception!")
 	}
 	catch (std::bad_alloc&) {
