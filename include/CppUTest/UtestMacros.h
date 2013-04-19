@@ -71,8 +71,8 @@
 
 #define IGNORE_TEST(testGroup, testName)\
   /* External declarations for strict compilers */ \
-  class TEST_##testGroup##_##testName##_TestShell; \
-  extern TEST_##testGroup##_##testName##_TestShell TEST_##testGroup##_##testName##_TestShell_instance; \
+  class IGNORE##testGroup##_##testName##_Test; \
+  extern IGNORE##testGroup##_##testName##_Test IGNORE##testGroup##_##testName##_TestShell_instance; \
   \
   class IGNORE##testGroup##_##testName##_Test : public TEST_GROUP_##CppUTestGroup##testGroup \
 { public: IGNORE##testGroup##_##testName##_Test () : TEST_GROUP_##CppUTestGroup##testGroup () {} \
