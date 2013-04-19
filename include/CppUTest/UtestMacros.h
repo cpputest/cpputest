@@ -39,6 +39,7 @@
 
 
 #define TEST_GROUP_BASE(testGroup, baseclass) \
+  extern int externTestGroup##testGroup; \
   int externTestGroup##testGroup = 0; \
   struct TEST_GROUP_##CppUTestGroup##testGroup : public baseclass
 

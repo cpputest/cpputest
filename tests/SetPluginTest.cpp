@@ -19,8 +19,8 @@ static void stub_func2()
 {
 }
 
-void (*fp1)();
-void (*fp2)();
+static void (*fp1)();
+static void (*fp2)();
 
 TEST_GROUP(SetPointerPluginTest)
 {
