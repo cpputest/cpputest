@@ -33,7 +33,7 @@
 #define TEST(testGroup, testName) \
   /* external declaration */ \
   class TEST_##testGroup##_##testName##_TestShell; \
-  extern TEST_##testGroup##_##testName##_TestShell TEST_##testGroup##_##testName##_TestShell; \
+  extern TEST_##testGroup##_##testName##_TestShell TEST_##testGroup##_##testName##_TestShell_Instance; \
   class TEST_##testGroup##_##testName##_Test : public Utest \
 { public: TEST_##testGroup##_##testName##_Test () : Utest () {} \
        void testBody(); }; \
@@ -46,7 +46,7 @@
 #define TEST_F(testGroup, testName) \
 /* external declaration */ \
   class TEST_##testGroup##_##testName##_TestShell; \
-  extern TEST_##testGroup##_##testName##_TestShell TEST_##testGroup##_##testName##_TestShell; \
+  extern TEST_##testGroup##_##testName##_TestShell TEST_##testGroup##_##testName##_TestShell_instance; \
   class TEST_##testGroup##_##testName##_Test : public testGroup \
 { public: TEST_##testGroup##_##testName##_Test () : testGroup () {} \
        void testBody(); }; \
