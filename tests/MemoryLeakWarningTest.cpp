@@ -122,8 +122,8 @@ TEST(MemoryLeakWarningTest, FailingTestDoesNotReportMemoryLeaks)
 	LONGS_EQUAL(1, fixture->getFailureCount());
 }
 
-bool memoryLeakDetectorWasDeleted = false;
-bool memoryLeakFailureWasDelete = false;
+static bool memoryLeakDetectorWasDeleted = false;
+static bool memoryLeakFailureWasDelete = false;
 
 class DummyMemoryLeakDetector : public MemoryLeakDetector
 {
