@@ -346,10 +346,12 @@ ${PACKAGE_NAME} Version ${PACKAGE_VERSION}
 Current compiler options:
    CC:                                  ${CC}
    CXX:                                 ${CXX}
+   LD:                                  ${LD}
    Default CFLAGS:                      ${CFLAGS}
    Default CXXFLAGS:                    ${CFLAGS}
    CppUTest CFLAGS:                     ${CPPUTEST_CFLAGS}
    CppUTest CXXFLAGS:                   ${CPPUTEST_CXXFLAGS}
+   CppUTest CPPFLAGS:                   ${CPPUTEST_CPPFLAGS}
 
 Features configured in ${PACKAGE_NAME}:
    Memory Leak Detection:               ${memory_leak_detection}
