@@ -326,10 +326,17 @@ TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorReturnsNull)
 
 #if CPPUTEST_USE_STD_CPP_LIB
 
+// This might be a bug for clang 4.2
+// When allocating memory with new and without assigning it to 
+// any variable, the compiler will do an 'optimization' and make
+// it not calling the overriding new operator.
+// To prevent clang from doing this, we need this dummy pointer.
+static char * dummy_pointer_for_clang_workaround;
+
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorThrowsAnExceptionWhenUsingStdCppNewWithoutOverride)
 {
 	try {
-		new char;
+		dummy_pointer_for_clang_workaround = new char;
 		FAIL("Should have thrown an exception!")
 	}
 	catch (std::bad_alloc&) {
@@ -339,7 +346,7 @@ TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorThrowsAnExceptionWhenUsin
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorThrowsAnExceptionWhenUsingStdCppNewWithoutOverride)
 {
 	try {
-		new char[10];
+		dummy_pointer_for_clang_workaround = new char[10];
 		FAIL("Should have thrown an exception!")
 	}
 	catch (std::bad_alloc&) {
