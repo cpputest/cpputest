@@ -489,7 +489,7 @@ TEST(MockSupportTest, threeExpectedAndActual)
 class MyTypeForTesting
 {
 public:
-	MyTypeForTesting(int val) : value(val){};
+	MyTypeForTesting(int val) : value(val){}
 	int value;
 };
 

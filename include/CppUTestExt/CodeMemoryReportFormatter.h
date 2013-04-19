@@ -42,7 +42,7 @@ public:
 	virtual ~CodeMemoryReportFormatter();
 
 	virtual void report_testgroup_start(TestResult* result, UtestShell& test);
-	virtual void report_testgroup_end(TestResult* /*result*/, UtestShell& /*test*/){};
+	virtual void report_testgroup_end(TestResult* /*result*/, UtestShell& /*test*/){}
 
 	virtual void report_test_start(TestResult* result, UtestShell& test);
 	virtual void report_test_end(TestResult* result, UtestShell& test);

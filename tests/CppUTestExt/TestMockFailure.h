@@ -40,7 +40,7 @@ public:
 	SimpleString mockFailureString;
 	int amountOfFailures;
 
-	MockFailureReporterForTest() : amountOfFailures(0) {};
+	MockFailureReporterForTest() : amountOfFailures(0) {}
 
 	virtual void failTest(const MockFailure& failure)
 	{

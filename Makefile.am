@@ -16,7 +16,12 @@ endif
 
 TESTS = $(check_PROGRAMS)
 
-EXTRA_DIST = $(ALL_FILES_IN_GIT)
+pkgconfigdir = $(libdir)/pkgconfig
+pkgconfig_DATA = cpputest.pc
+
+EXTRA_DIST = \
+	cpputest-0.1.pc.in \
+	$(ALL_FILES_IN_GIT)
 
 libCppUTest_a_CPPFLAGS = $(AM_CPPFLAGS) $(CPPUTEST_CPPFLAGS) $(CPPUTEST_ADDITIONAL_CPPFLAGS)
 libCppUTest_a_CFLAGS = $(AM_CFLAGS) $(CPPUTEST_CFLAGS) $(CPPUTEST_ADDITIONAL_CFLAGS)
@@ -96,6 +101,8 @@ include_cpputestext_HEADERS = \
 	include/CppUTestExt/MemoryReportAllocator.h \
 	include/CppUTestExt/MockExpectedFunctionsList.h \
 	include/CppUTestExt/MockSupportPlugin.h \
+	include/CppUTestExt/MockSupport.h \
+	include/CppUTestExt/MockExpectedFunctionCall.h \
 	include/CppUTestExt/MemoryReportFormatter.h \
 	include/CppUTestExt/MockFailure.h \
 	include/CppUTestExt/MockSupport_c.h \
