@@ -349,7 +349,7 @@ Current compiler options:
    Default CFLAGS:                      ${CFLAGS}
    Default CXXFLAGS:                    ${CFLAGS}
    CppUTest CFLAGS:                     ${CPPUTEST_CFLAGS}
-   CppUTest CXXFLAGS:                   ${CPPUTEST_CFLAGS}
+   CppUTest CXXFLAGS:                   ${CPPUTEST_CXXFLAGS}
 
 Features configured in ${PACKAGE_NAME}:
    Memory Leak Detection:               ${memory_leak_detection}
