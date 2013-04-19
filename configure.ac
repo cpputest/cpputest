@@ -1,5 +1,5 @@
 
-AC_PREREQ([2.69])
+AC_PREREQ([2.68])
 AC_INIT([CppUTest], [3.3], [https://github.com/cpputest/cpputest])
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([src/CppUTest/Utest.cpp])
@@ -26,7 +26,6 @@ AM_SILENT_RULES([yes])
 
 AC_CHECK_HEADERS([stddef.h stdint.h stdlib.h string.h sys/time.h unistd.h])
 
-AC_CHECK_HEADER_STDBOOL
 AC_C_INLINE
 AC_TYPE_INT16_T
 AC_TYPE_INT32_T
