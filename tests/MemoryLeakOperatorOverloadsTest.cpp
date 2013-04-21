@@ -326,10 +326,38 @@ TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorReturnsNull)
 
 #if CPPUTEST_USE_STD_CPP_LIB
 
+
+/*
+ * CLang 4.2 and memory allocation.
+ *
+ * Clang 4.2 has done some optimizations to their memory management that actually causes slightly different behavior than what the C++ Standard defines.
+ * Usually this is not a problem... but in this case, it is a problem.
+ *
+ * More information about the optimization can be found at: http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3433.html
+ * We've done a bug-report to clang to fix some of this non-standard behavior, which is open at: http://llvm.org/bugs/show_bug.cgi?id=15541
+ *
+ * I very much hope that nobody would actually ever hit this bug/optimization as it is hard to figure out what is going on.
+ *
+ * The original test simply did "new char". Because the memory wasn't assigned to anything and is local in context, the optimization *doesn't* call
+ * the operator new overload. Because it doesn't call the operator new (optimizing away a call to operator new), therefore the method wouldn't throw an exception
+ * and therefore this test failed.
+ *
+ * The first attempt to fix this is to create a local variable and assigned the memory to that. Also this doesn't work as it still detects the allocation is
+ * local and optimizes away the memory call.
+ *
+ * Now, we assign the memory on some static global which fools the optimizer to believe that it isn't local and it stops optimizing the operator new call.
+ *
+ * We (Bas Vodde and Terry Yin) suspect that in a real product, you wouldn't be able to detect the optimization and it's breaking of Standard C++. Therefore,
+ * for now, we keep this hack in the test to fool the optimizer and hope nobody will ever notice this 'optimizer behavior' in a real product.
+ *
+ */
+
+static char* some_memory;
+
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorThrowsAnExceptionWhenUsingStdCppNewWithoutOverride)
 {
 	try {
-		new char;
+		some_memory = new char;
 		FAIL("Should have thrown an exception!")
 	}
 	catch (std::bad_alloc&) {
@@ -339,7 +367,7 @@ TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorThrowsAnExceptionWhenUsin
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorThrowsAnExceptionWhenUsingStdCppNewWithoutOverride)
 {
 	try {
-		new char[10];
+		some_memory = new char[10];
 		FAIL("Should have thrown an exception!")
 	}
 	catch (std::bad_alloc&) {

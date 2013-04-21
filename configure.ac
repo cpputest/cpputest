@@ -1,5 +1,5 @@
 
-AC_PREREQ([2.69])
+AC_PREREQ([2.68])
 AC_INIT([CppUTest], [3.3], [https://github.com/cpputest/cpputest])
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([src/CppUTest/Utest.cpp])
@@ -26,7 +26,6 @@ AM_SILENT_RULES([yes])
 
 AC_CHECK_HEADERS([stddef.h stdint.h stdlib.h string.h sys/time.h unistd.h])
 
-AC_CHECK_HEADER_STDBOOL
 AC_C_INLINE
 AC_TYPE_INT16_T
 AC_TYPE_INT32_T
@@ -52,6 +51,7 @@ AC_CHECK_PROG([CPPUTEST_HAS_LCOV], [lcov], [yes], [no])
 # Checking for warning flags on the compiler
 saved_cflags="$CFLAGS"
 saved_cxxflags="$CXXFLAGS"
+saved_ldflags="$LDFLAGS"
 
 # FLag -Werror. 
 CFLAGS=-Werror
@@ -164,6 +164,13 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CXXWARN
 CXXFLAGS="$saved_cxxflags"
 AC_LANG_POP
 
+#### Check whether some linker options are supported...  ?
+
+LDFLAGS=
+AC_MSG_CHECKING([whether LD supports -Qunused-arguments])
+AC_LINK_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_NO_UNUSED_ARGUMENT_WARNING+=" -Qunused-arguments" ], [AC_MSG_RESULT([no])])
+LDFLAGS="$saved_ldflags"
+
 # Different features
 AC_ARG_ENABLE([std-c], [AC_HELP_STRING([--disable-std-c], [disable the use of Standard C Library (warning: requires implementing Platforms/GccNoStdC) ])], 
    [use_std_c=${enableval}], [use_std_c=yes])
@@ -213,6 +220,10 @@ if test "x${use_std_cpp}" = xno; then
 	AC_DEFINE([CPPUTEST_STD_CPP_LIB_DISABLED], 1, [Standard C++ library disabled])
 	if test "x${use_std_c}" = xyes; then
     	CPPUTEST_CXXFLAGS+=" -nostdinc++"
+    	
+    	# Since automake passes the CXXFLAGS to the linker, this will cause warnings with clang 3.2 (which become errors)
+    	CPPUTEST_LDFLAGS+=$CPPUTEST_NO_UNUSED_ARGUMENT_WARNING
+    	
     fi
 fi
 
@@ -327,6 +338,7 @@ AC_SUBST([CPPUTEST_ADDITIONAL_CXXFLAGS])
 AC_SUBST([CPPUTEST_CPPFLAGS])
 AC_SUBST([CPPUTEST_ADDITIONAL_CPPFLAGS])
 AC_SUBST([CPPUTEST_LDADD])
+AC_SUBST([CPPUTEST_LDFLAGS])
 
 AC_SUBST([MOSTLYCLEANFILES])
 AC_SUBST([CPPUTEST_HAS_GCC])
@@ -347,10 +359,13 @@ ${PACKAGE_NAME} Version ${PACKAGE_VERSION}
 Current compiler options:
    CC:                                  ${CC}
    CXX:                                 ${CXX}
+   LD:                                  ${LD}
    Default CFLAGS:                      ${CFLAGS}
-   Default CXXFLAGS:                    ${CFLAGS}
+   Default CXXFLAGS:                    ${CXXFLAGS}
    CppUTest CFLAGS:                     ${CPPUTEST_CFLAGS}
-   CppUTest CXXFLAGS:                   ${CPPUTEST_CFLAGS}
+   CppUTest CXXFLAGS:                   ${CPPUTEST_CXXFLAGS}
+   CppUTest CPPFLAGS:                   ${CPPUTEST_CPPFLAGS}
+   CppUTest LDFLAGS:                    ${CPPUTEST_LDFLAGS}
 
 Features configured in ${PACKAGE_NAME}:
    Memory Leak Detection:               ${memory_leak_detection}

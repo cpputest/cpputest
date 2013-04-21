@@ -31,7 +31,7 @@
 
 #include "gtest/gtest.h"
 
-bool g_GTestEqual_has_been_called = false;
+static bool g_GTestEqual_has_been_called = false;
 TEST(GTestSimpleTest, GTestEqual)
 {
 	EXPECT_EQ(1, 1);
@@ -185,7 +185,7 @@ TEST(gtest, SimpleGoogleTestGetCalled)
 	CHECK(g_GTestEqual_has_been_called);
 }
 
-bool afterCheck;
+static bool afterCheck;
 
 static void _failMethodEXPECT_EQ()
 {
