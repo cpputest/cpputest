@@ -164,12 +164,32 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CXXWARN
 CXXFLAGS="$saved_cxxflags"
 AC_LANG_POP
 
-#### Check whether some linker options are supported...  ?
+##### Linker checking. 
+# 
+# TBD!
+# Things that need to be fixed!
+#
+# The below code is checking for the -Qunused-arguments which is a linker flag. However, it says gcc supports it, while in fact, it doesn't.
+# As a workaround, we'll just check whether it is clang hardcoded, this is not in the automake spirit and will need to be fixed.
+#
+# LDFLAGS=
+# AC_MSG_CHECKING([whether LD supports -Qunused-arguments])
+# AC_LINK_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_NO_UNUSED_ARGUMENT_WARNING+=" -Qunused-arguments" ], [AC_MSG_RESULT([no])])
+# LDFLAGS="$saved_ldflags"
 
-LDFLAGS=
-AC_MSG_CHECKING([whether LD supports -Qunused-arguments])
-AC_LINK_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_NO_UNUSED_ARGUMENT_WARNING+=" -Qunused-arguments" ], [AC_MSG_RESULT([no])])
-LDFLAGS="$saved_ldflags"
+#if [ -z "`$CXX --version | grep LLVM`" ] 
+#then
+#  AC_MSG_RESULT([no])
+#else
+#  AC_MSG_RESULT([yes])
+#fi
+
+AC_MSG_CHECKING([whether CXXLD supports -Qunused-arguments linker option])
+OUTPUT_WHEN_CLANG_COMPILER=`${CXX} --version | grep clang`
+AM_CONDITIONAL([TEST_COMPILER_IS_CLANG], [ ! test -z "$OUTPUT_WHEN_CLANG_COMPILER]")
+AM_COND_IF([TEST_COMPILER_IS_CLANG],
+                [AC_MSG_RESULT([yes]); CPPUTEST_NO_UNUSED_ARGUMENT_WARNING+=" -Qunused-arguments"], 
+                [AC_MSG_RESULT([no])]; CPPUTEST_NO_UNUSED_ARGUMENT_WARNING+=" ")
 
 # Different features
 AC_ARG_ENABLE([std-c], [AC_HELP_STRING([--disable-std-c], [disable the use of Standard C Library (warning: requires implementing Platforms/GccNoStdC) ])], 
