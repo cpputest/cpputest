@@ -6226,13 +6226,6 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 # AC_LINK_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_NO_UNUSED_ARGUMENT_WARNING+=" -Qunused-arguments" ], [AC_MSG_RESULT([no])])
 # LDFLAGS="$saved_ldflags"
 
-#if [ -z "`$CXX --version | grep LLVM`" ]
-#then
-#  AC_MSG_RESULT([no])
-#else
-#  AC_MSG_RESULT([yes])
-#fi
-
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether CXXLD supports -Qunused-arguments linker option" >&5
 $as_echo_n "checking whether CXXLD supports -Qunused-arguments linker option... " >&6; }
 OUTPUT_WHEN_CLANG_COMPILER=`${CXX} --version | grep clang`
@@ -6251,6 +6244,33 @@ else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }; CPPUTEST_NO_UNUSED_ARGUMENT_WARNING+=" "
 fi
+
+# Checking for options for creating map files
+LDFLAGS=" -Wl,-map,$<.map.txt"
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether LD supports -Wl,-map" >&5
+$as_echo_n "checking whether LD supports -Wl,-map... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }; CPPUTEST_LD_MAP_GENERATION+=" -Wl,-map,$<.map.txt"
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LDFLAGS="$saved_ldflags"
+
 
 # Different features
 # Check whether --enable-std-c was given.
@@ -6376,7 +6396,7 @@ fi
 
 # Generating map files.
 if test "x${generate_map_file}" = xyes; then
-	CPPUTEST_LDFLAGS+=" -Wl,-map,$<.map.txt"
+	CPPUTEST_LDFLAGS+=$CPPUTEST_LD_MAP_GENERATION
 	MOSTLYCLEANFILES+=" *.map.txt"
 fi
 
