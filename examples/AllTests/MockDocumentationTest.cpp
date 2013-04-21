@@ -65,7 +65,7 @@ class ClassFromProductionCode
 {
 public:
 	virtual void importantFunction(){}
-	virtual ~ClassFromProductionCode() {};
+	virtual ~ClassFromProductionCode() {}
 };
 
 class ClassFromProductionCodeMock : public ClassFromProductionCode
