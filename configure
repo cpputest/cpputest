@@ -650,6 +650,8 @@ GTEST_HOME
 GMOCK_HOME
 INCLUDE_CPPUTEST_EXT_FALSE
 INCLUDE_CPPUTEST_EXT_TRUE
+TEST_COMPILER_IS_CLANG_FALSE
+TEST_COMPILER_IS_CLANG_TRUE
 CPPUTEST_HAS_LCOV
 CPPUTEST_HAS_CLANG
 CPPUTEST_HAS_GCC
@@ -6211,32 +6213,44 @@ ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
-#### Check whether some linker options are supported...  ?
+##### Linker checking.
+#
+# TBD!
+# Things that need to be fixed!
+#
+# The below code is checking for the -Qunused-arguments which is a linker flag. However, it says gcc supports it, while in fact, it doesn't.
+# As a workaround, we'll just check whether it is clang hardcoded, this is not in the automake spirit and will need to be fixed.
+#
+# LDFLAGS=
+# AC_MSG_CHECKING([whether LD supports -Qunused-arguments])
+# AC_LINK_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_NO_UNUSED_ARGUMENT_WARNING+=" -Qunused-arguments" ], [AC_MSG_RESULT([no])])
+# LDFLAGS="$saved_ldflags"
 
-LDFLAGS=
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether LD supports -Qunused-arguments" >&5
-$as_echo_n "checking whether LD supports -Qunused-arguments... " >&6; }
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
+#if [ -z "`$CXX --version | grep LLVM`" ]
+#then
+#  AC_MSG_RESULT([no])
+#else
+#  AC_MSG_RESULT([yes])
+#fi
 
-int
-main ()
-{
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether CXXLD supports -Qunused-arguments linker option" >&5
+$as_echo_n "checking whether CXXLD supports -Qunused-arguments linker option... " >&6; }
+OUTPUT_WHEN_CLANG_COMPILER=`${CXX} --version | grep clang`
+ if  ! test -z "$OUTPUT_WHEN_CLANG_COMPILER"; then
+  TEST_COMPILER_IS_CLANG_TRUE=
+  TEST_COMPILER_IS_CLANG_FALSE='#'
+else
+  TEST_COMPILER_IS_CLANG_TRUE='#'
+  TEST_COMPILER_IS_CLANG_FALSE=
+fi
 
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
+if  ! test -z "$OUTPUT_WHEN_CLANG_COMPILER"; then
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }; CPPUTEST_NO_UNUSED_ARGUMENT_WARNING+=" -Qunused-arguments"
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
+$as_echo "no" >&6; }; CPPUTEST_NO_UNUSED_ARGUMENT_WARNING+=" "
 fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LDFLAGS="$saved_ldflags"
 
 # Different features
 # Check whether --enable-std-c was given.
@@ -16888,6 +16902,10 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${am__fastdepCXX_TRUE}" && test -z "${am__fastdepCXX_FALSE}"; then
   as_fn_error $? "conditional \"am__fastdepCXX\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${TEST_COMPILER_IS_CLANG_TRUE}" && test -z "${TEST_COMPILER_IS_CLANG_FALSE}"; then
+  as_fn_error $? "conditional \"TEST_COMPILER_IS_CLANG\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${INCLUDE_CPPUTEST_EXT_TRUE}" && test -z "${INCLUDE_CPPUTEST_EXT_FALSE}"; then
