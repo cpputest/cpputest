@@ -68,24 +68,26 @@ TEST_GROUP(JUnitOutputTest)
 		struct TestData
 		{
 			TestData() :
-				tst_(0), testName_(0), failure_(0)
+				tst_(0), testName_(0), failure_(0), skipped_(0)
 			{
 			}
 
 			UtestShell* tst_;
 			SimpleString* testName_;
 			TestFailure* failure_;
+			size_t skipped_;
 		};
 
 		struct TestGroupData
 		{
 			TestGroupData() :
-				numberTests_(0), totalFailures_(0), name_(""), testData_(0)
+				numberTests_(0), totalFailures_(0), totalSkipped_(0), name_(""), testData_(0)
 			{
 			}
 
 			size_t numberTests_;
 			size_t totalFailures_;
+			size_t totalSkipped_;
 			SimpleString name_;
 
 			TestData* testData_;
@@ -109,6 +111,7 @@ TEST_GROUP(JUnitOutputTest)
 			for (int i = 0; i < testGroupSize; i++) {
 				testGroupData_[i].numberTests_ = 0;
 				testGroupData_[i].totalFailures_ = 0;
+				testGroupData_[i].totalSkipped_ = 0;
 			}
 		}
 
@@ -202,8 +205,8 @@ TEST_GROUP(JUnitOutputTest)
 		void CHECK_TEST_SUITE_START(SimpleString out)
 		{
 			TestGroupData& group = currentGroup();
-			SimpleString buf = StringFromFormat("<testsuite errors=\"0\" failures=\"%d\" hostname=\"localhost\" name=\"%s\" tests=\"%d\" time=\"0.050\" timestamp=\"%s\">\n", group.totalFailures_,
-					group.name_.asCharString(), group.numberTests_, theTime);
+			SimpleString buf = StringFromFormat("<testsuite errors=\"0\" failures=\"%d\" hostname=\"localhost\" name=\"%s\" skips=\"%d\" tests=\"%d\" time=\"0.050\" timestamp=\"%s\">\n", group.totalFailures_,
+					group.name_.asCharString(), group.totalSkipped_, group.numberTests_, theTime);
 			CHECK_EQUAL(buf, out);
 		}
 
@@ -374,4 +377,4 @@ TEST(JUnitOutputTest, escapeSlashesInFilenames)
 	STRCMP_EQUAL("cpputest_group_weird_name.xml", output->createFileName("group/weird/name").asCharString());
 }
 
-
+//TODO: Add tests for skipped tests (IGNORE_TEST).
