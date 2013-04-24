@@ -1,112 +1,13 @@
 <!DOCTYPE html>
 <html>
   <head>
+   <meta http-equiv="refresh" content="0;url=http://cpputest.github.com">
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
-
     <title>Cpputest</title>
   </head>
 
   <body>
-
-    <header>
-      <div class="container">
-        <h1>Cpputest</h1>
-        <h2>CppUTest unit testing and mocking framework for C/C++</h2>
-
-        <section id="downloads">
-          <a href="https://github.com/downloads/cpputest/cpputest/CppUTest-v3.3.zip" class="btn">Download Release 3.3 as .zip</a>
-          <a href="https://github.com/downloads/cpputest/cpputest/CppUTest-v3.3.tar.gz" class="btn">Download Release 3.3 as .tar.gz</a>
-          <a href="https://github.com/cpputest/cpputest/zipball/master" class="btn">Download latest code as .zip</a>
-          <a href="https://github.com/cpputest/cpputest" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
-        </section>
-      </div>
-    </header>
-
-    <div class="container">
-      <section id="main_content">
-        <h2>What is CppUTest.</h2>
-
-CppUTest is a C /C++ based unit xUnit test framework for unit testing and for test-driving your code. It is written in C++ but is used in C and C++ projects and frequently used in embedded systems but it works for any C/C++ project.
-
-CppUTest is based on the following design principles
-<ul>
-<li>Simple in design and simple in use.
-<li>Portable to old and new platforms.
-</ul>
-
-<h2>Where to get CppUTest</h2>
-
-<p>The download link for github is at the top of this page. You can either get the latest code or a specific release.
-</p><p>
-You can find all the downloads <a href="https://github.com/cpputest/cpputest/downloads">at the download page</a>
-</p><p>
-Alternatively, you can clone the github repository, read-only:
-<pre><code>git clone git://github.com/cpputest/cpputest.git
-</code></pre>
-Or clone it via ssh (which requires a github account)
-<pre><code>git clone git@github.com:cpputest/cpputest.git
-</code></pre>
-</p>
-
-<h2>Where to find more information</h2>
-
-<ul>
-<li> The CppUTest manual can be found at <a href="http://www.cpputest.org/">CppUTest.org</a>
-<li> If you have any question, check out the <a href="https://groups.google.com/forum/?fromgroups#!forum/cpputest">Google Groups</a>
-<li> The source is at the <a href="https://github.com/cpputest/cpputest">main github page</a>
-<li> You can report bugs or features at <a href="https://github.com/cpputest/cpputest/issues">the issues page</a>
-<li> You can follow <a href="https://twitter.com/CppUTest">CppUTest on twitter</a>
-</ul>
-<h2>Quick introduction (some code!)</h2>
-To write your first test, all you need is a new cpp file with a TEST_GROUP and a TEST, like:
-
-<pre><code>TEST_GROUP(FirstTestGroup)
-{
-};
-
-TEST(FirstTestGroup, FirstTest)
-{
-   FAIL("Fail me!");
-}
-</code></pre>
-
-<p>This test will fail.</p>
-
-<p>You can add new tests to the test group by just writing more tests in the file, like this:</p>
-
-<pre><code>TEST(FirstTestGroup, SecondTest)
-{
-   STRCMP_EQUAL("hello", "world");
-   LONGS_EQUAL(1, 2);
-   CHECK(false);
-}
-</code></pre>
-
-You do need to create a main where you run all the unit tests. Such a main will look like this:
-<pre><code>int main(int ac, char** av)
-{
-   return CommandLineTestRunner::RunAllTests(ac, av);
-}
-</code></pre>
-<p>For more information, I'd recommend to <a href="http://www.cpputest.org">read the manual</a> or, even better, check some <a href="https://github.com/cpputest/cpputest/tree/master/tests">existing tests</a> such as <a href="https://github.com/cpputest/cpputest/blob/master/tests/SimpleStringTest.cpp">SimpleStringTest</a> or (a bit more complicated) <a href="https://github.com/cpputest/cpputest/blob/master/tests/MemoryLeakDetectorTest.cpp">MemoryLeakDetectorTest</a> or the <a href="https://github.com/cpputest/cpputest/blob/master/tests/CppUTestExt/TestMockSupport.cpp">mocking tests</a> or just check out the <a href="https://github.com/cpputest/cpputest/blob/master/tests/CheatSheetTest.cpp">Cheat Sheet</a></p>
-<h2>Related projects</h2>
-<p>
-<ul>
-<li> For Eclipse users, check out the <a href="https://github.com/cpputest/CppUTestEclipsePlugin">CppUTest Eclipse Plugin Project</a>
-</ul>
-</p>
-<h2>Authors and Contributors</h2>
-
-<p>CppUTest has had many contributions from its users. We can't remember all, but we appreciate it a lot!. Much of the original code was written by Michael Feathers (based on CppUnit Lite). The current main maintainers are <a href="https://github.com/jwgrenning">@jwgrenning</a> and <a href="https://github.com/basvodde">@basvodde</a></p>
-
-      </section>
-    </div>
-
-    
+    Moved to cpputest.github.com
   </body>
 </html>
