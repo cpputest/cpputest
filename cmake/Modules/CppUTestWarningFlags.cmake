@@ -32,7 +32,6 @@ else (MSVC)
         Wswitch-enum
         Wconversion
         Wsign-conversion
-        Woverloaded-virtual
         Wno-padded
         Wno-disabled-macro-expansion
         )
@@ -47,6 +46,7 @@ else (MSVC)
 
     set(WARNING_CXX_FLAGS
         ${WARNING_C_FLAGS}
+        Woverloaded-virtual
         Wno-global-constructors
         Wno-exit-time-destructors
         Wno-weak-vtables
