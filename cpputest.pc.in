@@ -8,4 +8,4 @@ URL: https://github.com/cpputest/cpputest
 Description: Easy to use unit test framework for C/C++
 Version: @PACKAGE_VERSION@
 Cflags: -I${includedir}
-Libs: -L${libdir} -lstdc++
+Libs: -L${libdir} -lstdc++ -lCppUTest -lCppUTestExt
