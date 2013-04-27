@@ -67,7 +67,7 @@ Features configure in CppUTest:
     Generating map file:                ${MAP_FILE}
     Compiling with coverage:            ${COVERAGE}
 
-    Use 'real' GTest:                   ${USED_REAL_GTEST}
+    Use 'real' GTest:                   ${REAL_GTEST}
     Able to use GMock:                  ${GMOCK}
 -------------------------------------------------------
 ")
