@@ -38,7 +38,7 @@
 #ifndef D_SimpleString_h
 #define D_SimpleString_h
 
-#include "CppUTest/StandardCLibrary.h"
+#include "StandardCLibrary.h"
 
 class SimpleStringCollection;
 class TestMemoryAllocator;
