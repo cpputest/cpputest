@@ -20,7 +20,7 @@ pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = cpputest.pc
 
 EXTRA_DIST = \
-	cpputest-0.1.pc.in \
+	cpputest.pc.in \
 	$(ALL_FILES_IN_GIT)
 
 libCppUTest_a_CPPFLAGS = $(AM_CPPFLAGS) $(CPPUTEST_CPPFLAGS) $(CPPUTEST_ADDITIONAL_CPPFLAGS)
