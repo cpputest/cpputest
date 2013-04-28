@@ -38,6 +38,8 @@
 #ifndef D_SimpleString_h
 #define D_SimpleString_h
 
+#include "StandardCLibrary.h"
+
 class SimpleStringCollection;
 class TestMemoryAllocator;
 
