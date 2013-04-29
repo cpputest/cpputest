@@ -8,6 +8,7 @@ AC_CONFIG_FILES([cpputest.pc])
 AC_CONFIG_MACRO_DIR([m4])
 
 AC_CANONICAL_HOST
+AM_MAINTAINER_MODE([enable])
 
 case "x$build_os" in
 	*darwin*)
