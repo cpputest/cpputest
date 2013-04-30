@@ -94,7 +94,13 @@ int PlatformSpecificSetJmp(void (*function) (void* data), void* data)
 	return 0;
 }
 
+/*
+ * MacOSX clang 3.0 doesn't seem to recognize longjmp and thus complains about __no_return_.
+ * The later clang compilers complain when it isn't there. So only way is to check the clang compiler here :(
+ */
+#if !((__clang_major__ == 3) && (__clang_minor__ == 0))
 __no_return__
+#endif
 void PlatformSpecificLongJmp()
 {
 	jmp_buf_index--;
