@@ -25,6 +25,8 @@ AC_PROG_MAKE_SET
 AM_PROG_CC_C_O
 AM_SILENT_RULES([yes])
 
+ACX_PTHREAD([LIBS="$PTHREAD_LIBS $LIBS"]) 
+
 AC_CHECK_HEADERS([stddef.h stdint.h stdlib.h string.h sys/time.h unistd.h])
 
 AC_C_INLINE
@@ -387,6 +389,7 @@ Current compiler options:
    CppUTest CXXFLAGS:                   ${CPPUTEST_CXXFLAGS}
    CppUTest CPPFLAGS:                   ${CPPUTEST_CPPFLAGS}
    CppUTest LDFLAGS:                    ${CPPUTEST_LDFLAGS}
+   CppUTest LIB:                        ${LIBS}
 
 Features configured in ${PACKAGE_NAME}:
    Memory Leak Detection:               ${memory_leak_detection}
