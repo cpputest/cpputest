@@ -5199,6 +5199,37 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
+# This additional -lpthread was added due to a bug on gcc for MacOSX: http://gcc.gnu.org/bugzilla/show_bug.cgi?id=42159
+# According to the bug report, a workaround is to link -lpthread. Even the ACX_PTHREAD doesn't do that, so we add an
+# additional check if that it possible, and if it is, then we link pthread
+
+saved_libs="$LIBS"
+LIBS=-lpthread
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking We're on MacOSX. Lets check if we can link -lpthread to work around a gcc bug" >&5
+$as_echo_n "checking We're on MacOSX. Lets check if we can link -lpthread to work around a gcc bug... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }; HACK_TO_USE_PTHREAD_LIBS+=" -lpthread"
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS="$saved_libs $HACK_TO_USE_PTHREAD_LIBS"
+
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for grep that handles long lines and -e" >&5
 $as_echo_n "checking for grep that handles long lines and -e... " >&6; }
 if ${ac_cv_path_GREP+:} false; then :
