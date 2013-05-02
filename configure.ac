@@ -27,6 +27,17 @@ AM_SILENT_RULES([yes])
 
 ACX_PTHREAD([LIBS="$PTHREAD_LIBS $LIBS"]) 
 
+
+# This additional -lpthread was added due to a bug on gcc for MacOSX: http://gcc.gnu.org/bugzilla/show_bug.cgi?id=42159
+# According to the bug report, a workaround is to link -lpthread. Even the ACX_PTHREAD doesn't do that, so we add an
+# additional check if that it possible, and if it is, then we link pthread
+
+saved_libs="$LIBS"
+LIBS=-lpthread
+AC_MSG_CHECKING([We're on MacOSX. Lets check if we can link -lpthread to work around a gcc bug])
+AC_LINK_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); HACK_TO_USE_PTHREAD_LIBS+=" -lpthread"], [AC_MSG_RESULT([no])])
+LIBS="$saved_libs $HACK_TO_USE_PTHREAD_LIBS"
+
 AC_CHECK_HEADERS([stddef.h stdint.h stdlib.h string.h sys/time.h unistd.h])
 
 AC_C_INLINE
