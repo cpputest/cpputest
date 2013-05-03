@@ -36,7 +36,7 @@ Then to get started, you'll need to do the following:
     * LD_LIBRARIES = -L$(CPPUTEST_HOME)/lib -lCppUTest -lCppUTestExt
 
 After this, you can write your first test:
-
+```
 TEST_GROUP(FirstTestGroup)
 {
 };
@@ -45,7 +45,7 @@ TEST(FirstTestGroup, FirstTest)
 {
    FAIL("Fail me!");
 }
-
+```
 ## Command line switches
 
 * -v verbose, print each test name as it runs
