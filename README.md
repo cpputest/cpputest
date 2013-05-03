@@ -36,7 +36,8 @@ Then to get started, you'll need to do the following:
     * LD_LIBRARIES = -L$(CPPUTEST_HOME)/lib -lCppUTest -lCppUTestExt
 
 After this, you can write your first test:
-```
+
+```C++
 TEST_GROUP(FirstTestGroup)
 {
 };
@@ -46,6 +47,7 @@ TEST(FirstTestGroup, FirstTest)
    FAIL("Fail me!");
 }
 ```
+
 ## Command line switches
 
 * -v verbose, print each test name as it runs
@@ -101,6 +103,7 @@ The Extensions directory has a few of these.
 
 Example of a main with a TestPlugin:
 
+```C++
 int main(int ac, char** av)
 {
    LogPlugin logPlugin;
@@ -109,6 +112,7 @@ int main(int ac, char** av)
    TestRegistry::getCurrentRegistry()->resetPlugins();
    return result;
 }
+```
 
 Memory leak detection
 
@@ -127,15 +131,17 @@ Memory leak detection
 
 If you use some leaky code that you can't or won't fix you can tell a TEST to ignore a certain number of leaks as in this example:
 
+```C++
 TEST(MemoryLeakWarningTest, Ignore1)
 {
     EXPECT_N_LEAKS(1);
     char* arrayToLeak1 = new char[100];
 }
-
+```
 
 ## Example Main
 
+```C++
 #include "UnitTestHarness/CommandLineTestRunner.h"
 
 int main(int ac, char** av)
@@ -144,10 +150,11 @@ int main(int ac, char** av)
 }
 
 IMPORT_TEST_GROUP(ClassName)
-
+```
 
 ## Example Test
 
+```C++
 #include "UnitTestHarness/TestHarness.h"
 #include "ClassName.h"
 
@@ -175,6 +182,7 @@ TEST(ClassName, Create)
   STRCMP_EQUAL("hello", "hello");
   FAIL("The prior tests pass, but this one doesn't");
 }
+```
 
 There are some scripts that are helpful in creating your initial h, cpp, and 
 Test files.  See scripts/README.TXT
