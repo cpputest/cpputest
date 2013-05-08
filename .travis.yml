@@ -17,7 +17,4 @@ before_script:
   - export CPPUTEST_BUILD_DIR=$TRAVIS_BUILD_DIR/cpputest_build
   - mkdir -p $CPPUTEST_BUILD_DIR && cd $CPPUTEST_BUILD_DIR
 script:
-  - if [ $BUILDTOOL = "autotools" ]; then ../configure && echo "CONFIGURATION DONE. Compiling now." && make check_all; if [ $CXX = "gcc" ]; then echo "Release now"; fi; fi
-  - if [ $BUILDTOOL = "cmake" ]; then cmake .. -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE && make && ctest -V; fi
-  - if [ $BUILDTOOL = "cmake" ]; then cmake .. -DGMOCK=ON && make && ctest -V; fi
-  - if [ $BUILDTOOL = "cmake" ]; then cmake .. -DGMOCK=OFF -DREAL_GTEST=ON && make && ctest -V; fi
+  - ../scripts/travis_ci_build.sh
