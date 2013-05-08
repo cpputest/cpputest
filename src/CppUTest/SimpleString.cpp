@@ -420,6 +420,11 @@ SimpleString StringFrom(const std::string& value)
 	return SimpleString(value.c_str());
 }
 
+SimpleString StringFrom(unsigned long i)
+{
+	return StringFromFormat("%lu (0x%lx)", i, i);
+}
+
 SimpleString StringFrom(uint32_t i)
 {
 	return StringFromFormat("%10u (0x%08x)", i, i);

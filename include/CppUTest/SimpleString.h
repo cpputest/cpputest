@@ -138,6 +138,7 @@ SimpleString VStringFromFormat(const char* format, va_list args);
 #include <stdint.h>
 
 SimpleString StringFrom(const std::string& other);
+SimpleString StringFrom(unsigned long);
 SimpleString StringFrom(uint32_t);
 SimpleString StringFrom(uint16_t);
 SimpleString StringFrom(uint8_t);

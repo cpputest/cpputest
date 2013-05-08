@@ -555,6 +555,12 @@ TEST(SimpleString, fromStdString)
 	STRCMP_EQUAL("hello", s1.asCharString());
 }
 
+TEST(SimpleString, CHECK_EQUAL_unsigned_long)
+{
+	unsigned long i = 0xffffffffUL;
+	CHECK_EQUAL(i, i);
+}
+
 TEST(SimpleString, CHECK_EQUAL_Uint32_t)
 {
 	uint32_t i = 0xffffffff;
@@ -571,6 +577,14 @@ TEST(SimpleString, CHECK_EQUAL_Uint8_t)
 {
 	uint8_t i = 0xff;
 	CHECK_EQUAL(i, i);
+}
+
+TEST(SimpleString, unsigned_long)
+{
+	unsigned long i = 0xffffffffUL;
+
+	SimpleString result = StringFrom(i);
+	CHECK_EQUAL("4294967295 (0xffffffff)", result);
 }
 
 TEST(SimpleString, Uint32_t)
