@@ -49,6 +49,15 @@ public:
 	virtual MockFunctionCall& withParameter(const SimpleString& name, void* value);
 	virtual MockFunctionCall& withParameterOfType(const SimpleString& type, const SimpleString& name, void* value);
 
+	virtual MockFunctionCall& andOutputParameter(const SimpleString& name, int value);
+	virtual MockFunctionCall& andOutputParameter(const SimpleString& name, int *value);
+	virtual MockFunctionCall& andOutputParameter(const SimpleString& name, double value);
+	virtual MockFunctionCall& andOutputParameter(const SimpleString& name, double *value);
+	virtual MockFunctionCall& andOutputParameter(const SimpleString& name, const char* value);
+	virtual MockFunctionCall& andOutputParameter(const SimpleString& name, const char* *value);
+	virtual MockFunctionCall& andOutputParameter(const SimpleString& name, void* value);
+	virtual MockFunctionCall& andOutputParameter(const SimpleString& name, void* *value);
+
 	virtual MockFunctionCall& andReturnValue(int value);
 	virtual MockFunctionCall& andReturnValue(double value);
 	virtual MockFunctionCall& andReturnValue(const char* value);
@@ -70,6 +79,8 @@ protected:
 	virtual void finnalizeCallWhenFulfilled();
 	virtual void failTest(const MockFailure& failure);
 	virtual void checkActualParameter(const MockNamedValue& actualParameter);
+
+	virtual MockNamedValue processOutputParameter(const SimpleString& name);
 
 	enum ActualCallState {
 		CALL_IN_PROGESS,

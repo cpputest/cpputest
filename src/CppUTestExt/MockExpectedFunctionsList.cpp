@@ -278,6 +278,15 @@ void MockExpectedFunctionsList::parameterWasPassed(const SimpleString& parameter
 		p->expectedCall_->parameterWasPassed(parameterName);
 }
 
+MockNamedValue MockExpectedFunctionsList::getNamedParameter(const SimpleString& parameterName) {
+	for (MockExpectedFunctionsListNode* p = head_; p; p = p->next_) {
+		if (p->expectedCall_->hasParameterWithName(parameterName)) {
+			return p->expectedCall_->getParameter(parameterName);
+		}
+	}
+	return MockNamedValue("");
+}
+
 MockExpectedFunctionsList::MockExpectedFunctionsListNode* MockExpectedFunctionsList::findNodeWithCallOrderOf(int callOrder) const
 {
 	for (MockExpectedFunctionsListNode* p = head_; p; p = p->next_)

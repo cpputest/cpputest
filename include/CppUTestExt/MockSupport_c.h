@@ -61,6 +61,15 @@ struct SMockFunctionCall_c
 	MockFunctionCall_c* (*withPointerParameters)(const char* name, void* value);
 	MockFunctionCall_c* (*withParameterOfType)(const char* type, const char* name, void* value);
 
+	MockFunctionCall_c* (*_andIntOutputParameters)(const char* name, int *value);
+	MockFunctionCall_c* (*andIntOutputParameters)(const char* name, int value);
+	MockFunctionCall_c* (*_andDoubleOutputParameters)(const char* name, double *value);
+	MockFunctionCall_c* (*andDoubleOutputParameters)(const char* name, double value);
+	MockFunctionCall_c* (*_andStringOutputParameters)(const char* name, const char* *value);
+	MockFunctionCall_c* (*andStringOutputParameters)(const char* name, const char* value);
+	MockFunctionCall_c* (*_andPointerOutputParameters)(const char* name, void* *value);
+	MockFunctionCall_c* (*andPointerOutputParameters)(const char* name, void* value);
+
 	MockFunctionCall_c* (*andReturnIntValue)(int value);
 	MockFunctionCall_c* (*andReturnDoubleValue)(double value);
 	MockFunctionCall_c* (*andReturnStringValue)(const char* value);

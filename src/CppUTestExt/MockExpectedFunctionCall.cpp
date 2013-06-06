@@ -93,6 +93,58 @@ MockFunctionCall& MockExpectedFunctionCall::withParameterOfType(const SimpleStri
 	return *this;
 }
 
+MockFunctionCall& MockExpectedFunctionCall::andOutputParameter(const SimpleString&, int *) {
+	FAIL("andOutputParameter cannot be called on an ExpectedFunctionCall. Use andOutputParameter instead to set the value.");
+	return *this;
+}
+
+MockFunctionCall& MockExpectedFunctionCall::andOutputParameter(const SimpleString& name, int value)
+{
+	MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
+	parameters_->add(newParameter);
+	newParameter->setValue(value);
+	return *this;
+}
+
+MockFunctionCall& MockExpectedFunctionCall::andOutputParameter(const SimpleString&, double *) {
+	FAIL("andOutputParameter cannot be called on an ExpectedFunctionCall. Use andOutputParameter instead to set the value.");
+	return *this;
+}
+
+MockFunctionCall& MockExpectedFunctionCall::andOutputParameter(const SimpleString& name, double value)
+{
+	MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
+	parameters_->add(newParameter);
+	newParameter->setValue(value);
+	return *this;
+}
+
+MockFunctionCall& MockExpectedFunctionCall::andOutputParameter(const SimpleString&, const char* *) {
+	FAIL("andOutputParameter cannot be called on an ExpectedFunctionCall. Use andOutputParameter instead to set the value.");
+	return *this;
+}
+
+MockFunctionCall& MockExpectedFunctionCall::andOutputParameter(const SimpleString& name, const char* value)
+{
+	MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
+	parameters_->add(newParameter);
+	newParameter->setValue(value);
+	return *this;
+}
+
+MockFunctionCall& MockExpectedFunctionCall::andOutputParameter(const SimpleString&, void* *) {
+	FAIL("andOutputParameter cannot be called on an ExpectedFunctionCall. Use andOutputParameter instead to set the value.");
+	return *this;
+}
+
+MockFunctionCall& MockExpectedFunctionCall::andOutputParameter(const SimpleString& name, void* value)
+{
+	MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
+	parameters_->add(newParameter);
+	newParameter->setValue(value);
+	return *this;
+}
+
 SimpleString MockExpectedFunctionCall::getParameterType(const SimpleString& name)
 {
 	MockNamedValue * p = parameters_->getValueByName(name);
