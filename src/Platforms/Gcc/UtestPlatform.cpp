@@ -139,7 +139,10 @@ void SetPlatformSpecificTimeInMillisMethod(long (*platformSpecific) ())
 static const char* TimeStringImplementation()
 {
 	time_t tm = time(NULL);
-	return ctime(&tm);
+	static char dateTime[80];
+	struct tm *tmp = localtime(&tm);
+	strftime(dateTime, 80, "%Y-%m-%dT%H:%M:%S", tmp);
+	return dateTime;
 }
 
 static const char* (*timeStringFp) () = TimeStringImplementation;
