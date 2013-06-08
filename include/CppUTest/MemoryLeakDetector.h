@@ -80,13 +80,13 @@ struct SimpleStringBuffer
 	void add(const char* format, ...);
 	char* toString();
 
-	void setWriteLimit(int write_limit);
+	void setWriteLimit(size_t write_limit);
 	void resetWriteLimit();
 	bool reachedItsCapacity();
 private:
 	char buffer_[SIMPLE_STRING_BUFFER_LEN];
-	int positions_filled_;
-	int write_limit_;
+	size_t positions_filled_;
+	size_t write_limit_;
 };
 
 struct MemoryLeakDetectorNode
