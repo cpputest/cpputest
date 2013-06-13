@@ -181,6 +181,11 @@ CppUTestExtTests_SOURCES = \
 RUN_CPPUTEST_TESTS = ./$(CPPUTEST_TESTS) -r
 #RUN_CPPUTEST_EXT_TESTS = ./$(CPPUTEST_EXT_TESTS) -r
 
+valgrind: check
+	@if test "x$(CPPUTEST_HAS_VALGRIND)" = xyes; then echo "Running the valgrind target without having valgrind. Perhaps install it first?"; exit 1; fi
+	valgrind ./$(CPPUTEST_TESTS)
+		
+
 check_all:
 	
 	@echo "Building without extensions"
