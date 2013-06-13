@@ -34,7 +34,7 @@ ACX_PTHREAD([LIBS="$PTHREAD_LIBS $LIBS"])
 
 saved_libs="$LIBS"
 LIBS=-lpthread
-AC_MSG_CHECKING([We're on MacOSX. Lets check if we can link -lpthread to work around a gcc bug])
+AC_MSG_CHECKING([Lets check if we can link -lpthread to work around a gcc bug (on MacOSX)])
 AC_LINK_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); HACK_TO_USE_PTHREAD_LIBS+=" -lpthread"], [AC_MSG_RESULT([no])])
 LIBS="$saved_libs $HACK_TO_USE_PTHREAD_LIBS"
 

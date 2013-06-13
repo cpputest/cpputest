@@ -5205,8 +5205,8 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 saved_libs="$LIBS"
 LIBS=-lpthread
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking We're on MacOSX. Lets check if we can link -lpthread to work around a gcc bug" >&5
-$as_echo_n "checking We're on MacOSX. Lets check if we can link -lpthread to work around a gcc bug... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Lets check if we can link -lpthread to work around a gcc bug (on MacOSX)" >&5
+$as_echo_n "checking Lets check if we can link -lpthread to work around a gcc bug (on MacOSX)... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
