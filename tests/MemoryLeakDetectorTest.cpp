@@ -530,14 +530,23 @@ TEST(SimpleStringBuffer, resetWriteLimit)
 	STRCMP_EQUAL(str.asCharString(), buffer.toString());
 }
 
-TEST_GROUP(ReallocBugReported) { };
-
-TEST(ReallocBugReported, ThisSituationShouldntCrash)
+TEST_GROUP(ReallocBugReported)
 {
-	TestMemoryAllocator allocator;
 	MemoryLeakFailureForTest reporter;
+};
+
+TEST(ReallocBugReported, CanSafelyDoAReallocWithANewAllocator)
+{
 	MemoryLeakDetector detector(&reporter);
-	char* mem = detector.allocMemory(&allocator, 5, "file", 1);
-	mem = detector.reallocMemory(&allocator, mem, 19, "file", 1);
-	detector.deallocMemory(&allocator, mem);
+	char* mem = detector.allocMemory(getCurrentNewAllocator(), 5, "file", 1);
+	mem = detector.reallocMemory(getCurrentNewAllocator(), mem, 19, "file", 1);
+	detector.deallocMemory(getCurrentNewAllocator(), mem);
+}
+
+TEST(ReallocBugReported, CanSafelyDoAReallocWithAMallocAllocator)
+{
+	MemoryLeakDetector detector(&reporter);
+	char* mem = detector.allocMemory(getCurrentMallocAllocator(), 5, "file", 1, true);
+	mem = detector.reallocMemory(getCurrentMallocAllocator(), mem, 19, "file", 1, true);
+	detector.deallocMemory(getCurrentMallocAllocator(), mem, true);
 }
