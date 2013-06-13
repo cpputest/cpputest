@@ -209,7 +209,7 @@ TEST(MemoryLeakOverridesToBeUsedInProductionCode, MallocWithButFreeWithoutLeakDe
 {
 	char* leak = mallocAllocation();
 	freeAllocationWithoutMacro(leak);
-	STRCMP_CONTAINS("Memory leak reports about malloc and free can be caused", memLeakDetector->report(mem_leak_period_checking));
+	LONGS_EQUAL(2, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
 	memLeakDetector->removeMemoryLeakInformationWithoutCheckingOrDeallocating(leak);
 }
 
