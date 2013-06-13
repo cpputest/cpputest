@@ -295,6 +295,7 @@ CPPUTEST_CXXFLAGS = @CPPUTEST_CXXFLAGS@
 CPPUTEST_HAS_CLANG = @CPPUTEST_HAS_CLANG@
 CPPUTEST_HAS_GCC = @CPPUTEST_HAS_GCC@
 CPPUTEST_HAS_LCOV = @CPPUTEST_HAS_LCOV@
+CPPUTEST_HAS_VALGRIND = @CPPUTEST_HAS_VALGRIND@
 CPPUTEST_LDADD = @CPPUTEST_LDADD@
 CPPUTEST_LDFLAGS = @CPPUTEST_LDFLAGS@
 CPPUTEST_ON_MACOSX = @CPPUTEST_ON_MACOSX@
@@ -2528,6 +2529,10 @@ uninstall-am: uninstall-include_cpputestHEADERS \
 	uninstall-pkgconfigDATA
 
 #RUN_CPPUTEST_EXT_TESTS = ./$(CPPUTEST_EXT_TESTS) -r
+
+valgrind: check
+	@if test "x$(CPPUTEST_HAS_VALGRIND)" = xyes; then echo "Running the valgrind target without having valgrind. Perhaps install it first?"; exit 1; fi
+	valgrind ./$(CPPUTEST_TESTS)
 
 check_all:
 
