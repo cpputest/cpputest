@@ -123,7 +123,7 @@ public:
 
 	virtual MockFunctionCall& onObject(void* ) { return *this; }
 
-	static MockFunctionCall& instance() { static MockIgnoredCall call; return call; }
+	static MockFunctionCall& instance();
 };
 
 class MockFunctionCallTrace : public MockFunctionCall
