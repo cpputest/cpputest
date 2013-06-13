@@ -183,13 +183,12 @@ RUN_CPPUTEST_TESTS = ./$(CPPUTEST_TESTS) -r
 
 valgrind: check
 	@if test "x$(CPPUTEST_HAS_VALGRIND)" = xno; then echo "Running the valgrind target without having valgrind. Perhaps install it first?"; exit 1; fi
-	valgrind --error-exitcode=1 ./$(CPPUTEST_TESTS)
-		
+	valgrind --suppressions=$(srcdir)/valgrind.suppressions --error-exitcode=1 ./$(CPPUTEST_TESTS)
 
-check_all:
+check_all: 
 	
 	@echo "Building without extensions"
-	make distclean; $(srcdir)/configure --disable-extensions; make check
+	make distclean; $(srcdir)/configure --disable-extensions; make check valgrind
 
 	@echo "Building without the Standard C library"
 	make distclean; $(srcdir)/configure --disable-std-c; make
