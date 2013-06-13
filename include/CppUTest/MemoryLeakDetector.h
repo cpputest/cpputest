@@ -80,13 +80,13 @@ struct SimpleStringBuffer
 	void add(const char* format, ...);
 	char* toString();
 
-	void setWriteLimit(int write_limit);
+	void setWriteLimit(size_t write_limit);
 	void resetWriteLimit();
 	bool reachedItsCapacity();
 private:
 	char buffer_[SIMPLE_STRING_BUFFER_LEN];
-	int positions_filled_;
-	int write_limit_;
+	size_t positions_filled_;
+	size_t write_limit_;
 };
 
 struct MemoryLeakDetectorNode
@@ -192,7 +192,7 @@ public:
 	char* reallocMemory(TestMemoryAllocator* allocator, char* memory, size_t size, const char* file, int line, bool allocatNodesSeperately = false);
 
 	void invalidateMemory(char* memory);
-	void removeMemoryLeakInformationWithoutCheckingOrDeallocating(void* memory);
+	void removeMemoryLeakInformationWithoutCheckingOrDeallocatingTheMemoryButDeallocatingTheAccountInformation(TestMemoryAllocator* allocator, void* memory, bool allocatNodesSeperately);
 	enum
 	{
 		memory_corruption_buffer_size = 3
@@ -207,6 +207,11 @@ private:
 	bool doAllocationTypeChecking_;
 	unsigned allocationSequenceNumber_;
 
+	char* allocateMemoryWithAccountingInformation(TestMemoryAllocator* allocator, size_t size, const char* file, int line, bool allocatNodesSeperately);
+	char* reallocateMemoryWithAccountingInformation(TestMemoryAllocator* allocator, char* memory, size_t size, const char* file, int line, bool allocatNodesSeperately);
+	MemoryLeakDetectorNode* createMemoryLeakAccountingInformation(TestMemoryAllocator* allocator, size_t size, char* memory, bool allocatNodesSeperately);
+
+
 	bool validMemoryCorruptionInformation(char* memory);
     bool matchingAllocation(TestMemoryAllocator *alloc_allocator, TestMemoryAllocator *free_allocator);
 
@@ -220,7 +225,7 @@ private:
 	size_t sizeOfMemoryWithCorruptionInfo(size_t size);
 	MemoryLeakDetectorNode* getNodeFromMemoryPointer(char* memory, size_t size);
 
-	char* reallocateMemoryAndLeakInformation(TestMemoryAllocator* allocator, char* memory, size_t size, const char* file, int line);
+	char* reallocateMemoryAndLeakInformation(TestMemoryAllocator* allocator, char* memory, size_t size, const char* file, int line, bool allocatNodesSeperately);
 
 	void addMemoryCorruptionInformation(char* memory);
 	void checkForCorruption(MemoryLeakDetectorNode* node, const char* file, int line, TestMemoryAllocator* allocator, bool allocateNodesSeperately);

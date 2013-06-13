@@ -1,6 +1,6 @@
 
 AC_PREREQ([2.68])
-AC_INIT([CppUTest], [3.3], [https://github.com/cpputest/cpputest])
+AC_INIT([CppUTest], [3.4], [https://github.com/cpputest/cpputest])
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([src/CppUTest/Utest.cpp])
 AC_CONFIG_HEADERS([config.h])
@@ -8,6 +8,7 @@ AC_CONFIG_FILES([cpputest.pc])
 AC_CONFIG_MACRO_DIR([m4])
 
 AC_CANONICAL_HOST
+AM_MAINTAINER_MODE([enable])
 
 case "x$build_os" in
 	*darwin*)
@@ -23,6 +24,19 @@ AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AM_PROG_CC_C_O
 AM_SILENT_RULES([yes])
+
+ACX_PTHREAD([LIBS="$PTHREAD_LIBS $LIBS"]) 
+
+
+# This additional -lpthread was added due to a bug on gcc for MacOSX: http://gcc.gnu.org/bugzilla/show_bug.cgi?id=42159
+# According to the bug report, a workaround is to link -lpthread. Even the ACX_PTHREAD doesn't do that, so we add an
+# additional check if that it possible, and if it is, then we link pthread
+
+saved_libs="$LIBS"
+LIBS=-lpthread
+AC_MSG_CHECKING([Lets check if we can link -lpthread to work around a gcc bug (on MacOSX)])
+AC_LINK_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); HACK_TO_USE_PTHREAD_LIBS+=" -lpthread"], [AC_MSG_RESULT([no])])
+LIBS="$saved_libs $HACK_TO_USE_PTHREAD_LIBS"
 
 AC_CHECK_HEADERS([stddef.h stdint.h stdlib.h string.h sys/time.h unistd.h])
 
@@ -47,6 +61,7 @@ AC_CHECK_FUNCS([gettimeofday memset strstr])
 AC_CHECK_PROG([CPPUTEST_HAS_GCC], [gcc], [yes], [no])
 AC_CHECK_PROG([CPPUTEST_HAS_CLANG], [clang], [yes], [no])
 AC_CHECK_PROG([CPPUTEST_HAS_LCOV], [lcov], [yes], [no])
+AC_CHECK_PROG([CPPUTEST_HAS_VALGRIND], [valgrind], [yes], [no])
 
 # Checking for warning flags on the compiler
 saved_cflags="$CFLAGS"
@@ -164,12 +179,32 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CXXWARN
 CXXFLAGS="$saved_cxxflags"
 AC_LANG_POP
 
-#### Check whether some linker options are supported...  ?
+##### Linker checking. 
+# 
+# TBD!
+# Things that need to be fixed!
+#
+# The below code is checking for the -Qunused-arguments which is a linker flag. However, it says gcc supports it, while in fact, it doesn't.
+# As a workaround, we'll just check whether it is clang hardcoded, this is not in the automake spirit and will need to be fixed.
+#
+# LDFLAGS=
+# AC_MSG_CHECKING([whether LD supports -Qunused-arguments])
+# AC_LINK_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_NO_UNUSED_ARGUMENT_WARNING+=" -Qunused-arguments" ], [AC_MSG_RESULT([no])])
+# LDFLAGS="$saved_ldflags"
 
-LDFLAGS=
-AC_MSG_CHECKING([whether LD supports -Qunused-arguments])
-AC_LINK_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_NO_UNUSED_ARGUMENT_WARNING+=" -Qunused-arguments" ], [AC_MSG_RESULT([no])])
+AC_MSG_CHECKING([whether CXXLD supports -Qunused-arguments linker option])
+OUTPUT_WHEN_CLANG_COMPILER=`${CXX} --version | grep clang`
+AM_CONDITIONAL([TEST_COMPILER_IS_CLANG], [ ! test -z "$OUTPUT_WHEN_CLANG_COMPILER]")
+AM_COND_IF([TEST_COMPILER_IS_CLANG],
+                [AC_MSG_RESULT([yes]); CPPUTEST_NO_UNUSED_ARGUMENT_WARNING+=" -Qunused-arguments"], 
+                [AC_MSG_RESULT([no])]; CPPUTEST_NO_UNUSED_ARGUMENT_WARNING+=" ")
+
+# Checking for options for creating map files
+LDFLAGS=" -Wl,-map,$<.map.txt"
+AC_MSG_CHECKING([whether LD supports -Wl,-map])
+AC_LINK_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_LD_MAP_GENERATION+=" -Wl,-map,$<.map.txt" ], [AC_MSG_RESULT([no])])
 LDFLAGS="$saved_ldflags"
+
 
 # Different features
 AC_ARG_ENABLE([std-c], [AC_HELP_STRING([--disable-std-c], [disable the use of Standard C Library (warning: requires implementing Platforms/GccNoStdC) ])], 
@@ -237,7 +272,7 @@ fi
 
 # Generating map files.
 if test "x${generate_map_file}" = xyes; then
-	CPPUTEST_LDFLAGS+=" -Wl,-map,$<.map.txt"
+	CPPUTEST_LDFLAGS+=$CPPUTEST_LD_MAP_GENERATION
 	MOSTLYCLEANFILES+=" *.map.txt"
 fi
 
@@ -366,6 +401,7 @@ Current compiler options:
    CppUTest CXXFLAGS:                   ${CPPUTEST_CXXFLAGS}
    CppUTest CPPFLAGS:                   ${CPPUTEST_CPPFLAGS}
    CppUTest LDFLAGS:                    ${CPPUTEST_LDFLAGS}
+   CppUTest LIB:                        ${LIBS}
 
 Features configured in ${PACKAGE_NAME}:
    Memory Leak Detection:               ${memory_leak_detection}

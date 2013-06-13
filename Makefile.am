@@ -20,7 +20,7 @@ pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = cpputest.pc
 
 EXTRA_DIST = \
-	cpputest-0.1.pc.in \
+	cpputest.pc.in \
 	$(ALL_FILES_IN_GIT)
 
 libCppUTest_a_CPPFLAGS = $(AM_CPPFLAGS) $(CPPUTEST_CPPFLAGS) $(CPPUTEST_ADDITIONAL_CPPFLAGS)
@@ -181,10 +181,14 @@ CppUTestExtTests_SOURCES = \
 RUN_CPPUTEST_TESTS = ./$(CPPUTEST_TESTS) -r
 #RUN_CPPUTEST_EXT_TESTS = ./$(CPPUTEST_EXT_TESTS) -r
 
-check_all:
+valgrind: check
+	@if test "x$(CPPUTEST_HAS_VALGRIND)" = xno; then echo "Running the valgrind target without having valgrind. Perhaps install it first?"; exit 1; fi
+	valgrind --suppressions=$(srcdir)/valgrind.suppressions --error-exitcode=1 ./$(CPPUTEST_TESTS)
+
+check_all: 
 	
 	@echo "Building without extensions"
-	make distclean; $(srcdir)/configure --disable-extensions; make check
+	make distclean; $(srcdir)/configure --disable-extensions; make check valgrind
 
 	@echo "Building without the Standard C library"
 	make distclean; $(srcdir)/configure --disable-std-c; make

@@ -108,6 +108,46 @@ AC_PREREQ([2.50])dnl
 am_aux_dir=`cd $ac_aux_dir && pwd`
 ])
 
+# AM_COND_IF                                            -*- Autoconf -*-
+
+# Copyright (C) 2008 Free Software Foundation, Inc.
+#
+# This file is free software; the Free Software Foundation
+# gives unlimited permission to copy and/or distribute it,
+# with or without modifications, as long as this notice is preserved.
+
+# serial 1
+
+# _AM_COND_IF
+# _AM_COND_ELSE
+# _AM_COND_ENDIF
+# --------------
+# These macros are only used for tracing.
+m4_define([_AM_COND_IF])
+m4_define([_AM_COND_ELSE])
+m4_define([_AM_COND_ENDIF])
+
+
+# AM_COND_IF(COND, [IF-TRUE], [IF-FALSE])
+# ---------------------------------------
+# If the shell condition matching COND is true, execute IF-TRUE,
+# otherwise execute IF-FALSE.  Allow automake to learn about conditional
+# instantiating macros (the AC_CONFIG_FOOS).
+AC_DEFUN([AM_COND_IF],
+[m4_ifndef([_AM_COND_VALUE_$1],
+	   [m4_fatal([$0: no such condition "$1"])])dnl
+_AM_COND_IF([$1])dnl
+if _AM_COND_VALUE_$1; then
+  m4_default([$2], [:])
+m4_ifval([$3],
+[_AM_COND_ELSE([$1])dnl
+else
+  $3
+])dnl
+_AM_COND_ENDIF([$1])dnl
+fi[]dnl
+])
+
 # AM_CONDITIONAL                                            -*- Autoconf -*-
 
 # Copyright (C) 1997, 2000, 2001, 2003, 2004, 2005, 2006, 2008
@@ -587,6 +627,46 @@ fi
 rmdir .tst 2>/dev/null
 AC_SUBST([am__leading_dot])])
 
+# Add --enable-maintainer-mode option to configure.         -*- Autoconf -*-
+# From Jim Meyering
+
+# Copyright (C) 1996, 1998, 2000, 2001, 2002, 2003, 2004, 2005, 2008
+# Free Software Foundation, Inc.
+#
+# This file is free software; the Free Software Foundation
+# gives unlimited permission to copy and/or distribute it,
+# with or without modifications, as long as this notice is preserved.
+
+# serial 5
+
+# AM_MAINTAINER_MODE([DEFAULT-MODE])
+# ----------------------------------
+# Control maintainer-specific portions of Makefiles.
+# Default is to disable them, unless `enable' is passed literally.
+# For symmetry, `disable' may be passed as well.  Anyway, the user
+# can override the default with the --enable/--disable switch.
+AC_DEFUN([AM_MAINTAINER_MODE],
+[m4_case(m4_default([$1], [disable]),
+       [enable], [m4_define([am_maintainer_other], [disable])],
+       [disable], [m4_define([am_maintainer_other], [enable])],
+       [m4_define([am_maintainer_other], [enable])
+        m4_warn([syntax], [unexpected argument to AM@&t@_MAINTAINER_MODE: $1])])
+AC_MSG_CHECKING([whether to am_maintainer_other maintainer-specific portions of Makefiles])
+  dnl maintainer-mode's default is 'disable' unless 'enable' is passed
+  AC_ARG_ENABLE([maintainer-mode],
+[  --][am_maintainer_other][-maintainer-mode  am_maintainer_other make rules and dependencies not useful
+			  (and sometimes confusing) to the casual installer],
+      [USE_MAINTAINER_MODE=$enableval],
+      [USE_MAINTAINER_MODE=]m4_if(am_maintainer_other, [enable], [no], [yes]))
+  AC_MSG_RESULT([$USE_MAINTAINER_MODE])
+  AM_CONDITIONAL([MAINTAINER_MODE], [test $USE_MAINTAINER_MODE = yes])
+  MAINT=$MAINTAINER_MODE_TRUE
+  AC_SUBST([MAINT])dnl
+]
+)
+
+AU_DEFUN([jm_MAINTAINER_MODE], [AM_MAINTAINER_MODE])
+
 # Check to see how 'make' treats includes.	            -*- Autoconf -*-
 
 # Copyright (C) 2001, 2002, 2003, 2005, 2009  Free Software Foundation, Inc.
@@ -1011,6 +1091,7 @@ AC_SUBST([am__tar])
 AC_SUBST([am__untar])
 ]) # _AM_PROG_TAR
 
+m4_include([m4/acx_pthread.m4])
 m4_include([m4/libtool.m4])
 m4_include([m4/ltoptions.m4])
 m4_include([m4/ltsugar.m4])

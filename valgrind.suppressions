@@ -1,0 +1,54 @@
+{
+   Supressions because the memory leak detector will print content of memory but can't know whether it is initialized or not
+   Memcheck:Cond
+   fun:strnlen
+   fun:vfprintf
+   fun:__vsnprintf_chk
+   obj:*
+}
+{
+   Supression because it checks whether the memory was set invalid after a de-alloc
+   Memcheck:Addr1
+   fun:_ZN45TEST_BasicBehavior_freeInvalidatesMemory_Test8testBodyEv
+   fun:PlatformSpecificSetJmp
+   fun:_ZN5Utest3runEv
+   fun:_ZN10UtestShell10runOneTestEP10TestPluginR10TestResult
+   fun:_ZL18helperDoRunOneTestPv
+   fun:PlatformSpecificSetJmp
+   fun:_ZN10UtestShell21runOneTestWithPluginsEP10TestPluginR10TestResult
+   fun:_ZN12TestRegistry11runAllTestsER10TestResult
+   fun:_ZN21CommandLineTestRunner11runAllTestsEv
+   fun:_ZN21CommandLineTestRunner15runAllTestsMainEv
+   fun:_ZN21CommandLineTestRunner11RunAllTestsEiPPKc
+}
+{
+   Supression because it checks whether the memory was set invalid after a de-alloc
+   Memcheck:Addr1
+   fun:_ZN47TEST_BasicBehavior_deleteInvalidatesMemory_Test8testBodyEv
+   fun:PlatformSpecificSetJmp
+   fun:_ZN5Utest3runEv
+   fun:_ZN10UtestShell10runOneTestEP10TestPluginR10TestResult
+   fun:_ZL18helperDoRunOneTestPv
+   fun:PlatformSpecificSetJmp
+   fun:_ZN10UtestShell21runOneTestWithPluginsEP10TestPluginR10TestResult
+   fun:_ZN12TestRegistry11runAllTestsER10TestResult
+   fun:_ZN21CommandLineTestRunner11runAllTestsEv
+   fun:_ZN21CommandLineTestRunner15runAllTestsMainEv
+   fun:_ZN21CommandLineTestRunner11RunAllTestsEiPPKc
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Addr1
+   fun:_ZN52TEST_BasicBehavior_deleteArrayInvalidatesMemory_Test8testBodyEv
+   fun:PlatformSpecificSetJmp
+   fun:_ZN5Utest3runEv
+   fun:_ZN10UtestShell10runOneTestEP10TestPluginR10TestResult
+   fun:_ZL18helperDoRunOneTestPv
+   fun:PlatformSpecificSetJmp
+   fun:_ZN10UtestShell21runOneTestWithPluginsEP10TestPluginR10TestResult
+   fun:_ZN12TestRegistry11runAllTestsER10TestResult
+   fun:_ZN21CommandLineTestRunner11runAllTestsEv
+   fun:_ZN21CommandLineTestRunner15runAllTestsMainEv
+   fun:_ZN21CommandLineTestRunner11RunAllTestsEiPPKc
+}
+

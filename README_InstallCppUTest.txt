@@ -9,11 +9,10 @@
 
 2a. For unix/gcc (including cygwin)
  > cd <someDirectory>/CppUTest
+ > configure
  > make
+ > make check (This is to run the CppUTest unit tests)
   
- NOTE: the builds run their unit tests to verify the build
- NOTE: Older cygwin installs may report memory leaks.
-
 2b. For Microsoft Visual C++ V6
  Double click <someDirectory>/CppUTest/CppUTest.dsw
  Run without debugging, see the test results in the command window
@@ -28,8 +27,6 @@
  NOTE: To create your own project, you need to have CppUTest and your project 
  compiled with the same compile and link settings
  
- NOTE: VC6 test runs may report memory leaks.
-
 3c. For Microsoft Visual Studio 2008
  Double click <someDirectory>/CppUTest/CppUTest.sln
  
@@ -52,8 +49,6 @@
  NOTE: To create your own project, you need to have CppUTest and your project 
  compiled with the same compile and link settings
  
- NOTE: VC6 test runs may report memory leaks.
-
 4. to setup the support scripts. These scripts work in various unix systems 
 and cygwin.  (these are quite handy)  If you are using windows
 install some tool like cygwin, msys or MKSToolkit to run these scripts.

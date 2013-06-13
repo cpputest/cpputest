@@ -49,10 +49,10 @@ DIST_COMMON = README $(am__configure_deps) \
 	COPYING ChangeLog INSTALL NEWS compile config.guess config.sub \
 	depcomp install-sh ltmain.sh missing
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
-	$(top_srcdir)/m4/ltoptions.m4 $(top_srcdir)/m4/ltsugar.m4 \
-	$(top_srcdir)/m4/ltversion.m4 $(top_srcdir)/m4/lt~obsolete.m4 \
-	$(top_srcdir)/configure.ac
+am__aclocal_m4_deps = $(top_srcdir)/m4/acx_pthread.m4 \
+	$(top_srcdir)/m4/libtool.m4 $(top_srcdir)/m4/ltoptions.m4 \
+	$(top_srcdir)/m4/ltsugar.m4 $(top_srcdir)/m4/ltversion.m4 \
+	$(top_srcdir)/m4/lt~obsolete.m4 $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
@@ -295,6 +295,7 @@ CPPUTEST_CXXFLAGS = @CPPUTEST_CXXFLAGS@
 CPPUTEST_HAS_CLANG = @CPPUTEST_HAS_CLANG@
 CPPUTEST_HAS_GCC = @CPPUTEST_HAS_GCC@
 CPPUTEST_HAS_LCOV = @CPPUTEST_HAS_LCOV@
+CPPUTEST_HAS_VALGRIND = @CPPUTEST_HAS_VALGRIND@
 CPPUTEST_LDADD = @CPPUTEST_LDADD@
 CPPUTEST_LDFLAGS = @CPPUTEST_LDFLAGS@
 CPPUTEST_ON_MACOSX = @CPPUTEST_ON_MACOSX@
@@ -332,6 +333,7 @@ LIBTOOL = @LIBTOOL@
 LIPO = @LIPO@
 LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
+MAINT = @MAINT@
 MAKEINFO = @MAKEINFO@
 MANIFEST_TOOL = @MANIFEST_TOOL@
 MKDIR_P = @MKDIR_P@
@@ -350,6 +352,9 @@ PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
+PTHREAD_CC = @PTHREAD_CC@
+PTHREAD_CFLAGS = @PTHREAD_CFLAGS@
+PTHREAD_LIBS = @PTHREAD_LIBS@
 RANLIB = @RANLIB@
 SED = @SED@
 SET_MAKE = @SET_MAKE@
@@ -364,6 +369,7 @@ ac_ct_AR = @ac_ct_AR@
 ac_ct_CC = @ac_ct_CC@
 ac_ct_CXX = @ac_ct_CXX@
 ac_ct_DUMPBIN = @ac_ct_DUMPBIN@
+acx_pthread_config = @acx_pthread_config@
 am__include = @am__include@
 am__leading_dot = @am__leading_dot@
 am__quote = @am__quote@
@@ -417,7 +423,7 @@ TESTS = $(check_PROGRAMS)
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = cpputest.pc
 EXTRA_DIST = \
-	cpputest-0.1.pc.in \
+	cpputest.pc.in \
 	$(ALL_FILES_IN_GIT)
 
 libCppUTest_a_CPPFLAGS = $(AM_CPPFLAGS) $(CPPUTEST_CPPFLAGS) $(CPPUTEST_ADDITIONAL_CPPFLAGS)
@@ -573,7 +579,7 @@ all: config.h
 .SUFFIXES: .c .cpp .lo .o .obj
 am--refresh:
 	@:
-$(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
+$(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
 	    *$$dep*) \
@@ -600,9 +606,9 @@ Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 $(top_builddir)/config.status: $(top_srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
 	$(SHELL) ./config.status --recheck
 
-$(top_srcdir)/configure:  $(am__configure_deps)
+$(top_srcdir)/configure: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 	$(am__cd) $(srcdir) && $(AUTOCONF)
-$(ACLOCAL_M4):  $(am__aclocal_m4_deps)
+$(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	$(am__cd) $(srcdir) && $(ACLOCAL) $(ACLOCAL_AMFLAGS)
 $(am__aclocal_m4_deps):
 
@@ -615,7 +621,7 @@ config.h: stamp-h1
 stamp-h1: $(srcdir)/config.h.in $(top_builddir)/config.status
 	@rm -f stamp-h1
 	cd $(top_builddir) && $(SHELL) ./config.status config.h
-$(srcdir)/config.h.in:  $(am__configure_deps) 
+$(srcdir)/config.h.in: @MAINTAINER_MODE_TRUE@ $(am__configure_deps) 
 	($(am__cd) $(top_srcdir) && $(AUTOHEADER))
 	rm -f stamp-h1
 	touch $@
@@ -2524,10 +2530,14 @@ uninstall-am: uninstall-include_cpputestHEADERS \
 
 #RUN_CPPUTEST_EXT_TESTS = ./$(CPPUTEST_EXT_TESTS) -r
 
-check_all:
+valgrind: check
+	@if test "x$(CPPUTEST_HAS_VALGRIND)" = xno; then echo "Running the valgrind target without having valgrind. Perhaps install it first?"; exit 1; fi
+	valgrind --suppressions=$(srcdir)/valgrind.suppressions --error-exitcode=1 ./$(CPPUTEST_TESTS)
+
+check_all: 
 
 	@echo "Building without extensions"
-	make distclean; $(srcdir)/configure --disable-extensions; make check
+	make distclean; $(srcdir)/configure --disable-extensions; make check valgrind
 
 	@echo "Building without the Standard C library"
 	make distclean; $(srcdir)/configure --disable-std-c; make

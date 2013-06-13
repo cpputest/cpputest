@@ -6,6 +6,8 @@ env:
   - BUILDTOOL=autotools
   - BUILDTOOL=cmake
 install:
+  - sudo apt-get update --fix-missing
+  - sudo apt-get install valgrind
   - wget https://googlemock.googlecode.com/files/gmock-1.6.0.zip
   - unzip gmock-1.6.0.zip
   - cd gmock-1.6.0
@@ -17,7 +19,4 @@ before_script:
   - export CPPUTEST_BUILD_DIR=$TRAVIS_BUILD_DIR/cpputest_build
   - mkdir -p $CPPUTEST_BUILD_DIR && cd $CPPUTEST_BUILD_DIR
 script:
-  - if [ $BUILDTOOL = "autotools" ]; then ../configure && echo "CONFIGURATION DONE. Compiling now." && make check_all; fi
-  - if [ $BUILDTOOL = "cmake" ]; then cmake .. -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE && make && ctest -V; fi
-  - if [ $BUILDTOOL = "cmake" ]; then cmake .. -DGMOCK=ON && make && ctest -V; fi
-  - if [ $BUILDTOOL = "cmake" ]; then cmake .. -DGMOCK=OFF -DREAL_GTEST=ON && make && ctest -V; fi
+  - ../scripts/travis_ci_build.sh

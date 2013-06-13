@@ -85,6 +85,7 @@
 
 #define IMPORT_TEST_GROUP(testGroup) \
   extern int externTestGroup##testGroup;\
+  extern int* p##testGroup; \
   int* p##testGroup = &externTestGroup##testGroup
 
 // Different checking macros

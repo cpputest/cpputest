@@ -1,3 +1,0 @@
-Add -xg and xn to exclude tests based on some character string in
-the name or group.
-
