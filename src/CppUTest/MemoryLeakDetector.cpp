@@ -410,9 +410,10 @@ char* MemoryLeakDetector::allocMemory(TestMemoryAllocator* allocator, size_t siz
 	return node->memory_;
 }
 
-void MemoryLeakDetector::removeMemoryLeakInformationWithoutCheckingOrDeallocating(void* memory)
+void MemoryLeakDetector::removeMemoryLeakInformationWithoutCheckingOrDeallocatingTheMemoryButDeallocatingTheAccountInformation(TestMemoryAllocator* allocator, void* memory, bool allocatNodesSeperately)
 {
-	memoryTable_.removeNode((char*) memory);
+	MemoryLeakDetectorNode* node = memoryTable_.removeNode((char*) memory);
+	if (allocatNodesSeperately) allocator->freeMemoryLeakNode( (char*) node);
 }
 
 void MemoryLeakDetector::deallocMemory(TestMemoryAllocator* allocator, void* memory, const char* file, int line, bool allocatNodesSeperately)

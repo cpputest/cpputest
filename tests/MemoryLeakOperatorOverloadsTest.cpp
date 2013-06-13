@@ -210,7 +210,7 @@ TEST(MemoryLeakOverridesToBeUsedInProductionCode, MallocWithButFreeWithoutLeakDe
 	char* leak = mallocAllocation();
 	freeAllocationWithoutMacro(leak);
 	LONGS_EQUAL(2, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
-	memLeakDetector->removeMemoryLeakInformationWithoutCheckingOrDeallocating(leak);
+	memLeakDetector->removeMemoryLeakInformationWithoutCheckingOrDeallocatingTheMemoryButDeallocatingTheAccountInformation(getCurrentMallocAllocator(), leak, true);
 }
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, OperatorNewOverloadingWithoutMacroWorks)

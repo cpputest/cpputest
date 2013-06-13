@@ -192,7 +192,7 @@ public:
 	char* reallocMemory(TestMemoryAllocator* allocator, char* memory, size_t size, const char* file, int line, bool allocatNodesSeperately = false);
 
 	void invalidateMemory(char* memory);
-	void removeMemoryLeakInformationWithoutCheckingOrDeallocating(void* memory);
+	void removeMemoryLeakInformationWithoutCheckingOrDeallocatingTheMemoryButDeallocatingTheAccountInformation(TestMemoryAllocator* allocator, void* memory, bool allocatNodesSeperately);
 	enum
 	{
 		memory_corruption_buffer_size = 3
