@@ -192,7 +192,12 @@ MockFunctionCall& MockFunctionCallComposite::onObject(void* object)
 	return *this;
 }
 
-
+MockFunctionCall& MockIgnoredCall::instance()
+{
+    static MockIgnoredCall call;
+    return call;
+}
+ 
 MockFunctionCallTrace::MockFunctionCallTrace()
 {
 }
