@@ -3,14 +3,14 @@ ACLOCAL_AMFLAGS = -I m4
 
 CPPUTEST_TESTS = CppUTestTests
 
-EXTRA_LIBRARIES = libCppUTestExt.a
+EXTRA_LIBRARIES = lib/libCppUTestExt.a
 EXTRA_PROGRAMS = CppUTestExtTests
 
-lib_LIBRARIES = libCppUTest.a
+lib_LIBRARIES = lib/libCppUTest.a
 check_PROGRAMS = $(CPPUTEST_TESTS)
 
 if INCLUDE_CPPUTEST_EXT
-lib_LIBRARIES+= libCppUTestExt.a
+lib_LIBRARIES+= lib/libCppUTestExt.a
 check_PROGRAMS += CppUTestExtTests
 endif
 
@@ -23,11 +23,11 @@ EXTRA_DIST = \
 	cpputest.pc.in \
 	$(ALL_FILES_IN_GIT)
 
-libCppUTest_a_CPPFLAGS = $(AM_CPPFLAGS) $(CPPUTEST_CPPFLAGS) $(CPPUTEST_ADDITIONAL_CPPFLAGS)
-libCppUTest_a_CFLAGS = $(AM_CFLAGS) $(CPPUTEST_CFLAGS) $(CPPUTEST_ADDITIONAL_CFLAGS)
-libCppUTest_a_CXXFLAGS = $(AM_CXXFLAGS) $(CPPUTEST_CXXFLAGS) $(CPPUTEST_ADDITIONAL_CXXFLAGS)
+lib_libCppUTest_a_CPPFLAGS = $(AM_CPPFLAGS) $(CPPUTEST_CPPFLAGS) $(CPPUTEST_ADDITIONAL_CPPFLAGS)
+lib_libCppUTest_a_CFLAGS = $(AM_CFLAGS) $(CPPUTEST_CFLAGS) $(CPPUTEST_ADDITIONAL_CFLAGS)
+lib_libCppUTest_a_CXXFLAGS = $(AM_CXXFLAGS) $(CPPUTEST_CXXFLAGS) $(CPPUTEST_ADDITIONAL_CXXFLAGS)
 
-libCppUTest_a_SOURCES = \
+lib_libCppUTest_a_SOURCES = \
 	src/CppUTest/CommandLineArguments.cpp \
 	src/CppUTest/MemoryLeakWarningPlugin.cpp \
 	src/CppUTest/TestHarness_c.cpp \
@@ -73,11 +73,11 @@ include_cpputest_HEADERS = \
 	include/CppUTest/TestHarness_c.h \
 	include/CppUTest/UtestMacros.h
 
-libCppUTestExt_a_CPPFLAGS = $(libCppUTest_a_CPPFLAGS)
-libCppUTestExt_a_CFLAGS = $(libCppUTest_a_CFLAGS)
-libCppUTestExt_a_CXXFLAGS = $(libCppUTest_a_CXXFLAGS)
+lib_libCppUTestExt_a_CPPFLAGS = $(lib_libCppUTest_a_CPPFLAGS)
+lib_libCppUTestExt_a_CFLAGS = $(lib_libCppUTest_a_CFLAGS)
+lib_libCppUTestExt_a_CXXFLAGS = $(lib_libCppUTest_a_CXXFLAGS)
 
-libCppUTestExt_a_SOURCES = \
+lib_libCppUTestExt_a_SOURCES = \
    src/CppUTestExt/CodeMemoryReportFormatter.cpp \
    src/CppUTestExt/MemoryReporterPlugin.cpp \
    src/CppUTestExt/MockFailure.cpp \
@@ -116,10 +116,10 @@ include_cpputestext_HEADERS = \
 	
 endif
 
-CppUTestTests_CPPFLAGS = $(libCppUTest_a_CPPFLAGS)
-CppUTestTests_CFLAGS = $(libCppUTest_a_CFLAGS)
-CppUTestTests_CXXFLAGS = $(libCppUTest_a_CXXFLAGS) 
-CppUTestTests_LDADD = libCppUTest.a $(CPPUTEST_LDADD)
+CppUTestTests_CPPFLAGS = $(lib_libCppUTest_a_CPPFLAGS)
+CppUTestTests_CFLAGS = $(lib_libCppUTest_a_CFLAGS)
+CppUTestTests_CXXFLAGS = $(lib_libCppUTest_a_CXXFLAGS) 
+CppUTestTests_LDADD = lib/libCppUTest.a $(CPPUTEST_LDADD)
 CppUTestTests_LDFLAGS = $(AM_LDFLAGS) $(CPPUTEST_LDFLAGS) $(CPPUTEST_ADDITIONAL_LDFLAGS)
 
 CppUTestTests_SOURCES = \
@@ -152,10 +152,10 @@ CppUTestTests_SOURCES = \
 	tests/AllocationInCppFile.cpp \
 	tests/UtestTest.cpp
 
-CppUTestExtTests_CPPFLAGS = $(libCppUTestExt_a_CPPFLAGS)
-CppUTestExtTests_CFLAGS = $(libCppUTestExt_a_CFLAGS)
-CppUTestExtTests_CXXFLAGS = $(libCppUTestExt_a_CXXFLAGS) 
-CppUTestExtTests_LDADD = libCppUTestExt.a libCppUTest.a $(CPPUTEST_LDADD)
+CppUTestExtTests_CPPFLAGS = $(lib_libCppUTestExt_a_CPPFLAGS)
+CppUTestExtTests_CFLAGS = $(lib_libCppUTestExt_a_CFLAGS)
+CppUTestExtTests_CXXFLAGS = $(lib_libCppUTestExt_a_CXXFLAGS) 
+CppUTestExtTests_LDADD = lib/libCppUTestExt.a lib/libCppUTest.a $(CPPUTEST_LDADD)
 CppUTestExtTests_LDFLAGS = $(CppUTestTests_LDFLAGS)
 
 CppUTestExtTests_SOURCES = \
@@ -230,7 +230,7 @@ check_all:
 	
 	./$(CPPUTEST_TESTS) >> test_output.txt; $(CPPUTESTEXT_TESTS) >> test_output.txt 
 	$(SILENCE)for f in `ls *.gcno` ; do \
-		gcov $(CppUTestExtTests_SOURCES) $(CppUTestTests_SOURCES) $(libCppUTest_a_SOURCES) $(libCppUTestExt_a_SOURCES) -o $$f 1>>gcov_output.txt 2>>gcov_error.txt; \
+		gcov $(CppUTestExtTests_SOURCES) $(CppUTestTests_SOURCES) $(lib_libCppUTest_a_SOURCES) $(lib_libCppUTestExt_a_SOURCES) -o $$f 1>>gcov_output.txt 2>>gcov_error.txt; \
 	done
 	$(srcdir)/scripts/filterGcov.sh gcov_output.txt gcov_error.txt gcov_report.txt test_output.txt
 	cat gcov_report.txt
@@ -239,7 +239,7 @@ check_all:
 	rm -rf test_coverage
 
 	@echo "Compiling and running the examples. This will use the old Makefile"
-	make distclean; ../configure; make; $(MAKE) -C $(srcdir)/examples all clean CPPUTEST_LIB_LINK_DIR="`pwd`"
+	make distclean; ../configure; make; $(MAKE) -C $(srcdir)/examples all clean CPPUTEST_LIB_LINK_DIR="`pwd`/lib"
 
 	@echo "Build using real gtest"
 	make distclean; $(srcdir)/configure --enable-real-gtest; make check
