@@ -38,7 +38,7 @@ build_triplet = @build@
 host_triplet = @host@
 EXTRA_PROGRAMS = CppUTestExtTests$(EXEEXT)
 check_PROGRAMS = $(am__EXEEXT_1) $(am__EXEEXT_2)
-@INCLUDE_CPPUTEST_EXT_TRUE@am__append_1 = libCppUTestExt.a
+@INCLUDE_CPPUTEST_EXT_TRUE@am__append_1 = lib/libCppUTestExt.a
 @INCLUDE_CPPUTEST_EXT_TRUE@am__append_2 = CppUTestExtTests
 subdir = .
 DIST_COMMON = README $(am__configure_deps) \
@@ -93,45 +93,46 @@ am__v_AR_0 = @echo "  AR    " $@;
 AM_V_at = $(am__v_at_$(V))
 am__v_at_ = $(am__v_at_$(AM_DEFAULT_VERBOSITY))
 am__v_at_0 = @
-libCppUTest_a_AR = $(AR) $(ARFLAGS)
-libCppUTest_a_LIBADD =
-am_libCppUTest_a_OBJECTS =  \
-	libCppUTest_a-CommandLineArguments.$(OBJEXT) \
-	libCppUTest_a-MemoryLeakWarningPlugin.$(OBJEXT) \
-	libCppUTest_a-TestHarness_c.$(OBJEXT) \
-	libCppUTest_a-TestRegistry.$(OBJEXT) \
-	libCppUTest_a-CommandLineTestRunner.$(OBJEXT) \
-	libCppUTest_a-SimpleString.$(OBJEXT) \
-	libCppUTest_a-TestMemoryAllocator.$(OBJEXT) \
-	libCppUTest_a-TestResult.$(OBJEXT) \
-	libCppUTest_a-JUnitTestOutput.$(OBJEXT) \
-	libCppUTest_a-TestFailure.$(OBJEXT) \
-	libCppUTest_a-TestOutput.$(OBJEXT) \
-	libCppUTest_a-MemoryLeakDetector.$(OBJEXT) \
-	libCppUTest_a-TestFilter.$(OBJEXT) \
-	libCppUTest_a-TestPlugin.$(OBJEXT) \
-	libCppUTest_a-Utest.$(OBJEXT) \
-	libCppUTest_a-UtestPlatform.$(OBJEXT)
-libCppUTest_a_OBJECTS = $(am_libCppUTest_a_OBJECTS)
-libCppUTestExt_a_AR = $(AR) $(ARFLAGS)
-libCppUTestExt_a_LIBADD =
-am_libCppUTestExt_a_OBJECTS =  \
-	libCppUTestExt_a-CodeMemoryReportFormatter.$(OBJEXT) \
-	libCppUTestExt_a-MemoryReporterPlugin.$(OBJEXT) \
-	libCppUTestExt_a-MockFailure.$(OBJEXT) \
-	libCppUTestExt_a-MockSupportPlugin.$(OBJEXT) \
-	libCppUTestExt_a-GTestConvertor.$(OBJEXT) \
-	libCppUTestExt_a-MockActualFunctionCall.$(OBJEXT) \
-	libCppUTestExt_a-MockFunctionCall.$(OBJEXT) \
-	libCppUTestExt_a-MockSupport_c.$(OBJEXT) \
-	libCppUTestExt_a-MemoryReportAllocator.$(OBJEXT) \
-	libCppUTestExt_a-MockExpectedFunctionCall.$(OBJEXT) \
-	libCppUTestExt_a-MockNamedValue.$(OBJEXT) \
-	libCppUTestExt_a-OrderedTest.$(OBJEXT) \
-	libCppUTestExt_a-MemoryReportFormatter.$(OBJEXT) \
-	libCppUTestExt_a-MockExpectedFunctionsList.$(OBJEXT) \
-	libCppUTestExt_a-MockSupport.$(OBJEXT)
-libCppUTestExt_a_OBJECTS = $(am_libCppUTestExt_a_OBJECTS)
+lib_libCppUTest_a_AR = $(AR) $(ARFLAGS)
+lib_libCppUTest_a_LIBADD =
+am_lib_libCppUTest_a_OBJECTS =  \
+	lib_libCppUTest_a-CommandLineArguments.$(OBJEXT) \
+	lib_libCppUTest_a-MemoryLeakWarningPlugin.$(OBJEXT) \
+	lib_libCppUTest_a-TestHarness_c.$(OBJEXT) \
+	lib_libCppUTest_a-TestRegistry.$(OBJEXT) \
+	lib_libCppUTest_a-CommandLineTestRunner.$(OBJEXT) \
+	lib_libCppUTest_a-SimpleString.$(OBJEXT) \
+	lib_libCppUTest_a-TestMemoryAllocator.$(OBJEXT) \
+	lib_libCppUTest_a-TestResult.$(OBJEXT) \
+	lib_libCppUTest_a-JUnitTestOutput.$(OBJEXT) \
+	lib_libCppUTest_a-TestFailure.$(OBJEXT) \
+	lib_libCppUTest_a-TestOutput.$(OBJEXT) \
+	lib_libCppUTest_a-MemoryLeakDetector.$(OBJEXT) \
+	lib_libCppUTest_a-TestFilter.$(OBJEXT) \
+	lib_libCppUTest_a-TestPlugin.$(OBJEXT) \
+	lib_libCppUTest_a-Utest.$(OBJEXT) \
+	lib_libCppUTest_a-UtestPlatform.$(OBJEXT)
+lib_libCppUTest_a_OBJECTS = $(am_lib_libCppUTest_a_OBJECTS)
+am__dirstamp = $(am__leading_dot)dirstamp
+lib_libCppUTestExt_a_AR = $(AR) $(ARFLAGS)
+lib_libCppUTestExt_a_LIBADD =
+am_lib_libCppUTestExt_a_OBJECTS =  \
+	lib_libCppUTestExt_a-CodeMemoryReportFormatter.$(OBJEXT) \
+	lib_libCppUTestExt_a-MemoryReporterPlugin.$(OBJEXT) \
+	lib_libCppUTestExt_a-MockFailure.$(OBJEXT) \
+	lib_libCppUTestExt_a-MockSupportPlugin.$(OBJEXT) \
+	lib_libCppUTestExt_a-GTestConvertor.$(OBJEXT) \
+	lib_libCppUTestExt_a-MockActualFunctionCall.$(OBJEXT) \
+	lib_libCppUTestExt_a-MockFunctionCall.$(OBJEXT) \
+	lib_libCppUTestExt_a-MockSupport_c.$(OBJEXT) \
+	lib_libCppUTestExt_a-MemoryReportAllocator.$(OBJEXT) \
+	lib_libCppUTestExt_a-MockExpectedFunctionCall.$(OBJEXT) \
+	lib_libCppUTestExt_a-MockNamedValue.$(OBJEXT) \
+	lib_libCppUTestExt_a-OrderedTest.$(OBJEXT) \
+	lib_libCppUTestExt_a-MemoryReportFormatter.$(OBJEXT) \
+	lib_libCppUTestExt_a-MockExpectedFunctionsList.$(OBJEXT) \
+	lib_libCppUTestExt_a-MockSupport.$(OBJEXT)
+lib_libCppUTestExt_a_OBJECTS = $(am_lib_libCppUTestExt_a_OBJECTS)
 am__EXEEXT_1 = CppUTestTests$(EXEEXT)
 @INCLUDE_CPPUTEST_EXT_TRUE@am__EXEEXT_2 = CppUTestExtTests$(EXEEXT)
 am_CppUTestExtTests_OBJECTS = CppUTestExtTests-AllTests.$(OBJEXT) \
@@ -153,7 +154,7 @@ am_CppUTestExtTests_OBJECTS = CppUTestExtTests-AllTests.$(OBJEXT) \
 	CppUTestExtTests-TestMockPlugin.$(OBJEXT)
 CppUTestExtTests_OBJECTS = $(am_CppUTestExtTests_OBJECTS)
 am__DEPENDENCIES_1 =
-CppUTestExtTests_DEPENDENCIES = libCppUTestExt.a libCppUTest.a \
+CppUTestExtTests_DEPENDENCIES = lib/libCppUTestExt.a lib/libCppUTest.a \
 	$(am__DEPENDENCIES_1)
 AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
@@ -191,7 +192,7 @@ am_CppUTestTests_OBJECTS = CppUTestTests-AllTests.$(OBJEXT) \
 	CppUTestTests-AllocationInCppFile.$(OBJEXT) \
 	CppUTestTests-UtestTest.$(OBJEXT)
 CppUTestTests_OBJECTS = $(am_CppUTestTests_OBJECTS)
-CppUTestTests_DEPENDENCIES = libCppUTest.a $(am__DEPENDENCIES_1)
+CppUTestTests_DEPENDENCIES = lib/libCppUTest.a $(am__DEPENDENCIES_1)
 CppUTestTests_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
 	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXXLD) \
 	$(CppUTestTests_CXXFLAGS) $(CXXFLAGS) $(CppUTestTests_LDFLAGS) \
@@ -235,10 +236,11 @@ am__v_CXXLD_0 = @echo "  CXXLD " $@;
 AM_V_GEN = $(am__v_GEN_$(V))
 am__v_GEN_ = $(am__v_GEN_$(AM_DEFAULT_VERBOSITY))
 am__v_GEN_0 = @echo "  GEN   " $@;
-SOURCES = $(libCppUTest_a_SOURCES) $(libCppUTestExt_a_SOURCES) \
+SOURCES = $(lib_libCppUTest_a_SOURCES) $(lib_libCppUTestExt_a_SOURCES) \
 	$(CppUTestExtTests_SOURCES) $(CppUTestTests_SOURCES)
-DIST_SOURCES = $(libCppUTest_a_SOURCES) $(libCppUTestExt_a_SOURCES) \
-	$(CppUTestExtTests_SOURCES) $(CppUTestTests_SOURCES)
+DIST_SOURCES = $(lib_libCppUTest_a_SOURCES) \
+	$(lib_libCppUTestExt_a_SOURCES) $(CppUTestExtTests_SOURCES) \
+	$(CppUTestTests_SOURCES)
 DATA = $(pkgconfig_DATA)
 am__include_cpputestext_HEADERS_DIST =  \
 	include/CppUTestExt/MemoryReportAllocator.h \
@@ -417,8 +419,8 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 ACLOCAL_AMFLAGS = -I m4
 CPPUTEST_TESTS = CppUTestTests
-EXTRA_LIBRARIES = libCppUTestExt.a
-lib_LIBRARIES = libCppUTest.a $(am__append_1)
+EXTRA_LIBRARIES = lib/libCppUTestExt.a
+lib_LIBRARIES = lib/libCppUTest.a $(am__append_1)
 TESTS = $(check_PROGRAMS)
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = cpputest.pc
@@ -426,10 +428,10 @@ EXTRA_DIST = \
 	cpputest.pc.in \
 	$(ALL_FILES_IN_GIT)
 
-libCppUTest_a_CPPFLAGS = $(AM_CPPFLAGS) $(CPPUTEST_CPPFLAGS) $(CPPUTEST_ADDITIONAL_CPPFLAGS)
-libCppUTest_a_CFLAGS = $(AM_CFLAGS) $(CPPUTEST_CFLAGS) $(CPPUTEST_ADDITIONAL_CFLAGS)
-libCppUTest_a_CXXFLAGS = $(AM_CXXFLAGS) $(CPPUTEST_CXXFLAGS) $(CPPUTEST_ADDITIONAL_CXXFLAGS)
-libCppUTest_a_SOURCES = \
+lib_libCppUTest_a_CPPFLAGS = $(AM_CPPFLAGS) $(CPPUTEST_CPPFLAGS) $(CPPUTEST_ADDITIONAL_CPPFLAGS)
+lib_libCppUTest_a_CFLAGS = $(AM_CFLAGS) $(CPPUTEST_CFLAGS) $(CPPUTEST_ADDITIONAL_CFLAGS)
+lib_libCppUTest_a_CXXFLAGS = $(AM_CXXFLAGS) $(CPPUTEST_CXXFLAGS) $(CPPUTEST_ADDITIONAL_CXXFLAGS)
+lib_libCppUTest_a_SOURCES = \
 	src/CppUTest/CommandLineArguments.cpp \
 	src/CppUTest/MemoryLeakWarningPlugin.cpp \
 	src/CppUTest/TestHarness_c.cpp \
@@ -474,10 +476,10 @@ include_cpputest_HEADERS = \
 	include/CppUTest/TestHarness_c.h \
 	include/CppUTest/UtestMacros.h
 
-libCppUTestExt_a_CPPFLAGS = $(libCppUTest_a_CPPFLAGS)
-libCppUTestExt_a_CFLAGS = $(libCppUTest_a_CFLAGS)
-libCppUTestExt_a_CXXFLAGS = $(libCppUTest_a_CXXFLAGS)
-libCppUTestExt_a_SOURCES = \
+lib_libCppUTestExt_a_CPPFLAGS = $(lib_libCppUTest_a_CPPFLAGS)
+lib_libCppUTestExt_a_CFLAGS = $(lib_libCppUTest_a_CFLAGS)
+lib_libCppUTestExt_a_CXXFLAGS = $(lib_libCppUTest_a_CXXFLAGS)
+lib_libCppUTestExt_a_SOURCES = \
    src/CppUTestExt/CodeMemoryReportFormatter.cpp \
    src/CppUTestExt/MemoryReporterPlugin.cpp \
    src/CppUTestExt/MockFailure.cpp \
@@ -512,10 +514,10 @@ libCppUTestExt_a_SOURCES = \
 @INCLUDE_CPPUTEST_EXT_TRUE@	include/CppUTestExt/MockActualFunctionCall.h \
 @INCLUDE_CPPUTEST_EXT_TRUE@	include/CppUTestExt/MockNamedValue.h
 
-CppUTestTests_CPPFLAGS = $(libCppUTest_a_CPPFLAGS)
-CppUTestTests_CFLAGS = $(libCppUTest_a_CFLAGS)
-CppUTestTests_CXXFLAGS = $(libCppUTest_a_CXXFLAGS) 
-CppUTestTests_LDADD = libCppUTest.a $(CPPUTEST_LDADD)
+CppUTestTests_CPPFLAGS = $(lib_libCppUTest_a_CPPFLAGS)
+CppUTestTests_CFLAGS = $(lib_libCppUTest_a_CFLAGS)
+CppUTestTests_CXXFLAGS = $(lib_libCppUTest_a_CXXFLAGS) 
+CppUTestTests_LDADD = lib/libCppUTest.a $(CPPUTEST_LDADD)
 CppUTestTests_LDFLAGS = $(AM_LDFLAGS) $(CPPUTEST_LDFLAGS) $(CPPUTEST_ADDITIONAL_LDFLAGS)
 CppUTestTests_SOURCES = \
 	tests/AllTests.cpp \
@@ -547,10 +549,10 @@ CppUTestTests_SOURCES = \
 	tests/AllocationInCppFile.cpp \
 	tests/UtestTest.cpp
 
-CppUTestExtTests_CPPFLAGS = $(libCppUTestExt_a_CPPFLAGS)
-CppUTestExtTests_CFLAGS = $(libCppUTestExt_a_CFLAGS)
-CppUTestExtTests_CXXFLAGS = $(libCppUTestExt_a_CXXFLAGS) 
-CppUTestExtTests_LDADD = libCppUTestExt.a libCppUTest.a $(CPPUTEST_LDADD)
+CppUTestExtTests_CPPFLAGS = $(lib_libCppUTestExt_a_CPPFLAGS)
+CppUTestExtTests_CFLAGS = $(lib_libCppUTestExt_a_CFLAGS)
+CppUTestExtTests_CXXFLAGS = $(lib_libCppUTestExt_a_CXXFLAGS) 
+CppUTestExtTests_LDADD = lib/libCppUTestExt.a lib/libCppUTest.a $(CPPUTEST_LDADD)
 CppUTestExtTests_LDFLAGS = $(CppUTestTests_LDFLAGS)
 CppUTestExtTests_SOURCES = \
 	tests/CppUTestExt/AllTests.cpp \
@@ -662,14 +664,17 @@ uninstall-libLIBRARIES:
 
 clean-libLIBRARIES:
 	-test -z "$(lib_LIBRARIES)" || rm -f $(lib_LIBRARIES)
-libCppUTest.a: $(libCppUTest_a_OBJECTS) $(libCppUTest_a_DEPENDENCIES) 
-	$(AM_V_at)-rm -f libCppUTest.a
-	$(AM_V_AR)$(libCppUTest_a_AR) libCppUTest.a $(libCppUTest_a_OBJECTS) $(libCppUTest_a_LIBADD)
-	$(AM_V_at)$(RANLIB) libCppUTest.a
-libCppUTestExt.a: $(libCppUTestExt_a_OBJECTS) $(libCppUTestExt_a_DEPENDENCIES) 
-	$(AM_V_at)-rm -f libCppUTestExt.a
-	$(AM_V_AR)$(libCppUTestExt_a_AR) libCppUTestExt.a $(libCppUTestExt_a_OBJECTS) $(libCppUTestExt_a_LIBADD)
-	$(AM_V_at)$(RANLIB) libCppUTestExt.a
+lib/$(am__dirstamp):
+	@$(MKDIR_P) lib
+	@: > lib/$(am__dirstamp)
+lib/libCppUTest.a: $(lib_libCppUTest_a_OBJECTS) $(lib_libCppUTest_a_DEPENDENCIES) lib/$(am__dirstamp)
+	$(AM_V_at)-rm -f lib/libCppUTest.a
+	$(AM_V_AR)$(lib_libCppUTest_a_AR) lib/libCppUTest.a $(lib_libCppUTest_a_OBJECTS) $(lib_libCppUTest_a_LIBADD)
+	$(AM_V_at)$(RANLIB) lib/libCppUTest.a
+lib/libCppUTestExt.a: $(lib_libCppUTestExt_a_OBJECTS) $(lib_libCppUTestExt_a_DEPENDENCIES) lib/$(am__dirstamp)
+	$(AM_V_at)-rm -f lib/libCppUTestExt.a
+	$(AM_V_AR)$(lib_libCppUTestExt_a_AR) lib/libCppUTestExt.a $(lib_libCppUTestExt_a_OBJECTS) $(lib_libCppUTestExt_a_LIBADD)
+	$(AM_V_at)$(RANLIB) lib/libCppUTestExt.a
 
 clean-checkPROGRAMS:
 	@list='$(check_PROGRAMS)'; test -n "$$list" || exit 0; \
@@ -737,37 +742,37 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CppUTestTests-TestResultTest.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CppUTestTests-TestUTestMacro.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CppUTestTests-UtestTest.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCppUTestExt_a-CodeMemoryReportFormatter.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCppUTestExt_a-GTestConvertor.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCppUTestExt_a-MemoryReportAllocator.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCppUTestExt_a-MemoryReportFormatter.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCppUTestExt_a-MemoryReporterPlugin.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCppUTestExt_a-MockActualFunctionCall.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCppUTestExt_a-MockExpectedFunctionCall.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCppUTestExt_a-MockExpectedFunctionsList.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCppUTestExt_a-MockFailure.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCppUTestExt_a-MockFunctionCall.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCppUTestExt_a-MockNamedValue.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCppUTestExt_a-MockSupport.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCppUTestExt_a-MockSupportPlugin.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCppUTestExt_a-MockSupport_c.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCppUTestExt_a-OrderedTest.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCppUTest_a-CommandLineArguments.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCppUTest_a-CommandLineTestRunner.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCppUTest_a-JUnitTestOutput.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCppUTest_a-MemoryLeakDetector.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCppUTest_a-MemoryLeakWarningPlugin.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCppUTest_a-SimpleString.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCppUTest_a-TestFailure.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCppUTest_a-TestFilter.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCppUTest_a-TestHarness_c.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCppUTest_a-TestMemoryAllocator.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCppUTest_a-TestOutput.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCppUTest_a-TestPlugin.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCppUTest_a-TestRegistry.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCppUTest_a-TestResult.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCppUTest_a-Utest.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libCppUTest_a-UtestPlatform.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTestExt_a-CodeMemoryReportFormatter.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTestExt_a-GTestConvertor.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTestExt_a-MemoryReportAllocator.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTestExt_a-MemoryReportFormatter.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTestExt_a-MemoryReporterPlugin.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTestExt_a-MockActualFunctionCall.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTestExt_a-MockExpectedFunctionCall.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTestExt_a-MockExpectedFunctionsList.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTestExt_a-MockFailure.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTestExt_a-MockFunctionCall.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTestExt_a-MockNamedValue.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTestExt_a-MockSupport.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTestExt_a-MockSupportPlugin.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTestExt_a-MockSupport_c.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTestExt_a-OrderedTest.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTest_a-CommandLineArguments.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTest_a-CommandLineTestRunner.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTest_a-JUnitTestOutput.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTest_a-MemoryLeakDetector.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTest_a-MemoryLeakWarningPlugin.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTest_a-SimpleString.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTest_a-TestFailure.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTest_a-TestFilter.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTest_a-TestHarness_c.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTest_a-TestMemoryAllocator.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTest_a-TestOutput.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTest_a-TestPlugin.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTest_a-TestRegistry.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTest_a-TestResult.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTest_a-Utest.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTest_a-UtestPlatform.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -881,501 +886,501 @@ CppUTestTests-AllocationInCFile.obj: tests/AllocationInCFile.c
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LTCXXCOMPILE) -c -o $@ $<
 
-libCppUTest_a-CommandLineArguments.o: src/CppUTest/CommandLineArguments.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTest_a-CommandLineArguments.o -MD -MP -MF $(DEPDIR)/libCppUTest_a-CommandLineArguments.Tpo -c -o libCppUTest_a-CommandLineArguments.o `test -f 'src/CppUTest/CommandLineArguments.cpp' || echo '$(srcdir)/'`src/CppUTest/CommandLineArguments.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTest_a-CommandLineArguments.Tpo $(DEPDIR)/libCppUTest_a-CommandLineArguments.Po
+lib_libCppUTest_a-CommandLineArguments.o: src/CppUTest/CommandLineArguments.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTest_a-CommandLineArguments.o -MD -MP -MF $(DEPDIR)/lib_libCppUTest_a-CommandLineArguments.Tpo -c -o lib_libCppUTest_a-CommandLineArguments.o `test -f 'src/CppUTest/CommandLineArguments.cpp' || echo '$(srcdir)/'`src/CppUTest/CommandLineArguments.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTest_a-CommandLineArguments.Tpo $(DEPDIR)/lib_libCppUTest_a-CommandLineArguments.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/CommandLineArguments.cpp' object='libCppUTest_a-CommandLineArguments.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/CommandLineArguments.cpp' object='lib_libCppUTest_a-CommandLineArguments.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTest_a-CommandLineArguments.o `test -f 'src/CppUTest/CommandLineArguments.cpp' || echo '$(srcdir)/'`src/CppUTest/CommandLineArguments.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTest_a-CommandLineArguments.o `test -f 'src/CppUTest/CommandLineArguments.cpp' || echo '$(srcdir)/'`src/CppUTest/CommandLineArguments.cpp
 
-libCppUTest_a-CommandLineArguments.obj: src/CppUTest/CommandLineArguments.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTest_a-CommandLineArguments.obj -MD -MP -MF $(DEPDIR)/libCppUTest_a-CommandLineArguments.Tpo -c -o libCppUTest_a-CommandLineArguments.obj `if test -f 'src/CppUTest/CommandLineArguments.cpp'; then $(CYGPATH_W) 'src/CppUTest/CommandLineArguments.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/CommandLineArguments.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTest_a-CommandLineArguments.Tpo $(DEPDIR)/libCppUTest_a-CommandLineArguments.Po
+lib_libCppUTest_a-CommandLineArguments.obj: src/CppUTest/CommandLineArguments.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTest_a-CommandLineArguments.obj -MD -MP -MF $(DEPDIR)/lib_libCppUTest_a-CommandLineArguments.Tpo -c -o lib_libCppUTest_a-CommandLineArguments.obj `if test -f 'src/CppUTest/CommandLineArguments.cpp'; then $(CYGPATH_W) 'src/CppUTest/CommandLineArguments.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/CommandLineArguments.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTest_a-CommandLineArguments.Tpo $(DEPDIR)/lib_libCppUTest_a-CommandLineArguments.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/CommandLineArguments.cpp' object='libCppUTest_a-CommandLineArguments.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/CommandLineArguments.cpp' object='lib_libCppUTest_a-CommandLineArguments.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTest_a-CommandLineArguments.obj `if test -f 'src/CppUTest/CommandLineArguments.cpp'; then $(CYGPATH_W) 'src/CppUTest/CommandLineArguments.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/CommandLineArguments.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTest_a-CommandLineArguments.obj `if test -f 'src/CppUTest/CommandLineArguments.cpp'; then $(CYGPATH_W) 'src/CppUTest/CommandLineArguments.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/CommandLineArguments.cpp'; fi`
 
-libCppUTest_a-MemoryLeakWarningPlugin.o: src/CppUTest/MemoryLeakWarningPlugin.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTest_a-MemoryLeakWarningPlugin.o -MD -MP -MF $(DEPDIR)/libCppUTest_a-MemoryLeakWarningPlugin.Tpo -c -o libCppUTest_a-MemoryLeakWarningPlugin.o `test -f 'src/CppUTest/MemoryLeakWarningPlugin.cpp' || echo '$(srcdir)/'`src/CppUTest/MemoryLeakWarningPlugin.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTest_a-MemoryLeakWarningPlugin.Tpo $(DEPDIR)/libCppUTest_a-MemoryLeakWarningPlugin.Po
+lib_libCppUTest_a-MemoryLeakWarningPlugin.o: src/CppUTest/MemoryLeakWarningPlugin.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTest_a-MemoryLeakWarningPlugin.o -MD -MP -MF $(DEPDIR)/lib_libCppUTest_a-MemoryLeakWarningPlugin.Tpo -c -o lib_libCppUTest_a-MemoryLeakWarningPlugin.o `test -f 'src/CppUTest/MemoryLeakWarningPlugin.cpp' || echo '$(srcdir)/'`src/CppUTest/MemoryLeakWarningPlugin.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTest_a-MemoryLeakWarningPlugin.Tpo $(DEPDIR)/lib_libCppUTest_a-MemoryLeakWarningPlugin.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/MemoryLeakWarningPlugin.cpp' object='libCppUTest_a-MemoryLeakWarningPlugin.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/MemoryLeakWarningPlugin.cpp' object='lib_libCppUTest_a-MemoryLeakWarningPlugin.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTest_a-MemoryLeakWarningPlugin.o `test -f 'src/CppUTest/MemoryLeakWarningPlugin.cpp' || echo '$(srcdir)/'`src/CppUTest/MemoryLeakWarningPlugin.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTest_a-MemoryLeakWarningPlugin.o `test -f 'src/CppUTest/MemoryLeakWarningPlugin.cpp' || echo '$(srcdir)/'`src/CppUTest/MemoryLeakWarningPlugin.cpp
 
-libCppUTest_a-MemoryLeakWarningPlugin.obj: src/CppUTest/MemoryLeakWarningPlugin.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTest_a-MemoryLeakWarningPlugin.obj -MD -MP -MF $(DEPDIR)/libCppUTest_a-MemoryLeakWarningPlugin.Tpo -c -o libCppUTest_a-MemoryLeakWarningPlugin.obj `if test -f 'src/CppUTest/MemoryLeakWarningPlugin.cpp'; then $(CYGPATH_W) 'src/CppUTest/MemoryLeakWarningPlugin.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/MemoryLeakWarningPlugin.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTest_a-MemoryLeakWarningPlugin.Tpo $(DEPDIR)/libCppUTest_a-MemoryLeakWarningPlugin.Po
+lib_libCppUTest_a-MemoryLeakWarningPlugin.obj: src/CppUTest/MemoryLeakWarningPlugin.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTest_a-MemoryLeakWarningPlugin.obj -MD -MP -MF $(DEPDIR)/lib_libCppUTest_a-MemoryLeakWarningPlugin.Tpo -c -o lib_libCppUTest_a-MemoryLeakWarningPlugin.obj `if test -f 'src/CppUTest/MemoryLeakWarningPlugin.cpp'; then $(CYGPATH_W) 'src/CppUTest/MemoryLeakWarningPlugin.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/MemoryLeakWarningPlugin.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTest_a-MemoryLeakWarningPlugin.Tpo $(DEPDIR)/lib_libCppUTest_a-MemoryLeakWarningPlugin.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/MemoryLeakWarningPlugin.cpp' object='libCppUTest_a-MemoryLeakWarningPlugin.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/MemoryLeakWarningPlugin.cpp' object='lib_libCppUTest_a-MemoryLeakWarningPlugin.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTest_a-MemoryLeakWarningPlugin.obj `if test -f 'src/CppUTest/MemoryLeakWarningPlugin.cpp'; then $(CYGPATH_W) 'src/CppUTest/MemoryLeakWarningPlugin.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/MemoryLeakWarningPlugin.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTest_a-MemoryLeakWarningPlugin.obj `if test -f 'src/CppUTest/MemoryLeakWarningPlugin.cpp'; then $(CYGPATH_W) 'src/CppUTest/MemoryLeakWarningPlugin.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/MemoryLeakWarningPlugin.cpp'; fi`
 
-libCppUTest_a-TestHarness_c.o: src/CppUTest/TestHarness_c.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTest_a-TestHarness_c.o -MD -MP -MF $(DEPDIR)/libCppUTest_a-TestHarness_c.Tpo -c -o libCppUTest_a-TestHarness_c.o `test -f 'src/CppUTest/TestHarness_c.cpp' || echo '$(srcdir)/'`src/CppUTest/TestHarness_c.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTest_a-TestHarness_c.Tpo $(DEPDIR)/libCppUTest_a-TestHarness_c.Po
+lib_libCppUTest_a-TestHarness_c.o: src/CppUTest/TestHarness_c.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTest_a-TestHarness_c.o -MD -MP -MF $(DEPDIR)/lib_libCppUTest_a-TestHarness_c.Tpo -c -o lib_libCppUTest_a-TestHarness_c.o `test -f 'src/CppUTest/TestHarness_c.cpp' || echo '$(srcdir)/'`src/CppUTest/TestHarness_c.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTest_a-TestHarness_c.Tpo $(DEPDIR)/lib_libCppUTest_a-TestHarness_c.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/TestHarness_c.cpp' object='libCppUTest_a-TestHarness_c.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/TestHarness_c.cpp' object='lib_libCppUTest_a-TestHarness_c.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTest_a-TestHarness_c.o `test -f 'src/CppUTest/TestHarness_c.cpp' || echo '$(srcdir)/'`src/CppUTest/TestHarness_c.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTest_a-TestHarness_c.o `test -f 'src/CppUTest/TestHarness_c.cpp' || echo '$(srcdir)/'`src/CppUTest/TestHarness_c.cpp
 
-libCppUTest_a-TestHarness_c.obj: src/CppUTest/TestHarness_c.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTest_a-TestHarness_c.obj -MD -MP -MF $(DEPDIR)/libCppUTest_a-TestHarness_c.Tpo -c -o libCppUTest_a-TestHarness_c.obj `if test -f 'src/CppUTest/TestHarness_c.cpp'; then $(CYGPATH_W) 'src/CppUTest/TestHarness_c.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/TestHarness_c.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTest_a-TestHarness_c.Tpo $(DEPDIR)/libCppUTest_a-TestHarness_c.Po
+lib_libCppUTest_a-TestHarness_c.obj: src/CppUTest/TestHarness_c.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTest_a-TestHarness_c.obj -MD -MP -MF $(DEPDIR)/lib_libCppUTest_a-TestHarness_c.Tpo -c -o lib_libCppUTest_a-TestHarness_c.obj `if test -f 'src/CppUTest/TestHarness_c.cpp'; then $(CYGPATH_W) 'src/CppUTest/TestHarness_c.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/TestHarness_c.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTest_a-TestHarness_c.Tpo $(DEPDIR)/lib_libCppUTest_a-TestHarness_c.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/TestHarness_c.cpp' object='libCppUTest_a-TestHarness_c.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/TestHarness_c.cpp' object='lib_libCppUTest_a-TestHarness_c.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTest_a-TestHarness_c.obj `if test -f 'src/CppUTest/TestHarness_c.cpp'; then $(CYGPATH_W) 'src/CppUTest/TestHarness_c.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/TestHarness_c.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTest_a-TestHarness_c.obj `if test -f 'src/CppUTest/TestHarness_c.cpp'; then $(CYGPATH_W) 'src/CppUTest/TestHarness_c.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/TestHarness_c.cpp'; fi`
 
-libCppUTest_a-TestRegistry.o: src/CppUTest/TestRegistry.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTest_a-TestRegistry.o -MD -MP -MF $(DEPDIR)/libCppUTest_a-TestRegistry.Tpo -c -o libCppUTest_a-TestRegistry.o `test -f 'src/CppUTest/TestRegistry.cpp' || echo '$(srcdir)/'`src/CppUTest/TestRegistry.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTest_a-TestRegistry.Tpo $(DEPDIR)/libCppUTest_a-TestRegistry.Po
+lib_libCppUTest_a-TestRegistry.o: src/CppUTest/TestRegistry.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTest_a-TestRegistry.o -MD -MP -MF $(DEPDIR)/lib_libCppUTest_a-TestRegistry.Tpo -c -o lib_libCppUTest_a-TestRegistry.o `test -f 'src/CppUTest/TestRegistry.cpp' || echo '$(srcdir)/'`src/CppUTest/TestRegistry.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTest_a-TestRegistry.Tpo $(DEPDIR)/lib_libCppUTest_a-TestRegistry.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/TestRegistry.cpp' object='libCppUTest_a-TestRegistry.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/TestRegistry.cpp' object='lib_libCppUTest_a-TestRegistry.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTest_a-TestRegistry.o `test -f 'src/CppUTest/TestRegistry.cpp' || echo '$(srcdir)/'`src/CppUTest/TestRegistry.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTest_a-TestRegistry.o `test -f 'src/CppUTest/TestRegistry.cpp' || echo '$(srcdir)/'`src/CppUTest/TestRegistry.cpp
 
-libCppUTest_a-TestRegistry.obj: src/CppUTest/TestRegistry.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTest_a-TestRegistry.obj -MD -MP -MF $(DEPDIR)/libCppUTest_a-TestRegistry.Tpo -c -o libCppUTest_a-TestRegistry.obj `if test -f 'src/CppUTest/TestRegistry.cpp'; then $(CYGPATH_W) 'src/CppUTest/TestRegistry.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/TestRegistry.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTest_a-TestRegistry.Tpo $(DEPDIR)/libCppUTest_a-TestRegistry.Po
+lib_libCppUTest_a-TestRegistry.obj: src/CppUTest/TestRegistry.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTest_a-TestRegistry.obj -MD -MP -MF $(DEPDIR)/lib_libCppUTest_a-TestRegistry.Tpo -c -o lib_libCppUTest_a-TestRegistry.obj `if test -f 'src/CppUTest/TestRegistry.cpp'; then $(CYGPATH_W) 'src/CppUTest/TestRegistry.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/TestRegistry.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTest_a-TestRegistry.Tpo $(DEPDIR)/lib_libCppUTest_a-TestRegistry.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/TestRegistry.cpp' object='libCppUTest_a-TestRegistry.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/TestRegistry.cpp' object='lib_libCppUTest_a-TestRegistry.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTest_a-TestRegistry.obj `if test -f 'src/CppUTest/TestRegistry.cpp'; then $(CYGPATH_W) 'src/CppUTest/TestRegistry.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/TestRegistry.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTest_a-TestRegistry.obj `if test -f 'src/CppUTest/TestRegistry.cpp'; then $(CYGPATH_W) 'src/CppUTest/TestRegistry.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/TestRegistry.cpp'; fi`
 
-libCppUTest_a-CommandLineTestRunner.o: src/CppUTest/CommandLineTestRunner.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTest_a-CommandLineTestRunner.o -MD -MP -MF $(DEPDIR)/libCppUTest_a-CommandLineTestRunner.Tpo -c -o libCppUTest_a-CommandLineTestRunner.o `test -f 'src/CppUTest/CommandLineTestRunner.cpp' || echo '$(srcdir)/'`src/CppUTest/CommandLineTestRunner.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTest_a-CommandLineTestRunner.Tpo $(DEPDIR)/libCppUTest_a-CommandLineTestRunner.Po
+lib_libCppUTest_a-CommandLineTestRunner.o: src/CppUTest/CommandLineTestRunner.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTest_a-CommandLineTestRunner.o -MD -MP -MF $(DEPDIR)/lib_libCppUTest_a-CommandLineTestRunner.Tpo -c -o lib_libCppUTest_a-CommandLineTestRunner.o `test -f 'src/CppUTest/CommandLineTestRunner.cpp' || echo '$(srcdir)/'`src/CppUTest/CommandLineTestRunner.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTest_a-CommandLineTestRunner.Tpo $(DEPDIR)/lib_libCppUTest_a-CommandLineTestRunner.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/CommandLineTestRunner.cpp' object='libCppUTest_a-CommandLineTestRunner.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/CommandLineTestRunner.cpp' object='lib_libCppUTest_a-CommandLineTestRunner.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTest_a-CommandLineTestRunner.o `test -f 'src/CppUTest/CommandLineTestRunner.cpp' || echo '$(srcdir)/'`src/CppUTest/CommandLineTestRunner.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTest_a-CommandLineTestRunner.o `test -f 'src/CppUTest/CommandLineTestRunner.cpp' || echo '$(srcdir)/'`src/CppUTest/CommandLineTestRunner.cpp
 
-libCppUTest_a-CommandLineTestRunner.obj: src/CppUTest/CommandLineTestRunner.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTest_a-CommandLineTestRunner.obj -MD -MP -MF $(DEPDIR)/libCppUTest_a-CommandLineTestRunner.Tpo -c -o libCppUTest_a-CommandLineTestRunner.obj `if test -f 'src/CppUTest/CommandLineTestRunner.cpp'; then $(CYGPATH_W) 'src/CppUTest/CommandLineTestRunner.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/CommandLineTestRunner.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTest_a-CommandLineTestRunner.Tpo $(DEPDIR)/libCppUTest_a-CommandLineTestRunner.Po
+lib_libCppUTest_a-CommandLineTestRunner.obj: src/CppUTest/CommandLineTestRunner.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTest_a-CommandLineTestRunner.obj -MD -MP -MF $(DEPDIR)/lib_libCppUTest_a-CommandLineTestRunner.Tpo -c -o lib_libCppUTest_a-CommandLineTestRunner.obj `if test -f 'src/CppUTest/CommandLineTestRunner.cpp'; then $(CYGPATH_W) 'src/CppUTest/CommandLineTestRunner.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/CommandLineTestRunner.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTest_a-CommandLineTestRunner.Tpo $(DEPDIR)/lib_libCppUTest_a-CommandLineTestRunner.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/CommandLineTestRunner.cpp' object='libCppUTest_a-CommandLineTestRunner.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/CommandLineTestRunner.cpp' object='lib_libCppUTest_a-CommandLineTestRunner.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTest_a-CommandLineTestRunner.obj `if test -f 'src/CppUTest/CommandLineTestRunner.cpp'; then $(CYGPATH_W) 'src/CppUTest/CommandLineTestRunner.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/CommandLineTestRunner.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTest_a-CommandLineTestRunner.obj `if test -f 'src/CppUTest/CommandLineTestRunner.cpp'; then $(CYGPATH_W) 'src/CppUTest/CommandLineTestRunner.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/CommandLineTestRunner.cpp'; fi`
 
-libCppUTest_a-SimpleString.o: src/CppUTest/SimpleString.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTest_a-SimpleString.o -MD -MP -MF $(DEPDIR)/libCppUTest_a-SimpleString.Tpo -c -o libCppUTest_a-SimpleString.o `test -f 'src/CppUTest/SimpleString.cpp' || echo '$(srcdir)/'`src/CppUTest/SimpleString.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTest_a-SimpleString.Tpo $(DEPDIR)/libCppUTest_a-SimpleString.Po
+lib_libCppUTest_a-SimpleString.o: src/CppUTest/SimpleString.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTest_a-SimpleString.o -MD -MP -MF $(DEPDIR)/lib_libCppUTest_a-SimpleString.Tpo -c -o lib_libCppUTest_a-SimpleString.o `test -f 'src/CppUTest/SimpleString.cpp' || echo '$(srcdir)/'`src/CppUTest/SimpleString.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTest_a-SimpleString.Tpo $(DEPDIR)/lib_libCppUTest_a-SimpleString.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/SimpleString.cpp' object='libCppUTest_a-SimpleString.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/SimpleString.cpp' object='lib_libCppUTest_a-SimpleString.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTest_a-SimpleString.o `test -f 'src/CppUTest/SimpleString.cpp' || echo '$(srcdir)/'`src/CppUTest/SimpleString.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTest_a-SimpleString.o `test -f 'src/CppUTest/SimpleString.cpp' || echo '$(srcdir)/'`src/CppUTest/SimpleString.cpp
 
-libCppUTest_a-SimpleString.obj: src/CppUTest/SimpleString.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTest_a-SimpleString.obj -MD -MP -MF $(DEPDIR)/libCppUTest_a-SimpleString.Tpo -c -o libCppUTest_a-SimpleString.obj `if test -f 'src/CppUTest/SimpleString.cpp'; then $(CYGPATH_W) 'src/CppUTest/SimpleString.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/SimpleString.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTest_a-SimpleString.Tpo $(DEPDIR)/libCppUTest_a-SimpleString.Po
+lib_libCppUTest_a-SimpleString.obj: src/CppUTest/SimpleString.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTest_a-SimpleString.obj -MD -MP -MF $(DEPDIR)/lib_libCppUTest_a-SimpleString.Tpo -c -o lib_libCppUTest_a-SimpleString.obj `if test -f 'src/CppUTest/SimpleString.cpp'; then $(CYGPATH_W) 'src/CppUTest/SimpleString.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/SimpleString.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTest_a-SimpleString.Tpo $(DEPDIR)/lib_libCppUTest_a-SimpleString.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/SimpleString.cpp' object='libCppUTest_a-SimpleString.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/SimpleString.cpp' object='lib_libCppUTest_a-SimpleString.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTest_a-SimpleString.obj `if test -f 'src/CppUTest/SimpleString.cpp'; then $(CYGPATH_W) 'src/CppUTest/SimpleString.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/SimpleString.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTest_a-SimpleString.obj `if test -f 'src/CppUTest/SimpleString.cpp'; then $(CYGPATH_W) 'src/CppUTest/SimpleString.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/SimpleString.cpp'; fi`
 
-libCppUTest_a-TestMemoryAllocator.o: src/CppUTest/TestMemoryAllocator.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTest_a-TestMemoryAllocator.o -MD -MP -MF $(DEPDIR)/libCppUTest_a-TestMemoryAllocator.Tpo -c -o libCppUTest_a-TestMemoryAllocator.o `test -f 'src/CppUTest/TestMemoryAllocator.cpp' || echo '$(srcdir)/'`src/CppUTest/TestMemoryAllocator.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTest_a-TestMemoryAllocator.Tpo $(DEPDIR)/libCppUTest_a-TestMemoryAllocator.Po
+lib_libCppUTest_a-TestMemoryAllocator.o: src/CppUTest/TestMemoryAllocator.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTest_a-TestMemoryAllocator.o -MD -MP -MF $(DEPDIR)/lib_libCppUTest_a-TestMemoryAllocator.Tpo -c -o lib_libCppUTest_a-TestMemoryAllocator.o `test -f 'src/CppUTest/TestMemoryAllocator.cpp' || echo '$(srcdir)/'`src/CppUTest/TestMemoryAllocator.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTest_a-TestMemoryAllocator.Tpo $(DEPDIR)/lib_libCppUTest_a-TestMemoryAllocator.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/TestMemoryAllocator.cpp' object='libCppUTest_a-TestMemoryAllocator.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/TestMemoryAllocator.cpp' object='lib_libCppUTest_a-TestMemoryAllocator.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTest_a-TestMemoryAllocator.o `test -f 'src/CppUTest/TestMemoryAllocator.cpp' || echo '$(srcdir)/'`src/CppUTest/TestMemoryAllocator.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTest_a-TestMemoryAllocator.o `test -f 'src/CppUTest/TestMemoryAllocator.cpp' || echo '$(srcdir)/'`src/CppUTest/TestMemoryAllocator.cpp
 
-libCppUTest_a-TestMemoryAllocator.obj: src/CppUTest/TestMemoryAllocator.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTest_a-TestMemoryAllocator.obj -MD -MP -MF $(DEPDIR)/libCppUTest_a-TestMemoryAllocator.Tpo -c -o libCppUTest_a-TestMemoryAllocator.obj `if test -f 'src/CppUTest/TestMemoryAllocator.cpp'; then $(CYGPATH_W) 'src/CppUTest/TestMemoryAllocator.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/TestMemoryAllocator.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTest_a-TestMemoryAllocator.Tpo $(DEPDIR)/libCppUTest_a-TestMemoryAllocator.Po
+lib_libCppUTest_a-TestMemoryAllocator.obj: src/CppUTest/TestMemoryAllocator.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTest_a-TestMemoryAllocator.obj -MD -MP -MF $(DEPDIR)/lib_libCppUTest_a-TestMemoryAllocator.Tpo -c -o lib_libCppUTest_a-TestMemoryAllocator.obj `if test -f 'src/CppUTest/TestMemoryAllocator.cpp'; then $(CYGPATH_W) 'src/CppUTest/TestMemoryAllocator.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/TestMemoryAllocator.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTest_a-TestMemoryAllocator.Tpo $(DEPDIR)/lib_libCppUTest_a-TestMemoryAllocator.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/TestMemoryAllocator.cpp' object='libCppUTest_a-TestMemoryAllocator.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/TestMemoryAllocator.cpp' object='lib_libCppUTest_a-TestMemoryAllocator.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTest_a-TestMemoryAllocator.obj `if test -f 'src/CppUTest/TestMemoryAllocator.cpp'; then $(CYGPATH_W) 'src/CppUTest/TestMemoryAllocator.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/TestMemoryAllocator.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTest_a-TestMemoryAllocator.obj `if test -f 'src/CppUTest/TestMemoryAllocator.cpp'; then $(CYGPATH_W) 'src/CppUTest/TestMemoryAllocator.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/TestMemoryAllocator.cpp'; fi`
 
-libCppUTest_a-TestResult.o: src/CppUTest/TestResult.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTest_a-TestResult.o -MD -MP -MF $(DEPDIR)/libCppUTest_a-TestResult.Tpo -c -o libCppUTest_a-TestResult.o `test -f 'src/CppUTest/TestResult.cpp' || echo '$(srcdir)/'`src/CppUTest/TestResult.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTest_a-TestResult.Tpo $(DEPDIR)/libCppUTest_a-TestResult.Po
+lib_libCppUTest_a-TestResult.o: src/CppUTest/TestResult.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTest_a-TestResult.o -MD -MP -MF $(DEPDIR)/lib_libCppUTest_a-TestResult.Tpo -c -o lib_libCppUTest_a-TestResult.o `test -f 'src/CppUTest/TestResult.cpp' || echo '$(srcdir)/'`src/CppUTest/TestResult.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTest_a-TestResult.Tpo $(DEPDIR)/lib_libCppUTest_a-TestResult.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/TestResult.cpp' object='libCppUTest_a-TestResult.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/TestResult.cpp' object='lib_libCppUTest_a-TestResult.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTest_a-TestResult.o `test -f 'src/CppUTest/TestResult.cpp' || echo '$(srcdir)/'`src/CppUTest/TestResult.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTest_a-TestResult.o `test -f 'src/CppUTest/TestResult.cpp' || echo '$(srcdir)/'`src/CppUTest/TestResult.cpp
 
-libCppUTest_a-TestResult.obj: src/CppUTest/TestResult.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTest_a-TestResult.obj -MD -MP -MF $(DEPDIR)/libCppUTest_a-TestResult.Tpo -c -o libCppUTest_a-TestResult.obj `if test -f 'src/CppUTest/TestResult.cpp'; then $(CYGPATH_W) 'src/CppUTest/TestResult.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/TestResult.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTest_a-TestResult.Tpo $(DEPDIR)/libCppUTest_a-TestResult.Po
+lib_libCppUTest_a-TestResult.obj: src/CppUTest/TestResult.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTest_a-TestResult.obj -MD -MP -MF $(DEPDIR)/lib_libCppUTest_a-TestResult.Tpo -c -o lib_libCppUTest_a-TestResult.obj `if test -f 'src/CppUTest/TestResult.cpp'; then $(CYGPATH_W) 'src/CppUTest/TestResult.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/TestResult.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTest_a-TestResult.Tpo $(DEPDIR)/lib_libCppUTest_a-TestResult.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/TestResult.cpp' object='libCppUTest_a-TestResult.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/TestResult.cpp' object='lib_libCppUTest_a-TestResult.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTest_a-TestResult.obj `if test -f 'src/CppUTest/TestResult.cpp'; then $(CYGPATH_W) 'src/CppUTest/TestResult.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/TestResult.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTest_a-TestResult.obj `if test -f 'src/CppUTest/TestResult.cpp'; then $(CYGPATH_W) 'src/CppUTest/TestResult.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/TestResult.cpp'; fi`
 
-libCppUTest_a-JUnitTestOutput.o: src/CppUTest/JUnitTestOutput.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTest_a-JUnitTestOutput.o -MD -MP -MF $(DEPDIR)/libCppUTest_a-JUnitTestOutput.Tpo -c -o libCppUTest_a-JUnitTestOutput.o `test -f 'src/CppUTest/JUnitTestOutput.cpp' || echo '$(srcdir)/'`src/CppUTest/JUnitTestOutput.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTest_a-JUnitTestOutput.Tpo $(DEPDIR)/libCppUTest_a-JUnitTestOutput.Po
+lib_libCppUTest_a-JUnitTestOutput.o: src/CppUTest/JUnitTestOutput.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTest_a-JUnitTestOutput.o -MD -MP -MF $(DEPDIR)/lib_libCppUTest_a-JUnitTestOutput.Tpo -c -o lib_libCppUTest_a-JUnitTestOutput.o `test -f 'src/CppUTest/JUnitTestOutput.cpp' || echo '$(srcdir)/'`src/CppUTest/JUnitTestOutput.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTest_a-JUnitTestOutput.Tpo $(DEPDIR)/lib_libCppUTest_a-JUnitTestOutput.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/JUnitTestOutput.cpp' object='libCppUTest_a-JUnitTestOutput.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/JUnitTestOutput.cpp' object='lib_libCppUTest_a-JUnitTestOutput.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTest_a-JUnitTestOutput.o `test -f 'src/CppUTest/JUnitTestOutput.cpp' || echo '$(srcdir)/'`src/CppUTest/JUnitTestOutput.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTest_a-JUnitTestOutput.o `test -f 'src/CppUTest/JUnitTestOutput.cpp' || echo '$(srcdir)/'`src/CppUTest/JUnitTestOutput.cpp
 
-libCppUTest_a-JUnitTestOutput.obj: src/CppUTest/JUnitTestOutput.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTest_a-JUnitTestOutput.obj -MD -MP -MF $(DEPDIR)/libCppUTest_a-JUnitTestOutput.Tpo -c -o libCppUTest_a-JUnitTestOutput.obj `if test -f 'src/CppUTest/JUnitTestOutput.cpp'; then $(CYGPATH_W) 'src/CppUTest/JUnitTestOutput.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/JUnitTestOutput.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTest_a-JUnitTestOutput.Tpo $(DEPDIR)/libCppUTest_a-JUnitTestOutput.Po
+lib_libCppUTest_a-JUnitTestOutput.obj: src/CppUTest/JUnitTestOutput.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTest_a-JUnitTestOutput.obj -MD -MP -MF $(DEPDIR)/lib_libCppUTest_a-JUnitTestOutput.Tpo -c -o lib_libCppUTest_a-JUnitTestOutput.obj `if test -f 'src/CppUTest/JUnitTestOutput.cpp'; then $(CYGPATH_W) 'src/CppUTest/JUnitTestOutput.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/JUnitTestOutput.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTest_a-JUnitTestOutput.Tpo $(DEPDIR)/lib_libCppUTest_a-JUnitTestOutput.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/JUnitTestOutput.cpp' object='libCppUTest_a-JUnitTestOutput.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/JUnitTestOutput.cpp' object='lib_libCppUTest_a-JUnitTestOutput.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTest_a-JUnitTestOutput.obj `if test -f 'src/CppUTest/JUnitTestOutput.cpp'; then $(CYGPATH_W) 'src/CppUTest/JUnitTestOutput.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/JUnitTestOutput.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTest_a-JUnitTestOutput.obj `if test -f 'src/CppUTest/JUnitTestOutput.cpp'; then $(CYGPATH_W) 'src/CppUTest/JUnitTestOutput.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/JUnitTestOutput.cpp'; fi`
 
-libCppUTest_a-TestFailure.o: src/CppUTest/TestFailure.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTest_a-TestFailure.o -MD -MP -MF $(DEPDIR)/libCppUTest_a-TestFailure.Tpo -c -o libCppUTest_a-TestFailure.o `test -f 'src/CppUTest/TestFailure.cpp' || echo '$(srcdir)/'`src/CppUTest/TestFailure.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTest_a-TestFailure.Tpo $(DEPDIR)/libCppUTest_a-TestFailure.Po
+lib_libCppUTest_a-TestFailure.o: src/CppUTest/TestFailure.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTest_a-TestFailure.o -MD -MP -MF $(DEPDIR)/lib_libCppUTest_a-TestFailure.Tpo -c -o lib_libCppUTest_a-TestFailure.o `test -f 'src/CppUTest/TestFailure.cpp' || echo '$(srcdir)/'`src/CppUTest/TestFailure.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTest_a-TestFailure.Tpo $(DEPDIR)/lib_libCppUTest_a-TestFailure.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/TestFailure.cpp' object='libCppUTest_a-TestFailure.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/TestFailure.cpp' object='lib_libCppUTest_a-TestFailure.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTest_a-TestFailure.o `test -f 'src/CppUTest/TestFailure.cpp' || echo '$(srcdir)/'`src/CppUTest/TestFailure.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTest_a-TestFailure.o `test -f 'src/CppUTest/TestFailure.cpp' || echo '$(srcdir)/'`src/CppUTest/TestFailure.cpp
 
-libCppUTest_a-TestFailure.obj: src/CppUTest/TestFailure.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTest_a-TestFailure.obj -MD -MP -MF $(DEPDIR)/libCppUTest_a-TestFailure.Tpo -c -o libCppUTest_a-TestFailure.obj `if test -f 'src/CppUTest/TestFailure.cpp'; then $(CYGPATH_W) 'src/CppUTest/TestFailure.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/TestFailure.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTest_a-TestFailure.Tpo $(DEPDIR)/libCppUTest_a-TestFailure.Po
+lib_libCppUTest_a-TestFailure.obj: src/CppUTest/TestFailure.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTest_a-TestFailure.obj -MD -MP -MF $(DEPDIR)/lib_libCppUTest_a-TestFailure.Tpo -c -o lib_libCppUTest_a-TestFailure.obj `if test -f 'src/CppUTest/TestFailure.cpp'; then $(CYGPATH_W) 'src/CppUTest/TestFailure.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/TestFailure.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTest_a-TestFailure.Tpo $(DEPDIR)/lib_libCppUTest_a-TestFailure.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/TestFailure.cpp' object='libCppUTest_a-TestFailure.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/TestFailure.cpp' object='lib_libCppUTest_a-TestFailure.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTest_a-TestFailure.obj `if test -f 'src/CppUTest/TestFailure.cpp'; then $(CYGPATH_W) 'src/CppUTest/TestFailure.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/TestFailure.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTest_a-TestFailure.obj `if test -f 'src/CppUTest/TestFailure.cpp'; then $(CYGPATH_W) 'src/CppUTest/TestFailure.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/TestFailure.cpp'; fi`
 
-libCppUTest_a-TestOutput.o: src/CppUTest/TestOutput.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTest_a-TestOutput.o -MD -MP -MF $(DEPDIR)/libCppUTest_a-TestOutput.Tpo -c -o libCppUTest_a-TestOutput.o `test -f 'src/CppUTest/TestOutput.cpp' || echo '$(srcdir)/'`src/CppUTest/TestOutput.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTest_a-TestOutput.Tpo $(DEPDIR)/libCppUTest_a-TestOutput.Po
+lib_libCppUTest_a-TestOutput.o: src/CppUTest/TestOutput.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTest_a-TestOutput.o -MD -MP -MF $(DEPDIR)/lib_libCppUTest_a-TestOutput.Tpo -c -o lib_libCppUTest_a-TestOutput.o `test -f 'src/CppUTest/TestOutput.cpp' || echo '$(srcdir)/'`src/CppUTest/TestOutput.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTest_a-TestOutput.Tpo $(DEPDIR)/lib_libCppUTest_a-TestOutput.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/TestOutput.cpp' object='libCppUTest_a-TestOutput.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/TestOutput.cpp' object='lib_libCppUTest_a-TestOutput.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTest_a-TestOutput.o `test -f 'src/CppUTest/TestOutput.cpp' || echo '$(srcdir)/'`src/CppUTest/TestOutput.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTest_a-TestOutput.o `test -f 'src/CppUTest/TestOutput.cpp' || echo '$(srcdir)/'`src/CppUTest/TestOutput.cpp
 
-libCppUTest_a-TestOutput.obj: src/CppUTest/TestOutput.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTest_a-TestOutput.obj -MD -MP -MF $(DEPDIR)/libCppUTest_a-TestOutput.Tpo -c -o libCppUTest_a-TestOutput.obj `if test -f 'src/CppUTest/TestOutput.cpp'; then $(CYGPATH_W) 'src/CppUTest/TestOutput.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/TestOutput.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTest_a-TestOutput.Tpo $(DEPDIR)/libCppUTest_a-TestOutput.Po
+lib_libCppUTest_a-TestOutput.obj: src/CppUTest/TestOutput.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTest_a-TestOutput.obj -MD -MP -MF $(DEPDIR)/lib_libCppUTest_a-TestOutput.Tpo -c -o lib_libCppUTest_a-TestOutput.obj `if test -f 'src/CppUTest/TestOutput.cpp'; then $(CYGPATH_W) 'src/CppUTest/TestOutput.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/TestOutput.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTest_a-TestOutput.Tpo $(DEPDIR)/lib_libCppUTest_a-TestOutput.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/TestOutput.cpp' object='libCppUTest_a-TestOutput.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/TestOutput.cpp' object='lib_libCppUTest_a-TestOutput.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTest_a-TestOutput.obj `if test -f 'src/CppUTest/TestOutput.cpp'; then $(CYGPATH_W) 'src/CppUTest/TestOutput.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/TestOutput.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTest_a-TestOutput.obj `if test -f 'src/CppUTest/TestOutput.cpp'; then $(CYGPATH_W) 'src/CppUTest/TestOutput.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/TestOutput.cpp'; fi`
 
-libCppUTest_a-MemoryLeakDetector.o: src/CppUTest/MemoryLeakDetector.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTest_a-MemoryLeakDetector.o -MD -MP -MF $(DEPDIR)/libCppUTest_a-MemoryLeakDetector.Tpo -c -o libCppUTest_a-MemoryLeakDetector.o `test -f 'src/CppUTest/MemoryLeakDetector.cpp' || echo '$(srcdir)/'`src/CppUTest/MemoryLeakDetector.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTest_a-MemoryLeakDetector.Tpo $(DEPDIR)/libCppUTest_a-MemoryLeakDetector.Po
+lib_libCppUTest_a-MemoryLeakDetector.o: src/CppUTest/MemoryLeakDetector.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTest_a-MemoryLeakDetector.o -MD -MP -MF $(DEPDIR)/lib_libCppUTest_a-MemoryLeakDetector.Tpo -c -o lib_libCppUTest_a-MemoryLeakDetector.o `test -f 'src/CppUTest/MemoryLeakDetector.cpp' || echo '$(srcdir)/'`src/CppUTest/MemoryLeakDetector.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTest_a-MemoryLeakDetector.Tpo $(DEPDIR)/lib_libCppUTest_a-MemoryLeakDetector.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/MemoryLeakDetector.cpp' object='libCppUTest_a-MemoryLeakDetector.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/MemoryLeakDetector.cpp' object='lib_libCppUTest_a-MemoryLeakDetector.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTest_a-MemoryLeakDetector.o `test -f 'src/CppUTest/MemoryLeakDetector.cpp' || echo '$(srcdir)/'`src/CppUTest/MemoryLeakDetector.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTest_a-MemoryLeakDetector.o `test -f 'src/CppUTest/MemoryLeakDetector.cpp' || echo '$(srcdir)/'`src/CppUTest/MemoryLeakDetector.cpp
 
-libCppUTest_a-MemoryLeakDetector.obj: src/CppUTest/MemoryLeakDetector.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTest_a-MemoryLeakDetector.obj -MD -MP -MF $(DEPDIR)/libCppUTest_a-MemoryLeakDetector.Tpo -c -o libCppUTest_a-MemoryLeakDetector.obj `if test -f 'src/CppUTest/MemoryLeakDetector.cpp'; then $(CYGPATH_W) 'src/CppUTest/MemoryLeakDetector.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/MemoryLeakDetector.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTest_a-MemoryLeakDetector.Tpo $(DEPDIR)/libCppUTest_a-MemoryLeakDetector.Po
+lib_libCppUTest_a-MemoryLeakDetector.obj: src/CppUTest/MemoryLeakDetector.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTest_a-MemoryLeakDetector.obj -MD -MP -MF $(DEPDIR)/lib_libCppUTest_a-MemoryLeakDetector.Tpo -c -o lib_libCppUTest_a-MemoryLeakDetector.obj `if test -f 'src/CppUTest/MemoryLeakDetector.cpp'; then $(CYGPATH_W) 'src/CppUTest/MemoryLeakDetector.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/MemoryLeakDetector.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTest_a-MemoryLeakDetector.Tpo $(DEPDIR)/lib_libCppUTest_a-MemoryLeakDetector.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/MemoryLeakDetector.cpp' object='libCppUTest_a-MemoryLeakDetector.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/MemoryLeakDetector.cpp' object='lib_libCppUTest_a-MemoryLeakDetector.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTest_a-MemoryLeakDetector.obj `if test -f 'src/CppUTest/MemoryLeakDetector.cpp'; then $(CYGPATH_W) 'src/CppUTest/MemoryLeakDetector.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/MemoryLeakDetector.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTest_a-MemoryLeakDetector.obj `if test -f 'src/CppUTest/MemoryLeakDetector.cpp'; then $(CYGPATH_W) 'src/CppUTest/MemoryLeakDetector.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/MemoryLeakDetector.cpp'; fi`
 
-libCppUTest_a-TestFilter.o: src/CppUTest/TestFilter.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTest_a-TestFilter.o -MD -MP -MF $(DEPDIR)/libCppUTest_a-TestFilter.Tpo -c -o libCppUTest_a-TestFilter.o `test -f 'src/CppUTest/TestFilter.cpp' || echo '$(srcdir)/'`src/CppUTest/TestFilter.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTest_a-TestFilter.Tpo $(DEPDIR)/libCppUTest_a-TestFilter.Po
+lib_libCppUTest_a-TestFilter.o: src/CppUTest/TestFilter.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTest_a-TestFilter.o -MD -MP -MF $(DEPDIR)/lib_libCppUTest_a-TestFilter.Tpo -c -o lib_libCppUTest_a-TestFilter.o `test -f 'src/CppUTest/TestFilter.cpp' || echo '$(srcdir)/'`src/CppUTest/TestFilter.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTest_a-TestFilter.Tpo $(DEPDIR)/lib_libCppUTest_a-TestFilter.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/TestFilter.cpp' object='libCppUTest_a-TestFilter.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/TestFilter.cpp' object='lib_libCppUTest_a-TestFilter.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTest_a-TestFilter.o `test -f 'src/CppUTest/TestFilter.cpp' || echo '$(srcdir)/'`src/CppUTest/TestFilter.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTest_a-TestFilter.o `test -f 'src/CppUTest/TestFilter.cpp' || echo '$(srcdir)/'`src/CppUTest/TestFilter.cpp
 
-libCppUTest_a-TestFilter.obj: src/CppUTest/TestFilter.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTest_a-TestFilter.obj -MD -MP -MF $(DEPDIR)/libCppUTest_a-TestFilter.Tpo -c -o libCppUTest_a-TestFilter.obj `if test -f 'src/CppUTest/TestFilter.cpp'; then $(CYGPATH_W) 'src/CppUTest/TestFilter.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/TestFilter.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTest_a-TestFilter.Tpo $(DEPDIR)/libCppUTest_a-TestFilter.Po
+lib_libCppUTest_a-TestFilter.obj: src/CppUTest/TestFilter.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTest_a-TestFilter.obj -MD -MP -MF $(DEPDIR)/lib_libCppUTest_a-TestFilter.Tpo -c -o lib_libCppUTest_a-TestFilter.obj `if test -f 'src/CppUTest/TestFilter.cpp'; then $(CYGPATH_W) 'src/CppUTest/TestFilter.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/TestFilter.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTest_a-TestFilter.Tpo $(DEPDIR)/lib_libCppUTest_a-TestFilter.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/TestFilter.cpp' object='libCppUTest_a-TestFilter.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/TestFilter.cpp' object='lib_libCppUTest_a-TestFilter.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTest_a-TestFilter.obj `if test -f 'src/CppUTest/TestFilter.cpp'; then $(CYGPATH_W) 'src/CppUTest/TestFilter.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/TestFilter.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTest_a-TestFilter.obj `if test -f 'src/CppUTest/TestFilter.cpp'; then $(CYGPATH_W) 'src/CppUTest/TestFilter.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/TestFilter.cpp'; fi`
 
-libCppUTest_a-TestPlugin.o: src/CppUTest/TestPlugin.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTest_a-TestPlugin.o -MD -MP -MF $(DEPDIR)/libCppUTest_a-TestPlugin.Tpo -c -o libCppUTest_a-TestPlugin.o `test -f 'src/CppUTest/TestPlugin.cpp' || echo '$(srcdir)/'`src/CppUTest/TestPlugin.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTest_a-TestPlugin.Tpo $(DEPDIR)/libCppUTest_a-TestPlugin.Po
+lib_libCppUTest_a-TestPlugin.o: src/CppUTest/TestPlugin.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTest_a-TestPlugin.o -MD -MP -MF $(DEPDIR)/lib_libCppUTest_a-TestPlugin.Tpo -c -o lib_libCppUTest_a-TestPlugin.o `test -f 'src/CppUTest/TestPlugin.cpp' || echo '$(srcdir)/'`src/CppUTest/TestPlugin.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTest_a-TestPlugin.Tpo $(DEPDIR)/lib_libCppUTest_a-TestPlugin.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/TestPlugin.cpp' object='libCppUTest_a-TestPlugin.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/TestPlugin.cpp' object='lib_libCppUTest_a-TestPlugin.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTest_a-TestPlugin.o `test -f 'src/CppUTest/TestPlugin.cpp' || echo '$(srcdir)/'`src/CppUTest/TestPlugin.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTest_a-TestPlugin.o `test -f 'src/CppUTest/TestPlugin.cpp' || echo '$(srcdir)/'`src/CppUTest/TestPlugin.cpp
 
-libCppUTest_a-TestPlugin.obj: src/CppUTest/TestPlugin.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTest_a-TestPlugin.obj -MD -MP -MF $(DEPDIR)/libCppUTest_a-TestPlugin.Tpo -c -o libCppUTest_a-TestPlugin.obj `if test -f 'src/CppUTest/TestPlugin.cpp'; then $(CYGPATH_W) 'src/CppUTest/TestPlugin.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/TestPlugin.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTest_a-TestPlugin.Tpo $(DEPDIR)/libCppUTest_a-TestPlugin.Po
+lib_libCppUTest_a-TestPlugin.obj: src/CppUTest/TestPlugin.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTest_a-TestPlugin.obj -MD -MP -MF $(DEPDIR)/lib_libCppUTest_a-TestPlugin.Tpo -c -o lib_libCppUTest_a-TestPlugin.obj `if test -f 'src/CppUTest/TestPlugin.cpp'; then $(CYGPATH_W) 'src/CppUTest/TestPlugin.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/TestPlugin.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTest_a-TestPlugin.Tpo $(DEPDIR)/lib_libCppUTest_a-TestPlugin.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/TestPlugin.cpp' object='libCppUTest_a-TestPlugin.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/TestPlugin.cpp' object='lib_libCppUTest_a-TestPlugin.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTest_a-TestPlugin.obj `if test -f 'src/CppUTest/TestPlugin.cpp'; then $(CYGPATH_W) 'src/CppUTest/TestPlugin.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/TestPlugin.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTest_a-TestPlugin.obj `if test -f 'src/CppUTest/TestPlugin.cpp'; then $(CYGPATH_W) 'src/CppUTest/TestPlugin.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/TestPlugin.cpp'; fi`
 
-libCppUTest_a-Utest.o: src/CppUTest/Utest.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTest_a-Utest.o -MD -MP -MF $(DEPDIR)/libCppUTest_a-Utest.Tpo -c -o libCppUTest_a-Utest.o `test -f 'src/CppUTest/Utest.cpp' || echo '$(srcdir)/'`src/CppUTest/Utest.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTest_a-Utest.Tpo $(DEPDIR)/libCppUTest_a-Utest.Po
+lib_libCppUTest_a-Utest.o: src/CppUTest/Utest.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTest_a-Utest.o -MD -MP -MF $(DEPDIR)/lib_libCppUTest_a-Utest.Tpo -c -o lib_libCppUTest_a-Utest.o `test -f 'src/CppUTest/Utest.cpp' || echo '$(srcdir)/'`src/CppUTest/Utest.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTest_a-Utest.Tpo $(DEPDIR)/lib_libCppUTest_a-Utest.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/Utest.cpp' object='libCppUTest_a-Utest.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/Utest.cpp' object='lib_libCppUTest_a-Utest.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTest_a-Utest.o `test -f 'src/CppUTest/Utest.cpp' || echo '$(srcdir)/'`src/CppUTest/Utest.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTest_a-Utest.o `test -f 'src/CppUTest/Utest.cpp' || echo '$(srcdir)/'`src/CppUTest/Utest.cpp
 
-libCppUTest_a-Utest.obj: src/CppUTest/Utest.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTest_a-Utest.obj -MD -MP -MF $(DEPDIR)/libCppUTest_a-Utest.Tpo -c -o libCppUTest_a-Utest.obj `if test -f 'src/CppUTest/Utest.cpp'; then $(CYGPATH_W) 'src/CppUTest/Utest.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/Utest.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTest_a-Utest.Tpo $(DEPDIR)/libCppUTest_a-Utest.Po
+lib_libCppUTest_a-Utest.obj: src/CppUTest/Utest.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTest_a-Utest.obj -MD -MP -MF $(DEPDIR)/lib_libCppUTest_a-Utest.Tpo -c -o lib_libCppUTest_a-Utest.obj `if test -f 'src/CppUTest/Utest.cpp'; then $(CYGPATH_W) 'src/CppUTest/Utest.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/Utest.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTest_a-Utest.Tpo $(DEPDIR)/lib_libCppUTest_a-Utest.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/Utest.cpp' object='libCppUTest_a-Utest.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTest/Utest.cpp' object='lib_libCppUTest_a-Utest.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTest_a-Utest.obj `if test -f 'src/CppUTest/Utest.cpp'; then $(CYGPATH_W) 'src/CppUTest/Utest.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/Utest.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTest_a-Utest.obj `if test -f 'src/CppUTest/Utest.cpp'; then $(CYGPATH_W) 'src/CppUTest/Utest.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTest/Utest.cpp'; fi`
 
-libCppUTest_a-UtestPlatform.o: src/Platforms/$(CPP_PLATFORM)/UtestPlatform.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTest_a-UtestPlatform.o -MD -MP -MF $(DEPDIR)/libCppUTest_a-UtestPlatform.Tpo -c -o libCppUTest_a-UtestPlatform.o `test -f 'src/Platforms/$(CPP_PLATFORM)/UtestPlatform.cpp' || echo '$(srcdir)/'`src/Platforms/$(CPP_PLATFORM)/UtestPlatform.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTest_a-UtestPlatform.Tpo $(DEPDIR)/libCppUTest_a-UtestPlatform.Po
+lib_libCppUTest_a-UtestPlatform.o: src/Platforms/$(CPP_PLATFORM)/UtestPlatform.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTest_a-UtestPlatform.o -MD -MP -MF $(DEPDIR)/lib_libCppUTest_a-UtestPlatform.Tpo -c -o lib_libCppUTest_a-UtestPlatform.o `test -f 'src/Platforms/$(CPP_PLATFORM)/UtestPlatform.cpp' || echo '$(srcdir)/'`src/Platforms/$(CPP_PLATFORM)/UtestPlatform.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTest_a-UtestPlatform.Tpo $(DEPDIR)/lib_libCppUTest_a-UtestPlatform.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/Platforms/$(CPP_PLATFORM)/UtestPlatform.cpp' object='libCppUTest_a-UtestPlatform.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/Platforms/$(CPP_PLATFORM)/UtestPlatform.cpp' object='lib_libCppUTest_a-UtestPlatform.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTest_a-UtestPlatform.o `test -f 'src/Platforms/$(CPP_PLATFORM)/UtestPlatform.cpp' || echo '$(srcdir)/'`src/Platforms/$(CPP_PLATFORM)/UtestPlatform.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTest_a-UtestPlatform.o `test -f 'src/Platforms/$(CPP_PLATFORM)/UtestPlatform.cpp' || echo '$(srcdir)/'`src/Platforms/$(CPP_PLATFORM)/UtestPlatform.cpp
 
-libCppUTest_a-UtestPlatform.obj: src/Platforms/$(CPP_PLATFORM)/UtestPlatform.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTest_a-UtestPlatform.obj -MD -MP -MF $(DEPDIR)/libCppUTest_a-UtestPlatform.Tpo -c -o libCppUTest_a-UtestPlatform.obj `if test -f 'src/Platforms/$(CPP_PLATFORM)/UtestPlatform.cpp'; then $(CYGPATH_W) 'src/Platforms/$(CPP_PLATFORM)/UtestPlatform.cpp'; else $(CYGPATH_W) '$(srcdir)/src/Platforms/$(CPP_PLATFORM)/UtestPlatform.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTest_a-UtestPlatform.Tpo $(DEPDIR)/libCppUTest_a-UtestPlatform.Po
+lib_libCppUTest_a-UtestPlatform.obj: src/Platforms/$(CPP_PLATFORM)/UtestPlatform.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTest_a-UtestPlatform.obj -MD -MP -MF $(DEPDIR)/lib_libCppUTest_a-UtestPlatform.Tpo -c -o lib_libCppUTest_a-UtestPlatform.obj `if test -f 'src/Platforms/$(CPP_PLATFORM)/UtestPlatform.cpp'; then $(CYGPATH_W) 'src/Platforms/$(CPP_PLATFORM)/UtestPlatform.cpp'; else $(CYGPATH_W) '$(srcdir)/src/Platforms/$(CPP_PLATFORM)/UtestPlatform.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTest_a-UtestPlatform.Tpo $(DEPDIR)/lib_libCppUTest_a-UtestPlatform.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/Platforms/$(CPP_PLATFORM)/UtestPlatform.cpp' object='libCppUTest_a-UtestPlatform.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/Platforms/$(CPP_PLATFORM)/UtestPlatform.cpp' object='lib_libCppUTest_a-UtestPlatform.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTest_a-UtestPlatform.obj `if test -f 'src/Platforms/$(CPP_PLATFORM)/UtestPlatform.cpp'; then $(CYGPATH_W) 'src/Platforms/$(CPP_PLATFORM)/UtestPlatform.cpp'; else $(CYGPATH_W) '$(srcdir)/src/Platforms/$(CPP_PLATFORM)/UtestPlatform.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTest_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTest_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTest_a-UtestPlatform.obj `if test -f 'src/Platforms/$(CPP_PLATFORM)/UtestPlatform.cpp'; then $(CYGPATH_W) 'src/Platforms/$(CPP_PLATFORM)/UtestPlatform.cpp'; else $(CYGPATH_W) '$(srcdir)/src/Platforms/$(CPP_PLATFORM)/UtestPlatform.cpp'; fi`
 
-libCppUTestExt_a-CodeMemoryReportFormatter.o: src/CppUTestExt/CodeMemoryReportFormatter.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTestExt_a-CodeMemoryReportFormatter.o -MD -MP -MF $(DEPDIR)/libCppUTestExt_a-CodeMemoryReportFormatter.Tpo -c -o libCppUTestExt_a-CodeMemoryReportFormatter.o `test -f 'src/CppUTestExt/CodeMemoryReportFormatter.cpp' || echo '$(srcdir)/'`src/CppUTestExt/CodeMemoryReportFormatter.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTestExt_a-CodeMemoryReportFormatter.Tpo $(DEPDIR)/libCppUTestExt_a-CodeMemoryReportFormatter.Po
+lib_libCppUTestExt_a-CodeMemoryReportFormatter.o: src/CppUTestExt/CodeMemoryReportFormatter.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTestExt_a-CodeMemoryReportFormatter.o -MD -MP -MF $(DEPDIR)/lib_libCppUTestExt_a-CodeMemoryReportFormatter.Tpo -c -o lib_libCppUTestExt_a-CodeMemoryReportFormatter.o `test -f 'src/CppUTestExt/CodeMemoryReportFormatter.cpp' || echo '$(srcdir)/'`src/CppUTestExt/CodeMemoryReportFormatter.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTestExt_a-CodeMemoryReportFormatter.Tpo $(DEPDIR)/lib_libCppUTestExt_a-CodeMemoryReportFormatter.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/CodeMemoryReportFormatter.cpp' object='libCppUTestExt_a-CodeMemoryReportFormatter.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/CodeMemoryReportFormatter.cpp' object='lib_libCppUTestExt_a-CodeMemoryReportFormatter.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTestExt_a-CodeMemoryReportFormatter.o `test -f 'src/CppUTestExt/CodeMemoryReportFormatter.cpp' || echo '$(srcdir)/'`src/CppUTestExt/CodeMemoryReportFormatter.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTestExt_a-CodeMemoryReportFormatter.o `test -f 'src/CppUTestExt/CodeMemoryReportFormatter.cpp' || echo '$(srcdir)/'`src/CppUTestExt/CodeMemoryReportFormatter.cpp
 
-libCppUTestExt_a-CodeMemoryReportFormatter.obj: src/CppUTestExt/CodeMemoryReportFormatter.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTestExt_a-CodeMemoryReportFormatter.obj -MD -MP -MF $(DEPDIR)/libCppUTestExt_a-CodeMemoryReportFormatter.Tpo -c -o libCppUTestExt_a-CodeMemoryReportFormatter.obj `if test -f 'src/CppUTestExt/CodeMemoryReportFormatter.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/CodeMemoryReportFormatter.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/CodeMemoryReportFormatter.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTestExt_a-CodeMemoryReportFormatter.Tpo $(DEPDIR)/libCppUTestExt_a-CodeMemoryReportFormatter.Po
+lib_libCppUTestExt_a-CodeMemoryReportFormatter.obj: src/CppUTestExt/CodeMemoryReportFormatter.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTestExt_a-CodeMemoryReportFormatter.obj -MD -MP -MF $(DEPDIR)/lib_libCppUTestExt_a-CodeMemoryReportFormatter.Tpo -c -o lib_libCppUTestExt_a-CodeMemoryReportFormatter.obj `if test -f 'src/CppUTestExt/CodeMemoryReportFormatter.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/CodeMemoryReportFormatter.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/CodeMemoryReportFormatter.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTestExt_a-CodeMemoryReportFormatter.Tpo $(DEPDIR)/lib_libCppUTestExt_a-CodeMemoryReportFormatter.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/CodeMemoryReportFormatter.cpp' object='libCppUTestExt_a-CodeMemoryReportFormatter.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/CodeMemoryReportFormatter.cpp' object='lib_libCppUTestExt_a-CodeMemoryReportFormatter.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTestExt_a-CodeMemoryReportFormatter.obj `if test -f 'src/CppUTestExt/CodeMemoryReportFormatter.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/CodeMemoryReportFormatter.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/CodeMemoryReportFormatter.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTestExt_a-CodeMemoryReportFormatter.obj `if test -f 'src/CppUTestExt/CodeMemoryReportFormatter.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/CodeMemoryReportFormatter.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/CodeMemoryReportFormatter.cpp'; fi`
 
-libCppUTestExt_a-MemoryReporterPlugin.o: src/CppUTestExt/MemoryReporterPlugin.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTestExt_a-MemoryReporterPlugin.o -MD -MP -MF $(DEPDIR)/libCppUTestExt_a-MemoryReporterPlugin.Tpo -c -o libCppUTestExt_a-MemoryReporterPlugin.o `test -f 'src/CppUTestExt/MemoryReporterPlugin.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MemoryReporterPlugin.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTestExt_a-MemoryReporterPlugin.Tpo $(DEPDIR)/libCppUTestExt_a-MemoryReporterPlugin.Po
+lib_libCppUTestExt_a-MemoryReporterPlugin.o: src/CppUTestExt/MemoryReporterPlugin.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTestExt_a-MemoryReporterPlugin.o -MD -MP -MF $(DEPDIR)/lib_libCppUTestExt_a-MemoryReporterPlugin.Tpo -c -o lib_libCppUTestExt_a-MemoryReporterPlugin.o `test -f 'src/CppUTestExt/MemoryReporterPlugin.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MemoryReporterPlugin.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTestExt_a-MemoryReporterPlugin.Tpo $(DEPDIR)/lib_libCppUTestExt_a-MemoryReporterPlugin.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MemoryReporterPlugin.cpp' object='libCppUTestExt_a-MemoryReporterPlugin.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MemoryReporterPlugin.cpp' object='lib_libCppUTestExt_a-MemoryReporterPlugin.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTestExt_a-MemoryReporterPlugin.o `test -f 'src/CppUTestExt/MemoryReporterPlugin.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MemoryReporterPlugin.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTestExt_a-MemoryReporterPlugin.o `test -f 'src/CppUTestExt/MemoryReporterPlugin.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MemoryReporterPlugin.cpp
 
-libCppUTestExt_a-MemoryReporterPlugin.obj: src/CppUTestExt/MemoryReporterPlugin.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTestExt_a-MemoryReporterPlugin.obj -MD -MP -MF $(DEPDIR)/libCppUTestExt_a-MemoryReporterPlugin.Tpo -c -o libCppUTestExt_a-MemoryReporterPlugin.obj `if test -f 'src/CppUTestExt/MemoryReporterPlugin.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MemoryReporterPlugin.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MemoryReporterPlugin.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTestExt_a-MemoryReporterPlugin.Tpo $(DEPDIR)/libCppUTestExt_a-MemoryReporterPlugin.Po
+lib_libCppUTestExt_a-MemoryReporterPlugin.obj: src/CppUTestExt/MemoryReporterPlugin.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTestExt_a-MemoryReporterPlugin.obj -MD -MP -MF $(DEPDIR)/lib_libCppUTestExt_a-MemoryReporterPlugin.Tpo -c -o lib_libCppUTestExt_a-MemoryReporterPlugin.obj `if test -f 'src/CppUTestExt/MemoryReporterPlugin.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MemoryReporterPlugin.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MemoryReporterPlugin.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTestExt_a-MemoryReporterPlugin.Tpo $(DEPDIR)/lib_libCppUTestExt_a-MemoryReporterPlugin.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MemoryReporterPlugin.cpp' object='libCppUTestExt_a-MemoryReporterPlugin.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MemoryReporterPlugin.cpp' object='lib_libCppUTestExt_a-MemoryReporterPlugin.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTestExt_a-MemoryReporterPlugin.obj `if test -f 'src/CppUTestExt/MemoryReporterPlugin.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MemoryReporterPlugin.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MemoryReporterPlugin.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTestExt_a-MemoryReporterPlugin.obj `if test -f 'src/CppUTestExt/MemoryReporterPlugin.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MemoryReporterPlugin.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MemoryReporterPlugin.cpp'; fi`
 
-libCppUTestExt_a-MockFailure.o: src/CppUTestExt/MockFailure.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTestExt_a-MockFailure.o -MD -MP -MF $(DEPDIR)/libCppUTestExt_a-MockFailure.Tpo -c -o libCppUTestExt_a-MockFailure.o `test -f 'src/CppUTestExt/MockFailure.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MockFailure.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTestExt_a-MockFailure.Tpo $(DEPDIR)/libCppUTestExt_a-MockFailure.Po
+lib_libCppUTestExt_a-MockFailure.o: src/CppUTestExt/MockFailure.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTestExt_a-MockFailure.o -MD -MP -MF $(DEPDIR)/lib_libCppUTestExt_a-MockFailure.Tpo -c -o lib_libCppUTestExt_a-MockFailure.o `test -f 'src/CppUTestExt/MockFailure.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MockFailure.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTestExt_a-MockFailure.Tpo $(DEPDIR)/lib_libCppUTestExt_a-MockFailure.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MockFailure.cpp' object='libCppUTestExt_a-MockFailure.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MockFailure.cpp' object='lib_libCppUTestExt_a-MockFailure.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTestExt_a-MockFailure.o `test -f 'src/CppUTestExt/MockFailure.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MockFailure.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTestExt_a-MockFailure.o `test -f 'src/CppUTestExt/MockFailure.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MockFailure.cpp
 
-libCppUTestExt_a-MockFailure.obj: src/CppUTestExt/MockFailure.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTestExt_a-MockFailure.obj -MD -MP -MF $(DEPDIR)/libCppUTestExt_a-MockFailure.Tpo -c -o libCppUTestExt_a-MockFailure.obj `if test -f 'src/CppUTestExt/MockFailure.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MockFailure.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MockFailure.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTestExt_a-MockFailure.Tpo $(DEPDIR)/libCppUTestExt_a-MockFailure.Po
+lib_libCppUTestExt_a-MockFailure.obj: src/CppUTestExt/MockFailure.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTestExt_a-MockFailure.obj -MD -MP -MF $(DEPDIR)/lib_libCppUTestExt_a-MockFailure.Tpo -c -o lib_libCppUTestExt_a-MockFailure.obj `if test -f 'src/CppUTestExt/MockFailure.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MockFailure.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MockFailure.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTestExt_a-MockFailure.Tpo $(DEPDIR)/lib_libCppUTestExt_a-MockFailure.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MockFailure.cpp' object='libCppUTestExt_a-MockFailure.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MockFailure.cpp' object='lib_libCppUTestExt_a-MockFailure.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTestExt_a-MockFailure.obj `if test -f 'src/CppUTestExt/MockFailure.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MockFailure.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MockFailure.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTestExt_a-MockFailure.obj `if test -f 'src/CppUTestExt/MockFailure.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MockFailure.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MockFailure.cpp'; fi`
 
-libCppUTestExt_a-MockSupportPlugin.o: src/CppUTestExt/MockSupportPlugin.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTestExt_a-MockSupportPlugin.o -MD -MP -MF $(DEPDIR)/libCppUTestExt_a-MockSupportPlugin.Tpo -c -o libCppUTestExt_a-MockSupportPlugin.o `test -f 'src/CppUTestExt/MockSupportPlugin.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MockSupportPlugin.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTestExt_a-MockSupportPlugin.Tpo $(DEPDIR)/libCppUTestExt_a-MockSupportPlugin.Po
+lib_libCppUTestExt_a-MockSupportPlugin.o: src/CppUTestExt/MockSupportPlugin.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTestExt_a-MockSupportPlugin.o -MD -MP -MF $(DEPDIR)/lib_libCppUTestExt_a-MockSupportPlugin.Tpo -c -o lib_libCppUTestExt_a-MockSupportPlugin.o `test -f 'src/CppUTestExt/MockSupportPlugin.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MockSupportPlugin.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTestExt_a-MockSupportPlugin.Tpo $(DEPDIR)/lib_libCppUTestExt_a-MockSupportPlugin.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MockSupportPlugin.cpp' object='libCppUTestExt_a-MockSupportPlugin.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MockSupportPlugin.cpp' object='lib_libCppUTestExt_a-MockSupportPlugin.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTestExt_a-MockSupportPlugin.o `test -f 'src/CppUTestExt/MockSupportPlugin.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MockSupportPlugin.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTestExt_a-MockSupportPlugin.o `test -f 'src/CppUTestExt/MockSupportPlugin.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MockSupportPlugin.cpp
 
-libCppUTestExt_a-MockSupportPlugin.obj: src/CppUTestExt/MockSupportPlugin.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTestExt_a-MockSupportPlugin.obj -MD -MP -MF $(DEPDIR)/libCppUTestExt_a-MockSupportPlugin.Tpo -c -o libCppUTestExt_a-MockSupportPlugin.obj `if test -f 'src/CppUTestExt/MockSupportPlugin.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MockSupportPlugin.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MockSupportPlugin.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTestExt_a-MockSupportPlugin.Tpo $(DEPDIR)/libCppUTestExt_a-MockSupportPlugin.Po
+lib_libCppUTestExt_a-MockSupportPlugin.obj: src/CppUTestExt/MockSupportPlugin.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTestExt_a-MockSupportPlugin.obj -MD -MP -MF $(DEPDIR)/lib_libCppUTestExt_a-MockSupportPlugin.Tpo -c -o lib_libCppUTestExt_a-MockSupportPlugin.obj `if test -f 'src/CppUTestExt/MockSupportPlugin.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MockSupportPlugin.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MockSupportPlugin.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTestExt_a-MockSupportPlugin.Tpo $(DEPDIR)/lib_libCppUTestExt_a-MockSupportPlugin.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MockSupportPlugin.cpp' object='libCppUTestExt_a-MockSupportPlugin.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MockSupportPlugin.cpp' object='lib_libCppUTestExt_a-MockSupportPlugin.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTestExt_a-MockSupportPlugin.obj `if test -f 'src/CppUTestExt/MockSupportPlugin.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MockSupportPlugin.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MockSupportPlugin.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTestExt_a-MockSupportPlugin.obj `if test -f 'src/CppUTestExt/MockSupportPlugin.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MockSupportPlugin.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MockSupportPlugin.cpp'; fi`
 
-libCppUTestExt_a-GTestConvertor.o: src/CppUTestExt/GTestConvertor.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTestExt_a-GTestConvertor.o -MD -MP -MF $(DEPDIR)/libCppUTestExt_a-GTestConvertor.Tpo -c -o libCppUTestExt_a-GTestConvertor.o `test -f 'src/CppUTestExt/GTestConvertor.cpp' || echo '$(srcdir)/'`src/CppUTestExt/GTestConvertor.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTestExt_a-GTestConvertor.Tpo $(DEPDIR)/libCppUTestExt_a-GTestConvertor.Po
+lib_libCppUTestExt_a-GTestConvertor.o: src/CppUTestExt/GTestConvertor.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTestExt_a-GTestConvertor.o -MD -MP -MF $(DEPDIR)/lib_libCppUTestExt_a-GTestConvertor.Tpo -c -o lib_libCppUTestExt_a-GTestConvertor.o `test -f 'src/CppUTestExt/GTestConvertor.cpp' || echo '$(srcdir)/'`src/CppUTestExt/GTestConvertor.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTestExt_a-GTestConvertor.Tpo $(DEPDIR)/lib_libCppUTestExt_a-GTestConvertor.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/GTestConvertor.cpp' object='libCppUTestExt_a-GTestConvertor.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/GTestConvertor.cpp' object='lib_libCppUTestExt_a-GTestConvertor.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTestExt_a-GTestConvertor.o `test -f 'src/CppUTestExt/GTestConvertor.cpp' || echo '$(srcdir)/'`src/CppUTestExt/GTestConvertor.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTestExt_a-GTestConvertor.o `test -f 'src/CppUTestExt/GTestConvertor.cpp' || echo '$(srcdir)/'`src/CppUTestExt/GTestConvertor.cpp
 
-libCppUTestExt_a-GTestConvertor.obj: src/CppUTestExt/GTestConvertor.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTestExt_a-GTestConvertor.obj -MD -MP -MF $(DEPDIR)/libCppUTestExt_a-GTestConvertor.Tpo -c -o libCppUTestExt_a-GTestConvertor.obj `if test -f 'src/CppUTestExt/GTestConvertor.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/GTestConvertor.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/GTestConvertor.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTestExt_a-GTestConvertor.Tpo $(DEPDIR)/libCppUTestExt_a-GTestConvertor.Po
+lib_libCppUTestExt_a-GTestConvertor.obj: src/CppUTestExt/GTestConvertor.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTestExt_a-GTestConvertor.obj -MD -MP -MF $(DEPDIR)/lib_libCppUTestExt_a-GTestConvertor.Tpo -c -o lib_libCppUTestExt_a-GTestConvertor.obj `if test -f 'src/CppUTestExt/GTestConvertor.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/GTestConvertor.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/GTestConvertor.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTestExt_a-GTestConvertor.Tpo $(DEPDIR)/lib_libCppUTestExt_a-GTestConvertor.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/GTestConvertor.cpp' object='libCppUTestExt_a-GTestConvertor.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/GTestConvertor.cpp' object='lib_libCppUTestExt_a-GTestConvertor.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTestExt_a-GTestConvertor.obj `if test -f 'src/CppUTestExt/GTestConvertor.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/GTestConvertor.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/GTestConvertor.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTestExt_a-GTestConvertor.obj `if test -f 'src/CppUTestExt/GTestConvertor.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/GTestConvertor.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/GTestConvertor.cpp'; fi`
 
-libCppUTestExt_a-MockActualFunctionCall.o: src/CppUTestExt/MockActualFunctionCall.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTestExt_a-MockActualFunctionCall.o -MD -MP -MF $(DEPDIR)/libCppUTestExt_a-MockActualFunctionCall.Tpo -c -o libCppUTestExt_a-MockActualFunctionCall.o `test -f 'src/CppUTestExt/MockActualFunctionCall.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MockActualFunctionCall.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTestExt_a-MockActualFunctionCall.Tpo $(DEPDIR)/libCppUTestExt_a-MockActualFunctionCall.Po
+lib_libCppUTestExt_a-MockActualFunctionCall.o: src/CppUTestExt/MockActualFunctionCall.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTestExt_a-MockActualFunctionCall.o -MD -MP -MF $(DEPDIR)/lib_libCppUTestExt_a-MockActualFunctionCall.Tpo -c -o lib_libCppUTestExt_a-MockActualFunctionCall.o `test -f 'src/CppUTestExt/MockActualFunctionCall.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MockActualFunctionCall.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTestExt_a-MockActualFunctionCall.Tpo $(DEPDIR)/lib_libCppUTestExt_a-MockActualFunctionCall.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MockActualFunctionCall.cpp' object='libCppUTestExt_a-MockActualFunctionCall.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MockActualFunctionCall.cpp' object='lib_libCppUTestExt_a-MockActualFunctionCall.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTestExt_a-MockActualFunctionCall.o `test -f 'src/CppUTestExt/MockActualFunctionCall.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MockActualFunctionCall.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTestExt_a-MockActualFunctionCall.o `test -f 'src/CppUTestExt/MockActualFunctionCall.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MockActualFunctionCall.cpp
 
-libCppUTestExt_a-MockActualFunctionCall.obj: src/CppUTestExt/MockActualFunctionCall.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTestExt_a-MockActualFunctionCall.obj -MD -MP -MF $(DEPDIR)/libCppUTestExt_a-MockActualFunctionCall.Tpo -c -o libCppUTestExt_a-MockActualFunctionCall.obj `if test -f 'src/CppUTestExt/MockActualFunctionCall.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MockActualFunctionCall.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MockActualFunctionCall.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTestExt_a-MockActualFunctionCall.Tpo $(DEPDIR)/libCppUTestExt_a-MockActualFunctionCall.Po
+lib_libCppUTestExt_a-MockActualFunctionCall.obj: src/CppUTestExt/MockActualFunctionCall.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTestExt_a-MockActualFunctionCall.obj -MD -MP -MF $(DEPDIR)/lib_libCppUTestExt_a-MockActualFunctionCall.Tpo -c -o lib_libCppUTestExt_a-MockActualFunctionCall.obj `if test -f 'src/CppUTestExt/MockActualFunctionCall.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MockActualFunctionCall.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MockActualFunctionCall.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTestExt_a-MockActualFunctionCall.Tpo $(DEPDIR)/lib_libCppUTestExt_a-MockActualFunctionCall.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MockActualFunctionCall.cpp' object='libCppUTestExt_a-MockActualFunctionCall.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MockActualFunctionCall.cpp' object='lib_libCppUTestExt_a-MockActualFunctionCall.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTestExt_a-MockActualFunctionCall.obj `if test -f 'src/CppUTestExt/MockActualFunctionCall.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MockActualFunctionCall.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MockActualFunctionCall.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTestExt_a-MockActualFunctionCall.obj `if test -f 'src/CppUTestExt/MockActualFunctionCall.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MockActualFunctionCall.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MockActualFunctionCall.cpp'; fi`
 
-libCppUTestExt_a-MockFunctionCall.o: src/CppUTestExt/MockFunctionCall.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTestExt_a-MockFunctionCall.o -MD -MP -MF $(DEPDIR)/libCppUTestExt_a-MockFunctionCall.Tpo -c -o libCppUTestExt_a-MockFunctionCall.o `test -f 'src/CppUTestExt/MockFunctionCall.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MockFunctionCall.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTestExt_a-MockFunctionCall.Tpo $(DEPDIR)/libCppUTestExt_a-MockFunctionCall.Po
+lib_libCppUTestExt_a-MockFunctionCall.o: src/CppUTestExt/MockFunctionCall.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTestExt_a-MockFunctionCall.o -MD -MP -MF $(DEPDIR)/lib_libCppUTestExt_a-MockFunctionCall.Tpo -c -o lib_libCppUTestExt_a-MockFunctionCall.o `test -f 'src/CppUTestExt/MockFunctionCall.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MockFunctionCall.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTestExt_a-MockFunctionCall.Tpo $(DEPDIR)/lib_libCppUTestExt_a-MockFunctionCall.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MockFunctionCall.cpp' object='libCppUTestExt_a-MockFunctionCall.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MockFunctionCall.cpp' object='lib_libCppUTestExt_a-MockFunctionCall.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTestExt_a-MockFunctionCall.o `test -f 'src/CppUTestExt/MockFunctionCall.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MockFunctionCall.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTestExt_a-MockFunctionCall.o `test -f 'src/CppUTestExt/MockFunctionCall.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MockFunctionCall.cpp
 
-libCppUTestExt_a-MockFunctionCall.obj: src/CppUTestExt/MockFunctionCall.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTestExt_a-MockFunctionCall.obj -MD -MP -MF $(DEPDIR)/libCppUTestExt_a-MockFunctionCall.Tpo -c -o libCppUTestExt_a-MockFunctionCall.obj `if test -f 'src/CppUTestExt/MockFunctionCall.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MockFunctionCall.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MockFunctionCall.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTestExt_a-MockFunctionCall.Tpo $(DEPDIR)/libCppUTestExt_a-MockFunctionCall.Po
+lib_libCppUTestExt_a-MockFunctionCall.obj: src/CppUTestExt/MockFunctionCall.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTestExt_a-MockFunctionCall.obj -MD -MP -MF $(DEPDIR)/lib_libCppUTestExt_a-MockFunctionCall.Tpo -c -o lib_libCppUTestExt_a-MockFunctionCall.obj `if test -f 'src/CppUTestExt/MockFunctionCall.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MockFunctionCall.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MockFunctionCall.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTestExt_a-MockFunctionCall.Tpo $(DEPDIR)/lib_libCppUTestExt_a-MockFunctionCall.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MockFunctionCall.cpp' object='libCppUTestExt_a-MockFunctionCall.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MockFunctionCall.cpp' object='lib_libCppUTestExt_a-MockFunctionCall.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTestExt_a-MockFunctionCall.obj `if test -f 'src/CppUTestExt/MockFunctionCall.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MockFunctionCall.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MockFunctionCall.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTestExt_a-MockFunctionCall.obj `if test -f 'src/CppUTestExt/MockFunctionCall.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MockFunctionCall.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MockFunctionCall.cpp'; fi`
 
-libCppUTestExt_a-MockSupport_c.o: src/CppUTestExt/MockSupport_c.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTestExt_a-MockSupport_c.o -MD -MP -MF $(DEPDIR)/libCppUTestExt_a-MockSupport_c.Tpo -c -o libCppUTestExt_a-MockSupport_c.o `test -f 'src/CppUTestExt/MockSupport_c.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MockSupport_c.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTestExt_a-MockSupport_c.Tpo $(DEPDIR)/libCppUTestExt_a-MockSupport_c.Po
+lib_libCppUTestExt_a-MockSupport_c.o: src/CppUTestExt/MockSupport_c.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTestExt_a-MockSupport_c.o -MD -MP -MF $(DEPDIR)/lib_libCppUTestExt_a-MockSupport_c.Tpo -c -o lib_libCppUTestExt_a-MockSupport_c.o `test -f 'src/CppUTestExt/MockSupport_c.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MockSupport_c.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTestExt_a-MockSupport_c.Tpo $(DEPDIR)/lib_libCppUTestExt_a-MockSupport_c.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MockSupport_c.cpp' object='libCppUTestExt_a-MockSupport_c.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MockSupport_c.cpp' object='lib_libCppUTestExt_a-MockSupport_c.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTestExt_a-MockSupport_c.o `test -f 'src/CppUTestExt/MockSupport_c.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MockSupport_c.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTestExt_a-MockSupport_c.o `test -f 'src/CppUTestExt/MockSupport_c.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MockSupport_c.cpp
 
-libCppUTestExt_a-MockSupport_c.obj: src/CppUTestExt/MockSupport_c.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTestExt_a-MockSupport_c.obj -MD -MP -MF $(DEPDIR)/libCppUTestExt_a-MockSupport_c.Tpo -c -o libCppUTestExt_a-MockSupport_c.obj `if test -f 'src/CppUTestExt/MockSupport_c.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MockSupport_c.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MockSupport_c.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTestExt_a-MockSupport_c.Tpo $(DEPDIR)/libCppUTestExt_a-MockSupport_c.Po
+lib_libCppUTestExt_a-MockSupport_c.obj: src/CppUTestExt/MockSupport_c.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTestExt_a-MockSupport_c.obj -MD -MP -MF $(DEPDIR)/lib_libCppUTestExt_a-MockSupport_c.Tpo -c -o lib_libCppUTestExt_a-MockSupport_c.obj `if test -f 'src/CppUTestExt/MockSupport_c.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MockSupport_c.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MockSupport_c.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTestExt_a-MockSupport_c.Tpo $(DEPDIR)/lib_libCppUTestExt_a-MockSupport_c.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MockSupport_c.cpp' object='libCppUTestExt_a-MockSupport_c.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MockSupport_c.cpp' object='lib_libCppUTestExt_a-MockSupport_c.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTestExt_a-MockSupport_c.obj `if test -f 'src/CppUTestExt/MockSupport_c.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MockSupport_c.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MockSupport_c.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTestExt_a-MockSupport_c.obj `if test -f 'src/CppUTestExt/MockSupport_c.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MockSupport_c.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MockSupport_c.cpp'; fi`
 
-libCppUTestExt_a-MemoryReportAllocator.o: src/CppUTestExt/MemoryReportAllocator.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTestExt_a-MemoryReportAllocator.o -MD -MP -MF $(DEPDIR)/libCppUTestExt_a-MemoryReportAllocator.Tpo -c -o libCppUTestExt_a-MemoryReportAllocator.o `test -f 'src/CppUTestExt/MemoryReportAllocator.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MemoryReportAllocator.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTestExt_a-MemoryReportAllocator.Tpo $(DEPDIR)/libCppUTestExt_a-MemoryReportAllocator.Po
+lib_libCppUTestExt_a-MemoryReportAllocator.o: src/CppUTestExt/MemoryReportAllocator.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTestExt_a-MemoryReportAllocator.o -MD -MP -MF $(DEPDIR)/lib_libCppUTestExt_a-MemoryReportAllocator.Tpo -c -o lib_libCppUTestExt_a-MemoryReportAllocator.o `test -f 'src/CppUTestExt/MemoryReportAllocator.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MemoryReportAllocator.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTestExt_a-MemoryReportAllocator.Tpo $(DEPDIR)/lib_libCppUTestExt_a-MemoryReportAllocator.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MemoryReportAllocator.cpp' object='libCppUTestExt_a-MemoryReportAllocator.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MemoryReportAllocator.cpp' object='lib_libCppUTestExt_a-MemoryReportAllocator.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTestExt_a-MemoryReportAllocator.o `test -f 'src/CppUTestExt/MemoryReportAllocator.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MemoryReportAllocator.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTestExt_a-MemoryReportAllocator.o `test -f 'src/CppUTestExt/MemoryReportAllocator.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MemoryReportAllocator.cpp
 
-libCppUTestExt_a-MemoryReportAllocator.obj: src/CppUTestExt/MemoryReportAllocator.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTestExt_a-MemoryReportAllocator.obj -MD -MP -MF $(DEPDIR)/libCppUTestExt_a-MemoryReportAllocator.Tpo -c -o libCppUTestExt_a-MemoryReportAllocator.obj `if test -f 'src/CppUTestExt/MemoryReportAllocator.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MemoryReportAllocator.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MemoryReportAllocator.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTestExt_a-MemoryReportAllocator.Tpo $(DEPDIR)/libCppUTestExt_a-MemoryReportAllocator.Po
+lib_libCppUTestExt_a-MemoryReportAllocator.obj: src/CppUTestExt/MemoryReportAllocator.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTestExt_a-MemoryReportAllocator.obj -MD -MP -MF $(DEPDIR)/lib_libCppUTestExt_a-MemoryReportAllocator.Tpo -c -o lib_libCppUTestExt_a-MemoryReportAllocator.obj `if test -f 'src/CppUTestExt/MemoryReportAllocator.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MemoryReportAllocator.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MemoryReportAllocator.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTestExt_a-MemoryReportAllocator.Tpo $(DEPDIR)/lib_libCppUTestExt_a-MemoryReportAllocator.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MemoryReportAllocator.cpp' object='libCppUTestExt_a-MemoryReportAllocator.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MemoryReportAllocator.cpp' object='lib_libCppUTestExt_a-MemoryReportAllocator.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTestExt_a-MemoryReportAllocator.obj `if test -f 'src/CppUTestExt/MemoryReportAllocator.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MemoryReportAllocator.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MemoryReportAllocator.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTestExt_a-MemoryReportAllocator.obj `if test -f 'src/CppUTestExt/MemoryReportAllocator.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MemoryReportAllocator.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MemoryReportAllocator.cpp'; fi`
 
-libCppUTestExt_a-MockExpectedFunctionCall.o: src/CppUTestExt/MockExpectedFunctionCall.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTestExt_a-MockExpectedFunctionCall.o -MD -MP -MF $(DEPDIR)/libCppUTestExt_a-MockExpectedFunctionCall.Tpo -c -o libCppUTestExt_a-MockExpectedFunctionCall.o `test -f 'src/CppUTestExt/MockExpectedFunctionCall.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MockExpectedFunctionCall.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTestExt_a-MockExpectedFunctionCall.Tpo $(DEPDIR)/libCppUTestExt_a-MockExpectedFunctionCall.Po
+lib_libCppUTestExt_a-MockExpectedFunctionCall.o: src/CppUTestExt/MockExpectedFunctionCall.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTestExt_a-MockExpectedFunctionCall.o -MD -MP -MF $(DEPDIR)/lib_libCppUTestExt_a-MockExpectedFunctionCall.Tpo -c -o lib_libCppUTestExt_a-MockExpectedFunctionCall.o `test -f 'src/CppUTestExt/MockExpectedFunctionCall.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MockExpectedFunctionCall.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTestExt_a-MockExpectedFunctionCall.Tpo $(DEPDIR)/lib_libCppUTestExt_a-MockExpectedFunctionCall.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MockExpectedFunctionCall.cpp' object='libCppUTestExt_a-MockExpectedFunctionCall.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MockExpectedFunctionCall.cpp' object='lib_libCppUTestExt_a-MockExpectedFunctionCall.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTestExt_a-MockExpectedFunctionCall.o `test -f 'src/CppUTestExt/MockExpectedFunctionCall.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MockExpectedFunctionCall.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTestExt_a-MockExpectedFunctionCall.o `test -f 'src/CppUTestExt/MockExpectedFunctionCall.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MockExpectedFunctionCall.cpp
 
-libCppUTestExt_a-MockExpectedFunctionCall.obj: src/CppUTestExt/MockExpectedFunctionCall.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTestExt_a-MockExpectedFunctionCall.obj -MD -MP -MF $(DEPDIR)/libCppUTestExt_a-MockExpectedFunctionCall.Tpo -c -o libCppUTestExt_a-MockExpectedFunctionCall.obj `if test -f 'src/CppUTestExt/MockExpectedFunctionCall.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MockExpectedFunctionCall.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MockExpectedFunctionCall.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTestExt_a-MockExpectedFunctionCall.Tpo $(DEPDIR)/libCppUTestExt_a-MockExpectedFunctionCall.Po
+lib_libCppUTestExt_a-MockExpectedFunctionCall.obj: src/CppUTestExt/MockExpectedFunctionCall.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTestExt_a-MockExpectedFunctionCall.obj -MD -MP -MF $(DEPDIR)/lib_libCppUTestExt_a-MockExpectedFunctionCall.Tpo -c -o lib_libCppUTestExt_a-MockExpectedFunctionCall.obj `if test -f 'src/CppUTestExt/MockExpectedFunctionCall.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MockExpectedFunctionCall.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MockExpectedFunctionCall.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTestExt_a-MockExpectedFunctionCall.Tpo $(DEPDIR)/lib_libCppUTestExt_a-MockExpectedFunctionCall.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MockExpectedFunctionCall.cpp' object='libCppUTestExt_a-MockExpectedFunctionCall.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MockExpectedFunctionCall.cpp' object='lib_libCppUTestExt_a-MockExpectedFunctionCall.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTestExt_a-MockExpectedFunctionCall.obj `if test -f 'src/CppUTestExt/MockExpectedFunctionCall.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MockExpectedFunctionCall.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MockExpectedFunctionCall.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTestExt_a-MockExpectedFunctionCall.obj `if test -f 'src/CppUTestExt/MockExpectedFunctionCall.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MockExpectedFunctionCall.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MockExpectedFunctionCall.cpp'; fi`
 
-libCppUTestExt_a-MockNamedValue.o: src/CppUTestExt/MockNamedValue.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTestExt_a-MockNamedValue.o -MD -MP -MF $(DEPDIR)/libCppUTestExt_a-MockNamedValue.Tpo -c -o libCppUTestExt_a-MockNamedValue.o `test -f 'src/CppUTestExt/MockNamedValue.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MockNamedValue.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTestExt_a-MockNamedValue.Tpo $(DEPDIR)/libCppUTestExt_a-MockNamedValue.Po
+lib_libCppUTestExt_a-MockNamedValue.o: src/CppUTestExt/MockNamedValue.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTestExt_a-MockNamedValue.o -MD -MP -MF $(DEPDIR)/lib_libCppUTestExt_a-MockNamedValue.Tpo -c -o lib_libCppUTestExt_a-MockNamedValue.o `test -f 'src/CppUTestExt/MockNamedValue.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MockNamedValue.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTestExt_a-MockNamedValue.Tpo $(DEPDIR)/lib_libCppUTestExt_a-MockNamedValue.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MockNamedValue.cpp' object='libCppUTestExt_a-MockNamedValue.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MockNamedValue.cpp' object='lib_libCppUTestExt_a-MockNamedValue.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTestExt_a-MockNamedValue.o `test -f 'src/CppUTestExt/MockNamedValue.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MockNamedValue.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTestExt_a-MockNamedValue.o `test -f 'src/CppUTestExt/MockNamedValue.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MockNamedValue.cpp
 
-libCppUTestExt_a-MockNamedValue.obj: src/CppUTestExt/MockNamedValue.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTestExt_a-MockNamedValue.obj -MD -MP -MF $(DEPDIR)/libCppUTestExt_a-MockNamedValue.Tpo -c -o libCppUTestExt_a-MockNamedValue.obj `if test -f 'src/CppUTestExt/MockNamedValue.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MockNamedValue.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MockNamedValue.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTestExt_a-MockNamedValue.Tpo $(DEPDIR)/libCppUTestExt_a-MockNamedValue.Po
+lib_libCppUTestExt_a-MockNamedValue.obj: src/CppUTestExt/MockNamedValue.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTestExt_a-MockNamedValue.obj -MD -MP -MF $(DEPDIR)/lib_libCppUTestExt_a-MockNamedValue.Tpo -c -o lib_libCppUTestExt_a-MockNamedValue.obj `if test -f 'src/CppUTestExt/MockNamedValue.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MockNamedValue.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MockNamedValue.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTestExt_a-MockNamedValue.Tpo $(DEPDIR)/lib_libCppUTestExt_a-MockNamedValue.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MockNamedValue.cpp' object='libCppUTestExt_a-MockNamedValue.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MockNamedValue.cpp' object='lib_libCppUTestExt_a-MockNamedValue.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTestExt_a-MockNamedValue.obj `if test -f 'src/CppUTestExt/MockNamedValue.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MockNamedValue.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MockNamedValue.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTestExt_a-MockNamedValue.obj `if test -f 'src/CppUTestExt/MockNamedValue.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MockNamedValue.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MockNamedValue.cpp'; fi`
 
-libCppUTestExt_a-OrderedTest.o: src/CppUTestExt/OrderedTest.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTestExt_a-OrderedTest.o -MD -MP -MF $(DEPDIR)/libCppUTestExt_a-OrderedTest.Tpo -c -o libCppUTestExt_a-OrderedTest.o `test -f 'src/CppUTestExt/OrderedTest.cpp' || echo '$(srcdir)/'`src/CppUTestExt/OrderedTest.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTestExt_a-OrderedTest.Tpo $(DEPDIR)/libCppUTestExt_a-OrderedTest.Po
+lib_libCppUTestExt_a-OrderedTest.o: src/CppUTestExt/OrderedTest.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTestExt_a-OrderedTest.o -MD -MP -MF $(DEPDIR)/lib_libCppUTestExt_a-OrderedTest.Tpo -c -o lib_libCppUTestExt_a-OrderedTest.o `test -f 'src/CppUTestExt/OrderedTest.cpp' || echo '$(srcdir)/'`src/CppUTestExt/OrderedTest.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTestExt_a-OrderedTest.Tpo $(DEPDIR)/lib_libCppUTestExt_a-OrderedTest.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/OrderedTest.cpp' object='libCppUTestExt_a-OrderedTest.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/OrderedTest.cpp' object='lib_libCppUTestExt_a-OrderedTest.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTestExt_a-OrderedTest.o `test -f 'src/CppUTestExt/OrderedTest.cpp' || echo '$(srcdir)/'`src/CppUTestExt/OrderedTest.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTestExt_a-OrderedTest.o `test -f 'src/CppUTestExt/OrderedTest.cpp' || echo '$(srcdir)/'`src/CppUTestExt/OrderedTest.cpp
 
-libCppUTestExt_a-OrderedTest.obj: src/CppUTestExt/OrderedTest.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTestExt_a-OrderedTest.obj -MD -MP -MF $(DEPDIR)/libCppUTestExt_a-OrderedTest.Tpo -c -o libCppUTestExt_a-OrderedTest.obj `if test -f 'src/CppUTestExt/OrderedTest.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/OrderedTest.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/OrderedTest.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTestExt_a-OrderedTest.Tpo $(DEPDIR)/libCppUTestExt_a-OrderedTest.Po
+lib_libCppUTestExt_a-OrderedTest.obj: src/CppUTestExt/OrderedTest.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTestExt_a-OrderedTest.obj -MD -MP -MF $(DEPDIR)/lib_libCppUTestExt_a-OrderedTest.Tpo -c -o lib_libCppUTestExt_a-OrderedTest.obj `if test -f 'src/CppUTestExt/OrderedTest.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/OrderedTest.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/OrderedTest.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTestExt_a-OrderedTest.Tpo $(DEPDIR)/lib_libCppUTestExt_a-OrderedTest.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/OrderedTest.cpp' object='libCppUTestExt_a-OrderedTest.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/OrderedTest.cpp' object='lib_libCppUTestExt_a-OrderedTest.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTestExt_a-OrderedTest.obj `if test -f 'src/CppUTestExt/OrderedTest.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/OrderedTest.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/OrderedTest.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTestExt_a-OrderedTest.obj `if test -f 'src/CppUTestExt/OrderedTest.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/OrderedTest.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/OrderedTest.cpp'; fi`
 
-libCppUTestExt_a-MemoryReportFormatter.o: src/CppUTestExt/MemoryReportFormatter.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTestExt_a-MemoryReportFormatter.o -MD -MP -MF $(DEPDIR)/libCppUTestExt_a-MemoryReportFormatter.Tpo -c -o libCppUTestExt_a-MemoryReportFormatter.o `test -f 'src/CppUTestExt/MemoryReportFormatter.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MemoryReportFormatter.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTestExt_a-MemoryReportFormatter.Tpo $(DEPDIR)/libCppUTestExt_a-MemoryReportFormatter.Po
+lib_libCppUTestExt_a-MemoryReportFormatter.o: src/CppUTestExt/MemoryReportFormatter.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTestExt_a-MemoryReportFormatter.o -MD -MP -MF $(DEPDIR)/lib_libCppUTestExt_a-MemoryReportFormatter.Tpo -c -o lib_libCppUTestExt_a-MemoryReportFormatter.o `test -f 'src/CppUTestExt/MemoryReportFormatter.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MemoryReportFormatter.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTestExt_a-MemoryReportFormatter.Tpo $(DEPDIR)/lib_libCppUTestExt_a-MemoryReportFormatter.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MemoryReportFormatter.cpp' object='libCppUTestExt_a-MemoryReportFormatter.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MemoryReportFormatter.cpp' object='lib_libCppUTestExt_a-MemoryReportFormatter.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTestExt_a-MemoryReportFormatter.o `test -f 'src/CppUTestExt/MemoryReportFormatter.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MemoryReportFormatter.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTestExt_a-MemoryReportFormatter.o `test -f 'src/CppUTestExt/MemoryReportFormatter.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MemoryReportFormatter.cpp
 
-libCppUTestExt_a-MemoryReportFormatter.obj: src/CppUTestExt/MemoryReportFormatter.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTestExt_a-MemoryReportFormatter.obj -MD -MP -MF $(DEPDIR)/libCppUTestExt_a-MemoryReportFormatter.Tpo -c -o libCppUTestExt_a-MemoryReportFormatter.obj `if test -f 'src/CppUTestExt/MemoryReportFormatter.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MemoryReportFormatter.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MemoryReportFormatter.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTestExt_a-MemoryReportFormatter.Tpo $(DEPDIR)/libCppUTestExt_a-MemoryReportFormatter.Po
+lib_libCppUTestExt_a-MemoryReportFormatter.obj: src/CppUTestExt/MemoryReportFormatter.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTestExt_a-MemoryReportFormatter.obj -MD -MP -MF $(DEPDIR)/lib_libCppUTestExt_a-MemoryReportFormatter.Tpo -c -o lib_libCppUTestExt_a-MemoryReportFormatter.obj `if test -f 'src/CppUTestExt/MemoryReportFormatter.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MemoryReportFormatter.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MemoryReportFormatter.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTestExt_a-MemoryReportFormatter.Tpo $(DEPDIR)/lib_libCppUTestExt_a-MemoryReportFormatter.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MemoryReportFormatter.cpp' object='libCppUTestExt_a-MemoryReportFormatter.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MemoryReportFormatter.cpp' object='lib_libCppUTestExt_a-MemoryReportFormatter.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTestExt_a-MemoryReportFormatter.obj `if test -f 'src/CppUTestExt/MemoryReportFormatter.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MemoryReportFormatter.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MemoryReportFormatter.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTestExt_a-MemoryReportFormatter.obj `if test -f 'src/CppUTestExt/MemoryReportFormatter.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MemoryReportFormatter.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MemoryReportFormatter.cpp'; fi`
 
-libCppUTestExt_a-MockExpectedFunctionsList.o: src/CppUTestExt/MockExpectedFunctionsList.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTestExt_a-MockExpectedFunctionsList.o -MD -MP -MF $(DEPDIR)/libCppUTestExt_a-MockExpectedFunctionsList.Tpo -c -o libCppUTestExt_a-MockExpectedFunctionsList.o `test -f 'src/CppUTestExt/MockExpectedFunctionsList.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MockExpectedFunctionsList.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTestExt_a-MockExpectedFunctionsList.Tpo $(DEPDIR)/libCppUTestExt_a-MockExpectedFunctionsList.Po
+lib_libCppUTestExt_a-MockExpectedFunctionsList.o: src/CppUTestExt/MockExpectedFunctionsList.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTestExt_a-MockExpectedFunctionsList.o -MD -MP -MF $(DEPDIR)/lib_libCppUTestExt_a-MockExpectedFunctionsList.Tpo -c -o lib_libCppUTestExt_a-MockExpectedFunctionsList.o `test -f 'src/CppUTestExt/MockExpectedFunctionsList.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MockExpectedFunctionsList.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTestExt_a-MockExpectedFunctionsList.Tpo $(DEPDIR)/lib_libCppUTestExt_a-MockExpectedFunctionsList.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MockExpectedFunctionsList.cpp' object='libCppUTestExt_a-MockExpectedFunctionsList.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MockExpectedFunctionsList.cpp' object='lib_libCppUTestExt_a-MockExpectedFunctionsList.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTestExt_a-MockExpectedFunctionsList.o `test -f 'src/CppUTestExt/MockExpectedFunctionsList.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MockExpectedFunctionsList.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTestExt_a-MockExpectedFunctionsList.o `test -f 'src/CppUTestExt/MockExpectedFunctionsList.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MockExpectedFunctionsList.cpp
 
-libCppUTestExt_a-MockExpectedFunctionsList.obj: src/CppUTestExt/MockExpectedFunctionsList.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTestExt_a-MockExpectedFunctionsList.obj -MD -MP -MF $(DEPDIR)/libCppUTestExt_a-MockExpectedFunctionsList.Tpo -c -o libCppUTestExt_a-MockExpectedFunctionsList.obj `if test -f 'src/CppUTestExt/MockExpectedFunctionsList.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MockExpectedFunctionsList.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MockExpectedFunctionsList.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTestExt_a-MockExpectedFunctionsList.Tpo $(DEPDIR)/libCppUTestExt_a-MockExpectedFunctionsList.Po
+lib_libCppUTestExt_a-MockExpectedFunctionsList.obj: src/CppUTestExt/MockExpectedFunctionsList.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTestExt_a-MockExpectedFunctionsList.obj -MD -MP -MF $(DEPDIR)/lib_libCppUTestExt_a-MockExpectedFunctionsList.Tpo -c -o lib_libCppUTestExt_a-MockExpectedFunctionsList.obj `if test -f 'src/CppUTestExt/MockExpectedFunctionsList.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MockExpectedFunctionsList.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MockExpectedFunctionsList.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTestExt_a-MockExpectedFunctionsList.Tpo $(DEPDIR)/lib_libCppUTestExt_a-MockExpectedFunctionsList.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MockExpectedFunctionsList.cpp' object='libCppUTestExt_a-MockExpectedFunctionsList.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MockExpectedFunctionsList.cpp' object='lib_libCppUTestExt_a-MockExpectedFunctionsList.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTestExt_a-MockExpectedFunctionsList.obj `if test -f 'src/CppUTestExt/MockExpectedFunctionsList.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MockExpectedFunctionsList.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MockExpectedFunctionsList.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTestExt_a-MockExpectedFunctionsList.obj `if test -f 'src/CppUTestExt/MockExpectedFunctionsList.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MockExpectedFunctionsList.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MockExpectedFunctionsList.cpp'; fi`
 
-libCppUTestExt_a-MockSupport.o: src/CppUTestExt/MockSupport.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTestExt_a-MockSupport.o -MD -MP -MF $(DEPDIR)/libCppUTestExt_a-MockSupport.Tpo -c -o libCppUTestExt_a-MockSupport.o `test -f 'src/CppUTestExt/MockSupport.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MockSupport.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTestExt_a-MockSupport.Tpo $(DEPDIR)/libCppUTestExt_a-MockSupport.Po
+lib_libCppUTestExt_a-MockSupport.o: src/CppUTestExt/MockSupport.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTestExt_a-MockSupport.o -MD -MP -MF $(DEPDIR)/lib_libCppUTestExt_a-MockSupport.Tpo -c -o lib_libCppUTestExt_a-MockSupport.o `test -f 'src/CppUTestExt/MockSupport.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MockSupport.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTestExt_a-MockSupport.Tpo $(DEPDIR)/lib_libCppUTestExt_a-MockSupport.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MockSupport.cpp' object='libCppUTestExt_a-MockSupport.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MockSupport.cpp' object='lib_libCppUTestExt_a-MockSupport.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTestExt_a-MockSupport.o `test -f 'src/CppUTestExt/MockSupport.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MockSupport.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTestExt_a-MockSupport.o `test -f 'src/CppUTestExt/MockSupport.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MockSupport.cpp
 
-libCppUTestExt_a-MockSupport.obj: src/CppUTestExt/MockSupport.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT libCppUTestExt_a-MockSupport.obj -MD -MP -MF $(DEPDIR)/libCppUTestExt_a-MockSupport.Tpo -c -o libCppUTestExt_a-MockSupport.obj `if test -f 'src/CppUTestExt/MockSupport.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MockSupport.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MockSupport.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libCppUTestExt_a-MockSupport.Tpo $(DEPDIR)/libCppUTestExt_a-MockSupport.Po
+lib_libCppUTestExt_a-MockSupport.obj: src/CppUTestExt/MockSupport.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTestExt_a-MockSupport.obj -MD -MP -MF $(DEPDIR)/lib_libCppUTestExt_a-MockSupport.Tpo -c -o lib_libCppUTestExt_a-MockSupport.obj `if test -f 'src/CppUTestExt/MockSupport.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MockSupport.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MockSupport.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTestExt_a-MockSupport.Tpo $(DEPDIR)/lib_libCppUTestExt_a-MockSupport.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MockSupport.cpp' object='libCppUTestExt_a-MockSupport.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MockSupport.cpp' object='lib_libCppUTestExt_a-MockSupport.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o libCppUTestExt_a-MockSupport.obj `if test -f 'src/CppUTestExt/MockSupport.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MockSupport.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MockSupport.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTestExt_a-MockSupport.obj `if test -f 'src/CppUTestExt/MockSupport.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MockSupport.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MockSupport.cpp'; fi`
 
 CppUTestExtTests-AllTests.o: tests/CppUTestExt/AllTests.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(CppUTestExtTests_CPPFLAGS) $(CPPFLAGS) $(CppUTestExtTests_CXXFLAGS) $(CXXFLAGS) -MT CppUTestExtTests-AllTests.o -MD -MP -MF $(DEPDIR)/CppUTestExtTests-AllTests.Tpo -c -o CppUTestExtTests-AllTests.o `test -f 'tests/CppUTestExt/AllTests.cpp' || echo '$(srcdir)/'`tests/CppUTestExt/AllTests.cpp
@@ -2424,6 +2429,7 @@ clean-generic:
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
+	-rm -f lib/$(am__dirstamp)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
@@ -2578,7 +2584,7 @@ check_all:
 
 	./$(CPPUTEST_TESTS) >> test_output.txt; $(CPPUTESTEXT_TESTS) >> test_output.txt 
 	$(SILENCE)for f in `ls *.gcno` ; do \
-		gcov $(CppUTestExtTests_SOURCES) $(CppUTestTests_SOURCES) $(libCppUTest_a_SOURCES) $(libCppUTestExt_a_SOURCES) -o $$f 1>>gcov_output.txt 2>>gcov_error.txt; \
+		gcov $(CppUTestExtTests_SOURCES) $(CppUTestTests_SOURCES) $(lib_libCppUTest_a_SOURCES) $(lib_libCppUTestExt_a_SOURCES) -o $$f 1>>gcov_output.txt 2>>gcov_error.txt; \
 	done
 	$(srcdir)/scripts/filterGcov.sh gcov_output.txt gcov_error.txt gcov_report.txt test_output.txt
 	cat gcov_report.txt
@@ -2587,7 +2593,7 @@ check_all:
 	rm -rf test_coverage
 
 	@echo "Compiling and running the examples. This will use the old Makefile"
-	make distclean; ../configure; make; $(MAKE) -C $(srcdir)/examples all clean CPPUTEST_LIB_LINK_DIR="`pwd`"
+	make distclean; ../configure; make; $(MAKE) -C $(srcdir)/examples all clean CPPUTEST_LIB_LINK_DIR="`pwd`/lib"
 
 	@echo "Build using real gtest"
 	make distclean; $(srcdir)/configure --enable-real-gtest; make check
