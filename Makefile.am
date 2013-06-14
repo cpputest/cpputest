@@ -183,7 +183,7 @@ RUN_CPPUTEST_TESTS = ./$(CPPUTEST_TESTS) -r
 
 valgrind: check
 	@if test "x$(CPPUTEST_HAS_VALGRIND)" = xno; then echo "Running the valgrind target without having valgrind. Perhaps install it first?"; exit 1; fi
-	valgrind --suppressions=$(srcdir)/valgrind.suppressions --error-exitcode=1 ./$(CPPUTEST_TESTS)
+	valgrind --suppressions=$(srcdir)/valgrind.suppressions --gen-suppressions=all --error-exitcode=1 ./$(CPPUTEST_TESTS)
 
 check_all: 
 	
