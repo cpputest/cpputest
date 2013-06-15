@@ -1,10 +1,9 @@
 {
    Supressions because the memory leak detector will print content of memory but can't know whether it is initialized or not
    Memcheck:Cond
-   fun:strnlen
+   fun:*strnlen
    fun:vfprintf
    fun:__vsnprintf_chk
-   obj:*
 }
 {
    Supression because it checks whether the memory was set invalid after a de-alloc
