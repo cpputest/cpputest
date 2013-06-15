@@ -770,6 +770,7 @@ enable_dependency_tracking
 enable_silent_rules
 enable_std_c
 enable_std_cpp
+enable_std_cpp11
 enable_cpputest_flags
 enable_memory_leak_detection
 enable_extensions
@@ -1429,6 +1430,8 @@ Optional Features:
   --disable-std-c         disable the use of Standard C Library (warning:
                           requires implementing Platforms/GccNoStdC)
   --disable-std-cpp       disable the use of Standard C++ Library
+  --enable-std-cpp11      enable the use of Standard C++ 11 (if the compiler
+                          supports that)
   --disable-cpputest-flags
                           disable CFLAGS/CPPFLAGS/CXXFLAGS set by CppUTest
   --disable-memory-leak-detection
@@ -5206,8 +5209,8 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 saved_libs="$LIBS"
 LIBS=-lpthread
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Lets check if we can link -lpthread to work around a gcc bug (on MacOSX)" >&5
-$as_echo_n "checking Lets check if we can link -lpthread to work around a gcc bug (on MacOSX)... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if we can link -lpthread to work around a gcc bug (on MacOSX)" >&5
+$as_echo_n "checking if we can link -lpthread to work around a gcc bug (on MacOSX)... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -6661,6 +6664,70 @@ ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
+### Checking for Standard C++ 11 compiler flags
+ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+
+# FLag -std=c++0x
+CXXFLAGS="-std=c++0x"
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether CXX supports -std=c++0x" >&5
+$as_echo_n "checking whether CXX supports -std=c++0x... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }; CPPUTEST_CPP11FLAG="-std=c++0x"
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+CXXFLAGS="$saved_cxxflags"
+
+CXXFLAGS="-std=c++11"
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether CXX supports -std=c++11" >&5
+$as_echo_n "checking whether CXX supports -std=c++11... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }; CPPUTEST_CPP11FLAG="-std=c++11"
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+CXXFLAGS="$saved_cxxflags"
+
+ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+
 ##### Linker checking.
 #
 # TBD!
@@ -6694,7 +6761,7 @@ $as_echo "no" >&6; }; CPPUTEST_NO_UNUSED_ARGUMENT_WARNING+=" "
 fi
 
 # Checking for options for creating map files
-LDFLAGS=" -Wl,-map,$<.map.txt"
+LDFLAGS=" -Wl,-map,filename.map.txt"
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether LD supports -Wl,-map" >&5
 $as_echo_n "checking whether LD supports -Wl,-map... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -6710,7 +6777,7 @@ main ()
 _ACEOF
 if ac_fn_c_try_link "$LINENO"; then :
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }; CPPUTEST_LD_MAP_GENERATION+=" -Wl,-map,$<.map.txt"
+$as_echo "yes" >&6; }; CPPUTEST_LD_MAP_GENERATION+=" -Wl,-map,filename.map.txt"
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
@@ -6734,6 +6801,14 @@ if test "${enable_std_cpp+set}" = set; then :
   enableval=$enable_std_cpp; use_std_cpp=${enableval}
 else
   use_std_cpp=yes
+fi
+
+
+# Check whether --enable-std-cpp11 was given.
+if test "${enable_std_cpp11+set}" = set; then :
+  enableval=$enable_std_cpp11; use_std_cpp11=${enableval}
+else
+  coverage=no
 fi
 
 
@@ -6831,6 +6906,12 @@ $as_echo "#define CPPUTEST_STD_CPP_LIB_DISABLED 1" >>confdefs.h
 
     fi
 fi
+
+# Using the C++11 standard?
+if test "x${use_std_cpp11}" = xyes; then
+	CPPUTEST_CXXFLAGS+=" ${CPPUTEST_CPP11FLAG}"
+fi
+
 
 # Dealing with memory leak detection
 if test "x${memory_leak_detection}" = xno; then

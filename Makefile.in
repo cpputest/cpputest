@@ -2542,8 +2542,11 @@ valgrind: check
 
 check_all: 
 
+	@echo "Building and valgrinding"
+	make distclean; $(srcdir)/configure; make valgrind
+
 	@echo "Building without extensions"
-	make distclean; $(srcdir)/configure --disable-extensions; make check valgrind
+	make distclean; $(srcdir)/configure --disable-extensions; make check
 
 	@echo "Building without the Standard C library"
 	make distclean; $(srcdir)/configure --disable-std-c; make
