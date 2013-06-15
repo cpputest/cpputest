@@ -48,11 +48,16 @@
 
 #if CPPUTEST_USE_STD_CPP_LIB
 
+#if CPPUTEST_USE_NEW_MACROS
+#include "MemoryLeakDetectorNewMacros.h"
+#else
 #include <new>
 void* operator new(size_t size) throw(std::bad_alloc);
 void* operator new[](size_t size) throw(std::bad_alloc);
-void* operator new(size_t size, const std::nothrow_t&) throw();
-void* operator new[](size_t size, const std::nothrow_t&) throw();
+void* operator new(size_t size, const std::nothrow_t&) UT_THROW();
+void* operator new[](size_t size, const std::nothrow_t&) UT_THROW();
+#endif
+
 
 #else
 
@@ -61,14 +66,11 @@ void* operator new[](size_t size);
 
 #endif
 
-void operator delete(void* mem) throw();
-void operator delete[](void* mem) throw();
-void operator delete(void* mem, const char* file, int line) throw();
-void operator delete[](void* mem, const char* file, int line) throw();
+void operator delete(void* mem) UT_THROW();
+void operator delete[](void* mem) UT_THROW();
+void operator delete(void* mem, const char* file, int line) UT_THROW();
+void operator delete[](void* mem, const char* file, int line) UT_THROW();
 
-#if CPPUTEST_USE_NEW_MACROS
-#include "MemoryLeakDetectorNewMacros.h"
-#endif
 
 #endif
 

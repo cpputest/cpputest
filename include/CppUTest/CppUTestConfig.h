@@ -99,6 +99,19 @@
   #define __no_return__
 #endif
 
+/*
+ * When we don't link Standard C++, then we won't throw exceptions as we assume the compiler might not support that!
+ */
+
+#if CPPUTEST_USE_STD_CPP_LIB
+#define UT_THROW(exception) throw (exception)
+#else
+#define UT_THROW(exception)
+#endif
+
+#define CPPUTEST_THROW(exception) throw(exception)
+
+
 /* Should be the only #include here. Standard C library wrappers */
 #include "StandardCLibrary.h"
 
