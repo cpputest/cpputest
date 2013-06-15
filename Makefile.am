@@ -186,9 +186,12 @@ valgrind: check
 	valgrind --dsymutil=yes --suppressions=$(srcdir)/valgrind.suppressions --gen-suppressions=all --error-exitcode=1 ./$(CPPUTEST_TESTS)
 
 check_all: 
+
+	@echo "Building and valgrinding"
+	make distclean; $(srcdir)/configure; make valgrind
 	
 	@echo "Building without extensions"
-	make distclean; $(srcdir)/configure --disable-extensions; make check valgrind
+	make distclean; $(srcdir)/configure --disable-extensions; make check
 
 	@echo "Building without the Standard C library"
 	make distclean; $(srcdir)/configure --disable-std-c; make
