@@ -19,12 +19,6 @@
  *
  */
 
-/* Warning for maintainers:
- * This macro code is duplicate from TestHarness.h. The reason for this is to make the two files
- * completely independent from each other. NewMacros file can be included in production code whereas
- * TestHarness.h is only included in test code.
- */
-
 #include "CppUTestConfig.h"
 
 #if CPPUTEST_USE_MEM_LEAK_DETECTION
@@ -33,22 +27,16 @@
 #ifndef CPPUTEST_USE_NEW_MACROS
 
 	#if CPPUTEST_USE_STD_CPP_LIB
-	#include <new>
-	#include <memory>
-	#include <string>
-
-		void* operator new(size_t size, const char* file, int line) UT_THROW (std::bad_alloc);
-		void* operator new[](size_t size, const char* file, int line) UT_THROW (std::bad_alloc);
-		void* operator new(size_t size) UT_THROW(std::bad_alloc);
-		void* operator new[](size_t size) UT_THROW(std::bad_alloc);
-
-	#else
-
-		void* operator new(size_t size, const char* file, int line);
-		void* operator new[](size_t size, const char* file, int line);
-		void* operator new(size_t size);
-		void* operator new[](size_t size);
+		#include <new>
+		#include <memory>
+		#include <string>
 	#endif
+
+	void* operator new(size_t size, const char* file, int line) UT_THROW (std::bad_alloc);
+	void* operator new[](size_t size, const char* file, int line) UT_THROW (std::bad_alloc);
+	void* operator new(size_t size) UT_THROW(std::bad_alloc);
+	void* operator new[](size_t size) UT_THROW(std::bad_alloc);
+
 #endif
 
 #define new new(__FILE__, __LINE__)

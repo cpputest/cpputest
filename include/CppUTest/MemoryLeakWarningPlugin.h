@@ -30,47 +30,23 @@
 
 #include "TestPlugin.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  MemoryLeakWarning.h
-//
-//  MemoryLeakWarning defines the inteface to a platform specific
-//  memory leak detection class.  See Platforms directory for examples
-//
-///////////////////////////////////////////////////////////////////////////////
-
 #define IGNORE_ALL_LEAKS_IN_TEST() MemoryLeakWarningPlugin::getFirstPlugin()->ignoreAllLeaksInTest();
 #define EXPECT_N_LEAKS(n)          MemoryLeakWarningPlugin::getFirstPlugin()->expectLeaksInTest(n);
 
 #if CPPUTEST_USE_MEM_LEAK_DETECTION
 
-#undef new
-
-#if CPPUTEST_USE_STD_CPP_LIB
-
-#if CPPUTEST_USE_NEW_MACROS
-#include "MemoryLeakDetectorNewMacros.h"
-#else
-#include <new>
-void* operator new(size_t size) throw(std::bad_alloc);
-void* operator new[](size_t size) throw(std::bad_alloc);
-void* operator new(size_t size, const std::nothrow_t&) UT_THROW();
-void* operator new[](size_t size, const std::nothrow_t&) UT_THROW();
-#endif
-
-
-#else
-
-void* operator new(size_t size);
-void* operator new[](size_t size);
-
+#if !CPPUTEST_USE_NEW_MACROS
+	#include <new>
+	void* operator new(size_t size) UT_THROW(std::bad_alloc);
+	void* operator new[](size_t size) UT_THROW(std::bad_alloc);
+	void* operator new(size_t size, const std::nothrow_t&) UT_THROW( );
+	void* operator new[](size_t size, const std::nothrow_t&) UT_THROW( );
 #endif
 
 void operator delete(void* mem) UT_THROW();
 void operator delete[](void* mem) UT_THROW();
-void operator delete(void* mem, const char* file, int line) UT_THROW();
-void operator delete[](void* mem, const char* file, int line) UT_THROW();
-
+void operator delete(void* mem, const char* file, int line) UT_THROW( );
+void operator delete[](void* mem, const char* file, int line) UT_THROW( );
 
 #endif
 
@@ -82,8 +58,7 @@ class MemoryLeakFailure;
 class MemoryLeakWarningPlugin: public TestPlugin
 {
 public:
-	MemoryLeakWarningPlugin(const SimpleString& name,
-			MemoryLeakDetector* localDetector = 0);
+	MemoryLeakWarningPlugin(const SimpleString& name, MemoryLeakDetector* localDetector = 0);
 	virtual ~MemoryLeakWarningPlugin();
 
 	virtual void preTestAction(UtestShell& test, TestResult& result);
