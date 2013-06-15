@@ -6,6 +6,14 @@
    fun:__vsnprintf_chk
 }
 {
+   Same as the above, but this one is more specific for clang. This allows the clang to fail on other vprintf errors where it is suppressed at gcc
+   ...
+   fun:vsnprintf
+   fun:_ZN18SimpleStringBuffer3addEPKcz
+   fun:_ZN18MemoryLeakDetector25ConstructMemoryLeakReportE13MemLeakPeriod
+   fun:_ZN18MemoryLeakDetector6reportE13MemLeakPeriod
+}
+{
    Supression because it checks whether the memory was set invalid after a de-alloc
    Memcheck:Addr1
    fun:_ZN45TEST_BasicBehavior_freeInvalidatesMemory_Test8testBodyEv
