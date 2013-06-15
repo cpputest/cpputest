@@ -43,8 +43,8 @@
 	void* operator new[](size_t size, const std::nothrow_t&) UT_THROW( );
 #endif
 
-void operator delete(void* mem) UT_THROW();
-void operator delete[](void* mem) UT_THROW();
+void operator delete(void* mem) UT_THROW( );
+void operator delete[](void* mem) UT_THROW( );
 void operator delete(void* mem, const char* file, int line) UT_THROW( );
 void operator delete[](void* mem, const char* file, int line) UT_THROW( );
 
