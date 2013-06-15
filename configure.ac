@@ -34,7 +34,7 @@ ACX_PTHREAD([LIBS="$PTHREAD_LIBS $LIBS"])
 
 saved_libs="$LIBS"
 LIBS=-lpthread
-AC_MSG_CHECKING([Lets check if we can link -lpthread to work around a gcc bug (on MacOSX)])
+AC_MSG_CHECKING([if we can link -lpthread to work around a gcc bug (on MacOSX)])
 AC_LINK_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); HACK_TO_USE_PTHREAD_LIBS+=" -lpthread"], [AC_MSG_RESULT([no])])
 LIBS="$saved_libs $HACK_TO_USE_PTHREAD_LIBS"
 
@@ -179,6 +179,22 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CXXWARN
 CXXFLAGS="$saved_cxxflags"
 AC_LANG_POP
 
+### Checking for Standard C++ 11 compiler flags
+AC_LANG_PUSH([C++])
+
+# FLag -std=c++0x 
+CXXFLAGS="-std=c++0x"
+AC_MSG_CHECKING([whether CXX supports -std=c++0x])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CPP11FLAG="-std=c++0x" ], [AC_MSG_RESULT([no])])
+CXXFLAGS="$saved_cxxflags"
+
+CXXFLAGS="-std=c++11"
+AC_MSG_CHECKING([whether CXX supports -std=c++11])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CPP11FLAG="-std=c++11" ], [AC_MSG_RESULT([no])])
+CXXFLAGS="$saved_cxxflags"
+
+AC_LANG_POP
+
 ##### Linker checking. 
 # 
 # TBD!
@@ -212,6 +228,9 @@ AC_ARG_ENABLE([std-c], [AC_HELP_STRING([--disable-std-c], [disable the use of St
 
 AC_ARG_ENABLE([std-cpp], [AC_HELP_STRING([--disable-std-cpp], [disable the use of Standard C++ Library])], 
    [use_std_cpp=${enableval}], [use_std_cpp=yes])
+
+AC_ARG_ENABLE([std-cpp11], [AC_HELP_STRING([--enable-std-cpp11], [enable the use of Standard C++ 11 (if the compiler supports that)])], 
+   [use_std_cpp11=${enableval}], [coverage=no])
 
 AC_ARG_ENABLE([cpputest-flags], [AC_HELP_STRING([--disable-cpputest-flags], [disable CFLAGS/CPPFLAGS/CXXFLAGS set by CppUTest])], 
    [cpputest_flags=${enableval}], [cpputest_flags=yes])
@@ -261,6 +280,12 @@ if test "x${use_std_cpp}" = xno; then
     	
     fi
 fi
+
+# Using the C++11 standard?
+if test "x${use_std_cpp11}" = xyes; then
+	CPPUTEST_CXXFLAGS+=" ${CPPUTEST_CPP11FLAG}"
+fi
+
 
 # Dealing with memory leak detection
 if test "x${memory_leak_detection}" = xno; then
