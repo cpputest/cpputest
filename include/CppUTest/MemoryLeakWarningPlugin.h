@@ -39,14 +39,14 @@
 	#include <new>
 	void* operator new(size_t size) UT_THROW(std::bad_alloc);
 	void* operator new[](size_t size) UT_THROW(std::bad_alloc);
-	void* operator new(size_t size, const std::nothrow_t&) UT_THROW( );
-	void* operator new[](size_t size, const std::nothrow_t&) UT_THROW( );
+	void* operator new(size_t size, const std::nothrow_t&) UT_NOTHROW;
+	void* operator new[](size_t size, const std::nothrow_t&) UT_NOTHROW;
 #endif
 
-void operator delete(void* mem) UT_THROW(/*none*/);
-void operator delete[](void* mem) UT_THROW(/*none*/);
-void operator delete(void* mem, const char* file, int line) UT_THROW(/*none*/);
-void operator delete[](void* mem, const char* file, int line) UT_THROW(/*none*/);
+void operator delete(void* mem) UT_NOTHROW;
+void operator delete[](void* mem) UT_NOTHROW;
+void operator delete(void* mem, const char* file, int line) UT_NOTHROW;
+void operator delete[](void* mem, const char* file, int line) UT_NOTHROW;
 
 #endif
 

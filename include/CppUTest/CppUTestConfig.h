@@ -105,12 +105,11 @@
 
 #if CPPUTEST_USE_STD_CPP_LIB
 #define UT_THROW(exception) throw (exception)
+#define UT_NOTHROW throw()
 #else
 #define UT_THROW(exception)
+#define UT_NOTHROW
 #endif
-
-#define CPPUTEST_THROW(exception) throw(exception)
-
 
 /* Should be the only #include here. Standard C library wrappers */
 #include "StandardCLibrary.h"
