@@ -216,9 +216,9 @@ AM_COND_IF([TEST_COMPILER_IS_CLANG],
                 [AC_MSG_RESULT([no])]; CPPUTEST_NO_UNUSED_ARGUMENT_WARNING+=" ")
 
 # Checking for options for creating map files
-LDFLAGS=" -Wl,-map,$<.map.txt"
+LDFLAGS=" -Wl,-map,filename.map.txt"
 AC_MSG_CHECKING([whether LD supports -Wl,-map])
-AC_LINK_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_LD_MAP_GENERATION+=" -Wl,-map,$<.map.txt" ], [AC_MSG_RESULT([no])])
+AC_LINK_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_LD_MAP_GENERATION+=" -Wl,-map,filename.map.txt" ], [AC_MSG_RESULT([no])])
 LDFLAGS="$saved_ldflags"
 
 
