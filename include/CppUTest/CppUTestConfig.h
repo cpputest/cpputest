@@ -111,6 +111,16 @@
 #define UT_NOTHROW
 #endif
 
+/*
+ * CLang's operator delete requires an NOTHROW block. For now, when we use CLang, then have an empty exception specifier.
+ * However, this ought to be done inside the configure.ac in the future.
+ */
+
+#ifdef __clang__
+#undef UT_NOTHROW
+#define UT_NOTHROW throw()
+#endif
+
 /* Should be the only #include here. Standard C library wrappers */
 #include "StandardCLibrary.h"
 
