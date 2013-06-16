@@ -122,14 +122,16 @@
 #endif
 
 /*
- * g++-4.7 with stdc++11 enabled will have a different exception specifier for operator new (and thank you!)
+ * g++-4.7 with stdc++11 enabled On MacOSX! will have a different exception specifier for operator new (and thank you!)
  * I assume they'll fix this in the future, but for now, we'll change that here.
  * (This should perhaps also be done in the configure.ac)
  */
 
 #ifdef __GXX_EXPERIMENTAL_CXX0X__
+#ifdef __APPLE__
 #undef UT_THROW
 #define UT_THROW(exception)
+#endif
 #endif
 
 
