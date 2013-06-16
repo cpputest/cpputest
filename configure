@@ -6721,6 +6721,96 @@ fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 CXXFLAGS="$saved_cxxflags"
 
+CXXFLAGS="-stdlib=libc++"
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether CXX supports -stdlib=libc++" >&5
+$as_echo_n "checking whether CXX supports -stdlib=libc++... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }; CPPUTEST_CPP11FLAG+=" -stdlib=libc++"
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+CXXFLAGS="$saved_cxxflags"
+
+ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+
+### Checking for strange exception handling behavior, related to bugs in compilers...
+### TODO: This part isn't finished yet. It will need to generate different CppUTestConfig.h files based on the result of these checks.
+ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+
+# Can we use operator delete without exception handling specifier? (clang warns on this!)
+CXXFLAGS="-Werror"
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether CXX supports operator delete without exception handling specifier" >&5
+$as_echo_n "checking whether CXX supports operator delete without exception handling specifier... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <new>\nvoid operator delete(void* mem);
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }; UT_DELETE_MUST_HAVE_EXCEPTION_SPECIFIER="yes"
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+CXXFLAGS="$saved_cxxflags"
+
+# Can we use operator new with exception specifier (g++4.7 on MacOSX is broken here)
+CXXFLAGS="-Werror"
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether CXX supports operator new with exception handling specifier" >&5
+$as_echo_n "checking whether CXX supports operator new with exception handling specifier... " >&6; }
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <new>\nvoid* operator new(size_t size) throw(std::bad_alloc);;
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }; UT_NEW_CANT_HAVE_EXCEPTION_SPECIFIER="yes"
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+CXXFLAGS="$saved_cxxflags"
+
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
