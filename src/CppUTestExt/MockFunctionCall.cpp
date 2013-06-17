@@ -25,6 +25,14 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+ /** The method definition of MockIgnoredCall::instance() was moved
+   * here from the header file, as the TI c2000 compiler does not
+   * handle it correctly when the header is #included by multiple
+   * sources. This should probably be fed back to JWG, because none
+   * of the other instance() operations are defined in the header,
+   * anyway. Arnd R. Strube, Mar 2013.
+   */
+
 #include "CppUTest/TestHarness.h"
 #include "CppUTestExt/MockFunctionCall.h"
 #include "CppUTestExt/MockNamedValue.h"
@@ -103,14 +111,14 @@ MockFunctionCall& MockFunctionCallComposite::withCallOrder(int)
 	return *this;
 }
 
-MockFunctionCall& MockFunctionCallComposite::withParameter(const SimpleString& name, int value)
+MockFunctionCall& MockFunctionCallComposite::withIntParameter(const SimpleString& name, int value)
 {
 	for (MockFunctionCallCompositeNode* node = head_; node != NULL; node = node->next_)
 		node->call_.withParameter(name, value);
 	return *this;
 }
 
-MockFunctionCall& MockFunctionCallComposite::withParameter(const SimpleString& name, double value)
+MockFunctionCall& MockFunctionCallComposite::withDoubleParameter(const SimpleString& name, double value)
 {
 	for (MockFunctionCallCompositeNode* node = head_; node != NULL; node = node->next_)
 		node->call_.withParameter(name, value);
@@ -118,14 +126,14 @@ MockFunctionCall& MockFunctionCallComposite::withParameter(const SimpleString& n
 
 }
 
-MockFunctionCall& MockFunctionCallComposite::withParameter(const SimpleString& name, const char* value)
+MockFunctionCall& MockFunctionCallComposite::withStringParameter(const SimpleString& name, const char* value)
 {
 	for (MockFunctionCallCompositeNode* node = head_; node != NULL; node = node->next_)
 		node->call_.withParameter(name, value);
 	return *this;
 }
 
-MockFunctionCall& MockFunctionCallComposite::withParameter(const SimpleString& name, void* value)
+MockFunctionCall& MockFunctionCallComposite::withPointerParameter(const SimpleString& name, void* value)
 {
 	for (MockFunctionCallCompositeNode* node = head_; node != NULL; node = node->next_)
 		node->call_.withParameter(name, value);
@@ -192,12 +200,6 @@ MockFunctionCall& MockFunctionCallComposite::onObject(void* object)
 	return *this;
 }
 
-MockFunctionCall& MockIgnoredCall::instance()
-{
-    static MockIgnoredCall call;
-    return call;
-}
- 
 MockFunctionCallTrace::MockFunctionCallTrace()
 {
 }
@@ -220,7 +222,7 @@ MockFunctionCall& MockFunctionCallTrace::withCallOrder(int callOrder)
 	return *this;
 }
 
-MockFunctionCall& MockFunctionCallTrace::withParameter(const SimpleString& name, int value)
+MockFunctionCall& MockFunctionCallTrace::withIntParameter(const SimpleString& name, int value)
 {
 	traceBuffer_ += " ";
 	traceBuffer_ += name;
@@ -229,7 +231,7 @@ MockFunctionCall& MockFunctionCallTrace::withParameter(const SimpleString& name,
 	return *this;
 }
 
-MockFunctionCall& MockFunctionCallTrace::withParameter(const SimpleString& name, double value)
+MockFunctionCall& MockFunctionCallTrace::withDoubleParameter(const SimpleString& name, double value)
 {
 	traceBuffer_ += " ";
 	traceBuffer_ += name;
@@ -238,7 +240,7 @@ MockFunctionCall& MockFunctionCallTrace::withParameter(const SimpleString& name,
 	return *this;
 }
 
-MockFunctionCall& MockFunctionCallTrace::withParameter(const SimpleString& name, const char* value)
+MockFunctionCall& MockFunctionCallTrace::withStringParameter(const SimpleString& name, const char* value)
 {
 	traceBuffer_ += " ";
 	traceBuffer_ += name;
@@ -247,7 +249,7 @@ MockFunctionCall& MockFunctionCallTrace::withParameter(const SimpleString& name,
 	return *this;
 }
 
-MockFunctionCall& MockFunctionCallTrace::withParameter(const SimpleString& name, void* value)
+MockFunctionCall& MockFunctionCallTrace::withPointerParameter(const SimpleString& name, void* value)
 {
 	traceBuffer_ += " ";
 	traceBuffer_ += name;
@@ -322,6 +324,12 @@ MockFunctionCallTrace& MockFunctionCallTrace::instance()
 {
 	static MockFunctionCallTrace call;
 	return call;
+}
+
+MockFunctionCall& MockIgnoredCall::instance()
+{
+    static MockIgnoredCall call;
+    return call;
 }
 
 

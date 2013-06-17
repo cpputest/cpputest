@@ -110,7 +110,7 @@ void MockActualFunctionCall::checkActualParameter(const MockNamedValue& actualPa
 	finnalizeCallWhenFulfilled();
 }
 
-MockFunctionCall& MockActualFunctionCall::withParameter(const SimpleString& name, int value)
+MockFunctionCall& MockActualFunctionCall::withIntParameter(const SimpleString& name, int value)
 {
 	MockNamedValue actualParameter(name);
 	actualParameter.setValue(value);
@@ -118,7 +118,7 @@ MockFunctionCall& MockActualFunctionCall::withParameter(const SimpleString& name
 	return *this;
 }
 
-MockFunctionCall& MockActualFunctionCall::withParameter(const SimpleString& name, double value)
+MockFunctionCall& MockActualFunctionCall::withDoubleParameter(const SimpleString& name, double value)
 {
 	MockNamedValue actualParameter(name);
 	actualParameter.setValue(value);
@@ -126,7 +126,7 @@ MockFunctionCall& MockActualFunctionCall::withParameter(const SimpleString& name
 	return *this;
 }
 
-MockFunctionCall& MockActualFunctionCall::withParameter(const SimpleString& name, const char* value)
+MockFunctionCall& MockActualFunctionCall::withStringParameter(const SimpleString& name, const char* value)
 {
 	MockNamedValue actualParameter(name);
 	actualParameter.setValue(value);
@@ -134,7 +134,7 @@ MockFunctionCall& MockActualFunctionCall::withParameter(const SimpleString& name
 	return *this;
 }
 
-MockFunctionCall& MockActualFunctionCall::withParameter(const SimpleString& name, void* value)
+MockFunctionCall& MockActualFunctionCall::withPointerParameter(const SimpleString& name, void* value)
 {
 	MockNamedValue actualParameter(name);
 	actualParameter.setValue(value);
@@ -195,13 +195,9 @@ const char* MockActualFunctionCall::stringFromState(ActualCallState state)
 	case CALL_IN_PROGESS: return "In progress";
 	case CALL_FAILED: return "Failed";
 	case CALL_SUCCEED: return "Succeed";
-#ifndef __clang__
 	default: ;
-#endif
 	}
-#ifndef __clang__
 	return "No valid state info";
-#endif
 }
 
 void MockActualFunctionCall::checkStateConsistency(ActualCallState oldState, ActualCallState newState)
