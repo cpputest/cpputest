@@ -130,11 +130,9 @@
 #ifdef __GXX_EXPERIMENTAL_CXX0X__
 #ifdef __APPLE__
 #undef UT_THROW
-#define UT_THROW(exception)
+#define UT_THROW(exception) _GLIBCXX_THROW(exception)
 #endif
 #endif
-
-
 
 /* Should be the only #include here. Standard C library wrappers */
 #include "StandardCLibrary.h"
