@@ -124,9 +124,17 @@ CFLAGS="$saved_cflags"
 
 # FLag -Wsign-conversion 
 CFLAGS="-Werror -Wsign-conversion"
-AC_MSG_CHECKING([whether CC and CXX supports -Wsign-conversion])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS+=" -Wsign-conversion"; CPPUTEST_CXXWARNINGFLAGS+=" -Wsign-conversion" ], [AC_MSG_RESULT([no])])
+AC_MSG_CHECKING([whether CC supports -Wsign-conversion])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS+=" -Wsign-conversion"], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
+
+# FLag -Wsign-conversion (for CXX)
+AC_LANG_PUSH([C++])
+CXXFLAGS="-Werror -Wsign-conversion"
+AC_MSG_CHECKING([whether CXX supports -Wsign-conversion])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CXXWARNINGFLAGS+=" -Wsign-conversion"], [AC_MSG_RESULT([no])])
+CFLAGS="$saved_cxxflags"
+AC_LANG_POP
 
 # FLag -Woverloaded-virtual 
 AC_LANG_PUSH([C++])
