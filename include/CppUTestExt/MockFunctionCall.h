@@ -25,14 +25,6 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/** The method definition of MockIgnoredCall::instance() was moved
-   * to the source file from here, as the TI c2000 compiler does not
-   * handle it correctly when the header is #included by multiple
-   * sources. This should probably be fed back to JWG, because none
-   * of the other instance() operations are defined in the header,
-   * anyway. Arnd R. Strube, Mar 2013.
-   */
-
 #ifndef D_MockFunctionCall_h
 #define D_MockFunctionCall_h
 
@@ -58,8 +50,12 @@ public:
 	MockFunctionCall& withParameter(const SimpleString& name, const char* value) { return withStringParameter(name, value); }
 	MockFunctionCall& withParameter(const SimpleString& name, void* value) { return withPointerParameter(name, value); }
 	virtual MockFunctionCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, void* value)=0;
-	virtual MockFunctionCall& ignoreOtherParameters() { return *this;};
+	virtual MockFunctionCall& ignoreOtherParameters() { return *this;}
 
+	virtual MockFunctionCall& withIntParameter(const SimpleString& name, int value)=0;
+	virtual MockFunctionCall& withDoubleParameter(const SimpleString& name, double value)=0;
+	virtual MockFunctionCall& withStringParameter(const SimpleString& name, const char* value)=0;
+	virtual MockFunctionCall& withPointerParameter(const SimpleString& name, void* value)=0;
 	virtual MockFunctionCall& andReturnValue(int value)=0;
 	virtual MockFunctionCall& andReturnValue(double value)=0;
 	virtual MockFunctionCall& andReturnValue(const char* value)=0;
@@ -72,15 +68,9 @@ public:
 	virtual void setComparatorRepository(MockNamedValueComparatorRepository* repository);
 
 protected:
-	virtual MockFunctionCall& withIntParameter(const SimpleString& name, int value)=0;
-	virtual MockFunctionCall& withDoubleParameter(const SimpleString& name, double value)=0;
-	virtual MockFunctionCall& withStringParameter(const SimpleString& name, const char* value)=0;
-	virtual MockFunctionCall& withPointerParameter(const SimpleString& name, void* value)=0;
-
 	void setName(const SimpleString& name);
 	SimpleString getName() const;
 	MockNamedValueComparator* getComparatorForType(const SimpleString& type) const;
-
 private:
 	SimpleString functionName_;
 	MockNamedValueComparatorRepository* comparatorRepository_;
@@ -95,6 +85,10 @@ public:
 
 	virtual MockFunctionCall& withName(const SimpleString&);
 	virtual MockFunctionCall& withCallOrder(int);
+	virtual MockFunctionCall& withIntParameter(const SimpleString&, int);
+	virtual MockFunctionCall& withDoubleParameter(const SimpleString&, double);
+	virtual MockFunctionCall& withStringParameter(const SimpleString&, const char*);
+	virtual MockFunctionCall& withPointerParameter(const SimpleString& , void*);
 	virtual MockFunctionCall& withParameterOfType(const SimpleString&, const SimpleString&, void*);
 	virtual MockFunctionCall& ignoreOtherParameters();
 
@@ -109,13 +103,6 @@ public:
 
 	virtual void add(MockFunctionCall& call);
 	virtual void clear();
-
-protected:
-	virtual MockFunctionCall& withIntParameter(const SimpleString&, int);
-	virtual MockFunctionCall& withDoubleParameter(const SimpleString&, double);
-	virtual MockFunctionCall& withStringParameter(const SimpleString&, const char*);
-	virtual MockFunctionCall& withPointerParameter(const SimpleString& , void*);
-
 private:
 	MockFunctionCallCompositeNode* head_;
 };
@@ -125,6 +112,10 @@ class MockIgnoredCall : public MockFunctionCall
 public:
 	virtual MockFunctionCall& withName(const SimpleString&) { return *this;}
 	virtual MockFunctionCall& withCallOrder(int) { return *this; }
+	virtual MockFunctionCall& withIntParameter(const SimpleString&, int) { return *this; }
+	virtual MockFunctionCall& withDoubleParameter(const SimpleString&, double) { return *this; }
+	virtual MockFunctionCall& withStringParameter(const SimpleString&, const char*) { return *this; }
+	virtual MockFunctionCall& withPointerParameter(const SimpleString& , void*) { return *this; }
 	virtual MockFunctionCall& withParameterOfType(const SimpleString&, const SimpleString&, void*) { return *this; }
 
 	virtual MockFunctionCall& andReturnValue(int) { return *this; }
@@ -137,12 +128,6 @@ public:
 	virtual MockFunctionCall& onObject(void* ) { return *this; }
 
 	static MockFunctionCall& instance();
-
-protected:
-	virtual MockFunctionCall& withIntParameter(const SimpleString&, int) { return *this; }
-	virtual MockFunctionCall& withDoubleParameter(const SimpleString&, double) { return *this; }
-	virtual MockFunctionCall& withStringParameter(const SimpleString&, const char*) { return *this; }
-	virtual MockFunctionCall& withPointerParameter(const SimpleString& , void*) { return *this; }
 };
 
 class MockFunctionCallTrace : public MockFunctionCall
@@ -153,6 +138,10 @@ public:
 
 	virtual MockFunctionCall& withName(const SimpleString& name);
 	virtual MockFunctionCall& withCallOrder(int);
+	virtual MockFunctionCall& withIntParameter(const SimpleString& name, int value);
+	virtual MockFunctionCall& withDoubleParameter(const SimpleString& name, double value);
+	virtual MockFunctionCall& withStringParameter(const SimpleString& name, const char* value);
+	virtual MockFunctionCall& withPointerParameter(const SimpleString& name, void* value);
 	virtual MockFunctionCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, void* value);
 	virtual MockFunctionCall& ignoreOtherParameters();
 
@@ -168,12 +157,6 @@ public:
 	const char* getTraceOutput();
 	void clear();
 	static MockFunctionCallTrace& instance();
-
-protected:
-	virtual MockFunctionCall& withIntParameter(const SimpleString& name, int value);
-	virtual MockFunctionCall& withDoubleParameter(const SimpleString& name, double value);
-	virtual MockFunctionCall& withStringParameter(const SimpleString& name, const char* value);
-	virtual MockFunctionCall& withPointerParameter(const SimpleString& name, void* value);
 
 private:
 	SimpleString traceBuffer_;

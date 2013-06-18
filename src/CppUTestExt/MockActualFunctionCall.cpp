@@ -195,9 +195,13 @@ const char* MockActualFunctionCall::stringFromState(ActualCallState state)
 	case CALL_IN_PROGESS: return "In progress";
 	case CALL_FAILED: return "Failed";
 	case CALL_SUCCEED: return "Succeed";
+#ifndef __clang__
 	default: ;
+#endif
 	}
+#ifndef __clang__
 	return "No valid state info";
+#endif
 }
 
 void MockActualFunctionCall::checkStateConsistency(ActualCallState oldState, ActualCallState newState)

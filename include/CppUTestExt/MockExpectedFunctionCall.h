@@ -42,6 +42,10 @@ public:
 
 	virtual MockFunctionCall& withName(const SimpleString& name);
 	virtual MockFunctionCall& withCallOrder(int);
+	virtual MockFunctionCall& withIntParameter(const SimpleString& name, int value);
+	virtual MockFunctionCall& withDoubleParameter(const SimpleString& name, double value);
+	virtual MockFunctionCall& withStringParameter(const SimpleString& name, const char* value);
+	virtual MockFunctionCall& withPointerParameter(const SimpleString& name, void* value);
 	virtual MockFunctionCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, void* value);
 	virtual MockFunctionCall& ignoreOtherParameters();
 
@@ -80,13 +84,6 @@ public:
 
 	enum { NOT_CALLED_YET = -1, NO_EXPECTED_CALL_ORDER = -1};
 	virtual int getCallOrder() const;
-
-protected:
-	virtual MockFunctionCall& withIntParameter(const SimpleString& name, int value);
-	virtual MockFunctionCall& withDoubleParameter(const SimpleString& name, double value);
-	virtual MockFunctionCall& withStringParameter(const SimpleString& name, const char* value);
-	virtual MockFunctionCall& withPointerParameter(const SimpleString& name, void* value);
-
 private:
 
 	class MockExpectedFunctionParameter : public MockNamedValue

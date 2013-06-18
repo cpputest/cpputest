@@ -25,14 +25,6 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
- /** The method definition of MockIgnoredCall::instance() was moved
-   * here from the header file, as the TI c2000 compiler does not
-   * handle it correctly when the header is #included by multiple
-   * sources. This should probably be fed back to JWG, because none
-   * of the other instance() operations are defined in the header,
-   * anyway. Arnd R. Strube, Mar 2013.
-   */
-
 #include "CppUTest/TestHarness.h"
 #include "CppUTestExt/MockFunctionCall.h"
 #include "CppUTestExt/MockNamedValue.h"
@@ -200,6 +192,12 @@ MockFunctionCall& MockFunctionCallComposite::onObject(void* object)
 	return *this;
 }
 
+MockFunctionCall& MockIgnoredCall::instance()
+{
+    static MockIgnoredCall call;
+    return call;
+}
+
 MockFunctionCallTrace::MockFunctionCallTrace()
 {
 }
@@ -324,12 +322,6 @@ MockFunctionCallTrace& MockFunctionCallTrace::instance()
 {
 	static MockFunctionCallTrace call;
 	return call;
-}
-
-MockFunctionCall& MockIgnoredCall::instance()
-{
-    static MockIgnoredCall call;
-    return call;
 }
 
 
