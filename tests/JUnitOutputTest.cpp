@@ -161,9 +161,9 @@ public:
 		return test_;
 	}
 
-	void addTest(const SimpleString& testGroup, const SimpleString& testName)
+	void addTest(const char* testGroup, const char* testName)
 	{
-		test_ = new UtestShell(testGroup.asCharString(), testName.asCharString(), "file", 1);
+		test_ = new UtestShell(testGroup, testName, "file", 1);
 	}
 
 	DummyTestCaseStructureForJUnitTests() : test_(0) {}
@@ -177,7 +177,7 @@ public:
 class DummyTestCaseBuilder
 {
 	DummyTestCaseStructureForJUnitTests tests_;
-	SimpleString currentGroupName_;
+	const char* currentGroupName_;
 public:
 	DummyTestCaseBuilder& withGroup(const char* groupName)
 	{
