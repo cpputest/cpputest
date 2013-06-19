@@ -78,7 +78,7 @@ public:
 		isOpen_ = false;
 	}
 
-	SimpleString line(int lineNumber)
+	SimpleString line(size_t lineNumber)
 	{
 		buffer_.split("\n", linesOfFile_);
 		return linesOfFile_[lineNumber];
