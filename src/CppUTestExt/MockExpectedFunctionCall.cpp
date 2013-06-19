@@ -84,7 +84,7 @@ MockFunctionCall& MockExpectedFunctionCall::withPointerParameter(const SimpleStr
 	return *this;
 }
 
-MockFunctionCall& MockExpectedFunctionCall::withParameterOfType(const SimpleString& type, const SimpleString& name, void* value)
+MockFunctionCall& MockExpectedFunctionCall::withParameterOfType(const SimpleString& type, const SimpleString& name, const void* value)
 {
 	MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
 	parameters_->add(newParameter);

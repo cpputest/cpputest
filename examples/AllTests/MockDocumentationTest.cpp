@@ -104,11 +104,11 @@ TEST(MockDocumentation, parameters)
 class MyTypeComparator : public MockNamedValueComparator
 {
 public:
-	virtual bool isEqual(void* object1, void* object2)
+	virtual bool isEqual(const void* object1, const void* object2)
 	{
 		return object1 == object2;
 	}
-	virtual SimpleString valueToString(void* object)
+	virtual SimpleString valueToString(const void* object)
 	{
 		return StringFrom(object);
 	}
@@ -174,12 +174,12 @@ TEST(MockDocumentation, scope)
 	mock("xmlparser").actualCall("open");
 }
 
-static  int equalMethod(void* object1, void* object2)
+static  int equalMethod(const void* object1, const void* object2)
 {
 	return object1 == object2;
 }
 
-static char* toStringMethod(void*)
+static char* toStringMethod(const void*)
 {
 	return (char*) "string";
 }
