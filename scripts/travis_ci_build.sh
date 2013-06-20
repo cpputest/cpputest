@@ -11,19 +11,19 @@ if [ "x$BUILDTOOL" = "xautotools" ]; then
 	fi; 
 fi
 
-if [ "x$BUILDTOOL" = "cmake" ]; then 
+if [ "x$BUILDTOOL" = "xcmake" ]; then 
 	cmake .. -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE || exit 1
 	make || exit 1
 	ctest -V || exit 1
 fi
 
-if [ "x$BUILDTOOL" = "cmake" ]; then 
+if [ "x$BUILDTOOL" = "xcmake" ]; then 
 	cmake .. -DGMOCK=ON || exit 1
 	make || exit 1
 	ctest -V || exit 1
 fi
 
-if [ "x$BUILDTOOL" = "cmake" ]; then 
+if [ "x$BUILDTOOL" = "xcmake" ]; then 
 	cmake .. -DGMOCK=OFF -DREAL_GTEST=ON || exit 1
 	make || exit 1
 	ctest -V || exit 1
