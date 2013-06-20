@@ -13,6 +13,7 @@
 #include <string.h>
 #include <math.h>
 #include <float.h>
+#include <time.h>
 #include "CppUTest/PlatformSpecificFunctions.h"
 
 #include <windows.h>
@@ -80,7 +81,11 @@ void SetPlatformSpecificTimeInMillisMethod(long (*platformSpecific) ())
 
 static const char* TimeStringImplementation()
 {
-	return "Windows time needs work";
+	time_t tm = time(NULL);
+	static char dateTime[80];
+	struct tm *tmp = localtime(&tm);
+	strftime(dateTime, 80, "%Y-%m-%dT%H:%M:%S", tmp);
+	return dateTime;
 }
 
 static const char* (*timeStringFp) () = TimeStringImplementation;
