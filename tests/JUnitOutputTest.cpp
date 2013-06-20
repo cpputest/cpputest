@@ -286,6 +286,14 @@ TEST(JUnitOutputTestNew, outputsTestSuiteStartAndEndBlocks)
 	STRCMP_EQUAL("</testsuite>", outputFile->line(outputFile->amountOfLines()).asCharString());
 }
 
+TEST(JUnitOutputTestNew, fileShouldContainAnEmptyPropertiesBlock)
+{
+	testCaseRunner->runTests(simpleTestStructureWithOneTest);
+	FileForJUnitOutputTests* outputFile = fileSystem.file("cpputest_groupname.xml");
+	STRCMP_EQUAL("<properties>\n", outputFile->line(3).asCharString());
+	STRCMP_EQUAL("</properties>\n", outputFile->line(4).asCharString());
+}
+
 
 ///////////////////// OLD CODE SHOULD GRADUALLY BE REMOVED //////////////////////////
 
@@ -453,22 +461,9 @@ public:
 		buffer_.split("\n", col);
 		CHECK(col.size() >= totalSize);
 		CHECK_TEST_SUITE_START(col[1]);
-		CHECK_PROPERTIES_START(col[2]);
-		CHECK_PROPERTIES_END(col[3]);
 		CHECK_TESTS(&col[4]);
 		CHECK_SYSTEM_OUT(col[col.size() - 3]);
 		CHECK_SYSTEM_ERR(col[col.size() - 2]);
-		CHECK_TEST_SUITE_END(col[col.size() - 1]);
-	}
-
-	void CHECK_PROPERTIES_START(const SimpleString& out)
-	{
-		STRCMP_EQUAL("<properties>\n", out.asCharString());
-	}
-
-	void CHECK_PROPERTIES_END(const SimpleString& out)
-	{
-		STRCMP_EQUAL("</properties>\n", out.asCharString());
 	}
 
 	void CHECK_SYSTEM_OUT(const SimpleString& out)
@@ -479,11 +474,6 @@ public:
 	void CHECK_SYSTEM_ERR(const SimpleString& out)
 	{
 		STRCMP_EQUAL("<system-err></system-err>\n", out.asCharString());
-	}
-
-	void CHECK_TEST_SUITE_END(const SimpleString& out)
-	{
-		STRCMP_EQUAL("</testsuite>", out.asCharString());
 	}
 
 	void CHECK_TESTS(SimpleString* arr)
