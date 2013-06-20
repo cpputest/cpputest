@@ -40,11 +40,11 @@ public:
 		: next_(next), equal_(equal), toString_(toString) {}
 	virtual ~MockCFunctionComparatorNode() {}
 
-	virtual bool isEqual(void* object1, void* object2)
+	virtual bool isEqual(const void* object1, const void* object2)
 	{
 		return equal_(object1, object2) != 0;
 	}
-	virtual SimpleString valueToString(void* object)
+	virtual SimpleString valueToString(const void* object)
 	{
 		return SimpleString(toString_(object));
 	}

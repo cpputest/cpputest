@@ -97,11 +97,11 @@ TEST(MockPlugin, checkExpectationsWorksAlsoWithHierachicalObjects)
 class DummyComparator : public MockNamedValueComparator
 {
 public:
-	bool isEqual(void* object1, void* object2)
+	bool isEqual(const void* object1, const void* object2)
 	{
 		return object1 == object2;
 	}
-	SimpleString valueToString(void*)
+	SimpleString valueToString(const void*)
 	{
 		return "string";
 	}

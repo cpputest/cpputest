@@ -132,7 +132,7 @@ MockFunctionCall& MockFunctionCallComposite::withPointerParameter(const SimpleSt
 	return *this;
 }
 
-MockFunctionCall& MockFunctionCallComposite::withParameterOfType(const SimpleString& typeName, const SimpleString& name, void* value)
+MockFunctionCall& MockFunctionCallComposite::withParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value)
 {
 	for (MockFunctionCallCompositeNode* node = head_; node != NULL; node = node->next_)
 		node->call_.withParameterOfType(typeName, name, value);
@@ -256,7 +256,7 @@ MockFunctionCall& MockFunctionCallTrace::withPointerParameter(const SimpleString
 	return *this;
 }
 
-MockFunctionCall& MockFunctionCallTrace::withParameterOfType(const SimpleString& typeName, const SimpleString& name, void* value)
+MockFunctionCall& MockFunctionCallTrace::withParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value)
 {
 	traceBuffer_ += " ";
 	traceBuffer_ += typeName;
