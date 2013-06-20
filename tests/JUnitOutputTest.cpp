@@ -85,7 +85,7 @@ public:
 
 	}
 
-	int amountOfLines()
+	size_t amountOfLines()
 	{
 		return linesOfFile_.size();
 	}
