@@ -81,8 +81,13 @@ public:
 	SimpleString line(size_t lineNumber)
 	{
 		buffer_.split("\n", linesOfFile_);
-		return linesOfFile_[lineNumber];
+		return linesOfFile_[lineNumber-1];
 
+	}
+
+	int amountOfLines()
+	{
+		return linesOfFile_.size();
 	}
 
 };
@@ -176,9 +181,13 @@ public:
 
 class DummyTestCaseBuilder
 {
-	DummyTestCaseStructureForJUnitTests tests_;
+	DummyTestCaseStructureForJUnitTests* tests_;
 	const char* currentGroupName_;
 public:
+	DummyTestCaseBuilder()
+		: tests_(new DummyTestCaseStructureForJUnitTests()), currentGroupName_(0)
+	{}
+
 	DummyTestCaseBuilder& withGroup(const char* groupName)
 	{
 		currentGroupName_ = groupName;
@@ -187,11 +196,11 @@ public:
 
 	DummyTestCaseBuilder& withTest(const char* testName)
 	{
-		tests_.addTest(currentGroupName_, testName);
+		tests_->addTest(currentGroupName_, testName);
 		return *this;
 	}
 
-	DummyTestCaseStructureForJUnitTests& build()
+	DummyTestCaseStructureForJUnitTests* build()
 	{
 		return tests_;
 	}
@@ -206,13 +215,13 @@ public:
 
 	TestResult result_;
 
-	void runTests(DummyTestCaseStructureForJUnitTests& tests)
+	void runTests(DummyTestCaseStructureForJUnitTests* tests)
 	{
 		result_.testsStarted();
-		result_.currentGroupStarted(tests.test());
-		result_.currentTestStarted(tests.test());
-		result_.currentTestEnded(tests.test());
-		result_.currentGroupEnded(tests.test());
+		result_.currentGroupStarted(tests->test());
+		result_.currentTestStarted(tests->test());
+		result_.currentTestEnded(tests->test());
+		result_.currentGroupEnded(tests->test());
 		result_.testsEnded();
 	}
 };
@@ -225,15 +234,28 @@ TEST_GROUP(JUnitOutputTestNew)
 	JUnitTestOutputToBuffer *junitOutput;
 	TestResult *result;
 	JUnitTestOutputTestRunner *testCaseRunner;
+	DummyTestCaseStructureForJUnitTests* simpleTestStructureWithOneTest;
 
 	void setup()
 	{
 		junitOutput = new JUnitTestOutputToBuffer (fileSystem);
 		result = new TestResult(*junitOutput);
 		testCaseRunner = new JUnitTestOutputTestRunner(*result);
+
+		simpleTestStructureWithOneTest = testsBuilder
+				.withGroup("groupname").withTest("testname")
+				.build();
+
+		SetPlatformSpecificTimeInMillisMethod(MockGetPlatformSpecificTimeInMillis);
+		SetPlatformSpecificTimeStringMethod(MockGetPlatformSpecificTimeString);
 	}
+
 	void teardown()
 	{
+		SetPlatformSpecificTimeInMillisMethod(0);
+		SetPlatformSpecificTimeStringMethod(0);
+
+		delete simpleTestStructureWithOneTest;
 		delete testCaseRunner;
 		delete result;
 		delete junitOutput;
@@ -242,28 +264,27 @@ TEST_GROUP(JUnitOutputTestNew)
 
 TEST(JUnitOutputTestNew, withOneTestGroupOnlyWriteToOneFile)
 {
-	DummyTestCaseStructureForJUnitTests& tests = testsBuilder
-			.withGroup("group").withTest("name")
-			.build();
-
-	testCaseRunner->runTests(tests);
+	testCaseRunner->runTests(simpleTestStructureWithOneTest);
 
 	LONGS_EQUAL(1, fileSystem.amountOfFiles());
-	CHECK(fileSystem.fileExists("cpputest_group.xml"));
+	CHECK(fileSystem.fileExists("cpputest_groupname.xml"));
 }
 
 TEST(JUnitOutputTestNew, outputsValidXMLFiles)
 {
-	DummyTestCaseStructureForJUnitTests& tests = testsBuilder
-			.withGroup("group").withTest("name")
-			.build();
+	testCaseRunner->runTests(simpleTestStructureWithOneTest);
 
-	testCaseRunner->runTests(tests);
-
-	STRCMP_EQUAL("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n", fileSystem.file("cpputest_group.xml")->line(0).asCharString());
-
+	FileForJUnitOutputTests* outputFile = fileSystem.file("cpputest_groupname.xml");
+	STRCMP_EQUAL("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n", outputFile->line(1).asCharString());
 }
 
+TEST(JUnitOutputTestNew, outputsTestSuiteStartAndEndBlocks)
+{
+	testCaseRunner->runTests(simpleTestStructureWithOneTest);
+	FileForJUnitOutputTests* outputFile = fileSystem.file("cpputest_groupname.xml");
+	STRCMP_EQUAL("<testsuite errors=\"0\" failures=\"0\" hostname=\"localhost\" name=\"groupname\" tests=\"1\" time=\"0.000\" timestamp=\"1978-10-03T00:00:00\">\n", outputFile->line(2).asCharString());
+	STRCMP_EQUAL("</testsuite>", outputFile->line(outputFile->amountOfLines()).asCharString());
+}
 
 
 ///////////////////// OLD CODE SHOULD GRADUALLY BE REMOVED //////////////////////////
