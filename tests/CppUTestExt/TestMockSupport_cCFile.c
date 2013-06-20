@@ -28,13 +28,13 @@
 #include "CppUTestExt/MockSupport_c.h"
 #include "TestMockSupport_cCFile.h"
 
-static int typeNameIsEqual(void* object1, void* object2)
+static int typeNameIsEqual(const void* object1, const void* object2)
 {
 	return object1 == object2;
 
 }
 
-static char* typeNameValueToString(void* object)
+static char* typeNameValueToString(const void* object)
 {
 	return (char*) object;
 }

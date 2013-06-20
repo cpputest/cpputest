@@ -496,11 +496,11 @@ public:
 class MyTypeForTestingComparator : public MockNamedValueComparator
 {
 public:
-	virtual bool isEqual(void* object1, void* object2)
+	virtual bool isEqual(const void* object1, const void* object2)
 	{
 		return ((MyTypeForTesting*)object1)->value == ((MyTypeForTesting*)object2)->value;
 	}
-	virtual SimpleString valueToString(void* object)
+	virtual SimpleString valueToString(const void* object)
 	{
 		return StringFrom(((MyTypeForTesting*)object)->value);
 	}
@@ -529,12 +529,12 @@ TEST(MockSupportTest, customObjectParameterSucceeds)
 	mock().removeAllComparators();
 }
 
-static bool myTypeIsEqual(void* object1, void* object2)
+static bool myTypeIsEqual(const void* object1, const void* object2)
 {
 	return ((MyTypeForTesting*)object1)->value == ((MyTypeForTesting*)object2)->value;
 }
 
-static SimpleString myTypeValueToString(void* object)
+static SimpleString myTypeValueToString(const void* object)
 {
 	return StringFrom(((MyTypeForTesting*)object)->value);
 }
@@ -948,6 +948,39 @@ TEST(MockSupportTest, shouldntFailTwice)
 	mock().checkExpectations();
 	LONGS_EQUAL(1, MockFailureReporterForTest::getReporter()->getAmountOfTestFailures());
 	CLEAR_MOCK_FAILURE();
+}
+
+class StubComparator : public MockNamedValueComparator
+{
+public:
+	virtual bool isEqual(const void*, const void*)
+	{
+		return true;
+	}
+	virtual SimpleString valueToString(const void*)
+	{
+		return "";
+	}
+};
+
+class SomeClass
+{};
+
+static void functionWithConstParam(const SomeClass param)
+{
+	mock().actualCall("functionWithConstParam").withParameterOfType("SomeClass", "param", &param);
+}
+
+TEST(MockSupportTest, shouldSupportConstParameters)
+{
+	StubComparator comparator;
+	mock().installComparator("SomeClass", comparator);
+
+	SomeClass param;
+	mock().expectOneCall("functionWithConstParam").withParameterOfType("SomeClass", "param", &param);
+	functionWithConstParam(param);
+
+	mock().checkExpectations();
 }
 
 

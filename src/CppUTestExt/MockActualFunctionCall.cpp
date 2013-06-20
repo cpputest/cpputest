@@ -142,7 +142,7 @@ MockFunctionCall& MockActualFunctionCall::withPointerParameter(const SimpleStrin
 	return *this;
 }
 
-MockFunctionCall& MockActualFunctionCall::withParameterOfType(const SimpleString& type, const SimpleString& name, void* value)
+MockFunctionCall& MockActualFunctionCall::withParameterOfType(const SimpleString& type, const SimpleString& name, const void* value)
 {
 	if (getComparatorForType(type) == NULL) {
 		MockNoWayToCompareCustomTypeFailure failure(getTest(), type);
