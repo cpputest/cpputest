@@ -78,18 +78,27 @@ public:
 		isOpen_ = false;
 	}
 
-	SimpleString line(size_t lineNumber)
+	const char* line(size_t lineNumber)
 	{
 		buffer_.split("\n", linesOfFile_);
-		return linesOfFile_[lineNumber-1];
+		return linesOfFile_[lineNumber-1].asCharString();
 
+	}
+	const char* lineFromTheBack(size_t lineNumberFromTheBack)
+	{
+		return line(amountOfLines() - (lineNumberFromTheBack - 1));
 	}
 
 	size_t amountOfLines()
 	{
+		buffer_.split("\n", linesOfFile_);
 		return linesOfFile_.size();
 	}
 
+	SimpleString content()
+	{
+		return buffer_;
+	}
 };
 
 class FileSystemForJUnitTestOutputTests
@@ -262,7 +271,7 @@ TEST_GROUP(JUnitOutputTestNew)
 	}
 };
 
-TEST(JUnitOutputTestNew, withOneTestGroupOnlyWriteToOneFile)
+TEST(JUnitOutputTestNew, withOneTestGroupAndOneTestOnlyWriteToOneFile)
 {
 	testCaseRunner->runTests(simpleTestStructureWithOneTest);
 
@@ -270,30 +279,43 @@ TEST(JUnitOutputTestNew, withOneTestGroupOnlyWriteToOneFile)
 	CHECK(fileSystem.fileExists("cpputest_groupname.xml"));
 }
 
-TEST(JUnitOutputTestNew, outputsValidXMLFiles)
+TEST(JUnitOutputTestNew, withOneTestGroupAndOneTestOutputsValidXMLFiles)
 {
 	testCaseRunner->runTests(simpleTestStructureWithOneTest);
 
 	FileForJUnitOutputTests* outputFile = fileSystem.file("cpputest_groupname.xml");
-	STRCMP_EQUAL("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n", outputFile->line(1).asCharString());
+	STRCMP_EQUAL("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n", outputFile->line(1));
 }
 
-TEST(JUnitOutputTestNew, outputsTestSuiteStartAndEndBlocks)
+TEST(JUnitOutputTestNew, withOneTestGroupAndOneTestoutputsTestSuiteStartAndEndBlocks)
 {
 	testCaseRunner->runTests(simpleTestStructureWithOneTest);
 	FileForJUnitOutputTests* outputFile = fileSystem.file("cpputest_groupname.xml");
-	STRCMP_EQUAL("<testsuite errors=\"0\" failures=\"0\" hostname=\"localhost\" name=\"groupname\" tests=\"1\" time=\"0.000\" timestamp=\"1978-10-03T00:00:00\">\n", outputFile->line(2).asCharString());
-	STRCMP_EQUAL("</testsuite>", outputFile->line(outputFile->amountOfLines()).asCharString());
+	STRCMP_EQUAL("<testsuite errors=\"0\" failures=\"0\" hostname=\"localhost\" name=\"groupname\" tests=\"1\" time=\"0.000\" timestamp=\"1978-10-03T00:00:00\">\n", outputFile->line(2));
+	STRCMP_EQUAL("</testsuite>", outputFile->lineFromTheBack(1));
 }
 
-TEST(JUnitOutputTestNew, fileShouldContainAnEmptyPropertiesBlock)
+TEST(JUnitOutputTestNew, withOneTestGroupAndOneTestFileShouldContainAnEmptyPropertiesBlock)
 {
 	testCaseRunner->runTests(simpleTestStructureWithOneTest);
 	FileForJUnitOutputTests* outputFile = fileSystem.file("cpputest_groupname.xml");
-	STRCMP_EQUAL("<properties>\n", outputFile->line(3).asCharString());
-	STRCMP_EQUAL("</properties>\n", outputFile->line(4).asCharString());
+	STRCMP_EQUAL("<properties>\n", outputFile->line(3));
+	STRCMP_EQUAL("</properties>\n", outputFile->line(4));
 }
 
+TEST(JUnitOutputTestNew, withOneTestGroupAndOneTestFileShouldContainAnEmptyStdoutBlock)
+{
+	testCaseRunner->runTests(simpleTestStructureWithOneTest);
+	FileForJUnitOutputTests* outputFile = fileSystem.file("cpputest_groupname.xml");
+	STRCMP_EQUAL("<system-out></system-out>\n", outputFile->lineFromTheBack(3));
+}
+
+TEST(JUnitOutputTestNew, withOneTestGroupAndOneTestFileShouldContainAnEmptyStderrBlock)
+{
+	testCaseRunner->runTests(simpleTestStructureWithOneTest);
+	FileForJUnitOutputTests* outputFile = fileSystem.file("cpputest_groupname.xml");
+	STRCMP_EQUAL("<system-err></system-err>\n", outputFile->lineFromTheBack(2));
+}
 
 ///////////////////// OLD CODE SHOULD GRADUALLY BE REMOVED //////////////////////////
 
@@ -462,18 +484,6 @@ public:
 		CHECK(col.size() >= totalSize);
 		CHECK_TEST_SUITE_START(col[1]);
 		CHECK_TESTS(&col[4]);
-		CHECK_SYSTEM_OUT(col[col.size() - 3]);
-		CHECK_SYSTEM_ERR(col[col.size() - 2]);
-	}
-
-	void CHECK_SYSTEM_OUT(const SimpleString& out)
-	{
-		STRCMP_EQUAL("<system-out></system-out>\n", out.asCharString());
-	}
-
-	void CHECK_SYSTEM_ERR(const SimpleString& out)
-	{
-		STRCMP_EQUAL("<system-err></system-err>\n", out.asCharString());
 	}
 
 	void CHECK_TESTS(SimpleString* arr)
