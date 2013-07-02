@@ -505,8 +505,8 @@ public:
 	void CHECK_TEST_SUITE_START(SimpleString out)
 	{
 		TestGroupData& group = currentGroup();
-		SimpleString buf = StringFromFormat("<testsuite errors=\"0\" failures=\"%d\" hostname=\"localhost\" name=\"%s\" tests=\"%d\" time=\"0.050\" timestamp=\"%s\">\n", group.totalFailures_,
-				group.name_.asCharString(), group.numberTests_, theTime);
+		SimpleString buf = StringFromFormat("<testsuite errors=\"0\" failures=\"%d\" hostname=\"localhost\" name=\"%s\" tests=\"%d\" time=\"0.050\" timestamp=\"%s\">\n", (int) group.totalFailures_,
+				group.name_.asCharString(), (int) group.numberTests_, theTime);
 		CHECK_EQUAL(buf, out);
 	}
 
