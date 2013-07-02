@@ -37,9 +37,9 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 EXTRA_PROGRAMS = CppUTestExtTests$(EXEEXT)
-check_PROGRAMS = $(am__EXEEXT_1) $(am__EXEEXT_2)
+check_PROGRAMS = $(am__EXEEXT_1) $(am__EXEEXT_3)
 @INCLUDE_CPPUTEST_EXT_TRUE@am__append_1 = lib/libCppUTestExt.a
-@INCLUDE_CPPUTEST_EXT_TRUE@am__append_2 = CppUTestExtTests
+@INCLUDE_CPPUTEST_EXT_TRUE@am__append_2 = $(CPPUTESTEXT_TESTS)
 subdir = .
 DIST_COMMON = README $(am__configure_deps) \
 	$(am__include_cpputestext_HEADERS_DIST) \
@@ -134,7 +134,8 @@ am_lib_libCppUTestExt_a_OBJECTS =  \
 	lib_libCppUTestExt_a-MockSupport.$(OBJEXT)
 lib_libCppUTestExt_a_OBJECTS = $(am_lib_libCppUTestExt_a_OBJECTS)
 am__EXEEXT_1 = CppUTestTests$(EXEEXT)
-@INCLUDE_CPPUTEST_EXT_TRUE@am__EXEEXT_2 = CppUTestExtTests$(EXEEXT)
+am__EXEEXT_2 = CppUTestExtTests$(EXEEXT)
+@INCLUDE_CPPUTEST_EXT_TRUE@am__EXEEXT_3 = $(am__EXEEXT_2)
 am_CppUTestExtTests_OBJECTS = CppUTestExtTests-AllTests.$(OBJEXT) \
 	CppUTestExtTests-TestMockActualFunctionCall.$(OBJEXT) \
 	CppUTestExtTests-TestMockSupport.$(OBJEXT) \
@@ -419,6 +420,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 ACLOCAL_AMFLAGS = -I m4
 CPPUTEST_TESTS = CppUTestTests
+CPPUTESTEXT_TESTS = CppUTestExtTests
 EXTRA_LIBRARIES = lib/libCppUTestExt.a
 lib_LIBRARIES = lib/libCppUTest.a $(am__append_1)
 TESTS = $(check_PROGRAMS)
@@ -2539,6 +2541,10 @@ uninstall-am: uninstall-include_cpputestHEADERS \
 valgrind: check
 	@if test "x$(CPPUTEST_HAS_VALGRIND)" = xno; then echo "Running the valgrind target without having valgrind. Perhaps install it first?"; exit 1; fi
 	valgrind --dsymutil=yes --suppressions=$(srcdir)/valgrind.suppressions --gen-suppressions=all --error-exitcode=1 ./$(CPPUTEST_TESTS)
+
+tdd: $(CPPUTEST_TESTS) $(CPPUTESTEXT_TESTS)
+	./$(CPPUTEST_TESTS)
+@INCLUDE_CPPUTEST_EXT_TRUE@	./$(CPPUTESTEXT_TESTS)
 
 check_all: 
 

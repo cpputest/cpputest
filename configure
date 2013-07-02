@@ -4851,7 +4851,7 @@ fi
 case $enable_silent_rules in
 yes) AM_DEFAULT_VERBOSITY=0;;
 no)  AM_DEFAULT_VERBOSITY=1;;
-*)   AM_DEFAULT_VERBOSITY=0;;
+*)   AM_DEFAULT_VERBOSITY=1;;
 esac
 AM_BACKSLASH='\'
 
@@ -6189,6 +6189,7 @@ saved_cflags="$CFLAGS"
 saved_cxxflags="$CXXFLAGS"
 saved_ldflags="$LDFLAGS"
 
+if test "x$USE_MAINTAINER_MODE" = "xyes"; then
 # FLag -Werror.
 CFLAGS=-Werror
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether CC and CXX supports -Werror" >&5
@@ -6213,6 +6214,7 @@ $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 CFLAGS="$saved_cflags"
+fi
 
 # FLag -Weverything.
 CFLAGS="-Werror -Weverything -Wno-unused-macros"
