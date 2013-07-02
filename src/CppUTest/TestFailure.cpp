@@ -138,7 +138,7 @@ SimpleString TestFailure::createDifferenceAtPosString(const SimpleString& actual
 
 	SimpleString paddingForPreventingOutOfBounds (" ", halfOfExtraCharactersWindow);
 	SimpleString actualString = paddingForPreventingOutOfBounds + actual + paddingForPreventingOutOfBounds;
-	SimpleString differentString = StringFromFormat("difference starts at position %d at: <", position);
+	SimpleString differentString = StringFromFormat("difference starts at position %lu at: <", (unsigned long) position);
 
 	result += "\n";
 	result += StringFromFormat("\t%s%s>\n", differentString.asCharString(), actualString.subString(position, extraCharactersWindow).asCharString());
