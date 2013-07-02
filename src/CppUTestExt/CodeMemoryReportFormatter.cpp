@@ -122,9 +122,9 @@ bool CodeMemoryReportFormatter::variableExists(const SimpleString& variableName)
 SimpleString CodeMemoryReportFormatter::getAllocationString(TestMemoryAllocator* allocator, const SimpleString& variableName, size_t size)
 {
 	if (isNewAllocator(allocator))
-		return StringFromFormat("char* %s = new char[%d]; /* using %s */", variableName.asCharString(), size, allocator->alloc_name());
+		return StringFromFormat("char* %s = new char[%lu]; /* using %s */", variableName.asCharString(), (unsigned long) size, allocator->alloc_name());
 	else
-		return StringFromFormat("void* %s = malloc(%d);", variableName.asCharString(), size);
+		return StringFromFormat("void* %s = malloc(%lu);", variableName.asCharString(), (unsigned long) size);
 }
 
 SimpleString CodeMemoryReportFormatter::getDeallocationString(TestMemoryAllocator* allocator, const SimpleString& variableName, const char* file, int line)
