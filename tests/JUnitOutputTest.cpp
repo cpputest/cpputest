@@ -336,7 +336,7 @@ TEST(JUnitOutputTestNew, withOneTestGroupAndOneTestFileShouldContainsATestCaseBl
 	STRCMP_EQUAL("</testcase>\n", outputFile->line(6));
 }
 
-TEST(JUnitOutputTestNew, withOneTestGroupAndTwoTestCasesCreateCorrectTestgroupBlock)
+TEST(JUnitOutputTestNew, withOneTestGroupAndTwoTestCasesCreateCorrectTestgroupBlockAndCorrectTestCaseBlock)
 {
 	testCaseRunner->start()
 			.withGroup("twoTestsGroup").withTest("firstTestName").withTest("secondTestName")
@@ -345,6 +345,10 @@ TEST(JUnitOutputTestNew, withOneTestGroupAndTwoTestCasesCreateCorrectTestgroupBl
 	outputFile = fileSystem.file("cpputest_twoTestsGroup.xml");
 
 	STRCMP_EQUAL("<testsuite errors=\"0\" failures=\"0\" hostname=\"localhost\" name=\"twoTestsGroup\" tests=\"2\" time=\"0.000\" timestamp=\"1978-10-03T00:00:00\">\n", outputFile->line(2));
+	STRCMP_EQUAL("<testcase classname=\"twoTestsGroup\" name=\"firstTestName\" time=\"0.000\">\n", outputFile->line(5));
+	STRCMP_EQUAL("</testcase>\n", outputFile->line(6));
+	STRCMP_EQUAL("<testcase classname=\"twoTestsGroup\" name=\"secondTestName\" time=\"0.000\">\n", outputFile->line(7));
+	STRCMP_EQUAL("</testcase>\n", outputFile->line(8));
 }
 
 ///////////////////// OLD CODE SHOULD GRADUALLY BE REMOVED //////////////////////////
