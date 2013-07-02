@@ -2,6 +2,7 @@
 ACLOCAL_AMFLAGS = -I m4
 
 CPPUTEST_TESTS = CppUTestTests
+CPPUTESTEXT_TESTS = CppUTestExtTests
 
 EXTRA_LIBRARIES = lib/libCppUTestExt.a
 EXTRA_PROGRAMS = CppUTestExtTests
@@ -11,7 +12,7 @@ check_PROGRAMS = $(CPPUTEST_TESTS)
 
 if INCLUDE_CPPUTEST_EXT
 lib_LIBRARIES+= lib/libCppUTestExt.a
-check_PROGRAMS += CppUTestExtTests
+check_PROGRAMS += $(CPPUTESTEXT_TESTS)
 endif
 
 TESTS = $(check_PROGRAMS)
@@ -185,8 +186,11 @@ valgrind: check
 	@if test "x$(CPPUTEST_HAS_VALGRIND)" = xno; then echo "Running the valgrind target without having valgrind. Perhaps install it first?"; exit 1; fi
 	valgrind --dsymutil=yes --suppressions=$(srcdir)/valgrind.suppressions --gen-suppressions=all --error-exitcode=1 ./$(CPPUTEST_TESTS)
 
-tdd: $(CPPUTEST_TESTS)
+tdd: $(CPPUTEST_TESTS) $(CPPUTESTEXT_TESTS)
 	./$(CPPUTEST_TESTS)
+if INCLUDE_CPPUTEST_EXT
+	./$(CPPUTESTEXT_TESTS)
+endif
 	
 
 check_all: 
