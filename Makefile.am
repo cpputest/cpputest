@@ -241,7 +241,7 @@ check_all:
 		make distclean; $(srcdir)/configure -enable-coverage; make check; \
 	fi
 	
-	./$(CPPUTEST_TESTS) >> test_output.txt; $(CPPUTESTEXT_TESTS) >> test_output.txt 
+	./$(CPPUTEST_TESTS) >> test_output.txt; ./$(CPPUTESTEXT_TESTS) >> test_output.txt 
 	$(SILENCE)for f in `ls *.gcno` ; do \
 		gcov $(CppUTestExtTests_SOURCES) $(CppUTestTests_SOURCES) $(lib_libCppUTest_a_SOURCES) $(lib_libCppUTestExt_a_SOURCES) -o $$f 1>>gcov_output.txt 2>>gcov_error.txt; \
 	done
