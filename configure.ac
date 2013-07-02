@@ -68,11 +68,13 @@ saved_cflags="$CFLAGS"
 saved_cxxflags="$CXXFLAGS"
 saved_ldflags="$LDFLAGS"
 
+if test "x$USE_MAINTAINER_MODE" = "xyes"; then
 # FLag -Werror. 
 CFLAGS=-Werror
 AC_MSG_CHECKING([whether CC and CXX supports -Werror])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS+=" -Werror"; CPPUTEST_CXXWARNINGFLAGS+=" -Werror" ], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
+fi
 
 # FLag -Weverything. 
 CFLAGS="-Werror -Weverything -Wno-unused-macros"
