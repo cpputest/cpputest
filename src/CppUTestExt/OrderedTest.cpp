@@ -32,7 +32,7 @@
 OrderedTestShell* OrderedTestShell::_orderedTestsHead = 0;
 
 OrderedTestShell::OrderedTestShell() :
-	_nextOrderedTest(0)
+	_nextOrderedTest(0), _level(0)
 {
 }
 

@@ -40,7 +40,7 @@ class DummyPlugin: public TestPlugin
 {
 public:
 	DummyPlugin(const SimpleString& name) :
-		TestPlugin(name), preAction(0), postAction(0)
+		TestPlugin(name), preAction(0), preActionSequence(0), postAction(0), postActionSequence(0)
 	{
 	}
 

@@ -266,7 +266,7 @@ MockNamedValueComparator* MockNamedValueComparatorRepository::getComparatorForTy
 {
 	for (MockNamedValueComparatorRepositoryNode* p = head_; p; p = p->next_)
 			if (p->name_ == name) return &p->comparator_;
-	return NULL;;
+	return NULL;
 }
 
 void MockNamedValueComparatorRepository::installComparators(const MockNamedValueComparatorRepository& repository)

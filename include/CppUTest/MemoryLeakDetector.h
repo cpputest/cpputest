@@ -92,7 +92,7 @@ private:
 struct MemoryLeakDetectorNode
 {
 	MemoryLeakDetectorNode() :
-		size_(0), next_(0)
+		size_(0), number_(0), memory_(0), file_(0), line_(0), allocator_(0), period_(mem_leak_period_enabled), next_(0)
 	{
 	}
 

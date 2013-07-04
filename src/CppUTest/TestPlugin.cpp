@@ -34,7 +34,7 @@ TestPlugin::TestPlugin(const SimpleString& name) :
 }
 
 TestPlugin::TestPlugin(TestPlugin* next) :
-	next_(next), name_("null")
+	next_(next), name_("null"), enabled_(true)
 {
 }
 
