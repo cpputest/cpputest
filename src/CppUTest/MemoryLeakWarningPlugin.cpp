@@ -264,6 +264,18 @@ void* operator new[](size_t size, const std::nothrow_t&) UT_NOTHROW
 	return operator_new_array_nothrow_fptr(size);
 }
 
+#else
+
+void* operator_new_nothrow(size_t size) UT_NOTHROW
+{
+	return operator_new_nothrow_fptr(size);
+}
+
+void* operator_new_array_nothrow(size_t size) UT_NOTHROW
+{
+	return operator_new_array_nothrow_fptr(size);
+}
+
 #endif
 #endif
 

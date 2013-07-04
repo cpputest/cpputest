@@ -128,6 +128,8 @@ TEST(UtestShell, TestStopsAfterSetupFailure)
 	LONGS_EQUAL(0, stopAfterFailure);
 }
 
+#if CPPUTEST_USE_STD_CPP_LIB
+
 static bool destructorWasCalledOnFailedTest = false;
 
 class DestructorOughtToBeCalled
@@ -139,7 +141,6 @@ public:
 	}
 };
 
-#if CPPUTEST_USE_STD_CPP_LIB
 
 static void _destructorCalledForLocalObjects()
 {
