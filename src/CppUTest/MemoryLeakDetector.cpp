@@ -316,14 +316,14 @@ void MemoryLeakDetector::reportFailure(const char* message, const char* allocFil
 	reporter_->fail(output_buffer_.toString());
 }
 
-static size_t calculateIntAlignedSize(size_t size)
+static size_t calculateVoidPointerAlignedSize(size_t size)
 {
-	return (sizeof(int) - (size % sizeof(int))) + size;
+	return (sizeof(void*) - (size % sizeof(void*))) + size;
 }
 
 size_t MemoryLeakDetector::sizeOfMemoryWithCorruptionInfo(size_t size)
 {
-	return calculateIntAlignedSize(size + memory_corruption_buffer_size);
+	return calculateVoidPointerAlignedSize(size + memory_corruption_buffer_size);
 }
 
 MemoryLeakDetectorNode* MemoryLeakDetector::getNodeFromMemoryPointer(char* memory, size_t memory_size)
