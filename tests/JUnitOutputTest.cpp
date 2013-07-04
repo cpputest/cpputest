@@ -29,6 +29,7 @@
 #include "CppUTest/JUnitTestOutput.h"
 #include "CppUTest/TestResult.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
+#include "CppUTest/SimpleString.h"
 
 static long millisTime;
 
@@ -171,16 +172,38 @@ class JUnitTestOutputTestRunner
 {
 	TestResult result_;
 	const char* currentGroupName_;
-	bool newGroupStarted_;
-	UtestShell* currentTest_;
+	const char* currentTestName_;
+
+	static long millisTime;
+	static const char* theTime;
+
+	static long MockGetPlatformSpecificTimeInMillis()
+	{
+		return millisTime;
+	}
+
+	static const char* MockGetPlatformSpecificTimeString()
+	{
+		return theTime;
+	}
+
 public:
 
+
 	JUnitTestOutputTestRunner(TestResult result) :
-		result_(result), currentGroupName_(0), newGroupStarted_(false), currentTest_(0) {}
+		result_(result), currentGroupName_(0), currentTestName_(0)
+	{
+		millisTime = 0;
+		theTime =  "1978-10-03T00:00:00";
+
+		SetPlatformSpecificTimeInMillisMethod(MockGetPlatformSpecificTimeInMillis);
+		SetPlatformSpecificTimeStringMethod(MockGetPlatformSpecificTimeString);
+	}
 
 	~JUnitTestOutputTestRunner()
 	{
-		delete currentTest_;
+		SetPlatformSpecificTimeInMillisMethod(0);
+		SetPlatformSpecificTimeStringMethod(0);
 	}
 
 	JUnitTestOutputTestRunner& start()
@@ -198,39 +221,57 @@ public:
 
 	void endOfTestGroup()
 	{
-		if (currentTest_)
-			result_.currentGroupEnded(currentTest_);
+		if (currentGroupName_) {
+			UtestShell currentTest(currentGroupName_, currentTestName_, "file", 1);
+			result_.currentGroupEnded(&currentTest);
+		}
 
-		delete currentTest_;
-		currentTest_ = 0;
 		currentGroupName_ = 0;
-		newGroupStarted_ = false;
 	}
 
-	JUnitTestOutputTestRunner& withGroup(const char* groupName)
+	JUnitTestOutputTestRunner& withGroupWithTest(const char* groupName, const char* testName, int timeElapsed = 0)
 	{
 		endOfTestGroup();
 		currentGroupName_ = groupName;
-		newGroupStarted_ = true;
+
+		UtestShell currentTest(currentGroupName_, testName, "file", 1);
+
+		result_.currentGroupStarted(&currentTest);
+
+		withTest(testName, timeElapsed);
+
 		return *this;
 	}
 
-	JUnitTestOutputTestRunner& withTest(const char* testName)
+	JUnitTestOutputTestRunner& withTest(const char* testName, int timeElapsed = 0)
 	{
-		delete currentTest_;
-		currentTest_ = new UtestShell(currentGroupName_, testName, "file", 1);
+		currentTestName_ = testName;
 
-		if (newGroupStarted_) {
-			result_.currentGroupStarted(currentTest_);
-			newGroupStarted_ = false;
-		}
+		UtestShell currentTest(currentGroupName_, testName, "file", 1);
 
-		result_.currentTestStarted(currentTest_);
-		result_.currentTestEnded(currentTest_);
+		result_.currentTestStarted(&currentTest);
+		elapsedTime(timeElapsed);
+		result_.currentTestEnded(&currentTest);
 
+		return *this;
+	}
+
+	JUnitTestOutputTestRunner& elapsedTime(int timeElapsed)
+	{
+		millisTime += timeElapsed;
+		return *this;
+	}
+
+	JUnitTestOutputTestRunner& atTime(const char* newTime)
+	{
+		theTime = newTime;
 		return *this;
 	}
 };
+
+long JUnitTestOutputTestRunner::millisTime = 0;
+const char* JUnitTestOutputTestRunner::theTime = "";
+
 
 TEST_GROUP(JUnitOutputTestNew)
 {
@@ -246,16 +287,10 @@ TEST_GROUP(JUnitOutputTestNew)
 		junitOutput = new JUnitTestOutputToBuffer (fileSystem);
 		result = new TestResult(*junitOutput);
 		testCaseRunner = new JUnitTestOutputTestRunner(*result);
-
-		SetPlatformSpecificTimeInMillisMethod(MockGetPlatformSpecificTimeInMillis);
-		SetPlatformSpecificTimeStringMethod(MockGetPlatformSpecificTimeString);
 	}
 
 	void teardown()
 	{
-		SetPlatformSpecificTimeInMillisMethod(0);
-		SetPlatformSpecificTimeStringMethod(0);
-
 		delete testCaseRunner;
 		delete result;
 		delete junitOutput;
@@ -265,7 +300,7 @@ TEST_GROUP(JUnitOutputTestNew)
 TEST(JUnitOutputTestNew, withOneTestGroupAndOneTestOnlyWriteToOneFile)
 {
 	testCaseRunner->start()
-			.withGroup("groupname").withTest("testname")
+			.withGroupWithTest("groupname", "testname")
 			.end();
 
 	LONGS_EQUAL(1, fileSystem.amountOfFiles());
@@ -275,7 +310,7 @@ TEST(JUnitOutputTestNew, withOneTestGroupAndOneTestOnlyWriteToOneFile)
 TEST(JUnitOutputTestNew, withOneTestGroupAndOneTestOutputsValidXMLFiles)
 {
 	testCaseRunner->start()
-			.withGroup("groupname").withTest("testname")
+			.withGroupWithTest("groupname", "testname")
 			.end();
 
 	outputFile = fileSystem.file("cpputest_groupname.xml");
@@ -285,7 +320,7 @@ TEST(JUnitOutputTestNew, withOneTestGroupAndOneTestOutputsValidXMLFiles)
 TEST(JUnitOutputTestNew, withOneTestGroupAndOneTestoutputsTestSuiteStartAndEndBlocks)
 {
 	testCaseRunner->start()
-			.withGroup("groupname").withTest("testname")
+			.withGroupWithTest("groupname", "testname")
 			.end();
 
 	outputFile = fileSystem.file("cpputest_groupname.xml");
@@ -296,7 +331,7 @@ TEST(JUnitOutputTestNew, withOneTestGroupAndOneTestoutputsTestSuiteStartAndEndBl
 TEST(JUnitOutputTestNew, withOneTestGroupAndOneTestFileShouldContainAnEmptyPropertiesBlock)
 {
 	testCaseRunner->start()
-			.withGroup("groupname").withTest("testname")
+			.withGroupWithTest("groupname", "testname")
 			.end();
 
 	outputFile = fileSystem.file("cpputest_groupname.xml");
@@ -307,7 +342,7 @@ TEST(JUnitOutputTestNew, withOneTestGroupAndOneTestFileShouldContainAnEmptyPrope
 TEST(JUnitOutputTestNew, withOneTestGroupAndOneTestFileShouldContainAnEmptyStdoutBlock)
 {
 	testCaseRunner->start()
-			.withGroup("groupname").withTest("testname")
+			.withGroupWithTest("groupname", "testname")
 			.end();
 
 	outputFile = fileSystem.file("cpputest_groupname.xml");
@@ -317,7 +352,7 @@ TEST(JUnitOutputTestNew, withOneTestGroupAndOneTestFileShouldContainAnEmptyStdou
 TEST(JUnitOutputTestNew, withOneTestGroupAndOneTestFileShouldContainAnEmptyStderrBlock)
 {
 	testCaseRunner->start()
-			.withGroup("groupname").withTest("testname")
+			.withGroupWithTest("groupname", "testname")
 			.end();
 
 	outputFile = fileSystem.file("cpputest_groupname.xml");
@@ -327,7 +362,7 @@ TEST(JUnitOutputTestNew, withOneTestGroupAndOneTestFileShouldContainAnEmptyStder
 TEST(JUnitOutputTestNew, withOneTestGroupAndOneTestFileShouldContainsATestCaseBlock)
 {
 	testCaseRunner->start()
-			.withGroup("groupname").withTest("testname")
+			.withGroupWithTest("groupname", "testname")
 			.end();
 
 	outputFile = fileSystem.file("cpputest_groupname.xml");
@@ -339,7 +374,7 @@ TEST(JUnitOutputTestNew, withOneTestGroupAndOneTestFileShouldContainsATestCaseBl
 TEST(JUnitOutputTestNew, withOneTestGroupAndTwoTestCasesCreateCorrectTestgroupBlockAndCorrectTestCaseBlock)
 {
 	testCaseRunner->start()
-			.withGroup("twoTestsGroup").withTest("firstTestName").withTest("secondTestName")
+			.withGroupWithTest("twoTestsGroup", "firstTestName").withTest("secondTestName")
 			.end();
 
 	outputFile = fileSystem.file("cpputest_twoTestsGroup.xml");
@@ -348,6 +383,32 @@ TEST(JUnitOutputTestNew, withOneTestGroupAndTwoTestCasesCreateCorrectTestgroupBl
 	STRCMP_EQUAL("<testcase classname=\"twoTestsGroup\" name=\"firstTestName\" time=\"0.000\">\n", outputFile->line(5));
 	STRCMP_EQUAL("</testcase>\n", outputFile->line(6));
 	STRCMP_EQUAL("<testcase classname=\"twoTestsGroup\" name=\"secondTestName\" time=\"0.000\">\n", outputFile->line(7));
+	STRCMP_EQUAL("</testcase>\n", outputFile->line(8));
+}
+
+TEST(JUnitOutputTestNew, withOneTestGroupAndTimeHasElapsedAndTimestampChanged)
+{
+	testCaseRunner->start().atTime("2013-07-04T22:28:00")
+			.withGroupWithTest("timeGroup", "Dummy", 10)
+			.end();
+
+	outputFile = fileSystem.file("cpputest_timeGroup.xml");
+
+	STRCMP_EQUAL("<testsuite errors=\"0\" failures=\"0\" hostname=\"localhost\" name=\"timeGroup\" tests=\"1\" time=\"0.010\" timestamp=\"2013-07-04T22:28:00\">\n", outputFile->line(2));
+}
+
+TEST(JUnitOutputTestNew, withOneTestGroupAndMultipleTestCasesWithElapsedTime)
+{
+	testCaseRunner->start()
+			.withGroupWithTest("twoTestsGroup", "firstTestName", 10)
+				.withTest("secondTestName", 50)
+			.end();
+
+	outputFile = fileSystem.file("cpputest_twoTestsGroup.xml");
+	STRCMP_EQUAL("<testsuite errors=\"0\" failures=\"0\" hostname=\"localhost\" name=\"twoTestsGroup\" tests=\"2\" time=\"0.060\" timestamp=\"1978-10-03T00:00:00\">\n", outputFile->line(2));
+	STRCMP_EQUAL("<testcase classname=\"twoTestsGroup\" name=\"firstTestName\" time=\"0.010\">\n", outputFile->line(5));
+	STRCMP_EQUAL("</testcase>\n", outputFile->line(6));
+	STRCMP_EQUAL("<testcase classname=\"twoTestsGroup\" name=\"secondTestName\" time=\"0.050\">\n", outputFile->line(7));
 	STRCMP_EQUAL("</testcase>\n", outputFile->line(8));
 }
 
@@ -628,11 +689,6 @@ TEST(JUnitOutputTest, messageWithNewLine)
 	output->createTestsInGroup(0, 1, "failedGroup", "failedName");
 	output->setFailure(0, 0, "file", 1, "Test \n failed");
 	runTests();
-}
-
-TEST(JUnitOutputTest, createNormalFilename)
-{
-	STRCMP_EQUAL("cpputest_group.xml", output->createFileName("group").asCharString());
 }
 
 TEST(JUnitOutputTest, escapeSlashesInFilenames)
