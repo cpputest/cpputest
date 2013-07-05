@@ -215,6 +215,21 @@
 		UtestShell::getCurrent()->fail(msg.asCharString(), __FILE__, __LINE__); \
 	} \
 	}
+	
+#define CHECK_NO_THROWS(expression) \
+	{ \
+	SimpleString msg("Expected to throw nothing, but threw an exception"); \
+	bool caught_exception = false; \
+	try { \
+		(expression); \
+	} catch(...) { \
+		msg = "Expected to throw nothing, but threw an exception"; \
+		caught_exception = true; \
+	} \
+	if (caught_exception) { \
+		UtestShell::getCurrent()->fail(msg.asCharString(), __FILE__, __LINE__); \
+	} \
+	}
 #endif /* CPPUTEST_USE_STD_CPP_LIB */
 
 #define UT_CRASH() { UtestShell::crash(); }
