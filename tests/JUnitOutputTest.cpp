@@ -31,20 +31,6 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 #include "CppUTest/SimpleString.h"
 
-static long millisTime;
-
-static const char* theTime = "1978-10-03T00:00:00";
-
-static long MockGetPlatformSpecificTimeInMillis()
-{
-	return millisTime;
-}
-
-static const char* MockGetPlatformSpecificTimeString()
-{
-	return theTime;
-}
-
 class FileForJUnitOutputTests
 {
 	SimpleString name_;
@@ -110,7 +96,11 @@ public:
 	FileSystemForJUnitTestOutputTests() : firstFile_(0) {}
 	~FileSystemForJUnitTestOutputTests()
 	{
-		delete firstFile_;
+		while (firstFile_) {
+			FileForJUnitOutputTests* fileToBeDeleted = firstFile_;
+			firstFile_ = firstFile_->nextFile();
+			delete fileToBeDeleted;
+		}
 	}
 
 	FileForJUnitOutputTests* openFile(const SimpleString& filename)
@@ -141,7 +131,7 @@ public:
 	}
 };
 
-class JUnitTestOutputToBuffer: public JUnitTestOutput
+class JUnitTestOutputToBuffer : public JUnitTestOutput
 {
 public:
 
@@ -303,7 +293,7 @@ long JUnitTestOutputTestRunner::millisTime = 0;
 const char* JUnitTestOutputTestRunner::theTime = "";
 
 
-TEST_GROUP(JUnitOutputTestNew)
+TEST_GROUP(JUnitOutputTest)
 {
 	FileSystemForJUnitTestOutputTests fileSystem;
 
@@ -327,7 +317,7 @@ TEST_GROUP(JUnitOutputTestNew)
 	}
 };
 
-TEST(JUnitOutputTestNew, withOneTestGroupAndOneTestOnlyWriteToOneFile)
+TEST(JUnitOutputTest, withOneTestGroupAndOneTestOnlyWriteToOneFile)
 {
 	testCaseRunner->start()
 			.withGroup("groupname").withTest("testname")
@@ -337,7 +327,7 @@ TEST(JUnitOutputTestNew, withOneTestGroupAndOneTestOnlyWriteToOneFile)
 	CHECK(fileSystem.fileExists("cpputest_groupname.xml"));
 }
 
-TEST(JUnitOutputTestNew, withOneTestGroupAndOneTestOutputsValidXMLFiles)
+TEST(JUnitOutputTest, withOneTestGroupAndOneTestOutputsValidXMLFiles)
 {
 	testCaseRunner->start()
 			.withGroup("groupname").withTest("testname")
@@ -347,7 +337,7 @@ TEST(JUnitOutputTestNew, withOneTestGroupAndOneTestOutputsValidXMLFiles)
 	STRCMP_EQUAL("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n", outputFile->line(1));
 }
 
-TEST(JUnitOutputTestNew, withOneTestGroupAndOneTestoutputsTestSuiteStartAndEndBlocks)
+TEST(JUnitOutputTest, withOneTestGroupAndOneTestoutputsTestSuiteStartAndEndBlocks)
 {
 	testCaseRunner->start()
 			.withGroup("groupname").withTest("testname")
@@ -358,7 +348,7 @@ TEST(JUnitOutputTestNew, withOneTestGroupAndOneTestoutputsTestSuiteStartAndEndBl
 	STRCMP_EQUAL("</testsuite>", outputFile->lineFromTheBack(1));
 }
 
-TEST(JUnitOutputTestNew, withOneTestGroupAndOneTestFileShouldContainAnEmptyPropertiesBlock)
+TEST(JUnitOutputTest, withOneTestGroupAndOneTestFileShouldContainAnEmptyPropertiesBlock)
 {
 	testCaseRunner->start()
 			.withGroup("groupname").withTest("testname")
@@ -369,7 +359,7 @@ TEST(JUnitOutputTestNew, withOneTestGroupAndOneTestFileShouldContainAnEmptyPrope
 	STRCMP_EQUAL("</properties>\n", outputFile->line(4));
 }
 
-TEST(JUnitOutputTestNew, withOneTestGroupAndOneTestFileShouldContainAnEmptyStdoutBlock)
+TEST(JUnitOutputTest, withOneTestGroupAndOneTestFileShouldContainAnEmptyStdoutBlock)
 {
 	testCaseRunner->start()
 			.withGroup("groupname").withTest("testname")
@@ -379,7 +369,7 @@ TEST(JUnitOutputTestNew, withOneTestGroupAndOneTestFileShouldContainAnEmptyStdou
 	STRCMP_EQUAL("<system-out></system-out>\n", outputFile->lineFromTheBack(3));
 }
 
-TEST(JUnitOutputTestNew, withOneTestGroupAndOneTestFileShouldContainAnEmptyStderrBlock)
+TEST(JUnitOutputTest, withOneTestGroupAndOneTestFileShouldContainAnEmptyStderrBlock)
 {
 	testCaseRunner->start()
 			.withGroup("groupname").withTest("testname")
@@ -389,7 +379,7 @@ TEST(JUnitOutputTestNew, withOneTestGroupAndOneTestFileShouldContainAnEmptyStder
 	STRCMP_EQUAL("<system-err></system-err>\n", outputFile->lineFromTheBack(2));
 }
 
-TEST(JUnitOutputTestNew, withOneTestGroupAndOneTestFileShouldContainsATestCaseBlock)
+TEST(JUnitOutputTest, withOneTestGroupAndOneTestFileShouldContainsATestCaseBlock)
 {
 	testCaseRunner->start()
 			.withGroup("groupname").withTest("testname")
@@ -401,7 +391,7 @@ TEST(JUnitOutputTestNew, withOneTestGroupAndOneTestFileShouldContainsATestCaseBl
 	STRCMP_EQUAL("</testcase>\n", outputFile->line(6));
 }
 
-TEST(JUnitOutputTestNew, withOneTestGroupAndTwoTestCasesCreateCorrectTestgroupBlockAndCorrectTestCaseBlock)
+TEST(JUnitOutputTest, withOneTestGroupAndTwoTestCasesCreateCorrectTestgroupBlockAndCorrectTestCaseBlock)
 {
 	testCaseRunner->start()
 			.withGroup("twoTestsGroup").withTest("firstTestName").withTest("secondTestName")
@@ -416,7 +406,7 @@ TEST(JUnitOutputTestNew, withOneTestGroupAndTwoTestCasesCreateCorrectTestgroupBl
 	STRCMP_EQUAL("</testcase>\n", outputFile->line(8));
 }
 
-TEST(JUnitOutputTestNew, withOneTestGroupAndTimeHasElapsedAndTimestampChanged)
+TEST(JUnitOutputTest, withOneTestGroupAndTimeHasElapsedAndTimestampChanged)
 {
 	testCaseRunner->start().atTime("2013-07-04T22:28:00")
 			.withGroup("timeGroup").withTest("Dummy").thatTakes(10).seconds()
@@ -427,7 +417,7 @@ TEST(JUnitOutputTestNew, withOneTestGroupAndTimeHasElapsedAndTimestampChanged)
 	STRCMP_EQUAL("<testsuite errors=\"0\" failures=\"0\" hostname=\"localhost\" name=\"timeGroup\" tests=\"1\" time=\"0.010\" timestamp=\"2013-07-04T22:28:00\">\n", outputFile->line(2));
 }
 
-TEST(JUnitOutputTestNew, withOneTestGroupAndMultipleTestCasesWithElapsedTime)
+TEST(JUnitOutputTest, withOneTestGroupAndMultipleTestCasesWithElapsedTime)
 {
 	testCaseRunner->start()
 			.withGroup("twoTestsGroup")
@@ -443,7 +433,7 @@ TEST(JUnitOutputTestNew, withOneTestGroupAndMultipleTestCasesWithElapsedTime)
 	STRCMP_EQUAL("</testcase>\n", outputFile->line(8));
 }
 
-TEST(JUnitOutputTestNew, withOneTestGroupAndOneFailingTest)
+TEST(JUnitOutputTest, withOneTestGroupAndOneFailingTest)
 {
 	testCaseRunner->start()
 			.withGroup("testGroupWithFailingTest")
@@ -458,288 +448,120 @@ TEST(JUnitOutputTestNew, withOneTestGroupAndOneFailingTest)
 	STRCMP_EQUAL("</testcase>\n", outputFile->line(8));
 }
 
-///////////////////// OLD CODE SHOULD GRADUALLY BE REMOVED //////////////////////////
-
-
-class MockJUnitTestOutput: public JUnitTestOutput
+TEST(JUnitOutputTest, withTwoTestGroupAndOneFailingTest)
 {
-public:
-	enum
-	{
-		testGroupSize = 10
-	};
-	enum
-	{
-		defaultSize = 7
-	};
+	testCaseRunner->start()
+			.withGroup("testGroupWithFailingTest")
+				.withTest("FirstTest")
+				.withTest("FailingTestName").thatFails("Test failed", "thisfile", 10)
+			.end();
 
-	int filesOpened;
-	int fileBalance;
+	outputFile = fileSystem.file("cpputest_testGroupWithFailingTest.xml");
 
-	SimpleString fileName_;
-	SimpleString buffer_;
-
-	TestResult* res_;
-	struct TestData
-	{
-		TestData() :
-			tst_(0), testName_(0), failure_(0)
-		{
-		}
-
-		UtestShell* tst_;
-		SimpleString* testName_;
-		TestFailure* failure_;
-	};
-
-	struct TestGroupData
-	{
-		TestGroupData() :
-			numberTests_(0), totalFailures_(0), name_(""), testData_(0)
-		{
-		}
-
-		size_t numberTests_;
-		size_t totalFailures_;
-		SimpleString name_;
-
-		TestData* testData_;
-	};
-
-	TestGroupData testGroupData_[testGroupSize];
-
-	TestGroupData& currentGroup()
-	{
-		return testGroupData_[filesOpened - 1];
-	}
-
-	void resetXmlFile()
-	{
-		buffer_ = "";
-	}
-
-	MockJUnitTestOutput() :
-		filesOpened(0), fileBalance(0), res_(0)
-	{
-		for (int i = 0; i < testGroupSize; i++) {
-			testGroupData_[i].numberTests_ = 0;
-			testGroupData_[i].totalFailures_ = 0;
-		}
-	}
-
-	void setResult(TestResult* testRes)
-	{
-		res_ = testRes;
-	}
-
-	virtual ~MockJUnitTestOutput()
-	{
-		for (size_t i = 0; i < testGroupSize; i++) {
-			for (size_t j = 0; j < testGroupData_[i].numberTests_; j++) {
-				delete testGroupData_[i].testData_[j].tst_;
-				delete testGroupData_[i].testData_[j].testName_;
-				if (testGroupData_[i].testData_[j].failure_) delete testGroupData_[i].testData_[j].failure_;
-			}
-			if (testGroupData_[i].testData_) delete[] testGroupData_[i].testData_;
-		}
-
-		LONGS_EQUAL(0, fileBalance);
-	}
-
-	void writeToFile(const SimpleString& buf)
-	{
-		buffer_ += buf;
-	}
-
-	void openFileForWrite(const SimpleString& in_FileName)
-	{
-		filesOpened++;
-		fileBalance++;
-		fileName_ = in_FileName;
-	}
-
-	void closeFile()
-	{
-		CHECK_XML_FILE();
-		resetXmlFile();
-		fileBalance--;
-	}
-
-	void createTestsInGroup(int index, size_t amount, const char* group, const char* basename)
-	{
-		testGroupData_[index].name_ = group;
-		testGroupData_[index].numberTests_ = amount;
-
-		testGroupData_[index].testData_ = new TestData[amount];
-		for (size_t i = 0; i < amount; i++) {
-			TestData& testData = testGroupData_[index].testData_[i];
-			testData.testName_ = new SimpleString(basename);
-			*testData.testName_ += StringFrom((long) i);
-			testData.tst_ = new UtestShell(group, testData.testName_->asCharString(), "file", 1);
-		}
-	}
-	void runTests()
-	{
-		res_->testsStarted();
-		for (int i = 0; i < testGroupSize; i++) {
-			TestGroupData& data = testGroupData_[i];
-			if (data.numberTests_ == 0) continue;
-
-			millisTime = 0;
-			res_->currentGroupStarted(data.testData_[0].tst_);
-			for (size_t j = 0; j < data.numberTests_; j++) {
-				TestData& testData = data.testData_[j];
-
-				millisTime = 0;
-				res_->currentTestStarted(testData.tst_);
-				if (testData.failure_) print(*testData.failure_);
-				millisTime = 10;
-				res_->currentTestEnded(testData.tst_);
-			}
-			millisTime = 50;
-			res_->currentGroupEnded(data.testData_[0].tst_);
-		}
-		res_->testsEnded();
-	}
-
-	void setFailure(int groupIndex, int testIndex, const char* fileName, int lineNumber, const char* message)
-	{
-		TestData& data = testGroupData_[groupIndex].testData_[testIndex];
-		data.failure_ = new TestFailure(data.tst_, fileName, lineNumber, message);
-		testGroupData_[groupIndex].totalFailures_++;
-	}
-
-	void CHECK_TEST_SUITE_START(SimpleString out)
-	{
-		TestGroupData& group = currentGroup();
-		SimpleString buf = StringFromFormat("<testsuite errors=\"0\" failures=\"%d\" hostname=\"localhost\" name=\"%s\" tests=\"%d\" time=\"0.050\" timestamp=\"%s\">\n", (int) group.totalFailures_,
-				group.name_.asCharString(), (int) group.numberTests_, theTime);
-		CHECK_EQUAL(buf, out);
-	}
-
-	void CHECK_XML_FILE()
-	{
-		SimpleStringCollection col;
-		buffer_.split("\n", col);
-		CHECK_TEST_SUITE_START(col[1]);
-		CHECK_TESTS(&col[4]);
-	}
-
-	void CHECK_TESTS(SimpleString* arr)
-	{
-		for (size_t index = 0, curTest = 0; curTest < currentGroup().numberTests_; curTest++, index++) {
-			SimpleString buf = StringFromFormat("<testcase classname=\"%s\" name=\"%s\" time=\"0.010\">\n", currentGroup().name_.asCharString(),
-					currentGroup().testData_[curTest].tst_->getName().asCharString());
-			CHECK_EQUAL(buf, arr[index]);
-			if (currentGroup().testData_[curTest].failure_) {
-				CHECK_FAILURE(arr, index, curTest);
-			}
-			buf = "</testcase>\n";
-			CHECK_EQUAL(buf, arr[++index]);
-
-		}
-	}
-	void CHECK_FAILURE(SimpleString* arr, size_t& i, size_t curTest)
-	{
-		TestFailure& f = *currentGroup().testData_[curTest].failure_;
-		i++;
-		SimpleString message = f.getMessage().asCharString();
-		message.replace('"', '\'');
-		message.replace('<', '[');
-		message.replace('>', ']');
-		message.replace("\n", "{newline}");
-		SimpleString buf = StringFromFormat("<failure message=\"%s:%d: %s\" type=\"AssertionFailedError\">\n", f.getFileName().asCharString(), f.getFailureLineNumber(), message.asCharString());
-		CHECK_EQUAL(buf, arr[i]);
-		i++;
-		STRCMP_EQUAL("</failure>\n", arr[i].asCharString());
-	}
-};
-
-
-TEST_GROUP(JUnitOutputTest)
-{
-
-	MockJUnitTestOutput * output;
-	TestResult *res;
-
-	void setup()
-	{
-		output = new MockJUnitTestOutput();
-		res = new TestResult(*output);
-		output->setResult(res);
-		SetPlatformSpecificTimeInMillisMethod(MockGetPlatformSpecificTimeInMillis);
-		SetPlatformSpecificTimeStringMethod(MockGetPlatformSpecificTimeString);
-	}
-	void teardown()
-	{
-		delete output;
-		delete res;
-		SetPlatformSpecificTimeInMillisMethod(0);
-		SetPlatformSpecificTimeStringMethod(0);
-	}
-
-	void runTests()
-	{
-		output->printTestsStarted();
-		output->runTests();
-		output->printTestsEnded(*res);
-	}
-};
-
-TEST(JUnitOutputTest, fiveTestsInOneGroupAllPass)
-{
-	output->createTestsInGroup(0, 5, "group", "name");
-	runTests();
+	STRCMP_EQUAL("<testsuite errors=\"0\" failures=\"1\" hostname=\"localhost\" name=\"testGroupWithFailingTest\" tests=\"2\" time=\"0.000\" timestamp=\"1978-10-03T00:00:00\">\n", outputFile->line(2));
+	STRCMP_EQUAL("<testcase classname=\"testGroupWithFailingTest\" name=\"FailingTestName\" time=\"0.000\">\n", outputFile->line(7));
+	STRCMP_EQUAL("<failure message=\"thisfile:10: Test failed\" type=\"AssertionFailedError\">\n", outputFile->line(8));
 }
 
-TEST(JUnitOutputTest, multipleTestsInTwoGroupAllPass)
+TEST(JUnitOutputTest, testFailureWithLessThanAndGreaterThanInsideIt)
 {
-	output->createTestsInGroup(0, 3, "group", "name");
-	output->createTestsInGroup(1, 8, "secondGroup", "secondName");
-	runTests();
-	LONGS_EQUAL(2, output->filesOpened);
+	testCaseRunner->start()
+			.withGroup("testGroupWithFailingTest")
+				.withTest("FailingTestName").thatFails("Test <failed>", "thisfile", 10)
+			.end();
+
+	outputFile = fileSystem.file("cpputest_testGroupWithFailingTest.xml");
+
+	STRCMP_EQUAL("<failure message=\"thisfile:10: Test [failed]\" type=\"AssertionFailedError\">\n", outputFile->line(6));
 }
 
-TEST(JUnitOutputTest, oneTestInOneGroupFailed)
+TEST(JUnitOutputTest, testFailureWithQuotesInIt)
 {
-	output->createTestsInGroup(0, 1, "failedGroup", "failedName");
-	output->setFailure(0, 0, "file", 1, "Test <\"just\"> failed");
-	runTests();
+	testCaseRunner->start()
+			.withGroup("testGroupWithFailingTest")
+				.withTest("FailingTestName").thatFails("Test \"failed\"", "thisfile", 10)
+			.end();
+
+	outputFile = fileSystem.file("cpputest_testGroupWithFailingTest.xml");
+
+	STRCMP_EQUAL("<failure message=\"thisfile:10: Test 'failed'\" type=\"AssertionFailedError\">\n", outputFile->line(6));
 }
 
-TEST(JUnitOutputTest, fiveTestsInOneGroupAndThreeFail)
+TEST(JUnitOutputTest, testFailureWithNewlineInIt)
 {
-	output->printTestsStarted();
-	output->createTestsInGroup(0, 5, "failedGroup", "failedName");
-	output->setFailure(0, 0, "file", 1, "Test just failed");
-	output->setFailure(0, 1, "file", 5, "Also failed");
-	output->setFailure(0, 4, "file", 8, "And failed again");
-	runTests();
+	testCaseRunner->start()
+			.withGroup("testGroupWithFailingTest")
+				.withTest("FailingTestName").thatFails("Test \nfailed", "thisfile", 10)
+			.end();
+
+	outputFile = fileSystem.file("cpputest_testGroupWithFailingTest.xml");
+
+	STRCMP_EQUAL("<failure message=\"thisfile:10: Test {newline}failed\" type=\"AssertionFailedError\">\n", outputFile->line(6));
 }
 
-TEST(JUnitOutputTest, fourGroupsAndSomePassAndSomeFail)
+TEST(JUnitOutputTest, testFailureWithDifferentFileAndLine)
 {
-	output->printTestsStarted();
-	output->createTestsInGroup(0, 5, "group1", "firstName");
-	output->createTestsInGroup(1, 50, "group2", "secondName");
-	output->createTestsInGroup(2, 3, "group3", "thirdName");
-	output->createTestsInGroup(3, 5, "group4", "fourthName");
+	testCaseRunner->start()
+			.withGroup("testGroupWithFailingTest")
+				.withTest("FailingTestName").thatFails("Test failed", "importantFile", 999)
+			.end();
 
-	output->setFailure(0, 0, "file", 1, "Test just failed");
-	output->printTestsEnded(*res);
-	runTests();
+	outputFile = fileSystem.file("cpputest_testGroupWithFailingTest.xml");
+
+	STRCMP_EQUAL("<failure message=\"importantFile:999: Test failed\" type=\"AssertionFailedError\">\n", outputFile->line(6));
 }
 
-TEST(JUnitOutputTest, messageWithNewLine)
+TEST(JUnitOutputTest, aCoupleOfTestFailures)
 {
-	output->createTestsInGroup(0, 1, "failedGroup", "failedName");
-	output->setFailure(0, 0, "file", 1, "Test \n failed");
-	runTests();
+	testCaseRunner->start()
+			.withGroup("testGroup")
+				.withTest("passingOne")
+				.withTest("FailingTest").thatFails("Failure", "file", 99)
+				.withTest("passingTwo")
+				.withTest("passingThree")
+				.withTest("AnotherFailingTest").thatFails("otherFailure", "anotherFile", 10)
+			.end();
+
+	outputFile = fileSystem.file("cpputest_testGroup.xml");
+
+	STRCMP_EQUAL("<failure message=\"file:99: Failure\" type=\"AssertionFailedError\">\n", outputFile->line(8));
+	STRCMP_EQUAL("<failure message=\"anotherFile:10: otherFailure\" type=\"AssertionFailedError\">\n", outputFile->line(16));
 }
 
-TEST(JUnitOutputTest, escapeSlashesInFilenames)
+TEST(JUnitOutputTest, testFailuresInSeparateGroups)
 {
-	STRCMP_EQUAL("cpputest_group_weird_name.xml", output->createFileName("group/weird/name").asCharString());
+	testCaseRunner->start()
+			.withGroup("testGroup")
+				.withTest("passingOne")
+				.withTest("FailingTest").thatFails("Failure", "file", 99)
+			.withGroup("AnotherGroup")
+				.withTest("AnotherFailingTest").thatFails("otherFailure", "anotherFile", 10)
+			.end();
+
+	outputFile = fileSystem.file("cpputest_testGroup.xml");
+
+	STRCMP_EQUAL("<failure message=\"file:99: Failure\" type=\"AssertionFailedError\">\n", outputFile->line(8));
+
+	outputFile = fileSystem.file("cpputest_AnotherGroup.xml");
+	STRCMP_EQUAL("<failure message=\"anotherFile:10: otherFailure\" type=\"AssertionFailedError\">\n", outputFile->line(8));
 }
 
+TEST(JUnitOutputTest, twoTestGroupsWriteToTwoDifferentFiles)
+{
+	testCaseRunner->start()
+			.withGroup("firstTestGroup")
+				.withTest("testName")
+			.withGroup("secondTestGroup")
+				.withTest("testName")
+			.end();
+
+	CHECK(fileSystem.file("cpputest_firstTestGroup.xml"));
+	CHECK(fileSystem.file("cpputest_secondTestGroup.xml"));
+
+}
+
+TEST(JUnitOutputTest, testGroupWithWeirdName)
+{
+	STRCMP_EQUAL("cpputest_group_weird_name.xml", junitOutput->createFileName("group/weird/name").asCharString());
+}
 
