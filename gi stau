@@ -1,0 +1,28 @@
+[33mcommit a22f8173b5ed95bff8ee80ed47d2f3deb39d4e44[m
+Author: Bas Vodde <basv@odd-e.com>
+Date:   Thu Jul 4 22:40:12 2013 +0800
+
+    Changed the memory alignment to void* instead of to int site, so that it works on the cl2000 compiler
+
+[1mdiff --git a/src/CppUTest/MemoryLeakDetector.cpp b/src/CppUTest/MemoryLeakDetector.cpp[m
+[1mindex 487985d..3624085 100644[m
+[1m--- a/src/CppUTest/MemoryLeakDetector.cpp[m
+[1m+++ b/src/CppUTest/MemoryLeakDetector.cpp[m
+[36m@@ -316,14 +316,14 @@[m [mvoid MemoryLeakDetector::reportFailure(const char* message, const char* allocFil[m
+ 	reporter_->fail(output_buffer_.toString());[m
+ }[m
+ [m
+[31m-static size_t calculateIntAlignedSize(size_t size)[m
+[32m+[m[32mstatic size_t calculateVoidPointerAlignedSize(size_t size)[m[41m[m
+ {[m
+[31m-	return (sizeof(int) - (size % sizeof(int))) + size;[m
+[32m+[m	[32mreturn (sizeof(void*) - (size % sizeof(void*))) + size;[m[41m[m
+ }[m
+ [m
+ size_t MemoryLeakDetector::sizeOfMemoryWithCorruptionInfo(size_t size)[m
+ {[m
+[31m-	return calculateIntAlignedSize(size + memory_corruption_buffer_size);[m
+[32m+[m	[32mreturn calculateVoidPointerAlignedSize(size + memory_corruption_buffer_size);[m[41m[m
+ }[m
+ [m
+ MemoryLeakDetectorNode* MemoryLeakDetector::getNodeFromMemoryPointer(char* memory, size_t memory_size)[m
