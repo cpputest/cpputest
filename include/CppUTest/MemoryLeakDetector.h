@@ -30,7 +30,7 @@
 
 #define MEM_LEAK_NONE "No memory leaks were detected."
 #define MEM_LEAK_HEADER "Memory leak(s) found.\n"
-#define MEM_LEAK_LEAK "Alloc num (%u) Leak size: %d Allocated at: %s and line: %d. Type: \"%s\"\n\t Memory: <%p> Content: \"%.15s\"\n"
+#define MEM_LEAK_LEAK "Alloc num (%u) Leak size: %lu Allocated at: %s and line: %d. Type: \"%s\"\n\t Memory: <%p> Content: \"%.15s\"\n"
 #define MEM_LEAK_TOO_MUCH "\netc etc etc etc. !!!! Too much memory leaks to report. Bailing out\n"
 #define MEM_LEAK_FOOTER "Total number of leaks: "
 #define MEM_LEAK_ADDITION_MALLOC_WARNING "NOTE:\n" \
@@ -44,7 +44,7 @@
 
 #define MEM_LEAK_ALLOC_DEALLOC_MISMATCH "Allocation/deallocation type mismatch\n"
 #define MEM_LEAK_MEMORY_CORRUPTION "Memory corruption (written out of bounds?)\n"
-#define MEM_LEAK_ALLOC_LOCATION "   allocated at file: %s line: %d size: %d type: %s\n"
+#define MEM_LEAK_ALLOC_LOCATION "   allocated at file: %s line: %d size: %lu type: %s\n"
 #define MEM_LEAK_DEALLOC_LOCATION "   deallocated at file: %s line: %d type: %s\n"
 #define MEM_LEAK_DEALLOC_NON_ALLOCATED "Deallocating non-allocated memory\n"
 
@@ -77,7 +77,7 @@ struct SimpleStringBuffer
 
 	SimpleStringBuffer();
 	void clear();
-	void add(const char* format, ...);
+	void add(const char* format, ...) __check_format__(printf, 2, 3);
 	char* toString();
 
 	void setWriteLimit(size_t write_limit);
