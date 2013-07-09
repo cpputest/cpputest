@@ -19,4 +19,5 @@ before_script:
   - export CPPUTEST_BUILD_DIR=$TRAVIS_BUILD_DIR/cpputest_build
   - mkdir -p $CPPUTEST_BUILD_DIR && cd $CPPUTEST_BUILD_DIR
 script:
-  - ../scripts/travis_ci_build.sh
+  - git config remote.origin.url
+#  - ../scripts/travis_ci_build.sh
