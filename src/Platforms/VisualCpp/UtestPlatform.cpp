@@ -145,7 +145,7 @@ char* PlatformSpecificStrStr(const char* s1, const char* s2)
 int PlatformSpecificVSNprintf(char *str, size_t size, const char* format, va_list args)
 {
 	char* buf = 0;
-	int sizeGuess = size;
+	size_t sizeGuess = size;
 
 	int result = _vsnprintf( str, size, format, args);
 	str[size-1] = 0;
