@@ -15,6 +15,10 @@ class GithubPagesDeployerForCppUTest
   def prepare_credentials_based_on_environment_variables
     set_username_based_on_environment_variable
     set_email_based_on_environment_variable
+    set_repository_token_based_on_enviroment_variable
+  end
+  
+  def set_repository_token_based_on_enviroment_variable
   end
   
   def set_username_based_on_environment_variable

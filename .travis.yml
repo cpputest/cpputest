@@ -1,23 +1,29 @@
+--- 
 language: cpp
-compiler:
-  - clang
-  - gcc
-env:
+compiler: 
+- clang
+- gcc
+env: 
+  matrix: 
   - BUILDTOOL=autotools
   - BUILDTOOL=cmake
-install:
-  - sudo apt-get update --fix-missing
-  - sudo apt-get install valgrind
-  - wget https://googlemock.googlecode.com/files/gmock-1.6.0.zip
-  - unzip gmock-1.6.0.zip
-  - cd gmock-1.6.0
-  - ./configure && make
-  - cd ..
-before_script:
-  - export GMOCK_HOME=$TRAVIS_BUILD_DIR/gmock-1.6.0
-  - export GTEST_HOME=$TRAVIS_BUILD_DIR/gmock-1.6.0/gtest
-  - export CPPUTEST_BUILD_DIR=$TRAVIS_BUILD_DIR/cpputest_build
-  - mkdir -p $CPPUTEST_BUILD_DIR && cd $CPPUTEST_BUILD_DIR
-script:
-  - ruby ../scripts/deploy_to_github_pages.rb
-# - ../scripts/travis_ci_build.sh
+  global: 
+    secure: |-
+      f2p8AoRYm+0Vpc/LahBYUiRr2TjjHrC7lT0RAdDjFMzJozHYAmcsLtGioXOF
+      Cl9h0RPvp0SpO1KolN0ocBYZwKCUII8JoUWgmukigjvjTVevkhvU3LjxxUZ+
+      JpEsHdv4K20efC/r8ixreWX/GXmaNP151TxDAI/VSW7djW3uK8g=
+install: 
+- sudo apt-get update --fix-missing
+- sudo apt-get install valgrind
+- wget https://googlemock.googlecode.com/files/gmock-1.6.0.zip
+- unzip gmock-1.6.0.zip
+- cd gmock-1.6.0
+- ./configure && make
+- cd ..
+before_script: 
+- export GMOCK_HOME=$TRAVIS_BUILD_DIR/gmock-1.6.0
+- export GTEST_HOME=$TRAVIS_BUILD_DIR/gmock-1.6.0/gtest
+- export CPPUTEST_BUILD_DIR=$TRAVIS_BUILD_DIR/cpputest_build
+- mkdir -p $CPPUTEST_BUILD_DIR && cd $CPPUTEST_BUILD_DIR
+script: 
+- ruby ../scripts/deploy_to_github_pages.rb

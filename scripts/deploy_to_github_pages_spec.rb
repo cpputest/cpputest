@@ -13,6 +13,7 @@ describe "configuring the git environment for deploying to github pages" do
   it "Should be able to set the credentials for pushing stuff up" do
     subject.should_receive(:set_username_based_on_environment_variable)
     subject.should_receive(:set_email_based_on_environment_variable)
+    subject.should_receive(:set_repository_token_based_on_enviroment_variable)
     subject.prepare_credentials_based_on_environment_variables
   end
   
