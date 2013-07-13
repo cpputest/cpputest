@@ -8,10 +8,10 @@ env:
   - BUILDTOOL=autotools
   - BUILDTOOL=cmake
   global: 
-    secure: |-
-      f2p8AoRYm+0Vpc/LahBYUiRr2TjjHrC7lT0RAdDjFMzJozHYAmcsLtGioXOF
-      Cl9h0RPvp0SpO1KolN0ocBYZwKCUII8JoUWgmukigjvjTVevkhvU3LjxxUZ+
-      JpEsHdv4K20efC/r8ixreWX/GXmaNP151TxDAI/VSW7djW3uK8g=
+  - secure: |-
+      P05xUfJVw5YM4hF7hzQLjyMzDD4Q1/fyWP9Uk5aK5VrSWNY99EuxldXI5QK/
+      vA1NkcW49tQW1wQvBlRtdlLNOmUfDP/oiJFXPwNn4dqwOIOEet2P7JO/5hnH
+      MNHlZmGu2WpoZREhOFBfsIhK0IP8mloqLDq2XemBdga/LWygrLU=
 install: 
 - sudo apt-get update --fix-missing
 - sudo apt-get install valgrind
