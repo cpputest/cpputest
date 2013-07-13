@@ -5,6 +5,7 @@ class GithubPagesDeployerForCppUTest
   def self.push_artifacts
     deployer = GithubPagesDeployerForCppUTest.new
     deployer.clone_cpputest_pages
+    deployer.set_credentials
   end
 
   def clone_cpputest_pages
@@ -12,7 +13,11 @@ class GithubPagesDeployerForCppUTest
   end
   
   def set_credentials
-    system("git config user.name '#{ENV['GIT_NAME']}'")
+    username = ENV['GIT_NAME']
+    raise StandardError.new("The GIT_NAME environment variable wasn't set.") if username.empty?
+    system("git config user.name '#{username}'")
+
+    
   end
   
 end

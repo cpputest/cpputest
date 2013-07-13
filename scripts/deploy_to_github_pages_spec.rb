@@ -11,12 +11,19 @@ describe "configuring the git environment for deploying to github pages" do
   end
   
   it "Should be able to set the username, email and credentials in order to push" do
-    subject.should_receive(:system).with("git config user.name '#{ENV['GIT_NAME']}'")
+    ENV['GIT_NAME'] = "basvodde"
+    subject.should_receive(:system).with("git config user.name 'basvodde'")
     subject.set_credentials    
+  end
+  
+  it "Should give an error message when the GIT_NAME isn't set" do
+    ENV['GIT_NAME'] = ""
+    expect {subject.set_credentials}.to raise_error(StandardError, "The GIT_NAME environment variable wasn't set.")
   end
   
   it "should push the right artifacts up to github" do
     subject.should_receive(:clone_cpputest_pages)
+    subject.should_receive(:set_credentials)
     GithubPagesDeployerForCppUTest.should_receive(:new).and_return(subject)
     GithubPagesDeployerForCppUTest.push_artifacts
   end
