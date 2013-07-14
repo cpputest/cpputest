@@ -10,6 +10,7 @@ class GithubPagesDeployerForCppUTest
 
   def clone_cpputest_pages
     system("git clone https://github.com/cpputest/cpputest.github.io.git github_pages")
+    Dir.chdir("github_pages")
   end
   
   def prepare_credentials_based_on_environment_variables
@@ -19,6 +20,11 @@ class GithubPagesDeployerForCppUTest
   end
   
   def set_repository_token_based_on_enviroment_variable
+    git_token = environment_variable_value("GIT_TOKEN")
+    system("git config credential.helper 'store --file=.git/travis_deploy_credentials'")
+    File.open(".git/travis_deploy_credentials", "w") { |credential_file|
+      credential_file.write("https://#{git_token}:@github.com")
+    }
   end
   
   def set_username_based_on_environment_variable
@@ -30,12 +36,15 @@ class GithubPagesDeployerForCppUTest
   end
   
   def git_config_based_on_enviroment_variable(config_parameter, environment_variable)
-    config_value = ENV[environment_variable]
-    raise StandardError.new("The #{environment_variable} environment variable wasn't set.") if config_value.nil?
+    config_value = environment_variable_value(environment_variable)
     system("git config #{config_parameter} '#{config_value}'")
   end
   
-  
+  def environment_variable_value (environment_variable_name)
+    value = ENV[environment_variable_name]
+    raise StandardError.new("The #{environment_variable_name} environment variable wasn't set.") if value.nil?
+    value
+  end
 end
 
 

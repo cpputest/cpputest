@@ -7,6 +7,7 @@ describe "configuring the git environment for deploying to github pages" do
   
   it "it should be able to clone the CppUTest github pages" do
     subject.should_receive(:system).with("git clone https://github.com/cpputest/cpputest.github.io.git github_pages")
+    Dir.should_receive(:chdir).with("github_pages")
     subject.clone_cpputest_pages
   end
 
@@ -32,7 +33,17 @@ describe "configuring the git environment for deploying to github pages" do
     ENV['GIT_EMAIL'] = "basv@bestcompanythatexists.com"
     subject.should_receive(:system).with("git config user.email 'basv@bestcompanythatexists.com'")
     subject.set_email_based_on_environment_variable
+  end
+
+  it "Should be able to write the github token based on an environment variable" do
+    credential_file = mock
+    ENV['GIT_TOKEN'] = "Token"
     
+    subject.should_receive(:system).with("git config credential.helper 'store --file=.git/travis_deploy_credentials'")
+    File.should_receive(:open).with(".git/travis_deploy_credentials", "w").and_yield(credential_file)
+    credential_file.should_receive(:write).with("https://Token:@github.com")
+    
+    subject.set_repository_token_based_on_enviroment_variable
   end
   
   it "should push the right artifacts up to github" do
