@@ -6,6 +6,10 @@ class GithubPagesDeployerForCppUTest
     deployer = GithubPagesDeployerForCppUTest.new
     deployer.clone_cpputest_pages
     deployer.prepare_credentials_based_on_environment_variables
+    system("echo " " >> README.md")
+    system("git add README.md")
+    system('git commit README.md -m "Commit from Travis CI"')
+    system("git push")
   end
 
   def clone_cpputest_pages
