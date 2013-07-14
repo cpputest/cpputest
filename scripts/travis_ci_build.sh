@@ -5,7 +5,7 @@ if [ "x$BUILDTOOL" = "xautotools" ]; then
 	../configure || exit 1
 	echo "CONFIGURATION DONE. Compiling now."
 	make check_all || exit 1
-	if [ $CXX = "gcc" ]; then 
+	if [ "x$CXX" = "xgcc" ]; then 
 		ruby ../scripts/deploy_to_github_pages.rb || exit 1
 	fi; 
 fi

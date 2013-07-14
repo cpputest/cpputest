@@ -6,14 +6,10 @@ class GithubPagesDeployerForCppUTest
     deployer = GithubPagesDeployerForCppUTest.new
     deployer.clone_cpputest_pages
     deployer.prepare_credentials_based_on_environment_variables
-    system("echo " " >> README.md")
-    system("git add README.md")
-    system('git commit README.md -m "Commit from Travis CI"')
-    system("git push")
   end
 
   def clone_cpputest_pages
-    system("git clone https://github.com/cpputest/cpputest.github.io.git github_pages")
+    do_system("git clone https://github.com/cpputest/cpputest.github.io.git github_pages")
     Dir.chdir("github_pages")
   end
   
@@ -25,7 +21,7 @@ class GithubPagesDeployerForCppUTest
   
   def set_repository_token_based_on_enviroment_variable
     git_token = environment_variable_value("GIT_TOKEN")
-    system("git config credential.helper 'store --file=.git/travis_deploy_credentials'")
+    do_system("git config credential.helper 'store --file=.git/travis_deploy_credentials'")
     File.open(".git/travis_deploy_credentials", "w") { |credential_file|
       credential_file.write("https://#{git_token}:@github.com")
     }
@@ -41,7 +37,7 @@ class GithubPagesDeployerForCppUTest
   
   def git_config_based_on_enviroment_variable(config_parameter, environment_variable)
     config_value = environment_variable_value(environment_variable)
-    system("git config #{config_parameter} '#{config_value}'")
+    do_system("git config #{config_parameter} '#{config_value}'")
   end
   
   def environment_variable_value (environment_variable_name)
@@ -49,9 +45,19 @@ class GithubPagesDeployerForCppUTest
     raise StandardError.new("The #{environment_variable_name} environment variable wasn't set.") if value.nil?
     value
   end
+  
+  def self.do_system(command)
+    output = `#{command} 2>&1`
+    raise StandardError, "Command: '#{command}' failed. Message: " + output unless $?.success?
+    output
+  end
 end
 
 
 if __FILE__ == $0 then
   GithubPagesDeployerForCppUTest.push_artifacts
+  GithubPagesDeployerForCppUTest.do_system("echo " " >> README.md")
+  GithubPagesDeployerForCppUTest.do_system("git add README.md")
+  GithubPagesDeployerForCppUTest.do_system('git commit README.md -m "Commit from Travis CI"')
+  GithubPagesDeployerForCppUTest.do_system("git push")
 end

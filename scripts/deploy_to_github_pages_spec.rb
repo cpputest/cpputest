@@ -6,7 +6,7 @@ describe "configuring the git environment for deploying to github pages" do
   subject { GithubPagesDeployerForCppUTest.new }
   
   it "it should be able to clone the CppUTest github pages" do
-    subject.should_receive(:system).with("git clone https://github.com/cpputest/cpputest.github.io.git github_pages")
+    subject.should_receive(:do_system).with("git clone https://github.com/cpputest/cpputest.github.io.git github_pages")
     Dir.should_receive(:chdir).with("github_pages")
     subject.clone_cpputest_pages
   end
@@ -20,7 +20,7 @@ describe "configuring the git environment for deploying to github pages" do
   
   it "Should be able to set the username based on an environment variable" do
     ENV['GIT_NAME'] = "basvodde"
-    subject.should_receive(:system).with("git config user.name 'basvodde'")
+    subject.should_receive(:do_system).with("git config user.name 'basvodde'")
     subject.set_username_based_on_environment_variable    
   end
   
@@ -31,7 +31,7 @@ describe "configuring the git environment for deploying to github pages" do
 
   it "Should be able to set the password based on an environment variable" do
     ENV['GIT_EMAIL'] = "basv@bestcompanythatexists.com"
-    subject.should_receive(:system).with("git config user.email 'basv@bestcompanythatexists.com'")
+    subject.should_receive(:do_system).with("git config user.email 'basv@bestcompanythatexists.com'")
     subject.set_email_based_on_environment_variable
   end
 
@@ -39,7 +39,7 @@ describe "configuring the git environment for deploying to github pages" do
     credential_file = mock
     ENV['GIT_TOKEN'] = "Token"
     
-    subject.should_receive(:system).with("git config credential.helper 'store --file=.git/travis_deploy_credentials'")
+    subject.should_receive(:do_system).with("git config credential.helper 'store --file=.git/travis_deploy_credentials'")
     File.should_receive(:open).with(".git/travis_deploy_credentials", "w").and_yield(credential_file)
     credential_file.should_receive(:write).with("https://Token:@github.com")
     
@@ -52,4 +52,18 @@ describe "configuring the git environment for deploying to github pages" do
     GithubPagesDeployerForCppUTest.should_receive(:new).and_return(subject)
     GithubPagesDeployerForCppUTest.push_artifacts
   end
+  
+  context "do_system" do
+    it "Should be able to do a successful command" do
+      GithubPagesDeployerForCppUTest.do_system('echo "hello"').should== "hello\n"
+    end
+    
+    it "Should be able to raise an StandardError on failed commands" do
+      expect {
+        GithubPagesDeployerForCppUTest.do_system('doesnotexistonanysystem').should== "hello\n"
+      }.to raise_error(StandardError, "Command: 'doesnotexistonanysystem' failed. Message: sh: doesnotexistonanysystem: command not found\n")
+    end
+    
+  end
+  
 end
