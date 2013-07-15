@@ -36,7 +36,7 @@
 
 #define GTEST_DONT_DEFINE_TEST 1
 #define GTEST_DONT_DEFINE_FAIL 1
-#include "gmock/gmock.h"
+#include "CppUTestExt/CppUTestGMock/gmock/gmock.h"
 #undef RUN_ALL_TESTS
 
 #ifdef CPPUTEST_USE_REAL_GMOCK
