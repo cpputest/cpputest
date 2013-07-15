@@ -1,18 +1,55 @@
 #!/usr/bin/env ruby -w
 
-class GithubPagesDeployerForCppUTest
+require File.join(File.dirname(__FILE__), "git_command_line.rb")
+require 'YAML'
+
+class TravisGithubDeployer
   
-  def self.push_artifacts
-    deployer = GithubPagesDeployerForCppUTest.new
-    deployer.clone_cpputest_pages
-    deployer.prepare_credentials_based_on_environment_variables
+  def initialize
+    @git = GitCommandLine.new
+  end
+  
+  ## Configuration values
+  
+  def destination_repository
+    @destination_repository
+  end
+  
+  def destination_repository_dir
+    @destination_repository_dir
+  end
+  
+  def files_to_deploy
+    @files_to_deploy
+  end
+    
+  ## Deployment 
+    
+  def deploy
+    load_configuration
+    clone_destination_repository
+    change_current_directory_to_cloned_repository
+    prepare_credentials_based_on_environment_variables
+    copy_files_in_destination_repository
+    commit_and_push_files
   end
 
-  def clone_cpputest_pages
-    do_system("git clone https://github.com/cpputest/cpputest.github.io.git github_pages")
-    Dir.chdir("github_pages")
+  ## Preparing for deployment
+
+  def load_configuration
+    configuration = YAML.load_file(".travis_github_deployer.yml")
+    @destination_repository = configuration["destination_repository"]
+    @files_to_deploy = configuration["files_to_deploy"]
+  end
+
+  def clone_destination_repository
+    @git.clone(destination_repository, destination_repository_dir)
   end
   
+  def change_current_directory_to_cloned_repository
+    Dir.chdir(destination_repository_dir)
+  end
+
   def prepare_credentials_based_on_environment_variables
     set_username_based_on_environment_variable
     set_email_based_on_environment_variable
@@ -21,23 +58,18 @@ class GithubPagesDeployerForCppUTest
   
   def set_repository_token_based_on_enviroment_variable
     git_token = environment_variable_value("GIT_TOKEN")
-    do_system("git config credential.helper 'store --file=.git/travis_deploy_credentials'")
+    @git.config_credential_helper_store_file(".git/travis_deploy_credentials")
     File.open(".git/travis_deploy_credentials", "w") { |credential_file|
       credential_file.write("https://#{git_token}:@github.com")
     }
   end
   
   def set_username_based_on_environment_variable
-    git_config_based_on_enviroment_variable("user.name", "GIT_NAME")
+    @git.config_username(environment_variable_value("GIT_NAME"))
   end
   
   def set_email_based_on_environment_variable
-    git_config_based_on_enviroment_variable("user.email", "GIT_EMAIL")
-  end
-  
-  def git_config_based_on_enviroment_variable(config_parameter, environment_variable)
-    config_value = environment_variable_value(environment_variable)
-    do_system("git config #{config_parameter} '#{config_value}'")
+    @git.config_email(environment_variable_value("GIT_EMAIL"))
   end
   
   def environment_variable_value (environment_variable_name)
@@ -45,19 +77,24 @@ class GithubPagesDeployerForCppUTest
     raise StandardError.new("The #{environment_variable_name} environment variable wasn't set.") if value.nil?
     value
   end
-  
-  def self.do_system(command)
-    output = `#{command} 2>&1`
-    raise StandardError, "Command: '#{command}' failed. Message: " + output unless $?.success?
-    output
+    
+  def copy_files_to_deployment_repository
+    
+    files_to_deploy.each { |source_location, destination_location|
+      source = Pathname.new(source_location)
+      destination = Pathname.new("github_pages")
+      destination += destination_location.empty? ? source_location : destination_location
+      FileUtils.copy(source, destination)
+    }
+    
   end
+  
+  def commit_and_push_files
+  end
+    
 end
 
 
 if __FILE__ == $0 then
-  GithubPagesDeployerForCppUTest.push_artifacts
-  GithubPagesDeployerForCppUTest.do_system("echo " " >> README.md")
-  GithubPagesDeployerForCppUTest.do_system("git add README.md")
-  GithubPagesDeployerForCppUTest.do_system('git commit README.md -m "Commit from Travis CI"')
-  GithubPagesDeployerForCppUTest.do_system("git push")
+  GithubPagesDeployer.new.deploy
 end
