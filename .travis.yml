@@ -3,6 +3,8 @@ language: cpp
 compiler: 
 - clang
 - gcc
+rvm:
+  - "1.9.3"
 env: 
   matrix: 
   - BUILDTOOL=autotools
