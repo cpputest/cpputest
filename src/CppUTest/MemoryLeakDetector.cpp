@@ -310,8 +310,8 @@ unsigned MemoryLeakDetector::getCurrentAllocationNumber()
 void MemoryLeakDetector::reportFailure(const char* message, const char* allocFile, int allocLine, size_t allocSize, TestMemoryAllocator* allocAllocator, const char* freeFile, int freeLine,
 		TestMemoryAllocator* freeAllocator)
 {
-	output_buffer_.add(message);
-	output_buffer_.add(MEM_LEAK_ALLOC_LOCATION, allocFile, allocLine, allocSize, allocAllocator->alloc_name());
+	output_buffer_.add("%s", message);
+	output_buffer_.add(MEM_LEAK_ALLOC_LOCATION, allocFile, allocLine, (unsigned long) allocSize, allocAllocator->alloc_name());
 	output_buffer_.add(MEM_LEAK_DEALLOC_LOCATION, freeFile, freeLine, freeAllocator->free_name());
 	reporter_->fail(output_buffer_.toString());
 }
@@ -469,7 +469,7 @@ void MemoryLeakDetector::ConstructMemoryLeakReport(MemLeakPeriod period)
 	output_buffer_.setWriteLimit(SimpleStringBuffer::SIMPLE_STRING_BUFFER_LEN - MEM_LEAK_NORMAL_MALLOC_FOOTER_SIZE);
 
 	while (leak) {
-		output_buffer_.add(MEM_LEAK_LEAK, leak->number_, leak->size_, leak->file_, leak->line_, leak->allocator_->alloc_name(), leak->memory_, leak->memory_);
+		output_buffer_.add(MEM_LEAK_LEAK, leak->number_, (unsigned long) leak->size_, leak->file_, leak->line_, leak->allocator_->alloc_name(), leak->memory_, leak->memory_);
 		if (PlatformSpecificStrCmp(leak->allocator_->alloc_name(), "malloc") == 0)
 			giveWarningOnUsingMalloc = true;
 		total_leaks++;

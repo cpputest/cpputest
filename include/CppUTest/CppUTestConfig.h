@@ -93,10 +93,17 @@
 #ifndef __has_attribute
   #define __has_attribute(x) 0
 #endif
+
 #if __has_attribute(noreturn)
   #define __no_return__ __attribute__((noreturn))
 #else
   #define __no_return__
+#endif
+
+#if __has_attribute(format)
+  #define __check_format__(type, format_parameter, other_parameters) __attribute__ ((format (type, format_parameter, other_parameters)))
+#else
+  #define __check_format__(type, format_parameter, other_parameters) /* type, format_parameter, other_parameters */
 #endif
 
 /*

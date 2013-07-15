@@ -524,7 +524,7 @@ TEST(SimpleStringBuffer, resetWriteLimit)
 	for (int i = 0; i < SimpleStringBuffer::SIMPLE_STRING_BUFFER_LEN ; i++)
 		buffer.add("h");
 	buffer.resetWriteLimit();
-	buffer.add(SimpleString("h", 10).asCharString());
+	buffer.add("%s", SimpleString("h", 10).asCharString());
 
 	SimpleString str("h", 20);
 	STRCMP_EQUAL(str.asCharString(), buffer.toString());

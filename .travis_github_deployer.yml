@@ -1,0 +1,6 @@
+
+destination_repository: https://github.com/cpputest/cpputest.github.io.git
+
+files_to_deploy:
+  README: README
+
