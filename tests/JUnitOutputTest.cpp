@@ -35,15 +35,22 @@ static long millisTime;
 
 static const char* theTime = "1978-10-03T00:00:00";
 
-static long MockGetPlatformSpecificTimeInMillis()
-{
-	return millisTime;
-}
+extern "C" {
 
-static const char* MockGetPlatformSpecificTimeString()
-{
-	return theTime;
-}
+    typedef long (*LongFP_C)();
+    typedef const char* (*StringFP_C)();
+
+    static long MockGetPlatformSpecificTimeInMillis()
+    {
+	    return millisTime;
+    }
+
+    static const char* MockGetPlatformSpecificTimeString()
+    {
+	    return theTime;
+    }
+
+} // extern "C"
 
 class FileForJUnitOutputTests
 {
@@ -168,6 +175,8 @@ public:
 	}
 };
 
+		extern "C" long MockGetPlatformSpecificTimeInMillis();
+
 class JUnitTestOutputTestRunner
 {
 	TestResult result_;
@@ -196,8 +205,8 @@ public:
 		millisTime = 0;
 		theTime =  "1978-10-03T00:00:00";
 
-		SetPlatformSpecificTimeInMillisMethod(MockGetPlatformSpecificTimeInMillis);
-		SetPlatformSpecificTimeStringMethod(MockGetPlatformSpecificTimeString);
+		SetPlatformSpecificTimeInMillisMethod((LongFP_C)MockGetPlatformSpecificTimeInMillis);
+		SetPlatformSpecificTimeStringMethod((StringFP_C)MockGetPlatformSpecificTimeString);
 	}
 
 	~JUnitTestOutputTestRunner()
