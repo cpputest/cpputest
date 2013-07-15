@@ -13,6 +13,7 @@ env:
       vA1NkcW49tQW1wQvBlRtdlLNOmUfDP/oiJFXPwNn4dqwOIOEet2P7JO/5hnH
       MNHlZmGu2WpoZREhOFBfsIhK0IP8mloqLDq2XemBdga/LWygrLU=
 install: 
+- gem install travis_github_deployer
 - sudo apt-get update --fix-missing
 - sudo apt-get install valgrind
 - wget https://googlemock.googlecode.com/files/gmock-1.6.0.zip
@@ -26,4 +27,5 @@ before_script:
 - export CPPUTEST_BUILD_DIR=$TRAVIS_BUILD_DIR/cpputest_build
 - mkdir -p $CPPUTEST_BUILD_DIR && cd $CPPUTEST_BUILD_DIR
 script: 
-- ../scripts/travis_ci_build.sh
+- travis_github_deployer
+#- ../scripts/travis_ci_build.sh
