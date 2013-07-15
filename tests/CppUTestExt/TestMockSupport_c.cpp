@@ -26,9 +26,11 @@
  */
 #include "CppUTest/TestHarness.h"
 
+extern "C" {
 #include "CppUTest/TestHarness_c.h"
 #include "CppUTestExt/MockSupport_c.h"
 #include "TestMockSupport_cCFile.h"
+}
 
 TEST_GROUP(MockSupport_c)
 {
@@ -62,7 +64,10 @@ static char* typeNameValueToString(const void* PUNUSED(object))
 
 TEST(MockSupport_c, expectAndActualParametersOnObject)
 {
-	mock_c()->installComparator("typeName", typeNameIsEqual, typeNameValueToString);
+	mock_c()->installComparator("typeName", 
+	        (MockTypeEqualFunction_c)typeNameIsEqual, 
+	        (MockTypeValueToStringFunction_c)typeNameValueToString
+	    );
 	mock_c()->expectOneCall("boo")->withParameterOfType("typeName", "name", (void*) 1);
 	mock_c()->actualCall("boo")->withParameterOfType("typeName", "name", (void*) 1);
 	mock_c()->checkExpectations();
