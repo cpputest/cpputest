@@ -1,0 +1,11 @@
+prefix=/usr/local
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: CppUtest
+URL: https://github.com/cpputest/cpputest
+Description: Easy to use unit test framework for C/C++
+Version: 3.4
+Cflags: -I${includedir}
+Libs: -L${libdir} -lstdc++ -lCppUTest -lCppUTestExt

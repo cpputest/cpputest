@@ -5,6 +5,7 @@
 *.d
 *.o
 *.a
+*.bak
 .settings
 *doxygen*
 *.gcov
@@ -31,7 +32,9 @@ Debug
 *.obj
 *.ncb
 *.opt
+*.paf2
 *.plg
+*.psp
 *.idb
 *.pdb
 *.sou
@@ -44,3 +47,13 @@ Debug
 _build_
 _build
 build
+project.pj
+*.sbl
+Debug.lkf
+*.CDX
+*.DBF
+*.FPT
+temporary.txt
+EmbeddedUnitTest.cpp
+/.deps/
+/.libs/

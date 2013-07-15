@@ -27,12 +27,28 @@
 
 #include "CppUTest/CommandLineTestRunner.h"
 
-int main(int ac, const char** av)
+int main(int ac, char** av)
 {
+	char arg2[] = "-v";
+//	char arg3[] = "-gSimpleStringBuffer";
+    char arg3[] = "-nTwoLeaks";
+//  char arg3[] = "-gTestHarness_c";
+    char arg4[] = "-nTwoLeaks";
+//  char arg4[] = "-ncpputest_realloc_larger";
+//	char arg4[] = "-ojunit";
+//	char arg4[] = "-nmallocLeakGivesAdditionalWarning";
+	char* args[4];
+	ac = 2;
+                        // arg 1 == name of executable
+	args[1] = &arg2[0]; // arg 2
+	args[2] = &arg3[0]; // arg 3
+  	args[3] = &arg4[0]; // arg 4
+	av = args;
+
 	/* These checks are here to make sure assertions outside test runs don't crash */
 	CHECK(true);
 	LONGS_EQUAL(1, 1);
 
-	return CommandLineTestRunner::RunAllTests(ac, av);
+	return CommandLineTestRunner::RunAllTests(ac, av); // change to 2 or higher to enable args
 }
 

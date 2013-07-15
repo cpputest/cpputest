@@ -53,11 +53,7 @@ public:
 		return amountOfFailures;
 	}
 
-	static MockFailureReporterForTest* getReporter()
-	{
-		static MockFailureReporterForTest reporter;
-		return &reporter;
-	}
+	static MockFailureReporterForTest* getReporter();
 };
 
 inline UtestShell* mockFailureTest()
