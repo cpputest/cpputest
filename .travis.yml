@@ -29,5 +29,5 @@ before_script:
 - export CPPUTEST_BUILD_DIR=$TRAVIS_BUILD_DIR/cpputest_build
 - mkdir -p $CPPUTEST_BUILD_DIR && cd $CPPUTEST_BUILD_DIR
 script: 
-- travis_github_deployer
+- cd .. && travis_github_deployer
 #- ../scripts/travis_ci_build.sh
