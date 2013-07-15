@@ -266,6 +266,11 @@ void* operator new[](size_t size, const std::nothrow_t&) UT_NOTHROW
 
 #else
 
+/* Have a similar method. This avoid unused operator_new_nothrow_fptr warning */
+
+extern void* operator_new_nothrow(size_t size) UT_NOTHROW;
+extern void* operator_new_array_nothrow(size_t size) UT_NOTHROW;
+
 void* operator_new_nothrow(size_t size) UT_NOTHROW
 {
 	return operator_new_nothrow_fptr(size);

@@ -77,7 +77,7 @@ struct SimpleStringBuffer
 
 	SimpleStringBuffer();
 	void clear();
-	void add(const char* format, ...);
+	void add(const char* format, ...) __check_format__(printf, 2, 3);
 	char* toString();
 
 	void setWriteLimit(size_t write_limit);
