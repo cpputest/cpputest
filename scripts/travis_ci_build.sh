@@ -7,7 +7,7 @@ if [ "x$BUILDTOOL" = "xautotools" ]; then
 	make check_all || exit 1
 	if [ "x$CXX" = "xg++" ]; then 
 		echo " " >> ../README
-		cd .. && travis_github_deployer || exit 1
+		cd .. && travis_github_deployer -v || exit 1
 	fi; 
 fi
 
