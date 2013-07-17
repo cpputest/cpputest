@@ -4,7 +4,7 @@
 if [ "x$BUILDTOOL" = "xautotools" ]; then 
 	../configure || exit 1
 	echo "CONFIGURATION DONE. Compiling now."
-#	make check_all || exit 1
+	make check_all || exit 1
 
 	# One more normal build for generating test reports
 	../configure || exit 1
