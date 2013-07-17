@@ -16,7 +16,7 @@ if [ "x$BUILDTOOL" = "xautotools" ]; then
 		date >> ../README
 		cd .. && travis_github_deployer -v || exit 1
 	fi; 
-#fi
+fi
 
 if [ "x$BUILDTOOL" = "xcmake" ]; then 
 	cmake .. -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE || exit 1
