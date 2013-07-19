@@ -2,5 +2,5 @@
 destination_repository: https://github.com/cpputest/cpputest.github.io.git
 
 files_to_deploy:
-  cpputest_build/unit_rest_report/* unit_test_report
+  cpputest_build/unit_test_report/*: unit_test_report
 
