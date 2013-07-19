@@ -236,9 +236,9 @@ check_all:
 	
 	@echo "Compile with coverage (switch to clang for Mac OSX)"
 	if test "x$(CPPUTEST_HAS_CLANG)" = xyes && test "x$(CPPUTEST_ON_MACOSX)" = xyes; then \
-	   echo "Compiling with clang"; make distclean; ../configure CC="clang" CXX="clang++" --enable-coverage \
+	   echo "Compiling with clang"; make distclean; ../configure CC="clang" CXX="clang++" --enable-coverage; \
 	else \
-		make distclean; $(srcdir)/configure -enable-coverage  \
+		make distclean; $(srcdir)/configure -enable-coverage;  \
 	fi
 	
 	make check
