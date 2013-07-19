@@ -236,10 +236,12 @@ check_all:
 	
 	@echo "Compile with coverage (switch to clang for Mac OSX)"
 	if test "x$(CPPUTEST_HAS_CLANG)" = xyes && test "x$(CPPUTEST_ON_MACOSX)" = xyes; then \
-	   echo "Compiling with clang"; make distclean; ../configure CC="clang" CXX="clang++" --enable-coverage; make check; \
+	   echo "Compiling with clang"; make distclean; ../configure CC="clang" CXX="clang++" --enable-coverage \
 	else \
-		make distclean; $(srcdir)/configure -enable-coverage; make check; \
+		make distclean; $(srcdir)/configure -enable-coverage  \
 	fi
+	
+	make check
 	
 	./$(CPPUTEST_TESTS) >> test_output.txt; ./$(CPPUTESTEXT_TESTS) >> test_output.txt 
 	$(SILENCE)for f in `ls *.gcno` ; do \
