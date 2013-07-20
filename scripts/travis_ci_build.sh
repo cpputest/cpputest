@@ -9,11 +9,12 @@ if [ "x$BUILDTOOL" = "xautotools" ]; then
 	# One more normal build for generating test reports
 	../configure || exit 1
 	make check
+	./CppUTestTests -ojunit
+	,/CppUTestExtTests -ojunit
 	cp ../scripts/generate_junit_report_ant.xml .
 	ant -f generate_junit_report_ant.xml
 
 	if [ "x$CXX" = "xg++" ]; then 
-		date >> ../README
 		cd .. && travis_github_deployer -v || exit 1
 	fi; 
 fi
