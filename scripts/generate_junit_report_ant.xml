@@ -3,6 +3,6 @@
 		<fileset dir=".">
 			<include name="cpputest*.xml"/>
 		</fileset>
-		<report todir="./unit_rest_report"/>
+		<report todir="./unit_test_report"/>
 	</junitreport>
 </project>
