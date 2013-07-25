@@ -457,12 +457,12 @@ SimpleString VStringFromFormat(const char* format, va_list args)
 	char defaultBuffer[sizeOfdefaultBuffer];
 	SimpleString resultString;
 
-	int size = PlatformSpecificVSNprintf(defaultBuffer, sizeOfdefaultBuffer, format, args);
+	size_t size = (size_t)PlatformSpecificVSNprintf(defaultBuffer, sizeOfdefaultBuffer, format, args);
 	if (size < sizeOfdefaultBuffer) {
 		resultString = SimpleString(defaultBuffer);
 	}
 	else {
-		size_t newBufferSize = (size_t) size + 1;
+		size_t newBufferSize = size + 1;
 		char* newBuffer = SimpleString::allocStringBuffer(newBufferSize);
 		PlatformSpecificVSNprintf(newBuffer, newBufferSize, format, argsCopy);
 		resultString = SimpleString(newBuffer);
