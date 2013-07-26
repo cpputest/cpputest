@@ -1,4 +1,5 @@
 set(CppUTestExt_src
+        MemoryBufferContainer.cpp
         CodeMemoryReportFormatter.cpp
         MemoryReporterPlugin.cpp
         MockFailure.cpp

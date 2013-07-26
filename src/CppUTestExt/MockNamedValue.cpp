@@ -30,13 +30,44 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 
 
-MockNamedValue::MockNamedValue(const SimpleString& name) : name_(name), type_("int"), comparator_(NULL)
+MockNamedValue::MockNamedValue(const SimpleString& name) : name_(name), type_("int"), memoryBufferValue_(NULL), comparator_(NULL)
 {
 	value_.intValue_ = 0;
 }
 
+MockNamedValue::MockNamedValue(MockNamedValue const &other)
+    : name_(other.name_), type_(other.type_), value_(other.value_),
+      memoryBufferValue_(NULL), comparator_(other.comparator_)
+{
+    if (other.memoryBufferValue_) {
+        memoryBufferValue_ = new MemoryBufferContainer(*other.memoryBufferValue_);
+    }
+}
+
+
 MockNamedValue::~MockNamedValue()
 {
+    if (memoryBufferValue_) {
+        delete memoryBufferValue_;
+        memoryBufferValue_ = NULL;
+    }
+}
+
+MockNamedValue &MockNamedValue::operator= (MockNamedValue const &other)
+{
+    if (this == &other)
+        return *this;
+
+    if (memoryBufferValue_) {
+        delete memoryBufferValue_;
+        memoryBufferValue_ = NULL;
+    }
+
+    if (other.memoryBufferValue_) {
+        memoryBufferValue_ = new MemoryBufferContainer(*other.memoryBufferValue_);
+    }
+
+    return *this;
 }
 
 void MockNamedValue::setValue(int value)
@@ -67,6 +98,34 @@ void MockNamedValue::setObjectPointer(const SimpleString& type, const void* obje
 {
 	type_ = type;
 	value_.objectPointerValue_ = objectPtr;
+}
+
+void MockNamedValue::setValue(void (*value)())
+{
+    type_ = "void(*)()";
+    value_.functionPointerValue_ = value;
+}
+
+void MockNamedValue::setValue(void const *value, size_t size)
+{
+    type_ = "memoryBuffer";
+
+    if (memoryBufferValue_) {
+        delete memoryBufferValue_;
+        memoryBufferValue_ = NULL;
+    }
+    memoryBufferValue_ = new MemoryBufferContainer(value, size);
+}
+
+void MockNamedValue::setValue(MemoryBufferContainer const &value)
+{
+    type_ = "memoryBuffer";
+
+    if (memoryBufferValue_) {
+        delete memoryBufferValue_;
+        memoryBufferValue_ = NULL;
+    }
+    memoryBufferValue_ = new MemoryBufferContainer(value);
 }
 
 void MockNamedValue::setName(const char* name)
@@ -113,6 +172,18 @@ const void* MockNamedValue::getObjectPointer() const
 	return value_.objectPointerValue_;
 }
 
+void (*MockNamedValue::getFunctionPointerValue() const)()
+{
+    STRCMP_EQUAL("void(*)()", type_.asCharString());
+    return value_.functionPointerValue_;
+}
+
+MemoryBufferContainer const &MockNamedValue::getMemoryBufferValue() const
+{
+    STRCMP_EQUAL("memoryBuffer", type_.asCharString());
+    return *memoryBufferValue_;
+}
+
 void MockNamedValue::setComparator(MockNamedValueComparator* comparator)
 {
 	comparator_ = comparator;
@@ -130,6 +201,10 @@ bool MockNamedValue::equals(const MockNamedValue& p) const
 		return value_.pointerValue_ == p.value_.pointerValue_;
 	else if (type_ == "double")
 		return (doubles_equal(value_.doubleValue_, p.value_.doubleValue_, 0.005));
+    else if (type_ == "void(*)()")
+        return value_.functionPointerValue_ == p.value_.functionPointerValue_;
+    else if (type_ == "memoryBuffer")
+        return *memoryBufferValue_ == *p.memoryBufferValue_;
 
 	if (comparator_)
 		return comparator_->isEqual(value_.objectPointerValue_, p.value_.objectPointerValue_);
@@ -147,6 +222,10 @@ SimpleString MockNamedValue::toString() const
 		return StringFrom(value_.pointerValue_);
 	else if (type_ == "double")
 		return StringFrom(value_.doubleValue_);
+    else if (type_ == "void(*)()")
+        return StringFrom(value_.functionPointerValue_);
+    else if (type_ == "memoryBuffer")
+        return StringFrom(*memoryBufferValue_);
 
 	if (comparator_)
 		return comparator_->valueToString(value_.objectPointerValue_);

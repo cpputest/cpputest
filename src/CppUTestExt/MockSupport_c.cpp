@@ -66,6 +66,7 @@ void setIntData_c(const char* name, int value);
 void setDoubleData_c(const char* name, double value);
 void setStringData_c(const char* name, const char* value);
 void setPointerData_c(const char* name, void* value);
+void setMemoryBufferData_c(const char* name, void const *value, size_t size);
 void setDataObject_c(const char* name, const char* type, void* value);
 MockValue_c getData_c(const char* name);
 
@@ -78,6 +79,8 @@ MockFunctionCall_c* withDoubleParameters_c(const char* name, double value);
 MockFunctionCall_c* withStringParameters_c(const char* name, const char* value);
 MockFunctionCall_c* withPointerParameters_c(const char* name, void* value);
 MockFunctionCall_c* withParameterOfType_c(const char* type, const char* name, void* value);
+MockFunctionCall_c* withFunctionPointerParameters_c(const char* name, void (*value)());
+MockFunctionCall_c* withMemoryBufferParameters_c(const char* name, void const *value, size_t size);
 MockFunctionCall_c* andReturnIntValue_c(int value);
 MockFunctionCall_c* andReturnDoubleValue_c(double value);
 MockFunctionCall_c* andReturnStringValue_c(const char* value);
@@ -107,6 +110,8 @@ static MockFunctionCall_c gFunctionCall = {
 		withStringParameters_c,
 		withPointerParameters_c,
 		withParameterOfType_c,
+		withFunctionPointerParameters_c,
+		withMemoryBufferParameters_c,
 		andReturnIntValue_c,
 		andReturnDoubleValue_c,
 		andReturnStringValue_c,
@@ -125,6 +130,7 @@ static MockSupport_c gMockSupport = {
 		setStringData_c,
 		setPointerData_c,
 		setDataObject_c,
+        setMemoryBufferData_c,
 		getData_c,
 		checkExpectations_c,
 		expectedCallsLeft_c,
@@ -161,6 +167,18 @@ MockFunctionCall_c* withParameterOfType_c(const char* type, const char* name, vo
 {
 	currentCall = &currentCall->withParameterOfType(type, name, value);
 	return &gFunctionCall;
+}
+
+MockFunctionCall_c* withFunctionPointerParameters_c(const char* name, void (*value)())
+{
+    currentCall = &currentCall->withParameter(name, value);
+    return &gFunctionCall;
+}
+
+MockFunctionCall_c* withMemoryBufferParameters_c(const char* name, void const *value, size_t size)
+{
+    currentCall = &currentCall->withParameter(name, value, size);
+    return &gFunctionCall;
 }
 
 MockFunctionCall_c* andReturnIntValue_c(int value)
@@ -206,6 +224,12 @@ static MockValue_c getMockValueCFromNamedValue(const MockNamedValue& namedValue)
 		returnValue.type = MOCKVALUETYPE_POINTER;
 		returnValue.value.pointerValue = namedValue.getPointerValue();
 	}
+    else if (PlatformSpecificStrCmp(namedValue.getType().asCharString(), "memoryBuffer") == 0) {
+        MemoryBufferContainer const &memoryBuffer = namedValue.getMemoryBufferValue();
+        returnValue.type = MOCKVALUETYPE_MEMORYBUFFER;
+        returnValue.value.memoryBufferValue.bufferLength = memoryBuffer.getBufferLength();
+        returnValue.value.memoryBufferValue.buffer = memoryBuffer.getBuffer();
+    }
 	else {
 		returnValue.type = MOCKVALUETYPE_OBJECT;
 		returnValue.value.objectValue = namedValue.getObjectPointer();
@@ -263,6 +287,11 @@ void setPointerData_c(const char* name, void* value)
 void setDataObject_c(const char* name, const char* type, void* value)
 {
 	return currentMockSupport->setDataObject(name, type, value);
+}
+
+void setMemoryBufferData_c(const char* name, void const *value, size_t size)
+{
+    return currentMockSupport->setData(name, value, size);
 }
 
 MockValue_c getData_c(const char* name)

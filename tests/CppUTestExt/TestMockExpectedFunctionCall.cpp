@@ -140,6 +140,32 @@ TEST(MockExpectedFunctionCall, callWithPointerParameter)
 	POINTERS_EQUAL(ptr, call->getParameter("pointer").getPointerValue());
 }
 
+TEST(MockExpectedFunctionCall, callWithFunctionPointerParameter)
+{
+    void (*ptr)() = (void (*)()) 0x123;
+    call->withParameter("functionPointer", ptr);
+    STRCMP_EQUAL("void(*)()", call->getParameterType("functionPointer").asCharString());
+    FUNCTIONPOINTERS_EQUAL(ptr, call->getParameter("functionPointer").getFunctionPointerValue());
+}
+
+TEST(MockExpectedFunctionCall, callWithMemoryBufferParameter)
+{
+    uint8_t rawdata[] = {1,2,3,4,5,6,7,8,9};
+    MemoryBufferContainer buffer(rawdata, sizeof(rawdata));
+    call->withParameter("buffer", rawdata, sizeof(rawdata));
+    STRCMP_EQUAL("memoryBuffer", call->getParameterType("buffer").asCharString());
+    CHECK(buffer == call->getParameter("buffer").getMemoryBufferValue());
+}
+
+TEST(MockExpectedFunctionCall, callWithMemoryBufferContainerParameter)
+{
+    uint8_t rawdata[] = {1,2,3,4,5,6,7,8,9};
+    MemoryBufferContainer buffer(rawdata, sizeof(rawdata));
+    call->withParameter("buffer", buffer);
+    STRCMP_EQUAL("memoryBuffer", call->getParameterType("buffer").asCharString());
+    CHECK(buffer == call->getParameter("buffer").getMemoryBufferValue());
+}
+
 TEST(MockExpectedFunctionCall, callWithObjectParameter)
 {
 	void* ptr = (void*) 0x123;

@@ -30,6 +30,7 @@
 
 #include "CppUTestExt/MockFunctionCall.h"
 #include "CppUTestExt/MockNamedValue.h"
+#include "CppUTestExt/MemoryBufferContainer.h"
 
 extern SimpleString StringFrom(const MockNamedValue& parameter);
 
@@ -47,6 +48,9 @@ public:
 	virtual MockFunctionCall& withStringParameter(const SimpleString& name, const char* value);
 	virtual MockFunctionCall& withPointerParameter(const SimpleString& name, void* value);
 	virtual MockFunctionCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value);
+    virtual MockFunctionCall& withFunctionPointerParameter(const SimpleString& name, void (*value)());
+    virtual MockFunctionCall& withMemoryBufferParameter(const SimpleString& name, void const *value, size_t size);
+    virtual MockFunctionCall& withMemoryBufferContainerParameter(const SimpleString& name, MemoryBufferContainer const &value);
 	virtual MockFunctionCall& ignoreOtherParameters();
 
 	virtual MockFunctionCall& andReturnValue(int value);

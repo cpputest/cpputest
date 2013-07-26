@@ -34,6 +34,7 @@
  */
 class MockNamedValueComparator;
 class MockNamedValueComparatorRepository;
+class MemoryBufferContainer;
 
 #include "CppUTestExt/MockNamedValue.h"
 
@@ -49,6 +50,9 @@ public:
 	MockFunctionCall& withParameter(const SimpleString& name, double value) { return withDoubleParameter(name, value); }
 	MockFunctionCall& withParameter(const SimpleString& name, const char* value) { return withStringParameter(name, value); }
 	MockFunctionCall& withParameter(const SimpleString& name, void* value) { return withPointerParameter(name, value); }
+    MockFunctionCall& withParameter(const SimpleString& name, void (*value)()) { return withFunctionPointerParameter(name, value); }
+    MockFunctionCall& withParameter(const SimpleString& name, void const *value, size_t size) { return withMemoryBufferParameter(name, value, size); }
+    MockFunctionCall& withParameter(const SimpleString& name, MemoryBufferContainer const &value)  { return withMemoryBufferContainerParameter(name, value); }
 	virtual MockFunctionCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value)=0;
 	virtual MockFunctionCall& ignoreOtherParameters() { return *this;}
 
@@ -56,6 +60,9 @@ public:
 	virtual MockFunctionCall& withDoubleParameter(const SimpleString& name, double value)=0;
 	virtual MockFunctionCall& withStringParameter(const SimpleString& name, const char* value)=0;
 	virtual MockFunctionCall& withPointerParameter(const SimpleString& name, void* value)=0;
+	virtual MockFunctionCall& withFunctionPointerParameter(const SimpleString& name, void (*value)())=0;
+	virtual MockFunctionCall& withMemoryBufferParameter(const SimpleString& name, void const *value, size_t size)=0;
+	virtual MockFunctionCall& withMemoryBufferContainerParameter(const SimpleString& name, MemoryBufferContainer const &value)=0;
 	virtual MockFunctionCall& andReturnValue(int value)=0;
 	virtual MockFunctionCall& andReturnValue(double value)=0;
 	virtual MockFunctionCall& andReturnValue(const char* value)=0;
@@ -90,6 +97,9 @@ public:
 	virtual MockFunctionCall& withStringParameter(const SimpleString&, const char*);
 	virtual MockFunctionCall& withPointerParameter(const SimpleString& , void*);
 	virtual MockFunctionCall& withParameterOfType(const SimpleString&, const SimpleString&, const void*);
+    virtual MockFunctionCall& withFunctionPointerParameter(const SimpleString& name, void (*)());
+    virtual MockFunctionCall& withMemoryBufferParameter(const SimpleString& name, void const *value, size_t size);
+    virtual MockFunctionCall& withMemoryBufferContainerParameter(const SimpleString& name, MemoryBufferContainer const &value);
 	virtual MockFunctionCall& ignoreOtherParameters();
 
 	virtual MockFunctionCall& andReturnValue(int);
@@ -117,6 +127,9 @@ public:
 	virtual MockFunctionCall& withStringParameter(const SimpleString&, const char*) { return *this; }
 	virtual MockFunctionCall& withPointerParameter(const SimpleString& , void*) { return *this; }
 	virtual MockFunctionCall& withParameterOfType(const SimpleString&, const SimpleString&, const void*) { return *this; }
+    virtual MockFunctionCall& withFunctionPointerParameter(const SimpleString&, void (*)() ) { return *this; }
+    virtual MockFunctionCall& withMemoryBufferParameter(const SimpleString&, void const *, size_t ) { return *this; }
+    virtual MockFunctionCall& withMemoryBufferContainerParameter(const SimpleString&, MemoryBufferContainer const &) { return *this; }
 
 	virtual MockFunctionCall& andReturnValue(int) { return *this; }
 	virtual MockFunctionCall& andReturnValue(double) { return *this;}
@@ -143,6 +156,9 @@ public:
 	virtual MockFunctionCall& withStringParameter(const SimpleString& name, const char* value);
 	virtual MockFunctionCall& withPointerParameter(const SimpleString& name, void* value);
 	virtual MockFunctionCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value);
+    virtual MockFunctionCall& withFunctionPointerParameter(const SimpleString& name, void (*value)());
+    virtual MockFunctionCall& withMemoryBufferParameter(const SimpleString& name, void const *value, size_t size);
+    virtual MockFunctionCall& withMemoryBufferContainerParameter(const SimpleString& name, MemoryBufferContainer const &value);
 	virtual MockFunctionCall& ignoreOtherParameters();
 
 	virtual MockFunctionCall& andReturnValue(int value);

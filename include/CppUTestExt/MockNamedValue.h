@@ -27,6 +27,9 @@
 
 #ifndef D_MockNamedValue_h
 #define D_MockNamedValue_h
+
+#include "CppUTestExt/MemoryBufferContainer.h"
+
 /*
  * MockParameterComparator is an interface that needs to be used when creating Comparators.
  * This is needed when comparing values of non-native type.
@@ -70,12 +73,18 @@ class MockNamedValue
 {
 public:
 	MockNamedValue(const SimpleString& name);
+    MockNamedValue(MockNamedValue const &other);
 	virtual ~MockNamedValue();
+
+	MockNamedValue &operator= (MockNamedValue const &other);
 
 	virtual void setValue(int value);
 	virtual void setValue(double value);
 	virtual void setValue(void* value);
+    virtual void setValue(void (*value)());
 	virtual void setValue(const char* value);
+    virtual void setValue(void const *value, size_t size);
+    virtual void setValue(MemoryBufferContainer const &value);
 	virtual void setObjectPointer(const SimpleString& type, const void* objectPtr);
 
 	virtual void setComparator(MockNamedValueComparator* comparator);
@@ -91,7 +100,9 @@ public:
 	virtual int getIntValue() const;
 	virtual double getDoubleValue() const;
 	virtual const char* getStringValue() const;
+    virtual MemoryBufferContainer const &getMemoryBufferValue() const;
 	virtual void* getPointerValue() const;
+    virtual void (*getFunctionPointerValue() const)();
 	virtual const void* getObjectPointer() const;
 private:
 	SimpleString name_;
@@ -101,8 +112,10 @@ private:
 		double doubleValue_;
 		const char* stringValue_;
 		void* pointerValue_;
+		void (*functionPointerValue_)();
 		const void* objectPointerValue_;
 	} value_;
+	MemoryBufferContainer *memoryBufferValue_;
 	MockNamedValueComparator* comparator_;
 };
 

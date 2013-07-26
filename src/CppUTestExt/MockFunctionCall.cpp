@@ -140,6 +140,27 @@ MockFunctionCall& MockFunctionCallComposite::withParameterOfType(const SimpleStr
 
 }
 
+MockFunctionCall& MockFunctionCallComposite::withFunctionPointerParameter(const SimpleString& name, void (*value)())
+{
+    for (MockFunctionCallCompositeNode* node = head_; node != NULL; node = node->next_)
+        node->call_.withParameter(name, value);
+    return *this;
+}
+
+MockFunctionCall& MockFunctionCallComposite::withMemoryBufferParameter(const SimpleString& name, void const *value, size_t size)
+{
+    for (MockFunctionCallCompositeNode* node = head_; node != NULL; node = node->next_)
+        node->call_.withParameter(name, value, size);
+    return *this;
+}
+
+MockFunctionCall& MockFunctionCallComposite::withMemoryBufferContainerParameter(const SimpleString& name, MemoryBufferContainer const &value)
+{
+    for (MockFunctionCallCompositeNode* node = head_; node != NULL; node = node->next_)
+        node->call_.withParameter(name, value);
+    return *this;
+}
+
 MockFunctionCall& MockFunctionCallComposite::ignoreOtherParameters()
 {
 	for (MockFunctionCallCompositeNode* node = head_; node != NULL; node = node->next_)
@@ -265,6 +286,30 @@ MockFunctionCall& MockFunctionCallTrace::withParameterOfType(const SimpleString&
 	traceBuffer_ += ":";
 	traceBuffer_ += StringFrom(value);
 	return *this;
+}
+
+MockFunctionCall& MockFunctionCallTrace::withFunctionPointerParameter(const SimpleString& name, void (*value)())
+{
+    traceBuffer_ += " ";
+    traceBuffer_ += name;
+    traceBuffer_ += ":";
+    traceBuffer_ += StringFrom(value);
+    return *this;
+}
+
+MockFunctionCall& MockFunctionCallTrace::withMemoryBufferParameter(const SimpleString& name, void const *value, size_t size)
+{
+    MemoryBufferContainer _value(value, size);
+    return withParameter(name, &_value);
+}
+
+MockFunctionCall& MockFunctionCallTrace::withMemoryBufferContainerParameter(const SimpleString& name, MemoryBufferContainer const &value)
+{
+    traceBuffer_ += " ";
+    traceBuffer_ += name;
+    traceBuffer_ += ":";
+    traceBuffer_ += StringFrom(value);
+    return *this;
 }
 
 MockFunctionCall& MockFunctionCallTrace::ignoreOtherParameters()

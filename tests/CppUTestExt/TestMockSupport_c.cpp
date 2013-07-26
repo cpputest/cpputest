@@ -43,10 +43,16 @@ TEST(MockSupport_c, expectAndActualOneCall)
 
 TEST(MockSupport_c, expectAndActualParameters)
 {
-	mock_c()->expectOneCall("boo")->withIntParameters("integer", 1)->withDoubleParameters("doube", 1.0)->
-			withStringParameters("string", "string")->withPointerParameters("pointer", (void*) 1);
-	mock_c()->actualCall("boo")->withIntParameters("integer", 1)->withDoubleParameters("doube", 1.0)->
-			withStringParameters("string", "string")->withPointerParameters("pointer", (void*) 1);
+    uint8_t testData[] = {0,1,2,3,4,5,6,7,8,9};
+	mock_c()->expectOneCall("boo")->withIntParameters("integer", 1)->withDoubleParameters("double", 1.0)->
+			withStringParameters("string", "string")->withPointerParameters("pointer", (void*) 1)->
+			withFunctionPointerParameters("functionPointer", (void(*)()) 1)->
+			withMemoryBufferParameters("memoryBuffer", testData, sizeof(testData));
+
+	mock_c()->actualCall("boo")->withIntParameters("integer", 1)->withDoubleParameters("double", 1.0)->
+			withStringParameters("string", "string")->withPointerParameters("pointer", (void*) 1)->
+            withFunctionPointerParameters("functionPointer", (void(*)()) 1)->
+			withMemoryBufferParameters("memoryBuffer", testData, sizeof(testData));
 }
 
 static int typeNameIsEqual(const void* object1, const void* object2)

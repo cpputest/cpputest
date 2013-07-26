@@ -93,6 +93,30 @@ MockFunctionCall& MockExpectedFunctionCall::withParameterOfType(const SimpleStri
 	return *this;
 }
 
+MockFunctionCall& MockExpectedFunctionCall::withFunctionPointerParameter(const SimpleString& name, void (*value)())
+{
+    MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
+    parameters_->add(newParameter);
+    newParameter->setValue(value);
+    return *this;
+}
+
+MockFunctionCall& MockExpectedFunctionCall::withMemoryBufferParameter(const SimpleString& name, void const *value, size_t size)
+{
+    MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
+    parameters_->add(newParameter);
+    newParameter->setValue(value, size);
+    return *this;
+}
+
+MockFunctionCall& MockExpectedFunctionCall::withMemoryBufferContainerParameter(const SimpleString& name, MemoryBufferContainer const &value)
+{
+    MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
+    parameters_->add(newParameter);
+    newParameter->setValue(value);
+    return *this;
+}
+
 SimpleString MockExpectedFunctionCall::getParameterType(const SimpleString& name)
 {
 	MockNamedValue * p = parameters_->getValueByName(name);

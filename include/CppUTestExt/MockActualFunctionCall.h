@@ -30,6 +30,7 @@
 
 #include "CppUTestExt/MockFunctionCall.h"
 #include "CppUTestExt/MockExpectedFunctionsList.h"
+#include "CppUTestExt/MemoryBufferContainer.h"
 
 class MockFailureReporter;
 class MockFailure;
@@ -48,6 +49,9 @@ public:
 	virtual MockFunctionCall& withStringParameter(const SimpleString& name, const char* value);
 	virtual MockFunctionCall& withPointerParameter(const SimpleString& name, void* value);
 	virtual MockFunctionCall& withParameterOfType(const SimpleString& type, const SimpleString& name, const void* value);
+    virtual MockFunctionCall& withFunctionPointerParameter(const SimpleString& name, void (*value)());
+    virtual MockFunctionCall& withMemoryBufferParameter(const SimpleString& name, void const *value, size_t size);
+    virtual MockFunctionCall& withMemoryBufferContainerParameter(const SimpleString& name, MemoryBufferContainer const &value);
 
 	virtual MockFunctionCall& andReturnValue(int value);
 	virtual MockFunctionCall& andReturnValue(double value);

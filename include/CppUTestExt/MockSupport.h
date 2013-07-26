@@ -61,6 +61,8 @@ public:
 	void setData(const SimpleString& name, const char* value);
 	void setData(const SimpleString& name, double value);
 	void setData(const SimpleString& name, void* value);
+	void setData(const SimpleString& name, void const *value, size_t size);
+	void setData(const SimpleString& name, MemoryBufferContainer const &value);
 	void setDataObject(const SimpleString& name, const SimpleString& type, void* value);
 	MockNamedValue getData(const SimpleString& name);
 

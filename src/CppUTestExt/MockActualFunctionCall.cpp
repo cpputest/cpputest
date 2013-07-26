@@ -156,6 +156,30 @@ MockFunctionCall& MockActualFunctionCall::withParameterOfType(const SimpleString
 	return *this;
 }
 
+MockFunctionCall& MockActualFunctionCall::withFunctionPointerParameter(const SimpleString& name, void (*value)())
+{
+    MockNamedValue actualParameter(name);
+    actualParameter.setValue(value);
+    checkActualParameter(actualParameter);
+    return *this;
+}
+
+MockFunctionCall& MockActualFunctionCall::withMemoryBufferParameter(const SimpleString& name, void const *value, size_t size)
+{
+    MockNamedValue actualParameter(name);
+    actualParameter.setValue(value, size);
+    checkActualParameter(actualParameter);
+    return *this;
+}
+
+MockFunctionCall& MockActualFunctionCall::withMemoryBufferContainerParameter(const SimpleString& name, MemoryBufferContainer const &value)
+{
+    MockNamedValue actualParameter(name);
+    actualParameter.setValue(value);
+    checkActualParameter(actualParameter);
+    return *this;
+}
+
 bool MockActualFunctionCall::isFulfilled() const
 {
 	return state_ == CALL_SUCCEED;

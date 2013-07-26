@@ -327,6 +327,18 @@ void MockSupport::setData(const SimpleString& name, void* value)
 	newData->setValue(value);
 }
 
+void MockSupport::setData(const SimpleString& name, void const *value, size_t size)
+{
+    MockNamedValue* newData = retrieveDataFromStore(name);
+    newData->setValue(value,size);
+}
+
+void MockSupport::setData(const SimpleString& name, MemoryBufferContainer const &value)
+{
+    MockNamedValue* newData = retrieveDataFromStore(name);
+    newData->setValue(value);
+}
+
 void MockSupport::setDataObject(const SimpleString& name, const SimpleString& type, void* value)
 {
 	MockNamedValue* newData = retrieveDataFromStore(name);
