@@ -55,6 +55,7 @@ public:
 	virtual void printCurrentGroupEnded(const TestResult& res);
 
 	virtual void verbose();
+	virtual void color();
 	virtual void printBuffer(const char*)=0;
 	virtual void print(const char*);
 	virtual void print(long);
@@ -88,6 +89,7 @@ protected:
 
 	int dotCount_;
 	bool verbose_;
+	bool color_;
 	const char* progressIndication_;
 
 	static WorkingEnvironment workingEnvironment_;

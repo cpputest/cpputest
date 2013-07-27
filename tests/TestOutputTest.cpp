@@ -142,6 +142,22 @@ TEST(TestOutput, PrintTestVerboseEnded)
 	STRCMP_EQUAL("TEST(group, test) - 5 ms\n", mock->getOutput().asCharString());
 }
 
+TEST(TestOutput, printColorWithSuccess)
+{
+	mock->color();
+	printer->printTestsEnded(*result);
+	STRCMP_EQUAL("\n\033[32;1mOK (0 tests, 0 ran, 0 checks, 0 ignored, 0 filtered out, 10 ms)\033[m\n\n", mock->getOutput().asCharString());
+}
+
+TEST(TestOutput, printColorWithFailures)
+{
+	mock->color();
+	result->addFailure(*f);
+	printer->flush();
+	printer->printTestsEnded(*result);
+	STRCMP_EQUAL("\n\033[31;1mErrors (1 failures, 0 tests, 0 ran, 0 checks, 0 ignored, 0 filtered out, 10 ms)\033[m\n\n", mock->getOutput().asCharString());
+}
+
 TEST(TestOutput, PrintTestRun)
 {
 	printer->printTestRun(2, 3);
