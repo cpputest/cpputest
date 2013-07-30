@@ -270,14 +270,6 @@ TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorThrowsAnExceptionWhe
 	CHECK_THROWS(std::bad_alloc, new char[10]);
 }
 
-class ClassThatThrowsAnExceptionInTheConstructor
-{
-public:
-	ClassThatThrowsAnExceptionInTheConstructor() __no_return__ {
-		throw 1;
-	}
-};
-
 TEST_GROUP(TestForExceptionsInConstructor)
 {
 };
