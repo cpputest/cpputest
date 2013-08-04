@@ -964,7 +964,9 @@ public:
 };
 
 class SomeClass
-{};
+{
+	int someDummy_;
+};
 
 static void functionWithConstParam(const SomeClass param)
 {
