@@ -136,8 +136,10 @@
 
 #ifdef __GXX_EXPERIMENTAL_CXX0X__
 #ifdef __APPLE__
+#ifdef _GLIBCXX_THROW
 #undef UT_THROW
 #define UT_THROW(exception) _GLIBCXX_THROW(exception)
+#endif
 #endif
 #endif
 
