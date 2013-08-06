@@ -1,0 +1,247 @@
+/********************************************************************/
+/* f28335.gel                                                       */
+/* Version 4.00.2                                                   */
+/*                                                                  */
+/* This GEL file is to be used with the TMS320F28335 DSP.           */
+/* Changes may be required to support specific hardware designs.    */
+/*                                                                  */
+/* Code Composer Studio supports six reserved GEL functions that    */
+/* automatically get executed if they are defined. They are:        */
+/*                                                                  */
+/* StartUp()              - Executed whenever CCS is invoked        */
+/* OnReset()              - Executed after Debug->Reset CPU         */
+/* OnRestart()            - Executed after Debug->Restart           */
+/* OnPreFileLoaded()      - Executed before File->Load Program      */
+/* OnFileLoaded()         - Executed after File->Load Program       */
+/* OnTargetConnect()      - Executed after Debug->Connect           */
+/*                                                                  */
+/********************************************************************/
+
+StartUp()
+{
+    /* The next line automatically loads the .gel file that comes   */
+    /* with the DSP2833x Peripheral Header Files download. To use,  */
+    /* uncomment, and copy the peripheral header .gel file to       */
+    /* same directory as device .gel file.                          */
+     //  GEL_LoadGel("$(GEL_file_dir)\\DSP2833x_Peripheral.gel");
+}
+
+OnReset(int nErrorCode)
+{
+    C28x_Mode();
+    XINTF_Enable(); 
+}
+
+OnRestart(int nErrorCode)
+{
+/* CCS will call OnRestart() when you do a Debug->Restart and   */
+/* after you load a new file.  Between running interrupt based  */
+/* programs, this function will clear interrupts and help keep  */
+/* the processor from going off into invalid memory.            */
+    C28x_Mode();
+    IER = 0;
+    IFR = 0;
+}
+
+OnPreFileLoaded()
+{
+    C28x_Mode();
+    XINTF_Enable(); 
+    GEL_Reset();
+}
+
+OnFileLoaded(int nErrorCode, int bSymbolsOnly)
+{
+}
+
+OnTargetConnect()
+{
+    C28335_Memory_Map();       /* Initialize the CCS memory map */
+
+    /* Check to see if CCS has been started-up with the DSP already */
+    /* running in real-time mode.  The user can add whatever        */
+    /* custom initialization stuff they want to each case.          */
+
+    if (GEL_IsInRealtimeMode()) /* Do real-time mode target initialization */
+    {
+        // Note: This case never executes with the simulator
+    }
+    else                      /* Do stop-mode target initialization */
+    {
+        // Note: This case always executes with the simulator
+    }
+}
+
+
+/********************************************************************/
+/*                         F28335 Memory Map                        */
+/*                                                                  */
+/*   Note: M0M1MAP and VMAP signals tied high on F28335 core        */
+/*                                                                  */
+/*   0x000000 - 0x0003ff   M0 SARAM                (Prog and Data)  */
+/*   0x000400 - 0x0007ff   M1 SARAM                (Prog and Data)  */
+/*   0x000800 - 0x001fff   Peripheral Frame0 (PF0) (Data only)      */
+/*   0x004000 - 0x004fff   XINTF Zone 0            (Prog and Data)  */
+/*   0x005000 - 0x005fff   Peripheral Frame3 (PF3) (Data only)      */
+/*   0x006000 - 0x006fff   Peripheral Frame1 (PF1) (Data only)      */
+/*   0x007000 - 0x007fff   Peripheral Frame2 (PF2) (Data only)      */
+/*   0x008000 - 0x008fff   L0 SARAM                (Prog and Data)  */
+/*   0x009000 - 0x009fff   L1 SARAM                (Prog and Data)  */
+/*   0x00A000 - 0x00Afff   L2 SARAM                (Prog and Data)  */
+/*   0x00B000 - 0x00Bfff   L3 SARAM                (Prog and Data)  */
+/*   0x00C000 - 0x00Cfff   L4 SARAM                (Prog and Data)  */
+/*   0x00D000 - 0x00Dfff   L5 SARAM                (Prog and Data)  */
+/*   0x00E000 - 0x00Efff   L6 SARAM                (Prog and Data)  */
+/*   0x00F000 - 0x00Ffff   L7 SARAM                (Prog and Data)  */
+/*   0x100000 - 0x1fffff   XINTF Zone 6            (Prog and Data)  */
+/*   0x200000 - 0x2fffff   XINTF Zone 7            (Prog and Data   */
+/*   0x300000 - 0x33ffff   Flash                   (Prog and Data)  */
+/*   0x380080 - 0x380088   ADC_cal function        (Prog and Data)  */
+/*   0x380090 - 0x380090   PARTID value            (Prog and Data)  */
+/*   0x380400 - 0x3807ff   OTP                     (Prog and Data)  */
+/*   0x3f8000 - 0x3f8fff   L0 SARAM                (Prog and Data)  */
+/*   0x3f9000 - 0x3f9fff   L1 SARAM                (Prog and Data)  */
+/*   0x3fA000 - 0x3fAfff   L2 SARAM                (Prog and Data)  */
+/*   0x3fB000 - 0x3fBfff   L3 SARAM                (Prog and Data)  */
+/*   0x3fe000 - 0x3fffff   BOOT ROM                (Prog and Data)  */
+/********************************************************************/
+menuitem "Initialize Memory Map";
+
+hotmenu Memory_Map_Off()
+{
+    GEL_MapReset();
+    GEL_MapOff();
+}
+
+hotmenu C28335_Memory_Map()
+{
+    GEL_MapReset();
+    GEL_MapOn();
+
+    /* Program memory map */
+    GEL_MapAdd(0x000,0,0x400,1,1);               /* M0 SARAM        */
+    GEL_MapAdd(0x400,0,0x400,1,1);               /* M1 SARAM        */
+    GEL_MapAdd(0x4000,0,0x1000,1,1);             /* Zone 0          */
+    GEL_MapAdd(0x8000,0,0x1000,1,1);             /* L0 SARAM        */
+    GEL_MapAdd(0x9000,0,0x1000,1,1);             /* L1 SARAM        */
+    GEL_MapAdd(0xA000,0,0x1000,1,1);             /* L2 SARAM        */
+    GEL_MapAdd(0xB000,0,0x1000,1,1);             /* L3 SARAM        */
+    GEL_MapAdd(0xC000,0,0x1000,1,1);             /* L4 SARAM        */
+    GEL_MapAdd(0xD000,0,0x1000,1,1);             /* L5 SARAM        */
+    GEL_MapAdd(0xE000,0,0x1000,1,1);             /* L6 SARAM        */
+    GEL_MapAdd(0xF000,0,0x1000,1,1);             /* L7 SARAM        */
+    GEL_MapAdd(0x100000,0,0x100000,1,1);         /* Zone 6          */
+    GEL_MapAdd(0x200000,0,0x100000,1,1);         /* Zone 7          */
+    GEL_MapAdd(0x300000,0,0x40000,1,1);          /* FLASH           */
+    GEL_MapAdd(0x380080,0,0x00009,1,0);          /* ADC_cal function*/
+    GEL_MapAdd(0x380090,0,0x00001,1,0);          /* PARTID value    */
+    GEL_MapAdd(0x380400,0,0x00400,1,0);          /* OTP             */
+    GEL_MapAdd(0x3f8000,0,0x1000,1,1);           /* L0 SARAM Mirror */
+    GEL_MapAdd(0x3f9000,0,0x1000,1,1);           /* L1 SARAM Mirror */
+    GEL_MapAdd(0x3fA000,0,0x1000,1,1);           /* L2 SARAM Mirror */
+    GEL_MapAdd(0x3fb000,0,0x1000,1,1);           /* L3 SARAM Mirror */
+    GEL_MapAdd(0x3fe000,0,0x2000,1,0);           /* BOOT ROM        */
+
+    /* Data memory map */
+    GEL_MapAdd(0x000,1,0x400,1,1);               /* M0 SARAM        */
+    GEL_MapAdd(0x400,1,0x400,1,1);               /* M1 SARAM        */
+    GEL_MapAdd(0x800,1,0x1800,1,1);              /* PF0             */
+    GEL_MapAdd(0x4000,1,0x1000,1,1);             /* Zone 0          */
+    GEL_MapAdd(0x5000,1,0x1000,1,1);             /* PF3             */
+    GEL_MapAdd(0x6000,1,0x1000,1,1);             /* PF1             */
+    GEL_MapAddStr(0x7000,1,0x1000,"R|W|AS2",0);  /* PF2             */
+    GEL_MapAdd(0x8000,1,0x1000,1,1);             /* L0 SARAM        */
+    GEL_MapAdd(0x9000,1,0x1000,1,1);             /* L1 SARAM        */
+    GEL_MapAdd(0xA000,1,0x1000,1,1);             /* L2 SARAM        */
+    GEL_MapAdd(0xB000,1,0x1000,1,1);             /* L3 SARAM        */
+    GEL_MapAdd(0xC000,1,0x1000,1,1);             /* L4 SARAM        */
+    GEL_MapAdd(0xD000,1,0x1000,1,1);             /* L5 SARAM        */
+    GEL_MapAdd(0xE000,1,0x1000,1,1);             /* L6 SARAM        */
+    GEL_MapAdd(0xF000,1,0x1000,1,1);             /* L7 SARAM        */
+    GEL_MapAdd(0x100000,1,0x100000,1,1);         /* Zone 6          */
+    GEL_MapAdd(0x200000,1,0x100000,1,1);         /* Zone 7          */
+    GEL_MapAdd(0x300000,1,0x40000,1,0);          /* FLASH           */
+    GEL_MapAdd(0x380400,1,0x00400,1,0);          /* OTP             */
+    GEL_MapAdd(0x380080,1,0x00009,1,0);          /* ADC_cal function*/
+    GEL_MapAdd(0x380090,1,0x00001,1,0);          /* PARTID value    */
+    GEL_MapAdd(0x3f8000,1,0x1000,1,1);           /* L0 SARAM Mirror */
+    GEL_MapAdd(0x3f9000,1,0x1000,1,1);           /* L1 SARAM Mirror */
+    GEL_MapAdd(0x3fA000,1,0x1000,1,1);           /* L2 SARAM Mirror */
+    GEL_MapAdd(0x3fb000,1,0x1000,1,1);           /* L3 SARAM Mirror */
+    GEL_MapAdd(0x3fe000,1,0x2000,1,0);           /* BOOT ROM        */
+}
+
+/********************************************************************/
+menuitem "Addressing Modes";
+
+hotmenu C28x_Mode()
+{
+    ST1 = ST1 & (~0x0100);      /*   AMODE = 0  */
+    ST1 = ST1 | 0x0200;         /* OBJMODE = 1  */
+}
+
+hotmenu C24x_Mode()
+{
+    ST1 = ST1 | 0x0100;         /*   AMODE = 1  */
+    ST1 = ST1 | 0x0200;         /* OBJMODE = 1  */
+}
+
+hotmenu C27x_Mode()
+{
+    ST1 = ST1 & (~0x0100);      /*   AMODE = 0  */
+    ST1 = ST1 & (~0x0200);      /* OBJMODE = 0  */
+}
+
+/********************************************************************/
+/* Enable the XINTF and configure GPIOs for XINTF function          */
+/********************************************************************/
+int TxtOutCtl=0;
+menuitem "XINTF Enable"
+hotmenu XINTF_Enable()
+{
+
+    if (TxtOutCtl==0)
+    {
+      GEL_TextOut("\nNOTES:\nTo configure the XINTF automatically on reset:\n  uncomment the XINTF_Enable call in the OnReset function of the GEL file.");
+      GEL_TextOut("\nNOTES:\nGel will enable XINTFx16 during Debug only.\nEnable XINTF in code prior to use.");
+      TxtOutCtl=1;
+    }
+
+   /* enable XINTF clock (XTIMCLK) */
+
+   *0x7020 = 0x3700;
+   /* GPBMUX1: XA0-XA7, XA16, XZCS0,        */
+   /*          XZCS7, XREADY, XRNW, XWE0    */
+   /* GPAMUX2: XA17-XA19, XZCS6             */
+   /* GPCMUX2: XA8-XA15                     */
+   /* GPCMUX1: XD0-XD15                     */
+   *(unsigned long *)0x6F96 = 0xFFFFFFC0;   /* GPBMUX1 */
+   *(unsigned long *)0x6f88 = 0xFF000000;   /* GPAMUX2 */
+   *(unsigned long *)0x6FA8 = 0x0000AAAA;   /* GPCMUX2 */
+   *(unsigned long *)0x6FA6 = 0xAAAAAAAA;   /* GPCMUX1 */
+
+   /* Uncomment for x32 data bus            */
+   /* GPBMUX2: XD16-XD31                    */
+// *(unsigned long *)0x6F98 = 0xFFFFFFFF;   /* GPBMUX2 */
+
+   /* Zone timing.
+   /* Each zone can be configured seperately */
+   /* Uncomment the x16 or the x32 timing    */
+   /* depending on the data bus width for    */
+   /* the zone                               */
+
+   /* x16 Timing */
+   *(unsigned long *)0x0B20 = 0x0043FFFF;    /* Zone0 */
+   *(unsigned long *)0x0B2C = 0x0043FFFF;    /* Zone6 */
+   *(unsigned long *)0x0B2E = 0x0043FFFF;    /* Zone7 */
+
+   /* x32 Timing:
+// *(unsigned long *)0x0B20 = 0x0041FFFF;    /* x32 */
+// *(unsigned long *)0x0B2C = 0x0041FFFF;    /* x32 */
+// *(unsigned long *)0x0B2E = 0x0041FFFF;    /* x32 */
+
+
+}
+
+/********************************************************************/
+/*** End of file ***/
