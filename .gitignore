@@ -1,3 +1,4 @@
+*.CS_/
 .DS_Store
 *.swp
 *.*~
@@ -28,12 +29,14 @@ testResults
 Debug
 */Debug/*
 *.exe
+*.lkf
 *.obj
 *.ncb
 *.opt
 *.plg
 *.idb
 *.pdb
+*.sbl
 *.sou
 *.sdf
 *.lib
