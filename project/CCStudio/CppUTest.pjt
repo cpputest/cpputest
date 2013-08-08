@@ -8,7 +8,7 @@ Tool="Archiver"
 Tool="Compiler"
 Tool="CustomBuilder"
 Tool="DspBiosBuilder"
-Config="Debug"
+Config="Debug" 
 
 [Source Files]
 Source="..\..\src\CppUTest\CommandLineArguments.cpp"
