@@ -31,21 +31,8 @@
 #include "CppUTestExt/MockSupportPlugin.h"
 #include "CppUTestExt/GTestConvertor.h"
 
-int main(int ac, char** av)
+int main(int ac, const char** av)
 {
-	char arg2[] = "-v";
-    char arg3[] = "-gMemoryReporterPlugin";
-    char arg4[] = "-nATestCaseName(Part)";
-//	char arg4[] = "-ojunit";
-	char* args[4];
-                        // arg 1 == name of executable
-	args[1] = &arg2[0]; // arg 2
-	args[2] = &arg3[0]; // arg 3
-	args[3] = &arg4[0]; // arg 4
-	av = args;
-	ac = 2;
-
-
 #ifdef CPPUTEST_USE_REAL_GTEST
 	GTestConvertor convertor;
 	convertor.addAllGTestToTestRegistry();

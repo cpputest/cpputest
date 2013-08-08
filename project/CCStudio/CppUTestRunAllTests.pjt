@@ -1,7 +1,7 @@
 ; Code Composer Project File, Version 2.0 (do not modify or remove this line)
 
 [Project Settings]
-ProjectDir="Y:\Module_and_Unit_Test\40_SW\30_Module_Test\20_CppUTest\30_CppUTest\project\CCStudio\"
+ProjectDir="C:\data\00_Dev\05_CppUTest\cpputest\project\CCStudio\"
 ProjectType=Executable
 CPUFamily=TMS320C28XX
 Tool="Compiler"
@@ -31,7 +31,6 @@ Source="..\..\tests\AllocationInCFile.c"
 Source="..\..\tests\AllocationInCppFile.cpp"
 Source="..\..\tests\AllocLetTestFree.c"
 Source="..\..\tests\AllocLetTestFreeTest.cpp"
-Source="..\..\tests\AllTests.cpp"
 Source="..\..\tests\CheatSheetTest.cpp"
 Source="..\..\tests\CommandLineArgumentsTest.cpp"
 Source="..\..\tests\CommandLineTestRunnerTest.cpp"
@@ -39,6 +38,7 @@ Source="..\..\tests\JUnitOutputTest.cpp"
 Source="..\..\tests\MemoryLeakDetectorTest.cpp"
 Source="..\..\tests\MemoryLeakWarningTest.cpp"
 Source="..\..\tests\NullTestTest.cpp"
+Source="..\..\tests\Platforms\embedded\AllTests.cpp"
 Source="..\..\tests\PluginTest.cpp"
 Source="..\..\tests\PreprocessorTest.cpp"
 Source="..\..\tests\SetPluginTest.cpp"
