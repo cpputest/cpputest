@@ -406,6 +406,14 @@ void UtestShell::assertDoublesEqual(double expected, double actual, double thres
 		failWith(DoublesEqualFailure(this, fileName, lineNumber, expected, actual, threshold));
 }
 
+void UtestShell::assertEquals(bool failed, const char* expected, const char* actual, const char* file, int line)
+{
+	getTestResult()->countCheck();
+	if (failed)
+		failWith(CheckEqualFailure(this, file, line, expected, actual));
+}
+
+
 void UtestShell::print(const char *text, const char* fileName, int lineNumber)
 {
 	SimpleString stringToPrint = "\n";
