@@ -61,8 +61,7 @@ public:
 class UtestShell
 {
 public:
-	UtestShell(const char* groupName, const char* testName, const char* fileName,
-			int lineNumber);
+	UtestShell(const char* groupName, const char* testName, const char* fileName, int lineNumber);
 	virtual ~UtestShell();
 
 	virtual void runOneTestWithPlugins(TestPlugin* plugin, TestResult& result);
