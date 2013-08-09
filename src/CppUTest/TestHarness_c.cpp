@@ -37,12 +37,12 @@ extern "C"
 
 void CHECK_EQUAL_C_INT_LOCATION(int expected, int actual, const char* fileName, int lineNumber)
 {
-	LONGS_EQUAL_LOCATION((long)expected, (long)actual, fileName, lineNumber);
+	UtestShell::getCurrent()->assertLongsEqual((long)expected, (long)actual,  fileName, lineNumber);
 }
 
 void CHECK_EQUAL_C_REAL_LOCATION(double expected, double actual, double threshold, const char* fileName, int lineNumber)
 {
-	DOUBLES_EQUAL_LOCATION(expected, actual, threshold, fileName, lineNumber);
+	UtestShell::getCurrent()->assertDoublesEqual(expected, actual, threshold,  fileName, lineNumber);
 }
 
 void CHECK_EQUAL_C_CHAR_LOCATION(char expected, char actual, const char* fileName, int lineNumber)
@@ -57,17 +57,17 @@ void CHECK_EQUAL_C_STRING_LOCATION(const char* expected, const char* actual, con
 
 void FAIL_TEXT_C_LOCATION(const char* text, const char* fileName, int lineNumber)
 {
-	FAIL_LOCATION(text, fileName, lineNumber);
+	UtestShell::getCurrent()->fail(text,  fileName, lineNumber);
 }
 
 void FAIL_C_LOCATION(const char* fileName, int lineNumber)
 {
-	FAIL_LOCATION("", fileName, lineNumber);
+	UtestShell::getCurrent()->fail("",  fileName, lineNumber);
 }
 
 void CHECK_C_LOCATION(int condition, const char* conditionString, const char* fileName, int lineNumber)
 {
-	CHECK_LOCATION_TRUE(((condition) == 0 ? false : true), "CHECK_C", conditionString, fileName, lineNumber);
+	UtestShell::getCurrent()->assertTrue(condition, "CHECK_C", conditionString, fileName, lineNumber);
 }
 
 enum { NO_COUNTDOWN = -1, OUT_OF_MEMORRY = 0 };
