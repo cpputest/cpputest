@@ -56,7 +56,7 @@ TEST(TestHarness_c, checkInt)
 	CHECK_EQUAL_C_INT(2, 2);
 	fixture->setTestFunction(_failIntMethod);
 	fixture->runAllTests();
-	fixture->assertPrintContains("expected <1>\n	but was  <2>");
+	fixture->assertPrintContains("expected <1 0x1>\n	but was  <2 0x2>");
 	fixture->assertPrintContains("arness_c");
 }
 

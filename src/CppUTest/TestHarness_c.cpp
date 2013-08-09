@@ -37,7 +37,7 @@ extern "C"
 
 void CHECK_EQUAL_C_INT_LOCATION(int expected, int actual, const char* fileName, int lineNumber)
 {
-	CHECK_EQUAL_LOCATION((long)expected, (long)actual, fileName, lineNumber);
+	LONGS_EQUAL_LOCATION((long)expected, (long)actual, fileName, lineNumber);
 }
 
 void CHECK_EQUAL_C_REAL_LOCATION(double expected, double actual, double threshold, const char* fileName, int lineNumber)
