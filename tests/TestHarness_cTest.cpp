@@ -241,5 +241,13 @@ TEST(TestHarness_c, callocInitializedToZero)
 		CHECK(mem[i] == 0);
 	free(mem);
 }
+
+TEST(TestHarness_c, callocShouldReturnNULLWhenOutOfMeory)
+{
+	cpputest_malloc_set_out_of_memory_countdown(0);
+	void * m = calloc(1, 1);
+	CHECK(m == 0);
+	cpputest_malloc_set_not_out_of_memory();
+}
 #endif
 
