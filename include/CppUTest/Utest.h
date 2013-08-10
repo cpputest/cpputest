@@ -37,6 +37,7 @@ class TestResult;
 class TestPlugin;
 class TestFailure;
 class TestFilter;
+class TestTerminator;
 
 extern bool doubles_equal(double d1, double d2, double threshold);
 
@@ -61,11 +62,11 @@ public:
 class UtestShell
 {
 public:
+    static UtestShell *getCurrent();
+
+public:
 	UtestShell(const char* groupName, const char* testName, const char* fileName, int lineNumber);
 	virtual ~UtestShell();
-
-	virtual void runOneTestWithPlugins(TestPlugin* plugin, TestResult& result);
-	virtual SimpleString getFormattedName() const;
 
 	virtual UtestShell* addTest(UtestShell* test);
 	virtual UtestShell *getNext() const;
@@ -75,12 +76,11 @@ public:
 	bool shouldRun(const TestFilter& groupFilter, const TestFilter& nameFilter) const;
 	const SimpleString getName() const;
 	const SimpleString getGroup() const;
+	virtual SimpleString getFormattedName() const;
 	const SimpleString getFile() const;
 	int getLineNumber() const;
     virtual const char *getProgressIndicator() const;
-
-	static TestResult *getTestResult();
-    static UtestShell *getCurrent();
+    virtual bool hasFailed() const;
 
     virtual void assertTrue(bool condition, const char *checkString, const char *conditionString, const char *fileName, int lineNumber);
     virtual void assertTrueText(bool condition, const char *checkString, const char *conditionString, const char* text, const char *fileName, int lineNumber);
@@ -115,12 +115,18 @@ public:
     virtual Utest* createTest();
     virtual void destroyTest(Utest* test);
 
-    virtual void runOneTest(TestPlugin *plugin, TestResult & result);
+	virtual void runOneTest(TestPlugin* plugin, TestResult& result);
+    virtual void runOneTestInCurrentProcess(TestPlugin *plugin, TestResult & result);
+
+    virtual void failWith(const TestFailure& failure);
+    virtual void failWith(const TestFailure& failure, const TestTerminator& terminator);
+
 protected:
     UtestShell();
     UtestShell(const char *groupName, const char *testName, const char *fileName, int lineNumber, UtestShell *nextTest);
 
     virtual SimpleString getMacroName() const;
+	TestResult *getTestResult();
 private:
     const char *group_;
     const char *name_;
@@ -128,6 +134,7 @@ private:
     int lineNumber_;
     UtestShell *next_;
     bool isRunAsSeperateProcess_;
+    bool hasFailed_;
 
     void setTestResult(TestResult* result);
 	void setCurrentTest(UtestShell* test);
@@ -135,7 +142,6 @@ private:
 	static UtestShell* currentTest_;
 	static TestResult* testResult_;
 
-    void failWith(const TestFailure& failure);
 };
 
 //////////////////// NullTest
@@ -161,6 +167,28 @@ private:
 
 };
 
+//////////////////// TestTerminator
+
+class TestTerminator
+{
+public:
+	virtual void exitCurrentTest() const=0;
+	virtual ~TestTerminator();
+};
+
+class NormalTestTerminator : public TestTerminator
+{
+public:
+	virtual void exitCurrentTest() const;
+	virtual ~NormalTestTerminator();
+};
+
+class TestTerminatorWithoutExceptions  : public TestTerminator
+{
+public:
+	virtual void exitCurrentTest() const;
+	virtual ~TestTerminatorWithoutExceptions();
+};
 
 //////////////////// ExecFunctionTest
 

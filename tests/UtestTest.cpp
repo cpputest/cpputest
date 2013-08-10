@@ -113,6 +113,7 @@ TEST(UtestShell, TestStopsAfterTestFailure)
 	stopAfterFailure = 0;
 	fixture.setTestFunction(_stopAfterFailureMethod);
 	fixture.runAllTests();
+	CHECK(fixture.hasTestFailed());
 	LONGS_EQUAL(1, fixture.getFailureCount());
 	LONGS_EQUAL(0, stopAfterFailure);
 }

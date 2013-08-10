@@ -99,7 +99,7 @@ struct HelperTestRunInfo
 	TestResult* result_;
 };
 
-static void helperDoRunOneTest(void* data)
+static void helperDoRunOneTestInCurrentProcess(void* data)
 {
 	HelperTestRunInfo* runInfo = (HelperTestRunInfo*) data;
 
@@ -107,7 +107,7 @@ static void helperDoRunOneTest(void* data)
 	TestPlugin* plugin = runInfo->plugin_;
 	TestResult* result = runInfo->result_;
 
-	shell->runOneTest(plugin, *result);
+	shell->runOneTestInCurrentProcess(plugin, *result);
 }
 
 static void helperDoRunOneTestSeperateProcess(void* data)
@@ -123,17 +123,17 @@ static void helperDoRunOneTestSeperateProcess(void* data)
 /******************************** */
 
 UtestShell::UtestShell() :
-	group_("UndefinedTestGroup"), name_("UndefinedTest"), file_("UndefinedFile"), lineNumber_(0), next_(&NullTestShell::instance()), isRunAsSeperateProcess_(false)
+	group_("UndefinedTestGroup"), name_("UndefinedTest"), file_("UndefinedFile"), lineNumber_(0), next_(&NullTestShell::instance()), isRunAsSeperateProcess_(false), hasFailed_(false)
 {
 }
 
 UtestShell::UtestShell(const char* groupName, const char* testName, const char* fileName, int lineNumber) :
-		group_(groupName), name_(testName), file_(fileName), lineNumber_(lineNumber), next_(&NullTestShell::instance()), isRunAsSeperateProcess_(false)
+		group_(groupName), name_(testName), file_(fileName), lineNumber_(lineNumber), next_(&NullTestShell::instance()), isRunAsSeperateProcess_(false), hasFailed_(false)
 {
 }
 
 UtestShell::UtestShell(const char* groupName, const char* testName, const char* fileName, int lineNumber, UtestShell* nextTest) :
-	group_(groupName), name_(testName), file_(fileName), lineNumber_(lineNumber), next_(nextTest), isRunAsSeperateProcess_(false)
+	group_(groupName), name_(testName), file_(fileName), lineNumber_(lineNumber), next_(nextTest), isRunAsSeperateProcess_(false), hasFailed_(false)
 {
 }
 
@@ -163,13 +163,13 @@ void UtestShell::crash()
 	pleaseCrashMeRightNow();
 }
 
-void UtestShell::runOneTestWithPlugins(TestPlugin* plugin, TestResult& result)
+void UtestShell::runOneTest(TestPlugin* plugin, TestResult& result)
 {
 	HelperTestRunInfo runInfo(this, plugin, &result);
 	if (isRunInSeperateProcess())
 		PlatformSpecificSetJmp(helperDoRunOneTestSeperateProcess, &runInfo);
 	else
-		PlatformSpecificSetJmp(helperDoRunOneTest, &runInfo);
+		PlatformSpecificSetJmp(helperDoRunOneTestInCurrentProcess, &runInfo);
 }
 
 Utest* UtestShell::createTest()
@@ -182,7 +182,7 @@ void UtestShell::destroyTest(Utest* test)
 	delete test;
 }
 
-void UtestShell::runOneTest(TestPlugin* plugin, TestResult& result)
+void UtestShell::runOneTestInCurrentProcess(TestPlugin* plugin, TestResult& result)
 {
 	plugin->runAllPreTestAction(*this, result);
 
@@ -266,6 +266,11 @@ SimpleString UtestShell::getFormattedName() const
 	return formattedName;
 }
 
+bool UtestShell::hasFailed() const
+{
+	return hasFailed_;
+}
+
 const char* UtestShell::getProgressIndicator() const
 {
 	return ".";
@@ -321,8 +326,14 @@ bool UtestShell::shouldRun(const TestFilter& groupFilter, const TestFilter& name
 
 void UtestShell::failWith(const TestFailure& failure)
 {
+	failWith(failure, NormalTestTerminator());
+}
+
+void UtestShell::failWith(const TestFailure& failure, const TestTerminator& terminator)
+{
+	hasFailed_ = true;
 	getTestResult()->addFailure(failure);
-    UtestShell::getCurrent()->exitCurrentTest();
+	terminator.exitCurrentTest();
 }
 
 void UtestShell::assertTrue(bool condition, const char * checkString, const char* conditionString, const char* fileName, int lineNumber)
@@ -559,6 +570,35 @@ bool NullTestShell::isNull() const
 }
 
 void NullTestShell::testBody()
+{
+}
+
+
+/////////////////// Terminators
+
+TestTerminator::~TestTerminator()
+{
+}
+
+void NormalTestTerminator::exitCurrentTest() const
+{
+	#if CPPUTEST_USE_STD_CPP_LIB
+		throw CppUTestFailedException();
+	#else
+		PlatformSpecificLongJmp();
+	#endif
+}
+
+NormalTestTerminator::~NormalTestTerminator()
+{
+}
+
+void TestTerminatorWithoutExceptions::exitCurrentTest() const
+{
+	PlatformSpecificLongJmp();
+}
+
+TestTerminatorWithoutExceptions::~TestTerminatorWithoutExceptions()
 {
 }
 

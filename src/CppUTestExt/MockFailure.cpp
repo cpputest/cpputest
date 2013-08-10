@@ -30,24 +30,38 @@
 #include "CppUTestExt/MockExpectedFunctionCall.h"
 #include "CppUTestExt/MockExpectedFunctionsList.h"
 
+class MockFailureReporterTestTerminator : public NormalTestTerminator
+{
+public:
+	MockFailureReporterTestTerminator(bool crashOnFailure) : crashOnFailure_(crashOnFailure)
+	{
+	}
+
+	virtual void exitCurrentTest() const
+	{
+		if (crashOnFailure_)
+			UT_CRASH();
+
+		NormalTestTerminator::exitCurrentTest();
+	}
+
+	virtual ~MockFailureReporterTestTerminator()
+	{
+	}
+private:
+	bool crashOnFailure_;
+
+};
+
 void MockFailureReporter::failTest(const MockFailure& failure)
 {
-	getTestToFail()->getTestResult()->addFailure(failure);
-
-	if (crashOnFailure_)
-		UT_CRASH();
-
-	getTestToFail()->exitCurrentTest();
+	if (!getTestToFail()->hasFailed())
+		getTestToFail()->failWith(failure, MockFailureReporterTestTerminator(crashOnFailure_));
 }
 
 UtestShell* MockFailureReporter::getTestToFail()
 {
 	return UtestShell::getCurrent();
-}
-
-int MockFailureReporter::getAmountOfTestFailures()
-{
-	return getTestToFail()->getTestResult()->getFailureCount();
 }
 
 MockFailure::MockFailure(UtestShell* test) : TestFailure(test, "Test failed with MockFailure without an error! Something went seriously wrong.")

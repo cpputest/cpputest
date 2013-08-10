@@ -943,11 +943,11 @@ TEST(MockSupportTest, tracing)
 
 TEST(MockSupportTest, shouldntFailTwice)
 {
-	mock().expectOneCall("foo");
-	mock().actualCall("bar");
-	mock().checkExpectations();
-	LONGS_EQUAL(1, MockFailureReporterForTest::getReporter()->getAmountOfTestFailures());
-	CLEAR_MOCK_FAILURE();
+       mock().expectOneCall("foo");
+       mock().actualCall("bar");
+       mock().checkExpectations();
+       CHECK(!MockFailureReporterForTest::getReporter()->mockFailureString.contains("bar"));
+       CLEAR_MOCK_FAILURE();
 }
 
 class StubComparator : public MockNamedValueComparator

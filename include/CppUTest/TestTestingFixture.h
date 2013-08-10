@@ -79,6 +79,12 @@ public:
 		return result_->getFailureCount();
 	}
 
+	bool hasTestFailed()
+	{
+		return genTest_->hasFailed();
+	}
+
+
 	void assertPrintContains(const SimpleString& contains)
 	{
 		assertPrintContains(output_, contains);

@@ -263,8 +263,7 @@ void MockSupport::failTestWithOutOfOrderCalls()
 
 void MockSupport::failTest(MockFailure& failure)
 {
-	if (reporter_->getAmountOfTestFailures() == 0)
-		reporter_->failTest(failure);
+	reporter_->failTest(failure);
 }
 
 void MockSupport::checkExpectationsOfLastCall()
