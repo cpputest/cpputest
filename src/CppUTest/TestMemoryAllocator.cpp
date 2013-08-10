@@ -34,7 +34,7 @@ static char* checkedMalloc(size_t size)
 {
 	char* mem = (char*) PlatformSpecificMalloc(size);
 	if (mem == 0)
-	FAIL("PlatformSpecificMalloc returned null pointer");
+	FAIL("malloc returned null pointer");
 	return mem;
 }
 
