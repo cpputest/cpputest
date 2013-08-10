@@ -44,11 +44,7 @@ bool doubles_equal(double d1, double d2, double threshold)
 class OutsideTestRunnerUTest: public UtestShell
 {
 public:
-	static OutsideTestRunnerUTest& instance()
-	{
-		static OutsideTestRunnerUTest instance_;
-		return instance_;
-	}
+	static OutsideTestRunnerUTest& instance();
 	virtual TestResult& getTestResult()
 	{
 		return defaultTestResult;
@@ -69,11 +65,25 @@ private:
 	TestResult defaultTestResult;
 };
 
+OutsideTestRunnerUTest& OutsideTestRunnerUTest::instance()
+{
+	static OutsideTestRunnerUTest instance_;
+	return instance_;
+}
+
 /*
  * Below helpers are used for the PlatformSpecificSetJmp and LongJmp. They pass a method for what needs to happen after
  * the jump, so that the stack stays right.
  *
  */
+
+extern "C" { // Needed for cl2000 compiler
+static void helperDoTestSetup(void* data);
+static void helperDoTestBody(void* data);
+static void helperDoTestTeardown(void* data);
+static void helperDoRunOneTest(void* data);
+static void helperDoRunOneTestSeperateProcess(void* data);
+} // extern "C"
 
 static void helperDoTestSetup(void* data)
 {

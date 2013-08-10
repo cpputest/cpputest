@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, Michael Feathers, James Grenning and Bas Vodde
+ * Copyright (c) 2007, Michael Feathers, James Grenning and Bas Vodde
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -25,27 +25,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef GMOCK_H_
-#define GMOCK_H_
-
-#ifdef CPPUTEST_USE_REAL_GMOCK
-#undef new
-#endif
-
-#undef RUN_ALL_TESTS
-
-#define GTEST_DONT_DEFINE_TEST 1
-#define GTEST_DONT_DEFINE_FAIL 1
-#include "CppUTestExt/CppUTestGMock/gmock/gmock.h"
-#undef RUN_ALL_TESTS
-
-#ifdef CPPUTEST_USE_REAL_GMOCK
-using testing::Return;
-using testing::NiceMock;
-#endif
-
-#ifdef CPPUTEST_USE_NEW_MACROS
-#include "CppUTest/MemoryLeakDetectorNewMacros.h"
-#endif
+#ifndef D_c2000_Platform_H
+#define D_c2000_Platform_H
 
 #endif
