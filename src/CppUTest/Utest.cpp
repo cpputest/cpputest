@@ -334,19 +334,19 @@ void UtestShell::assertTrueText(bool condition, const char *checkString, const c
 		failWith(CheckFailure(this, fileName, lineNumber, checkString, conditionString, text));
 }
 
-void UtestShell::fail(const char *text, const char* fileName, int lineNumber)
+void UtestShell::fail(const char *text, const char* fileName, int lineNumber, const TestTerminator& testTerminator)
 {
-	failWith(FailFailure(this, fileName, lineNumber, text));
+	failWith(FailFailure(this, fileName, lineNumber, text), testTerminator);
 }
 
-void UtestShell::assertCstrEqual(const char* expected, const char* actual, const char* fileName, int lineNumber)
+void UtestShell::assertCstrEqual(const char* expected, const char* actual, const char* fileName, int lineNumber, const TestTerminator& testTerminator)
 {
 	getTestResult()->countCheck();
 	if (actual == 0 && expected == 0) return;
 	if (actual == 0 || expected == 0)
-		failWith(StringEqualFailure(this, fileName, lineNumber, expected, actual));
+		failWith(StringEqualFailure(this, fileName, lineNumber, expected, actual), testTerminator);
 	if (PlatformSpecificStrCmp(expected, actual) != 0)
-		failWith(StringEqualFailure(this, fileName, lineNumber, expected, actual));
+		failWith(StringEqualFailure(this, fileName, lineNumber, expected, actual), testTerminator);
 }
 
 void UtestShell::assertCstrNoCaseEqual(const char* expected, const char* actual, const char* fileName, int lineNumber)
@@ -393,18 +393,18 @@ void UtestShell::assertPointersEqual(const void* expected, const void* actual, c
 		failWith(EqualsFailure(this, fileName, lineNumber, StringFrom(expected), StringFrom(actual)));
 }
 
-void UtestShell::assertDoublesEqual(double expected, double actual, double threshold, const char* fileName, int lineNumber)
+void UtestShell::assertDoublesEqual(double expected, double actual, double threshold, const char* fileName, int lineNumber, const TestTerminator& testTerminator)
 {
 	getTestResult()->countCheck();
 	if (!doubles_equal(expected, actual, threshold))
-		failWith(DoublesEqualFailure(this, fileName, lineNumber, expected, actual, threshold));
+		failWith(DoublesEqualFailure(this, fileName, lineNumber, expected, actual, threshold), testTerminator);
 }
 
-void UtestShell::assertEquals(bool failed, const char* expected, const char* actual, const char* file, int line)
+void UtestShell::assertEquals(bool failed, const char* expected, const char* actual, const char* file, int line, const TestTerminator& testTerminator)
 {
 	getTestResult()->countCheck();
 	if (failed)
-		failWith(CheckEqualFailure(this, file, line, expected, actual));
+		failWith(CheckEqualFailure(this, file, line, expected, actual), testTerminator);
 }
 
 

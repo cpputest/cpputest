@@ -34,7 +34,8 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 
 
-bool hasDestructorOfTheDestructorCheckedBeenCalled;
+static bool hasDestructorOfTheDestructorCheckedBeenCalled;
+
 class HasTheDestructorBeenCalledChecker
 {
 public:
@@ -74,6 +75,7 @@ TEST(TestHarness_c, checkInt)
 
 static void _failRealMethod()
 {
+	HasTheDestructorBeenCalledChecker checker;
 	CHECK_EQUAL_C_REAL(1.0, 2.0, 0.5);
 }
 
@@ -84,10 +86,12 @@ TEST(TestHarness_c, checkReal)
 	fixture->runAllTests();
 	fixture->assertPrintContains("expected <1>\n	but was  <2>");
 	fixture->assertPrintContains("arness_c");
+	CHECK(!hasDestructorOfTheDestructorCheckedBeenCalled)
 }
 
 static void _failCharMethod()
 {
+	HasTheDestructorBeenCalledChecker checker;
 	CHECK_EQUAL_C_CHAR('a', 'c');
 }
 
@@ -98,10 +102,12 @@ TEST(TestHarness_c, checkChar)
 	fixture->runAllTests();
 	fixture->assertPrintContains("expected <a>\n	but was  <c>");
 	fixture->assertPrintContains("arness_c");
+	CHECK(!hasDestructorOfTheDestructorCheckedBeenCalled)
 }
 
 static void _failStringMethod()
 {
+	HasTheDestructorBeenCalledChecker checker;
 	CHECK_EQUAL_C_STRING("Hello", "Hello World");
 }
 
@@ -114,10 +120,12 @@ TEST(TestHarness_c, checkString)
 	StringEqualFailure failure(UtestShell::getCurrent(), "file", 1, "Hello", "Hello World");
 	fixture->assertPrintContains(failure.getMessage());
 	fixture->assertPrintContains("arness_c");
+	CHECK(!hasDestructorOfTheDestructorCheckedBeenCalled)
 }
 
 static void _failTextMethod()
 {
+	HasTheDestructorBeenCalledChecker checker;
 	FAIL_TEXT_C("Booo");
 }
 
@@ -127,6 +135,7 @@ TEST(TestHarness_c, checkFailText)
 	fixture->runAllTests();
 	fixture->assertPrintContains("Booo");
 	fixture->assertPrintContains("arness_c");
+	CHECK(!hasDestructorOfTheDestructorCheckedBeenCalled)
 }
 
 static void _failMethod()
