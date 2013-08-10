@@ -322,16 +322,16 @@ void UtestShell::failWith(const TestFailure& failure, const TestTerminator& term
 	terminator.exitCurrentTest();
 }
 
-void UtestShell::assertTrue(bool condition, const char * checkString, const char* conditionString, const char* fileName, int lineNumber)
+void UtestShell::assertTrue(bool condition, const char * checkString, const char* conditionString, const char* fileName, int lineNumber, const TestTerminator& testTerminator)
 {
-	assertTrueText(condition, checkString, conditionString, "", fileName, lineNumber);
+	assertTrueText(condition, checkString, conditionString, "", fileName, lineNumber, testTerminator);
 }
 
-void UtestShell::assertTrueText(bool condition, const char *checkString, const char *conditionString, const char* text, const char *fileName, int lineNumber)
+void UtestShell::assertTrueText(bool condition, const char *checkString, const char *conditionString, const char* text, const char *fileName, int lineNumber, const TestTerminator& testTerminator)
 {
 	getTestResult()->countCheck();
 	if (!condition)
-		failWith(CheckFailure(this, fileName, lineNumber, checkString, conditionString, text));
+		failWith(CheckFailure(this, fileName, lineNumber, checkString, conditionString, text), testTerminator);
 }
 
 void UtestShell::fail(const char *text, const char* fileName, int lineNumber, const TestTerminator& testTerminator)

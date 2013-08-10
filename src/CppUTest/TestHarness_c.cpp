@@ -62,12 +62,12 @@ void FAIL_TEXT_C_LOCATION(const char* text, const char* fileName, int lineNumber
 
 void FAIL_C_LOCATION(const char* fileName, int lineNumber)
 {
-	UtestShell::getCurrent()->fail("",  fileName, lineNumber);
+	UtestShell::getCurrent()->fail("",  fileName, lineNumber, TestTerminatorWithoutExceptions());
 }
 
 void CHECK_C_LOCATION(int condition, const char* conditionString, const char* fileName, int lineNumber)
 {
-	UtestShell::getCurrent()->assertTrue(condition, "CHECK_C", conditionString, fileName, lineNumber);
+	UtestShell::getCurrent()->assertTrue(condition, "CHECK_C", conditionString, fileName, lineNumber, TestTerminatorWithoutExceptions());
 }
 
 enum { NO_COUNTDOWN = -1, OUT_OF_MEMORRY = 0 };

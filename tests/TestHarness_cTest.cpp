@@ -140,6 +140,7 @@ TEST(TestHarness_c, checkFailText)
 
 static void _failMethod()
 {
+	HasTheDestructorBeenCalledChecker checker;
 	FAIL_C();
 }
 
@@ -149,10 +150,12 @@ TEST(TestHarness_c, checkFail)
 	fixture->runAllTests();
 	LONGS_EQUAL(1, fixture->getFailureCount());
 	fixture->assertPrintContains("arness_c");
+	CHECK(!hasDestructorOfTheDestructorCheckedBeenCalled)
 }
 
 static void _CheckMethod()
 {
+	HasTheDestructorBeenCalledChecker checker;
 	CHECK_C(false);
 }
 
@@ -162,6 +165,7 @@ TEST(TestHarness_c, checkCheck)
 	fixture->setTestFunction(_CheckMethod);
 	fixture->runAllTests();
 	LONGS_EQUAL(1, fixture->getFailureCount());
+	CHECK(!hasDestructorOfTheDestructorCheckedBeenCalled)
 }
 
 #if CPPUTEST_USE_MEM_LEAK_DETECTION
