@@ -45,3 +45,4 @@ _build_
 _build
 build
 builds/*gcc*
+/.deps
