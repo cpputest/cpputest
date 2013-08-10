@@ -102,9 +102,6 @@ public:
     void setGroupName(const char *groupName);
     void setTestName(const char *testName);
 
-    virtual void exitCurrentTest();
-    virtual void exitCurrentTestWithoutException();
-
     static void crash();
     static void setCrashMethod(void (*crashme)());
     static void resetCrashMethod();

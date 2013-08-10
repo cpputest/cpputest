@@ -204,20 +204,6 @@ void UtestShell::runOneTestInCurrentProcess(TestPlugin* plugin, TestResult& resu
 	plugin->runAllPostTestAction(*this, result);
 }
 
-void UtestShell::exitCurrentTest()
-{
-#if CPPUTEST_USE_STD_CPP_LIB
-	throw CppUTestFailedException();
-#else
-	exitCurrentTestWithoutException();
-#endif
-}
-
-void UtestShell::exitCurrentTestWithoutException()
-{
-	PlatformSpecificLongJmp();
-}
-
 UtestShell *UtestShell::getNext() const
 {
 	return next_;
@@ -396,11 +382,8 @@ void UtestShell::assertCstrNoCaseContains(const char* expected, const char* actu
 void UtestShell::assertLongsEqual(long expected, long actual, const char* fileName, int lineNumber)
 {
 	getTestResult()->countCheck();
-	if (expected != actual) {
-		LongsEqualFailure f(this, fileName, lineNumber, expected, actual);
-		getTestResult()->addFailure(f);
-	    UtestShell::getCurrent()->exitCurrentTest();
-	}
+	if (expected != actual)
+		failWith(LongsEqualFailure (this, fileName, lineNumber, expected, actual));
 }
 
 void UtestShell::assertPointersEqual(const void* expected, const void* actual, const char* fileName, int lineNumber)
@@ -585,7 +568,7 @@ void NormalTestTerminator::exitCurrentTest() const
 	#if CPPUTEST_USE_STD_CPP_LIB
 		throw CppUTestFailedException();
 	#else
-		PlatformSpecificLongJmp();
+		TestTerminatorWithoutExceptions().exitCurrentTest();
 	#endif
 }
 
