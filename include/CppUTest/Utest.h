@@ -57,6 +57,29 @@ public:
 	virtual void testBody();
 };
 
+//////////////////// TestTerminator
+
+class TestTerminator
+{
+public:
+	virtual void exitCurrentTest() const=0;
+	virtual ~TestTerminator();
+};
+
+class NormalTestTerminator : public TestTerminator
+{
+public:
+	virtual void exitCurrentTest() const;
+	virtual ~NormalTestTerminator();
+};
+
+class TestTerminatorWithoutExceptions  : public TestTerminator
+{
+public:
+	virtual void exitCurrentTest() const;
+	virtual ~TestTerminatorWithoutExceptions();
+};
+
 //////////////////// UtestShell
 
 class UtestShell
@@ -88,7 +111,7 @@ public:
     virtual void assertCstrNoCaseEqual(const char *expected, const char *actual, const char *fileName, int lineNumber);
     virtual void assertCstrContains(const char *expected, const char *actual, const char *fileName, int lineNumber);
     virtual void assertCstrNoCaseContains(const char *expected, const char *actual, const char *fileName, int lineNumber);
-    virtual void assertLongsEqual(long  expected, long  actual, const char *fileName, int lineNumber);
+    virtual void assertLongsEqual(long  expected, long  actual, const char *fileName, int lineNumber, const TestTerminator& testTerminator = NormalTestTerminator());
     virtual void assertPointersEqual(const void *expected, const void *actual, const char *fileName, int lineNumber);
     virtual void assertDoublesEqual(double expected, double actual, double threshold, const char *fileName, int lineNumber);
     virtual void assertEquals(bool failed, const char* expected, const char* actual, const char* file, int line);
@@ -162,29 +185,6 @@ private:
 	NullTestShell(const NullTestShell&);
 	NullTestShell& operator=(const NullTestShell&);
 
-};
-
-//////////////////// TestTerminator
-
-class TestTerminator
-{
-public:
-	virtual void exitCurrentTest() const=0;
-	virtual ~TestTerminator();
-};
-
-class NormalTestTerminator : public TestTerminator
-{
-public:
-	virtual void exitCurrentTest() const;
-	virtual ~NormalTestTerminator();
-};
-
-class TestTerminatorWithoutExceptions  : public TestTerminator
-{
-public:
-	virtual void exitCurrentTest() const;
-	virtual ~TestTerminatorWithoutExceptions();
 };
 
 //////////////////// ExecFunctionTest

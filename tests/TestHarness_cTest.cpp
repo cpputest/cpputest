@@ -33,11 +33,21 @@
 #include "CppUTest/TestTestingFixture.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
+
+bool hasDestructorOfTheDestructorCheckedBeenCalled;
+class HasTheDestructorBeenCalledChecker
+{
+public:
+	HasTheDestructorBeenCalledChecker(){}
+	~HasTheDestructorBeenCalledChecker() { hasDestructorOfTheDestructorCheckedBeenCalled = true; }
+};
+
 TEST_GROUP(TestHarness_c)
 {
 	TestTestingFixture* fixture;
 	TEST_SETUP()
 	{
+		hasDestructorOfTheDestructorCheckedBeenCalled = false;
 		fixture = new TestTestingFixture();
 	}
 	TEST_TEARDOWN()
@@ -48,6 +58,7 @@ TEST_GROUP(TestHarness_c)
 
 static void _failIntMethod()
 {
+	HasTheDestructorBeenCalledChecker checker;
 	CHECK_EQUAL_C_INT(1, 2);
 }
 
@@ -58,6 +69,7 @@ TEST(TestHarness_c, checkInt)
 	fixture->runAllTests();
 	fixture->assertPrintContains("expected <1 0x1>\n	but was  <2 0x2>");
 	fixture->assertPrintContains("arness_c");
+	CHECK(!hasDestructorOfTheDestructorCheckedBeenCalled)
 }
 
 static void _failRealMethod()
