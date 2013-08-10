@@ -25,36 +25,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "CppUTest/CommandLineTestRunner.h"
-#include "CppUTest/TestRegistry.h"
-#include "CppUTestExt/MemoryReporterPlugin.h"
-#include "CppUTestExt/MockSupportPlugin.h"
-#include "CppUTestExt/GTestConvertor.h"
+#ifndef D_c2000_Platform_H
+#define D_c2000_Platform_H
 
-int main(int ac, char** av)
-{
-	char arg2[] = "-v";
-    char arg3[] = "-gMemoryReporterPlugin";
-    char arg4[] = "-nATestCaseName(Part)";
-//	char arg4[] = "-ojunit";
-	char* args[4];
-                        // arg 1 == name of executable
-	args[1] = &arg2[0]; // arg 2
-	args[2] = &arg3[0]; // arg 3
-	args[3] = &arg4[0]; // arg 4
-	av = args;
-	ac = 2;
-
-
-#ifdef CPPUTEST_USE_REAL_GTEST
-	GTestConvertor convertor;
-	convertor.addAllGTestToTestRegistry();
 #endif
-
-	MemoryReporterPlugin plugin;
-	MockSupportPlugin mockPlugin;
-	TestRegistry::getCurrentRegistry()->installPlugin(&plugin);
-	TestRegistry::getCurrentRegistry()->installPlugin(&mockPlugin);
-	return CommandLineTestRunner::RunAllTests(ac, av);
-}
-
