@@ -44,11 +44,7 @@ public:
 		mockFailureString = failure.getMessage();
 	}
 
-	static MockFailureReporterForTest* getReporter()
-	{
-		static MockFailureReporterForTest reporter;
-		return &reporter;
-	}
+	static MockFailureReporterForTest* getReporter();
 };
 
 inline UtestShell* mockFailureTest()
