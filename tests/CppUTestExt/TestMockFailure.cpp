@@ -31,6 +31,12 @@
 #include "CppUTestExt/MockExpectedFunctionsList.h"
 #include "TestMockFailure.h"
 
+MockFailureReporterForTest* MockFailureReporterForTest::getReporter()
+{
+    static MockFailureReporterForTest reporter;
+    return &reporter;
+}
+
 TEST_GROUP(MockFailureTest)
 {
 	MockFailureReporter reporter;
