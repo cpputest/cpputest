@@ -81,7 +81,6 @@ extern "C" { // Needed for cl2000 compiler
 static void helperDoTestSetup(void* data);
 static void helperDoTestBody(void* data);
 static void helperDoTestTeardown(void* data);
-static void helperDoRunOneTest(void* data);
 static void helperDoRunOneTestSeperateProcess(void* data);
 } // extern "C"
 
