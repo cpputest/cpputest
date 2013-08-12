@@ -158,18 +158,9 @@ public:
 	}
 };
 
-class JUnitTestOutputTestRunner
-{
-	TestResult result_;
-
-	const char* currentGroupName_;
-	UtestShell* currentTest_;
-	bool firstTestInGroup_;
-	int timeTheTestTakes_;
-	TestFailure* testFailure_;
-
-	static long millisTime;
-	static const char* theTime;
+extern "C" {
+	static long millisTime = 0;
+	static const char* theTime = "";
 
 	static long MockGetPlatformSpecificTimeInMillis()
 	{
@@ -180,6 +171,18 @@ class JUnitTestOutputTestRunner
 	{
 		return theTime;
 	}
+}
+
+class JUnitTestOutputTestRunner
+{
+	TestResult result_;
+
+	const char* currentGroupName_;
+	UtestShell* currentTest_;
+	bool firstTestInGroup_;
+	int timeTheTestTakes_;
+	TestFailure* testFailure_;
+
 
 public:
 
@@ -288,10 +291,6 @@ public:
 		return *this;
 	}
 };
-
-long JUnitTestOutputTestRunner::millisTime = 0;
-const char* JUnitTestOutputTestRunner::theTime = "";
-
 
 TEST_GROUP(JUnitOutputTest)
 {
