@@ -76,6 +76,85 @@ bool SimpleStringBuffer::reachedItsCapacity()
 {
 	return positions_filled_ >= write_limit_;
 }
+
+////////////////////////
+
+void MemoryLeakOutputStringBuffer::addMessage(const char* message)
+{
+	outputBuffer_.add("%s", message);
+}
+
+void MemoryLeakOutputStringBuffer::addAllocationLocation(const char* allocationFile, int allocationLineNumber, size_t allocationSize, const char* allocatorName)
+{
+	outputBuffer_.add("   allocated at file: %s line: %d size: %lu type: %s\n", allocationFile, allocationLineNumber, (unsigned long) allocationSize, allocatorName);
+}
+
+void MemoryLeakOutputStringBuffer::addDeallocationLocation(const char* freeFile, int freeLineNumber, const char* allocatorName)
+{
+	outputBuffer_.add("   deallocated at file: %s line: %d type: %s\n", freeFile, freeLineNumber, allocatorName);
+}
+
+void MemoryLeakOutputStringBuffer::addMemoryLeakHeader()
+{
+	outputBuffer_.add(MEM_LEAK_HEADER);
+}
+
+void MemoryLeakOutputStringBuffer::addMemoryLeak(MemoryLeakDetectorNode* leak)
+{
+	outputBuffer_.add("Alloc num (%u) Leak size: %lu Allocated at: %s and line: %d. Type: \"%s\"\n\t Memory: <%p> Content: \"%.15s\"\n",
+			leak->number_, (unsigned long) leak->size_, leak->file_, leak->line_, leak->allocator_->alloc_name(), leak->memory_, leak->memory_);
+}
+
+void MemoryLeakOutputStringBuffer::addErrorMessageForTooMuchLeaks()
+{
+	outputBuffer_.add(MEM_LEAK_TOO_MUCH);
+}
+
+void MemoryLeakOutputStringBuffer::addMemoryLeakFooter(int amountOfLeaks)
+{
+	outputBuffer_.add("%s %d\n", MEM_LEAK_FOOTER, amountOfLeaks);
+}
+
+void MemoryLeakOutputStringBuffer::addWarningForUsingMalloc()
+{
+	outputBuffer_.add(MEM_LEAK_ADDITION_MALLOC_WARNING);
+}
+
+void MemoryLeakOutputStringBuffer::reportFailure(const char* message, const char* allocFile, int allocLine, size_t allocSize, TestMemoryAllocator* allocAllocator, const char* freeFile, int freeLine,
+		TestMemoryAllocator* freeAllocator, MemoryLeakFailure* reporter)
+{
+	addMessage(message);
+	addAllocationLocation(allocFile, allocLine, allocSize, allocAllocator->alloc_name());
+	addDeallocationLocation(freeFile, freeLine, freeAllocator->free_name());
+	reporter->fail(toString());
+}
+
+
+char* MemoryLeakOutputStringBuffer::toString()
+{
+	return outputBuffer_.toString();
+}
+
+void MemoryLeakOutputStringBuffer::setWriteLimit(size_t write_limit)
+{
+	outputBuffer_.setWriteLimit(write_limit);
+}
+
+void MemoryLeakOutputStringBuffer::resetWriteLimit()
+{
+	outputBuffer_.resetWriteLimit();
+}
+
+bool MemoryLeakOutputStringBuffer::reachedItsCapacity()
+{
+	return outputBuffer_.reachedItsCapacity();
+}
+
+void MemoryLeakOutputStringBuffer::clear()
+{
+	outputBuffer_.clear();
+}
+
 ////////////////////////
 
 void MemoryLeakDetectorNode::init(char* memory, unsigned number, size_t size, TestMemoryAllocator* allocator, MemLeakPeriod period, const char* file, int line)
@@ -262,7 +341,7 @@ MemoryLeakDetector::MemoryLeakDetector(MemoryLeakFailure* reporter)
 	allocationSequenceNumber_ = 1;
 	current_period_ = mem_leak_period_disabled;
 	reporter_ = reporter;
-	output_buffer_ = SimpleStringBuffer();
+	outputBuffer_ = MemoryLeakOutputStringBuffer();
 	memoryTable_ = MemoryLeakDetectorTable();
 }
 
@@ -273,7 +352,7 @@ void MemoryLeakDetector::clearAllAccounting(MemLeakPeriod period)
 
 void MemoryLeakDetector::startChecking()
 {
-	output_buffer_.clear();
+	outputBuffer_.clear();
 	current_period_ = mem_leak_period_checking;
 }
 
@@ -305,15 +384,6 @@ void MemoryLeakDetector::enableAllocationTypeChecking()
 unsigned MemoryLeakDetector::getCurrentAllocationNumber()
 {
 	return allocationSequenceNumber_;
-}
-
-void MemoryLeakDetector::reportFailure(const char* message, const char* allocFile, int allocLine, size_t allocSize, TestMemoryAllocator* allocAllocator, const char* freeFile, int freeLine,
-		TestMemoryAllocator* freeAllocator)
-{
-	output_buffer_.add("%s", message);
-	output_buffer_.add(MEM_LEAK_ALLOC_LOCATION, allocFile, allocLine, (unsigned long) allocSize, allocAllocator->alloc_name());
-	output_buffer_.add(MEM_LEAK_DEALLOC_LOCATION, freeFile, freeLine, freeAllocator->free_name());
-	reporter_->fail(output_buffer_.toString());
 }
 
 static size_t calculateVoidPointerAlignedSize(size_t size)
@@ -376,8 +446,8 @@ bool MemoryLeakDetector::matchingAllocation(TestMemoryAllocator *alloc_allocator
 
 void MemoryLeakDetector::checkForCorruption(MemoryLeakDetectorNode* node, const char* file, int line, TestMemoryAllocator* allocator, bool allocateNodesSeperately)
 {
-	if (!matchingAllocation(node->allocator_, allocator)) reportFailure(MEM_LEAK_ALLOC_DEALLOC_MISMATCH, node->file_, node->line_, node->size_, node->allocator_, file, line, allocator);
-	else if (!validMemoryCorruptionInformation(node->memory_ + node->size_)) reportFailure(MEM_LEAK_MEMORY_CORRUPTION, node->file_, node->line_, node->size_, node->allocator_, file, line, allocator);
+	if (!matchingAllocation(node->allocator_, allocator)) outputBuffer_.reportFailure(MEM_LEAK_ALLOC_DEALLOC_MISMATCH, node->file_, node->line_, node->size_, node->allocator_, file, line, allocator, reporter_);
+	else if (!validMemoryCorruptionInformation(node->memory_ + node->size_)) outputBuffer_.reportFailure(MEM_LEAK_MEMORY_CORRUPTION, node->file_, node->line_, node->size_, node->allocator_, file, line, allocator, reporter_);
 	else if (allocateNodesSeperately) allocator->freeMemoryLeakNode((char*) node);
 }
 
@@ -433,7 +503,7 @@ void MemoryLeakDetector::deallocMemory(TestMemoryAllocator* allocator, void* mem
 
 	MemoryLeakDetectorNode* node = memoryTable_.removeNode((char*) memory);
 	if (node == NULL) {
-		reportFailure(MEM_LEAK_DEALLOC_NON_ALLOCATED, "<unknown>", 0, 0, NullUnknownAllocator::defaultAllocator(), file, line, allocator);
+		outputBuffer_.reportFailure(MEM_LEAK_DEALLOC_NON_ALLOCATED, "<unknown>", 0, 0, NullUnknownAllocator::defaultAllocator(), file, line, allocator, reporter_);
 		return;
 	}
 	if (!allocator->hasBeenDestroyed()) {
@@ -452,7 +522,7 @@ char* MemoryLeakDetector::reallocMemory(TestMemoryAllocator* allocator, char* me
 	if (memory) {
 		MemoryLeakDetectorNode* node = memoryTable_.removeNode(memory);
 		if (node == NULL) {
-			reportFailure(MEM_LEAK_DEALLOC_NON_ALLOCATED, "<unknown>", 0, 0, NullUnknownAllocator::defaultAllocator(), file, line, allocator);
+			outputBuffer_.reportFailure(MEM_LEAK_DEALLOC_NON_ALLOCATED, "<unknown>", 0, 0, NullUnknownAllocator::defaultAllocator(), file, line, allocator, reporter_);
 			return NULL;
 		}
 		checkForCorruption(node, file, line, allocator, allocatNodesSeperately);
@@ -465,33 +535,33 @@ void MemoryLeakDetector::ConstructMemoryLeakReport(MemLeakPeriod period)
 	MemoryLeakDetectorNode* leak = memoryTable_.getFirstLeak(period);
 	int total_leaks = 0;
 	bool giveWarningOnUsingMalloc = false;
-	output_buffer_.add(MEM_LEAK_HEADER);
-	output_buffer_.setWriteLimit(SimpleStringBuffer::SIMPLE_STRING_BUFFER_LEN - MEM_LEAK_NORMAL_MALLOC_FOOTER_SIZE);
+	outputBuffer_.addMemoryLeakHeader();
+	outputBuffer_.setWriteLimit(SimpleStringBuffer::SIMPLE_STRING_BUFFER_LEN - MEM_LEAK_NORMAL_MALLOC_FOOTER_SIZE);
 
 	while (leak) {
-		output_buffer_.add(MEM_LEAK_LEAK, leak->number_, (unsigned long) leak->size_, leak->file_, leak->line_, leak->allocator_->alloc_name(), leak->memory_, leak->memory_);
+		outputBuffer_.addMemoryLeak(leak);
 		if (PlatformSpecificStrCmp(leak->allocator_->alloc_name(), "malloc") == 0)
 			giveWarningOnUsingMalloc = true;
 		total_leaks++;
 		leak = memoryTable_.getNextLeak(leak, period);
 	}
-	bool buffer_reached_its_capacity = output_buffer_.reachedItsCapacity();
-	output_buffer_.resetWriteLimit();
+	bool buffer_reached_its_capacity = outputBuffer_.reachedItsCapacity();
+	outputBuffer_.resetWriteLimit();
 	if (buffer_reached_its_capacity)
-		output_buffer_.add(MEM_LEAK_TOO_MUCH);
-	output_buffer_.add("%s %d\n", MEM_LEAK_FOOTER, total_leaks);
+		outputBuffer_.addErrorMessageForTooMuchLeaks();
+	outputBuffer_.addMemoryLeakFooter(total_leaks);
 	if (giveWarningOnUsingMalloc)
-		output_buffer_.add(MEM_LEAK_ADDITION_MALLOC_WARNING);
+		outputBuffer_.addWarningForUsingMalloc();
 }
 
 const char* MemoryLeakDetector::report(MemLeakPeriod period)
 {
 	if (!memoryTable_.hasLeaks(period)) return MEM_LEAK_NONE;
 
-	output_buffer_.clear();
+	outputBuffer_.clear();
 	ConstructMemoryLeakReport(period);
 
-	return output_buffer_.toString();
+	return outputBuffer_.toString();
 }
 
 void MemoryLeakDetector::markCheckingPeriodLeaksAsNonCheckingPeriod()
