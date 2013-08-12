@@ -32,10 +32,14 @@
 
 static long millisTime;
 
+extern "C" {
+
 static long MockGetPlatformSpecificTimeInMillis()
 {
 	return millisTime;
 }
+
+} // extern "C"
 
 TEST_GROUP(TestOutput)
 {

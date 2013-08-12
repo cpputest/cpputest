@@ -31,6 +31,13 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 #include "CppUTest/SimpleString.h"
 
+extern "C" {
+
+    typedef long (*LongFP_C)();
+    typedef const char* (*StringFP_C)();
+
+}
+
 class FileForJUnitOutputTests
 {
 	SimpleString name_;
@@ -158,6 +165,8 @@ public:
 	}
 };
 
+		extern "C" long MockGetPlatformSpecificTimeInMillis();
+
 class JUnitTestOutputTestRunner
 {
 	TestResult result_;
@@ -189,8 +198,8 @@ public:
 		millisTime = 0;
 		theTime =  "1978-10-03T00:00:00";
 
-		SetPlatformSpecificTimeInMillisMethod(MockGetPlatformSpecificTimeInMillis);
-		SetPlatformSpecificTimeStringMethod(MockGetPlatformSpecificTimeString);
+		SetPlatformSpecificTimeInMillisMethod((LongFP_C)MockGetPlatformSpecificTimeInMillis);
+		SetPlatformSpecificTimeStringMethod((StringFP_C)MockGetPlatformSpecificTimeString);
 	}
 
 	~JUnitTestOutputTestRunner()
