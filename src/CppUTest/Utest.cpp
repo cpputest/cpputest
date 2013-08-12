@@ -82,7 +82,7 @@ static void helperDoTestSetup(void* data);
 static void helperDoTestBody(void* data);
 static void helperDoTestTeardown(void* data);
 static void helperDoRunOneTestSeperateProcess(void* data);
-} // extern "C"
+}
 
 static void helperDoTestSetup(void* data)
 {
