@@ -86,7 +86,7 @@ private:
 	size_t write_limit_;
 };
 
-class MemoryLeakDetectorNode;
+struct MemoryLeakDetectorNode;
 
 class MemoryLeakOutputStringBuffer
 {
