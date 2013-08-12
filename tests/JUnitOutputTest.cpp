@@ -36,7 +36,7 @@ extern "C" {
     typedef long (*LongFP_C)();
     typedef const char* (*StringFP_C)();
 
-} // extern "C"
+}
 
 class FileForJUnitOutputTests
 {
