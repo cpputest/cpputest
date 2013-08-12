@@ -120,6 +120,11 @@ void MemoryLeakOutputStringBuffer::addWarningForUsingMalloc()
 	outputBuffer_.add(MEM_LEAK_ADDITION_MALLOC_WARNING);
 }
 
+void MemoryLeakOutputStringBuffer::reportDeallocateNonAllocatedMemoryFailure(const char* freeFile, int freeLine, TestMemoryAllocator* freeAllocator, MemoryLeakFailure* reporter)
+{
+	reportFailure(MEM_LEAK_DEALLOC_NON_ALLOCATED, "<unknown>", 0, 0, NullUnknownAllocator::defaultAllocator(), freeFile, freeLine, freeAllocator, reporter);
+}
+
 void MemoryLeakOutputStringBuffer::reportFailure(const char* message, const char* allocFile, int allocLine, size_t allocSize, TestMemoryAllocator* allocAllocator, const char* freeFile, int freeLine,
 		TestMemoryAllocator* freeAllocator, MemoryLeakFailure* reporter)
 {
@@ -522,7 +527,7 @@ char* MemoryLeakDetector::reallocMemory(TestMemoryAllocator* allocator, char* me
 	if (memory) {
 		MemoryLeakDetectorNode* node = memoryTable_.removeNode(memory);
 		if (node == NULL) {
-			outputBuffer_.reportFailure(MEM_LEAK_DEALLOC_NON_ALLOCATED, "<unknown>", 0, 0, NullUnknownAllocator::defaultAllocator(), file, line, allocator, reporter_);
+			outputBuffer_.reportDeallocateNonAllocatedMemoryFailure(file, line, allocator, reporter_);
 			return NULL;
 		}
 		checkForCorruption(node, file, line, allocator, allocatNodesSeperately);

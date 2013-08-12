@@ -103,7 +103,9 @@ public:
 	void addMemoryLeakFooter(int totalAmountOfLeaks);
 	void addWarningForUsingMalloc();
 
-    void reportFailure(const char* message, const char* allocFile,
+	void reportDeallocateNonAllocatedMemoryFailure(const char* freeFile, int freeLine, TestMemoryAllocator* freeAllocator, MemoryLeakFailure* reporter);
+
+	void reportFailure(const char* message, const char* allocFile,
 			int allocLine, size_t allocSize,
 			TestMemoryAllocator* allocAllocator, const char* freeFile,
 			int freeLine, TestMemoryAllocator* freeAllocator, MemoryLeakFailure* reporter);
