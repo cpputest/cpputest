@@ -94,8 +94,8 @@ public:
 	void clear();
 
 	void addMessage(const char* message);
-	void addAllocationLocation(const char* allocationFile, int allocationLineNumber, size_t allocationSize, const char* allocatorName);
-	void addDeallocationLocation(const char* freeFile, int freeLineNumber, const char* allocatorName);
+	void addAllocationLocation(const char* allocationFile, int allocationLineNumber, size_t allocationSize, TestMemoryAllocator* allocator);
+	void addDeallocationLocation(const char* freeFile, int freeLineNumber, TestMemoryAllocator* allocator);
 
 	void addMemoryLeakHeader();
 	void addMemoryLeak(MemoryLeakDetectorNode* leak);

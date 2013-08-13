@@ -84,14 +84,14 @@ void MemoryLeakOutputStringBuffer::addMessage(const char* message)
 	outputBuffer_.add("%s", message);
 }
 
-void MemoryLeakOutputStringBuffer::addAllocationLocation(const char* allocationFile, int allocationLineNumber, size_t allocationSize, const char* allocatorName)
+void MemoryLeakOutputStringBuffer::addAllocationLocation(const char* allocationFile, int allocationLineNumber, size_t allocationSize, TestMemoryAllocator* allocator)
 {
-	outputBuffer_.add("   allocated at file: %s line: %d size: %lu type: %s\n", allocationFile, allocationLineNumber, (unsigned long) allocationSize, allocatorName);
+	outputBuffer_.add("   allocated at file: %s line: %d size: %lu type: %s\n", allocationFile, allocationLineNumber, (unsigned long) allocationSize, allocator->alloc_name());
 }
 
-void MemoryLeakOutputStringBuffer::addDeallocationLocation(const char* freeFile, int freeLineNumber, const char* allocatorName)
+void MemoryLeakOutputStringBuffer::addDeallocationLocation(const char* freeFile, int freeLineNumber, TestMemoryAllocator* allocator)
 {
-	outputBuffer_.add("   deallocated at file: %s line: %d type: %s\n", freeFile, freeLineNumber, allocatorName);
+	outputBuffer_.add("   deallocated at file: %s line: %d type: %s\n", freeFile, freeLineNumber, allocator->free_name());
 }
 
 void MemoryLeakOutputStringBuffer::addMemoryLeakHeader()
@@ -129,8 +129,8 @@ void MemoryLeakOutputStringBuffer::reportFailure(const char* message, const char
 		TestMemoryAllocator* freeAllocator, MemoryLeakFailure* reporter)
 {
 	addMessage(message);
-	addAllocationLocation(allocFile, allocLine, allocSize, allocAllocator->alloc_name());
-	addDeallocationLocation(freeFile, freeLine, freeAllocator->free_name());
+	addAllocationLocation(allocFile, allocLine, allocSize, allocAllocator);
+	addDeallocationLocation(freeFile, freeLine, freeAllocator);
 	reporter->fail(toString());
 }
 
