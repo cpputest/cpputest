@@ -93,23 +93,19 @@ class MemoryLeakOutputStringBuffer
 public:
 	void clear();
 
-	void addMessage(const char* message);
 	void addAllocationLocation(const char* allocationFile, int allocationLineNumber, size_t allocationSize, TestMemoryAllocator* allocator);
 	void addDeallocationLocation(const char* freeFile, int freeLineNumber, TestMemoryAllocator* allocator);
 
 	void addMemoryLeakHeader();
 	void addMemoryLeak(MemoryLeakDetectorNode* leak);
-	void addErrorMessageForTooMuchLeaks();
 	void addMemoryLeakFooter(int totalAmountOfLeaks);
+
+	void addErrorMessageForTooMuchLeaks();
 	void addWarningForUsingMalloc();
 
 	void reportDeallocateNonAllocatedMemoryFailure(const char* freeFile, int freeLine, TestMemoryAllocator* freeAllocator, MemoryLeakFailure* reporter);
-
-	void reportFailure(const char* message, const char* allocFile,
-			int allocLine, size_t allocSize,
-			TestMemoryAllocator* allocAllocator, const char* freeFile,
-			int freeLine, TestMemoryAllocator* freeAllocator, MemoryLeakFailure* reporter);
-
+	void reportMemoryCorruptionFailure(MemoryLeakDetectorNode* node, const char* freeFile, int freeLineNumber, TestMemoryAllocator* freeAllocator, MemoryLeakFailure* reporter);
+	void reportAllocationDeallocationMismatchFailure(MemoryLeakDetectorNode* node, const char* freeFile, int freeLineNumber, TestMemoryAllocator* freeAllocator, MemoryLeakFailure* reporter);
 	char* toString();
 
 	void setWriteLimit(size_t write_limit);
@@ -117,6 +113,12 @@ public:
 	bool reachedItsCapacity();
 
 private:
+	void addMessage(const char* message);
+	void reportFailure(const char* message, const char* allocFile,
+			int allocLine, size_t allocSize,
+			TestMemoryAllocator* allocAllocator, const char* freeFile,
+			int freeLine, TestMemoryAllocator* freeAllocator, MemoryLeakFailure* reporter);
+
 	SimpleStringBuffer outputBuffer_;
 };
 
