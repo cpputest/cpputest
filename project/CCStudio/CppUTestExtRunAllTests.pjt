@@ -1,7 +1,7 @@
 ; Code Composer Project File, Version 2.0 (do not modify or remove this line)
 
 [Project Settings]
-ProjectDir="Y:\Module_and_Unit_Test\40_SW\30_Module_Test\20_CppUTest\30_CppUTest\project\CCStudio\"
+ProjectDir="C:\data\00_Dev\05_CppUTest\cpputest\project\CCStudio\"
 ProjectType=Executable
 CPUFamily=TMS320C28XX
 Tool="Compiler"
@@ -59,7 +59,7 @@ Source="..\..\tests\CppUTestExt\TestMockSupport_c.cpp"
 Source="..\..\tests\CppUTestExt\TestMockSupport_cCFile.c"
 Source="..\..\tests\CppUTestExt\TestOrderedTest.cpp"
 Source="C:\CCStudio_v3.3\C2000\cgtools\lib\src\farmem_cpp.cpp"
-Source="..\..\..\sim28335.cmd"
+Source="sim28335.cmd"
 
 ["Compiler" Settings: "Debug"]
 Options=-g -rtti -pdsw225 -pden -pds1 -fr"$(Proj_dir)\Debug" -i"$(Proj_dir)\..\..\include" -i"$(Proj_dir)\..\..\tests" -d"_DEBUG" -d"LARGE_MODEL" -d"CPPUTEST_STD_CPP_LIB_DISABLED" -d"CPPUTEST_USE_MEM_LEAK_DETECTION" -d"CPPUTEST_USE_MALLOC_MACROS" -ml -v28 --preinclude="$(Proj_dir)\..\..\include\Platforms\c2000\stdint.h"
