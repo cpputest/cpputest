@@ -62,7 +62,7 @@ Source="C:\CCStudio_v3.3\C2000\cgtools\lib\src\farmem_cpp.cpp"
 Source="sim28335.cmd"
 
 ["Compiler" Settings: "Debug"]
-Options=-g -rtti -pdsw225 -pden -pds1 -fr"$(Proj_dir)\Debug" -i"$(Proj_dir)\..\..\include" -i"$(Proj_dir)\..\..\tests" -d"_DEBUG" -d"LARGE_MODEL" -d"CPPUTEST_STD_CPP_LIB_DISABLED" -d"CPPUTEST_USE_MEM_LEAK_DETECTION" -d"CPPUTEST_USE_MALLOC_MACROS" -ml -v28 --preinclude="$(Proj_dir)\..\..\include\Platforms\c2000\stdint.h"
+Options=-g -rtti -pdsw225 -pden -pds1 -fr"$(Proj_dir)\Debug" -i"$(Proj_dir)\..\..\include" -i"..\..\include\CppUTestExt\CppUTestGMock" -i"$(Proj_dir)\..\..\tests" -d"_DEBUG" -d"LARGE_MODEL" -d"CPPUTEST_STD_CPP_LIB_DISABLED" -d"CPPUTEST_USE_MEM_LEAK_DETECTION" -d"CPPUTEST_USE_MALLOC_MACROS" -ml -v28 --preinclude="$(Proj_dir)\..\..\include\Platforms\c2000\stdint.h"
 
 ["Linker" Settings: "Debug"]
 Options=-a -c -farheap0x20000 -f0x0 -heap0x2000 -m".\Debug\CppUTestExtRunAllTests.map" -o".\Debug\CppUTestExtRunAllTests.out" -stack0x4000 --disable_auto_rts -w -l"rts2800_ml.lib"
