@@ -29,9 +29,13 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 #include "CppUTest/TestOutput.h"
 
-static long MockGetPlatformSpecificTimeInMillis()
-{
-	return 10;
+extern "C" {
+
+    static long MockGetPlatformSpecificTimeInMillis()
+    {
+	    return 10;
+    }
+
 }
 
 TEST_GROUP(TestResult)
