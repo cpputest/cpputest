@@ -28,23 +28,6 @@
 #ifndef D_MemoryLeakDetector_h
 #define D_MemoryLeakDetector_h
 
-#define MEM_LEAK_NONE "No memory leaks were detected."
-#define MEM_LEAK_HEADER "Memory leak(s) found.\n"
-#define MEM_LEAK_TOO_MUCH "\netc etc etc etc. !!!! Too much memory leaks to report. Bailing out\n"
-#define MEM_LEAK_FOOTER "Total number of leaks: "
-#define MEM_LEAK_ADDITION_MALLOC_WARNING "NOTE:\n" \
-										 "\tMemory leak reports about malloc and free can be caused by allocating using the cpputest version of malloc,\n" \
-										 "\tbut deallocate using the standard free.\n" \
-										 "\tIf this is the case, check whether your malloc/free replacements are working (#define malloc cpputest_malloc etc).\n"
-
-#define MEM_LEAK_NORMAL_FOOTER_SIZE (sizeof(MEM_LEAK_FOOTER) + 10 + sizeof(MEM_LEAK_TOO_MUCH)) /* the number of leaks */
-#define MEM_LEAK_NORMAL_MALLOC_FOOTER_SIZE (MEM_LEAK_NORMAL_FOOTER_SIZE + sizeof(MEM_LEAK_ADDITION_MALLOC_WARNING))
-
-
-#define MEM_LEAK_ALLOC_DEALLOC_MISMATCH "Allocation/deallocation type mismatch\n"
-#define MEM_LEAK_MEMORY_CORRUPTION "Memory corruption (written out of bounds?)\n"
-#define MEM_LEAK_DEALLOC_NON_ALLOCATED "Deallocating non-allocated memory\n"
-
 enum MemLeakPeriod
 {
 	mem_leak_period_all,
@@ -91,29 +74,35 @@ struct MemoryLeakDetectorNode;
 class MemoryLeakOutputStringBuffer
 {
 public:
+	MemoryLeakOutputStringBuffer();
+
 	void clear();
 
-	void addAllocationLocation(const char* allocationFile, int allocationLineNumber, size_t allocationSize, TestMemoryAllocator* allocator);
-	void addDeallocationLocation(const char* freeFile, int freeLineNumber, TestMemoryAllocator* allocator);
+	void startMemoryLeakReporting();
+	void stopMemoryLeakReporting();
 
-	void addMemoryLeakHeader();
-	void addMemoryLeak(MemoryLeakDetectorNode* leak);
-	void addMemoryLeakFooter(int totalAmountOfLeaks);
-
-	void addErrorMessageForTooMuchLeaks();
-	void addWarningForUsingMalloc();
+	void reportMemoryLeak(MemoryLeakDetectorNode* leak);
 
 	void reportDeallocateNonAllocatedMemoryFailure(const char* freeFile, int freeLine, TestMemoryAllocator* freeAllocator, MemoryLeakFailure* reporter);
 	void reportMemoryCorruptionFailure(MemoryLeakDetectorNode* node, const char* freeFile, int freeLineNumber, TestMemoryAllocator* freeAllocator, MemoryLeakFailure* reporter);
 	void reportAllocationDeallocationMismatchFailure(MemoryLeakDetectorNode* node, const char* freeFile, int freeLineNumber, TestMemoryAllocator* freeAllocator, MemoryLeakFailure* reporter);
 	char* toString();
 
-	void setWriteLimit(size_t write_limit);
-	void resetWriteLimit();
-	bool reachedItsCapacity();
+private:
+	void addAllocationLocation(const char* allocationFile, int allocationLineNumber, size_t allocationSize, TestMemoryAllocator* allocator);
+	void addDeallocationLocation(const char* freeFile, int freeLineNumber, TestMemoryAllocator* allocator);
+
+	void addMemoryLeakHeader();
+	void addMemoryLeakFooter(int totalAmountOfLeaks);
+	void addWarningForUsingMalloc();
+	void addNoMemoryLeaksMessage();
+	void addErrorMessageForTooMuchLeaks();
 
 private:
-	void addMessage(const char* message);
+
+	int total_leaks_;
+	bool giveWarningOnUsingMalloc_;
+
 	void reportFailure(const char* message, const char* allocFile,
 			int allocLine, size_t allocSize,
 			TestMemoryAllocator* allocAllocator, const char* freeFile,
