@@ -111,7 +111,6 @@ void MemoryLeakOutputStringBuffer::startMemoryLeakReporting()
 	giveWarningOnUsingMalloc_ = false;
 	total_leaks_ = 0;
 
-	addMemoryLeakHeader();
 	size_t memory_leak_normal_footer_size = sizeof(MEM_LEAK_FOOTER) + 10 + sizeof(MEM_LEAK_TOO_MUCH); /* the number of leaks */
 	size_t memory_leak_foot_size_with_malloc_warning = memory_leak_normal_footer_size + sizeof(MEM_LEAK_ADDITION_MALLOC_WARNING);
 
@@ -120,6 +119,10 @@ void MemoryLeakOutputStringBuffer::startMemoryLeakReporting()
 
 void MemoryLeakOutputStringBuffer::reportMemoryLeak(MemoryLeakDetectorNode* leak)
 {
+	if (total_leaks_ == 0) {
+		addMemoryLeakHeader();
+	}
+
 	total_leaks_++;
 	outputBuffer_.add("Alloc num (%u) Leak size: %lu Allocated at: %s and line: %d. Type: \"%s\"\n\t Memory: <%p> Content: \"%.15s\"\n",
 			leak->number_, (unsigned long) leak->size_, leak->file_, leak->line_, leak->allocator_->alloc_name(), leak->memory_, leak->memory_);
