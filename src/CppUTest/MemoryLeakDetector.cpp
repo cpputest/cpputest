@@ -86,9 +86,6 @@ bool SimpleStringBuffer::reachedItsCapacity()
 										 "\tbut deallocate using the standard free.\n" \
 										 "\tIf this is the case, check whether your malloc/free replacements are working (#define malloc cpputest_malloc etc).\n"
 
-#define MEM_LEAK_NORMAL_FOOTER_SIZE (sizeof(MEM_LEAK_FOOTER) + 10 + sizeof(MEM_LEAK_TOO_MUCH)) /* the number of leaks */
-#define MEM_LEAK_NORMAL_MALLOC_FOOTER_SIZE (MEM_LEAK_NORMAL_FOOTER_SIZE + sizeof(MEM_LEAK_ADDITION_MALLOC_WARNING))
-
 MemoryLeakOutputStringBuffer::MemoryLeakOutputStringBuffer()
 	: total_leaks_(0), giveWarningOnUsingMalloc_(false)
 {
@@ -115,7 +112,10 @@ void MemoryLeakOutputStringBuffer::startMemoryLeakReporting()
 	total_leaks_ = 0;
 
 	addMemoryLeakHeader();
-	outputBuffer_.setWriteLimit(SimpleStringBuffer::SIMPLE_STRING_BUFFER_LEN - MEM_LEAK_NORMAL_MALLOC_FOOTER_SIZE);
+	unsigned int memory_leak_normal_footer_size = sizeof(MEM_LEAK_FOOTER) + 10 + sizeof(MEM_LEAK_TOO_MUCH); /* the number of leaks */
+	unsigned int memory_leak_foot_size_with_malloc_warning = memory_leak_normal_footer_size + sizeof(MEM_LEAK_ADDITION_MALLOC_WARNING);
+
+	outputBuffer_.setWriteLimit(SimpleStringBuffer::SIMPLE_STRING_BUFFER_LEN - memory_leak_foot_size_with_malloc_warning);
 }
 
 void MemoryLeakOutputStringBuffer::reportMemoryLeak(MemoryLeakDetectorNode* leak)
