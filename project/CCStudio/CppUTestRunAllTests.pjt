@@ -62,3 +62,5 @@ Options=-g -rtti -pdsw225 -pden -pds1 -fr"$(Proj_dir)\Debug" -i"$(Proj_dir)\..\.
 ["Linker" Settings: "Debug"]
 Options=-a -c -farheap0x020000 -f0x0 -heap0x2000 -m".\Debug\CppUTestRunAllTests.map" -o".\Debug\CppUTestRunAllTests.out" -stack0x4000 --disable_auto_rts -w -l"rts2800_ml.lib"
 
+[Tools]  
+ToolDeleteList  
