@@ -35,27 +35,27 @@
 int main(int ac, char** av)
 {
     /* Specify commandline arguments here as needed */
-	char arg2[] = "-v";
+    char arg2[] = "-v";
     char arg3[] = "-gMemoryReporterPlugin";
-	char arg4[] = "-ojunit";
-	char* args[4];
+    char arg4[] = "-ojunit";
+    char* args[4];
 
-	args[1] = &arg2[0]; // arg 2
-	args[2] = &arg3[0]; // arg 3
-	args[3] = &arg4[0]; // arg 4
-	av = args;
-	ac = 2; /* increase to 3 or 4 as needed */
+    args[1] = &arg2[0]; // arg 2
+    args[2] = &arg3[0]; // arg 3
+    args[3] = &arg4[0]; // arg 4
+    av = args;
+    ac = 2; /* increase to 3 or 4 as needed */
 
 
 #ifdef CPPUTEST_USE_REAL_GTEST
-	GTestConvertor convertor;
-	convertor.addAllGTestToTestRegistry();
+    GTestConvertor convertor;
+    convertor.addAllGTestToTestRegistry();
 #endif
 
-	MemoryReporterPlugin plugin;
-	MockSupportPlugin mockPlugin;
-	TestRegistry::getCurrentRegistry()->installPlugin(&plugin);
-	TestRegistry::getCurrentRegistry()->installPlugin(&mockPlugin);
-	return CommandLineTestRunner::RunAllTests(ac, av);
+    MemoryReporterPlugin plugin;
+    MockSupportPlugin mockPlugin;
+    TestRegistry::getCurrentRegistry()->installPlugin(&plugin);
+    TestRegistry::getCurrentRegistry()->installPlugin(&mockPlugin);
+    return CommandLineTestRunner::RunAllTests(ac, av);
 }
 

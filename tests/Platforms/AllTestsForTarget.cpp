@@ -31,21 +31,21 @@
 int main(int ac, char** av)
 {
     /* Specify commandline arguments here as needed */
-	char arg2[] = "-v";
-  	char arg3[] = "-gSimpleStringBuffer";
- 	char arg4[] = "-ojunit";
-	char* args[4];
+    char arg2[] = "-v";
+    char arg3[] = "-gSimpleStringBuffer";
+    char arg4[] = "-ojunit";
+    char* args[4];
 
-	args[1] = &arg2[0];
-	args[2] = &arg3[0];
-  	args[3] = &arg4[0];
-	av = args;
-	ac = 2; /* increase to 3 or 4 as needed */
+    args[1] = &arg2[0];
+    args[2] = &arg3[0];
+    args[3] = &arg4[0];
+    av = args;
+    ac = 2; /* increase to 3 or 4 as needed */
 
-	/* These checks are here to make sure assertions outside test runs don't crash */
-	CHECK(true);
-	LONGS_EQUAL(1, 1);
+    /* These checks are here to make sure assertions outside test runs don't crash */
+    CHECK(true);
+    LONGS_EQUAL(1, 1);
 
-	return CommandLineTestRunner::RunAllTests(ac, av);
+    return CommandLineTestRunner::RunAllTests(ac, av);
 }
 
