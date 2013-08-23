@@ -1,14 +1,14 @@
 ; Code Composer Project File, Version 2.0 (do not modify or remove this line)
 
 [Project Settings]
-ProjectDir="Y:\\Module_and_Unit_Test\40_SW\30_Module_Test\20_CppUTest\30_CppUTest\project\CCStudio\"
+ProjectDir="C:\data\00_Dev\05_CppUTest\cpputest\project\CCStudio\"
 ProjectType=Library
 CPUFamily=TMS320C28XX
 Tool="Archiver"
 Tool="Compiler"
 Tool="CustomBuilder"
 Tool="DspBiosBuilder"
-Config="Debug" 
+Config="Debug"
 
 [Source Files]
 Source="..\..\src\CppUTest\CommandLineArguments.cpp"
@@ -17,6 +17,7 @@ Source="..\..\src\CppUTest\JUnitTestOutput.cpp"
 Source="..\..\src\CppUTest\MemoryLeakDetector.cpp"
 Source="..\..\src\CppUTest\MemoryLeakWarningPlugin.cpp"
 Source="..\..\src\CppUTest\SimpleString.cpp"
+Source="..\..\src\CppUTest\TestFailure.cpp"
 Source="..\..\src\CppUTest\TestFilter.cpp"
 Source="..\..\src\CppUTest\TestHarness_c.cpp"
 Source="..\..\src\CppUTest\TestMemoryAllocator.cpp"
@@ -24,8 +25,6 @@ Source="..\..\src\CppUTest\TestOutput.cpp"
 Source="..\..\src\CppUTest\TestPlugin.cpp"
 Source="..\..\src\CppUTest\TestRegistry.cpp"
 Source="..\..\src\CppUTest\TestResult.cpp"
-Source="..\..\src\CppUTest\MemoryLeakDetector.cpp"
-Source="..\..\src\CppUTest\TestFailure.cpp"
 Source="..\..\src\CppUTest\Utest.cpp"
 Source="..\..\src\CppUTestExt\CodeMemoryReportFormatter.cpp"
 Source="..\..\src\CppUTestExt\MemoryReportAllocator.cpp"
