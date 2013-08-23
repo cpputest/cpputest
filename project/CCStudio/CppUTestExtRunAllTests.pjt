@@ -57,7 +57,7 @@ Source="..\..\tests\CppUTestExt\TestMockSupport.cpp"
 Source="..\..\tests\CppUTestExt\TestMockSupport_c.cpp"
 Source="..\..\tests\CppUTestExt\TestMockSupport_cCFile.c"
 Source="..\..\tests\CppUTestExt\TestOrderedTest.cpp"
-Source="..\..\tests\Platforms\CppUTestExt\AllTestsForTarget.cpp"
+Source="tests\CppUTestExt\AllTestsForTarget.cpp"
 Source="C:\CCStudio_v3.3\C2000\cgtools\lib\src\farmem_cpp.cpp"
 Source="sim28335.cmd"
 
