@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013, Michael Feathers, James Grenning, Bas Vodde
+ * Copyright (c) 2013, Michael Feathers, James Grenning, Bas Vodde 
  * and Arnd Strube
  * All rights reserved.
  *
@@ -27,25 +27,35 @@
  */
 
 #include "CppUTest/CommandLineTestRunner.h"
+#include "CppUTest/TestRegistry.h"
+#include "CppUTestExt/MemoryReporterPlugin.h"
+#include "CppUTestExt/MockSupportPlugin.h"
+#include "CppUTestExt/GTestConvertor.h"
 
 int main(int ac, char** av)
 {
     /* Specify commandline arguments here as needed */
     char arg2[] = "-v";
-    char arg3[] = "-gSimpleStringBuffer";
+    char arg3[] = "-gMemoryReporterPlugin";
     char arg4[] = "-ojunit";
     char* args[4];
 
-    args[1] = &arg2[0];
-    args[2] = &arg3[0];
-    args[3] = &arg4[0];
+    args[1] = &arg2[0]; // arg 2
+    args[2] = &arg3[0]; // arg 3
+    args[3] = &arg4[0]; // arg 4
     av = args;
-    ac = 2; /* increase to 3 or 4 as needed */
+    ac = 1; /* increase to 2, 3 or 4 as needed */
 
-    /* These checks are here to make sure assertions outside test runs don't crash */
-    CHECK(true);
-    LONGS_EQUAL(1, 1);
 
+#ifdef CPPUTEST_USE_REAL_GTEST
+    GTestConvertor convertor;
+    convertor.addAllGTestToTestRegistry();
+#endif
+
+    MemoryReporterPlugin plugin;
+    MockSupportPlugin mockPlugin;
+    TestRegistry::getCurrentRegistry()->installPlugin(&plugin);
+    TestRegistry::getCurrentRegistry()->installPlugin(&mockPlugin);
     return CommandLineTestRunner::RunAllTests(ac, av);
 }
 
