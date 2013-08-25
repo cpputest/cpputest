@@ -27,6 +27,7 @@
 #include "CppUTest/TestHarness.h"
 
 #include "CppUTest/TestHarness_c.h"
+#include "CppUTest/TestTestingFixture.h"
 #include "CppUTestExt/MockSupport_c.h"
 #include "TestMockSupport_cCFile.h"
 
@@ -142,3 +143,23 @@ TEST(MockSupport_c, WorksInCFile)
 {
 	all_mock_support_c_calls();
 }
+
+static bool destructorWasCalled = false;
+
+static void failedCallToMockC()
+{
+	SetBooleanOnDestructorCall setOneDestructor(destructorWasCalled);
+	mock_c()->actualCall("Not a call");
+}
+
+TEST(MockSupport_c, NoExceptionsAreThrownWhenAMock_cCallFailed)
+{
+	TestTestingFixture fixture;
+
+	fixture.setTestFunction(failedCallToMockC);
+	fixture.runAllTests();
+
+	LONGS_EQUAL(1, fixture.getFailureCount());
+	CHECK(!destructorWasCalled);
+}
+

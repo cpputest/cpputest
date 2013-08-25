@@ -42,7 +42,7 @@ TEST_GROUP(MockPlugin)
 
 	void setup()
 	{
-		mock().setMockFailureReporter(MockFailureReporterForTest::getReporter());
+		mock().setMockFailureStandardReporter(MockFailureReporterForTest::getReporter());
 
 		test = new UtestShell("group", "name", "file", 1);
 		output = new StringBufferTestOutput;
@@ -63,7 +63,7 @@ TEST_GROUP(MockPlugin)
 		delete plugin;
 
 		CHECK_NO_MOCK_FAILURE();
-		mock().setMockFailureReporter(NULL);
+		mock().setMockFailureStandardReporter(NULL);
 	}
 };
 

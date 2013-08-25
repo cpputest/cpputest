@@ -29,6 +29,7 @@
 #define D_TestTestingFixture_H
 
 #include "TestRegistry.h"
+#include "TestOutput.h"
 
 class TestTestingFixture
 {
@@ -101,6 +102,20 @@ public:
 	ExecFunctionTestShell* genTest_;
 	StringBufferTestOutput* output_;
 	TestResult * result_;
+};
+
+class SetBooleanOnDestructorCall
+{
+	bool& booleanToSet_;
+public:
+	SetBooleanOnDestructorCall(bool& booleanToSet) : booleanToSet_(booleanToSet)
+	{
+	}
+
+	virtual ~SetBooleanOnDestructorCall()
+	{
+		booleanToSet_ = true;
+	}
 };
 
 #endif

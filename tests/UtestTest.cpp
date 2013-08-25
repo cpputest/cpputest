@@ -133,19 +133,9 @@ TEST(UtestShell, TestStopsAfterSetupFailure)
 
 static bool destructorWasCalledOnFailedTest = false;
 
-class DestructorOughtToBeCalled
-{
-public:
-	virtual ~DestructorOughtToBeCalled()
-	{
-		destructorWasCalledOnFailedTest = true;
-	}
-};
-
-
 static void _destructorCalledForLocalObjects()
 {
-	DestructorOughtToBeCalled pleaseCallTheDestructor;
+	SetBooleanOnDestructorCall pleaseCallTheDestructor(destructorWasCalledOnFailedTest);
 	destructorWasCalledOnFailedTest = false;
 	FAIL("fail");
 }

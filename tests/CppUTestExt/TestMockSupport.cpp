@@ -37,7 +37,7 @@ TEST_GROUP(MockSupportTest)
 
 	void setup()
 	{
-		mock().setMockFailureReporter(MockFailureReporterForTest::getReporter());
+		mock().setMockFailureStandardReporter(MockFailureReporterForTest::getReporter());
 		expectationsList = new MockExpectedFunctionsList;
 	}
 
@@ -47,7 +47,7 @@ TEST_GROUP(MockSupportTest)
 		CHECK_NO_MOCK_FAILURE();
 		expectationsList->deleteAllExpectationsAndClearList();
 		delete expectationsList;
-		mock().setMockFailureReporter(NULL);
+		mock().setMockFailureStandardReporter(NULL);
 	}
 
 	MockExpectedFunctionCall* addFunctionToExpectationsList(const SimpleString& name)
