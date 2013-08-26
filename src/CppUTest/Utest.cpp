@@ -78,55 +78,52 @@ OutsideTestRunnerUTest& OutsideTestRunnerUTest::instance()
  */
 
 extern "C" {
-	static void helperDoTestSetup(void* data);
-	static void helperDoTestBody(void* data);
-	static void helperDoTestTeardown(void* data);
-	static void helperDoRunOneTestSeperateProcess(void* data);
-}
 
-static void helperDoTestSetup(void* data)
-{
-    ((Utest*)data)->setup();
-}
+    static void helperDoTestSetup(void* data)
+    {
+        ((Utest*)data)->setup();
+    }
 
-static void helperDoTestBody(void* data)
-{
-    ((Utest*)data)->testBody();
-}
+    static void helperDoTestBody(void* data)
+    {
+        ((Utest*)data)->testBody();
+    }
 
-static void helperDoTestTeardown(void* data)
-{
-    ((Utest*)data)->teardown();
-}
+    static void helperDoTestTeardown(void* data)
+    {
+        ((Utest*)data)->teardown();
+    }
 
-struct HelperTestRunInfo
-{
-	HelperTestRunInfo(UtestShell* shell, TestPlugin* plugin, TestResult* result) : shell_(shell), plugin_(plugin), result_(result){}
+    struct HelperTestRunInfo
+    {
+	    HelperTestRunInfo(UtestShell* shell, TestPlugin* plugin, TestResult* result) : shell_(shell), plugin_(plugin), result_(result){}
 
-	UtestShell* shell_;
-	TestPlugin* plugin_;
-	TestResult* result_;
-};
+	    UtestShell* shell_;
+	    TestPlugin* plugin_;
+	    TestResult* result_;
+    };
 
-static void helperDoRunOneTestInCurrentProcess(void* data)
-{
-	HelperTestRunInfo* runInfo = (HelperTestRunInfo*) data;
+    static void helperDoRunOneTestInCurrentProcess(void* data)
+    {
+	    HelperTestRunInfo* runInfo = (HelperTestRunInfo*) data;
 
-	UtestShell* shell = runInfo->shell_;
-	TestPlugin* plugin = runInfo->plugin_;
-	TestResult* result = runInfo->result_;
+	    UtestShell* shell = runInfo->shell_;
+	    TestPlugin* plugin = runInfo->plugin_;
+	    TestResult* result = runInfo->result_;
 
-	shell->runOneTestInCurrentProcess(plugin, *result);
-}
+	    shell->runOneTestInCurrentProcess(plugin, *result);
+    }
 
-static void helperDoRunOneTestSeperateProcess(void* data)
-{
-	HelperTestRunInfo* runInfo = (HelperTestRunInfo*) data;
+    static void helperDoRunOneTestSeperateProcess(void* data)
+    {
+	    HelperTestRunInfo* runInfo = (HelperTestRunInfo*) data;
 
-	UtestShell* shell = runInfo->shell_;
-	TestPlugin* plugin = runInfo->plugin_;
-	TestResult* result = runInfo->result_;
-	PlatformSpecificRunTestInASeperateProcess(shell, plugin, result);
+	    UtestShell* shell = runInfo->shell_;
+	    TestPlugin* plugin = runInfo->plugin_;
+	    TestResult* result = runInfo->result_;
+	    PlatformSpecificRunTestInASeperateProcess(shell, plugin, result);
+    }
+
 }
 
 /******************************** */
