@@ -40,7 +40,7 @@ int main(int ac, char** av)
     args[2] = &arg3[0];
     args[3] = &arg4[0];
     av = args;
-    ac = 1; /* increase to 2, 3 or 4 as needed */
+    ac = 2; /* increase to 3 or 4 as needed */
 
     /* These checks are here to make sure assertions outside test runs don't crash */
     CHECK(true);

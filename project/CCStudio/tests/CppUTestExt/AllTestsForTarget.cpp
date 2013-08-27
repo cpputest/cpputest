@@ -44,7 +44,7 @@ int main(int ac, char** av)
     args[2] = &arg3[0]; // arg 3
     args[3] = &arg4[0]; // arg 4
     av = args;
-    ac = 1; /* increase to 2, 3 or 4 as needed */
+    ac = 2; /* increase to 3 or 4 as needed */
 
 
 #ifdef CPPUTEST_USE_REAL_GTEST
