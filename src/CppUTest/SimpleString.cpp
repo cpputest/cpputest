@@ -384,6 +384,11 @@ SimpleString HexStringFrom(long value)
 	return StringFromFormat("%lx", value);
 }
 
+SimpleString HexStringFrom(unsigned long value)
+{
+	return StringFromFormat("%lx", value);
+}
+
 SimpleString StringFrom(double value, int precision)
 {
 	return StringFromFormat("%.*g", precision, value);
