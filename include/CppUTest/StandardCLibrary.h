@@ -49,7 +49,7 @@
 #ifdef __SIZE_TYPE__
 typedef __SIZE_TYPE__ size_t;
 #else
-typedef unsigned int size_t;
+typedef long unsigned int size_t;
 #endif
 
 typedef char* va_list;
