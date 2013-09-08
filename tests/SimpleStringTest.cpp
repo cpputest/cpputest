@@ -427,7 +427,7 @@ TEST(SimpleString, Sizes)
 
 TEST(SimpleString, HexStrings)
 {
-	SimpleString h1 = HexStringFrom(0xffff);
+	SimpleString h1 = HexStringFrom(0xffffL);
 	STRCMP_EQUAL("ffff", h1.asCharString());
 }
 
