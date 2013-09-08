@@ -376,7 +376,7 @@ SimpleString StringFrom(long value)
 
 SimpleString StringFrom(const void* value)
 {
-	return SimpleString("0x") + HexStringFrom((long) value);
+	return SimpleString("0x") + HexStringFrom((size_t) value);
 }
 
 SimpleString HexStringFrom(long value)
