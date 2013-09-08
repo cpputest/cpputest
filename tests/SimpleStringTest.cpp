@@ -427,7 +427,7 @@ TEST(SimpleString, Sizes)
 
 TEST(SimpleString, HexStrings)
 {
-	SimpleString h1 = HexStringFrom(0xffff);
+	SimpleString h1 = HexStringFrom(0xffffL);
 	STRCMP_EQUAL("ffff", h1.asCharString());
 }
 
@@ -445,6 +445,8 @@ TEST(SimpleString, StringFromFormatpointer)
 		STRCMP_EQUAL("0x1", h1.asCharString())
 	else if (h1.size() == 8)
 		STRCMP_EQUAL("00000001", h1.asCharString())
+	else if (h1.size() == 16)
+		STRCMP_EQUAL("0000000000000001", h1.asCharString())
 	else if (h1.size() == 1)
 		STRCMP_EQUAL("1", h1.asCharString())
 	else
