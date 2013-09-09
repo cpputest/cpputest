@@ -376,7 +376,7 @@ SimpleString StringFrom(long value)
 
 SimpleString StringFrom(const void* value)
 {
-	return SimpleString("0x") + HexStringFrom((size_t) value);
+	return SimpleString("0x") + HexStringFrom(value);
 }
 
 SimpleString HexStringFrom(long value)
@@ -384,9 +384,9 @@ SimpleString HexStringFrom(long value)
 	return StringFromFormat("%lx", value);
 }
 
-SimpleString HexStringFrom(size_t value)
+SimpleString HexStringFrom(const void* value)
 {
-	return StringFromFormat("%lx", value);
+	return StringFromFormat("%lx", (long) value);
 }
 
 SimpleString StringFrom(double value, int precision)
