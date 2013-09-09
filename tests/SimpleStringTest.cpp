@@ -449,6 +449,8 @@ TEST(SimpleString, StringFromFormatpointer)
 		STRCMP_EQUAL("0000000000000001", h1.asCharString())
 	else if (h1.size() == 1)
 		STRCMP_EQUAL("1", h1.asCharString())
+	else if (h1.size() == 16)
+		STRCMP_EQUAL("0000000000000001", h1.asCharString())
 	else
 		FAIL("Off %p behavior")
 }
@@ -546,6 +548,17 @@ TEST(SimpleString, CollectionWritingToEmptyString)
 	col[3] = SimpleString("HAH");
 	STRCMP_EQUAL("", col[3].asCharString());
 }
+
+#if defined(_WIN64)
+
+TEST(SimpleString, AddressFallsOutsideOf32bitAddressSpace)
+{
+    char * p = (char*) 0xffffffff;
+    SimpleString s = StringFrom((void*) &p[0x10000]);
+    STRCMP_EQUAL("0x10000ffff", s.asCharString());
+}
+
+#endif // _WIN64
 
 #if CPPUTEST_USE_STD_CPP_LIB
 
