@@ -449,8 +449,6 @@ TEST(SimpleString, StringFromFormatpointer)
 		STRCMP_EQUAL("0000000000000001", h1.asCharString())
 	else if (h1.size() == 1)
 		STRCMP_EQUAL("1", h1.asCharString())
-	else if (h1.size() == 16)
-		STRCMP_EQUAL("0000000000000001", h1.asCharString())
 	else
 		FAIL("Off %p behavior")
 }
