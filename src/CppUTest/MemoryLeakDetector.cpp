@@ -323,7 +323,7 @@ bool MemoryLeakDetectorList::hasLeaks(MemLeakPeriod period)
 
 unsigned long MemoryLeakDetectorTable::hash(char* memory)
 {
-	return ((size_t) memory) % hash_prime;
+	return (unsigned long)((size_t)memory % hash_prime);
 }
 
 void MemoryLeakDetectorTable::clearAllAccounting(MemLeakPeriod period)
