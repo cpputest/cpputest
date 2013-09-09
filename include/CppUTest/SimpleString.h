@@ -127,7 +127,7 @@ SimpleString StringFromOrNull(const char * value);
 SimpleString StringFrom(long value);
 SimpleString StringFrom(int value);
 SimpleString HexStringFrom(long value);
-SimpleString HexStringFrom(size_t value);
+SimpleString HexStringFrom(const void* value);
 SimpleString StringFrom(double value, int precision = 6);
 SimpleString StringFrom(const SimpleString& other);
 SimpleString StringFromFormat(const char* format, ...) __check_format__(printf, 1, 2);
