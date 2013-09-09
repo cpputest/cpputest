@@ -386,7 +386,7 @@ SimpleString HexStringFrom(long value)
 
 SimpleString HexStringFrom(const void* value)
 {
-	return StringFromFormat("%lx", value);
+	return StringFromFormat("%lx", (long) value);
 }
 
 SimpleString StringFrom(double value, int precision)
