@@ -384,7 +384,7 @@ SimpleString HexStringFrom(long value)
 	return StringFromFormat("%lx", value);
 }
 
-SimpleString HexStringFrom(size_t value)
+SimpleString HexStringFrom(const void* value)
 {
 	return StringFromFormat("%lx", value);
 }

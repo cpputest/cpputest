@@ -549,17 +549,6 @@ TEST(SimpleString, CollectionWritingToEmptyString)
 	STRCMP_EQUAL("", col[3].asCharString());
 }
 
-#if defined(_WIN64)
-
-TEST(SimpleString, AddressFallsOutsideOf32bitAddressSpace)
-{
-    char * p = (char*) 0xffffffff;
-    SimpleString s = StringFrom((void*) &p[0x10000]);
-    STRCMP_EQUAL("0x10000ffff", s.asCharString());
-}
-
-#endif // _WIN64
-
 #if CPPUTEST_USE_STD_CPP_LIB
 
 TEST(SimpleString, fromStdString)
