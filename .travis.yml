@@ -31,7 +31,3 @@ before_script:
 - mkdir -p $CPPUTEST_BUILD_DIR && cd $CPPUTEST_BUILD_DIR
 script: 
 - ../scripts/travis_ci_build.sh
-branches:
-  except:
-  - master
-  - travis
