@@ -15,7 +15,6 @@ if [ "x$BUILDTOOL" = "xautotools" ]; then
 	ant -f generate_junit_report_ant.xml
 
 	if [ "x$CXX" = "xg++" ]; then 
-		cd .. && travis_github_deployer -v || exit 1
 	fi; 
 fi
 
