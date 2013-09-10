@@ -1,6 +1,5 @@
-
-destination_repository: https://github.com/cpputest/cpputest.github.io.git
-
+destination_repository:
+  https://github.com/arstrube/cpputest.github.io.git
 files_to_deploy:
   cpputest_build/unit_test_report/*: unit_test_report
 
