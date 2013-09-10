@@ -13,9 +13,6 @@ if [ "x$BUILDTOOL" = "xautotools" ]; then
 	,/CppUTestExtTests -ojunit
 	cp ../scripts/generate_junit_report_ant.xml .
 	ant -f generate_junit_report_ant.xml
-
-	if [ "x$CXX" = "xg++" ]; then 
-	fi; 
 fi
 
 if [ "x$BUILDTOOL" = "xcmake" ]; then 
