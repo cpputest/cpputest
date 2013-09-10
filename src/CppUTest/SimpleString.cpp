@@ -391,7 +391,8 @@ static long convertPointerToLongValue(const void* value)
 	 * This isn't the right way to convert pointers values and need to change by implementing a
 	 * proper portable way to convert pointers to strings.
 	 */
-	return (long) *((long*) &value);
+	long* long_value = (long*) &value;
+	return *long_value;
 }
 
 SimpleString HexStringFrom(const void* value)
