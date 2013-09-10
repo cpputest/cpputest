@@ -547,6 +547,18 @@ TEST(SimpleString, CollectionWritingToEmptyString)
 	STRCMP_EQUAL("", col[3].asCharString());
 }
 
+TEST(SimpleString, _64BitAddressPrintsCorrectlyIfLongIs64BitOtherwiseOverflow)
+{
+	char* p = (char*) 0xffffffff;
+	SimpleString s = StringFrom((void*)&p[2]);
+	if(8 <= sizeof(long)) {
+	    STRCMP_EQUAL("0x100000001", s.asCharString());
+	}
+	else {
+	    STRCMP_EQUAL("0x1", s.asCharString());
+	}
+}
+
 #if CPPUTEST_USE_STD_CPP_LIB
 
 TEST(SimpleString, fromStdString)
