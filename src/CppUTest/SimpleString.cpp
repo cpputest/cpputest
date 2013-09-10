@@ -384,9 +384,19 @@ SimpleString HexStringFrom(long value)
 	return StringFromFormat("%lx", value);
 }
 
+static long convertPointerToLongValue(const void* value)
+{
+	/*
+	 * This way of converting also can convert a 64bit pointer in a 32bit integer by truncating.
+	 * This isn't the right way to convert pointers values and need to change by implementing a
+	 * proper portable way to convert pointers to strings.
+	 */
+	return (long) *((long*) &value);
+}
+
 SimpleString HexStringFrom(const void* value)
 {
-	return StringFromFormat("%lx", (long) value);
+	return StringFromFormat("%lx", convertPointerToLongValue(value));
 }
 
 SimpleString StringFrom(double value, int precision)
