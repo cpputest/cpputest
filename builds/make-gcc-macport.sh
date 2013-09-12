@@ -53,3 +53,4 @@ make check
 #these links keep compatibility with makefile worker
 ln -s $cpputest_home/include include
 ln -s $cpputest_home/build build
+ln -s $cpputest_home/scripts scripts

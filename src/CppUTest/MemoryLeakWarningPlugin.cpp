@@ -228,7 +228,7 @@ void operator delete(void* mem) UT_NOTHROW
 
 void operator delete(void* mem, const char*, int) UT_NOTHROW
 {
-	return operator_delete_fptr(mem);
+	operator_delete_fptr(mem);
 }
 
 void* operator new[](size_t size) UT_THROW(std::bad_alloc)
