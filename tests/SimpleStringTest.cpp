@@ -547,11 +547,12 @@ TEST(SimpleString, CollectionWritingToEmptyString)
 	STRCMP_EQUAL("", col[3].asCharString());
 }
 
-//#define __WIN64
-#if defined(__WIN64)
+#if defined(_WIN64) || defined(_WIN32)
 
-/* These tests will be used on Windows 7. They will test correctly
- * for both 32 bit and 64 targets on Windows 7.
+/* These tests will be used on Windows 7. They will compile and
+ * test correctly for both 32 bit and 64 targets on Windows 7.
+ * Note that we can't properly print the 64 bit pointer -- yet.
+ * All other 32 bit targets should compile part, too. How?
  */
 
 TEST(SimpleString, _64BitAddressPrintsTruncatedOnLLP64or32BitSystem)
@@ -560,19 +561,12 @@ TEST(SimpleString, _64BitAddressPrintsTruncatedOnLLP64or32BitSystem)
     SimpleString expected("0x23456789");
     SimpleString actual = StringFrom((void*)&p[0x2345678A]);
     STRCMP_EQUAL(expected.asCharString(), actual.asCharString());
-
-    ConsoleTestOutput o;
-    o.print("\nExpected: ");
-    o.print(expected.asCharString());
-    o.print("\nActual:   ");
-    o.print(actual.asCharString());
-    o.print("\n");
 }
 
 #else
 
-/* This would includ all other systems, Works fine for 64 bit
- * Linux -- but we need to exclude this from 32 bit systems
+/* This would include all other systems;
+ * works fine for 64 bit Linux.
  */
 
 TEST(SimpleString, _64BitAddressPrintsCorrectlyOnLP64System)
@@ -581,13 +575,6 @@ TEST(SimpleString, _64BitAddressPrintsCorrectlyOnLP64System)
     SimpleString expected("0x12345678901234");
     SimpleString actual = StringFrom((void*)p);
     STRCMP_EQUAL(expected.asCharString(), actual.asCharString());
-
-    ConsoleTestOutput o;
-    o.print("\nExpected: ");
-    o.print(expected.asCharString());
-    o.print("\nActual:   ");
-    o.print(actual.asCharString());
-    o.print("\n");
 }
 
 #endif
