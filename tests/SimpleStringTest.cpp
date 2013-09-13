@@ -547,17 +547,50 @@ TEST(SimpleString, CollectionWritingToEmptyString)
 	STRCMP_EQUAL("", col[3].asCharString());
 }
 
-TEST(SimpleString, _64BitAddressPrintsCorrectlyIfLongIs64BitOtherwiseOverflow)
+//#define __WIN64
+#if defined(__WIN64)
+
+/* These tests will be used on Windows 7. They will test correctly
+ * for both 32 bit and 64 targets on Windows 7.
+ */
+
+TEST(SimpleString, _64BitAddressPrintsTruncatedOnLLP64or32BitSystem)
 {
-	char* p = (char*) 0xffffffff;
-	SimpleString s = StringFrom((void*)&p[2]);
-	if(8 <= sizeof(long)) {
-	    STRCMP_EQUAL("0x100000001", s.asCharString());
-	}
-	else {
-	    STRCMP_EQUAL("0x1", s.asCharString());
-	}
+    char* p = (char*) 0xffffffffu;     // LLP64 has only 32 bit long
+    SimpleString expected("0x23456789");
+    SimpleString actual = StringFrom((void*)&p[0x2345678A]);
+    STRCMP_EQUAL(expected.asCharString(), actual.asCharString());
+
+    ConsoleTestOutput o;
+    o.print("\nExpected: ");
+    o.print(expected.asCharString());
+    o.print("\nActual:   ");
+    o.print(actual.asCharString());
+    o.print("\n");
 }
+
+#else
+
+/* This would includ all other systems, Works fine for 64 bit
+ * Linux -- but we need to exclude this from 32 bit systems
+ */
+
+TEST(SimpleString, _64BitAddressPrintsCorrectlyOnLP64System)
+{
+    char* p = (char*) 0x0012345678901234;
+    SimpleString expected("0x12345678901234");
+    SimpleString actual = StringFrom((void*)p);
+    STRCMP_EQUAL(expected.asCharString(), actual.asCharString());
+
+    ConsoleTestOutput o;
+    o.print("\nExpected: ");
+    o.print(expected.asCharString());
+    o.print("\nActual:   ");
+    o.print(actual.asCharString());
+    o.print("\n");
+}
+
+#endif
 
 #if CPPUTEST_USE_STD_CPP_LIB
 
