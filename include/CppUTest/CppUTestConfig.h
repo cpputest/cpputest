@@ -143,6 +143,17 @@
 #endif
 #endif
 
+/*
+ * Detection of different 64 bit environments
+ */
+
+#if defined(__LP64__) || defined(_LP64) || (__WORDSIZE == 64 ) || defined(__x86_64) || defined(_WIN64)
+#define CPPUTEST_64BIT
+#if defined(_WIN64)
+#define CPPUTEST_64BIT_32BIT_LONGS
+#endif
+#endif
+
 /* Should be the only #include here. Standard C library wrappers */
 #include "StandardCLibrary.h"
 
