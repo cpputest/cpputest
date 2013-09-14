@@ -29,26 +29,10 @@
 #define D_MemoryLeakWarningPlugin_h
 
 #include "TestPlugin.h"
+#include "MemoryLeakDetectorNewMacros.h"
 
 #define IGNORE_ALL_LEAKS_IN_TEST() MemoryLeakWarningPlugin::getFirstPlugin()->ignoreAllLeaksInTest();
 #define EXPECT_N_LEAKS(n)          MemoryLeakWarningPlugin::getFirstPlugin()->expectLeaksInTest(n);
-
-#if CPPUTEST_USE_MEM_LEAK_DETECTION
-
-#if !CPPUTEST_USE_NEW_MACROS
-	#include <new>
-	void* operator new(size_t size) UT_THROW(std::bad_alloc);
-	void* operator new[](size_t size) UT_THROW(std::bad_alloc);
-	void* operator new(size_t size, const std::nothrow_t&) UT_NOTHROW;
-	void* operator new[](size_t size, const std::nothrow_t&) UT_NOTHROW;
-#endif
-
-void operator delete(void* mem) UT_NOTHROW;
-void operator delete[](void* mem) UT_NOTHROW;
-void operator delete(void* mem, const char* file, int line) UT_NOTHROW;
-void operator delete[](void* mem, const char* file, int line) UT_NOTHROW;
-
-#endif
 
 extern void crash_on_allocation_number(unsigned alloc_number);
 
