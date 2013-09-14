@@ -547,17 +547,12 @@ TEST(SimpleString, CollectionWritingToEmptyString)
 	STRCMP_EQUAL("", col[3].asCharString());
 }
 
-#if defined(_WIN64) || defined(_WIN32)
+#ifdef CPPUTEST_64BIT
+#ifdef CPPUTEST_64BIT_32BIT_LONGS
 
-/* These tests will be used on Windows 7. They will compile and
- * test correctly for both 32 bit and 64 targets on Windows 7.
- * Note that we can't properly print the 64 bit pointer -- yet.
- * All other 32 bit targets should compile part, too. How?
- */
-
-TEST(SimpleString, _64BitAddressPrintsTruncatedOnLLP64or32BitSystem)
+TEST(SimpleString, _64BitAddressPrintsCorrectly)
 {
-    char* p = (char*) 0xffffffffu;     // LLP64 has only 32 bit long
+    char* p = (char*) 0xffffffffu; // LLP64 long is only 32 bit
     SimpleString expected("0x23456789");
     SimpleString actual = StringFrom((void*)&p[0x2345678A]);
     STRCMP_EQUAL(expected.asCharString(), actual.asCharString());
@@ -565,11 +560,7 @@ TEST(SimpleString, _64BitAddressPrintsTruncatedOnLLP64or32BitSystem)
 
 #else
 
-/* This would include all other systems;
- * works fine for 64 bit Linux.
- */
-
-TEST(SimpleString, _64BitAddressPrintsCorrectlyOnLP64System)
+TEST(SimpleString, _64BitAddressPrintsCorrectly)
 {
     char* p = (char*) 0x0012345678901234;
     SimpleString expected("0x12345678901234");
@@ -577,6 +568,7 @@ TEST(SimpleString, _64BitAddressPrintsCorrectlyOnLP64System)
     STRCMP_EQUAL(expected.asCharString(), actual.asCharString());
 }
 
+#endif
 #endif
 
 #if CPPUTEST_USE_STD_CPP_LIB
