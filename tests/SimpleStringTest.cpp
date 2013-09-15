@@ -550,9 +550,14 @@ TEST(SimpleString, CollectionWritingToEmptyString)
 #ifdef CPPUTEST_64BIT
 #ifdef CPPUTEST_64BIT_32BIT_LONGS
 
+/*
+ * Right now, the 64 bit pointers are casted to 32bit as the %p is causing different formats on
+ * different platforms. However, this will need to be fixed in the future and then this test ought
+ * to be deleted.
+ */
 TEST(SimpleString, _64BitAddressPrintsCorrectly)
 {
-    char* p = (char*) 0xffffffffu; // LLP64 long is only 32 bit
+    char* p = (char*) 0xffffffffu;
     SimpleString expected("0x23456789");
     SimpleString actual = StringFrom((void*)&p[0x2345678A]);
     STRCMP_EQUAL(expected.asCharString(), actual.asCharString());
