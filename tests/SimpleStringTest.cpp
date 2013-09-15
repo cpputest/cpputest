@@ -547,6 +547,30 @@ TEST(SimpleString, CollectionWritingToEmptyString)
 	STRCMP_EQUAL("", col[3].asCharString());
 }
 
+#ifdef CPPUTEST_64BIT
+#ifdef CPPUTEST_64BIT_32BIT_LONGS
+
+TEST(SimpleString, _64BitAddressPrintsCorrectly)
+{
+    char* p = (char*) 0xffffffffu; // LLP64 long is only 32 bit
+    SimpleString expected("0x23456789");
+    SimpleString actual = StringFrom((void*)&p[0x2345678A]);
+    STRCMP_EQUAL(expected.asCharString(), actual.asCharString());
+}
+
+#else
+
+TEST(SimpleString, _64BitAddressPrintsCorrectly)
+{
+    char* p = (char*) 0x0012345678901234;
+    SimpleString expected("0x12345678901234");
+    SimpleString actual = StringFrom((void*)p);
+    STRCMP_EQUAL(expected.asCharString(), actual.asCharString());
+}
+
+#endif
+#endif
+
 #if CPPUTEST_USE_STD_CPP_LIB
 
 TEST(SimpleString, fromStdString)
