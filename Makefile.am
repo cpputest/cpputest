@@ -202,7 +202,7 @@ check_all:
 	make distclean; $(srcdir)/configure --disable-extensions; make check
 
 	@echo "Building with the Std C++ 11 turned on. Compiler acts differently then."
-	make distclean; $(srcdir)/configure --enable-std-c++11; make
+	make distclean; $(srcdir)/configure --enable-std-cpp11; make
 
 	@echo "Building without the Standard C library"
 	make distclean; $(srcdir)/configure --disable-std-c; make
@@ -214,7 +214,7 @@ check_all:
 	make distclean; $(srcdir)/configure --disable-memory-leak-detection; make check
 
 	@echo "Building without memory leak detection and without Standard C++"
-	make distclean; $(srcdir)/configure --disable-memory-leak-detection --disable--std-cpp; make check
+	make distclean; $(srcdir)/configure --disable-memory-leak-detection --disable-std-cpp; make check
 
 	@echo "Generate a map file while building"
 	make distclean; $(srcdir)/configure -enable-generate-map-file; make check
