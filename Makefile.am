@@ -221,7 +221,7 @@ check_all:
 	if [ -s CppUTest.o.map.txt ]; then echo "Generating map file failed. Build failed!"; exit 1; fi
 	
 	@echo "Does the system have gcc? $(CPPUTEST_HAS_GCC)"
-	if test "x$(CPPUTEST_HAS_GCC)" = xyes; then echo "Compiling with gcc"; make distclean; ../configure CC="gcc" CXX="g++"; make check; fi
+	if test "x$(CPPUTEST_HAS_GCC)" = xyes; then echo "Compiling with gcc"; make distclean; $(srcdir)/configure CC="gcc" CXX="g++"; make check; fi
 
 	@echo "Does the system have clang and is a Mac? $(CPPUTEST_HAS_CLANG)"
 	if test "x$(CPPUTEST_HAS_CLANG)" = xyes && test "x$(CPPUTEST_ON_MACOSX)" = xyes; then \
@@ -236,7 +236,7 @@ check_all:
 	
 	@echo "Compile with coverage (switch to clang for Mac OSX)"
 	if test "x$(CPPUTEST_HAS_CLANG)" = xyes && test "x$(CPPUTEST_ON_MACOSX)" = xyes; then \
-	   echo "Compiling with clang"; make distclean; ../configure CC="clang" CXX="clang++" --enable-coverage; \
+	   echo "Compiling with clang"; make distclean; $(srcdir)/configure CC="clang" CXX="clang++" --enable-coverage; \
 	else \
 		make distclean; $(srcdir)/configure -enable-coverage;  \
 	fi
@@ -254,7 +254,7 @@ check_all:
 	rm -rf test_coverage
 
 	@echo "Compiling and running the examples. This will use the old Makefile"
-	make distclean; ../configure; make; $(MAKE) -C $(srcdir)/examples all clean CPPUTEST_LIB_LINK_DIR="`pwd`/lib"
+	make distclean; $(srcdir)/configure; make; $(MAKE) -C $(srcdir)/examples all clean CPPUTEST_LIB_LINK_DIR="`pwd`/lib"
 
 	@echo "Build using real gtest"
 	make distclean; $(srcdir)/configure --enable-real-gtest; make check
