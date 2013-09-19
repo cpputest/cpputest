@@ -147,7 +147,7 @@
  * Detection of different 64 bit environments
  */
 
-#if defined(__LP64__) || defined(_LP64) || (__WORDSIZE == 64 ) || defined(__x86_64) || defined(_WIN64)
+#if defined(__LP64__) || defined(_LP64) || (defined(__WORDSIZE) && (__WORDSIZE == 64 )) || defined(__x86_64) || defined(_WIN64)
 #define CPPUTEST_64BIT
 #if defined(_WIN64)
 #define CPPUTEST_64BIT_32BIT_LONGS
