@@ -214,7 +214,7 @@ check_all:
 	make distclean; $(srcdir)/configure --disable-memory-leak-detection; make check
 
 	@echo "Building without memory leak detection and without Standard C++"
-	make distclean; $(srcdir)/configure --disable-memory-leak-detection --disable--std-cpp; make check
+	make distclean; $(srcdir)/configure --disable-memory-leak-detection --disable-std-cpp; make check
 
 	@echo "Generate a map file while building"
 	make distclean; $(srcdir)/configure -enable-generate-map-file; make check
