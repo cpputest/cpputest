@@ -203,6 +203,11 @@ AC_MSG_CHECKING([whether CXX supports -std=c++11])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CPP11FLAG="-std=c++11" ], [AC_MSG_RESULT([no])])
 CXXFLAGS="$saved_cxxflags"
 
+CXXFLAGS="-stdlib=libc++"
+AC_MSG_CHECKING([whether CXX supports -stdlib=libc++])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <cstdio>]])], [AC_MSG_RESULT([yes]); CPPUTEST_CPP11FLAG+=" -stdlib=libc++" ], [AC_MSG_RESULT([no])])
+CXXFLAGS="$saved_cxxflags"
+
 AC_LANG_POP
 
 ### Checking for strange exception handling behavior, related to bugs in compilers...
