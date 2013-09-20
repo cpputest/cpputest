@@ -6765,7 +6765,7 @@ CXXFLAGS="-stdlib=libc++"
 $as_echo_n "checking whether CXX supports -stdlib=libc++... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-
+#include <cstdio>
 int
 main ()
 {
