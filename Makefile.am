@@ -202,7 +202,7 @@ check_all:
 	make distclean; $(srcdir)/configure --disable-extensions; make check
 
 	@echo "Building with the Std C++ 11 turned on. Compiler acts differently then."
-	make distclean; $(srcdir)/configure --enable-std-c++11; make
+	make distclean; $(srcdir)/configure --enable-std-cpp11; make
 
 	@echo "Building without the Standard C library"
 	make distclean; $(srcdir)/configure --disable-std-c; make
@@ -225,7 +225,7 @@ check_all:
 
 	@echo "Does the system have clang and is a Mac? $(CPPUTEST_HAS_CLANG)"
 	if test "x$(CPPUTEST_HAS_CLANG)" = xyes && test "x$(CPPUTEST_ON_MACOSX)" = xyes; then \
-	   echo "Compiling with clang"; make distclean; ../configure CC="clang" CXX="clang++"; make check; \
+	   echo "Compiling with clang"; make distclean; $(srcdir)/configure CC="clang" CXX="clang++"; make check; \
 	fi
 
 	@echo Testing JUnit output
