@@ -2354,7 +2354,7 @@ distcheck: dist
 	  && dc_destdir="$${TMPDIR-/tmp}/am-dc-$$$$/" \
 	  && am__cwd=`pwd` \
 	  && $(am__cd) $(distdir)/_build \
-	  && $(srcdir)/configure --srcdir=.. --prefix="$$dc_install_base" \
+	  && ../configure --srcdir=.. --prefix="$$dc_install_base" \
 	    $(DISTCHECK_CONFIGURE_FLAGS) \
 	  && $(MAKE) $(AM_MAKEFLAGS) \
 	  && $(MAKE) $(AM_MAKEFLAGS) dvi \
@@ -2589,10 +2589,12 @@ check_all:
 
 	@echo "Compile with coverage (switch to clang for Mac OSX)"
 	if test "x$(CPPUTEST_HAS_CLANG)" = xyes && test "x$(CPPUTEST_ON_MACOSX)" = xyes; then \
-	   echo "Compiling with clang"; make distclean; $(srcdir)/configure CC="clang" CXX="clang++" --enable-coverage; make check; \
+	   echo "Compiling with clang"; make distclean; $(srcdir)/configure CC="clang" CXX="clang++" --enable-coverage; \
 	else \
-		make distclean; $(srcdir)/configure -enable-coverage; make check; \
+		make distclean; $(srcdir)/configure -enable-coverage;  \
 	fi
+
+	make check
 
 	./$(CPPUTEST_TESTS) >> test_output.txt; ./$(CPPUTESTEXT_TESTS) >> test_output.txt 
 	$(SILENCE)for f in `ls *.gcno` ; do \
