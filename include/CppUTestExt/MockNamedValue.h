@@ -73,6 +73,7 @@ public:
 	virtual ~MockNamedValue();
 
 	virtual void setValue(int value);
+	virtual void setValue(unsigned int value);
 	virtual void setValue(double value);
 	virtual void setValue(void* value);
 	virtual void setValue(const char* value);
@@ -99,6 +100,7 @@ private:
 	SimpleString type_;
 	union {
 		int intValue_;
+		unsigned int unsignedIntValue_;
 		double doubleValue_;
 		const char* stringValue_;
 		void* pointerValue_;

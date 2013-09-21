@@ -39,6 +39,12 @@ MockNamedValue::~MockNamedValue()
 {
 }
 
+void MockNamedValue::setValue(unsigned int value)
+{
+	type_ = "unsigned int";
+	value_.unsignedIntValue_ = value;
+}
+
 void MockNamedValue::setValue(int value)
 {
 	type_ = "int";
@@ -86,7 +92,7 @@ SimpleString MockNamedValue::getType() const
 
 unsigned int MockNamedValue::getUnsignedIntValue() const
 {
-    return 0;
+    return value_.unsignedIntValue_;
 }
 
 int MockNamedValue::getIntValue() const
