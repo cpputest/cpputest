@@ -88,15 +88,8 @@ public:
 	virtual SimpleString getName() const;
 	virtual SimpleString getType() const;
 
-    /* TODO:KATCIPIS: Add getters that support a default value. So we can write mock().returnValue().getIntValueOrDefault(5) 
-     * See: https://github.com/cpputest/cpputest/issues/95
-     * 
-     * Or should we just use getIntValue with a parameter and make use of method overloading ?
-     *
-     * Also we need to add documentation about the ignoreOtherCalls problem related to return values here:
-     *      http://www.cpputest.org/node/35
-     * */
 	virtual int getIntValue() const;
+	virtual unsigned int getUnsignedIntValue() const;
 	virtual double getDoubleValue() const;
 	virtual const char* getStringValue() const;
 	virtual void* getPointerValue() const;

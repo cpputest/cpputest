@@ -52,6 +52,13 @@ MockFunctionCall& MockExpectedFunctionCall::withName(const SimpleString& name)
 	return *this;
 }
 
+MockFunctionCall& MockExpectedFunctionCall::withUnsignedIntParameter(const SimpleString& name, unsigned int value)
+{
+    (void)name;
+    (void)value;
+	return *this;
+}
+
 MockFunctionCall& MockExpectedFunctionCall::withIntParameter(const SimpleString& name, int value)
 {
 	MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);

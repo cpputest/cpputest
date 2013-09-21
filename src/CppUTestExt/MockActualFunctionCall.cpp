@@ -110,6 +110,13 @@ void MockActualFunctionCall::checkActualParameter(const MockNamedValue& actualPa
 	finnalizeCallWhenFulfilled();
 }
 
+MockFunctionCall& MockActualFunctionCall::withUnsignedIntParameter(const SimpleString& name, unsigned int value)
+{
+    (void)name;
+    (void)value;
+	return *this;
+}
+
 MockFunctionCall& MockActualFunctionCall::withIntParameter(const SimpleString& name, int value)
 {
 	MockNamedValue actualParameter(name);

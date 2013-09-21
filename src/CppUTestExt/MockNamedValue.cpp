@@ -84,6 +84,11 @@ SimpleString MockNamedValue::getType() const
 	return type_;
 }
 
+unsigned int MockNamedValue::getUnsignedIntValue() const
+{
+    return 0;
+}
+
 int MockNamedValue::getIntValue() const
 {
 	STRCMP_EQUAL("int", type_.asCharString());

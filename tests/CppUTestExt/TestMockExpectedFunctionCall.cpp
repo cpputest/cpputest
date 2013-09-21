@@ -110,6 +110,16 @@ TEST(MockExpectedFunctionCall, callWithoutParameterSetOrNotFound)
 	CHECK(!call->hasParameterWithName("nonexisting"));
 }
 
+TEST(MockExpectedFunctionCall, callWithUnsignedIntegerParameter)
+{
+    const SimpleString name = "unsigned integer"; 
+    unsigned int value = 777;
+	call->withParameter(name, value);
+	STRCMP_EQUAL("unsigned int", call->getParameterType(name).asCharString());
+	LONGS_EQUAL(value, call->getParameter(name).getUnsignedIntValue());
+	CHECK(call->hasParameterWithName(name));
+}
+
 TEST(MockExpectedFunctionCall, callWithIntegerParameter)
 {
 	call->withParameter("integer", 1);

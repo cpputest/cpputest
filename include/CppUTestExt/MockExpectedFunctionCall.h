@@ -43,6 +43,7 @@ public:
 	virtual MockFunctionCall& withName(const SimpleString& name);
 	virtual MockFunctionCall& withCallOrder(int);
 	virtual MockFunctionCall& withIntParameter(const SimpleString& name, int value);
+	virtual MockFunctionCall& withUnsignedIntParameter(const SimpleString& name, unsigned int value);
 	virtual MockFunctionCall& withDoubleParameter(const SimpleString& name, double value);
 	virtual MockFunctionCall& withStringParameter(const SimpleString& name, const char* value);
 	virtual MockFunctionCall& withPointerParameter(const SimpleString& name, void* value);

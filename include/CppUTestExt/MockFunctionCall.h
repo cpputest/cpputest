@@ -46,6 +46,7 @@ public:
 	virtual MockFunctionCall& withName(const SimpleString& name)=0;
 	virtual MockFunctionCall& withCallOrder(int)=0;
 	MockFunctionCall& withParameter(const SimpleString& name, int value) { return withIntParameter(name, value); }
+	MockFunctionCall& withParameter(const SimpleString& name, unsigned int value) { return withUnsignedIntParameter(name, value); }
 	MockFunctionCall& withParameter(const SimpleString& name, double value) { return withDoubleParameter(name, value); }
 	MockFunctionCall& withParameter(const SimpleString& name, const char* value) { return withStringParameter(name, value); }
 	MockFunctionCall& withParameter(const SimpleString& name, void* value) { return withPointerParameter(name, value); }
@@ -53,6 +54,7 @@ public:
 	virtual MockFunctionCall& ignoreOtherParameters() { return *this;}
 
 	virtual MockFunctionCall& withIntParameter(const SimpleString& name, int value)=0;
+	virtual MockFunctionCall& withUnsignedIntParameter(const SimpleString& name, unsigned int value)=0;
 	virtual MockFunctionCall& withDoubleParameter(const SimpleString& name, double value)=0;
 	virtual MockFunctionCall& withStringParameter(const SimpleString& name, const char* value)=0;
 	virtual MockFunctionCall& withPointerParameter(const SimpleString& name, void* value)=0;
@@ -86,6 +88,7 @@ public:
 	virtual MockFunctionCall& withName(const SimpleString&);
 	virtual MockFunctionCall& withCallOrder(int);
 	virtual MockFunctionCall& withIntParameter(const SimpleString&, int);
+	virtual MockFunctionCall& withUnsignedIntParameter(const SimpleString&, unsigned int);
 	virtual MockFunctionCall& withDoubleParameter(const SimpleString&, double);
 	virtual MockFunctionCall& withStringParameter(const SimpleString&, const char*);
 	virtual MockFunctionCall& withPointerParameter(const SimpleString& , void*);
@@ -113,6 +116,7 @@ public:
 	virtual MockFunctionCall& withName(const SimpleString&) { return *this;}
 	virtual MockFunctionCall& withCallOrder(int) { return *this; }
 	virtual MockFunctionCall& withIntParameter(const SimpleString&, int) { return *this; }
+	virtual MockFunctionCall& withUnsignedIntParameter(const SimpleString&, unsigned int) { MockIgnoredCall * bla = new MockIgnoredCall(); return *bla; } //TODO TEST THIS
 	virtual MockFunctionCall& withDoubleParameter(const SimpleString&, double) { return *this; }
 	virtual MockFunctionCall& withStringParameter(const SimpleString&, const char*) { return *this; }
 	virtual MockFunctionCall& withPointerParameter(const SimpleString& , void*) { return *this; }
@@ -139,6 +143,7 @@ public:
 	virtual MockFunctionCall& withName(const SimpleString& name);
 	virtual MockFunctionCall& withCallOrder(int);
 	virtual MockFunctionCall& withIntParameter(const SimpleString& name, int value);
+	virtual MockFunctionCall& withUnsignedIntParameter(const SimpleString& name, unsigned int value);
 	virtual MockFunctionCall& withDoubleParameter(const SimpleString& name, double value);
 	virtual MockFunctionCall& withStringParameter(const SimpleString& name, const char* value);
 	virtual MockFunctionCall& withPointerParameter(const SimpleString& name, void* value);

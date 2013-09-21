@@ -103,6 +103,13 @@ MockFunctionCall& MockFunctionCallComposite::withCallOrder(int)
 	return *this;
 }
 
+MockFunctionCall& MockFunctionCallComposite::withUnsignedIntParameter(const SimpleString& name, unsigned int value)
+{
+    (void)name;
+    (void)value;
+	return *this;
+}
+
 MockFunctionCall& MockFunctionCallComposite::withIntParameter(const SimpleString& name, int value)
 {
 	for (MockFunctionCallCompositeNode* node = head_; node != NULL; node = node->next_)
@@ -217,6 +224,13 @@ MockFunctionCall& MockFunctionCallTrace::withCallOrder(int callOrder)
 {
 	traceBuffer_ += "\nwithCallOrder: ";
 	traceBuffer_ += StringFrom(callOrder);
+	return *this;
+}
+
+MockFunctionCall& MockFunctionCallTrace::withUnsignedIntParameter(const SimpleString& name, unsigned int value)
+{
+    (void)name;
+    (void)value;
 	return *this;
 }
 
