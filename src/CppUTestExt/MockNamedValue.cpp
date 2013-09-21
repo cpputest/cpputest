@@ -136,6 +136,8 @@ bool MockNamedValue::equals(const MockNamedValue& p) const
 
 	if (type_ == "int")
 		return value_.intValue_ == p.value_.intValue_;
+    else if (type_ == "unsigned int")
+        return value_.unsignedIntValue_ == p.value_.unsignedIntValue_;
 	else if (type_ == "char*")
 		return SimpleString(value_.stringValue_) == SimpleString(p.value_.stringValue_);
 	else if (type_ == "void*")
