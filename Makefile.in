@@ -170,6 +170,7 @@ am_CppUTestTests_OBJECTS = CppUTestTests-AllTests.$(OBJEXT) \
 	CppUTestTests-SimpleStringTest.$(OBJEXT) \
 	CppUTestTests-CommandLineArgumentsTest.$(OBJEXT) \
 	CppUTestTests-TestFailureTest.$(OBJEXT) \
+	CppUTestTests-TestFailureNaNTest.$(OBJEXT) \
 	CppUTestTests-CommandLineTestRunnerTest.$(OBJEXT) \
 	CppUTestTests-TestFilterTest.$(OBJEXT) \
 	CppUTestTests-TestHarness_cTest.$(OBJEXT) \
@@ -528,6 +529,7 @@ CppUTestTests_SOURCES = \
 	tests/SimpleStringTest.cpp \
 	tests/CommandLineArgumentsTest.cpp \
 	tests/TestFailureTest.cpp \
+	tests/TestFailureNaNTest.cpp \
 	tests/CommandLineTestRunnerTest.cpp \
 	tests/TestFilterTest.cpp \
 	tests/TestHarness_cTest.cpp \
@@ -733,6 +735,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CppUTestTests-PreprocessorTest.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CppUTestTests-SetPluginTest.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CppUTestTests-SimpleStringTest.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CppUTestTests-TestFailureNaNTest.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CppUTestTests-TestFailureTest.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CppUTestTests-TestFilterTest.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CppUTestTests-TestHarness_cTest.Po@am__quote@
@@ -1735,6 +1738,22 @@ CppUTestTests-TestFailureTest.obj: tests/TestFailureTest.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='tests/TestFailureTest.cpp' object='CppUTestTests-TestFailureTest.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(CppUTestTests_CPPFLAGS) $(CPPFLAGS) $(CppUTestTests_CXXFLAGS) $(CXXFLAGS) -c -o CppUTestTests-TestFailureTest.obj `if test -f 'tests/TestFailureTest.cpp'; then $(CYGPATH_W) 'tests/TestFailureTest.cpp'; else $(CYGPATH_W) '$(srcdir)/tests/TestFailureTest.cpp'; fi`
+
+CppUTestTests-TestFailureNaNTest.o: tests/TestFailureNaNTest.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(CppUTestTests_CPPFLAGS) $(CPPFLAGS) $(CppUTestTests_CXXFLAGS) $(CXXFLAGS) -MT CppUTestTests-TestFailureNaNTest.o -MD -MP -MF $(DEPDIR)/CppUTestTests-TestFailureNaNTest.Tpo -c -o CppUTestTests-TestFailureNaNTest.o `test -f 'tests/TestFailureNaNTest.cpp' || echo '$(srcdir)/'`tests/TestFailureNaNTest.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/CppUTestTests-TestFailureNaNTest.Tpo $(DEPDIR)/CppUTestTests-TestFailureNaNTest.Po
+@am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='tests/TestFailureNaNTest.cpp' object='CppUTestTests-TestFailureNaNTest.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(CppUTestTests_CPPFLAGS) $(CPPFLAGS) $(CppUTestTests_CXXFLAGS) $(CXXFLAGS) -c -o CppUTestTests-TestFailureNaNTest.o `test -f 'tests/TestFailureNaNTest.cpp' || echo '$(srcdir)/'`tests/TestFailureNaNTest.cpp
+
+CppUTestTests-TestFailureNaNTest.obj: tests/TestFailureNaNTest.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(CppUTestTests_CPPFLAGS) $(CPPFLAGS) $(CppUTestTests_CXXFLAGS) $(CXXFLAGS) -MT CppUTestTests-TestFailureNaNTest.obj -MD -MP -MF $(DEPDIR)/CppUTestTests-TestFailureNaNTest.Tpo -c -o CppUTestTests-TestFailureNaNTest.obj `if test -f 'tests/TestFailureNaNTest.cpp'; then $(CYGPATH_W) 'tests/TestFailureNaNTest.cpp'; else $(CYGPATH_W) '$(srcdir)/tests/TestFailureNaNTest.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/CppUTestTests-TestFailureNaNTest.Tpo $(DEPDIR)/CppUTestTests-TestFailureNaNTest.Po
+@am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='tests/TestFailureNaNTest.cpp' object='CppUTestTests-TestFailureNaNTest.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(CppUTestTests_CPPFLAGS) $(CPPFLAGS) $(CppUTestTests_CXXFLAGS) $(CXXFLAGS) -c -o CppUTestTests-TestFailureNaNTest.obj `if test -f 'tests/TestFailureNaNTest.cpp'; then $(CYGPATH_W) 'tests/TestFailureNaNTest.cpp'; else $(CYGPATH_W) '$(srcdir)/tests/TestFailureNaNTest.cpp'; fi`
 
 CppUTestTests-CommandLineTestRunnerTest.o: tests/CommandLineTestRunnerTest.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(CppUTestTests_CPPFLAGS) $(CPPFLAGS) $(CppUTestTests_CXXFLAGS) $(CXXFLAGS) -MT CppUTestTests-CommandLineTestRunnerTest.o -MD -MP -MF $(DEPDIR)/CppUTestTests-CommandLineTestRunnerTest.Tpo -c -o CppUTestTests-CommandLineTestRunnerTest.o `test -f 'tests/CommandLineTestRunnerTest.cpp' || echo '$(srcdir)/'`tests/CommandLineTestRunnerTest.cpp
