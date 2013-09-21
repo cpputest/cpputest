@@ -92,7 +92,7 @@ SimpleString MockNamedValue::getType() const
 
 unsigned int MockNamedValue::getUnsignedIntValue() const
 {
-	//STRCMP_EQUAL("unsigned int", type_.asCharString());
+	//STRCMP_EQUAL("unsigned int", type_.asCharString()); TODO: HOW TO TDD THIS ?
     return value_.unsignedIntValue_;
 }
 
@@ -153,6 +153,7 @@ bool MockNamedValue::equals(const MockNamedValue& p) const
 
 SimpleString MockNamedValue::toString() const
 {
+    // TODO: HOW TO TDD THIS ?
 	if (type_ == "int")
 		return StringFrom(value_.intValue_);
 	else if (type_ == "char*")
