@@ -278,6 +278,15 @@ TEST(MockSupportTest, expectOneCallHoweverMultipleHappened)
 	CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 
+TEST(MockSupportTest, expectOneUnsignedIntegerParameterAndValue)
+{
+    unsigned int value = 144000;
+	mock().expectOneCall("foo").withParameter("parameter", value);
+	mock().actualCall("foo").withParameter("parameter", value);
+	mock().checkExpectations();
+	CHECK_NO_MOCK_FAILURE();
+}
+
 TEST(MockSupportTest, expectOneIntegerParameterAndValue)
 {
 	mock().expectOneCall("foo").withParameter("parameter", 10);
@@ -323,6 +332,20 @@ TEST(MockSupportTest, expectOneStringParameterAndValueFails)
 	CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 
+TEST(MockSupportTest, expectOneUnsignedIntegerParameterAndFailsDueToParameterName)
+{
+    unsigned int value = 7;
+	MockNamedValue parameter("different");
+	parameter.setValue(value);
+	addFunctionToExpectationsList("foo")->withParameter("parameter", value);
+	MockUnexpectedParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, *expectationsList);
+
+	mock().expectOneCall("foo").withParameter("parameter", value);
+	mock().actualCall("foo").withParameter("different", value);
+
+	CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
 TEST(MockSupportTest, expectOneIntegerParameterAndFailsDueToParameterName)
 {
 	MockNamedValue parameter("different");
@@ -336,6 +359,22 @@ TEST(MockSupportTest, expectOneIntegerParameterAndFailsDueToParameterName)
 	CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 
+TEST(MockSupportTest, expectOneUnsignedIntegerParameterAndFailsDueToValue)
+{
+    unsigned int actual_value = 8;
+    unsigned int expected_value = actual_value + 1;
+	MockNamedValue parameter("parameter");
+
+	parameter.setValue(actual_value);
+	addFunctionToExpectationsList("foo")->withParameter("parameter", expected_value);
+	MockUnexpectedParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, *expectationsList);
+
+	mock().expectOneCall("foo").withParameter("parameter", expected_value);
+	mock().actualCall("foo").withParameter("parameter", actual_value);
+
+	CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
 TEST(MockSupportTest, expectOneIntegerParameterAndFailsDueToValue)
 {
 	MockNamedValue parameter("parameter");
@@ -345,6 +384,22 @@ TEST(MockSupportTest, expectOneIntegerParameterAndFailsDueToValue)
 
 	mock().expectOneCall("foo").withParameter("parameter", 10);
 	mock().actualCall("foo").withParameter("parameter", 8);
+
+	CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
+TEST(MockSupportTest, expectOneUnsignedIntegerParameterAndFailsDueToTypes)
+{
+    unsigned int expected_value = 7777;
+    int actual_value = (int) expected_value;
+
+	MockNamedValue parameter("parameter");
+	parameter.setValue(actual_value);
+	addFunctionToExpectationsList("foo")->withParameter("parameter", expected_value);
+	MockUnexpectedParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, *expectationsList);
+
+	mock().expectOneCall("foo").withParameter("parameter", expected_value);
+	mock().actualCall("foo").withParameter("parameter", actual_value);
 
 	CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }

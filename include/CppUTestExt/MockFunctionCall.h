@@ -165,6 +165,8 @@ public:
 
 private:
 	SimpleString traceBuffer_;
+
+	void addParameterName(const SimpleString& name);
 };
 
 #endif

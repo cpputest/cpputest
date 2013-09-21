@@ -227,45 +227,44 @@ MockFunctionCall& MockFunctionCallTrace::withCallOrder(int callOrder)
 	return *this;
 }
 
+void MockFunctionCallTrace::addParameterName(const SimpleString& name)
+{
+	traceBuffer_ += " ";
+	traceBuffer_ += name;
+	traceBuffer_ += ":";
+}
+
 MockFunctionCall& MockFunctionCallTrace::withUnsignedIntParameter(const SimpleString& name, unsigned int value)
 {
-    (void)name;
-    (void)value;
+    addParameterName(name);
+	traceBuffer_ += StringFrom(value);
 	return *this;
 }
 
 MockFunctionCall& MockFunctionCallTrace::withIntParameter(const SimpleString& name, int value)
 {
-	traceBuffer_ += " ";
-	traceBuffer_ += name;
-	traceBuffer_ += ":";
+    addParameterName(name);
 	traceBuffer_ += StringFrom(value);
 	return *this;
 }
 
 MockFunctionCall& MockFunctionCallTrace::withDoubleParameter(const SimpleString& name, double value)
 {
-	traceBuffer_ += " ";
-	traceBuffer_ += name;
-	traceBuffer_ += ":";
+    addParameterName(name);
 	traceBuffer_ += StringFrom(value);
 	return *this;
 }
 
 MockFunctionCall& MockFunctionCallTrace::withStringParameter(const SimpleString& name, const char* value)
 {
-	traceBuffer_ += " ";
-	traceBuffer_ += name;
-	traceBuffer_ += ":";
+    addParameterName(name);
 	traceBuffer_ += StringFrom(value);
 	return *this;
 }
 
 MockFunctionCall& MockFunctionCallTrace::withPointerParameter(const SimpleString& name, void* value)
 {
-	traceBuffer_ += " ";
-	traceBuffer_ += name;
-	traceBuffer_ += ":";
+    addParameterName(name);
 	traceBuffer_ += StringFrom(value);
 	return *this;
 }
@@ -274,9 +273,7 @@ MockFunctionCall& MockFunctionCallTrace::withParameterOfType(const SimpleString&
 {
 	traceBuffer_ += " ";
 	traceBuffer_ += typeName;
-	traceBuffer_ += " ";
-	traceBuffer_ += name;
-	traceBuffer_ += ":";
+    addParameterName(name);
 	traceBuffer_ += StringFrom(value);
 	return *this;
 }
