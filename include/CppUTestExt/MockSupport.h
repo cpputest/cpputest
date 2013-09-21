@@ -37,7 +37,7 @@ class UtestShell;
 class MockSupport;
 
 /* This allows access to "the global" mocking support for easier testing */
-MockSupport& mock(const SimpleString& mockName = "");
+MockSupport& mock(const SimpleString& mockName = "", MockFailureReporter* failureReporterForThisCall = NULL);
 
 class MockSupport
 {
@@ -81,8 +81,14 @@ public:
     virtual bool expectedCallsLeft();
 
     virtual void clear();
-	virtual void setMockFailureReporter(MockFailureReporter* reporter);
 	virtual void crashOnFailure();
+
+	/*
+	 * Each mock() call will set the activeReporter to standard, unless a special reporter is passed for this call.
+	 */
+
+	virtual void setMockFailureStandardReporter(MockFailureReporter* reporter);
+	virtual void setActiveReporter(MockFailureReporter* activeReporter);
 
 	virtual void installComparator(const SimpleString& typeName, MockNamedValueComparator& comparator);
 	virtual void installComparators(const MockNamedValueComparatorRepository& repository);
@@ -96,7 +102,8 @@ private:
     static int callOrder_;
     static int expectedCallOrder_;
     bool strictOrdering_;
-    MockFailureReporter *reporter_;
+    MockFailureReporter *activeReporter_;
+    MockFailureReporter *standardReporter_;
     MockFailureReporter defaultReporter_;
     MockExpectedFunctionsList expectations_;
     bool ignoreOtherCalls_;

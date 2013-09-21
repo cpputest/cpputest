@@ -126,8 +126,7 @@ bool TestFailure::isInHelperFunction() const
 
 SimpleString TestFailure::createButWasString(const SimpleString& expected, const SimpleString& actual)
 {
-	const char* format = "expected <%s>\n\tbut was  <%s>";
-	return StringFromFormat(format, expected.asCharString(), actual.asCharString());
+	return StringFromFormat("expected <%s>\n\tbut was  <%s>", expected.asCharString(), actual.asCharString());
 }
 
 SimpleString TestFailure::createDifferenceAtPosString(const SimpleString& actual, size_t position)
@@ -138,7 +137,7 @@ SimpleString TestFailure::createDifferenceAtPosString(const SimpleString& actual
 
 	SimpleString paddingForPreventingOutOfBounds (" ", halfOfExtraCharactersWindow);
 	SimpleString actualString = paddingForPreventingOutOfBounds + actual + paddingForPreventingOutOfBounds;
-	SimpleString differentString = StringFromFormat("difference starts at position %d at: <", position);
+	SimpleString differentString = StringFromFormat("difference starts at position %lu at: <", (unsigned long) position);
 
 	result += "\n";
 	result += StringFromFormat("\t%s%s>\n", differentString.asCharString(), actualString.subString(position, extraCharactersWindow).asCharString());
@@ -194,8 +193,7 @@ CheckEqualFailure::CheckEqualFailure(UtestShell* test, const char* fileName, int
 ContainsFailure::ContainsFailure(UtestShell* test, const char* fileName, int lineNumber, const SimpleString& expected, const SimpleString& actual) :
 	TestFailure(test, fileName, lineNumber)
 {
-	const char* format = "actual <%s>\n\tdid not contain  <%s>";
-	message_ = StringFromFormat(format, actual.asCharString(), expected.asCharString());
+	message_ = StringFromFormat("actual <%s>\n\tdid not contain  <%s>", actual.asCharString(), expected.asCharString());
 }
 
 CheckFailure::CheckFailure(UtestShell* test, const char* fileName, int lineNumber, const SimpleString& checkString, const SimpleString& conditionString, const SimpleString& text) : TestFailure(test, fileName, lineNumber)

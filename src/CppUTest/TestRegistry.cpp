@@ -59,7 +59,7 @@ void TestRegistry::runAllTests(TestResult& result)
 		result.countTest();
 		if (testShouldRun(test, result)) {
 			result.currentTestStarted(test);
-			test->runOneTestWithPlugins(firstPlugin_, result);
+			test->runOneTest(firstPlugin_, result);
 			result.currentTestEnded(test);
 		}
 

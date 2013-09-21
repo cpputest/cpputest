@@ -38,22 +38,22 @@ public:
 	MockNamedValueComparator() {}
 	virtual ~MockNamedValueComparator() {}
 
-	virtual bool isEqual(void* object1, void* object2)=0;
-	virtual SimpleString valueToString(void* object)=0;
+	virtual bool isEqual(const void* object1, const void* object2)=0;
+	virtual SimpleString valueToString(const void* object)=0;
 };
 
 class MockFunctionComparator : public MockNamedValueComparator
 {
 public:
-	typedef bool (*isEqualFunction)(void*, void*);
-	typedef SimpleString (*valueToStringFunction)(void*);
+	typedef bool (*isEqualFunction)(const void*, const void*);
+	typedef SimpleString (*valueToStringFunction)(const void*);
 
 	MockFunctionComparator(isEqualFunction equal, valueToStringFunction valToString)
 		: equal_(equal), valueToString_(valToString) {}
 	virtual ~MockFunctionComparator(){}
 
-	virtual bool isEqual(void* object1, void* object2){ return equal_(object1, object2); }
-	virtual SimpleString valueToString(void* object) { return valueToString_(object); }
+	virtual bool isEqual(const void* object1, const void* object2){ return equal_(object1, object2); }
+	virtual SimpleString valueToString(const void* object) { return valueToString_(object); }
 private:
 	isEqualFunction equal_;
 	valueToStringFunction valueToString_;
@@ -76,7 +76,7 @@ public:
 	virtual void setValue(double value);
 	virtual void setValue(void* value);
 	virtual void setValue(const char* value);
-	virtual void setObjectPointer(const SimpleString& type, void* objectPtr);
+	virtual void setObjectPointer(const SimpleString& type, const void* objectPtr);
 
 	virtual void setComparator(MockNamedValueComparator* comparator);
 	virtual void setName(const char* name);
@@ -100,7 +100,7 @@ public:
 	virtual double getDoubleValue() const;
 	virtual const char* getStringValue() const;
 	virtual void* getPointerValue() const;
-	virtual void* getObjectPointer() const;
+	virtual const void* getObjectPointer() const;
 private:
 	SimpleString name_;
 	SimpleString type_;
@@ -109,7 +109,7 @@ private:
 		double doubleValue_;
 		const char* stringValue_;
 		void* pointerValue_;
-		void* objectPointerValue_;
+		const void* objectPointerValue_;
 	} value_;
 	MockNamedValueComparator* comparator_;
 };

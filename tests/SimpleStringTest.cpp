@@ -427,7 +427,7 @@ TEST(SimpleString, Sizes)
 
 TEST(SimpleString, HexStrings)
 {
-	SimpleString h1 = HexStringFrom(0xffff);
+	SimpleString h1 = HexStringFrom(0xffffL);
 	STRCMP_EQUAL("ffff", h1.asCharString());
 }
 
@@ -440,11 +440,13 @@ TEST(SimpleString, StringFromFormat)
 TEST(SimpleString, StringFromFormatpointer)
 {
 	//this is not a great test. but %p is odd on mingw and even more odd on Solaris.
-	SimpleString h1 = StringFromFormat("%p", 1);
+	SimpleString h1 = StringFromFormat("%p", (void*) 1);
 	if (h1.size() == 3)
 		STRCMP_EQUAL("0x1", h1.asCharString())
 	else if (h1.size() == 8)
 		STRCMP_EQUAL("00000001", h1.asCharString())
+	else if (h1.size() == 16)
+		STRCMP_EQUAL("0000000000000001", h1.asCharString())
 	else if (h1.size() == 1)
 		STRCMP_EQUAL("1", h1.asCharString())
 	else
@@ -544,6 +546,35 @@ TEST(SimpleString, CollectionWritingToEmptyString)
 	col[3] = SimpleString("HAH");
 	STRCMP_EQUAL("", col[3].asCharString());
 }
+
+#ifdef CPPUTEST_64BIT
+#ifdef CPPUTEST_64BIT_32BIT_LONGS
+
+/*
+ * Right now, the 64 bit pointers are casted to 32bit as the %p is causing different formats on
+ * different platforms. However, this will need to be fixed in the future and then this test ought
+ * to be deleted.
+ */
+TEST(SimpleString, _64BitAddressPrintsCorrectly)
+{
+    char* p = (char*) 0xffffffffu;
+    SimpleString expected("0x23456789");
+    SimpleString actual = StringFrom((void*)&p[0x2345678A]);
+    STRCMP_EQUAL(expected.asCharString(), actual.asCharString());
+}
+
+#else
+
+TEST(SimpleString, _64BitAddressPrintsCorrectly)
+{
+    char* p = (char*) 0x0012345678901234;
+    SimpleString expected("0x12345678901234");
+    SimpleString actual = StringFrom((void*)p);
+    STRCMP_EQUAL(expected.asCharString(), actual.asCharString());
+}
+
+#endif
+#endif
 
 #if CPPUTEST_USE_STD_CPP_LIB
 

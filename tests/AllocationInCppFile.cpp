@@ -26,3 +26,9 @@ char* newArrayAllocationWithoutMacro()
 {
 	return new char[100];
 }
+
+ClassThatThrowsAnExceptionInTheConstructor::ClassThatThrowsAnExceptionInTheConstructor()
+{
+  throw 1;
+}
+

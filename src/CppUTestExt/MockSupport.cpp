@@ -37,16 +37,17 @@ static MockSupport global_mock;
 int MockSupport::callOrder_ = 0;
 int MockSupport::expectedCallOrder_ = 0;
 
-MockSupport& mock(const SimpleString& mockName)
+MockSupport& mock(const SimpleString& mockName, MockFailureReporter* failureReporterForThisCall)
 {
-	if (mockName != "")
-		return *global_mock.getMockSupportScope(mockName);
-	return global_mock;
+	MockSupport& mock_support = (mockName != "") ? *global_mock.getMockSupportScope(mockName) : global_mock;
+	mock_support.setActiveReporter(failureReporterForThisCall);
+	return mock_support;
 }
 
 MockSupport::MockSupport()
-	: strictOrdering_(false), reporter_(&defaultReporter_), ignoreOtherCalls_(false), enabled_(true), lastActualFunctionCall_(NULL), tracing_(false)
+	: strictOrdering_(false), standardReporter_(&defaultReporter_), ignoreOtherCalls_(false), enabled_(true), lastActualFunctionCall_(NULL), tracing_(false)
 {
+	setActiveReporter(NULL);
 }
 
 MockSupport::~MockSupport()
@@ -55,18 +56,23 @@ MockSupport::~MockSupport()
 
 void MockSupport::crashOnFailure()
 {
-	reporter_->crashOnFailure();
+	activeReporter_->crashOnFailure();
 }
 
-void MockSupport::setMockFailureReporter(MockFailureReporter* reporter)
+void MockSupport::setMockFailureStandardReporter(MockFailureReporter* reporter)
 {
-	reporter_ = (reporter != NULL) ? reporter : &defaultReporter_;
+	standardReporter_ = (reporter != NULL) ? reporter : &defaultReporter_;
 
 	if (lastActualFunctionCall_)
-		lastActualFunctionCall_->setMockFailureReporter(reporter_);
+		lastActualFunctionCall_->setMockFailureReporter(standardReporter_);
 
 	for (MockNamedValueListNode* p = data_.begin(); p; p = p->next())
-		if (getMockSupport(p)) getMockSupport(p)->setMockFailureReporter(reporter_);
+		if (getMockSupport(p)) getMockSupport(p)->setMockFailureStandardReporter(standardReporter_);
+}
+
+void MockSupport::setActiveReporter(MockFailureReporter* reporter)
+{
+	activeReporter_ = (reporter) ? reporter : standardReporter_;
 }
 
 void MockSupport::installComparator(const SimpleString& typeName, MockNamedValueComparator& comparator)
@@ -148,7 +154,7 @@ MockFunctionCall& MockSupport::expectNCalls(int amount, const SimpleString& func
 
 MockActualFunctionCall* MockSupport::createActualFunctionCall()
 {
-	lastActualFunctionCall_ = new MockActualFunctionCall(++callOrder_, reporter_, expectations_);
+	lastActualFunctionCall_ = new MockActualFunctionCall(++callOrder_, activeReporter_, expectations_);
 	return lastActualFunctionCall_;
 }
 
@@ -242,7 +248,7 @@ void MockSupport::failTestWithUnexpectedCalls()
 		if(getMockSupport(p))
 			expectationsList.addExpectations(getMockSupport(p)->expectations_);
 
-    MockExpectedCallsDidntHappenFailure failure(reporter_->getTestToFail(), expectationsList);
+    MockExpectedCallsDidntHappenFailure failure(activeReporter_->getTestToFail(), expectationsList);
     clear();
     failTest(failure);
 }
@@ -256,15 +262,14 @@ void MockSupport::failTestWithOutOfOrderCalls()
 		if(getMockSupport(p))
 			expectationsList.addExpectations(getMockSupport(p)->expectations_);
 
-    MockCallOrderFailure failure(reporter_->getTestToFail(), expectationsList);
+    MockCallOrderFailure failure(activeReporter_->getTestToFail(), expectationsList);
     clear();
     failTest(failure);
 }
 
 void MockSupport::failTest(MockFailure& failure)
 {
-	if (reporter_->getAmountOfTestFailures() == 0)
-		reporter_->failTest(failure);
+	activeReporter_->failTest(failure);
 }
 
 void MockSupport::checkExpectationsOfLastCall()
@@ -344,7 +349,7 @@ MockNamedValue MockSupport::getData(const SimpleString& name)
 MockSupport* MockSupport::clone()
 {
 	MockSupport* newMock = new MockSupport;
-	newMock->setMockFailureReporter(reporter_);
+	newMock->setMockFailureStandardReporter(standardReporter_);
 	if (ignoreOtherCalls_) newMock->ignoreOtherCalls();
 
 	if (!enabled_) newMock->disable();

@@ -2,16 +2,17 @@
 ACLOCAL_AMFLAGS = -I m4
 
 CPPUTEST_TESTS = CppUTestTests
+CPPUTESTEXT_TESTS = CppUTestExtTests
 
-EXTRA_LIBRARIES = libCppUTestExt.a
+EXTRA_LIBRARIES = lib/libCppUTestExt.a
 EXTRA_PROGRAMS = CppUTestExtTests
 
-lib_LIBRARIES = libCppUTest.a
+lib_LIBRARIES = lib/libCppUTest.a
 check_PROGRAMS = $(CPPUTEST_TESTS)
 
 if INCLUDE_CPPUTEST_EXT
-lib_LIBRARIES+= libCppUTestExt.a
-check_PROGRAMS += CppUTestExtTests
+lib_LIBRARIES+= lib/libCppUTestExt.a
+check_PROGRAMS += $(CPPUTESTEXT_TESTS)
 endif
 
 TESTS = $(check_PROGRAMS)
@@ -23,11 +24,11 @@ EXTRA_DIST = \
 	cpputest.pc.in \
 	$(ALL_FILES_IN_GIT)
 
-libCppUTest_a_CPPFLAGS = $(AM_CPPFLAGS) $(CPPUTEST_CPPFLAGS) $(CPPUTEST_ADDITIONAL_CPPFLAGS)
-libCppUTest_a_CFLAGS = $(AM_CFLAGS) $(CPPUTEST_CFLAGS) $(CPPUTEST_ADDITIONAL_CFLAGS)
-libCppUTest_a_CXXFLAGS = $(AM_CXXFLAGS) $(CPPUTEST_CXXFLAGS) $(CPPUTEST_ADDITIONAL_CXXFLAGS)
+lib_libCppUTest_a_CPPFLAGS = $(AM_CPPFLAGS) $(CPPUTEST_CPPFLAGS) $(CPPUTEST_ADDITIONAL_CPPFLAGS)
+lib_libCppUTest_a_CFLAGS = $(AM_CFLAGS) $(CPPUTEST_CFLAGS) $(CPPUTEST_ADDITIONAL_CFLAGS)
+lib_libCppUTest_a_CXXFLAGS = $(AM_CXXFLAGS) $(CPPUTEST_CXXFLAGS) $(CPPUTEST_ADDITIONAL_CXXFLAGS)
 
-libCppUTest_a_SOURCES = \
+lib_libCppUTest_a_SOURCES = \
 	src/CppUTest/CommandLineArguments.cpp \
 	src/CppUTest/MemoryLeakWarningPlugin.cpp \
 	src/CppUTest/TestHarness_c.cpp \
@@ -73,11 +74,11 @@ include_cpputest_HEADERS = \
 	include/CppUTest/TestHarness_c.h \
 	include/CppUTest/UtestMacros.h
 
-libCppUTestExt_a_CPPFLAGS = $(libCppUTest_a_CPPFLAGS)
-libCppUTestExt_a_CFLAGS = $(libCppUTest_a_CFLAGS)
-libCppUTestExt_a_CXXFLAGS = $(libCppUTest_a_CXXFLAGS)
+lib_libCppUTestExt_a_CPPFLAGS = $(lib_libCppUTest_a_CPPFLAGS)
+lib_libCppUTestExt_a_CFLAGS = $(lib_libCppUTest_a_CFLAGS)
+lib_libCppUTestExt_a_CXXFLAGS = $(lib_libCppUTest_a_CXXFLAGS)
 
-libCppUTestExt_a_SOURCES = \
+lib_libCppUTestExt_a_SOURCES = \
    src/CppUTestExt/CodeMemoryReportFormatter.cpp \
    src/CppUTestExt/MemoryReporterPlugin.cpp \
    src/CppUTestExt/MockFailure.cpp \
@@ -116,10 +117,10 @@ include_cpputestext_HEADERS = \
 	
 endif
 
-CppUTestTests_CPPFLAGS = $(libCppUTest_a_CPPFLAGS)
-CppUTestTests_CFLAGS = $(libCppUTest_a_CFLAGS)
-CppUTestTests_CXXFLAGS = $(libCppUTest_a_CXXFLAGS) 
-CppUTestTests_LDADD = libCppUTest.a $(CPPUTEST_LDADD)
+CppUTestTests_CPPFLAGS = $(lib_libCppUTest_a_CPPFLAGS)
+CppUTestTests_CFLAGS = $(lib_libCppUTest_a_CFLAGS)
+CppUTestTests_CXXFLAGS = $(lib_libCppUTest_a_CXXFLAGS) 
+CppUTestTests_LDADD = lib/libCppUTest.a $(CPPUTEST_LDADD)
 CppUTestTests_LDFLAGS = $(AM_LDFLAGS) $(CPPUTEST_LDFLAGS) $(CPPUTEST_ADDITIONAL_LDFLAGS)
 
 CppUTestTests_SOURCES = \
@@ -129,6 +130,7 @@ CppUTestTests_SOURCES = \
 	tests/SimpleStringTest.cpp \
 	tests/CommandLineArgumentsTest.cpp \
 	tests/TestFailureTest.cpp \
+	tests/TestFailureNaNTest.cpp \
 	tests/CommandLineTestRunnerTest.cpp \
 	tests/TestFilterTest.cpp \
 	tests/TestHarness_cTest.cpp \
@@ -152,10 +154,10 @@ CppUTestTests_SOURCES = \
 	tests/AllocationInCppFile.cpp \
 	tests/UtestTest.cpp
 
-CppUTestExtTests_CPPFLAGS = $(libCppUTestExt_a_CPPFLAGS)
-CppUTestExtTests_CFLAGS = $(libCppUTestExt_a_CFLAGS)
-CppUTestExtTests_CXXFLAGS = $(libCppUTestExt_a_CXXFLAGS) 
-CppUTestExtTests_LDADD = libCppUTestExt.a libCppUTest.a $(CPPUTEST_LDADD)
+CppUTestExtTests_CPPFLAGS = $(lib_libCppUTestExt_a_CPPFLAGS)
+CppUTestExtTests_CFLAGS = $(lib_libCppUTestExt_a_CFLAGS)
+CppUTestExtTests_CXXFLAGS = $(lib_libCppUTestExt_a_CXXFLAGS) 
+CppUTestExtTests_LDADD = lib/libCppUTestExt.a lib/libCppUTest.a $(CPPUTEST_LDADD)
 CppUTestExtTests_LDFLAGS = $(CppUTestTests_LDFLAGS)
 
 CppUTestExtTests_SOURCES = \
@@ -181,10 +183,27 @@ CppUTestExtTests_SOURCES = \
 RUN_CPPUTEST_TESTS = ./$(CPPUTEST_TESTS) -r
 #RUN_CPPUTEST_EXT_TESTS = ./$(CPPUTEST_EXT_TESTS) -r
 
-check_all:
+valgrind: check
+	@if test "x$(CPPUTEST_HAS_VALGRIND)" = xno; then echo "Running the valgrind target without having valgrind. Perhaps install it first?"; exit 1; fi
+	valgrind --dsymutil=yes --suppressions=$(srcdir)/valgrind.suppressions --gen-suppressions=all --error-exitcode=1 ./$(CPPUTEST_TESTS)
+
+tdd: $(CPPUTEST_TESTS) $(CPPUTESTEXT_TESTS)
+	./$(CPPUTEST_TESTS)
+if INCLUDE_CPPUTEST_EXT
+	./$(CPPUTESTEXT_TESTS)
+endif
+	
+
+check_all: 
+
+	@echo "Building and valgrinding"
+	make distclean; $(srcdir)/configure; make valgrind
 	
 	@echo "Building without extensions"
 	make distclean; $(srcdir)/configure --disable-extensions; make check
+
+	@echo "Building with the Std C++ 11 turned on. Compiler acts differently then."
+	make distclean; $(srcdir)/configure --enable-std-cpp11; make
 
 	@echo "Building without the Standard C library"
 	make distclean; $(srcdir)/configure --disable-std-c; make
@@ -196,18 +215,18 @@ check_all:
 	make distclean; $(srcdir)/configure --disable-memory-leak-detection; make check
 
 	@echo "Building without memory leak detection and without Standard C++"
-	make distclean; $(srcdir)/configure --disable-memory-leak-detection --disable--std-cpp; make check
+	make distclean; $(srcdir)/configure --disable-memory-leak-detection --disable-std-cpp; make check
 
 	@echo "Generate a map file while building"
 	make distclean; $(srcdir)/configure -enable-generate-map-file; make check
 	if [ -s CppUTest.o.map.txt ]; then echo "Generating map file failed. Build failed!"; exit 1; fi
 	
 	@echo "Does the system have gcc? $(CPPUTEST_HAS_GCC)"
-	if test "x$(CPPUTEST_HAS_GCC)" = xyes; then echo "Compiling with gcc"; make distclean; ../configure CC="gcc" CXX="g++"; make check; fi
+	if test "x$(CPPUTEST_HAS_GCC)" = xyes; then echo "Compiling with gcc"; make distclean; $(srcdir)/configure CC="gcc" CXX="g++"; make check; fi
 
 	@echo "Does the system have clang and is a Mac? $(CPPUTEST_HAS_CLANG)"
 	if test "x$(CPPUTEST_HAS_CLANG)" = xyes && test "x$(CPPUTEST_ON_MACOSX)" = xyes; then \
-	   echo "Compiling with clang"; make distclean; ../configure CC="clang" CXX="clang++"; make check; \
+	   echo "Compiling with clang"; make distclean; $(srcdir)/configure CC="clang" CXX="clang++"; make check; \
 	fi
 
 	@echo Testing JUnit output
@@ -218,14 +237,16 @@ check_all:
 	
 	@echo "Compile with coverage (switch to clang for Mac OSX)"
 	if test "x$(CPPUTEST_HAS_CLANG)" = xyes && test "x$(CPPUTEST_ON_MACOSX)" = xyes; then \
-	   echo "Compiling with clang"; make distclean; ../configure CC="clang" CXX="clang++" --enable-coverage; make check; \
+	   echo "Compiling with clang"; make distclean; $(srcdir)/configure CC="clang" CXX="clang++" --enable-coverage; \
 	else \
-		make distclean; $(srcdir)/configure -enable-coverage; make check; \
+		make distclean; $(srcdir)/configure -enable-coverage;  \
 	fi
 	
-	./$(CPPUTEST_TESTS) >> test_output.txt; $(CPPUTESTEXT_TESTS) >> test_output.txt 
+	make check
+	
+	./$(CPPUTEST_TESTS) >> test_output.txt; ./$(CPPUTESTEXT_TESTS) >> test_output.txt 
 	$(SILENCE)for f in `ls *.gcno` ; do \
-		gcov $(CppUTestExtTests_SOURCES) $(CppUTestTests_SOURCES) $(libCppUTest_a_SOURCES) $(libCppUTestExt_a_SOURCES) -o $$f 1>>gcov_output.txt 2>>gcov_error.txt; \
+		gcov $(CppUTestExtTests_SOURCES) $(CppUTestTests_SOURCES) $(lib_libCppUTest_a_SOURCES) $(lib_libCppUTestExt_a_SOURCES) -o $$f 1>>gcov_output.txt 2>>gcov_error.txt; \
 	done
 	$(srcdir)/scripts/filterGcov.sh gcov_output.txt gcov_error.txt gcov_report.txt test_output.txt
 	cat gcov_report.txt
@@ -234,7 +255,7 @@ check_all:
 	rm -rf test_coverage
 
 	@echo "Compiling and running the examples. This will use the old Makefile"
-	make distclean; ../configure; make; $(MAKE) -C $(srcdir)/examples all clean CPPUTEST_LIB_LINK_DIR="`pwd`"
+	make distclean; $(srcdir)/configure; make; $(MAKE) -C $(srcdir)/examples all clean CPPUTEST_LIB_LINK_DIR="`pwd`/lib"
 
 	@echo "Build using real gtest"
 	make distclean; $(srcdir)/configure --enable-real-gtest; make check

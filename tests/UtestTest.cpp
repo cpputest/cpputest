@@ -113,6 +113,7 @@ TEST(UtestShell, TestStopsAfterTestFailure)
 	stopAfterFailure = 0;
 	fixture.setTestFunction(_stopAfterFailureMethod);
 	fixture.runAllTests();
+	CHECK(fixture.hasTestFailed());
 	LONGS_EQUAL(1, fixture.getFailureCount());
 	LONGS_EQUAL(0, stopAfterFailure);
 }
@@ -128,22 +129,13 @@ TEST(UtestShell, TestStopsAfterSetupFailure)
 	LONGS_EQUAL(0, stopAfterFailure);
 }
 
-static bool destructorWasCalledOnFailedTest = false;
-
-class DestructorOughtToBeCalled
-{
-public:
-	virtual ~DestructorOughtToBeCalled()
-	{
-		destructorWasCalledOnFailedTest = true;
-	}
-};
-
 #if CPPUTEST_USE_STD_CPP_LIB
+
+static bool destructorWasCalledOnFailedTest = false;
 
 static void _destructorCalledForLocalObjects()
 {
-	DestructorOughtToBeCalled pleaseCallTheDestructor;
+	SetBooleanOnDestructorCall pleaseCallTheDestructor(destructorWasCalledOnFailedTest);
 	destructorWasCalledOnFailedTest = false;
 	FAIL("fail");
 }

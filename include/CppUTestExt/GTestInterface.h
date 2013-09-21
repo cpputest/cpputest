@@ -65,17 +65,7 @@
  */
 
 #define EXPECT_EQ(expected, actual) \
-  if ((expected) != (actual))\
-  {\
-	 { \
-      UtestShell::getTestResult()->countCheck();\
-  	   CheckEqualFailure _f(UtestShell::getCurrent(), __FILE__, __LINE__, StringFrom(expected), StringFrom(actual)); \
-      UtestShell::getTestResult()->addFailure(_f);\
-    } \
-    UtestShell::getCurrent()->exitCurrentTest(); \
-  }\
-  else\
-	 UtestShell::getTestResult()->countCheck();
+  { UtestShell::getCurrent()->assertEquals(((expected) != (actual)), StringFrom(expected).asCharString(), StringFrom(actual).asCharString(), __FILE__, __LINE__); }
 
 #define EXPECT_TRUE(condition) \
 	{ UtestShell::getCurrent()->assertTrue((condition) != 0, "EXPECT_TRUE", #condition, __FILE__, __LINE__); }

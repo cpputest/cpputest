@@ -7,6 +7,7 @@ set(CppUTestTests_src
         SimpleStringTest.cpp
         CommandLineArgumentsTest.cpp
         TestFailureTest.cpp
+        TestFailureNaNTest.cpp
         CommandLineTestRunnerTest.cpp
         TestFilterTest.cpp
         TestHarness_cTest.cpp

@@ -27,6 +27,7 @@
 #include "CppUTest/TestHarness.h"
 
 #include "CppUTest/TestHarness_c.h"
+#include "CppUTest/TestTestingFixture.h"
 #include "CppUTestExt/MockSupport_c.h"
 #include "TestMockSupport_cCFile.h"
 
@@ -49,15 +50,18 @@ TEST(MockSupport_c, expectAndActualParameters)
 			withStringParameters("string", "string")->withPointerParameters("pointer", (void*) 1);
 }
 
-static int typeNameIsEqual(void* object1, void* object2)
-{
-	return object1 == object2;
+extern "C"{
 
-}
+    static int typeNameIsEqual(const void* object1, const void* object2)
+    {
+	    return object1 == object2;
+    }
 
-static char* typeNameValueToString(void* PUNUSED(object))
-{
-	return (char*) "valueToString";
+    static char* typeNameValueToString(const void* PUNUSED(object))
+    {
+	    return (char*) "valueToString";
+    }
+
 }
 
 TEST(MockSupport_c, expectAndActualParametersOnObject)
@@ -139,3 +143,23 @@ TEST(MockSupport_c, WorksInCFile)
 {
 	all_mock_support_c_calls();
 }
+
+static bool destructorWasCalled = false;
+
+static void failedCallToMockC()
+{
+	SetBooleanOnDestructorCall setOneDestructor(destructorWasCalled);
+	mock_c()->actualCall("Not a call");
+}
+
+TEST(MockSupport_c, NoExceptionsAreThrownWhenAMock_cCallFailed)
+{
+	TestTestingFixture fixture;
+
+	fixture.setTestFunction(failedCallToMockC);
+	fixture.runAllTests();
+
+	LONGS_EQUAL(1, fixture.getFailureCount());
+	CHECK(!destructorWasCalled);
+}
+

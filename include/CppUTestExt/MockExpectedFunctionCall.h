@@ -42,11 +42,11 @@ public:
 
 	virtual MockFunctionCall& withName(const SimpleString& name);
 	virtual MockFunctionCall& withCallOrder(int);
-	virtual MockFunctionCall& withParameter(const SimpleString& name, int value);
-	virtual MockFunctionCall& withParameter(const SimpleString& name, double value);
-	virtual MockFunctionCall& withParameter(const SimpleString& name, const char* value);
-	virtual MockFunctionCall& withParameter(const SimpleString& name, void* value);
-	virtual MockFunctionCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, void* value);
+	virtual MockFunctionCall& withIntParameter(const SimpleString& name, int value);
+	virtual MockFunctionCall& withDoubleParameter(const SimpleString& name, double value);
+	virtual MockFunctionCall& withStringParameter(const SimpleString& name, const char* value);
+	virtual MockFunctionCall& withPointerParameter(const SimpleString& name, void* value);
+	virtual MockFunctionCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value);
 	virtual MockFunctionCall& ignoreOtherParameters();
 
 	virtual MockFunctionCall& andReturnValue(int value);

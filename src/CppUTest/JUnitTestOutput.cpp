@@ -47,7 +47,7 @@ struct JUnitTestCaseResultNode
 struct JUnitTestGroupResult
 {
 	JUnitTestGroupResult() :
-		testCount_(0), failureCount_(0), groupExecTime_(0), head_(0), tail_(0)
+		testCount_(0), failureCount_(0), startTime_(0), groupExecTime_(0), head_(0), tail_(0)
 	{
 	}
 

@@ -29,6 +29,7 @@
 #define D_TestTestingFixture_H
 
 #include "TestRegistry.h"
+#include "TestOutput.h"
 
 class TestTestingFixture
 {
@@ -79,6 +80,12 @@ public:
 		return result_->getFailureCount();
 	}
 
+	bool hasTestFailed()
+	{
+		return genTest_->hasFailed();
+	}
+
+
 	void assertPrintContains(const SimpleString& contains)
 	{
 		assertPrintContains(output_, contains);
@@ -95,6 +102,20 @@ public:
 	ExecFunctionTestShell* genTest_;
 	StringBufferTestOutput* output_;
 	TestResult * result_;
+};
+
+class SetBooleanOnDestructorCall
+{
+	bool& booleanToSet_;
+public:
+	SetBooleanOnDestructorCall(bool& booleanToSet) : booleanToSet_(booleanToSet)
+	{
+	}
+
+	virtual ~SetBooleanOnDestructorCall()
+	{
+		booleanToSet_ = true;
+	}
 };
 
 #endif

@@ -209,8 +209,8 @@ TEST(MemoryLeakOverridesToBeUsedInProductionCode, MallocWithButFreeWithoutLeakDe
 {
 	char* leak = mallocAllocation();
 	freeAllocationWithoutMacro(leak);
-	STRCMP_CONTAINS("Memory leak reports about malloc and free can be caused", memLeakDetector->report(mem_leak_period_checking));
-	memLeakDetector->removeMemoryLeakInformationWithoutCheckingOrDeallocating(leak);
+	LONGS_EQUAL(2, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
+	memLeakDetector->removeMemoryLeakInformationWithoutCheckingOrDeallocatingTheMemoryButDeallocatingTheAccountInformation(getCurrentMallocAllocator(), leak, true);
 }
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, OperatorNewOverloadingWithoutMacroWorks)
@@ -269,14 +269,6 @@ TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorThrowsAnExceptionWhe
 {
 	CHECK_THROWS(std::bad_alloc, new char[10]);
 }
-
-class ClassThatThrowsAnExceptionInTheConstructor
-{
-public:
-	ClassThatThrowsAnExceptionInTheConstructor() __no_return__ {
-		throw 1;
-	}
-};
 
 TEST_GROUP(TestForExceptionsInConstructor)
 {

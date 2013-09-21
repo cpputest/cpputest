@@ -48,7 +48,7 @@ typedef struct SMockValue_c
 		double doubleValue;
 		const char* stringValue;
 		void* pointerValue;
-		void* objectValue;
+		const void* objectValue;
 	} value;
 } MockValue_c;
 
@@ -70,8 +70,8 @@ struct SMockFunctionCall_c
 
 };
 
-typedef int (*MockTypeEqualFunction_c)(void* object1, void* object2);
-typedef char* (*MockTypeValueToStringFunction_c)(void* object1);
+typedef int (*MockTypeEqualFunction_c)(const void* object1, const void* object2);
+typedef char* (*MockTypeValueToStringFunction_c)(const void* object1);
 
 typedef struct SMockSupport_c MockSupport_c;
 struct SMockSupport_c

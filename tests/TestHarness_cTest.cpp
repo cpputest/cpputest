@@ -33,11 +33,22 @@
 #include "CppUTest/TestTestingFixture.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
+
+static bool hasDestructorOfTheDestructorCheckedBeenCalled;
+
+class HasTheDestructorBeenCalledChecker
+{
+public:
+	HasTheDestructorBeenCalledChecker(){}
+	~HasTheDestructorBeenCalledChecker() { hasDestructorOfTheDestructorCheckedBeenCalled = true; }
+};
+
 TEST_GROUP(TestHarness_c)
 {
 	TestTestingFixture* fixture;
 	TEST_SETUP()
 	{
+		hasDestructorOfTheDestructorCheckedBeenCalled = false;
 		fixture = new TestTestingFixture();
 	}
 	TEST_TEARDOWN()
@@ -48,6 +59,7 @@ TEST_GROUP(TestHarness_c)
 
 static void _failIntMethod()
 {
+	HasTheDestructorBeenCalledChecker checker;
 	CHECK_EQUAL_C_INT(1, 2);
 }
 
@@ -56,12 +68,14 @@ TEST(TestHarness_c, checkInt)
 	CHECK_EQUAL_C_INT(2, 2);
 	fixture->setTestFunction(_failIntMethod);
 	fixture->runAllTests();
-	fixture->assertPrintContains("expected <1>\n	but was  <2>");
+	fixture->assertPrintContains("expected <1 0x1>\n	but was  <2 0x2>");
 	fixture->assertPrintContains("arness_c");
+	CHECK(!hasDestructorOfTheDestructorCheckedBeenCalled)
 }
 
 static void _failRealMethod()
 {
+	HasTheDestructorBeenCalledChecker checker;
 	CHECK_EQUAL_C_REAL(1.0, 2.0, 0.5);
 }
 
@@ -72,10 +86,12 @@ TEST(TestHarness_c, checkReal)
 	fixture->runAllTests();
 	fixture->assertPrintContains("expected <1>\n	but was  <2>");
 	fixture->assertPrintContains("arness_c");
+	CHECK(!hasDestructorOfTheDestructorCheckedBeenCalled)
 }
 
 static void _failCharMethod()
 {
+	HasTheDestructorBeenCalledChecker checker;
 	CHECK_EQUAL_C_CHAR('a', 'c');
 }
 
@@ -86,10 +102,12 @@ TEST(TestHarness_c, checkChar)
 	fixture->runAllTests();
 	fixture->assertPrintContains("expected <a>\n	but was  <c>");
 	fixture->assertPrintContains("arness_c");
+	CHECK(!hasDestructorOfTheDestructorCheckedBeenCalled)
 }
 
 static void _failStringMethod()
 {
+	HasTheDestructorBeenCalledChecker checker;
 	CHECK_EQUAL_C_STRING("Hello", "Hello World");
 }
 
@@ -102,10 +120,12 @@ TEST(TestHarness_c, checkString)
 	StringEqualFailure failure(UtestShell::getCurrent(), "file", 1, "Hello", "Hello World");
 	fixture->assertPrintContains(failure.getMessage());
 	fixture->assertPrintContains("arness_c");
+	CHECK(!hasDestructorOfTheDestructorCheckedBeenCalled)
 }
 
 static void _failTextMethod()
 {
+	HasTheDestructorBeenCalledChecker checker;
 	FAIL_TEXT_C("Booo");
 }
 
@@ -115,10 +135,12 @@ TEST(TestHarness_c, checkFailText)
 	fixture->runAllTests();
 	fixture->assertPrintContains("Booo");
 	fixture->assertPrintContains("arness_c");
+	CHECK(!hasDestructorOfTheDestructorCheckedBeenCalled)
 }
 
 static void _failMethod()
 {
+	HasTheDestructorBeenCalledChecker checker;
 	FAIL_C();
 }
 
@@ -128,10 +150,12 @@ TEST(TestHarness_c, checkFail)
 	fixture->runAllTests();
 	LONGS_EQUAL(1, fixture->getFailureCount());
 	fixture->assertPrintContains("arness_c");
+	CHECK(!hasDestructorOfTheDestructorCheckedBeenCalled)
 }
 
 static void _CheckMethod()
 {
+	HasTheDestructorBeenCalledChecker checker;
 	CHECK_C(false);
 }
 
@@ -141,6 +165,7 @@ TEST(TestHarness_c, checkCheck)
 	fixture->setTestFunction(_CheckMethod);
 	fixture->runAllTests();
 	LONGS_EQUAL(1, fixture->getFailureCount());
+	CHECK(!hasDestructorOfTheDestructorCheckedBeenCalled)
 }
 
 #if CPPUTEST_USE_MEM_LEAK_DETECTION
@@ -218,8 +243,10 @@ TEST(TestHarness_c, cpputest_realloc_larger)
 
 TEST(TestHarness_c, macros)
 {
+#if CPPUTEST_USE_MALLOC_MACROS
 	MemoryLeakDetector* memLeakDetector = MemoryLeakWarningPlugin::getGlobalDetector();
 	int memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
+#endif
 	void* mem1 = malloc(10);
 	void* mem2 = calloc(10, 20);
 	void* mem3 = realloc(mem2, 100);
@@ -240,6 +267,14 @@ TEST(TestHarness_c, callocInitializedToZero)
 	for (int i = 0; i < 20; i++)
 		CHECK(mem[i] == 0);
 	free(mem);
+}
+
+TEST(TestHarness_c, callocShouldReturnNULLWhenOutOfMeory)
+{
+	cpputest_malloc_set_out_of_memory_countdown(0);
+	void * m = cpputest_calloc(1, 1);
+	CHECK(m == 0);
+	cpputest_malloc_set_not_out_of_memory();
 }
 #endif
 

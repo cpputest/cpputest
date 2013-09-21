@@ -33,12 +33,12 @@
 class MyDummyComparator : public MockNamedValueComparator
 {
 public:
-	virtual bool isEqual(void* object1, void* object2)
+	virtual bool isEqual(const void* object1, const void* object2)
 	{
 		return object1 == object2;
 	}
 
-	virtual SimpleString valueToString(void* object)
+	virtual SimpleString valueToString(const void* object)
 	{
 		return StringFrom(object);
 	}

@@ -376,7 +376,7 @@ SimpleString StringFrom(long value)
 
 SimpleString StringFrom(const void* value)
 {
-	return SimpleString("0x") + HexStringFrom((long) value);
+	return SimpleString("0x") + HexStringFrom(value);
 }
 
 SimpleString HexStringFrom(long value)
@@ -384,10 +384,25 @@ SimpleString HexStringFrom(long value)
 	return StringFromFormat("%lx", value);
 }
 
+static long convertPointerToLongValue(const void* value)
+{
+	/*
+	 * This way of converting also can convert a 64bit pointer in a 32bit integer by truncating.
+	 * This isn't the right way to convert pointers values and need to change by implementing a
+	 * proper portable way to convert pointers to strings.
+	 */
+	long* long_value = (long*) &value;
+	return *long_value;
+}
+
+SimpleString HexStringFrom(const void* value)
+{
+	return StringFromFormat("%lx", convertPointerToLongValue(value));
+}
+
 SimpleString StringFrom(double value, int precision)
 {
-	SimpleString format = StringFromFormat("%%.%dg", precision);
-	return StringFromFormat(format.asCharString(), value);
+	return StringFromFormat("%.*g", precision, value);
 }
 
 SimpleString StringFrom(char value)
@@ -458,12 +473,12 @@ SimpleString VStringFromFormat(const char* format, va_list args)
 	char defaultBuffer[sizeOfdefaultBuffer];
 	SimpleString resultString;
 
-	int size = PlatformSpecificVSNprintf(defaultBuffer, sizeOfdefaultBuffer, format, args);
+	size_t size = (size_t)PlatformSpecificVSNprintf(defaultBuffer, sizeOfdefaultBuffer, format, args);
 	if (size < sizeOfdefaultBuffer) {
 		resultString = SimpleString(defaultBuffer);
 	}
 	else {
-		size_t newBufferSize = (size_t) size + 1;
+		size_t newBufferSize = size + 1;
 		char* newBuffer = SimpleString::allocStringBuffer(newBufferSize);
 		PlatformSpecificVSNprintf(newBuffer, newBufferSize, format, argsCopy);
 		resultString = SimpleString(newBuffer);

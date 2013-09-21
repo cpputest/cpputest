@@ -1,0 +1,72 @@
+; Code Composer Project File, Version 2.0 (do not modify or remove this line)
+
+[Project Settings]
+ProjectDir="C:\data\00_Dev\05_CppUTest\cpputest\project\CCStudio\"
+ProjectType=Executable
+CPUFamily=TMS320C28XX
+Tool="Compiler"
+Tool="CustomBuilder"
+Tool="DspBiosBuilder"
+Tool="Linker"
+Config="Debug"
+
+[Source Files]
+Source="..\..\src\CppUTest\CommandLineArguments.cpp"
+Source="..\..\src\CppUTest\CommandLineTestRunner.cpp"
+Source="..\..\src\CppUTest\JUnitTestOutput.cpp"
+Source="..\..\src\CppUTest\MemoryLeakDetector.cpp"
+Source="..\..\src\CppUTest\MemoryLeakWarningPlugin.cpp"
+Source="..\..\src\CppUTest\SimpleString.cpp"
+Source="..\..\src\CppUTest\TestFailure.cpp"
+Source="..\..\src\CppUTest\TestFilter.cpp"
+Source="..\..\src\CppUTest\TestHarness_c.cpp"
+Source="..\..\src\CppUTest\TestMemoryAllocator.cpp"
+Source="..\..\src\CppUTest\TestOutput.cpp"
+Source="..\..\src\CppUTest\TestPlugin.cpp"
+Source="..\..\src\CppUTest\TestRegistry.cpp"
+Source="..\..\src\CppUTest\TestResult.cpp"
+Source="..\..\src\CppUTest\Utest.cpp"
+Source="..\..\src\CppUTestExt\CodeMemoryReportFormatter.cpp"
+Source="..\..\src\CppUTestExt\MemoryReportAllocator.cpp"
+Source="..\..\src\CppUTestExt\MemoryReporterPlugin.cpp"
+Source="..\..\src\CppUTestExt\MemoryReportFormatter.cpp"
+Source="..\..\src\CppUTestExt\MockActualFunctionCall.cpp"
+Source="..\..\src\CppUTestExt\MockExpectedFunctionCall.cpp"
+Source="..\..\src\CppUTestExt\MockExpectedFunctionsList.cpp"
+Source="..\..\src\CppUTestExt\MockFailure.cpp"
+Source="..\..\src\CppUTestExt\MockFunctionCall.cpp"
+Source="..\..\src\CppUTestExt\MockNamedValue.cpp"
+Source="..\..\src\CppUTestExt\MockSupport.cpp"
+Source="..\..\src\CppUTestExt\MockSupport_c.cpp"
+Source="..\..\src\CppUTestExt\MockSupportPlugin.cpp"
+Source="..\..\src\CppUTestExt\OrderedTest.cpp"
+Source="..\..\src\Platforms\C2000\UtestPlatform.cpp"
+Source="..\..\tests\CppUTestExt\TestCodeMemoryReportFormatter.cpp"
+Source="..\..\tests\CppUTestExt\TestGMock.cpp"
+Source="..\..\tests\CppUTestExt\TestGTest.cpp"
+Source="..\..\tests\CppUTestExt\TestMemoryReportAllocator.cpp"
+Source="..\..\tests\CppUTestExt\TestMemoryReporterPlugin.cpp"
+Source="..\..\tests\CppUTestExt\TestMemoryReportFormatter.cpp"
+Source="..\..\tests\CppUTestExt\TestMockActualFunctionCall.cpp"
+Source="..\..\tests\CppUTestExt\TestMockCheatSheet.cpp"
+Source="..\..\tests\CppUTestExt\TestMockExpectedFunctionCall.cpp"
+Source="..\..\tests\CppUTestExt\TestMockExpectedFunctionsList.cpp"
+Source="..\..\tests\CppUTestExt\TestMockFailure.cpp"
+Source="..\..\tests\CppUTestExt\TestMockPlugin.cpp"
+Source="..\..\tests\CppUTestExt\TestMockSupport.cpp"
+Source="..\..\tests\CppUTestExt\TestMockSupport_c.cpp"
+Source="..\..\tests\CppUTestExt\TestMockSupport_cCFile.c"
+Source="..\..\tests\CppUTestExt\TestOrderedTest.cpp"
+Source="tests\CppUTestExt\AllTestsForTarget.cpp"
+Source="C:\CCStudio_v3.3\C2000\cgtools\lib\src\farmem_cpp.cpp"
+Source="sim28335.cmd"
+
+["Compiler" Settings: "Debug"]
+Options=-g -rtti -pdsw225 -pden -pds1 -fr"$(Proj_dir)\Debug" -i"$(Proj_dir)\..\..\include" -i"$(Proj_dir)\..\..\include\CppUTestExt\CppUTestGMock" -i"$(Proj_dir)\..\..\tests" -d"_DEBUG" -d"LARGE_MODEL" -d"CPPUTEST_STD_CPP_LIB_DISABLED" -d"CPPUTEST_USE_MEM_LEAK_DETECTION" -d"CPPUTEST_USE_MALLOC_MACROS" -ml -v28 --preinclude="$(Proj_dir)\..\..\include\Platforms\c2000\stdint.h"
+
+["Linker" Settings: "Debug"]
+Options=-a -c -farheap0x20000 -f0x0 -heap0x2000 -m".\Debug\CppUTestExtRunAllTests.map" -o".\Debug\CppUTestExtRunAllTests.out" -stack0x4000 --disable_auto_rts -w -l"rts2800_ml.lib"
+
+["..\..\tests\CppUTestExt\TestGTest.cpp" Settings: "Debug"]
+ExcludeFromBuild=true
+

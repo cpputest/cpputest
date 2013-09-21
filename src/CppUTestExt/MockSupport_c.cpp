@@ -26,12 +26,49 @@
  */
 
 #include "CppUTest/CppUTestConfig.h"
+#include "CppUTest/Utest.h"
+#include "CppUTest/UtestMacros.h"
 #include "CppUTest/PlatformSpecificFunctions_c.h"
 #include "CppUTestExt/MockSupport.h"
 #include "CppUTestExt/MockSupport_c.h"
 
+class MockFailureReporterTestTerminatorForInCOnlyCode : public TestTerminatorWithoutExceptions
+{
+public:
+	MockFailureReporterTestTerminatorForInCOnlyCode(bool crashOnFailure) : crashOnFailure_(crashOnFailure)
+	{
+	}
+
+	virtual void exitCurrentTest() const
+	{
+		if (crashOnFailure_)
+			UT_CRASH();
+
+		TestTerminatorWithoutExceptions::exitCurrentTest();
+	}
+
+	virtual ~MockFailureReporterTestTerminatorForInCOnlyCode()
+	{
+	}
+private:
+	bool crashOnFailure_;
+
+};
+
+class MockFailureReporterForInCOnlyCode : public MockFailureReporter
+{
+public:
+	void failTest(const MockFailure& failure)
+	{
+		if (!getTestToFail()->hasFailed())
+			getTestToFail()->failWith(failure, MockFailureReporterTestTerminatorForInCOnlyCode(crashOnFailure_));
+	}
+
+};
+
 static MockSupport* currentMockSupport = NULL;
 static MockFunctionCall* currentCall = NULL;
+static MockFailureReporterForInCOnlyCode failureReporterForC;
 
 class MockCFunctionComparatorNode : public MockNamedValueComparator
 {
@@ -40,11 +77,11 @@ public:
 		: next_(next), equal_(equal), toString_(toString) {}
 	virtual ~MockCFunctionComparatorNode() {}
 
-	virtual bool isEqual(void* object1, void* object2)
+	virtual bool isEqual(const void* object1, const void* object2)
 	{
 		return equal_(object1, object2) != 0;
 	}
-	virtual SimpleString valueToString(void* object)
+	virtual SimpleString valueToString(const void* object)
 	{
 		return SimpleString(toString_(object));
 	}
@@ -287,13 +324,13 @@ void clear_c()
 
 MockSupport_c* mock_c()
 {
-	currentMockSupport = &mock();
+	currentMockSupport = &mock("", &failureReporterForC);
 	return &gMockSupport;
 }
 
 MockSupport_c* mock_scope_c(const char* scope)
 {
-	currentMockSupport = &mock(scope);
+	currentMockSupport = &mock(scope, &failureReporterForC);
 	return &gMockSupport;
 }
 

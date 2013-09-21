@@ -1,0 +1,50 @@
+; Code Composer Project File, Version 2.0 (do not modify or remove this line)
+
+[Project Settings]
+ProjectDir="C:\data\00_Dev\05_CppUTest\cpputest\project\CCStudio\"
+ProjectType=Library
+CPUFamily=TMS320C28XX
+Tool="Archiver"
+Tool="Compiler"
+Tool="CustomBuilder"
+Tool="DspBiosBuilder"
+Config="Debug"
+
+[Source Files]
+Source="..\..\src\CppUTest\CommandLineArguments.cpp"
+Source="..\..\src\CppUTest\CommandLineTestRunner.cpp"
+Source="..\..\src\CppUTest\JUnitTestOutput.cpp"
+Source="..\..\src\CppUTest\MemoryLeakDetector.cpp"
+Source="..\..\src\CppUTest\MemoryLeakWarningPlugin.cpp"
+Source="..\..\src\CppUTest\SimpleString.cpp"
+Source="..\..\src\CppUTest\TestFailure.cpp"
+Source="..\..\src\CppUTest\TestFilter.cpp"
+Source="..\..\src\CppUTest\TestHarness_c.cpp"
+Source="..\..\src\CppUTest\TestMemoryAllocator.cpp"
+Source="..\..\src\CppUTest\TestOutput.cpp"
+Source="..\..\src\CppUTest\TestPlugin.cpp"
+Source="..\..\src\CppUTest\TestRegistry.cpp"
+Source="..\..\src\CppUTest\TestResult.cpp"
+Source="..\..\src\CppUTest\Utest.cpp"
+Source="..\..\src\CppUTestExt\CodeMemoryReportFormatter.cpp"
+Source="..\..\src\CppUTestExt\MemoryReportAllocator.cpp"
+Source="..\..\src\CppUTestExt\MemoryReporterPlugin.cpp"
+Source="..\..\src\CppUTestExt\MemoryReportFormatter.cpp"
+Source="..\..\src\CppUTestExt\MockActualFunctionCall.cpp"
+Source="..\..\src\CppUTestExt\MockExpectedFunctionCall.cpp"
+Source="..\..\src\CppUTestExt\MockExpectedFunctionsList.cpp"
+Source="..\..\src\CppUTestExt\MockFailure.cpp"
+Source="..\..\src\CppUTestExt\MockFunctionCall.cpp"
+Source="..\..\src\CppUTestExt\MockNamedValue.cpp"
+Source="..\..\src\CppUTestExt\MockSupport.cpp"
+Source="..\..\src\CppUTestExt\MockSupport_c.cpp"
+Source="..\..\src\CppUTestExt\MockSupportPlugin.cpp"
+Source="..\..\src\CppUTestExt\OrderedTest.cpp"
+Source="..\..\src\Platforms\C2000\UtestPlatform.cpp"
+
+["Archiver" Settings: "Debug"]
+Options=-r -o"..\..\lib\c2000\CppUTestd.lib"
+
+["Compiler" Settings: "Debug"]
+Options=-g -rtti -pdsw225 -pden -pds1 -fr"$(Proj_dir)\Debug" -i"$(Proj_dir)\..\..\include" -d"_DEBUG" -d"LARGE_MODEL" -d"CPPUTEST_STD_CPP_LIB_DISABLED" -d"CPPUTEST_USE_MEM_LEAK_DETECTION" -ml -v28
+

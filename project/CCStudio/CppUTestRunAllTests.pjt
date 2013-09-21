@@ -1,0 +1,64 @@
+; Code Composer Project File, Version 2.0 (do not modify or remove this line)
+
+[Project Settings]
+ProjectDir="C:\data\00_Dev\05_CppUTest\cpputest\project\CCStudio\"
+ProjectType=Executable
+CPUFamily=TMS320C28XX
+Tool="Compiler"
+Tool="CustomBuilder"
+Tool="DspBiosBuilder"
+Tool="Linker"
+Config="Debug"
+
+[Source Files]
+Source="..\..\src\CppUTest\CommandLineArguments.cpp"
+Source="..\..\src\CppUTest\CommandLineTestRunner.cpp"
+Source="..\..\src\CppUTest\JUnitTestOutput.cpp"
+Source="..\..\src\CppUTest\MemoryLeakDetector.cpp"
+Source="..\..\src\CppUTest\MemoryLeakWarningPlugin.cpp"
+Source="..\..\src\CppUTest\SimpleString.cpp"
+Source="..\..\src\CppUTest\TestFailure.cpp"
+Source="..\..\src\CppUTest\TestFilter.cpp"
+Source="..\..\src\CppUTest\TestHarness_c.cpp"
+Source="..\..\src\CppUTest\TestMemoryAllocator.cpp"
+Source="..\..\src\CppUTest\TestOutput.cpp"
+Source="..\..\src\CppUTest\TestPlugin.cpp"
+Source="..\..\src\CppUTest\TestRegistry.cpp"
+Source="..\..\src\CppUTest\TestResult.cpp"
+Source="..\..\src\CppUTest\Utest.cpp"
+Source="..\..\src\Platforms\C2000\UtestPlatform.cpp"
+Source="..\..\tests\AllocationInCFile.c"
+Source="..\..\tests\AllocationInCppFile.cpp"
+Source="..\..\tests\AllocLetTestFree.c"
+Source="..\..\tests\AllocLetTestFreeTest.cpp"
+Source="..\..\tests\CheatSheetTest.cpp"
+Source="..\..\tests\CommandLineArgumentsTest.cpp"
+Source="..\..\tests\CommandLineTestRunnerTest.cpp"
+Source="..\..\tests\JUnitOutputTest.cpp"
+Source="..\..\tests\MemoryLeakDetectorTest.cpp"
+Source="..\..\tests\MemoryLeakWarningTest.cpp"
+Source="..\..\tests\NullTestTest.cpp"
+Source="tests\CppUTest\AllTestsForTarget.cpp"
+Source="..\..\tests\PluginTest.cpp"
+Source="..\..\tests\PreprocessorTest.cpp"
+Source="..\..\tests\SetPluginTest.cpp"
+Source="..\..\tests\SimpleStringTest.cpp"
+Source="..\..\tests\TestFailureTest.cpp"
+Source="..\..\tests\TestFilterTest.cpp"
+Source="..\..\tests\TestHarness_cTest.cpp"
+Source="..\..\tests\TestHarness_cTestCFile.c"
+Source="..\..\tests\TestInstallerTest.cpp"
+Source="..\..\tests\TestMemoryAllocatorTest.cpp"
+Source="..\..\tests\TestOutputTest.cpp"
+Source="..\..\tests\TestRegistryTest.cpp"
+Source="..\..\tests\TestResultTest.cpp"
+Source="..\..\tests\UtestTest.cpp"
+Source="C:\CCStudio_v3.3\C2000\cgtools\lib\src\farmem_cpp.cpp"
+Source="sim28335.cmd"
+
+["Compiler" Settings: "Debug"]
+Options=-g -rtti -pdsw225 -pden -pds1 -fr"$(Proj_dir)\Debug" -i"$(Proj_dir)\..\..\include" -i"$(Proj_dir)\..\..\tests" -d"_DEBUG" -d"LARGE_MODEL" -d"CPPUTEST_STD_CPP_LIB_DISABLED" -d"CPPUTEST_USE_MEM_LEAK_DETECTION" -ml -v28 --preinclude="$(Proj_dir)\..\..\include\Platforms\c2000\stdint.h"
+
+["Linker" Settings: "Debug"]
+Options=-a -c -farheap0x020000 -f0x0 -heap0x2000 -m".\Debug\CppUTestRunAllTests.map" -o".\Debug\CppUTestRunAllTests.out" -stack0x4000 --disable_auto_rts -w -l"rts2800_ml.lib"
+

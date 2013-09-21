@@ -110,7 +110,7 @@ void MockActualFunctionCall::checkActualParameter(const MockNamedValue& actualPa
 	finnalizeCallWhenFulfilled();
 }
 
-MockFunctionCall& MockActualFunctionCall::withParameter(const SimpleString& name, int value)
+MockFunctionCall& MockActualFunctionCall::withIntParameter(const SimpleString& name, int value)
 {
 	MockNamedValue actualParameter(name);
 	actualParameter.setValue(value);
@@ -118,7 +118,7 @@ MockFunctionCall& MockActualFunctionCall::withParameter(const SimpleString& name
 	return *this;
 }
 
-MockFunctionCall& MockActualFunctionCall::withParameter(const SimpleString& name, double value)
+MockFunctionCall& MockActualFunctionCall::withDoubleParameter(const SimpleString& name, double value)
 {
 	MockNamedValue actualParameter(name);
 	actualParameter.setValue(value);
@@ -126,7 +126,7 @@ MockFunctionCall& MockActualFunctionCall::withParameter(const SimpleString& name
 	return *this;
 }
 
-MockFunctionCall& MockActualFunctionCall::withParameter(const SimpleString& name, const char* value)
+MockFunctionCall& MockActualFunctionCall::withStringParameter(const SimpleString& name, const char* value)
 {
 	MockNamedValue actualParameter(name);
 	actualParameter.setValue(value);
@@ -134,7 +134,7 @@ MockFunctionCall& MockActualFunctionCall::withParameter(const SimpleString& name
 	return *this;
 }
 
-MockFunctionCall& MockActualFunctionCall::withParameter(const SimpleString& name, void* value)
+MockFunctionCall& MockActualFunctionCall::withPointerParameter(const SimpleString& name, void* value)
 {
 	MockNamedValue actualParameter(name);
 	actualParameter.setValue(value);
@@ -142,7 +142,7 @@ MockFunctionCall& MockActualFunctionCall::withParameter(const SimpleString& name
 	return *this;
 }
 
-MockFunctionCall& MockActualFunctionCall::withParameterOfType(const SimpleString& type, const SimpleString& name, void* value)
+MockFunctionCall& MockActualFunctionCall::withParameterOfType(const SimpleString& type, const SimpleString& name, const void* value)
 {
 	if (getComparatorForType(type) == NULL) {
 		MockNoWayToCompareCustomTypeFailure failure(getTest(), type);

@@ -1,0 +1,8 @@
+<project>
+	<junitreport>
+		<fileset dir=".">
+			<include name="cpputest*.xml"/>
+		</fileset>
+		<report todir="./unit_test_report"/>
+	</junitreport>
+</project>

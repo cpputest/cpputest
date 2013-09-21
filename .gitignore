@@ -44,3 +44,5 @@ Debug
 _build_
 _build
 build
+builds/*gcc*
+/.deps

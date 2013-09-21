@@ -93,10 +93,65 @@
 #ifndef __has_attribute
   #define __has_attribute(x) 0
 #endif
+
 #if __has_attribute(noreturn)
   #define __no_return__ __attribute__((noreturn))
 #else
   #define __no_return__
+#endif
+
+#if __has_attribute(format)
+  #define __check_format__(type, format_parameter, other_parameters) __attribute__ ((format (type, format_parameter, other_parameters)))
+#else
+  #define __check_format__(type, format_parameter, other_parameters) /* type, format_parameter, other_parameters */
+#endif
+
+/*
+ * When we don't link Standard C++, then we won't throw exceptions as we assume the compiler might not support that!
+ */
+
+#if CPPUTEST_USE_STD_CPP_LIB
+#define UT_THROW(exception) throw (exception)
+#define UT_NOTHROW throw()
+#else
+#define UT_THROW(exception)
+#define UT_NOTHROW
+#endif
+
+/*
+ * CLang's operator delete requires an NOTHROW block. For now, when we use CLang, then have an empty exception specifier.
+ * However, this ought to be done inside the configure.ac in the future.
+ */
+
+#ifdef __clang__
+#undef UT_NOTHROW
+#define UT_NOTHROW throw()
+#endif
+
+/*
+ * g++-4.7 with stdc++11 enabled On MacOSX! will have a different exception specifier for operator new (and thank you!)
+ * I assume they'll fix this in the future, but for now, we'll change that here.
+ * (This should perhaps also be done in the configure.ac)
+ */
+
+#ifdef __GXX_EXPERIMENTAL_CXX0X__
+#ifdef __APPLE__
+#ifdef _GLIBCXX_THROW
+#undef UT_THROW
+#define UT_THROW(exception) _GLIBCXX_THROW(exception)
+#endif
+#endif
+#endif
+
+/*
+ * Detection of different 64 bit environments
+ */
+
+#if defined(__LP64__) || defined(_LP64) || (defined(__WORDSIZE) && (__WORDSIZE == 64 )) || defined(__x86_64) || defined(_WIN64)
+#define CPPUTEST_64BIT
+#if defined(_WIN64)
+#define CPPUTEST_64BIT_32BIT_LONGS
+#endif
 #endif
 
 /* Should be the only #include here. Standard C library wrappers */

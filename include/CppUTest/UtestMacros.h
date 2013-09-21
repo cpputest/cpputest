@@ -116,17 +116,7 @@
   CHECK_EQUAL_LOCATION(expected, actual, __FILE__, __LINE__)
 
 #define CHECK_EQUAL_LOCATION(expected,actual, file, line)\
-  if ((expected) != (actual))\
-  {\
-	 { \
-      UtestShell::getTestResult()->countCheck();\
-  	   CheckEqualFailure _f(UtestShell::getCurrent(), file, line, StringFrom(expected), StringFrom(actual)); \
-      UtestShell::getTestResult()->addFailure(_f);\
-    } \
-    UtestShell::getCurrent()->exitCurrentTest(); \
-  }\
-  else\
-	 UtestShell::getTestResult()->countCheck();
+  { UtestShell::getCurrent()->assertEquals(((expected) != (actual)), StringFrom(expected).asCharString(), StringFrom(actual).asCharString(), file, line); }
 
 //This check checks for char* string equality using strcmp.
 //This makes up for the fact that CHECK_EQUAL only compares the pointers to char*'s
