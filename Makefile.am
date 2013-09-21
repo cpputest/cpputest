@@ -130,6 +130,7 @@ CppUTestTests_SOURCES = \
 	tests/SimpleStringTest.cpp \
 	tests/CommandLineArgumentsTest.cpp \
 	tests/TestFailureTest.cpp \
+	tests/TestFailureNaNTest.cpp \
 	tests/CommandLineTestRunnerTest.cpp \
 	tests/TestFilterTest.cpp \
 	tests/TestHarness_cTest.cpp \
