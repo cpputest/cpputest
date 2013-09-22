@@ -73,6 +73,17 @@ TEST(MockSupport_c, expectAndActualParametersOnObject)
 	mock_c()->removeAllComparators();
 }
 
+#if 0
+//TODO add more tests for unsigned integer here.
+TEST(MockSupport_c, returnUnsignedIntValue)
+{
+    unsigned int value = 7;
+	mock_c()->expectOneCall("boo")->andReturnUnsignedIntValue(value);
+	LONGS_EQUAL(value, mock_c()->actualCall("boo")->returnValue().value.unsignedIntValue);
+	LONGS_EQUAL(MOCKVALUETYPE_INTEGER, mock_c()->returnValue().type);
+}
+#endif
+
 TEST(MockSupport_c, returnIntValue)
 {
 	mock_c()->expectOneCall("boo")->andReturnIntValue(10);

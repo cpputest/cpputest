@@ -232,7 +232,7 @@ TEST(MockExpectedFunctionCall, getParameterValueOfObjectTypeWithoutComparator)
 	STRCMP_EQUAL("No comparator found for type: \"type\"", call->getParameterValueString("name").asCharString());
 }
 
-
+//TODO: add unsigned integer test here too ??
 TEST(MockExpectedFunctionCall, callWithTwoIntegerParameter)
 {
 	call->withParameter("integer1", 1);

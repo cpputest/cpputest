@@ -842,6 +842,7 @@ TEST(MockSupportTest, hasReturnValue)
 	CHECK(mock().hasReturnValue());
 }
 
+//TODO: Add tests for unsigned integers here !!!
 TEST(MockSupportTest, IntegerReturnValue)
 {
 	mock().expectOneCall("foo").andReturnValue(1);
