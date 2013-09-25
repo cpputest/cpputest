@@ -62,7 +62,7 @@ TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
 
 static long TimeInMillisImplementation()
 {
-    return timeGetTime()/1000;
+    return timeGetTime();
 }
 
 static long (*timeInMillisFp) () = TimeInMillisImplementation;
@@ -157,7 +157,7 @@ int PlatformSpecificVSNprintf(char *str, size_t size, const char* format, va_lis
 		buf = (char*)malloc(sizeGuess);
 		result = _vsnprintf( buf, sizeGuess, format, args);
 	}
-	
+
 	if (buf != 0)
 		free(buf);
 	return result;
