@@ -13,13 +13,13 @@ typedef struct AllocLetTestFreeStruct
 AllocLetTestFree AllocLetTestFree_Create(void)
 {
 	size_t count = 1;
-    AllocLetTestFree self = calloc(count, sizeof(AllocLetTestFreeStruct));
+    AllocLetTestFree self = (AllocLetTestFree)calloc(count, sizeof(AllocLetTestFreeStruct));
     return self;
 }
 
 void AllocLetTestFree_Destroy(AllocLetTestFree self)
 {
-	void* no_use = self;
+	AllocLetTestFree no_use = self;
 	self = NULL;
 	self = no_use;
 
