@@ -36,9 +36,9 @@ else (MSVC)
         Wno-disabled-macro-expansion
         )
 
-    if (NOT GMOCK AND NOT REAL_GTEST)
+    if (NOT CPPUTEST_GMOCK AND NOT CPPUTEST_REAL_GTEST)
       list(APPEND WARNING_C_FLAGS Werror pedantic-errors)
-    endif (NOT GMOCK AND NOT REAL_GTEST)
+    endif (NOT CPPUTEST_GMOCK AND NOT CPPUTEST_REAL_GTEST)
 
     set(WARNING_C_ONLY_FLAGS
         Wstrict-prototypes

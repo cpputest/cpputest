@@ -16,14 +16,14 @@ if(NOT TARGET CppUTest AND NOT CppUTest_BINARY_DIR)
   include("${CPPUTEST_CMAKE_DIR}/CppUTestTargets.cmake")
 endif()
 
-if (EXTENSIONS)
+if (CPPUTEST_EXTENSIONS)
     if(NOT TARGET CppUTestExt AND NOT CppUTest_BINARY_DIR)
       include("${CPPUTEST_CMAKE_DIR}/CppUTestTargets.cmake")
     endif()
 endif()
 
 # These are IMPORTED targets created by CppUTestTargets.cmake
-if (EXTENSIONS)
+if (CPPUTEST_EXTENSIONS)
     set(CPPUTEST_LIBRARIES CppUTest CppUTestExt)
 else()
     set(CPPUTEST_LIBRARIES CppUTest)

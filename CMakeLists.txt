@@ -7,17 +7,17 @@ set(CppUTest_version_patch 0)
 # 2.6.3 is needed for ctest support
 cmake_minimum_required(VERSION 2.6.3)
 
-option(STD_C "Use the standard C library" ON)
-option(STD_CPP "Use the standard C++ library" ON)
+option(CPPUTEST_STD_C "Use the standard C library" ON)
+option(CPPUTEST_STD_CPP "Use the standard C++ library" ON)
 option(CPPUTEST_FLAGS "Use the CFLAGS/CXXFLAGS/LDFLAGS set by CppUTest" ON)
-option(MEMORY_LEAK_DETECTION "Enable memory leak detection" ON)
-option(EXTENSIONS "Use the CppUTest extenstion library" ON)
-option(MAP_FILE "Enable the creation of a map file" OFF)
-option(COVERAGE "Enable running with coverage" OFF)
-option(REAL_GTEST "Enable using real GTest rather than faking it" OFF)
-option(GMOCK "Enable using GMock" OFF)
+option(CPPUTEST_MEMORY_LEAK_DETECTION "Enable memory leak detection" ON)
+option(CPPUTEST_EXTENSIONS "Use the CppUTest extenstion library" ON)
+option(CPPUTEST_MAP_FILE "Enable the creation of a map file" OFF)
+option(CPPUTEST_COVERAGE "Enable running with coverage" OFF)
+option(CPPUTEST_REAL_GTEST "Enable using real GTest rather than faking it" OFF)
+option(CPPUTEST_GMOCK "Enable using GMock" OFF)
 
-option(TESTS "Compile and make tests for the code?" ON)
+option(CPPUTEST_TESTS "Compile and make tests for the code?" ON)
 
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "What kind of build this is" FORCE)
@@ -38,13 +38,13 @@ add_definitions(-DHAVE_CONFIG_H)
 include_directories(${CppUTestRootDirectory}/include)
 add_subdirectory(src/CppUTest)
 
-if (EXTENSIONS)
+if (CPPUTEST_EXTENSIONS)
     add_subdirectory(src/CppUTestExt)
-endif (EXTENSIONS)
+endif (CPPUTEST_EXTENSIONS)
 
-if (TESTS)
+if (CPPUTEST_TESTS)
     add_subdirectory(tests)
-endif (TESTS)
+endif (CPPUTEST_TESTS)
 
 message("
 -------------------------------------------------------
@@ -58,18 +58,18 @@ Current compiler options:
     CppUTest LDFLAGS:                   ${CPPUTEST_LD_FLAGS}
 
 Features configure in CppUTest:
-    Memory Leak Detection:              ${MEMORY_LEAK_DETECTION}
-    Compiling Extensions:               ${EXTENSIONS}
+    Memory Leak Detection:              ${CPPUTEST_MEMORY_LEAK_DETECTION}
+    Compiling Extensions:               ${CPPUTEST_EXTENSIONS}
     Use CppUTest flags:                 ${CPPUTEST_FLAGS}
 
-    Using Standard C library:           ${STD_C}
-    Using Standard C++ library:         ${STD_CPP}
+    Using Standard C library:           ${CPPUTEST_STD_C}
+    Using Standard C++ library:         ${CPPUTEST_STD_CPP}
 
-    Generating map file:                ${MAP_FILE}
-    Compiling with coverage:            ${COVERAGE}
+    Generating map file:                ${CPPUTEST_MAP_FILE}
+    Compiling with coverage:            ${CPPUTEST_COVERAGE}
 
-    Use 'real' GTest:                   ${REAL_GTEST}
-    Able to use GMock:                  ${GMOCK}
+    Use 'real' GTest:                   ${CPPUTEST_REAL_GTEST}
+    Able to use GMock:                  ${CPPUTEST_GMOCK}
 -------------------------------------------------------
 ")
 
@@ -78,7 +78,7 @@ Features configure in CppUTest:
 #
 
 # Add all targets to the build-tree export set
-if(EXTENSIONS)
+if(CPPUTEST_EXTENSIONS)
     export(TARGETS CppUTest CppUTestExt FILE "${PROJECT_BINARY_DIR}/CppUTestTargets.cmake")
 else()
     export(TARGETS CppUTest FILE "${PROJECT_BINARY_DIR}/CppUTestTargets.cmake")

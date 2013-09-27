@@ -41,6 +41,6 @@ add_executable(CppUTestTests ${CppUTestTests_src})
 target_link_libraries(CppUTestTests CppUTest)
 add_test(CppUTestTests CppUTestTests)
 
-if (TESTS)
+if (CPPUTEST_EXTENSIONS)
     add_subdirectory(CppUTestExt)
-endif (TESTS)
+endif (CPPUTEST_EXTENSIONS)
