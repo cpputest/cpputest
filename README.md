@@ -8,6 +8,8 @@ CppUTest unit testing and mocking framework for C/C++
 [![Build Status](https://travis-ci.org/cpputest/cpputest.png?branch=master)](https://travis-ci.org/cpputest/cpputest)
 
 
+### 
+
 ## Getting Started
 
 You'll need to do the following to get started:
@@ -187,6 +189,17 @@ TEST(ClassName, Create)
 There are some scripts that are helpful in creating your initial h, cpp, and 
 Test files.  See scripts/README.TXT
 
+------
 
+#### NOTE
 
+In this fork we will be using the the [git flow](https://github.com/nvie/gitflow) setup.
+The branch setup is the following.
+
+ <dl>
+  <dt>master</dt>
+  <dd>points to the latest release.</dd>
+  <dt>develop</dt><dd>points to our latest code.</dd>
+  <dt>upstream</dt><dd>points to the master on [cpputest/cpputest](https://github.com/cpputest/cpputest)</dd>
+ </dl>
 
