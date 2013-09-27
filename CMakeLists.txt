@@ -89,3 +89,22 @@ Features configure in CppUTest:
 
 -------------------------------------------------------
 ")
+
+#
+# CMake support.
+#
+
+# Add all targets to the build-tree export set
+if(CPPUTEST_EXTENSIONS)
+    export(TARGETS CppUTest CppUTestExt FILE "${PROJECT_BINARY_DIR}/CppUTestTargets.cmake")
+else()
+    export(TARGETS CppUTest FILE "${PROJECT_BINARY_DIR}/CppUTestTargets.cmake")
+endif()
+
+# Create the CppUTestConfig.cmake and CppUTestConfigVersion files
+#file(RELATIVE_PATH REL_INCLUDE_DIR "${INSTALL_CMAKE_DIR}" "${INSTALL_INCLUDE_DIR}")
+# ... for the build tree
+get_property(CONF_INCLUDE_DIRS DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
+configure_file(CppUTestConfig.cmake.in "${CMAKE_BINARY_DIR}/CppUTestConfig.cmake" @ONLY)
+
+configure_file(CppUTestConfigVersion.cmake.in "${CMAKE_BINARY_DIR}/CppUTestConfigVersion.cmake" @ONLY)
