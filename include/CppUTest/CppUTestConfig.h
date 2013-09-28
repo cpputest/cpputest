@@ -99,6 +99,13 @@
   #define __no_return__
 #endif
 
+#if __cplusplus >= 201103L
+  #define _throw(exception)
+#else
+  #define _throw(exception) throw(exception)
+  #define noexcept throw()
+#endif
+
 /* Should be the only #include here. Standard C library wrappers */
 #include "StandardCLibrary.h"
 
