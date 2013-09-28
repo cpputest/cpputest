@@ -38,7 +38,7 @@
 { public: TEST_##testGroup##_##testName##_Test () : Utest () {} \
        void testBody(); }; \
   class TEST_##testGroup##_##testName##_TestShell : public UtestShell \
-{  public: virtual Utest* createTest() { return new TEST_##testGroup##_##testName##_Test; } \
+{  public: virtual Utest* createTest() override { return new TEST_##testGroup##_##testName##_Test; } \
   } TEST_##testGroup##_##testName##_TestShell_Instance; \
   static TestInstaller TEST_##testGroup##_##testName##_Installer(TEST_##testGroup##_##testName##_TestShell_Instance, #testGroup, #testName, __FILE__,__LINE__); \
 	void TEST_##testGroup##_##testName##_Test::testBody()
@@ -51,7 +51,7 @@
 { public: TEST_##testGroup##_##testName##_Test () : testGroup () {} \
        void testBody(); }; \
   class TEST_##testGroup##_##testName##_TestShell : public UtestShell { \
-	  virtual Utest* createTest() { return new TEST_##testGroup##_##testName##_Test; } \
+	  virtual Utest* createTest() override { return new TEST_##testGroup##_##testName##_Test; } \
   } TEST_##testGroup##_##testName##_TestShell_instance; \
   static TestInstaller TEST_##testGroup##_##testName##_Installer(TEST_##testGroup##_##testName##_TestShell_instance, #testGroup, #testName, __FILE__,__LINE__); \
 	void TEST_##testGroup##_##testName##_Test::testBody()
@@ -94,15 +94,15 @@ namespace testing
 {
 	class Test : public Utest
 	{
-		virtual void SetUp(){}
-		virtual void TearDown(){}
+		virtual void SetUp() {}
+		virtual void TearDown() {}
 
-		void setup()
+		void setup() final
 		{
 			SetUp();
 		}
 
-		void teardown()
+		void teardown() final
 		{
 			TearDown();
 		}

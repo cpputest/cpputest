@@ -52,37 +52,37 @@ public:
 class MockMemoryReportFormatter : public MemoryReportFormatter
 {
 public:
-	virtual void report_testgroup_start(TestResult* result, UtestShell& test)
+	virtual void report_testgroup_start(TestResult* result, UtestShell& test) override
 	{
 		TemporaryDefaultNewAllocator tempAlloc(previousNewAllocator);
 		mock("formatter").actualCall("report_testgroup_start").withParameter("result", result).withParameter("test", &test);
 	}
 
-	virtual void report_testgroup_end(TestResult* result, UtestShell& test)
+	virtual void report_testgroup_end(TestResult* result, UtestShell& test) override
 	{
 		TemporaryDefaultNewAllocator tempAlloc(previousNewAllocator);
 		mock("formatter").actualCall("report_testgroup_end").withParameter("result", result).withParameter("test", &test);
 	}
 
-	virtual void report_test_start(TestResult* result, UtestShell& test)
+	virtual void report_test_start(TestResult* result, UtestShell& test) override
 	{
 		TemporaryDefaultNewAllocator tempAlloc(previousNewAllocator);
 		mock("formatter").actualCall("report_test_start").withParameter("result", result).withParameter("test", &test);
 	}
 
-	virtual void report_test_end(TestResult* result, UtestShell& test)
+	virtual void report_test_end(TestResult* result, UtestShell& test) override
 	{
 		TemporaryDefaultNewAllocator tempAlloc(previousNewAllocator);
 		mock("formatter").actualCall("report_test_end").withParameter("result", result).withParameter("test", &test);
 	}
 
-	virtual void report_alloc_memory(TestResult* result, TestMemoryAllocator* allocator, size_t, char* , const char* , int )
+	virtual void report_alloc_memory(TestResult* result, TestMemoryAllocator* allocator, size_t, char* , const char* , int ) override
 	{
 		TemporaryDefaultNewAllocator tempAlloc(previousNewAllocator);
 		mock("formatter").actualCall("report_alloc_memory").withParameter("result", result).withParameterOfType("TestMemoryAllocator", "allocator", allocator);
 	}
 
-	virtual void report_free_memory(TestResult* result, TestMemoryAllocator* allocator, char* , const char* , int )
+	virtual void report_free_memory(TestResult* result, TestMemoryAllocator* allocator, char* , const char* , int ) override
 	{
 		TemporaryDefaultNewAllocator tempAlloc(previousNewAllocator);
 		mock("formatter").actualCall("report_free_memory").withParameter("result", result).withParameterOfType("TestMemoryAllocator", "allocator", allocator);
@@ -94,7 +94,7 @@ static MockMemoryReportFormatter formatterForPluginTest;
 class MemoryReporterPluginUnderTest : public MemoryReporterPlugin
 {
 public:
-    MemoryReportFormatter* createMemoryFormatter(const SimpleString& type)
+    MemoryReportFormatter* createMemoryFormatter(const SimpleString& type) final
     {
     	mock("reporter").actualCall("createMemoryFormatter").onObject(this).withParameter("type", type.asCharString());
     	return new MockMemoryReportFormatter;
@@ -104,11 +104,11 @@ public:
 class TestMemoryAllocatorComparator : public MockNamedValueComparator
 {
 public:
-	bool isEqual(void* object1, void* object2)
+	bool isEqual(void* object1, void* object2) final
 	{
 		return ((TestMemoryAllocator*)object1)->name() == ((TestMemoryAllocator*)object2)->name();
 	}
-	SimpleString valueToString(void* object)
+	SimpleString valueToString(void* object) final
 	{
 		return ((TestMemoryAllocator*)object)->name();
 	}

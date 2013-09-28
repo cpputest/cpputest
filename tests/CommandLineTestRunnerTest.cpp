@@ -43,7 +43,7 @@ public:
 	{
 	}
 
-	virtual bool parseArguments(int, const char**, int)
+	virtual bool parseArguments(int, const char**, int) override
 	{
 		/* Remove ourselves from the count */
 		amountOfPlugins = registry_->countPlugins() - 1;

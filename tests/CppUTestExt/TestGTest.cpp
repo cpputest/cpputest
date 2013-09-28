@@ -85,13 +85,13 @@ protected:
 	bool setup_was_called;
 	char* freed_during_teardown;
 
-	void SetUp()
+	void SetUp() final
 	{
 		setup_was_called = true;
 		freed_during_teardown = NULL;
 	}
 
-	void TearDown()
+	void TearDown() final
 	{
 		delete [] freed_during_teardown;
 	}

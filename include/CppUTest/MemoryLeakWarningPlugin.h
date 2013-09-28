@@ -84,8 +84,8 @@ public:
 			MemoryLeakDetector* localDetector = 0);
 	virtual ~MemoryLeakWarningPlugin();
 
-	virtual void preTestAction(UtestShell& test, TestResult& result);
-	virtual void postTestAction(UtestShell& test, TestResult& result);
+	virtual void preTestAction(UtestShell& test, TestResult& result) override;
+	virtual void postTestAction(UtestShell& test, TestResult& result) override;
 
 	virtual const char* FinalReport(int toBeDeletedLeaks = 0);
 

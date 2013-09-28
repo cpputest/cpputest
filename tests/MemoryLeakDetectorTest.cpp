@@ -37,7 +37,7 @@ public:
 	{
 	}
 
-	virtual void fail(char* fail_string)
+	virtual void fail(char* fail_string) override
 	{
 		*message = fail_string;
 	}
@@ -56,12 +56,12 @@ public:
 
 	int alloc_called;
 	int free_called;
-	char* alloc_memory(size_t size, const char*, int)
+	char* alloc_memory(size_t size, const char*, int) final
 	{
 		alloc_called++;
 		return TestMemoryAllocator::alloc_memory(size, "file", 1);
 	}
-	void free_memory(char* memory, const char* file, int line)
+	void free_memory(char* memory, const char* file, int line) final
 	{
 		free_called++;
 		TestMemoryAllocator::free_memory(memory, file, line);
@@ -81,24 +81,24 @@ public:
 	int allocMemoryLeakNodeCalled;
 	int freeMemoryLeakNodeCalled;
 
-	char* alloc_memory(size_t size, const char* file, int line)
+	char* alloc_memory(size_t size, const char* file, int line) final
 	{
 		alloc_called++;
 		return TestMemoryAllocator::alloc_memory(size, file, line);
 	}
-	void free_memory(char* memory, const char* file, int line)
+	void free_memory(char* memory, const char* file, int line) final
 	{
 		free_called++;
 		TestMemoryAllocator::free_memory(memory, file, line);
 	}
 
-	char* allocMemoryLeakNode(size_t size)
+	char* allocMemoryLeakNode(size_t size) final
 	{
 		allocMemoryLeakNodeCalled++;
 		return TestMemoryAllocator::alloc_memory(size, __FILE__, __LINE__);
 	}
 
-	void freeMemoryLeakNode(char* memory)
+	void freeMemoryLeakNode(char* memory) final
 	{
 		freeMemoryLeakNodeCalled++;
 		TestMemoryAllocator::free_memory(memory, __FILE__, __LINE__);

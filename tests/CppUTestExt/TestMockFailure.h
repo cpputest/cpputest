@@ -42,13 +42,13 @@ public:
 
 	MockFailureReporterForTest() : amountOfFailures(0) {}
 
-	virtual void failTest(const MockFailure& failure)
+	virtual void failTest(const MockFailure& failure) override
 	{
 		amountOfFailures++;
 		mockFailureString = failure.getMessage();
 	}
 
-	virtual int getAmountOfTestFailures()
+	virtual int getAmountOfTestFailures() override
 	{
 		return amountOfFailures;
 	}

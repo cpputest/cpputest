@@ -124,7 +124,7 @@ class GTestDummyResultReporter : public ::testing::ScopedFakeTestPartResultRepor
 {
 public:
 	GTestDummyResultReporter () : ::testing::ScopedFakeTestPartResultReporter(INTERCEPT_ALL_THREADS, NULL) {}
-	virtual void ReportTestPartResult(const ::testing::TestPartResult& /*result*/) {}
+	virtual void ReportTestPartResult(const ::testing::TestPartResult& /*result*/) override {}
 };
 
 class GTestResultReporter : public ::testing::ScopedFakeTestPartResultReporter
@@ -132,7 +132,7 @@ class GTestResultReporter : public ::testing::ScopedFakeTestPartResultReporter
 public:
 	GTestResultReporter () : ::testing::ScopedFakeTestPartResultReporter(INTERCEPT_ALL_THREADS, NULL) {}
 
-	virtual void ReportTestPartResult(const ::testing::TestPartResult& result)
+	virtual void ReportTestPartResult(const ::testing::TestPartResult& result) override
 	{
 		FailFailure failure(UtestShell::getCurrent(), result.file_name(), result.line_number(), result.message());
 		UtestShell::getCurrent()->getTestResult()->addFailure(failure);
@@ -168,7 +168,7 @@ public:
 
 	}
 
-	void testBody()
+	void testBody() final
 	{
 		try {
 			test_->TestBody();
@@ -178,7 +178,7 @@ public:
 		}
 	}
 
-	void setup()
+	void setup() final
 	{
 		resetValuesOfGTestFlags();
 
@@ -197,7 +197,7 @@ public:
 		}
 	}
 
-	void teardown()
+	void teardown() final
 	{
 		try {
 			test_->TearDown();

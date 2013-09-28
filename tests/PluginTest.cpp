@@ -48,13 +48,13 @@ public:
 	{
 	}
 
-	virtual void preTestAction(UtestShell&, TestResult&)
+	virtual void preTestAction(UtestShell&, TestResult&) override
 	{
 		preAction++;
 		preActionSequence = sequenceNumber++;
 	}
 
-	virtual void postTestAction(UtestShell&, TestResult&)
+	virtual void postTestAction(UtestShell&, TestResult&) override
 	{
 		postAction++;
 		postActionSequence = sequenceNumber++;
@@ -74,7 +74,7 @@ public:
 	{
 	}
 
-	virtual bool parseArguments(int ac, const char** av, int index)
+	virtual bool parseArguments(int ac, const char** av, int index) override
 	{
 		SimpleString argument (av[index]);
 		if (argument == "-paccept")

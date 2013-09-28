@@ -131,19 +131,19 @@ TEST_GROUP(JUnitOutputTest)
 			LONGS_EQUAL(0, fileBalance);
 		}
 
-		void writeToFile(const SimpleString& buf)
+		void writeToFile(const SimpleString& buf) final
 		{
 			buffer_ += buf;
 		}
 
-		void openFileForWrite(const SimpleString& in_FileName)
+		void openFileForWrite(const SimpleString& in_FileName) final
 		{
 			filesOpened++;
 			fileBalance++;
 			fileName_ = in_FileName;
 		}
 
-		void closeFile()
+		void closeFile() final
 		{
 			CHECK_XML_FILE();
 			resetXmlFile();
@@ -281,7 +281,7 @@ TEST_GROUP(JUnitOutputTest)
 	MockJUnitTestOutput * output;
 	TestResult *res;
 
-	void setup()
+	void setup() final
 	{
 		output = new MockJUnitTestOutput();
 		res = new TestResult(*output);
@@ -289,7 +289,7 @@ TEST_GROUP(JUnitOutputTest)
 		SetPlatformSpecificTimeInMillisMethod(MockGetPlatformSpecificTimeInMillis);
 		SetPlatformSpecificTimeStringMethod(MockGetPlatformSpecificTimeString);
 	}
-	void teardown()
+	void teardown() final
 	{
 		delete output;
 		delete res;

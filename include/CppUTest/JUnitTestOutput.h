@@ -40,21 +40,21 @@ public:
 	JUnitTestOutput();
 	virtual ~JUnitTestOutput();
 
-	virtual void printTestsStarted();
-	virtual void printTestsEnded(const TestResult& result);
-	virtual void printCurrentTestStarted(const UtestShell& test);
-	virtual void printCurrentTestEnded(const TestResult& res);
-	virtual void printCurrentGroupStarted(const UtestShell& test);
-	virtual void printCurrentGroupEnded(const TestResult& res);
+	virtual void printTestsStarted() override;
+	virtual void printTestsEnded(const TestResult& result) override;
+	virtual void printCurrentTestStarted(const UtestShell& test) override;
+	virtual void printCurrentTestEnded(const TestResult& res) override;
+	virtual void printCurrentGroupStarted(const UtestShell& test) override;
+	virtual void printCurrentGroupEnded(const TestResult& res) override;
 
-	virtual void verbose();
-	virtual void printBuffer(const char*);
-	virtual void print(const char*);
-	virtual void print(long);
-	virtual void print(const TestFailure& failure);
-	virtual void printTestRun(int number, int total);
+	virtual void verbose() override;
+	virtual void printBuffer(const char*) override;
+	virtual void print(const char*) override;
+	virtual void print(long) override;
+	virtual void print(const TestFailure& failure) override;
+	virtual void printTestRun(int number, int total) override;
 
-	virtual void flush();
+	virtual void flush() override;
 
 	virtual SimpleString createFileName(const SimpleString& group);
 

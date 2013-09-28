@@ -53,7 +53,7 @@ public:
 	{
 		return defaultTestResult;
 	}
-	virtual void exitCurrentTest()
+	virtual void exitCurrentTest() override
 	{
 	}
 	virtual ~OutsideTestRunnerUTest()

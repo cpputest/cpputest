@@ -50,7 +50,6 @@ private:
    OrderedTestShell* _nextOrderedTest;
 
    int _level;
-
 };
 
 class OrderedTestInstaller
@@ -73,7 +72,7 @@ class OrderedTestInstaller
 { public: TEST_##testGroup##_##testName##_Test () : TEST_GROUP_##CppUTestGroup##testGroup () {} \
        void testBody(); }; \
   class TEST_##testGroup##_##testName##_TestShell : public OrderedTestShell { \
-	   virtual Utest* createTest() { return new TEST_##testGroup##_##testName##_Test; } \
+	   virtual Utest* createTest() override { return new TEST_##testGroup##_##testName##_Test; } \
   }  TEST_##testGroup##_##testName##_Instance; \
   static OrderedTestInstaller TEST_##testGroup##_##testName##_Installer(TEST_##testGroup##_##testName##_Instance, #testGroup, #testName, __FILE__,__LINE__, testLevel); \
    void TEST_##testGroup##_##testName##_Test::testBody()

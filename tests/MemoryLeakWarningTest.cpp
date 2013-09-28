@@ -43,7 +43,7 @@ public:
 	virtual ~DummyReporter()
 	{
 	}
-	virtual void fail(char* /*fail_string*/)
+	virtual void fail(char* /*fail_string*/) override
 	{
 	}
 };
@@ -141,7 +141,7 @@ class DummyMemoryLeakFailure : public MemoryLeakFailure
 	{
 		memoryLeakFailureWasDelete = true;
 	}
-	virtual void fail(char*)
+	virtual void fail(char*) override
 	{
 	}
 };

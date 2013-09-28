@@ -496,11 +496,11 @@ public:
 class MyTypeForTestingComparator : public MockNamedValueComparator
 {
 public:
-	virtual bool isEqual(void* object1, void* object2)
+	virtual bool isEqual(void* object1, void* object2) override
 	{
 		return ((MyTypeForTesting*)object1)->value == ((MyTypeForTesting*)object2)->value;
 	}
-	virtual SimpleString valueToString(void* object)
+	virtual SimpleString valueToString(void* object) override
 	{
 		return StringFrom(((MyTypeForTesting*)object)->value);
 	}

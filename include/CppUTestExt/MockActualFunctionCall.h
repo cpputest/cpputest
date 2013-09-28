@@ -41,22 +41,22 @@ public:
 	MockActualFunctionCall(int callOrder, MockFailureReporter* reporter, const MockExpectedFunctionsList& expectations);
 	virtual ~MockActualFunctionCall();
 
-	virtual MockFunctionCall& withName(const SimpleString& name);
-	virtual MockFunctionCall& withCallOrder(int);
-	virtual MockFunctionCall& withParameter(const SimpleString& name, int value);
-	virtual MockFunctionCall& withParameter(const SimpleString& name, double value);
-	virtual MockFunctionCall& withParameter(const SimpleString& name, const char* value);
-	virtual MockFunctionCall& withParameter(const SimpleString& name, void* value);
-	virtual MockFunctionCall& withParameterOfType(const SimpleString& type, const SimpleString& name, void* value);
+	virtual MockFunctionCall& withName(const SimpleString& name) override;
+	virtual MockFunctionCall& withCallOrder(int) override;
+	virtual MockFunctionCall& withParameter(const SimpleString& name, int value) override;
+	virtual MockFunctionCall& withParameter(const SimpleString& name, double value) override;
+	virtual MockFunctionCall& withParameter(const SimpleString& name, const char* value) override;
+	virtual MockFunctionCall& withParameter(const SimpleString& name, void* value) override;
+	virtual MockFunctionCall& withParameterOfType(const SimpleString& type, const SimpleString& name, void* value) override;
 
-	virtual MockFunctionCall& andReturnValue(int value);
-	virtual MockFunctionCall& andReturnValue(double value);
-	virtual MockFunctionCall& andReturnValue(const char* value);
-	virtual MockFunctionCall& andReturnValue(void* value);
-	virtual bool hasReturnValue();
-	virtual MockNamedValue returnValue();
+	virtual MockFunctionCall& andReturnValue(int value) override;
+	virtual MockFunctionCall& andReturnValue(double value) override;
+	virtual MockFunctionCall& andReturnValue(const char* value) override;
+	virtual MockFunctionCall& andReturnValue(void* value) override;
+	virtual bool hasReturnValue() override;
+	virtual MockNamedValue returnValue() override;
 
-	virtual MockFunctionCall& onObject(void* objectPtr);
+	virtual MockFunctionCall& onObject(void* objectPtr) override;
 
 	virtual bool isFulfilled() const;
 	virtual bool hasFailed() const;

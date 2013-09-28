@@ -320,7 +320,7 @@ public:
 	{
 	}
 
-	virtual void fail(char* fail_string)
+	virtual void fail(char* fail_string) override
 	{
 		UtestShell* currentTest = UtestShell::getCurrent();
 		currentTest->getTestResult()->addFailure(FailFailure(currentTest, currentTest->getName().asCharString(), currentTest->getLineNumber(), fail_string));

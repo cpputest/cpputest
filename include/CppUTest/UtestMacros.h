@@ -64,7 +64,7 @@
 { public: TEST_##testGroup##_##testName##_Test () : TEST_GROUP_##CppUTestGroup##testGroup () {} \
        void testBody(); }; \
   class TEST_##testGroup##_##testName##_TestShell : public UtestShell { \
-	  virtual Utest* createTest() { return new TEST_##testGroup##_##testName##_Test; } \
+	  virtual Utest* createTest() override { return new TEST_##testGroup##_##testName##_Test; } \
   } TEST_##testGroup##_##testName##_TestShell_instance; \
   static TestInstaller TEST_##testGroup##_##testName##_Installer(TEST_##testGroup##_##testName##_TestShell_instance, #testGroup, #testName, __FILE__,__LINE__); \
 	void TEST_##testGroup##_##testName##_Test::testBody()
@@ -78,7 +78,7 @@
 { public: IGNORE##testGroup##_##testName##_Test () : TEST_GROUP_##CppUTestGroup##testGroup () {} \
   public: void testBodyThatNeverRuns (); }; \
   class IGNORE##testGroup##_##testName##_TestShell : public IgnoredUtestShell { \
-	  virtual Utest* createTest() { return new IGNORE##testGroup##_##testName##_Test; } \
+	  virtual Utest* createTest() override { return new IGNORE##testGroup##_##testName##_Test; } \
   } IGNORE##testGroup##_##testName##_TestShell_instance; \
    static TestInstaller TEST_##testGroup##testName##_Installer(IGNORE##testGroup##_##testName##_TestShell_instance, #testGroup, #testName, __FILE__,__LINE__); \
 	void IGNORE##testGroup##_##testName##_Test::testBodyThatNeverRuns ()

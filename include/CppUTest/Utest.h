@@ -151,9 +151,9 @@ public:
 
 	static NullTestShell& instance();
 
-	virtual int countTests();
-	virtual UtestShell*getNext() const;
-	virtual bool isNull() const;
+	virtual int countTests() override;
+	virtual UtestShell*getNext() const override;
+	virtual bool isNull() const override;
 private:
 
 	NullTestShell(const NullTestShell&);
@@ -171,8 +171,8 @@ class ExecFunctionTest : public Utest
 public:
 	ExecFunctionTest(ExecFunctionTestShell* shell);
 	void testBody();
-	virtual void setup();
-	virtual void teardown();
+	virtual void setup() override;
+	virtual void teardown() override;
 private:
 	ExecFunctionTestShell* shell_;
 };
@@ -212,9 +212,10 @@ public:
 	virtual ~IgnoredUtestShell();
 	explicit IgnoredUtestShell(const char* groupName, const char* testName,
 			const char* fileName, int lineNumber);
-	virtual const char* getProgressIndicator() const;
-	protected:  virtual SimpleString getMacroName() const;
-    virtual void runOneTestWithPlugins(TestPlugin* plugin, TestResult& result);
+	virtual const char* getProgressIndicator() const override;
+protected:
+	virtual SimpleString getMacroName() const override;
+	virtual void runOneTestWithPlugins(TestPlugin* plugin, TestResult& result) override;
 
 private:
 

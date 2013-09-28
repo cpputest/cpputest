@@ -46,7 +46,7 @@ public:
 	virtual ~MyOwnStringAllocator() {}
 
 	bool memoryWasAllocated;
-	char* alloc_memory(size_t size, const char* file, int line)
+	char* alloc_memory(size_t size, const char* file, int line) final
 	{
 		memoryWasAllocated = true;
 		return TestMemoryAllocator::alloc_memory(size, file, line);

@@ -39,7 +39,7 @@ public:
 	~OptionsPlugin()
 	{
 	}
-	bool parseArguments(int /*ac*/, const char** /*av*/, int /*index*/)
+	bool parseArguments(int /*ac*/, const char** /*av*/, int /*index*/) final
 	{
 		return true;
 	}

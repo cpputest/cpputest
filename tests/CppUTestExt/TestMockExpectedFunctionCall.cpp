@@ -44,11 +44,11 @@ public:
 	TypeForTestingExpectedFunctionCallComparator() {}
 	virtual ~TypeForTestingExpectedFunctionCallComparator() {}
 
-	virtual bool isEqual(void* object1, void* object2)
+	virtual bool isEqual(void* object1, void* object2) override
 	{
 		return ((TypeForTestingExpectedFunctionCall*)object1)->value == ((TypeForTestingExpectedFunctionCall*)object2)->value;
 	}
-	virtual SimpleString valueToString(void* object)
+	virtual SimpleString valueToString(void* object) override
 	{
 		return StringFrom(((TypeForTestingExpectedFunctionCall*)object)->value);
 	}

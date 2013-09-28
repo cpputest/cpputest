@@ -41,7 +41,7 @@ public:
 		UtestShell(group, "Name", "File", testLineNumber), hasRun_(false)
 	{
 	}
-	virtual void runOneTestWithPlugins(TestPlugin*, TestResult&)
+	virtual void runOneTestWithPlugins(TestPlugin*, TestResult&) override
 	{
 		hasRun_ = true;
 	}
