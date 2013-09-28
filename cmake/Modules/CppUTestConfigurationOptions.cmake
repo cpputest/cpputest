@@ -44,6 +44,11 @@ if (COVERAGE AND NOT MSVC)
     set(CMAKE_BUILD_TYPE "Debug")
 endif (COVERAGE AND NOT MSVC)
 
+if (C++11)
+    find_package(CXX11 REQUIRED)
+    set(CPPUTEST_CXX_FLAGS "${CPPUTEST_CXX_FLAGS} ${CXX11_FLAGS}")
+endif (C++11)
+
 if (GMOCK)
     set(GMOCK_HOME $ENV{GMOCK_HOME})
     if (NOT GMOCK_HOME)
