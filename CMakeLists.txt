@@ -13,6 +13,7 @@ option(MEMORY_LEAK_DETECTION "Enable memory leak detection" ON)
 option(EXTENSIONS "Use the CppUTest extenstion library" ON)
 option(MAP_FILE "Enable the creation of a map file" OFF)
 option(COVERAGE "Enable running with coverage" OFF)
+option(C++11 "Compile with C++11 support" OFF)
 
 option(TESTS "Compile and make tests for the code?" ON)
 
@@ -21,6 +22,8 @@ if(NOT CMAKE_BUILD_TYPE)
 endif(NOT CMAKE_BUILD_TYPE)
 
 set(CppUTestRootDirectory ${PROJECT_SOURCE_DIR})
+
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CppUTestRootDirectory}/cmake/Modules)
 
 include("${CppUTestRootDirectory}/cmake/Modules/CppUTestConfigurationOptions.cmake")
 include(CTest)
@@ -61,6 +64,7 @@ Features configure in CppUTest:
 
     Using Standard C library:           ${STD_C}
     Using Standard C++ library:         ${STD_CPP}
+    Using C++11 library:                ${C++11}
 
     Generating map file:                ${MAP_FILE}
     Compiling with coverage:            ${COVERAGE}
