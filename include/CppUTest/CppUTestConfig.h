@@ -154,6 +154,12 @@
 #endif
 #endif
 
+#if defined(__cplusplus) && __cplusplus >= 201103L
+#define _override override
+#else
+#define _override
+#endif
+
 /* Should be the only #include here. Standard C library wrappers */
 #include "StandardCLibrary.h"
 
