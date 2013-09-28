@@ -104,6 +104,8 @@
 #else
   #define _throw(exception) throw(exception)
   #define noexcept throw()
+  #define override
+  #define final
 #endif
 
 /* Should be the only #include here. Standard C library wrappers */
