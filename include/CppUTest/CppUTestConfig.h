@@ -111,11 +111,16 @@
  */
 
 #if CPPUTEST_USE_STD_CPP_LIB
-#define UT_THROW(exception) throw (exception)
-#define UT_NOTHROW throw()
+  #if defined(__cplusplus) && __cplusplus >= 201103L
+    #define UT_THROW(exception)
+    #define UT_NOTHROW noexcept
+  #else
+    #define UT_THROW(exception) throw (exception)
+    #define UT_NOTHROW throw()
+  #endif
 #else
-#define UT_THROW(exception)
-#define UT_NOTHROW
+  #define UT_THROW(exception)
+  #define UT_NOTHROW
 #endif
 
 /*
