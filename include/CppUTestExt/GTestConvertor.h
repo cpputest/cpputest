@@ -47,7 +47,7 @@ class GTestShell : public UtestShell
 public:
 	GTestShell(::testing::TestInfo* testinfo, GTestShell* next);
 
-	virtual Utest* createTest();
+	virtual Utest* createTest() _override;
 
 	GTestShell* nextGTest();
 };

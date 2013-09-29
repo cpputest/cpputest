@@ -69,14 +69,14 @@ public:
 class NormalTestTerminator : public TestTerminator
 {
 public:
-	virtual void exitCurrentTest() const;
+	virtual void exitCurrentTest() const _override;
 	virtual ~NormalTestTerminator();
 };
 
 class TestTerminatorWithoutExceptions  : public TestTerminator
 {
 public:
-	virtual void exitCurrentTest() const;
+	virtual void exitCurrentTest() const _override;
 	virtual ~TestTerminatorWithoutExceptions();
 };
 
@@ -177,9 +177,9 @@ public:
 
 	static NullTestShell& instance();
 
-	virtual int countTests();
-	virtual UtestShell*getNext() const;
-	virtual bool isNull() const;
+	virtual int countTests() _override;
+	virtual UtestShell*getNext() const _override;
+	virtual bool isNull() const _override;
 private:
 
 	NullTestShell(const NullTestShell&);
@@ -196,8 +196,8 @@ class ExecFunctionTest : public Utest
 public:
 	ExecFunctionTest(ExecFunctionTestShell* shell);
 	void testBody();
-	virtual void setup();
-	virtual void teardown();
+	virtual void setup() _override;
+	virtual void teardown() _override;
 private:
 	ExecFunctionTestShell* shell_;
 };
@@ -238,8 +238,8 @@ public:
 	explicit IgnoredUtestShell(const char* groupName, const char* testName,
 			const char* fileName, int lineNumber);
 	virtual const char* getProgressIndicator() const;
-	protected:  virtual SimpleString getMacroName() const;
-    virtual void runOneTest(TestPlugin* plugin, TestResult& result);
+	protected:  virtual SimpleString getMacroName() const _override;
+    virtual void runOneTest(TestPlugin* plugin, TestResult& result) _override;
 
 private:
 

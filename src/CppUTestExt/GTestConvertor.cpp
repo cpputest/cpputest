@@ -132,7 +132,7 @@ class GTestResultReporter : public ::testing::ScopedFakeTestPartResultReporter
 public:
 	GTestResultReporter () : ::testing::ScopedFakeTestPartResultReporter(INTERCEPT_ALL_THREADS, NULL) {}
 
-	virtual void ReportTestPartResult(const ::testing::TestPartResult& result)
+	virtual void ReportTestPartResult(const ::testing::TestPartResult& result) _override
 	{
 		FailFailure failure(UtestShell::getCurrent(), result.file_name(), result.line_number(), result.message());
 		UtestShell::getCurrent()->getTestResult()->addFailure(failure);
@@ -168,7 +168,7 @@ public:
 
 	}
 
-	void testBody()
+	void testBody() _override
 	{
 		try {
 			test_->TestBody();
@@ -178,7 +178,7 @@ public:
 		}
 	}
 
-	void setup()
+	void setup() _override
 	{
 		resetValuesOfGTestFlags();
 
@@ -197,7 +197,7 @@ public:
 		}
 	}
 
-	void teardown()
+	void teardown() _override
 	{
 		try {
 			test_->TearDown();
