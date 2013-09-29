@@ -114,8 +114,8 @@ public:
 	{
 	}
 
-	virtual void printBuffer(const char* s);
-	virtual void flush();
+	virtual void printBuffer(const char* s) _override;
+	virtual void flush() _override;
 
 private:
 	ConsoleTestOutput(const ConsoleTestOutput&);
@@ -140,12 +140,12 @@ public:
 
 	virtual ~StringBufferTestOutput();
 
-	void printBuffer(const char* s)
+	void printBuffer(const char* s) _override
 	{
 		output += s;
 	}
 
-	void flush()
+	void flush() _override
 	{
 		output = "";
 	}

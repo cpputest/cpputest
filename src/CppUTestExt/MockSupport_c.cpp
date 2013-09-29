@@ -39,7 +39,7 @@ public:
 	{
 	}
 
-	virtual void exitCurrentTest() const
+	virtual void exitCurrentTest() const _override
 	{
 		if (crashOnFailure_)
 			UT_CRASH();
@@ -58,7 +58,7 @@ private:
 class MockFailureReporterForInCOnlyCode : public MockFailureReporter
 {
 public:
-	void failTest(const MockFailure& failure)
+	void failTest(const MockFailure& failure) _override
 	{
 		if (!getTestToFail()->hasFailed())
 			getTestToFail()->failWith(failure, MockFailureReporterTestTerminatorForInCOnlyCode(crashOnFailure_));
@@ -77,11 +77,11 @@ public:
 		: next_(next), equal_(equal), toString_(toString) {}
 	virtual ~MockCFunctionComparatorNode() {}
 
-	virtual bool isEqual(const void* object1, const void* object2)
+	virtual bool isEqual(const void* object1, const void* object2) _override
 	{
 		return equal_(object1, object2) != 0;
 	}
-	virtual SimpleString valueToString(const void* object)
+	virtual SimpleString valueToString(const void* object) _override
 	{
 		return SimpleString(toString_(object));
 	}

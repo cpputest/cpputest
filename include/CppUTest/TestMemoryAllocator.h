@@ -82,7 +82,7 @@ public:
 
 	virtual void setNumberToCrashOn(unsigned allocationToCrashOn);
 
-	virtual char* alloc_memory(size_t size, const char* file, int line);
+	virtual char* alloc_memory(size_t size, const char* file, int line) _override;
 };
 
 
@@ -90,8 +90,8 @@ class NullUnknownAllocator: public TestMemoryAllocator
 {
 public:
 	NullUnknownAllocator();
-	virtual char* alloc_memory(size_t size, const char* file, int line);
-	virtual void free_memory(char* memory, const char* file, int line);
+	virtual char* alloc_memory(size_t size, const char* file, int line) _override;
+	virtual void free_memory(char* memory, const char* file, int line) _override;
 
 	static TestMemoryAllocator* defaultAllocator();
 };

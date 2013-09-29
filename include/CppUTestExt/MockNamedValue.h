@@ -52,8 +52,8 @@ public:
 		: equal_(equal), valueToString_(valToString) {}
 	virtual ~MockFunctionComparator(){}
 
-	virtual bool isEqual(const void* object1, const void* object2){ return equal_(object1, object2); }
-	virtual SimpleString valueToString(const void* object) { return valueToString_(object); }
+	virtual bool isEqual(const void* object1, const void* object2) _override { return equal_(object1, object2); }
+	virtual SimpleString valueToString(const void* object) _override { return valueToString_(object); }
 private:
 	isEqualFunction equal_;
 	valueToStringFunction valueToString_;
