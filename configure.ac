@@ -86,6 +86,12 @@ AC_MSG_CHECKING([whether CC and CXX supports -Weverything])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Weverything"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Weverything" ], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 
+# Flag -Wno-c++98-compat
+CXXFLAGS="-Wno-c++98-compat"
+AC_MSG_CHECKING([whether CXX supports -Wno-c++98-compat])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CPP11BLACKLIST=" -Wno-c++98-compat" ], [AC_MSG_RESULT([no])])
+CXXFLAGS="$saved_cxxflags"
+
 # FLag -Wall. 
 CFLAGS="-Werror -Wall"
 AC_MSG_CHECKING([whether CC and CXX supports -Wall])
@@ -321,7 +327,7 @@ fi
 
 # Using the C++11 standard?
 if test "x${use_std_cpp11}" = xyes; then
-	CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} ${CPPUTEST_CPP11FLAG}"
+	CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} ${CPPUTEST_CPP11FLAG} ${CPPUTEST_CPP11BLACKLIST}"
 fi
 
 

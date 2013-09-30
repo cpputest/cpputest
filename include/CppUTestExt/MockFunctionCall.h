@@ -121,45 +121,28 @@ private:
 class MockIgnoredCall : public MockFunctionCall
 {
 public:
-<<<<<<< HEAD
-	virtual MockFunctionCall& withName(const SimpleString&) { return *this;}
-	virtual MockFunctionCall& withCallOrder(int) { return *this; }
-	virtual MockFunctionCall& withIntParameter(const SimpleString&, int) { return *this; }
-	virtual MockFunctionCall& withUnsignedIntParameter(const SimpleString&, unsigned int) { return *this; }
-	virtual MockFunctionCall& withDoubleParameter(const SimpleString&, double) { return *this; }
-	virtual MockFunctionCall& withStringParameter(const SimpleString&, const char*) { return *this; }
-	virtual MockFunctionCall& withPointerParameter(const SimpleString& , void*) { return *this; }
-	virtual MockFunctionCall& withConstPointerParameter(const SimpleString& , const void*) { return *this; }
-	virtual MockFunctionCall& withParameterOfType(const SimpleString&, const SimpleString&, const void*) { return *this; }
 
-	virtual MockFunctionCall& andReturnValue(int) { return *this; }
-	virtual MockFunctionCall& andReturnValue(unsigned int) { return *this; }
-	virtual MockFunctionCall& andReturnValue(double) { return *this;}
-	virtual MockFunctionCall& andReturnValue(const char*) { return *this; }
-	virtual MockFunctionCall& andReturnValue(void*) { return *this; }
-	virtual MockFunctionCall& andReturnValue(const void*) { return *this; }
-	virtual bool hasReturnValue() { return false; }
-	virtual MockNamedValue returnValue() { return MockNamedValue(""); }
-
-	virtual MockFunctionCall& onObject(void* ) { return *this; }
-=======
 	virtual MockFunctionCall& withName(const SimpleString&) _override { return *this;}
 	virtual MockFunctionCall& withCallOrder(int) _override { return *this; }
 	virtual MockFunctionCall& withIntParameter(const SimpleString&, int) _override { return *this; }
+	virtual MockFunctionCall& withUnsignedIntParameter(const SimpleString&, unsigned int) _override{ return *this; }
 	virtual MockFunctionCall& withDoubleParameter(const SimpleString&, double) _override { return *this; }
 	virtual MockFunctionCall& withStringParameter(const SimpleString&, const char*) _override { return *this; }
 	virtual MockFunctionCall& withPointerParameter(const SimpleString& , void*) _override { return *this; }
+	virtual MockFunctionCall& withConstPointerParameter(const SimpleString& , const void*) _override { return *this; }
 	virtual MockFunctionCall& withParameterOfType(const SimpleString&, const SimpleString&, const void*) _override { return *this; }
 
 	virtual MockFunctionCall& andReturnValue(int) _override { return *this; }
+	virtual MockFunctionCall& andReturnValue(unsigned int) _override { return *this; }
 	virtual MockFunctionCall& andReturnValue(double) _override { return *this;}
 	virtual MockFunctionCall& andReturnValue(const char*) _override { return *this; }
 	virtual MockFunctionCall& andReturnValue(void*) _override { return *this; }
+	virtual MockFunctionCall& andReturnValue(const void*) _override { return *this; }
+
 	virtual bool hasReturnValue() _override { return false; }
 	virtual MockNamedValue returnValue() _override { return MockNamedValue(""); }
 
 	virtual MockFunctionCall& onObject(void* ) _override { return *this; }
->>>>>>> cf4341b... Add the _override keyword everywhere possible.
 
 	static MockFunctionCall& instance();
 };
@@ -170,47 +153,28 @@ public:
 	MockFunctionCallTrace();
 	virtual ~MockFunctionCallTrace();
 
-<<<<<<< HEAD
-	virtual MockFunctionCall& withName(const SimpleString& name);
-	virtual MockFunctionCall& withCallOrder(int);
-	virtual MockFunctionCall& withIntParameter(const SimpleString& name, int value);
-	virtual MockFunctionCall& withUnsignedIntParameter(const SimpleString& name, unsigned int value);
-	virtual MockFunctionCall& withDoubleParameter(const SimpleString& name, double value);
-	virtual MockFunctionCall& withStringParameter(const SimpleString& name, const char* value);
-	virtual MockFunctionCall& withPointerParameter(const SimpleString& name, void* value);
-	virtual MockFunctionCall& withConstPointerParameter(const SimpleString& name, const void* value);
-	virtual MockFunctionCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value);
-	virtual MockFunctionCall& ignoreOtherParameters();
-
-	virtual MockFunctionCall& andReturnValue(int value);
-	virtual MockFunctionCall& andReturnValue(unsigned int value);
-	virtual MockFunctionCall& andReturnValue(double value);
-	virtual MockFunctionCall& andReturnValue(const char* value);
-	virtual MockFunctionCall& andReturnValue(void* value);
-	virtual MockFunctionCall& andReturnValue(const void* value);
-	virtual bool hasReturnValue();
-	virtual MockNamedValue returnValue();
-
-	virtual MockFunctionCall& onObject(void* objectPtr);
-=======
 	virtual MockFunctionCall& withName(const SimpleString& name) _override;
 	virtual MockFunctionCall& withCallOrder(int) _override;
 	virtual MockFunctionCall& withIntParameter(const SimpleString& name, int value) _override;
+	virtual MockFunctionCall& withUnsignedIntParameter(const SimpleString& name, unsigned int value) _override;
 	virtual MockFunctionCall& withDoubleParameter(const SimpleString& name, double value) _override;
 	virtual MockFunctionCall& withStringParameter(const SimpleString& name, const char* value) _override;
 	virtual MockFunctionCall& withPointerParameter(const SimpleString& name, void* value) _override;
+	virtual MockFunctionCall& withConstPointerParameter(const SimpleString& name, const void* value) _override;
 	virtual MockFunctionCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value) _override;
 	virtual MockFunctionCall& ignoreOtherParameters() _override;
 
 	virtual MockFunctionCall& andReturnValue(int value) _override;
+	virtual MockFunctionCall& andReturnValue(unsigned int value) _override;
 	virtual MockFunctionCall& andReturnValue(double value) _override;
 	virtual MockFunctionCall& andReturnValue(const char* value) _override;
 	virtual MockFunctionCall& andReturnValue(void* value) _override;
+	virtual MockFunctionCall& andReturnValue(const void* value) _override;
+
 	virtual bool hasReturnValue() _override;
 	virtual MockNamedValue returnValue() _override;
 
 	virtual MockFunctionCall& onObject(void* objectPtr) _override;
->>>>>>> cf4341b... Add the _override keyword everywhere possible.
 
 	const char* getTraceOutput();
 	void clear();
