@@ -412,10 +412,6 @@
 				RelativePath=".\include\CppUTest\UtestMacros.h"
 				>
 			</File>
-			<File
-				RelativePath=".\include\CppUTest\VirtualCall.h"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="ext"
