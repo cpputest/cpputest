@@ -194,7 +194,7 @@ ifeq ($(CPPUTEST_PEDANTIC_ERRORS), Y)
 	CPPUTEST_WARNINGFLAGS += -pedantic-errors
 endif 
 ifeq ($(UNAME_OS),$(LINUX_STR))
-#	CPPUTEST_WARNINGFLAGS += -Wsign-conversion
+	CPPUTEST_WARNINGFLAGS += -Wsign-conversion
 endif
 	CPPUTEST_CXX_WARNINGFLAGS = -Woverloaded-virtual
 	CPPUTEST_C_WARNINGFLAGS = -Wstrict-prototypes
