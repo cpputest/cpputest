@@ -116,6 +116,7 @@ MockFunctionCall_c* withStringParameters_c(const char* name, const char* value);
 MockFunctionCall_c* withPointerParameters_c(const char* name, void* value);
 MockFunctionCall_c* withParameterOfType_c(const char* type, const char* name, void* value);
 MockFunctionCall_c* andReturnIntValue_c(int value);
+MockFunctionCall_c* andReturnUnsignedIntValue_c(unsigned int value);
 MockFunctionCall_c* andReturnDoubleValue_c(double value);
 MockFunctionCall_c* andReturnStringValue_c(const char* value);
 MockFunctionCall_c* andReturnPointerValue_c(void* value);
@@ -144,6 +145,7 @@ static MockFunctionCall_c gFunctionCall = {
 		withStringParameters_c,
 		withPointerParameters_c,
 		withParameterOfType_c,
+		andReturnUnsignedIntValue_c,
 		andReturnIntValue_c,
 		andReturnDoubleValue_c,
 		andReturnStringValue_c,
@@ -200,6 +202,12 @@ MockFunctionCall_c* withParameterOfType_c(const char* type, const char* name, vo
 	return &gFunctionCall;
 }
 
+MockFunctionCall_c* andReturnUnsignedIntValue_c(unsigned int value)
+{
+	currentCall = &currentCall->andReturnValue(value);
+	return &gFunctionCall;
+}
+
 MockFunctionCall_c* andReturnIntValue_c(int value)
 {
 	currentCall = &currentCall->andReturnValue(value);
@@ -230,6 +238,10 @@ static MockValue_c getMockValueCFromNamedValue(const MockNamedValue& namedValue)
 	if (PlatformSpecificStrCmp(namedValue.getType().asCharString(), "int") == 0) {
 		returnValue.type = MOCKVALUETYPE_INTEGER;
 		returnValue.value.intValue = namedValue.getIntValue();
+	}
+	else if (PlatformSpecificStrCmp(namedValue.getType().asCharString(), "unsigned int") == 0) {
+		returnValue.type = MOCKVALUETYPE_UNSIGNED_INTEGER;
+		returnValue.value.unsignedIntValue = namedValue.getUnsignedIntValue();
 	}
 	else if (PlatformSpecificStrCmp(namedValue.getType().asCharString(), "double") == 0) {
 		returnValue.type = MOCKVALUETYPE_DOUBLE;
