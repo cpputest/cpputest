@@ -619,6 +619,7 @@ TEST(MockSupportTest, disableEnable)
 	CHECK_NO_MOCK_FAILURE();
 }
 
+//TODO - add support to unsigned integers on setData.
 TEST(MockSupportTest, setDataForIntegerValues)
 {
 	mock().setData("data", 10);
