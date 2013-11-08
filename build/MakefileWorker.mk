@@ -98,7 +98,7 @@ endif
 
 ifeq ($(findstring $(MACOSX_STR),$(UNAME_OUTPUT)),$(MACOSX_STR))
 	UNAME_OS = $(MACOSX_STR)
-	#lion has a problem with the 'v' part of -a
+#lion has a problem with the 'v' part of -a
 	UNAME_OUTPUT = "$(shell uname -pmnrs)"
 endif
 
@@ -129,7 +129,7 @@ endif
 ifeq ($(UNAME_OS),$(CYGWIN_STR))
   CPPUTEST_LDFLAGS += -static
 endif
-  
+
 
 #Kludge for MacOsX gcc compiler on Darwin9 who can't handle pendantic
 ifeq ($(UNAME_OS),$(MACOSX_STR))
@@ -351,7 +351,7 @@ LD_LIBRARIES += -lstdc++
 
 TARGET_LIB = \
     $(CPPUTEST_LIB_DIR)/lib$(COMPONENT_NAME).a
-    
+
 ifndef TEST_TARGET
 	ifndef TARGET_PLATFORM
 		TEST_TARGET = $(COMPONENT_NAME)_tests
@@ -361,10 +361,10 @@ ifndef TEST_TARGET
 endif
 
 #Helper Functions
-get_src_from_dir  = $(wildcard $1/*.cpp) $(wildcard $1/*.c)
+get_src_from_dir  = $(wildcard $1/*.cpp) $(wildcard $1/*.cc) $(wildcard $1/*.c)
 get_dirs_from_dirspec  = $(wildcard $1)
 get_src_from_dir_list = $(foreach dir, $1, $(call get_src_from_dir,$(dir)))
-__src_to = $(subst .c,$1, $(subst .cpp,$1,$(if $(CPPUTEST_USE_VPATH),$(notdir $2),$2)))
+__src_to = $(subst .c,$1, $(subst .cc,$1, $(subst .cpp,$1,$(if $(CPPUTEST_USE_VPATH),$(notdir $2),$2))))
 src_to = $(addprefix $(CPPUTEST_OBJS_DIR)/,$(call __src_to,$1,$2))
 src_to_o = $(call src_to,.o,$1)
 src_to_d = $(call src_to,.d,$1)
@@ -395,9 +395,9 @@ ALL_SRC = $(SRC) $(TEST_SRC) $(MOCKS_SRC)
 
 # If we're using VPATH
 ifeq ($(CPPUTEST_USE_VPATH), Y)
-	# gather all the source directories and add them
+# gather all the source directories and add them
 	VPATH += $(sort $(dir $(ALL_SRC)))
-	# Add the component name to the objs dir path, to differentiate between same-name objects
+# Add the component name to the objs dir path, to differentiate between same-name objects
 	CPPUTEST_OBJS_DIR := $(addsuffix /$(COMPONENT_NAME),$(CPPUTEST_OBJS_DIR))
 endif
 
@@ -502,9 +502,14 @@ $(TARGET_LIB): $(OBJ)
 
 test: $(TEST_TARGET)
 	$(RUN_TEST_TARGET) | tee $(TEST_OUTPUT)
-	
+
 vtest: $(TEST_TARGET)
 	$(RUN_TEST_TARGET) -v  | tee $(TEST_OUTPUT)
+
+$(CPPUTEST_OBJS_DIR)/%.o: %.cc
+	@echo compiling $(notdir $<)
+	$(SILENCE)mkdir -p $(dir $@)
+	$(SILENCE)$(COMPILE.cpp) $(DEP_FLAGS) $(OUTPUT_OPTION) $<
 
 $(CPPUTEST_OBJS_DIR)/%.o: %.cpp
 	@echo compiling $(notdir $<)
@@ -527,7 +532,7 @@ clean:
 	$(SILENCE)rm -rf gcov $(CPPUTEST_OBJS_DIR)
 	$(SILENCE)find . -name "*.gcno" | xargs rm -f
 	$(SILENCE)find . -name "*.gcda" | xargs rm -f
-	
+
 #realclean gets rid of all gcov, o and d files in the directory tree
 #not just the ones made by this makefile
 .PHONY: realclean
@@ -553,11 +558,11 @@ endif
 	$(SILENCE)mv *.gcov gcov
 	$(SILENCE)mv gcov_* gcov
 	@echo "See gcov directory for details"
- 
+
 .PHONEY: format
 format: 
 	$(CPPUTEST_HOME)/scripts/reformat.sh $(PROJECT_HOME_DIR)
-	
+
 .PHONEY: debug
 debug:
 	@echo

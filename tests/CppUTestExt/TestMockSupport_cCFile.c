@@ -45,9 +45,9 @@ void all_mock_support_c_calls(void)
 	mock_c()->actualCall("boo");
 	mock_c()->checkExpectations();
 
-	mock_c()->expectOneCall("boo")->withIntParameters("integer", 1)->withDoubleParameters("doube", 1.0)->
+	mock_c()->expectOneCall("boo")->withIntParameters("integer", 1)->withDoubleParameters("double", 1.0)->
 			withStringParameters("string", "string")->withPointerParameters("pointer", (void*) 1);
-	mock_c()->actualCall("boo")->withIntParameters("integer", 1)->withDoubleParameters("doube", 1.0)->
+	mock_c()->actualCall("boo")->withIntParameters("integer", 1)->withDoubleParameters("double", 1.0)->
 			withStringParameters("string", "string")->withPointerParameters("pointer", (void*) 1);
 
 	mock_c()->installComparator("typeName", typeNameIsEqual, typeNameValueToString);

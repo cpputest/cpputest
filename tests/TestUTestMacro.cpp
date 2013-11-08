@@ -439,3 +439,19 @@ TEST(UnitTestMacros, MultipleCHECK_THROWS_inOneScope)
 	CHECK_THROWS(int, throw 4);
 }
 #endif
+
+TEST_GROUP(IgnoreTest)
+{
+	TestTestingFixture fixture;
+};
+
+TEST(IgnoreTest, doesIgnoreCount)
+{
+	IgnoredUtestShell * ignoreTest = new IgnoredUtestShell();
+	fixture.addTest(ignoreTest);
+	fixture.runAllTests();
+	LONGS_EQUAL(1, fixture.getIgnoreCount());
+	delete ignoreTest;
+}
+
+
