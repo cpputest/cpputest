@@ -308,6 +308,12 @@ MockNamedValue* MockSupport::retrieveDataFromStore(const SimpleString& name)
 	return newData;
 }
 
+void MockSupport::setData(const SimpleString& name, unsigned int value)
+{
+	MockNamedValue* newData = retrieveDataFromStore(name);
+	newData->setValue(value);
+}
+
 void MockSupport::setData(const SimpleString& name, int value)
 {
 	MockNamedValue* newData = retrieveDataFromStore(name);

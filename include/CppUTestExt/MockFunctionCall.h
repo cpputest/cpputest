@@ -118,7 +118,7 @@ public:
 	virtual MockFunctionCall& withName(const SimpleString&) { return *this;}
 	virtual MockFunctionCall& withCallOrder(int) { return *this; }
 	virtual MockFunctionCall& withIntParameter(const SimpleString&, int) { return *this; }
-	virtual MockFunctionCall& withUnsignedIntParameter(const SimpleString&, unsigned int) { MockIgnoredCall * bla = new MockIgnoredCall(); return *bla; } //TODO TEST THIS
+	virtual MockFunctionCall& withUnsignedIntParameter(const SimpleString&, unsigned int) { return *this; }
 	virtual MockFunctionCall& withDoubleParameter(const SimpleString&, double) { return *this; }
 	virtual MockFunctionCall& withStringParameter(const SimpleString&, const char*) { return *this; }
 	virtual MockFunctionCall& withPointerParameter(const SimpleString& , void*) { return *this; }

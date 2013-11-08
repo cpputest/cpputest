@@ -59,6 +59,7 @@ public:
 
 	bool hasData(const SimpleString& name);
 	void setData(const SimpleString& name, int value);
+	void setData(const SimpleString& name, unsigned int value);
 	void setData(const SimpleString& name, const char* value);
 	void setData(const SimpleString& name, double value);
 	void setData(const SimpleString& name, void* value);
