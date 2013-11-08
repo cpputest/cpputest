@@ -232,15 +232,30 @@ TEST(MockExpectedFunctionCall, getParameterValueOfObjectTypeWithoutComparator)
 	STRCMP_EQUAL("No comparator found for type: \"type\"", call->getParameterValueString("name").asCharString());
 }
 
-//TODO: add unsigned integer test here too ??
+TEST(MockExpectedFunctionCall, callWithTwoUnsignedIntegerParameter)
+{
+    unsigned int expected_value = 1;
+    unsigned int another_expected_value = 2;
+
+	call->withParameter("unsigned-integer1", expected_value);
+	call->withParameter("unsigned-integer2", another_expected_value);
+	STRCMP_EQUAL("unsigned int", call->getParameterType("unsigned-integer1").asCharString());
+	STRCMP_EQUAL("unsigned int", call->getParameterType("unsigned-integer2").asCharString());
+	LONGS_EQUAL(expected_value, call->getParameter("unsigned-integer1").getUnsignedIntValue());
+	LONGS_EQUAL(another_expected_value, call->getParameter("unsigned-integer2").getUnsignedIntValue());
+}
+
 TEST(MockExpectedFunctionCall, callWithTwoIntegerParameter)
 {
-	call->withParameter("integer1", 1);
-	call->withParameter("integer2", 2);
+    int expected_value = 1;
+    int another_expected_value = -1;
+
+	call->withParameter("integer1", expected_value);
+	call->withParameter("integer2", another_expected_value);
 	STRCMP_EQUAL("int", call->getParameterType("integer1").asCharString());
 	STRCMP_EQUAL("int", call->getParameterType("integer2").asCharString());
-	LONGS_EQUAL(1, call->getParameter("integer1").getIntValue());
-	LONGS_EQUAL(2, call->getParameter("integer2").getIntValue());
+	LONGS_EQUAL(expected_value, call->getParameter("integer1").getIntValue());
+	LONGS_EQUAL(another_expected_value, call->getParameter("integer2").getIntValue());
 }
 
 TEST(MockExpectedFunctionCall, callWithThreeDifferentParameter)

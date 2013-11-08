@@ -390,6 +390,11 @@ MockNamedValue MockSupport::returnValue()
 	return MockNamedValue("");
 }
 
+unsigned int MockSupport::unsignedIntReturnValue()
+{
+	return returnValue().getUnsignedIntValue();
+}
+
 int MockSupport::intReturnValue()
 {
 	return returnValue().getIntValue();

@@ -59,6 +59,7 @@ public:
 	virtual MockFunctionCall& withStringParameter(const SimpleString& name, const char* value)=0;
 	virtual MockFunctionCall& withPointerParameter(const SimpleString& name, void* value)=0;
 	virtual MockFunctionCall& andReturnValue(int value)=0;
+	virtual MockFunctionCall& andReturnValue(unsigned int value)=0;
 	virtual MockFunctionCall& andReturnValue(double value)=0;
 	virtual MockFunctionCall& andReturnValue(const char* value)=0;
 	virtual MockFunctionCall& andReturnValue(void* value)=0;
@@ -96,6 +97,7 @@ public:
 	virtual MockFunctionCall& ignoreOtherParameters();
 
 	virtual MockFunctionCall& andReturnValue(int);
+	virtual MockFunctionCall& andReturnValue(unsigned int);
 	virtual MockFunctionCall& andReturnValue(double);
 	virtual MockFunctionCall& andReturnValue(const char*);
 	virtual MockFunctionCall& andReturnValue(void*);
@@ -123,6 +125,7 @@ public:
 	virtual MockFunctionCall& withParameterOfType(const SimpleString&, const SimpleString&, const void*) { return *this; }
 
 	virtual MockFunctionCall& andReturnValue(int) { return *this; }
+	virtual MockFunctionCall& andReturnValue(unsigned int) { return *this; }
 	virtual MockFunctionCall& andReturnValue(double) { return *this;}
 	virtual MockFunctionCall& andReturnValue(const char*) { return *this; }
 	virtual MockFunctionCall& andReturnValue(void*) { return *this; }
@@ -151,6 +154,7 @@ public:
 	virtual MockFunctionCall& ignoreOtherParameters();
 
 	virtual MockFunctionCall& andReturnValue(int value);
+	virtual MockFunctionCall& andReturnValue(unsigned int value);
 	virtual MockFunctionCall& andReturnValue(double value);
 	virtual MockFunctionCall& andReturnValue(const char* value);
 	virtual MockFunctionCall& andReturnValue(void* value);

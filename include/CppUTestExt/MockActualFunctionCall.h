@@ -51,6 +51,7 @@ public:
 	virtual MockFunctionCall& withParameterOfType(const SimpleString& type, const SimpleString& name, const void* value);
 
 	virtual MockFunctionCall& andReturnValue(int value);
+	virtual MockFunctionCall& andReturnValue(unsigned int value);
 	virtual MockFunctionCall& andReturnValue(double value);
 	virtual MockFunctionCall& andReturnValue(const char* value);
 	virtual MockFunctionCall& andReturnValue(void* value);

@@ -52,6 +52,7 @@ public:
 	virtual bool hasReturnValue();
 	virtual MockNamedValue returnValue();
 	virtual int intReturnValue();
+	virtual unsigned int unsignedIntReturnValue();
 	virtual const char* stringReturnValue();
 	virtual double doubleReturnValue();
 	virtual void* pointerReturnValue();

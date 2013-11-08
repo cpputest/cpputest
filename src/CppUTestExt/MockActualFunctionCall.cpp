@@ -226,6 +226,12 @@ void MockActualFunctionCall::setState(ActualCallState state)
 	state_ = state;
 }
 
+MockFunctionCall& MockActualFunctionCall::andReturnValue(unsigned int)
+{
+	FAIL("andReturnValue cannot be called on an ActualFunctionCall. Use returnValue instead to get the value.");
+	return *this;
+}
+
 MockFunctionCall& MockActualFunctionCall::andReturnValue(int)
 {
 	FAIL("andReturnValue cannot be called on an ActualFunctionCall. Use returnValue instead to get the value.");

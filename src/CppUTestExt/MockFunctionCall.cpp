@@ -155,6 +155,13 @@ MockFunctionCall& MockFunctionCallComposite::ignoreOtherParameters()
 	return *this;
 }
 
+MockFunctionCall& MockFunctionCallComposite::andReturnValue(unsigned int value)
+{
+	for (MockFunctionCallCompositeNode* node = head_; node != NULL; node = node->next_)
+		node->call_.andReturnValue(value);
+	return *this;
+}
+
 MockFunctionCall& MockFunctionCallComposite::andReturnValue(int value)
 {
 	for (MockFunctionCallCompositeNode* node = head_; node != NULL; node = node->next_)
@@ -280,6 +287,11 @@ MockFunctionCall& MockFunctionCallTrace::withParameterOfType(const SimpleString&
 }
 
 MockFunctionCall& MockFunctionCallTrace::ignoreOtherParameters()
+{
+	return *this;
+}
+
+MockFunctionCall& MockFunctionCallTrace::andReturnValue(unsigned int)
 {
 	return *this;
 }

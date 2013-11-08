@@ -269,6 +269,13 @@ bool MockExpectedFunctionCall::MockExpectedFunctionParameter::isFulfilled() cons
 	return fulfilled_;
 }
 
+MockFunctionCall& MockExpectedFunctionCall::andReturnValue(unsigned int value)
+{
+	returnValue_.setName("returnValue");
+	returnValue_.setValue(value);
+	return *this;
+}
+
 MockFunctionCall& MockExpectedFunctionCall::andReturnValue(int value)
 {
 	returnValue_.setName("returnValue");
