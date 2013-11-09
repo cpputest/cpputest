@@ -618,6 +618,7 @@ TEST(SimpleString, unsigned_long)
 	CHECK_EQUAL("4294967295 (0xffffffff)", result);
 }
 
+//TODO add support to unsigned int if not defined this
 TEST(SimpleString, Uint32_t)
 {
 	uint32_t i = 0xffffffff;

@@ -327,10 +327,15 @@ TEST(MockExpectedFunctionCall, toStringForIgnoredParameters)
 
 TEST(MockExpectedFunctionCall, toStringForMultipleParameters)
 {
+    int int_value = 10;
+    unsigned int uint_value = 7;
+
 	call->withName("name");
 	call->withParameter("string", "value");
-	call->withParameter("integer", 10);
-	STRCMP_EQUAL("name -> char* string: <value>, int integer: <10>", call->callToString().asCharString());
+	call->withParameter("integer", int_value);
+	call->withParameter("unsigned-integer", uint_value);
+	//TODO FIX THE WAY UINT IS PRESENTED TO BE LIKE UINT32.
+	STRCMP_EQUAL("name -> char* string: <value>, int integer: <10>, unsigned int unsigned-integer: <7>", call->callToString().asCharString());
 }
 
 TEST(MockExpectedFunctionCall, toStringForParameterAndIgnored)

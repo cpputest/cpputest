@@ -153,7 +153,6 @@ bool MockNamedValue::equals(const MockNamedValue& p) const
 
 SimpleString MockNamedValue::toString() const
 {
-    // TODO: HOW TO TDD THIS ?
 	if (type_ == "int")
 		return StringFrom(value_.intValue_);
 	else if (type_ == "unsigned int")

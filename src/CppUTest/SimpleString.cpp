@@ -440,6 +440,7 @@ SimpleString StringFrom(unsigned long i)
 	return StringFromFormat("%lu (0x%lx)", i, i);
 }
 
+//TODO add support to unsigned int if not defined this
 SimpleString StringFrom(uint32_t i)
 {
 	return StringFromFormat("%10u (0x%08x)", i, i);
