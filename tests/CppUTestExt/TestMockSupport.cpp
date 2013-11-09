@@ -1007,9 +1007,15 @@ TEST(MockSupportTest, expectMultipleCalls)
 
 TEST(MockSupportTest, expectMultipleCallsWithParameters)
 {
-	mock().expectNCalls(2, "boo").withParameter("double", 1.0).withParameter("int", 1).withParameter("string", "string");
-	mock().actualCall("boo").withParameter("double", 1.0).withParameter("int", 1).withParameter("string", "string");
-	mock().actualCall("boo").withParameter("double", 1.0).withParameter("int", 1).withParameter("string", "string");
+    int expected_int = -7;
+    unsigned int expected_uint = 7;
+
+	mock().expectNCalls(2, "boo").withParameter("double", 1.0).withParameter("int", expected_int).
+	    withParameter("string", "string").withParameter("uint", expected_uint);
+	mock().actualCall("boo").withParameter("double", 1.0).withParameter("int", expected_int).withParameter("string", "string").
+	    withParameter("uint", expected_uint);
+	mock().actualCall("boo").withParameter("double", 1.0).withParameter("int", expected_int).withParameter("string", "string").
+	    withParameter("uint", expected_uint);
 	mock().checkExpectations();
 	CHECK_NO_MOCK_FAILURE();
 }

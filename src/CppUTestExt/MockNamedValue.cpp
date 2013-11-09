@@ -156,6 +156,8 @@ SimpleString MockNamedValue::toString() const
     // TODO: HOW TO TDD THIS ?
 	if (type_ == "int")
 		return StringFrom(value_.intValue_);
+	else if (type_ == "unsigned int")
+		return StringFrom(value_.unsignedIntValue_);
 	else if (type_ == "char*")
 		return value_.stringValue_;
 	else if (type_ == "void*")
