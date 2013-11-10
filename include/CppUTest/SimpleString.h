@@ -126,13 +126,13 @@ SimpleString StringFrom(const char *value);
 SimpleString StringFromOrNull(const char * value);
 SimpleString StringFrom(long value);
 SimpleString StringFrom(int value);
-SimpleString StringFrom(unsigned int value);
 SimpleString HexStringFrom(long value);
 SimpleString HexStringFrom(const void* value);
 SimpleString StringFrom(double value, int precision = 6);
 SimpleString StringFrom(const SimpleString& other);
 SimpleString StringFromFormat(const char* format, ...) __check_format__(printf, 1, 2);
 SimpleString VStringFromFormat(const char* format, va_list args);
+//TODO add support to unsigned int if not defined this
 
 #if CPPUTEST_USE_STD_CPP_LIB
 
@@ -141,7 +141,6 @@ SimpleString VStringFromFormat(const char* format, va_list args);
 
 SimpleString StringFrom(const std::string& other);
 SimpleString StringFrom(unsigned long);
-//TODO add support to unsigned int if not defined this
 SimpleString StringFrom(uint32_t);
 SimpleString StringFrom(uint16_t);
 SimpleString StringFrom(uint8_t);
