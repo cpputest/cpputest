@@ -334,7 +334,7 @@ TEST(MockExpectedFunctionCall, toStringForMultipleParameters)
 	call->withParameter("string", "value");
 	call->withParameter("integer", int_value);
 	call->withParameter("unsigned-integer", uint_value);
-	STRCMP_EQUAL("name -> char* string: <value>, int integer: <10>, unsigned int unsigned-integer: <7 (0x00000007)>", call->callToString().asCharString());
+	STRCMP_EQUAL("name -> char* string: <value>, int integer: <10>, unsigned int unsigned-integer: <7>", call->callToString().asCharString());
 }
 
 TEST(MockExpectedFunctionCall, toStringForParameterAndIgnored)
