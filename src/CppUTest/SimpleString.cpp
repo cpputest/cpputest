@@ -426,6 +426,11 @@ SimpleString StringFromFormat(const char* format, ...)
 	return resultString;
 }
 
+SimpleString StringFrom(unsigned int i)
+{
+	return StringFromFormat("%10u (0x%08x)", i, i);
+}
+
 #if CPPUTEST_USE_STD_CPP_LIB
 
 #include <string>
@@ -438,22 +443,6 @@ SimpleString StringFrom(const std::string& value)
 SimpleString StringFrom(unsigned long i)
 {
 	return StringFromFormat("%lu (0x%lx)", i, i);
-}
-
-//TODO add support to unsigned int if not defined this
-SimpleString StringFrom(uint32_t i)
-{
-	return StringFromFormat("%10u (0x%08x)", i, i);
-}
-
-SimpleString StringFrom(uint16_t i)
-{
-	return StringFromFormat("%5u (0x%04x)", i, i);
-}
-
-SimpleString StringFrom(uint8_t i)
-{
-	return StringFromFormat("%3u (0x%02x)", i, i);
 }
 
 #endif
