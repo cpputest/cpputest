@@ -52,6 +52,14 @@ MockFunctionCall& MockExpectedFunctionCall::withName(const SimpleString& name)
 	return *this;
 }
 
+MockFunctionCall& MockExpectedFunctionCall::withUnsignedIntParameter(const SimpleString& name, unsigned int value)
+{
+	MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
+	parameters_->add(newParameter);
+	newParameter->setValue(value);
+	return *this;
+}
+
 MockFunctionCall& MockExpectedFunctionCall::withIntParameter(const SimpleString& name, int value)
 {
 	MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
@@ -259,6 +267,13 @@ void MockExpectedFunctionCall::MockExpectedFunctionParameter::setFulfilled(bool 
 bool MockExpectedFunctionCall::MockExpectedFunctionParameter::isFulfilled() const
 {
 	return fulfilled_;
+}
+
+MockFunctionCall& MockExpectedFunctionCall::andReturnValue(unsigned int value)
+{
+	returnValue_.setName("returnValue");
+	returnValue_.setValue(value);
+	return *this;
 }
 
 MockFunctionCall& MockExpectedFunctionCall::andReturnValue(int value)

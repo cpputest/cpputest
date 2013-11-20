@@ -576,6 +576,14 @@ TEST(SimpleString, _64BitAddressPrintsCorrectly)
 #endif
 #endif
 
+TEST(SimpleString, BuildStringFromUnsignedInteger)
+{
+	unsigned int i = 0xffffffff;
+
+	SimpleString result = StringFrom(i);
+	CHECK_EQUAL("4294967295 (0xffffffff)", result);
+}
+
 #if CPPUTEST_USE_STD_CPP_LIB
 
 TEST(SimpleString, fromStdString)
@@ -592,54 +600,12 @@ TEST(SimpleString, CHECK_EQUAL_unsigned_long)
 	CHECK_EQUAL(i, i);
 }
 
-TEST(SimpleString, CHECK_EQUAL_Uint32_t)
-{
-	uint32_t i = 0xffffffff;
-	CHECK_EQUAL(i, i);
-}
-
-TEST(SimpleString, CHECK_EQUAL_Uint16_t)
-{
-	uint16_t i = 0xffff;
-	CHECK_EQUAL(i, i);
-}
-
-TEST(SimpleString, CHECK_EQUAL_Uint8_t)
-{
-	uint8_t i = 0xff;
-	CHECK_EQUAL(i, i);
-}
-
 TEST(SimpleString, unsigned_long)
 {
 	unsigned long i = 0xffffffffUL;
 
 	SimpleString result = StringFrom(i);
 	CHECK_EQUAL("4294967295 (0xffffffff)", result);
-}
-
-TEST(SimpleString, Uint32_t)
-{
-	uint32_t i = 0xffffffff;
-
-	SimpleString result = StringFrom(i);
-	CHECK_EQUAL("4294967295 (0xffffffff)", result);
-}
-
-TEST(SimpleString, Uint16_t)
-{
-	uint16_t i = 0xffff;
-
-	SimpleString result = StringFrom(i);
-	CHECK_EQUAL("65535 (0xffff)", result);
-}
-
-TEST(SimpleString, Uint8_t)
-{
-	uint8_t i = 0xff;
-
-	SimpleString result = StringFrom(i);
-	CHECK_EQUAL("255 (0xff)", result);
 }
 
 #endif

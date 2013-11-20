@@ -110,6 +110,14 @@ void MockActualFunctionCall::checkActualParameter(const MockNamedValue& actualPa
 	finnalizeCallWhenFulfilled();
 }
 
+MockFunctionCall& MockActualFunctionCall::withUnsignedIntParameter(const SimpleString& name, unsigned int value)
+{
+	MockNamedValue actualParameter(name);
+	actualParameter.setValue(value);
+	checkActualParameter(actualParameter);
+	return *this;
+}
+
 MockFunctionCall& MockActualFunctionCall::withIntParameter(const SimpleString& name, int value)
 {
 	MockNamedValue actualParameter(name);
@@ -216,6 +224,12 @@ void MockActualFunctionCall::setState(ActualCallState state)
 {
 	checkStateConsistency(state_, state);
 	state_ = state;
+}
+
+MockFunctionCall& MockActualFunctionCall::andReturnValue(unsigned int)
+{
+	FAIL("andReturnValue cannot be called on an ActualFunctionCall. Use returnValue instead to get the value.");
+	return *this;
 }
 
 MockFunctionCall& MockActualFunctionCall::andReturnValue(int)
