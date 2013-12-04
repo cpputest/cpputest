@@ -207,7 +207,6 @@ copy $(OutDir)CppUTest.lib lib\CppUTest.lib
     <ClInclude Include="include\CppUTest\TestTestingFixture.h" />
     <ClInclude Include="include\CppUTest\Utest.h" />
     <ClInclude Include="include\CppUTest\UtestMacros.h" />
-    <ClInclude Include="include\CppUTest\VirtualCall.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

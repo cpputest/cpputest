@@ -33,6 +33,7 @@ extern "C" {
 #endif
 
 typedef enum {
+	MOCKVALUETYPE_UNSIGNED_INTEGER,
 	MOCKVALUETYPE_INTEGER,
 	MOCKVALUETYPE_DOUBLE,
 	MOCKVALUETYPE_STRING,
@@ -45,6 +46,7 @@ typedef struct SMockValue_c
 	MockValueType_c type;
 	union  {
 		int intValue;
+		unsigned int unsignedIntValue;
 		double doubleValue;
 		const char* stringValue;
 		void* pointerValue;
@@ -61,6 +63,7 @@ struct SMockFunctionCall_c
 	MockFunctionCall_c* (*withPointerParameters)(const char* name, void* value);
 	MockFunctionCall_c* (*withParameterOfType)(const char* type, const char* name, void* value);
 
+	MockFunctionCall_c* (*andReturnUnsignedIntValue)(unsigned int value);
 	MockFunctionCall_c* (*andReturnIntValue)(int value);
 	MockFunctionCall_c* (*andReturnDoubleValue)(double value);
 	MockFunctionCall_c* (*andReturnStringValue)(const char* value);

@@ -239,7 +239,7 @@ public:
 			const char* fileName, int lineNumber);
 	virtual const char* getProgressIndicator() const;
 	protected:  virtual SimpleString getMacroName() const;
-    virtual void runOneTestWithPlugins(TestPlugin* plugin, TestResult& result);
+    virtual void runOneTest(TestPlugin* plugin, TestResult& result);
 
 private:
 

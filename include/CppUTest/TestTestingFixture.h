@@ -55,6 +55,11 @@ public:
 		delete genTest_;
 	}
 
+	void addTest(UtestShell * test)
+	{
+		registry_->addTest(test);
+	}
+
 	void setTestFunction(void(*testFunction)())
 	{
 		genTest_->testFunction_ = testFunction;
@@ -78,6 +83,11 @@ public:
 	int getFailureCount()
 	{
 		return result_->getFailureCount();
+	}
+
+	int getIgnoreCount()
+	{
+		return result_->getIgnoredCount();
 	}
 
 	bool hasTestFailed()

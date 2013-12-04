@@ -308,6 +308,12 @@ MockNamedValue* MockSupport::retrieveDataFromStore(const SimpleString& name)
 	return newData;
 }
 
+void MockSupport::setData(const SimpleString& name, unsigned int value)
+{
+	MockNamedValue* newData = retrieveDataFromStore(name);
+	newData->setValue(value);
+}
+
 void MockSupport::setData(const SimpleString& name, int value)
 {
 	MockNamedValue* newData = retrieveDataFromStore(name);
@@ -388,6 +394,11 @@ MockNamedValue MockSupport::returnValue()
 {
 	if (lastActualFunctionCall_) return lastActualFunctionCall_->returnValue();
 	return MockNamedValue("");
+}
+
+unsigned int MockSupport::unsignedIntReturnValue()
+{
+	return returnValue().getUnsignedIntValue();
 }
 
 int MockSupport::intReturnValue()

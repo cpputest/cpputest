@@ -178,7 +178,7 @@ TEST(ClassName, Create)
 {
   CHECK(0 != className);
   CHECK(true);
-  CHECK_EQUALS(1,1);
+  CHECK_EQUAL(1,1);
   LONGS_EQUAL(1,1);
   DOUBLES_EQUAL(1.000, 1.001, .01);
   STRCMP_EQUAL("hello", "hello");
