@@ -52,10 +52,14 @@
 #include "gtest/gtest-death-test.h"
 #include "gmock/gmock.h"
 
+#ifndef RUN_ALL_TESTS
+#define GTEST_VERSION_GTEST_1_7
+#else
 #ifdef ADD_FAILURE_AT
 #define GTEST_VERSION_GTEST_1_6
 #else
 #define GTEST_VERSION_GTEST_1_5
+#endif
 #endif
 
 /*
@@ -73,13 +77,19 @@
 
 /* Store some of the flags as we'll need to reset them each test to avoid leaking memory */
 
-static ::testing::internal::String GTestFlagcolor;
-static ::testing::internal::String GTestFlagfilter;
-static ::testing::internal::String GTestFlagoutput;
-static ::testing::internal::String GTestFlagdeath_test_style;
-static ::testing::internal::String GTestFlaginternal_run_death_test;
+#ifdef GTEST_VERSION_GTEST_1_7
+#define GTEST_STRING std::string
+#else
+#define GTEST_STRING ::testing::internal::String
+#endif
+
+static GTEST_STRING GTestFlagcolor;
+static GTEST_STRING GTestFlagfilter;
+static GTEST_STRING GTestFlagoutput;
+static GTEST_STRING GTestFlagdeath_test_style;
+static GTEST_STRING GTestFlaginternal_run_death_test;
 #ifndef GTEST_VERSION_GTEST_1_5
-static ::testing::internal::String GTestFlagstream_result_to;
+static GTEST_STRING GTestFlagstream_result_to;
 #endif
 
 static void storeValuesOfGTestFLags()
@@ -108,6 +118,7 @@ static void resetValuesOfGTestFlags()
 
 void setGTestFLagValuesToNULLToAvoidMemoryLeaks()
 {
+#ifndef GTEST_VERSION_GTEST_1_7
 	::testing::GTEST_FLAG(color) = NULL;
 	::testing::GTEST_FLAG(filter) = NULL;
 	::testing::GTEST_FLAG(output) = NULL;
@@ -116,6 +127,7 @@ void setGTestFLagValuesToNULLToAvoidMemoryLeaks()
 	#ifndef GTEST_VERSION_GTEST_1_5
 	::testing::GTEST_FLAG(stream_result_to) = NULL;
 	#endif
+#endif
 }
 
 /* Left a global to avoid a header dependency to gtest.h */
