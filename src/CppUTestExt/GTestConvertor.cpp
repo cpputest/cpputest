@@ -79,8 +79,10 @@
 
 #ifdef GTEST_VERSION_GTEST_1_7
 #define GTEST_STRING std::string
+#define GTEST_NO_STRING_VALUE ""
 #else
 #define GTEST_STRING ::testing::internal::String
+#define GTEST_NO_STRING_VALUE NULL
 #endif
 
 static GTEST_STRING GTestFlagcolor;
@@ -118,16 +120,14 @@ static void resetValuesOfGTestFlags()
 
 void setGTestFLagValuesToNULLToAvoidMemoryLeaks()
 {
-#ifndef GTEST_VERSION_GTEST_1_7
-	::testing::GTEST_FLAG(color) = NULL;
-	::testing::GTEST_FLAG(filter) = NULL;
-	::testing::GTEST_FLAG(output) = NULL;
-	::testing::GTEST_FLAG(death_test_style) = NULL;
-	::testing::internal::GTEST_FLAG(internal_run_death_test) = NULL;
+	::testing::GTEST_FLAG(color) = GTEST_NO_STRING_VALUE;
+	::testing::GTEST_FLAG(filter) = GTEST_NO_STRING_VALUE;
+	::testing::GTEST_FLAG(output) = GTEST_NO_STRING_VALUE;
+	::testing::GTEST_FLAG(death_test_style) = GTEST_NO_STRING_VALUE;
+	::testing::internal::GTEST_FLAG(internal_run_death_test) = GTEST_NO_STRING_VALUE;
 	#ifndef GTEST_VERSION_GTEST_1_5
-	::testing::GTEST_FLAG(stream_result_to) = NULL;
+	::testing::GTEST_FLAG(stream_result_to) = GTEST_NO_STRING_VALUE;
 	#endif
-#endif
 }
 
 /* Left a global to avoid a header dependency to gtest.h */
@@ -221,7 +221,7 @@ public:
 		delete test_;
 
 		setGTestFLagValuesToNULLToAvoidMemoryLeaks();
-		::testing::internal::DeathTest::set_last_death_test_message(NULL);
+		::testing::internal::DeathTest::set_last_death_test_message(GTEST_NO_STRING_VALUE);
 	}
 
 private:
