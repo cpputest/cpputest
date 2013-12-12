@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2007, Michael Feathers, James Grenning and Bas Vodde
  * All rights reserved.
@@ -88,7 +87,7 @@ TEST(UnitTestMacros, FAILBehavesAsAProperMacro)
 	else FAIL("")
 }
 
-IGNORE_TEST(UnitTestMacros, FAILworksInAnIngoredTest)
+IGNORE_TEST(UnitTestMacros, FAILworksInAnIgnoredTest)
 {
 	FAIL("die!");
 }
