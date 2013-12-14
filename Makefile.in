@@ -2584,6 +2584,15 @@ check_gtest:
 	@echo "Build using gmock 1.6"; \
 	make distclean; $(srcdir)/configure CXXFLAGS=-DGTEST_USE_OWN_TR1_TUPLE=1 --enable-gmock; make check
 
+	rm -rf cpputest_build_gtest17
+	mkdir -p cpputest_build_gtest17
+	cd cpputest_build_gtest17; \
+	wget https://googlemock.googlecode.com/files/gmock-1.7.0.zip && unzip gmock-1.7.0.zip 
+	cd cpputest_build_gtest17/gmock-1.7.0; ./configure && make
+	export GMOCK_HOME=`pwd`/cpputest_build_gtest17/gmock-1.7.0; \
+	@echo "Build using gmock 1.7"; \
+	make distclean; $(srcdir)/configure --enable-gmock; make check
+
 check_all: 
 
 	@echo "Building and valgrinding"
