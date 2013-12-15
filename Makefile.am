@@ -193,6 +193,13 @@ if INCLUDE_CPPUTEST_EXT
 	./$(CPPUTESTEXT_TESTS)
 endif
 
+tmptmp:
+	@echo "Build using gmock 1.7";
+	@echo "Fix the build with gmock 1.7 and then remove this line"
+	export GMOCK_HOME=`pwd`/cpputest_build_gtest17/gmock-1.7.0;
+#	make distclean; $(srcdir)/configure --enable-gmock; make check
+
+
 check_gtest:
 	rm -rf cpputest_build_gtest15
 	mkdir -p cpputest_build_gtest15
@@ -217,9 +224,9 @@ check_gtest:
 	cd cpputest_build_gtest17; \
 	wget https://googlemock.googlecode.com/files/gmock-1.7.0.zip && unzip gmock-1.7.0.zip 
 	cd cpputest_build_gtest17/gmock-1.7.0; ./configure && make
-	export GMOCK_HOME=`pwd`/cpputest_build_gtest17/gmock-1.7.0; \
-	@echo "Build using gmock 1.7"; \
+	@echo "Build using gmock 1.7";
 	@echo "Fix the build with gmock 1.7 and then remove this line"
+	export GMOCK_HOME=`pwd`/cpputest_build_gtest17/gmock-1.7.0;
 #	make distclean; $(srcdir)/configure --enable-gmock; make check
 
 check_all: 
