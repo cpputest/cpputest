@@ -17,9 +17,9 @@ if [ "x$BUILDTOOL" = "xautotools" ]; then
 	cp ../scripts/generate_junit_report_ant.xml .
 	ant -f generate_junit_report_ant.xml
 
-	if [ "x$CXX" = "xg++" ]; then 
-		cd .. && travis_github_deployer -v || exit 1
-	fi; 
+#	if [ "x$CXX" = "xg++" ]; then 
+#		cd .. && travis_github_deployer -v || exit 1
+#	fi; 
 fi
 
 if [ "x$BUILDTOOL" = "xcmake" ]; then 
