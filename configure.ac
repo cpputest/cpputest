@@ -62,6 +62,7 @@ AC_CHECK_PROG([CPPUTEST_HAS_GCC], [gcc], [yes], [no])
 AC_CHECK_PROG([CPPUTEST_HAS_CLANG], [clang], [yes], [no])
 AC_CHECK_PROG([CPPUTEST_HAS_LCOV], [lcov], [yes], [no])
 AC_CHECK_PROG([CPPUTEST_HAS_VALGRIND], [valgrind], [yes], [no])
+AC_CHECK_PROG([CPPUTEST_HAS_DASH], [dash], [yes], [no])
 
 # Checking for warning flags on the compiler
 saved_cflags="$CFLAGS"

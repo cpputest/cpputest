@@ -224,6 +224,9 @@ check_gtest:
 
 check_all: 
 
+	@echo "If dash is available, run the configure with dash to find bash-isms and increase portability"
+	make distclean; if test "x$(CPPUTEST_HAS_DASH)" = xyes; then CONFIG_SHELL=dash $(srcdir)/configure; fi 
+
 	@echo "Building and valgrinding"
 	make distclean; $(srcdir)/configure; make valgrind
 	
