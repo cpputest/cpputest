@@ -92,50 +92,50 @@ CFLAGS="$saved_cflags"
 # FLag -Wextra. 
 CFLAGS="-Werror -Wextra"
 AC_MSG_CHECKING([whether CC and CXX supports -Wextra])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS+=" -Wextra"; CPPUTEST_CXXWARNINGFLAGS+=" -Wextra" ], [AC_MSG_RESULT([no])])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wextra"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wextra" ], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 
 # FLag -Wshadow. 
 CFLAGS="-Werror -Wshadow"
 AC_MSG_CHECKING([whether CC and CXX supports -Wshadow])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS+=" -Wshadow"; CPPUTEST_CXXWARNINGFLAGS+=" -Wshadow" ], [AC_MSG_RESULT([no])])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wshadow"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wshadow" ], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 
 # FLag -Wswitch-default
 CFLAGS="-Werror -Wswitch-default"
 AC_MSG_CHECKING([whether CC and CXX supports -Wswitch-default])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS+=" -Wswitch-default"; CPPUTEST_CXXWARNINGFLAGS+=" -Wswitch-default" ], [AC_MSG_RESULT([no])])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wswitch-default"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wswitch-default" ], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 
 # FLag -Wswitch-enum
 CFLAGS="-Werror -Wswitch-enum"
 AC_MSG_CHECKING([whether CC and CXX supports -Wswitch-enum])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS+=" -Wswitch-enum"; CPPUTEST_CXXWARNINGFLAGS+=" -Wswitch-enum" ], [AC_MSG_RESULT([no])])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wswitch-enum"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wswitch-enum" ], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 
 # FLag -Wconversion 
 CFLAGS="-Werror -Wconversion"
 AC_MSG_CHECKING([whether CC and CXX supports -Wconversion])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS+=" -Wconversion"; CPPUTEST_CXXWARNINGFLAGS+=" -Wconversion" ], [AC_MSG_RESULT([no])])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wconversion"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wconversion" ], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 
 # FLag -pedantic-errors 
 CFLAGS="-Werror -pedantic-errors"
 AC_MSG_CHECKING([whether CC and CXX supports -pedantic-errors])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS+=" -pedantic-errors"; CPPUTEST_CXXWARNINGFLAGS+=" -pedantic-errors" ], [AC_MSG_RESULT([no])])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -pedantic-errors"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -pedantic-errors" ], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 
 # FLag -Wsign-conversion 
 CFLAGS="-Werror -Wsign-conversion"
 AC_MSG_CHECKING([whether CC supports -Wsign-conversion])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS+=" -Wsign-conversion"], [AC_MSG_RESULT([no])])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wsign-conversion"], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 
 # FLag -Wsign-conversion (for CXX)
 AC_LANG_PUSH([C++])
 CXXFLAGS="-Werror -Wsign-conversion"
 AC_MSG_CHECKING([whether CXX supports -Wsign-conversion])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CXXWARNINGFLAGS+=" -Wsign-conversion"], [AC_MSG_RESULT([no])])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wsign-conversion"], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cxxflags"
 AC_LANG_POP
 
@@ -143,34 +143,34 @@ AC_LANG_POP
 AC_LANG_PUSH([C++])
 CXXFLAGS="-Werror -Woverloaded-virtual"
 AC_MSG_CHECKING([whether CXX supports -Woverloaded-virtual])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CXXWARNINGFLAGS+=" -Woverloaded-virtual" ], [AC_MSG_RESULT([no])])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Woverloaded-virtual" ], [AC_MSG_RESULT([no])])
 CXXFLAGS="$saved_cxxflags"
 AC_LANG_POP
 
 # FLag -Wstrict-prototypes 
 CFLAGS="-Werror -Wstrict-prototypes"
 AC_MSG_CHECKING([whether CC supports -Wstrict-prototypes])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS+=" -Wstrict-prototypes" ], [AC_MSG_RESULT([no])])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wstrict-prototypes" ], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 
 # Disable some warnings as CppUTest has this and can't be prevented at the moment.
 # FLag -Wno-disabled-macro-expansion. 
 CFLAGS="-Werror -Wno-disabled-macro-expansion"
 AC_MSG_CHECKING([whether CC and CXX supports -Wno-disabled-macro-expansion])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS+=" -Wno-disabled-macro-expansion"; CPPUTEST_CXXWARNINGFLAGS+=" -Wno-disabled-macro-expansion" ], [AC_MSG_RESULT([no])])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wno-disabled-macro-expansion"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wno-disabled-macro-expansion" ], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 
 # FLag -Wno-padded. 
 CFLAGS="-Werror -Wno-padded"
 AC_MSG_CHECKING([whether CC and CXX supports -Wno-padded])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS+=" -Wno-padded"; CPPUTEST_CXXWARNINGFLAGS+=" -Wno-padded" ], [AC_MSG_RESULT([no])])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wno-padded"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wno-padded" ], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 
 # FLag -Wno-global-constructors. 
 AC_LANG_PUSH([C++])
 CXXFLAGS="-Werror -Wno-global-constructors"
 AC_MSG_CHECKING([whether CXX supports -Wno-global-constructors])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CXXWARNINGFLAGS+=" -Wno-global-constructors" ], [AC_MSG_RESULT([no])])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wno-global-constructors" ], [AC_MSG_RESULT([no])])
 CXXFLAGS="$saved_cxxflags"
 AC_LANG_POP
 
@@ -178,7 +178,7 @@ AC_LANG_POP
 AC_LANG_PUSH([C++])
 CXXFLAGS="-Werror -Wno-exit-time-destructors"
 AC_MSG_CHECKING([whether CXX supports -Wno-exit-time-destructors])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CXXWARNINGFLAGS+=" -Wno-exit-time-destructors" ], [AC_MSG_RESULT([no])])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wno-exit-time-destructors" ], [AC_MSG_RESULT([no])])
 CXXFLAGS="$saved_cxxflags"
 AC_LANG_POP
 
@@ -186,7 +186,7 @@ AC_LANG_POP
 AC_LANG_PUSH([C++])
 CXXFLAGS="-Werror -Wno-weak-vtables"
 AC_MSG_CHECKING([whether CXX supports -Wno-weak-vtables])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CXXWARNINGFLAGS+=" -Wno-weak-vtables" ], [AC_MSG_RESULT([no])])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wno-weak-vtables" ], [AC_MSG_RESULT([no])])
 CXXFLAGS="$saved_cxxflags"
 AC_LANG_POP
 
@@ -214,7 +214,7 @@ CXXFLAGS="$saved_cxxflags"
 
 CXXFLAGS="-stdlib=libc++"
 AC_MSG_CHECKING([whether CXX supports -stdlib=libc++])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <cstdio>]])], [AC_MSG_RESULT([yes]); CPPUTEST_CPP11FLAG+=" -stdlib=libc++" ], [AC_MSG_RESULT([no])])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <cstdio>]])], [AC_MSG_RESULT([yes]); CPPUTEST_CPP11FLAG="${CPPUTEST_CPP11FLAG} -stdlib=libc++" ], [AC_MSG_RESULT([no])])
 CXXFLAGS="$saved_cxxflags"
 
 AC_LANG_POP
@@ -247,22 +247,21 @@ AC_LANG_POP
 #
 # LDFLAGS=
 # AC_MSG_CHECKING([whether LD supports -Qunused-arguments])
-# AC_LINK_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_NO_UNUSED_ARGUMENT_WARNING+=" -Qunused-arguments" ], [AC_MSG_RESULT([no])])
+# AC_LINK_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_NO_UNUSED_ARGUMENT_WARNING=" -Qunused-arguments" ], [AC_MSG_RESULT([no])])
 # LDFLAGS="$saved_ldflags"
 
 AC_MSG_CHECKING([whether CXXLD supports -Qunused-arguments linker option])
 OUTPUT_WHEN_CLANG_COMPILER=`${CXX} --version | grep clang`
 AM_CONDITIONAL([TEST_COMPILER_IS_CLANG], [ ! test -z "$OUTPUT_WHEN_CLANG_COMPILER]")
 AM_COND_IF([TEST_COMPILER_IS_CLANG],
-                [AC_MSG_RESULT([yes]); CPPUTEST_NO_UNUSED_ARGUMENT_WARNING+=" -Qunused-arguments"], 
-                [AC_MSG_RESULT([no])]; CPPUTEST_NO_UNUSED_ARGUMENT_WARNING+=" ")
+                [AC_MSG_RESULT([yes]); CPPUTEST_NO_UNUSED_ARGUMENT_WARNING=" ${CPPUTEST_NO_UNUSED_ARGUMENT_WARNING} -Qunused-arguments"], 
+                [AC_MSG_RESULT([no])]; CPPUTEST_NO_UNUSED_ARGUMENT_WARNING="${CPPUTEST_NO_UNUSED_ARGUMENT_WARNING} ")
 
 # Checking for options for creating map files
 LDFLAGS=" -Wl,-map,filename.map.txt"
 AC_MSG_CHECKING([whether LD supports -Wl,-map])
-AC_LINK_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_LD_MAP_GENERATION+=" -Wl,-map,filename.map.txt" ], [AC_MSG_RESULT([no])])
+AC_LINK_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_LD_MAP_GENERATION=" -Wl,-map,filename.map.txt" ], [AC_MSG_RESULT([no])])
 LDFLAGS="$saved_ldflags"
-
 
 # Different features
 AC_ARG_ENABLE([std-c], [AC_HELP_STRING([--disable-std-c], [disable the use of Standard C Library (warning: requires implementing Platforms/GccNoStdC) ])], 
@@ -295,6 +294,7 @@ AC_ARG_ENABLE([real-gtest], [AC_HELP_STRING([--enable-real-gtest], [enable using
 AC_ARG_ENABLE([gmock], [AC_HELP_STRING([--enable-gmock], [enable using GMock. Requires GMOCK_HOME to be set])], 
    [use_gmock=${enableval}], [use_gmock=no])
 
+
 ############################## Setting options ###############################
 
 AM_CONDITIONAL([INCLUDE_CPPUTEST_EXT], [test "x${cpputest_ext}" = xyes]) 
@@ -303,8 +303,8 @@ AM_CONDITIONAL([INCLUDE_CPPUTEST_EXT], [test "x${cpputest_ext}" = xyes])
 if test "x${use_std_c}" = xno; then
 	use_std_cpp=no
 	memory_leak_detection=no
-    CPPUTEST_CPPFLAGS+=" -nostdinc"
-    CPPUTEST_LDFLAGS+=" -nostdlib"
+    CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -nostdinc"
+    CPPUTEST_LDFLAGS="${CPPUTEST_LDFLAGS} -nostdlib"
     AC_DEFINE([CPPUTEST_STD_C_LIB_DISABLED], [1], [Standard C library disabled])
     CPP_PLATFORM="GccNoStdC"
 else
@@ -315,17 +315,17 @@ fi
 if test "x${use_std_cpp}" = xno; then
 	AC_DEFINE([CPPUTEST_STD_CPP_LIB_DISABLED], 1, [Standard C++ library disabled])
 	if test "x${use_std_c}" = xyes; then
-    	CPPUTEST_CXXFLAGS+=" -nostdinc++"
+    	CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} -nostdinc++"
     	
     	# Since automake passes the CXXFLAGS to the linker, this will cause warnings with clang 3.2 (which become errors)
-    	CPPUTEST_LDFLAGS+=$CPPUTEST_NO_UNUSED_ARGUMENT_WARNING
+    	CPPUTEST_LDFLAGS="${CPPUTEST_LDFLAGS} ${CPPUTEST_NO_UNUSED_ARGUMENT_WARNING}"
     	
     fi
 fi
 
 # Using the C++11 standard?
 if test "x${use_std_cpp11}" = xyes; then
-	CPPUTEST_CXXFLAGS+=" ${CPPUTEST_CPP11FLAG}"
+	CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} ${CPPUTEST_CPP11FLAG}"
 fi
 
 
@@ -333,21 +333,21 @@ fi
 if test "x${memory_leak_detection}" = xno; then
 	AC_DEFINE([CPPUTEST_MEM_LEAK_DETECTION_DISABLED], 1, [memory leak detection disabled])
 else
-	CPPUTEST_CXXFLAGS+=" -include ${srcdir}/include/CppUTest/MemoryLeakDetectorNewMacros.h"
-	CPPUTEST_CPPFLAGS+=" -include ${srcdir}/include/CppUTest/MemoryLeakDetectorMallocMacros.h"
+	CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} -include ${srcdir}/include/CppUTest/MemoryLeakDetectorNewMacros.h"
+	CPPUTEST_CPPFLAGS="${CPPUTEST_CXXFLAGS} -include ${srcdir}/include/CppUTest/MemoryLeakDetectorMallocMacros.h"
 fi
 
 # Generating map files.
 if test "x${generate_map_file}" = xyes; then
-	CPPUTEST_LDFLAGS+=$CPPUTEST_LD_MAP_GENERATION
-	MOSTLYCLEANFILES+=" *.map.txt"
+	CPPUTEST_LDFLAGS="${CPPUTEST_LDFLAGS} ${CPPUTEST_LD_MAP_GENERATION}"
+	MOSTLYCLEANFILES="${MOSTLYCLEANFILES} *.map.txt"
 fi
 
 if test "x${coverage_flag_supported}" = xyes; then
 if test "x${coverage}" = xyes; then
-	CPPUTEST_CXXFLAGS+=" --coverage"
-	CPPUTEST_CFLAGS+=" --coverage"
-	MOSTLYCLEANFILES+=" *.gcda *.gcno"
+	CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} --coverage"
+	CPPUTEST_CFLAGS="${CPPUTEST_CFLAGS} --coverage"
+	MOSTLYCLEANFILES="${MOSTLYCLEANFILES} *.gcda *.gcno"
 fi
 fi
 
@@ -362,11 +362,11 @@ to be set.
 	fi
 	real_gtest=yes
 	GTEST_HOME=${GMOCK_HOME}/gtest
-	CPPUTEST_CPPFLAGS+=" -I${GMOCK_HOME}/include"
+	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I${GMOCK_HOME}/include"
 	if test -e ${GMOCK_HOME}/lib/libgmock.la; then \
-		CPPUTEST_LDADD+=" ${GMOCK_HOME}/lib/libgmock.la"; \
+		CPPUTEST_LDADD="${CPPUTEST_LDADD} ${GMOCK_HOME}/lib/libgmock.la"; \
 	elif test -e ${GMOCK_HOME}/libgmock.a; then \
-		CPPUTEST_LDADD+=" ${GMOCK_HOME}/libgmock.a"; \
+		CPPUTEST_LDADD="${CPPUTEST_LDADD} ${GMOCK_HOME}/libgmock.a"; \
 	else \
 		AC_MSG_ERROR([
 -------------------------------------
@@ -376,7 +376,7 @@ Did you compile it?
 	fi	
 	AC_DEFINE([CPPUTEST_USE_REAL_GMOCK], [1], [Use GMock])
 else
-	CPPUTEST_CPPFLAGS+=" -I${srcdir}/include/CppUTestExt/CppUTestGMock"
+	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I${srcdir}/include/CppUTestExt/CppUTestGMock"
 fi
 
 if test "x${real_gtest}" = xyes; then
@@ -388,12 +388,12 @@ Compiling with --enable-real-gtest requires you to
 set the GTEST_HOME to the GTest source directory
 -------------------------------------])
 	fi
-	CPPUTEST_CPPFLAGS+=" -I${GTEST_HOME}/include -I${GTEST_HOME} -Isomething"
+	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I${GTEST_HOME}/include -I${GTEST_HOME} -Isomething"
 
 	if test -e ${GTEST_HOME}/lib/libgtest.la; then \
-		CPPUTEST_LDADD+=" ${GTEST_HOME}/lib/libgtest.la"; \
+		CPPUTEST_LDADD="${CPPUTEST_LDADD} ${GTEST_HOME}/lib/libgtest.la"; \
 	elif test -e ${GTEST_HOME}/libgtest.a; then \
-		CPPUTEST_LDADD+=" ${GTEST_HOME}/libgtest.a"; \
+		CPPUTEST_LDADD="${CPPUTEST_LDADD} ${GTEST_HOME}/libgtest.a"; \
 	else \
 		AC_MSG_ERROR([
 -------------------------------------
@@ -407,12 +407,12 @@ Did you compile it?
 	CPPUTEST_CWARNINGFLAGS=""
 	CPPUTEST_CXXWARNINGFLAGS=""
 else
-	CPPUTEST_CPPFLAGS+=" -I${srcdir}/include/CppUTestExt/CppUTestGTest"
+	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I${srcdir}/include/CppUTestExt/CppUTestGTest"
 fi
 
-CPPUTEST_CFLAGS+=" ${CPPUTEST_CWARNINGFLAGS}"
-CPPUTEST_CXXFLAGS+=" ${CPPUTEST_CXXWARNINGFLAGS}"
-CPPUTEST_CPPFLAGS+=" -I ${srcdir}/include ${CPPUTEST_CPPWARNINGFLAGS}"
+CPPUTEST_CFLAGS="${CPPUTEST_CFLAGS} ${CPPUTEST_CWARNINGFLAGS}"
+CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} ${CPPUTEST_CXXWARNINGFLAGS}"
+CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I ${srcdir}/include ${CPPUTEST_CPPWARNINGFLAGS}"
 
 if test "x${cpputest_flags}" = xno; then
 	CPPUTEST_CFLAGS=""
