@@ -7126,7 +7126,7 @@ $as_echo "#define CPPUTEST_MEM_LEAK_DETECTION_DISABLED 1" >>confdefs.h
 
 else
 	CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} -include ${srcdir}/include/CppUTest/MemoryLeakDetectorNewMacros.h"
-	CPPUTEST_CPPFLAGS="${CPPUTEST_CXXFLAGS} -include ${srcdir}/include/CppUTest/MemoryLeakDetectorMallocMacros.h"
+	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -include ${srcdir}/include/CppUTest/MemoryLeakDetectorMallocMacros.h"
 fi
 
 # Generating map files.
