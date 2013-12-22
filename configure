@@ -652,6 +652,7 @@ INCLUDE_CPPUTEST_EXT_FALSE
 INCLUDE_CPPUTEST_EXT_TRUE
 TEST_COMPILER_IS_CLANG_FALSE
 TEST_COMPILER_IS_CLANG_TRUE
+CPPUTEST_HAS_DASH
 CPPUTEST_HAS_VALGRIND
 CPPUTEST_HAS_LCOV
 CPPUTEST_HAS_CLANG
@@ -5224,7 +5225,7 @@ main ()
 _ACEOF
 if ac_fn_c_try_link "$LINENO"; then :
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }; HACK_TO_USE_PTHREAD_LIBS+=" -lpthread"
+$as_echo "yes" >&6; }; HACK_TO_USE_PTHREAD_LIBS=" -lpthread"
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
@@ -6183,6 +6184,44 @@ $as_echo "no" >&6; }
 fi
 
 
+# Extract the first word of "dash", so it can be a program name with args.
+set dummy dash; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_CPPUTEST_HAS_DASH+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$CPPUTEST_HAS_DASH"; then
+  ac_cv_prog_CPPUTEST_HAS_DASH="$CPPUTEST_HAS_DASH" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+    ac_cv_prog_CPPUTEST_HAS_DASH="yes"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+  test -z "$ac_cv_prog_CPPUTEST_HAS_DASH" && ac_cv_prog_CPPUTEST_HAS_DASH="no"
+fi
+fi
+CPPUTEST_HAS_DASH=$ac_cv_prog_CPPUTEST_HAS_DASH
+if test -n "$CPPUTEST_HAS_DASH"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $CPPUTEST_HAS_DASH" >&5
+$as_echo "$CPPUTEST_HAS_DASH" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
 
 # Checking for warning flags on the compiler
 saved_cflags="$CFLAGS"
@@ -6207,7 +6246,7 @@ main ()
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }; CPPUTEST_CWARNINGFLAGS+=" -Werror"; CPPUTEST_CXXWARNINGFLAGS+=" -Werror"
+$as_echo "yes" >&6; }; CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Werror"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Werror"
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
@@ -6233,7 +6272,7 @@ main ()
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }; CPPUTEST_CWARNINGFLAGS+=" -Weverything"; CPPUTEST_CXXWARNINGFLAGS+=" -Weverything"
+$as_echo "yes" >&6; }; CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Weverything"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Weverything"
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
@@ -6258,7 +6297,7 @@ main ()
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }; CPPUTEST_CWARNINGFLAGS+=" -Wall"; CPPUTEST_CXXWARNINGFLAGS+=" -Wall"
+$as_echo "yes" >&6; }; CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wall"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wall"
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
@@ -6283,7 +6322,7 @@ main ()
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }; CPPUTEST_CWARNINGFLAGS+=" -Wextra"; CPPUTEST_CXXWARNINGFLAGS+=" -Wextra"
+$as_echo "yes" >&6; }; CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wextra"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wextra"
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
@@ -6308,7 +6347,7 @@ main ()
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }; CPPUTEST_CWARNINGFLAGS+=" -Wshadow"; CPPUTEST_CXXWARNINGFLAGS+=" -Wshadow"
+$as_echo "yes" >&6; }; CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wshadow"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wshadow"
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
@@ -6333,7 +6372,7 @@ main ()
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }; CPPUTEST_CWARNINGFLAGS+=" -Wswitch-default"; CPPUTEST_CXXWARNINGFLAGS+=" -Wswitch-default"
+$as_echo "yes" >&6; }; CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wswitch-default"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wswitch-default"
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
@@ -6358,7 +6397,7 @@ main ()
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }; CPPUTEST_CWARNINGFLAGS+=" -Wswitch-enum"; CPPUTEST_CXXWARNINGFLAGS+=" -Wswitch-enum"
+$as_echo "yes" >&6; }; CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wswitch-enum"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wswitch-enum"
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
@@ -6383,7 +6422,7 @@ main ()
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }; CPPUTEST_CWARNINGFLAGS+=" -Wconversion"; CPPUTEST_CXXWARNINGFLAGS+=" -Wconversion"
+$as_echo "yes" >&6; }; CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wconversion"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wconversion"
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
@@ -6408,7 +6447,7 @@ main ()
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }; CPPUTEST_CWARNINGFLAGS+=" -pedantic-errors"; CPPUTEST_CXXWARNINGFLAGS+=" -pedantic-errors"
+$as_echo "yes" >&6; }; CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -pedantic-errors"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -pedantic-errors"
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
@@ -6433,7 +6472,7 @@ main ()
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }; CPPUTEST_CWARNINGFLAGS+=" -Wsign-conversion"
+$as_echo "yes" >&6; }; CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wsign-conversion"
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
@@ -6465,7 +6504,7 @@ main ()
 _ACEOF
 if ac_fn_cxx_try_compile "$LINENO"; then :
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }; CPPUTEST_CXXWARNINGFLAGS+=" -Wsign-conversion"
+$as_echo "yes" >&6; }; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wsign-conversion"
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
@@ -6502,7 +6541,7 @@ main ()
 _ACEOF
 if ac_fn_cxx_try_compile "$LINENO"; then :
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }; CPPUTEST_CXXWARNINGFLAGS+=" -Woverloaded-virtual"
+$as_echo "yes" >&6; }; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Woverloaded-virtual"
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
@@ -6533,7 +6572,7 @@ main ()
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }; CPPUTEST_CWARNINGFLAGS+=" -Wstrict-prototypes"
+$as_echo "yes" >&6; }; CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wstrict-prototypes"
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
@@ -6559,7 +6598,7 @@ main ()
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }; CPPUTEST_CWARNINGFLAGS+=" -Wno-disabled-macro-expansion"; CPPUTEST_CXXWARNINGFLAGS+=" -Wno-disabled-macro-expansion"
+$as_echo "yes" >&6; }; CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wno-disabled-macro-expansion"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wno-disabled-macro-expansion"
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
@@ -6584,7 +6623,7 @@ main ()
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }; CPPUTEST_CWARNINGFLAGS+=" -Wno-padded"; CPPUTEST_CXXWARNINGFLAGS+=" -Wno-padded"
+$as_echo "yes" >&6; }; CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wno-padded"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wno-padded"
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
@@ -6615,7 +6654,7 @@ main ()
 _ACEOF
 if ac_fn_cxx_try_compile "$LINENO"; then :
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }; CPPUTEST_CXXWARNINGFLAGS+=" -Wno-global-constructors"
+$as_echo "yes" >&6; }; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wno-global-constructors"
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
@@ -6652,7 +6691,7 @@ main ()
 _ACEOF
 if ac_fn_cxx_try_compile "$LINENO"; then :
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }; CPPUTEST_CXXWARNINGFLAGS+=" -Wno-exit-time-destructors"
+$as_echo "yes" >&6; }; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wno-exit-time-destructors"
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
@@ -6689,7 +6728,7 @@ main ()
 _ACEOF
 if ac_fn_cxx_try_compile "$LINENO"; then :
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }; CPPUTEST_CXXWARNINGFLAGS+=" -Wno-weak-vtables"
+$as_echo "yes" >&6; }; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wno-weak-vtables"
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
@@ -6814,7 +6853,7 @@ main ()
 _ACEOF
 if ac_fn_cxx_try_compile "$LINENO"; then :
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }; CPPUTEST_CPP11FLAG+=" -stdlib=libc++"
+$as_echo "yes" >&6; }; CPPUTEST_CPP11FLAG="${CPPUTEST_CPP11FLAG} -stdlib=libc++"
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
@@ -6905,7 +6944,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 #
 # LDFLAGS=
 # AC_MSG_CHECKING([whether LD supports -Qunused-arguments])
-# AC_LINK_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_NO_UNUSED_ARGUMENT_WARNING+=" -Qunused-arguments" ], [AC_MSG_RESULT([no])])
+# AC_LINK_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_NO_UNUSED_ARGUMENT_WARNING=" -Qunused-arguments" ], [AC_MSG_RESULT([no])])
 # LDFLAGS="$saved_ldflags"
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether CXXLD supports -Qunused-arguments linker option" >&5
@@ -6921,10 +6960,10 @@ fi
 
 if  ! test -z "$OUTPUT_WHEN_CLANG_COMPILER"; then
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }; CPPUTEST_NO_UNUSED_ARGUMENT_WARNING+=" -Qunused-arguments"
+$as_echo "yes" >&6; }; CPPUTEST_NO_UNUSED_ARGUMENT_WARNING=" ${CPPUTEST_NO_UNUSED_ARGUMENT_WARNING} -Qunused-arguments"
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }; CPPUTEST_NO_UNUSED_ARGUMENT_WARNING+=" "
+$as_echo "no" >&6; }; CPPUTEST_NO_UNUSED_ARGUMENT_WARNING="${CPPUTEST_NO_UNUSED_ARGUMENT_WARNING} "
 fi
 
 # Checking for options for creating map files
@@ -6944,7 +6983,7 @@ main ()
 _ACEOF
 if ac_fn_c_try_link "$LINENO"; then :
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }; CPPUTEST_LD_MAP_GENERATION+=" -Wl,-map,filename.map.txt"
+$as_echo "yes" >&6; }; CPPUTEST_LD_MAP_GENERATION=" -Wl,-map,filename.map.txt"
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
@@ -6952,7 +6991,6 @@ fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 LDFLAGS="$saved_ldflags"
-
 
 # Different features
 # Check whether --enable-std-c was given.
@@ -7035,6 +7073,7 @@ else
 fi
 
 
+
 ############################## Setting options ###############################
 
  if test "x${cpputest_ext}" = xyes; then
@@ -7050,8 +7089,8 @@ fi
 if test "x${use_std_c}" = xno; then
 	use_std_cpp=no
 	memory_leak_detection=no
-    CPPUTEST_CPPFLAGS+=" -nostdinc"
-    CPPUTEST_LDFLAGS+=" -nostdlib"
+    CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -nostdinc"
+    CPPUTEST_LDFLAGS="${CPPUTEST_LDFLAGS} -nostdlib"
 
 $as_echo "#define CPPUTEST_STD_C_LIB_DISABLED 1" >>confdefs.h
 
@@ -7066,17 +7105,17 @@ if test "x${use_std_cpp}" = xno; then
 $as_echo "#define CPPUTEST_STD_CPP_LIB_DISABLED 1" >>confdefs.h
 
 	if test "x${use_std_c}" = xyes; then
-    	CPPUTEST_CXXFLAGS+=" -nostdinc++"
+    	CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} -nostdinc++"
 
     	# Since automake passes the CXXFLAGS to the linker, this will cause warnings with clang 3.2 (which become errors)
-    	CPPUTEST_LDFLAGS+=$CPPUTEST_NO_UNUSED_ARGUMENT_WARNING
+    	CPPUTEST_LDFLAGS="${CPPUTEST_LDFLAGS} ${CPPUTEST_NO_UNUSED_ARGUMENT_WARNING}"
 
     fi
 fi
 
 # Using the C++11 standard?
 if test "x${use_std_cpp11}" = xyes; then
-	CPPUTEST_CXXFLAGS+=" ${CPPUTEST_CPP11FLAG}"
+	CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} ${CPPUTEST_CPP11FLAG}"
 fi
 
 
@@ -7086,21 +7125,21 @@ if test "x${memory_leak_detection}" = xno; then
 $as_echo "#define CPPUTEST_MEM_LEAK_DETECTION_DISABLED 1" >>confdefs.h
 
 else
-	CPPUTEST_CXXFLAGS+=" -include ${srcdir}/include/CppUTest/MemoryLeakDetectorNewMacros.h"
-	CPPUTEST_CPPFLAGS+=" -include ${srcdir}/include/CppUTest/MemoryLeakDetectorMallocMacros.h"
+	CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} -include ${srcdir}/include/CppUTest/MemoryLeakDetectorNewMacros.h"
+	CPPUTEST_CPPFLAGS="${CPPUTEST_CXXFLAGS} -include ${srcdir}/include/CppUTest/MemoryLeakDetectorMallocMacros.h"
 fi
 
 # Generating map files.
 if test "x${generate_map_file}" = xyes; then
-	CPPUTEST_LDFLAGS+=$CPPUTEST_LD_MAP_GENERATION
-	MOSTLYCLEANFILES+=" *.map.txt"
+	CPPUTEST_LDFLAGS="${CPPUTEST_LDFLAGS} ${CPPUTEST_LD_MAP_GENERATION}"
+	MOSTLYCLEANFILES="${MOSTLYCLEANFILES} *.map.txt"
 fi
 
 if test "x${coverage_flag_supported}" = xyes; then
 if test "x${coverage}" = xyes; then
-	CPPUTEST_CXXFLAGS+=" --coverage"
-	CPPUTEST_CFLAGS+=" --coverage"
-	MOSTLYCLEANFILES+=" *.gcda *.gcno"
+	CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} --coverage"
+	CPPUTEST_CFLAGS="${CPPUTEST_CFLAGS} --coverage"
+	MOSTLYCLEANFILES="${MOSTLYCLEANFILES} *.gcda *.gcno"
 fi
 fi
 
@@ -7115,11 +7154,11 @@ to be set.
 	fi
 	real_gtest=yes
 	GTEST_HOME=${GMOCK_HOME}/gtest
-	CPPUTEST_CPPFLAGS+=" -I${GMOCK_HOME}/include"
+	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I${GMOCK_HOME}/include"
 	if test -e ${GMOCK_HOME}/lib/libgmock.la; then \
-		CPPUTEST_LDADD+=" ${GMOCK_HOME}/lib/libgmock.la"; \
+		CPPUTEST_LDADD="${CPPUTEST_LDADD} ${GMOCK_HOME}/lib/libgmock.la"; \
 	elif test -e ${GMOCK_HOME}/libgmock.a; then \
-		CPPUTEST_LDADD+=" ${GMOCK_HOME}/libgmock.a"; \
+		CPPUTEST_LDADD="${CPPUTEST_LDADD} ${GMOCK_HOME}/libgmock.a"; \
 	else \
 		as_fn_error $? "
 -------------------------------------
@@ -7131,7 +7170,7 @@ Did you compile it?
 $as_echo "#define CPPUTEST_USE_REAL_GMOCK 1" >>confdefs.h
 
 else
-	CPPUTEST_CPPFLAGS+=" -I${srcdir}/include/CppUTestExt/CppUTestGMock"
+	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I${srcdir}/include/CppUTestExt/CppUTestGMock"
 fi
 
 if test "x${real_gtest}" = xyes; then
@@ -7143,12 +7182,12 @@ Compiling with --enable-real-gtest requires you to
 set the GTEST_HOME to the GTest source directory
 -------------------------------------" "$LINENO" 5
 	fi
-	CPPUTEST_CPPFLAGS+=" -I${GTEST_HOME}/include -I${GTEST_HOME} -Isomething"
+	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I${GTEST_HOME}/include -I${GTEST_HOME} -Isomething"
 
 	if test -e ${GTEST_HOME}/lib/libgtest.la; then \
-		CPPUTEST_LDADD+=" ${GTEST_HOME}/lib/libgtest.la"; \
+		CPPUTEST_LDADD="${CPPUTEST_LDADD} ${GTEST_HOME}/lib/libgtest.la"; \
 	elif test -e ${GTEST_HOME}/libgtest.a; then \
-		CPPUTEST_LDADD+=" ${GTEST_HOME}/libgtest.a"; \
+		CPPUTEST_LDADD="${CPPUTEST_LDADD} ${GTEST_HOME}/libgtest.a"; \
 	else \
 		as_fn_error $? "
 -------------------------------------
@@ -7164,12 +7203,12 @@ $as_echo "#define CPPUTEST_USE_REAL_GTEST 1" >>confdefs.h
 	CPPUTEST_CWARNINGFLAGS=""
 	CPPUTEST_CXXWARNINGFLAGS=""
 else
-	CPPUTEST_CPPFLAGS+=" -I${srcdir}/include/CppUTestExt/CppUTestGTest"
+	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I${srcdir}/include/CppUTestExt/CppUTestGTest"
 fi
 
-CPPUTEST_CFLAGS+=" ${CPPUTEST_CWARNINGFLAGS}"
-CPPUTEST_CXXFLAGS+=" ${CPPUTEST_CXXWARNINGFLAGS}"
-CPPUTEST_CPPFLAGS+=" -I ${srcdir}/include ${CPPUTEST_CPPWARNINGFLAGS}"
+CPPUTEST_CFLAGS="${CPPUTEST_CFLAGS} ${CPPUTEST_CWARNINGFLAGS}"
+CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} ${CPPUTEST_CXXWARNINGFLAGS}"
+CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I ${srcdir}/include ${CPPUTEST_CPPWARNINGFLAGS}"
 
 if test "x${cpputest_flags}" = xno; then
 	CPPUTEST_CFLAGS=""

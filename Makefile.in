@@ -297,6 +297,7 @@ CPPUTEST_CFLAGS = @CPPUTEST_CFLAGS@
 CPPUTEST_CPPFLAGS = @CPPUTEST_CPPFLAGS@
 CPPUTEST_CXXFLAGS = @CPPUTEST_CXXFLAGS@
 CPPUTEST_HAS_CLANG = @CPPUTEST_HAS_CLANG@
+CPPUTEST_HAS_DASH = @CPPUTEST_HAS_DASH@
 CPPUTEST_HAS_GCC = @CPPUTEST_HAS_GCC@
 CPPUTEST_HAS_LCOV = @CPPUTEST_HAS_LCOV@
 CPPUTEST_HAS_VALGRIND = @CPPUTEST_HAS_VALGRIND@
@@ -2595,6 +2596,9 @@ check_gtest:
 #	make distclean; $(srcdir)/configure --enable-gmock; make check
 
 check_all: 
+
+	@echo "If dash is available, run the configure with dash to find bash-isms and increase portability"
+	make distclean; if test "x$(CPPUTEST_HAS_DASH)" = xyes; then CONFIG_SHELL=dash $(srcdir)/configure; fi 
 
 	@echo "Building and valgrinding"
 	make distclean; $(srcdir)/configure; make valgrind
