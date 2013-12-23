@@ -120,6 +120,7 @@ static void resetValuesOfGTestFlags()
 
 void setGTestFLagValuesToNULLToAvoidMemoryLeaks()
 {
+#ifndef GTEST_VERSION_GTEST_1_7
 	::testing::GTEST_FLAG(color) = GTEST_NO_STRING_VALUE;
 	::testing::GTEST_FLAG(filter) = GTEST_NO_STRING_VALUE;
 	::testing::GTEST_FLAG(output) = GTEST_NO_STRING_VALUE;
@@ -128,6 +129,7 @@ void setGTestFLagValuesToNULLToAvoidMemoryLeaks()
 	#ifndef GTEST_VERSION_GTEST_1_5
 	::testing::GTEST_FLAG(stream_result_to) = GTEST_NO_STRING_VALUE;
 	#endif
+#endif
 }
 
 /* Left a global to avoid a header dependency to gtest.h */
