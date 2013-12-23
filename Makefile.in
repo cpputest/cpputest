@@ -2592,8 +2592,8 @@ check_gtest:
 	cd cpputest_build_gtest17/gmock-1.7.0; ./configure && make
 	@echo "Build using gmock 1.7"
 	@echo "Fix the build with gmock 1.7 and then remove this line"
-	export GMOCK_HOME=`pwd`/cpputest_build_gtest17/gmock-1.7.0;
-#	make distclean; $(srcdir)/configure --enable-gmock; make check
+	export GMOCK_HOME=`pwd`/cpputest_build_gtest17/gmock-1.7.0; \
+	make distclean; $(srcdir)/configure --enable-gmock; make check
 
 check_all: 
 
