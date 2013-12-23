@@ -347,7 +347,11 @@ ifeq ($(CPPUTEST_USE_EXTENSIONS), Y)
 CPPUTEST_LIB += $(CPPUTEST_LIB_LINK_DIR)/libCppUTestExt.a
 endif
 
-LD_LIBRARIES += -lstdc++
+ifndef CPPUTEST_STATIC_REALTIME
+	LD_LIBRARIES += -lstdc++
+else
+	LD_LIBRARIES += -lstdc++ -lrt
+endif
 
 TARGET_LIB = \
     $(CPPUTEST_LIB_DIR)/lib$(COMPONENT_NAME).a
