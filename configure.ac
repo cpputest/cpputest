@@ -351,6 +351,8 @@ if test "x${coverage}" = xyes; then
 fi
 fi
 
+AM_CONDITIONAL([INCLUDE_GMOCKTESTS_EXT], [test "x${use_gmock}" = xyes])
+
 if test "x${use_gmock}" = xyes; then
 	AC_ARG_VAR([GMOCK_HOME], [Location of the GMock])
 	if test -z ${GMOCK_HOME}; then 

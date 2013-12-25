@@ -15,6 +15,10 @@ lib_LIBRARIES+= lib/libCppUTestExt.a
 check_PROGRAMS += $(CPPUTESTEXT_TESTS)
 endif
 
+if INCLUDE_GMOCKTESTS_EXT
+# check_PROGRAMS += GTestTests
+endif
+
 TESTS = $(check_PROGRAMS)
 
 pkgconfigdir = $(libdir)/pkgconfig
@@ -193,34 +197,45 @@ if INCLUDE_CPPUTEST_EXT
 	./$(CPPUTESTEXT_TESTS)
 endif
 
-check_gtest:
-	rm -rf cpputest_build_gtest15
+cpputest_build_gtest17:
+	mkdir -p cpputest_build_gtest17
+	cd cpputest_build_gtest17; \
+	wget https://googlemock.googlecode.com/files/gmock-1.7.0.zip && unzip gmock-1.7.0.zip 
+	cd cpputest_build_gtest17/gmock-1.7.0; ./configure && make check
+
+cpputest_build_gtest16:
+	mkdir -p cpputest_build_gtest16
+	cd cpputest_build_gtest16; \
+	wget https://googlemock.googlecode.com/files/gmock-1.6.0.zip && unzip gmock-1.6.0.zip 
+	cd cpputest_build_gtest16/gmock-1.6.0; ./configure CXXFLAGS=-DGTEST_USE_OWN_TR1_TUPLE=1 && make check
+
+cpputest_build_gtest15:
 	mkdir -p cpputest_build_gtest15
 	cd cpputest_build_gtest15; \
 	wget https://googlemock.googlecode.com/files/gmock-1.5.0.zip && unzip gmock-1.5.0.zip 
 	cd cpputest_build_gtest15/gmock-1.5.0; ./configure CXXFLAGS=-DGTEST_USE_OWN_TR1_TUPLE=1 && make
+
+check_gtest15: cpputest_build_gtest15
 	@echo "Build using gmock 1.5";
 	export GMOCK_HOME=`pwd`/cpputest_build_gtest15/gmock-1.5.0; \
 	make distclean; $(srcdir)/configure CXXFLAGS=-DGTEST_USE_OWN_TR1_TUPLE=1 --enable-gmock; make check
 
-	rm -rf cpputest_build_gtest16
-	mkdir -p cpputest_build_gtest16
-	cd cpputest_build_gtest16; \
-	wget https://googlemock.googlecode.com/files/gmock-1.6.0.zip && unzip gmock-1.6.0.zip 
-	cd cpputest_build_gtest16/gmock-1.6.0; ./configure CXXFLAGS=-DGTEST_USE_OWN_TR1_TUPLE=1 && make
+check_gtest16: cpputest_build_gtest16
 	@echo "Build using gmock 1.6";
 	export GMOCK_HOME=`pwd`/cpputest_build_gtest16/gmock-1.6.0; \
 	make distclean; $(srcdir)/configure CXXFLAGS=-DGTEST_USE_OWN_TR1_TUPLE=1 --enable-gmock; make check
-	
-	rm -rf cpputest_build_gtest17
-	mkdir -p cpputest_build_gtest17
-	cd cpputest_build_gtest17; \
-	wget https://googlemock.googlecode.com/files/gmock-1.7.0.zip && unzip gmock-1.7.0.zip 
-	cd cpputest_build_gtest17/gmock-1.7.0; ./configure && make
+
+check_gtest17: cpputest_build_gtest17
 	@echo "Build using gmock 1.7"
-	@echo "Fix the build with gmock 1.7 and then remove this line"
 	export GMOCK_HOME=`pwd`/cpputest_build_gtest17/gmock-1.7.0; \
 	make distclean; $(srcdir)/configure --enable-gmock; make check
+	
+remove_gtest_directories:
+	rm -rf cpputest_build_gtest15
+	rm -rf cpputest_build_gtest16
+	rm -rf cpputest_build_gtest17
+
+check_gtest: remove_gtest_directories check_gtest15 check_gtest16 check_gtest17
 
 check_all: 
 
