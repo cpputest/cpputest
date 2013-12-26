@@ -648,6 +648,8 @@ INCLUDE_CPPUTEST_EXT
 CPP_PLATFORM
 GTEST_HOME
 GMOCK_HOME
+INCLUDE_GMOCKTESTS_EXT_FALSE
+INCLUDE_GMOCKTESTS_EXT_TRUE
 INCLUDE_CPPUTEST_EXT_FALSE
 INCLUDE_CPPUTEST_EXT_TRUE
 TEST_COMPILER_IS_CLANG_FALSE
@@ -7142,6 +7144,15 @@ if test "x${coverage}" = xyes; then
 	MOSTLYCLEANFILES="${MOSTLYCLEANFILES} *.gcda *.gcno"
 fi
 fi
+
+ if test "x${use_gmock}" = xyes; then
+  INCLUDE_GMOCKTESTS_EXT_TRUE=
+  INCLUDE_GMOCKTESTS_EXT_FALSE='#'
+else
+  INCLUDE_GMOCKTESTS_EXT_TRUE='#'
+  INCLUDE_GMOCKTESTS_EXT_FALSE=
+fi
+
 
 if test "x${use_gmock}" = xyes; then
 
@@ -17671,6 +17682,10 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${INCLUDE_CPPUTEST_EXT_TRUE}" && test -z "${INCLUDE_CPPUTEST_EXT_FALSE}"; then
   as_fn_error $? "conditional \"INCLUDE_CPPUTEST_EXT\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${INCLUDE_GMOCKTESTS_EXT_TRUE}" && test -z "${INCLUDE_GMOCKTESTS_EXT_FALSE}"; then
+  as_fn_error $? "conditional \"INCLUDE_GMOCKTESTS_EXT\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 

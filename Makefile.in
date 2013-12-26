@@ -146,6 +146,7 @@ am_CppUTestExtTests_OBJECTS = CppUTestExtTests-AllTests.$(OBJEXT) \
 	CppUTestExtTests-TestMockExpectedFunctionCall.$(OBJEXT) \
 	CppUTestExtTests-TestMockSupport_cCFile.$(OBJEXT) \
 	CppUTestExtTests-TestGTest.$(OBJEXT) \
+	CppUTestExtTests-TestGTestConvertor.$(OBJEXT) \
 	CppUTestExtTests-TestMockExpectedFunctionsList.$(OBJEXT) \
 	CppUTestExtTests-TestMemoryReportAllocator.$(OBJEXT) \
 	CppUTestExtTests-TestMockFailure.$(OBJEXT) \
@@ -425,6 +426,8 @@ CPPUTEST_TESTS = CppUTestTests
 CPPUTESTEXT_TESTS = CppUTestExtTests
 EXTRA_LIBRARIES = lib/libCppUTestExt.a
 lib_LIBRARIES = lib/libCppUTest.a $(am__append_1)
+
+# check_PROGRAMS += GTestTests
 TESTS = $(check_PROGRAMS)
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = cpputest.pc
@@ -570,6 +573,7 @@ CppUTestExtTests_SOURCES = \
 	tests/CppUTestExt/TestMockExpectedFunctionCall.cpp \
 	tests/CppUTestExt/TestMockSupport_cCFile.c \
 	tests/CppUTestExt/TestGTest.cpp \
+	tests/CppUTestExt/TestGTestConvertor.cpp \
 	tests/CppUTestExt/TestMockExpectedFunctionsList.cpp \
 	tests/CppUTestExt/TestMemoryReportAllocator.cpp \
 	tests/CppUTestExt/TestMockFailure.cpp \
@@ -706,6 +710,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CppUTestExtTests-TestCodeMemoryReportFormatter.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CppUTestExtTests-TestGMock.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CppUTestExtTests-TestGTest.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CppUTestExtTests-TestGTestConvertor.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CppUTestExtTests-TestMemoryReportAllocator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CppUTestExtTests-TestMemoryReportFormatter.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CppUTestExtTests-TestMemoryReporterPlugin.Po@am__quote@
@@ -1531,6 +1536,22 @@ CppUTestExtTests-TestGTest.obj: tests/CppUTestExt/TestGTest.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='tests/CppUTestExt/TestGTest.cpp' object='CppUTestExtTests-TestGTest.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(CppUTestExtTests_CPPFLAGS) $(CPPFLAGS) $(CppUTestExtTests_CXXFLAGS) $(CXXFLAGS) -c -o CppUTestExtTests-TestGTest.obj `if test -f 'tests/CppUTestExt/TestGTest.cpp'; then $(CYGPATH_W) 'tests/CppUTestExt/TestGTest.cpp'; else $(CYGPATH_W) '$(srcdir)/tests/CppUTestExt/TestGTest.cpp'; fi`
+
+CppUTestExtTests-TestGTestConvertor.o: tests/CppUTestExt/TestGTestConvertor.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(CppUTestExtTests_CPPFLAGS) $(CPPFLAGS) $(CppUTestExtTests_CXXFLAGS) $(CXXFLAGS) -MT CppUTestExtTests-TestGTestConvertor.o -MD -MP -MF $(DEPDIR)/CppUTestExtTests-TestGTestConvertor.Tpo -c -o CppUTestExtTests-TestGTestConvertor.o `test -f 'tests/CppUTestExt/TestGTestConvertor.cpp' || echo '$(srcdir)/'`tests/CppUTestExt/TestGTestConvertor.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/CppUTestExtTests-TestGTestConvertor.Tpo $(DEPDIR)/CppUTestExtTests-TestGTestConvertor.Po
+@am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='tests/CppUTestExt/TestGTestConvertor.cpp' object='CppUTestExtTests-TestGTestConvertor.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(CppUTestExtTests_CPPFLAGS) $(CPPFLAGS) $(CppUTestExtTests_CXXFLAGS) $(CXXFLAGS) -c -o CppUTestExtTests-TestGTestConvertor.o `test -f 'tests/CppUTestExt/TestGTestConvertor.cpp' || echo '$(srcdir)/'`tests/CppUTestExt/TestGTestConvertor.cpp
+
+CppUTestExtTests-TestGTestConvertor.obj: tests/CppUTestExt/TestGTestConvertor.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(CppUTestExtTests_CPPFLAGS) $(CPPFLAGS) $(CppUTestExtTests_CXXFLAGS) $(CXXFLAGS) -MT CppUTestExtTests-TestGTestConvertor.obj -MD -MP -MF $(DEPDIR)/CppUTestExtTests-TestGTestConvertor.Tpo -c -o CppUTestExtTests-TestGTestConvertor.obj `if test -f 'tests/CppUTestExt/TestGTestConvertor.cpp'; then $(CYGPATH_W) 'tests/CppUTestExt/TestGTestConvertor.cpp'; else $(CYGPATH_W) '$(srcdir)/tests/CppUTestExt/TestGTestConvertor.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/CppUTestExtTests-TestGTestConvertor.Tpo $(DEPDIR)/CppUTestExtTests-TestGTestConvertor.Po
+@am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='tests/CppUTestExt/TestGTestConvertor.cpp' object='CppUTestExtTests-TestGTestConvertor.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(CppUTestExtTests_CPPFLAGS) $(CPPFLAGS) $(CppUTestExtTests_CXXFLAGS) $(CXXFLAGS) -c -o CppUTestExtTests-TestGTestConvertor.obj `if test -f 'tests/CppUTestExt/TestGTestConvertor.cpp'; then $(CYGPATH_W) 'tests/CppUTestExt/TestGTestConvertor.cpp'; else $(CYGPATH_W) '$(srcdir)/tests/CppUTestExt/TestGTestConvertor.cpp'; fi`
 
 CppUTestExtTests-TestMockExpectedFunctionsList.o: tests/CppUTestExt/TestMockExpectedFunctionsList.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(CppUTestExtTests_CPPFLAGS) $(CPPFLAGS) $(CppUTestExtTests_CXXFLAGS) $(CXXFLAGS) -MT CppUTestExtTests-TestMockExpectedFunctionsList.o -MD -MP -MF $(DEPDIR)/CppUTestExtTests-TestMockExpectedFunctionsList.Tpo -c -o CppUTestExtTests-TestMockExpectedFunctionsList.o `test -f 'tests/CppUTestExt/TestMockExpectedFunctionsList.cpp' || echo '$(srcdir)/'`tests/CppUTestExt/TestMockExpectedFunctionsList.cpp
@@ -2566,34 +2587,45 @@ tdd: $(CPPUTEST_TESTS) $(CPPUTESTEXT_TESTS)
 	./$(CPPUTEST_TESTS)
 @INCLUDE_CPPUTEST_EXT_TRUE@	./$(CPPUTESTEXT_TESTS)
 
-check_gtest:
-	rm -rf cpputest_build_gtest15
+cpputest_build_gtest17:
+	mkdir -p cpputest_build_gtest17
+	cd cpputest_build_gtest17; \
+	wget https://googlemock.googlecode.com/files/gmock-1.7.0.zip && unzip gmock-1.7.0.zip 
+	cd cpputest_build_gtest17/gmock-1.7.0; ./configure && make check
+
+cpputest_build_gtest16:
+	mkdir -p cpputest_build_gtest16
+	cd cpputest_build_gtest16; \
+	wget https://googlemock.googlecode.com/files/gmock-1.6.0.zip && unzip gmock-1.6.0.zip 
+	cd cpputest_build_gtest16/gmock-1.6.0; ./configure CXXFLAGS=-DGTEST_USE_OWN_TR1_TUPLE=1 && make check
+
+cpputest_build_gtest15:
 	mkdir -p cpputest_build_gtest15
 	cd cpputest_build_gtest15; \
 	wget https://googlemock.googlecode.com/files/gmock-1.5.0.zip && unzip gmock-1.5.0.zip 
 	cd cpputest_build_gtest15/gmock-1.5.0; ./configure CXXFLAGS=-DGTEST_USE_OWN_TR1_TUPLE=1 && make
+
+check_gtest15: cpputest_build_gtest15
 	@echo "Build using gmock 1.5";
 	export GMOCK_HOME=`pwd`/cpputest_build_gtest15/gmock-1.5.0; \
 	make distclean; $(srcdir)/configure CXXFLAGS=-DGTEST_USE_OWN_TR1_TUPLE=1 --enable-gmock; make check
 
-	rm -rf cpputest_build_gtest16
-	mkdir -p cpputest_build_gtest16
-	cd cpputest_build_gtest16; \
-	wget https://googlemock.googlecode.com/files/gmock-1.6.0.zip && unzip gmock-1.6.0.zip 
-	cd cpputest_build_gtest16/gmock-1.6.0; ./configure CXXFLAGS=-DGTEST_USE_OWN_TR1_TUPLE=1 && make
+check_gtest16: cpputest_build_gtest16
 	@echo "Build using gmock 1.6";
 	export GMOCK_HOME=`pwd`/cpputest_build_gtest16/gmock-1.6.0; \
 	make distclean; $(srcdir)/configure CXXFLAGS=-DGTEST_USE_OWN_TR1_TUPLE=1 --enable-gmock; make check
 
-	rm -rf cpputest_build_gtest17
-	mkdir -p cpputest_build_gtest17
-	cd cpputest_build_gtest17; \
-	wget https://googlemock.googlecode.com/files/gmock-1.7.0.zip && unzip gmock-1.7.0.zip 
-	cd cpputest_build_gtest17/gmock-1.7.0; ./configure && make
+check_gtest17: cpputest_build_gtest17
 	@echo "Build using gmock 1.7"
-	@echo "Fix the build with gmock 1.7 and then remove this line"
 	export GMOCK_HOME=`pwd`/cpputest_build_gtest17/gmock-1.7.0; \
 	make distclean; $(srcdir)/configure --enable-gmock; make check
+
+remove_gtest_directories:
+	rm -rf cpputest_build_gtest15
+	rm -rf cpputest_build_gtest16
+	rm -rf cpputest_build_gtest17
+
+check_gtest: remove_gtest_directories check_gtest15 check_gtest16 check_gtest17
 
 check_all: 
 
