@@ -172,9 +172,9 @@ CppUTestExtTests_SOURCES = \
 	tests/CppUTestExt/TestMockCheatSheet.cpp \
 	tests/CppUTestExt/TestMockSupport_c.cpp \
 	tests/CppUTestExt/TestGMock.cpp \
+	tests/CppUTestExt/TestGTestConvertor.cpp \
 	tests/CppUTestExt/TestMockExpectedFunctionCall.cpp \
 	tests/CppUTestExt/TestMockSupport_cCFile.c \
-	tests/CppUTestExt/TestGTest.cpp \
 	tests/CppUTestExt/TestMockExpectedFunctionsList.cpp \
 	tests/CppUTestExt/TestMemoryReportAllocator.cpp \
 	tests/CppUTestExt/TestMockFailure.cpp \
@@ -183,6 +183,10 @@ CppUTestExtTests_SOURCES = \
 	tests/CppUTestExt/TestMemoryReporterPlugin.cpp \
 	tests/CppUTestExt/TestMockPlugin.cpp
 	
+if INCLUDE_GMOCKTESTS
+CppUTestExtTests_SOURCES += \
+	tests/CppUTestExt/TestGTest.cpp
+endif
 
 RUN_CPPUTEST_TESTS = ./$(CPPUTEST_TESTS) -r
 #RUN_CPPUTEST_EXT_TESTS = ./$(CPPUTEST_EXT_TESTS) -r

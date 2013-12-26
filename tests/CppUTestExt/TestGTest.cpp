@@ -25,11 +25,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifdef CPPUTEST_USE_REAL_GTEST
-#undef new
-#endif
-
-#include "gtest/gtest.h"
+#include "CppUTestExt/GTest.h"
 
 static bool g_GTestEqual_has_been_called = false;
 TEST(GTestSimpleTest, GTestEqual)
@@ -63,8 +59,6 @@ TEST(GTestSimpleTest, GTestExpectStreq)
 	EXPECT_STREQ("hello world", "hello world");
 }
 
-#ifdef CPPUTEST_USE_REAL_GTEST
-
 /* Death tests are IMHO not a good idea at all. But for compatibility reason, we'll support it */
 
 static void crashMe ()
@@ -77,8 +71,6 @@ TEST(GTestSimpleTest, GTestDeathTest)
 {
 	ASSERT_DEATH(crashMe(), "Crash me!");
 }
-
-#endif
 
 class GTestTestingFixtureTest : public testing::Test {
 protected:
@@ -115,45 +107,6 @@ TEST_F(GTestTestingFixtureTest, teardownMustBeCalledOrElseThisWillLeak)
 #include "CppUTest/TestRegistry.h"
 #include "CppUTest/TestOutput.h"
 #include "CppUTest/TestTestingFixture.h"
-#include "CppUTestExt/GTestConvertor.h"
-
-#ifdef CPPUTEST_USE_REAL_GTEST
-
-TEST_GROUP(GTestConvertor)
-{
-};
-
-TEST(GTestConvertor, correctNumberOfTestCases)
-{
-	LONGS_EQUAL(2, ::testing::UnitTest::GetInstance()->total_test_case_count());
-	CHECK(::testing::UnitTest::GetInstance()->GetTestCase(0));
-	CHECK(::testing::UnitTest::GetInstance()->GetTestCase(1));
-	CHECK(::testing::UnitTest::GetInstance()->GetTestCase(2) == NULL);
-}
-
-TEST(GTestConvertor, correctNumberOfTestsInTheTestCases)
-{
-	const ::testing::TestCase* firstTestCase = ::testing::UnitTest::GetInstance()->GetTestCase(0);
-	const ::testing::TestCase* secondTestCase = ::testing::UnitTest::GetInstance()->GetTestCase(1);
-
-	STRCMP_EQUAL("GTestSimpleTest", firstTestCase->name());
-	STRCMP_EQUAL("GTestTestingFixtureTest", secondTestCase->name());
-	LONGS_EQUAL(7, firstTestCase->total_test_count());
-	LONGS_EQUAL(2, secondTestCase->total_test_count());
-}
-
-TEST(GTestConvertor, testsGetAddedToCurrentTestRegistry)
-{
-	TestTestingFixture fixture;
-	TestRegistry::getCurrentRegistry()->unDoLastAddTest();
-
-	GTestConvertor convertor(false);
-	convertor.addAllGTestToTestRegistry();
-
-	LONGS_EQUAL(9, TestRegistry::getCurrentRegistry()->countTests());
-}
-
-#endif
 
 TEST_GROUP(gtest)
 {
@@ -275,3 +228,4 @@ TEST(gtestMacros, ASSERT_TRUEFails)
 {
 	testFailureWith(_failMethodASSERT_TRUE);
 }
+

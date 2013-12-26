@@ -33,10 +33,8 @@
 
 int main(int ac, const char** av)
 {
-#ifdef CPPUTEST_USE_REAL_GTEST
 	GTestConvertor convertor;
 	convertor.addAllGTestToTestRegistry();
-#endif
 
 	MemoryReporterPlugin plugin;
 	MockSupportPlugin mockPlugin;

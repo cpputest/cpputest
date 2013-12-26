@@ -25,20 +25,15 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef GMOCK_H_
-#define GMOCK_H_
+#ifndef GTEST__H_
+#define GTEST__H_
 
 #undef new
 
 #undef RUN_ALL_TESTS
 
-#define GTEST_DONT_DEFINE_TEST 1
-#define GTEST_DONT_DEFINE_FAIL 1
-#include "gmock/gmock.h"
+#include "gtest/gtest.h"
 #undef RUN_ALL_TESTS
-
-using testing::Return;
-using testing::NiceMock;
 
 #ifdef CPPUTEST_USE_NEW_MACROS
 #include "CppUTest/MemoryLeakDetectorNewMacros.h"

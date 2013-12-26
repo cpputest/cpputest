@@ -73,7 +73,7 @@ if test "x$USE_MAINTAINER_MODE" = "xyes"; then
 # FLag -Werror. 
 CFLAGS=-Werror
 AC_MSG_CHECKING([whether CC and CXX supports -Werror])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Werror"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Werror" ], [AC_MSG_RESULT([no])])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS_AS_ERROR="-Werror"; CPPUTEST_CXXWARNINGFLAGS_AS_ERROR="-Werror" ], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 fi
 
@@ -299,6 +299,56 @@ AC_ARG_ENABLE([gmock], [AC_HELP_STRING([--enable-gmock], [enable using GMock. Re
 
 AM_CONDITIONAL([INCLUDE_CPPUTEST_EXT], [test "x${cpputest_ext}" = xyes]) 
 
+# Check availability of GMock.
+
+AC_ARG_VAR([GMOCK_HOME], Directory where gmock is installed so the gmock tests can run)
+AC_MSG_CHECKING([for the availability of gmock via the GMOCK_HOME variable])
+
+AM_CONDITIONAL([INCLUDE_GMOCKTESTS], [test -n ${GMOCK_HOME}])
+if test -n ${GMOCK_HOME}; then
+
+	# Gmock requires C++11
+	use_std_cpp11=yes
+	
+	# Set the compiler and linker options for GMock
+	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -DGTEST_USE_OWN_TR1_TUPLE=1"
+	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I${GMOCK_HOME}/include"
+	if test -e ${GMOCK_HOME}/lib/libgmock.la; then \
+		CPPUTEST_LDADD="${CPPUTEST_LDADD} ${GMOCK_HOME}/lib/libgmock.la"; \
+	elif test -e ${GMOCK_HOME}/libgmock.a; then \
+		CPPUTEST_LDADD="${CPPUTEST_LDADD} ${GMOCK_HOME}/libgmock.a"; \
+	else \
+		AC_MSG_ERROR([
+-------------------------------------
+GMOCK_HOME was set, but couldn't find the compiled library.
+Did you compile it?
+-------------------------------------]);
+	fi	
+
+	GTEST_HOME=${GMOCK_HOME}/gtest
+	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I${GTEST_HOME}/include -I${GTEST_HOME}"
+
+	if test -e ${GTEST_HOME}/lib/libgtest.la; then \
+		CPPUTEST_LDADD="${CPPUTEST_LDADD} ${GTEST_HOME}/lib/libgtest.la"; \
+	elif test -e ${GTEST_HOME}/libgtest.a; then \
+		CPPUTEST_LDADD="${CPPUTEST_LDADD} ${GTEST_HOME}/libgtest.a"; \
+	else \
+		AC_MSG_ERROR([
+-------------------------------------
+GTEST_HOME was set, but couldn't find the compiled library.
+Did you compile it?
+-------------------------------------]);
+	fi
+			
+	AC_MSG_RESULT([yes])
+else
+	# Without GTest, we can safely have warnings as errors. With GTest not as it has warnings :)
+	CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} ${CPPUTEST_CWARNINGFLAGS_AS_ERROR}"
+	CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} ${CPPUTEST_CWARNINGFLAGS_AS_ERROR}"
+	AC_MSG_RESULT([no]) 
+fi
+
+
 # Dealing with not having a Standard C library... (usually for Kernel development)
 if test "x${use_std_c}" = xno; then
 	use_std_cpp=no
@@ -351,6 +401,7 @@ if test "x${coverage}" = xyes; then
 fi
 fi
 
+
 AM_CONDITIONAL([INCLUDE_GMOCKTESTS_EXT], [test "x${use_gmock}" = xyes])
 
 if test "x${use_gmock}" = xyes; then
@@ -377,8 +428,8 @@ Did you compile it?
 -------------------------------------]);
 	fi	
 	AC_DEFINE([CPPUTEST_USE_REAL_GMOCK], [1], [Use GMock])
-else
-	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I${srcdir}/include/CppUTestExt/CppUTestGMock"
+#else
+#	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I${srcdir}/include/CppUTestExt/CppUTestGMock"
 fi
 
 if test "x${real_gtest}" = xyes; then
@@ -390,7 +441,7 @@ Compiling with --enable-real-gtest requires you to
 set the GTEST_HOME to the GTest source directory
 -------------------------------------])
 	fi
-	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I${GTEST_HOME}/include -I${GTEST_HOME} -Isomething"
+	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I${GTEST_HOME}/include -I${GTEST_HOME}"
 
 	if test -e ${GTEST_HOME}/lib/libgtest.la; then \
 		CPPUTEST_LDADD="${CPPUTEST_LDADD} ${GTEST_HOME}/lib/libgtest.la"; \
@@ -408,8 +459,8 @@ Did you compile it?
 	# Turn warnings off. Gtest doesn't like it!
 	CPPUTEST_CWARNINGFLAGS=""
 	CPPUTEST_CXXWARNINGFLAGS=""
-else
-	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I${srcdir}/include/CppUTestExt/CppUTestGTest"
+#else
+#	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I${srcdir}/include/CppUTestExt/CppUTestGTest"
 fi
 
 CPPUTEST_CFLAGS="${CPPUTEST_CFLAGS} ${CPPUTEST_CWARNINGFLAGS}"

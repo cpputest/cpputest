@@ -25,23 +25,40 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef GMOCK_H_
-#define GMOCK_H_
+#include "CppUTestExt/GTestConvertor.h"
 
-#undef new
+#if 0
+TEST_GROUP(GTestConvertor)
+{
+};
 
-#undef RUN_ALL_TESTS
+TEST(GTestConvertor, correctNumberOfTestCases)
+{
+	LONGS_EQUAL(2, ::testing::UnitTest::GetInstance()->total_test_case_count());
+	CHECK(::testing::UnitTest::GetInstance()->GetTestCase(0));
+	CHECK(::testing::UnitTest::GetInstance()->GetTestCase(1));
+	CHECK(::testing::UnitTest::GetInstance()->GetTestCase(2) == NULL);
+}
 
-#define GTEST_DONT_DEFINE_TEST 1
-#define GTEST_DONT_DEFINE_FAIL 1
-#include "gmock/gmock.h"
-#undef RUN_ALL_TESTS
+TEST(GTestConvertor, correctNumberOfTestsInTheTestCases)
+{
+	const ::testing::TestCase* firstTestCase = ::testing::UnitTest::GetInstance()->GetTestCase(0);
+	const ::testing::TestCase* secondTestCase = ::testing::UnitTest::GetInstance()->GetTestCase(1);
 
-using testing::Return;
-using testing::NiceMock;
+	STRCMP_EQUAL("GTestSimpleTest", firstTestCase->name());
+	STRCMP_EQUAL("GTestTestingFixtureTest", secondTestCase->name());
+	LONGS_EQUAL(7, firstTestCase->total_test_count());
+	LONGS_EQUAL(2, secondTestCase->total_test_count());
+}
 
-#ifdef CPPUTEST_USE_NEW_MACROS
-#include "CppUTest/MemoryLeakDetectorNewMacros.h"
-#endif
+TEST(GTestConvertor, testsGetAddedToCurrentTestRegistry)
+{
+	TestTestingFixture fixture;
+	TestRegistry::getCurrentRegistry()->unDoLastAddTest();
 
+	GTestConvertor convertor(false);
+	convertor.addAllGTestToTestRegistry();
+
+	LONGS_EQUAL(9, TestRegistry::getCurrentRegistry()->countTests());
+}
 #endif
