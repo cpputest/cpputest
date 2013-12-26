@@ -46,6 +46,7 @@
 #include "CppUTest/Utest.h"
 
 class GTestResultReporter;
+class GTestFlags;
 
 namespace testing {
 	class TestInfo;
@@ -57,12 +58,16 @@ class GTestShell : public UtestShell
 {
 	::testing::TestInfo* testinfo_;
 	GTestShell* next_;
+	GTestFlags* flags_;
 public:
-	GTestShell(::testing::TestInfo* testinfo, GTestShell* next);
+	GTestShell(::testing::TestInfo* testinfo, GTestShell* next, GTestFlags* flags);
 
 	virtual Utest* createTest();
 
-	GTestShell* nextGTest();
+	GTestShell* nextGTest()
+	{
+		return next_;
+	}
 };
 
 #undef new
@@ -121,54 +126,6 @@ public:
 #define GTEST_NO_STRING_VALUE NULL
 #endif
 
-static GTEST_STRING GTestFlagcolor;
-static GTEST_STRING GTestFlagfilter;
-static GTEST_STRING GTestFlagoutput;
-static GTEST_STRING GTestFlagdeath_test_style;
-static GTEST_STRING GTestFlaginternal_run_death_test;
-#ifndef GTEST_VERSION_GTEST_1_5
-static GTEST_STRING GTestFlagstream_result_to;
-#endif
-
-
-inline void storeValuesOfGTestFLags()
-{
-	GTestFlagcolor = ::testing::GTEST_FLAG(color);
-	GTestFlagfilter = ::testing::GTEST_FLAG(filter);
-	GTestFlagoutput = ::testing::GTEST_FLAG(output);
-	GTestFlagdeath_test_style = ::testing::GTEST_FLAG(death_test_style);
-	GTestFlaginternal_run_death_test = ::testing::internal::GTEST_FLAG(internal_run_death_test);
-	#ifndef GTEST_VERSION_GTEST_1_5
-	GTestFlagstream_result_to = ::testing::GTEST_FLAG(stream_result_to);
-	#endif
-}
-
-inline void resetValuesOfGTestFlags()
-{
-	::testing::GTEST_FLAG(color) = GTestFlagcolor;
-	::testing::GTEST_FLAG(filter) = GTestFlagfilter;
-	::testing::GTEST_FLAG(output) = GTestFlagoutput;
-	::testing::GTEST_FLAG(death_test_style) = GTestFlagdeath_test_style;
-	::testing::internal::GTEST_FLAG(internal_run_death_test) = GTestFlaginternal_run_death_test;
-	#ifndef GTEST_VERSION_GTEST_1_5
-	::testing::GTEST_FLAG(stream_result_to) = GTestFlagstream_result_to;
-	#endif
-}
-
-inline void setGTestFLagValuesToNULLToAvoidMemoryLeaks()
-{
-#ifndef GTEST_VERSION_GTEST_1_7
-	::testing::GTEST_FLAG(color) = GTEST_NO_STRING_VALUE;
-	::testing::GTEST_FLAG(filter) = GTEST_NO_STRING_VALUE;
-	::testing::GTEST_FLAG(output) = GTEST_NO_STRING_VALUE;
-	::testing::GTEST_FLAG(death_test_style) = GTEST_NO_STRING_VALUE;
-	::testing::internal::GTEST_FLAG(internal_run_death_test) = GTEST_NO_STRING_VALUE;
-	#ifndef GTEST_VERSION_GTEST_1_5
-	::testing::GTEST_FLAG(stream_result_to) = GTEST_NO_STRING_VALUE;
-	#endif
-#endif
-}
-
 class GTestDummyResultReporter : public ::testing::ScopedFakeTestPartResultReporter
 {
 public:
@@ -199,6 +156,57 @@ public:
 	}
 };
 
+class GTestFlags
+{
+public:
+	void storeValuesOfGTestFLags()
+	{
+		GTestFlagcolor = ::testing::GTEST_FLAG(color);
+		GTestFlagfilter = ::testing::GTEST_FLAG(filter);
+		GTestFlagoutput = ::testing::GTEST_FLAG(output);
+		GTestFlagdeath_test_style = ::testing::GTEST_FLAG(death_test_style);
+		GTestFlaginternal_run_death_test = ::testing::internal::GTEST_FLAG(internal_run_death_test);
+		#ifndef GTEST_VERSION_GTEST_1_5
+		GTestFlagstream_result_to = ::testing::GTEST_FLAG(stream_result_to);
+		#endif
+	}
+
+	void resetValuesOfGTestFlags()
+	{
+		::testing::GTEST_FLAG(color) = GTestFlagcolor;
+		::testing::GTEST_FLAG(filter) = GTestFlagfilter;
+		::testing::GTEST_FLAG(output) = GTestFlagoutput;
+		::testing::GTEST_FLAG(death_test_style) = GTestFlagdeath_test_style;
+		::testing::internal::GTEST_FLAG(internal_run_death_test) = GTestFlaginternal_run_death_test;
+		#ifndef GTEST_VERSION_GTEST_1_5
+		::testing::GTEST_FLAG(stream_result_to) = GTestFlagstream_result_to;
+		#endif
+	}
+
+	void setGTestFLagValuesToNULLToAvoidMemoryLeaks()
+	{
+	#ifndef GTEST_VERSION_GTEST_1_7
+		::testing::GTEST_FLAG(color) = GTEST_NO_STRING_VALUE;
+		::testing::GTEST_FLAG(filter) = GTEST_NO_STRING_VALUE;
+		::testing::GTEST_FLAG(output) = GTEST_NO_STRING_VALUE;
+		::testing::GTEST_FLAG(death_test_style) = GTEST_NO_STRING_VALUE;
+		::testing::internal::GTEST_FLAG(internal_run_death_test) = GTEST_NO_STRING_VALUE;
+		#ifndef GTEST_VERSION_GTEST_1_5
+		::testing::GTEST_FLAG(stream_result_to) = GTEST_NO_STRING_VALUE;
+		#endif
+	#endif
+	}
+
+private:
+	GTEST_STRING GTestFlagcolor;
+	GTEST_STRING GTestFlagfilter;
+	GTEST_STRING GTestFlagoutput;
+	GTEST_STRING GTestFlagdeath_test_style;
+	GTEST_STRING GTestFlaginternal_run_death_test;
+	#ifndef GTEST_VERSION_GTEST_1_5
+	GTEST_STRING GTestFlagstream_result_to;
+	#endif
+};
 
 class GTestConvertor
 {
@@ -224,7 +232,7 @@ public:
 	virtual void addAllGTestToTestRegistry()
 	{
 		createDummyInSequenceToAndFailureReporterAvoidMemoryLeakInGMock();
-		storeValuesOfGTestFLags();
+		flags_.storeValuesOfGTestFLags();
 
 		int argc = 2;
 		const char * argv[] = {"NameOfTheProgram", "--gmock_catch_leaked_mocks=0"};
@@ -250,7 +258,7 @@ protected:
 
 	virtual void addNewTestCaseForTestInfo(::testing::TestInfo* testinfo)
 	{
-		first_ = new GTestShell(testinfo, first_);
+		first_ = new GTestShell(testinfo, first_, &flags_);
 		TestRegistry::getCurrentRegistry()->addTest(first_);
 	}
 
@@ -270,14 +278,16 @@ protected:
 		::testing::InSequence seq;
 		::testing::internal::GetFailureReporter();
 	}
+
 private:
 	GTestResultReporter* reporter_;
 	GTestShell* first_;
+	GTestFlags flags_;
 };
 
 class GTestUTest: public Utest {
 public:
-	GTestUTest(::testing::TestInfo* testinfo) : testinfo_(testinfo), test_(NULL)
+	GTestUTest(::testing::TestInfo* testinfo, GTestFlags* flags) : testinfo_(testinfo), test_(NULL), flags_(flags)
 	{
 
 	}
@@ -294,7 +304,7 @@ public:
 
 	void setup()
 	{
-		resetValuesOfGTestFlags();
+		flags_->resetValuesOfGTestFlags();
 
 	#ifdef GTEST_VERSION_GTEST_1_5
 		test_ = testinfo_->impl()->factory_->CreateTest();
@@ -322,29 +332,26 @@ public:
 		::testing::UnitTest::GetInstance()->impl()->set_current_test_info(NULL);
 		delete test_;
 
-		setGTestFLagValuesToNULLToAvoidMemoryLeaks();
+		flags_->setGTestFLagValuesToNULLToAvoidMemoryLeaks();
 		::testing::internal::DeathTest::set_last_death_test_message(GTEST_NO_STRING_VALUE);
 	}
 
 private:
 	::testing::Test* test_;
 	::testing::TestInfo* testinfo_;
+	GTestFlags* flags_;
 };
 
-inline GTestShell::GTestShell(::testing::TestInfo* testinfo, GTestShell* next) : testinfo_(testinfo), next_(next)
+inline GTestShell::GTestShell(::testing::TestInfo* testinfo, GTestShell* next, GTestFlags* flags)
+	: testinfo_(testinfo), next_(next), flags_(flags)
 {
 	setGroupName(testinfo->test_case_name());
 	setTestName(testinfo->name());
 }
 
-inline GTestShell* GTestShell::nextGTest()
-{
-	return next_;
-}
-
 inline Utest* GTestShell::createTest()
 {
-	return new GTestUTest(testinfo_);
+	return new GTestUTest(testinfo_, flags_);
 };
 
 #endif
