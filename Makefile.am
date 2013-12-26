@@ -175,6 +175,7 @@ CppUTestExtTests_SOURCES = \
 	tests/CppUTestExt/TestMockExpectedFunctionCall.cpp \
 	tests/CppUTestExt/TestMockSupport_cCFile.c \
 	tests/CppUTestExt/TestGTest.cpp \
+	tests/CppUTestExt/TestGTestConvertor.cpp \
 	tests/CppUTestExt/TestMockExpectedFunctionsList.cpp \
 	tests/CppUTestExt/TestMemoryReportAllocator.cpp \
 	tests/CppUTestExt/TestMockFailure.cpp \

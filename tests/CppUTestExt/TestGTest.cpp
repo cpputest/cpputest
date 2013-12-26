@@ -80,80 +80,11 @@ TEST(GTestSimpleTest, GTestDeathTest)
 
 #endif
 
-class GTestTestingFixtureTest : public testing::Test {
-protected:
-	bool setup_was_called;
-	char* freed_during_teardown;
-
-	void SetUp()
-	{
-		setup_was_called = true;
-		freed_during_teardown = NULL;
-	}
-
-	void TearDown()
-	{
-		delete [] freed_during_teardown;
-	}
-};
-
-TEST_F(GTestTestingFixtureTest, setupBeenCalled)
-{
-	EXPECT_TRUE(setup_was_called);
-}
-
-TEST_F(GTestTestingFixtureTest, teardownMustBeCalledOrElseThisWillLeak)
-{
-	freed_during_teardown = new char[100];
-}
-
 #undef TEST
-#undef RUN_ALL_TESTS
-#undef FAIL
 
 #include "CppUTest/TestHarness.h"
-#include "CppUTest/TestRegistry.h"
 #include "CppUTest/TestOutput.h"
 #include "CppUTest/TestTestingFixture.h"
-#include "CppUTestExt/GTestConvertor.h"
-
-#ifdef CPPUTEST_USE_REAL_GTEST
-
-TEST_GROUP(GTestConvertor)
-{
-};
-
-TEST(GTestConvertor, correctNumberOfTestCases)
-{
-	LONGS_EQUAL(2, ::testing::UnitTest::GetInstance()->total_test_case_count());
-	CHECK(::testing::UnitTest::GetInstance()->GetTestCase(0));
-	CHECK(::testing::UnitTest::GetInstance()->GetTestCase(1));
-	CHECK(::testing::UnitTest::GetInstance()->GetTestCase(2) == NULL);
-}
-
-TEST(GTestConvertor, correctNumberOfTestsInTheTestCases)
-{
-	const ::testing::TestCase* firstTestCase = ::testing::UnitTest::GetInstance()->GetTestCase(0);
-	const ::testing::TestCase* secondTestCase = ::testing::UnitTest::GetInstance()->GetTestCase(1);
-
-	STRCMP_EQUAL("GTestSimpleTest", firstTestCase->name());
-	STRCMP_EQUAL("GTestTestingFixtureTest", secondTestCase->name());
-	LONGS_EQUAL(7, firstTestCase->total_test_count());
-	LONGS_EQUAL(2, secondTestCase->total_test_count());
-}
-
-TEST(GTestConvertor, testsGetAddedToCurrentTestRegistry)
-{
-	TestTestingFixture fixture;
-	TestRegistry::getCurrentRegistry()->unDoLastAddTest();
-
-	GTestConvertor convertor(false);
-	convertor.addAllGTestToTestRegistry();
-
-	LONGS_EQUAL(9, TestRegistry::getCurrentRegistry()->countTests());
-}
-
-#endif
 
 TEST_GROUP(gtest)
 {
