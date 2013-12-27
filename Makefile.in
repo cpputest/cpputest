@@ -253,7 +253,7 @@ am__include_cpputestext_HEADERS_DIST =  \
 	include/CppUTestExt/MemoryReportFormatter.h \
 	include/CppUTestExt/MockFailure.h \
 	include/CppUTestExt/MockSupport_c.h \
-	include/CppUTestExt/GMock.h \
+	include/CppUTestExt/GMock.h include/CppUTestExt/GTest.h \
 	include/CppUTestExt/MemoryReporterPlugin.h \
 	include/CppUTestExt/MockFunctionCall.h \
 	include/CppUTestExt/OrderedTest.h \
@@ -512,6 +512,7 @@ lib_libCppUTestExt_a_SOURCES = \
 @INCLUDE_CPPUTEST_EXT_TRUE@	include/CppUTestExt/MockFailure.h \
 @INCLUDE_CPPUTEST_EXT_TRUE@	include/CppUTestExt/MockSupport_c.h \
 @INCLUDE_CPPUTEST_EXT_TRUE@	include/CppUTestExt/GMock.h \
+@INCLUDE_CPPUTEST_EXT_TRUE@	include/CppUTestExt/GTest.h \
 @INCLUDE_CPPUTEST_EXT_TRUE@	include/CppUTestExt/MemoryReporterPlugin.h \
 @INCLUDE_CPPUTEST_EXT_TRUE@	include/CppUTestExt/MockFunctionCall.h \
 @INCLUDE_CPPUTEST_EXT_TRUE@	include/CppUTestExt/OrderedTest.h \
