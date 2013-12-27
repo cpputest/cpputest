@@ -27,42 +27,8 @@
 
 #ifdef CPPUTEST_USE_REAL_GTEST
 
-/* Enormous hack!
- *
- * This sucks enormously. We need to do two things in GTest that seem to not be possible without
- * this hack. Hopefully there is *another way*.
- *
- * We need to access the factory in the TestInfo in order to be able to create tests. The factory
- * is private and there seems to be no way to access it...
- *
- * We need to be able to call the Test SetUp and TearDown methods, but they are protected for
- * some reason. We can't subclass either as the tests are created with the TEST macro.
- *
- * If anyone knows how to get the above things done *without* these ugly #defines, let me know!
- *
- */
-
-#define private public
-#define protected public
-
-#include "CppUTestExt/GTest.h"
-#include "gtest/gtest-spi.h"
-#include "gtest/gtest-death-test.h"
-#include "gmock/gmock.h"
-
-
-/*
- * We really need some of its internals as they don't have a public interface.
- *
- */
-#define GTEST_IMPLEMENTATION_ 1
-#include "src/gtest-internal-inl.h"
-
-
 #include "CppUTestExt/GTestConvertor.h"
-#include "CppUTest/TestRegistry.h"
-#include "CppUTest/TestFailure.h"
-#include "CppUTest/TestResult.h"
+
 
 /* Store some of the flags as we'll need to reset them each test to avoid leaking memory */
 

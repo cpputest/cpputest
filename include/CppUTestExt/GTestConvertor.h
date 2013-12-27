@@ -32,6 +32,21 @@
 
 #ifdef CPPUTEST_USE_REAL_GTEST
 
+/*
+ * Usage:
+ *
+ * This file must only be included in the main. The whole implementation is inline so that this can
+ * be compiled on usage and not on CppUTest compile-time. This avoids a hard dependency with CppUTest
+ * and with GTest
+ *
+ * Add the following lines to your main:
+ *
+ *      GTestConvertor convertor;
+ *      convertor.addAllGTestToTestRegistry();
+ *
+ *
+ */
+
 class GTestResultReporter;
 
 namespace testing {
@@ -52,6 +67,38 @@ public:
 	GTestShell* nextGTest();
 };
 
+/* Enormous hack!
+ *
+ * This sucks enormously. We need to do two things in GTest that seem to not be possible without
+ * this hack. Hopefully there is *another way*.
+ *
+ * We need to access the factory in the TestInfo in order to be able to create tests. The factory
+ * is private and there seems to be no way to access it...
+ *
+ * We need to be able to call the Test SetUp and TearDown methods, but they are protected for
+ * some reason. We can't subclass either as the tests are created with the TEST macro.
+ *
+ * If anyone knows how to get the above things done *without* these ugly #defines, let me know!
+ *
+ */
+
+#define private public
+#define protected public
+
+#include "CppUTestExt/GTest.h"
+#include "CppUTestExt/GMock.h"
+#include "gtest/gtest-spi.h"
+#include "gtest/gtest-death-test.h"
+/*
+ * We really need some of its internals as they don't have a public interface.
+ *
+ */
+#define GTEST_IMPLEMENTATION_ 1
+#include "src/gtest-internal-inl.h"
+
+#include "CppUTest/TestRegistry.h"
+#include "CppUTest/TestFailure.h"
+#include "CppUTest/TestResult.h"
 
 class GTestConvertor
 {
@@ -71,6 +118,8 @@ private:
 	GTestResultReporter* reporter_;
 	GTestShell* first_;
 };
+
+
 
 #endif
 
