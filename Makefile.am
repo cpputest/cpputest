@@ -238,13 +238,14 @@ remove_gtest_directories:
 
 check_gtest: remove_gtest_directories check_gtest15 check_gtest16 check_gtest17
 
-check_all: 
-
+check_basic:
 	@echo "If dash is available, run the configure with dash to find bash-isms and increase portability"
 	make distclean; if test "x$(CPPUTEST_HAS_DASH)" = xyes; then CONFIG_SHELL=dash $(srcdir)/configure; fi 
 
-	@echo "Building and valgrinding"
-	make distclean; $(srcdir)/configure; make valgrind
+	@echo "Building and valgrinding (skipping this on MacOS due to buggy Valgrind"
+	if test "x$(CPPUTEST_ON_MACOSX)" = xno; then \
+		make distclean; $(srcdir)/configure; make valgrind; \
+	fi
 	
 	@echo "Building without extensions"
 	make distclean; $(srcdir)/configure --disable-extensions; make check
@@ -267,7 +268,8 @@ check_all:
 	@echo "Generate a map file while building"
 	make distclean; $(srcdir)/configure -enable-generate-map-file; make check
 	if [ -s CppUTest.o.map.txt ]; then echo "Generating map file failed. Build failed!"; exit 1; fi
-	
+
+check_special_situations:
 	@echo "Does the system have gcc? $(CPPUTEST_HAS_GCC)"
 	if test "x$(CPPUTEST_HAS_GCC)" = xyes; then echo "Compiling with gcc"; make distclean; $(srcdir)/configure CC="gcc" CXX="g++"; make check; fi
 
@@ -281,7 +283,11 @@ check_all:
 	./$(CPPUTEST_TESTS) -ojunit > junit_run_output
 	if [ -s junit_run_output ]; then echo "JUnit run has output. Build failed!"; exit 1; fi
 	rm junit_run_output; rm cpputest_*.xml
-	
+
+	@echo "Building with all flags turned off"
+	make distclean; $(srcdir)/configure --disable-cpputest-flags CFLAGS="" CXXFLAGS="" CPPFLAGS="-I $(srcdir)/include -I$(srcdir)/include/CppUTestExt/CppUTestGTest -I$(srcdir)/include/CppUTestExt/CppUTestGMock" --disable-dependency-tracking; make check
+
+check_coverage:
 	@echo "Compile with coverage (switch to clang for Mac OSX)"
 	if test "x$(CPPUTEST_HAS_CLANG)" = xyes && test "x$(CPPUTEST_ON_MACOSX)" = xyes; then \
 	   echo "Compiling with clang"; make distclean; $(srcdir)/configure CC="clang" CXX="clang++" --enable-coverage; \
@@ -290,7 +296,7 @@ check_all:
 	fi
 	
 	make check
-	
+
 	./$(CPPUTEST_TESTS) >> test_output.txt; ./$(CPPUTESTEXT_TESTS) >> test_output.txt 
 	$(SILENCE)for f in `ls *.gcno` ; do \
 		gcov $(CppUTestExtTests_SOURCES) $(CppUTestTests_SOURCES) $(lib_libCppUTest_a_SOURCES) $(lib_libCppUTestExt_a_SOURCES) -o $$f 1>>gcov_output.txt 2>>gcov_error.txt; \
@@ -301,18 +307,11 @@ check_all:
 	rm -f gcov_output.txt gcov_error.txt gcov_report.txt test_output.txt gcov_report.txt.html coverage.info
 	rm -rf test_coverage
 
+check_examples:
 	@echo "Compiling and running the examples. This will use the old Makefile"
 	make distclean; $(srcdir)/configure; make; $(MAKE) -C $(srcdir)/examples all clean CPPUTEST_LIB_LINK_DIR="`pwd`/lib"
 
-	@echo "Build using real gtest"
-	make distclean; $(srcdir)/configure --enable-real-gtest; make check
-
-	@echo "Build using gmock"
-	make distclean; $(srcdir)/configure --enable-gmock; make check
-	
-	@echo "Building with all flags turned off"
-	make distclean; $(srcdir)/configure --disable-cpputest-flags CFLAGS="" CXXFLAGS="" CPPFLAGS="-I $(srcdir)/include -I$(srcdir)/include/CppUTestExt/CppUTestGTest -I$(srcdir)/include/CppUTestExt/CppUTestGMock" --disable-dependency-tracking; make check
-			
+check_all: check_basic check_special_situations check_coverage check_examples check_gtest
 	@echo "Last... one normal build and test"
 	make distclean; $(srcdir)/configure; make check; $(RUN_CPPUTEST_TESTS); $(RUN_CPPUTEST_EXT_TESTS)
 	
