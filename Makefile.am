@@ -87,7 +87,6 @@ lib_libCppUTestExt_a_SOURCES = \
    src/CppUTestExt/MemoryReporterPlugin.cpp \
    src/CppUTestExt/MockFailure.cpp \
    src/CppUTestExt/MockSupportPlugin.cpp \
-   src/CppUTestExt/GTestConvertor.cpp \
    src/CppUTestExt/MockActualFunctionCall.cpp \
    src/CppUTestExt/MockFunctionCall.cpp \
    src/CppUTestExt/MockSupport_c.cpp \
