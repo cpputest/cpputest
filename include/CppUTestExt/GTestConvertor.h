@@ -303,6 +303,83 @@ private:
 	GTestFlagsThatAllocateMemory* flags_;
 };
 
+inline Utest* GTestShell::createTest()
+{
+	return new GTestUTest(testinfo_, flags_);
+};
+
+inline void GTestConvertor::simulateGTestFailureToPreAllocateAllTheThreadLocalData()
+{
+	GTestDummyResultReporter *dummyReporter = new GTestDummyResultReporter();
+	ASSERT_TRUE(false);
+	delete dummyReporter;
+}
+
+inline GTestConvertor::GTestConvertor(bool shouldSimulateFailureAtCreationToAllocateThreadLocalData) : first_(NULL)
+{
+	if (shouldSimulateFailureAtCreationToAllocateThreadLocalData)
+		simulateGTestFailureToPreAllocateAllTheThreadLocalData();
+	reporter_ = new GTestResultReporter();
+}
+
+inline GTestConvertor::~GTestConvertor()
+{
+	delete reporter_;
+
+	while (first_) {
+		GTestShell* next = first_->nextGTest();
+		delete first_;
+		first_ = next;
+	}
+}
+
+inline void GTestConvertor::addNewTestCaseForTestInfo(::testing::TestInfo* testinfo)
+{
+	first_ = new GTestShell(testinfo, first_, &flags_);
+	TestRegistry::getCurrentRegistry()->addTest(first_);
+}
+
+inline void GTestConvertor::addAllTestsFromTestCaseToTestRegistry(::testing::TestCase* testcase)
+{
+	int currentTestCount = 0;
+	::testing::TestInfo* currentTest = (::testing::TestInfo*) testcase->GetTestInfo(currentTestCount);
+	while (currentTest) {
+		addNewTestCaseForTestInfo(currentTest);
+		currentTestCount++;
+		currentTest = (::testing::TestInfo*) testcase->GetTestInfo(currentTestCount);
+	}
+}
+
+inline void GTestConvertor::createDummyInSequenceToAndFailureReporterAvoidMemoryLeakInGMock()
+{
+#ifdef CPPUTEST_USE_REAL_GMOCK
+	::testing::InSequence seq;
+	::testing::internal::GetFailureReporter();
+#endif
+}
+
+inline void GTestConvertor::addAllGTestToTestRegistry()
+{
+	createDummyInSequenceToAndFailureReporterAvoidMemoryLeakInGMock();
+	flags_.storeValuesOfGTestFLags();
+
+#ifdef CPPUTEST_USE_REAL_GMOCK
+	int argc = 2;
+	const char * argv[] = {"NameOfTheProgram", "--gmock_catch_leaked_mocks=0"};
+	::testing::InitGoogleMock(&argc, (char**) argv);
+#endif
+
+	::testing::UnitTest* unitTests = ::testing::UnitTest::GetInstance();
+
+	int currentUnitTestCount = 0;
+	::testing::TestCase* currentTestCase = (::testing::TestCase*) unitTests->GetTestCase(currentUnitTestCount);
+	while (currentTestCase) {
+		addAllTestsFromTestCaseToTestRegistry(currentTestCase);
+		currentUnitTestCount++;
+		currentTestCase = (::testing::TestCase*) unitTests->GetTestCase(currentUnitTestCount);
+	}
+}
+
 
 #endif
 
