@@ -121,7 +121,6 @@ am_lib_libCppUTestExt_a_OBJECTS =  \
 	lib_libCppUTestExt_a-MemoryReporterPlugin.$(OBJEXT) \
 	lib_libCppUTestExt_a-MockFailure.$(OBJEXT) \
 	lib_libCppUTestExt_a-MockSupportPlugin.$(OBJEXT) \
-	lib_libCppUTestExt_a-GTestConvertor.$(OBJEXT) \
 	lib_libCppUTestExt_a-MockActualFunctionCall.$(OBJEXT) \
 	lib_libCppUTestExt_a-MockFunctionCall.$(OBJEXT) \
 	lib_libCppUTestExt_a-MockSupport_c.$(OBJEXT) \
@@ -491,7 +490,6 @@ lib_libCppUTestExt_a_SOURCES = \
    src/CppUTestExt/MemoryReporterPlugin.cpp \
    src/CppUTestExt/MockFailure.cpp \
    src/CppUTestExt/MockSupportPlugin.cpp \
-   src/CppUTestExt/GTestConvertor.cpp \
    src/CppUTestExt/MockActualFunctionCall.cpp \
    src/CppUTestExt/MockFunctionCall.cpp \
    src/CppUTestExt/MockSupport_c.cpp \
@@ -754,7 +752,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CppUTestTests-TestUTestMacro.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CppUTestTests-UtestTest.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTestExt_a-CodeMemoryReportFormatter.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTestExt_a-GTestConvertor.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTestExt_a-MemoryReportAllocator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTestExt_a-MemoryReportFormatter.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTestExt_a-MemoryReporterPlugin.Po@am__quote@
@@ -1216,22 +1213,6 @@ lib_libCppUTestExt_a-MockSupportPlugin.obj: src/CppUTestExt/MockSupportPlugin.cp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MockSupportPlugin.cpp' object='lib_libCppUTestExt_a-MockSupportPlugin.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTestExt_a-MockSupportPlugin.obj `if test -f 'src/CppUTestExt/MockSupportPlugin.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MockSupportPlugin.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MockSupportPlugin.cpp'; fi`
-
-lib_libCppUTestExt_a-GTestConvertor.o: src/CppUTestExt/GTestConvertor.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTestExt_a-GTestConvertor.o -MD -MP -MF $(DEPDIR)/lib_libCppUTestExt_a-GTestConvertor.Tpo -c -o lib_libCppUTestExt_a-GTestConvertor.o `test -f 'src/CppUTestExt/GTestConvertor.cpp' || echo '$(srcdir)/'`src/CppUTestExt/GTestConvertor.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTestExt_a-GTestConvertor.Tpo $(DEPDIR)/lib_libCppUTestExt_a-GTestConvertor.Po
-@am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/GTestConvertor.cpp' object='lib_libCppUTestExt_a-GTestConvertor.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTestExt_a-GTestConvertor.o `test -f 'src/CppUTestExt/GTestConvertor.cpp' || echo '$(srcdir)/'`src/CppUTestExt/GTestConvertor.cpp
-
-lib_libCppUTestExt_a-GTestConvertor.obj: src/CppUTestExt/GTestConvertor.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTestExt_a-GTestConvertor.obj -MD -MP -MF $(DEPDIR)/lib_libCppUTestExt_a-GTestConvertor.Tpo -c -o lib_libCppUTestExt_a-GTestConvertor.obj `if test -f 'src/CppUTestExt/GTestConvertor.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/GTestConvertor.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/GTestConvertor.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTestExt_a-GTestConvertor.Tpo $(DEPDIR)/lib_libCppUTestExt_a-GTestConvertor.Po
-@am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/GTestConvertor.cpp' object='lib_libCppUTestExt_a-GTestConvertor.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTestExt_a-GTestConvertor.obj `if test -f 'src/CppUTestExt/GTestConvertor.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/GTestConvertor.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/GTestConvertor.cpp'; fi`
 
 lib_libCppUTestExt_a-MockActualFunctionCall.o: src/CppUTestExt/MockActualFunctionCall.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTestExt_a-MockActualFunctionCall.o -MD -MP -MF $(DEPDIR)/lib_libCppUTestExt_a-MockActualFunctionCall.Tpo -c -o lib_libCppUTestExt_a-MockActualFunctionCall.o `test -f 'src/CppUTestExt/MockActualFunctionCall.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MockActualFunctionCall.cpp
