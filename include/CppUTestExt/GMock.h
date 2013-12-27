@@ -36,6 +36,8 @@
 
 #define GTEST_DONT_DEFINE_TEST 1
 #define GTEST_DONT_DEFINE_FAIL 1
+
+#include "GTest.h"
 #include "gmock/gmock.h"
 #undef RUN_ALL_TESTS
 

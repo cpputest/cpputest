@@ -38,4 +38,15 @@
 #include "CppUTest/MemoryLeakDetectorNewMacros.h"
 #endif
 
+#ifndef RUN_ALL_TESTS
+#define GTEST_VERSION_GTEST_1_7
+#else
+#ifdef ADD_FAILURE_AT
+#define GTEST_VERSION_GTEST_1_6
+#else
+#define GTEST_VERSION_GTEST_1_5
+#endif
+#endif
+
+
 #endif

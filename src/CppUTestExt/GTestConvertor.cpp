@@ -50,15 +50,6 @@
 #include "gtest/gtest-death-test.h"
 #include "gmock/gmock.h"
 
-#ifndef RUN_ALL_TESTS
-#define GTEST_VERSION_GTEST_1_7
-#else
-#ifdef ADD_FAILURE_AT
-#define GTEST_VERSION_GTEST_1_6
-#else
-#define GTEST_VERSION_GTEST_1_5
-#endif
-#endif
 
 /*
  * We really need some of its internals as they don't have a public interface.
