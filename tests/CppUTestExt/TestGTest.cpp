@@ -27,7 +27,6 @@
 
 #ifdef CPPUTEST_USE_REAL_GTEST
 #undef new
-#endif
 
 #include "gtest/gtest.h"
 
@@ -63,8 +62,6 @@ TEST(GTestSimpleTest, GTestExpectStreq)
 	EXPECT_STREQ("hello world", "hello world");
 }
 
-#ifdef CPPUTEST_USE_REAL_GTEST
-
 /* Death tests are IMHO not a good idea at all. But for compatibility reason, we'll support it */
 
 static void crashMe ()
@@ -77,8 +74,6 @@ TEST(GTestSimpleTest, GTestDeathTest)
 {
 	ASSERT_DEATH(crashMe(), "Crash me!");
 }
-
-#endif
 
 #undef TEST
 
@@ -206,3 +201,5 @@ TEST(gtestMacros, ASSERT_TRUEFails)
 {
 	testFailureWith(_failMethodASSERT_TRUE);
 }
+
+#endif

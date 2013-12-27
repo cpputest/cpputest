@@ -25,13 +25,14 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#ifdef CPPUTEST_USE_REAL_GMOCK
+
 #include "CppUTestExt/GMock.h"
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TestOutput.h"
 #include "CppUTest/TestRegistry.h"
 #include "CppUTest/TestTestingFixture.h"
 
-#ifdef CPPUTEST_USE_REAL_GMOCK
 
 TEST_GROUP(GMock)
 {
