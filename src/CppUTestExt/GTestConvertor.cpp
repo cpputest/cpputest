@@ -27,8 +27,6 @@
 
 #ifdef CPPUTEST_USE_REAL_GTEST
 
-#undef new
-
 /* Enormous hack!
  *
  * This sucks enormously. We need to do two things in GTest that seem to not be possible without
@@ -47,7 +45,7 @@
 #define private public
 #define protected public
 
-#include "gtest/gtest.h"
+#include "CppUTestExt/GTest.h"
 #include "gtest/gtest-spi.h"
 #include "gtest/gtest-death-test.h"
 #include "gmock/gmock.h"
