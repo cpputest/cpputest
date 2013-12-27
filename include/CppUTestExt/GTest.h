@@ -48,5 +48,6 @@
 #endif
 #endif
 
+#undef RUN_ALL_TESTS
 
 #endif

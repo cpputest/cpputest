@@ -30,183 +30,9 @@
 #include "CppUTestExt/GTestConvertor.h"
 
 
-/* Store some of the flags as we'll need to reset them each test to avoid leaking memory */
-
-#ifdef GTEST_VERSION_GTEST_1_7
-#define GTEST_STRING std::string
-#define GTEST_NO_STRING_VALUE ""
-#else
-#define GTEST_STRING ::testing::internal::String
-#define GTEST_NO_STRING_VALUE NULL
-#endif
-
-static GTEST_STRING GTestFlagcolor;
-static GTEST_STRING GTestFlagfilter;
-static GTEST_STRING GTestFlagoutput;
-static GTEST_STRING GTestFlagdeath_test_style;
-static GTEST_STRING GTestFlaginternal_run_death_test;
-#ifndef GTEST_VERSION_GTEST_1_5
-static GTEST_STRING GTestFlagstream_result_to;
-#endif
-
-static void storeValuesOfGTestFLags()
-{
-	GTestFlagcolor = ::testing::GTEST_FLAG(color);
-	GTestFlagfilter = ::testing::GTEST_FLAG(filter);
-	GTestFlagoutput = ::testing::GTEST_FLAG(output);
-	GTestFlagdeath_test_style = ::testing::GTEST_FLAG(death_test_style);
-	GTestFlaginternal_run_death_test = ::testing::internal::GTEST_FLAG(internal_run_death_test);
-	#ifndef GTEST_VERSION_GTEST_1_5
-	GTestFlagstream_result_to = ::testing::GTEST_FLAG(stream_result_to);
-	#endif
-}
-
-static void resetValuesOfGTestFlags()
-{
-	::testing::GTEST_FLAG(color) = GTestFlagcolor;
-	::testing::GTEST_FLAG(filter) = GTestFlagfilter;
-	::testing::GTEST_FLAG(output) = GTestFlagoutput;
-	::testing::GTEST_FLAG(death_test_style) = GTestFlagdeath_test_style;
-	::testing::internal::GTEST_FLAG(internal_run_death_test) = GTestFlaginternal_run_death_test;
-	#ifndef GTEST_VERSION_GTEST_1_5
-	::testing::GTEST_FLAG(stream_result_to) = GTestFlagstream_result_to;
-	#endif
-}
-
-void setGTestFLagValuesToNULLToAvoidMemoryLeaks()
-{
-#ifndef GTEST_VERSION_GTEST_1_7
-	::testing::GTEST_FLAG(color) = GTEST_NO_STRING_VALUE;
-	::testing::GTEST_FLAG(filter) = GTEST_NO_STRING_VALUE;
-	::testing::GTEST_FLAG(output) = GTEST_NO_STRING_VALUE;
-	::testing::GTEST_FLAG(death_test_style) = GTEST_NO_STRING_VALUE;
-	::testing::internal::GTEST_FLAG(internal_run_death_test) = GTEST_NO_STRING_VALUE;
-	#ifndef GTEST_VERSION_GTEST_1_5
-	::testing::GTEST_FLAG(stream_result_to) = GTEST_NO_STRING_VALUE;
-	#endif
-#endif
-}
-
-/* Left a global to avoid a header dependency to gtest.h */
-
-class GTestDummyResultReporter : public ::testing::ScopedFakeTestPartResultReporter
-{
-public:
-	GTestDummyResultReporter () : ::testing::ScopedFakeTestPartResultReporter(INTERCEPT_ALL_THREADS, NULL) {}
-	virtual void ReportTestPartResult(const ::testing::TestPartResult& /*result*/) {}
-};
-
-class GMockTestTerminator : public TestTerminator
-{
-public:
-	GMockTestTerminator(const ::testing::TestPartResult& result) : result_(result)
-	{
-	}
-
-	virtual void exitCurrentTest() const
-	{
-		/*
-		 * When using GMock, it throws an exception fromt he destructor leaving
-		 * the system in an unstable state.
-		 * Therefore, when the test fails because of failed gmock expectation
-		 * then don't throw the exception, but let it return. Usually this should
-		 * already be at the end of the test, so it doesn't matter much
-		 */
-		if (!SimpleString(result_.message()).contains("Actual: never called") &&
-			!SimpleString(result_.message()).contains("Actual function call count doesn't match"))
-			throw CppUTestFailedException();
-
-	}
-	virtual ~GMockTestTerminator()
-	{
-	}
-private:
-	const ::testing::TestPartResult& result_;
-};
-
-
-class GTestResultReporter : public ::testing::ScopedFakeTestPartResultReporter
-{
-public:
-	GTestResultReporter () : ::testing::ScopedFakeTestPartResultReporter(INTERCEPT_ALL_THREADS, NULL) {}
-
-	virtual void ReportTestPartResult(const ::testing::TestPartResult& result)
-	{
-		FailFailure failure(UtestShell::getCurrent(), result.file_name(), result.line_number(), result.message());
-		UtestShell::getCurrent()->failWith(failure, GMockTestTerminator(result));
-	}
-};
-
-GTestShell::GTestShell(::testing::TestInfo* testinfo, GTestShell* next) : testinfo_(testinfo), next_(next)
-{
-	setGroupName(testinfo->test_case_name());
-	setTestName(testinfo->name());
-}
-
-GTestShell* GTestShell::nextGTest()
-{
-	return next_;
-}
-
-class GTestUTest: public Utest {
-public:
-	GTestUTest(::testing::TestInfo* testinfo) : testinfo_(testinfo), test_(NULL)
-	{
-
-	}
-
-	void testBody()
-	{
-		try {
-			test_->TestBody();
-		}
-		catch (CppUTestFailedException& ex)
-		{
-		}
-	}
-
-	void setup()
-	{
-		resetValuesOfGTestFlags();
-
-		#ifdef GTEST_VERSION_GTEST_1_5
-		test_ = testinfo_->impl()->factory_->CreateTest();
-	#else
-		test_ = testinfo_->factory_->CreateTest();
-	#endif
-
-		::testing::UnitTest::GetInstance()->impl()->set_current_test_info(testinfo_);
-		try {
-			test_->SetUp();
-		}
-		catch (CppUTestFailedException& ex)
-		{
-		}
-	}
-
-	void teardown()
-	{
-		try {
-			test_->TearDown();
-		}
-		catch (CppUTestFailedException& ex)
-		{
-		}
-		::testing::UnitTest::GetInstance()->impl()->set_current_test_info(NULL);
-		delete test_;
-
-		setGTestFLagValuesToNULLToAvoidMemoryLeaks();
-		::testing::internal::DeathTest::set_last_death_test_message(GTEST_NO_STRING_VALUE);
-	}
-
-private:
-	::testing::Test* test_;
-	::testing::TestInfo* testinfo_;
-};
-
 Utest* GTestShell::createTest()
 {
-	return new GTestUTest(testinfo_);
+	return new GTestUTest(testinfo_, flags_);
 };
 
 void GTestConvertor::simulateGTestFailureToPreAllocateAllTheThreadLocalData()
@@ -236,7 +62,7 @@ GTestConvertor::~GTestConvertor()
 
 void GTestConvertor::addNewTestCaseForTestInfo(::testing::TestInfo* testinfo)
 {
-	first_ = new GTestShell(testinfo, first_);
+	first_ = new GTestShell(testinfo, first_, &flags_);
 	TestRegistry::getCurrentRegistry()->addTest(first_);
 }
 
@@ -262,7 +88,7 @@ void GTestConvertor::createDummyInSequenceToAndFailureReporterAvoidMemoryLeakInG
 void GTestConvertor::addAllGTestToTestRegistry()
 {
 	createDummyInSequenceToAndFailureReporterAvoidMemoryLeakInGMock();
-	storeValuesOfGTestFLags();
+	flags_.storeValuesOfGTestFLags();
 
 #ifdef CPPUTEST_USE_REAL_GMOCK
 	int argc = 2;

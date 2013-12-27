@@ -25,7 +25,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "CppUTestExt/GTest.h"
+#include "CppUTestExt/GTestConvertor.h"
 
 #ifdef CPPUTEST_USE_REAL_GTEST
 
@@ -62,7 +62,6 @@ TEST_F(GTestTestingFixtureTest, teardownMustBeCalledOrElseThisWillLeak)
 
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TestRegistry.h"
-#include "CppUTestExt/GTestConvertor.h"
 #include "CppUTest/TestTestingFixture.h"
 
 TEST_GROUP(GTestConvertor)
