@@ -3,7 +3,6 @@ set(CppUTestExt_src
         MemoryReporterPlugin.cpp
         MockFailure.cpp
         MockSupportPlugin.cpp
-        GTestConvertor.cpp
         MockActualFunctionCall.cpp
         MockFunctionCall.cpp
         MockSupport_c.cpp
@@ -24,6 +23,7 @@ set(CppUTestExt_headers
         ${CppUTestRootDirectory}/include/CppUTestExt/MockFailure.h
         ${CppUTestRootDirectory}/include/CppUTestExt/MockSupport_c.h
         ${CppUTestRootDirectory}/include/CppUTestExt/GMock.h
+        ${CppUTestRootDirectory}/include/CppUTestExt/GTest.h
         ${CppUTestRootDirectory}/include/CppUTestExt/MemoryReporterPlugin.h
         ${CppUTestRootDirectory}/include/CppUTestExt/MockFunctionCall.h
         ${CppUTestRootDirectory}/include/CppUTestExt/OrderedTest.h
