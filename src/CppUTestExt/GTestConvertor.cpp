@@ -139,6 +139,35 @@ public:
 	virtual void ReportTestPartResult(const ::testing::TestPartResult& /*result*/) {}
 };
 
+class GMockTestTerminator : public TestTerminator
+{
+public:
+	GMockTestTerminator(const ::testing::TestPartResult& result) : result_(result)
+	{
+	}
+
+	virtual void exitCurrentTest() const
+	{
+		/*
+		 * When using GMock, it throws an exception fromt he destructor leaving
+		 * the system in an unstable state.
+		 * Therefore, when the test fails because of failed gmock expectation
+		 * then don't throw the exception, but let it return. Usually this should
+		 * already be at the end of the test, so it doesn't matter much
+		 */
+		if (!SimpleString(result_.message()).contains("Actual: never called") &&
+			!SimpleString(result_.message()).contains("Actual function call count doesn't match"))
+			throw CppUTestFailedException();
+
+	}
+	virtual ~GMockTestTerminator()
+	{
+	}
+private:
+	const ::testing::TestPartResult& result_;
+};
+
+
 class GTestResultReporter : public ::testing::ScopedFakeTestPartResultReporter
 {
 public:
@@ -147,18 +176,7 @@ public:
 	virtual void ReportTestPartResult(const ::testing::TestPartResult& result)
 	{
 		FailFailure failure(UtestShell::getCurrent(), result.file_name(), result.line_number(), result.message());
-		UtestShell::getCurrent()->getTestResult()->addFailure(failure);
-
-		/*
-		 * When using GMock, it throws an exception fromt he destructor leaving
-		 * the system in an unstable state.
-		 * Therefore, when the test fails because of failed gmock expectation
-		 * then don't throw the exception, but let it return. Usually this should
-		 * already be at the end of the test, so it doesn't matter much
-		 */
-		if (!SimpleString(result.message()).contains("Actual: never called") &&
-			!SimpleString(result.message()).contains("Actual function call count doesn't match"))
-			throw CppUTestFailedException();
+		UtestShell::getCurrent()->failWith(failure, GMockTestTerminator(result));
 	}
 };
 
