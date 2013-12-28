@@ -646,9 +646,9 @@ CPPUTEST_ADDITIONAL_CFLAGS
 CPPUTEST_CFLAGS
 INCLUDE_CPPUTEST_EXT
 CPP_PLATFORM
+INCLUDE_GMOCKTESTS_FALSE
+INCLUDE_GMOCKTESTS_TRUE
 GMOCK_HOME
-INCLUDE_GMOCKTESTS_EXT_FALSE
-INCLUDE_GMOCKTESTS_EXT_TRUE
 INCLUDE_CPPUTEST_EXT_FALSE
 INCLUDE_CPPUTEST_EXT_TRUE
 TEST_COMPILER_IS_CLANG_FALSE
@@ -778,7 +778,6 @@ enable_memory_leak_detection
 enable_extensions
 enable_generate_map_file
 enable_coverage
-enable_gmock
 enable_shared
 enable_static
 with_pic
@@ -1440,7 +1439,6 @@ Optional Features:
   --enable-generate-map-file
                           enable the creation of a map file
   --enable-coverage       enable running with coverage
-  --enable-gmock          enable using GMock. Requires GMOCK_HOME to be set
   --enable-shared[=PKGS]  build shared libraries [default=yes]
   --enable-static[=PKGS]  build static libraries [default=yes]
   --enable-fast-install[=PKGS]
@@ -1467,7 +1465,7 @@ Some influential environment variables:
   CPP         C preprocessor
   CXX         C++ compiler command
   CXXFLAGS    C++ compiler flags
-  GMOCK_HOME  Location of the GMock
+  GMOCK_HOME  Directory where gmock is installed so the gmock tests can run
   CXXCPP      C++ preprocessor
 
 Use these variables to override the choices made by `configure' or to help
@@ -7053,15 +7051,6 @@ else
 fi
 
 
-# Check whether --enable-gmock was given.
-if test "${enable_gmock+set}" = set; then :
-  enableval=$enable_gmock; use_gmock=${enableval}
-else
-  use_gmock=no
-fi
-
-
-
 ############################## Setting options ###############################
 
  if test "x${cpputest_ext}" = xyes; then
@@ -7131,29 +7120,27 @@ if test "x${coverage}" = xyes; then
 fi
 fi
 
- if test "x${use_gmock}" = xyes; then
-  INCLUDE_GMOCKTESTS_EXT_TRUE=
-  INCLUDE_GMOCKTESTS_EXT_FALSE='#'
+# GMock, check whether we can compile the GMock tests.
+
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for the availability of gmock via the GMOCK_HOME variable" >&5
+$as_echo_n "checking for the availability of gmock via the GMOCK_HOME variable... " >&6; }
+
+ if test -n ${GMOCK_HOME}; then
+  INCLUDE_GMOCKTESTS_TRUE=
+  INCLUDE_GMOCKTESTS_FALSE='#'
 else
-  INCLUDE_GMOCKTESTS_EXT_TRUE='#'
-  INCLUDE_GMOCKTESTS_EXT_FALSE=
+  INCLUDE_GMOCKTESTS_TRUE='#'
+  INCLUDE_GMOCKTESTS_FALSE=
 fi
 
+if test -n ${GMOCK_HOME}; then
 
-if test "x${use_gmock}" = xyes; then
-
-
-	if test -z ${GMOCK_HOME}; then
-		as_fn_error $? "
--------------------------------------
-Compiling with --enable-gmock will require the GMOCK_HOME
-to be set.
--------------------------------------" "$LINENO" 5
-	fi
 
 	GTEST_HOME=${GMOCK_HOME}/gtest
 
 	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I${GMOCK_HOME}/include -I${GTEST_HOME}/include -I${GTEST_HOME}"
+	CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} -DGTEST_USE_OWN_TR1_TUPLE=1"
 	if test -e ${GMOCK_HOME}/lib/libgmock.la && test -e ${GTEST_HOME}/lib/libgtest.la; then \
 		CPPUTEST_LDADD="${CPPUTEST_LDADD} ${GMOCK_HOME}/lib/libgmock.la ${GTEST_HOME}/lib/libgtest.la"; \
 	elif test -e ${GMOCK_HOME}/libgmock.a && test -e ${GTEST_HOME}/libgtest.a; then \
@@ -17650,8 +17637,8 @@ if test -z "${INCLUDE_CPPUTEST_EXT_TRUE}" && test -z "${INCLUDE_CPPUTEST_EXT_FAL
   as_fn_error $? "conditional \"INCLUDE_CPPUTEST_EXT\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
-if test -z "${INCLUDE_GMOCKTESTS_EXT_TRUE}" && test -z "${INCLUDE_GMOCKTESTS_EXT_FALSE}"; then
-  as_fn_error $? "conditional \"INCLUDE_GMOCKTESTS_EXT\" was never defined.
+if test -z "${INCLUDE_GMOCKTESTS_TRUE}" && test -z "${INCLUDE_GMOCKTESTS_FALSE}"; then
+  as_fn_error $? "conditional \"INCLUDE_GMOCKTESTS\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 
@@ -20198,8 +20185,5 @@ Features configured in ${PACKAGE_NAME}:
 
    Generating map file:                 ${generate_map_file}
    Compiling w coverage info:           ${coverage}
-
-   Able to use GMock:                   ${use_gmock}
-
 
 ----------------------------------------------------------------"
