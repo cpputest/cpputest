@@ -53,29 +53,16 @@ if (GMOCK)
     # GMock pulls in gtest.
     set(REAL_GTEST OFF)
     set(CPPUTEST_USE_REAL_GMOCK 1)
-    set(CPPUTEST_USE_REAL_GTEST 1)
 
     include_directories(${GMOCK_HOME}/include ${GMOCK_HOME}/gtest ${GMOCK_HOME}/gtest/include)
     add_subdirectory(${GMOCK_HOME} "${CMAKE_CURRENT_BINARY_DIR}/gmock")
     set(CPPUNIT_EXTERNAL_LIBRARIES ${CPPUNIT_EXTERNAL_LIBARIES} gmock gtest)
-else (GMOCK)
-    include_directories(${CppUTestRootDirectory}/include/CppUTestExt/CppUTestGMock)
-endif (GMOCK)
-
-if (REAL_GTEST AND NOT CPPUTEST_USE_REAL_GTEST)
     set(GTEST_HOME $ENV{GTEST_HOME})
-    if (NOT GTEST_HOME)
-        message(FATAL_ERROR "Trying to compile with gtest support, but environment variable $GTEST_HOME is not set")
-    endif (NOT GTEST_HOME)
-
-    set(CPPUTEST_USE_REAL_GTEST 1)
 
     include_directories(${GTEST_HOME} ${GTEST_HOME}/include)
     add_subdirectory(${GTEST_HOME} "${CMAKE_CURRENT_BINARY_DIR}/gtest")
     set(CPPUNIT_EXTERNAL_LIBRARIES ${CPPUNIT_EXTERNAL_LIBARIES} gtest)
-elseif (NOT CPPUTEST_USE_REAL_GTEST)
-    include_directories(${CppUTestRootDirectory}/include/CppUTestExt/CppUTestGTest)
-endif (REAL_GTEST AND NOT CPPUTEST_USE_REAL_GTEST)
+endif (GMOCK)
 
 set(CPPUTEST_C_FLAGS "${CPPUTEST_C_FLAGS} ${CPPUTEST_C_WARNING_FLAGS}")
 set(CPPUTEST_CXX_FLAGS "${CPPUTEST_CXX_FLAGS} ${CPPUTEST_CXX_WARNING_FLAGS}")

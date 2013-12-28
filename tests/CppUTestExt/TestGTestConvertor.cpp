@@ -27,7 +27,7 @@
 
 #include "CppUTestExt/GTestConvertor.h"
 
-#ifdef CPPUTEST_USE_REAL_GTEST
+#ifdef CPPUTEST_USE_REAL_GMOCK
 
 class GTestTestingFixtureTest : public testing::Test {
 protected:
@@ -68,7 +68,7 @@ TEST_GROUP(GTestConvertor)
 {
 };
 
-#ifdef CPPUTEST_USE_REAL_GTEST
+#ifdef CPPUTEST_USE_REAL_GMOCK
 
 /*
  * These tests depend on the amount of GTests that are actually added (also in other files).

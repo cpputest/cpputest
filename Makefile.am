@@ -308,6 +308,11 @@ check_coverage:
 	rm -rf test_coverage
 
 check_examples:
+	@echo "Using the old Makefile and examples"
+	make distclean
+	$(MAKE) -C $(srcdir) -f Makefile_using_MakefileWorker extensions 
+	$(MAKE) -C $(srcdir)/examples all clean
+	
 	@echo "Compiling and running the examples. This will use the old Makefile"
 	make distclean; $(srcdir)/configure; make; $(MAKE) -C $(srcdir)/examples all clean CPPUTEST_LIB_LINK_DIR="`pwd`/lib"
 

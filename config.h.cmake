@@ -9,6 +9,5 @@
 #cmakedefine CPPUTEST_STD_CPP_LIB_DISABLED
 
 #cmakedefine CPPUTEST_USE_REAL_GMOCK
-#cmakedefine CPPUTEST_USE_REAL_GTEST
 
 #endif

@@ -33,7 +33,7 @@
 
 int main(int ac, const char** av)
 {
-#ifdef CPPUTEST_USE_REAL_GTEST
+#ifdef CPPUTEST_USE_REAL_GMOCK
 	GTestConvertor convertor;
 	convertor.addAllGTestToTestRegistry();
 #endif

@@ -30,7 +30,7 @@
 
 #include "CppUTest/Utest.h"
 
-#ifdef CPPUTEST_USE_REAL_GTEST
+#ifdef CPPUTEST_USE_REAL_GMOCK
 
 #ifdef GTEST__H_
 #error "Please include this file before you include any other GTest files"

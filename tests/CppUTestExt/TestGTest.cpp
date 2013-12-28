@@ -25,7 +25,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifdef CPPUTEST_USE_REAL_GTEST
+#ifdef CPPUTEST_USE_REAL_GMOCK
 #undef new
 
 #include "gtest/gtest.h"

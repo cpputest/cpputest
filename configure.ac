@@ -351,6 +351,7 @@ fi
 AM_CONDITIONAL([INCLUDE_GMOCKTESTS_EXT], [test "x${use_gmock}" = xyes])
 
 if test "x${use_gmock}" = xyes; then
+
 	AC_ARG_VAR([GMOCK_HOME], [Location of the GMock])
 	if test -z ${GMOCK_HOME}; then 
 		AC_MSG_ERROR([
@@ -374,14 +375,6 @@ Did you compile it?
 	fi	
 	AC_DEFINE([CPPUTEST_USE_REAL_GMOCK], [1], [Use GMock])
 
-	AC_ARG_VAR([GTEST_HOME], [Location of the GTest source])
-	if test -z ${GTEST_HOME}; then 
-		AC_MSG_ERROR([
--------------------------------------
-Compiling with --enable-real-gtest requires you to 
-set the GTEST_HOME to the GTest source directory
--------------------------------------])
-	fi
 	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I${GTEST_HOME}/include -I${GTEST_HOME} -Isomething"
 
 	if test -e ${GTEST_HOME}/lib/libgtest.la; then \
@@ -395,7 +388,6 @@ GTEST_HOME was set, but couldn't find the compiled library.
 Did you compile it?
 -------------------------------------]);
 	fi	
-	AC_DEFINE([CPPUTEST_USE_REAL_GTEST], [1], [Using the real gtest])
 	
 	# Turn warnings off. Gtest doesn't like it!
 	CPPUTEST_CWARNINGFLAGS=""
