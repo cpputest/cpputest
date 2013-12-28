@@ -288,10 +288,6 @@ AC_ARG_ENABLE([generate-map-file], [AC_HELP_STRING([--enable-generate-map-file],
 AC_ARG_ENABLE([coverage], [AC_HELP_STRING([--enable-coverage], [enable running with coverage])], 
    [coverage=${enableval}], [coverage=no])
 
-AC_ARG_ENABLE([gmock], [AC_HELP_STRING([--enable-gmock], [enable using GMock. Requires GMOCK_HOME to be set])], 
-   [use_gmock=${enableval}], [use_gmock=no])
-
-
 ############################## Setting options ###############################
 
 AM_CONDITIONAL([INCLUDE_CPPUTEST_EXT], [test "x${cpputest_ext}" = xyes]) 
@@ -348,22 +344,19 @@ if test "x${coverage}" = xyes; then
 fi
 fi
 
-AM_CONDITIONAL([INCLUDE_GMOCKTESTS_EXT], [test "x${use_gmock}" = xyes])
+# GMock, check whether we can compile the GMock tests.
 
-if test "x${use_gmock}" = xyes; then
+AC_ARG_VAR([GMOCK_HOME], Directory where gmock is installed so the gmock tests can run)
+AC_MSG_CHECKING([for the availability of gmock via the GMOCK_HOME variable])
+
+AM_CONDITIONAL([INCLUDE_GMOCKTESTS], [test -n ${GMOCK_HOME}])
+if test -n ${GMOCK_HOME}; then
 
 	AC_ARG_VAR([GMOCK_HOME], [Location of the GMock])
-	if test -z ${GMOCK_HOME}; then 
-		AC_MSG_ERROR([
--------------------------------------
-Compiling with --enable-gmock will require the GMOCK_HOME
-to be set.
--------------------------------------])
-	fi
-	
 	GTEST_HOME=${GMOCK_HOME}/gtest
 	
 	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I${GMOCK_HOME}/include -I${GTEST_HOME}/include -I${GTEST_HOME}"
+	CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} -DGTEST_USE_OWN_TR1_TUPLE=1"
 	if test -e ${GMOCK_HOME}/lib/libgmock.la && test -e ${GTEST_HOME}/lib/libgtest.la; then \
 		CPPUTEST_LDADD="${CPPUTEST_LDADD} ${GMOCK_HOME}/lib/libgmock.la ${GTEST_HOME}/lib/libgtest.la"; \
 	elif test -e ${GMOCK_HOME}/libgmock.a && test -e ${GTEST_HOME}/libgtest.a; then \
@@ -464,7 +457,4 @@ Features configured in ${PACKAGE_NAME}:
    Generating map file:                 ${generate_map_file}
    Compiling w coverage info:           ${coverage}
 
-   Able to use GMock:                   ${use_gmock}
-
-      
 ----------------------------------------------------------------"

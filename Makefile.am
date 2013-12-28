@@ -15,7 +15,7 @@ lib_LIBRARIES+= lib/libCppUTestExt.a
 check_PROGRAMS += $(CPPUTESTEXT_TESTS)
 endif
 
-if INCLUDE_GMOCKTESTS_EXT
+if INCLUDE_GMOCKTESTS
 # check_PROGRAMS += GTestTests
 endif
 
