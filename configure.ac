@@ -73,7 +73,7 @@ if test "x$USE_MAINTAINER_MODE" = "xyes"; then
 # FLag -Werror. 
 CFLAGS=-Werror
 AC_MSG_CHECKING([whether CC and CXX supports -Werror])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Werror"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Werror" ], [AC_MSG_RESULT([no])])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS_STRICT="${CPPUTEST_CWARNINGFLAGS} -Werror"; CPPUTEST_CXXWARNINGFLAGS_STRICT="${CPPUTEST_CXXWARNINGFLAGS} -Werror" ], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 fi
 
@@ -119,10 +119,10 @@ AC_MSG_CHECKING([whether CC and CXX supports -Wconversion])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wconversion"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wconversion" ], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 
-# FLag -pedantic-errors 
-CFLAGS="-Werror -pedantic-errors"
-AC_MSG_CHECKING([whether CC and CXX supports -pedantic-errors])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -pedantic-errors"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -pedantic-errors" ], [AC_MSG_RESULT([no])])
+# FLag -pedantic
+CFLAGS="-Werror -pedantic"
+AC_MSG_CHECKING([whether CC and CXX supports -pedantic])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -pedantic"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -pedantic" ], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 
 # FLag -Wsign-conversion 
@@ -375,7 +375,7 @@ Did you compile it?
 	fi	
 	AC_DEFINE([CPPUTEST_USE_REAL_GMOCK], [1], [Use GMock])
 
-	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I${GTEST_HOME}/include -I${GTEST_HOME} -Isomething"
+	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I${GTEST_HOME}/include -I${GTEST_HOME}"
 
 	if test -e ${GTEST_HOME}/lib/libgtest.la; then \
 		CPPUTEST_LDADD="${CPPUTEST_LDADD} ${GTEST_HOME}/lib/libgtest.la"; \
@@ -389,9 +389,11 @@ Did you compile it?
 -------------------------------------]);
 	fi	
 	
-	# Turn warnings off. Gtest doesn't like it!
-	CPPUTEST_CWARNINGFLAGS=""
-	CPPUTEST_CXXWARNINGFLAGS=""
+else
+	# When we don't compile with GMock, we can be a bit stricter on warnings.
+	CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} ${CPPUTEST_CWARNINGFLAGS_STRICT}"
+	CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} ${CPPUTEST_CXXWARNINGFLAGS_STRICT}"
+
 fi
 
 
