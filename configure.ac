@@ -360,12 +360,14 @@ Compiling with --enable-gmock will require the GMOCK_HOME
 to be set.
 -------------------------------------])
 	fi
+	
 	GTEST_HOME=${GMOCK_HOME}/gtest
-	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I${GMOCK_HOME}/include"
-	if test -e ${GMOCK_HOME}/lib/libgmock.la; then \
-		CPPUTEST_LDADD="${CPPUTEST_LDADD} ${GMOCK_HOME}/lib/libgmock.la"; \
-	elif test -e ${GMOCK_HOME}/libgmock.a; then \
-		CPPUTEST_LDADD="${CPPUTEST_LDADD} ${GMOCK_HOME}/libgmock.a"; \
+	
+	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I${GMOCK_HOME}/include -I${GTEST_HOME}/include -I${GTEST_HOME}"
+	if test -e ${GMOCK_HOME}/lib/libgmock.la && test -e ${GTEST_HOME}/lib/libgtest.la; then \
+		CPPUTEST_LDADD="${CPPUTEST_LDADD} ${GMOCK_HOME}/lib/libgmock.la ${GTEST_HOME}/lib/libgtest.la"; \
+	elif test -e ${GMOCK_HOME}/libgmock.a && test -e ${GTEST_HOME}/libgtest.a; then \
+		CPPUTEST_LDADD="${CPPUTEST_LDADD} ${GMOCK_HOME}/libgmock.a ${GTEST_HOME}/libgtest.a"; \
 	else \
 		AC_MSG_ERROR([
 -------------------------------------
@@ -375,19 +377,11 @@ Did you compile it?
 	fi	
 	AC_DEFINE([CPPUTEST_USE_REAL_GMOCK], [1], [Use GMock])
 
-	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I${GTEST_HOME}/include -I${GTEST_HOME}"
-
-	if test -e ${GTEST_HOME}/lib/libgtest.la; then \
-		CPPUTEST_LDADD="${CPPUTEST_LDADD} ${GTEST_HOME}/lib/libgtest.la"; \
-	elif test -e ${GTEST_HOME}/libgtest.a; then \
-		CPPUTEST_LDADD="${CPPUTEST_LDADD} ${GTEST_HOME}/libgtest.a"; \
-	else \
-		AC_MSG_ERROR([
--------------------------------------
-GTEST_HOME was set, but couldn't find the compiled library.
-Did you compile it?
--------------------------------------]);
-	fi	
+	# In Travis, do not show warnings. The GTest warnings cause a log overflow that errors the build. Nice :)
+	if test -n "${TRAVIS_BRANCH}"; then
+		CPPUTEST_CWARNINGFLAGS=""
+		CPPUTEST_CXXWARNINGFLAGS=""
+	fi
 	
 else
 	# When we don't compile with GMock, we can be a bit stricter on warnings.
