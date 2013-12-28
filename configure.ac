@@ -288,9 +288,6 @@ AC_ARG_ENABLE([generate-map-file], [AC_HELP_STRING([--enable-generate-map-file],
 AC_ARG_ENABLE([coverage], [AC_HELP_STRING([--enable-coverage], [enable running with coverage])], 
    [coverage=${enableval}], [coverage=no])
 
-AC_ARG_ENABLE([real-gtest], [AC_HELP_STRING([--enable-real-gtest], [enable using real GTest rather than faking it. Requires GTEST_HOME to be set])], 
-   [real_gtest=${enableval}], [real_gtest=no])
-
 AC_ARG_ENABLE([gmock], [AC_HELP_STRING([--enable-gmock], [enable using GMock. Requires GMOCK_HOME to be set])], 
    [use_gmock=${enableval}], [use_gmock=no])
 
@@ -362,7 +359,6 @@ Compiling with --enable-gmock will require the GMOCK_HOME
 to be set.
 -------------------------------------])
 	fi
-	real_gtest=yes
 	GTEST_HOME=${GMOCK_HOME}/gtest
 	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I${GMOCK_HOME}/include"
 	if test -e ${GMOCK_HOME}/lib/libgmock.la; then \
@@ -377,11 +373,7 @@ Did you compile it?
 -------------------------------------]);
 	fi	
 	AC_DEFINE([CPPUTEST_USE_REAL_GMOCK], [1], [Use GMock])
-else
-	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I${srcdir}/include/CppUTestExt/CppUTestGMock"
-fi
 
-if test "x${real_gtest}" = xyes; then
 	AC_ARG_VAR([GTEST_HOME], [Location of the GTest source])
 	if test -z ${GTEST_HOME}; then 
 		AC_MSG_ERROR([
@@ -408,9 +400,8 @@ Did you compile it?
 	# Turn warnings off. Gtest doesn't like it!
 	CPPUTEST_CWARNINGFLAGS=""
 	CPPUTEST_CXXWARNINGFLAGS=""
-else
-	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I${srcdir}/include/CppUTestExt/CppUTestGTest"
 fi
+
 
 CPPUTEST_CFLAGS="${CPPUTEST_CFLAGS} ${CPPUTEST_CWARNINGFLAGS}"
 CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} ${CPPUTEST_CXXWARNINGFLAGS}"
@@ -485,7 +476,6 @@ Features configured in ${PACKAGE_NAME}:
    Generating map file:                 ${generate_map_file}
    Compiling w coverage info:           ${coverage}
 
-   Use 'real' GTest:                    ${real_gtest}
    Able to use GMock:                   ${use_gmock}
 
       
