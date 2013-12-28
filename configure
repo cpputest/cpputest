@@ -646,7 +646,6 @@ CPPUTEST_ADDITIONAL_CFLAGS
 CPPUTEST_CFLAGS
 INCLUDE_CPPUTEST_EXT
 CPP_PLATFORM
-GTEST_HOME
 GMOCK_HOME
 INCLUDE_GMOCKTESTS_EXT_FALSE
 INCLUDE_GMOCKTESTS_EXT_TRUE
@@ -779,7 +778,6 @@ enable_memory_leak_detection
 enable_extensions
 enable_generate_map_file
 enable_coverage
-enable_real_gtest
 enable_gmock
 enable_shared
 enable_static
@@ -802,7 +800,6 @@ CXX
 CXXFLAGS
 CCC
 GMOCK_HOME
-GTEST_HOME
 CXXCPP'
 
 
@@ -1443,8 +1440,6 @@ Optional Features:
   --enable-generate-map-file
                           enable the creation of a map file
   --enable-coverage       enable running with coverage
-  --enable-real-gtest     enable using real GTest rather than faking it.
-                          Requires GTEST_HOME to be set
   --enable-gmock          enable using GMock. Requires GMOCK_HOME to be set
   --enable-shared[=PKGS]  build shared libraries [default=yes]
   --enable-static[=PKGS]  build static libraries [default=yes]
@@ -1473,7 +1468,6 @@ Some influential environment variables:
   CXX         C++ compiler command
   CXXFLAGS    C++ compiler flags
   GMOCK_HOME  Location of the GMock
-  GTEST_HOME  Location of the GTest source
   CXXCPP      C++ preprocessor
 
 Use these variables to override the choices made by `configure' or to help
@@ -7059,14 +7053,6 @@ else
 fi
 
 
-# Check whether --enable-real-gtest was given.
-if test "${enable_real_gtest+set}" = set; then :
-  enableval=$enable_real_gtest; real_gtest=${enableval}
-else
-  real_gtest=no
-fi
-
-
 # Check whether --enable-gmock was given.
 if test "${enable_gmock+set}" = set; then :
   enableval=$enable_gmock; use_gmock=${enableval}
@@ -7156,6 +7142,7 @@ fi
 
 if test "x${use_gmock}" = xyes; then
 
+
 	if test -z ${GMOCK_HOME}; then
 		as_fn_error $? "
 -------------------------------------
@@ -7163,7 +7150,6 @@ Compiling with --enable-gmock will require the GMOCK_HOME
 to be set.
 -------------------------------------" "$LINENO" 5
 	fi
-	real_gtest=yes
 	GTEST_HOME=${GMOCK_HOME}/gtest
 	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I${GMOCK_HOME}/include"
 	if test -e ${GMOCK_HOME}/lib/libgmock.la; then \
@@ -7180,19 +7166,7 @@ Did you compile it?
 
 $as_echo "#define CPPUTEST_USE_REAL_GMOCK 1" >>confdefs.h
 
-else
-	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I${srcdir}/include/CppUTestExt/CppUTestGMock"
-fi
 
-if test "x${real_gtest}" = xyes; then
-
-	if test -z ${GTEST_HOME}; then
-		as_fn_error $? "
--------------------------------------
-Compiling with --enable-real-gtest requires you to
-set the GTEST_HOME to the GTest source directory
--------------------------------------" "$LINENO" 5
-	fi
 	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I${GTEST_HOME}/include -I${GTEST_HOME} -Isomething"
 
 	if test -e ${GTEST_HOME}/lib/libgtest.la; then \
@@ -7207,15 +7181,11 @@ Did you compile it?
 -------------------------------------" "$LINENO" 5;
 	fi
 
-$as_echo "#define CPPUTEST_USE_REAL_GTEST 1" >>confdefs.h
-
-
 	# Turn warnings off. Gtest doesn't like it!
 	CPPUTEST_CWARNINGFLAGS=""
 	CPPUTEST_CXXWARNINGFLAGS=""
-else
-	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I${srcdir}/include/CppUTestExt/CppUTestGTest"
 fi
+
 
 CPPUTEST_CFLAGS="${CPPUTEST_CFLAGS} ${CPPUTEST_CWARNINGFLAGS}"
 CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} ${CPPUTEST_CXXWARNINGFLAGS}"
@@ -20233,7 +20203,6 @@ Features configured in ${PACKAGE_NAME}:
    Generating map file:                 ${generate_map_file}
    Compiling w coverage info:           ${coverage}
 
-   Use 'real' GTest:                    ${real_gtest}
    Able to use GMock:                   ${use_gmock}
 
 

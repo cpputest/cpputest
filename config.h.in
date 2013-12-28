@@ -15,9 +15,6 @@
 /* Use GMock */
 #undef CPPUTEST_USE_REAL_GMOCK
 
-/* Using the real gtest */
-#undef CPPUTEST_USE_REAL_GTEST
-
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #undef HAVE_DLFCN_H
 

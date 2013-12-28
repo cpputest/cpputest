@@ -323,7 +323,6 @@ EXEEXT = @EXEEXT@
 FGREP = @FGREP@
 GMOCK_HOME = @GMOCK_HOME@
 GREP = @GREP@
-GTEST_HOME = @GTEST_HOME@
 INCLUDE_CPPUTEST_EXT = @INCLUDE_CPPUTEST_EXT@
 INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
@@ -2679,6 +2678,11 @@ check_coverage:
 	rm -rf test_coverage
 
 check_examples:
+	@echo "Using the old Makefile and examples"
+	make distclean
+	$(MAKE) -C $(srcdir) -f Makefile_using_MakefileWorker extensions 
+	$(MAKE) -C $(srcdir)/examples all clean
+
 	@echo "Compiling and running the examples. This will use the old Makefile"
 	make distclean; $(srcdir)/configure; make; $(MAKE) -C $(srcdir)/examples all clean CPPUTEST_LIB_LINK_DIR="`pwd`/lib"
 
