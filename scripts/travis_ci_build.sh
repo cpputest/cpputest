@@ -23,19 +23,22 @@ if [ "x$BUILDTOOL" = "xautotools" ]; then
 fi
 
 if [ "x$BUILDTOOL" = "xcmake" ]; then 
+	wget https://googlemock.googlecode.com/files/gmock-1.6.0.zip
+	unzip gmock-1.6.0.zip
+	cd gmock-1.6.0
+	./configure && make
+	cd ..
+	
+	export GMOCK_HOME=$TRAVIS_BUILD_DIR/gmock-1.6.0
+	export GTEST_HOME=$TRAVIS_BUILD_DIR/gmock-1.6.0/gtest
+	
+
 	cmake .. -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE || exit 1
 	make || exit 1
 	ctest -V || exit 1
-fi
-
-if [ "x$BUILDTOOL" = "xcmake" ]; then 
+	
 	cmake .. -DGMOCK=ON || exit 1
 	make || exit 1
 	ctest -V || exit 1
 fi
 
-if [ "x$BUILDTOOL" = "xcmake" ]; then 
-	cmake .. -DGMOCK=ON -DREAL_GTEST=ON || exit 1
-	make || exit 1
-	ctest -V || exit 1
-fi
