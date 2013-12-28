@@ -35,7 +35,7 @@ if [ "x$BUILDTOOL" = "xcmake" ]; then
 fi
 
 if [ "x$BUILDTOOL" = "xcmake" ]; then 
-	cmake .. -DGMOCK=OFF -DREAL_GTEST=ON || exit 1
+	cmake .. -DGMOCK=ON -DREAL_GTEST=ON || exit 1
 	make || exit 1
 	ctest -V || exit 1
 fi
