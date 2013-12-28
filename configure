@@ -6242,7 +6242,7 @@ main ()
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }; CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Werror"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Werror"
+$as_echo "yes" >&6; }; CPPUTEST_CWARNINGFLAGS_STRICT="${CPPUTEST_CWARNINGFLAGS} -Werror"; CPPUTEST_CXXWARNINGFLAGS_STRICT="${CPPUTEST_CXXWARNINGFLAGS} -Werror"
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
@@ -6426,10 +6426,10 @@ fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 CFLAGS="$saved_cflags"
 
-# FLag -pedantic-errors
-CFLAGS="-Werror -pedantic-errors"
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether CC and CXX supports -pedantic-errors" >&5
-$as_echo_n "checking whether CC and CXX supports -pedantic-errors... " >&6; }
+# FLag -pedantic
+CFLAGS="-Werror -pedantic"
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether CC and CXX supports -pedantic" >&5
+$as_echo_n "checking whether CC and CXX supports -pedantic... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -6443,7 +6443,7 @@ main ()
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }; CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -pedantic-errors"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -pedantic-errors"
+$as_echo "yes" >&6; }; CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -pedantic"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -pedantic"
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
@@ -7167,7 +7167,7 @@ Did you compile it?
 $as_echo "#define CPPUTEST_USE_REAL_GMOCK 1" >>confdefs.h
 
 
-	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I${GTEST_HOME}/include -I${GTEST_HOME} -Isomething"
+	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I${GTEST_HOME}/include -I${GTEST_HOME}"
 
 	if test -e ${GTEST_HOME}/lib/libgtest.la; then \
 		CPPUTEST_LDADD="${CPPUTEST_LDADD} ${GTEST_HOME}/lib/libgtest.la"; \
@@ -7181,9 +7181,11 @@ Did you compile it?
 -------------------------------------" "$LINENO" 5;
 	fi
 
-	# Turn warnings off. Gtest doesn't like it!
-	CPPUTEST_CWARNINGFLAGS=""
-	CPPUTEST_CXXWARNINGFLAGS=""
+else
+	# When we don't compile with GMock, we can be a bit stricter on warnings.
+	CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} ${CPPUTEST_CWARNINGFLAGS_STRICT}"
+	CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} ${CPPUTEST_CXXWARNINGFLAGS_STRICT}"
+
 fi
 
 
