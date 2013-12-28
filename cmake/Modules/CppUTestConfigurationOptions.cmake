@@ -51,17 +51,12 @@ if (GMOCK)
     endif (NOT GMOCK_HOME)
 
     # GMock pulls in gtest.
-    set(REAL_GTEST OFF)
     set(CPPUTEST_USE_REAL_GMOCK 1)
 
     include_directories(${GMOCK_HOME}/include ${GMOCK_HOME}/gtest ${GMOCK_HOME}/gtest/include)
     add_subdirectory(${GMOCK_HOME} "${CMAKE_CURRENT_BINARY_DIR}/gmock")
     set(CPPUNIT_EXTERNAL_LIBRARIES ${CPPUNIT_EXTERNAL_LIBARIES} gmock gtest)
-    set(GTEST_HOME $ENV{GTEST_HOME})
 
-    include_directories(${GTEST_HOME} ${GTEST_HOME}/include)
-    add_subdirectory(${GTEST_HOME} "${CMAKE_CURRENT_BINARY_DIR}/gtest")
-    set(CPPUNIT_EXTERNAL_LIBRARIES ${CPPUNIT_EXTERNAL_LIBARIES} gtest)
 endif (GMOCK)
 
 set(CPPUTEST_C_FLAGS "${CPPUTEST_C_FLAGS} ${CPPUTEST_C_WARNING_FLAGS}")
