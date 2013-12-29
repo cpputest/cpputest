@@ -352,6 +352,7 @@ AC_MSG_CHECKING([for the availability of gmock via the GMOCK_HOME variable])
 AM_CONDITIONAL([INCLUDE_GMOCKTESTS], [test -n "${GMOCK_HOME}"])
 if test -n "${GMOCK_HOME}"; then
 
+	AC_DEFINE([INCLUDE_GTEST_TESTS], 1, [Include the GTest-related tests in the build])
 	AC_ARG_VAR([GMOCK_HOME], [Location of the GMock])
 	GTEST_HOME=${GMOCK_HOME}/gtest
 	

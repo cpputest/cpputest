@@ -25,9 +25,9 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "CppUTestExt/GTestConvertor.h"
+#ifdef INCLUDE_GTEST_TESTS
 
-#ifdef CPPUTEST_USE_REAL_GMOCK
+#include "CppUTestExt/GTestConvertor.h"
 
 class GTestTestingFixtureTest : public testing::Test {
 protected:
@@ -68,7 +68,7 @@ TEST_GROUP(GTestConvertor)
 {
 };
 
-#ifdef CPPUTEST_USE_REAL_GMOCK
+#ifdef INCLUDE_GTEST_TESTS
 
 /*
  * These tests depend on the amount of GTests that are actually added (also in other files).
