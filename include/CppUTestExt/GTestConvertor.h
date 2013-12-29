@@ -30,8 +30,6 @@
 
 #include "CppUTest/Utest.h"
 
-#ifdef CPPUTEST_USE_REAL_GMOCK
-
 #ifdef GTEST__H_
 #error "Please include this file before you include any other GTest files"
 #endif
@@ -352,10 +350,8 @@ inline void GTestConvertor::addAllTestsFromTestCaseToTestRegistry(::testing::Tes
 
 inline void GTestConvertor::createDummyInSequenceToAndFailureReporterAvoidMemoryLeakInGMock()
 {
-#ifdef CPPUTEST_USE_REAL_GMOCK
 	::testing::InSequence seq;
 	::testing::internal::GetFailureReporter();
-#endif
 }
 
 inline void GTestConvertor::addAllGTestToTestRegistry()
@@ -363,11 +359,9 @@ inline void GTestConvertor::addAllGTestToTestRegistry()
 	createDummyInSequenceToAndFailureReporterAvoidMemoryLeakInGMock();
 	flags_.storeValuesOfGTestFLags();
 
-#ifdef CPPUTEST_USE_REAL_GMOCK
 	int argc = 2;
 	const char * argv[] = {"NameOfTheProgram", "--gmock_catch_leaked_mocks=0"};
 	::testing::InitGoogleMock(&argc, (char**) argv);
-#endif
 
 	::testing::UnitTest* unitTests = ::testing::UnitTest::GetInstance();
 
@@ -380,7 +374,5 @@ inline void GTestConvertor::addAllGTestToTestRegistry()
 	}
 }
 
-
-#endif
 
 #endif

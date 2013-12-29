@@ -165,7 +165,6 @@ CppUTestExtTests_LDADD = lib/libCppUTestExt.a lib/libCppUTest.a $(CPPUTEST_LDADD
 CppUTestExtTests_LDFLAGS = $(CppUTestTests_LDFLAGS)
 
 CppUTestExtTests_SOURCES = \
-	tests/CppUTestExt/AllTests.cpp \
 	tests/CppUTestExt/TestMockActualFunctionCall.cpp \
 	tests/CppUTestExt/TestMockSupport.cpp \
 	tests/CppUTestExt/TestCodeMemoryReportFormatter.cpp \
@@ -175,7 +174,6 @@ CppUTestExtTests_SOURCES = \
 	tests/CppUTestExt/TestMockExpectedFunctionCall.cpp \
 	tests/CppUTestExt/TestMockSupport_cCFile.c \
 	tests/CppUTestExt/TestGTest.cpp \
-	tests/CppUTestExt/TestGTestConvertor.cpp \
 	tests/CppUTestExt/TestMockExpectedFunctionsList.cpp \
 	tests/CppUTestExt/TestMemoryReportAllocator.cpp \
 	tests/CppUTestExt/TestMockFailure.cpp \
@@ -183,7 +181,16 @@ CppUTestExtTests_SOURCES = \
 	tests/CppUTestExt/TestMemoryReportFormatter.cpp \
 	tests/CppUTestExt/TestMemoryReporterPlugin.cpp \
 	tests/CppUTestExt/TestMockPlugin.cpp
-	
+
+if INCLUDE_GMOCKTESTS
+CppUTestExtTests_SOURCES += \
+	tests/CppUTestExt/TestGTestConvertor.cpp \
+	tests/CppUTestExt/AllTestsWithGTest.cpp
+else
+CppUTestExtTests_SOURCES += \
+	tests/CppUTestExt/AllTests.cpp 
+endif
+
 
 RUN_CPPUTEST_TESTS = ./$(CPPUTEST_TESTS) -r
 #RUN_CPPUTEST_EXT_TESTS = ./$(CPPUTEST_EXT_TESTS) -r
