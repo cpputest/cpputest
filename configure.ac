@@ -349,8 +349,8 @@ fi
 AC_ARG_VAR([GMOCK_HOME], Directory where gmock is installed so the gmock tests can run)
 AC_MSG_CHECKING([for the availability of gmock via the GMOCK_HOME variable])
 
-AM_CONDITIONAL([INCLUDE_GMOCKTESTS], [test -n ${GMOCK_HOME}])
-if test -n ${GMOCK_HOME}; then
+AM_CONDITIONAL([INCLUDE_GMOCKTESTS], [test -n "${GMOCK_HOME}"])
+if test -n "${GMOCK_HOME}"; then
 
 	AC_ARG_VAR([GMOCK_HOME], [Location of the GMock])
 	GTEST_HOME=${GMOCK_HOME}/gtest
