@@ -12,9 +12,6 @@
 /* Standard C library disabled */
 #undef CPPUTEST_STD_C_LIB_DISABLED
 
-/* Use GMock */
-#undef CPPUTEST_USE_REAL_GMOCK
-
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #undef HAVE_DLFCN_H
 
@@ -85,6 +82,9 @@
 
 /* Define to 1 if `vfork' works. */
 #undef HAVE_WORKING_VFORK
+
+/* Include the GTest-related tests in the build */
+#undef INCLUDE_GTEST_TESTS
 
 /* Define to the sub-directory in which libtool stores uninstalled libraries.
    */

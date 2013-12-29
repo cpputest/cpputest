@@ -7137,6 +7137,9 @@ fi
 if test -n "${GMOCK_HOME}"; then
 
 
+$as_echo "#define INCLUDE_GTEST_TESTS 1" >>confdefs.h
+
+
 	GTEST_HOME=${GMOCK_HOME}/gtest
 
 	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I${GMOCK_HOME}/include -I${GTEST_HOME}/include -I${GTEST_HOME}"
@@ -7152,9 +7155,6 @@ GMOCK_HOME was set, but couldn't find the compiled library.
 Did you compile it?
 -------------------------------------" "$LINENO" 5;
 	fi
-
-$as_echo "#define CPPUTEST_USE_REAL_GMOCK 1" >>confdefs.h
-
 
 	# In Travis, do not show warnings. The GTest warnings cause a log overflow that errors the build. Nice :)
 	if test -n "${TRAVIS_BRANCH}"; then
