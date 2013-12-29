@@ -44,20 +44,21 @@ if (COVERAGE AND NOT MSVC)
     set(CMAKE_BUILD_TYPE "Debug")
 endif (COVERAGE AND NOT MSVC)
 
-if (GMOCK)
-    set(GMOCK_HOME $ENV{GMOCK_HOME})
-    if (NOT GMOCK_HOME)
-        message(FATAL_ERROR "Trying to compile with GMock support, but environment variable $GMOCK_HOME is not set")
-    endif (NOT GMOCK_HOME)
-
+set(GMOCK_HOME $ENV{GMOCK_HOME})
+if (DEFINED ENV{GMOCK_HOME})
+    
     # GMock pulls in gtest.
     set(CPPUTEST_USE_REAL_GMOCK 1)
-
+    set(INCLUDE_GTEST_TESTS 1)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGTEST_USE_OWN_TR1_TUPLE=1")
     include_directories(${GMOCK_HOME}/include ${GMOCK_HOME}/gtest ${GMOCK_HOME}/gtest/include)
     add_subdirectory(${GMOCK_HOME} "${CMAKE_CURRENT_BINARY_DIR}/gmock")
     set(CPPUNIT_EXTERNAL_LIBRARIES ${CPPUNIT_EXTERNAL_LIBARIES} gmock gtest)
 
-endif (GMOCK)
+	set(CPPUTEST_C_WARNING_FLAGS "")
+	set(CPPUTEST_CXX_WARNING_FLAGS "")
+
+endif (GMOCK_HOME)
 
 set(CPPUTEST_C_FLAGS "${CPPUTEST_C_FLAGS} ${CPPUTEST_C_WARNING_FLAGS}")
 set(CPPUTEST_CXX_FLAGS "${CPPUTEST_CXX_FLAGS} ${CPPUTEST_CXX_WARNING_FLAGS}")

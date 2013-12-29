@@ -13,8 +13,6 @@ option(MEMORY_LEAK_DETECTION "Enable memory leak detection" ON)
 option(EXTENSIONS "Use the CppUTest extenstion library" ON)
 option(MAP_FILE "Enable the creation of a map file" OFF)
 option(COVERAGE "Enable running with coverage" OFF)
-option(REAL_GTEST "Enable using real GTest rather than faking it" OFF)
-option(GMOCK "Enable using GMock" OFF)
 
 option(TESTS "Compile and make tests for the code?" ON)
 
@@ -67,7 +65,5 @@ Features configure in CppUTest:
     Generating map file:                ${MAP_FILE}
     Compiling with coverage:            ${COVERAGE}
 
-    Use 'real' GTest:                   ${REAL_GTEST}
-    Able to use GMock:                  ${GMOCK}
 -------------------------------------------------------
 ")
