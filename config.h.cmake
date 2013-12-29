@@ -10,4 +10,6 @@
 
 #cmakedefine CPPUTEST_USE_REAL_GMOCK
 
+#cmakedefine INCLUDE_GTEST_TESTS
+
 #endif
