@@ -160,14 +160,6 @@ ifndef CPPUTEST_USE_STD_CPP_LIB
 	CPPUTEST_USE_STD_CPP_LIB = Y
 endif
 
-# Use gmock
-ifdef CPPUTEST_USE_REAL_GMOCK
-	CPPUTEST_USE_REAL_GMOCK = Y
-else
-	CPPUTEST_USE_REAL_GMOCK = N
-endif
-
-
 # Use gcov, off by default
 ifndef CPPUTEST_USE_GCOV
 	CPPUTEST_USE_GCOV = N
@@ -179,7 +171,6 @@ endif
 
 # Default warnings
 ifndef CPPUTEST_WARNINGFLAGS
-ifeq ($(CPPUTEST_USE_REAL_GMOCK), N)
 	CPPUTEST_WARNINGFLAGS =  -Wall -Wextra -Werror -Wshadow -Wswitch-default -Wswitch-enum -Wconversion
 ifeq ($(CPPUTEST_PEDANTIC_ERRORS), Y)
 	CPPUTEST_WARNINGFLAGS += -pedantic-errors
@@ -189,7 +180,6 @@ ifeq ($(UNAME_OS),$(LINUX_STR))
 endif
 	CPPUTEST_CXX_WARNINGFLAGS = -Woverloaded-virtual
 	CPPUTEST_C_WARNINGFLAGS = -Wstrict-prototypes
-endif
 endif
 
 #Wonderful extra compiler warnings with clang
@@ -289,15 +279,13 @@ ifeq ($(CPPUTEST_USE_STD_C_LIB), Y)
 endif
 endif
 
-ifeq ($(CPPUTEST_USE_REAL_GMOCK), Y)
-	ifndef GMOCK_HOME
-$(error CPPUTEST_USE_REAL_GMOCK defined, but GMOCK_HOME not, so can't use real gmock! Please define GMOCK_HOME to the gmock location)
-	endif
+ifdef $(GMOCK_HOME)
 	GTEST_HOME = $(GMOCK_HOME)/gtest
 	CPPUTEST_CPPFLAGS += -I$(GMOCK_HOME)/include
 	GMOCK_LIBRARY = $(GMOCK_HOME)/lib/.libs/libgmock.a
 	LD_LIBRARIES += $(GMOCK_LIBRARY)
-	CPPUTEST_CPPFLAGS += -DCPPUTEST_USE_REAL_GMOCK
+	CPPUTEST_CPPFLAGS += -DINCLUDE_GTEST_TESTS
+	CPPUTEST_WARNINGFLAGS = 
 	CPPUTEST_CPPFLAGS += -I$(GTEST_HOME)/include -I$(GTEST_HOME)
 	GTEST_LIBRARY = $(GTEST_HOME)/lib/.libs/libgtest.a
 	LD_LIBRARIES += $(GTEST_LIBRARY)

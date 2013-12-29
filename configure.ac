@@ -369,7 +369,6 @@ GMOCK_HOME was set, but couldn't find the compiled library.
 Did you compile it?
 -------------------------------------]);
 	fi	
-	AC_DEFINE([CPPUTEST_USE_REAL_GMOCK], [1], [Use GMock])
 
 	# In Travis, do not show warnings. The GTest warnings cause a log overflow that errors the build. Nice :)
 	if test -n "${TRAVIS_BRANCH}"; then

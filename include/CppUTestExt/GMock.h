@@ -28,9 +28,7 @@
 #ifndef GMOCK_H_
 #define GMOCK_H_
 
-#ifdef CPPUTEST_USE_REAL_GMOCK
 #undef new
-#endif
 
 #undef RUN_ALL_TESTS
 
@@ -40,10 +38,8 @@
 #include "gmock/gmock.h"
 #undef RUN_ALL_TESTS
 
-#ifdef CPPUTEST_USE_REAL_GMOCK
 using testing::Return;
 using testing::NiceMock;
-#endif
 
 #ifdef CPPUTEST_USE_NEW_MACROS
 #include "CppUTest/MemoryLeakDetectorNewMacros.h"

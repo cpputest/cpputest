@@ -218,17 +218,17 @@ cpputest_build_gtest15:
 check_gtest15: cpputest_build_gtest15
 	@echo "Build using gmock 1.5";
 	export GMOCK_HOME=`pwd`/cpputest_build_gtest15/gmock-1.5.0; \
-	make distclean; $(srcdir)/configure CXXFLAGS=-DGTEST_USE_OWN_TR1_TUPLE=1 --enable-gmock; make check
+	make distclean; $(srcdir)/configure; make check
 
 check_gtest16: cpputest_build_gtest16
 	@echo "Build using gmock 1.6";
 	export GMOCK_HOME=`pwd`/cpputest_build_gtest16/gmock-1.6.0; \
-	make distclean; $(srcdir)/configure CXXFLAGS=-DGTEST_USE_OWN_TR1_TUPLE=1 --enable-gmock; make check
+	make distclean; $(srcdir)/configure; make check
 
 check_gtest17: cpputest_build_gtest17
 	@echo "Build using gmock 1.7"
 	export GMOCK_HOME=`pwd`/cpputest_build_gtest17/gmock-1.7.0; \
-	make distclean; $(srcdir)/configure --enable-gmock; make check
+	make distclean; $(srcdir)/configure; make check
 	
 remove_gtest_directories:
 	rm -rf cpputest_build_gtest15
