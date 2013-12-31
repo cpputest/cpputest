@@ -30,7 +30,6 @@
 #include "CppUTestExt/MemoryReporterPlugin.h"
 #include "CppUTestExt/MockSupportPlugin.h"
 
-
 #ifdef INCLUDE_GTEST_TESTS
 #include "CppUTestExt/GTestConvertor.h"
 #endif
@@ -46,6 +45,17 @@ int main(int ac, const char** av)
 	MockSupportPlugin mockPlugin;
 	TestRegistry::getCurrentRegistry()->installPlugin(&plugin);
 	TestRegistry::getCurrentRegistry()->installPlugin(&mockPlugin);
+
+#ifndef GMOCK_RENAME_MAIN
 	return CommandLineTestRunner::RunAllTests(ac, av);
+#else
+	/* Don't have any memory leak detector when running the Google Test tests */
+
+	testing::GMOCK_FLAG(verbose) = testing::internal::kWarningVerbosity;
+
+	ConsoleTestOutput output;
+	CommandLineTestRunner runner(ac, av, &output, TestRegistry::getCurrentRegistry());
+	return runner.runAllTestsMain();
+#endif
 }
 
