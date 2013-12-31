@@ -28,8 +28,8 @@
 #ifdef INCLUDE_GTEST_TESTS
 #undef new
 
-#include "CppuTestExt/GTest.h"
-#include "CppuTestExt/GMock.h"
+#include "CppUTestExt/GTest.h"
+#include "CppUTestExt/GMock.h"
 
 static bool g_GTestEqual_has_been_called = false;
 TEST(GTestSimpleTest, GTestEqual)
