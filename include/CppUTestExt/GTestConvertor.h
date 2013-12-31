@@ -213,10 +213,9 @@ public:
 		 * then don't throw the exception, but let it return. Usually this should
 		 * already be at the end of the test, so it doesn't matter much
 		 */
-		if (!SimpleString(result_.message()).contains("Actual: never called") &&
-			!SimpleString(result_.message()).contains("Actual function call count doesn't match"))
+		if (result_.type() == ::testing::TestPartResult::kNonFatalFailure) {
 			throw CppUTestFailedException();
-
+		}
 	}
 	virtual ~GMockTestTerminator()
 	{
