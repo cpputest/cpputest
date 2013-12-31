@@ -214,7 +214,10 @@ public:
 		 * already be at the end of the test, so it doesn't matter much
 		 */
 		if (result_.type() == ::testing::TestPartResult::kNonFatalFailure) {
-			throw CppUTestFailedException();
+			if (!SimpleString(result_.message()).contains("Actual: never called") &&
+					!SimpleString(result_.message()).contains("Actual function call count doesn't match"))
+				throw CppUTestFailedException();
+
 		}
 	}
 	virtual ~GMockTestTerminator()
