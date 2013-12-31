@@ -16,7 +16,7 @@ check_PROGRAMS += $(CPPUTESTEXT_TESTS)
 endif
 
 if INCLUDE_GMOCKTESTS
- check_PROGRAMS += GTestTests
+# check_PROGRAMS += GTestTests
 endif
 
 TESTS = $(check_PROGRAMS)
