@@ -16,7 +16,7 @@ check_PROGRAMS += $(CPPUTESTEXT_TESTS)
 endif
 
 if INCLUDE_GMOCKTESTS
-# check_PROGRAMS += GTestTests
+ check_PROGRAMS += GTestTests
 endif
 
 TESTS = $(check_PROGRAMS)
@@ -183,6 +183,19 @@ CppUTestExtTests_SOURCES = \
 	tests/CppUTestExt/TestMemoryReporterPlugin.cpp \
 	tests/CppUTestExt/TestMockPlugin.cpp \
 	tests/CppUTestExt/AllTests.cpp 
+
+if INCLUDE_GMOCKTESTS
+
+GTestTests_CPPFLAGS = $(lib_libCppUTestExt_a_CPPFLAGS)
+GTestTests_CFLAGS = $(lib_libCppUTestExt_a_CFLAGS)
+GTestTests_CXXFLAGS = $(lib_libCppUTestExt_a_CXXFLAGS) -DCPPUTEST_USE_MEM_LEAK_DETECTION=0 -DGMOCK_RENAME_MAIN=1 -D_THREAD_SAFE  -DGTEST_HAS_PTHREAD=1
+GTestTests_LDADD = lib/libCppUTestExt.a lib/libCppUTest.a $(CPPUTEST_LDADD)
+GTestTests_LDFLAGS = $(CppUTestTests_LDFLAGS)
+
+GTestTests_SOURCES = \
+	$(GMOCK_HOME)/test/gmock-spec-builders_test.cc \
+	tests/CppUTestExt/AllTests.cpp 
+endif
 
 RUN_CPPUTEST_TESTS = ./$(CPPUTEST_TESTS) -r
 #RUN_CPPUTEST_EXT_TESTS = ./$(CPPUTEST_EXT_TESTS) -r
