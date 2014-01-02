@@ -315,10 +315,8 @@ ifeq ($(CPPUTEST_USE_EXTENSIONS), Y)
 CPPUTEST_LIB += $(CPPUTEST_LIB_LINK_DIR)/libCppUTestExt.a
 endif
 
-ifndef CPPUTEST_STATIC_REALTIME
-	LD_LIBRARIES += -lstdc++
-else
-	LD_LIBRARIES += -lstdc++ -lrt
+ifdef CPPUTEST_STATIC_REALTIME
+	LD_LIBRARIES += -lrt
 endif
 
 TARGET_LIB = \
@@ -464,7 +462,7 @@ test-deps: $(TEST_DEPS)
 
 $(TEST_TARGET): $(TEST_DEPS)
 	@echo Linking $@
-	$(SILENCE)$(LINK.o) -o $@ $^ $(LD_LIBRARIES)
+	$(SILENCE)$(CXX) -o $@ $^ $(LD_LIBRARIES)
 
 $(TARGET_LIB): $(OBJ)
 	@echo Building archive $@
