@@ -54,8 +54,6 @@ AC_TYPE_UINT8_T
 
 # Checks for library functions.
 AC_FUNC_FORK
-AC_FUNC_MALLOC
-AC_FUNC_REALLOC
 AC_CHECK_FUNCS([gettimeofday memset strstr])
 
 AC_CHECK_PROG([CPPUTEST_HAS_GCC], [gcc], [yes], [no])

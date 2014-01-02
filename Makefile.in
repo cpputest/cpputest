@@ -37,10 +37,9 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 EXTRA_PROGRAMS = CppUTestExtTests$(EXEEXT)
-check_PROGRAMS = $(am__EXEEXT_1) $(am__EXEEXT_3) $(am__EXEEXT_4)
+check_PROGRAMS = $(am__EXEEXT_1) $(am__EXEEXT_3)
 @INCLUDE_CPPUTEST_EXT_TRUE@am__append_1 = lib/libCppUTestExt.a
 @INCLUDE_CPPUTEST_EXT_TRUE@am__append_2 = $(CPPUTESTEXT_TESTS)
-@INCLUDE_GMOCKTESTS_TRUE@am__append_3 = GTestTests
 subdir = .
 DIST_COMMON = README $(am__configure_deps) \
 	$(am__include_cpputestext_HEADERS_DIST) \
@@ -136,7 +135,6 @@ lib_libCppUTestExt_a_OBJECTS = $(am_lib_libCppUTestExt_a_OBJECTS)
 am__EXEEXT_1 = CppUTestTests$(EXEEXT)
 am__EXEEXT_2 = CppUTestExtTests$(EXEEXT)
 @INCLUDE_CPPUTEST_EXT_TRUE@am__EXEEXT_3 = $(am__EXEEXT_2)
-@INCLUDE_GMOCKTESTS_TRUE@am__EXEEXT_4 = GTestTests$(EXEEXT)
 am_CppUTestExtTests_OBJECTS =  \
 	CppUTestExtTests-TestMockActualFunctionCall.$(OBJEXT) \
 	CppUTestExtTests-TestMockSupport.$(OBJEXT) \
@@ -202,19 +200,6 @@ CppUTestTests_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
 	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXXLD) \
 	$(CppUTestTests_CXXFLAGS) $(CXXFLAGS) $(CppUTestTests_LDFLAGS) \
 	$(LDFLAGS) -o $@
-am__GTestTests_SOURCES_DIST =  \
-	$(GMOCK_HOME)/test/gmock-spec-builders_test.cc \
-	tests/CppUTestExt/AllTests.cpp
-@INCLUDE_GMOCKTESTS_TRUE@am_GTestTests_OBJECTS = GTestTests-gmock-spec-builders_test.$(OBJEXT) \
-@INCLUDE_GMOCKTESTS_TRUE@	GTestTests-AllTests.$(OBJEXT)
-GTestTests_OBJECTS = $(am_GTestTests_OBJECTS)
-@INCLUDE_GMOCKTESTS_TRUE@GTestTests_DEPENDENCIES =  \
-@INCLUDE_GMOCKTESTS_TRUE@	lib/libCppUTestExt.a \
-@INCLUDE_GMOCKTESTS_TRUE@	lib/libCppUTest.a \
-@INCLUDE_GMOCKTESTS_TRUE@	$(am__DEPENDENCIES_1)
-GTestTests_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(GTestTests_CXXFLAGS) \
-	$(CXXFLAGS) $(GTestTests_LDFLAGS) $(LDFLAGS) -o $@
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -255,11 +240,10 @@ AM_V_GEN = $(am__v_GEN_$(V))
 am__v_GEN_ = $(am__v_GEN_$(AM_DEFAULT_VERBOSITY))
 am__v_GEN_0 = @echo "  GEN   " $@;
 SOURCES = $(lib_libCppUTest_a_SOURCES) $(lib_libCppUTestExt_a_SOURCES) \
-	$(CppUTestExtTests_SOURCES) $(CppUTestTests_SOURCES) \
-	$(GTestTests_SOURCES)
+	$(CppUTestExtTests_SOURCES) $(CppUTestTests_SOURCES)
 DIST_SOURCES = $(lib_libCppUTest_a_SOURCES) \
 	$(lib_libCppUTestExt_a_SOURCES) $(CppUTestExtTests_SOURCES) \
-	$(CppUTestTests_SOURCES) $(am__GTestTests_SOURCES_DIST)
+	$(CppUTestTests_SOURCES)
 DATA = $(pkgconfig_DATA)
 am__include_cpputestext_HEADERS_DIST =  \
 	include/CppUTestExt/MemoryReportAllocator.h \
@@ -441,6 +425,8 @@ CPPUTEST_TESTS = CppUTestTests
 CPPUTESTEXT_TESTS = CppUTestExtTests
 EXTRA_LIBRARIES = lib/libCppUTestExt.a
 lib_LIBRARIES = lib/libCppUTest.a $(am__append_1)
+
+# check_PROGRAMS += GTestTests
 TESTS = $(check_PROGRAMS)
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = cpputest.pc
@@ -609,7 +595,7 @@ all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am
 
 .SUFFIXES:
-.SUFFIXES: .c .cc .cpp .lo .o .obj
+.SUFFIXES: .c .cpp .lo .o .obj
 am--refresh:
 	@:
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
@@ -721,9 +707,6 @@ CppUTestExtTests$(EXEEXT): $(CppUTestExtTests_OBJECTS) $(CppUTestExtTests_DEPEND
 CppUTestTests$(EXEEXT): $(CppUTestTests_OBJECTS) $(CppUTestTests_DEPENDENCIES) 
 	@rm -f CppUTestTests$(EXEEXT)
 	$(AM_V_CXXLD)$(CppUTestTests_LINK) $(CppUTestTests_OBJECTS) $(CppUTestTests_LDADD) $(LIBS)
-GTestTests$(EXEEXT): $(GTestTests_OBJECTS) $(GTestTests_DEPENDENCIES) 
-	@rm -f GTestTests$(EXEEXT)
-	$(AM_V_CXXLD)$(GTestTests_LINK) $(GTestTests_OBJECTS) $(GTestTests_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -778,8 +761,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CppUTestTests-TestResultTest.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CppUTestTests-TestUTestMacro.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CppUTestTests-UtestTest.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/GTestTests-AllTests.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/GTestTests-gmock-spec-builders_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTestExt_a-CodeMemoryReportFormatter.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTestExt_a-MemoryReportAllocator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTestExt_a-MemoryReportFormatter.Po@am__quote@
@@ -899,7 +880,7 @@ CppUTestTests-AllocationInCFile.obj: tests/AllocationInCFile.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(CppUTestTests_CPPFLAGS) $(CPPFLAGS) $(CppUTestTests_CFLAGS) $(CFLAGS) -c -o CppUTestTests-AllocationInCFile.obj `if test -f 'tests/AllocationInCFile.c'; then $(CYGPATH_W) 'tests/AllocationInCFile.c'; else $(CYGPATH_W) '$(srcdir)/tests/AllocationInCFile.c'; fi`
 
-.cc.o:
+.cpp.o:
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
 @am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
@@ -907,7 +888,7 @@ CppUTestTests-AllocationInCFile.obj: tests/AllocationInCFile.c
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ $<
 
-.cc.obj:
+.cpp.obj:
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ `$(CYGPATH_W) '$<'`
 @am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
@@ -915,7 +896,7 @@ CppUTestTests-AllocationInCFile.obj: tests/AllocationInCFile.c
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
 
-.cc.lo:
+.cpp.lo:
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LTCXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
 @am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Plo
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
@@ -2090,62 +2071,6 @@ CppUTestTests-UtestTest.obj: tests/UtestTest.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='tests/UtestTest.cpp' object='CppUTestTests-UtestTest.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(CppUTestTests_CPPFLAGS) $(CPPFLAGS) $(CppUTestTests_CXXFLAGS) $(CXXFLAGS) -c -o CppUTestTests-UtestTest.obj `if test -f 'tests/UtestTest.cpp'; then $(CYGPATH_W) 'tests/UtestTest.cpp'; else $(CYGPATH_W) '$(srcdir)/tests/UtestTest.cpp'; fi`
-
-GTestTests-gmock-spec-builders_test.o: $(GMOCK_HOME)/test/gmock-spec-builders_test.cc
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(GTestTests_CPPFLAGS) $(CPPFLAGS) $(GTestTests_CXXFLAGS) $(CXXFLAGS) -MT GTestTests-gmock-spec-builders_test.o -MD -MP -MF $(DEPDIR)/GTestTests-gmock-spec-builders_test.Tpo -c -o GTestTests-gmock-spec-builders_test.o `test -f '$(GMOCK_HOME)/test/gmock-spec-builders_test.cc' || echo '$(srcdir)/'`$(GMOCK_HOME)/test/gmock-spec-builders_test.cc
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/GTestTests-gmock-spec-builders_test.Tpo $(DEPDIR)/GTestTests-gmock-spec-builders_test.Po
-@am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$(GMOCK_HOME)/test/gmock-spec-builders_test.cc' object='GTestTests-gmock-spec-builders_test.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(GTestTests_CPPFLAGS) $(CPPFLAGS) $(GTestTests_CXXFLAGS) $(CXXFLAGS) -c -o GTestTests-gmock-spec-builders_test.o `test -f '$(GMOCK_HOME)/test/gmock-spec-builders_test.cc' || echo '$(srcdir)/'`$(GMOCK_HOME)/test/gmock-spec-builders_test.cc
-
-GTestTests-gmock-spec-builders_test.obj: $(GMOCK_HOME)/test/gmock-spec-builders_test.cc
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(GTestTests_CPPFLAGS) $(CPPFLAGS) $(GTestTests_CXXFLAGS) $(CXXFLAGS) -MT GTestTests-gmock-spec-builders_test.obj -MD -MP -MF $(DEPDIR)/GTestTests-gmock-spec-builders_test.Tpo -c -o GTestTests-gmock-spec-builders_test.obj `if test -f '$(GMOCK_HOME)/test/gmock-spec-builders_test.cc'; then $(CYGPATH_W) '$(GMOCK_HOME)/test/gmock-spec-builders_test.cc'; else $(CYGPATH_W) '$(srcdir)/$(GMOCK_HOME)/test/gmock-spec-builders_test.cc'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/GTestTests-gmock-spec-builders_test.Tpo $(DEPDIR)/GTestTests-gmock-spec-builders_test.Po
-@am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$(GMOCK_HOME)/test/gmock-spec-builders_test.cc' object='GTestTests-gmock-spec-builders_test.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(GTestTests_CPPFLAGS) $(CPPFLAGS) $(GTestTests_CXXFLAGS) $(CXXFLAGS) -c -o GTestTests-gmock-spec-builders_test.obj `if test -f '$(GMOCK_HOME)/test/gmock-spec-builders_test.cc'; then $(CYGPATH_W) '$(GMOCK_HOME)/test/gmock-spec-builders_test.cc'; else $(CYGPATH_W) '$(srcdir)/$(GMOCK_HOME)/test/gmock-spec-builders_test.cc'; fi`
-
-GTestTests-AllTests.o: tests/CppUTestExt/AllTests.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(GTestTests_CPPFLAGS) $(CPPFLAGS) $(GTestTests_CXXFLAGS) $(CXXFLAGS) -MT GTestTests-AllTests.o -MD -MP -MF $(DEPDIR)/GTestTests-AllTests.Tpo -c -o GTestTests-AllTests.o `test -f 'tests/CppUTestExt/AllTests.cpp' || echo '$(srcdir)/'`tests/CppUTestExt/AllTests.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/GTestTests-AllTests.Tpo $(DEPDIR)/GTestTests-AllTests.Po
-@am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='tests/CppUTestExt/AllTests.cpp' object='GTestTests-AllTests.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(GTestTests_CPPFLAGS) $(CPPFLAGS) $(GTestTests_CXXFLAGS) $(CXXFLAGS) -c -o GTestTests-AllTests.o `test -f 'tests/CppUTestExt/AllTests.cpp' || echo '$(srcdir)/'`tests/CppUTestExt/AllTests.cpp
-
-GTestTests-AllTests.obj: tests/CppUTestExt/AllTests.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(GTestTests_CPPFLAGS) $(CPPFLAGS) $(GTestTests_CXXFLAGS) $(CXXFLAGS) -MT GTestTests-AllTests.obj -MD -MP -MF $(DEPDIR)/GTestTests-AllTests.Tpo -c -o GTestTests-AllTests.obj `if test -f 'tests/CppUTestExt/AllTests.cpp'; then $(CYGPATH_W) 'tests/CppUTestExt/AllTests.cpp'; else $(CYGPATH_W) '$(srcdir)/tests/CppUTestExt/AllTests.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/GTestTests-AllTests.Tpo $(DEPDIR)/GTestTests-AllTests.Po
-@am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='tests/CppUTestExt/AllTests.cpp' object='GTestTests-AllTests.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(GTestTests_CPPFLAGS) $(CPPFLAGS) $(GTestTests_CXXFLAGS) $(CXXFLAGS) -c -o GTestTests-AllTests.obj `if test -f 'tests/CppUTestExt/AllTests.cpp'; then $(CYGPATH_W) 'tests/CppUTestExt/AllTests.cpp'; else $(CYGPATH_W) '$(srcdir)/tests/CppUTestExt/AllTests.cpp'; fi`
-
-.cpp.o:
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
-@am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ $<
-
-.cpp.obj:
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ `$(CYGPATH_W) '$<'`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
-@am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
-
-.cpp.lo:
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LTCXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Plo
-@am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(LTCXXCOMPILE) -c -o $@ $<
 
 mostlyclean-libtool:
 	-rm -f *.lo
