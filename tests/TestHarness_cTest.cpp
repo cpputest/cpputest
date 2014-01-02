@@ -45,16 +45,17 @@ TEST_GROUP_C(TestGroupInC)
 	TEST_GROUP_C_TEARDOWN_WRAPPER(TestGroupInC)
 };
 
-TEST_GROUP_C_WRAPPER(TestGroupInC, one_test)
+TEST_GROUP_C_WRAPPER(TestGroupInC, checkThatTheTestHasRun)
 
 /*
- * These two tests are a bit strange. They use the fact that you can do -r2 for repeating the same run.
+ * This test is a bit strange. They use the fact that you can do -r2 for repeating the same run.
  * When you do so, the same statics will be shared and therefore we can test whether the setup/teardown is run
  * correctly.
  */
 
 TEST(TestGroupInC, setupHasBeenCalled)
 {
+	test_was_called_in_test_group_in_C++;
 	/* Increased in setup, decreased in teardown. So at this point it must be 1 also on a multiple run */
 	LONGS_EQUAL(1, setup_teardown_was_called_in_test_group_in_C);
 }
