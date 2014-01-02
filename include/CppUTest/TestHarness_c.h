@@ -92,7 +92,11 @@
 	   group_##group_name##_setup_wrapper_c(); \
 	}
 
-#define TEST_GROUP_C_TEARDOWN_WRAPPER(group_name) /* group_name */
+#define TEST_GROUP_C_TEARDOWN_WRAPPER(group_name) \
+	void teardown() { \
+	   group_##group_name##_teardown_wrapper_c(); \
+	}
+
 #define TEST_GROUP_C_WRAPPER(group_name, test_name) /* group_name, test_name */
 
 #ifdef __cplusplus
