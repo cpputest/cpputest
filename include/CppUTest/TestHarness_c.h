@@ -57,6 +57,44 @@
 #define CHECK_C(condition) \
   CHECK_C_LOCATION(condition, #condition, __FILE__,__LINE__)
 
+
+/******************************************************************************
+ *
+ * TEST macros for in C.
+ *
+ *******************************************************************************/
+
+/* For use in C file */
+#define TEST_GROUP_C_SETUP(group_name) \
+	extern void group_##group_name##_setup_wrapper_c(void); \
+	void group_##group_name##_setup_wrapper_c()
+
+#define TEST_GROUP_C_TEARDOWN(group_name) \
+	extern void group_##group_name##_teardown_wrapper_c(void); \
+	void group_##group_name##_teardown_wrapper_c()
+
+#define TEST_C(group_name, test_name) \
+	extern void test_##group_name##_wrapper_c(void);\
+	void test_##group_name##_wrapper_c()
+
+
+/* For use in C++ file */
+
+#define TEST_GROUP_C(group_name) \
+	extern "C" { \
+		extern void group_##group_name##_setup_wrapper_c(void); \
+		extern void group_##group_name##_teardown_wrapper_c(void); \
+	} \
+	TEST_GROUP(group_name)
+
+#define TEST_GROUP_C_SETUP_WRAPPER(group_name) \
+	void setup() { \
+	   group_##group_name##_setup_wrapper_c(); \
+	}
+
+#define TEST_GROUP_C_TEARDOWN_WRAPPER(group_name) // group_name
+#define TEST_GROUP_C_WRAPPER(group_name, test_name) // group_name, test_name
+
 #ifdef __cplusplus
 extern "C"
 {

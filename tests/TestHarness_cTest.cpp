@@ -34,6 +34,22 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 
 
+extern int setup_was_called_in_test_group_in_C;
+int setup_was_called_in_test_group_in_C = 0;
+
+TEST_GROUP_C(TestGroupInC)
+{
+	TEST_GROUP_C_SETUP_WRAPPER(TestGroupInC)
+	TEST_GROUP_C_TEARDOWN_WRAPPER(TestGroupInC)
+};
+
+TEST_GROUP_C_WRAPPER(TestGroupInC, one_test)
+
+TEST(TestGroupInC, setupHasBeenCalled)
+{
+	LONGS_EQUAL(1, setup_was_called_in_test_group_in_C);
+}
+
 static bool hasDestructorOfTheDestructorCheckedBeenCalled;
 
 class HasTheDestructorBeenCalledChecker
