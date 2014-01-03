@@ -10,10 +10,15 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_CANONICAL_HOST
 AM_MAINTAINER_MODE([enable])
 
+default_use_std_cpp=yes
+
 case "x$build_os" in
 	*darwin*)
 		AC_SUBST([CPPUTEST_ON_MACOSX], [yes])
-   ;;
+		;;
+	*mingw*)
+		default_use_std_cpp=no
+		;;
 esac
 
 
@@ -266,7 +271,7 @@ AC_ARG_ENABLE([std-c], [AC_HELP_STRING([--disable-std-c], [disable the use of St
    [use_std_c=${enableval}], [use_std_c=yes])
 
 AC_ARG_ENABLE([std-cpp], [AC_HELP_STRING([--disable-std-cpp], [disable the use of Standard C++ Library])], 
-   [use_std_cpp=${enableval}], [use_std_cpp=yes])
+   [use_std_cpp=${enableval}], [use_std_cpp=${default_use_std_cpp}])
 
 AC_ARG_ENABLE([std-cpp11], [AC_HELP_STRING([--enable-std-cpp11], [enable the use of Standard C++ 11 (if the compiler supports that)])], 
    [use_std_cpp11=${enableval}], [use_std_cpp11=no])
