@@ -581,15 +581,16 @@ CppUTestExtTests_SOURCES = \
 	tests/CppUTestExt/TestMockPlugin.cpp \
 	tests/CppUTestExt/AllTests.cpp 
 
-@INCLUDE_GMOCKTESTS_TRUE@GTestTests_CPPFLAGS = $(lib_libCppUTestExt_a_CPPFLAGS)
-@INCLUDE_GMOCKTESTS_TRUE@GTestTests_CFLAGS = $(lib_libCppUTestExt_a_CFLAGS)
-@INCLUDE_GMOCKTESTS_TRUE@GTestTests_CXXFLAGS = $(lib_libCppUTestExt_a_CXXFLAGS) -DCPPUTEST_USE_MEM_LEAK_DETECTION=0 -DGMOCK_RENAME_MAIN=1 -D_THREAD_SAFE  -DGTEST_HAS_PTHREAD=1
-@INCLUDE_GMOCKTESTS_TRUE@GTestTests_LDADD = lib/libCppUTestExt.a lib/libCppUTest.a $(CPPUTEST_LDADD)
-@INCLUDE_GMOCKTESTS_TRUE@GTestTests_LDFLAGS = $(CppUTestTests_LDFLAGS)
-@INCLUDE_GMOCKTESTS_TRUE@GTestTests_SOURCES = \
-@INCLUDE_GMOCKTESTS_TRUE@	$(GMOCK_HOME)/test/gmock-spec-builders_test.cc \
-@INCLUDE_GMOCKTESTS_TRUE@	tests/CppUTestExt/AllTests.cpp 
 
+#GTestTests_CPPFLAGS = $(lib_libCppUTestExt_a_CPPFLAGS)
+#GTestTests_CFLAGS = $(lib_libCppUTestExt_a_CFLAGS)
+#GTestTests_CXXFLAGS = $(lib_libCppUTestExt_a_CXXFLAGS) -DCPPUTEST_USE_MEM_LEAK_DETECTION=0 -DGMOCK_RENAME_MAIN=1 -D_THREAD_SAFE  -DGTEST_HAS_PTHREAD=1
+#GTestTests_LDADD = lib/libCppUTestExt.a lib/libCppUTest.a $(CPPUTEST_LDADD)
+#GTestTests_LDFLAGS = $(CppUTestTests_LDFLAGS)
+
+#GTestTests_SOURCES = \
+#	$(GMOCK_HOME)/test/gmock-spec-builders_test.cc \
+#	tests/CppUTestExt/AllTests.cpp 
 RUN_CPPUTEST_TESTS = ./$(CPPUTEST_TESTS) -r
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am
