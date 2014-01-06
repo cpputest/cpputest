@@ -150,6 +150,14 @@ TEST(MockExpectedFunctionCall, callWithPointerParameter)
 	POINTERS_EQUAL(ptr, call->getParameter("pointer").getPointerValue());
 }
 
+TEST(MockExpectedFunctionCall, callWithConstPointerParameter)
+{
+	const void* ptr = (const void*) 0x345;
+	call->withParameter("constPointer", ptr);
+	STRCMP_EQUAL("const void*", call->getParameterType("constPointer").asCharString());
+	POINTERS_EQUAL(ptr, call->getParameter("constPointer").getConstPointerValue());
+}
+
 TEST(MockExpectedFunctionCall, callWithObjectParameter)
 {
 	void* ptr = (void*) 0x123;

@@ -139,6 +139,13 @@ MockFunctionCall& MockFunctionCallComposite::withPointerParameter(const SimpleSt
 	return *this;
 }
 
+MockFunctionCall& MockFunctionCallComposite::withConstPointerParameter(const SimpleString& name, const void* value)
+{
+	for (MockFunctionCallCompositeNode* node = head_; node != NULL; node = node->next_)
+		node->call_.withParameter(name, value);
+	return *this;
+}
+
 MockFunctionCall& MockFunctionCallComposite::withParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value)
 {
 	for (MockFunctionCallCompositeNode* node = head_; node != NULL; node = node->next_)
@@ -183,6 +190,13 @@ MockFunctionCall& MockFunctionCallComposite::andReturnValue(const char* value)
 }
 
 MockFunctionCall& MockFunctionCallComposite::andReturnValue(void* value)
+{
+	for (MockFunctionCallCompositeNode* node = head_; node != NULL; node = node->next_)
+		node->call_.andReturnValue(value);
+	return *this;
+}
+
+MockFunctionCall& MockFunctionCallComposite::andReturnValue(const void* value)
 {
 	for (MockFunctionCallCompositeNode* node = head_; node != NULL; node = node->next_)
 		node->call_.andReturnValue(value);
@@ -276,6 +290,13 @@ MockFunctionCall& MockFunctionCallTrace::withPointerParameter(const SimpleString
 	return *this;
 }
 
+MockFunctionCall& MockFunctionCallTrace::withConstPointerParameter(const SimpleString& name, const void* value)
+{
+    addParameterName(name);
+	traceBuffer_ += StringFrom(value);
+	return *this;
+}
+
 MockFunctionCall& MockFunctionCallTrace::withParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value)
 {
 	traceBuffer_ += " ";
@@ -311,6 +332,11 @@ MockFunctionCall& MockFunctionCallTrace::andReturnValue(const char*)
 }
 
 MockFunctionCall& MockFunctionCallTrace::andReturnValue(void*)
+{
+	return *this;
+}
+
+MockFunctionCall& MockFunctionCallTrace::andReturnValue(const void*)
 {
 	return *this;
 }

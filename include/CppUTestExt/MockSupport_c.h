@@ -38,6 +38,7 @@ typedef enum {
 	MOCKVALUETYPE_DOUBLE,
 	MOCKVALUETYPE_STRING,
 	MOCKVALUETYPE_POINTER,
+	MOCKVALUETYPE_CONST_POINTER,
 	MOCKVALUETYPE_OBJECT
 } MockValueType_c;
 
@@ -50,6 +51,7 @@ typedef struct SMockValue_c
 		double doubleValue;
 		const char* stringValue;
 		void* pointerValue;
+		const void* constPointerValue;
 		const void* objectValue;
 	} value;
 } MockValue_c;
@@ -61,6 +63,7 @@ struct SMockFunctionCall_c
 	MockFunctionCall_c* (*withDoubleParameters)(const char* name, double value);
 	MockFunctionCall_c* (*withStringParameters)(const char* name, const char* value);
 	MockFunctionCall_c* (*withPointerParameters)(const char* name, void* value);
+	MockFunctionCall_c* (*withConstPointerParameters)(const char* name, const void* value);
 	MockFunctionCall_c* (*withParameterOfType)(const char* type, const char* name, const void* value);
 
 	MockFunctionCall_c* (*andReturnUnsignedIntValue)(unsigned int value);
@@ -68,6 +71,7 @@ struct SMockFunctionCall_c
 	MockFunctionCall_c* (*andReturnDoubleValue)(double value);
 	MockFunctionCall_c* (*andReturnStringValue)(const char* value);
 	MockFunctionCall_c* (*andReturnPointerValue)(void* value);
+	MockFunctionCall_c* (*andReturnConstPointerValue)(const void* value);
 
 	MockValue_c (*returnValue)(void);
 
@@ -90,6 +94,7 @@ struct SMockSupport_c
 	void (*setDoubleData) (const char* name, double value);
 	void (*setStringData) (const char* name, const char* value);
 	void (*setPointerData) (const char* name, void* value);
+	void (*setConstPointerData) (const char* name, const void* value);
 	void (*setDataObject) (const char* name, const char* type, void* value);
 	MockValue_c (*getData)(const char* name);
 

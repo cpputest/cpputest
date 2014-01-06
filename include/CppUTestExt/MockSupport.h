@@ -56,6 +56,7 @@ public:
 	virtual const char* stringReturnValue();
 	virtual double doubleReturnValue();
 	virtual void* pointerReturnValue();
+	virtual const void* constPointerReturnValue();
 
 	bool hasData(const SimpleString& name);
 	void setData(const SimpleString& name, int value);
@@ -63,6 +64,7 @@ public:
 	void setData(const SimpleString& name, const char* value);
 	void setData(const SimpleString& name, double value);
 	void setData(const SimpleString& name, void* value);
+	void setData(const SimpleString& name, const void* value);
 	void setDataObject(const SimpleString& name, const SimpleString& type, void* value);
 	MockNamedValue getData(const SimpleString& name);
 

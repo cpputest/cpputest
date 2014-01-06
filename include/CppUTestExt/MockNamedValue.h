@@ -76,6 +76,7 @@ public:
 	virtual void setValue(unsigned int value);
 	virtual void setValue(double value);
 	virtual void setValue(void* value);
+	virtual void setValue(const void* value);
 	virtual void setValue(const char* value);
 	virtual void setObjectPointer(const SimpleString& type, const void* objectPtr);
 
@@ -94,6 +95,7 @@ public:
 	virtual double getDoubleValue() const;
 	virtual const char* getStringValue() const;
 	virtual void* getPointerValue() const;
+	virtual const void* getConstPointerValue() const;
 	virtual const void* getObjectPointer() const;
 private:
 	SimpleString name_;
@@ -104,6 +106,7 @@ private:
 		double doubleValue_;
 		const char* stringValue_;
 		void* pointerValue_;
+		const void* constPointerValue_;
 		const void* objectPointerValue_;
 	} value_;
 	MockNamedValueComparator* comparator_;
