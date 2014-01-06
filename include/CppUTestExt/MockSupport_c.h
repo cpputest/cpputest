@@ -61,7 +61,7 @@ struct SMockFunctionCall_c
 	MockFunctionCall_c* (*withDoubleParameters)(const char* name, double value);
 	MockFunctionCall_c* (*withStringParameters)(const char* name, const char* value);
 	MockFunctionCall_c* (*withPointerParameters)(const char* name, void* value);
-	MockFunctionCall_c* (*withParameterOfType)(const char* type, const char* name, void* value);
+	MockFunctionCall_c* (*withParameterOfType)(const char* type, const char* name, const void* value);
 
 	MockFunctionCall_c* (*andReturnUnsignedIntValue)(unsigned int value);
 	MockFunctionCall_c* (*andReturnIntValue)(int value);

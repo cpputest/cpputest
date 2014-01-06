@@ -67,8 +67,8 @@ extern "C"{
 TEST(MockSupport_c, expectAndActualParametersOnObject)
 {
 	mock_c()->installComparator("typeName", typeNameIsEqual, typeNameValueToString);
-	mock_c()->expectOneCall("boo")->withParameterOfType("typeName", "name", (void*) 1);
-	mock_c()->actualCall("boo")->withParameterOfType("typeName", "name", (void*) 1);
+	mock_c()->expectOneCall("boo")->withParameterOfType("typeName", "name", (const void*) 1);
+	mock_c()->actualCall("boo")->withParameterOfType("typeName", "name", (const void*) 1);
 	mock_c()->checkExpectations();
 	mock_c()->removeAllComparators();
 }

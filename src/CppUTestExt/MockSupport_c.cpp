@@ -114,7 +114,7 @@ MockFunctionCall_c* withIntParameters_c(const char* name, int value);
 MockFunctionCall_c* withDoubleParameters_c(const char* name, double value);
 MockFunctionCall_c* withStringParameters_c(const char* name, const char* value);
 MockFunctionCall_c* withPointerParameters_c(const char* name, void* value);
-MockFunctionCall_c* withParameterOfType_c(const char* type, const char* name, void* value);
+MockFunctionCall_c* withParameterOfType_c(const char* type, const char* name, const void* value);
 MockFunctionCall_c* andReturnIntValue_c(int value);
 MockFunctionCall_c* andReturnUnsignedIntValue_c(unsigned int value);
 MockFunctionCall_c* andReturnDoubleValue_c(double value);
@@ -196,7 +196,7 @@ MockFunctionCall_c* withPointerParameters_c(const char* name, void* value)
 	return &gFunctionCall;
 }
 
-MockFunctionCall_c* withParameterOfType_c(const char* type, const char* name, void* value)
+MockFunctionCall_c* withParameterOfType_c(const char* type, const char* name, const void* value)
 {
 	currentCall = &currentCall->withParameterOfType(type, name, value);
 	return &gFunctionCall;
