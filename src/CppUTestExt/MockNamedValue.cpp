@@ -65,7 +65,7 @@ void MockNamedValue::setValue(void* value)
 
 void MockNamedValue::setValue(const char* value)
 {
-	type_ = "char*";
+	type_ = "const char*";
 	value_.stringValue_ = value;
 }
 
@@ -110,7 +110,7 @@ double MockNamedValue::getDoubleValue() const
 
 const char* MockNamedValue::getStringValue() const
 {
-	STRCMP_EQUAL("char*", type_.asCharString());
+	STRCMP_EQUAL("const char*", type_.asCharString());
 	return value_.stringValue_;
 }
 
@@ -138,7 +138,7 @@ bool MockNamedValue::equals(const MockNamedValue& p) const
 		return value_.intValue_ == p.value_.intValue_;
     else if (type_ == "unsigned int")
         return value_.unsignedIntValue_ == p.value_.unsignedIntValue_;
-	else if (type_ == "char*")
+	else if (type_ == "const char*")
 		return SimpleString(value_.stringValue_) == SimpleString(p.value_.stringValue_);
 	else if (type_ == "void*")
 		return value_.pointerValue_ == p.value_.pointerValue_;
@@ -157,7 +157,7 @@ SimpleString MockNamedValue::toString() const
 		return StringFrom(value_.intValue_);
 	else if (type_ == "unsigned int")
 		return StringFrom(value_.unsignedIntValue_);
-	else if (type_ == "char*")
+	else if (type_ == "const char*")
 		return value_.stringValue_;
 	else if (type_ == "void*")
 		return StringFrom(value_.pointerValue_);

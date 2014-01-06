@@ -138,7 +138,7 @@ TEST(MockExpectedFunctionCall, callWithDoubleParameter)
 TEST(MockExpectedFunctionCall, callWithStringParameter)
 {
 	call->withParameter("string", "hello world");
-	STRCMP_EQUAL("char*", call->getParameterType("string").asCharString());
+	STRCMP_EQUAL("const char*", call->getParameterType("string").asCharString());
 	STRCMP_EQUAL("hello world", call->getParameter("string").getStringValue());
 }
 
@@ -264,7 +264,7 @@ TEST(MockExpectedFunctionCall, callWithThreeDifferentParameter)
 	call->withParameter("string", "hello world");
 	call->withParameter("double", 0.12);
 	STRCMP_EQUAL("int", call->getParameterType("integer").asCharString());
-	STRCMP_EQUAL("char*", call->getParameterType("string").asCharString());
+	STRCMP_EQUAL("const char*", call->getParameterType("string").asCharString());
 	STRCMP_EQUAL("double", call->getParameterType("double").asCharString());
 	LONGS_EQUAL(1, call->getParameter("integer").getIntValue());
 	STRCMP_EQUAL("hello world", call->getParameter("string").getStringValue());
@@ -334,7 +334,7 @@ TEST(MockExpectedFunctionCall, toStringForMultipleParameters)
 	call->withParameter("string", "value");
 	call->withParameter("integer", int_value);
 	call->withParameter("unsigned-integer", uint_value);
-	STRCMP_EQUAL("name -> char* string: <value>, int integer: <10>, unsigned int unsigned-integer: <         7 (0x00000007)>", call->callToString().asCharString());
+	STRCMP_EQUAL("name -> const char* string: <value>, int integer: <10>, unsigned int unsigned-integer: <         7 (0x00000007)>", call->callToString().asCharString());
 }
 
 TEST(MockExpectedFunctionCall, toStringForParameterAndIgnored)
@@ -342,7 +342,7 @@ TEST(MockExpectedFunctionCall, toStringForParameterAndIgnored)
 	call->withName("name");
 	call->withParameter("string", "value");
 	call->ignoreOtherParameters();
-	STRCMP_EQUAL("name -> char* string: <value>, other parameters are ignored", call->callToString().asCharString());
+	STRCMP_EQUAL("name -> const char* string: <value>, other parameters are ignored", call->callToString().asCharString());
 }
 
 TEST(MockExpectedFunctionCall, toStringForCallOrder)

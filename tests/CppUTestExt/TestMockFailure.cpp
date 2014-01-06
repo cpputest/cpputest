@@ -97,7 +97,7 @@ TEST(MockFailureTest, expectedCallDidNotHappen)
 	STRCMP_EQUAL("Mock Failure: Expected call did not happen.\n"
 				 "\tEXPECTED calls that did NOT happen:\n"
 				 "\t\tfoobar -> no parameters\n"
-				 "\t\tworld -> int boo: <2>, char* hello: <world>\n"
+				 "\t\tworld -> int boo: <2>, const char* hello: <world>\n"
 				 "\tACTUAL calls that did happen (in call order):\n"
 				 "\t\thaphaphap -> no parameters", failure.getMessage().asCharString());
 }
@@ -167,11 +167,11 @@ TEST(MockFailureTest, MockExpectedParameterDidntHappenFailure)
 	MockExpectedParameterDidntHappenFailure failure(UtestShell::getCurrent(), "foo", *list);
 	STRCMP_EQUAL("Mock Failure: Expected parameter for function \"foo\" did not happen.\n"
 			     "\tEXPECTED calls that DID NOT happen related to function: foo\n"
-				 "\t\tfoo -> int bar: <2>, char* boo: <str>\n"
+				 "\t\tfoo -> int bar: <2>, const char* boo: <str>\n"
 				 "\tACTUAL calls that DID happen related to function: foo\n"
-				 "\t\tfoo -> int bar: <10>, char* boo: <bleh>\n"
+				 "\t\tfoo -> int bar: <10>, const char* boo: <bleh>\n"
 				 "\tMISSING parameters that didn't happen:\n"
-			     "\t\tint bar, char* boo", failure.getMessage().asCharString());
+			     "\t\tint bar, const char* boo", failure.getMessage().asCharString());
 }
 
 TEST(MockFailureTest, MockNoWayToCompareCustomTypeFailure)

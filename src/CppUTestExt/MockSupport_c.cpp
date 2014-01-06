@@ -247,7 +247,7 @@ static MockValue_c getMockValueCFromNamedValue(const MockNamedValue& namedValue)
 		returnValue.type = MOCKVALUETYPE_DOUBLE;
 		returnValue.value.doubleValue = namedValue.getDoubleValue();
 	}
-	else if (PlatformSpecificStrCmp(namedValue.getType().asCharString(), "char*") == 0) {
+	else if (PlatformSpecificStrCmp(namedValue.getType().asCharString(), "const char*") == 0) {
 		returnValue.type = MOCKVALUETYPE_STRING;
 		returnValue.value.stringValue = namedValue.getStringValue();
 	}
