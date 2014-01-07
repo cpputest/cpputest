@@ -510,6 +510,18 @@ TEST(JUnitOutputTest, testFailureWithDifferentFileAndLine)
 	STRCMP_EQUAL("<failure message=\"importantFile:999: Test failed\" type=\"AssertionFailedError\">\n", outputFile->line(6));
 }
 
+TEST(JUnitOutputTest, testFailureWithAmpersands)
+{
+	testCaseRunner->start()
+			.withGroup("testGroupWithFailingTest")
+				.withTest("FailingTestName").thatFails("&object1 != &object2", "importantFile", 999)
+			.end();
+
+	outputFile = fileSystem.file("cpputest_testGroupWithFailingTest.xml");
+
+	STRCMP_EQUAL("<failure message=\"importantFile:999: &amp;object1 != &amp;object2\" type=\"AssertionFailedError\">\n", outputFile->line(6));
+}
+
 TEST(JUnitOutputTest, aCoupleOfTestFailures)
 {
 	testCaseRunner->start()

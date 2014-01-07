@@ -194,6 +194,7 @@ void JUnitTestOutput::writeFailure(JUnitTestCaseResultNode* node)
 	message.replace('"', '\'');
 	message.replace('<', '[');
 	message.replace('>', ']');
+	message.replace("&", "&amp;");
 	message.replace("\n", "{newline}");
 	SimpleString buf = StringFromFormat(
 			"<failure message=\"%s:%d: %s\" type=\"AssertionFailedError\">\n",
