@@ -150,6 +150,14 @@ MockFunctionCall& MockActualFunctionCall::withPointerParameter(const SimpleStrin
 	return *this;
 }
 
+MockFunctionCall& MockActualFunctionCall::withConstPointerParameter(const SimpleString& name, const void* value)
+{
+	MockNamedValue actualParameter(name);
+	actualParameter.setValue(value);
+	checkActualParameter(actualParameter);
+	return *this;
+}
+
 MockFunctionCall& MockActualFunctionCall::withParameterOfType(const SimpleString& type, const SimpleString& name, const void* value)
 {
 	if (getComparatorForType(type) == NULL) {
@@ -251,6 +259,12 @@ MockFunctionCall& MockActualFunctionCall::andReturnValue(double)
 }
 
 MockFunctionCall& MockActualFunctionCall::andReturnValue(void*)
+{
+	FAIL("andReturnValue cannot be called on an ActualFunctionCall. Use returnValue instead to get the value.");
+	return *this;
+}
+
+MockFunctionCall& MockActualFunctionCall::andReturnValue(const void*)
 {
 	FAIL("andReturnValue cannot be called on an ActualFunctionCall. Use returnValue instead to get the value.");
 	return *this;

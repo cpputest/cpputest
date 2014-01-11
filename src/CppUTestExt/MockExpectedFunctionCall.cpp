@@ -92,6 +92,14 @@ MockFunctionCall& MockExpectedFunctionCall::withPointerParameter(const SimpleStr
 	return *this;
 }
 
+MockFunctionCall& MockExpectedFunctionCall::withConstPointerParameter(const SimpleString& name, const void* value)
+{
+	MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
+	parameters_->add(newParameter);
+	newParameter->setValue(value);
+	return *this;
+}
+
 MockFunctionCall& MockExpectedFunctionCall::withParameterOfType(const SimpleString& type, const SimpleString& name, const void* value)
 {
 	MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
@@ -298,6 +306,13 @@ MockFunctionCall& MockExpectedFunctionCall::andReturnValue(double value)
 }
 
 MockFunctionCall& MockExpectedFunctionCall::andReturnValue(void* value)
+{
+	returnValue_.setName("returnValue");
+	returnValue_.setValue(value);
+	return *this;
+}
+
+MockFunctionCall& MockExpectedFunctionCall::andReturnValue(const void* value)
 {
 	returnValue_.setName("returnValue");
 	returnValue_.setValue(value);

@@ -63,9 +63,15 @@ void MockNamedValue::setValue(void* value)
 	value_.pointerValue_ = value;
 }
 
+void MockNamedValue::setValue(const void* value)
+{
+	type_ = "const void*";
+	value_.constPointerValue_ = value;
+}
+
 void MockNamedValue::setValue(const char* value)
 {
-	type_ = "char*";
+	type_ = "const char*";
 	value_.stringValue_ = value;
 }
 
@@ -110,13 +116,19 @@ double MockNamedValue::getDoubleValue() const
 
 const char* MockNamedValue::getStringValue() const
 {
-	STRCMP_EQUAL("char*", type_.asCharString());
+	STRCMP_EQUAL("const char*", type_.asCharString());
 	return value_.stringValue_;
 }
 
 void* MockNamedValue::getPointerValue() const
 {
 	STRCMP_EQUAL("void*", type_.asCharString());
+	return value_.pointerValue_;
+}
+
+const void* MockNamedValue::getConstPointerValue() const
+{
+	STRCMP_EQUAL("const void*", type_.asCharString());
 	return value_.pointerValue_;
 }
 
@@ -138,10 +150,12 @@ bool MockNamedValue::equals(const MockNamedValue& p) const
 		return value_.intValue_ == p.value_.intValue_;
     else if (type_ == "unsigned int")
         return value_.unsignedIntValue_ == p.value_.unsignedIntValue_;
-	else if (type_ == "char*")
+	else if (type_ == "const char*")
 		return SimpleString(value_.stringValue_) == SimpleString(p.value_.stringValue_);
 	else if (type_ == "void*")
 		return value_.pointerValue_ == p.value_.pointerValue_;
+	else if (type_ == "const void*")
+		return value_.constPointerValue_ == p.value_.constPointerValue_;
 	else if (type_ == "double")
 		return (doubles_equal(value_.doubleValue_, p.value_.doubleValue_, 0.005));
 
@@ -157,10 +171,12 @@ SimpleString MockNamedValue::toString() const
 		return StringFrom(value_.intValue_);
 	else if (type_ == "unsigned int")
 		return StringFrom(value_.unsignedIntValue_);
-	else if (type_ == "char*")
+	else if (type_ == "const char*")
 		return value_.stringValue_;
 	else if (type_ == "void*")
 		return StringFrom(value_.pointerValue_);
+	else if (type_ == "const void*")
+		return StringFrom(value_.constPointerValue_);
 	else if (type_ == "double")
 		return StringFrom(value_.doubleValue_);
 

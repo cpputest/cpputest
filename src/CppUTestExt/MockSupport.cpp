@@ -338,6 +338,12 @@ void MockSupport::setData(const SimpleString& name, void* value)
 	newData->setValue(value);
 }
 
+void MockSupport::setData(const SimpleString& name, const void* value)
+{
+	MockNamedValue* newData = retrieveDataFromStore(name);
+	newData->setValue(value);
+}
+
 void MockSupport::setDataObject(const SimpleString& name, const SimpleString& type, void* value)
 {
 	MockNamedValue* newData = retrieveDataFromStore(name);
@@ -419,6 +425,11 @@ double MockSupport::doubleReturnValue()
 void* MockSupport::pointerReturnValue()
 {
 	return returnValue().getPointerValue();
+}
+
+const void* MockSupport::constPointerReturnValue()
+{
+	return returnValue().getConstPointerValue();
 }
 
 bool MockSupport::hasReturnValue()

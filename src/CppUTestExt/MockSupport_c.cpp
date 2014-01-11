@@ -103,6 +103,7 @@ void setIntData_c(const char* name, int value);
 void setDoubleData_c(const char* name, double value);
 void setStringData_c(const char* name, const char* value);
 void setPointerData_c(const char* name, void* value);
+void setConstPointerData_c(const char* name, const void* value);
 void setDataObject_c(const char* name, const char* type, void* value);
 MockValue_c getData_c(const char* name);
 
@@ -114,12 +115,14 @@ MockFunctionCall_c* withIntParameters_c(const char* name, int value);
 MockFunctionCall_c* withDoubleParameters_c(const char* name, double value);
 MockFunctionCall_c* withStringParameters_c(const char* name, const char* value);
 MockFunctionCall_c* withPointerParameters_c(const char* name, void* value);
-MockFunctionCall_c* withParameterOfType_c(const char* type, const char* name, void* value);
+MockFunctionCall_c* withConstPointerParameters_c(const char* name, const void* value);
+MockFunctionCall_c* withParameterOfType_c(const char* type, const char* name, const void* value);
 MockFunctionCall_c* andReturnIntValue_c(int value);
 MockFunctionCall_c* andReturnUnsignedIntValue_c(unsigned int value);
 MockFunctionCall_c* andReturnDoubleValue_c(double value);
 MockFunctionCall_c* andReturnStringValue_c(const char* value);
 MockFunctionCall_c* andReturnPointerValue_c(void* value);
+MockFunctionCall_c* andReturnConstPointerValue_c(const void* value);
 MockValue_c returnValue_c();
 
 
@@ -144,12 +147,14 @@ static MockFunctionCall_c gFunctionCall = {
 		withDoubleParameters_c,
 		withStringParameters_c,
 		withPointerParameters_c,
+		withConstPointerParameters_c,
 		withParameterOfType_c,
 		andReturnUnsignedIntValue_c,
 		andReturnIntValue_c,
 		andReturnDoubleValue_c,
 		andReturnStringValue_c,
 		andReturnPointerValue_c,
+		andReturnConstPointerValue_c,
 		returnValue_c
 };
 
@@ -163,6 +168,7 @@ static MockSupport_c gMockSupport = {
 		setDoubleData_c,
 		setStringData_c,
 		setPointerData_c,
+		setConstPointerData_c,
 		setDataObject_c,
 		getData_c,
 		checkExpectations_c,
@@ -196,7 +202,13 @@ MockFunctionCall_c* withPointerParameters_c(const char* name, void* value)
 	return &gFunctionCall;
 }
 
-MockFunctionCall_c* withParameterOfType_c(const char* type, const char* name, void* value)
+MockFunctionCall_c* withConstPointerParameters_c(const char* name, const void* value)
+{
+	currentCall = &currentCall->withParameter(name, value);
+	return &gFunctionCall;
+}
+
+MockFunctionCall_c* withParameterOfType_c(const char* type, const char* name, const void* value)
 {
 	currentCall = &currentCall->withParameterOfType(type, name, value);
 	return &gFunctionCall;
@@ -232,6 +244,12 @@ MockFunctionCall_c* andReturnPointerValue_c(void* value)
 	return &gFunctionCall;
 }
 
+MockFunctionCall_c* andReturnConstPointerValue_c(const void* value)
+{
+	currentCall = &currentCall->andReturnValue(value);
+	return &gFunctionCall;
+}
+
 static MockValue_c getMockValueCFromNamedValue(const MockNamedValue& namedValue)
 {
 	MockValue_c returnValue;
@@ -247,13 +265,17 @@ static MockValue_c getMockValueCFromNamedValue(const MockNamedValue& namedValue)
 		returnValue.type = MOCKVALUETYPE_DOUBLE;
 		returnValue.value.doubleValue = namedValue.getDoubleValue();
 	}
-	else if (PlatformSpecificStrCmp(namedValue.getType().asCharString(), "char*") == 0) {
+	else if (PlatformSpecificStrCmp(namedValue.getType().asCharString(), "const char*") == 0) {
 		returnValue.type = MOCKVALUETYPE_STRING;
 		returnValue.value.stringValue = namedValue.getStringValue();
 	}
 	else if (PlatformSpecificStrCmp(namedValue.getType().asCharString(), "void*") == 0) {
 		returnValue.type = MOCKVALUETYPE_POINTER;
 		returnValue.value.pointerValue = namedValue.getPointerValue();
+	}
+	else if (PlatformSpecificStrCmp(namedValue.getType().asCharString(), "const void*") == 0) {
+		returnValue.type = MOCKVALUETYPE_CONST_POINTER;
+		returnValue.value.constPointerValue = namedValue.getConstPointerValue();
 	}
 	else {
 		returnValue.type = MOCKVALUETYPE_OBJECT;
@@ -305,6 +327,11 @@ void setStringData_c(const char* name, const char* value)
 }
 
 void setPointerData_c(const char* name, void* value)
+{
+	return currentMockSupport->setData(name, value);
+}
+
+void setConstPointerData_c(const char* name, const void* value)
 {
 	return currentMockSupport->setData(name, value);
 }

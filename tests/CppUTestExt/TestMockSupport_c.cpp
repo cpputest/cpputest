@@ -67,8 +67,8 @@ extern "C"{
 TEST(MockSupport_c, expectAndActualParametersOnObject)
 {
 	mock_c()->installComparator("typeName", typeNameIsEqual, typeNameValueToString);
-	mock_c()->expectOneCall("boo")->withParameterOfType("typeName", "name", (void*) 1);
-	mock_c()->actualCall("boo")->withParameterOfType("typeName", "name", (void*) 1);
+	mock_c()->expectOneCall("boo")->withParameterOfType("typeName", "name", (const void*) 1);
+	mock_c()->actualCall("boo")->withParameterOfType("typeName", "name", (const void*) 1);
 	mock_c()->checkExpectations();
 	mock_c()->removeAllComparators();
 }
@@ -110,6 +110,13 @@ TEST(MockSupport_c, returnPointerValue)
 	LONGS_EQUAL(MOCKVALUETYPE_POINTER, mock_c()->returnValue().type);
 }
 
+TEST(MockSupport_c, returnConstPointerValue)
+{
+	mock_c()->expectOneCall("boo")->andReturnConstPointerValue((const void*) 10);
+	POINTERS_EQUAL((const void*) 10, mock_c()->actualCall("boo")->returnValue().value.constPointerValue);
+	LONGS_EQUAL(MOCKVALUETYPE_CONST_POINTER, mock_c()->returnValue().type);
+}
+
 TEST(MockSupport_c, MockSupportWithScope)
 {
 	mock_scope_c("scope")->expectOneCall("boo");
@@ -140,6 +147,12 @@ TEST(MockSupport_c, MockSupportSetPointerData)
 {
 	mock_c()->setPointerData("pointer", (void*) 1);
 	POINTERS_EQUAL((void*) 1, mock_c()->getData("pointer").value.pointerValue);
+}
+
+TEST(MockSupport_c, MockSupportSetConstPointerData)
+{
+	mock_c()->setConstPointerData("constPointer", (const void*) 1);
+	POINTERS_EQUAL((const void*) 1, mock_c()->getData("constPointer").value.constPointerValue);
 }
 
 TEST(MockSupport_c, MockSupportSetDataObject)

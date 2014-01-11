@@ -319,6 +319,14 @@ TEST(MockSupportTest, expectOnePointerParameterAndValue)
 	CHECK_NO_MOCK_FAILURE();
 }
 
+TEST(MockSupportTest, expectOneConstPointerParameterAndValue)
+{
+	mock().expectOneCall("foo").withParameter("parameter", (const void*) 0x01);
+	mock().actualCall("foo").withParameter("parameter", (const void*) 0x01);
+	mock().checkExpectations();
+	CHECK_NO_MOCK_FAILURE();
+}
+
 TEST(MockSupportTest, expectOneStringParameterAndValueFails)
 {
 	MockNamedValue parameter("parameter");
@@ -681,6 +689,13 @@ TEST(MockSupportTest, setDataPointer)
 	POINTERS_EQUAL(ptr, mock().getData("data").getPointerValue());
 }
 
+TEST(MockSupportTest, setConstDataPointer)
+{
+	const void * ptr = (const void*) 0x001;
+	mock().setData("data", ptr);
+	POINTERS_EQUAL(ptr, mock().getData("data").getConstPointerValue());
+}
+
 TEST(MockSupportTest, setDataObject)
 {
 	void * ptr = (void*) 0x001;
@@ -957,6 +972,14 @@ TEST(MockSupportTest, PointerReturnValue)
 	mock().expectOneCall("foo").andReturnValue(ptr);
 	POINTERS_EQUAL(ptr, mock().actualCall("foo").returnValue().getPointerValue());
 	POINTERS_EQUAL(ptr, mock().pointerReturnValue());
+}
+
+TEST(MockSupportTest, ConstPointerReturnValue)
+{
+	const void* ptr = (const void*) 0x001;
+	mock().expectOneCall("foo").andReturnValue(ptr);
+	POINTERS_EQUAL(ptr, mock().actualCall("foo").returnValue().getConstPointerValue());
+	POINTERS_EQUAL(ptr, mock().constPointerReturnValue());
 }
 
 TEST(MockSupportTest, OnObject)
