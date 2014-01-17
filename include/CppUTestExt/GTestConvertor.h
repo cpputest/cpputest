@@ -213,12 +213,19 @@ public:
 		 * then don't throw the exception, but let it return. Usually this should
 		 * already be at the end of the test, so it doesn't matter much
 		 */
-		if (result_.type() == ::testing::TestPartResult::kNonFatalFailure) {
+
+
+		/*
+		 * TODO: We probably want this check here, however the tests fail when putting it there. Also, we'll need to
+		 * check how to get all the gTest tests to run within CppUTest. At the moment, the 'death tests' seem to fail
+		 * still.
+		 *
+		 * if (result_.type() == ::testing::TestPartResult::kFatalFailure) {
+		 */
 			if (!SimpleString(result_.message()).contains("Actual: never called") &&
 					!SimpleString(result_.message()).contains("Actual function call count doesn't match"))
 				throw CppUTestFailedException();
 
-		}
 	}
 	virtual ~GMockTestTerminator()
 	{
