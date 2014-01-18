@@ -32,7 +32,7 @@
 #include "CppUTestExt/MockFailure.h"
 #include "TestMockFailure.h"
 
-TEST_GROUP(MockActualFunctionCall)
+TEST_GROUP(CheckedMockActualFunctionCall)
 {
 	MockExpectedFunctionsList* emptyList;
 	MockExpectedFunctionsList* list;
@@ -53,22 +53,22 @@ TEST_GROUP(MockActualFunctionCall)
 	}
 };
 
-TEST(MockActualFunctionCall, unExpectedCall)
+TEST(CheckedMockActualFunctionCall, unExpectedCall)
 {
-	MockActualFunctionCall actualCall(1, reporter, *emptyList);
+	CheckedMockActualFunctionCall actualCall(1, reporter, *emptyList);
 	actualCall.withName("unexpected");
 
 	MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "unexpected", *list);
 	CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 
-TEST(MockActualFunctionCall, unExpectedParameterName)
+TEST(CheckedMockActualFunctionCall, unExpectedParameterName)
 {
 	MockExpectedFunctionCall call1;
 	call1.withName("func");
 	list->addExpectedCall(&call1);
 
-	MockActualFunctionCall actualCall(1, reporter, *list);
+	CheckedMockActualFunctionCall actualCall(1, reporter, *list);
 	actualCall.withName("func").withParameter("integer", 1);
 
 	MockNamedValue parameter("integer");
@@ -78,7 +78,7 @@ TEST(MockActualFunctionCall, unExpectedParameterName)
 	CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 
-TEST(MockActualFunctionCall, multipleSameFunctionsExpectingAndHappenGradually)
+TEST(CheckedMockActualFunctionCall, multipleSameFunctionsExpectingAndHappenGradually)
 {
 	MockExpectedFunctionCall* call1 = new MockExpectedFunctionCall();
 	MockExpectedFunctionCall* call2 = new MockExpectedFunctionCall();
@@ -87,8 +87,8 @@ TEST(MockActualFunctionCall, multipleSameFunctionsExpectingAndHappenGradually)
 	list->addExpectedCall(call1);
 	list->addExpectedCall(call2);
 
-	MockActualFunctionCall actualCall1(1, reporter, *list);
-	MockActualFunctionCall actualCall2(2, reporter, *list);
+	CheckedMockActualFunctionCall actualCall1(1, reporter, *list);
+	CheckedMockActualFunctionCall actualCall2(2, reporter, *list);
 
 	LONGS_EQUAL(2, list->amountOfUnfulfilledExpectations());
 	actualCall1.withName("func");

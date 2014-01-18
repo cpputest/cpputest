@@ -152,9 +152,9 @@ MockFunctionCall& MockSupport::expectNCalls(int amount, const SimpleString& func
 }
 
 
-MockActualFunctionCall* MockSupport::createActualFunctionCall()
+CheckedMockActualFunctionCall* MockSupport::createActualFunctionCall()
 {
-	lastActualFunctionCall_ = new MockActualFunctionCall(++callOrder_, activeReporter_, expectations_);
+	lastActualFunctionCall_ = new CheckedMockActualFunctionCall(++callOrder_, activeReporter_, expectations_);
 	return lastActualFunctionCall_;
 }
 
@@ -174,7 +174,7 @@ MockFunctionCall& MockSupport::actualCall(const SimpleString& functionName)
 		return MockIgnoredCall::instance();
 	}
 
-	MockActualFunctionCall* call = createActualFunctionCall();
+	CheckedMockActualFunctionCall* call = createActualFunctionCall();
 	call->setComparatorRepository(&comparatorRepository_);
 	call->withName(functionName);
 	return *call;
