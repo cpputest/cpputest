@@ -132,4 +132,44 @@ private:
 	const MockExpectedFunctionsList& allExpectations_;
 };
 
+class MockFunctionCallTrace : public MockActualFunctionCall
+{
+public:
+	MockFunctionCallTrace();
+	virtual ~MockFunctionCallTrace();
+
+	virtual MockActualFunctionCall& withName(const SimpleString& name) _override;
+	virtual MockActualFunctionCall& withCallOrder(int) _override;
+	virtual MockActualFunctionCall& withIntParameter(const SimpleString& name, int value) _override;
+	virtual MockActualFunctionCall& withUnsignedIntParameter(const SimpleString& name, unsigned int value) _override;
+	virtual MockActualFunctionCall& withDoubleParameter(const SimpleString& name, double value) _override;
+	virtual MockActualFunctionCall& withStringParameter(const SimpleString& name, const char* value) _override;
+	virtual MockActualFunctionCall& withPointerParameter(const SimpleString& name, void* value) _override;
+	virtual MockActualFunctionCall& withConstPointerParameter(const SimpleString& name, const void* value) _override;
+	virtual MockActualFunctionCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value) _override;
+	virtual MockActualFunctionCall& ignoreOtherParameters() _override;
+
+	virtual MockActualFunctionCall& andReturnValue(int value) _override;
+	virtual MockActualFunctionCall& andReturnValue(unsigned int value) _override;
+	virtual MockActualFunctionCall& andReturnValue(double value) _override;
+	virtual MockActualFunctionCall& andReturnValue(const char* value) _override;
+	virtual MockActualFunctionCall& andReturnValue(void* value) _override;
+	virtual MockActualFunctionCall& andReturnValue(const void* value) _override;
+
+	virtual bool hasReturnValue() _override;
+	virtual MockNamedValue returnValue() _override;
+
+	virtual MockActualFunctionCall& onObject(void* objectPtr) _override;
+
+	const char* getTraceOutput();
+	void clear();
+	static MockFunctionCallTrace& instance();
+
+private:
+	SimpleString traceBuffer_;
+
+	void addParameterName(const SimpleString& name);
+};
+
+
 #endif
