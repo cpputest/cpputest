@@ -116,7 +116,7 @@ TEST_GROUP(PluginTest)
 
 TEST(PluginTest, PluginHasName)
 {
-	CHECK_EQUAL(GENERIC_PLUGIN, firstPlugin->getName());
+	STRCMP_EQUAL(GENERIC_PLUGIN, firstPlugin->getName().asCharString());
 }
 
 TEST(PluginTest, InstallPlugin)
