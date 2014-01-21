@@ -116,7 +116,13 @@
   CHECK_EQUAL_LOCATION(expected, actual, __FILE__, __LINE__)
 
 #define CHECK_EQUAL_LOCATION(expected,actual, file, line)\
-  { UtestShell::getCurrent()->assertEquals(((expected) != (actual)), StringFrom(expected).asCharString(), StringFrom(actual).asCharString(), file, line); }
+  { if ((expected) != (actual)) { \
+	  if ((actual) != (actual)) \
+	  	  UtestShell::getCurrent()->print("WARNING:\n\tThe \"Actual Parameter\" parameter is evaluated multiple times resulting in different values.\n\tThus the value in the error message is probably incorrect.", file, line); \
+	  if ((expected) != (expected)) \
+	  	  UtestShell::getCurrent()->print("WARNING:\n\tThe \"Expected Parameter\" parameter is evaluated multiple times resulting in different values.\n\tThus the value in the error message is probably incorrect.", file, line); \
+	  UtestShell::getCurrent()->assertEquals(true, StringFrom(expected).asCharString(), StringFrom(actual).asCharString(), file, line); \
+  } }
 
 //This check checks for char* string equality using strcmp.
 //This makes up for the fact that CHECK_EQUAL only compares the pointers to char*'s
