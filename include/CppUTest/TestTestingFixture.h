@@ -85,6 +85,11 @@ public:
 		return result_->getFailureCount();
 	}
 
+	int getCheckCount()
+	{
+		return result_->getCheckCount();
+	}
+
 	int getIgnoreCount()
 	{
 		return result_->getIgnoredCount();
