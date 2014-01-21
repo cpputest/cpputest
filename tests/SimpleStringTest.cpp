@@ -581,7 +581,8 @@ TEST(SimpleString, BuildStringFromUnsignedInteger)
 	unsigned int i = 0xffffffff;
 
 	SimpleString result = StringFrom(i);
-	CHECK_EQUAL("4294967295 (0xffffffff)", result);
+	const char* expected_string = "4294967295 (0xffffffff)";
+	CHECK_EQUAL(expected_string, result);
 }
 
 #if CPPUTEST_USE_STD_CPP_LIB
@@ -605,7 +606,8 @@ TEST(SimpleString, unsigned_long)
 	unsigned long i = 0xffffffffUL;
 
 	SimpleString result = StringFrom(i);
-	CHECK_EQUAL("4294967295 (0xffffffff)", result);
+	const char* expected_string = "4294967295 (0xffffffff)";
+	CHECK_EQUAL(expected_string, result);
 }
 
 #endif
