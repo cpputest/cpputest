@@ -59,6 +59,14 @@ TEST(UtestShell, compareDoubles)
 	CHECK(doubles_equal(a, a, 0.000000001));
 }
 
+TEST(UtestShell, FailWillIncreaseTheAmountOfChecks)
+{
+	fixture.setTestFunction(_failMethod);
+	fixture.runAllTests();
+	LONGS_EQUAL(1, fixture.getCheckCount());
+}
+
+
 IGNORE_TEST(UtestShell, IgnoreTestAccessingFixture)
 {
 	CHECK(&fixture != 0);
