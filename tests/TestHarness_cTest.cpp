@@ -34,8 +34,8 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 
 
-extern int setup_teardown_was_called_in_test_group_in_C;
-extern int test_was_called_in_test_group_in_C;
+extern "C" int setup_teardown_was_called_in_test_group_in_C;
+extern "C" int test_was_called_in_test_group_in_C;
 int setup_teardown_was_called_in_test_group_in_C = 0;
 int test_was_called_in_test_group_in_C = 0;
 
