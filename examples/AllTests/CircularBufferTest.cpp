@@ -162,8 +162,8 @@ TEST(CircularBuffer, PrintEmpty)
 	Printer* p = &mock;
 
 	buffer->Print(p);
-	CHECK_EQUAL("Circular buffer content:\n<>\n",
-			mock.getOutput());
+	STRCMP_EQUAL("Circular buffer content:\n<>\n",
+			mock.getOutput().c_str());
 }
 
 TEST(CircularBuffer, PrintAfterOnePut)
@@ -172,8 +172,8 @@ TEST(CircularBuffer, PrintAfterOnePut)
 
 	buffer->Put(1);
 	buffer->Print(&mock);
-	CHECK_EQUAL("Circular buffer content:\n<1>\n",
-			mock.getOutput());
+	STRCMP_EQUAL("Circular buffer content:\n<1>\n",
+			mock.getOutput().c_str());
 }
 
 TEST(CircularBuffer, PrintNotYetWrappedOrFull)
@@ -184,8 +184,8 @@ TEST(CircularBuffer, PrintNotYetWrappedOrFull)
 	buffer->Put(2);
 	buffer->Put(3);
 	buffer->Print(&mock);
-	CHECK_EQUAL("Circular buffer content:\n<1, 2, 3>\n",
-			mock.getOutput());
+	STRCMP_EQUAL("Circular buffer content:\n<1, 2, 3>\n",
+			mock.getOutput().c_str());
 }
 
 TEST(CircularBuffer, PrintNotYetWrappedAndIsFull)
@@ -198,7 +198,7 @@ TEST(CircularBuffer, PrintNotYetWrappedAndIsFull)
 	const char* expected = "Circular buffer content:\n"
 		"<200, 201, 202, 203, 204>\n";
 
-	CHECK_EQUAL(expected, mock.getOutput());
+	STRCMP_EQUAL(expected, mock.getOutput().c_str());
 }
 
 TEST(CircularBuffer, PrintWrappedAndIsFullOldestToNewest)
@@ -213,7 +213,7 @@ TEST(CircularBuffer, PrintWrappedAndIsFullOldestToNewest)
 	const char* expected = "Circular buffer content:\n"
 		"<201, 202, 203, 204, 999>\n";
 
-	CHECK_EQUAL(expected, mock.getOutput());
+	STRCMP_EQUAL(expected, mock.getOutput().c_str());
 }
 
 TEST(CircularBuffer, PrintWrappedAndFullOverwriteOldest)
@@ -227,7 +227,7 @@ TEST(CircularBuffer, PrintWrappedAndFullOverwriteOldest)
 	const char* expected = "Circular buffer content:\n"
 		"<201, 202, 203, 204, 9999>\n";
 
-	CHECK_EQUAL(expected, mock.getOutput());
+	STRCMP_EQUAL(expected, mock.getOutput().c_str());
 }
 
 TEST(CircularBuffer, PrintBoundary)
@@ -243,7 +243,7 @@ TEST(CircularBuffer, PrintBoundary)
 	const char* expected = "Circular buffer content:\n"
 		"<888, 300, 301, 302, 303>\n";
 
-	CHECK_EQUAL(expected, mock.getOutput());
+	STRCMP_EQUAL(expected, mock.getOutput().c_str());
 }
 
 TEST(CircularBuffer, FillEmptyThenPrint)
@@ -256,5 +256,5 @@ TEST(CircularBuffer, FillEmptyThenPrint)
 	const char* expected = "Circular buffer content:\n"
 		"<>\n";
 
-	CHECK_EQUAL(expected, mock.getOutput());
+	STRCMP_EQUAL(expected, mock.getOutput().c_str());
 }
