@@ -48,18 +48,21 @@ TEST(Printer, PrintConstCharStar)
 {
 	printer->Print("hello");
 	printer->Print("hello\n");
-	CHECK_EQUAL("hellohello\n", mockPrinter->getOutput());
+	const char* expected = "hellohello\n";
+	CHECK_EQUAL(expected, mockPrinter->getOutput());
 }
 
 TEST(Printer, PrintLong)
 {
 	printer->Print(1234);
-	CHECK_EQUAL("1234", mockPrinter->getOutput());
+	const char* expected = "1234";
+	CHECK_EQUAL(expected, mockPrinter->getOutput());
 }
 
 TEST(Printer, StreamOperators)
 {
 	*printer << "n=" << 1234;
-	CHECK_EQUAL("n=1234", mockPrinter->getOutput());
+	const char* expected = "n=1234";
+	CHECK_EQUAL(expected, mockPrinter->getOutput());
 }
 
