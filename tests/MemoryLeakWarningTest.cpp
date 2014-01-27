@@ -328,4 +328,42 @@ TEST(MemoryLeakWarningGlobalDetectorTest, turnOffNewOverloadsNoThrowCausesNoAddi
 #endif
 }
 
+#ifndef CPPUTEST_MEM_LEAK_DETECTION_DISABLED
+
+
+
+
+TEST_GROUP(MemoryLeakWarningWarningThreadSafe)
+{
+    void setup()
+    {
+    }
+    
+    void teardown()
+    {
+    }
+};
+
+TEST(MemoryLeakWarningWarningThreadSafe, turnOnThreadSafeNewDeleteOverloads)
+{
+    int storedAmountOfLeaks = MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all);
+    
+    MemoryLeakWarningPlugin::turnOnThreadSafeNewDeleteOverloads();
+    int *n = new int;
+    char *str = new char[20];
+    
+    LONGS_EQUAL(storedAmountOfLeaks + 2, MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all));
+    
+    delete [] str;
+    delete n;
+    
+    LONGS_EQUAL(storedAmountOfLeaks, MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all));
+    MemoryLeakWarningPlugin::turnOnNewDeleteOverloads();
+}
+
+
+
+
+#endif
+
 #endif

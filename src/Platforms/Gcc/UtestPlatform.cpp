@@ -195,6 +195,18 @@ void* PlatformSpecificMemset(void* mem, int c, size_t size)
     return memset(mem, c, size);
 }
 
+pthread_mutex_t malloc_mutex = PTHREAD_MUTEX_INITIALIZER;
+
+void PlatformSpecificMallocMutexLock()
+{
+	pthread_mutex_lock(&malloc_mutex);
+}
+
+void PlatformSpecificMallocMutexUnlock()
+{
+	pthread_mutex_unlock(&malloc_mutex);
+}
+
 
 double PlatformSpecificFabs(double d)
 {
