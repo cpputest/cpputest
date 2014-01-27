@@ -37,6 +37,7 @@ enum MemLeakPeriod
 };
 
 class TestMemoryAllocator;
+class SimpleMutex;
 
 class MemoryLeakFailure
 {
@@ -190,9 +191,7 @@ class MemoryLeakDetector
 {
 public:
     MemoryLeakDetector(MemoryLeakFailure* reporter);
-    virtual ~MemoryLeakDetector()
-    {
-    }
+    virtual ~MemoryLeakDetector();
 
     void enable();
     void disable();
@@ -223,6 +222,8 @@ public:
     };
 
     unsigned getCurrentAllocationNumber();
+    
+    SimpleMutex* getMutex(void);
 private:
     MemoryLeakFailure* reporter_;
     MemLeakPeriod current_period_;
@@ -230,6 +231,7 @@ private:
     MemoryLeakDetectorTable memoryTable_;
     bool doAllocationTypeChecking_;
     unsigned allocationSequenceNumber_;
+    SimpleMutex* mutex_;
 
     char* allocateMemoryWithAccountingInformation(TestMemoryAllocator* allocator, size_t size, const char* file, int line, bool allocatNodesSeperately);
     char* reallocateMemoryWithAccountingInformation(TestMemoryAllocator* allocator, char* memory, size_t size, const char* file, int line, bool allocatNodesSeperately);

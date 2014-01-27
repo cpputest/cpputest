@@ -28,6 +28,7 @@
 #include "CppUTest/MemoryLeakDetector.h"
 #include "CppUTest/TestMemoryAllocator.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
+#include "CppUTest/SimpleMutex.h"
 
 #define UNKNOWN ((char*)("<unknown>"))
 
@@ -436,6 +437,15 @@ MemoryLeakDetector::MemoryLeakDetector(MemoryLeakFailure* reporter)
     reporter_ = reporter;
     outputBuffer_ = MemoryLeakOutputStringBuffer();
     memoryTable_ = MemoryLeakDetectorTable();
+    mutex_ = new SimpleMutex;
+}
+
+MemoryLeakDetector::~MemoryLeakDetector()
+{
+    if (mutex_)
+    {
+        delete mutex_;
+    }
 }
 
 void MemoryLeakDetector::clearAllAccounting(MemLeakPeriod period)
@@ -477,6 +487,11 @@ void MemoryLeakDetector::enableAllocationTypeChecking()
 unsigned MemoryLeakDetector::getCurrentAllocationNumber()
 {
     return allocationSequenceNumber_;
+}
+
+SimpleMutex *MemoryLeakDetector::getMutex()
+{
+    return mutex_;
 }
 
 static size_t calculateVoidPointerAlignedSize(size_t size)
