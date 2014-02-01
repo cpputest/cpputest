@@ -16,11 +16,14 @@ set(CppUTestExt_src
 )
 
 set(CppUTestExt_headers
+        ${CppUTestRootDirectory}/include/CppUTestExt/CodeMemoryReportFormatter.h
         ${CppUTestRootDirectory}/include/CppUTestExt/MemoryReportAllocator.h
+        ${CppUTestRootDirectory}/include/CppUTestExt/MockExpectedFunctionCall.h
         ${CppUTestRootDirectory}/include/CppUTestExt/MockExpectedFunctionsList.h
         ${CppUTestRootDirectory}/include/CppUTestExt/MockSupportPlugin.h
         ${CppUTestRootDirectory}/include/CppUTestExt/MemoryReportFormatter.h
         ${CppUTestRootDirectory}/include/CppUTestExt/MockFailure.h
+        ${CppUTestRootDirectory}/include/CppUTestExt/MockSupport.h
         ${CppUTestRootDirectory}/include/CppUTestExt/MockSupport_c.h
         ${CppUTestRootDirectory}/include/CppUTestExt/GMock.h
         ${CppUTestRootDirectory}/include/CppUTestExt/GTest.h
