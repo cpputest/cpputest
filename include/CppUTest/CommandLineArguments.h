@@ -42,6 +42,7 @@ public:
 
 	bool parse(TestPlugin* plugin);
 	bool isVerbose() const;
+	bool isColor() const;
 	int getRepeatCount() const;
 	TestFilter getGroupFilter() const;
 	TestFilter getNameFilter() const;
@@ -60,6 +61,7 @@ private:
 	const char** av_;
 
 	bool verbose_;
+	bool color_;
 	bool runTestsAsSeperateProcess_;
 	int repeat_;
 	TestFilter groupFilter_;
