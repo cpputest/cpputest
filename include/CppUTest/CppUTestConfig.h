@@ -137,6 +137,12 @@
   #define UT_THROW(exception)
 #endif
 
+#if defined(__cplusplus) && __cplusplus >= 201103L
+	#define DEFAULT_COPY_CONSTRUCTOR(classname) classname(const classname &) = default;
+#else
+	#define DEFAULT_COPY_CONSTRUCTOR(classname)
+#endif
+
 /*
  * g++-4.7 with stdc++11 enabled On MacOSX! will have a different exception specifier for operator new (and thank you!)
  * I assume they'll fix this in the future, but for now, we'll change that here.
