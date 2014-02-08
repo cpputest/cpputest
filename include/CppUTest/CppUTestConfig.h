@@ -120,7 +120,11 @@
   #endif
 #else
   #define UT_THROW(exception)
-  #define UT_NOTHROW
+  #ifdef __clang__
+    #define UT_NOTHROW throw()
+  #else
+    #define UT_NOTHROW
+  #endif
 #endif
 
 /*
@@ -131,16 +135,6 @@
 #ifdef _MSC_VER
   #undef UT_THROW
   #define UT_THROW(exception)
-#endif
-
-/*
- * CLang's operator delete requires an NOTHROW block. For now, when we use CLang, then have an empty exception specifier.
- * However, this ought to be done inside the configure.ac in the future.
- */
-
-#ifdef __clang__
-#undef UT_NOTHROW
-#define UT_NOTHROW throw()
 #endif
 
 /*
