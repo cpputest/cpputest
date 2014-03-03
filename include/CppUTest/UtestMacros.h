@@ -122,6 +122,10 @@
 	  if ((expected) != (expected)) \
 	  	  UtestShell::getCurrent()->print("WARNING:\n\tThe \"Expected Parameter\" parameter is evaluated multiple times resulting in different values.\n\tThus the value in the error message is probably incorrect.", file, line); \
 	  UtestShell::getCurrent()->assertEquals(true, StringFrom(expected).asCharString(), StringFrom(actual).asCharString(), file, line); \
+  } \
+  else \
+  { \
+    UtestShell::getCurrent()->assertLongsEqual((long)0, (long)0, file, line); \
   } }
 
 //This check checks for char* string equality using strcmp.
