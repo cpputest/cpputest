@@ -318,7 +318,7 @@ SimpleString MockExpectedFunctionsList::fulfilledFunctionsToString(const SimpleS
 {
 	SimpleString str;
 
-	MockExpectedFunctionsListNode* nextNodeInOrder = head_;
+	MockExpectedFunctionsListNode* nextNodeInOrder;
 	for (int callOrder = 1; (nextNodeInOrder = findNodeWithCallOrderOf(callOrder)); callOrder++)
 		if (nextNodeInOrder)
 			str = appendStringOnANewLine(str, linePrefix, nextNodeInOrder->expectedCall_->callToString());
