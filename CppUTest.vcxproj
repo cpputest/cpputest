@@ -132,7 +132,6 @@ copy $(OutDir)CppUTest.lib lib\CppUTest.lib
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\CppUTestExt\CodeMemoryReportFormatter.cpp" />
-    <ClCompile Include="src\CppUTestExt\GTestConvertor.cpp" />
     <ClCompile Include="src\CppUTestExt\MemoryReportAllocator.cpp" />
     <ClCompile Include="src\CppUTestExt\MemoryReporterPlugin.cpp" />
     <ClCompile Include="src\CppUTestExt\MemoryReportFormatter.cpp" />
@@ -171,7 +170,6 @@ copy $(OutDir)CppUTest.lib lib\CppUTest.lib
     <ClInclude Include="include\CppUTestExt\CodeMemoryReportFormatter.h" />
     <ClInclude Include="include\CppUTestExt\GMock.h" />
     <ClInclude Include="include\CppUTestExt\GTestConvertor.h" />
-    <ClInclude Include="include\CppUTestExt\GTestInterface.h" />
     <ClInclude Include="include\CppUTestExt\MemoryReportAllocator.h" />
     <ClInclude Include="include\CppUTestExt\MemoryReporterPlugin.h" />
     <ClInclude Include="include\CppUTestExt\MemoryReportFormatter.h" />
