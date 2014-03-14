@@ -45,6 +45,11 @@ static void _passingTestMethod()
 	CHECK(true);
 }
 
+static void _passingCheckEqualTestMethod()
+{
+	CHECK_EQUAL(1, 1);
+}
+
 TEST(UtestShell, compareDoubles)
 {
 	double zero = 0.0;
@@ -62,6 +67,13 @@ TEST(UtestShell, compareDoubles)
 TEST(UtestShell, FailWillIncreaseTheAmountOfChecks)
 {
 	fixture.setTestFunction(_failMethod);
+	fixture.runAllTests();
+	LONGS_EQUAL(1, fixture.getCheckCount());
+}
+
+TEST(UtestShell, PassedCheckEqualWillIncreaseTheAmountOfChecks)
+{
+	fixture.setTestFunction(_passingCheckEqualTestMethod);
 	fixture.runAllTests();
 	LONGS_EQUAL(1, fixture.getCheckCount());
 }
