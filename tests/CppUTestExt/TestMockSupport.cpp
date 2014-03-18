@@ -280,7 +280,7 @@ TEST(MockSupportTest, expectOneCallHoweverMultipleHappened)
 
 TEST(MockSupportTest, expectOneUnsignedIntegerParameterAndValue)
 {
-    unsigned int value = 144000;
+    unsigned int value = 14400;
 	mock().expectOneCall("foo").withParameter("parameter", value);
 	mock().actualCall("foo").withParameter("parameter", value);
 	mock().checkExpectations();
