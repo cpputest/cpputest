@@ -70,6 +70,13 @@ public:
 	virtual MockNamedValue returnValue()=0;
 
 	virtual MockFunctionCall& onObject(void* objectPtr)=0;
+};
+
+class MockFunctionCallBase
+{
+public:
+	MockFunctionCallBase() : comparatorRepository_(NULL) {}
+	virtual ~MockFunctionCallBase() {}
 
 	virtual void setComparatorRepository(MockNamedValueComparatorRepository* repository);
 

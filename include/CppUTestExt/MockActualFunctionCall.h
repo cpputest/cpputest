@@ -35,7 +35,7 @@ class MockFailureReporter;
 class MockFailure;
 class MockNamedValue;
 
-class MockActualFunctionCall : public MockFunctionCall
+class MockActualFunctionCall
 {
 public:
 	MockActualFunctionCall();
@@ -71,7 +71,7 @@ public:
 };
 
 
-class CheckedMockActualFunctionCall : public MockActualFunctionCall
+class CheckedMockActualFunctionCall : public MockActualFunctionCall, public MockFunctionCallBase
 {
 public:
 	CheckedMockActualFunctionCall(int callOrder, MockFailureReporter* reporter, const MockExpectedFunctionsList& expectations);
