@@ -455,4 +455,9 @@ MockFunctionCallTrace& MockFunctionCallTrace::instance()
 	return call;
 }
 
+MockIgnoredActualCall& MockIgnoredActualCall::instance()
+{
+    static MockIgnoredActualCall call;
+    return call;
+}
 

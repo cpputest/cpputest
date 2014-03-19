@@ -67,7 +67,8 @@ public:
 };
 
 static MockSupport* currentMockSupport = NULL;
-static MockFunctionCall* currentCall = NULL;
+static MockExpectedFunctionCall* expectedCall = NULL;
+static MockActualFunctionCall* actualCall = NULL;
 static MockFailureReporterForInCOnlyCode failureReporterForC;
 
 class MockCFunctionComparatorNode : public MockNamedValueComparator
@@ -95,8 +96,8 @@ static MockCFunctionComparatorNode* comparatorList_ = NULL;
 
 extern "C" {
 
-MockFunctionCall_c* expectOneCall_c(const char* name);
-MockFunctionCall_c* actualCall_c(const char* name);
+MockExpectedFunctionCall_c* expectOneCall_c(const char* name);
+MockActualFunctionCall_c* actualCall_c(const char* name);
 void disable_c(void);
 void enable_c(void);
 void setIntData_c(const char* name, int value);
@@ -111,19 +112,27 @@ void checkExpectations_c();
 int expectedCallsLeft_c();
 void clear_c();
 
-MockFunctionCall_c* withIntParameters_c(const char* name, int value);
-MockFunctionCall_c* withDoubleParameters_c(const char* name, double value);
-MockFunctionCall_c* withStringParameters_c(const char* name, const char* value);
-MockFunctionCall_c* withPointerParameters_c(const char* name, void* value);
-MockFunctionCall_c* withConstPointerParameters_c(const char* name, const void* value);
-MockFunctionCall_c* withParameterOfType_c(const char* type, const char* name, const void* value);
-MockFunctionCall_c* andReturnIntValue_c(int value);
-MockFunctionCall_c* andReturnUnsignedIntValue_c(unsigned int value);
-MockFunctionCall_c* andReturnDoubleValue_c(double value);
-MockFunctionCall_c* andReturnStringValue_c(const char* value);
-MockFunctionCall_c* andReturnPointerValue_c(void* value);
-MockFunctionCall_c* andReturnConstPointerValue_c(const void* value);
-MockValue_c returnValue_c();
+MockExpectedFunctionCall_c* withIntParameters_c(const char* name, int value);
+MockExpectedFunctionCall_c* withDoubleParameters_c(const char* name, double value);
+MockExpectedFunctionCall_c* withStringParameters_c(const char* name, const char* value);
+MockExpectedFunctionCall_c* withPointerParameters_c(const char* name, void* value);
+MockExpectedFunctionCall_c* withConstPointerParameters_c(const char* name, const void* value);
+MockExpectedFunctionCall_c* withParameterOfType_c(const char* type, const char* name, const void* value);
+MockExpectedFunctionCall_c* andReturnIntValue_c(int value);
+MockExpectedFunctionCall_c* andReturnUnsignedIntValue_c(unsigned int value);
+MockExpectedFunctionCall_c* andReturnDoubleValue_c(double value);
+MockExpectedFunctionCall_c* andReturnStringValue_c(const char* value);
+MockExpectedFunctionCall_c* andReturnPointerValue_c(void* value);
+MockExpectedFunctionCall_c* andReturnConstPointerValue_c(const void* value);
+MockValue_c expectedReturnValue_c();
+
+MockActualFunctionCall_c* withActualIntParameters_c(const char* name, int value);
+MockActualFunctionCall_c* withActualDoubleParameters_c(const char* name, double value);
+MockActualFunctionCall_c* withActualStringParameters_c(const char* name, const char* value);
+MockActualFunctionCall_c* withActualPointerParameters_c(const char* name, void* value);
+MockActualFunctionCall_c* withActualConstPointerParameters_c(const char* name, const void* value);
+MockActualFunctionCall_c* withActualParameterOfType_c(const char* type, const char* name, const void* value);
+MockValue_c actualReturnValue_c();
 
 
 static void installComparator_c (const char* typeName, MockTypeEqualFunction_c isEqual, MockTypeValueToStringFunction_c valueToString)
@@ -142,26 +151,36 @@ static void removeAllComparators_c()
 	currentMockSupport->removeAllComparators();
 }
 
-static MockFunctionCall_c gFunctionCall = {
+static MockExpectedFunctionCall_c gExpectedFunctionCall = {
 		withIntParameters_c,
 		withDoubleParameters_c,
 		withStringParameters_c,
 		withPointerParameters_c,
 		withConstPointerParameters_c,
 		withParameterOfType_c,
-		andReturnUnsignedIntValue_c,
-		andReturnIntValue_c,
-		andReturnDoubleValue_c,
-		andReturnStringValue_c,
-		andReturnPointerValue_c,
-		andReturnConstPointerValue_c,
-		returnValue_c
+        andReturnUnsignedIntValue_c,
+        andReturnIntValue_c,
+        andReturnDoubleValue_c,
+        andReturnStringValue_c,
+        andReturnPointerValue_c,
+        andReturnConstPointerValue_c,
+		expectedReturnValue_c
+};
+
+static MockActualFunctionCall_c gActualFunctionCall = {
+		withActualIntParameters_c,
+		withActualDoubleParameters_c,
+		withActualStringParameters_c,
+		withActualPointerParameters_c,
+		withActualConstPointerParameters_c,
+		withActualParameterOfType_c,
+		actualReturnValue_c
 };
 
 static MockSupport_c gMockSupport = {
 		expectOneCall_c,
 		actualCall_c,
-		returnValue_c,
+		actualReturnValue_c,
 		enable_c,
 		disable_c,
 		setIntData_c,
@@ -178,76 +197,76 @@ static MockSupport_c gMockSupport = {
 		removeAllComparators_c
 };
 
-MockFunctionCall_c* withIntParameters_c(const char* name, int value)
+MockExpectedFunctionCall_c* withIntParameters_c(const char* name, int value)
 {
-	currentCall = &currentCall->withParameter(name, value);
-	return &gFunctionCall;
+	expectedCall = &expectedCall->withParameter(name, value);
+	return &gExpectedFunctionCall;
 }
 
-MockFunctionCall_c* withDoubleParameters_c(const char* name, double value)
+MockExpectedFunctionCall_c* withDoubleParameters_c(const char* name, double value)
 {
-	currentCall = &currentCall->withParameter(name, value);
-	return &gFunctionCall;
+	expectedCall = &expectedCall->withParameter(name, value);
+	return &gExpectedFunctionCall;
 }
 
-MockFunctionCall_c* withStringParameters_c(const char* name, const char* value)
+MockExpectedFunctionCall_c* withStringParameters_c(const char* name, const char* value)
 {
-	currentCall = &currentCall->withParameter(name, value);
-	return &gFunctionCall;
+	expectedCall = &expectedCall->withParameter(name, value);
+	return &gExpectedFunctionCall;
 }
 
-MockFunctionCall_c* withPointerParameters_c(const char* name, void* value)
+MockExpectedFunctionCall_c* withPointerParameters_c(const char* name, void* value)
 {
-	currentCall = &currentCall->withParameter(name, value);
-	return &gFunctionCall;
+	expectedCall = &expectedCall->withParameter(name, value);
+	return &gExpectedFunctionCall;
 }
 
-MockFunctionCall_c* withConstPointerParameters_c(const char* name, const void* value)
+MockExpectedFunctionCall_c* withConstPointerParameters_c(const char* name, const void* value)
 {
-	currentCall = &currentCall->withParameter(name, value);
-	return &gFunctionCall;
+	expectedCall = &expectedCall->withParameter(name, value);
+	return &gExpectedFunctionCall;
 }
 
-MockFunctionCall_c* withParameterOfType_c(const char* type, const char* name, const void* value)
+MockExpectedFunctionCall_c* withParameterOfType_c(const char* type, const char* name, const void* value)
 {
-	currentCall = &currentCall->withParameterOfType(type, name, value);
-	return &gFunctionCall;
+	expectedCall = &expectedCall->withParameterOfType(type, name, value);
+	return &gExpectedFunctionCall;
 }
 
-MockFunctionCall_c* andReturnUnsignedIntValue_c(unsigned int value)
+MockExpectedFunctionCall_c* andReturnUnsignedIntValue_c(unsigned int value)
 {
-	currentCall = &currentCall->andReturnValue(value);
-	return &gFunctionCall;
+	expectedCall = &expectedCall->andReturnValue(value);
+	return &gExpectedFunctionCall;
 }
 
-MockFunctionCall_c* andReturnIntValue_c(int value)
+MockExpectedFunctionCall_c* andReturnIntValue_c(int value)
 {
-	currentCall = &currentCall->andReturnValue(value);
-	return &gFunctionCall;
+	expectedCall = &expectedCall->andReturnValue(value);
+	return &gExpectedFunctionCall;
 }
 
-MockFunctionCall_c* andReturnDoubleValue_c(double value)
+MockExpectedFunctionCall_c* andReturnDoubleValue_c(double value)
 {
-	currentCall = &currentCall->andReturnValue(value);
-	return &gFunctionCall;
+	expectedCall = &expectedCall->andReturnValue(value);
+	return &gExpectedFunctionCall;
 }
 
-MockFunctionCall_c* andReturnStringValue_c(const char* value)
+MockExpectedFunctionCall_c* andReturnStringValue_c(const char* value)
 {
-	currentCall = &currentCall->andReturnValue(value);
-	return &gFunctionCall;
+	expectedCall = &expectedCall->andReturnValue(value);
+	return &gExpectedFunctionCall;
 }
 
-MockFunctionCall_c* andReturnPointerValue_c(void* value)
+MockExpectedFunctionCall_c* andReturnPointerValue_c(void* value)
 {
-	currentCall = &currentCall->andReturnValue(value);
-	return &gFunctionCall;
+	expectedCall = &expectedCall->andReturnValue(value);
+	return &gExpectedFunctionCall;
 }
 
-MockFunctionCall_c* andReturnConstPointerValue_c(const void* value)
+MockExpectedFunctionCall_c* andReturnConstPointerValue_c(const void* value)
 {
-	currentCall = &currentCall->andReturnValue(value);
-	return &gFunctionCall;
+	expectedCall = &expectedCall->andReturnValue(value);
+	return &gExpectedFunctionCall;
 }
 
 static MockValue_c getMockValueCFromNamedValue(const MockNamedValue& namedValue)
@@ -284,21 +303,62 @@ static MockValue_c getMockValueCFromNamedValue(const MockNamedValue& namedValue)
 	return returnValue;
 }
 
-MockValue_c returnValue_c()
+MockValue_c expectedReturnValue_c()
 {
-	return getMockValueCFromNamedValue(currentCall->returnValue());
+	return getMockValueCFromNamedValue(expectedCall->returnValue());
 }
 
-MockFunctionCall_c* expectOneCall_c(const char* name)
+MockExpectedFunctionCall_c* expectOneCall_c(const char* name)
 {
-	currentCall = &currentMockSupport->expectOneCall(name);
-	return &gFunctionCall;
+	expectedCall = &currentMockSupport->expectOneCall(name);
+	return &gExpectedFunctionCall;
 }
 
-MockFunctionCall_c* actualCall_c(const char* name)
+MockActualFunctionCall_c* actualCall_c(const char* name)
 {
-	currentCall = &currentMockSupport->actualCall(name);
-	return &gFunctionCall;
+	actualCall = &currentMockSupport->actualCall(name);
+	return &gActualFunctionCall;
+}
+
+MockActualFunctionCall_c* withActualIntParameters_c(const char* name, int value)
+{
+	actualCall = &actualCall->withParameter(name, value);
+	return &gActualFunctionCall;
+}
+
+MockActualFunctionCall_c* withActualDoubleParameters_c(const char* name, double value)
+{
+	actualCall = &actualCall->withParameter(name, value);
+	return &gActualFunctionCall;
+}
+
+MockActualFunctionCall_c* withActualStringParameters_c(const char* name, const char* value)
+{
+	actualCall = &actualCall->withParameter(name, value);
+	return &gActualFunctionCall;
+}
+
+MockActualFunctionCall_c* withActualPointerParameters_c(const char* name, void* value)
+{
+	actualCall = &actualCall->withParameter(name, value);
+	return &gActualFunctionCall;
+}
+
+MockActualFunctionCall_c* withActualConstPointerParameters_c(const char* name, const void* value)
+{
+	actualCall = &actualCall->withParameter(name, value);
+	return &gActualFunctionCall;
+}
+
+MockActualFunctionCall_c* withActualParameterOfType_c(const char* type, const char* name, const void* value)
+{
+	actualCall = &actualCall->withParameterOfType(type, name, value);
+	return &gActualFunctionCall;
+}
+
+MockValue_c actualReturnValue_c()
+{
+	return getMockValueCFromNamedValue(actualCall->returnValue());
 }
 
 void disable_c(void)

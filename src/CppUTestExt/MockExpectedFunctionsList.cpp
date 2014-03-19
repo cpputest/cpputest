@@ -99,7 +99,7 @@ bool MockExpectedFunctionsList::hasExpectationWithName(const SimpleString& name)
 	return false;
 }
 
-void MockExpectedFunctionsList::addExpectedCall(MockExpectedFunctionCall* call)
+void MockExpectedFunctionsList::addExpectedCall(CheckedMockExpectedFunctionCall* call)
 {
 	MockExpectedFunctionsListNode* newCall = new MockExpectedFunctionsListNode(call);
 
@@ -193,11 +193,11 @@ void MockExpectedFunctionsList::onlyKeepUnfulfilledExpectationsOnObject(void* ob
 	onlyKeepExpectationsOnObject(objectPtr);
 }
 
-MockExpectedFunctionCall* MockExpectedFunctionsList::removeOneFulfilledExpectation()
+CheckedMockExpectedFunctionCall* MockExpectedFunctionsList::removeOneFulfilledExpectation()
 {
 	for (MockExpectedFunctionsListNode* p = head_; p; p = p->next_) {
 		if (p->expectedCall_->isFulfilled()) {
-			MockExpectedFunctionCall* fulfilledCall = p->expectedCall_;
+			CheckedMockExpectedFunctionCall* fulfilledCall = p->expectedCall_;
 			p->expectedCall_ = NULL;
 			pruneEmptyNodeFromList();
 			return fulfilledCall;
@@ -206,11 +206,11 @@ MockExpectedFunctionCall* MockExpectedFunctionsList::removeOneFulfilledExpectati
 	return NULL;
 }
 
-MockExpectedFunctionCall* MockExpectedFunctionsList::removeOneFulfilledExpectationWithIgnoredParameters()
+CheckedMockExpectedFunctionCall* MockExpectedFunctionsList::removeOneFulfilledExpectationWithIgnoredParameters()
 {
 	for (MockExpectedFunctionsListNode* p = head_; p; p = p->next_) {
 		if (p->expectedCall_->isFulfilledWithoutIgnoredParameters()) {
-			MockExpectedFunctionCall* fulfilledCall = p->expectedCall_;
+			CheckedMockExpectedFunctionCall* fulfilledCall = p->expectedCall_;
 			p->expectedCall_->parametersWereIgnored();
 			p->expectedCall_ = NULL;
 			pruneEmptyNodeFromList();

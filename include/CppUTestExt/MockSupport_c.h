@@ -56,35 +56,48 @@ typedef struct SMockValue_c
 	} value;
 } MockValue_c;
 
-typedef struct SMockFunctionCall_c MockFunctionCall_c;
-struct SMockFunctionCall_c
+typedef struct SMockActualFunctionCall_c MockActualFunctionCall_c;
+struct SMockActualFunctionCall_c
 {
-	MockFunctionCall_c* (*withIntParameters)(const char* name, int value);
-	MockFunctionCall_c* (*withDoubleParameters)(const char* name, double value);
-	MockFunctionCall_c* (*withStringParameters)(const char* name, const char* value);
-	MockFunctionCall_c* (*withPointerParameters)(const char* name, void* value);
-	MockFunctionCall_c* (*withConstPointerParameters)(const char* name, const void* value);
-	MockFunctionCall_c* (*withParameterOfType)(const char* type, const char* name, const void* value);
-
-	MockFunctionCall_c* (*andReturnUnsignedIntValue)(unsigned int value);
-	MockFunctionCall_c* (*andReturnIntValue)(int value);
-	MockFunctionCall_c* (*andReturnDoubleValue)(double value);
-	MockFunctionCall_c* (*andReturnStringValue)(const char* value);
-	MockFunctionCall_c* (*andReturnPointerValue)(void* value);
-	MockFunctionCall_c* (*andReturnConstPointerValue)(const void* value);
+	MockActualFunctionCall_c* (*withIntParameters)(const char* name, int value);
+	MockActualFunctionCall_c* (*withDoubleParameters)(const char* name, double value);
+	MockActualFunctionCall_c* (*withStringParameters)(const char* name, const char* value);
+	MockActualFunctionCall_c* (*withPointerParameters)(const char* name, void* value);
+	MockActualFunctionCall_c* (*withConstPointerParameters)(const char* name, const void* value);
+	MockActualFunctionCall_c* (*withParameterOfType)(const char* type, const char* name, const void* value);
 
 	MockValue_c (*returnValue)(void);
 
 };
 
+typedef struct SMockExpectedFunctionCall_c MockExpectedFunctionCall_c;
+struct SMockExpectedFunctionCall_c
+{
+	MockExpectedFunctionCall_c* (*withIntParameters)(const char* name, int value);
+	MockExpectedFunctionCall_c* (*withDoubleParameters)(const char* name, double value);
+	MockExpectedFunctionCall_c* (*withStringParameters)(const char* name, const char* value);
+	MockExpectedFunctionCall_c* (*withPointerParameters)(const char* name, void* value);
+	MockExpectedFunctionCall_c* (*withConstPointerParameters)(const char* name, const void* value);
+	MockExpectedFunctionCall_c* (*withParameterOfType)(const char* type, const char* name, const void* value);
+
+	MockExpectedFunctionCall_c* (*andReturnUnsignedIntValue)(unsigned int value);
+	MockExpectedFunctionCall_c* (*andReturnIntValue)(int value);
+	MockExpectedFunctionCall_c* (*andReturnDoubleValue)(double value);
+	MockExpectedFunctionCall_c* (*andReturnStringValue)(const char* value);
+	MockExpectedFunctionCall_c* (*andReturnPointerValue)(void* value);
+	MockExpectedFunctionCall_c* (*andReturnConstPointerValue)(const void* value);
+
+    MockValue_c (*returnValue)(void);
+
+};
 typedef int (*MockTypeEqualFunction_c)(const void* object1, const void* object2);
 typedef char* (*MockTypeValueToStringFunction_c)(const void* object1);
 
 typedef struct SMockSupport_c MockSupport_c;
 struct SMockSupport_c
 {
-	MockFunctionCall_c* (*expectOneCall)(const char* name);
-	MockFunctionCall_c* (*actualCall)(const char* name);
+	MockExpectedFunctionCall_c* (*expectOneCall)(const char* name);
+	MockActualFunctionCall_c* (*actualCall)(const char* name);
 	MockValue_c (*returnValue)(void);
 
 	void (*enable)(void);
