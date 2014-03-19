@@ -33,6 +33,14 @@ SimpleString StringFrom(const MockNamedValue& parameter)
 	return parameter.toString();
 }
 
+MockExpectedFunctionCall::MockExpectedFunctionCall()
+{
+}
+
+MockExpectedFunctionCall::~MockExpectedFunctionCall()
+{
+}
+
 CheckedMockExpectedFunctionCall::CheckedMockExpectedFunctionCall()
 	: ignoreOtherParameters_(false), parametersWereIgnored_(false), callOrder_(0), expectedCallOrder_(NO_EXPECTED_CALL_ORDER), outOfOrder_(true), returnValue_(""), objectPtr_(NULL), wasPassedToObject_(true)
 {
