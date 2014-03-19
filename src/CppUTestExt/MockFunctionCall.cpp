@@ -29,7 +29,7 @@
 #include "CppUTestExt/MockFunctionCall.h"
 #include "CppUTestExt/MockNamedValue.h"
 
-MockFunctionCall::MockFunctionCall() : comparatorRepository_(NULL)
+MockFunctionCall::MockFunctionCall()
 {
 }
 
@@ -37,22 +37,22 @@ MockFunctionCall::~MockFunctionCall()
 {
 }
 
-void MockFunctionCall::setComparatorRepository(MockNamedValueComparatorRepository* repository)
+void MockFunctionCallBase::setComparatorRepository(MockNamedValueComparatorRepository* repository)
 {
 	comparatorRepository_ = repository;
 }
 
-void MockFunctionCall::setName(const SimpleString& name)
+void MockFunctionCallBase::setName(const SimpleString& name)
 {
 	functionName_ = name;
 }
 
-SimpleString MockFunctionCall::getName() const
+SimpleString MockFunctionCallBase::getName() const
 {
 	return functionName_;
 }
 
-MockNamedValueComparator* MockFunctionCall::getComparatorForType(const SimpleString& type) const
+MockNamedValueComparator* MockFunctionCallBase::getComparatorForType(const SimpleString& type) const
 {
 	if (comparatorRepository_)
 		return comparatorRepository_->getComparatorForType(type);
