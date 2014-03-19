@@ -33,12 +33,12 @@
 
 extern SimpleString StringFrom(const MockNamedValue& parameter);
 
-class MockExpectedFunctionCall : public MockFunctionCall, public MockFunctionCallBase
+class CheckedMockExpectedFunctionCall : public MockFunctionCall, public MockFunctionCallBase
 {
 
 public:
-	MockExpectedFunctionCall();
-	virtual ~MockExpectedFunctionCall();
+	CheckedMockExpectedFunctionCall();
+	virtual ~CheckedMockExpectedFunctionCall();
 
 	virtual MockFunctionCall& withName(const SimpleString& name) _override;
 	virtual MockFunctionCall& withCallOrder(int) _override;

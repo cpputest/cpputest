@@ -34,17 +34,17 @@
 TEST_GROUP(MockExpectedFunctionsList)
 {
 	MockExpectedFunctionsList * list;
-	MockExpectedFunctionCall* call1;
-	MockExpectedFunctionCall* call2;
-	MockExpectedFunctionCall* call3;
-	MockExpectedFunctionCall* call4;
+	CheckedMockExpectedFunctionCall* call1;
+	CheckedMockExpectedFunctionCall* call2;
+	CheckedMockExpectedFunctionCall* call3;
+	CheckedMockExpectedFunctionCall* call4;
 	void setup()
 	{
 		list = new MockExpectedFunctionsList;
-		call1 = new MockExpectedFunctionCall;
-		call2 = new MockExpectedFunctionCall;
-		call3 = new MockExpectedFunctionCall;
-		call4 = new MockExpectedFunctionCall;
+		call1 = new CheckedMockExpectedFunctionCall;
+		call2 = new CheckedMockExpectedFunctionCall;
+		call3 = new CheckedMockExpectedFunctionCall;
+		call4 = new CheckedMockExpectedFunctionCall;
 		call1->withName("foo");
 		call2->withName("bar");
 		call3->withName("boo");
@@ -107,8 +107,8 @@ TEST(MockExpectedFunctionsList, listWithUnFulfilledExpectationHasNoUnfillfilledO
 
 TEST(MockExpectedFunctionsList, deleteAllExpectationsAndClearList)
 {
-	list->addExpectedCall(new MockExpectedFunctionCall);
-	list->addExpectedCall(new MockExpectedFunctionCall);
+	list->addExpectedCall(new CheckedMockExpectedFunctionCall);
+	list->addExpectedCall(new CheckedMockExpectedFunctionCall);
 	list->deleteAllExpectationsAndClearList();
 }
 
