@@ -164,7 +164,6 @@ static MockExpectedFunctionCall_c gExpectedFunctionCall = {
         andReturnStringValue_c,
         andReturnPointerValue_c,
         andReturnConstPointerValue_c,
-		expectedReturnValue_c
 };
 
 static MockActualFunctionCall_c gActualFunctionCall = {
@@ -301,11 +300,6 @@ static MockValue_c getMockValueCFromNamedValue(const MockNamedValue& namedValue)
 		returnValue.value.objectValue = namedValue.getObjectPointer();
 	}
 	return returnValue;
-}
-
-MockValue_c expectedReturnValue_c()
-{
-	return getMockValueCFromNamedValue(expectedCall->returnValue());
 }
 
 MockExpectedFunctionCall_c* expectOneCall_c(const char* name)
