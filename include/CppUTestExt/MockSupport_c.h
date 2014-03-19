@@ -86,10 +86,8 @@ struct SMockExpectedFunctionCall_c
 	MockExpectedFunctionCall_c* (*andReturnStringValue)(const char* value);
 	MockExpectedFunctionCall_c* (*andReturnPointerValue)(void* value);
 	MockExpectedFunctionCall_c* (*andReturnConstPointerValue)(const void* value);
-
-    MockValue_c (*returnValue)(void);
-
 };
+
 typedef int (*MockTypeEqualFunction_c)(const void* object1, const void* object2);
 typedef char* (*MockTypeValueToStringFunction_c)(const void* object1);
 

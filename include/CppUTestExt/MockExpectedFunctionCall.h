@@ -66,9 +66,9 @@ public:
 	virtual MockExpectedFunctionCall& andReturnValue(const char* value)=0;
 	virtual MockExpectedFunctionCall& andReturnValue(void* value)=0;
 	virtual MockExpectedFunctionCall& andReturnValue(const void* value)=0;
+	
 	virtual bool hasReturnValue()=0;
-	virtual MockNamedValue returnValue()=0;
-
+	
 	virtual MockExpectedFunctionCall& onObject(void* objectPtr)=0;
 };
 
@@ -98,7 +98,7 @@ public:
 	virtual MockExpectedFunctionCall& andReturnValue(const void* value) _override;
 
 	virtual bool hasReturnValue() _override;
-	virtual MockNamedValue returnValue() _override;
+	virtual MockNamedValue returnValue();
 
 	virtual MockExpectedFunctionCall& onObject(void* objectPtr) _override;
 
@@ -180,7 +180,6 @@ public:
 	virtual MockExpectedFunctionCall& andReturnValue(const void*) _override;
 
 	virtual bool hasReturnValue() _override;
-	virtual MockNamedValue returnValue() _override;
 
 	virtual MockExpectedFunctionCall& onObject(void* ) _override;
 
@@ -212,7 +211,7 @@ public:
 	virtual MockExpectedFunctionCall& andReturnValue(const void*) _override { return *this; }
 
 	virtual bool hasReturnValue() _override { return false; }
-	virtual MockNamedValue returnValue() _override { return MockNamedValue(""); }
+	virtual MockNamedValue returnValue() { return MockNamedValue(""); }
 
 	virtual MockExpectedFunctionCall& onObject(void* ) _override { return *this; }
 
