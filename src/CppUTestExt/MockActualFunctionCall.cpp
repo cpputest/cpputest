@@ -357,36 +357,6 @@ MockActualFunctionCall& MockFunctionCallTrace::ignoreOtherParameters()
 	return *this;
 }
 
-MockActualFunctionCall& MockFunctionCallTrace::andReturnValue(unsigned int)
-{
-	return *this;
-}
-
-MockActualFunctionCall& MockFunctionCallTrace::andReturnValue(int)
-{
-	return *this;
-}
-
-MockActualFunctionCall& MockFunctionCallTrace::andReturnValue(double)
-{
-	return *this;
-}
-
-MockActualFunctionCall& MockFunctionCallTrace::andReturnValue(const char*)
-{
-	return *this;
-}
-
-MockActualFunctionCall& MockFunctionCallTrace::andReturnValue(void*)
-{
-	return *this;
-}
-
-MockActualFunctionCall& MockFunctionCallTrace::andReturnValue(const void*)
-{
-	return *this;
-}
-
 bool MockFunctionCallTrace::hasReturnValue()
 {
 	return false;
