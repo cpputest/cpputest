@@ -28,48 +28,44 @@
 #ifndef D_MockFunctionCall_h
 #define D_MockFunctionCall_h
 
-/*
- * MockFunctionCall is the main interface for recording and actualizing mock calls.
- *
- */
 class MockNamedValueComparator;
 class MockNamedValueComparatorRepository;
 
 #include "CppUTestExt/MockNamedValue.h"
 
-class MockFunctionCall
+class MockExpectedFunctionCall
 {
 public:
-	MockFunctionCall();
-	virtual ~MockFunctionCall();
+	MockExpectedFunctionCall();
+	virtual ~MockExpectedFunctionCall();
 
-	virtual MockFunctionCall& withName(const SimpleString& name)=0;
-	virtual MockFunctionCall& withCallOrder(int)=0;
-	MockFunctionCall& withParameter(const SimpleString& name, int value) { return withIntParameter(name, value); }
-	MockFunctionCall& withParameter(const SimpleString& name, unsigned int value) { return withUnsignedIntParameter(name, value); }
-	MockFunctionCall& withParameter(const SimpleString& name, double value) { return withDoubleParameter(name, value); }
-	MockFunctionCall& withParameter(const SimpleString& name, const char* value) { return withStringParameter(name, value); }
-	MockFunctionCall& withParameter(const SimpleString& name, void* value) { return withPointerParameter(name, value); }
-	MockFunctionCall& withParameter(const SimpleString& name, const void* value) { return withConstPointerParameter(name, value); }
-	virtual MockFunctionCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value)=0;
-	virtual MockFunctionCall& ignoreOtherParameters() { return *this;}
+	virtual MockExpectedFunctionCall& withName(const SimpleString& name)=0;
+	virtual MockExpectedFunctionCall& withCallOrder(int)=0;
+	MockExpectedFunctionCall& withParameter(const SimpleString& name, int value) { return withIntParameter(name, value); }
+	MockExpectedFunctionCall& withParameter(const SimpleString& name, unsigned int value) { return withUnsignedIntParameter(name, value); }
+	MockExpectedFunctionCall& withParameter(const SimpleString& name, double value) { return withDoubleParameter(name, value); }
+	MockExpectedFunctionCall& withParameter(const SimpleString& name, const char* value) { return withStringParameter(name, value); }
+	MockExpectedFunctionCall& withParameter(const SimpleString& name, void* value) { return withPointerParameter(name, value); }
+	MockExpectedFunctionCall& withParameter(const SimpleString& name, const void* value) { return withConstPointerParameter(name, value); }
+	virtual MockExpectedFunctionCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value)=0;
+	virtual MockExpectedFunctionCall& ignoreOtherParameters() { return *this;}
 
-	virtual MockFunctionCall& withIntParameter(const SimpleString& name, int value)=0;
-	virtual MockFunctionCall& withUnsignedIntParameter(const SimpleString& name, unsigned int value)=0;
-	virtual MockFunctionCall& withDoubleParameter(const SimpleString& name, double value)=0;
-	virtual MockFunctionCall& withStringParameter(const SimpleString& name, const char* value)=0;
-	virtual MockFunctionCall& withPointerParameter(const SimpleString& name, void* value)=0;
-	virtual MockFunctionCall& withConstPointerParameter(const SimpleString& name, const void* value)=0;
-	virtual MockFunctionCall& andReturnValue(int value)=0;
-	virtual MockFunctionCall& andReturnValue(unsigned int value)=0;
-	virtual MockFunctionCall& andReturnValue(double value)=0;
-	virtual MockFunctionCall& andReturnValue(const char* value)=0;
-	virtual MockFunctionCall& andReturnValue(void* value)=0;
-	virtual MockFunctionCall& andReturnValue(const void* value)=0;
+	virtual MockExpectedFunctionCall& withIntParameter(const SimpleString& name, int value)=0;
+	virtual MockExpectedFunctionCall& withUnsignedIntParameter(const SimpleString& name, unsigned int value)=0;
+	virtual MockExpectedFunctionCall& withDoubleParameter(const SimpleString& name, double value)=0;
+	virtual MockExpectedFunctionCall& withStringParameter(const SimpleString& name, const char* value)=0;
+	virtual MockExpectedFunctionCall& withPointerParameter(const SimpleString& name, void* value)=0;
+	virtual MockExpectedFunctionCall& withConstPointerParameter(const SimpleString& name, const void* value)=0;
+	virtual MockExpectedFunctionCall& andReturnValue(int value)=0;
+	virtual MockExpectedFunctionCall& andReturnValue(unsigned int value)=0;
+	virtual MockExpectedFunctionCall& andReturnValue(double value)=0;
+	virtual MockExpectedFunctionCall& andReturnValue(const char* value)=0;
+	virtual MockExpectedFunctionCall& andReturnValue(void* value)=0;
+	virtual MockExpectedFunctionCall& andReturnValue(const void* value)=0;
 	virtual bool hasReturnValue()=0;
 	virtual MockNamedValue returnValue()=0;
 
-	virtual MockFunctionCall& onObject(void* objectPtr)=0;
+	virtual MockExpectedFunctionCall& onObject(void* objectPtr)=0;
 };
 
 class MockFunctionCallBase
