@@ -158,7 +158,6 @@ bool CheckedMockExpectedFunctionCall::isFulfilledWithoutIgnoredParameters()
 	return callOrder_ != NOT_CALLED_YET && areParametersFulfilled() && wasPassedToObject_;
 }
 
-
 void CheckedMockExpectedFunctionCall::callWasMade(int callOrder)
 {
 	callOrder_ = callOrder;
@@ -174,7 +173,6 @@ void CheckedMockExpectedFunctionCall::parametersWereIgnored()
 {
 	parametersWereIgnored_ = true;
 }
-
 
 void CheckedMockExpectedFunctionCall::wasPassedToObject()
 {
@@ -511,4 +509,10 @@ MockFunctionCall& MockFunctionCallComposite::onObject(void* object)
 	for (MockFunctionCallCompositeNode* node = head_; node != NULL; node = node->next_)
 		node->call_.onObject(object);
 	return *this;
+}
+
+MockIgnoredExpectedCall& MockIgnoredExpectedCall::instance()
+{
+    static MockIgnoredExpectedCall call;
+    return call;
 }

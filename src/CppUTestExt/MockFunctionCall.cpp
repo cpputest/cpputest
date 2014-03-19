@@ -58,10 +58,3 @@ MockNamedValueComparator* MockFunctionCallBase::getComparatorForType(const Simpl
 		return comparatorRepository_->getComparatorForType(type);
 	return NULL;
 }
-
-MockFunctionCall& MockIgnoredCall::instance()
-{
-    static MockIgnoredCall call;
-    return call;
-}
-

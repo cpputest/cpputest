@@ -131,7 +131,7 @@ void MockSupport::strictOrder()
 
 MockFunctionCall& MockSupport::expectOneCall(const SimpleString& functionName)
 {
-	if (!enabled_) return MockIgnoredCall::instance();
+	if (!enabled_) return MockIgnoredExpectedCall::instance();
 
 	CheckedMockExpectedFunctionCall* call = new CheckedMockExpectedFunctionCall;
 	call->setComparatorRepository(&comparatorRepository_);
@@ -167,6 +167,7 @@ MockActualFunctionCall& MockSupport::actualCall(const SimpleString& functionName
 	}
 
 	if (!enabled_) return MockIgnoredActualCall::instance();
+
 	if (tracing_) return MockFunctionCallTrace::instance().withName(functionName);
 
 

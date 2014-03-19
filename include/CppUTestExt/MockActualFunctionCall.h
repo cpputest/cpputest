@@ -171,7 +171,6 @@ private:
 	void addParameterName(const SimpleString& name);
 };
 
-
 class MockIgnoredActualCall: public MockActualFunctionCall
 {
 public:

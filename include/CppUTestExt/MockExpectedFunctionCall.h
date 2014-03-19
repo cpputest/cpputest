@@ -151,5 +151,33 @@ private:
 	MockFunctionCallCompositeNode* head_;
 };
 
+class MockIgnoredExpectedCall: public MockFunctionCall
+{
+public:
+
+	virtual MockFunctionCall& withName(const SimpleString&) _override { return *this;}
+	virtual MockFunctionCall& withCallOrder(int) _override { return *this; }
+	virtual MockFunctionCall& withIntParameter(const SimpleString&, int) _override { return *this; }
+	virtual MockFunctionCall& withUnsignedIntParameter(const SimpleString&, unsigned int) _override{ return *this; }
+	virtual MockFunctionCall& withDoubleParameter(const SimpleString&, double) _override { return *this; }
+	virtual MockFunctionCall& withStringParameter(const SimpleString&, const char*) _override { return *this; }
+	virtual MockFunctionCall& withPointerParameter(const SimpleString& , void*) _override { return *this; }
+	virtual MockFunctionCall& withConstPointerParameter(const SimpleString& , const void*) _override { return *this; }
+	virtual MockFunctionCall& withParameterOfType(const SimpleString&, const SimpleString&, const void*) _override { return *this; }
+
+	virtual MockFunctionCall& andReturnValue(int) _override { return *this; }
+	virtual MockFunctionCall& andReturnValue(unsigned int) _override { return *this; }
+	virtual MockFunctionCall& andReturnValue(double) _override { return *this;}
+	virtual MockFunctionCall& andReturnValue(const char*) _override { return *this; }
+	virtual MockFunctionCall& andReturnValue(void*) _override { return *this; }
+	virtual MockFunctionCall& andReturnValue(const void*) _override { return *this; }
+
+	virtual bool hasReturnValue() _override { return false; }
+	virtual MockNamedValue returnValue() _override { return MockNamedValue(""); }
+
+	virtual MockFunctionCall& onObject(void* ) _override { return *this; }
+
+    static MockIgnoredExpectedCall& instance();
+};
 
 #endif
