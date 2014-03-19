@@ -64,7 +64,7 @@ TEST(CheckedMockActualFunctionCall, unExpectedCall)
 
 TEST(CheckedMockActualFunctionCall, unExpectedParameterName)
 {
-	MockExpectedFunctionCall call1;
+	CheckedMockExpectedFunctionCall call1;
 	call1.withName("func");
 	list->addExpectedCall(&call1);
 
@@ -80,8 +80,8 @@ TEST(CheckedMockActualFunctionCall, unExpectedParameterName)
 
 TEST(CheckedMockActualFunctionCall, multipleSameFunctionsExpectingAndHappenGradually)
 {
-	MockExpectedFunctionCall* call1 = new MockExpectedFunctionCall();
-	MockExpectedFunctionCall* call2 = new MockExpectedFunctionCall();
+	CheckedMockExpectedFunctionCall* call1 = new CheckedMockExpectedFunctionCall();
+	CheckedMockExpectedFunctionCall* call2 = new CheckedMockExpectedFunctionCall();
 	call1->withName("func");
 	call2->withName("func");
 	list->addExpectedCall(call1);
