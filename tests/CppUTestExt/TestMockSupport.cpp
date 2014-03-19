@@ -50,17 +50,17 @@ TEST_GROUP(MockSupportTest)
 		mock().setMockFailureStandardReporter(NULL);
 	}
 
-	MockExpectedFunctionCall* addFunctionToExpectationsList(const SimpleString& name)
+	CheckedMockExpectedFunctionCall* addFunctionToExpectationsList(const SimpleString& name)
 	{
-		MockExpectedFunctionCall* newCall = new MockExpectedFunctionCall;
+		CheckedMockExpectedFunctionCall* newCall = new CheckedMockExpectedFunctionCall;
 		newCall->withName(name);
 		expectationsList->addExpectedCall(newCall);
 		return newCall;
 	}
 
-	MockExpectedFunctionCall* addFunctionToExpectationsList(const SimpleString& name, int order)
+	CheckedMockExpectedFunctionCall* addFunctionToExpectationsList(const SimpleString& name, int order)
 	{
-		MockExpectedFunctionCall* newCall = new MockExpectedFunctionCall;
+		CheckedMockExpectedFunctionCall* newCall = new CheckedMockExpectedFunctionCall;
 		newCall->withName(name);
 		newCall->withCallOrder(order);
 		expectationsList->addExpectedCall(newCall);
@@ -510,7 +510,7 @@ TEST(MockSupportTest, ignoreOtherParametersMultipleCalls)
 
 TEST(MockSupportTest, ignoreOtherParametersMultipleCallsButOneDidntHappen)
 {
-	MockExpectedFunctionCall* call = addFunctionToExpectationsList("boo");
+	CheckedMockExpectedFunctionCall* call = addFunctionToExpectationsList("boo");
 	call->ignoreOtherParameters();
 	call->callWasMade(1);
 	call->parametersWereIgnored();

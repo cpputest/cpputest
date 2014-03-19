@@ -126,7 +126,7 @@ private:
 	MockFailureReporter* reporter_;
 
 	ActualCallState state_;
-	MockExpectedFunctionCall* _fulfilledExpectation;
+	CheckedMockExpectedFunctionCall* _fulfilledExpectation;
 
 	MockExpectedFunctionsList unfulfilledExpectations_;
 	const MockExpectedFunctionsList& allExpectations_;
@@ -170,7 +170,6 @@ private:
 
 	void addParameterName(const SimpleString& name);
 };
-
 
 class MockIgnoredActualCall: public MockActualFunctionCall
 {
