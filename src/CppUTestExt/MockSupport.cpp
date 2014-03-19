@@ -158,7 +158,7 @@ CheckedMockActualFunctionCall* MockSupport::createActualFunctionCall()
 	return lastActualFunctionCall_;
 }
 
-MockFunctionCall& MockSupport::actualCall(const SimpleString& functionName)
+MockActualFunctionCall& MockSupport::actualCall(const SimpleString& functionName)
 {
 	if (lastActualFunctionCall_) {
 		lastActualFunctionCall_->checkExpectations();
@@ -166,12 +166,12 @@ MockFunctionCall& MockSupport::actualCall(const SimpleString& functionName)
 		lastActualFunctionCall_ = NULL;
 	}
 
-	if (!enabled_) return MockIgnoredCall::instance();
+	if (!enabled_) return MockIgnoredActualCall::instance();
 	if (tracing_) return MockFunctionCallTrace::instance().withName(functionName);
 
 
 	if (!expectations_.hasExpectationWithName(functionName) && ignoreOtherCalls_) {
-		return MockIgnoredCall::instance();
+		return MockIgnoredActualCall::instance();
 	}
 
 	CheckedMockActualFunctionCall* call = createActualFunctionCall();
