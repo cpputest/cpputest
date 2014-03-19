@@ -33,7 +33,7 @@
 
 extern SimpleString StringFrom(const MockNamedValue& parameter);
 
-class MockExpectedFunctionCall : public MockFunctionCall
+class MockExpectedFunctionCall : public MockFunctionCall, public MockFunctionCallBase
 {
 
 public:
