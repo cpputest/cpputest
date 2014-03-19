@@ -243,42 +243,6 @@ void CheckedMockActualFunctionCall::setState(ActualCallState state)
 	state_ = state;
 }
 
-MockActualFunctionCall& CheckedMockActualFunctionCall::andReturnValue(unsigned int)
-{
-	FAIL("andReturnValue cannot be called on an ActualFunctionCall. Use returnValue instead to get the value.");
-	return *this;
-}
-
-MockActualFunctionCall& CheckedMockActualFunctionCall::andReturnValue(int)
-{
-	FAIL("andReturnValue cannot be called on an ActualFunctionCall. Use returnValue instead to get the value.");
-	return *this;
-}
-
-MockActualFunctionCall& CheckedMockActualFunctionCall::andReturnValue(const char*)
-{
-	FAIL("andReturnValue cannot be called on an ActualFunctionCall. Use returnValue instead to get the value.");
-	return *this;
-}
-
-MockActualFunctionCall& CheckedMockActualFunctionCall::andReturnValue(double)
-{
-	FAIL("andReturnValue cannot be called on an ActualFunctionCall. Use returnValue instead to get the value.");
-	return *this;
-}
-
-MockActualFunctionCall& CheckedMockActualFunctionCall::andReturnValue(void*)
-{
-	FAIL("andReturnValue cannot be called on an ActualFunctionCall. Use returnValue instead to get the value.");
-	return *this;
-}
-
-MockActualFunctionCall& CheckedMockActualFunctionCall::andReturnValue(const void*)
-{
-	FAIL("andReturnValue cannot be called on an ActualFunctionCall. Use returnValue instead to get the value.");
-	return *this;
-}
-
 MockNamedValue CheckedMockActualFunctionCall::returnValue()
 {
 	checkExpectations();
@@ -455,4 +419,9 @@ MockFunctionCallTrace& MockFunctionCallTrace::instance()
 	return call;
 }
 
+MockIgnoredActualCall& MockIgnoredActualCall::instance()
+{
+    static MockIgnoredActualCall call;
+    return call;
+}
 
