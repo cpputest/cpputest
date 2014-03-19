@@ -29,14 +29,6 @@
 #include "CppUTestExt/MockFunctionCall.h"
 #include "CppUTestExt/MockNamedValue.h"
 
-MockExpectedFunctionCall::MockExpectedFunctionCall()
-{
-}
-
-MockExpectedFunctionCall::~MockExpectedFunctionCall()
-{
-}
-
 void MockFunctionCallBase::setComparatorRepository(MockNamedValueComparatorRepository* repository)
 {
 	comparatorRepository_ = repository;
