@@ -112,14 +112,6 @@ void checkExpectations_c();
 int expectedCallsLeft_c();
 void clear_c();
 
-MockActualFunctionCall_c* withActualIntParameters_c(const char* name, int value);
-MockActualFunctionCall_c* withActualDoubleParameters_c(const char* name, double value);
-MockActualFunctionCall_c* withActualStringParameters_c(const char* name, const char* value);
-MockActualFunctionCall_c* withActualPointerParameters_c(const char* name, void* value);
-MockActualFunctionCall_c* withActualConstPointerParameters_c(const char* name, const void* value);
-MockActualFunctionCall_c* withActualParameterOfType_c(const char* type, const char* name, const void* value);
-MockValue_c actualReturnValue_c();
-
 MockExpectedFunctionCall_c* withIntParameters_c(const char* name, int value);
 MockExpectedFunctionCall_c* withDoubleParameters_c(const char* name, double value);
 MockExpectedFunctionCall_c* withStringParameters_c(const char* name, const char* value);
