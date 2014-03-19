@@ -91,10 +91,10 @@ TEST(MockNamedValueComparatorRepository, installMultipleComparator)
 
 TEST_GROUP(MockExpectedFunctionCall)
 {
-	MockExpectedFunctionCall* call;
+	CheckedMockExpectedFunctionCall* call;
 	void setup ()
 	{
-		call = new MockExpectedFunctionCall;
+		call = new CheckedMockExpectedFunctionCall;
 	}
 	void teardown()
 	{

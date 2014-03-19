@@ -36,7 +36,7 @@ TEST_GROUP(MockPlugin)
 	StringBufferTestOutput *output;
 	TestResult *result;
 	MockExpectedFunctionsList *expectationsList;
-	MockExpectedFunctionCall *call;
+	CheckedMockExpectedFunctionCall *call;
 
 	MockSupportPlugin *plugin;
 
@@ -48,7 +48,7 @@ TEST_GROUP(MockPlugin)
 		output = new StringBufferTestOutput;
 		result = new TestResult(*output);
 		expectationsList = new MockExpectedFunctionsList;
-		call = new MockExpectedFunctionCall;
+		call = new CheckedMockExpectedFunctionCall;
 		expectationsList->addExpectedCall(call);
 		plugin = new MockSupportPlugin;;
 	}
