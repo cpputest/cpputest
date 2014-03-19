@@ -29,11 +29,11 @@
 #include "CppUTestExt/MockFunctionCall.h"
 #include "CppUTestExt/MockNamedValue.h"
 
-MockFunctionCall::MockFunctionCall()
+MockExpectedFunctionCall::MockExpectedFunctionCall()
 {
 }
 
-MockFunctionCall::~MockFunctionCall()
+MockExpectedFunctionCall::~MockExpectedFunctionCall()
 {
 }
 
