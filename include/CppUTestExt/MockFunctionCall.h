@@ -32,8 +32,6 @@
  * MockFunctionCall is the main interface for recording and actualizing mock calls.
  *
  */
-class MockNamedValueComparator;
-class MockNamedValueComparatorRepository;
 
 #include "CppUTestExt/MockNamedValue.h"
 
@@ -71,15 +69,11 @@ public:
 
 	virtual MockFunctionCall& onObject(void* objectPtr)=0;
 
-	virtual void setComparatorRepository(MockNamedValueComparatorRepository* repository);
-
 protected:
 	void setName(const SimpleString& name);
 	SimpleString getName() const;
-	MockNamedValueComparator* getComparatorForType(const SimpleString& type) const;
 private:
 	SimpleString functionName_;
-	MockNamedValueComparatorRepository* comparatorRepository_;
 };
 
 struct MockFunctionCallCompositeNode;

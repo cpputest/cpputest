@@ -187,7 +187,7 @@ TEST(MockExpectedFunctionCall, callWithObjectParameterEqualComparisonButFailsWit
 TEST(MockExpectedFunctionCall, callWithObjectParameterEqualComparisonButFailsWithoutComparator)
 {
 	MockNamedValueComparatorRepository repository;
-	call->setComparatorRepository(&repository);
+	MockNamedValue::setDefaultComparatorRepository(&repository);
 
 	TypeForTestingExpectedFunctionCall type(1), equalType(1);
 	MockNamedValue parameter ("name");
@@ -200,13 +200,13 @@ TEST(MockExpectedFunctionCall, callWithObjectParameterEqualComparison)
 {
 	TypeForTestingExpectedFunctionCallComparator comparator;
 	MockNamedValueComparatorRepository repository;
+	MockNamedValue::setDefaultComparatorRepository(&repository);
 	repository.installComparator("type", comparator);
 
 	TypeForTestingExpectedFunctionCall type(1), equalType(1);
 	MockNamedValue parameter ("name");
 	parameter.setObjectPointer("type", &equalType);
 
-	call->setComparatorRepository(&repository);
 	call->withParameterOfType("type", "name", &type);
 	CHECK (call->hasParameter(parameter));
 }
@@ -215,10 +215,10 @@ TEST(MockExpectedFunctionCall, getParameterValueOfObjectType)
 {
 	TypeForTestingExpectedFunctionCallComparator comparator;
 	MockNamedValueComparatorRepository repository;
+	MockNamedValue::setDefaultComparatorRepository(&repository);
 	repository.installComparator("type", comparator);
 
 	TypeForTestingExpectedFunctionCall type(1);
-	call->setComparatorRepository(&repository);
 	call->withParameterOfType("type", "name", &type);
 	POINTERS_EQUAL(&type, call->getParameter("name").getObjectPointer());
 	STRCMP_EQUAL("1", call->getParameterValueString("name").asCharString());
@@ -235,7 +235,7 @@ TEST(MockExpectedFunctionCall, getParameterValueOfObjectTypeWithoutComparator)
 {
 	TypeForTestingExpectedFunctionCall type(1);
 	MockNamedValueComparatorRepository repository;
-	call->setComparatorRepository(&repository);
+	MockNamedValue::setDefaultComparatorRepository(&repository);
 	call->withParameterOfType("type", "name", &type);
 	STRCMP_EQUAL("No comparator found for type: \"type\"", call->getParameterValueString("name").asCharString());
 }

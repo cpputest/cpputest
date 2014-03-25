@@ -105,7 +105,6 @@ MockFunctionCall& MockExpectedFunctionCall::withParameterOfType(const SimpleStri
 	MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
 	parameters_->add(newParameter);
 	newParameter->setObjectPointer(type, value);
-	newParameter->setComparator(getComparatorForType(type));
 	return *this;
 }
 
