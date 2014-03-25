@@ -39,6 +39,16 @@ MockActualFunctionCall::~MockActualFunctionCall()
 {
 }
 
+void MockActualFunctionCall::setName(const SimpleString& name)
+{
+	functionName_ = name;
+}
+
+SimpleString MockActualFunctionCall::getName() const
+{
+	return functionName_;
+}
+
 
 CheckedMockActualFunctionCall::CheckedMockActualFunctionCall(int callOrder, MockFailureReporter* reporter, const MockExpectedFunctionsList& allExpectations)
 	: callOrder_(callOrder), reporter_(reporter), state_(CALL_SUCCEED), _fulfilledExpectation(NULL), allExpectations_(allExpectations)
