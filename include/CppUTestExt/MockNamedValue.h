@@ -66,6 +66,7 @@ private:
  * Basically this class ties together a Name, a Value, a Type, and a Comparator
  */
 
+class MockNamedValueComparatorRepository;
 class MockNamedValue
 {
 public:
@@ -97,6 +98,8 @@ public:
 	virtual void* getPointerValue() const;
 	virtual const void* getConstPointerValue() const;
 	virtual const void* getObjectPointer() const;
+
+	static void setDefaultComparatorRepository(MockNamedValueComparatorRepository* repository);
 private:
 	SimpleString name_;
 	SimpleString type_;
@@ -110,6 +113,7 @@ private:
 		const void* objectPointerValue_;
 	} value_;
 	MockNamedValueComparator* comparator_;
+	static MockNamedValueComparatorRepository* defaultRepository_;
 };
 
 class MockNamedValueListNode

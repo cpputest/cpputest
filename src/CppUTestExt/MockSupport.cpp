@@ -41,6 +41,7 @@ MockSupport& mock(const SimpleString& mockName, MockFailureReporter* failureRepo
 {
 	MockSupport& mock_support = (mockName != "") ? *global_mock.getMockSupportScope(mockName) : global_mock;
 	mock_support.setActiveReporter(failureReporterForThisCall);
+	mock_support.setDefaultComparatorRepository();
 	return mock_support;
 }
 
@@ -73,6 +74,11 @@ void MockSupport::setMockFailureStandardReporter(MockFailureReporter* reporter)
 void MockSupport::setActiveReporter(MockFailureReporter* reporter)
 {
 	activeReporter_ = (reporter) ? reporter : standardReporter_;
+}
+
+void MockSupport::setDefaultComparatorRepository()
+{
+	MockNamedValue::setDefaultComparatorRepository(&comparatorRepository_);
 }
 
 void MockSupport::installComparator(const SimpleString& typeName, MockNamedValueComparator& comparator)

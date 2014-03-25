@@ -94,6 +94,7 @@ public:
 
 	virtual void setMockFailureStandardReporter(MockFailureReporter* reporter);
 	virtual void setActiveReporter(MockFailureReporter* activeReporter);
+	virtual void setDefaultComparatorRepository();
 
 	virtual void installComparator(const SimpleString& typeName, MockNamedValueComparator& comparator);
 	virtual void installComparators(const MockNamedValueComparatorRepository& repository);

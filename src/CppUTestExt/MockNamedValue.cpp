@@ -30,6 +30,13 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 
 
+MockNamedValueComparatorRepository* MockNamedValue::defaultRepository_ = NULL;
+
+void MockNamedValue::setDefaultComparatorRepository(MockNamedValueComparatorRepository* repository)
+{
+	defaultRepository_ = repository;
+}
+
 MockNamedValue::MockNamedValue(const SimpleString& name) : name_(name), type_("int"), comparator_(NULL)
 {
 	value_.intValue_ = 0;
