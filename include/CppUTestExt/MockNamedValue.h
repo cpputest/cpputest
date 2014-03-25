@@ -98,6 +98,7 @@ public:
 	virtual void* getPointerValue() const;
 	virtual const void* getConstPointerValue() const;
 	virtual const void* getObjectPointer() const;
+	virtual MockNamedValueComparator* getComparator() const;
 
 	static void setDefaultComparatorRepository(MockNamedValueComparatorRepository* repository);
 private:

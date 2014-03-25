@@ -179,14 +179,14 @@ MockActualFunctionCall& CheckedMockActualFunctionCall::withConstPointerParameter
 
 MockActualFunctionCall& CheckedMockActualFunctionCall::withParameterOfType(const SimpleString& type, const SimpleString& name, const void* value)
 {
-	if (getComparatorForType(type) == NULL) {
+	MockNamedValue actualParameter(name);
+	actualParameter.setObjectPointer(type, value);
+
+	if (actualParameter.getComparator() == NULL) {
 		MockNoWayToCompareCustomTypeFailure failure(getTest(), type);
 		failTest(failure);
 		return *this;
 	}
-	MockNamedValue actualParameter(name);
-	actualParameter.setObjectPointer(type, value);
-	actualParameter.setComparator(getComparatorForType(type));
 	checkActualParameter(actualParameter);
 	return *this;
 }

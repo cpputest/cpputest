@@ -86,6 +86,8 @@ void MockNamedValue::setObjectPointer(const SimpleString& type, const void* obje
 {
 	type_ = type;
 	value_.objectPointerValue_ = objectPtr;
+	if (! comparator_ && defaultRepository_)
+		comparator_ = defaultRepository_->getComparatorForType(type);
 }
 
 void MockNamedValue::setName(const char* name)
@@ -147,6 +149,11 @@ const void* MockNamedValue::getObjectPointer() const
 void MockNamedValue::setComparator(MockNamedValueComparator* comparator)
 {
 	comparator_ = comparator;
+}
+
+MockNamedValueComparator* MockNamedValue::getComparator() const
+{
+	return comparator_;
 }
 
 bool MockNamedValue::equals(const MockNamedValue& p) const

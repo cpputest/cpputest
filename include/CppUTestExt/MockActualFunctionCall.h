@@ -35,7 +35,7 @@ class MockFailureReporter;
 class MockFailure;
 class MockNamedValue;
 
-class MockActualFunctionCall : public MockFunctionCall
+class MockActualFunctionCall
 {
 public:
 	MockActualFunctionCall();

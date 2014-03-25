@@ -181,7 +181,6 @@ MockActualFunctionCall& MockSupport::actualCall(const SimpleString& functionName
 	}
 
 	CheckedMockActualFunctionCall* call = createActualFunctionCall();
-	call->setComparatorRepository(&comparatorRepository_);
 	call->withName(functionName);
 	return *call;
 }
