@@ -121,12 +121,12 @@ private:
 	bool wasPassedToObject_;
 };
 
-struct MockFunctionCallCompositeNode;
-class MockFunctionCallComposite : public MockCheckedExpectedCall
+struct MockExpectedCallCompositeNode;
+class MockExpectedCallComposite : public MockCheckedExpectedCall
 {
 public:
-	MockFunctionCallComposite();
-	virtual ~MockFunctionCallComposite();
+	MockExpectedCallComposite();
+	virtual ~MockExpectedCallComposite();
 
 	virtual MockFunctionCall& withName(const SimpleString&) _override;
 	virtual MockFunctionCall& withCallOrder(int) _override;
@@ -154,7 +154,7 @@ public:
 	virtual void add(MockFunctionCall& call);
 	virtual void clear();
 private:
-	MockFunctionCallCompositeNode* head_;
+	MockExpectedCallCompositeNode* head_;
 };
 
 
