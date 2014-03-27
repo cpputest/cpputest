@@ -29,6 +29,14 @@
 #include "CppUTestExt/MockFunctionCall.h"
 #include "CppUTestExt/MockNamedValue.h"
 
+MockFunctionCall::MockFunctionCall()
+{
+}
+
+MockFunctionCall::~MockFunctionCall()
+{
+}
+
 struct MockFunctionCallCompositeNode
 {
 	MockFunctionCallCompositeNode(MockFunctionCall& functionCall, MockFunctionCallCompositeNode* next) : next_(next), call_(functionCall){}
