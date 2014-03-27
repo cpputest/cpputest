@@ -68,15 +68,7 @@ public:
 	virtual MockNamedValue returnValue()=0;
 
 	virtual MockActualFunctionCall& onObject(void* objectPtr)=0;
-
-protected:
-	void setName(const SimpleString& name);
-	SimpleString getName() const;
-
-private:
-	SimpleString functionName_;
 };
-
 
 class CheckedMockActualFunctionCall : public MockActualFunctionCall
 {
@@ -112,7 +104,10 @@ public:
 	virtual void checkExpectations();
 
 	virtual void setMockFailureReporter(MockFailureReporter* reporter);
+	
 protected:
+	void setName(const SimpleString& name);
+	SimpleString getName() const;
 	virtual UtestShell* getTest() const;
 	virtual void callHasSucceeded();
 	virtual void finnalizeCallWhenFulfilled();
@@ -129,6 +124,7 @@ protected:
 	virtual void checkStateConsistency(ActualCallState oldState, ActualCallState newState);
 
 private:
+	SimpleString functionName_;
 	int callOrder_;
 	MockFailureReporter* reporter_;
 

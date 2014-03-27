@@ -89,7 +89,13 @@ public:
 
 	enum { NOT_CALLED_YET = -1, NO_EXPECTED_CALL_ORDER = -1};
 	virtual int getCallOrder() const;
+
+protected:
+	void setName(const SimpleString& name);
+	SimpleString getName() const;
+	
 private:
+	SimpleString functionName_;
 
 	class MockExpectedFunctionParameter : public MockNamedValue
 	{

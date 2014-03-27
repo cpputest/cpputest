@@ -37,16 +37,6 @@ MockFunctionCall::~MockFunctionCall()
 {
 }
 
-void MockFunctionCall::setName(const SimpleString& name)
-{
-	functionName_ = name;
-}
-
-SimpleString MockFunctionCall::getName() const
-{
-	return functionName_;
-}
-
 struct MockFunctionCallCompositeNode
 {
 	MockFunctionCallCompositeNode(MockFunctionCall& functionCall, MockFunctionCallCompositeNode* next) : next_(next), call_(functionCall){}
