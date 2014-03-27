@@ -135,7 +135,7 @@ void MockSupport::strictOrder()
 	strictOrdering_ = true;
 }
 
-MockFunctionCall& MockSupport::expectOneCall(const SimpleString& functionName)
+MockExpectedCall& MockSupport::expectOneCall(const SimpleString& functionName)
 {
 	if (!enabled_) return MockIgnoredExpectedCall::instance();
 
@@ -147,7 +147,7 @@ MockFunctionCall& MockSupport::expectOneCall(const SimpleString& functionName)
 	return *call;
 }
 
-MockFunctionCall& MockSupport::expectNCalls(int amount, const SimpleString& functionName)
+MockExpectedCall& MockSupport::expectNCalls(int amount, const SimpleString& functionName)
 {
 	compositeCalls_.clear();
 

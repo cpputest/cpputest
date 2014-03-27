@@ -47,8 +47,8 @@ public:
 	virtual ~MockSupport();
 
 	virtual void strictOrder();
-	virtual MockFunctionCall& expectOneCall(const SimpleString& functionName);
-	virtual MockFunctionCall& expectNCalls(int amount, const SimpleString& functionName);
+	virtual MockExpectedCall& expectOneCall(const SimpleString& functionName);
+	virtual MockExpectedCall& expectNCalls(int amount, const SimpleString& functionName);
 	virtual MockActualFunctionCall& actualCall(const SimpleString& functionName);
 	virtual bool hasReturnValue();
 	virtual MockNamedValue returnValue();

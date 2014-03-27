@@ -30,10 +30,10 @@
 #include "CppUTestExt/MockNamedValue.h"
 
 
-MockFunctionCall::MockFunctionCall()
+MockExpectedCall::MockExpectedCall()
 {
 }
 
-MockFunctionCall::~MockFunctionCall()
+MockExpectedCall::~MockExpectedCall()
 {
 }

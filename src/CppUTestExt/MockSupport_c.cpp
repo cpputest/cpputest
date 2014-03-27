@@ -67,7 +67,7 @@ public:
 };
 
 static MockSupport* currentMockSupport = NULL;
-static MockFunctionCall* currentCall = NULL;
+static MockExpectedCall* currentCall = NULL;
 static MockActualFunctionCall* actualCall = NULL;
 static MockFailureReporterForInCOnlyCode failureReporterForC;
 
