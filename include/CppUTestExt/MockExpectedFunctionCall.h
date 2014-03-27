@@ -25,20 +25,20 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef D_MockExpectedFunctionCall_h
-#define D_MockExpectedFunctionCall_h
+#ifndef D_MockCheckedExpectedCall_h
+#define D_MockCheckedExpectedCall_h
 
 #include "CppUTestExt/MockFunctionCall.h"
 #include "CppUTestExt/MockNamedValue.h"
 
 extern SimpleString StringFrom(const MockNamedValue& parameter);
 
-class MockExpectedFunctionCall : public MockFunctionCall
+class MockCheckedExpectedCall : public MockFunctionCall
 {
 
 public:
-	MockExpectedFunctionCall();
-	virtual ~MockExpectedFunctionCall();
+	MockCheckedExpectedCall();
+	virtual ~MockCheckedExpectedCall();
 
 	virtual MockFunctionCall& withName(const SimpleString& name) _override;
 	virtual MockFunctionCall& withCallOrder(int) _override;

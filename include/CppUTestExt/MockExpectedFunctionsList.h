@@ -28,7 +28,7 @@
 #ifndef D_MockExpectedFunctionsList_h
 #define D_MockExpectedFunctionsList_h
 
-class MockExpectedFunctionCall;
+class MockCheckedExpectedCall;
 class MockNamedValue;
 
 class MockExpectedFunctionsList
@@ -49,7 +49,7 @@ public:
 	virtual bool hasCallsOutOfOrder() const;
 	virtual bool isEmpty() const;
 
-	virtual void addExpectedCall(MockExpectedFunctionCall* call);
+	virtual void addExpectedCall(MockCheckedExpectedCall* call);
 	virtual void addExpectations(const MockExpectedFunctionsList& list);
 	virtual void addExpectationsRelatedTo(const SimpleString& name, const MockExpectedFunctionsList& list);
 	virtual void addUnfilfilledExpectations(const MockExpectedFunctionsList& list);
@@ -63,8 +63,8 @@ public:
 	virtual void onlyKeepUnfulfilledExpectationsWithParameter(const MockNamedValue& parameter);
 	virtual void onlyKeepUnfulfilledExpectationsOnObject(void* objectPtr);
 
-	virtual MockExpectedFunctionCall* removeOneFulfilledExpectation();
-	virtual MockExpectedFunctionCall* removeOneFulfilledExpectationWithIgnoredParameters();
+	virtual MockCheckedExpectedCall* removeOneFulfilledExpectation();
+	virtual MockCheckedExpectedCall* removeOneFulfilledExpectationWithIgnoredParameters();
 
 	virtual void resetExpectations();
 	virtual void callWasMade(int callOrder);
@@ -81,10 +81,10 @@ protected:
 	class MockExpectedFunctionsListNode
 	{
 	public:
-		MockExpectedFunctionCall* expectedCall_;
+		MockCheckedExpectedCall* expectedCall_;
 
 		MockExpectedFunctionsListNode* next_;
-		MockExpectedFunctionsListNode(MockExpectedFunctionCall* expectedCall)
+		MockExpectedFunctionsListNode(MockCheckedExpectedCall* expectedCall)
 			: expectedCall_(expectedCall), next_(NULL) {}
 	};
 
