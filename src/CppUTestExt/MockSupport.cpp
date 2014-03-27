@@ -137,7 +137,7 @@ void MockSupport::strictOrder()
 
 MockFunctionCall& MockSupport::expectOneCall(const SimpleString& functionName)
 {
-	if (!enabled_) return MockIgnoredCall::instance();
+	if (!enabled_) return MockIgnoredExpectedCall::instance();
 
 	MockCheckedExpectedCall* call = new MockCheckedExpectedCall;
 	call->withName(functionName);

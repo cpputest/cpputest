@@ -521,3 +521,9 @@ MockFunctionCall& MockExpectedCallComposite::onObject(void* object)
 		node->call_.onObject(object);
 	return *this;
 }
+
+MockFunctionCall& MockIgnoredExpectedCall::instance()
+{
+    static MockIgnoredExpectedCall call;
+    return call;
+}

@@ -37,10 +37,3 @@ MockFunctionCall::MockFunctionCall()
 MockFunctionCall::~MockFunctionCall()
 {
 }
-
-MockFunctionCall& MockIgnoredCall::instance()
-{
-    static MockIgnoredCall call;
-    return call;
-}
-
