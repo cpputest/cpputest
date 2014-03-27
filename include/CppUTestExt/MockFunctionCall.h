@@ -68,12 +68,6 @@ public:
 	virtual MockNamedValue returnValue()=0;
 
 	virtual MockFunctionCall& onObject(void* objectPtr)=0;
-
-protected:
-	void setName(const SimpleString& name);
-	SimpleString getName() const;
-private:
-	SimpleString functionName_;
 };
 
 struct MockFunctionCallCompositeNode;
