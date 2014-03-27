@@ -156,14 +156,13 @@ MockExpectedCall& MockSupport::expectNCalls(int amount, const SimpleString& func
 	return compositeCalls_;
 }
 
-
 MockCheckedActualCall* MockSupport::createActualFunctionCall()
 {
 	lastActualFunctionCall_ = new MockCheckedActualCall(++callOrder_, activeReporter_, expectations_);
 	return lastActualFunctionCall_;
 }
 
-MockActualFunctionCall& MockSupport::actualCall(const SimpleString& functionName)
+MockActualCall& MockSupport::actualCall(const SimpleString& functionName)
 {
 	if (lastActualFunctionCall_) {
 		lastActualFunctionCall_->checkExpectations();

@@ -31,11 +31,11 @@
 #include "CppUTestExt/MockExpectedFunctionCall.h"
 #include "CppUTestExt/MockFailure.h"
 
-MockActualFunctionCall::MockActualFunctionCall()
+MockActualCall::MockActualCall()
 {
 }
 
-MockActualFunctionCall::~MockActualFunctionCall()
+MockActualCall::~MockActualCall()
 {
 }
 
@@ -91,7 +91,7 @@ void MockCheckedActualCall::callHasSucceeded()
 	unfulfilledExpectations_.resetExpectations();
 }
 
-MockActualFunctionCall& MockCheckedActualCall::withName(const SimpleString& name)
+MockActualCall& MockCheckedActualCall::withName(const SimpleString& name)
 {
 	setName(name);
 	setState(CALL_IN_PROGESS);
@@ -110,7 +110,7 @@ MockActualFunctionCall& MockCheckedActualCall::withName(const SimpleString& name
 	return *this;
 }
 
-MockActualFunctionCall& MockCheckedActualCall::withCallOrder(int)
+MockActualCall& MockCheckedActualCall::withCallOrder(int)
 {
 	return *this;
 }
@@ -129,7 +129,7 @@ void MockCheckedActualCall::checkActualParameter(const MockNamedValue& actualPar
 	finnalizeCallWhenFulfilled();
 }
 
-MockActualFunctionCall& MockCheckedActualCall::withUnsignedIntParameter(const SimpleString& name, unsigned int value)
+MockActualCall& MockCheckedActualCall::withUnsignedIntParameter(const SimpleString& name, unsigned int value)
 {
 	MockNamedValue actualParameter(name);
 	actualParameter.setValue(value);
@@ -137,7 +137,7 @@ MockActualFunctionCall& MockCheckedActualCall::withUnsignedIntParameter(const Si
 	return *this;
 }
 
-MockActualFunctionCall& MockCheckedActualCall::withIntParameter(const SimpleString& name, int value)
+MockActualCall& MockCheckedActualCall::withIntParameter(const SimpleString& name, int value)
 {
 	MockNamedValue actualParameter(name);
 	actualParameter.setValue(value);
@@ -145,7 +145,7 @@ MockActualFunctionCall& MockCheckedActualCall::withIntParameter(const SimpleStri
 	return *this;
 }
 
-MockActualFunctionCall& MockCheckedActualCall::withDoubleParameter(const SimpleString& name, double value)
+MockActualCall& MockCheckedActualCall::withDoubleParameter(const SimpleString& name, double value)
 {
 	MockNamedValue actualParameter(name);
 	actualParameter.setValue(value);
@@ -153,7 +153,7 @@ MockActualFunctionCall& MockCheckedActualCall::withDoubleParameter(const SimpleS
 	return *this;
 }
 
-MockActualFunctionCall& MockCheckedActualCall::withStringParameter(const SimpleString& name, const char* value)
+MockActualCall& MockCheckedActualCall::withStringParameter(const SimpleString& name, const char* value)
 {
 	MockNamedValue actualParameter(name);
 	actualParameter.setValue(value);
@@ -161,7 +161,7 @@ MockActualFunctionCall& MockCheckedActualCall::withStringParameter(const SimpleS
 	return *this;
 }
 
-MockActualFunctionCall& MockCheckedActualCall::withPointerParameter(const SimpleString& name, void* value)
+MockActualCall& MockCheckedActualCall::withPointerParameter(const SimpleString& name, void* value)
 {
 	MockNamedValue actualParameter(name);
 	actualParameter.setValue(value);
@@ -169,7 +169,7 @@ MockActualFunctionCall& MockCheckedActualCall::withPointerParameter(const Simple
 	return *this;
 }
 
-MockActualFunctionCall& MockCheckedActualCall::withConstPointerParameter(const SimpleString& name, const void* value)
+MockActualCall& MockCheckedActualCall::withConstPointerParameter(const SimpleString& name, const void* value)
 {
 	MockNamedValue actualParameter(name);
 	actualParameter.setValue(value);
@@ -177,7 +177,7 @@ MockActualFunctionCall& MockCheckedActualCall::withConstPointerParameter(const S
 	return *this;
 }
 
-MockActualFunctionCall& MockCheckedActualCall::withParameterOfType(const SimpleString& type, const SimpleString& name, const void* value)
+MockActualCall& MockCheckedActualCall::withParameterOfType(const SimpleString& type, const SimpleString& name, const void* value)
 {
 	MockNamedValue actualParameter(name);
 	actualParameter.setObjectPointer(type, value);
@@ -253,37 +253,37 @@ void MockCheckedActualCall::setState(ActualCallState state)
 	state_ = state;
 }
 
-MockActualFunctionCall& MockCheckedActualCall::andReturnValue(unsigned int)
+MockActualCall& MockCheckedActualCall::andReturnValue(unsigned int)
 {
 	FAIL("andReturnValue cannot be called on an ActualFunctionCall. Use returnValue instead to get the value.");
 	return *this;
 }
 
-MockActualFunctionCall& MockCheckedActualCall::andReturnValue(int)
+MockActualCall& MockCheckedActualCall::andReturnValue(int)
 {
 	FAIL("andReturnValue cannot be called on an ActualFunctionCall. Use returnValue instead to get the value.");
 	return *this;
 }
 
-MockActualFunctionCall& MockCheckedActualCall::andReturnValue(const char*)
+MockActualCall& MockCheckedActualCall::andReturnValue(const char*)
 {
 	FAIL("andReturnValue cannot be called on an ActualFunctionCall. Use returnValue instead to get the value.");
 	return *this;
 }
 
-MockActualFunctionCall& MockCheckedActualCall::andReturnValue(double)
+MockActualCall& MockCheckedActualCall::andReturnValue(double)
 {
 	FAIL("andReturnValue cannot be called on an ActualFunctionCall. Use returnValue instead to get the value.");
 	return *this;
 }
 
-MockActualFunctionCall& MockCheckedActualCall::andReturnValue(void*)
+MockActualCall& MockCheckedActualCall::andReturnValue(void*)
 {
 	FAIL("andReturnValue cannot be called on an ActualFunctionCall. Use returnValue instead to get the value.");
 	return *this;
 }
 
-MockActualFunctionCall& MockCheckedActualCall::andReturnValue(const void*)
+MockActualCall& MockCheckedActualCall::andReturnValue(const void*)
 {
 	FAIL("andReturnValue cannot be called on an ActualFunctionCall. Use returnValue instead to get the value.");
 	return *this;
@@ -302,7 +302,7 @@ bool MockCheckedActualCall::hasReturnValue()
 	return ! returnValue().getName().isEmpty();
 }
 
-MockActualFunctionCall& MockCheckedActualCall::onObject(void* objectPtr)
+MockActualCall& MockCheckedActualCall::onObject(void* objectPtr)
 {
 	unfulfilledExpectations_.onlyKeepUnfulfilledExpectationsOnObject(objectPtr);
 
@@ -326,14 +326,14 @@ MockFunctionCallTrace::~MockFunctionCallTrace()
 {
 }
 
-MockActualFunctionCall& MockFunctionCallTrace::withName(const SimpleString& name)
+MockActualCall& MockFunctionCallTrace::withName(const SimpleString& name)
 {
 	traceBuffer_ += "\nFunction name: ";
 	traceBuffer_ += name;
 	return *this;
 }
 
-MockActualFunctionCall& MockFunctionCallTrace::withCallOrder(int callOrder)
+MockActualCall& MockFunctionCallTrace::withCallOrder(int callOrder)
 {
 	traceBuffer_ += "\nwithCallOrder: ";
 	traceBuffer_ += StringFrom(callOrder);
@@ -347,49 +347,49 @@ void MockFunctionCallTrace::addParameterName(const SimpleString& name)
 	traceBuffer_ += ":";
 }
 
-MockActualFunctionCall& MockFunctionCallTrace::withUnsignedIntParameter(const SimpleString& name, unsigned int value)
+MockActualCall& MockFunctionCallTrace::withUnsignedIntParameter(const SimpleString& name, unsigned int value)
 {
     addParameterName(name);
 	traceBuffer_ += StringFrom(value);
 	return *this;
 }
 
-MockActualFunctionCall& MockFunctionCallTrace::withIntParameter(const SimpleString& name, int value)
+MockActualCall& MockFunctionCallTrace::withIntParameter(const SimpleString& name, int value)
 {
     addParameterName(name);
 	traceBuffer_ += StringFrom(value);
 	return *this;
 }
 
-MockActualFunctionCall& MockFunctionCallTrace::withDoubleParameter(const SimpleString& name, double value)
+MockActualCall& MockFunctionCallTrace::withDoubleParameter(const SimpleString& name, double value)
 {
     addParameterName(name);
 	traceBuffer_ += StringFrom(value);
 	return *this;
 }
 
-MockActualFunctionCall& MockFunctionCallTrace::withStringParameter(const SimpleString& name, const char* value)
+MockActualCall& MockFunctionCallTrace::withStringParameter(const SimpleString& name, const char* value)
 {
     addParameterName(name);
 	traceBuffer_ += StringFrom(value);
 	return *this;
 }
 
-MockActualFunctionCall& MockFunctionCallTrace::withPointerParameter(const SimpleString& name, void* value)
+MockActualCall& MockFunctionCallTrace::withPointerParameter(const SimpleString& name, void* value)
 {
     addParameterName(name);
 	traceBuffer_ += StringFrom(value);
 	return *this;
 }
 
-MockActualFunctionCall& MockFunctionCallTrace::withConstPointerParameter(const SimpleString& name, const void* value)
+MockActualCall& MockFunctionCallTrace::withConstPointerParameter(const SimpleString& name, const void* value)
 {
     addParameterName(name);
 	traceBuffer_ += StringFrom(value);
 	return *this;
 }
 
-MockActualFunctionCall& MockFunctionCallTrace::withParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value)
+MockActualCall& MockFunctionCallTrace::withParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value)
 {
 	traceBuffer_ += " ";
 	traceBuffer_ += typeName;
@@ -398,37 +398,37 @@ MockActualFunctionCall& MockFunctionCallTrace::withParameterOfType(const SimpleS
 	return *this;
 }
 
-MockActualFunctionCall& MockFunctionCallTrace::ignoreOtherParameters()
+MockActualCall& MockFunctionCallTrace::ignoreOtherParameters()
 {
 	return *this;
 }
 
-MockActualFunctionCall& MockFunctionCallTrace::andReturnValue(unsigned int)
+MockActualCall& MockFunctionCallTrace::andReturnValue(unsigned int)
 {
 	return *this;
 }
 
-MockActualFunctionCall& MockFunctionCallTrace::andReturnValue(int)
+MockActualCall& MockFunctionCallTrace::andReturnValue(int)
 {
 	return *this;
 }
 
-MockActualFunctionCall& MockFunctionCallTrace::andReturnValue(double)
+MockActualCall& MockFunctionCallTrace::andReturnValue(double)
 {
 	return *this;
 }
 
-MockActualFunctionCall& MockFunctionCallTrace::andReturnValue(const char*)
+MockActualCall& MockFunctionCallTrace::andReturnValue(const char*)
 {
 	return *this;
 }
 
-MockActualFunctionCall& MockFunctionCallTrace::andReturnValue(void*)
+MockActualCall& MockFunctionCallTrace::andReturnValue(void*)
 {
 	return *this;
 }
 
-MockActualFunctionCall& MockFunctionCallTrace::andReturnValue(const void*)
+MockActualCall& MockFunctionCallTrace::andReturnValue(const void*)
 {
 	return *this;
 }
@@ -443,7 +443,7 @@ MockNamedValue MockFunctionCallTrace::returnValue()
 	return MockNamedValue("");
 }
 
-MockActualFunctionCall& MockFunctionCallTrace::onObject(void* objectPtr)
+MockActualCall& MockFunctionCallTrace::onObject(void* objectPtr)
 {
 	traceBuffer_ += StringFrom(objectPtr);
 	return *this;

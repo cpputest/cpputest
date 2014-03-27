@@ -49,7 +49,7 @@ public:
 	virtual void strictOrder();
 	virtual MockExpectedCall& expectOneCall(const SimpleString& functionName);
 	virtual MockExpectedCall& expectNCalls(int amount, const SimpleString& functionName);
-	virtual MockActualFunctionCall& actualCall(const SimpleString& functionName);
+	virtual MockActualCall& actualCall(const SimpleString& functionName);
 	virtual bool hasReturnValue();
 	virtual MockNamedValue returnValue();
 	virtual int intReturnValue();

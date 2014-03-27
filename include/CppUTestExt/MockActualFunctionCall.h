@@ -25,8 +25,8 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef D_MockActualFunctionCall_h
-#define D_MockActualFunctionCall_h
+#ifndef D_MockActualCall_h
+#define D_MockActualCall_h
 
 #include "CppUTest/TestHarness.h"
 #include "CppUTestExt/MockNamedValue.h"
@@ -36,68 +36,68 @@ class MockFailureReporter;
 class MockFailure;
 class MockNamedValue;
 
-class MockActualFunctionCall
+class MockActualCall
 {
 public:
-	MockActualFunctionCall();
-	virtual ~MockActualFunctionCall();
+	MockActualCall();
+	virtual ~MockActualCall();
 
-	virtual MockActualFunctionCall& withName(const SimpleString& name)=0;
-	virtual MockActualFunctionCall& withCallOrder(int)=0;
-	MockActualFunctionCall& withParameter(const SimpleString& name, int value) { return withIntParameter(name, value); }
-	MockActualFunctionCall& withParameter(const SimpleString& name, unsigned int value) { return withUnsignedIntParameter(name, value); }
-	MockActualFunctionCall& withParameter(const SimpleString& name, double value) { return withDoubleParameter(name, value); }
-	MockActualFunctionCall& withParameter(const SimpleString& name, const char* value) { return withStringParameter(name, value); }
-	MockActualFunctionCall& withParameter(const SimpleString& name, void* value) { return withPointerParameter(name, value); }
-	MockActualFunctionCall& withParameter(const SimpleString& name, const void* value) { return withConstPointerParameter(name, value); }
-	virtual MockActualFunctionCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value)=0;
-	virtual MockActualFunctionCall& ignoreOtherParameters() { return *this;}
+	virtual MockActualCall& withName(const SimpleString& name)=0;
+	virtual MockActualCall& withCallOrder(int)=0;
+	MockActualCall& withParameter(const SimpleString& name, int value) { return withIntParameter(name, value); }
+	MockActualCall& withParameter(const SimpleString& name, unsigned int value) { return withUnsignedIntParameter(name, value); }
+	MockActualCall& withParameter(const SimpleString& name, double value) { return withDoubleParameter(name, value); }
+	MockActualCall& withParameter(const SimpleString& name, const char* value) { return withStringParameter(name, value); }
+	MockActualCall& withParameter(const SimpleString& name, void* value) { return withPointerParameter(name, value); }
+	MockActualCall& withParameter(const SimpleString& name, const void* value) { return withConstPointerParameter(name, value); }
+	virtual MockActualCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value)=0;
+	virtual MockActualCall& ignoreOtherParameters() { return *this;}
 
-	virtual MockActualFunctionCall& withIntParameter(const SimpleString& name, int value)=0;
-	virtual MockActualFunctionCall& withUnsignedIntParameter(const SimpleString& name, unsigned int value)=0;
-	virtual MockActualFunctionCall& withDoubleParameter(const SimpleString& name, double value)=0;
-	virtual MockActualFunctionCall& withStringParameter(const SimpleString& name, const char* value)=0;
-	virtual MockActualFunctionCall& withPointerParameter(const SimpleString& name, void* value)=0;
-	virtual MockActualFunctionCall& withConstPointerParameter(const SimpleString& name, const void* value)=0;
-	virtual MockActualFunctionCall& andReturnValue(int value)=0;
-	virtual MockActualFunctionCall& andReturnValue(unsigned int value)=0;
-	virtual MockActualFunctionCall& andReturnValue(double value)=0;
-	virtual MockActualFunctionCall& andReturnValue(const char* value)=0;
-	virtual MockActualFunctionCall& andReturnValue(void* value)=0;
-	virtual MockActualFunctionCall& andReturnValue(const void* value)=0;
+	virtual MockActualCall& withIntParameter(const SimpleString& name, int value)=0;
+	virtual MockActualCall& withUnsignedIntParameter(const SimpleString& name, unsigned int value)=0;
+	virtual MockActualCall& withDoubleParameter(const SimpleString& name, double value)=0;
+	virtual MockActualCall& withStringParameter(const SimpleString& name, const char* value)=0;
+	virtual MockActualCall& withPointerParameter(const SimpleString& name, void* value)=0;
+	virtual MockActualCall& withConstPointerParameter(const SimpleString& name, const void* value)=0;
+	virtual MockActualCall& andReturnValue(int value)=0;
+	virtual MockActualCall& andReturnValue(unsigned int value)=0;
+	virtual MockActualCall& andReturnValue(double value)=0;
+	virtual MockActualCall& andReturnValue(const char* value)=0;
+	virtual MockActualCall& andReturnValue(void* value)=0;
+	virtual MockActualCall& andReturnValue(const void* value)=0;
 	virtual bool hasReturnValue()=0;
 	virtual MockNamedValue returnValue()=0;
 
-	virtual MockActualFunctionCall& onObject(void* objectPtr)=0;
+	virtual MockActualCall& onObject(void* objectPtr)=0;
 };
 
-class MockCheckedActualCall : public MockActualFunctionCall
+class MockCheckedActualCall : public MockActualCall
 {
 public:
 	MockCheckedActualCall(int callOrder, MockFailureReporter* reporter, const MockExpectedFunctionsList& expectations);
 	virtual ~MockCheckedActualCall();
 
-	virtual MockActualFunctionCall& withName(const SimpleString& name) _override;
-	virtual MockActualFunctionCall& withCallOrder(int) _override;
-	virtual MockActualFunctionCall& withIntParameter(const SimpleString& name, int value) _override;
-	virtual MockActualFunctionCall& withUnsignedIntParameter(const SimpleString& name, unsigned int value) _override;
-	virtual MockActualFunctionCall& withDoubleParameter(const SimpleString& name, double value) _override;
-	virtual MockActualFunctionCall& withStringParameter(const SimpleString& name, const char* value) _override;
-	virtual MockActualFunctionCall& withPointerParameter(const SimpleString& name, void* value) _override;
-	virtual MockActualFunctionCall& withConstPointerParameter(const SimpleString& name, const void* value) _override;
-	virtual MockActualFunctionCall& withParameterOfType(const SimpleString& type, const SimpleString& name, const void* value) _override;
+	virtual MockActualCall& withName(const SimpleString& name) _override;
+	virtual MockActualCall& withCallOrder(int) _override;
+	virtual MockActualCall& withIntParameter(const SimpleString& name, int value) _override;
+	virtual MockActualCall& withUnsignedIntParameter(const SimpleString& name, unsigned int value) _override;
+	virtual MockActualCall& withDoubleParameter(const SimpleString& name, double value) _override;
+	virtual MockActualCall& withStringParameter(const SimpleString& name, const char* value) _override;
+	virtual MockActualCall& withPointerParameter(const SimpleString& name, void* value) _override;
+	virtual MockActualCall& withConstPointerParameter(const SimpleString& name, const void* value) _override;
+	virtual MockActualCall& withParameterOfType(const SimpleString& type, const SimpleString& name, const void* value) _override;
 
-	virtual MockActualFunctionCall& andReturnValue(int value) _override;
-	virtual MockActualFunctionCall& andReturnValue(unsigned int value) _override;
-	virtual MockActualFunctionCall& andReturnValue(double value) _override;
-	virtual MockActualFunctionCall& andReturnValue(const char* value) _override;
-	virtual MockActualFunctionCall& andReturnValue(void* value) _override;
-	virtual MockActualFunctionCall& andReturnValue(const void* value) _override;
+	virtual MockActualCall& andReturnValue(int value) _override;
+	virtual MockActualCall& andReturnValue(unsigned int value) _override;
+	virtual MockActualCall& andReturnValue(double value) _override;
+	virtual MockActualCall& andReturnValue(const char* value) _override;
+	virtual MockActualCall& andReturnValue(void* value) _override;
+	virtual MockActualCall& andReturnValue(const void* value) _override;
 
 	virtual bool hasReturnValue() _override;
 	virtual MockNamedValue returnValue() _override;
 
-	virtual MockActualFunctionCall& onObject(void* objectPtr) _override;
+	virtual MockActualCall& onObject(void* objectPtr) _override;
 
 	virtual bool isFulfilled() const;
 	virtual bool hasFailed() const;
@@ -136,34 +136,34 @@ private:
 	const MockExpectedFunctionsList& allExpectations_;
 };
 
-class MockFunctionCallTrace : public MockActualFunctionCall
+class MockFunctionCallTrace : public MockActualCall
 {
 public:
 	MockFunctionCallTrace();
 	virtual ~MockFunctionCallTrace();
 
-	virtual MockActualFunctionCall& withName(const SimpleString& name) _override;
-	virtual MockActualFunctionCall& withCallOrder(int) _override;
-	virtual MockActualFunctionCall& withIntParameter(const SimpleString& name, int value) _override;
-	virtual MockActualFunctionCall& withUnsignedIntParameter(const SimpleString& name, unsigned int value) _override;
-	virtual MockActualFunctionCall& withDoubleParameter(const SimpleString& name, double value) _override;
-	virtual MockActualFunctionCall& withStringParameter(const SimpleString& name, const char* value) _override;
-	virtual MockActualFunctionCall& withPointerParameter(const SimpleString& name, void* value) _override;
-	virtual MockActualFunctionCall& withConstPointerParameter(const SimpleString& name, const void* value) _override;
-	virtual MockActualFunctionCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value) _override;
-	virtual MockActualFunctionCall& ignoreOtherParameters() _override;
+	virtual MockActualCall& withName(const SimpleString& name) _override;
+	virtual MockActualCall& withCallOrder(int) _override;
+	virtual MockActualCall& withIntParameter(const SimpleString& name, int value) _override;
+	virtual MockActualCall& withUnsignedIntParameter(const SimpleString& name, unsigned int value) _override;
+	virtual MockActualCall& withDoubleParameter(const SimpleString& name, double value) _override;
+	virtual MockActualCall& withStringParameter(const SimpleString& name, const char* value) _override;
+	virtual MockActualCall& withPointerParameter(const SimpleString& name, void* value) _override;
+	virtual MockActualCall& withConstPointerParameter(const SimpleString& name, const void* value) _override;
+	virtual MockActualCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value) _override;
+	virtual MockActualCall& ignoreOtherParameters() _override;
 
-	virtual MockActualFunctionCall& andReturnValue(int value) _override;
-	virtual MockActualFunctionCall& andReturnValue(unsigned int value) _override;
-	virtual MockActualFunctionCall& andReturnValue(double value) _override;
-	virtual MockActualFunctionCall& andReturnValue(const char* value) _override;
-	virtual MockActualFunctionCall& andReturnValue(void* value) _override;
-	virtual MockActualFunctionCall& andReturnValue(const void* value) _override;
+	virtual MockActualCall& andReturnValue(int value) _override;
+	virtual MockActualCall& andReturnValue(unsigned int value) _override;
+	virtual MockActualCall& andReturnValue(double value) _override;
+	virtual MockActualCall& andReturnValue(const char* value) _override;
+	virtual MockActualCall& andReturnValue(void* value) _override;
+	virtual MockActualCall& andReturnValue(const void* value) _override;
 
 	virtual bool hasReturnValue() _override;
 	virtual MockNamedValue returnValue() _override;
 
-	virtual MockActualFunctionCall& onObject(void* objectPtr) _override;
+	virtual MockActualCall& onObject(void* objectPtr) _override;
 
 	const char* getTraceOutput();
 	void clear();
@@ -176,30 +176,30 @@ private:
 };
 
 
-class MockIgnoredActualCall: public MockActualFunctionCall
+class MockIgnoredActualCall: public MockActualCall
 {
 public:
-	virtual MockActualFunctionCall& withName(const SimpleString&) _override { return *this;}
-	virtual MockActualFunctionCall& withCallOrder(int) _override { return *this; }
-	virtual MockActualFunctionCall& withIntParameter(const SimpleString&, int) _override { return *this; }
-	virtual MockActualFunctionCall& withUnsignedIntParameter(const SimpleString&, unsigned int) _override{ return *this; }
-	virtual MockActualFunctionCall& withDoubleParameter(const SimpleString&, double) _override { return *this; }
-	virtual MockActualFunctionCall& withStringParameter(const SimpleString&, const char*) _override { return *this; }
-	virtual MockActualFunctionCall& withPointerParameter(const SimpleString& , void*) _override { return *this; }
-	virtual MockActualFunctionCall& withConstPointerParameter(const SimpleString& , const void*) _override { return *this; }
-	virtual MockActualFunctionCall& withParameterOfType(const SimpleString&, const SimpleString&, const void*) _override { return *this; }
+	virtual MockActualCall& withName(const SimpleString&) _override { return *this;}
+	virtual MockActualCall& withCallOrder(int) _override { return *this; }
+	virtual MockActualCall& withIntParameter(const SimpleString&, int) _override { return *this; }
+	virtual MockActualCall& withUnsignedIntParameter(const SimpleString&, unsigned int) _override{ return *this; }
+	virtual MockActualCall& withDoubleParameter(const SimpleString&, double) _override { return *this; }
+	virtual MockActualCall& withStringParameter(const SimpleString&, const char*) _override { return *this; }
+	virtual MockActualCall& withPointerParameter(const SimpleString& , void*) _override { return *this; }
+	virtual MockActualCall& withConstPointerParameter(const SimpleString& , const void*) _override { return *this; }
+	virtual MockActualCall& withParameterOfType(const SimpleString&, const SimpleString&, const void*) _override { return *this; }
 
-	virtual MockActualFunctionCall& andReturnValue(int) _override { return *this; }
-	virtual MockActualFunctionCall& andReturnValue(unsigned int) _override { return *this; }
-	virtual MockActualFunctionCall& andReturnValue(double) _override { return *this;}
-	virtual MockActualFunctionCall& andReturnValue(const char*) _override { return *this; }
-	virtual MockActualFunctionCall& andReturnValue(void*) _override { return *this; }
-	virtual MockActualFunctionCall& andReturnValue(const void*) _override { return *this; }
+	virtual MockActualCall& andReturnValue(int) _override { return *this; }
+	virtual MockActualCall& andReturnValue(unsigned int) _override { return *this; }
+	virtual MockActualCall& andReturnValue(double) _override { return *this;}
+	virtual MockActualCall& andReturnValue(const char*) _override { return *this; }
+	virtual MockActualCall& andReturnValue(void*) _override { return *this; }
+	virtual MockActualCall& andReturnValue(const void*) _override { return *this; }
 
 	virtual bool hasReturnValue() _override { return false; }
 	virtual MockNamedValue returnValue() _override { return MockNamedValue(""); }
 
-	virtual MockActualFunctionCall& onObject(void* ) _override { return *this; }
+	virtual MockActualCall& onObject(void* ) _override { return *this; }
 
     static MockIgnoredActualCall& instance();
 };
