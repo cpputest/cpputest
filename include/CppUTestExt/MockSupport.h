@@ -102,7 +102,7 @@ public:
 
 protected:
 	MockSupport* clone();
-    virtual CheckedMockActualFunctionCall *createActualFunctionCall();
+    virtual MockCheckedActualCall *createActualFunctionCall();
     virtual void failTest(MockFailure& failure);
 private:
     static int callOrder_;
@@ -114,8 +114,8 @@ private:
     MockExpectedFunctionsList expectations_;
     bool ignoreOtherCalls_;
     bool enabled_;
-    CheckedMockActualFunctionCall *lastActualFunctionCall_;
-	MockFunctionCallComposite compositeCalls_;
+    MockCheckedActualCall *lastActualFunctionCall_;
+	MockExpectedCallComposite compositeCalls_;
     MockNamedValueComparatorRepository comparatorRepository_;
     MockNamedValueList data_;
 

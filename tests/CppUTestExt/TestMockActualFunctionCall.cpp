@@ -32,7 +32,7 @@
 #include "CppUTestExt/MockFailure.h"
 #include "TestMockFailure.h"
 
-TEST_GROUP(CheckedMockActualFunctionCall)
+TEST_GROUP(MockCheckedActualCall)
 {
 	MockExpectedFunctionsList* emptyList;
 	MockExpectedFunctionsList* list;
@@ -53,22 +53,22 @@ TEST_GROUP(CheckedMockActualFunctionCall)
 	}
 };
 
-TEST(CheckedMockActualFunctionCall, unExpectedCall)
+TEST(MockCheckedActualCall, unExpectedCall)
 {
-	CheckedMockActualFunctionCall actualCall(1, reporter, *emptyList);
+	MockCheckedActualCall actualCall(1, reporter, *emptyList);
 	actualCall.withName("unexpected");
 
 	MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "unexpected", *list);
 	CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 
-TEST(CheckedMockActualFunctionCall, unExpectedParameterName)
+TEST(MockCheckedActualCall, unExpectedParameterName)
 {
-	MockExpectedFunctionCall call1;
+	MockCheckedExpectedCall call1;
 	call1.withName("func");
 	list->addExpectedCall(&call1);
 
-	CheckedMockActualFunctionCall actualCall(1, reporter, *list);
+	MockCheckedActualCall actualCall(1, reporter, *list);
 	actualCall.withName("func").withParameter("integer", 1);
 
 	MockNamedValue parameter("integer");
@@ -78,17 +78,17 @@ TEST(CheckedMockActualFunctionCall, unExpectedParameterName)
 	CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 
-TEST(CheckedMockActualFunctionCall, multipleSameFunctionsExpectingAndHappenGradually)
+TEST(MockCheckedActualCall, multipleSameFunctionsExpectingAndHappenGradually)
 {
-	MockExpectedFunctionCall* call1 = new MockExpectedFunctionCall();
-	MockExpectedFunctionCall* call2 = new MockExpectedFunctionCall();
+	MockCheckedExpectedCall* call1 = new MockCheckedExpectedCall();
+	MockCheckedExpectedCall* call2 = new MockCheckedExpectedCall();
 	call1->withName("func");
 	call2->withName("func");
 	list->addExpectedCall(call1);
 	list->addExpectedCall(call2);
 
-	CheckedMockActualFunctionCall actualCall1(1, reporter, *list);
-	CheckedMockActualFunctionCall actualCall2(2, reporter, *list);
+	MockCheckedActualCall actualCall1(1, reporter, *list);
+	MockCheckedActualCall actualCall2(2, reporter, *list);
 
 	LONGS_EQUAL(2, list->amountOfUnfulfilledExpectations());
 	actualCall1.withName("func");

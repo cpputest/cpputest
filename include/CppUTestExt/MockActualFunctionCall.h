@@ -70,11 +70,11 @@ public:
 	virtual MockActualFunctionCall& onObject(void* objectPtr)=0;
 };
 
-class CheckedMockActualFunctionCall : public MockActualFunctionCall
+class MockCheckedActualCall : public MockActualFunctionCall
 {
 public:
-	CheckedMockActualFunctionCall(int callOrder, MockFailureReporter* reporter, const MockExpectedFunctionsList& expectations);
-	virtual ~CheckedMockActualFunctionCall();
+	MockCheckedActualCall(int callOrder, MockFailureReporter* reporter, const MockExpectedFunctionsList& expectations);
+	virtual ~MockCheckedActualCall();
 
 	virtual MockActualFunctionCall& withName(const SimpleString& name) _override;
 	virtual MockActualFunctionCall& withCallOrder(int) _override;
@@ -129,7 +129,7 @@ private:
 	MockFailureReporter* reporter_;
 
 	ActualCallState state_;
-	MockExpectedFunctionCall* _fulfilledExpectation;
+	MockCheckedExpectedCall* _fulfilledExpectation;
 
 	MockExpectedFunctionsList unfulfilledExpectations_;
 	const MockExpectedFunctionsList& allExpectations_;
