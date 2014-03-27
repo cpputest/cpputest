@@ -39,7 +39,7 @@ MockActualFunctionCall::~MockActualFunctionCall()
 {
 }
 
-void CheckedMockActualFunctionCall::setName(const SimpleString& name)
+void MockCheckedActualCall::setName(const SimpleString& name)
 {
 	functionName_ = name;
 }

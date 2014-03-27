@@ -122,7 +122,7 @@ private:
 };
 
 struct MockExpectedCallCompositeNode;
-class MockExpectedCallComposite : public MockCheckedExpectedCall
+class MockExpectedCallComposite : public MockFunctionCall
 {
 public:
 	MockExpectedCallComposite();
