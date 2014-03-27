@@ -32,7 +32,7 @@
 #include "CppUTest/TestFailure.h"
 
 class MockExpectedFunctionsList;
-class CheckedMockActualFunctionCall;
+class MockCheckedActualCall;
 class MockNamedValue;
 class MockFailure;
 
