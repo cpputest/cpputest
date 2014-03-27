@@ -33,35 +33,70 @@
 
 extern SimpleString StringFrom(const MockNamedValue& parameter);
 
-class MockCheckedExpectedCall : public MockFunctionCall
+class MockExpectedCall
+{
+public:
+	MockExpectedCall();
+	virtual ~MockExpectedCall();
+
+	virtual MockExpectedCall& withName(const SimpleString& name)=0;
+	virtual MockExpectedCall& withCallOrder(int)=0;
+	MockExpectedCall& withParameter(const SimpleString& name, int value) { return withIntParameter(name, value); }
+	MockExpectedCall& withParameter(const SimpleString& name, unsigned int value) { return withUnsignedIntParameter(name, value); }
+	MockExpectedCall& withParameter(const SimpleString& name, double value) { return withDoubleParameter(name, value); }
+	MockExpectedCall& withParameter(const SimpleString& name, const char* value) { return withStringParameter(name, value); }
+	MockExpectedCall& withParameter(const SimpleString& name, void* value) { return withPointerParameter(name, value); }
+	MockExpectedCall& withParameter(const SimpleString& name, const void* value) { return withConstPointerParameter(name, value); }
+	virtual MockExpectedCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value)=0;
+	virtual MockExpectedCall& ignoreOtherParameters() { return *this;}
+
+	virtual MockExpectedCall& withIntParameter(const SimpleString& name, int value)=0;
+	virtual MockExpectedCall& withUnsignedIntParameter(const SimpleString& name, unsigned int value)=0;
+	virtual MockExpectedCall& withDoubleParameter(const SimpleString& name, double value)=0;
+	virtual MockExpectedCall& withStringParameter(const SimpleString& name, const char* value)=0;
+	virtual MockExpectedCall& withPointerParameter(const SimpleString& name, void* value)=0;
+	virtual MockExpectedCall& withConstPointerParameter(const SimpleString& name, const void* value)=0;
+	virtual MockExpectedCall& andReturnValue(int value)=0;
+	virtual MockExpectedCall& andReturnValue(unsigned int value)=0;
+	virtual MockExpectedCall& andReturnValue(double value)=0;
+	virtual MockExpectedCall& andReturnValue(const char* value)=0;
+	virtual MockExpectedCall& andReturnValue(void* value)=0;
+	virtual MockExpectedCall& andReturnValue(const void* value)=0;
+	virtual bool hasReturnValue()=0;
+	virtual MockNamedValue returnValue()=0;
+
+	virtual MockExpectedCall& onObject(void* objectPtr)=0;
+};
+
+class MockCheckedExpectedCall : public MockExpectedCall
 {
 
 public:
 	MockCheckedExpectedCall();
 	virtual ~MockCheckedExpectedCall();
 
-	virtual MockFunctionCall& withName(const SimpleString& name) _override;
-	virtual MockFunctionCall& withCallOrder(int) _override;
-	virtual MockFunctionCall& withIntParameter(const SimpleString& name, int value) _override;
-	virtual MockFunctionCall& withUnsignedIntParameter(const SimpleString& name, unsigned int value) _override;
-	virtual MockFunctionCall& withDoubleParameter(const SimpleString& name, double value) _override;
-	virtual MockFunctionCall& withStringParameter(const SimpleString& name, const char* value) _override;
-	virtual MockFunctionCall& withPointerParameter(const SimpleString& name, void* value) _override;
-	virtual MockFunctionCall& withConstPointerParameter(const SimpleString& name, const void* value) _override;
-	virtual MockFunctionCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value) _override;
-	virtual MockFunctionCall& ignoreOtherParameters() _override;
+	virtual MockExpectedCall& withName(const SimpleString& name) _override;
+	virtual MockExpectedCall& withCallOrder(int) _override;
+	virtual MockExpectedCall& withIntParameter(const SimpleString& name, int value) _override;
+	virtual MockExpectedCall& withUnsignedIntParameter(const SimpleString& name, unsigned int value) _override;
+	virtual MockExpectedCall& withDoubleParameter(const SimpleString& name, double value) _override;
+	virtual MockExpectedCall& withStringParameter(const SimpleString& name, const char* value) _override;
+	virtual MockExpectedCall& withPointerParameter(const SimpleString& name, void* value) _override;
+	virtual MockExpectedCall& withConstPointerParameter(const SimpleString& name, const void* value) _override;
+	virtual MockExpectedCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value) _override;
+	virtual MockExpectedCall& ignoreOtherParameters() _override;
 
-	virtual MockFunctionCall& andReturnValue(int value) _override;
-	virtual MockFunctionCall& andReturnValue(unsigned int value) _override;
-	virtual MockFunctionCall& andReturnValue(double value) _override;
-	virtual MockFunctionCall& andReturnValue(const char* value) _override;
-	virtual MockFunctionCall& andReturnValue(void* value) _override;
-	virtual MockFunctionCall& andReturnValue(const void* value) _override;
+	virtual MockExpectedCall& andReturnValue(int value) _override;
+	virtual MockExpectedCall& andReturnValue(unsigned int value) _override;
+	virtual MockExpectedCall& andReturnValue(double value) _override;
+	virtual MockExpectedCall& andReturnValue(const char* value) _override;
+	virtual MockExpectedCall& andReturnValue(void* value) _override;
+	virtual MockExpectedCall& andReturnValue(const void* value) _override;
 
 	virtual bool hasReturnValue() _override;
 	virtual MockNamedValue returnValue() _override;
 
-	virtual MockFunctionCall& onObject(void* objectPtr) _override;
+	virtual MockExpectedCall& onObject(void* objectPtr) _override;
 
 	virtual MockNamedValue getParameter(const SimpleString& name);
 	virtual SimpleString getParameterType(const SimpleString& name);
@@ -122,68 +157,68 @@ private:
 };
 
 struct MockExpectedCallCompositeNode;
-class MockExpectedCallComposite : public MockFunctionCall
+class MockExpectedCallComposite : public MockExpectedCall
 {
 public:
 	MockExpectedCallComposite();
 	virtual ~MockExpectedCallComposite();
 
-	virtual MockFunctionCall& withName(const SimpleString&) _override;
-	virtual MockFunctionCall& withCallOrder(int) _override;
-	virtual MockFunctionCall& withIntParameter(const SimpleString&, int) _override;
-	virtual MockFunctionCall& withUnsignedIntParameter(const SimpleString&, unsigned int) _override;
-	virtual MockFunctionCall& withDoubleParameter(const SimpleString&, double) _override;
-	virtual MockFunctionCall& withStringParameter(const SimpleString&, const char*) _override;
-	virtual MockFunctionCall& withConstPointerParameter(const SimpleString& , const void*) _override;
-	virtual MockFunctionCall& withPointerParameter(const SimpleString& , void*) _override;
-	virtual MockFunctionCall& withParameterOfType(const SimpleString&, const SimpleString&, const void*) _override;
-	virtual MockFunctionCall& ignoreOtherParameters() _override;
+	virtual MockExpectedCall& withName(const SimpleString&) _override;
+	virtual MockExpectedCall& withCallOrder(int) _override;
+	virtual MockExpectedCall& withIntParameter(const SimpleString&, int) _override;
+	virtual MockExpectedCall& withUnsignedIntParameter(const SimpleString&, unsigned int) _override;
+	virtual MockExpectedCall& withDoubleParameter(const SimpleString&, double) _override;
+	virtual MockExpectedCall& withStringParameter(const SimpleString&, const char*) _override;
+	virtual MockExpectedCall& withConstPointerParameter(const SimpleString& , const void*) _override;
+	virtual MockExpectedCall& withPointerParameter(const SimpleString& , void*) _override;
+	virtual MockExpectedCall& withParameterOfType(const SimpleString&, const SimpleString&, const void*) _override;
+	virtual MockExpectedCall& ignoreOtherParameters() _override;
 
-	virtual MockFunctionCall& andReturnValue(int) _override;
-	virtual MockFunctionCall& andReturnValue(unsigned int) _override;
-	virtual MockFunctionCall& andReturnValue(double) _override;
-	virtual MockFunctionCall& andReturnValue(const char*) _override;
-	virtual MockFunctionCall& andReturnValue(void*) _override;
-	virtual MockFunctionCall& andReturnValue(const void*) _override;
+	virtual MockExpectedCall& andReturnValue(int) _override;
+	virtual MockExpectedCall& andReturnValue(unsigned int) _override;
+	virtual MockExpectedCall& andReturnValue(double) _override;
+	virtual MockExpectedCall& andReturnValue(const char*) _override;
+	virtual MockExpectedCall& andReturnValue(void*) _override;
+	virtual MockExpectedCall& andReturnValue(const void*) _override;
 
 	virtual bool hasReturnValue() _override;
 	virtual MockNamedValue returnValue() _override;
 
-	virtual MockFunctionCall& onObject(void* ) _override;
+	virtual MockExpectedCall& onObject(void* ) _override;
 
-	virtual void add(MockFunctionCall& call);
+	virtual void add(MockExpectedCall& call);
 	virtual void clear();
 private:
 	MockExpectedCallCompositeNode* head_;
 };
 
-class MockIgnoredExpectedCall : public MockFunctionCall
+class MockIgnoredExpectedCall : public MockExpectedCall
 {
 public:
 
-	virtual MockFunctionCall& withName(const SimpleString&) _override { return *this;}
-	virtual MockFunctionCall& withCallOrder(int) _override { return *this; }
-	virtual MockFunctionCall& withIntParameter(const SimpleString&, int) _override { return *this; }
-	virtual MockFunctionCall& withUnsignedIntParameter(const SimpleString&, unsigned int) _override{ return *this; }
-	virtual MockFunctionCall& withDoubleParameter(const SimpleString&, double) _override { return *this; }
-	virtual MockFunctionCall& withStringParameter(const SimpleString&, const char*) _override { return *this; }
-	virtual MockFunctionCall& withPointerParameter(const SimpleString& , void*) _override { return *this; }
-	virtual MockFunctionCall& withConstPointerParameter(const SimpleString& , const void*) _override { return *this; }
-	virtual MockFunctionCall& withParameterOfType(const SimpleString&, const SimpleString&, const void*) _override { return *this; }
+	virtual MockExpectedCall& withName(const SimpleString&) _override { return *this;}
+	virtual MockExpectedCall& withCallOrder(int) _override { return *this; }
+	virtual MockExpectedCall& withIntParameter(const SimpleString&, int) _override { return *this; }
+	virtual MockExpectedCall& withUnsignedIntParameter(const SimpleString&, unsigned int) _override{ return *this; }
+	virtual MockExpectedCall& withDoubleParameter(const SimpleString&, double) _override { return *this; }
+	virtual MockExpectedCall& withStringParameter(const SimpleString&, const char*) _override { return *this; }
+	virtual MockExpectedCall& withPointerParameter(const SimpleString& , void*) _override { return *this; }
+	virtual MockExpectedCall& withConstPointerParameter(const SimpleString& , const void*) _override { return *this; }
+	virtual MockExpectedCall& withParameterOfType(const SimpleString&, const SimpleString&, const void*) _override { return *this; }
 
-	virtual MockFunctionCall& andReturnValue(int) _override { return *this; }
-	virtual MockFunctionCall& andReturnValue(unsigned int) _override { return *this; }
-	virtual MockFunctionCall& andReturnValue(double) _override { return *this;}
-	virtual MockFunctionCall& andReturnValue(const char*) _override { return *this; }
-	virtual MockFunctionCall& andReturnValue(void*) _override { return *this; }
-	virtual MockFunctionCall& andReturnValue(const void*) _override { return *this; }
+	virtual MockExpectedCall& andReturnValue(int) _override { return *this; }
+	virtual MockExpectedCall& andReturnValue(unsigned int) _override { return *this; }
+	virtual MockExpectedCall& andReturnValue(double) _override { return *this;}
+	virtual MockExpectedCall& andReturnValue(const char*) _override { return *this; }
+	virtual MockExpectedCall& andReturnValue(void*) _override { return *this; }
+	virtual MockExpectedCall& andReturnValue(const void*) _override { return *this; }
 
 	virtual bool hasReturnValue() _override { return false; }
 	virtual MockNamedValue returnValue() _override { return MockNamedValue(""); }
 
-	virtual MockFunctionCall& onObject(void* ) _override { return *this; }
+	virtual MockExpectedCall& onObject(void* ) _override { return *this; }
 
-	static MockFunctionCall& instance();
+	static MockExpectedCall& instance();
 };
 
 #endif
