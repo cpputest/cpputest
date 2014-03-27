@@ -121,4 +121,41 @@ private:
 	bool wasPassedToObject_;
 };
 
+struct MockFunctionCallCompositeNode;
+class MockFunctionCallComposite : public MockCheckedExpectedCall
+{
+public:
+	MockFunctionCallComposite();
+	virtual ~MockFunctionCallComposite();
+
+	virtual MockFunctionCall& withName(const SimpleString&) _override;
+	virtual MockFunctionCall& withCallOrder(int) _override;
+	virtual MockFunctionCall& withIntParameter(const SimpleString&, int) _override;
+	virtual MockFunctionCall& withUnsignedIntParameter(const SimpleString&, unsigned int) _override;
+	virtual MockFunctionCall& withDoubleParameter(const SimpleString&, double) _override;
+	virtual MockFunctionCall& withStringParameter(const SimpleString&, const char*) _override;
+	virtual MockFunctionCall& withConstPointerParameter(const SimpleString& , const void*) _override;
+	virtual MockFunctionCall& withPointerParameter(const SimpleString& , void*) _override;
+	virtual MockFunctionCall& withParameterOfType(const SimpleString&, const SimpleString&, const void*) _override;
+	virtual MockFunctionCall& ignoreOtherParameters() _override;
+
+	virtual MockFunctionCall& andReturnValue(int) _override;
+	virtual MockFunctionCall& andReturnValue(unsigned int) _override;
+	virtual MockFunctionCall& andReturnValue(double) _override;
+	virtual MockFunctionCall& andReturnValue(const char*) _override;
+	virtual MockFunctionCall& andReturnValue(void*) _override;
+	virtual MockFunctionCall& andReturnValue(const void*) _override;
+
+	virtual bool hasReturnValue() _override;
+	virtual MockNamedValue returnValue() _override;
+
+	virtual MockFunctionCall& onObject(void* ) _override;
+
+	virtual void add(MockFunctionCall& call);
+	virtual void clear();
+private:
+	MockFunctionCallCompositeNode* head_;
+};
+
+
 #endif
