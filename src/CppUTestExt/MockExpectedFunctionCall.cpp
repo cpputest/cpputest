@@ -26,8 +26,17 @@
  */
 
 #include "CppUTest/TestHarness.h"
+#include "CppUTestExt/MockFunctionCall.h"
 #include "CppUTestExt/MockExpectedFunctionCall.h"
+#include "CppUTestExt/MockNamedValue.h"
 
+MockExpectedCall::MockExpectedCall()
+{
+}
+
+MockExpectedCall::~MockExpectedCall()
+{
+}
 SimpleString StringFrom(const MockNamedValue& parameter)
 {
 	return parameter.toString();

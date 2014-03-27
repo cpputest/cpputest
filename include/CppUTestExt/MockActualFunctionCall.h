@@ -28,7 +28,8 @@
 #ifndef D_MockActualFunctionCall_h
 #define D_MockActualFunctionCall_h
 
-#include "CppUTestExt/MockFunctionCall.h"
+#include "CppUTest/TestHarness.h"
+#include "CppUTestExt/MockNamedValue.h"
 #include "CppUTestExt/MockExpectedFunctionsList.h"
 
 class MockFailureReporter;

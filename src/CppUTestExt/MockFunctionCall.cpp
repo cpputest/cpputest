@@ -25,15 +25,4 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "CppUTest/TestHarness.h"
-#include "CppUTestExt/MockFunctionCall.h"
-#include "CppUTestExt/MockNamedValue.h"
 
-
-MockExpectedCall::MockExpectedCall()
-{
-}
-
-MockExpectedCall::~MockExpectedCall()
-{
-}
