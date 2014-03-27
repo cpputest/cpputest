@@ -38,8 +38,8 @@ class MockNamedValue;
 class MockActualFunctionCall
 {
 public:
-	MockActualFunctionCall();
-	virtual ~MockActualFunctionCall();
+	MockActualFunctionCall() {}
+	virtual ~MockActualFunctionCall() {}
 
 	virtual MockActualFunctionCall& withName(const SimpleString& name)=0;
 	virtual MockActualFunctionCall& withCallOrder(int)=0;
@@ -76,7 +76,6 @@ protected:
 private:
 	SimpleString functionName_;
 };
-
 
 class CheckedMockActualFunctionCall : public MockActualFunctionCall
 {

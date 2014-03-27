@@ -38,8 +38,8 @@
 class MockFunctionCall
 {
 public:
-	MockFunctionCall();
-	virtual ~MockFunctionCall();
+	MockFunctionCall() {}
+	virtual ~MockFunctionCall() {}
 
 	virtual MockFunctionCall& withName(const SimpleString& name)=0;
 	virtual MockFunctionCall& withCallOrder(int)=0;

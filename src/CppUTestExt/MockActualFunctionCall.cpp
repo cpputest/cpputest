@@ -31,14 +31,6 @@
 #include "CppUTestExt/MockExpectedFunctionCall.h"
 #include "CppUTestExt/MockFailure.h"
 
-MockActualFunctionCall::MockActualFunctionCall()
-{
-
-}
-MockActualFunctionCall::~MockActualFunctionCall()
-{
-}
-
 void MockActualFunctionCall::setName(const SimpleString& name)
 {
 	functionName_ = name;

@@ -29,14 +29,6 @@
 #include "CppUTestExt/MockFunctionCall.h"
 #include "CppUTestExt/MockNamedValue.h"
 
-MockFunctionCall::MockFunctionCall()
-{
-}
-
-MockFunctionCall::~MockFunctionCall()
-{
-}
-
 void MockFunctionCall::setName(const SimpleString& name)
 {
 	functionName_ = name;
