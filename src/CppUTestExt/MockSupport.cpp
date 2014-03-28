@@ -135,11 +135,11 @@ void MockSupport::strictOrder()
 	strictOrdering_ = true;
 }
 
-MockFunctionCall& MockSupport::expectOneCall(const SimpleString& functionName)
+MockExpectedCall& MockSupport::expectOneCall(const SimpleString& functionName)
 {
-	if (!enabled_) return MockIgnoredCall::instance();
+	if (!enabled_) return MockIgnoredExpectedCall::instance();
 
-	MockExpectedFunctionCall* call = new MockExpectedFunctionCall;
+	MockCheckedExpectedCall* call = new MockCheckedExpectedCall;
 	call->withName(functionName);
 	if (strictOrdering_)
 		call->withCallOrder(++expectedCallOrder_);
@@ -147,7 +147,7 @@ MockFunctionCall& MockSupport::expectOneCall(const SimpleString& functionName)
 	return *call;
 }
 
-MockFunctionCall& MockSupport::expectNCalls(int amount, const SimpleString& functionName)
+MockExpectedCall& MockSupport::expectNCalls(int amount, const SimpleString& functionName)
 {
 	compositeCalls_.clear();
 
@@ -156,14 +156,13 @@ MockFunctionCall& MockSupport::expectNCalls(int amount, const SimpleString& func
 	return compositeCalls_;
 }
 
-
-CheckedMockActualFunctionCall* MockSupport::createActualFunctionCall()
+MockCheckedActualCall* MockSupport::createActualFunctionCall()
 {
-	lastActualFunctionCall_ = new CheckedMockActualFunctionCall(++callOrder_, activeReporter_, expectations_);
+	lastActualFunctionCall_ = new MockCheckedActualCall(++callOrder_, activeReporter_, expectations_);
 	return lastActualFunctionCall_;
 }
 
-MockActualFunctionCall& MockSupport::actualCall(const SimpleString& functionName)
+MockActualCall& MockSupport::actualCall(const SimpleString& functionName)
 {
 	if (lastActualFunctionCall_) {
 		lastActualFunctionCall_->checkExpectations();
@@ -179,7 +178,7 @@ MockActualFunctionCall& MockSupport::actualCall(const SimpleString& functionName
 		return MockIgnoredActualCall::instance();
 	}
 
-	CheckedMockActualFunctionCall* call = createActualFunctionCall();
+	MockCheckedActualCall* call = createActualFunctionCall();
 	call->withName(functionName);
 	return *call;
 }

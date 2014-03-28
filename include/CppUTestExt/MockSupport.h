@@ -47,9 +47,9 @@ public:
 	virtual ~MockSupport();
 
 	virtual void strictOrder();
-	virtual MockFunctionCall& expectOneCall(const SimpleString& functionName);
-	virtual MockFunctionCall& expectNCalls(int amount, const SimpleString& functionName);
-	virtual MockActualFunctionCall& actualCall(const SimpleString& functionName);
+	virtual MockExpectedCall& expectOneCall(const SimpleString& functionName);
+	virtual MockExpectedCall& expectNCalls(int amount, const SimpleString& functionName);
+	virtual MockActualCall& actualCall(const SimpleString& functionName);
 	virtual bool hasReturnValue();
 	virtual MockNamedValue returnValue();
 	virtual int intReturnValue();
@@ -102,7 +102,7 @@ public:
 
 protected:
 	MockSupport* clone();
-    virtual CheckedMockActualFunctionCall *createActualFunctionCall();
+    virtual MockCheckedActualCall *createActualFunctionCall();
     virtual void failTest(MockFailure& failure);
 private:
     static int callOrder_;
@@ -114,8 +114,8 @@ private:
     MockExpectedFunctionsList expectations_;
     bool ignoreOtherCalls_;
     bool enabled_;
-    CheckedMockActualFunctionCall *lastActualFunctionCall_;
-	MockFunctionCallComposite compositeCalls_;
+    MockCheckedActualCall *lastActualFunctionCall_;
+	MockExpectedCallComposite compositeCalls_;
     MockNamedValueComparatorRepository comparatorRepository_;
     MockNamedValueList data_;
 

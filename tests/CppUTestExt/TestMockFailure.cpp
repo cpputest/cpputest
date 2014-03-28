@@ -42,16 +42,16 @@ TEST_GROUP(MockFailureTest)
 	MockFailureReporter reporter;
 
 	MockExpectedFunctionsList *list;
-	MockExpectedFunctionCall* call1;
-	MockExpectedFunctionCall* call2;
-	MockExpectedFunctionCall* call3;
+	MockCheckedExpectedCall* call1;
+	MockCheckedExpectedCall* call2;
+	MockCheckedExpectedCall* call3;
 
 	void setup ()
 	{
 		list = new MockExpectedFunctionsList;
-		call1 = new MockExpectedFunctionCall;
-		call2 = new MockExpectedFunctionCall;
-		call3 = new MockExpectedFunctionCall;
+		call1 = new MockCheckedExpectedCall;
+		call2 = new MockCheckedExpectedCall;
+		call3 = new MockCheckedExpectedCall;
 	}
 	void teardown ()
 	{
