@@ -34,8 +34,9 @@ Debug
 *.plg
 *.idb
 *.pdb
-*.sou
+*.suo
 *.sdf
+*.opensdf
 *.lib
 *.log
 *.tlog
