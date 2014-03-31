@@ -4,7 +4,6 @@ set(CppUTestExt_src
         MockFailure.cpp
         MockSupportPlugin.cpp
         MockActualFunctionCall.cpp
-        MockFunctionCall.cpp
         MockSupport_c.cpp
         MemoryReportAllocator.cpp
         MockExpectedFunctionCall.cpp
@@ -28,7 +27,6 @@ set(CppUTestExt_headers
         ${CppUTestRootDirectory}/include/CppUTestExt/GMock.h
         ${CppUTestRootDirectory}/include/CppUTestExt/GTest.h
         ${CppUTestRootDirectory}/include/CppUTestExt/MemoryReporterPlugin.h
-        ${CppUTestRootDirectory}/include/CppUTestExt/MockFunctionCall.h
         ${CppUTestRootDirectory}/include/CppUTestExt/OrderedTest.h
         ${CppUTestRootDirectory}/include/CppUTestExt/GTestConvertor.h
         ${CppUTestRootDirectory}/include/CppUTestExt/MockActualFunctionCall.h

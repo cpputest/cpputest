@@ -28,7 +28,6 @@
 #ifndef D_MockCheckedExpectedCall_h
 #define D_MockCheckedExpectedCall_h
 
-#include "CppUTestExt/MockFunctionCall.h"
 #include "CppUTestExt/MockNamedValue.h"
 
 extern SimpleString StringFrom(const MockNamedValue& parameter);

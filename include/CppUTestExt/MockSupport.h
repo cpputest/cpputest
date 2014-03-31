@@ -29,7 +29,6 @@
 #define D_MockSupport_h
 
 #include "CppUTestExt/MockFailure.h"
-#include "CppUTestExt/MockFunctionCall.h"
 #include "CppUTestExt/MockActualFunctionCall.h"
 #include "CppUTestExt/MockExpectedFunctionCall.h"
 #include "CppUTestExt/MockExpectedFunctionsList.h"
