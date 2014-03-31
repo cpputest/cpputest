@@ -30,7 +30,7 @@
 
 #include "CppUTestExt/MockFailure.h"
 #include "CppUTestExt/MockActualFunctionCall.h"
-#include "CppUTestExt/MockExpectedFunctionCall.h"
+#include "CppUTestExt/MockCheckedExpectedCall.h"
 #include "CppUTestExt/MockExpectedFunctionsList.h"
 
 class UtestShell;

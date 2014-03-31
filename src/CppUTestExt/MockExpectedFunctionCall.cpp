@@ -26,8 +26,7 @@
  */
 
 #include "CppUTest/TestHarness.h"
-#include "CppUTestExt/MockExpectedFunctionCall.h"
-#include "CppUTestExt/MockNamedValue.h"
+#include "CppUTestExt/MockCheckedExpectedCall.h"
 
 MockExpectedCall::MockExpectedCall()
 {

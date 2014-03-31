@@ -105,6 +105,7 @@ include_cpputestext_HEADERS = \
 	include/CppUTestExt/MockExpectedFunctionsList.h \
 	include/CppUTestExt/MockSupportPlugin.h \
 	include/CppUTestExt/MockSupport.h \
+	include/CppUTestExt/MockCheckedExpectedCall.h \
 	include/CppUTestExt/MockExpectedFunctionCall.h \
 	include/CppUTestExt/MemoryReportFormatter.h \
 	include/CppUTestExt/MockFailure.h \
