@@ -519,11 +519,6 @@ bool MockExpectedCallComposite::hasReturnValue()
 	return head_->call_.hasReturnValue();
 }
 
-MockNamedValue MockExpectedCallComposite::returnValue()
-{
-	return head_->call_.returnValue();
-}
-
 MockExpectedCall& MockExpectedCallComposite::onObject(void* object)
 {
 	for (MockExpectedCallCompositeNode* node = head_; node != NULL; node = node->next_)

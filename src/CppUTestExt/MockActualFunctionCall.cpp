@@ -253,42 +253,6 @@ void MockCheckedActualCall::setState(ActualCallState state)
 	state_ = state;
 }
 
-MockActualCall& MockCheckedActualCall::andReturnValue(unsigned int)
-{
-	FAIL("andReturnValue cannot be called on an ActualFunctionCall. Use returnValue instead to get the value.");
-	return *this;
-}
-
-MockActualCall& MockCheckedActualCall::andReturnValue(int)
-{
-	FAIL("andReturnValue cannot be called on an ActualFunctionCall. Use returnValue instead to get the value.");
-	return *this;
-}
-
-MockActualCall& MockCheckedActualCall::andReturnValue(const char*)
-{
-	FAIL("andReturnValue cannot be called on an ActualFunctionCall. Use returnValue instead to get the value.");
-	return *this;
-}
-
-MockActualCall& MockCheckedActualCall::andReturnValue(double)
-{
-	FAIL("andReturnValue cannot be called on an ActualFunctionCall. Use returnValue instead to get the value.");
-	return *this;
-}
-
-MockActualCall& MockCheckedActualCall::andReturnValue(void*)
-{
-	FAIL("andReturnValue cannot be called on an ActualFunctionCall. Use returnValue instead to get the value.");
-	return *this;
-}
-
-MockActualCall& MockCheckedActualCall::andReturnValue(const void*)
-{
-	FAIL("andReturnValue cannot be called on an ActualFunctionCall. Use returnValue instead to get the value.");
-	return *this;
-}
-
 MockNamedValue MockCheckedActualCall::returnValue()
 {
 	checkExpectations();
@@ -399,36 +363,6 @@ MockActualCall& MockFunctionCallTrace::withParameterOfType(const SimpleString& t
 }
 
 MockActualCall& MockFunctionCallTrace::ignoreOtherParameters()
-{
-	return *this;
-}
-
-MockActualCall& MockFunctionCallTrace::andReturnValue(unsigned int)
-{
-	return *this;
-}
-
-MockActualCall& MockFunctionCallTrace::andReturnValue(int)
-{
-	return *this;
-}
-
-MockActualCall& MockFunctionCallTrace::andReturnValue(double)
-{
-	return *this;
-}
-
-MockActualCall& MockFunctionCallTrace::andReturnValue(const char*)
-{
-	return *this;
-}
-
-MockActualCall& MockFunctionCallTrace::andReturnValue(void*)
-{
-	return *this;
-}
-
-MockActualCall& MockFunctionCallTrace::andReturnValue(const void*)
 {
 	return *this;
 }
