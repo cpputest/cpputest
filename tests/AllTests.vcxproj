@@ -29,11 +29,9 @@
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
@@ -151,6 +149,7 @@
     <ClCompile Include="CppUTestExt\TestCodeMemoryReportFormatter.cpp" />
     <ClCompile Include="CppUTestExt\TestGMock.cpp" />
     <ClCompile Include="CppUTestExt\TestGTest.cpp" />
+    <ClCompile Include="CppUTestExt\TestGTestConvertor.cpp" />
     <ClCompile Include="CppUTestExt\TestMemoryReportAllocator.cpp" />
     <ClCompile Include="CppUTestExt\TestMemoryReporterPlugin.cpp" />
     <ClCompile Include="CppUTestExt\TestMemoryReportFormatter.cpp" />
@@ -173,6 +172,7 @@
     <ClCompile Include="PreprocessorTest.cpp" />
     <ClCompile Include="SetPluginTest.cpp" />
     <ClCompile Include="SimpleStringTest.cpp" />
+    <ClCompile Include="TestFailureNaNTest.cpp" />
     <ClCompile Include="TestFailureTest.cpp" />
     <ClCompile Include="TestFilterTest.cpp" />
     <ClCompile Include="TestHarness_cTest.cpp" />
@@ -182,6 +182,7 @@
     <ClCompile Include="TestOutputTest.cpp" />
     <ClCompile Include="TestRegistryTest.cpp" />
     <ClCompile Include="TestResultTest.cpp" />
+    <ClCompile Include="TestUTestMacro.cpp" />
     <ClCompile Include="UtestTest.cpp" />
   </ItemGroup>
   <ItemGroup>
