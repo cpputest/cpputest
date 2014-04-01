@@ -26,7 +26,6 @@
  */
 
 #include "CppUTest/TestHarness.h"
-#include "CppUTestExt/MockFunctionCall.h"
 #include "CppUTestExt/MockExpectedFunctionCall.h"
 #include "CppUTestExt/MockNamedValue.h"
 
@@ -517,11 +516,6 @@ MockExpectedCall& MockExpectedCallComposite::andReturnValue(const void* value)
 bool MockExpectedCallComposite::hasReturnValue()
 {
 	return head_->call_.hasReturnValue();
-}
-
-MockNamedValue MockExpectedCallComposite::returnValue()
-{
-	return head_->call_.returnValue();
 }
 
 MockExpectedCall& MockExpectedCallComposite::onObject(void* object)

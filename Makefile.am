@@ -88,7 +88,6 @@ lib_libCppUTestExt_a_SOURCES = \
    src/CppUTestExt/MockFailure.cpp \
    src/CppUTestExt/MockSupportPlugin.cpp \
    src/CppUTestExt/MockActualFunctionCall.cpp \
-   src/CppUTestExt/MockFunctionCall.cpp \
    src/CppUTestExt/MockSupport_c.cpp \
    src/CppUTestExt/MemoryReportAllocator.cpp \
    src/CppUTestExt/MockExpectedFunctionCall.cpp \
@@ -113,7 +112,6 @@ include_cpputestext_HEADERS = \
 	include/CppUTestExt/GMock.h \
 	include/CppUTestExt/GTest.h \
 	include/CppUTestExt/MemoryReporterPlugin.h \
-	include/CppUTestExt/MockFunctionCall.h \
 	include/CppUTestExt/OrderedTest.h \
 	include/CppUTestExt/GTestConvertor.h \
 	include/CppUTestExt/MockActualFunctionCall.h \

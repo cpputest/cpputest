@@ -139,7 +139,6 @@ copy $(OutDir)CppUTest.lib lib\CppUTest.lib
     <ClCompile Include="src\CppUTestExt\MockExpectedFunctionCall.cpp" />
     <ClCompile Include="src\CppUTestExt\MockExpectedFunctionsList.cpp" />
     <ClCompile Include="src\CppUTestExt\MockFailure.cpp" />
-    <ClCompile Include="src\CppUTestExt\MockFunctionCall.cpp" />
     <ClCompile Include="src\CppUTestExt\MockNamedValue.cpp" />
     <ClCompile Include="src\CppUTestExt\MockSupport.cpp" />
     <ClCompile Include="src\CppUTestExt\MockSupportPlugin.cpp" />
@@ -177,7 +176,6 @@ copy $(OutDir)CppUTest.lib lib\CppUTest.lib
     <ClInclude Include="include\CppUTestExt\MockExpectedFunctionCall.h" />
     <ClInclude Include="include\CppUTestExt\MockExpectedFunctionsList.h" />
     <ClInclude Include="include\CppUTestExt\MockFailure.h" />
-    <ClInclude Include="include\CppUTestExt\MockFunctionCall.h" />
     <ClInclude Include="include\CppUTestExt\MockNamedValue.h" />
     <ClInclude Include="include\CppUTestExt\MockSupport.h" />
     <ClInclude Include="include\CppUTestExt\MockSupportPlugin.h" />

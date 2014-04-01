@@ -231,10 +231,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\src\CppUTestExt\MockFunctionCall.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\src\CppUTestExt\MockNamedValue.cpp"
 				>
 			</File>
