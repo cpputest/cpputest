@@ -176,7 +176,6 @@ public:
 	virtual MockExpectedCall& andReturnValue(const void*) _override { return *this; }
 
 	virtual bool hasReturnValue() _override { return false; }
-	virtual MockNamedValue returnValue() { return MockNamedValue(""); }
 
 	virtual MockExpectedCall& onObject(void* ) _override { return *this; }
 
