@@ -29,7 +29,6 @@
 #define D_MockCheckedActualCall_h
 
 #include "CppUTestExt/MockActualCall.h"
-#include "CppUTestExt/MockCheckedActualCall.h"
 #include "CppUTestExt/MockExpectedFunctionsList.h"
 
 class MockFailureReporter;
