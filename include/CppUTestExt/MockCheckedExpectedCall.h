@@ -29,7 +29,6 @@
 #define D_MockCheckedExpectedCall_h
 
 #include "CppUTestExt/MockExpectedCall.h"
-#include "CppUTestExt/MockCheckedExpectedCall.h"
 #include "CppUTestExt/MockNamedValue.h"
 
 class MockCheckedExpectedCall : public MockExpectedCall
