@@ -31,10 +31,6 @@
 #include "CppUTestExt/MockActualCall.h"
 #include "CppUTestExt/MockExpectedFunctionsList.h"
 
-class MockFailureReporter;
-class MockFailure;
-class MockNamedValue;
-
 class MockCheckedActualCall : public MockActualCall
 {
 public:

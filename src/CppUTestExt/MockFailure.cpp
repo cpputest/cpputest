@@ -29,6 +29,7 @@
 #include "CppUTestExt/MockFailure.h"
 #include "CppUTestExt/MockExpectedCall.h"
 #include "CppUTestExt/MockExpectedFunctionsList.h"
+#include "CppUTestExt/MockNamedValue.h"
 
 class MockFailureReporterTestTerminator : public NormalTestTerminator
 {
