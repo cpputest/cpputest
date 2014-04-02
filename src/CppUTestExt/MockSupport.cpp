@@ -27,8 +27,8 @@
 
 #include "CppUTest/TestHarness.h"
 #include "CppUTestExt/MockSupport.h"
-#include "CppUTestExt/MockActualCall.h"
-#include "CppUTestExt/MockExpectedCall.h"
+#include "CppUTestExt/MockCheckedActualCall.h"
+#include "CppUTestExt/MockCheckedExpectedCall.h"
 #include "CppUTestExt/MockFailure.h"
 
 #define MOCK_SUPPORT_SCOPE_PREFIX "!!!$$$MockingSupportScope$$$!!!"
@@ -49,10 +49,12 @@ MockSupport::MockSupport()
 	: strictOrdering_(false), standardReporter_(&defaultReporter_), ignoreOtherCalls_(false), enabled_(true), lastActualFunctionCall_(NULL), tracing_(false)
 {
 	setActiveReporter(NULL);
+	compositeCalls_ = new MockExpectedCallComposite;
 }
 
 MockSupport::~MockSupport()
 {
+    delete compositeCalls_;
 }
 
 void MockSupport::crashOnFailure()
@@ -113,7 +115,7 @@ void MockSupport::clear()
 	MockActualCallTrace::instance().clear();
 
 	expectations_.deleteAllExpectationsAndClearList();
-	compositeCalls_.clear();
+	compositeCalls_->clear();
 	ignoreOtherCalls_ = false;
 	enabled_ = true;
 	callOrder_ = 0;
@@ -149,11 +151,11 @@ MockExpectedCall& MockSupport::expectOneCall(const SimpleString& functionName)
 
 MockExpectedCall& MockSupport::expectNCalls(int amount, const SimpleString& functionName)
 {
-	compositeCalls_.clear();
+	compositeCalls_->clear();
 
 	for (int i = 0; i < amount; i++)
-		compositeCalls_.add(expectOneCall(functionName));
-	return compositeCalls_;
+		compositeCalls_->add(expectOneCall(functionName));
+	return *compositeCalls_;
 }
 
 MockCheckedActualCall* MockSupport::createActualFunctionCall()
