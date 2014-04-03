@@ -26,16 +26,16 @@
  */
 
 #ifdef _MSC_VER
-#pragma warning(disable:4786)
-#pragma warning(disable:4290)
-#pragma warning(disable:4996)
+//#pragma warning(disable:4786)
+//#pragma warning(disable:4290)
+//#pragma warning(disable:4996)
 #endif
 
 #ifdef WIN32
     #ifdef _VC80_UPGRADE
-        #pragma warning(disable:4996)
-        #pragma warning(disable:4290)
+        //#pragma warning(disable:4996)
+        //#pragma warning(disable:4290)
     #else
-        #define vsnprintf _vsnprintf
+        //#define vsnprintf _vsnprintf
     #endif
 #endif
