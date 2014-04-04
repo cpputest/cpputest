@@ -170,7 +170,7 @@
 #endif
 
 /* Visual C++ 10.0+ (2010+) supports the override keyword, but doesn't define the C++ version as C++11 */
-#if defined(__cplusplus) && ((__cplusplus >= 201103L) || (_MSC_VER >= 1600))
+#if defined(__cplusplus) && ((__cplusplus >= 201103L) || (defined(_MSC_VER) && (_MSC_VER >= 1600)))
 #define _override override
 #else
 #define _override
