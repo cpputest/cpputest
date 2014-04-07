@@ -124,6 +124,16 @@
 #endif
 
 /*
+ * Visual C++ doesn't define __cplusplus as C++11 yet (201103), however it doesn't want the throw(exception) either, but
+ * it does want throw().
+ */
+
+#ifdef _MSC_VER
+  #undef UT_THROW
+  #define UT_THROW(exception)
+#endif
+
+/*
  * CLang's operator delete requires an NOTHROW block. For now, when we use CLang, then have an empty exception specifier.
  * However, this ought to be done inside the configure.ac in the future.
  */
@@ -159,7 +169,8 @@
 #endif
 #endif
 
-#if defined(__cplusplus) && __cplusplus >= 201103L
+/* Visual C++ 10.0+ (2010+) supports the override keyword, but doesn't define the C++ version as C++11 */
+#if defined(__cplusplus) && ((__cplusplus >= 201103L) || (defined(_MSC_VER) && (_MSC_VER >= 1600)))
 #define _override override
 #else
 #define _override
