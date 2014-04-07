@@ -31,6 +31,8 @@ set(CppUTestExt_headers
         ${CppUTestRootDirectory}/include/CppUTestExt/GTestConvertor.h
         ${CppUTestRootDirectory}/include/CppUTestExt/MockActualFunctionCall.h
         ${CppUTestRootDirectory}/include/CppUTestExt/MockNamedValue.h
+        ${CppUTestRootDirectory}/include/CppUTestExt/MockSupport.h
+        ${CppUTestRootDirectory}/include/CppUTestExt/MockExpectedFunctionCall.h
 )
 
 add_library(CppUTestExt STATIC ${CppUTestExt_src})
