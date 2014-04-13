@@ -30,7 +30,7 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 
 CommandLineArguments::CommandLineArguments(int ac, const char** av) :
-	ac_(ac), av_(av), verbose_(false), runTestsAsSeperateProcess_(false), repeat_(1), groupFilter_(""), nameFilter_(""), outputType_(OUTPUT_ECLIPSE)
+	ac_(ac), av_(av), verbose_(false), runTestsAsSeperateProcess_(false), repeat_(1), groupFilter_(""), nameFilter_(""), outputType_(OUTPUT_ECLIPSE), packageName_("")
 {
 }
 
@@ -54,6 +54,7 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
 		else if (argument.startsWith("IGNORE_TEST(")) SetTestToRunBasedOnVerboseOutput(ac_, av_, i, "IGNORE_TEST(");
 		else if (argument.startsWith("-o")) correctParameters = SetOutputType(ac_, av_, i);
 		else if (argument.startsWith("-p")) correctParameters = plugin->parseAllArguments(ac_, av_, i);
+		else if (argument.startsWith("-k")) SetPackageName(ac_, av_, i);
 		else correctParameters = false;
 
 		if (correctParameters == false) {
@@ -151,6 +152,14 @@ void CommandLineArguments::SetTestToRunBasedOnVerboseOutput(int ac, const char**
 	groupFilter_.strictMatching();
 }
 
+void CommandLineArguments::SetPackageName(int ac, const char** av, int& i)
+{
+	SimpleString packageName = getParameterField(ac, av, i, "-k");
+	if (packageName.size() == 0) return;
+
+	packageName_ = packageName;
+}
+
 bool CommandLineArguments::SetOutputType(int ac, const char** av, int& i)
 {
 	SimpleString outputType = getParameterField(ac, av, i, "-o");
@@ -175,5 +184,10 @@ bool CommandLineArguments::isEclipseOutput() const
 bool CommandLineArguments::isJUnitOutput() const
 {
 	return outputType_ == OUTPUT_JUNIT;
+}
+
+const SimpleString& CommandLineArguments::getPackageName() const
+{
+	return packageName_;
 }
 

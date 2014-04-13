@@ -269,4 +269,15 @@ TEST(CommandLineArguments, checkDefaultArguments)
 	CHECK(TestFilter() == args->getGroupFilter());
 	CHECK(TestFilter() == args->getNameFilter());
 	CHECK(args->isEclipseOutput());
+	CHECK(SimpleString("") == args->getPackageName());
 }
+
+TEST(CommandLineArguments, setPackageName)
+{
+	int argc = 3;
+	const char* argv[] = { "tests.exe", "-k", "package" };
+	CHECK(newArgumentParser(argc, argv));
+	CHECK_EQUAL(SimpleString("package"), args->getPackageName());
+}
+
+
