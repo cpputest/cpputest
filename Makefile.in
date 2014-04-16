@@ -121,7 +121,7 @@ am_lib_libCppUTestExt_a_OBJECTS =  \
 	lib_libCppUTestExt_a-MemoryReporterPlugin.$(OBJEXT) \
 	lib_libCppUTestExt_a-MockFailure.$(OBJEXT) \
 	lib_libCppUTestExt_a-MockSupportPlugin.$(OBJEXT) \
-	lib_libCppUTestExt_a-MockActualFunctionCall.$(OBJEXT) \
+	lib_libCppUTestExt_a-MockActualCall.$(OBJEXT) \
 	lib_libCppUTestExt_a-MockSupport_c.$(OBJEXT) \
 	lib_libCppUTestExt_a-MemoryReportAllocator.$(OBJEXT) \
 	lib_libCppUTestExt_a-MockExpectedCall.$(OBJEXT) \
@@ -490,7 +490,7 @@ lib_libCppUTestExt_a_SOURCES = \
    src/CppUTestExt/MemoryReporterPlugin.cpp \
    src/CppUTestExt/MockFailure.cpp \
    src/CppUTestExt/MockSupportPlugin.cpp \
-   src/CppUTestExt/MockActualFunctionCall.cpp \
+   src/CppUTestExt/MockActualCall.cpp \
    src/CppUTestExt/MockSupport_c.cpp \
    src/CppUTestExt/MemoryReportAllocator.cpp \
    src/CppUTestExt/MockExpectedCall.cpp \
@@ -766,7 +766,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTestExt_a-MemoryReportAllocator.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTestExt_a-MemoryReportFormatter.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTestExt_a-MemoryReporterPlugin.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTestExt_a-MockActualFunctionCall.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTestExt_a-MockActualCall.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTestExt_a-MockExpectedCall.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTestExt_a-MockExpectedFunctionsList.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lib_libCppUTestExt_a-MockFailure.Po@am__quote@
@@ -1224,21 +1224,21 @@ lib_libCppUTestExt_a-MockSupportPlugin.obj: src/CppUTestExt/MockSupportPlugin.cp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTestExt_a-MockSupportPlugin.obj `if test -f 'src/CppUTestExt/MockSupportPlugin.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MockSupportPlugin.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MockSupportPlugin.cpp'; fi`
 
-lib_libCppUTestExt_a-MockActualFunctionCall.o: src/CppUTestExt/MockActualFunctionCall.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTestExt_a-MockActualFunctionCall.o -MD -MP -MF $(DEPDIR)/lib_libCppUTestExt_a-MockActualFunctionCall.Tpo -c -o lib_libCppUTestExt_a-MockActualFunctionCall.o `test -f 'src/CppUTestExt/MockActualFunctionCall.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MockActualFunctionCall.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTestExt_a-MockActualFunctionCall.Tpo $(DEPDIR)/lib_libCppUTestExt_a-MockActualFunctionCall.Po
+lib_libCppUTestExt_a-MockActualCall.o: src/CppUTestExt/MockActualCall.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTestExt_a-MockActualCall.o -MD -MP -MF $(DEPDIR)/lib_libCppUTestExt_a-MockActualCall.Tpo -c -o lib_libCppUTestExt_a-MockActualCall.o `test -f 'src/CppUTestExt/MockActualCall.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MockActualCall.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTestExt_a-MockActualCall.Tpo $(DEPDIR)/lib_libCppUTestExt_a-MockActualCall.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MockActualFunctionCall.cpp' object='lib_libCppUTestExt_a-MockActualFunctionCall.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MockActualCall.cpp' object='lib_libCppUTestExt_a-MockActualCall.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTestExt_a-MockActualFunctionCall.o `test -f 'src/CppUTestExt/MockActualFunctionCall.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MockActualFunctionCall.cpp
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTestExt_a-MockActualCall.o `test -f 'src/CppUTestExt/MockActualCall.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MockActualCall.cpp
 
-lib_libCppUTestExt_a-MockActualFunctionCall.obj: src/CppUTestExt/MockActualFunctionCall.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTestExt_a-MockActualFunctionCall.obj -MD -MP -MF $(DEPDIR)/lib_libCppUTestExt_a-MockActualFunctionCall.Tpo -c -o lib_libCppUTestExt_a-MockActualFunctionCall.obj `if test -f 'src/CppUTestExt/MockActualFunctionCall.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MockActualFunctionCall.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MockActualFunctionCall.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTestExt_a-MockActualFunctionCall.Tpo $(DEPDIR)/lib_libCppUTestExt_a-MockActualFunctionCall.Po
+lib_libCppUTestExt_a-MockActualCall.obj: src/CppUTestExt/MockActualCall.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTestExt_a-MockActualCall.obj -MD -MP -MF $(DEPDIR)/lib_libCppUTestExt_a-MockActualCall.Tpo -c -o lib_libCppUTestExt_a-MockActualCall.obj `if test -f 'src/CppUTestExt/MockActualCall.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MockActualCall.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MockActualCall.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/lib_libCppUTestExt_a-MockActualCall.Tpo $(DEPDIR)/lib_libCppUTestExt_a-MockActualCall.Po
 @am__fastdepCXX_FALSE@	$(AM_V_CXX) @AM_BACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MockActualFunctionCall.cpp' object='lib_libCppUTestExt_a-MockActualFunctionCall.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='src/CppUTestExt/MockActualCall.cpp' object='lib_libCppUTestExt_a-MockActualCall.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTestExt_a-MockActualFunctionCall.obj `if test -f 'src/CppUTestExt/MockActualFunctionCall.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MockActualFunctionCall.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MockActualFunctionCall.cpp'; fi`
+@am__fastdepCXX_FALSE@	$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -c -o lib_libCppUTestExt_a-MockActualCall.obj `if test -f 'src/CppUTestExt/MockActualCall.cpp'; then $(CYGPATH_W) 'src/CppUTestExt/MockActualCall.cpp'; else $(CYGPATH_W) '$(srcdir)/src/CppUTestExt/MockActualCall.cpp'; fi`
 
 lib_libCppUTestExt_a-MockSupport_c.o: src/CppUTestExt/MockSupport_c.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(lib_libCppUTestExt_a_CPPFLAGS) $(CPPFLAGS) $(lib_libCppUTestExt_a_CXXFLAGS) $(CXXFLAGS) -MT lib_libCppUTestExt_a-MockSupport_c.o -MD -MP -MF $(DEPDIR)/lib_libCppUTestExt_a-MockSupport_c.Tpo -c -o lib_libCppUTestExt_a-MockSupport_c.o `test -f 'src/CppUTestExt/MockSupport_c.cpp' || echo '$(srcdir)/'`src/CppUTestExt/MockSupport_c.cpp
