@@ -219,7 +219,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\src\CppUTestExt\MockExpectedFunctionCall.cpp"
+				RelativePath=".\src\CppUTestExt\MockExpectedCall.cpp"
 				>
 			</File>
 			<File

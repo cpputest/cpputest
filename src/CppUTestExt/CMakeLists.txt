@@ -6,7 +6,7 @@ set(CppUTestExt_src
         MockActualFunctionCall.cpp
         MockSupport_c.cpp
         MemoryReportAllocator.cpp
-        MockExpectedFunctionCall.cpp
+        MockExpectedCall.cpp
         MockNamedValue.cpp
         OrderedTest.cpp
         MemoryReportFormatter.cpp
