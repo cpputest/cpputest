@@ -27,7 +27,7 @@
 
 #include "CppUTest/TestHarness.h"
 #include "CppUTestExt/MockExpectedFunctionsList.h"
-#include "CppUTestExt/MockExpectedFunctionCall.h"
+#include "CppUTestExt/MockCheckedExpectedCall.h"
 
 MockExpectedFunctionsList::MockExpectedFunctionsList() : head_(NULL)
 {

@@ -6,7 +6,7 @@ set(CppUTestExt_src
         MockActualFunctionCall.cpp
         MockSupport_c.cpp
         MemoryReportAllocator.cpp
-        MockExpectedFunctionCall.cpp
+        MockExpectedCall.cpp
         MockNamedValue.cpp
         OrderedTest.cpp
         MemoryReportFormatter.cpp
@@ -17,7 +17,8 @@ set(CppUTestExt_src
 set(CppUTestExt_headers
         ${CppUTestRootDirectory}/include/CppUTestExt/CodeMemoryReportFormatter.h
         ${CppUTestRootDirectory}/include/CppUTestExt/MemoryReportAllocator.h
-        ${CppUTestRootDirectory}/include/CppUTestExt/MockExpectedFunctionCall.h
+        ${CppUTestRootDirectory}/include/CppUTestExt/MockExpectedCall.h
+        ${CppUTestRootDirectory}/include/CppUTestExt/MockCheckedExpectedCall.h
         ${CppUTestRootDirectory}/include/CppUTestExt/MockExpectedFunctionsList.h
         ${CppUTestRootDirectory}/include/CppUTestExt/MockSupportPlugin.h
         ${CppUTestRootDirectory}/include/CppUTestExt/MemoryReportFormatter.h
@@ -32,7 +33,6 @@ set(CppUTestExt_headers
         ${CppUTestRootDirectory}/include/CppUTestExt/MockActualFunctionCall.h
         ${CppUTestRootDirectory}/include/CppUTestExt/MockNamedValue.h
         ${CppUTestRootDirectory}/include/CppUTestExt/MockSupport.h
-        ${CppUTestRootDirectory}/include/CppUTestExt/MockExpectedFunctionCall.h
 )
 
 add_library(CppUTestExt STATIC ${CppUTestExt_src})
