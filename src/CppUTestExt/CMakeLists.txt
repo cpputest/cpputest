@@ -3,7 +3,7 @@ set(CppUTestExt_src
         MemoryReporterPlugin.cpp
         MockFailure.cpp
         MockSupportPlugin.cpp
-        MockActualFunctionCall.cpp
+        MockActualCall.cpp
         MockSupport_c.cpp
         MemoryReportAllocator.cpp
         MockExpectedCall.cpp
