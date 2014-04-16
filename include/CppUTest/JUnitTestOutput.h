@@ -57,6 +57,7 @@ public:
 	virtual void flush() _override;
 
 	virtual SimpleString createFileName(const SimpleString& group);
+	void setPackageName(const SimpleString &package);
 
 protected:
 

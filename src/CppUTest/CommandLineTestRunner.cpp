@@ -113,6 +113,9 @@ bool CommandLineTestRunner::parseArguments(TestPlugin* plugin)
 	if (arguments_->parse(plugin)) {
 		if (arguments_->isJUnitOutput()) {
 			output_ = jUnitOutput_ = new JUnitTestOutput;
+			if (jUnitOutput_ != NULL) {
+				jUnitOutput_->setPackageName(arguments_->getPackageName());
+			}
 		}
 		return true;
 	}

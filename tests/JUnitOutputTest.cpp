@@ -576,3 +576,16 @@ TEST(JUnitOutputTest, testGroupWithWeirdName)
 	STRCMP_EQUAL("cpputest_group_weird_name.xml", junitOutput->createFileName("group/weird/name").asCharString());
 }
 
+TEST(JUnitOutputTest, TestCaseBlockWithAPackageName)
+{
+	junitOutput->setPackageName("packagename");
+	testCaseRunner->start()
+			.withGroup("groupname").withTest("testname")
+			.end();
+
+	outputFile = fileSystem.file("cpputest_groupname.xml");
+
+	STRCMP_EQUAL("<testcase classname=\"packagename.groupname\" name=\"testname\" time=\"0.000\">\n", outputFile->line(5));
+	STRCMP_EQUAL("</testcase>\n", outputFile->line(6));
+}
+
