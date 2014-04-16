@@ -25,45 +25,11 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef D_MockActualCall_h
-#define D_MockActualCall_h
+#ifndef D_MockCheckedActualCall_h
+#define D_MockCheckedActualCall_h
 
-#include "CppUTest/TestHarness.h"
-#include "CppUTestExt/MockNamedValue.h"
+#include "CppUTestExt/MockActualCall.h"
 #include "CppUTestExt/MockExpectedFunctionsList.h"
-
-class MockFailureReporter;
-class MockFailure;
-class MockNamedValue;
-
-class MockActualCall
-{
-public:
-	MockActualCall();
-	virtual ~MockActualCall();
-
-	virtual MockActualCall& withName(const SimpleString& name)=0;
-	virtual MockActualCall& withCallOrder(int)=0;
-	MockActualCall& withParameter(const SimpleString& name, int value) { return withIntParameter(name, value); }
-	MockActualCall& withParameter(const SimpleString& name, unsigned int value) { return withUnsignedIntParameter(name, value); }
-	MockActualCall& withParameter(const SimpleString& name, double value) { return withDoubleParameter(name, value); }
-	MockActualCall& withParameter(const SimpleString& name, const char* value) { return withStringParameter(name, value); }
-	MockActualCall& withParameter(const SimpleString& name, void* value) { return withPointerParameter(name, value); }
-	MockActualCall& withParameter(const SimpleString& name, const void* value) { return withConstPointerParameter(name, value); }
-	virtual MockActualCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value)=0;
-	virtual MockActualCall& ignoreOtherParameters() { return *this;}
-
-	virtual MockActualCall& withIntParameter(const SimpleString& name, int value)=0;
-	virtual MockActualCall& withUnsignedIntParameter(const SimpleString& name, unsigned int value)=0;
-	virtual MockActualCall& withDoubleParameter(const SimpleString& name, double value)=0;
-	virtual MockActualCall& withStringParameter(const SimpleString& name, const char* value)=0;
-	virtual MockActualCall& withPointerParameter(const SimpleString& name, void* value)=0;
-	virtual MockActualCall& withConstPointerParameter(const SimpleString& name, const void* value)=0;
-	virtual bool hasReturnValue()=0;
-	virtual MockNamedValue returnValue()=0;
-
-	virtual MockActualCall& onObject(void* objectPtr)=0;
-};
 
 class MockCheckedActualCall : public MockActualCall
 {
@@ -92,7 +58,6 @@ public:
 	virtual void checkExpectations();
 
 	virtual void setMockFailureReporter(MockFailureReporter* reporter);
-	
 protected:
 	void setName(const SimpleString& name);
 	SimpleString getName() const;
@@ -111,6 +76,7 @@ protected:
 	virtual void setState(ActualCallState state);
 	virtual void checkStateConsistency(ActualCallState oldState, ActualCallState newState);
 
+
 private:
 	SimpleString functionName_;
 	int callOrder_;
@@ -123,11 +89,11 @@ private:
 	const MockExpectedFunctionsList& allExpectations_;
 };
 
-class MockFunctionCallTrace : public MockActualCall
+class MockActualCallTrace : public MockActualCall
 {
 public:
-	MockFunctionCallTrace();
-	virtual ~MockFunctionCallTrace();
+	MockActualCallTrace();
+	virtual ~MockActualCallTrace();
 
 	virtual MockActualCall& withName(const SimpleString& name) _override;
 	virtual MockActualCall& withCallOrder(int) _override;
@@ -147,14 +113,13 @@ public:
 
 	const char* getTraceOutput();
 	void clear();
-	static MockFunctionCallTrace& instance();
+	static MockActualCallTrace& instance();
 
 private:
 	SimpleString traceBuffer_;
 
 	void addParameterName(const SimpleString& name);
 };
-
 
 class MockIgnoredActualCall: public MockActualCall
 {

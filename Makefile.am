@@ -87,10 +87,10 @@ lib_libCppUTestExt_a_SOURCES = \
    src/CppUTestExt/MemoryReporterPlugin.cpp \
    src/CppUTestExt/MockFailure.cpp \
    src/CppUTestExt/MockSupportPlugin.cpp \
-   src/CppUTestExt/MockActualFunctionCall.cpp \
+   src/CppUTestExt/MockActualCall.cpp \
    src/CppUTestExt/MockSupport_c.cpp \
    src/CppUTestExt/MemoryReportAllocator.cpp \
-   src/CppUTestExt/MockExpectedFunctionCall.cpp \
+   src/CppUTestExt/MockExpectedCall.cpp \
    src/CppUTestExt/MockNamedValue.cpp \
    src/CppUTestExt/OrderedTest.cpp \
    src/CppUTestExt/MemoryReportFormatter.cpp \
@@ -105,7 +105,8 @@ include_cpputestext_HEADERS = \
 	include/CppUTestExt/MockExpectedFunctionsList.h \
 	include/CppUTestExt/MockSupportPlugin.h \
 	include/CppUTestExt/MockSupport.h \
-	include/CppUTestExt/MockExpectedFunctionCall.h \
+	include/CppUTestExt/MockCheckedExpectedCall.h \
+	include/CppUTestExt/MockExpectedCall.h \
 	include/CppUTestExt/MemoryReportFormatter.h \
 	include/CppUTestExt/MockFailure.h \
 	include/CppUTestExt/MockSupport_c.h \
@@ -114,7 +115,8 @@ include_cpputestext_HEADERS = \
 	include/CppUTestExt/MemoryReporterPlugin.h \
 	include/CppUTestExt/OrderedTest.h \
 	include/CppUTestExt/GTestConvertor.h \
-	include/CppUTestExt/MockActualFunctionCall.h \
+	include/CppUTestExt/MockActualCall.h \
+	include/CppUTestExt/MockCheckedActualCall.h \
 	include/CppUTestExt/MockNamedValue.h
 	
 endif

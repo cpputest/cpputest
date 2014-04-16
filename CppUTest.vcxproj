@@ -135,8 +135,8 @@ copy $(OutDir)CppUTest.lib lib\CppUTest.lib
     <ClCompile Include="src\CppUTestExt\MemoryReportAllocator.cpp" />
     <ClCompile Include="src\CppUTestExt\MemoryReporterPlugin.cpp" />
     <ClCompile Include="src\CppUTestExt\MemoryReportFormatter.cpp" />
-    <ClCompile Include="src\CppUTestExt\MockActualFunctionCall.cpp" />
-    <ClCompile Include="src\CppUTestExt\MockExpectedFunctionCall.cpp" />
+    <ClCompile Include="src\CppUTestExt\MockActualCall.cpp" />
+    <ClCompile Include="src\CppUTestExt\MockExpectedCall.cpp" />
     <ClCompile Include="src\CppUTestExt\MockExpectedFunctionsList.cpp" />
     <ClCompile Include="src\CppUTestExt\MockFailure.cpp" />
     <ClCompile Include="src\CppUTestExt\MockNamedValue.cpp" />
