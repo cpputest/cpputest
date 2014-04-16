@@ -250,7 +250,7 @@ am__include_cpputestext_HEADERS_DIST =  \
 	include/CppUTestExt/MockSupportPlugin.h \
 	include/CppUTestExt/MockSupport.h \
 	include/CppUTestExt/MockCheckedExpectedCall.h \
-	include/CppUTestExt/MockExpectedFunctionCall.h \
+	include/CppUTestExt/MockExpectedCall.h \
 	include/CppUTestExt/MemoryReportFormatter.h \
 	include/CppUTestExt/MockFailure.h \
 	include/CppUTestExt/MockSupport_c.h \
@@ -506,7 +506,7 @@ lib_libCppUTestExt_a_SOURCES = \
 @INCLUDE_CPPUTEST_EXT_TRUE@	include/CppUTestExt/MockSupportPlugin.h \
 @INCLUDE_CPPUTEST_EXT_TRUE@	include/CppUTestExt/MockSupport.h \
 @INCLUDE_CPPUTEST_EXT_TRUE@	include/CppUTestExt/MockCheckedExpectedCall.h \
-@INCLUDE_CPPUTEST_EXT_TRUE@	include/CppUTestExt/MockExpectedFunctionCall.h \
+@INCLUDE_CPPUTEST_EXT_TRUE@	include/CppUTestExt/MockExpectedCall.h \
 @INCLUDE_CPPUTEST_EXT_TRUE@	include/CppUTestExt/MemoryReportFormatter.h \
 @INCLUDE_CPPUTEST_EXT_TRUE@	include/CppUTestExt/MockFailure.h \
 @INCLUDE_CPPUTEST_EXT_TRUE@	include/CppUTestExt/MockSupport_c.h \

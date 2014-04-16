@@ -28,7 +28,7 @@
 #ifndef D_MockCheckedExpectedCall_h
 #define D_MockCheckedExpectedCall_h
 
-#include "CppUTestExt/MockExpectedFunctionCall.h"
+#include "CppUTestExt/MockExpectedCall.h"
 #include "CppUTestExt/MockCheckedExpectedCall.h"
 #include "CppUTestExt/MockNamedValue.h"
 

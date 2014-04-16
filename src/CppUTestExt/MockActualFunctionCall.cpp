@@ -29,7 +29,7 @@
 #include "CppUTestExt/MockActualFunctionCall.h"
 #include "CppUTestExt/MockCheckedExpectedCall.h"
 #include "CppUTestExt/MockExpectedFunctionsList.h"
-#include "CppUTestExt/MockExpectedFunctionCall.h"
+#include "CppUTestExt/MockExpectedCall.h"
 #include "CppUTestExt/MockFailure.h"
 
 MockActualCall::MockActualCall()
