@@ -110,7 +110,7 @@ void MockSupport::clear()
 	lastActualFunctionCall_ = NULL;
 
 	tracing_ = false;
-	MockFunctionCallTrace::instance().clear();
+	MockActualCallTrace::instance().clear();
 
 	expectations_.deleteAllExpectationsAndClearList();
 	compositeCalls_.clear();
@@ -171,7 +171,7 @@ MockActualCall& MockSupport::actualCall(const SimpleString& functionName)
 	}
 
 	if (!enabled_) return MockIgnoredActualCall::instance();
-	if (tracing_) return MockFunctionCallTrace::instance().withName(functionName);
+	if (tracing_) return MockActualCallTrace::instance().withName(functionName);
 
 
 	if (!expectations_.hasExpectationWithName(functionName) && ignoreOtherCalls_) {
@@ -217,7 +217,7 @@ void MockSupport::tracing(bool enabled)
 
 const char* MockSupport::getTraceOutput()
 {
-	return MockFunctionCallTrace::instance().getTraceOutput();
+	return MockActualCallTrace::instance().getTraceOutput();
 }
 
 bool MockSupport::expectedCallsLeft()

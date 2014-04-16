@@ -116,6 +116,7 @@ include_cpputestext_HEADERS = \
 	include/CppUTestExt/OrderedTest.h \
 	include/CppUTestExt/GTestConvertor.h \
 	include/CppUTestExt/MockActualFunctionCall.h \
+	include/CppUTestExt/MockCheckedActualCall.h \
 	include/CppUTestExt/MockNamedValue.h
 	
 endif
