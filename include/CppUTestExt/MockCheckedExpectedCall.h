@@ -29,7 +29,6 @@
 #define D_MockCheckedExpectedCall_h
 
 #include "CppUTestExt/MockExpectedCall.h"
-#include "CppUTestExt/MockCheckedExpectedCall.h"
 #include "CppUTestExt/MockNamedValue.h"
 
 class MockCheckedExpectedCall : public MockExpectedCall
@@ -177,7 +176,6 @@ public:
 	virtual MockExpectedCall& andReturnValue(const void*) _override { return *this; }
 
 	virtual bool hasReturnValue() _override { return false; }
-	virtual MockNamedValue returnValue() { return MockNamedValue(""); }
 
 	virtual MockExpectedCall& onObject(void* ) _override { return *this; }
 

@@ -34,7 +34,6 @@
 
 class MockFailureReporter;
 class MockFailure;
-class MockNamedValue;
 
 class MockActualCall
 {
