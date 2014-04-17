@@ -28,7 +28,7 @@
 #include "CppUTest/TestOutput.h"
 #include "CppUTestExt/MockSupport.h"
 #include "CppUTestExt/MockSupportPlugin.h"
-#include "TestMockFailure.h"
+#include "MockFailureTest.h"
 
 TEST_GROUP(MockPlugin)
 {

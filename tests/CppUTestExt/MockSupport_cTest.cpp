@@ -29,7 +29,7 @@
 #include "CppUTest/TestHarness_c.h"
 #include "CppUTest/TestTestingFixture.h"
 #include "CppUTestExt/MockSupport_c.h"
-#include "TestMockSupport_cCFile.h"
+#include "MockSupport_cTestCFile.h"
 
 TEST_GROUP(MockSupport_c)
 {

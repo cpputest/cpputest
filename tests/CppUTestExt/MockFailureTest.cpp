@@ -29,7 +29,7 @@
 #include "CppUTestExt/MockFailure.h"
 #include "CppUTestExt/MockCheckedExpectedCall.h"
 #include "CppUTestExt/MockExpectedFunctionsList.h"
-#include "TestMockFailure.h"
+#include "MockFailureTest.h"
 
 MockFailureReporterForTest* MockFailureReporterForTest::getReporter()
 {
