@@ -34,19 +34,19 @@ lib_libCppUTest_a_CXXFLAGS = $(AM_CXXFLAGS) $(CPPUTEST_CXXFLAGS) $(CPPUTEST_ADDI
 
 lib_libCppUTest_a_SOURCES = \
 	src/CppUTest/CommandLineArguments.cpp \
-	src/CppUTest/MemoryLeakWarningPlugin.cpp \
-	src/CppUTest/TestHarness_c.cpp \
-	src/CppUTest/TestRegistry.cpp \
 	src/CppUTest/CommandLineTestRunner.cpp \
-	src/CppUTest/SimpleString.cpp \
-	src/CppUTest/TestMemoryAllocator.cpp \
-	src/CppUTest/TestResult.cpp \
 	src/CppUTest/JUnitTestOutput.cpp \
-	src/CppUTest/TestFailure.cpp \
-	src/CppUTest/TestOutput.cpp \
 	src/CppUTest/MemoryLeakDetector.cpp \
+	src/CppUTest/MemoryLeakWarningPlugin.cpp \
+	src/CppUTest/SimpleString.cpp \
+	src/CppUTest/TestFailure.cpp \
 	src/CppUTest/TestFilter.cpp \
+	src/CppUTest/TestHarness_c.cpp \
+	src/CppUTest/TestMemoryAllocator.cpp \
+	src/CppUTest/TestOutput.cpp \
 	src/CppUTest/TestPlugin.cpp \
+	src/CppUTest/TestRegistry.cpp \
+	src/CppUTest/TestResult.cpp \
 	src/CppUTest/Utest.cpp \
 	src/Platforms/$(CPP_PLATFORM)/UtestPlatform.cpp
 
@@ -54,28 +54,28 @@ include_cpputestdir = $(includedir)/CppUTest
 
 include_cpputest_HEADERS = \
 	include/CppUTest/CommandLineArguments.h \
-	include/CppUTest/PlatformSpecificFunctions.h \
-	include/CppUTest/TestMemoryAllocator.h \
 	include/CppUTest/CommandLineTestRunner.h \
-	include/CppUTest/PlatformSpecificFunctions_c.h \
-	include/CppUTest/TestOutput.h \
 	include/CppUTest/CppUTestConfig.h \
-	include/CppUTest/SimpleString.h \
-	include/CppUTest/TestPlugin.h \
 	include/CppUTest/JUnitTestOutput.h \
-	include/CppUTest/StandardCLibrary.h \
-	include/CppUTest/TestRegistry.h \
 	include/CppUTest/MemoryLeakDetector.h \
-	include/CppUTest/TestFailure.h \
-	include/CppUTest/TestResult.h \
 	include/CppUTest/MemoryLeakDetectorMallocMacros.h \
-	include/CppUTest/TestFilter.h \
-	include/CppUTest/TestTestingFixture.h \
 	include/CppUTest/MemoryLeakDetectorNewMacros.h \
-	include/CppUTest/TestHarness.h \
-	include/CppUTest/Utest.h \
 	include/CppUTest/MemoryLeakWarningPlugin.h \
+	include/CppUTest/PlatformSpecificFunctions.h \
+	include/CppUTest/PlatformSpecificFunctions_c.h \
+	include/CppUTest/SimpleString.h \
+	include/CppUTest/StandardCLibrary.h \
+	include/CppUTest/TestFailure.h \
+	include/CppUTest/TestFilter.h \
+	include/CppUTest/TestHarness.h \
 	include/CppUTest/TestHarness_c.h \
+	include/CppUTest/TestMemoryAllocator.h \
+	include/CppUTest/TestOutput.h \
+	include/CppUTest/TestPlugin.h \
+	include/CppUTest/TestRegistry.h \
+	include/CppUTest/TestResult.h \
+	include/CppUTest/TestTestingFixture.h \
+	include/CppUTest/Utest.h \
 	include/CppUTest/UtestMacros.h
 
 lib_libCppUTestExt_a_CPPFLAGS = $(lib_libCppUTest_a_CPPFLAGS)
@@ -84,40 +84,40 @@ lib_libCppUTestExt_a_CXXFLAGS = $(lib_libCppUTest_a_CXXFLAGS)
 
 lib_libCppUTestExt_a_SOURCES = \
    src/CppUTestExt/CodeMemoryReportFormatter.cpp \
-   src/CppUTestExt/MemoryReporterPlugin.cpp \
-   src/CppUTestExt/MockFailure.cpp \
-   src/CppUTestExt/MockSupportPlugin.cpp \
-   src/CppUTestExt/MockActualCall.cpp \
-   src/CppUTestExt/MockSupport_c.cpp \
    src/CppUTestExt/MemoryReportAllocator.cpp \
-   src/CppUTestExt/MockExpectedCall.cpp \
-   src/CppUTestExt/MockNamedValue.cpp \
-   src/CppUTestExt/OrderedTest.cpp \
+   src/CppUTestExt/MemoryReporterPlugin.cpp \
    src/CppUTestExt/MemoryReportFormatter.cpp \
+   src/CppUTestExt/MockActualCall.cpp \
+   src/CppUTestExt/MockExpectedCall.cpp \
    src/CppUTestExt/MockExpectedFunctionsList.cpp \
-   src/CppUTestExt/MockSupport.cpp
+   src/CppUTestExt/MockFailure.cpp \
+   src/CppUTestExt/MockNamedValue.cpp \
+   src/CppUTestExt/MockSupport.cpp \
+   src/CppUTestExt/MockSupportPlugin.cpp \
+   src/CppUTestExt/MockSupport_c.cpp \
+   src/CppUTestExt/OrderedTest.cpp
 
 if INCLUDE_CPPUTEST_EXT
 include_cpputestextdir = $(includedir)/CppUTestExt
 
 include_cpputestext_HEADERS = \
-	include/CppUTestExt/MemoryReportAllocator.h \
-	include/CppUTestExt/MockExpectedFunctionsList.h \
-	include/CppUTestExt/MockSupportPlugin.h \
-	include/CppUTestExt/MockSupport.h \
-	include/CppUTestExt/MockCheckedExpectedCall.h \
-	include/CppUTestExt/MockExpectedCall.h \
-	include/CppUTestExt/MemoryReportFormatter.h \
-	include/CppUTestExt/MockFailure.h \
-	include/CppUTestExt/MockSupport_c.h \
 	include/CppUTestExt/GMock.h \
 	include/CppUTestExt/GTest.h \
-	include/CppUTestExt/MemoryReporterPlugin.h \
-	include/CppUTestExt/OrderedTest.h \
 	include/CppUTestExt/GTestConvertor.h \
+	include/CppUTestExt/MemoryReportAllocator.h \
+	include/CppUTestExt/MemoryReporterPlugin.h \
+	include/CppUTestExt/MemoryReportFormatter.h \
 	include/CppUTestExt/MockActualCall.h \
 	include/CppUTestExt/MockCheckedActualCall.h \
-	include/CppUTestExt/MockNamedValue.h
+	include/CppUTestExt/MockCheckedExpectedCall.h \
+	include/CppUTestExt/MockExpectedCall.h \
+	include/CppUTestExt/MockExpectedFunctionsList.h \
+	include/CppUTestExt/MockFailure.h \
+	include/CppUTestExt/MockNamedValue.h \
+	include/CppUTestExt/MockSupport.h \
+	include/CppUTestExt/MockSupportPlugin.h \
+	include/CppUTestExt/MockSupport_c.h \
+	include/CppUTestExt/OrderedTest.h	
 	
 endif
 
@@ -128,34 +128,34 @@ CppUTestTests_LDADD = lib/libCppUTest.a $(CPPUTEST_LDADD)
 CppUTestTests_LDFLAGS = $(AM_LDFLAGS) $(CPPUTEST_LDFLAGS) $(CPPUTEST_ADDITIONAL_LDFLAGS)
 
 CppUTestTests_SOURCES = \
+	tests/AllocationInCFile.c \
+	tests/AllocationInCppFile.cpp \
+	tests/AllocLetTestFree.c \
+	tests/AllocLetTestFreeTest.cpp \
 	tests/AllTests.cpp \
-	tests/SetPluginTest.cpp \
 	tests/CheatSheetTest.cpp \
-	tests/SimpleStringTest.cpp \
 	tests/CommandLineArgumentsTest.cpp \
-	tests/TestFailureTest.cpp \
-	tests/TestFailureNaNTest.cpp \
 	tests/CommandLineTestRunnerTest.cpp \
+	tests/JUnitOutputTest.cpp \
+	tests/MemoryLeakDetectorTest.cpp \
+	tests/MemoryLeakOperatorOverloadsTest.cpp \
+	tests/MemoryLeakWarningTest.cpp \
+	tests/NullTestTest.cpp \
+	tests/PluginTest.cpp \
+	tests/PreprocessorTest.cpp \
+	tests/SetPluginTest.cpp \
+	tests/SimpleStringTest.cpp \
+	tests/TestFailureNaNTest.cpp \
+	tests/TestFailureTest.cpp \
 	tests/TestFilterTest.cpp \
 	tests/TestHarness_cTest.cpp \
-	tests/JUnitOutputTest.cpp \
 	tests/TestHarness_cTestCFile.c \
-	tests/MemoryLeakDetectorTest.cpp \
 	tests/TestInstallerTest.cpp \
-	tests/AllocLetTestFree.c \
-	tests/MemoryLeakOperatorOverloadsTest.cpp \
 	tests/TestMemoryAllocatorTest.cpp \
-	tests/MemoryLeakWarningTest.cpp \
 	tests/TestOutputTest.cpp \
-	tests/AllocLetTestFreeTest.cpp \
-	tests/NullTestTest.cpp \
 	tests/TestRegistryTest.cpp \
-	tests/AllocationInCFile.c \
-	tests/PluginTest.cpp \
 	tests/TestResultTest.cpp \
-	tests/PreprocessorTest.cpp \
 	tests/TestUTestMacro.cpp \
-	tests/AllocationInCppFile.cpp \
 	tests/UtestTest.cpp
 
 CppUTestExtTests_CPPFLAGS = $(lib_libCppUTestExt_a_CPPFLAGS)
@@ -165,24 +165,24 @@ CppUTestExtTests_LDADD = lib/libCppUTestExt.a lib/libCppUTest.a $(CPPUTEST_LDADD
 CppUTestExtTests_LDFLAGS = $(CppUTestTests_LDFLAGS)
 
 CppUTestExtTests_SOURCES = \
-	tests/CppUTestExt/MockActualCallTest.cpp \
-	tests/CppUTestExt/MockSupportTest.cpp \
+	tests/CppUTestExt/AllTests.cpp \
 	tests/CppUTestExt/CodeMemoryReportFormatterTest.cpp \
-	tests/CppUTestExt/MockCheatSheetTest.cpp \
-	tests/CppUTestExt/MockSupport_cTest.cpp \
 	tests/CppUTestExt/GMockTest.cpp \
-	tests/CppUTestExt/MockExpectedCallTest.cpp \
-	tests/CppUTestExt/MockSupport_cTestCFile.c \
 	tests/CppUTestExt/GTest1Test.cpp \
 	tests/CppUTestExt/GTest2ConvertorTest.cpp \
-	tests/CppUTestExt/MockExpectedFunctionsListTest.cpp \
 	tests/CppUTestExt/MemoryReportAllocatorTest.cpp \
-	tests/CppUTestExt/MockFailureTest.cpp \
-	tests/CppUTestExt/OrderedTestTest.cpp \
-	tests/CppUTestExt/MemoryReportFormatterTest.cpp \
 	tests/CppUTestExt/MemoryReporterPluginTest.cpp \
+	tests/CppUTestExt/MemoryReportFormatterTest.cpp \
+	tests/CppUTestExt/MockActualCallTest.cpp \
+	tests/CppUTestExt/MockCheatSheetTest.cpp \
+	tests/CppUTestExt/MockExpectedCallTest.cpp \
+	tests/CppUTestExt/MockExpectedFunctionsListTest.cpp \
+	tests/CppUTestExt/MockFailureTest.cpp \
 	tests/CppUTestExt/MockPluginTest.cpp \
-	tests/CppUTestExt/AllTests.cpp 
+	tests/CppUTestExt/MockSupportTest.cpp \
+	tests/CppUTestExt/MockSupport_cTest.cpp \
+	tests/CppUTestExt/MockSupport_cTestCFile.c \
+	tests/CppUTestExt/OrderedTestTest.cpp
 
 if INCLUDE_GMOCKTESTS
 
