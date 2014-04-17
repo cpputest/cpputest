@@ -215,38 +215,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\src\CppUTestExt\MockActualCall.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\CppUTestExt\MockExpectedCall.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\CppUTestExt\MockExpectedFunctionsList.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\CppUTestExt\MockFailure.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\CppUTestExt\MockNamedValue.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\CppUTestExt\MockSupport.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\CppUTestExt\MockSupport_c.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\CppUTestExt\MockSupportPlugin.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\src\CppUTestExt\OrderedTest.cpp"
 				>
 			</File>
@@ -317,11 +285,27 @@
 			Filter="h;hpp;hxx;hm;inl"
 			>
 			<File
+				RelativePath=".\include\CppUTestExt\CodeMemoryReportFormatter.h"
+				>
+			</File>
+			<File
 				RelativePath=".\include\CppUTest\CommandLineArguments.h"
 				>
 			</File>
 			<File
 				RelativePath=".\include\CppUTest\CommandLineTestRunner.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTestExt\GMock.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTestExt\GTest.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTestExt\GTestConvertor.h"
 				>
 			</File>
 			<File
@@ -342,6 +326,62 @@
 			</File>
 			<File
 				RelativePath=".\include\CppUTest\MemoryLeakWarningPlugin.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTestExt\MemoryReportAllocator.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTestExt\MemoryReporterPlugin.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTestExt\MemoryReportFormatter.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTestExt\MockActualCall.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTestExt\MockCheckedActualCall.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTestExt\MockCheckedExpectedCall.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTestExt\MockExpectedCall.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTestExt\MockExpectedFunctionsList.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTestExt\MockFailure.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTestExt\MockNamedValue.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTestExt\MockSupport.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTestExt\MockSupport_c.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTestExt\MockSupportPlugin.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTestExt\OrderedTest.h"
 				>
 			</File>
 			<File
@@ -408,6 +448,38 @@
 		<Filter
 			Name="ext"
 			>
+			<File
+				RelativePath=".\src\CppUTestExt\MockActualCall.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\CppUTestExt\MockExpectedCall.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\CppUTestExt\MockExpectedFunctionsList.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\CppUTestExt\MockFailure.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\CppUTestExt\MockNamedValue.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\CppUTestExt\MockSupport.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\CppUTestExt\MockSupport_c.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\CppUTestExt\MockSupportPlugin.cpp"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>
