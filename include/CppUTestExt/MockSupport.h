@@ -29,12 +29,14 @@
 #define D_MockSupport_h
 
 #include "CppUTestExt/MockFailure.h"
-#include "CppUTestExt/MockCheckedActualCall.h"
-#include "CppUTestExt/MockCheckedExpectedCall.h"
+#include "CppUTestExt/MockActualCall.h"
+#include "CppUTestExt/MockExpectedCall.h"
 #include "CppUTestExt/MockExpectedFunctionsList.h"
 
 class UtestShell;
 class MockSupport;
+class MockCheckedActualCall;
+class MockExpectedCallComposite;
 
 /* This allows access to "the global" mocking support for easier testing */
 MockSupport& mock(const SimpleString& mockName = "", MockFailureReporter* failureReporterForThisCall = NULL);
@@ -114,7 +116,7 @@ private:
     bool ignoreOtherCalls_;
     bool enabled_;
     MockCheckedActualCall *lastActualFunctionCall_;
-	MockExpectedCallComposite compositeCalls_;
+	MockExpectedCallComposite *compositeCalls_;
     MockNamedValueComparatorRepository comparatorRepository_;
     MockNamedValueList data_;
 
