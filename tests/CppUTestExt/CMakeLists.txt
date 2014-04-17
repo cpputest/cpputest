@@ -1,21 +1,21 @@
 set(CppUTestExtTests_src
         AllTests.cpp
-        MockActualCallTest.cpp
-        MockSupportTest.cpp
         CodeMemoryReportFormatterTest.cpp
-        MockCheatSheetTest.cpp
-        MockSupport_cTest.cpp
         GMockTest.cpp
-        MockExpectedCallTest.cpp
-        MockSupport_cTestCFile.c
         GTest1Test.cpp
-        MockExpectedFunctionsListTest.cpp
         MemoryReportAllocatorTest.cpp
-        MockFailureTest.cpp
-        OrderedTestTest.cpp
-        MemoryReportFormatterTest.cpp
         MemoryReporterPluginTest.cpp
+        MemoryReportFormatterTest.cpp
+        MockActualCallTest.cpp
+        MockCheatSheetTest.cpp
+        MockExpectedCallTest.cpp
+        MockExpectedFunctionsListTest.cpp
+        MockFailureTest.cpp
         MockPluginTest.cpp
+        MockSupportTest.cpp
+        MockSupport_cTestCFile.c
+        MockSupport_cTest.cpp
+        OrderedTestTest.cpp
 )
 
 add_executable(CppUTestExtTests ${CppUTestExtTests_src})
