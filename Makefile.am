@@ -165,23 +165,23 @@ CppUTestExtTests_LDADD = lib/libCppUTestExt.a lib/libCppUTest.a $(CPPUTEST_LDADD
 CppUTestExtTests_LDFLAGS = $(CppUTestTests_LDFLAGS)
 
 CppUTestExtTests_SOURCES = \
-	tests/CppUTestExt/TestMockActualFunctionCall.cpp \
-	tests/CppUTestExt/TestMockSupport.cpp \
-	tests/CppUTestExt/TestCodeMemoryReportFormatter.cpp \
-	tests/CppUTestExt/TestMockCheatSheet.cpp \
-	tests/CppUTestExt/TestMockSupport_c.cpp \
-	tests/CppUTestExt/TestGMock.cpp \
-	tests/CppUTestExt/TestMockExpectedFunctionCall.cpp \
-	tests/CppUTestExt/TestMockSupport_cCFile.c \
-	tests/CppUTestExt/TestGTest.cpp \
-	tests/CppUTestExt/TestGTestConvertor.cpp \
-	tests/CppUTestExt/TestMockExpectedFunctionsList.cpp \
-	tests/CppUTestExt/TestMemoryReportAllocator.cpp \
-	tests/CppUTestExt/TestMockFailure.cpp \
-	tests/CppUTestExt/TestOrderedTest.cpp \
-	tests/CppUTestExt/TestMemoryReportFormatter.cpp \
-	tests/CppUTestExt/TestMemoryReporterPlugin.cpp \
-	tests/CppUTestExt/TestMockPlugin.cpp \
+	tests/CppUTestExt/MockActualCallTest.cpp \
+	tests/CppUTestExt/MockSupportTest.cpp \
+	tests/CppUTestExt/CodeMemoryReportFormatterTest.cpp \
+	tests/CppUTestExt/MockCheatSheetTest.cpp \
+	tests/CppUTestExt/MockSupport_cTest.cpp \
+	tests/CppUTestExt/GMockTest.cpp \
+	tests/CppUTestExt/MockExpectedCallTest.cpp \
+	tests/CppUTestExt/MockSupport_cTestCFile.c \
+	tests/CppUTestExt/GTest1Test.cpp \
+	tests/CppUTestExt/GTest2ConvertorTest.cpp \
+	tests/CppUTestExt/MockExpectedFunctionsListTest.cpp \
+	tests/CppUTestExt/MemoryReportAllocatorTest.cpp \
+	tests/CppUTestExt/MockFailureTest.cpp \
+	tests/CppUTestExt/OrderedTestTest.cpp \
+	tests/CppUTestExt/MemoryReportFormatterTest.cpp \
+	tests/CppUTestExt/MemoryReporterPluginTest.cpp \
+	tests/CppUTestExt/MockPluginTest.cpp \
 	tests/CppUTestExt/AllTests.cpp 
 
 if INCLUDE_GMOCKTESTS
