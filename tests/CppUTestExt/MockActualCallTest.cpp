@@ -30,7 +30,7 @@
 #include "CppUTestExt/MockCheckedExpectedCall.h"
 #include "CppUTestExt/MockExpectedFunctionsList.h"
 #include "CppUTestExt/MockFailure.h"
-#include "TestMockFailure.h"
+#include "MockFailureTest.h"
 
 TEST_GROUP(MockCheckedActualCall)
 {
