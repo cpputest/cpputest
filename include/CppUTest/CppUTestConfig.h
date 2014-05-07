@@ -138,9 +138,9 @@
 #endif
 
 #if defined(__cplusplus) && __cplusplus >= 201103L
-	#define DEFAULT_COPY_CONSTRUCTOR(classname) classname(const classname &) = default;
+	#define DEFAULT_COPY_CONSTRUCTOR(classname) classname(const classname &) = default
 #else
-	#define DEFAULT_COPY_CONSTRUCTOR(classname)
+	#define DEFAULT_COPY_CONSTRUCTOR(classname) class _NoExtraSemi {}
 #endif
 
 /*

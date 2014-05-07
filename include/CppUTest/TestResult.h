@@ -42,7 +42,7 @@ class TestResult
 {
 public:
 	TestResult(TestOutput&);
-	DEFAULT_COPY_CONSTRUCTOR(TestResult)
+	DEFAULT_COPY_CONSTRUCTOR(TestResult);
 	virtual ~TestResult();
 
 	virtual void testsStarted();
