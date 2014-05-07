@@ -1,0 +1,12 @@
+*   text=auto
+
+*.c text
+*.h text
+*.cpp text
+
+# Windows files
+*.sln text eol=crlf
+*.bat text eol=crlf
+*.dsw text eol=crlf
+*.vcproj text eol=crlf
+*.vcxproj text eol=crlf
