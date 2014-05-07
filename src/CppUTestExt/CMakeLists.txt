@@ -10,7 +10,7 @@ set(CppUTestExt_src
         MockNamedValue.cpp
         OrderedTest.cpp
         MemoryReportFormatter.cpp
-        MockExpectedFunctionsList.cpp
+        MockExpectedCallsList.cpp
         MockSupport.cpp
 )
 
@@ -19,7 +19,7 @@ set(CppUTestExt_headers
         ${CppUTestRootDirectory}/include/CppUTestExt/MemoryReportAllocator.h
         ${CppUTestRootDirectory}/include/CppUTestExt/MockExpectedCall.h
         ${CppUTestRootDirectory}/include/CppUTestExt/MockCheckedExpectedCall.h
-        ${CppUTestRootDirectory}/include/CppUTestExt/MockExpectedFunctionsList.h
+        ${CppUTestRootDirectory}/include/CppUTestExt/MockExpectedCallsList.h
         ${CppUTestRootDirectory}/include/CppUTestExt/MockSupportPlugin.h
         ${CppUTestRootDirectory}/include/CppUTestExt/MemoryReportFormatter.h
         ${CppUTestRootDirectory}/include/CppUTestExt/MockFailure.h
