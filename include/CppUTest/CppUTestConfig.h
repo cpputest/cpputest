@@ -120,7 +120,11 @@
   #endif
 #else
   #define UT_THROW(exception)
-  #define UT_NOTHROW
+  #ifdef __clang__
+    #define UT_NOTHROW throw()
+  #else
+    #define UT_NOTHROW
+  #endif
 #endif
 
 /*
@@ -133,14 +137,10 @@
   #define UT_THROW(exception)
 #endif
 
-/*
- * CLang's operator delete requires an NOTHROW block. For now, when we use CLang, then have an empty exception specifier.
- * However, this ought to be done inside the configure.ac in the future.
- */
-
-#ifdef __clang__
-#undef UT_NOTHROW
-#define UT_NOTHROW throw()
+#if defined(__cplusplus) && __cplusplus >= 201103L
+	#define DEFAULT_COPY_CONSTRUCTOR(classname) classname(const classname &) = default;
+#else
+	#define DEFAULT_COPY_CONSTRUCTOR(classname)
 #endif
 
 /*
