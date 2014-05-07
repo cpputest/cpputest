@@ -29,7 +29,7 @@
 #define D_MockCheckedActualCall_h
 
 #include "CppUTestExt/MockActualCall.h"
-#include "CppUTestExt/MockExpectedFunctionsList.h"
+#include "CppUTestExt/MockExpectedCallsList.h"
 
 class MockCheckedActualCall : public MockActualCall
 {

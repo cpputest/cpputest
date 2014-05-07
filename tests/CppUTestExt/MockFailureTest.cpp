@@ -28,7 +28,7 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTestExt/MockFailure.h"
 #include "CppUTestExt/MockCheckedExpectedCall.h"
-#include "CppUTestExt/MockExpectedFunctionsList.h"
+#include "CppUTestExt/MockExpectedCallsList.h"
 #include "MockFailureTest.h"
 
 MockFailureReporterForTest* MockFailureReporterForTest::getReporter()

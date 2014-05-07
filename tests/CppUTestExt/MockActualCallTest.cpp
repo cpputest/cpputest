@@ -28,7 +28,7 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTestExt/MockCheckedActualCall.h"
 #include "CppUTestExt/MockCheckedExpectedCall.h"
-#include "CppUTestExt/MockExpectedFunctionsList.h"
+#include "CppUTestExt/MockExpectedCallsList.h"
 #include "CppUTestExt/MockFailure.h"
 #include "MockFailureTest.h"
 
