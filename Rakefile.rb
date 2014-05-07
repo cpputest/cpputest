@@ -1,36 +1,36 @@
 static_library_project :CppUTest, File.dirname(__FILE__) do |lib|
 
-  lib.add_configuration :default,
+  lib.add_configuration :Test,
     sources: ['src/CppUTest/*.cpp', 'src/Platforms/Gcc/*.cpp'],
     api_headers: 'include',
-    toolchain: gcc(
+    toolchain: toolchain(:gcc,
       cppflags: '-DNDEBUG',
       cflags: '-include CppUTest/MemoryLeakDetectorMallocMacros.h -Weverything -Wall -Wextra -Wshadow -Wswitch-default -Wswitch-enum -Wconversion -Wsign-conversion -Wno-padded -Wno-disabled-macro-expansion -Werror -Wstrict-prototypes',
       cxxflags: '-include CppUTest/MemoryLeakDetectorNewMacros.h -include CppUTest/MemoryLeakDetectorMallocMacros.h -Weverything -Wall -Wextra -Wshadow -Wswitch-default -Wswitch-enum -Wconversion -Wsign-conversion -Wno-padded -Wno-disabled-macro-expansion -Werror -pedantic-errors -Woverloaded-virtual -Wno-global-constructors -Wno-exit-time-destructors -Wno-weak-vtables -O2 -g'
     ),
     tests: [
-      'CppUTestTests:default'
+      'CppUTestTests:Test'
     ]
 end
 
 static_library_project :CppUTestExt, File.dirname(__FILE__) do |lib|
 
-  lib.add_configuration :default,
+  lib.add_configuration :Test,
     sources: ['src/CppUTestExt/*.cpp'],
     api_headers: 'include',
-    toolchain: gcc(
+    toolchain: toolchain(:gcc,
       cppflags: '-DNDEBUG',
       cflags: '-include CppUTest/MemoryLeakDetectorMallocMacros.h -Weverything -Wall -Wextra -Wshadow -Wswitch-default -Wswitch-enum -Wconversion -Wsign-conversion -Wno-padded -Wno-disabled-macro-expansion -Werror -Wstrict-prototypes',
       cxxflags: '-include CppUTest/MemoryLeakDetectorNewMacros.h -include CppUTest/MemoryLeakDetectorMallocMacros.h -Weverything -Wall -Wextra -Wshadow -Wswitch-default -Wswitch-enum -Wconversion -Wsign-conversion -Wno-padded -Wno-disabled-macro-expansion -Werror -pedantic-errors -Woverloaded-virtual -Wno-global-constructors -Wno-exit-time-destructors -Wno-weak-vtables -O2 -g'
     ),
     tests: [
-      'CppUTestExtTests:default'
+      'CppUTestExtTests:Test'
     ]
 end
 
 test_application_project :CppUTestTests, File.dirname(__FILE__) do |app|
 
-  app.add_configuration :default,
+  app.add_configuration :Test,
     sources: [
         'tests/AllTests.cpp',
         'tests/SetPluginTest.cpp',
@@ -61,14 +61,14 @@ test_application_project :CppUTestTests, File.dirname(__FILE__) do |app|
         'tests/AllocationInCppFile.cpp',
         'tests/UtestTest.cpp'
       ],
-    toolchain: gcc(
+    toolchain: toolchain(:gcc,
       cppflags: '-DNDEBUG',
       cflags: '-include CppUTest/MemoryLeakDetectorMallocMacros.h -Weverything -Wall -Wextra -Wshadow -Wswitch-default -Wswitch-enum -Wconversion -Wsign-conversion -Wno-padded -Wno-disabled-macro-expansion -Werror -Wstrict-prototypes',
       cxxflags: '-include CppUTest/MemoryLeakDetectorNewMacros.h -include CppUTest/MemoryLeakDetectorMallocMacros.h -Weverything -Wall -Wextra -Wshadow -Wswitch-default -Wswitch-enum -Wconversion -Wsign-conversion -Wno-padded -Wno-disabled-macro-expansion -Werror -pedantic-errors -Woverloaded-virtual -Wno-global-constructors -Wno-exit-time-destructors -Wno-weak-vtables -O2 -g',
       ldflags: '-lstdc++'
     ),
     dependencies: [
-      'CppUTest:default'
+      'CppUTest:Test'
     ]
 end
 
@@ -94,7 +94,7 @@ test_application_project :CppUTestExtTests, File.dirname(__FILE__) do |app|
         'tests/CppUTestExt/TestMemoryReporterPlugin.cpp',
         'tests/CppUTestExt/TestMockPlugin.cpp'
       ],
-    toolchain: gcc(
+    toolchain: toolchain(:gcc,
       cppflags: '-DNDEBUG',
       cflags: '-include CppUTest/MemoryLeakDetectorMallocMacros.h -Weverything -Wall -Wextra -Wshadow -Wswitch-default -Wswitch-enum -Wconversion -Wsign-conversion -Wno-padded -Wno-disabled-macro-expansion -Werror -Wstrict-prototypes',
       cxxflags: '-include CppUTest/MemoryLeakDetectorNewMacros.h -include CppUTest/MemoryLeakDetectorMallocMacros.h -Weverything -Wall -Wextra -Wshadow -Wswitch-default -Wswitch-enum -Wconversion -Wsign-conversion -Wno-padded -Wno-disabled-macro-expansion -Werror -pedantic-errors -Woverloaded-virtual -Wno-global-constructors -Wno-exit-time-destructors -Wno-weak-vtables -O2 -g',
@@ -105,6 +105,6 @@ test_application_project :CppUTestExtTests, File.dirname(__FILE__) do |app|
       ]
     ),
     dependencies: [
-      'CppUTest:default', 'CppUTestExt:default'
+      'CppUTest:Test', 'CppUTestExt:Test'
     ]
 end
