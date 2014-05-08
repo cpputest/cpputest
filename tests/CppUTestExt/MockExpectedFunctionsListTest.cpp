@@ -31,16 +31,16 @@
 #include "CppUTestExt/MockFailure.h"
 #include "MockFailureTest.h"
 
-TEST_GROUP(MockExpectedFunctionsList)
+TEST_GROUP(MockExpectedCallsList)
 {
-	MockExpectedFunctionsList * list;
+	MockExpectedCallsList * list;
 	MockCheckedExpectedCall* call1;
 	MockCheckedExpectedCall* call2;
 	MockCheckedExpectedCall* call3;
 	MockCheckedExpectedCall* call4;
 	void setup()
 	{
-		list = new MockExpectedFunctionsList;
+		list = new MockExpectedCallsList;
 		call1 = new MockCheckedExpectedCall;
 		call2 = new MockCheckedExpectedCall;
 		call3 = new MockCheckedExpectedCall;
@@ -60,21 +60,21 @@ TEST_GROUP(MockExpectedFunctionsList)
 	}
 };
 
-TEST(MockExpectedFunctionsList, emptyList)
+TEST(MockExpectedCallsList, emptyList)
 {
 	CHECK(! list->hasUnfullfilledExpectations());
 	CHECK(! list->hasFulfilledExpectations());
 	LONGS_EQUAL(0, list->size());
 }
 
-TEST(MockExpectedFunctionsList, addingCalls)
+TEST(MockExpectedCallsList, addingCalls)
 {
 	list->addExpectedCall(call1);
 	list->addExpectedCall(call2);
 	LONGS_EQUAL(2, list->size());
 }
 
-TEST(MockExpectedFunctionsList, listWithFulfilledExpectationHasNoUnfillfilledOnes)
+TEST(MockExpectedCallsList, listWithFulfilledExpectationHasNoUnfillfilledOnes)
 {
 	call1->callWasMade(1);
 	call2->callWasMade(2);
@@ -83,7 +83,7 @@ TEST(MockExpectedFunctionsList, listWithFulfilledExpectationHasNoUnfillfilledOne
 	CHECK(! list->hasUnfullfilledExpectations());
 }
 
-TEST(MockExpectedFunctionsList, listWithFulfilledExpectationButOutOfOrder)
+TEST(MockExpectedCallsList, listWithFulfilledExpectationButOutOfOrder)
 {
 	call1->withCallOrder(1);
 	call2->withCallOrder(2);
@@ -95,7 +95,7 @@ TEST(MockExpectedFunctionsList, listWithFulfilledExpectationButOutOfOrder)
 	CHECK(list->hasCallsOutOfOrder());
 }
 
-TEST(MockExpectedFunctionsList, listWithUnFulfilledExpectationHasNoUnfillfilledOnes)
+TEST(MockExpectedCallsList, listWithUnFulfilledExpectationHasNoUnfillfilledOnes)
 {
 	call1->callWasMade(1);
 	call3->callWasMade(2);
@@ -105,14 +105,14 @@ TEST(MockExpectedFunctionsList, listWithUnFulfilledExpectationHasNoUnfillfilledO
 	CHECK(list->hasUnfullfilledExpectations());
 }
 
-TEST(MockExpectedFunctionsList, deleteAllExpectationsAndClearList)
+TEST(MockExpectedCallsList, deleteAllExpectationsAndClearList)
 {
 	list->addExpectedCall(new MockCheckedExpectedCall);
 	list->addExpectedCall(new MockCheckedExpectedCall);
 	list->deleteAllExpectationsAndClearList();
 }
 
-TEST(MockExpectedFunctionsList, onlyKeepUnfulfilledExpectationsRelatedTo)
+TEST(MockExpectedCallsList, onlyKeepUnfulfilledExpectationsRelatedTo)
 {
 	call1->withName("relate");
 	call2->withName("unrelate");
@@ -125,7 +125,7 @@ TEST(MockExpectedFunctionsList, onlyKeepUnfulfilledExpectationsRelatedTo)
 	LONGS_EQUAL(1, list->size());
 }
 
-TEST(MockExpectedFunctionsList, removeAllExpectationsExceptThisThatRelateToTheWoleList)
+TEST(MockExpectedCallsList, removeAllExpectationsExceptThisThatRelateToTheWoleList)
 {
 	call1->withName("relate");
 	call2->withName("relate");
@@ -137,7 +137,7 @@ TEST(MockExpectedFunctionsList, removeAllExpectationsExceptThisThatRelateToTheWo
 	LONGS_EQUAL(0, list->size());
 }
 
-TEST(MockExpectedFunctionsList, removeAllExpectationsExceptThisThatRelateToFirstOne)
+TEST(MockExpectedCallsList, removeAllExpectationsExceptThisThatRelateToFirstOne)
 {
 	call1->withName("relate");
 	call2->withName("unrelate");
@@ -147,7 +147,7 @@ TEST(MockExpectedFunctionsList, removeAllExpectationsExceptThisThatRelateToFirst
 	LONGS_EQUAL(1, list->size());
 }
 
-TEST(MockExpectedFunctionsList, removeAllExpectationsExceptThisThatRelateToLastOne)
+TEST(MockExpectedCallsList, removeAllExpectationsExceptThisThatRelateToLastOne)
 {
 	call1->withName("unrelate");
 	call2->withName("relate");
@@ -157,7 +157,7 @@ TEST(MockExpectedFunctionsList, removeAllExpectationsExceptThisThatRelateToLastO
 	LONGS_EQUAL(1, list->size());
 }
 
-TEST(MockExpectedFunctionsList, onlyKeepExpectationsWithParameterName)
+TEST(MockExpectedCallsList, onlyKeepExpectationsWithParameterName)
 {
 	call1->withName("func").withParameter("param", 1);
 	call2->withName("func").withParameter("diffname", 1);
@@ -169,7 +169,7 @@ TEST(MockExpectedFunctionsList, onlyKeepExpectationsWithParameterName)
 	LONGS_EQUAL(2, list->size());
 }
 
-TEST(MockExpectedFunctionsList, onlyKeepUnfulfilledExpectationsWithParameter)
+TEST(MockExpectedCallsList, onlyKeepUnfulfilledExpectationsWithParameter)
 {
 	MockNamedValue parameter("diffname");
 	parameter.setValue(1);
@@ -187,25 +187,25 @@ TEST(MockExpectedFunctionsList, onlyKeepUnfulfilledExpectationsWithParameter)
 	LONGS_EQUAL(1, list->size());
 }
 
-TEST(MockExpectedFunctionsList, addUnfilfilledExpectationsWithEmptyList)
+TEST(MockExpectedCallsList, addUnfilfilledExpectationsWithEmptyList)
 {
-	MockExpectedFunctionsList newList;
+	MockExpectedCallsList newList;
 	newList.addUnfilfilledExpectations(*list);
 	LONGS_EQUAL(0, newList.size());
 }
 
-TEST(MockExpectedFunctionsList, addUnfilfilledExpectationsMultipleUnfulfilledExpectations)
+TEST(MockExpectedCallsList, addUnfilfilledExpectationsMultipleUnfulfilledExpectations)
 {
 	call2->callWasMade(1);
 	list->addExpectedCall(call1);
 	list->addExpectedCall(call2);
 	list->addExpectedCall(call3);
-	MockExpectedFunctionsList newList;
+	MockExpectedCallsList newList;
 	newList.addUnfilfilledExpectations(*list);
 	LONGS_EQUAL(2, newList.size());
 }
 
-TEST(MockExpectedFunctionsList, amountOfExpectationsFor)
+TEST(MockExpectedCallsList, amountOfExpectationsFor)
 {
 	call1->withName("foo");
 	call2->withName("bar");
@@ -214,14 +214,14 @@ TEST(MockExpectedFunctionsList, amountOfExpectationsFor)
 	LONGS_EQUAL(1, list->amountOfExpectationsFor("bar"));
 }
 
-TEST(MockExpectedFunctionsList, amountOfExpectationsForHasNone)
+TEST(MockExpectedCallsList, amountOfExpectationsForHasNone)
 {
 	call1->withName("foo");
 	list->addExpectedCall(call1);
 	LONGS_EQUAL(0, list->amountOfExpectationsFor("bar"));
 }
 
-TEST(MockExpectedFunctionsList, callToStringForUnfulfilledFunctions)
+TEST(MockExpectedCallsList, callToStringForUnfulfilledFunctions)
 {
 	call1->withName("foo");
 	call2->withName("bar");
@@ -234,10 +234,10 @@ TEST(MockExpectedFunctionsList, callToStringForUnfulfilledFunctions)
 
 	SimpleString expectedString;
 	expectedString = StringFromFormat("%s\n%s", call1->callToString().asCharString(), call2->callToString().asCharString());
-	STRCMP_EQUAL(expectedString.asCharString(), list->unfulfilledFunctionsToString().asCharString());
+	STRCMP_EQUAL(expectedString.asCharString(), list->unfulfilledCallsToString().asCharString());
 }
 
-TEST(MockExpectedFunctionsList, callToStringForFulfilledFunctions)
+TEST(MockExpectedCallsList, callToStringForFulfilledFunctions)
 {
 	call1->withName("foo");
 	call2->withName("bar");
@@ -250,12 +250,12 @@ TEST(MockExpectedFunctionsList, callToStringForFulfilledFunctions)
 
 	SimpleString expectedString;
 	expectedString = StringFromFormat("%s\n%s", call2->callToString().asCharString(), call1->callToString().asCharString());
-	STRCMP_EQUAL(expectedString.asCharString(), list->fulfilledFunctionsToString().asCharString());
+	STRCMP_EQUAL(expectedString.asCharString(), list->fulfilledCallsToString().asCharString());
 }
 
 
 
-TEST(MockExpectedFunctionsList, toStringOnEmptyList)
+TEST(MockExpectedCallsList, toStringOnEmptyList)
 {
-	STRCMP_EQUAL("<none>", list->unfulfilledFunctionsToString().asCharString());
+	STRCMP_EQUAL("<none>", list->unfulfilledCallsToString().asCharString());
 }

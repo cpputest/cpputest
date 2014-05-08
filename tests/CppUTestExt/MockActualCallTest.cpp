@@ -34,14 +34,14 @@
 
 TEST_GROUP(MockCheckedActualCall)
 {
-	MockExpectedFunctionsList* emptyList;
-	MockExpectedFunctionsList* list;
+	MockExpectedCallsList* emptyList;
+	MockExpectedCallsList* list;
 	MockFailureReporter* reporter;
 
 	void setup()
 	{
-		emptyList = new MockExpectedFunctionsList;
-		list = new MockExpectedFunctionsList;
+		emptyList = new MockExpectedCallsList;
+		list = new MockExpectedCallsList;
 		reporter = MockFailureReporterForTest::getReporter();
 	}
 

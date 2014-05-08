@@ -110,7 +110,7 @@ private:
     MockFailureReporter *activeReporter_;
     MockFailureReporter *standardReporter_;
     MockFailureReporter defaultReporter_;
-    MockExpectedFunctionsList expectations_;
+    MockExpectedCallsList expectations_;
     bool ignoreOtherCalls_;
     bool enabled_;
     MockCheckedActualCall *lastActualFunctionCall_;

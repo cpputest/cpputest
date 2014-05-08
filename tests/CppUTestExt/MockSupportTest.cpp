@@ -33,12 +33,12 @@
 
 TEST_GROUP(MockSupportTest)
 {
-	MockExpectedFunctionsList *expectationsList;
+	MockExpectedCallsList *expectationsList;
 
 	void setup()
 	{
 		mock().setMockFailureStandardReporter(MockFailureReporterForTest::getReporter());
-		expectationsList = new MockExpectedFunctionsList;
+		expectationsList = new MockExpectedCallsList;
 	}
 
 	void teardown()

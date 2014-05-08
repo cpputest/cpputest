@@ -41,14 +41,14 @@ TEST_GROUP(MockFailureTest)
 {
 	MockFailureReporter reporter;
 
-	MockExpectedFunctionsList *list;
+	MockExpectedCallsList *list;
 	MockCheckedExpectedCall* call1;
 	MockCheckedExpectedCall* call2;
 	MockCheckedExpectedCall* call3;
 
 	void setup ()
 	{
-		list = new MockExpectedFunctionsList;
+		list = new MockExpectedCallsList;
 		call1 = new MockCheckedExpectedCall;
 		call2 = new MockCheckedExpectedCall;
 		call3 = new MockCheckedExpectedCall;

@@ -25,18 +25,18 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef D_MockExpectedFunctionsList_h
-#define D_MockExpectedFunctionsList_h
+#ifndef D_MockExpectedCallsList_h
+#define D_MockExpectedCallsList_h
 
 class MockCheckedExpectedCall;
 class MockNamedValue;
 
-class MockExpectedFunctionsList
+class MockExpectedCallsList
 {
 
 public:
-	MockExpectedFunctionsList();
-	virtual ~MockExpectedFunctionsList();
+	MockExpectedCallsList();
+	virtual ~MockExpectedCallsList();
 	virtual void deleteAllExpectationsAndClearList();
 
 	virtual int size() const;
@@ -50,9 +50,9 @@ public:
 	virtual bool isEmpty() const;
 
 	virtual void addExpectedCall(MockCheckedExpectedCall* call);
-	virtual void addExpectations(const MockExpectedFunctionsList& list);
-	virtual void addExpectationsRelatedTo(const SimpleString& name, const MockExpectedFunctionsList& list);
-	virtual void addUnfilfilledExpectations(const MockExpectedFunctionsList& list);
+	virtual void addExpectations(const MockExpectedCallsList& list);
+	virtual void addExpectationsRelatedTo(const SimpleString& name, const MockExpectedCallsList& list);
+	virtual void addUnfilfilledExpectations(const MockExpectedCallsList& list);
 
 	virtual void onlyKeepExpectationsRelatedTo(const SimpleString& name);
 	virtual void onlyKeepExpectationsWithParameter(const MockNamedValue& parameter);
@@ -71,28 +71,28 @@ public:
 	virtual void wasPassedToObject();
 	virtual void parameterWasPassed(const SimpleString& parameterName);
 
-	virtual SimpleString unfulfilledFunctionsToString(const SimpleString& linePrefix = "") const;
-	virtual SimpleString fulfilledFunctionsToString(const SimpleString& linePrefix = "") const;
+	virtual SimpleString unfulfilledCallsToString(const SimpleString& linePrefix = "") const;
+	virtual SimpleString fulfilledCallsToString(const SimpleString& linePrefix = "") const;
 	virtual SimpleString missingParametersToString() const;
 
 protected:
 	virtual void pruneEmptyNodeFromList();
 
-	class MockExpectedFunctionsListNode
+	class MockExpectedCallsListNode
 	{
 	public:
 		MockCheckedExpectedCall* expectedCall_;
 
-		MockExpectedFunctionsListNode* next_;
-		MockExpectedFunctionsListNode(MockCheckedExpectedCall* expectedCall)
+		MockExpectedCallsListNode* next_;
+		MockExpectedCallsListNode(MockCheckedExpectedCall* expectedCall)
 			: expectedCall_(expectedCall), next_(NULL) {}
 	};
 
-	virtual MockExpectedFunctionsListNode* findNodeWithCallOrderOf(int callOrder) const;
+	virtual MockExpectedCallsListNode* findNodeWithCallOrderOf(int callOrder) const;
 private:
-	MockExpectedFunctionsListNode* head_;
+	MockExpectedCallsListNode* head_;
 
-	MockExpectedFunctionsList(const MockExpectedFunctionsList&);
+	MockExpectedCallsList(const MockExpectedCallsList&);
 };
 
 #endif
