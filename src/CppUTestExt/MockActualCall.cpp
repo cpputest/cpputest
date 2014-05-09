@@ -49,7 +49,7 @@ SimpleString MockCheckedActualCall::getName() const
 }
 
 
-MockCheckedActualCall::MockCheckedActualCall(int callOrder, MockFailureReporter* reporter, const MockExpectedFunctionsList& allExpectations)
+MockCheckedActualCall::MockCheckedActualCall(int callOrder, MockFailureReporter* reporter, const MockExpectedCallsList& allExpectations)
 	: callOrder_(callOrder), reporter_(reporter), state_(CALL_SUCCEED), _fulfilledExpectation(NULL), allExpectations_(allExpectations)
 {
 	unfulfilledExpectations_.addUnfilfilledExpectations(allExpectations);

@@ -31,7 +31,7 @@
 #include "CppUTestExt/MockFailure.h"
 #include "CppUTestExt/MockCheckedActualCall.h"
 #include "CppUTestExt/MockCheckedExpectedCall.h"
-#include "CppUTestExt/MockExpectedFunctionsList.h"
+#include "CppUTestExt/MockExpectedCallsList.h"
 
 class UtestShell;
 class MockSupport;
@@ -110,7 +110,7 @@ private:
     MockFailureReporter *activeReporter_;
     MockFailureReporter *standardReporter_;
     MockFailureReporter defaultReporter_;
-    MockExpectedFunctionsList expectations_;
+    MockExpectedCallsList expectations_;
     bool ignoreOtherCalls_;
     bool enabled_;
     MockCheckedActualCall *lastActualFunctionCall_;

@@ -30,7 +30,7 @@
 
 #include "CppUTest/TestHarness.h"
 #include "CppUTestExt/MockNamedValue.h"
-#include "CppUTestExt/MockExpectedFunctionsList.h"
+#include "CppUTestExt/MockExpectedCallsList.h"
 
 class MockFailureReporter;
 class MockFailure;

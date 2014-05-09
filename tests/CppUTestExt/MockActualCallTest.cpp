@@ -28,20 +28,20 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTestExt/MockCheckedActualCall.h"
 #include "CppUTestExt/MockCheckedExpectedCall.h"
-#include "CppUTestExt/MockExpectedFunctionsList.h"
+#include "CppUTestExt/MockExpectedCallsList.h"
 #include "CppUTestExt/MockFailure.h"
 #include "MockFailureTest.h"
 
 TEST_GROUP(MockCheckedActualCall)
 {
-	MockExpectedFunctionsList* emptyList;
-	MockExpectedFunctionsList* list;
+	MockExpectedCallsList* emptyList;
+	MockExpectedCallsList* list;
 	MockFailureReporter* reporter;
 
 	void setup()
 	{
-		emptyList = new MockExpectedFunctionsList;
-		list = new MockExpectedFunctionsList;
+		emptyList = new MockExpectedCallsList;
+		list = new MockExpectedCallsList;
 		reporter = MockFailureReporterForTest::getReporter();
 	}
 

@@ -35,7 +35,7 @@ TEST_GROUP(MockPlugin)
 	UtestShell *test;
 	StringBufferTestOutput *output;
 	TestResult *result;
-	MockExpectedFunctionsList *expectationsList;
+	MockExpectedCallsList *expectationsList;
 	MockCheckedExpectedCall *call;
 
 	MockSupportPlugin *plugin;
@@ -47,7 +47,7 @@ TEST_GROUP(MockPlugin)
 		test = new UtestShell("group", "name", "file", 1);
 		output = new StringBufferTestOutput;
 		result = new TestResult(*output);
-		expectationsList = new MockExpectedFunctionsList;
+		expectationsList = new MockExpectedCallsList;
 		call = new MockCheckedExpectedCall;
 		expectationsList->addExpectedCall(call);
 		plugin = new MockSupportPlugin;;

@@ -29,12 +29,12 @@
 #define D_MockCheckedActualCall_h
 
 #include "CppUTestExt/MockActualCall.h"
-#include "CppUTestExt/MockExpectedFunctionsList.h"
+#include "CppUTestExt/MockExpectedCallsList.h"
 
 class MockCheckedActualCall : public MockActualCall
 {
 public:
-	MockCheckedActualCall(int callOrder, MockFailureReporter* reporter, const MockExpectedFunctionsList& expectations);
+	MockCheckedActualCall(int callOrder, MockFailureReporter* reporter, const MockExpectedCallsList& expectations);
 	virtual ~MockCheckedActualCall();
 
 	virtual MockActualCall& withName(const SimpleString& name) _override;
@@ -85,8 +85,8 @@ private:
 	ActualCallState state_;
 	MockCheckedExpectedCall* _fulfilledExpectation;
 
-	MockExpectedFunctionsList unfulfilledExpectations_;
-	const MockExpectedFunctionsList& allExpectations_;
+	MockExpectedCallsList unfulfilledExpectations_;
+	const MockExpectedCallsList& allExpectations_;
 };
 
 class MockActualCallTrace : public MockActualCall
