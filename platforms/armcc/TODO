@@ -1,0 +1,6 @@
+I am not familiar with automake.
+
+There is need to change build libCppUTest.a for target platform from
+  makefile in current directory to automake in CppUTest root directory.
+  And keep in mind that I want to add gcc way, and the others may want to add
+  some instructions for different compilers and chips.
