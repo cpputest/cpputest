@@ -357,7 +357,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\include\CppUTestExt\MockExpectedFunctionsList.h"
+				RelativePath=".\include\CppUTestExt\MockExpectedCallsList.h"
 				>
 			</File>
 			<File
@@ -457,7 +457,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\src\CppUTestExt\MockExpectedFunctionsList.cpp"
+				RelativePath=".\src\CppUTestExt\MockExpectedCallsList.cpp"
 				>
 			</File>
 			<File

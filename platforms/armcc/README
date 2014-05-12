@@ -1,5 +1,5 @@
 Makefile to build CppUTest library to run in hardware using
-  ARMCC C/C++ compiler.
+  ARM C/C++ compiler.
 
 You need installed CYGWIN with make.exe, rm.exe, mkdir.exe and
   installed Keil MDK-ARM.

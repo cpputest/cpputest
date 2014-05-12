@@ -244,7 +244,7 @@ bool MockSupport::wasLastCallFulfilled()
 
 void MockSupport::failTestWithUnexpectedCalls()
 {
-    MockExpectedFunctionsList expectationsList;
+    MockExpectedCallsList expectationsList;
     expectationsList.addExpectations(expectations_);
 
     for(MockNamedValueListNode *p = data_.begin();p;p = p->next())
@@ -258,7 +258,7 @@ void MockSupport::failTestWithUnexpectedCalls()
 
 void MockSupport::failTestWithOutOfOrderCalls()
 {
-    MockExpectedFunctionsList expectationsList;
+    MockExpectedCallsList expectationsList;
     expectationsList.addExpectations(expectations_);
 
     for(MockNamedValueListNode *p = data_.begin();p;p = p->next())
