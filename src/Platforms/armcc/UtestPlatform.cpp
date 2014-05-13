@@ -211,10 +211,8 @@ int PlatformSpecificPutchar(int c)
   return putchar(c);
 }
 
-int size_heap = 0;
 void* PlatformSpecificMalloc(size_t size)
 {
-   size_heap+=size;
    return malloc(size);
 }
 

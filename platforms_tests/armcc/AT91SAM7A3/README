@@ -1,0 +1,34 @@
+Sample project to test CppUTest for Keil MDK-ARM toolchain and AT91SAM7A3 chip.
+
+Requirements:
+1. CYGWIN (rm.exe, find.exe, mkdir.exe, make.exe)
+
+2. Keil MDK-ARM
+
+3. JLink Flash (for programming chip)
+
+4. serial connection to DBGU interface
+
+5. 4 MHz quartz. If else, need to be adjusted in src/ASM/SAM7A3.asm and
+  src/Retarget.c (for _clock_init() function working correctly)
+
+6. eclipse + gdb server from JLink + arm-none-eabi-gdb from GNU ARM Tools Embedded
+  For debug only.
+
+First, you need to compile CppUTest for target:
+  make -C ../../../platforms/armcc all
+
+Second, you need to write tests. As example, I take SimpleStringTest.cpp from
+  tests directory of CppUTest home directory.
+
+Third, you need to make executable:
+  make all
+
+Fourth, you need to program executable on target chip:
+  make prog
+
+
+All sources inside src/ directory and its subdirectories will be compiled, no
+  way to add other sources or directories.
+
+Project use semihosting, so you may use standard printf() or std::cout << "Hello!"
