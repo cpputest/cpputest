@@ -1,5 +1,6 @@
 if (MSVC)
     set(CPP_PLATFORM VisualCpp)
+    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
     include_directories(${CppUTestRootDirectory}/include/Platforms/${CPP_PLATFORM})
 elseif (STD_C)
     set(CPP_PLATFORM Gcc)
