@@ -138,7 +138,7 @@ int PlatformSpecificVSNprintf(char *str, size_t size, const char* format, va_lis
 	char* buf = 0;
 	size_t sizeGuess = size;
 
-	int result = _vsnprintf( str, size, format, args);
+	int result = _vsnprintf_s( str, size, _TRUNCATE, format, args);
 	str[size-1] = 0;
 	while (result == -1)
 	{
@@ -146,7 +146,7 @@ int PlatformSpecificVSNprintf(char *str, size_t size, const char* format, va_lis
 			free(buf);
 		sizeGuess += 10;
 		buf = (char*)malloc(sizeGuess);
-		result = _vsnprintf( buf, sizeGuess, format, args);
+		result = _vsnprintf_s( buf, sizeGuess, _TRUNCATE, format, args);
 	}
 
 	if (buf != 0)
@@ -157,7 +157,9 @@ int PlatformSpecificVSNprintf(char *str, size_t size, const char* format, va_lis
 
 PlatformSpecificFile PlatformSpecificFOpen(const char* filename, const char* flag)
 {
-   return fopen(filename, flag);
+   FILE* file;
+   fopen_s(&file, filename, flag);
+   return file;
 }
 
 void PlatformSpecificFPuts(const char* str, PlatformSpecificFile file)
@@ -217,7 +219,7 @@ int PlatformSpecificIsNan(double d)
 
 int PlatformSpecificVSNprintf(char *str, unsigned int size, const char* format, void* args)
 {
-   return _vsnprintf( str, size, format, (va_list) args);
+   return _vsnprintf_s( str, size, _TRUNCATE, format, (va_list) args);
 }
 
 char PlatformSpecificToLower(char c)
