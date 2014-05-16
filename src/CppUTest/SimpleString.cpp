@@ -70,18 +70,19 @@ SimpleString::SimpleString(const char *otherBuffer)
 	else {
 		size_t len = PlatformSpecificStrLen(otherBuffer) + 1;
 		buffer_ = allocStringBuffer(len);
-		PlatformSpecificStrCpy(buffer_, otherBuffer);
+		PlatformSpecificStrNCpy(buffer_, otherBuffer, len);
 	}
 }
 
 SimpleString::SimpleString(const char *other, size_t repeatCount)
 {
-	size_t len = PlatformSpecificStrLen(other) * repeatCount + 1;
+  size_t otherStringLength = PlatformSpecificStrLen(other);
+	size_t len = otherStringLength * repeatCount + 1;
 	buffer_ = allocStringBuffer(len);
 	char* next = buffer_;
 	for (size_t i = 0; i < repeatCount; i++) {
-		PlatformSpecificStrCpy(next, other);
-		next += PlatformSpecificStrLen(other);
+		PlatformSpecificStrNCpy(next, other, otherStringLength);
+		next += otherStringLength;
 	}
 	*next = 0;
 
@@ -90,7 +91,7 @@ SimpleString::SimpleString(const SimpleString& other)
 {
 	size_t len = other.size() + 1;
 	buffer_ = allocStringBuffer(len);
-	PlatformSpecificStrCpy(buffer_, other.buffer_);
+	PlatformSpecificStrNCpy(buffer_, other.buffer_, len);
 }
 
 SimpleString& SimpleString::operator=(const SimpleString& other)
@@ -99,7 +100,7 @@ SimpleString& SimpleString::operator=(const SimpleString& other)
 		deallocStringBuffer(buffer_);
 		size_t len = other.size() + 1;
 		buffer_ = allocStringBuffer(len);
-		PlatformSpecificStrCpy(buffer_, other.buffer_);
+		PlatformSpecificStrNCpy(buffer_, other.buffer_, len);
 	}
 	return *this;
 }
@@ -274,10 +275,12 @@ SimpleString& SimpleString::operator+=(const SimpleString& rhs)
 
 SimpleString& SimpleString::operator+=(const char* rhs)
 {
-	size_t len = this->size() + PlatformSpecificStrLen(rhs) + 1;
-	char* tbuffer = allocStringBuffer(len);
-	PlatformSpecificStrCpy(tbuffer, this->buffer_);
-	PlatformSpecificStrCat(tbuffer, rhs);
+	size_t originalSize = this->size();
+	size_t additionalStringSize = PlatformSpecificStrLen(rhs);
+	size_t totalSizeOfNewBuffer = originalSize + additionalStringSize + 1;
+	char* tbuffer = allocStringBuffer(totalSizeOfNewBuffer);
+	PlatformSpecificStrNCpy(tbuffer, this->buffer_, originalSize);
+	PlatformSpecificStrNCpy(tbuffer + originalSize, rhs, additionalStringSize + 1);
 	deallocStringBuffer(buffer_);
 	buffer_ = tbuffer;
 	return *this;
