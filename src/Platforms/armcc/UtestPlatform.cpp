@@ -104,7 +104,7 @@ long GetPlatformSpecificTimeInMillis()
 /* The ARMCC compiler will compile this function with C++ linkage, unless
  * we specifically tell it to use C linkage again, in the function definiton.
  */
-extern "C" void SetPlatformSpecificTimeInMillisMethod(long (*platformSpecific) ()){
+extern "C" void SetPlatformSpecificTimeInMillisMethod(long (*platformSpecific) ()){
 	timeInMillisFp = (platformSpecific == 0) ? TimeInMillisImplementation : platformSpecific;
 }
 
@@ -144,11 +144,6 @@ size_t PlatformSpecificStrLen(const char* str)
 char* PlatformSpecificStrCat(char* s1, const char* s2)
 {
    return strcat(s1, s2);
-}
-
-char* PlatformSpecificStrCpy(char* s1, const char* s2)
-{
-   return strcpy(s1, s2);
 }
 
 char* PlatformSpecificStrNCpy(char* s1, const char* s2, size_t size)

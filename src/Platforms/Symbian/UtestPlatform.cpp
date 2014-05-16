@@ -123,10 +123,6 @@ int PlatformSpecificPutchar(int c) {
 	return putchar(c);
 }
 
-char* PlatformSpecificStrCpy(char* s1, const char* s2) {
-	return strcpy(s1, s2);
-}
-
 size_t PlatformSpecificStrLen(const char* s) {
     return strlen(s);
 }

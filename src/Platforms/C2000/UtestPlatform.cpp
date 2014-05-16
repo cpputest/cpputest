@@ -191,17 +191,8 @@ char* PlatformSpecificStrCat(char* s1, const char* s2)
 
     while (*s1++);			       // FIND END OF STRING
     --s1;				           // BACK UP OVER NULL
-    while (*s1++ = *s2++);	       // APPEND SECOND STRING
+    while ((*s1++ = *s2++));	       // APPEND SECOND STRING
     return result;
-}
-
-char* PlatformSpecificStrCpy(char* dest, const char* src)
-{
-    register char       *d = dest;     
-    register const char *s = src;
-
-    while (*d++ = *s++);
-    return dest;
 }
 
 char* PlatformSpecificStrNCpy(char* s1, const char* s2, size_t n)
