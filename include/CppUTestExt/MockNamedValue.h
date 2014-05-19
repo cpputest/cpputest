@@ -52,8 +52,8 @@ public:
 		: equal_(equal), valueToString_(valToString) {}
 	virtual ~MockFunctionComparator(){}
 
-	virtual bool isEqual(const void* object1, const void* object2){ return equal_(object1, object2); }
-	virtual SimpleString valueToString(const void* object) { return valueToString_(object); }
+	virtual bool isEqual(const void* object1, const void* object2) _override { return equal_(object1, object2); }
+	virtual SimpleString valueToString(const void* object) _override { return valueToString_(object); }
 private:
 	isEqualFunction equal_;
 	valueToStringFunction valueToString_;
@@ -66,16 +66,19 @@ private:
  * Basically this class ties together a Name, a Value, a Type, and a Comparator
  */
 
+class MockNamedValueComparatorRepository;
 class MockNamedValue
 {
 public:
 	MockNamedValue(const SimpleString& name);
+	DEFAULT_COPY_CONSTRUCTOR(MockNamedValue)
 	virtual ~MockNamedValue();
 
 	virtual void setValue(int value);
 	virtual void setValue(unsigned int value);
 	virtual void setValue(double value);
 	virtual void setValue(void* value);
+	virtual void setValue(const void* value);
 	virtual void setValue(const char* value);
 	virtual void setObjectPointer(const SimpleString& type, const void* objectPtr);
 
@@ -94,7 +97,11 @@ public:
 	virtual double getDoubleValue() const;
 	virtual const char* getStringValue() const;
 	virtual void* getPointerValue() const;
+	virtual const void* getConstPointerValue() const;
 	virtual const void* getObjectPointer() const;
+	virtual MockNamedValueComparator* getComparator() const;
+
+	static void setDefaultComparatorRepository(MockNamedValueComparatorRepository* repository);
 private:
 	SimpleString name_;
 	SimpleString type_;
@@ -104,9 +111,11 @@ private:
 		double doubleValue_;
 		const char* stringValue_;
 		void* pointerValue_;
+		const void* constPointerValue_;
 		const void* objectPointerValue_;
 	} value_;
 	MockNamedValueComparator* comparator_;
+	static MockNamedValueComparatorRepository* defaultRepository_;
 };
 
 class MockNamedValueListNode

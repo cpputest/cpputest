@@ -64,6 +64,7 @@ struct JUnitTestOutputImpl
 {
 	JUnitTestGroupResult results_;
 	PlatformSpecificFile file_;
+	SimpleString package_;
 };
 
 JUnitTestOutput::JUnitTestOutput() :
@@ -145,6 +146,13 @@ SimpleString JUnitTestOutput::createFileName(const SimpleString& group)
 	return fileName;
 }
 
+void JUnitTestOutput::setPackageName(const SimpleString& package)
+{
+	if (impl_ != NULL) {
+		impl_->package_ = package;
+	}
+}
+
 void JUnitTestOutput::writeXmlHeader()
 {
 	writeToFile("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n");
@@ -175,7 +183,9 @@ void JUnitTestOutput::writeTestCases()
 	JUnitTestCaseResultNode* cur = impl_->results_.head_;
 	while (cur) {
 		SimpleString buf = StringFromFormat(
-				"<testcase classname=\"%s\" name=\"%s\" time=\"%d.%03d\">\n",
+				"<testcase classname=\"%s%s%s\" name=\"%s\" time=\"%d.%03d\">\n",
+				impl_->package_.asCharString(),
+				impl_->package_.isEmpty() == true ? "" : ".",
 				impl_->results_.group_.asCharString(),
 				cur->name_.asCharString(), (int) (cur->execTime_ / 1000), (int)(cur->execTime_ % 1000));
 		writeToFile(buf.asCharString());
@@ -194,6 +204,7 @@ void JUnitTestOutput::writeFailure(JUnitTestCaseResultNode* node)
 	message.replace('"', '\'');
 	message.replace('<', '[');
 	message.replace('>', ']');
+	message.replace("&", "&amp;");
 	message.replace("\n", "{newline}");
 	SimpleString buf = StringFromFormat(
 			"<failure message=\"%s:%d: %s\" type=\"AssertionFailedError\">\n",

@@ -342,6 +342,7 @@ void UtestShell::assertTrueText(bool condition, const char *checkString, const c
 
 void UtestShell::fail(const char *text, const char* fileName, int lineNumber, const TestTerminator& testTerminator)
 {
+	getTestResult()->countCheck();
 	failWith(FailFailure(this, fileName, lineNumber, text), testTerminator);
 }
 

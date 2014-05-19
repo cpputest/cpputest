@@ -64,7 +64,7 @@
 { public: TEST_##testGroup##_##testName##_Test () : TEST_GROUP_##CppUTestGroup##testGroup () {} \
        void testBody(); }; \
   class TEST_##testGroup##_##testName##_TestShell : public UtestShell { \
-	  virtual Utest* createTest() { return new TEST_##testGroup##_##testName##_Test; } \
+	  virtual Utest* createTest() _override { return new TEST_##testGroup##_##testName##_Test; } \
   } TEST_##testGroup##_##testName##_TestShell_instance; \
   static TestInstaller TEST_##testGroup##_##testName##_Installer(TEST_##testGroup##_##testName##_TestShell_instance, #testGroup, #testName, __FILE__,__LINE__); \
 	void TEST_##testGroup##_##testName##_Test::testBody()
@@ -78,7 +78,7 @@
 { public: IGNORE##testGroup##_##testName##_Test () : TEST_GROUP_##CppUTestGroup##testGroup () {} \
   public: void testBodyThatNeverRuns (); }; \
   class IGNORE##testGroup##_##testName##_TestShell : public IgnoredUtestShell { \
-	  virtual Utest* createTest() { return new IGNORE##testGroup##_##testName##_Test; } \
+	  virtual Utest* createTest() _override { return new IGNORE##testGroup##_##testName##_Test; } \
   } IGNORE##testGroup##_##testName##_TestShell_instance; \
    static TestInstaller TEST_##testGroup##testName##_Installer(IGNORE##testGroup##_##testName##_TestShell_instance, #testGroup, #testName, __FILE__,__LINE__); \
 	void IGNORE##testGroup##_##testName##_Test::testBodyThatNeverRuns ()
@@ -116,7 +116,17 @@
   CHECK_EQUAL_LOCATION(expected, actual, __FILE__, __LINE__)
 
 #define CHECK_EQUAL_LOCATION(expected,actual, file, line)\
-  { UtestShell::getCurrent()->assertEquals(((expected) != (actual)), StringFrom(expected).asCharString(), StringFrom(actual).asCharString(), file, line); }
+  { if ((expected) != (actual)) { \
+	  if ((actual) != (actual)) \
+	  	  UtestShell::getCurrent()->print("WARNING:\n\tThe \"Actual Parameter\" parameter is evaluated multiple times resulting in different values.\n\tThus the value in the error message is probably incorrect.", file, line); \
+	  if ((expected) != (expected)) \
+	  	  UtestShell::getCurrent()->print("WARNING:\n\tThe \"Expected Parameter\" parameter is evaluated multiple times resulting in different values.\n\tThus the value in the error message is probably incorrect.", file, line); \
+	  UtestShell::getCurrent()->assertEquals(true, StringFrom(expected).asCharString(), StringFrom(actual).asCharString(), file, line); \
+  } \
+  else \
+  { \
+    UtestShell::getCurrent()->assertLongsEqual((long)0, (long)0, file, line); \
+  } }
 
 //This check checks for char* string equality using strcmp.
 //This makes up for the fact that CHECK_EQUAL only compares the pointers to char*'s

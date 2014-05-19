@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2007, Michael Feathers, James Grenning and Bas Vodde
  * All rights reserved.
@@ -88,7 +87,7 @@ TEST(UnitTestMacros, FAILBehavesAsAProperMacro)
 	else FAIL("")
 }
 
-IGNORE_TEST(UnitTestMacros, FAILworksInAnIngoredTest)
+IGNORE_TEST(UnitTestMacros, FAILworksInAnIgnoredTest)
 {
 	FAIL("die!");
 }
@@ -190,6 +189,48 @@ TEST(UnitTestMacros, FailureWithCHECK_EQUAL)
 {
 	runTestWithMethod(_failingTestMethodWithCHECK_EQUAL);
 	CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1>");
+}
+
+static int countInCountingMethod;
+static int _countingMethod()
+{
+	return countInCountingMethod++;
+}
+
+TEST(UnitTestMacros, passingCheckEqualWillNotBeEvaluatedMultipleTimesWithCHECK_EQUAL)
+{
+	countInCountingMethod = 0;
+	CHECK_EQUAL(0, _countingMethod());
+
+	LONGS_EQUAL(1, countInCountingMethod);
+}
+
+static void _failing_CHECK_EQUAL_WithActualBeingEvaluatesMultipleTimesWillGiveAWarning()
+{
+	CHECK_EQUAL(12345, _countingMethod());
+}
+
+TEST(UnitTestMacros, failing_CHECK_EQUAL_WithActualBeingEvaluatesMultipleTimesWillGiveAWarning)
+{
+	runTestWithMethod(_failing_CHECK_EQUAL_WithActualBeingEvaluatesMultipleTimesWillGiveAWarning);
+	CHECK_TEST_FAILS_PROPER_WITH_TEXT("WARNING:\n\tThe \"Actual Parameter\" parameter is evaluated multiple times resulting in different values.\n\tThus the value in the error message is probably incorrect.");
+}
+
+static void _failing_CHECK_EQUAL_WithExpectedBeingEvaluatesMultipleTimesWillGiveAWarning()
+{
+	CHECK_EQUAL(_countingMethod(), 12345);
+}
+
+TEST(UnitTestMacros, failing_CHECK_EQUAL_WithExpectedBeingEvaluatesMultipleTimesWillGiveAWarning)
+{
+	runTestWithMethod(_failing_CHECK_EQUAL_WithExpectedBeingEvaluatesMultipleTimesWillGiveAWarning);
+	CHECK_TEST_FAILS_PROPER_WITH_TEXT("WARNING:\n\tThe \"Expected Parameter\" parameter is evaluated multiple times resulting in different values.\n\tThus the value in the error message is probably incorrect.");
+}
+
+TEST(UnitTestMacros, failing_CHECK_EQUAL_withParamatersThatDontChangeWillNotGiveAnyWarning)
+{
+	runTestWithMethod(_failingTestMethodWithCHECK_EQUAL);
+	CHECK( ! fixture.output_->getOutput().contains("WARNING"));
 }
 
 TEST(UnitTestMacros, CHECK_EQUALBehavesAsProperMacro)

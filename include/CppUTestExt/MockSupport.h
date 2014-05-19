@@ -29,9 +29,9 @@
 #define D_MockSupport_h
 
 #include "CppUTestExt/MockFailure.h"
-#include "CppUTestExt/MockFunctionCall.h"
-#include "CppUTestExt/MockExpectedFunctionCall.h"
-#include "CppUTestExt/MockExpectedFunctionsList.h"
+#include "CppUTestExt/MockCheckedActualCall.h"
+#include "CppUTestExt/MockCheckedExpectedCall.h"
+#include "CppUTestExt/MockExpectedCallsList.h"
 
 class UtestShell;
 class MockSupport;
@@ -46,9 +46,9 @@ public:
 	virtual ~MockSupport();
 
 	virtual void strictOrder();
-	virtual MockFunctionCall& expectOneCall(const SimpleString& functionName);
-	virtual MockFunctionCall& expectNCalls(int amount, const SimpleString& functionName);
-	virtual MockFunctionCall& actualCall(const SimpleString& functionName);
+	virtual MockExpectedCall& expectOneCall(const SimpleString& functionName);
+	virtual MockExpectedCall& expectNCalls(int amount, const SimpleString& functionName);
+	virtual MockActualCall& actualCall(const SimpleString& functionName);
 	virtual bool hasReturnValue();
 	virtual MockNamedValue returnValue();
 	virtual int intReturnValue();
@@ -56,6 +56,7 @@ public:
 	virtual const char* stringReturnValue();
 	virtual double doubleReturnValue();
 	virtual void* pointerReturnValue();
+	virtual const void* constPointerReturnValue();
 
 	bool hasData(const SimpleString& name);
 	void setData(const SimpleString& name, int value);
@@ -63,6 +64,7 @@ public:
 	void setData(const SimpleString& name, const char* value);
 	void setData(const SimpleString& name, double value);
 	void setData(const SimpleString& name, void* value);
+	void setData(const SimpleString& name, const void* value);
 	void setDataObject(const SimpleString& name, const SimpleString& type, void* value);
 	MockNamedValue getData(const SimpleString& name);
 
@@ -91,6 +93,7 @@ public:
 
 	virtual void setMockFailureStandardReporter(MockFailureReporter* reporter);
 	virtual void setActiveReporter(MockFailureReporter* activeReporter);
+	virtual void setDefaultComparatorRepository();
 
 	virtual void installComparator(const SimpleString& typeName, MockNamedValueComparator& comparator);
 	virtual void installComparators(const MockNamedValueComparatorRepository& repository);
@@ -98,7 +101,7 @@ public:
 
 protected:
 	MockSupport* clone();
-    virtual MockActualFunctionCall *createActualFunctionCall();
+    virtual MockCheckedActualCall *createActualFunctionCall();
     virtual void failTest(MockFailure& failure);
 private:
     static int callOrder_;
@@ -107,11 +110,11 @@ private:
     MockFailureReporter *activeReporter_;
     MockFailureReporter *standardReporter_;
     MockFailureReporter defaultReporter_;
-    MockExpectedFunctionsList expectations_;
+    MockExpectedCallsList expectations_;
     bool ignoreOtherCalls_;
     bool enabled_;
-    MockActualFunctionCall *lastActualFunctionCall_;
-	MockFunctionCallComposite compositeCalls_;
+    MockCheckedActualCall *lastActualFunctionCall_;
+	MockExpectedCallComposite compositeCalls_;
     MockNamedValueComparatorRepository comparatorRepository_;
     MockNamedValueList data_;
 

@@ -48,6 +48,7 @@ public:
 	bool isJUnitOutput() const;
 	bool isEclipseOutput() const;
 	bool runTestsInSeperateProcess() const;
+	const SimpleString& getPackageName() const;
 	const char* usage() const;
 
 private:
@@ -65,6 +66,7 @@ private:
 	TestFilter groupFilter_;
 	TestFilter nameFilter_;
 	OutputType outputType_;
+	SimpleString packageName_;
 
 	SimpleString getParameterField(int ac, const char** av, int& i, const SimpleString& parameterName);
 	void SetRepeatCount(int ac, const char** av, int& index);
@@ -74,6 +76,7 @@ private:
 	void SetStrictNameFilter(int ac, const char** av, int& index);
 	void SetTestToRunBasedOnVerboseOutput(int ac, const char** av, int& index, const char* parameterName);
 	bool SetOutputType(int ac, const char** av, int& index);
+	void SetPackageName(int ac, const char** av, int& index);
 
 	CommandLineArguments(const CommandLineArguments&);
 	CommandLineArguments& operator=(const CommandLineArguments&);

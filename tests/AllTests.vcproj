@@ -45,7 +45,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\include;..\include\Platforms\VisualCpp;..\include\CppUTestExt\CppUTestGMock;..\include\CppUTestExt\CppUTestGTest"
+				AdditionalIncludeDirectories="..\include;..\include\Platforms\VisualCpp;..\include\CppUTestExt\CppUTestGMock"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				StringPooling="true"
 				RuntimeLibrary="0"
@@ -333,75 +333,75 @@
 			Name="ext"
 			>
 			<File
-				RelativePath=".\CppUTestExt\TestCodeMemoryReportFormatter.cpp"
+				RelativePath=".\CppUTestExt\CodeMemoryReportFormatterTest.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\CppUTestExt\TestGMock.cpp"
+				RelativePath=".\CppUTestExt\GMockTest.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\CppUTestExt\TestGTest.cpp"
+				RelativePath=".\CppUTestExt\GTest1Test.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\CppUTestExt\TestMemoryReportAllocator.cpp"
+				RelativePath=".\CppUTestExt\MemoryReportAllocatorTest.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\CppUTestExt\TestMemoryReporterPlugin.cpp"
+				RelativePath=".\CppUTestExt\MemoryReporterPluginTest.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\CppUTestExt\TestMemoryReportFormatter.cpp"
+				RelativePath=".\CppUTestExt\MemoryReportFormatterTest.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\CppUTestExt\TestMockActualFunctionCall.cpp"
+				RelativePath=".\CppUTestExt\MockActualCallTest.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\CppUTestExt\TestMockCheatSheet.cpp"
+				RelativePath=".\CppUTestExt\MockCheatSheetTest.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\CppUTestExt\TestMockExpectedFunctionCall.cpp"
+				RelativePath=".\CppUTestExt\MockExpectedCallTest.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\CppUTestExt\TestMockExpectedFunctionsList.cpp"
+				RelativePath=".\CppUTestExt\MockExpectedFunctionsListTest.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\CppUTestExt\TestMockFailure.cpp"
+				RelativePath=".\CppUTestExt\MockFailureTest.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\CppUTestExt\TestMockFailure.h"
+				RelativePath=".\CppUTestExt\MockFailureTest.h"
 				>
 			</File>
 			<File
-				RelativePath=".\CppUTestExt\TestMockPlugin.cpp"
+				RelativePath=".\CppUTestExt\MockPluginTest.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\CppUTestExt\TestMockSupport.cpp"
+				RelativePath=".\CppUTestExt\MockSupportTest.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\CppUTestExt\TestMockSupport_c.cpp"
+				RelativePath=".\CppUTestExt\MockSupport_cTest.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\CppUTestExt\TestMockSupport_cCFile.c"
+				RelativePath=".\CppUTestExt\MockSupport_cTestCFile.c"
 				>
 			</File>
 			<File
-				RelativePath=".\CppUTestExt\TestMockSupport_cCFile.h"
+				RelativePath=".\CppUTestExt\MockSupport_cTestCFile.h"
 				>
 			</File>
 			<File
-				RelativePath=".\CppUTestExt\TestOrderedTest.cpp"
+				RelativePath=".\CppUTestExt\OrderedTestTest.cpp"
 				>
 			</File>
 		</Filter>

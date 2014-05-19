@@ -34,6 +34,32 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 
 
+extern "C" int setup_teardown_was_called_in_test_group_in_C;
+extern "C" int test_was_called_in_test_group_in_C;
+int setup_teardown_was_called_in_test_group_in_C = 0;
+int test_was_called_in_test_group_in_C = 0;
+
+TEST_GROUP_C(TestGroupInC)
+{
+	TEST_GROUP_C_SETUP_WRAPPER(TestGroupInC)
+	TEST_GROUP_C_TEARDOWN_WRAPPER(TestGroupInC)
+};
+
+TEST_GROUP_C_WRAPPER(TestGroupInC, checkThatTheTestHasRun)
+
+/*
+ * This test is a bit strange. They use the fact that you can do -r2 for repeating the same run.
+ * When you do so, the same statics will be shared and therefore we can test whether the setup/teardown is run
+ * correctly.
+ */
+
+TEST(TestGroupInC, setupHasBeenCalled)
+{
+	test_was_called_in_test_group_in_C++;
+	/* Increased in setup, decreased in teardown. So at this point it must be 1 also on a multiple run */
+	LONGS_EQUAL(1, setup_teardown_was_called_in_test_group_in_C);
+}
+
 static bool hasDestructorOfTheDestructorCheckedBeenCalled;
 
 class HasTheDestructorBeenCalledChecker
@@ -228,7 +254,7 @@ TEST(TestHarness_c, cpputest_realloc_larger)
 
 	char* mem1 = (char*) cpputest_malloc(10);
 
-	PlatformSpecificStrCpy(mem1, number_string);
+	PlatformSpecificStrNCpy(mem1, number_string, 10);
 	CHECK(mem1 != 0);
 
 	char* mem2 = (char*) cpputest_realloc(mem1, 1000);

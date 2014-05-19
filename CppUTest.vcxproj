@@ -132,15 +132,13 @@ copy $(OutDir)CppUTest.lib lib\CppUTest.lib
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\CppUTestExt\CodeMemoryReportFormatter.cpp" />
-    <ClCompile Include="src\CppUTestExt\GTestConvertor.cpp" />
     <ClCompile Include="src\CppUTestExt\MemoryReportAllocator.cpp" />
     <ClCompile Include="src\CppUTestExt\MemoryReporterPlugin.cpp" />
     <ClCompile Include="src\CppUTestExt\MemoryReportFormatter.cpp" />
-    <ClCompile Include="src\CppUTestExt\MockActualFunctionCall.cpp" />
-    <ClCompile Include="src\CppUTestExt\MockExpectedFunctionCall.cpp" />
-    <ClCompile Include="src\CppUTestExt\MockExpectedFunctionsList.cpp" />
+    <ClCompile Include="src\CppUTestExt\MockActualCall.cpp" />
+    <ClCompile Include="src\CppUTestExt\MockExpectedCall.cpp" />
+    <ClCompile Include="src\CppUTestExt\MockExpectedCallsList.cpp" />
     <ClCompile Include="src\CppUTestExt\MockFailure.cpp" />
-    <ClCompile Include="src\CppUTestExt\MockFunctionCall.cpp" />
     <ClCompile Include="src\CppUTestExt\MockNamedValue.cpp" />
     <ClCompile Include="src\CppUTestExt\MockSupport.cpp" />
     <ClCompile Include="src\CppUTestExt\MockSupportPlugin.cpp" />
@@ -171,15 +169,13 @@ copy $(OutDir)CppUTest.lib lib\CppUTest.lib
     <ClInclude Include="include\CppUTestExt\CodeMemoryReportFormatter.h" />
     <ClInclude Include="include\CppUTestExt\GMock.h" />
     <ClInclude Include="include\CppUTestExt\GTestConvertor.h" />
-    <ClInclude Include="include\CppUTestExt\GTestInterface.h" />
     <ClInclude Include="include\CppUTestExt\MemoryReportAllocator.h" />
     <ClInclude Include="include\CppUTestExt\MemoryReporterPlugin.h" />
     <ClInclude Include="include\CppUTestExt\MemoryReportFormatter.h" />
     <ClInclude Include="include\CppUTestExt\MockActualFunctionCall.h" />
     <ClInclude Include="include\CppUTestExt\MockExpectedFunctionCall.h" />
-    <ClInclude Include="include\CppUTestExt\MockExpectedFunctionsList.h" />
+    <ClInclude Include="include\CppUTestExt\MockExpectedCallsList.h" />
     <ClInclude Include="include\CppUTestExt\MockFailure.h" />
-    <ClInclude Include="include\CppUTestExt\MockFunctionCall.h" />
     <ClInclude Include="include\CppUTestExt\MockNamedValue.h" />
     <ClInclude Include="include\CppUTestExt\MockSupport.h" />
     <ClInclude Include="include\CppUTestExt\MockSupportPlugin.h" />

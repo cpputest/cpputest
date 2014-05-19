@@ -46,8 +46,6 @@
 #		of the test harness
 #   CPPUTEST_USE_GCOV - Turn on coverage analysis
 #		Clean then build with this flag set to Y, then 'make gcov'
-#   CPPUTEST_USE_REAL_GTEST - Expect to link to gtest too. This enables the ability to
-#       run Google Test tests as CppUTest tests using the GTestConvertor.
 #   CPPUTEST_MAPFILE - generate a map file
 #   CPPUTEST_WARNINGFLAGS - overly picky by default
 #	OTHER_MAKEFILE_TO_INCLUDE - a hook to use this makefile to make 
@@ -162,21 +160,6 @@ ifndef CPPUTEST_USE_STD_CPP_LIB
 	CPPUTEST_USE_STD_CPP_LIB = Y
 endif
 
-# Use the real gtest or use the fake simulation
-ifdef CPPUTEST_USE_REAL_GTEST
-	CPPUTEST_USE_REAL_GTEST = Y
-else
-	CPPUTEST_USE_REAL_GTEST = N
-endif
-
-# Use gmock
-ifdef CPPUTEST_USE_REAL_GMOCK
-	CPPUTEST_USE_REAL_GMOCK = Y
-else
-	CPPUTEST_USE_REAL_GMOCK = N
-endif
-
-
 # Use gcov, off by default
 ifndef CPPUTEST_USE_GCOV
 	CPPUTEST_USE_GCOV = N
@@ -188,7 +171,6 @@ endif
 
 # Default warnings
 ifndef CPPUTEST_WARNINGFLAGS
-ifeq ($(CPPUTEST_USE_REAL_GTEST), N)
 	CPPUTEST_WARNINGFLAGS =  -Wall -Wextra -Werror -Wshadow -Wswitch-default -Wswitch-enum -Wconversion
 ifeq ($(CPPUTEST_PEDANTIC_ERRORS), Y)
 	CPPUTEST_WARNINGFLAGS += -pedantic-errors
@@ -198,7 +180,6 @@ ifeq ($(UNAME_OS),$(LINUX_STR))
 endif
 	CPPUTEST_CXX_WARNINGFLAGS = -Woverloaded-virtual
 	CPPUTEST_C_WARNINGFLAGS = -Wstrict-prototypes
-endif
 endif
 
 #Wonderful extra compiler warnings with clang
@@ -298,31 +279,18 @@ ifeq ($(CPPUTEST_USE_STD_C_LIB), Y)
 endif
 endif
 
-ifeq ($(CPPUTEST_USE_REAL_GMOCK), Y)
-	ifndef GMOCK_HOME
-$(error CPPUTEST_USE_REAL_GMOCK defined, but GMOCK_HOME not, so can't use real gmock! Please define GMOCK_HOME to the gmock location)
-	endif
+ifdef $(GMOCK_HOME)
 	GTEST_HOME = $(GMOCK_HOME)/gtest
-	CPPUTEST_USE_REAL_GTEST = Y
 	CPPUTEST_CPPFLAGS += -I$(GMOCK_HOME)/include
 	GMOCK_LIBRARY = $(GMOCK_HOME)/lib/.libs/libgmock.a
 	LD_LIBRARIES += $(GMOCK_LIBRARY)
-	CPPUTEST_CPPFLAGS += -DCPPUTEST_USE_REAL_GMOCK
-else
-	CPPUTEST_CPPFLAGS += -Iinclude/CppUTestExt/CppUTestGMock
-endif
-
-ifeq ($(CPPUTEST_USE_REAL_GTEST), Y)
-	ifndef GTEST_HOME
-$(error CPPUTEST_USE_REAL_GTEST defined, but GTEST_HOME not, so can't use real gtest! Please define GTEST_HOME to the gtest location)
-	endif
+	CPPUTEST_CPPFLAGS += -DINCLUDE_GTEST_TESTS
+	CPPUTEST_WARNINGFLAGS = 
 	CPPUTEST_CPPFLAGS += -I$(GTEST_HOME)/include -I$(GTEST_HOME)
 	GTEST_LIBRARY = $(GTEST_HOME)/lib/.libs/libgtest.a
 	LD_LIBRARIES += $(GTEST_LIBRARY)
-	CPPUTEST_CPPFLAGS += -DCPPUTEST_USE_REAL_GTEST
-else
-	CPPUTEST_CPPFLAGS += -Iinclude/CppUTestExt/CppUTestGTest
 endif
+
 
 ifeq ($(CPPUTEST_USE_GCOV), Y)
 	CPPUTEST_CXXFLAGS += -fprofile-arcs -ftest-coverage
@@ -347,7 +315,9 @@ ifeq ($(CPPUTEST_USE_EXTENSIONS), Y)
 CPPUTEST_LIB += $(CPPUTEST_LIB_LINK_DIR)/libCppUTestExt.a
 endif
 
-LD_LIBRARIES += -lstdc++
+ifdef CPPUTEST_STATIC_REALTIME
+	LD_LIBRARIES += -lrt
+endif
 
 TARGET_LIB = \
     $(CPPUTEST_LIB_DIR)/lib$(COMPONENT_NAME).a
@@ -492,7 +462,7 @@ test-deps: $(TEST_DEPS)
 
 $(TEST_TARGET): $(TEST_DEPS)
 	@echo Linking $@
-	$(SILENCE)$(LINK.o) -o $@ $^ $(LD_LIBRARIES)
+	$(SILENCE)$(CXX) -o $@ $^ $(LD_LIBRARIES) $(LDFLAGS)
 
 $(TARGET_LIB): $(OBJ)
 	@echo Building archive $@

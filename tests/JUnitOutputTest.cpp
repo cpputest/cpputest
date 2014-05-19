@@ -510,6 +510,18 @@ TEST(JUnitOutputTest, testFailureWithDifferentFileAndLine)
 	STRCMP_EQUAL("<failure message=\"importantFile:999: Test failed\" type=\"AssertionFailedError\">\n", outputFile->line(6));
 }
 
+TEST(JUnitOutputTest, testFailureWithAmpersands)
+{
+	testCaseRunner->start()
+			.withGroup("testGroupWithFailingTest")
+				.withTest("FailingTestName").thatFails("&object1 != &object2", "importantFile", 999)
+			.end();
+
+	outputFile = fileSystem.file("cpputest_testGroupWithFailingTest.xml");
+
+	STRCMP_EQUAL("<failure message=\"importantFile:999: &amp;object1 != &amp;object2\" type=\"AssertionFailedError\">\n", outputFile->line(6));
+}
+
 TEST(JUnitOutputTest, aCoupleOfTestFailures)
 {
 	testCaseRunner->start()
@@ -562,5 +574,18 @@ TEST(JUnitOutputTest, twoTestGroupsWriteToTwoDifferentFiles)
 TEST(JUnitOutputTest, testGroupWithWeirdName)
 {
 	STRCMP_EQUAL("cpputest_group_weird_name.xml", junitOutput->createFileName("group/weird/name").asCharString());
+}
+
+TEST(JUnitOutputTest, TestCaseBlockWithAPackageName)
+{
+	junitOutput->setPackageName("packagename");
+	testCaseRunner->start()
+			.withGroup("groupname").withTest("testname")
+			.end();
+
+	outputFile = fileSystem.file("cpputest_groupname.xml");
+
+	STRCMP_EQUAL("<testcase classname=\"packagename.groupname\" name=\"testname\" time=\"0.000\">\n", outputFile->line(5));
+	STRCMP_EQUAL("</testcase>\n", outputFile->line(6));
 }
 

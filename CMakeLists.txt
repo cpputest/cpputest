@@ -14,8 +14,7 @@ option(CPPUTEST_MEMORY_LEAK_DETECTION "Enable memory leak detection" ON)
 option(CPPUTEST_EXTENSIONS "Use the CppUTest extenstion library" ON)
 option(CPPUTEST_MAP_FILE "Enable the creation of a map file" OFF)
 option(CPPUTEST_COVERAGE "Enable running with coverage" OFF)
-option(CPPUTEST_REAL_GTEST "Enable using real GTest rather than faking it" OFF)
-option(CPPUTEST_GMOCK "Enable using GMock" OFF)
+option(CPPUTEST_C++11 "Compile with C++11 support" OFF)
 
 option(CPPUTEST_TESTS "Compile and make tests for the code?" ON)
 
@@ -24,6 +23,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif(NOT CMAKE_BUILD_TYPE)
 
 set(CppUTestRootDirectory ${PROJECT_SOURCE_DIR})
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CppUTestRootDirectory}/cmake/Modules)
 
 include("${CppUTestRootDirectory}/cmake/Modules/CppUTestConfigurationOptions.cmake")
 include(CTest)
@@ -64,30 +64,10 @@ Features configure in CppUTest:
 
     Using Standard C library:           ${CPPUTEST_STD_C}
     Using Standard C++ library:         ${CPPUTEST_STD_CPP}
+    Using C++11 library:                ${CPPUTEST_C++11}
 
     Generating map file:                ${CPPUTEST_MAP_FILE}
     Compiling with coverage:            ${CPPUTEST_COVERAGE}
 
-    Use 'real' GTest:                   ${CPPUTEST_REAL_GTEST}
-    Able to use GMock:                  ${CPPUTEST_GMOCK}
 -------------------------------------------------------
 ")
-
-#
-# CMake support.
-#
-
-# Add all targets to the build-tree export set
-if(CPPUTEST_EXTENSIONS)
-    export(TARGETS CppUTest CppUTestExt FILE "${PROJECT_BINARY_DIR}/CppUTestTargets.cmake")
-else()
-    export(TARGETS CppUTest FILE "${PROJECT_BINARY_DIR}/CppUTestTargets.cmake")
-endif()
-
-# Create the CppUTestConfig.cmake and CppUTestConfigVersion files
-#file(RELATIVE_PATH REL_INCLUDE_DIR "${INSTALL_CMAKE_DIR}" "${INSTALL_INCLUDE_DIR}")
-# ... for the build tree
-get_property(CONF_INCLUDE_DIRS DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
-configure_file(CppUTestConfig.cmake.in "${CMAKE_BINARY_DIR}/CppUTestConfig.cmake" @ONLY)
-
-configure_file(CppUTestConfigVersion.cmake.in "${CMAKE_BINARY_DIR}/CppUTestConfigVersion.cmake" @ONLY)

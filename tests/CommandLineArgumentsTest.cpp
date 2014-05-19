@@ -246,7 +246,7 @@ TEST(CommandLineArguments, weirdParamatersPrintsUsageAndReturnsFalse)
 	int argc = 2;
 	const char* argv[] = { "tests.exe", "-SomethingWeird" };
 	CHECK(!newArgumentParser(argc, argv));
-	STRCMP_EQUAL("usage [-v] [-r#] [-g|sg groupName] [-n|sn testName] [-o{normal, junit}]\n",
+	STRCMP_EQUAL("usage [-v] [-r#] [-g|sg groupName] [-n|sn testName] [-o{normal, junit}] [-k packageName]\n",
 			args->usage());
 }
 
@@ -269,4 +269,15 @@ TEST(CommandLineArguments, checkDefaultArguments)
 	CHECK(TestFilter() == args->getGroupFilter());
 	CHECK(TestFilter() == args->getNameFilter());
 	CHECK(args->isEclipseOutput());
+	CHECK(SimpleString("") == args->getPackageName());
 }
+
+TEST(CommandLineArguments, setPackageName)
+{
+	int argc = 3;
+	const char* argv[] = { "tests.exe", "-k", "package" };
+	CHECK(newArgumentParser(argc, argv));
+	CHECK_EQUAL(SimpleString("package"), args->getPackageName());
+}
+
+

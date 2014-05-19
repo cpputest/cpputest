@@ -27,8 +27,8 @@
 
 #include "CppUTest/TestHarness.h"
 #include "CppUTestExt/MockSupport.h"
-#include "CppUTestExt/MockActualFunctionCall.h"
-#include "CppUTestExt/MockExpectedFunctionCall.h"
+#include "CppUTestExt/MockActualCall.h"
+#include "CppUTestExt/MockExpectedCall.h"
 #include "CppUTestExt/MockFailure.h"
 
 #define MOCK_SUPPORT_SCOPE_PREFIX "!!!$$$MockingSupportScope$$$!!!"
@@ -41,6 +41,7 @@ MockSupport& mock(const SimpleString& mockName, MockFailureReporter* failureRepo
 {
 	MockSupport& mock_support = (mockName != "") ? *global_mock.getMockSupportScope(mockName) : global_mock;
 	mock_support.setActiveReporter(failureReporterForThisCall);
+	mock_support.setDefaultComparatorRepository();
 	return mock_support;
 }
 
@@ -75,6 +76,11 @@ void MockSupport::setActiveReporter(MockFailureReporter* reporter)
 	activeReporter_ = (reporter) ? reporter : standardReporter_;
 }
 
+void MockSupport::setDefaultComparatorRepository()
+{
+	MockNamedValue::setDefaultComparatorRepository(&comparatorRepository_);
+}
+
 void MockSupport::installComparator(const SimpleString& typeName, MockNamedValueComparator& comparator)
 {
 	comparatorRepository_.installComparator(typeName, comparator);
@@ -104,7 +110,7 @@ void MockSupport::clear()
 	lastActualFunctionCall_ = NULL;
 
 	tracing_ = false;
-	MockFunctionCallTrace::instance().clear();
+	MockActualCallTrace::instance().clear();
 
 	expectations_.deleteAllExpectationsAndClearList();
 	compositeCalls_.clear();
@@ -129,12 +135,11 @@ void MockSupport::strictOrder()
 	strictOrdering_ = true;
 }
 
-MockFunctionCall& MockSupport::expectOneCall(const SimpleString& functionName)
+MockExpectedCall& MockSupport::expectOneCall(const SimpleString& functionName)
 {
-	if (!enabled_) return MockIgnoredCall::instance();
+	if (!enabled_) return MockIgnoredExpectedCall::instance();
 
-	MockExpectedFunctionCall* call = new MockExpectedFunctionCall;
-	call->setComparatorRepository(&comparatorRepository_);
+	MockCheckedExpectedCall* call = new MockCheckedExpectedCall;
 	call->withName(functionName);
 	if (strictOrdering_)
 		call->withCallOrder(++expectedCallOrder_);
@@ -142,7 +147,7 @@ MockFunctionCall& MockSupport::expectOneCall(const SimpleString& functionName)
 	return *call;
 }
 
-MockFunctionCall& MockSupport::expectNCalls(int amount, const SimpleString& functionName)
+MockExpectedCall& MockSupport::expectNCalls(int amount, const SimpleString& functionName)
 {
 	compositeCalls_.clear();
 
@@ -151,14 +156,13 @@ MockFunctionCall& MockSupport::expectNCalls(int amount, const SimpleString& func
 	return compositeCalls_;
 }
 
-
-MockActualFunctionCall* MockSupport::createActualFunctionCall()
+MockCheckedActualCall* MockSupport::createActualFunctionCall()
 {
-	lastActualFunctionCall_ = new MockActualFunctionCall(++callOrder_, activeReporter_, expectations_);
+	lastActualFunctionCall_ = new MockCheckedActualCall(++callOrder_, activeReporter_, expectations_);
 	return lastActualFunctionCall_;
 }
 
-MockFunctionCall& MockSupport::actualCall(const SimpleString& functionName)
+MockActualCall& MockSupport::actualCall(const SimpleString& functionName)
 {
 	if (lastActualFunctionCall_) {
 		lastActualFunctionCall_->checkExpectations();
@@ -166,16 +170,15 @@ MockFunctionCall& MockSupport::actualCall(const SimpleString& functionName)
 		lastActualFunctionCall_ = NULL;
 	}
 
-	if (!enabled_) return MockIgnoredCall::instance();
-	if (tracing_) return MockFunctionCallTrace::instance().withName(functionName);
+	if (!enabled_) return MockIgnoredActualCall::instance();
+	if (tracing_) return MockActualCallTrace::instance().withName(functionName);
 
 
 	if (!expectations_.hasExpectationWithName(functionName) && ignoreOtherCalls_) {
-		return MockIgnoredCall::instance();
+		return MockIgnoredActualCall::instance();
 	}
 
-	MockActualFunctionCall* call = createActualFunctionCall();
-	call->setComparatorRepository(&comparatorRepository_);
+	MockCheckedActualCall* call = createActualFunctionCall();
 	call->withName(functionName);
 	return *call;
 }
@@ -214,7 +217,7 @@ void MockSupport::tracing(bool enabled)
 
 const char* MockSupport::getTraceOutput()
 {
-	return MockFunctionCallTrace::instance().getTraceOutput();
+	return MockActualCallTrace::instance().getTraceOutput();
 }
 
 bool MockSupport::expectedCallsLeft()
@@ -241,7 +244,7 @@ bool MockSupport::wasLastCallFulfilled()
 
 void MockSupport::failTestWithUnexpectedCalls()
 {
-    MockExpectedFunctionsList expectationsList;
+    MockExpectedCallsList expectationsList;
     expectationsList.addExpectations(expectations_);
 
     for(MockNamedValueListNode *p = data_.begin();p;p = p->next())
@@ -255,7 +258,7 @@ void MockSupport::failTestWithUnexpectedCalls()
 
 void MockSupport::failTestWithOutOfOrderCalls()
 {
-    MockExpectedFunctionsList expectationsList;
+    MockExpectedCallsList expectationsList;
     expectationsList.addExpectations(expectations_);
 
     for(MockNamedValueListNode *p = data_.begin();p;p = p->next())
@@ -333,6 +336,12 @@ void MockSupport::setData(const SimpleString& name, double value)
 }
 
 void MockSupport::setData(const SimpleString& name, void* value)
+{
+	MockNamedValue* newData = retrieveDataFromStore(name);
+	newData->setValue(value);
+}
+
+void MockSupport::setData(const SimpleString& name, const void* value)
 {
 	MockNamedValue* newData = retrieveDataFromStore(name);
 	newData->setValue(value);
@@ -419,6 +428,11 @@ double MockSupport::doubleReturnValue()
 void* MockSupport::pointerReturnValue()
 {
 	return returnValue().getPointerValue();
+}
+
+const void* MockSupport::constPointerReturnValue()
+{
+	return returnValue().getConstPointerValue();
 }
 
 bool MockSupport::hasReturnValue()
