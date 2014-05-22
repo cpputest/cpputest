@@ -361,11 +361,6 @@ MockActualCall& MockActualCallTrace::withParameterOfType(const SimpleString& typ
 	return *this;
 }
 
-MockActualCall& MockActualCallTrace::ignoreOtherParameters()
-{
-	return *this;
-}
-
 bool MockActualCallTrace::hasReturnValue()
 {
 	return false;
