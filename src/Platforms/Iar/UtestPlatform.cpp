@@ -136,11 +136,6 @@ char* PlatformSpecificStrCat(char* s1, const char* s2)
    return strcat(s1, s2);
 }
 
-char* PlatformSpecificStrCpy(char* s1, const char* s2)
-{
-   return strcpy(s1, s2);
-}
-
 char* PlatformSpecificStrNCpy(char* s1, const char* s2, size_t size)
 {
    return strncpy(s1, s2, size);
