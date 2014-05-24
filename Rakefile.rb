@@ -1,8 +1,9 @@
 static_library_project :CppUTest, File.dirname(__FILE__) do |lib|
 
+  lib.add_api_headers 'include'
+
   lib.add_configuration :Test,
     sources: ['src/CppUTest/*.cpp', 'src/Platforms/Gcc/*.cpp'],
-    api_headers: 'include',
     toolchain: toolchain(:gcc,
       cppflags: '-DNDEBUG',
       cflags: '-include CppUTest/MemoryLeakDetectorMallocMacros.h -g -Weverything -Wall -Wextra -Wshadow -Wswitch-default -Wswitch-enum -Wconversion -Wsign-conversion -Wno-padded -Wno-disabled-macro-expansion -Werror -Wstrict-prototypes',
@@ -11,13 +12,16 @@ static_library_project :CppUTest, File.dirname(__FILE__) do |lib|
     tests: [
       'CppUTestTests:Test'
     ]
+
+  lib.build_framework_package([:Test])
 end
 
 static_library_project :CppUTestExt, File.dirname(__FILE__) do |lib|
 
+  lib.add_api_headers 'include'
+
   lib.add_configuration :Test,
     sources: ['src/CppUTestExt/*.cpp'],
-    api_headers: 'include',
     toolchain: toolchain(:gcc,
       cppflags: '-DNDEBUG',
       cflags: '-include CppUTest/MemoryLeakDetectorMallocMacros.h -g -Weverything -Wall -Wextra -Wshadow -Wswitch-default -Wswitch-enum -Wconversion -Wsign-conversion -Wno-padded -Wno-disabled-macro-expansion -Werror -Wstrict-prototypes',
