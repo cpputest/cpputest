@@ -27,8 +27,4 @@ Third, you need to make executable:
 Fourth, you need to program executable on target chip:
   make prog
 
-
-All sources inside src/ directory and its subdirectories will be compiled, no
-  way to add other sources or directories.
-
 Project use semihosting, so you may use standard printf() or std::cout << "Hello!"
