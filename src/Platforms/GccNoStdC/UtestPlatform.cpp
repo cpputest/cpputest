@@ -105,14 +105,6 @@ size_t PlatformSpecificStrLen(const char* str)
 	return 0;
 }
 
-char* PlatformSpecificStrCat(char* s1, const char* s2)
-{
-	/* To be implemented */
-	(void) s1;
-	(void) s2;
-	return NULL;
-}
-
 char* PlatformSpecificStrNCpy(char* s1, const char* s2, size_t size)
 {
 	/* To be implemented */

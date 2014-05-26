@@ -56,7 +56,6 @@ void SetPlatformSpecificTimeStringMethod(const char* (*platformMethod)(void));
 /* String operations */
 int PlatformSpecificAtoI(const char*str);
 size_t PlatformSpecificStrLen(const char* str);
-char* PlatformSpecificStrCat(char* s1, const char* s2);
 char* PlatformSpecificStrNCpy(char* s1, const char* s2, size_t size);
 int PlatformSpecificStrCmp(const char* s1, const char* s2);
 int PlatformSpecificStrNCmp(const char* s1, const char* s2, size_t size);
