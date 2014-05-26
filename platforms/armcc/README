@@ -1,12 +1,19 @@
-Makefile to build CppUTest library to run in hardware using
-  ARM C/C++ compiler.
+Makefile to build CppUTest library to run in hardware using ARM C/C++ compiler.
 
-You need installed CYGWIN with make.exe, rm.exe, mkdir.exe and
-  installed Keil MDK-ARM.
+Also it is possible to build CppUTestExt library using
+"make all COMPONENT_NAME=CppUTestExt".
+
+All libraries is placed in lib directory of CppUTest home.
+
+Thumb mode is using. For ARM mode, you need to remove compiler key
+"--apcs=/interwork" and change $(CPU_MODE) to arm.
+
+You need installed CYGWIN with make.exe, rm.exe, mkdir.exe and installed
+  Keil MDK-ARM.
 
 For compiling CppUTest library using ARMCC, please adjust Makefile:
 1. # Path to cygwin binary
-	CYGWIN_DIR :=C:/CYGWIN64/bin
+	CYGWIN_DIR :=C:/CYGWIN/bin
 2. # Path to ARMCC of Keil MDK-ARM, with libraries, includes and executables
 	KEIL_DIR   :=D:/Keil/ARM/ARMCC
 3. # source CppUTest files
@@ -18,7 +25,7 @@ For compiling CppUTest library using ARMCC, please adjust Makefile:
 	CPPUTEST_USE_STD_C_LIB := Y
 	CPPUTEST_ENABLE_DEBUG := Y
 
-You may add additional options CPU=xx and CPU_MODE=yy
+You may add additional options "CPU=xx" and "CPU_MODE=yy"
 CPU is an option that passed to armcc.exe. It selects CPU. List of CPU is
   available by executing 'armcc.exe --cpu list'.
   Default CPU architecture is ARM7TDMI.
@@ -58,7 +65,5 @@ CPU is an option that passed to armcc.exe. It selects CPU. List of CPU is
 
 CPU_MODE is one of 'arm', 'thumb'.
   Default is thumb.
-
-Library is placed in lib directory.
 
 Tested with Keil MDK-ARM Pro v4.60

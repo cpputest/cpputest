@@ -18,9 +18,9 @@
 ; Load region for main program
 LR1   FLASH_START  FLASH_SIZE {
    ER2 FLASH_START {
-        *.o (.reset, +First)
-        *(InRoot$$Sections)
-        *(+RO)
+        *.o(.reset, +First)
+        *.o(InRoot$$Sections)
+        *.o(+RO)
    }
    ER5 RAM_START RAM_SIZE {
     *.o(+RW +ZI)
