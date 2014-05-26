@@ -114,8 +114,8 @@ size_t PlatformSpecificStrLen(const char* str)
    return strlen(str);
 }
 
-/** Until we have safe replacements for PlatformSpecificStrCat()
-  * and PlatformSpecificStrNCpy(), we need to supress this warning
+/** Until we a safe replacement for PlatformSpecificStrNCpy(),
+  * we need to supress this warning
   */
 
 #pragma warning(push)
