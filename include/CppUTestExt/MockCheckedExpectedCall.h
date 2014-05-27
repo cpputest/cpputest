@@ -49,7 +49,7 @@ public:
 	virtual MockExpectedCall& withPointerParameter(const SimpleString& name, void* value) _override;
 	virtual MockExpectedCall& withConstPointerParameter(const SimpleString& name, const void* value) _override;
 	virtual MockExpectedCall& withParameterOfType(const SimpleString& type, const SimpleString& name, const void* value) _override;
-    virtual MockExpectedCall& withOutputParameterOfType(const SimpleString& type, const SimpleString& name, void* output, const void* value, size_t size) _override;
+    virtual MockExpectedCall& withOutputParameterOfType(const SimpleString& type, const SimpleString& name, const void* value, size_t size) _override;
 	virtual MockExpectedCall& ignoreOtherParameters() _override;
 
 	virtual MockExpectedCall& andReturnValue(int value) _override;
@@ -142,7 +142,7 @@ public:
 	virtual MockExpectedCall& withConstPointerParameter(const SimpleString& name, const void* value) _override;
 	virtual MockExpectedCall& withPointerParameter(const SimpleString& name, void* value) _override;
 	virtual MockExpectedCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value) _override;
-	virtual MockExpectedCall& withOutputParameterOfType(const SimpleString& typeName, const SimpleString& name, void* output, const void* value, size_t size) _override;
+	virtual MockExpectedCall& withOutputParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value, size_t size) _override;
 	virtual MockExpectedCall& ignoreOtherParameters() _override;
 
 	virtual MockExpectedCall& andReturnValue(int value) _override;
@@ -179,7 +179,7 @@ public:
 	virtual MockExpectedCall& withPointerParameter(const SimpleString& , void*) _override { return *this; }
 	virtual MockExpectedCall& withConstPointerParameter(const SimpleString& , const void*) _override { return *this; }
 	virtual MockExpectedCall& withParameterOfType(const SimpleString&, const SimpleString&, const void*) _override { return *this; }
-	virtual MockExpectedCall& withOutputParameterOfType(const SimpleString&, const SimpleString&, void*, const void*, size_t) { return *this; }
+	virtual MockExpectedCall& withOutputParameterOfType(const SimpleString&, const SimpleString&, const void*, size_t) { return *this; }
 
 	virtual MockExpectedCall& andReturnValue(int) _override { return *this; }
 	virtual MockExpectedCall& andReturnValue(unsigned int) _override { return *this; }

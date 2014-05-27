@@ -141,7 +141,7 @@ MockExpectedCall& MockCheckedExpectedCall::withParameterOfType(const SimpleStrin
 	return *this;
 }
 
-MockExpectedCall& MockCheckedExpectedCall::withOutputParameterOfType(const SimpleString& type, const SimpleString& name, void*, const void* value, size_t)
+MockExpectedCall& MockCheckedExpectedCall::withOutputParameterOfType(const SimpleString& type, const SimpleString& name, const void* value, size_t)
 {
     return withParameterOfType(type, name, value);
 }
@@ -512,7 +512,7 @@ MockExpectedCall& MockExpectedCallComposite::withParameterOfType(const SimpleStr
 
 }
 
-MockExpectedCall& MockExpectedCallComposite::withOutputParameterOfType(const SimpleString& type, const SimpleString& name, void*, const void* value, size_t)
+MockExpectedCall& MockExpectedCallComposite::withOutputParameterOfType(const SimpleString& type, const SimpleString& name, const void* value, size_t)
 {
     return withParameterOfType(type, name, value);
 }
