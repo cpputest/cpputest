@@ -29,6 +29,7 @@
 #include "CppUTestExt/MockCheckedActualCall.h"
 #include "CppUTestExt/MockCheckedExpectedCall.h"
 #include "CppUTestExt/MockFailure.h"
+#include "CppUTest/PlatformSpecificFunctions.h"
 
 MockActualCall::MockActualCall()
 {
@@ -197,6 +198,27 @@ MockActualCall& MockCheckedActualCall::withParameterOfType(const SimpleString& t
 	MockNamedValue actualParameter(name);
 	actualParameter.setObjectPointer(type, value);
 
+	if (actualParameter.getComparator() == NULL) {
+		MockNoWayToCompareCustomTypeFailure failure(getTest(), type);
+		failTest(failure);
+		return *this;
+	}
+	checkActualParameter(actualParameter);
+	return *this;
+}
+
+MockActualCall& MockCheckedActualCall::withOutputParameterOfType(const SimpleString& type, const SimpleString& name, void* output, const void* value, size_t size)
+{
+	MockNamedValue actualParameter(name);
+	actualParameter.setObjectPointer(type, output);
+#if 1
+	if (size && (NULL != output) && (NULL != value)) {
+		PlatformSpecificMemCpy(output, value, size);
+	}
+#else
+    (void)(size);
+    (void)(value);
+#endif
 	if (actualParameter.getComparator() == NULL) {
 		MockNoWayToCompareCustomTypeFailure failure(getTest(), type);
 		failTest(failure);
@@ -388,6 +410,20 @@ MockActualCall& MockActualCallTrace::withParameterOfType(const SimpleString& typ
 	traceBuffer_ += typeName;
 	addParameterName(name);
 	traceBuffer_ += StringFrom(value);
+	return *this;
+}
+
+MockActualCall& MockActualCallTrace::withOutputParameterOfType(const SimpleString& typeName, const SimpleString& name, void* output, const void* value, size_t size)
+{
+	traceBuffer_ += " ";
+	traceBuffer_ += typeName;
+    addParameterName(name);
+	traceBuffer_ += StringFrom(output);
+	traceBuffer_ += " = ";
+	traceBuffer_ += StringFrom(value);
+	traceBuffer_ += " (size: ";
+	traceBuffer_ += StringFrom(size);
+	traceBuffer_ += ")";
 	return *this;
 }
 

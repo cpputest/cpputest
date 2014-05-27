@@ -668,6 +668,21 @@ TEST(MockSupportTest, customObjectParameterSucceeds)
 	mock().removeAllComparators();
 }
 
+TEST(MockSupportTest, customObjectOutputParameterSucceeds)
+{
+	MyTypeForTesting object(1);
+	MyTypeForTesting retval(2);
+	MyTypeForTestingComparator comparator;
+	mock().installComparator("MyTypeForTesting", comparator);
+	mock().expectOneCall("function").withParameterOfType("MyTypeForTesting", "parameterName", &retval);
+ 	mock().actualCall("function").withOutputParameterOfType("MyTypeForTesting", "parameterName", &object, &retval, sizeof(object));
+	mock().checkExpectations();
+	CHECK_NO_MOCK_FAILURE();
+	mock().removeAllComparators();
+}
+
+// TODO: Need to test ignored and trace version
+
 static bool myTypeIsEqual(const void* object1, const void* object2)
 {
 	return ((MyTypeForTesting*)object1)->value == ((MyTypeForTesting*)object2)->value;
