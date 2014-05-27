@@ -81,10 +81,11 @@ void SetPlatformSpecificTimeInMillisMethod(long (*platformSpecific) ())
 
 static const char* TimeStringImplementation()
 {
-	time_t tm = time(NULL);
+	time_t the_time = time(NULL);
+	struct tm the_local_time;
 	static char dateTime[80];
-	struct tm *tmp = localtime(&tm);
-	strftime(dateTime, 80, "%Y-%m-%dT%H:%M:%S", tmp);
+	localtime_s(&the_local_time, &the_time);
+	strftime(dateTime, 80, "%Y-%m-%dT%H:%M:%S", &the_local_time);
 	return dateTime;
 }
 
@@ -113,10 +114,19 @@ size_t PlatformSpecificStrLen(const char* str)
    return strlen(str);
 }
 
+/** Until we a safe replacement for PlatformSpecificStrNCpy(),
+  * we need to supress this warning
+  */
+
+#pragma warning(push)
+#pragma warning(disable:4996)
+
 char* PlatformSpecificStrNCpy(char* s1, const char* s2, size_t size)
 {
    return strncpy(s1, s2, size);
 }
+
+#pragma warning(pop)
 
 int PlatformSpecificStrCmp(const char* s1, const char* s2)
 {
@@ -137,7 +147,7 @@ int PlatformSpecificVSNprintf(char *str, size_t size, const char* format, va_lis
 	char* buf = 0;
 	size_t sizeGuess = size;
 
-	int result = _vsnprintf( str, size, format, args);
+	int result = _vsnprintf_s( str, size, _TRUNCATE, format, args);
 	str[size-1] = 0;
 	while (result == -1)
 	{
@@ -145,7 +155,7 @@ int PlatformSpecificVSNprintf(char *str, size_t size, const char* format, va_lis
 			free(buf);
 		sizeGuess += 10;
 		buf = (char*)malloc(sizeGuess);
-		result = _vsnprintf( buf, sizeGuess, format, args);
+		result = _vsnprintf_s( buf, sizeGuess, _TRUNCATE, format, args);
 	}
 
 	if (buf != 0)
@@ -156,7 +166,9 @@ int PlatformSpecificVSNprintf(char *str, size_t size, const char* format, va_lis
 
 PlatformSpecificFile PlatformSpecificFOpen(const char* filename, const char* flag)
 {
-   return fopen(filename, flag);
+   FILE* file;
+   fopen_s(&file, filename, flag);
+   return file;
 }
 
 void PlatformSpecificFPuts(const char* str, PlatformSpecificFile file)
@@ -216,7 +228,7 @@ int PlatformSpecificIsNan(double d)
 
 int PlatformSpecificVSNprintf(char *str, unsigned int size, const char* format, void* args)
 {
-   return _vsnprintf( str, size, format, (va_list) args);
+   return _vsnprintf_s( str, size, _TRUNCATE, format, (va_list) args);
 }
 
 char PlatformSpecificToLower(char c)
