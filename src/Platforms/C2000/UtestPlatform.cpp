@@ -185,16 +185,6 @@ size_t PlatformSpecificStrLen(const char* str)
     return n;
 }
 
-char* PlatformSpecificStrCat(char* s1, const char* s2)
-{
-    char *result = s1;
-
-    while (*s1++);			       // FIND END OF STRING
-    --s1;				           // BACK UP OVER NULL
-    while ((*s1++ = *s2++));	       // APPEND SECOND STRING
-    return result;
-}
-
 char* PlatformSpecificStrNCpy(char* s1, const char* s2, size_t n)
 {
     char *result = s1;

@@ -104,7 +104,6 @@ public:
 	virtual MockActualCall& withPointerParameter(const SimpleString& name, void* value) _override;
 	virtual MockActualCall& withConstPointerParameter(const SimpleString& name, const void* value) _override;
 	virtual MockActualCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value) _override;
-	virtual MockActualCall& ignoreOtherParameters() _override;
 
 	virtual bool hasReturnValue() _override;
 	virtual MockNamedValue returnValue() _override;

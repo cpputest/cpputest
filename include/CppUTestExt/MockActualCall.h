@@ -42,7 +42,7 @@ public:
 	virtual ~MockActualCall();
 
 	virtual MockActualCall& withName(const SimpleString& name)=0;
-	virtual MockActualCall& withCallOrder(int)=0;
+	virtual MockActualCall& withCallOrder(int callOrder)=0;
 	MockActualCall& withParameter(const SimpleString& name, int value) { return withIntParameter(name, value); }
 	MockActualCall& withParameter(const SimpleString& name, unsigned int value) { return withUnsignedIntParameter(name, value); }
 	MockActualCall& withParameter(const SimpleString& name, double value) { return withDoubleParameter(name, value); }
@@ -50,7 +50,6 @@ public:
 	MockActualCall& withParameter(const SimpleString& name, void* value) { return withPointerParameter(name, value); }
 	MockActualCall& withParameter(const SimpleString& name, const void* value) { return withConstPointerParameter(name, value); }
 	virtual MockActualCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value)=0;
-	virtual MockActualCall& ignoreOtherParameters() { return *this;}
 
 	virtual MockActualCall& withIntParameter(const SimpleString& name, int value)=0;
 	virtual MockActualCall& withUnsignedIntParameter(const SimpleString& name, unsigned int value)=0;
