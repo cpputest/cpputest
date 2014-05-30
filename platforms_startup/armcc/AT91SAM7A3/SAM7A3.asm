@@ -53,7 +53,7 @@ RAM_BASE        EQU     0x00200000
 ;// </h>
 
 UND_Stack_Size  EQU     0x00000000
-SVC_Stack_Size  EQU     0x00001300
+SVC_Stack_Size  EQU     0x00001000
 ABT_Stack_Size  EQU     0x00000000
 FIQ_Stack_Size  EQU     0x00000000
 IRQ_Stack_Size  EQU     0x00000070
@@ -74,7 +74,7 @@ Stack_Top
 ;//   <o>  Heap Size (in Bytes) <0x0-0xFFFFFFFF>
 ;// </h>
 
-Heap_Size       EQU     0x0002980
+Heap_Size       EQU     0x0003800
 
                 AREA    HEAP, NOINIT, READWRITE, ALIGN=3
 __heap_base

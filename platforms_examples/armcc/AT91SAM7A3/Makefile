@@ -15,19 +15,17 @@ TARGET_PLATFORM :=armcc_$(CPU)_$(CPU_MODE)
 
 CPPUTEST_HOME := ../../..
 
-# имя компонента
 COMPONENT_NAME := app
 
-# промежуточный каталог, где производится компиляция тестов и исходников
 CPPUTEST_OBJS_DIR = objs
 
 # каталог размещения будущей библиотеки приложения
-# эти библиотеки собираются из объектных файлов в $(OBJS_DIR)
+# directory for appication library
 CPPUTEST_LIB_DIR := lib
 
 CPPUTEST_USE_MEM_LEAK_DETECTION := N
 CPPUTEST_USE_STD_CPP_LIB := Y
-CPPUTEST_USE_VPATH := N
+CPPUTEST_USE_VPATH := Y
 CPPUTEST_USE_STD_C_LIB := Y
 CPPUTEST_ENABLE_DEBUG := Y
 CPPUTEST_USE_EXTENSIONS := N
@@ -35,21 +33,27 @@ CPPUTEST_USE_EXTENSIONS := N
 # каталог с файлами приложения
 # также возможно указать отдельные файлы в переменной $(SRC_FILES)
 SRC_DIRS := \
-  src \
+
+SRC_FILES := $(CPPUTEST_HOME)/examples/ApplicationLib/CircularBuffer.cpp \
+  $(CPPUTEST_HOME)/examples/ApplicationLib/Printer.cpp
 
 # каталог с тестами
 # также возможно указать отдельные файлы в переменной $(TEST_FILES)
 TEST_SRC_DIRS := \
 	tests \
 
+TEST_FILES := $(CPPUTEST_HOME)/examples/AllTests/CircularBufferTest.cpp
+
 
 # каталог со скомпилированными библиотеками CppUTest (и CppUTestExt, если нужна)
+# directory with CppUTest and startup libraries
 CPPUTEST_LIB_LINK_DIR := $(CPPUTEST_HOME)/lib/$(TARGET_PLATFORM)
 
 # каталог с заголовочными файлами
 INCLUDE_DIRS := \
   $(CPPUTEST_HOME)/include \
   $(SRC_DIRS) \
+  $(CPPUTEST_HOME)/examples/ApplicationLib \
 
 # расширение выходного файла. Keil выводит .axf, хотя по сути является elf форматом
 # Расширение с "умолчательного" переделано на .elf для eclipse (он понимает .elf)
@@ -191,10 +195,10 @@ delta_t = $(eval minus, $1, $2)
 debug_print_list = $(foreach word,$1,$(ECHO) "  $(word)";) $(ECHO)
 
 # исходники программных модулей
-SRC = $(call get_src_from_dir_list, $(SRC_DIRS) $(SRC_FILES))
+SRC = $(call get_src_from_dir_list, $(SRC_DIRS)) $(SRC_FILES)
 OBJ = $(call src_to_o,$(SRC),$(CPPUTEST_OBJS_DIR))
 # исходники тестов
-TEST_SRC = $(call get_src_from_dir_list, $(TEST_SRC_DIRS) $(TEST_SRC_FILES))
+TEST_SRC = $(call get_src_from_dir_list, $(TEST_SRC_DIRS)) $(TEST_FILES)
 TEST_OBJ = $(call src_to_o,$(TEST_SRC),$(CPPUTEST_OBJS_DIR))
 
 # If we're using VPATH

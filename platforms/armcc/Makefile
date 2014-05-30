@@ -28,8 +28,8 @@ CPPUTEST_HOME := ../..
 COMPONENT_NAME := CppUTest
 
 INCLUDE_DIRS :=\
-  $(CPPUTEST_HOME)/include\
-  $(CPPUTEST_HOME)/include/Platforms/armcc\
+  $(CPPUTEST_HOME)/include \
+  $(CPPUTEST_HOME)/include/Platforms/armcc \
 
 # armcc system include path
 SYS_INCLUDE_DIRS:=$(KEIL_DIR)/include 
@@ -39,7 +39,7 @@ SRC_DIRS :=\
   $(CPPUTEST_HOME)/src/Platforms/armcc\
 
 TARGET_PLATFORM :=armcc_$(CPU)_$(CPU_MODE)
-CPPUTEST_USE_MEM_LEAK_DETECTION := Y
+CPPUTEST_USE_MEM_LEAK_DETECTION := N
 CPPUTEST_USE_STD_CPP_LIB := N
 CPPUTEST_USE_VPATH := Y
 CPPUTEST_USE_STD_C_LIB := Y
@@ -77,6 +77,18 @@ STUFF_TO_CLEAN = $(OBJ)
 
 ALL_SRC = $(SRC)
 
+CPUFLAGS =--cpu=$(CPU)
+ifeq ($(CPU_MODE), thumb)
+  CPUFLAGS +=--apcs=/interwork
+endif
+DEPFLAGS =$(CPUFLAGS) -M $(INCLUDES) --depend_format=unix_escaped --depend_single_line --no_depend_system_headers
+OPTFLAGS =-O1
+CCFLAGS =$(CPUFLAGS) $(OPTFLAGS) -c $(INCLUDES)\
+  --$(CPU_MODE)\
+  --exceptions\
+  -D__CLK_TCK=1000\
+
+
 # If we're using VPATH
 ifeq ($(CPPUTEST_USE_VPATH), Y)
 # gather all the source directories and add them
@@ -113,18 +125,6 @@ endif
 ifeq ($(CPPUTEST_USE_STD_CPP_LIB), N)
 	CCFLAGS += -DCPPUTEST_STD_CPP_LIB_DISABLED
 endif
-
-
-CPUFLAGS :=--cpu=$(CPU)
-ifeq ($(CPU_MODE), thumb)
-  CPUFLAGS +=--apcs=/interwork
-endif
-DEPFLAGS:=$(CPUFLAGS) -M $(INCLUDES) --depend_format=unix_escaped --depend_single_line --no_depend_system_headers
-OPTFLAGS:=-O1
-CCFLAGS:=$(CPUFLAGS) $(OPTFLAGS) -c $(INCLUDES)\
-  --$(CPU_MODE)\
-  --exceptions\
-  -D__CLK_TCK=1000\
 
 
 OBJS_DIRS :=$(sort $(dir $(STUFF_TO_CLEAN)))
@@ -182,6 +182,8 @@ debug:
 	@$(call debug_print_list,$(OBJS_DIRS))
 	@echo Directories of CppUTest object files:
 	@$(call debug_print_list,$(CPPUTEST_OBJS_DIR))
+	@echo Flags:
+	@$(call debug_print_list,$(CCFLAGS))
 
 
 #Don't create dependencies when we're cleaning, for instance
