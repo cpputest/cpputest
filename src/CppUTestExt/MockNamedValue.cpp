@@ -58,6 +58,18 @@ void MockNamedValue::setValue(int value)
 	value_.intValue_ = value;
 }
 
+void MockNamedValue::setValue(long int value)
+{
+	type_ = "long int";
+	value_.longIntValue_ = value;
+}
+
+void MockNamedValue::setValue(unsigned long int value)
+{
+	type_ = "unsigned long int";
+	value_.unsignedLongIntValue_ = value;
+}
+
 void MockNamedValue::setValue(double value)
 {
 	type_ = "double";
@@ -115,6 +127,18 @@ int MockNamedValue::getIntValue() const
 {
 	STRCMP_EQUAL("int", type_.asCharString());
 	return value_.intValue_;
+}
+
+long int MockNamedValue::getLongIntValue() const
+{
+	STRCMP_EQUAL("long int", type_.asCharString());
+	return value_.longIntValue_;
+}
+
+unsigned long int MockNamedValue::getUnsignedLongIntValue() const
+{
+	STRCMP_EQUAL("unsigned long int", type_.asCharString());
+	return value_.unsignedLongIntValue_;
 }
 
 double MockNamedValue::getDoubleValue() const
