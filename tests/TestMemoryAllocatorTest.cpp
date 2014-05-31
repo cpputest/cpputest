@@ -40,7 +40,7 @@ TEST_GROUP(TestMemoryAllocatorTest)
 
 	void teardown()
 	{
-		if (allocator) delete allocator;
+		delete allocator;
 	}
 };
 
