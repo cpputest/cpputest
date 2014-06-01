@@ -141,11 +141,6 @@ size_t PlatformSpecificStrLen(const char* str)
    return strlen(str);
 }
 
-char* PlatformSpecificStrNCpy(char* s1, const char* s2, size_t size)
-{
-   return strncpy(s1, s2, size);
-}
-
 int PlatformSpecificStrCmp(const char* s1, const char* s2)
 {
    return strcmp(s1, s2);
