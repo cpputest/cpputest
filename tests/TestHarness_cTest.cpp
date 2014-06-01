@@ -254,7 +254,8 @@ TEST(TestHarness_c, cpputest_realloc_larger)
 
 	char* mem1 = (char*) cpputest_malloc(10);
 
-	PlatformSpecificStrNCpy(mem1, number_string, 10);
+	SimpleString::StrNCpy(mem1, number_string, 10);
+
 	CHECK(mem1 != 0);
 
 	char* mem2 = (char*) cpputest_realloc(mem1, 1000);
