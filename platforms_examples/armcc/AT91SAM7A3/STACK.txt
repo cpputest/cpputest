@@ -1,0 +1,12 @@
+Stack usage for std::cout << (double) is about 1336 bytes
+
+Stack usage for CppUTest is at least 4368 bytes with call chain:
+main ->
+  CommandLineTestRunner::RunAllTests(int, char**) ->
+  CommandLineTestRunner::RunAllTests(int, const char**) ->
+  MemoryLeakWarningPlugin::MemoryLeakWarningPlugin(const SimpleString&, MemoryLeakDetector*) ->
+  MemoryLeakWarningPlugin::getGlobalDetector() ->
+  MemoryLeakDetector::MemoryLeakDetector(MemoryLeakFailure*) ->
+  MemoryLeakDetectorTable::MemoryLeakDetectorTable() ->
+  __aeabi_vec_ctor_nocookie_nodtor
+Maximum stack consumption for constructor MemoryLeakDetector::MemoryLeakDetector(MemoryLeakFailure*)

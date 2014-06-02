@@ -1,0 +1,9 @@
+Startup library for ARM C/C++ compiler and AT91SAM7A3 chip.
+Semihosting is in use, so you may use standard printf() or std::cout << "Hello!"
+
+Requirements:
+1. CYGWIN (rm.exe, mkdir.exe, make.exe, echo.exe)
+2. Keil MDK-ARM
+
+Library libStartup_AT91SAM7A3.a is placed in ./lib/armcc_ARM7TDMI_thumb
+  directory of home CppUTest directory.

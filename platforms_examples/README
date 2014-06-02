@@ -1,0 +1,4 @@
+Directory to place test examples for different toolchains/chips combinations.
+
+Source files from this directory is compiled to executable using CppUTest,
+  CppUTestExt and startup libraries from lib directory in CppUTest home.
