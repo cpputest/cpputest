@@ -185,20 +185,6 @@ size_t PlatformSpecificStrLen(const char* str)
     return n;
 }
 
-char* PlatformSpecificStrNCpy(char* s1, const char* s2, size_t n)
-{
-    char *result = s1;
-
-    if (n == 0) return result; 
-    while ((*s1++ = *s2++) && --n != 0);  // COPY STRING
-    if (n > 1)
-    {
-        --n;
-        do *s1++ = 0; while (--n);       // TERMINATION PADDING
-    }
-    return result;
-}
-
 int PlatformSpecificStrCmp(const char* s1, const char* s2)
 {
     for(;;)

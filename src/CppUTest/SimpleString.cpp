@@ -62,45 +62,51 @@ char* SimpleString::getEmptyString() const
 	empty[0] = '\0';
 	return empty;
 }
+
+char* SimpleString::StrNCpy(char* s1, const char* s2, size_t n)
+{
+	char* result = s1;
+
+	if((NULL == s1) || (0 == n)) return result;
+
+	while ((*s1++ = *s2++) && --n != 0)
+		;
+	return result;
+}
+
 SimpleString::SimpleString(const char *otherBuffer)
 {
 	if (otherBuffer == 0) {
 		buffer_ = getEmptyString();
 	}
 	else {
-		size_t len = PlatformSpecificStrLen(otherBuffer) + 1;
-		buffer_ = allocStringBuffer(len);
-		PlatformSpecificStrNCpy(buffer_, otherBuffer, len);
+		buffer_ = copyToNewBuffer(otherBuffer);
 	}
 }
 
 SimpleString::SimpleString(const char *other, size_t repeatCount)
 {
-  size_t otherStringLength = PlatformSpecificStrLen(other);
+	size_t otherStringLength = PlatformSpecificStrLen(other);
 	size_t len = otherStringLength * repeatCount + 1;
 	buffer_ = allocStringBuffer(len);
 	char* next = buffer_;
 	for (size_t i = 0; i < repeatCount; i++) {
-		PlatformSpecificStrNCpy(next, other, otherStringLength);
+		StrNCpy(next, other, otherStringLength + 1);
 		next += otherStringLength;
 	}
 	*next = 0;
-
 }
+
 SimpleString::SimpleString(const SimpleString& other)
 {
-	size_t len = other.size() + 1;
-	buffer_ = allocStringBuffer(len);
-	PlatformSpecificStrNCpy(buffer_, other.buffer_, len);
+	buffer_ = copyToNewBuffer(other.buffer_);
 }
 
 SimpleString& SimpleString::operator=(const SimpleString& other)
 {
 	if (this != &other) {
 		deallocStringBuffer(buffer_);
-		size_t len = other.size() + 1;
-		buffer_ = allocStringBuffer(len);
-		PlatformSpecificStrNCpy(buffer_, other.buffer_, len);
+		buffer_ = copyToNewBuffer(other.buffer_);
 	}
 	return *this;
 }
@@ -159,12 +165,8 @@ void SimpleString::split(const SimpleString& delimiter, SimpleStringCollection& 
 	for (size_t i = 0; i < num; ++i) {
 		prev = str;
 		str = PlatformSpecificStrStr(str, delimiter.buffer_) + 1;
-		size_t len = (size_t) (str - prev);
-		char* sub = allocStringBuffer(len + 1);
-		PlatformSpecificStrNCpy(sub, prev, len);
-		sub[len] = '\0';
-		col[i] = sub;
-		deallocStringBuffer(sub);
+		size_t len = (size_t) (str - prev) + 1;
+		col[i].buffer_ = copyToNewBuffer(prev, len);
 	}
 	if (extraEndToken) {
 		col[num] = str;
@@ -192,7 +194,7 @@ void SimpleString::replace(const char* to, const char* with)
 		char* newbuf = allocStringBuffer(newsize);
 		for (size_t i = 0, j = 0; i < len;) {
 			if (PlatformSpecificStrNCmp(&buffer_[i], to, tolen) == 0) {
-				PlatformSpecificStrNCpy(&newbuf[j], with, withlen);
+				StrNCpy(&newbuf[j], with, withlen + 1);
 				j += withlen;
 				i += tolen;
 			}
@@ -276,13 +278,12 @@ SimpleString& SimpleString::operator+=(const SimpleString& rhs)
 SimpleString& SimpleString::operator+=(const char* rhs)
 {
 	size_t originalSize = this->size();
-	size_t additionalStringSize = PlatformSpecificStrLen(rhs);
-	size_t totalSizeOfNewBuffer = originalSize + additionalStringSize + 1;
-	char* tbuffer = allocStringBuffer(totalSizeOfNewBuffer);
-	PlatformSpecificStrNCpy(tbuffer, this->buffer_, originalSize);
-	PlatformSpecificStrNCpy(tbuffer + originalSize, rhs, additionalStringSize + 1);
-	deallocStringBuffer(buffer_);
-	buffer_ = tbuffer;
+	size_t additionalStringSize = PlatformSpecificStrLen(rhs) + 1;
+	size_t sizeOfNewString = originalSize + additionalStringSize;
+	char* tbuffer = copyToNewBuffer(this->buffer_, sizeOfNewString);
+	StrNCpy(tbuffer + originalSize, rhs, additionalStringSize);
+	deallocStringBuffer(this->buffer_);
+	this->buffer_ = tbuffer;
 	return *this;
 }
 
@@ -340,16 +341,24 @@ SimpleString SimpleString::subStringFromTill(char startChar, char lastExcludedCh
 	return subString((size_t)beginPos, (size_t) (endPos - beginPos));
 }
 
+char* SimpleString::copyToNewBuffer(const char* bufferToCopy, size_t bufferSize)
+{
+	if(bufferSize == 0) bufferSize = PlatformSpecificStrLen(bufferToCopy) + 1;
+
+	char* newBuffer = allocStringBuffer(bufferSize);
+	StrNCpy(newBuffer, bufferToCopy, bufferSize);
+	newBuffer[bufferSize-1] = '\0';
+	return newBuffer;
+}
 
 void SimpleString::copyToBuffer(char* bufferToCopy, size_t bufferSize) const
 {
 	if (bufferToCopy == NULL || bufferSize == 0) return;
 
-	size_t sizeToCopy = (bufferSize-1 < size()) ? bufferSize-1 : size();
+	size_t sizeToCopy = (bufferSize-1 < size()) ? bufferSize : size();
 
-	PlatformSpecificStrNCpy(bufferToCopy, buffer_, sizeToCopy);
+	StrNCpy(bufferToCopy, buffer_, sizeToCopy);
 	bufferToCopy[sizeToCopy] = '\0';
-
 }
 
 SimpleString StringFrom(bool value)
@@ -515,4 +524,3 @@ SimpleString& SimpleStringCollection::operator[](size_t index)
 
 	return collection_[index];
 }
-

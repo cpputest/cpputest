@@ -90,13 +90,15 @@ public:
 	static void setStringAllocator(TestMemoryAllocator* allocator);
 
 	static char* allocStringBuffer(size_t size);
+	static char* StrNCpy(char* s1, const char* s2, size_t n);
 	static void deallocStringBuffer(char* str);
 private:
 	char *buffer_;
 
 	static TestMemoryAllocator* stringAllocator_;
 
-	char* getEmptyString() const;
+	char* getEmptyString() const; 
+	static char* copyToNewBuffer(const char* bufferToCopy, size_t bufferSize=0);
 };
 
 class SimpleStringCollection

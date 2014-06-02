@@ -135,10 +135,6 @@ int PlatformSpecificStrCmp(const char* s1, const char* s2) {
     return strcmp(s1, s2);
 }
 
-char* PlatformSpecificStrNCpy(char* s1, const char* s2, size_t size) {
-    return strncpy(s1, s2, size);
-}
-
 int PlatformSpecificStrNCmp(const char* s1, const char* s2, size_t size) {
     return strncmp(s1, s2, size);
 }

@@ -392,7 +392,7 @@ TEST(SimpleString, copyInBufferWithBiggerBufferThanNeeded)
 TEST(SimpleString, ContainsNull)
 {
 	SimpleString s(0);
-	CHECK(!s.contains("something"));
+	STRCMP_EQUAL("", s.asCharString());
 }
 
 TEST(SimpleString, NULLReportsNullString)
@@ -611,3 +611,39 @@ TEST(SimpleString, unsigned_long)
 }
 
 #endif
+
+TEST(SimpleString, StrNCpy_no_zero_termination)
+{
+	char str[] = "XXXXXXXXXX";
+	STRCMP_EQUAL("womanXXXXX", SimpleString::StrNCpy(str, "woman", 5));
+}
+
+TEST(SimpleString, StrNCpy_zero_termination)
+{
+	char str[] = "XXXXXXXXXX";
+	STRCMP_EQUAL("woman", SimpleString::StrNCpy(str, "woman", 6));
+}
+
+TEST(SimpleString, StrNCpy_null_proof)
+{
+	POINTERS_EQUAL(NULL, SimpleString::StrNCpy(NULL, "woman", 6));
+}
+
+TEST(SimpleString, StrNCpy_stops_at_end_of_string)
+{
+	char str[] = "XXXXXXXXXX";
+	STRCMP_EQUAL("woman", SimpleString::StrNCpy(str, "woman", 8));
+}
+
+TEST(SimpleString, StrNCpy_nothing_to_do)
+{
+	char str[] = "XXXXXXXXXX";
+	STRCMP_EQUAL("XXXXXXXXXX", SimpleString::StrNCpy(str, "woman", 0));
+}
+
+TEST(SimpleString, StrNCpy_write_into_the_middle)
+{
+	char str[] = "womanXXXXX";
+	SimpleString::StrNCpy(str+3, "e", 1);
+	STRCMP_EQUAL("womenXXXXX", str);
+}

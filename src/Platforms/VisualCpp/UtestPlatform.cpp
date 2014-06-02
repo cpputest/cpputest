@@ -114,20 +114,6 @@ size_t PlatformSpecificStrLen(const char* str)
    return strlen(str);
 }
 
-/** Until we a safe replacement for PlatformSpecificStrNCpy(),
-  * we need to supress this warning
-  */
-
-#pragma warning(push)
-#pragma warning(disable:4996)
-
-char* PlatformSpecificStrNCpy(char* s1, const char* s2, size_t size)
-{
-   return strncpy(s1, s2, size);
-}
-
-#pragma warning(pop)
-
 int PlatformSpecificStrCmp(const char* s1, const char* s2)
 {
    return strcmp(s1, s2);
@@ -137,6 +123,7 @@ int PlatformSpecificStrNCmp(const char* s1, const char* s2, size_t size)
 {
    return strncmp(s1, s2, size);
 }
+
 char* PlatformSpecificStrStr(const char* s1, const char* s2)
 {
    return (char*) strstr(s1, s2);
