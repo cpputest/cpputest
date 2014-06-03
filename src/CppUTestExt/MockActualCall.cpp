@@ -76,7 +76,7 @@ void MockCheckedActualCall::failTest(const MockFailure& failure)
 	reporter_->failTest(failure);
 }
 
-void MockCheckedActualCall::finnalizeCallWhenFulfilled()
+void MockCheckedActualCall::finalizeCallWhenFulfilled()
 {
 	if (unfulfilledExpectations_.hasFulfilledExpectations()) {
 		_fulfilledExpectation = unfulfilledExpectations_.removeOneFulfilledExpectation();
@@ -104,7 +104,7 @@ MockActualCall& MockCheckedActualCall::withName(const SimpleString& name)
 
 	unfulfilledExpectations_.callWasMade(callOrder_);
 
-	finnalizeCallWhenFulfilled();
+	finalizeCallWhenFulfilled();
 
 	return *this;
 }
@@ -125,7 +125,7 @@ void MockCheckedActualCall::checkActualParameter(const MockNamedValue& actualPar
 	}
 
 	unfulfilledExpectations_.parameterWasPassed(actualParameter.getName());
-	finnalizeCallWhenFulfilled();
+	finalizeCallWhenFulfilled();
 }
 
 MockActualCall& MockCheckedActualCall::withUnsignedIntParameter(const SimpleString& name, unsigned int value)
@@ -137,6 +137,22 @@ MockActualCall& MockCheckedActualCall::withUnsignedIntParameter(const SimpleStri
 }
 
 MockActualCall& MockCheckedActualCall::withIntParameter(const SimpleString& name, int value)
+{
+	MockNamedValue actualParameter(name);
+	actualParameter.setValue(value);
+	checkActualParameter(actualParameter);
+	return *this;
+}
+
+MockActualCall& MockCheckedActualCall::withUnsignedLongIntParameter(const SimpleString& name, unsigned long int value)
+{
+	MockNamedValue actualParameter(name);
+	actualParameter.setValue(value);
+	checkActualParameter(actualParameter);
+	return *this;
+}
+
+MockActualCall& MockCheckedActualCall::withLongIntParameter(const SimpleString& name, long int value)
 {
 	MockNamedValue actualParameter(name);
 	actualParameter.setValue(value);
@@ -277,7 +293,7 @@ MockActualCall& MockCheckedActualCall::onObject(void* objectPtr)
 
 	unfulfilledExpectations_.wasPassedToObject();
 
-	finnalizeCallWhenFulfilled();
+	finalizeCallWhenFulfilled();
 	return *this;
 }
 
@@ -312,42 +328,56 @@ void MockActualCallTrace::addParameterName(const SimpleString& name)
 
 MockActualCall& MockActualCallTrace::withUnsignedIntParameter(const SimpleString& name, unsigned int value)
 {
-    addParameterName(name);
+	addParameterName(name);
 	traceBuffer_ += StringFrom(value);
 	return *this;
 }
 
 MockActualCall& MockActualCallTrace::withIntParameter(const SimpleString& name, int value)
 {
-    addParameterName(name);
+	addParameterName(name);
+	traceBuffer_ += StringFrom(value);
+	return *this;
+}
+
+MockActualCall& MockActualCallTrace::withUnsignedLongIntParameter(const SimpleString& name, unsigned long int value)
+{
+	addParameterName(name);
+	traceBuffer_ += StringFrom(value);
+	return *this;
+}
+
+MockActualCall& MockActualCallTrace::withLongIntParameter(const SimpleString& name, long int value)
+{
+	addParameterName(name);
 	traceBuffer_ += StringFrom(value);
 	return *this;
 }
 
 MockActualCall& MockActualCallTrace::withDoubleParameter(const SimpleString& name, double value)
 {
-    addParameterName(name);
+	addParameterName(name);
 	traceBuffer_ += StringFrom(value);
 	return *this;
 }
 
 MockActualCall& MockActualCallTrace::withStringParameter(const SimpleString& name, const char* value)
 {
-    addParameterName(name);
+	addParameterName(name);
 	traceBuffer_ += StringFrom(value);
 	return *this;
 }
 
 MockActualCall& MockActualCallTrace::withPointerParameter(const SimpleString& name, void* value)
 {
-    addParameterName(name);
+	addParameterName(name);
 	traceBuffer_ += StringFrom(value);
 	return *this;
 }
 
 MockActualCall& MockActualCallTrace::withConstPointerParameter(const SimpleString& name, const void* value)
 {
-    addParameterName(name);
+	addParameterName(name);
 	traceBuffer_ += StringFrom(value);
 	return *this;
 }
@@ -356,7 +386,7 @@ MockActualCall& MockActualCallTrace::withParameterOfType(const SimpleString& typ
 {
 	traceBuffer_ += " ";
 	traceBuffer_ += typeName;
-    addParameterName(name);
+	addParameterName(name);
 	traceBuffer_ += StringFrom(value);
 	return *this;
 }
@@ -395,7 +425,7 @@ MockActualCallTrace& MockActualCallTrace::instance()
 
 MockIgnoredActualCall& MockIgnoredActualCall::instance()
 {
-    static MockIgnoredActualCall call;
-    return call;
+	static MockIgnoredActualCall call;
+	return call;
 }
 

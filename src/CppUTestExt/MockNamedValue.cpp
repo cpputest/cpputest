@@ -182,12 +182,37 @@ MockNamedValueComparator* MockNamedValue::getComparator() const
 
 bool MockNamedValue::equals(const MockNamedValue& p) const
 {
+	if((type_ == "long int") && (p.type_ == "int"))
+		return value_.longIntValue_ == p.value_.intValue_;
+	else if((type_ == "int") && (p.type_ == "long int"))
+		return value_.intValue_ == p.value_.longIntValue_;
+	else if((type_ == "unsigned int") && (p.type_ == "int"))
+		return (long)value_.unsignedIntValue_ == (long)p.value_.intValue_;
+	else if((type_ == "int") && (p.type_ == "unsigned int"))
+		return (long)value_.intValue_ == (long)p.value_.unsignedIntValue_;
+	else if((type_ == "unsigned long int") && (p.type_ == "int"))
+		return value_.unsignedLongIntValue_ == (unsigned long)p.value_.intValue_;
+	else if((type_ == "int") && (p.type_ == "unsigned long int"))
+		return (unsigned long)value_.intValue_ == p.value_.unsignedLongIntValue_;
+	else if((type_ == "unsigned int") && (p.type_ == "long int"))
+		return value_.unsignedIntValue_ == p.value_.longIntValue_;
+	else if((type_ == "long int") && (p.type_ == "unsigned int"))
+		return value_.longIntValue_ == p.value_.unsignedIntValue_;
+	else if((type_ == "unsigned int") && (p.type_ == "unsigned long int"))
+		return value_.unsignedIntValue_ == p.value_.unsignedLongIntValue_;
+	else if((type_ == "unsigned long int") && (p.type_ == "unsigned int"))
+		return value_.unsignedLongIntValue_ == p.value_.unsignedIntValue_;
+
 	if (type_ != p.type_) return false;
 
 	if (type_ == "int")
 		return value_.intValue_ == p.value_.intValue_;
-    else if (type_ == "unsigned int")
-        return value_.unsignedIntValue_ == p.value_.unsignedIntValue_;
+	else if (type_ == "unsigned int")
+		return value_.unsignedIntValue_ == p.value_.unsignedIntValue_;
+	else if (type_ == "long int")
+		return value_.longIntValue_ == p.value_.longIntValue_;
+	else if (type_ == "long unsigned int")
+		return value_.unsignedLongIntValue_ == p.value_.unsignedLongIntValue_;
 	else if (type_ == "const char*")
 		return SimpleString(value_.stringValue_) == SimpleString(p.value_.stringValue_);
 	else if (type_ == "void*")
@@ -209,6 +234,10 @@ SimpleString MockNamedValue::toString() const
 		return StringFrom(value_.intValue_);
 	else if (type_ == "unsigned int")
 		return StringFrom(value_.unsignedIntValue_);
+	else if (type_ == "long int")
+		return StringFrom(value_.longIntValue_);
+	else if (type_ == "unsigned long int")
+		return StringFrom(value_.unsignedLongIntValue_);
 	else if (type_ == "const char*")
 		return value_.stringValue_;
 	else if (type_ == "void*")

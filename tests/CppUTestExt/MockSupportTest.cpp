@@ -295,6 +295,87 @@ TEST(MockSupportTest, expectOneIntegerParameterAndValue)
 	CHECK_NO_MOCK_FAILURE();
 }
 
+TEST(MockSupportTest, mismatchedIntegerTypesIntAndLongAreAllowed)
+{
+	mock().expectOneCall("foo").withParameter("parameter", (int)1);
+	mock().actualCall("foo").withParameter("parameter", (long)1);
+
+	mock().expectOneCall("foo").withParameter("parameter", (long)1);
+	mock().actualCall("foo").withParameter("parameter", (int)1);
+
+	CHECK_NO_MOCK_FAILURE();
+}
+
+TEST(MockSupportTest, mismatchedIntegerTypesIntAndUnsignedAreAllowed)
+{
+	mock().expectOneCall("foo").withParameter("parameter", (int)1);
+	mock().actualCall("foo").withParameter("parameter", (unsigned)1);
+
+	mock().expectOneCall("foo").withParameter("parameter", (unsigned)1);
+	mock().actualCall("foo").withParameter("parameter", (int)1);
+
+	CHECK_NO_MOCK_FAILURE();
+}
+
+TEST(MockSupportTest, mismatchedIntegerTypesIntAndUnsignedLongAreAllowed)
+{
+	mock().expectOneCall("foo").withParameter("parameter", (int)1);
+	mock().actualCall("foo").withParameter("parameter", (unsigned long)1);
+
+	mock().expectOneCall("foo").withParameter("parameter", (unsigned long)1);
+	mock().actualCall("foo").withParameter("parameter", (int)1);
+
+	CHECK_NO_MOCK_FAILURE();
+}
+
+TEST(MockSupportTest, mismatchedIntegerTypesUnsignedAndLongAreAllowed)
+{
+	mock().expectOneCall("foo").withParameter("parameter", (unsigned)1);
+	mock().actualCall("foo").withParameter("parameter", (long)1);
+
+	mock().expectOneCall("foo").withParameter("parameter", (long)1);
+	mock().actualCall("foo").withParameter("parameter", (unsigned)1);
+
+	CHECK_NO_MOCK_FAILURE();
+}
+
+TEST(MockSupportTest, mismatchedIntegerTypesUnsignedAndUnsignedLongAreAllowed)
+{
+	mock().expectOneCall("foo").withParameter("parameter", (unsigned)1);
+	mock().actualCall("foo").withParameter("parameter", (unsigned long)1);
+
+	mock().expectOneCall("foo").withParameter("parameter", (unsigned long)1);
+	mock().actualCall("foo").withParameter("parameter", (unsigned)1);
+
+	CHECK_NO_MOCK_FAILURE();
+}
+
+TEST(MockSupportTest, mismatchedIntegerTypesLongAndUnsignedLongAreDisallowed)
+{
+	MockNamedValue parameter("parameter");
+	parameter.setValue((unsigned long)1);
+	addFunctionToExpectationsList("foo")->withParameter("parameter", (long)1);
+	MockUnexpectedParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, *expectationsList);
+
+	mock().expectOneCall("foo").withParameter("parameter", (long)1);
+	mock().actualCall("foo").withParameter("parameter", (unsigned long)1);
+
+	CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
+TEST(MockSupportTest, mismatchedIntegerTypesUnsignedLongAndLongAreDisallowed)
+{
+	MockNamedValue parameter("parameter");
+	parameter.setValue((long)1);
+	addFunctionToExpectationsList("foo")->withParameter("parameter", (unsigned long)1);
+	MockUnexpectedParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, *expectationsList);
+
+	mock().expectOneCall("foo").withParameter("parameter", (unsigned long)1);
+	mock().actualCall("foo").withParameter("parameter", (long)1);
+
+	CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
 TEST(MockSupportTest, expectOneDoubleParameterAndValue)
 {
 	mock().expectOneCall("foo").withParameter("parameter", 1.0);
@@ -392,22 +473,6 @@ TEST(MockSupportTest, expectOneIntegerParameterAndFailsDueToValue)
 
 	mock().expectOneCall("foo").withParameter("parameter", 10);
 	mock().actualCall("foo").withParameter("parameter", 8);
-
-	CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
-}
-
-TEST(MockSupportTest, expectOneUnsignedIntegerParameterAndFailsDueToTypes)
-{
-    unsigned int expected_value = 7777;
-    int actual_value = (int) expected_value;
-
-	MockNamedValue parameter("parameter");
-	parameter.setValue(actual_value);
-	addFunctionToExpectationsList("foo")->withParameter("parameter", expected_value);
-	MockUnexpectedParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, *expectationsList);
-
-	mock().expectOneCall("foo").withParameter("parameter", expected_value);
-	mock().actualCall("foo").withParameter("parameter", actual_value);
 
 	CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
