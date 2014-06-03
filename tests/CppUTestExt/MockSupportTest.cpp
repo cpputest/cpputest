@@ -350,28 +350,39 @@ TEST(MockSupportTest, mismatchedIntegerTypesUnsignedAndUnsignedLongAreAllowed)
 	CHECK_NO_MOCK_FAILURE();
 }
 
-TEST(MockSupportTest, mismatchedIntegerTypesLongAndUnsignedLongAreDisallowed)
+TEST(MockSupportTest, mismatchedIntegerTypesLongAndUnsignedLongAreAllowed)
 {
-	MockNamedValue parameter("parameter");
-	parameter.setValue((unsigned long)1);
-	addFunctionToExpectationsList("foo")->withParameter("parameter", (long)1);
-	MockUnexpectedParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, *expectationsList);
-
 	mock().expectOneCall("foo").withParameter("parameter", (long)1);
 	mock().actualCall("foo").withParameter("parameter", (unsigned long)1);
+
+	mock().expectOneCall("foo").withParameter("parameter", (unsigned long)1);
+	mock().actualCall("foo").withParameter("parameter", (long)1);
+
+	CHECK_NO_MOCK_FAILURE();
+}
+
+TEST(MockSupportTest, longAndUnsignedLongWithSameBitRepresentationShouldNotBeTreatedAsEqual)
+{
+	MockNamedValue parameter("parameter");
+	parameter.setValue((unsigned long)-1);
+	addFunctionToExpectationsList("foo")->withParameter("parameter", (long)-1);
+	MockUnexpectedParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, *expectationsList);
+
+	mock().expectOneCall("foo").withParameter("parameter", (long)-1);
+	mock().actualCall("foo").withParameter("parameter", (unsigned long)-1);
 
 	CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 
-TEST(MockSupportTest, mismatchedIntegerTypesUnsignedLongAndLongAreDisallowed)
+TEST(MockSupportTest, unsignedLongAndLongWithSameBitRepresentationShouldnotBeTreatedAsEqual)
 {
 	MockNamedValue parameter("parameter");
-	parameter.setValue((long)1);
-	addFunctionToExpectationsList("foo")->withParameter("parameter", (unsigned long)1);
+	parameter.setValue((long)-1);
+	addFunctionToExpectationsList("foo")->withParameter("parameter", (unsigned long)-1);
 	MockUnexpectedParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, *expectationsList);
 
-	mock().expectOneCall("foo").withParameter("parameter", (unsigned long)1);
-	mock().actualCall("foo").withParameter("parameter", (long)1);
+	mock().expectOneCall("foo").withParameter("parameter", (unsigned long)-1);
+	mock().actualCall("foo").withParameter("parameter", (long)-1);
 
 	CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
@@ -423,7 +434,7 @@ TEST(MockSupportTest, expectOneStringParameterAndValueFails)
 
 TEST(MockSupportTest, expectOneUnsignedIntegerParameterAndFailsDueToParameterName)
 {
-    unsigned int value = 7;
+	unsigned int value = 7;
 	MockNamedValue parameter("different");
 	parameter.setValue(value);
 	addFunctionToExpectationsList("foo")->withParameter("parameter", value);
@@ -450,8 +461,8 @@ TEST(MockSupportTest, expectOneIntegerParameterAndFailsDueToParameterName)
 
 TEST(MockSupportTest, expectOneUnsignedIntegerParameterAndFailsDueToValue)
 {
-    unsigned int actual_value = 8;
-    unsigned int expected_value = actual_value + 1;
+	unsigned int actual_value = 8;
+	unsigned int expected_value = actual_value + 1;
 	MockNamedValue parameter("parameter");
 
 	parameter.setValue(actual_value);

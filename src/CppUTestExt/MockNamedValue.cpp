@@ -202,6 +202,10 @@ bool MockNamedValue::equals(const MockNamedValue& p) const
 		return value_.unsignedIntValue_ == p.value_.unsignedLongIntValue_;
 	else if((type_ == "unsigned long int") && (p.type_ == "unsigned int"))
 		return value_.unsignedLongIntValue_ == p.value_.unsignedIntValue_;
+	else if((type_ == "long int") && (p.type_ == "unsigned long int"))
+		return (value_.longIntValue_ >= 0) && (value_.longIntValue_ == (long) p.value_.unsignedLongIntValue_);
+	else if((type_ == "unsigned long int") && (p.type_ == "long int"))
+		return (p.value_.longIntValue_ >= 0) && ((long)value_.unsignedLongIntValue_ == p.value_.longIntValue_);
 
 	if (type_ != p.type_) return false;
 
