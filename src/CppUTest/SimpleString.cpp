@@ -502,7 +502,7 @@ SimpleStringCollection::SimpleStringCollection()
 
 void SimpleStringCollection::allocate(size_t _size)
 {
-	if (collection_) delete[] collection_;
+	delete[] collection_;
 
 	size_ = _size;
 	collection_ = new SimpleString[size_];

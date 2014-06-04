@@ -87,7 +87,7 @@ void JUnitTestOutput::resetTestGroupResult()
 	while (cur) {
 		JUnitTestCaseResultNode* tmp = cur->next_;
 		;
-		if (cur->failure_) delete cur->failure_;
+		delete cur->failure_;
 		delete cur;
 		cur = tmp;
 	}
