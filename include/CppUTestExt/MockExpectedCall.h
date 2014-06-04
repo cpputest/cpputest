@@ -61,6 +61,8 @@ public:
 	virtual MockExpectedCall& withConstPointerParameter(const SimpleString& name, const void* value)=0;
 	virtual MockExpectedCall& andReturnValue(int value)=0;
 	virtual MockExpectedCall& andReturnValue(unsigned int value)=0;
+	virtual MockExpectedCall& andReturnValue(long int value)=0;
+	virtual MockExpectedCall& andReturnValue(unsigned long int value)=0;
 	virtual MockExpectedCall& andReturnValue(double value)=0;
 	virtual MockExpectedCall& andReturnValue(const char* value)=0;
 	virtual MockExpectedCall& andReturnValue(void* value)=0;

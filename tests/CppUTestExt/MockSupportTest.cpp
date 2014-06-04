@@ -943,7 +943,7 @@ TEST(MockSupportTest, hasReturnValue)
 
 TEST(MockSupportTest, UnsignedIntegerReturnValue)
 {
-    unsigned int expected_value = 7;
+	unsigned int expected_value = 7;
 	mock().expectOneCall("foo").andReturnValue(expected_value);
 	LONGS_EQUAL(expected_value, mock().actualCall("foo").returnValue().getUnsignedIntValue());
 	LONGS_EQUAL(expected_value, mock().returnValue().getUnsignedIntValue());
@@ -952,8 +952,8 @@ TEST(MockSupportTest, UnsignedIntegerReturnValue)
 
 TEST(MockSupportTest, UnsignedIntegerReturnValueSetsDifferentValues)
 {
-    unsigned int expected_value = 1;
-    unsigned int another_expected_value = 2;
+	unsigned int expected_value = 1;
+	unsigned int another_expected_value = 2;
 
 	mock().expectOneCall("foo").andReturnValue(expected_value);
 	mock().expectOneCall("foo").andReturnValue(another_expected_value);
@@ -966,8 +966,8 @@ TEST(MockSupportTest, UnsignedIntegerReturnValueSetsDifferentValues)
 
 TEST(MockSupportTest, UnsignedIntegerReturnValueSetsDifferentValuesWhileParametersAreIgnored)
 {
-    unsigned int ret_value = 1;
-    unsigned int another_ret_value = 2;
+	unsigned int ret_value = 1;
+	unsigned int another_ret_value = 2;
 
 	mock().expectOneCall("foo").withParameter("p1", 1).ignoreOtherParameters().andReturnValue(ret_value);
 	mock().expectOneCall("foo").withParameter("p1", 1).ignoreOtherParameters().andReturnValue(another_ret_value);
@@ -980,7 +980,7 @@ TEST(MockSupportTest, UnsignedIntegerReturnValueSetsDifferentValuesWhileParamete
 
 TEST(MockSupportTest, IntegerReturnValue)
 {
-    int expected_value = 1;
+	int expected_value = 1;
 	mock().expectOneCall("foo").andReturnValue(1);
 	LONGS_EQUAL(expected_value, mock().actualCall("foo").returnValue().getIntValue());
 	LONGS_EQUAL(expected_value, mock().returnValue().getIntValue());
@@ -989,8 +989,8 @@ TEST(MockSupportTest, IntegerReturnValue)
 
 TEST(MockSupportTest, IntegerReturnValueSetsDifferentValues)
 {
-    int expected_value = 1;
-    int another_expected_value = -1;
+	int expected_value = 1;
+	int another_expected_value = -1;
 
 	mock().expectOneCall("foo").andReturnValue(expected_value);
 	mock().expectOneCall("foo").andReturnValue(another_expected_value);
@@ -1003,8 +1003,8 @@ TEST(MockSupportTest, IntegerReturnValueSetsDifferentValues)
 
 TEST(MockSupportTest, IntegerReturnValueSetsDifferentValuesWhileParametersAreIgnored)
 {
-    int ret_value = 1;
-    int another_ret_value = -1;
+	int ret_value = 1;
+	int another_ret_value = -1;
 
 	mock().expectOneCall("foo").withParameter("p1", 1).ignoreOtherParameters().andReturnValue(ret_value);
 	mock().expectOneCall("foo").withParameter("p1", 1).ignoreOtherParameters().andReturnValue(another_ret_value);
@@ -1013,6 +1013,80 @@ TEST(MockSupportTest, IntegerReturnValueSetsDifferentValuesWhileParametersAreIgn
 	LONGS_EQUAL(ret_value, mock().returnValue().getIntValue());
 	LONGS_EQUAL(another_ret_value, mock().actualCall("foo").withParameter("p1", 1).returnValue().getIntValue());
 	LONGS_EQUAL(another_ret_value, mock().returnValue().getIntValue());
+}
+
+TEST(MockSupportTest, LongIntegerReturnValue)
+{
+	long int expected_value = 7;
+	mock().expectOneCall("foo").andReturnValue(expected_value);
+	LONGS_EQUAL(expected_value, mock().actualCall("foo").returnValue().getLongIntValue());
+	LONGS_EQUAL(expected_value, mock().returnValue().getLongIntValue());
+	LONGS_EQUAL(expected_value, mock().longIntReturnValue());
+}
+
+TEST(MockSupportTest, LongIntegerReturnValueSetsDifferentValues)
+{
+	long int expected_value = 1;
+	long int another_expected_value = 2;
+
+	mock().expectOneCall("foo").andReturnValue(expected_value);
+	mock().expectOneCall("foo").andReturnValue(another_expected_value);
+
+	LONGS_EQUAL(expected_value, mock().actualCall("foo").returnValue().getLongIntValue());
+	LONGS_EQUAL(expected_value, mock().returnValue().getLongIntValue());
+	LONGS_EQUAL(another_expected_value, mock().actualCall("foo").returnValue().getLongIntValue());
+	LONGS_EQUAL(another_expected_value, mock().returnValue().getLongIntValue());
+}
+
+TEST(MockSupportTest, LongIntegerReturnValueSetsDifferentValuesWhileParametersAreIgnored)
+{
+	long int ret_value = 1;
+	long int another_ret_value = 2;
+
+	mock().expectOneCall("foo").withParameter("p1", 1).ignoreOtherParameters().andReturnValue(ret_value);
+	mock().expectOneCall("foo").withParameter("p1", 1).ignoreOtherParameters().andReturnValue(another_ret_value);
+
+	LONGS_EQUAL(ret_value, mock().actualCall("foo").withParameter("p1", 1).returnValue().getLongIntValue());
+	LONGS_EQUAL(ret_value, mock().returnValue().getLongIntValue());
+	LONGS_EQUAL(another_ret_value, mock().actualCall("foo").withParameter("p1", 1).returnValue().getLongIntValue());
+	LONGS_EQUAL(another_ret_value, mock().returnValue().getLongIntValue());
+}
+
+TEST(MockSupportTest, UnsignedLongIntegerReturnValue)
+{
+	unsigned long int expected_value = 7;
+	mock().expectOneCall("foo").andReturnValue(expected_value);
+	LONGS_EQUAL(expected_value, mock().actualCall("foo").returnValue().getUnsignedLongIntValue());
+	LONGS_EQUAL(expected_value, mock().returnValue().getUnsignedLongIntValue());
+	LONGS_EQUAL(expected_value, mock().unsignedLongIntReturnValue());
+}
+
+TEST(MockSupportTest, UnsignedLongIntegerReturnValueSetsDifferentValues)
+{
+	unsigned long int expected_value = 1;
+	unsigned long int another_expected_value = 2;
+
+	mock().expectOneCall("foo").andReturnValue(expected_value);
+	mock().expectOneCall("foo").andReturnValue(another_expected_value);
+
+	LONGS_EQUAL(expected_value, mock().actualCall("foo").returnValue().getUnsignedLongIntValue());
+	LONGS_EQUAL(expected_value, mock().returnValue().getUnsignedLongIntValue());
+	LONGS_EQUAL(another_expected_value, mock().actualCall("foo").returnValue().getUnsignedLongIntValue());
+	LONGS_EQUAL(another_expected_value, mock().returnValue().getUnsignedLongIntValue());
+}
+
+TEST(MockSupportTest, UnsignedLongIntegerReturnValueSetsDifferentValuesWhileParametersAreIgnored)
+{
+	unsigned long int ret_value = 1;
+	unsigned long int another_ret_value = 2;
+
+	mock().expectOneCall("foo").withParameter("p1", 1).ignoreOtherParameters().andReturnValue(ret_value);
+	mock().expectOneCall("foo").withParameter("p1", 1).ignoreOtherParameters().andReturnValue(another_ret_value);
+
+	LONGS_EQUAL(ret_value, mock().actualCall("foo").withParameter("p1", 1).returnValue().getUnsignedLongIntValue());
+	LONGS_EQUAL(ret_value, mock().returnValue().getUnsignedLongIntValue());
+	LONGS_EQUAL(another_ret_value, mock().actualCall("foo").withParameter("p1", 1).returnValue().getUnsignedLongIntValue());
+	LONGS_EQUAL(another_ret_value, mock().returnValue().getUnsignedLongIntValue());
 }
 
 TEST(MockSupportTest, MatchingReturnValueOnWhileSignature)

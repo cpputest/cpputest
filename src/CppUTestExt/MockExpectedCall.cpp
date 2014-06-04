@@ -323,6 +323,20 @@ MockExpectedCall& MockCheckedExpectedCall::andReturnValue(int value)
 	return *this;
 }
 
+MockExpectedCall& MockCheckedExpectedCall::andReturnValue(long int value)
+{
+	returnValue_.setName("returnValue");
+	returnValue_.setValue(value);
+	return *this;
+}
+
+MockExpectedCall& MockCheckedExpectedCall::andReturnValue(unsigned long int value)
+{
+	returnValue_.setName("returnValue");
+	returnValue_.setValue(value);
+	return *this;
+}
+
 MockExpectedCall& MockCheckedExpectedCall::andReturnValue(const char* value)
 {
 	returnValue_.setName("returnValue");
@@ -508,6 +522,20 @@ MockExpectedCall& MockExpectedCallComposite::andReturnValue(unsigned int value)
 }
 
 MockExpectedCall& MockExpectedCallComposite::andReturnValue(int value)
+{
+	for (MockExpectedCallCompositeNode* node = head_; node != NULL; node = node->next_)
+		node->call_.andReturnValue(value);
+	return *this;
+}
+
+MockExpectedCall& MockExpectedCallComposite::andReturnValue(long int value)
+{
+	for (MockExpectedCallCompositeNode* node = head_; node != NULL; node = node->next_)
+		node->call_.andReturnValue(value);
+	return *this;
+}
+
+MockExpectedCall& MockExpectedCallComposite::andReturnValue(unsigned long int value)
 {
 	for (MockExpectedCallCompositeNode* node = head_; node != NULL; node = node->next_)
 		node->call_.andReturnValue(value);
