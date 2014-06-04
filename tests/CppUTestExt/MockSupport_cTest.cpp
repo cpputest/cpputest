@@ -52,15 +52,15 @@ TEST(MockSupport_c, expectAndActualParameters)
 
 extern "C"{
 
-    static int typeNameIsEqual(const void* object1, const void* object2)
-    {
-	    return object1 == object2;
-    }
+	static int typeNameIsEqual(const void* object1, const void* object2)
+	{
+		return object1 == object2;
+	}
 
-    static char* typeNameValueToString(const void* PUNUSED(object))
-    {
-	    return (char*) "valueToString";
-    }
+	static char* typeNameValueToString(const void* PUNUSED(object))
+	{
+		return (char*) "valueToString";
+	}
 
 }
 
@@ -73,9 +73,27 @@ TEST(MockSupport_c, expectAndActualParametersOnObject)
 	mock_c()->removeAllComparators();
 }
 
+TEST(MockSupport_c, unsignedIntParameter)
+{
+	mock_c()->expectOneCall("foo")->withUnsignedIntParameters("p", 1);
+	mock_c()->actualCall("foo")->withUnsignedIntParameters("p", 1);
+}
+
+TEST(MockSupport_c, longIntParameter)
+{
+	mock_c()->expectOneCall("foo")->withLongIntParameters("p", 1);
+	mock_c()->actualCall("foo")->withLongIntParameters("p", 1);
+}
+
+TEST(MockSupport_c, unsignedLongIntParameter)
+{
+	mock_c()->expectOneCall("foo")->withUnsignedLongIntParameters("p", 1);
+	mock_c()->actualCall("foo")->withUnsignedLongIntParameters("p", 1);
+}
+
 TEST(MockSupport_c, returnUnsignedIntValue)
 {
-    unsigned int expected_value = 7;
+	unsigned int expected_value = 7;
 	mock_c()->expectOneCall("boo")->andReturnUnsignedIntValue(expected_value);
 	LONGS_EQUAL(expected_value, mock_c()->actualCall("boo")->returnValue().value.unsignedIntValue);
 	LONGS_EQUAL(MOCKVALUETYPE_UNSIGNED_INTEGER, mock_c()->returnValue().type);
@@ -83,7 +101,7 @@ TEST(MockSupport_c, returnUnsignedIntValue)
 
 TEST(MockSupport_c, returnIntValue)
 {
-    int expected_value = 10;
+	int expected_value = 10;
 	mock_c()->expectOneCall("boo")->andReturnIntValue(expected_value);
 	LONGS_EQUAL(expected_value, mock_c()->actualCall("boo")->returnValue().value.intValue);
 	LONGS_EQUAL(MOCKVALUETYPE_INTEGER, mock_c()->returnValue().type);
@@ -190,7 +208,7 @@ MSC_SWITCHED_TEST(MockSupport_c, NoExceptionsAreThrownWhenAMock_cCallFailed)
 	fixture.runAllTests();
 
 	LONGS_EQUAL(1, fixture.getFailureCount());
-    // Odd behavior in Visual C++, destructor still gets called here
+	// Odd behavior in Visual C++, destructor still gets called here
 	CHECK(!destructorWasCalled);
 }
 

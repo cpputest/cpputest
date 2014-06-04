@@ -215,7 +215,7 @@ bool MockNamedValue::equals(const MockNamedValue& p) const
 		return value_.unsignedIntValue_ == p.value_.unsignedIntValue_;
 	else if (type_ == "long int")
 		return value_.longIntValue_ == p.value_.longIntValue_;
-	else if (type_ == "long unsigned int")
+	else if (type_ == "unsigned long int")
 		return value_.unsignedLongIntValue_ == p.value_.unsignedLongIntValue_;
 	else if (type_ == "const char*")
 		return SimpleString(value_.stringValue_) == SimpleString(p.value_.stringValue_);
