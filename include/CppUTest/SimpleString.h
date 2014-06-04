@@ -124,9 +124,10 @@ SimpleString StringFrom(const void* value);
 SimpleString StringFrom(char value);
 SimpleString StringFrom(const char *value);
 SimpleString StringFromOrNull(const char * value);
+SimpleString StringFrom(int value);
+SimpleString StringFrom(unsigned int value);
 SimpleString StringFrom(long value);
 SimpleString StringFrom(unsigned long value);
-SimpleString StringFrom(int value);
 SimpleString HexStringFrom(long value);
 SimpleString HexStringFrom(unsigned long value);
 SimpleString HexStringFrom(const void* value);
@@ -134,8 +135,6 @@ SimpleString StringFrom(double value, int precision = 6);
 SimpleString StringFrom(const SimpleString& other);
 SimpleString StringFromFormat(const char* format, ...) __check_format__(printf, 1, 2);
 SimpleString VStringFromFormat(const char* format, va_list args);
-SimpleString StringFrom(unsigned int value);
-SimpleString StringFrom(unsigned long value);
 
 #if CPPUTEST_USE_STD_CPP_LIB
 
