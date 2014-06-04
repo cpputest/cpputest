@@ -128,6 +128,7 @@ SimpleString StringFrom(long value);
 SimpleString StringFrom(unsigned long value);
 SimpleString StringFrom(int value);
 SimpleString HexStringFrom(long value);
+SimpleString HexStringFrom(unsigned long value);
 SimpleString HexStringFrom(const void* value);
 SimpleString StringFrom(double value, int precision = 6);
 SimpleString StringFrom(const SimpleString& other);

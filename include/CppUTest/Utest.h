@@ -111,7 +111,8 @@ public:
     virtual void assertCstrNoCaseEqual(const char *expected, const char *actual, const char *fileName, int lineNumber);
     virtual void assertCstrContains(const char *expected, const char *actual, const char *fileName, int lineNumber);
     virtual void assertCstrNoCaseContains(const char *expected, const char *actual, const char *fileName, int lineNumber);
-    virtual void assertLongsEqual(long  expected, long  actual, const char *fileName, int lineNumber, const TestTerminator& testTerminator = NormalTestTerminator());
+    virtual void assertLongsEqual(long expected, long actual, const char *fileName, int lineNumber, const TestTerminator& testTerminator = NormalTestTerminator());
+    virtual void assertUnsignedLongsEqual(unsigned long expected, unsigned long actual, const char *fileName, int lineNumber, const TestTerminator& testTerminator = NormalTestTerminator());
     virtual void assertPointersEqual(const void *expected, const void *actual, const char *fileName, int lineNumber);
     virtual void assertDoublesEqual(double expected, double actual, double threshold, const char *fileName, int lineNumber, const TestTerminator& testTerminator = NormalTestTerminator());
     virtual void assertEquals(bool failed, const char* expected, const char* actual, const char* file, int line, const TestTerminator& testTerminator = NormalTestTerminator());

@@ -123,6 +123,8 @@ MockExpectedCall_c* withConstPointerParameters_c(const char* name, const void* v
 MockExpectedCall_c* withParameterOfType_c(const char* type, const char* name, const void* value);
 MockExpectedCall_c* andReturnIntValue_c(int value);
 MockExpectedCall_c* andReturnUnsignedIntValue_c(unsigned int value);
+MockExpectedCall_c* andReturnLongIntValue_c(long int value);
+MockExpectedCall_c* andReturnUnsignedLongIntValue_c(unsigned long int value);
 MockExpectedCall_c* andReturnDoubleValue_c(double value);
 MockExpectedCall_c* andReturnStringValue_c(const char* value);
 MockExpectedCall_c* andReturnPointerValue_c(void* value);
@@ -169,6 +171,8 @@ static MockExpectedCall_c gExpectedCall = {
 		withParameterOfType_c,
 		andReturnUnsignedIntValue_c,
 		andReturnIntValue_c,
+		andReturnLongIntValue_c,
+		andReturnUnsignedLongIntValue_c,
 		andReturnDoubleValue_c,
 		andReturnStringValue_c,
 		andReturnPointerValue_c,
@@ -274,6 +278,18 @@ MockExpectedCall_c* andReturnIntValue_c(int value)
 	return &gExpectedCall;
 }
 
+MockExpectedCall_c* andReturnLongIntValue_c(long int value)
+{
+	expectedCall = &expectedCall->andReturnValue(value);
+	return &gExpectedCall;
+}
+
+MockExpectedCall_c* andReturnUnsignedLongIntValue_c(unsigned long int value)
+{
+	expectedCall = &expectedCall->andReturnValue(value);
+	return &gExpectedCall;
+}
+
 MockExpectedCall_c* andReturnDoubleValue_c(double value)
 {
 	expectedCall = &expectedCall->andReturnValue(value);
@@ -308,6 +324,14 @@ static MockValue_c getMockValueCFromNamedValue(const MockNamedValue& namedValue)
 	else if (PlatformSpecificStrCmp(namedValue.getType().asCharString(), "unsigned int") == 0) {
 		returnValue.type = MOCKVALUETYPE_UNSIGNED_INTEGER;
 		returnValue.value.unsignedIntValue = namedValue.getUnsignedIntValue();
+	}
+	else if (PlatformSpecificStrCmp(namedValue.getType().asCharString(), "long int") == 0) {
+		returnValue.type = MOCKVALUETYPE_LONG_INTEGER;
+		returnValue.value.longIntValue = namedValue.getLongIntValue();
+	}
+	else if (PlatformSpecificStrCmp(namedValue.getType().asCharString(), "unsigned long int") == 0) {
+		returnValue.type = MOCKVALUETYPE_UNSIGNED_LONG_INTEGER;
+		returnValue.value.unsignedLongIntValue = namedValue.getUnsignedLongIntValue();
 	}
 	else if (PlatformSpecificStrCmp(namedValue.getType().asCharString(), "double") == 0) {
 		returnValue.type = MOCKVALUETYPE_DOUBLE;

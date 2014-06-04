@@ -119,8 +119,13 @@ SimpleString MockNamedValue::getType() const
 
 unsigned int MockNamedValue::getUnsignedIntValue() const
 {
-	STRCMP_EQUAL("unsigned int", type_.asCharString());
-    return value_.unsignedIntValue_;
+	if(type_ == "int" && value_.intValue_ >= 0)
+		return (unsigned int)value_.intValue_;
+	else
+	{
+		STRCMP_EQUAL("unsigned int", type_.asCharString());
+		return value_.unsignedIntValue_;
+	}
 }
 
 int MockNamedValue::getIntValue() const
@@ -131,14 +136,30 @@ int MockNamedValue::getIntValue() const
 
 long int MockNamedValue::getLongIntValue() const
 {
-	STRCMP_EQUAL("long int", type_.asCharString());
-	return value_.longIntValue_;
+	if(type_ == "int")
+		return value_.intValue_;
+	else if(type_ == "unsigned int")
+		return (long int)value_.unsignedIntValue_;
+	else
+	{
+		STRCMP_EQUAL("long int", type_.asCharString());
+		return value_.longIntValue_;
+	}
 }
 
 unsigned long int MockNamedValue::getUnsignedLongIntValue() const
 {
-	STRCMP_EQUAL("unsigned long int", type_.asCharString());
-	return value_.unsignedLongIntValue_;
+	if(type_ == "unsigned int")
+		return value_.unsignedIntValue_;
+	else if(type_ == "int" && value_.intValue_ >= 0)
+		return (unsigned long int)value_.intValue_;
+	else if(type_ == "long int" && value_.longIntValue_ >= 0)
+		return (unsigned long int)value_.longIntValue_;
+	else
+	{
+		STRCMP_EQUAL("unsigned long int", type_.asCharString());
+		return value_.unsignedLongIntValue_;
+	}
 }
 
 double MockNamedValue::getDoubleValue() const

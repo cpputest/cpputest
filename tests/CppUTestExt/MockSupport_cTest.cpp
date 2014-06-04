@@ -107,6 +107,22 @@ TEST(MockSupport_c, returnIntValue)
 	LONGS_EQUAL(MOCKVALUETYPE_INTEGER, mock_c()->returnValue().type);
 }
 
+TEST(MockSupport_c, returnLongIntValue)
+{
+	long int expected_value = 10;
+	mock_c()->expectOneCall("boo")->andReturnLongIntValue(expected_value);
+	LONGS_EQUAL(expected_value, mock_c()->actualCall("boo")->returnValue().value.longIntValue);
+	LONGS_EQUAL(MOCKVALUETYPE_LONG_INTEGER, mock_c()->returnValue().type);
+}
+
+TEST(MockSupport_c, returnUnsignedLongIntValue)
+{
+	unsigned long int expected_value = 10;
+	mock_c()->expectOneCall("boo")->andReturnUnsignedLongIntValue(expected_value);
+	LONGS_EQUAL(expected_value, mock_c()->actualCall("boo")->returnValue().value.unsignedLongIntValue);
+	LONGS_EQUAL(MOCKVALUETYPE_UNSIGNED_LONG_INTEGER, mock_c()->returnValue().type);
+}
+
 TEST(MockSupport_c, returnDoubleValue)
 {
 	mock_c()->expectOneCall("boo")->andReturnDoubleValue(1.0);

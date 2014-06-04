@@ -705,14 +705,14 @@ TEST(MockSupportTest, disableEnable)
 
 TEST(MockSupportTest, setDataForUnsignedIntegerValues)
 {
-    unsigned int expected_data = 7;
+	unsigned int expected_data = 7;
 	mock().setData("data", expected_data);
 	LONGS_EQUAL(expected_data, mock().getData("data").getUnsignedIntValue());
 }
 
 TEST(MockSupportTest, setDataForIntegerValues)
 {
-    int expected_data = 10;
+	int expected_data = 10;
 	mock().setData("data", expected_data);
 	LONGS_EQUAL(expected_data, mock().getData("data").getIntValue());
 }
@@ -729,7 +729,6 @@ TEST(MockSupportTest, dataCanBeChanged)
 	mock().setData("data", 10);
 	mock().setData("data", 15);
 	LONGS_EQUAL(15, mock().getData("data").getIntValue());
-
 }
 
 TEST(MockSupportTest, uninitializedData)
@@ -948,6 +947,48 @@ TEST(MockSupportTest, UnsignedIntegerReturnValue)
 	LONGS_EQUAL(expected_value, mock().actualCall("foo").returnValue().getUnsignedIntValue());
 	LONGS_EQUAL(expected_value, mock().returnValue().getUnsignedIntValue());
 	LONGS_EQUAL(expected_value, mock().unsignedIntReturnValue());
+}
+
+TEST(MockSupportTest, PositiveIntReturnValueCanBeRetrievedAsUnsignedInt)
+{
+	int expected_value = 7;
+	mock().expectOneCall("foo").andReturnValue(expected_value);
+	LONGS_EQUAL(expected_value, mock().actualCall("foo").returnValue().getUnsignedIntValue());
+}
+
+TEST(MockSupportTest, IntReturnValueCanBeRetrievedAsLongInt)
+{
+	int expected_value = 7;
+	mock().expectOneCall("foo").andReturnValue(expected_value);
+	LONGS_EQUAL(expected_value, mock().actualCall("foo").returnValue().getLongIntValue());
+}
+
+TEST(MockSupportTest, UnsignedIntReturnValueCanBeRetrievedAsLongInt)
+{
+	unsigned int expected_value = 7;
+	mock().expectOneCall("foo").andReturnValue(expected_value);
+	LONGS_EQUAL(expected_value, mock().actualCall("foo").returnValue().getLongIntValue());
+}
+
+TEST(MockSupportTest, PositiveIntReturnValueCanBeRetrievedAsUnsignedLongInt)
+{
+	int expected_value = 7;
+	mock().expectOneCall("foo").andReturnValue(expected_value);
+	UNSIGNED_LONGS_EQUAL(expected_value, mock().actualCall("foo").returnValue().getUnsignedLongIntValue());
+}
+
+TEST(MockSupportTest, PositiveLongIntReturnValueCanBeRetrievedAsUnsignedLongInt)
+{
+	long int expected_value = 7;
+	mock().expectOneCall("foo").andReturnValue(expected_value);
+	UNSIGNED_LONGS_EQUAL(expected_value, mock().actualCall("foo").returnValue().getUnsignedLongIntValue());
+}
+
+TEST(MockSupportTest, UnsignedIntReturnValueCanBeRetrievedAsUnsignedLongInt)
+{
+	unsigned int expected_value = 7;
+	mock().expectOneCall("foo").andReturnValue(expected_value);
+	UNSIGNED_LONGS_EQUAL(expected_value, mock().actualCall("foo").returnValue().getUnsignedLongIntValue());
 }
 
 TEST(MockSupportTest, UnsignedIntegerReturnValueSetsDifferentValues)

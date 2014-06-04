@@ -393,6 +393,13 @@ void UtestShell::assertLongsEqual(long expected, long actual, const char* fileNa
 		failWith(LongsEqualFailure (this, fileName, lineNumber, expected, actual), testTerminator);
 }
 
+void UtestShell::assertUnsignedLongsEqual(unsigned long expected, unsigned long actual, const char* fileName, int lineNumber, const TestTerminator& testTerminator)
+{
+	getTestResult()->countCheck();
+	if (expected != actual)
+		failWith(UnsignedLongsEqualFailure (this, fileName, lineNumber, expected, actual), testTerminator);
+}
+
 void UtestShell::assertPointersEqual(const void* expected, const void* actual, const char* fileName, int lineNumber)
 {
 	getTestResult()->countCheck();
