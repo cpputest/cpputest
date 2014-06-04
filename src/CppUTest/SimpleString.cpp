@@ -396,6 +396,11 @@ SimpleString HexStringFrom(long value)
 	return StringFromFormat("%lx", value);
 }
 
+SimpleString HexStringFrom(unsigned long value)
+{
+	return StringFromFormat("%lx", value);
+}
+
 static long convertPointerToLongValue(const void* value)
 {
 	/*
@@ -455,6 +460,13 @@ SimpleString StringFrom(const std::string& value)
 SimpleString StringFrom(unsigned long i)
 {
 	return StringFromFormat("%lu (0x%lx)", i, i);
+}
+
+#else
+
+SimpleString StringFrom(unsigned long value)
+{
+	return StringFromFormat("%lu", value);
 }
 
 #endif

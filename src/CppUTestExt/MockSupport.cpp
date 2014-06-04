@@ -415,6 +415,16 @@ int MockSupport::intReturnValue()
 	return returnValue().getIntValue();
 }
 
+long int MockSupport::longIntReturnValue()
+{
+	return returnValue().getLongIntValue();
+}
+
+unsigned long int MockSupport::unsignedLongIntReturnValue()
+{
+	return returnValue().getUnsignedLongIntValue();
+}
+
 const char* MockSupport::stringReturnValue()
 {
 	return returnValue().getStringValue();
