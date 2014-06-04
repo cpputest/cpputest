@@ -37,7 +37,6 @@ public:
 	int value;
 };
 
-
 class TypeForTestingExpectedFunctionCallComparator : public MockNamedValueComparator
 {
 public:
@@ -52,7 +51,6 @@ public:
 	{
 		return StringFrom(((TypeForTestingExpectedFunctionCall*)object)->value);
 	}
-
 };
 
 TEST_GROUP(MockNamedValueComparatorRepository)
@@ -92,7 +90,7 @@ TEST(MockNamedValueComparatorRepository, installMultipleComparator)
 TEST_GROUP(MockExpectedFunctionCall)
 {
 	MockCheckedExpectedCall* call;
-	void setup ()
+	void setup()
 	{
 		call = new MockCheckedExpectedCall;
 	}
@@ -112,8 +110,8 @@ TEST(MockExpectedFunctionCall, callWithoutParameterSetOrNotFound)
 
 TEST(MockExpectedFunctionCall, callWithUnsignedIntegerParameter)
 {
-    const SimpleString name = "unsigned integer"; 
-    unsigned int value = 777;
+	const SimpleString name = "unsigned integer";
+	unsigned int value = 777;
 	call->withParameter(name, value);
 	STRCMP_EQUAL("unsigned int", call->getParameterType(name).asCharString());
 	LONGS_EQUAL(value, call->getParameter(name).getUnsignedIntValue());
@@ -126,6 +124,26 @@ TEST(MockExpectedFunctionCall, callWithIntegerParameter)
 	STRCMP_EQUAL("int", call->getParameterType("integer").asCharString());
 	LONGS_EQUAL(1, call->getParameter("integer").getIntValue());
 	CHECK(call->hasParameterWithName("integer"));
+}
+
+TEST(MockExpectedFunctionCall, callWithUnsignedLongIntegerParameter)
+{
+	const SimpleString name = "unsigned long integer";
+	unsigned long value = 777;
+	call->withParameter(name, value);
+	STRCMP_EQUAL("unsigned long int", call->getParameterType(name).asCharString());
+	LONGS_EQUAL(value, call->getParameter(name).getUnsignedLongIntValue());
+	CHECK(call->hasParameterWithName(name));
+}
+
+TEST(MockExpectedFunctionCall, callWithLongIntegerParameter)
+{
+	const SimpleString name = "long integer";
+	long value = 777;
+	call->withParameter(name, value);
+	STRCMP_EQUAL("long int", call->getParameterType(name).asCharString());
+	LONGS_EQUAL(value, call->getParameter(name).getLongIntValue());
+	CHECK(call->hasParameterWithName(name));
 }
 
 TEST(MockExpectedFunctionCall, callWithDoubleParameter)
@@ -169,19 +187,19 @@ TEST(MockExpectedFunctionCall, callWithObjectParameter)
 TEST(MockExpectedFunctionCall, callWithObjectParameterUnequalComparison)
 {
 	TypeForTestingExpectedFunctionCall type(1), unequalType(2);
-	MockNamedValue parameter ("name");
+	MockNamedValue parameter("name");
 	parameter.setObjectPointer("type", &unequalType);
 	call->withParameterOfType("type", "name", &type);
-	CHECK (!call->hasParameter(parameter));
+	CHECK(!call->hasParameter(parameter));
 }
 
 TEST(MockExpectedFunctionCall, callWithObjectParameterEqualComparisonButFailsWithoutRepository)
 {
 	TypeForTestingExpectedFunctionCall type(1), equalType(1);
-	MockNamedValue parameter ("name");
+	MockNamedValue parameter("name");
 	parameter.setObjectPointer("type", &equalType);
 	call->withParameterOfType("type", "name", &type);
-	CHECK (!call->hasParameter(parameter));
+	CHECK(!call->hasParameter(parameter));
 }
 
 TEST(MockExpectedFunctionCall, callWithObjectParameterEqualComparisonButFailsWithoutComparator)
@@ -190,10 +208,10 @@ TEST(MockExpectedFunctionCall, callWithObjectParameterEqualComparisonButFailsWit
 	MockNamedValue::setDefaultComparatorRepository(&repository);
 
 	TypeForTestingExpectedFunctionCall type(1), equalType(1);
-	MockNamedValue parameter ("name");
+	MockNamedValue parameter("name");
 	parameter.setObjectPointer("type", &equalType);
 	call->withParameterOfType("type", "name", &type);
-	CHECK (!call->hasParameter(parameter));
+	CHECK(!call->hasParameter(parameter));
 }
 
 TEST(MockExpectedFunctionCall, callWithObjectParameterEqualComparison)
@@ -204,11 +222,11 @@ TEST(MockExpectedFunctionCall, callWithObjectParameterEqualComparison)
 	repository.installComparator("type", comparator);
 
 	TypeForTestingExpectedFunctionCall type(1), equalType(1);
-	MockNamedValue parameter ("name");
+	MockNamedValue parameter("name");
 	parameter.setObjectPointer("type", &equalType);
 
 	call->withParameterOfType("type", "name", &type);
-	CHECK (call->hasParameter(parameter));
+	CHECK(call->hasParameter(parameter));
 }
 
 TEST(MockExpectedFunctionCall, getParameterValueOfObjectType)
@@ -242,8 +260,8 @@ TEST(MockExpectedFunctionCall, getParameterValueOfObjectTypeWithoutComparator)
 
 TEST(MockExpectedFunctionCall, callWithTwoUnsignedIntegerParameter)
 {
-    unsigned int expected_value = 1;
-    unsigned int another_expected_value = 2;
+	unsigned int expected_value = 1;
+	unsigned int another_expected_value = 2;
 
 	call->withParameter("unsigned-integer1", expected_value);
 	call->withParameter("unsigned-integer2", another_expected_value);
@@ -255,8 +273,8 @@ TEST(MockExpectedFunctionCall, callWithTwoUnsignedIntegerParameter)
 
 TEST(MockExpectedFunctionCall, callWithTwoIntegerParameter)
 {
-    int expected_value = 1;
-    int another_expected_value = -1;
+	int expected_value = 1;
+	int another_expected_value = -1;
 
 	call->withParameter("integer1", expected_value);
 	call->withParameter("integer2", another_expected_value);
@@ -317,7 +335,7 @@ TEST(MockExpectedFunctionCall, calledButNotAllParametersAreFulfilled)
 	call->withName("name").withParameter("para", 1).withParameter("two", 2);
 	call->callWasMade(1);
 	call->parameterWasPassed("para");
-	CHECK(! call->isFulfilled());
+	CHECK(!call->isFulfilled());
 }
 
 TEST(MockExpectedFunctionCall, toStringForNoParameters)
@@ -335,8 +353,8 @@ TEST(MockExpectedFunctionCall, toStringForIgnoredParameters)
 
 TEST(MockExpectedFunctionCall, toStringForMultipleParameters)
 {
-    int int_value = 10;
-    unsigned int uint_value = 7;
+	int int_value = 10;
+	unsigned int uint_value = 7;
 
 	call->withName("name");
 	call->withParameter("string", "value");
@@ -377,4 +395,3 @@ TEST(MockExpectedFunctionCall, callOrderIsFulfilled)
 	CHECK(call->isFulfilled());
 	CHECK_FALSE(call->isOutOfOrder());
 }
-
