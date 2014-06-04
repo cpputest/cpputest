@@ -389,7 +389,7 @@ SimpleString HexStringFrom(long value)
 
 SimpleString HexStringFrom(unsigned long value)
 {
-	return StringFromFormat("%lux", value);
+	return StringFromFormat("%lx", value);
 }
 
 static long convertPointerToLongValue(const void* value)
