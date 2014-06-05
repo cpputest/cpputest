@@ -48,8 +48,8 @@ public:
 	virtual MockExpectedCall& withStringParameter(const SimpleString& name, const char* value) _override;
 	virtual MockExpectedCall& withPointerParameter(const SimpleString& name, void* value) _override;
 	virtual MockExpectedCall& withConstPointerParameter(const SimpleString& name, const void* value) _override;
-	virtual MockExpectedCall& withParameterOfType(const SimpleString& type, const SimpleString& name, const void* value) _override;
-    virtual MockExpectedCall& withOutputParameter(const SimpleString& name, const void* value) _override;
+	virtual MockExpectedCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value) _override;
+	virtual MockExpectedCall& withOutputParameter(const SimpleString& name, const void* value) _override;
 	virtual MockExpectedCall& ignoreOtherParameters() _override;
 
 	virtual MockExpectedCall& andReturnValue(int value) _override;

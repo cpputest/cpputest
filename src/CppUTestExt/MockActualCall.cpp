@@ -208,14 +208,14 @@ MockActualCall& MockCheckedActualCall::withParameterOfType(const SimpleString& t
 
 MockActualCall& MockCheckedActualCall::withOutputParameter(const SimpleString& name, void* output, size_t size)
 {
- 	MockNamedValue actualParameter(name);
-    const void* value = allExpectations_.getOutputParameterValueByName(name);
-    if (size && (NULL != output) && (NULL != value))
-    {
-        PlatformSpecificMemCpy(output, value, size);
-	    actualParameter.setValue(value);
-    }
- 	checkActualParameter(actualParameter);
+	MockNamedValue actualParameter(name);
+	const void* value = allExpectations_.getOutputParameterValueByName(name);
+	if (size && (NULL != output) && (NULL != value))
+	{
+		PlatformSpecificMemCpy(output, value, size);
+		actualParameter.setValue(value);
+	}
+	checkActualParameter(actualParameter);
 	return *this;
 }
 
@@ -406,7 +406,7 @@ MockActualCall& MockActualCallTrace::withParameterOfType(const SimpleString& typ
 
 MockActualCall& MockActualCallTrace::withOutputParameter(const SimpleString& name, void* output, size_t size)
 {
-    addParameterName(name);
+	addParameterName(name);
 	traceBuffer_ += StringFrom(output);
 	traceBuffer_ += " size: ";
 	traceBuffer_ += StringFrom((int)size);

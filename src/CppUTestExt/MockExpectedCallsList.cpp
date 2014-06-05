@@ -209,10 +209,10 @@ MockCheckedExpectedCall* MockExpectedCallsList::removeOneFulfilledExpectation()
 const void* MockExpectedCallsList::getOutputParameterValueByName(const SimpleString& name) const
 {
 	for (MockExpectedCallsListNode* p = head_; p; p = p->next_) {
-        MockNamedValue value = p->expectedCall_->getParameter(name);
-        if (!value.equals(MockNamedValue(""))) {
-            return value.getObjectPointer();
-        }
+		MockNamedValue value = p->expectedCall_->getParameter(name);
+		if (!value.equals(MockNamedValue(""))) {
+			return value.getObjectPointer();
+		}
 	}
 	return NULL;
 }

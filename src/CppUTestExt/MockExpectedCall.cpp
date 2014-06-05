@@ -144,7 +144,7 @@ MockExpectedCall& MockCheckedExpectedCall::withParameterOfType(const SimpleStrin
 
 MockExpectedCall& MockCheckedExpectedCall::withOutputParameter(const SimpleString& name, const void* value)
 {
-    return withConstPointerParameter(name, value);
+	return withConstPointerParameter(name, value);
 }
 
 SimpleString MockCheckedExpectedCall::getParameterType(const SimpleString& name)
@@ -516,8 +516,8 @@ MockExpectedCall& MockExpectedCallComposite::withParameterOfType(const SimpleStr
 MockExpectedCall& MockExpectedCallComposite::withOutputParameter(const SimpleString& name, const void* value)
 {
 	for (MockExpectedCallCompositeNode* node = head_; node != NULL; node = node->next_)
-	    node->call_.withOutputParameter(name, value);
-    return *this;
+		node->call_.withOutputParameter(name, value);
+	return *this;
 }
 
 MockExpectedCall& MockExpectedCallComposite::ignoreOtherParameters()

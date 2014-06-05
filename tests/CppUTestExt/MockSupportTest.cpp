@@ -688,7 +688,7 @@ TEST(MockSupportTest, outputParameterTraced)
  	mock().actualCall("someFunc").withOutputParameter("someParameter", &object, sizeof(object));
 	mock().checkExpectations();
 	STRCMP_CONTAINS("Function name: someFunc someParameter:", mock().getTraceOutput());
-    STRCMP_CONTAINS("size: 4", mock().getTraceOutput());
+	STRCMP_CONTAINS("size: 4", mock().getTraceOutput());
 }
 
 static bool myTypeIsEqual(const void* object1, const void* object2)
