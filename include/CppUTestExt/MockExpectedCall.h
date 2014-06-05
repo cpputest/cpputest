@@ -68,7 +68,7 @@ private:
 	virtual MockExpectedCall& withIntParameter(const SimpleString& name, int value)=0;
 	virtual MockExpectedCall& withUnsignedIntParameter(const SimpleString& name, unsigned int value)=0;
 	virtual MockExpectedCall& withLongIntParameter(const SimpleString& name, long int value)=0;
-	virtual MockExpectedCall& withUnsignedIntParameter(const SimpleString& name, unsigned int value)=0;
+	virtual MockExpectedCall& withUnsignedLongIntParameter(const SimpleString& name, unsigned long int value)=0;
 	virtual MockExpectedCall& withDoubleParameter(const SimpleString& name, double value)=0;
 	virtual MockExpectedCall& withStringParameter(const SimpleString& name, const char* value)=0;
 	virtual MockExpectedCall& withPointerParameter(const SimpleString& name, void* value)=0;
