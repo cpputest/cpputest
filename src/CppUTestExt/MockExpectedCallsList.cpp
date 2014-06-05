@@ -206,6 +206,17 @@ MockCheckedExpectedCall* MockExpectedCallsList::removeOneFulfilledExpectation()
 	return NULL;
 }
 
+const void* MockExpectedCallsList::getOutputParameterValueByName(const SimpleString& name) const
+{
+	for (MockExpectedCallsListNode* p = head_; p; p = p->next_) {
+        MockNamedValue value = p->expectedCall_->getParameter(name);
+        if (!value.equals(MockNamedValue(""))) {
+            return value.getObjectPointer();
+        }
+	}
+	return NULL;
+}
+
 MockCheckedExpectedCall* MockExpectedCallsList::removeOneFulfilledExpectationWithIgnoredParameters()
 {
 	for (MockExpectedCallsListNode* p = head_; p; p = p->next_) {
@@ -219,7 +230,6 @@ MockCheckedExpectedCall* MockExpectedCallsList::removeOneFulfilledExpectationWit
 	}
 	return NULL;
 }
-
 
 void MockExpectedCallsList::pruneEmptyNodeFromList()
 {

@@ -49,6 +49,7 @@ public:
 	MockExpectedCall& withParameter(const SimpleString& name, void* value) { return withPointerParameter(name, value); }
 	MockExpectedCall& withParameter(const SimpleString& name, const void* value) { return withConstPointerParameter(name, value); }
 	virtual MockExpectedCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value)=0;
+	virtual MockExpectedCall& withOutputParameter(const SimpleString& name, const void* value)=0;
 	virtual MockExpectedCall& ignoreOtherParameters() { return *this;}
 
 	virtual MockExpectedCall& withIntParameter(const SimpleString& name, int value)=0;
