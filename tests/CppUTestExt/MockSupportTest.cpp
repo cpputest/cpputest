@@ -668,6 +668,30 @@ TEST(MockSupportTest, customObjectParameterSucceeds)
 	mock().removeAllComparators();
 }
 
+TEST(MockSupportTest, outputParameterSucceeds)
+{
+	MyTypeForTesting object(1);
+	MyTypeForTesting retval(2);
+	mock().expectOneCall("function").withOutputParameter("parameterName", &retval);
+ 	mock().actualCall("function").withOutputParameter("parameterName", &object, sizeof(object));
+	MyTypeForTestingComparator comparator;
+ 	STRCMP_EQUAL("2", comparator.valueToString(&retval).asCharString());
+    STRCMP_EQUAL("2", comparator.valueToString(&object).asCharString());
+	mock().checkExpectations();
+	CHECK_NO_MOCK_FAILURE();
+}
+
+TEST(MockSupportTest, outputParameterTraced)
+{
+	mock().tracing(true);
+
+	MyTypeForTesting object(1);
+ 	mock().actualCall("someFunc").withOutputParameter("someParameter", &object, sizeof(object));
+	mock().checkExpectations();
+	STRCMP_CONTAINS("Function name: someFunc someParameter:", mock().getTraceOutput());
+	STRCMP_CONTAINS("size: 4", mock().getTraceOutput());
+}
+
 static bool myTypeIsEqual(const void* object1, const void* object2)
 {
 	return ((MyTypeForTesting*)object1)->value == ((MyTypeForTesting*)object2)->value;
