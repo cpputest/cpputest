@@ -47,3 +47,12 @@ _build
 build
 builds/*gcc*
 /.deps
+CppUTestExtTests
+CppUTestTests
+Makefile
+config.h
+config.status
+cpputest.pc
+filename.map.txt
+libtool
+stamp-h1
