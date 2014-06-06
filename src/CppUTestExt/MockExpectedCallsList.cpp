@@ -187,6 +187,12 @@ void MockExpectedCallsList::onlyKeepUnfulfilledExpectationsWithParameter(const M
 	onlyKeepExpectationsWithParameter(parameter);
 }
 
+void MockExpectedCallsList::onlyKeepUnfulfilledExpectationsWithOutputParameter(const MockNamedValue& parameter)
+{
+	onlyKeepUnfulfilledExpectations();
+	onlyKeepExpectationsWithParameterName(parameter.getName());
+}
+
 void MockExpectedCallsList::onlyKeepUnfulfilledExpectationsOnObject(void* objectPtr)
 {
 	onlyKeepUnfulfilledExpectations();

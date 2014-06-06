@@ -61,6 +61,7 @@ public:
 	virtual void onlyKeepUnfulfilledExpectations();
 	virtual void onlyKeepUnfulfilledExpectationsRelatedTo(const SimpleString& name);
 	virtual void onlyKeepUnfulfilledExpectationsWithParameter(const MockNamedValue& parameter);
+	virtual void onlyKeepUnfulfilledExpectationsWithOutputParameter(const MockNamedValue& parameter);
 	virtual void onlyKeepUnfulfilledExpectationsOnObject(void* objectPtr);
 
 	virtual MockCheckedExpectedCall* removeOneFulfilledExpectation();

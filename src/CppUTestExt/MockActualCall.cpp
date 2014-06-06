@@ -29,6 +29,7 @@
 #include "CppUTestExt/MockCheckedActualCall.h"
 #include "CppUTestExt/MockCheckedExpectedCall.h"
 #include "CppUTestExt/MockFailure.h"
+#include "CppUTest/PlatformSpecificFunctions.h"
 
 MockActualCall::MockActualCall()
 {
@@ -50,13 +51,14 @@ SimpleString MockCheckedActualCall::getName() const
 
 
 MockCheckedActualCall::MockCheckedActualCall(int callOrder, MockFailureReporter* reporter, const MockExpectedCallsList& allExpectations)
-	: callOrder_(callOrder), reporter_(reporter), state_(CALL_SUCCEED), _fulfilledExpectation(NULL), allExpectations_(allExpectations)
+	: callOrder_(callOrder), reporter_(reporter), state_(CALL_SUCCEED), _fulfilledExpectation(NULL), allExpectations_(allExpectations), outputParametersHead_(NULL)
 {
 	unfulfilledExpectations_.addUnfilfilledExpectations(allExpectations);
 }
 
 MockCheckedActualCall::~MockCheckedActualCall()
 {
+	cleanUpOutputParameterList();
 }
 
 void MockCheckedActualCall::setMockFailureReporter(MockFailureReporter* reporter)
@@ -80,6 +82,13 @@ void MockCheckedActualCall::finalizeCallWhenFulfilled()
 {
 	if (unfulfilledExpectations_.hasFulfilledExpectations()) {
 		_fulfilledExpectation = unfulfilledExpectations_.removeOneFulfilledExpectation();
+
+		for (MockOutputParametersListNode* p = outputParametersHead_; p; p = p->next_)
+		{
+			const void* data = _fulfilledExpectation->getParameter(*p->name_).getConstPointerValue();
+			PlatformSpecificMemCpy(p->ptr_, data, p->size_);
+		}
+
 		callHasSucceeded();
 	}
 }
@@ -125,6 +134,20 @@ void MockCheckedActualCall::checkActualParameter(const MockNamedValue& actualPar
 	}
 
 	unfulfilledExpectations_.parameterWasPassed(actualParameter.getName());
+	finalizeCallWhenFulfilled();
+}
+
+void MockCheckedActualCall::checkOutputParameter(const MockNamedValue& outputParameter)
+{
+	unfulfilledExpectations_.onlyKeepUnfulfilledExpectationsWithOutputParameter(outputParameter);
+
+	if (unfulfilledExpectations_.isEmpty()) {
+		MockUnexpectedParameterFailure failure(getTest(), getName(), outputParameter, allExpectations_);
+		failTest(failure);
+		return;
+	}
+
+	unfulfilledExpectations_.parameterWasPassed(outputParameter.getName());
 	finalizeCallWhenFulfilled();
 }
 
@@ -203,6 +226,14 @@ MockActualCall& MockCheckedActualCall::withParameterOfType(const SimpleString& t
 		return *this;
 	}
 	checkActualParameter(actualParameter);
+	return *this;
+}
+
+MockActualCall& MockCheckedActualCall::withOutputParameter(const SimpleString& name, void* output, size_t size)
+{
+	MockNamedValue outputParameter(name);
+	addOutputParameter(name, output, size);
+	checkOutputParameter(outputParameter);
 	return *this;
 }
 
@@ -297,6 +328,38 @@ MockActualCall& MockCheckedActualCall::onObject(void* objectPtr)
 	return *this;
 }
 
+void MockCheckedActualCall::addOutputParameter(const SimpleString& name, void* ptr, size_t size)
+{
+	SimpleString* nameCopy = new SimpleString(name);
+	MockOutputParametersListNode* newNode = new MockOutputParametersListNode(nameCopy, ptr, size);
+
+	if (outputParametersHead_ == NULL)
+		outputParametersHead_ = newNode;
+	else {
+		MockOutputParametersListNode* lastNode = outputParametersHead_;
+		while (lastNode->next_) lastNode = lastNode->next_;
+		lastNode->next_ = newNode;
+	}
+}
+
+void MockCheckedActualCall::cleanUpOutputParameterList()
+{
+	MockOutputParametersListNode* current = outputParametersHead_;
+	MockOutputParametersListNode* previous = NULL;
+	MockOutputParametersListNode* toBeDeleted = NULL;
+
+	while (current) {
+		toBeDeleted = current;
+		if (previous == NULL)
+			outputParametersHead_ = current = current->next_;
+		else
+			current = previous->next_ = current->next_;
+		delete toBeDeleted->name_;
+		delete toBeDeleted;
+	}
+}
+
+
 MockActualCallTrace::MockActualCallTrace()
 {
 }
@@ -388,6 +451,15 @@ MockActualCall& MockActualCallTrace::withParameterOfType(const SimpleString& typ
 	traceBuffer_ += typeName;
 	addParameterName(name);
 	traceBuffer_ += StringFrom(value);
+	return *this;
+}
+
+MockActualCall& MockActualCallTrace::withOutputParameter(const SimpleString& name, void* output, size_t size)
+{
+	addParameterName(name);
+	traceBuffer_ += StringFrom(output);
+	traceBuffer_ += " size: ";
+	traceBuffer_ += StringFrom((int)size);
 	return *this;
 }
 
