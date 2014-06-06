@@ -142,9 +142,13 @@ MockExpectedCall& MockCheckedExpectedCall::withParameterOfType(const SimpleStrin
 	return *this;
 }
 
-MockExpectedCall& MockCheckedExpectedCall::withOutputParameterReturning(const SimpleString& name, const void* value)
+MockExpectedCall& MockCheckedExpectedCall::withOutputParameterReturning(const SimpleString& name, const void* value, size_t size)
 {
-	return withConstPointerParameter(name, value);
+	MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
+	parameters_->add(newParameter);
+	newParameter->setOutputPointer(value);
+	newParameter->setOutputSize(size);
+	return *this;
 }
 
 SimpleString MockCheckedExpectedCall::getParameterType(const SimpleString& name)
@@ -250,7 +254,7 @@ bool MockCheckedExpectedCall::hasParameter(const MockNamedValue& parameter)
 bool MockCheckedExpectedCall::hasOutputParameter(const MockNamedValue& parameter)
 {
 	MockNamedValue * p = parameters_->getValueByName(parameter.getName());
-	return (p) ? true : ignoreOtherParameters_;
+	return (p->getType() == "output") ? true : ignoreOtherParameters_;
 }
 
 SimpleString MockCheckedExpectedCall::callToString()
@@ -518,10 +522,10 @@ MockExpectedCall& MockExpectedCallComposite::withParameterOfType(const SimpleStr
 	return *this;
 }
 
-MockExpectedCall& MockExpectedCallComposite::withOutputParameterReturning(const SimpleString& name, const void* value)
+MockExpectedCall& MockExpectedCallComposite::withOutputParameterReturning(const SimpleString& name, const void* value, size_t size)
 {
 	for (MockExpectedCallCompositeNode* node = head_; node != NULL; node = node->next_)
-		node->call_.withOutputParameterReturning(name, value);
+		node->call_.withOutputParameterReturning(name, value, size);
 	return *this;
 }
 

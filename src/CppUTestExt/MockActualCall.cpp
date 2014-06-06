@@ -85,8 +85,9 @@ void MockCheckedActualCall::finalizeCallWhenFulfilled()
 
 		for (MockOutputParametersListNode* p = outputParameterExpectations_; p; p = p->next_)
 		{
-			const void* data = fulfilledExpectation_->getParameter(*p->name_).getConstPointerValue();
-			PlatformSpecificMemCpy(p->ptr_, data, p->size_);
+			const void* data = fulfilledExpectation_->getParameter(*p->name_).getOutputPointer();
+			size_t size = fulfilledExpectation_->getParameter(*p->name_).getOutputSize();
+			PlatformSpecificMemCpy(p->ptr_, data, size);
 		}
 
 		callHasSucceeded();
@@ -229,10 +230,10 @@ MockActualCall& MockCheckedActualCall::withParameterOfType(const SimpleString& t
 	return *this;
 }
 
-MockActualCall& MockCheckedActualCall::withOutputParameter(const SimpleString& name, void* output, size_t size)
+MockActualCall& MockCheckedActualCall::withOutputParameter(const SimpleString& name, void* output)
 {
 	MockNamedValue outputParameter(name);
-	addOutputParameter(name, output, size);
+	addOutputParameter(name, output);
 	checkOutputParameter(outputParameter);
 	return *this;
 }
@@ -328,10 +329,10 @@ MockActualCall& MockCheckedActualCall::onObject(void* objectPtr)
 	return *this;
 }
 
-void MockCheckedActualCall::addOutputParameter(const SimpleString& name, void* ptr, size_t size)
+void MockCheckedActualCall::addOutputParameter(const SimpleString& name, void* ptr)
 {
 	SimpleString* nameCopy = new SimpleString(name);
-	MockOutputParametersListNode* newNode = new MockOutputParametersListNode(nameCopy, ptr, size);
+	MockOutputParametersListNode* newNode = new MockOutputParametersListNode(nameCopy, ptr);
 
 	if (outputParameterExpectations_ == NULL)
 		outputParameterExpectations_ = newNode;
@@ -454,12 +455,10 @@ MockActualCall& MockActualCallTrace::withParameterOfType(const SimpleString& typ
 	return *this;
 }
 
-MockActualCall& MockActualCallTrace::withOutputParameter(const SimpleString& name, void* output, size_t size)
+MockActualCall& MockActualCallTrace::withOutputParameter(const SimpleString& name, void* output)
 {
 	addParameterName(name);
 	traceBuffer_ += StringFrom(output);
-	traceBuffer_ += " size: ";
-	traceBuffer_ += StringFrom((int)size);
 	return *this;
 }
 
