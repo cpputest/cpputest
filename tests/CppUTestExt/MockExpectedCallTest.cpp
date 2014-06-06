@@ -396,19 +396,3 @@ TEST(MockExpectedCall, callOrderIsFulfilled)
 	CHECK_FALSE(call->isOutOfOrder());
 }
 
-TEST(MockExpectedCall, hasOutputParameter) 
-{
-    const int value = 1;
-    call->withOutputParameter("foo", &value);
-    MockNamedValue foo("foo");
-    foo.setValue(&value);
-    CHECK(call->hasOutputParameter(foo));
-}
-
-TEST(MockExpectedCall, hasNoOutputParameter) 
-{
-    call->withIntParameter("foo", 1);
-    MockNamedValue foo("foo");
-    foo.setValue(1);
-    CHECK_FALSE(call->hasOutputParameter(foo));
-}
