@@ -672,7 +672,7 @@ TEST(MockSupportTest, outputParameterSucceeds)
 {
 	MyTypeForTesting object(1);
 	MyTypeForTesting retval(2);
-	mock().expectOneCall("function").withOutputParameter("parameterName", &retval);
+	mock().expectOneCall("function").withOutputParameterReturning("parameterName", &retval);
 	mock().actualCall("function").withOutputParameter("parameterName", &object, sizeof(object));
 	MyTypeForTestingComparator comparator;
 	STRCMP_EQUAL(comparator.valueToString(&retval).asCharString(), comparator.valueToString(&object).asCharString());
@@ -687,8 +687,8 @@ TEST(MockSupportTest, twoOutputParameters)
 	MyTypeForTesting retval1(1);
 	MyTypeForTesting object2(77);
 	MyTypeForTesting retval2(2);
-	mock().expectOneCall("function").withOutputParameter("parameterName", &retval1).withParameter("id", 1);
-	mock().expectOneCall("function").withOutputParameter("parameterName", &retval2).withParameter("id", 2);
+	mock().expectOneCall("function").withOutputParameterReturning("parameterName", &retval1).withParameter("id", 1);
+	mock().expectOneCall("function").withOutputParameterReturning("parameterName", &retval2).withParameter("id", 2);
 	mock().actualCall("function").withOutputParameter("parameterName", &object1, sizeof(object1)).withParameter("id", 1);
 	mock().actualCall("function").withOutputParameter("parameterName", &object2, sizeof(object2)).withParameter("id", 2);
 	MyTypeForTestingComparator comparator;
@@ -704,8 +704,8 @@ TEST(MockSupportTest, twoInterleavedOutputParameters)
 	MyTypeForTesting retval1(1);
 	MyTypeForTesting object2(77);
 	MyTypeForTesting retval2(2);
-	mock().expectOneCall("function").withOutputParameter("parameterName", &retval1).withParameter("id", 1);
-	mock().expectOneCall("function").withOutputParameter("parameterName", &retval2).withParameter("id", 2);
+	mock().expectOneCall("function").withOutputParameterReturning("parameterName", &retval1).withParameter("id", 1);
+	mock().expectOneCall("function").withOutputParameterReturning("parameterName", &retval2).withParameter("id", 2);
 	mock().actualCall("function").withOutputParameter("parameterName", &object2, sizeof(object2)).withParameter("id", 2);
 	mock().actualCall("function").withOutputParameter("parameterName", &object1, sizeof(object1)).withParameter("id", 1);
 	MyTypeForTestingComparator comparator;
@@ -736,8 +736,8 @@ TEST(MockSupportTest, twoDifferentOutputParametersInSameFunctionCallSucceeds)
 	MyTypeForTesting retval1(2);
 	MyTypeForTesting retval2(3);
 	mock().expectOneCall("foo")
-		.withOutputParameter("bar", &retval1)
-		.withOutputParameter("foobar", &retval2);
+		.withOutputParameterReturning("bar", &retval1)
+		.withOutputParameterReturning("foobar", &retval2);
 	mock().actualCall("foo")
 		.withOutputParameter("bar", &object1, sizeof(object1))
 		.withOutputParameter("foobar", &object2, sizeof(object2));
@@ -754,7 +754,7 @@ TEST(MockSupportTest, oneOutputParameterTwoOfSameNameInDifferentFunctionCallsOfS
 {
 	MyTypeForTesting object(1);
 	MyTypeForTesting retval(2);
-	mock().expectOneCall("foo").withOutputParameter("bar", &retval);
+	mock().expectOneCall("foo").withOutputParameterReturning("bar", &retval);
 	mock().expectOneCall("foo").withIntParameter("bar", 25);
 	mock().actualCall("foo").withOutputParameter("bar", &object, sizeof(object));
 	mock().actualCall("foo").withIntParameter("bar", 25);
@@ -771,8 +771,8 @@ TEST(MockSupportTest, twoOutputParameterOfSameNameInDifferentFunctionCallsOfSame
 	MyTypeForTesting object2(1);
 	MyTypeForTesting retval1(2);
 	MyTypeForTesting retval2(3);
-	mock().expectOneCall("foo").withOutputParameter("bar", &retval1);
-	mock().expectOneCall("foo").withOutputParameter("bar", &retval2);
+	mock().expectOneCall("foo").withOutputParameterReturning("bar", &retval1);
+	mock().expectOneCall("foo").withOutputParameterReturning("bar", &retval2);
 	mock().actualCall("foo").withOutputParameter("bar", &object1, sizeof(object1));
 	mock().actualCall("foo").withOutputParameter("bar", &object2, sizeof(object2));
 	MyTypeForTestingComparator comparator;
@@ -788,7 +788,7 @@ TEST(MockSupportTest, twoOutputParameterOfSameNameInDifferentFunctionsSucceeds)
 {
 	MyTypeForTesting object(1);
 	MyTypeForTesting retval(2);
-	mock().expectOneCall("foo1").withOutputParameter("bar", &retval);
+	mock().expectOneCall("foo1").withOutputParameterReturning("bar", &retval);
 	mock().expectOneCall("foo2").withIntParameter("bar", 25);
 	mock().actualCall("foo1").withOutputParameter("bar", &object, sizeof(object));
 	mock().actualCall("foo2").withIntParameter("bar", 25);
