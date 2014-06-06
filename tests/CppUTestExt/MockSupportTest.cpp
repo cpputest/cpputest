@@ -675,7 +675,8 @@ TEST(MockSupportTest, outputParameterSucceeds)
 	mock().expectOneCall("function").withOutputParameter("parameterName", &retval);
  	mock().actualCall("function").withOutputParameter("parameterName", &object, sizeof(object));
 	MyTypeForTestingComparator comparator;
- 	STRCMP_EQUAL(comparator.valueToString(&retval).asCharString(), comparator.valueToString(&object).asCharString());
+ 	STRCMP_EQUAL("2", comparator.valueToString(&retval).asCharString());
+    STRCMP_EQUAL("2", comparator.valueToString(&object).asCharString());
 	mock().checkExpectations();
 	CHECK_NO_MOCK_FAILURE();
 }
