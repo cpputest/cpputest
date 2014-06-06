@@ -680,6 +680,41 @@ TEST(MockSupportTest, outputParameterSucceeds)
 	CHECK_NO_MOCK_FAILURE();
 }
 
+
+TEST(MockSupportTest, twoOutputParameters)
+{
+	MyTypeForTesting object1(55);
+	MyTypeForTesting retval1(1);
+	MyTypeForTesting object2(77);
+	MyTypeForTesting retval2(2);
+	mock().expectOneCall("function").withOutputParameter("parameterName", &retval1).withParameter("id", 1);
+	mock().expectOneCall("function").withOutputParameter("parameterName", &retval2).withParameter("id", 2);
+ 	mock().actualCall("function").withOutputParameter("parameterName", &object1, sizeof(object1)).withParameter("id", 1);
+ 	mock().actualCall("function").withOutputParameter("parameterName", &object2, sizeof(object2)).withParameter("id", 2);
+	MyTypeForTestingComparator comparator;
+ 	STRCMP_EQUAL(comparator.valueToString(&retval1).asCharString(), comparator.valueToString(&object1).asCharString());
+ 	STRCMP_EQUAL(comparator.valueToString(&retval2).asCharString(), comparator.valueToString(&object2).asCharString());
+	mock().checkExpectations();
+	CHECK_NO_MOCK_FAILURE();
+}
+
+TEST(MockSupportTest, twoInterleavedOutputParameters)
+{
+	MyTypeForTesting object1(55);
+	MyTypeForTesting retval1(1);
+	MyTypeForTesting object2(77);
+	MyTypeForTesting retval2(2);
+	mock().expectOneCall("function").withOutputParameter("parameterName", &retval1).withParameter("id", 1);
+	mock().expectOneCall("function").withOutputParameter("parameterName", &retval2).withParameter("id", 2);
+ 	mock().actualCall("function").withOutputParameter("parameterName", &object2, sizeof(object2)).withParameter("id", 2);
+ 	mock().actualCall("function").withOutputParameter("parameterName", &object1, sizeof(object1)).withParameter("id", 1);
+	MyTypeForTestingComparator comparator;
+ 	STRCMP_EQUAL(comparator.valueToString(&retval1).asCharString(), comparator.valueToString(&object1).asCharString());
+ 	STRCMP_EQUAL(comparator.valueToString(&retval2).asCharString(), comparator.valueToString(&object2).asCharString());
+	mock().checkExpectations();
+	CHECK_NO_MOCK_FAILURE();
+}
+
 TEST(MockSupportTest, outputParameterTraced)
 {
 	mock().tracing(true);
