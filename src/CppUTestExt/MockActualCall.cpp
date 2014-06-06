@@ -51,7 +51,7 @@ SimpleString MockCheckedActualCall::getName() const
 
 
 MockCheckedActualCall::MockCheckedActualCall(int callOrder, MockFailureReporter* reporter, const MockExpectedCallsList& allExpectations)
-	: callOrder_(callOrder), reporter_(reporter), state_(CALL_SUCCEED), _fulfilledExpectation(NULL), allExpectations_(allExpectations), outputParametersHead_(NULL)
+	: callOrder_(callOrder), reporter_(reporter), state_(CALL_SUCCEED), fulfilledExpectation_(NULL), allExpectations_(allExpectations), outputParameterExpectations_(NULL)
 {
 	unfulfilledExpectations_.addUnfilfilledExpectations(allExpectations);
 }
@@ -81,11 +81,11 @@ void MockCheckedActualCall::failTest(const MockFailure& failure)
 void MockCheckedActualCall::finalizeCallWhenFulfilled()
 {
 	if (unfulfilledExpectations_.hasFulfilledExpectations()) {
-		_fulfilledExpectation = unfulfilledExpectations_.removeOneFulfilledExpectation();
+		fulfilledExpectation_ = unfulfilledExpectations_.removeOneFulfilledExpectation();
 
-		for (MockOutputParametersListNode* p = outputParametersHead_; p; p = p->next_)
+		for (MockOutputParametersListNode* p = outputParameterExpectations_; p; p = p->next_)
 		{
-			const void* data = _fulfilledExpectation->getParameter(*p->name_).getConstPointerValue();
+			const void* data = fulfilledExpectation_->getParameter(*p->name_).getConstPointerValue();
 			PlatformSpecificMemCpy(p->ptr_, data, p->size_);
 		}
 
@@ -254,8 +254,8 @@ void MockCheckedActualCall::checkExpectations()
 	if (! unfulfilledExpectations_.hasUnfullfilledExpectations())
 		FAIL("Actual call is in progress. Checking expectations. But no unfulfilled expectations. Cannot happen.")
 
-	_fulfilledExpectation = unfulfilledExpectations_.removeOneFulfilledExpectationWithIgnoredParameters();
-	if (_fulfilledExpectation) {
+	fulfilledExpectation_ = unfulfilledExpectations_.removeOneFulfilledExpectationWithIgnoredParameters();
+	if (fulfilledExpectation_) {
 		callHasSucceeded();
 		return;
 	}
@@ -302,8 +302,8 @@ void MockCheckedActualCall::setState(ActualCallState state)
 MockNamedValue MockCheckedActualCall::returnValue()
 {
 	checkExpectations();
-	if (_fulfilledExpectation)
-		return _fulfilledExpectation->returnValue();
+	if (fulfilledExpectation_)
+		return fulfilledExpectation_->returnValue();
 	return MockNamedValue("no return value");
 }
 
@@ -333,10 +333,10 @@ void MockCheckedActualCall::addOutputParameter(const SimpleString& name, void* p
 	SimpleString* nameCopy = new SimpleString(name);
 	MockOutputParametersListNode* newNode = new MockOutputParametersListNode(nameCopy, ptr, size);
 
-	if (outputParametersHead_ == NULL)
-		outputParametersHead_ = newNode;
+	if (outputParameterExpectations_ == NULL)
+		outputParameterExpectations_ = newNode;
 	else {
-		MockOutputParametersListNode* lastNode = outputParametersHead_;
+		MockOutputParametersListNode* lastNode = outputParameterExpectations_;
 		while (lastNode->next_) lastNode = lastNode->next_;
 		lastNode->next_ = newNode;
 	}
@@ -344,14 +344,14 @@ void MockCheckedActualCall::addOutputParameter(const SimpleString& name, void* p
 
 void MockCheckedActualCall::cleanUpOutputParameterList()
 {
-	MockOutputParametersListNode* current = outputParametersHead_;
+	MockOutputParametersListNode* current = outputParameterExpectations_;
 	MockOutputParametersListNode* previous = NULL;
 	MockOutputParametersListNode* toBeDeleted = NULL;
 
 	while (current) {
 		toBeDeleted = current;
 		if (previous == NULL)
-			outputParametersHead_ = current = current->next_;
+			outputParameterExpectations_ = current = current->next_;
 		else
 			current = previous->next_ = current->next_;
 		delete toBeDeleted->name_;

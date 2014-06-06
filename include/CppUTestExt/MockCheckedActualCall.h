@@ -50,7 +50,6 @@ public:
 	virtual MockActualCall& withParameterOfType(const SimpleString& type, const SimpleString& name, const void* value) _override;
 	virtual MockActualCall& withOutputParameter(const SimpleString& name, void* output, size_t size) _override;
 
-
 	virtual bool hasReturnValue() _override;
 	virtual MockNamedValue returnValue() _override;
 
@@ -87,7 +86,7 @@ private:
 	MockFailureReporter* reporter_;
 
 	ActualCallState state_;
-	MockCheckedExpectedCall* _fulfilledExpectation;
+	MockCheckedExpectedCall* fulfilledExpectation_;
 
 	MockExpectedCallsList unfulfilledExpectations_;
 	const MockExpectedCallsList& allExpectations_;
@@ -104,7 +103,7 @@ private:
 			: name_(name), ptr_(ptr), size_(size), next_(NULL) {}
 	};
 
-	MockOutputParametersListNode* outputParametersHead_;
+	MockOutputParametersListNode* outputParameterExpectations_;
 
 	virtual void addOutputParameter(const SimpleString& name, void* ptr, size_t size);
 	virtual void cleanUpOutputParameterList();
@@ -128,7 +127,6 @@ public:
 	virtual MockActualCall& withConstPointerParameter(const SimpleString& name, const void* value) _override;
 	virtual MockActualCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value) _override;
 	virtual MockActualCall& withOutputParameter(const SimpleString& name, void* output, size_t size) _override;
-
 
 	virtual bool hasReturnValue() _override;
 	virtual MockNamedValue returnValue() _override;
@@ -168,6 +166,5 @@ public:
 
     static MockIgnoredActualCall& instance();
 };
-
 
 #endif
