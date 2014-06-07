@@ -321,7 +321,11 @@ void MemoryLeakWarningPlugin::turnOnNewDeleteOverloads()
 
 bool MemoryLeakWarningPlugin::areNewDeleteOverloaded()
 {
+#if CPPUTEST_USE_MEM_LEAK_DETECTION
 	return operator_new_fptr == mem_leak_operator_new;
+#else
+	return false;
+#endif
 }
 
 void crash_on_allocation_number(unsigned alloc_number)
