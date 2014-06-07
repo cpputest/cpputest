@@ -76,18 +76,21 @@ void MockCheckedActualCall::failTest(const MockFailure& failure)
 	reporter_->failTest(failure);
 }
 
+void MockCheckedActualCall::finalizeOutputParameters()
+{
+	for (MockOutputParametersListNode* p = outputParameterExpectations_; p; p = p->next_)
+	{
+		const void* data = fulfilledExpectation_->getParameter(*p->name_).getOutputPointer();
+		size_t size = fulfilledExpectation_->getParameter(*p->name_).getOutputSize();
+		PlatformSpecificMemCpy(p->ptr_, data, size);
+	}
+}
+
 void MockCheckedActualCall::finalizeCallWhenFulfilled()
 {
 	if (unfulfilledExpectations_.hasFulfilledExpectations()) {
 		fulfilledExpectation_ = unfulfilledExpectations_.removeOneFulfilledExpectation();
-
-		for (MockOutputParametersListNode* p = outputParameterExpectations_; p; p = p->next_)
-		{
-			const void* data = fulfilledExpectation_->getParameter(*p->name_).getOutputPointer();
-			size_t size = fulfilledExpectation_->getParameter(*p->name_).getOutputSize();
-			PlatformSpecificMemCpy(p->ptr_, data, size);
-		}
-
+		finalizeOutputParameters();
 		callHasSucceeded();
 	}
 }

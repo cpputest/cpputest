@@ -66,6 +66,7 @@ protected:
 	SimpleString getName() const;
 	virtual UtestShell* getTest() const;
 	virtual void callHasSucceeded();
+	virtual void finalizeOutputParameters();
 	virtual void finalizeCallWhenFulfilled();
 	virtual void failTest(const MockFailure& failure);
 	virtual void checkActualParameter(const MockNamedValue& actualParameter);
