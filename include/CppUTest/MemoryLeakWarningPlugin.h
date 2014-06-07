@@ -66,6 +66,7 @@ public:
 
 	static void turnOffNewDeleteOverloads();
 	static void turnOnNewDeleteOverloads();
+	static bool areNewDeleteOverloaded();
 private:
 	MemoryLeakDetector* memLeakDetector_;
 	bool ignoreAllWarnings_;
