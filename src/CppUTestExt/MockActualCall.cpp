@@ -49,7 +49,6 @@ SimpleString MockCheckedActualCall::getName() const
 	return functionName_;
 }
 
-
 MockCheckedActualCall::MockCheckedActualCall(int callOrder, MockFailureReporter* reporter, const MockExpectedCallsList& allExpectations)
 	: callOrder_(callOrder), reporter_(reporter), state_(CALL_SUCCEED), fulfilledExpectation_(NULL), allExpectations_(allExpectations), outputParameterExpectations_(NULL)
 {
@@ -65,7 +64,6 @@ void MockCheckedActualCall::setMockFailureReporter(MockFailureReporter* reporter
 {
 	reporter_ = reporter;
 }
-
 
 UtestShell* MockCheckedActualCall::getTest() const
 {
