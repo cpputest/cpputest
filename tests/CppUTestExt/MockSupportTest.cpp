@@ -280,7 +280,7 @@ TEST(MockSupportTest, expectOneCallHoweverMultipleHappened)
 
 TEST(MockSupportTest, expectOneUnsignedIntegerParameterAndValue)
 {
-    unsigned int value = 14400;
+	unsigned int value = 14400;
 	mock().expectOneCall("foo").withParameter("parameter", value);
 	mock().actualCall("foo").withParameter("parameter", value);
 	mock().checkExpectations();
@@ -666,6 +666,139 @@ TEST(MockSupportTest, customObjectParameterSucceeds)
 	mock().checkExpectations();
 	CHECK_NO_MOCK_FAILURE();
 	mock().removeAllComparators();
+}
+
+TEST(MockSupportTest, outputParameterSucceeds)
+{
+	int param = 1;
+	int retval = 2;
+	mock().expectOneCall("function").withOutputParameterReturning("parameterName", &retval, sizeof(retval));
+	mock().actualCall("function").withOutputParameter("parameterName", &param);
+	CHECK_EQUAL(param, 2);
+	CHECK_EQUAL(retval, 2);
+	mock().checkExpectations();
+	CHECK_NO_MOCK_FAILURE();
+}
+
+TEST(MockSupportTest, outputParameterMissing)
+{
+	int output;
+	mock().expectOneCall("foo").withOutputParameterReturning("output", &output, sizeof(output));
+
+	addFunctionToExpectationsList("foo")->withOutputParameterReturning("output", &output, sizeof(output));
+	MockExpectedCallsDidntHappenFailure expectedFailure(mockFailureTest(), *expectationsList);
+
+	mock().checkExpectations();
+	CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
+TEST(MockSupportTest, twoOutputParameters)
+{
+	int param1 = 55;
+	int retval1 = 1;
+	int param2 = 77;
+	int retval2 = 2;
+	mock().expectOneCall("function").withOutputParameterReturning("parameterName", &retval1, sizeof(retval1)).withParameter("id", 1);
+	mock().expectOneCall("function").withOutputParameterReturning("parameterName", &retval2, sizeof(retval2)).withParameter("id", 2);
+	mock().actualCall("function").withOutputParameter("parameterName", &param1).withParameter("id", 1);
+	mock().actualCall("function").withOutputParameter("parameterName", &param2).withParameter("id", 2);
+	CHECK_EQUAL(retval1, param1);
+	CHECK_EQUAL(retval2, param2);
+	mock().checkExpectations();
+	CHECK_NO_MOCK_FAILURE();
+}
+
+TEST(MockSupportTest, twoInterleavedOutputParameters)
+{
+	int param1 = 55;
+	int retval1 = 1;
+	int param2 = 77;
+	int retval2 = 2;
+	mock().expectOneCall("function").withOutputParameterReturning("parameterName", &retval1, sizeof(retval1)).withParameter("id", 1);
+	mock().expectOneCall("function").withOutputParameterReturning("parameterName", &retval2, sizeof(retval2)).withParameter("id", 2);
+	mock().actualCall("function").withOutputParameter("parameterName", &param2).withParameter("id", 2);
+	mock().actualCall("function").withOutputParameter("parameterName", &param1).withParameter("id", 1);
+	CHECK_EQUAL(retval1, param1);
+	CHECK_EQUAL(retval2, param2);
+	mock().checkExpectations();
+	CHECK_NO_MOCK_FAILURE();
+}
+
+TEST(MockSupportTest, twoDifferentOutputParametersInSameFunctionCallSucceeds)
+{
+	int param1 = 1;
+	int param2 = 1;
+	int retval1 = 2;
+	int retval2 = 3;
+	mock().expectOneCall("foo")
+		.withOutputParameterReturning("bar", &retval1, sizeof(retval1))
+		.withOutputParameterReturning("foobar", &retval2, sizeof(retval2));
+	mock().actualCall("foo")
+		.withOutputParameter("bar", &param1)
+		.withOutputParameter("foobar", &param2);
+	CHECK_EQUAL(2, retval1);
+	CHECK_EQUAL(2, param1);
+	CHECK_EQUAL(3, retval2);
+	CHECK_EQUAL(3, param2);
+	mock().checkExpectations();
+	CHECK_NO_MOCK_FAILURE();
+}
+
+TEST(MockSupportTest, outputAndIntParametersOfSameNameInDifferentFunctionCallsOfSameFunctionSucceeds)
+{
+	int param = 1;
+	int retval = 2;
+	mock().expectOneCall("foo").withOutputParameterReturning("bar", &retval, sizeof(retval));
+	mock().expectOneCall("foo").withIntParameter("bar", 25);
+	mock().actualCall("foo").withOutputParameter("bar", &param);
+	mock().actualCall("foo").withIntParameter("bar", 25);
+	CHECK_EQUAL(2, retval);
+	CHECK_EQUAL(2, param);
+	mock().checkExpectations();
+	CHECK_NO_MOCK_FAILURE();
+}
+
+TEST(MockSupportTest, twoOutputParameterOfSameNameInDifferentFunctionCallsOfSameFunctionSucceeds)
+{
+	int param1 = 1;
+	int param2 = 1;
+	int retval1 = 2;
+	int retval2 = 3;
+	mock().expectOneCall("foo").withOutputParameterReturning("bar", &retval1, sizeof(retval1));
+	mock().expectOneCall("foo").withOutputParameterReturning("bar", &retval2, sizeof(retval2));
+	mock().actualCall("foo").withOutputParameter("bar", &param1);
+	mock().actualCall("foo").withOutputParameter("bar", &param2);
+	CHECK_EQUAL(2, retval1);
+	CHECK_EQUAL(2, param1);
+	CHECK_EQUAL(3, retval2);
+	CHECK_EQUAL(3, param2);
+	mock().checkExpectations();
+	CHECK_NO_MOCK_FAILURE();
+}
+
+TEST(MockSupportTest, twoOutputParametersOfSameNameInDifferentFunctionsSucceeds)
+{
+	int param = 1;
+	int retval = 2;
+	mock().expectOneCall("foo1").withOutputParameterReturning("bar", &retval, sizeof(retval));
+	mock().expectOneCall("foo2").withIntParameter("bar", 25);
+	mock().actualCall("foo1").withOutputParameter("bar", &param);
+	mock().actualCall("foo2").withIntParameter("bar", 25);
+	MyTypeForTestingComparator comparator;
+	CHECK_EQUAL(2, retval);
+	CHECK_EQUAL(2, param);
+	mock().checkExpectations();
+	CHECK_NO_MOCK_FAILURE();
+}
+
+TEST(MockSupportTest, outputParameterTraced)
+{
+	mock().tracing(true);
+
+	int param = 1;
+	mock().actualCall("someFunc").withOutputParameter("someParameter", &param);
+	mock().checkExpectations();
+	STRCMP_CONTAINS("Function name: someFunc someParameter:", mock().getTraceOutput());
 }
 
 static bool myTypeIsEqual(const void* object1, const void* object2)
@@ -1221,15 +1354,15 @@ TEST(MockSupportTest, expectMultipleCalls)
 
 TEST(MockSupportTest, expectMultipleCallsWithParameters)
 {
-    int expected_int = -7;
-    unsigned int expected_uint = 7;
+	int expected_int = -7;
+	unsigned int expected_uint = 7;
 
 	mock().expectNCalls(2, "boo").withParameter("double", 1.0).withParameter("int", expected_int).
-	    withParameter("string", "string").withParameter("uint", expected_uint);
+		withParameter("string", "string").withParameter("uint", expected_uint);
 	mock().actualCall("boo").withParameter("double", 1.0).withParameter("int", expected_int).withParameter("string", "string").
-	    withParameter("uint", expected_uint);
+		withParameter("uint", expected_uint);
 	mock().actualCall("boo").withParameter("double", 1.0).withParameter("int", expected_int).withParameter("string", "string").
-	    withParameter("uint", expected_uint);
+		withParameter("uint", expected_uint);
 	mock().checkExpectations();
 	CHECK_NO_MOCK_FAILURE();
 }
@@ -1269,11 +1402,11 @@ TEST(MockSupportTest, tracing)
 
 TEST(MockSupportTest, shouldntFailTwice)
 {
-       mock().expectOneCall("foo");
-       mock().actualCall("bar");
-       mock().checkExpectations();
-       CHECK(!MockFailureReporterForTest::getReporter()->mockFailureString.contains("bar"));
-       CLEAR_MOCK_FAILURE();
+	   mock().expectOneCall("foo");
+	   mock().actualCall("bar");
+	   mock().checkExpectations();
+	   CHECK(!MockFailureReporterForTest::getReporter()->mockFailureString.contains("bar"));
+	   CLEAR_MOCK_FAILURE();
 }
 
 class StubComparator : public MockNamedValueComparator
