@@ -50,6 +50,12 @@ public:
 	MockExpectedCall& withParameter(const SimpleString& name, const void* value) { return withConstPointerParameter(name, value); }
 	virtual MockExpectedCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value)=0;
 	virtual MockExpectedCall& withOutputParameterReturning(const SimpleString& name, const void* value, size_t size)=0;
+	MockExpectedCall& withOutputParameterReturning(const SimpleString& name, const char* value) { return withOutputParameterReturning(name, value, sizeof(char)); }
+	MockExpectedCall& withOutputParameterReturning(const SimpleString& name, const int* value) { return withOutputParameterReturning(name, value, sizeof(int)); }
+	MockExpectedCall& withOutputParameterReturning(const SimpleString& name, const unsigned int* value) { return withOutputParameterReturning(name, value, sizeof(unsigned)); }
+	MockExpectedCall& withOutputParameterReturning(const SimpleString& name, const long int* value) { return withOutputParameterReturning(name, value, sizeof(long)); }
+	MockExpectedCall& withOutputParameterReturning(const SimpleString& name, const unsigned long int* value) { return withOutputParameterReturning(name, value, sizeof(unsigned long)); }
+	MockExpectedCall& withOutputParameterReturning(const SimpleString& name, const double* value) { return withOutputParameterReturning(name, value, sizeof(double long)); }
 	virtual MockExpectedCall& ignoreOtherParameters() { return *this;}
 
 	virtual MockExpectedCall& withIntParameter(const SimpleString& name, int value)=0;
