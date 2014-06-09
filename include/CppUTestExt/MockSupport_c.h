@@ -32,6 +32,8 @@
 extern "C" {
 #endif
 
+#include <stddef.h>
+
 typedef enum {
 	MOCKVALUETYPE_UNSIGNED_INTEGER,
 	MOCKVALUETYPE_INTEGER,
