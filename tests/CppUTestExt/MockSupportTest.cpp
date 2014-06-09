@@ -791,6 +791,66 @@ TEST(MockSupportTest, twoOutputParametersOfSameNameInDifferentFunctionsSucceeds)
 	CHECK_NO_MOCK_FAILURE();
 }
 
+TEST(MockSupportTest, implicitOutputParameterSize_char)
+{
+	char param = 1;
+	char retval = 2;
+	mock().expectOneCall("foo").withOutputParameterReturning("bar", &retval);
+	mock().actualCall("foo").withOutputParameter("bar", &param);
+	mock().checkExpectations();
+	CHECK_NO_MOCK_FAILURE();
+}
+
+TEST(MockSupportTest, implicitOutputParameterSize_Int)
+{
+	int param = 1;
+	int retval = 2;
+	mock().expectOneCall("foo").withOutputParameterReturning("bar", &retval);
+	mock().actualCall("foo").withOutputParameter("bar", &param);
+	mock().checkExpectations();
+	CHECK_NO_MOCK_FAILURE();
+}
+
+TEST(MockSupportTest, implicitOutputParameterSize_Unsigned)
+{
+	unsigned param = 1;
+	unsigned retval = 2;
+	mock().expectOneCall("foo").withOutputParameterReturning("bar", &retval);
+	mock().actualCall("foo").withOutputParameter("bar", &param);
+	mock().checkExpectations();
+	CHECK_NO_MOCK_FAILURE();
+}
+
+TEST(MockSupportTest, implicitOutputParameterSize_Long)
+{
+	long param = 1;
+	long retval = 2;
+	mock().expectOneCall("foo").withOutputParameterReturning("bar", &retval);
+	mock().actualCall("foo").withOutputParameter("bar", &param);
+	mock().checkExpectations();
+	CHECK_NO_MOCK_FAILURE();
+}
+
+TEST(MockSupportTest, implicitOutputParameterSize_UnsignedLong)
+{
+	unsigned long param = 1;
+	unsigned long retval = 2;
+	mock().expectOneCall("foo").withOutputParameterReturning("bar", &retval);
+	mock().actualCall("foo").withOutputParameter("bar", &param);
+	mock().checkExpectations();
+	CHECK_NO_MOCK_FAILURE();
+}
+
+TEST(MockSupportTest, implicitOutputParameterSize_Double)
+{
+	double param = 1;
+	double retval = 2;
+	mock().expectOneCall("foo").withOutputParameterReturning("bar", &retval);
+	mock().actualCall("foo").withOutputParameter("bar", &param);
+	mock().checkExpectations();
+	CHECK_NO_MOCK_FAILURE();
+}
+
 TEST(MockSupportTest, outputParameterTraced)
 {
 	mock().tracing(true);
