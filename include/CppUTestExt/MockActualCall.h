@@ -45,14 +45,19 @@ public:
 	virtual MockActualCall& withCallOrder(int callOrder)=0;
 	MockActualCall& withParameter(const SimpleString& name, int value) { return withIntParameter(name, value); }
 	MockActualCall& withParameter(const SimpleString& name, unsigned int value) { return withUnsignedIntParameter(name, value); }
+	MockActualCall& withParameter(const SimpleString& name, long int value) { return withLongIntParameter(name, value); }
+	MockActualCall& withParameter(const SimpleString& name, unsigned long int value) { return withUnsignedLongIntParameter(name, value); }
 	MockActualCall& withParameter(const SimpleString& name, double value) { return withDoubleParameter(name, value); }
 	MockActualCall& withParameter(const SimpleString& name, const char* value) { return withStringParameter(name, value); }
 	MockActualCall& withParameter(const SimpleString& name, void* value) { return withPointerParameter(name, value); }
 	MockActualCall& withParameter(const SimpleString& name, const void* value) { return withConstPointerParameter(name, value); }
 	virtual MockActualCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value)=0;
+	virtual MockActualCall& withOutputParameter(const SimpleString& name, void* output)=0;
 
 	virtual MockActualCall& withIntParameter(const SimpleString& name, int value)=0;
 	virtual MockActualCall& withUnsignedIntParameter(const SimpleString& name, unsigned int value)=0;
+	virtual MockActualCall& withLongIntParameter(const SimpleString& name, long int value)=0;
+	virtual MockActualCall& withUnsignedLongIntParameter(const SimpleString& name, unsigned long int value)=0;
 	virtual MockActualCall& withDoubleParameter(const SimpleString& name, double value)=0;
 	virtual MockActualCall& withStringParameter(const SimpleString& name, const char* value)=0;
 	virtual MockActualCall& withPointerParameter(const SimpleString& name, void* value)=0;

@@ -113,6 +113,9 @@ int expectedCallsLeft_c();
 void clear_c();
 
 MockExpectedCall_c* withIntParameters_c(const char* name, int value);
+MockExpectedCall_c* withUnsignedIntParameters_c(const char* name, unsigned int value);
+MockExpectedCall_c* withLongIntParameters_c(const char* name, long int value);
+MockExpectedCall_c* withUnsignedLongIntParameters_c(const char* name, unsigned long int value);
 MockExpectedCall_c* withDoubleParameters_c(const char* name, double value);
 MockExpectedCall_c* withStringParameters_c(const char* name, const char* value);
 MockExpectedCall_c* withPointerParameters_c(const char* name, void* value);
@@ -120,6 +123,8 @@ MockExpectedCall_c* withConstPointerParameters_c(const char* name, const void* v
 MockExpectedCall_c* withParameterOfType_c(const char* type, const char* name, const void* value);
 MockExpectedCall_c* andReturnIntValue_c(int value);
 MockExpectedCall_c* andReturnUnsignedIntValue_c(unsigned int value);
+MockExpectedCall_c* andReturnLongIntValue_c(long int value);
+MockExpectedCall_c* andReturnUnsignedLongIntValue_c(unsigned long int value);
 MockExpectedCall_c* andReturnDoubleValue_c(double value);
 MockExpectedCall_c* andReturnStringValue_c(const char* value);
 MockExpectedCall_c* andReturnPointerValue_c(void* value);
@@ -127,6 +132,9 @@ MockExpectedCall_c* andReturnConstPointerValue_c(const void* value);
 MockValue_c expectedReturnValue_c();
 
 MockActualCall_c* withActualIntParameters_c(const char* name, int value);
+MockActualCall_c* withActualUnsignedIntParameters_c(const char* name, unsigned int value);
+MockActualCall_c* withActualLongIntParameters_c(const char* name, long int value);
+MockActualCall_c* withActualUnsignedLongIntParameters_c(const char* name, unsigned long int value);
 MockActualCall_c* withActualDoubleParameters_c(const char* name, double value);
 MockActualCall_c* withActualStringParameters_c(const char* name, const char* value);
 MockActualCall_c* withActualPointerParameters_c(const char* name, void* value);
@@ -153,21 +161,29 @@ static void removeAllComparators_c()
 
 static MockExpectedCall_c gExpectedCall = {
 		withIntParameters_c,
+		withUnsignedIntParameters_c,
+		withLongIntParameters_c,
+		withUnsignedLongIntParameters_c,
 		withDoubleParameters_c,
 		withStringParameters_c,
 		withPointerParameters_c,
 		withConstPointerParameters_c,
 		withParameterOfType_c,
-        andReturnUnsignedIntValue_c,
-        andReturnIntValue_c,
-        andReturnDoubleValue_c,
-        andReturnStringValue_c,
-        andReturnPointerValue_c,
-        andReturnConstPointerValue_c,
+		andReturnUnsignedIntValue_c,
+		andReturnIntValue_c,
+		andReturnLongIntValue_c,
+		andReturnUnsignedLongIntValue_c,
+		andReturnDoubleValue_c,
+		andReturnStringValue_c,
+		andReturnPointerValue_c,
+		andReturnConstPointerValue_c,
 };
 
 static MockActualCall_c gActualCall = {
 		withActualIntParameters_c,
+		withActualUnsignedIntParameters_c,
+		withActualLongIntParameters_c,
+		withActualUnsignedLongIntParameters_c,
 		withActualDoubleParameters_c,
 		withActualStringParameters_c,
 		withActualPointerParameters_c,
@@ -197,6 +213,24 @@ static MockSupport_c gMockSupport = {
 };
 
 MockExpectedCall_c* withIntParameters_c(const char* name, int value)
+{
+	expectedCall = &expectedCall->withParameter(name, value);
+	return &gExpectedCall;
+}
+
+MockExpectedCall_c* withUnsignedIntParameters_c(const char* name, unsigned int value)
+{
+	expectedCall = &expectedCall->withParameter(name, value);
+	return &gExpectedCall;
+}
+
+MockExpectedCall_c* withLongIntParameters_c(const char* name, long int value)
+{
+	expectedCall = &expectedCall->withParameter(name, value);
+	return &gExpectedCall;
+}
+
+MockExpectedCall_c* withUnsignedLongIntParameters_c(const char* name, unsigned long int value)
 {
 	expectedCall = &expectedCall->withParameter(name, value);
 	return &gExpectedCall;
@@ -244,6 +278,18 @@ MockExpectedCall_c* andReturnIntValue_c(int value)
 	return &gExpectedCall;
 }
 
+MockExpectedCall_c* andReturnLongIntValue_c(long int value)
+{
+	expectedCall = &expectedCall->andReturnValue(value);
+	return &gExpectedCall;
+}
+
+MockExpectedCall_c* andReturnUnsignedLongIntValue_c(unsigned long int value)
+{
+	expectedCall = &expectedCall->andReturnValue(value);
+	return &gExpectedCall;
+}
+
 MockExpectedCall_c* andReturnDoubleValue_c(double value)
 {
 	expectedCall = &expectedCall->andReturnValue(value);
@@ -278,6 +324,14 @@ static MockValue_c getMockValueCFromNamedValue(const MockNamedValue& namedValue)
 	else if (PlatformSpecificStrCmp(namedValue.getType().asCharString(), "unsigned int") == 0) {
 		returnValue.type = MOCKVALUETYPE_UNSIGNED_INTEGER;
 		returnValue.value.unsignedIntValue = namedValue.getUnsignedIntValue();
+	}
+	else if (PlatformSpecificStrCmp(namedValue.getType().asCharString(), "long int") == 0) {
+		returnValue.type = MOCKVALUETYPE_LONG_INTEGER;
+		returnValue.value.longIntValue = namedValue.getLongIntValue();
+	}
+	else if (PlatformSpecificStrCmp(namedValue.getType().asCharString(), "unsigned long int") == 0) {
+		returnValue.type = MOCKVALUETYPE_UNSIGNED_LONG_INTEGER;
+		returnValue.value.unsignedLongIntValue = namedValue.getUnsignedLongIntValue();
 	}
 	else if (PlatformSpecificStrCmp(namedValue.getType().asCharString(), "double") == 0) {
 		returnValue.type = MOCKVALUETYPE_DOUBLE;
@@ -315,6 +369,24 @@ MockActualCall_c* actualCall_c(const char* name)
 }
 
 MockActualCall_c* withActualIntParameters_c(const char* name, int value)
+{
+	actualCall = &actualCall->withParameter(name, value);
+	return &gActualCall;
+}
+
+MockActualCall_c* withActualUnsignedIntParameters_c(const char* name, unsigned int value)
+{
+	actualCall = &actualCall->withParameter(name, value);
+	return &gActualCall;
+}
+
+MockActualCall_c* withActualLongIntParameters_c(const char* name, long int value)
+{
+	actualCall = &actualCall->withParameter(name, value);
+	return &gActualCall;
+}
+
+MockActualCall_c* withActualUnsignedLongIntParameters_c(const char* name, unsigned long int value)
 {
 	actualCall = &actualCall->withParameter(name, value);
 	return &gActualCall;

@@ -319,6 +319,15 @@ void MemoryLeakWarningPlugin::turnOnNewDeleteOverloads()
 #endif
 }
 
+bool MemoryLeakWarningPlugin::areNewDeleteOverloaded()
+{
+#if CPPUTEST_USE_MEM_LEAK_DETECTION
+	return operator_new_fptr == mem_leak_operator_new;
+#else
+	return false;
+#endif
+}
+
 void crash_on_allocation_number(unsigned alloc_number)
 {
 	static CrashOnAllocationAllocator crashAllocator;
@@ -348,12 +357,13 @@ static MemoryLeakDetector* globalDetector = 0;
 MemoryLeakDetector* MemoryLeakWarningPlugin::getGlobalDetector()
 {
 	if (globalDetector == 0) {
+		bool newDeleteOverloaded = areNewDeleteOverloaded();
 		turnOffNewDeleteOverloads();
 
 		globalReporter = new MemoryLeakWarningReporter;
 		globalDetector = new MemoryLeakDetector(globalReporter);
 
-		turnOnNewDeleteOverloads();
+		if (newDeleteOverloaded) turnOnNewDeleteOverloads();
 	}
 	return globalDetector;
 }

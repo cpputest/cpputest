@@ -35,6 +35,8 @@ extern "C" {
 typedef enum {
 	MOCKVALUETYPE_UNSIGNED_INTEGER,
 	MOCKVALUETYPE_INTEGER,
+	MOCKVALUETYPE_LONG_INTEGER,
+	MOCKVALUETYPE_UNSIGNED_LONG_INTEGER,
 	MOCKVALUETYPE_DOUBLE,
 	MOCKVALUETYPE_STRING,
 	MOCKVALUETYPE_POINTER,
@@ -45,9 +47,11 @@ typedef enum {
 typedef struct SMockValue_c
 {
 	MockValueType_c type;
-	union  {
+	union {
 		int intValue;
 		unsigned int unsignedIntValue;
+		long int longIntValue;
+		unsigned long int unsignedLongIntValue;
 		double doubleValue;
 		const char* stringValue;
 		void* pointerValue;
@@ -60,6 +64,9 @@ typedef struct SMockActualCall_c MockActualCall_c;
 struct SMockActualCall_c
 {
 	MockActualCall_c* (*withIntParameters)(const char* name, int value);
+	MockActualCall_c* (*withUnsignedIntParameters)(const char* name, unsigned int value);
+	MockActualCall_c* (*withLongIntParameters)(const char* name, long int value);
+	MockActualCall_c* (*withUnsignedLongIntParameters)(const char* name, unsigned long int value);
 	MockActualCall_c* (*withDoubleParameters)(const char* name, double value);
 	MockActualCall_c* (*withStringParameters)(const char* name, const char* value);
 	MockActualCall_c* (*withPointerParameters)(const char* name, void* value);
@@ -67,13 +74,15 @@ struct SMockActualCall_c
 	MockActualCall_c* (*withParameterOfType)(const char* type, const char* name, const void* value);
 
 	MockValue_c (*returnValue)(void);
-
 };
 
 typedef struct SMockExpectedCall_c MockExpectedCall_c;
 struct SMockExpectedCall_c
 {
 	MockExpectedCall_c* (*withIntParameters)(const char* name, int value);
+	MockExpectedCall_c* (*withUnsignedIntParameters)(const char* name, unsigned int value);
+	MockExpectedCall_c* (*withLongIntParameters)(const char* name, long int value);
+	MockExpectedCall_c* (*withUnsignedLongIntParameters)(const char* name, unsigned long int value);
 	MockExpectedCall_c* (*withDoubleParameters)(const char* name, double value);
 	MockExpectedCall_c* (*withStringParameters)(const char* name, const char* value);
 	MockExpectedCall_c* (*withPointerParameters)(const char* name, void* value);
@@ -82,6 +91,8 @@ struct SMockExpectedCall_c
 
 	MockExpectedCall_c* (*andReturnUnsignedIntValue)(unsigned int value);
 	MockExpectedCall_c* (*andReturnIntValue)(int value);
+	MockExpectedCall_c* (*andReturnLongIntValue)(long int value);
+	MockExpectedCall_c* (*andReturnUnsignedLongIntValue)(unsigned long int value);
 	MockExpectedCall_c* (*andReturnDoubleValue)(double value);
 	MockExpectedCall_c* (*andReturnStringValue)(const char* value);
 	MockExpectedCall_c* (*andReturnPointerValue)(void* value);

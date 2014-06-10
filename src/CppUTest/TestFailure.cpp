@@ -230,6 +230,21 @@ LongsEqualFailure::LongsEqualFailure(UtestShell* test, const char* fileName, int
 	message_ = createButWasString(expectedReported, actualReported);
 }
 
+UnsignedLongsEqualFailure::UnsignedLongsEqualFailure(UtestShell* test, const char* fileName, int lineNumber, unsigned long expected, unsigned long actual) : TestFailure(test, fileName, lineNumber)
+{
+	SimpleString aDecimal = StringFrom(actual);
+	SimpleString aHex = HexStringFrom(actual);
+	SimpleString eDecimal = StringFrom(expected);
+	SimpleString eHex = HexStringFrom(expected);
+
+	SimpleString::padStringsToSameLength(aDecimal, eDecimal, ' ');
+	SimpleString::padStringsToSameLength(aHex, eHex, '0');
+
+	SimpleString actualReported = aDecimal + " 0x" + aHex;
+	SimpleString expectedReported = eDecimal + " 0x" + eHex;
+	message_ = createButWasString(expectedReported, actualReported);
+}
+
 
 StringEqualFailure::StringEqualFailure(UtestShell* test, const char* fileName, int lineNumber, const char* expected, const char* actual) : TestFailure(test, fileName, lineNumber)
 {

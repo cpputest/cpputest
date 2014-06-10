@@ -407,6 +407,19 @@ TEST(SimpleString, Characters)
 	CHECK(s == s2);
 }
 
+TEST(SimpleString, LongInts)
+{
+	SimpleString s(StringFrom((long)1));
+	CHECK(s == "1");
+}
+
+TEST(SimpleString, UnsignedLongInts)
+{
+	SimpleString s(StringFrom((unsigned long)1));
+	SimpleString s2(StringFrom((unsigned long)1));
+	CHECK(s == s2);
+}
+
 TEST(SimpleString, Doubles)
 {
 	SimpleString s(StringFrom(1.2));

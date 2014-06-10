@@ -57,10 +57,12 @@ public:
 	virtual void onlyKeepExpectationsRelatedTo(const SimpleString& name);
 	virtual void onlyKeepExpectationsWithParameter(const MockNamedValue& parameter);
 	virtual void onlyKeepExpectationsWithParameterName(const SimpleString& name);
+	virtual void onlyKeepExpectationsWithOutputParameterName(const SimpleString& name);
 	virtual void onlyKeepExpectationsOnObject(void* objectPtr);
 	virtual void onlyKeepUnfulfilledExpectations();
 	virtual void onlyKeepUnfulfilledExpectationsRelatedTo(const SimpleString& name);
 	virtual void onlyKeepUnfulfilledExpectationsWithParameter(const MockNamedValue& parameter);
+	virtual void onlyKeepUnfulfilledExpectationsWithOutputParameter(const MockNamedValue& parameter);
 	virtual void onlyKeepUnfulfilledExpectationsOnObject(void* objectPtr);
 
 	virtual MockCheckedExpectedCall* removeOneFulfilledExpectation();
