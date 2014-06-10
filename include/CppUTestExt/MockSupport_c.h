@@ -32,7 +32,7 @@
 extern "C" {
 #endif
 
-#include <stddef.h>
+#include "CppUTest/StandardCLibrary.h"
 
 typedef enum {
 	MOCKVALUETYPE_UNSIGNED_INTEGER,
