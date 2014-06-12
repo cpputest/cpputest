@@ -76,11 +76,15 @@ public:
 
 	virtual void setValue(int value);
 	virtual void setValue(unsigned int value);
+	virtual void setValue(long int value);
+	virtual void setValue(unsigned long int value);
 	virtual void setValue(double value);
 	virtual void setValue(void* value);
 	virtual void setValue(const void* value);
 	virtual void setValue(const char* value);
 	virtual void setObjectPointer(const SimpleString& type, const void* objectPtr);
+	virtual void setOutputPointer(const void* outputPtr);
+	virtual void setOutputSize(size_t size);
 
 	virtual void setComparator(MockNamedValueComparator* comparator);
 	virtual void setName(const char* name);
@@ -94,11 +98,15 @@ public:
 
 	virtual int getIntValue() const;
 	virtual unsigned int getUnsignedIntValue() const;
+	virtual long int getLongIntValue() const;
+	virtual unsigned long int getUnsignedLongIntValue() const;
 	virtual double getDoubleValue() const;
 	virtual const char* getStringValue() const;
 	virtual void* getPointerValue() const;
 	virtual const void* getConstPointerValue() const;
 	virtual const void* getObjectPointer() const;
+	virtual const void* getOutputPointer() const;
+	virtual size_t getOutputSize() const;
 	virtual MockNamedValueComparator* getComparator() const;
 
 	static void setDefaultComparatorRepository(MockNamedValueComparatorRepository* repository);
@@ -108,12 +116,16 @@ private:
 	union {
 		int intValue_;
 		unsigned int unsignedIntValue_;
+		long int longIntValue_;
+		unsigned long int unsignedLongIntValue_;
 		double doubleValue_;
 		const char* stringValue_;
 		void* pointerValue_;
 		const void* constPointerValue_;
 		const void* objectPointerValue_;
+		const void* outputPointerValue_;
 	} value_;
+	size_t outputSize_;
 	MockNamedValueComparator* comparator_;
 	static MockNamedValueComparatorRepository* defaultRepository_;
 };

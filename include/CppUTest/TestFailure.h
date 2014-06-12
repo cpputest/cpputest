@@ -122,6 +122,12 @@ public:
 	LongsEqualFailure(UtestShell* test, const char* fileName, int lineNumber, long expected, long actual);
 };
 
+class UnsignedLongsEqualFailure : public TestFailure
+{
+public:
+	UnsignedLongsEqualFailure(UtestShell* test, const char* fileName, int lineNumber, unsigned long expected, unsigned long actual);
+};
+
 class StringEqualFailure : public TestFailure
 {
 public:
