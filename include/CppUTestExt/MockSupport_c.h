@@ -32,6 +32,8 @@
 extern "C" {
 #endif
 
+#include "CppUTest/StandardCLibrary.h"
+
 typedef enum {
 	MOCKVALUETYPE_UNSIGNED_INTEGER,
 	MOCKVALUETYPE_INTEGER,
@@ -72,6 +74,7 @@ struct SMockActualCall_c
 	MockActualCall_c* (*withPointerParameters)(const char* name, void* value);
 	MockActualCall_c* (*withConstPointerParameters)(const char* name, const void* value);
 	MockActualCall_c* (*withParameterOfType)(const char* type, const char* name, const void* value);
+	MockActualCall_c* (*withOutputParameter)(const char* name, void* value);
 
 	MockValue_c (*returnValue)(void);
 };
@@ -88,6 +91,7 @@ struct SMockExpectedCall_c
 	MockExpectedCall_c* (*withPointerParameters)(const char* name, void* value);
 	MockExpectedCall_c* (*withConstPointerParameters)(const char* name, const void* value);
 	MockExpectedCall_c* (*withParameterOfType)(const char* type, const char* name, const void* value);
+	MockExpectedCall_c* (*withOutputParameterReturning)(const char* name, const void* value, size_t size);
 
 	MockExpectedCall_c* (*andReturnUnsignedIntValue)(unsigned int value);
 	MockExpectedCall_c* (*andReturnIntValue)(int value);
