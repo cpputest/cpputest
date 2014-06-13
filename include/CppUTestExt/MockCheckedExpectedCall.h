@@ -84,6 +84,7 @@ public:
 
 	virtual void callWasMade(int callOrder);
 	virtual void parameterWasPassed(const SimpleString& name);
+	virtual void outputParameterWasPassed(const SimpleString& name);
 	virtual void parametersWereIgnored();
 	virtual void wasPassedToObject();
 	virtual void resetExpectation();

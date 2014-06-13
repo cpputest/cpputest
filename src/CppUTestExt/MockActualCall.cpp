@@ -149,7 +149,7 @@ void MockCheckedActualCall::checkOutputParameter(const MockNamedValue& outputPar
 		return;
 	}
 
-	unfulfilledExpectations_.parameterWasPassed(outputParameter.getName());
+	unfulfilledExpectations_.outputParameterWasPassed(outputParameter.getName());
 	finalizeCallWhenFulfilled();
 }
 

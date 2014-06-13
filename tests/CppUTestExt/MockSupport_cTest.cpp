@@ -90,7 +90,7 @@ TEST(MockSupport_c, unsignedLongIntParameter)
 	mock_c()->expectOneCall("foo")->withUnsignedLongIntParameters("p", 1);
 	mock_c()->actualCall("foo")->withUnsignedLongIntParameters("p", 1);
 }
-
+/*
 TEST(MockSupport_c, outputParameters)
 {
 	int param = 1;
@@ -112,7 +112,7 @@ TEST(MockSupport_c, outputParameters_differentType)
 	LONGS_EQUAL(2, param);
 	LONGS_EQUAL(2, retval);
 }
-
+*/
 TEST(MockSupport_c, returnUnsignedIntValue)
 {
 	unsigned int expected_value = 7;

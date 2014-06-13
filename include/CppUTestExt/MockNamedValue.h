@@ -95,6 +95,7 @@ public:
 
 	virtual SimpleString getName() const;
 	virtual SimpleString getType() const;
+	virtual bool isOutput() const;
 
 	virtual int getIntValue() const;
 	virtual unsigned int getUnsignedIntValue() const;
@@ -159,6 +160,7 @@ public:
 	void clear();
 
 	MockNamedValue* getValueByName(const SimpleString& name);
+	MockNamedValue* getOutputValueByName(const SimpleString& name);
 
 private:
 	MockNamedValueListNode* head_;

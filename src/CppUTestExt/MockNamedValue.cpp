@@ -128,6 +128,11 @@ SimpleString MockNamedValue::getType() const
 	return type_;
 }
 
+bool MockNamedValue::isOutput() const
+{
+	return (type_ == "output");
+}
+
 unsigned int MockNamedValue::getUnsignedIntValue() const
 {
 	if(type_ == "int" && value_.intValue_ >= 0)
@@ -204,6 +209,7 @@ const void* MockNamedValue::getObjectPointer() const
 
 const void* MockNamedValue::getOutputPointer() const
 {
+	STRCMP_EQUAL("output", type_.asCharString());
 	return value_.outputPointerValue_;
 }
 
@@ -364,7 +370,15 @@ void MockNamedValueList::add(MockNamedValue* newValue)
 MockNamedValue* MockNamedValueList::getValueByName(const SimpleString& name)
 {
 	for (MockNamedValueListNode * p = head_; p; p = p->next())
-		if (p->getName() == name)
+		if (p->getName() == name && !p->item()->isOutput())
+			return p->item();
+	return NULL;
+}
+
+MockNamedValue* MockNamedValueList::getOutputValueByName(const SimpleString& name)
+{
+	for (MockNamedValueListNode * p = head_; p; p = p->next())
+		if (p->getName() == name && p->item()->isOutput())
 			return p->item();
 	return NULL;
 }

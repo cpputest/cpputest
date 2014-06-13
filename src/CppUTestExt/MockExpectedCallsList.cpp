@@ -292,6 +292,12 @@ void MockExpectedCallsList::parameterWasPassed(const SimpleString& parameterName
 		p->expectedCall_->parameterWasPassed(parameterName);
 }
 
+void MockExpectedCallsList::outputParameterWasPassed(const SimpleString& parameterName)
+{
+	for (MockExpectedCallsListNode* p = head_; p; p = p->next_)
+		p->expectedCall_->outputParameterWasPassed(parameterName);
+}
+
 MockExpectedCallsList::MockExpectedCallsListNode* MockExpectedCallsList::findNodeWithCallOrderOf(int callOrder) const
 {
 	for (MockExpectedCallsListNode* p = head_; p; p = p->next_)

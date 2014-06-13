@@ -72,6 +72,7 @@ public:
 	virtual void callWasMade(int callOrder);
 	virtual void wasPassedToObject();
 	virtual void parameterWasPassed(const SimpleString& parameterName);
+	virtual void outputParameterWasPassed(const SimpleString& parameterName);
 
 	virtual SimpleString unfulfilledCallsToString(const SimpleString& linePrefix = "") const;
 	virtual SimpleString fulfilledCallsToString(const SimpleString& linePrefix = "") const;

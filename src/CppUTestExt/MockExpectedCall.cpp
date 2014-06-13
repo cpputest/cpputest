@@ -234,7 +234,15 @@ void MockCheckedExpectedCall::resetExpectation()
 void MockCheckedExpectedCall::parameterWasPassed(const SimpleString& name)
 {
 	for (MockNamedValueListNode* p = parameters_->begin(); p; p = p->next()) {
-		if (p->getName() == name)
+		if (p->getName() == name && !p->item()->isOutput())
+			item(p)->setFulfilled(true);
+	}
+}
+
+void MockCheckedExpectedCall::outputParameterWasPassed(const SimpleString& name)
+{
+	for (MockNamedValueListNode* p = parameters_->begin(); p; p = p->next()) {
+		if (p->getName() == name && p->item()->isOutput())
 			item(p)->setFulfilled(true);
 	}
 }
@@ -253,8 +261,8 @@ bool MockCheckedExpectedCall::hasParameter(const MockNamedValue& parameter)
 
 bool MockCheckedExpectedCall::hasOutputParameter(const MockNamedValue& parameter)
 {
-	MockNamedValue * p = parameters_->getValueByName(parameter.getName());
-	return (p->getType() == "output") ? true : ignoreOtherParameters_;
+	MockNamedValue * p = parameters_->getOutputValueByName(parameter.getName());
+	return (p) ? true : ignoreOtherParameters_;
 }
 
 SimpleString MockCheckedExpectedCall::callToString()
