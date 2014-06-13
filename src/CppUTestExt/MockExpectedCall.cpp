@@ -169,6 +169,12 @@ MockNamedValue MockCheckedExpectedCall::getParameter(const SimpleString& name)
 	return (p) ? *p : MockNamedValue("");
 }
 
+MockNamedValue MockCheckedExpectedCall::getOutputParameter(const SimpleString& name)
+{
+	MockNamedValue * p = parameters_->getOutputValueByName(name);
+	return (p) ? *p : MockNamedValue("");
+}
+
 bool MockCheckedExpectedCall::areParametersFulfilled()
 {
 	for (MockNamedValueListNode* p = parameters_->begin(); p; p = p->next())

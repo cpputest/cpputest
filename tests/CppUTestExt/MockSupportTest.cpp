@@ -679,7 +679,7 @@ TEST(MockSupportTest, outputParameterSucceeds)
 	mock().checkExpectations();
 	CHECK_NO_MOCK_FAILURE();
 }
-#if(0)
+
 TEST(MockSupportTest, outputParameterMissing)
 {
 	int output;
@@ -791,16 +791,16 @@ TEST(MockSupportTest, twoOutputParametersOfSameNameInDifferentFunctionsSucceeds)
 	CHECK_NO_MOCK_FAILURE();
 }
 
-//TEST(MockSupportTest, outputAndInputParameter)
-//{
-//    int return_value = 5;
-//    int returned_value = 7;
-//    mock().expectOneCall("foo").withParameter("bar", 10).withOutputParameterReturning("bar", &return_value, sizeof(return_value));
-//    mock().actualCall("foo").withParameter("bar", 10).withOutputParameter("bar", &returned_value);
-//
-//    LONGS_EQUAL(5, returned_value);
-//    CHECK_NO_MOCK_FAILURE();
-//}
+TEST(MockSupportTest, outputAndInputParameter)
+{
+    int return_value = 5;
+    int returned_value = 7;
+    mock().expectOneCall("foo").withParameter("bar", 10).withOutputParameterReturning("bar", &return_value, sizeof(return_value));
+    mock().actualCall("foo").withParameter("bar", 10).withOutputParameter("bar", &returned_value);
+
+    LONGS_EQUAL(5, returned_value);
+    CHECK_NO_MOCK_FAILURE();
+}
 
 TEST(MockSupportTest, outputParameterTraced)
 {
@@ -811,7 +811,6 @@ TEST(MockSupportTest, outputParameterTraced)
 	mock().checkExpectations();
 	STRCMP_CONTAINS("Function name: someFunc someParameter:", mock().getTraceOutput());
 }
-#endif
 
 static bool myTypeIsEqual(const void* object1, const void* object2)
 {
