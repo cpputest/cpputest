@@ -10,7 +10,7 @@ static int foo(const char* param_string, int param_int)
 	return mock().actualCall("Foo")
 			.withParameter("param_string", param_string)
 			.withParameter("param_int", param_int)
-			.returnValue().getIntValue();
+			.returnValue().getIntInputValue();
 }
 
 static void bar(double param_double, const char* param_string)

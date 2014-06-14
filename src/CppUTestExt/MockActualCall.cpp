@@ -127,7 +127,7 @@ MockActualCall& MockCheckedActualCall::withCallOrder(int)
 
 void MockCheckedActualCall::checkActualParameter(const MockNamedValue& actualParameter)
 {
-	unfulfilledExpectations_.onlyKeepUnfulfilledExpectationsWithParameter(actualParameter);
+	unfulfilledExpectations_.onlyKeepUnfulfilledExpectationsWithInputParameter(actualParameter);
 
 	if (unfulfilledExpectations_.isEmpty()) {
 		MockUnexpectedParameterFailure failure(getTest(), getName(), actualParameter, allExpectations_);
@@ -156,7 +156,7 @@ void MockCheckedActualCall::checkOutputParameter(const MockNamedValue& outputPar
 MockActualCall& MockCheckedActualCall::withUnsignedIntParameter(const SimpleString& name, unsigned int value)
 {
 	MockNamedValue actualParameter(name);
-	actualParameter.setValue(value);
+	actualParameter.setInputValue(value);
 	checkActualParameter(actualParameter);
 	return *this;
 }
@@ -164,7 +164,7 @@ MockActualCall& MockCheckedActualCall::withUnsignedIntParameter(const SimpleStri
 MockActualCall& MockCheckedActualCall::withIntParameter(const SimpleString& name, int value)
 {
 	MockNamedValue actualParameter(name);
-	actualParameter.setValue(value);
+	actualParameter.setInputValue(value);
 	checkActualParameter(actualParameter);
 	return *this;
 }
@@ -172,7 +172,7 @@ MockActualCall& MockCheckedActualCall::withIntParameter(const SimpleString& name
 MockActualCall& MockCheckedActualCall::withUnsignedLongIntParameter(const SimpleString& name, unsigned long int value)
 {
 	MockNamedValue actualParameter(name);
-	actualParameter.setValue(value);
+	actualParameter.setInputValue(value);
 	checkActualParameter(actualParameter);
 	return *this;
 }
@@ -180,7 +180,7 @@ MockActualCall& MockCheckedActualCall::withUnsignedLongIntParameter(const Simple
 MockActualCall& MockCheckedActualCall::withLongIntParameter(const SimpleString& name, long int value)
 {
 	MockNamedValue actualParameter(name);
-	actualParameter.setValue(value);
+	actualParameter.setInputValue(value);
 	checkActualParameter(actualParameter);
 	return *this;
 }
@@ -188,7 +188,7 @@ MockActualCall& MockCheckedActualCall::withLongIntParameter(const SimpleString& 
 MockActualCall& MockCheckedActualCall::withDoubleParameter(const SimpleString& name, double value)
 {
 	MockNamedValue actualParameter(name);
-	actualParameter.setValue(value);
+	actualParameter.setInputValue(value);
 	checkActualParameter(actualParameter);
 	return *this;
 }
@@ -196,7 +196,7 @@ MockActualCall& MockCheckedActualCall::withDoubleParameter(const SimpleString& n
 MockActualCall& MockCheckedActualCall::withStringParameter(const SimpleString& name, const char* value)
 {
 	MockNamedValue actualParameter(name);
-	actualParameter.setValue(value);
+	actualParameter.setInputValue(value);
 	checkActualParameter(actualParameter);
 	return *this;
 }
@@ -204,7 +204,7 @@ MockActualCall& MockCheckedActualCall::withStringParameter(const SimpleString& n
 MockActualCall& MockCheckedActualCall::withPointerParameter(const SimpleString& name, void* value)
 {
 	MockNamedValue actualParameter(name);
-	actualParameter.setValue(value);
+	actualParameter.setInputValue(value);
 	checkActualParameter(actualParameter);
 	return *this;
 }
@@ -212,7 +212,7 @@ MockActualCall& MockCheckedActualCall::withPointerParameter(const SimpleString& 
 MockActualCall& MockCheckedActualCall::withConstPointerParameter(const SimpleString& name, const void* value)
 {
 	MockNamedValue actualParameter(name);
-	actualParameter.setValue(value);
+	actualParameter.setInputValue(value);
 	checkActualParameter(actualParameter);
 	return *this;
 }

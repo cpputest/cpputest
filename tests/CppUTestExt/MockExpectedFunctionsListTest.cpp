@@ -169,21 +169,21 @@ TEST(MockExpectedCallsList, onlyKeepExpectationsWithParameterName)
 	LONGS_EQUAL(2, list->size());
 }
 
-TEST(MockExpectedCallsList, onlyKeepUnfulfilledExpectationsWithParameter)
+TEST(MockExpectedCallsList, onlyKeepUnfulfilledExpectationsWithInputParameter)
 {
 	MockNamedValue parameter("diffname");
-	parameter.setValue(1);
+	parameter.setInputValue(1);
 	call1->withName("func").withParameter("param", 1);
 	call2->withName("func").withParameter("diffname", 1);
 	call3->withName("func").withParameter("diffname", 1);
 	call4->withName("func").withParameter("diffname", 2);
 	call3->callWasMade(1);
-	call3->parameterWasPassed("diffname");
+	call3->inputParameterWasPassed("diffname");
 	list->addExpectedCall(call1);
 	list->addExpectedCall(call2);
 	list->addExpectedCall(call3);
 	list->addExpectedCall(call4);
-	list->onlyKeepUnfulfilledExpectationsWithParameter(parameter);
+	list->onlyKeepUnfulfilledExpectationsWithInputParameter(parameter);
 	LONGS_EQUAL(1, list->size());
 }
 

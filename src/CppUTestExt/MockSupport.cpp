@@ -298,12 +298,12 @@ void MockSupport::checkExpectations()
 
 bool MockSupport::hasData(const SimpleString& name)
 {
-	return data_.getValueByName(name) != NULL;
+	return data_.getInputValueByName(name) != NULL;
 }
 
 MockNamedValue* MockSupport::retrieveDataFromStore(const SimpleString& name)
 {
-	MockNamedValue* newData = data_.getValueByName(name);
+	MockNamedValue* newData = data_.getInputValueByName(name);
 	if (newData == NULL) {
 		newData = new MockNamedValue(name);
 		data_.add(newData);
@@ -314,37 +314,37 @@ MockNamedValue* MockSupport::retrieveDataFromStore(const SimpleString& name)
 void MockSupport::setData(const SimpleString& name, unsigned int value)
 {
 	MockNamedValue* newData = retrieveDataFromStore(name);
-	newData->setValue(value);
+	newData->setInputValue(value);
 }
 
 void MockSupport::setData(const SimpleString& name, int value)
 {
 	MockNamedValue* newData = retrieveDataFromStore(name);
-	newData->setValue(value);
+	newData->setInputValue(value);
 }
 
 void MockSupport::setData(const SimpleString& name, const char* value)
 {
 	MockNamedValue* newData = retrieveDataFromStore(name);
-	newData->setValue(value);
+	newData->setInputValue(value);
 }
 
 void MockSupport::setData(const SimpleString& name, double value)
 {
 	MockNamedValue* newData = retrieveDataFromStore(name);
-	newData->setValue(value);
+	newData->setInputValue(value);
 }
 
 void MockSupport::setData(const SimpleString& name, void* value)
 {
 	MockNamedValue* newData = retrieveDataFromStore(name);
-	newData->setValue(value);
+	newData->setInputValue(value);
 }
 
 void MockSupport::setData(const SimpleString& name, const void* value)
 {
 	MockNamedValue* newData = retrieveDataFromStore(name);
-	newData->setValue(value);
+	newData->setInputValue(value);
 }
 
 void MockSupport::setDataObject(const SimpleString& name, const SimpleString& type, void* value)
@@ -355,7 +355,7 @@ void MockSupport::setDataObject(const SimpleString& name, const SimpleString& ty
 
 MockNamedValue MockSupport::getData(const SimpleString& name)
 {
-	MockNamedValue* value = data_.getValueByName(name);
+	MockNamedValue* value = data_.getInputValueByName(name);
 	if (value == NULL)
 		return MockNamedValue("");
 	return *value;
@@ -407,42 +407,42 @@ MockNamedValue MockSupport::returnValue()
 
 unsigned int MockSupport::unsignedIntReturnValue()
 {
-	return returnValue().getUnsignedIntValue();
+	return returnValue().getUnsignedIntInputValue();
 }
 
 int MockSupport::intReturnValue()
 {
-	return returnValue().getIntValue();
+	return returnValue().getIntInputValue();
 }
 
 long int MockSupport::longIntReturnValue()
 {
-	return returnValue().getLongIntValue();
+	return returnValue().getLongIntInputValue();
 }
 
 unsigned long int MockSupport::unsignedLongIntReturnValue()
 {
-	return returnValue().getUnsignedLongIntValue();
+	return returnValue().getUnsignedLongIntInputValue();
 }
 
 const char* MockSupport::stringReturnValue()
 {
-	return returnValue().getStringValue();
+	return returnValue().getStringInputValue();
 }
 
 double MockSupport::doubleReturnValue()
 {
-	return returnValue().getDoubleValue();
+	return returnValue().getDoubleInputValue();
 }
 
 void* MockSupport::pointerReturnValue()
 {
-	return returnValue().getPointerValue();
+	return returnValue().getPointerInputValue();
 }
 
 const void* MockSupport::constPointerReturnValue()
 {
-	return returnValue().getConstPointerValue();
+	return returnValue().getConstPointerInputValue();
 }
 
 bool MockSupport::hasReturnValue()

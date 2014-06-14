@@ -120,7 +120,7 @@ TEST(MockFailureTest, MockUnexpectedParameterFailure)
 	addAllToList();
 
 	MockNamedValue actualParameter("bar");
-	actualParameter.setValue(2);
+	actualParameter.setInputValue(2);
 
 	MockUnexpectedParameterFailure failure(UtestShell::getCurrent(), "foo", actualParameter, *list);
 	STRCMP_EQUAL("Mock Failure: Unexpected parameter name to function \"foo\": bar\n"
@@ -141,7 +141,7 @@ TEST(MockFailureTest, MockUnexpectedParameterValueFailure)
 	addAllToList();
 
 	MockNamedValue actualParameter("boo");
-	actualParameter.setValue(20);
+	actualParameter.setInputValue(20);
 
 	MockUnexpectedParameterFailure failure(UtestShell::getCurrent(), "foo", actualParameter, *list);
 	STRCMP_EQUAL("Mock Failure: Unexpected parameter value to parameter \"boo\" to function \"foo\": <20>\n"
@@ -159,8 +159,8 @@ TEST(MockFailureTest, MockExpectedParameterDidntHappenFailure)
 	call1->withName("foo").withParameter("bar", 2).withParameter("boo", "str");
 	call2->withName("foo").withParameter("bar", 10).withParameter("boo", "bleh");
 	call2->callWasMade(1);
-	call2->parameterWasPassed("bar");
-	call2->parameterWasPassed("boo");
+	call2->inputParameterWasPassed("bar");
+	call2->inputParameterWasPassed("boo");
 	call3->withName("unrelated");
 	addAllToList();
 

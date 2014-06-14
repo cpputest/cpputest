@@ -127,8 +127,8 @@ TEST(MockDocumentation, ObjectParameters)
 TEST(MockDocumentation, returnValue)
 {
 	mock().expectOneCall("function").andReturnValue(10);
-	int value = mock().actualCall("function").returnValue().getIntValue();
-	value = mock().returnValue().getIntValue();
+	int value = mock().actualCall("function").returnValue().getIntInputValue();
+	value = mock().returnValue().getIntInputValue();
 	LONGS_EQUAL(10, value);
 }
 
@@ -139,7 +139,7 @@ TEST(MockDocumentation, setData)
 	mock().setDataObject("importantObject", "ClassFromProductionCode", &object);
 
 	ClassFromProductionCode * pobject;
-	int value = mock().getData("importantValue").getIntValue();
+	int value = mock().getData("importantValue").getIntInputValue();
 	pobject = (ClassFromProductionCode*) mock().getData("importantObject").getObjectPointer();
 
 	LONGS_EQUAL(10, value);

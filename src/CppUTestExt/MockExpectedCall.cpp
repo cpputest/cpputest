@@ -74,7 +74,7 @@ MockExpectedCall& MockCheckedExpectedCall::withUnsignedIntParameter(const Simple
 {
 	MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
 	parameters_->add(newParameter);
-	newParameter->setValue(value);
+	newParameter->setInputValue(value);
 	return *this;
 }
 
@@ -82,7 +82,7 @@ MockExpectedCall& MockCheckedExpectedCall::withIntParameter(const SimpleString& 
 {
 	MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
 	parameters_->add(newParameter);
-	newParameter->setValue(value);
+	newParameter->setInputValue(value);
 	return *this;
 }
 
@@ -90,7 +90,7 @@ MockExpectedCall& MockCheckedExpectedCall::withLongIntParameter(const SimpleStri
 {
 	MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
 	parameters_->add(newParameter);
-	newParameter->setValue(value);
+	newParameter->setInputValue(value);
 	return *this;
 }
 
@@ -98,7 +98,7 @@ MockExpectedCall& MockCheckedExpectedCall::withUnsignedLongIntParameter(const Si
 {
 	MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
 	parameters_->add(newParameter);
-	newParameter->setValue(value);
+	newParameter->setInputValue(value);
 	return *this;
 }
 
@@ -106,7 +106,7 @@ MockExpectedCall& MockCheckedExpectedCall::withDoubleParameter(const SimpleStrin
 {
 	MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
 	parameters_->add(newParameter);
-	newParameter->setValue(value);
+	newParameter->setInputValue(value);
 	return *this;
 }
 
@@ -114,7 +114,7 @@ MockExpectedCall& MockCheckedExpectedCall::withStringParameter(const SimpleStrin
 {
 	MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
 	parameters_->add(newParameter);
-	newParameter->setValue(value);
+	newParameter->setInputValue(value);
 	return *this;
 }
 
@@ -122,7 +122,7 @@ MockExpectedCall& MockCheckedExpectedCall::withPointerParameter(const SimpleStri
 {
 	MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
 	parameters_->add(newParameter);
-	newParameter->setValue(value);
+	newParameter->setInputValue(value);
 	return *this;
 }
 
@@ -130,7 +130,7 @@ MockExpectedCall& MockCheckedExpectedCall::withConstPointerParameter(const Simpl
 {
 	MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
 	parameters_->add(newParameter);
-	newParameter->setValue(value);
+	newParameter->setInputValue(value);
 	return *this;
 }
 
@@ -146,26 +146,25 @@ MockExpectedCall& MockCheckedExpectedCall::withOutputParameterReturning(const Si
 {
 	MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
 	parameters_->add(newParameter);
-	newParameter->setOutputPointer(value);
-	newParameter->setOutputSize(size);
+	newParameter->setOutputData(value, size);
 	return *this;
 }
 
-SimpleString MockCheckedExpectedCall::getParameterType(const SimpleString& name)
+SimpleString MockCheckedExpectedCall::getInputParameterType(const SimpleString& name)
 {
-	MockNamedValue * p = parameters_->getValueByName(name);
+	MockNamedValue * p = parameters_->getInputValueByName(name);
 	return (p) ? p->getType() : "";
 }
 
-bool MockCheckedExpectedCall::hasParameterWithName(const SimpleString& name)
+bool MockCheckedExpectedCall::hasInputParameterWithName(const SimpleString& name)
 {
-	MockNamedValue * p = parameters_->getValueByName(name);
+	MockNamedValue * p = parameters_->getInputValueByName(name);
 	return p != NULL;
 }
 
-MockNamedValue MockCheckedExpectedCall::getParameter(const SimpleString& name)
+MockNamedValue MockCheckedExpectedCall::getInputParameter(const SimpleString& name)
 {
-	MockNamedValue * p = parameters_->getValueByName(name);
+	MockNamedValue * p = parameters_->getInputValueByName(name);
 	return (p) ? *p : MockNamedValue("");
 }
 
@@ -237,10 +236,10 @@ void MockCheckedExpectedCall::resetExpectation()
 		item(p)->setFulfilled(false);
 }
 
-void MockCheckedExpectedCall::parameterWasPassed(const SimpleString& name)
+void MockCheckedExpectedCall::inputParameterWasPassed(const SimpleString& name)
 {
 	for (MockNamedValueListNode* p = parameters_->begin(); p; p = p->next()) {
-		if (p->getName() == name && !p->item()->isOutput())
+		if (p->getName() == name && p->item()->isInput())
 			item(p)->setFulfilled(true);
 	}
 }
@@ -253,15 +252,15 @@ void MockCheckedExpectedCall::outputParameterWasPassed(const SimpleString& name)
 	}
 }
 
-SimpleString MockCheckedExpectedCall::getParameterValueString(const SimpleString& name)
+SimpleString MockCheckedExpectedCall::getInputParameterValueString(const SimpleString& name)
 {
-	MockNamedValue * p = parameters_->getValueByName(name);
+	MockNamedValue * p = parameters_->getInputValueByName(name);
 	return (p) ? StringFrom(*p) : "failed";
 }
 
-bool MockCheckedExpectedCall::hasParameter(const MockNamedValue& parameter)
+bool MockCheckedExpectedCall::hasInputParameter(const MockNamedValue& parameter)
 {
-	MockNamedValue * p = parameters_->getValueByName(parameter.getName());
+	MockNamedValue * p = parameters_->getInputValueByName(parameter.getName());
 	return (p) ? p->equals(parameter) : ignoreOtherParameters_;
 }
 
@@ -289,7 +288,7 @@ SimpleString MockCheckedExpectedCall::callToString()
 	}
 
 	for (MockNamedValueListNode* p = parameters_->begin(); p; p = p->next()) {
-		str += StringFromFormat("%s %s: <%s>", p->getType().asCharString(), p->getName().asCharString(), getParameterValueString(p->getName()).asCharString());
+		str += StringFromFormat("%s %s: <%s>", p->getType().asCharString(), p->getName().asCharString(), getInputParameterValueString(p->getName()).asCharString());
 		if (p->next()) str += ", ";
 	}
 	if (ignoreOtherParameters_)
@@ -342,56 +341,56 @@ bool MockCheckedExpectedCall::MockExpectedFunctionParameter::isFulfilled() const
 MockExpectedCall& MockCheckedExpectedCall::andReturnValue(unsigned int value)
 {
 	returnValue_.setName("returnValue");
-	returnValue_.setValue(value);
+	returnValue_.setInputValue(value);
 	return *this;
 }
 
 MockExpectedCall& MockCheckedExpectedCall::andReturnValue(int value)
 {
 	returnValue_.setName("returnValue");
-	returnValue_.setValue(value);
+	returnValue_.setInputValue(value);
 	return *this;
 }
 
 MockExpectedCall& MockCheckedExpectedCall::andReturnValue(long int value)
 {
 	returnValue_.setName("returnValue");
-	returnValue_.setValue(value);
+	returnValue_.setInputValue(value);
 	return *this;
 }
 
 MockExpectedCall& MockCheckedExpectedCall::andReturnValue(unsigned long int value)
 {
 	returnValue_.setName("returnValue");
-	returnValue_.setValue(value);
+	returnValue_.setInputValue(value);
 	return *this;
 }
 
 MockExpectedCall& MockCheckedExpectedCall::andReturnValue(const char* value)
 {
 	returnValue_.setName("returnValue");
-	returnValue_.setValue(value);
+	returnValue_.setInputValue(value);
 	return *this;
 }
 
 MockExpectedCall& MockCheckedExpectedCall::andReturnValue(double value)
 {
 	returnValue_.setName("returnValue");
-	returnValue_.setValue(value);
+	returnValue_.setInputValue(value);
 	return *this;
 }
 
 MockExpectedCall& MockCheckedExpectedCall::andReturnValue(void* value)
 {
 	returnValue_.setName("returnValue");
-	returnValue_.setValue(value);
+	returnValue_.setInputValue(value);
 	return *this;
 }
 
 MockExpectedCall& MockCheckedExpectedCall::andReturnValue(const void* value)
 {
 	returnValue_.setName("returnValue");
-	returnValue_.setValue(value);
+	returnValue_.setInputValue(value);
 	return *this;
 }
 

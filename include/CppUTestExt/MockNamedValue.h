@@ -74,17 +74,16 @@ public:
 	DEFAULT_COPY_CONSTRUCTOR(MockNamedValue)
 	virtual ~MockNamedValue();
 
-	virtual void setValue(int value);
-	virtual void setValue(unsigned int value);
-	virtual void setValue(long int value);
-	virtual void setValue(unsigned long int value);
-	virtual void setValue(double value);
-	virtual void setValue(void* value);
-	virtual void setValue(const void* value);
-	virtual void setValue(const char* value);
+	virtual void setInputValue(int value);
+	virtual void setInputValue(unsigned int value);
+	virtual void setInputValue(long int value);
+	virtual void setInputValue(unsigned long int value);
+	virtual void setInputValue(double value);
+	virtual void setInputValue(void* value);
+	virtual void setInputValue(const void* value);
+	virtual void setInputValue(const char* value);
 	virtual void setObjectPointer(const SimpleString& type, const void* objectPtr);
-	virtual void setOutputPointer(const void* outputPtr);
-	virtual void setOutputSize(size_t size);
+	virtual void setOutputData(const void* outputPtr, size_t size);
 
 	virtual void setComparator(MockNamedValueComparator* comparator);
 	virtual void setName(const char* name);
@@ -95,16 +94,17 @@ public:
 
 	virtual SimpleString getName() const;
 	virtual SimpleString getType() const;
+	virtual bool isInput() const;
 	virtual bool isOutput() const;
 
-	virtual int getIntValue() const;
-	virtual unsigned int getUnsignedIntValue() const;
-	virtual long int getLongIntValue() const;
-	virtual unsigned long int getUnsignedLongIntValue() const;
-	virtual double getDoubleValue() const;
-	virtual const char* getStringValue() const;
-	virtual void* getPointerValue() const;
-	virtual const void* getConstPointerValue() const;
+	virtual int getIntInputValue() const;
+	virtual unsigned int getUnsignedIntInputValue() const;
+	virtual long int getLongIntInputValue() const;
+	virtual unsigned long int getUnsignedLongIntInputValue() const;
+	virtual double getDoubleInputValue() const;
+	virtual const char* getStringInputValue() const;
+	virtual void* getPointerInputValue() const;
+	virtual const void* getConstPointerInputValue() const;
 	virtual const void* getObjectPointer() const;
 	virtual const void* getOutputPointer() const;
 	virtual size_t getOutputSize() const;
@@ -126,6 +126,7 @@ private:
 		const void* objectPointerValue_;
 		const void* outputPointerValue_;
 	} value_;
+	bool isInput_;
 	size_t outputSize_;
 	MockNamedValueComparator* comparator_;
 	static MockNamedValueComparatorRepository* defaultRepository_;
@@ -159,7 +160,7 @@ public:
 	void add(MockNamedValue* newValue);
 	void clear();
 
-	MockNamedValue* getValueByName(const SimpleString& name);
+	MockNamedValue* getInputValueByName(const SimpleString& name);
 	MockNamedValue* getOutputValueByName(const SimpleString& name);
 
 private:

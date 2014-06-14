@@ -159,7 +159,7 @@ void MockExpectedCallsList::onlyKeepUnfulfilledExpectationsRelatedTo(const Simpl
 void MockExpectedCallsList::onlyKeepExpectationsWithParameterName(const SimpleString& name)
 {
 	for (MockExpectedCallsListNode* p = head_; p; p = p->next_)
-		if (! p->expectedCall_->hasParameterWithName(name))
+		if (! p->expectedCall_->hasInputParameterWithName(name))
 			p->expectedCall_ = NULL;
 	pruneEmptyNodeFromList();
 }
@@ -172,10 +172,10 @@ void MockExpectedCallsList::onlyKeepExpectationsWithOutputParameterName(const Si
 	pruneEmptyNodeFromList();
 }
 
-void MockExpectedCallsList::onlyKeepExpectationsWithParameter(const MockNamedValue& parameter)
+void MockExpectedCallsList::onlyKeepExpectationsWithInputParameter(const MockNamedValue& parameter)
 {
 	for (MockExpectedCallsListNode* p = head_; p; p = p->next_)
-		if (! p->expectedCall_->hasParameter(parameter))
+		if (! p->expectedCall_->hasInputParameter(parameter))
 			p->expectedCall_ = NULL;
 	pruneEmptyNodeFromList();
 }
@@ -189,10 +189,10 @@ void MockExpectedCallsList::onlyKeepExpectationsOnObject(void* objectPtr)
 }
 
 
-void MockExpectedCallsList::onlyKeepUnfulfilledExpectationsWithParameter(const MockNamedValue& parameter)
+void MockExpectedCallsList::onlyKeepUnfulfilledExpectationsWithInputParameter(const MockNamedValue& parameter)
 {
 	onlyKeepUnfulfilledExpectations();
-	onlyKeepExpectationsWithParameter(parameter);
+	onlyKeepExpectationsWithInputParameter(parameter);
 }
 
 void MockExpectedCallsList::onlyKeepUnfulfilledExpectationsWithOutputParameter(const MockNamedValue& parameter)
@@ -289,7 +289,7 @@ void MockExpectedCallsList::wasPassedToObject()
 void MockExpectedCallsList::parameterWasPassed(const SimpleString& parameterName)
 {
 	for (MockExpectedCallsListNode* p = head_; p; p = p->next_)
-		p->expectedCall_->parameterWasPassed(parameterName);
+		p->expectedCall_->inputParameterWasPassed(parameterName);
 }
 
 void MockExpectedCallsList::outputParameterWasPassed(const SimpleString& parameterName)

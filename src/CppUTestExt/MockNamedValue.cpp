@@ -37,7 +37,7 @@ void MockNamedValue::setDefaultComparatorRepository(MockNamedValueComparatorRepo
 	defaultRepository_ = repository;
 }
 
-MockNamedValue::MockNamedValue(const SimpleString& name) : name_(name), type_("int"), comparator_(NULL)
+MockNamedValue::MockNamedValue(const SimpleString& name) : name_(name), type_("int"), isInput_(true), comparator_(NULL)
 {
 	value_.intValue_ = 0;
 }
@@ -46,70 +46,76 @@ MockNamedValue::~MockNamedValue()
 {
 }
 
-void MockNamedValue::setValue(unsigned int value)
+void MockNamedValue::setInputValue(unsigned int value)
 {
+	isInput_ = true;
 	type_ = "unsigned int";
 	value_.unsignedIntValue_ = value;
 }
 
-void MockNamedValue::setValue(int value)
+void MockNamedValue::setInputValue(int value)
 {
+	isInput_ = true;
 	type_ = "int";
 	value_.intValue_ = value;
 }
 
-void MockNamedValue::setValue(long int value)
+void MockNamedValue::setInputValue(long int value)
 {
+	isInput_ = true;
 	type_ = "long int";
 	value_.longIntValue_ = value;
 }
 
-void MockNamedValue::setValue(unsigned long int value)
+void MockNamedValue::setInputValue(unsigned long int value)
 {
+	isInput_ = true;
 	type_ = "unsigned long int";
 	value_.unsignedLongIntValue_ = value;
 }
 
-void MockNamedValue::setValue(double value)
+void MockNamedValue::setInputValue(double value)
 {
+	isInput_ = true;
 	type_ = "double";
 	value_.doubleValue_ = value;
 }
 
-void MockNamedValue::setValue(void* value)
+void MockNamedValue::setInputValue(void* value)
 {
+	isInput_ = true;
 	type_ = "void*";
 	value_.pointerValue_ = value;
 }
 
-void MockNamedValue::setValue(const void* value)
+void MockNamedValue::setInputValue(const void* value)
 {
+	isInput_ = true;
 	type_ = "const void*";
 	value_.constPointerValue_ = value;
 }
 
-void MockNamedValue::setValue(const char* value)
+void MockNamedValue::setInputValue(const char* value)
 {
+	isInput_ = true;
 	type_ = "const char*";
 	value_.stringValue_ = value;
 }
 
 void MockNamedValue::setObjectPointer(const SimpleString& type, const void* objectPtr)
 {
+	isInput_ = true;
 	type_ = type;
 	value_.objectPointerValue_ = objectPtr;
 	if (! comparator_ && defaultRepository_)
 		comparator_ = defaultRepository_->getComparatorForType(type);
 }
 
-void MockNamedValue::setOutputPointer(const void *outputPtr)
+void MockNamedValue::setOutputData(const void *outputPtr, size_t size)
 {
+	isInput_ = false;
 	type_ = "output";
 	value_.outputPointerValue_ = outputPtr;
-}
-
-void MockNamedValue::setOutputSize(size_t size)
-{
 	outputSize_ = size;
 }
 
@@ -128,12 +134,17 @@ SimpleString MockNamedValue::getType() const
 	return type_;
 }
 
-bool MockNamedValue::isOutput() const
+bool MockNamedValue::isInput() const
 {
-	return (type_ == "output");
+	return isInput_;
 }
 
-unsigned int MockNamedValue::getUnsignedIntValue() const
+bool MockNamedValue::isOutput() const
+{
+	return !isInput();
+}
+
+unsigned int MockNamedValue::getUnsignedIntInputValue() const
 {
 	if(type_ == "int" && value_.intValue_ >= 0)
 		return (unsigned int)value_.intValue_;
@@ -144,13 +155,13 @@ unsigned int MockNamedValue::getUnsignedIntValue() const
 	}
 }
 
-int MockNamedValue::getIntValue() const
+int MockNamedValue::getIntInputValue() const
 {
 	STRCMP_EQUAL("int", type_.asCharString());
 	return value_.intValue_;
 }
 
-long int MockNamedValue::getLongIntValue() const
+long int MockNamedValue::getLongIntInputValue() const
 {
 	if(type_ == "int")
 		return value_.intValue_;
@@ -163,7 +174,7 @@ long int MockNamedValue::getLongIntValue() const
 	}
 }
 
-unsigned long int MockNamedValue::getUnsignedLongIntValue() const
+unsigned long int MockNamedValue::getUnsignedLongIntInputValue() const
 {
 	if(type_ == "unsigned int")
 		return value_.unsignedIntValue_;
@@ -178,25 +189,25 @@ unsigned long int MockNamedValue::getUnsignedLongIntValue() const
 	}
 }
 
-double MockNamedValue::getDoubleValue() const
+double MockNamedValue::getDoubleInputValue() const
 {
 	STRCMP_EQUAL("double", type_.asCharString());
 	return value_.doubleValue_;
 }
 
-const char* MockNamedValue::getStringValue() const
+const char* MockNamedValue::getStringInputValue() const
 {
 	STRCMP_EQUAL("const char*", type_.asCharString());
 	return value_.stringValue_;
 }
 
-void* MockNamedValue::getPointerValue() const
+void* MockNamedValue::getPointerInputValue() const
 {
 	STRCMP_EQUAL("void*", type_.asCharString());
 	return value_.pointerValue_;
 }
 
-const void* MockNamedValue::getConstPointerValue() const
+const void* MockNamedValue::getConstPointerInputValue() const
 {
 	STRCMP_EQUAL("const void*", type_.asCharString());
 	return value_.pointerValue_;
@@ -367,10 +378,10 @@ void MockNamedValueList::add(MockNamedValue* newValue)
 	}
 }
 
-MockNamedValue* MockNamedValueList::getValueByName(const SimpleString& name)
+MockNamedValue* MockNamedValueList::getInputValueByName(const SimpleString& name)
 {
 	for (MockNamedValueListNode * p = head_; p; p = p->next())
-		if (p->getName() == name && !p->item()->isOutput())
+		if (p->getName() == name && p->item()->isInput())
 			return p->item();
 	return NULL;
 }

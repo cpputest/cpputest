@@ -329,35 +329,35 @@ static MockValue_c getMockValueCFromNamedValue(const MockNamedValue& namedValue)
 	MockValue_c returnValue;
 	if (PlatformSpecificStrCmp(namedValue.getType().asCharString(), "int") == 0) {
 		returnValue.type = MOCKVALUETYPE_INTEGER;
-		returnValue.value.intValue = namedValue.getIntValue();
+		returnValue.value.intValue = namedValue.getIntInputValue();
 	}
 	else if (PlatformSpecificStrCmp(namedValue.getType().asCharString(), "unsigned int") == 0) {
 		returnValue.type = MOCKVALUETYPE_UNSIGNED_INTEGER;
-		returnValue.value.unsignedIntValue = namedValue.getUnsignedIntValue();
+		returnValue.value.unsignedIntValue = namedValue.getUnsignedIntInputValue();
 	}
 	else if (PlatformSpecificStrCmp(namedValue.getType().asCharString(), "long int") == 0) {
 		returnValue.type = MOCKVALUETYPE_LONG_INTEGER;
-		returnValue.value.longIntValue = namedValue.getLongIntValue();
+		returnValue.value.longIntValue = namedValue.getLongIntInputValue();
 	}
 	else if (PlatformSpecificStrCmp(namedValue.getType().asCharString(), "unsigned long int") == 0) {
 		returnValue.type = MOCKVALUETYPE_UNSIGNED_LONG_INTEGER;
-		returnValue.value.unsignedLongIntValue = namedValue.getUnsignedLongIntValue();
+		returnValue.value.unsignedLongIntValue = namedValue.getUnsignedLongIntInputValue();
 	}
 	else if (PlatformSpecificStrCmp(namedValue.getType().asCharString(), "double") == 0) {
 		returnValue.type = MOCKVALUETYPE_DOUBLE;
-		returnValue.value.doubleValue = namedValue.getDoubleValue();
+		returnValue.value.doubleValue = namedValue.getDoubleInputValue();
 	}
 	else if (PlatformSpecificStrCmp(namedValue.getType().asCharString(), "const char*") == 0) {
 		returnValue.type = MOCKVALUETYPE_STRING;
-		returnValue.value.stringValue = namedValue.getStringValue();
+		returnValue.value.stringValue = namedValue.getStringInputValue();
 	}
 	else if (PlatformSpecificStrCmp(namedValue.getType().asCharString(), "void*") == 0) {
 		returnValue.type = MOCKVALUETYPE_POINTER;
-		returnValue.value.pointerValue = namedValue.getPointerValue();
+		returnValue.value.pointerValue = namedValue.getPointerInputValue();
 	}
 	else if (PlatformSpecificStrCmp(namedValue.getType().asCharString(), "const void*") == 0) {
 		returnValue.type = MOCKVALUETYPE_CONST_POINTER;
-		returnValue.value.constPointerValue = namedValue.getConstPointerValue();
+		returnValue.value.constPointerValue = namedValue.getConstPointerInputValue();
 	}
 	else {
 		returnValue.type = MOCKVALUETYPE_OBJECT;
