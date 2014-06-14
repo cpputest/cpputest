@@ -291,7 +291,7 @@ SimpleString MockCheckedExpectedCall::callToString()
 		str += StringFromFormat("expected call order: <%d> -> ", expectedCallOrder_);
 	}
 
-	if (inputParameters_->begin() == NULL) {
+	if (inputParameters_->begin() == NULL && outputParameters_->begin() == NULL) {
 		str += (ignoreOtherParameters_) ? "all parameters ignored" : "no parameters";
 		return str;
 	}
@@ -300,6 +300,12 @@ SimpleString MockCheckedExpectedCall::callToString()
 		str += StringFromFormat("%s %s: <%s>", p->getType().asCharString(), p->getName().asCharString(), getInputParameterValueString(p->getName()).asCharString());
 		if (p->next()) str += ", ";
 	}
+
+	for (MockNamedValueListNode* p = outputParameters_->begin(); p; p = p->next()) {
+		str += StringFromFormat("%s %s: <output>", p->getType().asCharString(), p->getName().asCharString());
+		if (p->next()) str += ", ";
+	}
+
 	if (ignoreOtherParameters_)
 		str += ", other parameters are ignored";
 	return str;
@@ -309,6 +315,12 @@ SimpleString MockCheckedExpectedCall::missingParametersToString()
 {
 	SimpleString str;
 	for (MockNamedValueListNode* p = inputParameters_->begin(); p; p = p->next()) {
+		if (! item(p)->isFulfilled()) {
+			if (str != "") str += ", ";
+			str += StringFromFormat("%s %s", p->getType().asCharString(), p->getName().asCharString());
+		}
+	}
+	for (MockNamedValueListNode* p = outputParameters_->begin(); p; p = p->next()) {
 		if (! item(p)->isFulfilled()) {
 			if (str != "") str += ", ";
 			str += StringFromFormat("%s %s", p->getType().asCharString(), p->getName().asCharString());

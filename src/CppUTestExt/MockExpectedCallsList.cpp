@@ -156,7 +156,7 @@ void MockExpectedCallsList::onlyKeepUnfulfilledExpectationsRelatedTo(const Simpl
 	onlyKeepExpectationsRelatedTo(name);
 }
 
-void MockExpectedCallsList::onlyKeepExpectationsWithParameterName(const SimpleString& name)
+void MockExpectedCallsList::onlyKeepExpectationsWithInputParameterName(const SimpleString& name)
 {
 	for (MockExpectedCallsListNode* p = head_; p; p = p->next_)
 		if (! p->expectedCall_->hasInputParameterWithName(name))

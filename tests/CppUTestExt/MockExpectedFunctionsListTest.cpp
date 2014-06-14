@@ -157,7 +157,7 @@ TEST(MockExpectedCallsList, removeAllExpectationsExceptThisThatRelateToLastOne)
 	LONGS_EQUAL(1, list->size());
 }
 
-TEST(MockExpectedCallsList, onlyKeepExpectationsWithParameterName)
+TEST(MockExpectedCallsList, onlyKeepExpectationsWithInputParameterName)
 {
 	call1->withName("func").withParameter("param", 1);
 	call2->withName("func").withParameter("diffname", 1);
@@ -165,7 +165,7 @@ TEST(MockExpectedCallsList, onlyKeepExpectationsWithParameterName)
 	list->addExpectedCall(call1);
 	list->addExpectedCall(call2);
 	list->addExpectedCall(call3);
-	list->onlyKeepExpectationsWithParameterName("diffname");
+	list->onlyKeepExpectationsWithInputParameterName("diffname");
 	LONGS_EQUAL(2, list->size());
 }
 
