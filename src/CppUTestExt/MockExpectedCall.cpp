@@ -149,7 +149,8 @@ MockExpectedCall& MockCheckedExpectedCall::withOutputParameterReturning(const Si
 {
 	MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
 	outputParameters_->add(newParameter);
-	newParameter->setOutputData(value, size);
+	newParameter->setValue(value);
+	newParameter->setSize(size);
 	return *this;
 }
 
