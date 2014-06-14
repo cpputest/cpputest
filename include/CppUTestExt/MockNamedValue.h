@@ -94,8 +94,6 @@ public:
 
 	virtual SimpleString getName() const;
 	virtual SimpleString getType() const;
-	virtual bool isInput() const;
-	virtual bool isOutput() const;
 
 	virtual int getIntValue() const;
 	virtual unsigned int getUnsignedIntValue() const;
@@ -126,7 +124,6 @@ private:
 		const void* objectPointerValue_;
 		const void* outputPointerValue_;
 	} value_;
-	bool isInput_;
 	size_t outputSize_;
 	MockNamedValueComparator* comparator_;
 	static MockNamedValueComparatorRepository* defaultRepository_;
@@ -160,8 +157,7 @@ public:
 	void add(MockNamedValue* newValue);
 	void clear();
 
-	MockNamedValue* getInputValueByName(const SimpleString& name);
-	MockNamedValue* getOutputValueByName(const SimpleString& name);
+	MockNamedValue* getValueByName(const SimpleString& name);
 
 private:
 	MockNamedValueListNode* head_;

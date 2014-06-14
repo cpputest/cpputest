@@ -298,12 +298,12 @@ void MockSupport::checkExpectations()
 
 bool MockSupport::hasData(const SimpleString& name)
 {
-	return data_.getInputValueByName(name) != NULL;
+	return data_.getValueByName(name) != NULL;
 }
 
 MockNamedValue* MockSupport::retrieveDataFromStore(const SimpleString& name)
 {
-	MockNamedValue* newData = data_.getInputValueByName(name);
+	MockNamedValue* newData = data_.getValueByName(name);
 	if (newData == NULL) {
 		newData = new MockNamedValue(name);
 		data_.add(newData);
@@ -355,7 +355,7 @@ void MockSupport::setDataObject(const SimpleString& name, const SimpleString& ty
 
 MockNamedValue MockSupport::getData(const SimpleString& name)
 {
-	MockNamedValue* value = data_.getInputValueByName(name);
+	MockNamedValue* value = data_.getValueByName(name);
 	if (value == NULL)
 		return MockNamedValue("");
 	return *value;

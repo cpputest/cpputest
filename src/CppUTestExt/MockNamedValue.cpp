@@ -37,7 +37,7 @@ void MockNamedValue::setDefaultComparatorRepository(MockNamedValueComparatorRepo
 	defaultRepository_ = repository;
 }
 
-MockNamedValue::MockNamedValue(const SimpleString& name) : name_(name), type_("int"), isInput_(true), comparator_(NULL)
+MockNamedValue::MockNamedValue(const SimpleString& name) : name_(name), type_("int"), comparator_(NULL)
 {
 	value_.intValue_ = 0;
 }
@@ -48,63 +48,54 @@ MockNamedValue::~MockNamedValue()
 
 void MockNamedValue::setValue(unsigned int value)
 {
-	isInput_ = true;
 	type_ = "unsigned int";
 	value_.unsignedIntValue_ = value;
 }
 
 void MockNamedValue::setValue(int value)
 {
-	isInput_ = true;
 	type_ = "int";
 	value_.intValue_ = value;
 }
 
 void MockNamedValue::setValue(long int value)
 {
-	isInput_ = true;
 	type_ = "long int";
 	value_.longIntValue_ = value;
 }
 
 void MockNamedValue::setValue(unsigned long int value)
 {
-	isInput_ = true;
 	type_ = "unsigned long int";
 	value_.unsignedLongIntValue_ = value;
 }
 
 void MockNamedValue::setValue(double value)
 {
-	isInput_ = true;
 	type_ = "double";
 	value_.doubleValue_ = value;
 }
 
 void MockNamedValue::setValue(void* value)
 {
-	isInput_ = true;
 	type_ = "void*";
 	value_.pointerValue_ = value;
 }
 
 void MockNamedValue::setValue(const void* value)
 {
-	isInput_ = true;
 	type_ = "const void*";
 	value_.constPointerValue_ = value;
 }
 
 void MockNamedValue::setValue(const char* value)
 {
-	isInput_ = true;
 	type_ = "const char*";
 	value_.stringValue_ = value;
 }
 
 void MockNamedValue::setObjectPointer(const SimpleString& type, const void* objectPtr)
 {
-	isInput_ = true;
 	type_ = type;
 	value_.objectPointerValue_ = objectPtr;
 	if (! comparator_ && defaultRepository_)
@@ -113,7 +104,6 @@ void MockNamedValue::setObjectPointer(const SimpleString& type, const void* obje
 
 void MockNamedValue::setOutputData(const void *outputPtr, size_t size)
 {
-	isInput_ = false;
 	type_ = "output";
 	value_.outputPointerValue_ = outputPtr;
 	outputSize_ = size;
@@ -132,16 +122,6 @@ SimpleString MockNamedValue::getName() const
 SimpleString MockNamedValue::getType() const
 {
 	return type_;
-}
-
-bool MockNamedValue::isInput() const
-{
-	return isInput_;
-}
-
-bool MockNamedValue::isOutput() const
-{
-	return !isInput();
 }
 
 unsigned int MockNamedValue::getUnsignedIntValue() const
@@ -378,18 +358,10 @@ void MockNamedValueList::add(MockNamedValue* newValue)
 	}
 }
 
-MockNamedValue* MockNamedValueList::getInputValueByName(const SimpleString& name)
+MockNamedValue* MockNamedValueList::getValueByName(const SimpleString& name)
 {
 	for (MockNamedValueListNode * p = head_; p; p = p->next())
-		if (p->getName() == name && p->item()->isInput())
-			return p->item();
-	return NULL;
-}
-
-MockNamedValue* MockNamedValueList::getOutputValueByName(const SimpleString& name)
-{
-	for (MockNamedValueListNode * p = head_; p; p = p->next())
-		if (p->getName() == name && p->item()->isOutput())
+		if (p->getName() == name)
 			return p->item();
 	return NULL;
 }

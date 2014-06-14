@@ -121,7 +121,8 @@ private:
 	int callOrder_;
 	int expectedCallOrder_;
 	bool outOfOrder_;
-	MockNamedValueList* parameters_;
+	MockNamedValueList* inputParameters_;
+	MockNamedValueList* outputParameters_;
 	MockNamedValue returnValue_;
 	void* objectPtr_;
 	bool wasPassedToObject_;
