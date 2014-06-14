@@ -172,7 +172,7 @@ TEST(MockExpectedCallsList, onlyKeepExpectationsWithParameterName)
 TEST(MockExpectedCallsList, onlyKeepUnfulfilledExpectationsWithInputParameter)
 {
 	MockNamedValue parameter("diffname");
-	parameter.setInputValue(1);
+	parameter.setValue(1);
 	call1->withName("func").withParameter("param", 1);
 	call2->withName("func").withParameter("diffname", 1);
 	call3->withName("func").withParameter("diffname", 1);

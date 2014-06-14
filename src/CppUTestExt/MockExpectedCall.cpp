@@ -74,7 +74,7 @@ MockExpectedCall& MockCheckedExpectedCall::withUnsignedIntParameter(const Simple
 {
 	MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
 	parameters_->add(newParameter);
-	newParameter->setInputValue(value);
+	newParameter->setValue(value);
 	return *this;
 }
 
@@ -82,7 +82,7 @@ MockExpectedCall& MockCheckedExpectedCall::withIntParameter(const SimpleString& 
 {
 	MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
 	parameters_->add(newParameter);
-	newParameter->setInputValue(value);
+	newParameter->setValue(value);
 	return *this;
 }
 
@@ -90,7 +90,7 @@ MockExpectedCall& MockCheckedExpectedCall::withLongIntParameter(const SimpleStri
 {
 	MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
 	parameters_->add(newParameter);
-	newParameter->setInputValue(value);
+	newParameter->setValue(value);
 	return *this;
 }
 
@@ -98,7 +98,7 @@ MockExpectedCall& MockCheckedExpectedCall::withUnsignedLongIntParameter(const Si
 {
 	MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
 	parameters_->add(newParameter);
-	newParameter->setInputValue(value);
+	newParameter->setValue(value);
 	return *this;
 }
 
@@ -106,7 +106,7 @@ MockExpectedCall& MockCheckedExpectedCall::withDoubleParameter(const SimpleStrin
 {
 	MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
 	parameters_->add(newParameter);
-	newParameter->setInputValue(value);
+	newParameter->setValue(value);
 	return *this;
 }
 
@@ -114,7 +114,7 @@ MockExpectedCall& MockCheckedExpectedCall::withStringParameter(const SimpleStrin
 {
 	MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
 	parameters_->add(newParameter);
-	newParameter->setInputValue(value);
+	newParameter->setValue(value);
 	return *this;
 }
 
@@ -122,7 +122,7 @@ MockExpectedCall& MockCheckedExpectedCall::withPointerParameter(const SimpleStri
 {
 	MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
 	parameters_->add(newParameter);
-	newParameter->setInputValue(value);
+	newParameter->setValue(value);
 	return *this;
 }
 
@@ -130,7 +130,7 @@ MockExpectedCall& MockCheckedExpectedCall::withConstPointerParameter(const Simpl
 {
 	MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
 	parameters_->add(newParameter);
-	newParameter->setInputValue(value);
+	newParameter->setValue(value);
 	return *this;
 }
 
@@ -341,56 +341,56 @@ bool MockCheckedExpectedCall::MockExpectedFunctionParameter::isFulfilled() const
 MockExpectedCall& MockCheckedExpectedCall::andReturnValue(unsigned int value)
 {
 	returnValue_.setName("returnValue");
-	returnValue_.setInputValue(value);
+	returnValue_.setValue(value);
 	return *this;
 }
 
 MockExpectedCall& MockCheckedExpectedCall::andReturnValue(int value)
 {
 	returnValue_.setName("returnValue");
-	returnValue_.setInputValue(value);
+	returnValue_.setValue(value);
 	return *this;
 }
 
 MockExpectedCall& MockCheckedExpectedCall::andReturnValue(long int value)
 {
 	returnValue_.setName("returnValue");
-	returnValue_.setInputValue(value);
+	returnValue_.setValue(value);
 	return *this;
 }
 
 MockExpectedCall& MockCheckedExpectedCall::andReturnValue(unsigned long int value)
 {
 	returnValue_.setName("returnValue");
-	returnValue_.setInputValue(value);
+	returnValue_.setValue(value);
 	return *this;
 }
 
 MockExpectedCall& MockCheckedExpectedCall::andReturnValue(const char* value)
 {
 	returnValue_.setName("returnValue");
-	returnValue_.setInputValue(value);
+	returnValue_.setValue(value);
 	return *this;
 }
 
 MockExpectedCall& MockCheckedExpectedCall::andReturnValue(double value)
 {
 	returnValue_.setName("returnValue");
-	returnValue_.setInputValue(value);
+	returnValue_.setValue(value);
 	return *this;
 }
 
 MockExpectedCall& MockCheckedExpectedCall::andReturnValue(void* value)
 {
 	returnValue_.setName("returnValue");
-	returnValue_.setInputValue(value);
+	returnValue_.setValue(value);
 	return *this;
 }
 
 MockExpectedCall& MockCheckedExpectedCall::andReturnValue(const void* value)
 {
 	returnValue_.setName("returnValue");
-	returnValue_.setInputValue(value);
+	returnValue_.setValue(value);
 	return *this;
 }
 

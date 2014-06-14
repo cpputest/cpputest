@@ -72,7 +72,7 @@ TEST(MockCheckedActualCall, unExpectedParameterName)
 	actualCall.withName("func").withParameter("integer", 1);
 
 	MockNamedValue parameter("integer");
-	parameter.setInputValue(1);
+	parameter.setValue(1);
 
 	MockUnexpectedParameterFailure expectedFailure(mockFailureTest(), "func", parameter, *list);
 	CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);

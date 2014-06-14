@@ -314,37 +314,37 @@ MockNamedValue* MockSupport::retrieveDataFromStore(const SimpleString& name)
 void MockSupport::setData(const SimpleString& name, unsigned int value)
 {
 	MockNamedValue* newData = retrieveDataFromStore(name);
-	newData->setInputValue(value);
+	newData->setValue(value);
 }
 
 void MockSupport::setData(const SimpleString& name, int value)
 {
 	MockNamedValue* newData = retrieveDataFromStore(name);
-	newData->setInputValue(value);
+	newData->setValue(value);
 }
 
 void MockSupport::setData(const SimpleString& name, const char* value)
 {
 	MockNamedValue* newData = retrieveDataFromStore(name);
-	newData->setInputValue(value);
+	newData->setValue(value);
 }
 
 void MockSupport::setData(const SimpleString& name, double value)
 {
 	MockNamedValue* newData = retrieveDataFromStore(name);
-	newData->setInputValue(value);
+	newData->setValue(value);
 }
 
 void MockSupport::setData(const SimpleString& name, void* value)
 {
 	MockNamedValue* newData = retrieveDataFromStore(name);
-	newData->setInputValue(value);
+	newData->setValue(value);
 }
 
 void MockSupport::setData(const SimpleString& name, const void* value)
 {
 	MockNamedValue* newData = retrieveDataFromStore(name);
-	newData->setInputValue(value);
+	newData->setValue(value);
 }
 
 void MockSupport::setDataObject(const SimpleString& name, const SimpleString& type, void* value)
@@ -407,42 +407,42 @@ MockNamedValue MockSupport::returnValue()
 
 unsigned int MockSupport::unsignedIntReturnValue()
 {
-	return returnValue().getUnsignedIntInputValue();
+	return returnValue().getUnsignedIntValue();
 }
 
 int MockSupport::intReturnValue()
 {
-	return returnValue().getIntInputValue();
+	return returnValue().getIntValue();
 }
 
 long int MockSupport::longIntReturnValue()
 {
-	return returnValue().getLongIntInputValue();
+	return returnValue().getLongIntValue();
 }
 
 unsigned long int MockSupport::unsignedLongIntReturnValue()
 {
-	return returnValue().getUnsignedLongIntInputValue();
+	return returnValue().getUnsignedLongIntValue();
 }
 
 const char* MockSupport::stringReturnValue()
 {
-	return returnValue().getStringInputValue();
+	return returnValue().getStringValue();
 }
 
 double MockSupport::doubleReturnValue()
 {
-	return returnValue().getDoubleInputValue();
+	return returnValue().getDoubleValue();
 }
 
 void* MockSupport::pointerReturnValue()
 {
-	return returnValue().getPointerInputValue();
+	return returnValue().getPointerValue();
 }
 
 const void* MockSupport::constPointerReturnValue()
 {
-	return returnValue().getConstPointerInputValue();
+	return returnValue().getConstPointerValue();
 }
 
 bool MockSupport::hasReturnValue()
