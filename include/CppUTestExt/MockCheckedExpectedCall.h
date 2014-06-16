@@ -66,12 +66,13 @@ public:
 
 	virtual MockExpectedCall& onObject(void* objectPtr) _override;
 
-	virtual MockNamedValue getParameter(const SimpleString& name);
-	virtual SimpleString getParameterType(const SimpleString& name);
-	virtual SimpleString getParameterValueString(const SimpleString& name);
+	virtual MockNamedValue getInputParameter(const SimpleString& name);
+	virtual MockNamedValue getOutputParameter(const SimpleString& name);
+	virtual SimpleString getInputParameterType(const SimpleString& name);
+	virtual SimpleString getInputParameterValueString(const SimpleString& name);
 
-	virtual bool hasParameterWithName(const SimpleString& name);
-	virtual bool hasParameter(const MockNamedValue& parameter);
+	virtual bool hasInputParameterWithName(const SimpleString& name);
+	virtual bool hasInputParameter(const MockNamedValue& parameter);
 	virtual bool hasOutputParameter(const MockNamedValue& parameter);
 	virtual bool relatesTo(const SimpleString& functionName);
 	virtual bool relatesToObject(void*objectPtr) const;
@@ -83,7 +84,8 @@ public:
 	virtual bool isOutOfOrder() const;
 
 	virtual void callWasMade(int callOrder);
-	virtual void parameterWasPassed(const SimpleString& name);
+	virtual void inputParameterWasPassed(const SimpleString& name);
+	virtual void outputParameterWasPassed(const SimpleString& name);
 	virtual void parametersWereIgnored();
 	virtual void wasPassedToObject();
 	virtual void resetExpectation();
@@ -119,7 +121,8 @@ private:
 	int callOrder_;
 	int expectedCallOrder_;
 	bool outOfOrder_;
-	MockNamedValueList* parameters_;
+	MockNamedValueList* inputParameters_;
+	MockNamedValueList* outputParameters_;
 	MockNamedValue returnValue_;
 	void* objectPtr_;
 	bool wasPassedToObject_;

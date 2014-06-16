@@ -81,11 +81,18 @@ public:
 	virtual ~MockCallOrderFailure(){}
 };
 
-class MockUnexpectedParameterFailure : public MockFailure
+class MockUnexpectedInputParameterFailure : public MockFailure
 {
 public:
-	MockUnexpectedParameterFailure(UtestShell* test, const SimpleString& functionName, const MockNamedValue& parameter, const MockExpectedCallsList& expectations);
-	virtual ~MockUnexpectedParameterFailure(){}
+	MockUnexpectedInputParameterFailure(UtestShell* test, const SimpleString& functionName, const MockNamedValue& parameter, const MockExpectedCallsList& expectations);
+	virtual ~MockUnexpectedInputParameterFailure(){}
+};
+
+class MockUnexpectedOutputParameterFailure : public MockFailure
+{
+public:
+	MockUnexpectedOutputParameterFailure(UtestShell* test, const SimpleString& functionName, const MockNamedValue& parameter, const MockExpectedCallsList& expectations);
+	virtual ~MockUnexpectedOutputParameterFailure(){}
 };
 
 class MockExpectedParameterDidntHappenFailure : public MockFailure

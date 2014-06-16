@@ -112,7 +112,7 @@ TEST(MockFailureTest, MockUnexpectedAdditionalCallFailure)
 	STRCMP_CONTAINS("Mock Failure: Unexpected additional (2th) call to function: bar\n\tEXPECTED", failure.getMessage().asCharString());
 }
 
-TEST(MockFailureTest, MockUnexpectedParameterFailure)
+TEST(MockFailureTest, MockUnexpectedInputParameterFailure)
 {
 	call1->withName("foo").withParameter("boo", 2);
 	call2->withName("foo").withParameter("boo", 10);
@@ -122,15 +122,38 @@ TEST(MockFailureTest, MockUnexpectedParameterFailure)
 	MockNamedValue actualParameter("bar");
 	actualParameter.setValue(2);
 
-	MockUnexpectedParameterFailure failure(UtestShell::getCurrent(), "foo", actualParameter, *list);
+	MockUnexpectedInputParameterFailure failure(UtestShell::getCurrent(), "foo", actualParameter, *list);
 	STRCMP_EQUAL("Mock Failure: Unexpected parameter name to function \"foo\": bar\n"
-			     "\tEXPECTED calls that DID NOT happen related to function: foo\n"
+				 "\tEXPECTED calls that DID NOT happen related to function: foo\n"
 				 "\t\tfoo -> int boo: <2>\n"
 				 "\t\tfoo -> int boo: <10>\n"
 				 "\tACTUAL calls that DID happen related to function: foo\n"
 				 "\t\t<none>\n"
-			     "\tACTUAL unexpected parameter passed to function: foo\n"
-			     "\t\tint bar: <2>", failure.getMessage().asCharString());
+				 "\tACTUAL unexpected parameter passed to function: foo\n"
+				 "\t\tint bar: <2>", failure.getMessage().asCharString());
+}
+
+TEST(MockFailureTest, MockUnexpectedOutputParameterFailure)
+{
+	int out1;
+	int out2;
+	call1->withName("foo").withOutputParameterReturning("boo", &out1, sizeof(out1));
+	call2->withName("foo").withOutputParameterReturning("boo", &out2, sizeof(out2));
+	call3->withName("unrelated");
+	addAllToList();
+
+	MockNamedValue actualParameter("bar");
+	actualParameter.setValue((void *)0x123);
+
+	MockUnexpectedOutputParameterFailure failure(UtestShell::getCurrent(), "foo", actualParameter, *list);
+	STRCMP_EQUAL("Mock Failure: Unexpected output parameter name to function \"foo\": bar\n"
+				 "\tEXPECTED calls that DID NOT happen related to function: foo\n"
+				 "\t\tfoo -> const void* boo: <output>\n"
+				 "\t\tfoo -> const void* boo: <output>\n"
+				 "\tACTUAL calls that DID happen related to function: foo\n"
+				 "\t\t<none>\n"
+				 "\tACTUAL unexpected output parameter passed to function: foo\n"
+				 "\t\tvoid* bar", failure.getMessage().asCharString());
 }
 
 TEST(MockFailureTest, MockUnexpectedParameterValueFailure)
@@ -143,7 +166,7 @@ TEST(MockFailureTest, MockUnexpectedParameterValueFailure)
 	MockNamedValue actualParameter("boo");
 	actualParameter.setValue(20);
 
-	MockUnexpectedParameterFailure failure(UtestShell::getCurrent(), "foo", actualParameter, *list);
+	MockUnexpectedInputParameterFailure failure(UtestShell::getCurrent(), "foo", actualParameter, *list);
 	STRCMP_EQUAL("Mock Failure: Unexpected parameter value to parameter \"boo\" to function \"foo\": <20>\n"
 			     "\tEXPECTED calls that DID NOT happen related to function: foo\n"
 				 "\t\tfoo -> int boo: <2>\n"
@@ -159,8 +182,8 @@ TEST(MockFailureTest, MockExpectedParameterDidntHappenFailure)
 	call1->withName("foo").withParameter("bar", 2).withParameter("boo", "str");
 	call2->withName("foo").withParameter("bar", 10).withParameter("boo", "bleh");
 	call2->callWasMade(1);
-	call2->parameterWasPassed("bar");
-	call2->parameterWasPassed("boo");
+	call2->inputParameterWasPassed("bar");
+	call2->inputParameterWasPassed("boo");
 	call3->withName("unrelated");
 	addAllToList();
 

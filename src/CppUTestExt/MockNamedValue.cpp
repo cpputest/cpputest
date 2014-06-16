@@ -102,15 +102,9 @@ void MockNamedValue::setObjectPointer(const SimpleString& type, const void* obje
 		comparator_ = defaultRepository_->getComparatorForType(type);
 }
 
-void MockNamedValue::setOutputPointer(const void *outputPtr)
+void MockNamedValue::setSize(size_t size)
 {
-	type_ = "output";
-	value_.outputPointerValue_ = outputPtr;
-}
-
-void MockNamedValue::setOutputSize(size_t size)
-{
-	outputSize_ = size;
+	size_ = size;
 }
 
 void MockNamedValue::setName(const char* name)
@@ -202,14 +196,9 @@ const void* MockNamedValue::getObjectPointer() const
 	return value_.objectPointerValue_;
 }
 
-const void* MockNamedValue::getOutputPointer() const
+size_t MockNamedValue::getSize() const
 {
-	return value_.outputPointerValue_;
-}
-
-size_t MockNamedValue::getOutputSize() const
-{
-	return outputSize_;
+	return size_;
 }
 
 void MockNamedValue::setComparator(MockNamedValueComparator* comparator)

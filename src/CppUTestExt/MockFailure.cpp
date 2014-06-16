@@ -121,11 +121,11 @@ MockCallOrderFailure::MockCallOrderFailure(UtestShell* test, const MockExpectedC
 	addExpectationsAndCallHistory(expectations);
 }
 
-MockUnexpectedParameterFailure::MockUnexpectedParameterFailure(UtestShell* test, const SimpleString& functionName, const MockNamedValue& parameter, const MockExpectedCallsList& expectations)  : MockFailure(test)
+MockUnexpectedInputParameterFailure::MockUnexpectedInputParameterFailure(UtestShell* test, const SimpleString& functionName, const MockNamedValue& parameter, const MockExpectedCallsList& expectations)  : MockFailure(test)
 {
 	MockExpectedCallsList expectationsForFunctionWithParameterName;
 	expectationsForFunctionWithParameterName.addExpectationsRelatedTo(functionName, expectations);
-	expectationsForFunctionWithParameterName.onlyKeepExpectationsWithParameterName(parameter.getName());
+	expectationsForFunctionWithParameterName.onlyKeepExpectationsWithInputParameterName(parameter.getName());
 
 	if (expectationsForFunctionWithParameterName.isEmpty()) {
 		message_ = "Mock Failure: Unexpected parameter name to function \"";
@@ -157,6 +157,26 @@ MockUnexpectedParameterFailure::MockUnexpectedParameterFailure(UtestShell* test,
 	message_ += ": <";
 	message_ += StringFrom(parameter);
 	message_ += ">";
+}
+
+MockUnexpectedOutputParameterFailure::MockUnexpectedOutputParameterFailure(UtestShell* test, const SimpleString& functionName, const MockNamedValue& parameter, const MockExpectedCallsList& expectations)  : MockFailure(test)
+{
+	message_ = "Mock Failure: Unexpected output parameter name to function \"";
+	message_ += functionName;
+	message_ += "\": ";
+	message_ += parameter.getName();
+
+	message_ += "\n";
+	addExpectationsAndCallHistoryRelatedTo(functionName, expectations);
+
+	message_ += "\n\tACTUAL unexpected output parameter passed to function: ";
+	message_ += functionName;
+	message_ += "\n";
+
+	message_ += "\t\t";
+	message_ += parameter.getType();
+	message_ += " ";
+	message_ += parameter.getName();
 }
 
 MockExpectedParameterDidntHappenFailure::MockExpectedParameterDidntHappenFailure(UtestShell* test, const SimpleString& functionName, const MockExpectedCallsList& expectations) : MockFailure(test)
