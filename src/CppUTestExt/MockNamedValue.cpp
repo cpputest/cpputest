@@ -46,6 +46,11 @@ MockNamedValue::~MockNamedValue()
 {
 }
 
+bool MockNamedValue::hasValue() const
+{
+	return !getName().isEmpty();
+}
+
 void MockNamedValue::setValue(unsigned int value)
 {
 	type_ = "unsigned int";
@@ -141,6 +146,9 @@ int MockNamedValue::getIntValue() const
 
 int MockNamedValue::getIntValue(int defaultValue) const
 {
+    if (hasValue()) {
+        return getIntValue();
+    }
 	return defaultValue;
 }
 

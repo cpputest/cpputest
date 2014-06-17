@@ -417,6 +417,9 @@ int MockSupport::intReturnValue()
 
 int MockSupport::intReturnValue(int defaultValue)
 {
+    if (hasReturnValue()) {
+        return returnValue().getIntValue();
+    }
 	return defaultValue;
 }
 

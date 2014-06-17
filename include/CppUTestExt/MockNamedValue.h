@@ -94,6 +94,7 @@ public:
 
 	virtual SimpleString getName() const;
 	virtual SimpleString getType() const;
+    virtual bool hasValue() const;
 
 	virtual int getIntValue() const;
 	virtual int getIntValue(int defaultValue) const;
