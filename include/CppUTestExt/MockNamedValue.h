@@ -96,6 +96,7 @@ public:
 	virtual SimpleString getType() const;
 
 	virtual int getIntValue() const;
+	virtual int getIntValue(int defaultValue) const;
 	virtual unsigned int getUnsignedIntValue() const;
 	virtual long int getLongIntValue() const;
 	virtual unsigned long int getUnsignedLongIntValue() const;

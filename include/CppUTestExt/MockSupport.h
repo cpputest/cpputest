@@ -52,6 +52,7 @@ public:
 	virtual bool hasReturnValue();
 	virtual MockNamedValue returnValue();
 	virtual int intReturnValue();
+	virtual int intReturnValue(int defaultValue);
 	virtual unsigned int unsignedIntReturnValue();
 	virtual long int longIntReturnValue();
 	virtual unsigned long int unsignedLongIntReturnValue();

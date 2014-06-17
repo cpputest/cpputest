@@ -415,6 +415,11 @@ int MockSupport::intReturnValue()
 	return returnValue().getIntValue();
 }
 
+int MockSupport::intReturnValue(int defaultValue)
+{
+	return defaultValue;
+}
+
 long int MockSupport::longIntReturnValue()
 {
 	return returnValue().getLongIntValue();

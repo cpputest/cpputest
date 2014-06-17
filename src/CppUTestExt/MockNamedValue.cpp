@@ -139,6 +139,11 @@ int MockNamedValue::getIntValue() const
 	return value_.intValue_;
 }
 
+int MockNamedValue::getIntValue(int defaultValue) const
+{
+	return defaultValue;
+}
+
 long int MockNamedValue::getLongIntValue() const
 {
 	if(type_ == "int")
