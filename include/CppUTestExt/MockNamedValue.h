@@ -83,8 +83,7 @@ public:
 	virtual void setValue(const void* value);
 	virtual void setValue(const char* value);
 	virtual void setObjectPointer(const SimpleString& type, const void* objectPtr);
-	virtual void setOutputPointer(const void* outputPtr);
-	virtual void setOutputSize(size_t size);
+	virtual void setSize(size_t size);
 
 	virtual void setComparator(MockNamedValueComparator* comparator);
 	virtual void setName(const char* name);
@@ -105,8 +104,7 @@ public:
 	virtual void* getPointerValue() const;
 	virtual const void* getConstPointerValue() const;
 	virtual const void* getObjectPointer() const;
-	virtual const void* getOutputPointer() const;
-	virtual size_t getOutputSize() const;
+	virtual size_t getSize() const;
 	virtual MockNamedValueComparator* getComparator() const;
 
 	static void setDefaultComparatorRepository(MockNamedValueComparatorRepository* repository);
@@ -125,7 +123,7 @@ private:
 		const void* objectPointerValue_;
 		const void* outputPointerValue_;
 	} value_;
-	size_t outputSize_;
+	size_t size_;
 	MockNamedValueComparator* comparator_;
 	static MockNamedValueComparatorRepository* defaultRepository_;
 };

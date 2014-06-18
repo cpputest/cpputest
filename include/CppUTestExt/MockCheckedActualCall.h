@@ -69,7 +69,7 @@ protected:
 	virtual void finalizeOutputParameters();
 	virtual void finalizeCallWhenFulfilled();
 	virtual void failTest(const MockFailure& failure);
-	virtual void checkActualParameter(const MockNamedValue& actualParameter);
+	virtual void checkInputParameter(const MockNamedValue& actualParameter);
 	virtual void checkOutputParameter(const MockNamedValue& outputParameter);
 
 	enum ActualCallState {

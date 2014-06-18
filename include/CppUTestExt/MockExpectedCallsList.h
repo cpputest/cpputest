@@ -55,13 +55,13 @@ public:
 	virtual void addUnfilfilledExpectations(const MockExpectedCallsList& list);
 
 	virtual void onlyKeepExpectationsRelatedTo(const SimpleString& name);
-	virtual void onlyKeepExpectationsWithParameter(const MockNamedValue& parameter);
-	virtual void onlyKeepExpectationsWithParameterName(const SimpleString& name);
+	virtual void onlyKeepExpectationsWithInputParameter(const MockNamedValue& parameter);
+	virtual void onlyKeepExpectationsWithInputParameterName(const SimpleString& name);
 	virtual void onlyKeepExpectationsWithOutputParameterName(const SimpleString& name);
 	virtual void onlyKeepExpectationsOnObject(void* objectPtr);
 	virtual void onlyKeepUnfulfilledExpectations();
 	virtual void onlyKeepUnfulfilledExpectationsRelatedTo(const SimpleString& name);
-	virtual void onlyKeepUnfulfilledExpectationsWithParameter(const MockNamedValue& parameter);
+	virtual void onlyKeepUnfulfilledExpectationsWithInputParameter(const MockNamedValue& parameter);
 	virtual void onlyKeepUnfulfilledExpectationsWithOutputParameter(const MockNamedValue& parameter);
 	virtual void onlyKeepUnfulfilledExpectationsOnObject(void* objectPtr);
 
@@ -72,6 +72,7 @@ public:
 	virtual void callWasMade(int callOrder);
 	virtual void wasPassedToObject();
 	virtual void parameterWasPassed(const SimpleString& parameterName);
+	virtual void outputParameterWasPassed(const SimpleString& parameterName);
 
 	virtual SimpleString unfulfilledCallsToString(const SimpleString& linePrefix = "") const;
 	virtual SimpleString fulfilledCallsToString(const SimpleString& linePrefix = "") const;

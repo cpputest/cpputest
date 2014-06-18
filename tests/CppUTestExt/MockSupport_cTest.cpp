@@ -91,6 +91,28 @@ TEST(MockSupport_c, unsignedLongIntParameter)
 	mock_c()->actualCall("foo")->withUnsignedLongIntParameters("p", 1);
 }
 
+TEST(MockSupport_c, outputParameters)
+{
+	int param = 1;
+	int retval = 2;
+	mock_c()->expectOneCall("foo")->withOutputParameterReturning("out", &retval, sizeof(retval));
+	mock_c()->actualCall("foo")->withOutputParameter("out", &param);
+	mock_c()->checkExpectations();
+	LONGS_EQUAL(2, param);
+	LONGS_EQUAL(2, retval);
+}
+
+TEST(MockSupport_c, outputParameters_differentType)
+{
+	long param = 1;
+	long retval = 2;
+	mock_c()->expectOneCall("foo")->withOutputParameterReturning("out", &retval, sizeof(retval));
+	mock_c()->actualCall("foo")->withOutputParameter("out", &param);
+	mock_c()->checkExpectations();
+	LONGS_EQUAL(2, param);
+	LONGS_EQUAL(2, retval);
+}
+
 TEST(MockSupport_c, returnUnsignedIntValue)
 {
 	unsigned int expected_value = 7;
