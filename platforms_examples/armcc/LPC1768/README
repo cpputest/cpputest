@@ -12,7 +12,10 @@ Requirements:
 5. 12 or 24 MHz quartz. If else, need to be adjusted in
   $(CPPUTEST_HOME)/platforms_startup/armcc/LPC1768/system_LPC17xx.c
   (for _clock_init() function working correctly and to set up 100 MHz core
-  clock)
+  clock).
+  Please check system_LPC17xx.c for correct quartz selection in function
+  SystemInit(), and rebuild startup library for any change.
+  Default is 12 MHz quartz.
 
 6. eclipse + gdb server from JLink + arm-none-eabi-gdb from GNU ARM Tools Embedded
   For debug only.
