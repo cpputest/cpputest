@@ -95,7 +95,7 @@ public:
 
 	enum
 	{
-		MAX_SET = 1024
+		MAX_SET = 32
 	};
 };
 
