@@ -22,7 +22,7 @@ Requirements:
 
 First, you need to compile CppUTest and target startup library:
   make -C ../../../platforms/armcc CPU=Cortex-M3 all
-  make -C ../../../platforms_startup/armcc/LPC1768 CPU=Cortex-M3  all
+  make -C ../../../platforms_startup/armcc/LPC1768 all
 
 Second, you need to write tests. As example, I use
   $(CPPUTEST_HOME)/examples/AllTests/CircularBufferTest.cpp.
