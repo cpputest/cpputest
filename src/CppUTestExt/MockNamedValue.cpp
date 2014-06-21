@@ -46,11 +46,6 @@ MockNamedValue::~MockNamedValue()
 {
 }
 
-bool MockNamedValue::hasValue() const
-{
-	return !getName().isEmpty();
-}
-
 void MockNamedValue::setValue(unsigned int value)
 {
 	type_ = "unsigned int";
@@ -142,14 +137,6 @@ int MockNamedValue::getIntValue() const
 {
 	STRCMP_EQUAL("int", type_.asCharString());
 	return value_.intValue_;
-}
-
-int MockNamedValue::getIntValue(int defaultValue) const
-{
-    if (hasValue()) {
-        return getIntValue();
-    }
-	return defaultValue;
 }
 
 long int MockNamedValue::getLongIntValue() const

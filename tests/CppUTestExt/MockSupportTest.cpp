@@ -1196,18 +1196,16 @@ TEST(MockSupportTest, WhenAIntegerReturnValueIsDefinedAndAlsoThereIsADefaultShou
 	int default_return_value = 777;
 	int expected_return_value = default_return_value + 1;
 	mock().expectOneCall("foo").andReturnValue(expected_return_value);
-	LONGS_EQUAL(expected_return_value, mock().actualCall("foo").returnValue().getIntValue(default_return_value));
-	LONGS_EQUAL(expected_return_value, mock().returnValue().getIntValue(default_return_value));
+	mock().actualCall("foo");
 	LONGS_EQUAL(expected_return_value, mock().intReturnValue(default_return_value));
 }
 
 TEST(MockSupportTest, WhenNoIntegerReturnValueIsDefinedButThereIsADefaultShouldlUseTheDefaultValue)
 {
-	int expected_value = 777;
+	int default_value = 777;
 	mock().expectOneCall("foo");
-	LONGS_EQUAL(expected_value, mock().actualCall("foo").returnValue().getIntValue(expected_value));
-	LONGS_EQUAL(expected_value, mock().returnValue().getIntValue(expected_value));
-	LONGS_EQUAL(expected_value, mock().intReturnValue(expected_value));
+	mock().actualCall("foo");
+	LONGS_EQUAL(default_value, mock().intReturnValue(default_value));
 }
 
 TEST(MockSupportTest, IntegerReturnValue)

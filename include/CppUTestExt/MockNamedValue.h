@@ -94,10 +94,8 @@ public:
 
 	virtual SimpleString getName() const;
 	virtual SimpleString getType() const;
-	virtual bool hasValue() const;
 
 	virtual int getIntValue() const;
-	virtual int getIntValue(int defaultValue) const;
 	virtual unsigned int getUnsignedIntValue() const;
 	virtual long int getLongIntValue() const;
 	virtual unsigned long int getUnsignedLongIntValue() const;
