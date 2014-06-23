@@ -1204,7 +1204,7 @@ TEST(MockSupportTest, WhenNoIntegerReturnValueIsDefinedButThereIsADefaultShouldl
 {
 	int default_value = 777;
 	mock().expectOneCall("foo");
-	mock().actualCall("foo");
+	LONGS_EQUAL(default_value, mock().actualCall("foo").returnIntValueOrDefault(default_value));
 	LONGS_EQUAL(default_value, mock().returnIntValueOrDefault(default_value));
 }
 

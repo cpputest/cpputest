@@ -52,6 +52,7 @@ public:
 
 	virtual bool hasReturnValue() _override;
 	virtual MockNamedValue returnValue() _override;
+	virtual int returnIntValueOrDefault(int default_value) _override;
 
 	virtual MockActualCall& onObject(void* objectPtr) _override;
 
@@ -130,6 +131,7 @@ public:
 
 	virtual bool hasReturnValue() _override;
 	virtual MockNamedValue returnValue() _override;
+	virtual int returnIntValueOrDefault(int default_value) _override;
 
 	virtual MockActualCall& onObject(void* objectPtr) _override;
 
@@ -161,6 +163,7 @@ public:
 
 	virtual bool hasReturnValue() _override { return false; }
 	virtual MockNamedValue returnValue() _override { return MockNamedValue(""); }
+    virtual int returnIntValueOrDefault(int default_value __attribute__((unused))) { return 0; }
 
 	virtual MockActualCall& onObject(void* ) _override { return *this; }
 

@@ -312,6 +312,11 @@ MockNamedValue MockCheckedActualCall::returnValue()
 	return MockNamedValue("no return value");
 }
 
+int MockCheckedActualCall::returnIntValueOrDefault(int default_value)
+{
+    return default_value;
+}
+
 bool MockCheckedActualCall::hasReturnValue()
 {
 	return ! returnValue().getName().isEmpty();
@@ -474,6 +479,11 @@ bool MockActualCallTrace::hasReturnValue()
 MockNamedValue MockActualCallTrace::returnValue()
 {
 	return MockNamedValue("");
+}
+
+int MockActualCallTrace::returnIntValueOrDefault(int default_value __attribute__((unused)))
+{
+	return 0;
 }
 
 MockActualCall& MockActualCallTrace::onObject(void* objectPtr)
