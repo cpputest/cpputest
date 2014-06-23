@@ -314,7 +314,10 @@ MockNamedValue MockCheckedActualCall::returnValue()
 
 int MockCheckedActualCall::returnIntValueOrDefault(int default_value)
 {
-    return default_value;
+    if (!hasReturnValue()) {
+        return default_value;
+    }
+    return returnValue().getIntValue();
 }
 
 bool MockCheckedActualCall::hasReturnValue()
