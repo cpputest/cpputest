@@ -484,7 +484,7 @@ MockNamedValue MockActualCallTrace::returnValue()
 	return MockNamedValue("");
 }
 
-int MockActualCallTrace::returnIntValueOrDefault(int default_value __attribute__((unused)))
+int MockActualCallTrace::returnIntValueOrDefault(int)
 {
 	return 0;
 }

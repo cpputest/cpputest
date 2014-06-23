@@ -163,7 +163,7 @@ public:
 
 	virtual bool hasReturnValue() _override { return false; }
 	virtual MockNamedValue returnValue() _override { return MockNamedValue(""); }
-    virtual int returnIntValueOrDefault(int default_value __attribute__((unused))) { return 0; }
+    virtual int returnIntValueOrDefault(int) { return 0; }
 
 	virtual MockActualCall& onObject(void* ) _override { return *this; }
 
