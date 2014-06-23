@@ -1,8 +1,8 @@
 *   text=auto
 
-*.c text
-*.h text
-*.cpp text
+*.c text trailing-space space-before-tab tab-in-indent -indent-with-non-tab tabwidth=4
+*.h text trailing-space space-before-tab tab-in-indent -indent-with-non-tab tabwidth=4
+*.cpp text trailing-space space-before-tab tab-in-indent -indent-with-non-tab tabwidth=4
 
 # Windows files
 *.sln text eol=crlf
