@@ -317,6 +317,11 @@ int MockCheckedActualCall::returnIntValueOrDefault(int default_value)
     if (!hasReturnValue()) {
         return default_value;
     }
+    return returnIntValue();
+}
+
+int MockCheckedActualCall::returnIntValue()
+{
     return returnValue().getIntValue();
 }
 
@@ -482,6 +487,11 @@ bool MockActualCallTrace::hasReturnValue()
 MockNamedValue MockActualCallTrace::returnValue()
 {
 	return MockNamedValue("");
+}
+
+int MockActualCallTrace::returnIntValue()
+{
+	return 0;
 }
 
 int MockActualCallTrace::returnIntValueOrDefault(int)

@@ -1212,7 +1212,11 @@ TEST(MockSupportTest, IntegerReturnValue)
 {
 	int expected_value = 1;
 	mock().expectOneCall("foo").andReturnValue(1);
-	LONGS_EQUAL(expected_value, mock().actualCall("foo").returnValue().getIntValue());
+	MockActualCall& actual_call = mock().actualCall("foo");
+
+	LONGS_EQUAL(expected_value, actual_call.returnValue().getIntValue());
+	LONGS_EQUAL(expected_value, actual_call.returnIntValue());
+
 	LONGS_EQUAL(expected_value, mock().returnValue().getIntValue());
 	LONGS_EQUAL(expected_value, mock().intReturnValue());
 }
