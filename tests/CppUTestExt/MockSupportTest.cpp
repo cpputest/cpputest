@@ -1339,7 +1339,10 @@ TEST(MockSupportTest, MatchingReturnValueOnWhileSignature)
 TEST(MockSupportTest, StringReturnValue)
 {
 	mock().expectOneCall("foo").andReturnValue("hello world");
-	STRCMP_EQUAL("hello world", mock().actualCall("foo").returnValue().getStringValue());
+	MockActualCall& actual_call = mock().actualCall("foo");
+
+	STRCMP_EQUAL("hello world", actual_call.returnValue().getStringValue());
+	STRCMP_EQUAL("hello world", actual_call.returnStringValue());
 	STRCMP_EQUAL("hello world", mock().stringReturnValue());
 }
 

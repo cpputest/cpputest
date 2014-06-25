@@ -65,8 +65,11 @@ public:
 
 	virtual bool hasReturnValue()=0;
 	virtual MockNamedValue returnValue()=0;
+
 	virtual int returnIntValueOrDefault(int default_value)=0;
 	virtual int returnIntValue()=0;
+
+	virtual const char * returnStringValue()=0;
 
 	virtual MockActualCall& onObject(void* objectPtr)=0;
 };

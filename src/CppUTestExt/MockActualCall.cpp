@@ -325,6 +325,11 @@ int MockCheckedActualCall::returnIntValue()
     return returnValue().getIntValue();
 }
 
+const char * MockCheckedActualCall::returnStringValue()
+{
+    return returnValue().getStringValue();
+}
+
 bool MockCheckedActualCall::hasReturnValue()
 {
 	return ! returnValue().getName().isEmpty();
@@ -492,6 +497,11 @@ MockNamedValue MockActualCallTrace::returnValue()
 int MockActualCallTrace::returnIntValue()
 {
 	return 0;
+}
+
+const char * MockActualCallTrace::returnStringValue()
+{
+	return "";
 }
 
 int MockActualCallTrace::returnIntValueOrDefault(int)
