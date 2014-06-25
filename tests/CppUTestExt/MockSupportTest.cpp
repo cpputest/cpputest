@@ -1342,7 +1342,7 @@ TEST(MockSupportTest, WhenAStringReturnValueIsDefinedAndAlsoThereIsADefaultShoul
 	const char * expected_return_value = "expected";
 	mock().expectOneCall("foo").andReturnValue(expected_return_value);
 	STRCMP_EQUAL(expected_return_value, mock().actualCall("foo").returnStringValueOrDefault(default_return_value));
-	//STRCMP_EQUAL(expected_return_value, mock().returnStringValueOrDefault(default_return_value));
+	STRCMP_EQUAL(expected_return_value, mock().returnStringValueOrDefault(default_return_value));
 }
 
 TEST(MockSupportTest, WhenNoStringReturnValueIsDefinedButThereIsADefaultShouldlUseTheDefaultValue)
@@ -1350,7 +1350,7 @@ TEST(MockSupportTest, WhenNoStringReturnValueIsDefinedButThereIsADefaultShouldlU
 	const char * default_return_value = "default";
 	mock().expectOneCall("foo");
 	LONGS_EQUAL(default_return_value, mock().actualCall("foo").returnStringValueOrDefault(default_return_value));
-	//LONGS_EQUAL(default_return_value, mock().returnStringValueOrDefault(default_return_value));
+	LONGS_EQUAL(default_return_value, mock().returnStringValueOrDefault(default_return_value));
 }
 
 TEST(MockSupportTest, StringReturnValue)
