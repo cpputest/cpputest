@@ -415,6 +415,14 @@ int MockSupport::intReturnValue()
 	return returnValue().getIntValue();
 }
 
+const char * MockSupport::returnStringValueOrDefault(const char * defaultValue)
+{
+	if (hasReturnValue()) {
+		return returnValue().getStringValue();
+	}
+	return defaultValue;
+}
+
 int MockSupport::returnIntValueOrDefault(int defaultValue)
 {
 	if (hasReturnValue()) {

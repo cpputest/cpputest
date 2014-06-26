@@ -1336,10 +1336,30 @@ TEST(MockSupportTest, MatchingReturnValueOnWhileSignature)
 	LONGS_EQUAL(2, mock().actualCall("foo").withParameter("p1", 2).returnValue().getIntValue());
 }
 
+TEST(MockSupportTest, WhenAStringReturnValueIsDefinedAndAlsoThereIsADefaultShouldlIgnoreTheDefault)
+{
+	const char * default_return_value = "default";
+	const char * expected_return_value = "expected";
+	mock().expectOneCall("foo").andReturnValue(expected_return_value);
+	STRCMP_EQUAL(expected_return_value, mock().actualCall("foo").returnStringValueOrDefault(default_return_value));
+	STRCMP_EQUAL(expected_return_value, mock().returnStringValueOrDefault(default_return_value));
+}
+
+TEST(MockSupportTest, WhenNoStringReturnValueIsDefinedButThereIsADefaultShouldlUseTheDefaultValue)
+{
+	const char * default_return_value = "default";
+	mock().expectOneCall("foo");
+	LONGS_EQUAL(default_return_value, mock().actualCall("foo").returnStringValueOrDefault(default_return_value));
+	LONGS_EQUAL(default_return_value, mock().returnStringValueOrDefault(default_return_value));
+}
+
 TEST(MockSupportTest, StringReturnValue)
 {
 	mock().expectOneCall("foo").andReturnValue("hello world");
-	STRCMP_EQUAL("hello world", mock().actualCall("foo").returnValue().getStringValue());
+	MockActualCall& actual_call = mock().actualCall("foo");
+
+	STRCMP_EQUAL("hello world", actual_call.returnValue().getStringValue());
+	STRCMP_EQUAL("hello world", actual_call.returnStringValue());
 	STRCMP_EQUAL("hello world", mock().stringReturnValue());
 }
 
