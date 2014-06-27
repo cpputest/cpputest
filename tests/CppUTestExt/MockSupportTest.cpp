@@ -1372,9 +1372,12 @@ TEST(MockSupportTest, DoubleReturnValue)
 
 TEST(MockSupportTest, PointerReturnValue)
 {
-	void* ptr = (void*) 0x001;
+	void* ptr = (void*) 0x00107;
 	mock().expectOneCall("foo").andReturnValue(ptr);
-	POINTERS_EQUAL(ptr, mock().actualCall("foo").returnValue().getPointerValue());
+	MockActualCall& actual_call = mock().actualCall("foo");
+
+	POINTERS_EQUAL(ptr, actual_call.returnValue().getPointerValue());
+	POINTERS_EQUAL(ptr, actual_call.returnPointerValue());
 	POINTERS_EQUAL(ptr, mock().pointerReturnValue());
 }
 
