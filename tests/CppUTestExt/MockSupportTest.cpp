@@ -1376,7 +1376,7 @@ TEST(MockSupportTest, WhenAPointerReturnValueIsDefinedAndAlsoThereIsADefaultShou
 	void * expected_return_value = (void*) 0x144000;
 	mock().expectOneCall("foo").andReturnValue(expected_return_value);
 	POINTERS_EQUAL(expected_return_value, mock().actualCall("foo").returnPointerValueOrDefault(default_return_value));
-	//POINTERS_EQUAL(expected_return_value, mock().returnPointerValueOrDefault(default_return_value));
+	POINTERS_EQUAL(expected_return_value, mock().returnPointerValueOrDefault(default_return_value));
 }
 
 TEST(MockSupportTest, WhenNoPointerReturnValueIsDefinedButThereIsADefaultShouldlUseTheDefaultValue)
@@ -1384,7 +1384,7 @@ TEST(MockSupportTest, WhenNoPointerReturnValueIsDefinedButThereIsADefaultShouldl
 	void * default_return_value = (void*) 0x10;
 	mock().expectOneCall("foo");
 	POINTERS_EQUAL(default_return_value, mock().actualCall("foo").returnPointerValueOrDefault(default_return_value));
-	//POINTERS_EQUAL(default_return_value, mock().returnPointerValueOrDefault(default_return_value));
+	POINTERS_EQUAL(default_return_value, mock().returnPointerValueOrDefault(default_return_value));
 }
 
 TEST(MockSupportTest, PointerReturnValue)

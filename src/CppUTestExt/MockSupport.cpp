@@ -431,6 +431,7 @@ int MockSupport::returnIntValueOrDefault(int defaultValue)
 	return defaultValue;
 }
 
+
 long int MockSupport::longIntReturnValue()
 {
 	return returnValue().getLongIntValue();
@@ -449,6 +450,14 @@ const char* MockSupport::stringReturnValue()
 double MockSupport::doubleReturnValue()
 {
 	return returnValue().getDoubleValue();
+}
+
+void * MockSupport::returnPointerValueOrDefault(void * defaultValue)
+{
+	if (hasReturnValue()) {
+		return returnValue().getPointerValue();
+	}
+	return defaultValue;
 }
 
 void* MockSupport::pointerReturnValue()
