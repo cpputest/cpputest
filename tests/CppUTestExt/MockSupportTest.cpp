@@ -1349,8 +1349,8 @@ TEST(MockSupportTest, WhenNoStringReturnValueIsDefinedButThereIsADefaultShouldlU
 {
 	const char * default_return_value = "default";
 	mock().expectOneCall("foo");
-	LONGS_EQUAL(default_return_value, mock().actualCall("foo").returnStringValueOrDefault(default_return_value));
-	LONGS_EQUAL(default_return_value, mock().returnStringValueOrDefault(default_return_value));
+	STRCMP_EQUAL(default_return_value, mock().actualCall("foo").returnStringValueOrDefault(default_return_value));
+	STRCMP_EQUAL(default_return_value, mock().returnStringValueOrDefault(default_return_value));
 }
 
 TEST(MockSupportTest, StringReturnValue)
@@ -1368,6 +1368,23 @@ TEST(MockSupportTest, DoubleReturnValue)
 	mock().expectOneCall("foo").andReturnValue(1.0);
 	DOUBLES_EQUAL(1.0, mock().actualCall("foo").returnValue().getDoubleValue(), 0.05);
 	DOUBLES_EQUAL(1.0, mock().doubleReturnValue(), 0.05);
+}
+
+TEST(MockSupportTest, WhenAPointerReturnValueIsDefinedAndAlsoThereIsADefaultShouldlIgnoreTheDefault)
+{
+	void * default_return_value = (void*) 0x777;
+	void * expected_return_value = (void*) 0x144000;
+	mock().expectOneCall("foo").andReturnValue(expected_return_value);
+	POINTERS_EQUAL(expected_return_value, mock().actualCall("foo").returnPointerValueOrDefault(default_return_value));
+	//POINTERS_EQUAL(expected_return_value, mock().returnPointerValueOrDefault(default_return_value));
+}
+
+TEST(MockSupportTest, WhenNoPointerReturnValueIsDefinedButThereIsADefaultShouldlUseTheDefaultValue)
+{
+	void * default_return_value = (void*) 0x10;
+	mock().expectOneCall("foo");
+	POINTERS_EQUAL(default_return_value, mock().actualCall("foo").returnPointerValueOrDefault(default_return_value));
+	//POINTERS_EQUAL(default_return_value, mock().returnPointerValueOrDefault(default_return_value));
 }
 
 TEST(MockSupportTest, PointerReturnValue)

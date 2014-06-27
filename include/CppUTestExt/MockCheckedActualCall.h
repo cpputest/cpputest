@@ -60,6 +60,7 @@ public:
 	virtual const char * returnStringValue() _override;
 
 	virtual void * returnPointerValue() _override;
+	virtual void * returnPointerValueOrDefault(void *) _override;
 
 	virtual MockActualCall& onObject(void* objectPtr) _override;
 
@@ -146,6 +147,7 @@ public:
 	virtual const char * returnStringValue() _override;
 
 	virtual void * returnPointerValue() _override;
+	virtual void * returnPointerValueOrDefault(void *) _override;
 
 	virtual MockActualCall& onObject(void* objectPtr) _override;
 
@@ -185,6 +187,7 @@ public:
 	virtual const char * returnStringValue() _override { return ""; }
 
 	virtual void * returnPointerValue() _override { return NULL; }
+	virtual void * returnPointerValueOrDefault(void * ) _override { return returnPointerValue(); }
 
 	virtual MockActualCall& onObject(void* ) _override { return *this; }
 
