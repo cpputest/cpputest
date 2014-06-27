@@ -1,8 +1,10 @@
 *   text=auto
 
-*.c text trailing-space space-before-tab tab-in-indent -indent-with-non-tab tabwidth=4
-*.h text trailing-space space-before-tab tab-in-indent -indent-with-non-tab tabwidth=4
-*.cpp text trailing-space space-before-tab tab-in-indent -indent-with-non-tab tabwidth=4
+[attr]cpputesttext text eol=lf whitespace=trailing-space,space-before-tab,tab-in-indent,tabwidth=4
+
+*.c cpputesttext
+*.h cpputesttext
+*.cpp cpputesttext 
 
 # Windows files
 *.sln text eol=crlf
