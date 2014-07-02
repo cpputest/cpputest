@@ -60,6 +60,7 @@ public:
 	virtual const char* returnStringValueOrDefault(const char * defaultValue);
 	virtual double doubleReturnValue();
 	virtual void* pointerReturnValue();
+	virtual void* returnPointerValueOrDefault(void * defaultValue);
 	virtual const void* constPointerReturnValue();
 
 	bool hasData(const SimpleString& name);
