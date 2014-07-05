@@ -431,6 +431,14 @@ int MockSupport::returnIntValueOrDefault(int defaultValue)
 	return defaultValue;
 }
 
+unsigned int MockSupport::returnUnsignedIntValueOrDefault(unsigned int defaultValue)
+{
+    if (hasReturnValue()) {
+        return unsignedIntReturnValue();
+    }
+	return defaultValue;
+}
+
 
 long int MockSupport::longIntReturnValue()
 {
