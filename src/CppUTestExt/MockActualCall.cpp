@@ -325,6 +325,11 @@ int MockCheckedActualCall::returnIntValue()
     return returnValue().getIntValue();
 }
 
+unsigned int MockCheckedActualCall::returnUnsignedIntValue()
+{
+    return returnValue().getUnsignedIntValue();
+}
+
 void * MockCheckedActualCall::returnPointerValueOrDefault(void * default_value)
 {
     if (!hasReturnValue()) {
@@ -516,6 +521,11 @@ MockNamedValue MockActualCallTrace::returnValue()
 }
 
 int MockActualCallTrace::returnIntValue()
+{
+	return 0;
+}
+
+unsigned int MockActualCallTrace::returnUnsignedIntValue()
 {
 	return 0;
 }
