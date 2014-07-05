@@ -1197,6 +1197,23 @@ TEST(MockSupportTest, UnsignedIntegerReturnValueSetsDifferentValuesWhileParamete
 	LONGS_EQUAL(another_ret_value, mock().returnValue().getUnsignedIntValue());
 }
 
+TEST(MockSupportTest, WhenAUnsignedIntegerReturnValueIsDefinedAndAlsoThereIsADefaultShouldlIgnoreTheDefault)
+{
+	unsigned int default_return_value = 10;
+	unsigned int expected_return_value = default_return_value + 1;
+	mock().expectOneCall("foo").andReturnValue(expected_return_value);
+	LONGS_EQUAL(expected_return_value, mock().actualCall("foo").returnUnsignedIntValueOrDefault(default_return_value));
+	//LONGS_EQUAL(expected_return_value, mock().returnUnsignedIntValueOrDefault(default_return_value));
+}
+
+TEST(MockSupportTest, WhenNoUnsignedIntegerReturnValueIsDefinedButThereIsADefaultShouldlUseTheDefaultValue)
+{
+	unsigned int default_return_value = 10;
+	mock().expectOneCall("foo");
+	LONGS_EQUAL(default_return_value, mock().actualCall("foo").returnUnsignedIntValueOrDefault(default_return_value));
+	//LONGS_EQUAL(default_return_value, mock().returnUnsignedIntValueOrDefault(default_return_value));
+}
+
 TEST(MockSupportTest, WhenAIntegerReturnValueIsDefinedAndAlsoThereIsADefaultShouldlIgnoreTheDefault)
 {
 	int default_return_value = 777;

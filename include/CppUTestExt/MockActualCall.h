@@ -70,6 +70,7 @@ public:
 	virtual int returnIntValue()=0;
 
 	virtual unsigned int returnUnsignedIntValue()=0;
+	virtual unsigned int returnUnsignedIntValueOrDefault(unsigned int default_value)=0;
 
 	virtual const char * returnStringValueOrDefault(const char * default_value)=0;
 	virtual const char * returnStringValue()=0;
