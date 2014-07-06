@@ -56,6 +56,9 @@ public:
 	virtual int returnIntValueOrDefault(int default_value) _override;
 	virtual int returnIntValue() _override;
 
+	virtual unsigned int returnUnsignedIntValue() _override;
+	virtual unsigned int returnUnsignedIntValueOrDefault(unsigned int default_value) _override;
+
 	virtual const char * returnStringValueOrDefault(const char * default_value) _override;
 	virtual const char * returnStringValue() _override;
 
@@ -143,6 +146,9 @@ public:
 	virtual int returnIntValueOrDefault(int default_value) _override;
 	virtual int returnIntValue() _override;
 
+	virtual unsigned int returnUnsignedIntValue() _override;
+	virtual unsigned int returnUnsignedIntValueOrDefault(unsigned int default_value) _override;
+
 	virtual const char * returnStringValueOrDefault(const char * default_value) _override;
 	virtual const char * returnStringValue() _override;
 
@@ -182,6 +188,9 @@ public:
 
     virtual int returnIntValueOrDefault(int) _override { return 0; }
     virtual int returnIntValue() _override { return 0; }
+
+	virtual unsigned int returnUnsignedIntValue() _override { return 0; }
+	virtual unsigned int returnUnsignedIntValueOrDefault(unsigned int) _override { return returnUnsignedIntValue(); }
 
 	virtual const char * returnStringValueOrDefault(const char *) _override { return returnStringValue(); }
 	virtual const char * returnStringValue() _override { return ""; }

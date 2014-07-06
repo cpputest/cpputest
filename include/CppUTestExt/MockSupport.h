@@ -56,6 +56,7 @@ public:
 	virtual unsigned int unsignedIntReturnValue();
 	virtual long int longIntReturnValue();
 	virtual unsigned long int unsignedLongIntReturnValue();
+	virtual unsigned int returnUnsignedIntValueOrDefault(unsigned int defaultValue);
 	virtual const char* stringReturnValue();
 	virtual const char* returnStringValueOrDefault(const char * defaultValue);
 	virtual double doubleReturnValue();

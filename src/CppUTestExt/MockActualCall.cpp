@@ -325,6 +325,19 @@ int MockCheckedActualCall::returnIntValue()
     return returnValue().getIntValue();
 }
 
+unsigned int MockCheckedActualCall::returnUnsignedIntValue()
+{
+    return returnValue().getUnsignedIntValue();
+}
+
+unsigned int MockCheckedActualCall::returnUnsignedIntValueOrDefault(unsigned int default_value)
+{
+    if (!hasReturnValue()) {
+        return default_value;
+    }
+    return returnUnsignedIntValue();
+}
+
 void * MockCheckedActualCall::returnPointerValueOrDefault(void * default_value)
 {
     if (!hasReturnValue()) {
@@ -520,6 +533,11 @@ int MockActualCallTrace::returnIntValue()
 	return 0;
 }
 
+unsigned int MockActualCallTrace::returnUnsignedIntValue()
+{
+	return 0;
+}
+
 void * MockActualCallTrace::returnPointerValue()
 {
 	return NULL;
@@ -543,6 +561,11 @@ const char * MockActualCallTrace::returnStringValueOrDefault(const char *)
 int MockActualCallTrace::returnIntValueOrDefault(int)
 {
 	return 0;
+}
+
+unsigned int MockActualCallTrace::returnUnsignedIntValueOrDefault(unsigned int)
+{
+    return returnUnsignedIntValue();
 }
 
 MockActualCall& MockActualCallTrace::onObject(void* objectPtr)

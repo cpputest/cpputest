@@ -418,7 +418,7 @@ int MockSupport::intReturnValue()
 const char * MockSupport::returnStringValueOrDefault(const char * defaultValue)
 {
 	if (hasReturnValue()) {
-		return returnValue().getStringValue();
+		return stringReturnValue();
 	}
 	return defaultValue;
 }
@@ -426,8 +426,16 @@ const char * MockSupport::returnStringValueOrDefault(const char * defaultValue)
 int MockSupport::returnIntValueOrDefault(int defaultValue)
 {
 	if (hasReturnValue()) {
-		return returnValue().getIntValue();
+		return intReturnValue();
 	}
+	return defaultValue;
+}
+
+unsigned int MockSupport::returnUnsignedIntValueOrDefault(unsigned int defaultValue)
+{
+    if (hasReturnValue()) {
+        return unsignedIntReturnValue();
+    }
 	return defaultValue;
 }
 
@@ -455,7 +463,7 @@ double MockSupport::doubleReturnValue()
 void * MockSupport::returnPointerValueOrDefault(void * defaultValue)
 {
 	if (hasReturnValue()) {
-		return returnValue().getPointerValue();
+		return pointerReturnValue();
 	}
 	return defaultValue;
 }

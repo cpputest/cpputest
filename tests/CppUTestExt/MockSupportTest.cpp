@@ -1115,8 +1115,14 @@ TEST(MockSupportTest, hasReturnValue)
 TEST(MockSupportTest, UnsignedIntegerReturnValue)
 {
 	unsigned int expected_value = 7;
+
 	mock().expectOneCall("foo").andReturnValue(expected_value);
-	LONGS_EQUAL(expected_value, mock().actualCall("foo").returnValue().getUnsignedIntValue());
+
+	MockActualCall& actual_call = mock().actualCall("foo");
+
+	LONGS_EQUAL(expected_value, actual_call.returnValue().getUnsignedIntValue());
+	LONGS_EQUAL(expected_value, actual_call.returnUnsignedIntValue());
+
 	LONGS_EQUAL(expected_value, mock().returnValue().getUnsignedIntValue());
 	LONGS_EQUAL(expected_value, mock().unsignedIntReturnValue());
 }
@@ -1189,6 +1195,23 @@ TEST(MockSupportTest, UnsignedIntegerReturnValueSetsDifferentValuesWhileParamete
 	LONGS_EQUAL(ret_value, mock().returnValue().getUnsignedIntValue());
 	LONGS_EQUAL(another_ret_value, mock().actualCall("foo").withParameter("p1", 1).returnValue().getUnsignedIntValue());
 	LONGS_EQUAL(another_ret_value, mock().returnValue().getUnsignedIntValue());
+}
+
+TEST(MockSupportTest, WhenAUnsignedIntegerReturnValueIsDefinedAndAlsoThereIsADefaultShouldlIgnoreTheDefault)
+{
+	unsigned int default_return_value = 10;
+	unsigned int expected_return_value = default_return_value + 1;
+	mock().expectOneCall("foo").andReturnValue(expected_return_value);
+	LONGS_EQUAL(expected_return_value, mock().actualCall("foo").returnUnsignedIntValueOrDefault(default_return_value));
+	LONGS_EQUAL(expected_return_value, mock().returnUnsignedIntValueOrDefault(default_return_value));
+}
+
+TEST(MockSupportTest, WhenNoUnsignedIntegerReturnValueIsDefinedButThereIsADefaultShouldlUseTheDefaultValue)
+{
+	unsigned int default_return_value = 10;
+	mock().expectOneCall("foo");
+	LONGS_EQUAL(default_return_value, mock().actualCall("foo").returnUnsignedIntValueOrDefault(default_return_value));
+	LONGS_EQUAL(default_return_value, mock().returnUnsignedIntValueOrDefault(default_return_value));
 }
 
 TEST(MockSupportTest, WhenAIntegerReturnValueIsDefinedAndAlsoThereIsADefaultShouldlIgnoreTheDefault)
