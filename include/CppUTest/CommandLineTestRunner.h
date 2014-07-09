@@ -64,6 +64,7 @@ private:
 	int runAllTests();
 	void initializeTestRun();
 	bool isVerbose();
+	bool isColor();
 	int getRepeatCount();
 	TestFilter getGroupFilter();
 	TestFilter getNameFilter();
