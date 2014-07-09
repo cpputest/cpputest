@@ -246,7 +246,7 @@ TEST(CommandLineArguments, weirdParamatersPrintsUsageAndReturnsFalse)
 	int argc = 2;
 	const char* argv[] = { "tests.exe", "-SomethingWeird" };
 	CHECK(!newArgumentParser(argc, argv));
-	STRCMP_EQUAL("usage [-v] [-r#] [-g|sg groupName] [-n|sn testName] [-o{normal, junit}] [-k packageName]\n",
+	STRCMP_EQUAL("usage [-v] [-c] [-r#] [-g|sg groupName] [-n|sn testName] [-o{normal, junit}] [-k packageName]\n",
 			args->usage());
 }
 
