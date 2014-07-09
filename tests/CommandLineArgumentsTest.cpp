@@ -79,6 +79,13 @@ TEST(CommandLineArguments, verboseSetMultipleParameters)
 	CHECK(args->isVerbose());
 }
 
+TEST(CommandLineArguments, setColor)
+{
+	const char* argv[] = { "tests.exe", "-c" };
+	CHECK(newArgumentParser(2, argv));
+	CHECK(args->isColor());
+}
+
 TEST(CommandLineArguments, repeatSet)
 {
 	int argc = 2;
