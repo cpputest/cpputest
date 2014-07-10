@@ -30,7 +30,7 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 
 CommandLineArguments::CommandLineArguments(int ac, const char** av) :
-	ac_(ac), av_(av), verbose_(false), runTestsAsSeperateProcess_(false), repeat_(1), groupFilter_(""), nameFilter_(""), outputType_(OUTPUT_ECLIPSE), packageName_("")
+	ac_(ac), av_(av), verbose_(false), color_(false), runTestsAsSeperateProcess_(false), repeat_(1), groupFilter_(""), nameFilter_(""), outputType_(OUTPUT_ECLIPSE)
 {
 }
 
@@ -44,6 +44,7 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
 	for (int i = 1; i < ac_; i++) {
 		SimpleString argument = av_[i];
 		if (argument == "-v") verbose_ = true;
+		else if (argument == "-c") color_ = true;
 		else if (argument == "-p") runTestsAsSeperateProcess_ = true;
 		else if (argument.startsWith("-r")) SetRepeatCount(ac_, av_, i);
 		else if (argument.startsWith("-g")) SetGroupFilter(ac_, av_, i);
@@ -66,12 +67,17 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
 
 const char* CommandLineArguments::usage() const
 {
-	return "usage [-v] [-r#] [-g|sg groupName] [-n|sn testName] [-o{normal, junit}] [-k packageName]\n";
+	return "usage [-v] [-c] [-r#] [-g|sg groupName] [-n|sn testName] [-o{normal, junit}] [-k packageName]\n";
 }
 
 bool CommandLineArguments::isVerbose() const
 {
 	return verbose_;
+}
+
+bool CommandLineArguments::isColor() const
+{
+	return color_;
 }
 
 bool CommandLineArguments::runTestsInSeperateProcess() const
