@@ -97,7 +97,7 @@ private:
 
 	static TestMemoryAllocator* stringAllocator_;
 
-	char* getEmptyString() const; 
+	char* getEmptyString() const;
 	static char* copyToNewBuffer(const char* bufferToCopy, size_t bufferSize=0);
 };
 

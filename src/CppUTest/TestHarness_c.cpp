@@ -146,7 +146,7 @@ void* cpputest_malloc_location(size_t size, const char* file, int line)
 void* cpputest_calloc_location(size_t num, size_t size, const char* file, int line)
 {
 	void* mem = cpputest_malloc_location(num * size, file, line);
-	if (mem)    
+	if (mem)
 	    PlatformSpecificMemset(mem, 0, num*size);
 	return mem;
 }
