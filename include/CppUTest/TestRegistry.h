@@ -43,48 +43,48 @@ class TestPlugin;
 class TestRegistry
 {
 public:
-	TestRegistry();
-	virtual ~TestRegistry();
+    TestRegistry();
+    virtual ~TestRegistry();
 
-	virtual void addTest(UtestShell *test);
-	virtual void unDoLastAddTest();
-	virtual int countTests();
-	virtual void runAllTests(TestResult& result);
-	virtual void nameFilter(const TestFilter& filter);
-	virtual void groupFilter(const TestFilter& filter);
+    virtual void addTest(UtestShell *test);
+    virtual void unDoLastAddTest();
+    virtual int countTests();
+    virtual void runAllTests(TestResult& result);
+    virtual void nameFilter(const TestFilter& filter);
+    virtual void groupFilter(const TestFilter& filter);
 
-	virtual void installPlugin(TestPlugin* plugin);
-	virtual void resetPlugins();
-	virtual TestPlugin* getFirstPlugin();
-	virtual TestPlugin* getPluginByName(const SimpleString& name);
-	virtual void removePluginByName(const SimpleString& name);
-	virtual int countPlugins();
+    virtual void installPlugin(TestPlugin* plugin);
+    virtual void resetPlugins();
+    virtual TestPlugin* getFirstPlugin();
+    virtual TestPlugin* getPluginByName(const SimpleString& name);
+    virtual void removePluginByName(const SimpleString& name);
+    virtual int countPlugins();
 
-	TestFilter getGroupFilter();
-	TestFilter getNameFilter();
+    TestFilter getGroupFilter();
+    TestFilter getNameFilter();
 
-	virtual UtestShell* getFirstTest();
-	virtual UtestShell* getLastTest();
-	virtual UtestShell* getTestWithNext(UtestShell* test);
+    virtual UtestShell* getFirstTest();
+    virtual UtestShell* getLastTest();
+    virtual UtestShell* getTestWithNext(UtestShell* test);
 
-	virtual UtestShell* findTestWithName(const SimpleString& name);
-	virtual UtestShell* findTestWithGroup(const SimpleString& name);
+    virtual UtestShell* findTestWithName(const SimpleString& name);
+    virtual UtestShell* findTestWithGroup(const SimpleString& name);
 
-	static TestRegistry* getCurrentRegistry();
-	virtual void setCurrentRegistry(TestRegistry* registry);
+    static TestRegistry* getCurrentRegistry();
+    virtual void setCurrentRegistry(TestRegistry* registry);
 
-	virtual void setRunTestsInSeperateProcess();
+    virtual void setRunTestsInSeperateProcess();
 private:
 
-	bool testShouldRun(UtestShell* test, TestResult& result);
-	bool endOfGroup(UtestShell* test);
+    bool testShouldRun(UtestShell* test, TestResult& result);
+    bool endOfGroup(UtestShell* test);
 
-	UtestShell * tests_;
-	TestFilter nameFilter_;
-	TestFilter groupFilter_;
-	TestPlugin* firstPlugin_;
-	static TestRegistry* currentRegistry_;
-	bool runInSeperateProcess_;
+    UtestShell * tests_;
+    TestFilter nameFilter_;
+    TestFilter groupFilter_;
+    TestPlugin* firstPlugin_;
+    static TestRegistry* currentRegistry_;
+    bool runInSeperateProcess_;
 
 };
 

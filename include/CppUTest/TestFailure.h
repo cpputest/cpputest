@@ -45,99 +45,99 @@ class TestFailure
 {
 
 public:
-	TestFailure(UtestShell*, const char* fileName, int lineNumber,
-			const SimpleString& theMessage);
-	TestFailure(UtestShell*, const SimpleString& theMessage);
-	TestFailure(UtestShell*, const char* fileName, int lineNumber);
-	TestFailure(const TestFailure&);
-	virtual ~TestFailure();
+    TestFailure(UtestShell*, const char* fileName, int lineNumber,
+            const SimpleString& theMessage);
+    TestFailure(UtestShell*, const SimpleString& theMessage);
+    TestFailure(UtestShell*, const char* fileName, int lineNumber);
+    TestFailure(const TestFailure&);
+    virtual ~TestFailure();
 
-	virtual SimpleString getFileName() const;
-	virtual SimpleString getTestName() const;
-	virtual int getFailureLineNumber() const;
-	virtual SimpleString getMessage() const;
-	virtual SimpleString getTestFileName() const;
-	virtual int getTestLineNumber() const;
-	bool isOutsideTestFile() const;
-	bool isInHelperFunction() const;
+    virtual SimpleString getFileName() const;
+    virtual SimpleString getTestName() const;
+    virtual int getFailureLineNumber() const;
+    virtual SimpleString getMessage() const;
+    virtual SimpleString getTestFileName() const;
+    virtual int getTestLineNumber() const;
+    bool isOutsideTestFile() const;
+    bool isInHelperFunction() const;
 
 
 protected:
 
-	SimpleString createButWasString(const SimpleString& expected, const SimpleString& actual);
-	SimpleString createDifferenceAtPosString(const SimpleString& actual, size_t position);
+    SimpleString createButWasString(const SimpleString& expected, const SimpleString& actual);
+    SimpleString createDifferenceAtPosString(const SimpleString& actual, size_t position);
 
-	SimpleString testName_;
-	SimpleString fileName_;
-	int lineNumber_;
-	SimpleString testFileName_;
-	int testLineNumber_;
-	SimpleString message_;
+    SimpleString testName_;
+    SimpleString fileName_;
+    int lineNumber_;
+    SimpleString testFileName_;
+    int testLineNumber_;
+    SimpleString message_;
 
-	TestFailure& operator=(const TestFailure&);
+    TestFailure& operator=(const TestFailure&);
 
 };
 
 class EqualsFailure: public TestFailure
 {
 public:
-	EqualsFailure(UtestShell*, const char* fileName, int lineNumber, const char* expected, const char* actual);
-	EqualsFailure(UtestShell*, const char* fileName, int lineNumber, const SimpleString& expected, const SimpleString& actual);
+    EqualsFailure(UtestShell*, const char* fileName, int lineNumber, const char* expected, const char* actual);
+    EqualsFailure(UtestShell*, const char* fileName, int lineNumber, const SimpleString& expected, const SimpleString& actual);
 };
 
 class DoublesEqualFailure: public TestFailure
 {
 public:
-	DoublesEqualFailure(UtestShell*, const char* fileName, int lineNumber, double expected, double actual, double threshold);
+    DoublesEqualFailure(UtestShell*, const char* fileName, int lineNumber, double expected, double actual, double threshold);
 };
 
 class CheckEqualFailure : public TestFailure
 {
 public:
-	CheckEqualFailure(UtestShell* test, const char* fileName, int lineNumber, const SimpleString& expected, const SimpleString& actual);
+    CheckEqualFailure(UtestShell* test, const char* fileName, int lineNumber, const SimpleString& expected, const SimpleString& actual);
 };
 
 class ContainsFailure: public TestFailure
 {
 public:
-	ContainsFailure(UtestShell*, const char* fileName, int lineNumber, const SimpleString& expected, const SimpleString& actual);
+    ContainsFailure(UtestShell*, const char* fileName, int lineNumber, const SimpleString& expected, const SimpleString& actual);
 
 };
 
 class CheckFailure : public TestFailure
 {
 public:
-	CheckFailure(UtestShell* test, const char* fileName, int lineNumber, const SimpleString& checkString, const SimpleString& conditionString, const SimpleString& textString = "");
+    CheckFailure(UtestShell* test, const char* fileName, int lineNumber, const SimpleString& checkString, const SimpleString& conditionString, const SimpleString& textString = "");
 };
 
 class FailFailure : public TestFailure
 {
 public:
-	FailFailure(UtestShell* test, const char* fileName, int lineNumber, const SimpleString& message);
+    FailFailure(UtestShell* test, const char* fileName, int lineNumber, const SimpleString& message);
 };
 
 class LongsEqualFailure : public TestFailure
 {
 public:
-	LongsEqualFailure(UtestShell* test, const char* fileName, int lineNumber, long expected, long actual);
+    LongsEqualFailure(UtestShell* test, const char* fileName, int lineNumber, long expected, long actual);
 };
 
 class UnsignedLongsEqualFailure : public TestFailure
 {
 public:
-	UnsignedLongsEqualFailure(UtestShell* test, const char* fileName, int lineNumber, unsigned long expected, unsigned long actual);
+    UnsignedLongsEqualFailure(UtestShell* test, const char* fileName, int lineNumber, unsigned long expected, unsigned long actual);
 };
 
 class StringEqualFailure : public TestFailure
 {
 public:
-	StringEqualFailure(UtestShell* test, const char* fileName, int lineNumber, const char* expected, const char* actual);
+    StringEqualFailure(UtestShell* test, const char* fileName, int lineNumber, const char* expected, const char* actual);
 };
 
 class StringEqualNoCaseFailure : public TestFailure
 {
 public:
-	StringEqualNoCaseFailure(UtestShell* test, const char* fileName, int lineNumber, const char* expected, const char* actual);
+    StringEqualNoCaseFailure(UtestShell* test, const char* fileName, int lineNumber, const char* expected, const char* actual);
 };
 
 #endif

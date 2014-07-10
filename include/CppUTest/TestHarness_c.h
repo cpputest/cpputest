@@ -66,44 +66,44 @@
 
 /* For use in C file */
 #define TEST_GROUP_C_SETUP(group_name) \
-	extern void group_##group_name##_setup_wrapper_c(void); \
-	void group_##group_name##_setup_wrapper_c()
+    extern void group_##group_name##_setup_wrapper_c(void); \
+    void group_##group_name##_setup_wrapper_c()
 
 #define TEST_GROUP_C_TEARDOWN(group_name) \
-	extern void group_##group_name##_teardown_wrapper_c(void); \
-	void group_##group_name##_teardown_wrapper_c()
+    extern void group_##group_name##_teardown_wrapper_c(void); \
+    void group_##group_name##_teardown_wrapper_c()
 
 #define TEST_C(group_name, test_name) \
-	extern void test_##group_name##_##test_name##_wrapper_c(void);\
-	void test_##group_name##_##test_name##_wrapper_c()
+    extern void test_##group_name##_##test_name##_wrapper_c(void);\
+    void test_##group_name##_##test_name##_wrapper_c()
 
 
 /* For use in C++ file */
 
 #define TEST_GROUP_C(group_name) \
-	extern "C" { \
-		extern void group_##group_name##_setup_wrapper_c(void); \
-		extern void group_##group_name##_teardown_wrapper_c(void); \
-	} \
-	TEST_GROUP(group_name)
+    extern "C" { \
+        extern void group_##group_name##_setup_wrapper_c(void); \
+        extern void group_##group_name##_teardown_wrapper_c(void); \
+    } \
+    TEST_GROUP(group_name)
 
 #define TEST_GROUP_C_SETUP_WRAPPER(group_name) \
-	void setup() { \
-	   group_##group_name##_setup_wrapper_c(); \
-	}
+    void setup() { \
+       group_##group_name##_setup_wrapper_c(); \
+    }
 
 #define TEST_GROUP_C_TEARDOWN_WRAPPER(group_name) \
-	void teardown() { \
-	   group_##group_name##_teardown_wrapper_c(); \
-	}
+    void teardown() { \
+       group_##group_name##_teardown_wrapper_c(); \
+    }
 
 #define TEST_GROUP_C_WRAPPER(group_name, test_name) \
-	extern "C" { \
-		extern void test_##group_name##_##test_name##_wrapper_c(); \
-	} \
-	TEST(group_name, test_name) { \
-		test_##group_name##_##test_name##_wrapper_c(); \
-	}
+    extern "C" { \
+        extern void test_##group_name##_##test_name##_wrapper_c(); \
+    } \
+    TEST(group_name, test_name) { \
+        test_##group_name##_##test_name##_wrapper_c(); \
+    }
 
 #ifdef __cplusplus
 extern "C"
@@ -113,18 +113,18 @@ extern "C"
 
 /* CHECKS that can be used from C code */
 extern void CHECK_EQUAL_C_INT_LOCATION(int expected, int actual,
-		const char* fileName, int lineNumber);
+        const char* fileName, int lineNumber);
 extern void CHECK_EQUAL_C_REAL_LOCATION(double expected, double actual,
-		double threshold, const char* fileName, int lineNumber);
+        double threshold, const char* fileName, int lineNumber);
 extern void CHECK_EQUAL_C_CHAR_LOCATION(char expected, char actual,
-		const char* fileName, int lineNumber);
+        const char* fileName, int lineNumber);
 extern void CHECK_EQUAL_C_STRING_LOCATION(const char* expected,
-		const char* actual, const char* fileName, int lineNumber);
+        const char* actual, const char* fileName, int lineNumber);
 extern void FAIL_TEXT_C_LOCATION(const char* text, const char* fileName,
-		int lineNumber);
+        int lineNumber);
 extern void FAIL_C_LOCATION(const char* fileName, int lineNumber);
 extern void CHECK_C_LOCATION(int condition, const char* conditionString,
-		const char* fileName, int lineNumber);
+        const char* fileName, int lineNumber);
 
 extern void* cpputest_malloc(size_t size);
 extern void* cpputest_calloc(size_t num, size_t size);
@@ -133,9 +133,9 @@ extern void  cpputest_free(void* buffer);
 
 extern void* cpputest_malloc_location(size_t size, const char* file, int line);
 extern void* cpputest_calloc_location(size_t num, size_t size,
-		const char* file, int line);
+        const char* file, int line);
 extern void* cpputest_realloc_location(void* memory, size_t size,
-		const char* file, int line);
+        const char* file, int line);
 extern void cpputest_free_location(void* buffer, const char* file, int line);
 
 void cpputest_malloc_set_out_of_memory(void);

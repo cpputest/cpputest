@@ -64,10 +64,10 @@
 { public: TEST_##testGroup##_##testName##_Test () : TEST_GROUP_##CppUTestGroup##testGroup () {} \
        void testBody(); }; \
   class TEST_##testGroup##_##testName##_TestShell : public UtestShell { \
-	  virtual Utest* createTest() _override { return new TEST_##testGroup##_##testName##_Test; } \
+      virtual Utest* createTest() _override { return new TEST_##testGroup##_##testName##_Test; } \
   } TEST_##testGroup##_##testName##_TestShell_instance; \
   static TestInstaller TEST_##testGroup##_##testName##_Installer(TEST_##testGroup##_##testName##_TestShell_instance, #testGroup, #testName, __FILE__,__LINE__); \
-	void TEST_##testGroup##_##testName##_Test::testBody()
+    void TEST_##testGroup##_##testName##_Test::testBody()
 
 #define IGNORE_TEST(testGroup, testName)\
   /* External declarations for strict compilers */ \
@@ -78,10 +78,10 @@
 { public: IGNORE##testGroup##_##testName##_Test () : TEST_GROUP_##CppUTestGroup##testGroup () {} \
   public: void testBodyThatNeverRuns (); }; \
   class IGNORE##testGroup##_##testName##_TestShell : public IgnoredUtestShell { \
-	  virtual Utest* createTest() _override { return new IGNORE##testGroup##_##testName##_Test; } \
+      virtual Utest* createTest() _override { return new IGNORE##testGroup##_##testName##_Test; } \
   } IGNORE##testGroup##_##testName##_TestShell_instance; \
    static TestInstaller TEST_##testGroup##testName##_Installer(IGNORE##testGroup##_##testName##_TestShell_instance, #testGroup, #testName, __FILE__,__LINE__); \
-	void IGNORE##testGroup##_##testName##_Test::testBodyThatNeverRuns ()
+    void IGNORE##testGroup##_##testName##_Test::testBodyThatNeverRuns ()
 
 #define IMPORT_TEST_GROUP(testGroup) \
   extern int externTestGroup##testGroup;\
@@ -103,7 +103,7 @@
   CHECK_LOCATION_FALSE(condition, "CHECK_FALSE", #condition, __FILE__, __LINE__)
 
 #define CHECK_LOCATION_TEXT(condition, checkString, conditionString, text, file, line) \
-	{ UtestShell::getCurrent()->assertTrueText((condition) != 0, checkString, conditionString, text, file, line); }
+    { UtestShell::getCurrent()->assertTrueText((condition) != 0, checkString, conditionString, text, file, line); }
 
 #define CHECK_LOCATION_TRUE(condition, checkString, conditionString, file, line)\
   { UtestShell::getCurrent()->assertTrue((condition) != 0, checkString, conditionString, file, line); }
@@ -117,11 +117,11 @@
 
 #define CHECK_EQUAL_LOCATION(expected,actual, file, line)\
   { if ((expected) != (actual)) { \
-	  if ((actual) != (actual)) \
-	  	  UtestShell::getCurrent()->print("WARNING:\n\tThe \"Actual Parameter\" parameter is evaluated multiple times resulting in different values.\n\tThus the value in the error message is probably incorrect.", file, line); \
-	  if ((expected) != (expected)) \
-	  	  UtestShell::getCurrent()->print("WARNING:\n\tThe \"Expected Parameter\" parameter is evaluated multiple times resulting in different values.\n\tThus the value in the error message is probably incorrect.", file, line); \
-	  UtestShell::getCurrent()->assertEquals(true, StringFrom(expected).asCharString(), StringFrom(actual).asCharString(), file, line); \
+      if ((actual) != (actual)) \
+      	  UtestShell::getCurrent()->print("WARNING:\n\tThe \"Actual Parameter\" parameter is evaluated multiple times resulting in different values.\n\tThus the value in the error message is probably incorrect.", file, line); \
+      if ((expected) != (expected)) \
+      	  UtestShell::getCurrent()->print("WARNING:\n\tThe \"Expected Parameter\" parameter is evaluated multiple times resulting in different values.\n\tThus the value in the error message is probably incorrect.", file, line); \
+      UtestShell::getCurrent()->assertEquals(true, StringFrom(expected).asCharString(), StringFrom(actual).asCharString(), file, line); \
   } \
   else \
   { \
@@ -207,20 +207,20 @@
 
 #if CPPUTEST_USE_STD_CPP_LIB
 #define CHECK_THROWS(expected, expression) \
-	{ \
-	SimpleString msg("expected to throw "#expected "\nbut threw nothing"); \
-	bool caught_expected = false; \
-	try { \
-		(expression); \
-	} catch(const expected &) { \
-		caught_expected = true; \
-	} catch(...) { \
-		msg = "expected to throw " #expected "\nbut threw a different type"; \
-	} \
-	if (!caught_expected) { \
-		UtestShell::getCurrent()->fail(msg.asCharString(), __FILE__, __LINE__); \
-	} \
-	}
+    { \
+    SimpleString msg("expected to throw "#expected "\nbut threw nothing"); \
+    bool caught_expected = false; \
+    try { \
+        (expression); \
+    } catch(const expected &) { \
+        caught_expected = true; \
+    } catch(...) { \
+        msg = "expected to throw " #expected "\nbut threw a different type"; \
+    } \
+    if (!caught_expected) { \
+        UtestShell::getCurrent()->fail(msg.asCharString(), __FILE__, __LINE__); \
+    } \
+    }
 #endif /* CPPUTEST_USE_STD_CPP_LIB */
 
 #define UT_CRASH() { UtestShell::crash(); }

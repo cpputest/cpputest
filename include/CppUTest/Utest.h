@@ -48,13 +48,13 @@ class UtestShell;
 class Utest
 {
 public:
-	Utest();
-	virtual ~Utest();
-	virtual void run();
+    Utest();
+    virtual ~Utest();
+    virtual void run();
 
     virtual void setup();
     virtual void teardown();
-	virtual void testBody();
+    virtual void testBody();
 };
 
 //////////////////// TestTerminator
@@ -62,22 +62,22 @@ public:
 class TestTerminator
 {
 public:
-	virtual void exitCurrentTest() const=0;
-	virtual ~TestTerminator();
+    virtual void exitCurrentTest() const=0;
+    virtual ~TestTerminator();
 };
 
 class NormalTestTerminator : public TestTerminator
 {
 public:
-	virtual void exitCurrentTest() const _override;
-	virtual ~NormalTestTerminator();
+    virtual void exitCurrentTest() const _override;
+    virtual ~NormalTestTerminator();
 };
 
 class TestTerminatorWithoutExceptions  : public TestTerminator
 {
 public:
-	virtual void exitCurrentTest() const _override;
-	virtual ~TestTerminatorWithoutExceptions();
+    virtual void exitCurrentTest() const _override;
+    virtual ~TestTerminatorWithoutExceptions();
 };
 
 //////////////////// UtestShell
@@ -88,20 +88,20 @@ public:
     static UtestShell *getCurrent();
 
 public:
-	UtestShell(const char* groupName, const char* testName, const char* fileName, int lineNumber);
-	virtual ~UtestShell();
+    UtestShell(const char* groupName, const char* testName, const char* fileName, int lineNumber);
+    virtual ~UtestShell();
 
-	virtual UtestShell* addTest(UtestShell* test);
-	virtual UtestShell *getNext() const;
-	virtual bool isNull() const;
-	virtual int countTests();
+    virtual UtestShell* addTest(UtestShell* test);
+    virtual UtestShell *getNext() const;
+    virtual bool isNull() const;
+    virtual int countTests();
 
-	bool shouldRun(const TestFilter& groupFilter, const TestFilter& nameFilter) const;
-	const SimpleString getName() const;
-	const SimpleString getGroup() const;
-	virtual SimpleString getFormattedName() const;
-	const SimpleString getFile() const;
-	int getLineNumber() const;
+    bool shouldRun(const TestFilter& groupFilter, const TestFilter& nameFilter) const;
+    const SimpleString getName() const;
+    const SimpleString getGroup() const;
+    virtual SimpleString getFormattedName() const;
+    const SimpleString getFile() const;
+    int getLineNumber() const;
     virtual const char *getProgressIndicator() const;
     virtual bool hasFailed() const;
 
@@ -136,7 +136,7 @@ public:
     virtual Utest* createTest();
     virtual void destroyTest(Utest* test);
 
-	virtual void runOneTest(TestPlugin* plugin, TestResult& result);
+    virtual void runOneTest(TestPlugin* plugin, TestResult& result);
     virtual void runOneTestInCurrentProcess(TestPlugin *plugin, TestResult & result);
 
     virtual void failWith(const TestFailure& failure);
@@ -147,7 +147,7 @@ protected:
     UtestShell(const char *groupName, const char *testName, const char *fileName, int lineNumber, UtestShell *nextTest);
 
     virtual SimpleString getMacroName() const;
-	TestResult *getTestResult();
+    TestResult *getTestResult();
 private:
     const char *group_;
     const char *name_;
@@ -158,10 +158,10 @@ private:
     bool hasFailed_;
 
     void setTestResult(TestResult* result);
-	void setCurrentTest(UtestShell* test);
+    void setCurrentTest(UtestShell* test);
 
-	static UtestShell* currentTest_;
-	static TestResult* testResult_;
+    static UtestShell* currentTest_;
+    static TestResult* testResult_;
 
 };
 
@@ -170,21 +170,21 @@ private:
 class NullTestShell: public UtestShell
 {
 public:
-	explicit NullTestShell();
-	explicit NullTestShell(const char* fileName, int lineNumber);
-	virtual ~NullTestShell();
+    explicit NullTestShell();
+    explicit NullTestShell(const char* fileName, int lineNumber);
+    virtual ~NullTestShell();
 
-	void testBody();
+    void testBody();
 
-	static NullTestShell& instance();
+    static NullTestShell& instance();
 
-	virtual int countTests() _override;
-	virtual UtestShell*getNext() const _override;
-	virtual bool isNull() const _override;
+    virtual int countTests() _override;
+    virtual UtestShell*getNext() const _override;
+    virtual bool isNull() const _override;
 private:
 
-	NullTestShell(const NullTestShell&);
-	NullTestShell& operator=(const NullTestShell&);
+    NullTestShell(const NullTestShell&);
+    NullTestShell& operator=(const NullTestShell&);
 
 };
 
@@ -195,12 +195,12 @@ class ExecFunctionTestShell;
 class ExecFunctionTest : public Utest
 {
 public:
-	ExecFunctionTest(ExecFunctionTestShell* shell);
-	void testBody();
-	virtual void setup() _override;
-	virtual void teardown() _override;
+    ExecFunctionTest(ExecFunctionTestShell* shell);
+    void testBody();
+    virtual void setup() _override;
+    virtual void teardown() _override;
 private:
-	ExecFunctionTestShell* shell_;
+    ExecFunctionTestShell* shell_;
 };
 
 //////////////////// ExecFunctionTestShell
@@ -208,17 +208,17 @@ private:
 class ExecFunctionTestShell: public UtestShell
 {
 public:
-	void (*setup_)();
-	void (*teardown_)();
-	void (*testFunction_)();
+    void (*setup_)();
+    void (*teardown_)();
+    void (*testFunction_)();
 
-	ExecFunctionTestShell(void(*set)() = 0, void(*tear)() = 0) :
-		UtestShell("Generic", "Generic", "Generic", 1), setup_(set), teardown_(
-				tear), testFunction_(0)
-	{
-	}
-	Utest* createTest() { return new ExecFunctionTest(this); }
-	virtual ~ExecFunctionTestShell();
+    ExecFunctionTestShell(void(*set)() = 0, void(*tear)() = 0) :
+        UtestShell("Generic", "Generic", "Generic", 1), setup_(set), teardown_(
+                tear), testFunction_(0)
+    {
+    }
+    Utest* createTest() { return new ExecFunctionTest(this); }
+    virtual ~ExecFunctionTestShell();
 };
 
 //////////////////// CppUTestFailedException
@@ -226,7 +226,7 @@ public:
 class CppUTestFailedException
 {
 public:
-	int dummy_;
+    int dummy_;
 };
 
 //////////////////// IgnoredTest
@@ -234,18 +234,18 @@ public:
 class IgnoredUtestShell : public UtestShell
 {
 public:
-	IgnoredUtestShell();
-	virtual ~IgnoredUtestShell();
-	explicit IgnoredUtestShell(const char* groupName, const char* testName,
-			const char* fileName, int lineNumber);
-	virtual const char* getProgressIndicator() const;
-	protected:  virtual SimpleString getMacroName() const _override;
+    IgnoredUtestShell();
+    virtual ~IgnoredUtestShell();
+    explicit IgnoredUtestShell(const char* groupName, const char* testName,
+            const char* fileName, int lineNumber);
+    virtual const char* getProgressIndicator() const;
+    protected:  virtual SimpleString getMacroName() const _override;
     virtual void runOneTest(TestPlugin* plugin, TestResult& result) _override;
 
 private:
 
-	IgnoredUtestShell(const IgnoredUtestShell&);
-	IgnoredUtestShell& operator=(const IgnoredUtestShell&);
+    IgnoredUtestShell(const IgnoredUtestShell&);
+    IgnoredUtestShell& operator=(const IgnoredUtestShell&);
 
 };
 
@@ -254,16 +254,16 @@ private:
 class TestInstaller
 {
 public:
-	explicit TestInstaller(UtestShell& shell, const char* groupName, const char* testName,
-			const char* fileName, int lineNumber);
-	virtual ~TestInstaller();
+    explicit TestInstaller(UtestShell& shell, const char* groupName, const char* testName,
+            const char* fileName, int lineNumber);
+    virtual ~TestInstaller();
 
-	void unDo();
+    void unDo();
 
 private:
 
-	TestInstaller(const TestInstaller&);
-	TestInstaller& operator=(const TestInstaller&);
+    TestInstaller(const TestInstaller&);
+    TestInstaller& operator=(const TestInstaller&);
 
 };
 
