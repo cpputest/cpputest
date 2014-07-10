@@ -163,7 +163,6 @@ TEST(TestFailure, StringsEqualFailureInTheMiddle)
 			    "\t                                               ^", f);
 }
 
-
 TEST(TestFailure, StringsEqualFailureAtTheBeginning)
 {
 	StringEqualFailure f(test, failFileName, failLineNumber, "aaa", "bbb");
@@ -173,6 +172,20 @@ TEST(TestFailure, StringsEqualFailureAtTheBeginning)
 			    "\t                                               ^", f);
 }
 
+TEST(TestFailure, StringsEqualFailureWithNullAsActual)
+{
+	StringEqualFailure f(test, failFileName, failLineNumber, "abc", NULL);
+	FAILURE_EQUAL("expected <abc>\n"
+                "\tbut was  <(null)>", f);
+}
+
+TEST(TestFailure, StringsEqualFailureWithNullAsExpected)
+{
+	StringEqualFailure f(test, failFileName, failLineNumber, NULL, "abd");
+	FAILURE_EQUAL("expected <(null)>\n"
+                "\tbut was  <abd>", f);
+}
+
 TEST(TestFailure, StringsEqualNoCaseFailure)
 {
 	StringEqualNoCaseFailure f(test, failFileName, failLineNumber, "ABC", "abd");
@@ -180,6 +193,20 @@ TEST(TestFailure, StringsEqualNoCaseFailure)
 			    "\tbut was  <abd>\n"
 			    "\tdifference starts at position 2 at: <        abd         >\n"
 			    "\t                                               ^", f);
+}
+
+TEST(TestFailure, StringsEqualNoCaseFailureWithActualAsNull)
+{
+	StringEqualNoCaseFailure f(test, failFileName, failLineNumber, "ABC", NULL);
+	FAILURE_EQUAL("expected <ABC>\n"
+			    "\tbut was  <(null)>", f);
+}
+
+TEST(TestFailure, StringsEqualNoCaseFailureWithExpectedAsNull)
+{
+	StringEqualNoCaseFailure f(test, failFileName, failLineNumber, NULL, "abd");
+	FAILURE_EQUAL("expected <(null)>\n"
+			    "\tbut was  <abd>", f);
 }
 
 TEST(TestFailure, StringsEqualNoCaseFailure2)

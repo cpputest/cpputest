@@ -245,23 +245,26 @@ UnsignedLongsEqualFailure::UnsignedLongsEqualFailure(UtestShell* test, const cha
 	message_ = createButWasString(expectedReported, actualReported);
 }
 
-
 StringEqualFailure::StringEqualFailure(UtestShell* test, const char* fileName, int lineNumber, const char* expected, const char* actual) : TestFailure(test, fileName, lineNumber)
 {
-	size_t failStart;
-	for (failStart = 0; actual[failStart] == expected[failStart]; failStart++)
-		;
-	message_ = createButWasString(expected, actual);
-	message_ += createDifferenceAtPosString(actual, failStart);
+	message_ = createButWasString(StringFromOrNull(expected), StringFromOrNull(actual));
+	if((expected) && (actual)) 
+	{
+	    size_t failStart;
+	    for (failStart = 0; actual[failStart] == expected[failStart]; failStart++)
+		    ;
+	    message_ += createDifferenceAtPosString(actual, failStart);
+	}
 }
 
 StringEqualNoCaseFailure::StringEqualNoCaseFailure(UtestShell* test, const char* fileName, int lineNumber, const char* expected, const char* actual) : TestFailure(test, fileName, lineNumber)
 {
-	size_t failStart;
-    for (failStart = 0; PlatformSpecificToLower(actual[failStart]) == PlatformSpecificToLower(expected[failStart]); failStart++)
-    	;
-	message_ = createButWasString(expected, actual);
-	message_ += createDifferenceAtPosString(actual, failStart);
+	message_ = createButWasString(StringFromOrNull(expected), StringFromOrNull(actual));
+	if((expected) && (actual)) 
+	{
+	    size_t failStart;
+	    for (failStart = 0; PlatformSpecificToLower(actual[failStart]) == PlatformSpecificToLower(expected[failStart]); failStart++)
+		    ;
+	    message_ += createDifferenceAtPosString(actual, failStart);
+	}
 }
-
-
