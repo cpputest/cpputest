@@ -176,6 +176,9 @@
 #define _override
 #endif
 
+/* MinGW-w64 prefers to act like Visual C++, but we want the ANSI behaviors instead */
+#define __USE_MINGW_ANSI_STDIO 1
+
 /* Should be the only #include here. Standard C library wrappers */
 #include "StandardCLibrary.h"
 
