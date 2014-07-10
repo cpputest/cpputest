@@ -312,6 +312,58 @@ MockNamedValue MockCheckedActualCall::returnValue()
 	return MockNamedValue("no return value");
 }
 
+int MockCheckedActualCall::returnIntValueOrDefault(int default_value)
+{
+    if (!hasReturnValue()) {
+        return default_value;
+    }
+    return returnIntValue();
+}
+
+int MockCheckedActualCall::returnIntValue()
+{
+    return returnValue().getIntValue();
+}
+
+unsigned int MockCheckedActualCall::returnUnsignedIntValue()
+{
+    return returnValue().getUnsignedIntValue();
+}
+
+unsigned int MockCheckedActualCall::returnUnsignedIntValueOrDefault(unsigned int default_value)
+{
+    if (!hasReturnValue()) {
+        return default_value;
+    }
+    return returnUnsignedIntValue();
+}
+
+void * MockCheckedActualCall::returnPointerValueOrDefault(void * default_value)
+{
+    if (!hasReturnValue()) {
+        return default_value;
+    }
+    return returnPointerValue();
+}
+
+void * MockCheckedActualCall::returnPointerValue()
+{
+    return returnValue().getPointerValue();
+}
+
+const char * MockCheckedActualCall::returnStringValueOrDefault(const char * default_value)
+{
+    if (!hasReturnValue()) {
+        return default_value;
+    }
+    return returnStringValue();
+}
+
+const char * MockCheckedActualCall::returnStringValue()
+{
+    return returnValue().getStringValue();
+}
+
 bool MockCheckedActualCall::hasReturnValue()
 {
 	return ! returnValue().getName().isEmpty();
@@ -474,6 +526,46 @@ bool MockActualCallTrace::hasReturnValue()
 MockNamedValue MockActualCallTrace::returnValue()
 {
 	return MockNamedValue("");
+}
+
+int MockActualCallTrace::returnIntValue()
+{
+	return 0;
+}
+
+unsigned int MockActualCallTrace::returnUnsignedIntValue()
+{
+	return 0;
+}
+
+void * MockActualCallTrace::returnPointerValue()
+{
+	return NULL;
+}
+
+void * MockActualCallTrace::returnPointerValueOrDefault(void *)
+{
+	return returnPointerValue();
+}
+
+const char * MockActualCallTrace::returnStringValue()
+{
+	return "";
+}
+
+const char * MockActualCallTrace::returnStringValueOrDefault(const char *)
+{
+    return returnStringValue();
+}
+
+int MockActualCallTrace::returnIntValueOrDefault(int)
+{
+	return 0;
+}
+
+unsigned int MockActualCallTrace::returnUnsignedIntValueOrDefault(unsigned int)
+{
+    return returnUnsignedIntValue();
 }
 
 MockActualCall& MockActualCallTrace::onObject(void* objectPtr)

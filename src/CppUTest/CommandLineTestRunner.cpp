@@ -88,6 +88,7 @@ void CommandLineTestRunner::initializeTestRun()
 	registry_->groupFilter(arguments_->getGroupFilter());
 	registry_->nameFilter(arguments_->getNameFilter());
 	if (arguments_->isVerbose()) output_->verbose();
+	if (arguments_->isColor()) output_->color();
 	if (arguments_->runTestsInSeperateProcess()) registry_->setRunTestsInSeperateProcess();
 }
 
@@ -128,6 +129,11 @@ bool CommandLineTestRunner::parseArguments(TestPlugin* plugin)
 bool CommandLineTestRunner::isVerbose()
 {
 	return arguments_->isVerbose();
+}
+
+bool CommandLineTestRunner::isColor()
+{
+	return arguments_->isColor();
 }
 
 int CommandLineTestRunner::getRepeatCount()

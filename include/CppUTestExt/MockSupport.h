@@ -52,12 +52,16 @@ public:
 	virtual bool hasReturnValue();
 	virtual MockNamedValue returnValue();
 	virtual int intReturnValue();
+	virtual int returnIntValueOrDefault(int defaultValue);
 	virtual unsigned int unsignedIntReturnValue();
 	virtual long int longIntReturnValue();
 	virtual unsigned long int unsignedLongIntReturnValue();
+	virtual unsigned int returnUnsignedIntValueOrDefault(unsigned int defaultValue);
 	virtual const char* stringReturnValue();
+	virtual const char* returnStringValueOrDefault(const char * defaultValue);
 	virtual double doubleReturnValue();
 	virtual void* pointerReturnValue();
+	virtual void* returnPointerValueOrDefault(void * defaultValue);
 	virtual const void* constPointerReturnValue();
 
 	bool hasData(const SimpleString& name);

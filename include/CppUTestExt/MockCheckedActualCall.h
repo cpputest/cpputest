@@ -53,6 +53,18 @@ public:
 	virtual bool hasReturnValue() _override;
 	virtual MockNamedValue returnValue() _override;
 
+	virtual int returnIntValueOrDefault(int default_value) _override;
+	virtual int returnIntValue() _override;
+
+	virtual unsigned int returnUnsignedIntValue() _override;
+	virtual unsigned int returnUnsignedIntValueOrDefault(unsigned int default_value) _override;
+
+	virtual const char * returnStringValueOrDefault(const char * default_value) _override;
+	virtual const char * returnStringValue() _override;
+
+	virtual void * returnPointerValue() _override;
+	virtual void * returnPointerValueOrDefault(void *) _override;
+
 	virtual MockActualCall& onObject(void* objectPtr) _override;
 
 	virtual bool isFulfilled() const;
@@ -131,6 +143,18 @@ public:
 	virtual bool hasReturnValue() _override;
 	virtual MockNamedValue returnValue() _override;
 
+	virtual int returnIntValueOrDefault(int default_value) _override;
+	virtual int returnIntValue() _override;
+
+	virtual unsigned int returnUnsignedIntValue() _override;
+	virtual unsigned int returnUnsignedIntValueOrDefault(unsigned int default_value) _override;
+
+	virtual const char * returnStringValueOrDefault(const char * default_value) _override;
+	virtual const char * returnStringValue() _override;
+
+	virtual void * returnPointerValue() _override;
+	virtual void * returnPointerValueOrDefault(void *) _override;
+
 	virtual MockActualCall& onObject(void* objectPtr) _override;
 
 	const char* getTraceOutput();
@@ -161,6 +185,18 @@ public:
 
 	virtual bool hasReturnValue() _override { return false; }
 	virtual MockNamedValue returnValue() _override { return MockNamedValue(""); }
+
+    virtual int returnIntValueOrDefault(int) _override { return 0; }
+    virtual int returnIntValue() _override { return 0; }
+
+	virtual unsigned int returnUnsignedIntValue() _override { return 0; }
+	virtual unsigned int returnUnsignedIntValueOrDefault(unsigned int) _override { return returnUnsignedIntValue(); }
+
+	virtual const char * returnStringValueOrDefault(const char *) _override { return returnStringValue(); }
+	virtual const char * returnStringValue() _override { return ""; }
+
+	virtual void * returnPointerValue() _override { return NULL; }
+	virtual void * returnPointerValueOrDefault(void * ) _override { return returnPointerValue(); }
 
 	virtual MockActualCall& onObject(void* ) _override { return *this; }
 

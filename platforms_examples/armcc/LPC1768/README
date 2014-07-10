@@ -1,0 +1,40 @@
+Sample project to test CppUTest for Keil MDK-ARM toolchain and LPC1768 chip.
+
+Requirements:
+1. CYGWIN (rm.exe, mkdir.exe, make.exe)
+
+2. Keil MDK-ARM
+
+3. JLink Flash (for programming chip) or FlashMagic
+
+4. serial connection to UART0 or UART1 interface
+
+5. 12 or 24 MHz quartz. If else, need to be adjusted in
+  $(CPPUTEST_HOME)/platforms_startup/armcc/LPC1768/system_LPC17xx.c
+  (for _clock_init() function working correctly and to set up 100 MHz core
+  clock).
+  Please check system_LPC17xx.c for correct quartz selection in function
+  SystemInit(), and rebuild startup library for any change.
+  Default is 12 MHz quartz.
+
+6. eclipse + gdb server from JLink + arm-none-eabi-gdb from GNU ARM Tools Embedded
+  For debug only.
+
+First, you need to compile CppUTest and target startup library:
+  make -C ../../../platforms/armcc CPU=Cortex-M3 all
+  make -C ../../../platforms_startup/armcc/LPC1768 all
+
+Second, you need to write tests. As example, I use
+  $(CPPUTEST_HOME)/examples/AllTests/CircularBufferTest.cpp.
+
+Third, you need to make executable:
+  make all
+
+Fourth, you need to program executable on target chip:
+  make prog
+
+Project use semihosting, so you may use standard printf() or std::cout << "Hello!"
+
+If problems with heap or low memory, adjust heap size in
+  $(CPPUTEST_HOME)/platforms_startup/armcc/LPC1768/startup_LPC17xx.asm
+  and rebuild startup library.

@@ -66,6 +66,18 @@ public:
 	virtual bool hasReturnValue()=0;
 	virtual MockNamedValue returnValue()=0;
 
+	virtual int returnIntValueOrDefault(int default_value)=0;
+	virtual int returnIntValue()=0;
+
+	virtual unsigned int returnUnsignedIntValue()=0;
+	virtual unsigned int returnUnsignedIntValueOrDefault(unsigned int default_value)=0;
+
+	virtual const char * returnStringValueOrDefault(const char * default_value)=0;
+	virtual const char * returnStringValue()=0;
+
+	virtual void * returnPointerValue()=0;
+	virtual void * returnPointerValueOrDefault(void * default_value)=0;
+
 	virtual MockActualCall& onObject(void* objectPtr)=0;
 };
 

@@ -424,7 +424,7 @@ MockExpectedCall& MockCheckedExpectedCall::onObject(void* objectPtr)
 
 bool MockCheckedExpectedCall::hasReturnValue()
 {
-	return ! returnValue_.getName().isEmpty();
+	return !returnValue_.getName().isEmpty();
 }
 
 MockNamedValue MockCheckedExpectedCall::returnValue()

@@ -1115,8 +1115,14 @@ TEST(MockSupportTest, hasReturnValue)
 TEST(MockSupportTest, UnsignedIntegerReturnValue)
 {
 	unsigned int expected_value = 7;
+
 	mock().expectOneCall("foo").andReturnValue(expected_value);
-	LONGS_EQUAL(expected_value, mock().actualCall("foo").returnValue().getUnsignedIntValue());
+
+	MockActualCall& actual_call = mock().actualCall("foo");
+
+	LONGS_EQUAL(expected_value, actual_call.returnValue().getUnsignedIntValue());
+	LONGS_EQUAL(expected_value, actual_call.returnUnsignedIntValue());
+
 	LONGS_EQUAL(expected_value, mock().returnValue().getUnsignedIntValue());
 	LONGS_EQUAL(expected_value, mock().unsignedIntReturnValue());
 }
@@ -1191,11 +1197,49 @@ TEST(MockSupportTest, UnsignedIntegerReturnValueSetsDifferentValuesWhileParamete
 	LONGS_EQUAL(another_ret_value, mock().returnValue().getUnsignedIntValue());
 }
 
+TEST(MockSupportTest, WhenAUnsignedIntegerReturnValueIsDefinedAndAlsoThereIsADefaultShouldlIgnoreTheDefault)
+{
+	unsigned int default_return_value = 10;
+	unsigned int expected_return_value = default_return_value + 1;
+	mock().expectOneCall("foo").andReturnValue(expected_return_value);
+	LONGS_EQUAL(expected_return_value, mock().actualCall("foo").returnUnsignedIntValueOrDefault(default_return_value));
+	LONGS_EQUAL(expected_return_value, mock().returnUnsignedIntValueOrDefault(default_return_value));
+}
+
+TEST(MockSupportTest, WhenNoUnsignedIntegerReturnValueIsDefinedButThereIsADefaultShouldlUseTheDefaultValue)
+{
+	unsigned int default_return_value = 10;
+	mock().expectOneCall("foo");
+	LONGS_EQUAL(default_return_value, mock().actualCall("foo").returnUnsignedIntValueOrDefault(default_return_value));
+	LONGS_EQUAL(default_return_value, mock().returnUnsignedIntValueOrDefault(default_return_value));
+}
+
+TEST(MockSupportTest, WhenAIntegerReturnValueIsDefinedAndAlsoThereIsADefaultShouldlIgnoreTheDefault)
+{
+	int default_return_value = 777;
+	int expected_return_value = default_return_value + 1;
+	mock().expectOneCall("foo").andReturnValue(expected_return_value);
+	LONGS_EQUAL(expected_return_value, mock().actualCall("foo").returnIntValueOrDefault(default_return_value));
+	LONGS_EQUAL(expected_return_value, mock().returnIntValueOrDefault(default_return_value));
+}
+
+TEST(MockSupportTest, WhenNoIntegerReturnValueIsDefinedButThereIsADefaultShouldlUseTheDefaultValue)
+{
+	int default_return_value = 777;
+	mock().expectOneCall("foo");
+	LONGS_EQUAL(default_return_value, mock().actualCall("foo").returnIntValueOrDefault(default_return_value));
+	LONGS_EQUAL(default_return_value, mock().returnIntValueOrDefault(default_return_value));
+}
+
 TEST(MockSupportTest, IntegerReturnValue)
 {
 	int expected_value = 1;
 	mock().expectOneCall("foo").andReturnValue(1);
-	LONGS_EQUAL(expected_value, mock().actualCall("foo").returnValue().getIntValue());
+	MockActualCall& actual_call = mock().actualCall("foo");
+
+	LONGS_EQUAL(expected_value, actual_call.returnValue().getIntValue());
+	LONGS_EQUAL(expected_value, actual_call.returnIntValue());
+
 	LONGS_EQUAL(expected_value, mock().returnValue().getIntValue());
 	LONGS_EQUAL(expected_value, mock().intReturnValue());
 }
@@ -1315,10 +1359,30 @@ TEST(MockSupportTest, MatchingReturnValueOnWhileSignature)
 	LONGS_EQUAL(2, mock().actualCall("foo").withParameter("p1", 2).returnValue().getIntValue());
 }
 
+TEST(MockSupportTest, WhenAStringReturnValueIsDefinedAndAlsoThereIsADefaultShouldlIgnoreTheDefault)
+{
+	const char * default_return_value = "default";
+	const char * expected_return_value = "expected";
+	mock().expectOneCall("foo").andReturnValue(expected_return_value);
+	STRCMP_EQUAL(expected_return_value, mock().actualCall("foo").returnStringValueOrDefault(default_return_value));
+	STRCMP_EQUAL(expected_return_value, mock().returnStringValueOrDefault(default_return_value));
+}
+
+TEST(MockSupportTest, WhenNoStringReturnValueIsDefinedButThereIsADefaultShouldlUseTheDefaultValue)
+{
+	const char * default_return_value = "default";
+	mock().expectOneCall("foo");
+	STRCMP_EQUAL(default_return_value, mock().actualCall("foo").returnStringValueOrDefault(default_return_value));
+	STRCMP_EQUAL(default_return_value, mock().returnStringValueOrDefault(default_return_value));
+}
+
 TEST(MockSupportTest, StringReturnValue)
 {
 	mock().expectOneCall("foo").andReturnValue("hello world");
-	STRCMP_EQUAL("hello world", mock().actualCall("foo").returnValue().getStringValue());
+	MockActualCall& actual_call = mock().actualCall("foo");
+
+	STRCMP_EQUAL("hello world", actual_call.returnValue().getStringValue());
+	STRCMP_EQUAL("hello world", actual_call.returnStringValue());
 	STRCMP_EQUAL("hello world", mock().stringReturnValue());
 }
 
@@ -1329,11 +1393,31 @@ TEST(MockSupportTest, DoubleReturnValue)
 	DOUBLES_EQUAL(1.0, mock().doubleReturnValue(), 0.05);
 }
 
+TEST(MockSupportTest, WhenAPointerReturnValueIsDefinedAndAlsoThereIsADefaultShouldlIgnoreTheDefault)
+{
+	void * default_return_value = (void*) 0x777;
+	void * expected_return_value = (void*) 0x144000;
+	mock().expectOneCall("foo").andReturnValue(expected_return_value);
+	POINTERS_EQUAL(expected_return_value, mock().actualCall("foo").returnPointerValueOrDefault(default_return_value));
+	POINTERS_EQUAL(expected_return_value, mock().returnPointerValueOrDefault(default_return_value));
+}
+
+TEST(MockSupportTest, WhenNoPointerReturnValueIsDefinedButThereIsADefaultShouldlUseTheDefaultValue)
+{
+	void * default_return_value = (void*) 0x10;
+	mock().expectOneCall("foo");
+	POINTERS_EQUAL(default_return_value, mock().actualCall("foo").returnPointerValueOrDefault(default_return_value));
+	POINTERS_EQUAL(default_return_value, mock().returnPointerValueOrDefault(default_return_value));
+}
+
 TEST(MockSupportTest, PointerReturnValue)
 {
-	void* ptr = (void*) 0x001;
+	void* ptr = (void*) 0x00107;
 	mock().expectOneCall("foo").andReturnValue(ptr);
-	POINTERS_EQUAL(ptr, mock().actualCall("foo").returnValue().getPointerValue());
+	MockActualCall& actual_call = mock().actualCall("foo");
+
+	POINTERS_EQUAL(ptr, actual_call.returnValue().getPointerValue());
+	POINTERS_EQUAL(ptr, actual_call.returnPointerValue());
 	POINTERS_EQUAL(ptr, mock().pointerReturnValue());
 }
 
