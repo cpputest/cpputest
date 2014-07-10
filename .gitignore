@@ -44,7 +44,6 @@ Debug
 *.user
 _build_
 _build
-build
 builds/*gcc*
 /.deps
 CppUTestExtTests
