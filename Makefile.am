@@ -1,6 +1,5 @@
 
 ACLOCAL_AMFLAGS = -I m4
-AUTOMAKE_OPTIONS = subdir-objects
 
 CPPUTEST_TESTS = CppUTestTests
 CPPUTESTEXT_TESTS = CppUTestExtTests
