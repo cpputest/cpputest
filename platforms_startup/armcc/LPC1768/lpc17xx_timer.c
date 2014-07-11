@@ -66,26 +66,26 @@ static uint32_t converPtrToTimeNum (LPC_TIM_TypeDef *TIMx);
  **********************************************************************/
 static uint32_t getPClock (uint32_t timernum)
 {
-	uint32_t clkdlycnt;
-	switch (timernum)
-	{
-	case 0:
-		clkdlycnt = CLKPWR_GetPCLK (CLKPWR_PCLKSEL_TIMER0);
-		break;
+    uint32_t clkdlycnt;
+    switch (timernum)
+    {
+    case 0:
+        clkdlycnt = CLKPWR_GetPCLK (CLKPWR_PCLKSEL_TIMER0);
+        break;
 
-	case 1:
-		clkdlycnt = CLKPWR_GetPCLK (CLKPWR_PCLKSEL_TIMER1);
-		break;
+    case 1:
+        clkdlycnt = CLKPWR_GetPCLK (CLKPWR_PCLKSEL_TIMER1);
+        break;
 
-	case 2:
-		clkdlycnt = CLKPWR_GetPCLK (CLKPWR_PCLKSEL_TIMER2);
-		break;
+    case 2:
+        clkdlycnt = CLKPWR_GetPCLK (CLKPWR_PCLKSEL_TIMER2);
+        break;
 
-	case 3:
-		clkdlycnt = CLKPWR_GetPCLK (CLKPWR_PCLKSEL_TIMER3);
-		break;
-	}
-	return clkdlycnt;
+    case 3:
+        clkdlycnt = CLKPWR_GetPCLK (CLKPWR_PCLKSEL_TIMER3);
+        break;
+    }
+    return clkdlycnt;
 }
 
 
@@ -97,13 +97,13 @@ static uint32_t getPClock (uint32_t timernum)
  **********************************************************************/
 uint32_t converUSecToVal (uint32_t timernum, uint32_t usec)
 {
-	uint64_t clkdlycnt;
+    uint64_t clkdlycnt;
 
-	// Get Pclock of timer
-	clkdlycnt = (uint64_t) getPClock(timernum);
+    // Get Pclock of timer
+    clkdlycnt = (uint64_t) getPClock(timernum);
 
-	clkdlycnt = (clkdlycnt * usec) / 1000000;
-	return (uint32_t) clkdlycnt;
+    clkdlycnt = (clkdlycnt * usec) / 1000000;
+    return (uint32_t) clkdlycnt;
 }
 
 
@@ -118,26 +118,26 @@ uint32_t converUSecToVal (uint32_t timernum, uint32_t usec)
  **********************************************************************/
 uint32_t converPtrToTimeNum (LPC_TIM_TypeDef *TIMx)
 {
-	uint32_t tnum = 0xFFFFFFFF;
+    uint32_t tnum = 0xFFFFFFFF;
 
-	if (TIMx == LPC_TIM0)
-	{
-		tnum = 0;
-	}
-	else if (TIMx == LPC_TIM1)
-	{
-		tnum = 1;
-	}
-	else if (TIMx == LPC_TIM2)
-	{
-		tnum = 2;
-	}
-	else if (TIMx == LPC_TIM3)
-	{
-		tnum = 3;
-	}
+    if (TIMx == LPC_TIM0)
+    {
+        tnum = 0;
+    }
+    else if (TIMx == LPC_TIM1)
+    {
+        tnum = 1;
+    }
+    else if (TIMx == LPC_TIM2)
+    {
+        tnum = 2;
+    }
+    else if (TIMx == LPC_TIM3)
+    {
+        tnum = 3;
+    }
 
-	return tnum;
+    return tnum;
 }
 
 /* End of Private Functions ---------------------------------------------------- */
@@ -168,14 +168,14 @@ uint32_t converPtrToTimeNum (LPC_TIM_TypeDef *TIMx)
  **********************************************************************/
 FlagStatus TIM_GetIntStatus(LPC_TIM_TypeDef *TIMx, TIM_INT_TYPE IntFlag)
 {
-	uint8_t temp;
-	CHECK_PARAM(PARAM_TIMx(TIMx));
-	CHECK_PARAM(PARAM_TIM_INT_TYPE(IntFlag));
-	temp = (TIMx->IR)& TIM_IR_CLR(IntFlag);
-	if (temp)
-		return SET;
+    uint8_t temp;
+    CHECK_PARAM(PARAM_TIMx(TIMx));
+    CHECK_PARAM(PARAM_TIM_INT_TYPE(IntFlag));
+    temp = (TIMx->IR)& TIM_IR_CLR(IntFlag);
+    if (temp)
+        return SET;
 
-	return RESET;
+    return RESET;
 
 }
 /*********************************************************************//**
@@ -198,13 +198,13 @@ FlagStatus TIM_GetIntStatus(LPC_TIM_TypeDef *TIMx, TIM_INT_TYPE IntFlag)
  **********************************************************************/
 FlagStatus TIM_GetIntCaptureStatus(LPC_TIM_TypeDef *TIMx, TIM_INT_TYPE IntFlag)
 {
-	uint8_t temp;
-	CHECK_PARAM(PARAM_TIMx(TIMx));
-	CHECK_PARAM(PARAM_TIM_INT_TYPE(IntFlag));
-	temp = (TIMx->IR) & (1<<(4+IntFlag));
-	if(temp)
-		return SET;
-	return RESET;
+    uint8_t temp;
+    CHECK_PARAM(PARAM_TIMx(TIMx));
+    CHECK_PARAM(PARAM_TIM_INT_TYPE(IntFlag));
+    temp = (TIMx->IR) & (1<<(4+IntFlag));
+    if(temp)
+        return SET;
+    return RESET;
 }
 /*********************************************************************//**
  * @brief 		Clear Interrupt pending
@@ -224,9 +224,9 @@ FlagStatus TIM_GetIntCaptureStatus(LPC_TIM_TypeDef *TIMx, TIM_INT_TYPE IntFlag)
  **********************************************************************/
 void TIM_ClearIntPending(LPC_TIM_TypeDef *TIMx, TIM_INT_TYPE IntFlag)
 {
-	CHECK_PARAM(PARAM_TIMx(TIMx));
-	CHECK_PARAM(PARAM_TIM_INT_TYPE(IntFlag));
-	TIMx->IR = TIM_IR_CLR(IntFlag);
+    CHECK_PARAM(PARAM_TIMx(TIMx));
+    CHECK_PARAM(PARAM_TIM_INT_TYPE(IntFlag));
+    TIMx->IR = TIM_IR_CLR(IntFlag);
 }
 
 /*********************************************************************//**
@@ -247,9 +247,9 @@ void TIM_ClearIntPending(LPC_TIM_TypeDef *TIMx, TIM_INT_TYPE IntFlag)
  **********************************************************************/
 void TIM_ClearIntCapturePending(LPC_TIM_TypeDef *TIMx, TIM_INT_TYPE IntFlag)
 {
-	CHECK_PARAM(PARAM_TIMx(TIMx));
-	CHECK_PARAM(PARAM_TIM_INT_TYPE(IntFlag));
-	TIMx->IR = (1<<(4+IntFlag));
+    CHECK_PARAM(PARAM_TIMx(TIMx));
+    CHECK_PARAM(PARAM_TIM_INT_TYPE(IntFlag));
+    TIMx->IR = (1<<(4+IntFlag));
 }
 
 /*********************************************************************//**
@@ -265,17 +265,17 @@ void TIM_ClearIntCapturePending(LPC_TIM_TypeDef *TIMx, TIM_INT_TYPE IntFlag)
  **********************************************************************/
 void TIM_ConfigStructInit(TIM_MODE_OPT TimerCounterMode, void *TIM_ConfigStruct)
 {
-	if (TimerCounterMode == TIM_TIMER_MODE )
-	{
-		TIM_TIMERCFG_Type * pTimeCfg = (TIM_TIMERCFG_Type *)TIM_ConfigStruct;
-		pTimeCfg->PrescaleOption = TIM_PRESCALE_USVAL;
-		pTimeCfg->PrescaleValue = 1;
-	}
-	else
-	{
-		TIM_COUNTERCFG_Type * pCounterCfg = (TIM_COUNTERCFG_Type *)TIM_ConfigStruct;
-		pCounterCfg->CountInputSelect = TIM_COUNTER_INCAP0;
-	}
+    if (TimerCounterMode == TIM_TIMER_MODE )
+    {
+        TIM_TIMERCFG_Type * pTimeCfg = (TIM_TIMERCFG_Type *)TIM_ConfigStruct;
+        pTimeCfg->PrescaleOption = TIM_PRESCALE_USVAL;
+        pTimeCfg->PrescaleValue = 1;
+    }
+    else
+    {
+        TIM_COUNTERCFG_Type * pCounterCfg = (TIM_COUNTERCFG_Type *)TIM_ConfigStruct;
+        pCounterCfg->CountInputSelect = TIM_COUNTER_INCAP0;
+    }
 }
 
 /*********************************************************************//**
@@ -299,73 +299,73 @@ void TIM_ConfigStructInit(TIM_MODE_OPT TimerCounterMode, void *TIM_ConfigStruct)
  **********************************************************************/
 void TIM_Init(LPC_TIM_TypeDef *TIMx, TIM_MODE_OPT TimerCounterMode, void *TIM_ConfigStruct)
 {
-	TIM_TIMERCFG_Type *pTimeCfg;
-	TIM_COUNTERCFG_Type *pCounterCfg;
+    TIM_TIMERCFG_Type *pTimeCfg;
+    TIM_COUNTERCFG_Type *pCounterCfg;
 
-	CHECK_PARAM(PARAM_TIMx(TIMx));
-	CHECK_PARAM(PARAM_TIM_MODE_OPT(TimerCounterMode));
+    CHECK_PARAM(PARAM_TIMx(TIMx));
+    CHECK_PARAM(PARAM_TIM_MODE_OPT(TimerCounterMode));
 
-	//set power
+    //set power
 
-	if (TIMx== LPC_TIM0)
-	{
-		CLKPWR_ConfigPPWR (CLKPWR_PCONP_PCTIM0, ENABLE);
-		//PCLK_Timer0 = CCLK/4
-		CLKPWR_SetPCLKDiv (CLKPWR_PCLKSEL_TIMER0, CLKPWR_PCLKSEL_CCLK_DIV_4);
-	}
-	else if (TIMx== LPC_TIM1)
-	{
-		CLKPWR_ConfigPPWR (CLKPWR_PCONP_PCTIM1, ENABLE);
-		//PCLK_Timer1 = CCLK/4
-		CLKPWR_SetPCLKDiv (CLKPWR_PCLKSEL_TIMER1, CLKPWR_PCLKSEL_CCLK_DIV_4);
+    if (TIMx== LPC_TIM0)
+    {
+        CLKPWR_ConfigPPWR (CLKPWR_PCONP_PCTIM0, ENABLE);
+        //PCLK_Timer0 = CCLK/4
+        CLKPWR_SetPCLKDiv (CLKPWR_PCLKSEL_TIMER0, CLKPWR_PCLKSEL_CCLK_DIV_4);
+    }
+    else if (TIMx== LPC_TIM1)
+    {
+        CLKPWR_ConfigPPWR (CLKPWR_PCONP_PCTIM1, ENABLE);
+        //PCLK_Timer1 = CCLK/4
+        CLKPWR_SetPCLKDiv (CLKPWR_PCLKSEL_TIMER1, CLKPWR_PCLKSEL_CCLK_DIV_4);
 
-	}
+    }
 
-	else if (TIMx== LPC_TIM2)
-	{
-		CLKPWR_ConfigPPWR (CLKPWR_PCONP_PCTIM2, ENABLE);
-		//PCLK_Timer2= CCLK/4
-		CLKPWR_SetPCLKDiv (CLKPWR_PCLKSEL_TIMER2, CLKPWR_PCLKSEL_CCLK_DIV_4);
-	}
-	else if (TIMx== LPC_TIM3)
-	{
-		CLKPWR_ConfigPPWR (CLKPWR_PCONP_PCTIM3, ENABLE);
-		//PCLK_Timer3= CCLK/4
-		CLKPWR_SetPCLKDiv (CLKPWR_PCLKSEL_TIMER3, CLKPWR_PCLKSEL_CCLK_DIV_4);
+    else if (TIMx== LPC_TIM2)
+    {
+        CLKPWR_ConfigPPWR (CLKPWR_PCONP_PCTIM2, ENABLE);
+        //PCLK_Timer2= CCLK/4
+        CLKPWR_SetPCLKDiv (CLKPWR_PCLKSEL_TIMER2, CLKPWR_PCLKSEL_CCLK_DIV_4);
+    }
+    else if (TIMx== LPC_TIM3)
+    {
+        CLKPWR_ConfigPPWR (CLKPWR_PCONP_PCTIM3, ENABLE);
+        //PCLK_Timer3= CCLK/4
+        CLKPWR_SetPCLKDiv (CLKPWR_PCLKSEL_TIMER3, CLKPWR_PCLKSEL_CCLK_DIV_4);
 
-	}
+    }
 
-	TIMx->CCR &= ~TIM_CTCR_MODE_MASK;
-	TIMx->CCR |= TIM_TIMER_MODE;
+    TIMx->CCR &= ~TIM_CTCR_MODE_MASK;
+    TIMx->CCR |= TIM_TIMER_MODE;
 
-	TIMx->TC =0;
-	TIMx->PC =0;
-	TIMx->PR =0;
-	TIMx->TCR |= (1<<1); //Reset Counter
-	TIMx->TCR &= ~(1<<1); //release reset
-	if (TimerCounterMode == TIM_TIMER_MODE )
-	{
-		pTimeCfg = (TIM_TIMERCFG_Type *)TIM_ConfigStruct;
-		if (pTimeCfg->PrescaleOption  == TIM_PRESCALE_TICKVAL)
-		{
-			TIMx->PR   = pTimeCfg->PrescaleValue -1  ;
-		}
-		else
-		{
-			TIMx->PR   = converUSecToVal (converPtrToTimeNum(TIMx),pTimeCfg->PrescaleValue)-1;
-		}
-	}
-	else
-	{
+    TIMx->TC =0;
+    TIMx->PC =0;
+    TIMx->PR =0;
+    TIMx->TCR |= (1<<1); //Reset Counter
+    TIMx->TCR &= ~(1<<1); //release reset
+    if (TimerCounterMode == TIM_TIMER_MODE )
+    {
+        pTimeCfg = (TIM_TIMERCFG_Type *)TIM_ConfigStruct;
+        if (pTimeCfg->PrescaleOption  == TIM_PRESCALE_TICKVAL)
+        {
+            TIMx->PR   = pTimeCfg->PrescaleValue -1  ;
+        }
+        else
+        {
+            TIMx->PR   = converUSecToVal (converPtrToTimeNum(TIMx),pTimeCfg->PrescaleValue)-1;
+        }
+    }
+    else
+    {
 
-		pCounterCfg = (TIM_COUNTERCFG_Type *)TIM_ConfigStruct;
-		TIMx->CCR  &= ~TIM_CTCR_INPUT_MASK;
-		if (pCounterCfg->CountInputSelect == TIM_COUNTER_INCAP1)
-			TIMx->CCR |= _BIT(2);
-	}
+        pCounterCfg = (TIM_COUNTERCFG_Type *)TIM_ConfigStruct;
+        TIMx->CCR  &= ~TIM_CTCR_INPUT_MASK;
+        if (pCounterCfg->CountInputSelect == TIM_COUNTER_INCAP1)
+            TIMx->CCR |= _BIT(2);
+    }
 
-	// Clear interrupt pending
-	TIMx->IR = 0xFFFFFFFF;
+    // Clear interrupt pending
+    TIMx->IR = 0xFFFFFFFF;
 
 }
 
@@ -380,22 +380,22 @@ void TIM_Init(LPC_TIM_TypeDef *TIMx, TIM_MODE_OPT TimerCounterMode, void *TIM_Co
  **********************************************************************/
 void TIM_DeInit (LPC_TIM_TypeDef *TIMx)
 {
-	CHECK_PARAM(PARAM_TIMx(TIMx));
-	// Disable timer/counter
-	TIMx->TCR = 0x00;
+    CHECK_PARAM(PARAM_TIMx(TIMx));
+    // Disable timer/counter
+    TIMx->TCR = 0x00;
 
-	// Disable power
-	if (TIMx== LPC_TIM0)
-		CLKPWR_ConfigPPWR (CLKPWR_PCONP_PCTIM0, DISABLE);
+    // Disable power
+    if (TIMx== LPC_TIM0)
+        CLKPWR_ConfigPPWR (CLKPWR_PCONP_PCTIM0, DISABLE);
 
-	else if (TIMx== LPC_TIM1)
-		CLKPWR_ConfigPPWR (CLKPWR_PCONP_PCTIM1, DISABLE);
+    else if (TIMx== LPC_TIM1)
+        CLKPWR_ConfigPPWR (CLKPWR_PCONP_PCTIM1, DISABLE);
 
-	else if (TIMx== LPC_TIM2)
-		CLKPWR_ConfigPPWR (CLKPWR_PCONP_PCTIM2, DISABLE);
+    else if (TIMx== LPC_TIM2)
+        CLKPWR_ConfigPPWR (CLKPWR_PCONP_PCTIM2, DISABLE);
 
-	else if (TIMx== LPC_TIM3)
-		CLKPWR_ConfigPPWR (CLKPWR_PCONP_PCTIM2, DISABLE);
+    else if (TIMx== LPC_TIM3)
+        CLKPWR_ConfigPPWR (CLKPWR_PCONP_PCTIM2, DISABLE);
 
 }
 
@@ -413,15 +413,15 @@ void TIM_DeInit (LPC_TIM_TypeDef *TIMx)
  **********************************************************************/
 void TIM_Cmd(LPC_TIM_TypeDef *TIMx, FunctionalState NewState)
 {
-	CHECK_PARAM(PARAM_TIMx(TIMx));
-	if (NewState == ENABLE)
-	{
-		TIMx->TCR	|=  TIM_ENABLE;
-	}
-	else
-	{
-		TIMx->TCR &= ~TIM_ENABLE;
-	}
+    CHECK_PARAM(PARAM_TIMx(TIMx));
+    if (NewState == ENABLE)
+    {
+        TIMx->TCR	|=  TIM_ENABLE;
+    }
+    else
+    {
+        TIMx->TCR &= ~TIM_ENABLE;
+    }
 }
 
 /*********************************************************************//**
@@ -437,9 +437,9 @@ void TIM_Cmd(LPC_TIM_TypeDef *TIMx, FunctionalState NewState)
  **********************************************************************/
 void TIM_ResetCounter(LPC_TIM_TypeDef *TIMx)
 {
-	CHECK_PARAM(PARAM_TIMx(TIMx));
-	TIMx->TCR |= TIM_RESET;
-	TIMx->TCR &= ~TIM_RESET;
+    CHECK_PARAM(PARAM_TIMx(TIMx));
+    TIMx->TCR |= TIM_RESET;
+    TIMx->TCR &= ~TIM_RESET;
 }
 
 /*********************************************************************//**
@@ -468,46 +468,46 @@ void TIM_ResetCounter(LPC_TIM_TypeDef *TIMx)
 void TIM_ConfigMatch(LPC_TIM_TypeDef *TIMx, TIM_MATCHCFG_Type *TIM_MatchConfigStruct)
 {
 
-	CHECK_PARAM(PARAM_TIMx(TIMx));
-	CHECK_PARAM(PARAM_TIM_EXTMATCH_OPT(TIM_MatchConfigStruct->ExtMatchOutputType));
+    CHECK_PARAM(PARAM_TIMx(TIMx));
+    CHECK_PARAM(PARAM_TIM_EXTMATCH_OPT(TIM_MatchConfigStruct->ExtMatchOutputType));
 
-	switch(TIM_MatchConfigStruct->MatchChannel)
-	{
-	case 0:
-		TIMx->MR0 = TIM_MatchConfigStruct->MatchValue;
-		break;
-	case 1:
-		TIMx->MR1 = TIM_MatchConfigStruct->MatchValue;
-		break;
-	case 2:
-		TIMx->MR2 = TIM_MatchConfigStruct->MatchValue;
-		break;
-	case 3:
-		TIMx->MR3 = TIM_MatchConfigStruct->MatchValue;
-		break;
-	default:
-		//Error match value
-		//Error loop
-		while(1);
-	}
-	//interrupt on MRn
-	TIMx->MCR &=~TIM_MCR_CHANNEL_MASKBIT(TIM_MatchConfigStruct->MatchChannel);
+    switch(TIM_MatchConfigStruct->MatchChannel)
+    {
+    case 0:
+        TIMx->MR0 = TIM_MatchConfigStruct->MatchValue;
+        break;
+    case 1:
+        TIMx->MR1 = TIM_MatchConfigStruct->MatchValue;
+        break;
+    case 2:
+        TIMx->MR2 = TIM_MatchConfigStruct->MatchValue;
+        break;
+    case 3:
+        TIMx->MR3 = TIM_MatchConfigStruct->MatchValue;
+        break;
+    default:
+        //Error match value
+        //Error loop
+        while(1);
+    }
+    //interrupt on MRn
+    TIMx->MCR &=~TIM_MCR_CHANNEL_MASKBIT(TIM_MatchConfigStruct->MatchChannel);
 
-	if (TIM_MatchConfigStruct->IntOnMatch)
-		TIMx->MCR |= TIM_INT_ON_MATCH(TIM_MatchConfigStruct->MatchChannel);
+    if (TIM_MatchConfigStruct->IntOnMatch)
+        TIMx->MCR |= TIM_INT_ON_MATCH(TIM_MatchConfigStruct->MatchChannel);
 
-	//reset on MRn
-	if (TIM_MatchConfigStruct->ResetOnMatch)
-		TIMx->MCR |= TIM_RESET_ON_MATCH(TIM_MatchConfigStruct->MatchChannel);
+    //reset on MRn
+    if (TIM_MatchConfigStruct->ResetOnMatch)
+        TIMx->MCR |= TIM_RESET_ON_MATCH(TIM_MatchConfigStruct->MatchChannel);
 
-	//stop on MRn
-	if (TIM_MatchConfigStruct->StopOnMatch)
-		TIMx->MCR |= TIM_STOP_ON_MATCH(TIM_MatchConfigStruct->MatchChannel);
+    //stop on MRn
+    if (TIM_MatchConfigStruct->StopOnMatch)
+        TIMx->MCR |= TIM_STOP_ON_MATCH(TIM_MatchConfigStruct->MatchChannel);
 
-	// match output type
+    // match output type
 
-	TIMx->EMR 	&= ~TIM_EM_MASK(TIM_MatchConfigStruct->MatchChannel);
-	TIMx->EMR   |= TIM_EM_SET(TIM_MatchConfigStruct->MatchChannel,TIM_MatchConfigStruct->ExtMatchOutputType);
+    TIMx->EMR 	&= ~TIM_EM_MASK(TIM_MatchConfigStruct->MatchChannel);
+    TIMx->EMR   |= TIM_EM_SET(TIM_MatchConfigStruct->MatchChannel,TIM_MatchConfigStruct->ExtMatchOutputType);
 }
 /*********************************************************************//**
  * @brief 		Update Match value
@@ -522,25 +522,25 @@ void TIM_ConfigMatch(LPC_TIM_TypeDef *TIMx, TIM_MATCHCFG_Type *TIM_MatchConfigSt
  **********************************************************************/
 void TIM_UpdateMatchValue(LPC_TIM_TypeDef *TIMx,uint8_t MatchChannel, uint32_t MatchValue)
 {
-	CHECK_PARAM(PARAM_TIMx(TIMx));
-	switch(MatchChannel)
-	{
-	case 0:
-		TIMx->MR0 = MatchValue;
-		break;
-	case 1:
-		TIMx->MR1 = MatchValue;
-		break;
-	case 2:
-		TIMx->MR2 = MatchValue;
-		break;
-	case 3:
-		TIMx->MR3 = MatchValue;
-		break;
-	default:
-		//Error Loop
-		while(1);
-	}
+    CHECK_PARAM(PARAM_TIMx(TIMx));
+    switch(MatchChannel)
+    {
+    case 0:
+        TIMx->MR0 = MatchValue;
+        break;
+    case 1:
+        TIMx->MR1 = MatchValue;
+        break;
+    case 2:
+        TIMx->MR2 = MatchValue;
+        break;
+    case 3:
+        TIMx->MR3 = MatchValue;
+        break;
+    default:
+        //Error Loop
+        while(1);
+    }
 
 }
 /*********************************************************************//**
@@ -560,17 +560,17 @@ void TIM_UpdateMatchValue(LPC_TIM_TypeDef *TIMx,uint8_t MatchChannel, uint32_t M
 void TIM_ConfigCapture(LPC_TIM_TypeDef *TIMx, TIM_CAPTURECFG_Type *TIM_CaptureConfigStruct)
 {
 
-	CHECK_PARAM(PARAM_TIMx(TIMx));
-	TIMx->CCR &= ~TIM_CCR_CHANNEL_MASKBIT(TIM_CaptureConfigStruct->CaptureChannel);
+    CHECK_PARAM(PARAM_TIMx(TIMx));
+    TIMx->CCR &= ~TIM_CCR_CHANNEL_MASKBIT(TIM_CaptureConfigStruct->CaptureChannel);
 
-	if (TIM_CaptureConfigStruct->RisingEdge)
-		TIMx->CCR |= TIM_CAP_RISING(TIM_CaptureConfigStruct->CaptureChannel);
+    if (TIM_CaptureConfigStruct->RisingEdge)
+        TIMx->CCR |= TIM_CAP_RISING(TIM_CaptureConfigStruct->CaptureChannel);
 
-	if (TIM_CaptureConfigStruct->FallingEdge)
-		TIMx->CCR |= TIM_CAP_FALLING(TIM_CaptureConfigStruct->CaptureChannel);
+    if (TIM_CaptureConfigStruct->FallingEdge)
+        TIMx->CCR |= TIM_CAP_FALLING(TIM_CaptureConfigStruct->CaptureChannel);
 
-	if (TIM_CaptureConfigStruct->IntOnCaption)
-		TIMx->CCR |= TIM_INT_ON_CAP(TIM_CaptureConfigStruct->CaptureChannel);
+    if (TIM_CaptureConfigStruct->IntOnCaption)
+        TIMx->CCR |= TIM_INT_ON_CAP(TIM_CaptureConfigStruct->CaptureChannel);
 }
 
 /*********************************************************************//**
@@ -587,13 +587,13 @@ void TIM_ConfigCapture(LPC_TIM_TypeDef *TIMx, TIM_CAPTURECFG_Type *TIM_CaptureCo
  **********************************************************************/
 uint32_t TIM_GetCaptureValue(LPC_TIM_TypeDef *TIMx, TIM_COUNTER_INPUT_OPT CaptureChannel)
 {
-	CHECK_PARAM(PARAM_TIMx(TIMx));
-	CHECK_PARAM(PARAM_TIM_COUNTER_INPUT_OPT(CaptureChannel));
+    CHECK_PARAM(PARAM_TIMx(TIMx));
+    CHECK_PARAM(PARAM_TIM_COUNTER_INPUT_OPT(CaptureChannel));
 
-	if(CaptureChannel==0)
-		return TIMx->CR0;
-	else
-		return TIMx->CR1;
+    if(CaptureChannel==0)
+        return TIMx->CR0;
+    else
+        return TIMx->CR1;
 }
 
 /**

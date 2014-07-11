@@ -53,25 +53,25 @@ class GTestResultReporter;
 class GTestFlagsThatAllocateMemory;
 
 namespace testing {
-	class TestInfo;
-	class TestCase;
-	class Test;
+    class TestInfo;
+    class TestCase;
+    class Test;
 }
 
 class GTestShell : public UtestShell
 {
-	::testing::TestInfo* testinfo_;
-	GTestShell* next_;
-	GTestFlagsThatAllocateMemory* flags_;
+    ::testing::TestInfo* testinfo_;
+    GTestShell* next_;
+    GTestFlagsThatAllocateMemory* flags_;
 public:
-	GTestShell(::testing::TestInfo* testinfo, GTestShell* next, GTestFlagsThatAllocateMemory* flags);
+    GTestShell(::testing::TestInfo* testinfo, GTestShell* next, GTestFlagsThatAllocateMemory* flags);
 
-	virtual Utest* createTest() _override;
+    virtual Utest* createTest() _override;
 
-	GTestShell* nextGTest()
-	{
-		return next_;
-	}
+    GTestShell* nextGTest()
+    {
+        return next_;
+    }
 };
 
 /* Enormous hack!
@@ -121,266 +121,266 @@ public:
 class GTestFlagsThatAllocateMemory
 {
 public:
-	void storeValuesOfGTestFLags()
-	{
-		GTestFlagcolor = ::testing::GTEST_FLAG(color);
-		GTestFlagfilter = ::testing::GTEST_FLAG(filter);
-		GTestFlagoutput = ::testing::GTEST_FLAG(output);
-		GTestFlagdeath_test_style = ::testing::GTEST_FLAG(death_test_style);
-		GTestFlaginternal_run_death_test = ::testing::internal::GTEST_FLAG(internal_run_death_test);
-		#ifndef GTEST_VERSION_GTEST_1_5
-		GTestFlagstream_result_to = ::testing::GTEST_FLAG(stream_result_to);
-		#endif
-	}
+    void storeValuesOfGTestFLags()
+    {
+        GTestFlagcolor = ::testing::GTEST_FLAG(color);
+        GTestFlagfilter = ::testing::GTEST_FLAG(filter);
+        GTestFlagoutput = ::testing::GTEST_FLAG(output);
+        GTestFlagdeath_test_style = ::testing::GTEST_FLAG(death_test_style);
+        GTestFlaginternal_run_death_test = ::testing::internal::GTEST_FLAG(internal_run_death_test);
+        #ifndef GTEST_VERSION_GTEST_1_5
+        GTestFlagstream_result_to = ::testing::GTEST_FLAG(stream_result_to);
+        #endif
+    }
 
-	void resetValuesOfGTestFlags()
-	{
-		::testing::GTEST_FLAG(color) = GTestFlagcolor;
-		::testing::GTEST_FLAG(filter) = GTestFlagfilter;
-		::testing::GTEST_FLAG(output) = GTestFlagoutput;
-		::testing::GTEST_FLAG(death_test_style) = GTestFlagdeath_test_style;
-		::testing::internal::GTEST_FLAG(internal_run_death_test) = GTestFlaginternal_run_death_test;
-		#ifndef GTEST_VERSION_GTEST_1_5
-		::testing::GTEST_FLAG(stream_result_to) = GTestFlagstream_result_to;
-		#endif
-	}
+    void resetValuesOfGTestFlags()
+    {
+        ::testing::GTEST_FLAG(color) = GTestFlagcolor;
+        ::testing::GTEST_FLAG(filter) = GTestFlagfilter;
+        ::testing::GTEST_FLAG(output) = GTestFlagoutput;
+        ::testing::GTEST_FLAG(death_test_style) = GTestFlagdeath_test_style;
+        ::testing::internal::GTEST_FLAG(internal_run_death_test) = GTestFlaginternal_run_death_test;
+        #ifndef GTEST_VERSION_GTEST_1_5
+        ::testing::GTEST_FLAG(stream_result_to) = GTestFlagstream_result_to;
+        #endif
+    }
 
-	void setGTestFLagValuesToNULLToAvoidMemoryLeaks()
-	{
-	#ifndef GTEST_VERSION_GTEST_1_7
-		::testing::GTEST_FLAG(color) = GTEST_NO_STRING_VALUE;
-		::testing::GTEST_FLAG(filter) = GTEST_NO_STRING_VALUE;
-		::testing::GTEST_FLAG(output) = GTEST_NO_STRING_VALUE;
-		::testing::GTEST_FLAG(death_test_style) = GTEST_NO_STRING_VALUE;
-		::testing::internal::GTEST_FLAG(internal_run_death_test) = GTEST_NO_STRING_VALUE;
-		#ifndef GTEST_VERSION_GTEST_1_5
-		::testing::GTEST_FLAG(stream_result_to) = GTEST_NO_STRING_VALUE;
-		#endif
-	#endif
-	}
+    void setGTestFLagValuesToNULLToAvoidMemoryLeaks()
+    {
+    #ifndef GTEST_VERSION_GTEST_1_7
+        ::testing::GTEST_FLAG(color) = GTEST_NO_STRING_VALUE;
+        ::testing::GTEST_FLAG(filter) = GTEST_NO_STRING_VALUE;
+        ::testing::GTEST_FLAG(output) = GTEST_NO_STRING_VALUE;
+        ::testing::GTEST_FLAG(death_test_style) = GTEST_NO_STRING_VALUE;
+        ::testing::internal::GTEST_FLAG(internal_run_death_test) = GTEST_NO_STRING_VALUE;
+        #ifndef GTEST_VERSION_GTEST_1_5
+        ::testing::GTEST_FLAG(stream_result_to) = GTEST_NO_STRING_VALUE;
+        #endif
+    #endif
+    }
 
 private:
-	GTEST_STRING GTestFlagcolor;
-	GTEST_STRING GTestFlagfilter;
-	GTEST_STRING GTestFlagoutput;
-	GTEST_STRING GTestFlagdeath_test_style;
-	GTEST_STRING GTestFlaginternal_run_death_test;
-	#ifndef GTEST_VERSION_GTEST_1_5
-	GTEST_STRING GTestFlagstream_result_to;
-	#endif
+    GTEST_STRING GTestFlagcolor;
+    GTEST_STRING GTestFlagfilter;
+    GTEST_STRING GTestFlagoutput;
+    GTEST_STRING GTestFlagdeath_test_style;
+    GTEST_STRING GTestFlaginternal_run_death_test;
+    #ifndef GTEST_VERSION_GTEST_1_5
+    GTEST_STRING GTestFlagstream_result_to;
+    #endif
 };
 
 class GTestConvertor
 {
 public:
-	GTestConvertor(bool shouldSimulateFailureAtCreationToAllocateThreadLocalData = true);
-	virtual ~GTestConvertor();
+    GTestConvertor(bool shouldSimulateFailureAtCreationToAllocateThreadLocalData = true);
+    virtual ~GTestConvertor();
 
-	virtual void addAllGTestToTestRegistry();
+    virtual void addAllGTestToTestRegistry();
 protected:
-	virtual void simulateGTestFailureToPreAllocateAllTheThreadLocalData();
+    virtual void simulateGTestFailureToPreAllocateAllTheThreadLocalData();
 
-	virtual void addNewTestCaseForTestInfo(::testing::TestInfo* testinfo);
-	virtual void addAllTestsFromTestCaseToTestRegistry(::testing::TestCase* testcase);
+    virtual void addNewTestCaseForTestInfo(::testing::TestInfo* testinfo);
+    virtual void addAllTestsFromTestCaseToTestRegistry(::testing::TestCase* testcase);
 
-	virtual void createDummyInSequenceToAndFailureReporterAvoidMemoryLeakInGMock();
+    virtual void createDummyInSequenceToAndFailureReporterAvoidMemoryLeakInGMock();
 private:
-	GTestResultReporter* reporter_;
-	GTestShell* first_;
-	GTestFlagsThatAllocateMemory flags_;
+    GTestResultReporter* reporter_;
+    GTestShell* first_;
+    GTestFlagsThatAllocateMemory flags_;
 };
 
 class GTestDummyResultReporter : public ::testing::ScopedFakeTestPartResultReporter
 {
 public:
-	GTestDummyResultReporter () : ::testing::ScopedFakeTestPartResultReporter(INTERCEPT_ALL_THREADS, NULL) {}
-	virtual void ReportTestPartResult(const ::testing::TestPartResult& /*result*/) {}
+    GTestDummyResultReporter () : ::testing::ScopedFakeTestPartResultReporter(INTERCEPT_ALL_THREADS, NULL) {}
+    virtual void ReportTestPartResult(const ::testing::TestPartResult& /*result*/) {}
 };
 
 class GMockTestTerminator : public TestTerminator
 {
 public:
-	GMockTestTerminator(const ::testing::TestPartResult& result) : result_(result)
-	{
-	}
+    GMockTestTerminator(const ::testing::TestPartResult& result) : result_(result)
+    {
+    }
 
-	virtual void exitCurrentTest() const
-	{
-		/*
-		 * When using GMock, it throws an exception fromt he destructor leaving
-		 * the system in an unstable state.
-		 * Therefore, when the test fails because of failed gmock expectation
-		 * then don't throw the exception, but let it return. Usually this should
-		 * already be at the end of the test, so it doesn't matter much
-		 */
+    virtual void exitCurrentTest() const
+    {
+        /*
+         * When using GMock, it throws an exception fromt he destructor leaving
+         * the system in an unstable state.
+         * Therefore, when the test fails because of failed gmock expectation
+         * then don't throw the exception, but let it return. Usually this should
+         * already be at the end of the test, so it doesn't matter much
+         */
 
 
-		/*
-		 * TODO: We probably want this check here, however the tests fail when putting it there. Also, we'll need to
-		 * check how to get all the gTest tests to run within CppUTest. At the moment, the 'death tests' seem to fail
-		 * still.
-		 *
-		 * if (result_.type() == ::testing::TestPartResult::kFatalFailure) {
-		 */
-			if (!SimpleString(result_.message()).contains("Actual: never called") &&
-					!SimpleString(result_.message()).contains("Actual function call count doesn't match"))
-				throw CppUTestFailedException();
+        /*
+         * TODO: We probably want this check here, however the tests fail when putting it there. Also, we'll need to
+         * check how to get all the gTest tests to run within CppUTest. At the moment, the 'death tests' seem to fail
+         * still.
+         *
+         * if (result_.type() == ::testing::TestPartResult::kFatalFailure) {
+         */
+            if (!SimpleString(result_.message()).contains("Actual: never called") &&
+                    !SimpleString(result_.message()).contains("Actual function call count doesn't match"))
+                throw CppUTestFailedException();
 
-	}
-	virtual ~GMockTestTerminator()
-	{
-	}
+    }
+    virtual ~GMockTestTerminator()
+    {
+    }
 private:
-	const ::testing::TestPartResult& result_;
+    const ::testing::TestPartResult& result_;
 };
 
 
 class GTestResultReporter : public ::testing::ScopedFakeTestPartResultReporter
 {
 public:
-	GTestResultReporter () : ::testing::ScopedFakeTestPartResultReporter(INTERCEPT_ALL_THREADS, NULL) {}
+    GTestResultReporter () : ::testing::ScopedFakeTestPartResultReporter(INTERCEPT_ALL_THREADS, NULL) {}
 
-	virtual void ReportTestPartResult(const ::testing::TestPartResult& result)
-	{
-		FailFailure failure(UtestShell::getCurrent(), result.file_name(), result.line_number(), result.message());
-		UtestShell::getCurrent()->failWith(failure, GMockTestTerminator(result));
-	}
+    virtual void ReportTestPartResult(const ::testing::TestPartResult& result)
+    {
+        FailFailure failure(UtestShell::getCurrent(), result.file_name(), result.line_number(), result.message());
+        UtestShell::getCurrent()->failWith(failure, GMockTestTerminator(result));
+    }
 };
 
 inline GTestShell::GTestShell(::testing::TestInfo* testinfo, GTestShell* next, GTestFlagsThatAllocateMemory* flags) : testinfo_(testinfo), next_(next), flags_(flags)
 {
-	setGroupName(testinfo->test_case_name());
-	setTestName(testinfo->name());
+    setGroupName(testinfo->test_case_name());
+    setTestName(testinfo->name());
 }
 
 class GTestUTest: public Utest {
 public:
-	GTestUTest(::testing::TestInfo* testinfo, GTestFlagsThatAllocateMemory* flags) : testinfo_(testinfo), test_(NULL), flags_(flags)
-	{
+    GTestUTest(::testing::TestInfo* testinfo, GTestFlagsThatAllocateMemory* flags) : testinfo_(testinfo), test_(NULL), flags_(flags)
+    {
 
-	}
+    }
 
-	void testBody()
-	{
-		try {
-			test_->TestBody();
-		}
-		catch (CppUTestFailedException& ex)
-		{
-		}
-	}
+    void testBody()
+    {
+        try {
+            test_->TestBody();
+        }
+        catch (CppUTestFailedException& ex)
+        {
+        }
+    }
 
-	void setup()
-	{
-		flags_->resetValuesOfGTestFlags();
+    void setup()
+    {
+        flags_->resetValuesOfGTestFlags();
 
-		#ifdef GTEST_VERSION_GTEST_1_5
-		test_ = testinfo_->impl()->factory_->CreateTest();
-	#else
-		test_ = testinfo_->factory_->CreateTest();
-	#endif
+        #ifdef GTEST_VERSION_GTEST_1_5
+        test_ = testinfo_->impl()->factory_->CreateTest();
+    #else
+        test_ = testinfo_->factory_->CreateTest();
+    #endif
 
-		::testing::UnitTest::GetInstance()->impl()->set_current_test_info(testinfo_);
-		try {
-			test_->SetUp();
-		}
-		catch (CppUTestFailedException& ex)
-		{
-		}
-	}
+        ::testing::UnitTest::GetInstance()->impl()->set_current_test_info(testinfo_);
+        try {
+            test_->SetUp();
+        }
+        catch (CppUTestFailedException& ex)
+        {
+        }
+    }
 
-	void teardown()
-	{
-		try {
-			test_->TearDown();
-		}
-		catch (CppUTestFailedException& ex)
-		{
-		}
-		::testing::UnitTest::GetInstance()->impl()->set_current_test_info(NULL);
-		delete test_;
+    void teardown()
+    {
+        try {
+            test_->TearDown();
+        }
+        catch (CppUTestFailedException& ex)
+        {
+        }
+        ::testing::UnitTest::GetInstance()->impl()->set_current_test_info(NULL);
+        delete test_;
 
-		flags_->setGTestFLagValuesToNULLToAvoidMemoryLeaks();
-		::testing::internal::DeathTest::set_last_death_test_message(GTEST_NO_STRING_VALUE);
-	}
+        flags_->setGTestFLagValuesToNULLToAvoidMemoryLeaks();
+        ::testing::internal::DeathTest::set_last_death_test_message(GTEST_NO_STRING_VALUE);
+    }
 
 private:
-	::testing::Test* test_;
-	::testing::TestInfo* testinfo_;
-	GTestFlagsThatAllocateMemory* flags_;
+    ::testing::Test* test_;
+    ::testing::TestInfo* testinfo_;
+    GTestFlagsThatAllocateMemory* flags_;
 };
 
 inline Utest* GTestShell::createTest()
 {
-	return new GTestUTest(testinfo_, flags_);
+    return new GTestUTest(testinfo_, flags_);
 };
 
 inline void GTestConvertor::simulateGTestFailureToPreAllocateAllTheThreadLocalData()
 {
-	GTestDummyResultReporter *dummyReporter = new GTestDummyResultReporter();
-	ASSERT_TRUE(false);
-	delete dummyReporter;
+    GTestDummyResultReporter *dummyReporter = new GTestDummyResultReporter();
+    ASSERT_TRUE(false);
+    delete dummyReporter;
 }
 
 inline GTestConvertor::GTestConvertor(bool shouldSimulateFailureAtCreationToAllocateThreadLocalData) : first_(NULL)
 {
-	if (shouldSimulateFailureAtCreationToAllocateThreadLocalData)
-		simulateGTestFailureToPreAllocateAllTheThreadLocalData();
-	reporter_ = new GTestResultReporter();
+    if (shouldSimulateFailureAtCreationToAllocateThreadLocalData)
+        simulateGTestFailureToPreAllocateAllTheThreadLocalData();
+    reporter_ = new GTestResultReporter();
 }
 
 inline GTestConvertor::~GTestConvertor()
 {
-	delete reporter_;
+    delete reporter_;
 
-	while (first_) {
-		GTestShell* next = first_->nextGTest();
-		delete first_;
-		first_ = next;
-	}
+    while (first_) {
+        GTestShell* next = first_->nextGTest();
+        delete first_;
+        first_ = next;
+    }
 }
 
 inline void GTestConvertor::addNewTestCaseForTestInfo(::testing::TestInfo* testinfo)
 {
-	first_ = new GTestShell(testinfo, first_, &flags_);
-	TestRegistry::getCurrentRegistry()->addTest(first_);
+    first_ = new GTestShell(testinfo, first_, &flags_);
+    TestRegistry::getCurrentRegistry()->addTest(first_);
 }
 
 inline void GTestConvertor::addAllTestsFromTestCaseToTestRegistry(::testing::TestCase* testcase)
 {
-	int currentTestCount = 0;
-	::testing::TestInfo* currentTest = (::testing::TestInfo*) testcase->GetTestInfo(currentTestCount);
-	while (currentTest) {
-		addNewTestCaseForTestInfo(currentTest);
-		currentTestCount++;
-		currentTest = (::testing::TestInfo*) testcase->GetTestInfo(currentTestCount);
-	}
+    int currentTestCount = 0;
+    ::testing::TestInfo* currentTest = (::testing::TestInfo*) testcase->GetTestInfo(currentTestCount);
+    while (currentTest) {
+        addNewTestCaseForTestInfo(currentTest);
+        currentTestCount++;
+        currentTest = (::testing::TestInfo*) testcase->GetTestInfo(currentTestCount);
+    }
 }
 
 inline void GTestConvertor::createDummyInSequenceToAndFailureReporterAvoidMemoryLeakInGMock()
 {
-	::testing::InSequence seq;
-	::testing::internal::GetFailureReporter();
+    ::testing::InSequence seq;
+    ::testing::internal::GetFailureReporter();
 }
 
 inline void GTestConvertor::addAllGTestToTestRegistry()
 {
-	createDummyInSequenceToAndFailureReporterAvoidMemoryLeakInGMock();
-	flags_.storeValuesOfGTestFLags();
+    createDummyInSequenceToAndFailureReporterAvoidMemoryLeakInGMock();
+    flags_.storeValuesOfGTestFLags();
 
-	int argc = 2;
-	const char * argv[] = {"NameOfTheProgram", "--gmock_catch_leaked_mocks=0"};
-	::testing::InitGoogleMock(&argc, (char**) argv);
+    int argc = 2;
+    const char * argv[] = {"NameOfTheProgram", "--gmock_catch_leaked_mocks=0"};
+    ::testing::InitGoogleMock(&argc, (char**) argv);
 
-	::testing::UnitTest* unitTests = ::testing::UnitTest::GetInstance();
+    ::testing::UnitTest* unitTests = ::testing::UnitTest::GetInstance();
 
-	int currentUnitTestCount = 0;
-	::testing::TestCase* currentTestCase = (::testing::TestCase*) unitTests->GetTestCase(currentUnitTestCount);
-	while (currentTestCase) {
-		addAllTestsFromTestCaseToTestRegistry(currentTestCase);
-		currentUnitTestCount++;
-		currentTestCase = (::testing::TestCase*) unitTests->GetTestCase(currentUnitTestCount);
-	}
+    int currentUnitTestCount = 0;
+    ::testing::TestCase* currentTestCase = (::testing::TestCase*) unitTests->GetTestCase(currentUnitTestCount);
+    while (currentTestCase) {
+        addAllTestsFromTestCaseToTestRegistry(currentTestCase);
+        currentUnitTestCount++;
+        currentTestCase = (::testing::TestCase*) unitTests->GetTestCase(currentUnitTestCount);
+    }
 }
 
 

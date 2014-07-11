@@ -42,71 +42,71 @@ MockSupport& mock(const SimpleString& mockName = "", MockFailureReporter* failur
 class MockSupport
 {
 public:
-	MockSupport();
-	virtual ~MockSupport();
+    MockSupport();
+    virtual ~MockSupport();
 
-	virtual void strictOrder();
-	virtual MockExpectedCall& expectOneCall(const SimpleString& functionName);
-	virtual MockExpectedCall& expectNCalls(int amount, const SimpleString& functionName);
-	virtual MockActualCall& actualCall(const SimpleString& functionName);
-	virtual bool hasReturnValue();
-	virtual MockNamedValue returnValue();
-	virtual int intReturnValue();
-	virtual int returnIntValueOrDefault(int defaultValue);
-	virtual unsigned int unsignedIntReturnValue();
-	virtual long int longIntReturnValue();
-	virtual unsigned long int unsignedLongIntReturnValue();
-	virtual unsigned int returnUnsignedIntValueOrDefault(unsigned int defaultValue);
-	virtual const char* stringReturnValue();
-	virtual const char* returnStringValueOrDefault(const char * defaultValue);
-	virtual double doubleReturnValue();
-	virtual void* pointerReturnValue();
-	virtual void* returnPointerValueOrDefault(void * defaultValue);
-	virtual const void* constPointerReturnValue();
+    virtual void strictOrder();
+    virtual MockExpectedCall& expectOneCall(const SimpleString& functionName);
+    virtual MockExpectedCall& expectNCalls(int amount, const SimpleString& functionName);
+    virtual MockActualCall& actualCall(const SimpleString& functionName);
+    virtual bool hasReturnValue();
+    virtual MockNamedValue returnValue();
+    virtual int intReturnValue();
+    virtual int returnIntValueOrDefault(int defaultValue);
+    virtual unsigned int unsignedIntReturnValue();
+    virtual long int longIntReturnValue();
+    virtual unsigned long int unsignedLongIntReturnValue();
+    virtual unsigned int returnUnsignedIntValueOrDefault(unsigned int defaultValue);
+    virtual const char* stringReturnValue();
+    virtual const char* returnStringValueOrDefault(const char * defaultValue);
+    virtual double doubleReturnValue();
+    virtual void* pointerReturnValue();
+    virtual void* returnPointerValueOrDefault(void * defaultValue);
+    virtual const void* constPointerReturnValue();
 
-	bool hasData(const SimpleString& name);
-	void setData(const SimpleString& name, int value);
-	void setData(const SimpleString& name, unsigned int value);
-	void setData(const SimpleString& name, const char* value);
-	void setData(const SimpleString& name, double value);
-	void setData(const SimpleString& name, void* value);
-	void setData(const SimpleString& name, const void* value);
-	void setDataObject(const SimpleString& name, const SimpleString& type, void* value);
-	MockNamedValue getData(const SimpleString& name);
+    bool hasData(const SimpleString& name);
+    void setData(const SimpleString& name, int value);
+    void setData(const SimpleString& name, unsigned int value);
+    void setData(const SimpleString& name, const char* value);
+    void setData(const SimpleString& name, double value);
+    void setData(const SimpleString& name, void* value);
+    void setData(const SimpleString& name, const void* value);
+    void setDataObject(const SimpleString& name, const SimpleString& type, void* value);
+    MockNamedValue getData(const SimpleString& name);
 
-	MockSupport* getMockSupportScope(const SimpleString& name);
+    MockSupport* getMockSupportScope(const SimpleString& name);
 
-	const char* getTraceOutput();
-	/*
-	 * The following functions are recursively through the lower MockSupports scopes
-	 * This means, if you do mock().disable() it will disable *all* mocking scopes, including mock("myScope").
+    const char* getTraceOutput();
+    /*
+     * The following functions are recursively through the lower MockSupports scopes
+     * This means, if you do mock().disable() it will disable *all* mocking scopes, including mock("myScope").
   	 */
 
-	virtual void disable();
+    virtual void disable();
     virtual void enable();
     virtual void tracing(bool enabled);
-	virtual void ignoreOtherCalls();
+    virtual void ignoreOtherCalls();
 
     virtual void checkExpectations();
     virtual bool expectedCallsLeft();
 
     virtual void clear();
-	virtual void crashOnFailure();
+    virtual void crashOnFailure();
 
-	/*
-	 * Each mock() call will set the activeReporter to standard, unless a special reporter is passed for this call.
-	 */
+    /*
+     * Each mock() call will set the activeReporter to standard, unless a special reporter is passed for this call.
+     */
 
-	virtual void setMockFailureStandardReporter(MockFailureReporter* reporter);
-	virtual void setActiveReporter(MockFailureReporter* activeReporter);
-	virtual void setDefaultComparatorRepository();
+    virtual void setMockFailureStandardReporter(MockFailureReporter* reporter);
+    virtual void setActiveReporter(MockFailureReporter* activeReporter);
+    virtual void setDefaultComparatorRepository();
 
-	virtual void installComparator(const SimpleString& typeName, MockNamedValueComparator& comparator);
-	virtual void installComparators(const MockNamedValueComparatorRepository& repository);
-	virtual void removeAllComparators();
+    virtual void installComparator(const SimpleString& typeName, MockNamedValueComparator& comparator);
+    virtual void installComparators(const MockNamedValueComparatorRepository& repository);
+    virtual void removeAllComparators();
 
 protected:
-	MockSupport* clone();
+    MockSupport* clone();
     virtual MockCheckedActualCall *createActualFunctionCall();
     virtual void failTest(MockFailure& failure);
 private:
@@ -120,7 +120,7 @@ private:
     bool ignoreOtherCalls_;
     bool enabled_;
     MockCheckedActualCall *lastActualFunctionCall_;
-	MockExpectedCallComposite compositeCalls_;
+    MockExpectedCallComposite compositeCalls_;
     MockNamedValueComparatorRepository comparatorRepository_;
     MockNamedValueList data_;
 
@@ -131,9 +131,9 @@ private:
     void failTestWithUnexpectedCalls();
     void failTestWithOutOfOrderCalls();
 
-	MockNamedValue* retrieveDataFromStore(const SimpleString& name);
+    MockNamedValue* retrieveDataFromStore(const SimpleString& name);
 
-	MockSupport* getMockSupport(MockNamedValueListNode* node);
+    MockSupport* getMockSupport(MockNamedValueListNode* node);
 };
 
 #endif

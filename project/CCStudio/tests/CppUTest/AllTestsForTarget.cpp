@@ -32,12 +32,12 @@ int main(int ac, char** av)
 {
     /* Specify commandline arguments here as needed */
     char* argv[] =
-	{
-	    (char*) 0,
+    {
+        (char*) 0,
         (char*) "-v",
 //      (char*) "-gSimpleStringBuffer",
 //      (char*) "-ojunit",
-	};
+    };
 
     ac = sizeof(argv) / sizeof(char*);
 

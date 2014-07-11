@@ -35,28 +35,28 @@
 class MockNamedValueComparator
 {
 public:
-	MockNamedValueComparator() {}
-	virtual ~MockNamedValueComparator() {}
+    MockNamedValueComparator() {}
+    virtual ~MockNamedValueComparator() {}
 
-	virtual bool isEqual(const void* object1, const void* object2)=0;
-	virtual SimpleString valueToString(const void* object)=0;
+    virtual bool isEqual(const void* object1, const void* object2)=0;
+    virtual SimpleString valueToString(const void* object)=0;
 };
 
 class MockFunctionComparator : public MockNamedValueComparator
 {
 public:
-	typedef bool (*isEqualFunction)(const void*, const void*);
-	typedef SimpleString (*valueToStringFunction)(const void*);
+    typedef bool (*isEqualFunction)(const void*, const void*);
+    typedef SimpleString (*valueToStringFunction)(const void*);
 
-	MockFunctionComparator(isEqualFunction equal, valueToStringFunction valToString)
-		: equal_(equal), valueToString_(valToString) {}
-	virtual ~MockFunctionComparator(){}
+    MockFunctionComparator(isEqualFunction equal, valueToStringFunction valToString)
+        : equal_(equal), valueToString_(valToString) {}
+    virtual ~MockFunctionComparator(){}
 
-	virtual bool isEqual(const void* object1, const void* object2) _override { return equal_(object1, object2); }
-	virtual SimpleString valueToString(const void* object) _override { return valueToString_(object); }
+    virtual bool isEqual(const void* object1, const void* object2) _override { return equal_(object1, object2); }
+    virtual SimpleString valueToString(const void* object) _override { return valueToString_(object); }
 private:
-	isEqualFunction equal_;
-	valueToStringFunction valueToString_;
+    isEqualFunction equal_;
+    valueToStringFunction valueToString_;
 };
 
 /*
@@ -70,96 +70,96 @@ class MockNamedValueComparatorRepository;
 class MockNamedValue
 {
 public:
-	MockNamedValue(const SimpleString& name);
-	DEFAULT_COPY_CONSTRUCTOR(MockNamedValue)
-	virtual ~MockNamedValue();
+    MockNamedValue(const SimpleString& name);
+    DEFAULT_COPY_CONSTRUCTOR(MockNamedValue)
+    virtual ~MockNamedValue();
 
-	virtual void setValue(int value);
-	virtual void setValue(unsigned int value);
-	virtual void setValue(long int value);
-	virtual void setValue(unsigned long int value);
-	virtual void setValue(double value);
-	virtual void setValue(void* value);
-	virtual void setValue(const void* value);
-	virtual void setValue(const char* value);
-	virtual void setObjectPointer(const SimpleString& type, const void* objectPtr);
-	virtual void setSize(size_t size);
+    virtual void setValue(int value);
+    virtual void setValue(unsigned int value);
+    virtual void setValue(long int value);
+    virtual void setValue(unsigned long int value);
+    virtual void setValue(double value);
+    virtual void setValue(void* value);
+    virtual void setValue(const void* value);
+    virtual void setValue(const char* value);
+    virtual void setObjectPointer(const SimpleString& type, const void* objectPtr);
+    virtual void setSize(size_t size);
 
-	virtual void setComparator(MockNamedValueComparator* comparator);
-	virtual void setName(const char* name);
+    virtual void setComparator(MockNamedValueComparator* comparator);
+    virtual void setName(const char* name);
 
-	virtual bool equals(const MockNamedValue& p) const;
+    virtual bool equals(const MockNamedValue& p) const;
 
-	virtual SimpleString toString() const;
+    virtual SimpleString toString() const;
 
-	virtual SimpleString getName() const;
-	virtual SimpleString getType() const;
+    virtual SimpleString getName() const;
+    virtual SimpleString getType() const;
 
-	virtual int getIntValue() const;
-	virtual unsigned int getUnsignedIntValue() const;
-	virtual long int getLongIntValue() const;
-	virtual unsigned long int getUnsignedLongIntValue() const;
-	virtual double getDoubleValue() const;
-	virtual const char* getStringValue() const;
-	virtual void* getPointerValue() const;
-	virtual const void* getConstPointerValue() const;
-	virtual const void* getObjectPointer() const;
-	virtual size_t getSize() const;
-	virtual MockNamedValueComparator* getComparator() const;
+    virtual int getIntValue() const;
+    virtual unsigned int getUnsignedIntValue() const;
+    virtual long int getLongIntValue() const;
+    virtual unsigned long int getUnsignedLongIntValue() const;
+    virtual double getDoubleValue() const;
+    virtual const char* getStringValue() const;
+    virtual void* getPointerValue() const;
+    virtual const void* getConstPointerValue() const;
+    virtual const void* getObjectPointer() const;
+    virtual size_t getSize() const;
+    virtual MockNamedValueComparator* getComparator() const;
 
-	static void setDefaultComparatorRepository(MockNamedValueComparatorRepository* repository);
+    static void setDefaultComparatorRepository(MockNamedValueComparatorRepository* repository);
 private:
-	SimpleString name_;
-	SimpleString type_;
-	union {
-		int intValue_;
-		unsigned int unsignedIntValue_;
-		long int longIntValue_;
-		unsigned long int unsignedLongIntValue_;
-		double doubleValue_;
-		const char* stringValue_;
-		void* pointerValue_;
-		const void* constPointerValue_;
-		const void* objectPointerValue_;
-		const void* outputPointerValue_;
-	} value_;
-	size_t size_;
-	MockNamedValueComparator* comparator_;
-	static MockNamedValueComparatorRepository* defaultRepository_;
+    SimpleString name_;
+    SimpleString type_;
+    union {
+        int intValue_;
+        unsigned int unsignedIntValue_;
+        long int longIntValue_;
+        unsigned long int unsignedLongIntValue_;
+        double doubleValue_;
+        const char* stringValue_;
+        void* pointerValue_;
+        const void* constPointerValue_;
+        const void* objectPointerValue_;
+        const void* outputPointerValue_;
+    } value_;
+    size_t size_;
+    MockNamedValueComparator* comparator_;
+    static MockNamedValueComparatorRepository* defaultRepository_;
 };
 
 class MockNamedValueListNode
 {
 public:
-	MockNamedValueListNode(MockNamedValue* newValue);
+    MockNamedValueListNode(MockNamedValue* newValue);
 
-	SimpleString getName() const;
-	SimpleString getType() const;
+    SimpleString getName() const;
+    SimpleString getType() const;
 
-	MockNamedValueListNode* next();
-	MockNamedValue* item();
+    MockNamedValueListNode* next();
+    MockNamedValue* item();
 
-	void destroy();
-	void setNext(MockNamedValueListNode* node);
+    void destroy();
+    void setNext(MockNamedValueListNode* node);
 private:
-	MockNamedValue* data_;
-	MockNamedValueListNode* next_;
+    MockNamedValue* data_;
+    MockNamedValueListNode* next_;
 };
 
 class MockNamedValueList
 {
 public:
-	MockNamedValueList();
+    MockNamedValueList();
 
-	MockNamedValueListNode* begin();
+    MockNamedValueListNode* begin();
 
-	void add(MockNamedValue* newValue);
-	void clear();
+    void add(MockNamedValue* newValue);
+    void clear();
 
-	MockNamedValue* getValueByName(const SimpleString& name);
+    MockNamedValue* getValueByName(const SimpleString& name);
 
 private:
-	MockNamedValueListNode* head_;
+    MockNamedValueListNode* head_;
 };
 
 /*
@@ -170,16 +170,16 @@ private:
 struct MockNamedValueComparatorRepositoryNode;
 class MockNamedValueComparatorRepository
 {
-	MockNamedValueComparatorRepositoryNode* head_;
+    MockNamedValueComparatorRepositoryNode* head_;
 public:
-	MockNamedValueComparatorRepository();
-	virtual ~MockNamedValueComparatorRepository();
+    MockNamedValueComparatorRepository();
+    virtual ~MockNamedValueComparatorRepository();
 
-	virtual void installComparator(const SimpleString& name, MockNamedValueComparator& comparator);
-	virtual void installComparators(const MockNamedValueComparatorRepository& repository);
-	virtual MockNamedValueComparator* getComparatorForType(const SimpleString& name);
+    virtual void installComparator(const SimpleString& name, MockNamedValueComparator& comparator);
+    virtual void installComparators(const MockNamedValueComparatorRepository& repository);
+    virtual MockNamedValueComparator* getComparatorForType(const SimpleString& name);
 
-	void clear();
+    void clear();
 };
 
 #endif
