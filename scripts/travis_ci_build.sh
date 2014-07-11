@@ -2,6 +2,7 @@
 # Script run in the travis CI
 
 if [ "x$BUILDTOOL" = "xautotools" ]; then 
+	autoreconf ..
 	../configure || exit 1
 	echo "CONFIGURATION DONE. Compiling now."
 	make check_all || exit 1
