@@ -34,21 +34,21 @@ MemoryLeakWarning* MemoryLeakWarning::_latest = NULL;
 // naming convention due to CppUTest generic class name
 class MemoryLeakWarningData : public CBase {
 public:
-	TInt iInitialAllocCells;
-	TInt iExpectedLeaks;
-	TInt iInitialThreadHandleCount;
-	TInt iInitialProcessHandleCount;
+    TInt iInitialAllocCells;
+    TInt iExpectedLeaks;
+    TInt iInitialThreadHandleCount;
+    TInt iInitialProcessHandleCount;
 };
 
 MemoryLeakWarning::MemoryLeakWarning()
 {
-	_latest = this; 
-	CreateData();	
+    _latest = this; 
+    CreateData();	
 }
 
 MemoryLeakWarning::~MemoryLeakWarning()
 {
-	DestroyData();
+    DestroyData();
 }
 
 void MemoryLeakWarning::Enable()
@@ -57,67 +57,67 @@ void MemoryLeakWarning::Enable()
 
 const char* MemoryLeakWarning::FinalReport(int toBeDeletedLeaks)
 {
-	TInt cellDifference(User::CountAllocCells() - _impl->iInitialAllocCells);
-	if( cellDifference != toBeDeletedLeaks ) {
-		return "Heap imbalance after test\n";
-	}
-	
-	TInt processHandles;
-	TInt threadHandles;
-	RThread().HandleCount(processHandles, threadHandles);
-	
-	if(_impl->iInitialProcessHandleCount != processHandles ||
-		_impl->iInitialThreadHandleCount != threadHandles) {
-		return "Handle count imbalance after test\n";
-	}
-	
-	return "";
+    TInt cellDifference(User::CountAllocCells() - _impl->iInitialAllocCells);
+    if( cellDifference != toBeDeletedLeaks ) {
+        return "Heap imbalance after test\n";
+    }
+    
+    TInt processHandles;
+    TInt threadHandles;
+    RThread().HandleCount(processHandles, threadHandles);
+    
+    if(_impl->iInitialProcessHandleCount != processHandles ||
+        _impl->iInitialThreadHandleCount != threadHandles) {
+        return "Handle count imbalance after test\n";
+    }
+    
+    return "";
 }
 
 void MemoryLeakWarning::CheckPointUsage()
 {
-	_impl->iInitialAllocCells = User::CountAllocCells();
-	RThread().HandleCount(_impl->iInitialProcessHandleCount, _impl->iInitialThreadHandleCount);
+    _impl->iInitialAllocCells = User::CountAllocCells();
+    RThread().HandleCount(_impl->iInitialProcessHandleCount, _impl->iInitialThreadHandleCount);
 }
 
 bool MemoryLeakWarning::UsageIsNotBalanced()
 {
-	TInt allocatedCells(User::CountAllocCells());
-	if(_impl->iExpectedLeaks != 0) {
-		TInt difference(Abs(_impl->iInitialAllocCells - allocatedCells));
-		return difference != _impl->iExpectedLeaks;
-	}
-	return allocatedCells != _impl->iInitialAllocCells;
+    TInt allocatedCells(User::CountAllocCells());
+    if(_impl->iExpectedLeaks != 0) {
+        TInt difference(Abs(_impl->iInitialAllocCells - allocatedCells));
+        return difference != _impl->iExpectedLeaks;
+    }
+    return allocatedCells != _impl->iInitialAllocCells;
 }
 
 const char* MemoryLeakWarning::Message()
 {
-	return "";
+    return "";
 }
 
 void MemoryLeakWarning::ExpectLeaks(int n)
 {
-	_impl->iExpectedLeaks = n;
+    _impl->iExpectedLeaks = n;
 }
 
 // this method leaves (no naming convention followed due to CppUTest framework
 void MemoryLeakWarning::CreateData()
 {
-	_impl = new(ELeave) MemoryLeakWarningData();
+    _impl = new(ELeave) MemoryLeakWarningData();
 }
 
 void MemoryLeakWarning::DestroyData()
 {
-	delete _impl;
-	_impl = NULL;
+    delete _impl;
+    _impl = NULL;
 }
 
 MemoryLeakWarning* MemoryLeakWarning::GetLatest()
 {
-	return _latest;
+    return _latest;
 }
 
 void MemoryLeakWarning::SetLatest(MemoryLeakWarning* latest)
 {
-	_latest = latest;
+    _latest = latest;
 }

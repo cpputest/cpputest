@@ -39,33 +39,33 @@ static bool reporterRegistered = false;
 
 class MemoryLeakWarningData
 {
-	public:
-		MemoryLeakWarningData();
-		
-		int initialBlocksUsed;
-		int initialArraysUsed;
+    public:
+        MemoryLeakWarningData();
+        
+        int initialBlocksUsed;
+        int initialArraysUsed;
 
-		int blockUsageCheckPoint;
-		int arrayUsageCheckPoint;
-		int expectCount;
-		char message[100];
+        int blockUsageCheckPoint;
+        int arrayUsageCheckPoint;
+        int expectCount;
+        char message[100];
 };
 
 void MemoryLeakWarning::CreateData()
 {
-	_impl = (MemoryLeakWarningData*) malloc(sizeof(MemoryLeakWarningData));
-	_impl->initialBlocksUsed = 0;
-	_impl->initialArraysUsed = 0;
+    _impl = (MemoryLeakWarningData*) malloc(sizeof(MemoryLeakWarningData));
+    _impl->initialBlocksUsed = 0;
+    _impl->initialArraysUsed = 0;
 
-	_impl->blockUsageCheckPoint = 0;
-	_impl->arrayUsageCheckPoint = 0;
-	_impl->expectCount = 0;
-	_impl->message_[0] = '\0';
+    _impl->blockUsageCheckPoint = 0;
+    _impl->arrayUsageCheckPoint = 0;
+    _impl->expectCount = 0;
+    _impl->message_[0] = '\0';
 }
 
 void MemoryLeakWarning::DestroyData()
 {
-	free(_impl);
+    free(_impl);
 }
 
 extern "C" {
@@ -104,23 +104,23 @@ MemoryLeakWarning* MemoryLeakWarning::_latest = NULL;
 
 MemoryLeakWarning::MemoryLeakWarning()
 {
-	_latest = this; 
-	CreateData();	
+    _latest = this; 
+    CreateData();	
 }
 
 MemoryLeakWarning::~MemoryLeakWarning()
 {
-	DestroyData();
+    DestroyData();
 }
 
 MemoryLeakWarning* MemoryLeakWarning::GetLatest()
 {
-	return _latest;
+    return _latest;
 }
 
 void MemoryLeakWarning::SetLatest(MemoryLeakWarning* latest)
 {
-	_latest = latest;
+    _latest = latest;
 }
 
 void MemoryLeakWarning::Enable()
@@ -128,11 +128,11 @@ void MemoryLeakWarning::Enable()
   _impl->initialBlocksUsed = allocatedBlocks;
   _impl->initialArraysUsed = allocatedArrays;
 
-	if (!reporterRegistered) {
-		firstInitialBlocks = allocatedBlocks;
-		firstInitialArrays = allocatedArrays;
-		reporterRegistered = true;
-	}
+    if (!reporterRegistered) {
+        firstInitialBlocks = allocatedBlocks;
+        firstInitialArrays = allocatedArrays;
+        reporterRegistered = true;
+    }
 
 }
 
@@ -188,14 +188,14 @@ const char* MemoryLeakWarning::Message()
 
 void MemoryLeakWarning::ExpectLeaks(int n)
 {
-	_impl->expectCount = n;
+    _impl->expectCount = n;
 }
 
 /* Global overloaded operators */
 
 void* operator new(size_t size)
 {
-	allocatedBlocks++;
+    allocatedBlocks++;
   	return malloc(size);
 }
 
@@ -207,7 +207,7 @@ void operator delete(void* mem)
 
 void* operator new[](size_t size)
 {
-	allocatedArrays++;
+    allocatedArrays++;
   	return malloc(size);
 }
 

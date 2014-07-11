@@ -41,24 +41,24 @@ static int jmp_buf_index = 0;
 
 int PlatformSpecificSetJmp(void (*function) (void* data), void* data)
 {
-	if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
-	    jmp_buf_index++;
-		function(data);
-	    jmp_buf_index--;
-		return 1;
-	}
-	return 0;
+    if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
+        jmp_buf_index++;
+        function(data);
+        jmp_buf_index--;
+        return 1;
+    }
+    return 0;
 }
 
 void PlatformSpecificLongJmp()
 {
-	jmp_buf_index--;
-	longjmp(test_exit_jmp_buf[jmp_buf_index], 1);
+    jmp_buf_index--;
+    longjmp(test_exit_jmp_buf[jmp_buf_index], 1);
 }
 
 void PlatformSpecificRestoreJumpBuffer()
 {
-	jmp_buf_index--;
+    jmp_buf_index--;
 }
 
 void PlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
@@ -68,42 +68,42 @@ void PlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* pl
 }
 
 static long TimeInMillisImplementation() {
-	struct timeval tv;
-	struct timezone tz;
-	::gettimeofday(&tv, &tz);
-	return (tv.tv_sec * 1000) + (long)(tv.tv_usec * 0.001);
+    struct timeval tv;
+    struct timezone tz;
+    ::gettimeofday(&tv, &tz);
+    return (tv.tv_sec * 1000) + (long)(tv.tv_usec * 0.001);
 }
 
 static long (*timeInMillisFp) () = TimeInMillisImplementation;
 
 long GetPlatformSpecificTimeInMillis() {
-	return timeInMillisFp();
+    return timeInMillisFp();
 }
 
 void SetPlatformSpecificTimeInMillisMethod(long (*platformSpecific) ()) {
-	timeInMillisFp = (platformSpecific == 0) ? TimeInMillisImplementation : platformSpecific;
+    timeInMillisFp = (platformSpecific == 0) ? TimeInMillisImplementation : platformSpecific;
 }
 
 TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
 {
-	return TestOutput::eclipse;
+    return TestOutput::eclipse;
 }
 
 ///////////// Time in String
 
 static SimpleString TimeStringImplementation() {
-	time_t tm = time(NULL);
-	return ctime(&tm);
+    time_t tm = time(NULL);
+    return ctime(&tm);
 }
 
 static SimpleString (*timeStringFp) () = TimeStringImplementation;
 
 SimpleString GetPlatformSpecificTimeString() {
-	return timeStringFp();
+    return timeStringFp();
 }
 
 void SetPlatformSpecificTimeStringMethod(SimpleString (*platformMethod) ()) {
-	timeStringFp = (platformMethod == 0) ? TimeStringImplementation : platformMethod;
+    timeStringFp = (platformMethod == 0) ? TimeStringImplementation : platformMethod;
 }
 
 int PlatformSpecificVSNprintf(char* str, size_t size, const char* format, va_list args) {
@@ -112,15 +112,15 @@ int PlatformSpecificVSNprintf(char* str, size_t size, const char* format, va_lis
 
 char PlatformSpecificToLower(char c)
 {
-	return tolower(c);
+    return tolower(c);
 }
 
 void PlatformSpecificFlush() {
-	fflush(stdout);
+    fflush(stdout);
 }
 
 int PlatformSpecificPutchar(int c) {
-	return putchar(c);
+    return putchar(c);
 }
 
 size_t PlatformSpecificStrLen(const char* s) {
@@ -161,7 +161,7 @@ void* PlatformSpecificMemCpy(void* s1, const void* s2, size_t size) {
 
 void* PlatformSpecificMemset(void* mem, int c, size_t size)
 {
-	return memset(mem, c, size);
+    return memset(mem, c, size);
 }
 
 PlatformSpecificFile PlatformSpecificFOpen(const char* filename, const char* flag) {

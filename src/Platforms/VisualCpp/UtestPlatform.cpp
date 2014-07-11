@@ -27,24 +27,24 @@ static int jmp_buf_index = 0;
 
 int PlatformSpecificSetJmp(void (*function) (void* data), void* data)
 {
-	if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
-	    jmp_buf_index++;
-		function(data);
-	    jmp_buf_index--;
-		return 1;
-	}
-	return 0;
+    if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
+        jmp_buf_index++;
+        function(data);
+        jmp_buf_index--;
+        return 1;
+    }
+    return 0;
 }
 
 void PlatformSpecificLongJmp()
 {
-	jmp_buf_index--;
-	longjmp(test_exit_jmp_buf[jmp_buf_index], 1);
+    jmp_buf_index--;
+    longjmp(test_exit_jmp_buf[jmp_buf_index], 1);
 }
 
 void PlatformSpecificRestoreJumpBuffer()
 {
-	jmp_buf_index--;
+    jmp_buf_index--;
 }
 
 void PlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
@@ -55,7 +55,7 @@ void PlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* pl
 
 TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
 {
-	return TestOutput::vistualStudio;
+    return TestOutput::vistualStudio;
 }
 
 ///////////// Time in millis
@@ -69,36 +69,36 @@ static long (*timeInMillisFp) () = TimeInMillisImplementation;
 
 long GetPlatformSpecificTimeInMillis()
 {
-	return timeInMillisFp();
+    return timeInMillisFp();
 }
 
 void SetPlatformSpecificTimeInMillisMethod(long (*platformSpecific) ())
 {
-	timeInMillisFp = (platformSpecific == 0) ? TimeInMillisImplementation : platformSpecific;
+    timeInMillisFp = (platformSpecific == 0) ? TimeInMillisImplementation : platformSpecific;
 }
 
 ///////////// Time in String
 
 static const char* TimeStringImplementation()
 {
-	time_t the_time = time(NULL);
-	struct tm the_local_time;
-	static char dateTime[80];
-	localtime_s(&the_local_time, &the_time);
-	strftime(dateTime, 80, "%Y-%m-%dT%H:%M:%S", &the_local_time);
-	return dateTime;
+    time_t the_time = time(NULL);
+    struct tm the_local_time;
+    static char dateTime[80];
+    localtime_s(&the_local_time, &the_time);
+    strftime(dateTime, 80, "%Y-%m-%dT%H:%M:%S", &the_local_time);
+    return dateTime;
 }
 
 static const char* (*timeStringFp) () = TimeStringImplementation;
 
 const char* GetPlatformSpecificTimeString()
 {
-	return timeStringFp();
+    return timeStringFp();
 }
 
 void SetPlatformSpecificTimeStringMethod(const char* (*platformMethod) ())
 {
-	timeStringFp = (platformMethod == 0) ? TimeStringImplementation : platformMethod;
+    timeStringFp = (platformMethod == 0) ? TimeStringImplementation : platformMethod;
 }
 
 
@@ -131,23 +131,23 @@ char* PlatformSpecificStrStr(const char* s1, const char* s2)
 
 int PlatformSpecificVSNprintf(char *str, size_t size, const char* format, va_list args)
 {
-	char* buf = 0;
-	size_t sizeGuess = size;
+    char* buf = 0;
+    size_t sizeGuess = size;
 
-	int result = _vsnprintf_s( str, size, _TRUNCATE, format, args);
-	str[size-1] = 0;
-	while (result == -1)
-	{
-		if (buf != 0)
-			free(buf);
-		sizeGuess += 10;
-		buf = (char*)malloc(sizeGuess);
-		result = _vsnprintf_s( buf, sizeGuess, _TRUNCATE, format, args);
-	}
+    int result = _vsnprintf_s( str, size, _TRUNCATE, format, args);
+    str[size-1] = 0;
+    while (result == -1)
+    {
+        if (buf != 0)
+            free(buf);
+        sizeGuess += 10;
+        buf = (char*)malloc(sizeGuess);
+        result = _vsnprintf_s( buf, sizeGuess, _TRUNCATE, format, args);
+    }
 
-	if (buf != 0)
-		free(buf);
-	return result;
+    if (buf != 0)
+        free(buf);
+    return result;
 
 }
 
@@ -200,7 +200,7 @@ void* PlatformSpecificMemCpy(void* s1, const void* s2, size_t size)
 
 void* PlatformSpecificMemset(void* mem, int c, size_t size)
 {
-	return memset(mem, c, size);
+    return memset(mem, c, size);
 }
 
 double PlatformSpecificFabs(double d)
@@ -210,7 +210,7 @@ double PlatformSpecificFabs(double d)
 
 int PlatformSpecificIsNan(double d)
 {
-	return _isnan(d);
+    return _isnan(d);
 }
 
 int PlatformSpecificVSNprintf(char *str, unsigned int size, const char* format, void* args)
@@ -220,7 +220,7 @@ int PlatformSpecificVSNprintf(char *str, unsigned int size, const char* format, 
 
 char PlatformSpecificToLower(char c)
 {
-	return tolower(c);
+    return tolower(c);
 }
 
 

@@ -63,24 +63,24 @@ static int jmp_buf_index = 0;
  */
 extern "C" int PlatformSpecificSetJmp(void (*function) (void* data), void* data)
 {
-	if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
-	    jmp_buf_index++;
-		function(data);
-	    jmp_buf_index--;
-		return 1;
-	}
-	return 0;
+    if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
+        jmp_buf_index++;
+        function(data);
+        jmp_buf_index--;
+        return 1;
+    }
+    return 0;
 }
 
 void PlatformSpecificLongJmp()
 {
-	jmp_buf_index--;
-	longjmp(test_exit_jmp_buf[jmp_buf_index], 1);
+    jmp_buf_index--;
+    longjmp(test_exit_jmp_buf[jmp_buf_index], 1);
 }
 
 void PlatformSpecificRestoreJumpBuffer()
 {
-	jmp_buf_index--;
+    jmp_buf_index--;
 }
 
 void PlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
@@ -91,7 +91,7 @@ void PlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* pl
 
 TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
 {
-	return TestOutput::eclipse;
+    return TestOutput::eclipse;
 }
 
 ///////////// Time in millis
@@ -100,24 +100,24 @@ static long TimeInMillisImplementation()
 {
     /* The TI c2000 platform does not have Posix support and thus lacks struct timespec.
      * Also, clock() always returns 0 in the simulator. Hence we work with struct tm.tm_hour
-	 * This has two consequences:
-	 *   (1) We need to sum up the part in order to get an "elapsed since" time value,
-	 *       rather than just using tm_sec.
-	 *   (2) There is a possibility of overflow, since we stop at the hour
-	 *   (3) Resolution is 1 s, even though we return ms.
-	 */
-	time_t t        = time((time_t*)0);
+     * This has two consequences:
+     *   (1) We need to sum up the part in order to get an "elapsed since" time value,
+     *       rather than just using tm_sec.
+     *   (2) There is a possibility of overflow, since we stop at the hour
+     *   (3) Resolution is 1 s, even though we return ms.
+     */
+    time_t t        = time((time_t*)0);
     struct tm * ptm = gmtime(&t);
-	long result = (long)
+    long result = (long)
         ((ptm->tm_sec + ptm->tm_min * (time_t)60 + ptm->tm_hour * (time_t)3600) * (time_t)1000);
-	return result;
+    return result;
 }
 
 static long (*timeInMillisFp) () = TimeInMillisImplementation;
 
 long GetPlatformSpecificTimeInMillis()
 {
-	return timeInMillisFp();
+    return timeInMillisFp();
 }
 
 /* The TI cl2000 compiler will compile this function with C++ linkage, unless
@@ -129,28 +129,28 @@ typedef long (*cppLongCall)();
 extern "C" void SetPlatformSpecificTimeInMillisMethod(long (*platformSpecific) ())
 {
     if(platformSpecific == 0) 
-	{
+    {
      	timeInMillisFp = TimeInMillisImplementation;
     }
     else
     {
         timeInMillisFp = reinterpret_cast<cppLongCall>(platformSpecific);
-	}
+    }
 }
 
 ///////////// Time in String
 
 static const char* TimeStringImplementation()
 {
-	time_t tm = time(NULL);
-	return ctime(&tm);
+    time_t tm = time(NULL);
+    return ctime(&tm);
 }
 
 static const char* (*timeStringFp) () = TimeStringImplementation;
 
 const char* GetPlatformSpecificTimeString()
 {
-	return timeStringFp();
+    return timeStringFp();
 }
 
 /* The TI cl2000 compiler will compile this function with C++ linkage, unless
@@ -164,13 +164,13 @@ typedef const char* (*cppStringFp)();
 extern "C" void SetPlatformSpecificTimeStringMethod(const char* (*platformMethod) ())
 {
     if(platformMethod == 0)
-	{
-	    timeStringFp = TimeStringImplementation;
-	}
-	else
-	{
-	    timeStringFp = reinterpret_cast<cppStringFp>(platformMethod);
-	}
+    {
+        timeStringFp = TimeStringImplementation;
+    }
+    else
+    {
+        timeStringFp = reinterpret_cast<cppStringFp>(platformMethod);
+    }
 }
 
 int PlatformSpecificAtoI(const char* str)
@@ -191,7 +191,7 @@ int PlatformSpecificStrCmp(const char* s1, const char* s2)
     {
         if (!*s1) return(0 - *s2);
         if (*s1++ != *s2++)
-	        return(*--s1 - *--s2);
+            return(*--s1 - *--s2);
     }
 }
 
@@ -219,15 +219,15 @@ char* PlatformSpecificStrStr(const char* s1, const char* s2)
  
         do
         {
-	        // ----------------------------------------------------------------
-	        //  AT END OF COMPARISON STRING, MUST HAVE A MATCH OR EMPTY STRING
-	        // ----------------------------------------------------------------
-	        if (!*cmp)  return (char *)s1;
+            // ----------------------------------------------------------------
+            //  AT END OF COMPARISON STRING, MUST HAVE A MATCH OR EMPTY STRING
+            // ----------------------------------------------------------------
+            if (!*cmp)  return (char *)s1;
  
-	        // ----------------------------------------------------------------
-	        // AT END OF CONTROL STRING, NO MATCH IS POSSIBLE
-	        // ----------------------------------------------------------------
-	        if (!*wpos) return NULL;
+            // ----------------------------------------------------------------
+            // AT END OF CONTROL STRING, NO MATCH IS POSSIBLE
+            // ----------------------------------------------------------------
+            if (!*wpos) return NULL;
  
        } while (*wpos++ == *cmp++);
    }
@@ -243,7 +243,7 @@ int PlatformSpecificVSNprintf(char *str, size_t size, const char* format, va_lis
 
 char PlatformSpecificToLower(char c)
 {
-	return (char) tolower((char) c);
+    return (char) tolower((char) c);
 }
 
 PlatformSpecificFile PlatformSpecificFOpen(const char* filename, const char* flag)
@@ -307,9 +307,9 @@ void* PlatformSpecificMemCpy(void* s1, const void* s2, size_t size)
 void* PlatformSpecificMemset(void* mem, int c, size_t size)
 {
     register unsigned long i = size;
-	register long p = (long) mem;
-	while (i--) *__farptr_to_word(p++) = c;
-	return mem;
+    register long p = (long) mem;
+    while (i--) *__farptr_to_word(p++) = c;
+    return mem;
 }
 
 double PlatformSpecificFabs(double d)
@@ -324,6 +324,6 @@ int PlatformSpecificIsNan(double d)
      * 0.0 / 0.0 evaluates to 0.0).
      */
     volatile double temp1 = d;
-	volatile double temp2 = d;
-	return temp1 != temp2;
+    volatile double temp2 = d;
+    return temp1 != temp2;
 }
