@@ -158,16 +158,16 @@ TEST(TestOrderedTestMacros, NormalTest)
     testNumber++;
 }
 
-TEST_ORDERED(TestOrderedTestMacros, Test2, 2)
-{
-    CHECK(testNumber == 2);
-    testNumber++;
-}
-
 TEST_ORDERED(TestOrderedTestMacros, Test1, 1)
 {
-    CHECK(testNumber == 1);
-    testNumber++;
+	CHECK(testNumber == 1);
+	testNumber++;
+}
+
+TEST_ORDERED(TestOrderedTestMacros, Test2, 2)
+{
+	CHECK(testNumber == 2);
+	testNumber++;
 }
 
 TEST_ORDERED(TestOrderedTestMacros, Test4, 4)
