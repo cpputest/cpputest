@@ -37,25 +37,25 @@
 int main(int ac, const char** av)
 {
 #ifdef INCLUDE_GTEST_TESTS
-	GTestConvertor convertor;
-	convertor.addAllGTestToTestRegistry();
+    GTestConvertor convertor;
+    convertor.addAllGTestToTestRegistry();
 #endif
 
-	MemoryReporterPlugin plugin;
-	MockSupportPlugin mockPlugin;
-	TestRegistry::getCurrentRegistry()->installPlugin(&plugin);
-	TestRegistry::getCurrentRegistry()->installPlugin(&mockPlugin);
+    MemoryReporterPlugin plugin;
+    MockSupportPlugin mockPlugin;
+    TestRegistry::getCurrentRegistry()->installPlugin(&plugin);
+    TestRegistry::getCurrentRegistry()->installPlugin(&mockPlugin);
 
 #ifndef GMOCK_RENAME_MAIN
-	return CommandLineTestRunner::RunAllTests(ac, av);
+    return CommandLineTestRunner::RunAllTests(ac, av);
 #else
-	/* Don't have any memory leak detector when running the Google Test tests */
+    /* Don't have any memory leak detector when running the Google Test tests */
 
-	testing::GMOCK_FLAG(verbose) = testing::internal::kWarningVerbosity;
+    testing::GMOCK_FLAG(verbose) = testing::internal::kWarningVerbosity;
 
-	ConsoleTestOutput output;
-	CommandLineTestRunner runner(ac, av, &output, TestRegistry::getCurrentRegistry());
-	return runner.runAllTestsMain();
+    ConsoleTestOutput output;
+    CommandLineTestRunner runner(ac, av, &output, TestRegistry::getCurrentRegistry());
+    return runner.runAllTestsMain();
 #endif
 }
 

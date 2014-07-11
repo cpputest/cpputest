@@ -34,46 +34,46 @@
 static bool g_GTestEqual_has_been_called = false;
 TEST(GTestSimpleTest, GTestEqual)
 {
-	EXPECT_EQ(1, 1);
-	g_GTestEqual_has_been_called = true;
+    EXPECT_EQ(1, 1);
+    g_GTestEqual_has_been_called = true;
 }
 
 TEST(GTestSimpleTest, GTestAssertEq)
 {
-	ASSERT_EQ(1, 1);
+    ASSERT_EQ(1, 1);
 }
 
 TEST(GTestSimpleTest, GTestExpectTrue)
 {
-	EXPECT_TRUE(true);
+    EXPECT_TRUE(true);
 }
 
 TEST(GTestSimpleTest, GTestAssertTrue)
 {
-	ASSERT_TRUE(true);
+    ASSERT_TRUE(true);
 }
 
 TEST(GTestSimpleTest, GTestExpectFalse)
 {
-	EXPECT_FALSE(false);
+    EXPECT_FALSE(false);
 }
 
 TEST(GTestSimpleTest, GTestExpectStreq)
 {
-	EXPECT_STREQ("hello world", "hello world");
+    EXPECT_STREQ("hello world", "hello world");
 }
 
 /* Death tests are IMHO not a good idea at all. But for compatibility reason, we'll support it */
 
 static void crashMe ()
 {
-	fprintf(stderr, "Crash me!");
-	*((int*) 0) = 10;
+    fprintf(stderr, "Crash me!");
+    *((int*) 0) = 10;
 }
 
 TEST(GTestSimpleTest, GTestDeathTest)
 {
-	ASSERT_DEATH(crashMe(), "Crash me!");
+    ASSERT_DEATH(crashMe(), "Crash me!");
 }
 
 #undef TEST
@@ -88,119 +88,119 @@ TEST_GROUP(gtest)
 
 TEST(gtest, SimpleGoogleTestExists)
 {
-	TestRegistry* registry = TestRegistry::getCurrentRegistry();
-	CHECK(registry->findTestWithName("GTestEqual"));
+    TestRegistry* registry = TestRegistry::getCurrentRegistry();
+    CHECK(registry->findTestWithName("GTestEqual"));
 }
 
 TEST(gtest, SimpleGoogleTestGroupExists)
 {
-	TestRegistry* registry = TestRegistry::getCurrentRegistry();
-	CHECK(registry->findTestWithGroup("GTestSimpleTest"));
+    TestRegistry* registry = TestRegistry::getCurrentRegistry();
+    CHECK(registry->findTestWithGroup("GTestSimpleTest"));
 }
 
 TEST(gtest, SimpleGoogleTestGetCalled)
 {
-	StringBufferTestOutput output;
-	TestResult result(output);
-	TestPlugin plugin("dummy");
+    StringBufferTestOutput output;
+    TestResult result(output);
+    TestPlugin plugin("dummy");
 
-	TestRegistry* registry = TestRegistry::getCurrentRegistry();
-	UtestShell * shell = registry->findTestWithName("GTestEqual");
-	g_GTestEqual_has_been_called = false;
-	shell->runOneTest(&plugin, result);
+    TestRegistry* registry = TestRegistry::getCurrentRegistry();
+    UtestShell * shell = registry->findTestWithName("GTestEqual");
+    g_GTestEqual_has_been_called = false;
+    shell->runOneTest(&plugin, result);
 
-	CHECK(g_GTestEqual_has_been_called);
+    CHECK(g_GTestEqual_has_been_called);
 }
 
 static bool afterCheck;
 
 static void _failMethodEXPECT_EQ()
 {
-	EXPECT_EQ(1, 2);
-	afterCheck = true;
+    EXPECT_EQ(1, 2);
+    afterCheck = true;
 }
 
 static void _failMethodASSERT_EQ()
 {
-	ASSERT_EQ(1, 2);
-	afterCheck = true;
+    ASSERT_EQ(1, 2);
+    afterCheck = true;
 }
 
 static void _failMethodEXPECT_TRUE()
 {
-	EXPECT_TRUE(false);
-	afterCheck = true;
+    EXPECT_TRUE(false);
+    afterCheck = true;
 }
 
 static void _failMethodASSERT_TRUE()
 {
-	ASSERT_TRUE(false);
-	afterCheck = true;
+    ASSERT_TRUE(false);
+    afterCheck = true;
 }
 
 static void _failMethodEXPECT_FALSE()
 {
-	EXPECT_FALSE(true);
-	afterCheck = true;
+    EXPECT_FALSE(true);
+    afterCheck = true;
 }
 
 static void _failMethodEXPECT_STREQ()
 {
-	EXPECT_STREQ("hello", "world");
-	afterCheck = true;
+    EXPECT_STREQ("hello", "world");
+    afterCheck = true;
 }
 
 TEST_GROUP(gtestMacros)
 {
-	TestTestingFixture* fixture;
-	void setup()
-	{
-		fixture = new TestTestingFixture();
-		afterCheck = false;
-	}
-	void teardown()
-	{
-		delete fixture;
-	}
+    TestTestingFixture* fixture;
+    void setup()
+    {
+        fixture = new TestTestingFixture();
+        afterCheck = false;
+    }
+    void teardown()
+    {
+        delete fixture;
+    }
 
-	void testFailureWith(void(*method)())
-	{
-		fixture->setTestFunction(method);
-		fixture->runAllTests();
-		LONGS_EQUAL(1, fixture->getFailureCount());
-		CHECK(!afterCheck);
-	}
+    void testFailureWith(void(*method)())
+    {
+        fixture->setTestFunction(method);
+        fixture->runAllTests();
+        LONGS_EQUAL(1, fixture->getFailureCount());
+        CHECK(!afterCheck);
+    }
 
 };
 
 TEST(gtestMacros, EXPECT_EQFails)
 {
-	testFailureWith(_failMethodEXPECT_EQ);
+    testFailureWith(_failMethodEXPECT_EQ);
 }
 
 TEST(gtestMacros, EXPECT_TRUEFails)
 {
-	testFailureWith(_failMethodEXPECT_TRUE);
+    testFailureWith(_failMethodEXPECT_TRUE);
 }
 
 TEST(gtestMacros, EXPECT_FALSEFails)
 {
-	testFailureWith(_failMethodEXPECT_FALSE);
+    testFailureWith(_failMethodEXPECT_FALSE);
 }
 
 TEST(gtestMacros, EXPECT_STREQFails)
 {
-	testFailureWith(_failMethodEXPECT_STREQ);
+    testFailureWith(_failMethodEXPECT_STREQ);
 }
 
 TEST(gtestMacros, ASSERT_EQFails)
 {
-	testFailureWith(_failMethodASSERT_EQ);
+    testFailureWith(_failMethodASSERT_EQ);
 }
 
 TEST(gtestMacros, ASSERT_TRUEFails)
 {
-	testFailureWith(_failMethodASSERT_TRUE);
+    testFailureWith(_failMethodASSERT_TRUE);
 }
 
 #endif

@@ -33,229 +33,229 @@
 
 TEST_GROUP(MockExpectedCallsList)
 {
-	MockExpectedCallsList * list;
-	MockCheckedExpectedCall* call1;
-	MockCheckedExpectedCall* call2;
-	MockCheckedExpectedCall* call3;
-	MockCheckedExpectedCall* call4;
-	void setup()
-	{
-		list = new MockExpectedCallsList;
-		call1 = new MockCheckedExpectedCall;
-		call2 = new MockCheckedExpectedCall;
-		call3 = new MockCheckedExpectedCall;
-		call4 = new MockCheckedExpectedCall;
-		call1->withName("foo");
-		call2->withName("bar");
-		call3->withName("boo");
-	}
-	void teardown()
-	{
-		delete call1;
-		delete call2;
-		delete call3;
-		delete call4;
-		delete list;
-		CHECK_NO_MOCK_FAILURE();
-	}
+    MockExpectedCallsList * list;
+    MockCheckedExpectedCall* call1;
+    MockCheckedExpectedCall* call2;
+    MockCheckedExpectedCall* call3;
+    MockCheckedExpectedCall* call4;
+    void setup()
+    {
+        list = new MockExpectedCallsList;
+        call1 = new MockCheckedExpectedCall;
+        call2 = new MockCheckedExpectedCall;
+        call3 = new MockCheckedExpectedCall;
+        call4 = new MockCheckedExpectedCall;
+        call1->withName("foo");
+        call2->withName("bar");
+        call3->withName("boo");
+    }
+    void teardown()
+    {
+        delete call1;
+        delete call2;
+        delete call3;
+        delete call4;
+        delete list;
+        CHECK_NO_MOCK_FAILURE();
+    }
 };
 
 TEST(MockExpectedCallsList, emptyList)
 {
-	CHECK(! list->hasUnfullfilledExpectations());
-	CHECK(! list->hasFulfilledExpectations());
-	LONGS_EQUAL(0, list->size());
+    CHECK(! list->hasUnfullfilledExpectations());
+    CHECK(! list->hasFulfilledExpectations());
+    LONGS_EQUAL(0, list->size());
 }
 
 TEST(MockExpectedCallsList, addingCalls)
 {
-	list->addExpectedCall(call1);
-	list->addExpectedCall(call2);
-	LONGS_EQUAL(2, list->size());
+    list->addExpectedCall(call1);
+    list->addExpectedCall(call2);
+    LONGS_EQUAL(2, list->size());
 }
 
 TEST(MockExpectedCallsList, listWithFulfilledExpectationHasNoUnfillfilledOnes)
 {
-	call1->callWasMade(1);
-	call2->callWasMade(2);
-	list->addExpectedCall(call1);
-	list->addExpectedCall(call2);
-	CHECK(! list->hasUnfullfilledExpectations());
+    call1->callWasMade(1);
+    call2->callWasMade(2);
+    list->addExpectedCall(call1);
+    list->addExpectedCall(call2);
+    CHECK(! list->hasUnfullfilledExpectations());
 }
 
 TEST(MockExpectedCallsList, listWithFulfilledExpectationButOutOfOrder)
 {
-	call1->withCallOrder(1);
-	call2->withCallOrder(2);
-	list->addExpectedCall(call1);
-	list->addExpectedCall(call2);
-	call2->callWasMade(1);
-	call1->callWasMade(2);
-	CHECK(! list->hasUnfullfilledExpectations());
-	CHECK(list->hasCallsOutOfOrder());
+    call1->withCallOrder(1);
+    call2->withCallOrder(2);
+    list->addExpectedCall(call1);
+    list->addExpectedCall(call2);
+    call2->callWasMade(1);
+    call1->callWasMade(2);
+    CHECK(! list->hasUnfullfilledExpectations());
+    CHECK(list->hasCallsOutOfOrder());
 }
 
 TEST(MockExpectedCallsList, listWithUnFulfilledExpectationHasNoUnfillfilledOnes)
 {
-	call1->callWasMade(1);
-	call3->callWasMade(2);
-	list->addExpectedCall(call1);
-	list->addExpectedCall(call2);
-	list->addExpectedCall(call3);
-	CHECK(list->hasUnfullfilledExpectations());
+    call1->callWasMade(1);
+    call3->callWasMade(2);
+    list->addExpectedCall(call1);
+    list->addExpectedCall(call2);
+    list->addExpectedCall(call3);
+    CHECK(list->hasUnfullfilledExpectations());
 }
 
 TEST(MockExpectedCallsList, deleteAllExpectationsAndClearList)
 {
-	list->addExpectedCall(new MockCheckedExpectedCall);
-	list->addExpectedCall(new MockCheckedExpectedCall);
-	list->deleteAllExpectationsAndClearList();
+    list->addExpectedCall(new MockCheckedExpectedCall);
+    list->addExpectedCall(new MockCheckedExpectedCall);
+    list->deleteAllExpectationsAndClearList();
 }
 
 TEST(MockExpectedCallsList, onlyKeepUnfulfilledExpectationsRelatedTo)
 {
-	call1->withName("relate");
-	call2->withName("unrelate");
-	call3->withName("relate");
-	call3->callWasMade(1);
-	list->addExpectedCall(call1);
-	list->addExpectedCall(call2);
-	list->addExpectedCall(call3);
-	list->onlyKeepUnfulfilledExpectationsRelatedTo("relate");
-	LONGS_EQUAL(1, list->size());
+    call1->withName("relate");
+    call2->withName("unrelate");
+    call3->withName("relate");
+    call3->callWasMade(1);
+    list->addExpectedCall(call1);
+    list->addExpectedCall(call2);
+    list->addExpectedCall(call3);
+    list->onlyKeepUnfulfilledExpectationsRelatedTo("relate");
+    LONGS_EQUAL(1, list->size());
 }
 
 TEST(MockExpectedCallsList, removeAllExpectationsExceptThisThatRelateToTheWoleList)
 {
-	call1->withName("relate");
-	call2->withName("relate");
-	call3->withName("relate");
-	list->addExpectedCall(call1);
-	list->addExpectedCall(call2);
-	list->addExpectedCall(call3);
-	list->onlyKeepUnfulfilledExpectationsRelatedTo("unrelate");
-	LONGS_EQUAL(0, list->size());
+    call1->withName("relate");
+    call2->withName("relate");
+    call3->withName("relate");
+    list->addExpectedCall(call1);
+    list->addExpectedCall(call2);
+    list->addExpectedCall(call3);
+    list->onlyKeepUnfulfilledExpectationsRelatedTo("unrelate");
+    LONGS_EQUAL(0, list->size());
 }
 
 TEST(MockExpectedCallsList, removeAllExpectationsExceptThisThatRelateToFirstOne)
 {
-	call1->withName("relate");
-	call2->withName("unrelate");
-	list->addExpectedCall(call1);
-	list->addExpectedCall(call2);
-	list->onlyKeepUnfulfilledExpectationsRelatedTo("unrelate");
-	LONGS_EQUAL(1, list->size());
+    call1->withName("relate");
+    call2->withName("unrelate");
+    list->addExpectedCall(call1);
+    list->addExpectedCall(call2);
+    list->onlyKeepUnfulfilledExpectationsRelatedTo("unrelate");
+    LONGS_EQUAL(1, list->size());
 }
 
 TEST(MockExpectedCallsList, removeAllExpectationsExceptThisThatRelateToLastOne)
 {
-	call1->withName("unrelate");
-	call2->withName("relate");
-	list->addExpectedCall(call1);
-	list->addExpectedCall(call2);
-	list->onlyKeepUnfulfilledExpectationsRelatedTo("unrelate");
-	LONGS_EQUAL(1, list->size());
+    call1->withName("unrelate");
+    call2->withName("relate");
+    list->addExpectedCall(call1);
+    list->addExpectedCall(call2);
+    list->onlyKeepUnfulfilledExpectationsRelatedTo("unrelate");
+    LONGS_EQUAL(1, list->size());
 }
 
 TEST(MockExpectedCallsList, onlyKeepExpectationsWithInputParameterName)
 {
-	call1->withName("func").withParameter("param", 1);
-	call2->withName("func").withParameter("diffname", 1);
-	call3->withName("func").withParameter("diffname", 1);
-	list->addExpectedCall(call1);
-	list->addExpectedCall(call2);
-	list->addExpectedCall(call3);
-	list->onlyKeepExpectationsWithInputParameterName("diffname");
-	LONGS_EQUAL(2, list->size());
+    call1->withName("func").withParameter("param", 1);
+    call2->withName("func").withParameter("diffname", 1);
+    call3->withName("func").withParameter("diffname", 1);
+    list->addExpectedCall(call1);
+    list->addExpectedCall(call2);
+    list->addExpectedCall(call3);
+    list->onlyKeepExpectationsWithInputParameterName("diffname");
+    LONGS_EQUAL(2, list->size());
 }
 
 TEST(MockExpectedCallsList, onlyKeepUnfulfilledExpectationsWithInputParameter)
 {
-	MockNamedValue parameter("diffname");
-	parameter.setValue(1);
-	call1->withName("func").withParameter("param", 1);
-	call2->withName("func").withParameter("diffname", 1);
-	call3->withName("func").withParameter("diffname", 1);
-	call4->withName("func").withParameter("diffname", 2);
-	call3->callWasMade(1);
-	call3->inputParameterWasPassed("diffname");
-	list->addExpectedCall(call1);
-	list->addExpectedCall(call2);
-	list->addExpectedCall(call3);
-	list->addExpectedCall(call4);
-	list->onlyKeepUnfulfilledExpectationsWithInputParameter(parameter);
-	LONGS_EQUAL(1, list->size());
+    MockNamedValue parameter("diffname");
+    parameter.setValue(1);
+    call1->withName("func").withParameter("param", 1);
+    call2->withName("func").withParameter("diffname", 1);
+    call3->withName("func").withParameter("diffname", 1);
+    call4->withName("func").withParameter("diffname", 2);
+    call3->callWasMade(1);
+    call3->inputParameterWasPassed("diffname");
+    list->addExpectedCall(call1);
+    list->addExpectedCall(call2);
+    list->addExpectedCall(call3);
+    list->addExpectedCall(call4);
+    list->onlyKeepUnfulfilledExpectationsWithInputParameter(parameter);
+    LONGS_EQUAL(1, list->size());
 }
 
 TEST(MockExpectedCallsList, addUnfilfilledExpectationsWithEmptyList)
 {
-	MockExpectedCallsList newList;
-	newList.addUnfilfilledExpectations(*list);
-	LONGS_EQUAL(0, newList.size());
+    MockExpectedCallsList newList;
+    newList.addUnfilfilledExpectations(*list);
+    LONGS_EQUAL(0, newList.size());
 }
 
 TEST(MockExpectedCallsList, addUnfilfilledExpectationsMultipleUnfulfilledExpectations)
 {
-	call2->callWasMade(1);
-	list->addExpectedCall(call1);
-	list->addExpectedCall(call2);
-	list->addExpectedCall(call3);
-	MockExpectedCallsList newList;
-	newList.addUnfilfilledExpectations(*list);
-	LONGS_EQUAL(2, newList.size());
+    call2->callWasMade(1);
+    list->addExpectedCall(call1);
+    list->addExpectedCall(call2);
+    list->addExpectedCall(call3);
+    MockExpectedCallsList newList;
+    newList.addUnfilfilledExpectations(*list);
+    LONGS_EQUAL(2, newList.size());
 }
 
 TEST(MockExpectedCallsList, amountOfExpectationsFor)
 {
-	call1->withName("foo");
-	call2->withName("bar");
-	list->addExpectedCall(call1);
-	list->addExpectedCall(call2);
-	LONGS_EQUAL(1, list->amountOfExpectationsFor("bar"));
+    call1->withName("foo");
+    call2->withName("bar");
+    list->addExpectedCall(call1);
+    list->addExpectedCall(call2);
+    LONGS_EQUAL(1, list->amountOfExpectationsFor("bar"));
 }
 
 TEST(MockExpectedCallsList, amountOfExpectationsForHasNone)
 {
-	call1->withName("foo");
-	list->addExpectedCall(call1);
-	LONGS_EQUAL(0, list->amountOfExpectationsFor("bar"));
+    call1->withName("foo");
+    list->addExpectedCall(call1);
+    LONGS_EQUAL(0, list->amountOfExpectationsFor("bar"));
 }
 
 TEST(MockExpectedCallsList, callToStringForUnfulfilledFunctions)
 {
-	call1->withName("foo");
-	call2->withName("bar");
-	call3->withName("blah");
-	call3->callWasMade(1);
+    call1->withName("foo");
+    call2->withName("bar");
+    call3->withName("blah");
+    call3->callWasMade(1);
 
-	list->addExpectedCall(call1);
-	list->addExpectedCall(call2);
-	list->addExpectedCall(call3);
+    list->addExpectedCall(call1);
+    list->addExpectedCall(call2);
+    list->addExpectedCall(call3);
 
-	SimpleString expectedString;
-	expectedString = StringFromFormat("%s\n%s", call1->callToString().asCharString(), call2->callToString().asCharString());
-	STRCMP_EQUAL(expectedString.asCharString(), list->unfulfilledCallsToString().asCharString());
+    SimpleString expectedString;
+    expectedString = StringFromFormat("%s\n%s", call1->callToString().asCharString(), call2->callToString().asCharString());
+    STRCMP_EQUAL(expectedString.asCharString(), list->unfulfilledCallsToString().asCharString());
 }
 
 TEST(MockExpectedCallsList, callToStringForFulfilledFunctions)
 {
-	call1->withName("foo");
-	call2->withName("bar");
+    call1->withName("foo");
+    call2->withName("bar");
 
-	call2->callWasMade(1);
-	call1->callWasMade(2);
+    call2->callWasMade(1);
+    call1->callWasMade(2);
 
-	list->addExpectedCall(call1);
-	list->addExpectedCall(call2);
+    list->addExpectedCall(call1);
+    list->addExpectedCall(call2);
 
-	SimpleString expectedString;
-	expectedString = StringFromFormat("%s\n%s", call2->callToString().asCharString(), call1->callToString().asCharString());
-	STRCMP_EQUAL(expectedString.asCharString(), list->fulfilledCallsToString().asCharString());
+    SimpleString expectedString;
+    expectedString = StringFromFormat("%s\n%s", call2->callToString().asCharString(), call1->callToString().asCharString());
+    STRCMP_EQUAL(expectedString.asCharString(), list->fulfilledCallsToString().asCharString());
 }
 
 
 
 TEST(MockExpectedCallsList, toStringOnEmptyList)
 {
-	STRCMP_EQUAL("<none>", list->unfulfilledCallsToString().asCharString());
+    STRCMP_EQUAL("<none>", list->unfulfilledCallsToString().asCharString());
 }
