@@ -34,64 +34,64 @@ TEST_GROUP(TestFilter)
 
 TEST(TestFilter, emptyFilterMatchesEverything)
 {
-	TestFilter filter;
-	CHECK(filter.match("random_name"));
-	CHECK(filter.match(""));
-	CHECK(filter.match("*&%#^&%$(*&^@#(&*@#^(&*$^@#"));
+    TestFilter filter;
+    CHECK(filter.match("random_name"));
+    CHECK(filter.match(""));
+    CHECK(filter.match("*&%#^&%$(*&^@#(&*@#^(&*$^@#"));
 }
 
 TEST(TestFilter, defaultAbsoluteMismatches)
 {
-	TestFilter filter("filtername");
-	CHECK(!filter.match("notevenclose"));
-	CHECK(!filter.match("filterrname"));
-	CHECK(!filter.match(""));
+    TestFilter filter("filtername");
+    CHECK(!filter.match("notevenclose"));
+    CHECK(!filter.match("filterrname"));
+    CHECK(!filter.match(""));
 }
 
 TEST(TestFilter, strictMatching)
 {
-	TestFilter filter("filter");
-	filter.strictMatching();
-	CHECK(filter.match("filter"));
-	CHECK(!filter.match("filterr"));
-	CHECK(!filter.match(" filter"));
+    TestFilter filter("filter");
+    filter.strictMatching();
+    CHECK(filter.match("filter"));
+    CHECK(!filter.match("filterr"));
+    CHECK(!filter.match(" filter"));
 }
 
 TEST(TestFilter, equality)
 {
-	TestFilter filter1("filter");
-	TestFilter filter2("filter");
-	TestFilter filter3("filter3");
-	CHECK(filter1 == filter2);
-	CHECK(! (filter1 == filter3));
+    TestFilter filter1("filter");
+    TestFilter filter2("filter");
+    TestFilter filter3("filter3");
+    CHECK(filter1 == filter2);
+    CHECK(! (filter1 == filter3));
 }
 
 TEST(TestFilter, equalityWithStrictness)
 {
-	TestFilter filter1("filter");
-	TestFilter filter2("filter");
-	filter2.strictMatching();
-	CHECK(! (filter1 == filter2));
+    TestFilter filter1("filter");
+    TestFilter filter2("filter");
+    filter2.strictMatching();
+    CHECK(! (filter1 == filter2));
 }
 
 TEST(TestFilter, notEqual)
 {
-	TestFilter filter1("filter");
-	TestFilter filter2("filter");
-	TestFilter filter3("filter3");
-	CHECK(filter1 != filter3);
-	CHECK(! (filter1 != filter2));
+    TestFilter filter1("filter");
+    TestFilter filter2("filter");
+    TestFilter filter3("filter3");
+    CHECK(filter1 != filter3);
+    CHECK(! (filter1 != filter2));
 }
 
 TEST(TestFilter, stringFrom)
 {
-	TestFilter filter("filter");
-	STRCMP_EQUAL("TestFilter: \"filter\"", StringFrom(filter).asCharString());
+    TestFilter filter("filter");
+    STRCMP_EQUAL("TestFilter: \"filter\"", StringFrom(filter).asCharString());
 }
 
 TEST(TestFilter, stringFromWithStrictMatching)
 {
-	TestFilter filter("filter");
-	filter.strictMatching();
-	STRCMP_EQUAL("TestFilter: \"filter\" with strict matching", StringFrom(filter).asCharString());
+    TestFilter filter("filter");
+    filter.strictMatching();
+    STRCMP_EQUAL("TestFilter: \"filter\" with strict matching", StringFrom(filter).asCharString());
 }

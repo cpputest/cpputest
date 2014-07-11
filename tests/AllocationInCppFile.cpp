@@ -7,24 +7,24 @@
 
 char* newAllocation()
 {
-	return new char;
+    return new char;
 }
 
 char* newArrayAllocation()
 {
-	return new char[100];
+    return new char[100];
 }
 
 #undef new
 
 char* newAllocationWithoutMacro()
 {
-	return new char;
+    return new char;
 }
 
 char* newArrayAllocationWithoutMacro()
 {
-	return new char[100];
+    return new char[100];
 }
 
 #if CPPUTEST_USE_STD_CPP_LIB

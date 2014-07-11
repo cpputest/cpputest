@@ -29,17 +29,17 @@
 
 TEST_GROUP(NullTestShell)
 {
-	NullTestShell* nullTest;
+    NullTestShell* nullTest;
 
-	TEST_SETUP()
-	{
-		nullTest = new NullTestShell();
-	}
+    TEST_SETUP()
+    {
+        nullTest = new NullTestShell();
+    }
 
-	TEST_TEARDOWN()
-	{
-		delete nullTest;
-	}
+    TEST_TEARDOWN()
+    {
+        delete nullTest;
+    }
 };
 
 TEST(NullTestShell, Create)
@@ -48,12 +48,12 @@ TEST(NullTestShell, Create)
 
 TEST(NullTestShell, InstanceAlwaysTheSame)
 {
-	NullTestShell& _instance = NullTestShell::instance();
-	CHECK(&_instance == &NullTestShell::instance());
+    NullTestShell& _instance = NullTestShell::instance();
+    CHECK(&_instance == &NullTestShell::instance());
 }
 
 TEST(NullTestShell, NullTestsDontCount)
 {
-	NullTestShell& _instance = NullTestShell::instance();
-	CHECK(_instance.countTests() == 0);
+    NullTestShell& _instance = NullTestShell::instance();
+    CHECK(_instance.countTests() == 0);
 }

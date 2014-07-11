@@ -6,18 +6,18 @@
 
 char* mallocAllocation()
 {
-	return (char*) malloc(10UL);
+    return (char*) malloc(10UL);
 }
 
 void freeAllocation(void* memory)
 {
-	free(memory);
+    free(memory);
 }
 
 #undef free
 
 void freeAllocationWithoutMacro(void* memory)
 {
-	free(memory);
+    free(memory);
 }
 

@@ -14,22 +14,22 @@ extern "C"
  */
 TEST_GROUP(AllocLetTestFree)
 {
-	AllocLetTestFree allocLetTestFree;
+    AllocLetTestFree allocLetTestFree;
 
-	void setup()
-	{
-		allocLetTestFree = AllocLetTestFree_Create();
-	}
+    void setup()
+    {
+        allocLetTestFree = AllocLetTestFree_Create();
+    }
 
-	void teardown()
-	{
-		AllocLetTestFree_Destroy(allocLetTestFree);
-	}
+    void teardown()
+    {
+        AllocLetTestFree_Destroy(allocLetTestFree);
+    }
 };
 
 TEST(AllocLetTestFree, Create)
 {
-	free(allocLetTestFree);
+    free(allocLetTestFree);
 }
 
 #endif

@@ -16,47 +16,47 @@ TEST_GROUP(BasicBehavior)
 
 TEST(BasicBehavior, CanDeleteNullPointers)
 {
-	delete (char*) NULL;
-	delete [] (char*) NULL;
+    delete (char*) NULL;
+    delete [] (char*) NULL;
 }
 
 #ifndef CPPUTEST_MEM_LEAK_DETECTION_DISABLED
 
 TEST(BasicBehavior, deleteArrayInvalidatesMemory)
 {
-	unsigned char* memory = new unsigned char[10];
-	PlatformSpecificMemset(memory, 0xAB, 10);
-	delete [] memory;
-	CHECK(memory[5] != 0xCB);
+    unsigned char* memory = new unsigned char[10];
+    PlatformSpecificMemset(memory, 0xAB, 10);
+    delete [] memory;
+    CHECK(memory[5] != 0xCB);
 }
 
 TEST(BasicBehavior, deleteInvalidatesMemory)
 {
-	unsigned char* memory = new unsigned char;
-	*memory = 0xAD;
-	delete memory;
-	CHECK(*memory != 0xAD);
+    unsigned char* memory = new unsigned char;
+    *memory = 0xAD;
+    delete memory;
+    CHECK(*memory != 0xAD);
 }
 
 static void deleteUnallocatedMemory()
 {
-	delete (char*) 0x1234678;
-	FAIL("Should never come here");
+    delete (char*) 0x1234678;
+    FAIL("Should never come here");
 }
 
 TEST(BasicBehavior, deleteWillNotThrowAnExceptionWhenDeletingUnallocatedMemoryButCanStillCauseTestFailures)
 {
-	/*
-	 * Test failure might cause an exception. But according to C++ standard, you aren't allowed
-	 * to throw exceptions in the delete function. If you do that, it will call std::terminate.
-	 * Therefore, the delete will need to fail without exceptions.
-	 */
-	MemoryLeakFailure* defaultReporter = MemoryLeakWarningPlugin::getGlobalFailureReporter();
-	TestTestingFixture fixture;
-	fixture.setTestFunction(deleteUnallocatedMemory);
-	fixture.runAllTests();
-	LONGS_EQUAL(1, fixture.getFailureCount());
-	POINTERS_EQUAL(defaultReporter, MemoryLeakWarningPlugin::getGlobalFailureReporter());
+    /*
+     * Test failure might cause an exception. But according to C++ standard, you aren't allowed
+     * to throw exceptions in the delete function. If you do that, it will call std::terminate.
+     * Therefore, the delete will need to fail without exceptions.
+     */
+    MemoryLeakFailure* defaultReporter = MemoryLeakWarningPlugin::getGlobalFailureReporter();
+    TestTestingFixture fixture;
+    fixture.setTestFunction(deleteUnallocatedMemory);
+    fixture.runAllTests();
+    LONGS_EQUAL(1, fixture.getFailureCount());
+    POINTERS_EQUAL(defaultReporter, MemoryLeakWarningPlugin::getGlobalFailureReporter());
 }
 
 #endif
@@ -70,11 +70,11 @@ TEST(BasicBehavior, deleteWillNotThrowAnExceptionWhenDeletingUnallocatedMemoryBu
 
 TEST(BasicBehavior, bothMallocAndFreeAreOverloaded)
 {
-	void* memory = cpputest_malloc_location(sizeof(char), "file", 10);
-	free(memory);
+    void* memory = cpputest_malloc_location(sizeof(char), "file", 10);
+    free(memory);
 
-	memory = malloc(sizeof(unsigned char));
-	cpputest_free_location(memory, "file", 10);
+    memory = malloc(sizeof(unsigned char));
+    cpputest_free_location(memory, "file", 10);
 }
 
 #endif
@@ -83,20 +83,20 @@ TEST(BasicBehavior, bothMallocAndFreeAreOverloaded)
 
 TEST(BasicBehavior, freeInvalidatesMemory)
 {
-	unsigned char* memory = (unsigned char*) cpputest_malloc(sizeof(unsigned char));
-	*memory = 0xAD;
-	cpputest_free(memory);
-	CHECK(*memory != 0xAD);
+    unsigned char* memory = (unsigned char*) cpputest_malloc(sizeof(unsigned char));
+    *memory = 0xAD;
+    cpputest_free(memory);
+    CHECK(*memory != 0xAD);
 }
 #endif
 
 TEST_GROUP(MemoryLeakOverridesToBeUsedInProductionCode)
 {
-	MemoryLeakDetector* memLeakDetector;
-	void setup()
-	{
-		memLeakDetector = MemoryLeakWarningPlugin::getGlobalDetector();
-	}
+    MemoryLeakDetector* memLeakDetector;
+    void setup()
+    {
+        memLeakDetector = MemoryLeakWarningPlugin::getGlobalDetector();
+    }
 
 };
 
@@ -104,24 +104,24 @@ TEST_GROUP(MemoryLeakOverridesToBeUsedInProductionCode)
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, MallocOverrideIsUsed)
 {
-	int memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
-	void* memory = malloc(10);
-	LONGS_EQUAL(memLeaks+1, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
-	free (memory);
+    int memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
+    void* memory = malloc(10);
+    LONGS_EQUAL(memLeaks+1, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
+    free (memory);
 }
 
 #endif
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, UseNativeMallocByTemporarlySwitchingOffMalloc)
 {
-	int memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
+    int memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
 #ifdef CPPUTEST_USE_MALLOC_MACROS
-	#undef malloc
-	#undef free
+    #undef malloc
+    #undef free
 #endif
-	void* memory = malloc(10);
-	LONGS_EQUAL(memLeaks, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
-	free (memory);
+    void* memory = malloc(10);
+    LONGS_EQUAL(memLeaks, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
+    free (memory);
 
 #ifdef CPPUTEST_USE_MALLOC_MACROS
 #include "CppUTest/MemoryLeakDetectorMallocMacros.h"
@@ -132,52 +132,52 @@ TEST(MemoryLeakOverridesToBeUsedInProductionCode, UseNativeMallocByTemporarlySwi
 class NewDummyClass
 {
 public:
-	static bool overloaded_new_called;
+    static bool overloaded_new_called;
 
 #ifdef CPPUTEST_USE_NEW_MACROS
-	#undef new
+    #undef new
 #endif
-	void* operator new (size_t size)
+    void* operator new (size_t size)
 #ifdef CPPUTEST_USE_NEW_MACROS
-	#include "CppUTest/MemoryLeakDetectorNewMacros.h"
+    #include "CppUTest/MemoryLeakDetectorNewMacros.h"
 #endif
-	{
-		overloaded_new_called = true;
-		return malloc(size);
-	}
-	void dummyFunction()
-	{
-		char* memory = new char;
-		delete memory;
-	}
+    {
+        overloaded_new_called = true;
+        return malloc(size);
+    }
+    void dummyFunction()
+    {
+        char* memory = new char;
+        delete memory;
+    }
 };
 bool NewDummyClass::overloaded_new_called = false;
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, NoSideEffectsFromTurningOffNewMacros)
 {
-	/*
-	 * Interesting effect of wrapping the operator new around the macro is
-	 * that the actual new that is called is a different one than expected.
-	 *
-	 * The overloaded operator new doesn't actually ever get called.
-	 *
-	 * This might come as a surprise, so it is important to realize!
-	 */
-	NewDummyClass dummy;
-	dummy.dummyFunction();
-	// CHECK(dummy.overloaded_new_called);
+    /*
+     * Interesting effect of wrapping the operator new around the macro is
+     * that the actual new that is called is a different one than expected.
+     *
+     * The overloaded operator new doesn't actually ever get called.
+     *
+     * This might come as a surprise, so it is important to realize!
+     */
+    NewDummyClass dummy;
+    dummy.dummyFunction();
+    // CHECK(dummy.overloaded_new_called);
 }
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, UseNativeNewByTemporarlySwitchingOffNew)
 {
 #ifdef CPPUTEST_USE_NEW_MACROS
-	#undef new
-	#undef delete
+    #undef new
+    #undef delete
 #endif
-	char* memory = new char[10];
-	delete [] memory;
+    char* memory = new char[10];
+    delete [] memory;
 #ifdef CPPUTEST_USE_NEW_MACROS
-	#include "CppUTest/MemoryLeakDetectorNewMacros.h"
+    #include "CppUTest/MemoryLeakDetectorNewMacros.h"
 #endif
 }
 
@@ -186,74 +186,74 @@ TEST(MemoryLeakOverridesToBeUsedInProductionCode, UseNativeNewByTemporarlySwitch
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, OperatorNewMacroOverloadViaIncludeFileWorks)
 {
-	char* leak = newAllocation();
-	STRCMP_NOCASE_CONTAINS("AllocationInCppFile.cpp", memLeakDetector->report(mem_leak_period_checking));
-	delete leak;
+    char* leak = newAllocation();
+    STRCMP_NOCASE_CONTAINS("AllocationInCppFile.cpp", memLeakDetector->report(mem_leak_period_checking));
+    delete leak;
 }
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, OperatorNewArrayMacroOverloadViaIncludeFileWorks)
 {
-	char* leak = newArrayAllocation();
-	STRCMP_NOCASE_CONTAINS("AllocationInCppFile.cpp", memLeakDetector->report(mem_leak_period_checking));
-	delete[] leak;
+    char* leak = newArrayAllocation();
+    STRCMP_NOCASE_CONTAINS("AllocationInCppFile.cpp", memLeakDetector->report(mem_leak_period_checking));
+    delete[] leak;
 }
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, MallocOverrideWorks)
 {
-	char* leak = mallocAllocation();
-	STRCMP_NOCASE_CONTAINS("AllocationInCFile.c", memLeakDetector->report(mem_leak_period_checking));
-	freeAllocation(leak);
+    char* leak = mallocAllocation();
+    STRCMP_NOCASE_CONTAINS("AllocationInCFile.c", memLeakDetector->report(mem_leak_period_checking));
+    freeAllocation(leak);
 }
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, MallocWithButFreeWithoutLeakDetectionDoesntCrash)
 {
-	char* leak = mallocAllocation();
-	freeAllocationWithoutMacro(leak);
-	LONGS_EQUAL(2, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
-	memLeakDetector->removeMemoryLeakInformationWithoutCheckingOrDeallocatingTheMemoryButDeallocatingTheAccountInformation(getCurrentMallocAllocator(), leak, true);
+    char* leak = mallocAllocation();
+    freeAllocationWithoutMacro(leak);
+    LONGS_EQUAL(2, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
+    memLeakDetector->removeMemoryLeakInformationWithoutCheckingOrDeallocatingTheMemoryButDeallocatingTheAccountInformation(getCurrentMallocAllocator(), leak, true);
 }
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, OperatorNewOverloadingWithoutMacroWorks)
 {
-	char* leak = newAllocationWithoutMacro();
-	STRCMP_CONTAINS("unknown", memLeakDetector->report(mem_leak_period_checking));
-	delete leak;
+    char* leak = newAllocationWithoutMacro();
+    STRCMP_CONTAINS("unknown", memLeakDetector->report(mem_leak_period_checking));
+    delete leak;
 }
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, OperatorNewArrayOverloadingWithoutMacroWorks)
 {
-	char* leak = newArrayAllocationWithoutMacro();
-	STRCMP_CONTAINS("unknown", memLeakDetector->report(mem_leak_period_checking));
-	delete[] leak;
+    char* leak = newArrayAllocationWithoutMacro();
+    STRCMP_CONTAINS("unknown", memLeakDetector->report(mem_leak_period_checking));
+    delete[] leak;
 }
 
 #else
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, MemoryOverridesAreDisabled)
 {
-	char* leak = newAllocation();
-	STRCMP_EQUAL("No memory leaks were detected.", memLeakDetector->report(mem_leak_period_checking));
-	delete leak;
+    char* leak = newAllocation();
+    STRCMP_EQUAL("No memory leaks were detected.", memLeakDetector->report(mem_leak_period_checking));
+    delete leak;
 }
 
 #endif
 
 TEST_GROUP(OutOfMemoryTestsForOperatorNew)
 {
-	TestMemoryAllocator* no_memory_allocator;
-	void setup()
-	{
-		no_memory_allocator = new NullUnknownAllocator;
-		setCurrentNewAllocator(no_memory_allocator);
-		setCurrentNewArrayAllocator(no_memory_allocator);
-	}
+    TestMemoryAllocator* no_memory_allocator;
+    void setup()
+    {
+        no_memory_allocator = new NullUnknownAllocator;
+        setCurrentNewAllocator(no_memory_allocator);
+        setCurrentNewArrayAllocator(no_memory_allocator);
+    }
 
-	void teardown()
-	{
-		setCurrentNewAllocatorToDefault();
-		setCurrentNewArrayAllocatorToDefault();
-		delete no_memory_allocator;
-	}
+    void teardown()
+    {
+        setCurrentNewAllocatorToDefault();
+        setCurrentNewArrayAllocatorToDefault();
+        delete no_memory_allocator;
+    }
 };
 
 #if CPPUTEST_USE_MEM_LEAK_DETECTION
@@ -262,12 +262,12 @@ TEST_GROUP(OutOfMemoryTestsForOperatorNew)
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorThrowsAnExceptionWhenUsingStdCppNew)
 {
-	CHECK_THROWS(std::bad_alloc, new char);
+    CHECK_THROWS(std::bad_alloc, new char);
 }
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorThrowsAnExceptionWhenUsingStdCppNew)
 {
-	CHECK_THROWS(std::bad_alloc, new char[10]);
+    CHECK_THROWS(std::bad_alloc, new char[10]);
 }
 
 TEST_GROUP(TestForExceptionsInConstructor)
@@ -276,24 +276,24 @@ TEST_GROUP(TestForExceptionsInConstructor)
 
 TEST(TestForExceptionsInConstructor,ConstructorThrowsAnException)
 {
-	CHECK_THROWS(int, new ClassThatThrowsAnExceptionInTheConstructor);
+    CHECK_THROWS(int, new ClassThatThrowsAnExceptionInTheConstructor);
 }
 
 TEST(TestForExceptionsInConstructor,ConstructorThrowsAnExceptionAllocatedAsArray)
 {
-	CHECK_THROWS(int, new ClassThatThrowsAnExceptionInTheConstructor[10]);
+    CHECK_THROWS(int, new ClassThatThrowsAnExceptionInTheConstructor[10]);
 }
 
 #else
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorReturnsNull)
 {
-	POINTERS_EQUAL(NULL, new char);
+    POINTERS_EQUAL(NULL, new char);
 }
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorReturnsNull)
 {
-	POINTERS_EQUAL(NULL, new char[10]);
+    POINTERS_EQUAL(NULL, new char[10]);
 }
 
 #endif
@@ -332,34 +332,34 @@ static char* some_memory;
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorThrowsAnExceptionWhenUsingStdCppNewWithoutOverride)
 {
-	CHECK_THROWS(std::bad_alloc, some_memory = new char);
+    CHECK_THROWS(std::bad_alloc, some_memory = new char);
 }
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorThrowsAnExceptionWhenUsingStdCppNewWithoutOverride)
 {
-	CHECK_THROWS(std::bad_alloc, some_memory = new char[10]);
+    CHECK_THROWS(std::bad_alloc, some_memory = new char[10]);
 }
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorReturnsNullWithoutOverride)
 {
-	POINTERS_EQUAL(NULL, new (std::nothrow) char);
+    POINTERS_EQUAL(NULL, new (std::nothrow) char);
 }
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorReturnsNullWithoutOverride)
 {
-	POINTERS_EQUAL(NULL, new (std::nothrow) char[10]);
+    POINTERS_EQUAL(NULL, new (std::nothrow) char[10]);
 }
 
 #else
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorReturnsNullWithoutOverride)
 {
-	POINTERS_EQUAL(NULL, new char);
+    POINTERS_EQUAL(NULL, new char);
 }
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorReturnsNullWithoutOverride)
 {
-	POINTERS_EQUAL(NULL, new char[10]);
+    POINTERS_EQUAL(NULL, new char[10]);
 }
 
 #endif
