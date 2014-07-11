@@ -41,275 +41,275 @@ MockActualCall::~MockActualCall()
 
 void MockCheckedActualCall::setName(const SimpleString& name)
 {
-	functionName_ = name;
+    functionName_ = name;
 }
 
 SimpleString MockCheckedActualCall::getName() const
 {
-	return functionName_;
+    return functionName_;
 }
 
 MockCheckedActualCall::MockCheckedActualCall(int callOrder, MockFailureReporter* reporter, const MockExpectedCallsList& allExpectations)
-	: callOrder_(callOrder), reporter_(reporter), state_(CALL_SUCCEED), fulfilledExpectation_(NULL), allExpectations_(allExpectations), outputParameterExpectations_(NULL)
+    : callOrder_(callOrder), reporter_(reporter), state_(CALL_SUCCEED), fulfilledExpectation_(NULL), allExpectations_(allExpectations), outputParameterExpectations_(NULL)
 {
-	unfulfilledExpectations_.addUnfilfilledExpectations(allExpectations);
+    unfulfilledExpectations_.addUnfilfilledExpectations(allExpectations);
 }
 
 MockCheckedActualCall::~MockCheckedActualCall()
 {
-	cleanUpOutputParameterList();
+    cleanUpOutputParameterList();
 }
 
 void MockCheckedActualCall::setMockFailureReporter(MockFailureReporter* reporter)
 {
-	reporter_ = reporter;
+    reporter_ = reporter;
 }
 
 UtestShell* MockCheckedActualCall::getTest() const
 {
-	return reporter_->getTestToFail();
+    return reporter_->getTestToFail();
 }
 
 void MockCheckedActualCall::failTest(const MockFailure& failure)
 {
-	setState(CALL_FAILED);
-	reporter_->failTest(failure);
+    setState(CALL_FAILED);
+    reporter_->failTest(failure);
 }
 
 void MockCheckedActualCall::finalizeOutputParameters()
 {
-	for (MockOutputParametersListNode* p = outputParameterExpectations_; p; p = p->next_)
-	{
-		const void* data = fulfilledExpectation_->getOutputParameter(*p->name_).getConstPointerValue();
-		size_t size = fulfilledExpectation_->getOutputParameter(*p->name_).getSize();
-		PlatformSpecificMemCpy(p->ptr_, data, size);
-	}
+    for (MockOutputParametersListNode* p = outputParameterExpectations_; p; p = p->next_)
+    {
+        const void* data = fulfilledExpectation_->getOutputParameter(*p->name_).getConstPointerValue();
+        size_t size = fulfilledExpectation_->getOutputParameter(*p->name_).getSize();
+        PlatformSpecificMemCpy(p->ptr_, data, size);
+    }
 }
 
 void MockCheckedActualCall::finalizeCallWhenFulfilled()
 {
-	if (unfulfilledExpectations_.hasFulfilledExpectations()) {
-		fulfilledExpectation_ = unfulfilledExpectations_.removeOneFulfilledExpectation();
-		finalizeOutputParameters();
-		callHasSucceeded();
-	}
+    if (unfulfilledExpectations_.hasFulfilledExpectations()) {
+        fulfilledExpectation_ = unfulfilledExpectations_.removeOneFulfilledExpectation();
+        finalizeOutputParameters();
+        callHasSucceeded();
+    }
 }
 
 void MockCheckedActualCall::callHasSucceeded()
 {
-	setState(CALL_SUCCEED);
-	unfulfilledExpectations_.resetExpectations();
+    setState(CALL_SUCCEED);
+    unfulfilledExpectations_.resetExpectations();
 }
 
 MockActualCall& MockCheckedActualCall::withName(const SimpleString& name)
 {
-	setName(name);
-	setState(CALL_IN_PROGESS);
+    setName(name);
+    setState(CALL_IN_PROGESS);
 
-	unfulfilledExpectations_.onlyKeepUnfulfilledExpectationsRelatedTo(name);
-	if (unfulfilledExpectations_.isEmpty()) {
-		MockUnexpectedCallHappenedFailure failure(getTest(), name, allExpectations_);
-		failTest(failure);
-		return *this;
-	}
+    unfulfilledExpectations_.onlyKeepUnfulfilledExpectationsRelatedTo(name);
+    if (unfulfilledExpectations_.isEmpty()) {
+        MockUnexpectedCallHappenedFailure failure(getTest(), name, allExpectations_);
+        failTest(failure);
+        return *this;
+    }
 
-	unfulfilledExpectations_.callWasMade(callOrder_);
+    unfulfilledExpectations_.callWasMade(callOrder_);
 
-	finalizeCallWhenFulfilled();
+    finalizeCallWhenFulfilled();
 
-	return *this;
+    return *this;
 }
 
 MockActualCall& MockCheckedActualCall::withCallOrder(int)
 {
-	return *this;
+    return *this;
 }
 
 void MockCheckedActualCall::checkInputParameter(const MockNamedValue& actualParameter)
 {
-	unfulfilledExpectations_.onlyKeepUnfulfilledExpectationsWithInputParameter(actualParameter);
+    unfulfilledExpectations_.onlyKeepUnfulfilledExpectationsWithInputParameter(actualParameter);
 
-	if (unfulfilledExpectations_.isEmpty()) {
-		MockUnexpectedInputParameterFailure failure(getTest(), getName(), actualParameter, allExpectations_);
-		failTest(failure);
-		return;
-	}
+    if (unfulfilledExpectations_.isEmpty()) {
+        MockUnexpectedInputParameterFailure failure(getTest(), getName(), actualParameter, allExpectations_);
+        failTest(failure);
+        return;
+    }
 
-	unfulfilledExpectations_.parameterWasPassed(actualParameter.getName());
-	finalizeCallWhenFulfilled();
+    unfulfilledExpectations_.parameterWasPassed(actualParameter.getName());
+    finalizeCallWhenFulfilled();
 }
 
 void MockCheckedActualCall::checkOutputParameter(const MockNamedValue& outputParameter)
 {
-	unfulfilledExpectations_.onlyKeepUnfulfilledExpectationsWithOutputParameter(outputParameter);
+    unfulfilledExpectations_.onlyKeepUnfulfilledExpectationsWithOutputParameter(outputParameter);
 
-	if (unfulfilledExpectations_.isEmpty()) {
-		MockUnexpectedOutputParameterFailure failure(getTest(), getName(), outputParameter, allExpectations_);
-		failTest(failure);
-		return;
-	}
+    if (unfulfilledExpectations_.isEmpty()) {
+        MockUnexpectedOutputParameterFailure failure(getTest(), getName(), outputParameter, allExpectations_);
+        failTest(failure);
+        return;
+    }
 
-	unfulfilledExpectations_.outputParameterWasPassed(outputParameter.getName());
-	finalizeCallWhenFulfilled();
+    unfulfilledExpectations_.outputParameterWasPassed(outputParameter.getName());
+    finalizeCallWhenFulfilled();
 }
 
 MockActualCall& MockCheckedActualCall::withUnsignedIntParameter(const SimpleString& name, unsigned int value)
 {
-	MockNamedValue actualParameter(name);
-	actualParameter.setValue(value);
-	checkInputParameter(actualParameter);
-	return *this;
+    MockNamedValue actualParameter(name);
+    actualParameter.setValue(value);
+    checkInputParameter(actualParameter);
+    return *this;
 }
 
 MockActualCall& MockCheckedActualCall::withIntParameter(const SimpleString& name, int value)
 {
-	MockNamedValue actualParameter(name);
-	actualParameter.setValue(value);
-	checkInputParameter(actualParameter);
-	return *this;
+    MockNamedValue actualParameter(name);
+    actualParameter.setValue(value);
+    checkInputParameter(actualParameter);
+    return *this;
 }
 
 MockActualCall& MockCheckedActualCall::withUnsignedLongIntParameter(const SimpleString& name, unsigned long int value)
 {
-	MockNamedValue actualParameter(name);
-	actualParameter.setValue(value);
-	checkInputParameter(actualParameter);
-	return *this;
+    MockNamedValue actualParameter(name);
+    actualParameter.setValue(value);
+    checkInputParameter(actualParameter);
+    return *this;
 }
 
 MockActualCall& MockCheckedActualCall::withLongIntParameter(const SimpleString& name, long int value)
 {
-	MockNamedValue actualParameter(name);
-	actualParameter.setValue(value);
-	checkInputParameter(actualParameter);
-	return *this;
+    MockNamedValue actualParameter(name);
+    actualParameter.setValue(value);
+    checkInputParameter(actualParameter);
+    return *this;
 }
 
 MockActualCall& MockCheckedActualCall::withDoubleParameter(const SimpleString& name, double value)
 {
-	MockNamedValue actualParameter(name);
-	actualParameter.setValue(value);
-	checkInputParameter(actualParameter);
-	return *this;
+    MockNamedValue actualParameter(name);
+    actualParameter.setValue(value);
+    checkInputParameter(actualParameter);
+    return *this;
 }
 
 MockActualCall& MockCheckedActualCall::withStringParameter(const SimpleString& name, const char* value)
 {
-	MockNamedValue actualParameter(name);
-	actualParameter.setValue(value);
-	checkInputParameter(actualParameter);
-	return *this;
+    MockNamedValue actualParameter(name);
+    actualParameter.setValue(value);
+    checkInputParameter(actualParameter);
+    return *this;
 }
 
 MockActualCall& MockCheckedActualCall::withPointerParameter(const SimpleString& name, void* value)
 {
-	MockNamedValue actualParameter(name);
-	actualParameter.setValue(value);
-	checkInputParameter(actualParameter);
-	return *this;
+    MockNamedValue actualParameter(name);
+    actualParameter.setValue(value);
+    checkInputParameter(actualParameter);
+    return *this;
 }
 
 MockActualCall& MockCheckedActualCall::withConstPointerParameter(const SimpleString& name, const void* value)
 {
-	MockNamedValue actualParameter(name);
-	actualParameter.setValue(value);
-	checkInputParameter(actualParameter);
-	return *this;
+    MockNamedValue actualParameter(name);
+    actualParameter.setValue(value);
+    checkInputParameter(actualParameter);
+    return *this;
 }
 
 MockActualCall& MockCheckedActualCall::withParameterOfType(const SimpleString& type, const SimpleString& name, const void* value)
 {
-	MockNamedValue actualParameter(name);
-	actualParameter.setObjectPointer(type, value);
+    MockNamedValue actualParameter(name);
+    actualParameter.setObjectPointer(type, value);
 
-	if (actualParameter.getComparator() == NULL) {
-		MockNoWayToCompareCustomTypeFailure failure(getTest(), type);
-		failTest(failure);
-		return *this;
-	}
-	checkInputParameter(actualParameter);
-	return *this;
+    if (actualParameter.getComparator() == NULL) {
+        MockNoWayToCompareCustomTypeFailure failure(getTest(), type);
+        failTest(failure);
+        return *this;
+    }
+    checkInputParameter(actualParameter);
+    return *this;
 }
 
 MockActualCall& MockCheckedActualCall::withOutputParameter(const SimpleString& name, void* output)
 {
-	addOutputParameter(name, output);
+    addOutputParameter(name, output);
 
-	MockNamedValue outputParameter(name);
-	outputParameter.setValue(output);
-	checkOutputParameter(outputParameter);
+    MockNamedValue outputParameter(name);
+    outputParameter.setValue(output);
+    checkOutputParameter(outputParameter);
 
-	return *this;
+    return *this;
 }
 
 bool MockCheckedActualCall::isFulfilled() const
 {
-	return state_ == CALL_SUCCEED;
+    return state_ == CALL_SUCCEED;
 }
 
 bool MockCheckedActualCall::hasFailed() const
 {
-	return state_ == CALL_FAILED;
+    return state_ == CALL_FAILED;
 }
 
 void MockCheckedActualCall::checkExpectations()
 {
-	if (state_ != CALL_IN_PROGESS) return;
+    if (state_ != CALL_IN_PROGESS) return;
 
-	if (! unfulfilledExpectations_.hasUnfullfilledExpectations())
-		FAIL("Actual call is in progress. Checking expectations. But no unfulfilled expectations. Cannot happen.")
+    if (! unfulfilledExpectations_.hasUnfullfilledExpectations())
+        FAIL("Actual call is in progress. Checking expectations. But no unfulfilled expectations. Cannot happen.")
 
-	fulfilledExpectation_ = unfulfilledExpectations_.removeOneFulfilledExpectationWithIgnoredParameters();
-	if (fulfilledExpectation_) {
-		callHasSucceeded();
-		return;
-	}
+    fulfilledExpectation_ = unfulfilledExpectations_.removeOneFulfilledExpectationWithIgnoredParameters();
+    if (fulfilledExpectation_) {
+        callHasSucceeded();
+        return;
+    }
 
-	if (unfulfilledExpectations_.hasUnfulfilledExpectationsBecauseOfMissingParameters()) {
-		MockExpectedParameterDidntHappenFailure failure(getTest(), getName(), allExpectations_);
-		failTest(failure);
-	}
-	else {
-		MockExpectedObjectDidntHappenFailure failure(getTest(), getName(), allExpectations_);
-		failTest(failure);
-	}
+    if (unfulfilledExpectations_.hasUnfulfilledExpectationsBecauseOfMissingParameters()) {
+        MockExpectedParameterDidntHappenFailure failure(getTest(), getName(), allExpectations_);
+        failTest(failure);
+    }
+    else {
+        MockExpectedObjectDidntHappenFailure failure(getTest(), getName(), allExpectations_);
+        failTest(failure);
+    }
 }
 
 const char* MockCheckedActualCall::stringFromState(ActualCallState state)
 {
-	switch (state) {
-	case CALL_IN_PROGESS: return "In progress";
-	case CALL_FAILED: return "Failed";
-	case CALL_SUCCEED: return "Succeed";
+    switch (state) {
+    case CALL_IN_PROGESS: return "In progress";
+    case CALL_FAILED: return "Failed";
+    case CALL_SUCCEED: return "Succeed";
 #ifndef __clang__
-	default: ;
+    default: ;
 #endif
-	}
+    }
 #ifndef __clang__
-	return "No valid state info";
+    return "No valid state info";
 #endif
 }
 
 void MockCheckedActualCall::checkStateConsistency(ActualCallState oldState, ActualCallState newState)
 {
-	if (oldState == newState)
-		FAIL(StringFromFormat("State change to the same state: %s.", stringFromState(newState)).asCharString());
-	if (oldState == CALL_FAILED)
-		FAIL("State was already failed. Cannot change state again.");
+    if (oldState == newState)
+        FAIL(StringFromFormat("State change to the same state: %s.", stringFromState(newState)).asCharString());
+    if (oldState == CALL_FAILED)
+        FAIL("State was already failed. Cannot change state again.");
 }
 
 void MockCheckedActualCall::setState(ActualCallState state)
 {
-	checkStateConsistency(state_, state);
-	state_ = state;
+    checkStateConsistency(state_, state);
+    state_ = state;
 }
 
 MockNamedValue MockCheckedActualCall::returnValue()
 {
-	checkExpectations();
-	if (fulfilledExpectation_)
-		return fulfilledExpectation_->returnValue();
-	return MockNamedValue("no return value");
+    checkExpectations();
+    if (fulfilledExpectation_)
+        return fulfilledExpectation_->returnValue();
+    return MockNamedValue("no return value");
 }
 
 int MockCheckedActualCall::returnIntValueOrDefault(int default_value)
@@ -366,54 +366,54 @@ const char * MockCheckedActualCall::returnStringValue()
 
 bool MockCheckedActualCall::hasReturnValue()
 {
-	return ! returnValue().getName().isEmpty();
+    return ! returnValue().getName().isEmpty();
 }
 
 MockActualCall& MockCheckedActualCall::onObject(void* objectPtr)
 {
-	unfulfilledExpectations_.onlyKeepUnfulfilledExpectationsOnObject(objectPtr);
+    unfulfilledExpectations_.onlyKeepUnfulfilledExpectationsOnObject(objectPtr);
 
-	if (unfulfilledExpectations_.isEmpty()) {
-		MockUnexpectedObjectFailure failure(getTest(), getName(), objectPtr, allExpectations_);
-		failTest(failure);
-		return *this;
-	}
+    if (unfulfilledExpectations_.isEmpty()) {
+        MockUnexpectedObjectFailure failure(getTest(), getName(), objectPtr, allExpectations_);
+        failTest(failure);
+        return *this;
+    }
 
-	unfulfilledExpectations_.wasPassedToObject();
+    unfulfilledExpectations_.wasPassedToObject();
 
-	finalizeCallWhenFulfilled();
-	return *this;
+    finalizeCallWhenFulfilled();
+    return *this;
 }
 
 void MockCheckedActualCall::addOutputParameter(const SimpleString& name, void* ptr)
 {
-	SimpleString* nameCopy = new SimpleString(name);
-	MockOutputParametersListNode* newNode = new MockOutputParametersListNode(nameCopy, ptr);
+    SimpleString* nameCopy = new SimpleString(name);
+    MockOutputParametersListNode* newNode = new MockOutputParametersListNode(nameCopy, ptr);
 
-	if (outputParameterExpectations_ == NULL)
-		outputParameterExpectations_ = newNode;
-	else {
-		MockOutputParametersListNode* lastNode = outputParameterExpectations_;
-		while (lastNode->next_) lastNode = lastNode->next_;
-		lastNode->next_ = newNode;
-	}
+    if (outputParameterExpectations_ == NULL)
+        outputParameterExpectations_ = newNode;
+    else {
+        MockOutputParametersListNode* lastNode = outputParameterExpectations_;
+        while (lastNode->next_) lastNode = lastNode->next_;
+        lastNode->next_ = newNode;
+    }
 }
 
 void MockCheckedActualCall::cleanUpOutputParameterList()
 {
-	MockOutputParametersListNode* current = outputParameterExpectations_;
-	MockOutputParametersListNode* previous = NULL;
-	MockOutputParametersListNode* toBeDeleted = NULL;
+    MockOutputParametersListNode* current = outputParameterExpectations_;
+    MockOutputParametersListNode* previous = NULL;
+    MockOutputParametersListNode* toBeDeleted = NULL;
 
-	while (current) {
-		toBeDeleted = current;
-		if (previous == NULL)
-			outputParameterExpectations_ = current = current->next_;
-		else
-			current = previous->next_ = current->next_;
-		delete toBeDeleted->name_;
-		delete toBeDeleted;
-	}
+    while (current) {
+        toBeDeleted = current;
+        if (previous == NULL)
+            outputParameterExpectations_ = current = current->next_;
+        else
+            current = previous->next_ = current->next_;
+        delete toBeDeleted->name_;
+        delete toBeDeleted;
+    }
 }
 
 
@@ -427,130 +427,130 @@ MockActualCallTrace::~MockActualCallTrace()
 
 MockActualCall& MockActualCallTrace::withName(const SimpleString& name)
 {
-	traceBuffer_ += "\nFunction name: ";
-	traceBuffer_ += name;
-	return *this;
+    traceBuffer_ += "\nFunction name: ";
+    traceBuffer_ += name;
+    return *this;
 }
 
 MockActualCall& MockActualCallTrace::withCallOrder(int callOrder)
 {
-	traceBuffer_ += "\nwithCallOrder: ";
-	traceBuffer_ += StringFrom(callOrder);
-	return *this;
+    traceBuffer_ += "\nwithCallOrder: ";
+    traceBuffer_ += StringFrom(callOrder);
+    return *this;
 }
 
 void MockActualCallTrace::addParameterName(const SimpleString& name)
 {
-	traceBuffer_ += " ";
-	traceBuffer_ += name;
-	traceBuffer_ += ":";
+    traceBuffer_ += " ";
+    traceBuffer_ += name;
+    traceBuffer_ += ":";
 }
 
 MockActualCall& MockActualCallTrace::withUnsignedIntParameter(const SimpleString& name, unsigned int value)
 {
-	addParameterName(name);
-	traceBuffer_ += StringFrom(value);
-	return *this;
+    addParameterName(name);
+    traceBuffer_ += StringFrom(value);
+    return *this;
 }
 
 MockActualCall& MockActualCallTrace::withIntParameter(const SimpleString& name, int value)
 {
-	addParameterName(name);
-	traceBuffer_ += StringFrom(value);
-	return *this;
+    addParameterName(name);
+    traceBuffer_ += StringFrom(value);
+    return *this;
 }
 
 MockActualCall& MockActualCallTrace::withUnsignedLongIntParameter(const SimpleString& name, unsigned long int value)
 {
-	addParameterName(name);
-	traceBuffer_ += StringFrom(value);
-	return *this;
+    addParameterName(name);
+    traceBuffer_ += StringFrom(value);
+    return *this;
 }
 
 MockActualCall& MockActualCallTrace::withLongIntParameter(const SimpleString& name, long int value)
 {
-	addParameterName(name);
-	traceBuffer_ += StringFrom(value);
-	return *this;
+    addParameterName(name);
+    traceBuffer_ += StringFrom(value);
+    return *this;
 }
 
 MockActualCall& MockActualCallTrace::withDoubleParameter(const SimpleString& name, double value)
 {
-	addParameterName(name);
-	traceBuffer_ += StringFrom(value);
-	return *this;
+    addParameterName(name);
+    traceBuffer_ += StringFrom(value);
+    return *this;
 }
 
 MockActualCall& MockActualCallTrace::withStringParameter(const SimpleString& name, const char* value)
 {
-	addParameterName(name);
-	traceBuffer_ += StringFrom(value);
-	return *this;
+    addParameterName(name);
+    traceBuffer_ += StringFrom(value);
+    return *this;
 }
 
 MockActualCall& MockActualCallTrace::withPointerParameter(const SimpleString& name, void* value)
 {
-	addParameterName(name);
-	traceBuffer_ += StringFrom(value);
-	return *this;
+    addParameterName(name);
+    traceBuffer_ += StringFrom(value);
+    return *this;
 }
 
 MockActualCall& MockActualCallTrace::withConstPointerParameter(const SimpleString& name, const void* value)
 {
-	addParameterName(name);
-	traceBuffer_ += StringFrom(value);
-	return *this;
+    addParameterName(name);
+    traceBuffer_ += StringFrom(value);
+    return *this;
 }
 
 MockActualCall& MockActualCallTrace::withParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value)
 {
-	traceBuffer_ += " ";
-	traceBuffer_ += typeName;
-	addParameterName(name);
-	traceBuffer_ += StringFrom(value);
-	return *this;
+    traceBuffer_ += " ";
+    traceBuffer_ += typeName;
+    addParameterName(name);
+    traceBuffer_ += StringFrom(value);
+    return *this;
 }
 
 MockActualCall& MockActualCallTrace::withOutputParameter(const SimpleString& name, void* output)
 {
-	addParameterName(name);
-	traceBuffer_ += StringFrom(output);
-	return *this;
+    addParameterName(name);
+    traceBuffer_ += StringFrom(output);
+    return *this;
 }
 
 bool MockActualCallTrace::hasReturnValue()
 {
-	return false;
+    return false;
 }
 
 MockNamedValue MockActualCallTrace::returnValue()
 {
-	return MockNamedValue("");
+    return MockNamedValue("");
 }
 
 int MockActualCallTrace::returnIntValue()
 {
-	return 0;
+    return 0;
 }
 
 unsigned int MockActualCallTrace::returnUnsignedIntValue()
 {
-	return 0;
+    return 0;
 }
 
 void * MockActualCallTrace::returnPointerValue()
 {
-	return NULL;
+    return NULL;
 }
 
 void * MockActualCallTrace::returnPointerValueOrDefault(void *)
 {
-	return returnPointerValue();
+    return returnPointerValue();
 }
 
 const char * MockActualCallTrace::returnStringValue()
 {
-	return "";
+    return "";
 }
 
 const char * MockActualCallTrace::returnStringValueOrDefault(const char *)
@@ -560,7 +560,7 @@ const char * MockActualCallTrace::returnStringValueOrDefault(const char *)
 
 int MockActualCallTrace::returnIntValueOrDefault(int)
 {
-	return 0;
+    return 0;
 }
 
 unsigned int MockActualCallTrace::returnUnsignedIntValueOrDefault(unsigned int)
@@ -570,29 +570,29 @@ unsigned int MockActualCallTrace::returnUnsignedIntValueOrDefault(unsigned int)
 
 MockActualCall& MockActualCallTrace::onObject(void* objectPtr)
 {
-	traceBuffer_ += StringFrom(objectPtr);
-	return *this;
+    traceBuffer_ += StringFrom(objectPtr);
+    return *this;
 }
 
 void MockActualCallTrace::clear()
 {
-	traceBuffer_ = "";
+    traceBuffer_ = "";
 }
 
 const char* MockActualCallTrace::getTraceOutput()
 {
-	return traceBuffer_.asCharString();
+    return traceBuffer_.asCharString();
 }
 
 MockActualCallTrace& MockActualCallTrace::instance()
 {
-	static MockActualCallTrace call;
-	return call;
+    static MockActualCallTrace call;
+    return call;
 }
 
 MockIgnoredActualCall& MockIgnoredActualCall::instance()
 {
-	static MockIgnoredActualCall call;
-	return call;
+    static MockIgnoredActualCall call;
+    return call;
 }
 

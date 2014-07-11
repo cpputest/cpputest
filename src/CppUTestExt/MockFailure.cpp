@@ -34,35 +34,35 @@
 class MockFailureReporterTestTerminator : public NormalTestTerminator
 {
 public:
-	MockFailureReporterTestTerminator(bool crashOnFailure) : crashOnFailure_(crashOnFailure)
-	{
-	}
+    MockFailureReporterTestTerminator(bool crashOnFailure) : crashOnFailure_(crashOnFailure)
+    {
+    }
 
-	virtual void exitCurrentTest() const
-	{
-		if (crashOnFailure_)
-			UT_CRASH();
+    virtual void exitCurrentTest() const
+    {
+        if (crashOnFailure_)
+            UT_CRASH();
 
-		NormalTestTerminator::exitCurrentTest();
-	}
+        NormalTestTerminator::exitCurrentTest();
+    }
 
-	virtual ~MockFailureReporterTestTerminator()
-	{
-	}
+    virtual ~MockFailureReporterTestTerminator()
+    {
+    }
 private:
-	bool crashOnFailure_;
+    bool crashOnFailure_;
 
 };
 
 void MockFailureReporter::failTest(const MockFailure& failure)
 {
-	if (!getTestToFail()->hasFailed())
-		getTestToFail()->failWith(failure, MockFailureReporterTestTerminator(crashOnFailure_));
+    if (!getTestToFail()->hasFailed())
+        getTestToFail()->failWith(failure, MockFailureReporterTestTerminator(crashOnFailure_));
 }
 
 UtestShell* MockFailureReporter::getTestToFail()
 {
-	return UtestShell::getCurrent();
+    return UtestShell::getCurrent();
 }
 
 MockFailure::MockFailure(UtestShell* test) : TestFailure(test, "Test failed with MockFailure without an error! Something went seriously wrong.")
@@ -71,146 +71,146 @@ MockFailure::MockFailure(UtestShell* test) : TestFailure(test, "Test failed with
 
 void MockFailure::addExpectationsAndCallHistory(const MockExpectedCallsList& expectations)
 {
-	message_ += "\tEXPECTED calls that did NOT happen:\n";
-	message_ += expectations.unfulfilledCallsToString("\t\t");
-	message_ += "\n\tACTUAL calls that did happen (in call order):\n";
-	message_ += expectations.fulfilledCallsToString("\t\t");
+    message_ += "\tEXPECTED calls that did NOT happen:\n";
+    message_ += expectations.unfulfilledCallsToString("\t\t");
+    message_ += "\n\tACTUAL calls that did happen (in call order):\n";
+    message_ += expectations.fulfilledCallsToString("\t\t");
 }
 
 void MockFailure::addExpectationsAndCallHistoryRelatedTo(const SimpleString& name, const MockExpectedCallsList& expectations)
 {
-	MockExpectedCallsList expectationsForFunction;
-	expectationsForFunction.addExpectationsRelatedTo(name, expectations);
+    MockExpectedCallsList expectationsForFunction;
+    expectationsForFunction.addExpectationsRelatedTo(name, expectations);
 
-	message_ += "\tEXPECTED calls that DID NOT happen related to function: ";
-	message_ += name;
-	message_ += "\n";
+    message_ += "\tEXPECTED calls that DID NOT happen related to function: ";
+    message_ += name;
+    message_ += "\n";
 
-	message_ += expectationsForFunction.unfulfilledCallsToString("\t\t");
+    message_ += expectationsForFunction.unfulfilledCallsToString("\t\t");
 
-	message_ += "\n\tACTUAL calls that DID happen related to function: ";
-	message_ += name;
-	message_ += "\n";
+    message_ += "\n\tACTUAL calls that DID happen related to function: ";
+    message_ += name;
+    message_ += "\n";
 
-	message_ += expectationsForFunction.fulfilledCallsToString("\t\t");
+    message_ += expectationsForFunction.fulfilledCallsToString("\t\t");
 }
 
 
 MockExpectedCallsDidntHappenFailure::MockExpectedCallsDidntHappenFailure(UtestShell* test, const MockExpectedCallsList& expectations) : MockFailure(test)
 {
-	message_ = "Mock Failure: Expected call did not happen.\n";
-	addExpectationsAndCallHistory(expectations);
+    message_ = "Mock Failure: Expected call did not happen.\n";
+    addExpectationsAndCallHistory(expectations);
 }
 
 MockUnexpectedCallHappenedFailure::MockUnexpectedCallHappenedFailure(UtestShell* test, const SimpleString& name, const MockExpectedCallsList& expectations) : MockFailure(test)
 {
-	int amountOfExpectations = expectations.amountOfExpectationsFor(name);
-	if (amountOfExpectations)
-		message_ = StringFromFormat("Mock Failure: Unexpected additional (%dth) call to function: ", amountOfExpectations+1);
-	else
-		message_ = "Mock Failure: Unexpected call to function: ";
-	message_ += name;
-	message_ += "\n";
-	addExpectationsAndCallHistory(expectations);
+    int amountOfExpectations = expectations.amountOfExpectationsFor(name);
+    if (amountOfExpectations)
+        message_ = StringFromFormat("Mock Failure: Unexpected additional (%dth) call to function: ", amountOfExpectations+1);
+    else
+        message_ = "Mock Failure: Unexpected call to function: ";
+    message_ += name;
+    message_ += "\n";
+    addExpectationsAndCallHistory(expectations);
 }
 
 MockCallOrderFailure::MockCallOrderFailure(UtestShell* test, const MockExpectedCallsList& expectations) : MockFailure(test)
 {
-	message_ = "Mock Failure: Out of order calls";
-	message_ += "\n";
-	addExpectationsAndCallHistory(expectations);
+    message_ = "Mock Failure: Out of order calls";
+    message_ += "\n";
+    addExpectationsAndCallHistory(expectations);
 }
 
 MockUnexpectedInputParameterFailure::MockUnexpectedInputParameterFailure(UtestShell* test, const SimpleString& functionName, const MockNamedValue& parameter, const MockExpectedCallsList& expectations)  : MockFailure(test)
 {
-	MockExpectedCallsList expectationsForFunctionWithParameterName;
-	expectationsForFunctionWithParameterName.addExpectationsRelatedTo(functionName, expectations);
-	expectationsForFunctionWithParameterName.onlyKeepExpectationsWithInputParameterName(parameter.getName());
+    MockExpectedCallsList expectationsForFunctionWithParameterName;
+    expectationsForFunctionWithParameterName.addExpectationsRelatedTo(functionName, expectations);
+    expectationsForFunctionWithParameterName.onlyKeepExpectationsWithInputParameterName(parameter.getName());
 
-	if (expectationsForFunctionWithParameterName.isEmpty()) {
-		message_ = "Mock Failure: Unexpected parameter name to function \"";
-		message_ += functionName;
-		message_ += "\": ";
-		message_ += parameter.getName();
-	}
-	else {
-		message_ = "Mock Failure: Unexpected parameter value to parameter \"";
-		message_ += parameter.getName();
-		message_ += "\" to function \"";
-		message_ += functionName;
-		message_ += "\": <";
-		message_ += StringFrom(parameter);
-		message_ += ">";
-	}
+    if (expectationsForFunctionWithParameterName.isEmpty()) {
+        message_ = "Mock Failure: Unexpected parameter name to function \"";
+        message_ += functionName;
+        message_ += "\": ";
+        message_ += parameter.getName();
+    }
+    else {
+        message_ = "Mock Failure: Unexpected parameter value to parameter \"";
+        message_ += parameter.getName();
+        message_ += "\" to function \"";
+        message_ += functionName;
+        message_ += "\": <";
+        message_ += StringFrom(parameter);
+        message_ += ">";
+    }
 
-	message_ += "\n";
-	addExpectationsAndCallHistoryRelatedTo(functionName, expectations);
+    message_ += "\n";
+    addExpectationsAndCallHistoryRelatedTo(functionName, expectations);
 
-	message_ += "\n\tACTUAL unexpected parameter passed to function: ";
-	message_ += functionName;
-	message_ += "\n";
+    message_ += "\n\tACTUAL unexpected parameter passed to function: ";
+    message_ += functionName;
+    message_ += "\n";
 
-	message_ += "\t\t";
-	message_ += parameter.getType();
-	message_ += " ";
-	message_ += parameter.getName();
-	message_ += ": <";
-	message_ += StringFrom(parameter);
-	message_ += ">";
+    message_ += "\t\t";
+    message_ += parameter.getType();
+    message_ += " ";
+    message_ += parameter.getName();
+    message_ += ": <";
+    message_ += StringFrom(parameter);
+    message_ += ">";
 }
 
 MockUnexpectedOutputParameterFailure::MockUnexpectedOutputParameterFailure(UtestShell* test, const SimpleString& functionName, const MockNamedValue& parameter, const MockExpectedCallsList& expectations)  : MockFailure(test)
 {
-	message_ = "Mock Failure: Unexpected output parameter name to function \"";
-	message_ += functionName;
-	message_ += "\": ";
-	message_ += parameter.getName();
+    message_ = "Mock Failure: Unexpected output parameter name to function \"";
+    message_ += functionName;
+    message_ += "\": ";
+    message_ += parameter.getName();
 
-	message_ += "\n";
-	addExpectationsAndCallHistoryRelatedTo(functionName, expectations);
+    message_ += "\n";
+    addExpectationsAndCallHistoryRelatedTo(functionName, expectations);
 
-	message_ += "\n\tACTUAL unexpected output parameter passed to function: ";
-	message_ += functionName;
-	message_ += "\n";
+    message_ += "\n\tACTUAL unexpected output parameter passed to function: ";
+    message_ += functionName;
+    message_ += "\n";
 
-	message_ += "\t\t";
-	message_ += parameter.getType();
-	message_ += " ";
-	message_ += parameter.getName();
+    message_ += "\t\t";
+    message_ += parameter.getType();
+    message_ += " ";
+    message_ += parameter.getName();
 }
 
 MockExpectedParameterDidntHappenFailure::MockExpectedParameterDidntHappenFailure(UtestShell* test, const SimpleString& functionName, const MockExpectedCallsList& expectations) : MockFailure(test)
 {
-	MockExpectedCallsList expectationsForFunction;
-	expectationsForFunction.addExpectationsRelatedTo(functionName, expectations);
+    MockExpectedCallsList expectationsForFunction;
+    expectationsForFunction.addExpectationsRelatedTo(functionName, expectations);
 
-	message_ = "Mock Failure: Expected parameter for function \"";
-	message_ += functionName;
-	message_ += "\" did not happen.\n";
+    message_ = "Mock Failure: Expected parameter for function \"";
+    message_ += functionName;
+    message_ += "\" did not happen.\n";
 
-	addExpectationsAndCallHistoryRelatedTo(functionName, expectations);
+    addExpectationsAndCallHistoryRelatedTo(functionName, expectations);
 
-	message_ += "\n\tMISSING parameters that didn't happen:\n";
-	message_ += "\t\t";
-	message_ += expectationsForFunction.missingParametersToString();
+    message_ += "\n\tMISSING parameters that didn't happen:\n";
+    message_ += "\t\t";
+    message_ += expectationsForFunction.missingParametersToString();
 }
 
 MockNoWayToCompareCustomTypeFailure::MockNoWayToCompareCustomTypeFailure(UtestShell* test, const SimpleString& typeName) : MockFailure(test)
 {
-	message_ = StringFromFormat("MockFailure: No way to compare type <%s>. Please install a ParameterTypeComparator.", typeName.asCharString());
+    message_ = StringFromFormat("MockFailure: No way to compare type <%s>. Please install a ParameterTypeComparator.", typeName.asCharString());
 }
 
 MockUnexpectedObjectFailure::MockUnexpectedObjectFailure(UtestShell* test, const SimpleString& functionName, void* actual, const MockExpectedCallsList& expectations) : MockFailure(test)
 {
-	message_ = StringFromFormat ("MockFailure: Function called on a unexpected object: %s\n"
-								 "\tActual object for call has address: <%p>\n", functionName.asCharString(),actual);
-	addExpectationsAndCallHistoryRelatedTo(functionName, expectations);
+    message_ = StringFromFormat ("MockFailure: Function called on a unexpected object: %s\n"
+                                 "\tActual object for call has address: <%p>\n", functionName.asCharString(),actual);
+    addExpectationsAndCallHistoryRelatedTo(functionName, expectations);
 }
 
 MockExpectedObjectDidntHappenFailure::MockExpectedObjectDidntHappenFailure(UtestShell* test, const SimpleString& functionName, const MockExpectedCallsList& expectations) : MockFailure(test)
 {
-	message_ = StringFromFormat("Mock Failure: Expected call on object for function \"%s\" but it did not happen.\n", functionName.asCharString());
-	addExpectationsAndCallHistoryRelatedTo(functionName, expectations);
+    message_ = StringFromFormat("Mock Failure: Expected call on object for function \"%s\" but it did not happen.\n", functionName.asCharString());
+    addExpectationsAndCallHistoryRelatedTo(functionName, expectations);
 }
 
 

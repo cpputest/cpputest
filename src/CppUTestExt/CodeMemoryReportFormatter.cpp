@@ -38,56 +38,56 @@
 
 struct CodeReportingAllocationNode
 {
-	char variableName_[MAX_VARIABLE_NAME_LENGTH + 1];
-	void* memory_;
-	CodeReportingAllocationNode* next_;
+    char variableName_[MAX_VARIABLE_NAME_LENGTH + 1];
+    void* memory_;
+    CodeReportingAllocationNode* next_;
 };
 
 CodeMemoryReportFormatter::CodeMemoryReportFormatter(TestMemoryAllocator* internalAllocator)
-	: codeReportingList_(NULL), internalAllocator_(internalAllocator)
+    : codeReportingList_(NULL), internalAllocator_(internalAllocator)
 {
 }
 
 CodeMemoryReportFormatter::~CodeMemoryReportFormatter()
 {
-	clearReporting();
+    clearReporting();
 }
 
 void CodeMemoryReportFormatter::clearReporting()
 {
-	while (codeReportingList_) {
-		CodeReportingAllocationNode* oldNode = codeReportingList_;
-		codeReportingList_ = codeReportingList_->next_;
-		internalAllocator_->free_memory((char*) oldNode, __FILE__, __LINE__);
-	}
+    while (codeReportingList_) {
+        CodeReportingAllocationNode* oldNode = codeReportingList_;
+        codeReportingList_ = codeReportingList_->next_;
+        internalAllocator_->free_memory((char*) oldNode, __FILE__, __LINE__);
+    }
 }
 
 void CodeMemoryReportFormatter::addNodeToList(const char* variableName, void* memory, CodeReportingAllocationNode* next)
 {
-	CodeReportingAllocationNode* newNode = (CodeReportingAllocationNode*) (void*) internalAllocator_->alloc_memory(sizeof(CodeReportingAllocationNode), __FILE__, __LINE__);
-	newNode->memory_ = memory;
-	newNode->next_ = next;
-	SimpleString::StrNCpy(newNode->variableName_, variableName, MAX_VARIABLE_NAME_LENGTH);
-	codeReportingList_ = newNode;
+    CodeReportingAllocationNode* newNode = (CodeReportingAllocationNode*) (void*) internalAllocator_->alloc_memory(sizeof(CodeReportingAllocationNode), __FILE__, __LINE__);
+    newNode->memory_ = memory;
+    newNode->next_ = next;
+    SimpleString::StrNCpy(newNode->variableName_, variableName, MAX_VARIABLE_NAME_LENGTH);
+    codeReportingList_ = newNode;
 }
 
 CodeReportingAllocationNode* CodeMemoryReportFormatter::findNode(void* memory)
 {
 
-	CodeReportingAllocationNode* current = codeReportingList_;
-	while (current && current->memory_ != memory) {
-		current = current->next_;
-	}
-	return current;
+    CodeReportingAllocationNode* current = codeReportingList_;
+    while (current && current->memory_ != memory) {
+        current = current->next_;
+    }
+    return current;
 }
 
 static SimpleString extractFileNameFromPath(const char* file)
 {
-	const char* fileNameOnly = file + PlatformSpecificStrLen(file);
-	while (fileNameOnly != file && *fileNameOnly != '/')
-		fileNameOnly--;
-	if (*fileNameOnly == '/') fileNameOnly++;
-	return fileNameOnly;
+    const char* fileNameOnly = file + PlatformSpecificStrLen(file);
+    while (fileNameOnly != file && *fileNameOnly != '/')
+        fileNameOnly--;
+    if (*fileNameOnly == '/') fileNameOnly++;
+    return fileNameOnly;
 }
 
 SimpleString CodeMemoryReportFormatter::createVariableNameFromFileLineInfo(const char *file, int line)
@@ -96,9 +96,9 @@ SimpleString CodeMemoryReportFormatter::createVariableNameFromFileLineInfo(const
     fileNameOnly.replace(".", "_");
 
     for (int i = 1; i < 100000; i++) {
-		SimpleString variableName = StringFromFormat("%s_%d_%d", fileNameOnly.asCharString(), line, i);
-		if (!variableExists(variableName))
-			return variableName;
+        SimpleString variableName = StringFromFormat("%s_%d_%d", fileNameOnly.asCharString(), line, i);
+        if (!variableExists(variableName))
+            return variableName;
     }
     return "";
 }
@@ -110,63 +110,63 @@ bool CodeMemoryReportFormatter::isNewAllocator(TestMemoryAllocator* allocator)
 
 bool CodeMemoryReportFormatter::variableExists(const SimpleString& variableName)
 {
-	CodeReportingAllocationNode* current = codeReportingList_;
-	while (current) {
-		if (variableName == current->variableName_)
-			return true;
-		current = current->next_;
-	}
-	return false;
+    CodeReportingAllocationNode* current = codeReportingList_;
+    while (current) {
+        if (variableName == current->variableName_)
+            return true;
+        current = current->next_;
+    }
+    return false;
 }
 
 SimpleString CodeMemoryReportFormatter::getAllocationString(TestMemoryAllocator* allocator, const SimpleString& variableName, size_t size)
 {
-	if (isNewAllocator(allocator))
-		return StringFromFormat("char* %s = new char[%lu]; /* using %s */", variableName.asCharString(), (unsigned long) size, allocator->alloc_name());
-	else
-		return StringFromFormat("void* %s = malloc(%lu);", variableName.asCharString(), (unsigned long) size);
+    if (isNewAllocator(allocator))
+        return StringFromFormat("char* %s = new char[%lu]; /* using %s */", variableName.asCharString(), (unsigned long) size, allocator->alloc_name());
+    else
+        return StringFromFormat("void* %s = malloc(%lu);", variableName.asCharString(), (unsigned long) size);
 }
 
 SimpleString CodeMemoryReportFormatter::getDeallocationString(TestMemoryAllocator* allocator, const SimpleString& variableName, const char* file, int line)
 {
-	if (isNewAllocator(allocator))
-		return StringFromFormat("delete [] %s; /* using %s at %s:%d */", variableName.asCharString(), allocator->free_name(), file, line);
-	else
-		return StringFromFormat("free(%s); /* at %s:%d */", variableName.asCharString(), file, line);
+    if (isNewAllocator(allocator))
+        return StringFromFormat("delete [] %s; /* using %s at %s:%d */", variableName.asCharString(), allocator->free_name(), file, line);
+    else
+        return StringFromFormat("free(%s); /* at %s:%d */", variableName.asCharString(), file, line);
 }
 
 void CodeMemoryReportFormatter::report_test_start(TestResult* result, UtestShell& test)
 {
-	clearReporting();
-	result->print(StringFromFormat("*/\nTEST(%s_memoryReport, %s)\n{ /* at %s:%d */\n",
-			test.getGroup().asCharString(), test.getName().asCharString(), test.getFile().asCharString(), test.getLineNumber()).asCharString());
+    clearReporting();
+    result->print(StringFromFormat("*/\nTEST(%s_memoryReport, %s)\n{ /* at %s:%d */\n",
+            test.getGroup().asCharString(), test.getName().asCharString(), test.getFile().asCharString(), test.getLineNumber()).asCharString());
 }
 
 void CodeMemoryReportFormatter::report_test_end(TestResult* result, UtestShell&)
 {
-	result->print("}/*");
+    result->print("}/*");
 }
 
 void CodeMemoryReportFormatter::report_testgroup_start(TestResult* result, UtestShell& test)
 {
-	result->print(StringFromFormat("*/TEST_GROUP(%s_memoryReport)\n{\n};\n/*",
-			test.getGroup().asCharString()).asCharString());
+    result->print(StringFromFormat("*/TEST_GROUP(%s_memoryReport)\n{\n};\n/*",
+            test.getGroup().asCharString()).asCharString());
 }
 
 void CodeMemoryReportFormatter::report_alloc_memory(TestResult* result, TestMemoryAllocator* allocator, size_t size, char* memory, const char* file, int line)
 {
-	SimpleString variableName = createVariableNameFromFileLineInfo(file, line);
-	result->print(StringFromFormat("\t%s\n", getAllocationString(allocator, variableName, size).asCharString()).asCharString());
-	addNodeToList(variableName.asCharString(), memory, codeReportingList_);
+    SimpleString variableName = createVariableNameFromFileLineInfo(file, line);
+    result->print(StringFromFormat("\t%s\n", getAllocationString(allocator, variableName, size).asCharString()).asCharString());
+    addNodeToList(variableName.asCharString(), memory, codeReportingList_);
 }
 
 void CodeMemoryReportFormatter::report_free_memory(TestResult* result, TestMemoryAllocator* allocator, char* memory, const char* file, int line)
 {
-	SimpleString variableName;
-	CodeReportingAllocationNode* node = findNode(memory);
+    SimpleString variableName;
+    CodeReportingAllocationNode* node = findNode(memory);
 
-	if (memory == NULL) variableName = "NULL";
-	else variableName = node->variableName_;
+    if (memory == NULL) variableName = "NULL";
+    else variableName = node->variableName_;
 
-	result->print(StringFromFormat("\t%s\n", getDeallocationString(allocator, variableName, file, line).asCharString()).asCharString());
+    result->print(StringFromFormat("\t%s\n", getDeallocationString(allocator, variableName, file, line).asCharString()).asCharString());
 }
