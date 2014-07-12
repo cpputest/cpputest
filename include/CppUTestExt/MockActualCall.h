@@ -75,6 +75,8 @@ public:
     virtual const char * returnStringValueOrDefault(const char * default_value)=0;
     virtual const char * returnStringValue()=0;
 
+    virtual double returnDoubleValue()=0;
+
     virtual void * returnPointerValue()=0;
     virtual void * returnPointerValueOrDefault(void * default_value)=0;
 
