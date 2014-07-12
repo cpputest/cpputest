@@ -15,7 +15,7 @@ if [ "x$BUILDTOOL" = "xautotools" ]; then
     ../configure
     make check
     ./CppUTestTests -ojunit
-    ,/CppUTestExtTests -ojunit
+    ./CppUTestExtTests -ojunit
     cp ../scripts/generate_junit_report_ant.xml .
     ant -f generate_junit_report_ant.xml
 
