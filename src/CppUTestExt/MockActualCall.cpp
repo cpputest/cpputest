@@ -330,6 +330,14 @@ double MockCheckedActualCall::returnDoubleValue()
     return returnValue().getDoubleValue();
 }
 
+double MockCheckedActualCall::returnDoubleValueOrDefault(double default_value)
+{
+    if (!hasReturnValue()) {
+        return default_value;
+    }
+    return returnDoubleValue();
+}
+
 unsigned int MockCheckedActualCall::returnUnsignedIntValue()
 {
     return returnValue().getUnsignedIntValue();
@@ -541,6 +549,11 @@ int MockActualCallTrace::returnIntValue()
 double MockActualCallTrace::returnDoubleValue()
 {
     return 0.0;
+}
+
+double MockActualCallTrace::returnDoubleValueOrDefault(double)
+{
+    return returnDoubleValue();
 }
 
 unsigned int MockActualCallTrace::returnUnsignedIntValue()
