@@ -20,6 +20,7 @@ if [ "x$BUILDTOOL" = "xautotools" ]; then
     ant -f generate_junit_report_ant.xml
 
     make dist
+    make dist-zip
 
     if [ "x$CXX" = "xg++" ]; then
         cd .. && travis_github_deployer -v || exit 1
