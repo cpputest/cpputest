@@ -1204,7 +1204,7 @@ TEST(MockSupportTest, WhenADoubleReturnValueIsDefinedAndAlsoThereIsADefaultShoul
     mock().expectOneCall("foo").andReturnValue(expected_return_value);
 
     DOUBLES_EQUAL(expected_return_value, mock().actualCall("foo").returnDoubleValueOrDefault(default_return_value), 0.05);
-    //LONGS_EQUAL(expected_return_value, mock().returnDoubleValueOrDefault(default_return_value));
+    DOUBLES_EQUAL(expected_return_value, mock().returnDoubleValueOrDefault(default_return_value), 0.05);
 }
 
 TEST(MockSupportTest, WhenNoDoubleReturnValueIsDefinedButThereIsADefaultShouldlUseTheDefaultValue)
@@ -1212,7 +1212,7 @@ TEST(MockSupportTest, WhenNoDoubleReturnValueIsDefinedButThereIsADefaultShouldlU
     double default_return_value = 7.7;
     mock().expectOneCall("foo");
     DOUBLES_EQUAL(default_return_value, mock().actualCall("foo").returnDoubleValueOrDefault(default_return_value), 0.05);
-    //LONGS_EQUAL(default_return_value, mock().returnDoubleValueOrDefault(default_return_value));
+    DOUBLES_EQUAL(default_return_value, mock().returnDoubleValueOrDefault(default_return_value), 0.05);
 }
 
 TEST(MockSupportTest, WhenAUnsignedIntegerReturnValueIsDefinedAndAlsoThereIsADefaultShouldlIgnoreTheDefault)
