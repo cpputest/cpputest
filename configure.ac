@@ -8,7 +8,6 @@ AC_CONFIG_FILES([cpputest.pc])
 AC_CONFIG_MACRO_DIR([m4])
 
 AC_CANONICAL_HOST
-AM_MAINTAINER_MODE([enable])
 
 default_use_std_cpp=yes
 
