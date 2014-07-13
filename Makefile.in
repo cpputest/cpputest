@@ -2907,5 +2907,5 @@ check_all: check_basic check_special_situations check_coverage check_examples ch
 	make distclean; $(srcdir)/configure; make check; $(RUN_CPPUTEST_TESTS); $(RUN_CPPUTEST_EXT_TESTS)
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
-# Otherwise a system limit (for SysV at least) may be exceeded
+# Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:
