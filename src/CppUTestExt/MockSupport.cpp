@@ -423,6 +423,14 @@ const char * MockSupport::returnStringValueOrDefault(const char * defaultValue)
     return defaultValue;
 }
 
+double MockSupport::returnDoubleValueOrDefault(double defaultValue)
+{
+    if (hasReturnValue()) {
+        return doubleReturnValue();
+    }
+    return defaultValue;
+}
+
 int MockSupport::returnIntValueOrDefault(int defaultValue)
 {
     if (hasReturnValue()) {

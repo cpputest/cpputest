@@ -21,6 +21,10 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "What kind of build this is" FORCE)
 endif(NOT CMAKE_BUILD_TYPE)
 
+# Pkg-config file
+include(FindPkgConfig)
+set(CppUTest_PKGCONFIG_FILE cpputest.pc)
+
 set(CppUTestRootDirectory ${PROJECT_SOURCE_DIR})
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CppUTestRootDirectory}/cmake/Modules)
@@ -45,6 +49,20 @@ endif (EXTENSIONS)
 if (TESTS)
     add_subdirectory(tests)
 endif (TESTS)
+
+# Pkg-config file.
+set (prefix "${CMAKE_INSTALL_PREFIX}")
+set (exec_prefix "${CMAKE_INSTALL_PREFIX}")
+set (libdir "${LIB_INSTALL_DIR}")
+set (includedir "${INCLUDE_INSTALL_DIR}")
+set (PACKAGE_VERSION "${CppUTest_version_major}.${CppUTest_version_minor}")
+
+configure_file (cpputest.pc.in
+    ${CMAKE_CURRENT_SOURCE_DIR}/${CppUTest_PKGCONFIG_FILE} @ONLY)
+
+install(FILES  ${CMAKE_CURRENT_SOURCE_DIR}/${CppUTest_PKGCONFIG_FILE}
+    DESTINATION ${LIB_INSTALL_DIR}/pkgconfig
+    )
 
 message("
 -------------------------------------------------------

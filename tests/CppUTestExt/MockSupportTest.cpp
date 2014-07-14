@@ -1197,6 +1197,24 @@ TEST(MockSupportTest, UnsignedIntegerReturnValueSetsDifferentValuesWhileParamete
     LONGS_EQUAL(another_ret_value, mock().returnValue().getUnsignedIntValue());
 }
 
+TEST(MockSupportTest, WhenADoubleReturnValueIsDefinedAndAlsoThereIsADefaultShouldlIgnoreTheDefault)
+{
+    double default_return_value = 10.7;
+    double expected_return_value = default_return_value + 1.3;
+    mock().expectOneCall("foo").andReturnValue(expected_return_value);
+
+    DOUBLES_EQUAL(expected_return_value, mock().actualCall("foo").returnDoubleValueOrDefault(default_return_value), 0.05);
+    DOUBLES_EQUAL(expected_return_value, mock().returnDoubleValueOrDefault(default_return_value), 0.05);
+}
+
+TEST(MockSupportTest, WhenNoDoubleReturnValueIsDefinedButThereIsADefaultShouldlUseTheDefaultValue)
+{
+    double default_return_value = 7.7;
+    mock().expectOneCall("foo");
+    DOUBLES_EQUAL(default_return_value, mock().actualCall("foo").returnDoubleValueOrDefault(default_return_value), 0.05);
+    DOUBLES_EQUAL(default_return_value, mock().returnDoubleValueOrDefault(default_return_value), 0.05);
+}
+
 TEST(MockSupportTest, WhenAUnsignedIntegerReturnValueIsDefinedAndAlsoThereIsADefaultShouldlIgnoreTheDefault)
 {
     unsigned int default_return_value = 10;
@@ -1388,9 +1406,13 @@ TEST(MockSupportTest, StringReturnValue)
 
 TEST(MockSupportTest, DoubleReturnValue)
 {
-    mock().expectOneCall("foo").andReturnValue(1.0);
-    DOUBLES_EQUAL(1.0, mock().actualCall("foo").returnValue().getDoubleValue(), 0.05);
-    DOUBLES_EQUAL(1.0, mock().doubleReturnValue(), 0.05);
+    double expected_return_value = 7.8;
+    mock().expectOneCall("foo").andReturnValue(expected_return_value);
+
+    MockActualCall& actual_call = mock().actualCall("foo");
+    DOUBLES_EQUAL(expected_return_value, actual_call.returnValue().getDoubleValue(), 0.05);
+    DOUBLES_EQUAL(expected_return_value, actual_call.returnDoubleValue(), 0.05);
+    DOUBLES_EQUAL(expected_return_value, mock().doubleReturnValue(), 0.05);
 }
 
 TEST(MockSupportTest, WhenAPointerReturnValueIsDefinedAndAlsoThereIsADefaultShouldlIgnoreTheDefault)
