@@ -46,7 +46,7 @@ TEST_GROUP(TestOrderedTest)
     void setup()
     {
         orderedTestCache = OrderedTestShell::getOrderedTestHead();
-        OrderedTestShell::setOrderedTestHead(0);
+        OrderedTestShell::setOrderedTestHead((OrderedTestShell*)&NullTestShell::instance());
 
         fixture = new TestTestingFixture();
         fixture->registry_->unDoLastAddTest();

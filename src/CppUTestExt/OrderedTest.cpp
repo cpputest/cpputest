@@ -29,10 +29,10 @@
 #include "CppUTest/TestRegistry.h"
 #include "CppUTestExt/OrderedTest.h"
 
-OrderedTestShell* OrderedTestShell::_orderedTestsHead = 0;
+OrderedTestShell* OrderedTestShell::_orderedTestsHead = (OrderedTestShell*)&NullTestShell::instance();
 
 OrderedTestShell::OrderedTestShell() :
-    _nextOrderedTest(0), _level(0)
+    _nextOrderedTest((OrderedTestShell*)&NullTestShell::instance()), _level(0)
 {
 }
 
@@ -62,7 +62,7 @@ OrderedTestShell* OrderedTestShell::getOrderedTestHead()
 
 bool OrderedTestShell::firstOrderedTest()
 {
-    return (getOrderedTestHead() == 0);
+    return ((NullTestShell*) getOrderedTestHead() == &NullTestShell::instance());
 }
 
 OrderedTestShell* OrderedTestShell::addOrderedTest(OrderedTestShell* test)
@@ -114,7 +114,7 @@ void OrderedTestInstaller::addOrderedTestInOrderNotAtHeadPosition(
         OrderedTestShell* test)
 {
     OrderedTestShell* current = OrderedTestShell::getOrderedTestHead();
-    while (current->getNextOrderedTest()) {
+    while (!current->getNextOrderedTest()->isNull()) {
 
         if (current->getNextOrderedTest()->getLevel() > test->getLevel()) {
             test->addOrderedTest(current->getNextOrderedTest());
