@@ -41,16 +41,24 @@ public:
    void setLevel(int level);
 
    static void addOrderedTestToHead(OrderedTestShell* test);
-   static OrderedTestShell* getOrderedTestHead();
    static bool firstOrderedTest();
 
-   static void setOrderedTestHead(OrderedTestShell* test);
 private:
-   static OrderedTestShell* _orderedTestsHead;
    OrderedTestShell* _nextOrderedTest;
-
    int _level;
 
+};
+
+class OrderedTestHead
+{
+public:
+    explicit OrderedTestHead();
+    static OrderedTestHead& instance();
+    OrderedTestShell* getValue();
+    void setValue(OrderedTestShell* test);
+    
+private:
+    OrderedTestShell* value_;
 };
 
 class OrderedTestInstaller
@@ -60,9 +68,8 @@ class OrderedTestInstaller
     virtual ~OrderedTestInstaller();
 
   private:
-     void addOrderedTestInOrder(OrderedTestShell* test);
+    void addOrderedTestInOrder(OrderedTestShell* test);
     void addOrderedTestInOrderNotAtHeadPosition(OrderedTestShell* test);
-
 };
 
 #define TEST_ORDERED(testGroup, testName, testLevel) \
