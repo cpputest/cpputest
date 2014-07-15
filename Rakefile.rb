@@ -78,7 +78,7 @@ end
 
 test_application_project :CppUTestExtTests, File.dirname(__FILE__) do |app|
 
-  app.add_configuration :default,
+  app.add_configuration :Test,
     sources: [
         'tests/CppUTestExt/AllTests.cpp',
         'tests/CppUTestExt/TestMockActualFunctionCall.cpp',
