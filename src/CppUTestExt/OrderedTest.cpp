@@ -75,10 +75,15 @@ OrderedTestShell* OrderedTestShell::addOrderedTest(OrderedTestShell* test)
 void OrderedTestShell::addOrderedTestToHead(OrderedTestShell* test)
 {
     TestRegistry *reg = TestRegistry::getCurrentRegistry();
+    UtestShell* head = getOrderedTestHead();
 
-    if (reg->getFirstTest()->isNull() || getOrderedTestHead()
-            == reg->getFirstTest()) reg->addTest(test);
-    else reg->getTestWithNext(getOrderedTestHead())->addTest(test);
+    if (reg->getFirstTest()->isNull() || head == reg->getFirstTest()) {
+        reg->addTest(test);
+    }
+    else {
+        (void)reg->getTestWithNext(head)->addTest(test);
+        (void)test->addTest(head);
+    }
 
     test->_nextOrderedTest = getOrderedTestHead();
     setOrderedTestHead(test);
