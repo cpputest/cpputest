@@ -62,7 +62,7 @@ OrderedTestShell* OrderedTestShell::getOrderedTestHead()
 
 bool OrderedTestShell::firstOrderedTest()
 {
-    return ((NullTestShell*) getOrderedTestHead() == &NullTestShell::instance());
+    return (getOrderedTestHead()->isNull());
 }
 
 OrderedTestShell* OrderedTestShell::addOrderedTest(OrderedTestShell* test)
@@ -89,6 +89,7 @@ OrderedTestShell* OrderedTestShell::getNextOrderedTest()
     return _nextOrderedTest;
 }
 
+
 OrderedTestInstaller::OrderedTestInstaller(OrderedTestShell& test,
         const char* groupName, const char* testName, const char* fileName,
         int lineNumber, int level)
@@ -105,8 +106,8 @@ OrderedTestInstaller::OrderedTestInstaller(OrderedTestShell& test,
 
 void OrderedTestInstaller::addOrderedTestInOrder(OrderedTestShell* test)
 {
-    if (test->getLevel() < OrderedTestShell::getOrderedTestHead()->getLevel()) OrderedTestShell::addOrderedTestToHead(
-            test);
+    if (test->getLevel() < OrderedTestShell::getOrderedTestHead()->getLevel()) 
+        OrderedTestShell::addOrderedTestToHead(test);
     else addOrderedTestInOrderNotAtHeadPosition(test);
 }
 
