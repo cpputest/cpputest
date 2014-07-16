@@ -356,6 +356,16 @@ void UtestShell::assertCstrEqual(const char* expected, const char* actual, const
         failWith(StringEqualFailure(this, fileName, lineNumber, expected, actual), testTerminator);
 }
 
+void UtestShell::assertCstrNEqual(const char* expected, const char* actual, int length, const char* fileName, int lineNumber, const TestTerminator& testTerminator)
+{
+    getTestResult()->countCheck();
+    if (actual == 0 && expected == 0) return;
+    if (actual == 0 || expected == 0)
+        failWith(StringEqualFailure(this, fileName, lineNumber, expected, actual), testTerminator);
+    if (PlatformSpecificStrNCmp(expected, actual, length) != 0)
+        failWith(StringEqualFailure(this, fileName, lineNumber, expected, actual), testTerminator);
+}
+
 void UtestShell::assertCstrNoCaseEqual(const char* expected, const char* actual, const char* fileName, int lineNumber)
 {
     getTestResult()->countCheck();
