@@ -91,4 +91,6 @@ private:
 
 };
 
+#define UT_PRETESTRUNACTION_SET(fp) { TestRegistry::getCurrentRegistry()->preTestRunHook = fp; }
+
 #endif

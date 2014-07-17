@@ -157,7 +157,7 @@ TEST_GROUP(TestOrderedTestMacros)
 {
     void setup(void) 
     {
-        TestRegistry::getCurrentRegistry()->preTestRunHook = &resetTestNumber;
+        UT_PRETESTRUNACTION_SET(&resetTestNumber);
     }
 };
 
