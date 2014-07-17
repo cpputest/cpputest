@@ -284,10 +284,12 @@ TEST(TestRegistry, runTestInSeperateProcess)
 }
 
 static int testCount = 0;
+static int runCount = 1;
 
-static void resetCount(void)
+static void preTestrunAction(void)
 {
     testCount = 0;
+    runCount++;
 }
 
 static void testFunc(void) {
@@ -322,7 +324,7 @@ TEST_GROUP(TestRegistry2)
 
 TEST(TestRegistry2, preTestRunActionIsWorking)
 {
-    myRegistry->preTestRunHook = &resetCount;
+    myRegistry->preTestRunHook = &preTestrunAction;
     myRegistry->runAllTests(*result);
     myRegistry->runAllTests(*result);
     LONGS_EQUAL(1, testCount);
@@ -331,7 +333,9 @@ TEST(TestRegistry2, preTestRunActionIsWorking)
 TEST(TestRegistry2, preTestActionInitiallyDoesNothing)
 {
     CHECK(NULL == myRegistry->preTestRunHook);
-    myRegistry->runAllTests(*result);
-    myRegistry->runAllTests(*result);
-    LONGS_EQUAL(2, testCount);
+    if(1 == runCount) { // needed for -r2
+        myRegistry->runAllTests(*result);
+        myRegistry->runAllTests(*result);
+        LONGS_EQUAL(2, testCount);
+    }
 }
