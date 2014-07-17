@@ -356,7 +356,7 @@ void UtestShell::assertCstrEqual(const char* expected, const char* actual, const
         failWith(StringEqualFailure(this, fileName, lineNumber, expected, actual), testTerminator);
 }
 
-void UtestShell::assertCstrNEqual(const char* expected, const char* actual, int length, const char* fileName, int lineNumber, const TestTerminator& testTerminator)
+void UtestShell::assertCstrNEqual(const char* expected, const char* actual, size_t length, const char* fileName, int lineNumber, const TestTerminator& testTerminator)
 {
     getTestResult()->countCheck();
     if (actual == 0 && expected == 0) return;
