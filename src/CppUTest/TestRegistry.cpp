@@ -214,4 +214,3 @@ UtestShell* TestRegistry::findTestWithGroup(const SimpleString& group)
     }
     return NULL;
 }
-
