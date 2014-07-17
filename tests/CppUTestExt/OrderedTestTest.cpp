@@ -146,11 +146,20 @@ TEST(TestOrderedTest, MultipleOrderedTests2)
 
 }
 
+static int testNumber = 0;
+
+static void resetTestNumber(void)
+{
+    testNumber = 0;
+}
+
 TEST_GROUP(TestOrderedTestMacros)
 {
+    void setup(void) 
+    {
+        TestRegistry::getCurrentRegistry()->preTestRunHook = &resetTestNumber;
+    }
 };
-
-static int testNumber = 0;
 
 TEST(TestOrderedTestMacros, NormalTest)
 {

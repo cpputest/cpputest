@@ -74,6 +74,9 @@ public:
     virtual void setCurrentRegistry(TestRegistry* registry);
 
     virtual void setRunTestsInSeperateProcess();
+
+    void (*preTestRunHook)();
+
 private:
 
     bool testShouldRun(UtestShell* test, TestResult& result);

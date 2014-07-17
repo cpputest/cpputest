@@ -29,7 +29,7 @@
 #include "CppUTest/TestRegistry.h"
 
 TestRegistry::TestRegistry() :
-    tests_(&NullTestShell::instance()), firstPlugin_(NullTestPlugin::instance()), runInSeperateProcess_(false)
+    preTestRunHook(0), tests_(&NullTestShell::instance()), firstPlugin_(NullTestPlugin::instance()), runInSeperateProcess_(false)
 {
 }
 
@@ -47,6 +47,7 @@ void TestRegistry::runAllTests(TestResult& result)
     bool groupStart = true;
 
     result.testsStarted();
+    if (preTestRunHook) preTestRunHook();
     for (UtestShell *test = tests_; !test->isNull(); test = test->getNext()) {
         if (runInSeperateProcess_) test->setRunInSeperateProcess();
 

@@ -283,3 +283,55 @@ TEST(TestRegistry, runTestInSeperateProcess)
     CHECK(test1->isRunInSeperateProcess());
 }
 
+static int testCount = 0;
+
+static void resetCount(void)
+{
+    testCount = 0;
+}
+
+static void testFunc(void) {
+    testCount++;
+}
+
+TEST_GROUP(TestRegistry2)
+{
+    StringBufferTestOutput* output;
+    TestResult* result;
+    TestRegistry* myRegistry;
+    ExecFunctionTestShell test;
+
+    void setup()
+    {
+        output= new StringBufferTestOutput();
+        result = new TestResult(*output);
+        myRegistry = new TestRegistry();
+        myRegistry->setCurrentRegistry(myRegistry);
+        test.testFunction_ = &testFunc;
+        TestInstaller(test, "testgroup", "test", __FILE__, __LINE__);
+    }
+
+    void teardown()
+    {
+        myRegistry->setCurrentRegistry(0);
+        delete myRegistry;
+        delete output;
+        delete result;
+    }
+};
+
+TEST(TestRegistry2, preTestRunActionIsWorking)
+{
+    myRegistry->preTestRunHook = &resetCount;
+    myRegistry->runAllTests(*result);
+    myRegistry->runAllTests(*result);
+    LONGS_EQUAL(1, testCount);
+}
+
+TEST(TestRegistry2, preTestActionInitiallyDoesNothing)
+{
+    CHECK(NULL == myRegistry->preTestRunHook);
+    myRegistry->runAllTests(*result);
+    myRegistry->runAllTests(*result);
+    LONGS_EQUAL(2, testCount);
+}
