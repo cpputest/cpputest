@@ -858,6 +858,7 @@ CppUTestExtTests_SOURCES = \
 #	$(GMOCK_HOME)/test/gmock-spec-builders_test.cc \
 #	tests/CppUTestExt/AllTests.cpp 
 RUN_CPPUTEST_TESTS = ./$(CPPUTEST_TESTS) -r
+RUN_CPPUTEST_EXT_TESTS = ./$(CPPUTEST_EXT_TESTS) -r
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am
 
@@ -2774,7 +2775,6 @@ uninstall-am: uninstall-include_cpputestHEADERS \
 	uninstall-include_cpputestextHEADERS uninstall-libLIBRARIES \
 	uninstall-pkgconfigDATA
 
-#RUN_CPPUTEST_EXT_TESTS = ./$(CPPUTEST_EXT_TESTS) -r
 
 valgrind: check
 	@if test "x$(CPPUTEST_HAS_VALGRIND)" = xno; then echo "Running the valgrind target without having valgrind. Perhaps install it first?"; exit 1; fi
