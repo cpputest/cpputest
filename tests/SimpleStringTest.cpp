@@ -174,12 +174,8 @@ TEST(SimpleString, NFirstCharsComparison)
 {
     SimpleString hello_peter("Hello Peter!");
     SimpleString hello_world("Hello World!");
-    STRNCMP_EQUAL(hello_peter.asCharString(), hello_world.asCharString(), 6);
 
-    STRNCMP_EQUAL("Hello World!", "Hello Peter!", 0);
-    STRNCMP_EQUAL("Hello World!", "Hello Peter!", 1);
-    STRNCMP_EQUAL("Hello World!", "Hello Peter!", 6);
-    STRNCMP_EQUAL("Hello World!", "Hello", 5);
+    STRNCMP_EQUAL(hello_peter.asCharString(), hello_world.asCharString(), 6);
 }
 
 TEST(SimpleString, Concatenation)
