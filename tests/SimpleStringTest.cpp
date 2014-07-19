@@ -170,14 +170,6 @@ TEST(SimpleString, Addition)
     CHECK_EQUAL(s3, s4);
 }
 
-TEST(SimpleString, NFirstCharsComparison)
-{
-    SimpleString hello_peter("Hello Peter!");
-    SimpleString hello_world("Hello World!");
-
-    STRNCMP_EQUAL(hello_peter.asCharString(), hello_world.asCharString(), 6);
-}
-
 TEST(SimpleString, Concatenation)
 {
     SimpleString s1("hello!");
