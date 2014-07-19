@@ -29,10 +29,8 @@
 #include "CppUTest/TestRegistry.h"
 #include "CppUTestExt/OrderedTest.h"
 
-OrderedTestShell* OrderedTestShell::_orderedTestsHead = 0;
-
 OrderedTestShell::OrderedTestShell() :
-    _nextOrderedTest(0), _level(0)
+    _nextOrderedTest((OrderedTestShell*)&NullTestShell::instance()), _level(0)
 {
 }
 
@@ -50,19 +48,9 @@ void OrderedTestShell::setLevel(int level)
     _level = level;
 }
 
-void OrderedTestShell::setOrderedTestHead(OrderedTestShell* test)
-{
-    _orderedTestsHead = test;
-}
-
-OrderedTestShell* OrderedTestShell::getOrderedTestHead()
-{
-    return _orderedTestsHead;
-}
-
 bool OrderedTestShell::firstOrderedTest()
 {
-    return (getOrderedTestHead() == 0);
+    return (OrderedTestHead::instance().getValue()->isNull());
 }
 
 OrderedTestShell* OrderedTestShell::addOrderedTest(OrderedTestShell* test)
@@ -75,18 +63,44 @@ OrderedTestShell* OrderedTestShell::addOrderedTest(OrderedTestShell* test)
 void OrderedTestShell::addOrderedTestToHead(OrderedTestShell* test)
 {
     TestRegistry *reg = TestRegistry::getCurrentRegistry();
+    UtestShell* head = OrderedTestHead::instance().getValue();
 
-    if (reg->getFirstTest()->isNull() || getOrderedTestHead()
-            == reg->getFirstTest()) reg->addTest(test);
-    else reg->getTestWithNext(getOrderedTestHead())->addTest(test);
+    if (reg->getFirstTest()->isNull() || head == reg->getFirstTest()) {
+        reg->addTest(test);
+    }
+    else {
+        (void)reg->getTestWithNext(head)->addTest(test);
+        (void)test->addTest(head);
+    }
 
-    test->_nextOrderedTest = getOrderedTestHead();
-    setOrderedTestHead(test);
+    test->_nextOrderedTest = OrderedTestHead::instance().getValue();
+    OrderedTestHead::instance().setValue(test);
 }
 
 OrderedTestShell* OrderedTestShell::getNextOrderedTest()
 {
     return _nextOrderedTest;
+}
+
+
+OrderedTestHead::OrderedTestHead() : value_((OrderedTestShell*)&NullTestShell::instance())
+{
+}
+
+OrderedTestShell* OrderedTestHead::getValue() 
+{
+    return value_;
+}
+
+void OrderedTestHead::setValue(OrderedTestShell* test)
+{
+    value_ = test;
+}
+
+OrderedTestHead& OrderedTestHead::OrderedTestHead::instance()
+{
+    static OrderedTestHead instance;
+    return instance;
 }
 
 OrderedTestInstaller::OrderedTestInstaller(OrderedTestShell& test,
@@ -105,16 +119,16 @@ OrderedTestInstaller::OrderedTestInstaller(OrderedTestShell& test,
 
 void OrderedTestInstaller::addOrderedTestInOrder(OrderedTestShell* test)
 {
-    if (test->getLevel() < OrderedTestShell::getOrderedTestHead()->getLevel()) OrderedTestShell::addOrderedTestToHead(
-            test);
+    if (test->getLevel() < OrderedTestHead::instance().getValue()->getLevel()) 
+        OrderedTestShell::addOrderedTestToHead(test);
     else addOrderedTestInOrderNotAtHeadPosition(test);
 }
 
 void OrderedTestInstaller::addOrderedTestInOrderNotAtHeadPosition(
         OrderedTestShell* test)
 {
-    OrderedTestShell* current = OrderedTestShell::getOrderedTestHead();
-    while (current->getNextOrderedTest()) {
+    OrderedTestShell* current = OrderedTestHead::instance().getValue();
+    while (!current->getNextOrderedTest()->isNull()) {
 
         if (current->getNextOrderedTest()->getLevel() > test->getLevel()) {
             test->addOrderedTest(current->getNextOrderedTest());

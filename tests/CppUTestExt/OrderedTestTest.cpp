@@ -45,8 +45,8 @@ TEST_GROUP(TestOrderedTest)
     OrderedTestShell* orderedTestCache;
     void setup()
     {
-        orderedTestCache = OrderedTestShell::getOrderedTestHead();
-        OrderedTestShell::setOrderedTestHead(0);
+        orderedTestCache = OrderedTestHead::instance().getValue();
+        OrderedTestHead::instance().setValue((OrderedTestShell*)&NullTestShell::instance());
 
         fixture = new TestTestingFixture();
         fixture->registry_->unDoLastAddTest();
@@ -55,7 +55,7 @@ TEST_GROUP(TestOrderedTest)
     void teardown()
     {
         delete fixture;
-        OrderedTestShell::setOrderedTestHead(orderedTestCache);
+        OrderedTestHead::instance().setValue(orderedTestCache);
     }
 
     void InstallOrderedTest(OrderedTestShell& test, int level)
@@ -158,16 +158,16 @@ TEST(TestOrderedTestMacros, NormalTest)
     testNumber++;
 }
 
-TEST_ORDERED(TestOrderedTestMacros, Test2, 2)
-{
-    CHECK(testNumber == 2);
-    testNumber++;
-}
-
 TEST_ORDERED(TestOrderedTestMacros, Test1, 1)
 {
-    CHECK(testNumber == 1);
-    testNumber++;
+	CHECK(testNumber == 1);
+	testNumber++;
+}
+
+TEST_ORDERED(TestOrderedTestMacros, Test2, 2)
+{
+	CHECK(testNumber == 2);
+	testNumber++;
 }
 
 TEST_ORDERED(TestOrderedTestMacros, Test4, 4)

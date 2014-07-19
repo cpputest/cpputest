@@ -73,7 +73,8 @@ void TestRegistry::runAllTests(TestResult& result)
 
 bool TestRegistry::endOfGroup(UtestShell* test)
 {
-    return (test->isNull() || test->getGroup() != test->getNext()->getGroup());
+    return (test->isNull() 
+        || (!test->isNull() && test->getGroup() != test->getNext()->getGroup()));
 }
 
 int TestRegistry::countTests()
@@ -213,4 +214,3 @@ UtestShell* TestRegistry::findTestWithGroup(const SimpleString& group)
     }
     return NULL;
 }
-
