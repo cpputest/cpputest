@@ -442,6 +442,70 @@ TEST(UnitTestMacros, allMacrosFromFunctionThatReturnsAValue)
     functionThatReturnsAValue();
 }
 
+TEST(UnitTestMacros, NFirstCharsComparison)
+{
+    STRNCMP_EQUAL("Hello World!", "Hello Peter!", 0);
+    STRNCMP_EQUAL("Hello World!", "Hello Peter!", 1);
+    STRNCMP_EQUAL("Hello World!", "Hello Peter!", 6);
+    STRNCMP_EQUAL("Hello World!", "Hello", 5);
+}
+
+static void _compareNFirstCharsWithUpperAndLowercase()
+{
+    STRNCMP_EQUAL("hello world!", "HELLO WORLD!", 12);
+    lineOfCodeExecutedAfterCheck = true;
+}
+
+TEST(UnitTestMacros, CompareNFirstCharsWithUpperAndLowercase)
+{
+    runTestWithMethod(_compareNFirstCharsWithUpperAndLowercase);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <hello world!>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <HELLO WORLD!>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("difference starts at position 0");
+}
+
+static void _compareNFirstCharsWithDifferenceInTheMiddle()
+{
+    STRNCMP_EQUAL("Hello World!", "Hello Peter!", 12);
+    lineOfCodeExecutedAfterCheck = true;
+}
+
+TEST(UnitTestMacros, CompareNFirstCharsWithDifferenceInTheMiddle)
+{
+    runTestWithMethod(_compareNFirstCharsWithDifferenceInTheMiddle);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <Hello World!>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <Hello Peter!>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("difference starts at position 6");
+}
+
+static void _compareNFirstCharsWithEmptyString()
+{
+    STRNCMP_EQUAL("", "Not empty string", 5);
+    lineOfCodeExecutedAfterCheck = true;
+}
+
+TEST(UnitTestMacros, CompareNFirstCharsWithEmptyString)
+{
+    runTestWithMethod(_compareNFirstCharsWithEmptyString);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <Not empty string>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("difference starts at position 0");
+}
+
+static void _compareNFirstCharsWithLastCharDifferent()
+{
+    STRNCMP_EQUAL("Not empty string?", "Not empty string!", 17);
+    lineOfCodeExecutedAfterCheck = true;
+}
+
+TEST(UnitTestMacros, CompareNFirstCharsWithLastCharDifferent)
+{
+    runTestWithMethod(_compareNFirstCharsWithLastCharDifferent);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <Not empty string?>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <Not empty string!>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("difference starts at position 16");
+}
+
 #if CPPUTEST_USE_STD_CPP_LIB
 static void _failingTestMethod_NoThrowWithCHECK_THROWS()
 {
