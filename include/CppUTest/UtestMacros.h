@@ -136,6 +136,12 @@
 #define STRCMP_EQUAL_LOCATION(expected,actual, file, line)\
   { UtestShell::getCurrent()->assertCstrEqual(expected, actual, file, line); }
 
+#define STRNCMP_EQUAL(expected, actual, length)\
+  STRNCMP_EQUAL_LOCATION(expected, actual, length, __FILE__, __LINE__)
+
+#define STRNCMP_EQUAL_LOCATION(expected, actual, length, file, line)\
+  { UtestShell::getCurrent()->assertCstrNEqual(expected, actual, length, file, line); }
+
 #define STRCMP_NOCASE_EQUAL(expected,actual)\
   STRCMP_NOCASE_EQUAL_LOCATION(expected, actual, __FILE__, __LINE__)
 
