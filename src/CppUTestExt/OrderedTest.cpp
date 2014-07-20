@@ -76,8 +76,7 @@ void OrderedTestShell::addOrderedTestToHead(OrderedTestShell* test)
 {
     TestRegistry *reg = TestRegistry::getCurrentRegistry();
 
-    if (reg->getFirstTest()->isNull() || getOrderedTestHead()
-            == reg->getFirstTest()) reg->addTest(test);
+    if (NULL == reg->getFirstTest() || getOrderedTestHead() == reg->getFirstTest()) reg->addTest(test);
     else reg->getTestWithNext(getOrderedTestHead())->addTest(test);
 
     test->_nextOrderedTest = getOrderedTestHead();

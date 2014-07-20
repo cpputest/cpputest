@@ -29,7 +29,7 @@
 #include "CppUTest/TestRegistry.h"
 
 TestRegistry::TestRegistry() :
-    tests_(&NullTestShell::instance()), firstPlugin_(NullTestPlugin::instance()), runInSeperateProcess_(false)
+    tests_(NULL), firstPlugin_(NullTestPlugin::instance()), runInSeperateProcess_(false)
 {
 }
 
@@ -47,7 +47,7 @@ void TestRegistry::runAllTests(TestResult& result)
     bool groupStart = true;
 
     result.testsStarted();
-    for (UtestShell *test = tests_; !test->isNull(); test = test->getNext()) {
+    for (UtestShell *test = tests_; test != NULL; test = test->getNext()) {
         if (runInSeperateProcess_) test->setRunInSeperateProcess();
 
         if (groupStart) {
@@ -73,12 +73,12 @@ void TestRegistry::runAllTests(TestResult& result)
 
 bool TestRegistry::endOfGroup(UtestShell* test)
 {
-    return (test->isNull() || test->getGroup() != test->getNext()->getGroup());
+    return (!test || (!test->getNext()) || (test && test->getGroup() != test->getNext()->getGroup()));
 }
 
 int TestRegistry::countTests()
 {
-    return tests_->countTests();
+    return tests_ ? tests_->countTests() : 0;
 }
 
 TestRegistry* TestRegistry::currentRegistry_ = 0;
@@ -96,7 +96,7 @@ void TestRegistry::setCurrentRegistry(TestRegistry* registry)
 
 void TestRegistry::unDoLastAddTest()
 {
-    tests_ = tests_->getNext();
+    tests_ = tests_ ? tests_->getNext() : NULL;
 
 }
 
@@ -179,7 +179,7 @@ UtestShell* TestRegistry::getFirstTest()
 UtestShell* TestRegistry::getLastTest()
 {
     UtestShell* current = tests_;
-    while (!current->getNext()->isNull())
+    while (current->getNext())
         current = current->getNext();
     return current;
 }
@@ -187,7 +187,7 @@ UtestShell* TestRegistry::getLastTest()
 UtestShell* TestRegistry::getTestWithNext(UtestShell* test)
 {
     UtestShell* current = tests_;
-    while (!current->getNext()->isNull() && current->getNext() != test)
+    while (current && current->getNext() != test)
         current = current->getNext();
     return current;
 }
@@ -195,7 +195,7 @@ UtestShell* TestRegistry::getTestWithNext(UtestShell* test)
 UtestShell* TestRegistry::findTestWithName(const SimpleString& name)
 {
     UtestShell* current = tests_;
-    while (!current->isNull()) {
+    while (current) {
         if (current->getName() == name)
             return current;
         current = current->getNext();
@@ -206,7 +206,7 @@ UtestShell* TestRegistry::findTestWithName(const SimpleString& name)
 UtestShell* TestRegistry::findTestWithGroup(const SimpleString& group)
 {
     UtestShell* current = tests_;
-    while (!current->isNull()) {
+    while (current) {
         if (current->getGroup() == group)
             return current;
         current = current->getNext();
