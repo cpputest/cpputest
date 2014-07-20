@@ -858,7 +858,7 @@ CppUTestExtTests_SOURCES = \
 #	$(GMOCK_HOME)/test/gmock-spec-builders_test.cc \
 #	tests/CppUTestExt/AllTests.cpp 
 RUN_CPPUTEST_TESTS = ./$(CPPUTEST_TESTS) -r
-RUN_CPPUTEST_EXT_TESTS = ./$(CPPUTEST_EXT_TESTS) -r
+RUN_CPPUTESTEXT_TESTS = ./$(CPPUTESTEXT_TESTS) -r
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am
 
@@ -2904,7 +2904,7 @@ check_examples:
 
 check_all: check_basic check_special_situations check_coverage check_examples check_gtest
 	@echo "Last... one normal build and test"
-	make distclean; $(srcdir)/configure; make check; $(RUN_CPPUTEST_TESTS); $(RUN_CPPUTEST_EXT_TESTS)
+	make distclean; $(srcdir)/configure; make check; $(RUN_CPPUTEST_TESTS); $(RUN_CPPUTESTEXT_TESTS)
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
