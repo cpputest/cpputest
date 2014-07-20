@@ -75,9 +75,15 @@ OrderedTestShell* OrderedTestShell::addOrderedTest(OrderedTestShell* test)
 void OrderedTestShell::addOrderedTestToHead(OrderedTestShell* test)
 {
     TestRegistry *reg = TestRegistry::getCurrentRegistry();
+    UtestShell* head = getOrderedTestHead();
 
-    if (NULL == reg->getFirstTest() || getOrderedTestHead() == reg->getFirstTest()) reg->addTest(test);
-    else reg->getTestWithNext(getOrderedTestHead())->addTest(test);
+    if (NULL == reg->getFirstTest() || head == reg->getFirstTest()) {
+        reg->addTest(test);
+    }
+    else {
+        (void)reg->getTestWithNext(head)->addTest(test);
+        (void)test->addTest(head);
+    }
 
     test->_nextOrderedTest = getOrderedTestHead();
     setOrderedTestHead(test);
@@ -104,8 +110,8 @@ OrderedTestInstaller::OrderedTestInstaller(OrderedTestShell& test,
 
 void OrderedTestInstaller::addOrderedTestInOrder(OrderedTestShell* test)
 {
-    if (test->getLevel() < OrderedTestShell::getOrderedTestHead()->getLevel()) OrderedTestShell::addOrderedTestToHead(
-            test);
+    if (test->getLevel() < OrderedTestShell::getOrderedTestHead()->getLevel())
+        OrderedTestShell::addOrderedTestToHead(test);
     else addOrderedTestInOrderNotAtHeadPosition(test);
 }
 
