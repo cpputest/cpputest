@@ -73,7 +73,7 @@ void TestRegistry::runAllTests(TestResult& result)
 
 bool TestRegistry::endOfGroup(UtestShell* test)
 {
-    return (!test || (!test->getNext()) || (test && test->getGroup() != test->getNext()->getGroup()));
+    return (!test || !test->getNext() || test->getGroup() != test->getNext()->getGroup());
 }
 
 int TestRegistry::countTests()

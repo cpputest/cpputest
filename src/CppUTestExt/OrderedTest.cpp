@@ -81,8 +81,8 @@ void OrderedTestShell::addOrderedTestToHead(OrderedTestShell* test)
         reg->addTest(test);
     }
     else {
-        (void)reg->getTestWithNext(head)->addTest(test);
-        (void)test->addTest(head);
+        reg->getTestWithNext(head)->addTest(test);
+        test->addTest(head);
     }
 
     test->_nextOrderedTest = getOrderedTestHead();
