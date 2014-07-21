@@ -127,6 +127,6 @@ void MemoryReporterPlugin::postTestAction(UtestShell& test, TestResult& result)
     removeGlobalMemoryReportAllocators();
     formatter_->report_test_end(&result, test);
 
-    if (test.getNext()->getGroup() != currentTestGroup_)
+    if (test.getNext() == NULL || test.getNext()->getGroup() != currentTestGroup_)
         formatter_->report_testgroup_end(&result, test);
 }

@@ -129,12 +129,12 @@ extern "C" {
 /******************************** */
 
 UtestShell::UtestShell() :
-    group_("UndefinedTestGroup"), name_("UndefinedTest"), file_("UndefinedFile"), lineNumber_(0), next_(&NullTestShell::instance()), isRunAsSeperateProcess_(false), hasFailed_(false)
+    group_("UndefinedTestGroup"), name_("UndefinedTest"), file_("UndefinedFile"), lineNumber_(0), next_(NULL), isRunAsSeperateProcess_(false), hasFailed_(false)
 {
 }
 
 UtestShell::UtestShell(const char* groupName, const char* testName, const char* fileName, int lineNumber) :
-        group_(groupName), name_(testName), file_(fileName), lineNumber_(lineNumber), next_(&NullTestShell::instance()), isRunAsSeperateProcess_(false), hasFailed_(false)
+        group_(groupName), name_(testName), file_(fileName), lineNumber_(lineNumber), next_(NULL), isRunAsSeperateProcess_(false), hasFailed_(false)
 {
 }
 
@@ -223,12 +223,7 @@ UtestShell* UtestShell::addTest(UtestShell *test)
 
 int UtestShell::countTests()
 {
-    return next_->countTests() + 1;
-}
-
-bool UtestShell::isNull() const
-{
-    return false;
+    return next_ ? next_->countTests() + 1 : 1;
 }
 
 SimpleString UtestShell::getMacroName() const
@@ -534,49 +529,6 @@ void Utest::testBody()
 }
 
 void Utest::teardown()
-{
-}
-
-
-////////////// NullTestShell ////////////
-
-
-NullTestShell::NullTestShell() :
-    UtestShell("NullGroup", "NullName", "NullFile", -1, 0)
-{
-}
-
-NullTestShell::NullTestShell(const char* fileName, int lineNumber) :
-    UtestShell("NullGroup", "NullName", fileName, lineNumber, 0)
-{
-}
-
-NullTestShell::~NullTestShell()
-{
-}
-
-NullTestShell& NullTestShell::instance()
-{
-    static NullTestShell _instance;
-    return _instance;
-}
-
-int NullTestShell::countTests()
-{
-    return 0;
-}
-
-UtestShell* NullTestShell::getNext() const
-{
-    return &instance();
-}
-
-bool NullTestShell::isNull() const
-{
-    return true;
-}
-
-void NullTestShell::testBody()
 {
 }
 

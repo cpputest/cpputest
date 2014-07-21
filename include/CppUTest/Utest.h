@@ -93,7 +93,6 @@ public:
 
     virtual UtestShell* addTest(UtestShell* test);
     virtual UtestShell *getNext() const;
-    virtual bool isNull() const;
     virtual int countTests();
 
     bool shouldRun(const TestFilter& groupFilter, const TestFilter& nameFilter) const;
@@ -163,29 +162,6 @@ private:
 
     static UtestShell* currentTest_;
     static TestResult* testResult_;
-
-};
-
-//////////////////// NullTest
-
-class NullTestShell: public UtestShell
-{
-public:
-    explicit NullTestShell();
-    explicit NullTestShell(const char* fileName, int lineNumber);
-    virtual ~NullTestShell();
-
-    void testBody();
-
-    static NullTestShell& instance();
-
-    virtual int countTests() _override;
-    virtual UtestShell*getNext() const _override;
-    virtual bool isNull() const _override;
-private:
-
-    NullTestShell(const NullTestShell&);
-    NullTestShell& operator=(const NullTestShell&);
 
 };
 

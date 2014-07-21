@@ -40,7 +40,7 @@ TEST_GROUP(TestFailure)
 
     void setup()
     {
-        test = new NullTestShell(failFileName, failLineNumber-1);
+        test = new UtestShell("groupname", "testname", failFileName, failLineNumber-1);
     }
     void teardown()
     {

@@ -27,33 +27,4 @@
 
 #include "CppUTest/TestHarness.h"
 
-TEST_GROUP(NullTestShell)
-{
-    NullTestShell* nullTest;
-
-    TEST_SETUP()
-    {
-        nullTest = new NullTestShell();
-    }
-
-    TEST_TEARDOWN()
-    {
-        delete nullTest;
-    }
-};
-
-TEST(NullTestShell, Create)
-{
-}
-
-TEST(NullTestShell, InstanceAlwaysTheSame)
-{
-    NullTestShell& _instance = NullTestShell::instance();
-    CHECK(&_instance == &NullTestShell::instance());
-}
-
-TEST(NullTestShell, NullTestsDontCount)
-{
-    NullTestShell& _instance = NullTestShell::instance();
-    CHECK(_instance.countTests() == 0);
-}
+/** No longer needed. To be removed separately */
