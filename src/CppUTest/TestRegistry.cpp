@@ -29,7 +29,7 @@
 #include "CppUTest/TestRegistry.h"
 
 TestRegistry::TestRegistry() :
-    tests_(NULL), firstPlugin_(NullTestPlugin::instance()), runInSeperateProcess_(false)
+    tests_(NULL), firstPlugin_(NullTestPlugin::instance()), runInSeperateProcess_(false), currentRepetition_(0)
 {
 }
 
@@ -69,6 +69,7 @@ void TestRegistry::runAllTests(TestResult& result)
         }
     }
     result.testsEnded();
+    currentRepetition_++;
 }
 
 bool TestRegistry::endOfGroup(UtestShell* test)
@@ -125,6 +126,10 @@ void TestRegistry::setRunTestsInSeperateProcess()
     runInSeperateProcess_ = true;
 }
 
+int TestRegistry::getCurrentRepetition()
+{
+    return currentRepetition_;
+}
 
 bool TestRegistry::testShouldRun(UtestShell* test, TestResult& result)
 {

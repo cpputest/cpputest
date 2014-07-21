@@ -148,36 +148,42 @@ TEST(TestOrderedTest, MultipleOrderedTests2)
 
 TEST_GROUP(TestOrderedTestMacros)
 {
+    int run;
+
+    void setup()
+    {
+        run = TestRegistry::getCurrentRegistry()->getCurrentRepetition();
+    }
 };
 
-static int testNumber = 0;
+static int testNumber[] = { 0, 0};
 
 TEST(TestOrderedTestMacros, NormalTest)
 {
-    CHECK(testNumber == 0);
-    testNumber++;
+    CHECK(testNumber[run] == 0);
+    testNumber[run]++;
 }
 
 TEST_ORDERED(TestOrderedTestMacros, Test2, 2)
 {
-    CHECK(testNumber == 2);
-    testNumber++;
+    CHECK(testNumber[run] == 2);
+    testNumber[run]++;
 }
 
 TEST_ORDERED(TestOrderedTestMacros, Test1, 1)
 {
-    CHECK(testNumber == 1);
-    testNumber++;
+    CHECK(testNumber[run] == 1);
+    testNumber[run]++;
 }
 
 TEST_ORDERED(TestOrderedTestMacros, Test4, 4)
 {
-    CHECK(testNumber == 4);
-    testNumber++;
+    CHECK(testNumber[run] == 4);
+    testNumber[run]++;
 }
 
 TEST_ORDERED(TestOrderedTestMacros, Test3, 3)
 {
-    CHECK(testNumber == 3);
-    testNumber++;
+    CHECK(testNumber[run] == 3);
+    testNumber[run]++;
 }

@@ -198,7 +198,7 @@ if INCLUDE_GMOCKTESTS
 endif
 
 RUN_CPPUTEST_TESTS = ./$(CPPUTEST_TESTS) -r
-#RUN_CPPUTEST_EXT_TESTS = ./$(CPPUTEST_EXT_TESTS) -r
+RUN_CPPUTESTEXT_TESTS = ./$(CPPUTESTEXT_TESTS) -r
 
 valgrind: check
 	@if test "x$(CPPUTEST_HAS_VALGRIND)" = xno; then echo "Running the valgrind target without having valgrind. Perhaps install it first?"; exit 1; fi
@@ -330,7 +330,7 @@ check_examples:
 
 check_all: check_basic check_special_situations check_coverage check_examples check_gtest
 	@echo "Last... one normal build and test"
-	make distclean; $(srcdir)/configure; make check; $(RUN_CPPUTEST_TESTS); $(RUN_CPPUTEST_EXT_TESTS)
+	make distclean; $(srcdir)/configure; make check; $(RUN_CPPUTEST_TESTS); $(RUN_CPPUTESTEXT_TESTS)
 	
 	
 

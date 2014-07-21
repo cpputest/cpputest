@@ -74,6 +74,8 @@ public:
     virtual void setCurrentRegistry(TestRegistry* registry);
 
     virtual void setRunTestsInSeperateProcess();
+    int getCurrentRepetition();
+
 private:
 
     bool testShouldRun(UtestShell* test, TestResult& result);
@@ -85,6 +87,7 @@ private:
     TestPlugin* firstPlugin_;
     static TestRegistry* currentRegistry_;
     bool runInSeperateProcess_;
+    int currentRepetition_;
 
 };
 

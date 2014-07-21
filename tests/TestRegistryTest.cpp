@@ -283,3 +283,18 @@ TEST(TestRegistry, runTestInSeperateProcess)
     CHECK(test1->isRunInSeperateProcess());
 }
 
+TEST(TestRegistry, CurrentRepetitionIsCorrectNone)
+{
+    CHECK(0 == myRegistry->getCurrentRepetition());
+    myRegistry->runAllTests(*result);
+    LONGS_EQUAL(1, myRegistry->getCurrentRepetition());
+}
+
+TEST(TestRegistry, CurrentRepetitionIsCorrectTwo)
+{
+    CHECK(0 == myRegistry->getCurrentRepetition());
+    myRegistry->runAllTests(*result);
+    myRegistry->runAllTests(*result);
+    LONGS_EQUAL(2, myRegistry->getCurrentRepetition());
+}
+
