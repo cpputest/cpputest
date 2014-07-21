@@ -224,7 +224,6 @@ am_CppUTestTests_OBJECTS = CppUTestTests-AllocationInCFile.$(OBJEXT) \
 	CppUTestTests-MemoryLeakDetectorTest.$(OBJEXT) \
 	CppUTestTests-MemoryLeakOperatorOverloadsTest.$(OBJEXT) \
 	CppUTestTests-MemoryLeakWarningTest.$(OBJEXT) \
-	CppUTestTests-NullTestTest.$(OBJEXT) \
 	CppUTestTests-PluginTest.$(OBJEXT) \
 	CppUTestTests-PreprocessorTest.$(OBJEXT) \
 	CppUTestTests-SetPluginTest.$(OBJEXT) \
@@ -804,7 +803,6 @@ CppUTestTests_SOURCES = \
 	tests/MemoryLeakDetectorTest.cpp \
 	tests/MemoryLeakOperatorOverloadsTest.cpp \
 	tests/MemoryLeakWarningTest.cpp \
-	tests/NullTestTest.cpp \
 	tests/PluginTest.cpp \
 	tests/PreprocessorTest.cpp \
 	tests/SetPluginTest.cpp \
@@ -1013,7 +1011,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CppUTestTests-MemoryLeakDetectorTest.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CppUTestTests-MemoryLeakOperatorOverloadsTest.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CppUTestTests-MemoryLeakWarningTest.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CppUTestTests-NullTestTest.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CppUTestTests-PluginTest.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CppUTestTests-PreprocessorTest.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CppUTestTests-SetPluginTest.Po@am__quote@
@@ -1941,20 +1938,6 @@ CppUTestTests-MemoryLeakWarningTest.obj: tests/MemoryLeakWarningTest.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='tests/MemoryLeakWarningTest.cpp' object='CppUTestTests-MemoryLeakWarningTest.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(CppUTestTests_CPPFLAGS) $(CPPFLAGS) $(CppUTestTests_CXXFLAGS) $(CXXFLAGS) -c -o CppUTestTests-MemoryLeakWarningTest.obj `if test -f 'tests/MemoryLeakWarningTest.cpp'; then $(CYGPATH_W) 'tests/MemoryLeakWarningTest.cpp'; else $(CYGPATH_W) '$(srcdir)/tests/MemoryLeakWarningTest.cpp'; fi`
-
-CppUTestTests-NullTestTest.o: tests/NullTestTest.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(CppUTestTests_CPPFLAGS) $(CPPFLAGS) $(CppUTestTests_CXXFLAGS) $(CXXFLAGS) -MT CppUTestTests-NullTestTest.o -MD -MP -MF $(DEPDIR)/CppUTestTests-NullTestTest.Tpo -c -o CppUTestTests-NullTestTest.o `test -f 'tests/NullTestTest.cpp' || echo '$(srcdir)/'`tests/NullTestTest.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/CppUTestTests-NullTestTest.Tpo $(DEPDIR)/CppUTestTests-NullTestTest.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='tests/NullTestTest.cpp' object='CppUTestTests-NullTestTest.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(CppUTestTests_CPPFLAGS) $(CPPFLAGS) $(CppUTestTests_CXXFLAGS) $(CXXFLAGS) -c -o CppUTestTests-NullTestTest.o `test -f 'tests/NullTestTest.cpp' || echo '$(srcdir)/'`tests/NullTestTest.cpp
-
-CppUTestTests-NullTestTest.obj: tests/NullTestTest.cpp
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(CppUTestTests_CPPFLAGS) $(CPPFLAGS) $(CppUTestTests_CXXFLAGS) $(CXXFLAGS) -MT CppUTestTests-NullTestTest.obj -MD -MP -MF $(DEPDIR)/CppUTestTests-NullTestTest.Tpo -c -o CppUTestTests-NullTestTest.obj `if test -f 'tests/NullTestTest.cpp'; then $(CYGPATH_W) 'tests/NullTestTest.cpp'; else $(CYGPATH_W) '$(srcdir)/tests/NullTestTest.cpp'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/CppUTestTests-NullTestTest.Tpo $(DEPDIR)/CppUTestTests-NullTestTest.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='tests/NullTestTest.cpp' object='CppUTestTests-NullTestTest.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(CppUTestTests_CPPFLAGS) $(CPPFLAGS) $(CppUTestTests_CXXFLAGS) $(CXXFLAGS) -c -o CppUTestTests-NullTestTest.obj `if test -f 'tests/NullTestTest.cpp'; then $(CYGPATH_W) 'tests/NullTestTest.cpp'; else $(CYGPATH_W) '$(srcdir)/tests/NullTestTest.cpp'; fi`
 
 CppUTestTests-PluginTest.o: tests/PluginTest.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(CppUTestTests_CPPFLAGS) $(CPPFLAGS) $(CppUTestTests_CXXFLAGS) $(CXXFLAGS) -MT CppUTestTests-PluginTest.o -MD -MP -MF $(DEPDIR)/CppUTestTests-PluginTest.Tpo -c -o CppUTestTests-PluginTest.o `test -f 'tests/PluginTest.cpp' || echo '$(srcdir)/'`tests/PluginTest.cpp
