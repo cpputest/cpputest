@@ -140,7 +140,6 @@ CppUTestTests_SOURCES = \
 	tests/MemoryLeakDetectorTest.cpp \
 	tests/MemoryLeakOperatorOverloadsTest.cpp \
 	tests/MemoryLeakWarningTest.cpp \
-	tests/NullTestTest.cpp \
 	tests/PluginTest.cpp \
 	tests/PreprocessorTest.cpp \
 	tests/SetPluginTest.cpp \

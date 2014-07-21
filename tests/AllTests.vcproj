@@ -247,10 +247,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\NullTestTest.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\PluginTest.cpp"
 				>
 			</File>
