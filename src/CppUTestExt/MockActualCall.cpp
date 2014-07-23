@@ -369,6 +369,14 @@ const void * MockCheckedActualCall::returnConstPointerValue()
     return returnValue().getConstPointerValue();
 }
 
+const void * MockCheckedActualCall::returnConstPointerValueOrDefault(const void * default_value)
+{
+    if (!hasReturnValue()) {
+        return default_value;
+    }
+    return returnConstPointerValue();
+}
+
 const char * MockCheckedActualCall::returnStringValueOrDefault(const char * default_value)
 {
     if (!hasReturnValue()) {
@@ -574,6 +582,11 @@ void * MockActualCallTrace::returnPointerValue()
 const void * MockActualCallTrace::returnConstPointerValue()
 {
     return NULL;
+}
+
+const void * MockActualCallTrace::returnConstPointerValueOrDefault(const void *)
+{
+    return returnConstPointerValue();
 }
 
 void * MockActualCallTrace::returnPointerValueOrDefault(void *)

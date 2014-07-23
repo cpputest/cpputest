@@ -82,6 +82,7 @@ public:
     virtual void * returnPointerValueOrDefault(void * default_value)=0;
 
     virtual const void * returnConstPointerValue()=0;
+    virtual const void * returnConstPointerValueOrDefault(const void * default_value)=0;
 
     virtual MockActualCall& onObject(void* objectPtr)=0;
 };

@@ -66,6 +66,7 @@ public:
     virtual double returnDoubleValueOrDefault(double default_value) _override;
 
     virtual const void * returnConstPointerValue() _override;
+    virtual const void * returnConstPointerValueOrDefault(const void * default_value) _override;
 
     virtual void * returnPointerValue() _override;
     virtual void * returnPointerValueOrDefault(void *) _override;
@@ -164,6 +165,7 @@ public:
     virtual void * returnPointerValueOrDefault(void *) _override;
 
     virtual const void * returnConstPointerValue() _override;
+    virtual const void * returnConstPointerValueOrDefault(const void * default_value) _override;
 
     virtual MockActualCall& onObject(void* objectPtr) _override;
 
@@ -212,6 +214,7 @@ public:
     virtual void * returnPointerValueOrDefault(void * ) _override { return returnPointerValue(); }
 
     virtual const void * returnConstPointerValue() _override { return NULL; }
+    virtual const void * returnConstPointerValueOrDefault(const void *) _override { return returnConstPointerValue(); }
 
     virtual MockActualCall& onObject(void* ) _override { return *this; }
 
