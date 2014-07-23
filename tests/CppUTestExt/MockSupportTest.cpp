@@ -1445,9 +1445,11 @@ TEST(MockSupportTest, PointerReturnValue)
 
 TEST(MockSupportTest, ConstPointerReturnValue)
 {
-    const void* ptr = (const void*) 0x001;
+    const void* ptr = (const void*) 0x001074;
     mock().expectOneCall("foo").andReturnValue(ptr);
-    POINTERS_EQUAL(ptr, mock().actualCall("foo").returnValue().getConstPointerValue());
+    MockActualCall& actual_call = mock().actualCall("foo");
+    POINTERS_EQUAL(ptr, actual_call.returnValue().getConstPointerValue());
+    POINTERS_EQUAL(ptr, actual_call.returnConstPointerValue());
     POINTERS_EQUAL(ptr, mock().constPointerReturnValue());
 }
 

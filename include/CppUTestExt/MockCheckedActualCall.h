@@ -65,6 +65,8 @@ public:
     virtual double returnDoubleValue() _override;
     virtual double returnDoubleValueOrDefault(double default_value) _override;
 
+    virtual const void * returnConstPointerValue() _override;
+
     virtual void * returnPointerValue() _override;
     virtual void * returnPointerValueOrDefault(void *) _override;
 
@@ -161,6 +163,8 @@ public:
     virtual void * returnPointerValue() _override;
     virtual void * returnPointerValueOrDefault(void *) _override;
 
+    virtual const void * returnConstPointerValue() _override;
+
     virtual MockActualCall& onObject(void* objectPtr) _override;
 
     const char* getTraceOutput();
@@ -206,6 +210,8 @@ public:
 
     virtual void * returnPointerValue() _override { return NULL; }
     virtual void * returnPointerValueOrDefault(void * ) _override { return returnPointerValue(); }
+
+    virtual const void * returnConstPointerValue() _override { return NULL; }
 
     virtual MockActualCall& onObject(void* ) _override { return *this; }
 
