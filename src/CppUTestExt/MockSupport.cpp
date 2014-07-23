@@ -476,6 +476,14 @@ void * MockSupport::returnPointerValueOrDefault(void * defaultValue)
     return defaultValue;
 }
 
+const void* MockSupport::returnConstPointerValueOrDefault(const void * defaultValue)
+{
+    if (hasReturnValue()) {
+        return constPointerReturnValue();
+    }
+    return defaultValue;
+}
+
 void* MockSupport::pointerReturnValue()
 {
     return returnValue().getPointerValue();
