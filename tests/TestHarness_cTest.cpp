@@ -39,13 +39,13 @@ extern "C" int test_was_called_in_test_group_in_C;
 int setup_teardown_was_called_in_test_group_in_C = 0;
 int test_was_called_in_test_group_in_C = 0;
 
-TEST_GROUP_C(TestGroupInC)
+TEST_GROUP_C_WRAPPER(TestGroupInC)
 {
     TEST_GROUP_C_SETUP_WRAPPER(TestGroupInC)
     TEST_GROUP_C_TEARDOWN_WRAPPER(TestGroupInC)
 };
 
-TEST_GROUP_C_WRAPPER(TestGroupInC, checkThatTheTestHasRun)
+TEST_C_WRAPPER(TestGroupInC, checkThatTheTestHasRun)
 
 /*
  * This test is a bit strange. They use the fact that you can do -r2 for repeating the same run.
