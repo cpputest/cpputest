@@ -80,7 +80,7 @@
 
 /* For use in C++ file */
 
-#define TEST_GROUP_C(group_name) \
+#define TEST_GROUP_C_WRAPPER(group_name) \
     extern "C" { \
         extern void group_##group_name##_setup_wrapper_c(void); \
         extern void group_##group_name##_teardown_wrapper_c(void); \
@@ -97,7 +97,7 @@
        group_##group_name##_teardown_wrapper_c(); \
     }
 
-#define TEST_GROUP_C_WRAPPER(group_name, test_name) \
+#define TEST_C_WRAPPER(group_name, test_name) \
     extern "C" { \
         extern void test_##group_name##_##test_name##_wrapper_c(); \
     } \
