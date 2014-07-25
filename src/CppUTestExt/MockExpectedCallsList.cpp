@@ -86,6 +86,14 @@ bool MockExpectedCallsList::hasFulfilledExpectations() const
     return (size() - amountOfUnfulfilledExpectations()) != 0;
 }
 
+bool MockExpectedCallsList::hasFulfilledExpectationsWithoutIgnoredParameters() const
+{
+    for (MockExpectedCallsListNode* p = head_; p; p = p->next_)
+        if (p->expectedCall_->isFulfilledWithoutIgnoredParameters())
+            return true;
+    return false;
+}
+
 bool MockExpectedCallsList::hasUnfullfilledExpectations() const
 {
     return amountOfUnfulfilledExpectations() != 0;
@@ -220,6 +228,16 @@ MockCheckedExpectedCall* MockExpectedCallsList::removeOneFulfilledExpectation()
     return NULL;
 }
 
+MockCheckedExpectedCall* MockExpectedCallsList::getOneFulfilledExpectationWithIgnoredParameters()
+{
+    for (MockExpectedCallsListNode* p = head_; p; p = p->next_) {
+        if (p->expectedCall_->isFulfilledWithoutIgnoredParameters()) {
+            return p->expectedCall_;
+        }
+    }
+    return NULL;
+}
+
 MockCheckedExpectedCall* MockExpectedCallsList::removeOneFulfilledExpectationWithIgnoredParameters()
 {
     for (MockExpectedCallsListNode* p = head_; p; p = p->next_) {
@@ -233,7 +251,6 @@ MockCheckedExpectedCall* MockExpectedCallsList::removeOneFulfilledExpectationWit
     }
     return NULL;
 }
-
 
 void MockExpectedCallsList::pruneEmptyNodeFromList()
 {
