@@ -76,12 +76,12 @@ void MockCheckedActualCall::failTest(const MockFailure& failure)
     reporter_->failTest(failure);
 }
 
-void MockCheckedActualCall::finalizeOutputParameters(MockCheckedExpectedCall* call)
+void MockCheckedActualCall::finalizeOutputParameters(MockCheckedExpectedCall* expectedCall)
 {
     for (MockOutputParametersListNode* p = outputParameterExpectations_; p; p = p->next_)
     {
-        const void* data = call->getOutputParameter(*p->name_).getConstPointerValue();
-        size_t size = call->getOutputParameter(*p->name_).getSize();
+        const void* data = expectedCall->getOutputParameter(*p->name_).getConstPointerValue();
+        size_t size = expectedCall->getOutputParameter(*p->name_).getSize();
         PlatformSpecificMemCpy(p->ptr_, data, size);
     }
 }
