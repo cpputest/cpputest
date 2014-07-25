@@ -840,6 +840,17 @@ TEST(MockSupportTest, outputParameterTraced)
     STRCMP_CONTAINS("Function name: someFunc someParameter:", mock().getTraceOutput());
 }
 
+TEST(MockSupportTest, outputParameterWithIgnoredParameters)
+{
+    int param = 1;
+    int retval = 2;
+
+    mock().expectOneCall("foo").withOutputParameterReturning("bar", &param, sizeof(param)).ignoreOtherParameters();
+    mock().actualCall("foo").withOutputParameter("bar", &retval).withParameter("other", 1);
+
+    LONGS_EQUAL(param, retval);
+}
+
 static bool myTypeIsEqual(const void* object1, const void* object2)
 {
     return ((MyTypeForTesting*)object1)->value == ((MyTypeForTesting*)object2)->value;
