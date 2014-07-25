@@ -1,7 +1,7 @@
 ; Code Composer Project File, Version 2.0 (do not modify or remove this line)
 
 [Project Settings]
-ProjectDir="C:\data\00_Dev\05_CppUTest\cpputest\project\CCStudio\"
+ProjectDir="C:\data\00_Dev\05_CppUTest\cpputest\platforms\CCStudio\"
 ProjectType=Executable
 CPUFamily=TMS320C28XX
 Tool="Compiler"
@@ -37,7 +37,6 @@ Source="..\..\tests\CommandLineTestRunnerTest.cpp"
 Source="..\..\tests\JUnitOutputTest.cpp"
 Source="..\..\tests\MemoryLeakDetectorTest.cpp"
 Source="..\..\tests\MemoryLeakWarningTest.cpp"
-Source="tests\CppUTest\AllTestsForTarget.cpp"
 Source="..\..\tests\PluginTest.cpp"
 Source="..\..\tests\PreprocessorTest.cpp"
 Source="..\..\tests\SetPluginTest.cpp"
@@ -53,6 +52,7 @@ Source="..\..\tests\TestRegistryTest.cpp"
 Source="..\..\tests\TestResultTest.cpp"
 Source="..\..\tests\UtestTest.cpp"
 Source="C:\CCStudio_v3.3\C2000\cgtools\lib\src\farmem_cpp.cpp"
+Source="tests\CppUTest\AllTestsForTarget.cpp"
 Source="sim28335.cmd"
 
 ["Compiler" Settings: "Debug"]
