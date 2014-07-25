@@ -97,7 +97,6 @@ protected:
     };
     virtual const char* stringFromState(ActualCallState state);
     virtual void setState(ActualCallState state);
-    virtual void checkStateConsistency(ActualCallState oldState, ActualCallState newState);
 
 private:
     SimpleString functionName_;

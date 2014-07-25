@@ -72,8 +72,10 @@ UtestShell* MockCheckedActualCall::getTest() const
 
 void MockCheckedActualCall::failTest(const MockFailure& failure)
 {
-    setState(CALL_FAILED);
-    reporter_->failTest(failure);
+    if (!hasFailed()) {
+        setState(CALL_FAILED);
+        reporter_->failTest(failure);
+    }
 }
 
 void MockCheckedActualCall::finalizeOutputParameters()
@@ -290,17 +292,8 @@ const char* MockCheckedActualCall::stringFromState(ActualCallState state)
 #endif
 }
 
-void MockCheckedActualCall::checkStateConsistency(ActualCallState oldState, ActualCallState newState)
-{
-    if (oldState == newState)
-        FAIL(StringFromFormat("State change to the same state: %s.", stringFromState(newState)).asCharString());
-    if (oldState == CALL_FAILED)
-        FAIL("State was already failed. Cannot change state again.");
-}
-
 void MockCheckedActualCall::setState(ActualCallState state)
 {
-    checkStateConsistency(state_, state);
     state_ = state;
 }
 
