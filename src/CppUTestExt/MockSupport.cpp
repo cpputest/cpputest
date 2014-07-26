@@ -431,6 +431,14 @@ double MockSupport::returnDoubleValueOrDefault(double defaultValue)
     return defaultValue;
 }
 
+long int MockSupport::returnLongIntValueOrDefault(long int defaultValue)
+{
+    if (hasReturnValue()) {
+        return longIntReturnValue();
+    }
+    return defaultValue;
+}
+
 int MockSupport::returnIntValueOrDefault(int defaultValue)
 {
     if (hasReturnValue()) {
