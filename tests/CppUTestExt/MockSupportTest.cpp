@@ -1294,7 +1294,10 @@ TEST(MockSupportTest, LongIntegerReturnValue)
 {
     long int expected_value = 7;
     mock().expectOneCall("foo").andReturnValue(expected_value);
-    LONGS_EQUAL(expected_value, mock().actualCall("foo").returnValue().getLongIntValue());
+
+    MockActualCall& actual_call = mock().actualCall("foo");
+    LONGS_EQUAL(expected_value, actual_call.returnValue().getLongIntValue());
+    LONGS_EQUAL(expected_value, actual_call.returnLongIntValue());
     LONGS_EQUAL(expected_value, mock().returnValue().getLongIntValue());
     LONGS_EQUAL(expected_value, mock().longIntReturnValue());
 }
