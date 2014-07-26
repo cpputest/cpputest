@@ -330,6 +330,14 @@ long int MockCheckedActualCall::returnLongIntValue()
     return returnValue().getLongIntValue();
 }
 
+long int MockCheckedActualCall::returnLongIntValueOrDefault(long int default_value)
+{
+    if (!hasReturnValue()) {
+        return default_value;
+    }
+    return returnValue().getLongIntValue();
+}
+
 double MockCheckedActualCall::returnDoubleValue()
 {
     return returnValue().getDoubleValue();
@@ -562,6 +570,11 @@ MockNamedValue MockActualCallTrace::returnValue()
 long int MockActualCallTrace::returnLongIntValue()
 {
     return 0;
+}
+
+long int MockActualCallTrace::returnLongIntValueOrDefault(long int)
+{
+    return returnLongIntValue();
 }
 
 int MockActualCallTrace::returnIntValue()
