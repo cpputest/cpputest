@@ -457,19 +457,12 @@ SimpleString StringFrom(const std::string& value)
     return SimpleString(value.c_str());
 }
 
+#endif
+
 SimpleString StringFrom(unsigned long i)
 {
     return StringFromFormat("%lu (0x%lx)", i, i);
 }
-
-#else
-
-SimpleString StringFrom(unsigned long value)
-{
-    return StringFromFormat("%lu", value);
-}
-
-#endif
 
 //Kludge to get a va_copy in VC++ V6
 #ifndef va_copy
