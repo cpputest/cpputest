@@ -69,6 +69,8 @@ public:
     virtual int returnIntValueOrDefault(int default_value)=0;
     virtual int returnIntValue()=0;
 
+    virtual unsigned long int returnUnsignedLongIntValue()=0;
+
     virtual long int returnLongIntValue()=0;
     virtual long int returnLongIntValueOrDefault(long int default_value)=0;
 

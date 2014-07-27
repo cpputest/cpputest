@@ -1351,7 +1351,10 @@ TEST(MockSupportTest, UnsignedLongIntegerReturnValue)
 {
     unsigned long int expected_value = 7;
     mock().expectOneCall("foo").andReturnValue(expected_value);
-    LONGS_EQUAL(expected_value, mock().actualCall("foo").returnValue().getUnsignedLongIntValue());
+
+    MockActualCall& actual_call = mock().actualCall("foo");
+    LONGS_EQUAL(expected_value, actual_call.returnValue().getUnsignedLongIntValue());
+    LONGS_EQUAL(expected_value, actual_call.returnUnsignedLongIntValue());
     LONGS_EQUAL(expected_value, mock().returnValue().getUnsignedLongIntValue());
     LONGS_EQUAL(expected_value, mock().unsignedLongIntReturnValue());
 }

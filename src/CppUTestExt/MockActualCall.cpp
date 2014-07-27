@@ -325,6 +325,11 @@ int MockCheckedActualCall::returnIntValue()
     return returnValue().getIntValue();
 }
 
+unsigned long int MockCheckedActualCall::returnUnsignedLongIntValue()
+{
+    return returnValue().getUnsignedLongIntValue();
+}
+
 long int MockCheckedActualCall::returnLongIntValue()
 {
     return returnValue().getLongIntValue();
@@ -568,6 +573,11 @@ MockNamedValue MockActualCallTrace::returnValue()
 }
 
 long int MockActualCallTrace::returnLongIntValue()
+{
+    return 0;
+}
+
+unsigned long int MockActualCallTrace::returnUnsignedLongIntValue()
 {
     return 0;
 }
