@@ -325,6 +325,32 @@ int MockCheckedActualCall::returnIntValue()
     return returnValue().getIntValue();
 }
 
+unsigned long int MockCheckedActualCall::returnUnsignedLongIntValue()
+{
+    return returnValue().getUnsignedLongIntValue();
+}
+
+unsigned long int MockCheckedActualCall::returnUnsignedLongIntValueOrDefault(unsigned long int default_value)
+{
+    if (!hasReturnValue()) {
+        return default_value;
+    }
+    return returnUnsignedLongIntValue();
+}
+
+long int MockCheckedActualCall::returnLongIntValue()
+{
+    return returnValue().getLongIntValue();
+}
+
+long int MockCheckedActualCall::returnLongIntValueOrDefault(long int default_value)
+{
+    if (!hasReturnValue()) {
+        return default_value;
+    }
+    return returnLongIntValue();
+}
+
 double MockCheckedActualCall::returnDoubleValue()
 {
     return returnValue().getDoubleValue();
@@ -552,6 +578,26 @@ bool MockActualCallTrace::hasReturnValue()
 MockNamedValue MockActualCallTrace::returnValue()
 {
     return MockNamedValue("");
+}
+
+long int MockActualCallTrace::returnLongIntValue()
+{
+    return 0;
+}
+
+unsigned long int MockActualCallTrace::returnUnsignedLongIntValue()
+{
+    return 0;
+}
+
+unsigned long int MockActualCallTrace::returnUnsignedLongIntValueOrDefault(unsigned long)
+{
+    return 0;
+}
+
+long int MockActualCallTrace::returnLongIntValueOrDefault(long int)
+{
+    return returnLongIntValue();
 }
 
 int MockActualCallTrace::returnIntValue()

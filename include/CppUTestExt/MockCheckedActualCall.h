@@ -56,6 +56,12 @@ public:
     virtual int returnIntValueOrDefault(int default_value) _override;
     virtual int returnIntValue() _override;
 
+    virtual unsigned long int returnUnsignedLongIntValue() _override;
+    virtual unsigned long int returnUnsignedLongIntValueOrDefault(unsigned long int) _override;
+
+    virtual long int returnLongIntValue() _override;
+    virtual long int returnLongIntValueOrDefault(long int default_value) _override;
+
     virtual unsigned int returnUnsignedIntValue() _override;
     virtual unsigned int returnUnsignedIntValueOrDefault(unsigned int default_value) _override;
 
@@ -152,6 +158,12 @@ public:
     virtual int returnIntValueOrDefault(int default_value) _override;
     virtual int returnIntValue() _override;
 
+    virtual unsigned long int returnUnsignedLongIntValue() _override;
+    virtual unsigned long int returnUnsignedLongIntValueOrDefault(unsigned long int) _override;
+
+    virtual long int returnLongIntValue() _override;
+    virtual long int returnLongIntValueOrDefault(long int default_value) _override;
+
     virtual unsigned int returnUnsignedIntValue() _override;
     virtual unsigned int returnUnsignedIntValueOrDefault(unsigned int default_value) _override;
 
@@ -200,6 +212,12 @@ public:
 
     virtual int returnIntValueOrDefault(int) _override { return 0; }
     virtual int returnIntValue() _override { return 0; }
+
+    virtual unsigned long int returnUnsignedLongIntValue() _override { return 0; }
+    virtual unsigned long int returnUnsignedLongIntValueOrDefault(unsigned long int) _override { return 0; }
+
+    virtual long int returnLongIntValue() _override { return 0; }
+    virtual long int returnLongIntValueOrDefault(long int) _override { return returnLongIntValue(); }
 
     virtual unsigned int returnUnsignedIntValue() _override { return 0; }
     virtual unsigned int returnUnsignedIntValueOrDefault(unsigned int) _override { return returnUnsignedIntValue(); }
