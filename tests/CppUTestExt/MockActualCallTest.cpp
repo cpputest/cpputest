@@ -62,6 +62,15 @@ TEST(MockCheckedActualCall, unExpectedCall)
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 
+TEST(MockCheckedActualCall, unExpectedCallWithAParameter)
+{
+    MockCheckedActualCall actualCall(1, reporter, *emptyList);
+    actualCall.withName("unexpected").withParameter("bar", 0);
+
+    MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "unexpected", *list);
+    CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
 TEST(MockCheckedActualCall, unExpectedParameterName)
 {
     MockCheckedExpectedCall call1;
