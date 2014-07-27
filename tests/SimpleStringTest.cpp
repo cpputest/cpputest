@@ -591,7 +591,7 @@ TEST(SimpleString, _64BitAddressPrintsCorrectly)
 
 TEST(SimpleString, BuildStringFromUnsignedInteger)
 {
-    unsigned int i = 0xffffffff;
+    unsigned long int i = 0xffffffff;
 
     SimpleString result = StringFrom(i);
     const char* expected_string = "4294967295 (0xffffffff)";

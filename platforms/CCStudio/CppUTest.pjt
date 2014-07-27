@@ -1,7 +1,7 @@
 ; Code Composer Project File, Version 2.0 (do not modify or remove this line)
 
 [Project Settings]
-ProjectDir="C:\data\00_Dev\05_CppUTest\cpputest\project\CCStudio\"
+ProjectDir="C:\data\00_Dev\05_CppUTest\cpputest\platforms\CCStudio\"
 ProjectType=Library
 CPUFamily=TMS320C28XX
 Tool="Archiver"
@@ -30,11 +30,10 @@ Source="..\..\src\CppUTestExt\CodeMemoryReportFormatter.cpp"
 Source="..\..\src\CppUTestExt\MemoryReportAllocator.cpp"
 Source="..\..\src\CppUTestExt\MemoryReporterPlugin.cpp"
 Source="..\..\src\CppUTestExt\MemoryReportFormatter.cpp"
-Source="..\..\src\CppUTestExt\MockActualFunctionCall.cpp"
-Source="..\..\src\CppUTestExt\MockExpectedFunctionCall.cpp"
-Source="..\..\src\CppUTestExt\MockExpectedFunctionsList.cpp"
+Source="..\..\src\CppUTestExt\MockActualCall.cpp"
+Source="..\..\src\CppUTestExt\MockExpectedCall.cpp"
+Source="..\..\src\CppUTestExt\MockExpectedCallsList.cpp"
 Source="..\..\src\CppUTestExt\MockFailure.cpp"
-Source="..\..\src\CppUTestExt\MockFunctionCall.cpp"
 Source="..\..\src\CppUTestExt\MockNamedValue.cpp"
 Source="..\..\src\CppUTestExt\MockSupport.cpp"
 Source="..\..\src\CppUTestExt\MockSupport_c.cpp"
