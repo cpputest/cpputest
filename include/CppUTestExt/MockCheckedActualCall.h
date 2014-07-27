@@ -90,7 +90,7 @@ protected:
     SimpleString getName() const;
     virtual UtestShell* getTest() const;
     virtual void callHasSucceeded();
-    virtual void finalizeOutputParameters();
+    virtual void finalizeOutputParameters(MockCheckedExpectedCall* call);
     virtual void finalizeCallWhenFulfilled();
     virtual void failTest(const MockFailure& failure);
     virtual void checkInputParameter(const MockNamedValue& actualParameter);
