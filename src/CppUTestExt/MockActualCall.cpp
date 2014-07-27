@@ -335,7 +335,7 @@ unsigned long int MockCheckedActualCall::returnUnsignedLongIntValueOrDefault(uns
     if (!hasReturnValue()) {
         return default_value;
     }
-    return returnValue().getUnsignedLongIntValue();
+    return returnUnsignedLongIntValue();
 }
 
 long int MockCheckedActualCall::returnLongIntValue()
@@ -348,7 +348,7 @@ long int MockCheckedActualCall::returnLongIntValueOrDefault(long int default_val
     if (!hasReturnValue()) {
         return default_value;
     }
-    return returnValue().getLongIntValue();
+    return returnLongIntValue();
 }
 
 double MockCheckedActualCall::returnDoubleValue()
