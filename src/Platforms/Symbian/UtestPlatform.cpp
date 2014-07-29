@@ -74,37 +74,19 @@ static long TimeInMillisImplementation() {
     return (tv.tv_sec * 1000) + (long)(tv.tv_usec * 0.001);
 }
 
-static long (*timeInMillisFp) () = TimeInMillisImplementation;
-
-long GetPlatformSpecificTimeInMillis() {
-    return timeInMillisFp();
-}
-
-void SetPlatformSpecificTimeInMillisMethod(long (*platformSpecific) ()) {
-    timeInMillisFp = (platformSpecific == 0) ? TimeInMillisImplementation : platformSpecific;
-}
+long (*GetPlatformSpecificTimeInMillis)() = TimeInMillisImplementation;
 
 TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
 {
     return TestOutput::eclipse;
 }
 
-///////////// Time in String
-
 static SimpleString TimeStringImplementation() {
     time_t tm = time(NULL);
     return ctime(&tm);
 }
 
-static SimpleString (*timeStringFp) () = TimeStringImplementation;
-
-SimpleString GetPlatformSpecificTimeString() {
-    return timeStringFp();
-}
-
-void SetPlatformSpecificTimeStringMethod(SimpleString (*platformMethod) ()) {
-    timeStringFp = (platformMethod == 0) ? TimeStringImplementation : platformMethod;
-}
+SimpleString GetPlatformSpecificTimeString() = TimeStringImplementation;
 
 int PlatformSpecificVSNprintf(char* str, size_t size, const char* format, va_list args) {
     return vsnprintf(str, size, format, args);

@@ -61,35 +61,14 @@ void PlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* pl
     /* To be implemented */
 }
 
-long GetPlatformSpecificTimeInMillis()
-{
-    /* To be implemented */
-    return 0;
-}
-
-void SetPlatformSpecificTimeInMillisMethod(long (*platformSpecific) ())
-{
-    (void) platformSpecific;
-}
+long (*GetPlatformSpecificTimeInMillis)() = NULL;
 
 TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
 {
     return TestOutput::eclipse;
 }
 
-///////////// Time in String
-
-const char* GetPlatformSpecificTimeString()
-{
-    /* To be implemented */
-    return NULL;
-}
-
-void SetPlatformSpecificTimeStringMethod(const char* (*platformMethod) ())
-{
-    /* To be implemented */
-    (void) platformMethod;
-}
+const char* (*GetPlatformSpecificTimeString)() = NULL;
 
 int PlatformSpecificAtoI(const char*str)
 {

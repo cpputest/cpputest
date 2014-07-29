@@ -65,17 +65,7 @@ static long TimeInMillisImplementation()
     return timeGetTime();
 }
 
-static long (*timeInMillisFp) () = TimeInMillisImplementation;
-
-long GetPlatformSpecificTimeInMillis()
-{
-    return timeInMillisFp();
-}
-
-void SetPlatformSpecificTimeInMillisMethod(long (*platformSpecific) ())
-{
-    timeInMillisFp = (platformSpecific == 0) ? TimeInMillisImplementation : platformSpecific;
-}
+long (*GetPlatformSpecificTimeInMillis)() = TimeInMillisImplementation;
 
 ///////////// Time in String
 
@@ -89,18 +79,7 @@ static const char* TimeStringImplementation()
     return dateTime;
 }
 
-static const char* (*timeStringFp) () = TimeStringImplementation;
-
-const char* GetPlatformSpecificTimeString()
-{
-    return timeStringFp();
-}
-
-void SetPlatformSpecificTimeStringMethod(const char* (*platformMethod) ())
-{
-    timeStringFp = (platformMethod == 0) ? TimeStringImplementation : platformMethod;
-}
-
+const char* (*GetPlatformSpecificTimeString)() = TimeStringImplementation;
 
 ////// taken from gcc
 

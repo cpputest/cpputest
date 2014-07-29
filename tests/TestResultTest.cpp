@@ -50,11 +50,10 @@ TEST_GROUP(TestResult)
         mock = new StringBufferTestOutput();
         printer = mock;
         res = new TestResult(*printer);
-        SetPlatformSpecificTimeInMillisMethod(MockGetPlatformSpecificTimeInMillis);
+        UT_PTR_SET(GetPlatformSpecificTimeInMillis, MockGetPlatformSpecificTimeInMillis);
     }
     void teardown()
     {
-        SetPlatformSpecificTimeInMillisMethod(0);
         delete printer;
         delete res;
     }

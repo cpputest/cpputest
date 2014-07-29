@@ -113,32 +113,7 @@ static long TimeInMillisImplementation()
     return result;
 }
 
-static long (*timeInMillisFp) () = TimeInMillisImplementation;
-
-long GetPlatformSpecificTimeInMillis()
-{
-    return timeInMillisFp();
-}
-
-/* The TI cl2000 compiler will compile this function with C++ linkage, unless
- * we specifically tell it to use C linkage again, in the function definiton. .
- */
-
-typedef long (*cppLongCall)();
-
-extern "C" void SetPlatformSpecificTimeInMillisMethod(long (*platformSpecific) ())
-{
-    if(platformSpecific == 0) 
-    {
-     	timeInMillisFp = TimeInMillisImplementation;
-    }
-    else
-    {
-        timeInMillisFp = reinterpret_cast<cppLongCall>(platformSpecific);
-    }
-}
-
-///////////// Time in String
+long (*GetPlatformSpecificTimeInMillis)() = TimeInMillisImplementation;
 
 static const char* TimeStringImplementation()
 {
@@ -146,32 +121,7 @@ static const char* TimeStringImplementation()
     return ctime(&tm);
 }
 
-static const char* (*timeStringFp) () = TimeStringImplementation;
-
-const char* GetPlatformSpecificTimeString()
-{
-    return timeStringFp();
-}
-
-/* The TI cl2000 compiler will compile this function with C++ linkage, unless
- * we specifically tell it to use C linkage again, in the function definiton. 
- * Having the extern "C" here unfortunately makes the function argument
- * extern "C" also. This has to be cast away explicitly.
- */
-
-typedef const char* (*cppStringFp)();
-
-extern "C" void SetPlatformSpecificTimeStringMethod(const char* (*platformMethod) ())
-{
-    if(platformMethod == 0)
-    {
-        timeStringFp = TimeStringImplementation;
-    }
-    else
-    {
-        timeStringFp = reinterpret_cast<cppStringFp>(platformMethod);
-    }
-}
+const char* (*GetPlatformSpecificTimeString)() = TimeStringImplementation;
 
 int PlatformSpecificAtoI(const char* str)
 {
