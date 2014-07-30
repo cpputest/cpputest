@@ -38,7 +38,9 @@ const char* failFileName = "fail.cpp";
 static double zero = 0.0;
 static const double not_a_number = zero / zero;
 
-extern "C" int IsNanForSystemsWithoutNan(double d) { return (0.0 == d); }
+extern "C" {
+    static int IsNanForSystemsWithoutNan(double d) { return (0.0 == d); }
+}
 
 TEST_GROUP(TestFailureNaN)
 {
