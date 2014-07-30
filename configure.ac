@@ -6,6 +6,7 @@ AC_CONFIG_SRCDIR([src/CppUTest/Utest.cpp])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([cpputest.pc])
 AC_CONFIG_MACRO_DIR([m4])
+AC_PROG_RANLIB
 
 AC_CANONICAL_HOST
 
