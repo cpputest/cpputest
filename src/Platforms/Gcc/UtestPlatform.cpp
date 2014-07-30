@@ -232,9 +232,11 @@ double PlatformSpecificFabs(double d)
    return fabs(d);
 }
 
-int PlatformSpecificIsNan(double d)
+static int IsNanImplementation(double d)
 {
     return isnan((float)d);
 }
+
+int (*PlatformSpecificIsNan)(double) = IsNanImplementation;
 
 }
