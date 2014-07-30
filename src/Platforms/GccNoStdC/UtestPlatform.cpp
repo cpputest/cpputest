@@ -228,12 +228,14 @@ double PlatformSpecificFabs(double d)
     return 0.0;
 }
 
-int PlatformSpecificIsNan(double d)
+int IsNanImplementation(double d)
 {
     /* To be implemented */
     (void) d;
     return 0;
 }
+
+int (*PlatformSpecificIsNan)(double) = IsNanImplementation;
 
 void* malloc(size_t)
 {
