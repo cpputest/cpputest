@@ -228,6 +228,8 @@ double PlatformSpecificFabs(double d)
     return 0.0;
 }
 
+extern "C" {
+    
 int IsNanImplementation(double d)
 {
     /* To be implemented */
@@ -236,6 +238,8 @@ int IsNanImplementation(double d)
 }
 
 int (*PlatformSpecificIsNan)(double) = IsNanImplementation;
+    
+}
 
 void* malloc(size_t)
 {
