@@ -187,10 +187,7 @@ double PlatformSpecificFabs(double d)
    return fabs(d);
 }
 
-int PlatformSpecificIsNan(double d)
-{
-    return _isnan(d);
-}
+extern "C" int (*PlatformSpecificIsNan)(double) = _isnan;
 
 int PlatformSpecificVSNprintf(char *str, unsigned int size, const char* format, void* args)
 {
