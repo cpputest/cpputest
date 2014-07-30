@@ -82,11 +82,11 @@ TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
 
 static long TimeInMillisImplementation()
 {
-   clock_t t = clock();
+    clock_t t = clock();
 
-   t = t * 10;
+    t = t * 10;
 
-   return t;
+    return t;
 }
 
 long (*GetPlatformSpecificTimeInMillis)() = TimeInMillisImplementation;
@@ -103,7 +103,7 @@ const char* (*GetPlatformSpecificTimeString)() = TimeStringImplementation;
 
 int PlatformSpecificAtoI(const char*str)
 {
-   return atoi(str);
+    return atoi(str);
 }
 
 size_t PlatformSpecificStrLen(const char* str)
@@ -113,22 +113,22 @@ size_t PlatformSpecificStrLen(const char* str)
 
 int PlatformSpecificStrCmp(const char* s1, const char* s2)
 {
-   return strcmp(s1, s2);
+    return strcmp(s1, s2);
 }
 
 int PlatformSpecificStrNCmp(const char* s1, const char* s2, size_t size)
 {
-   return strncmp(s1, s2, size);
+    return strncmp(s1, s2, size);
 }
 
 char* PlatformSpecificStrStr(const char* s1, const char* s2)
 {
-   return strstr((char*)s1, (char*)s2);
+    return strstr((char*)s1, (char*)s2);
 }
 
 int PlatformSpecificVSNprintf(char *str, size_t size, const char* format, va_list args)
 {
-   return vsnprintf( str, size, format, args);
+    return vsnprintf( str, size, format, args);
 }
 
 char PlatformSpecificToLower(char c)
@@ -160,27 +160,27 @@ void PlatformSpecificFlush()
 
 int PlatformSpecificPutchar(int c)
 {
-  return putchar(c);
+    return putchar(c);
 }
 
 void* PlatformSpecificMalloc(size_t size)
 {
-   return malloc(size);
+     return malloc(size);
 }
 
 void* PlatformSpecificRealloc (void* memory, size_t size)
 {
-   return realloc(memory, size);
+    return realloc(memory, size);
 }
 
 void PlatformSpecificFree(void* memory)
 {
-   free(memory);
+    free(memory);
 }
 
 void* PlatformSpecificMemCpy(void* s1, const void* s2, size_t size)
 {
-   return memcpy(s1, s2, size);
+    return memcpy(s1, s2, size);
 }
 
 void* PlatformSpecificMemset(void* mem, int c, size_t size)
@@ -190,7 +190,7 @@ void* PlatformSpecificMemset(void* mem, int c, size_t size)
 
 double PlatformSpecificFabs(double d)
 {
-   return fabs(d);
+    return fabs(d);
 }
 
 extern "C" {
