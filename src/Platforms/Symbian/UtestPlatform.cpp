@@ -161,3 +161,14 @@ void PlatformSpecificFClose(PlatformSpecificFile file) {
 int PlatformSpecificAtoI(const char*str) {
     return atoi(str);
 }
+
+extern "C" {
+    
+static int IsNanImplementation(double d)
+{
+    return isnan(d);
+}
+
+int (*PlatformSpecificIsNan)(double) = IsNanImplementation;
+
+}
