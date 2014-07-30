@@ -317,10 +317,14 @@ double PlatformSpecificFabs(double d)
    return fabs(d);
 }
 
-extern "C" int IsNanImplementation(double d)
+extern "C" {
+
+static int IsNanImplementation(double d)
 {
     return 0;
 }
 
-extern "C" int (*PlatformSpecificIsNan)(double d) = IsNanImplementation;
+int (*PlatformSpecificIsNan)(double d) = IsNanImplementation;
+
+}
 
