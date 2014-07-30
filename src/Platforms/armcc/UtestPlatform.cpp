@@ -94,21 +94,7 @@ static long TimeInMillisImplementation()
    return t;
 }
 
-static long (*timeInMillisFp) () = TimeInMillisImplementation;
-
-long GetPlatformSpecificTimeInMillis()
-{
-    return timeInMillisFp();
-}
-
-/* The ARMCC compiler will compile this function with C++ linkage, unless
- * we specifically tell it to use C linkage again, in the function definiton.
- */
-extern "C" void SetPlatformSpecificTimeInMillisMethod(long (*platformSpecific) ()){
-    timeInMillisFp = (platformSpecific == 0) ? TimeInMillisImplementation : platformSpecific;
-}
-
-///////////// Time in String
+long (*GetPlatformSpecificTimeInMillis)() = TimeInMillisImplementation;
 
 static const char* TimeStringImplementation()
 {
@@ -116,20 +102,7 @@ static const char* TimeStringImplementation()
     return ctime(&tm);
 }
 
-static const char* (*timeStringFp) () = TimeStringImplementation;
-
-const char* GetPlatformSpecificTimeString()
-{
-    return timeStringFp();
-}
-
-/* The ARMCC compiler will compile this function with C++ linkage, unless
- * we specifically tell it to use C linkage again, in the function definiton.
- */
-extern "C" void SetPlatformSpecificTimeStringMethod(const char* (*platformMethod) ())
-{
-    timeStringFp = (platformMethod == 0) ? TimeStringImplementation : platformMethod;
-}
+const char* (*GetPlatformSpecificTimeString)() = TimeStringImplementation;
 
 int PlatformSpecificAtoI(const char* str)
 {

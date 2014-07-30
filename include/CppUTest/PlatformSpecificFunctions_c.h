@@ -47,11 +47,8 @@ void PlatformSpecificLongJmp(void);
 void PlatformSpecificRestoreJumpBuffer(void);
 
 /* Time operations */
-long GetPlatformSpecificTimeInMillis(void);
-void SetPlatformSpecificTimeInMillisMethod(long(*platformSpecific)(void));
-
-const char* GetPlatformSpecificTimeString(void);
-void SetPlatformSpecificTimeStringMethod(const char* (*platformMethod)(void));
+extern long (*GetPlatformSpecificTimeInMillis)(void);
+extern const char* (*GetPlatformSpecificTimeString)(void);
 
 /* String operations */
 int PlatformSpecificAtoI(const char*str);
@@ -60,8 +57,7 @@ int PlatformSpecificStrCmp(const char* s1, const char* s2);
 int PlatformSpecificStrNCmp(const char* s1, const char* s2, size_t size);
 char* PlatformSpecificStrStr(const char* s1, const char* s2);
 
-int PlatformSpecificVSNprintf(char *str, size_t size, const char* format,
-        va_list va_args_list);
+int PlatformSpecificVSNprintf(char *str, size_t size, const char* format, va_list va_args_list);
 
 char PlatformSpecificToLower(char c);
 
@@ -73,8 +69,7 @@ int PlatformSpecificAtExit(void(*func)(void));
 /* IO operations */
 typedef void* PlatformSpecificFile;
 
-PlatformSpecificFile PlatformSpecificFOpen(const char* filename,
-        const char* flag);
+PlatformSpecificFile PlatformSpecificFOpen(const char* filename, const char* flag);
 void PlatformSpecificFPuts(const char* str, PlatformSpecificFile file);
 void PlatformSpecificFClose(PlatformSpecificFile file);
 

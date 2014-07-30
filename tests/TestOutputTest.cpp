@@ -62,7 +62,7 @@ TEST_GROUP(TestOutput)
         result = new TestResult(*mock);
         result->setTotalExecutionTime(10);
         millisTime = 0;
-        SetPlatformSpecificTimeInMillisMethod(MockGetPlatformSpecificTimeInMillis);
+        UT_PTR_SET(GetPlatformSpecificTimeInMillis, MockGetPlatformSpecificTimeInMillis);
         TestOutput::setWorkingEnvironment(TestOutput::eclipse);
 
     }
@@ -75,7 +75,6 @@ TEST_GROUP(TestOutput)
         delete f2;
         delete f3;
         delete result;
-        SetPlatformSpecificTimeInMillisMethod(0);
     }
 };
 

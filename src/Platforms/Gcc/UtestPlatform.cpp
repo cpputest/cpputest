@@ -122,19 +122,7 @@ static long TimeInMillisImplementation()
     return (tv.tv_sec * 1000) + (long)((double)tv.tv_usec * 0.001);
 }
 
-static long (*timeInMillisFp) () = TimeInMillisImplementation;
-
-long GetPlatformSpecificTimeInMillis()
-{
-    return timeInMillisFp();
-}
-
-void SetPlatformSpecificTimeInMillisMethod(long (*platformSpecific) ())
-{
-    timeInMillisFp = (platformSpecific == 0) ? TimeInMillisImplementation : platformSpecific;
-}
-
-///////////// Time in String
+long (*GetPlatformSpecificTimeInMillis)() = TimeInMillisImplementation;
 
 static const char* TimeStringImplementation()
 {
@@ -145,17 +133,7 @@ static const char* TimeStringImplementation()
     return dateTime;
 }
 
-static const char* (*timeStringFp) () = TimeStringImplementation;
-
-const char* GetPlatformSpecificTimeString()
-{
-    return timeStringFp();
-}
-
-void SetPlatformSpecificTimeStringMethod(const char* (*platformMethod) ())
-{
-    timeStringFp = (platformMethod == 0) ? TimeStringImplementation : platformMethod;
-}
+const char* (*GetPlatformSpecificTimeString)() = TimeStringImplementation;
 
 int PlatformSpecificAtoI(const char*str)
 {
