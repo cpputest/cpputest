@@ -317,13 +317,12 @@ double PlatformSpecificFabs(double d)
    return fabs(d);
 }
 
-int PlatformSpecificIsNan(double d)
+extern "C" int IsNanImplementation(double d)
 {
-    /* This should work, but doesn't on the C2000, because it does not
-     * seem to have any concept of NaN whatsoever (e.g. the constant
-     * 0.0 / 0.0 evaluates to 0.0).
+    /* We don' have any concept of NaN. 0.0/0.0 becomes 0.0.
      */
-    volatile double temp1 = d;
-    volatile double temp2 = d;
-    return temp1 != temp2;
+    return 0;
 }
+
+extern "C" int (*PlatformSpecificIsNan)(double d) = IsNanImplementation;
+

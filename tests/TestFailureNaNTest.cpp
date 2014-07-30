@@ -27,6 +27,7 @@
 
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TestOutput.h"
+#include "CppUTest/PlatformSpecificFunctions.h"
 
 namespace
 {
@@ -37,6 +38,8 @@ const char* failFileName = "fail.cpp";
 static double zero = 0.0;
 static const double not_a_number = zero / zero;
 
+extern "C" int IsNanForSystemsWithoutNan(double d) { return (0.0 == d); }
+
 TEST_GROUP(TestFailureNaN)
 {
     UtestShell* test;
@@ -44,6 +47,8 @@ TEST_GROUP(TestFailureNaN)
     void setup()
     {
         test = new UtestShell("groupname", "testname", failFileName, failLineNumber-1);
+		if(PlatformSpecificIsNan(not_a_number) == false) 
+		    UT_PTR_SET(PlatformSpecificIsNan, IsNanForSystemsWithoutNan);
     }
     void teardown()
     {
