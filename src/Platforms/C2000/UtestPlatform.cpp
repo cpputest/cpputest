@@ -319,8 +319,6 @@ double PlatformSpecificFabs(double d)
 
 extern "C" int IsNanImplementation(double d)
 {
-    /* We don' have any concept of NaN. 0.0/0.0 becomes 0.0.
-     */
     return 0;
 }
 
