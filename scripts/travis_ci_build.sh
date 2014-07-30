@@ -3,11 +3,7 @@
 set -e
 
 if [ "x$BUILDTOOL" = "xautotools" ]; then
-    # One time with the cached configure script to see if that one works well.
-    ../configure
-    make
-
-    autoreconf ..
+    autoreconf -i ..
     ../configure
     echo "CONFIGURATION DONE. Compiling now."
     make check_all
