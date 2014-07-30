@@ -254,7 +254,7 @@ double PlatformSpecificFabs(double d)
    return fabs(d);
 }
 
-int IsNanImplementation(double d)
+static int IsNanImplementation(double d)
 {
     return isnan((float)d);
 }

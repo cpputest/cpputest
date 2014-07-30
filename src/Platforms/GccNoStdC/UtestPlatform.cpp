@@ -230,7 +230,7 @@ double PlatformSpecificFabs(double d)
 
 extern "C" {
     
-int IsNanImplementation(double d)
+static int IsNanImplementation(double d)
 {
     /* To be implemented */
     (void) d;
