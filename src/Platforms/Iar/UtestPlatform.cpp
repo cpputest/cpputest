@@ -138,15 +138,20 @@ char PlatformSpecificToLower(char c)
 
 PlatformSpecificFile PlatformSpecificFOpen(const char* filename, const char* flag)
 {
-   return 0;
+    (void)filename;
+    (void)flag;
+    return 0;
 }
 
 void PlatformSpecificFPuts(const char* str, PlatformSpecificFile file)
 {
+    (void)str;
+    (void)file;
 }
 
 void PlatformSpecificFClose(PlatformSpecificFile file)
 {
+    (void)file;
 }
 
 void PlatformSpecificFlush()
@@ -188,7 +193,13 @@ double PlatformSpecificFabs(double d)
    return fabs(d);
 }
 
-int PlatformSpecificIsNan(double d)
+extern "C" {
+    
+static int IsNanImplementation(double d)
 {
     return isnan(d);
+}
+
+int (*PlatformSpecificIsNan)(double) = IsNanImplementation;
+
 }
