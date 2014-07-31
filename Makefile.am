@@ -203,7 +203,7 @@ valgrind: check
 	@if test "x$(CPPUTEST_HAS_VALGRIND)" = xno; then echo "Running the valgrind target without having valgrind. Perhaps install it first?"; exit 1; fi
 	valgrind --dsymutil=yes --suppressions=$(srcdir)/valgrind.suppressions --gen-suppressions=all --error-exitcode=1 ./$(CPPUTEST_TESTS)
 
-tdd: $(CPPUTEST_TESTS) $(CPPUTESTEXT_TESTS)
+tdd: $(CPPUTEST_TESTS)$(EXEEXT) $(CPPUTESTEXT_TESTS)$(EXEEXT)
 	./$(CPPUTEST_TESTS)
 if INCLUDE_CPPUTEST_EXT
 	./$(CPPUTESTEXT_TESTS)
