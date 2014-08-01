@@ -1,0 +1,52 @@
+#! armcc -E
+; code upper need to use #define 
+
+;-------------------------------------------------------------------------------------
+;   Keil scatter loading file
+; For LPC1833
+;-------------------------------------------------------------------------------------
+
+; Internal SRAM0
+#define SRAM0_START 0x10000000
+#define SRAM0_END   0x10008000
+#define SRAM0_SIZE  (SRAM0_END-SRAM0_START)
+
+; Internal SRAM1
+#define SRAM1_START 0x10080000
+#define SRAM1_END   0x1008A000
+#define SRAM1_SIZE  (SRAM1_END-SRAM1_START)
+
+; Internal SRAM2
+#define SRAM2_START 0x20000000
+#define SRAM2_END   0x20010000
+#define SRAM2_SIZE  (SRAM2_END-SRAM2_START)
+
+; SDRAM
+#define SDRAM_START 0x28000000
+
+; Internal FLASHA
+#define FLASHA_START 0x1A000000
+#define FLASHA_END   0x1A040000
+#define FLASHA_SIZE  (FLASHA_END-FLASHA_START)
+
+; Internal FLASHB
+#define FLASHB_START 0x1B000000
+#define FLASHB_END   0x1B040000
+#define FLASHB_SIZE  (FLASHB_END-FLASHB_START)
+
+LR1 FLASHA_START FLASHA_SIZE {
+  ER1 FLASHA_START FLASHA_SIZE {
+    *(RESET, +FIRST)
+   *(InRoot$$Sections)
+    *.o (+RO)
+  }
+  ER2 SRAM0_START SRAM0_SIZE {
+    *.o (+RW +ZI)
+  }
+
+  ER4 (SRAM1_START) SRAM1_SIZE {
+    *(HEAP)
+    *(STACK)
+  }
+}
+

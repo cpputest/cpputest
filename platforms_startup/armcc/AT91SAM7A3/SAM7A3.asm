@@ -421,13 +421,12 @@ MC_RCR  EQU     0x00            ; MC_RCR Offset
                 AREA    |.text|, CODE, READONLY
 
                 IMPORT  __use_two_region_memory
-                EXPORT  __user_initial_stackheap
-__user_initial_stackheap
+                EXPORT  __user_setup_stackheap
+__user_setup_stackheap
 
                 LDR     R0, =  Heap_Mem
-                LDR     R1, =(Stack_Mem + SVC_Stack_Size)
-                LDR     R2, = (Heap_Mem +      Heap_Size)
-                LDR     R3, = Stack_Mem
+                LDR     R2, = (Heap_Mem +  Heap_Size)
+                LDR     SP, =(Stack_Mem + SVC_Stack_Size)
                 BX      LR
                 ENDIF
 
