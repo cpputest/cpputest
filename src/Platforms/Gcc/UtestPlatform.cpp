@@ -32,7 +32,6 @@
 #undef calloc
 #undef realloc
 
-#include "CppUTest/TestRegistry.h"
 #include <sys/time.h>
 #include <time.h>
 #include <stdio.h>
