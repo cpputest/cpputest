@@ -94,7 +94,7 @@ static long TimeInMillisImplementation()
     return t;
 }
 
-long (*GetPlatformSpecificTimeInMillis)() = TimeInMillisImplementation;
+extern "C" long (*GetPlatformSpecificTimeInMillis)() = TimeInMillisImplementation;
 
 static const char* TimeStringImplementation()
 {
@@ -102,7 +102,7 @@ static const char* TimeStringImplementation()
     return ctime(&tm);
 }
 
-const char* (*GetPlatformSpecificTimeString)() = TimeStringImplementation;
+extern "C" const char* (*GetPlatformSpecificTimeString)() = TimeStringImplementation;
 
 int PlatformSpecificAtoI(const char* str)
 {
@@ -199,13 +199,9 @@ double PlatformSpecificFabs(double d)
    return fabs(d);
 }
 
-extern "C" {
-    
 static int IsNanImplementation(double d)
 {
     return isnan(d);
 }
 
-int (*PlatformSpecificIsNan)(double) = IsNanImplementation;
-
-}
+extern "C" int (*PlatformSpecificIsNan)(double) = IsNanImplementation;

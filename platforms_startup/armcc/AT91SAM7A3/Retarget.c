@@ -26,9 +26,9 @@
 
 #pragma import(__use_no_semihosting_swi)
 
-const char __stdin_name[] = "";
-const char __stdout_name[] = "";
-const char __stderr_name[] = "";
+const char __stdin_name[] = "STDIN";
+const char __stdout_name[] = "STDOUT";
+const char __stderr_name[] = "STDERR";
 
 static int init_UART_done = 0;
 static void UART_putc(unsigned char);

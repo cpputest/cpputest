@@ -27,9 +27,9 @@
 
 #pragma import(__use_no_semihosting_swi)
 
-const char __stdin_name[] = "";
-const char __stdout_name[] = "";
-const char __stderr_name[] = "";
+const char __stdin_name[] = "STDIN";
+const char __stdout_name[] = "STDOUT";
+const char __stderr_name[] = "STDERR";
 
 
 FILEHANDLE _sys_open(const char *name, int openmode)
