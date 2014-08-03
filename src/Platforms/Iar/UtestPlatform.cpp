@@ -39,7 +39,6 @@
 #undef calloc
 #undef realloc
 #undef free
-#include "CppUTest/TestRegistry.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
 static jmp_buf test_exit_jmp_buf[10];
@@ -194,7 +193,7 @@ double PlatformSpecificFabs(double d)
 }
 
 extern "C" {
-    
+
 static int IsNanImplementation(double d)
 {
     return isnan(d);

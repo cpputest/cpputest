@@ -31,7 +31,6 @@
 #undef calloc
 #undef realloc
 
-#include "CppUTest/TestRegistry.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
 int PlatformSpecificSetJmp(void (*function) (void* data), void* data)
@@ -208,7 +207,7 @@ double PlatformSpecificFabs(double d)
 }
 
 extern "C" {
-    
+
 static int IsNanImplementation(double d)
 {
     /* To be implemented */
@@ -217,7 +216,7 @@ static int IsNanImplementation(double d)
 }
 
 int (*PlatformSpecificIsNan)(double) = IsNanImplementation;
-    
+
 }
 
 void* malloc(size_t)

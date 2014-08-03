@@ -33,7 +33,6 @@
 #undef realloc
 
 #define  far  // eliminate "meaningless type qualifier" warning
-#include "CppUTest/TestRegistry.h"
 #include <time.h>
 #include <stdio.h>
 #include <stdarg.h>

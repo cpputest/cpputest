@@ -6,7 +6,6 @@
 #undef calloc
 #undef realloc
 
-#include "CppUTest/TestRegistry.h"
 #include <stdio.h>
 #include <stdarg.h>
 #include <setjmp.h>

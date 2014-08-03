@@ -36,7 +36,6 @@
 #undef realloc
 
 #define  far  // eliminate "meaningless type qualifier" warning
-#include "CppUTest/TestRegistry.h"
 #include <time.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -52,7 +51,7 @@ static jmp_buf test_exit_jmp_buf[10];
 static int jmp_buf_index = 0;
 
 #if USE_BUFFER_OUTPUT
-    // Buffer for crude output routine 
+    // Buffer for crude output routine
     #define BUFFER_SIZE 4096
     static char buffer [BUFFER_SIZE]; /* "never used" warning is OK */
     static int idx = 0;
@@ -159,26 +158,26 @@ char* PlatformSpecificStrStr(const char* s1, const char* s2)
 {
     const char *cmp;
     const char *wpos;
- 
+
     // ----------------------------------------------------------------------
     // TRY EVERY POSITION IN THE CONTROL STRING
     // ----------------------------------------------------------------------
     for (wpos = s1; *s1; wpos = ++s1)
     {
         cmp = s2;
- 
+
         do
         {
             // ----------------------------------------------------------------
             //  AT END OF COMPARISON STRING, MUST HAVE A MATCH OR EMPTY STRING
             // ----------------------------------------------------------------
             if (!*cmp)  return (char *)s1;
- 
+
             // ----------------------------------------------------------------
             // AT END OF CONTROL STRING, NO MATCH IS POSSIBLE
             // ----------------------------------------------------------------
             if (!*wpos) return NULL;
- 
+
        } while (*wpos++ == *cmp++);
    }
    return NULL;
