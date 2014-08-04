@@ -127,7 +127,7 @@ void MemoryLeakOutputStringBuffer::reportMemoryLeak(MemoryLeakDetectorNode* leak
     outputBuffer_.add("Alloc num (%u) Leak size: %lu Allocated at: %s and line: %d. Type: \"%s\"\n\t Memory: <%p> Content: \"%.15s\"\n",
             leak->number_, (unsigned long) leak->size_, leak->file_, leak->line_, leak->allocator_->alloc_name(), leak->memory_, leak->memory_);
 
-    if (PlatformSpecificStrCmp(leak->allocator_->alloc_name(), "malloc") == 0)
+    if (SimpleString::StrCmp(leak->allocator_->alloc_name(), (const char*) "malloc") == 0)
         giveWarningOnUsingMalloc_ = true;
 }
 

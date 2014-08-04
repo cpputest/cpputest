@@ -63,6 +63,16 @@ char* SimpleString::getEmptyString() const
     return empty;
 }
 
+int SimpleString::StrCmp(const char* s1, const char* s2)
+{
+    for(;;)
+    {
+        if (!*s1) return(0 - *s2);
+        if (*s1++ != *s2++)
+            return(*--s1 - *--s2);
+    }
+}
+
 size_t SimpleString::StrLen(const char* str)
 {
     size_t n = (size_t)-1;
@@ -147,7 +157,7 @@ bool SimpleString::endsWith(const SimpleString& other) const
     if (other_buffer_length == 0) return true;
     if (buffer_length == 0) return false;
     if (buffer_length < other_buffer_length) return false;
-    return PlatformSpecificStrCmp(buffer_ + buffer_length - other_buffer_length, other.buffer_) == 0;
+    return StrCmp(buffer_ + buffer_length - other_buffer_length, other.buffer_) == 0;
 }
 
 size_t SimpleString::count(const SimpleString& substr) const
@@ -255,7 +265,7 @@ SimpleString::~SimpleString()
 
 bool operator==(const SimpleString& left, const SimpleString& right)
 {
-    return 0 == PlatformSpecificStrCmp(left.asCharString(), right.asCharString());
+    return 0 == SimpleString::StrCmp(left.asCharString(), right.asCharString());
 }
 
 bool SimpleString::equalsNoCase(const SimpleString& str) const
