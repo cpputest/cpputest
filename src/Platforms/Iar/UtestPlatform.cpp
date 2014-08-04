@@ -105,11 +105,6 @@ int PlatformSpecificAtoI(const char*str)
     return atoi(str);
 }
 
-size_t PlatformSpecificStrLen(const char* str)
-{
-   return strlen(str);
-}
-
 int PlatformSpecificStrCmp(const char* s1, const char* s2)
 {
     return strcmp(s1, s2);

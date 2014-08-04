@@ -105,10 +105,6 @@ int PlatformSpecificPutchar(int c) {
     return putchar(c);
 }
 
-size_t PlatformSpecificStrLen(const char* s) {
-    return strlen(s);
-}
-
 char* PlatformSpecificStrStr(const char* s1, const char* s2) {
     return strstr(s1, s2);
 }

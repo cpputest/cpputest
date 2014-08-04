@@ -83,7 +83,7 @@ CodeReportingAllocationNode* CodeMemoryReportFormatter::findNode(void* memory)
 
 static SimpleString extractFileNameFromPath(const char* file)
 {
-    const char* fileNameOnly = file + PlatformSpecificStrLen(file);
+    const char* fileNameOnly = file + SimpleString::StrLen(file);
     while (fileNameOnly != file && *fileNameOnly != '/')
         fileNameOnly--;
     if (*fileNameOnly == '/') fileNameOnly++;
