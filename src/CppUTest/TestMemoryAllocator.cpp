@@ -127,7 +127,7 @@ bool TestMemoryAllocator::hasBeenDestroyed()
 
 bool TestMemoryAllocator::isOfEqualType(TestMemoryAllocator* allocator)
 {
-    return PlatformSpecificStrCmp(this->name(), allocator->name()) == 0;
+    return SimpleString::StrCmp(this->name(), allocator->name()) == 0;
 }
 
 char* TestMemoryAllocator::allocMemoryLeakNode(size_t size)

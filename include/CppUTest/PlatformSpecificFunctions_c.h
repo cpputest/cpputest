@@ -52,7 +52,6 @@ extern const char* (*GetPlatformSpecificTimeString)(void);
 
 /* String operations */
 int PlatformSpecificAtoI(const char*str);
-int PlatformSpecificStrCmp(const char* s1, const char* s2);
 int PlatformSpecificStrNCmp(const char* s1, const char* s2, size_t size);
 char* PlatformSpecificStrStr(const char* s1, const char* s2);
 

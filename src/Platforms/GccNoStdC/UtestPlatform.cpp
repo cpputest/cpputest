@@ -76,14 +76,6 @@ int PlatformSpecificAtoI(const char*str)
     return 0;
 }
 
-int PlatformSpecificStrCmp(const char* s1, const char* s2)
-{
-    /* To be implemented */
-    (void) s1;
-    (void) s2;
-    return 0;
-}
-
 int PlatformSpecificStrNCmp(const char* s1, const char* s2, size_t size)
 {
     /* To be implemented */

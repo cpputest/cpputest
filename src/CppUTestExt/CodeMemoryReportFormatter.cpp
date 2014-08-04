@@ -105,7 +105,7 @@ SimpleString CodeMemoryReportFormatter::createVariableNameFromFileLineInfo(const
 
 bool CodeMemoryReportFormatter::isNewAllocator(TestMemoryAllocator* allocator)
 {
-    return PlatformSpecificStrCmp(allocator->alloc_name(), defaultNewAllocator()->alloc_name()) == 0 || PlatformSpecificStrCmp(allocator->alloc_name(), defaultNewArrayAllocator()->alloc_name()) == 0;
+    return SimpleString::StrCmp(allocator->alloc_name(), defaultNewAllocator()->alloc_name()) == 0 || SimpleString::StrCmp(allocator->alloc_name(), defaultNewArrayAllocator()->alloc_name()) == 0;
 }
 
 bool CodeMemoryReportFormatter::variableExists(const SimpleString& variableName)
