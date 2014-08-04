@@ -232,14 +232,16 @@ const char *SimpleString::asCharString() const
 
 size_t SimpleString::size() const
 {
-    return PlatformSpecificStrLen(buffer_);
+    char* str = buffer_;
+    size_t n = (size_t)-1;
+    do n++; while (*str++);
+    return n;
 }
 
 bool SimpleString::isEmpty() const
 {
     return size() == 0;
 }
-
 
 
 SimpleString::~SimpleString()
