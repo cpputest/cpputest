@@ -82,7 +82,6 @@ public:
 
     const char *asCharString() const;
     size_t size() const;
-    static size_t size(const char*);
     bool isEmpty() const;
 
     static void padStringsToSameLength(SimpleString& str1, SimpleString& str2, char ch);
@@ -91,6 +90,7 @@ public:
     static void setStringAllocator(TestMemoryAllocator* allocator);
 
     static char* allocStringBuffer(size_t size);
+    static size_t StrLen(const char*);
     static char* StrNCpy(char* s1, const char* s2, size_t n);
     static void deallocStringBuffer(char* str);
 private:
