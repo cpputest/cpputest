@@ -86,7 +86,7 @@ SimpleString::SimpleString(const char *otherBuffer)
 
 SimpleString::SimpleString(const char *other, size_t repeatCount)
 {
-    size_t otherStringLength = PlatformSpecificStrLen(other);
+    size_t otherStringLength = size(other);
     size_t len = otherStringLength * repeatCount + 1;
     buffer_ = allocStringBuffer(len);
     char* next = buffer_;
@@ -115,8 +115,8 @@ bool SimpleString::contains(const SimpleString& other) const
 {
     //strstr on some machines does not handle ""
     //the right way.  "" should be found in any string
-    if (PlatformSpecificStrLen(other.buffer_) == 0) return true;
-    else if (PlatformSpecificStrLen(buffer_) == 0) return false;
+    if (size(other.buffer_) == 0) return true;
+    else if (size() == 0) return false;
     else return PlatformSpecificStrStr(buffer_, other.buffer_) != 0;
 }
 
@@ -128,15 +128,15 @@ bool SimpleString::containsNoCase(const SimpleString& other) const
 
 bool SimpleString::startsWith(const SimpleString& other) const
 {
-    if (PlatformSpecificStrLen(other.buffer_) == 0) return true;
-    else if (PlatformSpecificStrLen(buffer_) == 0) return false;
+    if (size(other.buffer_) == 0) return true;
+    else if (size() == 0) return false;
     else return PlatformSpecificStrStr(buffer_, other.buffer_) == buffer_;
 }
 
 bool SimpleString::endsWith(const SimpleString& other) const
 {
-    size_t buffer_length = PlatformSpecificStrLen(buffer_);
-    size_t other_buffer_length = PlatformSpecificStrLen(other.buffer_);
+    size_t buffer_length = size();
+    size_t other_buffer_length = size(other.buffer_);
     if (other_buffer_length == 0) return true;
     if (buffer_length == 0) return false;
     if (buffer_length < other_buffer_length) return false;
@@ -185,8 +185,8 @@ void SimpleString::replace(const char* to, const char* with)
 {
     size_t c = count(to);
     size_t len = size();
-    size_t tolen = PlatformSpecificStrLen(to);
-    size_t withlen = PlatformSpecificStrLen(with);
+    size_t tolen = size(to);
+    size_t withlen = size(with);
 
     size_t newsize = len + (withlen * c) - (tolen * c) + 1;
 
@@ -232,7 +232,11 @@ const char *SimpleString::asCharString() const
 
 size_t SimpleString::size() const
 {
-    char* str = buffer_;
+    return size(buffer_);
+}
+
+size_t SimpleString::size(const char* str)
+{
     size_t n = (size_t)-1;
     do n++; while (*str++);
     return n;
@@ -280,7 +284,7 @@ SimpleString& SimpleString::operator+=(const SimpleString& rhs)
 SimpleString& SimpleString::operator+=(const char* rhs)
 {
     size_t originalSize = this->size();
-    size_t additionalStringSize = PlatformSpecificStrLen(rhs) + 1;
+    size_t additionalStringSize = size(rhs) + 1;
     size_t sizeOfNewString = originalSize + additionalStringSize;
     char* tbuffer = copyToNewBuffer(this->buffer_, sizeOfNewString);
     StrNCpy(tbuffer + originalSize, rhs, additionalStringSize);
@@ -345,7 +349,7 @@ SimpleString SimpleString::subStringFromTill(char startChar, char lastExcludedCh
 
 char* SimpleString::copyToNewBuffer(const char* bufferToCopy, size_t bufferSize)
 {
-    if(bufferSize == 0) bufferSize = PlatformSpecificStrLen(bufferToCopy) + 1;
+    if(bufferSize == 0) bufferSize = size(bufferToCopy) + 1;
 
     char* newBuffer = allocStringBuffer(bufferSize);
     StrNCpy(newBuffer, bufferToCopy, bufferSize);
