@@ -75,7 +75,7 @@ public:
     void replace(char to, char with);
     void replace(const char* to, const char* with);
 
-    SimpleString toLower() const;
+    SimpleString lowerCase() const;
     SimpleString subString(size_t beginPos, size_t amount) const;
     SimpleString subStringFromTill(char startChar, char lastExcludedChar) const;
     void copyToBuffer(char* buffer, size_t bufferSize) const;

@@ -151,12 +151,12 @@ TEST(SimpleString, Size)
     LONGS_EQUAL(6, s1.size());
 }
 
-TEST(SimpleString, toLower)
+TEST(SimpleString, lowerCase)
 {
-    SimpleString s1("AbCdEfG");
-    SimpleString s2(s1.toLower());
-    STRCMP_EQUAL("abcdefg", s2.asCharString());
-    STRCMP_EQUAL("AbCdEfG", s1.asCharString());
+    SimpleString s1("AbCdEfG1234");
+    SimpleString s2(s1.lowerCase());
+    STRCMP_EQUAL("abcdefg1234", s2.asCharString());
+    STRCMP_EQUAL("AbCdEfG1234", s1.asCharString());
 }
 
 TEST(SimpleString, Addition)

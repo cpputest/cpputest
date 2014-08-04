@@ -169,7 +169,7 @@ bool SimpleString::contains(const SimpleString& other) const
 
 bool SimpleString::containsNoCase(const SimpleString& other) const
 {
-    return toLower().contains(other.toLower());
+    return lowerCase().contains(other.lowerCase());
 }
 
 
@@ -261,7 +261,7 @@ void SimpleString::replace(const char* to, const char* with)
     }
 }
 
-SimpleString SimpleString::toLower() const
+SimpleString SimpleString::lowerCase() const
 {
     SimpleString str(*this);
 
@@ -300,7 +300,7 @@ bool operator==(const SimpleString& left, const SimpleString& right)
 
 bool SimpleString::equalsNoCase(const SimpleString& str) const
 {
-    return toLower() == str.toLower();
+    return lowerCase() == str.lowerCase();
 }
 
 
