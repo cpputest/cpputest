@@ -63,6 +63,13 @@ char* SimpleString::getEmptyString() const
     return empty;
 }
 
+size_t SimpleString::StrLen(const char* str)
+{
+    size_t n = (size_t)-1;
+    do n++; while (*str++);
+    return n;
+}
+
 char* SimpleString::StrNCpy(char* s1, const char* s2, size_t n)
 {
     char* result = s1;
@@ -233,13 +240,6 @@ const char *SimpleString::asCharString() const
 size_t SimpleString::size() const
 {
     return StrLen(buffer_);
-}
-
-size_t SimpleString::StrLen(const char* str)
-{
-    size_t n = (size_t)-1;
-    do n++; while (*str++);
-    return n;
 }
 
 bool SimpleString::isEmpty() const
