@@ -109,10 +109,6 @@ char* PlatformSpecificStrStr(const char* s1, const char* s2) {
     return strstr(s1, s2);
 }
 
-int PlatformSpecificStrNCmp(const char* s1, const char* s2, size_t size) {
-    return strncmp(s1, s2, size);
-}
-
 double PlatformSpecificFabs(double d) {
     return fabs(d);
 }

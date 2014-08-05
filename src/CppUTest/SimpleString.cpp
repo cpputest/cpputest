@@ -80,6 +80,18 @@ size_t SimpleString::StrLen(const char* str)
     return n;
 }
 
+int SimpleString::StrNCmp(const char* s1, const char* s2, size_t n)
+{
+    while (n) {
+         if (*s1 != *s2)
+             return *(unsigned char *) s1 - *(unsigned char *) s2;
+         if (*s1 == 0)
+             return 0;
+         n--, s1++, s2++;
+    }
+    return 0;
+}
+
 char* SimpleString::StrNCpy(char* s1, const char* s2, size_t n)
 {
     char* result = s1;
@@ -210,7 +222,7 @@ void SimpleString::replace(const char* to, const char* with)
     if (newsize) {
         char* newbuf = allocStringBuffer(newsize);
         for (size_t i = 0, j = 0; i < len;) {
-            if (PlatformSpecificStrNCmp(&buffer_[i], to, tolen) == 0) {
+            if (StrNCmp(&buffer_[i], to, tolen) == 0) {
                 StrNCpy(&newbuf[j], with, withlen + 1);
                 j += withlen;
                 i += tolen;

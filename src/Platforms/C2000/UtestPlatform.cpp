@@ -127,16 +127,6 @@ int PlatformSpecificAtoI(const char* str)
    return atoi(str);
 }
 
-int PlatformSpecificStrNCmp(const char* s1, const char* s2, size_t n)
-{
-    unsigned int   ch1, diff;
-
-    if (n == 0)  return 0;
-
-    while (n-- && !(diff = (ch1 = *s1++) - *s2++) && ch1 != 0) ;
-    return diff;
-}
-
 char* PlatformSpecificStrStr(const char* s1, const char* s2)
 {
     const char *cmp;

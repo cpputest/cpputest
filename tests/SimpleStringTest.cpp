@@ -660,3 +660,45 @@ TEST(SimpleString, StrNCpy_write_into_the_middle)
     SimpleString::StrNCpy(str+3, "e", 1);
     STRCMP_EQUAL("womenXXXXX", str);
 }
+
+TEST(SimpleString, StrNCmp_equal)
+{
+    int result = SimpleString::StrNCmp("teststring", "tests", 5);
+    LONGS_EQUAL(0, result);
+}
+
+TEST(SimpleString, StrNCmp_s1_smaller)
+{
+    int result = SimpleString::StrNCmp("testing", "tests", 7);
+    LONGS_EQUAL('i' - 's', result);
+}
+
+TEST(SimpleString, StrNCmp_s1_larger)
+{
+    int result = SimpleString::StrNCmp("teststring", "tester", 7);
+    LONGS_EQUAL('s' - 'e', result);
+}
+
+TEST(SimpleString, StrNCmp_n_too_large)
+{
+    int result = SimpleString::StrNCmp("teststring", "teststring", 20);
+    LONGS_EQUAL(0, result);
+}
+
+TEST(SimpleString, StrNCmp_s1_empty)
+{
+    int result = SimpleString::StrNCmp("", "foo", 2);
+    LONGS_EQUAL(0 - 'f', result);
+}
+
+TEST(SimpleString, StrNCmp_s2_empty)
+{
+    int result = SimpleString::StrNCmp("foo", "", 2);
+    LONGS_EQUAL('f', result);
+}
+
+TEST(SimpleString, StrNCmp_s1_and_s2_empty)
+{
+    int result = SimpleString::StrNCmp("", "", 2);
+    LONGS_EQUAL(0, result);
+}
