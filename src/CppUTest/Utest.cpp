@@ -357,7 +357,7 @@ void UtestShell::assertCstrNEqual(const char* expected, const char* actual, size
     if (actual == 0 && expected == 0) return;
     if (actual == 0 || expected == 0)
         failWith(StringEqualFailure(this, fileName, lineNumber, expected, actual), testTerminator);
-    if (PlatformSpecificStrNCmp(expected, actual, length) != 0)
+    if (SimpleString::StrNCmp(expected, actual, length) != 0)
         failWith(StringEqualFailure(this, fileName, lineNumber, expected, actual), testTerminator);
 }
 
