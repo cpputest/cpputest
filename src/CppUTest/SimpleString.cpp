@@ -105,19 +105,10 @@ char* SimpleString::StrNCpy(char* s1, const char* s2, size_t n)
 
 char* SimpleString::StrStr(const char* s1, const char* s2)
 {
-    const char *cmp;
-    const char *pos = s1;
-
-    do {
-        cmp = s2;
-        do {
-            if (!*cmp) return (char *)s1;
-            if (!*pos) return NULL;
-        } while (*pos++ == *cmp++);
-        pos = ++s1;
-   } while (*s1);
-   
-   return NULL;
+    for (; *s1 || !*s2; s1++)
+        if (StrNCmp(s1, s2, StrLen(s2)) == 0)
+            return (char*) s1;
+    return NULL;
 }
 
 SimpleString::SimpleString(const char *otherBuffer)
