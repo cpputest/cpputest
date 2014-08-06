@@ -106,9 +106,9 @@ void CommandLineArguments::SetRepeatCount(int ac, const char** av, int& i)
     repeat_ = 0;
 
     SimpleString repeatParameter(av[i]);
-    if (repeatParameter.size() > 2) repeat_ = PlatformSpecificAtoI(av[i] + 2);
+    if (repeatParameter.size() > 2) repeat_ = SimpleString::AtoI(av[i] + 2);
     else if (i + 1 < ac) {
-        repeat_ = PlatformSpecificAtoI(av[i + 1]);
+        repeat_ = SimpleString::AtoI(av[i + 1]);
         if (repeat_ != 0) i++;
     }
 

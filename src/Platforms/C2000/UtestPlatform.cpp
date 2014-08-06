@@ -122,11 +122,6 @@ static const char* TimeStringImplementation()
 
 const char* (*GetPlatformSpecificTimeString)() = TimeStringImplementation;
 
-int PlatformSpecificAtoI(const char* str)
-{
-   return atoi(str);
-}
-
 extern "C" int vsnprintf(char*, size_t, const char*, va_list); // not std::vsnprintf()
 
 int PlatformSpecificVSNprintf(char *str, size_t size, const char* format, va_list args)

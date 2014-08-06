@@ -30,7 +30,6 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 #include "CppUTest/TestMemoryAllocator.h"
 
-
 TestMemoryAllocator* SimpleString::stringAllocator_ = NULL;
 
 TestMemoryAllocator* SimpleString::getStringAllocator()
@@ -61,6 +60,24 @@ char* SimpleString::getEmptyString() const
     char* empty = allocStringBuffer(1);
     empty[0] = '\0';
     return empty;
+}
+
+int SimpleString::AtoI(const char* str)
+{
+    int  result = 0;
+    bool sign;
+
+    while (isSpace(*str)) str++;
+
+    sign = (*str == '-');
+    if (sign || *str == '+') str++;
+    for(; isDigit(*str); str++)
+    {
+        result *= 10;
+        result += *str - '0';
+    }
+    if (sign) result *= -1;
+    return result;
 }
 
 int SimpleString::StrCmp(const char* s1, const char* s2)
@@ -392,6 +409,16 @@ void SimpleString::copyToBuffer(char* bufferToCopy, size_t bufferSize) const
 
     StrNCpy(bufferToCopy, buffer_, sizeToCopy);
     bufferToCopy[sizeToCopy] = '\0';
+}
+
+bool SimpleString::isSpace(char ch)
+{
+    return (ch == ' ') || (0x08 < ch && 0x0E > ch);
+}
+
+bool SimpleString::isDigit(char ch)
+{
+    return '/' < ch && ':' > ch;
 }
 
 SimpleString StringFrom(bool value)
