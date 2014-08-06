@@ -625,6 +625,19 @@ TEST(SimpleString, unsigned_long)
 
 #endif
 
+TEST(SimpleString, StrCmp)
+{
+    char empty[] = "";
+    char blabla[] = "blabla";
+    char bla[] = "bla";
+    CHECK(SimpleString::StrCmp(empty, empty) == 0);
+    CHECK(SimpleString::StrCmp(bla, blabla) == -'b');
+    CHECK(SimpleString::StrCmp(blabla, bla) == 'b');
+    CHECK(SimpleString::StrCmp(bla, empty) == 'b');
+    CHECK(SimpleString::StrCmp(empty, bla) == -'b');
+    CHECK(SimpleString::StrCmp(bla, bla) == 0);
+}
+
 TEST(SimpleString, StrNCpy_no_zero_termination)
 {
     char str[] = "XXXXXXXXXX";
@@ -703,12 +716,15 @@ TEST(SimpleString, StrNCmp_s1_and_s2_empty)
     LONGS_EQUAL(0, result);
 }
 
-TEST(SimpleString, StrStr_s1_contains_empty)
+TEST(SimpleString, StrStr)
 {
-    CHECK(SimpleString::StrStr("foo", "") != 0);
-}
-
-TEST(SimpleString, StrStr_empty_contains_empty)
-{
-    CHECK(SimpleString::StrStr("", "") != 0);
+    char foo[] = "foo";
+    char empty[] = "";
+    char foobarfoo[] = "foobarfoo";
+    char barf[] = "barf";
+    CHECK(SimpleString::StrStr(foo, empty) == foo);
+    CHECK(SimpleString::StrStr(empty, foo) == 0);
+    CHECK(SimpleString::StrStr(foobarfoo, barf) == foobarfoo+3);
+    CHECK(SimpleString::StrStr(barf, foobarfoo) == 0);
+    CHECK(SimpleString::StrStr(foo, foo) == foo);
 }
