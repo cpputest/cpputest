@@ -103,6 +103,23 @@ char* SimpleString::StrNCpy(char* s1, const char* s2, size_t n)
     return result;
 }
 
+char* SimpleString::StrStr(const char* s1, const char* s2)
+{
+    const char *cmp;
+    const char *pos = s1;
+
+    do {
+        cmp = s2;
+        do {
+            if (!*cmp) return (char *)s1;
+            if (!*pos) return NULL;
+        } while (*pos++ == *cmp++);
+        pos = ++s1;
+   } while (*s1);
+   
+   return NULL;
+}
+
 SimpleString::SimpleString(const char *otherBuffer)
 {
     if (otherBuffer == 0) {
@@ -142,11 +159,7 @@ SimpleString& SimpleString::operator=(const SimpleString& other)
 
 bool SimpleString::contains(const SimpleString& other) const
 {
-    //strstr on some machines does not handle ""
-    //the right way.  "" should be found in any string
-    if (StrLen(other.buffer_) == 0) return true;
-    else if (size() == 0) return false;
-    else return PlatformSpecificStrStr(buffer_, other.buffer_) != 0;
+    return StrStr(buffer_, other.buffer_) != 0;
 }
 
 bool SimpleString::containsNoCase(const SimpleString& other) const
@@ -159,7 +172,7 @@ bool SimpleString::startsWith(const SimpleString& other) const
 {
     if (StrLen(other.buffer_) == 0) return true;
     else if (size() == 0) return false;
-    else return PlatformSpecificStrStr(buffer_, other.buffer_) == buffer_;
+    else return StrStr(buffer_, other.buffer_) == buffer_;
 }
 
 bool SimpleString::endsWith(const SimpleString& other) const
@@ -176,7 +189,7 @@ size_t SimpleString::count(const SimpleString& substr) const
 {
     size_t num = 0;
     char* str = buffer_;
-    while ((str = PlatformSpecificStrStr(str, substr.buffer_))) {
+    while ((str = StrStr(str, substr.buffer_))) {
         num++;
         str++;
     }
@@ -193,7 +206,7 @@ void SimpleString::split(const SimpleString& delimiter, SimpleStringCollection& 
     char* prev;
     for (size_t i = 0; i < num; ++i) {
         prev = str;
-        str = PlatformSpecificStrStr(str, delimiter.buffer_) + 1;
+        str = StrStr(str, delimiter.buffer_) + 1;
         size_t len = (size_t) (str - prev) + 1;
         col[i].buffer_ = copyToNewBuffer(prev, len);
     }

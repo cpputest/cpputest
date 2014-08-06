@@ -105,10 +105,6 @@ int PlatformSpecificPutchar(int c) {
     return putchar(c);
 }
 
-char* PlatformSpecificStrStr(const char* s1, const char* s2) {
-    return strstr(s1, s2);
-}
-
 double PlatformSpecificFabs(double d) {
     return fabs(d);
 }

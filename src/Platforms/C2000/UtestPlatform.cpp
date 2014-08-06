@@ -127,35 +127,6 @@ int PlatformSpecificAtoI(const char* str)
    return atoi(str);
 }
 
-char* PlatformSpecificStrStr(const char* s1, const char* s2)
-{
-    const char *cmp;
-    const char *wpos;
-
-    // ----------------------------------------------------------------------
-    // TRY EVERY POSITION IN THE CONTROL STRING
-    // ----------------------------------------------------------------------
-    for (wpos = s1; *s1; wpos = ++s1)
-    {
-        cmp = s2;
-
-        do
-        {
-            // ----------------------------------------------------------------
-            //  AT END OF COMPARISON STRING, MUST HAVE A MATCH OR EMPTY STRING
-            // ----------------------------------------------------------------
-            if (!*cmp)  return (char *)s1;
-
-            // ----------------------------------------------------------------
-            // AT END OF CONTROL STRING, NO MATCH IS POSSIBLE
-            // ----------------------------------------------------------------
-            if (!*wpos) return NULL;
-
-       } while (*wpos++ == *cmp++);
-   }
-   return NULL;
-}
-
 extern "C" int vsnprintf(char*, size_t, const char*, va_list); // not std::vsnprintf()
 
 int PlatformSpecificVSNprintf(char *str, size_t size, const char* format, va_list args)

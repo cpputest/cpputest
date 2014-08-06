@@ -702,3 +702,13 @@ TEST(SimpleString, StrNCmp_s1_and_s2_empty)
     int result = SimpleString::StrNCmp("", "", 2);
     LONGS_EQUAL(0, result);
 }
+
+TEST(SimpleString, StrStr_s1_contains_empty)
+{
+    CHECK(SimpleString::StrStr("foo", "") != 0);
+}
+
+TEST(SimpleString, StrStr_empty_contains_empty)
+{
+    CHECK(SimpleString::StrStr("", "") != 0);
+}
