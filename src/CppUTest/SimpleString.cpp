@@ -105,7 +105,8 @@ char* SimpleString::StrNCpy(char* s1, const char* s2, size_t n)
 
 char* SimpleString::StrStr(const char* s1, const char* s2)
 {
-    for (; *s1 || !*s2; s1++)
+    if(!*s2) return (char*) s1;
+    for (; *s1; s1++)
         if (StrNCmp(s1, s2, StrLen(s2)) == 0)
             return (char*) s1;
     return NULL;
