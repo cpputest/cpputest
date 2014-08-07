@@ -87,11 +87,6 @@ int PlatformSpecificAtoI(const char*str)
    return atoi(str);
 }
 
-char* PlatformSpecificStrStr(const char* s1, const char* s2)
-{
-   return (char*) strstr(s1, s2);
-}
-
 int PlatformSpecificVSNprintf(char *str, size_t size, const char* format, va_list args)
 {
     char* buf = 0;

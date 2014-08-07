@@ -108,11 +108,6 @@ int PlatformSpecificAtoI(const char* str)
     return atoi(str);
 }
 
-char* PlatformSpecificStrStr(const char* s1, const char* s2)
-{
-    return strstr((char*)s1, (char*)s2);
-}
-
 /* The ARMCC compiler will compile this function with C++ linkage, unless
  * we specifically tell it to use C linkage again, in the function definiton.
  */

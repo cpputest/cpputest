@@ -76,14 +76,6 @@ int PlatformSpecificAtoI(const char*str)
     return 0;
 }
 
-char* PlatformSpecificStrStr(const char* s1, const char* s2)
-{
-    /* To be implemented */
-    (void) s1;
-    (void) s2;
-    return NULL;
-}
-
 int PlatformSpecificVSNprintf(char *str, size_t size, const char* format, va_list args)
 {
     /* To be implemented */

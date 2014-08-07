@@ -94,6 +94,7 @@ public:
     static size_t StrLen(const char*);
     static int StrNCmp(const char* s1, const char* s2, size_t n);
     static char* StrNCpy(char* s1, const char* s2, size_t n);
+    static char* StrStr(const char* s1, const char* s2);
     static void deallocStringBuffer(char* str);
 private:
     char *buffer_;

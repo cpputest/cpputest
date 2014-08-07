@@ -139,11 +139,6 @@ int PlatformSpecificAtoI(const char*str)
    return atoi(str);
 }
 
-char* PlatformSpecificStrStr(const char* s1, const char* s2)
-{
-   return (char*) strstr(s1, s2);
-}
-
 /* Wish we could add an attribute to the format for discovering mis-use... but the __attribute__(format) seems to not work on va_list */
 #ifdef __clang__
 #pragma clang diagnostic ignored "-Wformat-nonliteral"

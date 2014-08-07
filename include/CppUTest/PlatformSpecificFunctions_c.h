@@ -52,7 +52,6 @@ extern const char* (*GetPlatformSpecificTimeString)(void);
 
 /* String operations */
 int PlatformSpecificAtoI(const char*str);
-char* PlatformSpecificStrStr(const char* s1, const char* s2);
 
 int PlatformSpecificVSNprintf(char *str, size_t size, const char* format, va_list va_args_list);
 
