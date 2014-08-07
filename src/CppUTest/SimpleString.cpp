@@ -64,13 +64,12 @@ char* SimpleString::getEmptyString() const
 
 int SimpleString::AtoI(const char* str)
 {
-    int  result = 0;
-    bool sign;
-
     while (isSpace(*str)) str++;
 
-    sign = (*str == '-');
+    bool sign = (*str == '-');
     if (sign || *str == '+') str++;
+    
+    int  result = 0;
     for(; isDigit(*str); str++)
     {
         result *= 10;
