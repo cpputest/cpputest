@@ -69,13 +69,6 @@ TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
 
 const char* (*GetPlatformSpecificTimeString)() = NULL;
 
-int PlatformSpecificAtoI(const char*str)
-{
-    /* To be implemented */
-    (void) str;
-    return 0;
-}
-
 int PlatformSpecificVSNprintf(char *str, size_t size, const char* format, va_list args)
 {
     /* To be implemented */

@@ -728,3 +728,16 @@ TEST(SimpleString, StrStr)
     CHECK(SimpleString::StrStr(barf, foobarfoo) == 0);
     CHECK(SimpleString::StrStr(foo, foo) == foo);
 }
+
+TEST(SimpleString, AtoI)
+{
+    char belowlowerbound[] = "-123456/";
+    char aboveupperbound[] = "+567890:";
+    char withleadingwhitespace[] = "\t \r\n+790";
+    char nonumber[] = "-foo";
+
+    CHECK(-123456 == SimpleString::AtoI(belowlowerbound));
+    CHECK(567890 == SimpleString::AtoI(aboveupperbound));
+    CHECK(790 == SimpleString::AtoI(withleadingwhitespace));
+    CHECK(0 == SimpleString::AtoI(nonumber));
+}

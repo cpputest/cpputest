@@ -134,11 +134,6 @@ static const char* TimeStringImplementation()
 
 const char* (*GetPlatformSpecificTimeString)() = TimeStringImplementation;
 
-int PlatformSpecificAtoI(const char*str)
-{
-   return atoi(str);
-}
-
 /* Wish we could add an attribute to the format for discovering mis-use... but the __attribute__(format) seems to not work on va_list */
 #ifdef __clang__
 #pragma clang diagnostic ignored "-Wformat-nonliteral"
