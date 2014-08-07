@@ -129,11 +129,6 @@ int PlatformSpecificVSNprintf(char *str, size_t size, const char* format, va_lis
     return vsnprintf(str, size, format, args);
 }
 
-char PlatformSpecificToLower(char c)
-{
-    return (char) tolower((char) c);
-}
-
 PlatformSpecificFile PlatformSpecificFOpen(const char* filename, const char* flag)
 {
    return fopen(filename, flag);

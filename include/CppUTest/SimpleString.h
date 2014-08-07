@@ -96,6 +96,7 @@ public:
     static int StrNCmp(const char* s1, const char* s2, size_t n);
     static char* StrNCpy(char* s1, const char* s2, size_t n);
     static char* StrStr(const char* s1, const char* s2);
+    static char ToLower(char ch);
     static void deallocStringBuffer(char* str);
 private:
     char *buffer_;
@@ -104,8 +105,9 @@ private:
 
     char* getEmptyString() const;
     static char* copyToNewBuffer(const char* bufferToCopy, size_t bufferSize=0);
-    static bool isSpace(char c);
-    static bool isDigit(char c);
+    static bool isDigit(char ch);
+    static bool isSpace(char ch);
+    static bool isUpper(char ch);
 };
 
 class SimpleStringCollection

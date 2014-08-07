@@ -28,6 +28,7 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TestFailure.h"
 #include "CppUTest/TestOutput.h"
+#include "CppUTest/SimpleString.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
 static SimpleString removeAllPrintableCharactersFrom(const SimpleString& str)
@@ -248,7 +249,7 @@ UnsignedLongsEqualFailure::UnsignedLongsEqualFailure(UtestShell* test, const cha
 StringEqualFailure::StringEqualFailure(UtestShell* test, const char* fileName, int lineNumber, const char* expected, const char* actual) : TestFailure(test, fileName, lineNumber)
 {
     message_ = createButWasString(StringFromOrNull(expected), StringFromOrNull(actual));
-    if((expected) && (actual)) 
+    if((expected) && (actual))
     {
         size_t failStart;
         for (failStart = 0; actual[failStart] == expected[failStart]; failStart++)
@@ -260,10 +261,10 @@ StringEqualFailure::StringEqualFailure(UtestShell* test, const char* fileName, i
 StringEqualNoCaseFailure::StringEqualNoCaseFailure(UtestShell* test, const char* fileName, int lineNumber, const char* expected, const char* actual) : TestFailure(test, fileName, lineNumber)
 {
     message_ = createButWasString(StringFromOrNull(expected), StringFromOrNull(actual));
-    if((expected) && (actual)) 
+    if((expected) && (actual))
     {
         size_t failStart;
-        for (failStart = 0; PlatformSpecificToLower(actual[failStart]) == PlatformSpecificToLower(expected[failStart]); failStart++)
+        for (failStart = 0; SimpleString::ToLower(actual[failStart]) == SimpleString::ToLower(expected[failStart]); failStart++)
             ;
         message_ += createDifferenceAtPosString(actual, failStart);
     }
