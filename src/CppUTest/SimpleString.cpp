@@ -418,7 +418,7 @@ bool SimpleString::isSpace(char ch)
 
 bool SimpleString::isDigit(char ch)
 {
-    return '/' < ch && ':' > ch;
+    return '0' <= ch && '9' >= ch;
 }
 
 SimpleString StringFrom(bool value)
