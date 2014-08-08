@@ -95,6 +95,8 @@ TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
 
 ///////////// Time in millis
 
+extern "C" {
+
 static long TimeInMillisImplementation()
 {
     /* The TI c2000 platform does not have Posix support and thus lacks struct timespec.
@@ -114,6 +116,10 @@ static long TimeInMillisImplementation()
 
 long (*GetPlatformSpecificTimeInMillis)() = TimeInMillisImplementation;
 
+}
+
+extern "C" {
+
 static const char* TimeStringImplementation()
 {
     time_t tm = time(NULL);
@@ -121,6 +127,8 @@ static const char* TimeStringImplementation()
 }
 
 const char* (*GetPlatformSpecificTimeString)() = TimeStringImplementation;
+
+}
 
 extern "C" int vsnprintf(char*, size_t, const char*, va_list); // not std::vsnprintf()
 
