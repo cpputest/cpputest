@@ -66,16 +66,16 @@ int SimpleString::AtoI(const char* str)
 {
     while (isSpace(*str)) str++;
 
-    bool sign = (*str == '-');
-    if (sign || *str == '+') str++;
-    
+    char first_char = *str;
+    if (first_char == '-' || first_char == '+') str++;
+
     int  result = 0;
     for(; isDigit(*str); str++)
     {
         result *= 10;
         result += *str - '0';
     }
-    return sign ? -result : result;
+    return (first_char == '-') ? -result : result;
 }
 
 int SimpleString::StrCmp(const char* s1, const char* s2)
