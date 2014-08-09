@@ -75,8 +75,7 @@ int SimpleString::AtoI(const char* str)
         result *= 10;
         result += *str - '0';
     }
-    if (sign) result *= -1;
-    return result;
+    return sign ? -result : result;
 }
 
 int SimpleString::StrCmp(const char* s1, const char* s2)
