@@ -729,15 +729,22 @@ TEST(SimpleString, StrStr)
     CHECK(SimpleString::StrStr(foo, foo) == foo);
 }
 
+#define MIN_SHORT (-32768)
+#define MAX_SHORT 32767
+
 TEST(SimpleString, AtoI)
 {
-    char belowlowerbound[] = "-123456/";
-    char aboveupperbound[] = "+567890:";
-    char withleadingwhitespace[] = "\t \r\n+790";
-    char nonumber[] = "-foo";
+    char max_short_str[] = "32767";
+    char min_short_str[] = "-32768";
 
-    CHECK(-123456 == SimpleString::AtoI(belowlowerbound));
-    CHECK(567890 == SimpleString::AtoI(aboveupperbound));
-    CHECK(790 == SimpleString::AtoI(withleadingwhitespace));
-    CHECK(0 == SimpleString::AtoI(nonumber));
+    CHECK(12345  == SimpleString::AtoI("012345"));
+    CHECK(6789   == SimpleString::AtoI("6789"));
+    CHECK(12345  == SimpleString::AtoI("12345/"));
+    CHECK(12345  == SimpleString::AtoI("12345:"));
+    CHECK(-12345 == SimpleString::AtoI("-12345"));
+    CHECK(123    == SimpleString::AtoI("\t \r\n123"));
+    CHECK(123    == SimpleString::AtoI("123-foo"));
+    CHECK(0      == SimpleString::AtoI("-foo"));
+    CHECK(-32768 == SimpleString::AtoI(min_short_str));
+    CHECK(32767  == SimpleString::AtoI(max_short_str));
 }
