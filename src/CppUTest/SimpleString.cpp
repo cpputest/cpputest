@@ -68,7 +68,7 @@ int SimpleString::AtoI(const char* str)
 
     bool sign = (*str == '-');
     if (sign || *str == '+') str++;
-    
+
     int  result = 0;
     for(; isDigit(*str); str++)
     {
@@ -81,12 +81,10 @@ int SimpleString::AtoI(const char* str)
 
 int SimpleString::StrCmp(const char* s1, const char* s2)
 {
-    for(;;)
-    {
-        if (!*s1) return(0 - *s2);
-        if (*s1++ != *s2++)
-            return(*--s1 - *--s2);
-    }
+    for(; *s1; s1++, s2++)
+        if (*s1 != *s2)
+            return *(unsigned char *) s1 - *(unsigned char *) s2;
+    return -*(unsigned char*) s2;
 }
 
 size_t SimpleString::StrLen(const char* str)
@@ -98,14 +96,10 @@ size_t SimpleString::StrLen(const char* str)
 
 int SimpleString::StrNCmp(const char* s1, const char* s2, size_t n)
 {
-    while (n) {
+    for (; n && *s1; n--, s1++, s2++)
          if (*s1 != *s2)
              return *(unsigned char *) s1 - *(unsigned char *) s2;
-         if (*s1 == 0)
-             return 0;
-         n--, s1++, s2++;
-    }
-    return 0;
+    return n ? -*(unsigned char*) s2 : 0;
 }
 
 char* SimpleString::StrNCpy(char* s1, const char* s2, size_t n)

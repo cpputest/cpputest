@@ -629,13 +629,17 @@ TEST(SimpleString, StrCmp)
 {
     char empty[] = "";
     char blabla[] = "blabla";
+    char foobla[] = "foobla";
     char bla[] = "bla";
+    char foo[] = "foo";
     CHECK(SimpleString::StrCmp(empty, empty) == 0);
     CHECK(SimpleString::StrCmp(bla, blabla) == -'b');
     CHECK(SimpleString::StrCmp(blabla, bla) == 'b');
+    CHECK(SimpleString::StrCmp(foobla, foo) == 'b');
     CHECK(SimpleString::StrCmp(bla, empty) == 'b');
     CHECK(SimpleString::StrCmp(empty, bla) == -'b');
     CHECK(SimpleString::StrCmp(bla, bla) == 0);
+    CHECK(SimpleString::StrCmp(bla, foo) == 'b'-'f');
 }
 
 TEST(SimpleString, StrNCpy_no_zero_termination)
@@ -674,46 +678,28 @@ TEST(SimpleString, StrNCpy_write_into_the_middle)
     STRCMP_EQUAL("womenXXXXX", str);
 }
 
-TEST(SimpleString, StrNCmp_equal)
+TEST(SimpleString, StrNCmp)
 {
-    int result = SimpleString::StrNCmp("teststring", "tests", 5);
-    LONGS_EQUAL(0, result);
-}
-
-TEST(SimpleString, StrNCmp_s1_smaller)
-{
-    int result = SimpleString::StrNCmp("testing", "tests", 7);
-    LONGS_EQUAL('i' - 's', result);
-}
-
-TEST(SimpleString, StrNCmp_s1_larger)
-{
-    int result = SimpleString::StrNCmp("teststring", "tester", 7);
-    LONGS_EQUAL('s' - 'e', result);
-}
-
-TEST(SimpleString, StrNCmp_n_too_large)
-{
-    int result = SimpleString::StrNCmp("teststring", "teststring", 20);
-    LONGS_EQUAL(0, result);
-}
-
-TEST(SimpleString, StrNCmp_s1_empty)
-{
-    int result = SimpleString::StrNCmp("", "foo", 2);
-    LONGS_EQUAL(0 - 'f', result);
-}
-
-TEST(SimpleString, StrNCmp_s2_empty)
-{
-    int result = SimpleString::StrNCmp("foo", "", 2);
-    LONGS_EQUAL('f', result);
-}
-
-TEST(SimpleString, StrNCmp_s1_and_s2_empty)
-{
-    int result = SimpleString::StrNCmp("", "", 2);
-    LONGS_EQUAL(0, result);
+    char empty[] = "";
+    char blabla[] = "blabla";
+    char foobla[] = "foobla";
+    char bla[] = "bla";
+    char foo[] = "foo";
+    CHECK(SimpleString::StrNCmp(empty, empty, 0) == 0);
+    CHECK(SimpleString::StrNCmp(empty, empty, 10) == 0);
+    CHECK(SimpleString::StrNCmp(bla, empty, 0) == 0);
+    CHECK(SimpleString::StrNCmp(bla, empty, 3) == 'b');
+    CHECK(SimpleString::StrNCmp(empty, bla, 0) == 0);
+    CHECK(SimpleString::StrNCmp(empty, bla, 3) == -'b');
+    CHECK(SimpleString::StrNCmp(bla, blabla, 6) == -'b');
+    CHECK(SimpleString::StrNCmp(bla, blabla, 3) == 0);
+    CHECK(SimpleString::StrNCmp(bla, blabla, 3) == 0);
+    CHECK(SimpleString::StrNCmp(blabla, bla, 6) == 'b');
+    CHECK(SimpleString::StrNCmp(blabla, bla, 3) == 0);
+    CHECK(SimpleString::StrNCmp(foobla, foo, 10) == 'b');
+    CHECK(SimpleString::StrNCmp(foobla, foo, 3) == 0);
+    CHECK(SimpleString::StrNCmp(bla, bla, 3) == 0);
+    CHECK(SimpleString::StrNCmp(bla, foo, 3) == 'b'-'f');
 }
 
 TEST(SimpleString, StrStr)
