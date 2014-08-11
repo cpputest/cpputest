@@ -99,7 +99,7 @@ int SimpleString::StrNCmp(const char* s1, const char* s2, size_t n)
     for (; n && *s1; n--, s1++, s2++)
          if (*s1 != *s2)
              return *(unsigned char *) s1 - *(unsigned char *) s2;
-    return (n && *s2) ? 0 - *(unsigned char*) s2 : 0;
+    return n ? -*(unsigned char*) s2 : 0;
 }
 
 char* SimpleString::StrNCpy(char* s1, const char* s2, size_t n)
