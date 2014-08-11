@@ -680,6 +680,12 @@ TEST(SimpleString, StrNCmp_equal)
     LONGS_EQUAL(0, result);
 }
 
+TEST(SimpleString, StrNCmp_should_always_return_0_when_n_is_0)
+{
+    int result = SimpleString::StrNCmp("a", "b", 0);
+    LONGS_EQUAL(0, result);
+}
+
 TEST(SimpleString, StrNCmp_s1_smaller)
 {
     int result = SimpleString::StrNCmp("testing", "tests", 7);
