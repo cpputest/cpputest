@@ -729,9 +729,6 @@ TEST(SimpleString, StrStr)
     CHECK(SimpleString::StrStr(foo, foo) == foo);
 }
 
-#define MIN_SHORT (-32768)
-#define MAX_SHORT 32767
-
 TEST(SimpleString, AtoI)
 {
     char max_short_str[] = "32767";
