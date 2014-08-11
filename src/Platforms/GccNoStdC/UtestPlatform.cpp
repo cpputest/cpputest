@@ -27,8 +27,12 @@
 
 #include "CppUTest/TestHarness.h"
 
+#undef malloc
+#undef free
+
 extern "C" {
-    #include <linux/vmalloc.h>
+    void * vmalloc(size_t);
+    void vfree(void *);
 }
 
 #include "CppUTest/PlatformSpecificFunctions.h"
