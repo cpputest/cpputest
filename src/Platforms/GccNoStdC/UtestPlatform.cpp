@@ -26,10 +26,10 @@
  */
 
 #include "CppUTest/TestHarness.h"
-#undef malloc
-#undef free
-#undef calloc
-#undef realloc
+
+extern "C" {
+    #include <linux/vmalloc.h>
+}
 
 #include "CppUTest/PlatformSpecificFunctions.h"
 
@@ -123,9 +123,7 @@ int PlatformSpecificPutchar(int c)
 
 void* PlatformSpecificMalloc(size_t size)
 {
-    /* To be implemented */
-    (void) size;
-    return NULL;
+    return vmalloc(size);
 }
 
 void* PlatformSpecificRealloc (void* memory, size_t size)
@@ -138,8 +136,7 @@ void* PlatformSpecificRealloc (void* memory, size_t size)
 
 void PlatformSpecificFree(void* memory)
 {
-    /* To be implemented */
-    (void) memory;
+    vfree(memory);
 }
 
 void* PlatformSpecificMemCpy(void* s1, const void* s2, size_t size)
