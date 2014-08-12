@@ -26,10 +26,21 @@
  */
 
 #include "CppUTest/TestHarness.h"
+
 #undef malloc
 #undef free
-#undef calloc
-#undef realloc
+
+extern "C" {
+    
+/// #include "linux/vmalloc.h"    
+void * vmalloc(unsigned long);                           
+void vfree(void *);
+                                
+/// #include "linux/string.h"
+typedef unsigned int	__kernel_size_t;
+extern void * memset(void *, int, __kernel_size_t);
+
+}
 
 #include "CppUTest/PlatformSpecificFunctions.h"
 
@@ -123,23 +134,19 @@ int PlatformSpecificPutchar(int c)
 
 void* PlatformSpecificMalloc(size_t size)
 {
-    /* To be implemented */
-    (void) size;
-    return NULL;
+    return vmalloc(size);
 }
 
 void* PlatformSpecificRealloc (void* memory, size_t size)
 {
-    /* To be implemented */
-    (void) memory;
-    (void) size;
+    (void)memory;
+    (void)size;
     return NULL;
 }
 
 void PlatformSpecificFree(void* memory)
 {
-    /* To be implemented */
-    (void) memory;
+    vfree(memory);
 }
 
 void* PlatformSpecificMemCpy(void* s1, const void* s2, size_t size)
@@ -153,11 +160,7 @@ void* PlatformSpecificMemCpy(void* s1, const void* s2, size_t size)
 
 void* PlatformSpecificMemset(void* mem, int c, size_t size)
 {
-    /* To be implemented */
-    (void) mem;
-    (void) c;
-    (void) size;
-    return NULL;
+   return memset(mem, c, size);
 }
 
 double PlatformSpecificFabs(double d)
