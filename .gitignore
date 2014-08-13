@@ -50,6 +50,7 @@ CppUTestExtTests
 CppUTestTests
 Makefile
 config.h
+config.h.in
 config.status
 cpputest.pc
 filename.map.txt
