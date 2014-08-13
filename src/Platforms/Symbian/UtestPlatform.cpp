@@ -92,11 +92,6 @@ int PlatformSpecificVSNprintf(char* str, size_t size, const char* format, va_lis
     return vsnprintf(str, size, format, args);
 }
 
-char PlatformSpecificToLower(char c)
-{
-    return tolower(c);
-}
-
 void PlatformSpecificFlush() {
     fflush(stdout);
 }

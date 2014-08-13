@@ -120,6 +120,11 @@ char* SimpleString::StrStr(const char* s1, const char* s2)
     return NULL;
 }
 
+char SimpleString::ToLower(char ch)
+{
+    return isUpper(ch) ? (char)((int)ch + ('a' - 'A')) : ch;
+}
+
 SimpleString::SimpleString(const char *otherBuffer)
 {
     if (otherBuffer == 0) {
@@ -164,7 +169,7 @@ bool SimpleString::contains(const SimpleString& other) const
 
 bool SimpleString::containsNoCase(const SimpleString& other) const
 {
-    return toLower().contains(other.toLower());
+    return lowerCase().contains(other.lowerCase());
 }
 
 
@@ -256,13 +261,13 @@ void SimpleString::replace(const char* to, const char* with)
     }
 }
 
-SimpleString SimpleString::toLower() const
+SimpleString SimpleString::lowerCase() const
 {
     SimpleString str(*this);
 
     size_t str_size = str.size();
     for (size_t i = 0; i < str_size; i++)
-        str.buffer_[i] = PlatformSpecificToLower(str.buffer_[i]);
+        str.buffer_[i] = ToLower(str.buffer_[i]);
 
     return str;
 }
@@ -295,7 +300,7 @@ bool operator==(const SimpleString& left, const SimpleString& right)
 
 bool SimpleString::equalsNoCase(const SimpleString& str) const
 {
-    return toLower() == str.toLower();
+    return lowerCase() == str.lowerCase();
 }
 
 
@@ -402,14 +407,19 @@ void SimpleString::copyToBuffer(char* bufferToCopy, size_t bufferSize) const
     bufferToCopy[sizeToCopy] = '\0';
 }
 
+bool SimpleString::isDigit(char ch)
+{
+    return '0' <= ch && '9' >= ch;
+}
+
 bool SimpleString::isSpace(char ch)
 {
     return (ch == ' ') || (0x08 < ch && 0x0E > ch);
 }
 
-bool SimpleString::isDigit(char ch)
+bool SimpleString::isUpper(char ch)
 {
-    return '0' <= ch && '9' >= ch;
+    return 'A' <= ch && 'Z' >= ch;
 }
 
 SimpleString StringFrom(bool value)

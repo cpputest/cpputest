@@ -80,13 +80,6 @@ int PlatformSpecificVSNprintf(char *str, size_t size, const char* format, va_lis
     return 0;
 }
 
-char PlatformSpecificToLower(char c)
-{
-    /* To be implemented */
-    (void) c;
-    return 0;
-}
-
 PlatformSpecificFile PlatformSpecificFOpen(const char* filename, const char* flag)
 {
     /* To be implemented */

@@ -167,10 +167,3 @@ int PlatformSpecificVSNprintf(char *str, unsigned int size, const char* format, 
 {
    return _vsnprintf_s( str, size, _TRUNCATE, format, (va_list) args);
 }
-
-char PlatformSpecificToLower(char c)
-{
-    return tolower(c);
-}
-
-
