@@ -56,6 +56,46 @@ void SimpleStringBuffer::add(const char* format, ...)
     va_end(arguments);
 }
 
+void SimpleStringBuffer::addMemoryDump(const void* memory, size_t memorySize)
+{
+    const unsigned char* byteMemory = (const unsigned char*)memory;
+    const size_t maxLineBytes = 16;
+    size_t currentPos = 0;
+
+    while (currentPos < memorySize) {
+        add("    %04lx: ", currentPos);
+        size_t bytesInLine = memorySize - currentPos;
+        if (bytesInLine > maxLineBytes) {
+            bytesInLine = maxLineBytes;
+        }
+        const size_t leftoverBytes = maxLineBytes - bytesInLine;
+
+        for (size_t p = 0; p < bytesInLine; p++) {
+            add("%02hhx ", byteMemory[currentPos + p]);
+            if (p == ((maxLineBytes / 2) - 1)) {
+                add(" ");
+            }
+        }
+        for (size_t p = 0; p < leftoverBytes; p++) {
+            add("   ");
+        }
+        if (leftoverBytes > (maxLineBytes/2)) {
+            add(" ");
+        }
+
+        add("|");
+        for (size_t p = 0; p < bytesInLine; p++) {
+            char toAdd = (char)byteMemory[currentPos + p];
+            if (toAdd < ' ' || toAdd > '~') {
+                toAdd = '.';
+            }
+            add("%c", (int)toAdd);
+        }
+        add("|\n");
+        currentPos += bytesInLine;
+    }
+}
+
 char* SimpleStringBuffer::toString()
 {
     return buffer_;
@@ -124,8 +164,9 @@ void MemoryLeakOutputStringBuffer::reportMemoryLeak(MemoryLeakDetectorNode* leak
     }
 
     total_leaks_++;
-    outputBuffer_.add("Alloc num (%u) Leak size: %lu Allocated at: %s and line: %d. Type: \"%s\"\n\t Memory: <%p> Content: \"%.15s\"\n",
-            leak->number_, (unsigned long) leak->size_, leak->file_, leak->line_, leak->allocator_->alloc_name(), leak->memory_, leak->memory_);
+    outputBuffer_.add("Alloc num (%u) Leak size: %lu Allocated at: %s and line: %d. Type: \"%s\"\n\tMemory: <%p> Content:\n",
+            leak->number_, (unsigned long) leak->size_, leak->file_, leak->line_, leak->allocator_->alloc_name(), leak->memory_);
+    outputBuffer_.addMemoryDump(leak->memory_, leak->size_);
 
     if (SimpleString::StrCmp(leak->allocator_->alloc_name(), (const char*) "malloc") == 0)
         giveWarningOnUsingMalloc_ = true;
