@@ -493,6 +493,12 @@ TEST_GROUP(SimpleStringBuffer)
 {
 };
 
+TEST(SimpleStringBuffer, initialStringIsEmpty)
+{
+    SimpleStringBuffer buffer;
+    STRCMP_EQUAL("", buffer.toString());
+}
+
 TEST(SimpleStringBuffer, simpleTest)
 {
     SimpleStringBuffer buffer;

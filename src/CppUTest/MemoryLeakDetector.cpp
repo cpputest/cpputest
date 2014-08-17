@@ -34,6 +34,7 @@
 SimpleStringBuffer::SimpleStringBuffer() :
     positions_filled_(0), write_limit_(SIMPLE_STRING_BUFFER_LEN-1)
 {
+    buffer_[0] = '\0';
 }
 
 void SimpleStringBuffer::clear()
