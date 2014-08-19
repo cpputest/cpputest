@@ -160,6 +160,19 @@ TEST(MemoryLeakDetectorTest, sequenceNumbersOfMemoryLeaks)
     PlatformSpecificFree(mem3);
 }
 
+TEST(MemoryLeakDetectorTest, memoryDumpOutput)
+{
+    char* mem = detector->allocMemory(defaultNewAllocator(), 6);
+    SimpleString::StrNCpy(mem, "test1", 6);
+    SimpleString output = detector->report(mem_leak_period_checking);
+
+    STRCMP_CONTAINS("Alloc num (1)", output.asCharString());
+    STRCMP_CONTAINS("Leak size: 6 Allocated at",  output.asCharString());
+    STRCMP_CONTAINS("Content:",  output.asCharString());
+    STRCMP_CONTAINS("0000: 74 65 73 74 31 00                                |test1.|", output.asCharString());
+
+    PlatformSpecificFree(mem);
+}
 
 TEST(MemoryLeakDetectorTest, OneHundredLeaks)
 {
@@ -480,6 +493,12 @@ TEST_GROUP(SimpleStringBuffer)
 {
 };
 
+TEST(SimpleStringBuffer, initialStringIsEmpty)
+{
+    SimpleStringBuffer buffer;
+    STRCMP_EQUAL("", buffer.toString());
+}
+
 TEST(SimpleStringBuffer, simpleTest)
 {
     SimpleStringBuffer buffer;
@@ -528,6 +547,55 @@ TEST(SimpleStringBuffer, resetWriteLimit)
 
     SimpleString str("h", 20);
     STRCMP_EQUAL(str.asCharString(), buffer.toString());
+}
+
+TEST(SimpleStringBuffer, addMemoryDumpOneLinePlusOnePartial)
+{
+    SimpleStringBuffer buffer;
+    buffer.addMemoryDump("deadbeefdeadbeefhopsxx", 22);
+    STRCMP_EQUAL("    0000: 64 65 61 64 62 65 65 66  64 65 61 64 62 65 65 66 |deadbeefdeadbeef|\n"
+                 "    0010: 68 6f 70 73 78 78                                |hopsxx|\n",
+                 buffer.toString());
+}
+
+TEST(SimpleStringBuffer, addMemoryDumpNonPrintable)
+{
+    SimpleStringBuffer buffer;
+    // Ensure we test edge cases - NUL, 0x1F, 0x7F, 0xFF
+    buffer.addMemoryDump("\x15\x7f\xff\x00\x1ftdd", 8);
+    STRCMP_EQUAL("    0000: 15 7f ff 00 1f 74 64 64                          |.....tdd|\n",
+                 buffer.toString());
+}
+
+TEST(SimpleStringBuffer, addMemoryDumpOneLine)
+{
+    SimpleStringBuffer buffer;
+    buffer.addMemoryDump("deadbeefdeadbeef", 16);
+    STRCMP_EQUAL("    0000: 64 65 61 64 62 65 65 66  64 65 61 64 62 65 65 66 |deadbeefdeadbeef|\n",
+                 buffer.toString());
+}
+
+TEST(SimpleStringBuffer, addMemoryDumpOneHalfLine)
+{
+    SimpleStringBuffer buffer;
+    buffer.addMemoryDump("deadbeef", 8);
+    STRCMP_EQUAL("    0000: 64 65 61 64 62 65 65 66                          |deadbeef|\n",
+                 buffer.toString());
+}
+
+TEST(SimpleStringBuffer, addMemoryDumpOneByte)
+{
+    SimpleStringBuffer buffer;
+    buffer.addMemoryDump("Z", 1);
+    STRCMP_EQUAL("    0000: 5a                                               |Z|\n",
+                 buffer.toString());
+}
+
+TEST(SimpleStringBuffer, addMemoryDumpZeroBytes)
+{
+    SimpleStringBuffer buffer;
+    buffer.addMemoryDump("", 0);
+    STRCMP_EQUAL("", buffer.toString());
 }
 
 TEST_GROUP(ReallocBugReported)

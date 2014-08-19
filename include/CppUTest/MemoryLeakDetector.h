@@ -58,6 +58,8 @@ struct SimpleStringBuffer
     SimpleStringBuffer();
     void clear();
     void add(const char* format, ...) __check_format__(printf, 2, 3);
+    void addMemoryDump(const void* memory, size_t memorySize);
+
     char* toString();
 
     void setWriteLimit(size_t write_limit);
