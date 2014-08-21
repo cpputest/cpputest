@@ -37,57 +37,57 @@ class MockFailureReporterForTest : public MockFailureReporter
 {
 public:
 
-	SimpleString mockFailureString;
+    SimpleString mockFailureString;
 
-	virtual void failTest(const MockFailure& failure)
-	{
-		mockFailureString = failure.getMessage();
-	}
+    virtual void failTest(const MockFailure& failure)
+    {
+        mockFailureString = failure.getMessage();
+    }
 
-	static MockFailureReporterForTest* getReporter();
+    static MockFailureReporterForTest* getReporter();
 };
 
 inline UtestShell* mockFailureTest()
 {
-	return MockFailureReporterForTest::getReporter()->getTestToFail();
+    return MockFailureReporterForTest::getReporter()->getTestToFail();
 }
 
 inline SimpleString mockFailureString()
 {
-	return MockFailureReporterForTest::getReporter()->mockFailureString;
+    return MockFailureReporterForTest::getReporter()->mockFailureString;
 }
 
 inline void CLEAR_MOCK_FAILURE()
 {
-	MockFailureReporterForTest::getReporter()->mockFailureString = "";
+    MockFailureReporterForTest::getReporter()->mockFailureString = "";
 }
 
 inline void CHECK_EXPECTED_MOCK_FAILURE_LOCATION(const MockFailure& expectedFailure, const char* file, int line)
 {
-	SimpleString expectedFailureString = expectedFailure.getMessage();
-	SimpleString actualFailureString = mockFailureString();
-	CLEAR_MOCK_FAILURE();
-	if (expectedFailureString != actualFailureString)
-	{
-		SimpleString error = "MockFailures are different.\n";
-		error += "Expected MockFailure:\n\t";
-		error += expectedFailureString;
-		error += "\nActual MockFailure:\n\t";
-		error += actualFailureString;
-		FAIL_LOCATION(error.asCharString(), file, line);
-	}
+    SimpleString expectedFailureString = expectedFailure.getMessage();
+    SimpleString actualFailureString = mockFailureString();
+    CLEAR_MOCK_FAILURE();
+    if (expectedFailureString != actualFailureString)
+    {
+        SimpleString error = "MockFailures are different.\n";
+        error += "Expected MockFailure:\n\t";
+        error += expectedFailureString;
+        error += "\nActual MockFailure:\n\t";
+        error += actualFailureString;
+        FAIL_LOCATION(error.asCharString(), file, line);
+    }
 }
 
 inline void CHECK_NO_MOCK_FAILURE_LOCATION(const char* file, int line)
 {
-	if (mockFailureString() != "") {
-		SimpleString error = "Unexpected mock failure:\n";
-		error += mockFailureString();
-		CLEAR_MOCK_FAILURE();
-		FAIL_LOCATION(error.asCharString(), file, line);
+    if (mockFailureString() != "") {
+        SimpleString error = "Unexpected mock failure:\n";
+        error += mockFailureString();
+        CLEAR_MOCK_FAILURE();
+        FAIL_LOCATION(error.asCharString(), file, line);
 
-	}
-	CLEAR_MOCK_FAILURE();
+    }
+    CLEAR_MOCK_FAILURE();
 }
 
 #endif

@@ -36,9 +36,9 @@ TEST_GROUP(MemoryReportAllocator)
 
 TEST(MemoryReportAllocator, FunctionsAreForwardedForMallocAllocator)
 {
-	MemoryReportAllocator allocator;
-	allocator.setRealAllocator(getCurrentMallocAllocator());
+    MemoryReportAllocator allocator;
+    allocator.setRealAllocator(getCurrentMallocAllocator());
 
-	STRCMP_EQUAL("malloc", allocator.alloc_name());
+    STRCMP_EQUAL("malloc", allocator.alloc_name());
 
 }

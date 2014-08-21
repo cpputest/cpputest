@@ -39,34 +39,34 @@ NormalMemoryReportFormatter::~NormalMemoryReportFormatter()
 
 void NormalMemoryReportFormatter::report_test_start(TestResult* result, UtestShell& test)
 {
-	result->print(StringFromFormat("TEST(%s, %s)\n", test.getGroup().asCharString(), test.getName().asCharString()).asCharString());
+    result->print(StringFromFormat("TEST(%s, %s)\n", test.getGroup().asCharString(), test.getName().asCharString()).asCharString());
 }
 
 void NormalMemoryReportFormatter::report_test_end(TestResult* result, UtestShell& test)
 {
-	result->print(StringFromFormat("ENDTEST(%s, %s)\n", test.getGroup().asCharString(), test.getName().asCharString()).asCharString());
+    result->print(StringFromFormat("ENDTEST(%s, %s)\n", test.getGroup().asCharString(), test.getName().asCharString()).asCharString());
 }
 
 void NormalMemoryReportFormatter::report_alloc_memory(TestResult* result, TestMemoryAllocator* allocator, size_t size, char* memory, const char* file, int line)
 {
-	result->print(StringFromFormat("\tAllocation using %s of size: %lu pointer: %p at %s:%d\n", allocator->alloc_name(), size, memory, file, line).asCharString());
+    result->print(StringFromFormat("\tAllocation using %s of size: %lu pointer: %p at %s:%d\n", allocator->alloc_name(), (unsigned long) size, memory, file, line).asCharString());
 }
 
 void NormalMemoryReportFormatter::report_free_memory(TestResult* result, TestMemoryAllocator* allocator, char* memory, const char* file, int line)
 {
-	result->print(StringFromFormat("\tDeallocation using %s of pointer: %p at %s:%d\n", allocator->free_name(),  memory, file, line).asCharString());
+    result->print(StringFromFormat("\tDeallocation using %s of pointer: %p at %s:%d\n", allocator->free_name(),  memory, file, line).asCharString());
 }
 
 void NormalMemoryReportFormatter::report_testgroup_start(TestResult* result, UtestShell& test)
 {
-	const size_t line_size = 80;
+    const size_t line_size = 80;
 
-	SimpleString groupName = StringFromFormat("TEST GROUP(%s)", test.getGroup().asCharString());
-	size_t beginPos = (line_size/2) - (groupName.size()/2);
+    SimpleString groupName = StringFromFormat("TEST GROUP(%s)", test.getGroup().asCharString());
+    size_t beginPos = (line_size/2) - (groupName.size()/2);
 
-	SimpleString line("-", beginPos);
-	line += groupName;
-	line += SimpleString("-", line_size - line.size());
-	line += "\n";
-	result->print(line.asCharString());
+    SimpleString line("-", beginPos);
+    line += groupName;
+    line += SimpleString("-", line_size - line.size());
+    line += "\n";
+    result->print(line.asCharString());
 }

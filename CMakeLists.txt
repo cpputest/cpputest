@@ -1,8 +1,7 @@
 project(CppUTest)
 
 set(CppUTest_version_major 3)
-set(CppUTest_version_minor 5)
-set(CppUTest_version_patch 0)
+set(CppUTest_version_minor 7dev)
 
 # 2.6.3 is needed for ctest support
 cmake_minimum_required(VERSION 2.6.3)
@@ -22,7 +21,12 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "What kind of build this is" FORCE)
 endif(NOT CMAKE_BUILD_TYPE)
 
+# Pkg-config file
+include(FindPkgConfig)
+set(CppUTest_PKGCONFIG_FILE cpputest.pc)
+
 set(CppUTestRootDirectory ${PROJECT_SOURCE_DIR})
+
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CppUTestRootDirectory}/cmake/Modules)
 
 include("${CppUTestRootDirectory}/cmake/Modules/CppUTestConfigurationOptions.cmake")
@@ -45,6 +49,20 @@ endif (CPPUTEST_EXTENSIONS)
 if (CPPUTEST_TESTS)
     add_subdirectory(tests)
 endif (CPPUTEST_TESTS)
+
+# Pkg-config file.
+set (prefix "${CMAKE_INSTALL_PREFIX}")
+set (exec_prefix "${CMAKE_INSTALL_PREFIX}")
+set (libdir "${LIB_INSTALL_DIR}")
+set (includedir "${INCLUDE_INSTALL_DIR}")
+set (PACKAGE_VERSION "${CppUTest_version_major}.${CppUTest_version_minor}")
+
+configure_file (cpputest.pc.in
+    ${CMAKE_CURRENT_SOURCE_DIR}/${CppUTest_PKGCONFIG_FILE} @ONLY)
+
+install(FILES  ${CMAKE_CURRENT_SOURCE_DIR}/${CppUTest_PKGCONFIG_FILE}
+    DESTINATION ${LIB_INSTALL_DIR}/pkgconfig
+    )
 
 message("
 -------------------------------------------------------

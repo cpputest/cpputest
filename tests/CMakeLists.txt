@@ -21,7 +21,6 @@ set(CppUTestTests_src
         MemoryLeakWarningTest.cpp
         TestOutputTest.cpp
         AllocLetTestFreeTest.cpp
-        NullTestTest.cpp
         TestRegistryTest.cpp
         AllocationInCFile.c
         PluginTest.cpp

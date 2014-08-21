@@ -37,49 +37,51 @@ class TestPlugin;
 class CommandLineArguments
 {
 public:
-	explicit CommandLineArguments(int ac, const char** av);
-	virtual ~CommandLineArguments();
+    explicit CommandLineArguments(int ac, const char** av);
+    virtual ~CommandLineArguments();
 
-	bool parse(TestPlugin* plugin);
-	bool isVerbose() const;
-	int getRepeatCount() const;
-	TestFilter getGroupFilter() const;
-	TestFilter getNameFilter() const;
-	bool isJUnitOutput() const;
-	bool isEclipseOutput() const;
-	bool runTestsInSeperateProcess() const;
-	const SimpleString& getPackageName() const;
-	const char* usage() const;
+    bool parse(TestPlugin* plugin);
+    bool isVerbose() const;
+    bool isColor() const;
+    int getRepeatCount() const;
+    TestFilter getGroupFilter() const;
+    TestFilter getNameFilter() const;
+    bool isJUnitOutput() const;
+    bool isEclipseOutput() const;
+    bool runTestsInSeperateProcess() const;
+    const SimpleString& getPackageName() const;
+    const char* usage() const;
 
 private:
 
-	enum OutputType
-	{
-		OUTPUT_ECLIPSE, OUTPUT_JUNIT
-	};
-	int ac_;
-	const char** av_;
+    enum OutputType
+    {
+        OUTPUT_ECLIPSE, OUTPUT_JUNIT
+    };
+    int ac_;
+    const char** av_;
 
-	bool verbose_;
-	bool runTestsAsSeperateProcess_;
-	int repeat_;
-	TestFilter groupFilter_;
-	TestFilter nameFilter_;
-	OutputType outputType_;
-	SimpleString packageName_;
+    bool verbose_;
+    bool color_;
+    bool runTestsAsSeperateProcess_;
+    int repeat_;
+    TestFilter groupFilter_;
+    TestFilter nameFilter_;
+    OutputType outputType_;
+    SimpleString packageName_;
 
-	SimpleString getParameterField(int ac, const char** av, int& i, const SimpleString& parameterName);
-	void SetRepeatCount(int ac, const char** av, int& index);
-	void SetGroupFilter(int ac, const char** av, int& index);
-	void SetStrictGroupFilter(int ac, const char** av, int& index);
-	void SetNameFilter(int ac, const char** av, int& index);
-	void SetStrictNameFilter(int ac, const char** av, int& index);
-	void SetTestToRunBasedOnVerboseOutput(int ac, const char** av, int& index, const char* parameterName);
-	bool SetOutputType(int ac, const char** av, int& index);
-	void SetPackageName(int ac, const char** av, int& index);
+    SimpleString getParameterField(int ac, const char** av, int& i, const SimpleString& parameterName);
+    void SetRepeatCount(int ac, const char** av, int& index);
+    void SetGroupFilter(int ac, const char** av, int& index);
+    void SetStrictGroupFilter(int ac, const char** av, int& index);
+    void SetNameFilter(int ac, const char** av, int& index);
+    void SetStrictNameFilter(int ac, const char** av, int& index);
+    void SetTestToRunBasedOnVerboseOutput(int ac, const char** av, int& index, const char* parameterName);
+    bool SetOutputType(int ac, const char** av, int& index);
+    void SetPackageName(int ac, const char** av, int& index);
 
-	CommandLineArguments(const CommandLineArguments&);
-	CommandLineArguments& operator=(const CommandLineArguments&);
+    CommandLineArguments(const CommandLineArguments&);
+    CommandLineArguments& operator=(const CommandLineArguments&);
 
 };
 

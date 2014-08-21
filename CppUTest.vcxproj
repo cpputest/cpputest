@@ -172,8 +172,8 @@ copy $(OutDir)CppUTest.lib lib\CppUTest.lib
     <ClInclude Include="include\CppUTestExt\MemoryReportAllocator.h" />
     <ClInclude Include="include\CppUTestExt\MemoryReporterPlugin.h" />
     <ClInclude Include="include\CppUTestExt\MemoryReportFormatter.h" />
-    <ClInclude Include="include\CppUTestExt\MockActualFunctionCall.h" />
-    <ClInclude Include="include\CppUTestExt\MockExpectedFunctionCall.h" />
+    <ClInclude Include="include\CppUTestExt\MockCheckedActualCall.h" />
+    <ClInclude Include="include\CppUTestExt\MockCheckedExpectedCall.h" />
     <ClInclude Include="include\CppUTestExt\MockExpectedCallsList.h" />
     <ClInclude Include="include\CppUTestExt\MockFailure.h" />
     <ClInclude Include="include\CppUTestExt\MockNamedValue.h" />

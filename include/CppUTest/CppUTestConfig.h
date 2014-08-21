@@ -138,9 +138,9 @@
 #endif
 
 #if defined(__cplusplus) && __cplusplus >= 201103L
-	#define DEFAULT_COPY_CONSTRUCTOR(classname) classname(const classname &) = default;
+    #define DEFAULT_COPY_CONSTRUCTOR(classname) classname(const classname &) = default;
 #else
-	#define DEFAULT_COPY_CONSTRUCTOR(classname)
+    #define DEFAULT_COPY_CONSTRUCTOR(classname)
 #endif
 
 /*
@@ -175,6 +175,9 @@
 #else
 #define _override
 #endif
+
+/* MinGW-w64 prefers to act like Visual C++, but we want the ANSI behaviors instead */
+#define __USE_MINGW_ANSI_STDIO 1
 
 /* Should be the only #include here. Standard C library wrappers */
 #include "StandardCLibrary.h"

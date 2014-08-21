@@ -45,78 +45,89 @@ class TestMemoryAllocator;
 
 class SimpleString
 {
-	friend bool operator==(const SimpleString& left, const SimpleString& right);
-	friend bool operator!=(const SimpleString& left, const SimpleString& right);
+    friend bool operator==(const SimpleString& left, const SimpleString& right);
+    friend bool operator!=(const SimpleString& left, const SimpleString& right);
 
 public:
-	SimpleString(const char *value = "");
-	SimpleString(const char *value, size_t repeatCount);
-	SimpleString(const SimpleString& other);
-	~SimpleString();
+    SimpleString(const char *value = "");
+    SimpleString(const char *value, size_t repeatCount);
+    SimpleString(const SimpleString& other);
+    ~SimpleString();
 
-	SimpleString& operator=(const SimpleString& other);
-	SimpleString operator+(const SimpleString&);
-	SimpleString& operator+=(const SimpleString&);
-	SimpleString& operator+=(const char*);
+    SimpleString& operator=(const SimpleString& other);
+    SimpleString operator+(const SimpleString&);
+    SimpleString& operator+=(const SimpleString&);
+    SimpleString& operator+=(const char*);
 
-	char at(int pos) const;
-	int find(char ch) const;
-	int findFrom(size_t starting_position, char ch) const;
-	bool contains(const SimpleString& other) const;
-	bool containsNoCase(const SimpleString& other) const;
-	bool startsWith(const SimpleString& other) const;
-	bool endsWith(const SimpleString& other) const;
-	void split(const SimpleString& split,
-					SimpleStringCollection& outCollection) const;
-	bool equalsNoCase(const SimpleString& str) const;
+    char at(int pos) const;
+    int find(char ch) const;
+    int findFrom(size_t starting_position, char ch) const;
+    bool contains(const SimpleString& other) const;
+    bool containsNoCase(const SimpleString& other) const;
+    bool startsWith(const SimpleString& other) const;
+    bool endsWith(const SimpleString& other) const;
+    void split(const SimpleString& split,
+                    SimpleStringCollection& outCollection) const;
+    bool equalsNoCase(const SimpleString& str) const;
 
-	size_t count(const SimpleString& str) const;
+    size_t count(const SimpleString& str) const;
 
-	void replace(char to, char with);
-	void replace(const char* to, const char* with);
+    void replace(char to, char with);
+    void replace(const char* to, const char* with);
 
-	SimpleString toLower() const;
-	SimpleString subString(size_t beginPos, size_t amount) const;
-	SimpleString subStringFromTill(char startChar, char lastExcludedChar) const;
-	void copyToBuffer(char* buffer, size_t bufferSize) const;
+    SimpleString lowerCase() const;
+    SimpleString subString(size_t beginPos, size_t amount) const;
+    SimpleString subStringFromTill(char startChar, char lastExcludedChar) const;
+    void copyToBuffer(char* buffer, size_t bufferSize) const;
 
-	const char *asCharString() const;
-	size_t size() const;
-	bool isEmpty() const;
+    const char *asCharString() const;
+    size_t size() const;
+    bool isEmpty() const;
 
-	static void padStringsToSameLength(SimpleString& str1, SimpleString& str2, char ch);
+    static void padStringsToSameLength(SimpleString& str1, SimpleString& str2, char ch);
 
-	static TestMemoryAllocator* getStringAllocator();
-	static void setStringAllocator(TestMemoryAllocator* allocator);
+    static TestMemoryAllocator* getStringAllocator();
+    static void setStringAllocator(TestMemoryAllocator* allocator);
 
-	static char* allocStringBuffer(size_t size);
-	static void deallocStringBuffer(char* str);
+    static char* allocStringBuffer(size_t size);
+    static int AtoI(const char*str);
+    static int StrCmp(const char* s1, const char* s2);
+    static size_t StrLen(const char*);
+    static int StrNCmp(const char* s1, const char* s2, size_t n);
+    static char* StrNCpy(char* s1, const char* s2, size_t n);
+    static char* StrStr(const char* s1, const char* s2);
+    static char ToLower(char ch);
+    static void deallocStringBuffer(char* str);
 private:
-	char *buffer_;
+    char *buffer_;
 
-	static TestMemoryAllocator* stringAllocator_;
+    static TestMemoryAllocator* stringAllocator_;
 
-	char* getEmptyString() const;
+    char* getEmptyString() const;
+    static char* copyToNewBuffer(const char* bufferToCopy, size_t bufferSize=0);
+    static bool isDigit(char ch);
+    static bool isSpace(char ch);
+    static bool isUpper(char ch);
 };
 
 class SimpleStringCollection
 {
 public:
-	SimpleStringCollection();
-	~SimpleStringCollection();
+    SimpleStringCollection();
+    ~SimpleStringCollection();
 
-	void allocate(size_t size);
+    void allocate(size_t size);
 
-	size_t size() const;
-	SimpleString& operator[](size_t index);
+    size_t size() const;
+    SimpleString& operator[](size_t index);
 
 private:
-	SimpleString* collection_;
-	SimpleString empty_;
-	size_t size_;
+    SimpleString* collection_;
+    SimpleString empty_;
+    size_t size_;
 
-	void operator =(SimpleStringCollection&);
-	SimpleStringCollection(SimpleStringCollection&);
+    void operator =(SimpleStringCollection&);
+    SimpleStringCollection(SimpleStringCollection&);
 };
 
 SimpleString StringFrom(bool value);
@@ -124,15 +135,17 @@ SimpleString StringFrom(const void* value);
 SimpleString StringFrom(char value);
 SimpleString StringFrom(const char *value);
 SimpleString StringFromOrNull(const char * value);
-SimpleString StringFrom(long value);
 SimpleString StringFrom(int value);
+SimpleString StringFrom(unsigned int value);
+SimpleString StringFrom(long value);
+SimpleString StringFrom(unsigned long value);
 SimpleString HexStringFrom(long value);
+SimpleString HexStringFrom(unsigned long value);
 SimpleString HexStringFrom(const void* value);
 SimpleString StringFrom(double value, int precision = 6);
 SimpleString StringFrom(const SimpleString& other);
 SimpleString StringFromFormat(const char* format, ...) __check_format__(printf, 1, 2);
 SimpleString VStringFromFormat(const char* format, va_list args);
-SimpleString StringFrom(unsigned int value);
 
 #if CPPUTEST_USE_STD_CPP_LIB
 
@@ -140,7 +153,6 @@ SimpleString StringFrom(unsigned int value);
 #include <stdint.h>
 
 SimpleString StringFrom(const std::string& other);
-SimpleString StringFrom(unsigned long);
 
 #endif
 

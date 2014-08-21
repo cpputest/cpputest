@@ -140,7 +140,6 @@ CppUTestTests_SOURCES = \
 	tests/MemoryLeakDetectorTest.cpp \
 	tests/MemoryLeakOperatorOverloadsTest.cpp \
 	tests/MemoryLeakWarningTest.cpp \
-	tests/NullTestTest.cpp \
 	tests/PluginTest.cpp \
 	tests/PreprocessorTest.cpp \
 	tests/SetPluginTest.cpp \
@@ -198,13 +197,13 @@ if INCLUDE_GMOCKTESTS
 endif
 
 RUN_CPPUTEST_TESTS = ./$(CPPUTEST_TESTS) -r
-#RUN_CPPUTEST_EXT_TESTS = ./$(CPPUTEST_EXT_TESTS) -r
+RUN_CPPUTESTEXT_TESTS = ./$(CPPUTESTEXT_TESTS) -r
 
 valgrind: check
 	@if test "x$(CPPUTEST_HAS_VALGRIND)" = xno; then echo "Running the valgrind target without having valgrind. Perhaps install it first?"; exit 1; fi
 	valgrind --dsymutil=yes --suppressions=$(srcdir)/valgrind.suppressions --gen-suppressions=all --error-exitcode=1 ./$(CPPUTEST_TESTS)
 
-tdd: $(CPPUTEST_TESTS) $(CPPUTESTEXT_TESTS)
+tdd: $(CPPUTEST_TESTS)$(EXEEXT) $(CPPUTESTEXT_TESTS)$(EXEEXT)
 	./$(CPPUTEST_TESTS)
 if INCLUDE_CPPUTEST_EXT
 	./$(CPPUTESTEXT_TESTS)
@@ -330,8 +329,7 @@ check_examples:
 
 check_all: check_basic check_special_situations check_coverage check_examples check_gtest
 	@echo "Last... one normal build and test"
-	make distclean; $(srcdir)/configure; make check; $(RUN_CPPUTEST_TESTS); $(RUN_CPPUTEST_EXT_TESTS)
+	make distclean; $(srcdir)/configure; make check; $(RUN_CPPUTEST_TESTS); $(RUN_CPPUTESTEXT_TESTS)
 	
 	
-
 

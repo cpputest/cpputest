@@ -12,7 +12,7 @@ ifndef CPU_MODE
 endif
 
 # Path to cygwin binary
-CYGWIN_DIR :=C:/CYGWIN64/bin
+CYGWIN_DIR :=C:/CYGWIN/bin
 
 # Path to ARMCC of Keil MDK-ARM, with libraries, includes and executables
 KEIL_DIR   :=D:/Keil/ARM/ARMCC
@@ -25,21 +25,21 @@ AR         :=@$(KEIL_DIR)/bin/armar.exe
 
 # source CppUTest files
 CPPUTEST_HOME := ../..
+COMPONENT_NAME := CppUTest
 
 INCLUDE_DIRS :=\
-  $(CPPUTEST_HOME)/include\
-  $(CPPUTEST_HOME)/include/Platforms/armcc\
+  $(CPPUTEST_HOME)/include \
+  $(CPPUTEST_HOME)/include/Platforms/armcc \
 
 # armcc system include path
 SYS_INCLUDE_DIRS:=$(KEIL_DIR)/include 
 
 SRC_DIRS :=\
-  $(CPPUTEST_HOME)/src/CppUTest\
+  $(CPPUTEST_HOME)/src/$(COMPONENT_NAME)\
   $(CPPUTEST_HOME)/src/Platforms/armcc\
 
-COMPONENT_NAME := CppUTest
 TARGET_PLATFORM :=armcc_$(CPU)_$(CPU_MODE)
-CPPUTEST_USE_MEM_LEAK_DETECTION := Y
+CPPUTEST_USE_MEM_LEAK_DETECTION := N
 CPPUTEST_USE_STD_CPP_LIB := N
 CPPUTEST_USE_VPATH := Y
 CPPUTEST_USE_STD_C_LIB := Y
@@ -48,15 +48,8 @@ CPPUTEST_ENABLE_DEBUG := Y
 
 # Default dir for temporary files (d, o)
 # Default dir for the outout library
-ifndef CPPUTEST_OBJS_DIR
-ifndef TARGET_PLATFORM
-    CPPUTEST_OBJS_DIR = objs
-    CPPUTEST_LIB_DIR = lib
-else
-    CPPUTEST_OBJS_DIR = objs/$(TARGET_PLATFORM)
-    CPPUTEST_LIB_DIR = lib/$(TARGET_PLATFORM)
-endif
-endif
+CPPUTEST_OBJS_DIR = objs
+CPPUTEST_LIB_DIR = $(CPPUTEST_HOME)/lib/$(TARGET_PLATFORM)
 
 TARGET_LIB = \
     $(CPPUTEST_LIB_DIR)/lib$(COMPONENT_NAME).a
@@ -84,6 +77,18 @@ STUFF_TO_CLEAN = $(OBJ)
 
 ALL_SRC = $(SRC)
 
+CPUFLAGS =--cpu=$(CPU)
+ifeq ($(CPU_MODE), thumb)
+  CPUFLAGS +=--apcs=/interwork
+endif
+DEPFLAGS =$(CPUFLAGS) -M $(INCLUDES) --depend_format=unix_escaped --depend_single_line --no_depend_system_headers
+OPTFLAGS =-O1
+CCFLAGS =$(CPUFLAGS) $(OPTFLAGS) -c $(INCLUDES)\
+  --$(CPU_MODE)\
+  --exceptions\
+  -D__CLK_TCK=1000\
+
+
 # If we're using VPATH
 ifeq ($(CPPUTEST_USE_VPATH), Y)
 # gather all the source directories and add them
@@ -93,30 +98,19 @@ ifeq ($(CPPUTEST_USE_VPATH), Y)
 endif
 
 INCLUDES_DIRS_EXPANDED = $(call get_dirs_from_dirspec, $(INCLUDE_DIRS))
-INCLUDES_DIRS_EXPANDED += $(SYS_INCLUDE_DIRS)
 INCLUDES += $(foreach dir, $(INCLUDES_DIRS_EXPANDED), -I$(dir))
 
 DEP_FILES = $(call src_to_d, $(ALL_SRC))
 STUFF_TO_CLEAN += $(DEP_FILES)
 
-STUFF_TO_CLEAN += $(TARGET_LIB)
-
-
-CPUFLAGS:=--cpu=$(CPU) --apcs=interwork
-DEPFLAGS:=$(CPUFLAGS) -M $(INCLUDES) --depend_format=unix_escaped --depend_single_line --no_depend_system_headers
-OPTFLAGS:=-O1
-CCFLAGS:=$(CPUFLAGS) $(OPTFLAGS) -c $(INCLUDES)\
-  --$(CPU_MODE)\
-  --bss_threshold=0\
-  --exceptions\
-  -D__CLK_TCK=1000\
-  --library_type=standardlib\
 
 # Without the C library, we'll need to disable the C++ library and ... 
 ifeq ($(CPPUTEST_USE_STD_C_LIB), N)
 	CPPUTEST_USE_STD_CPP_LIB = N
 	CPPUTEST_USE_MEM_LEAK_DETECTION = N
 	CCFLAGS += -DCPPUTEST_STD_C_LIB_DISABLED
+else
+	INCLUDE_DIRS +=$(SYS_INCLUDE_DIRS)
 endif
 
 ifeq ($(CPPUTEST_USE_MEM_LEAK_DETECTION), N)
@@ -133,11 +127,9 @@ ifeq ($(CPPUTEST_USE_STD_CPP_LIB), N)
 endif
 
 
-
-
 OBJS_DIRS :=$(sort $(dir $(STUFF_TO_CLEAN)))
 
-$(OBJS_DIRS):
+$(OBJS_DIRS) $(CPPUTEST_LIB_DIR):
 	@echo Updating directory $@
 	$(MKDIR) -p $@
 
@@ -152,19 +144,19 @@ $(CPPUTEST_OBJS_DIR)/%.d: %.cpp Makefile | $(OBJS_DIRS)
 	$(CC) $(DEPFLAGS) $< --depend=$@ --depend_target='$(patsubst %.d,%.o,$@)'
 
 #This rule does the compilation C++ files
-$(CPPUTEST_OBJS_DIR)/%.o: %.cpp $(CPPUTEST_OBJS_DIR)/%.d
+$(CPPUTEST_OBJS_DIR)/%.o: %.cpp $(CPPUTEST_OBJS_DIR)/%.d Makefile
 	@echo Compiling C++ file $<. Out file $@
 	$(CC) $(CCFLAGS) $< -o $@
 
 #This rule does the compilation C files
-$(CPPUTEST_OBJS_DIR)/%.o: %.c $(CPPUTEST_OBJS_DIR)/%.d
+$(CPPUTEST_OBJS_DIR)/%.o: %.c $(CPPUTEST_OBJS_DIR)/%.d Makefile
 	@echo Compiling C file $<. Out file $@
 	$(CC) $(CCFLAGS) $< -o $@
 
 
-$(TARGET_LIB): $(OBJ)
+$(TARGET_LIB): $(OBJ) | $(CPPUTEST_LIB_DIR)
 	@echo Archiving to $@
-	$(AR) $(ARFLAGS) --create $@ $(OBJ)
+	$(AR) $(ARFLAGS) --create $@ $^
 
 
 .PHONY: all
@@ -190,6 +182,8 @@ debug:
 	@$(call debug_print_list,$(OBJS_DIRS))
 	@echo Directories of CppUTest object files:
 	@$(call debug_print_list,$(CPPUTEST_OBJS_DIR))
+	@echo Flags:
+	@$(call debug_print_list,$(CCFLAGS))
 
 
 #Don't create dependencies when we're cleaning, for instance
@@ -198,4 +192,4 @@ ifeq (0, $(words $(findstring $(MAKECMDGOALS), $(NODEPS))))
 endif
 
 clean:
-	@$(RM) -rf $(CPPUTEST_OBJS_DIR) $(CPPUTEST_LIB_DIR)
+	@$(RM) -rf $(STUFF_TO_CLEAN)

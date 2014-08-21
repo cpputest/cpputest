@@ -34,67 +34,76 @@
 
 TEST_GROUP(MockCheckedActualCall)
 {
-	MockExpectedCallsList* emptyList;
-	MockExpectedCallsList* list;
-	MockFailureReporter* reporter;
+    MockExpectedCallsList* emptyList;
+    MockExpectedCallsList* list;
+    MockFailureReporter* reporter;
 
-	void setup()
-	{
-		emptyList = new MockExpectedCallsList;
-		list = new MockExpectedCallsList;
-		reporter = MockFailureReporterForTest::getReporter();
-	}
+    void setup()
+    {
+        emptyList = new MockExpectedCallsList;
+        list = new MockExpectedCallsList;
+        reporter = MockFailureReporterForTest::getReporter();
+    }
 
-	void teardown()
-	{
-		CHECK_NO_MOCK_FAILURE();
-		delete emptyList;
-		delete list;
-	}
+    void teardown()
+    {
+        CHECK_NO_MOCK_FAILURE();
+        delete emptyList;
+        delete list;
+    }
 };
 
 TEST(MockCheckedActualCall, unExpectedCall)
 {
-	MockCheckedActualCall actualCall(1, reporter, *emptyList);
-	actualCall.withName("unexpected");
+    MockCheckedActualCall actualCall(1, reporter, *emptyList);
+    actualCall.withName("unexpected");
 
-	MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "unexpected", *list);
-	CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+    MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "unexpected", *list);
+    CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
+TEST(MockCheckedActualCall, unExpectedCallWithAParameter)
+{
+    MockCheckedActualCall actualCall(1, reporter, *emptyList);
+    actualCall.withName("unexpected").withParameter("bar", 0);
+
+    MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "unexpected", *list);
+    CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 
 TEST(MockCheckedActualCall, unExpectedParameterName)
 {
-	MockCheckedExpectedCall call1;
-	call1.withName("func");
-	list->addExpectedCall(&call1);
+    MockCheckedExpectedCall call1;
+    call1.withName("func");
+    list->addExpectedCall(&call1);
 
-	MockCheckedActualCall actualCall(1, reporter, *list);
-	actualCall.withName("func").withParameter("integer", 1);
+    MockCheckedActualCall actualCall(1, reporter, *list);
+    actualCall.withName("func").withParameter("integer", 1);
 
-	MockNamedValue parameter("integer");
-	parameter.setValue(1);
+    MockNamedValue parameter("integer");
+    parameter.setValue(1);
 
-	MockUnexpectedParameterFailure expectedFailure(mockFailureTest(), "func", parameter, *list);
-	CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+    MockUnexpectedInputParameterFailure expectedFailure(mockFailureTest(), "func", parameter, *list);
+    CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 
 TEST(MockCheckedActualCall, multipleSameFunctionsExpectingAndHappenGradually)
 {
-	MockCheckedExpectedCall* call1 = new MockCheckedExpectedCall();
-	MockCheckedExpectedCall* call2 = new MockCheckedExpectedCall();
-	call1->withName("func");
-	call2->withName("func");
-	list->addExpectedCall(call1);
-	list->addExpectedCall(call2);
+    MockCheckedExpectedCall* call1 = new MockCheckedExpectedCall();
+    MockCheckedExpectedCall* call2 = new MockCheckedExpectedCall();
+    call1->withName("func");
+    call2->withName("func");
+    list->addExpectedCall(call1);
+    list->addExpectedCall(call2);
 
-	MockCheckedActualCall actualCall1(1, reporter, *list);
-	MockCheckedActualCall actualCall2(2, reporter, *list);
+    MockCheckedActualCall actualCall1(1, reporter, *list);
+    MockCheckedActualCall actualCall2(2, reporter, *list);
 
-	LONGS_EQUAL(2, list->amountOfUnfulfilledExpectations());
-	actualCall1.withName("func");
-	LONGS_EQUAL(1, list->amountOfUnfulfilledExpectations());
-	actualCall2.withName("func");
-	LONGS_EQUAL(0, list->amountOfUnfulfilledExpectations());
+    LONGS_EQUAL(2, list->amountOfUnfulfilledExpectations());
+    actualCall1.withName("func");
+    LONGS_EQUAL(1, list->amountOfUnfulfilledExpectations());
+    actualCall2.withName("func");
+    LONGS_EQUAL(0, list->amountOfUnfulfilledExpectations());
 
-	list->deleteAllExpectationsAndClearList();
+    list->deleteAllExpectationsAndClearList();
 }

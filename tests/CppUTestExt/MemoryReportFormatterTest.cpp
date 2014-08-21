@@ -34,54 +34,54 @@
 
 TEST_GROUP(NormalMemoryReportFormatter)
 {
-	char* memory01;
+    char* memory01;
 
-	StringBufferTestOutput testOutput;
-	TestResult* testResult;
-	NormalMemoryReportFormatter formatter;
+    StringBufferTestOutput testOutput;
+    TestResult* testResult;
+    NormalMemoryReportFormatter formatter;
 
-	void setup()
-	{
-		memory01 = (char*) 0x01;
-		testResult = new TestResult(testOutput);
-	}
+    void setup()
+    {
+        memory01 = (char*) 0x01;
+        testResult = new TestResult(testOutput);
+    }
 
-	void teardown()
-	{
-		delete testResult;
-	}
+    void teardown()
+    {
+        delete testResult;
+    }
 };
 
 
 TEST(NormalMemoryReportFormatter, mallocCreatesAnMallocCall)
 {
-	formatter.report_alloc_memory(testResult, defaultMallocAllocator(), 10, memory01, "file", 9);
-	TESTOUPUT_EQUAL(StringFromFormat("\tAllocation using malloc of size: 10 pointer: %p at file:9\n", memory01).asCharString());
+    formatter.report_alloc_memory(testResult, defaultMallocAllocator(), 10, memory01, "file", 9);
+    TESTOUPUT_EQUAL(StringFromFormat("\tAllocation using malloc of size: 10 pointer: %p at file:9\n", memory01).asCharString());
 }
 
 TEST(NormalMemoryReportFormatter, freeCreatesAnFreeCall)
 {
-	formatter.report_free_memory(testResult, defaultMallocAllocator(), memory01, "boo", 6);
-	TESTOUPUT_EQUAL(StringFromFormat("\tDeallocation using free of pointer: %p at boo:6\n", memory01).asCharString());
+    formatter.report_free_memory(testResult, defaultMallocAllocator(), memory01, "boo", 6);
+    TESTOUPUT_EQUAL(StringFromFormat("\tDeallocation using free of pointer: %p at boo:6\n", memory01).asCharString());
 }
 
 TEST(NormalMemoryReportFormatter, testStarts)
 {
-	UtestShell test("groupName", "TestName", "file", 1);
-	formatter.report_test_start(testResult, test);
-	TESTOUPUT_EQUAL("TEST(groupName, TestName)\n");
+    UtestShell test("groupName", "TestName", "file", 1);
+    formatter.report_test_start(testResult, test);
+    TESTOUPUT_EQUAL("TEST(groupName, TestName)\n");
 }
 
 TEST(NormalMemoryReportFormatter, testEnds)
 {
-	UtestShell test("groupName", "TestName", "file", 1);
-	formatter.report_test_end(testResult, test);
-	TESTOUPUT_EQUAL("ENDTEST(groupName, TestName)\n");
+    UtestShell test("groupName", "TestName", "file", 1);
+    formatter.report_test_end(testResult, test);
+    TESTOUPUT_EQUAL("ENDTEST(groupName, TestName)\n");
 }
 
 TEST(NormalMemoryReportFormatter, testGroupStarts)
 {
-	UtestShell test("groupName", "TestName", "file", 1);
-	formatter.report_testgroup_start(testResult, test);
-	TESTOUPUT_EQUAL("------------------------------TEST GROUP(groupName)-----------------------------\n");
+    UtestShell test("groupName", "TestName", "file", 1);
+    formatter.report_testgroup_start(testResult, test);
+    TESTOUPUT_EQUAL("------------------------------TEST GROUP(groupName)-----------------------------\n");
 }

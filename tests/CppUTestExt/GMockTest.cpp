@@ -36,57 +36,57 @@
 
 TEST_GROUP(GMock)
 {
-	TestTestingFixture *fixture;
-	void setup()
-	{
-		fixture = new TestTestingFixture;
-	}
+    TestTestingFixture *fixture;
+    void setup()
+    {
+        fixture = new TestTestingFixture;
+    }
 
-	void teardown()
-	{
-		delete fixture;
+    void teardown()
+    {
+        delete fixture;
 
-	}
+    }
 };
 
 class myMock
 {
 public:
-	MOCK_METHOD0(methodName, int());
+    MOCK_METHOD0(methodName, int());
 };
 
 static void failedMockCall()
 {
-	myMock mock;
-	EXPECT_CALL(mock, methodName()).WillOnce(Return(1));
+    myMock mock;
+    EXPECT_CALL(mock, methodName()).WillOnce(Return(1));
 }
 
 TEST(GMock, GMockFailuresWorkAsExpected)
 {
-	fixture->setTestFunction(failedMockCall);
-	fixture->runAllTests();
-	LONGS_EQUAL(1, fixture->getFailureCount());
+    fixture->setTestFunction(failedMockCall);
+    fixture->runAllTests();
+    LONGS_EQUAL(1, fixture->getFailureCount());
 }
 
 static void failedMockCallAfterOneSuccess()
 {
-	myMock mock;
-	EXPECT_CALL(mock, methodName()).Times(2).WillRepeatedly(Return(1));
+    myMock mock;
+    EXPECT_CALL(mock, methodName()).Times(2).WillRepeatedly(Return(1));
 
-	mock.methodName();
+    mock.methodName();
 }
 
 TEST(GMock, GMockFailuresWorkAsExpectedWithTwoExpectedCallButJustOneActual)
 {
-	fixture->setTestFunction(failedMockCallAfterOneSuccess);
-	fixture->runAllTests();
-	LONGS_EQUAL(1, fixture->getFailureCount());
+    fixture->setTestFunction(failedMockCallAfterOneSuccess);
+    fixture->runAllTests();
+    LONGS_EQUAL(1, fixture->getFailureCount());
 }
 
 TEST(GMock, GMockNiceMocksWorkFine)
 {
-	NiceMock<myMock> mock;
-	mock.methodName();
+    NiceMock<myMock> mock;
+    mock.methodName();
 }
 
 #endif

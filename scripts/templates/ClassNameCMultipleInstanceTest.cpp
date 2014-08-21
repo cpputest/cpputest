@@ -7,21 +7,21 @@ extern "C"
 
 TEST_GROUP(ClassName)
 {
-	ClassName aClassName;
+    ClassName aClassName;
 
-	void setup()
-	{
-		aClassName = ClassName_Create();
-	}
+    void setup()
+    {
+        aClassName = ClassName_Create();
+    }
 
-	void teardown()
-	{
-		ClassName_Destroy(aClassName);
-	}
+    void teardown()
+    {
+        ClassName_Destroy(aClassName);
+    }
 };
 
 TEST(ClassName, Create)
 {
-	FAIL("Start here");
+    FAIL("Start here");
 }
 

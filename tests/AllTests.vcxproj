@@ -168,7 +168,6 @@
     <ClCompile Include="MemoryLeakDetectorTest.cpp" />
     <ClCompile Include="MemoryLeakOperatorOverloadsTest.cpp" />
     <ClCompile Include="MemoryLeakWarningTest.cpp" />
-    <ClCompile Include="NullTestTest.cpp" />
     <ClCompile Include="PluginTest.cpp" />
     <ClCompile Include="PreprocessorTest.cpp" />
     <ClCompile Include="SetPluginTest.cpp" />

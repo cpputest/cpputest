@@ -33,7 +33,6 @@
 #undef realloc
 
 #define  far  // eliminate "meaningless type qualifier" warning
-#include "CppUTest/TestRegistry.h"
 #include <time.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -52,35 +51,35 @@ static int jmp_buf_index = 0;
  */
 extern "C" int PlatformSpecificSetJmp(void (*function) (void* data), void* data)
 {
-	if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
-	    jmp_buf_index++;
-		function(data);
-	    jmp_buf_index--;
-		return 1;
-	}
-	return 0;
+    if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
+        jmp_buf_index++;
+        function(data);
+        jmp_buf_index--;
+        return 1;
+    }
+    return 0;
 }
 
 void PlatformSpecificLongJmp()
 {
-	jmp_buf_index--;
-	longjmp(test_exit_jmp_buf[jmp_buf_index], 1);
+    jmp_buf_index--;
+    longjmp(test_exit_jmp_buf[jmp_buf_index], 1);
 }
 
 void PlatformSpecificRestoreJumpBuffer()
 {
-	jmp_buf_index--;
+    jmp_buf_index--;
 }
 
 void PlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
 {
-   printf("-p isn' implemented for armcc. Running inside the process\b");
-   shell->runOneTest(plugin, *result);
+    printf("-p isn' implemented for armcc. Running inside the process\b");
+    shell->runOneTest(plugin, *result);
 }
 
 TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
 {
-	return TestOutput::eclipse;
+    return TestOutput::eclipse;
 }
 
 ///////////// Time in millis
@@ -90,80 +89,23 @@ TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
 */
 static long TimeInMillisImplementation()
 {
-   clock_t t = clock();
-   return t;
+    clock_t t = clock();
+    return t;
 }
 
-static long (*timeInMillisFp) () = TimeInMillisImplementation;
-
-long GetPlatformSpecificTimeInMillis()
-{
-	return timeInMillisFp();
-}
-
-/* The ARMCC compiler will compile this function with C++ linkage, unless
- * we specifically tell it to use C linkage again, in the function definiton.
- */
-extern "C" void SetPlatformSpecificTimeInMillisMethod(long (*platformSpecific) ()){
-	timeInMillisFp = (platformSpecific == 0) ? TimeInMillisImplementation : platformSpecific;
-}
-
-///////////// Time in String
+extern "C" long (*GetPlatformSpecificTimeInMillis)() = TimeInMillisImplementation;
 
 static const char* TimeStringImplementation()
 {
-	time_t tm = time(NULL);
-	return ctime(&tm);
+    time_t tm = time(NULL);
+    return ctime(&tm);
 }
 
-static const char* (*timeStringFp) () = TimeStringImplementation;
-
-const char* GetPlatformSpecificTimeString()
-{
-	return timeStringFp();
-}
-
-/* The ARMCC compiler will compile this function with C++ linkage, unless
- * we specifically tell it to use C linkage again, in the function definiton.
- */
-extern "C" void SetPlatformSpecificTimeStringMethod(const char* (*platformMethod) ())
-{
-	timeStringFp = (platformMethod == 0) ? TimeStringImplementation : platformMethod;
-}
+extern "C" const char* (*GetPlatformSpecificTimeString)() = TimeStringImplementation;
 
 int PlatformSpecificAtoI(const char* str)
 {
-   return atoi(str);
-}
-
-size_t PlatformSpecificStrLen(const char* str)
-{
-   return strlen(str);
-}
-
-char* PlatformSpecificStrCat(char* s1, const char* s2)
-{
-   return strcat(s1, s2);
-}
-
-char* PlatformSpecificStrNCpy(char* s1, const char* s2, size_t size)
-{
-   return strncpy(s1, s2, size);
-}
-
-int PlatformSpecificStrCmp(const char* s1, const char* s2)
-{
-   return strcmp(s1, s2);
-}
-
-int PlatformSpecificStrNCmp(const char* s1, const char* s2, size_t size)
-{
-   return strncmp(s1, s2, size);
-}
-
-char* PlatformSpecificStrStr(const char* s1, const char* s2)
-{
-   return strstr((char*)s1, (char*)s2);
+    return atoi(str);
 }
 
 /* The ARMCC compiler will compile this function with C++ linkage, unless
@@ -172,65 +114,58 @@ char* PlatformSpecificStrStr(const char* s1, const char* s2)
 // extern "C" int PlatformSpecificVSNprintf(char *str, size_t size, const char* format, va_list args)
 int PlatformSpecificVSNprintf(char *str, size_t size, const char* format, va_list args)
 {
-   return vsnprintf( str, size, format, args);
-}
-
-char PlatformSpecificToLower(char c)
-{
-	return tolower(c);
+    return vsnprintf( str, size, format, args);
 }
 
 PlatformSpecificFile PlatformSpecificFOpen(const char* filename, const char* flag)
 {
-   return fopen(filename, flag);
+    return fopen(filename, flag);
 }
 
 
 void PlatformSpecificFPuts(const char* str, PlatformSpecificFile file)
 {
-   fputs(str, (FILE*)file);
+    fputs(str, (FILE*)file);
 }
 
 void PlatformSpecificFClose(PlatformSpecificFile file)
 {
-   fclose((FILE*)file);
+    fclose((FILE*)file);
 }
 
 void PlatformSpecificFlush()
 {
-  fflush(stdout);
+    fflush(stdout);
 }
 
 int PlatformSpecificPutchar(int c)
 {
-  return putchar(c);
+    return putchar(c);
 }
 
-int size_heap = 0;
 void* PlatformSpecificMalloc(size_t size)
 {
-   size_heap+=size;
-   return malloc(size);
+    return malloc(size);
 }
 
 void* PlatformSpecificRealloc (void* memory, size_t size)
 {
-   return realloc(memory, size);
+    return realloc(memory, size);
 }
 
 void PlatformSpecificFree(void* memory)
 {
-   free(memory);
+    free(memory);
 }
 
 void* PlatformSpecificMemCpy(void* s1, const void* s2, size_t size)
 {
-   return memcpy(s1, s2, size);
+    return memcpy(s1, s2, size);
 }
 
 void* PlatformSpecificMemset(void* mem, int c, size_t size)
 {
-	return memset(mem, c, size);
+    return memset(mem, c, size);
 }
 
 double PlatformSpecificFabs(double d)
@@ -238,7 +173,9 @@ double PlatformSpecificFabs(double d)
    return fabs(d);
 }
 
-int PlatformSpecificIsNan(double d)
+static int IsNanImplementation(double d)
 {
-	return isnan(d);
+    return isnan(d);
 }
+
+extern "C" int (*PlatformSpecificIsNan)(double) = IsNanImplementation;

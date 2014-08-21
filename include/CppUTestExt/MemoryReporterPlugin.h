@@ -35,13 +35,13 @@ class MemoryReportFormatter;
 
 class MemoryReporterPlugin : public TestPlugin
 {
-	MemoryReportFormatter* formatter_;
+    MemoryReportFormatter* formatter_;
 
-	MemoryReportAllocator mallocAllocator;
-	MemoryReportAllocator newAllocator;
-	MemoryReportAllocator newArrayAllocator;
+    MemoryReportAllocator mallocAllocator;
+    MemoryReportAllocator newAllocator;
+    MemoryReportAllocator newArrayAllocator;
 
-	SimpleString currentTestGroup_;
+    SimpleString currentTestGroup_;
 public:
     MemoryReporterPlugin();
     virtual ~MemoryReporterPlugin();

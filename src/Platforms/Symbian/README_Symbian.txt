@@ -27,9 +27,9 @@ The entry point file of the tests is normally the following:
 #endif
 
 int main(int argc, char** argv)
-	{
-	CommandLineTestRunner::RunAllTests(argc, argv);
-	}
+    {
+    CommandLineTestRunner::RunAllTests(argc, argv);
+    }
 
 The test must be statically linked against libcrt0.lib if standard main (not E32Main) is used as above.
 

@@ -42,31 +42,32 @@ class TestRegistry;
 class CommandLineTestRunner
 {
 public:
-	enum OutputType
-	{
-		OUTPUT_NORMAL, OUTPUT_JUNIT
-	};
+    enum OutputType
+    {
+        OUTPUT_NORMAL, OUTPUT_JUNIT
+    };
 
-	static int RunAllTests(int ac, const char** av);
-	static int RunAllTests(int ac, char** av);
-	CommandLineTestRunner(int ac, const char** av, TestOutput*, TestRegistry* registry);
+    static int RunAllTests(int ac, const char** av);
+    static int RunAllTests(int ac, char** av);
+    CommandLineTestRunner(int ac, const char** av, TestOutput*, TestRegistry* registry);
 
-	virtual ~CommandLineTestRunner();
-	int runAllTestsMain();
+    virtual ~CommandLineTestRunner();
+    int runAllTestsMain();
 
 private:
-	TestOutput* output_;
-	JUnitTestOutput* jUnitOutput_;
-	CommandLineArguments* arguments_;
-	TestRegistry* registry_;
+    TestOutput* output_;
+    JUnitTestOutput* jUnitOutput_;
+    CommandLineArguments* arguments_;
+    TestRegistry* registry_;
 
-	bool parseArguments(TestPlugin*);
-	int runAllTests();
-	void initializeTestRun();
-	bool isVerbose();
-	int getRepeatCount();
-	TestFilter getGroupFilter();
-	TestFilter getNameFilter();
+    bool parseArguments(TestPlugin*);
+    int runAllTests();
+    void initializeTestRun();
+    bool isVerbose();
+    bool isColor();
+    int getRepeatCount();
+    TestFilter getGroupFilter();
+    TestFilter getNameFilter();
 };
 
 #endif

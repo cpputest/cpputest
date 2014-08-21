@@ -32,10 +32,10 @@
 
 static char* checkedMalloc(size_t size)
 {
-	char* mem = (char*) PlatformSpecificMalloc(size);
-	if (mem == 0)
-	FAIL("malloc returned null pointer");
-	return mem;
+    char* mem = (char*) PlatformSpecificMalloc(size);
+    if (mem == 0)
+    FAIL("malloc returned null pointer");
+    return mem;
 }
 
 static TestMemoryAllocator* currentNewAllocator = 0;
@@ -44,124 +44,124 @@ static TestMemoryAllocator* currentMallocAllocator = 0;
 
 void setCurrentNewAllocator(TestMemoryAllocator* allocator)
 {
-	currentNewAllocator = allocator;
+    currentNewAllocator = allocator;
 }
 
 TestMemoryAllocator* getCurrentNewAllocator()
 {
-	if (currentNewAllocator == 0) setCurrentNewAllocatorToDefault();
-	return currentNewAllocator;
+    if (currentNewAllocator == 0) setCurrentNewAllocatorToDefault();
+    return currentNewAllocator;
 }
 
 void setCurrentNewAllocatorToDefault()
 {
-	currentNewAllocator = defaultNewAllocator();
+    currentNewAllocator = defaultNewAllocator();
 }
 
 TestMemoryAllocator* defaultNewAllocator()
 {
-	static TestMemoryAllocator allocator("Standard New Allocator", "new", "delete");
-	return &allocator;
+    static TestMemoryAllocator allocator("Standard New Allocator", "new", "delete");
+    return &allocator;
 }
 
 void setCurrentNewArrayAllocator(TestMemoryAllocator* allocator)
 {
-	currentNewArrayAllocator = allocator;
+    currentNewArrayAllocator = allocator;
 }
 
 TestMemoryAllocator* getCurrentNewArrayAllocator()
 {
-	if (currentNewArrayAllocator == 0) setCurrentNewArrayAllocatorToDefault();
-	return currentNewArrayAllocator;
+    if (currentNewArrayAllocator == 0) setCurrentNewArrayAllocatorToDefault();
+    return currentNewArrayAllocator;
 }
 
 void setCurrentNewArrayAllocatorToDefault()
 {
-	currentNewArrayAllocator = defaultNewArrayAllocator();
+    currentNewArrayAllocator = defaultNewArrayAllocator();
 }
 
 TestMemoryAllocator* defaultNewArrayAllocator()
 {
-	static TestMemoryAllocator allocator("Standard New [] Allocator", "new []", "delete []");
-	return &allocator;
+    static TestMemoryAllocator allocator("Standard New [] Allocator", "new []", "delete []");
+    return &allocator;
 }
 
 void setCurrentMallocAllocator(TestMemoryAllocator* allocator)
 {
-	currentMallocAllocator = allocator;
+    currentMallocAllocator = allocator;
 }
 
 TestMemoryAllocator* getCurrentMallocAllocator()
 {
-	if (currentMallocAllocator == 0) setCurrentMallocAllocatorToDefault();
-	return currentMallocAllocator;
+    if (currentMallocAllocator == 0) setCurrentMallocAllocatorToDefault();
+    return currentMallocAllocator;
 }
 
 void setCurrentMallocAllocatorToDefault()
 {
-	currentMallocAllocator = defaultMallocAllocator();
+    currentMallocAllocator = defaultMallocAllocator();
 }
 
 TestMemoryAllocator* defaultMallocAllocator()
 {
-	static TestMemoryAllocator allocator("Standard Malloc Allocator", "malloc", "free");
-	return &allocator;
+    static TestMemoryAllocator allocator("Standard Malloc Allocator", "malloc", "free");
+    return &allocator;
 }
 
 /////////////////////////////////////////////
 
 TestMemoryAllocator::TestMemoryAllocator(const char* name_str, const char* alloc_name_str, const char* free_name_str)
-	: name_(name_str), alloc_name_(alloc_name_str), free_name_(free_name_str), hasBeenDestroyed_(false)
+    : name_(name_str), alloc_name_(alloc_name_str), free_name_(free_name_str), hasBeenDestroyed_(false)
 {
 }
 
 TestMemoryAllocator::~TestMemoryAllocator()
 {
-	hasBeenDestroyed_ = true;
+    hasBeenDestroyed_ = true;
 }
 
 bool TestMemoryAllocator::hasBeenDestroyed()
 {
-	return hasBeenDestroyed_;
+    return hasBeenDestroyed_;
 }
 
 bool TestMemoryAllocator::isOfEqualType(TestMemoryAllocator* allocator)
 {
-	return PlatformSpecificStrCmp(this->name(), allocator->name()) == 0;
+    return SimpleString::StrCmp(this->name(), allocator->name()) == 0;
 }
 
 char* TestMemoryAllocator::allocMemoryLeakNode(size_t size)
 {
-	return alloc_memory(size, "MemoryLeakNode", 1);
+    return alloc_memory(size, "MemoryLeakNode", 1);
 }
 
 void TestMemoryAllocator::freeMemoryLeakNode(char* memory)
 {
-	free_memory(memory, "MemoryLeakNode", 1);
+    free_memory(memory, "MemoryLeakNode", 1);
 }
 
 char* TestMemoryAllocator::alloc_memory(size_t size, const char*, int)
 {
-	return checkedMalloc(size);
+    return checkedMalloc(size);
 }
 
 void TestMemoryAllocator::free_memory(char* memory, const char*, int)
 {
-	PlatformSpecificFree(memory);
+    PlatformSpecificFree(memory);
 }
 const char* TestMemoryAllocator::name()
 {
-	return name_;
+    return name_;
 }
 
 const char* TestMemoryAllocator::alloc_name()
 {
-	return alloc_name_;
+    return alloc_name_;
 }
 
 const char* TestMemoryAllocator::free_name()
 {
-	return free_name_;
+    return free_name_;
 }
 
 CrashOnAllocationAllocator::CrashOnAllocationAllocator() : allocationToCrashOn_(0)
@@ -170,21 +170,21 @@ CrashOnAllocationAllocator::CrashOnAllocationAllocator() : allocationToCrashOn_(
 
 void CrashOnAllocationAllocator::setNumberToCrashOn(unsigned allocationToCrashOn)
 {
-	allocationToCrashOn_ = allocationToCrashOn;
+    allocationToCrashOn_ = allocationToCrashOn;
 }
 
 char* CrashOnAllocationAllocator::alloc_memory(size_t size, const char* file, int line)
 {
-	if (MemoryLeakWarningPlugin::getGlobalDetector()->getCurrentAllocationNumber() == allocationToCrashOn_)
-		UT_CRASH();
+    if (MemoryLeakWarningPlugin::getGlobalDetector()->getCurrentAllocationNumber() == allocationToCrashOn_)
+        UT_CRASH();
 
-	return TestMemoryAllocator::alloc_memory(size, file, line);
+    return TestMemoryAllocator::alloc_memory(size, file, line);
 }
 
 
 char* NullUnknownAllocator::alloc_memory(size_t /*size*/, const char*, int)
 {
-	return 0;
+    return 0;
 }
 
 void NullUnknownAllocator::free_memory(char* /*memory*/, const char*, int)
@@ -192,13 +192,13 @@ void NullUnknownAllocator::free_memory(char* /*memory*/, const char*, int)
 }
 
 NullUnknownAllocator::NullUnknownAllocator()
-	: TestMemoryAllocator("Null Allocator", "unknown", "unknown")
+    : TestMemoryAllocator("Null Allocator", "unknown", "unknown")
 {
 }
 
 
 TestMemoryAllocator* NullUnknownAllocator::defaultAllocator()
 {
-	static NullUnknownAllocator allocator;
-	return &allocator;
+    static NullUnknownAllocator allocator;
+    return &allocator;
 }

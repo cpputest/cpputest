@@ -32,107 +32,107 @@
 
 TEST_GROUP(MockPlugin)
 {
-	UtestShell *test;
-	StringBufferTestOutput *output;
-	TestResult *result;
-	MockExpectedCallsList *expectationsList;
-	MockCheckedExpectedCall *call;
+    UtestShell *test;
+    StringBufferTestOutput *output;
+    TestResult *result;
+    MockExpectedCallsList *expectationsList;
+    MockCheckedExpectedCall *call;
 
-	MockSupportPlugin *plugin;
+    MockSupportPlugin *plugin;
 
-	void setup()
-	{
-		mock().setMockFailureStandardReporter(MockFailureReporterForTest::getReporter());
+    void setup()
+    {
+        mock().setMockFailureStandardReporter(MockFailureReporterForTest::getReporter());
 
-		test = new UtestShell("group", "name", "file", 1);
-		output = new StringBufferTestOutput;
-		result = new TestResult(*output);
-		expectationsList = new MockExpectedCallsList;
-		call = new MockCheckedExpectedCall;
-		expectationsList->addExpectedCall(call);
-		plugin = new MockSupportPlugin;;
-	}
+        test = new UtestShell("group", "name", "file", 1);
+        output = new StringBufferTestOutput;
+        result = new TestResult(*output);
+        expectationsList = new MockExpectedCallsList;
+        call = new MockCheckedExpectedCall;
+        expectationsList->addExpectedCall(call);
+        plugin = new MockSupportPlugin;;
+    }
 
-	void teardown()
-	{
-		delete test;
-		delete output;
-		delete result;
-		delete expectationsList;
-		delete call;
-		delete plugin;
+    void teardown()
+    {
+        delete test;
+        delete output;
+        delete result;
+        delete expectationsList;
+        delete call;
+        delete plugin;
 
-		CHECK_NO_MOCK_FAILURE();
-		mock().setMockFailureStandardReporter(NULL);
-	}
+        CHECK_NO_MOCK_FAILURE();
+        mock().setMockFailureStandardReporter(NULL);
+    }
 };
 
 TEST(MockPlugin, checkExpectationsAndClearAtEnd)
 {
-	call->withName("foobar");
-	MockExpectedCallsDidntHappenFailure expectedFailure(test, *expectationsList);
+    call->withName("foobar");
+    MockExpectedCallsDidntHappenFailure expectedFailure(test, *expectationsList);
 
-	mock().expectOneCall("foobar");
+    mock().expectOneCall("foobar");
 
-	plugin->postTestAction(*test, *result);
+    plugin->postTestAction(*test, *result);
 
-	STRCMP_CONTAINS(expectedFailure.getMessage().asCharString(), output->getOutput().asCharString())
-	LONGS_EQUAL(0, mock().expectedCallsLeft());
+    STRCMP_CONTAINS(expectedFailure.getMessage().asCharString(), output->getOutput().asCharString())
+    LONGS_EQUAL(0, mock().expectedCallsLeft());
 //	clear makes sure there are no memory leaks.
 }
 
 TEST(MockPlugin, checkExpectationsWorksAlsoWithHierachicalObjects)
 {
-	call->withName("foobar").onObject((void*) 1);
-	MockExpectedObjectDidntHappenFailure expectedFailure(test, "foobar", *expectationsList);
+    call->withName("foobar").onObject((void*) 1);
+    MockExpectedObjectDidntHappenFailure expectedFailure(test, "foobar", *expectationsList);
 
-	mock("differentScope").expectOneCall("foobar").onObject((void*) 1);
-	mock("differentScope").actualCall("foobar");
+    mock("differentScope").expectOneCall("foobar").onObject((void*) 1);
+    mock("differentScope").actualCall("foobar");
 
-	plugin->postTestAction(*test, *result);
+    plugin->postTestAction(*test, *result);
 
-	STRCMP_CONTAINS(expectedFailure.getMessage().asCharString(), output->getOutput().asCharString())
+    STRCMP_CONTAINS(expectedFailure.getMessage().asCharString(), output->getOutput().asCharString())
 }
 
 class DummyComparator : public MockNamedValueComparator
 {
 public:
-	bool isEqual(const void* object1, const void* object2)
-	{
-		return object1 == object2;
-	}
-	SimpleString valueToString(const void*)
-	{
-		return "string";
-	}
+    bool isEqual(const void* object1, const void* object2)
+    {
+        return object1 == object2;
+    }
+    SimpleString valueToString(const void*)
+    {
+        return "string";
+    }
 
 };
 
 TEST(MockPlugin, installComparatorRecordsTheComparatorButNotInstallsItYet)
 {
-	DummyComparator comparator;
-	plugin->installComparator("myType", comparator);
-	mock().expectOneCall("foo").withParameterOfType("myType", "name", &comparator);
-	mock().actualCall("foo").withParameterOfType("myType", "name", &comparator);
+    DummyComparator comparator;
+    plugin->installComparator("myType", comparator);
+    mock().expectOneCall("foo").withParameterOfType("myType", "name", &comparator);
+    mock().actualCall("foo").withParameterOfType("myType", "name", &comparator);
 
-	MockNoWayToCompareCustomTypeFailure failure(test, "myType");
-	CHECK_EXPECTED_MOCK_FAILURE(failure);
+    MockNoWayToCompareCustomTypeFailure failure(test, "myType");
+    CHECK_EXPECTED_MOCK_FAILURE(failure);
 }
 
 TEST(MockPlugin, preTestActionWillEnableMultipleComparatorsToTheGlobalMockSupportSpace)
 {
-	DummyComparator comparator;
-	DummyComparator comparator2;
-	plugin->installComparator("myType", comparator);
-	plugin->installComparator("myOtherType", comparator2);
+    DummyComparator comparator;
+    DummyComparator comparator2;
+    plugin->installComparator("myType", comparator);
+    plugin->installComparator("myOtherType", comparator2);
 
-	plugin->preTestAction(*test, *result);
-	mock().expectOneCall("foo").withParameterOfType("myType", "name", &comparator);
-	mock().expectOneCall("foo").withParameterOfType("myOtherType", "name", &comparator);
-	mock().actualCall("foo").withParameterOfType("myType", "name", &comparator);
-	mock().actualCall("foo").withParameterOfType("myOtherType", "name", &comparator);
+    plugin->preTestAction(*test, *result);
+    mock().expectOneCall("foo").withParameterOfType("myType", "name", &comparator);
+    mock().expectOneCall("foo").withParameterOfType("myOtherType", "name", &comparator);
+    mock().actualCall("foo").withParameterOfType("myType", "name", &comparator);
+    mock().actualCall("foo").withParameterOfType("myOtherType", "name", &comparator);
 
-	mock().checkExpectations();
-	CHECK_NO_MOCK_FAILURE();
-	LONGS_EQUAL(0, result->getFailureCount());
+    mock().checkExpectations();
+    CHECK_NO_MOCK_FAILURE();
+    LONGS_EQUAL(0, result->getFailureCount());
 }
