@@ -37,7 +37,7 @@ TEST_GROUP(PreprocessorTest)
 
 TEST(PreprocessorTest, FailWhenCPPUTEST_COMPILATIONIsNotDefined)
 {
-	FAIL("CPPUTEST_COMPILATION should always be defined when compiling CppUTest");
+    FAIL("CPPUTEST_COMPILATION should always be defined when compiling CppUTest");
 }
 #endif
 #endif

@@ -32,112 +32,121 @@
 #include "CppUTest/TestRegistry.h"
 
 CommandLineTestRunner::CommandLineTestRunner(int ac, const char** av, TestOutput* output, TestRegistry* registry) :
-	output_(output), jUnitOutput_(NULL), arguments_(NULL), registry_(registry)
+    output_(output), jUnitOutput_(NULL), arguments_(NULL), registry_(registry)
 {
-	arguments_ = new CommandLineArguments(ac, av);
+    arguments_ = new CommandLineArguments(ac, av);
 }
 
 CommandLineTestRunner::~CommandLineTestRunner()
 {
-	delete arguments_;
-	delete jUnitOutput_;
+    delete arguments_;
+    delete jUnitOutput_;
 }
 
 int CommandLineTestRunner::RunAllTests(int ac, char** av)
 {
-	return RunAllTests(ac, const_cast<const char**> (av));
+    return RunAllTests(ac, const_cast<const char**> (av));
 }
 
 int CommandLineTestRunner::RunAllTests(int ac, const char** av)
 {
-	int result = 0;
-	ConsoleTestOutput output;
+    int result = 0;
+    ConsoleTestOutput output;
 
-	MemoryLeakWarningPlugin memLeakWarn(DEF_PLUGIN_MEM_LEAK);
-	memLeakWarn.destroyGlobalDetectorAndTurnOffMemoryLeakDetectionInDestructor(true);
-	TestRegistry::getCurrentRegistry()->installPlugin(&memLeakWarn);
+    MemoryLeakWarningPlugin memLeakWarn(DEF_PLUGIN_MEM_LEAK);
+    memLeakWarn.destroyGlobalDetectorAndTurnOffMemoryLeakDetectionInDestructor(true);
+    TestRegistry::getCurrentRegistry()->installPlugin(&memLeakWarn);
 
-	{
-		CommandLineTestRunner runner(ac, av, &output, TestRegistry::getCurrentRegistry());
-		result = runner.runAllTestsMain();
-	}
+    {
+        CommandLineTestRunner runner(ac, av, &output, TestRegistry::getCurrentRegistry());
+        result = runner.runAllTestsMain();
+    }
 
-	if (result == 0) {
-		output << memLeakWarn.FinalReport(0);
-	}
-	TestRegistry::getCurrentRegistry()->removePluginByName(DEF_PLUGIN_MEM_LEAK);
-	return result;
+    if (result == 0) {
+        output << memLeakWarn.FinalReport(0);
+    }
+    TestRegistry::getCurrentRegistry()->removePluginByName(DEF_PLUGIN_MEM_LEAK);
+    return result;
 }
 
 int CommandLineTestRunner::runAllTestsMain()
 {
-	int testResult = 0;
+    int testResult = 0;
 
-	SetPointerPlugin pPlugin(DEF_PLUGIN_SET_POINTER);
-	registry_->installPlugin(&pPlugin);
+    SetPointerPlugin pPlugin(DEF_PLUGIN_SET_POINTER);
+    registry_->installPlugin(&pPlugin);
 
-	if (parseArguments(registry_->getFirstPlugin()))
-		testResult = runAllTests();
+    if (parseArguments(registry_->getFirstPlugin()))
+        testResult = runAllTests();
 
-	registry_->removePluginByName(DEF_PLUGIN_SET_POINTER);
-	return testResult;
+    registry_->removePluginByName(DEF_PLUGIN_SET_POINTER);
+    return testResult;
 }
 
 void CommandLineTestRunner::initializeTestRun()
 {
-	registry_->groupFilter(arguments_->getGroupFilter());
-	registry_->nameFilter(arguments_->getNameFilter());
-	if (arguments_->isVerbose()) output_->verbose();
-	if (arguments_->runTestsInSeperateProcess()) registry_->setRunTestsInSeperateProcess();
+    registry_->groupFilter(arguments_->getGroupFilter());
+    registry_->nameFilter(arguments_->getNameFilter());
+    if (arguments_->isVerbose()) output_->verbose();
+    if (arguments_->isColor()) output_->color();
+    if (arguments_->runTestsInSeperateProcess()) registry_->setRunTestsInSeperateProcess();
 }
 
 int CommandLineTestRunner::runAllTests()
 {
-	initializeTestRun();
-	int loopCount = 0;
-	int failureCount = 0;
-	int repeat_ = arguments_->getRepeatCount();
+    initializeTestRun();
+    int loopCount = 0;
+    int failureCount = 0;
+    int repeat_ = arguments_->getRepeatCount();
 
-	while (loopCount++ < repeat_) {
-		output_->printTestRun(loopCount, repeat_);
-		TestResult tr(*output_);
-		registry_->runAllTests(tr);
-		failureCount += tr.getFailureCount();
-	}
+    while (loopCount++ < repeat_) {
+        output_->printTestRun(loopCount, repeat_);
+        TestResult tr(*output_);
+        registry_->runAllTests(tr);
+        failureCount += tr.getFailureCount();
+    }
 
-	return failureCount;
+    return failureCount;
 }
 
 bool CommandLineTestRunner::parseArguments(TestPlugin* plugin)
 {
-	if (arguments_->parse(plugin)) {
-		if (arguments_->isJUnitOutput()) {
-			output_ = jUnitOutput_ = new JUnitTestOutput;
-		}
-		return true;
-	}
-	else {
-		output_->print(arguments_->usage());
-		return false;
-	}
+    if (arguments_->parse(plugin)) {
+        if (arguments_->isJUnitOutput()) {
+            output_ = jUnitOutput_ = new JUnitTestOutput;
+            if (jUnitOutput_ != NULL) {
+                jUnitOutput_->setPackageName(arguments_->getPackageName());
+            }
+        }
+        return true;
+    }
+    else {
+        output_->print(arguments_->usage());
+        return false;
+    }
 }
 
 bool CommandLineTestRunner::isVerbose()
 {
-	return arguments_->isVerbose();
+    return arguments_->isVerbose();
+}
+
+bool CommandLineTestRunner::isColor()
+{
+    return arguments_->isColor();
 }
 
 int CommandLineTestRunner::getRepeatCount()
 {
-	return arguments_->getRepeatCount();
+    return arguments_->getRepeatCount();
 }
 
 TestFilter CommandLineTestRunner::getGroupFilter()
 {
-	return arguments_->getGroupFilter();
+    return arguments_->getGroupFilter();
 }
 
 TestFilter CommandLineTestRunner::getNameFilter()
 {
-	return arguments_->getNameFilter();
+    return arguments_->getNameFilter();
 }

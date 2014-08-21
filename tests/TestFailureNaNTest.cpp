@@ -27,6 +27,7 @@
 
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TestOutput.h"
+#include "CppUTest/PlatformSpecificFunctions.h"
 
 namespace
 {
@@ -37,42 +38,48 @@ const char* failFileName = "fail.cpp";
 static double zero = 0.0;
 static const double not_a_number = zero / zero;
 
+extern "C" {
+    static int IsNanForSystemsWithoutNan(double d) { return (0.0 == d); }
+}
+
 TEST_GROUP(TestFailureNaN)
 {
-	UtestShell* test;
+    UtestShell* test;
 
-	void setup()
-	{
-		test = new NullTestShell(failFileName, failLineNumber-1);
-	}
-	void teardown()
-	{
-		delete test;
-	}
+    void setup()
+    {
+        test = new UtestShell("groupname", "testname", failFileName, failLineNumber-1);
+		if(PlatformSpecificIsNan(not_a_number) == false) 
+		    UT_PTR_SET(PlatformSpecificIsNan, IsNanForSystemsWithoutNan);
+    }
+    void teardown()
+    {
+        delete test;
+    }
 };
 #define FAILURE_EQUAL(a, b) STRCMP_EQUAL_LOCATION(a, b.getMessage().asCharString(), __FILE__, __LINE__)
 
 
 TEST(TestFailureNaN, DoublesEqualExpectedIsNaN)
 {
-	DoublesEqualFailure f(test, failFileName, failLineNumber, not_a_number, 2.0, 3.0);
-	FAILURE_EQUAL("expected <Nan - Not a number>\n"
-			    "\tbut was  <2> threshold used was <3>\n"
-			    "\tCannot make comparisons with Nan", f);
+    DoublesEqualFailure f(test, failFileName, failLineNumber, not_a_number, 2.0, 3.0);
+    FAILURE_EQUAL("expected <Nan - Not a number>\n"
+                "\tbut was  <2> threshold used was <3>\n"
+                "\tCannot make comparisons with Nan", f);
 }
 
 TEST(TestFailureNaN, DoublesEqualActualIsNaN)
 {
-	DoublesEqualFailure f(test, failFileName, failLineNumber, 1.0, not_a_number, 3.0);
-	FAILURE_EQUAL("expected <1>\n"
-			    "\tbut was  <Nan - Not a number> threshold used was <3>\n"
-			    "\tCannot make comparisons with Nan", f);
+    DoublesEqualFailure f(test, failFileName, failLineNumber, 1.0, not_a_number, 3.0);
+    FAILURE_EQUAL("expected <1>\n"
+                "\tbut was  <Nan - Not a number> threshold used was <3>\n"
+                "\tCannot make comparisons with Nan", f);
 }
 
 TEST(TestFailureNaN, DoublesEqualThresholdIsNaN)
 {
-	DoublesEqualFailure f(test, failFileName, failLineNumber, 1.0, 2.0, not_a_number);
-	FAILURE_EQUAL("expected <1>\n"
-			    "\tbut was  <2> threshold used was <Nan - Not a number>\n"
-			    "\tCannot make comparisons with Nan", f);
+    DoublesEqualFailure f(test, failFileName, failLineNumber, 1.0, 2.0, not_a_number);
+    FAILURE_EQUAL("expected <1>\n"
+                "\tbut was  <2> threshold used was <Nan - Not a number>\n"
+                "\tCannot make comparisons with Nan", f);
 }

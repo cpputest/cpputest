@@ -32,7 +32,6 @@
 #undef calloc
 #undef realloc
 
-#include "CppUTest/TestRegistry.h"
 #include <sys/time.h>
 #include <time.h>
 #include <stdio.h>
@@ -62,22 +61,22 @@ void PlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* pl
    pid_t pid = fork();
 
    if (pid) {
-	   wait(&info);
-	   if (WIFEXITED(info) && WEXITSTATUS(info) > result->getFailureCount())
-		   result->addFailure(TestFailure(shell, "failed in seperate process"));
-	   else if (!WIFEXITED(info))
-		   result->addFailure(TestFailure(shell, "failed in seperate process"));
+       wait(&info);
+       if (WIFEXITED(info) && WEXITSTATUS(info) > result->getFailureCount())
+           result->addFailure(TestFailure(shell, "failed in seperate process"));
+       else if (!WIFEXITED(info))
+           result->addFailure(TestFailure(shell, "failed in seperate process"));
    }
    else {
-	   shell->runOneTest(plugin, *result);
-	   exit(result->getFailureCount() );
-	}
+       shell->runOneTest(plugin, *result);
+       exit(result->getFailureCount() );
+    }
 #endif
 }
 
 TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
 {
-	return TestOutput::eclipse;
+    return TestOutput::eclipse;
 }
 
 
@@ -85,13 +84,13 @@ extern "C" {
 
 int PlatformSpecificSetJmp(void (*function) (void* data), void* data)
 {
-	if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
-	    jmp_buf_index++;
-		function(data);
-	    jmp_buf_index--;
-		return 1;
-	}
-	return 0;
+    if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
+        jmp_buf_index++;
+        function(data);
+        jmp_buf_index--;
+        return 1;
+    }
+    return 0;
 }
 
 /*
@@ -103,98 +102,37 @@ __no_return__
 #endif
 void PlatformSpecificLongJmp()
 {
-	jmp_buf_index--;
-	longjmp(test_exit_jmp_buf[jmp_buf_index], 1);
+    jmp_buf_index--;
+    longjmp(test_exit_jmp_buf[jmp_buf_index], 1);
 }
 
 void PlatformSpecificRestoreJumpBuffer()
 {
-	jmp_buf_index--;
+    jmp_buf_index--;
 }
 
 ///////////// Time in millis
 
 static long TimeInMillisImplementation()
 {
-	struct timeval tv;
-	struct timezone tz;
-	gettimeofday(&tv, &tz);
-	return (tv.tv_sec * 1000) + (long)((double)tv.tv_usec * 0.001);
+    struct timeval tv;
+    struct timezone tz;
+    gettimeofday(&tv, &tz);
+    return (tv.tv_sec * 1000) + (long)((double)tv.tv_usec * 0.001);
 }
 
-static long (*timeInMillisFp) () = TimeInMillisImplementation;
-
-long GetPlatformSpecificTimeInMillis()
-{
-	return timeInMillisFp();
-}
-
-void SetPlatformSpecificTimeInMillisMethod(long (*platformSpecific) ())
-{
-	timeInMillisFp = (platformSpecific == 0) ? TimeInMillisImplementation : platformSpecific;
-}
-
-///////////// Time in String
+long (*GetPlatformSpecificTimeInMillis)() = TimeInMillisImplementation;
 
 static const char* TimeStringImplementation()
 {
-	time_t tm = time(NULL);
-	static char dateTime[80];
-	struct tm *tmp = localtime(&tm);
-	strftime(dateTime, 80, "%Y-%m-%dT%H:%M:%S", tmp);
-	return dateTime;
+    time_t tm = time(NULL);
+    static char dateTime[80];
+    struct tm *tmp = localtime(&tm);
+    strftime(dateTime, 80, "%Y-%m-%dT%H:%M:%S", tmp);
+    return dateTime;
 }
 
-static const char* (*timeStringFp) () = TimeStringImplementation;
-
-const char* GetPlatformSpecificTimeString()
-{
-	return timeStringFp();
-}
-
-void SetPlatformSpecificTimeStringMethod(const char* (*platformMethod) ())
-{
-	timeStringFp = (platformMethod == 0) ? TimeStringImplementation : platformMethod;
-}
-
-int PlatformSpecificAtoI(const char*str)
-{
-   return atoi(str);
-}
-
-size_t PlatformSpecificStrLen(const char* str)
-{
-   return strlen(str);
-}
-
-char* PlatformSpecificStrCat(char* s1, const char* s2)
-{
-   return strcat(s1, s2);
-}
-
-char* PlatformSpecificStrCpy(char* s1, const char* s2)
-{
-   return strcpy(s1, s2);
-}
-
-char* PlatformSpecificStrNCpy(char* s1, const char* s2, size_t size)
-{
-   return strncpy(s1, s2, size);
-}
-
-int PlatformSpecificStrCmp(const char* s1, const char* s2)
-{
-   return strcmp(s1, s2);
-}
-
-int PlatformSpecificStrNCmp(const char* s1, const char* s2, size_t size)
-{
-   return strncmp(s1, s2, size);
-}
-char* PlatformSpecificStrStr(const char* s1, const char* s2)
-{
-   return (char*) strstr(s1, s2);
-}
+const char* (*GetPlatformSpecificTimeString)() = TimeStringImplementation;
 
 /* Wish we could add an attribute to the format for discovering mis-use... but the __attribute__(format) seems to not work on va_list */
 #ifdef __clang__
@@ -204,11 +142,6 @@ char* PlatformSpecificStrStr(const char* s1, const char* s2)
 int PlatformSpecificVSNprintf(char *str, size_t size, const char* format, va_list args)
 {
    return vsnprintf( str, size, format, args);
-}
-
-char PlatformSpecificToLower(char c)
-{
-	return (char) tolower((char) c);
 }
 
 PlatformSpecificFile PlatformSpecificFOpen(const char* filename, const char* flag)
@@ -259,7 +192,7 @@ void* PlatformSpecificMemCpy(void* s1, const void* s2, size_t size)
 
 void* PlatformSpecificMemset(void* mem, int c, size_t size)
 {
-	return memset(mem, c, size);
+    return memset(mem, c, size);
 }
 
 
@@ -268,9 +201,11 @@ double PlatformSpecificFabs(double d)
    return fabs(d);
 }
 
-int PlatformSpecificIsNan(double d)
+static int IsNanImplementation(double d)
 {
-	return isnan((float)d);
+    return isnan((float)d);
 }
+
+int (*PlatformSpecificIsNan)(double) = IsNanImplementation;
 
 }

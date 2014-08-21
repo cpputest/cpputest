@@ -49,51 +49,51 @@ extern TestMemoryAllocator* defaultMallocAllocator();
 class TestMemoryAllocator
 {
 public:
-	TestMemoryAllocator(const char* name_str = "generic", const char* alloc_name_str = "alloc", const char* free_name_str = "free");
-	virtual ~TestMemoryAllocator();
-	bool hasBeenDestroyed();
+    TestMemoryAllocator(const char* name_str = "generic", const char* alloc_name_str = "alloc", const char* free_name_str = "free");
+    virtual ~TestMemoryAllocator();
+    bool hasBeenDestroyed();
 
-	virtual char* alloc_memory(size_t size, const char* file, int line);
-	virtual void free_memory(char* memory, const char* file, int line);
+    virtual char* alloc_memory(size_t size, const char* file, int line);
+    virtual void free_memory(char* memory, const char* file, int line);
 
-	virtual const char* name();
-	virtual const char* alloc_name();
-	virtual const char* free_name();
+    virtual const char* name();
+    virtual const char* alloc_name();
+    virtual const char* free_name();
 
-	virtual bool isOfEqualType(TestMemoryAllocator* allocator);
+    virtual bool isOfEqualType(TestMemoryAllocator* allocator);
 
-	virtual char* allocMemoryLeakNode(size_t size);
-	virtual void freeMemoryLeakNode(char* memory);
+    virtual char* allocMemoryLeakNode(size_t size);
+    virtual void freeMemoryLeakNode(char* memory);
 
 protected:
 
-	const char* name_;
-	const char* alloc_name_;
-	const char* free_name_;
+    const char* name_;
+    const char* alloc_name_;
+    const char* free_name_;
 
-	bool hasBeenDestroyed_;
+    bool hasBeenDestroyed_;
 };
 
 class CrashOnAllocationAllocator : public TestMemoryAllocator
 {
-	unsigned allocationToCrashOn_;
+    unsigned allocationToCrashOn_;
 public:
-	CrashOnAllocationAllocator();
+    CrashOnAllocationAllocator();
 
-	virtual void setNumberToCrashOn(unsigned allocationToCrashOn);
+    virtual void setNumberToCrashOn(unsigned allocationToCrashOn);
 
-	virtual char* alloc_memory(size_t size, const char* file, int line);
+    virtual char* alloc_memory(size_t size, const char* file, int line) _override;
 };
 
 
 class NullUnknownAllocator: public TestMemoryAllocator
 {
 public:
-	NullUnknownAllocator();
-	virtual char* alloc_memory(size_t size, const char* file, int line);
-	virtual void free_memory(char* memory, const char* file, int line);
+    NullUnknownAllocator();
+    virtual char* alloc_memory(size_t size, const char* file, int line) _override;
+    virtual void free_memory(char* memory, const char* file, int line) _override;
 
-	static TestMemoryAllocator* defaultAllocator();
+    static TestMemoryAllocator* defaultAllocator();
 };
 
 #endif

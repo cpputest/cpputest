@@ -1,0 +1,69 @@
+Makefile to build CppUTest library to run in hardware using ARM C/C++ compiler.
+
+Also it is possible to build CppUTestExt library using
+"make all COMPONENT_NAME=CppUTestExt".
+
+All libraries is placed in lib directory of CppUTest home.
+
+Thumb mode is using. For ARM mode, you need to remove compiler key
+"--apcs=/interwork" and change $(CPU_MODE) to arm.
+
+You need installed CYGWIN with make.exe, rm.exe, mkdir.exe and installed
+  Keil MDK-ARM.
+
+For compiling CppUTest library using ARMCC, please adjust Makefile:
+1. # Path to cygwin binary
+	CYGWIN_DIR :=C:/CYGWIN/bin
+2. # Path to ARMCC of Keil MDK-ARM, with libraries, includes and executables
+	KEIL_DIR   :=D:/Keil/ARM/ARMCC
+3. # source CppUTest files
+	CPPUTEST_HOME := ../..
+4. other options explained in $(CPPUTEST_HOME)/build/MakefileWorker.mk
+	CPPUTEST_USE_MEM_LEAK_DETECTION := Y
+	CPPUTEST_USE_STD_CPP_LIB := N
+	CPPUTEST_USE_VPATH := Y
+	CPPUTEST_USE_STD_C_LIB := Y
+	CPPUTEST_ENABLE_DEBUG := Y
+
+You may add additional options "CPU=xx" and "CPU_MODE=yy"
+CPU is an option that passed to armcc.exe. It selects CPU. List of CPU is
+  available by executing 'armcc.exe --cpu list'.
+  Default CPU architecture is ARM7TDMI.
+  For armcc v5.02 build 28, CPU is one of the next:
+    ARM7EJ-S
+    ARM7TM
+    ARM7TDM
+    ARM7TDMI
+    ARM710T
+    ARM720T
+    ARM740T
+    ARM7TM-S
+    ARM7TDMI-S
+    ARM9TDMI
+    ARM920T
+    ARM922T
+    ARM940T
+    ARM9E-S
+    ARM9EJ-S
+    ARM926EJ-S
+    ARM946E-S
+    ARM966E-S
+    ARM968E-S
+    Cortex-M0
+    Cortex-M0plus
+    SC000
+    Cortex-M1
+    Cortex-M1.os_extension
+    Cortex-M1.no_os_extension
+    Cortex-M3
+    Cortex-M3-rev0
+    SC300
+    Cortex-M4
+    Cortex-M4.fp
+    Cortex-R4
+    Cortex-R4F
+
+CPU_MODE is one of 'arm', 'thumb'.
+  Default is thumb.
+
+Tested with Keil MDK-ARM Pro v4.60

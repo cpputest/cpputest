@@ -35,25 +35,25 @@ class MemoryReportFormatter;
 class MemoryReportAllocator : public TestMemoryAllocator
 {
 protected:
-	TestResult* result_;
-	TestMemoryAllocator* realAllocator_;
-	MemoryReportFormatter* formatter_;
+    TestResult* result_;
+    TestMemoryAllocator* realAllocator_;
+    MemoryReportFormatter* formatter_;
 public:
-	MemoryReportAllocator();
-	virtual ~MemoryReportAllocator();
+    MemoryReportAllocator();
+    virtual ~MemoryReportAllocator();
 
-	virtual void setFormatter(MemoryReportFormatter* formatter);
-	virtual void setTestResult(TestResult* result);
-	virtual void setRealAllocator(TestMemoryAllocator* allocator);
+    virtual void setFormatter(MemoryReportFormatter* formatter);
+    virtual void setTestResult(TestResult* result);
+    virtual void setRealAllocator(TestMemoryAllocator* allocator);
 
-	virtual TestMemoryAllocator* getRealAllocator();
+    virtual TestMemoryAllocator* getRealAllocator();
 
-	virtual char* alloc_memory(size_t size, const char* file, int line);
-	virtual void free_memory(char* memory, const char* file, int line);
+    virtual char* alloc_memory(size_t size, const char* file, int line) _override;
+    virtual void free_memory(char* memory, const char* file, int line) _override;
 
-	virtual const char* name();
-	virtual const char* alloc_name();
-	virtual const char* free_name();
+    virtual const char* name() _override;
+    virtual const char* alloc_name() _override;
+    virtual const char* free_name() _override;
 };
 
 #endif

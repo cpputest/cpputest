@@ -177,14 +177,14 @@ typedef unsigned  int  uint_fast32_t;
 /* 7.18.4.1  Macros for minimum-width integer constants
 
     Accoding to Douglas Gwyn <gwyn@arl.mil>:
-	"This spec was changed in ISO/IEC 9899:1999 TC1; in ISO/IEC
-	9899:1999 as initially published, the expansion was required
-	to be an integer constant of precisely matching type, which
-	is impossible to accomplish for the shorter types on most
-	platforms, because C99 provides no standard way to designate
-	an integer constant with width less than that of type int.
-	TC1 changed this to require just an integer constant
-	*expression* with *promoted* type."
+    "This spec was changed in ISO/IEC 9899:1999 TC1; in ISO/IEC
+    9899:1999 as initially published, the expansion was required
+    to be an integer constant of precisely matching type, which
+    is impossible to accomplish for the shorter types on most
+    platforms, because C99 provides no standard way to designate
+    an integer constant with width less than that of type int.
+    TC1 changed this to require just an integer constant
+    *expression* with *promoted* type."
 */
 
 #define INT8_C(val) val

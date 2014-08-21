@@ -42,38 +42,39 @@ class MemoryLeakFailure;
 class MemoryLeakWarningPlugin: public TestPlugin
 {
 public:
-	MemoryLeakWarningPlugin(const SimpleString& name, MemoryLeakDetector* localDetector = 0);
-	virtual ~MemoryLeakWarningPlugin();
+    MemoryLeakWarningPlugin(const SimpleString& name, MemoryLeakDetector* localDetector = 0);
+    virtual ~MemoryLeakWarningPlugin();
 
-	virtual void preTestAction(UtestShell& test, TestResult& result);
-	virtual void postTestAction(UtestShell& test, TestResult& result);
+    virtual void preTestAction(UtestShell& test, TestResult& result) _override;
+    virtual void postTestAction(UtestShell& test, TestResult& result) _override;
 
-	virtual const char* FinalReport(int toBeDeletedLeaks = 0);
+    virtual const char* FinalReport(int toBeDeletedLeaks = 0);
 
-	void ignoreAllLeaksInTest();
-	void expectLeaksInTest(int n);
+    void ignoreAllLeaksInTest();
+    void expectLeaksInTest(int n);
 
-	void destroyGlobalDetectorAndTurnOffMemoryLeakDetectionInDestructor(bool des);
+    void destroyGlobalDetectorAndTurnOffMemoryLeakDetectionInDestructor(bool des);
 
-	MemoryLeakDetector* getMemoryLeakDetector();
+    MemoryLeakDetector* getMemoryLeakDetector();
 
-	static MemoryLeakWarningPlugin* getFirstPlugin();
+    static MemoryLeakWarningPlugin* getFirstPlugin();
 
-	static MemoryLeakDetector* getGlobalDetector();
-	static MemoryLeakFailure* getGlobalFailureReporter();
-	static void setGlobalDetector(MemoryLeakDetector* detector, MemoryLeakFailure* reporter);
-	static void destroyGlobalDetector();
+    static MemoryLeakDetector* getGlobalDetector();
+    static MemoryLeakFailure* getGlobalFailureReporter();
+    static void setGlobalDetector(MemoryLeakDetector* detector, MemoryLeakFailure* reporter);
+    static void destroyGlobalDetector();
 
-	static void turnOffNewDeleteOverloads();
-	static void turnOnNewDeleteOverloads();
+    static void turnOffNewDeleteOverloads();
+    static void turnOnNewDeleteOverloads();
+    static bool areNewDeleteOverloaded();
 private:
-	MemoryLeakDetector* memLeakDetector_;
-	bool ignoreAllWarnings_;
-	bool destroyGlobalDetectorAndTurnOfMemoryLeakDetectionInDestructor_;
-	int expectedLeaks_;
-	int failureCount_;
+    MemoryLeakDetector* memLeakDetector_;
+    bool ignoreAllWarnings_;
+    bool destroyGlobalDetectorAndTurnOfMemoryLeakDetectionInDestructor_;
+    int expectedLeaks_;
+    int failureCount_;
 
-	static MemoryLeakWarningPlugin* firstPlugin_;
+    static MemoryLeakWarningPlugin* firstPlugin_;
 };
 
 extern void* cpputest_malloc_location_with_leak_detection(size_t size, const char* file, int line);

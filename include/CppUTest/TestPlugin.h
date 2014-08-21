@@ -35,45 +35,45 @@ class TestPlugin
 {
 public:
 
-	TestPlugin(const SimpleString& name);
-	virtual ~TestPlugin();
+    TestPlugin(const SimpleString& name);
+    virtual ~TestPlugin();
 
-	virtual void preTestAction(UtestShell&, TestResult&)
-	{
-	}
+    virtual void preTestAction(UtestShell&, TestResult&)
+    {
+    }
 
-	virtual void postTestAction(UtestShell&, TestResult&)
-	{
-	}
+    virtual void postTestAction(UtestShell&, TestResult&)
+    {
+    }
 
-	virtual bool parseArguments(int /* ac */, const char** /* av */, int /* index */ )
-	{
-		return false;
-	}
+    virtual bool parseArguments(int /* ac */, const char** /* av */, int /* index */ )
+    {
+        return false;
+    }
 
-	virtual void runAllPreTestAction(UtestShell&, TestResult&);
-	virtual void runAllPostTestAction(UtestShell&, TestResult&);
-	virtual bool parseAllArguments(int ac, const char** av, int index);
-	virtual bool parseAllArguments(int ac, char** av, int index);
+    virtual void runAllPreTestAction(UtestShell&, TestResult&);
+    virtual void runAllPostTestAction(UtestShell&, TestResult&);
+    virtual bool parseAllArguments(int ac, const char** av, int index);
+    virtual bool parseAllArguments(int ac, char** av, int index);
 
-	virtual TestPlugin* addPlugin(TestPlugin*);
-	virtual TestPlugin* removePluginByName(const SimpleString& name);
-	virtual TestPlugin* getNext();
+    virtual TestPlugin* addPlugin(TestPlugin*);
+    virtual TestPlugin* removePluginByName(const SimpleString& name);
+    virtual TestPlugin* getNext();
 
-	virtual void disable();
-	virtual void enable();
-	virtual bool isEnabled();
+    virtual void disable();
+    virtual void enable();
+    virtual bool isEnabled();
 
-	const SimpleString& getName();
-	TestPlugin* getPluginByName(const SimpleString& name);
+    const SimpleString& getName();
+    TestPlugin* getPluginByName(const SimpleString& name);
 
 protected:
-	TestPlugin(TestPlugin* next_);
+    TestPlugin(TestPlugin* next_);
 
 private:
-	TestPlugin* next_;
-	SimpleString name_;
-	bool enabled_;
+    TestPlugin* next_;
+    SimpleString name_;
+    bool enabled_;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -89,14 +89,14 @@ extern void CppUTestStore(void **location);
 class SetPointerPlugin: public TestPlugin
 {
 public:
-	SetPointerPlugin(const SimpleString& name);
-	virtual ~SetPointerPlugin();
-	virtual void postTestAction(UtestShell&, TestResult&);
+    SetPointerPlugin(const SimpleString& name);
+    virtual ~SetPointerPlugin();
+    virtual void postTestAction(UtestShell&, TestResult&) _override;
 
-	enum
-	{
-		MAX_SET = 1024
-	};
+    enum
+    {
+        MAX_SET = 32
+    };
 };
 
 #define UT_PTR_SET(a, b) { CppUTestStore( (void**)&a ); a = b; }
@@ -107,15 +107,15 @@ class NullTestPlugin: public TestPlugin
 {
 public:
 
-	NullTestPlugin();
-	virtual ~NullTestPlugin()
-	{
-	}
+    NullTestPlugin();
+    virtual ~NullTestPlugin()
+    {
+    }
 
-	virtual void runAllPreTestAction(UtestShell& test, TestResult& result);
-	virtual void runAllPostTestAction(UtestShell& test, TestResult& result);
+    virtual void runAllPreTestAction(UtestShell& test, TestResult& result) _override;
+    virtual void runAllPostTestAction(UtestShell& test, TestResult& result) _override;
 
-	static NullTestPlugin* instance();
+    static NullTestPlugin* instance();
 };
 
 #endif

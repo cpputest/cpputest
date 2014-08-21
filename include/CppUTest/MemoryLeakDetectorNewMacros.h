@@ -21,21 +21,22 @@
 
 #include "CppUTestConfig.h"
 
-#if CPPUTEST_USE_MEM_LEAK_DETECTION
+/* Make sure that mem leak detection is on and that this is being included from a C++ file */
+#if CPPUTEST_USE_MEM_LEAK_DETECTION && defined(__cplusplus)
 
 /* This #ifndef prevents <new> from being included twice and enables the file to be included anywhere */
 #ifndef CPPUTEST_USE_NEW_MACROS
 
-	#if CPPUTEST_USE_STD_CPP_LIB
-		#include <new>
-		#include <memory>
-		#include <string>
-	#endif
+    #if CPPUTEST_USE_STD_CPP_LIB
+        #include <new>
+        #include <memory>
+        #include <string>
+    #endif
 
-	void* operator new(size_t size, const char* file, int line) UT_THROW (std::bad_alloc);
-	void* operator new[](size_t size, const char* file, int line) UT_THROW (std::bad_alloc);
-	void* operator new(size_t size) UT_THROW(std::bad_alloc);
-	void* operator new[](size_t size) UT_THROW(std::bad_alloc);
+    void* operator new(size_t size, const char* file, int line) UT_THROW (std::bad_alloc);
+    void* operator new[](size_t size, const char* file, int line) UT_THROW (std::bad_alloc);
+    void* operator new(size_t size) UT_THROW(std::bad_alloc);
+    void* operator new[](size_t size) UT_THROW(std::bad_alloc);
 
     void operator delete(void* mem) UT_NOTHROW;
     void operator delete[](void* mem) UT_NOTHROW;

@@ -21,7 +21,6 @@ set(CppUTestTests_src
         MemoryLeakWarningTest.cpp
         TestOutputTest.cpp
         AllocLetTestFreeTest.cpp
-        NullTestTest.cpp
         TestRegistryTest.cpp
         AllocationInCFile.c
         PluginTest.cpp
@@ -39,7 +38,7 @@ endif (MSVC)
 
 add_executable(CppUTestTests ${CppUTestTests_src})
 target_link_libraries(CppUTestTests CppUTest)
-add_test(CppUTestTests CppUTestTests)
+add_test(CppUTestTests ${EXECUTABLE_OUTPUT_PATH}/CppUTestTests)
 
 if (TESTS)
     add_subdirectory(CppUTestExt)

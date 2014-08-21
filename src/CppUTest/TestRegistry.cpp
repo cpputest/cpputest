@@ -29,7 +29,7 @@
 #include "CppUTest/TestRegistry.h"
 
 TestRegistry::TestRegistry() :
-	tests_(&NullTestShell::instance()), firstPlugin_(NullTestPlugin::instance()), runInSeperateProcess_(false)
+    tests_(NULL), firstPlugin_(NullTestPlugin::instance()), runInSeperateProcess_(false), currentRepetition_(0)
 {
 }
 
@@ -39,178 +39,183 @@ TestRegistry::~TestRegistry()
 
 void TestRegistry::addTest(UtestShell *test)
 {
-	tests_ = test->addTest(tests_);
+    tests_ = test->addTest(tests_);
 }
 
 void TestRegistry::runAllTests(TestResult& result)
 {
-	bool groupStart = true;
+    bool groupStart = true;
 
-	result.testsStarted();
-	for (UtestShell *test = tests_; !test->isNull(); test = test->getNext()) {
-		if (runInSeperateProcess_) test->setRunInSeperateProcess();
+    result.testsStarted();
+    for (UtestShell *test = tests_; test != NULL; test = test->getNext()) {
+        if (runInSeperateProcess_) test->setRunInSeperateProcess();
 
-		if (groupStart) {
-			result.currentGroupStarted(test);
-			groupStart = false;
-		}
+        if (groupStart) {
+            result.currentGroupStarted(test);
+            groupStart = false;
+        }
 
-		result.setProgressIndicator(test->getProgressIndicator());
-		result.countTest();
-		if (testShouldRun(test, result)) {
-			result.currentTestStarted(test);
-			test->runOneTest(firstPlugin_, result);
-			result.currentTestEnded(test);
-		}
+        result.setProgressIndicator(test->getProgressIndicator());
+        result.countTest();
+        if (testShouldRun(test, result)) {
+            result.currentTestStarted(test);
+            test->runOneTest(firstPlugin_, result);
+            result.currentTestEnded(test);
+        }
 
-		if (endOfGroup(test)) {
-			groupStart = true;
-			result.currentGroupEnded(test);
-		}
-	}
-	result.testsEnded();
+        if (endOfGroup(test)) {
+            groupStart = true;
+            result.currentGroupEnded(test);
+        }
+    }
+    result.testsEnded();
+    currentRepetition_++;
 }
 
 bool TestRegistry::endOfGroup(UtestShell* test)
 {
-	return (test->isNull() || test->getGroup() != test->getNext()->getGroup());
+    return (!test || !test->getNext() || test->getGroup() != test->getNext()->getGroup());
 }
 
 int TestRegistry::countTests()
 {
-	return tests_->countTests();
+    return tests_ ? tests_->countTests() : 0;
 }
 
 TestRegistry* TestRegistry::currentRegistry_ = 0;
 
 TestRegistry* TestRegistry::getCurrentRegistry()
 {
-	static TestRegistry registry;
-	return (currentRegistry_ == 0) ? &registry : currentRegistry_;
+    static TestRegistry registry;
+    return (currentRegistry_ == 0) ? &registry : currentRegistry_;
 }
 
 void TestRegistry::setCurrentRegistry(TestRegistry* registry)
 {
-	currentRegistry_ = registry;
+    currentRegistry_ = registry;
 }
 
 void TestRegistry::unDoLastAddTest()
 {
-	tests_ = tests_->getNext();
+    tests_ = tests_ ? tests_->getNext() : NULL;
 
 }
 
 void TestRegistry::nameFilter(const TestFilter& f)
 {
-	nameFilter_ = f;
+    nameFilter_ = f;
 }
 
 void TestRegistry::groupFilter(const TestFilter& f)
 {
-	groupFilter_ = f;
+    groupFilter_ = f;
 }
 
 TestFilter TestRegistry::getGroupFilter()
 {
-	return groupFilter_;
+    return groupFilter_;
 }
 
 TestFilter TestRegistry::getNameFilter()
 {
-	return nameFilter_;
+    return nameFilter_;
 }
 
 void TestRegistry::setRunTestsInSeperateProcess()
 {
-	runInSeperateProcess_ = true;
+    runInSeperateProcess_ = true;
 }
 
+int TestRegistry::getCurrentRepetition()
+{
+    return currentRepetition_;
+}
 
 bool TestRegistry::testShouldRun(UtestShell* test, TestResult& result)
 {
-	if (test->shouldRun(groupFilter_, nameFilter_)) return true;
-	else {
-		result.countFilteredOut();
-		return false;
-	}
+    if (test->shouldRun(groupFilter_, nameFilter_)) return true;
+    else {
+        result.countFilteredOut();
+        return false;
+    }
 }
 
 void TestRegistry::resetPlugins()
 {
-	firstPlugin_ = NullTestPlugin::instance();
+    firstPlugin_ = NullTestPlugin::instance();
 }
 
 void TestRegistry::installPlugin(TestPlugin* plugin)
 {
-	firstPlugin_ = plugin->addPlugin(firstPlugin_);
+    firstPlugin_ = plugin->addPlugin(firstPlugin_);
 }
 
 TestPlugin* TestRegistry::getFirstPlugin()
 {
-	return firstPlugin_;
+    return firstPlugin_;
 }
 
 TestPlugin* TestRegistry::getPluginByName(const SimpleString& name)
 {
-	return firstPlugin_->getPluginByName(name);
+    return firstPlugin_->getPluginByName(name);
 }
 
 void TestRegistry::removePluginByName(const SimpleString& name)
 {
-	if (firstPlugin_->removePluginByName(name) == firstPlugin_) firstPlugin_ = firstPlugin_->getNext();
-	if (firstPlugin_->getName() == name) firstPlugin_ = firstPlugin_->getNext();
-	firstPlugin_->removePluginByName(name);
+    if (firstPlugin_->removePluginByName(name) == firstPlugin_) firstPlugin_ = firstPlugin_->getNext();
+    if (firstPlugin_->getName() == name) firstPlugin_ = firstPlugin_->getNext();
+    firstPlugin_->removePluginByName(name);
 }
 
 int TestRegistry::countPlugins()
 {
-	int count = 0;
-	for (TestPlugin* plugin = firstPlugin_; plugin != NullTestPlugin::instance(); plugin = plugin->getNext())
-		count++;
-	return count;
+    int count = 0;
+    for (TestPlugin* plugin = firstPlugin_; plugin != NullTestPlugin::instance(); plugin = plugin->getNext())
+        count++;
+    return count;
 }
 
 
 UtestShell* TestRegistry::getFirstTest()
 {
-	return tests_;
+    return tests_;
 }
 
 UtestShell* TestRegistry::getLastTest()
 {
-	UtestShell* current = tests_;
-	while (!current->getNext()->isNull())
-		current = current->getNext();
-	return current;
+    UtestShell* current = tests_;
+    while (current->getNext())
+        current = current->getNext();
+    return current;
 }
 
 UtestShell* TestRegistry::getTestWithNext(UtestShell* test)
 {
-	UtestShell* current = tests_;
-	while (!current->getNext()->isNull() && current->getNext() != test)
-		current = current->getNext();
-	return current;
+    UtestShell* current = tests_;
+    while (current && current->getNext() != test)
+        current = current->getNext();
+    return current;
 }
 
 UtestShell* TestRegistry::findTestWithName(const SimpleString& name)
 {
-	UtestShell* current = tests_;
-	while (!current->isNull()) {
-		if (current->getName() == name)
-			return current;
-		current = current->getNext();
-	}
-	return NULL;
+    UtestShell* current = tests_;
+    while (current) {
+        if (current->getName() == name)
+            return current;
+        current = current->getNext();
+    }
+    return NULL;
 }
 
 UtestShell* TestRegistry::findTestWithGroup(const SimpleString& group)
 {
-	UtestShell* current = tests_;
-	while (!current->isNull()) {
-		if (current->getGroup() == group)
-			return current;
-		current = current->getNext();
-	}
-	return NULL;
+    UtestShell* current = tests_;
+    while (current) {
+        if (current->getGroup() == group)
+            return current;
+        current = current->getNext();
+    }
+    return NULL;
 }
 

@@ -31,7 +31,7 @@
 class OrderedTestShell : public UtestShell
 {
 public:
-	OrderedTestShell();
+    OrderedTestShell();
    virtual ~OrderedTestShell();
 
    virtual OrderedTestShell* addOrderedTest(OrderedTestShell* test);
@@ -61,7 +61,7 @@ class OrderedTestInstaller
 
   private:
      void addOrderedTestInOrder(OrderedTestShell* test);
-	void addOrderedTestInOrderNotAtHeadPosition(OrderedTestShell* test);
+    void addOrderedTestInOrderNotAtHeadPosition(OrderedTestShell* test);
 
 };
 
@@ -73,7 +73,7 @@ class OrderedTestInstaller
 { public: TEST_##testGroup##_##testName##_Test () : TEST_GROUP_##CppUTestGroup##testGroup () {} \
        void testBody(); }; \
   class TEST_##testGroup##_##testName##_TestShell : public OrderedTestShell { \
-	   virtual Utest* createTest() { return new TEST_##testGroup##_##testName##_Test; } \
+       virtual Utest* createTest() _override { return new TEST_##testGroup##_##testName##_Test; } \
   }  TEST_##testGroup##_##testName##_Instance; \
   static OrderedTestInstaller TEST_##testGroup##_##testName##_Installer(TEST_##testGroup##_##testName##_Instance, #testGroup, #testName, __FILE__,__LINE__, testLevel); \
    void TEST_##testGroup##_##testName##_Test::testBody()

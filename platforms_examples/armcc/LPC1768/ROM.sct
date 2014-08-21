@@ -1,0 +1,42 @@
+#! armcc -E
+; code upper need to use #define 
+
+;-------------------------------------------------------------------------------------
+;   Keil scatter loading file
+; For LPC1768
+;-------------------------------------------------------------------------------------
+
+#define FLASH_START (0x00000000)
+#define FLASH_END   (0x00080000)
+#define FLASH_SIZE  (FLASH_END-FLASH_START)
+
+; Internal SRAM
+#define RAM1_START 0x10000000
+#define RAM1_END   0x10008000
+#define RAM1_SIZE  (RAM1_END-RAM1_START)
+
+; Internal SRAM for peripherial DMA
+#define RAM2_START 0x2007C000
+#define RAM2_END   0x20084000
+#define RAM2_SIZE  (RAM2_END-RAM2_START)
+
+; Load region for main program
+LR1   FLASH_START  FLASH_SIZE {
+   ER1 FLASH_START {
+        *.o(RESET, +First)
+        *.o(InRoot$$Sections)
+        *.o(+RO)
+   }
+   ER2 RAM1_START RAM1_SIZE {
+    *.o(+RW +ZI)
+   }
+   ER3 RAM2_START RAM2_SIZE {
+    *.o(HEAP)
+    *.o(STACK)
+   }
+}
+
+
+
+/*----------------------------------------------------------------------------*/
+

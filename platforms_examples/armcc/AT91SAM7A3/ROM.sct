@@ -1,0 +1,34 @@
+#! armcc -E
+; code upper need to use #define 
+
+;-------------------------------------------------------------------------------------
+;   Keil scatter loading file
+; For AT91SAM7A3
+;-------------------------------------------------------------------------------------
+
+#define FLASH_START (0x00100000)
+#define FLASH_END   (0x00140000)
+#define FLASH_SIZE  (FLASH_END-FLASH_START)
+
+; Internal SRAM
+#define RAM_START 0x00200000
+#define RAM_END   0x00208000
+#define RAM_SIZE  (RAM_END-RAM_START)
+
+; Load region for main program
+LR1   FLASH_START  FLASH_SIZE {
+   ER2 FLASH_START {
+        *.o(.reset, +First)
+        *.o(InRoot$$Sections)
+        *.o(+RO)
+   }
+   ER5 RAM_START RAM_SIZE {
+    *.o(+RW +ZI)
+    *.o(STACK)
+   }
+}
+
+
+
+/*----------------------------------------------------------------------------*/
+

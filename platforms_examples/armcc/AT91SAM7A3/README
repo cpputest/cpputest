@@ -1,0 +1,37 @@
+Sample project to test CppUTest for Keil MDK-ARM toolchain and AT91SAM7A3 chip.
+
+Requirements:
+1. CYGWIN (rm.exe, mkdir.exe, make.exe)
+
+2. Keil MDK-ARM
+
+3. JLink Flash (for programming chip)
+
+4. serial connection to DBGU interface
+
+5. 4 MHz quartz. If else, need to be adjusted in
+  $(CPPUTEST_HOME)/platforms_startup/armcc/AT91SAM7A3/SAM7A3.asm and
+  $(CPPUTEST_HOME)/platforms_startup/armcc/AT91SAM7A3/Retarget.c
+  (for _clock_init() function working correctly)
+
+6. eclipse + gdb server from JLink + arm-none-eabi-gdb from GNU ARM Tools Embedded
+  For debug only.
+
+First, you need to compile CppUTest and target startup library:
+  make -C ../../../platforms/armcc all
+  make -C ../../../platforms_startup/armcc/AT91SAM7A3 all
+
+Second, you need to write tests. As example, I use
+  $(CPPUTEST_HOME)/examples/AllTests/CircularBufferTest.cpp.
+
+Third, you need to make executable:
+  make all
+
+Fourth, you need to program executable on target chip:
+  make prog
+
+Project use semihosting, so you may use standard printf() or std::cout << "Hello!"
+
+If problems with heap or low memory, adjust heap size in
+  $(CPPUTEST_HOME)/platforms_startup/armcc/AT91SAM7A3/SAM7A3.asm
+  and rebuild startup library.

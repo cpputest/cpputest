@@ -111,21 +111,36 @@
  */
 
 #if CPPUTEST_USE_STD_CPP_LIB
-#define UT_THROW(exception) throw (exception)
-#define UT_NOTHROW throw()
+  #if defined(__cplusplus) && __cplusplus >= 201103L
+    #define UT_THROW(exception)
+    #define UT_NOTHROW noexcept
+  #else
+    #define UT_THROW(exception) throw (exception)
+    #define UT_NOTHROW throw()
+  #endif
 #else
-#define UT_THROW(exception)
-#define UT_NOTHROW
+  #define UT_THROW(exception)
+  #ifdef __clang__
+    #define UT_NOTHROW throw()
+  #else
+    #define UT_NOTHROW
+  #endif
 #endif
 
 /*
- * CLang's operator delete requires an NOTHROW block. For now, when we use CLang, then have an empty exception specifier.
- * However, this ought to be done inside the configure.ac in the future.
+ * Visual C++ doesn't define __cplusplus as C++11 yet (201103), however it doesn't want the throw(exception) either, but
+ * it does want throw().
  */
 
-#ifdef __clang__
-#undef UT_NOTHROW
-#define UT_NOTHROW throw()
+#ifdef _MSC_VER
+  #undef UT_THROW
+  #define UT_THROW(exception)
+#endif
+
+#if defined(__cplusplus) && __cplusplus >= 201103L
+    #define DEFAULT_COPY_CONSTRUCTOR(classname) classname(const classname &) = default;
+#else
+    #define DEFAULT_COPY_CONSTRUCTOR(classname)
 #endif
 
 /*
@@ -153,6 +168,16 @@
 #define CPPUTEST_64BIT_32BIT_LONGS
 #endif
 #endif
+
+/* Visual C++ 10.0+ (2010+) supports the override keyword, but doesn't define the C++ version as C++11 */
+#if defined(__cplusplus) && ((__cplusplus >= 201103L) || (defined(_MSC_VER) && (_MSC_VER >= 1600)))
+#define _override override
+#else
+#define _override
+#endif
+
+/* MinGW-w64 prefers to act like Visual C++, but we want the ANSI behaviors instead */
+#define __USE_MINGW_ANSI_STDIO 1
 
 /* Should be the only #include here. Standard C library wrappers */
 #include "StandardCLibrary.h"

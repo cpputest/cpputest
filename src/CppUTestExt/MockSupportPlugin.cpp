@@ -31,52 +31,52 @@
 
 class MockSupportPluginReporter : public MockFailureReporter
 {
-	UtestShell& test_;
-	TestResult& result_;
+    UtestShell& test_;
+    TestResult& result_;
 public:
-	MockSupportPluginReporter(UtestShell& test, TestResult& result)
-		: test_(test), result_(result)
-	{
-	}
+    MockSupportPluginReporter(UtestShell& test, TestResult& result)
+        : test_(test), result_(result)
+    {
+    }
 
-	virtual void failTest(const MockFailure& failure)
-	{
-		result_.addFailure(failure);
-	}
+    virtual void failTest(const MockFailure& failure) _override
+    {
+        result_.addFailure(failure);
+    }
 
-	virtual UtestShell* getTestToFail()
-	{
-		return &test_;
-	}
+    virtual UtestShell* getTestToFail() _override
+    {
+        return &test_;
+    }
 };
 
 MockSupportPlugin::MockSupportPlugin(const SimpleString& name)
-	: TestPlugin(name)
+    : TestPlugin(name)
 {
 }
 
 MockSupportPlugin::~MockSupportPlugin()
 {
-	repository_.clear();
+    repository_.clear();
 }
 
 void MockSupportPlugin::preTestAction(UtestShell&, TestResult&)
 {
-	mock().installComparators(repository_);
+    mock().installComparators(repository_);
 }
 
 void MockSupportPlugin::postTestAction(UtestShell& test, TestResult& result)
 {
-	MockSupportPluginReporter reporter(test, result);
-	mock().setMockFailureStandardReporter(&reporter);
-	mock().checkExpectations();
-	mock().clear();
-	mock().setMockFailureStandardReporter(NULL);
-	mock().removeAllComparators();
+    MockSupportPluginReporter reporter(test, result);
+    mock().setMockFailureStandardReporter(&reporter);
+    mock().checkExpectations();
+    mock().clear();
+    mock().setMockFailureStandardReporter(NULL);
+    mock().removeAllComparators();
 }
 
 void MockSupportPlugin::installComparator(const SimpleString& name, MockNamedValueComparator& comparator)
 {
-	repository_.installComparator(name, comparator);
+    repository_.installComparator(name, comparator);
 }
 

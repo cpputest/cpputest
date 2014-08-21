@@ -35,31 +35,34 @@ MockPrinter* mockPrinter;
 
 void setup()
 {
-	mockPrinter = new MockPrinter();
-	printer = mockPrinter;
+    mockPrinter = new MockPrinter();
+    printer = mockPrinter;
 }
 void teardown()
 {
-	delete printer;
+    delete printer;
 }
 };
 
 TEST(Printer, PrintConstCharStar)
 {
-	printer->Print("hello");
-	printer->Print("hello\n");
-	CHECK_EQUAL("hellohello\n", mockPrinter->getOutput());
+    printer->Print("hello");
+    printer->Print("hello\n");
+    const char* expected = "hellohello\n";
+    CHECK_EQUAL(expected, mockPrinter->getOutput());
 }
 
 TEST(Printer, PrintLong)
 {
-	printer->Print(1234);
-	CHECK_EQUAL("1234", mockPrinter->getOutput());
+    printer->Print(1234);
+    const char* expected = "1234";
+    CHECK_EQUAL(expected, mockPrinter->getOutput());
 }
 
 TEST(Printer, StreamOperators)
 {
-	*printer << "n=" << 1234;
-	CHECK_EQUAL("n=1234", mockPrinter->getOutput());
+    *printer << "n=" << 1234;
+    const char* expected = "n=1234";
+    CHECK_EQUAL(expected, mockPrinter->getOutput());
 }
 

@@ -33,35 +33,34 @@ extern "C" {
 
     static long MockGetPlatformSpecificTimeInMillis()
     {
-	    return 10;
+        return 10;
     }
 
 }
 
 TEST_GROUP(TestResult)
 {
-	TestOutput* printer;
-	StringBufferTestOutput* mock;
+    TestOutput* printer;
+    StringBufferTestOutput* mock;
 
-	TestResult* res;
+    TestResult* res;
 
-	void setup()
-	{
-		mock = new StringBufferTestOutput();
-		printer = mock;
-		res = new TestResult(*printer);
-		SetPlatformSpecificTimeInMillisMethod(MockGetPlatformSpecificTimeInMillis);
-	}
-	void teardown()
-	{
-		SetPlatformSpecificTimeInMillisMethod(0);
-		delete printer;
-		delete res;
-	}
+    void setup()
+    {
+        mock = new StringBufferTestOutput();
+        printer = mock;
+        res = new TestResult(*printer);
+        UT_PTR_SET(GetPlatformSpecificTimeInMillis, MockGetPlatformSpecificTimeInMillis);
+    }
+    void teardown()
+    {
+        delete printer;
+        delete res;
+    }
 };
 
 TEST(TestResult, TestEndedWillPrintResultsAndExecutionTime)
 {
-	res->testsEnded();
-	CHECK(mock->getOutput().contains("10 ms"));
+    res->testsEnded();
+    CHECK(mock->getOutput().contains("10 ms"));
 }

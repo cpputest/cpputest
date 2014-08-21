@@ -41,24 +41,24 @@ static int jmp_buf_index = 0;
 
 int PlatformSpecificSetJmp(void (*function) (void* data), void* data)
 {
-	if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
-	    jmp_buf_index++;
-		function(data);
-	    jmp_buf_index--;
-		return 1;
-	}
-	return 0;
+    if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
+        jmp_buf_index++;
+        function(data);
+        jmp_buf_index--;
+        return 1;
+    }
+    return 0;
 }
 
 void PlatformSpecificLongJmp()
 {
-	jmp_buf_index--;
-	longjmp(test_exit_jmp_buf[jmp_buf_index], 1);
+    jmp_buf_index--;
+    longjmp(test_exit_jmp_buf[jmp_buf_index], 1);
 }
 
 void PlatformSpecificRestoreJumpBuffer()
 {
-	jmp_buf_index--;
+    jmp_buf_index--;
 }
 
 void PlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
@@ -68,87 +68,36 @@ void PlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* pl
 }
 
 static long TimeInMillisImplementation() {
-	struct timeval tv;
-	struct timezone tz;
-	::gettimeofday(&tv, &tz);
-	return (tv.tv_sec * 1000) + (long)(tv.tv_usec * 0.001);
+    struct timeval tv;
+    struct timezone tz;
+    ::gettimeofday(&tv, &tz);
+    return (tv.tv_sec * 1000) + (long)(tv.tv_usec * 0.001);
 }
 
-static long (*timeInMillisFp) () = TimeInMillisImplementation;
-
-long GetPlatformSpecificTimeInMillis() {
-	return timeInMillisFp();
-}
-
-void SetPlatformSpecificTimeInMillisMethod(long (*platformSpecific) ()) {
-	timeInMillisFp = (platformSpecific == 0) ? TimeInMillisImplementation : platformSpecific;
-}
+long (*GetPlatformSpecificTimeInMillis)() = TimeInMillisImplementation;
 
 TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
 {
-	return TestOutput::eclipse;
+    return TestOutput::eclipse;
 }
-
-///////////// Time in String
 
 static SimpleString TimeStringImplementation() {
-	time_t tm = time(NULL);
-	return ctime(&tm);
+    time_t tm = time(NULL);
+    return ctime(&tm);
 }
 
-static SimpleString (*timeStringFp) () = TimeStringImplementation;
-
-SimpleString GetPlatformSpecificTimeString() {
-	return timeStringFp();
-}
-
-void SetPlatformSpecificTimeStringMethod(SimpleString (*platformMethod) ()) {
-	timeStringFp = (platformMethod == 0) ? TimeStringImplementation : platformMethod;
-}
+SimpleString GetPlatformSpecificTimeString() = TimeStringImplementation;
 
 int PlatformSpecificVSNprintf(char* str, size_t size, const char* format, va_list args) {
     return vsnprintf(str, size, format, args);
 }
 
-char PlatformSpecificToLower(char c)
-{
-	return tolower(c);
-}
-
 void PlatformSpecificFlush() {
-	fflush(stdout);
+    fflush(stdout);
 }
 
 int PlatformSpecificPutchar(int c) {
-	return putchar(c);
-}
-
-char* PlatformSpecificStrCpy(char* s1, const char* s2) {
-	return strcpy(s1, s2);
-}
-
-size_t PlatformSpecificStrLen(const char* s) {
-    return strlen(s);
-}
-
-char* PlatformSpecificStrStr(const char* s1, const char* s2) {
-    return strstr(s1, s2);
-}
-
-int PlatformSpecificStrCmp(const char* s1, const char* s2) {
-    return strcmp(s1, s2);
-}
-
-char* PlatformSpecificStrNCpy(char* s1, const char* s2, size_t size) {
-    return strncpy(s1, s2, size);
-}
-
-int PlatformSpecificStrNCmp(const char* s1, const char* s2, size_t size) {
-    return strncmp(s1, s2, size);
-}
-
-char* PlatformSpecificStrCat(char* s1, const char* s2) {
-    return strcat(s1, s2);
+    return putchar(c);
 }
 
 double PlatformSpecificFabs(double d) {
@@ -173,7 +122,7 @@ void* PlatformSpecificMemCpy(void* s1, const void* s2, size_t size) {
 
 void* PlatformSpecificMemset(void* mem, int c, size_t size)
 {
-	return memset(mem, c, size);
+    return memset(mem, c, size);
 }
 
 PlatformSpecificFile PlatformSpecificFOpen(const char* filename, const char* flag) {
@@ -188,6 +137,13 @@ void PlatformSpecificFClose(PlatformSpecificFile file) {
     fclose((FILE*)file);
 }
 
-int PlatformSpecificAtoI(const char*str) {
-    return atoi(str);
+extern "C" {
+    
+static int IsNanImplementation(double d)
+{
+    return isnan(d);
+}
+
+int (*PlatformSpecificIsNan)(double) = IsNanImplementation;
+
 }

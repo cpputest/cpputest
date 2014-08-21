@@ -31,102 +31,102 @@
 #include "CppUTestExt/CodeMemoryReportFormatter.h"
 
 MemoryReporterPlugin::MemoryReporterPlugin()
-	: TestPlugin("MemoryReporterPlugin"), formatter_(NULL)
+    : TestPlugin("MemoryReporterPlugin"), formatter_(NULL)
 {
 }
 
 MemoryReporterPlugin::~MemoryReporterPlugin()
 {
-	removeGlobalMemoryReportAllocators();
-	destroyMemoryFormatter(formatter_);
+    removeGlobalMemoryReportAllocators();
+    destroyMemoryFormatter(formatter_);
 }
 
 bool MemoryReporterPlugin::parseArguments(int /* ac */, const char** av, int index)
 {
-	SimpleString argument (av[index]);
-	if (argument.contains("-pmemoryreport=")) {
-		argument.replace("-pmemoryreport=", "");
+    SimpleString argument (av[index]);
+    if (argument.contains("-pmemoryreport=")) {
+        argument.replace("-pmemoryreport=", "");
 
-		destroyMemoryFormatter(formatter_);
-		formatter_ = createMemoryFormatter(argument);
-		return true;
-	}
-	return false;
+        destroyMemoryFormatter(formatter_);
+        formatter_ = createMemoryFormatter(argument);
+        return true;
+    }
+    return false;
 }
 
 MemoryReportFormatter* MemoryReporterPlugin::createMemoryFormatter(const SimpleString& type)
 {
-	if (type == "normal") {
-		return  new NormalMemoryReportFormatter;
-	}
-	else if (type == "code") {
-		return new CodeMemoryReportFormatter(defaultMallocAllocator());
-	}
-	return NULL;
+    if (type == "normal") {
+        return  new NormalMemoryReportFormatter;
+    }
+    else if (type == "code") {
+        return new CodeMemoryReportFormatter(defaultMallocAllocator());
+    }
+    return NULL;
 }
 
 void MemoryReporterPlugin::destroyMemoryFormatter(MemoryReportFormatter* formatter)
 {
-	delete formatter;
+    delete formatter;
 }
 
 
 void MemoryReporterPlugin::setGlobalMemoryReportAllocators()
 {
     mallocAllocator.setRealAllocator(getCurrentMallocAllocator());
-	setCurrentMallocAllocator(&mallocAllocator);
+    setCurrentMallocAllocator(&mallocAllocator);
 
-	newAllocator.setRealAllocator(getCurrentNewAllocator());
-	setCurrentNewAllocator(&newAllocator);
+    newAllocator.setRealAllocator(getCurrentNewAllocator());
+    setCurrentNewAllocator(&newAllocator);
 
-	newArrayAllocator.setRealAllocator(getCurrentNewArrayAllocator());
-	setCurrentNewArrayAllocator(&newArrayAllocator);
+    newArrayAllocator.setRealAllocator(getCurrentNewArrayAllocator());
+    setCurrentNewArrayAllocator(&newArrayAllocator);
 }
 
 void MemoryReporterPlugin::removeGlobalMemoryReportAllocators()
 {
-	if (getCurrentNewAllocator() == &newAllocator)
-		setCurrentNewAllocator(newAllocator.getRealAllocator());
+    if (getCurrentNewAllocator() == &newAllocator)
+        setCurrentNewAllocator(newAllocator.getRealAllocator());
 
-	if (getCurrentNewArrayAllocator() == &newArrayAllocator)
-		setCurrentNewArrayAllocator(newArrayAllocator.getRealAllocator());
+    if (getCurrentNewArrayAllocator() == &newArrayAllocator)
+        setCurrentNewArrayAllocator(newArrayAllocator.getRealAllocator());
 
-	if (getCurrentMallocAllocator() == &mallocAllocator)
-		setCurrentMallocAllocator(mallocAllocator.getRealAllocator());
+    if (getCurrentMallocAllocator() == &mallocAllocator)
+        setCurrentMallocAllocator(mallocAllocator.getRealAllocator());
 }
 
 
 void MemoryReporterPlugin::initializeAllocator(MemoryReportAllocator* allocator, TestResult & result)
 {
-	allocator->setFormatter(formatter_);
-	allocator->setTestResult((&result));
+    allocator->setFormatter(formatter_);
+    allocator->setTestResult((&result));
 }
 
 void MemoryReporterPlugin::preTestAction(UtestShell& test, TestResult& result)
 {
-	if (formatter_ == NULL) return;
+    if (formatter_ == NULL) return;
 
-	initializeAllocator(&mallocAllocator, result);
-	initializeAllocator(&newAllocator, result);
-	initializeAllocator(&newArrayAllocator, result);
+    initializeAllocator(&mallocAllocator, result);
+    initializeAllocator(&newAllocator, result);
+    initializeAllocator(&newArrayAllocator, result);
 
-	setGlobalMemoryReportAllocators();
+    setGlobalMemoryReportAllocators();
 
-	if (test.getGroup() != currentTestGroup_) {
-		formatter_->report_testgroup_start(&result, test);
-		currentTestGroup_ = test.getGroup();
-	}
+    if (test.getGroup() != currentTestGroup_) {
+        formatter_->report_testgroup_start(&result, test);
+        currentTestGroup_ = test.getGroup();
+    }
 
-	formatter_->report_test_start(&result, test);
+    formatter_->report_test_start(&result, test);
 }
 
 void MemoryReporterPlugin::postTestAction(UtestShell& test, TestResult& result)
 {
-	if (formatter_ == NULL) return;
+    if (formatter_ == NULL) return;
 
-	removeGlobalMemoryReportAllocators();
-	formatter_->report_test_end(&result, test);
+    removeGlobalMemoryReportAllocators();
+    formatter_->report_test_end(&result, test);
 
-	if (test.getNext()->getGroup() != currentTestGroup_)
-		formatter_->report_testgroup_end(&result, test);
+    if (test.getNext() == NULL || test.getNext()->getGroup() != currentTestGroup_)
+        formatter_->report_testgroup_end(&result, test);
 }

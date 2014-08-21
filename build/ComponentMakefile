@@ -7,10 +7,10 @@
 #    A static library
 #    A test executable
 #
-# The necessary parameters are shown in 
+# The necessary parameters are shown in
 #    ComponentMakefileExampleParameters
 #
-# Inputs 
+# Inputs
 #   SRC_FILES - Specific source files to build into library
 #	SRC_DIRS - Directories od source file to built into the library
 #	TEST_SRC - unit test code build into the unit test runner
@@ -22,7 +22,7 @@
 #	CPPUTEST_LDFLAGS - Linker flags
 #	LIB_DIR -  the directory for the created library
 #	COMPONENT_NAME - the name of the thing being created
-#	OTHER_MAKEFILE_TO_INCLUDE - a hook to use this makefile to make 
+#	OTHER_MAKEFILE_TO_INCLUDE - a hook to use this makefile to make
 #		other targets. Like CSlim, which is part of fitnesse
 #----------
 ifeq ("$(COMPONENT_NAME)", "")
@@ -48,14 +48,14 @@ endif
 
 TARGET_LIB = \
     $(LIB_DIR)/lib$(COMPONENT_NAME).a
-    
+
 TEST_TARGET = \
     $(COMPONENT_NAME)_tests
 
 #Helper Functions
 get_src_from_dir  = $(wildcard $1/*.cpp) $(wildcard $1/*.c)
 get_dirs_from_dirspec  = $(wildcard $1)
-get_src_from_dir_list = $(foreach dir, $1, $(call get_src_from_dir,$(dir)))				        
+get_src_from_dir_list = $(foreach dir, $1, $(call get_src_from_dir,$(dir)))
 src_to_o = $(subst .c,.o, $(subst .cpp,.o,$1))
 src_to_d = $(subst .c,.d, $(subst .cpp,.d,$1))
 change_o_file_location = $(patsubst %.o,$(OBJS_DIR)/%.o, $1)
@@ -65,7 +65,7 @@ src_to = $(subst .c,$1, $(subst .cpp,$1,$2))
 #Derived
 STUFF_TO_CLEAN += $(TEST_TARGET) $(TEST_TARGET).exe $(TARGET_LIB)
 
-SRC += $(call get_src_from_dir_list, $(SRC_DIRS)) $(SRC_FILES)			        
+SRC += $(call get_src_from_dir_list, $(SRC_DIRS)) $(SRC_FILES)
 #OBJ = $(call src_to_o,$(SRC))
 OBJ = $(call change_o_file_location, $(call src_to_o,$(SRC)))
 STUFF_TO_CLEAN += $(OBJ)
@@ -100,7 +100,7 @@ STUFF_TO_CLEAN += \
 
 
 #Other stuff needed
-CPPUTEST_LIB = $(CPPUTEST_HOME)/lib/libCppUTest.a 
+CPPUTEST_LIB = $(CPPUTEST_HOME)/lib/libCppUTest.a
 
 ifdef CPPUTEST_USE_EXTENSIONS
 CPPUTEST_LIB += $(CPPUTEST_HOME)/lib/libCppUTestExt.a
@@ -139,15 +139,15 @@ LDFLAGS = $(CPPUTEST_LDFLAGS) $(CPPUTEST_ADDITIONAL_LDFLAGS)
 
 # Targets
 .PHONY: all
-all: $(TEST_TARGET) 
+all: $(TEST_TARGET)
 	$(RUN_TEST_TARGET)
-	@echo "Component makefile is no longer supported, convert to MakefileInclude.mk"	
+	@echo "Component makefile is no longer supported, convert to MakefileInclude.mk"
 
 .PHONY: all_no_tests
 all_no_tests: $(TEST_TARGET)
 
 .PHONY: flags
-flags: 
+flags:
 	$(SILENCE)echo Compile with these flags:
 	$(SILENCE)for f in $(CPPFLAGS) ; do \
 		echo "    C++ $$f" ; \
@@ -161,9 +161,9 @@ flags:
 	$(SILENCE)for f in $(ARFLAGS) ; do \
 		echo "    AR   $$f" ; \
 	done
-	
-	
-$(TEST_TARGET): $(TEST_OBJS) $(MOCKS_OBJS)  $(PRODUCTION_CODE_START) $(TARGET_LIB) $(USER_LIBS) $(PRODUCTION_CODE_END) $(CPPUTEST_LIB) $(STDLIB_CODE_START) 
+
+
+$(TEST_TARGET): $(TEST_OBJS) $(MOCKS_OBJS)  $(PRODUCTION_CODE_START) $(TARGET_LIB) $(USER_LIBS) $(PRODUCTION_CODE_END) $(CPPUTEST_LIB) $(STDLIB_CODE_START)
 	$(SILENCE)echo Linking $@
 	$(SILENCE)$(LINK.o) -o $@ $^ $(LD_LIBRARIES)
 
@@ -175,7 +175,7 @@ $(TARGET_LIB): $(OBJ)
 
 test: $(TEST_TARGET)
 	$(RUN_TEST_TARGET) | tee $(TEST_OUTPUT)
-	
+
 vtest: $(TEST_TARGET)
 	$(RUN_TEST_TARGET) -v  | tee $(TEST_OUTPUT)
 
@@ -201,7 +201,7 @@ clean:
 	$(SILENCE)$(RM) $(STUFF_TO_CLEAN)
 	$(SILENCE)find . -name "*.gcov" | xargs rm -f
 	$(SILENCE)find . -name "*.[do]" | xargs rm -f
-	
+
 
 gcov: test
 	$(SILENCE)for d in $(SRC_DIRS) ; do \
@@ -209,11 +209,11 @@ gcov: test
 	done
 	$(CPPUTEST_HOME)/scripts/filterGcov.sh $(GCOV_OUTPUT) $(GCOV_ERROR) $(GCOV_REPORT) $(TEST_OUTPUT)
 	cat $(GCOV_REPORT)
- 
+
 .PHONEY: format
-format: 
+format:
 	$(CPPUTEST_HOME)/scripts/reformat.sh $(PROJECT_HOME_DIR)
-	
+
 debug:
 	echo Stuff to clean
 	$(SILENCE)for f in $(STUFF_TO_CLEAN) ; do \
@@ -223,4 +223,4 @@ debug:
 	$(SILENCE)for i in $(INCLUDES) ; do \
 		echo "$$i" ; \
 	done
-	
+

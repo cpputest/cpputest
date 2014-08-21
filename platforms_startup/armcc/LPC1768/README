@@ -1,0 +1,19 @@
+Startup library for ARM C/C++ compiler and LPC1768 chip.
+Semihosting is in use, so you may use standard printf() or std::cout << "Hello!"
+
+Requirements:
+1. CYGWIN (rm.exe, mkdir.exe, make.exe, echo.exe)
+2. Keil MDK-ARM
+
+Library libStartup_LPC1768.a is placed in ./lib/armcc_Cortex-M3_thumb
+  directory of home CppUTest directory.
+
+Time measure is done using LPC_TIM3.
+Because of calling _clock_init() before main() by startup code, value of
+  SystemCoreClock is 0, and it is need to manually call _clock_init() in main()
+  or other place after updating SystemCoreClock.
+  It come from two quartz selection in system_LPC17xx.c, non-standard solution
+  of startup initialization.
+  To remove _clock_init() call from main(), you need to remove two quartz
+  configuration in system_LPC17xx.c and declare SystemCoreClock variable as
+  "const" with value of real clock frequency.

@@ -37,43 +37,44 @@ struct JUnitTestCaseResultNode;
 class JUnitTestOutput: public TestOutput
 {
 public:
-	JUnitTestOutput();
-	virtual ~JUnitTestOutput();
+    JUnitTestOutput();
+    virtual ~JUnitTestOutput();
 
-	virtual void printTestsStarted();
-	virtual void printTestsEnded(const TestResult& result);
-	virtual void printCurrentTestStarted(const UtestShell& test);
-	virtual void printCurrentTestEnded(const TestResult& res);
-	virtual void printCurrentGroupStarted(const UtestShell& test);
-	virtual void printCurrentGroupEnded(const TestResult& res);
+    virtual void printTestsStarted() _override;
+    virtual void printTestsEnded(const TestResult& result) _override;
+    virtual void printCurrentTestStarted(const UtestShell& test) _override;
+    virtual void printCurrentTestEnded(const TestResult& res) _override;
+    virtual void printCurrentGroupStarted(const UtestShell& test) _override;
+    virtual void printCurrentGroupEnded(const TestResult& res) _override;
 
-	virtual void verbose();
-	virtual void printBuffer(const char*);
-	virtual void print(const char*);
-	virtual void print(long);
-	virtual void print(const TestFailure& failure);
-	virtual void printTestRun(int number, int total);
+    virtual void verbose() _override;
+    virtual void printBuffer(const char*) _override;
+    virtual void print(const char*) _override;
+    virtual void print(long) _override;
+    virtual void print(const TestFailure& failure) _override;
+    virtual void printTestRun(int number, int total) _override;
 
-	virtual void flush();
+    virtual void flush() _override;
 
-	virtual SimpleString createFileName(const SimpleString& group);
+    virtual SimpleString createFileName(const SimpleString& group);
+    void setPackageName(const SimpleString &package);
 
 protected:
 
-	JUnitTestOutputImpl* impl_;
-	void resetTestGroupResult();
+    JUnitTestOutputImpl* impl_;
+    void resetTestGroupResult();
 
-	virtual void openFileForWrite(const SimpleString& fileName);
-	virtual void writeTestGroupToFile();
-	virtual void writeToFile(const SimpleString& buffer);
-	virtual void closeFile();
+    virtual void openFileForWrite(const SimpleString& fileName);
+    virtual void writeTestGroupToFile();
+    virtual void writeToFile(const SimpleString& buffer);
+    virtual void closeFile();
 
-	virtual void writeXmlHeader();
-	virtual void writeTestSuiteSummery();
-	virtual void writeProperties();
-	virtual void writeTestCases();
-	virtual void writeFailure(JUnitTestCaseResultNode* node);
-	virtual void writeFileEnding();
+    virtual void writeXmlHeader();
+    virtual void writeTestSuiteSummery();
+    virtual void writeProperties();
+    virtual void writeTestCases();
+    virtual void writeFailure(JUnitTestCaseResultNode* node);
+    virtual void writeFileEnding();
 
 };
 

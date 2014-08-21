@@ -36,164 +36,191 @@ const char* failFileName = "fail.cpp";
 
 TEST_GROUP(TestFailure)
 {
-	UtestShell* test;
+    UtestShell* test;
 
-	void setup()
-	{
-		test = new NullTestShell(failFileName, failLineNumber-1);
-	}
-	void teardown()
-	{
-		delete test;
-	}
+    void setup()
+    {
+        test = new UtestShell("groupname", "testname", failFileName, failLineNumber-1);
+    }
+    void teardown()
+    {
+        delete test;
+    }
 };
 #define FAILURE_EQUAL(a, b) STRCMP_EQUAL_LOCATION(a, b.getMessage().asCharString(), __FILE__, __LINE__)
 
 TEST(TestFailure, CreateFailure)
 {
-	TestFailure f1(test, failFileName, failLineNumber, "the failure message");
-	TestFailure f2(test, "the failure message");
-	TestFailure f3(test, failFileName, failLineNumber);
+    TestFailure f1(test, failFileName, failLineNumber, "the failure message");
+    TestFailure f2(test, "the failure message");
+    TestFailure f3(test, failFileName, failLineNumber);
 }
 
 TEST(TestFailure, GetTestFileAndLineFromFailure)
 {
-	TestFailure f1(test, failFileName, failLineNumber, "the failure message");
-	STRCMP_EQUAL(failFileName, f1.getTestFileName().asCharString());
-	LONGS_EQUAL(1, f1.getTestLineNumber());
+    TestFailure f1(test, failFileName, failLineNumber, "the failure message");
+    STRCMP_EQUAL(failFileName, f1.getTestFileName().asCharString());
+    LONGS_EQUAL(1, f1.getTestLineNumber());
 }
 
 TEST(TestFailure, CreatePassingEqualsFailure)
 {
-	EqualsFailure f(test, failFileName, failLineNumber, "expected", "actual");
-	FAILURE_EQUAL("expected <expected>\n\tbut was  <actual>", f);
+    EqualsFailure f(test, failFileName, failLineNumber, "expected", "actual");
+    FAILURE_EQUAL("expected <expected>\n\tbut was  <actual>", f);
 }
 
 TEST(TestFailure, EqualsFailureWithNullAsActual)
 {
-	EqualsFailure f(test, failFileName, failLineNumber, "expected", NULL);
-	FAILURE_EQUAL("expected <expected>\n\tbut was  <(null)>", f);
+    EqualsFailure f(test, failFileName, failLineNumber, "expected", NULL);
+    FAILURE_EQUAL("expected <expected>\n\tbut was  <(null)>", f);
 }
 
 TEST(TestFailure, EqualsFailureWithNullAsExpected)
 {
-	EqualsFailure f(test, failFileName, failLineNumber, NULL, "actual");
-	FAILURE_EQUAL("expected <(null)>\n\tbut was  <actual>", f);
+    EqualsFailure f(test, failFileName, failLineNumber, NULL, "actual");
+    FAILURE_EQUAL("expected <(null)>\n\tbut was  <actual>", f);
 }
 
 TEST(TestFailure, CheckEqualFailure)
 {
-	CheckEqualFailure f(test, failFileName, failLineNumber, "expected", "actual");
-	FAILURE_EQUAL("expected <expected>\n"
-			      "\tbut was  <actual>\n"
-		          "\tdifference starts at position 0 at: <          actual    >\n"
-		          "\t                                               ^", f);
+    CheckEqualFailure f(test, failFileName, failLineNumber, "expected", "actual");
+    FAILURE_EQUAL("expected <expected>\n"
+                  "\tbut was  <actual>\n"
+                  "\tdifference starts at position 0 at: <          actual    >\n"
+                  "\t                                               ^", f);
 }
 
 TEST(TestFailure, CheckFailure)
 {
-	CheckFailure f(test, failFileName, failLineNumber, "CHECK", "chk");
-	FAILURE_EQUAL("CHECK(chk) failed", f);
+    CheckFailure f(test, failFileName, failLineNumber, "CHECK", "chk");
+    FAILURE_EQUAL("CHECK(chk) failed", f);
 }
 
 TEST(TestFailure, CheckFailureWithText)
 {
-	CheckFailure f(test, failFileName, failLineNumber, "CHECK", "chk", "text");
-	FAILURE_EQUAL("Message: text\n"
-			      "\tCHECK(chk) failed", f);
+    CheckFailure f(test, failFileName, failLineNumber, "CHECK", "chk", "text");
+    FAILURE_EQUAL("Message: text\n"
+                  "\tCHECK(chk) failed", f);
 }
 
 TEST(TestFailure, FailFailure)
 {
-	FailFailure f(test, failFileName, failLineNumber, "chk");
-	FAILURE_EQUAL("chk", f);
+    FailFailure f(test, failFileName, failLineNumber, "chk");
+    FAILURE_EQUAL("chk", f);
 }
 
 TEST(TestFailure, LongsEqualFailure)
 {
-	LongsEqualFailure f(test, failFileName, failLineNumber, 1, 2);
-	FAILURE_EQUAL("expected <1 0x1>\n\tbut was  <2 0x2>", f);
+    LongsEqualFailure f(test, failFileName, failLineNumber, 1, 2);
+    FAILURE_EQUAL("expected <1 0x1>\n\tbut was  <2 0x2>", f);
 }
 
 TEST(TestFailure, StringsEqualFailure)
 {
-	StringEqualFailure f(test, failFileName, failLineNumber, "abc", "abd");
-	FAILURE_EQUAL("expected <abc>\n"
-			    "\tbut was  <abd>\n"
-			    "\tdifference starts at position 2 at: <        abd         >\n"
-			    "\t                                               ^", f);
+    StringEqualFailure f(test, failFileName, failLineNumber, "abc", "abd");
+    FAILURE_EQUAL("expected <abc>\n"
+                "\tbut was  <abd>\n"
+                "\tdifference starts at position 2 at: <        abd         >\n"
+                "\t                                               ^", f);
 }
 
 TEST(TestFailure, StringsEqualFailureAtTheEnd)
 {
-	StringEqualFailure f(test, failFileName, failLineNumber, "abc", "ab");
-	FAILURE_EQUAL("expected <abc>\n"
-			    "\tbut was  <ab>\n"
-			    "\tdifference starts at position 2 at: <        ab          >\n"
-			    "\t                                               ^", f);
+    StringEqualFailure f(test, failFileName, failLineNumber, "abc", "ab");
+    FAILURE_EQUAL("expected <abc>\n"
+                "\tbut was  <ab>\n"
+                "\tdifference starts at position 2 at: <        ab          >\n"
+                "\t                                               ^", f);
 }
 
 TEST(TestFailure, StringsEqualFailureNewVariantAtTheEnd)
 {
-	StringEqualFailure f(test, failFileName, failLineNumber, "EndOfALongerString", "EndOfALongerStrinG");
-	FAILURE_EQUAL("expected <EndOfALongerString>\n"
-			    "\tbut was  <EndOfALongerStrinG>\n"
-			    "\tdifference starts at position 17 at: <ongerStrinG         >\n"
-			    "\t                                                ^", f);
+    StringEqualFailure f(test, failFileName, failLineNumber, "EndOfALongerString", "EndOfALongerStrinG");
+    FAILURE_EQUAL("expected <EndOfALongerString>\n"
+                "\tbut was  <EndOfALongerStrinG>\n"
+                "\tdifference starts at position 17 at: <ongerStrinG         >\n"
+                "\t                                                ^", f);
 }
 
 TEST(TestFailure, StringsEqualFailureWithNewLinesAndTabs)
 {
-	StringEqualFailure f(test, failFileName, failLineNumber,
-			"StringWith\t\nDifferentString",
-			"StringWith\t\ndifferentString");
+    StringEqualFailure f(test, failFileName, failLineNumber,
+            "StringWith\t\nDifferentString",
+            "StringWith\t\ndifferentString");
 
-	FAILURE_EQUAL("expected <StringWith\t\nDifferentString>\n"
-			    "\tbut was  <StringWith\t\ndifferentString>\n"
-			    "\tdifference starts at position 12 at: <ringWith\t\ndifferentS>\n"
-			    "\t                                              \t\n^", f);
+    FAILURE_EQUAL("expected <StringWith\t\nDifferentString>\n"
+                "\tbut was  <StringWith\t\ndifferentString>\n"
+                "\tdifference starts at position 12 at: <ringWith\t\ndifferentS>\n"
+                "\t                                              \t\n^", f);
 }
 
 TEST(TestFailure, StringsEqualFailureInTheMiddle)
 {
-	StringEqualFailure f(test, failFileName, failLineNumber, "aa", "ab");
-	FAILURE_EQUAL("expected <aa>\n"
-			    "\tbut was  <ab>\n"
-			    "\tdifference starts at position 1 at: <         ab         >\n"
-			    "\t                                               ^", f);
+    StringEqualFailure f(test, failFileName, failLineNumber, "aa", "ab");
+    FAILURE_EQUAL("expected <aa>\n"
+                "\tbut was  <ab>\n"
+                "\tdifference starts at position 1 at: <         ab         >\n"
+                "\t                                               ^", f);
 }
-
 
 TEST(TestFailure, StringsEqualFailureAtTheBeginning)
 {
-	StringEqualFailure f(test, failFileName, failLineNumber, "aaa", "bbb");
-	FAILURE_EQUAL("expected <aaa>\n"
-			    "\tbut was  <bbb>\n"
-			    "\tdifference starts at position 0 at: <          bbb       >\n"
-			    "\t                                               ^", f);
+    StringEqualFailure f(test, failFileName, failLineNumber, "aaa", "bbb");
+    FAILURE_EQUAL("expected <aaa>\n"
+                "\tbut was  <bbb>\n"
+                "\tdifference starts at position 0 at: <          bbb       >\n"
+                "\t                                               ^", f);
+}
+
+TEST(TestFailure, StringsEqualFailureWithNullAsActual)
+{
+    StringEqualFailure f(test, failFileName, failLineNumber, "abc", NULL);
+    FAILURE_EQUAL("expected <abc>\n"
+                "\tbut was  <(null)>", f);
+}
+
+TEST(TestFailure, StringsEqualFailureWithNullAsExpected)
+{
+    StringEqualFailure f(test, failFileName, failLineNumber, NULL, "abd");
+    FAILURE_EQUAL("expected <(null)>\n"
+                "\tbut was  <abd>", f);
 }
 
 TEST(TestFailure, StringsEqualNoCaseFailure)
 {
-	StringEqualNoCaseFailure f(test, failFileName, failLineNumber, "ABC", "abd");
-	FAILURE_EQUAL("expected <ABC>\n"
-			    "\tbut was  <abd>\n"
-			    "\tdifference starts at position 2 at: <        abd         >\n"
-			    "\t                                               ^", f);
+    StringEqualNoCaseFailure f(test, failFileName, failLineNumber, "ABC", "abd");
+    FAILURE_EQUAL("expected <ABC>\n"
+                "\tbut was  <abd>\n"
+                "\tdifference starts at position 2 at: <        abd         >\n"
+                "\t                                               ^", f);
+}
+
+TEST(TestFailure, StringsEqualNoCaseFailureWithActualAsNull)
+{
+    StringEqualNoCaseFailure f(test, failFileName, failLineNumber, "ABC", NULL);
+    FAILURE_EQUAL("expected <ABC>\n"
+                "\tbut was  <(null)>", f);
+}
+
+TEST(TestFailure, StringsEqualNoCaseFailureWithExpectedAsNull)
+{
+    StringEqualNoCaseFailure f(test, failFileName, failLineNumber, NULL, "abd");
+    FAILURE_EQUAL("expected <(null)>\n"
+                "\tbut was  <abd>", f);
 }
 
 TEST(TestFailure, StringsEqualNoCaseFailure2)
 {
-	StringEqualNoCaseFailure f(test, failFileName, failLineNumber, "ac", "AB");
-	FAILURE_EQUAL("expected <ac>\n"
-			    "\tbut was  <AB>\n"
-			    "\tdifference starts at position 1 at: <         AB         >\n"
-			    "\t                                               ^", f);
+    StringEqualNoCaseFailure f(test, failFileName, failLineNumber, "ac", "AB");
+    FAILURE_EQUAL("expected <ac>\n"
+                "\tbut was  <AB>\n"
+                "\tdifference starts at position 1 at: <         AB         >\n"
+                "\t                                               ^", f);
 }
 
 TEST(TestFailure, DoublesEqualNormal)
 {
-	DoublesEqualFailure f(test, failFileName, failLineNumber, 1.0, 2.0, 3.0);
-	FAILURE_EQUAL("expected <1>\n"
-			    "\tbut was  <2> threshold used was <3>", f);
+    DoublesEqualFailure f(test, failFileName, failLineNumber, 1.0, 2.0, 3.0);
+    FAILURE_EQUAL("expected <1>\n"
+                "\tbut was  <2> threshold used was <3>", f);
 }

@@ -1,0 +1,7 @@
+bss memory usage for std::cout is about 12248 bytes
+
+Library cpp_ts(ios.o) needs two big regions of 7472 and 4104 bytes and other
+  small regions.
+
+More than 8k needed for statically created arrays with size
+  SetPointerPlugin::MAX_SET

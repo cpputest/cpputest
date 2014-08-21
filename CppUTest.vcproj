@@ -90,7 +90,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy lib\CppUTest.lib lib\vs2008\CppUTest.lib&#x0D;&#x0A;copy Debug\vc90.pdb lib\vs2008\vc90.pdb&#x0D;&#x0A;"
+				CommandLine="if not exist lib\vs2008\ md lib\vs2008\&#x0D;&#x0A;copy lib\CppUTest.lib lib\vs2008\CppUTest.lib&#x0D;&#x0A;copy Debug\vc90.pdb lib\vs2008\vc90.pdb&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -191,10 +191,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\src\CppUTestExt\GTestConvertor.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\src\CppUTest\JUnitTestOutput.cpp"
 				>
 			</File>
@@ -216,42 +212,6 @@
 			</File>
 			<File
 				RelativePath=".\src\CppUTestExt\MemoryReportFormatter.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\CppUTestExt\MockActualFunctionCall.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\CppUTestExt\MockExpectedFunctionCall.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\CppUTestExt\MockExpectedFunctionsList.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\CppUTestExt\MockFailure.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\CppUTestExt\MockFunctionCall.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\CppUTestExt\MockNamedValue.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\CppUTestExt\MockSupport.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\CppUTestExt\MockSupport_c.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\CppUTestExt\MockSupportPlugin.cpp"
 				>
 			</File>
 			<File
@@ -301,23 +261,6 @@
 			<File
 				RelativePath="src\Platforms\VisualCpp\UtestPlatform.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
 			</File>
 		</Filter>
 		<Filter
@@ -325,11 +268,27 @@
 			Filter="h;hpp;hxx;hm;inl"
 			>
 			<File
+				RelativePath=".\include\CppUTestExt\CodeMemoryReportFormatter.h"
+				>
+			</File>
+			<File
 				RelativePath=".\include\CppUTest\CommandLineArguments.h"
 				>
 			</File>
 			<File
 				RelativePath=".\include\CppUTest\CommandLineTestRunner.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTestExt\GMock.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTestExt\GTest.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTestExt\GTestConvertor.h"
 				>
 			</File>
 			<File
@@ -350,6 +309,62 @@
 			</File>
 			<File
 				RelativePath=".\include\CppUTest\MemoryLeakWarningPlugin.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTestExt\MemoryReportAllocator.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTestExt\MemoryReporterPlugin.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTestExt\MemoryReportFormatter.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTestExt\MockActualCall.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTestExt\MockCheckedActualCall.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTestExt\MockCheckedExpectedCall.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTestExt\MockExpectedCall.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTestExt\MockExpectedCallsList.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTestExt\MockFailure.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTestExt\MockNamedValue.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTestExt\MockSupport.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTestExt\MockSupport_c.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTestExt\MockSupportPlugin.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTestExt\OrderedTest.h"
 				>
 			</File>
 			<File
@@ -412,14 +427,42 @@
 				RelativePath=".\include\CppUTest\UtestMacros.h"
 				>
 			</File>
-			<File
-				RelativePath=".\include\CppUTest\VirtualCall.h"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="ext"
 			>
+			<File
+				RelativePath=".\src\CppUTestExt\MockActualCall.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\CppUTestExt\MockExpectedCall.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\CppUTestExt\MockExpectedCallsList.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\CppUTestExt\MockFailure.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\CppUTestExt\MockNamedValue.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\CppUTestExt\MockSupport.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\CppUTestExt\MockSupport_c.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\CppUTestExt\MockSupportPlugin.cpp"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>

@@ -33,25 +33,25 @@
 class MyDummyComparator : public MockNamedValueComparator
 {
 public:
-	virtual bool isEqual(const void* object1, const void* object2)
-	{
-		return object1 == object2;
-	}
+    virtual bool isEqual(const void* object1, const void* object2)
+    {
+        return object1 == object2;
+    }
 
-	virtual SimpleString valueToString(const void* object)
-	{
-		return StringFrom(object);
-	}
+    virtual SimpleString valueToString(const void* object)
+    {
+        return StringFrom(object);
+    }
 };
 
 int main(int ac, char** av)
 {
-	MyDummyComparator dummyComparator;
-	MockSupportPlugin mockPlugin;
+    MyDummyComparator dummyComparator;
+    MockSupportPlugin mockPlugin;
 
-	mockPlugin.installComparator("MyDummyType", dummyComparator);
-	TestRegistry::getCurrentRegistry()->installPlugin(&mockPlugin);
-	return CommandLineTestRunner::RunAllTests(ac, av);
+    mockPlugin.installComparator("MyDummyType", dummyComparator);
+    TestRegistry::getCurrentRegistry()->installPlugin(&mockPlugin);
+    return CommandLineTestRunner::RunAllTests(ac, av);
 }
 
-#include "ApplicationLib/AllTests.h"
+#include "AllTests.h"

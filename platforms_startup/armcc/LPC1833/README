@@ -1,0 +1,10 @@
+Project for LPC1833 is based on LPCOpen. Unused functions is removed to make
+a small code instead of a fat one.
+
+Semihosting is in use. For time measurement, SystemTimer in Cortex-M3 core is
+used. Any pin is not initialized. 
+
+Debug output is done using SWO (ITM channel 0).
+
+Working frequency is getting from Internal RC (12 MHz), so no PLL setup is used,
+no quartz is required.
