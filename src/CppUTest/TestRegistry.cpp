@@ -101,24 +101,14 @@ void TestRegistry::unDoLastAddTest()
 
 }
 
-void TestRegistry::nameFilter(const TestFilter& f)
+void TestRegistry::setNameFilter(const TestFilter& f)
 {
     nameFilter_ = f;
 }
 
-void TestRegistry::groupFilter(const TestFilter& f)
+void TestRegistry::setGroupFilter(const TestFilter& f)
 {
     groupFilter_ = f;
-}
-
-TestFilter TestRegistry::getGroupFilter()
-{
-    return groupFilter_;
-}
-
-TestFilter TestRegistry::getNameFilter()
-{
-    return nameFilter_;
 }
 
 void TestRegistry::setRunTestsInSeperateProcess()

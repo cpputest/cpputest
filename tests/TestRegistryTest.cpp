@@ -259,7 +259,7 @@ TEST(TestRegistry, nameFilterWorks)
 {
     test1->setTestName("testname");
     test2->setTestName("noname");
-    myRegistry->nameFilter("testname");
+    myRegistry->setNameFilter("testname");
     addAndRunAllTests();
     CHECK(test1->hasRun_);
     CHECK(!test2->hasRun_);
@@ -269,7 +269,7 @@ TEST(TestRegistry, groupFilterWorks)
 {
     test1->setGroupName("groupname");
     test2->setGroupName("noname");
-    myRegistry->groupFilter("groupname");
+    myRegistry->setGroupFilter("groupname");
     addAndRunAllTests();
     CHECK(test1->hasRun_);
     CHECK(!test2->hasRun_);
