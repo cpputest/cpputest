@@ -101,16 +101,14 @@ int CommandLineArguments::getRepeatCount() const
     return repeat_;
 }
 
-TestFilter CommandLineArguments::getGroupFilter() const
+const TestFilter* CommandLineArguments::getGroupFilters() const
 {
-    /* TODO: Temporary fix */
-    return groupFilters_ ? *groupFilters_: TestFilter("");
+    return groupFilters_;
 }
 
-TestFilter CommandLineArguments::getNameFilter() const
+const TestFilter* CommandLineArguments::getNameFilters() const
 {
-    /* TODO: Temporary fix */
-    return nameFilters_ ? *nameFilters_ : TestFilter("");
+    return nameFilters_;
 }
 
 void CommandLineArguments::SetRepeatCount(int ac, const char** av, int& i)
