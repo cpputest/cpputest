@@ -95,3 +95,29 @@ TEST(TestFilter, stringFromWithStrictMatching)
     filter.strictMatching();
     STRCMP_EQUAL("TestFilter: \"filter\" with strict matching", StringFrom(filter).asCharString());
 }
+
+TEST(TestFilter, listOfFilters)
+{
+    TestFilter *listOfFilters = NULL;
+    TestFilter first("foo");
+    TestFilter secnd("bar");
+    listOfFilters = first.add(listOfFilters);
+    listOfFilters = secnd.add(listOfFilters);
+    TestFilter *current = listOfFilters;
+    STRCMP_EQUAL("TestFilter: \"bar\"", StringFrom(*current).asCharString());
+    current = current->getNext();
+    STRCMP_EQUAL("TestFilter: \"foo\"", StringFrom(*current).asCharString());
+    POINTERS_EQUAL(NULL, current->getNext());
+}
+
+TEST(TestFilter, constructors)
+{
+    TestFilter filter1;
+    TestFilter filter2(SimpleString("a"));
+    TestFilter filter3("a");
+    CHECK(filter1.getNext() == NULL);
+    CHECK(filter2.getNext() == NULL);
+    CHECK(filter3.getNext() == NULL);
+    CHECK(filter2.match("ab"));
+    CHECK(filter3.match("ab"));
+}
