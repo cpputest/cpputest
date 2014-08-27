@@ -124,10 +124,7 @@ int TestRegistry::getCurrentRepetition()
 
 bool TestRegistry::testShouldRun(UtestShell* test, TestResult& result)
 {
-    /* TODO: Temporary workaround */
-    TestFilter groupFilter = groupFilters_ ? *groupFilters_ : TestFilter("");
-    TestFilter nameFilter = nameFilters_ ? *nameFilters_ : TestFilter("");
-    if (test->shouldRun(groupFilter, nameFilter)) return true;
+    if (test->shouldRun(groupFilters_, nameFilters_)) return true;
     else {
         result.countFilteredOut();
         return false;
