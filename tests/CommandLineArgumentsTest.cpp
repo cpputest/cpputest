@@ -287,4 +287,15 @@ TEST(CommandLineArguments, setPackageName)
     CHECK_EQUAL(SimpleString("package"), args->getPackageName());
 }
 
-
+TEST(CommandLineArguments, lotsOfGroupsAndTests)
+{
+    int argc = 10;
+    const char* argv[] = { "tests.exe", "-sggroup1", "-sntest1", "-sggroup2", "-sntest2", "-sntest3", "-sggroup3", "-sntest4", "-sggroup4", "-sntest5" };
+    CHECK(newArgumentParser(argc, argv));
+    TestFilter nameFilter("test1");
+    nameFilter.strictMatching();
+    TestFilter groupFilter("group1");
+    groupFilter.strictMatching();
+    CHECK_EQUAL(nameFilter, *args->getNameFilter().getNext()->getNext()->getNext()->getNext());
+    CHECK_EQUAL(groupFilter, *args->getGroupFilter().getNext()->getNext()->getNext());
+}

@@ -60,7 +60,7 @@ void TestFilter::strictMatching()
 
 bool TestFilter::match(const SimpleString& name) const
 {
-    if (strictMatching_)
+    if(strictMatching_)
         return name == filter_;
     return name.contains(filter_);
 }
