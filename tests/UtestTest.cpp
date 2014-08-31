@@ -205,8 +205,8 @@ class NullParameterTest: public UtestShell
 TEST(UtestMyOwn, NullParameters)
 {
     NullParameterTest nullTest; /* Bug fix tests for creating a test without a name, fix in SimpleString */
-    TestRegistry* reg = TestRegistry::getCurrentRegistry();
-    nullTest.shouldRun(reg->getGroupFilter(), reg->getNameFilter());
+    TestFilter emptyFilter;
+    CHECK(nullTest.shouldRun(emptyFilter, emptyFilter));
 }
 
 class AllocateAndDeallocateInConstructorAndDestructor
