@@ -44,8 +44,8 @@ public:
     bool isVerbose() const;
     bool isColor() const;
     int getRepeatCount() const;
-    TestFilter getGroupFilter() const;
-    TestFilter getNameFilter() const;
+    const TestFilter* getGroupFilters() const;
+    const TestFilter* getNameFilters() const;
     bool isJUnitOutput() const;
     bool isEclipseOutput() const;
     bool runTestsInSeperateProcess() const;
