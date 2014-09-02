@@ -85,11 +85,8 @@ int CommandLineTestRunner::runAllTestsMain()
 
 void CommandLineTestRunner::initializeTestRun()
 {
-    /* TODO: Temporary workaround */
-    const TestFilter* groupFilter = arguments_->getGroupFilters();
-    const TestFilter* nameFilter = arguments_->getNameFilters();
-    registry_->setGroupFilter(groupFilter ? *groupFilter : TestFilter(""));
-    registry_->setNameFilter(nameFilter ? *nameFilter : TestFilter(""));
+    registry_->setGroupFilters(arguments_->getGroupFilters());
+    registry_->setNameFilters(arguments_->getNameFilters());
     if (arguments_->isVerbose()) output_->verbose();
     if (arguments_->isColor()) output_->color();
     if (arguments_->runTestsInSeperateProcess()) registry_->setRunTestsInSeperateProcess();

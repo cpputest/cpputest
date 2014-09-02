@@ -50,8 +50,8 @@ public:
     virtual void unDoLastAddTest();
     virtual int countTests();
     virtual void runAllTests(TestResult& result);
-    virtual void setNameFilter(const TestFilter& filter);
-    virtual void setGroupFilter(const TestFilter& filter);
+    virtual void setNameFilters(const TestFilter* filters);
+    virtual void setGroupFilters(const TestFilter* filters);
 
     virtual void installPlugin(TestPlugin* plugin);
     virtual void resetPlugins();
@@ -79,8 +79,8 @@ private:
     bool endOfGroup(UtestShell* test);
 
     UtestShell * tests_;
-    TestFilter nameFilter_;
-    TestFilter groupFilter_;
+    const TestFilter* nameFilters_;
+    const TestFilter* groupFilters_;
     TestPlugin* firstPlugin_;
     static TestRegistry* currentRegistry_;
     bool runInSeperateProcess_;
