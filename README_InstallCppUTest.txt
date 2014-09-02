@@ -8,10 +8,10 @@
 2. Build CppUTest and examples
 
 2a. For unix/gcc (including cygwin)
- > cd <someDirectory>/CppUTest
- > configure
+ > cd <someDirectory>/CppUTest/cpputest_build
+ > ../configure
  > make
- > make check (This is to run the CppUTest unit tests)
+ > make tdd   # This is to run the CppUTest unit tests
   
 2b. For Microsoft Visual C++ V6
  Double click <someDirectory>/CppUTest/CppUTest.dsw
