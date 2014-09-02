@@ -77,7 +77,7 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
 
 const char* CommandLineArguments::usage() const
 {
-    return "usage [-v] [-c] [-r#] [-g|sg groupName] [-n|sn testName] [-o{normal, junit}] [-k packageName]\n";
+    return "usage [-v] [-c] [-r#] [-g|sg groupName]... [-n|sn testName]... [\"TEST(groupName, testName)\"]... [-o{normal, junit}] [-k packageName]\n";
 }
 
 bool CommandLineArguments::isVerbose() const
