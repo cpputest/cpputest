@@ -95,7 +95,7 @@ public:
     virtual UtestShell *getNext() const;
     virtual int countTests();
 
-    bool shouldRun(const TestFilter& groupFilter, const TestFilter& nameFilter) const;
+    bool shouldRun(const TestFilter* groupFilters, const TestFilter* nameFilters) const;
     const SimpleString getName() const;
     const SimpleString getGroup() const;
     virtual SimpleString getFormattedName() const;
@@ -159,6 +159,7 @@ private:
 
     void setTestResult(TestResult* result);
     void setCurrentTest(UtestShell* test);
+    bool match(const char* target, const TestFilter* filters) const;
 
     static UtestShell* currentTest_;
     static TestResult* testResult_;

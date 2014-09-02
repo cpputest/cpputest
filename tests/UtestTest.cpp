@@ -206,7 +206,7 @@ TEST(UtestMyOwn, NullParameters)
 {
     NullParameterTest nullTest; /* Bug fix tests for creating a test without a name, fix in SimpleString */
     TestFilter emptyFilter;
-    CHECK(nullTest.shouldRun(emptyFilter, emptyFilter));
+    CHECK(nullTest.shouldRun(&emptyFilter, &emptyFilter));
 }
 
 class AllocateAndDeallocateInConstructorAndDestructor
