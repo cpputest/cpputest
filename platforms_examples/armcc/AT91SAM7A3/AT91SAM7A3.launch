@@ -39,7 +39,7 @@
 <stringAttribute key="org.eclipse.cdt.launch.PROGRAM_NAME" value="D:\Home\bortsov\git\cpputest\platforms_tests\armcc\AT91SAM7A3\obj\SimpleStringTest.axf"/>
 <stringAttribute key="org.eclipse.cdt.launch.PROJECT_ATTR" value="CppUTest AT91SAM7A3 sample project"/>
 <booleanAttribute key="org.eclipse.cdt.launch.PROJECT_BUILD_CONFIG_AUTO_ATTR" value="true"/>
-<stringAttribute key="org.eclipse.cdt.launch.PROJECT_BUILD_CONFIG_ID_ATTR" value="preference.org.eclipse.cdt.managedbuilder.core.configurationDataProvider.1662926317"/>
+<stringAttribute key="org.eclipse.cdt.launch.PROJECT_BUILD_CONFIG_ID_ATTR" value=""/>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
 <listEntry value="/CppUTest AT91SAM7A3 sample project"/>
 </listAttribute>
