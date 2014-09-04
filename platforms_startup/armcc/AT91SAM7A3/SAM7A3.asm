@@ -74,7 +74,7 @@ Stack_Top
 ;//   <o>  Heap Size (in Bytes) <0x0-0xFFFFFFFF>
 ;// </h>
 
-Heap_Size       EQU     0x0003800
+Heap_Size       EQU     0x0002800
 
                 AREA    HEAP, NOINIT, READWRITE, ALIGN=3
 __heap_base

@@ -81,7 +81,7 @@ FROMELF:=@$(KEIL_DIR)/bin/fromelf.exe
 # armcc system include path
 SYS_INCLUDE_DIRS :=$(KEIL_DIR)/include 
 
-JFLASH :="C:/Program Files (x86)/SEGGER/JLinkARM_V478c/JFlashARM.exe"
+JFLASH :="C:/Program Files (x86)/SEGGER/JLink_V490b/JFlash.exe"
 JFLASHPRJ :=AT91SAM7A3.jflash
 LDSCRIPT := ROM.sct
 
