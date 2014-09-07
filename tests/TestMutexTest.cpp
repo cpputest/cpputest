@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007, Michael Feathers, James Grenning and Bas Vodde
+ * Copyright (c) 2014, Chen YewMing
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -25,20 +25,30 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef PLATFORMSPECIFICFUNCTIONS_H_
-#define PLATFORMSPECIFICFUNCTIONS_H_
+#include "CppUTest/TestHarness.h"
+#include "CppUTest/TestMutex.h"
 
-#include "CppUTest/TestOutput.h"
-TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment();
+TEST_GROUP(TestMutexTest)
+{
+    void setup()
+    {
+    }
+    
+    void teardown()
+    {
+    }
+};
 
-class TestPlugin;
-void PlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result);
+TEST(TestMutexTest, NewDeleteTest)
+{
+    TestMutex* mtx = new TestMutex;
+    delete mtx;
+}
 
-/* Platform specific interface we use in order to minimize dependencies with LibC.
- * This enables porting to different embedded platforms.
- *
- */
- 
-#include "CppUTest/PlatformSpecificFunctions_c.h"
-
-#endif
+TEST(TestMutexTest, LockUnlockTest)
+{
+    TestMutex* mtx = new TestMutex;
+    mtx->Lock();
+    mtx->Unlock();
+    delete mtx;
+}

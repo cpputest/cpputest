@@ -195,16 +195,30 @@ void* PlatformSpecificMemset(void* mem, int c, size_t size)
     return memset(mem, c, size);
 }
 
-pthread_mutex_t malloc_mutex = PTHREAD_MUTEX_INITIALIZER;
-
-void PlatformSpecificMallocMutexLock()
+PlatformSpecificMutex PlatformSpecificMutexCreate(void)
 {
-	pthread_mutex_lock(&malloc_mutex);
+    pthread_mutex_t *mutex = new pthread_mutex_t;
+    
+    pthread_mutex_init(mutex, NULL);
+    
+    return (PlatformSpecificMutex)mutex;
 }
 
-void PlatformSpecificMallocMutexUnlock()
+void PlatformSpecificMutexLock(PlatformSpecificMutex mtx)
 {
-	pthread_mutex_unlock(&malloc_mutex);
+    pthread_mutex_lock((pthread_mutex_t *)mtx);
+}
+
+void PlatformSpecificMutexUnlock(PlatformSpecificMutex mtx)
+{
+    pthread_mutex_unlock((pthread_mutex_t *)mtx);
+}
+
+void PlatformSpecificMutexDestroy(PlatformSpecificMutex mtx)
+{
+    pthread_mutex_t *mutex = (pthread_mutex_t *)mtx;
+    pthread_mutex_destroy(mutex);
+    delete mutex;
 }
 
 

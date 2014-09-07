@@ -38,12 +38,20 @@
 class MemLeakScopedLock
 {
 public:
-    MemLeakScopedLock();
-    ~MemLeakScopedLock();
+    MemLeakScopedLock(void);
+    ~MemLeakScopedLock(void);
 };
 
-MemLeakScopedLock::MemLeakScopedLock() { PlatformSpecificMallocMutexLock(); }
-MemLeakScopedLock::~MemLeakScopedLock() { PlatformSpecificMallocMutexUnlock(); }
+MemLeakScopedLock::MemLeakScopedLock()
+{
+   MemoryLeakWarningPlugin::getGlobalDetector()->mutexLock();
+}
+
+MemLeakScopedLock::~MemLeakScopedLock()
+{
+   MemoryLeakWarningPlugin::getGlobalDetector()->mutexUnlock();
+}
+
 
 static void* threadsafe_mem_leak_malloc(size_t size, const char* file, int line)
 {
