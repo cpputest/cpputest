@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007, Michael Feathers, James Grenning and Bas Vodde
+ * Copyright (c) 2014, YewMing Chen
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -25,20 +25,22 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef PLATFORMSPECIFICFUNCTIONS_H_
-#define PLATFORMSPECIFICFUNCTIONS_H_
+#ifndef D_TestMutex_h
+#define D_TestMutex_h
 
-#include "CppUTest/TestOutput.h"
-TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment();
+#include "CppUTest/PlatformSpecificFunctions.h"
 
-class TestPlugin;
-void PlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result);
+class TestMutex
+{
+public:
+    TestMutex(void);
+    ~TestMutex(void);
+    void Lock(void);
+    void Unlock(void);
+private:
+    PlatformSpecificMutex psMtx;
+};
 
-/* Platform specific interface we use in order to minimize dependencies with LibC.
- * This enables porting to different embedded platforms.
- *
- */
- 
-#include "CppUTest/PlatformSpecificFunctions_c.h"
+
 
 #endif

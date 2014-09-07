@@ -29,6 +29,7 @@ set(CppUTestTests_src
         TestUTestMacro.cpp
         AllocationInCppFile.cpp
         UtestTest.cpp
+        TestMutexTest.cpp
 )
 
 if (MSVC)
