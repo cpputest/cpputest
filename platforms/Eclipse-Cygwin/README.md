@@ -3,7 +3,6 @@
 This project is for use on the Windows platform. These are the steps required for using it.
 
 ###Preparation
-
 ####1. Install Cygwin
 You need to have Cygwin installed, with at least the Gnu C compiler, make, autotools and libtool. Please follow the instructions in /README.md to build CppUTest from the Cygwin bash prompt.
 
@@ -32,14 +31,20 @@ While you are at it, you might also want to install:
 ````
 
 ####5. Add the CppUTest plugin
-Todo.
+You can find the plugin as well as instructions at https://github.com/tcmak/CppUTestEclipseJunoTestRunner
 
 ###Import the project into Eclipse
-Todo.
+In Eclipse you can't simply "open" a project - you have to first import it into the workspace:  
+ * File->Import...->General->Existing Projects into workspace
+ * [Next >]->Select root directory: ````<cpputest_dir>/Platforms/Eclipse-Cygwin```` 
+ * Make sure that ````[ ] Copy projects into workspace```` is **NOT** ticked.  
+ * Click Finish.
 
-###Compiling and running tests
+###Compile and run tests
+Before you can compile CppUTest in Eclipse, you must configure them using Automake. Instructions can be found at http://cpputest.github.io/. Once you have done this, select a configuration (Libraries, Check, CppUTestTests or CppUTestExtTests) via Project->BuildConfiguration->Set Active>. The Check configuration will build the libraries along with all tests and run the tests.
 
 ###Working with the C/C++ Unit plugin
+Todo.  
 
 1. Unzip CppUTest
 2. Install brand new Eclipse CDT
