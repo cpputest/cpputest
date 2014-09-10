@@ -194,6 +194,7 @@
 		<configuration configurationName="CppUTestExtTests">
 			<resource resourceType="PROJECT" workspacePath="/CppUTest"/>
 		</configuration>
+		<configuration configurationName="Libraries"/>
 		<configuration configurationName="Debug">
 			<resource resourceType="PROJECT" workspacePath="/CppUTest"/>
 		</configuration>
