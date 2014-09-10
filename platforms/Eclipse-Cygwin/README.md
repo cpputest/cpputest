@@ -1,4 +1,4 @@
-##Using the Eclipse Project in Platforms-Cygwin
+##Using the Eclipse Project
 
 This project is for use on the Windows platform. These are the steps required for using it.
 
@@ -7,7 +7,7 @@ This project is for use on the Windows platform. These are the steps required fo
 ####1. Install Cygwin
 You need to have Cygwin installed, with at least the Gnu C compiler, make, autotools and libtool. Please follow the instructions in /README.md to build CppUTest from the Cygwin bash prompt.
 
-####2. Set PATH
+####2. Set your PATH
 Then, you need to add the path to your Cygwin binaries to your system path, e.g.
 ````dos
 C:\<path_to_Cygwin>\Cygwin\bin
@@ -18,11 +18,24 @@ Copy Eclipse CDT (Kepler) to your system drive. You may use the 32 bit version a
 
 ####4. Install the Eclipse C/C++ plugin
 Open Eclipse. 
-Accept the default workspace for now (you may want to set a more appropriate workspace location later on).
-Then install the "C/C++ Unit Test" plugin: "Help"->"Install New Software"-> work with "Kepler - http://download.eclipse.org/releases/kepler" -> close eclipse
+Accept the default workspace for now (you may want to set a more appropriate workspace location later on). Then install the "C/C++ Unit Test" plugin:  
+  "Help"->"Install New Software"-> work with "Kepler - http://download.eclipse.org/releases/kepler".  
+  You will find the plugin under:
+````
+  [ ] Programming Languages
+      [x] C/C++ Unit Testing Support.
+````
+While you are at it, you might also want to install:  
+````
+  [ ] Linux Tools  
+      [x] Gcov Integration
+````
 
-####5. Add the C
-###Loading the project into Eclipse
+####5. Add the CppUTest plugin
+Todo.
+
+###Import the project into Eclipse
+Todo.
 
 ###Compiling and running tests
 
@@ -64,13 +77,15 @@ I just noticed the test runner you installed is not correct. I recommend you uni
 
 You must install via help->install new software:
 Work with: Kepler - http://download.eclipse.org/releases/kepler (or the equivalent for your version)
+````
 [ ] Programming Languages
-    C/C++ Unit Testing Support.
-
+    [x] C/C++ Unit Testing Support.
+````
 And while you are at it, you might also want to install:
+````
 [ ] Linux Tools
-     Gcov Integration.
-
+    [x] Gcov Integration.
+````
 Once you have that, I am pretty sure it will pick up the launch configuration, too.
 
  A.install Cygwin (include GCC C/C++, Autotools, Libtool, ...?)
