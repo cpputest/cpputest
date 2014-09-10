@@ -77,7 +77,7 @@ Similar errors exist when Cygwin.dll is not found (a more common case, but the e
 
 As far as the test runner is concerned, the tests have run and done nothing.
 
-P.S. Correction - it exits with Code 9009. So we could improve the test runner by checking whether
+It exits with Code 9009. So we could improve the test runner by checking whether
  1. there is no output AND
  2. exit code is non-zero
  and outputting a message about as helpful as the Google Test one :-)
