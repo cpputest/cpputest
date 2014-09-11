@@ -29,7 +29,7 @@ set(CppUTestTests_src
         TestUTestMacro.cpp
         AllocationInCppFile.cpp
         UtestTest.cpp
-        TestMutexTest.cpp
+        SimpleMutexTest.cpp
 )
 
 if (MSVC)
@@ -39,6 +39,7 @@ endif (MSVC)
 
 add_executable(CppUTestTests ${CppUTestTests_src})
 target_link_libraries(CppUTestTests CppUTest)
+target_link_libraries(CppUTestTests CppUTestExt)
 add_test(CppUTestTests ${EXECUTABLE_OUTPUT_PATH}/CppUTestTests)
 
 if (TESTS)

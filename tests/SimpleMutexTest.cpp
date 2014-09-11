@@ -24,29 +24,71 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 #include "CppUTest/TestHarness.h"
-#include "CppUTest/TestMutex.h"
+#include "CppUTestExt/MockSupport.h"
+#include "CppUTest/SimpleMutex.h"
+#include "CppUTest/PlatformSpecificFunctions.h"
 
+bool enableMutexMocks = false;
 
-TestMutex::TestMutex(void)
+PlatformSpecificMutex PlatformSpecificMutexCreate(void)
 {
-    psMtx = PlatformSpecificMutexCreate();
+    return enableMutexMocks ? 
+        mock().actualCall("PlatformSpecificMutexCreate").returnPointerValueOrDefault(0) : 0;
 }
 
-TestMutex::~TestMutex(void)
+void PlatformSpecificMutexLock(PlatformSpecificMutex)
 {
-    PlatformSpecificMutexDestroy(psMtx);
+    if (enableMutexMocks)
+        mock().actualCall("PlatformSpecificMutexLock");
 }
 
-void TestMutex::Lock(void)
+void PlatformSpecificMutexUnlock(PlatformSpecificMutex)
 {
-    PlatformSpecificMutexLock(psMtx);
+    if (enableMutexMocks)
+        mock().actualCall("PlatformSpecificMutexUnlock");
 }
+
+void PlatformSpecificMutexDestroy(PlatformSpecificMutex)
+{
+    if (enableMutexMocks)
+        mock().actualCall("PlatformSpecificMutexDestroy");
+}
+
+
+
+TEST_GROUP(SimpleMutexTest)
+{
+    void setup()
+    {
+        enableMutexMocks = true;
+    }
     
-void TestMutex::Unlock(void)
+    void teardown()
+    {
+        enableMutexMocks = false;
+        mock().checkExpectations();
+        mock().clear();
+    }
+};
+
+TEST(SimpleMutexTest, CreateAndDestroy)
 {
-    PlatformSpecificMutexUnlock(psMtx);
+    mock().expectOneCall("PlatformSpecificMutexCreate");
+    mock().expectOneCall("PlatformSpecificMutexDestroy");
+
+    SimpleMutex mtx;
 }
 
+TEST(SimpleMutexTest, LockUnlockTest)
+{
+    mock().expectOneCall("PlatformSpecificMutexCreate");
+    mock().expectOneCall("PlatformSpecificMutexLock");
+    mock().expectOneCall("PlatformSpecificMutexUnlock");
+    mock().expectOneCall("PlatformSpecificMutexDestroy");
 
-
+    SimpleMutex mtx;
+    mtx.Lock();
+    mtx.Unlock();
+}

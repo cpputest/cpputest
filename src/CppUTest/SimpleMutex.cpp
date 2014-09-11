@@ -24,31 +24,29 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 #include "CppUTest/TestHarness.h"
-#include "CppUTest/TestMutex.h"
+#include "CppUTest/SimpleMutex.h"
 
-TEST_GROUP(TestMutexTest)
+
+SimpleMutex::SimpleMutex(void)
 {
-    void setup()
-    {
-    }
+    psMtx = PlatformSpecificMutexCreate();
+}
+
+SimpleMutex::~SimpleMutex(void)
+{
+    PlatformSpecificMutexDestroy(psMtx);
+}
+
+void SimpleMutex::Lock(void)
+{
+    PlatformSpecificMutexLock(psMtx);
+}
     
-    void teardown()
-    {
-    }
-};
-
-TEST(TestMutexTest, NewDeleteTest)
+void SimpleMutex::Unlock(void)
 {
-    TestMutex* mtx = new TestMutex;
-    delete mtx;
+    PlatformSpecificMutexUnlock(psMtx);
 }
 
-TEST(TestMutexTest, LockUnlockTest)
-{
-    TestMutex* mtx = new TestMutex;
-    mtx->Lock();
-    mtx->Unlock();
-    delete mtx;
-}
+
+

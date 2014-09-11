@@ -25,16 +25,16 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef D_TestMutex_h
-#define D_TestMutex_h
+#ifndef D_SimpleMutex_h
+#define D_SimpleMutex_h
 
 #include "CppUTest/PlatformSpecificFunctions.h"
 
-class TestMutex
+class SimpleMutex
 {
 public:
-    TestMutex(void);
-    ~TestMutex(void);
+    SimpleMutex(void);
+    ~SimpleMutex(void);
     void Lock(void);
     void Unlock(void);
 private:

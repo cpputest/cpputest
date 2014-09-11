@@ -33,6 +33,7 @@
 #include "CppUTest/TestMemoryAllocator.h"
 #include "CppUTest/TestTestingFixture.h"
 #include "CppUTest/TestHarness_c.h"
+#include "CppUTestExt/MockSupport.h"
 
 static char* leak1;
 static long* leak2;
@@ -349,6 +350,7 @@ TEST(MemoryLeakWarningWarningThreadSafe, turnOnThreadSafeNewDeleteOverloads)
     int storedAmountOfLeaks = MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all);
     
     MemoryLeakWarningPlugin::turnOnThreadSafeNewDeleteOverloads();
+
     int *n = new int;
     char *str = new char[20];
     
