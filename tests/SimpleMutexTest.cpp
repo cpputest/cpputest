@@ -30,24 +30,30 @@
 #include "CppUTest/SimpleMutex.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
+bool enableMutexMocks = false;
+
 PlatformSpecificMutex PlatformSpecificMutexCreate(void)
 {
-    return mock().actualCall("PlatformSpecificMutexCreate").returnPointerValueOrDefault(0);
+    return enableMutexMocks ? 
+        mock().actualCall("PlatformSpecificMutexCreate").returnPointerValueOrDefault(0) : 0;
 }
 
 void PlatformSpecificMutexLock(PlatformSpecificMutex)
 {
-    mock().actualCall("PlatformSpecificMutexLock");
+    if (enableMutexMocks)
+        mock().actualCall("PlatformSpecificMutexLock");
 }
 
 void PlatformSpecificMutexUnlock(PlatformSpecificMutex)
 {
-    mock().actualCall("PlatformSpecificMutexUnlock");
+    if (enableMutexMocks)
+        mock().actualCall("PlatformSpecificMutexUnlock");
 }
 
 void PlatformSpecificMutexDestroy(PlatformSpecificMutex)
 {
-    mock().actualCall("PlatformSpecificMutexDestroy");
+    if (enableMutexMocks)
+        mock().actualCall("PlatformSpecificMutexDestroy");
 }
 
 
@@ -56,10 +62,12 @@ TEST_GROUP(SimpleMutexTest)
 {
     void setup()
     {
+        enableMutexMocks = true;
     }
     
     void teardown()
     {
+        enableMutexMocks = false;
         mock().checkExpectations();
         mock().clear();
     }

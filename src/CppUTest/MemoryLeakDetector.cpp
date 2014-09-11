@@ -28,7 +28,7 @@
 #include "CppUTest/MemoryLeakDetector.h"
 #include "CppUTest/TestMemoryAllocator.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
-#include "CppUTest/TestMutex.h"
+#include "CppUTest/SimpleMutex.h"
 
 #define UNKNOWN ((char*)("<unknown>"))
 
@@ -437,7 +437,7 @@ MemoryLeakDetector::MemoryLeakDetector(MemoryLeakFailure* reporter)
     reporter_ = reporter;
     outputBuffer_ = MemoryLeakOutputStringBuffer();
     memoryTable_ = MemoryLeakDetectorTable();
-    mutex_ = new TestMutex;
+    mutex_ = new SimpleMutex;
 }
 
 MemoryLeakDetector::~MemoryLeakDetector()
