@@ -35,6 +35,44 @@
 
 #if CPPUTEST_USE_MEM_LEAK_DETECTION
 
+class MemLeakScopedLock
+{
+public:
+    MemLeakScopedLock(void);
+    ~MemLeakScopedLock(void);
+};
+
+MemLeakScopedLock::MemLeakScopedLock()
+{
+   MemoryLeakWarningPlugin::getGlobalDetector()->mutexLock();
+}
+
+MemLeakScopedLock::~MemLeakScopedLock()
+{
+   MemoryLeakWarningPlugin::getGlobalDetector()->mutexUnlock();
+}
+
+
+static void* threadsafe_mem_leak_malloc(size_t size, const char* file, int line)
+{
+    MemLeakScopedLock lock;
+    return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentMallocAllocator(), size, file, line, true);
+}
+
+static void threadsafe_mem_leak_free(void* buffer, const char* file, int line)
+{
+    MemLeakScopedLock lock;
+    MemoryLeakWarningPlugin::getGlobalDetector()->invalidateMemory((char*) buffer);
+    MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(getCurrentMallocAllocator(), (char*) buffer, file, line, true);
+}
+
+static void* threadsafe_mem_leak_realloc(void* memory, size_t size, const char* file, int line)
+{
+    MemLeakScopedLock lock;
+    return MemoryLeakWarningPlugin::getGlobalDetector()->reallocMemory(getCurrentMallocAllocator(), (char*) memory, size, file, line, true);
+}
+
+
 static void* mem_leak_malloc(size_t size, const char* file, int line)
 {
     return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentMallocAllocator(), size, file, line, true);
@@ -103,6 +141,65 @@ void cpputest_free_location_with_leak_detection(void* buffer, const char* file, 
 #else
 #define UT_THROW_BAD_ALLOC_WHEN_NULL(memory)
 #endif
+
+static void* threadsafe_mem_leak_operator_new (size_t size) UT_THROW(std::bad_alloc)
+{
+    MemLeakScopedLock lock;
+    void* memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewAllocator(), size);
+    UT_THROW_BAD_ALLOC_WHEN_NULL(memory);
+    return memory;
+}
+
+static void* threadsafe_mem_leak_operator_new_nothrow (size_t size) UT_NOTHROW
+{
+    MemLeakScopedLock lock;
+    return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewAllocator(), size);
+}
+
+static void* threadsafe_mem_leak_operator_new_debug (size_t size, const char* file, int line) UT_THROW(std::bad_alloc)
+{
+    MemLeakScopedLock lock;
+    void *memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewAllocator(), size, (char*) file, line);
+    UT_THROW_BAD_ALLOC_WHEN_NULL(memory);
+    return memory;
+}
+
+static void* threadsafe_mem_leak_operator_new_array (size_t size) UT_THROW(std::bad_alloc)
+{
+    MemLeakScopedLock lock;
+    void* memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewArrayAllocator(), size);
+    UT_THROW_BAD_ALLOC_WHEN_NULL(memory);
+    return memory;
+}
+
+static void* threadsafe_mem_leak_operator_new_array_nothrow (size_t size) UT_NOTHROW
+{
+    MemLeakScopedLock lock;
+    return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewArrayAllocator(), size);
+}
+
+static void* threadsafe_mem_leak_operator_new_array_debug (size_t size, const char* file, int line) UT_THROW(std::bad_alloc)
+{
+    MemLeakScopedLock lock;
+    void* memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewArrayAllocator(), size, (char*) file, line);
+    UT_THROW_BAD_ALLOC_WHEN_NULL(memory);
+    return memory;
+}
+
+static void threadsafe_mem_leak_operator_delete (void* mem) UT_NOTHROW
+{
+    MemLeakScopedLock lock;
+    MemoryLeakWarningPlugin::getGlobalDetector()->invalidateMemory((char*) mem);
+    MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(getCurrentNewAllocator(), (char*) mem);
+}
+
+static void threadsafe_mem_leak_operator_delete_array (void* mem) UT_NOTHROW
+{
+    MemLeakScopedLock lock;
+    MemoryLeakWarningPlugin::getGlobalDetector()->invalidateMemory((char*) mem);
+    MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(getCurrentNewArrayAllocator(), (char*) mem);
+}
+
 
 static void* mem_leak_operator_new (size_t size) UT_THROW(std::bad_alloc)
 {
@@ -325,6 +422,23 @@ bool MemoryLeakWarningPlugin::areNewDeleteOverloaded()
     return operator_new_fptr == mem_leak_operator_new;
 #else
     return false;
+#endif
+}
+
+void MemoryLeakWarningPlugin::turnOnThreadSafeNewDeleteOverloads()
+{
+#if CPPUTEST_USE_MEM_LEAK_DETECTION
+    operator_new_fptr = threadsafe_mem_leak_operator_new;
+    operator_new_nothrow_fptr = threadsafe_mem_leak_operator_new_nothrow;
+    operator_new_debug_fptr = threadsafe_mem_leak_operator_new_debug;
+    operator_new_array_fptr = threadsafe_mem_leak_operator_new_array;
+    operator_new_array_nothrow_fptr = threadsafe_mem_leak_operator_new_array_nothrow;
+    operator_new_array_debug_fptr = threadsafe_mem_leak_operator_new_array_debug;
+    operator_delete_fptr = threadsafe_mem_leak_operator_delete;
+    operator_delete_array_fptr = threadsafe_mem_leak_operator_delete_array;
+    malloc_fptr = threadsafe_mem_leak_malloc;
+    realloc_fptr = threadsafe_mem_leak_realloc;
+    free_fptr = threadsafe_mem_leak_free;
 #endif
 }
 

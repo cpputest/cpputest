@@ -75,6 +75,12 @@ void PlatformSpecificFree(void* memory);
 void* PlatformSpecificMemCpy(void* s1, const void* s2, size_t size);
 void* PlatformSpecificMemset(void* mem, int c, size_t size);
 
+typedef void* PlatformSpecificMutex;
+PlatformSpecificMutex PlatformSpecificMutexCreate(void);
+void PlatformSpecificMutexLock(PlatformSpecificMutex mtx);
+void PlatformSpecificMutexUnlock(PlatformSpecificMutex mtx);
+void PlatformSpecificMutexDestroy(PlatformSpecificMutex mtx);
+
 #ifdef __cplusplus
 }
 #endif
