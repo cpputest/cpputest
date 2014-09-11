@@ -33,7 +33,6 @@
 #include "CppUTest/TestMemoryAllocator.h"
 #include "CppUTest/TestTestingFixture.h"
 #include "CppUTest/TestHarness_c.h"
-#include "CppUTestExt/MockSupport.h"
 
 static char* leak1;
 static long* leak2;
