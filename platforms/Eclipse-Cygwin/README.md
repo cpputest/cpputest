@@ -1,10 +1,10 @@
 ##Using the Eclipse-Cygwin Project
 
-This project is for use on the Windows platform. These are the steps required for using it. (If you only wish to compile the CppUTest libraries, it is recommended that you use one the method described at http://cpputest.github.io, rather than setting up Eclipse)
+This project is for use on the Windows platform. These are the steps required for using it. (If you only wish to compile the CppUTest libraries, it is recommended that you use the method described at http://cpputest.github.io, rather than setting up Eclipse).
 
 ###Preparation
 ####1. Install Cygwin
-You need to have Cygwin installed, with at least the Gnu C compiler, make, autotools and libtool. Please follow the instructions at http://cpputest.github.io to build CppUTest from the Cygwin bash prompt.
+You need to have Cygwin installed, with at least the Gnu C\C++ compiler, make, autotools and libtool. Please follow the instructions at http://cpputest.github.io to build CppUTest from the Cygwin bash prompt.
 
 ####2. Set your PATH
 Next, you need to add the path to your Cygwin binaries to your Windows system path, e.g.
@@ -13,9 +13,9 @@ C:\<path_to_Cygwin>\Cygwin\bin
 ```
 
 ####3. Install Eclipse CDT
-Copy Eclipse CDT (Kepler) to your system drive. You may use the 32 bit version as it will work on all systems. Unless you have a specific reason, you do not require the 64 bit version. You may need to install or update your Java JRE and add it to your system path. The JRE needs to match, e.g. 32 bit Eclipse requires the 32 bit JRE.
+Use your existing Eclipse CDT (Juno, Kepler, ...) or unpack the release to your system drive. You may use the 32 bit version as it will work on all systems. Unless you have a specific reason, you do not require the 64 bit version. You may need to install or update your Java JRE and add it to your system path. The JRE needs to match, e.g. 32 bit Eclipse requires the 32 bit JRE.
 
-####4. Install the Eclipse C/C++ plugin
+####4. Install the C/C++Unit plugin
 Open Eclipse. 
 Accept the default workspace for now (you may want to set a more appropriate workspace location later on). Then install the "C/C++ Unit Test" plugin:  
   "Help"->"Install New Software"-> work with "Kepler - http://download.eclipse.org/releases/kepler".  
@@ -33,7 +33,7 @@ While you are at it, you might also want to install:
 ####5. Add the CppUTest plugin
 Clone the [CppUTest Eclipse Test Runner](https://github.com/tcmak/CppUTestEclipseJunoTestRunner) and add it to Eclipse following the instructions there.
 
-###Import the project into Eclipse
+###Import this project into Eclipse
 In Eclipse you can't simply "open" a project - you have to first import it into the workspace:  
  * File->Import...->General->Existing Projects into workspace
  * [Next >]->Select root directory: `<cpputest_dir>/Platforms/Eclipse-Cygwin` 
@@ -41,7 +41,7 @@ In Eclipse you can't simply "open" a project - you have to first import it into 
  * Click Finish.
 
 ###Compile and run tests
-Before you can compile CppUTest in Eclipse, you must configure it using Automake. Instructions can be found at http://cpputest.github.io/. Once you have done this, select a configuration (Libraries, Check, CppUTestTests or CppUTestExtTests) via Project->BuildConfiguration->Set Active>. The Check configuration will build the libraries along with all tests and run the tests.
+Before you can compile CppUTest in Eclipse, you must configure it using Automake. Instructions can be found at http://cpputest.github.io/. Once you have done this, select a configuration (Libraries, Check, CppUTestTests or CppUTestExtTests) via Project->BuildConfiguration->Set Active>. The 'Check' configuration will build the libraries along with all tests and run the tests.
 
 ###Working with the C/C++ Unit plugin
 Make sure your unit test executable has been built and exists, e.g. cpputest_build/CppUTestTests.exe.
