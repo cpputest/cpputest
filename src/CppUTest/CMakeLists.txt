@@ -16,7 +16,6 @@ set(CppUTest_src
         SimpleMutex.cpp
         Utest.cpp
         ../Platforms/${CPP_PLATFORM}/UtestPlatform.cpp
-        ../Platforms/${CPP_PLATFORM}/UtestPlatformMutex.cpp
 )
 
 set(CppUTest_headers

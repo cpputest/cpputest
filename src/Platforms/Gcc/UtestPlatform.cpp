@@ -208,4 +208,36 @@ static int IsNanImplementation(double d)
 
 int (*PlatformSpecificIsNan)(double) = IsNanImplementation;
 
+
+static PlatformSpecificMutex PThreadMutexCreate(void)
+{
+    pthread_mutex_t *mutex = new pthread_mutex_t;
+    
+    pthread_mutex_init(mutex, NULL);
+    
+    return (PlatformSpecificMutex)mutex;
+}
+
+static void PThreadMutexLock(PlatformSpecificMutex mtx)
+{
+    pthread_mutex_lock((pthread_mutex_t *)mtx);
+}
+
+static void PThreadMutexUnlock(PlatformSpecificMutex mtx)
+{
+    pthread_mutex_unlock((pthread_mutex_t *)mtx);
+}
+
+static void PThreadMutexDestroy(PlatformSpecificMutex mtx)
+{
+    pthread_mutex_t *mutex = (pthread_mutex_t *)mtx;
+    pthread_mutex_destroy(mutex);
+    delete mutex;
+}
+
+PlatformSpecificMutex (*PlatformSpecificMutexCreate)(void) = PThreadMutexCreate;
+void (*PlatformSpecificMutexLock)(PlatformSpecificMutex) = PThreadMutexLock;
+void (*PlatformSpecificMutexUnlock)(PlatformSpecificMutex) = PThreadMutexUnlock;
+void (*PlatformSpecificMutexDestroy)(PlatformSpecificMutex) = PThreadMutexDestroy;
+
 }

@@ -49,8 +49,7 @@ lib_libCppUTest_a_SOURCES = \
 	src/CppUTest/TestRegistry.cpp \
 	src/CppUTest/TestResult.cpp \
 	src/CppUTest/Utest.cpp \
-	src/Platforms/$(CPP_PLATFORM)/UtestPlatform.cpp \
-	src/Platforms/$(CPP_PLATFORM)/UtestPlatformMutex.cpp
+	src/Platforms/$(CPP_PLATFORM)/UtestPlatform.cpp
 
 include_cpputestdir = $(includedir)/CppUTest
 

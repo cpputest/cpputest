@@ -34,23 +34,23 @@ static int mutexLockCount = 0;
 static int mutexUnlockCount = 0;
 static int mutexDestroyCount = 0;
 
-PlatformSpecificMutex PlatformSpecificMutexCreate(void)
+static PlatformSpecificMutex StubMutexCreate(void)
 {
     mutexCreateCount++;
     return 0;
 }
 
-void PlatformSpecificMutexLock(PlatformSpecificMutex)
+static void StubMutexLock(PlatformSpecificMutex)
 {
     mutexLockCount++;
 }
 
-void PlatformSpecificMutexUnlock(PlatformSpecificMutex)
+static void StubMutexUnlock(PlatformSpecificMutex)
 {
     mutexUnlockCount++;
 }
 
-void PlatformSpecificMutexDestroy(PlatformSpecificMutex)
+static void StubMutexDestroy(PlatformSpecificMutex)
 {
     mutexDestroyCount++;
 }
@@ -59,12 +59,30 @@ void PlatformSpecificMutexDestroy(PlatformSpecificMutex)
 
 TEST_GROUP(SimpleMutexTest)
 {
+    PlatformSpecificMutex (*backupMutexCreate)(void);
+    void (*backupMutexLock)(PlatformSpecificMutex);
+    void (*backupMutexUnlock)(PlatformSpecificMutex);
+    void (*backupMutexDestroy)(PlatformSpecificMutex);
+
     void setup()
     {
+        backupMutexCreate = PlatformSpecificMutexCreate;
+        backupMutexLock = PlatformSpecificMutexLock;
+        backupMutexUnlock = PlatformSpecificMutexUnlock;
+        backupMutexDestroy = PlatformSpecificMutexDestroy;
+
+        PlatformSpecificMutexCreate = StubMutexCreate;
+        PlatformSpecificMutexLock = StubMutexLock;
+        PlatformSpecificMutexUnlock = StubMutexUnlock;
+        PlatformSpecificMutexDestroy = StubMutexDestroy;
     }
     
     void teardown()
     {
+        PlatformSpecificMutexCreate = backupMutexCreate;
+        PlatformSpecificMutexLock = backupMutexLock;
+        PlatformSpecificMutexUnlock = backupMutexUnlock;
+        PlatformSpecificMutexDestroy = backupMutexDestroy;
     }
 };
 
