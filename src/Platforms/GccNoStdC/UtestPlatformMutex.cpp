@@ -4,6 +4,7 @@
 PlatformSpecificMutex PlatformSpecificMutexCreate(void)
 {
     FAIL("PlatformSpecificMutexCreate is not implemented");
+    return 0;
 }
 
 void PlatformSpecificMutexLock(PlatformSpecificMutex mtx)

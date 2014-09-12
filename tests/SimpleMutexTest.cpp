@@ -26,28 +26,33 @@
  */
 
 #include "CppUTest/TestHarness.h"
-#include "CppUTestExt/MockSupport.h"
 #include "CppUTest/SimpleMutex.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
+int mutexCreateCount = 0;
+int mutexLockCount = 0;
+int mutexUnlockCount = 0;
+int mutexDestroyCount = 0;
+
 PlatformSpecificMutex PlatformSpecificMutexCreate(void)
 {
-    return mock().actualCall("PlatformSpecificMutexCreate").returnPointerValueOrDefault(0);
+    mutexCreateCount++;
+    return 0;
 }
 
 void PlatformSpecificMutexLock(PlatformSpecificMutex)
 {
-    mock().actualCall("PlatformSpecificMutexLock");
+    mutexLockCount++;
 }
 
 void PlatformSpecificMutexUnlock(PlatformSpecificMutex)
 {
-    mock().actualCall("PlatformSpecificMutexUnlock");
+    mutexUnlockCount++;
 }
 
 void PlatformSpecificMutexDestroy(PlatformSpecificMutex)
 {
-    mock().actualCall("PlatformSpecificMutexDestroy");
+    mutexDestroyCount++;
 }
 
 
@@ -60,27 +65,37 @@ TEST_GROUP(SimpleMutexTest)
     
     void teardown()
     {
-        mock().checkExpectations();
-        mock().clear();
     }
 };
 
 TEST(SimpleMutexTest, CreateAndDestroy)
 {
-    mock().expectOneCall("PlatformSpecificMutexCreate");
-    mock().expectOneCall("PlatformSpecificMutexDestroy");
+    int tmpCreateCount = mutexCreateCount;
+    int tmpDestroyCount = mutexDestroyCount;
 
-    SimpleMutex mtx;
+    do {
+        SimpleMutex mtx;
+    } while (0);
+
+    CHECK_EQUAL((tmpCreateCount + 1), mutexCreateCount);
+    CHECK_EQUAL((tmpDestroyCount + 1), mutexDestroyCount);
 }
 
 TEST(SimpleMutexTest, LockUnlockTest)
 {
-    mock().expectOneCall("PlatformSpecificMutexCreate");
-    mock().expectOneCall("PlatformSpecificMutexLock");
-    mock().expectOneCall("PlatformSpecificMutexUnlock");
-    mock().expectOneCall("PlatformSpecificMutexDestroy");
+    int tmpCreateCount = mutexCreateCount;
+    int tmpLockCount = mutexLockCount;
+    int tmpUnlockCount = mutexUnlockCount;
+    int tmpDestroyCount = mutexDestroyCount;
 
-    SimpleMutex mtx;
-    mtx.Lock();
-    mtx.Unlock();
+    do {
+        SimpleMutex mtx;
+        mtx.Lock();
+        mtx.Unlock();
+    } while (0);
+    
+    CHECK_EQUAL((tmpCreateCount + 1), mutexCreateCount);
+    CHECK_EQUAL((tmpLockCount + 1), mutexLockCount);
+    CHECK_EQUAL((tmpUnlockCount + 1), mutexUnlockCount);
+    CHECK_EQUAL((tmpDestroyCount + 1), mutexDestroyCount);
 }

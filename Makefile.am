@@ -127,7 +127,7 @@ endif
 CppUTestTests_CPPFLAGS = $(lib_libCppUTest_a_CPPFLAGS)
 CppUTestTests_CFLAGS = $(lib_libCppUTest_a_CFLAGS)
 CppUTestTests_CXXFLAGS = $(lib_libCppUTest_a_CXXFLAGS) 
-CppUTestTests_LDADD = lib/libCppUTestExt.a lib/libCppUTest.a $(CPPUTEST_LDADD)
+CppUTestTests_LDADD = lib/libCppUTest.a $(CPPUTEST_LDADD)
 CppUTestTests_LDFLAGS = $(AM_LDFLAGS) $(CPPUTEST_LDFLAGS) $(CPPUTEST_ADDITIONAL_LDFLAGS)
 
 CppUTestTests_SOURCES = \
