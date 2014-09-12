@@ -29,10 +29,10 @@
 #include "CppUTest/SimpleMutex.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
-int mutexCreateCount = 0;
-int mutexLockCount = 0;
-int mutexUnlockCount = 0;
-int mutexDestroyCount = 0;
+static int mutexCreateCount = 0;
+static int mutexLockCount = 0;
+static int mutexUnlockCount = 0;
+static int mutexDestroyCount = 0;
 
 PlatformSpecificMutex PlatformSpecificMutexCreate(void)
 {
