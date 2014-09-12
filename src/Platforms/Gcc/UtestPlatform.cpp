@@ -44,6 +44,7 @@
 #ifndef __MINGW32__
 #include <sys/wait.h>
 #endif
+#include <pthread.h>
 
 #include "CppUTest/PlatformSpecificFunctions.h"
 
