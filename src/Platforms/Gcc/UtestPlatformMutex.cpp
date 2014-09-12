@@ -1,5 +1,6 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
+#include <pthread.h>
 
 PlatformSpecificMutex PlatformSpecificMutexCreate(void)
 {
