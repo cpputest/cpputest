@@ -91,9 +91,9 @@ TEST(SimpleMutexTest, CreateAndDestroy)
     int tmpCreateCount = mutexCreateCount;
     int tmpDestroyCount = mutexDestroyCount;
 
-    do {
+    {
         SimpleMutex mtx;
-    } while (0);
+    }
 
     CHECK_EQUAL((tmpCreateCount + 1), mutexCreateCount);
     CHECK_EQUAL((tmpDestroyCount + 1), mutexDestroyCount);
@@ -106,12 +106,12 @@ TEST(SimpleMutexTest, LockUnlockTest)
     int tmpUnlockCount = mutexUnlockCount;
     int tmpDestroyCount = mutexDestroyCount;
 
-    do {
+    {
         SimpleMutex mtx;
         mtx.Lock();
         mtx.Unlock();
-    } while (0);
-    
+    }
+
     CHECK_EQUAL((tmpCreateCount + 1), mutexCreateCount);
     CHECK_EQUAL((tmpLockCount + 1), mutexLockCount);
     CHECK_EQUAL((tmpUnlockCount + 1), mutexUnlockCount);
