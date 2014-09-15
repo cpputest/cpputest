@@ -54,7 +54,7 @@ Once you have run the tests at least once, you should be able to select them by 
 Note that launch configurations have been included with this project; in your own projects, you will need to create these yourself.
 
 This is an example of what a successful test run would look like:  
-![Successful Test Run](https://raw.githubusercontent.com/cpputest.github.io/images/master/images/eclipse-testrunner-01)  
+![Successful Test Run](https://raw.githubusercontent.com/cpputest/cpputest.github.io/master/images/eclipse-testrunner-01.png)  
 You can select and rerun individual tests in the upper pane, and error messages for failed tests will appear in the lower pane.
 ###Troubleshooting
 ####Problem: I am  getting no test results...
