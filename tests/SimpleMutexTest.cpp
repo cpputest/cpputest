@@ -59,30 +59,16 @@ static void StubMutexDestroy(PlatformSpecificMutex)
 
 TEST_GROUP(SimpleMutexTest)
 {
-    PlatformSpecificMutex (*backupMutexCreate)(void);
-    void (*backupMutexLock)(PlatformSpecificMutex);
-    void (*backupMutexUnlock)(PlatformSpecificMutex);
-    void (*backupMutexDestroy)(PlatformSpecificMutex);
-
     void setup()
     {
-        backupMutexCreate = PlatformSpecificMutexCreate;
-        backupMutexLock = PlatformSpecificMutexLock;
-        backupMutexUnlock = PlatformSpecificMutexUnlock;
-        backupMutexDestroy = PlatformSpecificMutexDestroy;
-
-        PlatformSpecificMutexCreate = StubMutexCreate;
-        PlatformSpecificMutexLock = StubMutexLock;
-        PlatformSpecificMutexUnlock = StubMutexUnlock;
-        PlatformSpecificMutexDestroy = StubMutexDestroy;
+        UT_PTR_SET(PlatformSpecificMutexCreate, StubMutexCreate);
+        UT_PTR_SET(PlatformSpecificMutexLock, StubMutexLock);
+        UT_PTR_SET(PlatformSpecificMutexUnlock, StubMutexUnlock);
+        UT_PTR_SET(PlatformSpecificMutexDestroy, StubMutexDestroy);
     }
     
     void teardown()
     {
-        PlatformSpecificMutexCreate = backupMutexCreate;
-        PlatformSpecificMutexLock = backupMutexLock;
-        PlatformSpecificMutexUnlock = backupMutexUnlock;
-        PlatformSpecificMutexDestroy = backupMutexDestroy;
     }
 };
 
