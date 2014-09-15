@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014, YewMing Chen
+ * Copyright (c) 2014, Michael Feathers, James Grenning, Bas Vodde and Chen YewMing
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
