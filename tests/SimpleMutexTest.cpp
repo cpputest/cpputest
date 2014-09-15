@@ -65,6 +65,11 @@ TEST_GROUP(SimpleMutexTest)
         UT_PTR_SET(PlatformSpecificMutexLock, StubMutexLock);
         UT_PTR_SET(PlatformSpecificMutexUnlock, StubMutexUnlock);
         UT_PTR_SET(PlatformSpecificMutexDestroy, StubMutexDestroy);
+
+        mutexCreateCount = 0;
+        mutexDestroyCount = 0;
+        mutexLockCount = 0;
+        mutexUnlockCount = 0;
     }
     
     void teardown()
@@ -74,32 +79,26 @@ TEST_GROUP(SimpleMutexTest)
 
 TEST(SimpleMutexTest, CreateAndDestroy)
 {
-    int tmpCreateCount = mutexCreateCount;
-    int tmpDestroyCount = mutexDestroyCount;
-
     {
         SimpleMutex mtx;
     }
 
-    CHECK_EQUAL((tmpCreateCount + 1), mutexCreateCount);
-    CHECK_EQUAL((tmpDestroyCount + 1), mutexDestroyCount);
+    CHECK_EQUAL(1, mutexCreateCount);
+    CHECK_EQUAL(1, mutexDestroyCount);
+    CHECK_EQUAL(0, mutexLockCount);
+    CHECK_EQUAL(0, mutexUnlockCount);
 }
 
 TEST(SimpleMutexTest, LockUnlockTest)
 {
-    int tmpCreateCount = mutexCreateCount;
-    int tmpLockCount = mutexLockCount;
-    int tmpUnlockCount = mutexUnlockCount;
-    int tmpDestroyCount = mutexDestroyCount;
-
     {
         SimpleMutex mtx;
         mtx.Lock();
         mtx.Unlock();
     }
 
-    CHECK_EQUAL((tmpCreateCount + 1), mutexCreateCount);
-    CHECK_EQUAL((tmpLockCount + 1), mutexLockCount);
-    CHECK_EQUAL((tmpUnlockCount + 1), mutexUnlockCount);
-    CHECK_EQUAL((tmpDestroyCount + 1), mutexDestroyCount);
+    CHECK_EQUAL(1, mutexCreateCount);
+    CHECK_EQUAL(1, mutexLockCount);
+    CHECK_EQUAL(1, mutexUnlockCount);
+    CHECK_EQUAL(1, mutexDestroyCount);
 }
