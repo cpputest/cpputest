@@ -171,6 +171,7 @@
     <ClCompile Include="PluginTest.cpp" />
     <ClCompile Include="PreprocessorTest.cpp" />
     <ClCompile Include="SetPluginTest.cpp" />
+    <ClCompile Include="SimpleMutexTest.cpp" />
     <ClCompile Include="SimpleStringTest.cpp" />
     <ClCompile Include="TestFailureTest.cpp" />
     <ClCompile Include="TestFilterTest.cpp" />

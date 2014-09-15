@@ -167,3 +167,30 @@ int PlatformSpecificVSNprintf(char *str, unsigned int size, const char* format, 
 {
    return _vsnprintf_s( str, size, _TRUNCATE, format, (va_list) args);
 }
+
+static PlatformSpecificMutex DummyMutexCreate(void)
+{
+    FAIL("PlatformSpecificMutexCreate is not implemented");
+    return 0;
+}
+
+static void DummyMutexLock(PlatformSpecificMutex mtx)
+{
+    FAIL("PlatformSpecificMutexLock is not implemented");
+}
+
+static void DummyMutexUnlock(PlatformSpecificMutex mtx)
+{
+    FAIL("PlatformSpecificMutexUnlock is not implemented");
+}
+
+static void DummyMutexDestroy(PlatformSpecificMutex mtx)
+{
+    FAIL("PlatformSpecificMutexDestroy is not implemented");
+}
+
+PlatformSpecificMutex (*PlatformSpecificMutexCreate)(void) = DummyMutexCreate;
+void (*PlatformSpecificMutexLock)(PlatformSpecificMutex) = DummyMutexLock;
+void (*PlatformSpecificMutexUnlock)(PlatformSpecificMutex) = DummyMutexUnlock;
+void (*PlatformSpecificMutexDestroy)(PlatformSpecificMutex) = DummyMutexDestroy;
+
