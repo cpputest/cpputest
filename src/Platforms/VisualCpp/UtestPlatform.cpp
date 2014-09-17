@@ -168,29 +168,32 @@ int PlatformSpecificVSNprintf(char *str, unsigned int size, const char* format, 
    return _vsnprintf_s( str, size, _TRUNCATE, format, (va_list) args);
 }
 
-static PlatformSpecificMutex DummyMutexCreate(void)
+static PlatformSpecificMutex Win32MutexCreate(void)
 {
-    FAIL("PlatformSpecificMutexCreate is not implemented");
-    return 0;
+	CRITICAL_SECTION *critical_section = new CRITICAL_SECTION;
+	InitializeCriticalSection(critical_section);
+	return (PlatformSpecificMutex)critical_section;
 }
 
-static void DummyMutexLock(PlatformSpecificMutex mtx)
+static void Win32MutexLock(PlatformSpecificMutex mutex)
 {
-    FAIL("PlatformSpecificMutexLock is not implemented");
+	EnterCriticalSection((CRITICAL_SECTION*)mutex);
 }
 
-static void DummyMutexUnlock(PlatformSpecificMutex mtx)
+static void Win32MutexUnlock(PlatformSpecificMutex mutex)
 {
-    FAIL("PlatformSpecificMutexUnlock is not implemented");
+	LeaveCriticalSection((CRITICAL_SECTION*)mutex);
 }
 
-static void DummyMutexDestroy(PlatformSpecificMutex mtx)
+static void Win32MutexDestroy(PlatformSpecificMutex mutex)
 {
-    FAIL("PlatformSpecificMutexDestroy is not implemented");
+	CRITICAL_SECTION *critical_section = (CRITICAL_SECTION*)mutex;
+	DeleteCriticalSection(critical_section);
+	delete critical_section;
 }
 
-PlatformSpecificMutex (*PlatformSpecificMutexCreate)(void) = DummyMutexCreate;
-void (*PlatformSpecificMutexLock)(PlatformSpecificMutex) = DummyMutexLock;
-void (*PlatformSpecificMutexUnlock)(PlatformSpecificMutex) = DummyMutexUnlock;
-void (*PlatformSpecificMutexDestroy)(PlatformSpecificMutex) = DummyMutexDestroy;
+PlatformSpecificMutex (*PlatformSpecificMutexCreate)(void) = Win32MutexCreate;
+void (*PlatformSpecificMutexLock)(PlatformSpecificMutex) = Win32MutexLock;
+void (*PlatformSpecificMutexUnlock)(PlatformSpecificMutex) = Win32MutexUnlock;
+void (*PlatformSpecificMutexDestroy)(PlatformSpecificMutex) = Win32MutexDestroy;
 
