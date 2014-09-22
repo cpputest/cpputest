@@ -10,7 +10,9 @@ Requirements:
 4. serial connection to DBGU interface
 
 5. 4 MHz quartz. If else, need to be adjusted in
-  $(CPPUTEST_HOME)/platforms_startup/armcc/AT91SAM7A3/SAM7A3.asm and
+  $(CPPUTEST_HOME)/platforms_startup/armcc/AT91SAM7A3/SAM7A3.asm
+  (for setup PLL and change core clock from IRC to PLL)
+  and
   $(CPPUTEST_HOME)/platforms_startup/armcc/AT91SAM7A3/Retarget.c
   (for _clock_init() function working correctly)
 
@@ -18,11 +20,13 @@ Requirements:
   For debug only.
 
 First, you need to compile CppUTest and target startup library:
-  make -C ../../../platforms/armcc all
-  make -C ../../../platforms_startup/armcc/AT91SAM7A3 all
+  make -C ../../../platforms/armcc
+  make -C ../../../platforms_startup/armcc/AT91SAM7A3
 
 Second, you need to write tests. As example, I use
   $(CPPUTEST_HOME)/examples/AllTests/CircularBufferTest.cpp.
+  All test from $(CPPUTEST_HOME)/examples/AllTests/ needs to many
+  RAM (chip does not have such).
 
 Third, you need to make executable:
   make all
@@ -35,3 +39,17 @@ Project use semihosting, so you may use standard printf() or std::cout << "Hello
 If problems with heap or low memory, adjust heap size in
   $(CPPUTEST_HOME)/platforms_startup/armcc/AT91SAM7A3/SAM7A3.asm
   and rebuild startup library.
+
+Startup library uses standard Keil MDK-ARM license.
+
+Eclipse project is tested in eclipse Kepler, eclipse Luna.
+You need to adjust some environment variables in "C/C++ Build" tab in
+properties window for project.
+"CPPUTEST_HOME" is a path to root of CppUTest
+"KEIL_DIR" is a path to ARM C/C++ compiler
+"PATH" there is need to add path to make.exe
+Eclipse project use plugin "GDB Hardware Debugger" to debug, so for debug
+you may install "GDB Hardware Debugger" and gdb client (from
+GNU ARM Tools Embedded) or create your own debug configuration
+(for exampe, use eclipse plugin from Keil MDK-ARM installation; no need to
+install other plugins and toolchains).
