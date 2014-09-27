@@ -125,7 +125,9 @@ void _clock_init(void)
 
 clock_t clock(void)
 {
-    return AT91F_PITGetPIIR(AT91C_BASE_PITC) >> 20;
+    static clock_t rc = 0;
+    rc += AT91F_PITGetPIVR(AT91C_BASE_PITC) >> 20;
+    return rc;
 }
 
 time_t time(time_t *timer)
@@ -158,20 +160,18 @@ static  void  UART_init(void)
     AT91C_BASE_DBGU->DBGU_CR = AT91C_US_RSTSTA; /* Reset status IRQ */
 }
 
-/*
- * Замена встроенной в Keil MDK-ARM функции, которая создаёт связанный список
- * адресов деструкторов глобальных или статических объектов в "куче" при
- * инициализации окружения.
- * Так как не планируется завершение программы, то ни один такой деструктор не
- * должен вызываться, и можно подменить стандартную версию __aeabi_atexit на
- * другую, которая не будет создавать такой список в "куче".
- * Идея взята отсюда
+/* Replace of default Keil MDK-ARM function to create linked list of
+ * destructor addresses of global or statically created objects. List is
+ * placed in heap at startup.
+ * No exit() is planned to call (exit from main() never take place in
+ * embedded applications). So, it is no need to that list and it is possible
+ * to use less heap memory.
+ * New version of __aeabi_atexit does not create that list. See also
  * http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.faqs/ka3951.html
- * Пример реализации взят отсюда
  * http://infocenter.arm.com/help/topic/com.arm.doc.ihi0041d/IHI0041D_cppabi.pdf
  */
 int __aeabi_atexit(void* object, void (*destroyer)(void*), void* dso_handle)
 {
     return 1;  // 0: failed; non-0: OK
-//    return __cxa_atexit(destroyer, object, dso_handle); /* стандартная версия из Keil MDK-ARM */
+//    return __cxa_atexit(destroyer, object, dso_handle); /* Keil MDK-ARM version */
 }

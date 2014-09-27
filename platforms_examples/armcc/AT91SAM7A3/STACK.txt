@@ -1,3 +1,5 @@
+See objs/app/app.htm for details about stack sizes for functions and call tree.
+
 Stack usage for std::cout << (double) is about 1336 bytes
 
 Stack usage for CppUTest is at least 4368 bytes with call chain:
