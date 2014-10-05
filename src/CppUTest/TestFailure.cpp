@@ -34,7 +34,7 @@
 static SimpleString removeAllPrintableCharactersFrom(const SimpleString& str)
 {
     size_t bufferSize = str.size()+1;
-    char* buffer = (char*) PlatformSpecificMalloc(bufferSize);
+    char* buffer = static_cast<char*>(PlatformSpecificMalloc(bufferSize));
     str.copyToBuffer(buffer, bufferSize);
 
     for (size_t i = 0; i < bufferSize-1; i++)
@@ -49,7 +49,7 @@ static SimpleString removeAllPrintableCharactersFrom(const SimpleString& str)
 static SimpleString addMarkerToString(const SimpleString& str, int markerPos)
 {
     size_t bufferSize = str.size()+1;
-    char* buffer = (char*) PlatformSpecificMalloc(bufferSize);
+    char* buffer = static_cast<char*>(PlatformSpecificMalloc(bufferSize));
     str.copyToBuffer(buffer, bufferSize);
 
     buffer[markerPos] = '^';
@@ -138,7 +138,7 @@ SimpleString TestFailure::createDifferenceAtPosString(const SimpleString& actual
 
     SimpleString paddingForPreventingOutOfBounds (" ", halfOfExtraCharactersWindow);
     SimpleString actualString = paddingForPreventingOutOfBounds + actual + paddingForPreventingOutOfBounds;
-    SimpleString differentString = StringFromFormat("difference starts at position %lu at: <", (unsigned long) position);
+    SimpleString differentString = StringFromFormat("difference starts at position %lu at: <", static_cast<unsigned long>(position));
 
     result += "\n";
     result += StringFromFormat("\t%s%s>\n", differentString.asCharString(), actualString.subString(position, extraCharactersWindow).asCharString());

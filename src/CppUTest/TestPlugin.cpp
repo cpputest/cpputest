@@ -147,7 +147,7 @@ void CppUTestStore(void**function)
 void SetPointerPlugin::postTestAction(UtestShell& /*test*/, TestResult& /*result*/)
 {
     for (int i = pointerTableIndex - 1; i >= 0; i--)
-        *((void**) setlist[i].orig) = setlist[i].orig_value;
+        *static_cast<void**>(setlist[i].orig) = setlist[i].orig_value;
     pointerTableIndex = 0;
 }
 

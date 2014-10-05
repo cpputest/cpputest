@@ -119,7 +119,7 @@ static long TimeInMillisImplementation()
     struct timeval tv;
     struct timezone tz;
     gettimeofday(&tv, &tz);
-    return (tv.tv_sec * 1000) + (long)((double)tv.tv_usec * 0.001);
+    return (tv.tv_sec * 1000) + static_cast<long>(static_cast<double>(tv.tv_usec) * 0.001);
 }
 
 long (*GetPlatformSpecificTimeInMillis)() = TimeInMillisImplementation;
@@ -153,12 +153,12 @@ PlatformSpecificFile PlatformSpecificFOpen(const char* filename, const char* fla
 
 void PlatformSpecificFPuts(const char* str, PlatformSpecificFile file)
 {
-   fputs(str, (FILE*)file);
+   fputs(str, static_cast<FILE*>(file));
 }
 
 void PlatformSpecificFClose(PlatformSpecificFile file)
 {
-   fclose((FILE*)file);
+   fclose(static_cast<FILE*>(file));
 }
 
 void PlatformSpecificFlush()
@@ -204,7 +204,7 @@ double PlatformSpecificFabs(double d)
 
 static int IsNanImplementation(double d)
 {
-    return isnan((float)d);
+    return isnan(static_cast<float>(d));
 }
 
 int (*PlatformSpecificIsNan)(double) = IsNanImplementation;
@@ -216,22 +216,22 @@ static PlatformSpecificMutex PThreadMutexCreate(void)
     
     pthread_mutex_init(mutex, NULL);
     
-    return (PlatformSpecificMutex)mutex;
+    return static_cast<PlatformSpecificMutex>(mutex);
 }
 
 static void PThreadMutexLock(PlatformSpecificMutex mtx)
 {
-    pthread_mutex_lock((pthread_mutex_t *)mtx);
+    pthread_mutex_lock(static_cast<pthread_mutex_t *>(mtx));
 }
 
 static void PThreadMutexUnlock(PlatformSpecificMutex mtx)
 {
-    pthread_mutex_unlock((pthread_mutex_t *)mtx);
+    pthread_mutex_unlock(static_cast<pthread_mutex_t *>(mtx));
 }
 
 static void PThreadMutexDestroy(PlatformSpecificMutex mtx)
 {
-    pthread_mutex_t *mutex = (pthread_mutex_t *)mtx;
+    pthread_mutex_t *mutex = static_cast<pthread_mutex_t *>(mtx);
     pthread_mutex_destroy(mutex);
     delete mutex;
 }

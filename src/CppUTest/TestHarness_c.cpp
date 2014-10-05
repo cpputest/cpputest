@@ -37,7 +37,7 @@ extern "C"
 
 void CHECK_EQUAL_C_INT_LOCATION(int expected, int actual, const char* fileName, int lineNumber)
 {
-    UtestShell::getCurrent()->assertLongsEqual((long)expected, (long)actual,  fileName, lineNumber, TestTerminatorWithoutExceptions());
+    UtestShell::getCurrent()->assertLongsEqual(static_cast<long>(expected), static_cast<long>(actual),  fileName, lineNumber, TestTerminatorWithoutExceptions());
 }
 
 void CHECK_EQUAL_C_REAL_LOCATION(double expected, double actual, double threshold, const char* fileName, int lineNumber)

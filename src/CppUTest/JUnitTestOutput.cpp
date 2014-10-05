@@ -167,7 +167,7 @@ void JUnitTestOutput::writeTestSuiteSummery()
                             impl_->results_.failureCount_,
                             impl_->results_.group_.asCharString(),
                             impl_->results_.testCount_,
-                            (int) (impl_->results_.groupExecTime_ / 1000), (int) (impl_->results_.groupExecTime_ % 1000),
+                            static_cast<int>(impl_->results_.groupExecTime_ / 1000), static_cast<int>(impl_->results_.groupExecTime_ % 1000),
                             GetPlatformSpecificTimeString());
     writeToFile(buf.asCharString());
 }
@@ -187,7 +187,7 @@ void JUnitTestOutput::writeTestCases()
                 impl_->package_.asCharString(),
                 impl_->package_.isEmpty() == true ? "" : ".",
                 impl_->results_.group_.asCharString(),
-                cur->name_.asCharString(), (int) (cur->execTime_ / 1000), (int)(cur->execTime_ % 1000));
+                cur->name_.asCharString(), static_cast<int>(cur->execTime_ / 1000), static_cast<int>(cur->execTime_ % 1000));
         writeToFile(buf.asCharString());
 
         if (cur->failure_) {
