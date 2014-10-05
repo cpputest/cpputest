@@ -81,17 +81,17 @@ extern "C" {
 
     static void helperDoTestSetup(void* data)
     {
-        ((Utest*)data)->setup();
+        (static_cast<Utest*>(data))->setup();
     }
 
     static void helperDoTestBody(void* data)
     {
-        ((Utest*)data)->testBody();
+        (static_cast<Utest*>(data))->testBody();
     }
 
     static void helperDoTestTeardown(void* data)
     {
-        ((Utest*)data)->teardown();
+        (static_cast<Utest*>(data))->teardown();
     }
 
     struct HelperTestRunInfo
@@ -105,7 +105,7 @@ extern "C" {
 
     static void helperDoRunOneTestInCurrentProcess(void* data)
     {
-        HelperTestRunInfo* runInfo = (HelperTestRunInfo*) data;
+        HelperTestRunInfo* runInfo = static_cast<HelperTestRunInfo*>(data);
 
         UtestShell* shell = runInfo->shell_;
         TestPlugin* plugin = runInfo->plugin_;
@@ -116,7 +116,7 @@ extern "C" {
 
     static void helperDoRunOneTestSeperateProcess(void* data)
     {
-        HelperTestRunInfo* runInfo = (HelperTestRunInfo*) data;
+        HelperTestRunInfo* runInfo = static_cast<HelperTestRunInfo*>(data);
 
         UtestShell* shell = runInfo->shell_;
         TestPlugin* plugin = runInfo->plugin_;
@@ -149,7 +149,7 @@ UtestShell::~UtestShell()
 
 static void defaultCrashMethod()
 {
-    UtestShell* ptr = (UtestShell*) 0x0; ptr->countTests();
+    UtestShell* ptr = static_cast<UtestShell*>(0x0); ptr->countTests();
 }
 
 static void (*pleaseCrashMeRightNow) () = defaultCrashMethod;

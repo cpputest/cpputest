@@ -82,12 +82,12 @@ int SimpleString::StrCmp(const char* s1, const char* s2)
 {
    while(*s1 && *s1 == *s2)
        s1++, s2++;
-   return *(unsigned char *) s1 - *(unsigned char *) s2;
+   return *reinterpret_cast<unsigned char *>(const_cast<char *>(s1)) - *reinterpret_cast<unsigned char *>(const_cast<char *>(s2));
 }
 
 size_t SimpleString::StrLen(const char* str)
 {
-    size_t n = (size_t)-1;
+    size_t n = static_cast<size_t>(-1);
     do n++; while (*str++);
     return n;
 }
@@ -97,7 +97,7 @@ int SimpleString::StrNCmp(const char* s1, const char* s2, size_t n)
     while (n && *s1 && *s1 == *s2) {
         n--, s1++, s2++;
     }
-    return n ? *(unsigned char *) s1 - *(unsigned char *) s2 : 0;
+    return n ? *reinterpret_cast<unsigned char *>(const_cast<char *>(s1)) - *reinterpret_cast<unsigned char *>(const_cast<char *>(s2)) : 0;
 }
 
 char* SimpleString::StrNCpy(char* s1, const char* s2, size_t n)
@@ -113,16 +113,16 @@ char* SimpleString::StrNCpy(char* s1, const char* s2, size_t n)
 
 char* SimpleString::StrStr(const char* s1, const char* s2)
 {
-    if(!*s2) return (char*) s1;
+    if(!*s2) return const_cast<char*>(s1);
     for (; *s1; s1++)
         if (StrNCmp(s1, s2, StrLen(s2)) == 0)
-            return (char*) s1;
+            return const_cast<char*>(s1);
     return NULL;
 }
 
 char SimpleString::ToLower(char ch)
 {
-    return isUpper(ch) ? (char)((int)ch + ('a' - 'A')) : ch;
+    return isUpper(ch) ? static_cast<char>((static_cast<int>(ch) + ('a' - 'A'))) : ch;
 }
 
 SimpleString::SimpleString(const char *otherBuffer)
@@ -212,7 +212,7 @@ void SimpleString::split(const SimpleString& delimiter, SimpleStringCollection& 
     for (size_t i = 0; i < num; ++i) {
         prev = str;
         str = StrStr(str, delimiter.buffer_) + 1;
-        size_t len = (size_t) (str - prev) + 1;
+        size_t len = static_cast<size_t>(str - prev) + 1;
         col[i].buffer_ = copyToNewBuffer(prev, len);
     }
     if (extraEndToken) {
@@ -372,7 +372,7 @@ int SimpleString::findFrom(size_t starting_position, char ch) const
 {
     size_t length = size();
     for (size_t i = starting_position; i < length; i++)
-        if (buffer_[i] == ch) return (int) i;
+        if (buffer_[i] == ch) return static_cast<int>(i);
     return -1;
 }
 
@@ -381,10 +381,10 @@ SimpleString SimpleString::subStringFromTill(char startChar, char lastExcludedCh
     int beginPos = find(startChar);
     if (beginPos < 0) return "";
 
-    int endPos = findFrom((size_t)beginPos, lastExcludedChar);
-    if (endPos == -1) return subString((size_t)beginPos, size());
+    int endPos = findFrom(static_cast<size_t>(beginPos), lastExcludedChar);
+    if (endPos == -1) return subString(static_cast<size_t>(beginPos), size());
 
-    return subString((size_t)beginPos, (size_t) (endPos - beginPos));
+    return subString(static_cast<size_t>(beginPos), static_cast<size_t>(endPos - beginPos));
 }
 
 char* SimpleString::copyToNewBuffer(const char* bufferToCopy, size_t bufferSize)
@@ -469,7 +469,7 @@ static long convertPointerToLongValue(const void* value)
      * This isn't the right way to convert pointers values and need to change by implementing a
      * proper portable way to convert pointers to strings.
      */
-    long* long_value = (long*) &value;
+    long* long_value = reinterpret_cast<long*>(&value);
     return *long_value;
 }
 
@@ -541,7 +541,7 @@ SimpleString VStringFromFormat(const char* format, va_list args)
     char defaultBuffer[sizeOfdefaultBuffer];
     SimpleString resultString;
 
-    size_t size = (size_t)PlatformSpecificVSNprintf(defaultBuffer, sizeOfdefaultBuffer, format, args);
+    size_t size = static_cast<size_t>(PlatformSpecificVSNprintf(defaultBuffer, sizeOfdefaultBuffer, format, args));
     if (size < sizeOfdefaultBuffer) {
         resultString = SimpleString(defaultBuffer);
     }
