@@ -34,6 +34,7 @@ else (MSVC)
         Wsign-conversion
         Wno-padded
         Wno-disabled-macro-expansion
+        Wno-old-style-cast
         )
 
     if (NOT GMOCK AND NOT REAL_GTEST)
