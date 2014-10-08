@@ -200,6 +200,14 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CXXWARN
 CXXFLAGS="$saved_cxxflags"
 AC_LANG_POP
 
+# FLag -Wno-old-style-cast.
+AC_LANG_PUSH([C++])
+CXXFLAGS="-Werror -Wno-old-style-cast"
+AC_MSG_CHECKING([whether CXX supports -Wno-old-style-cast])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wno-old-style-cast" ], [AC_MSG_RESULT([no])])
+CXXFLAGS="$saved_cxxflags"
+AC_LANG_POP
+
 # FLag --coverage
 AC_LANG_PUSH([C++])
 CXXFLAGS="-Werror --coverage"
