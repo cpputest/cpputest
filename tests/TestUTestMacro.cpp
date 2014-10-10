@@ -80,10 +80,10 @@ TEST(UnitTestMacros, FAILWillPrintTheFileThatItFailed)
 
 TEST(UnitTestMacros, FAILBehavesAsAProperMacro)
 {
-    if (this == 0) FAIL("")
+    if (false) FAIL("")
     else CHECK(true)
 
-    if (this != 0) CHECK(true)
+    if (true) CHECK(true)
     else FAIL("")
 }
 
@@ -106,7 +106,7 @@ TEST(UnitTestMacros, FailureWithCHECK)
 
 TEST(UnitTestMacros, CHECKBehavesAsProperMacro)
 {
-    if (this == 0) CHECK(false)
+    if (false) CHECK(false)
     else CHECK(true)
 }
 
@@ -124,7 +124,7 @@ TEST(UnitTestMacros, FailureWithCHECK_TEXT)
 
 TEST(UnitTestMacros, CHECK_TEXTBehavesAsProperMacro)
 {
-    if (this == 0) CHECK_TEXT(false, "false")
+    if (false) CHECK_TEXT(false, "false")
     else CHECK_TEXT(true, "true")
 }
 
@@ -147,7 +147,7 @@ TEST(UnitTestMacros, FailureWithCHECK_TRUE)
 
 TEST(UnitTestMacros, CHECK_TRUEBehavesAsProperMacro)
 {
-    if (this == 0) CHECK_TRUE(false)
+    if (false) CHECK_TRUE(false)
     else CHECK_TRUE(true)
 }
 
@@ -170,7 +170,7 @@ TEST(UnitTestMacros, FailureWithCHECK_FALSE)
 
 TEST(UnitTestMacros, CHECK_FALSEBehavesAsProperMacro)
 {
-    if (this == 0) CHECK_FALSE(true)
+    if (false) CHECK_FALSE(true)
     else CHECK_FALSE(false)
 }
 
@@ -235,7 +235,7 @@ TEST(UnitTestMacros, failing_CHECK_EQUAL_withParamatersThatDontChangeWillNotGive
 
 TEST(UnitTestMacros, CHECK_EQUALBehavesAsProperMacro)
 {
-    if (this == 0) CHECK_EQUAL(1, 2)
+    if (false) CHECK_EQUAL(1, 2)
     else CHECK_EQUAL(1, 1)
 }
 
@@ -258,7 +258,7 @@ TEST(UnitTestMacros, FailureWithSTRCMP_CONTAINS)
 
 TEST(UnitTestMacros, STRCMP_CONTAINSBehavesAsProperMacro)
 {
-    if (this == 0) STRCMP_CONTAINS("1", "2")
+    if (false) STRCMP_CONTAINS("1", "2")
     else STRCMP_CONTAINS("1", "1")
 }
 
@@ -281,7 +281,7 @@ TEST(UnitTestMacros, FailureWithSTRCMP_NOCASE_CONTAINS)
 
 TEST(UnitTestMacros, STRCMP_NOCASE_CONTAINSBehavesAsProperMacro)
 {
-    if (this == 0) STRCMP_NOCASE_CONTAINS("never", "executed")
+    if (false) STRCMP_NOCASE_CONTAINS("never", "executed")
     else STRCMP_NOCASE_CONTAINS("hello", "HELLO WORLD")
 }
 
@@ -305,7 +305,7 @@ TEST(UnitTestMacros, FailurePrintHexOutputForLongInts)
 
 TEST(UnitTestMacros, LONGS_EQUALBehavesAsProperMacro)
 {
-    if (this == 0) LONGS_EQUAL(1, 2)
+    if (false) LONGS_EQUAL(1, 2)
     else LONGS_EQUAL(10, 10)
 }
 
@@ -328,7 +328,7 @@ TEST(UnitTestMacros, FailureWithBYTES_EQUAL)
 
 TEST(UnitTestMacros, BYTES_EQUALBehavesAsProperMacro)
 {
-    if (this == 0) BYTES_EQUAL('a', 'b')
+    if (false) BYTES_EQUAL('a', 'b')
     else BYTES_EQUAL('c', 'c')
 }
 
@@ -352,7 +352,7 @@ TEST(UnitTestMacros, FailurePrintHexOutputForPointers)
 
 TEST(UnitTestMacros, POINTERS_EQUALBehavesAsProperMacro)
 {
-    if (this == 0) POINTERS_EQUAL(0, (void*) 0xbeefbeef)
+    if (false) POINTERS_EQUAL(0, (void*) 0xbeefbeef)
     else POINTERS_EQUAL((void*)0xdeadbeef, (void*)0xdeadbeef)
 }
 
@@ -376,7 +376,7 @@ TEST(UnitTestMacros, FailureWithDOUBLES_EQUAL)
 
 TEST(UnitTestMacros, DOUBLES_EQUALBehavesAsProperMacro)
 {
-    if (this == 0) DOUBLES_EQUAL(0.0, 1.1, 0.0005)
+    if (false) DOUBLES_EQUAL(0.0, 1.1, 0.0005)
     else DOUBLES_EQUAL(0.1, 0.2, 0.2)
 }
 
