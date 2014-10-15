@@ -259,6 +259,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\SimpleMutexTest.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\SimpleStringTest.cpp"
 				>
 			</File>

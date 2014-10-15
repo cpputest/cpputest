@@ -219,6 +219,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\CppUTest\SimpleMutex.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\src\CppUTest\SimpleString.cpp"
 				>
 			</File>
@@ -369,6 +373,10 @@
 			</File>
 			<File
 				RelativePath=".\include\CppUTest\PlatformSpecificFunctions.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTest\SimpleMutex.h"
 				>
 			</File>
 			<File
