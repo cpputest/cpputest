@@ -36,24 +36,30 @@
 
 #if CPPUTEST_USE_MEM_LEAK_DETECTION
 
-#define MEMLEAK_SCOPED_MUTEX ScopedMutexLock lock(MemoryLeakWarningPlugin::getGlobalDetector()->getMutex())
+class MemLeakScopedMutex
+{
+public:
+    MemLeakScopedMutex() : lock(MemoryLeakWarningPlugin::getGlobalDetector()->getMutex()) { }
+private:
+    ScopedMutexLock lock;
+};
 
 static void* threadsafe_mem_leak_malloc(size_t size, const char* file, int line)
 {
-    MEMLEAK_SCOPED_MUTEX;
+    MemLeakScopedMutex lock;
     return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentMallocAllocator(), size, file, line, true);
 }
 
 static void threadsafe_mem_leak_free(void* buffer, const char* file, int line)
 {
-    MEMLEAK_SCOPED_MUTEX;
+    MemLeakScopedMutex lock;
     MemoryLeakWarningPlugin::getGlobalDetector()->invalidateMemory((char*) buffer);
     MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(getCurrentMallocAllocator(), (char*) buffer, file, line, true);
 }
 
 static void* threadsafe_mem_leak_realloc(void* memory, size_t size, const char* file, int line)
 {
-    MEMLEAK_SCOPED_MUTEX;
+    MemLeakScopedMutex lock;
     return MemoryLeakWarningPlugin::getGlobalDetector()->reallocMemory(getCurrentMallocAllocator(), (char*) memory, size, file, line, true);
 }
 
@@ -129,7 +135,7 @@ void cpputest_free_location_with_leak_detection(void* buffer, const char* file, 
 
 static void* threadsafe_mem_leak_operator_new (size_t size) UT_THROW(std::bad_alloc)
 {
-    MEMLEAK_SCOPED_MUTEX;
+    MemLeakScopedMutex lock;
     void* memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewAllocator(), size);
     UT_THROW_BAD_ALLOC_WHEN_NULL(memory);
     return memory;
@@ -137,13 +143,13 @@ static void* threadsafe_mem_leak_operator_new (size_t size) UT_THROW(std::bad_al
 
 static void* threadsafe_mem_leak_operator_new_nothrow (size_t size) UT_NOTHROW
 {
-    MEMLEAK_SCOPED_MUTEX;
+    MemLeakScopedMutex lock;
     return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewAllocator(), size);
 }
 
 static void* threadsafe_mem_leak_operator_new_debug (size_t size, const char* file, int line) UT_THROW(std::bad_alloc)
 {
-    MEMLEAK_SCOPED_MUTEX;
+    MemLeakScopedMutex lock;
     void *memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewAllocator(), size, (char*) file, line);
     UT_THROW_BAD_ALLOC_WHEN_NULL(memory);
     return memory;
@@ -151,7 +157,7 @@ static void* threadsafe_mem_leak_operator_new_debug (size_t size, const char* fi
 
 static void* threadsafe_mem_leak_operator_new_array (size_t size) UT_THROW(std::bad_alloc)
 {
-    MEMLEAK_SCOPED_MUTEX;
+    MemLeakScopedMutex lock;
     void* memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewArrayAllocator(), size);
     UT_THROW_BAD_ALLOC_WHEN_NULL(memory);
     return memory;
@@ -159,13 +165,13 @@ static void* threadsafe_mem_leak_operator_new_array (size_t size) UT_THROW(std::
 
 static void* threadsafe_mem_leak_operator_new_array_nothrow (size_t size) UT_NOTHROW
 {
-    MEMLEAK_SCOPED_MUTEX;
+    MemLeakScopedMutex lock;
     return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewArrayAllocator(), size);
 }
 
 static void* threadsafe_mem_leak_operator_new_array_debug (size_t size, const char* file, int line) UT_THROW(std::bad_alloc)
 {
-    MEMLEAK_SCOPED_MUTEX;
+    MemLeakScopedMutex lock;
     void* memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewArrayAllocator(), size, (char*) file, line);
     UT_THROW_BAD_ALLOC_WHEN_NULL(memory);
     return memory;
@@ -173,14 +179,14 @@ static void* threadsafe_mem_leak_operator_new_array_debug (size_t size, const ch
 
 static void threadsafe_mem_leak_operator_delete (void* mem) UT_NOTHROW
 {
-    MEMLEAK_SCOPED_MUTEX;
+    MemLeakScopedMutex lock;
     MemoryLeakWarningPlugin::getGlobalDetector()->invalidateMemory((char*) mem);
     MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(getCurrentNewAllocator(), (char*) mem);
 }
 
 static void threadsafe_mem_leak_operator_delete_array (void* mem) UT_NOTHROW
 {
-    MEMLEAK_SCOPED_MUTEX;
+    MemLeakScopedMutex lock;
     MemoryLeakWarningPlugin::getGlobalDetector()->invalidateMemory((char*) mem);
     MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(getCurrentNewArrayAllocator(), (char*) mem);
 }
