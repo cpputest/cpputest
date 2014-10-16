@@ -42,5 +42,13 @@ private:
 };
 
 
+class ScopedMutexLock
+{
+public:
+    ScopedMutexLock(SimpleMutex *);
+    ~ScopedMutexLock(void);
+private:
+    SimpleMutex * mutex;
+};
 
 #endif

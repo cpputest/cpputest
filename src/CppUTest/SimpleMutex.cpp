@@ -49,4 +49,15 @@ void SimpleMutex::Unlock(void)
 }
 
 
+ScopedMutexLock::ScopedMutexLock(SimpleMutex *mtx) :
+    mutex(mtx)
+{
+    mutex->Lock();
+}
+
+ScopedMutexLock::~ScopedMutexLock()
+{
+    mutex->Unlock();
+}
+
 

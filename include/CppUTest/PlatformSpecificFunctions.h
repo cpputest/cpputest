@@ -38,7 +38,7 @@ void PlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* pl
  * This enables porting to different embedded platforms.
  *
  */
-
+ 
 #include "CppUTest/PlatformSpecificFunctions_c.h"
 
 #endif
