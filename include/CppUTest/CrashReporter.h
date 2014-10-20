@@ -36,30 +36,31 @@
 
 #include "Utest.h"
 #include "SimpleString.h"
+#include "CppUTest/TestOutput.h"
 
 class CrashReporter
 {
 public:
 	static CrashReporter* getInstance();
 	void updateCurrentTest(const UtestShell* Test);
-
-    struct Test {
-    	SimpleString name;
-    	SimpleString group;
-    	SimpleString file;
-    	int lineNumber;
-    };
+	void setOutput(TestOutput* output);
 
 private:
 
-    Test currentTest; // TODO: initialize currentTest in constructor
 	~CrashReporter();
 	CrashReporter(); // private constructor
 	void initSignalHandlers();
 	void destroySignalHandlers();
 	static void signalHandler(int signal);
-	void printEclipseCrash(int signal);
+	void printfCrash(int signal);
+	void printCrashMessage(int signal);
+	SimpleString signalCrashMessage(int signal);
+	void printStackTrace();
+	bool validTest(const UtestShell* Test);
+	bool validConsoleOutput(TestOutput* output);
 
+	const UtestShell* currentTest;
+	TestOutput* consoleOutput;
 	static CrashReporter* singleCrashReporter;
 };
 
