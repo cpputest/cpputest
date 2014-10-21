@@ -31,42 +31,9 @@
     Target(s):  ISO/IEC 14882:2003 (C++03)
     ------------------------------------------------------------------------- */
 
-#ifndef D_CrashReporter_H
-#define D_CrashReporter_H
+#ifndef D_STLlist_H
+#define D_STLlist_H
 
-#include "Utest.h"
-#include "SimpleString.h"
-#include "CppUTest/TestOutput.h"
-// map is included in
-class CrashReporter
-{
-public:
-	static CrashReporter* getInstance();
-	void updateCurrentTest(const UtestShell* Test);
-	void setOutput(TestOutput* output);
-
-private:
-
-	~CrashReporter();
-	CrashReporter();
-
-	void initSignalHandlers();
-	void updateSignalHandlers(struct sigaction* sa);
-	void destroySignalHandlers();
-	static void signalHandler(int signal);
-	SimpleString signalName(int signal);
-	bool validTest(const UtestShell* Test);
-	bool validProgramOutput(TestOutput* output);
-	void printCrashMessage();
-	void printCrashMessageConsoleOutput();
-	void printCrashMessageProgramOutput();
-	void initSignalMap();
-
-	std::map<int, SimpleString> signalMap;
-	const UtestShell* currentTest;
-	TestOutput* programOutput;
-	SimpleString crashSignalName;
-	static CrashReporter* singleCrashReporter;
-};
+#include <map>
 
 #endif

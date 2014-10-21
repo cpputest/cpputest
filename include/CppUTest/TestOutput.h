@@ -83,8 +83,6 @@ protected:
 	void printFailureInTest(SimpleString testName);
 	void printFailureMessage(SimpleString reason);
 	void printErrorInFileOnLineFormattedForWorkingEnvironment(SimpleString testFile, int lineNumber);
-	void printCrashInTest(SimpleString testName);
-
 
 	TestOutput(const TestOutput&);
 	TestOutput& operator=(const TestOutput&);

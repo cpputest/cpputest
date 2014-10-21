@@ -236,25 +236,21 @@ void TestOutput::printVistualStudioErrorInFileOnLine(SimpleString file, int line
 	print(" error:");
 }
 
-void TestOutput::printCrashMessage(const UtestShell* Test, SimpleString crashMessage)
+void TestOutput::printCrashMessage(const UtestShell* Test, SimpleString signalName)
 {
 	printErrorInFileOnLineFormattedForWorkingEnvironment(Test->getFile(), Test->getLineNumber());
+	print(" Crashed with signal ");
+	print(signalName.asCharString());
+	print(" running test ");
 	print((Test->getFormattedName()).asCharString());
-	print(crashMessage.asCharString());
 	print("\n\n");
 }
 
-void TestOutput::printCrashMessage(SimpleString crashMessage)
+void TestOutput::printCrashMessage(SimpleString signalName)
 {
-	print("Unknown Test ");
-	print(crashMessage.asCharString());
+	print("Crash during Unknown Test with crash signal ");
+	print(signalName.asCharString());
 	print("\n\n");
-}
-
-void TestOutput::printCrashInTest(SimpleString testName)
-{
-	print(" Crash in ");
-	print(testName.asCharString());
 }
 
 void ConsoleTestOutput::printBuffer(const char* s)

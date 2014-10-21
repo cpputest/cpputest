@@ -18,7 +18,7 @@
  * files *before* this file too.
  *
  */
-
+#include "CppUTest/STLlist.h"
 #include "CppUTestConfig.h"
 
 #if CPPUTEST_USE_MEM_LEAK_DETECTION
