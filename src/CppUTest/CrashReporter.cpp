@@ -37,40 +37,32 @@
 #include "CppUTest/CrashReporter.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 #include <signal.h>
-#include <execinfo.h> // TODO: extern
-#include <stdio.h>
+#include <iostream>
 
 CrashReporter* CrashReporter::singleCrashReporter = NULL;
 
 CrashReporter* CrashReporter::getInstance()
 {
-	if (singleCrashReporter == NULL)
-	{
+	if (singleCrashReporter == NULL) {
 		static CrashReporter singleCrashReporter;
 		return &singleCrashReporter;
+	} else {
+	    return singleCrashReporter;
 	}
-	return singleCrashReporter;
 }
 
 CrashReporter::CrashReporter()
 {
 	initSignalMap();
 	initSignalHandlers();
-	programOutput = NULL;
+	testRunnerOutput = NULL;
 	currentTest = NULL;
 }
 
 CrashReporter::~CrashReporter()
 {
 	destroySignalHandlers();
-	singleCrashReporter = NULL;// TODO: is this necessary?
-}
-
-void CrashReporter::destroySignalHandlers()
-{
-	struct sigaction sa;
-	sa.sa_handler = SIG_DFL;
-	updateSignalHandlers(&sa);
+	singleCrashReporter = NULL;
 }
 
 void CrashReporter::initSignalMap()
@@ -83,102 +75,88 @@ void CrashReporter::initSignalMap()
 	signalMap[SIGTERM] = "SIGTERM";
 }
 
+void CrashReporter::initSignalHandlers()
+{
+    struct sigaction sa;
+    sa.sa_handler = signalHandler;
+    updateSignalHandlers(&sa);
+}
+
+void CrashReporter::destroySignalHandlers()
+{
+	struct sigaction sa;
+	sa.sa_handler = SIG_DFL;
+	updateSignalHandlers(&sa);
+}
+
 void CrashReporter::updateSignalHandlers(struct sigaction* sa)
 {
-	for (std::map<int,SimpleString>::iterator i = signalMap.begin(); i != signalMap.end(); i++)
-	{
+	for (std::map<int,SimpleString>::iterator i = signalMap.begin(); i != signalMap.end(); i++) {
 		sigaction(i->first, sa, NULL);
 	}
 }
 
-void CrashReporter::initSignalHandlers()
-{
-	struct sigaction sa;
-	sa.sa_handler = signalHandler;
-	updateSignalHandlers(&sa);
-}
-
 void CrashReporter::signalHandler(int signalID)
 {
-	getInstance()->crashSignalName = getInstance()->signalName(signalID);
+	getInstance()->crashSignalName = getInstance()->signalMap[signalID];
 	getInstance()->printCrashMessage();
 	signal(signalID, SIG_DFL);
 	raise(signalID);
 }
 
-SimpleString CrashReporter::signalName(int signal) {
-	return signalMap[signal];
-}
-
-void CrashReporter::updateCurrentTest(const UtestShell* Test) {
+void CrashReporter::setCurrentTest(const UtestShell* Test) {
      currentTest = Test;
 }
 
 void CrashReporter::setOutput(TestOutput* output)
 {
-	programOutput = output;
+	testRunnerOutput = output;
 }
 
 bool CrashReporter::validTest(const UtestShell* Test){
-	if (Test == NULL) // TODO: add in check for Test getting corrupted during crash
-	{
+	if (Test == NULL) {
 		return false;
+	} else {
+	    return true;
 	}
-	return true;
 }
 
-bool CrashReporter::validProgramOutput(TestOutput* output){
-	if (output == NULL) // TODO: add in check for output getting corrupted from crash
-	{
+bool CrashReporter::validOutput(TestOutput* output){
+	if (output == NULL) {
 		return false;
+	} else {
+	    return true;
 	}
-	return true;
 }
 
 void CrashReporter::printCrashMessage()
 {
-	programOutput = NULL;
-	if (validProgramOutput(programOutput))
-	{
-		printCrashMessageProgramOutput();
-	}
-	else
-	{
+    if (validOutput(testRunnerOutput)) {
+		printCrashMessageTestRunnerOutput();
+	} else {
 		printCrashMessageConsoleOutput();
 	}
 }
 
-void CrashReporter::printCrashMessageProgramOutput()
+void CrashReporter::printCrashMessageTestRunnerOutput()
 {
-	if (validTest(currentTest))
-	{
-		programOutput->printCrashMessage(currentTest, crashSignalName);
-	}
-	else
-	{
-		programOutput->printCrashMessage(crashSignalName);
-
+	if (validTest(currentTest)) {
+		testRunnerOutput->printCrashMessage(currentTest, crashSignalName);
+	} else {
+		testRunnerOutput->printCrashMessage(crashSignalName);
 	}
 }
 
 void CrashReporter::printCrashMessageConsoleOutput()
 {
-	if (validTest(currentTest))
-	{
-		printf("\n\n %s:%d: error: ", currentTest->getFile().asCharString(), currentTest->getLineNumber());
-		printf(" Crashed with signal ");
-		printf("%s", crashSignalName.asCharString());
-		printf(" running test ");
-		printf("%s", (currentTest->getFormattedName()).asCharString());
-		printf("\n\n");
+	if (validTest(currentTest)) {
+		std::cout << "\n " << currentTest->getFile().asCharString() << ":"
+			<< currentTest->getLineNumber() << ": error: "
+			<< "Crashed with signal " << crashSignalName.asCharString()
+			<< " running test " << currentTest->getFormattedName().asCharString() << "\n\n";
+	} else {
+		std::cout << "\nCrashed with signal " << crashSignalName.asCharString()
+			 << " running unknown test.\n\n";
 	}
-	else
-	{
-		printf("Crash during Unknown Test with crash signal ");
-		printf("%s", crashSignalName.asCharString());
-		printf("\n\n");
-	}
-	fflush(stdout);
+	std::cout << std::flush;
 }
-
-

@@ -93,12 +93,13 @@ TestOutput& operator<<(TestOutput& p, long int i)
 
 void TestOutput::printCurrentTestStarted(const UtestShell& test)
 {
-	CrashReporter::getInstance()->updateCurrentTest(&test);
+	CrashReporter::getInstance()->setCurrentTest(&test);
 	if (verbose_) print(test.getFormattedName().asCharString());
 }
 
 void TestOutput::printCurrentTestEnded(const TestResult& res)
 {
+	CrashReporter::getInstance()->setCurrentTest(NULL);
 	if (verbose_) {
 		print(" - ");
 		print(res.getCurrentTestTotalExecutionTime());
@@ -243,14 +244,14 @@ void TestOutput::printCrashMessage(const UtestShell* Test, SimpleString signalNa
 	print(signalName.asCharString());
 	print(" running test ");
 	print((Test->getFormattedName()).asCharString());
-	print("\n\n");
+	print(".\n\n");
 }
 
 void TestOutput::printCrashMessage(SimpleString signalName)
 {
-	print("Crash during Unknown Test with crash signal ");
+	print("\nCrashed with signal ");
 	print(signalName.asCharString());
-	print("\n\n");
+	print(" running unknown test.\n\n");
 }
 
 void ConsoleTestOutput::printBuffer(const char* s)

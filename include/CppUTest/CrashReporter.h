@@ -42,7 +42,7 @@ class CrashReporter
 {
 public:
 	static CrashReporter* getInstance();
-	void updateCurrentTest(const UtestShell* Test);
+	void setCurrentTest(const UtestShell* Test);
 	void setOutput(TestOutput* output);
 
 private:
@@ -54,17 +54,16 @@ private:
 	void updateSignalHandlers(struct sigaction* sa);
 	void destroySignalHandlers();
 	static void signalHandler(int signal);
-	SimpleString signalName(int signal);
 	bool validTest(const UtestShell* Test);
-	bool validProgramOutput(TestOutput* output);
+	bool validOutput(TestOutput* output);
 	void printCrashMessage();
 	void printCrashMessageConsoleOutput();
-	void printCrashMessageProgramOutput();
+	void printCrashMessageTestRunnerOutput();
 	void initSignalMap();
 
 	std::map<int, SimpleString> signalMap;
 	const UtestShell* currentTest;
-	TestOutput* programOutput;
+	TestOutput* testRunnerOutput;
 	SimpleString crashSignalName;
 	static CrashReporter* singleCrashReporter;
 };
