@@ -43,7 +43,7 @@ class CrashReporter
 {
 public:
 	static CrashReporter* getInstance();
-	void setCurrentTest(const UtestShell* Test);
+	void setCurrentTest(const UtestShell* test);
 	void setOutput(TestOutput* output);
 
 private:
