@@ -31,8 +31,8 @@
     Target(s):  ISO/IEC 14882:2003 (C++03)
     ------------------------------------------------------------------------- */
 
-#include "CppUTest/TestHarness.h"
 #include "CppUTest/CrashReporter.h"
+#include "CppUTest/TestHarness.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 #include <signal.h>
 #include <iostream>

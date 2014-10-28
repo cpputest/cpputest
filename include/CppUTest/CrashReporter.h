@@ -37,7 +37,8 @@
 #include "Utest.h"
 #include "SimpleString.h"
 #include "CppUTest/TestOutput.h"
-// map is included in
+#include <map>
+
 class CrashReporter
 {
 public:
@@ -61,10 +62,10 @@ private:
 	void printCrashMessageTestRunnerOutput();
 	void initSignalMap();
 
-	std::map<int, SimpleString> signalMap;
 	const UtestShell* currentTest;
 	TestOutput* testRunnerOutput;
 	SimpleString crashSignalName;
+	std::map<int, SimpleString> signalMap;
 	static CrashReporter* singleCrashReporter;
 };
 

@@ -18,7 +18,6 @@
  * files *before* this file too.
  *
  */
-#include "CppUTest/stlIncludes.h"
 #include "CppUTestConfig.h"
 
 /* Make sure that mem leak detection is on and that this is being included from a C++ file */
