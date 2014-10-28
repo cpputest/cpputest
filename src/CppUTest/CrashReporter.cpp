@@ -26,8 +26,6 @@
     ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
     POSSIBILITY OF SUCH DAMAGE.
 
-	singleton pattern: http://www.codeproject.com/Articles/1921/Singleton-Pattern-its-implementation-with-C
-	TODO: clean this up
     Author(s):  Erin Watson <erin@mindtribe.com>
 
     Target(s):  ISO/IEC 14882:2003 (C++03)
