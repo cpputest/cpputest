@@ -28,6 +28,7 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TestOutput.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
+#include "CppUTest/CrashReporter.h"
 
 TestOutput::WorkingEnvironment TestOutput::workingEnvironment_ = TestOutput::detectEnvironment;
 
@@ -45,7 +46,7 @@ TestOutput::WorkingEnvironment TestOutput::getWorkingEnvironment()
 
 
 TestOutput::TestOutput() :
-    dotCount_(0), verbose_(false), color_(false), progressIndication_(".")
+   dotCount_(0), verbose_(false), color_(false), progressIndication_(".")
 {
 }
 
@@ -97,6 +98,7 @@ TestOutput& operator<<(TestOutput& p, long int i)
 
 void TestOutput::printCurrentTestStarted(const UtestShell& test)
 {
+    CrashReporter::getInstance()->updateCurrentTest(&test);
     if (verbose_) print(test.getFormattedName().asCharString());
 }
 
