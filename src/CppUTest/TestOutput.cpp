@@ -98,7 +98,7 @@ TestOutput& operator<<(TestOutput& p, long int i)
 
 void TestOutput::printCurrentTestStarted(const UtestShell& test)
 {
-    CrashReporter::getInstance()->updateCurrentTest(&test);
+    CrashReporter::getInstance()->setCurrentTest(&test);
     if (verbose_) print(test.getFormattedName().asCharString());
 }
 
@@ -253,14 +253,14 @@ void TestOutput::printVistualStudioErrorInFileOnLine(SimpleString file, int line
     print(" error:");
 }
 
-void TestOutput::printCrashMessage(const UtestShell* Test, SimpleString crashMessage)
+void TestOutput::printCrashMessage(const UtestShell* Test, SimpleString signalName)
 {
 	printErrorInFileOnLineFormattedForWorkingEnvironment(Test->getFile(), Test->getLineNumber());
 	print(" Crashed with signal ");
 	print(signalName.asCharString());
 	print(" running test ");
 	print((Test->getFormattedName()).asCharString());
-	print("\n\n");
+	print(".\n\n");
 }
 
 void TestOutput::printCrashMessage(SimpleString signalName)
@@ -268,7 +268,6 @@ void TestOutput::printCrashMessage(SimpleString signalName)
 	print("\nCrashed with signal ");
 	print(signalName.asCharString());
 	print(" running unknown test.\n\n");
-	print(testName.asCharString());
 }
 
 void ConsoleTestOutput::printBuffer(const char* s)

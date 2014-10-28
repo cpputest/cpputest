@@ -44,11 +44,9 @@ CrashReporter* CrashReporter::singleCrashReporter = NULL;
 CrashReporter* CrashReporter::getInstance()
 {
 	if (singleCrashReporter == NULL) {
-		static CrashReporter singleCrashReporter;
-		return &singleCrashReporter;
-	} else {
-	    return singleCrashReporter;
+		singleCrashReporter = new CrashReporter();
 	}
+	return singleCrashReporter;
 }
 
 CrashReporter::CrashReporter()
@@ -62,6 +60,7 @@ CrashReporter::CrashReporter()
 CrashReporter::~CrashReporter()
 {
 	destroySignalHandlers();
+	delete(singleCrashReporter);
 	singleCrashReporter = NULL;
 }
 
@@ -77,9 +76,9 @@ void CrashReporter::initSignalMap()
 
 void CrashReporter::initSignalHandlers()
 {
-    struct sigaction sa;
-    sa.sa_handler = signalHandler;
-    updateSignalHandlers(&sa);
+struct sigaction sa;
+	sa.sa_handler = signalHandler;
+	updateSignalHandlers(&sa);
 }
 
 void CrashReporter::destroySignalHandlers()
@@ -104,8 +103,8 @@ void CrashReporter::signalHandler(int signalID)
 	raise(signalID);
 }
 
-void CrashReporter::setCurrentTest(const UtestShell* Test) {
-     currentTest = Test;
+void CrashReporter::setCurrentTest(const UtestShell* test) {
+	currentTest = test;
 }
 
 void CrashReporter::setOutput(TestOutput* output)
@@ -117,7 +116,7 @@ bool CrashReporter::validTest(const UtestShell* Test){
 	if (Test == NULL) {
 		return false;
 	} else {
-	    return true;
+		return true;
 	}
 }
 
@@ -125,13 +124,13 @@ bool CrashReporter::validOutput(TestOutput* output){
 	if (output == NULL) {
 		return false;
 	} else {
-	    return true;
+		return true;
 	}
 }
 
 void CrashReporter::printCrashMessage()
 {
-    if (validOutput(testRunnerOutput)) {
+	if (validOutput(testRunnerOutput)) {
 		printCrashMessageTestRunnerOutput();
 	} else {
 		printCrashMessageConsoleOutput();

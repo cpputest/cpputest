@@ -54,7 +54,7 @@ private:
 	void updateSignalHandlers(struct sigaction* sa);
 	void destroySignalHandlers();
 	static void signalHandler(int signal);
-	bool validTest(const UtestShell* Test);
+	bool validTest(const UtestShell* test);
 	bool validOutput(TestOutput* output);
 	void printCrashMessage();
 	void printCrashMessageConsoleOutput();
