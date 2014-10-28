@@ -35,6 +35,7 @@ lib_libCppUTest_a_CXXFLAGS = $(AM_CXXFLAGS) $(CPPUTEST_CXXFLAGS) $(CPPUTEST_ADDI
 lib_libCppUTest_a_SOURCES = \
 	src/CppUTest/CommandLineArguments.cpp \
 	src/CppUTest/CommandLineTestRunner.cpp \
+    src/CppUTest/CrashReporter.cpp \
 	src/CppUTest/JUnitTestOutput.cpp \
 	src/CppUTest/MemoryLeakDetector.cpp \
 	src/CppUTest/MemoryLeakWarningPlugin.cpp \
@@ -57,6 +58,7 @@ include_cpputest_HEADERS = \
 	include/CppUTest/CommandLineArguments.h \
 	include/CppUTest/CommandLineTestRunner.h \
 	include/CppUTest/CppUTestConfig.h \
+    include/CppUTest/CrashReporter.h \
 	include/CppUTest/JUnitTestOutput.h \
 	include/CppUTest/MemoryLeakDetector.h \
 	include/CppUTest/MemoryLeakDetectorMallocMacros.h \

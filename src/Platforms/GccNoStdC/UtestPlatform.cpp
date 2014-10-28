@@ -190,16 +190,19 @@ static PlatformSpecificMutex DummyMutexCreate(void)
 
 static void DummyMutexLock(PlatformSpecificMutex mtx)
 {
+    (void)mtx;
     FAIL("PlatformSpecificMutexLock is not implemented");
 }
 
 static void DummyMutexUnlock(PlatformSpecificMutex mtx)
 {
+    (void)mtx;
     FAIL("PlatformSpecificMutexUnlock is not implemented");
 }
 
 static void DummyMutexDestroy(PlatformSpecificMutex mtx)
 {
+    (void)mtx;
     FAIL("PlatformSpecificMutexDestroy is not implemented");
 }
 
