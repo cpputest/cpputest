@@ -104,6 +104,7 @@ void TestOutput::printCurrentTestStarted(const UtestShell& test)
 
 void TestOutput::printCurrentTestEnded(const TestResult& res)
 {
+	CrashReporter::getInstance()->setCurrentTest(NULL);
     if (verbose_) {
         print(" - ");
         print(res.getCurrentTestTotalExecutionTime());
@@ -255,21 +256,18 @@ void TestOutput::printVistualStudioErrorInFileOnLine(SimpleString file, int line
 void TestOutput::printCrashMessage(const UtestShell* Test, SimpleString crashMessage)
 {
 	printErrorInFileOnLineFormattedForWorkingEnvironment(Test->getFile(), Test->getLineNumber());
+	print(" Crashed with signal ");
+	print(signalName.asCharString());
+	print(" running test ");
 	print((Test->getFormattedName()).asCharString());
-	print(crashMessage.asCharString());
 	print("\n\n");
 }
 
-void TestOutput::printCrashMessage(SimpleString crashMessage)
+void TestOutput::printCrashMessage(SimpleString signalName)
 {
-	print("Unknown Test ");
-	print(crashMessage.asCharString());
-	print("\n\n");
-}
-
-void TestOutput::printCrashInTest(SimpleString testName)
-{
-	print(" Crash in ");
+	print("\nCrashed with signal ");
+	print(signalName.asCharString());
+	print(" running unknown test.\n\n");
 	print(testName.asCharString());
 }
 

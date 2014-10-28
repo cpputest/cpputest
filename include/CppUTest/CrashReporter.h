@@ -37,30 +37,34 @@
 #include "Utest.h"
 #include "SimpleString.h"
 #include "CppUTest/TestOutput.h"
-
+// map is included in
 class CrashReporter
 {
 public:
 	static CrashReporter* getInstance();
-	void updateCurrentTest(const UtestShell* Test);
+	void setCurrentTest(const UtestShell* Test);
 	void setOutput(TestOutput* output);
 
 private:
 
 	~CrashReporter();
-	CrashReporter(); // private constructor
+	CrashReporter();
+
 	void initSignalHandlers();
+	void updateSignalHandlers(struct sigaction* sa);
 	void destroySignalHandlers();
 	static void signalHandler(int signal);
-	void printfCrash(int signal);
-	void printCrashMessage(int signal);
-	SimpleString signalCrashMessage(int signal);
-	void printStackTrace();
 	bool validTest(const UtestShell* Test);
-	bool validConsoleOutput(TestOutput* output);
+	bool validOutput(TestOutput* output);
+	void printCrashMessage();
+	void printCrashMessageConsoleOutput();
+	void printCrashMessageTestRunnerOutput();
+	void initSignalMap();
 
+	std::map<int, SimpleString> signalMap;
 	const UtestShell* currentTest;
-	TestOutput* consoleOutput;
+	TestOutput* testRunnerOutput;
+	SimpleString crashSignalName;
 	static CrashReporter* singleCrashReporter;
 };
 
