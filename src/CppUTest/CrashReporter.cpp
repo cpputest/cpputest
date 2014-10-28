@@ -36,10 +36,11 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/CrashReporter.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
-#include "CppUTest/TestOutput.h"
+#include <signal.h>
+#include <execinfo.h> // TODO: extern?
+//#include <stdio.h>
+//#include <stdlib.h>
 
-#include <csignal>
-#include <cstdio>
 
 CrashReporter* CrashReporter::singleCrashReporter = NULL;
 
@@ -56,6 +57,8 @@ CrashReporter* CrashReporter::getInstance()
 CrashReporter::CrashReporter()
 {
 	initSignalHandlers();
+	consoleOutput = NULL;
+	currentTest = NULL;
 	// TODO: init currenttest
 }
 
@@ -68,18 +71,19 @@ CrashReporter::~CrashReporter()
 
 void CrashReporter::destroySignalHandlers()
 {
-	std::signal(SIGABRT, SIG_DFL);
-	std::signal(SIGSEGV, SIG_DFL);
-	std::signal(SIGINT, SIG_DFL);
+	signal(SIGABRT, SIG_DFL);
+	signal(SIGSEGV, SIG_DFL);
+	signal(SIGINT, SIG_DFL);
+	signal(SIGFPE, SIG_DFL);
 
 }
 
 void CrashReporter::initSignalHandlers()
 {
-	std::signal(SIGABRT, signalHandler);
-	std::signal(SIGSEGV, signalHandler);
-	std::signal(SIGINT, signalHandler);
-	std::signal(SIGFPE, signalHandler);
+	signal(SIGABRT, signalHandler);
+	signal(SIGSEGV, signalHandler);
+	signal(SIGINT, signalHandler);
+	signal(SIGFPE, signalHandler);
 
 	// TODO: change to sigaction
 	// TODO: add aditional signal handlers
@@ -87,25 +91,89 @@ void CrashReporter::initSignalHandlers()
 	// TODO: make modular for differnte OSs
 }
 
-void CrashReporter::signalHandler(int signal)
+void CrashReporter::signalHandler(int signalID)
 {
-	getInstance()->printEclipseCrash(signal);
-	std::signal(signal, SIG_DFL);
-	std::raise(signal);
+	getInstance()->printCrashMessage(signalID);
+	getInstance()->printStackTrace();
+	signal(signalID, SIG_DFL);
+	raise(signalID);
 }
 
-void CrashReporter::printEclipseCrash(int signal) // TODO: incorporate with TestOutput, make cross platform
+//TODO: http://www.gnu.org/software/libc/manual/html_node/Backtraces.html
+void CrashReporter::printStackTrace()
 {
-	printf("\n\n %s:%d: error:", currentTest.file.asCharString(), currentTest.lineNumber);
-	printf("Crash in TEST(%s, %s): Signal %d \n\n", currentTest.group.asCharString(), currentTest.name.asCharString(), signal);
+	void *array[100];
+	int size;
+	char **strings;
+	int i;
+
+	size = backtrace(array, 100);
+	strings = backtrace_symbols(array, size);
+
+	printf ("Obtained %zd stack frames.\n", size);
+
+	for (i = 0; i < size; i++)
+	{
+		printf ("%s\n", strings[i]);
+	}
 	fflush(stdout);
-
 }
 
+void CrashReporter::printfCrash(int signalID) // TODO: refactor/clean this up...printf is used in case output has been corrupted
+{
+	if (validTest(currentTest))
+	{
+		printf("\n\n %s:%d: error: ", currentTest->getFile().asCharString(), currentTest->getLineNumber());
+		printf("TEST(%s, %s):\n", currentTest->getGroup().asCharString(), currentTest->getName().asCharString());
+	}
+	printf("%s", signalCrashMessage(signalID).asCharString());
+	fflush(stdout);
+}
 
+SimpleString CrashReporter::signalCrashMessage(int signalID){
+	signalID++; // TODO: add in signals & make sure string isn't being copied
+	return SimpleString(" Crashed with Signal");
+}
+
+bool CrashReporter::validTest(const UtestShell* Test){
+	if (Test == NULL) // TODO: add in check for Test getting corrupted during crash
+	{
+		return false;
+	}
+	return true;
+}
+
+bool CrashReporter::validConsoleOutput(TestOutput* output){
+	if (output == NULL) // TODO: add in check for output getting corrupted from crash
+	{
+		return false;
+	}
+	return true;
+}
+
+void CrashReporter::printCrashMessage(int signal){
+	if (validConsoleOutput(consoleOutput)) // restructure for less cases
+	{
+		if (validTest(currentTest))
+		{
+			consoleOutput->printCrashMessage(currentTest, signalCrashMessage(signal));
+		}
+		else
+		{
+			consoleOutput->printCrashMessage(signalCrashMessage(signal));
+
+		}
+	}
+	else
+	{
+		printfCrash(signal);
+	}
+}
 void CrashReporter::updateCurrentTest(const UtestShell* Test) {
-    currentTest.name = Test->getName();
-    currentTest.group = Test->getGroup();
-    currentTest.file = Test->getFile();
-    currentTest.lineNumber = Test->getLineNumber();
+     currentTest = Test;
+}
+
+void CrashReporter::setOutput(TestOutput* output)
+{
+	consoleOutput = output;
 }
