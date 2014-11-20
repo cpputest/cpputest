@@ -153,6 +153,7 @@ TEST_GROUP(TestOrderedTestMacros)
     void setup()
     {
         run = TestRegistry::getCurrentRegistry()->getCurrentRepetition();
+        CHECK(run < 2);
     }
 };
 
