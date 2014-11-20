@@ -1,5 +1,10 @@
 #!/bin/bash -x
-CPPUTEST_HOME=$(pwd)/..
+FirstLetter=${0:0:1}
+if [[ $FirstLetter == "/" ]] ;  then
+	CPPUTEST_HOME=${0%/scripts/*}
+else
+	CPPUTEST_HOME="$(pwd)/${0%/scripts/*}"
+fi
 
 EXE_DIR=${EXE_DIR:-/usr/local/bin}
 test -f ${EXE_DIR} || mkdir -p ${EXE_DIR}
