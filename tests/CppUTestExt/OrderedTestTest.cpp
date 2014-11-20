@@ -149,22 +149,22 @@ TEST(TestOrderedTest, MultipleOrderedTests2)
 class OrderedTestTestingFixture
 {
 public:
-    static void checkRun(unsigned long run) {
+    static void checkRun(int run) {
         if(run != run_) {
             run_ = run;
             count_ = 0;
         }
     }
-    static unsigned long count(void) {
+    static int count(void) {
         return count_++;
     }
 private:
-    static unsigned long run_;
-    static unsigned long count_;
+    static int run_;
+    static int count_;
 };
 
-unsigned long OrderedTestTestingFixture::run_ = 0;
-unsigned long OrderedTestTestingFixture::count_ = 0;
+int OrderedTestTestingFixture::run_ = 0;
+int OrderedTestTestingFixture::count_ = 0;
 
 TEST_GROUP(TestOrderedTestMacros)
 {
