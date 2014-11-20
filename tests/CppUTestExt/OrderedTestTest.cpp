@@ -146,45 +146,54 @@ TEST(TestOrderedTest, MultipleOrderedTests2)
 
 }
 
+class OrderedTestTestingFixture {
+public:
+    static void checkRun(unsigned long run) {
+        if(run != run_) {
+            run_ = run;
+            count_ = 0;
+        }
+    }
+    static unsigned long count(void) {
+        return count_++;
+    }
+private:
+    static unsigned long run_;
+    static unsigned long count_;
+};
+
+unsigned long OrderedTestTestingFixture::run_ = 0;
+unsigned long OrderedTestTestingFixture::count_ = 0;
+
 TEST_GROUP(TestOrderedTestMacros)
 {
-    int run;
-
     void setup()
     {
-        run = TestRegistry::getCurrentRegistry()->getCurrentRepetition();
-        CHECK(run < 2);
+        OrderedTestTestingFixture::checkRun(TestRegistry::getCurrentRegistry()->getCurrentRepetition());
     }
 };
 
-static int testNumber[] = { 0, 0};
-
 TEST(TestOrderedTestMacros, NormalTest)
 {
-    CHECK(testNumber[run] == 0);
-    testNumber[run]++;
+    CHECK(OrderedTestTestingFixture::count() == 0);
 }
 
 TEST_ORDERED(TestOrderedTestMacros, Test2, 2)
 {
-    CHECK(testNumber[run] == 2);
-    testNumber[run]++;
+    CHECK(OrderedTestTestingFixture::count() == 2);
 }
 
 TEST_ORDERED(TestOrderedTestMacros, Test1, 1)
 {
-    CHECK(testNumber[run] == 1);
-    testNumber[run]++;
+    CHECK(OrderedTestTestingFixture::count() == 1);
 }
 
 TEST_ORDERED(TestOrderedTestMacros, Test4, 4)
 {
-    CHECK(testNumber[run] == 4);
-    testNumber[run]++;
+    CHECK(OrderedTestTestingFixture::count() == 4);
 }
 
 TEST_ORDERED(TestOrderedTestMacros, Test3, 3)
 {
-    CHECK(testNumber[run] == 3);
-    testNumber[run]++;
+    CHECK(OrderedTestTestingFixture::count() == 3);
 }
