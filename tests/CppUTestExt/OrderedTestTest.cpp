@@ -146,7 +146,8 @@ TEST(TestOrderedTest, MultipleOrderedTests2)
 
 }
 
-class OrderedTestTestingFixture {
+class OrderedTestTestingFixture
+{
 public:
     static void checkRun(unsigned long run) {
         if(run != run_) {
