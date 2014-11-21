@@ -85,8 +85,8 @@ int CommandLineTestRunner::runAllTestsMain()
 
 void CommandLineTestRunner::initializeTestRun()
 {
-    registry_->groupFilter(arguments_->getGroupFilter());
-    registry_->nameFilter(arguments_->getNameFilter());
+    registry_->setGroupFilters(arguments_->getGroupFilters());
+    registry_->setNameFilters(arguments_->getNameFilters());
     if (arguments_->isVerbose()) output_->verbose();
     if (arguments_->isColor()) output_->color();
     if (arguments_->runTestsInSeperateProcess()) registry_->setRunTestsInSeperateProcess();
@@ -139,14 +139,4 @@ bool CommandLineTestRunner::isColor()
 int CommandLineTestRunner::getRepeatCount()
 {
     return arguments_->getRepeatCount();
-}
-
-TestFilter CommandLineTestRunner::getGroupFilter()
-{
-    return arguments_->getGroupFilter();
-}
-
-TestFilter CommandLineTestRunner::getNameFilter()
-{
-    return arguments_->getNameFilter();
 }

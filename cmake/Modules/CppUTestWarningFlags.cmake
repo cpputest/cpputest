@@ -36,9 +36,9 @@ else (MSVC)
         Wno-disabled-macro-expansion
         )
 
-    if (NOT CPPUTEST_GMOCK AND NOT CPPUTEST_REAL_GTEST)
+    if (NOT GMOCK AND NOT REAL_GTEST)
       list(APPEND WARNING_C_FLAGS Werror pedantic-errors)
-    endif (NOT CPPUTEST_GMOCK AND NOT CPPUTEST_REAL_GTEST)
+    endif (NOT GMOCK AND NOT REAL_GTEST)
 
     set(WARNING_C_ONLY_FLAGS
         Wstrict-prototypes
@@ -50,6 +50,7 @@ else (MSVC)
         Wno-global-constructors
         Wno-exit-time-destructors
         Wno-weak-vtables
+        Wno-old-style-cast
         )
 
     check_and_append_c_warning_flags(${WARNING_C_FLAGS})
@@ -61,5 +62,5 @@ else (MSVC)
         if (NO_WARNING_CXX_98_COMPAT_FLAG)
             set(CPPUTEST_CXX_WARNING_FLAGS "${CPPUTEST_CXX_WARNING_FLAGS} -Wno-c++98-compat")
         endif (NO_WARNING_CXX_98_COMPAT_FLAG)
-      endif (CPPUTEST_C++11)
+    endif (CPPUTEST_C++11)
 endif (MSVC)

@@ -29,7 +29,8 @@
 #include "CppUTest/TestRegistry.h"
 
 TestRegistry::TestRegistry() :
-    tests_(NULL), firstPlugin_(NullTestPlugin::instance()), runInSeperateProcess_(false), currentRepetition_(0)
+    tests_(NULL), nameFilters_(NULL), groupFilters_(NULL), firstPlugin_(NullTestPlugin::instance()), runInSeperateProcess_(false), currentRepetition_(0)
+
 {
 }
 
@@ -101,24 +102,14 @@ void TestRegistry::unDoLastAddTest()
 
 }
 
-void TestRegistry::nameFilter(const TestFilter& f)
+void TestRegistry::setNameFilters(const TestFilter* filters)
 {
-    nameFilter_ = f;
+    nameFilters_ = filters;
 }
 
-void TestRegistry::groupFilter(const TestFilter& f)
+void TestRegistry::setGroupFilters(const TestFilter* filters)
 {
-    groupFilter_ = f;
-}
-
-TestFilter TestRegistry::getGroupFilter()
-{
-    return groupFilter_;
-}
-
-TestFilter TestRegistry::getNameFilter()
-{
-    return nameFilter_;
+    groupFilters_ = filters;
 }
 
 void TestRegistry::setRunTestsInSeperateProcess()
@@ -133,7 +124,7 @@ int TestRegistry::getCurrentRepetition()
 
 bool TestRegistry::testShouldRun(UtestShell* test, TestResult& result)
 {
-    if (test->shouldRun(groupFilter_, nameFilter_)) return true;
+    if (test->shouldRun(groupFilters_, nameFilters_)) return true;
     else {
         result.countFilteredOut();
         return false;

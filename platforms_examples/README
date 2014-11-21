@@ -2,3 +2,8 @@ Directory to place test examples for different toolchains/chips combinations.
 
 Source files from this directory is compiled to executable using CppUTest,
   CppUTestExt and startup libraries from lib directory in CppUTest home.
+
+There is a sample eclipse project in armcc/AT91SAM7A3 folder. It may be used
+to see at possibility way of cross development with CppUTest running in
+target platform. It is based on Makefile.
+Makefile need some Cygwin utility, so you need to install cygwin.

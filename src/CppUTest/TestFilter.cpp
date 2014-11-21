@@ -28,18 +28,29 @@
 #include "CppUTest/CppUTestConfig.h"
 #include "CppUTest/TestFilter.h"
 
-TestFilter::TestFilter() : strictMatching_(false)
+TestFilter::TestFilter() : strictMatching_(false), next_(NULL)
 {
 }
 
-TestFilter::TestFilter(const SimpleString& filter) : strictMatching_(false)
+TestFilter::TestFilter(const SimpleString& filter) : strictMatching_(false), next_(NULL)
 {
     filter_ = filter;
 }
 
-TestFilter::TestFilter(const char* filter) : strictMatching_(false)
+TestFilter::TestFilter(const char* filter) : strictMatching_(false), next_(NULL)
 {
     filter_ = filter;
+}
+
+TestFilter* TestFilter::add(TestFilter* filter)
+{
+    next_ = filter;
+    return this;
+}
+
+TestFilter* TestFilter::getNext() const
+{
+    return next_;
 }
 
 void TestFilter::strictMatching()
@@ -49,7 +60,7 @@ void TestFilter::strictMatching()
 
 bool TestFilter::match(const SimpleString& name) const
 {
-    if (strictMatching_)
+    if(strictMatching_)
         return name == filter_;
     return name.contains(filter_);
 }

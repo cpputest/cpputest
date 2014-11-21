@@ -44,8 +44,8 @@ public:
     bool isVerbose() const;
     bool isColor() const;
     int getRepeatCount() const;
-    TestFilter getGroupFilter() const;
-    TestFilter getNameFilter() const;
+    const TestFilter* getGroupFilters() const;
+    const TestFilter* getNameFilters() const;
     bool isJUnitOutput() const;
     bool isEclipseOutput() const;
     bool runTestsInSeperateProcess() const;
@@ -65,18 +65,18 @@ private:
     bool color_;
     bool runTestsAsSeperateProcess_;
     int repeat_;
-    TestFilter groupFilter_;
-    TestFilter nameFilter_;
+    TestFilter* groupFilters_;
+    TestFilter* nameFilters_;
     OutputType outputType_;
     SimpleString packageName_;
 
     SimpleString getParameterField(int ac, const char** av, int& i, const SimpleString& parameterName);
     void SetRepeatCount(int ac, const char** av, int& index);
-    void SetGroupFilter(int ac, const char** av, int& index);
-    void SetStrictGroupFilter(int ac, const char** av, int& index);
-    void SetNameFilter(int ac, const char** av, int& index);
-    void SetStrictNameFilter(int ac, const char** av, int& index);
-    void SetTestToRunBasedOnVerboseOutput(int ac, const char** av, int& index, const char* parameterName);
+    void AddGroupFilter(int ac, const char** av, int& index);
+    void AddStrictGroupFilter(int ac, const char** av, int& index);
+    void AddNameFilter(int ac, const char** av, int& index);
+    void AddStrictNameFilter(int ac, const char** av, int& index);
+    void AddTestToRunBasedOnVerboseOutput(int ac, const char** av, int& index, const char* parameterName);
     bool SetOutputType(int ac, const char** av, int& index);
     void SetPackageName(int ac, const char** av, int& index);
 

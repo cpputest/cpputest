@@ -89,7 +89,6 @@ Features configure in CppUTest:
 
 -------------------------------------------------------
 ")
-
 #
 # CMake support.
 #

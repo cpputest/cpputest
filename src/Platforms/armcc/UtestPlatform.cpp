@@ -179,3 +179,30 @@ static int IsNanImplementation(double d)
 }
 
 extern "C" int (*PlatformSpecificIsNan)(double) = IsNanImplementation;
+
+static PlatformSpecificMutex DummyMutexCreate(void)
+{
+    FAIL("PlatformSpecificMutexCreate is not implemented");
+    return 0;
+}
+
+static void DummyMutexLock(PlatformSpecificMutex mtx)
+{
+    FAIL("PlatformSpecificMutexLock is not implemented");
+}
+
+static void DummyMutexUnlock(PlatformSpecificMutex mtx)
+{
+    FAIL("PlatformSpecificMutexUnlock is not implemented");
+}
+
+static void DummyMutexDestroy(PlatformSpecificMutex mtx)
+{
+    FAIL("PlatformSpecificMutexDestroy is not implemented");
+}
+
+extern "C" PlatformSpecificMutex (*PlatformSpecificMutexCreate)(void) = DummyMutexCreate;
+extern "C" void (*PlatformSpecificMutexLock)(PlatformSpecificMutex) = DummyMutexLock;
+extern "C" void (*PlatformSpecificMutexUnlock)(PlatformSpecificMutex) = DummyMutexUnlock;
+extern "C" void (*PlatformSpecificMutexDestroy)(PlatformSpecificMutex) = DummyMutexDestroy;
+
