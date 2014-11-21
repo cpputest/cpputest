@@ -17,6 +17,7 @@ You'll need to do the following to get started:
 Building from source (unix-based, cygwin, MacOSX):
 
 * Download latest version
+* autogen.sh
 * configure
 * make
 * make check

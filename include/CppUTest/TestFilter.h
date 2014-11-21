@@ -37,6 +37,9 @@ public:
     TestFilter();
     TestFilter(const char* filter);
     TestFilter(const SimpleString& filter);
+    
+    TestFilter* add(TestFilter* filter);
+    TestFilter* getNext() const;
 
     bool match(const SimpleString& name) const;
 
@@ -49,6 +52,7 @@ public:
 private:
     SimpleString filter_;
     bool strictMatching_;
+    TestFilter* next_;
 };
 
 SimpleString StringFrom(const TestFilter& filter);

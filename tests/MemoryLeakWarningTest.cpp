@@ -33,6 +33,7 @@
 #include "CppUTest/TestMemoryAllocator.h"
 #include "CppUTest/TestTestingFixture.h"
 #include "CppUTest/TestHarness_c.h"
+#include "CppUTest/SimpleMutex.h"
 
 static char* leak1;
 static long* leak2;
@@ -327,5 +328,66 @@ TEST(MemoryLeakWarningGlobalDetectorTest, turnOffNewOverloadsNoThrowCausesNoAddi
     #include "CppUTest/MemoryLeakDetectorNewMacros.h"
 #endif
 }
+
+#ifndef CPPUTEST_MEM_LEAK_DETECTION_DISABLED
+
+static int mutexLockCount = 0;
+static int mutexUnlockCount = 0;
+
+static void StubMutexLock(PlatformSpecificMutex)
+{
+    mutexLockCount++;
+}
+
+static void StubMutexUnlock(PlatformSpecificMutex)
+{
+    mutexUnlockCount++;
+}
+
+
+
+TEST_GROUP(MemoryLeakWarningWarningThreadSafe)
+{
+    void setup()
+    {
+        UT_PTR_SET(PlatformSpecificMutexLock, StubMutexLock);
+        UT_PTR_SET(PlatformSpecificMutexUnlock, StubMutexUnlock);
+
+        mutexLockCount = 0;
+        mutexUnlockCount = 0;
+    }
+    
+    void teardown()
+    {
+    }
+};
+
+TEST(MemoryLeakWarningWarningThreadSafe, turnOnThreadSafeNewDeleteOverloads)
+{
+    int storedAmountOfLeaks = MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all);
+    
+    MemoryLeakWarningPlugin::turnOnThreadSafeNewDeleteOverloads();
+
+    int *n = new int;
+    char *str = new char[20];
+    
+    LONGS_EQUAL(storedAmountOfLeaks + 2, MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all));
+    CHECK_EQUAL(2, mutexLockCount);
+    CHECK_EQUAL(2, mutexUnlockCount);
+    
+    delete [] str;
+    delete n;
+    
+    LONGS_EQUAL(storedAmountOfLeaks, MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all));
+    CHECK_EQUAL(4, mutexLockCount);
+    CHECK_EQUAL(4, mutexUnlockCount);
+
+    MemoryLeakWarningPlugin::turnOnNewDeleteOverloads();
+}
+
+
+
+
+#endif
 
 #endif

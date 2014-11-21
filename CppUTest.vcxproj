@@ -149,6 +149,7 @@ copy $(OutDir)CppUTest.lib lib\CppUTest.lib
     <ClCompile Include="src\CppUTest\JUnitTestOutput.cpp" />
     <ClCompile Include="src\CppUTest\MemoryLeakDetector.cpp" />
     <ClCompile Include="src\CppUTest\MemoryLeakWarningPlugin.cpp" />
+    <ClCompile Include="src\CppUTest\SimpleMutex.cpp" />
     <ClCompile Include="src\CppUTest\SimpleString.cpp" />
     <ClCompile Include="src\CppUTest\TestFailure.cpp" />
     <ClCompile Include="src\CppUTest\TestFilter.cpp" />
@@ -189,6 +190,7 @@ copy $(OutDir)CppUTest.lib lib\CppUTest.lib
     <ClInclude Include="include\CppUTest\MemoryLeakDetectorNewMacros.h" />
     <ClInclude Include="include\CppUTest\MemoryLeakWarningPlugin.h" />
     <ClInclude Include="include\CppUTest\PlatformSpecificFunctions.h" />
+    <ClInclude Include="include\CppUTest\SimpleMutex.h" />
     <ClInclude Include="include\CppUTest\SimpleString.h" />
     <ClInclude Include="include\CppUTest\StandardCLibrary.h" />
     <ClInclude Include="include\CppUTest\TestFailure.h" />

@@ -167,3 +167,33 @@ int PlatformSpecificVSNprintf(char *str, unsigned int size, const char* format, 
 {
    return _vsnprintf_s( str, size, _TRUNCATE, format, (va_list) args);
 }
+
+static PlatformSpecificMutex Win32MutexCreate(void)
+{
+	CRITICAL_SECTION *critical_section = new CRITICAL_SECTION;
+	InitializeCriticalSection(critical_section);
+	return (PlatformSpecificMutex)critical_section;
+}
+
+static void Win32MutexLock(PlatformSpecificMutex mutex)
+{
+	EnterCriticalSection((CRITICAL_SECTION*)mutex);
+}
+
+static void Win32MutexUnlock(PlatformSpecificMutex mutex)
+{
+	LeaveCriticalSection((CRITICAL_SECTION*)mutex);
+}
+
+static void Win32MutexDestroy(PlatformSpecificMutex mutex)
+{
+	CRITICAL_SECTION *critical_section = (CRITICAL_SECTION*)mutex;
+	DeleteCriticalSection(critical_section);
+	delete critical_section;
+}
+
+PlatformSpecificMutex (*PlatformSpecificMutexCreate)(void) = Win32MutexCreate;
+void (*PlatformSpecificMutexLock)(PlatformSpecificMutex) = Win32MutexLock;
+void (*PlatformSpecificMutexUnlock)(PlatformSpecificMutex) = Win32MutexUnlock;
+void (*PlatformSpecificMutexDestroy)(PlatformSpecificMutex) = Win32MutexDestroy;
+

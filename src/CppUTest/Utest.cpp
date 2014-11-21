@@ -304,11 +304,19 @@ int UtestShell::getLineNumber() const
     return lineNumber_;
 }
 
-bool UtestShell::shouldRun(const TestFilter& groupFilter, const TestFilter& nameFilter) const
+bool UtestShell::match(const char* target, const TestFilter* filters) const
 {
-    if (groupFilter.match(group_) && nameFilter.match(name_)) return true;
+    if(filters == NULL) return true;
+
+    for(; filters != NULL; filters = filters->getNext())
+        if(filters->match(target)) return true;
 
     return false;
+}
+
+bool UtestShell::shouldRun(const TestFilter* groupFilters, const TestFilter* nameFilters) const
+{
+    return match(group_, groupFilters) && match(name_, nameFilters);
 }
 
 void UtestShell::failWith(const TestFailure& failure)

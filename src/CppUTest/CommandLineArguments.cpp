@@ -30,12 +30,22 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 
 CommandLineArguments::CommandLineArguments(int ac, const char** av) :
-    ac_(ac), av_(av), verbose_(false), color_(false), runTestsAsSeperateProcess_(false), repeat_(1), groupFilter_(""), nameFilter_(""), outputType_(OUTPUT_ECLIPSE)
+    ac_(ac), av_(av), verbose_(false), color_(false), runTestsAsSeperateProcess_(false), repeat_(1), groupFilters_(NULL), nameFilters_(NULL), outputType_(OUTPUT_ECLIPSE)
 {
 }
 
 CommandLineArguments::~CommandLineArguments()
 {
+    while(groupFilters_) {
+        TestFilter* current = groupFilters_;
+        groupFilters_ = groupFilters_->getNext();
+        delete current;
+    }
+    while(nameFilters_) {
+        TestFilter* current = nameFilters_;
+        nameFilters_ = nameFilters_->getNext();
+        delete current;
+    }
 }
 
 bool CommandLineArguments::parse(TestPlugin* plugin)
@@ -47,12 +57,12 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
         else if (argument == "-c") color_ = true;
         else if (argument == "-p") runTestsAsSeperateProcess_ = true;
         else if (argument.startsWith("-r")) SetRepeatCount(ac_, av_, i);
-        else if (argument.startsWith("-g")) SetGroupFilter(ac_, av_, i);
-        else if (argument.startsWith("-sg")) SetStrictGroupFilter(ac_, av_, i);
-        else if (argument.startsWith("-n")) SetNameFilter(ac_, av_, i);
-        else if (argument.startsWith("-sn")) SetStrictNameFilter(ac_, av_, i);
-        else if (argument.startsWith("TEST(")) SetTestToRunBasedOnVerboseOutput(ac_, av_, i, "TEST(");
-        else if (argument.startsWith("IGNORE_TEST(")) SetTestToRunBasedOnVerboseOutput(ac_, av_, i, "IGNORE_TEST(");
+        else if (argument.startsWith("-g")) AddGroupFilter(ac_, av_, i);
+        else if (argument.startsWith("-sg")) AddStrictGroupFilter(ac_, av_, i);
+        else if (argument.startsWith("-n")) AddNameFilter(ac_, av_, i);
+        else if (argument.startsWith("-sn")) AddStrictNameFilter(ac_, av_, i);
+        else if (argument.startsWith("TEST(")) AddTestToRunBasedOnVerboseOutput(ac_, av_, i, "TEST(");
+        else if (argument.startsWith("IGNORE_TEST(")) AddTestToRunBasedOnVerboseOutput(ac_, av_, i, "IGNORE_TEST(");
         else if (argument.startsWith("-o")) correctParameters = SetOutputType(ac_, av_, i);
         else if (argument.startsWith("-p")) correctParameters = plugin->parseAllArguments(ac_, av_, i);
         else if (argument.startsWith("-k")) SetPackageName(ac_, av_, i);
@@ -67,7 +77,7 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
 
 const char* CommandLineArguments::usage() const
 {
-    return "usage [-v] [-c] [-r#] [-g|sg groupName] [-n|sn testName] [-o{normal, junit}] [-k packageName]\n";
+    return "usage [-v] [-c] [-r#] [-g|sg groupName]... [-n|sn testName]... [\"TEST(groupName, testName)\"]... [-o{normal, junit}] [-k packageName]\n";
 }
 
 bool CommandLineArguments::isVerbose() const
@@ -91,14 +101,14 @@ int CommandLineArguments::getRepeatCount() const
     return repeat_;
 }
 
-TestFilter CommandLineArguments::getGroupFilter() const
+const TestFilter* CommandLineArguments::getGroupFilters() const
 {
-    return groupFilter_;
+    return groupFilters_;
 }
 
-TestFilter CommandLineArguments::getNameFilter() const
+const TestFilter* CommandLineArguments::getNameFilters() const
 {
-    return nameFilter_;
+    return nameFilters_;
 }
 
 void CommandLineArguments::SetRepeatCount(int ac, const char** av, int& i)
@@ -125,37 +135,43 @@ SimpleString CommandLineArguments::getParameterField(int ac, const char** av, in
     return "";
 }
 
-void CommandLineArguments::SetGroupFilter(int ac, const char** av, int& i)
+void CommandLineArguments::AddGroupFilter(int ac, const char** av, int& i)
 {
-    groupFilter_ = TestFilter(getParameterField(ac, av, i, "-g"));
+    TestFilter* groupFilter = new TestFilter(getParameterField(ac, av, i, "-g"));
+    groupFilters_ = groupFilter->add(groupFilters_);
 }
 
-void CommandLineArguments::SetStrictGroupFilter(int ac, const char** av, int& i)
+void CommandLineArguments::AddStrictGroupFilter(int ac, const char** av, int& i)
 {
-    groupFilter_ = TestFilter(getParameterField(ac, av, i, "-sg"));
-    groupFilter_.strictMatching();
+    TestFilter* groupFilter = new TestFilter(getParameterField(ac, av, i, "-sg"));
+    groupFilter->strictMatching();
+    groupFilters_ = groupFilter->add(groupFilters_);
 }
 
-void CommandLineArguments::SetNameFilter(int ac, const char** av, int& i)
+void CommandLineArguments::AddNameFilter(int ac, const char** av, int& i)
 {
-    nameFilter_ = getParameterField(ac, av, i, "-n");
+    TestFilter* nameFilter = new TestFilter(getParameterField(ac, av, i, "-n"));
+    nameFilters_ = nameFilter->add(nameFilters_);
 }
 
-void CommandLineArguments::SetStrictNameFilter(int ac, const char** av, int& index)
+void CommandLineArguments::AddStrictNameFilter(int ac, const char** av, int& index)
 {
-    nameFilter_ = getParameterField(ac, av, index, "-sn");
-    nameFilter_.strictMatching();
+    TestFilter* nameFilter = new TestFilter(getParameterField(ac, av, index, "-sn"));
+    nameFilter->strictMatching();
+    nameFilters_= nameFilter->add(nameFilters_);
 }
 
-void CommandLineArguments::SetTestToRunBasedOnVerboseOutput(int ac, const char** av, int& index, const char* parameterName)
+void CommandLineArguments::AddTestToRunBasedOnVerboseOutput(int ac, const char** av, int& index, const char* parameterName)
 {
     SimpleString wholename = getParameterField(ac, av, index, parameterName);
     SimpleString testname = wholename.subStringFromTill(',', ')');
     testname = testname.subString(2, testname.size());
-    groupFilter_ = wholename.subStringFromTill(wholename.at(0), ',');
-    nameFilter_ = testname;
-    nameFilter_.strictMatching();
-    groupFilter_.strictMatching();
+    TestFilter* namefilter = new TestFilter(testname);
+    TestFilter* groupfilter = new TestFilter(wholename.subStringFromTill(wholename.at(0), ','));
+    namefilter->strictMatching();
+    groupfilter->strictMatching();
+    groupFilters_ = groupfilter->add(groupFilters_);
+    nameFilters_ = namefilter->add(nameFilters_);
 }
 
 void CommandLineArguments::SetPackageName(int ac, const char** av, int& i)
