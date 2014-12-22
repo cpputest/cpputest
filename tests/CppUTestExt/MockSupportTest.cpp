@@ -835,9 +835,23 @@ TEST(MockSupportTest, outputParameterTraced)
     mock().tracing(true);
 
     int param = 1;
+
+    // When using the tracing feature to understand legacy code, many unexpected calls would occur.
+    // Either the trace buffer text or the unexpected call output could be thought of as the
+    // "trace", for each would allow one to observe the actual calls and begin to understand
+    // the code under test.
+
+    // As analysis of the legacy code occurs, calls are identified then expectations are written for them.
+    mock().expectOneCall("someFunc").withOutputParameterReturning("someParameter", &param, sizeof(param));
+
+    // The following mimics a call to legacy code which performs some unknown set of actual calls.
     mock().actualCall("someFunc").withOutputParameter("someParameter", &param);
+
+    // Make sure that all established expectations are met.
     mock().checkExpectations();
-    STRCMP_CONTAINS("Function name: someFunc someParameter:", mock().getTraceOutput());
+
+    // The trace output can also be used to determine what calls have occurred.
+    STRCMP_CONTAINS("Function name: someFunc (out) someParameter:", mock().getTraceOutput());
 }
 
 TEST(MockSupportTest, outputParameterWithIgnoredParameters)
@@ -1605,14 +1619,70 @@ TEST(MockSupportTest, whenCallingDisabledOrIgnoredActualCallsThenTheyDontReturnP
 
 TEST(MockSupportTest, tracing)
 {
+	// Testing of most of the tracing feature.
+	// Test assumes that the MockSupportPlugin is installed.
+
+    long int outparam = 7;
+
+    MyTypeForTestingComparator comparator;
+    mock().installComparator("MyTypeForTesting", comparator);
+
     mock().tracing(true);
 
-    mock().actualCall("boo").withParameter("double", 1.0).withParameter("int", 1).withParameter("string", "string");
-    mock("scope").actualCall("foo").withParameter("double", 1.0).withParameter("int", 1).withParameter("string", "string");
-    mock().checkExpectations();
+    // Verify that the trace output begins as empty.
+    STRCMP_EQUAL("", mock().getTraceOutput());
 
-    STRCMP_CONTAINS("boo", mock().getTraceOutput());
-    STRCMP_CONTAINS("foo", mock().getTraceOutput());
+    // The following represents expected calls which are added as the legacy code is being understood
+    // from the trace output.
+    // (If these are commented out, you will get "Mock Trace" messages which resemble failures, but
+    // execution continues.)
+    // ------------------------------------------------------
+    mock().expectOneCall("bool").ignoreOtherParameters();
+    mock().expectOneCall("floob").ignoreOtherParameters();
+    mock().expectOneCall("blip").ignoreOtherParameters();
+    mock().expectOneCall("flim").withOutputParameterReturning("outParam1", &outparam, sizeof(long int)).ignoreOtherParameters();
+    mock().expectOneCall("boo").ignoreOtherParameters();
+    mock("scope").expectOneCall("foo").ignoreOtherParameters();
+
+    // Mock of actual legacy code calls.
+    // These would normally be invoked by a test double, as the
+    // code under test is executed.
+    // --------------------------------------------------------
+
+    mock().actualCall("bool").withParameter("dblParam1", 1.76).withParameter("intParam2", 7).withParameter("strParam3", "aStringValue");
+
+    unsigned int unsignedVal = 312;
+    long int longVal = -621L;
+    unsigned long int ulongVal = 1777L;
+    mock().actualCall("floob").withParameter("uintParam1", unsignedVal).withParameter("lintParam2", longVal).withParameter("ulintParam3", ulongVal);
+
+    long int *ptr = (long int *)(0x31F27);
+    const long int *cptr = (const long int *)(0xfFfFfFfF);
+    mock().actualCall("blip").withParameter("ptrParam1", ptr).withParameter("cptrParam2", cptr).withParameterOfType("MyTypeForTesting", "oParam3", ptr);
+
+    mock().actualCall("flim").withCallOrder(4).withOutputParameter("outParam1", &outparam);
+
+
+    mock().actualCall("boo").withParameter("double", 1.0).withParameter("int", 1).withParameter("string", "string");
+    mock("scope").actualCall("foo").withParameter("double", 2.0).withParameter("int", 2).withParameter("string", "scope");
+
+    // The trace output can be used to understand the legacy code.
+    STRCMP_CONTAINS("TRACE of TEST(MockSupportTest, tracing)", mock().getTraceOutput());
+    STRCMP_CONTAINS("Function name: bool dblParam1:1.76 intParam2:7 strParam3:aStringValue", mock().getTraceOutput());
+    STRCMP_CONTAINS("Function name: floob uintParam1:       312 (0x00000138) lintParam2:-621 ulintParam3:1777", mock().getTraceOutput());
+    STRCMP_CONTAINS("Function name: blip ptrParam1:0x31f27 cptrParam2:0xffffffff MyTypeForTesting oParam3:0x31f27", mock().getTraceOutput());
+    STRCMP_CONTAINS("Function name: flim withCallOrder:4 (out) outParam1:", mock().getTraceOutput());
+    STRCMP_CONTAINS("Function name: boo double:1 int:1 string:string", mock().getTraceOutput());
+    STRCMP_CONTAINS("Function name: foo double:2 int:2 string:scope", mock().getTraceOutput());
+
+    // This could be used to print out the trace output. (But it causes the test to fail...)
+    //FAIL(mock().getTraceOutput());
+
+    // Clear trace output
+    MockCheckedActualCallTrace::clearTraceOutput();
+
+    // Verify that the trace output is now empty again.
+    STRCMP_EQUAL("", mock().getTraceOutput());
 }
 
 TEST(MockSupportTest, shouldntFailTwice)

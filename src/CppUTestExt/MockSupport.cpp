@@ -111,6 +111,7 @@ void MockSupport::clear()
 
     tracing_ = false;
     MockActualCallTrace::instance().clear();
+    MockCheckedActualCallTrace::clearTraceOutput();
 
     expectations_.deleteAllExpectationsAndClearList();
     compositeCalls_.clear();
@@ -158,7 +159,11 @@ MockExpectedCall& MockSupport::expectNCalls(int amount, const SimpleString& func
 
 MockCheckedActualCall* MockSupport::createActualFunctionCall()
 {
-    lastActualFunctionCall_ = new MockCheckedActualCall(++callOrder_, activeReporter_, expectations_);
+	if (tracing_)
+		lastActualFunctionCall_ = new MockCheckedActualCallTrace(++callOrder_, activeReporter_, expectations_);
+	else
+		lastActualFunctionCall_ = new MockCheckedActualCall(++callOrder_, activeReporter_, expectations_);
+
     return lastActualFunctionCall_;
 }
 
@@ -171,8 +176,6 @@ MockActualCall& MockSupport::actualCall(const SimpleString& functionName)
     }
 
     if (!enabled_) return MockIgnoredActualCall::instance();
-    if (tracing_) return MockActualCallTrace::instance().withName(functionName);
-
 
     if (!expectations_.hasExpectationWithName(functionName) && ignoreOtherCalls_) {
         return MockIgnoredActualCall::instance();
@@ -217,7 +220,7 @@ void MockSupport::tracing(bool enabled)
 
 const char* MockSupport::getTraceOutput()
 {
-    return MockActualCallTrace::instance().getTraceOutput();
+    return MockCheckedActualCallTrace::getTraceOutput();
 }
 
 bool MockSupport::expectedCallsLeft()

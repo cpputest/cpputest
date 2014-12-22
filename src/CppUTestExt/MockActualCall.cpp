@@ -684,3 +684,230 @@ MockIgnoredActualCall& MockIgnoredActualCall::instance()
     return call;
 }
 
+//
+// MockCheckedActualCallTrace
+//
+// As a descendant of MockCheckedActualCall, it exercises the function call and parameter checking that its ancestor does.
+// However, due to its use for tracing, unexpected calls are reported but the unit test does not abort.
+//
+// Trace output collects in the static member traceBuffer_, which may be accessed via MockCheckedActualCallTrace::getTraceOutput().
+// This trace output is cleared by a direct call to MockCheckedActualCallTrace::clearTraceOutput(), or as one effect of calling mock().clear().
+
+
+// Static class attributes:
+SimpleString MockCheckedActualCallTrace::traceBuffer_;
+SimpleString MockCheckedActualCallTrace::testName_;
+
+MockCheckedActualCallTrace::MockCheckedActualCallTrace(int callOrder, MockFailureReporter* reporter, const MockExpectedCallsList& expectations) :
+		MockCheckedActualCall(callOrder, reporter, expectations), reporter_(reporter)
+{
+	// Nothing more to do here.
+}
+
+MockCheckedActualCallTrace::~MockCheckedActualCallTrace()
+{
+	// A MockCheckedActualCallTrace object is not responsible for any allocated memory.
+}
+
+const char *MockCheckedActualCallTrace::getTraceOutput()
+{
+	return traceBuffer_.asCharString();
+}
+
+void MockCheckedActualCallTrace::clearTraceOutput()
+{
+    traceBuffer_ = "";
+}
+
+void MockCheckedActualCallTrace::checkExpectations()
+{
+    if (getState() != CALL_IN_PROGESS) return;
+
+    // When tracing, it is possible for there to be no unfulfilled expectations.
+    if (! getUnfulfilledExpectations()->hasUnfullfilledExpectations())
+    	return;
+
+    MockCheckedExpectedCall* expectation = getUnfulfilledExpectations()->removeOneFulfilledExpectationWithIgnoredParameters();
+    setFulfilledExpectation(expectation);
+    if (expectation) {
+        callHasSucceeded();
+        return;
+    }
+
+    if (getUnfulfilledExpectations()->hasUnfulfilledExpectationsBecauseOfMissingParameters()) {
+        MockExpectedParameterDidntHappenFailure failure(getTest(), getName(), getAllExpectations());
+        failTest(failure);
+    }
+    else {
+        MockExpectedObjectDidntHappenFailure failure(getTest(), getName(), getAllExpectations());
+        failTest(failure);
+    }
+}
+
+
+
+void MockCheckedActualCallTrace::failTest(const MockFailure& failure)
+{
+	// When tracing, what usually causes a failure
+	// is only reported, and test execution continues.
+
+	SimpleString traceMessage = failure.getMessage();
+
+	// Remove the word, 'Failure' from the message.
+	traceMessage.replace("Failure", "Trace");
+
+    reporter_->getTestToFail()->print(traceMessage,failure.getFileName().asCharString(), failure.getFailureLineNumber());
+}
+
+/**
+ * Adds a line to the trace buffer to announce the new test name.
+ */
+void MockCheckedActualCallTrace::announceTestIfNew()
+{
+	SimpleString currentTestName = UtestShell::getCurrent()->getFormattedName();
+	if ( currentTestName != testName_)
+	{
+		testName_ = currentTestName;
+		traceBuffer_ += "\nTRACE of ";
+		traceBuffer_ += testName_;
+		traceBuffer_ += ":";
+	}
+}
+
+MockActualCall& MockCheckedActualCallTrace::withName(const SimpleString& name)
+{
+	// Update trace buffer
+	announceTestIfNew();
+    traceBuffer_ += "\nFunction name: ";
+    traceBuffer_ += name;
+
+    // Call base class functionality
+    return MockCheckedActualCall::withName(name);
+}
+
+MockActualCall& MockCheckedActualCallTrace::withCallOrder(int callOrder)
+{
+	// Update trace buffer
+    traceBuffer_ += " withCallOrder:";
+    traceBuffer_ += StringFrom(callOrder);
+
+    // Call base class functionality
+    return MockCheckedActualCall::withCallOrder(callOrder);
+}
+
+/**
+ * Helper function for withXxxxParameter() functions.
+ *
+ * Adds the parameter name to the trace buffer.
+ *
+ * @param name Parameter name
+ */
+void MockCheckedActualCallTrace::addParameterName(const SimpleString& name)
+{
+    traceBuffer_ += " ";
+    traceBuffer_ += name;
+    traceBuffer_ += ":";
+}
+
+MockActualCall& MockCheckedActualCallTrace::withIntParameter(const SimpleString& name, int value)
+{
+	// Update trace buffer
+    addParameterName(name);
+    traceBuffer_ += StringFrom(value);
+
+    // Call base class functionality
+    return MockCheckedActualCall::withIntParameter(name, value);
+}
+
+MockActualCall& MockCheckedActualCallTrace::withUnsignedIntParameter(const SimpleString& name, unsigned int value)
+{
+	// Update trace buffer
+    addParameterName(name);
+    traceBuffer_ += StringFrom(value);
+
+    // Call base class functionality
+    return MockCheckedActualCall::withUnsignedIntParameter(name, value);
+}
+
+MockActualCall& MockCheckedActualCallTrace::withLongIntParameter(const SimpleString& name, long int value)
+{
+	// Update trace buffer
+    addParameterName(name);
+    traceBuffer_ += StringFrom(value);
+
+    // Call base class functionality
+    return MockCheckedActualCall::withLongIntParameter(name, value);
+}
+
+MockActualCall& MockCheckedActualCallTrace::withUnsignedLongIntParameter(const SimpleString& name, unsigned long int value)
+{
+	// Update trace buffer
+    addParameterName(name);
+    traceBuffer_ += StringFrom(value);
+
+    // Call base class functionality
+    return MockCheckedActualCall::withUnsignedLongIntParameter(name, value);
+}
+
+MockActualCall& MockCheckedActualCallTrace::withDoubleParameter(const SimpleString& name, double value)
+{
+	// Update trace buffer
+    addParameterName(name);
+    traceBuffer_ += StringFrom(value);
+
+    // Call base class functionality
+    return MockCheckedActualCall::withDoubleParameter(name, value);
+}
+
+MockActualCall& MockCheckedActualCallTrace::withStringParameter(const SimpleString& name, const char *value)
+{
+	// Update trace buffer
+    addParameterName(name);
+    traceBuffer_ += StringFrom(value);
+
+    // Call base class functionality
+    return MockCheckedActualCall::withStringParameter(name, value);
+}
+
+MockActualCall& MockCheckedActualCallTrace::withPointerParameter(const SimpleString& name, void *value)
+{
+	// Update trace buffer
+    addParameterName(name);
+    traceBuffer_ += StringFrom(value);
+
+    // Call base class functionality
+    return MockCheckedActualCall::withPointerParameter(name, value);
+}
+
+MockActualCall& MockCheckedActualCallTrace::withConstPointerParameter(const SimpleString& name, const void *value)
+{
+	// Update trace buffer
+    addParameterName(name);
+    traceBuffer_ += StringFrom(value);
+
+    // Call base class functionality
+    return MockCheckedActualCall::withConstPointerParameter(name, value);
+}
+
+MockActualCall& MockCheckedActualCallTrace::withParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value)
+{
+	// Update trace buffer
+    traceBuffer_ += " ";
+    traceBuffer_ += typeName;
+    addParameterName(name);
+    traceBuffer_ += StringFrom(value);
+
+    // Call base class functionality
+    return MockCheckedActualCall::withParameterOfType(typeName, name, value);
+}
+
+MockActualCall& MockCheckedActualCallTrace::withOutputParameter(const SimpleString& name, void* output)
+{
+	// Update trace buffer
+	traceBuffer_ += " (out)";
+    addParameterName(name);
+    traceBuffer_ += StringFrom(output);
+
+    // Call base class functionality
+    return MockCheckedActualCall::withOutputParameter(name, output);
+}

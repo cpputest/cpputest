@@ -37,7 +37,7 @@ void MockNamedValue::setDefaultComparatorRepository(MockNamedValueComparatorRepo
     defaultRepository_ = repository;
 }
 
-MockNamedValue::MockNamedValue(const SimpleString& name) : name_(name), type_("int"), comparator_(NULL)
+MockNamedValue::MockNamedValue(const SimpleString& name) : name_(name), type_("int"), size_(sizeof(int)), comparator_(NULL)
 {
     value_.intValue_ = 0;
 }
