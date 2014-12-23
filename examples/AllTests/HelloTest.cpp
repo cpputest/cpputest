@@ -31,6 +31,17 @@
 #include <stdarg.h>
 #include "CppUTest/TestHarness.h"
 
+/** quick & dirty test to use stub by linker substitution;
+  * not working: Results in "multiple definition" error.
+  */
+  
+extern "C" {
+    void printHelloWorld()
+    {
+        PrintFormated("dlroW olleH!\n");
+    }
+}
+
 static SimpleString* buffer;
 
 TEST_GROUP(HelloWorld)
