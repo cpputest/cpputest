@@ -3,5 +3,5 @@
 
 void printHelloWorld()
 {
-    printf("dlroW olleH!\n");
+    PrintFormated("Stub the World!\n");
 }

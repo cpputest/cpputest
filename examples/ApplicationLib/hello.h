@@ -32,7 +32,7 @@
 extern "C" {
 #endif
 
-extern void printHelloWorld(void);
+__attribute__((weak)) extern void printHelloWorld(void);
 
 extern int (*PrintFormated)(const char*, ...);
 

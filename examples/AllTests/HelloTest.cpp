@@ -56,5 +56,5 @@ void teardown()
 TEST(HelloWorld, PrintOk)
 {
     printHelloWorld();
-    STRCMP_EQUAL("Hello World!\n", buffer->asCharString());
+    STRCMP_EQUAL("Stub the World!\n", buffer->asCharString());
 }
