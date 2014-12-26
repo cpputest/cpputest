@@ -69,7 +69,7 @@ void PlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* pl
            result->addFailure(TestFailure(shell, "failed in separate process"));
    }
    else {
-       shell->runOneTest(plugin, *result);
+       shell->runOneTestInCurrentProcess(plugin, *result);
        exit(result->getFailureCount() );
     }
 #endif
