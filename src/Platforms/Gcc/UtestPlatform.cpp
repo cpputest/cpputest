@@ -69,7 +69,7 @@ void PlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* pl
            result->addFailure(TestFailure(shell, "failed in seperate process"));
    }
    else {
-       shell->runOneTest(plugin, *result);
+       shell->runOneTestInCurrentProcess(plugin, *result);
        exit(result->getFailureCount() );
     }
 #endif
@@ -213,9 +213,9 @@ int (*PlatformSpecificIsNan)(double) = IsNanImplementation;
 static PlatformSpecificMutex PThreadMutexCreate(void)
 {
     pthread_mutex_t *mutex = new pthread_mutex_t;
-    
+
     pthread_mutex_init(mutex, NULL);
-    
+
     return (PlatformSpecificMutex)mutex;
 }
 
