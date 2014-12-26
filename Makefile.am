@@ -332,7 +332,7 @@ check_examples:
 
 check_all: check_basic check_special_situations check_coverage check_examples check_gtest
 	@echo "Last... one normal build and test"
-	make distclean; $(srcdir)/configure; make check; $(RUN_CPPUTEST_TESTS); $(RUN_CPPUTESTEXT_TESTS)
+	make distclean; $(srcdir)/configure; make check; $(RUN_CPPUTEST_TESTS) -p; $(RUN_CPPUTESTEXT_TESTS)
 	
 	
 
