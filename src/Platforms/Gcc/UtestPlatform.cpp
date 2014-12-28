@@ -64,9 +64,9 @@ void PlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* pl
    if (pid) {
        wait(&info);
        if (WIFEXITED(info) && WEXITSTATUS(info) > result->getFailureCount())
-           result->addFailure(TestFailure(shell, "failed in seperate process"));
+           result->addFailure(TestFailure(shell, "failed in separate process"));
        else if (!WIFEXITED(info))
-           result->addFailure(TestFailure(shell, "failed in seperate process"));
+           result->addFailure(TestFailure(shell, "failed in separate process"));
    }
    else {
        shell->runOneTest(plugin, *result);
