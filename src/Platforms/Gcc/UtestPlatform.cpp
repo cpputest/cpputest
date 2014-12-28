@@ -55,7 +55,7 @@ void PlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* pl
 {
 #ifdef __MINGW32__
    printf("-p doesn't work on MinGW as it is lacking fork. Running inside the process\b");
-   shell->runOneTest(plugin, *result);
+   shell->runOneTestInCurrentProcess(plugin, *result);
 #else
 
    int info;
