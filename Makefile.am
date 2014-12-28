@@ -330,9 +330,12 @@ check_examples:
 	@echo "Compiling and running the examples. This will use the old Makefile"
 	make distclean; $(srcdir)/configure; make; $(MAKE) -C $(srcdir)/examples all clean CPPUTEST_LIB_LINK_DIR="`pwd`/lib"
 
-check_all: check_basic check_special_situations check_coverage check_examples check_gtest
+check_separate_process:
+	@echo "Check running in a separate process"
+	$(RUN_CPPUTEST_TESTS) -p; $(RUN_CPPUTESTEXT_TESTS) -p
+
+check_all: check_basic check_special_situations check_coverage check_examples check_gtest check_separate_process
 	@echo "Last... one normal build and test"
-	make distclean; $(srcdir)/configure; make check; $(RUN_CPPUTEST_TESTS) -p; $(RUN_CPPUTESTEXT_TESTS)
-	
-	
+	make distclean; $(srcdir)/configure; make check; $(RUN_CPPUTEST_TESTS); $(RUN_CPPUTESTEXT_TESTS)
+
 
