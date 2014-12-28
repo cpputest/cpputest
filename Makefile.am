@@ -331,10 +331,11 @@ check_examples:
 	make distclean; $(srcdir)/configure; make; $(MAKE) -C $(srcdir)/examples all clean CPPUTEST_LIB_LINK_DIR="`pwd`/lib"
 
 check_separate_process:
-	@echo "Check running in a separate process"
+	@echo "Normal build and run tests in a separate process"
+	make distclean; $(srcdir)/configure; make
 	$(RUN_CPPUTEST_TESTS) -p; $(RUN_CPPUTESTEXT_TESTS) -p
 
-check_all: check_basic check_special_situations check_coverage check_examples check_gtest check_separate_process
+check_all: check_basic check_special_situations check_coverage check_examples check_gtest
 	@echo "Last... one normal build and test"
 	make distclean; $(srcdir)/configure; make check; $(RUN_CPPUTEST_TESTS); $(RUN_CPPUTESTEXT_TESTS)
 
