@@ -335,7 +335,7 @@ check_all: check_basic check_special_situations check_coverage check_examples ch
 	make distclean; $(srcdir)/configure; make check; 
 	@echo "Check running tests repeatedly"
 	$(RUN_CPPUTEST_TESTS) - r; $(RUN_CPPUTESTEXT_TESTS) -r
-	@echo "Check running tests in separate process"
-	$(RUN_CPPUTEST_TESTS) -p; $(RUN_CPPUTESTEXT_TESTS) -p
+	@echo "Check running tests in separate process (CppUTestExtTests TEST_GROUP(TestOrderedTestMacro) would have to fail)"
+	$(RUN_CPPUTEST_TESTS) -p;
 
 
