@@ -199,8 +199,8 @@ if INCLUDE_GMOCKTESTS
 	tests/CppUTestExt/AllTests.cpp 
 endif
 
-RUN_CPPUTEST_TESTS = ./$(CPPUTEST_TESTS) -r
-RUN_CPPUTESTEXT_TESTS = ./$(CPPUTESTEXT_TESTS) -r
+RUN_CPPUTEST_TESTS = ./$(CPPUTEST_TESTS)
+RUN_CPPUTESTEXT_TESTS = ./$(CPPUTESTEXT_TESTS)
 
 valgrind: check
 	@if test "x$(CPPUTEST_HAS_VALGRIND)" = xno; then echo "Running the valgrind target without having valgrind. Perhaps install it first?"; exit 1; fi
@@ -330,13 +330,12 @@ check_examples:
 	@echo "Compiling and running the examples. This will use the old Makefile"
 	make distclean; $(srcdir)/configure; make; $(MAKE) -C $(srcdir)/examples all clean CPPUTEST_LIB_LINK_DIR="`pwd`/lib"
 
-check_separate_process:
-	@echo "Normal build and run tests in a separate process"
-	make distclean; $(srcdir)/configure; make
-	$(RUN_CPPUTEST_TESTS) -p; $(RUN_CPPUTESTEXT_TESTS) -p
-
 check_all: check_basic check_special_situations check_coverage check_examples check_gtest
 	@echo "Last... one normal build and test"
-	make distclean; $(srcdir)/configure; make check; $(RUN_CPPUTEST_TESTS); $(RUN_CPPUTESTEXT_TESTS)
+	make distclean; $(srcdir)/configure; make check; 
+	@echo "Check running tests repeatedly"
+	$(RUN_CPPUTEST_TESTS) - r; $(RUN_CPPUTESTEXT_TESTS) -r
+	@echo "Check running tests in separate process"
+	$(RUN_CPPUTEST_TESTS) -p; $(RUN_CPPUTESTEXT_TESTS) -p
 
 
