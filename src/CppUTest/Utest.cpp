@@ -596,6 +596,11 @@ IgnoredUtestShell::IgnoredUtestShell()
 {
 }
 
+IgnoredUtestShell::IgnoredUtestShell(const char* groupName, const char* testName, const char* fileName, int lineNumber) :
+   UtestShell(groupName, testName, fileName, lineNumber)
+{
+}
+
 IgnoredUtestShell::~IgnoredUtestShell()
 {
 }

@@ -34,13 +34,14 @@
 struct JUnitTestCaseResultNode
 {
     JUnitTestCaseResultNode() :
-        execTime_(0), failure_(0), next_(0)
+        execTime_(0), failure_(0), ignored_(false), next_(0)
     {
     }
 
     SimpleString name_;
     long execTime_;
     TestFailure* failure_;
+    bool ignored_;
     JUnitTestCaseResultNode* next_;
 };
 
@@ -135,6 +136,9 @@ void JUnitTestOutput::printCurrentTestStarted(const UtestShell& test)
         impl_->results_.tail_ = impl_->results_.tail_->next_;
     }
     impl_->results_.tail_->name_ = test.getName();
+    if (*(test.getProgressIndicator()) == '!') {
+        impl_->results_.tail_->ignored_ = true;
+    }
 }
 
 SimpleString JUnitTestOutput::createFileName(const SimpleString& group)
@@ -192,6 +196,9 @@ void JUnitTestOutput::writeTestCases()
 
         if (cur->failure_) {
             writeFailure(cur);
+        }
+        else if (cur->ignored_) {
+            writeToFile("<skipped />\n");
         }
         writeToFile("</testcase>\n");
         cur = cur->next_;
