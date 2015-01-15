@@ -133,7 +133,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG"
+				PreprocessorDefinitions="NDEBUG"
 				Culture="1033"
 			/>
 			<Tool
@@ -141,7 +141,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="./Release/ApplicationLib.lib"
+				OutputFile="./$(ConfigurationName)/ApplicationLib.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -153,7 +153,7 @@
 			<Tool
 				Name="VCBscMakeTool"
 				SuppressStartupBanner="true"
-				OutputFile=".\Debug/ApplicationLib.bsc"
+				OutputFile="./$(ConfigurationName)/ApplicationLib.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"

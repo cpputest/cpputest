@@ -97,7 +97,7 @@
 			<Tool
 				Name="VCBscMakeTool"
 				SuppressStartupBanner="true"
-				OutputFile=".\Debug/AllTests.bsc"
+				OutputFile=".\$(ConfigurationName)/AllTests.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
