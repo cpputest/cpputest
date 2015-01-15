@@ -79,7 +79,7 @@
 			<Tool
 				Name="VCBscMakeTool"
 				SuppressStartupBanner="true"
-				OutputFile=".\Debug/ApplicationLib.bsc"
+				OutputFile="./$(ConfigurationName)/ApplicationLib.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -115,15 +115,15 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="0"
+				Optimization="2"
 				AdditionalIncludeDirectories="../../include,../../include/Platforms/VisualCpp"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
-				BasicRuntimeChecks="3"
+				BasicRuntimeChecks="0"
 				RuntimeLibrary="3"
-				PrecompiledHeaderFile="./Release/ApplicationLib.pch"
-				AssemblerListingLocation="./Release"
-				ObjectFile="./Release"
-				ProgramDataBaseFileName="./Debug"
+				PrecompiledHeaderFile="./$(ConfigurationName)/ApplicationLib.pch"
+				AssemblerListingLocation="./$(ConfigurationName)/"
+				ObjectFile="./$(ConfigurationName)/"
+				ProgramDataBaseFileName="./$(ConfigurationName)/"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="0"
