@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="AllTests"
 	ProjectGUID="{95A5F8D0-12C0-4AC1-B46B-292DD3886108}"
 	TargetFrameworkVersion="0"
@@ -16,13 +16,14 @@
 	<Configurations>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory=".\Release"
-			IntermediateDirectory=".\Release"
+			OutputDirectory="./$(ConfigurationName)/"
+			IntermediateDirectory="./$(ConfigurationName)/"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
+			BuildLogFile="$(IntDir)/BuildLog.htm"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -43,18 +44,19 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="0"
+				Optimization="2"
 				AdditionalIncludeDirectories="../../include,../../include/Platforms/VisualCpp,../ApplicationLib"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
-				BasicRuntimeChecks="3"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				BasicRuntimeChecks="0"
 				RuntimeLibrary="3"
-				PrecompiledHeaderFile=".\Debug/AllTests.pch"
-				AssemblerListingLocation=".\Debug/"
-				ObjectFile=".\Debug/"
-				ProgramDataBaseFileName=".\Debug/"
+				PrecompiledHeaderFile="./$(ConfigurationName)/AllTests.pch"
+				AssemblerListingLocation="./$(ConfigurationName)/"
+				ObjectFile="./$(ConfigurationName)/"
+				ProgramDataBaseFileName="./$(ConfigurationName)/"
+				XMLDocumentationFileName="./$(ConfigurationName)/"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
-				DebugInformationFormat="4"
+				DebugInformationFormat="0"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -69,13 +71,15 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/DEFAULTLIB:../ApplicationLib/Debug/ApplicationLib.lib"
-				AdditionalDependencies="../../lib/CppUTest.lib odbc32.lib odbccp32.lib winmm.lib"
-				OutputFile=".\Debug/AllTests.exe"
+				AdditionalOptions="/NODEFAULTLIB:LIBCMT"
+				AdditionalDependencies="../../lib/CppUTest.lib ../ApplicationLib/$(ConfigurationName)/ApplicationLib.lib odbc32.lib odbccp32.lib winmm.lib"
+				OutputFile="./$(ConfigurationName)/AllTests.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
-				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\Debug/AllTests.pdb"
+				ManifestFile="./$(ConfigurationName)/$(TargetFileName).intermediate.manifest"
+				IgnoreAllDefaultLibraries="false"
+				GenerateDebugInformation="false"
+				ProgramDatabaseFile=""
 				SubSystem="1"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -93,7 +97,7 @@
 			<Tool
 				Name="VCBscMakeTool"
 				SuppressStartupBanner="true"
-				OutputFile=".\Debug/AllTests.bsc"
+				OutputFile=".\$(ConfigurationName)/AllTests.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -103,6 +107,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="&quot;$(TargetPath)&quot;"
 			/>
 		</Configuration>
 		<Configuration
@@ -139,10 +144,11 @@
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				PrecompiledHeaderFile=".\Debug/AllTests.pch"
-				AssemblerListingLocation=".\Debug/"
-				ObjectFile=".\Debug/"
-				ProgramDataBaseFileName=".\Debug/"
+				PrecompiledHeaderFile="./$(ConfigurationName)/AllTests.pch"
+				AssemblerListingLocation="./$(ConfigurationName)/"
+				ObjectFile="./$(ConfigurationName)/"
+				ProgramDataBaseFileName="./$(ConfigurationName)/"
+				XMLDocumentationFileName="$(ConfigurationName)/"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="4"
@@ -160,12 +166,13 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="../../lib/CppUTest.lib odbc32.lib odbccp32.lib winmm.lib"
-				OutputFile=".\Debug/AllTests.exe"
+				AdditionalDependencies="../../lib/CppUTest.lib ../ApplicationLib/$(ConfigurationName)/ApplicationLib.lib odbc32.lib odbccp32.lib winmm.lib"
+				OutputFile="./$(ConfigurationName)/AllTests.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
+				ManifestFile="./$(ConfigurationName)/$(TargetFileName).intermediate.manifest"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\Debug/AllTests.pdb"
+				ProgramDatabaseFile="./$(ConfigurationName)/AllTests.pdb"
 				SubSystem="1"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -193,6 +200,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="&quot;$(TargetPath)&quot;"
 			/>
 		</Configuration>
 	</Configurations>
