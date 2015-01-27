@@ -573,10 +573,11 @@ TEST(SimpleString, _64BitAddressPrintsCorrectly)
 
 #else
 /*
- * The above test case should also pass on 64 bit systems with 32 bit longs, 
- * but would actually fail due to implementation problems. Right now, the 64  
- * bit pointers are casted to 32bit as the %p is causing different formats
- * on different platforms. However, this will need to be fixed in the future.
+ * This test case should pass on 64 bit systems with 32 bit longs, 
+ * but actually fails due to an implementation problem: Right now,
+ * the 64 bit pointers are casted to 32bit as the %p is causing 
+ * different formats on different platforms. However, this will
+ * need to be fixed in the future.
  */
 
 IGNORE_TEST(SimpleString, _64BitAddressPrintsCorrectly)
@@ -586,7 +587,7 @@ IGNORE_TEST(SimpleString, _64BitAddressPrintsCorrectly)
 #endif
 #else
 /*
- * The above test case would necessarily fail on 32 bit systems.
+ * This test case necessarily fails on 32 bit systems.
  */
 IGNORE_TEST(SimpleString, _64BitAddressPrintsCorrectly)
 {
