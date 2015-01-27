@@ -587,7 +587,7 @@ IGNORE_TEST(SimpleString, _64BitAddressPrintsCorrectly)
 #endif
 #else
 /*
- * This test case necessarily fails on 32 bit systems.
+ * This test case cannot pass on 32 bit systems.
  */
 IGNORE_TEST(SimpleString, _64BitAddressPrintsCorrectly)
 {
