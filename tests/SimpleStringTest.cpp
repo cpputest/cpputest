@@ -565,9 +565,9 @@ TEST(SimpleString, CollectionWritingToEmptyString)
 
 TEST(SimpleString, _64BitAddressPrintsCorrectly)
 {
-    char* p = (char*) 0xffffffff;
-    SimpleString expected("0x100000000");
-    SimpleString actual = StringFrom((void*)++p);
+    char* p = (char*) 0x0012345678901234;
+    SimpleString expected("0x12345678901234");
+    SimpleString actual = StringFrom((void*)p);
     STRCMP_EQUAL(expected.asCharString(), actual.asCharString());
 }
 
@@ -582,6 +582,10 @@ TEST(SimpleString, _64BitAddressPrintsCorrectly)
 
 IGNORE_TEST(SimpleString, _64BitAddressPrintsCorrectly)
 {
+    char* p = (char*) 0xffffffff;
+    SimpleString expected("0x123456789");
+    SimpleString actual = StringFrom((void*)&p[0x2345678A]);
+    STRCMP_EQUAL(expected.asCharString(), actual.asCharString());
 }
 
 #endif
