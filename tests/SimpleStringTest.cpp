@@ -560,25 +560,36 @@ TEST(SimpleString, CollectionWritingToEmptyString)
     STRCMP_EQUAL("", col[3].asCharString());
 }
 
-#if !defined(CPPUTEST_64BIT) || \
-     defined(CPPUTEST_64BIT_32BIT_LONGS)
+#ifdef CPPUTEST_64BIT
+#ifndef CPPUTEST_64BIT_32BIT_LONGS
 
+TEST(SimpleString, _64BitAddressPrintsCorrectly)
+{
+    char* p = (char*) 0xffffffff;
+    SimpleString expected("0x100000000");
+    SimpleString actual = StringFrom((void*)++p);
+    STRCMP_EQUAL(expected.asCharString(), actual.asCharString());
+}
+
+#else
 /*
- * Right now, the 64 bit pointers are casted to 32bit as the %p is causing different formats on
- * different platforms. However, this will need to be fixed in the future.
+ * The above test case should also pass on 64 bit systems with 32 bit longs, 
+ * but would actually fail due to implementation problems. Right now, the 64  
+ * bit pointers are casted to 32bit as the %p is causing different formats
+ * on different platforms. However, this will need to be fixed in the future.
  */
+
 IGNORE_TEST(SimpleString, _64BitAddressPrintsCorrectly)
 {
 }
 
+#endif
 #else
-
-TEST(SimpleString, _64BitAddressPrintsCorrectly)
+/*
+ * The above test case would necessarily fail on 32 bit systems.
+ */
+IGNORE_TEST(SimpleString, _64BitAddressPrintsCorrectly)
 {
-    char* p = (char*) 0x0012345678901234;
-    SimpleString expected("0x12345678901234");
-    SimpleString actual = StringFrom((void*)p);
-    STRCMP_EQUAL(expected.asCharString(), actual.asCharString());
 }
 
 #endif
