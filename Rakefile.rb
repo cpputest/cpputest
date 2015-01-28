@@ -1,3 +1,8 @@
+workspace :CppUTest, File.dirname(__FILE__) do |w|
+  w.add_default_tasks(['CppUTest:Test'])
+  w.add_default_tasks(['CppUTestExt:Test'])
+end
+
 static_library_project :CppUTest, File.dirname(__FILE__) do |lib|
 
   lib.add_api_headers 'include'
