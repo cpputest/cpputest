@@ -560,18 +560,8 @@ TEST(SimpleString, CollectionWritingToEmptyString)
     STRCMP_EQUAL("", col[3].asCharString());
 }
 
-#if !defined(CPPUTEST_64BIT) || \
-     defined(CPPUTEST_64BIT_32BIT_LONGS)
-
-/*
- * Right now, the 64 bit pointers are casted to 32bit as the %p is causing different formats on
- * different platforms. However, this will need to be fixed in the future.
- */
-IGNORE_TEST(SimpleString, _64BitAddressPrintsCorrectly)
-{
-}
-
-#else
+#ifdef CPPUTEST_64BIT
+#ifndef CPPUTEST_64BIT_32BIT_LONGS
 
 TEST(SimpleString, _64BitAddressPrintsCorrectly)
 {
@@ -579,6 +569,32 @@ TEST(SimpleString, _64BitAddressPrintsCorrectly)
     SimpleString expected("0x12345678901234");
     SimpleString actual = StringFrom((void*)p);
     STRCMP_EQUAL(expected.asCharString(), actual.asCharString());
+}
+
+#else
+/*
+ * This test case should pass on 64 bit systems with 32 bit longs, 
+ * but actually fails due to an implementation problem: Right now,
+ * the 64 bit pointers are casted to 32bit as the %p is causing 
+ * different formats on different platforms. However, this will
+ * need to be fixed in the future.
+ */
+
+IGNORE_TEST(SimpleString, _64BitAddressPrintsCorrectly)
+{
+    char* p = (char*) 0xffffffff;
+    SimpleString expected("0x123456789");
+    SimpleString actual = StringFrom((void*)&p[0x2345678A]);
+    STRCMP_EQUAL(expected.asCharString(), actual.asCharString());
+}
+
+#endif
+#else
+/*
+ * This test case cannot pass on 32 bit systems.
+ */
+IGNORE_TEST(SimpleString, _64BitAddressPrintsCorrectly)
+{
 }
 
 #endif
