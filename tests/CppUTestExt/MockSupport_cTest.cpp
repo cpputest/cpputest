@@ -235,7 +235,7 @@ static void failedCallToMockC()
 #ifdef _MSC_VER
 #define MSC_SWITCHED_TEST(testGroup, testName) IGNORE_TEST(testGroup, testName)
 #else
-#define MSC_SWITCHED_TEST(testGroup, testName) IGNORE_TEST(testGroup, testName)
+#define MSC_SWITCHED_TEST(testGroup, testName) TEST(testGroup, testName)
 #endif
 
 MSC_SWITCHED_TEST(MockSupport_c, NoExceptionsAreThrownWhenAMock_cCallFailed)
