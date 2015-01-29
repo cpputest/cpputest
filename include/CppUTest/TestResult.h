@@ -59,7 +59,6 @@ public:
     virtual void countIgnored();
     virtual void addFailure(const TestFailure& failure);
     virtual void print(const char* text);
-    virtual void setProgressIndicator(const char*);
 
     int getTestCount() const
     {

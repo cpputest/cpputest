@@ -258,9 +258,9 @@ bool UtestShell::hasFailed() const
     return hasFailed_;
 }
 
-const char* UtestShell::getProgressIndicator() const
+bool UtestShell::willRun() const
 {
-    return ".";
+    return true;
 }
 
 bool UtestShell::isRunInSeperateProcess() const
@@ -596,13 +596,18 @@ IgnoredUtestShell::IgnoredUtestShell()
 {
 }
 
+IgnoredUtestShell::IgnoredUtestShell(const char* groupName, const char* testName, const char* fileName, int lineNumber) :
+   UtestShell(groupName, testName, fileName, lineNumber)
+{
+}
+
 IgnoredUtestShell::~IgnoredUtestShell()
 {
 }
 
-const char* IgnoredUtestShell::getProgressIndicator() const
+bool IgnoredUtestShell::willRun() const
 {
-    return "!";
+    return false;
 }
 
 SimpleString IgnoredUtestShell::getMacroName() const

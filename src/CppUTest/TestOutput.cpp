@@ -98,6 +98,13 @@ TestOutput& operator<<(TestOutput& p, long int i)
 void TestOutput::printCurrentTestStarted(const UtestShell& test)
 {
     if (verbose_) print(test.getFormattedName().asCharString());
+
+    if (test.willRun()) {
+       setProgressIndicator(".");
+    }
+    else {
+       setProgressIndicator("!");
+    }
 }
 
 void TestOutput::printCurrentTestEnded(const TestResult& res)

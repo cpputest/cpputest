@@ -239,6 +239,15 @@ public:
         return *this;
     }
 
+    JUnitTestOutputTestRunner& withIgnoredTest(const char* testName)
+    {
+        runPreviousTest();
+        delete currentTest_;
+
+        currentTest_ = new IgnoredUtestShell(currentGroupName_, testName, "file", 1);
+        return *this;
+    }
+
     void runPreviousTest()
     {
         if (currentTest_ == 0) return;
@@ -583,3 +592,16 @@ TEST(JUnitOutputTest, TestCaseBlockWithAPackageName)
     STRCMP_EQUAL("</testcase>\n", outputFile->line(6));
 }
 
+TEST(JUnitOutputTest, TestCaseBlockForIgnoredTest)
+{
+   junitOutput->setPackageName("packagename");
+   testCaseRunner->start()
+      .withGroup("groupname").withIgnoredTest("testname")
+      .end();
+
+   outputFile = fileSystem.file("cpputest_groupname.xml");
+
+   STRCMP_EQUAL("<testcase classname=\"packagename.groupname\" name=\"testname\" time=\"0.000\">\n", outputFile->line(5));
+   STRCMP_EQUAL("<skipped />\n", outputFile->line(6));
+   STRCMP_EQUAL("</testcase>\n", outputFile->line(7));
+}
