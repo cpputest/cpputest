@@ -136,7 +136,7 @@ void JUnitTestOutput::printCurrentTestStarted(const UtestShell& test)
         impl_->results_.tail_ = impl_->results_.tail_->next_;
     }
     impl_->results_.tail_->name_ = test.getName();
-    if (*(test.getProgressIndicator()) == '!') {
+    if (!test.willRun()) {
         impl_->results_.tail_->ignored_ = true;
     }
 }

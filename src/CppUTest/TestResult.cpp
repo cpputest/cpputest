@@ -37,11 +37,6 @@ TestResult::TestResult(TestOutput& p) :
 {
 }
 
-void TestResult::setProgressIndicator(const char* indicator)
-{
-    output_.setProgressIndicator(indicator);
-}
-
 TestResult::~TestResult()
 {
 }

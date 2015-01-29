@@ -258,9 +258,9 @@ bool UtestShell::hasFailed() const
     return hasFailed_;
 }
 
-const char* UtestShell::getProgressIndicator() const
+bool UtestShell::willRun() const
 {
-    return ".";
+    return true;
 }
 
 bool UtestShell::isRunInSeperateProcess() const
@@ -605,9 +605,9 @@ IgnoredUtestShell::~IgnoredUtestShell()
 {
 }
 
-const char* IgnoredUtestShell::getProgressIndicator() const
+bool IgnoredUtestShell::willRun() const
 {
-    return "!";
+    return false;
 }
 
 SimpleString IgnoredUtestShell::getMacroName() const
