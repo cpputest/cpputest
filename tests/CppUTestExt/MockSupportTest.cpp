@@ -216,7 +216,7 @@ TEST(MockSupportTest, strictOrderViolatedWithinAScope)
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 
-TEST(MockSupportTest, strictOrderNotViolatedWithTwoMocks)
+TEST(MockSupportTest, strictOrderNotViolatedAcrossScopes)
 {
     mock("mock1").strictOrder();
     mock("mock2").strictOrder();
@@ -231,9 +231,8 @@ TEST(MockSupportTest, strictOrderNotViolatedWithTwoMocks)
     CHECK_NO_MOCK_FAILURE();
 }
 
-IGNORE_TEST(MockSupportTest, strictOrderViolatedWithTwoMocks)
+TEST(MockSupportTest, strictOrderViolatedAcrossScopes)
 {
-    //this test and scenario needs a decent failure message.
     mock("mock1").strictOrder();
     mock("mock2").strictOrder();
     mock("mock1").expectOneCall("foo1");
