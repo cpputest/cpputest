@@ -73,7 +73,7 @@ static const char* TimeStringImplementation()
     time_t the_time = time(NULL);
     struct tm the_local_time;
     static char dateTime[80];
-    localtime_s(&the_local_time, &the_time);
+    _getsystime(&the_local_time);
     strftime(dateTime, 80, "%Y-%m-%dT%H:%M:%S", &the_local_time);
     return dateTime;
 }
@@ -87,7 +87,7 @@ int PlatformSpecificVSNprintf(char *str, size_t size, const char* format, va_lis
     char* buf = 0;
     size_t sizeGuess = size;
 
-    int result = _vsnprintf_s( str, size, _TRUNCATE, format, args);
+    int result = _vsnprintf( str, size, format, args);
     str[size-1] = 0;
     while (result == -1)
     {
@@ -95,7 +95,7 @@ int PlatformSpecificVSNprintf(char *str, size_t size, const char* format, va_lis
             free(buf);
         sizeGuess += 10;
         buf = (char*)malloc(sizeGuess);
-        result = _vsnprintf_s( buf, sizeGuess, _TRUNCATE, format, args);
+        result = _vsnprintf( buf, sizeGuess, format, args);
     }
 
     if (buf != 0)
@@ -106,8 +106,7 @@ int PlatformSpecificVSNprintf(char *str, size_t size, const char* format, va_lis
 
 PlatformSpecificFile PlatformSpecificFOpen(const char* filename, const char* flag)
 {
-   FILE* file;
-   fopen_s(&file, filename, flag);
+   FILE* file = fopen(filename, flag);
    return file;
 }
 
@@ -165,7 +164,7 @@ extern "C" int (*PlatformSpecificIsNan)(double) = _isnan;
 
 int PlatformSpecificVSNprintf(char *str, unsigned int size, const char* format, void* args)
 {
-   return _vsnprintf_s( str, size, _TRUNCATE, format, (va_list) args);
+   return _vsnprintf( str, size, format, (va_list) args);
 }
 
 static PlatformSpecificMutex Win32MutexCreate(void)

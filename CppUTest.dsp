@@ -41,7 +41,7 @@ RSC=rc.exe
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
+# ADD CPP /nologo /W3 /GX /O2 /I ".\include\Platforms\VisualCpp" /I ".\include" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -64,7 +64,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /GX /ZI /Od /I ".\include\Platforms\VisualCpp" /I ".\include\CppUTest" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /GX /ZI /Od /I ".\include\Platforms\VisualCpp" /I ".\include" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FR /FD /GZ /c
 # SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
@@ -90,14 +90,6 @@ SOURCE=.\SRC\CPPUTEST\CommandLineTestRunner.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\SRC\CPPUTEST\EqualsFailure.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\SRC\CPPUTEST\Failure.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\SRC\CPPUTEST\JUnitTestOutput.cpp
 # End Source File
 # Begin Source File
@@ -106,23 +98,11 @@ SOURCE=.\SRC\CPPUTEST\MemoryLeakWarningPlugin.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\SRC\CPPUTEST\NullTest.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\SRC\CPPUTEST\SimpleString.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\SRC\CPPUTEST\SimpleStringExtensions.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\SRC\CPPUTEST\TestHarness_c.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\SRC\CPPUTEST\TestInstaller.cpp
 # End Source File
 # Begin Source File
 
@@ -147,10 +127,6 @@ SOURCE=.\SRC\CPPUTEST\Utest.cpp
 # Begin Source File
 
 SOURCE=.\src\Platforms\VisualCpp\UtestPlatform.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\Platforms\VisualCpp\Win32MemoryLeakWarning.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
