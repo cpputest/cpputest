@@ -419,6 +419,13 @@ void UtestShell::assertPointersEqual(const void* expected, const void* actual, c
         failWith(EqualsFailure(this, fileName, lineNumber, StringFrom(expected), StringFrom(actual)));
 }
 
+void UtestShell::assertFunctionPointersEqual(void (*expected)(), void (*actual)(), const char* fileName, int lineNumber)
+{
+    getTestResult()->countCheck();
+    if (expected != actual)
+        failWith(EqualsFailure(this, fileName, lineNumber, StringFrom(expected), StringFrom(actual)));
+}
+
 void UtestShell::assertDoublesEqual(double expected, double actual, double threshold, const char* fileName, int lineNumber, const TestTerminator& testTerminator)
 {
     getTestResult()->countCheck();
