@@ -67,6 +67,8 @@ public:
     virtual void* returnPointerValueOrDefault(void * defaultValue);
     virtual const void* returnConstPointerValueOrDefault(const void * defaultValue);
     virtual const void* constPointerReturnValue();
+    virtual void (*returnFunctionPointerValueOrDefault(void (*defaultValue)()))();
+    virtual void (*functionPointerReturnValue())();
 
     bool hasData(const SimpleString& name);
     void setData(const SimpleString& name, int value);
@@ -75,6 +77,9 @@ public:
     void setData(const SimpleString& name, double value);
     void setData(const SimpleString& name, void* value);
     void setData(const SimpleString& name, const void* value);
+    void setData(const SimpleString& name, void (*value)());
+    void setData(const SimpleString& name, void const *value, size_t size);
+    void setData(const SimpleString& name, MemoryBufferContainer const &value);
     void setDataObject(const SimpleString& name, const SimpleString& type, void* value);
     MockNamedValue getData(const SimpleString& name);
 
