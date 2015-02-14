@@ -305,10 +305,20 @@ static void (*g_crash_handler)(void *context, const char *crash_message) = NULL;
 
 static void *g_callback_context = NULL;
 
+static char const *findSignalName(int signalID)
+{
+    for (size_t i = 0; i < sizeof(g_signals)/sizeof(g_signals[0]); i++) {
+        if (g_signals[i].signum == signalID) {
+            return g_signals[i].signame;
+        }
+    }
+    return "Unknown signal";
+}
+
 static void signalHandler(int signalID)
 {
     if (g_crash_handler) {
-        g_crash_handler(g_callback_context, g_signals[signalID].signame);
+        g_crash_handler(g_callback_context, findSignalName(signalID));
     }
     signal(signalID, SIG_DFL);
     raise(signalID);
