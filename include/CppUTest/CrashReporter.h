@@ -46,23 +46,18 @@ public:
 	void setOutput(TestOutput* output);
 
 private:
-
 	~CrashReporter();
 	CrashReporter();
 
-	void initSignalHandlers();
-	void updateSignalHandlers(struct sigaction* sa);
-	void destroySignalHandlers();
-	static void signalHandler(int signal);
+	static void crashHandler(void *context, const char *crash_message);
 	bool validTest(const UtestShell* test);
 	bool validOutput(TestOutput* output);
-	void printCrashMessage();
-	void printCrashMessageConsoleOutput();
-	void printCrashMessageTestRunnerOutput();
+	void printCrashMessage(char const *crashMessage);
+	void printCrashMessageConsoleOutput(char const *crashMessage);
+	void printCrashMessageTestRunnerOutput(char const *crashMessage);
 
 	const UtestShell* currentTest;
 	TestOutput* testRunnerOutput;
-	SimpleString crashSignalName;
 	static CrashReporter* singleCrashReporter;
 };
 

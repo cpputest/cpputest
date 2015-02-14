@@ -209,3 +209,12 @@ void (*PlatformSpecificMutexLock)(PlatformSpecificMutex) = Win32MutexLock;
 void (*PlatformSpecificMutexUnlock)(PlatformSpecificMutex) = Win32MutexUnlock;
 void (*PlatformSpecificMutexDestroy)(PlatformSpecificMutex) = Win32MutexDestroy;
 
+void PlatformSpecificInstallCrashTrap(void (*crash_handler)(void *context, const char *crash_message), void *callback_context)
+{
+    (void)crash_handler;
+    (void)callback_context;
+}
+
+void PlatformSpecificRemoveCrashTrap(void)
+{
+}

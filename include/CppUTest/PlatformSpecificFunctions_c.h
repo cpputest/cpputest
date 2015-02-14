@@ -81,6 +81,10 @@ extern void (*PlatformSpecificMutexLock)(PlatformSpecificMutex mtx);
 extern void (*PlatformSpecificMutexUnlock)(PlatformSpecificMutex mtx);
 extern void (*PlatformSpecificMutexDestroy)(PlatformSpecificMutex mtx);
 
+/* Crash Handling operations */
+void PlatformSpecificInstallCrashTrap(void (*crash_handler)(void *context, const char *crash_message), void *callback_context);
+void PlatformSpecificRemoveCrashTrap(void);
+
 #ifdef __cplusplus
 }
 #endif

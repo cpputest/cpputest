@@ -46,6 +46,7 @@
 #include <sys/wait.h>
 #endif
 #include <pthread.h>
+#include <signal.h>
 
 #include "CppUTest/PlatformSpecificFunctions.h"
 
@@ -287,5 +288,57 @@ PlatformSpecificMutex (*PlatformSpecificMutexCreate)(void) = PThreadMutexCreate;
 void (*PlatformSpecificMutexLock)(PlatformSpecificMutex) = PThreadMutexLock;
 void (*PlatformSpecificMutexUnlock)(PlatformSpecificMutex) = PThreadMutexUnlock;
 void (*PlatformSpecificMutexDestroy)(PlatformSpecificMutex) = PThreadMutexDestroy;
+
+static struct {
+    int signum;
+    char const *signame;
+} const g_signals[] = {
+    {SIGABRT, "SIGABRT"},
+    {SIGFPE, "SIGFPE"},
+    {SIGILL, "SIGILL"},
+    {SIGINT, "SIGINT"},
+    {SIGSEGV, "SIGSEGV"},
+    {SIGTERM, "SIGTERM"}
+};
+
+static void (*g_crash_handler)(void *context, const char *crash_message) = NULL;
+
+static void *g_callback_context = NULL;
+
+static void signalHandler(int signalID)
+{
+    if (g_crash_handler) {
+        g_crash_handler(g_callback_context, g_signals[signalID].signame);
+    }
+    signal(signalID, SIG_DFL);
+    raise(signalID);
+}
+
+static void updateSignalHandlers(struct sigaction* sa)
+{
+    for (size_t i = 0; i < sizeof(g_signals)/sizeof(g_signals[0]); i++) {
+        sigaction(g_signals[i].signum, sa, NULL);
+    }
+}
+
+void PlatformSpecificInstallCrashTrap(void (*crash_handler)(void *context, const char *crash_message), void *callback_context)
+{
+    g_crash_handler = crash_handler;
+    g_callback_context = callback_context;
+
+    struct sigaction sa;
+    sa.sa_handler = signalHandler;
+    updateSignalHandlers(&sa);
+}
+
+void PlatformSpecificRemoveCrashTrap(void)
+{
+    struct sigaction sa;
+    sa.sa_handler = SIG_DFL;
+    updateSignalHandlers(&sa);
+
+    g_crash_handler = NULL;
+    g_callback_context = NULL;
+}
 
 }

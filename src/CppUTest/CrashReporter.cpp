@@ -34,20 +34,7 @@
 #include "CppUTest/CrashReporter.h"
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
-#include <signal.h>
 #include <stdio.h>
-
-static struct {
-    int signum;
-    char const *signame;
-} const g_signals[] = {
-    {SIGABRT, "SIGABRT"},
-    {SIGFPE, "SIGFPE"},
-    {SIGILL, "SIGILL"},
-    {SIGINT, "SIGINT"},
-    {SIGSEGV, "SIGSEGV"},
-    {SIGTERM, "SIGTERM"}
-};
 
 CrashReporter* CrashReporter::singleCrashReporter = NULL;
 
@@ -61,48 +48,26 @@ CrashReporter* CrashReporter::getInstance()
 
 CrashReporter::CrashReporter()
 {
-    initSignalHandlers();
     testRunnerOutput = NULL;
     currentTest = NULL;
+    PlatformSpecificInstallCrashTrap(crashHandler, NULL);
 }
 
 CrashReporter::~CrashReporter()
 {
-    destroySignalHandlers();
+    PlatformSpecificRemoveCrashTrap();
     delete(singleCrashReporter);
     singleCrashReporter = NULL;
 }
 
-void CrashReporter::initSignalHandlers()
+void CrashReporter::crashHandler(void *context, const char *crash_message)
 {
-    struct sigaction sa;
-    sa.sa_handler = signalHandler;
-    updateSignalHandlers(&sa);
+    (void)context;
+    getInstance()->printCrashMessage(crash_message);
 }
 
-void CrashReporter::destroySignalHandlers()
+void CrashReporter::setCurrentTest(const UtestShell* test)
 {
-    struct sigaction sa;
-    sa.sa_handler = SIG_DFL;
-    updateSignalHandlers(&sa);
-}
-
-void CrashReporter::updateSignalHandlers(struct sigaction* sa)
-{
-    for (size_t i = 0; i < sizeof(g_signals)/sizeof(g_signals[0]); i++) {
-        sigaction(g_signals[i].signum, sa, NULL);
-    }
-}
-
-void CrashReporter::signalHandler(int signalID)
-{
-    getInstance()->crashSignalName = g_signals[signalID].signame;
-    getInstance()->printCrashMessage();
-    signal(signalID, SIG_DFL);
-    raise(signalID);
-}
-
-void CrashReporter::setCurrentTest(const UtestShell* test) {
     currentTest = test;
 }
 
@@ -127,33 +92,33 @@ bool CrashReporter::validOutput(TestOutput* output){
     }
 }
 
-void CrashReporter::printCrashMessage()
+void CrashReporter::printCrashMessage(char const *crashMessage)
 {
     if (validOutput(testRunnerOutput)) {
-        printCrashMessageTestRunnerOutput();
+        printCrashMessageTestRunnerOutput(crashMessage);
     } else {
-        printCrashMessageConsoleOutput();
+        printCrashMessageConsoleOutput(crashMessage);
     }
 }
 
-void CrashReporter::printCrashMessageTestRunnerOutput()
+void CrashReporter::printCrashMessageTestRunnerOutput(char const *crashMessage)
 {
     if (validTest(currentTest)) {
-        testRunnerOutput->printCrashMessage(currentTest, crashSignalName);
+        testRunnerOutput->printCrashMessage(currentTest, crashMessage);
     } else {
-        testRunnerOutput->printCrashMessage(crashSignalName);
+        testRunnerOutput->printCrashMessage(crashMessage);
     }
 }
 
-void CrashReporter::printCrashMessageConsoleOutput()
+void CrashReporter::printCrashMessageConsoleOutput(char const *crashMessage)
 {
     if (validTest(currentTest)) {
-        printf("\n %s:%u: error: Crashed with signal %s running test %s\n\n",
+        printf("\n %s:%u: error: Crashed with '%s' running test %s\n\n",
             currentTest->getFile().asCharString(),
             currentTest->getLineNumber(),
-            crashSignalName.asCharString(),
+            crashMessage,
             currentTest->getFormattedName().asCharString());
     } else {
-        printf("\nCrashed with signal %s running unknown test.\n\n", crashSignalName.asCharString());
+        printf("\nCrashed with '%s' running unknown test.\n\n", crashMessage);
     }
 }
