@@ -63,6 +63,8 @@ public:
     virtual void print(const TestFailure& failure);
     virtual void printTestRun(int number, int total);
     virtual void setProgressIndicator(const char*);
+    virtual void printCrashMessage(const UtestShell* Test, SimpleString crashMessage);
+    virtual void printCrashMessage(SimpleString crashMessage);
 
     virtual void flush();
 
