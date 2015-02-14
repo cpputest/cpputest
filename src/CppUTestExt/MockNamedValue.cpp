@@ -27,6 +27,7 @@
 
 #include "CppUTest/TestHarness.h"
 #include "CppUTestExt/MockNamedValue.h"
+#include "CppUTestExt/MemoryBufferContainer.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
 
@@ -37,14 +38,45 @@ void MockNamedValue::setDefaultComparatorRepository(MockNamedValueComparatorRepo
     defaultRepository_ = repository;
 }
 
-MockNamedValue::MockNamedValue(const SimpleString& name) : name_(name), type_("int"), comparator_(NULL)
+MockNamedValue::MockNamedValue(const SimpleString& name) : name_(name), type_("int"), memoryBufferValue_(NULL), comparator_(NULL)
 {
     value_.intValue_ = 0;
 }
 
+MockNamedValue::MockNamedValue(MockNamedValue const &other)
+    : name_(other.name_), type_(other.type_), value_(other.value_), size_(other.size_),
+      memoryBufferValue_(NULL), comparator_(other.comparator_)
+{
+    if (other.memoryBufferValue_) {
+        memoryBufferValue_ = new MemoryBufferContainer(*other.memoryBufferValue_);
+    }
+}
+
 MockNamedValue::~MockNamedValue()
 {
+    if (memoryBufferValue_) {
+        delete memoryBufferValue_;
+        memoryBufferValue_ = NULL;
+    }
 }
+
+MockNamedValue &MockNamedValue::operator= (MockNamedValue const &other)
+{
+    if (this == &other)
+        return *this;
+
+    if (memoryBufferValue_) {
+        delete memoryBufferValue_;
+        memoryBufferValue_ = NULL;
+    }
+
+    if (other.memoryBufferValue_) {
+        memoryBufferValue_ = new MemoryBufferContainer(*other.memoryBufferValue_);
+    }
+
+    return *this;
+ }
+
 
 void MockNamedValue::setValue(unsigned int value)
 {
@@ -88,10 +120,37 @@ void MockNamedValue::setValue(const void* value)
     value_.constPointerValue_ = value;
 }
 
+void MockNamedValue::setValue(void (*value)())
+{
+    type_ = "void (*)()";
+    value_.functionPointerValue_ = value;
+}
+
 void MockNamedValue::setValue(const char* value)
 {
     type_ = "const char*";
     value_.stringValue_ = value;
+}
+
+void MockNamedValue::setValue(void const *value, size_t size)
+{
+    type_ = "MemoryBufferContainer";
+    if (memoryBufferValue_) {
+        delete memoryBufferValue_;
+        memoryBufferValue_ = NULL;
+    }
+    memoryBufferValue_ = new MemoryBufferContainer(value, size);
+}
+
+void MockNamedValue::setValue(MemoryBufferContainer const &value)
+{
+    type_ = "MemoryBufferContainer";
+
+    if (memoryBufferValue_) {
+        delete memoryBufferValue_;
+        memoryBufferValue_ = NULL;
+    }
+    memoryBufferValue_ = new MemoryBufferContainer(value);
 }
 
 void MockNamedValue::setObjectPointer(const SimpleString& type, const void* objectPtr)
@@ -196,6 +255,18 @@ const void* MockNamedValue::getObjectPointer() const
     return value_.objectPointerValue_;
 }
 
+void (*MockNamedValue::getFunctionPointerValue() const)()
+{
+    STRCMP_EQUAL("void (*)()", type_.asCharString());
+    return value_.functionPointerValue_;
+}
+
+MemoryBufferContainer const &MockNamedValue::getMemoryBufferValue() const
+{
+    STRCMP_EQUAL("MemoryBufferContainer", type_.asCharString());
+    return *memoryBufferValue_;
+}
+
 size_t MockNamedValue::getSize() const
 {
     return size_;
@@ -256,6 +327,10 @@ bool MockNamedValue::equals(const MockNamedValue& p) const
         return value_.constPointerValue_ == p.value_.constPointerValue_;
     else if (type_ == "double")
         return (doubles_equal(value_.doubleValue_, p.value_.doubleValue_, 0.005));
+    else if (type_ == "void (*)()")
+        return value_.functionPointerValue_ == p.value_.functionPointerValue_;
+    else if (type_ == "MemoryBufferContainer")
+        return *memoryBufferValue_ == *p.memoryBufferValue_;
 
     if (comparator_)
         return comparator_->isEqual(value_.objectPointerValue_, p.value_.objectPointerValue_);
@@ -281,6 +356,10 @@ SimpleString MockNamedValue::toString() const
         return StringFrom(value_.constPointerValue_);
     else if (type_ == "double")
         return StringFrom(value_.doubleValue_);
+    else if (type_ == "void (*)()")
+        return StringFrom(value_.functionPointerValue_);
+    else if (type_ == "MemoryBufferContainer")
+        return StringFrom(*memoryBufferValue_);
 
     if (comparator_)
         return comparator_->valueToString(value_.objectPointerValue_);

@@ -66,13 +66,17 @@ private:
  * Basically this class ties together a Name, a Value, a Type, and a Comparator
  */
 
+class MemoryBufferContainer;
 class MockNamedValueComparatorRepository;
 class MockNamedValue
 {
 public:
     MockNamedValue(const SimpleString& name);
-    DEFAULT_COPY_CONSTRUCTOR(MockNamedValue)
+    MockNamedValue(MockNamedValue const &other);
     virtual ~MockNamedValue();
+
+    MockNamedValue &operator= (MockNamedValue const &other);
+
 
     virtual void setValue(int value);
     virtual void setValue(unsigned int value);
@@ -81,7 +85,10 @@ public:
     virtual void setValue(double value);
     virtual void setValue(void* value);
     virtual void setValue(const void* value);
+    virtual void setValue(void (*value)());
     virtual void setValue(const char* value);
+    virtual void setValue(void const *value, size_t size);
+    virtual void setValue(MemoryBufferContainer const &value);
     virtual void setObjectPointer(const SimpleString& type, const void* objectPtr);
     virtual void setSize(size_t size);
 
@@ -101,9 +108,11 @@ public:
     virtual unsigned long int getUnsignedLongIntValue() const;
     virtual double getDoubleValue() const;
     virtual const char* getStringValue() const;
+    virtual MemoryBufferContainer const &getMemoryBufferValue() const;
     virtual void* getPointerValue() const;
     virtual const void* getConstPointerValue() const;
     virtual const void* getObjectPointer() const;
+    virtual void (*getFunctionPointerValue() const)();
     virtual size_t getSize() const;
     virtual MockNamedValueComparator* getComparator() const;
 
@@ -119,11 +128,13 @@ private:
         double doubleValue_;
         const char* stringValue_;
         void* pointerValue_;
+        void (*functionPointerValue_)();
         const void* constPointerValue_;
         const void* objectPointerValue_;
         const void* outputPointerValue_;
     } value_;
     size_t size_;
+    MemoryBufferContainer* memoryBufferValue_;
     MockNamedValueComparator* comparator_;
     static MockNamedValueComparatorRepository* defaultRepository_;
 };

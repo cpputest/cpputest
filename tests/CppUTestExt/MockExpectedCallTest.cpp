@@ -26,6 +26,7 @@
  */
 
 #include "CppUTest/TestHarness.h"
+#include "CppUTestExt/MemoryBufferContainer.h"
 #include "CppUTestExt/MockCheckedExpectedCall.h"
 #include "CppUTestExt/MockFailure.h"
 #include "MockFailureTest.h"
@@ -174,6 +175,32 @@ TEST(MockExpectedCall, callWithConstPointerParameter)
     call->withParameter("constPointer", ptr);
     STRCMP_EQUAL("const void*", call->getInputParameterType("constPointer").asCharString());
     POINTERS_EQUAL(ptr, call->getInputParameter("constPointer").getConstPointerValue());
+}
+
+TEST(MockExpectedCall, callWithFunctionPointerParameter)
+{
+    void (*ptr)() = (void (*)()) 0x123;
+    call->withParameter("functionPointer", ptr);
+    STRCMP_EQUAL("void (*)()", call->getInputParameterType("functionPointer").asCharString());
+    FUNCTIONPOINTERS_EQUAL(ptr, call->getInputParameter("functionPointer").getFunctionPointerValue());
+}
+
+TEST(MockExpectedCall, callWithMemoryBufferParameter)
+{
+    uint8_t rawdata[] = {1,2,3,4,5,6,7,8,9};
+    MemoryBufferContainer buffer(rawdata, sizeof(rawdata));
+    call->withParameter("buffer", rawdata, sizeof(rawdata));
+    STRCMP_EQUAL("MemoryBufferContainer", call->getInputParameterType("buffer").asCharString());
+    CHECK(buffer == call->getInputParameter("buffer").getMemoryBufferValue());
+}
+
+TEST(MockExpectedCall, callWithMemoryBufferContainerParameter)
+{
+    uint8_t rawdata[] = {1,2,3,4,5,6,7,8,9};
+    MemoryBufferContainer buffer(rawdata, sizeof(rawdata));
+    call->withParameter("buffer", buffer);
+    STRCMP_EQUAL("MemoryBufferContainer", call->getInputParameterType("buffer").asCharString());
+    CHECK(buffer == call->getInputParameter("buffer").getMemoryBufferValue());
 }
 
 TEST(MockExpectedCall, callWithObjectParameter)

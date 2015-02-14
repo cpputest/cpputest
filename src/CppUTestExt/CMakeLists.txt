@@ -1,4 +1,5 @@
 set(CppUTestExt_src
+        MemoryBufferContainer.cpp
         CodeMemoryReportFormatter.cpp
         MemoryReporterPlugin.cpp
         MockFailure.cpp
@@ -15,6 +16,7 @@ set(CppUTestExt_src
 )
 
 set(CppUTestExt_headers
+        ${CppUTestRootDirectory}/include/CppUTestExt/MemoryBufferContainer.h
         ${CppUTestRootDirectory}/include/CppUTestExt/CodeMemoryReportFormatter.h
         ${CppUTestRootDirectory}/include/CppUTestExt/MemoryReportAllocator.h
         ${CppUTestRootDirectory}/include/CppUTestExt/MockExpectedCall.h
