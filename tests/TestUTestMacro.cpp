@@ -92,6 +92,138 @@ IGNORE_TEST(UnitTestMacros, FAILworksInAnIgnoredTest)
     FAIL("die!");
 }
 
+static void _STRCMP_EQUALWithActualIsNULLTestMethod()
+{
+    STRCMP_EQUAL("ok", NULL);
+}
+
+TEST(UnitTestMacros, FailureWithSTRCMP_EQUALAndActualIsNULL)
+{
+    runTestWithMethod(_STRCMP_EQUALWithActualIsNULLTestMethod);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <(null)>");
+}
+
+static void _STRCMP_EQUALWithExpectedIsNULLTestMethod()
+{
+    STRCMP_EQUAL(NULL, "ok");
+}
+
+TEST(UnitTestMacros, FailureWithSTRCMP_EQUALAndExpectedIsNULL)
+{
+    runTestWithMethod(_STRCMP_EQUALWithExpectedIsNULLTestMethod);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <(null)>");
+}
+
+static void _STRCMP_CONTAINSWithActualIsNULLTestMethod()
+{
+    STRCMP_CONTAINS("ok", NULL);
+}
+
+TEST(UnitTestMacros, FailureWithSTRCMP_CONTAINSAndActualIsNULL)
+{
+    runTestWithMethod(_STRCMP_CONTAINSWithActualIsNULLTestMethod);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("did not contain  <ok>");
+}
+
+static void _STRCMP_CONTAINSWithExpectedIsNULLTestMethod()
+{
+    STRCMP_CONTAINS(NULL, "ok");
+}
+
+TEST(UnitTestMacros, FailureWithSTRCMP_CONTAINSAndExpectedIsNULL)
+{
+    runTestWithMethod(_STRCMP_CONTAINSWithExpectedIsNULLTestMethod);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("did not contain  <>");
+}
+
+static void _STRNCMP_EQUALWithActualIsNULLTestMethod()
+{
+    STRNCMP_EQUAL("ok", NULL, 2);
+}
+
+TEST(UnitTestMacros, FailureWithSTRNCMP_EQUALAndActualIsNULL)
+{
+    runTestWithMethod(_STRNCMP_EQUALWithActualIsNULLTestMethod);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <(null)>");
+}
+
+static void _STRNCMP_EQUALWithExpectedIsNULLTestMethod()
+{
+    STRNCMP_EQUAL(NULL, "ok", 2);
+}
+
+TEST(UnitTestMacros, FailureWithSTRNCMP_EQUALAndExpectedIsNULL)
+{
+    runTestWithMethod(_STRNCMP_EQUALWithExpectedIsNULLTestMethod);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <(null)>");
+}
+
+static void _STRCMP_NOCASE_EQUALWithActualIsNULLTestMethod()
+{
+    STRCMP_NOCASE_EQUAL("ok", NULL);
+}
+
+TEST(UnitTestMacros, FailureWithSTRCMP_NOCASE_EQUALAndActualIsNULL)
+{
+    runTestWithMethod(_STRCMP_NOCASE_EQUALWithActualIsNULLTestMethod);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <(null)>");
+}
+
+static void _STRCMP_NOCASE_EQUALWithExpectedIsNULLTestMethod()
+{
+    STRCMP_NOCASE_EQUAL(NULL, "ok");
+}
+
+TEST(UnitTestMacros, FailureWithSTRCMP_NOCASE_EQUALAndExpectedIsNULL)
+{
+    runTestWithMethod(_STRCMP_NOCASE_EQUALWithExpectedIsNULLTestMethod);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <(null)>");
+}
+
+static void _STRCMP_NOCASE_EQUALWithUnequalInputTestMethod()
+{
+    STRCMP_NOCASE_EQUAL("no", "ok");
+}
+
+TEST(UnitTestMacros, FailureWithSTRCMP_NOCASE_EQUALAndUnequalInput)
+{
+    runTestWithMethod(_STRCMP_NOCASE_EQUALWithUnequalInputTestMethod);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <ok>");
+}
+
+static void _STRCMP_NOCASE_CONTAINSWithActualIsNULLTestMethod()
+{
+    STRCMP_NOCASE_CONTAINS("ok", NULL);
+}
+
+TEST(UnitTestMacros, FailureWithSTRCMP_NOCASE_CONTAINSAndActualIsNULL)
+{
+    runTestWithMethod(_STRCMP_NOCASE_CONTAINSWithActualIsNULLTestMethod);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("did not contain  <ok>");
+}
+
+static void _STRCMP_NOCASE_CONTAINSWithExpectedIsNULLTestMethod()
+{
+    STRCMP_NOCASE_CONTAINS(NULL, "ok");
+}
+
+TEST(UnitTestMacros, FailureWithSTRCMP_NOCASE_CONTAINSAndExpectedIsNULL)
+{
+    runTestWithMethod(_STRCMP_NOCASE_CONTAINSWithExpectedIsNULLTestMethod);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("did not contain  <>");
+}
+
+static void _UNSIGNED_LONGS_EQUALFailMethod()
+{
+    UNSIGNED_LONGS_EQUAL(1, 0);
+}
+
+TEST(UnitTestMacros, FailureWithUNSIGNED_LONGS_EQUAL)
+{
+    runTestWithMethod(_UNSIGNED_LONGS_EQUALFailMethod);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0 (0x0) 0x0>");
+}
+
 static void _failingTestMethodWithCHECK()
 {
     CHECK(false);
