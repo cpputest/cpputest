@@ -49,28 +49,36 @@ TEST_GROUP(SetPointerPluginTest)
     }
 };
 
-class nonoverriddenTestBodyUtest : public Utest
+class defaultTestBodyUtest : public Utest
 {
 public:
+    void setup() _override 
+    {
+        CHECK(true);
+    }
+    void teardown() _override
+    {
+        CHECK(true);
+    }
 };
 
-class nonoverriddenTestBodyUtestUtestShell: public UtestShell
+class defaultTestBodyUtestUtestShell: public UtestShell
 {
 public:
    virtual Utest* createTest() _override
    {
-      return new nonoverriddenTestBodyUtest();
+      return new defaultTestBodyUtest();
    }
 };
 
 TEST(SetPointerPluginTest, testUnoverridden_testBody)
 {
-    nonoverriddenTestBodyUtestUtestShell *tst = new nonoverriddenTestBodyUtestUtestShell();
+    defaultTestBodyUtestUtestShell *tst = new defaultTestBodyUtestUtestShell();
     ;
     myRegistry_->addTest(tst);
     myRegistry_->runAllTests(*result_);
     LONGS_EQUAL(0, result_->getFailureCount());
-    LONGS_EQUAL(0, result_->getCheckCount());
+    LONGS_EQUAL(2, result_->getCheckCount());
     delete tst;
 }
 

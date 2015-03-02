@@ -213,14 +213,15 @@ TEST(UnitTestMacros, FailureWithSTRCMP_NOCASE_CONTAINSAndExpectedIsNULL)
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("did not contain  <>");
 }
 
-static void _UNSIGNED_LONGS_EQUALFailMethod()
+static void _UNSIGNED_LONGS_EQUALTestMethod()
 {
+    UNSIGNED_LONGS_EQUAL(1, 1);
     UNSIGNED_LONGS_EQUAL(1, 0);
 }
 
-TEST(UnitTestMacros, FailureWithUNSIGNED_LONGS_EQUAL)
+TEST(UnitTestMacros, TestUNSIGNED_LONGS_EQUAL)
 {
-    runTestWithMethod(_UNSIGNED_LONGS_EQUALFailMethod);
+    runTestWithMethod(_UNSIGNED_LONGS_EQUALTestMethod);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0 (0x0) 0x0>");
 }
 
