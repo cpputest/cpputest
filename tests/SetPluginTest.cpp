@@ -82,6 +82,22 @@ TEST(SetPointerPluginTest, testUnoverridden_testBody)
     delete tst;
 }
 
+class defaultCreateTestUtestShell: public UtestShell
+{
+public:
+};
+
+TEST(SetPointerPluginTest, testUnoverridden_createTest)
+{
+    defaultCreateTestUtestShell *tst = new defaultCreateTestUtestShell();
+    ;
+    myRegistry_->addTest(tst);
+    myRegistry_->runAllTests(*result_);
+    LONGS_EQUAL(0, result_->getFailureCount());
+    LONGS_EQUAL(0, result_->getCheckCount());
+    delete tst;
+}
+
 class FunctionPointerUtest : public Utest
 {
 public:
