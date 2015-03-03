@@ -149,6 +149,19 @@ TEST(UtestShell, TestStopsAfterSetupFailure)
     LONGS_EQUAL(0, stopAfterFailure);
 }
 
+class defaultUtestShell: public UtestShell
+{
+};
+
+TEST(UtestShell, coverageForDefaultMethods)
+{
+    // This test covers UtestShell::createTest() and Utest::testBody()
+    defaultUtestShell shell;
+    fixture.addTest(&shell);
+    fixture.runAllTests();
+    LONGS_EQUAL(2, fixture.result_->getTestCount());
+}
+
 #if CPPUTEST_USE_STD_CPP_LIB
 
 static bool destructorWasCalledOnFailedTest = false;
