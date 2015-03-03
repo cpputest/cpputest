@@ -49,16 +49,65 @@ TEST_GROUP(SetPointerPluginTest)
     }
 };
 
+class defaultTestBodyUtest : public Utest
+{
+public:
+    void setup() _override 
+    {
+        CHECK(true);
+    }
+    void teardown() _override
+    {
+        CHECK(true);
+    }
+};
+
+class defaultTestBodyUtestUtestShell: public UtestShell
+{
+public:
+   virtual Utest* createTest() _override
+   {
+      return new defaultTestBodyUtest();
+   }
+};
+
+TEST(SetPointerPluginTest, testUnoverridden_testBody)
+{
+    defaultTestBodyUtestUtestShell *tst = new defaultTestBodyUtestUtestShell();
+    ;
+    myRegistry_->addTest(tst);
+    myRegistry_->runAllTests(*result_);
+    LONGS_EQUAL(0, result_->getFailureCount());
+    LONGS_EQUAL(2, result_->getCheckCount());
+    delete tst;
+}
+
+class defaultCreateTestUtestShell: public UtestShell
+{
+public:
+};
+
+TEST(SetPointerPluginTest, testUnoverridden_createTest)
+{
+    defaultCreateTestUtestShell *tst = new defaultCreateTestUtestShell();
+    ;
+    myRegistry_->addTest(tst);
+    myRegistry_->runAllTests(*result_);
+    LONGS_EQUAL(0, result_->getFailureCount());
+    LONGS_EQUAL(0, result_->getCheckCount());
+    delete tst;
+}
+
 class FunctionPointerUtest : public Utest
 {
 public:
-   void setup()
+   void setup() _override
    {
       UT_PTR_SET(fp1, stub_func1);
       UT_PTR_SET(fp2, stub_func2);
       UT_PTR_SET(fp2, stub_func2);
    }
-   void testBody()
+   void testBody() _override
    {
       CHECK(fp1 == stub_func1);
       CHECK(fp2 == stub_func2);

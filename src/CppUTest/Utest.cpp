@@ -49,9 +49,6 @@ public:
     {
         return defaultTestResult;
     }
-    virtual void exitCurrentTest()
-    {
-    }
     virtual ~OutsideTestRunnerUTest()
     {
     }
