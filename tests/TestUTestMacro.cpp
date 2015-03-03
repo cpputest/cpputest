@@ -681,25 +681,25 @@ TEST(UnitTestMacros, MultipleCHECK_THROWS_inOneScope)
 TEST_GROUP(IgnoreTest)
 {
     TestTestingFixture fixture;
+    IgnoredUtestShell ignoreTest;
+    
+    void setup() _override
+    {
+        fixture.addTest(&ignoreTest);
+    }
 };
 
 TEST(IgnoreTest, doesIgnoreCount)
 {
-    IgnoredUtestShell * ignoreTest = new IgnoredUtestShell();
-    fixture.addTest(ignoreTest);
     fixture.runAllTests();
     LONGS_EQUAL(1, fixture.getIgnoreCount());
-    delete ignoreTest;
 }
 
 TEST(IgnoreTest, printsIGNORE_TESTwhenVerbose)
 {
-    IgnoredUtestShell * ignoreTest = new IgnoredUtestShell();
-    fixture.addTest(ignoreTest);
     fixture.output_->verbose();
     fixture.runAllTests();
     fixture.assertPrintContains("IGNORE_TEST");
-    delete ignoreTest;
 }
 
 
