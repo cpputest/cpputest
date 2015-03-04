@@ -51,13 +51,14 @@
 static jmp_buf test_exit_jmp_buf[10];
 static int jmp_buf_index = 0;
 
-void PlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
+void GccNoPThreadPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
 {
-#ifdef __MINGW32__
-   printf("-p doesn't work on MinGW as it is lacking fork. Running inside the process\b");
-   shell->runOneTestInCurrentProcess(plugin, *result);
-#else
+    printf("-p doesn't work as no pthread support is available. Running inside the process\b");
+    shell->runOneTestInCurrentProcess(plugin, *result);
+}
 
+void GccCygwinPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
+{
    int info;
    pid_t pid = fork();
 
@@ -72,8 +73,17 @@ void PlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* pl
        shell->runOneTestInCurrentProcess(plugin, *result);
        exit(result->getFailureCount() );
     }
-#endif
 }
+
+/** TODO: This shouldn't depend on MinGW being the compiler but on PThread being available or not */
+
+#ifdef __MINGW32__
+void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell* shell, TestPlugin* plugin, TestResult* result) =
+        GccNoPThreadPlatformSpecificRunTestInASeperateProcess;
+#else
+void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell* shell, TestPlugin* plugin, TestResult* result) =
+        GccCygwinPlatformSpecificRunTestInASeperateProcess;
+#endif
 
 TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
 {
