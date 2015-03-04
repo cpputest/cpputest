@@ -51,14 +51,12 @@ void PlatformSpecificRestoreJumpBuffer()
     /* To be implemented */
 }
 
-
-void PlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
+void GccNoStdCPlatformSpecificRunTestInASeperateProcess(UtestShell*, TestPlugin*, TestResult*)
 {
-    (void) shell;
-    (void) plugin;
-    (void) result;
     /* To be implemented */
 }
+void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell* shell, TestPlugin* plugin, TestResult* result) =
+        GccNoStdCPlatformSpecificRunTestInASeperateProcess;
 
 long (*GetPlatformSpecificTimeInMillis)() = NULL;
 
