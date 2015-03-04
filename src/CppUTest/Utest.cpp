@@ -144,10 +144,12 @@ UtestShell::~UtestShell()
 {
 }
 
+// LCOV_EXCL_START
 static void defaultCrashMethod()
 {
     UtestShell* ptr = (UtestShell*) 0x0; ptr->countTests();
 }
+// LCOV_EXCL_STOP
 
 static void (*pleaseCrashMeRightNow) () = defaultCrashMethod;
 
@@ -319,14 +321,14 @@ bool UtestShell::shouldRun(const TestFilter* groupFilters, const TestFilter* nam
 void UtestShell::failWith(const TestFailure& failure)
 {
     failWith(failure, NormalTestTerminator());
-}
+} // LCOV_EXCL_LINE
 
 void UtestShell::failWith(const TestFailure& failure, const TestTerminator& terminator)
 {
     hasFailed_ = true;
     getTestResult()->addFailure(failure);
     terminator.exitCurrentTest();
-}
+} // LCOV_EXCL_LINE
 
 void UtestShell::assertTrue(bool condition, const char * checkString, const char* conditionString, const char* fileName, int lineNumber, const TestTerminator& testTerminator)
 {
@@ -344,7 +346,7 @@ void UtestShell::fail(const char *text, const char* fileName, int lineNumber, co
 {
     getTestResult()->countCheck();
     failWith(FailFailure(this, fileName, lineNumber, text), testTerminator);
-}
+} // LCOV_EXCL_LINE
 
 void UtestShell::assertCstrEqual(const char* expected, const char* actual, const char* fileName, int lineNumber, const TestTerminator& testTerminator)
 {
@@ -560,7 +562,7 @@ NormalTestTerminator::~NormalTestTerminator()
 void TestTerminatorWithoutExceptions::exitCurrentTest() const
 {
     PlatformSpecificLongJmp();
-}
+} // LCOV_EXCL_LINE
 
 TestTerminatorWithoutExceptions::~TestTerminatorWithoutExceptions()
 {
