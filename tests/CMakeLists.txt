@@ -30,6 +30,7 @@ set(CppUTestTests_src
         AllocationInCppFile.cpp
         UtestTest.cpp
         SimpleMutexTest.cpp
+        Platforms/$(CPP_PLATFORM)/UtestPlatformTest.cpp
 )
 
 if (MSVC)
