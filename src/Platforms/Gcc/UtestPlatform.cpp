@@ -57,7 +57,7 @@ static int jmp_buf_index = 0;
 
 static void GccNoPThreadPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
 {
-    printf("-p doesn't work as no pthread support is available. Running inside the process\b");
+    printf("-p doesn't work on MinGW as it is lacking fork. Running inside the process\b");
     shell->runOneTestInCurrentProcess(plugin, *result);
 }
 
@@ -68,19 +68,47 @@ void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell* shell, TestPlugin*
 
 static void GccCygwinPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
 {
-   int info;
-   pid_t pid = fork();
+    pid_t cpid, w;
+    int status;
 
-   if (pid) {
-       wait(&info);
-       if (WIFEXITED(info) && WEXITSTATUS(info) > result->getFailureCount())
-           result->addFailure(TestFailure(shell, "failed in separate process"));
-       else if (!WIFEXITED(info))
-           result->addFailure(TestFailure(shell, "failed in separate process"));
-   }
-   else {
-       shell->runOneTestInCurrentProcess(plugin, *result);
-       exit(result->getFailureCount() );
+    cpid = fork();
+    
+    if (cpid == -1) {
+        result->addFailure(TestFailure(shell, "Call to fork() failed"));
+        return;
+    }
+
+    if (cpid == 0) {            /* Code executed by child */
+        shell->runOneTestInCurrentProcess(plugin, *result);
+        _exit(result->getFailureCount());
+    } else {                    /* Code executed by parent */
+        do {
+            w = waitpid(cpid, &status, WUNTRACED | WCONTINUED);
+            if (w == -1) {
+                result->addFailure(TestFailure(shell, "Call to waitpid() failed"));
+                return;
+            }
+
+            if (WIFEXITED(status) && WEXITSTATUS(status) > result->getFailureCount()) {
+                result->addFailure(TestFailure(shell, "Failed in separate process"));
+            } else if (WIFSIGNALED(status)) {
+                SimpleString signal(StringFrom(WTERMSIG(status)));
+            #ifdef WCOREDUMP
+                if (WCOREDUMP(status)) {
+                    SimpleString message("Failed with coredump in separate process - killed by signal ");
+                    message += signal;
+                    result->addFailure(TestFailure(shell, message));
+                } else
+            #endif
+                {
+                    SimpleString message("Failed separate process - killed by signal ");
+                    message += signal;
+                    result->addFailure(TestFailure(shell, message));
+                }
+            } else if (WIFSTOPPED(status)) {
+                result->addFailure(TestFailure(shell, "Stopped in separate process"));
+            } 
+        } while (!WIFEXITED(status) && !WIFSIGNALED(status));
     }
 }
 
