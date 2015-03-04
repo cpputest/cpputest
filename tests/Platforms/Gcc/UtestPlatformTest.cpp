@@ -36,12 +36,12 @@ static void _failFunction()
 
 static int _accessViolationTestFunction()
 {
-    return *(int*) 0;
+    return *(volatile int*) 0;
 }
 
 static int _divisionByZeroTestFunction()
 {
-    volatile int a;
+    volatile int a = 1;
     return 1 / (a - a);
 }
 

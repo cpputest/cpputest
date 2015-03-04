@@ -92,7 +92,7 @@ static void GccCygwinPlatformSpecificRunTestInASeperateProcess(UtestShell* shell
             } else if (WIFSIGNALED(status)) {
                 SimpleString signal(StringFrom(WTERMSIG(status)));
                 {
-                    SimpleString message("Failed separate process - killed by signal ");
+                    SimpleString message("Failed in separate process - killed by signal ");
                     message += signal;
                     result->addFailure(TestFailure(shell, message));
                 }
