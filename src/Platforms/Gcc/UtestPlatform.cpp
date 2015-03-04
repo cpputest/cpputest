@@ -51,8 +51,6 @@
 static jmp_buf test_exit_jmp_buf[10];
 static int jmp_buf_index = 0;
 
-/** TODO: This shouldn't depend on MinGW being the compiler but on PThread being available or not */
-
 #ifdef __MINGW32__
 
 static void GccNoPThreadPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
@@ -93,13 +91,6 @@ static void GccCygwinPlatformSpecificRunTestInASeperateProcess(UtestShell* shell
                 result->addFailure(TestFailure(shell, "Failed in separate process"));
             } else if (WIFSIGNALED(status)) {
                 SimpleString signal(StringFrom(WTERMSIG(status)));
-            #ifdef WCOREDUMP
-                if (WCOREDUMP(status)) {
-                    SimpleString message("Failed with coredump in separate process - killed by signal ");
-                    message += signal;
-                    result->addFailure(TestFailure(shell, message));
-                } else
-            #endif
                 {
                     SimpleString message("Failed separate process - killed by signal ");
                     message += signal;
