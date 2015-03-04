@@ -53,10 +53,9 @@ static int jmp_buf_index = 0;
 
 #ifdef __MINGW32__
 
-static void GccNoPThreadPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
+static void GccNoPThreadPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin*, TestResult* result)
 {
-    printf("-p doesn't work on MinGW as it is lacking fork. Running inside the process\b");
-    shell->runOneTestInCurrentProcess(plugin, *result);
+    result->addFailure(TestFailure(shell, "-p doesn't work on MinGW as it is lacking fork.\b"));
 }
 
 void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell* shell, TestPlugin* plugin, TestResult* result) =

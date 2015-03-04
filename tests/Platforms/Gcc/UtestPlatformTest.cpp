@@ -29,6 +29,23 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TestTestingFixture.h"
 
+TEST_GROUP(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess)
+{
+    TestTestingFixture fixture;
+};
+
+#ifdef __MINGW32__
+
+TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, MinGwWorks)
+{
+    fixture.registry_->setRunTestsInSeperateProcess();
+    fixture.runAllTests();
+    fixture.assertPrintContains(
+       "-p doesn't work on MinGW as it is lacking fork.");
+}
+
+#else
+
 static void _failFunction()
 {
     FAIL("This test fails");
@@ -44,11 +61,6 @@ static int _divisionByZeroTestFunction()
     volatile int a = 1;
     return 1 / (a - a);
 }
-
-TEST_GROUP(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess)
-{
-    TestTestingFixture fixture;
-};
 
 TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, FailureInSeparateProcessWorks)
 {
@@ -87,3 +99,5 @@ IGNORE_TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, Simple
 IGNORE_TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, CrashWithSignalInSeparateProcessWorks)
 {
 }
+
+#endif
