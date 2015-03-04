@@ -153,9 +153,8 @@ class defaultUtestShell: public UtestShell
 {
 };
 
-TEST(UtestShell, coverageForDefaultMethods)
+TEST(UtestShell, this_test_covers_the_UtestShell_createTest_and_Utest_testBody_methods)
 {
-    // This test covers UtestShell::createTest() and Utest::testBody()
     defaultUtestShell shell;
     fixture.addTest(&shell);
     fixture.runAllTests();
