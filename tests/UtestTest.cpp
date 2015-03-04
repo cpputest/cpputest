@@ -161,9 +161,8 @@ TEST(UtestShell, this_test_covers_the_UtestShell_createTest_and_Utest_testBody_m
     LONGS_EQUAL(2, fixture.result_->getTestCount());
 }
 
-void StubPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
+static void StubPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
 {
-    shell->runOneTestInCurrentProcess(plugin, *result);
     result->addFailure(TestFailure(shell, "Failed in separate process"));
 }
 
