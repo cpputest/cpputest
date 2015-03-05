@@ -68,7 +68,7 @@ static void GccCygwinPlatformSpecificRunTestInASeperateProcess(UtestShell* shell
     pid_t cpid, w;
     int status;
 
-    cpid = fork();
+    cpid = PlatformSpecificFork();
     
     if (cpid == -1) {
         result->addFailure(TestFailure(shell, "Call to fork() failed"));
@@ -106,6 +106,12 @@ void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell* shell, TestPlugin*
         GccCygwinPlatformSpecificRunTestInASeperateProcess;
 
 #endif
+
+pid_t PlatformSpecificForkImplementation(void) {
+    return fork();
+}
+
+int (*PlatformSpecificFork)(void) = PlatformSpecificForkImplementation;
 
 TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
 {
