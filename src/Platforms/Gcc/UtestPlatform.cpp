@@ -76,8 +76,8 @@ static void GccCygwinPlatformSpecificRunTestInASeperateProcess(UtestShell* shell
     }
 
     if (cpid == 0) {            /* Code executed by child */
-        shell->runOneTestInCurrentProcess(plugin, *result);
-        _exit(result->getFailureCount());
+        shell->runOneTestInCurrentProcess(plugin, *result);   // LCOV_EXCL_LINE
+        _exit(result->getFailureCount());                     // LCOV_EXCL_LINE
     } else {                    /* Code executed by parent */
         do {
             w = waitpid(cpid, &status, WUNTRACED | WCONTINUED);

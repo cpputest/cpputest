@@ -144,7 +144,7 @@ UtestShell::~UtestShell()
 {
 }
 
-// LCOV_EXCL_START
+// LCOV_EXCL_START - actually covered but not in .gcno due to race condition
 static void defaultCrashMethod()
 {
     UtestShell* ptr = (UtestShell*) 0x0; ptr->countTests();
