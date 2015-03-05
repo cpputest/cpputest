@@ -75,6 +75,7 @@ TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, AccessViolati
     fixture.registry_->setRunTestsInSeperateProcess();
     fixture.setTestFunction((void(*)())_accessViolationTestFunction);
     fixture.runAllTests();
+    fixture.assertPrintContains("Failed in separate process - killed by signal 11");
 }
 
 TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, DivisionByZeroInSeparateProcessWorks)
@@ -82,6 +83,7 @@ TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, DivisionByZer
     fixture.registry_->setRunTestsInSeperateProcess();
     fixture.setTestFunction((void(*)())_divisionByZeroTestFunction);
     fixture.runAllTests();
+    fixture.assertPrintContains("Failed in separate process - killed by signal 8");
 }
 
 IGNORE_TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, SuccessInSeparateProcessWorksAfterCrashedTest)
