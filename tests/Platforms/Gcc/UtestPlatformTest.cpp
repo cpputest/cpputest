@@ -28,6 +28,7 @@
 #include "CppUTest/CommandLineTestRunner.h"
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TestTestingFixture.h"
+#include "CppUTest/PlatformSpecificFunctions.h"
 
 TEST_GROUP(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess)
 {
@@ -49,6 +50,10 @@ TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, MinGwWorks)
 static void _failFunction()
 {
     FAIL("This test fails");
+}
+
+extern "C" {
+    static int fork_failed_stub(void) { return -1; }
 }
 
 static int _accessViolationTestFunction()
@@ -84,6 +89,14 @@ TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, DivisionByZer
     fixture.setTestFunction((void(*)())_divisionByZeroTestFunction);
     fixture.runAllTests();
     fixture.assertPrintContains("Failed in separate process - killed by signal 8");
+}
+
+TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, CallToForkFailedInSeparateProcessWorks)
+{
+    UT_PTR_SET(PlatformSpecificFork, fork_failed_stub);
+    fixture.registry_->setRunTestsInSeperateProcess();
+    fixture.runAllTests();
+    fixture.assertPrintContains("Call to fork() failed");
 }
 
 IGNORE_TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, SuccessInSeparateProcessWorksAfterCrashedTest)
