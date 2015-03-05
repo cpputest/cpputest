@@ -33,6 +33,6 @@ int main(int ac, const char** av)
     CHECK(true);
     LONGS_EQUAL(1, 1);
 
-    return CommandLineTestRunner::RunAllTests(ac, av);
+    return CommandLineTestRunner::RunAllTests(ac, const_cast<char**>(av)); /* cover alternate method */
 }
 
