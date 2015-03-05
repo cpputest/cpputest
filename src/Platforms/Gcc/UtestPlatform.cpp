@@ -107,14 +107,14 @@ void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell* shell, TestPlugin*
 
 #endif
 
-pid_t PlatformSpecificForkImplementation(void)
+static pid_t PlatformSpecificForkImplementation(void)
 {
     return fork();
 }
 
 int (*PlatformSpecificFork)(void) = PlatformSpecificForkImplementation;
 
-int PlatformSpecificWaitPidImplementation(int pid, int* status, int options)
+static int PlatformSpecificWaitPidImplementation(int pid, int* status, int options)
 {
     return waitpid(pid, status, options);
 }
