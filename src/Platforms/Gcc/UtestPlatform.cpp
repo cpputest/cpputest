@@ -80,7 +80,7 @@ static void GccCygwinPlatformSpecificRunTestInASeperateProcess(UtestShell* shell
         _exit(result->getFailureCount());                     // LCOV_EXCL_LINE
     } else {                    /* Code executed by parent */
         do {
-            w = waitpid(cpid, &status, WUNTRACED | WCONTINUED);
+            w = PlatformSpecificWaitPid(cpid, &status, WUNTRACED);
             if (w == -1) {
                 result->addFailure(TestFailure(shell, "Call to waitpid() failed"));
                 return;
@@ -107,11 +107,19 @@ void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell* shell, TestPlugin*
 
 #endif
 
-pid_t PlatformSpecificForkImplementation(void) {
+pid_t PlatformSpecificForkImplementation(void)
+{
     return fork();
 }
 
 int (*PlatformSpecificFork)(void) = PlatformSpecificForkImplementation;
+
+int PlatformSpecificWaitPidImplementation(int pid, int* status, int options)
+{
+    return waitpid(pid, status, options);
+}
+
+int (*PlatformSpecificWaitPid)(int, int*, int) = PlatformSpecificWaitPidImplementation;
 
 TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
 {
