@@ -108,20 +108,4 @@ TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, CallToWaitPid
     fixture.assertPrintContains("Call to waitpid() failed");
 }
 
-IGNORE_TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, SuccessInSeparateProcessWorksAfterCrashedTest)
-{
-}
-
-IGNORE_TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, FailureInSeparateProcessWorksAfterCrashedTest)
-{
-}
-
-IGNORE_TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, SimpleCrashInSeparateProcessWorks)
-{
-}
-
-IGNORE_TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, CrashWithSignalInSeparateProcessWorks)
-{
-}
-
 #endif
