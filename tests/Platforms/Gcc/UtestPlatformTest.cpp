@@ -54,6 +54,7 @@ static void _failFunction()
 
 extern "C" {
     static int fork_failed_stub(void) { return -1; }
+    static int waitpid_failed_stub(int, int*, int) { return -1; }
 }
 
 static int _accessViolationTestFunction()
@@ -97,6 +98,14 @@ TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, CallToForkFai
     fixture.registry_->setRunTestsInSeperateProcess();
     fixture.runAllTests();
     fixture.assertPrintContains("Call to fork() failed");
+}
+
+TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, CallToWaitPidFailedInSeparateProcessWorks)
+{
+    UT_PTR_SET(PlatformSpecificWaitPid, waitpid_failed_stub);
+    fixture.registry_->setRunTestsInSeperateProcess();
+    fixture.runAllTests();
+    fixture.assertPrintContains("Call to waitpid() failed");
 }
 
 IGNORE_TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, SuccessInSeparateProcessWorksAfterCrashedTest)
