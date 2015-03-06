@@ -95,7 +95,7 @@ SimpleString CodeMemoryReportFormatter::createVariableNameFromFileLineInfo(const
     SimpleString fileNameOnly = extractFileNameFromPath(file);
     fileNameOnly.replace(".", "_");
 
-    for (int i = 1; i < 100000; i++) {
+    for (int i = 1; i < 100; i++) {
         SimpleString variableName = StringFromFormat("%s_%d_%d", fileNameOnly.asCharString(), line, i);
         if (!variableExists(variableName))
             return variableName;
