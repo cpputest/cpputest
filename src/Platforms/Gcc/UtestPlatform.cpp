@@ -41,6 +41,7 @@
 #include <math.h>
 #include <ctype.h>
 #include <unistd.h>
+#include <signal.h>
 #ifndef __MINGW32__
 #include <sys/wait.h>
 #endif
@@ -69,7 +70,7 @@ static void GccCygwinPlatformSpecificRunTestInASeperateProcess(UtestShell* shell
     int status;
 
     cpid = PlatformSpecificFork();
-    
+
     if (cpid == -1) {
         result->addFailure(TestFailure(shell, "Call to fork() failed"));
         return;
