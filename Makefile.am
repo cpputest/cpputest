@@ -159,7 +159,7 @@ CppUTestTests_SOURCES = \
 	tests/TestResultTest.cpp \
 	tests/TestUTestMacro.cpp \
 	tests/UtestTest.cpp \
-	tests/Platforms/$(CPP_PLATFORM)/UtestPlatformTest.cpp
+	tests/UtestPlatformTest.cpp
 
 CppUTestExtTests_CPPFLAGS = $(lib_libCppUTestExt_a_CPPFLAGS)
 CppUTestExtTests_CFLAGS = $(lib_libCppUTestExt_a_CFLAGS)
