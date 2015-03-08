@@ -46,11 +46,14 @@ void PlatformSpecificRestoreJumpBuffer()
     jmp_buf_index--;
 }
 
-void PlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
+static void VisualCppPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
 {
    printf("-p doesn't work on this platform as it is not implemented. Running inside the process\b");
    shell->runOneTest(plugin, *result);
 }
+
+void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell* shell, TestPlugin* plugin, TestResult* result) =
+        VisualCppPlatformSpecificRunTestInASeperateProcess;
 
 TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
 {
