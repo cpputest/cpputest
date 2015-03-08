@@ -174,6 +174,18 @@ TEST(UtestShell, RunInSeparateProcessTest)
     fixture.assertPrintContains("Failed in separate process");
 }
 
+#ifndef __MINGW32__
+
+TEST(UtestShell, TestDefaultCrashMethodInSeparateProcessTest)
+{
+    fixture.setTestFunction(UtestShell::crash);
+    fixture.registry_->setRunTestsInSeperateProcess();
+    fixture.runAllTests();
+    fixture.assertPrintContains("Failed in separate process - killed by signal 11");
+}
+
+#endif
+
 #if CPPUTEST_USE_STD_CPP_LIB
 
 static bool destructorWasCalledOnFailedTest = false;
