@@ -174,7 +174,7 @@ TEST(UtestShell, RunInSeparateProcessTest)
     fixture.assertPrintContains("Failed in separate process");
 }
 
-#ifndef __MINGW32__
+#if !defined(__MINGW32__) && !defined(_MSC_VER)
 
 TEST(UtestShell, TestDefaultCrashMethodInSeparateProcessTest)
 {
