@@ -115,7 +115,7 @@ TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, StoppedInSepa
     fixture.registry_->setRunTestsInSeperateProcess();
     fixture.setTestFunction(_stoppedTestFunction);
     fixture.runAllTests();
-    fixture.assertPrintContains("Stopped in separate process - forcing terminate");
+    fixture.assertPrintContains("Stopped in separate process - continuing");
 }
 
 TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, CallToForkFailedInSeparateProcessWorks)
