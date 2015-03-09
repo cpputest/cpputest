@@ -639,6 +639,22 @@ TEST(UnitTestMacros, CompareNFirstCharsWithLastCharDifferent)
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("difference starts at position 16");
 }
 
+#if defined(__MINGW32__) || defined(MSC_VER)
+
+IGNORE_TEST(UnitTestMacros, TEST_IN_SEPARATE_PROCESSWorks)
+{
+}
+
+#else
+
+TEST_IN_SEPARATE_PROCESS(UnitTestMacros, TEST_IN_SEPARATE_PROCESSWorks)
+{
+    CHECK(true);
+}
+
+#endif
+
+
 #if CPPUTEST_USE_STD_CPP_LIB
 static void _failingTestMethod_NoThrowWithCHECK_THROWS()
 {
@@ -682,7 +698,7 @@ TEST_GROUP(IgnoreTest)
 {
     TestTestingFixture fixture;
     IgnoredUtestShell ignoreTest;
-    
+
     void setup() _override
     {
         fixture.addTest(&ignoreTest);
@@ -701,5 +717,3 @@ TEST(IgnoreTest, printsIGNORE_TESTwhenVerbose)
     fixture.runAllTests();
     fixture.assertPrintContains("IGNORE_TEST");
 }
-
-

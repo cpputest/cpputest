@@ -69,6 +69,26 @@
   static TestInstaller TEST_##testGroup##_##testName##_Installer(TEST_##testGroup##_##testName##_TestShell_instance, #testGroup, #testName, __FILE__,__LINE__); \
     void TEST_##testGroup##_##testName##_Test::testBody()
 
+#if !defined(__MINGW32__) && !defined(_MSC_VER)
+
+#define TEST_IN_SEPARATE_PROCESS(testGroup, testName) \
+  /* External declarations for strict compilers */ \
+  class TEST_##testGroup##_##testName##_TestShell; \
+  extern TEST_##testGroup##_##testName##_TestShell TEST_##testGroup##_##testName##_TestShell_instance; \
+  \
+  class TEST_##testGroup##_##testName##_Test : public TEST_GROUP_##CppUTestGroup##testGroup \
+{ public: TEST_##testGroup##_##testName##_Test () : TEST_GROUP_##CppUTestGroup##testGroup () {} \
+       void testBody(); }; \
+  class TEST_##testGroup##_##testName##_TestShell : public UtestShell { \
+      public: \
+      TEST_##testGroup##_##testName##_TestShell() : UtestShell() { setRunInSeperateProcess(); } \
+      virtual Utest* createTest() _override { return new TEST_##testGroup##_##testName##_Test; } \
+  } TEST_##testGroup##_##testName##_TestShell_instance; \
+  static TestInstaller TEST_##testGroup##_##testName##_Installer(TEST_##testGroup##_##testName##_TestShell_instance, #testGroup, #testName, __FILE__,__LINE__); \
+    void TEST_##testGroup##_##testName##_Test::testBody()
+
+#endif
+
 #define IGNORE_TEST(testGroup, testName)\
   /* External declarations for strict compilers */ \
   class IGNORE##testGroup##_##testName##_TestShell; \
