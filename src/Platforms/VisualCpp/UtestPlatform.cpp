@@ -48,8 +48,7 @@ void PlatformSpecificRestoreJumpBuffer()
 
 static void VisualCppPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
 {
-   printf("-p doesn't work on this platform as it is not implemented. Running inside the process\b");
-   shell->runOneTest(plugin, *result);
+   result->addFailure(TestFailure(shell, "-p doesn't work on Visual C++ as it is lacking fork.\b"));
 }
 
 void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell* shell, TestPlugin* plugin, TestResult* result) =
