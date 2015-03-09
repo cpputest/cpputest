@@ -260,6 +260,20 @@ TEST_GROUP(OutOfMemoryTestsForOperatorNew)
 
 #if CPPUTEST_USE_STD_CPP_LIB
 
+TEST_GROUP(TestForExceptionsInConstructor)
+{
+};
+
+TEST(TestForExceptionsInConstructor, ConstructorThrowsAnException)
+{
+   CHECK_THROWS(int, new ClassThatThrowsAnExceptionInTheConstructor);
+}
+
+TEST(TestForExceptionsInConstructor, ConstructorThrowsAnExceptionAllocatedAsArray)
+{
+   CHECK_THROWS(int, new ClassThatThrowsAnExceptionInTheConstructor[10]);
+}
+
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorThrowsAnExceptionWhenUsingStdCppNew)
 {
     CHECK_THROWS(std::bad_alloc, new char);
@@ -268,20 +282,6 @@ TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorThrowsAnExceptionWhenUsin
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorThrowsAnExceptionWhenUsingStdCppNew)
 {
     CHECK_THROWS(std::bad_alloc, new char[10]);
-}
-
-TEST_GROUP(TestForExceptionsInConstructor)
-{
-};
-
-TEST(TestForExceptionsInConstructor,ConstructorThrowsAnException)
-{
-    CHECK_THROWS(int, new ClassThatThrowsAnExceptionInTheConstructor);
-}
-
-TEST(TestForExceptionsInConstructor,ConstructorThrowsAnExceptionAllocatedAsArray)
-{
-    CHECK_THROWS(int, new ClassThatThrowsAnExceptionInTheConstructor[10]);
 }
 
 #else
