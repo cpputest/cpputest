@@ -30,6 +30,23 @@
 #include "CppUTest/TestTestingFixture.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
+TEST_GROUP(UTestPlatformsTest)
+{
+};
+
+TEST(UTestPlatformsTest, PlatformSpecificFileFunctionsDontCrash)
+{
+    PlatformSpecificFile file;
+    file = PlatformSpecificFOpen("/dev/null", "rw");
+    PlatformSpecificFPuts("Hello", file);
+    PlatformSpecificFClose(file);
+}
+
+TEST(UTestPlatformsTest, GetPlatformSpecificTimeStringIsCalledOnce)
+{
+    GetPlatformSpecificTimeString();
+}
+
 TEST_GROUP(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess)
 {
     TestTestingFixture fixture;
