@@ -42,9 +42,17 @@ TEST(UTestPlatformsTest, PlatformSpecificFileFunctionsDontCrash)
     PlatformSpecificFClose(file);
 }
 
-TEST(UTestPlatformsTest, GetPlatformSpecificTimeStringIsCalledOnce)
+TEST(UTestPlatformsTest, GetPlatformSpecificTimeStringIsCovered)
 {
     GetPlatformSpecificTimeString();
+}
+
+TEST(UTestPlatformsTest, PlatformSpecificMutexLockAndUnlockDontCrash)
+{
+    PlatformSpecificMutex mutex = PlatformSpecificMutexCreate();
+    PlatformSpecificMutexLock(mutex);
+    PlatformSpecificMutexUnlock(mutex);
+    PlatformSpecificMutexDestroy(mutex);
 }
 
 TEST_GROUP(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess)
