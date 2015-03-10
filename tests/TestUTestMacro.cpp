@@ -651,11 +651,19 @@ TEST(UnitTestMacros, FailureWithCHECK_THROWS_whenDoesntThrow)
     runTestWithMethod(_failingTestMethod_NoThrowWithCHECK_THROWS);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected to throw int");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but threw nothing");
+    LONGS_EQUAL(1, fixture.getCheckCount());
+}
+
+static void _succeedingTestMethod_CorrectThrowWithCHECK_THROWS()
+{
+    CHECK_THROWS(int, throw 4);
+    lineOfCodeExecutedAfterCheck = true;
 }
 
 TEST(UnitTestMacros, SuccessWithCHECK_THROWS)
 {
-    CHECK_THROWS(int, throw 4);
+    runTestWithMethod(_succeedingTestMethod_CorrectThrowWithCHECK_THROWS);
+    LONGS_EQUAL(1, fixture.getCheckCount());
 }
 
 static void _failingTestMethod_WrongThrowWithCHECK_THROWS()
@@ -669,6 +677,7 @@ TEST(UnitTestMacros, FailureWithCHECK_THROWS_whenWrongThrow)
     runTestWithMethod(_failingTestMethod_WrongThrowWithCHECK_THROWS);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected to throw int");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but threw a different type");
+    LONGS_EQUAL(1, fixture.getCheckCount());
 }
 
 TEST(UnitTestMacros, MultipleCHECK_THROWS_inOneScope)
@@ -682,7 +691,7 @@ TEST_GROUP(IgnoreTest)
 {
     TestTestingFixture fixture;
     IgnoredUtestShell ignoreTest;
-    
+
     void setup() _override
     {
         fixture.addTest(&ignoreTest);
