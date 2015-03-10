@@ -262,7 +262,7 @@ void MockCheckedActualCall::checkExpectations()
     if (state_ != CALL_IN_PROGESS) return;
 
     if (! unfulfilledExpectations_.hasUnfullfilledExpectations())
-        FAIL("Actual call is in progress. Checking expectations. But no unfulfilled expectations. Cannot happen.")
+        FAIL("Actual call is in progress. Checking expectations. But no unfulfilled expectations. Cannot happen.") // LCOV_EXCL_LINE
 
     fulfilledExpectation_ = unfulfilledExpectations_.removeOneFulfilledExpectationWithIgnoredParameters();
     if (fulfilledExpectation_) {
@@ -278,21 +278,6 @@ void MockCheckedActualCall::checkExpectations()
         MockExpectedObjectDidntHappenFailure failure(getTest(), getName(), allExpectations_);
         failTest(failure);
     }
-}
-
-const char* MockCheckedActualCall::stringFromState(ActualCallState state)
-{
-    switch (state) {
-    case CALL_IN_PROGESS: return "In progress";
-    case CALL_FAILED: return "Failed";
-    case CALL_SUCCEED: return "Succeed";
-#ifndef __clang__
-    default: ;
-#endif
-    }
-#ifndef __clang__
-    return "No valid state info";
-#endif
 }
 
 void MockCheckedActualCall::setState(ActualCallState state)

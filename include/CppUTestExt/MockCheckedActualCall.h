@@ -101,7 +101,6 @@ protected:
         CALL_FAILED,
         CALL_SUCCEED
     };
-    virtual const char* stringFromState(ActualCallState state);
     virtual void setState(ActualCallState state);
 
 private:
