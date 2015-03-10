@@ -30,6 +30,31 @@
 #include "CppUTest/TestTestingFixture.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
+TEST_GROUP(UTestPlatformsTest)
+{
+};
+
+TEST(UTestPlatformsTest, PlatformSpecificFileFunctionsDontCrash)
+{
+    PlatformSpecificFile file;
+    file = PlatformSpecificFOpen("/dev/null", "rw");
+    PlatformSpecificFPuts("Hello", file);
+    PlatformSpecificFClose(file);
+}
+
+TEST(UTestPlatformsTest, GetPlatformSpecificTimeStringIsCovered)
+{
+    GetPlatformSpecificTimeString();
+}
+
+TEST(UTestPlatformsTest, PlatformSpecificMutexLockAndUnlockDontCrash)
+{
+    PlatformSpecificMutex mutex = PlatformSpecificMutexCreate();
+    PlatformSpecificMutexLock(mutex);
+    PlatformSpecificMutexUnlock(mutex);
+    PlatformSpecificMutexDestroy(mutex);
+}
+
 TEST_GROUP(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess)
 {
     TestTestingFixture fixture;
