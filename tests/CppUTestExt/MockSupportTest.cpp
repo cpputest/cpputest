@@ -1042,6 +1042,22 @@ TEST(MockSupportTest, ignoreOtherCallsWorksHierarchicallyWhenDynamicallyCreated)
     CHECK_NO_MOCK_FAILURE();
 }
 
+TEST(MockSupportTest, ignoreOtherCallsIgnoresWithAllKindsOfParameters)
+{
+     mock().ignoreOtherCalls();
+     mock().actualCall("boo")
+           .withParameter("bar", 1u)
+           .withParameter("foo", 1l)
+           .withParameter("hey", 1ul)
+           .withParameter("duh", 1.0f)
+           .withParameter("yoo", (const void*) 0)
+           .withParameterOfType("hoo", "int", (const void*) 0)
+           .withOutputParameter("gah", (void*) 0)
+           ;
+    CHECK_NO_MOCK_FAILURE();
+}
+
+
 TEST(MockSupportTest, checkExpectationsWorksHierarchicallyForLastCallNotFinished)
 {
     mock("first").expectOneCall("foobar").withParameter("boo", 1);
