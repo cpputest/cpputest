@@ -97,9 +97,8 @@ static void GccCygwinPlatformSpecificRunTestInASeperateProcess(UtestShell* shell
                     result->addFailure(TestFailure(shell, message));
                 }
             } else if (WIFSTOPPED(status)) {
-                result->addFailure(TestFailure(shell, "Stopped in separate process - forcing terminate"));
-                kill(w, SIGTERM);
-                return;
+                result->addFailure(TestFailure(shell, "Stopped in separate process - continuing"));
+                kill(w, SIGCONT);
             }
         } while (!WIFEXITED(status) && !WIFSIGNALED(status));
     }
