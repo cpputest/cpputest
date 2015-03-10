@@ -41,7 +41,7 @@ RSC=rc.exe
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /W3 /GX /O2 /I ".\include\Platforms\VisualCpp" /I ".\include" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
+# ADD CPP /nologo /W3 /GX /O2 /I ".\include\Platforms\VisualCpp" /I ".\include" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /D "CPPUTEST_MEM_LEAK_DETECTION_DISABLED" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -64,7 +64,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /GX /ZI /Od /I ".\include\Platforms\VisualCpp" /I ".\include" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FR /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /GX /ZI /Od /I ".\include\Platforms\VisualCpp" /I ".\include" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /D "CPPUTEST_MEM_LEAK_DETECTION_DISABLED" /FR /FD /GZ /c
 # SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
@@ -86,6 +86,10 @@ LIB32=link.exe -lib
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
+SOURCE=.\SRC\CPPUTEST\CommandLineArguments.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\SRC\CPPUTEST\CommandLineTestRunner.cpp
 # End Source File
 # Begin Source File
@@ -94,7 +98,15 @@ SOURCE=.\SRC\CPPUTEST\JUnitTestOutput.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\SRC\CPPUTEST\MemoryLeakDetector.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\SRC\CPPUTEST\MemoryLeakWarningPlugin.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\SRC\CPPUTEST\SimpleMutex.cpp
 # End Source File
 # Begin Source File
 
@@ -102,7 +114,19 @@ SOURCE=.\SRC\CPPUTEST\SimpleString.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\SRC\CPPUTEST\TestFailure.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\SRC\CPPUTEST\TestFilter.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\SRC\CPPUTEST\TestHarness_c.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\SRC\CPPUTEST\TestMemoryAllocator.cpp
 # End Source File
 # Begin Source File
 

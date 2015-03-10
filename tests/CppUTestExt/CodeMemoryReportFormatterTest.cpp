@@ -182,6 +182,17 @@ TEST(CodeMemoryReportFormatter, TestGroupGeneratesTestGroupCode)
     TESTOUPUT_EQUAL("*/TEST_GROUP(groupName_memoryReport)\n{\n};\n/*");
 }
 
+TEST(CodeMemoryReportFormatter, VariableFromFileLineInfoAlreadyExists)
+{
+    for(int i = 1; i < 100; i++) {
+         formatter->report_alloc_memory(testResult, newArrayAllocator, 10, memory01, "file", 8);
+    }
+    formatter->report_alloc_memory(testResult, newArrayAllocator, 10, memory01, "file", 8);
+    testOutput.flush();
+    formatter->report_free_memory(testResult, newArrayAllocator, memory01, "boo", 8);
+    TESTOUPUT_CONTAINS("delete [] ; /* using delete [] at boo:8 */");
+}
+
 // TODO: do!
 /* Dealloc without alloc */
 /* Remove the ugly comments by controlling the output! */
