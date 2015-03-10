@@ -92,6 +92,139 @@ IGNORE_TEST(UnitTestMacros, FAILworksInAnIgnoredTest)
     FAIL("die!");
 }
 
+static void _STRCMP_EQUALWithActualIsNULLTestMethod()
+{
+    STRCMP_EQUAL("ok", NULL);
+}
+
+TEST(UnitTestMacros, FailureWithSTRCMP_EQUALAndActualIsNULL)
+{
+    runTestWithMethod(_STRCMP_EQUALWithActualIsNULLTestMethod);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <(null)>");
+}
+
+static void _STRCMP_EQUALWithExpectedIsNULLTestMethod()
+{
+    STRCMP_EQUAL(NULL, "ok");
+}
+
+TEST(UnitTestMacros, FailureWithSTRCMP_EQUALAndExpectedIsNULL)
+{
+    runTestWithMethod(_STRCMP_EQUALWithExpectedIsNULLTestMethod);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <(null)>");
+}
+
+static void _STRCMP_CONTAINSWithActualIsNULLTestMethod()
+{
+    STRCMP_CONTAINS("ok", NULL);
+}
+
+TEST(UnitTestMacros, FailureWithSTRCMP_CONTAINSAndActualIsNULL)
+{
+    runTestWithMethod(_STRCMP_CONTAINSWithActualIsNULLTestMethod);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("did not contain  <ok>");
+}
+
+static void _STRCMP_CONTAINSWithExpectedIsNULLTestMethod()
+{
+    STRCMP_CONTAINS(NULL, "ok");
+}
+
+TEST(UnitTestMacros, FailureWithSTRCMP_CONTAINSAndExpectedIsNULL)
+{
+    runTestWithMethod(_STRCMP_CONTAINSWithExpectedIsNULLTestMethod);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("did not contain  <>");
+}
+
+static void _STRNCMP_EQUALWithActualIsNULLTestMethod()
+{
+    STRNCMP_EQUAL("ok", NULL, 2);
+}
+
+TEST(UnitTestMacros, FailureWithSTRNCMP_EQUALAndActualIsNULL)
+{
+    runTestWithMethod(_STRNCMP_EQUALWithActualIsNULLTestMethod);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <(null)>");
+}
+
+static void _STRNCMP_EQUALWithExpectedIsNULLTestMethod()
+{
+    STRNCMP_EQUAL(NULL, "ok", 2);
+}
+
+TEST(UnitTestMacros, FailureWithSTRNCMP_EQUALAndExpectedIsNULL)
+{
+    runTestWithMethod(_STRNCMP_EQUALWithExpectedIsNULLTestMethod);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <(null)>");
+}
+
+static void _STRCMP_NOCASE_EQUALWithActualIsNULLTestMethod()
+{
+    STRCMP_NOCASE_EQUAL("ok", NULL);
+}
+
+TEST(UnitTestMacros, FailureWithSTRCMP_NOCASE_EQUALAndActualIsNULL)
+{
+    runTestWithMethod(_STRCMP_NOCASE_EQUALWithActualIsNULLTestMethod);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <(null)>");
+}
+
+static void _STRCMP_NOCASE_EQUALWithExpectedIsNULLTestMethod()
+{
+    STRCMP_NOCASE_EQUAL(NULL, "ok");
+}
+
+TEST(UnitTestMacros, FailureWithSTRCMP_NOCASE_EQUALAndExpectedIsNULL)
+{
+    runTestWithMethod(_STRCMP_NOCASE_EQUALWithExpectedIsNULLTestMethod);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <(null)>");
+}
+
+static void _STRCMP_NOCASE_EQUALWithUnequalInputTestMethod()
+{
+    STRCMP_NOCASE_EQUAL("no", "ok");
+}
+
+TEST(UnitTestMacros, FailureWithSTRCMP_NOCASE_EQUALAndUnequalInput)
+{
+    runTestWithMethod(_STRCMP_NOCASE_EQUALWithUnequalInputTestMethod);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <ok>");
+}
+
+static void _STRCMP_NOCASE_CONTAINSWithActualIsNULLTestMethod()
+{
+    STRCMP_NOCASE_CONTAINS("ok", NULL);
+}
+
+TEST(UnitTestMacros, FailureWithSTRCMP_NOCASE_CONTAINSAndActualIsNULL)
+{
+    runTestWithMethod(_STRCMP_NOCASE_CONTAINSWithActualIsNULLTestMethod);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("did not contain  <ok>");
+}
+
+static void _STRCMP_NOCASE_CONTAINSWithExpectedIsNULLTestMethod()
+{
+    STRCMP_NOCASE_CONTAINS(NULL, "ok");
+}
+
+TEST(UnitTestMacros, FailureWithSTRCMP_NOCASE_CONTAINSAndExpectedIsNULL)
+{
+    runTestWithMethod(_STRCMP_NOCASE_CONTAINSWithExpectedIsNULLTestMethod);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("did not contain  <>");
+}
+
+static void _UNSIGNED_LONGS_EQUALTestMethod()
+{
+    UNSIGNED_LONGS_EQUAL(1, 1);
+    UNSIGNED_LONGS_EQUAL(1, 0);
+}
+
+TEST(UnitTestMacros, TestUNSIGNED_LONGS_EQUAL)
+{
+    runTestWithMethod(_UNSIGNED_LONGS_EQUALTestMethod);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0 (0x0) 0x0>");
+}
+
 static void _failingTestMethodWithCHECK()
 {
     CHECK(false);
@@ -518,11 +651,19 @@ TEST(UnitTestMacros, FailureWithCHECK_THROWS_whenDoesntThrow)
     runTestWithMethod(_failingTestMethod_NoThrowWithCHECK_THROWS);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected to throw int");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but threw nothing");
+    LONGS_EQUAL(1, fixture.getCheckCount());
+}
+
+static void _succeedingTestMethod_CorrectThrowWithCHECK_THROWS()
+{
+    CHECK_THROWS(int, throw 4);
+    lineOfCodeExecutedAfterCheck = true;
 }
 
 TEST(UnitTestMacros, SuccessWithCHECK_THROWS)
 {
-    CHECK_THROWS(int, throw 4);
+    runTestWithMethod(_succeedingTestMethod_CorrectThrowWithCHECK_THROWS);
+    LONGS_EQUAL(1, fixture.getCheckCount());
 }
 
 static void _failingTestMethod_WrongThrowWithCHECK_THROWS()
@@ -536,6 +677,7 @@ TEST(UnitTestMacros, FailureWithCHECK_THROWS_whenWrongThrow)
     runTestWithMethod(_failingTestMethod_WrongThrowWithCHECK_THROWS);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected to throw int");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but threw a different type");
+    LONGS_EQUAL(1, fixture.getCheckCount());
 }
 
 TEST(UnitTestMacros, MultipleCHECK_THROWS_inOneScope)
@@ -548,15 +690,25 @@ TEST(UnitTestMacros, MultipleCHECK_THROWS_inOneScope)
 TEST_GROUP(IgnoreTest)
 {
     TestTestingFixture fixture;
+    IgnoredUtestShell ignoreTest;
+
+    void setup() _override
+    {
+        fixture.addTest(&ignoreTest);
+    }
 };
 
 TEST(IgnoreTest, doesIgnoreCount)
 {
-    IgnoredUtestShell * ignoreTest = new IgnoredUtestShell();
-    fixture.addTest(ignoreTest);
     fixture.runAllTests();
     LONGS_EQUAL(1, fixture.getIgnoreCount());
-    delete ignoreTest;
+}
+
+TEST(IgnoreTest, printsIGNORE_TESTwhenVerbose)
+{
+    fixture.output_->verbose();
+    fixture.runAllTests();
+    fixture.assertPrintContains("IGNORE_TEST");
 }
 
 
