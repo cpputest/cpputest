@@ -41,7 +41,7 @@ RSC=rc.exe
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
+# ADD CPP /nologo /W3 /GX /O2 /I "..\include" /I "..\include\Platforms\VisualCpp" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -273,6 +273,62 @@ SOURCE=.\AllocationInCppFile.h
 # Begin Source File
 
 SOURCE=.\AllTests.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\CppUTest\CommandLineArguments.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\CppUTest\CppUTestConfig.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\CppUTest\MemoryLeakDetector.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\CppUTest\MemoryLeakDetectorMallocMacros.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\CppUTest\MemoryLeakDetectorNewMacros.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\CppUTest\PlatformSpecificFunctions.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\CppUTest\PlatformSpecificFunctions_c.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\CppUTest\SimpleMutex.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\CppUTest\StandardCLibrary.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\CppUTest\TestFailure.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\CppUTest\TestFilter.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\CppUTest\TestMemoryAllocator.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\CppUTest\TestTestingFixture.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\CppUTest\UtestMacros.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
