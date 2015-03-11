@@ -128,10 +128,6 @@ SOURCE=.\MemoryLeakWarningTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\NullTestTest.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\PluginTest.cpp
 # End Source File
 # Begin Source File
