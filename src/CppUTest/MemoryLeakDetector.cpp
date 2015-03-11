@@ -63,6 +63,7 @@ void SimpleStringBuffer::addMemoryDump(const void* memory, size_t memorySize)
     const unsigned char* byteMemory = (const unsigned char*)memory;
     const size_t maxLineBytes = 16;
     size_t currentPos = 0;
+	size_t p;
 
     while (currentPos < memorySize) {
         add("    %04lx: ", currentPos);
@@ -72,13 +73,13 @@ void SimpleStringBuffer::addMemoryDump(const void* memory, size_t memorySize)
         }
         const size_t leftoverBytes = maxLineBytes - bytesInLine;
 
-        for (size_t p = 0; p < bytesInLine; p++) {
+        for (p = 0; p < bytesInLine; p++) {
             add("%02hhx ", byteMemory[currentPos + p]);
             if (p == ((maxLineBytes / 2) - 1)) {
                 add(" ");
             }
         }
-        for (size_t p = 0; p < leftoverBytes; p++) {
+        for (p = 0; p < leftoverBytes; p++) {
             add("   ");
         }
         if (leftoverBytes > (maxLineBytes/2)) {
