@@ -86,6 +86,10 @@ LIB32=link.exe -lib
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
+SOURCE=.\SRC\CPPUTEST\CommandLineArguments.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\SRC\CPPUTEST\CommandLineTestRunner.cpp
 # End Source File
 # Begin Source File
@@ -94,7 +98,15 @@ SOURCE=.\SRC\CPPUTEST\JUnitTestOutput.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\SRC\CPPUTEST\MemoryLeakDetector.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\SRC\CPPUTEST\MemoryLeakWarningPlugin.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\SRC\CPPUTEST\SimpleMutex.cpp
 # End Source File
 # Begin Source File
 
@@ -102,7 +114,19 @@ SOURCE=.\SRC\CPPUTEST\SimpleString.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\SRC\CPPUTEST\TestFailure.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\SRC\CPPUTEST\TestFilter.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\SRC\CPPUTEST\TestHarness_c.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\SRC\CPPUTEST\TestMemoryAllocator.cpp
 # End Source File
 # Begin Source File
 
