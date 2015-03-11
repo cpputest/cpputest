@@ -104,11 +104,27 @@ SOURCE=.\CheatSheetTest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\CppUTestExt\CodeMemoryReportFormatterTest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\CommandLineArgumentsTest.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\CommandLineTestRunnerTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\CppUTestExt\GMockTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\CppUTestExt\GTest1Test.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\CppUTestExt\GTest2ConvertorTest.cpp
 # End Source File
 # Begin Source File
 
@@ -125,6 +141,66 @@ SOURCE=.\MemoryLeakOperatorOverloadsTest.cpp
 # Begin Source File
 
 SOURCE=.\MemoryLeakWarningTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\CppUTestExt\MemoryReportAllocatorTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\CppUTestExt\MemoryReporterPluginTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\CppUTestExt\MemoryReportFormatterTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\CppUTestExt\MockActualCallTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\CppUTestExt\MockCheatSheetTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\CppUTestExt\MockExpectedCallTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\CppUTestExt\MockExpectedFunctionsListTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\CppUTestExt\MockFailureTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\CppUTestExt\MockFailureTest.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\CppUTestExt\MockPluginTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\CppUTestExt\MockSupport_cTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\CppUTestExt\MockSupport_cTestCFile.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\CppUTestExt\MockSupport_cTestCFile.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\CppUTestExt\MockSupportTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\CppUTestExt\OrderedTestTest.cpp
 # End Source File
 # Begin Source File
 
