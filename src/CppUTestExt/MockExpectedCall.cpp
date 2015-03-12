@@ -180,10 +180,11 @@ MockNamedValue MockCheckedExpectedCall::getOutputParameter(const SimpleString& n
 
 bool MockCheckedExpectedCall::areParametersFulfilled()
 {
-    for (MockNamedValueListNode* p = inputParameters_->begin(); p; p = p->next())
+    MockNamedValueListNode* p;
+    for (p = inputParameters_->begin(); p; p = p->next())
         if (! item(p)->isFulfilled())
             return false;
-    for (MockNamedValueListNode* p = outputParameters_->begin(); p; p = p->next())
+    for (p = outputParameters_->begin(); p; p = p->next())
         if (! item(p)->isFulfilled())
             return false;
     return true;
@@ -239,9 +240,11 @@ void MockCheckedExpectedCall::resetExpectation()
 {
     callOrder_ = NOT_CALLED_YET;
     wasPassedToObject_ = (objectPtr_ == NULL);
-    for (MockNamedValueListNode* p = inputParameters_->begin(); p; p = p->next())
+    MockNamedValueListNode* p;
+
+    for (p = inputParameters_->begin(); p; p = p->next())
         item(p)->setFulfilled(false);
-    for (MockNamedValueListNode* p = outputParameters_->begin(); p; p = p->next())
+    for (p = outputParameters_->begin(); p; p = p->next())
         item(p)->setFulfilled(false);
 }
 
@@ -296,12 +299,14 @@ SimpleString MockCheckedExpectedCall::callToString()
         return str;
     }
 
-    for (MockNamedValueListNode* p = inputParameters_->begin(); p; p = p->next()) {
+	MockNamedValueListNode* p;
+
+    for (p = inputParameters_->begin(); p; p = p->next()) {
         str += StringFromFormat("%s %s: <%s>", p->getType().asCharString(), p->getName().asCharString(), getInputParameterValueString(p->getName()).asCharString());
         if (p->next()) str += ", ";
     }
 
-    for (MockNamedValueListNode* p = outputParameters_->begin(); p; p = p->next()) {
+    for (p = outputParameters_->begin(); p; p = p->next()) {
         str += StringFromFormat("%s %s: <output>", p->getType().asCharString(), p->getName().asCharString());
         if (p->next()) str += ", ";
     }
@@ -314,13 +319,15 @@ SimpleString MockCheckedExpectedCall::callToString()
 SimpleString MockCheckedExpectedCall::missingParametersToString()
 {
     SimpleString str;
-    for (MockNamedValueListNode* p = inputParameters_->begin(); p; p = p->next()) {
+	MockNamedValueListNode* p;
+
+    for (p = inputParameters_->begin(); p; p = p->next()) {
         if (! item(p)->isFulfilled()) {
             if (str != "") str += ", ";
             str += StringFromFormat("%s %s", p->getType().asCharString(), p->getName().asCharString());
         }
     }
-    for (MockNamedValueListNode* p = outputParameters_->begin(); p; p = p->next()) {
+    for (p = outputParameters_->begin(); p; p = p->next()) {
         if (! item(p)->isFulfilled()) {
             if (str != "") str += ", ";
             str += StringFromFormat("%s %s", p->getType().asCharString(), p->getName().asCharString());

@@ -86,6 +86,58 @@ LIB32=link.exe -lib
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
+SOURCE=.\src\CppUTestExt\CodeMemoryReportFormatter.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\CppUTestExt\MemoryReportAllocator.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\CppUTestExt\MemoryReporterPlugin.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\CppUTestExt\MemoryReportFormatter.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\CppUTestExt\MockActualCall.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\CppUTestExt\MockExpectedCall.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\CppUTestExt\MockExpectedCallsList.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\CppUTestExt\MockFailure.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\CppUTestExt\MockNamedValue.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\CppUTestExt\MockSupport.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\CppUTestExt\MockSupportPlugin.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\CppUTestExt\MockSupport_c.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\CppUTestExt\OrderedTest.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE=.\SRC\CPPUTEST\CommandLineArguments.cpp
 # End Source File
 # Begin Source File
@@ -156,6 +208,66 @@ SOURCE=.\src\Platforms\VisualCpp\UtestPlatform.cpp
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
+# Begin Source File
+
+SOURCE=.\include\CppUTestExt\CodeMemoryReportFormatter.h"
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTestExt\GMock.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTestExt\GTestConvertor.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTestExt\MemoryReportAllocator.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTestExt\MemoryReporterPlugin.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTestExt\MemoryReportFormatter.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTestExt\MockCheckedActualCall.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTestExt\MockCheckedExpectedCall.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTestExt\MockExpectedCallsList.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTestExt\MockFailure.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTestExt\MockNamedValue.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTestExt\MockSupport.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTestExt\MockSupportPlugin.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTestExt\MockSupport_c.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTestExt\OrderedTest.h
+# End Source File
 # Begin Source File
 
 SOURCE=.\include\CppUTest\CommandLineTestRunner.h
