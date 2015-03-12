@@ -51,17 +51,11 @@ BSC32=bscmake.exe
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
-# Begin Custom Build
-TargetDir=.\Release
+# Begin Special Build Tool
 TargetPath=.\Release\AllTests.exe
-TargetName=AllTests
-InputPath=.\Release\AllTests.exe
 SOURCE="$(InputPath)"
-
-"$(TargetDir)" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	$(TargetPath)$(TargetName)
-
-# End Custom Build
+PostBuild_Cmds=$(TargetPath)
+# End Special Build Tool
 
 !ELSEIF  "$(CFG)" == "AllTests - Win32 Debug"
 
@@ -88,16 +82,11 @@ LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
 # ADD LINK32 ..\lib\CppUTest.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
 # SUBTRACT LINK32 /incremental:no
-# Begin Custom Build
-TargetDir=.\Debug
+# Begin Special Build Tool
 TargetPath=.\Debug\AllTests.exe
-InputPath=.\Debug\AllTests.exe
 SOURCE="$(InputPath)"
-
-"$(TargetDir)" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	$(TargetPath)
-
-# End Custom Build
+PostBuild_Cmds=$(TargetPath)
+# End Special Build Tool
 
 !ENDIF 
 
