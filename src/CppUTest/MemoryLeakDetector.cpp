@@ -87,7 +87,7 @@ void SimpleStringBuffer::addMemoryDump(const void* memory, size_t memorySize)
         }
 
         add("|");
-        for (size_t p = 0; p < bytesInLine; p++) {
+        for (p = 0; p < bytesInLine; p++) {
             char toAdd = (char)byteMemory[currentPos + p];
             if (toAdd < ' ' || toAdd > '~') {
                 toAdd = '.';

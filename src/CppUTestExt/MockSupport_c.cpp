@@ -455,32 +455,32 @@ void enable_c(void)
 
 void setIntData_c(const char* name, int value)
 {
-    return currentMockSupport->setData(name, value);
+    currentMockSupport->setData(name, value);
 }
 
 void setDoubleData_c(const char* name, double value)
 {
-    return currentMockSupport->setData(name, value);
+    currentMockSupport->setData(name, value);
 }
 
 void setStringData_c(const char* name, const char* value)
 {
-    return currentMockSupport->setData(name, value);
+    currentMockSupport->setData(name, value);
 }
 
 void setPointerData_c(const char* name, void* value)
 {
-    return currentMockSupport->setData(name, value);
+    currentMockSupport->setData(name, value);
 }
 
 void setConstPointerData_c(const char* name, const void* value)
 {
-    return currentMockSupport->setData(name, value);
+    currentMockSupport->setData(name, value);
 }
 
 void setDataObject_c(const char* name, const char* type, void* value)
 {
-    return currentMockSupport->setDataObject(name, type, value);
+    currentMockSupport->setDataObject(name, type, value);
 }
 
 MockValue_c getData_c(const char* name)
