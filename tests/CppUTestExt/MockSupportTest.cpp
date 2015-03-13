@@ -48,6 +48,8 @@ TEST_GROUP(MockSupportTest)
         expectationsList->deleteAllExpectationsAndClearList();
         delete expectationsList;
         mock().setMockFailureStandardReporter(NULL);
+
+        mock().clear();
     }
 
     MockCheckedExpectedCall* addFunctionToExpectationsList(const SimpleString& name)
@@ -837,6 +839,8 @@ TEST(MockSupportTest, outputParameterTraced)
     mock().actualCall("someFunc").withOutputParameter("someParameter", &param);
     mock().checkExpectations();
     STRCMP_CONTAINS("Function name: someFunc someParameter:", mock().getTraceOutput());
+
+    mock().clear();
 }
 
 TEST(MockSupportTest, outputParameterWithIgnoredParameters)
@@ -1011,6 +1015,7 @@ TEST(MockSupportTest, ExpectedCallsLeftWorksHierarchically)
 {
     mock("first").expectOneCall("foobar");
     LONGS_EQUAL(1, mock().expectedCallsLeft());
+
     mock().clear();
 }
 
@@ -1025,6 +1030,8 @@ TEST(MockSupportTest, checkExpectationsWorksHierarchically)
 
     mock().checkExpectations();
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+
+    mock().clear();
 }
 
 TEST(MockSupportTest, ignoreOtherCallsWorksHierarchically)
@@ -1033,6 +1040,8 @@ TEST(MockSupportTest, ignoreOtherCallsWorksHierarchically)
     mock().ignoreOtherCalls();
     mock("first").actualCall("boo");
     CHECK_NO_MOCK_FAILURE();
+
+    mock().clear();
 }
 
 TEST(MockSupportTest, ignoreOtherCallsWorksHierarchicallyWhenDynamicallyCreated)
@@ -1671,6 +1680,7 @@ TEST(MockSupportTest, shouldSupportConstParameters)
     functionWithConstParam(param);
 
     mock().checkExpectations();
+	mock().removeAllComparators();
 }
 
 IGNORE_TEST(MockSupportTest, testForPerformanceProfiling)
