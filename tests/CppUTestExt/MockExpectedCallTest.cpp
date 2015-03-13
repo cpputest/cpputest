@@ -415,3 +415,31 @@ TEST(MockExpectedCall, hasNoOutputParameter)
     foo.setValue((int)1);
     CHECK_FALSE(call->hasOutputParameter(foo));
 }
+
+TEST(MockExpectedCall, MockIgnoredExpectedCallWorksAsItShould)
+{
+    MockIgnoredExpectedCall ignored;
+    ignored.withName("func");
+    ignored.withCallOrder(1)
+            .onObject((void*) 0)
+            .withIntParameter("bla", (int) 1)
+            .withUnsignedIntParameter("foo", (unsigned int) 1)
+            .withLongIntParameter("hey", (long int) 1)
+            .withUnsignedLongIntParameter("bah", (unsigned long int) 1)
+            .withDoubleParameter("hah", (double) 1.1f)
+            .withStringParameter("goo", "hello")
+            .withPointerParameter("pie", (void*) 0)
+            .withConstPointerParameter("woo", (const void*) 0)
+            .withParameterOfType("top", "mytype", (const void*) 0)
+            .withOutputParameterReturning("bar", (const void*) 0, 1)
+            .andReturnValue((double) 1.0f)
+            .andReturnValue((unsigned int) 1)
+            .andReturnValue((int) 1)
+            .andReturnValue((unsigned long int) 1)
+            .andReturnValue((long int) 1)
+            .andReturnValue("boo")
+            .andReturnValue((void*) 0)
+            .andReturnValue((const void*) 0)
+    ;
+    CHECK_FALSE(ignored.hasReturnValue());
+}

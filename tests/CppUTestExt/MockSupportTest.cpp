@@ -1066,7 +1066,6 @@ TEST(MockSupportTest, ignoreOtherCallsIgnoresWithAllKindsOfParameters)
     CHECK_NO_MOCK_FAILURE();
 }
 
-
 TEST(MockSupportTest, checkExpectationsWorksHierarchicallyForLastCallNotFinished)
 {
     mock("first").expectOneCall("foobar").withParameter("boo", 1);
