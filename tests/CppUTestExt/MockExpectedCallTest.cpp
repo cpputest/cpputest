@@ -212,6 +212,8 @@ TEST(MockExpectedCall, callWithObjectParameterEqualComparisonButFailsWithoutComp
     parameter.setObjectPointer("type", &equalType);
     call->withParameterOfType("type", "name", &type);
     CHECK(!call->hasInputParameter(parameter));
+
+    MockNamedValue::setDefaultComparatorRepository(NULL);
 }
 
 TEST(MockExpectedCall, callWithObjectParameterEqualComparison)
@@ -256,6 +258,7 @@ TEST(MockExpectedCall, getParameterValueOfObjectTypeWithoutComparator)
     MockNamedValue::setDefaultComparatorRepository(&repository);
     call->withParameterOfType("type", "name", &type);
     STRCMP_EQUAL("No comparator found for type: \"type\"", call->getInputParameterValueString("name").asCharString());
+    MockNamedValue::setDefaultComparatorRepository(NULL);
 }
 
 TEST(MockExpectedCall, callWithTwoUnsignedIntegerParameter)
