@@ -147,13 +147,6 @@ SOURCE=.\MemoryLeakDetectorTest.cpp
 # Begin Source File
 
 SOURCE=.\MemoryLeakOperatorOverloadsTest.cpp
-
-!IF  "$(CFG)" == "AllTests - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "AllTests - Win32 Debug"
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
