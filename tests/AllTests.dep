@@ -3,12 +3,14 @@
 .\AllocationInCFile.c : \
 	"..\include\CppUTest\CppUTestConfig.h"\
 	"..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"\
+	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
 	"..\include\CppUTest\StandardCLibrary.h"\
 	".\AllocationInCFile.h"\
 	
 
 .\AllocationInCppFile.cpp : \
 	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"\
 	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
 	"..\include\CppUTest\StandardCLibrary.h"\
 	".\AllocationInCppFile.h"\
@@ -18,6 +20,7 @@
 	"..\include\CppUTest\CommandLineArguments.h"\
 	"..\include\CppUTest\CommandLineTestRunner.h"\
 	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"\
 	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
 	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
 	"..\include\CppUTest\SimpleString.h"\
@@ -35,6 +38,7 @@
 
 .\CheatSheetTest.cpp : \
 	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"\
 	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
 	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
 	"..\include\CppUTest\SimpleString.h"\
@@ -50,6 +54,7 @@
 
 .\CppUTestExt\CodeMemoryReportFormatterTest.cpp : \
 	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"\
 	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
 	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
 	"..\include\CppUTest\SimpleString.h"\
@@ -71,6 +76,7 @@
 .\CommandLineArgumentsTest.cpp : \
 	"..\include\CppUTest\CommandLineArguments.h"\
 	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"\
 	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
 	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
 	"..\include\CppUTest\SimpleString.h"\
@@ -91,6 +97,7 @@
 	"..\include\CppUTest\CommandLineArguments.h"\
 	"..\include\CppUTest\CommandLineTestRunner.h"\
 	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"\
 	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
 	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
 	"..\include\CppUTest\SimpleString.h"\
@@ -108,8 +115,23 @@
 	"..\include\platforms\visualcpp\stdint.h"\
 	
 
+.\CppUTestExt\GMockTest.cpp : \
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"\
+	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	
+
+.\CppUTestExt\GTest1Test.cpp : \
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"\
+	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	
+
 .\CppUTestExt\GTest2ConvertorTest.cpp : \
 	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"\
 	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
 	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
 	"..\include\CppUTest\SimpleString.h"\
@@ -130,6 +152,7 @@
 .\JUnitOutputTest.cpp : \
 	"..\include\CppUTest\CppUTestConfig.h"\
 	"..\include\CppUTest\JunitTestOutput.h"\
+	"..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"\
 	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
 	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
 	"..\include\CppUTest\PlatformSpecificFunctions.h"\
@@ -149,6 +172,7 @@
 .\MemoryLeakDetectorTest.cpp : \
 	"..\include\CppUTest\CppUTestConfig.h"\
 	"..\include\CppUTest\MemoryLeakDetector.h"\
+	"..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"\
 	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
 	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
 	"..\include\CppUTest\PlatformSpecificFunctions.h"\
@@ -166,8 +190,62 @@
 	"..\include\platforms\visualcpp\stdint.h"\
 	
 
+.\MemoryLeakOperatorOverloadsTest.cpp : \
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetector.h"\
+	"..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"\
+	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
+	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
+	"..\include\CppUTest\PlatformSpecificFunctions.h"\
+	"..\include\CppUTest\PlatformSpecificFunctions_c.h"\
+	"..\include\CppUTest\SimpleString.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	"..\include\CppUTest\TestFailure.h"\
+	"..\include\CppUTest\TestFilter.h"\
+	"..\include\CppUTest\TestHarness.h"\
+	"..\include\CppUTest\TestHarness_c.h"\
+	"..\include\CppUTest\TestMemoryAllocator.h"\
+	"..\include\CppUTest\TestOutput.h"\
+	"..\include\CppUTest\TestPlugin.h"\
+	"..\include\CppUTest\TestRegistry.h"\
+	"..\include\CppUTest\TestResult.h"\
+	"..\include\CppUTest\TestTestingFixture.h"\
+	"..\include\CppUTest\Utest.h"\
+	"..\include\CppUTest\UtestMacros.h"\
+	"..\include\platforms\visualcpp\stdint.h"\
+	".\AllocationInCFile.h"\
+	".\AllocationInCppFile.h"\
+	
+
+.\MemoryLeakWarningTest.cpp : \
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetector.h"\
+	"..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"\
+	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
+	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
+	"..\include\CppUTest\PlatformSpecificFunctions.h"\
+	"..\include\CppUTest\PlatformSpecificFunctions_c.h"\
+	"..\include\CppUTest\SimpleMutex.h"\
+	"..\include\CppUTest\SimpleString.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	"..\include\CppUTest\TestFailure.h"\
+	"..\include\CppUTest\TestFilter.h"\
+	"..\include\CppUTest\TestHarness.h"\
+	"..\include\CppUTest\TestHarness_c.h"\
+	"..\include\CppUTest\TestMemoryAllocator.h"\
+	"..\include\CppUTest\TestOutput.h"\
+	"..\include\CppUTest\TestPlugin.h"\
+	"..\include\CppUTest\TestRegistry.h"\
+	"..\include\CppUTest\TestResult.h"\
+	"..\include\CppUTest\TestTestingFixture.h"\
+	"..\include\CppUTest\Utest.h"\
+	"..\include\CppUTest\UtestMacros.h"\
+	"..\include\platforms\visualcpp\stdint.h"\
+	
+
 .\CppUTestExt\MemoryReportAllocatorTest.cpp : \
 	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"\
 	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
 	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
 	"..\include\CppUTest\SimpleString.h"\
@@ -187,6 +265,7 @@
 
 .\CppUTestExt\MemoryReporterPluginTest.cpp : \
 	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"\
 	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
 	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
 	"..\include\CppUTest\SimpleString.h"\
@@ -215,6 +294,7 @@
 
 .\CppUTestExt\MemoryReportFormatterTest.cpp : \
 	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"\
 	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
 	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
 	"..\include\CppUTest\SimpleString.h"\
@@ -234,6 +314,7 @@
 
 .\CppUTestExt\MockActualCallTest.cpp : \
 	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"\
 	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
 	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
 	"..\include\CppUTest\SimpleString.h"\
@@ -257,6 +338,7 @@
 
 .\CppUTestExt\MockCheatSheetTest.cpp : \
 	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"\
 	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
 	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
 	"..\include\CppUTest\SimpleString.h"\
@@ -280,6 +362,7 @@
 
 .\CppUTestExt\MockExpectedCallTest.cpp : \
 	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"\
 	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
 	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
 	"..\include\CppUTest\SimpleString.h"\
@@ -300,6 +383,7 @@
 
 .\CppUTestExt\MockExpectedFunctionsListTest.cpp : \
 	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"\
 	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
 	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
 	"..\include\CppUTest\SimpleString.h"\
@@ -321,6 +405,7 @@
 
 .\CppUTestExt\MockFailureTest.cpp : \
 	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"\
 	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
 	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
 	"..\include\CppUTest\SimpleString.h"\
@@ -342,6 +427,7 @@
 
 .\CppUTestExt\MockPluginTest.cpp : \
 	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"\
 	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
 	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
 	"..\include\CppUTest\SimpleString.h"\
@@ -368,6 +454,7 @@
 
 .\CppUTestExt\MockSupport_cTest.cpp : \
 	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"\
 	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
 	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
 	"..\include\CppUTest\SimpleString.h"\
@@ -390,6 +477,8 @@
 
 .\CppUTestExt\MockSupport_cTestCFile.c : \
 	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"\
+	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
 	"..\include\CppUTest\StandardCLibrary.h"\
 	"..\include\CppUTestExt\MockSupport_c.h"\
 	".\CppUTestExt\MockSupport_cTestCFile.h"\
@@ -397,6 +486,7 @@
 
 .\CppUTestExt\MockSupportTest.cpp : \
 	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"\
 	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
 	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
 	"..\include\CppUTest\SimpleString.h"\
@@ -421,6 +511,7 @@
 
 .\CppUTestExt\OrderedTestTest.cpp : \
 	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"\
 	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
 	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
 	"..\include\CppUTest\SimpleString.h"\
@@ -441,6 +532,7 @@
 
 .\PluginTest.cpp : \
 	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"\
 	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
 	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
 	"..\include\CppUTest\SimpleString.h"\
@@ -460,6 +552,7 @@
 
 .\PreprocessorTest.cpp : \
 	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"\
 	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
 	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
 	"..\include\CppUTest\SimpleString.h"\
@@ -475,6 +568,7 @@
 
 .\SetPluginTest.cpp : \
 	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"\
 	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
 	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
 	"..\include\CppUTest\SimpleString.h"\
@@ -493,6 +587,7 @@
 
 .\SimpleStringTest.cpp : \
 	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"\
 	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
 	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
 	"..\include\CppUTest\PlatformSpecificFunctions.h"\
@@ -512,6 +607,7 @@
 
 .\TestFailureTest.cpp : \
 	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"\
 	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
 	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
 	"..\include\CppUTest\SimpleString.h"\
@@ -528,6 +624,7 @@
 
 .\TestFilterTest.cpp : \
 	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"\
 	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
 	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
 	"..\include\CppUTest\SimpleString.h"\
@@ -544,7 +641,7 @@
 
 .\TestHarness_cTest.cpp : \
 	"..\include\CppUTest\CppUTestConfig.h"\
-	"..\include\CppUTest\MemoryLeakDetector.h"\
+	"..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"\
 	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
 	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
 	"..\include\CppUTest\PlatformSpecificFunctions.h"\
@@ -567,6 +664,8 @@
 
 .\TestHarness_cTestCFile.c : \
 	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"\
+	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
 	"..\include\CppUTest\PlatformSpecificFunctions_c.h"\
 	"..\include\CppUTest\StandardCLibrary.h"\
 	"..\include\CppUTest\TestHarness_c.h"\
@@ -574,6 +673,7 @@
 
 .\TestInstallerTest.cpp : \
 	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"\
 	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
 	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
 	"..\include\CppUTest\SimpleString.h"\
@@ -591,6 +691,7 @@
 
 .\TestMemoryAllocatorTest.cpp : \
 	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"\
 	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
 	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
 	"..\include\CppUTest\PlatformSpecificFunctions.h"\
@@ -610,6 +711,7 @@
 
 .\TestOutputTest.cpp : \
 	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"\
 	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
 	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
 	"..\include\CppUTest\PlatformSpecificFunctions.h"\
@@ -628,6 +730,7 @@
 
 .\TestRegistryTest.cpp : \
 	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"\
 	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
 	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
 	"..\include\CppUTest\SimpleString.h"\
@@ -646,6 +749,7 @@
 
 .\TestResultTest.cpp : \
 	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"\
 	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
 	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
 	"..\include\CppUTest\PlatformSpecificFunctions.h"\
@@ -664,6 +768,7 @@
 
 .\UtestTest.cpp : \
 	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"\
 	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
 	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
 	"..\include\CppUTest\PlatformSpecificFunctions.h"\
