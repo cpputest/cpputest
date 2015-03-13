@@ -64,6 +64,7 @@ TEST_GROUP(MockPlugin)
 
         CHECK_NO_MOCK_FAILURE();
         mock().setMockFailureStandardReporter(NULL);
+        mock().clear();
     }
 };
 
@@ -135,4 +136,5 @@ TEST(MockPlugin, preTestActionWillEnableMultipleComparatorsToTheGlobalMockSuppor
     mock().checkExpectations();
     CHECK_NO_MOCK_FAILURE();
     LONGS_EQUAL(0, result->getFailureCount());
+    plugin->postTestAction(*test, *result);
 }
