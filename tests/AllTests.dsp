@@ -71,7 +71,7 @@ PostBuild_Cmds=$(TargetPath)
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /GX /ZI /Od /I "..\include" /I "..\include\Platforms\VisualCpp" /FI"CppUTest/MemoryLeakDetectorMallocMacros.h" /FI"CppUTest/MemoryLeakDetectorNewMacros.h" /D "_CONSOLE" /D "WIN32" /D "_DEBUG" /D "_MBCS" /FR /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /GX /ZI /Od /I "..\include" /I "..\include\Platforms\VisualCpp" /FI"CppUTest/MemoryLeakDetectorMallocMacros.h" /FI"CppUTest/MemoryLeakDetectorNewMacros.h" /D "_CONSOLE" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "CPPUTEST_MEM_LEAK_DETECTION_DISABLED" /FR /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -84,7 +84,7 @@ LINK32=link.exe
 # Begin Special Build Tool
 TargetPath=.\Debug\AllTests.exe
 SOURCE="$(InputPath)"
-PostBuild_Cmds=$(TargetPath)
+PostBuild_Cmds=$(TargetPath) -v
 # End Special Build Tool
 
 !ENDIF 
@@ -147,6 +147,13 @@ SOURCE=.\MemoryLeakDetectorTest.cpp
 # Begin Source File
 
 SOURCE=.\MemoryLeakOperatorOverloadsTest.cpp
+
+!IF  "$(CFG)" == "AllTests - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "AllTests - Win32 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
