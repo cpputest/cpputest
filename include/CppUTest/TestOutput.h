@@ -60,7 +60,6 @@ public:
     virtual void print(const char*);
     virtual void print(long);
     virtual void printDouble(double);
-    virtual void printHex(long);
     virtual void print(const TestFailure& failure);
     virtual void printTestRun(int number, int total);
     virtual void setProgressIndicator(const char*);

@@ -78,11 +78,6 @@ void TestOutput::printDouble(double d)
     print(StringFrom(d).asCharString());
 }
 
-void TestOutput::printHex(long n)
-{
-    print(HexStringFrom(n).asCharString());
-}
-
 TestOutput& operator<<(TestOutput& p, const char* s)
 {
     p.print(s);
