@@ -1680,7 +1680,7 @@ TEST(MockSupportTest, shouldSupportConstParameters)
     functionWithConstParam(param);
 
     mock().checkExpectations();
-	mock().removeAllComparators();
+    mock().removeAllComparators();
 }
 
 IGNORE_TEST(MockSupportTest, testForPerformanceProfiling)
