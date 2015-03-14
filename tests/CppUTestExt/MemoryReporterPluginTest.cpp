@@ -145,6 +145,7 @@ TEST_GROUP(MemoryReporterPlugin)
         delete reporter;
         delete test;
         delete result;
+        mock().clear();
     }
 };
 
