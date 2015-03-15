@@ -300,3 +300,22 @@ TEST(TestRegistry, CurrentRepetitionIsCorrectTwo)
     LONGS_EQUAL(2, myRegistry->getCurrentRepetition());
 }
 
+class MyTestPluginDummy: public TestPlugin
+{
+public:
+    MyTestPluginDummy(const SimpleString& name) : TestPlugin(name) {}
+    virtual ~MyTestPluginDummy() {}
+    virtual void runAllPreTestAction(UtestShell&, TestResult&) _override {}
+    virtual void runAllPostTestAction(UtestShell&, TestResult&) _override {}
+};
+
+TEST(TestRegistry, ResetPluginsWorks)
+{
+    MyTestPluginDummy plugin1("Plugin-1");
+    MyTestPluginDummy plugin2("Plugin-2");
+    myRegistry->installPlugin(&plugin1);
+    myRegistry->installPlugin(&plugin2);
+    LONGS_EQUAL(2, myRegistry->countPlugins());
+    myRegistry->resetPlugins();
+    LONGS_EQUAL(0, myRegistry->countPlugins());
+}
