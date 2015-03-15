@@ -263,7 +263,7 @@ TEST(SimpleString, countEmptyString)
 	LONGS_EQUAL(SimpleString::StrLen("hahahaha"), str.count(""));
 }
 
-TEST(SimpleString, countInEmptyString)
+TEST(SimpleString, countEmptyStringInEmptyString)
 {
     SimpleString str;
     LONGS_EQUAL(0, str.count(""));
@@ -296,6 +296,13 @@ TEST(SimpleString, replaceEmptyStringWithEmptyString)
 {
     SimpleString str;
     str.replace("", "");
+    STRCMP_EQUAL("", str.asCharString());
+}
+
+TEST(SimpleString, replaceNullWithNull)
+{
+    SimpleString str;
+    str.replace((char*) 0, (char*) 0);
     STRCMP_EQUAL("", str.asCharString());
 }
 
@@ -502,7 +509,7 @@ TEST(SimpleString, StringFromFormatLarge)
 
 TEST(SimpleString, StringFromConstSimpleString)
 {
-    STRCMP_EQUAL("bla", StringFrom(SimpleString("bla")).asCharString());
+	STRCMP_EQUAL("bla", StringFrom(SimpleString("bla")).asCharString());
 }
 
 static int WrappedUpVSNPrintf(char* buf, size_t n, const char* format, ...)
