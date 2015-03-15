@@ -413,6 +413,14 @@ TEST(SimpleString, NULLReportsNullString)
     STRCMP_EQUAL("(null)", StringFromOrNull((char*) NULL).asCharString());
 }
 
+TEST(SimpleString, Booleans)
+{
+    SimpleString s1(StringFrom(true));
+    SimpleString s2(StringFrom(false));
+    CHECK(s1 == "true");
+    CHECK(s2 == "false");
+}
+
 TEST(SimpleString, Characters)
 {
     SimpleString s(StringFrom('a'));
