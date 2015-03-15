@@ -260,7 +260,13 @@ TEST(SimpleString, countTogether)
 TEST(SimpleString, countEmptyString)
 {
     SimpleString str("hahahaha");
-    LONGS_EQUAL(1, str.count(""));
+	LONGS_EQUAL(SimpleString::StrLen("hahahaha"), str.count(""));
+}
+
+TEST(SimpleString, countInEmptyString)
+{
+    SimpleString str;
+    LONGS_EQUAL(0, str.count(""));
 }
 
 TEST(SimpleString, endsWith)
