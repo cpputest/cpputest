@@ -496,7 +496,7 @@ TEST(SimpleString, StringFromFormatLarge)
 
 TEST(SimpleString, StringFromConstSimpleString)
 {
-	STRCMP_EQUAL("bla", StringFrom(SimpleString("bla")).asCharString());
+    STRCMP_EQUAL("bla", StringFrom(SimpleString("bla")).asCharString());
 }
 
 static int WrappedUpVSNPrintf(char* buf, size_t n, const char* format, ...)
