@@ -260,7 +260,7 @@ TEST(SimpleString, countTogether)
 TEST(SimpleString, countEmptyString)
 {
     SimpleString str("hahahaha");
-	LONGS_EQUAL(SimpleString::StrLen("hahahaha"), str.count(""));
+	LONGS_EQUAL(8, str.count(""));
 }
 
 TEST(SimpleString, countEmptyStringInEmptyString)
@@ -296,13 +296,6 @@ TEST(SimpleString, replaceEmptyStringWithEmptyString)
 {
     SimpleString str;
     str.replace("", "");
-    STRCMP_EQUAL("", str.asCharString());
-}
-
-TEST(SimpleString, replaceNullWithNull)
-{
-    SimpleString str;
-    str.replace((char*) 0, (char*) 0);
     STRCMP_EQUAL("", str.asCharString());
 }
 
