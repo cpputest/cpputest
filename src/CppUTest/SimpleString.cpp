@@ -191,8 +191,8 @@ bool SimpleString::endsWith(const SimpleString& other) const
 
 size_t SimpleString::count(const SimpleString& substr) const
 {
-	if(substr.isEmpty()) 
-		return 1;
+    if(substr.isEmpty())
+        return 1;
     size_t num = 0;
     char* str = buffer_;
     while ((str = StrStr(str, substr.buffer_))) {
