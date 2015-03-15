@@ -171,14 +171,6 @@ UtestShell* TestRegistry::getFirstTest()
     return tests_;
 }
 
-UtestShell* TestRegistry::getLastTest()
-{
-    UtestShell* current = tests_;
-    while (current->getNext())
-        current = current->getNext();
-    return current;
-}
-
 UtestShell* TestRegistry::getTestWithNext(UtestShell* test)
 {
     UtestShell* current = tests_;
