@@ -257,6 +257,18 @@ TEST(SimpleString, countTogether)
     LONGS_EQUAL(4, str.count("ha"));
 }
 
+TEST(SimpleString, countEmptyString)
+{
+    SimpleString str("hahahaha");
+	LONGS_EQUAL(8, str.count(""));
+}
+
+TEST(SimpleString, countEmptyStringInEmptyString)
+{
+    SimpleString str;
+    LONGS_EQUAL(0, str.count(""));
+}
+
 TEST(SimpleString, endsWith)
 {
     SimpleString str("Hello World");
@@ -278,6 +290,13 @@ TEST(SimpleString, replaceCharWithChar)
     SimpleString str("abcabcabca");
     str.replace('a', 'b');
     STRCMP_EQUAL("bbcbbcbbcb", str.asCharString());
+}
+
+TEST(SimpleString, replaceEmptyStringWithEmptyString)
+{
+    SimpleString str;
+    str.replace("", "");
+    STRCMP_EQUAL("", str.asCharString());
 }
 
 TEST(SimpleString, replaceStringWithString)
@@ -400,6 +419,14 @@ TEST(SimpleString, NULLReportsNullString)
     STRCMP_EQUAL("(null)", StringFromOrNull((char*) NULL).asCharString());
 }
 
+TEST(SimpleString, Booleans)
+{
+    SimpleString s1(StringFrom(true));
+    SimpleString s2(StringFrom(false));
+    CHECK(s1 == "true");
+    CHECK(s2 == "false");
+}
+
 TEST(SimpleString, Characters)
 {
     SimpleString s(StringFrom('a'));
@@ -471,6 +498,11 @@ TEST(SimpleString, StringFromFormatLarge)
     const char* s = "ThisIsAPrettyLargeStringAndIfWeAddThisManyTimesToABufferItWillbeFull";
     SimpleString h1 = StringFromFormat("%s%s%s%s%s%s%s%s%s%s", s, s, s, s, s, s, s, s, s, s);
     LONGS_EQUAL(10, h1.count(s));
+}
+
+TEST(SimpleString, StringFromConstSimpleString)
+{
+	STRCMP_EQUAL("bla", StringFrom(SimpleString("bla")).asCharString());
 }
 
 static int WrappedUpVSNPrintf(char* buf, size_t n, const char* format, ...)
@@ -573,9 +605,9 @@ TEST(SimpleString, _64BitAddressPrintsCorrectly)
 
 #else
 /*
- * This test case should pass on 64 bit systems with 32 bit longs, 
+ * This test case should pass on 64 bit systems with 32 bit longs,
  * but actually fails due to an implementation problem: Right now,
- * the 64 bit pointers are casted to 32bit as the %p is causing 
+ * the 64 bit pointers are casted to 32bit as the %p is causing
  * different formats on different platforms. However, this will
  * need to be fixed in the future.
  */
