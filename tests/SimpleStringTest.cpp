@@ -257,6 +257,12 @@ TEST(SimpleString, countTogether)
     LONGS_EQUAL(4, str.count("ha"));
 }
 
+TEST(SimpleString, countEmptyString)
+{
+    SimpleString str("hahahaha");
+    LONGS_EQUAL(1, str.count(""));
+}
+
 TEST(SimpleString, endsWith)
 {
     SimpleString str("Hello World");
@@ -573,9 +579,9 @@ TEST(SimpleString, _64BitAddressPrintsCorrectly)
 
 #else
 /*
- * This test case should pass on 64 bit systems with 32 bit longs, 
+ * This test case should pass on 64 bit systems with 32 bit longs,
  * but actually fails due to an implementation problem: Right now,
- * the 64 bit pointers are casted to 32bit as the %p is causing 
+ * the 64 bit pointers are casted to 32bit as the %p is causing
  * different formats on different platforms. However, this will
  * need to be fixed in the future.
  */

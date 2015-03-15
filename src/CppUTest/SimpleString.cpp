@@ -172,7 +172,6 @@ bool SimpleString::containsNoCase(const SimpleString& other) const
     return lowerCase().contains(other.lowerCase());
 }
 
-
 bool SimpleString::startsWith(const SimpleString& other) const
 {
     if (StrLen(other.buffer_) == 0) return true;
@@ -192,6 +191,8 @@ bool SimpleString::endsWith(const SimpleString& other) const
 
 size_t SimpleString::count(const SimpleString& substr) const
 {
+	if(substr.isEmpty()) 
+		return 1;
     size_t num = 0;
     char* str = buffer_;
     while ((str = StrStr(str, substr.buffer_))) {
