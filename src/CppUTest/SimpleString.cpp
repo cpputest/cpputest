@@ -238,7 +238,7 @@ void SimpleString::replace(const char* to, const char* with)
 
     size_t newsize = len + (withlen * c) - (tolen * c) + 1;
 
-    if (newsize) {
+    if (newsize > 1) {
         char* newbuf = allocStringBuffer(newsize);
         for (size_t i = 0, j = 0; i < len;) {
             if (StrNCmp(&buffer_[i], to, tolen) == 0) {

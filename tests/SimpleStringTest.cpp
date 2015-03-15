@@ -286,6 +286,13 @@ TEST(SimpleString, replaceCharWithChar)
     STRCMP_EQUAL("bbcbbcbbcb", str.asCharString());
 }
 
+TEST(SimpleString, replaceEmptyStringWithEmptyString)
+{
+    SimpleString str;
+    str.replace("", "");
+    STRCMP_EQUAL("", str.asCharString());
+}
+
 TEST(SimpleString, replaceStringWithString)
 {
     SimpleString str("boo baa boo baa boo");
