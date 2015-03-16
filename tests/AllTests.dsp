@@ -106,7 +106,7 @@ SOURCE=.\AllocationInCppFile.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\AllTests.cpp
+SOURCE=.\CppUTestExt\AllTests.cpp
 # End Source File
 # Begin Source File
 
