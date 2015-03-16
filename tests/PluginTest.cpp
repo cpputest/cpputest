@@ -84,7 +84,6 @@ public:
 
 };
 
-
 TEST_GROUP(PluginTest)
 {
     DummyPlugin* firstPlugin;
@@ -160,6 +159,18 @@ TEST(PluginTest, RemovePluginByName)
     LONGS_EQUAL(3, registry->countPlugins());
     registry->removePluginByName(GENERIC_PLUGIN2);
     LONGS_EQUAL(2, registry->countPlugins());
+}
+
+struct DefaultPlugin : public TestPlugin
+{
+    DefaultPlugin() : TestPlugin("default") {}
+};
+
+TEST(PluginTest, CoverDefaultPostTestAction)
+{
+    DefaultPlugin defaultPlugin;
+    registry->installPlugin(&defaultPlugin);
+    genFixture->runAllTests();
 }
 
 TEST(PluginTest, DisablesPluginsDontRun)
