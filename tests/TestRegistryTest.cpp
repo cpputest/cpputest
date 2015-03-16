@@ -238,10 +238,10 @@ TEST(TestRegistry, findTestWithNameDoesntExist)
 
 TEST(TestRegistry, findTestWithName)
 {
-    test1->setTestName("SomeOtherTest");
-    test2->setTestName("NameOfATestThatDoesExist");
-    myRegistry->addTest(test2);
+    test1->setTestName("NameOfATestThatDoesExist");
+    test2->setTestName("SomeOtherTest");
     myRegistry->addTest(test1);
+    myRegistry->addTest(test2);
     CHECK(myRegistry->findTestWithName("NameOfATestThatDoesExist"));
 }
 
@@ -252,10 +252,10 @@ TEST(TestRegistry, findTestWithGroupDoesntExist)
 
 TEST(TestRegistry, findTestWithGroup)
 {
-    test1->setGroupName("SomeOtherGroup");
-    test2->setGroupName("GroupOfATestThatDoesExist");
-    myRegistry->addTest(test2);
+    test1->setGroupName("GroupOfATestThatDoesExist");
+    test2->setGroupName("SomeOtherGroup");
     myRegistry->addTest(test1);
+    myRegistry->addTest(test2);
     CHECK(myRegistry->findTestWithGroup("GroupOfATestThatDoesExist"));
 }
 
