@@ -239,7 +239,9 @@ TEST(TestRegistry, findTestWithNameDoesntExist)
 TEST(TestRegistry, findTestWithName)
 {
     test1->setTestName("NameOfATestThatDoesExist");
+    test2->setTestName("SomeOtherTest");
     myRegistry->addTest(test1);
+    myRegistry->addTest(test2);
     CHECK(myRegistry->findTestWithName("NameOfATestThatDoesExist"));
 }
 
@@ -251,7 +253,9 @@ TEST(TestRegistry, findTestWithGroupDoesntExist)
 TEST(TestRegistry, findTestWithGroup)
 {
     test1->setGroupName("GroupOfATestThatDoesExist");
+    test2->setGroupName("SomeOtherGroup");
     myRegistry->addTest(test1);
+    myRegistry->addTest(test2);
     CHECK(myRegistry->findTestWithGroup("GroupOfATestThatDoesExist"));
 }
 
@@ -300,3 +304,22 @@ TEST(TestRegistry, CurrentRepetitionIsCorrectTwo)
     LONGS_EQUAL(2, myRegistry->getCurrentRepetition());
 }
 
+class MyTestPluginDummy: public TestPlugin
+{
+public:
+    MyTestPluginDummy(const SimpleString& name) : TestPlugin(name) {}
+    virtual ~MyTestPluginDummy() {}
+    virtual void runAllPreTestAction(UtestShell&, TestResult&) _override {}
+    virtual void runAllPostTestAction(UtestShell&, TestResult&) _override {}
+};
+
+TEST(TestRegistry, ResetPluginsWorks)
+{
+    MyTestPluginDummy plugin1("Plugin-1");
+    MyTestPluginDummy plugin2("Plugin-2");
+    myRegistry->installPlugin(&plugin1);
+    myRegistry->installPlugin(&plugin2);
+    LONGS_EQUAL(2, myRegistry->countPlugins());
+    myRegistry->resetPlugins();
+    LONGS_EQUAL(0, myRegistry->countPlugins());
+}

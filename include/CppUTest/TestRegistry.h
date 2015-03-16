@@ -61,7 +61,6 @@ public:
     virtual int countPlugins();
 
     virtual UtestShell* getFirstTest();
-    virtual UtestShell* getLastTest();
     virtual UtestShell* getTestWithNext(UtestShell* test);
 
     virtual UtestShell* findTestWithName(const SimpleString& name);
