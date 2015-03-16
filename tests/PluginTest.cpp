@@ -166,7 +166,7 @@ struct DefaultPlugin : public TestPlugin
     DefaultPlugin() : TestPlugin("default") {}
 };
 
-TEST(PluginTest, CoverDefaultPostTestAction)
+TEST(PluginTest, DefaultPostTestActionDoesntDoAnything)
 {
     DefaultPlugin defaultPlugin;
     registry->installPlugin(&defaultPlugin);
