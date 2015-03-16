@@ -25,6 +25,9 @@ NULL=
 NULL=nul
 !ENDIF 
 
+CPP=cl.exe
+RSC=rc.exe
+
 !IF  "$(CFG)" == "AllTests - Win32 Release"
 
 OUTDIR=.\Release
@@ -35,11 +38,11 @@ OutDir=.\Release
 
 !IF "$(RECURSE)" == "0" 
 
-ALL : "$(OUTDIR)\AllTests.exe" ".\Release"
+ALL : "$(OUTDIR)\AllTests.exe"
 
 !ELSE 
 
-ALL : "CppUTest - Win32 Release" "$(OUTDIR)\AllTests.exe" ".\Release"
+ALL : "CppUTest - Win32 Release" "$(OUTDIR)\AllTests.exe"
 
 !ENDIF 
 
@@ -60,6 +63,8 @@ CLEAN :
 	-@erase "$(INTDIR)\GTest2ConvertorTest.obj"
 	-@erase "$(INTDIR)\JUnitOutputTest.obj"
 	-@erase "$(INTDIR)\MemoryLeakDetectorTest.obj"
+	-@erase "$(INTDIR)\MemoryLeakOperatorOverloadsTest.obj"
+	-@erase "$(INTDIR)\MemoryLeakWarningTest.obj"
 	-@erase "$(INTDIR)\MemoryReportAllocatorTest.obj"
 	-@erase "$(INTDIR)\MemoryReporterPluginTest.obj"
 	-@erase "$(INTDIR)\MemoryReportFormatterTest.obj"
@@ -89,51 +94,18 @@ CLEAN :
 	-@erase "$(INTDIR)\UtestTest.obj"
 	-@erase "$(INTDIR)\vc60.idb"
 	-@erase "$(OUTDIR)\AllTests.exe"
-	-@erase ".\Release"
+	-@erase "$(OUTDIR)\AllTests.ilk"
 
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
-CPP=cl.exe
-CPP_PROJ=/nologo /ML /W3 /GX /O2 /I "..\include" /I "..\include\Platforms\VisualCpp" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /Fp"$(INTDIR)\AllTests.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
-
-.c{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cpp{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cxx{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.c{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cpp{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cxx{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-RSC=rc.exe
+CPP_PROJ=/nologo /ML /W3 /GX /O2 /I "..\include" /I "..\include\Platforms\VisualCpp" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /D "CPPUTEST_MEM_LEAK_DETECTION_DISABLED" /Fp"$(INTDIR)\AllTests.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
 BSC32=bscmake.exe
 BSC32_FLAGS=/nologo /o"$(OUTDIR)\AllTests.bsc" 
 BSC32_SBRS= \
 	
 LINK32=link.exe
-LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /incremental:no /pdb:"$(OUTDIR)\AllTests.pdb" /machine:I386 /out:"$(OUTDIR)\AllTests.exe" 
+LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib /nologo /subsystem:console /incremental:yes /pdb:"$(OUTDIR)\AllTests.pdb" /machine:I386 /out:"$(OUTDIR)\AllTests.exe" 
 LINK32_OBJS= \
 	"$(INTDIR)\AllocationInCFile.obj" \
 	"$(INTDIR)\AllocationInCppFile.obj" \
@@ -147,6 +119,8 @@ LINK32_OBJS= \
 	"$(INTDIR)\GTest2ConvertorTest.obj" \
 	"$(INTDIR)\JUnitOutputTest.obj" \
 	"$(INTDIR)\MemoryLeakDetectorTest.obj" \
+	"$(INTDIR)\MemoryLeakOperatorOverloadsTest.obj" \
+	"$(INTDIR)\MemoryLeakWarningTest.obj" \
 	"$(INTDIR)\MemoryReportAllocatorTest.obj" \
 	"$(INTDIR)\MemoryReporterPluginTest.obj" \
 	"$(INTDIR)\MemoryReportFormatterTest.obj" \
@@ -181,18 +155,19 @@ LINK32_OBJS= \
   $(LINK32_FLAGS) $(LINK32_OBJS)
 <<
 
-TargetDir=.\Release
 TargetPath=.\Release\AllTests.exe
-TargetName=AllTests
-InputPath=.\Release\AllTests.exe
 SOURCE="$(InputPath)"
+DS_POSTBUILD_DEP=$(INTDIR)\postbld.dep
 
-".\Release" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	<<tempfile.bat 
-	@echo off 
-	$(TargetPath)$(TargetName)
-<< 
-	
+ALL : $(DS_POSTBUILD_DEP)
+
+# Begin Custom Macros
+OutDir=.\Release
+# End Custom Macros
+
+$(DS_POSTBUILD_DEP) : "CppUTest - Win32 Release" "$(OUTDIR)\AllTests.exe"
+   .\Release\AllTests.exe
+	echo Helper for Post-build step > "$(DS_POSTBUILD_DEP)"
 
 !ELSEIF  "$(CFG)" == "AllTests - Win32 Debug"
 
@@ -204,11 +179,11 @@ OutDir=.\Debug
 
 !IF "$(RECURSE)" == "0" 
 
-ALL : "$(OUTDIR)\AllTests.exe" "$(OUTDIR)\AllTests.bsc" ".\Debug"
+ALL : "$(OUTDIR)\AllTests.exe" "$(OUTDIR)\AllTests.bsc"
 
 !ELSE 
 
-ALL : "CppUTest - Win32 Debug" "$(OUTDIR)\AllTests.exe" "$(OUTDIR)\AllTests.bsc" ".\Debug"
+ALL : "CppUTest - Win32 Debug" "$(OUTDIR)\AllTests.exe" "$(OUTDIR)\AllTests.bsc"
 
 !ENDIF 
 
@@ -241,6 +216,10 @@ CLEAN :
 	-@erase "$(INTDIR)\JUnitOutputTest.sbr"
 	-@erase "$(INTDIR)\MemoryLeakDetectorTest.obj"
 	-@erase "$(INTDIR)\MemoryLeakDetectorTest.sbr"
+	-@erase "$(INTDIR)\MemoryLeakOperatorOverloadsTest.obj"
+	-@erase "$(INTDIR)\MemoryLeakOperatorOverloadsTest.sbr"
+	-@erase "$(INTDIR)\MemoryLeakWarningTest.obj"
+	-@erase "$(INTDIR)\MemoryLeakWarningTest.sbr"
 	-@erase "$(INTDIR)\MemoryReportAllocatorTest.obj"
 	-@erase "$(INTDIR)\MemoryReportAllocatorTest.sbr"
 	-@erase "$(INTDIR)\MemoryReporterPluginTest.obj"
@@ -301,45 +280,11 @@ CLEAN :
 	-@erase "$(OUTDIR)\AllTests.exe"
 	-@erase "$(OUTDIR)\AllTests.ilk"
 	-@erase "$(OUTDIR)\AllTests.pdb"
-	-@erase ".\Debug"
 
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
-CPP=cl.exe
-CPP_PROJ=/nologo /MDd /W3 /GX /ZI /Od /I "..\include" /I "..\include\Platforms\VisualCpp" /D "_CONSOLE" /D "WIN32" /D "_DEBUG" /D "_MBCS" /FR"$(INTDIR)\\" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
-
-.c{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cpp{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cxx{$(INTDIR)}.obj::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.c{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cpp{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-.cxx{$(INTDIR)}.sbr::
-   $(CPP) @<<
-   $(CPP_PROJ) $< 
-<<
-
-RSC=rc.exe
+CPP_PROJ=/nologo /MDd /W3 /GX /ZI /Od /I "..\include" /I "..\include\Platforms\VisualCpp" /FI"CppUTest/MemoryLeakDetectorMallocMacros.h" /FI"CppUTest/MemoryLeakDetectorNewMacros.h" /D "_CONSOLE" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "CPPUTEST_MEM_LEAK_DETECTION_DISABLED" /FR"$(INTDIR)\\" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
 BSC32=bscmake.exe
 BSC32_FLAGS=/nologo /o"$(OUTDIR)\AllTests.bsc" 
 BSC32_SBRS= \
@@ -355,6 +300,8 @@ BSC32_SBRS= \
 	"$(INTDIR)\GTest2ConvertorTest.sbr" \
 	"$(INTDIR)\JUnitOutputTest.sbr" \
 	"$(INTDIR)\MemoryLeakDetectorTest.sbr" \
+	"$(INTDIR)\MemoryLeakOperatorOverloadsTest.sbr" \
+	"$(INTDIR)\MemoryLeakWarningTest.sbr" \
 	"$(INTDIR)\MemoryReportAllocatorTest.sbr" \
 	"$(INTDIR)\MemoryReporterPluginTest.sbr" \
 	"$(INTDIR)\MemoryReportFormatterTest.sbr" \
@@ -403,6 +350,8 @@ LINK32_OBJS= \
 	"$(INTDIR)\GTest2ConvertorTest.obj" \
 	"$(INTDIR)\JUnitOutputTest.obj" \
 	"$(INTDIR)\MemoryLeakDetectorTest.obj" \
+	"$(INTDIR)\MemoryLeakOperatorOverloadsTest.obj" \
+	"$(INTDIR)\MemoryLeakWarningTest.obj" \
 	"$(INTDIR)\MemoryReportAllocatorTest.obj" \
 	"$(INTDIR)\MemoryReporterPluginTest.obj" \
 	"$(INTDIR)\MemoryReportFormatterTest.obj" \
@@ -437,19 +386,51 @@ LINK32_OBJS= \
   $(LINK32_FLAGS) $(LINK32_OBJS)
 <<
 
-TargetDir=.\Debug
 TargetPath=.\Debug\AllTests.exe
-InputPath=.\Debug\AllTests.exe
 SOURCE="$(InputPath)"
+DS_POSTBUILD_DEP=$(INTDIR)\postbld.dep
 
-".\Debug" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	<<tempfile.bat 
-	@echo off 
-	$(TargetPath)
-<< 
-	
+ALL : $(DS_POSTBUILD_DEP)
+
+# Begin Custom Macros
+OutDir=.\Debug
+# End Custom Macros
+
+$(DS_POSTBUILD_DEP) : "CppUTest - Win32 Debug" "$(OUTDIR)\AllTests.exe" "$(OUTDIR)\AllTests.bsc"
+   .\Debug\AllTests.exe -v
+	echo Helper for Post-build step > "$(DS_POSTBUILD_DEP)"
 
 !ENDIF 
+
+.c{$(INTDIR)}.obj::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.cpp{$(INTDIR)}.obj::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.cxx{$(INTDIR)}.obj::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.c{$(INTDIR)}.sbr::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.cpp{$(INTDIR)}.sbr::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
+
+.cxx{$(INTDIR)}.sbr::
+   $(CPP) @<<
+   $(CPP_PROJ) $< 
+<<
 
 
 !IF "$(NO_EXTERNAL_DEPS)" != "1"
@@ -494,18 +475,20 @@ SOURCE=.\AllocationInCppFile.cpp
 
 !ENDIF 
 
-SOURCE=.\AllTests.cpp
+SOURCE=.\CppUTestExt\AllTests.cpp
 
 !IF  "$(CFG)" == "AllTests - Win32 Release"
 
 
 "$(INTDIR)\AllTests.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ELSEIF  "$(CFG)" == "AllTests - Win32 Debug"
 
 
 "$(INTDIR)\AllTests.obj"	"$(INTDIR)\AllTests.sbr" : $(SOURCE) "$(INTDIR)"
+	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 
 !ENDIF 
@@ -663,7 +646,37 @@ SOURCE=.\MemoryLeakDetectorTest.cpp
 !ENDIF 
 
 SOURCE=.\MemoryLeakOperatorOverloadsTest.cpp
+
+!IF  "$(CFG)" == "AllTests - Win32 Release"
+
+
+"$(INTDIR)\MemoryLeakOperatorOverloadsTest.obj" : $(SOURCE) "$(INTDIR)"
+
+
+!ELSEIF  "$(CFG)" == "AllTests - Win32 Debug"
+
+
+"$(INTDIR)\MemoryLeakOperatorOverloadsTest.obj"	"$(INTDIR)\MemoryLeakOperatorOverloadsTest.sbr" : $(SOURCE) "$(INTDIR)"
+
+
+!ENDIF 
+
 SOURCE=.\MemoryLeakWarningTest.cpp
+
+!IF  "$(CFG)" == "AllTests - Win32 Release"
+
+
+"$(INTDIR)\MemoryLeakWarningTest.obj" : $(SOURCE) "$(INTDIR)"
+
+
+!ELSEIF  "$(CFG)" == "AllTests - Win32 Debug"
+
+
+"$(INTDIR)\MemoryLeakWarningTest.obj"	"$(INTDIR)\MemoryLeakWarningTest.sbr" : $(SOURCE) "$(INTDIR)"
+
+
+!ENDIF 
+
 SOURCE=.\CppUTestExt\MemoryReportAllocatorTest.cpp
 
 !IF  "$(CFG)" == "AllTests - Win32 Release"
