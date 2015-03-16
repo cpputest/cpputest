@@ -153,6 +153,15 @@ TEST(PluginTest, Sequence)
     LONGS_EQUAL(2, registry->countPlugins());
 }
 
+TEST(PluginTest, RemovePluginByName)
+{
+    registry->installPlugin(secondPlugin);
+    registry->installPlugin(thirdPlugin);
+    LONGS_EQUAL(3, registry->countPlugins());
+    registry->removePluginByName(GENERIC_PLUGIN2);
+    LONGS_EQUAL(2, registry->countPlugins());
+}
+
 TEST(PluginTest, DisablesPluginsDontRun)
 {
     registry->installPlugin(thirdPlugin);
