@@ -48,6 +48,8 @@ TEST_GROUP(MockSupportTest)
         expectationsList->deleteAllExpectationsAndClearList();
         delete expectationsList;
         mock().setMockFailureStandardReporter(NULL);
+
+        mock().clear();
     }
 
     MockCheckedExpectedCall* addFunctionToExpectationsList(const SimpleString& name)
@@ -93,18 +95,18 @@ TEST(MockSupportTest, checkExpectationsClearsTheExpectations)
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 
-TEST(MockSupportTest, exceptACallThatHappens)
+TEST(MockSupportTest, expectACallThatHappens)
 {
     mock().expectOneCall("func");
     mock().actualCall("func");
     CHECK(! mock().expectedCallsLeft());
 }
 
-TEST(MockSupportTest, exceptACallInceasesExpectedCallsLeft)
+TEST(MockSupportTest, expectACallIncreasesExpectedCallsLeft)
 {
     mock().expectOneCall("func");
     CHECK(mock().expectedCallsLeft());
-    mock().clear();
+    mock().actualCall("func");
 }
 
 TEST(MockSupportTest, unexpectedCallHappened)
@@ -120,11 +122,11 @@ TEST(MockSupportTest, ignoreOtherCallsExceptForTheExpectedOne)
 {
     mock().expectOneCall("foo");
     mock().ignoreOtherCalls();
-    mock().actualCall("bar").withParameter("foo", 1);;
+    mock().actualCall("bar").withParameter("foo", 1);
 
     CHECK_NO_MOCK_FAILURE();
 
-    mock().clear();
+    mock().actualCall("foo");
 }
 
 TEST(MockSupportTest, ignoreOtherCallsDoesntIgnoreMultipleCallsOfTheSameFunction)
@@ -837,6 +839,8 @@ TEST(MockSupportTest, outputParameterTraced)
     mock().actualCall("someFunc").withOutputParameter("someParameter", &param);
     mock().checkExpectations();
     STRCMP_CONTAINS("Function name: someFunc someParameter:", mock().getTraceOutput());
+
+    mock().tracing(false);
 }
 
 TEST(MockSupportTest, outputParameterWithIgnoredParameters)
@@ -976,7 +980,8 @@ TEST(MockSupportTest, usingTwoMockSupportsByName)
     mock("first").expectOneCall("boo");
     LONGS_EQUAL(0, mock("other").expectedCallsLeft());
     LONGS_EQUAL(1, mock("first").expectedCallsLeft());
-    mock("first").clear();
+
+    mock("first").actualCall("boo");
 }
 
 TEST(MockSupportTest, EnableDisableWorkHierarchically)
@@ -991,7 +996,7 @@ TEST(MockSupportTest, EnableDisableWorkHierarchically)
     mock("first").expectOneCall("boo");
     LONGS_EQUAL(1, mock("first").expectedCallsLeft());
 
-    mock("first").clear();
+    mock("first").actualCall("boo");
 }
 
 TEST(MockSupportTest, EnableDisableWorkHierarchicallyWhenSupportIsDynamicallyCreated)
@@ -1004,14 +1009,15 @@ TEST(MockSupportTest, EnableDisableWorkHierarchicallyWhenSupportIsDynamicallyCre
     mock("second").expectOneCall("boo");
     LONGS_EQUAL(1, mock("second").expectedCallsLeft());
 
-    mock().clear();
+    mock("second").actualCall("boo");
 }
 
 TEST(MockSupportTest, ExpectedCallsLeftWorksHierarchically)
 {
     mock("first").expectOneCall("foobar");
     LONGS_EQUAL(1, mock().expectedCallsLeft());
-    mock().clear();
+
+    mock("first").actualCall("foobar");
 }
 
 TEST(MockSupportTest, checkExpectationsWorksHierarchically)
@@ -1671,6 +1677,7 @@ TEST(MockSupportTest, shouldSupportConstParameters)
     functionWithConstParam(param);
 
     mock().checkExpectations();
+    mock().removeAllComparators();
 }
 
 IGNORE_TEST(MockSupportTest, testForPerformanceProfiling)
