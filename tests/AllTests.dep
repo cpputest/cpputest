@@ -14,7 +14,7 @@
 	".\AllocationInCppFile.h"\
 	
 
-.\AllTests.cpp : \
+.\CppUTestExt\AllTests.cpp : \
 	"..\include\CppUTest\CommandLineArguments.h"\
 	"..\include\CppUTest\CommandLineTestRunner.h"\
 	"..\include\CppUTest\CppUTestConfig.h"\
@@ -25,11 +25,17 @@
 	"..\include\CppUTest\TestFailure.h"\
 	"..\include\CppUTest\TestFilter.h"\
 	"..\include\CppUTest\TestHarness.h"\
+	"..\include\CppUTest\TestMemoryAllocator.h"\
 	"..\include\CppUTest\TestOutput.h"\
 	"..\include\CppUTest\TestPlugin.h"\
+	"..\include\CppUTest\TestRegistry.h"\
 	"..\include\CppUTest\TestResult.h"\
 	"..\include\CppUTest\Utest.h"\
 	"..\include\CppUTest\UtestMacros.h"\
+	"..\include\CppUTestExt\MemoryReportAllocator.h"\
+	"..\include\CppUTestExt\MemoryReporterPlugin.h"\
+	"..\include\CppUTestExt\MockNamedValue.h"\
+	"..\include\CppUTestExt\MockSupportPlugin.h"\
 	"..\include\platforms\visualcpp\stdint.h"\
 	
 
@@ -161,6 +167,57 @@
 	"..\include\CppUTest\TestOutput.h"\
 	"..\include\CppUTest\TestPlugin.h"\
 	"..\include\CppUTest\TestResult.h"\
+	"..\include\CppUTest\Utest.h"\
+	"..\include\CppUTest\UtestMacros.h"\
+	"..\include\platforms\visualcpp\stdint.h"\
+	
+
+.\MemoryLeakOperatorOverloadsTest.cpp : \
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetector.h"\
+	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
+	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
+	"..\include\CppUTest\PlatformSpecificFunctions.h"\
+	"..\include\CppUTest\PlatformSpecificFunctions_c.h"\
+	"..\include\CppUTest\SimpleString.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	"..\include\CppUTest\TestFailure.h"\
+	"..\include\CppUTest\TestFilter.h"\
+	"..\include\CppUTest\TestHarness.h"\
+	"..\include\CppUTest\TestHarness_c.h"\
+	"..\include\CppUTest\TestMemoryAllocator.h"\
+	"..\include\CppUTest\TestOutput.h"\
+	"..\include\CppUTest\TestPlugin.h"\
+	"..\include\CppUTest\TestRegistry.h"\
+	"..\include\CppUTest\TestResult.h"\
+	"..\include\CppUTest\TestTestingFixture.h"\
+	"..\include\CppUTest\Utest.h"\
+	"..\include\CppUTest\UtestMacros.h"\
+	"..\include\platforms\visualcpp\stdint.h"\
+	".\AllocationInCFile.h"\
+	".\AllocationInCppFile.h"\
+	
+
+.\MemoryLeakWarningTest.cpp : \
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetector.h"\
+	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
+	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
+	"..\include\CppUTest\PlatformSpecificFunctions.h"\
+	"..\include\CppUTest\PlatformSpecificFunctions_c.h"\
+	"..\include\CppUTest\SimpleMutex.h"\
+	"..\include\CppUTest\SimpleString.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	"..\include\CppUTest\TestFailure.h"\
+	"..\include\CppUTest\TestFilter.h"\
+	"..\include\CppUTest\TestHarness.h"\
+	"..\include\CppUTest\TestHarness_c.h"\
+	"..\include\CppUTest\TestMemoryAllocator.h"\
+	"..\include\CppUTest\TestOutput.h"\
+	"..\include\CppUTest\TestPlugin.h"\
+	"..\include\CppUTest\TestRegistry.h"\
+	"..\include\CppUTest\TestResult.h"\
+	"..\include\CppUTest\TestTestingFixture.h"\
 	"..\include\CppUTest\Utest.h"\
 	"..\include\CppUTest\UtestMacros.h"\
 	"..\include\platforms\visualcpp\stdint.h"\
@@ -544,7 +601,6 @@
 
 .\TestHarness_cTest.cpp : \
 	"..\include\CppUTest\CppUTestConfig.h"\
-	"..\include\CppUTest\MemoryLeakDetector.h"\
 	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
 	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
 	"..\include\CppUTest\PlatformSpecificFunctions.h"\
