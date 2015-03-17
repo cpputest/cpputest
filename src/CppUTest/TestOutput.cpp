@@ -28,6 +28,7 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TestOutput.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
+#include "CppUTest/CrashReporter.h"
 
 TestOutput::WorkingEnvironment TestOutput::workingEnvironment_ = TestOutput::detectEnvironment;
 
@@ -92,6 +93,8 @@ TestOutput& operator<<(TestOutput& p, long int i)
 
 void TestOutput::printCurrentTestStarted(const UtestShell& test)
 {
+    CrashReporter::getInstance()->setCurrentTest(&test);
+
     if (verbose_) print(test.getFormattedName().asCharString());
 
     if (test.willRun()) {
@@ -104,6 +107,7 @@ void TestOutput::printCurrentTestStarted(const UtestShell& test)
 
 void TestOutput::printCurrentTestEnded(const TestResult& res)
 {
+    CrashReporter::getInstance()->setCurrentTest(NULL);
     if (verbose_) {
         print(" - ");
         print(res.getCurrentTestTotalExecutionTime());
@@ -250,6 +254,23 @@ void TestOutput::printVistualStudioErrorInFileOnLine(SimpleString file, int line
     print(lineNumber);
     print("):");
     print(" error:");
+}
+
+void TestOutput::printCrashMessage(const UtestShell* Test, SimpleString signalName)
+{
+    printErrorInFileOnLineFormattedForWorkingEnvironment(Test->getFile(), Test->getLineNumber());
+    print(" Crashed with '");
+    print(signalName.asCharString());
+    print("' running test ");
+    print((Test->getFormattedName()).asCharString());
+    print(".\n\n");
+}
+
+void TestOutput::printCrashMessage(SimpleString signalName)
+{
+    print("\nCrashed with '");
+    print(signalName.asCharString());
+    print("' running unknown test.\n\n");
 }
 
 void ConsoleTestOutput::printBuffer(const char* s)

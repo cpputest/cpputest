@@ -206,3 +206,12 @@ extern "C" void (*PlatformSpecificMutexLock)(PlatformSpecificMutex) = DummyMutex
 extern "C" void (*PlatformSpecificMutexUnlock)(PlatformSpecificMutex) = DummyMutexUnlock;
 extern "C" void (*PlatformSpecificMutexDestroy)(PlatformSpecificMutex) = DummyMutexDestroy;
 
+void PlatformSpecificInstallCrashTrap(void (*crash_handler)(void *context, const char *crash_message), void *callback_context)
+{
+    (void)crash_handler;
+    (void)callback_context;
+}
+
+void PlatformSpecificRemoveCrashTrap(void)
+{
+}

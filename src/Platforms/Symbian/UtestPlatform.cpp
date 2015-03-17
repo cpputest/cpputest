@@ -138,7 +138,7 @@ void PlatformSpecificFClose(PlatformSpecificFile file) {
 }
 
 extern "C" {
-    
+
 static int IsNanImplementation(double d)
 {
     return isnan(d);
@@ -174,3 +174,12 @@ void (*PlatformSpecificMutexLock)(PlatformSpecificMutex) = DummyMutexLock;
 void (*PlatformSpecificMutexUnlock)(PlatformSpecificMutex) = DummyMutexUnlock;
 void (*PlatformSpecificMutexDestroy)(PlatformSpecificMutex) = DummyMutexDestroy;
 
+void PlatformSpecificInstallCrashTrap(void (*crash_handler)(void *context, const char *crash_message), void *callback_context)
+{
+    (void)crash_handler;
+    (void)callback_context;
+}
+
+void PlatformSpecificRemoveCrashTrap(void)
+{
+}
