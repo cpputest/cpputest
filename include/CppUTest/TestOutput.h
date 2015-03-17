@@ -64,7 +64,7 @@ public:
     virtual void printTestRun(int number, int total);
     virtual void setProgressIndicator(const char*);
 
-    virtual void flush();
+    virtual void flush()=0;
 
     enum WorkingEnvironment {vistualStudio, eclipse, detectEnvironment};
 

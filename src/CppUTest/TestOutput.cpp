@@ -137,10 +137,6 @@ void TestOutput::printCurrentGroupEnded(const TestResult& /*res*/)
 {
 }
 
-void TestOutput::flush()
-{
-}
-
 void TestOutput::printTestsEnded(const TestResult& result)
 {
     print("\n");
