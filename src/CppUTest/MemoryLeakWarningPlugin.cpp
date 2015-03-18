@@ -453,7 +453,7 @@ public:
     {
         UtestShell* currentTest = UtestShell::getCurrent();
         currentTest->failWith(FailFailure(currentTest, currentTest->getName().asCharString(), currentTest->getLineNumber(), fail_string), TestTerminatorWithoutExceptions());
-    }
+    } // LCOV_EXCL_LINE
 };
 
 static MemoryLeakFailure* globalReporter = 0;
