@@ -319,11 +319,13 @@ TEST(MemoryLeakWarningGlobalDetectorTest, turnOffNewOverloadsNoThrowCausesNoAddi
 
     char* nonMemoryNoThrow = new (std::nothrow) char;
     char* nonArrayMemoryNoThrow = new (std::nothrow) char[10];
+    char* nonArrayMemoryThrow = new char[10];
 
     LONGS_EQUAL(storedAmountOfLeaks, detector->totalMemoryLeaks(mem_leak_period_all));
 
     delete nonMemoryNoThrow;
     delete nonArrayMemoryNoThrow;
+    delete nonArrayMemoryThrow;
 #ifdef CPPUTEST_USE_NEW_MACROS
     #include "CppUTest/MemoryLeakDetectorNewMacros.h"
 #endif
@@ -356,28 +358,28 @@ TEST_GROUP(MemoryLeakWarningWarningThreadSafe)
         mutexLockCount = 0;
         mutexUnlockCount = 0;
     }
-    
+
     void teardown()
     {
     }
 };
 
-TEST(MemoryLeakWarningWarningThreadSafe, turnOnThreadSafeNewDeleteOverloads)
+TEST(MemoryLeakWarningWarningThreadSafe, turnOnThreadSafeNewDeleteOverloadsDebug)
 {
     int storedAmountOfLeaks = MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all);
-    
+
     MemoryLeakWarningPlugin::turnOnThreadSafeNewDeleteOverloads();
 
     int *n = new int;
     char *str = new char[20];
-    
+
     LONGS_EQUAL(storedAmountOfLeaks + 2, MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all));
     CHECK_EQUAL(2, mutexLockCount);
     CHECK_EQUAL(2, mutexUnlockCount);
-    
+
     delete [] str;
     delete n;
-    
+
     LONGS_EQUAL(storedAmountOfLeaks, MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all));
     CHECK_EQUAL(4, mutexLockCount);
     CHECK_EQUAL(4, mutexUnlockCount);
@@ -385,8 +387,36 @@ TEST(MemoryLeakWarningWarningThreadSafe, turnOnThreadSafeNewDeleteOverloads)
     MemoryLeakWarningPlugin::turnOnNewDeleteOverloads();
 }
 
+TEST(MemoryLeakWarningWarningThreadSafe, turnOnThreadSafeNewDeleteOverloads)
+{
+#undef new
+    int storedAmountOfLeaks = MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all);
 
+    MemoryLeakWarningPlugin::turnOnThreadSafeNewDeleteOverloads();
 
+    int *n = new int;
+    int *n_nothrow = new (std::nothrow) int;
+    char *str = new char[20];
+    char *str_nothrow = new (std::nothrow) char[20];
+
+    LONGS_EQUAL(storedAmountOfLeaks + 4, MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all));
+    CHECK_EQUAL(4, mutexLockCount);
+    CHECK_EQUAL(4, mutexUnlockCount);
+
+    delete [] str_nothrow;
+    delete [] str;
+    delete n;
+    delete n_nothrow;
+
+    LONGS_EQUAL(storedAmountOfLeaks, MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all));
+    CHECK_EQUAL(8, mutexLockCount);
+    CHECK_EQUAL(8, mutexUnlockCount);
+
+    MemoryLeakWarningPlugin::turnOnNewDeleteOverloads();
+#ifdef CPPUTEST_USE_NEW_MACROS
+    #include "CppUTest/MemoryLeakDetectorNewMacros.h"
+#endif
+}
 
 #endif
 
