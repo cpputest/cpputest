@@ -394,6 +394,33 @@ TEST_GROUP(MemoryLeakWarningWarningThreadSafe)
     }
 };
 
+TEST(MemoryLeakWarningWarningThreadSafe, turnOnThreadSafeMallocFreeReallocOverloadsDebug)
+{
+    int storedAmountOfLeaks = MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all);
+
+    MemoryLeakWarningPlugin::turnOnThreadSafeNewDeleteOverloads();
+
+    int *n = (int*) malloc(sizeof(int));
+
+    LONGS_EQUAL(storedAmountOfLeaks + 1, MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all));
+    CHECK_EQUAL(1, mutexLockCount);
+    CHECK_EQUAL(1, mutexUnlockCount);
+   
+    n = (int*) realloc(n, sizeof(int)*3);
+
+    LONGS_EQUAL(storedAmountOfLeaks + 1, MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all));
+    CHECK_EQUAL(2, mutexLockCount);
+    CHECK_EQUAL(2, mutexUnlockCount);
+   
+    free(n);
+
+    LONGS_EQUAL(storedAmountOfLeaks, MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all));
+    CHECK_EQUAL(3, mutexLockCount);
+    CHECK_EQUAL(3, mutexUnlockCount);
+
+    MemoryLeakWarningPlugin::turnOnNewDeleteOverloads();
+}
+
 TEST(MemoryLeakWarningWarningThreadSafe, turnOnThreadSafeNewDeleteOverloadsDebug)
 {
     int storedAmountOfLeaks = MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all);
