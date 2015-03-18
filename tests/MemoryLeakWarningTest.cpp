@@ -58,7 +58,7 @@ TEST_GROUP(MemoryLeakWarningLocalDetectorTest)
 {
 };
 
-IGNORE_TEST(MemoryLeakWarningLocalDetectorTest, localDetectorReturnsNewGlobalWhenNoneWasSet)
+TEST(MemoryLeakWarningLocalDetectorTest, localDetectorReturnsNewGlobalWhenNoneWasSet)
 {
     MemoryLeakWarningPlugin memoryLeakWarningPlugin("TestMemoryLeakWarningPlugin", NULL);
     CHECK(0 != memoryLeakWarningPlugin.getMemoryLeakDetector());
