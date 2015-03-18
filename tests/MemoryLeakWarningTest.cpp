@@ -67,7 +67,6 @@ TEST(MemoryLeakWarningLocalDetectorTest, localDetectorReturnsNewGlobalWhenNoneWa
 TEST(MemoryLeakWarningLocalDetectorTest, localDetectorIsTheOneSpecifiedInConstructor)
 {
     MemoryLeakDetector localDetector(&dummy);
-    MemoryLeakDetector globalDetector(&dummy);
     MemoryLeakWarningPlugin memoryLeakWarningPlugin("TestMemoryLeakWarningPlugin", &localDetector);
     POINTERS_EQUAL(&localDetector, memoryLeakWarningPlugin.getMemoryLeakDetector());
 }
@@ -378,7 +377,7 @@ static void StubMutexUnlock(PlatformSpecificMutex)
 
 
 
-TEST_GROUP(MemoryLeakWarningWarningThreadSafe)
+TEST_GROUP(MemoryLeakWarningThreadSafe)
 {
     void setup()
     {
@@ -394,25 +393,25 @@ TEST_GROUP(MemoryLeakWarningWarningThreadSafe)
     }
 };
 
-TEST(MemoryLeakWarningWarningThreadSafe, turnOnThreadSafeMallocFreeReallocOverloadsDebug)
+TEST(MemoryLeakWarningThreadSafe, turnOnThreadSafeMallocFreeReallocOverloadsDebug)
 {
     int storedAmountOfLeaks = MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all);
 
     MemoryLeakWarningPlugin::turnOnThreadSafeNewDeleteOverloads();
 
-    int *n = (int*) malloc(sizeof(int));
+    int *n = (int*) cpputest_malloc(sizeof(int));
 
     LONGS_EQUAL(storedAmountOfLeaks + 1, MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all));
     CHECK_EQUAL(1, mutexLockCount);
     CHECK_EQUAL(1, mutexUnlockCount);
    
-    n = (int*) realloc(n, sizeof(int)*3);
+    n = (int*) cpputest_realloc(n, sizeof(int)*3);
 
     LONGS_EQUAL(storedAmountOfLeaks + 1, MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all));
     CHECK_EQUAL(2, mutexLockCount);
     CHECK_EQUAL(2, mutexUnlockCount);
    
-    free(n);
+    cpputest_free(n);
 
     LONGS_EQUAL(storedAmountOfLeaks, MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all));
     CHECK_EQUAL(3, mutexLockCount);
@@ -421,7 +420,7 @@ TEST(MemoryLeakWarningWarningThreadSafe, turnOnThreadSafeMallocFreeReallocOverlo
     MemoryLeakWarningPlugin::turnOnNewDeleteOverloads();
 }
 
-TEST(MemoryLeakWarningWarningThreadSafe, turnOnThreadSafeNewDeleteOverloadsDebug)
+TEST(MemoryLeakWarningThreadSafe, turnOnThreadSafeNewDeleteOverloadsDebug)
 {
     int storedAmountOfLeaks = MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all);
 
@@ -444,7 +443,7 @@ TEST(MemoryLeakWarningWarningThreadSafe, turnOnThreadSafeNewDeleteOverloadsDebug
     MemoryLeakWarningPlugin::turnOnNewDeleteOverloads();
 }
 
-TEST(MemoryLeakWarningWarningThreadSafe, turnOnThreadSafeNewDeleteOverloads)
+TEST(MemoryLeakWarningThreadSafe, turnOnThreadSafeNewDeleteOverloads)
 {
 #undef new
     int storedAmountOfLeaks = MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all);
