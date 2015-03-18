@@ -54,6 +54,36 @@ static MemoryLeakWarningPlugin* memPlugin;
 static DummyReporter dummy;
 static TestMemoryAllocator* allocator;
 
+TEST_GROUP(MemoryLeakWarningLocalDetectorTest)
+{
+};
+
+IGNORE_TEST(MemoryLeakWarningLocalDetectorTest, localDetectorReturnsNewGlobalWhenNoneWasSet)
+{
+    MemoryLeakWarningPlugin memoryLeakWarningPlugin("TestMemoryLeakWarningPlugin", NULL);
+    CHECK(0 != memoryLeakWarningPlugin.getMemoryLeakDetector());
+}
+
+TEST(MemoryLeakWarningLocalDetectorTest, localDetectorIsTheOneSpecifiedInConstructor)
+{
+    MemoryLeakDetector localDetector(&dummy);
+    MemoryLeakDetector globalDetector(&dummy);
+    MemoryLeakWarningPlugin memoryLeakWarningPlugin("TestMemoryLeakWarningPlugin", &localDetector);
+    POINTERS_EQUAL(&localDetector, memoryLeakWarningPlugin.getMemoryLeakDetector());
+}
+
+IGNORE_TEST(MemoryLeakWarningLocalDetectorTest, localDetectorIsGlobalDetector)
+{
+    MemoryLeakDetector* saveDetector = MemoryLeakWarningPlugin::getGlobalDetector();
+    MemoryLeakFailure* saveReporter = MemoryLeakWarningPlugin::getGlobalFailureReporter();
+    MemoryLeakDetector globalDetector(&dummy);
+    MemoryLeakWarningPlugin::setGlobalDetector(&globalDetector, &dummy);
+    MemoryLeakWarningPlugin memoryLeakWarningPlugin("TestMemoryLeakWarningPlugin", NULL);
+    POINTERS_EQUAL(&globalDetector, memoryLeakWarningPlugin.getMemoryLeakDetector());
+    MemoryLeakWarningPlugin::setGlobalDetector(saveDetector, saveReporter);
+}
+
+
 TEST_GROUP(MemoryLeakWarningTest)
 {
     TestTestingFixture* fixture;
