@@ -1,0 +1,11 @@
+version: 3.7.{build}
+branches:
+  only:
+  - appveyor
+os:
+- Windows Server 2012 R2
+build_script:
+- vcbuild /upgrade CppUTest.vcproj
+- vcbuild /upgrade tests\AllTests.vcproj
+- vcbuild CppUTest.vcproj Debug
+- vcbuild tests\AllTests.vcproj Debug
