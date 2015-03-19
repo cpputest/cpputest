@@ -404,13 +404,13 @@ TEST(MemoryLeakWarningThreadSafe, turnOnThreadSafeMallocFreeReallocOverloadsDebu
     LONGS_EQUAL(storedAmountOfLeaks + 1, MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all));
     CHECK_EQUAL(1, mutexLockCount);
     CHECK_EQUAL(1, mutexUnlockCount);
-   
+
     n = (int*) cpputest_realloc(n, sizeof(int)*3);
 
     LONGS_EQUAL(storedAmountOfLeaks + 1, MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all));
     CHECK_EQUAL(2, mutexLockCount);
     CHECK_EQUAL(2, mutexUnlockCount);
-   
+
     cpputest_free(n);
 
     LONGS_EQUAL(storedAmountOfLeaks, MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all));
@@ -443,11 +443,22 @@ TEST(MemoryLeakWarningThreadSafe, turnOnThreadSafeNewDeleteOverloadsDebug)
     MemoryLeakWarningPlugin::turnOnNewDeleteOverloads();
 }
 
+#ifdef __clang__
+
+IGNORE_TEST(MemoryLeakWarningThreadSafe, turnOnThreadSafeNewDeleteOverloads)
+{
+    /*  Clang misbehaves with -O2 - it will not overload operator new or
+     *  operator new[] no matter what. Therefore, this test is must be ignored.
+     */
+}
+
+#else
+
 TEST(MemoryLeakWarningThreadSafe, turnOnThreadSafeNewDeleteOverloads)
 {
 #undef new
-    int storedAmountOfLeaks = MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all);
 
+    int storedAmountOfLeaks = MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all);
     MemoryLeakWarningPlugin::turnOnThreadSafeNewDeleteOverloads();
 
     int *n = new int;
@@ -473,6 +484,8 @@ TEST(MemoryLeakWarningThreadSafe, turnOnThreadSafeNewDeleteOverloads)
     #include "CppUTest/MemoryLeakDetectorNewMacros.h"
 #endif
 }
+
+#endif
 
 #endif
 
