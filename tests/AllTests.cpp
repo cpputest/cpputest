@@ -27,7 +27,7 @@
 
 #include "CppUTest/CommandLineTestRunner.h"
 
-int main(int ac, const char** av)
+extern "C" int main(int ac, const char** av)
 {
     /* These checks are here to make sure assertions outside test runs don't crash */
     CHECK(true);

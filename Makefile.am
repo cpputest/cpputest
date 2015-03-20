@@ -263,13 +263,13 @@ check_basic:
 	fi
 	
 	@echo "Building without extensions"
-	make distclean; $(srcdir)/configure --disable-extensions; make check
+	make distclean; $(srcdir)/configure --disable-extensions CXXFLAGS="$(CXXFLAGS) -ffreestanding"; make check
 
 	@echo "Building with the Std C++ 11 turned on. Compiler acts differently then."
-	make distclean; $(srcdir)/configure --enable-std-cpp11; make
+	make distclean; $(srcdir)/configure --enable-std-cpp11 CXXFLAGS="$(CXXFLAGS) -ffreestanding"; make
 
 	@echo "Building without the Standard C library"
-	make distclean; $(srcdir)/configure --disable-std-c; make
+	make distclean; $(srcdir)/configure --disable-std-c CXXFLAGS="$(CXXFLAGS) -ffreestanding"; make
 
 	@echo "Building without the Standard C++ library"
 	make distclean; $(srcdir)/configure --disable-std-cpp; make check
@@ -281,16 +281,16 @@ check_basic:
 	make distclean; $(srcdir)/configure --disable-memory-leak-detection --disable-std-cpp; make check
 
 	@echo "Generate a map file while building"
-	make distclean; $(srcdir)/configure -enable-generate-map-file; make check
+	make distclean; $(srcdir)/configure -enable-generate-map-file CXXFLAGS="$(CXXFLAGS) -ffreestanding"; make check
 	if [ -s CppUTest.o.map.txt ]; then echo "Generating map file failed. Build failed!"; exit 1; fi
 
 check_special_situations:
 	@echo "Does the system have gcc? $(CPPUTEST_HAS_GCC)"
-	if test "x$(CPPUTEST_HAS_GCC)" = xyes; then echo "Compiling with gcc"; make distclean; $(srcdir)/configure CC="gcc" CXX="g++"; make check; fi
+	if test "x$(CPPUTEST_HAS_GCC)" = xyes; then echo "Compiling with gcc"; make distclean; $(srcdir)/configure CC="gcc" CXX="g++" CXXFLAGS="$(CXXFLAGS) -ffreestanding"; make check; fi
 
 	@echo "Does the system have clang and is a Mac? $(CPPUTEST_HAS_CLANG)"
 	if test "x$(CPPUTEST_HAS_CLANG)" = xyes && test "x$(CPPUTEST_ON_MACOSX)" = xyes; then \
-	   echo "Compiling with clang"; make distclean; $(srcdir)/configure CC="clang" CXX="clang++"; make check; \
+	   echo "Compiling with clang"; make distclean; $(srcdir)/configure CC="clang" CXX="clang++" CXXFLAGS="$(CXXFLAGS) -ffreestanding"; make check; \
 	fi
 
 	@echo Testing JUnit output
@@ -305,9 +305,9 @@ check_special_situations:
 check_coverage:
 	@echo "Compile with coverage (switch to clang for Mac OSX)"
 	if test "x$(CPPUTEST_HAS_CLANG)" = xyes && test "x$(CPPUTEST_ON_MACOSX)" = xyes; then \
-	   echo "Compiling with clang"; make distclean; $(srcdir)/configure CC="clang" CXX="clang++" --enable-coverage; \
+	   echo "Compiling with clang"; make distclean; $(srcdir)/configure CC="clang" CXX="clang++" --enable-coverage CXXFLAGS="-O0"; \
 	else \
-		make distclean; $(srcdir)/configure -enable-coverage $CFLAGS="-g -O0" $CXXFLAGS="-g -O0";  \
+		make distclean; $(srcdir)/configure -enable-coverage $CFLAGS="-g -O0" $CXXFLAGS="-O0";  \
 	fi
 	
 	make check
@@ -329,11 +329,11 @@ check_examples:
 	$(MAKE) -C $(srcdir)/examples all clean
 	
 	@echo "Compiling and running the examples. This will use the old Makefile"
-	make distclean; $(srcdir)/configure; make; $(MAKE) -C $(srcdir)/examples all clean CPPUTEST_LIB_LINK_DIR="`pwd`/lib"
+	make distclean; $(srcdir)/configure CXXFLAGS="$(CXXFLAGS) -ffreestanding"; make; $(MAKE) -C $(srcdir)/examples all clean CPPUTEST_LIB_LINK_DIR="`pwd`/lib"
 
 check_all: check_basic check_special_situations check_coverage check_examples check_gtest
 	@echo "Last... one normal build and test"
-	make distclean; $(srcdir)/configure; make check; 
+	make distclean; $(srcdir)/configure CXXFLAGS="$(CXXFLAGS) -ffreestanding"; make check; 
 	@echo "Check running tests repeatedly"
 	$(RUN_CPPUTEST_TESTS) - r; $(RUN_CPPUTESTEXT_TESTS) -r
 	@echo "Check running tests in separate process (CppUTestExtTests TEST_GROUP(TestOrderedTestMacro) would have to fail)"
