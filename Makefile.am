@@ -307,7 +307,7 @@ check_coverage:
 	if test "x$(CPPUTEST_HAS_CLANG)" = xyes && test "x$(CPPUTEST_ON_MACOSX)" = xyes; then \
 	   echo "Compiling with clang"; make distclean; $(srcdir)/configure CC="clang" CXX="clang++" --enable-coverage CXXFLAGS="-O0"; \
 	else \
-		make distclean; $(srcdir)/configure -enable-coverage $CFLAGS="-g -O0" $CXXFLAGS="-O0";  \
+		make distclean; $(srcdir)/configure -enable-coverage $CFLAGS="-g -O0" CXXFLAGS="-O0";  \
 	fi
 	
 	make check
