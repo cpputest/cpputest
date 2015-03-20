@@ -294,13 +294,13 @@ check_special_situations:
 	fi
 
 	@echo Testing JUnit output
-	make distclean; $(srcdir)/configure; make check
+	make distclean; $(srcdir)/configure CXXFLAGS="$(CXXFLAGS) -ffreestanding"; make check
 	./$(CPPUTEST_TESTS) -ojunit > junit_run_output
 	if [ -s junit_run_output ]; then echo "JUnit run has output. Build failed!"; exit 1; fi
 	rm junit_run_output; rm cpputest_*.xml
 
 	@echo "Building with all flags turned off"
-	make distclean; $(srcdir)/configure --disable-cpputest-flags CFLAGS="" CXXFLAGS="" CPPFLAGS="-I $(srcdir)/include -I$(srcdir)/include/CppUTestExt/CppUTestGTest -I$(srcdir)/include/CppUTestExt/CppUTestGMock" --disable-dependency-tracking; make check
+	make distclean; $(srcdir)/configure --disable-cpputest-flags CFLAGS="" CXXFLAGS="-ffreestanding" CPPFLAGS="-I $(srcdir)/include -I$(srcdir)/include/CppUTestExt/CppUTestGTest -I$(srcdir)/include/CppUTestExt/CppUTestGMock" --disable-dependency-tracking; make check
 
 check_coverage:
 	@echo "Compile with coverage (switch to clang for Mac OSX)"
