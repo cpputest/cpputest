@@ -217,7 +217,7 @@ cpputest_build_gtest17:
 	mkdir -p cpputest_build_gtest17
 	cd cpputest_build_gtest17; \
 	wget https://googlemock.googlecode.com/files/gmock-1.7.0.zip && unzip gmock-1.7.0.zip 
-	cd cpputest_build_gtest17/gmock-1.7.0; ./configure && make check
+	cd cpputest_build_gtest17/gmock-1.7.0; ./configure CXXFLAGS=$(CXXFLAGS) -ffreestanding" && make check
 
 cpputest_build_gtest16:
 	mkdir -p cpputest_build_gtest16
@@ -234,17 +234,17 @@ cpputest_build_gtest15:
 check_gtest15: cpputest_build_gtest15
 	@echo "Build using gmock 1.5";
 	export GMOCK_HOME=`pwd`/cpputest_build_gtest15/gmock-1.5.0; \
-	make distclean; $(srcdir)/configure; make check
+	make distclean; $(srcdir)/configure $(CXXFLAGS) -ffreestanding"; make check
 
 check_gtest16: cpputest_build_gtest16
 	@echo "Build using gmock 1.6";
 	export GMOCK_HOME=`pwd`/cpputest_build_gtest16/gmock-1.6.0; \
-	make distclean; $(srcdir)/configure; make check
+	make distclean; $(srcdir)/configure $(CXXFLAGS) -ffreestanding"; make check
 
 check_gtest17: cpputest_build_gtest17
 	@echo "Build using gmock 1.7"
 	export GMOCK_HOME=`pwd`/cpputest_build_gtest17/gmock-1.7.0; \
-	make distclean; $(srcdir)/configure; make check
+	make distclean; $(srcdir)/configure $(CXXFLAGS) -ffreestanding"; make check
 	
 remove_gtest_directories:
 	rm -rf cpputest_build_gtest15
