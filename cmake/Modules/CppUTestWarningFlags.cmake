@@ -51,6 +51,7 @@ else (MSVC)
         Wno-exit-time-destructors
         Wno-weak-vtables
         Wno-old-style-cast
+        Wno-missing-prototypes
         )
 
     check_and_append_c_warning_flags(${WARNING_C_FLAGS})

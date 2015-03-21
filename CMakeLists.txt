@@ -6,6 +6,8 @@ set(CppUTest_version_minor 7dev)
 # 2.6.3 is needed for ctest support
 cmake_minimum_required(VERSION 2.6.3)
 
+set(CPPUTEST_CXX_FLAGS "${CPPUTEST_CXX_FLAGS} -ffreestanding")
+
 option(STD_C "Use the standard C library" ON)
 option(STD_CPP "Use the standard C++ library" ON)
 option(CPPUTEST_FLAGS "Use the CFLAGS/CXXFLAGS/LDFLAGS set by CppUTest" ON)

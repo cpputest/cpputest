@@ -440,17 +440,6 @@ TEST(MemoryLeakWarningThreadSafe, turnOnThreadSafeNewDeleteOverloadsDebug)
     MemoryLeakWarningPlugin::turnOnNewDeleteOverloads();
 }
 
-#ifdef __clang__
-
-IGNORE_TEST(MemoryLeakWarningThreadSafe, turnOnThreadSafeNewDeleteOverloads)
-{
-    /*  Clang misbehaves with -O2 - it will not overload operator new or
-     *  operator new[] no matter what. Therefore, this test is must be ignored.
-     */
-}
-
-#else
-
 TEST(MemoryLeakWarningThreadSafe, turnOnThreadSafeNewDeleteOverloads)
 {
 #undef new
@@ -481,8 +470,6 @@ TEST(MemoryLeakWarningThreadSafe, turnOnThreadSafeNewDeleteOverloads)
     #include "CppUTest/MemoryLeakDetectorNewMacros.h"
 #endif
 }
-
-#endif
 
 #endif
 
