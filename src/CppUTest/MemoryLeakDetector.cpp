@@ -356,13 +356,6 @@ int MemoryLeakDetectorList::getTotalLeaks(MemLeakPeriod period)
     return total_leaks;
 }
 
-bool MemoryLeakDetectorList::hasLeaks(MemLeakPeriod period)
-{
-    for (MemoryLeakDetectorNode* node = head_; node; node = node->next_)
-        if (isInPeriod(node, period)) return true;
-    return false;
-}
-
 /////////////////////////////////////////////////////////////
 
 unsigned long MemoryLeakDetectorTable::hash(char* memory)
@@ -389,13 +382,6 @@ MemoryLeakDetectorNode* MemoryLeakDetectorTable::removeNode(char* memory)
 MemoryLeakDetectorNode* MemoryLeakDetectorTable::retrieveNode(char* memory)
 {
   return table_[hash(memory)].retrieveNode(memory);
-}
-
-bool MemoryLeakDetectorTable::hasLeaks(MemLeakPeriod period)
-{
-    for (int i = 0; i < hash_prime; i++)
-        if (table_[i].hasLeaks(period)) return true;
-    return false;
 }
 
 int MemoryLeakDetectorTable::getTotalLeaks(MemLeakPeriod period)
