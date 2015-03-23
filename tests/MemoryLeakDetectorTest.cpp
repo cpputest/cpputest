@@ -371,9 +371,9 @@ TEST(MemoryLeakDetectorTest, ReallocNonAllocatedMemory)
     char mem1;
     char* mem2 = detector->reallocMemory(testAllocator, &mem1, 5, "other.cpp", 13, true);
     detector->deallocMemory(testAllocator, mem2, true);
-    SimpleString output = detector->report(mem_leak_period_checking);
-    CHECK(output.contains("Deallocating non-allocated memory\n"));
-    CHECK(output.contains("deallocated at file: other.cpp line: 13"));
+    detector->stopChecking();
+    CHECK(reporter->message->contains("Deallocating non-allocated memory\n"));
+    CHECK(reporter->message->contains("   deallocated at file: other.cpp line: 13"));
 }
 
 TEST(MemoryLeakDetectorTest, AllocOneTypeFreeAnotherType)
