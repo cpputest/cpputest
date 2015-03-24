@@ -644,7 +644,6 @@ void MemoryLeakDetector::ConstructMemoryLeakReport(MemLeakPeriod period)
 
 const char* MemoryLeakDetector::report(MemLeakPeriod period)
 {
-    outputBuffer_.clear();
     ConstructMemoryLeakReport(period);
 
     return outputBuffer_.toString();
