@@ -54,8 +54,10 @@ public:
     virtual ~CommandLineTestRunner();
     int runAllTestsMain();
 
-private:
+protected:
     TestOutput* output_;
+
+private:
     JUnitTestOutput* jUnitOutput_;
     CommandLineArguments* arguments_;
     TestRegistry* registry_;
