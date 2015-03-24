@@ -153,7 +153,6 @@ struct MemoryLeakDetectorList
             MemLeakPeriod period);
 
     int getTotalLeaks(MemLeakPeriod period);
-    bool hasLeaks(MemLeakPeriod period);
     void clearAllAccounting(MemLeakPeriod period);
 
     bool isInPeriod(MemoryLeakDetectorNode* node, MemLeakPeriod period);
@@ -170,7 +169,6 @@ struct MemoryLeakDetectorTable
     MemoryLeakDetectorNode* retrieveNode(char* memory);
     MemoryLeakDetectorNode* removeNode(char* memory);
 
-    bool hasLeaks(MemLeakPeriod period);
     int getTotalLeaks(MemLeakPeriod period);
 
     MemoryLeakDetectorNode* getFirstLeak(MemLeakPeriod period);
@@ -222,7 +220,7 @@ public:
     };
 
     unsigned getCurrentAllocationNumber();
-    
+
     SimpleMutex* getMutex(void);
 private:
     MemoryLeakFailure* reporter_;
