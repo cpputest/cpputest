@@ -499,6 +499,25 @@ TEST(MemoryLeakDetectorTest, invalidateMemoryNULLShouldWork)
   detector->invalidateMemory(NULL);
 }
 
+TEST_GROUP(MemoryLeakDetectorListTest)
+{
+};
+
+TEST(MemoryLeakDetectorListTest, clearAllAccountingIsWorkingProperly)
+{
+    MemoryLeakDetectorList listForTesting;
+    MemoryLeakDetectorNode node1, node2, node3;
+    node3.period_ = mem_leak_period_disabled;
+    listForTesting.addNewNode(&node1);
+    listForTesting.addNewNode(&node2);
+    listForTesting.addNewNode(&node3);
+
+    listForTesting.clearAllAccounting(mem_leak_period_enabled);
+
+    CHECK(NULL == listForTesting.getFirstLeak(mem_leak_period_enabled));
+    CHECK(&node3 == listForTesting.getFirstLeak(mem_leak_period_disabled));
+}
+
 TEST_GROUP(SimpleStringBuffer)
 {
 };
