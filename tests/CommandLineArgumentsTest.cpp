@@ -299,3 +299,11 @@ TEST(CommandLineArguments, lotsOfGroupsAndTests)
     CHECK_EQUAL(nameFilter, *args->getNameFilters()->getNext()->getNext()->getNext()->getNext());
     CHECK_EQUAL(groupFilter, *args->getGroupFilters()->getNext()->getNext()->getNext());
 }
+
+TEST(CommandLineArguments, lastParameterFieldMissing)
+{
+    int argc = 2;
+    const char* argv[] = { "tests.exe", "-k"};
+    CHECK(newArgumentParser(argc, argv));
+    CHECK_EQUAL(SimpleString(""), args->getPackageName());
+}
