@@ -56,9 +56,9 @@ public:
 
 protected:
     TestOutput* output_;
+    JUnitTestOutput* jUnitOutput_;
 
 private:
-    JUnitTestOutput* jUnitOutput_;
     CommandLineArguments* arguments_;
     TestRegistry* registry_;
 

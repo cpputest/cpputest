@@ -105,7 +105,7 @@ struct TestOutputCheckingCommandLineTestRunner : public CommandLineTestRunner
 
     bool hasJUnitTestOutput(void)
     {
-        return NULL != dynamic_cast<JUnitTestOutput*>(output_);
+        return (output_ == jUnitOutput_);
     }
 };
 
