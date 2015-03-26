@@ -30,6 +30,7 @@
 #include "CppUTest/TestRegistry.h"
 #include "CppUTest/TestTestingFixture.h"
 #include "CppUTest/TestPlugin.h"
+#include "CppUTest/JUnitTestOutput.h"
 
 class DummyPluginWhichCountsThePlugins : public TestPlugin
 {
@@ -93,4 +94,26 @@ TEST(CommandLineTestRunner, NoPluginsAreInstalledAtTheEndOfARunWhenTheArgumentsA
     commandLineTestRunner.runAllTestsMain();
 
     LONGS_EQUAL(0, registry.countPlugins());
+}
+
+struct TestOutputCheckingCommandLineTestRunner : public CommandLineTestRunner
+{
+    TestOutputCheckingCommandLineTestRunner(int ac, const char** av, TestOutput* output, TestRegistry* registry) :
+        CommandLineTestRunner::CommandLineTestRunner(ac, av, output, registry)
+    {
+    }
+
+    bool hasJUnitTestOutput(void)
+    {
+        return (output_ == jUnitOutput_);
+    }
+};
+
+TEST(CommandLineTestRunner, JunitOutputEnabled)
+{
+    const char* argv[] = { "tests.exe", "-ojunit"};
+
+    TestOutputCheckingCommandLineTestRunner testRunner(2, argv, &output, &registry);
+    testRunner.runAllTestsMain();
+    CHECK(testRunner.hasJUnitTestOutput());
 }
