@@ -516,7 +516,7 @@ ifeq ($(CPPUTEST_USE_VPATH), Y)
 	$(SILENCE)gcov --object-directory $(CPPUTEST_OBJS_DIR) $(SRC) >> $(GCOV_OUTPUT) 2>> $(GCOV_ERROR)
 else
 	$(SILENCE)for d in $(SRC_DIRS) ; do \
-		FILES=`ls $$d/*.c $$d/*.cpp 2> /dev/null` ; \
+		FILES=`ls $$d/*.c $$d/*.cc $$d/*.cpp 2> /dev/null` ; \
 		gcov --object-directory $(CPPUTEST_OBJS_DIR)/$$d $$FILES >> $(GCOV_OUTPUT) 2>>$(GCOV_ERROR) ; \
 	done
 	$(SILENCE)for f in $(SRC_FILES) ; do \
