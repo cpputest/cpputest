@@ -102,6 +102,10 @@ protected:
         CALL_SUCCEED
     };
     virtual void setState(ActualCallState state);
+    ActualCallState getState() { return state_; }
+    void setFulfilledExpectation( MockCheckedExpectedCall *expectation ) { fulfilledExpectation_ = expectation; }
+    MockExpectedCallsList *getUnfulfilledExpectations() { return &unfulfilledExpectations_; }
+    const MockExpectedCallsList& getAllExpectations() { return allExpectations_; }
 
 private:
     SimpleString functionName_;
@@ -187,6 +191,42 @@ private:
     SimpleString traceBuffer_;
 
     void addParameterName(const SimpleString& name);
+};
+
+class MockCheckedActualCallTrace : public MockCheckedActualCall
+{
+public:
+	MockCheckedActualCallTrace(int callOrder, MockFailureReporter* reporter, const MockExpectedCallsList& expectations);
+    virtual ~MockCheckedActualCallTrace();
+
+    virtual MockActualCall& withName(const SimpleString&) _override;
+    virtual MockActualCall& withCallOrder(int) _override;
+    virtual MockActualCall& withIntParameter(const SimpleString&, int) _override;
+    virtual MockActualCall& withUnsignedIntParameter(const SimpleString&, unsigned int) _override;
+    virtual MockActualCall& withLongIntParameter(const SimpleString&, long int) _override;
+    virtual MockActualCall& withUnsignedLongIntParameter(const SimpleString&, unsigned long int) _override;
+    virtual MockActualCall& withDoubleParameter(const SimpleString&, double) _override;
+    virtual MockActualCall& withStringParameter(const SimpleString&, const char*) _override;
+    virtual MockActualCall& withPointerParameter(const SimpleString& , void*) _override;
+    virtual MockActualCall& withConstPointerParameter(const SimpleString& , const void*) _override;
+    virtual MockActualCall& withParameterOfType(const SimpleString&, const SimpleString&, const void*) _override;
+    virtual MockActualCall& withOutputParameter(const SimpleString&, void*) _override;
+
+    static const char* getTraceOutput();
+    static void clearTraceOutput();
+
+    virtual void checkExpectations();
+
+protected:
+    virtual void failTest(const MockFailure& failure);
+
+private:
+    static SimpleString traceBuffer_;
+    static SimpleString testName_;
+    MockFailureReporter* reporter_; // Need own copy to use for generating trace messages.
+
+    void addParameterName(const SimpleString& name);
+    void announceTestIfNew();
 };
 
 class MockIgnoredActualCall: public MockActualCall
