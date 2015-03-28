@@ -873,6 +873,18 @@ TEST(MockSupportTest, customObjectWithFunctionComparator)
     mock().removeAllComparators();
 }
 
+TEST(MockSupportTest, customObjectWithFunctionComparatorThatFailsCoversValueToString)
+{
+    MyTypeForTesting object(5);
+    MockFunctionComparator comparator(myTypeIsEqual, myTypeValueToString);
+    mock().installComparator("MyTypeForTesting", comparator);
+    addFunctionToExpectationsList("function")->withParameterOfType("MyTypeForTesting", "parameterName", &object);
+    MockExpectedCallsDidntHappenFailure failure(UtestShell::getCurrent(), *expectationsList);
+    mock().expectOneCall("function").withParameterOfType("MyTypeForTesting", "parameterName", &object);
+    mock().checkExpectations();
+    CHECK_EXPECTED_MOCK_FAILURE_LOCATION(failure, __FILE__, __LINE__);
+}
+
 TEST(MockSupportTest, disableEnable)
 {
     mock().disable();
