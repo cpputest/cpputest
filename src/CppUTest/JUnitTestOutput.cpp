@@ -240,9 +240,6 @@ void JUnitTestOutput::writeTestGroupToFile()
 }
 
 // LCOV_EXCL_START
-void JUnitTestOutput::verbose()
-{
-}
 
 void JUnitTestOutput::printBuffer(const char*)
 {
@@ -256,13 +253,10 @@ void JUnitTestOutput::print(long)
 {
 }
 
-void JUnitTestOutput::printTestRun(int /*number*/, int /*total*/)
-{
-}
-
 void JUnitTestOutput::flush()
 {
 }
+
 // LCOV_EXCL_STOP
 
 void JUnitTestOutput::print(const TestFailure& failure)
