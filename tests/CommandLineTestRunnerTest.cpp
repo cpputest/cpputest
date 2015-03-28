@@ -99,7 +99,7 @@ TEST(CommandLineTestRunner, NoPluginsAreInstalledAtTheEndOfARunWhenTheArgumentsA
 struct TestOutputCheckingCommandLineTestRunner : public CommandLineTestRunner
 {
     TestOutputCheckingCommandLineTestRunner(int ac, const char** av, TestOutput* output, TestRegistry* registry) :
-        CommandLineTestRunner::CommandLineTestRunner(ac, av, output, registry)
+        CommandLineTestRunner(ac, av, output, registry)
     {
     }
 
