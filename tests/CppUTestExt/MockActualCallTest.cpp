@@ -71,6 +71,15 @@ TEST(MockCheckedActualCall, unExpectedCallWithAParameter)
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 
+TEST(MockCheckedActualCall, actualCallWithNoReturnValueAndMeaninglessCallOrderForCoverage)
+{
+    MockCheckedActualCall actualCall(1, reporter, *emptyList);
+    actualCall.withName("noreturn").withCallOrder(0).returnValue();
+
+    MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "noreturn", *list);
+    CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
 TEST(MockCheckedActualCall, unExpectedParameterName)
 {
     MockCheckedExpectedCall call1;
