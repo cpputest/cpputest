@@ -1674,6 +1674,11 @@ TEST(MockSupportTest, shouldSupportConstParameters)
     mock().checkExpectations();
 }
 
+TEST(MockSupportTest, shouldReturnDefaultWhenThereIsntAnythingToReturn)
+{
+    CHECK(mock().returnValue().equals(MockNamedValue("")));
+}
+
 IGNORE_TEST(MockSupportTest, testForPerformanceProfiling)
 {
     /* TO fix! */
