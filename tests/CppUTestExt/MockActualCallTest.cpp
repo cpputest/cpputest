@@ -142,3 +142,43 @@ TEST(MockCheckedActualCall, MockIgnoredActualCallWorksAsItShould)
     CHECK_FALSE(actual.hasReturnValue());
     CHECK(actual.returnValue().equals(MockNamedValue("")));
 }
+
+TEST(MockCheckedActualCall, remainderOfMockActualCallTraceWorksAsItShould)
+{
+    int value;
+    const int const_value = 1;
+    MockActualCallTrace actual;
+    actual.withName("func");
+    actual.withCallOrder(1);
+    actual.onObject(&value);
+
+    actual.withUnsignedIntParameter("unsigned_int", (unsigned int) 1);
+    actual.withUnsignedLongIntParameter("unsigned_long", (unsigned long)1);
+    actual.withLongIntParameter("long_int", (long int) 1);
+    actual.withPointerParameter("pointer", &value);
+    actual.withConstPointerParameter("const_pointer", &const_value);
+    actual.withParameterOfType("int", "named_type", &const_value);
+
+    // TODO: Check trace buffer ?
+
+    CHECK_FALSE(actual.hasReturnValue());
+    CHECK(actual.returnValue().equals(MockNamedValue("")));
+    CHECK(0 == actual.returnLongIntValue());
+    CHECK(0 == actual.returnUnsignedLongIntValue());
+    CHECK(0 == actual.returnIntValue());
+    CHECK(0 == actual.returnUnsignedLongIntValueOrDefault(1ul));
+    CHECK(0 == actual.returnIntValueOrDefault(1));
+    CHECK(0 == actual.returnLongIntValue());
+    CHECK(0 == actual.returnLongIntValueOrDefault(1l));
+    CHECK(0 == actual.returnUnsignedIntValue());
+    CHECK(0 == actual.returnUnsignedIntValueOrDefault(1u));
+    DOUBLES_EQUAL(0.0f, actual.returnDoubleValue(), 0.0f);
+    DOUBLES_EQUAL(0.0f, actual.returnDoubleValueOrDefault(1.0f), 0.0f);
+    STRCMP_EQUAL("", actual.returnStringValueOrDefault("bla"));
+    STRCMP_EQUAL("", actual.returnStringValue());
+    CHECK(0 == actual.returnPointerValue());
+    CHECK(0 == actual.returnPointerValueOrDefault((void*) 0x0));
+    CHECK(0 == actual.returnConstPointerValue());
+    CHECK(0 == actual.returnConstPointerValueOrDefault((const void*) 0x0));
+}
+
