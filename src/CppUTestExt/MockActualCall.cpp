@@ -435,15 +435,11 @@ void MockCheckedActualCall::addOutputParameter(const SimpleString& name, void* p
 void MockCheckedActualCall::cleanUpOutputParameterList()
 {
     MockOutputParametersListNode* current = outputParameterExpectations_;
-    MockOutputParametersListNode* previous = NULL;
     MockOutputParametersListNode* toBeDeleted = NULL;
 
     while (current) {
         toBeDeleted = current;
-        if (previous == NULL)
-            outputParameterExpectations_ = current = current->next_;
-        else
-            current = previous->next_ = current->next_;
+        outputParameterExpectations_ = current = current->next_;
         delete toBeDeleted->name_;
         delete toBeDeleted;
     }
