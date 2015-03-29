@@ -26,6 +26,7 @@
  */
 
 #include "CppUTest/TestHarness.h"
+#include "CppUTest/TestTestingFixture.h"
 #include "CppUTestExt/MockSupport.h"
 #include "CppUTestExt/MockExpectedCall.h"
 #include "CppUTestExt/MockFailure.h"
@@ -1682,3 +1683,30 @@ IGNORE_TEST(MockSupportTest, testForPerformanceProfiling)
     }
 
 }
+
+TEST_GROUP(MockSupportCrashTest)
+{
+    TestTestingFixture fixture;
+};
+
+#if !defined(__MINGW32__) && !defined(_MSC_VER)
+
+static void _crashOnFailureTestFunction(void)
+{
+    mock().actualCall("unexpected");
+}
+
+TEST(MockSupportCrashTest, shouldCrashOnFailure)
+{
+    mock().crashOnFailure();
+    fixture.registry_->setRunTestsInSeperateProcess();
+    fixture.setTestFunction(_crashOnFailureTestFunction);
+    fixture.runAllTests();
+    fixture.assertPrintContains("Failed in separate process - killed by signal 11");
+}
+
+#else
+
+IGNORE_TEST(MockSupportCrashTest, shouldCrashOnFailure) {}
+
+#endif
