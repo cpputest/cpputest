@@ -44,7 +44,7 @@ public:
             UT_CRASH();
 
         NormalTestTerminator::exitCurrentTest();
-    }
+    } // LCOV_EXCL_LINE
 
     virtual ~MockFailureReporterTestTerminator()
     {
@@ -94,7 +94,6 @@ void MockFailure::addExpectationsAndCallHistoryRelatedTo(const SimpleString& nam
 
     message_ += expectationsForFunction.fulfilledCallsToString("\t\t");
 }
-
 
 MockExpectedCallsDidntHappenFailure::MockExpectedCallsDidntHappenFailure(UtestShell* test, const MockExpectedCallsList& expectations) : MockFailure(test)
 {
