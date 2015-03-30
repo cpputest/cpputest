@@ -491,7 +491,7 @@ MockExpectedCall& MockExpectedCallComposite::withName(const SimpleString& name)
 MockExpectedCall& MockExpectedCallComposite::withCallOrder(int)
 {
     FAIL("withCallOrder not supported for CompositeCalls");
-    return *this;
+    return *this; // LCOV_EXCL_LINE
 }
 
 MockExpectedCall& MockExpectedCallComposite::withUnsignedIntParameter(const SimpleString& name, unsigned int value)
