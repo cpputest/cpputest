@@ -456,14 +456,14 @@ MockActualCallTrace::~MockActualCallTrace()
 
 MockActualCall& MockActualCallTrace::withName(const SimpleString& name)
 {
-    traceBuffer_ += "\nFunction name: ";
+    traceBuffer_ += "\nFunction name:";
     traceBuffer_ += name;
     return *this;
 }
 
 MockActualCall& MockActualCallTrace::withCallOrder(int callOrder)
 {
-    traceBuffer_ += "\nwithCallOrder: ";
+    traceBuffer_ += " withCallOrder:";
     traceBuffer_ += StringFrom(callOrder);
     return *this;
 }
@@ -639,6 +639,7 @@ unsigned int MockActualCallTrace::returnUnsignedIntValueOrDefault(unsigned int)
 
 MockActualCall& MockActualCallTrace::onObject(void* objectPtr)
 {
+    traceBuffer_ += " onObject:";
     traceBuffer_ += StringFrom(objectPtr);
     return *this;
 }
