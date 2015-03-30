@@ -413,9 +413,74 @@ TEST(MockExpectedCall, hasNoOutputParameter)
     CHECK_FALSE(call->hasOutputParameter(foo));
 }
 
-TEST(MockExpectedCall, MockIgnoredExpectedCallWorksAsItShould)
+TEST_GROUP(MockExpectedCallComposite)
+{
+    MockCheckedExpectedCall call;
+    MockExpectedCallComposite composite;
+    
+    void setup() _override 
+    {
+        composite.add(call);
+    }
+    
+    void teardown() _override
+    {
+        CHECK_NO_MOCK_FAILURE();
+        composite.clear();
+    }
+};
+
+TEST(MockExpectedCallComposite, hasLongIntParameter)
+{
+    composite.withName("name");
+    composite.withParameter("param", (long int) -1);
+    STRCMP_EQUAL("name -> long int param: <-1>", call.callToString().asCharString());
+}
+
+TEST(MockExpectedCallComposite, hasUnsignedLongIntParameter)
+{
+    composite.withName("name");
+    composite.withParameter("param", (unsigned long int) 5);
+    STRCMP_EQUAL("name -> unsigned long int param: <5 (0x5)>", call.callToString().asCharString());
+}
+
+TEST(MockExpectedCallComposite, hasPointerParameter)
+{
+    composite.withName("name");
+    composite.withParameter("param", (void*) 0);
+    STRCMP_EQUAL("name -> void* param: <0x0>", call.callToString().asCharString());
+}
+
+TEST(MockExpectedCallComposite, hasConstPointerParameter)
+{
+    composite.withName("name");
+    composite.withParameter("param", (const void*) 0);
+    STRCMP_EQUAL("name -> const void* param: <0x0>", call.callToString().asCharString());
+}
+
+TEST(MockExpectedCallComposite, hasParameterOfType)
+{
+    composite.withName("name");
+    composite.withParameterOfType("type", "param", (const void*) 0);
+    STRCMP_EQUAL("name -> type param: <No comparator found for type: \"type\">", call.callToString().asCharString());
+}
+
+TEST(MockExpectedCallComposite, hasOutputParameterReturning)
+{
+    composite.withName("name");
+    composite.withOutputParameterReturning("out", (const void*) 0, 1);
+    STRCMP_EQUAL("name -> const void* out: <output>", call.callToString().asCharString());
+}
+
+
+
+TEST_GROUP(MockIgnoredExpectedCall)
 {
     MockIgnoredExpectedCall ignored;
+};
+
+TEST(MockIgnoredExpectedCall, worksAsItShould)
+{
     ignored.withName("func");
     ignored.withCallOrder(1);
     ignored.onObject((void*) 0);
