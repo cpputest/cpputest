@@ -429,11 +429,6 @@ MockExpectedCall& MockCheckedExpectedCall::onObject(void* objectPtr)
     return *this;
 }
 
-bool MockCheckedExpectedCall::hasReturnValue()
-{
-    return !returnValue_.getName().isEmpty();
-}
-
 MockNamedValue MockCheckedExpectedCall::returnValue()
 {
     return returnValue_;
@@ -631,11 +626,6 @@ MockExpectedCall& MockExpectedCallComposite::andReturnValue(const void* value)
     for (MockExpectedCallCompositeNode* node = head_; node != NULL; node = node->next_)
         node->call_.andReturnValue(value);
     return *this;
-}
-
-bool MockExpectedCallComposite::hasReturnValue()
-{
-    return head_->call_.hasReturnValue();
 }
 
 MockExpectedCall& MockExpectedCallComposite::onObject(void* object)

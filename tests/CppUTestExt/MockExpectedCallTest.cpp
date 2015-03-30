@@ -417,26 +417,25 @@ TEST(MockExpectedCall, MockIgnoredExpectedCallWorksAsItShould)
 {
     MockIgnoredExpectedCall ignored;
     ignored.withName("func");
-    ignored.withCallOrder(1)
-            .onObject((void*) 0)
-            .withIntParameter("bla", (int) 1)
-            .withUnsignedIntParameter("foo", (unsigned int) 1)
-            .withLongIntParameter("hey", (long int) 1)
-            .withUnsignedLongIntParameter("bah", (unsigned long int) 1)
-            .withDoubleParameter("hah", (double) 1.1f)
-            .withStringParameter("goo", "hello")
-            .withPointerParameter("pie", (void*) 0)
-            .withConstPointerParameter("woo", (const void*) 0)
-            .withParameterOfType("top", "mytype", (const void*) 0)
-            .withOutputParameterReturning("bar", (const void*) 0, 1)
-            .andReturnValue((double) 1.0f)
-            .andReturnValue((unsigned int) 1)
-            .andReturnValue((int) 1)
-            .andReturnValue((unsigned long int) 1)
-            .andReturnValue((long int) 1)
-            .andReturnValue("boo")
-            .andReturnValue((void*) 0)
-            .andReturnValue((const void*) 0)
-    ;
-    CHECK_FALSE(ignored.hasReturnValue());
+    ignored.withCallOrder(1);
+    ignored.onObject((void*) 0);
+    ignored.withIntParameter("bla", (int) 1);
+    ignored.withUnsignedIntParameter("foo", (unsigned int) 1);
+    ignored.withLongIntParameter("hey", (long int) 1);
+    ignored.withUnsignedLongIntParameter("bah", (unsigned long int) 1);
+    ignored.withDoubleParameter("hah", (double) 1.1f);
+    ignored.withStringParameter("goo", "hello");
+    ignored.withPointerParameter("pie", (void*) 0);
+    ignored.withConstPointerParameter("woo", (const void*) 0);
+    ignored.withParameterOfType("top", "mytype", (const void*) 0);
+    ignored.withOutputParameterReturning("bar", (const void*) 0, 1);
+    ignored.ignoreOtherParameters();
+    ignored.andReturnValue((double) 1.0f);
+    ignored.andReturnValue((unsigned int) 1);
+    ignored.andReturnValue((int) 1);
+    ignored.andReturnValue((unsigned long int) 1);
+    ignored.andReturnValue((long int) 1);
+    ignored.andReturnValue("boo");
+    ignored.andReturnValue((void*) 0);
+    ignored.andReturnValue((const void*) 0);
 }
