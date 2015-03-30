@@ -239,9 +239,7 @@ void JUnitTestOutput::writeTestGroupToFile()
     closeFile();
 }
 
-void JUnitTestOutput::verbose()
-{
-}
+// LCOV_EXCL_START
 
 void JUnitTestOutput::printBuffer(const char*)
 {
@@ -255,20 +253,18 @@ void JUnitTestOutput::print(long)
 {
 }
 
+void JUnitTestOutput::flush()
+{
+}
+
+// LCOV_EXCL_STOP
+
 void JUnitTestOutput::print(const TestFailure& failure)
 {
     if (impl_->results_.tail_->failure_ == 0) {
         impl_->results_.failureCount_++;
         impl_->results_.tail_->failure_ = new TestFailure(failure);
     }
-}
-
-void JUnitTestOutput::printTestRun(int /*number*/, int /*total*/)
-{
-}
-
-void JUnitTestOutput::flush()
-{
 }
 
 void JUnitTestOutput::openFileForWrite(const SimpleString& fileName)
