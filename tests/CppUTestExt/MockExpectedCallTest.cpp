@@ -438,5 +438,4 @@ TEST(MockExpectedCall, MockIgnoredExpectedCallWorksAsItShould)
             .andReturnValue((void*) 0)
             .andReturnValue((const void*) 0)
     ;
-    CHECK_FALSE(ignored.hasReturnValue());
 }

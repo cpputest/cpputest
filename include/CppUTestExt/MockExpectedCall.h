@@ -68,7 +68,6 @@ public:
     virtual MockExpectedCall& andReturnValue(const char* value)=0;
     virtual MockExpectedCall& andReturnValue(void* value)=0;
     virtual MockExpectedCall& andReturnValue(const void* value)=0;
-    virtual bool hasReturnValue()=0;
 
     virtual MockExpectedCall& onObject(void* objectPtr)=0;
 };
