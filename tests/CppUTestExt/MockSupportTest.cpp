@@ -26,6 +26,7 @@
  */
 
 #include "CppUTest/TestHarness.h"
+#include "CppUTest/TestTestingFixture.h"
 #include "CppUTestExt/MockSupport.h"
 #include "CppUTestExt/MockExpectedCall.h"
 #include "CppUTestExt/MockFailure.h"
@@ -872,6 +873,18 @@ TEST(MockSupportTest, customObjectWithFunctionComparator)
     mock().removeAllComparators();
 }
 
+TEST(MockSupportTest, customObjectWithFunctionComparatorThatFailsCoversValueToString)
+{
+    MyTypeForTesting object(5);
+    MockFunctionComparator comparator(myTypeIsEqual, myTypeValueToString);
+    mock().installComparator("MyTypeForTesting", comparator);
+    addFunctionToExpectationsList("function")->withParameterOfType("MyTypeForTesting", "parameterName", &object);
+    MockExpectedCallsDidntHappenFailure failure(UtestShell::getCurrent(), *expectationsList);
+    mock().expectOneCall("function").withParameterOfType("MyTypeForTesting", "parameterName", &object);
+    mock().checkExpectations();
+    CHECK_EXPECTED_MOCK_FAILURE_LOCATION(failure, __FILE__, __LINE__);
+}
+
 TEST(MockSupportTest, disableEnable)
 {
     mock().disable();
@@ -1673,6 +1686,11 @@ TEST(MockSupportTest, shouldSupportConstParameters)
     mock().checkExpectations();
 }
 
+TEST(MockSupportTest, shouldReturnDefaultWhenThereIsntAnythingToReturn)
+{
+    CHECK(mock().returnValue().equals(MockNamedValue("")));
+}
+
 IGNORE_TEST(MockSupportTest, testForPerformanceProfiling)
 {
     /* TO fix! */
@@ -1682,3 +1700,30 @@ IGNORE_TEST(MockSupportTest, testForPerformanceProfiling)
     }
 
 }
+
+TEST_GROUP(MockSupportCrashTest)
+{
+    TestTestingFixture fixture;
+};
+
+#if !defined(__MINGW32__) && !defined(_MSC_VER)
+
+static void _crashOnFailureTestFunction(void)
+{
+    mock().actualCall("unexpected");
+}
+
+TEST(MockSupportCrashTest, shouldCrashOnFailure)
+{
+    mock().crashOnFailure();
+    fixture.registry_->setRunTestsInSeperateProcess();
+    fixture.setTestFunction(_crashOnFailureTestFunction);
+    fixture.runAllTests();
+    fixture.assertPrintContains("Failed in separate process - killed by signal 11");
+}
+
+#else
+
+IGNORE_TEST(MockSupportCrashTest, shouldCrashOnFailure) {}
+
+#endif
