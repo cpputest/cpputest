@@ -158,8 +158,21 @@ TEST(MockCheckedActualCall, remainderOfMockActualCallTraceWorksAsItShould)
     actual.withPointerParameter("pointer", &value);
     actual.withConstPointerParameter("const_pointer", &const_value);
     actual.withParameterOfType("int", "named_type", &const_value);
-
-    // TODO: Check trace buffer ?
+    
+    SimpleString expectedString("\nFunction name:func");
+    expectedString += " withCallOrder:1";
+    expectedString += " onObject:0x";
+    expectedString += HexStringFrom(&value);
+    expectedString += " unsigned_int:         1 (0x00000001)";
+    expectedString += " unsigned_long:1 (0x1)";
+    expectedString += " long_int:1";
+    expectedString += " pointer:0x";
+    expectedString += HexStringFrom(&value);
+    expectedString += " const_pointer:0x";
+    expectedString += HexStringFrom(&const_value);
+    expectedString += " int named_type:0x";
+    expectedString += HexStringFrom(&const_value);
+    STRCMP_EQUAL(expectedString.asCharString(), actual.getTraceOutput());
 
     CHECK_FALSE(actual.hasReturnValue());
     CHECK(actual.returnValue().equals(MockNamedValue("")));
