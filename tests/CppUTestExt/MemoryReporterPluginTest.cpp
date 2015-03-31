@@ -137,8 +137,6 @@ TEST_GROUP(MemoryReporterPlugin)
         const char *cmd_line[] = {"-pmemoryreport=normal"};
         reporter->parseArguments(1, cmd_line, 0);
         mock("reporter").enable();
-
-        //		mock.crashOnFailure();
     }
     void teardown()
     {
@@ -291,3 +289,27 @@ TEST(MemoryReporterPlugin, postActionRestoresAllocators)
     reporter->postTestAction(*test, *result);
     CHECK(allocator == getCurrentMallocAllocator());
 }
+
+TEST(MemoryReporterPlugin, shouldCreateNormalMemoryReportFormatterWithoutMock)
+{
+    MemoryReporterPlugin realReporter;
+    const char *cmd_line[] = {"-pmemoryreport=normal"};
+    CHECK(realReporter.parseArguments(1, cmd_line, 0));
+}
+
+TEST(MemoryReporterPlugin, shouldCreateCodeMemoryReportFormatterWithoutMock)
+{
+    MemoryReporterPlugin realReporter;
+    const char *cmd_line[] = {"-pmemoryreport=code"};
+    CHECK(realReporter.parseArguments(1, cmd_line, 0));
+}
+
+TEST(MemoryReporterPlugin, shouldntCrashCreateInvalidMemoryReportFormatterWithoutMock)
+{
+    MemoryReporterPlugin realReporter;
+    const char *cmd_line[] = {"-pmemoryreport=foo"};
+    CHECK(realReporter.parseArguments(1, cmd_line, 0));
+    realReporter.preTestAction(*test, *result);
+    realReporter.postTestAction(*test, *result);
+}
+
