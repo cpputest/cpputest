@@ -837,7 +837,7 @@ TEST(MockSupportTest, outputParameterTraced)
     int param = 1;
     mock().actualCall("someFunc").withOutputParameter("someParameter", &param);
     mock().checkExpectations();
-    STRCMP_CONTAINS("Function name: someFunc someParameter:", mock().getTraceOutput());
+    STRCMP_CONTAINS("Function name:someFunc someParameter:", mock().getTraceOutput());
 }
 
 TEST(MockSupportTest, outputParameterWithIgnoredParameters)
