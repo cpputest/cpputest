@@ -253,7 +253,15 @@ TEST(MockExpectedCallsList, callToStringForFulfilledFunctions)
     STRCMP_EQUAL(expectedString.asCharString(), list->fulfilledCallsToString().asCharString());
 }
 
+TEST(MockExpectedCallsList, removeOneFulfilledExpectationFromEmptyList)
+{
+    POINTERS_EQUAL(NULL, list->removeOneFulfilledExpectation());
+}
 
+TEST(MockExpectedCallsList, getOneFulfilledExpectationWithIgnoredParametersFromEmptyList)
+{
+    POINTERS_EQUAL(NULL, list->getOneFulfilledExpectationWithIgnoredParameters());
+}
 
 TEST(MockExpectedCallsList, toStringOnEmptyList)
 {

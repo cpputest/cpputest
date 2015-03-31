@@ -413,9 +413,148 @@ TEST(MockExpectedCall, hasNoOutputParameter)
     CHECK_FALSE(call->hasOutputParameter(foo));
 }
 
-TEST(MockExpectedCall, MockIgnoredExpectedCallWorksAsItShould)
+static MockExpectedCallComposite composite;
+
+TEST_GROUP(MockExpectedCallComposite)
+{
+    MockCheckedExpectedCall call;
+    
+    void setup() _override 
+    {
+        composite.add(call);
+        composite.withName("name");
+    }
+    
+    void teardown() _override
+    {
+        CHECK_NO_MOCK_FAILURE();
+        composite.clear();
+    }
+};
+
+TEST(MockExpectedCallComposite, hasLongIntParameter)
+{
+    composite.withParameter("param", (long int) -1);
+    STRCMP_EQUAL("name -> long int param: <-1>", call.callToString().asCharString());
+}
+
+TEST(MockExpectedCallComposite, hasUnsignedLongIntParameter)
+{
+    composite.withParameter("param", (unsigned long int) 5);
+    STRCMP_EQUAL("name -> unsigned long int param: <5 (0x5)>", call.callToString().asCharString());
+}
+
+TEST(MockExpectedCallComposite, hasPointerParameter)
+{
+    composite.withParameter("param", (void*) 0);
+    STRCMP_EQUAL("name -> void* param: <0x0>", call.callToString().asCharString());
+}
+
+TEST(MockExpectedCallComposite, hasConstPointerParameter)
+{
+    composite.withParameter("param", (const void*) 0);
+    STRCMP_EQUAL("name -> const void* param: <0x0>", call.callToString().asCharString());
+}
+
+TEST(MockExpectedCallComposite, hasParameterOfType)
+{
+    composite.withParameterOfType("type", "param", (const void*) 0);
+    STRCMP_EQUAL("name -> type param: <No comparator found for type: \"type\">", call.callToString().asCharString());
+}
+
+TEST(MockExpectedCallComposite, hasOutputParameterReturning)
+{
+    composite.withOutputParameterReturning("out", (const void*) 0, 1);
+    STRCMP_EQUAL("name -> const void* out: <output>", call.callToString().asCharString());
+}
+
+TEST(MockExpectedCallComposite, hasUnsignedIntReturnValue)
+{
+    composite.andReturnValue((unsigned int) 2);
+    STRCMP_EQUAL("unsigned int", call.returnValue().getType().asCharString());
+    LONGS_EQUAL(2, call.returnValue().getUnsignedIntValue());
+}
+
+TEST(MockExpectedCallComposite, hasIntReturnValue)
+{
+    composite.andReturnValue((int) -5);
+    STRCMP_EQUAL("int", call.returnValue().getType().asCharString());
+    LONGS_EQUAL(-5, call.returnValue().getIntValue());
+}
+
+TEST(MockExpectedCallComposite, hasLongIntReturnValue)
+{
+    composite.andReturnValue((long int) -17);
+    STRCMP_EQUAL("long int", call.returnValue().getType().asCharString());
+    LONGS_EQUAL(-17, call.returnValue().getLongIntValue());
+}
+
+TEST(MockExpectedCallComposite, hasUnsignedLongIntReturnValue)
+{
+    composite.andReturnValue((unsigned long int) 6);
+    STRCMP_EQUAL("unsigned long int", call.returnValue().getType().asCharString());
+    LONGS_EQUAL(6, call.returnValue().getUnsignedLongIntValue());
+}
+
+TEST(MockExpectedCallComposite, hasDoubleReturnValue)
+{
+    composite.andReturnValue((double) 3.005);
+    STRCMP_EQUAL("double", call.returnValue().getType().asCharString());
+    DOUBLES_EQUAL(3.005, call.returnValue().getDoubleValue(), 0.0001);
+}
+
+TEST(MockExpectedCallComposite, hasStringReturnValue)
+{
+    composite.andReturnValue("hello");
+    STRCMP_EQUAL("const char*", call.returnValue().getType().asCharString());
+    STRCMP_EQUAL("hello", call.returnValue().getStringValue());
+}
+
+TEST(MockExpectedCallComposite, hasPointerReturnValue)
+{
+    composite.andReturnValue((void*) 0);
+    STRCMP_EQUAL("void*", call.returnValue().getType().asCharString());
+    POINTERS_EQUAL((void*) 0, call.returnValue().getPointerValue());
+}
+
+TEST(MockExpectedCallComposite, hasConstPointerReturnValue)
+{
+    composite.andReturnValue((const void*) 0);
+    STRCMP_EQUAL("const void*", call.returnValue().getType().asCharString());
+    POINTERS_EQUAL((const void*) 0, call.returnValue().getConstPointerValue());
+}
+
+TEST(MockExpectedCallComposite, isOnObject)
+{
+    composite.onObject(&composite);
+    SimpleString info("(object address: 0x");
+    info += HexStringFrom(&composite);
+    info += ")::name -> no parameters";
+    STRCMP_EQUAL(info.asCharString(), call.callToString().asCharString());
+}
+
+#include "CppUTest/TestTestingFixture.h"
+
+static void withCallOrderNotSupportedFailMethod_(void)
+{
+    composite.withCallOrder(5);
+}
+
+TEST(MockExpectedCallComposite, doesNotSupportCallOrder)
+{
+    TestTestingFixture fixture;
+    fixture.setTestFunction(&withCallOrderNotSupportedFailMethod_);
+    fixture.runAllTests();
+    fixture.assertPrintContains("withCallOrder not supported for CompositeCalls");
+}
+
+TEST_GROUP(MockIgnoredExpectedCall)
 {
     MockIgnoredExpectedCall ignored;
+};
+
+TEST(MockIgnoredExpectedCall, worksAsItShould)
+{
     ignored.withName("func");
     ignored.withCallOrder(1);
     ignored.onObject((void*) 0);
