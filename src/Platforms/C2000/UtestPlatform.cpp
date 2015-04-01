@@ -57,10 +57,23 @@ static int jmp_buf_index = 0;
     static int idx = 0;
 #endif
 
-/* The TI cl2000 compiler will compile this function with C++ linkage, unless
- * we specifically tell it to use C linkage again, in the function definiton.
- */
-extern "C" int PlatformSpecificSetJmp(void (*function) (void* data), void* data)
+TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
+{
+    return TestOutput::eclipse;
+}
+
+static void C2000RunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
+{
+   printf("-p isn' implemented for c2000. Running inside the process\b");
+   shell->runOneTest(plugin, *result);
+}
+
+void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell*, TestPlugin*, TestResult*) =
+    C2000RunTestInASeperateProcess;
+
+extern "C" {
+
+static int C2000SetJmp(void (*function) (void* data), void* data)
 {
     if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
         jmp_buf_index++;
@@ -71,33 +84,22 @@ extern "C" int PlatformSpecificSetJmp(void (*function) (void* data), void* data)
     return 0;
 }
 
-void PlatformSpecificLongJmp()
+static void  C2000LongJmp()
 {
     jmp_buf_index--;
     longjmp(test_exit_jmp_buf[jmp_buf_index], 1);
 }
 
-void PlatformSpecificRestoreJumpBuffer()
+static void  C2000RestoreJumpBuffer()
 {
     jmp_buf_index--;
 }
 
-void PlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
-{
-   printf("-p isn' implemented for c2000. Running inside the process\b");
-   shell->runOneTest(plugin, *result);
-}
+int (*PlatformSpecificSetJmp)(void (*function) (void*), void*) = C2000SetJmp;
+void (*PlatformSpecificLongJmp)(void) = C2000LongJmp;
+void (*PlatformSpecificRestoreJumpBuffer)(void) = C2000RestoreJumpBuffer;
 
-TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
-{
-    return TestOutput::eclipse;
-}
-
-///////////// Time in millis
-
-extern "C" {
-
-static long TimeInMillisImplementation()
+static long C2000TimeInMillis()
 {
     /* The TI c2000 platform does not have Posix support and thus lacks struct timespec.
      * Also, clock() always returns 0 in the simulator. Hence we work with struct tm.tm_hour
@@ -114,51 +116,39 @@ static long TimeInMillisImplementation()
     return result;
 }
 
-long (*GetPlatformSpecificTimeInMillis)() = TimeInMillisImplementation;
-
-}
-
-extern "C" {
-
 static const char* TimeStringImplementation()
 {
     time_t tm = time(NULL);
     return ctime(&tm);
 }
 
+long (*GetPlatformSpecificTimeInMillis)() = C2000TimeInMillis;
 const char* (*GetPlatformSpecificTimeString)() = TimeStringImplementation;
 
-}
+extern int vsnprintf(char*, size_t, const char*, va_list); // not std::vsnprintf()
 
-extern "C" int vsnprintf(char*, size_t, const char*, va_list); // not std::vsnprintf()
+extern int (*PlatformSpecificVSNprintf)(char *, size_t, const char*, va_list) = vsnprintf;
 
-int PlatformSpecificVSNprintf(char *str, size_t size, const char* format, va_list args)
+PlatformSpecificFile C2000FOpen(const char* filename, const char* flag)
 {
-    return vsnprintf(str, size, format, args);
+    return fopen(filename, flag);
 }
 
-PlatformSpecificFile PlatformSpecificFOpen(const char* filename, const char* flag)
-{
-   return fopen(filename, flag);
-}
-
-
-void PlatformSpecificFPuts(const char* str, PlatformSpecificFile file)
+static void C2000FPuts(const char* str, PlatformSpecificFile file)
 {
    fputs(str, (FILE*)file);
 }
 
-void PlatformSpecificFClose(PlatformSpecificFile file)
+static void C2000FClose(PlatformSpecificFile file)
 {
    fclose((FILE*)file);
 }
 
-void PlatformSpecificFlush()
-{
-  fflush(stdout);
-}
+PlatformSpecificFile (*PlatformSpecificFOpen)(const char* filename, const char* flag) = C2000FOpen;
+void (*PlatformSpecificFPuts)(const char* str, PlatformSpecificFile file) = C2000FPuts;
+void (*PlatformSpecificFClose)(PlatformSpecificFile file) = C2000FClose;
 
-int PlatformSpecificPutchar(int c)
+static int CL2000Putchar(int c)
 {
 #if USE_BUFFER_OUTPUT
     if(idx < BUFFER_SIZE) {
@@ -175,27 +165,35 @@ int PlatformSpecificPutchar(int c)
 #endif
 }
 
-void* PlatformSpecificMalloc(size_t size)
+static void CL2000Flush()
+{
+  fflush(stdout);
+}
+
+extern int (*PlatformSpecificPutchar)(int c) = CL2000Putchar;
+extern void (*PlatformSpecificFlush)(void) = CL2000Flush;
+
+static void* C2000Malloc(size_t size)
 {
    return (void*)far_malloc((unsigned long)size);
 }
 
-void* PlatformSpecificRealloc (void* memory, size_t size)
+static void* C2000Realloc (void* memory, size_t size)
 {
     return (void*)far_realloc((long)memory, (unsigned long)size);
 }
 
-void PlatformSpecificFree(void* memory)
+static void C2000Free(void* memory)
 {
     far_free((long)memory);
 }
 
-void* PlatformSpecificMemCpy(void* s1, const void* s2, size_t size)
+static void* C2000MemCpy(void* s1, const void* s2, size_t size)
 {
     return (void*)far_memlcpy((long)s1, (long)s2, size);
 }
 
-void* PlatformSpecificMemset(void* mem, int c, size_t size)
+static void* C2000Memset(void* mem, int c, size_t size)
 {
     register unsigned long i = size;
     register long p = (long) mem;
@@ -203,12 +201,19 @@ void* PlatformSpecificMemset(void* mem, int c, size_t size)
     return mem;
 }
 
+void* (*PlatformSpecificMalloc)(size_t size) = C2000Malloc;
+void* (*PlatformSpecificRealloc)(void* memory, size_t size) = C2000Realloc;
+void (*PlatformSpecificFree)(void* memory) = C2000Free;
+void* (*PlatformSpecificMemCpy)(void* s1, const void* s2, size_t size) = C2000MemCpy;
+void* (*PlatformSpecificMemset)(void* mem, int c, size_t size) = C2000Memset;
+
+/*
 double PlatformSpecificFabs(double d)
 {
    return fabs(d);
 }
-
-extern "C" {
+*/
+double (*PlatformSpecificFabs)(double) = fabs;
 
 static int IsNanImplementation(double d)
 {
@@ -216,8 +221,6 @@ static int IsNanImplementation(double d)
 }
 
 int (*PlatformSpecificIsNan)(double d) = IsNanImplementation;
-
-}
 
 static PlatformSpecificMutex DummyMutexCreate(void)
 {
@@ -245,3 +248,4 @@ void (*PlatformSpecificMutexLock)(PlatformSpecificMutex) = DummyMutexLock;
 void (*PlatformSpecificMutexUnlock)(PlatformSpecificMutex) = DummyMutexUnlock;
 void (*PlatformSpecificMutexDestroy)(PlatformSpecificMutex) = DummyMutexDestroy;
 
+}
