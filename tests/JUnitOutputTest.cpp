@@ -96,6 +96,11 @@ public:
     FileSystemForJUnitTestOutputTests() : firstFile_(0) {}
     ~FileSystemForJUnitTestOutputTests()
     {
+        clear();
+    }
+
+    void clear(void)
+    {
         while (firstFile_) {
             FileForJUnitOutputTests* fileToBeDeleted = firstFile_;
             firstFile_ = firstFile_->nextFile();
@@ -128,33 +133,6 @@ public:
             if (current->name() == filename)
                 return current;
         return NULL;
-    }
-};
-
-class JUnitTestOutputToBuffer : public JUnitTestOutput
-{
-public:
-
-    FileSystemForJUnitTestOutputTests& fileSystem_;
-    FileForJUnitOutputTests* currentOpenFile_;
-
-    JUnitTestOutputToBuffer(FileSystemForJUnitTestOutputTests& fileSystem)
-        : fileSystem_(fileSystem), currentOpenFile_(0) {}
-
-    void writeToFile(const SimpleString& buffer)
-    {
-        currentOpenFile_->write(buffer);
-    }
-
-    void openFileForWrite(const SimpleString& filename)
-    {
-        currentOpenFile_ = fileSystem_.openFile(filename);
-    }
-
-    void closeFile()
-    {
-        currentOpenFile_->close();
-        currentOpenFile_ = 0;
     }
 };
 
@@ -295,18 +273,38 @@ public:
     }
 };
 
+extern "C" {
+    static FileSystemForJUnitTestOutputTests fileSystem;
+
+    static PlatformSpecificFile mockFOpen(const char* filename, const char*)
+    {
+        return fileSystem.openFile(filename);
+    }
+
+    static void mockFPuts(const char* str, PlatformSpecificFile file)
+    {
+        ((FileForJUnitOutputTests*)file)->write(str);
+    }
+
+    static void mockFClose(PlatformSpecificFile file)
+    {
+        ((FileForJUnitOutputTests*)file)->close();
+    }
+}
+
 TEST_GROUP(JUnitOutputTest)
 {
-    FileSystemForJUnitTestOutputTests fileSystem;
-
-    JUnitTestOutputToBuffer *junitOutput;
+    JUnitTestOutput *junitOutput;
     TestResult *result;
     JUnitTestOutputTestRunner *testCaseRunner;
     FileForJUnitOutputTests* outputFile;
 
     void setup()
     {
-        junitOutput = new JUnitTestOutputToBuffer (fileSystem);
+        UT_PTR_SET(PlatformSpecificFOpen, (PlatformSpecificFile(*)(const char*, const char*))mockFOpen);
+        UT_PTR_SET(PlatformSpecificFPuts, mockFPuts);
+        UT_PTR_SET(PlatformSpecificFClose, mockFClose);
+        junitOutput = new JUnitTestOutput();
         result = new TestResult(*junitOutput);
         testCaseRunner = new JUnitTestOutputTestRunner(*result);
     }
@@ -316,6 +314,7 @@ TEST_GROUP(JUnitOutputTest)
         delete testCaseRunner;
         delete result;
         delete junitOutput;
+        fileSystem.clear();
     }
 };
 
