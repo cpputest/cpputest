@@ -71,6 +71,7 @@ public:
         return linesOfFile_[lineNumber-1].asCharString();
 
     }
+
     const char* lineFromTheBack(size_t lineNumberFromTheBack)
     {
         return line(amountOfLines() - (lineNumberFromTheBack - 1));
@@ -94,10 +95,7 @@ class FileSystemForJUnitTestOutputTests
 
 public:
     FileSystemForJUnitTestOutputTests() : firstFile_(0) {}
-    ~FileSystemForJUnitTestOutputTests()
-    {
-        clear();
-    }
+    ~FileSystemForJUnitTestOutputTests() { clear(); }
 
     void clear(void)
     {
@@ -160,7 +158,6 @@ class JUnitTestOutputTestRunner
     bool firstTestInGroup_;
     int timeTheTestTakes_;
     TestFailure* testFailure_;
-
 
 public:
 
@@ -244,10 +241,8 @@ public:
             testFailure_ = 0;
         }
 
-
         result_.currentTestEnded(currentTest_);
     }
-
 
     JUnitTestOutputTestRunner& thatTakes(int timeElapsed)
     {
