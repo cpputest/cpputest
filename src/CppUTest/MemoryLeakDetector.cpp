@@ -422,8 +422,6 @@ MemoryLeakDetector::MemoryLeakDetector(MemoryLeakFailure* reporter)
     allocationSequenceNumber_ = 1;
     current_period_ = mem_leak_period_disabled;
     reporter_ = reporter;
-    outputBuffer_ = MemoryLeakOutputStringBuffer();
-    memoryTable_ = MemoryLeakDetectorTable();
     mutex_ = new SimpleMutex;
 }
 
