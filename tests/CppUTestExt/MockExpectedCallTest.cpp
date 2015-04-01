@@ -418,13 +418,13 @@ static MockExpectedCallComposite composite;
 TEST_GROUP(MockExpectedCallComposite)
 {
     MockCheckedExpectedCall call;
-    
-    void setup() _override 
+
+    void setup() _override
     {
         composite.add(call);
         composite.withName("name");
     }
-    
+
     void teardown() _override
     {
         CHECK_NO_MOCK_FAILURE();
