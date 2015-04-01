@@ -50,6 +50,8 @@ public:
     virtual void unDoLastAddTest();
     virtual int countTests();
     virtual void runAllTests(TestResult& result);
+    virtual void listTestGroupNames(TestResult& result);
+    virtual void listTestGroupAndCaseNames(TestResult& result);
     virtual void setNameFilters(const TestFilter* filters);
     virtual void setGroupFilters(const TestFilter* filters);
 
