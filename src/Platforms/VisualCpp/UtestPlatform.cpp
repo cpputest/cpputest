@@ -18,7 +18,6 @@
 #include <windows.h>
 #include <mmsystem.h>
 
-
 #include <setjmp.h>
 
 #ifdef STDC_WANT_SECURE_LIB
