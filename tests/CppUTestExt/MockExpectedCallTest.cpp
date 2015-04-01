@@ -418,13 +418,13 @@ static MockExpectedCallComposite composite;
 TEST_GROUP(MockExpectedCallComposite)
 {
     MockCheckedExpectedCall call;
-    
-    void setup() _override 
+
+    void setup() _override
     {
         composite.add(call);
         composite.withName("name");
     }
-    
+
     void teardown() _override
     {
         CHECK_NO_MOCK_FAILURE();
@@ -527,8 +527,8 @@ TEST(MockExpectedCallComposite, hasConstPointerReturnValue)
 TEST(MockExpectedCallComposite, isOnObject)
 {
     composite.onObject(&composite);
-    SimpleString info("(object address: 0x");
-    info += HexStringFrom(&composite);
+    SimpleString info("(object address: ");
+    info += StringFromFormat("%p", &composite);
     info += ")::name -> no parameters";
     STRCMP_EQUAL(info.asCharString(), call.callToString().asCharString());
 }
