@@ -78,11 +78,6 @@ void TestOutput::printDouble(double d)
     print(StringFrom(d).asCharString());
 }
 
-void TestOutput::printHex(long n)
-{
-    print(HexStringFrom(n).asCharString());
-}
-
 TestOutput& operator<<(TestOutput& p, const char* s)
 {
     p.print(s);
@@ -98,6 +93,13 @@ TestOutput& operator<<(TestOutput& p, long int i)
 void TestOutput::printCurrentTestStarted(const UtestShell& test)
 {
     if (verbose_) print(test.getFormattedName().asCharString());
+
+    if (test.willRun()) {
+       setProgressIndicator(".");
+    }
+    else {
+       setProgressIndicator("!");
+    }
 }
 
 void TestOutput::printCurrentTestEnded(const TestResult& res)
@@ -132,10 +134,6 @@ void TestOutput::printCurrentGroupStarted(const UtestShell& /*test*/)
 }
 
 void TestOutput::printCurrentGroupEnded(const TestResult& /*res*/)
-{
-}
-
-void TestOutput::flush()
 {
 }
 

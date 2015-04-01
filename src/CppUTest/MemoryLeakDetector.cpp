@@ -63,6 +63,7 @@ void SimpleStringBuffer::addMemoryDump(const void* memory, size_t memorySize)
     const unsigned char* byteMemory = (const unsigned char*)memory;
     const size_t maxLineBytes = 16;
     size_t currentPos = 0;
+	size_t p;
 
     while (currentPos < memorySize) {
         add("    %04lx: ", currentPos);
@@ -72,13 +73,13 @@ void SimpleStringBuffer::addMemoryDump(const void* memory, size_t memorySize)
         }
         const size_t leftoverBytes = maxLineBytes - bytesInLine;
 
-        for (size_t p = 0; p < bytesInLine; p++) {
+        for (p = 0; p < bytesInLine; p++) {
             add("%02hhx ", byteMemory[currentPos + p]);
             if (p == ((maxLineBytes / 2) - 1)) {
                 add(" ");
             }
         }
-        for (size_t p = 0; p < leftoverBytes; p++) {
+        for (p = 0; p < leftoverBytes; p++) {
             add("   ");
         }
         if (leftoverBytes > (maxLineBytes/2)) {
@@ -86,7 +87,7 @@ void SimpleStringBuffer::addMemoryDump(const void* memory, size_t memorySize)
         }
 
         add("|");
-        for (size_t p = 0; p < bytesInLine; p++) {
+        for (p = 0; p < bytesInLine; p++) {
             char toAdd = (char)byteMemory[currentPos + p];
             if (toAdd < ' ' || toAdd > '~') {
                 toAdd = '.';
@@ -355,13 +356,6 @@ int MemoryLeakDetectorList::getTotalLeaks(MemLeakPeriod period)
     return total_leaks;
 }
 
-bool MemoryLeakDetectorList::hasLeaks(MemLeakPeriod period)
-{
-    for (MemoryLeakDetectorNode* node = head_; node; node = node->next_)
-        if (isInPeriod(node, period)) return true;
-    return false;
-}
-
 /////////////////////////////////////////////////////////////
 
 unsigned long MemoryLeakDetectorTable::hash(char* memory)
@@ -388,13 +382,6 @@ MemoryLeakDetectorNode* MemoryLeakDetectorTable::removeNode(char* memory)
 MemoryLeakDetectorNode* MemoryLeakDetectorTable::retrieveNode(char* memory)
 {
   return table_[hash(memory)].retrieveNode(memory);
-}
-
-bool MemoryLeakDetectorTable::hasLeaks(MemLeakPeriod period)
-{
-    for (int i = 0; i < hash_prime; i++)
-        if (table_[i].hasLeaks(period)) return true;
-    return false;
 }
 
 int MemoryLeakDetectorTable::getTotalLeaks(MemLeakPeriod period)
@@ -657,7 +644,6 @@ void MemoryLeakDetector::ConstructMemoryLeakReport(MemLeakPeriod period)
 
 const char* MemoryLeakDetector::report(MemLeakPeriod period)
 {
-    outputBuffer_.clear();
     ConstructMemoryLeakReport(period);
 
     return outputBuffer_.toString();

@@ -257,6 +257,18 @@ TEST(SimpleString, countTogether)
     LONGS_EQUAL(4, str.count("ha"));
 }
 
+TEST(SimpleString, countEmptyString)
+{
+    SimpleString str("hahahaha");
+	LONGS_EQUAL(8, str.count(""));
+}
+
+TEST(SimpleString, countEmptyStringInEmptyString)
+{
+    SimpleString str;
+    LONGS_EQUAL(0, str.count(""));
+}
+
 TEST(SimpleString, endsWith)
 {
     SimpleString str("Hello World");
@@ -278,6 +290,13 @@ TEST(SimpleString, replaceCharWithChar)
     SimpleString str("abcabcabca");
     str.replace('a', 'b');
     STRCMP_EQUAL("bbcbbcbbcb", str.asCharString());
+}
+
+TEST(SimpleString, replaceEmptyStringWithEmptyString)
+{
+    SimpleString str;
+    str.replace("", "");
+    STRCMP_EQUAL("", str.asCharString());
 }
 
 TEST(SimpleString, replaceStringWithString)
@@ -400,6 +419,14 @@ TEST(SimpleString, NULLReportsNullString)
     STRCMP_EQUAL("(null)", StringFromOrNull((char*) NULL).asCharString());
 }
 
+TEST(SimpleString, Booleans)
+{
+    SimpleString s1(StringFrom(true));
+    SimpleString s2(StringFrom(false));
+    CHECK(s1 == "true");
+    CHECK(s2 == "false");
+}
+
 TEST(SimpleString, Characters)
 {
     SimpleString s(StringFrom('a'));
@@ -471,6 +498,11 @@ TEST(SimpleString, StringFromFormatLarge)
     const char* s = "ThisIsAPrettyLargeStringAndIfWeAddThisManyTimesToABufferItWillbeFull";
     SimpleString h1 = StringFromFormat("%s%s%s%s%s%s%s%s%s%s", s, s, s, s, s, s, s, s, s, s);
     LONGS_EQUAL(10, h1.count(s));
+}
+
+TEST(SimpleString, StringFromConstSimpleString)
+{
+	STRCMP_EQUAL("bla", StringFrom(SimpleString("bla")).asCharString());
 }
 
 static int WrappedUpVSNPrintf(char* buf, size_t n, const char* format, ...)
@@ -561,22 +593,7 @@ TEST(SimpleString, CollectionWritingToEmptyString)
 }
 
 #ifdef CPPUTEST_64BIT
-#ifdef CPPUTEST_64BIT_32BIT_LONGS
-
-/*
- * Right now, the 64 bit pointers are casted to 32bit as the %p is causing different formats on
- * different platforms. However, this will need to be fixed in the future and then this test ought
- * to be deleted.
- */
-TEST(SimpleString, _64BitAddressPrintsCorrectly)
-{
-    char* p = (char*) 0xffffffffu;
-    SimpleString expected("0x23456789");
-    SimpleString actual = StringFrom((void*)&p[0x2345678A]);
-    STRCMP_EQUAL(expected.asCharString(), actual.asCharString());
-}
-
-#else
+#ifndef CPPUTEST_64BIT_32BIT_LONGS
 
 TEST(SimpleString, _64BitAddressPrintsCorrectly)
 {
@@ -586,7 +603,32 @@ TEST(SimpleString, _64BitAddressPrintsCorrectly)
     STRCMP_EQUAL(expected.asCharString(), actual.asCharString());
 }
 
+#else
+/*
+ * This test case should pass on 64 bit systems with 32 bit longs,
+ * but actually fails due to an implementation problem: Right now,
+ * the 64 bit pointers are casted to 32bit as the %p is causing
+ * different formats on different platforms. However, this will
+ * need to be fixed in the future.
+ */
+
+IGNORE_TEST(SimpleString, _64BitAddressPrintsCorrectly)
+{
+    char* p = (char*) 0xffffffff;
+    SimpleString expected("0x123456789");
+    SimpleString actual = StringFrom((void*)&p[0x2345678A]);
+    STRCMP_EQUAL(expected.asCharString(), actual.asCharString());
+}
+
 #endif
+#else
+/*
+ * This test case cannot pass on 32 bit systems.
+ */
+IGNORE_TEST(SimpleString, _64BitAddressPrintsCorrectly)
+{
+}
+
 #endif
 
 TEST(SimpleString, BuildStringFromUnsignedInteger)

@@ -101,7 +101,7 @@ public:
     virtual SimpleString getFormattedName() const;
     const SimpleString getFile() const;
     int getLineNumber() const;
-    virtual const char *getProgressIndicator() const;
+    virtual bool willRun() const;
     virtual bool hasFailed() const;
 
     virtual void assertTrue(bool condition, const char *checkString, const char *conditionString, const char *fileName, int lineNumber, const TestTerminator& testTerminator = NormalTestTerminator());
@@ -216,7 +216,7 @@ public:
     virtual ~IgnoredUtestShell();
     explicit IgnoredUtestShell(const char* groupName, const char* testName,
             const char* fileName, int lineNumber);
-    virtual const char* getProgressIndicator() const;
+    virtual bool willRun() const;
     protected:  virtual SimpleString getMacroName() const _override;
     virtual void runOneTest(TestPlugin* plugin, TestResult& result) _override;
 

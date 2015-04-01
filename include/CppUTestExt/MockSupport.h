@@ -114,8 +114,8 @@ protected:
     virtual MockCheckedActualCall *createActualFunctionCall();
     virtual void failTest(MockFailure& failure);
 private:
-    static int callOrder_;
-    static int expectedCallOrder_;
+    int callOrder_;
+    int expectedCallOrder_;
     bool strictOrdering_;
     MockFailureReporter *activeReporter_;
     MockFailureReporter *standardReporter_;

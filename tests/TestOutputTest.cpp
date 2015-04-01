@@ -119,11 +119,11 @@ TEST(TestOutput, PrintTestALot)
 
 TEST(TestOutput, SetProgressIndicator)
 {
-    result->setProgressIndicator(".");
+    printer->setProgressIndicator(".");
     printer->printCurrentTestEnded(*result);
-    result->setProgressIndicator("!");
+    printer->setProgressIndicator("!");
     printer->printCurrentTestEnded(*result);
-    result->setProgressIndicator(".");
+    printer->setProgressIndicator(".");
     printer->printCurrentTestEnded(*result);
 
     STRCMP_EQUAL(".!.", mock->getOutput().asCharString());

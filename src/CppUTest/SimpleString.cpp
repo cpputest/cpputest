@@ -172,7 +172,6 @@ bool SimpleString::containsNoCase(const SimpleString& other) const
     return lowerCase().contains(other.lowerCase());
 }
 
-
 bool SimpleString::startsWith(const SimpleString& other) const
 {
     if (StrLen(other.buffer_) == 0) return true;
@@ -194,7 +193,7 @@ size_t SimpleString::count(const SimpleString& substr) const
 {
     size_t num = 0;
     char* str = buffer_;
-    while ((str = StrStr(str, substr.buffer_))) {
+    while (*str && (str = StrStr(str, substr.buffer_))) {
         num++;
         str++;
     }
@@ -237,7 +236,7 @@ void SimpleString::replace(const char* to, const char* with)
 
     size_t newsize = len + (withlen * c) - (tolen * c) + 1;
 
-    if (newsize) {
+    if (newsize > 1) {
         char* newbuf = allocStringBuffer(newsize);
         for (size_t i = 0, j = 0; i < len;) {
             if (StrNCmp(&buffer_[i], to, tolen) == 0) {

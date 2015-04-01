@@ -1,0 +1,740 @@
+# Microsoft Developer Studio Generated Dependency File, included by AllTests.mak
+
+.\AllocationInCFile.c : \
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	".\AllocationInCFile.h"\
+	
+
+.\AllocationInCppFile.cpp : \
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	".\AllocationInCppFile.h"\
+	
+
+.\CppUTestExt\AllTests.cpp : \
+	"..\include\CppUTest\CommandLineArguments.h"\
+	"..\include\CppUTest\CommandLineTestRunner.h"\
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
+	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
+	"..\include\CppUTest\SimpleString.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	"..\include\CppUTest\TestFailure.h"\
+	"..\include\CppUTest\TestFilter.h"\
+	"..\include\CppUTest\TestHarness.h"\
+	"..\include\CppUTest\TestMemoryAllocator.h"\
+	"..\include\CppUTest\TestOutput.h"\
+	"..\include\CppUTest\TestPlugin.h"\
+	"..\include\CppUTest\TestRegistry.h"\
+	"..\include\CppUTest\TestResult.h"\
+	"..\include\CppUTest\Utest.h"\
+	"..\include\CppUTest\UtestMacros.h"\
+	"..\include\CppUTestExt\MemoryReportAllocator.h"\
+	"..\include\CppUTestExt\MemoryReporterPlugin.h"\
+	"..\include\CppUTestExt\MockNamedValue.h"\
+	"..\include\CppUTestExt\MockSupportPlugin.h"\
+	"..\include\platforms\visualcpp\stdint.h"\
+	
+
+.\CheatSheetTest.cpp : \
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
+	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
+	"..\include\CppUTest\SimpleString.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	"..\include\CppUTest\TestFailure.h"\
+	"..\include\CppUTest\TestHarness.h"\
+	"..\include\CppUTest\TestPlugin.h"\
+	"..\include\CppUTest\TestResult.h"\
+	"..\include\CppUTest\Utest.h"\
+	"..\include\CppUTest\UtestMacros.h"\
+	"..\include\platforms\visualcpp\stdint.h"\
+	
+
+.\CppUTestExt\CodeMemoryReportFormatterTest.cpp : \
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
+	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
+	"..\include\CppUTest\SimpleString.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	"..\include\CppUTest\TestFailure.h"\
+	"..\include\CppUTest\TestHarness.h"\
+	"..\include\CppUTest\TestMemoryAllocator.h"\
+	"..\include\CppUTest\TestOutput.h"\
+	"..\include\CppUTest\TestPlugin.h"\
+	"..\include\CppUTest\TestResult.h"\
+	"..\include\CppUTest\Utest.h"\
+	"..\include\CppUTest\UtestMacros.h"\
+	"..\include\CppUTestExt\CodeMemoryReportFormatter.h"\
+	"..\include\CppUTestExt\MemoryReportAllocator.h"\
+	"..\include\CppUTestExt\MemoryReportFormatter.h"\
+	"..\include\platforms\visualcpp\stdint.h"\
+	
+
+.\CommandLineArgumentsTest.cpp : \
+	"..\include\CppUTest\CommandLineArguments.h"\
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
+	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
+	"..\include\CppUTest\SimpleString.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	"..\include\CppUTest\TestFailure.h"\
+	"..\include\CppUTest\TestFilter.h"\
+	"..\include\CppUTest\TestHarness.h"\
+	"..\include\CppUTest\TestOutput.h"\
+	"..\include\CppUTest\TestPlugin.h"\
+	"..\include\CppUTest\TestRegistry.h"\
+	"..\include\CppUTest\TestResult.h"\
+	"..\include\CppUTest\Utest.h"\
+	"..\include\CppUTest\UtestMacros.h"\
+	"..\include\platforms\visualcpp\stdint.h"\
+	
+
+.\CommandLineTestRunnerTest.cpp : \
+	"..\include\CppUTest\CommandLineArguments.h"\
+	"..\include\CppUTest\CommandLineTestRunner.h"\
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
+	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
+	"..\include\CppUTest\SimpleString.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	"..\include\CppUTest\TestFailure.h"\
+	"..\include\CppUTest\TestFilter.h"\
+	"..\include\CppUTest\TestHarness.h"\
+	"..\include\CppUTest\TestOutput.h"\
+	"..\include\CppUTest\TestPlugin.h"\
+	"..\include\CppUTest\TestRegistry.h"\
+	"..\include\CppUTest\TestResult.h"\
+	"..\include\CppUTest\TestTestingFixture.h"\
+	"..\include\CppUTest\Utest.h"\
+	"..\include\CppUTest\UtestMacros.h"\
+	"..\include\platforms\visualcpp\stdint.h"\
+	
+
+.\CppUTestExt\GTest2ConvertorTest.cpp : \
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
+	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
+	"..\include\CppUTest\SimpleString.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	"..\include\CppUTest\TestFailure.h"\
+	"..\include\CppUTest\TestFilter.h"\
+	"..\include\CppUTest\TestHarness.h"\
+	"..\include\CppUTest\TestOutput.h"\
+	"..\include\CppUTest\TestPlugin.h"\
+	"..\include\CppUTest\TestRegistry.h"\
+	"..\include\CppUTest\TestResult.h"\
+	"..\include\CppUTest\TestTestingFixture.h"\
+	"..\include\CppUTest\Utest.h"\
+	"..\include\CppUTest\UtestMacros.h"\
+	"..\include\platforms\visualcpp\stdint.h"\
+	
+
+.\JUnitOutputTest.cpp : \
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\JunitTestOutput.h"\
+	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
+	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
+	"..\include\CppUTest\PlatformSpecificFunctions.h"\
+	"..\include\CppUTest\PlatformSpecificFunctions_c.h"\
+	"..\include\CppUTest\SimpleString.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	"..\include\CppUTest\TestFailure.h"\
+	"..\include\CppUTest\TestHarness.h"\
+	"..\include\CppUTest\TestOutput.h"\
+	"..\include\CppUTest\TestPlugin.h"\
+	"..\include\CppUTest\TestResult.h"\
+	"..\include\CppUTest\Utest.h"\
+	"..\include\CppUTest\UtestMacros.h"\
+	"..\include\platforms\visualcpp\stdint.h"\
+	
+
+.\MemoryLeakDetectorTest.cpp : \
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetector.h"\
+	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
+	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
+	"..\include\CppUTest\PlatformSpecificFunctions.h"\
+	"..\include\CppUTest\PlatformSpecificFunctions_c.h"\
+	"..\include\CppUTest\SimpleString.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	"..\include\CppUTest\TestFailure.h"\
+	"..\include\CppUTest\TestHarness.h"\
+	"..\include\CppUTest\TestMemoryAllocator.h"\
+	"..\include\CppUTest\TestOutput.h"\
+	"..\include\CppUTest\TestPlugin.h"\
+	"..\include\CppUTest\TestResult.h"\
+	"..\include\CppUTest\Utest.h"\
+	"..\include\CppUTest\UtestMacros.h"\
+	"..\include\platforms\visualcpp\stdint.h"\
+	
+
+.\MemoryLeakOperatorOverloadsTest.cpp : \
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetector.h"\
+	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
+	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
+	"..\include\CppUTest\PlatformSpecificFunctions.h"\
+	"..\include\CppUTest\PlatformSpecificFunctions_c.h"\
+	"..\include\CppUTest\SimpleString.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	"..\include\CppUTest\TestFailure.h"\
+	"..\include\CppUTest\TestFilter.h"\
+	"..\include\CppUTest\TestHarness.h"\
+	"..\include\CppUTest\TestHarness_c.h"\
+	"..\include\CppUTest\TestMemoryAllocator.h"\
+	"..\include\CppUTest\TestOutput.h"\
+	"..\include\CppUTest\TestPlugin.h"\
+	"..\include\CppUTest\TestRegistry.h"\
+	"..\include\CppUTest\TestResult.h"\
+	"..\include\CppUTest\TestTestingFixture.h"\
+	"..\include\CppUTest\Utest.h"\
+	"..\include\CppUTest\UtestMacros.h"\
+	"..\include\platforms\visualcpp\stdint.h"\
+	".\AllocationInCFile.h"\
+	".\AllocationInCppFile.h"\
+	
+
+.\MemoryLeakWarningTest.cpp : \
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetector.h"\
+	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
+	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
+	"..\include\CppUTest\PlatformSpecificFunctions.h"\
+	"..\include\CppUTest\PlatformSpecificFunctions_c.h"\
+	"..\include\CppUTest\SimpleMutex.h"\
+	"..\include\CppUTest\SimpleString.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	"..\include\CppUTest\TestFailure.h"\
+	"..\include\CppUTest\TestFilter.h"\
+	"..\include\CppUTest\TestHarness.h"\
+	"..\include\CppUTest\TestHarness_c.h"\
+	"..\include\CppUTest\TestMemoryAllocator.h"\
+	"..\include\CppUTest\TestOutput.h"\
+	"..\include\CppUTest\TestPlugin.h"\
+	"..\include\CppUTest\TestRegistry.h"\
+	"..\include\CppUTest\TestResult.h"\
+	"..\include\CppUTest\TestTestingFixture.h"\
+	"..\include\CppUTest\Utest.h"\
+	"..\include\CppUTest\UtestMacros.h"\
+	"..\include\platforms\visualcpp\stdint.h"\
+	
+
+.\CppUTestExt\MemoryReportAllocatorTest.cpp : \
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
+	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
+	"..\include\CppUTest\SimpleString.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	"..\include\CppUTest\TestFailure.h"\
+	"..\include\CppUTest\TestHarness.h"\
+	"..\include\CppUTest\TestMemoryAllocator.h"\
+	"..\include\CppUTest\TestOutput.h"\
+	"..\include\CppUTest\TestPlugin.h"\
+	"..\include\CppUTest\TestResult.h"\
+	"..\include\CppUTest\Utest.h"\
+	"..\include\CppUTest\UtestMacros.h"\
+	"..\include\CppUTestExt\MemoryReportAllocator.h"\
+	"..\include\CppUTestExt\MemoryReportFormatter.h"\
+	"..\include\platforms\visualcpp\stdint.h"\
+	
+
+.\CppUTestExt\MemoryReporterPluginTest.cpp : \
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
+	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
+	"..\include\CppUTest\SimpleString.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	"..\include\CppUTest\TestFailure.h"\
+	"..\include\CppUTest\TestHarness.h"\
+	"..\include\CppUTest\TestMemoryAllocator.h"\
+	"..\include\CppUTest\TestOutput.h"\
+	"..\include\CppUTest\TestPlugin.h"\
+	"..\include\CppUTest\TestResult.h"\
+	"..\include\CppUTest\Utest.h"\
+	"..\include\CppUTest\UtestMacros.h"\
+	"..\include\CppUTestExt\MemoryReportAllocator.h"\
+	"..\include\CppUTestExt\MemoryReporterPlugin.h"\
+	"..\include\CppUTestExt\MemoryReportFormatter.h"\
+	"..\include\cpputestext\mockactualcall.h"\
+	"..\include\CppUTestExt\MockCheckedActualCall.h"\
+	"..\include\CppUTestExt\MockCheckedExpectedCall.h"\
+	"..\include\cpputestext\mockexpectedcall.h"\
+	"..\include\CppUTestExt\MockExpectedCallsList.h"\
+	"..\include\CppUTestExt\MockFailure.h"\
+	"..\include\CppUTestExt\MockNamedValue.h"\
+	"..\include\CppUTestExt\MockSupport.h"\
+	"..\include\platforms\visualcpp\stdint.h"\
+	
+
+.\CppUTestExt\MemoryReportFormatterTest.cpp : \
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
+	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
+	"..\include\CppUTest\SimpleString.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	"..\include\CppUTest\TestFailure.h"\
+	"..\include\CppUTest\TestHarness.h"\
+	"..\include\CppUTest\TestMemoryAllocator.h"\
+	"..\include\CppUTest\TestOutput.h"\
+	"..\include\CppUTest\TestPlugin.h"\
+	"..\include\CppUTest\TestResult.h"\
+	"..\include\CppUTest\Utest.h"\
+	"..\include\CppUTest\UtestMacros.h"\
+	"..\include\CppUTestExt\MemoryReportAllocator.h"\
+	"..\include\CppUTestExt\MemoryReportFormatter.h"\
+	"..\include\platforms\visualcpp\stdint.h"\
+	
+
+.\CppUTestExt\MockActualCallTest.cpp : \
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
+	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
+	"..\include\CppUTest\SimpleString.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	"..\include\CppUTest\TestFailure.h"\
+	"..\include\CppUTest\TestHarness.h"\
+	"..\include\CppUTest\TestPlugin.h"\
+	"..\include\CppUTest\TestResult.h"\
+	"..\include\CppUTest\Utest.h"\
+	"..\include\CppUTest\UtestMacros.h"\
+	"..\include\cpputestext\mockactualcall.h"\
+	"..\include\CppUTestExt\MockCheckedActualCall.h"\
+	"..\include\CppUTestExt\MockCheckedExpectedCall.h"\
+	"..\include\cpputestext\mockexpectedcall.h"\
+	"..\include\CppUTestExt\MockExpectedCallsList.h"\
+	"..\include\CppUTestExt\MockFailure.h"\
+	"..\include\CppUTestExt\MockNamedValue.h"\
+	"..\include\platforms\visualcpp\stdint.h"\
+	".\CppUTestExt\MockFailureTest.h"\
+	
+
+.\CppUTestExt\MockCheatSheetTest.cpp : \
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
+	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
+	"..\include\CppUTest\SimpleString.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	"..\include\CppUTest\TestFailure.h"\
+	"..\include\CppUTest\TestHarness.h"\
+	"..\include\CppUTest\TestPlugin.h"\
+	"..\include\CppUTest\TestResult.h"\
+	"..\include\CppUTest\Utest.h"\
+	"..\include\CppUTest\UtestMacros.h"\
+	"..\include\cpputestext\mockactualcall.h"\
+	"..\include\CppUTestExt\MockCheckedActualCall.h"\
+	"..\include\CppUTestExt\MockCheckedExpectedCall.h"\
+	"..\include\cpputestext\mockexpectedcall.h"\
+	"..\include\CppUTestExt\MockExpectedCallsList.h"\
+	"..\include\CppUTestExt\MockFailure.h"\
+	"..\include\CppUTestExt\MockNamedValue.h"\
+	"..\include\CppUTestExt\MockSupport.h"\
+	"..\include\platforms\visualcpp\stdint.h"\
+	
+
+.\CppUTestExt\MockExpectedCallTest.cpp : \
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
+	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
+	"..\include\CppUTest\SimpleString.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	"..\include\CppUTest\TestFailure.h"\
+	"..\include\CppUTest\TestHarness.h"\
+	"..\include\CppUTest\TestPlugin.h"\
+	"..\include\CppUTest\TestResult.h"\
+	"..\include\CppUTest\Utest.h"\
+	"..\include\CppUTest\UtestMacros.h"\
+	"..\include\CppUTestExt\MockCheckedExpectedCall.h"\
+	"..\include\cpputestext\mockexpectedcall.h"\
+	"..\include\CppUTestExt\MockFailure.h"\
+	"..\include\CppUTestExt\MockNamedValue.h"\
+	"..\include\platforms\visualcpp\stdint.h"\
+	".\CppUTestExt\MockFailureTest.h"\
+	
+
+.\CppUTestExt\MockExpectedFunctionsListTest.cpp : \
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
+	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
+	"..\include\CppUTest\SimpleString.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	"..\include\CppUTest\TestFailure.h"\
+	"..\include\CppUTest\TestHarness.h"\
+	"..\include\CppUTest\TestPlugin.h"\
+	"..\include\CppUTest\TestResult.h"\
+	"..\include\CppUTest\Utest.h"\
+	"..\include\CppUTest\UtestMacros.h"\
+	"..\include\CppUTestExt\MockCheckedExpectedCall.h"\
+	"..\include\cpputestext\mockexpectedcall.h"\
+	"..\include\CppUTestExt\MockExpectedCallsList.h"\
+	"..\include\CppUTestExt\MockFailure.h"\
+	"..\include\CppUTestExt\MockNamedValue.h"\
+	"..\include\platforms\visualcpp\stdint.h"\
+	".\CppUTestExt\MockFailureTest.h"\
+	
+
+.\CppUTestExt\MockFailureTest.cpp : \
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
+	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
+	"..\include\CppUTest\SimpleString.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	"..\include\CppUTest\TestFailure.h"\
+	"..\include\CppUTest\TestHarness.h"\
+	"..\include\CppUTest\TestPlugin.h"\
+	"..\include\CppUTest\TestResult.h"\
+	"..\include\CppUTest\Utest.h"\
+	"..\include\CppUTest\UtestMacros.h"\
+	"..\include\CppUTestExt\MockCheckedExpectedCall.h"\
+	"..\include\cpputestext\mockexpectedcall.h"\
+	"..\include\CppUTestExt\MockExpectedCallsList.h"\
+	"..\include\CppUTestExt\MockFailure.h"\
+	"..\include\CppUTestExt\MockNamedValue.h"\
+	"..\include\platforms\visualcpp\stdint.h"\
+	".\CppUTestExt\MockFailureTest.h"\
+	
+
+.\CppUTestExt\MockPluginTest.cpp : \
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
+	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
+	"..\include\CppUTest\SimpleString.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	"..\include\CppUTest\TestFailure.h"\
+	"..\include\CppUTest\TestHarness.h"\
+	"..\include\CppUTest\TestOutput.h"\
+	"..\include\CppUTest\TestPlugin.h"\
+	"..\include\CppUTest\TestResult.h"\
+	"..\include\CppUTest\Utest.h"\
+	"..\include\CppUTest\UtestMacros.h"\
+	"..\include\cpputestext\mockactualcall.h"\
+	"..\include\CppUTestExt\MockCheckedActualCall.h"\
+	"..\include\CppUTestExt\MockCheckedExpectedCall.h"\
+	"..\include\cpputestext\mockexpectedcall.h"\
+	"..\include\CppUTestExt\MockExpectedCallsList.h"\
+	"..\include\CppUTestExt\MockFailure.h"\
+	"..\include\CppUTestExt\MockNamedValue.h"\
+	"..\include\CppUTestExt\MockSupport.h"\
+	"..\include\CppUTestExt\MockSupportPlugin.h"\
+	"..\include\platforms\visualcpp\stdint.h"\
+	".\CppUTestExt\MockFailureTest.h"\
+	
+
+.\CppUTestExt\MockSupport_cTest.cpp : \
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
+	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
+	"..\include\CppUTest\SimpleString.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	"..\include\CppUTest\TestFailure.h"\
+	"..\include\CppUTest\TestFilter.h"\
+	"..\include\CppUTest\TestHarness.h"\
+	"..\include\CppUTest\TestHarness_c.h"\
+	"..\include\CppUTest\TestOutput.h"\
+	"..\include\CppUTest\TestPlugin.h"\
+	"..\include\CppUTest\TestRegistry.h"\
+	"..\include\CppUTest\TestResult.h"\
+	"..\include\CppUTest\TestTestingFixture.h"\
+	"..\include\CppUTest\Utest.h"\
+	"..\include\CppUTest\UtestMacros.h"\
+	"..\include\CppUTestExt\MockSupport_c.h"\
+	"..\include\platforms\visualcpp\stdint.h"\
+	".\CppUTestExt\MockSupport_cTestCFile.h"\
+	
+
+.\CppUTestExt\MockSupport_cTestCFile.c : \
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	"..\include\CppUTestExt\MockSupport_c.h"\
+	".\CppUTestExt\MockSupport_cTestCFile.h"\
+	
+
+.\CppUTestExt\MockSupportTest.cpp : \
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
+	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
+	"..\include\CppUTest\SimpleString.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	"..\include\CppUTest\TestFailure.h"\
+	"..\include\CppUTest\TestHarness.h"\
+	"..\include\CppUTest\TestPlugin.h"\
+	"..\include\CppUTest\TestResult.h"\
+	"..\include\CppUTest\Utest.h"\
+	"..\include\CppUTest\UtestMacros.h"\
+	"..\include\cpputestext\mockactualcall.h"\
+	"..\include\CppUTestExt\MockCheckedActualCall.h"\
+	"..\include\CppUTestExt\MockCheckedExpectedCall.h"\
+	"..\include\cpputestext\mockexpectedcall.h"\
+	"..\include\CppUTestExt\MockExpectedCallsList.h"\
+	"..\include\CppUTestExt\MockFailure.h"\
+	"..\include\CppUTestExt\MockNamedValue.h"\
+	"..\include\CppUTestExt\MockSupport.h"\
+	"..\include\platforms\visualcpp\stdint.h"\
+	".\CppUTestExt\MockFailureTest.h"\
+	
+
+.\CppUTestExt\OrderedTestTest.cpp : \
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
+	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
+	"..\include\CppUTest\SimpleString.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	"..\include\CppUTest\TestFailure.h"\
+	"..\include\CppUTest\TestFilter.h"\
+	"..\include\CppUTest\TestHarness.h"\
+	"..\include\CppUTest\TestOutput.h"\
+	"..\include\CppUTest\TestPlugin.h"\
+	"..\include\CppUTest\TestRegistry.h"\
+	"..\include\CppUTest\TestResult.h"\
+	"..\include\CppUTest\TestTestingFixture.h"\
+	"..\include\CppUTest\Utest.h"\
+	"..\include\CppUTest\UtestMacros.h"\
+	"..\include\CppUTestExt\OrderedTest.h"\
+	"..\include\platforms\visualcpp\stdint.h"\
+	
+
+.\PluginTest.cpp : \
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
+	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
+	"..\include\CppUTest\SimpleString.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	"..\include\CppUTest\TestFailure.h"\
+	"..\include\CppUTest\TestFilter.h"\
+	"..\include\CppUTest\TestHarness.h"\
+	"..\include\CppUTest\TestOutput.h"\
+	"..\include\CppUTest\TestPlugin.h"\
+	"..\include\CppUTest\TestRegistry.h"\
+	"..\include\CppUTest\TestResult.h"\
+	"..\include\CppUTest\TestTestingFixture.h"\
+	"..\include\CppUTest\Utest.h"\
+	"..\include\CppUTest\UtestMacros.h"\
+	"..\include\platforms\visualcpp\stdint.h"\
+	
+
+.\PreprocessorTest.cpp : \
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
+	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
+	"..\include\CppUTest\SimpleString.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	"..\include\CppUTest\TestFailure.h"\
+	"..\include\CppUTest\TestHarness.h"\
+	"..\include\CppUTest\TestPlugin.h"\
+	"..\include\CppUTest\TestResult.h"\
+	"..\include\CppUTest\Utest.h"\
+	"..\include\CppUTest\UtestMacros.h"\
+	"..\include\platforms\visualcpp\stdint.h"\
+	
+
+.\SetPluginTest.cpp : \
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
+	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
+	"..\include\CppUTest\SimpleString.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	"..\include\CppUTest\TestFailure.h"\
+	"..\include\CppUTest\TestFilter.h"\
+	"..\include\CppUTest\TestHarness.h"\
+	"..\include\CppUTest\TestOutput.h"\
+	"..\include\CppUTest\TestPlugin.h"\
+	"..\include\CppUTest\TestRegistry.h"\
+	"..\include\CppUTest\TestResult.h"\
+	"..\include\CppUTest\Utest.h"\
+	"..\include\CppUTest\UtestMacros.h"\
+	"..\include\platforms\visualcpp\stdint.h"\
+	
+
+.\SimpleStringTest.cpp : \
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
+	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
+	"..\include\CppUTest\PlatformSpecificFunctions.h"\
+	"..\include\CppUTest\PlatformSpecificFunctions_c.h"\
+	"..\include\CppUTest\SimpleString.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	"..\include\CppUTest\TestFailure.h"\
+	"..\include\CppUTest\TestHarness.h"\
+	"..\include\CppUTest\TestMemoryAllocator.h"\
+	"..\include\CppUTest\TestOutput.h"\
+	"..\include\CppUTest\TestPlugin.h"\
+	"..\include\CppUTest\TestResult.h"\
+	"..\include\CppUTest\Utest.h"\
+	"..\include\CppUTest\UtestMacros.h"\
+	"..\include\platforms\visualcpp\stdint.h"\
+	
+
+.\TestFailureTest.cpp : \
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
+	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
+	"..\include\CppUTest\SimpleString.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	"..\include\CppUTest\TestFailure.h"\
+	"..\include\CppUTest\TestHarness.h"\
+	"..\include\CppUTest\TestOutput.h"\
+	"..\include\CppUTest\TestPlugin.h"\
+	"..\include\CppUTest\TestResult.h"\
+	"..\include\CppUTest\Utest.h"\
+	"..\include\CppUTest\UtestMacros.h"\
+	"..\include\platforms\visualcpp\stdint.h"\
+	
+
+.\TestFilterTest.cpp : \
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
+	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
+	"..\include\CppUTest\SimpleString.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	"..\include\CppUTest\TestFailure.h"\
+	"..\include\CppUTest\TestFilter.h"\
+	"..\include\CppUTest\TestHarness.h"\
+	"..\include\CppUTest\TestPlugin.h"\
+	"..\include\CppUTest\TestResult.h"\
+	"..\include\CppUTest\Utest.h"\
+	"..\include\CppUTest\UtestMacros.h"\
+	"..\include\platforms\visualcpp\stdint.h"\
+	
+
+.\TestHarness_cTest.cpp : \
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
+	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
+	"..\include\CppUTest\PlatformSpecificFunctions.h"\
+	"..\include\CppUTest\PlatformSpecificFunctions_c.h"\
+	"..\include\CppUTest\SimpleString.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	"..\include\CppUTest\TestFailure.h"\
+	"..\include\CppUTest\TestFilter.h"\
+	"..\include\CppUTest\TestHarness.h"\
+	"..\include\CppUTest\TestHarness_c.h"\
+	"..\include\CppUTest\TestOutput.h"\
+	"..\include\CppUTest\TestPlugin.h"\
+	"..\include\CppUTest\TestRegistry.h"\
+	"..\include\CppUTest\TestResult.h"\
+	"..\include\CppUTest\TestTestingFixture.h"\
+	"..\include\CppUTest\Utest.h"\
+	"..\include\CppUTest\UtestMacros.h"\
+	"..\include\platforms\visualcpp\stdint.h"\
+	
+
+.\TestHarness_cTestCFile.c : \
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\PlatformSpecificFunctions_c.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	"..\include\CppUTest\TestHarness_c.h"\
+	
+
+.\TestInstallerTest.cpp : \
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
+	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
+	"..\include\CppUTest\SimpleString.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	"..\include\CppUTest\TestFailure.h"\
+	"..\include\CppUTest\TestFilter.h"\
+	"..\include\CppUTest\TestHarness.h"\
+	"..\include\CppUTest\TestPlugin.h"\
+	"..\include\CppUTest\TestRegistry.h"\
+	"..\include\CppUTest\TestResult.h"\
+	"..\include\CppUTest\Utest.h"\
+	"..\include\CppUTest\UtestMacros.h"\
+	"..\include\platforms\visualcpp\stdint.h"\
+	
+
+.\TestMemoryAllocatorTest.cpp : \
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
+	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
+	"..\include\CppUTest\PlatformSpecificFunctions.h"\
+	"..\include\CppUTest\PlatformSpecificFunctions_c.h"\
+	"..\include\CppUTest\SimpleString.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	"..\include\CppUTest\TestFailure.h"\
+	"..\include\CppUTest\TestHarness.h"\
+	"..\include\CppUTest\TestMemoryAllocator.h"\
+	"..\include\CppUTest\TestOutput.h"\
+	"..\include\CppUTest\TestPlugin.h"\
+	"..\include\CppUTest\TestResult.h"\
+	"..\include\CppUTest\Utest.h"\
+	"..\include\CppUTest\UtestMacros.h"\
+	"..\include\platforms\visualcpp\stdint.h"\
+	
+
+.\TestOutputTest.cpp : \
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
+	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
+	"..\include\CppUTest\PlatformSpecificFunctions.h"\
+	"..\include\CppUTest\PlatformSpecificFunctions_c.h"\
+	"..\include\CppUTest\SimpleString.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	"..\include\CppUTest\TestFailure.h"\
+	"..\include\CppUTest\TestHarness.h"\
+	"..\include\CppUTest\TestOutput.h"\
+	"..\include\CppUTest\TestPlugin.h"\
+	"..\include\CppUTest\TestResult.h"\
+	"..\include\CppUTest\Utest.h"\
+	"..\include\CppUTest\UtestMacros.h"\
+	"..\include\platforms\visualcpp\stdint.h"\
+	
+
+.\TestRegistryTest.cpp : \
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
+	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
+	"..\include\CppUTest\SimpleString.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	"..\include\CppUTest\TestFailure.h"\
+	"..\include\CppUTest\TestFilter.h"\
+	"..\include\CppUTest\TestHarness.h"\
+	"..\include\CppUTest\TestOutput.h"\
+	"..\include\CppUTest\TestPlugin.h"\
+	"..\include\CppUTest\TestRegistry.h"\
+	"..\include\CppUTest\TestResult.h"\
+	"..\include\CppUTest\Utest.h"\
+	"..\include\CppUTest\UtestMacros.h"\
+	"..\include\platforms\visualcpp\stdint.h"\
+	
+
+.\TestResultTest.cpp : \
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
+	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
+	"..\include\CppUTest\PlatformSpecificFunctions.h"\
+	"..\include\CppUTest\PlatformSpecificFunctions_c.h"\
+	"..\include\CppUTest\SimpleString.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	"..\include\CppUTest\TestFailure.h"\
+	"..\include\CppUTest\TestHarness.h"\
+	"..\include\CppUTest\TestOutput.h"\
+	"..\include\CppUTest\TestPlugin.h"\
+	"..\include\CppUTest\TestResult.h"\
+	"..\include\CppUTest\Utest.h"\
+	"..\include\CppUTest\UtestMacros.h"\
+	"..\include\platforms\visualcpp\stdint.h"\
+	
+
+.\UtestTest.cpp : \
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\
+	"..\include\CppUTest\MemoryLeakWarningPlugin.h"\
+	"..\include\CppUTest\PlatformSpecificFunctions.h"\
+	"..\include\CppUTest\PlatformSpecificFunctions_c.h"\
+	"..\include\CppUTest\SimpleString.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	"..\include\CppUTest\TestFailure.h"\
+	"..\include\CppUTest\TestFilter.h"\
+	"..\include\CppUTest\TestHarness.h"\
+	"..\include\CppUTest\TestOutput.h"\
+	"..\include\CppUTest\TestPlugin.h"\
+	"..\include\CppUTest\TestRegistry.h"\
+	"..\include\CppUTest\TestResult.h"\
+	"..\include\CppUTest\TestTestingFixture.h"\
+	"..\include\CppUTest\Utest.h"\
+	"..\include\CppUTest\UtestMacros.h"\
+	"..\include\platforms\visualcpp\stdint.h"\
+	

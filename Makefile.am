@@ -158,7 +158,8 @@ CppUTestTests_SOURCES = \
 	tests/TestRegistryTest.cpp \
 	tests/TestResultTest.cpp \
 	tests/TestUTestMacro.cpp \
-	tests/UtestTest.cpp
+	tests/UtestTest.cpp \
+	tests/UtestPlatformTest.cpp
 
 CppUTestExtTests_CPPFLAGS = $(lib_libCppUTestExt_a_CPPFLAGS)
 CppUTestExtTests_CFLAGS = $(lib_libCppUTestExt_a_CFLAGS)
@@ -199,8 +200,8 @@ if INCLUDE_GMOCKTESTS
 	tests/CppUTestExt/AllTests.cpp 
 endif
 
-RUN_CPPUTEST_TESTS = ./$(CPPUTEST_TESTS) -r
-RUN_CPPUTESTEXT_TESTS = ./$(CPPUTESTEXT_TESTS) -r
+RUN_CPPUTEST_TESTS = ./$(CPPUTEST_TESTS)
+RUN_CPPUTESTEXT_TESTS = ./$(CPPUTESTEXT_TESTS)
 
 valgrind: check
 	@if test "x$(CPPUTEST_HAS_VALGRIND)" = xno; then echo "Running the valgrind target without having valgrind. Perhaps install it first?"; exit 1; fi
@@ -304,9 +305,9 @@ check_special_situations:
 check_coverage:
 	@echo "Compile with coverage (switch to clang for Mac OSX)"
 	if test "x$(CPPUTEST_HAS_CLANG)" = xyes && test "x$(CPPUTEST_ON_MACOSX)" = xyes; then \
-	   echo "Compiling with clang"; make distclean; $(srcdir)/configure CC="clang" CXX="clang++" --enable-coverage; \
+	   echo "Compiling with clang"; make distclean; $(srcdir)/configure CC="clang" CXX="clang++" --enable-coverage CFLAGS="-O0" CXXFLAGS="-O0"; \
 	else \
-		make distclean; $(srcdir)/configure -enable-coverage;  \
+		make distclean; $(srcdir)/configure -enable-coverage CFLAGS="-O0" CXXFLAGS="-O0";  \
 	fi
 	
 	make check
@@ -332,7 +333,10 @@ check_examples:
 
 check_all: check_basic check_special_situations check_coverage check_examples check_gtest
 	@echo "Last... one normal build and test"
-	make distclean; $(srcdir)/configure; make check; $(RUN_CPPUTEST_TESTS); $(RUN_CPPUTESTEXT_TESTS)
-	
-	
+	make distclean; $(srcdir)/configure; make check; 
+	@echo "Check running tests repeatedly"
+	$(RUN_CPPUTEST_TESTS) - r; $(RUN_CPPUTESTEXT_TESTS) -r
+	@echo "Check running tests in separate process (CppUTestExtTests TEST_GROUP(TestOrderedTestMacro) would have to fail)"
+	$(RUN_CPPUTEST_TESTS) -p;
+
 

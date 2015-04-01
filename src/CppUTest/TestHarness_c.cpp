@@ -58,12 +58,12 @@ void CHECK_EQUAL_C_STRING_LOCATION(const char* expected, const char* actual, con
 void FAIL_TEXT_C_LOCATION(const char* text, const char* fileName, int lineNumber)
 {
     UtestShell::getCurrent()->fail(text,  fileName, lineNumber, TestTerminatorWithoutExceptions());
-}
+} // LCOV_EXCL_LINE
 
 void FAIL_C_LOCATION(const char* fileName, int lineNumber)
 {
     UtestShell::getCurrent()->fail("",  fileName, lineNumber, TestTerminatorWithoutExceptions());
-}
+} // LCOV_EXCL_LINE
 
 void CHECK_C_LOCATION(int condition, const char* conditionString, const char* fileName, int lineNumber)
 {

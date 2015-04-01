@@ -262,7 +262,7 @@ void MockCheckedActualCall::checkExpectations()
     if (state_ != CALL_IN_PROGESS) return;
 
     if (! unfulfilledExpectations_.hasUnfullfilledExpectations())
-        FAIL("Actual call is in progress. Checking expectations. But no unfulfilled expectations. Cannot happen.")
+        FAIL("Actual call is in progress. Checking expectations. But no unfulfilled expectations. Cannot happen.") // LCOV_EXCL_LINE
 
     fulfilledExpectation_ = unfulfilledExpectations_.removeOneFulfilledExpectationWithIgnoredParameters();
     if (fulfilledExpectation_) {
@@ -278,21 +278,6 @@ void MockCheckedActualCall::checkExpectations()
         MockExpectedObjectDidntHappenFailure failure(getTest(), getName(), allExpectations_);
         failTest(failure);
     }
-}
-
-const char* MockCheckedActualCall::stringFromState(ActualCallState state)
-{
-    switch (state) {
-    case CALL_IN_PROGESS: return "In progress";
-    case CALL_FAILED: return "Failed";
-    case CALL_SUCCEED: return "Succeed";
-#ifndef __clang__
-    default: ;
-#endif
-    }
-#ifndef __clang__
-    return "No valid state info";
-#endif
 }
 
 void MockCheckedActualCall::setState(ActualCallState state)
@@ -450,15 +435,11 @@ void MockCheckedActualCall::addOutputParameter(const SimpleString& name, void* p
 void MockCheckedActualCall::cleanUpOutputParameterList()
 {
     MockOutputParametersListNode* current = outputParameterExpectations_;
-    MockOutputParametersListNode* previous = NULL;
     MockOutputParametersListNode* toBeDeleted = NULL;
 
     while (current) {
         toBeDeleted = current;
-        if (previous == NULL)
-            outputParameterExpectations_ = current = current->next_;
-        else
-            current = previous->next_ = current->next_;
+        outputParameterExpectations_ = current = current->next_;
         delete toBeDeleted->name_;
         delete toBeDeleted;
     }
@@ -475,14 +456,14 @@ MockActualCallTrace::~MockActualCallTrace()
 
 MockActualCall& MockActualCallTrace::withName(const SimpleString& name)
 {
-    traceBuffer_ += "\nFunction name: ";
+    traceBuffer_ += "\nFunction name:";
     traceBuffer_ += name;
     return *this;
 }
 
 MockActualCall& MockActualCallTrace::withCallOrder(int callOrder)
 {
-    traceBuffer_ += "\nwithCallOrder: ";
+    traceBuffer_ += " withCallOrder:";
     traceBuffer_ += StringFrom(callOrder);
     return *this;
 }
@@ -658,6 +639,7 @@ unsigned int MockActualCallTrace::returnUnsignedIntValueOrDefault(unsigned int)
 
 MockActualCall& MockActualCallTrace::onObject(void* objectPtr)
 {
+    traceBuffer_ += " onObject:";
     traceBuffer_ += StringFrom(objectPtr);
     return *this;
 }

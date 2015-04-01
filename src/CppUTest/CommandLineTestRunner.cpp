@@ -125,18 +125,3 @@ bool CommandLineTestRunner::parseArguments(TestPlugin* plugin)
         return false;
     }
 }
-
-bool CommandLineTestRunner::isVerbose()
-{
-    return arguments_->isVerbose();
-}
-
-bool CommandLineTestRunner::isColor()
-{
-    return arguments_->isColor();
-}
-
-int CommandLineTestRunner::getRepeatCount()
-{
-    return arguments_->getRepeatCount();
-}

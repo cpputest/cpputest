@@ -7,6 +7,9 @@
 # Windows files
 *.sln text eol=crlf
 *.bat text eol=crlf
+*.dsp text eol=crlf
 *.dsw text eol=crlf
+*.dep text eol=crlf
+*.mak text eol=crlf
 *.vcproj text eol=crlf
 *.vcxproj text eol=crlf

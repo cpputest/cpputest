@@ -26,6 +26,7 @@
  */
 
 #include "CppUTest/TestHarness.h"
+#include "CppUTest/TestTestingFixture.h"
 #include "CppUTestExt/MockSupport.h"
 #include "CppUTestExt/MockExpectedCall.h"
 #include "CppUTestExt/MockFailure.h"
@@ -216,7 +217,7 @@ TEST(MockSupportTest, strictOrderViolatedWithinAScope)
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 
-TEST(MockSupportTest, strictOrderNotViolatedWithTwoMocks)
+TEST(MockSupportTest, strictOrderNotViolatedAcrossScopes)
 {
     mock("mock1").strictOrder();
     mock("mock2").strictOrder();
@@ -231,9 +232,8 @@ TEST(MockSupportTest, strictOrderNotViolatedWithTwoMocks)
     CHECK_NO_MOCK_FAILURE();
 }
 
-IGNORE_TEST(MockSupportTest, strictOrderViolatedWithTwoMocks)
+TEST(MockSupportTest, strictOrderViolatedAcrossScopes)
 {
-    //this test and scenario needs a decent failure message.
     mock("mock1").strictOrder();
     mock("mock2").strictOrder();
     mock("mock1").expectOneCall("foo1");
@@ -837,7 +837,7 @@ TEST(MockSupportTest, outputParameterTraced)
     int param = 1;
     mock().actualCall("someFunc").withOutputParameter("someParameter", &param);
     mock().checkExpectations();
-    STRCMP_CONTAINS("Function name: someFunc someParameter:", mock().getTraceOutput());
+    STRCMP_CONTAINS("Function name:someFunc someParameter:", mock().getTraceOutput());
 }
 
 TEST(MockSupportTest, outputParameterWithIgnoredParameters)
@@ -871,6 +871,18 @@ TEST(MockSupportTest, customObjectWithFunctionComparator)
     mock().checkExpectations();
     CHECK_NO_MOCK_FAILURE();
     mock().removeAllComparators();
+}
+
+TEST(MockSupportTest, customObjectWithFunctionComparatorThatFailsCoversValueToString)
+{
+    MyTypeForTesting object(5);
+    MockFunctionComparator comparator(myTypeIsEqual, myTypeValueToString);
+    mock().installComparator("MyTypeForTesting", comparator);
+    addFunctionToExpectationsList("function")->withParameterOfType("MyTypeForTesting", "parameterName", &object);
+    MockExpectedCallsDidntHappenFailure failure(UtestShell::getCurrent(), *expectationsList);
+    mock().expectOneCall("function").withParameterOfType("MyTypeForTesting", "parameterName", &object);
+    mock().checkExpectations();
+    CHECK_EXPECTED_MOCK_FAILURE_LOCATION(failure, __FILE__, __LINE__);
 }
 
 TEST(MockSupportTest, disableEnable)
@@ -1040,6 +1052,21 @@ TEST(MockSupportTest, ignoreOtherCallsWorksHierarchicallyWhenDynamicallyCreated)
 {
     mock().ignoreOtherCalls();
     mock("first").actualCall("boo");
+    CHECK_NO_MOCK_FAILURE();
+}
+
+TEST(MockSupportTest, ignoreOtherCallsIgnoresWithAllKindsOfParameters)
+{
+     mock().ignoreOtherCalls();
+     mock().actualCall("boo")
+           .withParameter("bar", 1u)
+           .withParameter("foo", 1l)
+           .withParameter("hey", 1ul)
+           .withParameter("duh", 1.0f)
+           .withParameter("yoo", (const void*) 0)
+           .withParameterOfType("hoo", "int", (const void*) 0)
+           .withOutputParameter("gah", (void*) 0)
+           ;
     CHECK_NO_MOCK_FAILURE();
 }
 
@@ -1659,6 +1686,11 @@ TEST(MockSupportTest, shouldSupportConstParameters)
     mock().checkExpectations();
 }
 
+TEST(MockSupportTest, shouldReturnDefaultWhenThereIsntAnythingToReturn)
+{
+    CHECK(mock().returnValue().equals(MockNamedValue("")));
+}
+
 IGNORE_TEST(MockSupportTest, testForPerformanceProfiling)
 {
     /* TO fix! */
@@ -1668,3 +1700,30 @@ IGNORE_TEST(MockSupportTest, testForPerformanceProfiling)
     }
 
 }
+
+TEST_GROUP(MockSupportCrashTest)
+{
+    TestTestingFixture fixture;
+};
+
+#if !defined(__MINGW32__) && !defined(_MSC_VER)
+
+static void _crashOnFailureTestFunction(void)
+{
+    mock().actualCall("unexpected");
+}
+
+TEST(MockSupportCrashTest, shouldCrashOnFailure)
+{
+    mock().crashOnFailure();
+    fixture.registry_->setRunTestsInSeperateProcess();
+    fixture.setTestFunction(_crashOnFailureTestFunction);
+    fixture.runAllTests();
+    fixture.assertPrintContains("Failed in separate process - killed by signal 11");
+}
+
+#else
+
+IGNORE_TEST(MockSupportCrashTest, shouldCrashOnFailure) {}
+
+#endif

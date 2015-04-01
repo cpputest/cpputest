@@ -180,10 +180,11 @@ MockNamedValue MockCheckedExpectedCall::getOutputParameter(const SimpleString& n
 
 bool MockCheckedExpectedCall::areParametersFulfilled()
 {
-    for (MockNamedValueListNode* p = inputParameters_->begin(); p; p = p->next())
+    MockNamedValueListNode* p;
+    for (p = inputParameters_->begin(); p; p = p->next())
         if (! item(p)->isFulfilled())
             return false;
-    for (MockNamedValueListNode* p = outputParameters_->begin(); p; p = p->next())
+    for (p = outputParameters_->begin(); p; p = p->next())
         if (! item(p)->isFulfilled())
             return false;
     return true;
@@ -239,9 +240,11 @@ void MockCheckedExpectedCall::resetExpectation()
 {
     callOrder_ = NOT_CALLED_YET;
     wasPassedToObject_ = (objectPtr_ == NULL);
-    for (MockNamedValueListNode* p = inputParameters_->begin(); p; p = p->next())
+    MockNamedValueListNode* p;
+
+    for (p = inputParameters_->begin(); p; p = p->next())
         item(p)->setFulfilled(false);
-    for (MockNamedValueListNode* p = outputParameters_->begin(); p; p = p->next())
+    for (p = outputParameters_->begin(); p; p = p->next())
         item(p)->setFulfilled(false);
 }
 
@@ -296,12 +299,14 @@ SimpleString MockCheckedExpectedCall::callToString()
         return str;
     }
 
-    for (MockNamedValueListNode* p = inputParameters_->begin(); p; p = p->next()) {
+	MockNamedValueListNode* p;
+
+    for (p = inputParameters_->begin(); p; p = p->next()) {
         str += StringFromFormat("%s %s: <%s>", p->getType().asCharString(), p->getName().asCharString(), getInputParameterValueString(p->getName()).asCharString());
         if (p->next()) str += ", ";
     }
 
-    for (MockNamedValueListNode* p = outputParameters_->begin(); p; p = p->next()) {
+    for (p = outputParameters_->begin(); p; p = p->next()) {
         str += StringFromFormat("%s %s: <output>", p->getType().asCharString(), p->getName().asCharString());
         if (p->next()) str += ", ";
     }
@@ -314,13 +319,15 @@ SimpleString MockCheckedExpectedCall::callToString()
 SimpleString MockCheckedExpectedCall::missingParametersToString()
 {
     SimpleString str;
-    for (MockNamedValueListNode* p = inputParameters_->begin(); p; p = p->next()) {
+	MockNamedValueListNode* p;
+
+    for (p = inputParameters_->begin(); p; p = p->next()) {
         if (! item(p)->isFulfilled()) {
             if (str != "") str += ", ";
             str += StringFromFormat("%s %s", p->getType().asCharString(), p->getName().asCharString());
         }
     }
-    for (MockNamedValueListNode* p = outputParameters_->begin(); p; p = p->next()) {
+    for (p = outputParameters_->begin(); p; p = p->next()) {
         if (! item(p)->isFulfilled()) {
             if (str != "") str += ", ";
             str += StringFromFormat("%s %s", p->getType().asCharString(), p->getName().asCharString());
@@ -422,11 +429,6 @@ MockExpectedCall& MockCheckedExpectedCall::onObject(void* objectPtr)
     return *this;
 }
 
-bool MockCheckedExpectedCall::hasReturnValue()
-{
-    return !returnValue_.getName().isEmpty();
-}
-
 MockNamedValue MockCheckedExpectedCall::returnValue()
 {
     return returnValue_;
@@ -489,7 +491,7 @@ MockExpectedCall& MockExpectedCallComposite::withName(const SimpleString& name)
 MockExpectedCall& MockExpectedCallComposite::withCallOrder(int)
 {
     FAIL("withCallOrder not supported for CompositeCalls");
-    return *this;
+    return *this; // LCOV_EXCL_LINE
 }
 
 MockExpectedCall& MockExpectedCallComposite::withUnsignedIntParameter(const SimpleString& name, unsigned int value)
@@ -624,11 +626,6 @@ MockExpectedCall& MockExpectedCallComposite::andReturnValue(const void* value)
     for (MockExpectedCallCompositeNode* node = head_; node != NULL; node = node->next_)
         node->call_.andReturnValue(value);
     return *this;
-}
-
-bool MockExpectedCallComposite::hasReturnValue()
-{
-    return head_->call_.hasReturnValue();
 }
 
 MockExpectedCall& MockExpectedCallComposite::onObject(void* object)

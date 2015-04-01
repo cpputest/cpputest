@@ -56,7 +56,6 @@ void TestRegistry::runAllTests(TestResult& result)
             groupStart = false;
         }
 
-        result.setProgressIndicator(test->getProgressIndicator());
         result.countTest();
         if (testShouldRun(test, result)) {
             result.currentTestStarted(test);
@@ -170,14 +169,6 @@ int TestRegistry::countPlugins()
 UtestShell* TestRegistry::getFirstTest()
 {
     return tests_;
-}
-
-UtestShell* TestRegistry::getLastTest()
-{
-    UtestShell* current = tests_;
-    while (current->getNext())
-        current = current->getNext();
-    return current;
 }
 
 UtestShell* TestRegistry::getTestWithNext(UtestShell* test)

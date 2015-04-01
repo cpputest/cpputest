@@ -56,7 +56,7 @@
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeaderOutputFile>.\Release/AllTests.pch</PrecompiledHeaderOutputFile>
       <AssemblerListingLocation>.\Release/</AssemblerListingLocation>
@@ -144,6 +144,8 @@
   <ItemGroup>
     <ClCompile Include="AllocationInCFile.c" />
     <ClCompile Include="AllocationInCppFile.cpp" />
+    <ClCompile Include="AllocLetTestFree.c" />
+    <ClCompile Include="AllocLetTestFreeTest.cpp" />
     <ClCompile Include="CheatSheetTest.cpp" />
     <ClCompile Include="CommandLineArgumentsTest.cpp" />
     <ClCompile Include="CommandLineTestRunnerTest.cpp" />
@@ -151,6 +153,7 @@
     <ClCompile Include="CppUTestExt\CodeMemoryReportFormatterTest.cpp" />
     <ClCompile Include="CppUTestExt\GMockTest.cpp" />
     <ClCompile Include="CppUTestExt\GTest1Test.cpp" />
+    <ClCompile Include="CppUTestExt\GTest2ConvertorTest.cpp" />
     <ClCompile Include="CppUTestExt\MemoryReportAllocatorTest.cpp" />
     <ClCompile Include="CppUTestExt\MemoryReporterPluginTest.cpp" />
     <ClCompile Include="CppUTestExt\MemoryReportFormatterTest.cpp" />
@@ -173,6 +176,7 @@
     <ClCompile Include="SetPluginTest.cpp" />
     <ClCompile Include="SimpleMutexTest.cpp" />
     <ClCompile Include="SimpleStringTest.cpp" />
+    <ClCompile Include="TestFailureNaNTest.cpp" />
     <ClCompile Include="TestFailureTest.cpp" />
     <ClCompile Include="TestFilterTest.cpp" />
     <ClCompile Include="TestHarness_cTest.cpp" />
@@ -182,11 +186,14 @@
     <ClCompile Include="TestOutputTest.cpp" />
     <ClCompile Include="TestRegistryTest.cpp" />
     <ClCompile Include="TestResultTest.cpp" />
+    <ClCompile Include="TestUTestMacro.cpp" />
+    <ClCompile Include="UtestPlatformTest.cpp" />
     <ClCompile Include="UtestTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AllocationInCFile.h" />
     <ClInclude Include="AllocationInCppFile.h" />
+    <ClInclude Include="AllocLetTestFree.h" />
     <ClInclude Include="AllTests.h" />
     <ClInclude Include="CppUTestExt\MockFailureTest.h" />
     <ClInclude Include="CppUTestExt\MockSupport_cTestCFile.h" />

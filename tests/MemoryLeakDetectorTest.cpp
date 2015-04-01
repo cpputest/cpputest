@@ -366,6 +366,16 @@ TEST(MemoryLeakDetectorTest, OneRealloc)
     LONGS_EQUAL(2, testAllocator->freeMemoryLeakNodeCalled);
 }
 
+TEST(MemoryLeakDetectorTest, ReallocNonAllocatedMemory)
+{
+    char mem1;
+    char* mem2 = detector->reallocMemory(testAllocator, &mem1, 5, "other.cpp", 13, true);
+    detector->deallocMemory(testAllocator, mem2, true);
+    detector->stopChecking();
+    CHECK(reporter->message->contains("Deallocating non-allocated memory\n"));
+    CHECK(reporter->message->contains("   deallocated at file: other.cpp line: 13"));
+}
+
 TEST(MemoryLeakDetectorTest, AllocOneTypeFreeAnotherType)
 {
     char* mem = detector->allocMemory(defaultNewArrayAllocator(), 100, "ALLOC.c", 10);
@@ -487,6 +497,25 @@ TEST(MemoryLeakDetectorTest, invalidateMemory)
 TEST(MemoryLeakDetectorTest, invalidateMemoryNULLShouldWork)
 {
   detector->invalidateMemory(NULL);
+}
+
+TEST_GROUP(MemoryLeakDetectorListTest)
+{
+};
+
+TEST(MemoryLeakDetectorListTest, clearAllAccountingIsWorkingProperly)
+{
+    MemoryLeakDetectorList listForTesting;
+    MemoryLeakDetectorNode node1, node2, node3;
+    node3.period_ = mem_leak_period_disabled;
+    listForTesting.addNewNode(&node1);
+    listForTesting.addNewNode(&node2);
+    listForTesting.addNewNode(&node3);
+
+    listForTesting.clearAllAccounting(mem_leak_period_enabled);
+
+    CHECK(NULL == listForTesting.getFirstLeak(mem_leak_period_enabled));
+    CHECK(&node3 == listForTesting.getFirstLeak(mem_leak_period_disabled));
 }
 
 TEST_GROUP(SimpleStringBuffer)

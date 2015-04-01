@@ -54,18 +54,17 @@ public:
     virtual ~CommandLineTestRunner();
     int runAllTestsMain();
 
-private:
+protected:
     TestOutput* output_;
     JUnitTestOutput* jUnitOutput_;
+
+private:
     CommandLineArguments* arguments_;
     TestRegistry* registry_;
 
     bool parseArguments(TestPlugin*);
     int runAllTests();
     void initializeTestRun();
-    bool isVerbose();
-    bool isColor();
-    int getRepeatCount();
 };
 
 #endif

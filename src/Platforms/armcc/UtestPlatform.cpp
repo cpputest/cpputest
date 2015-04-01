@@ -201,8 +201,8 @@ static void DummyMutexDestroy(PlatformSpecificMutex mtx)
     FAIL("PlatformSpecificMutexDestroy is not implemented");
 }
 
-PlatformSpecificMutex (*PlatformSpecificMutexCreate)(void) = DummyMutexCreate;
-void (*PlatformSpecificMutexLock)(PlatformSpecificMutex) = DummyMutexLock;
-void (*PlatformSpecificMutexUnlock)(PlatformSpecificMutex) = DummyMutexUnlock;
-void (*PlatformSpecificMutexDestroy)(PlatformSpecificMutex) = DummyMutexDestroy;
+extern "C" PlatformSpecificMutex (*PlatformSpecificMutexCreate)(void) = DummyMutexCreate;
+extern "C" void (*PlatformSpecificMutexLock)(PlatformSpecificMutex) = DummyMutexLock;
+extern "C" void (*PlatformSpecificMutexUnlock)(PlatformSpecificMutex) = DummyMutexUnlock;
+extern "C" void (*PlatformSpecificMutexDestroy)(PlatformSpecificMutex) = DummyMutexDestroy;
 

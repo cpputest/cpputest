@@ -41,6 +41,7 @@
 #include <math.h>
 #include <ctype.h>
 #include <unistd.h>
+#include <signal.h>
 #ifndef __MINGW32__
 #include <sys/wait.h>
 #endif
@@ -51,35 +52,81 @@
 static jmp_buf test_exit_jmp_buf[10];
 static int jmp_buf_index = 0;
 
-void PlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
-{
 #ifdef __MINGW32__
-   printf("-p doesn't work on MinGW as it is lacking fork. Running inside the process\b");
-   shell->runOneTest(plugin, *result);
+
+static void GccNoPThreadPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin*, TestResult* result)
+{
+    result->addFailure(TestFailure(shell, "-p doesn't work on MinGW as it is lacking fork.\b"));
+}
+
+void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell* shell, TestPlugin* plugin, TestResult* result) =
+        GccNoPThreadPlatformSpecificRunTestInASeperateProcess;
+
 #else
 
-   int info;
-   pid_t pid = fork();
+static void GccCygwinPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
+{
+    pid_t cpid, w;
+    int status;
 
-   if (pid) {
-       wait(&info);
-       if (WIFEXITED(info) && WEXITSTATUS(info) > result->getFailureCount())
-           result->addFailure(TestFailure(shell, "failed in seperate process"));
-       else if (!WIFEXITED(info))
-           result->addFailure(TestFailure(shell, "failed in seperate process"));
-   }
-   else {
-       shell->runOneTest(plugin, *result);
-       exit(result->getFailureCount() );
+    cpid = PlatformSpecificFork();
+
+    if (cpid == -1) {
+        result->addFailure(TestFailure(shell, "Call to fork() failed"));
+        return;
     }
-#endif
+
+    if (cpid == 0) {            /* Code executed by child */
+        shell->runOneTestInCurrentProcess(plugin, *result);   // LCOV_EXCL_LINE
+        _exit(result->getFailureCount());                     // LCOV_EXCL_LINE
+    } else {                    /* Code executed by parent */
+        do {
+            w = PlatformSpecificWaitPid(cpid, &status, WUNTRACED);
+            if (w == -1) {
+                result->addFailure(TestFailure(shell, "Call to waitpid() failed"));
+                return;
+            }
+
+            if (WIFEXITED(status) && WEXITSTATUS(status) > result->getFailureCount()) {
+                result->addFailure(TestFailure(shell, "Failed in separate process"));
+            } else if (WIFSIGNALED(status)) {
+                SimpleString signal(StringFrom(WTERMSIG(status)));
+                {
+                    SimpleString message("Failed in separate process - killed by signal ");
+                    message += signal;
+                    result->addFailure(TestFailure(shell, message));
+                }
+            } else if (WIFSTOPPED(status)) {
+                result->addFailure(TestFailure(shell, "Stopped in separate process - continuing"));
+                kill(w, SIGCONT);
+            }
+        } while (!WIFEXITED(status) && !WIFSIGNALED(status));
+    }
 }
+
+void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell* shell, TestPlugin* plugin, TestResult* result) =
+        GccCygwinPlatformSpecificRunTestInASeperateProcess;
+
+#endif
+
+static pid_t PlatformSpecificForkImplementation(void)
+{
+    return fork();
+}
+
+int (*PlatformSpecificFork)(void) = PlatformSpecificForkImplementation;
+
+static int PlatformSpecificWaitPidImplementation(int pid, int* status, int options)
+{
+    return waitpid(pid, status, options);
+}
+
+int (*PlatformSpecificWaitPid)(int, int*, int) = PlatformSpecificWaitPidImplementation;
 
 TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
 {
     return TestOutput::eclipse;
 }
-
 
 extern "C" {
 
@@ -213,9 +260,9 @@ int (*PlatformSpecificIsNan)(double) = IsNanImplementation;
 static PlatformSpecificMutex PThreadMutexCreate(void)
 {
     pthread_mutex_t *mutex = new pthread_mutex_t;
-    
+
     pthread_mutex_init(mutex, NULL);
-    
+
     return (PlatformSpecificMutex)mutex;
 }
 

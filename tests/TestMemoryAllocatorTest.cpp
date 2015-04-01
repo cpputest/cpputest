@@ -111,3 +111,21 @@ TEST(TestMemoryAllocatorTest, NullUnknownNames)
     STRCMP_EQUAL("unknown", allocator->alloc_name());
     STRCMP_EQUAL("unknown", allocator->free_name());
 }
+
+#define MAX_SIZE_THATS_OKAY_FOR_MSC (size_t) -1 - 96
+
+static void failTryingToAllocateTooMuchMemory(void) 
+{
+    TestMemoryAllocator allocator;
+    allocator.alloc_memory(MAX_SIZE_THATS_OKAY_FOR_MSC, "file", 1);
+}
+
+#include "CppUTest/TestTestingFixture.h"
+
+TEST(TestMemoryAllocatorTest, TryingToAllocateTooMuchFailsTest)
+{
+    TestTestingFixture fixture;
+    fixture.setTestFunction(&failTryingToAllocateTooMuchMemory);
+    fixture.runAllTests();
+    fixture.assertPrintContains("malloc returned null pointer");
+}

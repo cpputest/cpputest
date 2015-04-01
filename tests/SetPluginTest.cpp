@@ -49,25 +49,34 @@ TEST_GROUP(SetPointerPluginTest)
     }
 };
 
-class FunctionPointerUtest: public UtestShell
+class FunctionPointerUtest : public Utest
 {
 public:
-    void setup()
-    {
-        UT_PTR_SET(fp1, stub_func1);
-        UT_PTR_SET(fp2, stub_func2);
-        UT_PTR_SET(fp2, stub_func2);
-    }
-    void testBody()
-    {
-        CHECK(fp1 == stub_func1);
-        CHECK(fp2 == stub_func2);
-    }
+   void setup() _override
+   {
+      UT_PTR_SET(fp1, stub_func1);
+      UT_PTR_SET(fp2, stub_func2);
+      UT_PTR_SET(fp2, stub_func2);
+   }
+   void testBody() _override
+   {
+      CHECK(fp1 == stub_func1);
+      CHECK(fp2 == stub_func2);
+   }
+};
+
+class FunctionPointerUtestShell: public UtestShell
+{
+public:
+   virtual Utest* createTest()
+   {
+      return new FunctionPointerUtest();
+   }
 };
 
 TEST(SetPointerPluginTest, installTwoFunctionPointer)
 {
-    FunctionPointerUtest *tst = new FunctionPointerUtest();
+    FunctionPointerUtestShell *tst = new FunctionPointerUtestShell();
     ;
 
     fp1 = orig_func1;
@@ -77,28 +86,46 @@ TEST(SetPointerPluginTest, installTwoFunctionPointer)
     CHECK(fp1 == orig_func1);
     CHECK(fp2 == orig_func2);
     LONGS_EQUAL(0, result_->getFailureCount());
+    LONGS_EQUAL(2, result_->getCheckCount());
     delete tst;
 }
 
-class MaxFunctionPointerUtest: public UtestShell
+class MaxFunctionPointerUtest : public Utest
 {
 public:
-    int numOfFpSets;
-    MaxFunctionPointerUtest(int num) :
-        numOfFpSets(num)
+   int numOfFpSets;
+   MaxFunctionPointerUtest(int num) :
+      numOfFpSets(num)
+   {
+   }
+
+   void setup()
+   {
+      for (int i = 0; i < numOfFpSets; ++i)
+      {
+         UT_PTR_SET(fp1, stub_func1);
+      }
+   }
+};
+
+class MaxFunctionPointerUtestShell: public UtestShell
+{
+public:
+   int numOfFpSets;
+    MaxFunctionPointerUtestShell(int num) :
+       numOfFpSets(num)
     {
     }
 
-    void setup()
+    virtual Utest* createTest()
     {
-        for (int i = 0; i < numOfFpSets; ++i)
-            UT_PTR_SET(fp1, stub_func1);
+       return new MaxFunctionPointerUtest(numOfFpSets);
     }
 };
 
-IGNORE_TEST(SetPointerPluginTest, installTooMuchFunctionPointer)
+TEST(SetPointerPluginTest, installTooMuchFunctionPointer)
 {
-    MaxFunctionPointerUtest *tst = new MaxFunctionPointerUtest(SetPointerPlugin::MAX_SET + 1);
+    MaxFunctionPointerUtestShell *tst = new MaxFunctionPointerUtestShell(SetPointerPlugin::MAX_SET + 1);
     myRegistry_->addTest(tst);
 
     myRegistry_->runAllTests(*result_);
@@ -111,23 +138,35 @@ static double orig_double = 3.0;
 static double* orig_double_ptr = &orig_double;
 static double stub_double = 4.0;
 
-class SetDoublePointerUtest: public UtestShell
+class SetDoublePointerUtest : public Utest
 {
 public:
-    void setup()
-    {
-        UT_PTR_SET(orig_double_ptr, &stub_double);
-    }
-    void testBody()
-    {
-        CHECK(orig_double_ptr == &stub_double);
-    }
+   void setup()
+   {
+      UT_PTR_SET(orig_double_ptr, &stub_double);
+   }
+   void testBody()
+   {
+      CHECK(orig_double_ptr == &stub_double);
+   }
+};
+
+class SetDoublePointerUtestShell: public UtestShell
+{
+public:
+   Utest * createTest()
+   {
+      return new SetDoublePointerUtest();
+   }
 };
 
 TEST(SetPointerPluginTest, doublePointer)
 {
-    SetDoublePointerUtest *doubletst = new SetDoublePointerUtest();
+    SetDoublePointerUtestShell *doubletst = new SetDoublePointerUtestShell();
     myRegistry_->addTest(doubletst);
+    myRegistry_->runAllTests(*result_);
+
     CHECK(orig_double_ptr == &orig_double);
+    LONGS_EQUAL(1, result_->getCheckCount());
     delete doubletst;
 }
