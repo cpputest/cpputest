@@ -45,7 +45,7 @@ public:
             UT_CRASH();
 
         TestTerminatorWithoutExceptions::exitCurrentTest();
-    }
+    } // LCOV_EXCL_LINE
 
     virtual ~MockFailureReporterTestTerminatorForInCOnlyCode()
     {
