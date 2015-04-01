@@ -43,6 +43,8 @@ public:
     bool parse(TestPlugin* plugin);
     bool isVerbose() const;
     bool isColor() const;
+    bool isListingTestGroupNames() const;
+    bool isListingTestGroupAndCaseNames() const;
     int getRepeatCount() const;
     const TestFilter* getGroupFilters() const;
     const TestFilter* getNameFilters() const;
@@ -64,6 +66,8 @@ private:
     bool verbose_;
     bool color_;
     bool runTestsAsSeperateProcess_;
+    bool listTestGroupNames_;
+    bool listTestGroupAndCaseNames_;
     int repeat_;
     TestFilter* groupFilters_;
     TestFilter* nameFilters_;
