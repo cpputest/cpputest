@@ -318,7 +318,9 @@ check_coverage:
 	done
 	$(srcdir)/scripts/filterGcov.sh gcov_output.txt gcov_error.txt gcov_report.txt test_output.txt
 	cat gcov_report.txt
-	if test "x$(CPPUTEST_HAS_LCOV)" = xyes;  then lcov -c -d . -o temp.info; lcov -r temp.info /usr\* -o coverage.info; genhtml -o test_coverage coverage.info; fi
+	if test "x$(CPPUTEST_HAS_LCOV)" = xyes; then lcov -c -d . -o temp.info; lcov -r temp.info /usr\* -o coverage.info; genhtml -o test_coverage coverage.info; fi
+    
+remove_coverage_output:
 	rm -f gcov_output.txt gcov_error.txt gcov_report.txt test_output.txt gcov_report.txt.html coverage.info
 	rm -rf test_coverage
 
@@ -331,7 +333,7 @@ check_examples:
 	@echo "Compiling and running the examples. This will use the old Makefile"
 	make distclean; $(srcdir)/configure; make; $(MAKE) -C $(srcdir)/examples all clean CPPUTEST_LIB_LINK_DIR="`pwd`/lib"
 
-check_all: check_basic check_special_situations check_coverage check_examples check_gtest
+check_all: check_basic check_special_situations check_coverage remove_coverage_output check_examples check_gtest
 	@echo "Last... one normal build and test"
 	make distclean; $(srcdir)/configure; make check; 
 	@echo "Check running tests repeatedly"
