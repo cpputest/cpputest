@@ -98,24 +98,31 @@ void JUnitTestOutput::resetTestGroupResult()
 
 void JUnitTestOutput::printTestsStarted()
 {
+    TestOutput::printTestsStarted();
 }
 
-void JUnitTestOutput::printCurrentGroupStarted(const UtestShell& /*test*/)
+void JUnitTestOutput::printCurrentGroupStarted(const UtestShell& test)
 {
+    TestOutput::printCurrentGroupStarted(test);
 }
 
 void JUnitTestOutput::printCurrentTestEnded(const TestResult& result)
 {
+    TestOutput::printCurrentTestEnded(result);
+
     impl_->results_.tail_->execTime_
             = result.getCurrentTestTotalExecutionTime();
 }
 
-void JUnitTestOutput::printTestsEnded(const TestResult& /*result*/)
+void JUnitTestOutput::printTestsEnded(const TestResult& result)
 {
+    TestOutput::printTestsEnded(result);
 }
 
 void JUnitTestOutput::printCurrentGroupEnded(const TestResult& result)
 {
+    TestOutput::printCurrentGroupEnded(result);
+
     impl_->results_.groupExecTime_ = result.getCurrentGroupTotalExecutionTime();
     writeTestGroupToFile();
     resetTestGroupResult();
@@ -123,6 +130,8 @@ void JUnitTestOutput::printCurrentGroupEnded(const TestResult& result)
 
 void JUnitTestOutput::printCurrentTestStarted(const UtestShell& test)
 {
+    TestOutput::printCurrentTestStarted(test);
+
     impl_->results_.testCount_++;
     impl_->results_.group_ = test.getGroup();
     impl_->results_.startTime_ = GetPlatformSpecificTimeInMillis();
@@ -241,20 +250,33 @@ void JUnitTestOutput::writeTestGroupToFile()
 
 // LCOV_EXCL_START
 
-void JUnitTestOutput::printBuffer(const char*)
+void JUnitTestOutput::printBuffer(const char* buffer)
 {
+    TestOutput::printBuffer(buffer);
+    if( verbose_ ) {
+        while( *buffer ) {
+            PlatformSpecificPutchar( *buffer );
+            buffer++;
+        }
+        flush();
+    }
 }
 
-void JUnitTestOutput::print(const char*)
+void JUnitTestOutput::print(const char* values)
 {
+    TestOutput::print(values);
 }
 
-void JUnitTestOutput::print(long)
+void JUnitTestOutput::print(long value)
 {
+    TestOutput::print(value);
 }
 
 void JUnitTestOutput::flush()
 {
+    if( verbose_ ) {
+        PlatformSpecificFlush();
+    }
 }
 
 // LCOV_EXCL_STOP
