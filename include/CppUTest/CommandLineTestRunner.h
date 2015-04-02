@@ -49,6 +49,7 @@ public:
 
     static int RunAllTests(int ac, const char** av);
     static int RunAllTests(int ac, char** av);
+    static int RunAllTests(int ac, wchar_t** av);
     CommandLineTestRunner(int ac, const char** av, TestOutput*, TestRegistry* registry);
 
     virtual ~CommandLineTestRunner();
