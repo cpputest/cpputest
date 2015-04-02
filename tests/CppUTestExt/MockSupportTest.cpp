@@ -1706,17 +1706,16 @@ TEST_GROUP(MockSupportTestWithFixture)
     TestTestingFixture fixture;
 };
 
-static void mixedMocksAndCheckTestFunction_()
+static void mocksAreCountedAsChecksTestFunction_()
 {
-    LONGS_EQUAL(4, 4);
     mock().expectOneCall("foo");
-    mock().expectNCalls(2, "bar");
+    mock().expectNCalls(3, "bar");
     mock().clear();
 }
 
 TEST(MockSupportTestWithFixture, mockExpectationShouldIncreaseNumberOfChecks)
 {
-    fixture.setTestFunction(mixedMocksAndCheckTestFunction_);
+    fixture.setTestFunction(mocksAreCountedAsChecksTestFunction_);
     fixture.runAllTests();
     LONGS_EQUAL(4, fixture.getCheckCount());
 }
