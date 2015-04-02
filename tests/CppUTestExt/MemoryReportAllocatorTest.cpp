@@ -40,5 +40,5 @@ TEST(MemoryReportAllocator, FunctionsAreForwardedForMallocAllocator)
     allocator.setRealAllocator(getCurrentMallocAllocator());
 
     STRCMP_EQUAL("malloc", allocator.alloc_name());
-
+    STRCMP_EQUAL("free", allocator.free_name());
 }
