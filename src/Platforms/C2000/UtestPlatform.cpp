@@ -64,8 +64,7 @@ TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
 
 static void C2000RunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
 {
-   printf("-p isn' implemented for c2000. Running inside the process\b");
-   shell->runOneTest(plugin, *result);
+    result->addFailure(TestFailure(shell, "-p doesn't work on CL2000 as it is lacking fork.\b"));
 }
 
 void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell*, TestPlugin*, TestResult*) =
@@ -224,23 +223,19 @@ int (*PlatformSpecificIsNan)(double d) = IsNanImplementation;
 
 static PlatformSpecificMutex DummyMutexCreate(void)
 {
-    FAIL("PlatformSpecificMutexCreate is not implemented");
     return 0;
 }
 
 static void DummyMutexLock(PlatformSpecificMutex mtx)
 {
-    FAIL("PlatformSpecificMutexLock is not implemented");
 }
 
 static void DummyMutexUnlock(PlatformSpecificMutex mtx)
 {
-    FAIL("PlatformSpecificMutexUnlock is not implemented");
 }
 
 static void DummyMutexDestroy(PlatformSpecificMutex mtx)
 {
-    FAIL("PlatformSpecificMutexDestroy is not implemented");
 }
 
 PlatformSpecificMutex (*PlatformSpecificMutexCreate)(void) = DummyMutexCreate;
