@@ -42,38 +42,38 @@ extern "C" {
 #endif
 
 /* Jumping operations. They manage their own jump buffers */
-int PlatformSpecificSetJmp(void (*function) (void*), void* data);
-void PlatformSpecificLongJmp(void);
-void PlatformSpecificRestoreJumpBuffer(void);
+extern int (*PlatformSpecificSetJmp)(void (*function) (void*), void* data);
+extern void (*PlatformSpecificLongJmp)(void);
+extern void (*PlatformSpecificRestoreJumpBuffer)(void);
 
 /* Time operations */
 extern long (*GetPlatformSpecificTimeInMillis)(void);
 extern const char* (*GetPlatformSpecificTimeString)(void);
 
 /* String operations */
-int PlatformSpecificVSNprintf(char *str, size_t size, const char* format, va_list va_args_list);
+extern int (*PlatformSpecificVSNprintf)(char *str, size_t size, const char* format, va_list va_args_list);
 
 /* Misc */
-double PlatformSpecificFabs(double d);
+extern double (*PlatformSpecificFabs)(double d);
 extern int (*PlatformSpecificIsNan)(double d);
-int PlatformSpecificAtExit(void(*func)(void));
+extern int (*PlatformSpecificAtExit)(void(*func)(void));
 
 /* IO operations */
 typedef void* PlatformSpecificFile;
 
-PlatformSpecificFile PlatformSpecificFOpen(const char* filename, const char* flag);
-void PlatformSpecificFPuts(const char* str, PlatformSpecificFile file);
-void PlatformSpecificFClose(PlatformSpecificFile file);
+extern PlatformSpecificFile (*PlatformSpecificFOpen)(const char* filename, const char* flag);
+extern void (*PlatformSpecificFPuts)(const char* str, PlatformSpecificFile file);
+extern void (*PlatformSpecificFClose)(PlatformSpecificFile file);
 
-int PlatformSpecificPutchar(int c);
-void PlatformSpecificFlush(void);
+extern int (*PlatformSpecificPutchar)(int c);
+extern void (*PlatformSpecificFlush)(void);
 
 /* Dynamic Memory operations */
-void* PlatformSpecificMalloc(size_t size);
-void* PlatformSpecificRealloc(void* memory, size_t size);
-void PlatformSpecificFree(void* memory);
-void* PlatformSpecificMemCpy(void* s1, const void* s2, size_t size);
-void* PlatformSpecificMemset(void* mem, int c, size_t size);
+extern void* (*PlatformSpecificMalloc)(size_t size);
+extern void* (*PlatformSpecificRealloc)(void* memory, size_t size);
+extern void (*PlatformSpecificFree)(void* memory);
+extern void* (*PlatformSpecificMemCpy)(void* s1, const void* s2, size_t size);
+extern void* (*PlatformSpecificMemset)(void* mem, int c, size_t size);
 
 typedef void* PlatformSpecificMutex;
 extern PlatformSpecificMutex (*PlatformSpecificMutexCreate)(void);

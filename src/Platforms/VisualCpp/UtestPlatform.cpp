@@ -18,7 +18,6 @@
 #include <windows.h>
 #include <mmsystem.h>
 
-
 #include <setjmp.h>
 
 #ifdef STDC_WANT_SECURE_LIB
@@ -34,7 +33,7 @@
 static jmp_buf test_exit_jmp_buf[10];
 static int jmp_buf_index = 0;
 
-int PlatformSpecificSetJmp(void (*function) (void* data), void* data)
+static int VisualCppSetJmp(void (*function) (void* data), void* data)
 {
     if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
         jmp_buf_index++;
@@ -45,24 +44,28 @@ int PlatformSpecificSetJmp(void (*function) (void* data), void* data)
     return 0;
 }
 
-void PlatformSpecificLongJmp()
+static void VisualCppLongJmp()
 {
     jmp_buf_index--;
     longjmp(test_exit_jmp_buf[jmp_buf_index], 1);
 }
 
-void PlatformSpecificRestoreJumpBuffer()
+static void VisualCppRestoreJumpBuffer()
 {
     jmp_buf_index--;
 }
 
-static void VisualCppPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
+int (*PlatformSpecificSetJmp)(void (*function) (void*), void* data) = VisualCppSetJmp;
+void (*PlatformSpecificLongJmp)(void) = VisualCppLongJmp;
+void (*PlatformSpecificRestoreJumpBuffer)(void) = VisualCppRestoreJumpBuffer;
+ 
+static void VisualCppRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
 {
    result->addFailure(TestFailure(shell, "-p doesn't work on Visual C++ as it is lacking fork.\b"));
 }
 
 void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell* shell, TestPlugin* plugin, TestResult* result) =
-        VisualCppPlatformSpecificRunTestInASeperateProcess;
+        VisualCppRunTestInASeperateProcess;
 
 TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
 {
@@ -71,16 +74,16 @@ TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
 
 ///////////// Time in millis
 
-static long TimeInMillisImplementation()
+static long VisualCppTimeInMillis()
 {
     return timeGetTime();
 }
 
-long (*GetPlatformSpecificTimeInMillis)() = TimeInMillisImplementation;
-
+long (*GetPlatformSpecificTimeInMillis)() = VisualCppTimeInMillis;
+	
 ///////////// Time in String
 
-static const char* TimeStringImplementation()
+static const char* VisualCppTimeString()
 {
     time_t the_time = time(NULL);
     struct tm the_local_time;
@@ -90,11 +93,11 @@ static const char* TimeStringImplementation()
     return dateTime;
 }
 
-const char* (*GetPlatformSpecificTimeString)() = TimeStringImplementation;
+const char* (*GetPlatformSpecificTimeString)() = VisualCppTimeString;
 
 ////// taken from gcc
 
-int PlatformSpecificVSNprintf(char *str, size_t size, const char* format, va_list args)
+static int VisualCppVSNprintf(char *str, size_t size, const char* format, va_list args)
 {
     char* buf = 0;
     size_t sizeGuess = size;
@@ -116,96 +119,77 @@ int PlatformSpecificVSNprintf(char *str, size_t size, const char* format, va_lis
 
 }
 
-PlatformSpecificFile PlatformSpecificFOpen(const char* filename, const char* flag)
+int (*PlatformSpecificVSNprintf)(char *str, size_t size, const char* format, va_list va_args_list) = VisualCppVSNprintf;
+
+static PlatformSpecificFile VisualCppFOpen(const char* filename, const char* flag)
 {
    FILE* file;
    FOPEN(&file, filename, flag);
    return file;
 }
 
-void PlatformSpecificFPuts(const char* str, PlatformSpecificFile file)
+static void VisualCppFPuts(const char* str, PlatformSpecificFile file)
 {
    fputs(str, (FILE*)file);
 }
 
-void PlatformSpecificFClose(PlatformSpecificFile file)
+static void VisualCppFClose(PlatformSpecificFile file)
 {
    fclose((FILE*)file);
 }
 
-void PlatformSpecificFlush()
+PlatformSpecificFile (*PlatformSpecificFOpen)(const char* filename, const char* flag) = VisualCppFOpen;
+void (*PlatformSpecificFPuts)(const char* str, PlatformSpecificFile file) = VisualCppFPuts;
+void (*PlatformSpecificFClose)(PlatformSpecificFile file) = VisualCppFClose;
+
+static void VisualCppFlush()
 {
   fflush(stdout);
 }
 
-int PlatformSpecificPutchar(int c)
-{
-  return putchar(c);
-}
+int (*PlatformSpecificPutchar)(int c) = putchar;
+void (*PlatformSpecificFlush)(void) = VisualCppFlush;
 
-void* PlatformSpecificMalloc(size_t size)
+static void* VisualCppMalloc(size_t size)
 {
    return malloc(size);
 }
 
-void* PlatformSpecificRealloc (void* memory, size_t size)
-{
-   return realloc(memory, size);
-}
+void* (*PlatformSpecificMalloc)(size_t size) = VisualCppMalloc;
+void* (*PlatformSpecificRealloc)(void* memory, size_t size) = realloc;
+void (*PlatformSpecificFree)(void* memory) = free;
+void* (*PlatformSpecificMemCpy)(void* s1, const void* s2, size_t size) = memcpy;
+void* (*PlatformSpecificMemset)(void* mem, int c, size_t size) = memset;
 
-void PlatformSpecificFree(void* memory)
-{
-   free(memory);
-}
-
-void* PlatformSpecificMemCpy(void* s1, const void* s2, size_t size)
-{
-   return memcpy(s1, s2, size);
-}
-
-void* PlatformSpecificMemset(void* mem, int c, size_t size)
-{
-    return memset(mem, c, size);
-}
-
-double PlatformSpecificFabs(double d)
-{
-   return fabs(d);
-}
-
+double (*PlatformSpecificFabs)(double d) = fabs;
 extern "C" int (*PlatformSpecificIsNan)(double) = _isnan;
+int (*PlatformSpecificAtExit)(void(*func)(void)) = atexit;
 
-int PlatformSpecificVSNprintf(char *str, unsigned int size, const char* format, void* args)
-{
-   return _VSNPRINTF( str, size, _TRUNCATE, format, (va_list) args);
-}
-
-static PlatformSpecificMutex Win32MutexCreate(void)
+static PlatformSpecificMutex VisualCppMutexCreate(void)
 {
 	CRITICAL_SECTION *critical_section = new CRITICAL_SECTION;
 	InitializeCriticalSection(critical_section);
 	return (PlatformSpecificMutex)critical_section;
 }
 
-static void Win32MutexLock(PlatformSpecificMutex mutex)
+static void VisualCppMutexLock(PlatformSpecificMutex mutex)
 {
 	EnterCriticalSection((CRITICAL_SECTION*)mutex);
 }
 
-static void Win32MutexUnlock(PlatformSpecificMutex mutex)
+static void VisualCppMutexUnlock(PlatformSpecificMutex mutex)
 {
 	LeaveCriticalSection((CRITICAL_SECTION*)mutex);
 }
 
-static void Win32MutexDestroy(PlatformSpecificMutex mutex)
+static void VisualCppMutexDestroy(PlatformSpecificMutex mutex)
 {
 	CRITICAL_SECTION *critical_section = (CRITICAL_SECTION*)mutex;
 	DeleteCriticalSection(critical_section);
 	delete critical_section;
 }
 
-PlatformSpecificMutex (*PlatformSpecificMutexCreate)(void) = Win32MutexCreate;
-void (*PlatformSpecificMutexLock)(PlatformSpecificMutex) = Win32MutexLock;
-void (*PlatformSpecificMutexUnlock)(PlatformSpecificMutex) = Win32MutexUnlock;
-void (*PlatformSpecificMutexDestroy)(PlatformSpecificMutex) = Win32MutexDestroy;
-
+PlatformSpecificMutex (*PlatformSpecificMutexCreate)(void) = VisualCppMutexCreate;
+void (*PlatformSpecificMutexLock)(PlatformSpecificMutex) = VisualCppMutexLock;
+void (*PlatformSpecificMutexUnlock)(PlatformSpecificMutex) = VisualCppMutexUnlock;
+void (*PlatformSpecificMutexDestroy)(PlatformSpecificMutex) = VisualCppMutexDestroy;
