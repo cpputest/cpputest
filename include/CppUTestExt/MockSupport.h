@@ -113,6 +113,8 @@ protected:
     MockSupport* clone();
     virtual MockCheckedActualCall *createActualFunctionCall();
     virtual void failTest(MockFailure& failure);
+    void countCheck();
+
 private:
     int callOrder_;
     int expectedCallOrder_;

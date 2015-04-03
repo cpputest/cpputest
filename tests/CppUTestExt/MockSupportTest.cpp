@@ -1701,23 +1701,37 @@ IGNORE_TEST(MockSupportTest, testForPerformanceProfiling)
 
 }
 
-TEST_GROUP(MockSupportCrashTest)
+TEST_GROUP(MockSupportTestWithFixture)
 {
     TestTestingFixture fixture;
 };
 
+static void mocksAreCountedAsChecksTestFunction_()
+{
+    mock().expectOneCall("foo");
+    mock().expectNCalls(3, "bar");
+    mock().clear();
+}
+
+TEST(MockSupportTestWithFixture, mockExpectationShouldIncreaseNumberOfChecks)
+{
+    fixture.setTestFunction(mocksAreCountedAsChecksTestFunction_);
+    fixture.runAllTests();
+    LONGS_EQUAL(4, fixture.getCheckCount());
+}
+
 #if !defined(__MINGW32__) && !defined(_MSC_VER)
 
-static void _crashOnFailureTestFunction(void)
+static void crashOnFailureTestFunction_(void)
 {
     mock().actualCall("unexpected");
 }
 
-TEST(MockSupportCrashTest, shouldCrashOnFailure)
+TEST(MockSupportTestWithFixture, shouldCrashOnFailure)
 {
     mock().crashOnFailure();
     fixture.registry_->setRunTestsInSeperateProcess();
-    fixture.setTestFunction(_crashOnFailureTestFunction);
+    fixture.setTestFunction(crashOnFailureTestFunction_);
     fixture.runAllTests();
     fixture.assertPrintContains("Failed in separate process - killed by signal 11");
 }
