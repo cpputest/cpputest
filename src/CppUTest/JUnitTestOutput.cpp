@@ -252,7 +252,6 @@ void JUnitTestOutput::writeTestGroupToFile()
 
 void JUnitTestOutput::printBuffer(const char* buffer)
 {
-    TestOutput::printBuffer(buffer);
     if( verbose_ ) {
         while( *buffer ) {
             PlatformSpecificPutchar( *buffer );
