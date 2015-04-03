@@ -282,6 +282,7 @@ void JUnitTestOutput::flush()
 
 void JUnitTestOutput::print(const TestFailure& failure)
 {
+    TestOutput::print(failure);
     if (impl_->results_.tail_->failure_ == 0) {
         impl_->results_.failureCount_++;
         impl_->results_.tail_->failure_ = new TestFailure(failure);
