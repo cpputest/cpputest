@@ -180,7 +180,6 @@ public:
     JUnitTestOutputTestRunner& end()
     {
         endOfPreviousTestGroup();
-        delete currentTest_;
         result_.testsEnded();
         return *this;
     }
@@ -191,6 +190,8 @@ public:
         if (currentTest_) {
             result_.currentGroupEnded(currentTest_);
             firstTestInGroup_ = true;
+            delete currentTest_;
+            currentTest_ = 0;
         }
 
         currentGroupName_ = 0;
@@ -198,7 +199,6 @@ public:
 
     JUnitTestOutputTestRunner& withGroup(const char* groupName)
     {
-        runPreviousTest();
         endOfPreviousTestGroup();
 
         currentGroupName_ = groupName;
@@ -208,9 +208,11 @@ public:
     JUnitTestOutputTestRunner& withTest(const char* testName)
     {
         runPreviousTest();
+
         delete currentTest_;
 
         currentTest_ = new UtestShell(currentGroupName_, testName, "file", 1);
+
         return *this;
     }
 
@@ -551,7 +553,8 @@ TEST(JUnitOutputTest, testFailuresInSeparateGroups)
     STRCMP_EQUAL("<failure message=\"file:99: Failure\" type=\"AssertionFailedError\">\n", outputFile->line(8));
 
     outputFile = fileSystem.file("cpputest_AnotherGroup.xml");
-    STRCMP_EQUAL("<failure message=\"anotherFile:10: otherFailure\" type=\"AssertionFailedError\">\n", outputFile->line(8));
+    STRCMP_EQUAL("<failure message=\"anotherFile:10: otherFailure\" type=\"AssertionFailedError\">\n", outputFile->line(6));
+}
 }
 
 TEST(JUnitOutputTest, twoTestGroupsWriteToTwoDifferentFiles)
