@@ -137,7 +137,7 @@ MockExpectedCall& MockSupport::expectOneCall(const SimpleString& functionName)
 {
     if (!enabled_) return MockIgnoredExpectedCall::instance();
 
-    UtestShell::getCurrent()->countCheck();
+    countCheck();
 
     MockCheckedExpectedCall* call = new MockCheckedExpectedCall;
     call->withName(functionName);
@@ -273,6 +273,11 @@ void MockSupport::failTestWithOutOfOrderCalls()
 void MockSupport::failTest(MockFailure& failure)
 {
     activeReporter_->failTest(failure);
+}
+
+void MockSupport::countCheck()
+{
+    UtestShell::getCurrent()->countCheck();
 }
 
 void MockSupport::checkExpectationsOfLastCall()
