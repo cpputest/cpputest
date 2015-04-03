@@ -257,6 +257,11 @@ bool UtestShell::hasFailed() const
     return hasFailed_;
 }
 
+void UtestShell::countCheck()
+{
+    getTestResult()->countCheck();
+}
+
 bool UtestShell::willRun() const
 {
     return true;
