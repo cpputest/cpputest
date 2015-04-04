@@ -252,13 +252,11 @@ MSC_SWITCHED_TEST(MockSupport_c, NoExceptionsAreThrownWhenAMock_cCallFailed)
 
 #if !defined(__MINGW32__) && !defined(_MSC_VER)
 
-#include "CppUTestExt/MockSupport.h"
-
 TEST(MockSupport_c, shouldCrashOnFailure)
 {
     TestTestingFixture fixture;
 
-    mock().crashOnFailure();
+    mock_c()->crashOnFailure();
     fixture.registry_->setRunTestsInSeperateProcess();
     fixture.setTestFunction(failedCallToMockC);
     fixture.runAllTests();
