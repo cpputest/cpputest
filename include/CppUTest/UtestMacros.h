@@ -227,7 +227,7 @@
         UtestShell::getCurrent()->fail(msg.asCharString(), __FILE__, __LINE__); \
     } \
     else { \
-        CHECK(true); /* calls countCheck() */ \
+        UtestShell::getCurrent()->countCheck(); \
     } \
     }
 #endif /* CPPUTEST_USE_STD_CPP_LIB */

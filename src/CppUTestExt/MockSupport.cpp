@@ -277,7 +277,7 @@ void MockSupport::failTest(MockFailure& failure)
 
 void MockSupport::countCheck()
 {
-    CHECK(true);
+    UtestShell::getCurrent()->countCheck();
 }
 
 void MockSupport::checkExpectationsOfLastCall()

@@ -103,6 +103,7 @@ public:
     int getLineNumber() const;
     virtual bool willRun() const;
     virtual bool hasFailed() const;
+    void countCheck();
 
     virtual void assertTrue(bool condition, const char *checkString, const char *conditionString, const char *fileName, int lineNumber, const TestTerminator& testTerminator = NormalTestTerminator());
     virtual void assertTrueText(bool condition, const char *checkString, const char *conditionString, const char* text, const char *fileName, int lineNumber, const TestTerminator& testTerminator = NormalTestTerminator());
