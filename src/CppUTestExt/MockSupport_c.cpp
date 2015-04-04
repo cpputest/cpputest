@@ -35,9 +35,6 @@
 class MockFailureReporterTestTerminatorForInCOnlyCode : public TestTerminatorWithoutExceptions
 {
 public:
-    MockFailureReporterTestTerminatorForInCOnlyCode(bool)
-    {
-    }
 
     virtual void exitCurrentTest() const _override
     {
@@ -55,7 +52,7 @@ public:
     void failTest(const MockFailure& failure) _override
     {
         if (!getTestToFail()->hasFailed())
-            getTestToFail()->failWith(failure, MockFailureReporterTestTerminatorForInCOnlyCode(crashOnFailure_));
+            getTestToFail()->failWith(failure, MockFailureReporterTestTerminatorForInCOnlyCode());
     }
 };
 
