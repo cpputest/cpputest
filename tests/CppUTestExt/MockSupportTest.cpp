@@ -1738,6 +1738,6 @@ TEST(MockSupportTestWithFixture, shouldCrashOnFailure)
 
 #else
 
-IGNORE_TEST(MockSupportCrashTest, shouldCrashOnFailure) {}
+IGNORE_TEST(MockSupportTestWithFixture, shouldCrashOnFailure) {}
 
 #endif
