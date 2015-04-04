@@ -250,3 +250,24 @@ MSC_SWITCHED_TEST(MockSupport_c, NoExceptionsAreThrownWhenAMock_cCallFailed)
     CHECK(!destructorWasCalled);
 }
 
+#if !defined(__MINGW32__) && !defined(_MSC_VER)
+
+#include "CppUTestExt/MockSupport.h"
+
+TEST(MockSupport_c, shouldCrashOnFailure)
+{
+    TestTestingFixture fixture;
+
+    mock().crashOnFailure();
+    fixture.registry_->setRunTestsInSeperateProcess();
+    fixture.setTestFunction(failedCallToMockC);
+    fixture.runAllTests();
+
+    fixture.assertPrintContains("Failed in separate process - killed by signal 11");
+}
+
+#else
+
+IGNORE_TEST(MockSupport_c, shouldCrashOnFailure) {}
+
+#endif
