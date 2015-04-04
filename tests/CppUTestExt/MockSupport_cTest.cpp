@@ -262,6 +262,7 @@ TEST(MockSupport_c, shouldCrashOnFailure)
     fixture.runAllTests();
 
     fixture.assertPrintContains("Failed in separate process - killed by signal 11");
+    mock_c()->clear();
 }
 
 #else

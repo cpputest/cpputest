@@ -63,7 +63,10 @@ public:
         if (!getTestToFail()->hasFailed())
             getTestToFail()->failWith(failure, MockFailureReporterTestTerminatorForInCOnlyCode(crashOnFailure_));
     }
-
+    void clear()
+    {
+        crashOnFailure_ = false;
+    }
 };
 
 static MockSupport* currentMockSupport = NULL;
@@ -502,6 +505,7 @@ int expectedCallsLeft_c()
 
 void clear_c()
 {
+    failureReporterForC.clear();
     currentMockSupport->clear();
 }
 
