@@ -30,6 +30,7 @@
 #include "CppUTest/TestTestingFixture.h"
 #include "CppUTestExt/MockSupport_c.h"
 #include "MockSupport_cTestCFile.h"
+#include "CppUTestExt/OrderedTest.h"
 
 TEST_GROUP(MockSupport_c)
 {
@@ -250,3 +251,34 @@ MSC_SWITCHED_TEST(MockSupport_c, NoExceptionsAreThrownWhenAMock_cCallFailed)
     CHECK(!destructorWasCalled);
 }
 
+static bool cpputestHasCrashed;
+
+static void crashMethod()
+{
+    cpputestHasCrashed = true;
+}
+
+TEST_ORDERED(MockSupport_c, shouldCrashOnFailure, 1)
+{
+    cpputestHasCrashed = false;
+    TestTestingFixture fixture;
+    UtestShell::setCrashMethod(crashMethod);
+    mock_c()->crashOnFailure();
+    fixture.setTestFunction(failedCallToMockC);
+    fixture.runAllTests();
+    fixture.assertPrintContains("Mock Failure: Unexpected call to function: Not a call");
+
+    CHECK(cpputestHasCrashed);
+    mock_c()->clear();
+}
+
+TEST_ORDERED(MockSupport_c, nextTestShouldNotCrashOnFailure, 2)
+{
+    cpputestHasCrashed = false;
+    TestTestingFixture fixture;
+    fixture.setTestFunction(failedCallToMockC);
+    fixture.runAllTests();
+    fixture.assertPrintContains("Mock Failure: Unexpected call to function: Not a call");
+
+    CHECK_FALSE(cpputestHasCrashed);
+}

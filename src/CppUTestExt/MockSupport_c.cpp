@@ -63,7 +63,10 @@ public:
         if (!getTestToFail()->hasFailed())
             getTestToFail()->failWith(failure, MockFailureReporterTestTerminatorForInCOnlyCode(crashOnFailure_));
     }
-
+    void clear()
+    {
+        crashOnFailure_ = false;
+    }
 };
 
 static MockSupport* currentMockSupport = NULL;
@@ -111,6 +114,7 @@ MockValue_c getData_c(const char* name);
 void checkExpectations_c();
 int expectedCallsLeft_c();
 void clear_c();
+void crashOnFailure_c();
 
 MockExpectedCall_c* withIntParameters_c(const char* name, int value);
 MockExpectedCall_c* withUnsignedIntParameters_c(const char* name, unsigned int value);
@@ -212,6 +216,7 @@ static MockSupport_c gMockSupport = {
         checkExpectations_c,
         expectedCallsLeft_c,
         clear_c,
+        crashOnFailure_c,
         installComparator_c,
         removeAllComparators_c
 };
@@ -500,7 +505,13 @@ int expectedCallsLeft_c()
 
 void clear_c()
 {
+    failureReporterForC.clear();
     currentMockSupport->clear();
+}
+
+void crashOnFailure_c()
+{
+    currentMockSupport->crashOnFailure();
 }
 
 MockSupport_c* mock_c()
