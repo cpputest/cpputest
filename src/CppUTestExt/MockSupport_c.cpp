@@ -35,24 +35,15 @@
 class MockFailureReporterTestTerminatorForInCOnlyCode : public TestTerminatorWithoutExceptions
 {
 public:
-    MockFailureReporterTestTerminatorForInCOnlyCode(bool crashOnFailure) : crashOnFailure_(crashOnFailure)
-    {
-    }
 
     virtual void exitCurrentTest() const _override
     {
-        if (crashOnFailure_)
-            UT_CRASH();
-
         TestTerminatorWithoutExceptions::exitCurrentTest();
     } // LCOV_EXCL_LINE
 
     virtual ~MockFailureReporterTestTerminatorForInCOnlyCode()
     {
     }
-private:
-    bool crashOnFailure_;
-
 };
 
 class MockFailureReporterForInCOnlyCode : public MockFailureReporter
@@ -61,9 +52,8 @@ public:
     void failTest(const MockFailure& failure) _override
     {
         if (!getTestToFail()->hasFailed())
-            getTestToFail()->failWith(failure, MockFailureReporterTestTerminatorForInCOnlyCode(crashOnFailure_));
+            getTestToFail()->failWith(failure, MockFailureReporterTestTerminatorForInCOnlyCode());
     }
-
 };
 
 static MockSupport* currentMockSupport = NULL;
