@@ -30,6 +30,7 @@
 #include "CppUTest/TestTestingFixture.h"
 #include "CppUTestExt/MockSupport_c.h"
 #include "MockSupport_cTestCFile.h"
+#include "CppUTestExt/OrderedTest.h"
 
 TEST_GROUP(MockSupport_c)
 {
@@ -250,23 +251,34 @@ MSC_SWITCHED_TEST(MockSupport_c, NoExceptionsAreThrownWhenAMock_cCallFailed)
     CHECK(!destructorWasCalled);
 }
 
-#if !defined(__MINGW32__) && !defined(_MSC_VER)
+static bool cpputestHasCrashed;
 
-TEST(MockSupport_c, shouldCrashOnFailure)
+static void crashMethod()
 {
-    TestTestingFixture fixture;
+    cpputestHasCrashed = true;
+}
 
+TEST_ORDERED(MockSupport_c, shouldCrashOnFailure, 1)
+{
+    cpputestHasCrashed = false;
+    TestTestingFixture fixture;
+    UtestShell::setCrashMethod(crashMethod);
     mock_c()->crashOnFailure();
-    fixture.registry_->setRunTestsInSeperateProcess();
     fixture.setTestFunction(failedCallToMockC);
     fixture.runAllTests();
+    fixture.assertPrintContains("Mock Failure: Unexpected call to function: Not a call");
 
-    fixture.assertPrintContains("Failed in separate process - killed by signal 11");
+    CHECK(cpputestHasCrashed);
     mock_c()->clear();
 }
 
-#else
+TEST_ORDERED(MockSupport_c, nextTestShouldNotCrashOnFailure, 2)
+{
+    cpputestHasCrashed = false;
+    TestTestingFixture fixture;
+    fixture.setTestFunction(failedCallToMockC);
+    fixture.runAllTests();
+    fixture.assertPrintContains("Mock Failure: Unexpected call to function: Not a call");
 
-IGNORE_TEST(MockSupport_c, shouldCrashOnFailure) {}
-
-#endif
+    CHECK_FALSE(cpputestHasCrashed);
+}
