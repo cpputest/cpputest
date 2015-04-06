@@ -1701,22 +1701,6 @@ IGNORE_TEST(MockSupportTest, testForPerformanceProfiling)
 
 }
 
-TEST(MockSupportTest, MockNamedValueCanSetComparator)
-{
-    MyTypeForTesting object1(1);
-    MyTypeForTesting object3(3);
-    MyTypeForTestingComparator comparator;
-    MockNamedValue obj1("obj1");
-    MockNamedValue obj2("obj2");
-    MockNamedValue obj3("obj3");
-    obj1.setObjectPointer("MyTypeForTesting", &object1);
-    obj2.setObjectPointer("MyTypeForTesting", &object1);
-    obj3.setObjectPointer("MyTypeForTesting", &object3);
-    obj1.setComparator(&comparator);
-    CHECK(obj1.equals(obj2));
-    CHECK_FALSE(obj1.equals(obj3));
-}
-
 TEST_GROUP(MockSupportTestWithFixture)
 {
     TestTestingFixture fixture;
