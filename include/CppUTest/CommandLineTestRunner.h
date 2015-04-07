@@ -32,6 +32,7 @@
 #include "TestOutput.h"
 #include "CommandLineArguments.h"
 #include "TestFilter.h"
+#include <cwchar>
 
 class JUnitTestOutput;
 class TestRegistry;
