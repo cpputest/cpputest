@@ -47,7 +47,7 @@ public:
     virtual void failTest(const MockFailure& failure);
     virtual UtestShell* getTestToFail();
 
-    virtual void crashOnFailure() {crashOnFailure_ = true; }
+    virtual void crashOnFailure(bool shouldCrash) { crashOnFailure_ = shouldCrash; }
 };
 
 class MockFailure : public TestFailure

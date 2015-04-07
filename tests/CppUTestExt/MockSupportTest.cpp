@@ -1729,11 +1729,12 @@ static void crashOnFailureTestFunction_(void)
 
 TEST(MockSupportTestWithFixture, shouldCrashOnFailure)
 {
-    mock().crashOnFailure();
+    mock().crashOnFailure(true);
     fixture.registry_->setRunTestsInSeperateProcess();
     fixture.setTestFunction(crashOnFailureTestFunction_);
     fixture.runAllTests();
     fixture.assertPrintContains("Failed in separate process - killed by signal 11");
+    mock().crashOnFailure(false);
 }
 
 #else
