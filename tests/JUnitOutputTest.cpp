@@ -304,6 +304,7 @@ TEST_GROUP(JUnitOutputTest)
         junitOutput = new StringBufferJUnitTestOutput();
         result = new TestResult(*junitOutput);
         testCaseRunner = new JUnitTestOutputTestRunner(*result);
+        TestOutput::setWorkingEnvironment( TestOutput::vistualStudio );
     }
 
     void teardown()
@@ -312,6 +313,7 @@ TEST_GROUP(JUnitOutputTest)
         delete result;
         delete junitOutput;
         fileSystem.clear();
+        TestOutput::setWorkingEnvironment( TestOutput::detectEnvironment );
     }
 };
 
