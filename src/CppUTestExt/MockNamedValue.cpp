@@ -201,6 +201,11 @@ size_t MockNamedValue::getSize() const
     return size_;
 }
 
+void MockNamedValue::setComparator(MockNamedValueComparator* comparator)
+{
+    comparator_ = comparator;
+}
+
 MockNamedValueComparator* MockNamedValue::getComparator() const
 {
     return comparator_;
