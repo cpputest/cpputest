@@ -53,9 +53,9 @@ MockSupport::~MockSupport()
 {
 }
 
-void MockSupport::crashOnFailure()
+void MockSupport::crashOnFailure(bool shouldCrash)
 {
-    activeReporter_->crashOnFailure();
+    activeReporter_->crashOnFailure(shouldCrash);
 }
 
 void MockSupport::setMockFailureStandardReporter(MockFailureReporter* reporter)
