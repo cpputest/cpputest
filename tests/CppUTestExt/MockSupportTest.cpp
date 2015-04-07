@@ -203,6 +203,23 @@ TEST(MockSupportTest, strictOrderViolated)
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 
+TEST(MockSupportTest, strictOrderViolatedWorksHierarchically)
+{
+    mock().strictOrder();
+    mock("bla").strictOrder();
+    addFunctionToExpectationsList("foo1", 1)->callWasMade(2);
+    addFunctionToExpectationsList("foo2", 2)->callWasMade(1);
+    MockCallOrderFailure expectedFailure(mockFailureTest(), *expectationsList);
+    mock("bla").expectOneCall("foo1");
+    mock().expectOneCall("foo1");
+    mock().expectOneCall("foo2");
+    mock("bla").actualCall("foo1");
+    mock().actualCall("foo2");
+    mock().actualCall("foo1");
+    mock().checkExpectations();
+    CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
 TEST(MockSupportTest, strictOrderViolatedWithinAScope)
 {
     mock().strictOrder();
@@ -1636,6 +1653,19 @@ TEST(MockSupportTest, tracing)
 
     mock().actualCall("boo").withParameter("double", 1.0).withParameter("int", 1).withParameter("string", "string");
     mock("scope").actualCall("foo").withParameter("double", 1.0).withParameter("int", 1).withParameter("string", "string");
+    mock().checkExpectations();
+
+    STRCMP_CONTAINS("boo", mock().getTraceOutput());
+    STRCMP_CONTAINS("foo", mock().getTraceOutput());
+}
+
+TEST(MockSupportTest, tracingWorksHierarchically)
+{
+    mock("scope").tracing(true);
+    mock().tracing(true);
+
+    mock().actualCall("boo");
+    mock("scope").actualCall("foo");
     mock().checkExpectations();
 
     STRCMP_CONTAINS("boo", mock().getTraceOutput());
