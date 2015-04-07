@@ -1750,25 +1750,44 @@ TEST(MockSupportTestWithFixture, mockExpectationShouldIncreaseNumberOfChecks)
     LONGS_EQUAL(4, fixture.getCheckCount());
 }
 
-#if !defined(__MINGW32__) && !defined(_MSC_VER)
+static bool cpputestHasCrashed;
+
+static void crashMethod()
+{
+    cpputestHasCrashed = true;
+}
 
 static void crashOnFailureTestFunction_(void)
 {
     mock().actualCall("unexpected");
 }
 
-TEST(MockSupportTestWithFixture, shouldCrashOnFailure)
+#include "CppUTestExt/OrderedTest.h"
+
+TEST_ORDERED(MockSupportTestWithFixture, shouldCrashOnFailure, 10)
 {
     mock().crashOnFailure(true);
-    fixture.registry_->setRunTestsInSeperateProcess();
+    UtestShell::setCrashMethod(crashMethod);
     fixture.setTestFunction(crashOnFailureTestFunction_);
+    
     fixture.runAllTests();
-    fixture.assertPrintContains("Failed in separate process - killed by signal 11");
+    
+    CHECK(cpputestHasCrashed);
+    
     mock().crashOnFailure(false);
+    UtestShell::resetCrashMethod();
 }
 
-#else
-
-IGNORE_TEST(MockSupportTestWithFixture, shouldCrashOnFailure) {}
-
-#endif
+TEST_ORDERED(MockSupportTestWithFixture, nextTestShouldNotCrashOnFailure, 11)
+{
+    cpputestHasCrashed = false;
+    UtestShell::setCrashMethod(crashMethod);
+    fixture.setTestFunction(crashOnFailureTestFunction_);
+    
+    fixture.runAllTests();
+    
+    fixture.assertPrintContains("Unexpected call to function: unexpected");
+    CHECK_FALSE(cpputestHasCrashed);
+    
+    UtestShell::resetCrashMethod();
+}
