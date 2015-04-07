@@ -90,7 +90,7 @@ class StringBufferJUnitTestOutput: public JUnitTestOutput
 public:
   explicit StringBufferJUnitTestOutput() {}
 
-  virtual ~StringBufferJUnitTestOutput() {};
+  virtual ~StringBufferJUnitTestOutput() {}
 
   void printBuffer( const char* s ) _override
   {
