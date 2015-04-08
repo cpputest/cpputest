@@ -46,8 +46,8 @@ class TestResult;
 class TestOutput
 {
 public:
-    explicit TestOutput() {};
-    virtual ~TestOutput() {};
+    explicit TestOutput() {}
+    virtual ~TestOutput() {}
 
     virtual void printTestsStarted() = 0;
     virtual void printTestsEnded( const TestResult& result ) = 0;

@@ -54,18 +54,6 @@ void ConsoleTestOutput::printDouble(double d)
     print(StringFrom(d).asCharString());
 }
 
-ConsoleTestOutput& operator<<(ConsoleTestOutput& p, const char* s)
-{
-    p.print(s);
-    return p;
-}
-
-ConsoleTestOutput& operator<<(ConsoleTestOutput& p, long int i)
-{
-    p.print(i);
-    return p;
-}
-
 void ConsoleTestOutput::printCurrentTestStarted(const UtestShell& test)
 {
     if (verbose_) print(test.getFormattedName().asCharString());
