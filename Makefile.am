@@ -47,7 +47,6 @@ lib_libCppUTest_a_SOURCES = \
 	src/CppUTest/TestOutput.cpp \
 	src/CppUTest/TestOutputDecorator.cpp \
 	src/CppUTest/ConsoleTestOutput.cpp \
-	src/CppUTest/StringBufferTestOutput.cpp \
 	src/CppUTest/TestPlugin.cpp \
 	src/CppUTest/TestRegistry.cpp \
 	src/CppUTest/TestResult.cpp \
@@ -131,7 +130,7 @@ endif
 
 CppUTestTests_CPPFLAGS = $(lib_libCppUTest_a_CPPFLAGS)
 CppUTestTests_CFLAGS = $(lib_libCppUTest_a_CFLAGS)
-CppUTestTests_CXXFLAGS = $(lib_libCppUTest_a_CXXFLAGS) 
+CppUTestTests_CXXFLAGS = $(lib_libCppUTest_a_CXXFLAGS)
 CppUTestTests_LDADD = lib/libCppUTest.a $(CPPUTEST_LDADD)
 CppUTestTests_LDFLAGS = $(AM_LDFLAGS) $(CPPUTEST_LDFLAGS) $(CPPUTEST_ADDITIONAL_LDFLAGS)
 
@@ -169,7 +168,7 @@ CppUTestTests_SOURCES = \
 
 CppUTestExtTests_CPPFLAGS = $(lib_libCppUTestExt_a_CPPFLAGS)
 CppUTestExtTests_CFLAGS = $(lib_libCppUTestExt_a_CFLAGS)
-CppUTestExtTests_CXXFLAGS = $(lib_libCppUTestExt_a_CXXFLAGS) 
+CppUTestExtTests_CXXFLAGS = $(lib_libCppUTestExt_a_CXXFLAGS)
 CppUTestExtTests_LDADD = lib/libCppUTestExt.a lib/libCppUTest.a $(CPPUTEST_LDADD)
 CppUTestExtTests_LDFLAGS = $(CppUTestTests_LDFLAGS)
 
@@ -203,7 +202,7 @@ if INCLUDE_GMOCKTESTS
 
 #GTestTests_SOURCES = \
 	$(GMOCK_HOME)/test/gmock-spec-builders_test.cc \
-	tests/CppUTestExt/AllTests.cpp 
+	tests/CppUTestExt/AllTests.cpp
 endif
 
 RUN_CPPUTEST_TESTS = ./$(CPPUTEST_TESTS)
@@ -222,19 +221,19 @@ endif
 cpputest_build_gtest17:
 	mkdir -p cpputest_build_gtest17
 	cd cpputest_build_gtest17; \
-	wget https://googlemock.googlecode.com/files/gmock-1.7.0.zip && unzip gmock-1.7.0.zip 
+	wget https://googlemock.googlecode.com/files/gmock-1.7.0.zip && unzip gmock-1.7.0.zip
 	cd cpputest_build_gtest17/gmock-1.7.0; ./configure && make check
 
 cpputest_build_gtest16:
 	mkdir -p cpputest_build_gtest16
 	cd cpputest_build_gtest16; \
-	wget https://googlemock.googlecode.com/files/gmock-1.6.0.zip && unzip gmock-1.6.0.zip 
+	wget https://googlemock.googlecode.com/files/gmock-1.6.0.zip && unzip gmock-1.6.0.zip
 	cd cpputest_build_gtest16/gmock-1.6.0; ./configure CXXFLAGS=-DGTEST_USE_OWN_TR1_TUPLE=1 && make check
 
 cpputest_build_gtest15:
 	mkdir -p cpputest_build_gtest15
 	cd cpputest_build_gtest15; \
-	wget https://googlemock.googlecode.com/files/gmock-1.5.0.zip && unzip gmock-1.5.0.zip 
+	wget https://googlemock.googlecode.com/files/gmock-1.5.0.zip && unzip gmock-1.5.0.zip
 	cd cpputest_build_gtest15/gmock-1.5.0; ./configure CXXFLAGS=-DGTEST_USE_OWN_TR1_TUPLE=1 && make
 
 check_gtest15: cpputest_build_gtest15
@@ -251,7 +250,7 @@ check_gtest17: cpputest_build_gtest17
 	@echo "Build using gmock 1.7"
 	export GMOCK_HOME=`pwd`/cpputest_build_gtest17/gmock-1.7.0; \
 	make distclean; $(srcdir)/configure; make check
-	
+
 remove_gtest_directories:
 	rm -rf cpputest_build_gtest15
 	rm -rf cpputest_build_gtest16
@@ -261,13 +260,13 @@ check_gtest: remove_gtest_directories check_gtest15 check_gtest16 check_gtest17
 
 check_basic:
 	@echo "If dash is available, run the configure with dash to find bash-isms and increase portability"
-	make distclean; if test "x$(CPPUTEST_HAS_DASH)" = xyes; then CONFIG_SHELL=dash $(srcdir)/configure; fi 
+	make distclean; if test "x$(CPPUTEST_HAS_DASH)" = xyes; then CONFIG_SHELL=dash $(srcdir)/configure; fi
 
 	@echo "Building and valgrinding (skipping this on MacOS due to buggy Valgrind"
 	if test "x$(CPPUTEST_ON_MACOSX)" = xno; then \
 		make distclean; $(srcdir)/configure; make valgrind; \
 	fi
-	
+
 	@echo "Building without extensions"
 	make distclean; $(srcdir)/configure --disable-extensions; make check
 
@@ -315,10 +314,10 @@ check_coverage:
 	else \
 		make distclean; $(srcdir)/configure -enable-coverage CFLAGS="-O0" CXXFLAGS="-O0";  \
 	fi
-	
+
 	make check
 
-	./$(CPPUTEST_TESTS) >> test_output.txt; ./$(CPPUTESTEXT_TESTS) >> test_output.txt 
+	./$(CPPUTEST_TESTS) >> test_output.txt; ./$(CPPUTESTEXT_TESTS) >> test_output.txt
 	$(SILENCE)for f in `ls *.gcno` ; do \
 		gcov $(CppUTestExtTests_SOURCES) $(CppUTestTests_SOURCES) $(lib_libCppUTest_a_SOURCES) $(lib_libCppUTestExt_a_SOURCES) -o $$f 1>>gcov_output.txt 2>>gcov_error.txt; \
 	done
@@ -331,15 +330,15 @@ check_coverage:
 check_examples:
 	@echo "Using the old Makefile and examples"
 	make distclean
-	$(MAKE) -C $(srcdir) -f Makefile_using_MakefileWorker extensions 
+	$(MAKE) -C $(srcdir) -f Makefile_using_MakefileWorker extensions
 	$(MAKE) -C $(srcdir)/examples all clean
-	
+
 	@echo "Compiling and running the examples. This will use the old Makefile"
 	make distclean; $(srcdir)/configure; make; $(MAKE) -C $(srcdir)/examples all clean CPPUTEST_LIB_LINK_DIR="`pwd`/lib"
 
 check_all: check_basic check_special_situations check_coverage check_examples check_gtest
 	@echo "Last... one normal build and test"
-	make distclean; $(srcdir)/configure; make check; 
+	make distclean; $(srcdir)/configure; make check;
 	@echo "Check running tests repeatedly"
 	$(RUN_CPPUTEST_TESTS) - r; $(RUN_CPPUTESTEXT_TESTS) -r
 	@echo "Check running tests in separate process (CppUTestExtTests TEST_GROUP(TestOrderedTestMacro) would have to fail)"

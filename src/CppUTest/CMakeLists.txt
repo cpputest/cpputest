@@ -12,7 +12,6 @@ set(CppUTest_src
         TestOutput.cpp
         TestOutputDecorator.cpp
         ConsoleTestOutput.cpp
-        StringBufferTestOutput.cpp
         MemoryLeakDetector.cpp
         TestFilter.cpp
         TestPlugin.cpp

@@ -1069,11 +1069,6 @@
 			<type>1</type>
 			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/include/CppUTest/ConsoleTestOutput.h</locationURI>
 		</link>
-    <link>
-			<name>include/CppUTest/StringBufferTestOutput.h</name>
-			<type>1</type>
-			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/include/CppUTest/StringBufferTestOutput.h</locationURI>
-		</link>
 		<link>
 			<name>include/CppUTest/TestPlugin.h</name>
 			<type>1</type>
