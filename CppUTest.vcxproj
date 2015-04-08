@@ -157,6 +157,7 @@ copy $(OutDir)CppUTest.lib lib\CppUTest.lib
     <ClCompile Include="src\CppUTest\TestHarness_c.cpp" />
     <ClCompile Include="src\CppUTest\TestMemoryAllocator.cpp" />
     <ClCompile Include="src\CppUTest\TestOutput.cpp" />
+    <ClCompile Include="src\CppUTest\TestOutputDecorator.cpp" />
     <ClCompile Include="src\CppUTest\TestPlugin.cpp" />
     <ClCompile Include="src\CppUTest\TestRegistry.cpp" />
     <ClCompile Include="src\CppUTest\TestResult.cpp" />

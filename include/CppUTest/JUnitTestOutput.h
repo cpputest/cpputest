@@ -28,33 +28,33 @@
 #ifndef D_JUnitTestOutput_h
 #define D_JUnitTestOutput_h
 
-#include "TestOutput.h"
+#include "TestOutputDecorator.h"
 #include "SimpleString.h"
 
 struct JUnitTestOutputImpl;
 struct JUnitTestCaseResultNode;
 
-class JUnitTestOutput: public TestOutput
+class JUnitTestOutput: public TestOutputDecorator
 {
 public:
-    JUnitTestOutput();
+    JUnitTestOutput( TestOutput* component = NULL);
     virtual ~JUnitTestOutput();
 
-    virtual void printTestsStarted() _override;
-    virtual void printTestsEnded(const TestResult& result) _override;
+//    virtual void printTestsStarted() _override;
+//    virtual void printTestsEnded(const TestResult& result) _override;
     virtual void printCurrentTestStarted(const UtestShell& test) _override;
     virtual void printCurrentTestEnded(const TestResult& res) _override;
-    virtual void printCurrentGroupStarted(const UtestShell& test) _override;
+//    virtual void printCurrentGroupStarted(const UtestShell& test) _override;
     virtual void printCurrentGroupEnded(const TestResult& res) _override;
 
-    virtual void printBuffer(const char*) _override;
-    virtual void print(const char*) _override;
-    virtual void print(long) _override;
-    virtual void printDouble( double ) _override;
-    virtual void printTestRun( int number, int total ) _override;
+//    virtual void printBuffer(const char*) _override;
+//    virtual void print(const char*) _override;
+//    virtual void print(long) _override;
+//    virtual void printDouble( double ) _override;
+//    virtual void printTestRun( int number, int total ) _override;
     virtual void print(const TestFailure& failure) _override;
 
-    virtual void flush() _override;
+//    virtual void flush() _override;
 
     virtual SimpleString createFileName(const SimpleString& group);
     void setPackageName(const SimpleString &package);

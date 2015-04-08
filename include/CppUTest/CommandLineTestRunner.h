@@ -64,6 +64,7 @@ private:
     bool parseArguments(TestPlugin*);
     int runAllTests();
     void initializeTestRun();
+    void CleanupTestOutputs();
 };
 
 #endif

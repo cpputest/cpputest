@@ -37,7 +37,23 @@ output_(0), arguments_( arguments ), registry_( registry )
 
 CommandLineTestRunner::~CommandLineTestRunner()
 {
-    if( output_ ) { delete output_; }
+    CleanupTestOutputs();
+}
+
+void CommandLineTestRunner::CleanupTestOutputs()
+{
+    // Clean up the chain of testoutputs. The moment one cannot be cast to TestOutputDecorator the tail is reached.
+    while( output_ ) {
+        TestOutputDecorator* current = dynamic_cast<TestOutputDecorator*>( output_ );
+        if( current ) {
+            output_ = current->getNextComponent();
+            delete current;
+        }
+        else {
+            delete output_;
+            output_ = 0;
+        }
+    }
 }
 
 int CommandLineTestRunner::RunAllTests(int ac, char** av)
@@ -87,17 +103,17 @@ void CommandLineTestRunner::initializeTestRun()
     registry_->setGroupFilters(arguments_->getGroupFilters());
     registry_->setNameFilters(arguments_->getNameFilters());
 
+    CleanupTestOutputs();
+    TestOutput* output = new ConsoleTestOutput( arguments_->isVerbose(), arguments_->isColor() );
     if( output_ ) { delete output_; }
     if( arguments_->isJUnitOutput() ) {
-        JUnitTestOutput* jUnitTestOutput = new JUnitTestOutput;
-        output_ = jUnitTestOutput;
+        JUnitTestOutput* jUnitTestOutput = new JUnitTestOutput(output);
+        output = jUnitTestOutput;
         if( jUnitTestOutput != NULL ) {
             jUnitTestOutput->setPackageName( arguments_->getPackageName() );
         }
     }
-    else {
-        output_ = new ConsoleTestOutput( arguments_->isVerbose(), arguments_->isColor() );
-    }
+    output_ = output;
 
     if (arguments_->runTestsInSeperateProcess()) registry_->setRunTestsInSeperateProcess();
 }
