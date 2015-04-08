@@ -31,16 +31,13 @@
 #include "CppUTest/JUnitTestOutput.h"
 #include "CppUTest/TestRegistry.h"
 
-CommandLineTestRunner::CommandLineTestRunner(int ac, const char** av, TestOutput* output, TestRegistry* registry) :
-    output_(output), jUnitOutput_(NULL), arguments_(NULL), registry_(registry)
-{
-    arguments_ = new CommandLineArguments(ac, av);
-}
+CommandLineTestRunner::CommandLineTestRunner( CommandLineArguments* arguments, TestRegistry* registry ):
+output_(0), arguments_( arguments ), registry_( registry )
+{}
 
 CommandLineTestRunner::~CommandLineTestRunner()
 {
-    delete arguments_;
-    delete jUnitOutput_;
+    if( output_ ) { delete output_; }
 }
 
 int CommandLineTestRunner::RunAllTests(int ac, char** av)
@@ -51,18 +48,19 @@ int CommandLineTestRunner::RunAllTests(int ac, char** av)
 int CommandLineTestRunner::RunAllTests(int ac, const char** av)
 {
     int result = 0;
-    ConsoleTestOutput output;
 
     MemoryLeakWarningPlugin memLeakWarn(DEF_PLUGIN_MEM_LEAK);
     memLeakWarn.destroyGlobalDetectorAndTurnOffMemoryLeakDetectionInDestructor(true);
     TestRegistry::getCurrentRegistry()->installPlugin(&memLeakWarn);
 
     {
-        CommandLineTestRunner runner(ac, av, &output, TestRegistry::getCurrentRegistry());
+        CommandLineArguments arguments( ac, av );
+        CommandLineTestRunner runner(&arguments, TestRegistry::getCurrentRegistry());
         result = runner.runAllTestsMain();
     }
 
     if (result == 0) {
+        ConsoleTestOutput output;
         output << memLeakWarn.FinalReport(0);
     }
     TestRegistry::getCurrentRegistry()->removePluginByName(DEF_PLUGIN_MEM_LEAK);
@@ -76,8 +74,9 @@ int CommandLineTestRunner::runAllTestsMain()
     SetPointerPlugin pPlugin(DEF_PLUGIN_SET_POINTER);
     registry_->installPlugin(&pPlugin);
 
-    if (parseArguments(registry_->getFirstPlugin()))
+    if( parseArguments( registry_->getFirstPlugin() ) ) {
         testResult = runAllTests();
+    }
 
     registry_->removePluginByName(DEF_PLUGIN_SET_POINTER);
     return testResult;
@@ -87,6 +86,19 @@ void CommandLineTestRunner::initializeTestRun()
 {
     registry_->setGroupFilters(arguments_->getGroupFilters());
     registry_->setNameFilters(arguments_->getNameFilters());
+
+    if( output_ ) { delete output_; }
+    if( arguments_->isJUnitOutput() ) {
+        JUnitTestOutput* jUnitTestOutput = new JUnitTestOutput;
+        output_ = jUnitTestOutput;
+        if( jUnitTestOutput != NULL ) {
+            jUnitTestOutput->setPackageName( arguments_->getPackageName() );
+        }
+    }
+    else {
+        output_ = new ConsoleTestOutput;
+    }
+
     if (arguments_->isVerbose()) output_->verbose();
     if (arguments_->isColor()) output_->color();
     if (arguments_->runTestsInSeperateProcess()) registry_->setRunTestsInSeperateProcess();
@@ -112,16 +124,11 @@ int CommandLineTestRunner::runAllTests()
 bool CommandLineTestRunner::parseArguments(TestPlugin* plugin)
 {
     if (arguments_->parse(plugin)) {
-        if (arguments_->isJUnitOutput()) {
-            output_ = jUnitOutput_ = new JUnitTestOutput;
-            if (jUnitOutput_ != NULL) {
-                jUnitOutput_->setPackageName(arguments_->getPackageName());
-            }
-        }
         return true;
     }
     else {
-        output_->print(arguments_->usage());
+        ConsoleTestOutput output;
+        output.print( arguments_->usage() );
         return false;
     }
 }
