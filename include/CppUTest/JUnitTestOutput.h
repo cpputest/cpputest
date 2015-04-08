@@ -76,4 +76,42 @@ protected:
 
 };
 
+///////////////////////////////////////////////////////////////////////////////
+//
+//  StringBufferJUnitTestOutput.h
+//
+//  TestOutput for test purposes
+//
+///////////////////////////////////////////////////////////////////////////////
+
+
+class StringBufferJUnitTestOutput: public JUnitTestOutput
+{
+public:
+  explicit StringBufferJUnitTestOutput() {}
+
+  virtual ~StringBufferJUnitTestOutput() {}
+
+  void printBuffer( const char* s ) _override
+  {
+    output += s;
+  }
+
+    void flush() _override
+  {
+    output = "";
+  }
+
+    const SimpleString& getOutput() {
+    return output;
+  }
+
+private:
+  SimpleString output;
+
+  StringBufferJUnitTestOutput( const StringBufferJUnitTestOutput& );
+  StringBufferJUnitTestOutput& operator=( const StringBufferJUnitTestOutput& );
+
+};
+
 #endif
