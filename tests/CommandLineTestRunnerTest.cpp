@@ -101,10 +101,27 @@ TEST(CommandLineTestRunner, NoPluginsAreInstalledAtTheEndOfARunWhenTheArgumentsA
 struct TestOutputCheckingCommandLineTestRunner : public CommandLineTestRunner
 {
     TestOutputCheckingCommandLineTestRunner( CommandLineArguments* arguments, TestRegistry* registry ):
-        CommandLineTestRunner( arguments, registry ) {}
+        CommandLineTestRunner( arguments, registry )
+    {    }
 
     bool hasJUnitTestOutput( void ) {
-        return ( dynamic_cast<JUnitTestOutput*>( output_ ) );
+        bool result = dynamic_cast<JUnitTestOutput*>( output_ );
+        TestOutputDecorator* current = dynamic_cast<TestOutputDecorator*>( output_ );
+        while( !result && current ) {
+            current = dynamic_cast<TestOutputDecorator*>( current->getNextComponent() );
+            result = dynamic_cast<JUnitTestOutput*>( current );
+        }
+        return result;
+    }
+
+    bool hasConsoleTestOutput( void ) {
+        ConsoleTestOutput* consoleTestOutput = dynamic_cast<ConsoleTestOutput*>( output_ );
+        TestOutputDecorator* current = dynamic_cast<TestOutputDecorator*>( output_ );
+        while( !consoleTestOutput && current ) {
+            consoleTestOutput = dynamic_cast<ConsoleTestOutput*>( current->getNextComponent() );
+            current = dynamic_cast<TestOutputDecorator*>( current->getNextComponent() );
+        }
+        return consoleTestOutput->isVerbose();
     }
 };
 
@@ -116,4 +133,15 @@ TEST(CommandLineTestRunner, JunitOutputEnabled)
     TestOutputCheckingCommandLineTestRunner testRunner( &arguments, &registry );
     testRunner.runAllTestsMain();
     CHECK(testRunner.hasJUnitTestOutput());
+    CHECK( !testRunner.hasConsoleTestOutput() );
+}
+
+TEST( CommandLineTestRunner, JunitOutputChainedWithVerboseEnabled ) {
+    const char* argv[] = { "tests.exe", "-v", "-ojunit" };
+    CommandLineArguments arguments( 3, argv );
+
+    TestOutputCheckingCommandLineTestRunner testRunner( &arguments, &registry );
+    testRunner.runAllTestsMain();
+    CHECK( testRunner.hasJUnitTestOutput() );
+    CHECK( testRunner.hasConsoleTestOutput() );
 }

@@ -64,6 +64,8 @@ public:
 
     virtual void flush() _override;
 
+    bool isVerbose() const;
+
 protected:
   virtual void printEclipseErrorInFileOnLine( SimpleString file, int lineNumber );
   virtual void printVistualStudioErrorInFileOnLine( SimpleString file, int lineNumber );

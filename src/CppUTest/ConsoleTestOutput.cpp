@@ -35,6 +35,10 @@ ConsoleTestOutput::ConsoleTestOutput(bool verbose, bool color) :
 {
 }
 
+bool ConsoleTestOutput::isVerbose() const {
+    return verbose_;
+}
+
 void ConsoleTestOutput::print(const char* str)
 {
     printBuffer(str);
