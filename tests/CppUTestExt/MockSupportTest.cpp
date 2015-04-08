@@ -698,7 +698,7 @@ TEST(MockSupportTest, unexpectedOutputParameter)
     mock().expectOneCall("foo");
     mock().actualCall("foo").withOutputParameter("parameterName", &param);
 
-    addFunctionToExpectationsList("foo")->callWasMade(1);;
+    addFunctionToExpectationsList("foo")->callWasMade(1);
     MockNamedValue parameter("parameterName");
     parameter.setValue(&param);
     MockUnexpectedOutputParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, *expectationsList);
