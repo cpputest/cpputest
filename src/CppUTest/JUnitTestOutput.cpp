@@ -253,6 +253,14 @@ void JUnitTestOutput::print(long)
 {
 }
 
+void JUnitTestOutput::printDouble( double )
+{
+}
+
+void JUnitTestOutput::printTestRun( int number, int total )
+{
+}
+
 void JUnitTestOutput::flush()
 {
 }

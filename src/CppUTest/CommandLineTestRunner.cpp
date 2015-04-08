@@ -27,7 +27,7 @@
 
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/CommandLineTestRunner.h"
-#include "CppUTest/TestOutput.h"
+#include "CppUTest/ConsoleTestOutput.h"
 #include "CppUTest/JUnitTestOutput.h"
 #include "CppUTest/TestRegistry.h"
 
@@ -96,11 +96,9 @@ void CommandLineTestRunner::initializeTestRun()
         }
     }
     else {
-        output_ = new ConsoleTestOutput;
+        output_ = new ConsoleTestOutput( arguments_->isVerbose(), arguments_->isColor() );
     }
 
-    if (arguments_->isVerbose()) output_->verbose();
-    if (arguments_->isColor()) output_->color();
     if (arguments_->runTestsInSeperateProcess()) registry_->setRunTestsInSeperateProcess();
 }
 

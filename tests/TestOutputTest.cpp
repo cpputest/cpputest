@@ -26,7 +26,7 @@
  */
 
 #include "CppUTest/TestHarness.h"
-#include "CppUTest/TestOutput.h"
+#include "CppUTest/StringBufferTestOutput.h"
 #include "CppUTest/TestResult.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
@@ -43,7 +43,7 @@ extern "C" {
 
 TEST_GROUP(TestOutput)
 {
-    TestOutput* printer;
+    ConsoleTestOutput* printer;
     StringBufferTestOutput* mock;
     UtestShell* tst;
     TestFailure *f;
@@ -129,38 +129,6 @@ TEST(TestOutput, SetProgressIndicator)
     STRCMP_EQUAL(".!.", mock->getOutput().asCharString());
 }
 
-TEST(TestOutput, PrintTestVerboseStarted)
-{
-    mock->verbose();
-    printer->printCurrentTestStarted(*tst);
-    STRCMP_EQUAL("TEST(group, test)", mock->getOutput().asCharString());
-}
-
-TEST(TestOutput, PrintTestVerboseEnded)
-{
-    mock->verbose();
-    result->currentTestStarted(tst);
-    millisTime = 5;
-    result->currentTestEnded(tst);
-    STRCMP_EQUAL("TEST(group, test) - 5 ms\n", mock->getOutput().asCharString());
-}
-
-TEST(TestOutput, printColorWithSuccess)
-{
-    mock->color();
-    printer->printTestsEnded(*result);
-    STRCMP_EQUAL("\n\033[32;1mOK (0 tests, 0 ran, 0 checks, 0 ignored, 0 filtered out, 10 ms)\033[m\n\n", mock->getOutput().asCharString());
-}
-
-TEST(TestOutput, printColorWithFailures)
-{
-    mock->color();
-    result->addFailure(*f);
-    printer->flush();
-    printer->printTestsEnded(*result);
-    STRCMP_EQUAL("\n\033[31;1mErrors (1 failures, 0 tests, 0 ran, 0 checks, 0 ignored, 0 filtered out, 10 ms)\033[m\n\n", mock->getOutput().asCharString());
-}
-
 TEST(TestOutput, PrintTestRun)
 {
     printer->printTestRun(2, 3);
@@ -232,4 +200,81 @@ TEST(TestOutput, printTestsEndedWithFailures)
     printer->flush();
     printer->printTestsEnded(*result);
     STRCMP_EQUAL("\nErrors (1 failures, 0 tests, 0 ran, 0 checks, 0 ignored, 0 filtered out, 10 ms)\n\n", mock->getOutput().asCharString());
+}
+
+TEST_GROUP( TestOutputVerbose ) {
+    ConsoleTestOutput* printer;
+    StringBufferTestOutput* mock;
+    UtestShell* tst;
+    TestResult* result;
+
+    void setup() {
+        mock = new StringBufferTestOutput( true );
+        printer = mock;
+        tst = new UtestShell( "group", "test", "file", 10 );
+        result = new TestResult( *mock );
+        result->setTotalExecutionTime( 10 );
+        millisTime = 0;
+        UT_PTR_SET( GetPlatformSpecificTimeInMillis, MockGetPlatformSpecificTimeInMillis );
+        TestOutput::setWorkingEnvironment( TestOutput::eclipse );
+
+    }
+    void teardown() {
+        TestOutput::setWorkingEnvironment( TestOutput::detectEnvironment );
+        delete printer;
+        delete tst;
+        delete result;
+    }
+};
+
+TEST( TestOutputVerbose, PrintTestVerboseStarted ) {
+    printer->printCurrentTestStarted( *tst );
+    STRCMP_EQUAL( "TEST(group, test)", mock->getOutput().asCharString() );
+}
+
+TEST( TestOutputVerbose, PrintTestVerboseEnded ) {
+    result->currentTestStarted( tst );
+    millisTime = 5;
+    result->currentTestEnded( tst );
+    STRCMP_EQUAL( "TEST(group, test) - 5 ms\n", mock->getOutput().asCharString() );
+}
+
+TEST_GROUP( TestOutputColor ) {
+    ConsoleTestOutput* printer;
+    StringBufferTestOutput* mock;
+    UtestShell* tst;
+    TestFailure *f;
+    TestResult* result;
+
+    void setup() {
+        mock = new StringBufferTestOutput( false, true );
+        printer = mock;
+        tst = new UtestShell( "group", "test", "file", 10 );
+        f = new TestFailure( tst, "failfile", 20, "message" );
+        result = new TestResult( *mock );
+        result->setTotalExecutionTime( 10 );
+        millisTime = 0;
+        UT_PTR_SET( GetPlatformSpecificTimeInMillis, MockGetPlatformSpecificTimeInMillis );
+        TestOutput::setWorkingEnvironment( TestOutput::eclipse );
+
+    }
+    void teardown() {
+        TestOutput::setWorkingEnvironment( TestOutput::detectEnvironment );
+        delete printer;
+        delete tst;
+        delete f;
+        delete result;
+    }
+};
+
+TEST( TestOutputColor, printColorWithSuccess ) {
+    printer->printTestsEnded( *result );
+    STRCMP_EQUAL( "\n\033[32;1mOK (0 tests, 0 ran, 0 checks, 0 ignored, 0 filtered out, 10 ms)\033[m\n\n", mock->getOutput().asCharString() );
+}
+
+TEST( TestOutputColor, printColorWithFailures ) {
+    result->addFailure( *f );
+    printer->flush();
+    printer->printTestsEnded( *result );
+    STRCMP_EQUAL( "\n\033[31;1mErrors (1 failures, 0 tests, 0 ran, 0 checks, 0 ignored, 0 filtered out, 10 ms)\033[m\n\n", mock->getOutput().asCharString() );
 }

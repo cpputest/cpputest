@@ -79,7 +79,7 @@ TEST(GTestSimpleTest, GTestDeathTest)
 #undef TEST
 
 #include "CppUTest/TestHarness.h"
-#include "CppUTest/TestOutput.h"
+#include "CppUTest/StringBufferTestOutput.h"
 #include "CppUTest/TestTestingFixture.h"
 
 TEST_GROUP(gtest)
