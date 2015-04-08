@@ -10,6 +10,9 @@ set(CppUTest_src
         JUnitTestOutput.cpp
         TestFailure.cpp
         TestOutput.cpp
+        TestOutputDecorator.cpp
+        ConsoleTestOutput.cpp
+        StringBufferTestOutput.cpp
         MemoryLeakDetector.cpp
         TestFilter.cpp
         TestPlugin.cpp
@@ -25,6 +28,9 @@ set(CppUTest_headers
         ${CppUTestRootDirectory}/include/CppUTest/CommandLineTestRunner.h
         ${CppUTestRootDirectory}/include/CppUTest/PlatformSpecificFunctions_c.h
         ${CppUTestRootDirectory}/include/CppUTest/TestOutput.h
+        ${CppUTestRootDirectory}/include/CppUTest/TestOutputDecorator.h
+        ${CppUTestRootDirectory}/include/CppUTest/ConsoleTestOutput.h
+        ${CppUTestRootDirectory}/include/CppUTest/StringBufferTestOutput.h
         ${CppUTestRootDirectory}/include/CppUTest/CppUTestConfig.h
         ${CppUTestRootDirectory}/include/CppUTest/SimpleString.h
         ${CppUTestRootDirectory}/include/CppUTest/TestPlugin.h
