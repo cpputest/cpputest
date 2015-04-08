@@ -251,8 +251,6 @@ MSC_SWITCHED_TEST(MockSupport_c, NoExceptionsAreThrownWhenAMock_cCallFailed)
     CHECK(!destructorWasCalled);
 }
 
-#include "CppUTestExt/MockSupport.h"
-
 static bool cpputestHasCrashed;
 
 static void crashMethod()
@@ -265,7 +263,7 @@ TEST_ORDERED(MockSupport_c, shouldCrashOnFailure, 21)
     cpputestHasCrashed = false;
     TestTestingFixture fixture;
     UtestShell::setCrashMethod(crashMethod);
-    mock().crashOnFailure(true);
+    mock_c()->crashOnFailure(true);
     fixture.setTestFunction(failedCallToMockC);
     
     fixture.runAllTests();
@@ -273,7 +271,7 @@ TEST_ORDERED(MockSupport_c, shouldCrashOnFailure, 21)
     CHECK(cpputestHasCrashed);
     
     UtestShell::resetCrashMethod();
-    mock().crashOnFailure(false);
+    mock_c()->crashOnFailure(false);
 }
 
 TEST_ORDERED(MockSupport_c, nextTestShouldNotCrashOnFailure, 22)
