@@ -60,6 +60,7 @@ TEST_GROUP(CommandLineTestRunner)
 {
     TestRegistry registry;
     StringBufferTestOutput output;
+    JUnitTestOutput jUnitOutput;
     DummyPluginWhichCountsThePlugins* pluginCountingPlugin;
 
     void setup()
@@ -100,9 +101,8 @@ TEST(CommandLineTestRunner, JunitOutputEnabled)
 {
     const char* argv[] = { "tests.exe", "-ojunit" };
     CommandLineArguments arguments( 2, argv );
-    JUnitTestOutput output;
 
-    TestOutputCheckingCommandLineTestRunner testRunner(&output, &registry, &arguments);
+    TestOutputCheckingCommandLineTestRunner testRunner( &jUnitOutput, &registry, &arguments );
     testRunner.runAllTestsMain();
     CHECK(testRunner.hasJUnitTestOutput());
 }
