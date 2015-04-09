@@ -47,6 +47,7 @@ public:
     const TestFilter* getGroupFilters() const;
     const TestFilter* getNameFilters() const;
     bool isJUnitOutput() const;
+    bool isSuccesfullyParsed() const;
     bool isEclipseOutput() const;
     bool runTestsInSeperateProcess() const;
     const SimpleString& getPackageName() const;
@@ -69,6 +70,7 @@ private:
     TestFilter* nameFilters_;
     OutputType outputType_;
     SimpleString packageName_;
+    bool succesfullyParsed_;
 
     SimpleString getParameterField(int ac, const char** av, int& i, const SimpleString& parameterName);
     void SetRepeatCount(int ac, const char** av, int& index);

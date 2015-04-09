@@ -49,20 +49,18 @@ public:
 
     static int RunAllTests(int ac, const char** av);
     static int RunAllTests(int ac, char** av);
-    CommandLineTestRunner(int ac, const char** av, TestOutput*, TestRegistry* registry);
+    CommandLineTestRunner(TestOutput*, TestRegistry* registry, CommandLineArguments* arguments );
 
     virtual ~CommandLineTestRunner();
     int runAllTestsMain();
 
 protected:
     TestOutput* output_;
-    JUnitTestOutput* jUnitOutput_;
 
 private:
     CommandLineArguments* arguments_;
     TestRegistry* registry_;
 
-    bool parseArguments(TestPlugin*);
     int runAllTests();
     void initializeTestRun();
 };

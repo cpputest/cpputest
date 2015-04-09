@@ -30,7 +30,7 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 
 CommandLineArguments::CommandLineArguments(int ac, const char** av) :
-    ac_(ac), av_(av), verbose_(false), color_(false), runTestsAsSeperateProcess_(false), repeat_(1), groupFilters_(NULL), nameFilters_(NULL), outputType_(OUTPUT_ECLIPSE)
+    ac_(ac), av_(av), verbose_(false), color_(false), runTestsAsSeperateProcess_(false), repeat_(1), groupFilters_(NULL), nameFilters_(NULL), outputType_(OUTPUT_ECLIPSE), succesfullyParsed_(false)
 {
 }
 
@@ -69,15 +69,21 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
         else correctParameters = false;
 
         if (correctParameters == false) {
+            succesfullyParsed_ = false;
             return false;
         }
     }
+    succesfullyParsed_ = true;
     return true;
 }
 
 const char* CommandLineArguments::usage() const
 {
     return "usage [-v] [-c] [-r#] [-g|sg groupName]... [-n|sn testName]... [\"TEST(groupName, testName)\"]... [-o{normal, junit}] [-k packageName]\n";
+}
+
+bool CommandLineArguments::isSuccesfullyParsed() const {
+    return succesfullyParsed_;
 }
 
 bool CommandLineArguments::isVerbose() const
