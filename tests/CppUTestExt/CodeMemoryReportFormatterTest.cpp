@@ -26,7 +26,7 @@
  */
 
 #include "CppUTest/TestHarness.h"
-#include "CppUTest/TestOutput.h"
+#include "CppUTest/StringBufferTestOutput.h"
 #include "CppUTestExt/MemoryReportAllocator.h"
 #include "CppUTestExt/CodeMemoryReportFormatter.h"
 

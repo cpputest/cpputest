@@ -146,6 +146,7 @@ copy $(OutDir)CppUTest.lib lib\CppUTest.lib
     <ClCompile Include="src\CppUTestExt\OrderedTest.cpp" />
     <ClCompile Include="src\CppUTest\CommandLineArguments.cpp" />
     <ClCompile Include="src\CppUTest\CommandLineTestRunner.cpp" />
+    <ClCompile Include="src\CppUTest\ConsoleTestOutput.cpp" />
     <ClCompile Include="src\CppUTest\JUnitTestOutput.cpp" />
     <ClCompile Include="src\CppUTest\MemoryLeakDetector.cpp" />
     <ClCompile Include="src\CppUTest\MemoryLeakWarningPlugin.cpp" />
@@ -184,6 +185,7 @@ copy $(OutDir)CppUTest.lib lib\CppUTest.lib
     <ClInclude Include="include\CppUTestExt\OrderedTest.h" />
     <ClInclude Include="include\CppUTest\CommandLineArguments.h" />
     <ClInclude Include="include\CppUTest\CommandLineTestRunner.h" />
+    <ClInclude Include="include\CppUTest\ConsoleTestOutput.h" />
     <ClInclude Include="include\CppUTest\JUnitTestOutput.h" />
     <ClInclude Include="include\CppUTest\MemoryLeakDetector.h" />
     <ClInclude Include="include\CppUTest\MemoryLeakDetectorMallocMacros.h" />
@@ -193,12 +195,14 @@ copy $(OutDir)CppUTest.lib lib\CppUTest.lib
     <ClInclude Include="include\CppUTest\SimpleMutex.h" />
     <ClInclude Include="include\CppUTest\SimpleString.h" />
     <ClInclude Include="include\CppUTest\StandardCLibrary.h" />
+    <ClInclude Include="include\CppUTest\StringBufferTestOutput.h" />
     <ClInclude Include="include\CppUTest\TestFailure.h" />
     <ClInclude Include="include\CppUTest\TestFilter.h" />
     <ClInclude Include="include\CppUTest\TestHarness.h" />
     <ClInclude Include="include\CppUTest\TestHarness_c.h" />
     <ClInclude Include="include\CppUTest\TestMemoryAllocator.h" />
     <ClInclude Include="include\CppUTest\TestOutput.h" />
+    <ClInclude Include="include\CppUTest\TestOutputDecorator.h" />
     <ClInclude Include="include\CppUTest\TestPlugin.h" />
     <ClInclude Include="include\CppUTest\TestRegistry.h" />
     <ClInclude Include="include\CppUTest\TestResult.h" />

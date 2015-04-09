@@ -706,7 +706,8 @@ TEST(IgnoreTest, doesIgnoreCount)
 
 TEST(IgnoreTest, printsIGNORE_TESTwhenVerbose)
 {
-    fixture.output_->verbose();
+    delete fixture.output_;
+    fixture.output_ = new StringBufferTestOutput(true);
     fixture.runAllTests();
     fixture.assertPrintContains("IGNORE_TEST");
 }

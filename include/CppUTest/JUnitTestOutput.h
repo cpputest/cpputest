@@ -50,6 +50,8 @@ public:
     virtual void printBuffer(const char*) _override;
     virtual void print(const char*) _override;
     virtual void print(long) _override;
+    virtual void printDouble( double ) _override;
+    virtual void printTestRun( int number, int total ) _override;
     virtual void print(const TestFailure& failure) _override;
 
     virtual void flush() _override;

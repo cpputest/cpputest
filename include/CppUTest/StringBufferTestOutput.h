@@ -25,32 +25,51 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "CppUTest/TestHarness.h"
-#include "CppUTest/TestOutput.h"
-#include "CppUTest/PlatformSpecificFunctions.h"
+#ifndef D_StringBufferTestOutput_h
+#define D_StringBufferTestOutput_h
 
-TestOutput::WorkingEnvironment TestOutput::workingEnvironment_ = TestOutput::detectEnvironment;
+#include "CppUTest/ConsoleTestOutput.h"
 
-void TestOutput::setWorkingEnvironment(TestOutput::WorkingEnvironment workEnvironment)
+///////////////////////////////////////////////////////////////////////////////
+//
+//  StringBufferTestOutput.h
+//
+//  TestOutput for test purposes
+//
+///////////////////////////////////////////////////////////////////////////////
+
+
+class StringBufferTestOutput: public ConsoleTestOutput
 {
-    workingEnvironment_ = workEnvironment;
-}
+public:
+    explicit StringBufferTestOutput( bool verbose = false, bool color = false ):
+      ConsoleTestOutput(verbose, color)
+    {
+    }
 
-TestOutput::WorkingEnvironment TestOutput::getWorkingEnvironment()
-{
-    if (workingEnvironment_ == TestOutput::detectEnvironment)
-        return PlatformSpecificGetWorkingEnvironment();
-    return workingEnvironment_;
-}
+    virtual ~StringBufferTestOutput() {}
 
-TestOutput& operator<<( TestOutput& p, const char* s )
-{
-    p.print( s );
-    return p;
-}
+    void printBuffer(const char* s) _override
+    {
+        output += s;
+    }
 
-TestOutput& operator<<( TestOutput& p, long int i )
-{
-    p.print( i );
-    return p;
-}
+    void flush() _override
+    {
+        output = "";
+    }
+
+    const SimpleString& getOutput()
+    {
+        return output;
+    }
+
+private:
+    SimpleString output;
+
+    StringBufferTestOutput(const StringBufferTestOutput&);
+    StringBufferTestOutput& operator=(const StringBufferTestOutput&);
+
+};
+
+#endif

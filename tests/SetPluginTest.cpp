@@ -1,6 +1,6 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TestRegistry.h"
-#include "CppUTest/TestOutput.h"
+#include "CppUTest/StringBufferTestOutput.h"
 #include "CppUTest/TestPlugin.h"
 
 static void orig_func1()

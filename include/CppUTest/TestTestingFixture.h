@@ -29,7 +29,7 @@
 #define D_TestTestingFixture_H
 
 #include "TestRegistry.h"
-#include "TestOutput.h"
+#include "StringBufferTestOutput.h"
 
 class TestTestingFixture
 {

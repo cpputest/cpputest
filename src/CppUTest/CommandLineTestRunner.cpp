@@ -27,7 +27,7 @@
 
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/CommandLineTestRunner.h"
-#include "CppUTest/TestOutput.h"
+#include "CppUTest/ConsoleTestOutput.h"
 #include "CppUTest/JUnitTestOutput.h"
 #include "CppUTest/TestRegistry.h"
 
@@ -59,7 +59,7 @@ int CommandLineTestRunner::RunAllTests(int ac, const char** av)
         output = jUnitOutput;
     }
     else {
-        output = new ConsoleTestOutput;
+        output = new ConsoleTestOutput( arguments.isVerbose(), arguments.isColor() );
     }
 
     MemoryLeakWarningPlugin memLeakWarn(DEF_PLUGIN_MEM_LEAK);
@@ -105,8 +105,6 @@ void CommandLineTestRunner::initializeTestRun()
 {
     registry_->setGroupFilters(arguments_->getGroupFilters());
     registry_->setNameFilters(arguments_->getNameFilters());
-    if (arguments_->isVerbose()) output_->verbose();
-    if (arguments_->isColor()) output_->color();
     if (arguments_->runTestsInSeperateProcess()) registry_->setRunTestsInSeperateProcess();
 }
 
