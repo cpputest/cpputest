@@ -45,6 +45,7 @@ lib_libCppUTest_a_SOURCES = \
 	src/CppUTest/TestHarness_c.cpp \
 	src/CppUTest/TestMemoryAllocator.cpp \
 	src/CppUTest/TestOutput.cpp \
+	src/CppUTest/ConsoleTestOutput.cpp \
 	src/CppUTest/TestPlugin.cpp \
 	src/CppUTest/TestRegistry.cpp \
 	src/CppUTest/TestResult.cpp \
@@ -73,6 +74,8 @@ include_cpputest_HEADERS = \
 	include/CppUTest/TestHarness_c.h \
 	include/CppUTest/TestMemoryAllocator.h \
 	include/CppUTest/TestOutput.h \
+	include/CppUTest/ConsoleTestOutput.h \
+	include/CppUTest/StringBufferTestOutput.h \
 	include/CppUTest/TestPlugin.h \
 	include/CppUTest/TestRegistry.h \
 	include/CppUTest/TestResult.h \

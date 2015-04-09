@@ -28,7 +28,7 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TestRegistry.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
-#include "CppUTest/TestOutput.h"
+#include "CppUTest/ConsoleTestOutput.h"
 
 bool doubles_equal(double d1, double d2, double threshold)
 {
