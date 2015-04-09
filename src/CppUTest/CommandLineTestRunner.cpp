@@ -52,14 +52,16 @@ int CommandLineTestRunner::RunAllTests(int ac, const char** av)
     TestRegistry* registry = TestRegistry::getCurrentRegistry();
     CommandLineArguments arguments( ac, av );
     arguments.parse( registry->getFirstPlugin() );
+
+    ConsoleTestOutput defaultOutput;
+    JUnitTestOutput jUnitOutput;
+    jUnitOutput.setPackageName( arguments.getPackageName() );
     TestOutput* output;
     if( arguments.isJUnitOutput() ) {
-        JUnitTestOutput* jUnitOutput = new JUnitTestOutput;
-        jUnitOutput->setPackageName( arguments.getPackageName() );
-        output = jUnitOutput;
+        output = &jUnitOutput;
     }
     else {
-        output = new ConsoleTestOutput;
+        output = &defaultOutput;
     }
 
     MemoryLeakWarningPlugin memLeakWarn(DEF_PLUGIN_MEM_LEAK);
@@ -84,8 +86,6 @@ int CommandLineTestRunner::RunAllTests(int ac, const char** av)
         *output << memLeakWarn.FinalReport(0);
     }
     registry->removePluginByName( DEF_PLUGIN_MEM_LEAK );
-
-    delete output;
 
     return result;
 }
