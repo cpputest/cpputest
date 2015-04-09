@@ -248,6 +248,32 @@ void ConsoleTestOutput::flush()
     PlatformSpecificFlush();
 }
 
+void ColoredTestOutput::printCurrentTestStarted(const UtestShell& test)
+{
+    c_->printCurrentTestStarted(test);
+}
+
+void ColoredTestOutput::printCurrentTestEnded(const TestResult& res)
+{
+    c_->printCurrentTestEnded(res);
+}
+
+ void ColoredTestOutput::printTestsEnded(const TestResult& result)
+{
+    if (result.getFailureCount() > 0)
+        c_->print("\033[31;1m");
+    else
+        c_->print("\033[32;1m");
+    c_->printTestsEnded(result);
+    c_->print("\033[m");
+}
+   
+void ColoredTestOutput::flush()
+{
+    c_->flush();
+}
+    
+
 StringBufferTestOutput::~StringBufferTestOutput()
 {
 }

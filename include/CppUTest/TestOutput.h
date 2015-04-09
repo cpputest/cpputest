@@ -127,30 +127,10 @@ public:
     ColoredTestOutput(ConsoleTestOutput* testOutput) : c_(testOutput) {}
     virtual ~ColoredTestOutput() {}
     
-    virtual void printCurrentTestStarted(const UtestShell& test) _override
-    {
-        c_->printCurrentTestStarted(test);
-    }
-
-    virtual void printCurrentTestEnded(const TestResult& res) _override
-    {
-        c_->printCurrentTestEnded(res);
-    }
-
-    virtual void printTestsEnded(const TestResult& result) _override
-    {
-        if (result.getFailureCount() > 0)
-            c_->print("\033[31;1m");
-        else
-            c_->print("\033[32;1m");
-        c_->printTestsEnded(result);
-        c_->print("\033[m");
-    }
-   
-    virtual void flush() _override
-    {
-        c_->flush();
-    }
+    virtual void printCurrentTestStarted(const UtestShell& test) _override;
+    virtual void printCurrentTestEnded(const TestResult& res) _override;
+    virtual void printTestsEnded(const TestResult& result) _override;
+    virtual void flush() _override;
     
 private:
     explicit ColoredTestOutput() {}
