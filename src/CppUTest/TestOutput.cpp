@@ -45,7 +45,7 @@ TestOutput::WorkingEnvironment TestOutput::getWorkingEnvironment()
 
 
 TestOutput::TestOutput() :
-    dotCount_(0), verbose_(false), color_(false), progressIndication_(".")
+    dotCount_(0), verbose_(false), progressIndication_(".")
 {
 }
 
@@ -56,11 +56,6 @@ TestOutput::~TestOutput()
 void TestOutput::verbose()
 {
     verbose_ = true;
-}
-
-void TestOutput::color()
-{
-    color_ = true;
 }
 
 void TestOutput::print(const char* str)
@@ -141,17 +136,11 @@ void TestOutput::printTestsEnded(const TestResult& result)
 {
     print("\n");
     if (result.getFailureCount() > 0) {
-        if (color_) {
-            print("\033[31;1m");
-        }
         print("Errors (");
         print(result.getFailureCount());
         print(" failures, ");
     }
     else {
-        if (color_) {
-            print("\033[32;1m");
-        }
         print("OK (");
     }
     print(result.getTestCount());
@@ -166,9 +155,6 @@ void TestOutput::printTestsEnded(const TestResult& result)
     print(" filtered out, ");
     print(result.getTotalExecutionTime());
     print(" ms)");
-    if (color_) {
-        print("\033[m");
-    }
     print("\n\n");
 }
 

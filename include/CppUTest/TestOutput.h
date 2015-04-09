@@ -55,7 +55,6 @@ public:
     virtual void printCurrentGroupEnded(const TestResult& res);
 
     virtual void verbose();
-    virtual void color();
     virtual void printBuffer(const char*)=0;
     virtual void print(const char*);
     virtual void print(long);
@@ -88,7 +87,6 @@ protected:
 
     int dotCount_;
     bool verbose_;
-    bool color_;
     const char* progressIndication_;
 
     static WorkingEnvironment workingEnvironment_;
@@ -123,6 +121,34 @@ private:
     ConsoleTestOutput& operator=(const ConsoleTestOutput&);
 };
 
+class ColoredTestOutput: public ConsoleTestOutput
+{
+public:
+    ColoredTestOutput(ConsoleTestOutput* testOutput) : c_(testOutput) {}
+    virtual ~ColoredTestOutput() {}
+
+    virtual void printTestsEnded(const TestResult& result) _override
+    {
+        if (result.getFailureCount() > 0)
+            c_->print("\033[31;1m");
+        else
+            c_->print("\033[32;1m");
+        c_->printTestsEnded(result);
+        c_->print("\033[m");
+    }
+    
+    virtual void flush() _override
+    {
+        c_->flush();
+    }
+
+private:
+    explicit ColoredTestOutput() {}
+    ConsoleTestOutput* c_;
+    ColoredTestOutput(const ColoredTestOutput&);
+    ColoredTestOutput& operator=(const ColoredTestOutput&);
+};
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 //  StringBufferTestOutput.h
@@ -132,7 +158,7 @@ private:
 ///////////////////////////////////////////////////////////////////////////////
 
 
-class StringBufferTestOutput: public TestOutput
+class StringBufferTestOutput: public ConsoleTestOutput
 {
 public:
     explicit StringBufferTestOutput()
