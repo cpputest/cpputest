@@ -56,6 +56,7 @@ public:
 
 protected:
     TestOutput* output_;
+    ColoredTestOutput* colorOutput_;
     JUnitTestOutput* jUnitOutput_;
 
 private:

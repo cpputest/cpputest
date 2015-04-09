@@ -32,7 +32,7 @@
 #include "CppUTest/TestRegistry.h"
 
 CommandLineTestRunner::CommandLineTestRunner(int ac, const char** av, TestOutput* output, TestRegistry* registry) :
-    output_(output), jUnitOutput_(NULL), arguments_(NULL), registry_(registry)
+    output_(output), colorOutput_(NULL), jUnitOutput_(NULL), arguments_(NULL), registry_(registry)
 {
     arguments_ = new CommandLineArguments(ac, av);
 }
@@ -40,6 +40,7 @@ CommandLineTestRunner::CommandLineTestRunner(int ac, const char** av, TestOutput
 CommandLineTestRunner::~CommandLineTestRunner()
 {
     delete arguments_;
+    delete colorOutput_;
     delete jUnitOutput_;
 }
 
@@ -88,7 +89,10 @@ void CommandLineTestRunner::initializeTestRun()
     registry_->setGroupFilters(arguments_->getGroupFilters());
     registry_->setNameFilters(arguments_->getNameFilters());
     if (arguments_->isVerbose()) output_->verbose();
-    if (arguments_->isColor()) output_->color();
+    if (arguments_->isColor()) {
+        colorOutput_ = new ColoredTestOutput((ConsoleTestOutput*)output_);
+        output_ = colorOutput_;
+    }
     if (arguments_->runTestsInSeperateProcess()) registry_->setRunTestsInSeperateProcess();
 }
 
