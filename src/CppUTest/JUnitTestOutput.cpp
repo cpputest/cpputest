@@ -68,7 +68,8 @@ struct JUnitTestOutputImpl
     SimpleString package_;
 };
 
-JUnitTestOutput::JUnitTestOutput() :
+JUnitTestOutput::JUnitTestOutput( TestOutput* component ):
+    TestOutputDecorator(component),
     impl_(new JUnitTestOutputImpl)
 {
 }
@@ -96,26 +97,18 @@ void JUnitTestOutput::resetTestGroupResult()
     impl_->results_.tail_ = 0;
 }
 
-void JUnitTestOutput::printTestsStarted()
-{
-}
-
-void JUnitTestOutput::printCurrentGroupStarted(const UtestShell& /*test*/)
-{
-}
-
 void JUnitTestOutput::printCurrentTestEnded(const TestResult& result)
 {
+    TestOutputDecorator::printCurrentTestEnded( result );
+
     impl_->results_.tail_->execTime_
             = result.getCurrentTestTotalExecutionTime();
 }
 
-void JUnitTestOutput::printTestsEnded(const TestResult& /*result*/)
-{
-}
-
 void JUnitTestOutput::printCurrentGroupEnded(const TestResult& result)
 {
+    TestOutputDecorator::printCurrentGroupEnded( result );
+
     impl_->results_.groupExecTime_ = result.getCurrentGroupTotalExecutionTime();
     writeTestGroupToFile();
     resetTestGroupResult();
@@ -123,6 +116,8 @@ void JUnitTestOutput::printCurrentGroupEnded(const TestResult& result)
 
 void JUnitTestOutput::printCurrentTestStarted(const UtestShell& test)
 {
+    TestOutputDecorator::printCurrentTestStarted( test );
+
     impl_->results_.testCount_++;
     impl_->results_.group_ = test.getGroup();
     impl_->results_.startTime_ = GetPlatformSpecificTimeInMillis();
@@ -239,28 +234,10 @@ void JUnitTestOutput::writeTestGroupToFile()
     closeFile();
 }
 
-// LCOV_EXCL_START
-
-void JUnitTestOutput::printBuffer(const char*)
-{
-}
-
-void JUnitTestOutput::print(const char*)
-{
-}
-
-void JUnitTestOutput::print(long)
-{
-}
-
-void JUnitTestOutput::flush()
-{
-}
-
-// LCOV_EXCL_STOP
-
 void JUnitTestOutput::print(const TestFailure& failure)
 {
+    TestOutputDecorator::print( failure );
+
     if (impl_->results_.tail_->failure_ == 0) {
         impl_->results_.failureCount_++;
         impl_->results_.tail_->failure_ = new TestFailure(failure);

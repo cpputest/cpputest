@@ -75,10 +75,11 @@ TEST_GROUP(CommandLineTestRunner)
 TEST(CommandLineTestRunner, OnePluginGetsInstalledDuringTheRunningTheTests)
 {
     const char* argv[] = { "tests.exe", "-psomething"};
+    CommandLineArguments arguments( 2, argv );
 
     registry.installPlugin(pluginCountingPlugin);
 
-    CommandLineTestRunner commandLineTestRunner(2, argv, &output, &registry);
+    CommandLineTestRunner commandLineTestRunner( &arguments, &registry );
     commandLineTestRunner.runAllTestsMain();
     registry.removePluginByName("PluginCountingPlugin");
 
@@ -89,8 +90,9 @@ TEST(CommandLineTestRunner, OnePluginGetsInstalledDuringTheRunningTheTests)
 TEST(CommandLineTestRunner, NoPluginsAreInstalledAtTheEndOfARunWhenTheArgumentsAreInvalid)
 {
     const char* argv[] = { "tests.exe", "-fdskjnfkds"};
+    CommandLineArguments arguments( 2, argv );
 
-    CommandLineTestRunner commandLineTestRunner(2, argv, &output, &registry);
+    CommandLineTestRunner commandLineTestRunner( &arguments, &registry );
     commandLineTestRunner.runAllTestsMain();
 
     LONGS_EQUAL(0, registry.countPlugins());
@@ -98,22 +100,48 @@ TEST(CommandLineTestRunner, NoPluginsAreInstalledAtTheEndOfARunWhenTheArgumentsA
 
 struct TestOutputCheckingCommandLineTestRunner : public CommandLineTestRunner
 {
-    TestOutputCheckingCommandLineTestRunner(int ac, const char** av, TestOutput* output, TestRegistry* registry) :
-        CommandLineTestRunner(ac, av, output, registry)
-    {
+    TestOutputCheckingCommandLineTestRunner( CommandLineArguments* arguments, TestRegistry* registry ):
+        CommandLineTestRunner( arguments, registry )
+    {    }
+
+    bool hasJUnitTestOutput( void ) {
+        bool result = dynamic_cast<JUnitTestOutput*>( output_ );
+        TestOutputDecorator* current = dynamic_cast<TestOutputDecorator*>( output_ );
+        while( !result && current ) {
+            current = dynamic_cast<TestOutputDecorator*>( current->getNextComponent() );
+            result = dynamic_cast<JUnitTestOutput*>( current );
+        }
+        return result;
     }
 
-    bool hasJUnitTestOutput(void)
-    {
-        return (output_ == jUnitOutput_);
+    bool hasConsoleTestOutput( void ) {
+        ConsoleTestOutput* consoleTestOutput = dynamic_cast<ConsoleTestOutput*>( output_ );
+        TestOutputDecorator* current = dynamic_cast<TestOutputDecorator*>( output_ );
+        while( !consoleTestOutput && current ) {
+            consoleTestOutput = dynamic_cast<ConsoleTestOutput*>( current->getNextComponent() );
+            current = dynamic_cast<TestOutputDecorator*>( current->getNextComponent() );
+        }
+        return consoleTestOutput->isVerbose();
     }
 };
 
 TEST(CommandLineTestRunner, JunitOutputEnabled)
 {
     const char* argv[] = { "tests.exe", "-ojunit"};
+    CommandLineArguments arguments( 2, argv );
 
-    TestOutputCheckingCommandLineTestRunner testRunner(2, argv, &output, &registry);
+    TestOutputCheckingCommandLineTestRunner testRunner( &arguments, &registry );
     testRunner.runAllTestsMain();
     CHECK(testRunner.hasJUnitTestOutput());
+    CHECK( !testRunner.hasConsoleTestOutput() );
+}
+
+TEST( CommandLineTestRunner, JunitOutputChainedWithVerboseEnabled ) {
+    const char* argv[] = { "tests.exe", "-v", "-ojunit" };
+    CommandLineArguments arguments( 3, argv );
+
+    TestOutputCheckingCommandLineTestRunner testRunner( &arguments, &registry );
+    testRunner.runAllTestsMain();
+    CHECK( testRunner.hasJUnitTestOutput() );
+    CHECK( testRunner.hasConsoleTestOutput() );
 }

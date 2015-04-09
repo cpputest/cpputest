@@ -30,12 +30,14 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-//  This is a minimal printer inteface.
+//  This is a minimal printer interface.
 //  We kept streams out too keep footprint small, and so the test
 //  harness could be used with less capable compilers so more
 //  platforms could use this test harness
 //
 ///////////////////////////////////////////////////////////////////////////////
+
+#include "SimpleString.h"
 
 class UtestShell;
 class TestFailure;
@@ -44,25 +46,22 @@ class TestResult;
 class TestOutput
 {
 public:
-    explicit TestOutput();
-    virtual ~TestOutput();
+    explicit TestOutput() {}
+    virtual ~TestOutput() {}
 
-    virtual void printTestsStarted();
-    virtual void printTestsEnded(const TestResult& result);
-    virtual void printCurrentTestStarted(const UtestShell& test);
-    virtual void printCurrentTestEnded(const TestResult& res);
-    virtual void printCurrentGroupStarted(const UtestShell& test);
-    virtual void printCurrentGroupEnded(const TestResult& res);
+    virtual void printTestsStarted() = 0;
+    virtual void printTestsEnded( const TestResult& result ) = 0;
+    virtual void printCurrentTestStarted( const UtestShell& test ) = 0;
+    virtual void printCurrentTestEnded( const TestResult& res ) = 0;
+    virtual void printCurrentGroupStarted( const UtestShell& test ) = 0;
+    virtual void printCurrentGroupEnded( const TestResult& res ) = 0;
 
-    virtual void verbose();
-    virtual void color();
     virtual void printBuffer(const char*)=0;
-    virtual void print(const char*);
-    virtual void print(long);
-    virtual void printDouble(double);
-    virtual void print(const TestFailure& failure);
-    virtual void printTestRun(int number, int total);
-    virtual void setProgressIndicator(const char*);
+    virtual void print( const char* ) = 0;
+    virtual void print( long ) = 0;
+    virtual void printDouble( double ) = 0;
+    virtual void print( const TestFailure& failure ) = 0;
+    virtual void printTestRun( int number, int total ) = 0;
 
     virtual void flush()=0;
 
@@ -72,96 +71,13 @@ public:
     static WorkingEnvironment getWorkingEnvironment();
 
 protected:
-
-    virtual void printEclipseErrorInFileOnLine(SimpleString file, int lineNumber);
-    virtual void printVistualStudioErrorInFileOnLine(SimpleString file, int lineNumber);
-
-    virtual void printProgressIndicator();
-    void printFileAndLineForTestAndFailure(const TestFailure& failure);
-    void printFileAndLineForFailure(const TestFailure& failure);
-    void printFailureInTest(SimpleString testName);
-    void printFailureMessage(SimpleString reason);
-    void printErrorInFileOnLineFormattedForWorkingEnvironment(SimpleString testFile, int lineNumber);
-
     TestOutput(const TestOutput&);
     TestOutput& operator=(const TestOutput&);
-
-    int dotCount_;
-    bool verbose_;
-    bool color_;
-    const char* progressIndication_;
 
     static WorkingEnvironment workingEnvironment_;
 };
 
 TestOutput& operator<<(TestOutput&, const char*);
 TestOutput& operator<<(TestOutput&, long);
-
-///////////////////////////////////////////////////////////////////////////////
-//
-//  ConsoleTestOutput.h
-//
-//  Printf Based Solution
-//
-///////////////////////////////////////////////////////////////////////////////
-
-class ConsoleTestOutput: public TestOutput
-{
-public:
-    explicit ConsoleTestOutput()
-    {
-    }
-    virtual ~ConsoleTestOutput()
-    {
-    }
-
-    virtual void printBuffer(const char* s) _override;
-    virtual void flush() _override;
-
-private:
-    ConsoleTestOutput(const ConsoleTestOutput&);
-    ConsoleTestOutput& operator=(const ConsoleTestOutput&);
-};
-
-///////////////////////////////////////////////////////////////////////////////
-//
-//  StringBufferTestOutput.h
-//
-//  TestOutput for test purposes
-//
-///////////////////////////////////////////////////////////////////////////////
-
-
-class StringBufferTestOutput: public TestOutput
-{
-public:
-    explicit StringBufferTestOutput()
-    {
-    }
-
-    virtual ~StringBufferTestOutput();
-
-    void printBuffer(const char* s) _override
-    {
-        output += s;
-    }
-
-    void flush() _override
-    {
-        output = "";
-    }
-
-    const SimpleString& getOutput()
-    {
-        return output;
-    }
-
-private:
-    SimpleString output;
-
-    StringBufferTestOutput(const StringBufferTestOutput&);
-    StringBufferTestOutput& operator=(const StringBufferTestOutput&);
-
-};
 
 #endif

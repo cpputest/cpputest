@@ -49,14 +49,13 @@ public:
 
     static int RunAllTests(int ac, const char** av);
     static int RunAllTests(int ac, char** av);
-    CommandLineTestRunner(int ac, const char** av, TestOutput*, TestRegistry* registry);
+    CommandLineTestRunner( CommandLineArguments* arguments, TestRegistry* registry );
 
     virtual ~CommandLineTestRunner();
     int runAllTestsMain();
 
 protected:
     TestOutput* output_;
-    JUnitTestOutput* jUnitOutput_;
 
 private:
     CommandLineArguments* arguments_;
@@ -65,6 +64,7 @@ private:
     bool parseArguments(TestPlugin*);
     int runAllTests();
     void initializeTestRun();
+    void CleanupTestOutputs();
 };
 
 #endif
