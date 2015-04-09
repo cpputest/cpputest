@@ -250,3 +250,18 @@ MSC_SWITCHED_TEST(MockSupport_c, NoExceptionsAreThrownWhenAMock_cCallFailed)
     CHECK(!destructorWasCalled);
 }
 
+static void failingCallToMockCWithParameterOfType_()
+{
+    mock_c()->expectOneCall("bar")->withParameterOfType("typeName", "name", (const void*) 1);
+    mock_c()->actualCall("bar")->withParameterOfType("typeName", "name", (const void*) 2);
+}
+
+TEST(MockSupport_c, failureWithParameterOfTypeCoversValueToString)
+{
+    TestTestingFixture fixture;
+    mock_c()->installComparator("typeName", typeNameIsEqual, typeNameValueToString);
+    fixture.setTestFunction(failingCallToMockCWithParameterOfType_);
+    fixture.runAllTests();
+    fixture.assertPrintContains("typeName name: <valueToString>");
+    mock_c()->removeAllComparators();
+}
