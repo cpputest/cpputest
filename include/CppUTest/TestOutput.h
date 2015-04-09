@@ -126,6 +126,16 @@ class ColoredTestOutput: public ConsoleTestOutput
 public:
     ColoredTestOutput(ConsoleTestOutput* testOutput) : c_(testOutput) {}
     virtual ~ColoredTestOutput() {}
+    
+    virtual void printCurrentTestStarted(const UtestShell& test) _override
+    {
+        c_->printCurrentTestStarted(test);
+    }
+
+    virtual void printCurrentTestEnded(const TestResult& res) _override
+    {
+        c_->printCurrentTestEnded(res);
+    }
 
     virtual void printTestsEnded(const TestResult& result) _override
     {
@@ -136,12 +146,12 @@ public:
         c_->printTestsEnded(result);
         c_->print("\033[m");
     }
-    
+   
     virtual void flush() _override
     {
         c_->flush();
     }
-
+    
 private:
     explicit ColoredTestOutput() {}
     ConsoleTestOutput* c_;

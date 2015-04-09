@@ -161,6 +161,16 @@ TEST(TestOutput, printColorWithFailures)
     STRCMP_EQUAL("\033[31;1m\nErrors (1 failures, 0 tests, 0 ran, 0 checks, 0 ignored, 0 filtered out, 10 ms)\n\n\033[m", mock->getOutput().asCharString());
 }
 
+TEST(TestOutput, PrintVerboseAndColorCombined)
+{
+    mock->verbose();
+    ColoredTestOutput coloredMock(mock);
+    coloredMock.printCurrentTestStarted(*tst);
+    result->currentTestEnded(tst);
+    coloredMock.printTestsEnded(*result);
+    STRCMP_CONTAINS("TEST(group, test) - 0 ms\n\033[32;1m\nOK (0 tests, 0 ran, ", mock->getOutput().asCharString());
+}
+
 TEST(TestOutput, PrintTestRun)
 {
     printer->printTestRun(2, 3);
