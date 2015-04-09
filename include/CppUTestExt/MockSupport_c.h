@@ -128,6 +128,7 @@ struct SMockSupport_c
     int (*expectedCallsLeft)(void);
 
     void (*clear)(void);
+    void (*crashOnFailure)(unsigned shouldCrash);
 
     void (*installComparator) (const char* typeName, MockTypeEqualFunction_c isEqual, MockTypeValueToStringFunction_c valueToString);
     void (*removeAllComparators)(void);

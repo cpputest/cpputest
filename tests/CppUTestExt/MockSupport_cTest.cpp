@@ -30,6 +30,7 @@
 #include "CppUTest/TestTestingFixture.h"
 #include "CppUTestExt/MockSupport_c.h"
 #include "MockSupport_cTestCFile.h"
+#include "CppUTestExt/OrderedTest.h"
 
 TEST_GROUP(MockSupport_c)
 {
@@ -248,6 +249,43 @@ MSC_SWITCHED_TEST(MockSupport_c, NoExceptionsAreThrownWhenAMock_cCallFailed)
     LONGS_EQUAL(1, fixture.getFailureCount());
     // Odd behavior in Visual C++, destructor still gets called here
     CHECK(!destructorWasCalled);
+}
+
+static bool cpputestHasCrashed;
+
+static void crashMethod()
+{
+    cpputestHasCrashed = true;
+}
+
+TEST_ORDERED(MockSupport_c, shouldCrashOnFailure, 21)
+{
+    cpputestHasCrashed = false;
+    TestTestingFixture fixture;
+    UtestShell::setCrashMethod(crashMethod);
+    mock_c()->crashOnFailure(true);
+    fixture.setTestFunction(failedCallToMockC);
+    
+    fixture.runAllTests();
+
+    CHECK(cpputestHasCrashed);
+    
+    UtestShell::resetCrashMethod();
+    mock_c()->crashOnFailure(false);
+}
+
+TEST_ORDERED(MockSupport_c, nextTestShouldNotCrashOnFailure, 22)
+{
+    cpputestHasCrashed = false;
+    TestTestingFixture fixture;
+    UtestShell::setCrashMethod(crashMethod);
+    fixture.setTestFunction(failedCallToMockC);
+    
+    fixture.runAllTests();
+
+    CHECK_FALSE(cpputestHasCrashed);
+
+    UtestShell::resetCrashMethod();
 }
 
 static void failingCallToMockCWithParameterOfType_()
