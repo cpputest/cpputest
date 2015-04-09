@@ -72,25 +72,12 @@ TEST_GROUP(CommandLineTestRunner)
     }
 };
 
-TEST(CommandLineTestRunner, OnePluginGetsInstalledDuringTheRunningTheTests)
-{
-    const char* argv[] = { "tests.exe", "-psomething"};
-
-    registry.installPlugin(pluginCountingPlugin);
-
-    CommandLineTestRunner commandLineTestRunner(2, argv, &output, &registry);
-    commandLineTestRunner.runAllTestsMain();
-    registry.removePluginByName("PluginCountingPlugin");
-
-    LONGS_EQUAL(0, registry.countPlugins());
-    LONGS_EQUAL(1, pluginCountingPlugin->amountOfPlugins);
-}
-
 TEST(CommandLineTestRunner, NoPluginsAreInstalledAtTheEndOfARunWhenTheArgumentsAreInvalid)
 {
-    const char* argv[] = { "tests.exe", "-fdskjnfkds"};
+    const char* argv[] = { "tests.exe", "-fdskjnfkds" };
+    CommandLineArguments arguments( 2, argv );
 
-    CommandLineTestRunner commandLineTestRunner(2, argv, &output, &registry);
+    CommandLineTestRunner commandLineTestRunner(&output, &registry, &arguments);
     commandLineTestRunner.runAllTestsMain();
 
     LONGS_EQUAL(0, registry.countPlugins());
@@ -98,22 +85,24 @@ TEST(CommandLineTestRunner, NoPluginsAreInstalledAtTheEndOfARunWhenTheArgumentsA
 
 struct TestOutputCheckingCommandLineTestRunner : public CommandLineTestRunner
 {
-    TestOutputCheckingCommandLineTestRunner(int ac, const char** av, TestOutput* output, TestRegistry* registry) :
-        CommandLineTestRunner(ac, av, output, registry)
+    TestOutputCheckingCommandLineTestRunner( TestOutput* output, TestRegistry* registry, CommandLineArguments* arguments ):
+        CommandLineTestRunner( output, registry, arguments)
     {
     }
 
     bool hasJUnitTestOutput(void)
     {
-        return (output_ == jUnitOutput_);
+        return ( dynamic_cast<JUnitTestOutput*>( output_ ) );
     }
 };
 
 TEST(CommandLineTestRunner, JunitOutputEnabled)
 {
-    const char* argv[] = { "tests.exe", "-ojunit"};
+    const char* argv[] = { "tests.exe", "-ojunit" };
+    CommandLineArguments arguments( 2, argv );
+    JUnitTestOutput output;
 
-    TestOutputCheckingCommandLineTestRunner testRunner(2, argv, &output, &registry);
+    TestOutputCheckingCommandLineTestRunner testRunner(&output, &registry, &arguments);
     testRunner.runAllTestsMain();
     CHECK(testRunner.hasJUnitTestOutput());
 }

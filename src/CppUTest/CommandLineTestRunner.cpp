@@ -31,16 +31,14 @@
 #include "CppUTest/JUnitTestOutput.h"
 #include "CppUTest/TestRegistry.h"
 
-CommandLineTestRunner::CommandLineTestRunner(int ac, const char** av, TestOutput* output, TestRegistry* registry) :
-    output_(output), jUnitOutput_(NULL), arguments_(NULL), registry_(registry)
+CommandLineTestRunner::CommandLineTestRunner( TestOutput* output, TestRegistry* registry, CommandLineArguments* arguments ):
+    output_(output), arguments_(arguments), registry_(registry)
 {
-    arguments_ = new CommandLineArguments(ac, av);
+
 }
 
 CommandLineTestRunner::~CommandLineTestRunner()
 {
-    delete arguments_;
-    delete jUnitOutput_;
 }
 
 int CommandLineTestRunner::RunAllTests(int ac, char** av)
@@ -51,21 +49,44 @@ int CommandLineTestRunner::RunAllTests(int ac, char** av)
 int CommandLineTestRunner::RunAllTests(int ac, const char** av)
 {
     int result = 0;
-    ConsoleTestOutput output;
+    TestRegistry* registry = TestRegistry::getCurrentRegistry();
+    CommandLineArguments arguments( ac, av );
+    arguments.parse( registry->getFirstPlugin() );
+    TestOutput* output;
+    if( arguments.isJUnitOutput() ) {
+        JUnitTestOutput* jUnitOutput = new JUnitTestOutput;
+        jUnitOutput->setPackageName( arguments.getPackageName() );
+        output = jUnitOutput;
+    }
+    else {
+        output = new ConsoleTestOutput;
+    }
 
     MemoryLeakWarningPlugin memLeakWarn(DEF_PLUGIN_MEM_LEAK);
     memLeakWarn.destroyGlobalDetectorAndTurnOffMemoryLeakDetectionInDestructor(true);
-    TestRegistry::getCurrentRegistry()->installPlugin(&memLeakWarn);
+    registry->installPlugin( &memLeakWarn );
 
+    SetPointerPlugin pPlugin( DEF_PLUGIN_SET_POINTER );
+    registry->installPlugin( &pPlugin );
+
+    if(arguments.isSuccesfullyParsed())
     {
-        CommandLineTestRunner runner(ac, av, &output, TestRegistry::getCurrentRegistry());
+        CommandLineTestRunner runner( output, registry, &arguments );
         result = runner.runAllTestsMain();
     }
+    else {
+        output->print( arguments.usage() );
+    }
+
+    registry->removePluginByName( DEF_PLUGIN_SET_POINTER );
 
     if (result == 0) {
-        output << memLeakWarn.FinalReport(0);
+        *output << memLeakWarn.FinalReport(0);
     }
-    TestRegistry::getCurrentRegistry()->removePluginByName(DEF_PLUGIN_MEM_LEAK);
+    registry->removePluginByName( DEF_PLUGIN_MEM_LEAK );
+
+    delete output;
+
     return result;
 }
 
@@ -73,13 +94,10 @@ int CommandLineTestRunner::runAllTestsMain()
 {
     int testResult = 0;
 
-    SetPointerPlugin pPlugin(DEF_PLUGIN_SET_POINTER);
-    registry_->installPlugin(&pPlugin);
-
-    if (parseArguments(registry_->getFirstPlugin()))
+    if( arguments_->isSuccesfullyParsed() ) {
         testResult = runAllTests();
+    }
 
-    registry_->removePluginByName(DEF_PLUGIN_SET_POINTER);
     return testResult;
 }
 
@@ -107,21 +125,4 @@ int CommandLineTestRunner::runAllTests()
     }
 
     return failureCount;
-}
-
-bool CommandLineTestRunner::parseArguments(TestPlugin* plugin)
-{
-    if (arguments_->parse(plugin)) {
-        if (arguments_->isJUnitOutput()) {
-            output_ = jUnitOutput_ = new JUnitTestOutput;
-            if (jUnitOutput_ != NULL) {
-                jUnitOutput_->setPackageName(arguments_->getPackageName());
-            }
-        }
-        return true;
-    }
-    else {
-        output_->print(arguments_->usage());
-        return false;
-    }
 }
