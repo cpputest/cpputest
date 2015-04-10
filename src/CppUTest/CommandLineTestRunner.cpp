@@ -32,7 +32,7 @@
 #include "CppUTest/TestRegistry.h"
 
 CommandLineTestRunner::CommandLineTestRunner(int ac, const char** av, TestOutput* output, TestRegistry* registry) :
-    output_(output), jUnitOutput_(NULL), arguments_(NULL), registry_(registry)
+    output_(output), primaryOutput_(output), secondaryOutput_(NULL), arguments_(NULL), registry_(registry)
 {
     arguments_ = new CommandLineArguments(ac, av);
 }
@@ -40,12 +40,12 @@ CommandLineTestRunner::CommandLineTestRunner(int ac, const char** av, TestOutput
 CommandLineTestRunner::~CommandLineTestRunner()
 {
     delete arguments_;
-    delete jUnitOutput_;
+    delete secondaryOutput_;
 }
 
 int CommandLineTestRunner::RunAllTests(int ac, char** av)
 {
-    return RunAllTests(ac, const_cast<const char**> (av));
+    return RunAllTests(ac, (const char**) av);
 }
 
 int CommandLineTestRunner::RunAllTests(int ac, const char** av)
@@ -113,9 +113,10 @@ bool CommandLineTestRunner::parseArguments(TestPlugin* plugin)
 {
     if (arguments_->parse(plugin)) {
         if (arguments_->isJUnitOutput()) {
-            output_ = jUnitOutput_ = new JUnitTestOutput;
-            if (jUnitOutput_ != NULL) {
-                jUnitOutput_->setPackageName(arguments_->getPackageName());
+          JUnitTestOutput* junitOutput = new JUnitTestOutput;
+          output_ = secondaryOutput_ = junitOutput;
+            if (junitOutput != NULL) {
+                junitOutput->setPackageName(arguments_->getPackageName());
             }
         }
         return true;

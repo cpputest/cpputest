@@ -56,6 +56,8 @@ public:
 
 protected:
     TestOutput* output_;
+    TestOutput* primaryOutput_;
+    TestOutput* secondaryOutput_;
     JUnitTestOutput* jUnitOutput_;
 
 private:
