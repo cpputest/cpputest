@@ -69,6 +69,34 @@ int CommandLineTestRunner::RunAllTests(int ac, const char** av)
     return result;
 }
 
+int CommandLineTestRunner::RunAllTests( int ac, wchar_t** av ) {
+    return RunAllTests( ac, const_cast<const wchar_t**> ( av ) );
+}
+
+int CommandLineTestRunner::RunAllTests( int ac, const wchar_t** av )
+{
+    char** avc = ConvertWideArgumentsToNormal( ac, av );
+
+    int result = RunAllTests( ac, avc );
+
+    for ( int i = 0; i < ac; i++ ) {
+        delete[] avc[i];
+    }
+    delete[] avc;
+
+    return result;
+}
+
+char** CommandLineTestRunner::ConvertWideArgumentsToNormal( int ac, const wchar_t** av ) {
+    char** avc = new char*[ac];
+    for( int i = 0; i < ac; i++ ) {
+        size_t len = wcslen( av[i] ) + 1;
+        avc[i] = new char[len];
+        wcstombs( avc[i], av[i], len );
+    }
+    return avc;
+}
+
 int CommandLineTestRunner::runAllTestsMain()
 {
     int testResult = 0;

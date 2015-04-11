@@ -96,6 +96,22 @@ TEST(CommandLineTestRunner, NoPluginsAreInstalledAtTheEndOfARunWhenTheArgumentsA
     LONGS_EQUAL(0, registry.countPlugins());
 }
 
+TEST( CommandLineTestRunner, VerifyWideToNormalConversions ) {
+    const wchar_t* argv[] = { L"dummy.exe", L"-fdskjnfkds" };
+    int ac = 2;
+
+    char** avc = CommandLineTestRunner::ConvertWideArgumentsToNormal( ac, argv );
+
+    STRCMP_EQUAL( "dummy.exe", avc[0] );
+    STRCMP_EQUAL( "-fdskjnfkds", avc[1] );
+
+    for( int i = 0; i < ac; i++ ) {
+        delete[] avc[i];
+    }
+    delete[] avc;
+}
+
+
 struct TestOutputCheckingCommandLineTestRunner : public CommandLineTestRunner
 {
     TestOutputCheckingCommandLineTestRunner(int ac, const char** av, TestOutput* output, TestRegistry* registry) :

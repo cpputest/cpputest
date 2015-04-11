@@ -32,6 +32,7 @@
 #include "TestOutput.h"
 #include "CommandLineArguments.h"
 #include "TestFilter.h"
+#include <cwchar>
 
 class JUnitTestOutput;
 class TestRegistry;
@@ -49,7 +50,11 @@ public:
 
     static int RunAllTests(int ac, const char** av);
     static int RunAllTests(int ac, char** av);
+    static int RunAllTests(int ac, const wchar_t** av);
+    static int RunAllTests( int ac, wchar_t** av );
     CommandLineTestRunner(int ac, const char** av, TestOutput*, TestRegistry* registry);
+
+    static char** ConvertWideArgumentsToNormal( int ac, const wchar_t** av );
 
     virtual ~CommandLineTestRunner();
     int runAllTestsMain();
