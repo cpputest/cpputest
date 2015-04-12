@@ -8,9 +8,58 @@ function Get-Batchfile ($file) {
     }
 }
 
+function Invoke-BuildCommand($command)
+{
+    Write-Host $command
+    Invoke-Expression $command
+    if (-not $?)
+    {
+        Exit $LASTEXITCODE
+    }
+}
+
+function Invoke-Tests($executable)
+{
+    # Run tests using Chutzpah and export results as JUnit format to chutzpah-results.xml
+    $TestCommand = "$executable -ojunit"
+    Write-Host $TestCommand
+    Invoke-Expression $TestCommand
+
+    $anyFailures = $FALSE
+
+    # Upload results to AppVeyor one by one
+    Get-ChildItem *.xml | foreach
+    {
+        $testsuites = [xml](get-content $_.Name)
+
+        foreach ($testsuite in $testsuites.testsuites.testsuite) {
+            write-host " $($testsuite.name)"
+            foreach ($testcase in $testsuite.testcase){
+                $failed = $testcase.failure
+                if ($failed) {
+                    Add-AppveyorTest $testcase.name -Outcome Failed -FileName $testsuite.name -ErrorMessage $testcase.failure.message
+                    Add-AppveyorMessage "$($testcase.name) failed" -Category Error
+                    $anyFailures = $TRUE
+                }
+                else {
+                    Add-AppveyorTest $testcase.name -Outcome Passed -FileName $testsuite.name
+                }
+
+            }
+        }
+    }
+
+    if ($anyFailures -eq $TRUE){
+        write-host "Failing build as there are broken tests"
+        $host.SetShouldExit(1)
+    }
+}
+
 # The project files that will get built
-$VS2008ProjectFiles = @( 'CppUTest.vcproj' , 'tests/AllTests.vcproj'  )
-$VS2010ProjectFiles = @( 'CppUTest.vcxproj', 'tests/AllTests.vcxproj' )
+$VS2008ProjectFiles = @( 'CppUTest.vcproj' , 'tests\AllTests.vcproj'  )
+$VS2010ProjectFiles = @( 'CppUTest.vcxproj', 'tests\AllTests.vcxproj' )
+$VS2008TestCommand = 'tests\Debug\AllTests.exe'
+$VS2010TestCommand = 'tests\Debug\AllTests.exe'
 
 if ($env:APPVEYOR)
 {
@@ -27,20 +76,21 @@ if ($env:PlatformToolset -eq 'v90')
     Get-BatchFile($vsvarspath)
 
     $VS2008ProjectFiles | foreach {
-        vcbuild /upgrade $_
-        if (-not $?) { exit $LASTEXITCODE }
+        Invoke-BuildCommand("vcbuild /upgrade $_")
     }
 
     $VS2008ProjectFiles | foreach {
-        vcbuild $_ Debug
-        if (-not $?) { exit $LASTEXITCODE }
+        Invoke-BuildCommand("vcbuild $_ Debug")
     }
+
+    Invoke-Test($VS2008TestCommand)
 }
 
 if ($env:PlatformToolset -eq 'v100')
 {
     $VS2010ProjectFiles | foreach {
-        msbuild $logger_arg $_
-        if (-not $?) { exit $LASTEXITCODE }
+        Invoke-BuildCommand("msbuild $logger_arg $_")
     }
+
+    Invoke-Tests($VS2010TestCommand)
 }
