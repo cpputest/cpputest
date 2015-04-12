@@ -74,28 +74,34 @@ void TestRegistry::runAllTests(TestResult& result)
 
 void TestRegistry::listTestGroupNames(TestResult& result)
 {
-    SimpleString lastgroup = "";
+    SimpleString groupList;
 
     for (UtestShell *test = tests_; test != NULL; test = test->getNext()) {
         SimpleString gname = test->getGroup();
-        if (gname != lastgroup) {
-            lastgroup = gname;
-            result.print(gname.asCharString());
-            result.print(" ");
+        if (!groupList.contains(gname)) {
+            groupList += gname;
+            groupList += " ";
         }
     }
+    result.print(groupList.asCharString());
 }
 
 void TestRegistry::listTestGroupAndCaseNames(TestResult& result)
 {
+    SimpleString groupAndNameList;
+
     for (UtestShell *test = tests_; test != NULL; test = test->getNext()) {
         if (testShouldRun(test, result)) {
-            result.print(test->getGroup().asCharString());
-            result.print(".");
-            result.print(test->getName().asCharString());
-            result.print(" ");
+            SimpleString groupAndName = test->getGroup();
+            groupAndName += ".";
+            groupAndName += test->getName();
+            groupAndName += " ";
+            if (!groupAndNameList.contains(groupAndName)) {
+                groupAndNameList += groupAndName;
+            }
         }
     }
+    result.print(groupAndNameList.asCharString());
 }
 
 bool TestRegistry::endOfGroup(UtestShell* test)

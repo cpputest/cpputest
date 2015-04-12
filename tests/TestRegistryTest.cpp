@@ -323,3 +323,40 @@ TEST(TestRegistry, ResetPluginsWorks)
     myRegistry->resetPlugins();
     LONGS_EQUAL(0, myRegistry->countPlugins());
 }
+
+TEST(TestRegistry, listGroupNames)
+{
+    test1->setGroupName("GROUP_1");
+    myRegistry->addTest(test1);
+    test2->setGroupName("GROUP_2");
+    myRegistry->addTest(test2);
+    test3->setGroupName("GROUP_3");
+    myRegistry->addTest(test3);
+
+    output->flush();
+    myRegistry->listTestGroupNames(*result);
+    SimpleString s = output->getOutput();
+    STRCMP_CONTAINS("GROUP_1 ", s.asCharString());
+    STRCMP_CONTAINS("GROUP_2 ", s.asCharString());
+    STRCMP_CONTAINS("GROUP_3 ", s.asCharString());
+}
+
+TEST(TestRegistry, listTestNames)
+{
+    test1->setGroupName("GROUP_A");
+    test1->setTestName("test_a");
+    myRegistry->addTest(test1);
+    test2->setGroupName("GROUP_B");
+    test2->setTestName("test_b");
+    myRegistry->addTest(test2);
+    test3->setGroupName("GROUP_C");
+    test3->setTestName("test_c");
+    myRegistry->addTest(test3);
+
+    output->flush();
+    myRegistry->listTestGroupAndCaseNames(*result);
+    SimpleString s = output->getOutput();
+    STRCMP_CONTAINS("GROUP_A.test_a ", s.asCharString());
+    STRCMP_CONTAINS("GROUP_B.test_b ", s.asCharString());
+    STRCMP_CONTAINS("GROUP_C.test_c ", s.asCharString());
+}
