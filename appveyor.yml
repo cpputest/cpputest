@@ -1,9 +1,5 @@
 version: 3.7.0-ci{build}
 
-branches:
-  only:
-  - appveyor
-
 os:
 - Windows Server 2012 R2
 
