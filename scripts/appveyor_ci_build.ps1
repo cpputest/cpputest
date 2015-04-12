@@ -12,6 +12,15 @@ function Get-Batchfile ($file) {
 $VS2008ProjectFiles = @( 'CppUTest.vcproj' , 'tests/AllTests.vcproj'  )
 $VS2010ProjectFiles = @( 'CppUTest.vcxproj', 'tests/AllTests.vcxproj' )
 
+if ($env:APPVEYOR)
+{
+    $logger_arg = '/logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"'
+}
+else
+{
+    $logger_arg = ''
+}
+
 if ($env:PlatformToolset -eq 'v90')
 {
     $vsvarspath = Join-Path $env:VS90COMNTOOLS vsvars32.bat
@@ -19,16 +28,19 @@ if ($env:PlatformToolset -eq 'v90')
 
     $VS2008ProjectFiles | foreach {
         vcbuild /upgrade $_
+        if (-not $?) { exit $LASTEXITCODE }
     }
 
     $VS2008ProjectFiles | foreach {
         vcbuild $_ Debug
+        if (-not $?) { exit $LASTEXITCODE }
     }
 }
 
 if ($env:PlatformToolset -eq 'v100')
 {
     $VS2010ProjectFiles | foreach {
-        msbuild /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll" $_
+        msbuild $logger_arg $_
+        if (-not $?) { exit $LASTEXITCODE }
     }
 }
