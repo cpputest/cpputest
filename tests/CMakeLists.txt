@@ -41,7 +41,16 @@ endif (MSVC)
 
 add_executable(CppUTestTests ${CppUTestTests_src})
 target_link_libraries(CppUTestTests CppUTest)
-add_test(CppUTestTests ${EXECUTABLE_OUTPUT_PATH}/CppUTestTests)
+
+# get all test groups
+execute_process(COMMAND tests/CppUTestTests -lg OUTPUT_VARIABLE CppUTestTests_Groups)
+
+# create separate test for each group
+separate_arguments(CppUTestTests_Groups)
+foreach(group ${CppUTestTests_Groups})
+	message("Add test: ${group}")
+	add_test(NAME CppUTest.${group} COMMAND ${EXECUTABLE_OUTPUT_PATH}/CppUTestTests -g ${group})
+endforeach()
 
 if (TESTS)
     add_subdirectory(CppUTestExt)
