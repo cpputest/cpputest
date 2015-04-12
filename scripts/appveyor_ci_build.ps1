@@ -80,10 +80,10 @@ if ($env:PlatformToolset -eq 'v90')
     }
 
     $VS2008ProjectFiles | foreach {
-        Invoke-BuildCommand("vcbuild $_ Debug")
+        Invoke-BuildCommand("vcbuild $_ $env:CONFIGURATION")
     }
 
-    Invoke-Test($VS2008TestCommand)
+    Invoke-Tests($VS2008TestCommand)
 }
 
 if ($env:PlatformToolset -eq 'v100')
