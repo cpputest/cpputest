@@ -31,18 +31,6 @@
 #include "CppUTest/JUnitTestOutput.h"
 #include "CppUTest/TestRegistry.h"
 
-CommandLineTestRunner::CommandLineTestRunner(int ac, const char** av, TestOutput* output, TestRegistry* registry) :
-    output_(output), primaryOutput_(output), secondaryOutput_(NULL), arguments_(NULL), registry_(registry)
-{
-    arguments_ = new CommandLineArguments(ac, av);
-}
-
-CommandLineTestRunner::~CommandLineTestRunner()
-{
-    delete arguments_;
-    delete secondaryOutput_;
-}
-
 int CommandLineTestRunner::RunAllTests(int ac, char** av)
 {
     return RunAllTests(ac, (const char**) av);
@@ -51,22 +39,34 @@ int CommandLineTestRunner::RunAllTests(int ac, char** av)
 int CommandLineTestRunner::RunAllTests(int ac, const char** av)
 {
     int result = 0;
-    ConsoleTestOutput output;
+    ConsoleTestOutput backupOutput;
 
     MemoryLeakWarningPlugin memLeakWarn(DEF_PLUGIN_MEM_LEAK);
     memLeakWarn.destroyGlobalDetectorAndTurnOffMemoryLeakDetectionInDestructor(true);
     TestRegistry::getCurrentRegistry()->installPlugin(&memLeakWarn);
 
     {
-        CommandLineTestRunner runner(ac, av, &output, TestRegistry::getCurrentRegistry());
+        CommandLineTestRunner runner(ac, av, TestRegistry::getCurrentRegistry());
         result = runner.runAllTestsMain();
     }
 
     if (result == 0) {
-        output << memLeakWarn.FinalReport(0);
+        backupOutput << memLeakWarn.FinalReport(0);
     }
     TestRegistry::getCurrentRegistry()->removePluginByName(DEF_PLUGIN_MEM_LEAK);
     return result;
+}
+
+CommandLineTestRunner::CommandLineTestRunner(int ac, const char** av, TestRegistry* registry) :
+    output_(NULL), arguments_(NULL), registry_(registry)
+{
+    arguments_ = new CommandLineArguments(ac, av);
+}
+
+CommandLineTestRunner::~CommandLineTestRunner()
+{
+    delete arguments_;
+    delete output_;
 }
 
 int CommandLineTestRunner::runAllTestsMain()
@@ -109,20 +109,32 @@ int CommandLineTestRunner::runAllTests()
     return failureCount;
 }
 
+TestOutput* CommandLineTestRunner::createJUnitOutput(const SimpleString& packageName)
+{
+    JUnitTestOutput* junitOutput = new JUnitTestOutput;
+    if (junitOutput != NULL) {
+      junitOutput->setPackageName(packageName);
+    }
+    return junitOutput;
+}
+
+TestOutput* CommandLineTestRunner::createConsoleOutput()
+{
+    return new ConsoleTestOutput;
+}
+
 bool CommandLineTestRunner::parseArguments(TestPlugin* plugin)
 {
-    if (arguments_->parse(plugin)) {
-        if (arguments_->isJUnitOutput()) {
-          JUnitTestOutput* junitOutput = new JUnitTestOutput;
-          output_ = secondaryOutput_ = junitOutput;
-            if (junitOutput != NULL) {
-                junitOutput->setPackageName(arguments_->getPackageName());
-            }
-        }
-        return true;
-    }
-    else {
-        output_->print(arguments_->usage());
-        return false;
-    }
+  if (!arguments_->parse(plugin)) {
+    output_ = createConsoleOutput();
+    output_->print(arguments_->usage());
+    return false;
+  }
+
+  if (arguments_->isJUnitOutput())
+    output_= createJUnitOutput(arguments_->getPackageName());
+  else
+    output_ = createConsoleOutput();
+  return true;
 }
+
