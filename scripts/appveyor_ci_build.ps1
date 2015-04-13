@@ -29,10 +29,10 @@ function Invoke-Tests($executable)
 
     # Upload results to AppVeyor one by one
     Get-ChildItem *.xml | foreach {
-        $testsuite = [xml](get-content $_.Name)
+        $testsuite = ([xml](get-content $_.Name)).testsuite
 
         write-host " $($testsuite.name)"
-        foreach ($testcase in $testsuite.testcase){
+        foreach ($testcase in $testsuite.testcase) {
             if ($testcase.failure) {
                 Add-AppveyorTest $testcase.name -Outcome Failed -FileName $testsuite.name -ErrorMessage $testcase.failure.message
                 Add-AppveyorMessage "$($testcase.name) failed" -Category Error
