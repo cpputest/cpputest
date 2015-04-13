@@ -10,9 +10,10 @@ function Get-Batchfile ($file) {
 
 function Invoke-BuildCommand($command)
 {
+    $command_wrapped = "$command;`$err = `$?"
     Write-Host $command
-    Invoke-Expression $command
-    if (-not $?)
+    Invoke-Expression $command_wrapped
+    if (-not $err)
     {
         Exit $LASTEXITCODE
     }
@@ -56,8 +57,8 @@ function Invoke-Tests($executable)
 # The project files that will get built
 $VS2008ProjectFiles = @( 'CppUTest.vcproj' , 'tests\AllTests.vcproj'  )
 $VS2010ProjectFiles = @( 'CppUTest.vcxproj', 'tests\AllTests.vcxproj' )
-$VS2008TestCommand = 'tests\Debug\AllTests.exe'
-$VS2010TestCommand = 'tests\Debug\AllTests.exe'
+$VS2008TestCommand = '.\tests\Debug\AllTests.exe'
+$VS2010TestCommand = '.\tests\Debug\AllTests.exe'
 
 if ($env:APPVEYOR)
 {
