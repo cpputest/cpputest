@@ -28,6 +28,7 @@ function Invoke-Tests($executable)
     $anyFailures = $FALSE
 
     # Upload results to AppVeyor one by one
+    Get-ChildItem *.xml | foreach {
         $testsuites = [xml](get-content $_.Name)
 
         foreach ($testsuite in $testsuites.testsuites.testsuite) {
