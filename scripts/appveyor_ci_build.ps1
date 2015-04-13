@@ -19,46 +19,9 @@ function Invoke-BuildCommand($command)
     }
 }
 
-function Invoke-Tests($executable)
-{
-    # Run tests using Chutzpah and export results as JUnit format to chutzpah-results.xml
-    $TestCommand = "$executable -ojunit"
-    Write-Host $TestCommand
-    Invoke-Expression $TestCommand
-
-    $anyFailures = $FALSE
-
-    # Upload results to AppVeyor one by one
-    Get-ChildItem *.xml | foreach {
-        $testsuite = ([xml](get-content $_.Name)).testsuite
-
-        write-host " $($testsuite.name)"
-        foreach ($testcase in $testsuite.testcase) {
-            if ($testcase.failure) {
-                Add-AppveyorTest $testcase.name -Outcome Failed -FileName $testsuite.name -ErrorMessage $testcase.failure.message
-                Add-AppveyorMessage "$($testcase.name) failed" -Category Error
-                $anyFailures = $TRUE
-            }
-            elseif ($testcase.skipped) {
-                Add-AppveyorTest $testcase.name -Outcome Ignored -Filename $testsuite.name
-            }
-            else {
-                Add-AppveyorTest $testcase.name -Outcome Passed -FileName $testsuite.name
-            }
-        }
-    }
-
-    if ($anyFailures -eq $TRUE){
-        write-host "Failing build as there are broken tests"
-        $host.SetShouldExit(1)
-    }
-}
-
 # The project files that will get built
 $VS2008ProjectFiles = @( 'CppUTest.vcproj' , 'tests\AllTests.vcproj'  )
 $VS2010ProjectFiles = @( 'CppUTest.vcxproj', 'tests\AllTests.vcxproj' )
-$VS2008TestCommand = '.\tests\Debug\AllTests.exe'
-$VS2010TestCommand = '.\tests\Debug\AllTests.exe'
 
 if ($env:APPVEYOR)
 {
@@ -81,8 +44,6 @@ if ($env:PlatformToolset -eq 'v90')
     $VS2008ProjectFiles | foreach {
         Invoke-BuildCommand("vcbuild $_ $env:CONFIGURATION")
     }
-
-    Invoke-Tests($VS2008TestCommand)
 }
 
 if ($env:PlatformToolset -eq 'v100')
@@ -90,6 +51,4 @@ if ($env:PlatformToolset -eq 'v100')
     $VS2010ProjectFiles | foreach {
         Invoke-BuildCommand("msbuild $logger_arg $_")
     }
-
-    Invoke-Tests($VS2010TestCommand)
 }
