@@ -330,15 +330,14 @@ TEST(TestRegistry, listGroupNames)
     myRegistry->addTest(test1);
     test2->setGroupName("GROUP_2");
     myRegistry->addTest(test2);
-    test3->setGroupName("GROUP_3");
+    test3->setGroupName("GROUP_1");
     myRegistry->addTest(test3);
 
-    output->flush();
     myRegistry->listTestGroupNames(*result);
     SimpleString s = output->getOutput();
     STRCMP_CONTAINS("GROUP_1 ", s.asCharString());
     STRCMP_CONTAINS("GROUP_2 ", s.asCharString());
-    STRCMP_CONTAINS("GROUP_3 ", s.asCharString());
+    LONGS_EQUAL(1, s.count("GROUP_1 "));
 }
 
 TEST(TestRegistry, listTestNames)
@@ -353,7 +352,6 @@ TEST(TestRegistry, listTestNames)
     test3->setTestName("test_c");
     myRegistry->addTest(test3);
 
-    output->flush();
     myRegistry->listTestGroupAndCaseNames(*result);
     SimpleString s = output->getOutput();
     STRCMP_CONTAINS("GROUP_A.test_a ", s.asCharString());
