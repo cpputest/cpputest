@@ -335,9 +335,7 @@ TEST(TestRegistry, listGroupNames)
 
     myRegistry->listTestGroupNames(*result);
     SimpleString s = output->getOutput();
-    STRCMP_CONTAINS("GROUP_1 ", s.asCharString());
-    STRCMP_CONTAINS("GROUP_2 ", s.asCharString());
-    LONGS_EQUAL(1, s.count("GROUP_1 "));
+    STRCMP_EQUAL("GROUP_1 GROUP_2 ", s.asCharString());
 }
 
 TEST(TestRegistry, listTestNames)
