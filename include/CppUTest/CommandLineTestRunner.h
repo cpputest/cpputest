@@ -33,7 +33,6 @@
 #include "CommandLineArguments.h"
 #include "TestFilter.h"
 
-class JUnitTestOutput;
 class TestRegistry;
 
 #define DEF_PLUGIN_MEM_LEAK "MemoryLeakPlugin"
@@ -42,22 +41,19 @@ class TestRegistry;
 class CommandLineTestRunner
 {
 public:
-    enum OutputType
-    {
-        OUTPUT_NORMAL, OUTPUT_JUNIT
-    };
-
     static int RunAllTests(int ac, const char** av);
     static int RunAllTests(int ac, char** av);
-    CommandLineTestRunner(int ac, const char** av, TestOutput*, TestRegistry* registry);
 
+    CommandLineTestRunner(int ac, const char** av, TestRegistry* registry);
     virtual ~CommandLineTestRunner();
+
     int runAllTestsMain();
 
 protected:
-    TestOutput* output_;
-    JUnitTestOutput* jUnitOutput_;
+    virtual TestOutput* createJUnitOutput(const SimpleString& packageName);
+    virtual TestOutput* createConsoleOutput();
 
+    TestOutput* output_;
 private:
     CommandLineArguments* arguments_;
     TestRegistry* registry_;

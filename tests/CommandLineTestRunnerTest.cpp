@@ -55,11 +55,39 @@ private:
 
 };
 
+class CommandLineTestRunnerWithStringBufferOutput : public CommandLineTestRunner
+{
+  TestOutput* junitOuput_;
+public:
+  CommandLineTestRunnerWithStringBufferOutput(int argc, const char** argv, TestRegistry* registry)
+    : CommandLineTestRunner(argc, argv, registry), junitOuput_(NULL)
+  {}
+
+  ~CommandLineTestRunnerWithStringBufferOutput()
+  {
+    delete junitOuput_;
+  }
+
+  TestOutput* createConsoleOutput()
+  {
+    return new StringBufferTestOutput;
+  }
+
+  TestOutput* createJUnitOutput(const SimpleString& packagename)
+  {
+    junitOuput_ = CommandLineTestRunner::createJUnitOutput(packagename);
+    return new StringBufferTestOutput;
+  }
+
+  bool hasJUnitTestOutput()
+  {
+    return junitOuput_;
+  }
+};
 
 TEST_GROUP(CommandLineTestRunner)
 {
     TestRegistry registry;
-    StringBufferTestOutput output;
     DummyPluginWhichCountsThePlugins* pluginCountingPlugin;
 
     void setup()
@@ -78,7 +106,7 @@ TEST(CommandLineTestRunner, OnePluginGetsInstalledDuringTheRunningTheTests)
 
     registry.installPlugin(pluginCountingPlugin);
 
-    CommandLineTestRunner commandLineTestRunner(2, argv, &output, &registry);
+    CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(2, argv, &registry);
     commandLineTestRunner.runAllTestsMain();
     registry.removePluginByName("PluginCountingPlugin");
 
@@ -90,30 +118,18 @@ TEST(CommandLineTestRunner, NoPluginsAreInstalledAtTheEndOfARunWhenTheArgumentsA
 {
     const char* argv[] = { "tests.exe", "-fdskjnfkds"};
 
-    CommandLineTestRunner commandLineTestRunner(2, argv, &output, &registry);
+    CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(2, argv, &registry);
     commandLineTestRunner.runAllTestsMain();
 
     LONGS_EQUAL(0, registry.countPlugins());
+
 }
-
-struct TestOutputCheckingCommandLineTestRunner : public CommandLineTestRunner
-{
-    TestOutputCheckingCommandLineTestRunner(int ac, const char** av, TestOutput* output, TestRegistry* registry) :
-        CommandLineTestRunner(ac, av, output, registry)
-    {
-    }
-
-    bool hasJUnitTestOutput(void)
-    {
-        return (output_ == jUnitOutput_);
-    }
-};
 
 TEST(CommandLineTestRunner, JunitOutputEnabled)
 {
     const char* argv[] = { "tests.exe", "-ojunit"};
 
-    TestOutputCheckingCommandLineTestRunner testRunner(2, argv, &output, &registry);
-    testRunner.runAllTestsMain();
-    CHECK(testRunner.hasJUnitTestOutput());
+    CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(2, argv, &registry);
+    commandLineTestRunner.runAllTestsMain();
+    CHECK(commandLineTestRunner.hasJUnitTestOutput());
 }
