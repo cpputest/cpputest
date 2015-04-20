@@ -1,5 +1,6 @@
 set(CppUTest_src
         CommandLineArguments.cpp
+        CompositeTestOutput.cpp
         MemoryLeakWarningPlugin.cpp
         TestHarness_c.cpp
         TestRegistry.cpp
@@ -23,6 +24,7 @@ set(CppUTest_headers
         ${CppUTestRootDirectory}/include/CppUTest/PlatformSpecificFunctions.h
         ${CppUTestRootDirectory}/include/CppUTest/TestMemoryAllocator.h
         ${CppUTestRootDirectory}/include/CppUTest/CommandLineTestRunner.h
+        ${CppUTestRootDirectory}/include/CppUTest/CompositeTestOutput.h
         ${CppUTestRootDirectory}/include/CppUTest/PlatformSpecificFunctions_c.h
         ${CppUTestRootDirectory}/include/CppUTest/TestOutput.h
         ${CppUTestRootDirectory}/include/CppUTest/CppUTestConfig.h

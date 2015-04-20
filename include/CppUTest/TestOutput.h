@@ -156,9 +156,10 @@ public:
         return output;
     }
 
-private:
+protected:
     SimpleString output;
 
+private:
     StringBufferTestOutput(const StringBufferTestOutput&);
     StringBufferTestOutput& operator=(const StringBufferTestOutput&);
 

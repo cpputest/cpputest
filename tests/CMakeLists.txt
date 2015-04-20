@@ -9,6 +9,7 @@ set(CppUTestTests_src
         TestFailureTest.cpp
         TestFailureNaNTest.cpp
         CommandLineTestRunnerTest.cpp
+        CompositeTestOutput.cpp
         TestFilterTest.cpp
         TestHarness_cTest.cpp
         JUnitOutputTest.cpp
