@@ -6,6 +6,7 @@ set(CppUTestTests_src
     CheatSheetTest.cpp
     SimpleStringTest.cpp
     CommandLineArgumentsTest.cpp
+    CompositeTestOutput.cpp
     TestFailureTest.cpp
     TestFailureNaNTest.cpp
     CommandLineTestRunnerTest.cpp
