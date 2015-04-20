@@ -538,7 +538,7 @@ TEST(MockExpectedCallComposite, isOnObject)
 static void withCallOrderNotSupportedFailMethod_(void)
 {
     composite.withCallOrder(5);
-}
+} // LCOV_EXCL_LINE
 
 TEST(MockExpectedCallComposite, doesNotSupportCallOrder)
 {

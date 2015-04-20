@@ -41,8 +41,8 @@ TEST(BasicBehavior, deleteInvalidatesMemory)
 static void deleteUnallocatedMemory()
 {
     delete (char*) 0x1234678;
-    FAIL("Should never come here");
-}
+    FAIL("Should never come here"); // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
 
 TEST(BasicBehavior, deleteWillNotThrowAnExceptionWhenDeletingUnallocatedMemoryButCanStillCauseTestFailures)
 {
