@@ -52,6 +52,7 @@ public:
     virtual void printBuffer(const char* str) _override;
     virtual bool isVerbose() _override { return currentConsoleOutput_->isVerbose(); }
     virtual void print(const char* str) _override { currentConsoleOutput_->print(str); }
+    virtual void print(long n) _override { currentConsoleOutput_->print(n); }
     virtual void print(const TestFailure& failure) _override;
     virtual void printTestRun(int number, int total) _override;
 
