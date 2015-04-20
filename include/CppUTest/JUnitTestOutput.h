@@ -37,7 +37,7 @@ struct JUnitTestCaseResultNode;
 class JUnitTestOutput: public TestOutput
 {
 public:
-    JUnitTestOutput();
+    explicit JUnitTestOutput(TestOutput* output = NULL);
     virtual ~JUnitTestOutput();
 
     virtual void printTestsStarted() _override;
@@ -47,10 +47,13 @@ public:
     virtual void printCurrentGroupStarted(const UtestShell& test) _override;
     virtual void printCurrentGroupEnded(const TestResult& res) _override;
 
-    virtual void printBuffer(const char*) _override;
-    virtual void print(const char*) _override;
-    virtual void print(long) _override;
+    virtual void verbose() _override { currentConsoleOutput_->verbose(); }
+    virtual void color() _override { currentConsoleOutput_->color(); }
+    virtual void printBuffer(const char* str) _override;
+    virtual bool isVerbose() _override { return currentConsoleOutput_->isVerbose(); }
+    virtual void print(const char* str) _override { currentConsoleOutput_->print(str); }
     virtual void print(const TestFailure& failure) _override;
+    virtual void printTestRun(int number, int total) _override;
 
     virtual void flush() _override;
 
@@ -74,6 +77,9 @@ protected:
     virtual void writeFailure(JUnitTestCaseResultNode* node);
     virtual void writeFileEnding();
 
+private:
+    TestOutput* currentConsoleOutput_;
+    ConsoleTestOutput defaultConsoleOutput_;
 };
 
 #endif

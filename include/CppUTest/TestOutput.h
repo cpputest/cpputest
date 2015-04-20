@@ -56,6 +56,7 @@ public:
 
     virtual void verbose();
     virtual void color();
+    virtual bool isVerbose() { return verbose_; }
     virtual void printBuffer(const char*)=0;
     virtual void print(const char*);
     virtual void print(long);
@@ -114,7 +115,6 @@ public:
     virtual ~ConsoleTestOutput()
     {
     }
-
     virtual void printBuffer(const char* s) _override;
     virtual void flush() _override;
 
