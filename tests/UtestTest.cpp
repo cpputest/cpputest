@@ -184,6 +184,10 @@ TEST(UtestShell, TestDefaultCrashMethodInSeparateProcessTest)
     fixture.assertPrintContains("Failed in separate process - killed by signal 11");
 }
 
+#else
+
+IGNORE_TEST(UtestShell, TestDefaultCrashMethodInSeparateProcessTest) {}
+
 #endif
 
 #if CPPUTEST_USE_STD_CPP_LIB
