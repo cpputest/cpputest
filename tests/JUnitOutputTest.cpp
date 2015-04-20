@@ -289,6 +289,7 @@ extern "C" {
 
 TEST_GROUP(JUnitOutputTest)
 {
+    StringBufferTestOutput printer;
     JUnitTestOutput *junitOutput;
     TestResult *result;
     JUnitTestOutputTestRunner *testCaseRunner;
@@ -299,7 +300,7 @@ TEST_GROUP(JUnitOutputTest)
         UT_PTR_SET(PlatformSpecificFOpen, (PlatformSpecificFile(*)(const char*, const char*))mockFOpen);
         UT_PTR_SET(PlatformSpecificFPuts, mockFPuts);
         UT_PTR_SET(PlatformSpecificFClose, mockFClose);
-        junitOutput = new JUnitTestOutput();
+        junitOutput = new JUnitTestOutput(&printer);
         result = new TestResult(*junitOutput);
         testCaseRunner = new JUnitTestOutputTestRunner(*result);
     }
@@ -598,4 +599,36 @@ TEST(JUnitOutputTest, TestCaseBlockForIgnoredTest)
    STRCMP_EQUAL("<testcase classname=\"packagename.groupname\" name=\"testname\" time=\"0.000\">\n", outputFile->line(5));
    STRCMP_EQUAL("<skipped />\n", outputFile->line(6));
    STRCMP_EQUAL("</testcase>\n", outputFile->line(7));
+}
+
+TEST(JUnitOutputTest, shouldAlsoPrintVerboseOutputWhenVerboseEnabled)
+{
+    junitOutput->verbose();
+    testCaseRunner->start()
+            .withGroup("groupname").withTest("testname")
+            .end();
+
+    outputFile = fileSystem.file("cpputest_groupname.xml");
+    STRCMP_EQUAL("<testsuite errors=\"0\" failures=\"0\" hostname=\"localhost\" name=\"groupname\" tests=\"1\" time=\"0.000\" timestamp=\"1978-10-03T00:00:00\">\n", outputFile->line(2));
+    STRCMP_EQUAL("</testsuite>", outputFile->lineFromTheBack(1));
+    STRCMP_EQUAL("TEST(groupname, testname) - 0 ms\n\nOK (0 tests, 0 ran, 0 checks, 0 ignored, 0 filtered out, 0 ms)\n\n", printer.getOutput().asCharString());
+}
+
+TEST(JUnitOutputTest, shouldAlsoPrintVerboseOutputWhenVerboseAndColorEnabled)
+{
+    junitOutput->verbose();
+    junitOutput->color();
+    testCaseRunner->start().withGroup("groupname").withTest("testname").end();
+
+    outputFile = fileSystem.file("cpputest_groupname.xml");
+    STRCMP_EQUAL("<testsuite errors=\"0\" failures=\"0\" hostname=\"localhost\" name=\"groupname\" tests=\"1\" time=\"0.000\" timestamp=\"1978-10-03T00:00:00\">\n", outputFile->line(2));
+    STRCMP_EQUAL("</testsuite>", outputFile->lineFromTheBack(1));
+    STRCMP_EQUAL("TEST(groupname, testname) - 0 ms\n\n\033[32;1mOK (0 tests, 0 ran, 0 checks, 0 ignored, 0 filtered out, 0 ms)\033[m\n\n", printer.getOutput().asCharString());
+}
+
+TEST(JUnitOutputTest, canPrintACString)
+{
+    junitOutput->print("hello");
+
+    STRCMP_EQUAL("hello", printer.getOutput().asCharString());
 }
