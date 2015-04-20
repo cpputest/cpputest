@@ -626,9 +626,16 @@ TEST(JUnitOutputTest, shouldAlsoPrintVerboseOutputWhenVerboseAndColorEnabled)
     STRCMP_EQUAL("TEST(groupname, testname) - 0 ms\n\n\033[32;1mOK (0 tests, 0 ran, 0 checks, 0 ignored, 0 filtered out, 0 ms)\033[m\n\n", printer.getOutput().asCharString());
 }
 
-TEST(JUnitOutputTest, canPrintACString)
+TEST(JUnitOutputTest, canPrintAString)
 {
     junitOutput->print("hello");
 
     STRCMP_EQUAL("hello", printer.getOutput().asCharString());
+}
+
+TEST(JUnitOutputTest, canPrintALong)
+{
+    junitOutput->print((long)2);
+
+    STRCMP_EQUAL("2", printer.getOutput().asCharString());
 }
