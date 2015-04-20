@@ -83,6 +83,8 @@ void TestRegistry::listTestGroupNames(TestResult& result)
             groupList += " ";
         }
     }
+    if (groupList.endsWith(" "))
+        groupList = groupList.subString(0, groupList.size() - 1);
     result.print(groupList.asCharString());
 }
 
@@ -101,6 +103,8 @@ void TestRegistry::listTestGroupAndCaseNames(TestResult& result)
             }
         }
     }
+    if (groupAndNameList.endsWith(" "))
+        groupAndNameList = groupAndNameList.subString(0, groupAndNameList.size() - 1);
     result.print(groupAndNameList.asCharString());
 }
 
