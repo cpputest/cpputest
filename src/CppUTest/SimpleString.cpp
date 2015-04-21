@@ -125,6 +125,19 @@ char SimpleString::ToLower(char ch)
     return isUpper(ch) ? (char)((int)ch + ('a' - 'A')) : ch;
 }
 
+int SimpleString::MemCmp(const void* s1, const void *s2, size_t n)
+{
+	const unsigned char* p1 = (const unsigned char*) s1;
+	const unsigned char* p2 = (const unsigned char*) s2;
+
+	while (n--)
+		if (*p1 != *p2)
+		return *p1 - *p2;
+		else
+		p1++, p2++;
+	return 0;
+}
+
 SimpleString::SimpleString(const char *otherBuffer)
 {
     if (otherBuffer == 0) {

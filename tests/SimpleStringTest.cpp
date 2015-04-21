@@ -816,3 +816,34 @@ TEST(SimpleString, BinaryNull)
 {
 	STRCMP_EQUAL("(null)", StringFromBinaryOrNull(NULL, 0).asCharString());
 }
+
+TEST(SimpleString, MemCmpMatching) {
+	unsigned char s1[] = { 0x00, 0x01, 0x2A, 0xFF };
+	LONGS_EQUAL(0, SimpleString::MemCmp(s1, s1, sizeof(s1)));
+}
+
+TEST(SimpleString, MemCmpZeroLength) {
+	LONGS_EQUAL(0, SimpleString::MemCmp(NULL, NULL, 0));
+}
+
+TEST(SimpleString, MemCmpFirstNotMatching)
+{
+	unsigned char s1[] = { 0x00, 0x01, 0x2A, 0xFF };
+	unsigned char s2[] = { 0x01, 0x01, 0x2A, 0xFF };
+	CHECK(0 != SimpleString::MemCmp(s1, s2, sizeof(s1)));
+}
+
+TEST(SimpleString, MemCmpLastNotMatching)
+{
+	unsigned char s1[] = { 0x00, 0x01, 0x2A, 0xFF };
+	unsigned char s2[] = { 0x00, 0x01, 0x2A, 0x00 };
+	CHECK(0 != SimpleString::MemCmp(s1, s2, sizeof(s1)));
+}
+
+TEST(SimpleString, MemCmpGreater)
+{
+	unsigned char smaller[] = { 0x00, 0x01, 0x2A, 0xFF };
+	unsigned char greater[] = { 0x00, 0x01, 0xFF, 0xFF };
+	CHECK(SimpleString::MemCmp(smaller, greater, sizeof(smaller)) < 0);
+	CHECK(SimpleString::MemCmp(greater, smaller, sizeof(smaller)) > 0);
+}

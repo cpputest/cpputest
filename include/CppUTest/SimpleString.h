@@ -97,6 +97,7 @@ public:
     static char* StrNCpy(char* s1, const char* s2, size_t n);
     static char* StrStr(const char* s1, const char* s2);
     static char ToLower(char ch);
+    static int MemCmp(const void* s1, const void *s2, size_t n);
     static void deallocStringBuffer(char* str);
 private:
     char *buffer_;
