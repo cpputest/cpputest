@@ -43,7 +43,7 @@ extern "C" {
 
 TEST_GROUP(TestOutput)
 {
-    TestOutput* printer;
+    ConsoleTestOutput* printer;
     StringBufferTestOutput* mock;
     UtestShell* tst;
     TestFailure *f;

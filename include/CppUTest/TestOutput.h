@@ -44,32 +44,69 @@ class TestResult;
 class TestOutput
 {
 public:
-    explicit TestOutput();
-    virtual ~TestOutput();
+    explicit TestOutput() {}
+    virtual ~TestOutput() {}
 
-    virtual void printTestsStarted();
-    virtual void printTestsEnded(const TestResult& result);
-    virtual void printCurrentTestStarted(const UtestShell& test);
-    virtual void printCurrentTestEnded(const TestResult& res);
-    virtual void printCurrentGroupStarted(const UtestShell& test);
-    virtual void printCurrentGroupEnded(const TestResult& res);
+    virtual void printTestsStarted() = 0;
+    virtual void printTestsEnded(const TestResult& result) = 0;
+    virtual void printCurrentTestStarted(const UtestShell& test) = 0;
+    virtual void printCurrentTestEnded(const TestResult& res) = 0;
+    virtual void printCurrentGroupStarted(const UtestShell& test) = 0;
+    virtual void printCurrentGroupEnded(const TestResult& res) = 0;
 
-    virtual void verbose();
-    virtual void color();
-    virtual void printBuffer(const char*)=0;
-    virtual void print(const char*);
-    virtual void print(long);
-    virtual void printDouble(double);
-    virtual void print(const TestFailure& failure);
-    virtual void printTestRun(int number, int total);
-    virtual void setProgressIndicator(const char*);
-
-    virtual void flush()=0;
+    virtual void verbose() = 0;
+    virtual void color() = 0;
+    virtual bool isVerbose() = 0;
+    virtual void print(const char*) = 0;
+    virtual void print(const TestFailure& failure) = 0;
+    virtual void printTestRun(int number, int total) = 0;
 
     enum WorkingEnvironment {vistualStudio, eclipse, detectEnvironment};
 
     static void setWorkingEnvironment(WorkingEnvironment workEnvironment);
     static WorkingEnvironment getWorkingEnvironment();
+
+protected:
+
+    TestOutput(const TestOutput&);
+    TestOutput& operator=(const TestOutput&);
+
+    static WorkingEnvironment workingEnvironment_;
+};
+
+///////////////////////////////////////////////////////////////////////////////
+//
+//  ConsoleTestOutput.h
+//
+//  Printf Based Solution
+//
+///////////////////////////////////////////////////////////////////////////////
+
+class ConsoleTestOutput: public TestOutput
+{
+public:
+    explicit ConsoleTestOutput();
+    virtual ~ConsoleTestOutput();
+
+    virtual void printTestsStarted() _override;
+    virtual void printTestsEnded(const TestResult& result) _override;
+    virtual void printCurrentTestStarted(const UtestShell& test) _override;
+    virtual void printCurrentTestEnded(const TestResult& res) _override;
+    virtual void printCurrentGroupStarted(const UtestShell& test) _override;
+    virtual void printCurrentGroupEnded(const TestResult& res) _override;
+
+    virtual void verbose() _override;
+    virtual bool isVerbose() _override { return verbose_; }
+    virtual void color() _override;
+    virtual void printBuffer(const char*);
+    virtual void print(const char*) _override;
+    virtual void print(long);
+    virtual void printDouble(double);
+    virtual void print(const TestFailure& failure) _override;
+    virtual void printTestRun(int number, int total) _override;
+    virtual void setProgressIndicator(const char*);
+
+    virtual void flush();
 
 protected:
 
@@ -83,45 +120,18 @@ protected:
     void printFailureMessage(SimpleString reason);
     void printErrorInFileOnLineFormattedForWorkingEnvironment(SimpleString testFile, int lineNumber);
 
-    TestOutput(const TestOutput&);
-    TestOutput& operator=(const TestOutput&);
-
     int dotCount_;
     bool verbose_;
     bool color_;
     const char* progressIndication_;
 
-    static WorkingEnvironment workingEnvironment_;
-};
-
-TestOutput& operator<<(TestOutput&, const char*);
-TestOutput& operator<<(TestOutput&, long);
-
-///////////////////////////////////////////////////////////////////////////////
-//
-//  ConsoleTestOutput.h
-//
-//  Printf Based Solution
-//
-///////////////////////////////////////////////////////////////////////////////
-
-class ConsoleTestOutput: public TestOutput
-{
-public:
-    explicit ConsoleTestOutput()
-    {
-    }
-    virtual ~ConsoleTestOutput()
-    {
-    }
-
-    virtual void printBuffer(const char* s) _override;
-    virtual void flush() _override;
-
 private:
     ConsoleTestOutput(const ConsoleTestOutput&);
     ConsoleTestOutput& operator=(const ConsoleTestOutput&);
 };
+
+ConsoleTestOutput& operator<<(ConsoleTestOutput&, const char*);
+ConsoleTestOutput& operator<<(ConsoleTestOutput&, long);
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -132,13 +142,10 @@ private:
 ///////////////////////////////////////////////////////////////////////////////
 
 
-class StringBufferTestOutput: public TestOutput
+class StringBufferTestOutput: public ConsoleTestOutput
 {
 public:
-    explicit StringBufferTestOutput()
-    {
-    }
-
+    explicit StringBufferTestOutput() {}
     virtual ~StringBufferTestOutput();
 
     void printBuffer(const char* s) _override

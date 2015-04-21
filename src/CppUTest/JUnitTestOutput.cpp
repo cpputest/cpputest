@@ -141,6 +141,10 @@ void JUnitTestOutput::printCurrentTestStarted(const UtestShell& test)
     }
 }
 
+void JUnitTestOutput::printTestRun(int /*number*/, int /*total*/)
+{
+}
+
 SimpleString JUnitTestOutput::createFileName(const SimpleString& group)
 {
     SimpleString fileName = "cpputest_";
@@ -238,26 +242,6 @@ void JUnitTestOutput::writeTestGroupToFile()
     writeFileEnding();
     closeFile();
 }
-
-// LCOV_EXCL_START
-
-void JUnitTestOutput::printBuffer(const char*)
-{
-}
-
-void JUnitTestOutput::print(const char*)
-{
-}
-
-void JUnitTestOutput::print(long)
-{
-}
-
-void JUnitTestOutput::flush()
-{
-}
-
-// LCOV_EXCL_STOP
 
 void JUnitTestOutput::print(const TestFailure& failure)
 {
