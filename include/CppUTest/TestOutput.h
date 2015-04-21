@@ -156,12 +156,50 @@ public:
         return output;
     }
 
-private:
+protected:
     SimpleString output;
 
+private:
     StringBufferTestOutput(const StringBufferTestOutput&);
     StringBufferTestOutput& operator=(const StringBufferTestOutput&);
 
+};
+
+class CompositeTestOutput : public TestOutput
+{
+public:
+    virtual void setOutputOne(TestOutput* output);
+    virtual void setOutputTwo(TestOutput* output);
+
+    CompositeTestOutput();
+    virtual ~CompositeTestOutput();
+
+    virtual void printTestsStarted();
+    virtual void printTestsEnded(const TestResult& result);
+
+    virtual void printCurrentTestStarted(const UtestShell& test);
+    virtual void printCurrentTestEnded(const TestResult& res);
+    virtual void printCurrentGroupStarted(const UtestShell& test);
+    virtual void printCurrentGroupEnded(const TestResult& res);
+
+    virtual void verbose();
+    virtual void color();
+    virtual void printBuffer(const char*);
+    virtual void print(const char*);
+    virtual void print(long);
+    virtual void printDouble(double);
+    virtual void print(const TestFailure& failure);
+    virtual void setProgressIndicator(const char*);
+
+    virtual void flush();
+
+protected:
+    CompositeTestOutput(const TestOutput&);
+    CompositeTestOutput& operator=(const TestOutput&);
+
+private:
+    TestOutput* outputOne_;
+    TestOutput* outputTwo_;
 };
 
 #endif
