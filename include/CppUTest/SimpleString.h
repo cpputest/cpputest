@@ -150,7 +150,6 @@ SimpleString VStringFromFormat(const char* format, va_list args);
 #if CPPUTEST_USE_STD_CPP_LIB
 
 #include <string>
-#include <stdint.h>
 
 SimpleString StringFrom(const std::string& other);
 
