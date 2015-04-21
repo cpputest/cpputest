@@ -30,7 +30,7 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 
 CommandLineArguments::CommandLineArguments(int ac, const char** av) :
-    ac_(ac), av_(av), verbose_(false), color_(false), runTestsAsSeperateProcess_(false), repeat_(1), groupFilters_(NULL), nameFilters_(NULL), outputType_(OUTPUT_ECLIPSE)
+    ac_(ac), av_(av), verbose_(false), color_(false), runTestsAsSeperateProcess_(false), listTestGroupNames_(false), listTestGroupAndCaseNames_(false), repeat_(1), groupFilters_(NULL), nameFilters_(NULL), outputType_(OUTPUT_ECLIPSE)
 {
 }
 
@@ -53,9 +53,12 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
     bool correctParameters = true;
     for (int i = 1; i < ac_; i++) {
         SimpleString argument = av_[i];
-        if (argument == "-v") verbose_ = true;
+        
+        if      (argument == "-v") verbose_ = true;
         else if (argument == "-c") color_ = true;
         else if (argument == "-p") runTestsAsSeperateProcess_ = true;
+        else if (argument == "-lg") listTestGroupNames_ = true;
+        else if (argument == "-ln") listTestGroupAndCaseNames_ = true;
         else if (argument.startsWith("-r")) SetRepeatCount(ac_, av_, i);
         else if (argument.startsWith("-g")) AddGroupFilter(ac_, av_, i);
         else if (argument.startsWith("-sg")) AddStrictGroupFilter(ac_, av_, i);
@@ -77,7 +80,7 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
 
 const char* CommandLineArguments::usage() const
 {
-    return "usage [-v] [-c] [-r#] [-g|sg groupName]... [-n|sn testName]... [\"TEST(groupName, testName)\"]... [-o{normal, junit}] [-k packageName]\n";
+    return "usage [-v] [-c] [-p] [-lg] [-ln] [-r#] [-g|sg groupName]... [-n|sn testName]... [\"TEST(groupName, testName)\"]... [-o{normal, junit}] [-k packageName]\n";
 }
 
 bool CommandLineArguments::isVerbose() const
@@ -88,6 +91,16 @@ bool CommandLineArguments::isVerbose() const
 bool CommandLineArguments::isColor() const
 {
     return color_;
+}
+
+bool CommandLineArguments::isListingTestGroupNames() const
+{
+    return listTestGroupNames_;
+}
+
+bool CommandLineArguments::isListingTestGroupAndCaseNames() const
+{
+    return listTestGroupAndCaseNames_;
 }
 
 bool CommandLineArguments::runTestsInSeperateProcess() const

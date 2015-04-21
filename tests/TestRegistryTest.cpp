@@ -323,3 +323,34 @@ TEST(TestRegistry, ResetPluginsWorks)
     myRegistry->resetPlugins();
     LONGS_EQUAL(0, myRegistry->countPlugins());
 }
+
+TEST(TestRegistry, listGroupNames)
+{
+    test1->setGroupName("GROUP_1");
+    myRegistry->addTest(test1);
+    test2->setGroupName("GROUP_2");
+    myRegistry->addTest(test2);
+    test3->setGroupName("GROUP_1");
+    myRegistry->addTest(test3);
+
+    myRegistry->listTestGroupNames(*result);
+    SimpleString s = output->getOutput();
+    STRCMP_EQUAL("GROUP_1 GROUP_2", s.asCharString());
+}
+
+TEST(TestRegistry, listTestNames)
+{
+    test1->setGroupName("GROUP_A");
+    test1->setTestName("test_a");
+    myRegistry->addTest(test1);
+    test2->setGroupName("GROUP_B");
+    test2->setTestName("test_b");
+    myRegistry->addTest(test2);
+    test3->setGroupName("GROUP_C");
+    test3->setTestName("test_c");
+    myRegistry->addTest(test3);
+
+    myRegistry->listTestGroupAndCaseNames(*result);
+    SimpleString s = output->getOutput();
+    STRCMP_EQUAL("GROUP_C.test_c GROUP_B.test_b GROUP_A.test_a", s.asCharString());
+}

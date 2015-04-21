@@ -72,6 +72,42 @@ void TestRegistry::runAllTests(TestResult& result)
     currentRepetition_++;
 }
 
+void TestRegistry::listTestGroupNames(TestResult& result)
+{
+    SimpleString groupList;
+
+    for (UtestShell *test = tests_; test != NULL; test = test->getNext()) {
+        SimpleString gname = test->getGroup();
+        if (!groupList.contains(gname)) {
+            groupList += gname;
+            groupList += " ";
+        }
+    }
+    if (groupList.endsWith(" "))
+        groupList = groupList.subString(0, groupList.size() - 1);
+    result.print(groupList.asCharString());
+}
+
+void TestRegistry::listTestGroupAndCaseNames(TestResult& result)
+{
+    SimpleString groupAndNameList;
+
+    for (UtestShell *test = tests_; test != NULL; test = test->getNext()) {
+        if (testShouldRun(test, result)) {
+            SimpleString groupAndName = test->getGroup();
+            groupAndName += ".";
+            groupAndName += test->getName();
+            groupAndName += " ";
+            if (!groupAndNameList.contains(groupAndName)) {
+                groupAndNameList += groupAndName;
+            }
+        }
+    }
+    if (groupAndNameList.endsWith(" "))
+        groupAndNameList = groupAndNameList.subString(0, groupAndNameList.size() - 1);
+    result.print(groupAndNameList.asCharString());
+}
+
 bool TestRegistry::endOfGroup(UtestShell* test)
 {
     return (!test || !test->getNext() || test->getGroup() != test->getNext()->getGroup());

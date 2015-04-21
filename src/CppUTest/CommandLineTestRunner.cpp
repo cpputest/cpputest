@@ -99,6 +99,20 @@ int CommandLineTestRunner::runAllTests()
     int failureCount = 0;
     int repeat_ = arguments_->getRepeatCount();
 
+    if (arguments_->isListingTestGroupNames())
+    {
+        TestResult tr(*output_);
+        registry_->listTestGroupNames(tr);
+        return 0;
+    }
+
+    if (arguments_->isListingTestGroupAndCaseNames())
+    {
+        TestResult tr(*output_);
+        registry_->listTestGroupAndCaseNames(tr);
+        return 0;
+    }
+
     while (loopCount++ < repeat_) {
         output_->printTestRun(loopCount, repeat_);
         TestResult tr(*output_);
