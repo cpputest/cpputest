@@ -68,8 +68,8 @@ struct JUnitTestOutputImpl
     SimpleString package_;
 };
 
-JUnitTestOutput::JUnitTestOutput() :
-    impl_(new JUnitTestOutputImpl)
+JUnitTestOutput::JUnitTestOutput(ConsoleTestOutput* output) :
+    impl_(new JUnitTestOutputImpl), currentConsoleOutput_(output? output : &defaultConsoleOutput_)
 {
 }
 
@@ -98,24 +98,31 @@ void JUnitTestOutput::resetTestGroupResult()
 
 void JUnitTestOutput::printTestsStarted()
 {
+    if (isVerbose()) { currentConsoleOutput_->printTestsStarted(); }
 }
 
-void JUnitTestOutput::printCurrentGroupStarted(const UtestShell& /*test*/)
+void JUnitTestOutput::printCurrentGroupStarted(const UtestShell& test)
 {
+    if(isVerbose()) { currentConsoleOutput_->printCurrentGroupStarted(test);}
 }
 
 void JUnitTestOutput::printCurrentTestEnded(const TestResult& result)
 {
+    if (isVerbose()) { currentConsoleOutput_->printCurrentTestEnded(result); }
+
     impl_->results_.tail_->execTime_
             = result.getCurrentTestTotalExecutionTime();
 }
 
-void JUnitTestOutput::printTestsEnded(const TestResult& /*result*/)
+void JUnitTestOutput::printTestsEnded(const TestResult& result)
 {
+    if (isVerbose()) { currentConsoleOutput_->printTestsEnded(result); }
 }
 
 void JUnitTestOutput::printCurrentGroupEnded(const TestResult& result)
 {
+    if (isVerbose()) { currentConsoleOutput_->printCurrentGroupEnded(result); }
+
     impl_->results_.groupExecTime_ = result.getCurrentGroupTotalExecutionTime();
     writeTestGroupToFile();
     resetTestGroupResult();
@@ -123,6 +130,8 @@ void JUnitTestOutput::printCurrentGroupEnded(const TestResult& result)
 
 void JUnitTestOutput::printCurrentTestStarted(const UtestShell& test)
 {
+    if (isVerbose()) { currentConsoleOutput_->printCurrentTestStarted(test); }
+
     impl_->results_.testCount_++;
     impl_->results_.group_ = test.getGroup();
     impl_->results_.startTime_ = GetPlatformSpecificTimeInMillis();
@@ -141,8 +150,9 @@ void JUnitTestOutput::printCurrentTestStarted(const UtestShell& test)
     }
 }
 
-void JUnitTestOutput::printTestRun(int /*number*/, int /*total*/)
+void JUnitTestOutput::printTestRun(int number, int total)
 {
+    if (isVerbose()) currentConsoleOutput_->printTestRun(number, total);
 }
 
 SimpleString JUnitTestOutput::createFileName(const SimpleString& group)
@@ -245,6 +255,8 @@ void JUnitTestOutput::writeTestGroupToFile()
 
 void JUnitTestOutput::print(const TestFailure& failure)
 {
+    currentConsoleOutput_->print(failure);
+
     if (impl_->results_.tail_->failure_ == 0) {
         impl_->results_.failureCount_++;
         impl_->results_.tail_->failure_ = new TestFailure(failure);
