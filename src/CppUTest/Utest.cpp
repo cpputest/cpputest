@@ -418,11 +418,11 @@ void UtestShell::assertUnsignedLongsEqual(unsigned long expected, unsigned long 
         failWith(UnsignedLongsEqualFailure (this, fileName, lineNumber, expected, actual, text), testTerminator);
 }
 
-void UtestShell::assertPointersEqual(const void* expected, const void* actual, const char* text, const char* fileName, int lineNumber)
+void UtestShell::assertPointersEqual(const void* expected, const void* actual, const char* text, const char* fileName, int lineNumber, const TestTerminator& testTerminator)
 {
     getTestResult()->countCheck();
     if (expected != actual)
-        failWith(EqualsFailure(this, fileName, lineNumber, StringFrom(expected), StringFrom(actual), text));
+        failWith(EqualsFailure(this, fileName, lineNumber, StringFrom(expected), StringFrom(actual), text), testTerminator);
 }
 
 void UtestShell::assertFunctionPointersEqual(void (*expected)(), void (*actual)(), const char* text, const char* fileName, int lineNumber)

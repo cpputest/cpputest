@@ -149,6 +149,22 @@ TEST(TestHarness_c, checkString)
     CHECK(!hasDestructorOfTheDestructorCheckedBeenCalled)
 }
 
+static void _failPointerMethod()
+{
+    HasTheDestructorBeenCalledChecker checker;
+    CHECK_EQUAL_C_POINTER(NULL, (void *)0x1);
+}
+
+TEST(TestHarness_c, checkPointer)
+{
+    CHECK_EQUAL_C_POINTER(NULL, NULL);
+    fixture->setTestFunction(_failPointerMethod);
+    fixture->runAllTests();
+    fixture->assertPrintContains("expected <0x0>\n	but was  <0x1>");
+    fixture->assertPrintContains("arness_c");
+    CHECK(!hasDestructorOfTheDestructorCheckedBeenCalled)
+}
+
 static void _failTextMethod()
 {
     HasTheDestructorBeenCalledChecker checker;
