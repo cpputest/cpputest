@@ -63,8 +63,8 @@ TEST_GROUP(UnitTestMacros)
 static void _failingTestMethodWithFAIL()
 {
     FAIL("This test fails");
-    lineOfCodeExecutedAfterCheck = true;
-}
+    lineOfCodeExecutedAfterCheck = true; // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
 
 TEST(UnitTestMacros, FAILMakesTheTestFailPrintsTheRightResultAndStopsExecuting)
 {
@@ -89,13 +89,13 @@ TEST(UnitTestMacros, FAILBehavesAsAProperMacro)
 
 IGNORE_TEST(UnitTestMacros, FAILworksInAnIgnoredTest)
 {
-    FAIL("die!");
-}
+    FAIL("die!"); // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
 
 static void _STRCMP_EQUALWithActualIsNULLTestMethod()
 {
     STRCMP_EQUAL("ok", NULL);
-}
+} // LCOV_EXCL_LINE
 
 TEST(UnitTestMacros, FailureWithSTRCMP_EQUALAndActualIsNULL)
 {
@@ -106,7 +106,7 @@ TEST(UnitTestMacros, FailureWithSTRCMP_EQUALAndActualIsNULL)
 static void _STRCMP_EQUALWithExpectedIsNULLTestMethod()
 {
     STRCMP_EQUAL(NULL, "ok");
-}
+} // LCOV_EXCL_LINE
 
 TEST(UnitTestMacros, FailureWithSTRCMP_EQUALAndExpectedIsNULL)
 {
@@ -117,7 +117,7 @@ TEST(UnitTestMacros, FailureWithSTRCMP_EQUALAndExpectedIsNULL)
 static void _STRCMP_CONTAINSWithActualIsNULLTestMethod()
 {
     STRCMP_CONTAINS("ok", NULL);
-}
+} // LCOV_EXCL_LINE
 
 TEST(UnitTestMacros, FailureWithSTRCMP_CONTAINSAndActualIsNULL)
 {
@@ -128,7 +128,7 @@ TEST(UnitTestMacros, FailureWithSTRCMP_CONTAINSAndActualIsNULL)
 static void _STRCMP_CONTAINSWithExpectedIsNULLTestMethod()
 {
     STRCMP_CONTAINS(NULL, "ok");
-}
+} // LCOV_EXCL_LINE
 
 TEST(UnitTestMacros, FailureWithSTRCMP_CONTAINSAndExpectedIsNULL)
 {
@@ -139,7 +139,7 @@ TEST(UnitTestMacros, FailureWithSTRCMP_CONTAINSAndExpectedIsNULL)
 static void _STRNCMP_EQUALWithActualIsNULLTestMethod()
 {
     STRNCMP_EQUAL("ok", NULL, 2);
-}
+} // LCOV_EXCL_LINE
 
 TEST(UnitTestMacros, FailureWithSTRNCMP_EQUALAndActualIsNULL)
 {
@@ -150,7 +150,7 @@ TEST(UnitTestMacros, FailureWithSTRNCMP_EQUALAndActualIsNULL)
 static void _STRNCMP_EQUALWithExpectedIsNULLTestMethod()
 {
     STRNCMP_EQUAL(NULL, "ok", 2);
-}
+} // LCOV_EXCL_LINE
 
 TEST(UnitTestMacros, FailureWithSTRNCMP_EQUALAndExpectedIsNULL)
 {
@@ -161,7 +161,7 @@ TEST(UnitTestMacros, FailureWithSTRNCMP_EQUALAndExpectedIsNULL)
 static void _STRCMP_NOCASE_EQUALWithActualIsNULLTestMethod()
 {
     STRCMP_NOCASE_EQUAL("ok", NULL);
-}
+} // LCOV_EXCL_LINE
 
 TEST(UnitTestMacros, FailureWithSTRCMP_NOCASE_EQUALAndActualIsNULL)
 {
@@ -172,7 +172,7 @@ TEST(UnitTestMacros, FailureWithSTRCMP_NOCASE_EQUALAndActualIsNULL)
 static void _STRCMP_NOCASE_EQUALWithExpectedIsNULLTestMethod()
 {
     STRCMP_NOCASE_EQUAL(NULL, "ok");
-}
+} // LCOV_EXCL_LINE
 
 TEST(UnitTestMacros, FailureWithSTRCMP_NOCASE_EQUALAndExpectedIsNULL)
 {
@@ -183,7 +183,7 @@ TEST(UnitTestMacros, FailureWithSTRCMP_NOCASE_EQUALAndExpectedIsNULL)
 static void _STRCMP_NOCASE_EQUALWithUnequalInputTestMethod()
 {
     STRCMP_NOCASE_EQUAL("no", "ok");
-}
+} // LCOV_EXCL_LINE
 
 TEST(UnitTestMacros, FailureWithSTRCMP_NOCASE_EQUALAndUnequalInput)
 {
@@ -194,7 +194,7 @@ TEST(UnitTestMacros, FailureWithSTRCMP_NOCASE_EQUALAndUnequalInput)
 static void _STRCMP_NOCASE_CONTAINSWithActualIsNULLTestMethod()
 {
     STRCMP_NOCASE_CONTAINS("ok", NULL);
-}
+} // LCOV_EXCL_LINE
 
 TEST(UnitTestMacros, FailureWithSTRCMP_NOCASE_CONTAINSAndActualIsNULL)
 {
@@ -205,7 +205,7 @@ TEST(UnitTestMacros, FailureWithSTRCMP_NOCASE_CONTAINSAndActualIsNULL)
 static void _STRCMP_NOCASE_CONTAINSWithExpectedIsNULLTestMethod()
 {
     STRCMP_NOCASE_CONTAINS(NULL, "ok");
-}
+} // LCOV_EXCL_LINE
 
 TEST(UnitTestMacros, FailureWithSTRCMP_NOCASE_CONTAINSAndExpectedIsNULL)
 {
@@ -217,7 +217,7 @@ static void _UNSIGNED_LONGS_EQUALTestMethod()
 {
     UNSIGNED_LONGS_EQUAL(1, 1);
     UNSIGNED_LONGS_EQUAL(1, 0);
-}
+} // LCOV_EXCL_LINE
 
 TEST(UnitTestMacros, TestUNSIGNED_LONGS_EQUAL)
 {
@@ -228,8 +228,8 @@ TEST(UnitTestMacros, TestUNSIGNED_LONGS_EQUAL)
 static void _failingTestMethodWithCHECK()
 {
     CHECK(false);
-    lineOfCodeExecutedAfterCheck = true;
-}
+    lineOfCodeExecutedAfterCheck = true; // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
 
 TEST(UnitTestMacros, FailureWithCHECK)
 {
@@ -246,8 +246,8 @@ TEST(UnitTestMacros, CHECKBehavesAsProperMacro)
 static void _failingTestMethodWithCHECK_TEXT()
 {
     CHECK_TEXT(false, "Failed because it failed");
-    lineOfCodeExecutedAfterCheck = true;
-}
+    lineOfCodeExecutedAfterCheck = true; // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
 
 TEST(UnitTestMacros, FailureWithCHECK_TEXT)
 {
@@ -263,14 +263,14 @@ TEST(UnitTestMacros, CHECK_TEXTBehavesAsProperMacro)
 
 IGNORE_TEST(UnitTestMacros, CHECKWorksInAnIgnoredTest)
 {
-    CHECK_TEXT(false, "false");
-}
+    CHECK_TEXT(false, "false"); // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
 
 static void _failingTestMethodWithCHECK_TRUE()
 {
     CHECK_TRUE(false);
-    lineOfCodeExecutedAfterCheck = true;
-}
+    lineOfCodeExecutedAfterCheck = true; // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
 
 TEST(UnitTestMacros, FailureWithCHECK_TRUE)
 {
@@ -286,14 +286,14 @@ TEST(UnitTestMacros, CHECK_TRUEBehavesAsProperMacro)
 
 IGNORE_TEST(UnitTestMacros, CHECK_TRUEWorksInAnIgnoredTest)
 {
-    CHECK_TRUE(false)
-}
+    CHECK_TRUE(false) // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
 
 static void _failingTestMethodWithCHECK_FALSE()
 {
     CHECK_FALSE(true);
-    lineOfCodeExecutedAfterCheck = true;
-}
+    lineOfCodeExecutedAfterCheck = true; // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
 
 TEST(UnitTestMacros, FailureWithCHECK_FALSE)
 {
@@ -309,14 +309,14 @@ TEST(UnitTestMacros, CHECK_FALSEBehavesAsProperMacro)
 
 IGNORE_TEST(UnitTestMacros, CHECK_FALSEWorksInAnIgnoredTest)
 {
-    CHECK_FALSE(true)
-}
+    CHECK_FALSE(true) // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
 
 static void _failingTestMethodWithCHECK_EQUAL()
 {
     CHECK_EQUAL(1, 2);
-    lineOfCodeExecutedAfterCheck = true;
-}
+    lineOfCodeExecutedAfterCheck = true; // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
 
 TEST(UnitTestMacros, FailureWithCHECK_EQUAL)
 {
@@ -341,7 +341,7 @@ TEST(UnitTestMacros, passingCheckEqualWillNotBeEvaluatedMultipleTimesWithCHECK_E
 static void _failing_CHECK_EQUAL_WithActualBeingEvaluatesMultipleTimesWillGiveAWarning()
 {
     CHECK_EQUAL(12345, _countingMethod());
-}
+} // LCOV_EXCL_LINE
 
 TEST(UnitTestMacros, failing_CHECK_EQUAL_WithActualBeingEvaluatesMultipleTimesWillGiveAWarning)
 {
@@ -352,7 +352,7 @@ TEST(UnitTestMacros, failing_CHECK_EQUAL_WithActualBeingEvaluatesMultipleTimesWi
 static void _failing_CHECK_EQUAL_WithExpectedBeingEvaluatesMultipleTimesWillGiveAWarning()
 {
     CHECK_EQUAL(_countingMethod(), 12345);
-}
+} // LCOV_EXCL_LINE
 
 TEST(UnitTestMacros, failing_CHECK_EQUAL_WithExpectedBeingEvaluatesMultipleTimesWillGiveAWarning)
 {
@@ -374,14 +374,14 @@ TEST(UnitTestMacros, CHECK_EQUALBehavesAsProperMacro)
 
 IGNORE_TEST(UnitTestMacros, CHECK_EQUALWorksInAnIgnoredTest)
 {
-    CHECK_EQUAL(1, 2)
-}
+    CHECK_EQUAL(1, 2) // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
 
 static void _failingTestMethodWithSTRCMP_CONTAINS()
 {
     STRCMP_CONTAINS("hello", "world");
-    lineOfCodeExecutedAfterCheck = true;
-}
+    lineOfCodeExecutedAfterCheck = true; // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
 
 TEST(UnitTestMacros, FailureWithSTRCMP_CONTAINS)
 {
@@ -397,8 +397,8 @@ TEST(UnitTestMacros, STRCMP_CONTAINSBehavesAsProperMacro)
 
 IGNORE_TEST(UnitTestMacros, STRCMP_CONTAINSWorksInAnIgnoredTest)
 {
-    STRCMP_CONTAINS("Hello", "World")
-}
+    STRCMP_CONTAINS("Hello", "World") // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
 
 static void _failingTestMethodWithSTRCMP_NOCASE_CONTAINS()
 {
@@ -420,14 +420,14 @@ TEST(UnitTestMacros, STRCMP_NOCASE_CONTAINSBehavesAsProperMacro)
 
 IGNORE_TEST(UnitTestMacros, STRCMP_NO_CASE_CONTAINSWorksInAnIgnoredTest)
 {
-    STRCMP_NOCASE_CONTAINS("Hello", "World")
-}
+    STRCMP_NOCASE_CONTAINS("Hello", "World") // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
 
 static void _failingTestMethodWithLONGS_EQUAL()
 {
     LONGS_EQUAL(1, 0xff);
-    lineOfCodeExecutedAfterCheck = true;
-}
+    lineOfCodeExecutedAfterCheck = true; // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
 
 TEST(UnitTestMacros, FailurePrintHexOutputForLongInts)
 {
@@ -444,8 +444,8 @@ TEST(UnitTestMacros, LONGS_EQUALBehavesAsProperMacro)
 
 IGNORE_TEST(UnitTestMacros, LONGS_EQUALWorksInAnIgnoredTest)
 {
-    LONGS_EQUAL(11, 22)
-}
+    LONGS_EQUAL(11, 22) // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
 
 static void _failingTestMethodWithBYTES_EQUAL()
 {
@@ -467,14 +467,14 @@ TEST(UnitTestMacros, BYTES_EQUALBehavesAsProperMacro)
 
 IGNORE_TEST(UnitTestMacros, BYTES_EQUALWorksInAnIgnoredTest)
 {
-    BYTES_EQUAL('q', 'w')
-}
+    BYTES_EQUAL('q', 'w') // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
 
 static void _failingTestMethodWithPOINTERS_EQUAL()
 {
     POINTERS_EQUAL((void*)0xa5a5, (void*)0xf0f0);
-    lineOfCodeExecutedAfterCheck = true;
-}
+    lineOfCodeExecutedAfterCheck = true; // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
 
 TEST(UnitTestMacros, FailurePrintHexOutputForPointers)
 {
@@ -491,14 +491,14 @@ TEST(UnitTestMacros, POINTERS_EQUALBehavesAsProperMacro)
 
 IGNORE_TEST(UnitTestMacros, POINTERS_EQUALWorksInAnIgnoredTest)
 {
-    POINTERS_EQUAL((void*) 0xbeef, (void*) 0xdead)
-}
+    POINTERS_EQUAL((void*) 0xbeef, (void*) 0xdead) // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
 
 static void _failingTestMethodWithDOUBLES_EQUAL()
 {
     DOUBLES_EQUAL(0.12, 44.1, 0.3);
-    lineOfCodeExecutedAfterCheck = true;
-}
+    lineOfCodeExecutedAfterCheck = true; // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
 
 TEST(UnitTestMacros, FailureWithDOUBLES_EQUAL)
 {
@@ -515,8 +515,8 @@ TEST(UnitTestMacros, DOUBLES_EQUALBehavesAsProperMacro)
 
 IGNORE_TEST(UnitTestMacros, DOUBLES_EQUALWorksInAnIgnoredTest)
 {
-    DOUBLES_EQUAL(100.0, 0.0, 0.2)
-}
+    DOUBLES_EQUAL(100.0, 0.0, 0.2) // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
 
 static void _passingTestMethod()
 {
@@ -586,8 +586,8 @@ TEST(UnitTestMacros, NFirstCharsComparison)
 static void _compareNFirstCharsWithUpperAndLowercase()
 {
     STRNCMP_EQUAL("hello world!", "HELLO WORLD!", 12);
-    lineOfCodeExecutedAfterCheck = true;
-}
+    lineOfCodeExecutedAfterCheck = true; // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
 
 TEST(UnitTestMacros, CompareNFirstCharsWithUpperAndLowercase)
 {
@@ -600,8 +600,8 @@ TEST(UnitTestMacros, CompareNFirstCharsWithUpperAndLowercase)
 static void _compareNFirstCharsWithDifferenceInTheMiddle()
 {
     STRNCMP_EQUAL("Hello World!", "Hello Peter!", 12);
-    lineOfCodeExecutedAfterCheck = true;
-}
+    lineOfCodeExecutedAfterCheck = true; // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
 
 TEST(UnitTestMacros, CompareNFirstCharsWithDifferenceInTheMiddle)
 {
@@ -614,8 +614,8 @@ TEST(UnitTestMacros, CompareNFirstCharsWithDifferenceInTheMiddle)
 static void _compareNFirstCharsWithEmptyString()
 {
     STRNCMP_EQUAL("", "Not empty string", 5);
-    lineOfCodeExecutedAfterCheck = true;
-}
+    lineOfCodeExecutedAfterCheck = true; // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
 
 TEST(UnitTestMacros, CompareNFirstCharsWithEmptyString)
 {
@@ -628,8 +628,8 @@ TEST(UnitTestMacros, CompareNFirstCharsWithEmptyString)
 static void _compareNFirstCharsWithLastCharDifferent()
 {
     STRNCMP_EQUAL("Not empty string?", "Not empty string!", 17);
-    lineOfCodeExecutedAfterCheck = true;
-}
+    lineOfCodeExecutedAfterCheck = true; // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
 
 TEST(UnitTestMacros, CompareNFirstCharsWithLastCharDifferent)
 {
@@ -643,8 +643,8 @@ TEST(UnitTestMacros, CompareNFirstCharsWithLastCharDifferent)
 static void _failingTestMethod_NoThrowWithCHECK_THROWS()
 {
     CHECK_THROWS(int, (void) (1+2));
-    lineOfCodeExecutedAfterCheck = true;
-}
+    lineOfCodeExecutedAfterCheck = true; // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
 
 TEST(UnitTestMacros, FailureWithCHECK_THROWS_whenDoesntThrow)
 {
@@ -669,8 +669,8 @@ TEST(UnitTestMacros, SuccessWithCHECK_THROWS)
 static void _failingTestMethod_WrongThrowWithCHECK_THROWS()
 {
     CHECK_THROWS(int, throw 4.3);
-    lineOfCodeExecutedAfterCheck = true;
-}
+    lineOfCodeExecutedAfterCheck = true; // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
 
 TEST(UnitTestMacros, FailureWithCHECK_THROWS_whenWrongThrow)
 {

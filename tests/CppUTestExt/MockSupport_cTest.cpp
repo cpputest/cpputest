@@ -229,7 +229,7 @@ static void failedCallToMockC()
 {
     SetBooleanOnDestructorCall setOneDestructor(destructorWasCalled);
     mock_c()->actualCall("Not a call");
-}
+} // LCOV_EXCL_LINE
 
 // Silly wrapper because of a test that only fails in Visual C++ due to different
 // destructor behaviors
@@ -292,7 +292,7 @@ static void failingCallToMockCWithParameterOfType_()
 {
     mock_c()->expectOneCall("bar")->withParameterOfType("typeName", "name", (const void*) 1);
     mock_c()->actualCall("bar")->withParameterOfType("typeName", "name", (const void*) 2);
-}
+} // LCOV_EXCL_LINE
 
 TEST(MockSupport_c, failureWithParameterOfTypeCoversValueToString)
 {
