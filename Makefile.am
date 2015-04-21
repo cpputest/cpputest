@@ -35,6 +35,7 @@ lib_libCppUTest_a_CXXFLAGS = $(AM_CXXFLAGS) $(CPPUTEST_CXXFLAGS) $(CPPUTEST_ADDI
 lib_libCppUTest_a_SOURCES = \
 	src/CppUTest/CommandLineArguments.cpp \
 	src/CppUTest/CommandLineTestRunner.cpp \
+	src/CppUTest/CompositeTestOutput.cpp \
 	src/CppUTest/JUnitTestOutput.cpp \
 	src/CppUTest/MemoryLeakDetector.cpp \
 	src/CppUTest/MemoryLeakWarningPlugin.cpp \
@@ -56,6 +57,7 @@ include_cpputestdir = $(includedir)/CppUTest
 include_cpputest_HEADERS = \
 	include/CppUTest/CommandLineArguments.h \
 	include/CppUTest/CommandLineTestRunner.h \
+	include/CppUTest/ComponsiteTestOutput.h \
 	include/CppUTest/CppUTestConfig.h \
 	include/CppUTest/JUnitTestOutput.h \
 	include/CppUTest/MemoryLeakDetector.h \
@@ -119,8 +121,8 @@ include_cpputestext_HEADERS = \
 	include/CppUTestExt/MockSupport.h \
 	include/CppUTestExt/MockSupportPlugin.h \
 	include/CppUTestExt/MockSupport_c.h \
-	include/CppUTestExt/OrderedTest.h	
-	
+	include/CppUTestExt/OrderedTest.h
+
 endif
 
 CppUTestTests_CPPFLAGS = $(lib_libCppUTest_a_CPPFLAGS)
@@ -138,6 +140,7 @@ CppUTestTests_SOURCES = \
 	tests/CheatSheetTest.cpp \
 	tests/CommandLineArgumentsTest.cpp \
 	tests/CommandLineTestRunnerTest.cpp \
+	tests/CompositeTestOutputTest.cpp \
 	tests/JUnitOutputTest.cpp \
 	tests/MemoryLeakDetectorTest.cpp \
 	tests/MemoryLeakOperatorOverloadsTest.cpp \
