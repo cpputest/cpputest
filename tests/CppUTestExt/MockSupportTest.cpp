@@ -1750,6 +1750,41 @@ TEST(MockSupportTestWithFixture, mockExpectationShouldIncreaseNumberOfChecks)
     LONGS_EQUAL(4, fixture.getCheckCount());
 }
 
+static void CHECK_EXPECTED_MOCK_FAILURE_LOCATION_failedTestMethod_()
+{
+    MockExpectedCallsList list;
+    MockUnexpectedCallHappenedFailure expectedFailure(UtestShell::getCurrent(), "unexpected", list);
+    mock().actualCall("boo");
+    CHECK_EXPECTED_MOCK_FAILURE_LOCATION(expectedFailure, "file", 1);
+}
+
+TEST(MockSupportTestWithFixture, CHECK_EXPECTED_MOCK_FAILURE_LOCATION_failed)
+{
+    mock().setMockFailureStandardReporter(MockFailureReporterForTest::getReporter());
+    fixture.setTestFunction(CHECK_EXPECTED_MOCK_FAILURE_LOCATION_failedTestMethod_);
+    fixture.runAllTests();
+    fixture.assertPrintContains("MockFailures are different.");
+    fixture.assertPrintContains("Expected MockFailure:");
+    fixture.assertPrintContains("Mock Failure: Unexpected call to function: unexpected");
+    fixture.assertPrintContains("Actual MockFailure:");
+    fixture.assertPrintContains("Mock Failure: Unexpected call to function: boo");
+}
+
+static void CHECK_NO_MOCK_FAILURE_LOCATION_failedTestMethod_()
+{
+    mock().actualCall("boo");    
+    CHECK_NO_MOCK_FAILURE_LOCATION("file", 1);
+}
+
+TEST(MockSupportTestWithFixture, CHECK_NO_MOCK_FAILURE_LOCATION_failed)
+{
+    mock().setMockFailureStandardReporter(MockFailureReporterForTest::getReporter());
+    fixture.setTestFunction(CHECK_NO_MOCK_FAILURE_LOCATION_failedTestMethod_);
+    fixture.runAllTests();
+    fixture.assertPrintContains("Unexpected mock failure:");
+    fixture.assertPrintContains("Mock Failure: Unexpected call to function: boo");
+}
+
 static bool cpputestHasCrashed;
 
 static void crashMethod()
