@@ -793,3 +793,26 @@ TEST(SimpleString, AtoI)
     CHECK(-32768 == SimpleString::AtoI(min_short_str));
     CHECK(32767  == SimpleString::AtoI(max_short_str));
 }
+
+TEST(SimpleString, Binary)
+{
+	const unsigned char value[] = { 0x00, 0x01, 0x2A, 0xFF };
+	STRCMP_EQUAL("00 01 2A FF", StringFromBinary(value, sizeof(value)).asCharString());
+}
+
+TEST(SimpleString, BinaryZeroLength)
+{
+	const unsigned char value[] = { 0x00, 0x01, 0x2A, 0xFF };
+	STRCMP_EQUAL("", StringFromBinary(value, 0).asCharString());
+}
+
+TEST(SimpleString, BinaryNotNull)
+{
+	const unsigned char value[] = { 0x00, 0x01, 0x2A, 0xFF };
+	STRCMP_EQUAL("00 01 2A FF", StringFromBinaryOrNull(value, sizeof(value)).asCharString());
+}
+
+TEST(SimpleString, BinaryNull)
+{
+	STRCMP_EQUAL("(null)", StringFromBinaryOrNull(NULL, 0).asCharString());
+}

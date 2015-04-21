@@ -556,6 +556,23 @@ SimpleString VStringFromFormat(const char* format, va_list args)
     return resultString;
 }
 
+SimpleString StringFromBinary(const unsigned char *value, size_t size)
+{
+	SimpleString result;
+
+	for (size_t i = 0; i < size; i++) {
+		result += StringFromFormat("%02X ", value[i]);
+	}
+	result = result.subString(0, result.size() - 1);
+
+	return result;
+}
+
+SimpleString StringFromBinaryOrNull(const unsigned char *value, size_t size)
+{
+	return (value) ? StringFromBinary(value, size) : "(null)";
+}
+
 SimpleStringCollection::SimpleStringCollection()
 {
     collection_ = 0;
