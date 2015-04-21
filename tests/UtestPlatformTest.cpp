@@ -29,6 +29,22 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TestTestingFixture.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
+#include "CppUTest/UtestPlatformWrapper.h"
+
+TEST_GROUP(UtestPlatformTest) {};
+
+TEST(UtestPlatformTest, PlatformSpecificGetPlatformSpecificTimeStringWorksProperly)
+{
+    struct tm* time = localtime_stub(NULL);
+    time->tm_year = 115;
+    time->tm_mon = 3;
+    time->tm_mday = 29;
+    time->tm_hour = 3;
+    time->tm_min = 22;
+    time->tm_sec = 55;
+
+    STRCMP_EQUAL("2015-04-29T03:22:55", GetPlatformSpecificTimeString());
+}
 
 TEST_GROUP(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess)
 {

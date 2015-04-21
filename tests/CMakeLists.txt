@@ -31,6 +31,7 @@ set(CppUTestTests_src
     UtestTest.cpp
     SimpleMutexTest.cpp
     UtestPlatformTest.cpp
+        Platforms/${CPP_PLATFORM}/UtestPlatformWrapper.cpp
 )
 
 if (MSVC)
@@ -40,6 +41,7 @@ endif (MSVC)
 
 add_executable(CppUTestTests ${CppUTestTests_src})
 target_link_libraries(CppUTestTests CppUTest)
+add_test(CppUTestTests ${EXECUTABLE_OUTPUT_PATH}/CppUTestTests)
 
 if (TESTS)
     if (TESTS_DETAILED)

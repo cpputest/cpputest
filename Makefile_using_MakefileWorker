@@ -18,7 +18,8 @@ SRC_DIRS = \
 	src/Platforms/$(CPP_PLATFORM)
 	
 TEST_SRC_DIRS = \
-	tests
+	tests \
+    tests/Platforms/$(CPP_PLATFORM)
 
 INCLUDE_DIRS =\
   include
