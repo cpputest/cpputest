@@ -224,3 +224,72 @@ TEST(TestFailure, DoublesEqualNormal)
     FAILURE_EQUAL("expected <1>\n"
                 "\tbut was  <2> threshold used was <3>", f);
 }
+
+TEST(TestFailure, BinaryEqualOneByte)
+{
+    const unsigned char expectedData[] = { 0x00 };
+    const unsigned char actualData[] = { 0x01 };
+    BinaryEqualFailure f(test, failFileName, failLineNumber, expectedData, actualData, sizeof(expectedData));
+    FAILURE_EQUAL("expected <00>\n"
+                "\tbut was  <01>\n"
+    			"\tdifference starts at position 0 at: <         01         >\n"
+    			"\t                                               ^", f);
+}
+
+TEST(TestFailure, BinaryEqualTwoBytes)
+{
+    const unsigned char expectedData[] = {0x00, 0x01};
+    const unsigned char actualData[] = {0x00, 0x02};
+    BinaryEqualFailure f(test, failFileName, failLineNumber, expectedData, actualData, sizeof(expectedData));
+    FAILURE_EQUAL("expected <00 01>\n"
+                "\tbut was  <00 02>\n"
+    			"\tdifference starts at position 1 at: <      00 02         >\n"
+    			"\t                                               ^", f);
+}
+
+TEST(TestFailure, BinaryEqualThreeBytes)
+{
+    const unsigned char expectedData[] = {0x00, 0x01, 0x00};
+    const unsigned char actualData[] = {0x00, 0x02, 0x00};
+    BinaryEqualFailure f(test, failFileName, failLineNumber, expectedData, actualData, sizeof(expectedData));
+    FAILURE_EQUAL("expected <00 01 00>\n"
+                "\tbut was  <00 02 00>\n"
+    			"\tdifference starts at position 1 at: <      00 02 00      >\n"
+    			"\t                                               ^", f);
+}
+
+TEST(TestFailure, BinaryEqualFullWidth)
+{
+    const unsigned char expectedData[] = {0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00};
+    const unsigned char actualData[] = {0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00};
+    BinaryEqualFailure f(test, failFileName, failLineNumber, expectedData, actualData, sizeof(expectedData));
+    FAILURE_EQUAL("expected <00 00 00 01 00 00 00>\n"
+                "\tbut was  <00 00 00 02 00 00 00>\n"
+    			"\tdifference starts at position 3 at: <00 00 00 02 00 00 00>\n"
+    			"\t                                               ^", f);
+}
+
+TEST(TestFailure, BinaryEqualLast)
+{
+    const unsigned char expectedData[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+	const unsigned char actualData[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01};
+    BinaryEqualFailure f(test, failFileName, failLineNumber, expectedData, actualData, sizeof(expectedData));
+    FAILURE_EQUAL("expected <00 00 00 00 00 00 00>\n"
+                "\tbut was  <00 00 00 00 00 00 01>\n"
+    			"\tdifference starts at position 6 at: <00 00 00 01         >\n"
+    			"\t                                               ^", f);
+}
+
+TEST(TestFailure, BinaryEqualActualNull)
+{
+    const unsigned char expectedData[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    BinaryEqualFailure f(test, failFileName, failLineNumber, expectedData, NULL, sizeof(expectedData));
+    FAILURE_EQUAL("expected <00 00 00 00 00 00 00>\n\tbut was  <(null)>", f);
+}
+
+TEST(TestFailure, BinaryEqualExpectedNull)
+{
+    const unsigned char actualData[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01};
+    BinaryEqualFailure f(test, failFileName, failLineNumber, NULL, actualData, sizeof(actualData));
+    FAILURE_EQUAL("expected <(null)>\n\tbut was  <00 00 00 00 00 00 01>", f);
+}
