@@ -266,6 +266,21 @@ SOURCE=.\TestResultTest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\UtestPlatformTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Platforms\VisualCpp\UtestPlatformWrapper.cpp
+
+!IF  "$(CFG)" == "AllTests - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "AllTests - Win32 Debug"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\UtestTest.cpp
 # End Source File
 # End Group
