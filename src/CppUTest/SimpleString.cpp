@@ -132,9 +132,9 @@ int SimpleString::MemCmp(const void* s1, const void *s2, size_t n)
 
 	while (n--)
 		if (*p1 != *p2)
-		return *p1 - *p2;
+			return *p1 - *p2;
 		else
-		p1++, p2++;
+			p1++, p2++;
 	return 0;
 }
 
@@ -569,7 +569,7 @@ SimpleString VStringFromFormat(const char* format, va_list args)
     return resultString;
 }
 
-SimpleString StringFromBinary(const unsigned char *value, size_t size)
+SimpleString StringFromBinary(const unsigned char* value, size_t size)
 {
 	SimpleString result;
 
@@ -581,7 +581,7 @@ SimpleString StringFromBinary(const unsigned char *value, size_t size)
 	return result;
 }
 
-SimpleString StringFromBinaryOrNull(const unsigned char *value, size_t size)
+SimpleString StringFromBinaryOrNull(const unsigned char* value, size_t size)
 {
 	return (value) ? StringFromBinary(value, size) : "(null)";
 }

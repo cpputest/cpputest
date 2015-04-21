@@ -797,53 +797,30 @@ TEST(SimpleString, AtoI)
 TEST(SimpleString, Binary)
 {
 	const unsigned char value[] = { 0x00, 0x01, 0x2A, 0xFF };
-	STRCMP_EQUAL("00 01 2A FF", StringFromBinary(value, sizeof(value)).asCharString());
-}
+	const char expectedString[] = "00 01 2A FF";
 
-TEST(SimpleString, BinaryZeroLength)
-{
-	const unsigned char value[] = { 0x00, 0x01, 0x2A, 0xFF };
+	STRCMP_EQUAL(expectedString, StringFromBinary(value, sizeof(value)).asCharString());
+	STRCMP_EQUAL(expectedString, StringFromBinaryOrNull(value, sizeof(value)).asCharString());
 	STRCMP_EQUAL("", StringFromBinary(value, 0).asCharString());
-}
-
-TEST(SimpleString, BinaryNotNull)
-{
-	const unsigned char value[] = { 0x00, 0x01, 0x2A, 0xFF };
-	STRCMP_EQUAL("00 01 2A FF", StringFromBinaryOrNull(value, sizeof(value)).asCharString());
-}
-
-TEST(SimpleString, BinaryNull)
-{
 	STRCMP_EQUAL("(null)", StringFromBinaryOrNull(NULL, 0).asCharString());
 }
 
-TEST(SimpleString, MemCmpMatching) {
-	unsigned char s1[] = { 0x00, 0x01, 0x2A, 0xFF };
-	LONGS_EQUAL(0, SimpleString::MemCmp(s1, s1, sizeof(s1)));
-}
-
-TEST(SimpleString, MemCmpZeroLength) {
-	LONGS_EQUAL(0, SimpleString::MemCmp(NULL, NULL, 0));
-}
-
-TEST(SimpleString, MemCmpFirstNotMatching)
-{
-	unsigned char s1[] = { 0x00, 0x01, 0x2A, 0xFF };
-	unsigned char s2[] = { 0x01, 0x01, 0x2A, 0xFF };
-	CHECK(0 != SimpleString::MemCmp(s1, s2, sizeof(s1)));
-}
-
-TEST(SimpleString, MemCmpLastNotMatching)
-{
-	unsigned char s1[] = { 0x00, 0x01, 0x2A, 0xFF };
-	unsigned char s2[] = { 0x00, 0x01, 0x2A, 0x00 };
-	CHECK(0 != SimpleString::MemCmp(s1, s2, sizeof(s1)));
-}
-
-TEST(SimpleString, MemCmpGreater)
+TEST(SimpleString, MemCmp)
 {
 	unsigned char smaller[] = { 0x00, 0x01, 0x2A, 0xFF };
 	unsigned char greater[] = { 0x00, 0x01, 0xFF, 0xFF };
+
+	LONGS_EQUAL(0, SimpleString::MemCmp(smaller, smaller, sizeof(smaller)));
 	CHECK(SimpleString::MemCmp(smaller, greater, sizeof(smaller)) < 0);
 	CHECK(SimpleString::MemCmp(greater, smaller, sizeof(smaller)) > 0);
+	LONGS_EQUAL(0, SimpleString::MemCmp(NULL, NULL, 0));
+}
+
+TEST(SimpleString, MemCmpFirstLastNotMatching)
+{
+	unsigned char base[] = { 0x00, 0x01, 0x2A, 0xFF };
+	unsigned char firstNotMatching[] = { 0x01, 0x01, 0x2A, 0xFF };
+	unsigned char lastNotMatching[] = { 0x00, 0x01, 0x2A, 0x00 };
+	CHECK(0 != SimpleString::MemCmp(base, firstNotMatching, sizeof(base)));
+	CHECK(0 != SimpleString::MemCmp(base, lastNotMatching, sizeof(base)));
 }
