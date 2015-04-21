@@ -1,0 +1,19 @@
+version: 3.7.0-ci{build}
+
+os:
+- Windows Server 2012 R2
+
+environment:
+  matrix:
+  - PlatformToolset: v90
+  - PlatformToolset: v100
+
+build_script:
+- ps: scripts\appveyor_ci_build.ps1
+
+test_script:
+- ps: scripts\appveyor_ci_test.ps1
+
+# Other configuration options
+platform: Win32
+configuration: Debug
