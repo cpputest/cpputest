@@ -376,10 +376,13 @@ TEST(CompositeTestOutput, color)
 
 TEST(CompositeTestOutput, PrintTestFailure)
 {
+  TestOutput::WorkingEnvironment previousEnvironment = TestOutput::getWorkingEnvironment();
+  TestOutput::setWorkingEnvironment(TestOutput::eclipse);
   TestFailure failure(test, "file", 10, "failed");
   compositeOutput.print(failure);
   STRCMP_EQUAL("\nfile:10: error: Failure in TEST(Group, Name)\n\tfailed\n\n", output1->getOutput().asCharString());
   STRCMP_EQUAL("\nfile:10: error: Failure in TEST(Group, Name)\n\tfailed\n\n", output2->getOutput().asCharString());
+  TestOutput::setWorkingEnvironment(previousEnvironment);
 }
 
 TEST(CompositeTestOutput, PrintTestRun)
