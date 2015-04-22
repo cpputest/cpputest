@@ -52,6 +52,7 @@ public:
 protected:
     virtual TestOutput* createJUnitOutput(const SimpleString& packageName);
     virtual TestOutput* createConsoleOutput();
+    virtual TestOutput* createCompositeOutput(TestOutput* outputOne, TestOutput* outputTwo);
 
     TestOutput* output_;
 private:
