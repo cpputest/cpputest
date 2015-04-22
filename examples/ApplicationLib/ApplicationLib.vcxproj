@@ -122,11 +122,9 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AllTests.h" />
     <ClInclude Include="CircularBuffer.h" />
     <ClInclude Include="EventDispatcher.h" />
     <ClInclude Include="hello.h" />
-    <ClInclude Include="MockPrinter.h" />
     <ClInclude Include="Printer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
