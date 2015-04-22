@@ -42,9 +42,9 @@ void Printer::Print(const char* s)
         putchar(*p);
 }
 
-void Printer::Print(long n)
+void Printer::Print(long int n)
 {
-	printf("%d", n);
+	printf("%ld", n);
 }
 
 Printer& operator<<(Printer& p, const char* s)
