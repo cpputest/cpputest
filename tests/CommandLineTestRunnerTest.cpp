@@ -70,7 +70,7 @@ public:
     return fakeConsoleOutputWhichIsReallyABuffer;
   }
 
-  TestOutput* createJUnitOutput(const SimpleString& packagename)
+  TestOutput* createJUnitOutput(const SimpleString&)
   {
     fakeJUnitOuputWhichIsReallyABuffer_ = new StringBufferTestOutput;
     return fakeJUnitOuputWhichIsReallyABuffer_;
