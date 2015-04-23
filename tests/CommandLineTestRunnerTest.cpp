@@ -186,19 +186,41 @@ struct FakeOutput
 SimpleString FakeOutput::console = "";
 SimpleString FakeOutput::file = "";
 
+struct FakeOutputInstaller
+{
+    FakeOutputInstaller() : SaveFOpen(PlatformSpecificFOpen), SaveFPuts(PlatformSpecificFPuts),
+        SaveFClose(PlatformSpecificFClose), SavePutchar(PlatformSpecificPutchar)
+    {
+        PlatformSpecificFOpen = FakeOutput::fopen_fake;
+        PlatformSpecificFPuts = FakeOutput::fputs_fake;
+        PlatformSpecificFClose = FakeOutput::fclose_fake;
+        PlatformSpecificPutchar = FakeOutput::putchar_fake;
+    }
+    ~FakeOutputInstaller()
+    {
+        PlatformSpecificPutchar = SavePutchar; /* Must be restored immediately */
+        PlatformSpecificFOpen = SaveFOpen;
+        PlatformSpecificFPuts = SaveFPuts;
+        PlatformSpecificFClose = SaveFClose;
+    }
+private:
+    void * test;
+    PlatformSpecificFile (*SaveFOpen)(const char*, const char*);
+    void (*SaveFPuts)(const char*, PlatformSpecificFile);
+    void (*SaveFClose)(PlatformSpecificFile);
+    int (*SavePutchar)(int);
+};
+
 TEST(CommandLineTestRunner, realJunitOutputShouldBeCreatedAndWorkProperly)
 {
     const char* argv[] = { "tests.exe", "-ojunit", "-v", "-kpackage", };
-    UT_PTR_SET(PlatformSpecificFOpen, FakeOutput::fopen_fake);
-    UT_PTR_SET(PlatformSpecificFPuts, FakeOutput::fputs_fake);
-    UT_PTR_SET(PlatformSpecificFClose, FakeOutput::fclose_fake);
-    int(*RealPutchar)(int)  = PlatformSpecificPutchar;
-    PlatformSpecificPutchar = FakeOutput::putchar_fake;
+
+    FakeOutputInstaller* installer = new FakeOutputInstaller; /* UT_PTR_SET() won't work here! */
 
     CommandLineTestRunner commandLineTestRunner(4, argv, &registry);
     commandLineTestRunner.runAllTestsMain();
 
-    PlatformSpecificPutchar = RealPutchar; /* Must be restored immediately */
+    delete installer;
 
     STRCMP_CONTAINS("<testcase classname=\"package.group\" name=\"test\"", FakeOutput::file.asCharString());
     STRCMP_CONTAINS("TEST(group, test)", FakeOutput::console.asCharString());
