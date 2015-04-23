@@ -64,8 +64,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /GX /ZI /Od /I "../../include" /I "../../include/Platforms/VisualCpp" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /GZ /c
-# SUBTRACT CPP /YX
+# ADD CPP /nologo /ML /W3 /GX /ZI /Od /I "../../include" /I "../../include/Platforms/VisualCpp" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -90,6 +89,10 @@ SOURCE=.\CircularBuffer.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\EventDispatcher.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\hello.c
 # End Source File
 # Begin Source File
@@ -102,19 +105,15 @@ SOURCE=.\Printer.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=.\AllTests.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\CircularBuffer.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\hello.h
+SOURCE=.\ExamplesNewOverrides.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\MockPrinter.h
+SOURCE=.\hello.h
 # End Source File
 # Begin Source File
 
