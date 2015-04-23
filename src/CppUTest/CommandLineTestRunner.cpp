@@ -137,6 +137,14 @@ TestOutput* CommandLineTestRunner::createConsoleOutput()
     return new ConsoleTestOutput;
 }
 
+TestOutput* CommandLineTestRunner::createCompositeOutput(TestOutput* outputOne, TestOutput* outputTwo)
+{
+  CompositeTestOutput* composite = new CompositeTestOutput;
+  composite->setOutputOne(outputOne);
+  composite->setOutputTwo(outputTwo);
+  return composite;
+}
+
 bool CommandLineTestRunner::parseArguments(TestPlugin* plugin)
 {
   if (!arguments_->parse(plugin)) {
@@ -145,8 +153,11 @@ bool CommandLineTestRunner::parseArguments(TestPlugin* plugin)
     return false;
   }
 
-  if (arguments_->isJUnitOutput())
+  if (arguments_->isJUnitOutput()) {
     output_= createJUnitOutput(arguments_->getPackageName());
+    if (arguments_->isVerbose())
+      output_ = createCompositeOutput(output_, createConsoleOutput());
+  }
   else
     output_ = createConsoleOutput();
   return true;

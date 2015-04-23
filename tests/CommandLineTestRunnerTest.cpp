@@ -52,51 +52,47 @@ public:
     }
 private:
     TestRegistry* registry_;
-
 };
 
 class CommandLineTestRunnerWithStringBufferOutput : public CommandLineTestRunner
 {
-  TestOutput* junitOuput_;
 public:
-  CommandLineTestRunnerWithStringBufferOutput(int argc, const char** argv, TestRegistry* registry)
-    : CommandLineTestRunner(argc, argv, registry), junitOuput_(NULL)
-  {}
+  StringBufferTestOutput* fakeJUnitOuputWhichIsReallyABuffer_;
+  StringBufferTestOutput* fakeConsoleOutputWhichIsReallyABuffer;
 
-  ~CommandLineTestRunnerWithStringBufferOutput()
-  {
-    delete junitOuput_;
-  }
+  CommandLineTestRunnerWithStringBufferOutput(int argc, const char** argv, TestRegistry* registry)
+    : CommandLineTestRunner(argc, argv, registry), fakeJUnitOuputWhichIsReallyABuffer_(NULL), fakeConsoleOutputWhichIsReallyABuffer(NULL)
+  {}
 
   TestOutput* createConsoleOutput()
   {
-    return new StringBufferTestOutput;
+    fakeConsoleOutputWhichIsReallyABuffer = new StringBufferTestOutput;
+    return fakeConsoleOutputWhichIsReallyABuffer;
   }
 
-  TestOutput* createJUnitOutput(const SimpleString& packagename)
+  TestOutput* createJUnitOutput(const SimpleString&)
   {
-    junitOuput_ = CommandLineTestRunner::createJUnitOutput(packagename);
-    return new StringBufferTestOutput;
-  }
-
-  bool hasJUnitTestOutput()
-  {
-    return junitOuput_;
+    fakeJUnitOuputWhichIsReallyABuffer_ = new StringBufferTestOutput;
+    return fakeJUnitOuputWhichIsReallyABuffer_;
   }
 };
 
 TEST_GROUP(CommandLineTestRunner)
 {
     TestRegistry registry;
+    UtestShell *oneTest_;
     DummyPluginWhichCountsThePlugins* pluginCountingPlugin;
 
     void setup()
     {
-        pluginCountingPlugin = new DummyPluginWhichCountsThePlugins("PluginCountingPlugin", &registry);
+      oneTest_ = new UtestShell("group", "test", "file", 1);
+      registry.addTest(oneTest_);
+      pluginCountingPlugin = new DummyPluginWhichCountsThePlugins("PluginCountingPlugin", &registry);
     }
     void teardown()
     {
-        delete pluginCountingPlugin;
+      delete pluginCountingPlugin;
+      delete oneTest_;
     }
 };
 
@@ -131,5 +127,15 @@ TEST(CommandLineTestRunner, JunitOutputEnabled)
 
     CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(2, argv, &registry);
     commandLineTestRunner.runAllTestsMain();
-    CHECK(commandLineTestRunner.hasJUnitTestOutput());
+    CHECK(commandLineTestRunner.fakeJUnitOuputWhichIsReallyABuffer_);
+}
+
+TEST(CommandLineTestRunner, JunitOutputAndVerboseEnabled)
+{
+    const char* argv[] = { "tests.exe", "-ojunit", "-v"};
+
+    CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(3, argv, &registry);
+    commandLineTestRunner.runAllTestsMain();
+    STRCMP_CONTAINS("TEST(group, test)", commandLineTestRunner.fakeJUnitOuputWhichIsReallyABuffer_->getOutput().asCharString());
+    STRCMP_CONTAINS("TEST(group, test)", commandLineTestRunner.fakeConsoleOutputWhichIsReallyABuffer->getOutput().asCharString());
 }
