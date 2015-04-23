@@ -195,8 +195,8 @@ TEST(CommandLineTestRunner, realJunitOutputShouldBeCreatedAndWorkProperly)
     int(*RealPutchar)(int)  = PlatformSpecificPutchar;
     PlatformSpecificPutchar = FakeOutput::putchar_fake;
 
-    CommandLineTestRunner realCommandLineTestRunner(4, argv, &registry);
-    realCommandLineTestRunner.runAllTestsMain();
+    CommandLineTestRunner commandLineTestRunner(4, argv, &registry);
+    commandLineTestRunner.runAllTestsMain();
 
     PlatformSpecificPutchar = RealPutchar; /* Must be restored immediately */
 
