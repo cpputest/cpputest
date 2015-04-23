@@ -31,6 +31,7 @@
 #include "CppUTest/TestTestingFixture.h"
 #include "CppUTest/TestPlugin.h"
 #include "CppUTest/JUnitTestOutput.h"
+#include "CppUTest/PlatformSpecificFunctions.h"
 
 class DummyPluginWhichCountsThePlugins : public TestPlugin
 {
@@ -143,7 +144,7 @@ TEST(CommandLineTestRunner, JunitOutputAndVerboseEnabled)
 TEST(CommandLineTestRunner, listTestGroupNamesShouldWorkProperly)
 {
     const char* argv[] = { "tests.exe", "-lg" };
-    
+
     CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(2, argv, &registry);
     commandLineTestRunner.runAllTestsMain();
 
@@ -153,9 +154,52 @@ TEST(CommandLineTestRunner, listTestGroupNamesShouldWorkProperly)
 TEST(CommandLineTestRunner, listTestGroupAndCaseNamesShouldWorkProperly)
 {
     const char* argv[] = { "tests.exe", "-ln" };
-    
+
     CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(2, argv, &registry);
     commandLineTestRunner.runAllTestsMain();
 
     STRCMP_CONTAINS("group.test", commandLineTestRunner.fakeConsoleOutputWhichIsReallyABuffer->getOutput().asCharString());
+}
+
+struct FakeOutput
+{
+    static PlatformSpecificFile fopen_fake(const char*, const char*)
+    {
+        return (PlatformSpecificFile)0;
+    }
+    static void fputs_fake(const char* str, PlatformSpecificFile)
+    {
+        file += str;
+    }
+    static void fclose_fake(PlatformSpecificFile)
+    {
+    }
+    static int putchar_fake(int c)
+    {
+        console += StringFrom((char)c);
+        return c;
+    }
+    static SimpleString file;
+    static SimpleString console;
+};
+
+SimpleString FakeOutput::console = "";
+SimpleString FakeOutput::file = "";
+
+TEST(CommandLineTestRunner, realJunitOutputShouldBeCreatedAndWorkProperly)
+{
+    const char* argv[] = { "tests.exe", "-ojunit", "-v", "-kpackage", };
+    UT_PTR_SET(PlatformSpecificFOpen, FakeOutput::fopen_fake);
+    UT_PTR_SET(PlatformSpecificFPuts, FakeOutput::fputs_fake);
+    UT_PTR_SET(PlatformSpecificFClose, FakeOutput::fclose_fake);
+    int(*RealPutchar)(int)  = PlatformSpecificPutchar;
+    PlatformSpecificPutchar = FakeOutput::putchar_fake;
+
+    CommandLineTestRunner realCommandLineTestRunner(4, argv, &registry);
+    realCommandLineTestRunner.runAllTestsMain();
+
+    PlatformSpecificPutchar = RealPutchar; /* Must be restored immediately */
+
+    STRCMP_CONTAINS("<testcase classname=\"package.group\" name=\"test\" time=\"", FakeOutput::file.asCharString());
+    STRCMP_CONTAINS("TEST(group, test) - 0 ms\n\nOK (1 tests, 1 ran, 0 checks, 0 ignored, 0 filtered out, ", FakeOutput::console.asCharString());
 }
