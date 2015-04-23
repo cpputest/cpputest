@@ -200,6 +200,6 @@ TEST(CommandLineTestRunner, realJunitOutputShouldBeCreatedAndWorkProperly)
 
     PlatformSpecificPutchar = RealPutchar; /* Must be restored immediately */
 
-    STRCMP_CONTAINS("<testcase classname=\"package.group\" name=\"test\" time=\"", FakeOutput::file.asCharString());
-    STRCMP_CONTAINS("TEST(group, test) - 0 ms\n\nOK (1 tests, 1 ran, 0 checks, 0 ignored, 0 filtered out, ", FakeOutput::console.asCharString());
+    STRCMP_CONTAINS("<testcase classname=\"package.group\" name=\"test\"", FakeOutput::file.asCharString());
+    STRCMP_CONTAINS("TEST(group, test)", FakeOutput::console.asCharString());
 }
