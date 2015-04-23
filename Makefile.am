@@ -119,8 +119,8 @@ include_cpputestext_HEADERS = \
 	include/CppUTestExt/MockSupport.h \
 	include/CppUTestExt/MockSupportPlugin.h \
 	include/CppUTestExt/MockSupport_c.h \
-	include/CppUTestExt/OrderedTest.h	
-	
+	include/CppUTestExt/OrderedTest.h
+
 endif
 
 CppUTestTests_CPPFLAGS = $(lib_libCppUTest_a_CPPFLAGS)
@@ -159,7 +159,8 @@ CppUTestTests_SOURCES = \
 	tests/TestResultTest.cpp \
 	tests/TestUTestMacro.cpp \
 	tests/UtestTest.cpp \
-	tests/UtestPlatformTest.cpp
+	tests/UtestPlatformTest.cpp \
+	tests/Platforms/$(CPP_PLATFORM)/UtestPlatformWrapper.cpp
 
 CppUTestExtTests_CPPFLAGS = $(lib_libCppUTestExt_a_CPPFLAGS)
 CppUTestExtTests_CFLAGS = $(lib_libCppUTestExt_a_CFLAGS)
