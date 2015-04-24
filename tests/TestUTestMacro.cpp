@@ -698,6 +698,12 @@ TEST(UnitTestMacros, MEMCMP_EQUALFailureWithNullActual)
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <(null)>");
 }
 
+TEST(UnitTestMacros, MEMCMP_EQUALNullExpectedNullActual)
+{
+    MEMCMP_EQUAL(NULL, NULL, 0);
+    MEMCMP_EQUAL(NULL, NULL, 1024);
+}
+
 #if CPPUTEST_USE_STD_CPP_LIB
 static void _failingTestMethod_NoThrowWithCHECK_THROWS()
 {
