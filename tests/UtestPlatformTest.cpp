@@ -62,8 +62,30 @@ static void _failFunction()
     FAIL("This test fails");
 }
 
+#include <errno.h>
+
 extern "C" {
+    
+    static int (*original_waitpid)(int, int*, int) = NULL;
+
     static int fork_failed_stub(void) { return -1; }
+    
+    static int waitpid_while_debugging_stub(int pid, int* status, int options)
+    { 
+        static int number_called = 0;
+        static int saved_status;
+        
+        if (number_called++ < 10) {
+            saved_status = *status;
+            errno=EINTR;
+            return -1;
+        }
+        else {
+            *status = saved_status; 
+            return original_waitpid(pid, status, options);
+        }
+    }
+    
     static int waitpid_failed_stub(int, int*, int) { return -1; }
 }
 
@@ -124,6 +146,15 @@ TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, CallToForkFai
     fixture.registry_->setRunTestsInSeperateProcess();
     fixture.runAllTests();
     fixture.assertPrintContains("Call to fork() failed");
+}
+
+TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, CallToWaitPidWhileDebuggingInSeparateProcessWorks)
+{
+    UT_PTR_SET(original_waitpid, PlatformSpecificWaitPid);
+    UT_PTR_SET(PlatformSpecificWaitPid, waitpid_while_debugging_stub);
+    fixture.registry_->setRunTestsInSeperateProcess();
+    fixture.runAllTests();
+    fixture.assertPrintContains("OK (1 tests, 0 ran, 0 checks, 0 ignored, 0 filtered out");
 }
 
 TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, CallToWaitPidFailedInSeparateProcessWorks)
