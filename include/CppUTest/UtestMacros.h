@@ -189,7 +189,6 @@
 #define DOUBLES_EQUAL_LOCATION(expected,actual,threshold,file,line)\
   { UtestShell::getCurrent()->assertDoublesEqual(expected, actual, threshold,  file, line); }
 
-//Check two memory areas for equality
 #define MEMCMP_EQUAL(expected,actual,size)\
   MEMCMP_EQUAL_LOCATION(expected,actual,size,__FILE__,__LINE__)
 

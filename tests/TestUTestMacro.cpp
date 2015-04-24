@@ -567,6 +567,7 @@ static int functionThatReturnsAValue()
     STRCMP_EQUAL("THIS", "THIS");
     DOUBLES_EQUAL(1.0, 1.0, .01);
     POINTERS_EQUAL(0, 0);
+    MEMCMP_EQUAL("THIS", "THIS", 5);
     return 0;
 }
 
@@ -637,6 +638,64 @@ TEST(UnitTestMacros, CompareNFirstCharsWithLastCharDifferent)
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <Not empty string?>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <Not empty string!>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("difference starts at position 16");
+}
+
+TEST(UnitTestMacros, MEMCMP_EQUALBehavesAsAProperMacro)
+{
+    if (false) MEMCMP_EQUAL("TEST", "test", 5)
+    else MEMCMP_EQUAL("TEST", "TEST", 5)
+}
+
+IGNORE_TEST(UnitTestMacros, MEMCMP_EQUALWorksInAnIgnoredTest)
+{
+    MEMCMP_EQUAL("TEST", "test", 5); // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
+
+static void _MEMCMP_EQUALFailingTestMethodWithUnequalInput()
+{
+    unsigned char expectedData[] = { 0x00, 0x01, 0x02, 0x03 };
+    unsigned char actualData[] = { 0x00, 0x01, 0x03, 0x03 };
+
+    MEMCMP_EQUAL(expectedData, actualData, sizeof(expectedData));
+    lineOfCodeExecutedAfterCheck = true; // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
+
+TEST(UnitTestMacros, MEMCMP_EQUALFailureWithUnequalInput)
+{
+    runTestWithMethod(_MEMCMP_EQUALFailingTestMethodWithUnequalInput);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <00 01 02 03>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <00 01 03 03>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("difference starts at position 2");
+}
+
+static void _MEMCMP_EQUALFailingTestMethodWithNullExpected()
+{
+    unsigned char actualData[] = { 0x00, 0x01, 0x02, 0x03 };
+
+    MEMCMP_EQUAL(NULL, actualData, sizeof(actualData));
+    lineOfCodeExecutedAfterCheck = true; // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
+
+TEST(UnitTestMacros, MEMCMP_EQUALFailureWithNullExpected)
+{
+    runTestWithMethod(_MEMCMP_EQUALFailingTestMethodWithNullExpected);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <(null)>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <00 01 02 03>");
+}
+
+static void _MEMCMP_EQUALFailingTestMethodWithNullActual()
+{
+    unsigned char expectedData[] = { 0x00, 0x01, 0x02, 0x03 };
+
+    MEMCMP_EQUAL(expectedData, NULL, sizeof(expectedData));
+    lineOfCodeExecutedAfterCheck = true; // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
+
+TEST(UnitTestMacros, MEMCMP_EQUALFailureWithNullActual)
+{
+    runTestWithMethod(_MEMCMP_EQUALFailingTestMethodWithNullActual);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <00 01 02 03>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <(null)>");
 }
 
 #if CPPUTEST_USE_STD_CPP_LIB
