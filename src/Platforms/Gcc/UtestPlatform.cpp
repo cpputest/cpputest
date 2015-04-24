@@ -44,6 +44,7 @@
 #include <signal.h>
 #ifndef __MINGW32__
 #include <sys/wait.h>
+#include <errno.h>
 #endif
 #include <pthread.h>
 
@@ -83,6 +84,7 @@ static void GccCygwinPlatformSpecificRunTestInASeperateProcess(UtestShell* shell
         do {
             w = PlatformSpecificWaitPid(cpid, &status, WUNTRACED);
             if (w == -1) {
+                if(EINTR ==errno) continue; /* OS X debugger */
                 result->addFailure(TestFailure(shell, "Call to waitpid() failed"));
                 return;
             }
