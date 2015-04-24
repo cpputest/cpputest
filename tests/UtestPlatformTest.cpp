@@ -65,27 +65,27 @@ static void _failFunction()
 #include <errno.h>
 
 extern "C" {
-    
+
     static int (*original_waitpid)(int, int*, int) = NULL;
 
     static int fork_failed_stub(void) { return -1; }
-    
+
     static int waitpid_while_debugging_stub(int pid, int* status, int options)
-    { 
+    {
         static int number_called = 0;
         static int saved_status;
-        
+
         if (number_called++ < 10) {
             saved_status = *status;
             errno=EINTR;
             return -1;
         }
         else {
-            *status = saved_status; 
+            *status = saved_status;
             return original_waitpid(pid, status, options);
         }
     }
-    
+
     static int waitpid_failed_stub(int, int*, int) { return -1; }
 }
 
@@ -96,8 +96,9 @@ static int _accessViolationTestFunction()
 
 static int _divisionByZeroTestFunction()
 {
-    volatile int a = 1;
-    return 1 / (a - a);
+    int divisionByZero =  division(1, 0);
+    FAIL(StringFromFormat("Should have divided by zero. Outcome: %d", divisionByZero).asCharString());
+    return divisionByZero;
 }
 
 #include <unistd.h>
