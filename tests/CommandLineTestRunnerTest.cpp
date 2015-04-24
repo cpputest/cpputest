@@ -204,7 +204,6 @@ struct FakeOutputInstaller
         PlatformSpecificFClose = SaveFClose;
     }
 private:
-    void * test;
     PlatformSpecificFile (*SaveFOpen)(const char*, const char*);
     void (*SaveFPuts)(const char*, PlatformSpecificFile);
     void (*SaveFClose)(PlatformSpecificFile);
@@ -215,12 +214,12 @@ TEST(CommandLineTestRunner, realJunitOutputShouldBeCreatedAndWorkProperly)
 {
     const char* argv[] = { "tests.exe", "-ojunit", "-v", "-kpackage", };
 
-    FakeOutputInstaller* installer = new FakeOutputInstaller; /* UT_PTR_SET() won't work here! */
+    FakeOutputInstaller* fakeOutput = new FakeOutputInstaller; /* UT_PTR_SET() is not reentrant */
 
     CommandLineTestRunner commandLineTestRunner(4, argv, &registry);
     commandLineTestRunner.runAllTestsMain();
 
-    delete installer;
+    delete fakeOutput;
 
     STRCMP_CONTAINS("<testcase classname=\"package.group\" name=\"test\"", FakeOutput::file.asCharString());
     STRCMP_CONTAINS("TEST(group, test)", FakeOutput::console.asCharString());
