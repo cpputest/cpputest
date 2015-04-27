@@ -35,9 +35,4 @@ function Invoke-Tests($executable)
     }
 }
 
-if ($env:PlatformToolset -eq 'v90') {
-    Invoke-Tests('.\tests\Debug\AllTests.exe')
-}
-else {
-    Invoke-Tests('.\cpputest_build\AllTests.exe')
-}
+Invoke-Tests('.\cpputest_build\AllTests.exe')
