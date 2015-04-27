@@ -23,7 +23,8 @@ if [ "x$BUILDTOOL" = "xautotools" ]; then
     make dist-zip
 
     if [ "x$CXX" = "xg++" ]; then
-        cd .. && travis_github_deployer -v || exit 1
+      echo "Deploy please"
+#        cd .. && travis_github_deployer -v || exit 1
     fi;
 fi
 
