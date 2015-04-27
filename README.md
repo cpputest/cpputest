@@ -5,7 +5,11 @@ CppUTest unit testing and mocking framework for C/C++
 
 [More information on the project page](http://cpputest.github.com)
 
+Travis Linux build status:
 [![Build Status](https://travis-ci.org/cpputest/cpputest.png?branch=master)](https://travis-ci.org/cpputest/cpputest)
+
+AppVeyer Windows build status:
+[![Build status](https://ci.appveyor.com/api/projects/status/irh38i4wblsb5tew?svg=true)](https://ci.appveyor.com/project/basvodde/cpputest)
 
 
 ## Getting Started
