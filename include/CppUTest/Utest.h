@@ -40,6 +40,7 @@ class TestFilter;
 class TestTerminator;
 
 extern bool doubles_equal(double d1, double d2, double threshold);
+extern int division(int one, int two);
 
 //////////////////// Utest
 
