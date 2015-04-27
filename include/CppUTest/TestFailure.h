@@ -63,9 +63,13 @@ public:
 
 
 protected:
+    enum DifferenceFormat
+    {
+        DIFFERENCE_STRING, DIFFERENCE_BINARY
+    };
 
     SimpleString createButWasString(const SimpleString& expected, const SimpleString& actual);
-    SimpleString createDifferenceAtPosString(const SimpleString& actual, size_t position);
+    SimpleString createDifferenceAtPosString(const SimpleString& actual, size_t position, DifferenceFormat format = DIFFERENCE_STRING);
 
     SimpleString testName_;
     SimpleString fileName_;
@@ -138,6 +142,12 @@ class StringEqualNoCaseFailure : public TestFailure
 {
 public:
     StringEqualNoCaseFailure(UtestShell* test, const char* fileName, int lineNumber, const char* expected, const char* actual);
+};
+
+class BinaryEqualFailure : public TestFailure
+{
+public:
+	BinaryEqualFailure(UtestShell* test, const char* fileName, int lineNumber, const unsigned char* expected, const unsigned char* actual, size_t size);
 };
 
 #endif
