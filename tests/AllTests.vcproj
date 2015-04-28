@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8,00"
+	Version="8.00"
 	Name="AllTests"
 	ProjectGUID="{E66A12BB-1E17-4CFE-A358-9E0FA85E0F15}"
+	RootNamespace="AllTests"
 	>
 	<Platforms>
 		<Platform
@@ -15,8 +16,8 @@
 	<Configurations>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory=".\Release"
-			IntermediateDirectory=".\Release"
+			OutputDirectory="..\cpputest_build"
+			IntermediateDirectory="..\cpputest_build\Release\$(ProjectName)"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -49,10 +50,6 @@
 				StringPooling="true"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
-				PrecompiledHeaderFile=".\Release/AllTests.pch"
-				AssemblerListingLocation=".\Release/"
-				ObjectFile=".\Release/"
-				ProgramDataBaseFileName=".\Release/"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 			/>
@@ -69,11 +66,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="odbc32.lib odbccp32.lib winmm.lib"
-				OutputFile=".\Release/AllTests.exe"
+				AdditionalDependencies="..\lib\CppUTest.lib odbc32.lib odbccp32.lib winmm.lib"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
-				ProgramDatabaseFile=".\Release/AllTests.pdb"
 				SubSystem="1"
 				TargetMachine="1"
 			/>
@@ -89,7 +84,6 @@
 			<Tool
 				Name="VCBscMakeTool"
 				SuppressStartupBanner="true"
-				OutputFile=".\Release/AllTests.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -107,8 +101,8 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory=".\Debug"
-			IntermediateDirectory=".\Debug"
+			OutputDirectory="..\cpputest_build"
+			IntermediateDirectory="..\cpputest_build\Debug\$(ProjectName)"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -139,11 +133,6 @@
 				PreprocessorDefinitions="_CONSOLE;WIN32;_DEBUG"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				PrecompiledHeaderFile=".\Debug/AllTests.pch"
-				AssemblerListingLocation=".\Debug/"
-				ObjectFile=".\Debug/"
-				ProgramDataBaseFileName=".\Debug/"
-				BrowseInformation="1"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="4"
@@ -162,12 +151,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="..\lib\CppUTest.lib odbc32.lib odbccp32.lib winmm.lib"
-				OutputFile=".\Debug/AllTests.exe"
+				AdditionalDependencies="..\lib\CppUTestd.lib odbc32.lib odbccp32.lib winmm.lib"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\Debug/AllTests.pdb"
 				SubSystem="1"
 				TargetMachine="1"
 			/>
@@ -183,7 +170,6 @@
 			<Tool
 				Name="VCBscMakeTool"
 				SuppressStartupBanner="true"
-				OutputFile=".\Debug/AllTests.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"

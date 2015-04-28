@@ -25,6 +25,7 @@ gcov*.html
 ErrorLogs
 testResults
 .metadata
+/ipch
 Debug
 Release
 */Debug/*
