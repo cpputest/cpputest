@@ -56,7 +56,7 @@ TEST(FirstTestGroup, FirstTest)
 ## Command line switches
 
 * -v verbose, print each test name as it runs
-* -r# repeat the tests some number of times, default is one, default is # is not specified is 2. This is handy if you are experiencing memory leaks. A second run that has no leaks indicates that someone
+* -r# repeat the tests some number of times, default is one, default is # is not specified is 2. This is handy if you are experiencing memory leaks related to statics and caches.
 * -g group only run test whose group contains the substring group
 * -n name only run test whose name contains the substring name
 
@@ -64,7 +64,7 @@ TEST(FirstTestGroup, FirstTest)
 
 * TEST(group, name) - define a test
 * IGNORE_TEST(group, name) - turn off the execution of a test
-* TEST_GROUP(group) - Declare a test group to which certain tests belong. This will also create thelink needed from another library.
+* TEST_GROUP(group) - Declare a test group to which certain tests belong. This will also create the link needed from another library.
 * TEST_GROUP_BASE(group, base) - Same as TEST_GROUP, just use a different base class than Utest
 * TEST_SETUP() - Declare a void setup method in a TEST_GROUP - this is the same as declaring void setup()
 * TEST_TEARDOWN() - Declare a void setup method in a TEST_GROUP
