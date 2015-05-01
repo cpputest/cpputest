@@ -32,9 +32,9 @@ You can also use CMake, which also works for Windows Visual Studio.
 * make
 
 Then to get started, you'll need to do the following:
-* Add the include path to the Makefile. Something like: 
+* Add the include path to the Makefile. Something like:
     * CPPFLAGS += -I(CPPUTEST_HOME)/include
-* Add the memory leak macros to you Makefile (needed for additional debug info!). Something like:     
+* Add the memory leak macros to you Makefile (needed for additional debug info!). Something like:
     * CXXFLAGS += -include $(CPPUTEST_HOME)/include/CppUTest/MemoryLeakDetectorNewMacros.h
     * CFLAGS += -include $(CPPUTEST_HOME)/include/CppUTest/MemoryLeakDetectorMallocMacros.h
 * Add the library linking to your Makefile. Something like:
@@ -56,7 +56,7 @@ TEST(FirstTestGroup, FirstTest)
 ## Command line switches
 
 * -v verbose, print each test name as it runs
-* -r# repeat the tests some number of times, default is one, default is # is not specified is 2. This is handy if you are experiencing memory leaks. A second run that has no leaks indicates that someone 
+* -r# repeat the tests some number of times, default is one, default is # is not specified is 2. This is handy if you are experiencing memory leaks. A second run that has no leaks indicates that someone
 * -g group only run test whose group contains the substring group
 * -n name only run test whose name contains the substring name
 
@@ -86,7 +86,7 @@ The failure of one of these macros causes the current test to immediately exit
 * STRCMP_EQUAL(expected, actual) - check const char* strings for equality using strcmp
 * LONGS_EQUAL(expected, actual) - Compares two numbers
 * BYTES_EQUAL(expected, actual) - Compares two numbers, eight bits wide
-* POINTERS_EQUAL(expected, actual) - Compares two const void * 
+* POINTERS_EQUAL(expected, actual) - Compares two const void *
 * DOUBLES_EQUAL(expected, actual, tolerance) - Compares two doubles within some tolerance
 * FAIL(text) - always fails
 
@@ -95,7 +95,7 @@ Customize CHECK_EQUAL to work with your types that support operator==()
 
 * Create the function:
 ** SimpleString StringFrom (const yourType&)
-        
+
 The Extensions directory has a few of these.
 
 ## Building default checks with TestPlugin
@@ -122,9 +122,9 @@ int main(int ac, char** av)
 Memory leak detection
 
 * A platform specific memory leak detection mechanism is provided.
-* If a test fails and has allocated memory prior to the fail and that memory is not cleaned up by TearDown, a memory leak is reported. 
+* If a test fails and has allocated memory prior to the fail and that memory is not cleaned up by TearDown, a memory leak is reported.
   It is best to only chase memory leaks when other errors have been eliminated.
-* Some code uses lazy initialization and appears to leak when it really does not (for example: gcc stringstream used to in an  earlier release). One cause is that some standard library calls allocate something and do not free it until after main (or never). 
+* Some code uses lazy initialization and appears to leak when it really does not (for example: gcc stringstream used to in an  earlier release). One cause is that some standard library calls allocate something and do not free it until after main (or never).
   To find out if a memory leak is due to lazy initialization set the -r switch to run tests twice. The signature of this situation is that the first run shows leaks and the second run shows no leaks. When both runs show leaks, you have a leak to find.
 
 ## How is memory leak detection implemented?
@@ -189,7 +189,7 @@ TEST(ClassName, Create)
 }
 ```
 
-There are some scripts that are helpful in creating your initial h, cpp, and 
+There are some scripts that are helpful in creating your initial h, cpp, and
 Test files.  See scripts/README.TXT
 
 
