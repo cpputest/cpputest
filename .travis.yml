@@ -4,6 +4,9 @@ compiler:
 - gcc
 rvm:
 - 1.9.3
+os:
+  - linux
+  - osx
 env:
   matrix:
   - BUILDTOOL=autotools
