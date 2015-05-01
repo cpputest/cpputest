@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8,00"
+	Version="8.00"
 	Name="CppUTest"
 	ProjectGUID="{EC28C821-4AB8-458F-A821-C6E65607B781}"
 	>
@@ -15,8 +15,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory=".\Debug"
-			IntermediateDirectory=".\Debug"
+			OutputDirectory="lib"
+			IntermediateDirectory="cpputest_build\Debug\$(ProjectName)"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -46,10 +46,6 @@
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				PrecompiledHeaderFile=".\Debug/CppUTest.pch"
-				AssemblerListingLocation=".\Debug/"
-				ObjectFile=".\Debug/"
-				ProgramDataBaseFileName=".\Debug/"
-				BrowseInformation="1"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="4"
@@ -67,7 +63,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="lib\CppUTest.lib"
+				OutputFile="$(OutDir)\$(ProjectName)d.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -79,7 +75,6 @@
 			<Tool
 				Name="VCBscMakeTool"
 				SuppressStartupBanner="true"
-				OutputFile=".\Debug/CppUTest.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -90,8 +85,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory=".\Release"
-			IntermediateDirectory=".\Release"
+			OutputDirectory="lib"
+			IntermediateDirectory="cpputest_build\Release\$(ProjectName)"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
 			UseOfMFC="0"
@@ -122,10 +117,6 @@
 				StringPooling="true"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
-				PrecompiledHeaderFile=".\Release/CppUTest.pch"
-				AssemblerListingLocation=".\Release/"
-				ObjectFile=".\Release/"
-				ProgramDataBaseFileName=".\Release/"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 			/>
@@ -142,7 +133,6 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile=".\Release\CppUTest.lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -154,7 +144,6 @@
 			<Tool
 				Name="VCBscMakeTool"
 				SuppressStartupBanner="true"
-				OutputFile=".\Release/CppUTest.bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
