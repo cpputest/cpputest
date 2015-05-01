@@ -14,6 +14,10 @@ build_script:
 test_script:
 - ps: scripts\appveyor_ci_test.ps1
 
+artifacts:
+- path: lib\CppUTest.lib
+  name: CppUTest
+
 # Other configuration options
 platform: Win32
-configuration: Debug
+configuration: Release

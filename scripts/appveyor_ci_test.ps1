@@ -35,4 +35,4 @@ function Invoke-Tests($executable)
     }
 }
 
-Invoke-Tests('.\tests\Debug\AllTests.exe')
+Invoke-Tests('.\cpputest_build\AllTests.exe')

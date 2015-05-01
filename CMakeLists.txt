@@ -1,7 +1,7 @@
 project(CppUTest)
 
 set(CppUTest_version_major 3)
-set(CppUTest_version_minor 7dev)
+set(CppUTest_version_minor 8dev)
 
 # 2.6.3 is needed for ctest support
 cmake_minimum_required(VERSION 2.6.3)

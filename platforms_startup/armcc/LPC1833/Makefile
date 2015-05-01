@@ -1,3 +1,5 @@
+SHELL = cmd.exe
+
 CPU := Cortex-M3
 CPU_MODE := thumb
 TARGET_PLATFORM :=armcc_$(CPU)_$(CPU_MODE)
