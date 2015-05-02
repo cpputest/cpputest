@@ -139,3 +139,23 @@ TEST(CommandLineTestRunner, JunitOutputAndVerboseEnabled)
     STRCMP_CONTAINS("TEST(group, test)", commandLineTestRunner.fakeJUnitOuputWhichIsReallyABuffer_->getOutput().asCharString());
     STRCMP_CONTAINS("TEST(group, test)", commandLineTestRunner.fakeConsoleOutputWhichIsReallyABuffer->getOutput().asCharString());
 }
+
+TEST(CommandLineTestRunner, listTestGroupNamesShouldWorkProperly)
+{
+    const char* argv[] = { "tests.exe", "-lg" };
+    
+    CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(2, argv, &registry);
+    commandLineTestRunner.runAllTestsMain();
+
+    STRCMP_CONTAINS("group", commandLineTestRunner.fakeConsoleOutputWhichIsReallyABuffer->getOutput().asCharString());
+}
+
+TEST(CommandLineTestRunner, listTestGroupAndCaseNamesShouldWorkProperly)
+{
+    const char* argv[] = { "tests.exe", "-ln" };
+    
+    CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(2, argv, &registry);
+    commandLineTestRunner.runAllTestsMain();
+
+    STRCMP_CONTAINS("group.test", commandLineTestRunner.fakeConsoleOutputWhichIsReallyABuffer->getOutput().asCharString());
+}
