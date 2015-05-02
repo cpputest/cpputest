@@ -62,6 +62,6 @@ if ($env:PlatformToolset -eq 'v100')
 if ($env:PlatformToolset -eq 'MinGW')
 {
     $env:Path = "C:\Program Files (x86)\CMake 2.8\bin;C:\MinGW\bin;$env:Path"
-    Invoke-BuildCommand "cmake -G 'MinGW Makefiles' .." 'cpputest_build'
+    Invoke-BuildCommand "cmake -G 'MSYS Makefiles' .." 'cpputest_build'
     Invoke-BuildCommand "mingw32-make all" 'cpputest_build'
 }
