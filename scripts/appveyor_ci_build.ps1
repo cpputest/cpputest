@@ -8,15 +8,21 @@ function Get-Batchfile ($file) {
     }
 }
 
-function Invoke-BuildCommand($command)
+function Invoke-BuildCommand($command, $directory = '.')
 {
     $command_wrapped = "$command;`$err = `$?"
     Write-Host $command
+
+    Push-Location $directory
     Invoke-Expression $command_wrapped
-    if (-not $err)
+
+    if ($LASTEXITCODE > 0)
     {
+        Pop-Location
         Exit $LASTEXITCODE
     }
+
+    Pop-Location
 }
 
 # The project files that will get built
@@ -38,17 +44,24 @@ if ($env:PlatformToolset -eq 'v90')
     Get-BatchFile($vsvarspath)
 
     $VS2008ProjectFiles | foreach {
-        Invoke-BuildCommand("vcbuild /upgrade $_")
+        Invoke-BuildCommand "vcbuild /upgrade $_"
     }
 
     $VS2008ProjectFiles | foreach {
-        Invoke-BuildCommand("vcbuild $_ $env:CONFIGURATION")
+        Invoke-BuildCommand "vcbuild $_ $env:CONFIGURATION"
     }
 }
 
 if ($env:PlatformToolset -eq 'v100')
 {
     $VS2010ProjectFiles | foreach {
-        Invoke-BuildCommand("msbuild $logger_arg $_")
+        Invoke-BuildCommand "msbuild $logger_arg $_"
     }
+}
+
+if ($env:PlatformToolset -eq 'MinGW')
+{
+    $env:Path = "C:\Program Files (x86)\CMake 2.8\bin;C:\MinGW\bin;$env:Path"
+    Invoke-BuildCommand "cmake -G 'MinGW Makefiles' .." 'cpputest_build'
+    Invoke-BuildCommand "mingw32-make all" 'cpputest_build'
 }
