@@ -27,6 +27,8 @@ function Invoke-Tests($executable)
                 Add-AppveyorTest $testcase.name -Outcome Passed -FileName $testsuite.name
             }
         }
+
+        Remove-Item $_.Name
     }
 
     if ($anyFailures -eq $TRUE){
@@ -35,4 +37,12 @@ function Invoke-Tests($executable)
     }
 }
 
-Invoke-Tests('.\cpputest_build\AllTests.exe')
+if ($env:PlatformToolset -ne 'MinGW')
+{
+    Invoke-Tests('.\cpputest_build\AllTests.exe')
+}
+else
+{
+    Invoke-Tests('.\cpputest_build\CppUTestTests.exe')
+    Invoke-Tests('.\cpputest_build\CppUTestExtTests.exe')
+}
