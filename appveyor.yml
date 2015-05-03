@@ -5,9 +5,9 @@ os:
 
 environment:
   matrix:
+  - PlatformToolset: MinGW
   - PlatformToolset: v90
   - PlatformToolset: v100
-  - PlatformToolset: MinGW
 
 build_script:
 - ps: scripts\appveyor_ci_build.ps1
