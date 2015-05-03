@@ -43,6 +43,6 @@ if ($env:PlatformToolset -ne 'MinGW')
 }
 else
 {
-    Invoke-Tests('.\cpputest_build\CppUTestTests.exe')
-    Invoke-Tests('.\cpputest_build\CppUTestExtTests.exe')
+    Invoke-Tests('.\cpputest_build\tests\CppUTestTests.exe')
+    Invoke-Tests('.\cpputest_build\tests\CppUTestExt\CppUTestExtTests.exe')
 }
