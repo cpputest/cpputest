@@ -25,6 +25,27 @@ function Invoke-BuildCommand($command, $directory = '.')
     Pop-Location
 }
 
+function Remove-PathFolder($folder)
+{
+    [string[]]$pathFolders = $env:Path -split ";"
+    for ([int]$i = 0; $i -lt $pathFolders.Count; $i++)
+    {
+        if ([string]::Compare($pathFolders[$i], $folder, $true) -eq 0)
+        {
+            Write-Host "Removing $folder from the PATH"
+            $pathFolders.RemoveAt($i)
+            $i--
+        }
+    }
+
+    $env:Path = $pathFolders -join ";"
+}
+
+function Add-PathFolder($folder)
+{
+    $env:Path = "$folder;$env:Path"
+}
+
 # The project files that will get built
 $VS2008ProjectFiles = @( 'CppUTest.vcproj' , 'tests\AllTests.vcproj'  )
 $VS2010ProjectFiles = @( 'CppUTest.vcxproj', 'tests\AllTests.vcxproj' )
@@ -61,7 +82,18 @@ if ($env:PlatformToolset -eq 'v100')
 
 if ($env:PlatformToolset -eq 'MinGW')
 {
-    $env:Path = "C:\Program Files (x86)\CMake 2.8\bin;C:\MinGW\bin;$env:Path"
+    Write-Host "Initial Path: $env:Path"
+
+    # Need to do some path cleanup first
+    Remove-PathFolder "C:\Program Files\Git\bin"
+    Remove-PathFolder "C:\Program Files (x86)\Git\bin"
+
+    # Add cmake and mingw to the path
+    Add-PathFolder "C:\Program Files (x86)\CMake 2.8\bin"
+    Add-PathFolder "C:\MinGW\bin"
+
+    Write-Host "Building with Path: $env:Path"
+
     Invoke-BuildCommand "cmake -G 'MSYS Makefiles' .." 'cpputest_build'
     Invoke-BuildCommand "mingw32-make all" 'cpputest_build'
 }
