@@ -29,7 +29,7 @@ function Invoke-BuildCommand($command, $directory = '.')
 function Remove-PathFolder($folder)
 {
     [System.Collections.ArrayList]$pathFolders = New-Object System.Collections.ArrayList
-    $env:Path -split ";" | foreach { $pathFolders.Add($_) }
+    $env:Path -split ";" | foreach { $pathFolders.Add($_) | Out-Null }
 
     for ([int]$i = 0; $i -lt $pathFolders.Count; $i++)
     {
@@ -53,11 +53,11 @@ function Add-PathFolder($folder)
 
     [bool]$alreadyInPath = $false
     [System.Collections.ArrayList]$pathFolders = New-Object System.Collections.ArrayList
-    $env:Path -split ";" | foreach { $pathFolders.Add($_) }
+    $env:Path -split ";" | foreach { $pathFolders.Add($_) | Out-Null }
 
     for ([int]$i = 0; $i -lt $pathFolders.Count; $i++)
     {
-        if ([string]::Compare($pathFolders[$i], $folder, $true))
+        if ([string]::Compare($pathFolders[$i], $folder, $true) -eq 0)
         {
             $alreadyInPath = $true
             break
