@@ -6,11 +6,14 @@ os:
 environment:
   matrix:
   - PlatformToolset: MinGW
+    Platform: Win32
+  - PlatformToolset: MinGW
+    Platform: x64
   - PlatformToolset: v90
   - PlatformToolset: v100
 
 install:
-- ps: if ($env:PlatformToolset -eq 'MinGW') { choco install mingw -forcex86 }
+- ps: if ($env:PlatformToolset -eq 'MinGW') { choco install mingw $( if ($env:Platform -eq 'Win32') { Write-Output -forcex86 } ) }
 
 build_script:
 - ps: scripts\appveyor_ci_build.ps1
