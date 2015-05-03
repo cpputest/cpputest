@@ -108,6 +108,7 @@ if ($env:PlatformToolset -eq 'v100')
 
 if ($env:PlatformToolset -eq 'MinGW')
 {
+    & 'cinst' 'mingw' '--forcex86' '--yes'
     Write-Host "Initial Path: $env:Path"
 
     # Need to do some path cleanup first

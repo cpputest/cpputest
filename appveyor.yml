@@ -9,9 +9,6 @@ environment:
   - PlatformToolset: v100
   - PlatformToolset: MinGW
 
-install:
-  - cinst mingw --x86
-  
 build_script:
 - ps: scripts\appveyor_ci_build.ps1
 
