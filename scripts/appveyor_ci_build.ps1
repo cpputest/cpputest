@@ -16,9 +16,10 @@ function Invoke-BuildCommand($command, $directory = '.')
     Push-Location $directory
     Invoke-Expression $command_wrapped
 
-    if ($LASTEXITCODE > 0)
+    if ($LASTEXITCODE -ne 0)
     {
         Pop-Location
+        Write-Host "Command Returned error: $LASTEXITCODE"
         Exit $LASTEXITCODE
     }
 
@@ -27,7 +28,9 @@ function Invoke-BuildCommand($command, $directory = '.')
 
 function Remove-PathFolder($folder)
 {
-    [string[]]$pathFolders = $env:Path -split ";"
+    [System.Collections.ArrayList]$pathFolders = New-Object System.Collections.ArrayList
+    $env:Path -split ";" | foreach { $pathFolders.Add($_) }
+
     for ([int]$i = 0; $i -lt $pathFolders.Count; $i++)
     {
         if ([string]::Compare($pathFolders[$i], $folder, $true) -eq 0)
@@ -43,7 +46,30 @@ function Remove-PathFolder($folder)
 
 function Add-PathFolder($folder)
 {
-    $env:Path = "$folder;$env:Path"
+    if (-not (Test-Path $folder))
+    {
+        Write-Host "Not adding $folder to the PATH, it does not exist"
+    }
+
+    [bool]$alreadyInPath = $false
+    [System.Collections.ArrayList]$pathFolders = New-Object System.Collections.ArrayList
+    $env:Path -split ";" | foreach { $pathFolders.Add($_) }
+
+    for ([int]$i = 0; $i -lt $pathFolders.Count; $i++)
+    {
+        if ([string]::Compare($pathFolders[$i], $folder, $true))
+        {
+            $alreadyInPath = $true
+            break
+        }
+    }
+
+    if (-not $alreadyInPath)
+    {
+        Write-Host "Adding $folder to the PATH"
+        $pathFolders.Insert(0, $folder)
+        $env:Path = $pathFolders -join ";"
+    }
 }
 
 # The project files that will get built
@@ -86,14 +112,17 @@ if ($env:PlatformToolset -eq 'MinGW')
 
     # Need to do some path cleanup first
     Remove-PathFolder "C:\Program Files\Git\bin"
+    Remove-PathFolder "C:\Program Files\Git\cmd"
     Remove-PathFolder "C:\Program Files (x86)\Git\bin"
+    Remove-PathFolder "C:\Program Files (x86)\Git\cmd"
 
-    # Add cmake and mingw to the path
-    Add-PathFolder "C:\Program Files (x86)\CMake 2.8\bin"
+    # Add mingw to the path
     Add-PathFolder "C:\MinGW\bin"
 
     Write-Host "Building with Path: $env:Path"
 
     Invoke-BuildCommand "cmake -G 'MinGW Makefiles' .." 'cpputest_build'
     Invoke-BuildCommand "mingw32-make all" 'cpputest_build'
+
+    Remove-PathFolder "C:\MinGW\bin"
 }
