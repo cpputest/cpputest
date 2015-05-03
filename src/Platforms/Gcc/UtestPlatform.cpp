@@ -55,17 +55,24 @@ static int jmp_buf_index = 0;
 
 #ifdef __MINGW32__
 
-static void GccNoPThreadPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin*, TestResult* result)
+static void GccPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin*, TestResult* result)
 {
     result->addFailure(TestFailure(shell, "-p doesn't work on MinGW as it is lacking fork.\b"));
 }
 
-void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell* shell, TestPlugin* plugin, TestResult* result) =
-        GccNoPThreadPlatformSpecificRunTestInASeperateProcess;
+static pid_t PlatformSpecificForkImplementation(void)
+{
+    return (pid_t) 0;
+}
+
+static int PlatformSpecificWaitPidImplementation(int, int*, int)
+{
+    return 0;
+}
 
 #else
 
-static void GccCygwinPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
+static void GccPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
 {
     pid_t cpid, w;
     int status;
@@ -106,11 +113,6 @@ static void GccCygwinPlatformSpecificRunTestInASeperateProcess(UtestShell* shell
     }
 }
 
-void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell* shell, TestPlugin* plugin, TestResult* result) =
-        GccCygwinPlatformSpecificRunTestInASeperateProcess;
-
-#endif
-
 static pid_t PlatformSpecificForkImplementation(void)
 {
     return fork();
@@ -121,11 +123,15 @@ static int PlatformSpecificWaitPidImplementation(int pid, int* status, int optio
     return waitpid(pid, status, options);
 }
 
+#endif
+
 TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
 {
     return TestOutput::eclipse;
 }
 
+void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell* shell, TestPlugin* plugin, TestResult* result) =
+        GccPlatformSpecificRunTestInASeperateProcess;
 int (*PlatformSpecificFork)(void) = PlatformSpecificForkImplementation;
 int (*PlatformSpecificWaitPid)(int, int*, int) = PlatformSpecificWaitPidImplementation;
 
