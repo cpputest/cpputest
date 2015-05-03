@@ -60,9 +60,9 @@ static void GccPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, Test
     result->addFailure(TestFailure(shell, "-p doesn't work on MinGW as it is lacking fork.\b"));
 }
 
-static pid_t PlatformSpecificForkImplementation(void)
+static int PlatformSpecificForkImplementation(void)
 {
-    return (pid_t) 0;
+    return 0;
 }
 
 static int PlatformSpecificWaitPidImplementation(int, int*, int)
@@ -118,7 +118,7 @@ static pid_t PlatformSpecificForkImplementation(void)
     return fork();
 }
 
-static int PlatformSpecificWaitPidImplementation(int pid, int* status, int options)
+static pid_t PlatformSpecificWaitPidImplementation(int pid, int* status, int options)
 {
     return waitpid(pid, status, options);
 }
