@@ -114,6 +114,7 @@ TEST_GROUP(TestRegistry)
     MockTest* test1;
     MockTest* test2;
     MockTest* test3;
+    MockTest* test4;
     TestResult *result;
     MockTestResult *mockResult;
     void setup()
@@ -124,6 +125,7 @@ TEST_GROUP(TestRegistry)
         test1 = new MockTest();
         test2 = new MockTest();
         test3 = new MockTest("group2");
+        test4 = new MockTest();
         myRegistry = new TestRegistry();
         myRegistry->setCurrentRegistry(myRegistry);
     }
@@ -135,6 +137,7 @@ TEST_GROUP(TestRegistry)
         delete test1;
         delete test2;
         delete test3;
+        delete test4;
         delete result;
         delete output;
     }
@@ -326,16 +329,20 @@ TEST(TestRegistry, ResetPluginsWorks)
 
 TEST(TestRegistry, listGroupNames)
 {
+    // run tests backward, ensure that GROUP_1 will be listed
+    // after GROUP_11, and also that GROUP_2 will be listed only once
     test1->setGroupName("GROUP_1");
     myRegistry->addTest(test1);
     test2->setGroupName("GROUP_2");
     myRegistry->addTest(test2);
-    test3->setGroupName("GROUP_1");
+    test3->setGroupName("GROUP_11");
     myRegistry->addTest(test3);
+    test4->setGroupName("GROUP_2");
+    myRegistry->addTest(test4);
 
     myRegistry->listTestGroupNames(*result);
     SimpleString s = output->getOutput();
-    STRCMP_EQUAL("GROUP_1 GROUP_2", s.asCharString());
+    STRCMP_EQUAL("GROUP_2 GROUP_11 GROUP_1", s.asCharString());
 }
 
 TEST(TestRegistry, listTestNames)
@@ -346,11 +353,11 @@ TEST(TestRegistry, listTestNames)
     test2->setGroupName("GROUP_B");
     test2->setTestName("test_b");
     myRegistry->addTest(test2);
-    test3->setGroupName("GROUP_C");
-    test3->setTestName("test_c");
+    test3->setGroupName("GROUP_A");
+    test3->setTestName("test_aa");
     myRegistry->addTest(test3);
 
     myRegistry->listTestGroupAndCaseNames(*result);
     SimpleString s = output->getOutput();
-    STRCMP_EQUAL("GROUP_C.test_c GROUP_B.test_b GROUP_A.test_a", s.asCharString());
+    STRCMP_EQUAL("GROUP_A.test_aa GROUP_B.test_b GROUP_A.test_a", s.asCharString());
 }
