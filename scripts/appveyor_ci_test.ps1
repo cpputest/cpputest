@@ -13,7 +13,6 @@ function Invoke-Tests($executable)
     Get-ChildItem cpputest_*.xml | foreach {
         $testsuite = ([xml](get-content $_.Name)).testsuite
 
-        write-host " $($testsuite.name)"
         foreach ($testcase in $testsuite.testcase) {
             if ($testcase.failure) {
                 Add-AppveyorTest $testcase.name -Outcome Failed -FileName $testsuite.name -ErrorMessage $testcase.failure.message
