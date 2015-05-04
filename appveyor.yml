@@ -10,7 +10,7 @@ environment:
   - PlatformToolset: v100
 
 install:
-- ps: if ($env:PlatformToolset -eq 'MinGW') { choco install mingw }
+- ps: if ($env:PlatformToolset -eq 'MinGW') { choco install mingw -forcex86 }
 
 build_script:
 - ps: scripts\appveyor_ci_build.ps1

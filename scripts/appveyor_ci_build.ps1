@@ -118,12 +118,12 @@ if ($env:PlatformToolset -eq 'MinGW')
     Remove-PathFolder "C:\Program Files (x86)\Git\cmd"
 
     # Add mingw to the path
-    Add-PathFolder "C:\Tools\mingw64\bin"
+    Add-PathFolder "C:\Tools\mingw32\bin"
 
     Write-Host "Building with Path: $env:Path"
 
     Invoke-BuildCommand "cmake -G 'MinGW Makefiles' .." 'cpputest_build'
     Invoke-BuildCommand "mingw32-make all" 'cpputest_build'
 
-    Remove-PathFolder "C:\Tools\mingw64\bin"
+    Remove-PathFolder "C:\Tools\mingw32\bin"
 }
