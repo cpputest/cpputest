@@ -338,6 +338,18 @@ TEST(TestRegistry, listGroupNames)
     STRCMP_EQUAL("GROUP_1 GROUP_2", s.asCharString());
 }
 
+TEST(TestRegistry, shouldListGroupNamesWhereOneIsContainedInAnother)
+{
+    test2->setGroupName("GROUP");
+    myRegistry->addTest(test2);
+    test3->setGroupName("GROUP_1");
+    myRegistry->addTest(test3);
+
+    myRegistry->listTestGroupNames(*result);
+    SimpleString s = output->getOutput();
+    STRCMP_EQUAL("GROUP_1 GROUP", s.asCharString());
+}
+
 TEST(TestRegistry, listTestNames)
 {
     test1->setGroupName("GROUP_A");
@@ -354,3 +366,21 @@ TEST(TestRegistry, listTestNames)
     SimpleString s = output->getOutput();
     STRCMP_EQUAL("GROUP_C.test_c GROUP_B.test_b GROUP_A.test_a", s.asCharString());
 }
+
+TEST(TestRegistry, shouldListTestNamesWhereOneIsContainedInAnother)
+{
+    test1->setGroupName("Test");
+    test1->setTestName("test");
+    myRegistry->addTest(test1);
+    test2->setGroupName("HisTest");
+    test2->setTestName("test");
+    myRegistry->addTest(test2);
+    test3->setGroupName("MyTest");
+    test3->setTestName("test");
+    myRegistry->addTest(test3);
+
+    myRegistry->listTestGroupAndCaseNames(*result);
+    SimpleString s = output->getOutput();
+    STRCMP_EQUAL("MyTest.test HisTest.test Test.test", s.asCharString());
+}
+
