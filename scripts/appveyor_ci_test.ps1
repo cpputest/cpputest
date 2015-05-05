@@ -13,7 +13,6 @@ function Invoke-Tests($executable)
     Get-ChildItem cpputest_*.xml | foreach {
         $testsuite = ([xml](get-content $_.Name)).testsuite
 
-        write-host " $($testsuite.name)"
         foreach ($testcase in $testsuite.testcase) {
             if ($testcase.failure) {
                 Add-AppveyorTest $testcase.name -Outcome Failed -FileName $testsuite.name -ErrorMessage $testcase.failure.message
@@ -89,8 +88,14 @@ if ($env:PlatformToolset -ne 'MinGW')
 }
 else
 {
-    Add-PathFolder 'C:\Tools\mingw32\bin'
+    $mingw_path = 'C:\Tools\mingw32\bin'
+    if ($env:Platform -eq 'x64')
+    {
+        $mingw_path = 'C:\Tools\mingw64\bin'
+    }
+
+    Add-PathFolder $mingw_path
     Invoke-Tests('.\cpputest_build\tests\CppUTestTests.exe')
     Invoke-Tests('.\cpputest_build\tests\CppUTestExt\CppUTestExtTests.exe')
-    Remove-PathFolder 'C:\Tools\mingw32\bin'
+    Remove-PathFolder $mingw_path
 }
