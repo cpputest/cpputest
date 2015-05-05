@@ -38,8 +38,13 @@ if (MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4723")
 endif (MSVC)
 
+if (MINGW)
+    find_package (Threads REQUIRED)
+    set(THREAD_LIB "pthread")
+endif (MINGW)
+
 add_executable(CppUTestTests ${CppUTestTests_src})
-target_link_libraries(CppUTestTests CppUTest)
+target_link_libraries(CppUTestTests CppUTest ${THREAD_LIB})
 
 if (TESTS)
     if (TESTS_DETAILED)

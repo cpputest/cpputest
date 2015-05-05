@@ -18,8 +18,13 @@ set(CppUTestExtTests_src
     OrderedTestTest.cpp
 )
 
+if (MINGW)
+    find_package (Threads REQUIRED)
+    set(THREAD_LIB "pthread")
+endif (MINGW)
+
 add_executable(CppUTestExtTests ${CppUTestExtTests_src})
-target_link_libraries(CppUTestExtTests CppUTest CppUTestExt ${CPPUNIT_EXTERNAL_LIBRARIES})
+target_link_libraries(CppUTestExtTests CppUTest CppUTestExt ${THREAD_LIB} ${CPPUNIT_EXTERNAL_LIBRARIES})
 
 if (TESTS)
     # get all test groups
