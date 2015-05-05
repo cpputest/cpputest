@@ -327,10 +327,8 @@ TEST(TestRegistry, ResetPluginsWorks)
     LONGS_EQUAL(0, myRegistry->countPlugins());
 }
 
-TEST(TestRegistry, listGroupNames)
+TEST(TestRegistry, listTestGroupNames_shouldListBackwardsGroup1AfterGroup11AndGroup2OnlyOnce)
 {
-    // run tests backward, ensure that GROUP_1 will be listed
-    // after GROUP_11, and also that GROUP_2 will be listed only once
     test1->setGroupName("GROUP_1");
     myRegistry->addTest(test1);
     test2->setGroupName("GROUP_2");
@@ -345,7 +343,7 @@ TEST(TestRegistry, listGroupNames)
     STRCMP_EQUAL("GROUP_2 GROUP_11 GROUP_1", s.asCharString());
 }
 
-TEST(TestRegistry, listTestNames)
+TEST(TestRegistry, listTestGroupAndCaseNames_shouldListBackwardsGroupATestaAfterGroupAtestaa)
 {
     test1->setGroupName("GROUP_A");
     test1->setTestName("test_a");
