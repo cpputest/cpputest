@@ -161,6 +161,8 @@ TEST(CommandLineTestRunner, listTestGroupAndCaseNamesShouldWorkProperly)
     STRCMP_CONTAINS("group.test", commandLineTestRunner.fakeConsoleOutputWhichIsReallyABuffer->getOutput().asCharString());
 }
 
+# if 0
+
 struct FakeOutput
 {
     FakeOutput() : SaveFOpen(PlatformSpecificFOpen), SaveFPuts(PlatformSpecificFPuts),
@@ -220,3 +222,26 @@ TEST(CommandLineTestRunner, realJunitOutputShouldBeCreatedAndWorkProperly)
     STRCMP_CONTAINS("<testcase classname=\"package.group\" name=\"test\"", FakeOutput::file.asCharString());
     STRCMP_CONTAINS("TEST(group, test)", FakeOutput::console.asCharString());
 }
+
+#else
+
+struct CommandLineTestRunnerForTesting : public CommandLineTestRunner
+{
+    CommandLineTestRunnerForTesting(int ac, const char** av, TestRegistry* registry) :
+        CommandLineTestRunner(ac, av, registry) {}
+
+    TestOutput* getTestOutput(void)
+    {
+        return output_;
+    }
+};
+/*)
+TEST(CommandLineTestRunner, JUnitOutputShouldBeCreatedProperly)
+{
+    const char* argv[] = { "tests.exe", "-ojunit", "-kmyPackage" };
+    CommandLineTestRunnerForTesting runner(3, argv, &registry);
+    runner.runAllTestsMain();
+    CHECK(NULL != dynamic_cast<JUnitTestOutput*>(runner.getTestOutput()))
+}
+*/
+#endif
