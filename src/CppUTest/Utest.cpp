@@ -37,11 +37,6 @@ bool doubles_equal(double d1, double d2, double threshold)
     return PlatformSpecificFabs(d1 - d2) <= threshold;
 }
 
-int division(int one, int two)
-{
-  return one / two;
-}
-
 /* Sometimes stubs use the CppUTest assertions.
  * Its not correct to do so, but this small helper class will prevent a segmentation fault and instead
  * will give an error message and also the file/line of the check that was executed outside the tests.
