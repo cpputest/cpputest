@@ -341,4 +341,17 @@ check_all: check_basic check_special_situations check_coverage remove_coverage_o
 	@echo "Check running tests in separate process (CppUTestExtTests TEST_GROUP(TestOrderedTestMacro) would have to fail)"
 	$(RUN_CPPUTEST_TESTS) -p;
 
+# Mac OSX adds an annoying directory when packaging. This can be prevented by setting COPYFILE_DISABLE=1
+# However, I've not figured out how to set it automatically and neither google nor stackoverflow knew the answer.
+# The automake mailing list is still thinking about it, and thus, I've added this check so that I don't forget to do it :)
+# More info: http://superuser.com/questions/61185/why-do-i-get-files-like-foo-in-my-tarball-on-os-x
+dist-hook:
+	if test "x$(CPPUTEST_ON_MACOSX)" = "xyes"; then \
+		if test ! "x$(COPYFILE_DISABLE)" = "x1"; then \
+			echo ""; \
+			echo 'ERROR: When packaging on MacOSX, please run "COPYFILE_DISABLE=1 make dist"'; \
+			echo ""; \
+			exit 1; \
+		fi \
+	fi
 
