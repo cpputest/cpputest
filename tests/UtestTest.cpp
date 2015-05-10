@@ -34,11 +34,6 @@ TEST_GROUP(Utest)
 {
 };
 
-TEST(Utest, division)
-{
-    LONGS_EQUAL(3, division(13, 4));
-}
-
 TEST_GROUP(UtestShell)
 {
     TestTestingFixture fixture;
