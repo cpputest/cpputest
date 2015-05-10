@@ -161,70 +161,6 @@ TEST(CommandLineTestRunner, listTestGroupAndCaseNamesShouldWorkProperly)
     STRCMP_CONTAINS("group.test", commandLineTestRunner.fakeConsoleOutputWhichIsReallyABuffer->getOutput().asCharString());
 }
 
-# if 0
-
-struct FakeOutput
-{
-    FakeOutput() : SaveFOpen(PlatformSpecificFOpen), SaveFPuts(PlatformSpecificFPuts),
-        SaveFClose(PlatformSpecificFClose), SavePutchar(PlatformSpecificPutchar)
-    {
-        PlatformSpecificFOpen = fopen_fake;
-        PlatformSpecificFPuts = fputs_fake;
-        PlatformSpecificFClose = fclose_fake;
-        PlatformSpecificPutchar = putchar_fake;
-    }
-    ~FakeOutput()
-    {
-        PlatformSpecificPutchar = SavePutchar;
-        PlatformSpecificFOpen = SaveFOpen;
-        PlatformSpecificFPuts = SaveFPuts;
-        PlatformSpecificFClose = SaveFClose;
-    }
-    static PlatformSpecificFile fopen_fake(const char*, const char*)
-    {
-        return (PlatformSpecificFile)0;
-    }
-    static void fputs_fake(const char* str, PlatformSpecificFile)
-    {
-        file += str;
-    }
-    static void fclose_fake(PlatformSpecificFile)
-    {
-    }
-    static int putchar_fake(int c)
-    {
-        console += StringFrom((char)c);
-        return c;
-    }
-    static SimpleString file;
-    static SimpleString console;
-private:
-    PlatformSpecificFile (*SaveFOpen)(const char*, const char*);
-    void (*SaveFPuts)(const char*, PlatformSpecificFile);
-    void (*SaveFClose)(PlatformSpecificFile);
-    int (*SavePutchar)(int);
-};
-
-SimpleString FakeOutput::console = "";
-SimpleString FakeOutput::file = "";
-
-TEST(CommandLineTestRunner, realJunitOutputShouldBeCreatedAndWorkProperly)
-{
-    const char* argv[] = { "tests.exe", "-ojunit", "-v", "-kpackage", };
-
-    FakeOutput* fakeOutput = new FakeOutput; /* UT_PTR_SET() is not reentrant */
-
-    CommandLineTestRunner commandLineTestRunner(4, argv, &registry);
-    commandLineTestRunner.runAllTestsMain();
-
-    delete fakeOutput; /* Original output must be restored before further output occurs */
-
-    STRCMP_CONTAINS("<testcase classname=\"package.group\" name=\"test\"", FakeOutput::file.asCharString());
-    STRCMP_CONTAINS("TEST(group, test)", FakeOutput::console.asCharString());
-}
-
-#else
-
 struct CommandLineTestRunnerForTesting : public CommandLineTestRunner
 {
     CommandLineTestRunnerForTesting(int ac, const char** av, TestRegistry* registry) :
@@ -235,7 +171,7 @@ struct CommandLineTestRunnerForTesting : public CommandLineTestRunner
         return output_;
     }
 };
-/*)
+
 TEST(CommandLineTestRunner, JUnitOutputShouldBeCreatedProperly)
 {
     const char* argv[] = { "tests.exe", "-ojunit", "-kmyPackage" };
@@ -243,5 +179,3 @@ TEST(CommandLineTestRunner, JUnitOutputShouldBeCreatedProperly)
     runner.runAllTestsMain();
     CHECK(NULL != dynamic_cast<JUnitTestOutput*>(runner.getTestOutput()))
 }
-*/
-#endif
