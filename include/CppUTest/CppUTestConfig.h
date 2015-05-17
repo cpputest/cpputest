@@ -177,6 +177,7 @@
 #endif
 
 /* MinGW-w64 prefers to act like Visual C++, but we want the ANSI behaviors instead */
+#undef __USE_MINGW_ANSI_STDIO
 #define __USE_MINGW_ANSI_STDIO 1
 
 /* Should be the only #include here. Standard C library wrappers */
