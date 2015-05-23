@@ -1,0 +1,8 @@
+@PACKAGE_INIT@
+
+set_and_check(CppUTest_INCLUDE_DIRS "@PACKAGE_INCLUDE_DIR@")
+set_and_check(CppUTest_LIBRARY "@PACKAGE_CMAKE_CURRENT_BINARY_DIR@/src/CppUTest")
+set_and_check(CppUTest_Ext_LIBRARY "@PACKAGE_CMAKE_CURRENT_BINARY_DIR@/src/CppUTestExt")
+set(CppUTest_LIBRARIES ${CppUTest_LIBRARY} ${CppUTest_Ext_LIBRARY})
+
+check_required_components(CppUTest)

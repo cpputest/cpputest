@@ -1,0 +1,8 @@
+@PACKAGE_INIT@
+
+set_and_check(CppUTest_INCLUDE_DIRS "@PACKAGE_INCLUDE_INSTALL_DIR@")
+set_and_check(CppUTest_LIBRARY "@PACKAGE_LIB_INSTALL_DIR@/CppUTest")
+set_and_check(CppUTest_Ext_LIBRARY "@PACKAGE_LIB_INSTALL_DIR@/CppUTestExt")
+set(CppUTest_LIBRARIES ${CppUTest_LIBRARY} ${CppUTest_Ext_LIBRARY})
+
+check_required_components(CppUTest)

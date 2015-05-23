@@ -50,6 +50,10 @@ if (TESTS)
     add_subdirectory(tests)
 endif (TESTS)
 
+set (INCLUDE_INSTALL_DIR "include/CppUTest")
+set (LIB_INSTALL_DIR "lib")
+set (INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
+
 # Pkg-config file.
 set (prefix "${CMAKE_INSTALL_PREFIX}")
 set (exec_prefix "${CMAKE_INSTALL_PREFIX}")
@@ -63,6 +67,29 @@ configure_file (cpputest.pc.in
 install(FILES  ${CMAKE_CURRENT_SOURCE_DIR}/${CppUTest_PKGCONFIG_FILE}
     DESTINATION ${LIB_INSTALL_DIR}/pkgconfig
     )
+
+include(CMakePackageConfigHelpers)
+configure_package_config_file(CppUTestConfig.cmake.install.in
+  ${CMAKE_CURRENT_BINARY_DIR}/install/CppUTestConfig.cmake
+  INSTALL_DESTINATION ${LIB_INSTALL_DIR}/CppUTest/cmake
+  PATH_VARS INCLUDE_INSTALL_DIR LIB_INSTALL_DIR)
+write_basic_package_version_file(
+  ${CMAKE_CURRENT_BINARY_DIR}/install/CppUTestConfigVersion.cmake
+  VERSION ${CppUTest_version_major}.${CppUTest_version_minor}
+  COMPATIBILITY SameMajorVersion )
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/install/CppUTestConfig.cmake
+              ${CMAKE_CURRENT_BINARY_DIR}/install/CppUTestConfigVersion.cmake
+        DESTINATION ${LIB_INSTALL_DIR}/CppUTest/cmake )
+
+configure_package_config_file(CppUTestConfig.cmake.build.in
+  ${CMAKE_CURRENT_BINARY_DIR}/CppUTestConfig.cmake
+  INSTALL_DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
+  PATH_VARS INCLUDE_DIR CMAKE_CURRENT_BINARY_DIR
+  INSTALL_PREFIX ${CMAKE_CURRENT_BINARY_DIR})
+write_basic_package_version_file(
+  ${CMAKE_CURRENT_BINARY_DIR}/CppUTestConfigVersion.cmake
+  VERSION ${CppUTest_version_major}.${CppUTest_version_minor}
+  COMPATIBILITY SameMajorVersion )
 
 message("
 -------------------------------------------------------
