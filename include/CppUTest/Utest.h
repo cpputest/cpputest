@@ -95,9 +95,9 @@ public:
     virtual UtestShell *getNext() const;
     virtual int countTests();
 
-    bool shouldRun(const TestFilter* groupFilters, const TestFilter* nameFilters) const;
-    const SimpleString getName() const;
-    const SimpleString getGroup() const;
+    virtual bool shouldRun(const TestFilter* groupFilters, const TestFilter* nameFilters) const;
+    virtual const SimpleString getName() const;
+    virtual const SimpleString getGroup() const;
     virtual SimpleString getFormattedName() const;
     const SimpleString getFile() const;
     int getLineNumber() const;
@@ -244,6 +244,93 @@ private:
 
     TestInstaller(const TestInstaller&);
     TestInstaller& operator=(const TestInstaller&);
+
+};
+
+//////////////////// MixInInstaller
+
+class MixInInstaller
+{
+public:
+    explicit MixInInstaller(UtestShell& shell, const char* groupName, const char* testName,
+            const char* fileName, int lineNumber);
+    virtual ~MixInInstaller();
+
+    void unDo();
+
+private:
+
+    MixInInstaller(const MixInInstaller&);
+    MixInInstaller& operator=(const MixInInstaller&);
+
+};
+
+//////////////////// MixInUtest
+
+class MixInUtest : public Utest
+{
+public:
+	virtual void* getParams() { return NULL; };
+};
+
+//////////////////// MixInInUtestShell
+
+class MixInInUtestShell: public UtestShell
+{
+friend class MixInInjectionUTest;
+public:
+	MixInInUtestShell() : currentMixinTest_(NULL), nextMixinTest_(NULL) {};
+	virtual ~MixInInUtestShell() {};
+
+    virtual const SimpleString getName() const;
+
+    virtual const SimpleString getMixinGroupName() const;
+    virtual void setMixinGroupName(const char *mixinGroupName);
+
+protected:
+	UtestShell* currentMixinTest_;
+	UtestShell* nextMixinTest_;
+
+	virtual void prepareMixin();
+	UtestShell* getCurrentMixinTest() const;
+
+private:
+	const char* mixinGroup_;
+	
+	UtestShell* next_;
+};
+
+//////////////////// MixInInjectionUTest
+
+class MixInInjectionUTest
+{
+public:
+	MixInInjectionUTest(MixInInUtestShell* testShell);
+
+	virtual void prepareScope() {}
+	void mixinInjection();
+
+private:
+	virtual void setParams(void* p) {}	// we can do an unsafe, old-style cast in pre-setup / post-teardown since we are sure that testToRun is derived from the current MixIn group base class
+
+	MixInInUtestShell* testShell_;
+};
+
+//////////////////// MixinApplyInstaller
+
+class MixinApplyInstaller
+{
+public:
+    explicit MixinApplyInstaller(MixInInUtestShell& shell, const char* groupName, const char* testName,
+            const char* fileName, int lineNumber, const char* mixinGroupName);
+    virtual ~MixinApplyInstaller();
+
+    void unDo();
+
+private:
+
+    MixinApplyInstaller(const MixinApplyInstaller&);
+    MixinApplyInstaller& operator=(const MixinApplyInstaller&);
 
 };
 
