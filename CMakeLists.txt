@@ -50,7 +50,7 @@ if (TESTS)
     add_subdirectory(tests)
 endif (TESTS)
 
-set (INCLUDE_INSTALL_DIR "include/CppUTest")
+set (INCLUDE_INSTALL_DIR "include")
 set (LIB_INSTALL_DIR "lib")
 set (INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
