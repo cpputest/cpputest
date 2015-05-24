@@ -87,11 +87,13 @@ configure_package_config_file(CppUTestConfig.cmake.build.in
   INSTALL_DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
   PATH_VARS INCLUDE_DIR CMAKE_CURRENT_BINARY_DIR
   INSTALL_PREFIX ${CMAKE_CURRENT_BINARY_DIR})
-export(EXPORT CppUTestTargets)
+export(EXPORT CppUTestTargets
+  FILE "${CMAKE_CURRENT_BINARY_DIR}/CppUTestTargets.cmake")
 write_basic_package_version_file(
   ${CMAKE_CURRENT_BINARY_DIR}/CppUTestConfigVersion.cmake
   VERSION ${CppUTest_version_major}.${CppUTest_version_minor}
   COMPATIBILITY SameMajorVersion )
+set(CppUTest_DIR "${CMAKE_CURRENT_BINARY_DIR}" CACHE PATH "Path to CppUTest" FORCE)
 
 message("
 -------------------------------------------------------
