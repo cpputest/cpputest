@@ -244,9 +244,9 @@ SimpleString UtestShell::getFormattedName() const
 {
     SimpleString formattedName(getMacroName());
     formattedName += "(";
-    formattedName += group_;
+    formattedName += getGroup();
     formattedName += ", ";
-    formattedName += name_;
+    formattedName += getName();
     formattedName += ")";
 
     return formattedName;
@@ -653,4 +653,149 @@ TestInstaller::~TestInstaller()
 void TestInstaller::unDo()
 {
     TestRegistry::getCurrentRegistry()->unDoLastAddTest();
+}
+
+//////////////////// MixInInstaller
+
+MixInInstaller::MixInInstaller(UtestShell& shell, const char* groupName, const char* testName, const char* fileName, int lineNumber)
+{
+    shell.setGroupName(groupName);
+    shell.setTestName(testName);
+    shell.setFileName(fileName);
+    shell.setLineNumber(lineNumber);
+    TestRegistry::getMixInRegistry()->addTest(&shell);
+}
+
+MixInInstaller::~MixInInstaller()
+{
+}
+
+void MixInInstaller::unDo()
+{
+    TestRegistry::getMixInRegistry()->unDoLastAddTest();
+}
+
+////////////// MixinApplyInstaller ////////////
+
+MixinApplyInstaller::MixinApplyInstaller(MixInInUtestShell& shell, const char* groupName, const char* testName, const char* fileName, int lineNumber, const char* mixinGroupName)
+{
+    shell.setGroupName(groupName);
+    shell.setTestName(testName);
+    shell.setFileName(fileName);
+    shell.setLineNumber(lineNumber);
+	shell.setMixinGroupName(mixinGroupName);
+    TestRegistry::getCurrentRegistry()->addTest(&shell);
+}
+
+MixinApplyInstaller::~MixinApplyInstaller()
+{
+}
+
+void MixinApplyInstaller::unDo()
+{
+    TestRegistry::getCurrentRegistry()->unDoLastAddTest();
+}
+
+//////////////////// MixInInUtestShell
+
+const SimpleString MixInInUtestShell::getName() const
+{
+	SimpleString name = SimpleString(UtestShell::getName());
+	UtestShell* test = getCurrentMixinTest();
+	if ( test )
+	{
+		name +=  ": "; name += test->getName();
+	}
+    return name;
+}
+
+const SimpleString MixInInUtestShell::getMixinGroupName() const
+{
+	return SimpleString(mixinGroup_);
+}
+
+
+void MixInInUtestShell::setMixinGroupName(const char *mixinGroupName)
+{
+	mixinGroup_ = mixinGroupName;
+}
+
+UtestShell* MixInInUtestShell::getCurrentMixinTest() const
+{
+	if ( currentMixinTest_ )
+	{
+		return currentMixinTest_;
+	}
+
+	// no active MixIn Test, search for first match
+	return TestRegistry::getMixInRegistry()->findTestWithGroup(mixinGroup_);
+}
+
+void MixInInUtestShell::prepareMixin()
+{
+	// first run
+	if ( !nextMixinTest_ )
+	{
+		// save next test pointer
+		next_ = getNext();
+
+		// get first MixIn Test
+		TestRegistry* registry = TestRegistry::getMixInRegistry();
+		nextMixinTest_ = registry->findTestWithGroup(mixinGroup_);
+
+		// set self-loop
+		addTest(this);
+	}
+
+	// set current MixIn Test
+	currentMixinTest_ = nextMixinTest_;
+
+	// get next test
+	if ( nextMixinTest_ )
+	{
+		nextMixinTest_ = nextMixinTest_->getNext();	// pre-fetch next test, in case the current one crashes
+		if ( nextMixinTest_ ) if ( nextMixinTest_->getGroup() != getMixinGroupName() ) nextMixinTest_ = NULL;
+	}
+
+	// exit self-loop on last MixIn
+	if ( !nextMixinTest_ )
+	{
+		addTest(next_);
+		next_ = NULL;
+	}
+
+}
+
+//////////////////// MixInInjectionUTest
+
+MixInInjectionUTest::MixInInjectionUTest(MixInInUtestShell* testShell) :
+	testShell_(testShell)
+{
+}
+
+void MixInInjectionUTest::mixinInjection()
+{
+	// injected actual MixIn test
+	if ( testShell_->currentMixinTest_ )
+	{
+		// run test
+		MixInUtest* testToRun = (MixInUtest *) testShell_->currentMixinTest_->createTest();
+		if ( testToRun )
+		{
+			try
+			{
+				setParams( testToRun->getParams() );
+				prepareScope();
+				testToRun->run();
+				setParams( NULL );
+			}
+			catch (...) {}
+
+			testShell_->currentMixinTest_->destroyTest(testToRun);
+		}
+		else
+		{
+			FAIL("cannot create test");
+		}
+	}
 }
