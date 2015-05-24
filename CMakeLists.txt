@@ -4,7 +4,7 @@ set(CppUTest_version_major 3)
 set(CppUTest_version_minor 7dev)
 
 # 2.6.3 is needed for ctest support
-cmake_minimum_required(VERSION 2.6.3)
+cmake_minimum_required(VERSION 2.8.12)
 
 option(STD_C "Use the standard C library" ON)
 option(STD_CPP "Use the standard C++ library" ON)
@@ -85,9 +85,8 @@ install(EXPORT CppUTestTargets
 configure_package_config_file(CppUTestConfig.cmake.build.in
   ${CMAKE_CURRENT_BINARY_DIR}/CppUTestConfig.cmake
   INSTALL_DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
-  PATH_VARS INCLUDE_DIR CMAKE_CURRENT_BINARY_DIR
-  INSTALL_PREFIX ${CMAKE_CURRENT_BINARY_DIR})
-export(EXPORT CppUTestTargets
+  PATH_VARS INCLUDE_DIR CMAKE_CURRENT_BINARY_DIR)
+export(TARGETS CppUTest CppUTestExt
   FILE "${CMAKE_CURRENT_BINARY_DIR}/CppUTestTargets.cmake")
 write_basic_package_version_file(
   ${CMAKE_CURRENT_BINARY_DIR}/CppUTestConfigVersion.cmake
