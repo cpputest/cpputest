@@ -93,7 +93,7 @@ write_basic_package_version_file(
   ${CMAKE_CURRENT_BINARY_DIR}/CppUTestConfigVersion.cmake
   VERSION ${CppUTest_version_major}.${CppUTest_version_minor}
   COMPATIBILITY SameMajorVersion )
-set(CppUTest_DIR "${CMAKE_CURRENT_BINARY_DIR}" CACHE PATH "Path to CppUTest" FORCE)
+set(CppUTest_DIR "${CMAKE_CURRENT_BINARY_DIR}" CACHE PATH "The directory containing a CMake configuration file for CppUTest.")
 
 message("
 -------------------------------------------------------
