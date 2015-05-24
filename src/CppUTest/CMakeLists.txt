@@ -51,6 +51,7 @@ if (WIN32)
 endif (WIN32)
 install(FILES ${CppUTest_headers} DESTINATION include/CppUTest)
 install(TARGETS CppUTest
+    EXPORT CppUTestTargets 
     RUNTIME DESTINATION bin
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib)

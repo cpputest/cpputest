@@ -80,12 +80,14 @@ write_basic_package_version_file(
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/install/CppUTestConfig.cmake
               ${CMAKE_CURRENT_BINARY_DIR}/install/CppUTestConfigVersion.cmake
         DESTINATION ${LIB_INSTALL_DIR}/CppUTest/cmake )
-
+install(EXPORT CppUTestTargets
+  DESTINATION ${LIB_INSTALL_DIR}/CppUTest/cmake)
 configure_package_config_file(CppUTestConfig.cmake.build.in
   ${CMAKE_CURRENT_BINARY_DIR}/CppUTestConfig.cmake
   INSTALL_DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
   PATH_VARS INCLUDE_DIR CMAKE_CURRENT_BINARY_DIR
   INSTALL_PREFIX ${CMAKE_CURRENT_BINARY_DIR})
+export(EXPORT CppUTestTargets)
 write_basic_package_version_file(
   ${CMAKE_CURRENT_BINARY_DIR}/CppUTestConfigVersion.cmake
   VERSION ${CppUTest_version_major}.${CppUTest_version_minor}
