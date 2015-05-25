@@ -4,7 +4,7 @@ set(CppUTest_version_major 3)
 set(CppUTest_version_minor 7dev)
 
 # 2.6.3 is needed for ctest support
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 2.8.7)
 
 option(STD_C "Use the standard C library" ON)
 option(STD_CPP "Use the standard C++ library" ON)
@@ -68,31 +68,40 @@ install(FILES  ${CMAKE_CURRENT_SOURCE_DIR}/${CppUTest_PKGCONFIG_FILE}
     DESTINATION ${LIB_INSTALL_DIR}/pkgconfig
     )
 
-include(CMakePackageConfigHelpers)
-configure_package_config_file(CppUTestConfig.cmake.install.in
-  ${CMAKE_CURRENT_BINARY_DIR}/install/CppUTestConfig.cmake
-  INSTALL_DESTINATION ${LIB_INSTALL_DIR}/CppUTest/cmake
-  PATH_VARS INCLUDE_INSTALL_DIR LIB_INSTALL_DIR)
-write_basic_package_version_file(
-  ${CMAKE_CURRENT_BINARY_DIR}/install/CppUTestConfigVersion.cmake
-  VERSION ${CppUTest_version_major}.${CppUTest_version_minor}
-  COMPATIBILITY SameMajorVersion )
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/install/CppUTestConfig.cmake
-              ${CMAKE_CURRENT_BINARY_DIR}/install/CppUTestConfigVersion.cmake
-        DESTINATION ${LIB_INSTALL_DIR}/CppUTest/cmake )
-install(EXPORT CppUTestTargets
-  DESTINATION ${LIB_INSTALL_DIR}/CppUTest/cmake)
-configure_package_config_file(CppUTestConfig.cmake.build.in
-  ${CMAKE_CURRENT_BINARY_DIR}/CppUTestConfig.cmake
-  INSTALL_DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
-  PATH_VARS INCLUDE_DIR CMAKE_CURRENT_BINARY_DIR)
-export(TARGETS CppUTest CppUTestExt
-  FILE "${CMAKE_CURRENT_BINARY_DIR}/CppUTestTargets.cmake")
-write_basic_package_version_file(
-  ${CMAKE_CURRENT_BINARY_DIR}/CppUTestConfigVersion.cmake
-  VERSION ${CppUTest_version_major}.${CppUTest_version_minor}
-  COMPATIBILITY SameMajorVersion )
-set(CppUTest_DIR "${CMAKE_CURRENT_BINARY_DIR}" CACHE PATH "The directory containing a CMake configuration file for CppUTest.")
+# Try to include helper module
+include(CMakePackageConfigHelpers OPTIONAL
+  RESULT_VARIABLE PkgHelpers_AVAILABLE)
+# guard against older versions of cmake which do not provide it
+if(PkgHelpers_AVAILABLE)
+  configure_package_config_file(CppUTestConfig.cmake.install.in
+    ${CMAKE_CURRENT_BINARY_DIR}/install/CppUTestConfig.cmake
+    INSTALL_DESTINATION ${LIB_INSTALL_DIR}/CppUTest/cmake
+    PATH_VARS INCLUDE_INSTALL_DIR LIB_INSTALL_DIR)
+  write_basic_package_version_file(
+    ${CMAKE_CURRENT_BINARY_DIR}/install/CppUTestConfigVersion.cmake
+    VERSION ${CppUTest_version_major}.${CppUTest_version_minor}
+    COMPATIBILITY SameMajorVersion )
+  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/install/CppUTestConfig.cmake
+    ${CMAKE_CURRENT_BINARY_DIR}/install/CppUTestConfigVersion.cmake
+    DESTINATION ${LIB_INSTALL_DIR}/CppUTest/cmake )
+  install(EXPORT CppUTestTargets
+    DESTINATION ${LIB_INSTALL_DIR}/CppUTest/cmake)
+  configure_package_config_file(CppUTestConfig.cmake.build.in
+    ${CMAKE_CURRENT_BINARY_DIR}/CppUTestConfig.cmake
+    INSTALL_DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
+    PATH_VARS INCLUDE_DIR CMAKE_CURRENT_BINARY_DIR)
+  export(TARGETS CppUTest CppUTestExt
+    FILE "${CMAKE_CURRENT_BINARY_DIR}/CppUTestTargets.cmake")
+  write_basic_package_version_file(
+    ${CMAKE_CURRENT_BINARY_DIR}/CppUTestConfigVersion.cmake
+    VERSION ${CppUTest_version_major}.${CppUTest_version_minor}
+    COMPATIBILITY SameMajorVersion )
+  set(CppUTest_DIR "${CMAKE_CURRENT_BINARY_DIR}" CACHE PATH "The directory containing a CMake configuration file for CppUTest.")
+else()
+  message("If you wish to use find_package(CppUTest) in your own project to find CppUTest library"
+    " please update cmake to version which provides CMakePackageConfighelpers module"
+    " or write generators for CppUTestConfig.cmake by yourself.")
+endif()
 
 message("
 -------------------------------------------------------
