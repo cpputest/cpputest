@@ -46,6 +46,5 @@ endif (MINGW)
 add_executable(CppUTestTests ${CppUTestTests_src})
 target_link_libraries(CppUTestTests CppUTest ${THREAD_LIB})
 
-
+add_subdirectory(CppUTestExt)
 cpputest_buildtime_discover_tests (CppUTestTests)
-
