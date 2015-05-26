@@ -32,6 +32,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CppUTestRootDirectory}/cmake/Module
 
 include("${CppUTestRootDirectory}/cmake/Modules/CppUTestConfigurationOptions.cmake")
 include(CTest)
+include("${CppUTestRootDirectory}/cmake/Modules/CppUTestBuildTimeDiscoverTests.cmake")
 
 configure_file (
     "${PROJECT_SOURCE_DIR}/config.h.cmake"
@@ -87,6 +88,9 @@ Features configure in CppUTest:
 
     Generating map file:                ${MAP_FILE}
     Compiling with coverage:            ${COVERAGE}
+
+    Compile and run self-tests          ${TESTS}
+    Run self-tests separately           ${TESTS_DETAILED}
 
 -------------------------------------------------------
 ")
