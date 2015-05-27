@@ -586,6 +586,31 @@ SimpleString StringFromBinaryOrNull(const unsigned char* value, size_t size)
     return (value) ? StringFromBinary(value, size) : "(null)";
 }
 
+SimpleString StringFromMaskedBits(unsigned long value, unsigned long mask, size_t byteCount)
+{
+    SimpleString result;
+    size_t bitCount = (byteCount > sizeof(unsigned long)) ? (sizeof(unsigned long) * 8) : (byteCount * 8);
+    const unsigned long msbMask = (((unsigned long) 1) << (bitCount - 1));
+
+    for (size_t i = 0; i < bitCount; i++) {
+        if (mask & msbMask) {
+            result += (value & msbMask) ? "1" : "0";
+        }
+        else {
+            result += "x";
+        }
+
+        if (((i % 8) == 7) && (i != (bitCount - 1))) {
+            result += " ";
+        }
+
+        value <<= 1;
+        mask <<= 1;
+    }
+
+    return result;
+}
+
 SimpleStringCollection::SimpleStringCollection()
 {
     collection_ = 0;
