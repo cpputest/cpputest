@@ -836,7 +836,7 @@ TEST(SimpleString, MaskedBits1byte)
     STRCMP_EQUAL("11xx11xx", StringFromMaskedBits(0xFF, 0xCC, 1).asCharString());
 }
 
-TEST(SimpleString, MaskedBits2byte)
+TEST(SimpleString, MaskedBits2bytes)
 {
     STRCMP_EQUAL("xxxxxxxx xxxxxxxx", StringFromMaskedBits(0x0000, 0x0000, 2).asCharString());
     STRCMP_EQUAL("00000000 00000000", StringFromMaskedBits(0x0000, 0xFFFF, 2).asCharString());
@@ -846,7 +846,7 @@ TEST(SimpleString, MaskedBits2byte)
     STRCMP_EQUAL("11xx11xx 11xx11xx", StringFromMaskedBits(0xFFFF, 0xCCCC, 2).asCharString());
 }
 
-TEST(SimpleString, MaskedBits4byte)
+TEST(SimpleString, MaskedBits4bytes)
 {
     STRCMP_EQUAL("xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx", StringFromMaskedBits(0x00000000, 0x00000000, 4).asCharString());
     STRCMP_EQUAL("00000000 00000000 00000000 00000000", StringFromMaskedBits(0x00000000, 0xFFFFFFFF, 4).asCharString());
