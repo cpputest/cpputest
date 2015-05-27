@@ -25,14 +25,4 @@ endif (MINGW)
 
 add_executable(CppUTestExtTests ${CppUTestExtTests_src})
 target_link_libraries(CppUTestExtTests CppUTest CppUTestExt ${THREAD_LIB} ${CPPUNIT_EXTERNAL_LIBRARIES})
-
-if (TESTS)
-    # get all test groups
-    execute_process(COMMAND tests/CppUTestExt/CppUTestExtTests -lg OUTPUT_VARIABLE CppUTestTestsExt_Groups)
-    # create separate test for each group
-    separate_arguments(CppUTestTestsExt_Groups)
-    foreach(group ${CppUTestTestsExt_Groups})
-        message("TestGroup2: ${group}:")
-        add_test(NAME CppUTestExt.${group} COMMAND ${EXECUTABLE_OUTPUT_PATH}/CppUTestExtTests -sg ${group} -c)
-    endforeach()
-endif (TESTS)
+cpputest_buildtime_discover_tests (CppUTestExtTests)
