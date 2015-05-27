@@ -283,3 +283,9 @@ BinaryEqualFailure::BinaryEqualFailure(UtestShell* test, const char* fileName, i
 		message_ += createDifferenceAtPosString(StringFromBinary(actual, size), failStart, DIFFERENCE_BINARY);
 	}
 }
+
+BitsEqualFailure::BitsEqualFailure(UtestShell* test, const char* fileName, int lineNumber, unsigned long expected, unsigned long actual, unsigned long mask, size_t byteCount) :
+        TestFailure(test, fileName, lineNumber)
+{
+    message_ = createButWasString(StringFromMaskedBits(expected, mask, byteCount), StringFromMaskedBits(actual, mask, byteCount));
+}
