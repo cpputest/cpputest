@@ -2,40 +2,36 @@
 #include "CppUTest/TestHarness.h"
 #include "MixInTest.h"
 
-class MyImplA : public MyInterface
+class ImplA : public SUT
 {
 public:
-	const char* foo() { return "foo"; };
-	const char* className() { return "MyImplA"; };
+	const char* className() { return "ImplA"; };
 };
 
-TEST_GROUP(ImplA)
+class ImplB : public SUT
 {
-	void setup() {}
-	void teardown() {}
-	MyImplA objA;
+public:
+	const char* className() { return "ImplB"; };
 };
 
-MIXIN_APPLY(ImplA, MixInTest, ImplA_test)
+TEST_GROUP(ImplATestGroup)
+{
+	ImplA objA;
+};
+
+MIXIN_APPLY(ImplATestGroup, DemoMixInGroup, ImplA_test)
 {
 	params->obj = &objA;
+	params->expectedName = "ImplA";
 }
 
-class MyImplB : public MyInterface
+TEST_GROUP(ImplBTestGroup)
 {
-public:
-	const char* foo() { return "foo"; };
-	const char* className() { return "MyImplB"; };
+	ImplB objB;
 };
 
-TEST_GROUP(ImplB)
-{
-	void setup() {}
-	void teardown() {}
-	MyImplB objB;
-};
-
-MIXIN_APPLY(ImplB, MixInTest, ImplB_test)
+MIXIN_APPLY(ImplBTestGroup, DemoMixInGroup, ImplB_test)
 {
 	params->obj = &objB;
+	params->expectedName = "ImplB";
 }

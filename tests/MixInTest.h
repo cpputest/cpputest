@@ -27,16 +27,15 @@
 
 #include "CppUTest/TestHarness.h"
 
-class MyInterface
+// system under test interface
+class SUT	
 {
 public:
-	virtual const char* foo() = 0;
 	virtual const char* className() = 0;
 };
 
-MIXIN_PARAMS(MixInTest)
+MIXIN_PARAMS(DemoMixInGroup) // MIXIN_GROUP name
 {
-	char* str;
-	
-	MyInterface* obj;
+	SUT* obj;
+	char* expectedName;
 };

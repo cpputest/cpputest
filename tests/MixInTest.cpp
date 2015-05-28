@@ -28,34 +28,19 @@
 #include "CppUTest/TestHarness.h"
 #include "MixInTest.h"
 
-struct MIXIN_MixInTest_Params b;
 
-MIXIN_GROUP(MixInTest)
+MIXIN_GROUP(DemoMixInGroup)
 {
-	void setup()
+	void setup() 
 	{
-		// Init stuff
-
+		CHECK(params.obj);
 	}
-
-	void teardown()
-	{
-		// Uninit stuff
-
-	}
+	void teardown()	{}
 };
 
 
-MIXIN_TEST(MixInTest, foo)
+MIXIN_TEST(DemoMixInGroup, name)
 {
-	CHECK(params.obj);
-	const char* str = params.obj->foo();
-	STRCMP_EQUAL( "foo", str );
-}
-
-MIXIN_TEST(MixInTest, name)
-{
-	CHECK(params.obj);
-	const char* str = params.obj->className();
-	CHECK( str != NULL );
+	const char* className = params.obj->className();
+	STRCMP_EQUAL( params.expectedName, className );
 }
