@@ -195,6 +195,12 @@
 #define MEMCMP_EQUAL_LOCATION(expected,actual,size,file,line)\
   { UtestShell::getCurrent()->assertBinaryEqual(expected, actual, size, file, line); }
 
+#define BITS_EQUAL(expected,actual,mask)\
+  BITS_LOCATION(expected,actual,mask,__FILE__,__LINE__)
+
+#define BITS_LOCATION(expected,actual,mask,file,line)\
+  { UtestShell::getCurrent()->assertBitsEqual(expected, actual, mask, sizeof(actual), file, line); }
+
 //Fail if you get to this macro
 //The macro FAIL may already be taken, so allow FAIL_TEST too
 #ifndef FAIL
