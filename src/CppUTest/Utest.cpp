@@ -445,7 +445,7 @@ void UtestShell::assertBitsEqual(unsigned long expected, unsigned long actual, u
 {
     getTestResult()->countCheck();
     if ((expected & mask) != (actual & mask))
-        failWith(BitsEqualFailure(this, fileName, lineNumber, expected, actual, mask, byteCount));
+        failWith(BitsEqualFailure(this, fileName, lineNumber, expected, actual, mask, byteCount), testTerminator);
 }
 
 void UtestShell::assertEquals(bool failed, const char* expected, const char* actual, const char* file, int line, const TestTerminator& testTerminator)
