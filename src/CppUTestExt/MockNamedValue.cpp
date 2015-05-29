@@ -94,6 +94,12 @@ void MockNamedValue::setValue(const char* value)
     value_.stringValue_ = value;
 }
 
+void MockNamedValue::setValue(const unsigned char* value)
+{
+    type_ = "const unsigned char*";
+    value_.stringValue_ = (const char*) value;
+}
+
 void MockNamedValue::setObjectPointer(const SimpleString& type, const void* objectPtr)
 {
     type_ = type;
@@ -251,6 +257,13 @@ bool MockNamedValue::equals(const MockNamedValue& p) const
         return value_.constPointerValue_ == p.value_.constPointerValue_;
     else if (type_ == "double")
         return (doubles_equal(value_.doubleValue_, p.value_.doubleValue_, 0.005));
+    else if (type_ == "const unsigned char*")
+    {
+        if (size_ != p.size_) {
+            return false;
+        }
+        return PlatformSpecificMemCmp(value_.stringValue_, p.value_.stringValue_, size_) == 0;
+    }
 
     if (comparator_)
         return comparator_->isEqual(value_.objectPointerValue_, p.value_.objectPointerValue_);
@@ -276,6 +289,8 @@ SimpleString MockNamedValue::toString() const
         return StringFrom(value_.constPointerValue_);
     else if (type_ == "double")
         return StringFrom(value_.doubleValue_);
+    else if (type_ == "const unsigned char*")
+        return StringFrom((const unsigned char*) value_.stringValue_, size_);
 
     if (comparator_)
         return comparator_->valueToString(value_.objectPointerValue_);

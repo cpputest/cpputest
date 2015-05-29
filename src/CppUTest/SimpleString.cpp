@@ -490,6 +490,21 @@ SimpleString HexStringFrom(const void* value)
     return StringFromFormat("%lx", convertPointerToLongValue(value));
 }
 
+SimpleString StringFrom(const unsigned char* value, size_t size)
+{
+    SimpleString str = StringFromFormat("Len = %1u | HexContents =", size);
+    size_t displayedSize = ((size > 128) ? 128 : size);
+    for (size_t i = 0; i < displayedSize; i++)
+    {
+        str += StringFromFormat(" %02X", value[i]);
+    }
+    if( size > displayedSize )
+    {
+        str += " ...";
+    }
+    return str;
+}
+
 SimpleString StringFrom(double value, int precision)
 {
     return StringFromFormat("%.*g", precision, value);

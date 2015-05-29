@@ -82,6 +82,7 @@ public:
     virtual void setValue(void* value);
     virtual void setValue(const void* value);
     virtual void setValue(const char* value);
+    virtual void setValue(const unsigned char* value);
     virtual void setObjectPointer(const SimpleString& type, const void* objectPtr);
     virtual void setSize(size_t size);
 

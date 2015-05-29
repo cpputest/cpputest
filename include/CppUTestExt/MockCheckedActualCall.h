@@ -47,6 +47,7 @@ public:
     virtual MockActualCall& withStringParameter(const SimpleString& name, const char* value) _override;
     virtual MockActualCall& withPointerParameter(const SimpleString& name, void* value) _override;
     virtual MockActualCall& withConstPointerParameter(const SimpleString& name, const void* value) _override;
+    virtual MockActualCall& withMemoryBufferParameter(const SimpleString& name, const unsigned char* value, size_t size) _override;
     virtual MockActualCall& withParameterOfType(const SimpleString& type, const SimpleString& name, const void* value) _override;
     virtual MockActualCall& withOutputParameter(const SimpleString& name, void* output) _override;
 
@@ -147,6 +148,7 @@ public:
     virtual MockActualCall& withStringParameter(const SimpleString& name, const char* value) _override;
     virtual MockActualCall& withPointerParameter(const SimpleString& name, void* value) _override;
     virtual MockActualCall& withConstPointerParameter(const SimpleString& name, const void* value) _override;
+    virtual MockActualCall& withMemoryBufferParameter(const SimpleString& name, const unsigned char* value, size_t size) _override;
     virtual MockActualCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value) _override;
     virtual MockActualCall& withOutputParameter(const SimpleString& name, void* output) _override;
 
@@ -202,6 +204,7 @@ public:
     virtual MockActualCall& withStringParameter(const SimpleString&, const char*) _override { return *this; }
     virtual MockActualCall& withPointerParameter(const SimpleString& , void*) _override { return *this; }
     virtual MockActualCall& withConstPointerParameter(const SimpleString& , const void*) _override { return *this; }
+    virtual MockActualCall& withMemoryBufferParameter(const SimpleString&, const unsigned char*, size_t) _override  { return *this; };
     virtual MockActualCall& withParameterOfType(const SimpleString&, const SimpleString&, const void*) _override { return *this; }
     virtual MockActualCall& withOutputParameter(const SimpleString&, void*) _override { return *this; }
 

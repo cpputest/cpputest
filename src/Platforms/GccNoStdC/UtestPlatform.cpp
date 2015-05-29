@@ -51,6 +51,7 @@ void* (*PlatformSpecificRealloc)(void*, size_t) = NULL;
 void (*PlatformSpecificFree)(void*) = NULL;
 void* (*PlatformSpecificMemCpy)(void*, const void*, size_t) = NULL;
 void* (*PlatformSpecificMemset)(void*, int, size_t) = NULL;
+int (*PlatformSpecificMemCmp)(const void*, const void*, size_t) = NULL;
 
 PlatformSpecificMutex (*PlatformSpecificMutexCreate)(void) = NULL;
 void (*PlatformSpecificMutexLock)(PlatformSpecificMutex mtx) = NULL;

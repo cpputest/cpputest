@@ -231,6 +231,7 @@ void* (*PlatformSpecificRealloc)(void*, size_t) = realloc;
 void (*PlatformSpecificFree)(void* memory) = free;
 void* (*PlatformSpecificMemCpy)(void*, const void*, size_t) = memcpy;
 void* (*PlatformSpecificMemset)(void*, int, size_t) = memset;
+int (*PlatformSpecificMemCmp)(const void*, const void*, size_t) = memcmp;
 
 static int IsNanImplementation(double d)
 {
