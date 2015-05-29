@@ -459,6 +459,13 @@ TEST(SimpleString, SmallDoubles)
     STRCMP_CONTAINS("1.2e", s.asCharString());
 }
 
+TEST(SimpleString, MemoryBuffers)
+{
+    const unsigned char mem_buffer[] = { 0x12, 0xFE, 0xA1 };
+    SimpleString s( StringFrom( mem_buffer, sizeof(mem_buffer) ) );
+    STRCMP_EQUAL("Len = 3 | HexContents = 12 FE A1", s.asCharString());
+}
+
 TEST(SimpleString, Sizes)
 {
     size_t size = 10;

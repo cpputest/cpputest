@@ -103,6 +103,7 @@ public:
     virtual const char* getStringValue() const;
     virtual void* getPointerValue() const;
     virtual const void* getConstPointerValue() const;
+    virtual const unsigned char* getMemBufferValue() const;
     virtual const void* getObjectPointer() const;
     virtual size_t getSize() const;
     virtual MockNamedValueComparator* getComparator() const;
@@ -120,6 +121,7 @@ private:
         const char* stringValue_;
         void* pointerValue_;
         const void* constPointerValue_;
+        const unsigned char* memBufferValue_;
         const void* objectPointerValue_;
         const void* outputPointerValue_;
     } value_;
