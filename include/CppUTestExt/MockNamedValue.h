@@ -82,6 +82,7 @@ public:
     virtual void setValue(void* value);
     virtual void setValue(const void* value);
     virtual void setValue(const char* value);
+    virtual void setValue(const unsigned char* value);
     virtual void setObjectPointer(const SimpleString& type, const void* objectPtr);
     virtual void setSize(size_t size);
 
@@ -102,6 +103,7 @@ public:
     virtual const char* getStringValue() const;
     virtual void* getPointerValue() const;
     virtual const void* getConstPointerValue() const;
+    virtual const unsigned char* getMemBufferValue() const;
     virtual const void* getObjectPointer() const;
     virtual size_t getSize() const;
     virtual MockNamedValueComparator* getComparator() const;
@@ -119,6 +121,7 @@ private:
         const char* stringValue_;
         void* pointerValue_;
         const void* constPointerValue_;
+        const unsigned char* memBufferValue_;
         const void* objectPointerValue_;
         const void* outputPointerValue_;
     } value_;

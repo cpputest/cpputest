@@ -147,6 +147,7 @@ TEST(MockCheckedActualCall, remainderOfMockActualCallTraceWorksAsItShould)
 {
     int value;
     const int const_value = 1;
+    const unsigned char mem_buffer[] = { 0xFE, 0x15 };
     MockActualCallTrace actual;
     actual.withName("func");
     actual.withCallOrder(1);
@@ -157,6 +158,7 @@ TEST(MockCheckedActualCall, remainderOfMockActualCallTraceWorksAsItShould)
     actual.withLongIntParameter("long_int", (long int) 1);
     actual.withPointerParameter("pointer", &value);
     actual.withConstPointerParameter("const_pointer", &const_value);
+    actual.withMemoryBufferParameter("mem_buffer", mem_buffer, sizeof(mem_buffer));
     actual.withParameterOfType("int", "named_type", &const_value);
     
     SimpleString expectedString("\nFunction name:func");
@@ -170,6 +172,7 @@ TEST(MockCheckedActualCall, remainderOfMockActualCallTraceWorksAsItShould)
     expectedString += HexStringFrom(&value);
     expectedString += " const_pointer:0x";
     expectedString += HexStringFrom(&const_value);
+    expectedString += " mem_buffer:Len = 2 | HexContents = FE 15";
     expectedString += " int named_type:0x";
     expectedString += HexStringFrom(&const_value);
     STRCMP_EQUAL(expectedString.asCharString(), actual.getTraceOutput());

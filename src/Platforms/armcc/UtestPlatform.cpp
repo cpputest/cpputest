@@ -150,6 +150,7 @@ extern "C" void* (*PlatformSpecificRealloc) (void*, size_t) = realloc;
 extern "C" void (*PlatformSpecificFree)(void*) = free;
 extern "C" void* (*PlatformSpecificMemCpy)(void* s1, const void* s2, size_t size) = memcpy;
 extern "C" void* (*PlatformSpecificMemset)(void*, int, size_t) = memset;
+extern "C" int (*PlatformSpecificMemCmp)(const void*, const void*, size_t) = memcmp;
 
 static int IsNanImplementation(double d)
 {

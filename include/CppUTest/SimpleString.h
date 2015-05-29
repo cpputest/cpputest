@@ -140,6 +140,7 @@ SimpleString StringFrom(int value);
 SimpleString StringFrom(unsigned int value);
 SimpleString StringFrom(long value);
 SimpleString StringFrom(unsigned long value);
+SimpleString StringFrom(const unsigned char* value, size_t size);
 SimpleString HexStringFrom(long value);
 SimpleString HexStringFrom(unsigned long value);
 SimpleString HexStringFrom(const void* value);

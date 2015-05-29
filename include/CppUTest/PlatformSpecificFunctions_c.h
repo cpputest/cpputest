@@ -74,6 +74,7 @@ extern void* (*PlatformSpecificRealloc)(void* memory, size_t size);
 extern void (*PlatformSpecificFree)(void* memory);
 extern void* (*PlatformSpecificMemCpy)(void* s1, const void* s2, size_t size);
 extern void* (*PlatformSpecificMemset)(void* mem, int c, size_t size);
+extern int (*PlatformSpecificMemCmp)(const void* s1, const void* s2, size_t size);
 
 typedef void* PlatformSpecificMutex;
 extern PlatformSpecificMutex (*PlatformSpecificMutexCreate)(void);

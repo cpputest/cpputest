@@ -200,11 +200,17 @@ static void* C2000Memset(void* mem, int c, size_t size)
     return mem;
 }
 
+static void* C2000MemCmp(void* s1, const void* s2, size_t size)
+{
+    return far_memcmp((long)s1, (long)s2, size);
+}
+
 void* (*PlatformSpecificMalloc)(size_t size) = C2000Malloc;
 void* (*PlatformSpecificRealloc)(void* memory, size_t size) = C2000Realloc;
 void (*PlatformSpecificFree)(void* memory) = C2000Free;
 void* (*PlatformSpecificMemCpy)(void* s1, const void* s2, size_t size) = C2000MemCpy;
 void* (*PlatformSpecificMemset)(void* mem, int c, size_t size) = C2000Memset;
+int (*PlatformSpecificMemCmp)(const void*, const void*, size_t) = C2000MemCmp;
 
 /*
 double PlatformSpecificFabs(double d)
