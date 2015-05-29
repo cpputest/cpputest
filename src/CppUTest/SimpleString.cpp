@@ -492,7 +492,7 @@ SimpleString HexStringFrom(const void* value)
 
 SimpleString StringFrom(const unsigned char* value, size_t size)
 {
-    SimpleString str = StringFromFormat("Len = %1u | HexContents =", size);
+    SimpleString str = StringFromFormat("Len = %lu | HexContents =", size);
     size_t displayedSize = ((size > 128) ? 128 : size);
     for (size_t i = 0; i < displayedSize; i++)
     {
