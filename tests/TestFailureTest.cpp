@@ -293,3 +293,21 @@ TEST(TestFailure, BinaryEqualExpectedNull)
     BinaryEqualFailure f(test, failFileName, failLineNumber, NULL, actualData, sizeof(actualData));
     FAILURE_EQUAL("expected <(null)>\n\tbut was  <00 00 00 00 00 00 01>", f);
 }
+
+TEST(TestFailure, BitsEqual1byte)
+{
+    BitsEqualFailure f(test, failFileName, failLineNumber, 0x01, 0x03, 0xFF, 1);
+    FAILURE_EQUAL("expected <00000001>\n\tbut was  <00000011>", f);
+}
+
+TEST(TestFailure, BitsEqual2bytes)
+{
+    BitsEqualFailure f(test, failFileName, failLineNumber, 0x0001, 0x0003, 0xFFFF, 2);
+    FAILURE_EQUAL("expected <00000000 00000001>\n\tbut was  <00000000 00000011>", f);
+}
+
+TEST(TestFailure, BitsEqual4bytes)
+{
+    BitsEqualFailure f(test, failFileName, failLineNumber, 0x00000001, 0x00000003, 0xFFFFFFFF, 4);
+    FAILURE_EQUAL("expected <00000000 00000000 00000000 00000001>\n\tbut was  <00000000 00000000 00000000 00000011>", f);
+}
