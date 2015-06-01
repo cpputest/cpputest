@@ -528,7 +528,7 @@ TEST(MockExpectedCallComposite, isOnObject)
 {
     composite.onObject(&composite);
     SimpleString info("(object address: ");
-    info += StringFromFormat("%p", &composite);
+    info += StringFromFormat("%p", (void*) &composite);
     info += ")::name -> no parameters";
     STRCMP_EQUAL(info.asCharString(), call.callToString().asCharString());
 }
