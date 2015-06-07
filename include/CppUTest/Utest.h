@@ -270,7 +270,7 @@ private:
 class MixInUtest : public Utest
 {
 public:
-	virtual void* getParams() { return NULL; };
+	virtual void* getParams() { return NULL; }
 };
 
 //////////////////// MixInInUtestShell
@@ -279,8 +279,8 @@ class MixInInUtestShell: public UtestShell
 {
 friend class MixInInjectionUTest;
 public:
-	MixInInUtestShell() : currentMixinTest_(NULL), nextMixinTest_(NULL) {};
-	virtual ~MixInInUtestShell() {};
+	MixInInUtestShell() : currentMixinTest_(NULL), nextMixinTest_(NULL) {}
+	virtual ~MixInInUtestShell() {}
 
     virtual const SimpleString getName() const;
 
@@ -306,12 +306,13 @@ class MixInInjectionUTest
 {
 public:
 	MixInInjectionUTest(MixInInUtestShell* testShell);
+	virtual ~MixInInjectionUTest() {}
 
 	virtual void prepareScope() {}
 	void mixinInjection();
 
 private:
-	virtual void setParams(void* p) {}	// we can do an unsafe, old-style cast in pre-setup / post-teardown since we are sure that testToRun is derived from the current MixIn group base class
+	virtual void setParams(void* p) = 0;	// we can do an unsafe, old-style cast in pre-setup / post-teardown since we are sure that testToRun is derived from the current MixIn group base class
 
 	MixInInUtestShell* testShell_;
 };
