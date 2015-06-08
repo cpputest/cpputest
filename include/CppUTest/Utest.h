@@ -308,7 +308,7 @@ public:
 	MixInInjectionUTest(MixInInUtestShell* testShell);
 	virtual ~MixInInjectionUTest() {}
 
-	virtual void prepareScope() {}
+	virtual void prepareScope() = 0;
 	void mixinInjection();
 
 private:

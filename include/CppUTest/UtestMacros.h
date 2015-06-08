@@ -115,7 +115,7 @@ class MIXIN_##mixinGroup##_##testName##_TestShell : public UtestShell { \
   { public: TEST_##testGroup##_##testName##_Test () : TEST_GROUP_##CppUTestGroup##testGroup (), MixInInjectionUTest((MixInInUtestShell*)&TEST_##testGroup##_##testName##_TestShell_instance) {} \
     void testBody() { mixinInjection(); } \
 	void setParams(void* p) { params = (MIXIN_##mixinGroup##_Params *)p; } \
-	virtual void prepareScope(); \
+	void prepareScope(); \
 	MIXIN_##mixinGroup##_Params *params; }; \
   class TEST_##testGroup##_##testName##_TestShell : public MixInInUtestShell { \
       virtual Utest* createTest() _override { prepareMixin(); return new TEST_##testGroup##_##testName##_Test; } \
