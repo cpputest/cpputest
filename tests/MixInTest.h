@@ -32,6 +32,7 @@ class SUT
 {
 public:
 	virtual const char* className() = 0;
+	virtual ~SUT() {}
 };
 
 MIXIN_PARAMS(DemoMixInGroup) // MIXIN_GROUP name
