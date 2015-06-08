@@ -28,7 +28,7 @@
 #include "CppUTest/TestHarness.h"
 
 // system under test interface
-class SUT	
+class SUT
 {
 public:
 	virtual const char* className() = 0;
@@ -37,5 +37,5 @@ public:
 MIXIN_PARAMS(DemoMixInGroup) // MIXIN_GROUP name
 {
 	SUT* obj;
-	char* expectedName;
+	char const* expectedName;
 };
