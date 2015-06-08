@@ -5,13 +5,13 @@
 class ImplA : public SUT
 {
 public:
-	const char* className() { return "ImplA"; };
+	const char* className() { return "ImplA"; }
 };
 
 class ImplB : public SUT
 {
 public:
-	const char* className() { return "ImplB"; };
+	const char* className() { return "ImplB"; }
 };
 
 TEST_GROUP(ImplATestGroup)
