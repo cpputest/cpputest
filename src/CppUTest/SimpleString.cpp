@@ -225,7 +225,7 @@ void SimpleString::split(const SimpleString& delimiter, SimpleStringCollection& 
         prev = str;
         str = StrStr(str, delimiter.buffer_) + 1;
         size_t len = (size_t) (str - prev) + 1;
-        col[i].buffer_ = copyToNewBuffer(prev, len);
+        col[i] = copyToNewBuffer(prev, len);
     }
     if (extraEndToken) {
         col[num] = str;
