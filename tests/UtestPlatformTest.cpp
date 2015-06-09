@@ -37,7 +37,7 @@ TEST_GROUP(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess)
 
 #if defined(__MINGW32__) || defined(_MSC_VER) || defined(__IAR_SYSTEMS_ICC__)
 
-TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, MinGwWorks)
+TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, DummyFailsWithMessage)
 {
     fixture.registry_->setRunTestsInSeperateProcess();
     fixture.runAllTests();

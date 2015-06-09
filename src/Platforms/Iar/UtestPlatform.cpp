@@ -49,25 +49,25 @@ TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
     return TestOutput::eclipse;
 }
 
-static void IarPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin*, TestResult* result)
+static void DummyPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin*, TestResult* result)
 {
     result->addFailure(TestFailure(shell, "-p doesn't work on this platform, as it is lacking fork.\b"));
 }
 
-static int PlatformSpecificForkImplementation(void)
+static int DummyPlatformSpecificFork(void)
 {
     return 0;
 }
 
-static int PlatformSpecificWaitPidImplementation(int, int*, int)
+static int DummyPlatformSpecificWaitPid(int, int*, int)
 {
     return 0;
 }
 
 void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell* shell, TestPlugin* plugin, TestResult* result) =
-        IarPlatformSpecificRunTestInASeperateProcess;
-int (*PlatformSpecificFork)(void) = PlatformSpecificForkImplementation;
-int (*PlatformSpecificWaitPid)(int, int*, int) = PlatformSpecificWaitPidImplementation;
+        DummyPlatformSpecificRunTestInASeperateProcess;
+int (*PlatformSpecificFork)(void) = DummyPlatformSpecificFork;
+int (*PlatformSpecificWaitPid)(int, int*, int) = DummyPlatformSpecificWaitPid;
 
 extern "C" {
 
