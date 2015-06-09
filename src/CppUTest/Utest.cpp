@@ -784,10 +784,8 @@ void MixInInjectionUTest::mixinInjection()
 		{
 			try
 			{
-				setParams( testToRun->getParams() );
-				prepareScope();
+				setParams( testToRun );
 				testToRun->run();
-				setParams( NULL );
 			}
 			catch (...) {}
 

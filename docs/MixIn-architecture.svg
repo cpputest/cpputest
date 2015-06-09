@@ -641,15 +641,15 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.49497475"
-     inkscape:cx="1075.993"
-     inkscape:cy="613.2794"
+     inkscape:zoom="0.7"
+     inkscape:cx="1024.8418"
+     inkscape:cy="398.4825"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="g2998-2-7-4"
      showgrid="false"
      inkscape:window-width="1920"
-     inkscape:window-height="1138"
-     inkscape:window-x="-8"
+     inkscape:window-height="1058"
+     inkscape:window-x="1912"
      inkscape:window-y="-8"
      inkscape:window-maximized="1" />
   <metadata
@@ -719,7 +719,7 @@
            sodipodi:role="line"
            x="211.5439"
            y="313.17609"
-           id="tspan6152"></tspan><tspan
+           id="tspan6152" /><tspan
            sodipodi:role="line"
            x="211.5439"
            y="328.17609"
@@ -1527,7 +1527,10 @@
        inkscape:connection-end-point="d4" />
     <g
        id="g2993-7-3"
-       transform="translate(1064.9334,128.57164)">
+       transform="translate(1064.9334,128.57164)"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100">
       <rect
          rx="2"
          ry="2"
@@ -1551,7 +1554,10 @@
     </g>
     <g
        transform="translate(964.17067,236.94514)"
-       id="g3774-5-7">
+       id="g3774-5-7"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100">
       <rect
          rx="2"
          ry="2"
@@ -1575,7 +1581,10 @@
     </g>
     <g
        id="g6426-0-6"
-       transform="translate(1158.3576,-121.37258)">
+       transform="translate(1158.3576,-121.37258)"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100">
       <rect
          y="574.50507"
          x="-88.571426"
@@ -1598,7 +1607,10 @@
     </g>
     <g
        id="g6431-0-9"
-       transform="translate(1174.1524,-90.329061)">
+       transform="translate(1174.1524,-90.329061)"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100">
       <rect
          transform="translate(0,308.2677)"
          y="167.66591"
@@ -1629,7 +1641,10 @@
        inkscape:connection-start="#g3774-5-7"
        inkscape:connection-start-point="d4"
        inkscape:connection-end="#g2993-7-3"
-       inkscape:connection-end-point="d4" />
+       inkscape:connection-end-point="d4"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100" />
     <g
        id="g2998-2-7-4"
        transform="translate(964.17067,323.16903)">
@@ -1641,14 +1656,20 @@
          x="201.11473"
          y="276.65936"
          ry="2"
-         rx="2" />
+         rx="2"
+         inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+         inkscape:export-xdpi="100"
+         inkscape:export-ydpi="100" />
       <text
          xml:space="preserve"
          style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
          x="211.5439"
          y="298.17609"
          id="text3002-5-3-4"
-         sodipodi:linespacing="125%"><tspan
+         sodipodi:linespacing="125%"
+         inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+         inkscape:export-xdpi="100"
+         inkscape:export-ydpi="100"><tspan
            sodipodi:role="line"
            id="tspan3004-5-5-9"
            x="211.5439"
@@ -1668,11 +1689,14 @@
            sodipodi:role="line"
            x="211.5439"
            y="358.17609"
-           id="tspan8694">prepareScope()</tspan></text>
+           id="tspan8694">prepareParams()</tspan></text>
     </g>
     <g
        transform="translate(1266.7728,323.16903)"
-       id="g3774-1-81-5">
+       id="g3774-1-81-5"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100">
       <rect
          rx="2"
          ry="2"
@@ -1704,7 +1728,10 @@
     </g>
     <g
        id="g6436-0-4"
-       transform="translate(1630.3219,108.34076)">
+       transform="translate(1630.3219,108.34076)"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100">
       <rect
          y="717.36218"
          x="-68.571426"
@@ -1735,10 +1762,16 @@
        inkscape:connection-start-point="d4"
        sodipodi:nodetypes="cc"
        inkscape:connection-end="#g3774-5-7"
-       inkscape:connection-end-point="d4" />
+       inkscape:connection-end-point="d4"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100" />
     <g
        transform="translate(1372.301,212.66694)"
-       id="g3774-1-8-9-8">
+       id="g3774-1-8-9-8"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100">
       <rect
          rx="2"
          ry="2"
@@ -1762,7 +1795,10 @@
     </g>
     <g
        transform="translate(1583.1951,323.16903)"
-       id="g3774-1-1-3-1">
+       id="g3774-1-1-3-1"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100">
       <rect
          rx="2"
          ry="2"
@@ -1786,7 +1822,10 @@
     </g>
     <g
        id="g11010"
-       transform="translate(-16.071448,0)">
+       transform="translate(-16.071448,0)"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100">
       <rect
          rx="1.9999998"
          ry="2"
@@ -1814,7 +1853,10 @@
        y="515.72461"
        x="1775.0895"
        style="font-size:10px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       xml:space="preserve"><tspan
+       xml:space="preserve"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100"><tspan
          style="font-size:12px;font-weight:bold;-inkscape-font-specification:Sans Bold"
          y="515.72461"
          x="1775.0895"
@@ -1830,10 +1872,16 @@
        inkscape:connection-end="#g3774-1-8-9-8"
        inkscape:connection-end-point="d4"
        inkscape:connection-start="#g3774-1-81-5"
-       inkscape:connection-start-point="d4" />
+       inkscape:connection-start-point="d4"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100" />
     <g
        transform="translate(1523.7601,139.7631)"
-       id="g3774-1-8-7-9-1-9">
+       id="g3774-1-8-7-9-1-9"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100">
       <rect
          rx="1.9999999"
          ry="2"
@@ -1864,7 +1912,10 @@
        inkscape:connection-end="#g3774-1-8-7-9-1-9"
        inkscape:connection-end-point="d4"
        inkscape:connection-start="#g11010"
-       inkscape:connection-start-point="d4" />
+       inkscape:connection-start-point="d4"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:1, 1;stroke-dashoffset:0;marker-end:url(#marker5456)"
        d="m 1172.7399,477.4182 86.4965,36.1863"
@@ -1874,7 +1925,10 @@
        inkscape:connection-start="#g6426-0-6"
        inkscape:connection-start-point="d4"
        inkscape:connection-end="#g3774-5-7"
-       inkscape:connection-end-point="d4" />
+       inkscape:connection-end-point="d4"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:1, 1;stroke-dashoffset:0;marker-end:url(#marker5456)"
        d="M 1592.952,825.70294 1376.1661,690.79596"
@@ -1884,7 +1938,10 @@
        inkscape:connection-start="#g6436-0-4"
        inkscape:connection-start-point="d4"
        inkscape:connection-end="#g2998-2-7-4"
-       inkscape:connection-end-point="d4" />
+       inkscape:connection-end-point="d4"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:1, 1;stroke-dashoffset:0;marker-end:url(#marker5456)"
        d="m 1612.4648,825.70294 -10e-5,-159.90697"
@@ -1894,7 +1951,10 @@
        inkscape:connection-start="#g6436-0-4"
        inkscape:connection-start-point="d4"
        inkscape:connection-end="#g3774-1-81-5"
-       inkscape:connection-end-point="d4" />
+       inkscape:connection-end-point="d4"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:1, 1;stroke-dashoffset:0;marker-end:url(#marker5456);display:inline"
        d="M 1629.5803,825.70294 1896.2496,636.51025"
@@ -1904,7 +1964,10 @@
        inkscape:connection-start="#g6436-0-4"
        inkscape:connection-start-point="d4"
        inkscape:connection-end="#g3774-1-1-3-1"
-       inkscape:connection-end-point="d4" />
+       inkscape:connection-end-point="d4"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:1, 1;stroke-dashoffset:0;marker-end:url(#marker5456)"
        d="m 1142.902,409.89026 0.6346,43.24223"
@@ -1914,14 +1977,20 @@
        inkscape:connection-start="#g6431-0-9"
        inkscape:connection-start-point="d4"
        inkscape:connection-end="#g6426-0-6"
-       inkscape:connection-end-point="d4" />
+       inkscape:connection-end-point="d4"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100" />
     <text
        xml:space="preserve"
        style="font-size:10px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
        x="1853.8337"
        y="464.77393"
        id="text8088-0-4"
-       sodipodi:linespacing="125%"><tspan
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100"><tspan
          sodipodi:role="line"
          id="tspan8090-8-2"
          x="1853.8337"
@@ -1935,10 +2004,16 @@
        inkscape:connection-start="#g3774-1-81-5"
        inkscape:connection-start-point="d4"
        inkscape:connection-end="#g11010"
-       inkscape:connection-end-point="d4" />
+       inkscape:connection-end-point="d4"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100" />
     <g
        transform="translate(1114.0404,160.01001)"
-       id="g3774-5-7-8">
+       id="g3774-5-7-8"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100">
       <rect
          rx="1.9999998"
          ry="2"
@@ -1980,7 +2055,10 @@
     </g>
     <g
        transform="translate(709.44909,122.15286)"
-       id="g3774-1-8-7-9-5">
+       id="g3774-1-8-7-9-5"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100">
       <rect
          rx="1.9999999"
          ry="2"
@@ -2011,7 +2089,10 @@
        inkscape:connection-start="#g3774-5-7-8"
        inkscape:connection-start-point="d4"
        inkscape:connection-end="#g3774-1-8-7-9-5"
-       inkscape:connection-end-point="d4" />
+       inkscape:connection-end-point="d4"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker8161)"
        d="m 1165.2854,610.53885 -124.5473,-31.431"
@@ -2021,14 +2102,20 @@
        inkscape:connection-start="#g2998-2-7-4"
        inkscape:connection-start-point="d4"
        inkscape:connection-end="#g3774-5-7-8"
-       inkscape:connection-end-point="d4" />
+       inkscape:connection-end-point="d4"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100" />
     <text
        xml:space="preserve"
        style="font-size:10px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
        x="932.94659"
        y="481.43896"
        id="text9263"
-       sodipodi:linespacing="125%"><tspan
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100"><tspan
          sodipodi:role="line"
          id="tspan9265"
          x="932.94659"
@@ -2102,7 +2189,10 @@
        inkscape:connection-end-point="d4" />
     <g
        transform="translate(1004.1707,454.18963)"
-       id="g3774-6-2">
+       id="g3774-6-2"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100">
       <rect
          rx="2"
          ry="2"
@@ -2126,7 +2216,10 @@
     </g>
     <g
        id="g6431-1-9"
-       transform="translate(1328.434,349.76933)">
+       transform="translate(1328.434,349.76933)"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100">
       <rect
          y="475.93359"
          x="-82.14286"
@@ -2156,7 +2249,10 @@
        inkscape:connection-start="#g6431-1-9"
        inkscape:connection-start-point="d4"
        inkscape:connection-end="#g3774-6-2"
-       inkscape:connection-end-point="d4" />
+       inkscape:connection-end-point="d4"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:6, 2;stroke-dashoffset:0;marker-start:url(#Arrow1Lstart);marker-mid:none"
        d="m 1303.0769,730.84899 0,-40.05303"
@@ -2166,14 +2262,20 @@
        inkscape:connection-start="#g3774-6-2"
        inkscape:connection-start-point="d4"
        inkscape:connection-end="#g2998-2-7-4"
-       inkscape:connection-end-point="d4" />
+       inkscape:connection-end-point="d4"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100" />
     <text
        xml:space="preserve"
        style="font-size:10px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
        x="1269.3961"
        y="714.03162"
        id="text9263-5"
-       sodipodi:linespacing="125%"><tspan
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100"><tspan
          sodipodi:role="line"
          id="tspan9265-3"
          x="1269.3961"
@@ -2198,6 +2300,9 @@
        inkscape:connection-start="#g3774-1-1-3-1"
        inkscape:connection-start-point="d4"
        inkscape:connection-end="#g11010"
-       inkscape:connection-end-point="d4" />
+       inkscape:connection-end-point="d4"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100" />
   </g>
 </svg>

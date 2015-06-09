@@ -114,14 +114,14 @@ class MIXIN_##mixinGroup##_##testName##_TestShell : public UtestShell { \
   class TEST_##testGroup##_##testName##_Test : public TEST_GROUP_##CppUTestGroup##testGroup, public MixInInjectionUTest \
   { public: TEST_##testGroup##_##testName##_Test () : TEST_GROUP_##CppUTestGroup##testGroup (), MixInInjectionUTest((MixInInUtestShell*)&TEST_##testGroup##_##testName##_TestShell_instance) {} \
     void testBody() { mixinInjection(); } \
-	void setParams(void* p) { params = (MIXIN_##mixinGroup##_Params *)p; } \
-	void prepareScope(); \
-	MIXIN_##mixinGroup##_Params *params; }; \
+	void setParams(MixInUtest* testToRun) { void *p = testToRun->getParams(); if (p) {prepareParams( *((MIXIN_##mixinGroup##_Params *)p) );} } \
+	void prepareParams( MIXIN_##mixinGroup##_Params& params ); \
+  }; \
   class TEST_##testGroup##_##testName##_TestShell : public MixInInUtestShell { \
       virtual Utest* createTest() _override { prepareMixin(); return new TEST_##testGroup##_##testName##_Test; } \
   } TEST_##testGroup##_##testName##_TestShell_instance; \
   static MixinApplyInstaller TEST_##testGroup##_##testName##_Installer(TEST_##testGroup##_##testName##_TestShell_instance, #testGroup, #testName, __FILE__,__LINE__, #mixinGroup); \
-  void TEST_##testGroup##_##testName##_Test::prepareScope()
+  void TEST_##testGroup##_##testName##_Test::prepareParams( MIXIN_##mixinGroup##_Params& params )
 
 #define IMPORT_TEST_GROUP(testGroup) \
   extern int externTestGroup##testGroup;\

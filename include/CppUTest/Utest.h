@@ -308,11 +308,10 @@ public:
 	MixInInjectionUTest(MixInInUtestShell* testShell);
 	virtual ~MixInInjectionUTest() {}
 
-	virtual void prepareScope() = 0;
 	void mixinInjection();
 
 private:
-	virtual void setParams(void* p) = 0;	// we can do an unsafe, old-style cast in pre-setup / post-teardown since we are sure that testToRun is derived from the current MixIn group base class
+	virtual void setParams(MixInUtest* testToRun) = 0;
 
 	MixInInUtestShell* testShell_;
 };

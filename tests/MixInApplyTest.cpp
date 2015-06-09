@@ -21,8 +21,8 @@ TEST_GROUP(ImplATestGroup)
 
 MIXIN_APPLY(ImplATestGroup, DemoMixInGroup, ImplA_test)
 {
-	params->obj = &objA;
-	params->expectedName = "ImplA";
+	params.obj = &objA;
+	params.expectedName = "ImplA";
 }
 
 TEST_GROUP(ImplBTestGroup)
@@ -32,6 +32,6 @@ TEST_GROUP(ImplBTestGroup)
 
 MIXIN_APPLY(ImplBTestGroup, DemoMixInGroup, ImplB_test)
 {
-	params->obj = &objB;
-	params->expectedName = "ImplB";
+	params.obj = &objB;
+	params.expectedName = "ImplB";
 }
