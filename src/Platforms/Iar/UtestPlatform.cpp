@@ -167,23 +167,19 @@ int (*PlatformSpecificAtExit)(void(*func)(void)) = atexit;  /// this was undefin
 
 static PlatformSpecificMutex DummyMutexCreate(void)
 {
-    FAIL("PlatformSpecificMutexCreate is not implemented");
     return 0;
 }
 
 static void DummyMutexLock(PlatformSpecificMutex)
 {
-    FAIL("PlatformSpecificMutexLock is not implemented");
 }
 
 static void DummyMutexUnlock(PlatformSpecificMutex)
 {
-    FAIL("PlatformSpecificMutexUnlock is not implemented");
 }
 
 static void DummyMutexDestroy(PlatformSpecificMutex)
 {
-    FAIL("PlatformSpecificMutexDestroy is not implemented");
 }
 
 PlatformSpecificMutex (*PlatformSpecificMutexCreate)(void) = DummyMutexCreate;
