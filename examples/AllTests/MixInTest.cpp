@@ -26,55 +26,28 @@
  */
 
 #include "CppUTest/TestHarness.h"
+#include "MixInTest.h"
 
 
-// system under test interface
-class SUT
+MIXIN_GROUP(DemoMixInGroup)
 {
-public:
-	const char* name() { return "SystemUnderTest"; }
-};
-
-MIXIN_PARAMS(DemoMixInGroup)
-{
-	SUT* obj;
-	char const* expectedName;
-	bool initializedByMixInSetup;
-};
-
-MIXIN_GROUP(DemoMixInGroup) {
-	void setup()
+	void setup() 
 	{
-		params.initializedByMixInSetup = true;
-		init = true;
+		CHECK(params.sut);
 	}
-
-	bool init;
+	void teardown()	{}
 };
-TEST_GROUP(MixInTestGroup) {};
 
-MIXIN_APPLY(MixInTestGroup, DemoMixInGroup, ImplA_test)
+
+MIXIN_TEST(DemoMixInGroup, classNameCheck)
 {
-	SUT sut;
-	params.obj = &sut;
-	params.expectedName = "SystemUnderTest";
-	params.initializedByMixInSetup = false;
+	const char* className = params.sut->className();
+	STRCMP_EQUAL( params.expectedName, className );
 }
 
-MIXIN_TEST(DemoMixInGroup, paramsSet)
-{
-	CHECK(params.obj);
-	CHECK(params.expectedName);
-}
 
-MIXIN_TEST(DemoMixInGroup, paramsObjectSubFunction)
+MIXIN_TEST(DemoMixInGroup, fooFunctionTest)
 {
-	STRCMP_EQUAL( params.expectedName, params.obj->name() );
-}
-
-MIXIN_TEST(DemoMixInGroup, mixInSetupWasCalled)
-{
-	CHECK(init);
-	CHECK(params.initializedByMixInSetup);
+	CHECK( 1 < params.sut->foo(1) );
 }
 

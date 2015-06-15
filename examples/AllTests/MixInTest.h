@@ -27,16 +27,21 @@
 
 #include "CppUTest/TestHarness.h"
 
-// system under test interface
-class SUT
+/*
+	each implementation of the SUT interface should have:
+	- a function className() returning the name of the class
+	- a function foo() returning an integer value greater 1
+*/
+class FooInterface
 {
 public:
 	virtual const char* className() = 0;
-	virtual ~SUT() {}
+	virtual int foo(int) = 0;
+	virtual ~FooInterface() {}
 };
 
 MIXIN_PARAMS(DemoMixInGroup) // MIXIN_GROUP name
 {
-	SUT* obj;
+	FooInterface* sut;
 	char const* expectedName;
 };

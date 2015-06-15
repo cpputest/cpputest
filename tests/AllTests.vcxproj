@@ -159,7 +159,6 @@
     <ClCompile Include="MemoryLeakDetectorTest.cpp" />
     <ClCompile Include="MemoryLeakOperatorOverloadsTest.cpp" />
     <ClCompile Include="MemoryLeakWarningTest.cpp" />
-    <ClCompile Include="MixInApplyTest.cpp" />
     <ClCompile Include="MixInTest.cpp" />
     <ClCompile Include="PluginTest.cpp" />
     <ClCompile Include="PreprocessorTest.cpp" />
@@ -187,7 +186,6 @@
     <ClInclude Include="AllTests.h" />
     <ClInclude Include="CppUTestExt\MockFailureTest.h" />
     <ClInclude Include="CppUTestExt\MockSupport_cTestCFile.h" />
-    <ClInclude Include="MixInTest.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
