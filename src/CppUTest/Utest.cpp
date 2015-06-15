@@ -704,7 +704,7 @@ const SimpleString MixInInUtestShell::getName() const
 	UtestShell* test = getCurrentMixinTest();
 	if ( test )
 	{
-		name +=  ": "; name += test->getName();
+		name +=  "__"; name += test->getName();
 	}
     return name;
 }
