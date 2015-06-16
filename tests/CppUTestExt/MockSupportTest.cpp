@@ -452,8 +452,7 @@ TEST(MockSupportTest, expectOneMemBufferParameterAndValueFailsDueToContents)
     unsigned char memBuffer2[] = { 0x12, 0x05, 0xFF };
 
     MockNamedValue parameter("parameter");
-    parameter.setValue( memBuffer2 );
-    parameter.setSize( sizeof(memBuffer2) );
+    parameter.setMemoryBuffer( memBuffer2, sizeof(memBuffer2) );
     addFunctionToExpectationsList("foo")->withParameter("parameter", memBuffer1, sizeof(memBuffer1));
     MockUnexpectedInputParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, *expectationsList);
 
@@ -469,8 +468,7 @@ TEST(MockSupportTest, expectOneMemBufferParameterAndValueFailsDueToSize)
     unsigned char memBuffer2[] = { 0x12, 0x15, 0xFF, 0x90 };
 
     MockNamedValue parameter("parameter");
-    parameter.setValue( memBuffer2 );
-    parameter.setSize( sizeof(memBuffer2) );
+    parameter.setMemoryBuffer( memBuffer2, sizeof(memBuffer2) );
     addFunctionToExpectationsList("foo")->withParameter("parameter", memBuffer1, sizeof(memBuffer1));
     MockUnexpectedInputParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, *expectationsList);
 

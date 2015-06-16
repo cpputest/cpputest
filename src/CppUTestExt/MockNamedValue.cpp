@@ -37,7 +37,7 @@ void MockNamedValue::setDefaultComparatorRepository(MockNamedValueComparatorRepo
     defaultRepository_ = repository;
 }
 
-MockNamedValue::MockNamedValue(const SimpleString& name) : name_(name), type_("int"), comparator_(NULL)
+MockNamedValue::MockNamedValue(const SimpleString& name) : name_(name), type_("int"), size_(0), comparator_(NULL)
 {
     value_.intValue_ = 0;
 }
@@ -97,7 +97,7 @@ void MockNamedValue::setValue(const char* value)
 void MockNamedValue::setMemoryBuffer(const unsigned char* value, size_t size)
 {
     type_ = "const unsigned char*";
-    value_.memBufferValue_ = value;
+    value_.memoryBufferValue_ = value;
     size_ = size;
 }
 
@@ -198,10 +198,10 @@ const void* MockNamedValue::getConstPointerValue() const
     return value_.pointerValue_;
 }
 
-const unsigned char* MockNamedValue::getMemBufferValue() const
+const unsigned char* MockNamedValue::getMemoryBuffer() const
 {
     STRCMP_EQUAL("const unsigned char*", type_.asCharString());
-    return value_.memBufferValue_;
+    return value_.memoryBufferValue_;
 }
 
 const void* MockNamedValue::getObjectPointer() const
@@ -269,7 +269,7 @@ bool MockNamedValue::equals(const MockNamedValue& p) const
         if (size_ != p.size_) {
             return false;
         }
-        return SimpleString::MemCmp(value_.memBufferValue_, p.value_.memBufferValue_, size_) == 0;
+        return SimpleString::MemCmp(value_.memoryBufferValue_, p.value_.memoryBufferValue_, size_) == 0;
     }
 
     if (comparator_)
@@ -297,7 +297,7 @@ SimpleString MockNamedValue::toString() const
     else if (type_ == "double")
         return StringFrom(value_.doubleValue_);
     else if (type_ == "const unsigned char*")
-        return StringFrom(value_.memBufferValue_, size_);
+        return StringFrom(value_.memoryBufferValue_, size_);
 
     if (comparator_)
         return comparator_->valueToString(value_.objectPointerValue_);

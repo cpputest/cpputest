@@ -181,7 +181,7 @@ TEST(MockExpectedCall, callWithMemoryBuffer)
     const unsigned char mem_buffer[] = { 0x12, 0xFE, 0xA1 };
     call->withParameter("memoryBuffer", mem_buffer, sizeof(mem_buffer));
     STRCMP_EQUAL("const unsigned char*", call->getInputParameterType("memoryBuffer").asCharString());
-    POINTERS_EQUAL( (void*) mem_buffer, (void*) call->getInputParameter("memoryBuffer").getMemBufferValue() );
+    POINTERS_EQUAL( (void*) mem_buffer, (void*) call->getInputParameter("memoryBuffer").getMemoryBuffer() );
     LONGS_EQUAL(sizeof(mem_buffer),  call->getInputParameter("memoryBuffer").getSize());
 }
 
