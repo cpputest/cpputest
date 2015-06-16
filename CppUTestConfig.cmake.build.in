@@ -1,0 +1,9 @@
+@PACKAGE_INIT@
+
+set_and_check(CppUTest_INCLUDE_DIRS "@PACKAGE_INCLUDE_DIR@")
+if(NOT TARGET CppUTest)
+  include("${CMAKE_CURRENT_LIST_DIR}/CppUTestTargets.cmake")
+endif()
+set(CppUTest_LIBRARIES CppUTest CppUTestExt)
+
+check_required_components(CppUTest)

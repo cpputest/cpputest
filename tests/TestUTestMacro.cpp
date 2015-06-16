@@ -568,6 +568,9 @@ static int functionThatReturnsAValue()
     DOUBLES_EQUAL(1.0, 1.0, .01);
     POINTERS_EQUAL(0, 0);
     MEMCMP_EQUAL("THIS", "THIS", 5);
+    BITS_EQUAL(0x01, (unsigned char )0x01, 0xFF);
+    BITS_EQUAL(0x0001, (unsigned short )0x0001, 0xFFFF);
+    BITS_EQUAL(0x00000001, (unsigned long )0x00000001, 0xFFFFFFFF);
     return 0;
 }
 
@@ -702,6 +705,35 @@ TEST(UnitTestMacros, MEMCMP_EQUALNullExpectedNullActual)
 {
     MEMCMP_EQUAL(NULL, NULL, 0);
     MEMCMP_EQUAL(NULL, NULL, 1024);
+}
+
+TEST(UnitTestMacros, BITS_EQUALBehavesAsAProperMacro)
+{
+    if (false) BITS_EQUAL(0x00, 0xFF, 0xFF)
+    else BITS_EQUAL(0x00, 0x00, 0xFF)
+}
+
+IGNORE_TEST(UnitTestMacros, BITS_EQUALWorksInAnIgnoredTest)
+{
+    BITS_EQUAL(0x00, 0xFF, 0xFF); // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
+
+static void _BITS_EQUALFailingTestMethodWithUnequalInput()
+{
+    BITS_EQUAL(0x00, 0xFF, 0xFF);
+    lineOfCodeExecutedAfterCheck = true; // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
+
+TEST(UnitTestMacros, BITS_EQUALFailureWithUnequalInput)
+{
+    runTestWithMethod(_BITS_EQUALFailingTestMethodWithUnequalInput);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("00000000>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("11111111>");
+}
+
+TEST(UnitTestMacros, BITS_EQUALZeroMaskEqual)
+{
+    BITS_EQUAL(0x00, 0xFF, 0x00);
 }
 
 #if CPPUTEST_USE_STD_CPP_LIB
