@@ -94,10 +94,11 @@ void MockNamedValue::setValue(const char* value)
     value_.stringValue_ = value;
 }
 
-void MockNamedValue::setValue(const unsigned char* value)
+void MockNamedValue::setMemoryBuffer(const unsigned char* value, size_t size)
 {
     type_ = "const unsigned char*";
     value_.memBufferValue_ = value;
+    size_ = size;
 }
 
 void MockNamedValue::setObjectPointer(const SimpleString& type, const void* objectPtr)
@@ -268,7 +269,7 @@ bool MockNamedValue::equals(const MockNamedValue& p) const
         if (size_ != p.size_) {
             return false;
         }
-        return PlatformSpecificMemCmp(value_.memBufferValue_, p.value_.memBufferValue_, size_) == 0;
+        return SimpleString::MemCmp(value_.memBufferValue_, p.value_.memBufferValue_, size_) == 0;
     }
 
     if (comparator_)

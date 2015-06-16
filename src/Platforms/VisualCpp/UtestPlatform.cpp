@@ -160,7 +160,6 @@ void* (*PlatformSpecificRealloc)(void* memory, size_t size) = realloc;
 void (*PlatformSpecificFree)(void* memory) = free;
 void* (*PlatformSpecificMemCpy)(void* s1, const void* s2, size_t size) = memcpy;
 void* (*PlatformSpecificMemset)(void* mem, int c, size_t size) = memset;
-int (*PlatformSpecificMemCmp)(const void*, const void*, size_t) = memcmp;
 
 double (*PlatformSpecificFabs)(double d) = fabs;
 extern "C" int (*PlatformSpecificIsNan)(double) = _isnan;

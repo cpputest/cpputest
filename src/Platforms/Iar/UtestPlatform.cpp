@@ -157,11 +157,6 @@ void* PlatformSpecificMemset(void* mem, int c, size_t size)
     return memset(mem, c, size);
 }
 
-int PlatformSpecificMemCmp(const void* s1, const void* s2, size_t size)
-{
-    return memcmp(s1, s2, size);
-}
-
 double PlatformSpecificFabs(double d)
 {
     return fabs(d);

@@ -225,8 +225,7 @@ MockActualCall& MockCheckedActualCall::withConstPointerParameter(const SimpleStr
 MockActualCall& MockCheckedActualCall::withMemoryBufferParameter(const SimpleString& name, const unsigned char* value, size_t size)
 {
     MockNamedValue actualParameter(name);
-    actualParameter.setValue(value);
-    actualParameter.setSize(size);
+    actualParameter.setMemoryBuffer(value, size);
     checkInputParameter(actualParameter);
     return *this;
 }

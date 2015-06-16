@@ -141,8 +141,7 @@ MockExpectedCall& MockCheckedExpectedCall::withMemoryBufferParameter(const Simpl
 {
     MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
     inputParameters_->add(newParameter);
-    newParameter->setValue(value);
-    newParameter->setSize(size);
+    newParameter->setMemoryBuffer(value, size);
     return *this;
 }
 

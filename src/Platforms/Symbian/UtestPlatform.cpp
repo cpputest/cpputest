@@ -125,11 +125,6 @@ void* PlatformSpecificMemset(void* mem, int c, size_t size)
     return memset(mem, c, size);
 }
 
-int PlatformSpecificMemCmp(const void* s1, const void* s2, size_t size)
-{
-    return memcmp(s1, s2, size);
-}
-
 PlatformSpecificFile PlatformSpecificFOpen(const char* filename, const char* flag) {
     return fopen(filename, flag);
 }
