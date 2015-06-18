@@ -41,6 +41,13 @@
  *
  */
 
+#ifdef __clang__
+ #pragma clang diagnostic push
+ #if __clang_major__ >= 3 && __clang_minor__ >= 6
+  #pragma clang diagnostic ignored "-Wreserved-id-macro"
+ #endif
+#endif
+
 /*
  * Lib C dependencies that are currently still left:
  *
@@ -90,12 +97,6 @@
  *
  * This is needed for compiling with clang, without breaking other compilers.
  */
-
-#ifdef __clang__
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wreserved-id-macro"
-#endif
-
 #ifndef __has_attribute
   #define __has_attribute(x) 0
 #endif
@@ -110,10 +111,6 @@
   #define __check_format__(type, format_parameter, other_parameters) __attribute__ ((format (type, format_parameter, other_parameters)))
 #else
   #define __check_format__(type, format_parameter, other_parameters) /* type, format_parameter, other_parameters */
-#endif
-
-#ifdef __clang__
-#pragma clang diagnostic pop
 #endif
 
 /*
@@ -186,17 +183,12 @@
 #define _override
 #endif
 
-#ifdef __clang__
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wreserved-id-macro"
-#endif
-
 /* MinGW-w64 prefers to act like Visual C++, but we want the ANSI behaviors instead */
 #undef __USE_MINGW_ANSI_STDIO
 #define __USE_MINGW_ANSI_STDIO 1
 
 #ifdef __clang__
-#pragma clang diagnostic pop
+ #pragma clang diagnostic pop
 #endif
 
 /* Should be the only #include here. Standard C library wrappers */
