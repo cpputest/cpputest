@@ -45,7 +45,12 @@
 
 #endif
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wkeyword-macro"
+
 #define new new(__FILE__, __LINE__)
+
+#pragma clang diagnostic pop
 
 #define CPPUTEST_USE_NEW_MACROS 1
 

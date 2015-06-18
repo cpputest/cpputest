@@ -90,6 +90,10 @@
  *
  * This is needed for compiling with clang, without breaking other compilers.
  */
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wreserved-id-macro"
+
 #ifndef __has_attribute
   #define __has_attribute(x) 0
 #endif
@@ -105,6 +109,8 @@
 #else
   #define __check_format__(type, format_parameter, other_parameters) /* type, format_parameter, other_parameters */
 #endif
+
+#pragma clang diagnostic pop
 
 /*
  * When we don't link Standard C++, then we won't throw exceptions as we assume the compiler might not support that!
@@ -176,9 +182,14 @@
 #define _override
 #endif
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wreserved-id-macro"
+
 /* MinGW-w64 prefers to act like Visual C++, but we want the ANSI behaviors instead */
 #undef __USE_MINGW_ANSI_STDIO
 #define __USE_MINGW_ANSI_STDIO 1
+
+#pragma clang diagnostic pop
 
 /* Should be the only #include here. Standard C library wrappers */
 #include "StandardCLibrary.h"
