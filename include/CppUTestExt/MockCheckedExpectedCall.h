@@ -180,8 +180,8 @@ public:
     virtual MockExpectedCall& withPointerParameter(const SimpleString& , void*) _override { return *this; }
     virtual MockExpectedCall& withConstPointerParameter(const SimpleString& , const void*) _override { return *this; }
     virtual MockExpectedCall& withParameterOfType(const SimpleString&, const SimpleString&, const void*) _override { return *this; }
-    virtual MockExpectedCall& withOutputParameterReturning(const SimpleString&, const void*, size_t) { return *this; }
-    virtual MockExpectedCall& ignoreOtherParameters() { return *this;}
+    virtual MockExpectedCall& withOutputParameterReturning(const SimpleString&, const void*, size_t) _override { return *this; }
+    virtual MockExpectedCall& ignoreOtherParameters() _override { return *this;}
 
     virtual MockExpectedCall& andReturnValue(int) _override { return *this; }
     virtual MockExpectedCall& andReturnValue(unsigned int) _override { return *this; }
