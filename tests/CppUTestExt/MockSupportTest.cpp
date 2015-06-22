@@ -645,8 +645,9 @@ TEST(MockSupportTest, threeExpectedAndActual)
 class MyTypeForTesting
 {
 public:
-    MyTypeForTesting(int val) : value(val){}
-    int value;
+    MyTypeForTesting (int val) : value(new int(val)) {}
+    ~MyTypeForTesting() { delete value; }
+    int * value;
 };
 
 class MyTypeForTestingComparator : public MockNamedValueComparator
@@ -654,14 +655,13 @@ class MyTypeForTestingComparator : public MockNamedValueComparator
 public:
     virtual bool isEqual(const void* object1, const void* object2)
     {
-        return ((MyTypeForTesting*)object1)->value == ((MyTypeForTesting*)object2)->value;
+        return *((MyTypeForTesting*)object1)->value == *((MyTypeForTesting*)object2)->value;
     }
     virtual SimpleString valueToString(const void* object)
     {
-        return StringFrom(((MyTypeForTesting*)object)->value);
+        return StringFrom(*(((MyTypeForTesting*)object)->value));
     }
 };
-
 
 TEST(MockSupportTest, customObjectParameterFailsWhenNotHavingAComparisonRepository)
 {
@@ -695,6 +695,19 @@ TEST(MockSupportTest, outputParameterSucceeds)
     CHECK_EQUAL(retval, 2);
     mock().checkExpectations();
     CHECK_NO_MOCK_FAILURE();
+}
+
+TEST(MockSupportTest, customObjectOutputParameterShouldSucceed)
+{
+    MyTypeForTesting source(1);
+    MyTypeForTesting target(2);
+    MyTypeForTestingComparator comparator;
+    mock().expectOneCall("function").withOutputParameterReturning("parameterName", &source, sizeof(MyTypeForTesting));
+    mock().actualCall("function").withOutputParameter("parameterName", &target);
+    mock().checkExpectations();
+    CHECK_NO_MOCK_FAILURE();
+    LONGS_EQUAL(1, *source.value);
+    LONGS_EQUAL(1, *target.value);
 }
 
 TEST(MockSupportTest, noActualCallForOutputParameter)
@@ -1772,7 +1785,7 @@ TEST(MockSupportTestWithFixture, CHECK_EXPECTED_MOCK_FAILURE_LOCATION_failed)
 
 static void CHECK_NO_MOCK_FAILURE_LOCATION_failedTestMethod_()
 {
-    mock().actualCall("boo");    
+    mock().actualCall("boo");
     CHECK_NO_MOCK_FAILURE_LOCATION("file", 1);
 }
 
@@ -1804,11 +1817,11 @@ TEST_ORDERED(MockSupportTestWithFixture, shouldCrashOnFailure, 10)
     mock().crashOnFailure(true);
     UtestShell::setCrashMethod(crashMethod);
     fixture.setTestFunction(crashOnFailureTestFunction_);
-    
+
     fixture.runAllTests();
-    
+
     CHECK(cpputestHasCrashed);
-    
+
     mock().crashOnFailure(false);
     UtestShell::resetCrashMethod();
 }
@@ -1818,11 +1831,11 @@ TEST_ORDERED(MockSupportTestWithFixture, nextTestShouldNotCrashOnFailure, 11)
     cpputestHasCrashed = false;
     UtestShell::setCrashMethod(crashMethod);
     fixture.setTestFunction(crashOnFailureTestFunction_);
-    
+
     fixture.runAllTests();
-    
+
     fixture.assertPrintContains("Unexpected call to function: unexpected");
     CHECK_FALSE(cpputestHasCrashed);
-    
+
     UtestShell::resetCrashMethod();
 }
