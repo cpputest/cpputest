@@ -645,8 +645,22 @@ TEST(MockSupportTest, threeExpectedAndActual)
 class MyTypeForTesting
 {
 public:
-    MyTypeForTesting (int val) : value(new int(val)) {}
-    ~MyTypeForTesting() { delete value; }
+    MyTypeForTesting () : value(new(int)) {}
+    MyTypeForTesting(int val) : value(new int(val)){}
+    MyTypeForTesting(MyTypeForTesting& rhs)
+    {
+        value = new(int);
+        *value = *rhs.value;
+    }
+    ~MyTypeForTesting()
+    {
+        delete value;
+    }
+    MyTypeForTesting& operator=(MyTypeForTesting& rhs)
+    {
+        *value = *rhs.value;
+        return *this;
+    }
     int * value;
 };
 
@@ -660,6 +674,12 @@ public:
     virtual SimpleString valueToString(const void* object)
     {
         return StringFrom(*(((MyTypeForTesting*)object)->value));
+    }
+    virtual void* copy(const void* object1, const void* object2)
+    {
+        MyTypeForTesting* ret = (MyTypeForTesting*)object1;
+        *ret = *((MyTypeForTesting*)object2);
+        return (void*)ret;
     }
 };
 
@@ -702,8 +722,9 @@ TEST(MockSupportTest, customObjectOutputParameterShouldSucceed)
     MyTypeForTesting source(1);
     MyTypeForTesting target(2);
     MyTypeForTestingComparator comparator;
-    mock().expectOneCall("function").withOutputParameterReturning("parameterName", &source, sizeof(MyTypeForTesting));
-    mock().actualCall("function").withOutputParameter("parameterName", &target);
+    mock().installComparator("MyTypeForTesting", comparator);
+    mock().expectOneCall("function").withOutputParameterOfTypeReturning("MyTypeForTesting", "parameterName", &source);
+    mock().actualCall("function").withOutputParameterOfType("MyTypeForTesting", "parameterName", &target);
     mock().checkExpectations();
     CHECK_NO_MOCK_FAILURE();
     LONGS_EQUAL(1, *source.value);
