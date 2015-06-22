@@ -27,8 +27,6 @@
 
 #include "CppUTest/TestHarness.h"
 #include "CppUTestExt/MockNamedValue.h"
-#include "CppUTest/PlatformSpecificFunctions.h"
-
 
 MockNamedValueComparatorRepository* MockNamedValue::defaultRepository_ = NULL;
 
@@ -40,6 +38,7 @@ void MockNamedValue::setDefaultComparatorRepository(MockNamedValueComparatorRepo
 MockNamedValue::MockNamedValue(const SimpleString& name) : name_(name), type_("int"), comparator_(NULL)
 {
     value_.intValue_ = 0;
+    size_ = sizeof(int);
 }
 
 MockNamedValue::~MockNamedValue()
