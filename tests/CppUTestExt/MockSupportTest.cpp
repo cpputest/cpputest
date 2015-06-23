@@ -675,11 +675,24 @@ public:
     {
         return StringFrom(*(((MyTypeForTesting*)object)->value));
     }
-    virtual void* copy(const void* object1, const void* object2)
+    virtual bool copy(const void* object1, const void* object2)
     {
         MyTypeForTesting* ret = (MyTypeForTesting*)object1;
         *ret = *((MyTypeForTesting*)object2);
-        return (void*)ret;
+        return true;
+    }
+};
+
+class MyTypeForTestingComparatorLackingCopy : public MockNamedValueComparator
+{
+public:
+    virtual bool isEqual(const void*, const void*)
+    {
+        return false;
+    }
+    virtual SimpleString valueToString(const void*)
+    {
+        return "";
     }
 };
 
@@ -729,6 +742,18 @@ TEST(MockSupportTest, customObjectOutputParameterShouldSucceed)
     CHECK_NO_MOCK_FAILURE();
     LONGS_EQUAL(1, *source.value);
     LONGS_EQUAL(1, *target.value);
+}
+
+TEST(MockSupportTest, customObjectOutputParameterShouldFailWhenCopyIsntOverridden)
+{
+    MyTypeForTesting object;
+    MyTypeForTestingComparatorLackingCopy comparator;
+    mock().installComparator("MyTypeForTesting", comparator);
+    mock().expectOneCall("function").withOutputParameterOfTypeReturning("MyTypeForTesting", "parameterName", &object);
+    mock().actualCall("function").withOutputParameterOfType("MyTypeForTesting", "parameterName", &object);
+    mock().checkExpectations();
+    MockNoWayToCopyCustomTypeFailure expectedFailure(mockFailureTest(), "MyTypeForTesting");
+    CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 
 TEST(MockSupportTest, noActualCallForOutputParameter)

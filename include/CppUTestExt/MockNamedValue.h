@@ -40,7 +40,7 @@ public:
 
     virtual bool isEqual(const void* object1, const void* object2)=0;
     virtual SimpleString valueToString(const void* object)=0;
-    virtual void* copy(const void*, const void*) { return 0; }
+    virtual bool copy(const void*, const void*) { return false; }
 };
 
 class MockFunctionComparator : public MockNamedValueComparator

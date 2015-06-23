@@ -85,7 +85,11 @@ void MockCheckedActualCall::finalizeOutputParameters(MockCheckedExpectedCall* ex
         MockNamedValue outputParameter = expectedCall->getOutputParameter(*p->name_);
         MockNamedValueComparator* comparator = outputParameter.getComparator();
         if (comparator) {
-            comparator->copy(p->ptr_, expectedCall->getOutputParameter(*p->name_).getObjectPointer());
+            if(!comparator->copy(p->ptr_, expectedCall->getOutputParameter(*p->name_).getObjectPointer())) {
+                SimpleString type = expectedCall->getOutputParameter(*p->name_).getType();
+                MockNoWayToCopyCustomTypeFailure failure(getTest(), type);
+                failTest(failure);
+            }
         }
         else {
             const void* data = expectedCall->getOutputParameter(*p->name_).getConstPointerValue();
