@@ -199,6 +199,11 @@ MockNoWayToCompareCustomTypeFailure::MockNoWayToCompareCustomTypeFailure(UtestSh
     message_ = StringFromFormat("MockFailure: No way to compare type <%s>. Please install a ParameterTypeComparator.", typeName.asCharString());
 }
 
+MockNoWayToCopyCustomTypeFailure::MockNoWayToCopyCustomTypeFailure(UtestShell* test, const SimpleString& typeName) : MockFailure(test)
+{
+    message_ = StringFromFormat("MockFailure: No way to copy type <%s>. Please override the copy() method.", typeName.asCharString());
+}
+
 MockUnexpectedObjectFailure::MockUnexpectedObjectFailure(UtestShell* test, const SimpleString& functionName, void* actual, const MockExpectedCallsList& expectations) : MockFailure(test)
 {
     message_ = StringFromFormat ("MockFailure: Function called on a unexpected object: %s\n"

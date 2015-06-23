@@ -109,6 +109,13 @@ public:
     virtual ~MockNoWayToCompareCustomTypeFailure(){}
 };
 
+class MockNoWayToCopyCustomTypeFailure : public MockFailure
+{
+public:
+    MockNoWayToCopyCustomTypeFailure(UtestShell* test, const SimpleString& typeName);
+    virtual ~MockNoWayToCopyCustomTypeFailure() {}
+};
+
 class MockUnexpectedObjectFailure : public MockFailure
 {
 public:
