@@ -51,11 +51,11 @@ void all_mock_support_c_calls(void)
             withStringParameters("string", "string")->withPointerParameters("pointer", (void*) 1)->
             withConstPointerParameters("constpointer", (const void*) 1);
 
-    mock_c()->installComparator("typeName", typeNameIsEqual, typeNameValueToString);
+    mock_c()->installComparatorHandler("typeName", typeNameIsEqual, typeNameValueToString);
     mock_c()->expectOneCall("boo")->withParameterOfType("typeName", "name", (void*) 1);
     mock_c()->actualCall("boo")->withParameterOfType("typeName", "name", (void*) 1);
     mock_c()->clear();
-    mock_c()->removeAllComparators();
+    mock_c()->removeAllHandlers();
 
     mock_c()->expectOneCall("boo")->andReturnIntValue(10);
     mock_c()->actualCall("boo")->returnValue();

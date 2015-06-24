@@ -131,9 +131,9 @@ struct SMockSupport_c
     void (*clear)(void);
     void (*crashOnFailure)(unsigned shouldCrash);
 
-    void (*installComparator) (const char* typeName, MockTypeEqualFunction_c isEqual, MockTypeValueToStringFunction_c valueToString);
-    void (*installCopier) (const char* typeName, MockTypeCopyFunction_c copy);
-    void (*removeAllComparators)(void);
+    void (*installComparatorHandler) (const char* typeName, MockTypeEqualFunction_c isEqual, MockTypeValueToStringFunction_c valueToString);
+    void (*installCopierHandler) (const char* typeName, MockTypeCopyFunction_c copy);
+    void (*removeAllHandlers)(void);
 };
 
 

@@ -284,8 +284,8 @@ SimpleString MockNamedValue::toString() const
     else if (type_ == "double")
         return StringFrom(value_.doubleValue_);
 
-    if (getComparator())
-        return getComparator()->valueToString(value_.objectPointerValue_);
+    if (comparator_)
+        return comparator_->valueToString(value_.objectPointerValue_);
 
     return StringFromFormat("No comparator found for type: \"%s\"", type_.asCharString());
 

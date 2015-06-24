@@ -131,7 +131,7 @@ TEST_GROUP(MemoryReporterPlugin)
         test = new UtestShell("groupname", "testname", "filename", 1);
         reporter = new MemoryReporterPluginUnderTest;
 
-        mock("formatter").installComparator("TestMemoryAllocator", memLeakAllocatorComparator);
+        mock("formatter").installHandler("TestMemoryAllocator", memLeakAllocatorComparator);
 
         mock("reporter").disable();
         const char *cmd_line[] = {"-pmemoryreport=normal"};

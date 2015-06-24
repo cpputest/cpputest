@@ -67,11 +67,11 @@ extern "C"{
 
 TEST(MockSupport_c, expectAndActualParametersOnObject)
 {
-    mock_c()->installComparator("typeName", typeNameIsEqual, typeNameValueToString);
+    mock_c()->installComparatorHandler("typeName", typeNameIsEqual, typeNameValueToString);
     mock_c()->expectOneCall("boo")->withParameterOfType("typeName", "name", (const void*) 1);
     mock_c()->actualCall("boo")->withParameterOfType("typeName", "name", (const void*) 1);
     mock_c()->checkExpectations();
-    mock_c()->removeAllComparators();
+    mock_c()->removeAllHandlers();
 }
 
 TEST(MockSupport_c, unsignedIntParameter)
@@ -265,11 +265,11 @@ TEST_ORDERED(MockSupport_c, shouldCrashOnFailure, 21)
     UtestShell::setCrashMethod(crashMethod);
     mock_c()->crashOnFailure(true);
     fixture.setTestFunction(failedCallToMockC);
-    
+
     fixture.runAllTests();
 
     CHECK(cpputestHasCrashed);
-    
+
     UtestShell::resetCrashMethod();
     mock_c()->crashOnFailure(false);
 }
@@ -280,7 +280,7 @@ TEST_ORDERED(MockSupport_c, nextTestShouldNotCrashOnFailure, 22)
     TestTestingFixture fixture;
     UtestShell::setCrashMethod(crashMethod);
     fixture.setTestFunction(failedCallToMockC);
-    
+
     fixture.runAllTests();
 
     CHECK_FALSE(cpputestHasCrashed);
@@ -297,9 +297,9 @@ static void failingCallToMockCWithParameterOfType_()
 TEST(MockSupport_c, failureWithParameterOfTypeCoversValueToString)
 {
     TestTestingFixture fixture;
-    mock_c()->installComparator("typeName", typeNameIsEqual, typeNameValueToString);
+    mock_c()->installComparatorHandler("typeName", typeNameIsEqual, typeNameValueToString);
     fixture.setTestFunction(failingCallToMockCWithParameterOfType_);
     fixture.runAllTests();
     fixture.assertPrintContains("typeName name: <valueToString>");
-    mock_c()->removeAllComparators();
+    mock_c()->removeAllHandlers();
 }

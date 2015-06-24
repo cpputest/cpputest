@@ -700,7 +700,7 @@ TEST(MockSupportTest, customObjectParameterSucceeds)
 {
     MyTypeForTesting object(1);
     MyTypeForTestingComparator comparator;
-    mock().installComparator("MyTypeForTesting", comparator);
+    mock().installHandler("MyTypeForTesting", comparator);
     mock().expectOneCall("function").withParameterOfType("MyTypeForTesting", "parameterName", &object);
     mock().actualCall("function").withParameterOfType("MyTypeForTesting", "parameterName", &object);
     mock().checkExpectations();
@@ -725,7 +725,7 @@ TEST(MockSupportTest, customObjectOutputParameterShouldSucceed)
     MyTypeForTesting source(1);
     MyTypeForTesting target(2);
     MyTypeForTestingCopier copier;
-    mock().installCopier("MyTypeForTesting", copier);
+    mock().installHandler("MyTypeForTesting", copier);
     mock().expectOneCall("function").withOutputParameterOfTypeReturning("MyTypeForTesting", "parameterName", &source);
     mock().actualCall("function").withOutputParameterOfType("MyTypeForTesting", "parameterName", &target);
     mock().checkExpectations();
@@ -919,7 +919,7 @@ TEST(MockSupportTest, customObjectWithFunctionComparator)
 {
     MyTypeForTesting object(1);
     MockFunctionComparator comparator(myTypeIsEqual, myTypeValueToString);
-    mock().installComparator("MyTypeForTesting", comparator);
+    mock().installHandler("MyTypeForTesting", comparator);
     mock().expectOneCall("function").withParameterOfType("MyTypeForTesting", "parameterName", &object);
     mock().actualCall("function").withParameterOfType("MyTypeForTesting", "parameterName", &object);
     mock().checkExpectations();
@@ -931,7 +931,7 @@ TEST(MockSupportTest, customObjectWithFunctionComparatorThatFailsCoversValueToSt
 {
     MyTypeForTesting object(5);
     MockFunctionComparator comparator(myTypeIsEqual, myTypeValueToString);
-    mock().installComparator("MyTypeForTesting", comparator);
+    mock().installHandler("MyTypeForTesting", comparator);
     addFunctionToExpectationsList("function")->withParameterOfType("MyTypeForTesting", "parameterName", &object);
     MockExpectedCallsDidntHappenFailure failure(UtestShell::getCurrent(), *expectationsList);
     mock().expectOneCall("function").withParameterOfType("MyTypeForTesting", "parameterName", &object);
@@ -1150,7 +1150,7 @@ TEST(MockSupportTest, installComparatorWorksHierarchicalOnBothExistingAndDynamic
     MyTypeForTestingComparator comparator;
 
     mock("existing");
-    mock().installComparator("MyTypeForTesting", comparator);
+    mock().installHandler("MyTypeForTesting", comparator);
     mock("existing").expectOneCall("function").withParameterOfType("MyTypeForTesting", "parameterName", &object);
     mock("existing").actualCall("function").withParameterOfType("MyTypeForTesting", "parameterName", &object);
     mock("dynamic").expectOneCall("function").withParameterOfType("MyTypeForTesting", "parameterName", &object);
@@ -1183,7 +1183,7 @@ TEST(MockSupportTest, removeComparatorsWorksHierachically)
     MyTypeForTesting object(1);
     MyTypeForTestingComparator comparator;
 
-    mock("scope").installComparator("MyTypeForTesting", comparator);
+    mock("scope").installHandler("MyTypeForTesting", comparator);
     mock().removeAllHandlers();
     mock("scope").expectOneCall("function").withParameterOfType("MyTypeForTesting", "parameterName", &object);
     mock("scope").actualCall("function").withParameterOfType("MyTypeForTesting", "parameterName", &object);
@@ -1744,7 +1744,7 @@ static void functionWithConstParam(const SomeClass param)
 TEST(MockSupportTest, shouldSupportConstParameters)
 {
     StubComparator comparator;
-    mock().installComparator("SomeClass", comparator);
+    mock().installHandler("SomeClass", comparator);
 
     SomeClass param;
     mock().expectOneCall("functionWithConstParam").withParameterOfType("SomeClass", "param", &param);

@@ -79,20 +79,20 @@ void MockSupport::setDefaultHandlerRepository()
     MockNamedValue::setDefaultHandlerRepository(&handlerRepository_);
 }
 
-void MockSupport::installComparator(const SimpleString& typeName, MockNamedValueComparator& comparator)
+void MockSupport::installHandler(const SimpleString& typeName, MockNamedValueComparator& comparator)
 {
     handlerRepository_.installComparator(typeName, comparator);
 
     for (MockNamedValueListNode* p = data_.begin(); p; p = p->next())
-        if (getMockSupport(p)) getMockSupport(p)->installComparator(typeName, comparator);
+        if (getMockSupport(p)) getMockSupport(p)->installHandler(typeName, comparator);
 }
 
-void MockSupport::installCopier(const SimpleString& typeName, MockNamedValueCopier& copier)
+void MockSupport::installHandler(const SimpleString& typeName, MockNamedValueCopier& copier)
 {
     handlerRepository_.installCopier(typeName, copier);
 
     for (MockNamedValueListNode* p = data_.begin(); p; p = p->next())
-        if (getMockSupport(p)) getMockSupport(p)->installCopier(typeName, copier);
+        if (getMockSupport(p)) getMockSupport(p)->installHandler(typeName, copier);
 }
 
 void MockSupport::installHandlers(const MockNamedValueHandlerRepository& repository)

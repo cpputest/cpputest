@@ -105,8 +105,8 @@ public:
     virtual void setActiveReporter(MockFailureReporter* activeReporter);
     virtual void setDefaultHandlerRepository();
 
-    virtual void installComparator(const SimpleString& typeName, MockNamedValueComparator& comparator);
-    virtual void installCopier(const SimpleString& typeName, MockNamedValueCopier& copier);
+    virtual void installHandler(const SimpleString& typeName, MockNamedValueComparator& comparator);
+    virtual void installHandler(const SimpleString& typeName, MockNamedValueCopier& copier);
     virtual void installHandlers(const MockNamedValueHandlerRepository& repository);
     virtual void removeAllHandlers();
 

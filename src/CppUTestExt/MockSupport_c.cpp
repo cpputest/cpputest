@@ -168,13 +168,13 @@ MockValue_c actualReturnValue_c();
 static void installComparator_c (const char* typeName, MockTypeEqualFunction_c isEqual, MockTypeValueToStringFunction_c valueToString)
 {
     comparatorList_ = new MockCFunctionComparatorNode(comparatorList_, isEqual, valueToString);
-    currentMockSupport->installComparator(typeName, *comparatorList_);
+    currentMockSupport->installHandler(typeName, *comparatorList_);
 }
 
 static void installCopier_c (const char* typeName, MockTypeCopyFunction_c copy)
 {
     copierList_ = new MockCFunctionCopierNode(copierList_, copy);
-    currentMockSupport->installCopier(typeName, *copierList_);
+    currentMockSupport->installHandler(typeName, *copierList_);
 }
 
 static void removeAllHandlers_c()

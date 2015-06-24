@@ -76,7 +76,6 @@ TEST_GROUP(EventDispatcher)
     }
 };
 
-
 TEST(EventDispatcher, EventWithoutRegistrationsResultsIntoNoCalls)
 {
     dispatcher->dispatchEvent(event, 10);
