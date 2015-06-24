@@ -96,8 +96,8 @@ public:
 class MockCFunctionCopierNode : public MockNamedValueCopier
 {
 public:
-    MockCFunctionCopierNode(MockCFunctionCopierNode* next, MockTypeCopyFunction_c copy)
-        : next_(next), copy_(copy) {}
+    MockCFunctionCopierNode(MockCFunctionCopierNode* next, MockTypeCopyFunction_c copyFunc)
+        : next_(next), copy_(copyFunc) {}
     virtual ~MockCFunctionCopierNode() {}
 
     virtual void copy(const void* object1, const void* object2) _override
