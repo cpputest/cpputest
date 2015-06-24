@@ -121,7 +121,7 @@ TEST(MockDocumentation, ObjectParameters)
     mock().installComparator("myType", comparator);
     mock().expectOneCall("function").withParameterOfType("myType", "parameterName", object);
     mock().clear();
-    mock().removeAllComparators();
+    mock().removeAllHandlers();
 }
 
 TEST(MockDocumentation, returnValue)

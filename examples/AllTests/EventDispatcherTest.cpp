@@ -72,7 +72,7 @@ TEST_GROUP(EventDispatcher)
     void teardown()
     {
         delete dispatcher;
-        mock().removeAllComparators();
+        mock().removeAllHandlers();
     }
 };
 
