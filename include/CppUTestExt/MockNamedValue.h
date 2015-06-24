@@ -93,7 +93,7 @@ class MockFunctionCopier : public MockNamedValueCopier
 public:
     typedef void (*copyFunction)(const void*, const void*);
 
-    MockFunctionCopier(copyFunction copy) : copy_(copy) {}
+    MockFunctionCopier(copyFunction copyFunc) : copy_(copyFunc) {}
     virtual ~MockFunctionCopier(){}
 
     virtual void copy(const void* object1, const void* object2) _override { copy_(object1, object2); }
