@@ -103,11 +103,12 @@ public:
 
     virtual void setMockFailureStandardReporter(MockFailureReporter* reporter);
     virtual void setActiveReporter(MockFailureReporter* activeReporter);
-    virtual void setDefaultComparatorRepository();
+    virtual void setDefaultHandlerRepository();
 
     virtual void installComparator(const SimpleString& typeName, MockNamedValueComparator& comparator);
-    virtual void installComparators(const MockNamedValueComparatorRepository& repository);
-    virtual void removeAllComparators();
+    virtual void installCopier(const SimpleString& typeName, MockNamedValueCopier& copier);
+    virtual void installHandlers(const MockNamedValueHandlerRepository& repository);
+    virtual void removeAllHandlers();
 
 protected:
     MockSupport* clone();
@@ -127,7 +128,7 @@ private:
     bool enabled_;
     MockCheckedActualCall *lastActualFunctionCall_;
     MockExpectedCallComposite compositeCalls_;
-    MockNamedValueComparatorRepository comparatorRepository_;
+    MockNamedValueHandlerRepository handlerRepository_;
     MockNamedValueList data_;
 
     bool tracing_;

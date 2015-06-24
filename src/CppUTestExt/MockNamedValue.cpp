@@ -27,17 +27,15 @@
 
 #include "CppUTest/TestHarness.h"
 #include "CppUTestExt/MockNamedValue.h"
-#include "CppUTest/PlatformSpecificFunctions.h"
 
+MockNamedValueHandlerRepository* MockNamedValue::defaultRepository_ = NULL;
 
-MockNamedValueComparatorRepository* MockNamedValue::defaultRepository_ = NULL;
-
-void MockNamedValue::setDefaultComparatorRepository(MockNamedValueComparatorRepository* repository)
+void MockNamedValue::setDefaultHandlerRepository(MockNamedValueHandlerRepository* repository)
 {
     defaultRepository_ = repository;
 }
 
-MockNamedValue::MockNamedValue(const SimpleString& name) : name_(name), type_("int"), size_(0), comparator_(NULL)
+MockNamedValue::MockNamedValue(const SimpleString& name) : name_(name), type_("int"), size_(0), handler_(NULL)
 {
     value_.intValue_ = 0;
 }
@@ -99,7 +97,7 @@ void MockNamedValue::setObjectPointer(const SimpleString& type, const void* obje
     type_ = type;
     value_.objectPointerValue_ = objectPtr;
     if (defaultRepository_)
-        comparator_ = defaultRepository_->getComparatorForType(type);
+        handler_ = defaultRepository_->getHandlerForType(type);
 }
 
 void MockNamedValue::setSize(size_t size)
@@ -203,7 +201,12 @@ size_t MockNamedValue::getSize() const
 
 MockNamedValueComparator* MockNamedValue::getComparator() const
 {
-    return comparator_;
+    return handler_ ? handler_->getComparator() : NULL;
+}
+
+MockNamedValueCopier* MockNamedValue::getCopier() const
+{
+    return handler_ ? handler_->getCopier() : NULL;
 }
 
 bool MockNamedValue::equals(const MockNamedValue& p) const
@@ -252,8 +255,8 @@ bool MockNamedValue::equals(const MockNamedValue& p) const
     else if (type_ == "double")
         return (doubles_equal(value_.doubleValue_, p.value_.doubleValue_, 0.005));
 
-    if (comparator_)
-        return comparator_->isEqual(value_.objectPointerValue_, p.value_.objectPointerValue_);
+    if (getComparator())
+        return getComparator()->isEqual(value_.objectPointerValue_, p.value_.objectPointerValue_);
 
     return false;
 }
@@ -277,8 +280,8 @@ SimpleString MockNamedValue::toString() const
     else if (type_ == "double")
         return StringFrom(value_.doubleValue_);
 
-    if (comparator_)
-        return comparator_->valueToString(value_.objectPointerValue_);
+    if (getComparator())
+        return getComparator()->valueToString(value_.objectPointerValue_);
 
     return StringFromFormat("No comparator found for type: \"%s\"", type_.asCharString());
 
@@ -358,49 +361,70 @@ MockNamedValueListNode* MockNamedValueList::begin()
     return head_;
 }
 
-struct MockNamedValueComparatorRepositoryNode
+struct MockNamedValueHandlerRepositoryNode
 {
-    MockNamedValueComparatorRepositoryNode(const SimpleString& name, MockNamedValueComparator& comparator, MockNamedValueComparatorRepositoryNode* next)
-        : name_(name), comparator_(comparator), next_(next) {}
+    MockNamedValueHandlerRepositoryNode(const SimpleString& name, MockNamedValueHandlerRepositoryNode* next)
+        : name_(name), next_(next) {}
     SimpleString name_;
-    MockNamedValueComparator& comparator_;
-    MockNamedValueComparatorRepositoryNode* next_;
+    MockNamedValueHandler handler_;
+    MockNamedValueHandlerRepositoryNode* next_;
 };
 
-MockNamedValueComparatorRepository::MockNamedValueComparatorRepository() : head_(NULL)
+MockNamedValueHandlerRepository::MockNamedValueHandlerRepository() : head_(NULL)
 {
 
 }
 
-MockNamedValueComparatorRepository::~MockNamedValueComparatorRepository()
+MockNamedValueHandlerRepository::~MockNamedValueHandlerRepository()
 {
     clear();
 }
 
-void MockNamedValueComparatorRepository::clear()
+void MockNamedValueHandlerRepository::clear()
 {
     while (head_) {
-        MockNamedValueComparatorRepositoryNode* next = head_->next_;
+        MockNamedValueHandlerRepositoryNode* next = head_->next_;
         delete head_;
         head_ = next;
     }
 }
 
-void MockNamedValueComparatorRepository::installComparator(const SimpleString& name, MockNamedValueComparator& comparator)
+void MockNamedValueHandlerRepository::installHandler(const SimpleString& name, MockNamedValueHandler& handler)
 {
-    head_ = new MockNamedValueComparatorRepositoryNode(name, comparator, head_);
+    MockNamedValueHandler* newHandler = addHandler(name);
+    newHandler->setComparator(handler.getComparator());
+    newHandler->setCopier(handler.getCopier());
 }
 
-MockNamedValueComparator* MockNamedValueComparatorRepository::getComparatorForType(const SimpleString& name)
+MockNamedValueHandler* MockNamedValueHandlerRepository::addHandler(const SimpleString& name)
 {
-    for (MockNamedValueComparatorRepositoryNode* p = head_; p; p = p->next_)
-            if (p->name_ == name) return &p->comparator_;
+    head_ = new MockNamedValueHandlerRepositoryNode(name, head_);
+    return &head_->handler_;
+}
+
+void MockNamedValueHandlerRepository::installComparator(const SimpleString& name, MockNamedValueComparator& comparator)
+{
+    MockNamedValueHandler* handler = getHandlerForType(name);
+    if(handler == NULL) handler = addHandler(name);
+    handler->setComparator(&comparator);
+}
+
+void MockNamedValueHandlerRepository::installCopier(const SimpleString& name, MockNamedValueCopier& copier)
+{
+    MockNamedValueHandler* handler = getHandlerForType(name);
+    if(handler == NULL) handler = addHandler(name);
+    handler->setCopier(&copier);
+}
+
+MockNamedValueHandler* MockNamedValueHandlerRepository::getHandlerForType(const SimpleString& name)
+{
+    for (MockNamedValueHandlerRepositoryNode* p = head_; p; p = p->next_)
+        if (p->name_ == name) return &p->handler_;
     return NULL;
 }
 
-void MockNamedValueComparatorRepository::installComparators(const MockNamedValueComparatorRepository& repository)
+void MockNamedValueHandlerRepository::installHandlers(const MockNamedValueHandlerRepository& repository)
 {
-    for (MockNamedValueComparatorRepositoryNode* p = repository.head_; p; p = p->next_)
-            installComparator(p->name_, p->comparator_);
+    for (MockNamedValueHandlerRepositoryNode* p = repository.head_; p; p = p->next_)
+        installHandler(p->name_, p->handler_);
 }
-

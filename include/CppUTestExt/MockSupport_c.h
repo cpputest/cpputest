@@ -105,6 +105,7 @@ struct SMockExpectedCall_c
 
 typedef int (*MockTypeEqualFunction_c)(const void* object1, const void* object2);
 typedef char* (*MockTypeValueToStringFunction_c)(const void* object1);
+typedef void (*MockTypeCopyFunction_c)(const void* object1, const void* object2);
 
 typedef struct SMockSupport_c MockSupport_c;
 struct SMockSupport_c
@@ -131,6 +132,7 @@ struct SMockSupport_c
     void (*crashOnFailure)(unsigned shouldCrash);
 
     void (*installComparator) (const char* typeName, MockTypeEqualFunction_c isEqual, MockTypeValueToStringFunction_c valueToString);
+    void (*installCopier) (const char* typeName, MockTypeCopyFunction_c copy);
     void (*removeAllComparators)(void);
 };
 

@@ -32,6 +32,26 @@
  * This is needed when comparing values of non-native type.
  */
 
+class MockNamedValueComparator;
+class MockNamedValueCopier;
+
+class MockNamedValueHandler
+{
+public:
+    MockNamedValueHandler() : comparator_(NULL), copier_(NULL) {}
+    MockNamedValueHandler(MockNamedValueComparator* comparator) : comparator_(comparator) {}
+    MockNamedValueHandler(MockNamedValueCopier* copier) : copier_(copier) {}
+    MockNamedValueHandler(MockNamedValueComparator* comparator, MockNamedValueCopier* copier) : comparator_(comparator), copier_(copier) {}
+    void setComparator(MockNamedValueComparator* comparator) { comparator_ = comparator; }
+    void setCopier(MockNamedValueCopier* copier) { copier_ = copier; }
+    MockNamedValueComparator* getComparator() { return comparator_; }
+    MockNamedValueCopier* getCopier() { return copier_; }
+    ~MockNamedValueHandler() {}
+private:
+    MockNamedValueComparator* comparator_;
+    MockNamedValueCopier* copier_;
+};
+
 class MockNamedValueComparator
 {
 public:
@@ -40,6 +60,15 @@ public:
 
     virtual bool isEqual(const void* object1, const void* object2)=0;
     virtual SimpleString valueToString(const void* object)=0;
+};
+
+class MockNamedValueCopier
+{
+public:
+    MockNamedValueCopier() {}
+    virtual ~MockNamedValueCopier() {}
+
+    virtual void copy(const void*, const void*)=0;
 };
 
 class MockFunctionComparator : public MockNamedValueComparator
@@ -59,6 +88,19 @@ private:
     valueToStringFunction valueToString_;
 };
 
+class MockFunctionCopier : public MockNamedValueCopier
+{
+public:
+    typedef void (*copyFunction)(const void*, const void*);
+
+    MockFunctionCopier(copyFunction copy) : copy_(copy) {}
+    virtual ~MockFunctionCopier(){}
+
+    virtual void copy(const void* object1, const void* object2) _override { copy_(object1, object2); }
+private:
+    copyFunction copy_;
+};
+
 /*
  * MockNamedValue is the generic value class used. It encapsulates basic types and can use them "as if one"
  * Also it enables other types by putting object pointers. They can be compared with comparators.
@@ -66,7 +108,7 @@ private:
  * Basically this class ties together a Name, a Value, a Type, and a Comparator
  */
 
-class MockNamedValueComparatorRepository;
+class MockNamedValueHandlerRepository;
 class MockNamedValue
 {
 public:
@@ -105,8 +147,9 @@ public:
     virtual const void* getObjectPointer() const;
     virtual size_t getSize() const;
     virtual MockNamedValueComparator* getComparator() const;
+    virtual MockNamedValueCopier* getCopier() const;
 
-    static void setDefaultComparatorRepository(MockNamedValueComparatorRepository* repository);
+    static void setDefaultHandlerRepository(MockNamedValueHandlerRepository* repository);
 private:
     SimpleString name_;
     SimpleString type_;
@@ -123,8 +166,8 @@ private:
         const void* outputPointerValue_;
     } value_;
     size_t size_;
-    MockNamedValueComparator* comparator_;
-    static MockNamedValueComparatorRepository* defaultRepository_;
+    MockNamedValueHandler* handler_;
+    static MockNamedValueHandlerRepository* defaultRepository_;
 };
 
 class MockNamedValueListNode
@@ -166,19 +209,23 @@ private:
  *
  */
 
-struct MockNamedValueComparatorRepositoryNode;
-class MockNamedValueComparatorRepository
+struct MockNamedValueHandlerRepositoryNode;
+class MockNamedValueHandlerRepository
 {
-    MockNamedValueComparatorRepositoryNode* head_;
+    MockNamedValueHandlerRepositoryNode* head_;
 public:
-    MockNamedValueComparatorRepository();
-    virtual ~MockNamedValueComparatorRepository();
+    MockNamedValueHandlerRepository();
+    virtual ~MockNamedValueHandlerRepository();
 
     virtual void installComparator(const SimpleString& name, MockNamedValueComparator& comparator);
-    virtual void installComparators(const MockNamedValueComparatorRepository& repository);
-    virtual MockNamedValueComparator* getComparatorForType(const SimpleString& name);
+    virtual void installCopier(const SimpleString& name, MockNamedValueCopier& copier);
+    virtual void installHandlers(const MockNamedValueHandlerRepository& repository);
+    virtual MockNamedValueHandler* getHandlerForType(const SimpleString& name);
 
     void clear();
+private:
+    virtual void installHandler(const SimpleString& name, MockNamedValueHandler& handler);
+    MockNamedValueHandler* addHandler(const SimpleString& name);
 };
 
 #endif

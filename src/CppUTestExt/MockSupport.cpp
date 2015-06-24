@@ -39,7 +39,7 @@ MockSupport& mock(const SimpleString& mockName, MockFailureReporter* failureRepo
 {
     MockSupport& mock_support = (mockName != "") ? *global_mock.getMockSupportScope(mockName) : global_mock;
     mock_support.setActiveReporter(failureReporterForThisCall);
-    mock_support.setDefaultComparatorRepository();
+    mock_support.setDefaultHandlerRepository();
     return mock_support;
 }
 
@@ -74,32 +74,40 @@ void MockSupport::setActiveReporter(MockFailureReporter* reporter)
     activeReporter_ = (reporter) ? reporter : standardReporter_;
 }
 
-void MockSupport::setDefaultComparatorRepository()
+void MockSupport::setDefaultHandlerRepository()
 {
-    MockNamedValue::setDefaultComparatorRepository(&comparatorRepository_);
+    MockNamedValue::setDefaultHandlerRepository(&handlerRepository_);
 }
 
 void MockSupport::installComparator(const SimpleString& typeName, MockNamedValueComparator& comparator)
 {
-    comparatorRepository_.installComparator(typeName, comparator);
+    handlerRepository_.installComparator(typeName, comparator);
 
     for (MockNamedValueListNode* p = data_.begin(); p; p = p->next())
         if (getMockSupport(p)) getMockSupport(p)->installComparator(typeName, comparator);
 }
 
-void MockSupport::installComparators(const MockNamedValueComparatorRepository& repository)
+void MockSupport::installCopier(const SimpleString& typeName, MockNamedValueCopier& copier)
 {
-    comparatorRepository_.installComparators(repository);
+    handlerRepository_.installCopier(typeName, copier);
 
     for (MockNamedValueListNode* p = data_.begin(); p; p = p->next())
-        if (getMockSupport(p)) getMockSupport(p)->installComparators(repository);
+        if (getMockSupport(p)) getMockSupport(p)->installCopier(typeName, copier);
 }
 
-void MockSupport::removeAllComparators()
+void MockSupport::installHandlers(const MockNamedValueHandlerRepository& repository)
 {
-    comparatorRepository_.clear();
+    handlerRepository_.installHandlers(repository);
+
     for (MockNamedValueListNode* p = data_.begin(); p; p = p->next())
-        if (getMockSupport(p)) getMockSupport(p)->removeAllComparators();
+        if (getMockSupport(p)) getMockSupport(p)->installHandlers(repository);
+}
+
+void MockSupport::removeAllHandlers()
+{
+    handlerRepository_.clear();
+    for (MockNamedValueListNode* p = data_.begin(); p; p = p->next())
+        if (getMockSupport(p)) getMockSupport(p)->removeAllHandlers();
 }
 
 void MockSupport::clear()
@@ -377,7 +385,7 @@ MockSupport* MockSupport::clone()
     if (strictOrdering_) newMock->strictOrder();
 
     newMock->tracing(tracing_);
-    newMock->installComparators(comparatorRepository_);
+    newMock->installHandlers(handlerRepository_);
     return newMock;
 }
 
