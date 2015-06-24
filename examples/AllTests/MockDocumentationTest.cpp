@@ -118,7 +118,7 @@ TEST(MockDocumentation, ObjectParameters)
 {
     void* object = (void*) 1;
     MyTypeComparator comparator;
-    mock().installComparator("myType", comparator);
+    mock().installHandler("myType", comparator);
     mock().expectOneCall("function").withParameterOfType("myType", "parameterName", object);
     mock().clear();
     mock().removeAllHandlers();
