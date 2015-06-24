@@ -61,10 +61,16 @@ TEST_GROUP(MockNamedValueHandlerRepository)
     }
 };
 
-TEST(MockNamedValueHandlerRepository, getHandlerForNonExistingName)
+TEST(MockNamedValueHandlerRepository, getComparatorForNonExistingName)
 {
     MockNamedValueHandlerRepository repository;
-    POINTERS_EQUAL(NULL, repository.getHandlerForType("typeName"));
+    POINTERS_EQUAL(NULL, repository.getComparatorForType("typeName"));
+}
+
+TEST(MockNamedValueHandlerRepository, getCopierrForNonExistingName)
+{
+    MockNamedValueHandlerRepository repository;
+    POINTERS_EQUAL(NULL, repository.getCopierForType("typeName"));
 }
 
 TEST(MockNamedValueHandlerRepository, installComparator)
@@ -72,7 +78,7 @@ TEST(MockNamedValueHandlerRepository, installComparator)
     TypeForTestingExpectedFunctionCallComparator comparator;
     MockNamedValueHandlerRepository repository;
     repository.installComparator("typeName", comparator);
-    POINTERS_EQUAL(&comparator, repository.getHandlerForType("typeName")->getComparator());
+    POINTERS_EQUAL(&comparator, repository.getComparatorForType("typeName"));
 }
 
 TEST(MockNamedValueHandlerRepository, installMultipleHandlers)
@@ -82,9 +88,9 @@ TEST(MockNamedValueHandlerRepository, installMultipleHandlers)
     repository.installComparator("type1", comparator1);
     repository.installComparator("type2", comparator2);
     repository.installComparator("type3", comparator3);
-    POINTERS_EQUAL(&comparator3, repository.getHandlerForType("type3")->getComparator());
-    POINTERS_EQUAL(&comparator2, repository.getHandlerForType("type2")->getComparator());
-    POINTERS_EQUAL(&comparator1, repository.getHandlerForType("type1")->getComparator());
+    POINTERS_EQUAL(&comparator3, repository.getComparatorForType("type3"));
+    POINTERS_EQUAL(&comparator2, repository.getComparatorForType("type2"));
+    POINTERS_EQUAL(&comparator1, repository.getComparatorForType("type1"));
 }
 
 TEST_GROUP(MockExpectedCall)

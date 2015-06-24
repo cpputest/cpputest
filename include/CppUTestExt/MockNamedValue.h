@@ -32,26 +32,6 @@
  * This is needed when comparing values of non-native type.
  */
 
-class MockNamedValueComparator;
-class MockNamedValueCopier;
-
-class MockNamedValueHandler
-{
-public:
-    MockNamedValueHandler() : comparator_(NULL), copier_(NULL) {}
-    MockNamedValueHandler(MockNamedValueComparator* comparator) : comparator_(comparator) {}
-    MockNamedValueHandler(MockNamedValueCopier* copier) : copier_(copier) {}
-    MockNamedValueHandler(MockNamedValueComparator* comparator, MockNamedValueCopier* copier) : comparator_(comparator), copier_(copier) {}
-    void setComparator(MockNamedValueComparator* comparator) { comparator_ = comparator; }
-    void setCopier(MockNamedValueCopier* copier) { copier_ = copier; }
-    MockNamedValueComparator* getComparator() { return comparator_; }
-    MockNamedValueCopier* getCopier() { return copier_; }
-    ~MockNamedValueHandler() {}
-private:
-    MockNamedValueComparator* comparator_;
-    MockNamedValueCopier* copier_;
-};
-
 class MockNamedValueComparator
 {
 public:
@@ -166,7 +146,8 @@ private:
         const void* outputPointerValue_;
     } value_;
     size_t size_;
-    MockNamedValueHandler* handler_;
+    MockNamedValueComparator* comparator_;
+    MockNamedValueCopier* copier_;
     static MockNamedValueHandlerRepository* defaultRepository_;
 };
 
@@ -220,12 +201,13 @@ public:
     virtual void installComparator(const SimpleString& name, MockNamedValueComparator& comparator);
     virtual void installCopier(const SimpleString& name, MockNamedValueCopier& copier);
     virtual void installHandlers(const MockNamedValueHandlerRepository& repository);
-    virtual MockNamedValueHandler* getHandlerForType(const SimpleString& name);
+    virtual MockNamedValueComparator* getComparatorForType(const SimpleString& name);
+    virtual MockNamedValueCopier* getCopierForType(const SimpleString& name);
 
     void clear();
 private:
-    virtual void installHandler(const SimpleString& name, MockNamedValueHandler& handler);
-    MockNamedValueHandler* addHandler(const SimpleString& name);
+    MockNamedValueHandlerRepositoryNode* getNodeForType(const SimpleString& name);
+    MockNamedValueHandlerRepositoryNode* insertNodeTorType(const SimpleString& name);
 };
 
 #endif
