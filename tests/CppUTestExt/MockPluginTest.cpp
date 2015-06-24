@@ -128,9 +128,9 @@ TEST(MockPlugin, preTestActionWillEnableMultipleComparatorsToTheGlobalMockSuppor
 
     plugin->preTestAction(*test, *result);
     mock().expectOneCall("foo").withParameterOfType("myType", "name", &comparator);
-    mock().expectOneCall("foo").withParameterOfType("myOtherType", "name", &comparator2);
+    mock().expectOneCall("foo").withParameterOfType("myOtherType", "name", &comparator);
     mock().actualCall("foo").withParameterOfType("myType", "name", &comparator);
-    mock().actualCall("foo").withParameterOfType("myOtherType", "name", &comparator2);
+    mock().actualCall("foo").withParameterOfType("myOtherType", "name", &comparator);
 
     mock().checkExpectations();
     CHECK_NO_MOCK_FAILURE();
