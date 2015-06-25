@@ -80,3 +80,7 @@ void MockSupportPlugin::installComparator(const SimpleString& name, MockNamedVal
     repository_.installComparator(name, comparator);
 }
 
+void MockSupportPlugin::installCopier(const SimpleString& name, MockNamedValueCopier& copier)
+{
+    repository_.installCopier(name, copier);
+}

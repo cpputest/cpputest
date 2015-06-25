@@ -82,17 +82,23 @@ void MockCheckedActualCall::finalizeOutputParameters(MockCheckedExpectedCall* ex
 {
     for (MockOutputParametersListNode* p = outputParameterExpectations_; p; p = p->next_)
     {
-        MockNamedValue outputParameter = expectedCall->getOutputParameter(*p->name_);
+        MockNamedValue outputParameter = expectedCall->getOutputParameter(p->name_);
         MockNamedValueCopier* copier = outputParameter.getCopier();
         if (copier)
         {
             copier->copy(p->ptr_, outputParameter.getObjectPointer());
         }
-        else
+        else if ((outputParameter.getType() == "const void*") && (p->type_ == "void*"))
         {
             const void* data = outputParameter.getConstPointerValue();
             size_t size = outputParameter.getSize();
             PlatformSpecificMemCpy(p->ptr_, data, size);
+        }
+        else
+        {
+            SimpleString type = expectedCall->getOutputParameter(p->name_).getType();
+            MockNoWayToCopyCustomTypeFailure failure(getTest(), type);
+            failTest(failure);
         }
     }
 }
@@ -247,7 +253,7 @@ MockActualCall& MockCheckedActualCall::withParameterOfType(const SimpleString& t
 
 MockActualCall& MockCheckedActualCall::withOutputParameter(const SimpleString& name, void* output)
 {
-    addOutputParameter(name, output);
+    addOutputParameter(name, "void*", output);
 
     MockNamedValue outputParameter(name);
     outputParameter.setValue(output);
@@ -258,7 +264,7 @@ MockActualCall& MockCheckedActualCall::withOutputParameter(const SimpleString& n
 
 MockActualCall& MockCheckedActualCall::withOutputParameterOfType(const SimpleString& type, const SimpleString& name, void* output)
 {
-    addOutputParameter(name, output);
+    addOutputParameter(name, type, output);
 
     MockNamedValue outputParameter(name);
     outputParameter.setObjectPointer(type, output);
@@ -438,10 +444,9 @@ MockActualCall& MockCheckedActualCall::onObject(void* objectPtr)
     return *this;
 }
 
-void MockCheckedActualCall::addOutputParameter(const SimpleString& name, void* ptr)
+void MockCheckedActualCall::addOutputParameter(const SimpleString& name, const SimpleString& type, void* ptr)
 {
-    SimpleString* nameCopy = new SimpleString(name);
-    MockOutputParametersListNode* newNode = new MockOutputParametersListNode(nameCopy, ptr);
+    MockOutputParametersListNode* newNode = new MockOutputParametersListNode(name, type, ptr);
 
     if (outputParameterExpectations_ == NULL)
         outputParameterExpectations_ = newNode;
@@ -460,7 +465,6 @@ void MockCheckedActualCall::cleanUpOutputParameterList()
     while (current) {
         toBeDeleted = current;
         outputParameterExpectations_ = current = current->next_;
-        delete toBeDeleted->name_;
         delete toBeDeleted;
     }
 }

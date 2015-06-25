@@ -118,17 +118,18 @@ private:
     class MockOutputParametersListNode
     {
     public:
-        SimpleString* name_;
+        SimpleString name_;
+        SimpleString type_;
         void* ptr_;
 
         MockOutputParametersListNode* next_;
-        MockOutputParametersListNode(SimpleString* name, void* ptr)
-            : name_(name), ptr_(ptr), next_(NULL) {}
+        MockOutputParametersListNode(const SimpleString& name, const SimpleString& type, void* ptr)
+            : name_(name), type_(type), ptr_(ptr), next_(NULL) {}
     };
 
     MockOutputParametersListNode* outputParameterExpectations_;
 
-    virtual void addOutputParameter(const SimpleString& name, void* ptr);
+    virtual void addOutputParameter(const SimpleString& name, const SimpleString& type, void* ptr);
     virtual void cleanUpOutputParameterList();
 };
 

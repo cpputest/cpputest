@@ -694,6 +694,16 @@ TEST(MockSupportTest, customObjectParameterFailsWhenNotHavingAComparisonReposito
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 
+TEST(MockSupportTest, customObjectParameterFailsWhenNotHavingACopierRepository)
+{
+    MyTypeForTesting object(1);
+    mock().expectOneCall("function").withOutputParameterOfTypeReturning("MyTypeForTesting", "parameterName", &object);
+    mock().actualCall("function").withOutputParameterOfType("MyTypeForTesting", "parameterName", &object);
+
+    MockNoWayToCopyCustomTypeFailure expectedFailure(mockFailureTest(), "MyTypeForTesting");
+    CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
 TEST(MockSupportTest, customObjectParameterSucceeds)
 {
     MyTypeForTesting object(1);
@@ -1516,6 +1526,20 @@ TEST(MockSupportTest, removeComparatorsWorksHierachically)
     mock("scope").actualCall("function").withParameterOfType("MyTypeForTesting", "parameterName", &object);
 
     MockNoWayToCompareCustomTypeFailure expectedFailure(mockFailureTest(), "MyTypeForTesting");
+    CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
+TEST(MockSupportTest, removeCopiersWorksHierachically)
+{
+    MyTypeForTesting object(1);
+    MyTypeForTestingCopier copier;
+
+    mock("scope").installCopier("MyTypeForTesting", copier);
+    mock().removeAllCopiers();
+    mock("scope").expectOneCall("function").withOutputParameterOfTypeReturning("MyTypeForTesting", "parameterName", &object);
+    mock("scope").actualCall("function").withOutputParameterOfType("MyTypeForTesting", "parameterName", &object);
+
+    MockNoWayToCopyCustomTypeFailure expectedFailure(mockFailureTest(), "MyTypeForTesting");
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 
