@@ -57,12 +57,12 @@ MockSupportPlugin::MockSupportPlugin(const SimpleString& name)
 
 MockSupportPlugin::~MockSupportPlugin()
 {
-    repository_.clear();
+    repository_.clearAll();
 }
 
 void MockSupportPlugin::preTestAction(UtestShell&, TestResult&)
 {
-    mock().installComparators(repository_);
+    mock().installHandlers(repository_);
 }
 
 void MockSupportPlugin::postTestAction(UtestShell& test, TestResult& result)

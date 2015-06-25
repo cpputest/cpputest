@@ -829,7 +829,6 @@ TEST(MockSupportTest, twoOutputParametersOfSameNameInDifferentFunctionsSucceeds)
     mock().expectOneCall("foo2").withIntParameter("bar", 25);
     mock().actualCall("foo1").withOutputParameter("bar", &param);
     mock().actualCall("foo2").withIntParameter("bar", 25);
-    MyTypeForTestingComparator comparator;
     CHECK_EQUAL(2, retval);
     CHECK_EQUAL(2, param);
     mock().checkExpectations();
@@ -844,6 +843,7 @@ TEST(MockSupportTest, outputAndInputParameter)
     mock().actualCall("foo").withParameter("bar", 10).withOutputParameter("bar", &returned_value);
 
     LONGS_EQUAL(5, returned_value);
+    mock().checkExpectations();
     CHECK_NO_MOCK_FAILURE();
 }
 
@@ -901,6 +901,391 @@ TEST(MockSupportTest, customObjectWithFunctionComparatorThatFailsCoversValueToSt
     mock().checkExpectations();
     CHECK_EXPECTED_MOCK_FAILURE_LOCATION(failure, __FILE__, __LINE__);
 }
+
+
+class MyTypeForOutputCopyTesting
+{
+public:
+    MyTypeForOutputCopyTesting(int val)
+    {
+        value = new int(val);
+    }
+    virtual ~MyTypeForOutputCopyTesting()
+    {
+        delete value;
+    }
+    int *value;
+};
+
+class MyTypeForOutputCopyTestingCopier : public MockNamedValueCopier
+{
+public:
+    virtual void copy(void* dst_, const void* src_)
+    {
+        MyTypeForOutputCopyTesting* dst = (MyTypeForOutputCopyTesting*) dst_;
+        const MyTypeForOutputCopyTesting* src = (const MyTypeForOutputCopyTesting*) src_;
+        *(dst->value) = *(src->value);
+    }
+};
+
+class MyTypeForOutputCopyTestingComparator : public MockNamedValueComparator
+{
+public:
+    virtual bool isEqual(const void* object1, const void* object2)
+    {
+        const MyTypeForOutputCopyTesting* obj1 = (const MyTypeForOutputCopyTesting*) object1;
+        const MyTypeForOutputCopyTesting* obj2 = (const MyTypeForOutputCopyTesting*) object2;
+        return *(obj1->value) == *(obj2->value);
+    }
+    virtual SimpleString valueToString(const void* object)
+    {
+        const MyTypeForOutputCopyTesting* obj = (const MyTypeForOutputCopyTesting*) object;
+        return StringFrom(*(obj->value));
+    }
+};
+
+
+TEST(MockSupportTest, outputParameterOfTypeSucceeds)
+{
+    // Prepare
+    MyTypeForOutputCopyTesting expectedObject(55);
+    MyTypeForOutputCopyTesting actualObject(99);
+    MyTypeForOutputCopyTestingCopier copier;
+    mock().installCopier("MyTypeForOutputCopyTesting", copier);
+
+    // Exercise
+    mock().expectOneCall("function").withOutputParameterOfTypeReturning("MyTypeForOutputCopyTesting", "parameterName", &expectedObject);
+    mock().actualCall("function").withOutputParameterOfType("MyTypeForOutputCopyTesting", "parameterName", &actualObject);
+    mock().checkExpectations();
+
+    // Verify
+    CHECK_EQUAL(55, *(expectedObject.value));
+    CHECK_EQUAL(55, *(actualObject.value));
+    CHECK_NO_MOCK_FAILURE();
+
+    // Cleanup
+    mock().removeAllCopiers();
+}
+
+TEST(MockSupportTest, noActualCallForOutputParameterOfType)
+{
+    // Prepare
+    MyTypeForOutputCopyTesting expectedObject(1);
+    MyTypeForOutputCopyTestingCopier copier;
+    mock().installCopier("MyTypeForOutputCopyTesting", copier);
+
+    addFunctionToExpectationsList("foo")->withOutputParameterOfTypeReturning("MyTypeForOutputCopyTesting", "output", &expectedObject);
+    MockExpectedCallsDidntHappenFailure expectedFailure(mockFailureTest(), *expectationsList);
+
+    // Exercise
+    mock().expectOneCall("foo").withOutputParameterOfTypeReturning("MyTypeForOutputCopyTesting", "output", &expectedObject);
+    mock().checkExpectations();
+
+    // Verify
+    CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+
+    // Cleanup
+    mock().removeAllCopiers();
+}
+
+TEST(MockSupportTest, unexpectedOutputParameterOfType)
+{
+    // Prepare
+    MyTypeForOutputCopyTesting actualObject(8834);
+    MyTypeForOutputCopyTestingCopier copier;
+    mock().installCopier("MyTypeForOutputCopyTesting", copier);
+
+    addFunctionToExpectationsList("foo")->callWasMade(1);
+    MockNamedValue parameter("parameterName");
+    parameter.setObjectPointer("MyTypeForOutputCopyTesting", &actualObject);
+    MockUnexpectedOutputParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, *expectationsList);
+
+    // Exercise
+    mock().expectOneCall("foo");
+    mock().actualCall("foo").withOutputParameterOfType("MyTypeForOutputCopyTesting", "parameterName", &actualObject);
+    mock().checkExpectations();
+
+    // Verify
+    CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+
+    // Cleanup
+    mock().removeAllCopiers();
+}
+
+TEST(MockSupportTest, outputParameterOfTypeMissing)
+{
+    // Prepare
+    MyTypeForOutputCopyTesting expectedObject(123464);
+    MyTypeForOutputCopyTestingCopier copier;
+    mock().installCopier("MyTypeForOutputCopyTesting", copier);
+
+    addFunctionToExpectationsList("foo")->withOutputParameterOfTypeReturning("MyTypeForOutputCopyTesting", "output", &expectedObject);
+    MockExpectedParameterDidntHappenFailure expectedFailure(mockFailureTest(), "foo", *expectationsList);
+
+    // Exercise
+    mock().expectOneCall("foo").withOutputParameterOfTypeReturning("MyTypeForOutputCopyTesting", "output", &expectedObject);
+    mock().actualCall("foo");
+    mock().checkExpectations();
+
+    // Verify
+    CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+
+    // Cleanup
+    mock().removeAllCopiers();
+}
+
+TEST(MockSupportTest, twoOutputParametersOfType)
+{
+    // Prepare
+    MyTypeForOutputCopyTesting expectedObject1(545);
+    MyTypeForOutputCopyTesting actualObject1(979);
+    MyTypeForOutputCopyTesting expectedObject2(123);
+    MyTypeForOutputCopyTesting actualObject2(4567);
+    MyTypeForOutputCopyTestingCopier copier;
+    mock().installCopier("MyTypeForOutputCopyTesting", copier);
+
+    // Exercise
+    mock().expectOneCall("function").withOutputParameterOfTypeReturning("MyTypeForOutputCopyTesting", "parameterName", &expectedObject1).withParameter("id", 1);
+    mock().expectOneCall("function").withOutputParameterOfTypeReturning("MyTypeForOutputCopyTesting", "parameterName", &expectedObject2).withParameter("id", 2);
+    mock().actualCall("function").withOutputParameterOfType("MyTypeForOutputCopyTesting", "parameterName", &actualObject1).withParameter("id", 1);
+    mock().actualCall("function").withOutputParameterOfType("MyTypeForOutputCopyTesting", "parameterName", &actualObject2).withParameter("id", 2);
+    mock().checkExpectations();
+
+    // Verify
+    CHECK_EQUAL(545, *(expectedObject1.value));
+    CHECK_EQUAL(545, *(actualObject1.value));
+    CHECK_EQUAL(123, *(expectedObject2.value));
+    CHECK_EQUAL(123, *(actualObject2.value));
+    CHECK_NO_MOCK_FAILURE();
+
+    // Cleanup
+    mock().removeAllCopiers();
+}
+
+TEST(MockSupportTest, twoInterleavedOutputParametersOfType)
+{
+    // Prepare
+    MyTypeForOutputCopyTesting expectedObject1(9545);
+    MyTypeForOutputCopyTesting actualObject1(79);
+    MyTypeForOutputCopyTesting expectedObject2(132);
+    MyTypeForOutputCopyTesting actualObject2(743);
+    MyTypeForOutputCopyTestingCopier copier;
+
+    // Exercise
+    mock().installCopier("MyTypeForOutputCopyTesting", copier);
+    mock().expectOneCall("function").withOutputParameterOfTypeReturning("MyTypeForOutputCopyTesting", "parameterName", &expectedObject1).withParameter("id", 1);
+    mock().expectOneCall("function").withOutputParameterOfTypeReturning("MyTypeForOutputCopyTesting", "parameterName", &expectedObject2).withParameter("id", 2);
+    mock().actualCall("function").withOutputParameterOfType("MyTypeForOutputCopyTesting", "parameterName", &actualObject2).withParameter("id", 2);
+    mock().actualCall("function").withOutputParameterOfType("MyTypeForOutputCopyTesting", "parameterName", &actualObject1).withParameter("id", 1);
+    mock().checkExpectations();
+
+    // Verify
+    CHECK_EQUAL(9545, *(expectedObject1.value));
+    CHECK_EQUAL(9545, *(actualObject1.value));
+    CHECK_EQUAL(132, *(expectedObject2.value));
+    CHECK_EQUAL(132, *(actualObject2.value));
+    CHECK_NO_MOCK_FAILURE();
+
+    // Cleanup
+    mock().removeAllCopiers();
+}
+
+TEST(MockSupportTest, twoDifferentOutputParametersOfTypeInSameFunctionCallSucceeds)
+{
+    // Prepare
+    MyTypeForOutputCopyTesting expectedObject1(11);
+    MyTypeForOutputCopyTesting actualObject1(22);
+    MyTypeForOutputCopyTesting expectedObject2(33);
+    MyTypeForOutputCopyTesting actualObject2(44);
+    MyTypeForOutputCopyTestingCopier copier;
+    mock().installCopier("MyTypeForOutputCopyTesting", copier);
+
+    // Exercise
+    mock().expectOneCall("foo")
+        .withOutputParameterOfTypeReturning("MyTypeForOutputCopyTesting", "bar", &expectedObject1)
+        .withOutputParameterOfTypeReturning("MyTypeForOutputCopyTesting", "foobar", &expectedObject2);
+    mock().actualCall("foo")
+        .withOutputParameterOfType("MyTypeForOutputCopyTesting", "bar", &actualObject1)
+        .withOutputParameterOfType("MyTypeForOutputCopyTesting", "foobar", &actualObject2);
+    mock().checkExpectations();
+
+    // Verify
+    CHECK_EQUAL(11, *(expectedObject1.value));
+    CHECK_EQUAL(11, *(actualObject1.value));
+    CHECK_EQUAL(33, *(expectedObject2.value));
+    CHECK_EQUAL(33, *(actualObject2.value));
+    CHECK_NO_MOCK_FAILURE();
+
+    // Cleanup
+    mock().removeAllCopiers();
+}
+
+TEST(MockSupportTest, outputAndIntParametersOfTypeOfSameNameInDifferentFunctionCallsOfSameFunctionSucceeds)
+{
+    // Prepare
+    MyTypeForOutputCopyTesting expectedObject1(911);
+    MyTypeForOutputCopyTesting actualObject1(6576878);
+    MyTypeForOutputCopyTesting expectedObject2(123);
+    MyTypeForOutputCopyTesting actualObject2(123);
+    MyTypeForOutputCopyTestingCopier copier;
+    MyTypeForOutputCopyTestingComparator comparator;
+    mock().installCopier("MyTypeForOutputCopyTesting", copier);
+    mock().installComparator("MyTypeForOutputCopyTesting", comparator);
+
+    // Exercise
+    mock().expectOneCall("foo").withOutputParameterOfTypeReturning("MyTypeForOutputCopyTesting", "bar", &expectedObject1);
+    mock().expectOneCall("foo").withParameterOfType("MyTypeForOutputCopyTesting", "bar", &expectedObject2);
+    mock().actualCall("foo").withOutputParameterOfType("MyTypeForOutputCopyTesting", "bar", &actualObject1);
+    mock().actualCall("foo").withParameterOfType("MyTypeForOutputCopyTesting", "bar", &actualObject2);
+    mock().checkExpectations();
+
+    // Verify
+    CHECK_EQUAL(911, *(expectedObject1.value));
+    CHECK_EQUAL(911, *(actualObject1.value));
+    CHECK_EQUAL(123, *(expectedObject2.value));
+    CHECK_EQUAL(123, *(actualObject2.value));
+    CHECK_NO_MOCK_FAILURE();
+
+    // Cleanup
+    mock().removeAllCopiers();
+    mock().removeAllComparators();
+}
+
+TEST(MockSupportTest, twoOutputParametersOfTypeOfSameNameInDifferentFunctionsSucceeds)
+{
+    // Prepare
+    MyTypeForOutputCopyTesting expectedObject1(657);
+    MyTypeForOutputCopyTesting actualObject1(984465);
+    MyTypeForOutputCopyTesting expectedObject2(987);
+    MyTypeForOutputCopyTesting actualObject2(987);
+    MyTypeForOutputCopyTestingCopier copier;
+    MyTypeForOutputCopyTestingComparator comparator;
+    mock().installCopier("MyTypeForOutputCopyTesting", copier);
+    mock().installComparator("MyTypeForOutputCopyTesting", comparator);
+
+    // Exercise
+    mock().expectOneCall("foo1").withOutputParameterOfTypeReturning("MyTypeForOutputCopyTesting", "bar", &expectedObject1);
+    mock().expectOneCall("foo2").withParameterOfType("MyTypeForOutputCopyTesting", "bar", &expectedObject2);
+    mock().actualCall("foo1").withOutputParameterOfType("MyTypeForOutputCopyTesting", "bar", &actualObject1);
+    mock().actualCall("foo2").withParameterOfType("MyTypeForOutputCopyTesting", "bar", &actualObject2);
+    mock().checkExpectations();
+
+    // Verify
+    CHECK_EQUAL(657, *(expectedObject1.value));
+    CHECK_EQUAL(657, *(actualObject1.value));
+    CHECK_EQUAL(987, *(expectedObject2.value));
+    CHECK_EQUAL(987, *(actualObject2.value));
+    CHECK_NO_MOCK_FAILURE();
+
+    // Cleanup
+    mock().removeAllCopiers();
+    mock().removeAllComparators();
+}
+
+TEST(MockSupportTest, outputAndInputParameterOfType)
+{
+    // Prepare
+    MyTypeForOutputCopyTesting expectedObject1(45);
+    MyTypeForOutputCopyTesting actualObject1(45);
+    MyTypeForOutputCopyTesting expectedObject2(987765443);
+    MyTypeForOutputCopyTesting actualObject2(0);
+    MyTypeForOutputCopyTestingCopier copier;
+    MyTypeForOutputCopyTestingComparator comparator;
+    mock().installCopier("MyTypeForOutputCopyTesting", copier);
+    mock().installComparator("MyTypeForOutputCopyTesting", comparator);
+
+    // Exercise
+    mock().expectOneCall("foo")
+          .withParameterOfType("MyTypeForOutputCopyTesting", "bar", &expectedObject1)
+          .withOutputParameterOfTypeReturning("MyTypeForOutputCopyTesting", "bar", &expectedObject2);
+    mock().actualCall("foo")
+          .withParameterOfType("MyTypeForOutputCopyTesting", "bar", &actualObject1)
+          .withOutputParameterOfType("MyTypeForOutputCopyTesting", "bar", &actualObject2);
+    mock().checkExpectations();
+
+    // Verify
+    CHECK_EQUAL(45, *(expectedObject1.value));
+    CHECK_EQUAL(45, *(actualObject1.value));
+    CHECK_EQUAL(987765443, *(expectedObject2.value));
+    CHECK_EQUAL(987765443, *(actualObject2.value));
+    CHECK_NO_MOCK_FAILURE();
+
+    // Cleanup
+    mock().removeAllCopiers();
+    mock().removeAllComparators();
+}
+
+TEST(MockSupportTest, outputParameterOfTypeTraced)
+{
+    // Prepare
+    MyTypeForOutputCopyTesting actualObject(676789);
+    MyTypeForOutputCopyTestingCopier copier;
+    mock().installCopier("MyTypeForOutputCopyTesting", copier);
+    mock().tracing(true);
+
+    // Exercise
+    mock().actualCall("someFunc").withOutputParameterOfType("MyTypeForOutputCopyTesting", "someParameter", &actualObject);
+    mock().checkExpectations();
+
+    // Verify
+    STRCMP_CONTAINS("Function name:someFunc MyTypeForOutputCopyTesting someParameter:", mock().getTraceOutput());
+    CHECK_NO_MOCK_FAILURE();
+
+    // Cleanup
+    mock().removeAllCopiers();
+}
+
+TEST(MockSupportTest, outputParameterOfTypeWithIgnoredParameters)
+{
+    // Prepare
+    MyTypeForOutputCopyTesting expectedObject(444537909);
+    MyTypeForOutputCopyTesting actualObject(98765);
+    MyTypeForOutputCopyTestingCopier copier;
+    mock().installCopier("MyTypeForOutputCopyTesting", copier);
+
+    // Exercise
+    mock().expectOneCall("foo").withOutputParameterOfTypeReturning("MyTypeForOutputCopyTesting", "bar", &expectedObject).ignoreOtherParameters();
+    mock().actualCall("foo").withOutputParameterOfType("MyTypeForOutputCopyTesting", "bar", &actualObject).withParameter("other", 1);
+    mock().checkExpectations();
+
+    // Verify
+    CHECK_EQUAL(444537909, *(expectedObject.value));
+    CHECK_EQUAL(444537909, *(actualObject.value));
+    CHECK_NO_MOCK_FAILURE();
+
+    // Cleanup
+    mock().removeAllCopiers();
+}
+
+static void myTypeForOutputTestingCopy(void* dst_, const void* src_)
+{
+    MyTypeForOutputCopyTesting* dst = (MyTypeForOutputCopyTesting*) dst_;
+    const MyTypeForOutputCopyTesting* src = (const MyTypeForOutputCopyTesting*) src_;
+    *(dst->value) = *(src->value);
+}
+
+TEST(MockSupportTest, customObjectWithFunctionCopier)
+{
+    // Prepare
+    MyTypeForOutputCopyTesting expectedObject(9874452);
+    MyTypeForOutputCopyTesting actualObject(2034);
+    MockFunctionCopier copier(myTypeForOutputTestingCopy);
+    mock().installCopier("MyTypeForOutputCopyTesting", copier);
+
+    // Exercise
+    mock().expectOneCall("function").withOutputParameterOfTypeReturning("MyTypeForOutputCopyTesting", "parameterName", &expectedObject);
+    mock().actualCall("function").withOutputParameterOfType("MyTypeForOutputCopyTesting", "parameterName", &actualObject);
+    mock().checkExpectations();
+
+    // Verify
+    CHECK_EQUAL(9874452, *(expectedObject.value));
+    CHECK_EQUAL(9874452, *(actualObject.value));
+    CHECK_NO_MOCK_FAILURE();
+
+    // Cleanup
+    mock().removeAllCopiers();
+}
+
 
 TEST(MockSupportTest, disableEnable)
 {
@@ -1128,11 +1513,11 @@ TEST(MockSupportTest, installComparatorsWorksHierarchical)
 {
     MyTypeForTesting object(1);
     MyTypeForTestingComparator comparator;
-    MockNamedValueComparatorRepository repos;
+    MockNamedValueHandlerRepository repos;
     repos.installComparator("MyTypeForTesting", comparator);
 
     mock("existing");
-    mock().installComparators(repos);
+    mock().installHandlers(repos);
     mock("existing").expectOneCall("function").withParameterOfType("MyTypeForTesting", "parameterName", &object);
     mock("existing").actualCall("function").withParameterOfType("MyTypeForTesting", "parameterName", &object);
 
