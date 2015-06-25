@@ -174,6 +174,12 @@ bool MockCheckedExpectedCall::hasInputParameterWithName(const SimpleString& name
     return p != NULL;
 }
 
+bool MockCheckedExpectedCall::hasOutputParameterWithName(const SimpleString& name)
+{
+    MockNamedValue * p = outputParameters_->getValueByName(name);
+    return p != NULL;
+}
+
 MockNamedValue MockCheckedExpectedCall::getInputParameter(const SimpleString& name)
 {
     MockNamedValue * p = inputParameters_->getValueByName(name);
@@ -287,7 +293,7 @@ bool MockCheckedExpectedCall::hasInputParameter(const MockNamedValue& parameter)
 bool MockCheckedExpectedCall::hasOutputParameter(const MockNamedValue& parameter)
 {
     MockNamedValue * p = outputParameters_->getValueByName(parameter.getName());
-    return (p) ? true : ignoreOtherParameters_;
+    return (p) ? p->compatibleForCopying(parameter) : ignoreOtherParameters_;
 }
 
 SimpleString MockCheckedExpectedCall::callToString()

@@ -266,6 +266,16 @@ bool MockNamedValue::equals(const MockNamedValue& p) const
     return false;
 }
 
+bool MockNamedValue::compatibleForCopying(const MockNamedValue& p) const
+{
+    if (type_ == p.type_) return true;
+
+    if ((type_ == "const void*") && (p.type_ == "void*"))
+        return true;
+
+    return false;
+}
+
 SimpleString MockNamedValue::toString() const
 {
     if (type_ == "int")

@@ -73,6 +73,7 @@ public:
 
     virtual bool hasInputParameterWithName(const SimpleString& name);
     virtual bool hasInputParameter(const MockNamedValue& parameter);
+    virtual bool hasOutputParameterWithName(const SimpleString& name);
     virtual bool hasOutputParameter(const MockNamedValue& parameter);
     virtual bool relatesTo(const SimpleString& functionName);
     virtual bool relatesToObject(void*objectPtr) const;

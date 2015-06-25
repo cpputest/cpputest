@@ -116,6 +116,7 @@ public:
     virtual void setName(const char* name);
 
     virtual bool equals(const MockNamedValue& p) const;
+    virtual bool compatibleForCopying(const MockNamedValue& p) const;
 
     virtual SimpleString toString() const;
 

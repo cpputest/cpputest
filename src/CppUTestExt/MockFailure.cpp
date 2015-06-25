@@ -160,10 +160,22 @@ MockUnexpectedInputParameterFailure::MockUnexpectedInputParameterFailure(UtestSh
 
 MockUnexpectedOutputParameterFailure::MockUnexpectedOutputParameterFailure(UtestShell* test, const SimpleString& functionName, const MockNamedValue& parameter, const MockExpectedCallsList& expectations)  : MockFailure(test)
 {
-    message_ = "Mock Failure: Unexpected output parameter name to function \"";
-    message_ += functionName;
-    message_ += "\": ";
-    message_ += parameter.getName();
+    MockExpectedCallsList expectationsForFunctionWithParameterName;
+    expectationsForFunctionWithParameterName.addExpectationsRelatedTo(functionName, expectations);
+    expectationsForFunctionWithParameterName.onlyKeepExpectationsWithOutputParameterName(parameter.getName());
+
+    if (expectationsForFunctionWithParameterName.isEmpty()) {
+        message_ = "Mock Failure: Unexpected output parameter name to function \"";
+        message_ += functionName;
+        message_ += "\": ";
+        message_ += parameter.getName();
+    }
+    else {
+        message_ = "Mock Failure: Unexpected parameter type to parameter \"";
+        message_ += parameter.getName();
+        message_ += "\" to function \"";
+        message_ += functionName;
+    }
 
     message_ += "\n";
     addExpectationsAndCallHistoryRelatedTo(functionName, expectations);
