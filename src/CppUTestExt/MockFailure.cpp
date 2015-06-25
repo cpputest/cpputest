@@ -171,12 +171,13 @@ MockUnexpectedOutputParameterFailure::MockUnexpectedOutputParameterFailure(Utest
         message_ += parameter.getName();
     }
     else {
-        message_ = "Mock Failure: Unexpected parameter type to parameter \"";
+        message_ = "Mock Failure: Unexpected parameter type \"";
+        message_ += parameter.getType();
+        message_ += "\" to output parameter \"";
         message_ += parameter.getName();
         message_ += "\" to function \"";
         message_ += functionName;
-        message_ += "\": ";
-        message_ += parameter.getType();
+        message_ += "\"";
     }
 
     message_ += "\n";
