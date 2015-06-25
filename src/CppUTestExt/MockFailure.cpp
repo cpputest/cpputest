@@ -175,6 +175,8 @@ MockUnexpectedOutputParameterFailure::MockUnexpectedOutputParameterFailure(Utest
         message_ += parameter.getName();
         message_ += "\" to function \"";
         message_ += functionName;
+        message_ += "\": ";
+        message_ += parameter.getType();
     }
 
     message_ += "\n";
