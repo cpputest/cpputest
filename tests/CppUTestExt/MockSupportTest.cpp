@@ -933,8 +933,7 @@ TEST(MockSupportTest, customObjectWithFunctionComparatorThatFailsCoversValueToSt
     CHECK_EXPECTED_MOCK_FAILURE_LOCATION(failure, __FILE__, __LINE__);
 }
 
-
-TEST(MockSupportTest, outputParameterOfTypeSucceeds)
+TEST(MockSupportTest, customTypeOutputParameterSucceeds)
 {
     // Prepare
     MyTypeForTesting expectedObject(55);
@@ -956,7 +955,7 @@ TEST(MockSupportTest, outputParameterOfTypeSucceeds)
     mock().removeAllCopiers();
 }
 
-TEST(MockSupportTest, noActualCallForOutputParameterOfType)
+TEST(MockSupportTest, noActualCallForCustomTypeOutputParameter)
 {
     // Prepare
     MyTypeForTesting expectedObject(1);
@@ -977,7 +976,7 @@ TEST(MockSupportTest, noActualCallForOutputParameterOfType)
     mock().removeAllCopiers();
 }
 
-TEST(MockSupportTest, unexpectedOutputParameterOfType)
+TEST(MockSupportTest, unexpectedCustomTypeOutputParameter)
 {
     // Prepare
     MyTypeForTesting actualObject(8834);
@@ -1001,7 +1000,7 @@ TEST(MockSupportTest, unexpectedOutputParameterOfType)
     mock().removeAllCopiers();
 }
 
-TEST(MockSupportTest, outputParameterOfTypeMissing)
+TEST(MockSupportTest, customTypeOutputParameterMissing)
 {
     // Prepare
     MyTypeForTesting expectedObject(123464);
@@ -1023,7 +1022,50 @@ TEST(MockSupportTest, outputParameterOfTypeMissing)
     mock().removeAllCopiers();
 }
 
-TEST(MockSupportTest, twoOutputParametersOfType)
+TEST(MockSupportTest, customTypeOutputParameterOfWrongType)
+{
+    // Prepare
+    MyTypeForTesting expectedObject(123464);
+    MyTypeForTesting actualObject(75646);
+    MyTypeForTestingCopier copier;
+    mock().installCopier("MyTypeForTesting", copier);
+
+    addFunctionToExpectationsList("foo")->withOutputParameterOfTypeReturning("MyTypeForTesting", "output", &expectedObject);
+    MockNamedValue parameter("output");
+    parameter.setObjectPointer("OtherTypeForTesting", &actualObject);
+    MockUnexpectedOutputParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, *expectationsList);
+
+    // Exercise
+    mock().expectOneCall("foo").withOutputParameterOfTypeReturning("MyTypeForTesting", "output", &expectedObject);
+    mock().actualCall("foo").withOutputParameterOfType("OtherTypeForTesting", "output", &actualObject);
+    mock().checkExpectations();
+
+    // Verify
+    CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+
+    // Cleanup
+    mock().removeAllCopiers();
+}
+
+TEST(MockSupportTest, noCopierForCustomTypeOutputParameter)
+{
+    // Prepare
+    MyTypeForTesting expectedObject(123464);
+    MyTypeForTesting actualObject(8834);
+
+    addFunctionToExpectationsList("foo")->withOutputParameterOfTypeReturning("MyTypeForTesting", "output", &expectedObject);
+    MockNoWayToCopyCustomTypeFailure expectedFailure(mockFailureTest(), "MyTypeForTesting");
+
+    // Exercise
+    mock().expectOneCall("foo").withOutputParameterOfTypeReturning("MyTypeForTesting", "output", &expectedObject);
+    mock().actualCall("foo").withOutputParameterOfType("MyTypeForTesting", "output", &actualObject);
+    mock().checkExpectations();
+
+    // Verify
+    CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
+TEST(MockSupportTest, twoCustomTypeOutputParameters)
 {
     // Prepare
     MyTypeForTesting expectedObject1(545);
@@ -1051,7 +1093,7 @@ TEST(MockSupportTest, twoOutputParametersOfType)
     mock().removeAllCopiers();
 }
 
-TEST(MockSupportTest, twoInterleavedOutputParametersOfType)
+TEST(MockSupportTest, twoInterleavedCustomTypeOutputParameters)
 {
     // Prepare
     MyTypeForTesting expectedObject1(9545);
@@ -1079,7 +1121,7 @@ TEST(MockSupportTest, twoInterleavedOutputParametersOfType)
     mock().removeAllCopiers();
 }
 
-TEST(MockSupportTest, twoDifferentOutputParametersOfTypeInSameFunctionCallSucceeds)
+TEST(MockSupportTest, twoDifferentCustomTypeOutputParametersInSameFunctionCallSucceeds)
 {
     // Prepare
     MyTypeForTesting expectedObject1(11);
@@ -1109,7 +1151,7 @@ TEST(MockSupportTest, twoDifferentOutputParametersOfTypeInSameFunctionCallSuccee
     mock().removeAllCopiers();
 }
 
-TEST(MockSupportTest, outputAndIntParametersOfTypeOfSameNameInDifferentFunctionCallsOfSameFunctionSucceeds)
+TEST(MockSupportTest, customTypeOutputAndInputParametersOfSameNameInDifferentFunctionCallsOfSameFunctionSucceeds)
 {
     // Prepare
     MyTypeForTesting expectedObject1(911);
@@ -1140,7 +1182,7 @@ TEST(MockSupportTest, outputAndIntParametersOfTypeOfSameNameInDifferentFunctionC
     mock().removeAllComparators();
 }
 
-TEST(MockSupportTest, twoOutputParametersOfTypeOfSameNameInDifferentFunctionsSucceeds)
+TEST(MockSupportTest, twoCustomTypeOutputParametersOfSameNameInDifferentFunctionsSucceeds)
 {
     // Prepare
     MyTypeForTesting expectedObject1(657);
@@ -1171,7 +1213,7 @@ TEST(MockSupportTest, twoOutputParametersOfTypeOfSameNameInDifferentFunctionsSuc
     mock().removeAllComparators();
 }
 
-TEST(MockSupportTest, outputAndInputParameterOfType)
+TEST(MockSupportTest, customTypeOutputAndInputParameterOfSameTypeInSameFunctionCall)
 {
     // Prepare
     MyTypeForTesting expectedObject1(45);
@@ -1204,7 +1246,7 @@ TEST(MockSupportTest, outputAndInputParameterOfType)
     mock().removeAllComparators();
 }
 
-TEST(MockSupportTest, outputParameterOfTypeTraced)
+TEST(MockSupportTest, customTypeOutputParameterTraced)
 {
     // Prepare
     MyTypeForTesting actualObject(676789);
@@ -1224,7 +1266,7 @@ TEST(MockSupportTest, outputParameterOfTypeTraced)
     mock().removeAllCopiers();
 }
 
-TEST(MockSupportTest, outputParameterOfTypeWithIgnoredParameters)
+TEST(MockSupportTest, customTypeOutputParameterWithIgnoredParameters)
 {
     // Prepare
     MyTypeForTesting expectedObject(444537909);
