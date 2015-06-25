@@ -645,23 +645,46 @@ TEST(MockSupportTest, threeExpectedAndActual)
 class MyTypeForTesting
 {
 public:
-    MyTypeForTesting(int val) : value(val){}
-    int value;
+    MyTypeForTesting () : value(new(int)) {}
+    MyTypeForTesting(int val) : value(new int(val)){}
+    MyTypeForTesting(MyTypeForTesting& rhs)
+    {
+        value = new(int);
+        *value = *rhs.value;
+    }
+    ~MyTypeForTesting()
+    {
+        delete value;
+    }
+    MyTypeForTesting& operator=(MyTypeForTesting& rhs)
+    {
+        *value = *rhs.value;
+        return *this;
+    }
+    int * value;
 };
 
 class MyTypeForTestingComparator : public MockNamedValueComparator
 {
 public:
-    virtual bool isEqual(const void* object1, const void* object2)
+    bool isEqual(const void* object1, const void* object2) _override
     {
-        return ((MyTypeForTesting*)object1)->value == ((MyTypeForTesting*)object2)->value;
+        return *((MyTypeForTesting*)object1)->value == *((MyTypeForTesting*)object2)->value;
     }
-    virtual SimpleString valueToString(const void* object)
+    SimpleString valueToString(const void* object) _override
     {
-        return StringFrom(((MyTypeForTesting*)object)->value);
+        return StringFrom(*(((MyTypeForTesting*)object)->value));
     }
 };
 
+class MyTypeForTestingCopier : public MockNamedValueCopier
+{
+public:
+    void copy(const void* object1, const void* object2) _override
+    {
+        *((MyTypeForTesting*)object1) = *((MyTypeForTesting*)object2);
+    }
+};
 
 TEST(MockSupportTest, customObjectParameterFailsWhenNotHavingAComparisonRepository)
 {
@@ -677,12 +700,12 @@ TEST(MockSupportTest, customObjectParameterSucceeds)
 {
     MyTypeForTesting object(1);
     MyTypeForTestingComparator comparator;
-    mock().installComparator("MyTypeForTesting", comparator);
+    mock().installHandler("MyTypeForTesting", comparator);
     mock().expectOneCall("function").withParameterOfType("MyTypeForTesting", "parameterName", &object);
     mock().actualCall("function").withParameterOfType("MyTypeForTesting", "parameterName", &object);
     mock().checkExpectations();
     CHECK_NO_MOCK_FAILURE();
-    mock().removeAllComparators();
+    mock().removeAllHandlers();
 }
 
 TEST(MockSupportTest, outputParameterSucceeds)
@@ -695,6 +718,21 @@ TEST(MockSupportTest, outputParameterSucceeds)
     CHECK_EQUAL(retval, 2);
     mock().checkExpectations();
     CHECK_NO_MOCK_FAILURE();
+}
+
+TEST(MockSupportTest, customObjectOutputParameterShouldSucceed)
+{
+    MyTypeForTesting source(1);
+    MyTypeForTesting target(2);
+    MyTypeForTestingCopier copier;
+    mock().installHandler("MyTypeForTesting", copier);
+    mock().expectOneCall("function").withOutputParameterOfTypeReturning("MyTypeForTesting", "parameterName", &source);
+    mock().actualCall("function").withOutputParameterOfType("MyTypeForTesting", "parameterName", &target);
+    mock().checkExpectations();
+    CHECK_NO_MOCK_FAILURE();
+    LONGS_EQUAL(1, *source.value);
+    LONGS_EQUAL(1, *target.value);
+    mock().removeAllHandlers();
 }
 
 TEST(MockSupportTest, noActualCallForOutputParameter)
@@ -829,7 +867,6 @@ TEST(MockSupportTest, twoOutputParametersOfSameNameInDifferentFunctionsSucceeds)
     mock().expectOneCall("foo2").withIntParameter("bar", 25);
     mock().actualCall("foo1").withOutputParameter("bar", &param);
     mock().actualCall("foo2").withIntParameter("bar", 25);
-    MyTypeForTestingComparator comparator;
     CHECK_EQUAL(2, retval);
     CHECK_EQUAL(2, param);
     mock().checkExpectations();
@@ -882,19 +919,19 @@ TEST(MockSupportTest, customObjectWithFunctionComparator)
 {
     MyTypeForTesting object(1);
     MockFunctionComparator comparator(myTypeIsEqual, myTypeValueToString);
-    mock().installComparator("MyTypeForTesting", comparator);
+    mock().installHandler("MyTypeForTesting", comparator);
     mock().expectOneCall("function").withParameterOfType("MyTypeForTesting", "parameterName", &object);
     mock().actualCall("function").withParameterOfType("MyTypeForTesting", "parameterName", &object);
     mock().checkExpectations();
     CHECK_NO_MOCK_FAILURE();
-    mock().removeAllComparators();
+    mock().removeAllHandlers();
 }
 
 TEST(MockSupportTest, customObjectWithFunctionComparatorThatFailsCoversValueToString)
 {
     MyTypeForTesting object(5);
     MockFunctionComparator comparator(myTypeIsEqual, myTypeValueToString);
-    mock().installComparator("MyTypeForTesting", comparator);
+    mock().installHandler("MyTypeForTesting", comparator);
     addFunctionToExpectationsList("function")->withParameterOfType("MyTypeForTesting", "parameterName", &object);
     MockExpectedCallsDidntHappenFailure failure(UtestShell::getCurrent(), *expectationsList);
     mock().expectOneCall("function").withParameterOfType("MyTypeForTesting", "parameterName", &object);
@@ -1113,7 +1150,7 @@ TEST(MockSupportTest, installComparatorWorksHierarchicalOnBothExistingAndDynamic
     MyTypeForTestingComparator comparator;
 
     mock("existing");
-    mock().installComparator("MyTypeForTesting", comparator);
+    mock().installHandler("MyTypeForTesting", comparator);
     mock("existing").expectOneCall("function").withParameterOfType("MyTypeForTesting", "parameterName", &object);
     mock("existing").actualCall("function").withParameterOfType("MyTypeForTesting", "parameterName", &object);
     mock("dynamic").expectOneCall("function").withParameterOfType("MyTypeForTesting", "parameterName", &object);
@@ -1121,24 +1158,24 @@ TEST(MockSupportTest, installComparatorWorksHierarchicalOnBothExistingAndDynamic
 
     mock().checkExpectations();
     CHECK_NO_MOCK_FAILURE();
-    mock().removeAllComparators();
+    mock().removeAllHandlers();
 }
 
 TEST(MockSupportTest, installComparatorsWorksHierarchical)
 {
     MyTypeForTesting object(1);
     MyTypeForTestingComparator comparator;
-    MockNamedValueComparatorRepository repos;
+    MockNamedValueHandlerRepository repos;
     repos.installComparator("MyTypeForTesting", comparator);
 
     mock("existing");
-    mock().installComparators(repos);
+    mock().installHandlers(repos);
     mock("existing").expectOneCall("function").withParameterOfType("MyTypeForTesting", "parameterName", &object);
     mock("existing").actualCall("function").withParameterOfType("MyTypeForTesting", "parameterName", &object);
 
     mock().checkExpectations();
     CHECK_NO_MOCK_FAILURE();
-    mock().removeAllComparators();
+    mock().removeAllHandlers();
 }
 
 TEST(MockSupportTest, removeComparatorsWorksHierachically)
@@ -1146,8 +1183,8 @@ TEST(MockSupportTest, removeComparatorsWorksHierachically)
     MyTypeForTesting object(1);
     MyTypeForTestingComparator comparator;
 
-    mock("scope").installComparator("MyTypeForTesting", comparator);
-    mock().removeAllComparators();
+    mock("scope").installHandler("MyTypeForTesting", comparator);
+    mock().removeAllHandlers();
     mock("scope").expectOneCall("function").withParameterOfType("MyTypeForTesting", "parameterName", &object);
     mock("scope").actualCall("function").withParameterOfType("MyTypeForTesting", "parameterName", &object);
 
@@ -1707,7 +1744,7 @@ static void functionWithConstParam(const SomeClass param)
 TEST(MockSupportTest, shouldSupportConstParameters)
 {
     StubComparator comparator;
-    mock().installComparator("SomeClass", comparator);
+    mock().installHandler("SomeClass", comparator);
 
     SomeClass param;
     mock().expectOneCall("functionWithConstParam").withParameterOfType("SomeClass", "param", &param);
@@ -1772,7 +1809,7 @@ TEST(MockSupportTestWithFixture, CHECK_EXPECTED_MOCK_FAILURE_LOCATION_failed)
 
 static void CHECK_NO_MOCK_FAILURE_LOCATION_failedTestMethod_()
 {
-    mock().actualCall("boo");    
+    mock().actualCall("boo");
     CHECK_NO_MOCK_FAILURE_LOCATION("file", 1);
 }
 
@@ -1804,11 +1841,11 @@ TEST_ORDERED(MockSupportTestWithFixture, shouldCrashOnFailure, 10)
     mock().crashOnFailure(true);
     UtestShell::setCrashMethod(crashMethod);
     fixture.setTestFunction(crashOnFailureTestFunction_);
-    
+
     fixture.runAllTests();
-    
+
     CHECK(cpputestHasCrashed);
-    
+
     mock().crashOnFailure(false);
     UtestShell::resetCrashMethod();
 }
@@ -1818,11 +1855,11 @@ TEST_ORDERED(MockSupportTestWithFixture, nextTestShouldNotCrashOnFailure, 11)
     cpputestHasCrashed = false;
     UtestShell::setCrashMethod(crashMethod);
     fixture.setTestFunction(crashOnFailureTestFunction_);
-    
+
     fixture.runAllTests();
-    
+
     fixture.assertPrintContains("Unexpected call to function: unexpected");
     CHECK_FALSE(cpputestHasCrashed);
-    
+
     UtestShell::resetCrashMethod();
 }

@@ -93,7 +93,25 @@ public:
     MockTypeValueToStringFunction_c toString_;
 };
 
+class MockCFunctionCopierNode : public MockNamedValueCopier
+{
+public:
+    MockCFunctionCopierNode(MockCFunctionCopierNode* next, MockTypeCopyFunction_c copyFunc)
+        : next_(next), copy_(copyFunc) {}
+    virtual ~MockCFunctionCopierNode() {}
+
+    virtual void copy(const void* object1, const void* object2) _override
+    {
+        copy_(object1, object2);
+    }
+
+    MockCFunctionCopierNode* next_;
+    MockTypeCopyFunction_c copy_;
+};
+
 static MockCFunctionComparatorNode* comparatorList_ = NULL;
+static MockCFunctionCopierNode* copierList_ = NULL;
+
 
 extern "C" {
 
@@ -150,17 +168,28 @@ MockValue_c actualReturnValue_c();
 static void installComparator_c (const char* typeName, MockTypeEqualFunction_c isEqual, MockTypeValueToStringFunction_c valueToString)
 {
     comparatorList_ = new MockCFunctionComparatorNode(comparatorList_, isEqual, valueToString);
-    currentMockSupport->installComparator(typeName, *comparatorList_);
+    currentMockSupport->installHandler(typeName, *comparatorList_);
 }
 
-static void removeAllComparators_c()
+static void installCopier_c (const char* typeName, MockTypeCopyFunction_c copy)
+{
+    copierList_ = new MockCFunctionCopierNode(copierList_, copy);
+    currentMockSupport->installHandler(typeName, *copierList_);
+}
+
+static void removeAllHandlers_c()
 {
     while (comparatorList_) {
         MockCFunctionComparatorNode *next = comparatorList_->next_;
         delete comparatorList_;
         comparatorList_ = next;
     }
-    currentMockSupport->removeAllComparators();
+    while (copierList_) {
+        MockCFunctionCopierNode *next = copierList_->next_;
+        delete copierList_;
+        copierList_ = next;
+    }
+    currentMockSupport->removeAllHandlers();
 }
 
 static MockExpectedCall_c gExpectedCall = {
@@ -216,7 +245,8 @@ static MockSupport_c gMockSupport = {
         clear_c,
         crashOnFailure_c,
         installComparator_c,
-        removeAllComparators_c
+        installCopier_c,
+        removeAllHandlers_c
 };
 
 MockExpectedCall_c* withIntParameters_c(const char* name, int value)

@@ -67,15 +67,14 @@ TEST_GROUP(EventDispatcher)
     void setup()
     {
         dispatcher = new EventDispatcher;
-        mock().installComparator("Event", eventComparator);
+        mock().installHandler("Event", eventComparator);
     }
     void teardown()
     {
         delete dispatcher;
-        mock().removeAllComparators();
+        mock().removeAllHandlers();
     }
 };
-
 
 TEST(EventDispatcher, EventWithoutRegistrationsResultsIntoNoCalls)
 {
