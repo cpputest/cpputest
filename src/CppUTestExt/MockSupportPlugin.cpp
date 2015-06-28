@@ -72,7 +72,7 @@ void MockSupportPlugin::postTestAction(UtestShell& test, TestResult& result)
     mock().checkExpectations();
     mock().clear();
     mock().setMockFailureStandardReporter(NULL);
-    mock().removeAllComparators();
+    mock().removeAllHandlers();
 }
 
 void MockSupportPlugin::installComparator(const SimpleString& name, MockNamedValueComparator& comparator)
