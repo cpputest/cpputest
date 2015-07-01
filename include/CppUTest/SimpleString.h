@@ -89,7 +89,6 @@ public:
     static TestMemoryAllocator* getStringAllocator();
     static void setStringAllocator(TestMemoryAllocator* allocator);
 
-    static char* allocStringBuffer(size_t size);
     static int AtoI(const char*str);
     static int StrCmp(const char* s1, const char* s2);
     static size_t StrLen(const char*);
@@ -98,7 +97,8 @@ public:
     static char* StrStr(const char* s1, const char* s2);
     static char ToLower(char ch);
     static int MemCmp(const void* s1, const void *s2, size_t n);
-    static void deallocStringBuffer(char* str);
+    static char* allocStringBuffer(size_t size, const char* file, size_t line);
+    static void deallocStringBuffer(char* str, const char* file, size_t line);
 private:
     char *buffer_;
 

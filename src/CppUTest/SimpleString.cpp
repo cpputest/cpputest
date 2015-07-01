@@ -45,19 +45,19 @@ void SimpleString::setStringAllocator(TestMemoryAllocator* allocator)
 }
 
 /* Avoid using the memory leak detector INSIDE SimpleString as its used inside the detector */
-char* SimpleString::allocStringBuffer(size_t _size)
+char* SimpleString::allocStringBuffer(size_t _size, const char* file, size_t line)
 {
-    return getStringAllocator()->alloc_memory(_size, __FILE__, __LINE__);
+    return getStringAllocator()->alloc_memory(_size, file, line);
 }
 
-void SimpleString::deallocStringBuffer(char* str)
+void SimpleString::deallocStringBuffer(char* str, const char* file, size_t line)
 {
-    getStringAllocator()->free_memory(str, __FILE__, __LINE__);
+    getStringAllocator()->free_memory(str, file, line);
 }
 
 char* SimpleString::getEmptyString() const
 {
-    char* empty = allocStringBuffer(1);
+    char* empty = allocStringBuffer(1, __FILE__, __LINE__);
     empty[0] = '\0';
     return empty;
 }
@@ -152,7 +152,7 @@ SimpleString::SimpleString(const char *other, size_t repeatCount)
 {
     size_t otherStringLength = StrLen(other);
     size_t len = otherStringLength * repeatCount + 1;
-    buffer_ = allocStringBuffer(len);
+    buffer_ = allocStringBuffer(len, __FILE__, __LINE__);
     char* next = buffer_;
     for (size_t i = 0; i < repeatCount; i++) {
         StrNCpy(next, other, otherStringLength + 1);
@@ -169,7 +169,7 @@ SimpleString::SimpleString(const SimpleString& other)
 SimpleString& SimpleString::operator=(const SimpleString& other)
 {
     if (this != &other) {
-        deallocStringBuffer(buffer_);
+        deallocStringBuffer(buffer_, __FILE__, __LINE__);
         buffer_ = copyToNewBuffer(other.buffer_);
     }
     return *this;
@@ -224,8 +224,7 @@ void SimpleString::split(const SimpleString& delimiter, SimpleStringCollection& 
     for (size_t i = 0; i < num; ++i) {
         prev = str;
         str = StrStr(str, delimiter.buffer_) + 1;
-        size_t len = (size_t) (str - prev) + 1;
-        col[i].buffer_ = copyToNewBuffer(prev, len);
+        col[i] = SimpleString(prev).subString(0, size_t (str - prev));
     }
     if (extraEndToken) {
         col[num] = str;
@@ -250,7 +249,7 @@ void SimpleString::replace(const char* to, const char* with)
     size_t newsize = len + (withlen * c) - (tolen * c) + 1;
 
     if (newsize > 1) {
-        char* newbuf = allocStringBuffer(newsize);
+        char* newbuf = allocStringBuffer(newsize, __FILE__, __LINE__);
         for (size_t i = 0, j = 0; i < len;) {
             if (StrNCmp(&buffer_[i], to, tolen) == 0) {
                 StrNCpy(&newbuf[j], with, withlen + 1);
@@ -263,13 +262,13 @@ void SimpleString::replace(const char* to, const char* with)
                 i++;
             }
         }
-        deallocStringBuffer(buffer_);
+        deallocStringBuffer(buffer_, __FILE__, __LINE__);
         buffer_ = newbuf;
         buffer_[newsize - 1] = '\0';
     }
     else {
+        deallocStringBuffer(buffer_, __FILE__, __LINE__);
         buffer_ = getEmptyString();
-        buffer_[0] = '\0';
     }
 }
 
@@ -302,7 +301,7 @@ bool SimpleString::isEmpty() const
 
 SimpleString::~SimpleString()
 {
-    deallocStringBuffer(buffer_);
+    deallocStringBuffer(buffer_, __FILE__, __LINE__);
 }
 
 bool operator==(const SimpleString& left, const SimpleString& right)
@@ -340,7 +339,7 @@ SimpleString& SimpleString::operator+=(const char* rhs)
     size_t sizeOfNewString = originalSize + additionalStringSize;
     char* tbuffer = copyToNewBuffer(this->buffer_, sizeOfNewString);
     StrNCpy(tbuffer + originalSize, rhs, additionalStringSize);
-    deallocStringBuffer(this->buffer_);
+    deallocStringBuffer(this->buffer_, __FILE__, __LINE__);
     this->buffer_ = tbuffer;
     return *this;
 }
@@ -403,7 +402,7 @@ char* SimpleString::copyToNewBuffer(const char* bufferToCopy, size_t bufferSize)
 {
     if(bufferSize == 0) bufferSize = StrLen(bufferToCopy) + 1;
 
-    char* newBuffer = allocStringBuffer(bufferSize);
+    char* newBuffer = allocStringBuffer(bufferSize, __FILE__, __LINE__);
     StrNCpy(newBuffer, bufferToCopy, bufferSize);
     newBuffer[bufferSize-1] = '\0';
     return newBuffer;
@@ -559,11 +558,11 @@ SimpleString VStringFromFormat(const char* format, va_list args)
     }
     else {
         size_t newBufferSize = size + 1;
-        char* newBuffer = SimpleString::allocStringBuffer(newBufferSize);
+        char* newBuffer = SimpleString::allocStringBuffer(newBufferSize, __FILE__, __LINE__);
         PlatformSpecificVSNprintf(newBuffer, newBufferSize, format, argsCopy);
         resultString = SimpleString(newBuffer);
 
-        SimpleString::deallocStringBuffer(newBuffer);
+        SimpleString::deallocStringBuffer(newBuffer, __FILE__, __LINE__);
     }
     va_end(argsCopy);
     return resultString;
