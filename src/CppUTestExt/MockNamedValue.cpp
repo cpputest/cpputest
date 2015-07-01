@@ -37,7 +37,7 @@ void MockNamedValue::setDefaultHandlerRepository(MockNamedValueHandlerRepository
     defaultRepository_ = repository;
 }
 
-MockNamedValue::MockNamedValue(const SimpleString& name) : name_(name), type_("int"), size_(0), comparator_(NULL)
+MockNamedValue::MockNamedValue(const SimpleString& name) : name_(name), type_("int"), size_(0), comparator_(NULL), copier_(NULL)
 {
     value_.intValue_ = 0;
 }
@@ -99,7 +99,10 @@ void MockNamedValue::setObjectPointer(const SimpleString& type, const void* obje
     type_ = type;
     value_.objectPointerValue_ = objectPtr;
     if (defaultRepository_)
+    {
         comparator_ = defaultRepository_->getComparatorForType(type);
+        copier_ = defaultRepository_->getCopierForType(type);
+    }
 }
 
 void MockNamedValue::setSize(size_t size)
@@ -206,6 +209,11 @@ MockNamedValueComparator* MockNamedValue::getComparator() const
     return comparator_;
 }
 
+MockNamedValueCopier* MockNamedValue::getCopier() const
+{
+    return copier_;
+}
+
 bool MockNamedValue::equals(const MockNamedValue& p) const
 {
     if((type_ == "long int") && (p.type_ == "int"))
@@ -254,6 +262,16 @@ bool MockNamedValue::equals(const MockNamedValue& p) const
 
     if (comparator_)
         return comparator_->isEqual(value_.objectPointerValue_, p.value_.objectPointerValue_);
+
+    return false;
+}
+
+bool MockNamedValue::compatibleForCopying(const MockNamedValue& p) const
+{
+    if (type_ == p.type_) return true;
+
+    if ((type_ == "const void*") && (p.type_ == "void*"))
+        return true;
 
     return false;
 }
@@ -367,14 +385,29 @@ struct MockNamedValueComparatorRepositoryNode
     MockNamedValueComparatorRepositoryNode* next_;
 };
 
-MockNamedValueHandlerRepository::MockNamedValueHandlerRepository() : comparatorsHead_(NULL)
+struct MockNamedValueCopierRepositoryNode
+{
+    MockNamedValueCopierRepositoryNode(const SimpleString& name, MockNamedValueCopier& copier, MockNamedValueCopierRepositoryNode* next)
+        : name_(name), copier_(copier), next_(next) {}
+    SimpleString name_;
+    MockNamedValueCopier& copier_;
+    MockNamedValueCopierRepositoryNode* next_;
+};
+
+MockNamedValueHandlerRepository::MockNamedValueHandlerRepository() : comparatorsHead_(NULL), copiersHead_(NULL)
 {
 
 }
 
 MockNamedValueHandlerRepository::~MockNamedValueHandlerRepository()
 {
+    clearAll();
+}
+
+void MockNamedValueHandlerRepository::clearAll()
+{
     clearComparators();
+    clearCopiers();
 }
 
 void MockNamedValueHandlerRepository::clearComparators()
@@ -386,9 +419,23 @@ void MockNamedValueHandlerRepository::clearComparators()
     }
 }
 
+void MockNamedValueHandlerRepository::clearCopiers()
+{
+    while (copiersHead_) {
+        MockNamedValueCopierRepositoryNode* next = copiersHead_->next_;
+        delete copiersHead_;
+        copiersHead_ = next;
+    }
+}
+
 void MockNamedValueHandlerRepository::installComparator(const SimpleString& name, MockNamedValueComparator& comparator)
 {
     comparatorsHead_ = new MockNamedValueComparatorRepositoryNode(name, comparator, comparatorsHead_);
+}
+
+void MockNamedValueHandlerRepository::installCopier(const SimpleString& name, MockNamedValueCopier& copier)
+{
+    copiersHead_ = new MockNamedValueCopierRepositoryNode(name, copier, copiersHead_);
 }
 
 MockNamedValueComparator* MockNamedValueHandlerRepository::getComparatorForType(const SimpleString& name)
@@ -398,8 +445,17 @@ MockNamedValueComparator* MockNamedValueHandlerRepository::getComparatorForType(
     return NULL;
 }
 
+MockNamedValueCopier* MockNamedValueHandlerRepository::getCopierForType(const SimpleString& name)
+{
+    for (MockNamedValueCopierRepositoryNode* p = copiersHead_; p; p = p->next_)
+            if (p->name_ == name) return &p->copier_;
+    return NULL;
+}
+
 void MockNamedValueHandlerRepository::installHandlers(const MockNamedValueHandlerRepository& repository)
 {
     for (MockNamedValueComparatorRepositoryNode* p = repository.comparatorsHead_; p; p = p->next_)
             installComparator(p->name_, p->comparator_);
+    for (MockNamedValueCopierRepositoryNode* q = repository.copiersHead_; q; q = q->next_)
+            installCopier(q->name_, q->copier_);
 }

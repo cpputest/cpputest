@@ -645,8 +645,15 @@ TEST(MockSupportTest, threeExpectedAndActual)
 class MyTypeForTesting
 {
 public:
-    MyTypeForTesting(int val) : value(val) {}
-    int value;
+    MyTypeForTesting(int val)
+    {
+        value = new int(val);
+    }
+    virtual ~MyTypeForTesting()
+    {
+        delete value;
+    }
+    int *value;
 };
 
 class MyTypeForTestingComparator : public MockNamedValueComparator
@@ -656,12 +663,12 @@ public:
     {
         const MyTypeForTesting* obj1 = (const MyTypeForTesting*) object1;
         const MyTypeForTesting* obj2 = (const MyTypeForTesting*) object2;
-        return obj1->value == obj2->value;
+        return *(obj1->value) == *(obj2->value);
     }
     virtual SimpleString valueToString(const void* object)
     {
         const MyTypeForTesting* obj = (const MyTypeForTesting*) object;
-        return StringFrom(obj->value);
+        return StringFrom(*(obj->value));
     }
 };
 
