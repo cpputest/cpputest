@@ -58,10 +58,10 @@ static void VisualCppRestoreJumpBuffer()
 int (*PlatformSpecificSetJmp)(void (*function) (void*), void* data) = VisualCppSetJmp;
 void (*PlatformSpecificLongJmp)(void) = VisualCppLongJmp;
 void (*PlatformSpecificRestoreJumpBuffer)(void) = VisualCppRestoreJumpBuffer;
- 
+
 static void VisualCppRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
 {
-   result->addFailure(TestFailure(shell, "-p doesn't work on Visual C++ as it is lacking fork.\b"));
+   result->addFailure(TestFailure(shell, "-p doesn't work on this platform, as it is lacking fork.\b"));
 }
 
 void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell* shell, TestPlugin* plugin, TestResult* result) =
@@ -80,7 +80,7 @@ static long VisualCppTimeInMillis()
 }
 
 long (*GetPlatformSpecificTimeInMillis)() = VisualCppTimeInMillis;
-	
+
 ///////////// Time in String
 
 static const char* VisualCppTimeString()
