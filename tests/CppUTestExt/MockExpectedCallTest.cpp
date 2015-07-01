@@ -33,23 +33,41 @@
 class TypeForTestingExpectedFunctionCall
 {
 public:
-    TypeForTestingExpectedFunctionCall(int val) : value(val) {}
-    int value;
+    TypeForTestingExpectedFunctionCall(int val)
+    {
+        value = new int(val);
+    }
+    virtual ~TypeForTestingExpectedFunctionCall()
+    {
+        delete value;
+    }
+    int *value;
 };
 
 class TypeForTestingExpectedFunctionCallComparator : public MockNamedValueComparator
 {
 public:
-    TypeForTestingExpectedFunctionCallComparator() {}
-    virtual ~TypeForTestingExpectedFunctionCallComparator() {}
-
     virtual bool isEqual(const void* object1, const void* object2)
     {
-        return ((TypeForTestingExpectedFunctionCall*)object1)->value == ((TypeForTestingExpectedFunctionCall*)object2)->value;
+        const TypeForTestingExpectedFunctionCall* obj1 = (const TypeForTestingExpectedFunctionCall*) object1;
+        const TypeForTestingExpectedFunctionCall* obj2 = (const TypeForTestingExpectedFunctionCall*) object2;
+        return *(obj1->value) == *(obj2->value);
     }
     virtual SimpleString valueToString(const void* object)
     {
-        return StringFrom(((TypeForTestingExpectedFunctionCall*)object)->value);
+        const TypeForTestingExpectedFunctionCall* obj = (const TypeForTestingExpectedFunctionCall*) object;
+        return StringFrom(*(obj->value));
+    }
+};
+
+class TypeForTestingExpectedFunctionCallCopier : public MockNamedValueCopier
+{
+public:
+    virtual void copy(void* dst_, const void* src_)
+    {
+        TypeForTestingExpectedFunctionCall* dst = (TypeForTestingExpectedFunctionCall*) dst_;
+        const TypeForTestingExpectedFunctionCall* src = (const TypeForTestingExpectedFunctionCall*) src_;
+        *(dst->value) = *(src->value);
     }
 };
 
@@ -75,7 +93,7 @@ TEST(MockNamedValueHandlerRepository, installComparator)
     POINTERS_EQUAL(&comparator, repository.getComparatorForType("typeName"));
 }
 
-TEST(MockNamedValueHandlerRepository, installMultipleComparator)
+TEST(MockNamedValueHandlerRepository, installMultipleComparators)
 {
     TypeForTestingExpectedFunctionCallComparator comparator1, comparator2, comparator3;
     MockNamedValueHandlerRepository repository;
@@ -85,6 +103,51 @@ TEST(MockNamedValueHandlerRepository, installMultipleComparator)
     POINTERS_EQUAL(&comparator3, repository.getComparatorForType("type3"));
     POINTERS_EQUAL(&comparator2, repository.getComparatorForType("type2"));
     POINTERS_EQUAL(&comparator1, repository.getComparatorForType("type1"));
+}
+
+TEST(MockNamedValueHandlerRepository, getCopierForNonExistingName)
+{
+    MockNamedValueHandlerRepository repository;
+    POINTERS_EQUAL(NULL, repository.getCopierForType("typeName"));
+}
+
+TEST(MockNamedValueHandlerRepository, installCopier)
+{
+    TypeForTestingExpectedFunctionCallCopier copier;
+    MockNamedValueHandlerRepository repository;
+    repository.installCopier("typeName", copier);
+    POINTERS_EQUAL(&copier, repository.getCopierForType("typeName"));
+}
+
+TEST(MockNamedValueHandlerRepository, installMultipleCopiers)
+{
+    TypeForTestingExpectedFunctionCallCopier copier1, copier2, copier3;
+    MockNamedValueHandlerRepository repository;
+    repository.installCopier("type1", copier1);
+    repository.installCopier("type2", copier2);
+    repository.installCopier("type3", copier3);
+    POINTERS_EQUAL(&copier3, repository.getCopierForType("type3"));
+    POINTERS_EQUAL(&copier2, repository.getCopierForType("type2"));
+    POINTERS_EQUAL(&copier1, repository.getCopierForType("type1"));
+}
+
+TEST(MockNamedValueHandlerRepository, installMultipleHandlers)
+{
+    TypeForTestingExpectedFunctionCallCopier copier1, copier2, copier3;
+    TypeForTestingExpectedFunctionCallComparator comparator1, comparator2, comparator3;
+    MockNamedValueHandlerRepository repository;
+    repository.installCopier("type1", copier1);
+    repository.installComparator("type1", comparator1);
+    repository.installCopier("type2", copier2);
+    repository.installCopier("type3", copier3);
+    repository.installComparator("type2", comparator2);
+    repository.installComparator("type3", comparator3);
+    POINTERS_EQUAL(&comparator3, repository.getComparatorForType("type3"));
+    POINTERS_EQUAL(&comparator2, repository.getComparatorForType("type2"));
+    POINTERS_EQUAL(&comparator1, repository.getComparatorForType("type1"));
+    POINTERS_EQUAL(&copier3, repository.getCopierForType("type3"));
+    POINTERS_EQUAL(&copier2, repository.getCopierForType("type2"));
+    POINTERS_EQUAL(&copier1, repository.getCopierForType("type1"));
 }
 
 TEST_GROUP(MockExpectedCall)
@@ -410,6 +473,33 @@ TEST(MockExpectedCall, hasNoOutputParameter)
     call->withIntParameter("foo", (int)1);
     MockNamedValue foo("foo");
     foo.setValue((int)1);
+    CHECK_FALSE(call->hasOutputParameter(foo));
+}
+
+TEST(MockExpectedCall, hasOutputParameterOfType)
+{
+    TypeForTestingExpectedFunctionCall object(676789);
+    call->withOutputParameterOfTypeReturning("TypeForTestingExpectedFunctionCall", "foo", &object);
+    MockNamedValue foo("foo");
+    foo.setObjectPointer("TypeForTestingExpectedFunctionCall", &object);
+    CHECK(call->hasOutputParameter(foo));
+}
+
+TEST(MockExpectedCall, hasNoOutputParameterOfTypeSameTypeButInput)
+{
+    TypeForTestingExpectedFunctionCall object(543);
+    call->withParameterOfType("TypeForTestingExpectedFunctionCall", "foo", &object);
+    MockNamedValue foo("foo");
+    foo.setObjectPointer("TypeForTestingExpectedFunctionCall", &object);
+    CHECK_FALSE(call->hasOutputParameter(foo));
+}
+
+TEST(MockExpectedCall, hasNoOutputParameterOfTypeDifferentType)
+{
+    TypeForTestingExpectedFunctionCall object(543);
+    call->withOutputParameterOfTypeReturning("TypeForTestingExpectedFunctionCall", "foo", &object);
+    MockNamedValue foo("foo");
+    foo.setObjectPointer("OtherTypeForTestingExpectedFunctionCall", &object);
     CHECK_FALSE(call->hasOutputParameter(foo));
 }
 
