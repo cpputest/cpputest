@@ -645,8 +645,23 @@ TEST(MockSupportTest, threeExpectedAndActual)
 class MyTypeForTesting
 {
 public:
-    MyTypeForTesting(int val) : value(val){}
-    int value;
+    MyTypeForTesting () : value(new(int)) {}
+    MyTypeForTesting(int val) : value(new int(val)){}
+    MyTypeForTesting(MyTypeForTesting& rhs)
+    {
+        value = new(int);
+        *value = *rhs.value;
+    }
+    ~MyTypeForTesting()
+    {
+        delete value;
+    }
+    MyTypeForTesting& operator=(MyTypeForTesting& rhs)
+    {
+        *value = *rhs.value;
+        return *this;
+    }
+    int * value;
 };
 
 class MyTypeForTestingComparator : public MockNamedValueComparator
@@ -654,14 +669,32 @@ class MyTypeForTestingComparator : public MockNamedValueComparator
 public:
     virtual bool isEqual(const void* object1, const void* object2)
     {
-        return ((MyTypeForTesting*)object1)->value == ((MyTypeForTesting*)object2)->value;
+        return *((MyTypeForTesting*)object1)->value == *((MyTypeForTesting*)object2)->value;
     }
     virtual SimpleString valueToString(const void* object)
     {
-        return StringFrom(((MyTypeForTesting*)object)->value);
+        return StringFrom(*(((MyTypeForTesting*)object)->value));
+    }
+    virtual bool copy(const void* object1, const void* object2)
+    {
+        MyTypeForTesting* ret = (MyTypeForTesting*)object1;
+        *ret = *((MyTypeForTesting*)object2);
+        return true;
     }
 };
 
+class MyTypeForTestingComparatorLackingCopy : public MockNamedValueComparator
+{
+public:
+    virtual bool isEqual(const void*, const void*)
+    {
+        return false;
+    }
+    virtual SimpleString valueToString(const void*)
+    {
+        return "";
+    }
+};
 
 TEST(MockSupportTest, customObjectParameterFailsWhenNotHavingAComparisonRepository)
 {
@@ -695,6 +728,32 @@ TEST(MockSupportTest, outputParameterSucceeds)
     CHECK_EQUAL(retval, 2);
     mock().checkExpectations();
     CHECK_NO_MOCK_FAILURE();
+}
+
+TEST(MockSupportTest, customObjectOutputParameterShouldSucceed)
+{
+    MyTypeForTesting source(1);
+    MyTypeForTesting target(2);
+    MyTypeForTestingComparator comparator;
+    mock().installComparator("MyTypeForTesting", comparator);
+    mock().expectOneCall("function").withOutputParameterOfTypeReturning("MyTypeForTesting", "parameterName", &source);
+    mock().actualCall("function").withOutputParameterOfType("MyTypeForTesting", "parameterName", &target);
+    mock().checkExpectations();
+    CHECK_NO_MOCK_FAILURE();
+    LONGS_EQUAL(1, *source.value);
+    LONGS_EQUAL(1, *target.value);
+}
+
+TEST(MockSupportTest, customObjectOutputParameterShouldFailWhenCopyIsntOverridden)
+{
+    MyTypeForTesting object;
+    MyTypeForTestingComparatorLackingCopy comparator;
+    mock().installComparator("MyTypeForTesting", comparator);
+    mock().expectOneCall("function").withOutputParameterOfTypeReturning("MyTypeForTesting", "parameterName", &object);
+    mock().actualCall("function").withOutputParameterOfType("MyTypeForTesting", "parameterName", &object);
+    mock().checkExpectations();
+    MockNoWayToCopyCustomTypeFailure expectedFailure(mockFailureTest(), "MyTypeForTesting");
+    CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 
 TEST(MockSupportTest, noActualCallForOutputParameter)
@@ -1772,7 +1831,7 @@ TEST(MockSupportTestWithFixture, CHECK_EXPECTED_MOCK_FAILURE_LOCATION_failed)
 
 static void CHECK_NO_MOCK_FAILURE_LOCATION_failedTestMethod_()
 {
-    mock().actualCall("boo");    
+    mock().actualCall("boo");
     CHECK_NO_MOCK_FAILURE_LOCATION("file", 1);
 }
 
@@ -1804,11 +1863,11 @@ TEST_ORDERED(MockSupportTestWithFixture, shouldCrashOnFailure, 10)
     mock().crashOnFailure(true);
     UtestShell::setCrashMethod(crashMethod);
     fixture.setTestFunction(crashOnFailureTestFunction_);
-    
+
     fixture.runAllTests();
-    
+
     CHECK(cpputestHasCrashed);
-    
+
     mock().crashOnFailure(false);
     UtestShell::resetCrashMethod();
 }
@@ -1818,11 +1877,11 @@ TEST_ORDERED(MockSupportTestWithFixture, nextTestShouldNotCrashOnFailure, 11)
     cpputestHasCrashed = false;
     UtestShell::setCrashMethod(crashMethod);
     fixture.setTestFunction(crashOnFailureTestFunction_);
-    
+
     fixture.runAllTests();
-    
+
     fixture.assertPrintContains("Unexpected call to function: unexpected");
     CHECK_FALSE(cpputestHasCrashed);
-    
+
     UtestShell::resetCrashMethod();
 }
