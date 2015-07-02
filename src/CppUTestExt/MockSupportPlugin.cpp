@@ -57,12 +57,12 @@ MockSupportPlugin::MockSupportPlugin(const SimpleString& name)
 
 MockSupportPlugin::~MockSupportPlugin()
 {
-    repository_.clear();
+    repository_.clearAll();
 }
 
 void MockSupportPlugin::preTestAction(UtestShell&, TestResult&)
 {
-    mock().installComparators(repository_);
+    mock().installHandlers(repository_);
 }
 
 void MockSupportPlugin::postTestAction(UtestShell& test, TestResult& result)
@@ -72,7 +72,7 @@ void MockSupportPlugin::postTestAction(UtestShell& test, TestResult& result)
     mock().checkExpectations();
     mock().clear();
     mock().setMockFailureStandardReporter(NULL);
-    mock().removeAllComparators();
+    mock().removeAllHandlers();
 }
 
 void MockSupportPlugin::installComparator(const SimpleString& name, MockNamedValueComparator& comparator)
@@ -80,3 +80,7 @@ void MockSupportPlugin::installComparator(const SimpleString& name, MockNamedVal
     repository_.installComparator(name, comparator);
 }
 
+void MockSupportPlugin::installCopier(const SimpleString& name, MockNamedValueCopier& copier)
+{
+    repository_.installCopier(name, copier);
+}
