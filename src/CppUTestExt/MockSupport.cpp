@@ -87,6 +87,14 @@ void MockSupport::installComparator(const SimpleString& typeName, MockNamedValue
         if (getMockSupport(p)) getMockSupport(p)->installComparator(typeName, comparator);
 }
 
+void MockSupport::installCopier(const SimpleString& typeName, MockNamedValueCopier& copier)
+{
+    handlerRepository_.installCopier(typeName, copier);
+
+    for (MockNamedValueListNode* p = data_.begin(); p; p = p->next())
+        if (getMockSupport(p)) getMockSupport(p)->installCopier(typeName, copier);
+}
+
 void MockSupport::installHandlers(const MockNamedValueHandlerRepository& repository)
 {
     handlerRepository_.installHandlers(repository);
@@ -100,6 +108,20 @@ void MockSupport::removeAllComparators()
     handlerRepository_.clearComparators();
     for (MockNamedValueListNode* p = data_.begin(); p; p = p->next())
         if (getMockSupport(p)) getMockSupport(p)->removeAllComparators();
+}
+
+void MockSupport::removeAllCopiers()
+{
+    handlerRepository_.clearCopiers();
+    for (MockNamedValueListNode* p = data_.begin(); p; p = p->next())
+        if (getMockSupport(p)) getMockSupport(p)->removeAllCopiers();
+}
+
+void MockSupport::removeAllHandlers()
+{
+    handlerRepository_.clearAll();
+    for (MockNamedValueListNode* p = data_.begin(); p; p = p->next())
+        if (getMockSupport(p)) getMockSupport(p)->removeAllHandlers();
 }
 
 void MockSupport::clear()

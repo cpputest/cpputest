@@ -106,8 +106,12 @@ public:
     virtual void setDefaultComparatorRepository();
 
     virtual void installComparator(const SimpleString& typeName, MockNamedValueComparator& comparator);
+    virtual void installCopier(const SimpleString& typeName, MockNamedValueCopier& copier);
     virtual void installHandlers(const MockNamedValueHandlerRepository& repository);
+
     virtual void removeAllComparators();
+    virtual void removeAllCopiers();
+    virtual void removeAllHandlers();
 
 protected:
     MockSupport* clone();
