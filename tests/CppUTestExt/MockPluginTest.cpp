@@ -118,6 +118,26 @@ TEST(MockPlugin, installComparatorRecordsTheComparatorButNotInstallsItYet)
     CHECK_EXPECTED_MOCK_FAILURE(failure);
 }
 
+class DummyCopier : public MockNamedValueCopier
+{
+public:
+    void copy(void* dst, const void* src)
+    {
+        *(int*)dst = *(const int*)src;
+    }
+};
+
+TEST(MockPlugin, installCopierRecordsTheCopierButNotInstallsItYet)
+{
+    DummyCopier copier;
+    plugin->installCopier("myType", copier);
+    mock().expectOneCall("foo").withOutputParameterOfTypeReturning("myType", "name", NULL);
+    mock().actualCall("foo").withOutputParameterOfType("myType", "name", NULL);
+
+    MockNoWayToCopyCustomTypeFailure failure(test, "myType");
+    CHECK_EXPECTED_MOCK_FAILURE(failure);
+}
+
 TEST(MockPlugin, preTestActionWillEnableMultipleComparatorsToTheGlobalMockSupportSpace)
 {
     DummyComparator comparator;
