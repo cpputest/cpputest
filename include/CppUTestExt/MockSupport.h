@@ -106,8 +106,12 @@ public:
     virtual void setDefaultComparatorRepository();
 
     virtual void installComparator(const SimpleString& typeName, MockNamedValueComparator& comparator);
-    virtual void installComparators(const MockNamedValueComparatorRepository& repository);
+    virtual void installCopier(const SimpleString& typeName, MockNamedValueCopier& copier);
+    virtual void installHandlers(const MockNamedValueHandlerRepository& repository);
+
     virtual void removeAllComparators();
+    virtual void removeAllCopiers();
+    virtual void removeAllHandlers();
 
 protected:
     MockSupport* clone();
@@ -127,7 +131,7 @@ private:
     bool enabled_;
     MockCheckedActualCall *lastActualFunctionCall_;
     MockExpectedCallComposite compositeCalls_;
-    MockNamedValueComparatorRepository comparatorRepository_;
+    MockNamedValueHandlerRepository handlerRepository_;
     MockNamedValueList data_;
 
     bool tracing_;
