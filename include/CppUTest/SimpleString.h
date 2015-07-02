@@ -97,8 +97,8 @@ public:
     static char* StrStr(const char* s1, const char* s2);
     static char ToLower(char ch);
     static int MemCmp(const void* s1, const void *s2, size_t n);
-    static char* allocStringBuffer(size_t size, const char* file, size_t line);
-    static void deallocStringBuffer(char* str, const char* file, size_t line);
+    static char* allocStringBuffer(size_t size, const char* file, int line);
+    static void deallocStringBuffer(char* str, const char* file, int line);
 private:
     char *buffer_;
 
