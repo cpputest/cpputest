@@ -29,14 +29,41 @@
 #include "CppUTest/SimpleString.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 #include "CppUTest/TestMemoryAllocator.h"
+#include "CppUTest/MemoryLeakDetector.h"
+
+class JustUseNewStringAllocator : public TestMemoryAllocator
+{
+public:
+    virtual ~JustUseNewStringAllocator() {}
+
+    char* alloc_memory(size_t size, const char* file, int line)
+    {
+      return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewArrayAllocator(), size, (char*) file, line);
+    }
+    void free_memory(char* str, const char* file, int line)
+    {
+      MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(getCurrentNewArrayAllocator(), str, (char*) file, line);
+    }
+};
+
 
 TEST_GROUP(SimpleString)
 {
+  JustUseNewStringAllocator justNewForSimpleStringTestAllocator;
+  void setup()
+  {
+    SimpleString::setStringAllocator(&justNewForSimpleStringTestAllocator);
+  }
+  void teardown()
+  {
+    SimpleString::setStringAllocator(NULL);
+  }
 };
 
 TEST(SimpleString, defaultAllocatorIsNewArrayAllocator)
 {
-    POINTERS_EQUAL(getCurrentNewArrayAllocator(), SimpleString::getStringAllocator());
+  SimpleString::setStringAllocator(NULL);
+  POINTERS_EQUAL(getCurrentNewArrayAllocator(), SimpleString::getStringAllocator());
 }
 
 class MyOwnStringAllocator : public TestMemoryAllocator
@@ -296,6 +323,13 @@ TEST(SimpleString, replaceEmptyStringWithEmptyString)
 {
     SimpleString str;
     str.replace("", "");
+    STRCMP_EQUAL("", str.asCharString());
+}
+
+TEST(SimpleString, replaceWholeString)
+{
+    SimpleString str("boo");
+    str.replace("boo", "");
     STRCMP_EQUAL("", str.asCharString());
 }
 
