@@ -96,6 +96,7 @@ protected:
     virtual void failTest(const MockFailure& failure);
     virtual void checkInputParameter(const MockNamedValue& actualParameter);
     virtual void checkOutputParameter(const MockNamedValue& outputParameter);
+    virtual bool isIgnoredOutputParameter(const MockNamedValue& outputParameter);
 
     enum ActualCallState {
         CALL_IN_PROGESS,

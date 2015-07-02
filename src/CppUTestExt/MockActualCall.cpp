@@ -94,7 +94,7 @@ void MockCheckedActualCall::finalizeOutputParameters(MockCheckedExpectedCall* ex
             size_t size = outputParameter.getSize();
             PlatformSpecificMemCpy(p->ptr_, data, size);
         }
-        else
+        else if (!isIgnoredOutputParameter(outputParameter))
         {
             SimpleString type = expectedCall->getOutputParameter(p->name_).getType();
             MockNoWayToCopyCustomTypeFailure failure(getTest(), type);
@@ -171,6 +171,11 @@ void MockCheckedActualCall::checkOutputParameter(const MockNamedValue& outputPar
 
     unfulfilledExpectations_.outputParameterWasPassed(outputParameter.getName());
     finalizeCallWhenFulfilled();
+}
+
+bool MockCheckedActualCall::isIgnoredOutputParameter(const MockNamedValue& outputParameter)
+{
+    return outputParameter.getName() == "";
 }
 
 MockActualCall& MockCheckedActualCall::withUnsignedIntParameter(const SimpleString& name, unsigned int value)
