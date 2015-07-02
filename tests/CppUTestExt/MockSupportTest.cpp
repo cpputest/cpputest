@@ -888,6 +888,13 @@ TEST(MockSupportTest, outputParameterTraced)
     STRCMP_CONTAINS("Function name:someFunc someParameter:", mock().getTraceOutput());
 }
 
+TEST(MockSupportTest, outputParameterThatIsIgnoredShouldNotFail)
+{
+    int param;
+    mock().expectOneCall("function").ignoreOtherParameters();
+    mock().actualCall("function").withOutputParameter("parameterName", &param);
+}
+
 TEST(MockSupportTest, outputParameterWithIgnoredParameters)
 {
     int param = 1;
