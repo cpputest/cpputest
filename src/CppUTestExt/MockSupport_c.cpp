@@ -95,6 +95,24 @@ public:
 
 static MockCFunctionComparatorNode* comparatorList_ = NULL;
 
+class MockCFunctionCopierNode : public MockNamedValueCopier
+{
+public:
+    MockCFunctionCopierNode(MockCFunctionCopierNode* next, MockTypeCopyFunction_c copier)
+        : next_(next), copier_(copier) {}
+    virtual ~MockCFunctionCopierNode() {}
+
+    virtual void copy(void* dst, const void* src) _override
+    {
+        copier_(dst, src);
+    }
+
+    MockCFunctionCopierNode* next_;
+    MockTypeCopyFunction_c copier_;
+};
+
+static MockCFunctionCopierNode* copierList_ = NULL;
+
 extern "C" {
 
 MockExpectedCall_c* expectOneCall_c(const char* name);
@@ -153,6 +171,12 @@ static void installComparator_c (const char* typeName, MockTypeEqualFunction_c i
     currentMockSupport->installComparator(typeName, *comparatorList_);
 }
 
+static void installCopier_c (const char* typeName, MockTypeCopyFunction_c copier)
+{
+    copierList_ = new MockCFunctionCopierNode(copierList_, copier);
+    currentMockSupport->installCopier(typeName, *copierList_);
+}
+
 static void removeAllComparators_c()
 {
     while (comparatorList_) {
@@ -161,6 +185,16 @@ static void removeAllComparators_c()
         comparatorList_ = next;
     }
     currentMockSupport->removeAllComparators();
+}
+
+static void removeAllCopiers_c()
+{
+    while (copierList_) {
+        MockCFunctionCopierNode *next = copierList_->next_;
+        delete copierList_;
+        copierList_ = next;
+    }
+    currentMockSupport->removeAllCopiers();
 }
 
 static MockExpectedCall_c gExpectedCall = {
@@ -216,7 +250,9 @@ static MockSupport_c gMockSupport = {
         clear_c,
         crashOnFailure_c,
         installComparator_c,
-        removeAllComparators_c
+        installCopier_c,
+        removeAllComparators_c,
+        removeAllCopiers_c
 };
 
 MockExpectedCall_c* withIntParameters_c(const char* name, int value)
