@@ -28,7 +28,7 @@
 #ifndef D_MockNamedValue_h
 #define D_MockNamedValue_h
 /*
- * MockParameterComparator is an interface that needs to be used when creating Comparators.
+ * MockNamedValueComparator is an interface that needs to be used when creating Comparators.
  * This is needed when comparing values of non-native type.
  */
 
@@ -66,7 +66,7 @@ private:
  * Basically this class ties together a Name, a Value, a Type, and a Comparator
  */
 
-class MockNamedValueComparatorRepository;
+class MockNamedValueHandlerRepository;
 class MockNamedValue
 {
 public:
@@ -106,7 +106,7 @@ public:
     virtual size_t getSize() const;
     virtual MockNamedValueComparator* getComparator() const;
 
-    static void setDefaultComparatorRepository(MockNamedValueComparatorRepository* repository);
+    static void setDefaultHandlerRepository(MockNamedValueHandlerRepository* repository);
 private:
     SimpleString name_;
     SimpleString type_;
@@ -124,7 +124,7 @@ private:
     } value_;
     size_t size_;
     MockNamedValueComparator* comparator_;
-    static MockNamedValueComparatorRepository* defaultRepository_;
+    static MockNamedValueHandlerRepository* defaultRepository_;
 };
 
 class MockNamedValueListNode
@@ -167,18 +167,19 @@ private:
  */
 
 struct MockNamedValueComparatorRepositoryNode;
-class MockNamedValueComparatorRepository
+class MockNamedValueHandlerRepository
 {
-    MockNamedValueComparatorRepositoryNode* head_;
+private:
+    MockNamedValueComparatorRepositoryNode* comparatorsHead_;
 public:
-    MockNamedValueComparatorRepository();
-    virtual ~MockNamedValueComparatorRepository();
+    MockNamedValueHandlerRepository();
+    virtual ~MockNamedValueHandlerRepository();
 
     virtual void installComparator(const SimpleString& name, MockNamedValueComparator& comparator);
-    virtual void installComparators(const MockNamedValueComparatorRepository& repository);
+    virtual void installHandlers(const MockNamedValueHandlerRepository& repository);
     virtual MockNamedValueComparator* getComparatorForType(const SimpleString& name);
 
-    void clear();
+    void clearComparators();
 };
 
 #endif
