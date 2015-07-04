@@ -1128,11 +1128,11 @@ TEST(MockSupportTest, installComparatorsWorksHierarchical)
 {
     MyTypeForTesting object(1);
     MyTypeForTestingComparator comparator;
-    MockNamedValueComparatorRepository repos;
+    MockNamedValueComparatorsAndCopiersRepository repos;
     repos.installComparator("MyTypeForTesting", comparator);
 
     mock("existing");
-    mock().installComparators(repos);
+    mock().installComparatorsAndCopiers(repos);
     mock("existing").expectOneCall("function").withParameterOfType("MyTypeForTesting", "parameterName", &object);
     mock("existing").actualCall("function").withParameterOfType("MyTypeForTesting", "parameterName", &object);
 

@@ -62,7 +62,7 @@ MockSupportPlugin::~MockSupportPlugin()
 
 void MockSupportPlugin::preTestAction(UtestShell&, TestResult&)
 {
-    mock().installComparators(repository_);
+    mock().installComparatorsAndCopiers(repository_);
 }
 
 void MockSupportPlugin::postTestAction(UtestShell& test, TestResult& result)

@@ -42,7 +42,7 @@ public:
 
     virtual void installComparator(const SimpleString& name, MockNamedValueComparator& comparator);
 private:
-    MockNamedValueComparatorRepository repository_;
+    MockNamedValueComparatorsAndCopiersRepository repository_;
 };
 
 #endif

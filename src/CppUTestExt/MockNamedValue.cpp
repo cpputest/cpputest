@@ -30,9 +30,9 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 
 
-MockNamedValueComparatorRepository* MockNamedValue::defaultRepository_ = NULL;
+MockNamedValueComparatorsAndCopiersRepository* MockNamedValue::defaultRepository_ = NULL;
 
-void MockNamedValue::setDefaultComparatorRepository(MockNamedValueComparatorRepository* repository)
+void MockNamedValue::setDefaultComparatorsAndCopiersRepository(MockNamedValueComparatorsAndCopiersRepository* repository)
 {
     defaultRepository_ = repository;
 }
@@ -358,49 +358,49 @@ MockNamedValueListNode* MockNamedValueList::begin()
     return head_;
 }
 
-struct MockNamedValueComparatorRepositoryNode
+struct MockNamedValueComparatorsAndCopiersRepositoryNode
 {
-    MockNamedValueComparatorRepositoryNode(const SimpleString& name, MockNamedValueComparator& comparator, MockNamedValueComparatorRepositoryNode* next)
+    MockNamedValueComparatorsAndCopiersRepositoryNode(const SimpleString& name, MockNamedValueComparator* comparator, MockNamedValueComparatorsAndCopiersRepositoryNode* next)
         : name_(name), comparator_(comparator), next_(next) {}
     SimpleString name_;
-    MockNamedValueComparator& comparator_;
-    MockNamedValueComparatorRepositoryNode* next_;
+    MockNamedValueComparator* comparator_;
+    MockNamedValueComparatorsAndCopiersRepositoryNode* next_;
 };
 
-MockNamedValueComparatorRepository::MockNamedValueComparatorRepository() : head_(NULL)
+MockNamedValueComparatorsAndCopiersRepository::MockNamedValueComparatorsAndCopiersRepository() : head_(NULL)
 {
 
 }
 
-MockNamedValueComparatorRepository::~MockNamedValueComparatorRepository()
+MockNamedValueComparatorsAndCopiersRepository::~MockNamedValueComparatorsAndCopiersRepository()
 {
     clear();
 }
 
-void MockNamedValueComparatorRepository::clear()
+void MockNamedValueComparatorsAndCopiersRepository::clear()
 {
     while (head_) {
-        MockNamedValueComparatorRepositoryNode* next = head_->next_;
+        MockNamedValueComparatorsAndCopiersRepositoryNode* next = head_->next_;
         delete head_;
         head_ = next;
     }
 }
 
-void MockNamedValueComparatorRepository::installComparator(const SimpleString& name, MockNamedValueComparator& comparator)
+void MockNamedValueComparatorsAndCopiersRepository::installComparator(const SimpleString& name, MockNamedValueComparator& comparator)
 {
-    head_ = new MockNamedValueComparatorRepositoryNode(name, comparator, head_);
+    head_ = new MockNamedValueComparatorsAndCopiersRepositoryNode(name, &comparator, head_);
 }
 
-MockNamedValueComparator* MockNamedValueComparatorRepository::getComparatorForType(const SimpleString& name)
+MockNamedValueComparator* MockNamedValueComparatorsAndCopiersRepository::getComparatorForType(const SimpleString& name)
 {
-    for (MockNamedValueComparatorRepositoryNode* p = head_; p; p = p->next_)
-            if (p->name_ == name) return &p->comparator_;
+    for (MockNamedValueComparatorsAndCopiersRepositoryNode* p = head_; p; p = p->next_)
+            if (p->name_ == name && p->comparator_) return p->comparator_;
     return NULL;
 }
 
-void MockNamedValueComparatorRepository::installComparators(const MockNamedValueComparatorRepository& repository)
+void MockNamedValueComparatorsAndCopiersRepository::installComparatorsAndCopiers(const MockNamedValueComparatorsAndCopiersRepository& repository)
 {
-    for (MockNamedValueComparatorRepositoryNode* p = repository.head_; p; p = p->next_)
-            installComparator(p->name_, p->comparator_);
+    for (MockNamedValueComparatorsAndCopiersRepositoryNode* p = repository.head_; p; p = p->next_)
+      head_ = new MockNamedValueComparatorsAndCopiersRepositoryNode(p->name_, p->comparator_, head_);
 }
 
