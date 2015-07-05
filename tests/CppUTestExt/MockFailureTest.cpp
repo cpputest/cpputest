@@ -200,7 +200,13 @@ TEST(MockFailureTest, MockExpectedParameterDidntHappenFailure)
 TEST(MockFailureTest, MockNoWayToCompareCustomTypeFailure)
 {
     MockNoWayToCompareCustomTypeFailure failure(UtestShell::getCurrent(), "myType");
-    STRCMP_EQUAL("MockFailure: No way to compare type <myType>. Please install a ParameterTypeComparator.", failure.getMessage().asCharString());
+    STRCMP_EQUAL("MockFailure: No way to compare type <myType>. Please install a MockNamedValueComparator.", failure.getMessage().asCharString());
+}
+
+TEST(MockFailureTest, MockNoWayToCopyCustomTypeFailure)
+{
+    MockNoWayToCopyCustomTypeFailure failure(UtestShell::getCurrent(), "myType");
+    STRCMP_EQUAL("MockFailure: No way to copy type <myType>. Please install a MockNamedValueCopier.", failure.getMessage().asCharString());
 }
 
 TEST(MockFailureTest, MockUnexpectedObjectFailure)
