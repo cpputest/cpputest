@@ -105,15 +105,14 @@ public:
     {
         return "string";
     }
-
 };
 
 TEST(MockPlugin, installComparatorRecordsTheComparatorButNotInstallsItYet)
 {
     DummyComparator comparator;
     plugin->installComparator("myType", comparator);
-    mock().expectOneCall("foo").withParameterOfType("myType", "name", &comparator);
-    mock().actualCall("foo").withParameterOfType("myType", "name", &comparator);
+    mock().expectOneCall("foo").withParameterOfType("myType", "name", NULL);
+    mock().actualCall("foo").withParameterOfType("myType", "name", NULL);
 
     MockNoWayToCompareCustomTypeFailure failure(test, "myType");
     CHECK_EXPECTED_MOCK_FAILURE(failure);
