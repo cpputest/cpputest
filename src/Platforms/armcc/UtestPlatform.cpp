@@ -72,16 +72,25 @@ extern "C" void (*PlatformSpecificLongJmp)() = PlatformSpecificLongJmpImplementa
 extern "C" int (*PlatformSpecificSetJmp)(void (*)(void*), void*) = PlatformSpecificSetJmpImplementation;
 extern "C" void (*PlatformSpecificRestoreJumpBuffer)() = PlatformSpecificRestoreJumpBufferImplementation;
 
-
-static void PlatformSpecificRunTestInASeperateProcessImplementation(UtestShell* shell, TestPlugin* plugin, TestResult* result)
+static void DummyPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin*, TestResult* result)
 {
-    printf("-p isn' implemented for armcc. Running inside the process\b");
-    shell->runOneTest(plugin, *result);
+    result->addFailure(TestFailure(shell, "-p doesn't work on this platform, as it is lacking fork.\b"));
+}
+
+static int DummyPlatformSpecificFork(void)
+{
+    return 0;
+}
+
+static int DummyPlatformSpecificWaitPid(int, int*, int)
+{
+    return 0;
 }
 
 void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell* shell, TestPlugin* plugin, TestResult* result) =
-        PlatformSpecificRunTestInASeperateProcessImplementation;
-
+        DummyPlatformSpecificRunTestInASeperateProcess;
+extern "C" int (*PlatformSpecificFork)(void) = DummyPlatformSpecificFork;
+extern "C" int (*PlatformSpecificWaitPid)(int, int*, int) = DummyPlatformSpecificWaitPid;
 
 TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
 {
@@ -109,11 +118,6 @@ static const char* TimeStringImplementation()
 
 extern "C" const char* (*GetPlatformSpecificTimeString)() = TimeStringImplementation;
 
-int PlatformSpecificAtoI(const char* str)
-{
-    return atoi(str);
-}
-
 /* The ARMCC compiler will compile this function with C++ linkage, unless
  * we specifically tell it to use C linkage again, in the function definiton.
  */
@@ -136,7 +140,7 @@ static void PlatformSpecificFCloseImplementation(PlatformSpecificFile file)
 
 static void PlatformSpecificFlushImplementation()
 {
-  fflush(stdout);
+    fflush(stdout);
 }
 
 extern "C" PlatformSpecificFile (*PlatformSpecificFOpen)(const char*, const char*) = PlatformSpecificFOpenImplementation;
@@ -146,9 +150,9 @@ extern "C" void (*PlatformSpecificFClose)(PlatformSpecificFile) = PlatformSpecif
 extern "C" int (*PlatformSpecificPutchar)(int) = putchar;
 extern "C" void (*PlatformSpecificFlush)() = PlatformSpecificFlushImplementation;
 extern "C" void* (*PlatformSpecificMalloc)(size_t) = malloc;
-extern "C" void* (*PlatformSpecificRealloc) (void*, size_t) = realloc;
+extern "C" void* (*PlatformSpecificRealloc)(void*, size_t) = realloc;
 extern "C" void (*PlatformSpecificFree)(void*) = free;
-extern "C" void* (*PlatformSpecificMemCpy)(void* s1, const void* s2, size_t size) = memcpy;
+extern "C" void* (*PlatformSpecificMemCpy)(void*, const void*, size_t) = memcpy;
 extern "C" void* (*PlatformSpecificMemset)(void*, int, size_t) = memset;
 
 static int IsNanImplementation(double d)
@@ -157,22 +161,23 @@ static int IsNanImplementation(double d)
 }
 
 extern "C" int (*PlatformSpecificIsNan)(double) = IsNanImplementation;
-extern "C" double (*PlatformSpecificFabs)(double) = fabs;extern "C" int (*PlatformSpecificAtExit)(void(*func)(void)) = atexit;  /// this was undefined before
+extern "C" double (*PlatformSpecificFabs)(double) = fabs;
+extern "C" int (*PlatformSpecificAtExit)(void(*func)(void)) = atexit;  /// this was undefined before
 
 static PlatformSpecificMutex DummyMutexCreate(void)
 {
     return 0;
 }
 
-static void DummyMutexLock(PlatformSpecificMutex mtx)
+static void DummyMutexLock(PlatformSpecificMutex)
 {
 }
 
-static void DummyMutexUnlock(PlatformSpecificMutex mtx)
+static void DummyMutexUnlock(PlatformSpecificMutex)
 {
 }
 
-static void DummyMutexDestroy(PlatformSpecificMutex mtx)
+static void DummyMutexDestroy(PlatformSpecificMutex)
 {
 }
 
