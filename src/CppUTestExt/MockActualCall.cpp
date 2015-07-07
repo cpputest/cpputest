@@ -82,9 +82,12 @@ void MockCheckedActualCall::finalizeOutputParameters(MockCheckedExpectedCall* ex
 {
     for (MockOutputParametersListNode* p = outputParameterExpectations_; p; p = p->next_)
     {
-        const void* data = expectedCall->getOutputParameter(*p->name_).getConstPointerValue();
-        size_t size = expectedCall->getOutputParameter(*p->name_).getSize();
-        PlatformSpecificMemCpy(p->ptr_, data, size);
+        MockNamedValue expectedParameter = expectedCall->getOutputParameter(*p->name_);
+        if (expectedParameter.getName() != "") {
+            const void* data = expectedCall->getOutputParameter(*p->name_).getConstPointerValue();
+            size_t size = expectedCall->getOutputParameter(*p->name_).getSize();
+            PlatformSpecificMemCpy(p->ptr_, data, size);
+        }
     }
 }
 
