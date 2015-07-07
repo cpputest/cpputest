@@ -181,6 +181,7 @@ CppUTestExtTests_SOURCES = \
 	tests/CppUTestExt/MockExpectedCallTest.cpp \
 	tests/CppUTestExt/MockExpectedFunctionsListTest.cpp \
 	tests/CppUTestExt/MockFailureTest.cpp \
+	tests/CppUTestExt/MockNamedValueTest.cpp \
 	tests/CppUTestExt/MockPluginTest.cpp \
 	tests/CppUTestExt/MockSupportTest.cpp \
 	tests/CppUTestExt/MockSupport_cTest.cpp \

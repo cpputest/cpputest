@@ -361,9 +361,12 @@ MockNamedValueListNode* MockNamedValueList::begin()
 struct MockNamedValueComparatorsAndCopiersRepositoryNode
 {
     MockNamedValueComparatorsAndCopiersRepositoryNode(const SimpleString& name, MockNamedValueComparator* comparator, MockNamedValueComparatorsAndCopiersRepositoryNode* next)
-        : name_(name), comparator_(comparator), next_(next) {}
+        : name_(name), comparator_(comparator), copier_(NULL), next_(next) {}
+    MockNamedValueComparatorsAndCopiersRepositoryNode(const SimpleString& name, MockNamedValueCopier* copier, MockNamedValueComparatorsAndCopiersRepositoryNode* next)
+        : name_(name), comparator_(NULL), copier_(copier), next_(next) {}
     SimpleString name_;
     MockNamedValueComparator* comparator_;
+    MockNamedValueCopier* copier_;
     MockNamedValueComparatorsAndCopiersRepositoryNode* next_;
 };
 
@@ -391,10 +394,22 @@ void MockNamedValueComparatorsAndCopiersRepository::installComparator(const Simp
     head_ = new MockNamedValueComparatorsAndCopiersRepositoryNode(name, &comparator, head_);
 }
 
+void MockNamedValueComparatorsAndCopiersRepository::installCopier(const SimpleString& name, MockNamedValueCopier& copier)
+{
+    head_ = new MockNamedValueComparatorsAndCopiersRepositoryNode(name, &copier, head_);
+}
+
 MockNamedValueComparator* MockNamedValueComparatorsAndCopiersRepository::getComparatorForType(const SimpleString& name)
 {
     for (MockNamedValueComparatorsAndCopiersRepositoryNode* p = head_; p; p = p->next_)
             if (p->name_ == name && p->comparator_) return p->comparator_;
+    return NULL;
+}
+
+MockNamedValueCopier* MockNamedValueComparatorsAndCopiersRepository::getCopierForType(const SimpleString& name)
+{
+    for (MockNamedValueComparatorsAndCopiersRepositoryNode* p = head_; p; p = p->next_)
+            if (p->name_ == name && p->copier_) return p->copier_;
     return NULL;
 }
 
