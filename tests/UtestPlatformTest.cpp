@@ -35,7 +35,7 @@ TEST_GROUP(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess)
     TestTestingFixture fixture;
 };
 
-#if defined(__MINGW32__) || defined(_MSC_VER) || defined(__IAR_SYSTEMS_ICC__)
+#if 1
 
 TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, DummyFailsWithMessage)
 {
