@@ -46,6 +46,7 @@ TEST(ComparatorsAndCopiersRepository, InstallCopierAndRetrieveIt)
 {
   MyCopier copier;
   MockNamedValueComparatorsAndCopiersRepository repository;
-  repository.installCopier("copier", copier);
-  POINTERS_EQUAL(&copier, repository.getCopierForType("copier"));
+  repository.installCopier("MyType", copier);
+  POINTERS_EQUAL(&copier, repository.getCopierForType("MyType"));
+  repository.clear();
 }
