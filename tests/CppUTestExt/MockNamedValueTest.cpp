@@ -32,6 +32,17 @@ TEST_GROUP(ComparatorsAndCopiersRepository)
 {
 };
 
+class MyComparator : public MockNamedValueComparator
+{
+  public:
+
+    MyComparator() {}
+    virtual ~MyComparator() {}
+
+    virtual bool isEqual(const void*, const void*) { return false; } _override
+    virtual SimpleString valueToString(const void*) { return ""; } _override
+};
+
 class MyCopier : public MockNamedValueCopier
 {
   public:
@@ -50,3 +61,15 @@ TEST(ComparatorsAndCopiersRepository, InstallCopierAndRetrieveIt)
   POINTERS_EQUAL(&copier, repository.getCopierForType("MyType"));
   repository.clear();
 }
+
+TEST(ComparatorsAndCopiersRepository, CopierShouldBeFoundWhenComparatorByTheSameNameIsFirstInTheList)
+{
+  MyComparator comparator;
+  MyCopier copier;
+  MockNamedValueComparatorsAndCopiersRepository repository;
+  repository.installCopier("MyType", copier);
+  repository.installComparator("MyType", comparator);
+  POINTERS_EQUAL(&copier, repository.getCopierForType("MyType"));
+  repository.clear();
+}
+
