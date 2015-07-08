@@ -78,6 +78,8 @@ public:
     void setDataObject(const SimpleString& name, const SimpleString& type, void* value);
     MockNamedValue getData(const SimpleString& name);
 
+    MockNamedValue *getDataPointer(const SimpleString& name);
+
     MockSupport* getMockSupportScope(const SimpleString& name);
 
     const char* getTraceOutput();
