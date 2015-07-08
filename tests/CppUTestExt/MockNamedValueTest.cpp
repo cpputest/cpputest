@@ -37,9 +37,9 @@ class MyCopier : public MockNamedValueCopier
   public:
 
     MyCopier() {}
-    virtual ~MyCopier() {}
+    virtual ~MyCopier() {} _override
 
-    virtual void copy(void*, const void*) {}
+    virtual void copy(void*, const void*) {} _override
 };
 
 TEST(ComparatorsAndCopiersRepository, InstallCopierAndRetrieveIt)
