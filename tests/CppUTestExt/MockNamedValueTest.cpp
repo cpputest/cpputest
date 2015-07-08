@@ -62,13 +62,14 @@ TEST(ComparatorsAndCopiersRepository, InstallCopierAndRetrieveIt)
   repository.clear();
 }
 
-TEST(ComparatorsAndCopiersRepository, CopierShouldBeFoundWhenComparatorByTheSameNameIsFirstInTheList)
+TEST(ComparatorsAndCopiersRepository, ComparatorAndCopierByTheSameNameShouldBothBeFound)
 {
   MyComparator comparator;
   MyCopier copier;
   MockNamedValueComparatorsAndCopiersRepository repository;
   repository.installCopier("MyType", copier);
   repository.installComparator("MyType", comparator);
+  POINTERS_EQUAL(&comparator, repository.getComparatorForType("MyType"));
   POINTERS_EQUAL(&copier, repository.getCopierForType("MyType"));
   repository.clear();
 }
