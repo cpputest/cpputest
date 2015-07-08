@@ -162,14 +162,14 @@ static int IsNanImplementation(double d)
     return isnan(d);
 }
 
-static int DummyAtExit(void(*)(void))
+static int AtExitImplementation(void(*func)(void))
 {
-    return 0;
+    return atexit(func);
 }
 
 double (*PlatformSpecificFabs)(double) = fabs;
 int (*PlatformSpecificIsNan)(double) = IsNanImplementation;
-int (*PlatformSpecificAtExit)(void(*func)(void)) = DummyAtExit;
+int (*PlatformSpecificAtExit)(void(*func)(void)) = AtExitImplementation;
 
 static PlatformSpecificMutex DummyMutexCreate(void)
 {
