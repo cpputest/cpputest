@@ -28,7 +28,7 @@
 #ifndef D_MockNamedValue_h
 #define D_MockNamedValue_h
 /*
- * MockParameterComparator is an interface that needs to be used when creating Comparators.
+ * MockNamedValueComparator is an interface that needs to be used when creating Comparators.
  * This is needed when comparing values of non-native type.
  */
 
@@ -41,6 +41,11 @@ public:
     virtual bool isEqual(const void* object1, const void* object2)=0;
     virtual SimpleString valueToString(const void* object)=0;
 };
+
+/*
+ * MockNamedValueCopier is an interface that needs to be used when creating Copiers.
+ * This is needed when copying values of non-native type.
+ */
 
 class MockNamedValueCopier
 {
@@ -67,6 +72,20 @@ public:
 private:
     isEqualFunction equal_;
     valueToStringFunction valueToString_;
+};
+
+class MockFunctionCopier : public MockNamedValueCopier
+{
+public:
+    typedef void (*copyFunction)(void*, const void*);
+
+    MockFunctionCopier(copyFunction copier) : copier_(copier) {}
+    virtual ~MockFunctionCopier(){}
+
+    virtual void copy(void* dst, const void* src) _override { return copier_(dst, src); }
+
+private:
+    copyFunction copier_;
 };
 
 /*
@@ -98,6 +117,7 @@ public:
     virtual void setName(const char* name);
 
     virtual bool equals(const MockNamedValue& p) const;
+    virtual bool compatibleForCopying(const MockNamedValue& p) const;
 
     virtual SimpleString toString() const;
 
@@ -114,7 +134,9 @@ public:
     virtual const void* getConstPointerValue() const;
     virtual const void* getObjectPointer() const;
     virtual size_t getSize() const;
+
     virtual MockNamedValueComparator* getComparator() const;
+    virtual MockNamedValueCopier* getCopier() const;
 
     static void setDefaultComparatorsAndCopiersRepository(MockNamedValueComparatorsAndCopiersRepository* repository);
 private:
@@ -134,6 +156,7 @@ private:
     } value_;
     size_t size_;
     MockNamedValueComparator* comparator_;
+    MockNamedValueCopier* copier_;
     static MockNamedValueComparatorsAndCopiersRepository* defaultRepository_;
 };
 

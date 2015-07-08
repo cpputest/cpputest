@@ -37,7 +37,7 @@ void MockNamedValue::setDefaultComparatorsAndCopiersRepository(MockNamedValueCom
     defaultRepository_ = repository;
 }
 
-MockNamedValue::MockNamedValue(const SimpleString& name) : name_(name), type_("int"), comparator_(NULL)
+MockNamedValue::MockNamedValue(const SimpleString& name) : name_(name), type_("int"), size_(0), comparator_(NULL), copier_(NULL)
 {
     value_.intValue_ = 0;
 }
@@ -99,7 +99,10 @@ void MockNamedValue::setObjectPointer(const SimpleString& type, const void* obje
     type_ = type;
     value_.objectPointerValue_ = objectPtr;
     if (defaultRepository_)
+    {
         comparator_ = defaultRepository_->getComparatorForType(type);
+        copier_ = defaultRepository_->getCopierForType(type);
+    }
 }
 
 void MockNamedValue::setSize(size_t size)
@@ -206,6 +209,11 @@ MockNamedValueComparator* MockNamedValue::getComparator() const
     return comparator_;
 }
 
+MockNamedValueCopier* MockNamedValue::getCopier() const
+{
+    return copier_;
+}
+
 bool MockNamedValue::equals(const MockNamedValue& p) const
 {
     if((type_ == "long int") && (p.type_ == "int"))
@@ -254,6 +262,16 @@ bool MockNamedValue::equals(const MockNamedValue& p) const
 
     if (comparator_)
         return comparator_->isEqual(value_.objectPointerValue_, p.value_.objectPointerValue_);
+
+    return false;
+}
+
+bool MockNamedValue::compatibleForCopying(const MockNamedValue& p) const
+{
+    if (type_ == p.type_) return true;
+
+    if ((type_ == "const void*") && (p.type_ == "void*"))
+        return true;
 
     return false;
 }
@@ -418,4 +436,3 @@ void MockNamedValueComparatorsAndCopiersRepository::installComparatorsAndCopiers
     for (MockNamedValueComparatorsAndCopiersRepositoryNode* p = repository.head_; p; p = p->next_)
       head_ = new MockNamedValueComparatorsAndCopiersRepositoryNode(p->name_, p->comparator_, head_);
 }
-
