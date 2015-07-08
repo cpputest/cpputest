@@ -48,7 +48,7 @@ public:
     MockNamedValueCopier() {}
     virtual ~MockNamedValueCopier() {}
 
-    virtual void copy(const void* in, void* out)=0;
+    virtual void copy(void* out, const void* in)=0;
 };
 
 
