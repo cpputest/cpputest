@@ -96,34 +96,9 @@ static void PlatformSpecificRestoreJumpBufferImplementation()
     jmp_buf_index--;
 }
 
-extern "C" void (*PlatformSpecificLongJmp)() = PlatformSpecificLongJmpImplementation;
-extern "C" int (*PlatformSpecificSetJmp)(void (*)(void*), void*) = PlatformSpecificSetJmpImplementation;
-extern "C" void (*PlatformSpecificRestoreJumpBuffer)() = PlatformSpecificRestoreJumpBufferImplementation;
-
-static void DummyPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin*, TestResult* result)
-{
-    result->addFailure(TestFailure(shell, "-p doesn't work on this platform, as it is lacking fork.\b"));
-}
-
-static int DummyPlatformSpecificFork(void)
-{
-    return 0;
-}
-
-static int DummyPlatformSpecificWaitPid(int, int*, int)
-{
-    return 0;
-}
-
-void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell* shell, TestPlugin* plugin, TestResult* result) =
-        DummyPlatformSpecificRunTestInASeperateProcess;
-extern "C" int (*PlatformSpecificFork)(void) = DummyPlatformSpecificFork;
-extern "C" int (*PlatformSpecificWaitPid)(int, int*, int) = DummyPlatformSpecificWaitPid;
-
-TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
-{
-    return TestOutput::eclipse;
-}
+void (*PlatformSpecificLongJmp)() = PlatformSpecificLongJmpImplementation;
+int (*PlatformSpecificSetJmp)(void (*)(void*), void*) = PlatformSpecificSetJmpImplementation;
+void (*PlatformSpecificRestoreJumpBuffer)() = PlatformSpecificRestoreJumpBufferImplementation;
 
 ///////////// Time in millis
 /*
@@ -138,14 +113,14 @@ static long TimeInMillisImplementation()
 
 ///////////// Time in String
 
-static const char* TimeStringImplementation()
+static const char* DummyTimeStringImplementation()
 {
-    time_t tm = time(NULL);
+    time_t tm = 0;
     return ctime(&tm);
 }
 
 long (*GetPlatformSpecificTimeInMillis)() = TimeInMillisImplementation;
-const char* (*GetPlatformSpecificTimeString)() = TimeStringImplementation;
+const char* (*GetPlatformSpecificTimeString)() = DummyTimeStringImplementation;
 
 int (*PlatformSpecificVSNprintf)(char *str, size_t size, const char* format, va_list args) = vsnprintf;
 
@@ -187,9 +162,14 @@ static int IsNanImplementation(double d)
     return isnan(d);
 }
 
+static int DummyAtExit(void(*)(void))
+{
+    return 0;
+}
+
 double (*PlatformSpecificFabs)(double) = fabs;
 int (*PlatformSpecificIsNan)(double) = IsNanImplementation;
-int (*PlatformSpecificAtExit)(void(*func)(void)) = atexit;  /// this was undefined before
+int (*PlatformSpecificAtExit)(void(*func)(void)) = DummyAtExit;
 
 static PlatformSpecificMutex DummyMutexCreate(void)
 {
