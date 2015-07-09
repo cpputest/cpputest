@@ -60,7 +60,7 @@ extern "C"{
 
     static const char* typeNameValueToString(const void* PUNUSED(object))
     {
-        return (const char*) "valueToString";
+        return "valueToString";
     }
 
 }
