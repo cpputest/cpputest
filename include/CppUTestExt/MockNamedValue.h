@@ -28,7 +28,7 @@
 #ifndef D_MockNamedValue_h
 #define D_MockNamedValue_h
 /*
- * MockParameterComparator is an interface that needs to be used when creating Comparators.
+ * MockNamedValueComparator is an interface that needs to be used when creating Comparators.
  * This is needed when comparing values of non-native type.
  */
 
@@ -42,12 +42,12 @@ public:
     virtual SimpleString valueToString(const void* object)=0;
 };
 
+extern "C" typedef int (*isEqualFunction)(const void*, const void*);
+extern "C" typedef const char* (*valueToStringFunction)(const void*);
+
 class MockFunctionComparator : public MockNamedValueComparator
 {
 public:
-    typedef bool (*isEqualFunction)(const void*, const void*);
-    typedef SimpleString (*valueToStringFunction)(const void*);
-
     MockFunctionComparator(isEqualFunction equal, valueToStringFunction valToString)
         : equal_(equal), valueToString_(valToString) {}
     virtual ~MockFunctionComparator(){}

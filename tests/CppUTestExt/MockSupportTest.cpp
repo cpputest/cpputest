@@ -875,14 +875,15 @@ TEST(MockSupportTest, outputParameterWithIgnoredParameters)
     LONGS_EQUAL(param, retval);
 }
 
-static bool myTypeIsEqual(const void* object1, const void* object2)
+static int myTypeIsEqual(const void* object1, const void* object2)
 {
     return ((MyTypeForTesting*)object1)->value == ((MyTypeForTesting*)object2)->value;
 }
 
-static SimpleString myTypeValueToString(const void* object)
+static const char* myTypeValueToString(const void* object)
 {
-    return StringFrom(((MyTypeForTesting*)object)->value);
+    static SimpleString valString = StringFrom(((MyTypeForTesting*)object)->value);
+    return valString.asCharString();
 }
 
 TEST(MockSupportTest, customObjectWithFunctionComparator)
