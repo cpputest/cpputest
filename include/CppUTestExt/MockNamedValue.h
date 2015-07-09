@@ -42,6 +42,16 @@ public:
     virtual SimpleString valueToString(const void* object)=0;
 };
 
+class MockNamedValueCopier
+{
+public:
+    MockNamedValueCopier() {}
+    virtual ~MockNamedValueCopier() {}
+
+    virtual void copy(void* out, const void* in)=0;
+};
+
+
 class MockFunctionComparator : public MockNamedValueComparator
 {
 public:
@@ -175,8 +185,10 @@ public:
     virtual ~MockNamedValueComparatorsAndCopiersRepository();
 
     virtual void installComparator(const SimpleString& name, MockNamedValueComparator& comparator);
+    virtual void installCopier(const SimpleString& name, MockNamedValueCopier& copier);
     virtual void installComparatorsAndCopiers(const MockNamedValueComparatorsAndCopiersRepository& repository);
     virtual MockNamedValueComparator* getComparatorForType(const SimpleString& name);
+    virtual MockNamedValueCopier* getCopierForType(const SimpleString& name);
 
     void clear();
 };
