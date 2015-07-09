@@ -66,7 +66,7 @@ private:
  * Basically this class ties together a Name, a Value, a Type, and a Comparator
  */
 
-class MockNamedValueComparatorRepository;
+class MockNamedValueComparatorsAndCopiersRepository;
 class MockNamedValue
 {
 public:
@@ -106,7 +106,7 @@ public:
     virtual size_t getSize() const;
     virtual MockNamedValueComparator* getComparator() const;
 
-    static void setDefaultComparatorRepository(MockNamedValueComparatorRepository* repository);
+    static void setDefaultComparatorsAndCopiersRepository(MockNamedValueComparatorsAndCopiersRepository* repository);
 private:
     SimpleString name_;
     SimpleString type_;
@@ -124,7 +124,7 @@ private:
     } value_;
     size_t size_;
     MockNamedValueComparator* comparator_;
-    static MockNamedValueComparatorRepository* defaultRepository_;
+    static MockNamedValueComparatorsAndCopiersRepository* defaultRepository_;
 };
 
 class MockNamedValueListNode
@@ -162,20 +162,20 @@ private:
 };
 
 /*
- * MockParameterComparatorRepository is a class which stores comparators which can be used for comparing non-native types
+ * MockParameterComparatorRepository is a class which stores comparators and copiers which can be used for comparing non-native types
  *
  */
 
-struct MockNamedValueComparatorRepositoryNode;
-class MockNamedValueComparatorRepository
+struct MockNamedValueComparatorsAndCopiersRepositoryNode;
+class MockNamedValueComparatorsAndCopiersRepository
 {
-    MockNamedValueComparatorRepositoryNode* head_;
+    MockNamedValueComparatorsAndCopiersRepositoryNode* head_;
 public:
-    MockNamedValueComparatorRepository();
-    virtual ~MockNamedValueComparatorRepository();
+    MockNamedValueComparatorsAndCopiersRepository();
+    virtual ~MockNamedValueComparatorsAndCopiersRepository();
 
     virtual void installComparator(const SimpleString& name, MockNamedValueComparator& comparator);
-    virtual void installComparators(const MockNamedValueComparatorRepository& repository);
+    virtual void installComparatorsAndCopiers(const MockNamedValueComparatorsAndCopiersRepository& repository);
     virtual MockNamedValueComparator* getComparatorForType(const SimpleString& name);
 
     void clear();

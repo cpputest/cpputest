@@ -39,7 +39,7 @@ MockSupport& mock(const SimpleString& mockName, MockFailureReporter* failureRepo
 {
     MockSupport& mock_support = (mockName != "") ? *global_mock.getMockSupportScope(mockName) : global_mock;
     mock_support.setActiveReporter(failureReporterForThisCall);
-    mock_support.setDefaultComparatorRepository();
+    mock_support.setDefaultComparatorsAndCopiersRepository();
     return mock_support;
 }
 
@@ -74,30 +74,30 @@ void MockSupport::setActiveReporter(MockFailureReporter* reporter)
     activeReporter_ = (reporter) ? reporter : standardReporter_;
 }
 
-void MockSupport::setDefaultComparatorRepository()
+void MockSupport::setDefaultComparatorsAndCopiersRepository()
 {
-    MockNamedValue::setDefaultComparatorRepository(&comparatorRepository_);
+    MockNamedValue::setDefaultComparatorsAndCopiersRepository(&comparatorsAndCopiersRepository_);
 }
 
 void MockSupport::installComparator(const SimpleString& typeName, MockNamedValueComparator& comparator)
 {
-    comparatorRepository_.installComparator(typeName, comparator);
+    comparatorsAndCopiersRepository_.installComparator(typeName, comparator);
 
     for (MockNamedValueListNode* p = data_.begin(); p; p = p->next())
         if (getMockSupport(p)) getMockSupport(p)->installComparator(typeName, comparator);
 }
 
-void MockSupport::installComparators(const MockNamedValueComparatorRepository& repository)
+void MockSupport::installComparatorsAndCopiers(const MockNamedValueComparatorsAndCopiersRepository& repository)
 {
-    comparatorRepository_.installComparators(repository);
+    comparatorsAndCopiersRepository_.installComparatorsAndCopiers(repository);
 
     for (MockNamedValueListNode* p = data_.begin(); p; p = p->next())
-        if (getMockSupport(p)) getMockSupport(p)->installComparators(repository);
+        if (getMockSupport(p)) getMockSupport(p)->installComparatorsAndCopiers(repository);
 }
 
 void MockSupport::removeAllComparators()
 {
-    comparatorRepository_.clear();
+    comparatorsAndCopiersRepository_.clear();
     for (MockNamedValueListNode* p = data_.begin(); p; p = p->next())
         if (getMockSupport(p)) getMockSupport(p)->removeAllComparators();
 }
@@ -377,7 +377,7 @@ MockSupport* MockSupport::clone()
     if (strictOrdering_) newMock->strictOrder();
 
     newMock->tracing(tracing_);
-    newMock->installComparators(comparatorRepository_);
+    newMock->installComparatorsAndCopiers(comparatorsAndCopiersRepository_);
     return newMock;
 }
 
