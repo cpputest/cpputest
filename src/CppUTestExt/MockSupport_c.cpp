@@ -72,25 +72,14 @@ static MockExpectedCall* expectedCall = NULL;
 static MockActualCall* actualCall = NULL;
 static MockFailureReporterForInCOnlyCode failureReporterForC;
 
-class MockCFunctionComparatorNode : public MockNamedValueComparator
+class MockCFunctionComparatorNode : public MockFunctionComparator
 {
 public:
     MockCFunctionComparatorNode(MockCFunctionComparatorNode* next, MockTypeEqualFunction_c equal, MockTypeValueToStringFunction_c toString)
-        : next_(next), equal_(equal), toString_(toString) {}
+        : MockFunctionComparator(equal, toString), next_(next) {}
     virtual ~MockCFunctionComparatorNode() {}
 
-    virtual bool isEqual(const void* object1, const void* object2) _override
-    {
-        return equal_(object1, object2) != 0;
-    }
-    virtual SimpleString valueToString(const void* object) _override
-    {
-        return SimpleString(toString_(object));
-    }
-
     MockCFunctionComparatorNode* next_;
-    MockTypeEqualFunction_c equal_;
-    MockTypeValueToStringFunction_c toString_;
 };
 
 static MockCFunctionComparatorNode* comparatorList_ = NULL;

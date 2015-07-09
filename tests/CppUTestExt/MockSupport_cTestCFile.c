@@ -33,9 +33,9 @@ static int typeNameIsEqual(const void* object1, const void* object2)
     return object1 == object2;
 }
 
-static char* typeNameValueToString(const void* object)
+static const char* typeNameValueToString(const void* object)
 {
-    return (char*) object;
+    return (const char*) object;
 }
 
 void all_mock_support_c_calls(void)
