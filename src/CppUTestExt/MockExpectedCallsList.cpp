@@ -175,7 +175,7 @@ void MockExpectedCallsList::onlyKeepExpectationsWithInputParameterName(const Sim
 void MockExpectedCallsList::onlyKeepExpectationsWithOutputParameterName(const SimpleString& name)
 {
     for (MockExpectedCallsListNode* p = head_; p; p = p->next_)
-        if (! p->expectedCall_->hasOutputParameter(name))
+        if (! p->expectedCall_->hasOutputParameterWithName(name))
             p->expectedCall_ = NULL;
     pruneEmptyNodeFromList();
 }
@@ -184,6 +184,14 @@ void MockExpectedCallsList::onlyKeepExpectationsWithInputParameter(const MockNam
 {
     for (MockExpectedCallsListNode* p = head_; p; p = p->next_)
         if (! p->expectedCall_->hasInputParameter(parameter))
+            p->expectedCall_ = NULL;
+    pruneEmptyNodeFromList();
+}
+
+void MockExpectedCallsList::onlyKeepExpectationsWithOutputParameter(const MockNamedValue& parameter)
+{
+    for (MockExpectedCallsListNode* p = head_; p; p = p->next_)
+        if (! p->expectedCall_->hasOutputParameter(parameter))
             p->expectedCall_ = NULL;
     pruneEmptyNodeFromList();
 }
@@ -206,7 +214,7 @@ void MockExpectedCallsList::onlyKeepUnfulfilledExpectationsWithInputParameter(co
 void MockExpectedCallsList::onlyKeepUnfulfilledExpectationsWithOutputParameter(const MockNamedValue& parameter)
 {
     onlyKeepUnfulfilledExpectations();
-    onlyKeepExpectationsWithOutputParameterName(parameter.getName());
+    onlyKeepExpectationsWithOutputParameter(parameter);
 }
 
 void MockExpectedCallsList::onlyKeepUnfulfilledExpectationsOnObject(void* objectPtr)

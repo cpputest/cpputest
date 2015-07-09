@@ -87,6 +87,14 @@ void MockSupport::installComparator(const SimpleString& typeName, MockNamedValue
         if (getMockSupport(p)) getMockSupport(p)->installComparator(typeName, comparator);
 }
 
+void MockSupport::installCopier(const SimpleString& typeName, MockNamedValueCopier& copier)
+{
+    comparatorsAndCopiersRepository_.installCopier(typeName, copier);
+
+    for (MockNamedValueListNode* p = data_.begin(); p; p = p->next())
+        if (getMockSupport(p)) getMockSupport(p)->installCopier(typeName, copier);
+}
+
 void MockSupport::installComparatorsAndCopiers(const MockNamedValueComparatorsAndCopiersRepository& repository)
 {
     comparatorsAndCopiersRepository_.installComparatorsAndCopiers(repository);
@@ -95,11 +103,11 @@ void MockSupport::installComparatorsAndCopiers(const MockNamedValueComparatorsAn
         if (getMockSupport(p)) getMockSupport(p)->installComparatorsAndCopiers(repository);
 }
 
-void MockSupport::removeAllComparators()
+void MockSupport::removeAllComparatorsAndCopiers()
 {
     comparatorsAndCopiersRepository_.clear();
     for (MockNamedValueListNode* p = data_.begin(); p; p = p->next())
-        if (getMockSupport(p)) getMockSupport(p)->removeAllComparators();
+        if (getMockSupport(p)) getMockSupport(p)->removeAllComparatorsAndCopiers();
 }
 
 void MockSupport::clear()

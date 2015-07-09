@@ -121,7 +121,7 @@ TEST(MockDocumentation, ObjectParameters)
     mock().installComparator("myType", comparator);
     mock().expectOneCall("function").withParameterOfType("myType", "parameterName", object);
     mock().clear();
-    mock().removeAllComparators();
+    mock().removeAllComparatorsAndCopiers();
 }
 
 TEST(MockDocumentation, returnValue)
@@ -196,7 +196,7 @@ TEST(MockDocumentation, CInterface)
     mock_c()->installComparator("type", equalMethod, toStringMethod);
     mock_scope_c("scope")->expectOneCall("bar")->withParameterOfType("type", "name", object);
     mock_scope_c("scope")->actualCall("bar")->withParameterOfType("type", "name", object);
-    mock_c()->removeAllComparators();
+    mock_c()->removeAllComparatorsAndCopiers();
 
     mock_c()->setIntData("important", 10);
     mock_c()->checkExpectations();
