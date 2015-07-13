@@ -35,24 +35,13 @@ TEST_GROUP(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess)
     TestTestingFixture fixture;
 };
 
-#if defined(__MINGW32__)
+#if defined(__MINGW32__) || defined(_MSC_VER) || defined(__IAR_SYSTEMS_ICC__) || defined(__arm__)
 
-TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, MinGwWorks)
+TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, DummyFailsWithMessage)
 {
     fixture.registry_->setRunTestsInSeperateProcess();
     fixture.runAllTests();
-    fixture.assertPrintContains(
-       "-p doesn't work on MinGW as it is lacking fork.");
-}
-
-#elif defined(_MSC_VER)
-
-TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, VisualCppWorks)
-{
-   fixture.registry_->setRunTestsInSeperateProcess();
-   fixture.runAllTests();
-   fixture.assertPrintContains(
-      "-p doesn't work on Visual C++ as it is lacking fork.");
+    fixture.assertPrintContains("-p doesn't work on this platform, as it is lacking fork.\b");
 }
 
 #else

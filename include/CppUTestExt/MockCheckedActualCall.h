@@ -50,6 +50,7 @@ public:
     virtual MockActualCall& withMemoryBufferParameter(const SimpleString& name, const unsigned char* value, size_t size) _override;
     virtual MockActualCall& withParameterOfType(const SimpleString& type, const SimpleString& name, const void* value) _override;
     virtual MockActualCall& withOutputParameter(const SimpleString& name, void* output) _override;
+    virtual MockActualCall& withOutputParameterOfType(const SimpleString& type, const SimpleString& name, void* output) _override;
 
     virtual bool hasReturnValue() _override;
     virtual MockNamedValue returnValue() _override;
@@ -118,17 +119,18 @@ private:
     class MockOutputParametersListNode
     {
     public:
-        SimpleString* name_;
+        SimpleString name_;
+        SimpleString type_;
         void* ptr_;
 
         MockOutputParametersListNode* next_;
-        MockOutputParametersListNode(SimpleString* name, void* ptr)
-            : name_(name), ptr_(ptr), next_(NULL) {}
+        MockOutputParametersListNode(const SimpleString& name, const SimpleString& type, void* ptr)
+            : name_(name), type_(type), ptr_(ptr), next_(NULL) {}
     };
 
     MockOutputParametersListNode* outputParameterExpectations_;
 
-    virtual void addOutputParameter(const SimpleString& name, void* ptr);
+    virtual void addOutputParameter(const SimpleString& name, const SimpleString& type, void* ptr);
     virtual void cleanUpOutputParameterList();
 };
 
@@ -151,6 +153,7 @@ public:
     virtual MockActualCall& withMemoryBufferParameter(const SimpleString& name, const unsigned char* value, size_t size) _override;
     virtual MockActualCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value) _override;
     virtual MockActualCall& withOutputParameter(const SimpleString& name, void* output) _override;
+    virtual MockActualCall& withOutputParameterOfType(const SimpleString& typeName, const SimpleString& name, void* output) _override;
 
     virtual bool hasReturnValue() _override;
     virtual MockNamedValue returnValue() _override;
@@ -207,6 +210,7 @@ public:
     virtual MockActualCall& withMemoryBufferParameter(const SimpleString&, const unsigned char*, size_t) _override  { return *this; }
     virtual MockActualCall& withParameterOfType(const SimpleString&, const SimpleString&, const void*) _override { return *this; }
     virtual MockActualCall& withOutputParameter(const SimpleString&, void*) _override { return *this; }
+    virtual MockActualCall& withOutputParameterOfType(const SimpleString&, const SimpleString&, void*) _override { return *this; }
 
     virtual bool hasReturnValue() _override { return false; }
     virtual MockNamedValue returnValue() _override { return MockNamedValue(""); }

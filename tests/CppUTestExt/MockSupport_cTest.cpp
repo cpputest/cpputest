@@ -71,7 +71,7 @@ TEST(MockSupport_c, expectAndActualParametersOnObject)
     mock_c()->expectOneCall("boo")->withParameterOfType("typeName", "name", (const void*) 1);
     mock_c()->actualCall("boo")->withParameterOfType("typeName", "name", (const void*) 1);
     mock_c()->checkExpectations();
-    mock_c()->removeAllComparators();
+    mock_c()->removeAllComparatorsAndCopiers();
 }
 
 TEST(MockSupport_c, unsignedIntParameter)
@@ -301,5 +301,5 @@ TEST(MockSupport_c, failureWithParameterOfTypeCoversValueToString)
     fixture.setTestFunction(failingCallToMockCWithParameterOfType_);
     fixture.runAllTests();
     fixture.assertPrintContains("typeName name: <valueToString>");
-    mock_c()->removeAllComparators();
+    mock_c()->removeAllComparatorsAndCopiers();
 }

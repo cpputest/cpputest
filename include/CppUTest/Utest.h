@@ -177,7 +177,7 @@ class ExecFunctionTest : public Utest
 {
 public:
     ExecFunctionTest(ExecFunctionTestShell* shell);
-    void testBody();
+    void testBody() _override;
     virtual void setup() _override;
     virtual void teardown() _override;
 private:
@@ -219,7 +219,7 @@ public:
     virtual ~IgnoredUtestShell();
     explicit IgnoredUtestShell(const char* groupName, const char* testName,
             const char* fileName, int lineNumber);
-    virtual bool willRun() const;
+    virtual bool willRun() const _override;
     protected:  virtual SimpleString getMacroName() const _override;
     virtual void runOneTest(TestPlugin* plugin, TestResult& result) _override;
 

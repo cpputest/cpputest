@@ -57,7 +57,7 @@ static int jmp_buf_index = 0;
 
 static void GccPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin*, TestResult* result)
 {
-    result->addFailure(TestFailure(shell, "-p doesn't work on MinGW as it is lacking fork.\b"));
+    result->addFailure(TestFailure(shell, "-p doesn't work on this platform, as it is lacking fork.\b"));
 }
 
 static int PlatformSpecificForkImplementation(void)

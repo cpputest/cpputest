@@ -25,25 +25,52 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef D_MockSupportPlugin_h
-#define D_MockSupportPlugin_h
-
-#include "CppUTest/TestPlugin.h"
+#include "CppUTest/TestHarness.h"
 #include "CppUTestExt/MockNamedValue.h"
 
-class MockSupportPlugin : public TestPlugin
+TEST_GROUP(ComparatorsAndCopiersRepository)
 {
-public:
-    MockSupportPlugin(const SimpleString& name = "MockSupportPLugin");
-    virtual ~MockSupportPlugin();
-
-    virtual void preTestAction(UtestShell&, TestResult&) _override;
-    virtual void postTestAction(UtestShell&, TestResult&) _override;
-
-    virtual void installComparator(const SimpleString& name, MockNamedValueComparator& comparator);
-    virtual void installCopier(const SimpleString& name, MockNamedValueCopier& copier);
-private:
-    MockNamedValueComparatorsAndCopiersRepository repository_;
 };
 
-#endif
+class MyComparator : public MockNamedValueComparator
+{
+  public:
+
+    MyComparator() {}
+    virtual ~MyComparator() {}
+
+    virtual bool isEqual(const void*, const void*) { return false; } _override
+    virtual SimpleString valueToString(const void*) { return ""; } _override
+};
+
+class MyCopier : public MockNamedValueCopier
+{
+  public:
+
+    MyCopier() {}
+    virtual ~MyCopier() {} _override
+
+    virtual void copy(void*, const void*) {} _override
+};
+
+TEST(ComparatorsAndCopiersRepository, InstallCopierAndRetrieveIt)
+{
+  MyCopier copier;
+  MockNamedValueComparatorsAndCopiersRepository repository;
+  repository.installCopier("MyType", copier);
+  POINTERS_EQUAL(&copier, repository.getCopierForType("MyType"));
+  repository.clear();
+}
+
+TEST(ComparatorsAndCopiersRepository, ComparatorAndCopierByTheSameNameShouldBothBeFound)
+{
+  MyComparator comparator;
+  MyCopier copier;
+  MockNamedValueComparatorsAndCopiersRepository repository;
+  repository.installCopier("MyType", copier);
+  repository.installComparator("MyType", comparator);
+  POINTERS_EQUAL(&comparator, repository.getComparatorForType("MyType"));
+  POINTERS_EQUAL(&copier, repository.getCopierForType("MyType"));
+  repository.clear();
+}
+
