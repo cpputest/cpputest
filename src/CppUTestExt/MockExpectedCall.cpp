@@ -154,6 +154,14 @@ MockExpectedCall& MockCheckedExpectedCall::withOutputParameterReturning(const Si
     return *this;
 }
 
+MockExpectedCall& MockCheckedExpectedCall::withOutputParameterOfTypeReturning(const SimpleString& type, const SimpleString& name, const void* value)
+{
+    MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
+    outputParameters_->add(newParameter);
+    newParameter->setObjectPointer(type, value);
+    return *this;
+}
+
 SimpleString MockCheckedExpectedCall::getInputParameterType(const SimpleString& name)
 {
     MockNamedValue * p = inputParameters_->getValueByName(name);
@@ -163,6 +171,12 @@ SimpleString MockCheckedExpectedCall::getInputParameterType(const SimpleString& 
 bool MockCheckedExpectedCall::hasInputParameterWithName(const SimpleString& name)
 {
     MockNamedValue * p = inputParameters_->getValueByName(name);
+    return p != NULL;
+}
+
+bool MockCheckedExpectedCall::hasOutputParameterWithName(const SimpleString& name)
+{
+    MockNamedValue * p = outputParameters_->getValueByName(name);
     return p != NULL;
 }
 
@@ -279,7 +293,7 @@ bool MockCheckedExpectedCall::hasInputParameter(const MockNamedValue& parameter)
 bool MockCheckedExpectedCall::hasOutputParameter(const MockNamedValue& parameter)
 {
     MockNamedValue * p = outputParameters_->getValueByName(parameter.getName());
-    return (p) ? true : ignoreOtherParameters_;
+    return (p) ? p->compatibleForCopying(parameter) : ignoreOtherParameters_;
 }
 
 SimpleString MockCheckedExpectedCall::callToString()
@@ -562,6 +576,13 @@ MockExpectedCall& MockExpectedCallComposite::withOutputParameterReturning(const 
 {
     for (MockExpectedCallCompositeNode* node = head_; node != NULL; node = node->next_)
         node->call_.withOutputParameterReturning(name, value, size);
+    return *this;
+}
+
+MockExpectedCall& MockExpectedCallComposite::withOutputParameterOfTypeReturning(const SimpleString& typeName, const SimpleString& name, const void* value)
+{
+    for (MockExpectedCallCompositeNode* node = head_; node != NULL; node = node->next_)
+        node->call_.withOutputParameterOfTypeReturning(typeName, name, value);
     return *this;
 }
 

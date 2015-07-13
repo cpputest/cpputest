@@ -41,6 +41,7 @@ public:
     virtual void postTestAction(UtestShell&, TestResult&) _override;
 
     virtual void installComparator(const SimpleString& name, MockNamedValueComparator& comparator);
+    virtual void installCopier(const SimpleString& name, MockNamedValueCopier& copier);
 private:
     MockNamedValueComparatorsAndCopiersRepository repository_;
 };
