@@ -469,7 +469,7 @@ TEST(MockExpectedCallComposite, hasMemoryBufferParameter)
 {
     const unsigned char mem_buffer[] = { 0x89, 0xFE, 0x15 };
     composite.withParameter("param", mem_buffer, sizeof(mem_buffer));
-    STRCMP_EQUAL("name -> const unsigned char* param: <Len = 3 | HexContents = 89 FE 15>", call.callToString().asCharString());
+    STRCMP_EQUAL("name -> const unsigned char* param: <Size = 3 | HexContents = 89 FE 15>", call.callToString().asCharString());
 }
 
 TEST(MockExpectedCallComposite, hasParameterOfType)

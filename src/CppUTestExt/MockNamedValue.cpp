@@ -297,7 +297,7 @@ SimpleString MockNamedValue::toString() const
     else if (type_ == "double")
         return StringFrom(value_.doubleValue_);
     else if (type_ == "const unsigned char*")
-        return StringFrom(value_.memoryBufferValue_, size_);
+        return StringFromBinaryWithSizeOrNull(value_.memoryBufferValue_, size_);
 
     if (comparator_)
         return comparator_->valueToString(value_.objectPointerValue_);

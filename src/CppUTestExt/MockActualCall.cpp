@@ -542,7 +542,7 @@ MockActualCall& MockActualCallTrace::withConstPointerParameter(const SimpleStrin
 MockActualCall& MockActualCallTrace::withMemoryBufferParameter(const SimpleString& name, const unsigned char* value, size_t size)
 {
     addParameterName(name);
-    traceBuffer_ += StringFrom(value, size);
+    traceBuffer_ += StringFromBinaryWithSizeOrNull(value, size);
     return *this;
 }
 

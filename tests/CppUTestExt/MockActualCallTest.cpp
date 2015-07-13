@@ -172,7 +172,7 @@ TEST(MockCheckedActualCall, remainderOfMockActualCallTraceWorksAsItShould)
     expectedString += HexStringFrom(&value);
     expectedString += " const_pointer:0x";
     expectedString += HexStringFrom(&const_value);
-    expectedString += " mem_buffer:Len = 2 | HexContents = FE 15";
+    expectedString += " mem_buffer:Size = 2 | HexContents = FE 15";
     expectedString += " int named_type:0x";
     expectedString += HexStringFrom(&const_value);
     STRCMP_EQUAL(expectedString.asCharString(), actual.getTraceOutput());

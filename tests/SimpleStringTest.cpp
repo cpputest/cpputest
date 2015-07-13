@@ -459,13 +459,6 @@ TEST(SimpleString, SmallDoubles)
     STRCMP_CONTAINS("1.2e", s.asCharString());
 }
 
-TEST(SimpleString, MemoryBuffers)
-{
-    const unsigned char mem_buffer[] = { 0x12, 0xFE, 0xA1 };
-    SimpleString s( StringFrom( mem_buffer, sizeof(mem_buffer) ) );
-    STRCMP_EQUAL("Len = 3 | HexContents = 12 FE A1", s.asCharString());
-}
-
 TEST(SimpleString, Sizes)
 {
     size_t size = 10;
@@ -811,6 +804,18 @@ TEST(SimpleString, Binary)
     STRCMP_EQUAL("", StringFromBinary(value, 0).asCharString());
     STRCMP_EQUAL("(null)", StringFromBinaryOrNull(NULL, 0).asCharString());
 }
+
+TEST(SimpleString, BinaryWithSize)
+{
+    const unsigned char value[] = { 0x12, 0xFE, 0xA1 };
+    const char expectedString[] = "Size = 3 | HexContents = 12 FE A1";
+
+    STRCMP_EQUAL(expectedString, StringFromBinaryWithSize(value, sizeof(value)).asCharString());
+    STRCMP_EQUAL(expectedString, StringFromBinaryWithSizeOrNull(value, sizeof(value)).asCharString());
+    STRCMP_EQUAL("Size = 0 | HexContents = ", StringFromBinaryWithSize(value, 0).asCharString());
+    STRCMP_EQUAL("(null)", StringFromBinaryWithSizeOrNull(NULL, 0).asCharString());
+}
+
 
 TEST(SimpleString, MemCmp)
 {

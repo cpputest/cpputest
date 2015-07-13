@@ -140,7 +140,6 @@ SimpleString StringFrom(int value);
 SimpleString StringFrom(unsigned int value);
 SimpleString StringFrom(long value);
 SimpleString StringFrom(unsigned long value);
-SimpleString StringFrom(const unsigned char* value, size_t size);
 SimpleString HexStringFrom(long value);
 SimpleString HexStringFrom(unsigned long value);
 SimpleString HexStringFrom(const void* value);
@@ -150,6 +149,8 @@ SimpleString StringFromFormat(const char* format, ...) __check_format__(printf, 
 SimpleString VStringFromFormat(const char* format, va_list args);
 SimpleString StringFromBinary(const unsigned char* value, size_t size);
 SimpleString StringFromBinaryOrNull(const unsigned char* value, size_t size);
+SimpleString StringFromBinaryWithSize(const unsigned char* value, size_t size);
+SimpleString StringFromBinaryWithSizeOrNull(const unsigned char* value, size_t size);
 SimpleString StringFromMaskedBits(unsigned long value, unsigned long mask, size_t byteCount);
 
 #if CPPUTEST_USE_STD_CPP_LIB
