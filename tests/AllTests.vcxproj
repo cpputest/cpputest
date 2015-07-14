@@ -150,6 +150,7 @@
     <ClCompile Include="CppUTestExt\MockExpectedCallTest.cpp" />
     <ClCompile Include="CppUTestExt\MockExpectedFunctionsListTest.cpp" />
     <ClCompile Include="CppUTestExt\MockFailureTest.cpp" />
+    <ClCompile Include="CppUTestExt\MockNamedValueTest.cpp" />
     <ClCompile Include="CppUTestExt\MockPluginTest.cpp" />
     <ClCompile Include="CppUTestExt\MockSupportTest.cpp" />
     <ClCompile Include="CppUTestExt\MockSupport_cTest.cpp" />
