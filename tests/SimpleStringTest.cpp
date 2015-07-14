@@ -839,6 +839,18 @@ TEST(SimpleString, Binary)
     STRCMP_EQUAL("(null)", StringFromBinaryOrNull(NULL, 0).asCharString());
 }
 
+TEST(SimpleString, BinaryWithSize)
+{
+    const unsigned char value[] = { 0x12, 0xFE, 0xA1 };
+    const char expectedString[] = "Size = 3 | HexContents = 12 FE A1";
+
+    STRCMP_EQUAL(expectedString, StringFromBinaryWithSize(value, sizeof(value)).asCharString());
+    STRCMP_EQUAL(expectedString, StringFromBinaryWithSizeOrNull(value, sizeof(value)).asCharString());
+    STRCMP_EQUAL("Size = 0 | HexContents = ", StringFromBinaryWithSize(value, 0).asCharString());
+    STRCMP_EQUAL("(null)", StringFromBinaryWithSizeOrNull(NULL, 0).asCharString());
+}
+
+
 TEST(SimpleString, MemCmp)
 {
     unsigned char smaller[] = { 0x00, 0x01, 0x2A, 0xFF };

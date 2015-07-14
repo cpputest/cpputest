@@ -436,6 +436,48 @@ TEST(MockSupportTest, expectOneConstPointerParameterAndValue)
     CHECK_NO_MOCK_FAILURE();
 }
 
+TEST(MockSupportTest, expectOneMemBufferParameterAndValue)
+{
+    unsigned char memBuffer1[] = { 0x12, 0x15, 0xFF };
+    unsigned char memBuffer2[] = { 0x12, 0x15, 0xFF };
+    mock().expectOneCall("foo").withParameter("parameter", memBuffer1, sizeof(memBuffer1));
+    mock().actualCall("foo").withParameter("parameter", memBuffer2, sizeof(memBuffer2));
+    mock().checkExpectations();
+    CHECK_NO_MOCK_FAILURE();
+}
+
+TEST(MockSupportTest, expectOneMemBufferParameterAndValueFailsDueToContents)
+{
+    unsigned char memBuffer1[] = { 0x12, 0x15, 0xFF };
+    unsigned char memBuffer2[] = { 0x12, 0x05, 0xFF };
+
+    MockNamedValue parameter("parameter");
+    parameter.setMemoryBuffer( memBuffer2, sizeof(memBuffer2) );
+    addFunctionToExpectationsList("foo")->withParameter("parameter", memBuffer1, sizeof(memBuffer1));
+    MockUnexpectedInputParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, *expectationsList);
+
+    mock().expectOneCall("foo").withParameter("parameter", memBuffer1, sizeof(memBuffer1));
+    mock().actualCall("foo").withParameter("parameter", memBuffer2, sizeof(memBuffer2));
+
+    CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
+TEST(MockSupportTest, expectOneMemBufferParameterAndValueFailsDueToSize)
+{
+    unsigned char memBuffer1[] = { 0x12, 0x15, 0xFF };
+    unsigned char memBuffer2[] = { 0x12, 0x15, 0xFF, 0x90 };
+
+    MockNamedValue parameter("parameter");
+    parameter.setMemoryBuffer( memBuffer2, sizeof(memBuffer2) );
+    addFunctionToExpectationsList("foo")->withParameter("parameter", memBuffer1, sizeof(memBuffer1));
+    MockUnexpectedInputParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, *expectationsList);
+
+    mock().expectOneCall("foo").withParameter("parameter", memBuffer1, sizeof(memBuffer1));
+    mock().actualCall("foo").withParameter("parameter", memBuffer2, sizeof(memBuffer2));
+
+    CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
 TEST(MockSupportTest, expectOneStringParameterAndValueFails)
 {
     MockNamedValue parameter("parameter");

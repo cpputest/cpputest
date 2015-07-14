@@ -239,6 +239,15 @@ TEST(MockExpectedCall, callWithConstPointerParameter)
     POINTERS_EQUAL(ptr, call->getInputParameter("constPointer").getConstPointerValue());
 }
 
+TEST(MockExpectedCall, callWithMemoryBuffer)
+{
+    const unsigned char mem_buffer[] = { 0x12, 0xFE, 0xA1 };
+    call->withParameter("memoryBuffer", mem_buffer, sizeof(mem_buffer));
+    STRCMP_EQUAL("const unsigned char*", call->getInputParameterType("memoryBuffer").asCharString());
+    POINTERS_EQUAL( (void*) mem_buffer, (void*) call->getInputParameter("memoryBuffer").getMemoryBuffer() );
+    LONGS_EQUAL(sizeof(mem_buffer),  call->getInputParameter("memoryBuffer").getSize());
+}
+
 TEST(MockExpectedCall, callWithObjectParameter)
 {
     void* ptr = (void*) 0x123;
@@ -546,6 +555,13 @@ TEST(MockExpectedCallComposite, hasConstPointerParameter)
     STRCMP_EQUAL("name -> const void* param: <0x0>", call.callToString().asCharString());
 }
 
+TEST(MockExpectedCallComposite, hasMemoryBufferParameter)
+{
+    const unsigned char mem_buffer[] = { 0x89, 0xFE, 0x15 };
+    composite.withParameter("param", mem_buffer, sizeof(mem_buffer));
+    STRCMP_EQUAL("name -> const unsigned char* param: <Size = 3 | HexContents = 89 FE 15>", call.callToString().asCharString());
+}
+
 TEST(MockExpectedCallComposite, hasParameterOfType)
 {
     composite.withParameterOfType("type", "param", (const void*) 0);
@@ -656,6 +672,7 @@ TEST(MockIgnoredExpectedCall, worksAsItShould)
     ignored.withStringParameter("goo", "hello");
     ignored.withPointerParameter("pie", (void*) 0);
     ignored.withConstPointerParameter("woo", (const void*) 0);
+    ignored.withMemoryBufferParameter("waa", (const unsigned char*) 0, 0);
     ignored.withParameterOfType("top", "mytype", (const void*) 0);
     ignored.withOutputParameterReturning("bar", (const void*) 0, 1);
     ignored.ignoreOtherParameters();

@@ -137,6 +137,14 @@ MockExpectedCall& MockCheckedExpectedCall::withConstPointerParameter(const Simpl
     return *this;
 }
 
+MockExpectedCall& MockCheckedExpectedCall::withMemoryBufferParameter(const SimpleString& name, const unsigned char* value, size_t size)
+{
+    MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
+    inputParameters_->add(newParameter);
+    newParameter->setMemoryBuffer(value, size);
+    return *this;
+}
+
 MockExpectedCall& MockCheckedExpectedCall::withParameterOfType(const SimpleString& type, const SimpleString& name, const void* value)
 {
     MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
@@ -562,6 +570,13 @@ MockExpectedCall& MockExpectedCallComposite::withConstPointerParameter(const Sim
 {
     for (MockExpectedCallCompositeNode* node = head_; node != NULL; node = node->next_)
         node->call_.withParameter(name, value);
+    return *this;
+}
+
+MockExpectedCall& MockExpectedCallComposite::withMemoryBufferParameter(const SimpleString& name, const unsigned char* value, size_t size)
+{
+    for (MockExpectedCallCompositeNode* node = head_; node != NULL; node = node->next_)
+        node->call_.withParameter(name, value, size);
     return *this;
 }
 

@@ -111,6 +111,7 @@ public:
     virtual void setValue(void* value);
     virtual void setValue(const void* value);
     virtual void setValue(const char* value);
+    virtual void setMemoryBuffer(const unsigned char* value, size_t size);
     virtual void setObjectPointer(const SimpleString& type, const void* objectPtr);
     virtual void setSize(size_t size);
 
@@ -132,6 +133,7 @@ public:
     virtual const char* getStringValue() const;
     virtual void* getPointerValue() const;
     virtual const void* getConstPointerValue() const;
+    virtual const unsigned char* getMemoryBuffer() const;
     virtual const void* getObjectPointer() const;
     virtual size_t getSize() const;
 
@@ -151,6 +153,7 @@ private:
         const char* stringValue_;
         void* pointerValue_;
         const void* constPointerValue_;
+        const unsigned char* memoryBufferValue_;
         const void* objectPointerValue_;
         const void* outputPointerValue_;
     } value_;

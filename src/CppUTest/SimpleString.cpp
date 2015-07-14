@@ -585,6 +585,23 @@ SimpleString StringFromBinaryOrNull(const unsigned char* value, size_t size)
     return (value) ? StringFromBinary(value, size) : "(null)";
 }
 
+SimpleString StringFromBinaryWithSize(const unsigned char* value, size_t size)
+{
+    SimpleString result = StringFromFormat("Size = %lu | HexContents = ", size);
+    size_t displayedSize = ((size > 128) ? 128 : size);
+    result += StringFromBinaryOrNull(value, size);
+    if (size > displayedSize)
+    {
+        result += " ...";
+    }
+    return result;
+}
+
+SimpleString StringFromBinaryWithSizeOrNull(const unsigned char* value, size_t size)
+{
+    return (value) ? StringFromBinaryWithSize(value, size) : "(null)";
+}
+
 SimpleString StringFromMaskedBits(unsigned long value, unsigned long mask, size_t byteCount)
 {
     SimpleString result;

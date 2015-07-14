@@ -237,6 +237,14 @@ MockActualCall& MockCheckedActualCall::withConstPointerParameter(const SimpleStr
     return *this;
 }
 
+MockActualCall& MockCheckedActualCall::withMemoryBufferParameter(const SimpleString& name, const unsigned char* value, size_t size)
+{
+    MockNamedValue actualParameter(name);
+    actualParameter.setMemoryBuffer(value, size);
+    checkInputParameter(actualParameter);
+    return *this;
+}
+
 MockActualCall& MockCheckedActualCall::withParameterOfType(const SimpleString& type, const SimpleString& name, const void* value)
 {
     MockNamedValue actualParameter(name);
@@ -552,6 +560,13 @@ MockActualCall& MockActualCallTrace::withConstPointerParameter(const SimpleStrin
 {
     addParameterName(name);
     traceBuffer_ += StringFrom(value);
+    return *this;
+}
+
+MockActualCall& MockActualCallTrace::withMemoryBufferParameter(const SimpleString& name, const unsigned char* value, size_t size)
+{
+    addParameterName(name);
+    traceBuffer_ += StringFromBinaryWithSizeOrNull(value, size);
     return *this;
 }
 

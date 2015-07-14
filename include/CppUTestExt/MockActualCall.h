@@ -51,6 +51,7 @@ public:
     MockActualCall& withParameter(const SimpleString& name, const char* value) { return withStringParameter(name, value); }
     MockActualCall& withParameter(const SimpleString& name, void* value) { return withPointerParameter(name, value); }
     MockActualCall& withParameter(const SimpleString& name, const void* value) { return withConstPointerParameter(name, value); }
+    MockActualCall& withParameter(const SimpleString& name, const unsigned char* value, size_t size) { return withMemoryBufferParameter(name, value, size); }
     virtual MockActualCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value)=0;
     virtual MockActualCall& withOutputParameter(const SimpleString& name, void* output)=0;
     virtual MockActualCall& withOutputParameterOfType(const SimpleString& typeName, const SimpleString& name, void* output)=0;
@@ -63,6 +64,7 @@ public:
     virtual MockActualCall& withStringParameter(const SimpleString& name, const char* value)=0;
     virtual MockActualCall& withPointerParameter(const SimpleString& name, void* value)=0;
     virtual MockActualCall& withConstPointerParameter(const SimpleString& name, const void* value)=0;
+    virtual MockActualCall& withMemoryBufferParameter(const SimpleString& name, const unsigned char* value, size_t size)=0;
 
     virtual bool hasReturnValue()=0;
     virtual MockNamedValue returnValue()=0;
