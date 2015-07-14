@@ -190,6 +190,10 @@ SOURCE=.\CppUTestExt\MockFailureTest.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\CppUTestExt\MockNamedValueTest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\CppUTestExt\MockPluginTest.cpp
 # End Source File
 # Begin Source File
