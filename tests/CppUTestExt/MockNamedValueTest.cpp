@@ -39,8 +39,8 @@ class MyComparator : public MockNamedValueComparator
     MyComparator() {}
     virtual ~MyComparator() {}
 
-    virtual bool isEqual(const void*, const void*) { return false; } _override
-    virtual SimpleString valueToString(const void*) { return ""; } _override
+    virtual bool isEqual(const void*, const void*) _override { return false; }
+    virtual SimpleString valueToString(const void*) _override { return ""; }
 };
 
 class MyCopier : public MockNamedValueCopier
@@ -48,9 +48,9 @@ class MyCopier : public MockNamedValueCopier
   public:
 
     MyCopier() {}
-    virtual ~MyCopier() {} _override
+    virtual ~MyCopier() _override {}
 
-    virtual void copy(void*, const void*) {} _override
+    virtual void copy(void*, const void*) _override {}
 };
 
 TEST(ComparatorsAndCopiersRepository, InstallCopierAndRetrieveIt)
