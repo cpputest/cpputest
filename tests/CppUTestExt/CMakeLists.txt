@@ -11,6 +11,7 @@ set(CppUTestExtTests_src
     MockExpectedCallTest.cpp
     MockExpectedFunctionsListTest.cpp
     MockFailureTest.cpp
+    MockNamedValueTest.cpp
     MockPluginTest.cpp
     MockSupportTest.cpp
     MockSupport_cTestCFile.c
