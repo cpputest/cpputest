@@ -52,7 +52,7 @@ SimpleString MockCheckedActualCall::getName() const
 MockCheckedActualCall::MockCheckedActualCall(int callOrder, MockFailureReporter* reporter, const MockExpectedCallsList& allExpectations)
     : callOrder_(callOrder), reporter_(reporter), state_(CALL_SUCCEED), fulfilledExpectation_(NULL), allExpectations_(allExpectations), outputParameterExpectations_(NULL)
 {
-    unfulfilledExpectations_.addUnfilfilledExpectations(allExpectations);
+    unfulfilledExpectations_.addUnfulfilledExpectations(allExpectations);
 }
 
 MockCheckedActualCall::~MockCheckedActualCall()
@@ -118,15 +118,25 @@ void MockCheckedActualCall::finalizeCallWhenFulfilled()
 void MockCheckedActualCall::callHasSucceeded()
 {
     setState(CALL_SUCCEED);
-    unfulfilledExpectations_.resetExpectations();
+}
+
+void MockCheckedActualCall::callIsInProgress()
+{
+    setState(CALL_IN_PROGRESS);
+    if (fulfilledExpectation_)
+    {
+        fulfilledExpectation_->resetExpectation();
+        fulfilledExpectation_ = NULL;
+    }
+    unfulfilledExpectations_.onlyKeepUnfulfilledExpectations();
 }
 
 MockActualCall& MockCheckedActualCall::withName(const SimpleString& name)
 {
     setName(name);
-    setState(CALL_IN_PROGESS);
+    callIsInProgress();
 
-    unfulfilledExpectations_.onlyKeepUnfulfilledExpectationsRelatedTo(name);
+    unfulfilledExpectations_.onlyKeepExpectationsRelatedTo(name);
     if (unfulfilledExpectations_.isEmpty()) {
         MockUnexpectedCallHappenedFailure failure(getTest(), name, allExpectations_);
         failTest(failure);
@@ -147,7 +157,14 @@ MockActualCall& MockCheckedActualCall::withCallOrder(int)
 
 void MockCheckedActualCall::checkInputParameter(const MockNamedValue& actualParameter)
 {
-    unfulfilledExpectations_.onlyKeepUnfulfilledExpectationsWithInputParameter(actualParameter);
+    if(hasFailed())
+    {
+        return;
+    }
+
+    callIsInProgress();
+
+    unfulfilledExpectations_.onlyKeepExpectationsWithInputParameter(actualParameter);
 
     if (unfulfilledExpectations_.isEmpty()) {
         MockUnexpectedInputParameterFailure failure(getTest(), getName(), actualParameter, allExpectations_);
@@ -161,7 +178,14 @@ void MockCheckedActualCall::checkInputParameter(const MockNamedValue& actualPara
 
 void MockCheckedActualCall::checkOutputParameter(const MockNamedValue& outputParameter)
 {
-    unfulfilledExpectations_.onlyKeepUnfulfilledExpectationsWithOutputParameter(outputParameter);
+    if(hasFailed())
+    {
+        return;
+    }
+
+    callIsInProgress();
+
+    unfulfilledExpectations_.onlyKeepExpectationsWithOutputParameter(outputParameter);
 
     if (unfulfilledExpectations_.isEmpty()) {
         MockUnexpectedOutputParameterFailure failure(getTest(), getName(), outputParameter, allExpectations_);
@@ -293,14 +317,19 @@ bool MockCheckedActualCall::hasFailed() const
 
 void MockCheckedActualCall::checkExpectations()
 {
-    if (state_ != CALL_IN_PROGESS) return;
+    if (state_ != CALL_IN_PROGRESS)
+    {
+        unfulfilledExpectations_.resetExpectations();
+        return;
+    }
 
-    if (! unfulfilledExpectations_.hasUnfullfilledExpectations())
+    if (! unfulfilledExpectations_.hasUnfulfilledExpectations())
         FAIL("Actual call is in progress. Checking expectations. But no unfulfilled expectations. Cannot happen.") // LCOV_EXCL_LINE
 
     fulfilledExpectation_ = unfulfilledExpectations_.removeOneFulfilledExpectationWithIgnoredParameters();
     if (fulfilledExpectation_) {
         callHasSucceeded();
+        unfulfilledExpectations_.resetExpectations();
         return;
     }
 
@@ -438,7 +467,9 @@ bool MockCheckedActualCall::hasReturnValue()
 
 MockActualCall& MockCheckedActualCall::onObject(void* objectPtr)
 {
-    unfulfilledExpectations_.onlyKeepUnfulfilledExpectationsOnObject(objectPtr);
+    callIsInProgress();
+
+    unfulfilledExpectations_.onlyKeepExpectationsOnObject(objectPtr);
 
     if (unfulfilledExpectations_.isEmpty()) {
         MockUnexpectedObjectFailure failure(getTest(), getName(), objectPtr, allExpectations_);

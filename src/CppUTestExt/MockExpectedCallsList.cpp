@@ -94,7 +94,7 @@ bool MockExpectedCallsList::hasFulfilledExpectationsWithoutIgnoredParameters() c
     return false;
 }
 
-bool MockExpectedCallsList::hasUnfullfilledExpectations() const
+bool MockExpectedCallsList::hasUnfulfilledExpectations() const
 {
     return amountOfUnfulfilledExpectations() != 0;
 }
@@ -120,7 +120,7 @@ void MockExpectedCallsList::addExpectedCall(MockCheckedExpectedCall* call)
     }
 }
 
-void MockExpectedCallsList::addUnfilfilledExpectations(const MockExpectedCallsList& list)
+void MockExpectedCallsList::addUnfulfilledExpectations(const MockExpectedCallsList& list)
 {
     for (MockExpectedCallsListNode* p = list.head_; p; p = p->next_)
         if (! p->expectedCall_->isFulfilled())
@@ -153,15 +153,12 @@ void MockExpectedCallsList::onlyKeepUnfulfilledExpectations()
 {
     for (MockExpectedCallsListNode* p = head_; p; p = p->next_)
         if (p->expectedCall_->isFulfilled())
+        {
+            p->expectedCall_->resetExpectation();
             p->expectedCall_ = NULL;
+        }
 
     pruneEmptyNodeFromList();
-}
-
-void MockExpectedCallsList::onlyKeepUnfulfilledExpectationsRelatedTo(const SimpleString& name)
-{
-    onlyKeepUnfulfilledExpectations();
-    onlyKeepExpectationsRelatedTo(name);
 }
 
 void MockExpectedCallsList::onlyKeepExpectationsWithInputParameterName(const SimpleString& name)
@@ -202,25 +199,6 @@ void MockExpectedCallsList::onlyKeepExpectationsOnObject(void* objectPtr)
         if (! p->expectedCall_->relatesToObject(objectPtr))
             p->expectedCall_ = NULL;
     pruneEmptyNodeFromList();
-}
-
-
-void MockExpectedCallsList::onlyKeepUnfulfilledExpectationsWithInputParameter(const MockNamedValue& parameter)
-{
-    onlyKeepUnfulfilledExpectations();
-    onlyKeepExpectationsWithInputParameter(parameter);
-}
-
-void MockExpectedCallsList::onlyKeepUnfulfilledExpectationsWithOutputParameter(const MockNamedValue& parameter)
-{
-    onlyKeepUnfulfilledExpectations();
-    onlyKeepExpectationsWithOutputParameter(parameter);
-}
-
-void MockExpectedCallsList::onlyKeepUnfulfilledExpectationsOnObject(void* objectPtr)
-{
-    onlyKeepUnfulfilledExpectations();
-    onlyKeepExpectationsOnObject(objectPtr);
 }
 
 MockCheckedExpectedCall* MockExpectedCallsList::removeOneFulfilledExpectation()

@@ -787,7 +787,7 @@ TEST(MockSupportTest, unexpectedOutputParameter)
     mock().expectOneCall("foo");
     mock().actualCall("foo").withOutputParameter("parameterName", &param);
 
-    addFunctionToExpectationsList("foo")->callWasMade(1);
+    addFunctionToExpectationsList("foo");
     MockNamedValue parameter("parameterName");
     parameter.setValue(&param);
     MockUnexpectedOutputParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, *expectationsList);
@@ -1022,7 +1022,7 @@ TEST(MockSupportTest, unexpectedCustomTypeOutputParameter)
     MyTypeForTestingCopier copier;
     mock().installCopier("MyTypeForTesting", copier);
 
-    addFunctionToExpectationsList("foo")->callWasMade(1);
+    addFunctionToExpectationsList("foo");
     MockNamedValue parameter("parameterName");
     parameter.setObjectPointer("MyTypeForTesting", &actualObject);
     MockUnexpectedOutputParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, *expectationsList);
