@@ -164,18 +164,20 @@ EqualsFailure::EqualsFailure(UtestShell* test, const char* fileName, int lineNum
     message_ = createButWasString(expected, actual);
 }
 
-static SimpleString StringFromOrNan(double d)
+static SimpleString StringFromOrNanOrInf(double d)
 {
     if (PlatformSpecificIsNan(d))
         return "Nan - Not a number";
+    if (PlatformSpecificIsInf(d))
+        return "Inf - Infinity";
     return StringFrom(d);
 }
 
 DoublesEqualFailure::DoublesEqualFailure(UtestShell* test, const char* fileName, int lineNumber, double expected, double actual, double threshold)  : TestFailure(test, fileName, lineNumber)
 {
-    message_ = createButWasString(StringFromOrNan(expected), StringFromOrNan(actual));
+    message_ = createButWasString(StringFromOrNanOrInf(expected), StringFromOrNanOrInf(actual));
     message_ += " threshold used was <";
-    message_ += StringFromOrNan(threshold);
+    message_ += StringFromOrNanOrInf(threshold);
     message_ += ">";
 
     if (PlatformSpecificIsNan(expected) || PlatformSpecificIsNan(actual) || PlatformSpecificIsNan(threshold))

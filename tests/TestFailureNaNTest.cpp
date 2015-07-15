@@ -35,51 +35,76 @@ const int failLineNumber = 2;
 const char* failFileName = "fail.cpp";
 }
 
-static double zero = 0.0;
-static const double not_a_number = zero / zero;
+static const double not_a_number = -1;
+static const double infinity = -2;
+
+#define FAILURE_EQUAL(a, b) STRCMP_EQUAL_LOCATION(a, b.failure->getMessage().asCharString(), __FILE__, __LINE__)
 
 extern "C" {
-    static int IsNanForSystemsWithoutNan(double d) { return (0.0 == d); }
+    static int IsNanStub(double d) { return (not_a_number == d); }
+    static int IsInfStub(double d) { return (infinity == d); }
 }
 
-TEST_GROUP(TestFailureNaN)
+struct DoublesEqualFailureFixture
 {
     UtestShell* test;
+    DoublesEqualFailure* failure;
 
-    void setup()
-    {
+    DoublesEqualFailureFixture(double a, double b, double threshold) {
+		UT_PTR_SET(PlatformSpecificIsNan, IsNanStub);
+        UT_PTR_SET(PlatformSpecificIsInf, IsInfStub);
         test = new UtestShell("groupname", "testname", failFileName, failLineNumber-1);
-		if(PlatformSpecificIsNan(not_a_number) == false) 
-		    UT_PTR_SET(PlatformSpecificIsNan, IsNanForSystemsWithoutNan);
+        failure = new DoublesEqualFailure(test, failFileName, failLineNumber, a, b, threshold);
     }
-    void teardown()
-    {
+
+    ~DoublesEqualFailureFixture() {
+        delete failure;
         delete test;
     }
 };
-#define FAILURE_EQUAL(a, b) STRCMP_EQUAL_LOCATION(a, b.getMessage().asCharString(), __FILE__, __LINE__)
 
+TEST_GROUP(TestFailureNaN)
+{
+};
 
 TEST(TestFailureNaN, DoublesEqualExpectedIsNaN)
 {
-    DoublesEqualFailure f(test, failFileName, failLineNumber, not_a_number, 2.0, 3.0);
+    DoublesEqualFailureFixture fixture(not_a_number, 2, 3);
     FAILURE_EQUAL("expected <Nan - Not a number>\n"
                 "\tbut was  <2> threshold used was <3>\n"
-                "\tCannot make comparisons with Nan", f);
+                "\tCannot make comparisons with Nan", fixture);
 }
 
 TEST(TestFailureNaN, DoublesEqualActualIsNaN)
 {
-    DoublesEqualFailure f(test, failFileName, failLineNumber, 1.0, not_a_number, 3.0);
+    DoublesEqualFailureFixture fixture(1.0, not_a_number, 3.0);
     FAILURE_EQUAL("expected <1>\n"
                 "\tbut was  <Nan - Not a number> threshold used was <3>\n"
-                "\tCannot make comparisons with Nan", f);
+                "\tCannot make comparisons with Nan", fixture);
 }
 
 TEST(TestFailureNaN, DoublesEqualThresholdIsNaN)
 {
-    DoublesEqualFailure f(test, failFileName, failLineNumber, 1.0, 2.0, not_a_number);
+    DoublesEqualFailureFixture fixture(1.0, 2.0, not_a_number);
     FAILURE_EQUAL("expected <1>\n"
                 "\tbut was  <2> threshold used was <Nan - Not a number>\n"
-                "\tCannot make comparisons with Nan", f);
+                "\tCannot make comparisons with Nan", fixture);
+}
+
+TEST_GROUP(TestFailureInf)
+{
+};
+
+TEST(TestFailureInf, DoublesEqualExpectedIsInf)
+{
+    DoublesEqualFailureFixture fixture(infinity, 2.0, 3.0);
+    FAILURE_EQUAL("expected <Inf - Infinity>\n"
+                "\tbut was  <2> threshold used was <3>", fixture);
+}
+
+TEST(TestFailureInf, DoublesEqualActualIsInf)
+{
+    DoublesEqualFailureFixture fixture(1.0, infinity, 3.0);
+    FAILURE_EQUAL("expected <1>\n"
+                "\tbut was  <Inf - Infinity> threshold used was <3>", fixture);
 }
