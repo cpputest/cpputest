@@ -39,10 +39,10 @@
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\cpputest_build\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\cpputest_build\Release\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\cpputest_build\Release\$(ProjectName)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\cpputest_build\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\cpputest_build\Debug\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\cpputest_build\Debug\$(ProjectName)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -127,6 +127,10 @@
     <ProjectReference Include="..\CppUTest.vcxproj">
       <Project>{f468f539-27bd-468e-be64-dde641400b51}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <Private>false</Private>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -150,6 +154,7 @@
     <ClCompile Include="CppUTestExt\MockExpectedCallTest.cpp" />
     <ClCompile Include="CppUTestExt\MockExpectedFunctionsListTest.cpp" />
     <ClCompile Include="CppUTestExt\MockFailureTest.cpp" />
+    <ClCompile Include="CppUTestExt\MockNamedValueTest.cpp" />
     <ClCompile Include="CppUTestExt\MockPluginTest.cpp" />
     <ClCompile Include="CppUTestExt\MockSupportTest.cpp" />
     <ClCompile Include="CppUTestExt\MockSupport_cTest.cpp" />
