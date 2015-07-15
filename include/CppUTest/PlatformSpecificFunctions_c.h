@@ -56,6 +56,7 @@ extern int (*PlatformSpecificVSNprintf)(char *str, size_t size, const char* form
 /* Misc */
 extern double (*PlatformSpecificFabs)(double d);
 extern int (*PlatformSpecificIsNan)(double d);
+extern int (*PlatformSpecificIsInf)(double d);
 extern int (*PlatformSpecificAtExit)(void(*func)(void));
 
 /* IO operations */
