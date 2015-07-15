@@ -161,8 +161,14 @@ void (*PlatformSpecificFree)(void* memory) = free;
 void* (*PlatformSpecificMemCpy)(void* s1, const void* s2, size_t size) = memcpy;
 void* (*PlatformSpecificMemset)(void* mem, int c, size_t size) = memset;
 
+static int IsInfImplementation(double d)
+{
+    return !_finite(d);
+}
+
 double (*PlatformSpecificFabs)(double d) = fabs;
 extern "C" int (*PlatformSpecificIsNan)(double) = _isnan;
+extern "C" int (*PlatformSpecificIsInf)(double) = IsInfImplementation;
 int (*PlatformSpecificAtExit)(void(*func)(void)) = atexit;
 
 static PlatformSpecificMutex VisualCppMutexCreate(void)
