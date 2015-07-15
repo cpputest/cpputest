@@ -162,6 +162,11 @@ static int IsNanImplementation(double d)
     return isnan(d);
 }
 
+static int IsInfImplementation(double d)
+{
+    return isinf(d);
+}
+
 static int AtExitImplementation(void(*func)(void))
 {
     return atexit(func);
@@ -169,6 +174,7 @@ static int AtExitImplementation(void(*func)(void))
 
 double (*PlatformSpecificFabs)(double) = fabs;
 int (*PlatformSpecificIsNan)(double) = IsNanImplementation;
+int (*PlatformSpecificIsInf)(double) = IsInfImplementation;
 int (*PlatformSpecificAtExit)(void(*func)(void)) = AtExitImplementation;
 
 static PlatformSpecificMutex DummyMutexCreate(void)

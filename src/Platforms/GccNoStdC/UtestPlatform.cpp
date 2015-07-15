@@ -68,6 +68,7 @@ void* (*PlatformSpecificMemset)(void*, int, size_t) = NULL;
 
 double (*PlatformSpecificFabs)(double) = NULL;
 int (*PlatformSpecificIsNan)(double) = NULL;
+int (*PlatformSpecificIsInf)(double) = NULL;
 int (*PlatformSpecificAtExit)(void(*func)(void)) = NULL;
 
 PlatformSpecificMutex (*PlatformSpecificMutexCreate)(void) = NULL;
