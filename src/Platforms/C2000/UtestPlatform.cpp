@@ -221,7 +221,7 @@ static int IsNanImplementation(double d)
 
 static int IsInfImplementation(double d)
 {
-    return (d == (1.0d/0.0d));
+    return 0;
 }
 
 int (*PlatformSpecificIsNan)(double d) = IsNanImplementation;

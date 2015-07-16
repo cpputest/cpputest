@@ -35,8 +35,10 @@ const int failLineNumber = 2;
 const char* failFileName = "fail.cpp";
 }
 
-#define ARBITRARY_NAN -1.0
-#define ARBITRARY_INF -2.0
+static double zero = 0.0;
+static double one = 1.0;
+static const double not_a_number = zero / zero;
+static const double infinity = one / zero;
 
 /* "'-Werror -Wfloat-equal' is a good idea if you are unfamiliar with
  * floating point, and a bad idea if you are." Clang seems to include
@@ -44,16 +46,25 @@ const char* failFileName = "fail.cpp";
  */
 
 extern "C" {
-    static int IsNanStub(double d) { return ((long)ARBITRARY_NAN == (long)d); }
-    static int IsInfStub(double d) { return ((long)ARBITRARY_INF == (long)d); }
+    static int IsNanForSystemsWithoutNan(double d) { return (0.0 == d); }
+    static int IsInfForSystemsWithoutInf(double d) { return (0.0 == d); }
 }
 
 TEST_GROUP(TestFailureNanAndInf)
 {
+    UtestShell*  test;
+    
     void setup() _override
     {
-        UT_PTR_SET(PlatformSpecificIsNan, IsNanStub);
-        UT_PTR_SET(PlatformSpecificIsInf, IsInfStub);
+        test = new UtestShell("groupname", "testname", failFileName, failLineNumber-1);
+        if(PlatformSpecificIsNan(not_a_number) == false)
+            UT_PTR_SET(PlatformSpecificIsNan, IsNanForSystemsWithoutNan);
+        if(PlatformSpecificIsInf(infinity) == false)
+            UT_PTR_SET(PlatformSpecificIsInf, IsInfForSystemsWithoutInf);
+    }
+    void teardown()
+    {
+        delete test;
     }
 };
 
@@ -61,8 +72,7 @@ TEST_GROUP(TestFailureNanAndInf)
 
 TEST(TestFailureNanAndInf, DoublesEqualExpectedIsNaN)
 {
-    UtestShell test("groupname", "testname", failFileName, failLineNumber-1);
-    DoublesEqualFailure  f(&test, failFileName, failLineNumber, ARBITRARY_NAN, 2.0, 3.0);
+    DoublesEqualFailure  f(test, failFileName, failLineNumber, not_a_number, 2.0, 3.0);
     FAILURE_EQUAL("expected <Nan - Not a number>\n"
                 "\tbut was  <2> threshold used was <3>\n"
                 "\tCannot make comparisons with Nan", f);
@@ -70,8 +80,7 @@ TEST(TestFailureNanAndInf, DoublesEqualExpectedIsNaN)
 
 TEST(TestFailureNanAndInf, DoublesEqualActualIsNaN)
 {
-    UtestShell test("groupname", "testname", failFileName, failLineNumber-1);
-    DoublesEqualFailure  f(&test, failFileName, failLineNumber, 1.0, ARBITRARY_NAN, 3.0);
+    DoublesEqualFailure  f(test, failFileName, failLineNumber, 1.0, not_a_number, 3.0);
     FAILURE_EQUAL("expected <1>\n"
                 "\tbut was  <Nan - Not a number> threshold used was <3>\n"
                 "\tCannot make comparisons with Nan", f);
@@ -79,8 +88,7 @@ TEST(TestFailureNanAndInf, DoublesEqualActualIsNaN)
 
 TEST(TestFailureNanAndInf, DoublesEqualThresholdIsNaN)
 {
-    UtestShell test("groupname", "testname", failFileName, failLineNumber-1);
-    DoublesEqualFailure f(&test, failFileName, failLineNumber, 1.0, 2.0, ARBITRARY_NAN);
+    DoublesEqualFailure f(test, failFileName, failLineNumber, 1.0, 2.0, not_a_number);
     FAILURE_EQUAL("expected <1>\n"
                 "\tbut was  <2> threshold used was <Nan - Not a number>\n"
                 "\tCannot make comparisons with Nan", f);
@@ -88,24 +96,21 @@ TEST(TestFailureNanAndInf, DoublesEqualThresholdIsNaN)
 
 TEST(TestFailureNanAndInf, DoublesEqualExpectedIsInf)
 {
-    UtestShell test("groupname", "testname", failFileName, failLineNumber-1);
-    DoublesEqualFailure f(&test, failFileName, failLineNumber, ARBITRARY_INF, 2.0, 3.0);
+    DoublesEqualFailure f(test, failFileName, failLineNumber, infinity, 2.0, 3.0);
     FAILURE_EQUAL("expected <Inf - Infinity>\n"
                 "\tbut was  <2> threshold used was <3>", f);
 }
 
 TEST(TestFailureNanAndInf, DoublesEqualActualIsInf)
 {
-    UtestShell test("groupname", "testname", failFileName, failLineNumber-1);
-    DoublesEqualFailure f(&test, failFileName, failLineNumber, 1.0, ARBITRARY_INF, 3.0);
+    DoublesEqualFailure f(test, failFileName, failLineNumber, 1.0, infinity, 3.0);
     FAILURE_EQUAL("expected <1>\n"
                 "\tbut was  <Inf - Infinity> threshold used was <3>", f);
 }
 
 TEST(TestFailureNanAndInf, DoublesEqualThresholdIsInf)
 {
-    UtestShell test("groupname", "testname", failFileName, failLineNumber-1);
-    DoublesEqualFailure f(&test, failFileName, failLineNumber, 1.0, ARBITRARY_NAN, ARBITRARY_INF);
+    DoublesEqualFailure f(test, failFileName, failLineNumber, 1.0, not_a_number, infinity);
     FAILURE_EQUAL("expected <1>\n"
                 "\tbut was  <Nan - Not a number> threshold used was <Inf - Infinity>\n"
                 "\tCannot make comparisons with Nan", f);
