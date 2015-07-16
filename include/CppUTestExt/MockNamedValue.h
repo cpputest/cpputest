@@ -82,7 +82,7 @@ public:
     MockFunctionCopier(copyFunction copier) : copier_(copier) {}
     virtual ~MockFunctionCopier(){}
 
-    virtual void copy(void* dst, const void* src) _override { return copier_(dst, src); }
+    virtual void copy(void* dst, const void* src) _override { copier_(dst, src); }
 
 private:
     copyFunction copier_;

@@ -237,8 +237,14 @@ static int IsNanImplementation(double d)
     return isnan((float)d);
 }
 
+static int IsInfImplementation(double d)
+{
+    return isinf((float)d);
+}
+
 double (*PlatformSpecificFabs)(double) = fabs;
 int (*PlatformSpecificIsNan)(double) = IsNanImplementation;
+int (*PlatformSpecificIsInf)(double) = IsInfImplementation;
 int (*PlatformSpecificAtExit)(void(*func)(void)) = atexit;  /// this was undefined before
 
 static PlatformSpecificMutex PThreadMutexCreate(void)

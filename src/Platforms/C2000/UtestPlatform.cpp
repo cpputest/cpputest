@@ -219,7 +219,13 @@ static int IsNanImplementation(double d)
     return 0;
 }
 
+static int IsInfImplementation(double d)
+{
+    return (d == (1.0d/0.0d));
+}
+
 int (*PlatformSpecificIsNan)(double d) = IsNanImplementation;
+int (*PlatformSpecificIsInf)(double d) = IsInfImplementation;
 
 static PlatformSpecificMutex DummyMutexCreate(void)
 {

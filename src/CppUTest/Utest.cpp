@@ -34,6 +34,12 @@ bool doubles_equal(double d1, double d2, double threshold)
 {
     if (PlatformSpecificIsNan(d1) || PlatformSpecificIsNan(d2) || PlatformSpecificIsNan(threshold))
         return false;
+
+    if (PlatformSpecificIsInf(d1) && PlatformSpecificIsInf(d2))
+    {
+        return true;
+    }
+
     return PlatformSpecificFabs(d1 - d2) <= threshold;
 }
 
