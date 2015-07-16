@@ -40,20 +40,15 @@ static double one = 1.0;
 static const double not_a_number = zero / zero;
 static const double infinity = one / zero;
 
-/* "'-Werror -Wfloat-equal' is a good idea if you are unfamiliar with
- * floating point, and a bad idea if you are." Clang seems to include
- * this in -Wextra, so we have to cast to long for comparison.
- */
-
 extern "C" {
     static int IsNanForSystemsWithoutNan(double d) { return (0.0 == d); }
-    static int IsInfForSystemsWithoutInf(double d) { return (0.0 == d); }
+    static int IsInfForSystemsWithoutInf(double d) { return ((long)infinity == (long)d); }
 }
 
 TEST_GROUP(TestFailureNanAndInf)
 {
     UtestShell*  test;
-    
+
     void setup() _override
     {
         test = new UtestShell("groupname", "testname", failFileName, failLineNumber-1);
