@@ -239,7 +239,7 @@ static int IsNanImplementation(double d)
 
 static int IsInfImplementation(double d)
 {
-    return isinf(d);
+    return isinf((float)d);
 }
 
 double (*PlatformSpecificFabs)(double) = fabs;
