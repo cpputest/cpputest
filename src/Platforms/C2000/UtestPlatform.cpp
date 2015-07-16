@@ -64,7 +64,7 @@ TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
 
 static void C2000RunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
 {
-    result->addFailure(TestFailure(shell, "-p doesn't work on CL2000 as it is lacking fork.\b"));
+    result->addFailure(TestFailure(shell, "-p doesn't work on this platform, as it is lacking fork.\b"));
 }
 
 void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell*, TestPlugin*, TestResult*) =
@@ -221,7 +221,7 @@ static int IsNanImplementation(double d)
 
 static int IsInfImplementation(double d)
 {
-    return (d == (1.0d/0.0d));
+    return 0;
 }
 
 int (*PlatformSpecificIsNan)(double d) = IsNanImplementation;
