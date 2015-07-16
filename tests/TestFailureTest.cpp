@@ -309,5 +309,8 @@ TEST(TestFailure, BitsEqual2bytes)
 TEST(TestFailure, BitsEqual4bytes)
 {
     BitsEqualFailure f(test, failFileName, failLineNumber, 0x00000001, 0x00000003, 0xFFFFFFFF, 4);
-    FAILURE_EQUAL("expected <00000000 00000000 00000000 00000001>\n\tbut was  <00000000 00000000 00000000 00000011>", f);
+    if (sizeof(long) < 4)
+        FAILURE_EQUAL("expected <00000000 00000001>\n\tbut was  <00000000 00000011>", f)
+    else
+        FAILURE_EQUAL("expected <00000000 00000000 00000000 00000001>\n\tbut was  <00000000 00000000 00000000 00000011>", f);
 }
