@@ -94,7 +94,7 @@ bool MockExpectedCallsList::hasFulfilledExpectationsWithoutIgnoredParameters() c
     return false;
 }
 
-bool MockExpectedCallsList::hasUnfullfilledExpectations() const
+bool MockExpectedCallsList::hasUnfulfilledExpectations() const
 {
     return amountOfUnfulfilledExpectations() != 0;
 }
@@ -120,7 +120,7 @@ void MockExpectedCallsList::addExpectedCall(MockCheckedExpectedCall* call)
     }
 }
 
-void MockExpectedCallsList::addUnfilfilledExpectations(const MockExpectedCallsList& list)
+void MockExpectedCallsList::addUnfulfilledExpectations(const MockExpectedCallsList& list)
 {
     for (MockExpectedCallsListNode* p = list.head_; p; p = p->next_)
         if (! p->expectedCall_->isFulfilled())

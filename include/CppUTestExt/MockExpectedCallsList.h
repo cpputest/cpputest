@@ -42,7 +42,7 @@ public:
     virtual int size() const;
     virtual int amountOfExpectationsFor(const SimpleString& name) const;
     virtual int amountOfUnfulfilledExpectations() const;
-    virtual bool hasUnfullfilledExpectations() const;
+    virtual bool hasUnfulfilledExpectations() const;
     virtual bool hasFulfilledExpectations() const;
     virtual bool hasFulfilledExpectationsWithoutIgnoredParameters() const;
     virtual bool hasUnfulfilledExpectationsBecauseOfMissingParameters() const;
@@ -53,7 +53,7 @@ public:
     virtual void addExpectedCall(MockCheckedExpectedCall* call);
     virtual void addExpectations(const MockExpectedCallsList& list);
     virtual void addExpectationsRelatedTo(const SimpleString& name, const MockExpectedCallsList& list);
-    virtual void addUnfilfilledExpectations(const MockExpectedCallsList& list);
+    virtual void addUnfulfilledExpectations(const MockExpectedCallsList& list);
 
     virtual void onlyKeepExpectationsRelatedTo(const SimpleString& name);
     virtual void onlyKeepExpectationsWithInputParameter(const MockNamedValue& parameter);

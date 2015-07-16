@@ -99,7 +99,7 @@ protected:
     virtual void checkOutputParameter(const MockNamedValue& outputParameter);
 
     enum ActualCallState {
-        CALL_IN_PROGESS,
+        CALL_IN_PROGRESS,
         CALL_FAILED,
         CALL_SUCCEED
     };
