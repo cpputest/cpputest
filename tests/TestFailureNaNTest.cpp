@@ -101,3 +101,12 @@ TEST(TestFailureNanAndInf, DoublesEqualActualIsInf)
     FAILURE_EQUAL("expected <1>\n"
                 "\tbut was  <Inf - Infinity> threshold used was <3>", f);
 }
+
+TEST(TestFailureNanAndInf, DoublesEqualThresholdIsInf)
+{
+    UtestShell test("groupname", "testname", failFileName, failLineNumber-1);
+    DoublesEqualFailure f(&test, failFileName, failLineNumber, 1.0, ARBITRARY_NAN, ARBITRARY_INF);
+    FAILURE_EQUAL("expected <1>\n"
+                "\tbut was  <Nan - Not a number> threshold used was <Inf - Infinity>\n"
+                "\tCannot make comparisons with Nan", f);
+}
