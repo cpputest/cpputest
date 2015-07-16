@@ -161,15 +161,22 @@ TEST(CommandLineTestRunner, listTestGroupAndCaseNamesShouldWorkProperly)
     STRCMP_CONTAINS("group.test", commandLineTestRunner.fakeConsoleOutputWhichIsReallyABuffer->getOutput().asCharString());
 }
 
+extern "C" {
+    typedef PlatformSpecificFile (*FOpenFunc)(const char*, const char*);
+    typedef void (*FPutsFunc)(const char*, PlatformSpecificFile);
+    typedef void (*FCloseFunc)(PlatformSpecificFile);
+    typedef int (*PutcharFunc)(int);
+}
+
 struct FakeOutput
 {
     FakeOutput() : SaveFOpen(PlatformSpecificFOpen), SaveFPuts(PlatformSpecificFPuts),
         SaveFClose(PlatformSpecificFClose), SavePutchar(PlatformSpecificPutchar)
     {
-        PlatformSpecificFOpen = fopen_fake;
-        PlatformSpecificFPuts = fputs_fake;
-        PlatformSpecificFClose = fclose_fake;
-        PlatformSpecificPutchar = putchar_fake;
+        PlatformSpecificFOpen = (FOpenFunc)fopen_fake;
+        PlatformSpecificFPuts = (FPutsFunc)fputs_fake;
+        PlatformSpecificFClose = (FCloseFunc)fclose_fake;
+        PlatformSpecificPutchar = (PutcharFunc)putchar_fake;
     }
     ~FakeOutput()
     {
@@ -197,10 +204,10 @@ struct FakeOutput
     static SimpleString file;
     static SimpleString console;
 private:
-    PlatformSpecificFile (*SaveFOpen)(const char*, const char*);
-    void (*SaveFPuts)(const char*, PlatformSpecificFile);
-    void (*SaveFClose)(PlatformSpecificFile);
-    int (*SavePutchar)(int);
+    FOpenFunc SaveFOpen;
+    FPutsFunc SaveFPuts;
+    FCloseFunc SaveFClose;
+    PutcharFunc SavePutchar;
 };
 
 SimpleString FakeOutput::console = "";
