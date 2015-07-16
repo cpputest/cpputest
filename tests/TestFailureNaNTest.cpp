@@ -38,9 +38,14 @@ const char* failFileName = "fail.cpp";
 #define ARBITRARY_NAN -1.0
 #define ARBITRARY_INF -2.0
 
+/* "'-Werror -Wfloat-equal' is a good idea if you are unfamiliar with
+ * floating point, and a bad idea if you are." Clang seems to include
+ * this in -Wextra, so we have to cast to long for comparison.
+ */
+
 extern "C" {
-    static int IsNanStub(double d) { return (ARBITRARY_NAN == d); }
-    static int IsInfStub(double d) { return (ARBITRARY_INF == d); }
+    static int IsNanStub(double d) { return ((long)ARBITRARY_NAN == (long)d); }
+    static int IsInfStub(double d) { return ((long)ARBITRARY_INF == (long)d); }
 }
 
 TEST_GROUP(TestFailureNanAndInf)
