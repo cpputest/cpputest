@@ -487,6 +487,24 @@ TEST(SimpleString, Doubles)
     STRCMP_EQUAL("1.2", s.asCharString());
 }
 
+extern "C" {
+    static int alwaysTrue(double) { return true; }
+}
+
+TEST(SimpleString, NaN)
+{
+    UT_PTR_SET(PlatformSpecificIsNan, alwaysTrue);
+    SimpleString s(StringFrom(0.0));
+    STRCMP_EQUAL("Nan - Not a number", s.asCharString());
+}
+
+TEST(SimpleString, Inf)
+{
+    UT_PTR_SET(PlatformSpecificIsInf, alwaysTrue);
+    SimpleString s(StringFrom(0.0));
+    STRCMP_EQUAL("Inf - Infinity", s.asCharString());
+}
+
 TEST(SimpleString, SmallDoubles)
 {
     SimpleString s(StringFrom(1.2e-10));

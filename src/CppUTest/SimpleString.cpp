@@ -491,7 +491,12 @@ SimpleString HexStringFrom(const void* value)
 
 SimpleString StringFrom(double value, int precision)
 {
-    return StringFromFormat("%.*g", precision, value);
+    if (PlatformSpecificIsNan(value))
+        return "Nan - Not a number";
+    else if (PlatformSpecificIsInf(value))
+        return "Inf - Infinity";
+    else
+        return StringFromFormat("%.*g", precision, value);
 }
 
 SimpleString StringFrom(char value)
