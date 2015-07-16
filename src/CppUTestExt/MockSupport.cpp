@@ -230,7 +230,7 @@ const char* MockSupport::getTraceOutput()
 
 bool MockSupport::expectedCallsLeft()
 {
-    int callsLeft = expectations_.hasUnfullfilledExpectations();
+    int callsLeft = expectations_.hasUnfulfilledExpectations();
 
     for (MockNamedValueListNode* p = data_.begin(); p; p = p->next())
         if (getMockSupport(p)) callsLeft += getMockSupport(p)->expectedCallsLeft();
