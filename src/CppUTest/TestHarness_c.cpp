@@ -37,22 +37,22 @@ extern "C"
 
 void CHECK_EQUAL_C_INT_LOCATION(int expected, int actual, const char* fileName, int lineNumber)
 {
-    UtestShell::getCurrent()->assertLongsEqual((long)expected, (long)actual,  fileName, lineNumber, TestTerminatorWithoutExceptions());
+    UtestShell::getCurrent()->assertLongsEqual((long)expected, (long)actual, "", fileName, lineNumber, TestTerminatorWithoutExceptions());
 }
 
 void CHECK_EQUAL_C_REAL_LOCATION(double expected, double actual, double threshold, const char* fileName, int lineNumber)
 {
-    UtestShell::getCurrent()->assertDoublesEqual(expected, actual, threshold,  fileName, lineNumber, TestTerminatorWithoutExceptions());
+    UtestShell::getCurrent()->assertDoublesEqual(expected, actual, threshold, "", fileName, lineNumber, TestTerminatorWithoutExceptions());
 }
 
 void CHECK_EQUAL_C_CHAR_LOCATION(char expected, char actual, const char* fileName, int lineNumber)
 {
-    UtestShell::getCurrent()->assertEquals(((expected) != (actual)), StringFrom(expected).asCharString(), StringFrom(actual).asCharString(), fileName, lineNumber, TestTerminatorWithoutExceptions());
+    UtestShell::getCurrent()->assertEquals(((expected) != (actual)), StringFrom(expected).asCharString(), StringFrom(actual).asCharString(), "", fileName, lineNumber, TestTerminatorWithoutExceptions());
 }
 
 void CHECK_EQUAL_C_STRING_LOCATION(const char* expected, const char* actual, const char* fileName, int lineNumber)
 {
-    UtestShell::getCurrent()->assertCstrEqual(expected, actual, fileName, lineNumber, TestTerminatorWithoutExceptions());
+    UtestShell::getCurrent()->assertCstrEqual(expected, actual, "", fileName, lineNumber, TestTerminatorWithoutExceptions());
 }
 
 void FAIL_TEXT_C_LOCATION(const char* text, const char* fileName, int lineNumber)

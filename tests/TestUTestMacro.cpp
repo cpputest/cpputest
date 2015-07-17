@@ -38,7 +38,7 @@ static void CHECK_TEST_FAILS_PROPER_WITH_TEXT_LOCATION(const char* text, TestTes
     if (fixture.getFailureCount() != 1)
         FAIL_LOCATION(StringFromFormat("Expected one test failure, but got %d amount of test failures", fixture.getFailureCount()).asCharString(), file, line);
 
-    STRCMP_CONTAINS_LOCATION(text, fixture.output_->getOutput().asCharString(), file, line);
+    STRCMP_CONTAINS_LOCATION(text, fixture.output_->getOutput().asCharString(), "", file, line);
 
     if (lineOfCodeExecutedAfterCheck)
         FAIL_LOCATION("The test should jump/throw on failure and not execute the next line. However, the next line was executed.", file, line)

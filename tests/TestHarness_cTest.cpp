@@ -143,7 +143,7 @@ TEST(TestHarness_c, checkString)
     fixture->setTestFunction(_failStringMethod);
     fixture->runAllTests();
 
-    StringEqualFailure failure(UtestShell::getCurrent(), "file", 1, "Hello", "Hello World");
+    StringEqualFailure failure(UtestShell::getCurrent(), "file", 1, "Hello", "Hello World", "");
     fixture->assertPrintContains(failure.getMessage());
     fixture->assertPrintContains("arness_c");
     CHECK(!hasDestructorOfTheDestructorCheckedBeenCalled)
