@@ -85,7 +85,7 @@ TEST(UtestShell, PassedCheckEqualWillIncreaseTheAmountOfChecks)
 
 IGNORE_TEST(UtestShell, IgnoreTestAccessingFixture)
 {
-    CHECK(&fixture != 0);
+    CHECK(&fixture != NULL);
 }
 
 TEST(UtestShell, MacrosUsedInSetup)
