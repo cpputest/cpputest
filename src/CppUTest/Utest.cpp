@@ -341,12 +341,7 @@ void UtestShell::failWith(const TestFailure& failure, const TestTerminator& term
     terminator.exitCurrentTest();
 } // LCOV_EXCL_LINE
 
-void UtestShell::assertTrue(bool condition, const char * checkString, const char* conditionString, const char* fileName, int lineNumber, const TestTerminator& testTerminator)
-{
-    assertTrueText(condition, checkString, conditionString, "", fileName, lineNumber, testTerminator);
-}
-
-void UtestShell::assertTrueText(bool condition, const char *checkString, const char *conditionString, const char* text, const char *fileName, int lineNumber, const TestTerminator& testTerminator)
+void UtestShell::assertTrue(bool condition, const char *checkString, const char *conditionString, const char* text, const char *fileName, int lineNumber, const TestTerminator& testTerminator)
 {
     getTestResult()->countCheck();
     if (!condition)

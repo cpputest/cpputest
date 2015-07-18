@@ -109,10 +109,10 @@
   CHECK_FALSE_LOCATION(condition, "CHECK_FALSE", #condition, text, __FILE__, __LINE__)
 
 #define CHECK_TRUE_LOCATION(condition, checkString, conditionString, text, file, line)\
-  { UtestShell::getCurrent()->assertTrueText((condition) != 0, checkString, conditionString, text, file, line); }
+  { UtestShell::getCurrent()->assertTrue((condition) != 0, checkString, conditionString, text, file, line); }
 
 #define CHECK_FALSE_LOCATION(condition, checkString, conditionString, text, file, line)\
-  { UtestShell::getCurrent()->assertTrueText((condition) == 0, checkString, conditionString, text, file, line); }
+  { UtestShell::getCurrent()->assertTrue((condition) == 0, checkString, conditionString, text, file, line); }
 
 //This check needs the operator!=(), and a StringFrom(YourType) function
 #define CHECK_EQUAL(expected, actual)\
