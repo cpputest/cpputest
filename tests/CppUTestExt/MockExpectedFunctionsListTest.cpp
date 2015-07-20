@@ -112,16 +112,29 @@ TEST(MockExpectedCallsList, deleteAllExpectationsAndClearList)
     list->deleteAllExpectationsAndClearList();
 }
 
-TEST(MockExpectedCallsList, onlyKeepUnfulfilledExpectationsRelatedTo)
+TEST(MockExpectedCallsList, onlyKeepUnfulfilledExpectations)
 {
     call1->withName("relate");
     call2->withName("unrelate");
     call3->withName("relate");
-    call3->callWasMade(1);
+    call2->callWasMade(1);
+    call3->callWasMade(2);
     list->addExpectedCall(call1);
     list->addExpectedCall(call2);
     list->addExpectedCall(call3);
-    list->onlyKeepUnfulfilledExpectationsRelatedTo("relate");
+    list->onlyKeepUnfulfilledExpectations();
+    LONGS_EQUAL(1, list->size());
+}
+
+TEST(MockExpectedCallsList, onlyKeepExpectationsRelatedTo)
+{
+    call1->withName("relate");
+    call2->withName("unrelate");
+    call3->withName("unrelate");
+    list->addExpectedCall(call1);
+    list->addExpectedCall(call2);
+    list->addExpectedCall(call3);
+    list->onlyKeepExpectationsRelatedTo("relate");
     LONGS_EQUAL(1, list->size());
 }
 
@@ -133,7 +146,7 @@ TEST(MockExpectedCallsList, removeAllExpectationsExceptThisThatRelateToTheWoleLi
     list->addExpectedCall(call1);
     list->addExpectedCall(call2);
     list->addExpectedCall(call3);
-    list->onlyKeepUnfulfilledExpectationsRelatedTo("unrelate");
+    list->onlyKeepExpectationsRelatedTo("unrelate");
     LONGS_EQUAL(0, list->size());
 }
 
@@ -143,7 +156,7 @@ TEST(MockExpectedCallsList, removeAllExpectationsExceptThisThatRelateToFirstOne)
     call2->withName("unrelate");
     list->addExpectedCall(call1);
     list->addExpectedCall(call2);
-    list->onlyKeepUnfulfilledExpectationsRelatedTo("unrelate");
+    list->onlyKeepExpectationsRelatedTo("unrelate");
     LONGS_EQUAL(1, list->size());
 }
 
@@ -153,7 +166,7 @@ TEST(MockExpectedCallsList, removeAllExpectationsExceptThisThatRelateToLastOne)
     call2->withName("relate");
     list->addExpectedCall(call1);
     list->addExpectedCall(call2);
-    list->onlyKeepUnfulfilledExpectationsRelatedTo("unrelate");
+    list->onlyKeepExpectationsRelatedTo("unrelate");
     LONGS_EQUAL(1, list->size());
 }
 
@@ -169,7 +182,7 @@ TEST(MockExpectedCallsList, onlyKeepExpectationsWithInputParameterName)
     LONGS_EQUAL(2, list->size());
 }
 
-TEST(MockExpectedCallsList, onlyKeepUnfulfilledExpectationsWithInputParameter)
+TEST(MockExpectedCallsList, onlyKeepExpectationsWithInputParameter)
 {
     MockNamedValue parameter("diffname");
     parameter.setValue(1);
@@ -183,8 +196,8 @@ TEST(MockExpectedCallsList, onlyKeepUnfulfilledExpectationsWithInputParameter)
     list->addExpectedCall(call2);
     list->addExpectedCall(call3);
     list->addExpectedCall(call4);
-    list->onlyKeepUnfulfilledExpectationsWithInputParameter(parameter);
-    LONGS_EQUAL(1, list->size());
+    list->onlyKeepExpectationsWithInputParameter(parameter);
+    LONGS_EQUAL(2, list->size());
 }
 
 TEST(MockExpectedCallsList, addUnfilfilledExpectationsWithEmptyList)

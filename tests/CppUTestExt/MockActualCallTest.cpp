@@ -105,13 +105,18 @@ TEST(MockCheckedActualCall, multipleSameFunctionsExpectingAndHappenGradually)
     list->addExpectedCall(call1);
     list->addExpectedCall(call2);
 
-    MockCheckedActualCall actualCall1(1, reporter, *list);
-    MockCheckedActualCall actualCall2(2, reporter, *list);
-
     LONGS_EQUAL(2, list->amountOfUnfulfilledExpectations());
+
+    MockCheckedActualCall actualCall1(1, reporter, *list);
     actualCall1.withName("func");
+    actualCall1.checkExpectations();
+
     LONGS_EQUAL(1, list->amountOfUnfulfilledExpectations());
+
+    MockCheckedActualCall actualCall2(2, reporter, *list);
     actualCall2.withName("func");
+    actualCall2.checkExpectations();
+
     LONGS_EQUAL(0, list->amountOfUnfulfilledExpectations());
 
     list->deleteAllExpectationsAndClearList();
