@@ -57,7 +57,7 @@ TEST_GROUP(TestFailureNanAndInf)
         if(PlatformSpecificIsInf(infinity) == false)
             UT_PTR_SET(PlatformSpecificIsInf, IsInfForSystemsWithoutInf);
     }
-    void teardown()
+    void teardown() _override
     {
         delete test;
     }
