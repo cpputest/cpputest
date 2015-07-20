@@ -166,9 +166,9 @@ EqualsFailure::EqualsFailure(UtestShell* test, const char* fileName, int lineNum
 
 DoublesEqualFailure::DoublesEqualFailure(UtestShell* test, const char* fileName, int lineNumber, double expected, double actual, double threshold)  : TestFailure(test, fileName, lineNumber)
 {
-    message_ = createButWasString(StringFrom(expected, 10), StringFrom(actual, 10));
+    message_ = createButWasString(StringFrom(expected, 7), StringFrom(actual, 7));
     message_ += " threshold used was <";
-    message_ += StringFrom(threshold, 10);
+    message_ += StringFrom(threshold, 7);
     message_ += ">";
 
     if (PlatformSpecificIsNan(expected) || PlatformSpecificIsNan(actual) || PlatformSpecificIsNan(threshold))
