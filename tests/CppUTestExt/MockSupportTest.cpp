@@ -687,15 +687,15 @@ TEST(MockSupportTest, threeExpectedAndActual)
 class MyTypeForTesting
 {
 public:
-    MyTypeForTesting(int val)
+    MyTypeForTesting(long val)
     {
-        value = new int(val);
+        value = new long(val);
     }
     virtual ~MyTypeForTesting()
     {
         delete value;
     }
-    int *value;
+    long *value;
 };
 
 class MyTypeForTestingComparator : public MockNamedValueComparator
