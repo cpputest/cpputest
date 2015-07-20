@@ -67,7 +67,7 @@ TEST_GROUP(TestFailureNanAndInf)
 
 TEST(TestFailureNanAndInf, DoublesEqualExpectedIsNaN)
 {
-    DoublesEqualFailure  f(test, failFileName, failLineNumber, not_a_number, 2.0, 3.0);
+    DoublesEqualFailure f(test, failFileName, failLineNumber, not_a_number, 2.0, 3.0);
     FAILURE_EQUAL("expected <Nan - Not a number>\n"
                 "\tbut was  <2> threshold used was <3>\n"
                 "\tCannot make comparisons with Nan", f);
@@ -75,7 +75,7 @@ TEST(TestFailureNanAndInf, DoublesEqualExpectedIsNaN)
 
 TEST(TestFailureNanAndInf, DoublesEqualActualIsNaN)
 {
-    DoublesEqualFailure  f(test, failFileName, failLineNumber, 1.0, not_a_number, 3.0);
+    DoublesEqualFailure f(test, failFileName, failLineNumber, 1.0, not_a_number, 3.0);
     FAILURE_EQUAL("expected <1>\n"
                 "\tbut was  <Nan - Not a number> threshold used was <3>\n"
                 "\tCannot make comparisons with Nan", f);
