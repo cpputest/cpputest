@@ -43,6 +43,7 @@ typedef enum {
     MOCKVALUETYPE_STRING,
     MOCKVALUETYPE_POINTER,
     MOCKVALUETYPE_CONST_POINTER,
+    MOCKVALUETYPE_MEMORYBUFFER,
     MOCKVALUETYPE_OBJECT
 } MockValueType_c;
 
@@ -58,6 +59,7 @@ typedef struct SMockValue_c
         const char* stringValue;
         void* pointerValue;
         const void* constPointerValue;
+        const unsigned char* memoryBufferValue;
         const void* objectValue;
     } value;
 } MockValue_c;
@@ -73,6 +75,7 @@ struct SMockActualCall_c
     MockActualCall_c* (*withStringParameters)(const char* name, const char* value);
     MockActualCall_c* (*withPointerParameters)(const char* name, void* value);
     MockActualCall_c* (*withConstPointerParameters)(const char* name, const void* value);
+    MockActualCall_c* (*withMemoryBufferParameter)(const char* name, const unsigned char* value, size_t size);
     MockActualCall_c* (*withParameterOfType)(const char* type, const char* name, const void* value);
     MockActualCall_c* (*withOutputParameter)(const char* name, void* value);
 
@@ -90,6 +93,7 @@ struct SMockExpectedCall_c
     MockExpectedCall_c* (*withStringParameters)(const char* name, const char* value);
     MockExpectedCall_c* (*withPointerParameters)(const char* name, void* value);
     MockExpectedCall_c* (*withConstPointerParameters)(const char* name, const void* value);
+    MockExpectedCall_c* (*withMemoryBufferParameter)(const char* name, const unsigned char* value, size_t size);
     MockExpectedCall_c* (*withParameterOfType)(const char* type, const char* name, const void* value);
     MockExpectedCall_c* (*withOutputParameterReturning)(const char* name, const void* value, size_t size);
 

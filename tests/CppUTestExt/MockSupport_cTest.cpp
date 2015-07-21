@@ -303,3 +303,20 @@ TEST(MockSupport_c, failureWithParameterOfTypeCoversValueToString)
     fixture.assertPrintContains("typeName name: <valueToString>");
     mock_c()->removeAllComparatorsAndCopiers();
 }
+
+static void failingCallToMockCWithMemoryBuffer_()
+{
+    unsigned char memBuffer1[] = { 0x12, 0x15, 0xFF };
+    unsigned char memBuffer2[] = { 0x12, 0x05, 0xFF };
+    mock_c()->expectOneCall("bar")->withMemoryBufferParameter("name", memBuffer1, sizeof(memBuffer1));
+    mock_c()->actualCall("bar")->withMemoryBufferParameter("name", memBuffer2, sizeof(memBuffer2));
+} // LCOV_EXCL_LINE
+
+TEST(MockSupport_c, expectOneMemBufferParameterAndValueFailsDueToContents)
+{
+    TestTestingFixture fixture;
+    fixture.setTestFunction(failingCallToMockCWithMemoryBuffer_);
+    fixture.runAllTests();
+    fixture.assertPrintContains("Unexpected parameter value to parameter \"name\" "
+                                "to function \"bar\": <Size = 3 | HexContents = 12 05 FF>");
+}
