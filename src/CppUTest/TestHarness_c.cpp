@@ -37,22 +37,22 @@ extern "C"
 
 void CHECK_EQUAL_C_INT_LOCATION(int expected, int actual, const char* fileName, int lineNumber)
 {
-    UtestShell::getCurrent()->assertLongsEqual((long)expected, (long)actual, "", fileName, lineNumber, TestTerminatorWithoutExceptions());
+    UtestShell::getCurrent()->assertLongsEqual((long)expected, (long)actual, NULL, fileName, lineNumber, TestTerminatorWithoutExceptions());
 }
 
 void CHECK_EQUAL_C_REAL_LOCATION(double expected, double actual, double threshold, const char* fileName, int lineNumber)
 {
-    UtestShell::getCurrent()->assertDoublesEqual(expected, actual, threshold, "", fileName, lineNumber, TestTerminatorWithoutExceptions());
+    UtestShell::getCurrent()->assertDoublesEqual(expected, actual, threshold, NULL, fileName, lineNumber, TestTerminatorWithoutExceptions());
 }
 
 void CHECK_EQUAL_C_CHAR_LOCATION(char expected, char actual, const char* fileName, int lineNumber)
 {
-    UtestShell::getCurrent()->assertEquals(((expected) != (actual)), StringFrom(expected).asCharString(), StringFrom(actual).asCharString(), "", fileName, lineNumber, TestTerminatorWithoutExceptions());
+    UtestShell::getCurrent()->assertEquals(((expected) != (actual)), StringFrom(expected).asCharString(), StringFrom(actual).asCharString(), NULL, fileName, lineNumber, TestTerminatorWithoutExceptions());
 }
 
 void CHECK_EQUAL_C_STRING_LOCATION(const char* expected, const char* actual, const char* fileName, int lineNumber)
 {
-    UtestShell::getCurrent()->assertCstrEqual(expected, actual, "", fileName, lineNumber, TestTerminatorWithoutExceptions());
+    UtestShell::getCurrent()->assertCstrEqual(expected, actual, NULL, fileName, lineNumber, TestTerminatorWithoutExceptions());
 }
 
 void FAIL_TEXT_C_LOCATION(const char* text, const char* fileName, int lineNumber)
@@ -67,7 +67,7 @@ void FAIL_C_LOCATION(const char* fileName, int lineNumber)
 
 void CHECK_C_LOCATION(int condition, const char* conditionString, const char* fileName, int lineNumber)
 {
-    UtestShell::getCurrent()->assertTrue(condition != 0, "CHECK_C", conditionString, "", fileName, lineNumber, TestTerminatorWithoutExceptions());
+    UtestShell::getCurrent()->assertTrue(condition != 0, "CHECK_C", conditionString, NULL, fileName, lineNumber, TestTerminatorWithoutExceptions());
 }
 
 enum { NO_COUNTDOWN = -1, OUT_OF_MEMORRY = 0 };
