@@ -51,6 +51,10 @@ void all_mock_support_c_calls(void)
             withStringParameters("string", "string")->withPointerParameters("pointer", (void*) 1)->
             withConstPointerParameters("constpointer", (const void*) 1);
 
+    mock_c()->expectOneCall("boo")->withMemoryBufferParameter("name", (void*) 1, 0);
+    mock_c()->actualCall("boo")->withMemoryBufferParameter("name", (void*) 1, 0);
+    mock_c()->clear();
+
     mock_c()->installComparator("typeName", typeNameIsEqual, typeNameValueToString);
     mock_c()->expectOneCall("boo")->withParameterOfType("typeName", "name", (void*) 1);
     mock_c()->actualCall("boo")->withParameterOfType("typeName", "name", (void*) 1);

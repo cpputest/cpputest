@@ -25,8 +25,8 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef __TestMockSupportc_CFile__h
-#define __TestMockSupportc_CFile__h
+#ifndef TESTMOCKSUPPORTC_CFILE_H
+#define TESTMOCKSUPPORTC_CFILE_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -38,5 +38,5 @@ extern void all_mock_support_c_calls(void);
 }
 #endif
 
-#endif
+#endif /* TESTMOCKSUPPORTC_CFILE_H */
 

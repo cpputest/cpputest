@@ -140,6 +140,7 @@ MockExpectedCall_c* withDoubleParameters_c(const char* name, double value);
 MockExpectedCall_c* withStringParameters_c(const char* name, const char* value);
 MockExpectedCall_c* withPointerParameters_c(const char* name, void* value);
 MockExpectedCall_c* withConstPointerParameters_c(const char* name, const void* value);
+MockExpectedCall_c* withMemoryBufferParameters_c(const char* name, const unsigned char* value, size_t size);
 MockExpectedCall_c* withParameterOfType_c(const char* type, const char* name, const void* value);
 MockExpectedCall_c* withOutputParameterReturning_c(const char* name, const void* value, size_t size);
 MockExpectedCall_c* andReturnIntValue_c(int value);
@@ -160,6 +161,7 @@ MockActualCall_c* withActualDoubleParameters_c(const char* name, double value);
 MockActualCall_c* withActualStringParameters_c(const char* name, const char* value);
 MockActualCall_c* withActualPointerParameters_c(const char* name, void* value);
 MockActualCall_c* withActualConstPointerParameters_c(const char* name, const void* value);
+MockActualCall_c* withActualMemoryBufferParameters_c(const char* name, const unsigned char* value, size_t size);
 MockActualCall_c* withActualParameterOfType_c(const char* type, const char* name, const void* value);
 MockActualCall_c* withActualOutputParameter_c(const char* name, void* value);
 MockValue_c actualReturnValue_c();
@@ -201,6 +203,7 @@ static MockExpectedCall_c gExpectedCall = {
         withStringParameters_c,
         withPointerParameters_c,
         withConstPointerParameters_c,
+        withMemoryBufferParameters_c,
         withParameterOfType_c,
         withOutputParameterReturning_c,
         andReturnUnsignedIntValue_c,
@@ -222,6 +225,7 @@ static MockActualCall_c gActualCall = {
         withActualStringParameters_c,
         withActualPointerParameters_c,
         withActualConstPointerParameters_c,
+        withActualMemoryBufferParameters_c,
         withActualParameterOfType_c,
         withActualOutputParameter_c,
         actualReturnValue_c
@@ -294,6 +298,12 @@ MockExpectedCall_c* withPointerParameters_c(const char* name, void* value)
 MockExpectedCall_c* withConstPointerParameters_c(const char* name, const void* value)
 {
     expectedCall = &expectedCall->withParameter(name, value);
+    return &gExpectedCall;
+}
+
+MockExpectedCall_c* withMemoryBufferParameters_c(const char* name, const unsigned char* value, size_t size)
+{
+    expectedCall = &expectedCall->withParameter(name, value, size);
     return &gExpectedCall;
 }
 
@@ -392,6 +402,10 @@ static MockValue_c getMockValueCFromNamedValue(const MockNamedValue& namedValue)
         returnValue.type = MOCKVALUETYPE_CONST_POINTER;
         returnValue.value.constPointerValue = namedValue.getConstPointerValue();
     }
+    else if (SimpleString::StrCmp(namedValue.getType().asCharString(), "const unsigned char*") == 0) {
+        returnValue.type = MOCKVALUETYPE_MEMORYBUFFER;
+        returnValue.value.memoryBufferValue = namedValue.getMemoryBuffer();
+    }
     else {
         returnValue.type = MOCKVALUETYPE_OBJECT;
         returnValue.value.objectValue = namedValue.getObjectPointer();
@@ -456,6 +470,12 @@ MockActualCall_c* withActualPointerParameters_c(const char* name, void* value)
 MockActualCall_c* withActualConstPointerParameters_c(const char* name, const void* value)
 {
     actualCall = &actualCall->withParameter(name, value);
+    return &gActualCall;
+}
+
+MockActualCall_c* withActualMemoryBufferParameters_c(const char* name, const unsigned char* value, size_t size)
+{
+    actualCall = &actualCall->withParameter(name, value, size);
     return &gActualCall;
 }
 
