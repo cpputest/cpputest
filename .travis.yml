@@ -9,6 +9,7 @@ env:
   - BUILDTOOL=autotools
   - BUILDTOOL=cmake
   - BUILDTOOL=cmake-coverage
+#  - BUILDTOOL=autotools_old_compilers
   global:
   - secure: |-
       P05xUfJVw5YM4hF7hzQLjyMzDD4Q1/fyWP9Uk5aK5VrSWNY99EuxldXI5QK/
