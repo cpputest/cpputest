@@ -52,3 +52,11 @@ if [ "x$BUILDTOOL" = "xcmake" ]; then
     ctest -V || exit 1
 fi
 
+if [ "x$BUILDTOOL" = "xcmake-coverage" -a "x$CXX" = "xg++" ]; then
+    cmake .. -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE -DCOVERAGE=ON
+    make || exit 1
+    ctest || exit 1
+
+    coveralls -b . -r .. -i "src" -i "include" --gcov-options="-bc"
+fi
+
