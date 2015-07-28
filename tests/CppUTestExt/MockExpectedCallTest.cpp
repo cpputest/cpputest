@@ -512,7 +512,7 @@ TEST(MockExpectedCall, hasNoOutputParameter)
 
 TEST(MockExpectedCall, hasOutputParameterOfType)
 {
-    TypeForTestingExpectedFunctionCall object(676789);
+    TypeForTestingExpectedFunctionCall object(6789);
     call->withOutputParameterOfTypeReturning("TypeForTestingExpectedFunctionCall", "foo", &object);
     MockNamedValue foo("foo");
     foo.setObjectPointer("TypeForTestingExpectedFunctionCall", &object);
