@@ -423,7 +423,7 @@ TEST(MockExpectedCall, toStringForIgnoredParameters)
     STRCMP_EQUAL("name -> all parameters ignored", call->callToString().asCharString());
 }
 
-TEST(MockExpectedCall, toStringForMultipleParameters)
+TEST(MockExpectedCall, toStringForMultipleInputParameters)
 {
     int int_value = 10;
     unsigned int uint_value = 7;
@@ -433,6 +433,31 @@ TEST(MockExpectedCall, toStringForMultipleParameters)
     call->withParameter("integer", int_value);
     call->withParameter("unsigned-integer", uint_value);
     STRCMP_EQUAL("name -> const char* string: <value>, int integer: <10>, unsigned int unsigned-integer: <         7 (0x00000007)>", call->callToString().asCharString());
+}
+
+TEST(MockExpectedCall, toStringForMultipleInputAndOutputParameters)
+{
+    int int_value = 10;
+    unsigned int uint_value = 7;
+    unsigned char buffer_value[3];
+
+    call->withName("name");
+    call->withParameter("string", "value");
+    call->withParameter("integer", int_value);
+    call->withParameter("unsigned-integer", uint_value);
+    call->withOutputParameterReturning("buffer", buffer_value, sizeof(buffer_value));
+    STRCMP_EQUAL("name -> const char* string: <value>, int integer: <10>, unsigned int unsigned-integer: <         7 (0x00000007)>, "
+                 "const void* buffer: <output>", call->callToString().asCharString());
+}
+
+TEST(MockExpectedCall, toStringForMultipleOutputParameters)
+{
+    unsigned char buffer_value[3];
+
+    call->withName("name");
+    call->withOutputParameterReturning("buffer1", buffer_value, sizeof(buffer_value));
+    call->withOutputParameterReturning("buffer2", buffer_value, sizeof(buffer_value));
+    STRCMP_EQUAL("name -> const void* buffer1: <output>, const void* buffer2: <output>", call->callToString().asCharString());
 }
 
 TEST(MockExpectedCall, toStringForParameterAndIgnored)

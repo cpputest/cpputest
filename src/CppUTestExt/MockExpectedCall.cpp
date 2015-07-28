@@ -328,6 +328,11 @@ SimpleString MockCheckedExpectedCall::callToString()
         if (p->next()) str += ", ";
     }
 
+    if (inputParameters_->begin() && outputParameters_->begin())
+    {
+        str += ", ";
+    }
+
     for (p = outputParameters_->begin(); p; p = p->next()) {
         str += StringFromFormat("%s %s: <output>", p->getType().asCharString(), p->getName().asCharString());
         if (p->next()) str += ", ";
