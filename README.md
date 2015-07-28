@@ -12,7 +12,7 @@ AppVeyer Windows build status:
 [![Build status](https://ci.appveyor.com/api/projects/status/irh38i4wblsb5tew?svg=true)](https://ci.appveyor.com/project/basvodde/cpputest)
 
 Coverage:
-[![Coverage Status](https://coveralls.io/repos/jgonzalezdr/cpputest/badge.svg?branch=coveralls&service=github)](https://coveralls.io/github/jgonzalezdr/cpputest?branch=coveralls)
+[![Coverage Status](https://coveralls.io/repos/cpputest/cpputest/badge.svg?branch=master&service=github)](https://coveralls.io/github/cpputest/cpputest?branch=master)
 
 ## Getting Started
 
