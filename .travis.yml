@@ -1,13 +1,13 @@
 language: cpp
 compiler:
-#- clang
+- clang
 - gcc
 rvm:
 - 1.9.3
 env:
   matrix:
-#  - BUILDTOOL=autotools
-#  - BUILDTOOL=cmake
+  - BUILDTOOL=autotools
+  - BUILDTOOL=cmake
   - BUILDTOOL=cmake-coverage
   global:
   - secure: |-
