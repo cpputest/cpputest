@@ -108,7 +108,7 @@ struct SMockExpectedCall_c
 };
 
 typedef int (*MockTypeEqualFunction_c)(const void* object1, const void* object2);
-typedef char* (*MockTypeValueToStringFunction_c)(const void* object1);
+typedef const char* (*MockTypeValueToStringFunction_c)(const void* object1);
 typedef void (*MockTypeCopyFunction_c)(void* dst, const void* src);
 
 typedef struct SMockSupport_c MockSupport_c;
