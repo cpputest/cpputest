@@ -179,9 +179,9 @@ static  int equalMethod(const void* object1, const void* object2)
     return object1 == object2;
 }
 
-static char* toStringMethod(const void*)
+static const char* toStringMethod(const void*)
 {
-    return (char*) "string";
+    return "string";
 }
 
 TEST(MockDocumentation, CInterface)
