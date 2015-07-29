@@ -31,12 +31,6 @@
 #include "CppUTestExt/MockExpectedCallsList.h"
 #include "MockFailureTest.h"
 
-MockFailureReporterForTest* MockFailureReporterForTest::getReporter()
-{
-    static MockFailureReporterForTest reporter;
-    return &reporter;
-}
-
 TEST_GROUP(MockFailureTest)
 {
     MockFailureReporter reporter;
