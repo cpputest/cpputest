@@ -44,7 +44,7 @@ public:
         mockFailureString = failure.getMessage();
     }
 
-    static MockFailureReporterForTest* MockFailureReporterForTest::getReporter()
+    static MockFailureReporterForTest* getReporter()
     {
         static MockFailureReporterForTest reporter;
         return &reporter;
