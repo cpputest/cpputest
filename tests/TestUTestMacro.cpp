@@ -1225,7 +1225,7 @@ IGNORE_TEST(UnitTestMacros, BITS_EQUAL_TEXTWorksInAnIgnoredTest)
 } // LCOV_EXCL_LINE
 
 #if CPPUTEST_USE_STD_CPP_LIB
-static void _failingTestMethod_NoThrowWithCHECK_THROWS()
+static void failingTestMethod_NoThrowWithCHECK_THROWS_()
 {
     CHECK_THROWS(int, (void) (1+2));
     lineOfCodeExecutedAfterCheck = true; // LCOV_EXCL_LINE
@@ -1233,7 +1233,7 @@ static void _failingTestMethod_NoThrowWithCHECK_THROWS()
 
 TEST(UnitTestMacros, FailureWithCHECK_THROWS_whenDoesntThrow)
 {
-    runTestWithMethod(_failingTestMethod_NoThrowWithCHECK_THROWS);
+    runTestWithMethod(failingTestMethod_NoThrowWithCHECK_THROWS_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected to throw int");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but threw nothing");
     LONGS_EQUAL(1, fixture.getCheckCount());
