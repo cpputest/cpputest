@@ -66,7 +66,7 @@ void SimpleStringBuffer::addMemoryDump(const void* memory, size_t memorySize)
 	size_t p;
 
     while (currentPos < memorySize) {
-        if (sizeof(size_t) == 2) {
+        if (sizeof(currentPos) == 2) {
             add("    %04hx: ", (unsigned short) currentPos);
         }
         else {
