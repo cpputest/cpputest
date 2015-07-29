@@ -592,7 +592,7 @@ SimpleString StringFromBinaryOrNull(const unsigned char* value, size_t size)
 
 SimpleString StringFromBinaryWithSize(const unsigned char* value, size_t size)
 {
-    SimpleString result = StringFromFormat("Size = %lu | HexContents = ", size);
+    SimpleString result = StringFromFormat("Size = %u | HexContents = ", (unsigned) size);
     size_t displayedSize = ((size > 128) ? 128 : size);
     result += StringFromBinaryOrNull(value, size);
     if (size > displayedSize)
