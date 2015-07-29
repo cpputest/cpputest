@@ -58,6 +58,8 @@ void SimpleStringBuffer::add(const char* format, ...)
     va_end(arguments);
 }
 
+#define MAYBE_16BIT(n) ((size_t)-1 > (unsigned short)-1) ? (n): (unsigned short)(n)
+
 void SimpleStringBuffer::addMemoryDump(const void* memory, size_t memorySize)
 {
     const unsigned char* byteMemory = (const unsigned char*)memory;
@@ -66,12 +68,7 @@ void SimpleStringBuffer::addMemoryDump(const void* memory, size_t memorySize)
 	size_t p;
 
     while (currentPos < memorySize) {
-        if (sizeof(currentPos) == 2) {
-            add("    %04hx: ", (unsigned short) currentPos);
-        }
-        else {
-            add("    %04lx: ", currentPos);
-        }
+        add("    %04lx: ", MAYBE_16BIT(currentPos));
         size_t bytesInLine = memorySize - currentPos;
         if (bytesInLine > maxLineBytes) {
             bytesInLine = maxLineBytes;
