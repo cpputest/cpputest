@@ -74,7 +74,7 @@ void SimpleStringBuffer::addMemoryDump(const void* memory, size_t memorySize)
         const size_t leftoverBytes = maxLineBytes - bytesInLine;
 
         for (p = 0; p < bytesInLine; p++) {
-            add("%02hhx ", byteMemory[currentPos + p]);
+            add("%02hx ", (unsigned short) byteMemory[currentPos + p]);
             if (p == ((maxLineBytes / 2) - 1)) {
                 add(" ");
             }
