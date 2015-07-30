@@ -31,6 +31,7 @@ set(CppUTestTests_src
     UtestTest.cpp
     SimpleMutexTest.cpp
     UtestPlatformTest.cpp
+    FailableMemoryAllocatorTest.cpp
 )
 
 if (MSVC)

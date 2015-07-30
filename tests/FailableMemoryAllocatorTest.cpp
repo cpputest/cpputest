@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007, Michael Feathers, James Grenning, Bas Vodde and Timo Puronen
+ * Copyright (c) 2007, Michael Feathers, James Grenning and Bas Vodde
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -24,29 +24,28 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- 
-TARGET		  cpputest.exe
-TARGETTYPE	  exe
-UID			 0x00000000 0x03A6305A
-
-USERINCLUDE	 ..\include ..\include\CppUTest ..\include\Platforms\Symbian ..\tests
-SYSTEMINCLUDE   \epoc32\include \epoc32\include\stdapis
-
-STATICLIBRARY libcrt0.lib 
-STATICLIBRARY cpputest.lib
-
-LIBRARY		 euser.lib libc.lib libm.lib libpthread.lib
+#include "CppUTest/TestHarness.h"
+#include "CppUTest/FailableMemoryAllocator.h"
 
 
-SOURCEPATH ..\tests
-SOURCE FailureTest.cpp MemoryLeakWarningTest.cpp NullTestTest.cpp 
-SOURCE SimpleStringTest.cpp TestInstallerTest.cpp
-SOURCE TestOutputTest.cpp TestRegistryTest.cpp UtestTest.cpp CommandLineTestRunnerTest.cpp JUnitOutputTest.cpp
-SOURCE TestHarness_cTest.cpp
-SOURCE FailableMemoryAllocatorTest.cpp
+TEST_GROUP(FailableMemoryAllocator)
+{
+    FailableMallocAllocator *failableMallocAllocator;
+    void setup()
+    {
+        failableMallocAllocator = new FailableMallocAllocator("Failable malloc");
+        setCurrentMallocAllocator(failableMallocAllocator);
+    }
+    void teardown()
+    {
+        delete failableMallocAllocator;
+        setCurrentMallocAllocatorToDefault();
+    }
+};
 
-SOURCEPATH ..\tests
-SOURCE AllTests.cpp TestResultTest.cpp PluginTest.cpp SetPluginTest.cpp
 
-MACRO UT_NEW_MACROS_DISABLED 
-MACRO UT_NEW_OVERRIDES_DISABLED
+TEST(FailableMemoryAllocator, FailFirstMalloc)
+{
+    failableMallocAllocator->failMallocNumber(1);
+    LONGS_EQUAL(NULL, (int*)malloc(sizeof(int)));
+}

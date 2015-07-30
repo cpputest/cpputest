@@ -49,6 +49,7 @@ lib_libCppUTest_a_SOURCES = \
 	src/CppUTest/TestRegistry.cpp \
 	src/CppUTest/TestResult.cpp \
 	src/CppUTest/Utest.cpp \
+	src/CppUTest/FailableMemoryAllocator.cpp \
 	src/Platforms/$(CPP_PLATFORM)/UtestPlatform.cpp
 
 include_cpputestdir = $(includedir)/CppUTest
@@ -78,7 +79,8 @@ include_cpputest_HEADERS = \
 	include/CppUTest/TestResult.h \
 	include/CppUTest/TestTestingFixture.h \
 	include/CppUTest/Utest.h \
-	include/CppUTest/UtestMacros.h
+	include/CppUTest/UtestMacros.h \
+	include/CppUTest/FailableMemoryAllocator.h
 
 lib_libCppUTestExt_a_CPPFLAGS = $(lib_libCppUTest_a_CPPFLAGS)
 lib_libCppUTestExt_a_CFLAGS = $(lib_libCppUTest_a_CFLAGS)
@@ -159,7 +161,8 @@ CppUTestTests_SOURCES = \
 	tests/TestResultTest.cpp \
 	tests/TestUTestMacro.cpp \
 	tests/UtestTest.cpp \
-	tests/UtestPlatformTest.cpp
+	tests/UtestPlatformTest.cpp\
+	tests/FailableMemoryAllocatorTest.cpp
 
 CppUTestExtTests_CPPFLAGS = $(lib_libCppUTestExt_a_CPPFLAGS)
 CppUTestExtTests_CFLAGS = $(lib_libCppUTestExt_a_CFLAGS)

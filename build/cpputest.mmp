@@ -34,6 +34,7 @@ SYSTEMINCLUDE   \epoc32\include \epoc32\include\stdapis
 
 SOURCEPATH ..\src\CppUTest
 SOURCE CommandLineTestRunner.cpp Failure.cpp MemoryLeakWarningPlugin.cpp SimpleString.cpp TestOutput.cpp TestPlugin.cpp TestRegistry.cpp TestResult.cpp Utest.cpp JUnitTestOutput.cpp TestHarness_c.cpp
+SOURCE FailableMemoryAllocator.cpp
 
 SOURCEPATH ..\src\Platforms\Symbian
 SOURCE SymbianMemoryLeakWarning.cpp UtestPlatform.cpp
