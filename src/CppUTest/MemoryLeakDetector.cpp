@@ -58,7 +58,7 @@ void SimpleStringBuffer::add(const char* format, ...)
     va_end(arguments);
 }
 
-#define MAYBE_16BIT(n) ((size_t)-1 > (unsigned short)-1) ? (n): (unsigned short)(n)
+#define MAYBE_16BIT(n) ((size_t)-1 > (unsigned short)-1) ? (n) : (unsigned long)(n) & 0x0000FFFFul
 
 void SimpleStringBuffer::addMemoryDump(const void* memory, size_t memorySize)
 {
