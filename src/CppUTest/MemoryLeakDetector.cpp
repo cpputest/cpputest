@@ -58,8 +58,6 @@ void SimpleStringBuffer::add(const char* format, ...)
     va_end(arguments);
 }
 
-#define CAST_FOR_16BIT_SYSTEMS(n) (unsigned long)(n)
-
 void SimpleStringBuffer::addMemoryDump(const void* memory, size_t memorySize)
 {
     const unsigned char* byteMemory = (const unsigned char*)memory;
@@ -68,7 +66,7 @@ void SimpleStringBuffer::addMemoryDump(const void* memory, size_t memorySize)
 	size_t p;
 
     while (currentPos < memorySize) {
-        add("    %04lx: ", CAST_FOR_16BIT_SYSTEMS(currentPos));
+        add("    %04lx: ", (unsigned long) currentPos); // cast for 16-bit system
         size_t bytesInLine = memorySize - currentPos;
         if (bytesInLine > maxLineBytes) {
             bytesInLine = maxLineBytes;
