@@ -57,6 +57,6 @@ if [ "x$BUILDTOOL" = "xcmake-coverage" -a "x$CXX" = "xg++" ]; then
     make || exit 1
     ctest || exit 1
 
-    coveralls -b . -r .. -i "src" -i "include" --gcov-options="-bc"
+    coveralls -b . -r .. -i "src" -i "include" --gcov-options="-bc" || true
 fi
 
