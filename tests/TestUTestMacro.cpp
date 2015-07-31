@@ -1198,7 +1198,7 @@ TEST(UnitTestMacros, BITS_EQUALZeroMaskEqual)
 
 static void _failingTestMethodWithBITS_EQUAL_TEXT()
 {
-    BITS_EQUAL_TEXT(0x00, 0xFF, 0xFF, "Failed because it failed");
+    BITS_EQUAL_TEXT(0x00, 0xFFFFFFFF, 0xFF, "Failed because it failed");
     lineOfCodeExecutedAfterCheck = true; // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
 
