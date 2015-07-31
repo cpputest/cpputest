@@ -38,14 +38,39 @@ TEST_GROUP(FailableMemoryAllocator)
     }
     void teardown()
     {
-        delete failableMallocAllocator;
         setCurrentMallocAllocatorToDefault();
+        delete failableMallocAllocator;
     }
 };
 
+TEST(FailableMemoryAllocator, MallocWorksNormallyIfNotAskedToFail)
+{
+    int *memory = (int*)malloc(sizeof(int));
+    *memory = 1;
+    CHECK(memory != NULL);
+    free(memory); // Try commenting this out
+}
 
 TEST(FailableMemoryAllocator, FailFirstMalloc)
 {
     failableMallocAllocator->failMallocNumber(1);
     LONGS_EQUAL(NULL, (int*)malloc(sizeof(int)));
+}
+
+TEST(FailableMemoryAllocator, FailSecondAndFourthMalloc)
+{
+    failableMallocAllocator->failMallocNumber(2);
+    failableMallocAllocator->failMallocNumber(4);
+    int *memory1 = (int*)malloc(sizeof(int));
+    int *memory2 = (int*)malloc(sizeof(int));
+    int *memory3 = (int*)malloc(sizeof(int));
+    int *memory4 = (int*)malloc(sizeof(int));
+
+    CHECK(NULL != memory1);
+    LONGS_EQUAL(NULL, memory2);
+    CHECK(NULL != memory3);
+    LONGS_EQUAL(NULL, memory4);
+
+    free(memory1);
+    free(memory3);
 }
