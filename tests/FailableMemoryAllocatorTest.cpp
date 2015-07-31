@@ -26,20 +26,25 @@
  */
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/FailableMemoryAllocator.h"
+#include "CppUTest/TestTestingFixture.h"
 
 
 TEST_GROUP(FailableMemoryAllocator)
 {
     FailableMallocAllocator *failableMallocAllocator;
+    TestTestingFixture *fixture;
+
     void setup()
     {
         failableMallocAllocator = new FailableMallocAllocator("Failable malloc");
+        fixture = new TestTestingFixture;
         setCurrentMallocAllocator(failableMallocAllocator);
     }
     void teardown()
     {
         setCurrentMallocAllocatorToDefault();
         delete failableMallocAllocator;
+        delete fixture;
     }
 };
 
@@ -73,4 +78,19 @@ TEST(FailableMemoryAllocator, FailSecondAndFourthMalloc)
 
     free(memory1);
     free(memory3);
+}
+
+static void setUpTooManyFailedMallocs()
+{
+    FailableMallocAllocator allocator;
+    for (int i = 0; i <= allocator.MAX_NUMBER_OF_FAILED_ALLOCS; i++)
+        allocator.failMallocNumber(i + 1);
+}
+
+TEST(FailableMemoryAllocator, SettingUpTooManyFailedAllocsWillFail)
+{
+    fixture->setTestFunction(setUpTooManyFailedMallocs);
+    fixture->runAllTests();
+    LONGS_EQUAL(1, fixture->getFailureCount());
+    fixture->assertPrintContains("Maximum number of failed memory allocations exceeded");
 }

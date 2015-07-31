@@ -2,9 +2,19 @@
 #include "CppUTest/FailableMemoryAllocator.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
+
+FailableMallocAllocator::FailableMallocAllocator(const char* name_str, const char* alloc_name_str, const char* free_name_str)
+: TestMemoryAllocator(name_str, alloc_name_str, free_name_str)
+, toFailCount_(0), currentAllocNumber_(0)
+{
+    memset(allocsToFail_, 0, sizeof(allocsToFail_));
+}
+
 void FailableMallocAllocator::failMallocNumber(int number)
 {
-    allocsToFail_[toFailCount_++] = number; // TODO: Limit check
+    if (toFailCount_ >= MAX_NUMBER_OF_FAILED_ALLOCS)
+        FAIL("Maximum number of failed memory allocations exceeded")
+    allocsToFail_[toFailCount_++] = number;
 }
 
 char* FailableMallocAllocator::alloc_memory(size_t size, const char* file, int line)
@@ -22,7 +32,6 @@ bool FailableMallocAllocator::shouldBeFailedAlloc_()
             return true;
     return false;
 }
-
 
 char* FailableMallocAllocator::allocMemoryLeakNode(size_t size)
 {
