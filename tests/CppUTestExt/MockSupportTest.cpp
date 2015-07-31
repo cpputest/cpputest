@@ -435,8 +435,8 @@ TEST(MockSupportTest, expectOneMemBufferParameterAndValueFailsDueToContents)
 
     MockNamedValue parameter("parameter");
     parameter.setMemoryBuffer( memBuffer2, sizeof(memBuffer2) );
-    addFunctionToExpectationsList("foo")->withParameter("parameter", memBuffer1, sizeof(memBuffer1));
-    MockUnexpectedInputParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, *expectationsList);
+    expectations.addFunction("foo")->withParameter("parameter", memBuffer1, sizeof(memBuffer1));
+    MockUnexpectedInputParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, expectations);
 
     mock().expectOneCall("foo").withParameter("parameter", memBuffer1, sizeof(memBuffer1));
     mock().actualCall("foo").withParameter("parameter", memBuffer2, sizeof(memBuffer2));
@@ -451,8 +451,8 @@ TEST(MockSupportTest, expectOneMemBufferParameterAndValueFailsDueToSize)
 
     MockNamedValue parameter("parameter");
     parameter.setMemoryBuffer( memBuffer2, sizeof(memBuffer2) );
-    addFunctionToExpectationsList("foo")->withParameter("parameter", memBuffer1, sizeof(memBuffer1));
-    MockUnexpectedInputParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, *expectationsList);
+    expectations.addFunction("foo")->withParameter("parameter", memBuffer1, sizeof(memBuffer1));
+    MockUnexpectedInputParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, expectations);
 
     mock().expectOneCall("foo").withParameter("parameter", memBuffer1, sizeof(memBuffer1));
     mock().actualCall("foo").withParameter("parameter", memBuffer2, sizeof(memBuffer2));
@@ -986,8 +986,8 @@ TEST(MockSupportTest, noActualCallForCustomTypeOutputParameter)
     MyTypeForTestingCopier copier;
     mock().installCopier("MyTypeForTesting", copier);
 
-    addFunctionToExpectationsList("foo")->withOutputParameterOfTypeReturning("MyTypeForTesting", "output", &expectedObject);
-    MockExpectedCallsDidntHappenFailure expectedFailure(mockFailureTest(), *expectationsList);
+    expectations.addFunction("foo")->withOutputParameterOfTypeReturning("MyTypeForTesting", "output", &expectedObject);
+    MockExpectedCallsDidntHappenFailure expectedFailure(mockFailureTest(), expectations);
 
     mock().expectOneCall("foo").withOutputParameterOfTypeReturning("MyTypeForTesting", "output", &expectedObject);
     mock().checkExpectations();
@@ -1003,10 +1003,10 @@ TEST(MockSupportTest, unexpectedCustomTypeOutputParameter)
     MyTypeForTestingCopier copier;
     mock().installCopier("MyTypeForTesting", copier);
 
-    addFunctionToExpectationsList("foo");
+    expectations.addFunction("foo");
     MockNamedValue parameter("parameterName");
     parameter.setObjectPointer("MyTypeForTesting", &actualObject);
-    MockUnexpectedOutputParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, *expectationsList);
+    MockUnexpectedOutputParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, expectations);
 
     mock().expectOneCall("foo");
     mock().actualCall("foo").withOutputParameterOfType("MyTypeForTesting", "parameterName", &actualObject);
@@ -1023,8 +1023,8 @@ TEST(MockSupportTest, customTypeOutputParameterMissing)
     MyTypeForTestingCopier copier;
     mock().installCopier("MyTypeForTesting", copier);
 
-    addFunctionToExpectationsList("foo")->withOutputParameterOfTypeReturning("MyTypeForTesting", "output", &expectedObject);
-    MockExpectedParameterDidntHappenFailure expectedFailure(mockFailureTest(), "foo", *expectationsList);
+    expectations.addFunction("foo")->withOutputParameterOfTypeReturning("MyTypeForTesting", "output", &expectedObject);
+    MockExpectedParameterDidntHappenFailure expectedFailure(mockFailureTest(), "foo", expectations);
 
     mock().expectOneCall("foo").withOutputParameterOfTypeReturning("MyTypeForTesting", "output", &expectedObject);
     mock().actualCall("foo");
@@ -1042,10 +1042,10 @@ TEST(MockSupportTest, customTypeOutputParameterOfWrongType)
     MyTypeForTestingCopier copier;
     mock().installCopier("MyTypeForTesting", copier);
 
-    addFunctionToExpectationsList("foo")->withOutputParameterOfTypeReturning("MyTypeForTesting", "output", &expectedObject);
+    expectations.addFunction("foo")->withOutputParameterOfTypeReturning("MyTypeForTesting", "output", &expectedObject);
     MockNamedValue parameter("output");
     parameter.setObjectPointer("OtherTypeForTesting", &actualObject);
-    MockUnexpectedOutputParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, *expectationsList);
+    MockUnexpectedOutputParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, expectations);
 
     mock().expectOneCall("foo").withOutputParameterOfTypeReturning("MyTypeForTesting", "output", &expectedObject);
     mock().actualCall("foo").withOutputParameterOfType("OtherTypeForTesting", "output", &actualObject);
@@ -1061,7 +1061,7 @@ TEST(MockSupportTest, noCopierForCustomTypeOutputParameter)
     MyTypeForTesting expectedObject(123464);
     MyTypeForTesting actualObject(8834);
 
-    addFunctionToExpectationsList("foo")->withOutputParameterOfTypeReturning("MyTypeForTesting", "output", &expectedObject);
+    expectations.addFunction("foo")->withOutputParameterOfTypeReturning("MyTypeForTesting", "output", &expectedObject);
     MockNoWayToCopyCustomTypeFailure expectedFailure(mockFailureTest(), "MyTypeForTesting");
 
     mock().expectOneCall("foo").withOutputParameterOfTypeReturning("MyTypeForTesting", "output", &expectedObject);
