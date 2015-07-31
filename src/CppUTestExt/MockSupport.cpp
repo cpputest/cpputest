@@ -374,6 +374,11 @@ MockNamedValue MockSupport::getData(const SimpleString& name)
     return *value;
 }
 
+MockNamedValue *MockSupport::getDataPointer(const SimpleString& name)
+{
+   return data_.getValueByName(name);
+}
+
 MockSupport* MockSupport::clone()
 {
     MockSupport* newMock = new MockSupport;
