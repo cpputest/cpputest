@@ -112,12 +112,12 @@ TEST(TestMemoryAllocatorTest, NullUnknownNames)
     STRCMP_EQUAL("unknown", allocator->free_name());
 }
 
-#define MAX_SIZE_THATS_OKAY_FOR_MSC (size_t) -1 - 96
+#define MAX_SIZE_FOR_ALLOC ((size_t) -1 > (unsigned short)-1) ? (size_t) -97 : (size_t) -1
 
 static void failTryingToAllocateTooMuchMemory(void)
 {
     TestMemoryAllocator allocator;
-    allocator.alloc_memory(MAX_SIZE_THATS_OKAY_FOR_MSC, "file", 1);
+    allocator.alloc_memory(MAX_SIZE_FOR_ALLOC, "file", 1);
 } // LCOV_EXCL_LINE
 
 #include "CppUTest/TestTestingFixture.h"
