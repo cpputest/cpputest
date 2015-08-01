@@ -114,7 +114,7 @@ SOURCE=.\CheatSheetTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\CppUTestExt\CodeMemoryReportFormatterTest.cpp
+SOURCE=.\CppUTestExt\CodeMemoryReporterTest.cpp
 # End Source File
 # Begin Source File
 
@@ -123,6 +123,10 @@ SOURCE=.\CommandLineArgumentsTest.cpp
 # Begin Source File
 
 SOURCE=.\CommandLineTestRunnerTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\CppUTestExt\ExpectedFunctionsListTest.cpp
 # End Source File
 # Begin Source File
 
@@ -146,11 +150,11 @@ SOURCE=.\MemoryLeakDetectorTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\MemoryLeakOperatorOverloadsTest.cpp
+SOURCE=.\MemoryLeakWarningTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\MemoryLeakWarningTest.cpp
+SOURCE=.\MemoryOperatorOverloadTest.cpp
 # End Source File
 # Begin Source File
 
@@ -175,10 +179,6 @@ SOURCE=.\CppUTestExt\MockCheatSheetTest.cpp
 # Begin Source File
 
 SOURCE=.\CppUTestExt\MockExpectedCallTest.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\CppUTestExt\MockExpectedFunctionsListTest.cpp
 # End Source File
 # Begin Source File
 
