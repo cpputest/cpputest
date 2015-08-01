@@ -35,7 +35,7 @@ TEST_GROUP(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess)
     TestTestingFixture fixture;
 };
 
-#if defined(__MINGW32__) || defined(_MSC_VER) || defined(__IAR_SYSTEMS_ICC__) || defined(__ARMCC_VERSION) || defined(__TMS320C2000__)
+#if defined(__MINGW32__) || defined(_MSC_VER) || defined(__IAR_SYSTEMS_ICC__) || defined(__arm__) || defined(__TMS320C2000__) || defined(__X86__)
 
 TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, DummyFailsWithMessage)
 {
