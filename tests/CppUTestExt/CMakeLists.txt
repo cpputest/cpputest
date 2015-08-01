@@ -17,6 +17,7 @@ set(CppUTestExtTests_src
     MockSupportTest.cpp
     MockSupport_cTestCFile.c
     MockSupport_cTest.cpp
+    MockStrictOrderTest.cpp
     OrderedTestTest.cpp
 )
 
