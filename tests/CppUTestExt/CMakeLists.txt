@@ -1,6 +1,6 @@
 set(CppUTestExtTests_src
     AllTests.cpp
-    CodeMemoryReportFormatterTest.cpp
+    CodeMemoryReporterTest.cpp
     GMockTest.cpp
     GTest1Test.cpp
     MemoryReportAllocatorTest.cpp
@@ -9,7 +9,7 @@ set(CppUTestExtTests_src
     MockActualCallTest.cpp
     MockCheatSheetTest.cpp
     MockExpectedCallTest.cpp
-    MockExpectedFunctionsListTest.cpp
+    ExpectedFunctionsListTest.cpp
     MockFailureTest.cpp
     MockNamedValueTest.cpp
     MockPluginTest.cpp
