@@ -178,6 +178,7 @@ CppUTestExtTests_SOURCES = \
 	tests/CppUTestExt/MemoryReportFormatterTest.cpp \
 	tests/CppUTestExt/MockActualCallTest.cpp \
 	tests/CppUTestExt/MockCheatSheetTest.cpp \
+	tests/CppUTestExt/MockCallTest.cpp \
 	tests/CppUTestExt/MockExpectedCallTest.cpp \
 	tests/CppUTestExt/MockExpectedFunctionsListTest.cpp \
 	tests/CppUTestExt/MockFailureTest.cpp \

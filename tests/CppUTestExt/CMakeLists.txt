@@ -8,6 +8,7 @@ set(CppUTestExtTests_src
     MemoryReportFormatterTest.cpp
     MockActualCallTest.cpp
     MockCheatSheetTest.cpp
+    MockCallTest.cpp
     MockExpectedCallTest.cpp
     MockExpectedFunctionsListTest.cpp
     MockFailureTest.cpp
