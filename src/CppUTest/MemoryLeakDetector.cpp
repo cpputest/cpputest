@@ -66,7 +66,7 @@ void SimpleStringBuffer::addMemoryDump(const void* memory, size_t memorySize)
 	size_t p;
 
     while (currentPos < memorySize) {
-        add("    %04lx: ", (unsigned long) currentPos); // cast for 16-bit system
+        add("    %04lx: ", (unsigned long) currentPos);
         size_t bytesInLine = memorySize - currentPos;
         if (bytesInLine > maxLineBytes) {
             bytesInLine = maxLineBytes;
