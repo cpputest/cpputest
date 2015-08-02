@@ -32,6 +32,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CppUTestRootDirectory}/cmake/Module
 
 include("${CppUTestRootDirectory}/cmake/Modules/CppUTestConfigurationOptions.cmake")
 include(CTest)
+include(CheckFunctionExists)
 include("${CppUTestRootDirectory}/cmake/Modules/CppUTestBuildTimeDiscoverTests.cmake")
 
 configure_file (
@@ -104,6 +105,9 @@ else()
     " please update cmake to version which provides CMakePackageConfighelpers module"
     " or write generators for CppUTestConfig.cmake by yourself.")
 endif()
+
+set (CMAKE_REQUIRED_INCLUDES unistd.h)
+check_function_exists(fork HAVE_FORK) 
 
 message("
 -------------------------------------------------------
