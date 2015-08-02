@@ -56,6 +56,9 @@ set (INCLUDE_INSTALL_DIR "include")
 set (LIB_INSTALL_DIR "lib")
 set (INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
+# Check for some functions that are used
+CHECK_FUNCTION_EXISTS (fork HAVE_FORK)
+
 # Pkg-config file.
 set (prefix "${CMAKE_INSTALL_PREFIX}")
 set (exec_prefix "${CMAKE_INSTALL_PREFIX}")
