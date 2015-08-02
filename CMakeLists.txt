@@ -107,7 +107,7 @@ else()
 endif()
 
 set (CMAKE_REQUIRED_INCLUDES unistd.h)
-check_function_exists(fork HAVE_FORK) 
+check_function_exists(fork HAVE_FORK)
 
 message("
 -------------------------------------------------------
