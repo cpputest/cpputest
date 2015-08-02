@@ -32,6 +32,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CppUTestRootDirectory}/cmake/Module
 
 include("${CppUTestRootDirectory}/cmake/Modules/CppUTestConfigurationOptions.cmake")
 include(CTest)
+include(CheckFunctionExists.cmake)
 include("${CppUTestRootDirectory}/cmake/Modules/CppUTestBuildTimeDiscoverTests.cmake")
 
 configure_file (
