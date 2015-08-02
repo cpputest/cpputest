@@ -8,6 +8,7 @@ set(CppUTestExtTests_src
     MemoryReportFormatterTest.cpp
     MockActualCallTest.cpp
     MockCheatSheetTest.cpp
+    MockCallTest.cpp
     MockExpectedCallTest.cpp
     ExpectedFunctionsListTest.cpp
     MockFailureTest.cpp
@@ -16,6 +17,7 @@ set(CppUTestExtTests_src
     MockSupportTest.cpp
     MockSupport_cTestCFile.c
     MockSupport_cTest.cpp
+    MockStrictOrderTest.cpp
     OrderedTestTest.cpp
 )
 
