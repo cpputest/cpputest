@@ -31,8 +31,9 @@
 
 // Allocator must be global. Otherwise, it does not exist when memory leak detector
 // reports memory leaks.
-static FailableMemoryAllocator failableMallocAllocator("failable malloc", "malloc", "free");
-static FailableMemoryAllocator failableNewAllocator("failable new", "new", "delete");
+static FailableMemoryAllocator failableMallocAllocator("Failable Malloc Allocator", "malloc", "free");
+static FailableMemoryAllocator failableNewAllocator("Failable New Allocator", "new", "delete");
+static FailableMemoryAllocator failableNewArrayAllocator("Failable New [] Allocator", "new []", "delete []");
 
 
 TEST_GROUP(FailableMemoryAllocator)
@@ -44,13 +45,17 @@ TEST_GROUP(FailableMemoryAllocator)
         fixture = new TestTestingFixture;
         failableMallocAllocator.clearFailedAllocations();
         failableNewAllocator.clearFailedAllocations();
+        failableNewArrayAllocator.clearFailedAllocations();
+
         setCurrentMallocAllocator(&failableMallocAllocator);
         setCurrentNewAllocator(&failableNewAllocator);
+        setCurrentNewArrayAllocator(&failableNewArrayAllocator);
     }
     void teardown()
     {
         setCurrentMallocAllocatorToDefault();
         setCurrentNewAllocatorToDefault();
+        setCurrentNewArrayAllocatorToDefault();
         delete fixture;
     }
 };
@@ -110,9 +115,17 @@ TEST(FailableMemoryAllocator, NewWorksNormallyIfNotAskedToFail)
     delete memory;
 }
 
+TEST(FailableMemoryAllocator, NewArrayWorksNormallyIfNotAskedToFail)
+{
+    int *memory = new int[10];
+    memory[0] = 1;
+    CHECK(memory != NULL);
+    delete [] memory;
+}
+
 #if CPPUTEST_USE_STD_CPP_LIB
 
-TEST(FailableMemoryAllocator, FailSecondRaisesException)
+TEST(FailableMemoryAllocator, FailSecondNewRaisesException)
 {
     failableNewAllocator.failAllocNumber(2);
     int *memory1 = new int;
@@ -120,6 +133,16 @@ TEST(FailableMemoryAllocator, FailSecondRaisesException)
     CHECK_THROWS(std::bad_alloc, new int);
 
     delete memory1;
+}
+
+TEST(FailableMemoryAllocator, FailSecondNewArrayRaisesException)
+{
+    failableNewArrayAllocator.failAllocNumber(2);
+    int *memory1 = new int[10];
+
+    CHECK_THROWS(std::bad_alloc, new int[10]);
+
+    delete [] memory1;
 }
 
 #endif
@@ -141,4 +164,22 @@ TEST(FailableMemoryAllocator, FailSecondAndFourthNewNoThrow)
 
     delete memory1;
     delete memory3;
+}
+
+TEST(FailableMemoryAllocator, FailSecondAndFourthNewArrayNoThrow)
+{
+    failableNewArrayAllocator.failAllocNumber(2);
+    failableNewArrayAllocator.failAllocNumber(4);
+    int *memory1 = new (std::nothrow) int[10];
+    int *memory2 = new (std::nothrow) int[10];
+    int *memory3 = new (std::nothrow) int[10];
+    int *memory4 = new (std::nothrow) int[10];
+
+    CHECK(NULL != memory1);
+    LONGS_EQUAL(NULL, memory2);
+    CHECK(NULL != memory3);
+    LONGS_EQUAL(NULL, memory4);
+
+    delete [] memory1;
+    delete [] memory3;
 }
