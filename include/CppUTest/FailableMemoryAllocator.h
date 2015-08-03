@@ -10,7 +10,7 @@ class FailableMallocAllocator: public TestMemoryAllocator
 {
 public:
     enum {MAX_NUMBER_OF_FAILED_ALLOCS = 10};
-    FailableMallocAllocator(const char* name_str = "generic", const char* alloc_name_str = "alloc", const char* free_name_str = "free");
+    FailableMallocAllocator(const char* name_str = "failable malloc", const char* alloc_name_str = "malloc", const char* free_name_str = "free");
     virtual ~FailableMallocAllocator() {};
     virtual void failMallocNumber(int number);
     virtual char* alloc_memory(size_t size, const char* file, int line);
