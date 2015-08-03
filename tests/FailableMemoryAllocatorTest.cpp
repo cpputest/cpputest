@@ -31,7 +31,8 @@
 
 // Allocator must be global. Otherwise, it does not exist when memory leak detector
 // reports memory leaks.
-static FailableMemoryAllocator failableMallocAllocator("Failable malloc");
+static FailableMemoryAllocator failableMallocAllocator("failable malloc", "malloc", "free");
+static FailableMemoryAllocator failableNewAllocator("failable new", "new", "delete");
 
 
 TEST_GROUP(FailableMemoryAllocator)
@@ -42,11 +43,14 @@ TEST_GROUP(FailableMemoryAllocator)
     {
         fixture = new TestTestingFixture;
         failableMallocAllocator.clearFailedAllocations();
+        failableNewAllocator.clearFailedAllocations();
         setCurrentMallocAllocator(&failableMallocAllocator);
+        setCurrentNewAllocator(&failableNewAllocator);
     }
     void teardown()
     {
         setCurrentMallocAllocatorToDefault();
+        setCurrentNewAllocatorToDefault();
         delete fixture;
     }
 };
@@ -83,7 +87,7 @@ TEST(FailableMemoryAllocator, FailSecondAndFourthMalloc)
     free(memory3);
 }
 
-static void setUpTooManyFailedMallocs()
+static void _setUpTooManyFailedMallocs()
 {
     FailableMemoryAllocator allocator;
     for (int i = 0; i <= allocator.MAX_NUMBER_OF_FAILED_ALLOCS; i++)
@@ -92,10 +96,49 @@ static void setUpTooManyFailedMallocs()
 
 TEST(FailableMemoryAllocator, SettingUpTooManyFailedAllocsWillFail)
 {
-    fixture->setTestFunction(setUpTooManyFailedMallocs);
+    fixture->setTestFunction(_setUpTooManyFailedMallocs);
     fixture->runAllTests();
     LONGS_EQUAL(1, fixture->getFailureCount());
     fixture->assertPrintContains("Maximum number of failed memory allocations exceeded");
 }
 
+TEST(FailableMemoryAllocator, NewWorksNormallyIfNotAskedToFail)
+{
+    int *memory = new int;
+    *memory = 1;
+    CHECK(memory != NULL);
+    delete memory;
+}
 
+#if CPPUTEST_USE_STD_CPP_LIB
+
+TEST(FailableMemoryAllocator, FailSecondRaisesException)
+{
+    failableNewAllocator.failAllocNumber(2);
+    int *memory1 = new int;
+
+    CHECK_THROWS(std::bad_alloc, new int);
+
+    delete memory1;
+}
+
+#endif
+
+TEST(FailableMemoryAllocator, FailSecondAndFourthNewNoThrow)
+{
+#undef new
+    failableNewAllocator.failAllocNumber(2);
+    failableNewAllocator.failAllocNumber(4);
+    int *memory1 = new (std::nothrow) int;
+    int *memory2 = new (std::nothrow) int;
+    int *memory3 = new (std::nothrow) int;
+    int *memory4 = new (std::nothrow) int;
+
+    CHECK(NULL != memory1);
+    LONGS_EQUAL(NULL, memory2);
+    CHECK(NULL != memory3);
+    LONGS_EQUAL(NULL, memory4);
+
+    delete memory1;
+    delete memory3;
+}
