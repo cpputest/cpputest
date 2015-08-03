@@ -105,7 +105,7 @@ static const char* TimeStringImplementation()
 long (*GetPlatformSpecificTimeInMillis)() = DosTimeInMillis;
 const char* (*GetPlatformSpecificTimeString)() = TimeStringImplementation;
 
-extern int (*PlatformSpecificVSNprintf)(char *, size_t, const char*, va_list) = vsnprintf;
+int (*PlatformSpecificVSNprintf)(char *, size_t, const char*, va_list) = vsnprintf;
 
 PlatformSpecificFile DosFOpen(const char* filename, const char* flag)
 {
