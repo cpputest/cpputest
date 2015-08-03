@@ -332,7 +332,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="CppUTestExt\CodeMemoryReportFormatterTest.cpp"
+				RelativePath="CppUTestExt\CodeMemoryReporterTest.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -516,7 +516,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="MemoryLeakOperatorOverloadsTest.cpp"
+				RelativePath="MemoryOperatorOverloadTest.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -700,7 +700,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="CppUTestExt\MockExpectedFunctionsListTest.cpp"
+				RelativePath="CppUTestExt\ExpectedFunctionsListTest.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"

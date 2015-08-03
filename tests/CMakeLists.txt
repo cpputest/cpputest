@@ -16,7 +16,7 @@ set(CppUTestTests_src
     MemoryLeakDetectorTest.cpp
     TestInstallerTest.cpp
     AllocLetTestFree.c
-    MemoryLeakOperatorOverloadsTest.cpp
+    MemoryOperatorOverloadTest.cpp
     TestMemoryAllocatorTest.cpp
     MemoryLeakWarningTest.cpp
     TestOutputTest.cpp

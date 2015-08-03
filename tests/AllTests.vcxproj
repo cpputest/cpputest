@@ -142,7 +142,7 @@
     <ClCompile Include="CommandLineArgumentsTest.cpp" />
     <ClCompile Include="CommandLineTestRunnerTest.cpp" />
     <ClCompile Include="CppUTestExt\AllTests.cpp" />
-    <ClCompile Include="CppUTestExt\CodeMemoryReportFormatterTest.cpp" />
+    <ClCompile Include="CppUTestExt\CodeMemoryReporterTest.cpp" />
     <ClCompile Include="CppUTestExt\GMockTest.cpp" />
     <ClCompile Include="CppUTestExt\GTest1Test.cpp" />
     <ClCompile Include="CppUTestExt\GTest2ConvertorTest.cpp" />
@@ -152,7 +152,7 @@
     <ClCompile Include="CppUTestExt\MockActualCallTest.cpp" />
     <ClCompile Include="CppUTestExt\MockCheatSheetTest.cpp" />
     <ClCompile Include="CppUTestExt\MockExpectedCallTest.cpp" />
-    <ClCompile Include="CppUTestExt\MockExpectedFunctionsListTest.cpp" />
+    <ClCompile Include="CppUTestExt\ExpectedFunctionsListTest.cpp" />
     <ClCompile Include="CppUTestExt\MockFailureTest.cpp" />
     <ClCompile Include="CppUTestExt\MockNamedValueTest.cpp" />
     <ClCompile Include="CppUTestExt\MockPluginTest.cpp" />
@@ -162,7 +162,7 @@
     <ClCompile Include="CppUTestExt\OrderedTestTest.cpp" />
     <ClCompile Include="JUnitOutputTest.cpp" />
     <ClCompile Include="MemoryLeakDetectorTest.cpp" />
-    <ClCompile Include="MemoryLeakOperatorOverloadsTest.cpp" />
+    <ClCompile Include="MemoryOperatorOverloadTest.cpp" />
     <ClCompile Include="MemoryLeakWarningTest.cpp" />
     <ClCompile Include="PluginTest.cpp" />
     <ClCompile Include="PreprocessorTest.cpp" />

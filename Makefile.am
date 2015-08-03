@@ -142,7 +142,7 @@ CppUTestTests_SOURCES = \
 	tests/CommandLineTestRunnerTest.cpp \
 	tests/JUnitOutputTest.cpp \
 	tests/MemoryLeakDetectorTest.cpp \
-	tests/MemoryLeakOperatorOverloadsTest.cpp \
+	tests/MemoryOperatorOverloadTest.cpp \
 	tests/MemoryLeakWarningTest.cpp \
 	tests/PluginTest.cpp \
 	tests/PreprocessorTest.cpp \
@@ -172,7 +172,7 @@ CppUTestExtTests_LDFLAGS = $(CppUTestTests_LDFLAGS)
 
 CppUTestExtTests_SOURCES = \
 	tests/CppUTestExt/AllTests.cpp \
-	tests/CppUTestExt/CodeMemoryReportFormatterTest.cpp \
+	tests/CppUTestExt/CodeMemoryReporterTest.cpp \
 	tests/CppUTestExt/GMockTest.cpp \
 	tests/CppUTestExt/GTest1Test.cpp \
 	tests/CppUTestExt/GTest2ConvertorTest.cpp \
@@ -181,14 +181,16 @@ CppUTestExtTests_SOURCES = \
 	tests/CppUTestExt/MemoryReportFormatterTest.cpp \
 	tests/CppUTestExt/MockActualCallTest.cpp \
 	tests/CppUTestExt/MockCheatSheetTest.cpp \
+	tests/CppUTestExt/MockCallTest.cpp \
 	tests/CppUTestExt/MockExpectedCallTest.cpp \
-	tests/CppUTestExt/MockExpectedFunctionsListTest.cpp \
+	tests/CppUTestExt/ExpectedFunctionsListTest.cpp \
 	tests/CppUTestExt/MockFailureTest.cpp \
 	tests/CppUTestExt/MockNamedValueTest.cpp \
 	tests/CppUTestExt/MockPluginTest.cpp \
 	tests/CppUTestExt/MockSupportTest.cpp \
 	tests/CppUTestExt/MockSupport_cTest.cpp \
 	tests/CppUTestExt/MockSupport_cTestCFile.c \
+	tests/CppUTestExt/MockStrictOrderTest.cpp \
 	tests/CppUTestExt/OrderedTestTest.cpp
 
 if INCLUDE_GMOCKTESTS
