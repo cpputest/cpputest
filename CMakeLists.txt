@@ -6,6 +6,14 @@ set(CppUTest_version_minor 7.2)
 # 2.6.3 is needed for ctest support
 cmake_minimum_required(VERSION 2.8.7)
 
+# Check for functions before setting a lot of stuff
+include(CheckFunctionExists)
+set (CMAKE_REQUIRED_INCLUDES "unistd.h")
+check_function_exists(fork HAVE_FORK)
+if(HAVE_FORK)
+  add_definitions(-DHAVE_FORK)
+endif(HAVE_FORK)
+
 option(STD_C "Use the standard C library" ON)
 option(STD_CPP "Use the standard C++ library" ON)
 option(CPPUTEST_FLAGS "Use the CFLAGS/CXXFLAGS/LDFLAGS set by CppUTest" ON)
@@ -32,7 +40,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CppUTestRootDirectory}/cmake/Module
 
 include("${CppUTestRootDirectory}/cmake/Modules/CppUTestConfigurationOptions.cmake")
 include(CTest)
-include(CheckFunctionExists)
+#include("${CppUTestRootDirectory}/cmake/Modules/CheckFunctionExists.cmake")
 include("${CppUTestRootDirectory}/cmake/Modules/CppUTestBuildTimeDiscoverTests.cmake")
 
 configure_file (
@@ -105,9 +113,6 @@ else()
     " please update cmake to version which provides CMakePackageConfighelpers module"
     " or write generators for CppUTestConfig.cmake by yourself.")
 endif()
-
-set (CMAKE_REQUIRED_INCLUDES unistd.h)
-check_function_exists(fork HAVE_FORK)
 
 message("
 -------------------------------------------------------
