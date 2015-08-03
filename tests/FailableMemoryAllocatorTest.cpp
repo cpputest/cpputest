@@ -53,7 +53,7 @@ TEST(FailableMemoryAllocator, MallocWorksNormallyIfNotAskedToFail)
     int *memory = (int*)malloc(sizeof(int));
     *memory = 1;
     CHECK(memory != NULL);
-    free(memory); // Try commenting this out
+//    free(memory);
 }
 
 TEST(FailableMemoryAllocator, FailFirstMalloc)
