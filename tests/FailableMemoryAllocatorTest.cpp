@@ -31,7 +31,7 @@
 
 // Allocator must be global. Otherwise, it does not exist when memory leak detector
 // reports memory leaks.
-static FailableMallocAllocator failableMallocAllocator("Failable malloc");
+static FailableMemoryAllocator failableMallocAllocator("Failable malloc");
 
 
 TEST_GROUP(FailableMemoryAllocator)
@@ -85,7 +85,7 @@ TEST(FailableMemoryAllocator, FailSecondAndFourthMalloc)
 
 static void setUpTooManyFailedMallocs()
 {
-    FailableMallocAllocator allocator;
+    FailableMemoryAllocator allocator;
     for (int i = 0; i <= allocator.MAX_NUMBER_OF_FAILED_ALLOCS; i++)
         allocator.failMallocNumber(i + 1);
 }
@@ -97,3 +97,5 @@ TEST(FailableMemoryAllocator, SettingUpTooManyFailedAllocsWillFail)
     LONGS_EQUAL(1, fixture->getFailureCount());
     fixture->assertPrintContains("Maximum number of failed memory allocations exceeded");
 }
+
+
