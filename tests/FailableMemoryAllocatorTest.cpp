@@ -29,21 +29,24 @@
 #include "CppUTest/TestTestingFixture.h"
 
 
+// Allocator must be global. Otherwise, it does not exist when memory leak detector
+// reports memory leaks.
+static FailableMallocAllocator failableMallocAllocator("Failable malloc");
+
+
 TEST_GROUP(FailableMemoryAllocator)
 {
-    FailableMallocAllocator *failableMallocAllocator;
     TestTestingFixture *fixture;
 
     void setup()
     {
-        failableMallocAllocator = new FailableMallocAllocator("Failable malloc");
         fixture = new TestTestingFixture;
-        setCurrentMallocAllocator(failableMallocAllocator);
+        failableMallocAllocator.clearFailedAllocations();
+        setCurrentMallocAllocator(&failableMallocAllocator);
     }
     void teardown()
     {
         setCurrentMallocAllocatorToDefault();
-        delete failableMallocAllocator;
         delete fixture;
     }
 };
@@ -53,19 +56,19 @@ TEST(FailableMemoryAllocator, MallocWorksNormallyIfNotAskedToFail)
     int *memory = (int*)malloc(sizeof(int));
     *memory = 1;
     CHECK(memory != NULL);
-//    free(memory);
+    free(memory);
 }
 
 TEST(FailableMemoryAllocator, FailFirstMalloc)
 {
-    failableMallocAllocator->failMallocNumber(1);
+    failableMallocAllocator.failMallocNumber(1);
     LONGS_EQUAL(NULL, (int*)malloc(sizeof(int)));
 }
 
 TEST(FailableMemoryAllocator, FailSecondAndFourthMalloc)
 {
-    failableMallocAllocator->failMallocNumber(2);
-    failableMallocAllocator->failMallocNumber(4);
+    failableMallocAllocator.failMallocNumber(2);
+    failableMallocAllocator.failMallocNumber(4);
     int *memory1 = (int*)malloc(sizeof(int));
     int *memory2 = (int*)malloc(sizeof(int));
     int *memory3 = (int*)malloc(sizeof(int));

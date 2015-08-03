@@ -15,6 +15,7 @@ public:
     virtual void failMallocNumber(int number);
     virtual char* alloc_memory(size_t size, const char* file, int line);
     virtual char* allocMemoryLeakNode(size_t size);
+    virtual void clearFailedAllocations();
 protected:
     virtual bool shouldBeFailedAlloc_();
     int allocsToFail_[MAX_NUMBER_OF_FAILED_ALLOCS];

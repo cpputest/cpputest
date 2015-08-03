@@ -38,3 +38,10 @@ char* FailableMallocAllocator::allocMemoryLeakNode(size_t size)
     return (char*)PlatformSpecificMalloc(size);
 }
 
+void FailableMallocAllocator::clearFailedAllocations()
+{
+    toFailCount_ = 0;
+    currentAllocNumber_ = 0;
+    memset(allocsToFail_, 0, sizeof(allocsToFail_));
+}
+
