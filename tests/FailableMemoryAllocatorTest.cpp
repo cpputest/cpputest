@@ -61,14 +61,14 @@ TEST(FailableMemoryAllocator, MallocWorksNormallyIfNotAskedToFail)
 
 TEST(FailableMemoryAllocator, FailFirstMalloc)
 {
-    failableMallocAllocator.failMallocNumber(1);
+    failableMallocAllocator.failAllocNumber(1);
     LONGS_EQUAL(NULL, (int*)malloc(sizeof(int)));
 }
 
 TEST(FailableMemoryAllocator, FailSecondAndFourthMalloc)
 {
-    failableMallocAllocator.failMallocNumber(2);
-    failableMallocAllocator.failMallocNumber(4);
+    failableMallocAllocator.failAllocNumber(2);
+    failableMallocAllocator.failAllocNumber(4);
     int *memory1 = (int*)malloc(sizeof(int));
     int *memory2 = (int*)malloc(sizeof(int));
     int *memory3 = (int*)malloc(sizeof(int));
@@ -87,7 +87,7 @@ static void setUpTooManyFailedMallocs()
 {
     FailableMemoryAllocator allocator;
     for (int i = 0; i <= allocator.MAX_NUMBER_OF_FAILED_ALLOCS; i++)
-        allocator.failMallocNumber(i + 1);
+        allocator.failAllocNumber(i + 1);
 }
 
 TEST(FailableMemoryAllocator, SettingUpTooManyFailedAllocsWillFail)

@@ -10,7 +10,7 @@ FailableMemoryAllocator::FailableMemoryAllocator(const char* name_str, const cha
     memset(allocsToFail_, 0, sizeof(allocsToFail_));
 }
 
-void FailableMemoryAllocator::failMallocNumber(int number)
+void FailableMemoryAllocator::failAllocNumber(int number)
 {
     if (toFailCount_ >= MAX_NUMBER_OF_FAILED_ALLOCS)
         FAIL("Maximum number of failed memory allocations exceeded")
