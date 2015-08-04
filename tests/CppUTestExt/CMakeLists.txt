@@ -9,6 +9,7 @@ set(CppUTestExtTests_src
     MockActualCallTest.cpp
     MockCheatSheetTest.cpp
     MockCallTest.cpp
+    MockComparatorCopierTest.cpp
     MockExpectedCallTest.cpp
     ExpectedFunctionsListTest.cpp
     MockFailureTest.cpp
