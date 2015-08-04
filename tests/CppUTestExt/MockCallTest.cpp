@@ -29,7 +29,7 @@
 #include "CppUTestExt/MockSupport.h"
 #include "MockFailureTest.h"
 
-TEST_GROUP(MockCallTests)
+TEST_GROUP(MockCallTest)
 {
   void teardown()
   {
@@ -37,33 +37,33 @@ TEST_GROUP(MockCallTests)
   }
 };
 
-TEST(MockCallTests, clear)
+TEST(MockCallTest, clear)
 {
     mock().expectOneCall("func");
     mock().clear();
     CHECK(! mock().expectedCallsLeft());
 }
 
-TEST(MockCallTests, checkExpectationsDoesntFail)
+TEST(MockCallTest, checkExpectationsDoesntFail)
 {
     mock().checkExpectations();
 }
 
-TEST(MockCallTests, exceptACallThatHappens)
+TEST(MockCallTest, exceptACallThatHappens)
 {
     mock().expectOneCall("func");
     mock().actualCall("func");
     CHECK(! mock().expectedCallsLeft());
 }
 
-TEST(MockCallTests, exceptACallInceasesExpectedCallsLeft)
+TEST(MockCallTest, exceptACallInceasesExpectedCallsLeft)
 {
     mock().expectOneCall("func");
     CHECK(mock().expectedCallsLeft());
     mock().clear();
 }
 
-TEST(MockCallTests, checkExpectationsClearsTheExpectations)
+TEST(MockCallTest, checkExpectationsClearsTheExpectations)
 {
     MockFailureReporterInstaller failureReporterInstaller;
 
@@ -78,7 +78,7 @@ TEST(MockCallTests, checkExpectationsClearsTheExpectations)
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 
-TEST(MockCallTests, unexpectedCallHappened)
+TEST(MockCallTest, unexpectedCallHappened)
 {
     MockFailureReporterInstaller failureReporterInstaller;
 
@@ -90,7 +90,7 @@ TEST(MockCallTests, unexpectedCallHappened)
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 
-TEST(MockCallTests, expectMultipleCallsThatHappen)
+TEST(MockCallTest, expectMultipleCallsThatHappen)
 {
     mock().expectOneCall("foo");
     mock().expectOneCall("foo");
@@ -99,7 +99,7 @@ TEST(MockCallTests, expectMultipleCallsThatHappen)
     mock().checkExpectations();
 }
 
-TEST(MockCallTests, expectOneCallHoweverMultipleHappened)
+TEST(MockCallTest, expectOneCallHoweverMultipleHappened)
 {
     MockFailureReporterInstaller failureReporterInstaller;
 
@@ -116,4 +116,59 @@ TEST(MockCallTests, expectOneCallHoweverMultipleHappened)
 
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
+
+TEST(MockCallTest, ignoreOtherCallsExceptForTheExpectedOne)
+{
+    mock().expectOneCall("foo");
+    mock().ignoreOtherCalls();
+    mock().actualCall("bar").withParameter("foo", 1);;
+
+    mock().clear();
+}
+
+TEST(MockCallTest, ignoreOtherCallsDoesntIgnoreMultipleCallsOfTheSameFunction)
+{
+    MockFailureReporterInstaller failureReporterInstaller;
+
+    MockExpectedCallsListForTest expectations;
+    expectations.addFunction("foo")->callWasMade(1);
+    MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "foo", expectations);
+
+    mock().expectOneCall("foo");
+    mock().ignoreOtherCalls();
+    mock().actualCall("bar");
+    mock().actualCall("foo");
+    mock().actualCall("foo");
+
+    CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
+TEST(MockCallTest, ignoreOtherStillFailsIfExpectedOneDidntHappen)
+{
+    MockFailureReporterInstaller failureReporterInstaller;
+
+    MockExpectedCallsListForTest expectations;
+    expectations.addFunction("foo");
+    MockExpectedCallsDidntHappenFailure expectedFailure(mockFailureTest(), expectations);
+
+    mock().expectOneCall("foo");
+    mock().ignoreOtherCalls();
+    mock().checkExpectations();
+
+    CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
+TEST(MockCallTest, threeExpectedAndActual)
+{
+    mock().expectOneCall("function1");
+    mock().expectOneCall("function2");
+    mock().expectOneCall("function3");
+    mock().actualCall("function1");
+    mock().actualCall("function2");
+    mock().actualCall("function3");
+
+    mock().checkExpectations();
+}
+
+
 
