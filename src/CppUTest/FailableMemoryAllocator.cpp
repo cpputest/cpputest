@@ -33,7 +33,7 @@ FailableMemoryAllocator::FailableMemoryAllocator(const char* name_str, const cha
 : TestMemoryAllocator(name_str, alloc_name_str, free_name_str)
 , toFailCount_(0), currentAllocNumber_(0)
 {
-    memset(allocsToFail_, 0, sizeof(allocsToFail_));
+    PlatformSpecificMemset(allocsToFail_, 0, sizeof(allocsToFail_));
 }
 
 void FailableMemoryAllocator::failAllocNumber(int number)
@@ -68,6 +68,6 @@ void FailableMemoryAllocator::clearFailedAllocations()
 {
     toFailCount_ = 0;
     currentAllocNumber_ = 0;
-    memset(allocsToFail_, 0, sizeof(allocsToFail_));
+    PlatformSpecificMemset(allocsToFail_, 0, sizeof(allocsToFail_));
 }
 

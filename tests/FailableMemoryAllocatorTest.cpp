@@ -36,6 +36,8 @@ static FailableMemoryAllocator failableNewAllocator("Failable New Allocator", "n
 static FailableMemoryAllocator failableNewArrayAllocator("Failable New [] Allocator", "new []", "delete []");
 
 
+#if CPPUTEST_USE_MEM_LEAK_DETECTION
+
 TEST_GROUP(FailableMemoryAllocator)
 {
     void setup()
@@ -147,15 +149,20 @@ TEST(FailableMemoryAllocator, FailSecondNewArrayRaisesException)
 
 #endif
 
+#if CPPUTEST_USE_STD_CPP_LIB
+#define STD_NOTHROW (std::nothrow)
+#else
+#define STD_NOTHROW
+#endif
 TEST(FailableMemoryAllocator, FailSecondAndFourthNewNoThrow)
 {
 #undef new
     failableNewAllocator.failAllocNumber(2);
     failableNewAllocator.failAllocNumber(4);
-    int *memory1 = new (std::nothrow) int;
-    int *memory2 = new (std::nothrow) int;
-    int *memory3 = new (std::nothrow) int;
-    int *memory4 = new (std::nothrow) int;
+    int *memory1 = new STD_NOTHROW int;
+    int *memory2 = new STD_NOTHROW int;
+    int *memory3 = new STD_NOTHROW int;
+    int *memory4 = new STD_NOTHROW int;
 
     CHECK(NULL != memory1);
     LONGS_EQUAL(NULL, memory2);
@@ -170,10 +177,10 @@ TEST(FailableMemoryAllocator, FailSecondAndFourthNewArrayNoThrow)
 {
     failableNewArrayAllocator.failAllocNumber(2);
     failableNewArrayAllocator.failAllocNumber(4);
-    int *memory1 = new (std::nothrow) int[10];
-    int *memory2 = new (std::nothrow) int[10];
-    int *memory3 = new (std::nothrow) int[10];
-    int *memory4 = new (std::nothrow) int[10];
+    int *memory1 = new STD_NOTHROW int[10];
+    int *memory2 = new STD_NOTHROW int[10];
+    int *memory3 = new STD_NOTHROW int[10];
+    int *memory4 = new STD_NOTHROW int[10];
 
     CHECK(NULL != memory1);
     LONGS_EQUAL(NULL, memory2);
@@ -183,3 +190,5 @@ TEST(FailableMemoryAllocator, FailSecondAndFourthNewArrayNoThrow)
     delete [] memory1;
     delete [] memory3;
 }
+
+#endif
