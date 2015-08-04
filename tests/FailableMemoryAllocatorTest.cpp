@@ -38,11 +38,8 @@ static FailableMemoryAllocator failableNewArrayAllocator("Failable New [] Alloca
 
 TEST_GROUP(FailableMemoryAllocator)
 {
-    TestTestingFixture *fixture;
-
     void setup()
     {
-        fixture = new TestTestingFixture;
         failableMallocAllocator.clearFailedAllocations();
         failableNewAllocator.clearFailedAllocations();
         failableNewArrayAllocator.clearFailedAllocations();
@@ -56,7 +53,6 @@ TEST_GROUP(FailableMemoryAllocator)
         setCurrentMallocAllocatorToDefault();
         setCurrentNewAllocatorToDefault();
         setCurrentNewArrayAllocatorToDefault();
-        delete fixture;
     }
 };
 
@@ -101,10 +97,14 @@ static void _setUpTooManyFailedMallocs()
 
 TEST(FailableMemoryAllocator, SettingUpTooManyFailedAllocsWillFail)
 {
+    TestTestingFixture *fixture = new TestTestingFixture;
     fixture->setTestFunction(_setUpTooManyFailedMallocs);
+
     fixture->runAllTests();
+
     LONGS_EQUAL(1, fixture->getFailureCount());
     fixture->assertPrintContains("Maximum number of failed memory allocations exceeded");
+    delete fixture;
 }
 
 TEST(FailableMemoryAllocator, NewWorksNormallyIfNotAskedToFail)
