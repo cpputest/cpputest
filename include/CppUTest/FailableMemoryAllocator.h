@@ -27,7 +27,6 @@
 #ifndef D_FailableMemoryAllocator_H
 #define D_FailableMemoryAllocator_H
 
-
 #include "CppUTest/TestMemoryAllocator.h"
 #include <string.h>
 
