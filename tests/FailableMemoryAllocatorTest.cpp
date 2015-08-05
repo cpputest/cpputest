@@ -70,7 +70,7 @@ TEST(FailableMemoryAllocator, MallocWorksNormallyIfNotAskedToFail)
 TEST(FailableMemoryAllocator, FailFirstMalloc)
 {
     failableMallocAllocator.failAllocNumber(1);
-    LONGS_EQUAL(NULL, (int*)malloc(sizeof(int)));
+    POINTERS_EQUAL(NULL, (int*)malloc(sizeof(int)));
 }
 
 TEST(FailableMemoryAllocator, FailSecondAndFourthMalloc)
@@ -83,9 +83,9 @@ TEST(FailableMemoryAllocator, FailSecondAndFourthMalloc)
     int *memory4 = (int*)malloc(sizeof(int));
 
     CHECK(NULL != memory1);
-    LONGS_EQUAL(NULL, memory2);
+    POINTERS_EQUAL(NULL, memory2);
     CHECK(NULL != memory3);
-    LONGS_EQUAL(NULL, memory4);
+    POINTERS_EQUAL(NULL, memory4);
 
     free(memory1);
     free(memory3);
@@ -167,9 +167,9 @@ TEST(FailableMemoryAllocator, FailSecondAndFourthNewNoThrow)
     int *memory4 = new STD_NOTHROW int;
 
     CHECK(NULL != memory1);
-    LONGS_EQUAL(NULL, memory2);
+    POINTERS_EQUAL(NULL, memory2);
     CHECK(NULL != memory3);
-    LONGS_EQUAL(NULL, memory4);
+    POINTERS_EQUAL(NULL, memory4);
 
     delete memory1;
     delete memory3;
@@ -185,9 +185,9 @@ TEST(FailableMemoryAllocator, FailSecondAndFourthNewArrayNoThrow)
     int *memory4 = new STD_NOTHROW int[10];
 
     CHECK(NULL != memory1);
-    LONGS_EQUAL(NULL, memory2);
+    POINTERS_EQUAL(NULL, memory2);
     CHECK(NULL != memory3);
-    LONGS_EQUAL(NULL, memory4);
+    POINTERS_EQUAL(NULL, memory4);
 
     delete [] memory1;
     delete [] memory3;
