@@ -28,7 +28,6 @@
 #define D_FailableMemoryAllocator_H
 
 #include "CppUTest/TestMemoryAllocator.h"
-#include <string.h>
 
 
 class FailableMemoryAllocator: public TestMemoryAllocator

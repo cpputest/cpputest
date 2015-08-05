@@ -58,6 +58,7 @@ TEST_GROUP(FailableMemoryAllocator)
     }
 };
 
+#if CPPUTEST_USE_MALLOC_MACROS
 TEST(FailableMemoryAllocator, MallocWorksNormallyIfNotAskedToFail)
 {
     int *memory = (int*)malloc(sizeof(int));
@@ -108,6 +109,7 @@ TEST(FailableMemoryAllocator, SettingUpTooManyFailedAllocsWillFail)
     fixture->assertPrintContains("Maximum number of failed memory allocations exceeded");
     delete fixture;
 }
+#endif
 
 TEST(FailableMemoryAllocator, NewWorksNormallyIfNotAskedToFail)
 {
