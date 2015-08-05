@@ -156,6 +156,16 @@ TEST(FailableMemoryAllocator, FailSecondNewArrayRaisesException)
 #else
 #define STD_NOTHROW
 #endif
+
+#ifdef __clang__
+IGNORE_TEST(FailableMemoryAllocator, FailSecondAndFourthNewNoThrow)
+{
+    /*  Clang misbehaves with -O2 - it will not overload operator new or
+     *  operator new[] no matter what. Therefore, this test is must be ignored.
+     */
+}
+#else
+
 TEST(FailableMemoryAllocator, FailSecondAndFourthNewNoThrow)
 {
 #undef new
@@ -174,6 +184,16 @@ TEST(FailableMemoryAllocator, FailSecondAndFourthNewNoThrow)
     delete memory1;
     delete memory3;
 }
+#endif
+
+#ifdef __clang__
+IGNORE_TEST(FailableMemoryAllocator, FailSecondAndFourthNewArrayNoThrow)
+{
+    /*  Clang misbehaves with -O2 - it will not overload operator new or
+     *  operator new[] no matter what. Therefore, this test is must be ignored.
+     */
+}
+#else
 
 TEST(FailableMemoryAllocator, FailSecondAndFourthNewArrayNoThrow)
 {
@@ -192,5 +212,6 @@ TEST(FailableMemoryAllocator, FailSecondAndFourthNewArrayNoThrow)
     delete [] memory1;
     delete [] memory3;
 }
+#endif
 
 #endif

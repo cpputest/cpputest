@@ -39,7 +39,7 @@ FailableMemoryAllocator::FailableMemoryAllocator(const char* name_str, const cha
 void FailableMemoryAllocator::failAllocNumber(int number)
 {
     if (toFailCount_ >= MAX_NUMBER_OF_FAILED_ALLOCS)
-        FAIL("Maximum number of failed memory allocations exceeded")
+        FAIL("Maximum number of failed memory allocations exceeded");
     allocsToFail_[toFailCount_++] = number;
 }
 
