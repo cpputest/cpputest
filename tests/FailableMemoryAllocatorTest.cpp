@@ -151,12 +151,6 @@ TEST(FailableMemoryAllocator, FailSecondNewArrayRaisesException)
 
 #endif
 
-#if CPPUTEST_USE_STD_CPP_LIB
-#define STD_NOTHROW (std::nothrow)
-#else
-#define STD_NOTHROW
-#endif
-
 #ifdef __clang__
 IGNORE_TEST(FailableMemoryAllocator, FailSecondAndFourthNewNoThrow)
 {
@@ -165,6 +159,12 @@ IGNORE_TEST(FailableMemoryAllocator, FailSecondAndFourthNewNoThrow)
      */
 }
 #else
+
+#if CPPUTEST_USE_STD_CPP_LIB
+#define STD_NOTHROW (std::nothrow)
+#else
+#define STD_NOTHROW
+#endif
 
 TEST(FailableMemoryAllocator, FailSecondAndFourthNewNoThrow)
 {
