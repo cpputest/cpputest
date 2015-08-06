@@ -52,11 +52,18 @@ if [ "x$BUILDTOOL" = "xcmake" ]; then
     ctest -V || exit 1
 fi
 
-if [ "x$BUILDTOOL" = "xcmake-coverage" -a "x$CXX" = "xg++" ]; then
+if [ "x$BUILDTOOL" = "xcmake-coverage" ]; then
     cmake .. -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE -DCOVERAGE=ON
     make || exit 1
     ctest || exit 1
 
     coveralls -b . -r .. -i "src" -i "include" --gcov-options="-bc" || true
+fi
+
+if [ "x$BUILDTOOL" = "xmake-dos" ]; then
+    make -f ../platforms/Dos/Makefile || exit 1
+        # 1. Build the six targets (all)
+        # 2. Run the six targets (tdd), writing to ALLTESTS.LOG
+        # cat ALLTESTS.LOG to console
 fi
 

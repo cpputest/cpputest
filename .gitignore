@@ -51,7 +51,7 @@ builds/*gcc*
 /.deps
 CppUTestExtTests
 CppUTestTests
-Makefile
+/Makefile
 config.h
 config.h.in
 config.status
