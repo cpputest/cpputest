@@ -61,9 +61,21 @@ if [ "x$BUILDTOOL" = "xcmake-coverage" ]; then
 fi
 
 if [ "x$BUILDTOOL" = "xmake-dos" ]; then
+    export CC=wcl
+    export CXX=wcl
+    # $(CC) --version
     make -f ../platforms/Dos/Makefile || exit 1
-        # 1. Build the six targets (all)
-        # 2. Run the six targets (tdd), writing to ALLTESTS.LOG
-        # cat ALLTESTS.LOG to console
+	echo "" > exit  # has to be there so dosbox will do 'exit' correctly
+	echo "\n" > ./ALLTESTS.LOG
+    dosbox -conf ../platforms/Dos/dosbox-0.74.conf exit \
+      -c "echo.>>ALLTESTS.LOG" \
+      -c "echo.>>ALLTESTS.LOG" \
+      -c "echo *** Pretending to run CPPU1.EXE ***>>ALLTESTS.LOG" \
+      -c "echo ...!......>>ALLTESTS.LOG" \
+      -c "echo OK (10 tests, 9 ran, 10 checks, 1 ignored, 0 filtered out, 100 ms)>>ALLTESTS.LOG" \
+      -c "echo.>>ALLTESTS.LOG" \
+      -noconsole -exit
+    cat ALLTESTS.LOG
+    # Generate an error here if failures occur in ALLTESTS.LOG
 fi
 

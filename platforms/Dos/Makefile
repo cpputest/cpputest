@@ -1,2 +1,2 @@
-all:
-	@echo "\n  Dos target not implemented yet\n"
+dummy:
+	echo "\n  *** Pretending to build CPPU1.EXE ***\n"
