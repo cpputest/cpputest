@@ -170,5 +170,18 @@ TEST(MockCallTest, threeExpectedAndActual)
     mock().checkExpectations();
 }
 
+TEST(MockCallTest, disableEnable)
+{
+    mock().disable();
+    mock().expectOneCall("function");
+    mock().actualCall("differenFunction");
+    CHECK(! mock().expectedCallsLeft());
+    mock().enable();
+    mock().expectOneCall("function");
+    CHECK(mock().expectedCallsLeft());
+    mock().actualCall("function");
+
+    mock().checkExpectations();
+}
 
 
