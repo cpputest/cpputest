@@ -184,4 +184,79 @@ TEST(MockCallTest, disableEnable)
     mock().checkExpectations();
 }
 
+TEST(MockCallTest, OnObject)
+{
+    void* objectPtr = (void*) 0x001;
+    mock().expectOneCall("boo").onObject(objectPtr);
+    mock().actualCall("boo").onObject(objectPtr);
+}
+
+TEST(MockCallTest, OnObjectFails)
+{
+    MockFailureReporterInstaller failureReporterInstaller;
+
+    void* objectPtr = (void*) 0x001;
+    void* objectPtr2 = (void*) 0x002;
+    MockExpectedCallsListForTest expectations;
+    expectations.addFunction("boo")->onObject(objectPtr);
+
+    mock().expectOneCall("boo").onObject(objectPtr);
+    mock().actualCall("boo").onObject(objectPtr2);
+
+    MockUnexpectedObjectFailure expectedFailure(mockFailureTest(), "boo", objectPtr2, expectations);
+    CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
+TEST(MockCallTest, OnObjectExpectedButNotCalled)
+{
+    MockFailureReporterInstaller failureReporterInstaller;
+
+    void* objectPtr = (void*) 0x001;
+    MockExpectedCallsListForTest expectations;
+    expectations.addFunction("boo")->onObject(objectPtr);
+    expectations.addFunction("boo")->onObject(objectPtr);
+
+    mock().expectOneCall("boo").onObject(objectPtr);
+    mock().expectOneCall("boo").onObject(objectPtr);
+    mock().actualCall("boo");
+    mock().actualCall("boo");
+
+    MockExpectedObjectDidntHappenFailure expectedFailure(mockFailureTest(), "boo", expectations);
+    CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+    mock().checkExpectations();
+    CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
+TEST(MockCallTest, expectMultipleCalls)
+{
+    mock().expectNCalls(2, "boo");
+    mock().actualCall("boo");
+    mock().actualCall("boo");
+    mock().checkExpectations();
+}
+
+TEST(MockCallTest, shouldntFailTwice)
+{
+  MockFailureReporterInstaller failureReporterInstaller;
+
+  mock().expectOneCall("foo");
+  mock().actualCall("bar");
+  mock().checkExpectations();
+
+  CHECK(!MockFailureReporterForTest::getReporter()->mockFailureString.contains("bar"));
+}
+
+TEST(MockCallTest, shouldReturnDefaultWhenThereIsntAnythingToReturn)
+{
+    CHECK(mock().returnValue().equals(MockNamedValue("")));
+}
+
+IGNORE_TEST(MockCallTest, testForPerformanceProfiling)
+{
+    /* TO fix! */
+    mock().expectNCalls(2000, "SimpleFunction");
+    for (int i = 0; i < 2000; i++) {
+        mock().actualCall("SimpleFunction");
+    }
+}
 
