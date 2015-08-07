@@ -36,8 +36,7 @@ TEST_GROUP(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess)
 };
 
 #ifndef HAVE_FORK
-
-TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, DummyFailsWithMessage)
+IGNORE_TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, DummyFailsWithMessage)
 {
     fixture.registry_->setRunTestsInSeperateProcess();
     fixture.runAllTests();

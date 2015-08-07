@@ -24,7 +24,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
+#include <math.h>
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TestOutput.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
@@ -37,7 +37,7 @@ const char* failFileName = "fail.cpp";
 
 static double zero = 0.0;
 static double one = 1.0;
-static const double not_a_number = zero / zero;
+static const double not_a_number = NAN;
 static const double infinity = one / zero;
 
 extern "C" {
