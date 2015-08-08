@@ -6,6 +6,7 @@ LOG := ALLTESTS.LOG
 NULL :=
 S := $(NULL) #
 C := ,
+V := /
 
 -include ../platforms/Dos/platform.mk
 
@@ -45,14 +46,14 @@ OBJECTS := \
 all: CPPU1$(EXE)
 
 %.obj: %.cpp
-	$(CXX) $(CXXFLAGS) -fo=$(notdir $@) $<
+	$(CXX) $(CXXFLAGS) -fo=$(notdir $@) $(subst /,$V, $<)
 
 %.obj: %.c
-	$(CC) $(CFLAGS) -fo=$(notdir $@) $<
+	$(CC) $(CFLAGS) -fo=$(notdir $@) $(subst /,$V, $<)
 
 CPPU1$(EXE): \
     $(OBJECTS)
-	$(LINK) opt map, stack=50k sys dos file $(subst $(S),$(C),$(notdir $?)) name $@
+	$(LINK) opt map, stack=50k sys dos file $(subst $S,$C,$(notdir $?)) name $@
 
 clean:
 	rm -rf exit *.obj *.map *.txt *.LOG *.EXE *.err
