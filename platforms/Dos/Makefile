@@ -11,8 +11,8 @@ V := /
 -include ../platforms/Dos/platform.mk
 include ../platforms/Dos/sources.mk
 
-CXXFLAGS := \
-  -q -c -xds -os -oc -d0 -w=3 -ml \
+CFLAGS := \
+  -q -c -os -oc -d0 -w=3 -ml \
   -dCPPUTEST_MEM_LEAK_DETECTION_DISABLED=1 \
   -dCPPUTEST_STD_CPP_LIB_DISABLED=1 \
   -i$(CPPUTEST_HOME)/include \
@@ -20,7 +20,7 @@ CXXFLAGS := \
   -i$(WATCOM)/h \
   -i$(WATCOM)/h/nt \
 
-CFLAGS := -std=c99 $(CXXFLAGS)
+CXXFLAGS := $(CFLAGS) -xds
 
 .PHONY: all clean
 
@@ -30,7 +30,7 @@ all: CPPU1$(EXE)
 	$(CXX) $(CXXFLAGS) -fo=$(notdir $@) $(subst /,$V, $<)
 
 %.obj: %.c
-	$(CC) $(CFLAGS) -fo=$(notdir $@) $(subst /,$V, $<)
+	$(CC) $(subst /,$V, $(CFLAGS)) -fo=$(notdir $@) $(subst /,$V, $<)
 
 CPPU1$(EXE): \
     $(CPPU_OBJECTS) $(CPPU1_OBJECTS)
