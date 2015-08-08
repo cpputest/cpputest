@@ -26,7 +26,7 @@
  */
 
 #include "CppUTest/TestHarness.h"
-#include "CppUTestExt/MockSupport.h"
+#include "CppUTest/TestTestingFixture.h"
 #include "MockFailureTest.h"
 
 TEST_GROUP(MockCallTest)
@@ -258,5 +258,20 @@ IGNORE_TEST(MockCallTest, testForPerformanceProfiling)
     for (int i = 0; i < 2000; i++) {
         mock().actualCall("SimpleFunction");
     }
+}
+
+static void mocksAreCountedAsChecksTestFunction_()
+{
+    mock().expectOneCall("foo");
+    mock().expectNCalls(3, "bar");
+    mock().clear();
+}
+
+TEST(MockCallTest, mockExpectationShouldIncreaseNumberOfChecks)
+{
+    TestTestingFixture fixture;
+    fixture.setTestFunction(mocksAreCountedAsChecksTestFunction_);
+    fixture.runAllTests();
+    LONGS_EQUAL(4, fixture.getCheckCount());
 }
 

@@ -446,3 +446,13 @@ TEST(MockReturnValueTest, ConstPointerReturnValue)
     POINTERS_EQUAL(ptr, mock().constPointerReturnValue());
 }
 
+TEST(MockReturnValueTest, whenCallingDisabledOrIgnoredActualCallsThenTheyDontReturnPreviousCallsValues)
+{
+    mock().expectOneCall("boo").ignoreOtherParameters().andReturnValue(10);
+    mock().ignoreOtherCalls();
+    mock().actualCall("boo");
+    mock().actualCall("An Ignored Call");
+
+    CHECK(!mock().hasReturnValue());
+}
+
