@@ -19,6 +19,7 @@ CPPU_OBJECTS := \
   $(CPPUTEST_HOME)/tests/AllTests.obj \
 
 CPPU1_OBJECTS := \
+  $(CPPUTEST_HOME)/tests/AllocLetTestFree.obj \
   $(CPPUTEST_HOME)/tests/AllocLetTestFreeTest.obj \
   $(CPPUTEST_HOME)/tests/AllocationInCFile.obj \
   $(CPPUTEST_HOME)/tests/AllocationInCppFile.obj \
@@ -36,7 +37,8 @@ CPPU1_OBJECTS := \
   $(CPPUTEST_HOME)/tests/TestOutputTest.obj \
   $(CPPUTEST_HOME)/tests/TestRegistryTest.obj \
   $(CPPUTEST_HOME)/tests/TestResultTest.obj \
-  $(CPPUTEST_HOME)/tests/TestUTestMacro.obj \
   $(CPPUTEST_HOME)/tests/UtestPlatformTest.obj \
   $(CPPUTEST_HOME)/tests/UtestTest.obj \
- 
+
+CPPU2_OBJECTS := \
+  $(CPPUTEST_HOME)/tests/TestUTestMacro.obj \
