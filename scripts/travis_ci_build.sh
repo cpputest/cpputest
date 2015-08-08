@@ -66,7 +66,7 @@ if [ "x$BUILDTOOL" = "xmake-dos" ]; then
     mkdir -p watcom && unzip -a -d watcom /tmp/watcom.zip && sudo chmod -R 755 watcom/binl
     export PATH=$PATH:$PWD/watcom/binl
     export WATCOM=$PWD/watcom
-    export CPPUTEST_HOME=$PWD
+    export CPPUTEST_HOME=$TRAVIS_BUILD_DIR
     export CC=wcl
     export CXX=wcl
     $CC --version

@@ -32,8 +32,7 @@ all: CPPU1$(EXE)
 %.obj: %.c
 	$(CC) $(subst /,$V, $(CFLAGS)) -fo=$(notdir $@) $(subst /,$V, $<)
 
-CPPU1$(EXE): \
-    $(CPPU_OBJECTS) $(CPPU1_OBJECTS)
+CPPU1$(EXE): $(CPPU_OBJECTS) $(CPPU1_OBJECTS)
 	$(LINK) opt map, stack=50k sys dos file $(subst $S,$C,$(notdir $?)) name $@
 
 clean:
