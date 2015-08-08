@@ -65,20 +65,18 @@ if [ "x$BUILDTOOL" = "xmake-dos" ]; then
     wget ftp://ftp.openwatcom.org/pub/open-watcom-c-linux-1.9 -O /tmp/watcom.zip
     mkdir -p watcom && unzip -a -d watcom /tmp/watcom.zip && sudo chmod -R 755 watcom/binl
     export PATH=$PATH:$PWD/watcom/binl/
+    export WATCOM=$TRAVIS_BUILD_DIR/watcom
+    export CPPUTEST_HOME=$TRAVIS_BUILD_DIR
     export CC=wcl
     export CXX=wcl
     $CC --version
     make -f ../platforms/Dos/Makefile || exit 1
-	echo "" > exit  # has to be there so dosbox will do 'exit' correctly
-	echo "\n" > ./ALLTESTS.LOG
+	printf "" > exit  # has to be there so dosbox will do 'exit' correctly
     dosbox -conf ../platforms/Dos/dosbox-0.74.conf exit \
-      -c "echo.>>ALLTESTS.LOG" \
-      -c "echo.>>ALLTESTS.LOG" \
-      -c "echo *** Pretending to run CPPU1.EXE ***>>ALLTESTS.LOG" \
-      -c "echo ...!......>>ALLTESTS.LOG" \
-      -c "echo OK (10 tests, 9 ran, 10 checks, 1 ignored, 0 filtered out, 100 ms)>>ALLTESTS.LOG" \
-      -c "echo.>>ALLTESTS.LOG" \
-      -noconsole -exit || exit 1
+      -c "echo.>ALLTESTS.LOG" \
+      -c "CPPU1.EXE>>ALLTESTS.LOG">>ALLTESTS.LOG \
+      -noconsole -exit
+    printf "\n" >>ALLTESTS.LOG
     cat ALLTESTS.LOG
     # Generate an error here if failures occur in ALLTESTS.LOG
 fi
