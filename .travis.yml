@@ -30,8 +30,6 @@ global:
       vA1NkcW49tQW1wQvBlRtdlLNOmUfDP/oiJFXPwNn4dqwOIOEet2P7JO/5hnH
       MNHlZmGu2WpoZREhOFBfsIhK0IP8mloqLDq2XemBdga/LWygrLU=
 - secure: Y/8iNkf6uEbE3qltnM+7mGlCvFWzyttwwRGgVGw1m9xOiUJcobvOImQRU8XZ91dgO+Fz0A3mljqs1sK1OPjpXmFGE1jP/NlotMw0WlDOuSIDjQ4ubwdTNGAwNY53R9ygbIjEmqxHAJm9mOZqxW2hNaoI7TcX6oX248/hLibyx8M=
-before_install:
-- sudo apt-get install dosbox
 install:
 - gem install travis_github_deployer
 - sudo apt-get update --fix-missing
