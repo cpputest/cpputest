@@ -62,8 +62,7 @@ fi
 
 if [ "x$BUILD" = "xcmake-coverage" ]; then
   # From: https://github.com/eddyxu/cpp-coveralls
-  brew update
-  brew install pyenv
+  git clone https://github.com/yyuu/pyenv.git ~/.pyenv
   eval "$(pyenv init -)"
   pyenv install 2.7.6
   pyenv global 2.7.6
