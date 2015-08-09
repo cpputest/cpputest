@@ -25,7 +25,7 @@ TEST_GROUP(CheatSheet)
 TEST(CheatSheet, TestName)
 {
     /* Check two longs are equal */
-    LONGS_EQUAL(1, 2);
+    LONGS_EQUAL(1, 1);
 
     /* Check a condition */
     CHECK(true == true);
