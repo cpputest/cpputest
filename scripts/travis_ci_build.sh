@@ -84,13 +84,10 @@ if [ "x$BUILD" = "xmake-dos" ]; then
     printf "" > exit  # has to be there so dosbox will do 'exit' correctly
     printf "\n" > ./ALLTESTS.LOG
     dosbox -conf ../platforms/Dos/dosbox-0.74.conf exit \
-      -c "echo.>>ALLTESTS.LOG" \
-      -c "echo.>>ALLTESTS.LOG" \
-      -c "echo *** Pretending to run CPPU1.EXE ***>>ALLTESTS.LOG" \
-      -c "echo ...!......>>ALLTESTS.LOG" \
-      -c "echo OK (10 tests, 9 ran, 10 checks, 1 ignored, 0 filtered out, 100 ms)>>ALLTESTS.LOG" \
-      -c "echo.>>ALLTESTS.LOG" \
-      -exit || exit 1
+ 	  -c "echo.>ALLTESTS.LOG" \
+      -c "CPPU1.EXE>>ALLTESTS.LOG">>ALLTESTS.LOG \
+      -noconsole -exit
+    printf "\n" >>ALLTESTS.LOG
     cat ALLTESTS.LOG
     # Generate an error here if failures occur in ALLTESTS.LOG
 fi
