@@ -16,9 +16,24 @@ CPPU_OBJECTS := \
   $(CPPUTEST_HOME)/src/CppUTest/TestResult.obj \
   $(CPPUTEST_HOME)/src/CppUTest/Utest.obj \
   $(CPPUTEST_HOME)/src/Platforms/Dos/UtestPlatform.obj \
-  $(CPPUTEST_HOME)/tests/AllTests.obj \
+
+CPPUEXT_OBJECTS := \
+  $(CPPUTEST_HOME)/src/CppUTestExt/CodeMemoryReportFormatter.obj \
+  $(CPPUTEST_HOME)/src/CppUTestExt/MemoryReporterPlugin.obj \
+  $(CPPUTEST_HOME)/src/CppUTestExt/MockFailure.obj \
+  $(CPPUTEST_HOME)/src/CppUTestExt/MockSupportPlugin.obj \
+  $(CPPUTEST_HOME)/src/CppUTestExt/MockActualCall.obj \
+  $(CPPUTEST_HOME)/src/CppUTestExt/MockSupport_c.obj \
+  $(CPPUTEST_HOME)/src/CppUTestExt/MemoryReportAllocator.obj \
+  $(CPPUTEST_HOME)/src/CppUTestExt/MockExpectedCall.obj \
+  $(CPPUTEST_HOME)/src/CppUTestExt/MockNamedValue.obj \
+  $(CPPUTEST_HOME)/src/CppUTestExt/OrderedTest.obj \
+  $(CPPUTEST_HOME)/src/CppUTestExt/MemoryReportFormatter.obj \
+  $(CPPUTEST_HOME)/src/CppUTestExt/MockExpectedCallsList.obj \
+  $(CPPUTEST_HOME)/src/CppUTestExt/MockSupport.obj \
 
 CPPU1_OBJECTS := \
+  $(CPPUTEST_HOME)/tests/AllTests.obj \
   $(CPPUTEST_HOME)/tests/AllocLetTestFree.obj \
   $(CPPUTEST_HOME)/tests/AllocLetTestFreeTest.obj \
   $(CPPUTEST_HOME)/tests/AllocationInCFile.obj \
@@ -52,6 +67,27 @@ CPPU2_OBJECTS := \
   $(CPPUTEST_HOME)/tests/TestMemoryAllocatorTest.obj \
 
 CPPUEXT1_OBJECTS := \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/AllTests.obj \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/ExpectedFunctionsListTest.obj \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/GMockTest.obj \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/GTest1Test.obj \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/GTest2ConvertorTest.obj \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/MemoryReportAllocatorTest.obj \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/MemoryReportFormatterTest.obj \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/MemoryReporterPluginTest.obj \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/MockActualCallTest.obj \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/MockCheatSheetTest.obj \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/MockExpectedCallTest.obj \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/MockExpectedCallTest.obj \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/OrderedTestTest.obj \
 
 CPPUEXT2_OBJECTS := \
   $(CPPUTEST_HOME)/tests/TestUTestMacro.obj \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/AllTests.obj \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/MockNamedValueTest.obj \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/MockPluginTest.obj \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/MockSupport_cTest.obj \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/MockSupport_cTestCFile.obj \
+
+CPPUEXT3_OBJECTS := \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/AllTests.obj \

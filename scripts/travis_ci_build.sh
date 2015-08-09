@@ -86,7 +86,15 @@ if [ "x$BUILD" = "xmake-dos" ]; then
     dosbox -conf ../platforms/Dos/dosbox-0.74.conf exit \
  	  -c "echo.>ALLTESTS.LOG" \
       -c "CPPU1.EXE>>ALLTESTS.LOG">>ALLTESTS.LOG \
-      -noconsole -exit
+      -noconsole -exit || exit 1
+    dosbox -conf ../platforms/Dos/dosbox-0.74.conf exit \
+ 	  -c "echo.>>ALLTESTS.LOG" \
+      -c "CPPU2.EXE>>ALLTESTS.LOG">>ALLTESTS.LOG \
+      -noconsole -exit || exit 1
+    dosbox -conf ../platforms/Dos/dosbox-0.74.conf exit \
+ 	  -c "echo.>>ALLTESTS.LOG" \
+      -c "CPPUEXT1.EXE>>ALLTESTS.LOG">>ALLTESTS.LOG \
+      -noconsole -exit || exit 1
     printf "\n" >>ALLTESTS.LOG
     cat ALLTESTS.LOG
     # Generate an error here if failures occur in ALLTESTS.LOG
