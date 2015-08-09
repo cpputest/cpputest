@@ -41,4 +41,17 @@ CPPU1_OBJECTS := \
   $(CPPUTEST_HOME)/tests/UtestTest.obj \
 
 CPPU2_OBJECTS := \
+  $(CPPUTEST_HOME)/tests/AllTests.obj \
+  $(CPPUTEST_HOME)/tests/SimpleStringTest.obj \
+  $(CPPUTEST_HOME)/tests/TestFailureNaNTest.obj \
+  $(CPPUTEST_HOME)/tests/TestFailureTest.obj \
+  $(CPPUTEST_HOME)/tests/TestFilterTest.obj \
+  $(CPPUTEST_HOME)/tests/TestHarness_cTest.obj \
+  $(CPPUTEST_HOME)/tests/TestHarness_cTestCFile.obj \
+  $(CPPUTEST_HOME)/tests/TestInstallerTest.obj \
+  $(CPPUTEST_HOME)/tests/TestMemoryAllocatorTest.obj \
+
+CPPUEXT1_OBJECTS := \
+
+CPPUEXT2_OBJECTS := \
   $(CPPUTEST_HOME)/tests/TestUTestMacro.obj \
