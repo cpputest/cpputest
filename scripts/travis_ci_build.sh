@@ -2,9 +2,6 @@
 # Script run in the travis CI
 set -ex
 
-export CPPUTEST_BUILD_DIR=$TRAVIS_BUILD_DIR/cpputest_build
-mkdir -p $CPPUTEST_BUILD_DIR && cd $CPPUTEST_BUILD_DIR
-
 if [ "x$BUILD" = "xautotools" ]; then
     autoreconf -i ..
     ../configure
