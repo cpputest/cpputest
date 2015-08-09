@@ -8,21 +8,27 @@ compiler:
 rvm:
 - 1.9.3
 env:
-  - BUILDTOOL=autotools
-  - BUILDTOOL=autotools_old_compilers
-  - BUILDTOOL=cmake
-  - BUILDTOOL=cmake-coverage
-  - BUILDTOOL=make-dos
+  - BUILD=autotools
+  - BUILD=cmake
+  - BUILD=autotools_gtest
+  - BUILD=cmake_gtest
+  - BUILD=test_report
+  - BUILD=autotools_old_compilers
+  - BUILD=cmake-coverage
+  - BUILD=make-dos
 matrix:
     exclude:
-    - env: BUILDTOOL=cmake-coverage
-    - env: BUILDTOOL=autotools_old_compilers
-    - env: BUILDTOOL=make-dos
+    - env: BUILD=cmake-coverage
+    - env: BUILD=autotools_old_compilers
+    - env: BUILD=make-dos
+    - env: BUILD=test_report
     - compiler: wcl
     include:
-    - env: BUILDTOOL=cmake-coverage
+    - env: BUILD=cmake-coverage
       compiler: gcc
-    - env: BUILDTOOL=make-dos
+    - env: BUILD=test_report
+      compiler: gcc
+    - env: BUILD=make-dos
       compiler: wcl
 global:
 - secure: |-
@@ -30,12 +36,20 @@ global:
       vA1NkcW49tQW1wQvBlRtdlLNOmUfDP/oiJFXPwNn4dqwOIOEet2P7JO/5hnH
       MNHlZmGu2WpoZREhOFBfsIhK0IP8mloqLDq2XemBdga/LWygrLU=
 - secure: Y/8iNkf6uEbE3qltnM+7mGlCvFWzyttwwRGgVGw1m9xOiUJcobvOImQRU8XZ91dgO+Fz0A3mljqs1sK1OPjpXmFGE1jP/NlotMw0WlDOuSIDjQ4ubwdTNGAwNY53R9ygbIjEmqxHAJm9mOZqxW2hNaoI7TcX6oX248/hLibyx8M=
+addons:
+  apt:
+    packages:
+      # - dosbox
+      - valgrind
+before_install:
+  #  - sudo pip install cpp-coveralls
+  - sudo apt-get install dosbox
 install:
-- gem install travis_github_deployer
-- sudo apt-get update --fix-missing
-- sudo apt-get install valgrind
+  - gem install travis_github_deployer
+  - sudo apt-get update --fix-missing
+    #  - sudo apt-get install valgrind
 before_script:
-- export CPPUTEST_BUILD_DIR=$TRAVIS_BUILD_DIR/cpputest_build
-- mkdir -p $CPPUTEST_BUILD_DIR && cd $CPPUTEST_BUILD_DIR
+  - export CPPUTEST_BUILD_DIR=$TRAVIS_BUILD_DIR/cpputest_build
+  - mkdir -p $CPPUTEST_BUILD_DIR && cd $CPPUTEST_BUILD_DIR
 script:
 - "../scripts/travis_ci_build.sh"
