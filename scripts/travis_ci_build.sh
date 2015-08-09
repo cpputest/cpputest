@@ -52,11 +52,30 @@ if [ "x$BUILDTOOL" = "xcmake" ]; then
     ctest -V || exit 1
 fi
 
-if [ "x$BUILDTOOL" = "xcmake-coverage" -a "x$CXX" = "xg++" ]; then
+if [ "x$BUILDTOOL" = "xcmake-coverage" ]; then
     cmake .. -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE -DCOVERAGE=ON
     make || exit 1
     ctest || exit 1
 
     coveralls -b . -r .. -i "src" -i "include" --gcov-options="-bc" || true
+fi
+
+if [ "x$BUILDTOOL" = "xmake-dos" ]; then
+    export CC=wcl
+    export CXX=wcl
+    # $(CC) --version
+    make -f ../platforms/Dos/Makefile || exit 1
+	echo "" > exit  # has to be there so dosbox will do 'exit' correctly
+	echo "\n" > ./ALLTESTS.LOG
+    dosbox -conf ../platforms/Dos/dosbox-0.74.conf exit \
+      -c "echo.>>ALLTESTS.LOG" \
+      -c "echo.>>ALLTESTS.LOG" \
+      -c "echo *** Pretending to run CPPU1.EXE ***>>ALLTESTS.LOG" \
+      -c "echo ...!......>>ALLTESTS.LOG" \
+      -c "echo OK (10 tests, 9 ran, 10 checks, 1 ignored, 0 filtered out, 100 ms)>>ALLTESTS.LOG" \
+      -c "echo.>>ALLTESTS.LOG" \
+      -noconsole -exit
+    cat ALLTESTS.LOG
+    # Generate an error here if failures occur in ALLTESTS.LOG
 fi
 
