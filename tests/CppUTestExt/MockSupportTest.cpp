@@ -120,42 +120,6 @@ TEST(MockSupportTest, setDataObject)
     STRCMP_EQUAL("type", mock().getData("data").getType().asCharString());
 }
 
-TEST(MockSupportTest, expectMultipleCallsWithParameters)
-{
-    int expected_int = -7;
-    unsigned int expected_uint = 7;
-
-    mock().expectNCalls(2, "boo").withParameter("double", 1.0).withParameter("int", expected_int).
-        withParameter("string", "string").withParameter("uint", expected_uint);
-    mock().actualCall("boo").withParameter("double", 1.0).withParameter("int", expected_int).withParameter("string", "string").
-        withParameter("uint", expected_uint);
-    mock().actualCall("boo").withParameter("double", 1.0).withParameter("int", expected_int).withParameter("string", "string").
-        withParameter("uint", expected_uint);
-    mock().checkExpectations();
-    CHECK_NO_MOCK_FAILURE();
-}
-
-TEST(MockSupportTest, expectMultipleMultipleCallsWithParameters)
-{
-    mock().expectNCalls(2, "boo").withParameter("double", 1.0).ignoreOtherParameters();
-    mock().expectNCalls(2, "boo").withParameter("double", 1.0).ignoreOtherParameters();
-    mock().actualCall("boo").withParameter("double", 1.0).withParameter("int", 1).withParameter("string", "string");
-    mock().actualCall("boo").withParameter("double", 1.0).withParameter("int", 1).withParameter("string", "string");
-    mock().actualCall("boo").withParameter("double", 1.0).withParameter("int", 1).withParameter("string", "string");
-    mock().actualCall("boo").withParameter("double", 1.0).withParameter("int", 1).withParameter("string", "string");
-    mock().checkExpectations();
-    CHECK_NO_MOCK_FAILURE();
-}
-
-TEST(MockSupportTest, whenCallingDisabledOrIgnoredActualCallsThenTheyDontReturnPreviousCallsValues)
-{
-    mock().expectOneCall("boo").ignoreOtherParameters().andReturnValue(10);
-    mock().ignoreOtherCalls();
-    mock().actualCall("boo");
-    mock().actualCall("An Ignored Call");
-    CHECK(!mock().hasReturnValue());
-}
-
 TEST(MockSupportTest, tracing)
 {
     mock().tracing(true);
@@ -181,59 +145,10 @@ TEST(MockSupportTest, tracingWorksHierarchically)
     STRCMP_CONTAINS("foo", mock().getTraceOutput());
 }
 
-class StubComparator : public MockNamedValueComparator
-{
-public:
-    virtual bool isEqual(const void*, const void*)
-    {
-        return true;
-    }
-    virtual SimpleString valueToString(const void*)
-    {
-        return "";
-    }
-};
-
-class SomeClass
-{
-    int someDummy_;
-};
-
-static void functionWithConstParam(const SomeClass param)
-{
-    mock().actualCall("functionWithConstParam").withParameterOfType("SomeClass", "param", &param);
-}
-
-TEST(MockSupportTest, shouldSupportConstParameters)
-{
-    StubComparator comparator;
-    mock().installComparator("SomeClass", comparator);
-
-    SomeClass param;
-    mock().expectOneCall("functionWithConstParam").withParameterOfType("SomeClass", "param", &param);
-    functionWithConstParam(param);
-
-    mock().checkExpectations();
-}
-
 TEST_GROUP(MockSupportTestWithFixture)
 {
     TestTestingFixture fixture;
 };
-
-static void mocksAreCountedAsChecksTestFunction_()
-{
-    mock().expectOneCall("foo");
-    mock().expectNCalls(3, "bar");
-    mock().clear();
-}
-
-TEST(MockSupportTestWithFixture, mockExpectationShouldIncreaseNumberOfChecks)
-{
-    fixture.setTestFunction(mocksAreCountedAsChecksTestFunction_);
-    fixture.runAllTests();
-    LONGS_EQUAL(4, fixture.getCheckCount());
-}
 
 static void CHECK_EXPECTED_MOCK_FAILURE_LOCATION_failedTestMethod_()
 {

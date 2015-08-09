@@ -681,3 +681,30 @@ TEST(MockParameterTest, ignoreOtherCallsIgnoresWithAllKindsOfParameters)
     mock().checkExpectations();
 }
 
+TEST(MockParameterTest, expectMultipleCallsWithParameters)
+{
+    int expected_int = -7;
+    unsigned int expected_uint = 7;
+
+    mock().expectNCalls(2, "boo").withParameter("double", 1.0).withParameter("int", expected_int).
+        withParameter("string", "string").withParameter("uint", expected_uint);
+    mock().actualCall("boo").withParameter("double", 1.0).withParameter("int", expected_int).withParameter("string", "string").
+        withParameter("uint", expected_uint);
+    mock().actualCall("boo").withParameter("double", 1.0).withParameter("int", expected_int).withParameter("string", "string").
+        withParameter("uint", expected_uint);
+
+    mock().checkExpectations();
+}
+
+TEST(MockParameterTest, expectMultipleMultipleCallsWithParameters)
+{
+    mock().expectNCalls(2, "boo").withParameter("double", 1.0).ignoreOtherParameters();
+    mock().expectNCalls(2, "boo").withParameter("double", 1.0).ignoreOtherParameters();
+    mock().actualCall("boo").withParameter("double", 1.0).withParameter("int", 1).withParameter("string", "string");
+    mock().actualCall("boo").withParameter("double", 1.0).withParameter("int", 1).withParameter("string", "string");
+    mock().actualCall("boo").withParameter("double", 1.0).withParameter("int", 1).withParameter("string", "string");
+    mock().actualCall("boo").withParameter("double", 1.0).withParameter("int", 1).withParameter("string", "string");
+
+    mock().checkExpectations();
+}
+
