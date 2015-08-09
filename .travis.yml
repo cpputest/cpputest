@@ -39,11 +39,11 @@ global:
 addons:
   apt:
     packages:
-      #      - dosbox -y
+      # - dosbox
       - valgrind
 before_install:
   #  - sudo pip install cpp-coveralls
-  - sudo apt-get install dosbox -y
+  - sudo apt-get install dosbox
 install:
   - gem install travis_github_deployer
   - sudo apt-get update --fix-missing

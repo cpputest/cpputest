@@ -1,2 +1,2 @@
 dummy:
-	echo "\n  *** Pretending to build CPPU1.EXE ***\n"
+	printf "\n  *** Makefile: Pretending to build CPPU1.EXE ***\n\n"
