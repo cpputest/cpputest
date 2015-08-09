@@ -532,3 +532,38 @@ TEST(MockComparatorCopierTest, installComparatorsWorksHierarchical)
     mock().removeAllComparatorsAndCopiers();
 }
 
+class StubComparator : public MockNamedValueComparator
+{
+public:
+    virtual bool isEqual(const void*, const void*)
+    {
+        return true;
+    }
+    virtual SimpleString valueToString(const void*)
+    {
+        return "";
+    }
+};
+
+class SomeClass
+{
+    int someDummy_;
+};
+
+static void functionWithConstParam(const SomeClass param)
+{
+    mock().actualCall("functionWithConstParam").withParameterOfType("SomeClass", "param", &param);
+}
+
+TEST(MockComparatorCopierTest, shouldSupportConstParameters)
+{
+    StubComparator comparator;
+    mock().installComparator("SomeClass", comparator);
+
+    SomeClass param;
+    mock().expectOneCall("functionWithConstParam").withParameterOfType("SomeClass", "param", &param);
+    functionWithConstParam(param);
+
+    mock().checkExpectations();
+}
+
