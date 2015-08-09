@@ -51,6 +51,7 @@ if [ "x$BUILD" = "xcmake_gtest" ]; then
 fi
 
 if [ "x$BUILD" = "xtest_report" ]; then
+    autoreconf -i ..
     ../configure
     make check
     ./CppUTestTests -ojunit
