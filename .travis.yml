@@ -42,8 +42,11 @@ addons:
       - dosbox -y
       - valgrind
 before_install:
-  - pip install cpp-coveralls
+  - sudo pip install cpp-coveralls
+  - sudo apt-get install dosbox -y
 install:
   - gem install travis_github_deployer
+  - sudo apt-get update --fix-missing
+  - sudo apt-get install valgrind
 script:
 - "../scripts/travis_ci_build.sh"
