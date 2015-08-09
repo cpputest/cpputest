@@ -115,5 +115,5 @@ if [ "x$BUILD" = "xmake-dos" ]; then
       -noconsole -exit || exit 1
     printf "\n" >>ALLTESTS.LOG
     cat ALLTESTS.LOG
-    # Generate an error here if failures occur in ALLTESTS.LOG
+    [ -z "`cat ALLTESTS.LOG | grep Failure`" ] || { printf "There were failed tests\n"; exit 1; }
 fi
