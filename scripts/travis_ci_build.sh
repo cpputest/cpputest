@@ -67,14 +67,18 @@ if [ "x$BUILD" = "xcmake-coverage" ]; then
     make
     ctest
 
-    coveralls -b . -r .. -i "src" -i "include" --gcov-options="-bc"
+    coveralls -b . -r .. -i "src" -i "include" --gcov-options="-bc" || true
 fi
 
 if [ "x$BUILD" = "xmake-dos" ]; then
-    export CC=wcl
-    export CXX=wcl
-    # $(CC) --version
-    make -f ../platforms/Dos/Makefile || exit 1
+  wget ftp://ftp.openwatcom.org/pub/open-watcom-c-linux-1.9 -O /tmp/watcom.zip
+  mkdir -p watcom && unzip -a -d watcom /tmp/watcom.zip && sudo chmod -R 755 watcom/binl
+  export PATH=$PATH:$PWD/watcom/binl/
+  wcl --version
+  export CC=wcl
+  export CXX=wcl
+  # $(CC) --version
+  make -f ../platforms/Dos/Makefile || exit 1
 	echo "" > exit  # has to be there so dosbox will do 'exit' correctly
 	echo "\n" > ./ALLTESTS.LOG
     dosbox -conf ../platforms/Dos/dosbox-0.74.conf exit \
