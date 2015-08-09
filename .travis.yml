@@ -30,18 +30,11 @@ global:
       vA1NkcW49tQW1wQvBlRtdlLNOmUfDP/oiJFXPwNn4dqwOIOEet2P7JO/5hnH
       MNHlZmGu2WpoZREhOFBfsIhK0IP8mloqLDq2XemBdga/LWygrLU=
 - secure: Y/8iNkf6uEbE3qltnM+7mGlCvFWzyttwwRGgVGw1m9xOiUJcobvOImQRU8XZ91dgO+Fz0A3mljqs1sK1OPjpXmFGE1jP/NlotMw0WlDOuSIDjQ4ubwdTNGAwNY53R9ygbIjEmqxHAJm9mOZqxW2hNaoI7TcX6oX248/hLibyx8M=
-before_install:
-- sudo pip install cpp-coveralls
-- sudo apt-get install dosbox -y
 install:
 - gem install travis_github_deployer
 - sudo apt-get update --fix-missing
 - sudo apt-get install valgrind
 before_script:
-- wget ftp://ftp.openwatcom.org/pub/open-watcom-c-linux-1.9 -O /tmp/watcom.zip
-- mkdir -p watcom && unzip -a -d watcom /tmp/watcom.zip && sudo chmod -R 755 watcom/binl
-- export PATH=$PATH:$PWD/watcom/binl/
-- wcl --version
 - export CPPUTEST_BUILD_DIR=$TRAVIS_BUILD_DIR/cpputest_build
 - mkdir -p $CPPUTEST_BUILD_DIR && cd $CPPUTEST_BUILD_DIR
 script:

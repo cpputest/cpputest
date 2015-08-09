@@ -53,6 +53,7 @@ if [ "x$BUILDTOOL" = "xcmake" ]; then
 fi
 
 if [ "x$BUILDTOOL" = "xcmake-coverage" ]; then
+    sudo pip install cpp-coveralls
     cmake .. -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE -DCOVERAGE=ON
     make || exit 1
     ctest || exit 1
@@ -61,12 +62,18 @@ if [ "x$BUILDTOOL" = "xcmake-coverage" ]; then
 fi
 
 if [ "x$BUILDTOOL" = "xmake-dos" ]; then
+    sudo apt-get install dosbox
+    wget ftp://ftp.openwatcom.org/pub/open-watcom-c-linux-1.9 -O /tmp/watcom.zip
+    mkdir -p watcom && unzip -aqd watcom /tmp/watcom.zip && sudo chmod -R 755 watcom/binl
+    export PATH=$PATH:$PWD/watcom/binl
+    export WATCOM=$PWD/watcom
+    export CPPUTEST_HOME=$TRAVIS_BUILD_DIR
     export CC=wcl
     export CXX=wcl
-    # $(CC) --version
+    $CC --version
     make -f ../platforms/Dos/Makefile || exit 1
-	echo "" > exit  # has to be there so dosbox will do 'exit' correctly
-	echo "\n" > ./ALLTESTS.LOG
+	printf "" > exit  # has to be there so dosbox will do 'exit' correctly
+	printf "\n" > ./ALLTESTS.LOG
     dosbox -conf ../platforms/Dos/dosbox-0.74.conf exit \
       -c "echo.>>ALLTESTS.LOG" \
       -c "echo.>>ALLTESTS.LOG" \
@@ -74,7 +81,7 @@ if [ "x$BUILDTOOL" = "xmake-dos" ]; then
       -c "echo ...!......>>ALLTESTS.LOG" \
       -c "echo OK (10 tests, 9 ran, 10 checks, 1 ignored, 0 filtered out, 100 ms)>>ALLTESTS.LOG" \
       -c "echo.>>ALLTESTS.LOG" \
-      -noconsole -exit
+      -exit || exit 1
     cat ALLTESTS.LOG
     # Generate an error here if failures occur in ALLTESTS.LOG
 fi
