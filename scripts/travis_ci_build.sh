@@ -84,16 +84,28 @@ if [ "x$BUILD" = "xmake-dos" ]; then
     printf "" > exit  # has to be there so dosbox will do 'exit' correctly
     printf "\n" > ./ALLTESTS.LOG
     dosbox -conf ../platforms/Dos/dosbox-0.74.conf exit \
- 	  -c "echo.>ALLTESTS.LOG" \
+      -c "echo.>ALLTESTS.LOG" \
       -c "CPPU1.EXE>>ALLTESTS.LOG">>ALLTESTS.LOG \
       -noconsole -exit || exit 1
     dosbox -conf ../platforms/Dos/dosbox-0.74.conf exit \
- 	  -c "echo.>>ALLTESTS.LOG" \
+      -c "echo.>>ALLTESTS.LOG" \
       -c "CPPU2.EXE>>ALLTESTS.LOG">>ALLTESTS.LOG \
       -noconsole -exit || exit 1
     dosbox -conf ../platforms/Dos/dosbox-0.74.conf exit \
- 	  -c "echo.>>ALLTESTS.LOG" \
+      -c "echo.>>ALLTESTS.LOG" \
       -c "CPPUEXT1.EXE>>ALLTESTS.LOG">>ALLTESTS.LOG \
+      -noconsole -exit || exit 1
+    dosbox -conf ../platforms/Dos/dosbox-0.74.conf exit \
+      -c "echo.>>ALLTESTS.LOG" \
+      -c "CPPUEXT2.EXE>>ALLTESTS.LOG">>ALLTESTS.LOG \
+      -noconsole -exit || exit 1
+    dosbox -conf ../platforms/Dos/dosbox-0.74.conf exit \
+      -c "echo.>>ALLTESTS.LOG" \
+      -c "CPPUEXT3.EXE>>ALLTESTS.LOG">>ALLTESTS.LOG \
+      -noconsole -exit || exit 1
+    dosbox -conf ../platforms/Dos/dosbox-0.74.conf exit \
+      -c "echo.>>ALLTESTS.LOG" \
+      -c "CPPUEXT4.EXE>>ALLTESTS.LOG">>ALLTESTS.LOG \
       -noconsole -exit || exit 1
     printf "\n" >>ALLTESTS.LOG
     cat ALLTESTS.LOG

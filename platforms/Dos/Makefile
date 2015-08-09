@@ -24,7 +24,8 @@ CXXFLAGS := $(CFLAGS) -xds
 
 .PHONY: all clean
 
-all: CPPU1$(EXE) CPPU2$(EXE) CPPUEXT1$(EXE) CPPUEXT2$(EXE)
+all: CPPU1$(EXE) CPPU2$(EXE) CPPUEXT1$(EXE) CPPUEXT2$(EXE) CPPUEXT3$(EXE) \
+  CPPUEXT4$(EXE)
 
 %.obj: %.cpp
 	$(CXX) $(CXXFLAGS) -fo=$(notdir $@) $(subst /,$V, $<)
@@ -42,6 +43,12 @@ CPPUEXT1$(EXE): $(CPPU_OBJECTS) $(CPPUEXT_OBJECTS) $(CPPUEXT1_OBJECTS)
 	$(LINK) opt quiet,map,stack=50k sys dos file $(subst $S,$C,$(notdir $?)) name $@
 
 CPPUEXT2$(EXE): $(CPPU_OBJECTS) $(CPPUEXT_OBJECTS) $(CPPUEXT2_OBJECTS)
+	$(LINK) opt quiet,map,stack=50k sys dos file $(subst $S,$C,$(notdir $?)) name $@
+
+CPPUEXT3$(EXE): $(CPPU_OBJECTS) $(CPPUEXT_OBJECTS) $(CPPUEXT3_OBJECTS)
+	$(LINK) opt quiet,map,stack=50k sys dos file $(subst $S,$C,$(notdir $?)) name $@
+
+CPPUEXT4$(EXE): $(CPPU_OBJECTS) $(CPPUEXT_OBJECTS) $(CPPUEXT4_OBJECTS)
 	$(LINK) opt quiet,map,stack=50k sys dos file $(subst $S,$C,$(notdir $?)) name $@
 
 clean:

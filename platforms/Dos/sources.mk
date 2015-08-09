@@ -78,7 +78,6 @@ CPPUEXT1_OBJECTS := \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockActualCallTest.obj \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockCheatSheetTest.obj \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockExpectedCallTest.obj \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/MockExpectedCallTest.obj \
   $(CPPUTEST_HOME)/tests/CppUTestExt/OrderedTestTest.obj \
 
 CPPUEXT2_OBJECTS := \
@@ -91,3 +90,15 @@ CPPUEXT2_OBJECTS := \
 
 CPPUEXT3_OBJECTS := \
   $(CPPUTEST_HOME)/tests/CppUTestExt/AllTests.obj \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/CodeMemoryReporterTest.obj \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/MockCallTest.obj \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/MockComparatorCopierTest.obj \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/MockFailureTest.obj \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/MockHierarchyTest.obj \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/MockParameterTest.obj \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/MockPluginTest.obj \
+
+CPPUEXT4_OBJECTS := \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/AllTests.obj \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/MockSupportTest.obj \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/MockStrictOrderTest.obj \
