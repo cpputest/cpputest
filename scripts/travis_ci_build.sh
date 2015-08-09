@@ -61,15 +61,7 @@ if [ "x$BUILD" = "xtest_report" ]; then
 fi
 
 if [ "x$BUILD" = "xcmake-coverage" ]; then
-  # From: https://github.com/eddyxu/cpp-coveralls
-#  git clone https://github.com/yyuu/pyenv.git pyenv
-#  export PYENV_ROOT=`pwd`/pyenv/
-#  eval "$(pyenv/bin/pyenv init -)"
-#  pyenv/bin/pyenv install 2.7.6
-  pyenv global 2.7.6
-  pyenv rehash
-  pip install cpp-coveralls
-  pyenv rehash
+  pip install cpp-coveralls --user `whoami`
 
   cmake .. -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE -DCOVERAGE=ON
   make
