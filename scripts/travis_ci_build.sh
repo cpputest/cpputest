@@ -82,38 +82,7 @@ if [ "x$BUILD" = "xmake-dos" ]; then
     $CC --version
     make -f ../platforms/Dos/Makefile || exit 1
     printf "" > exit  # has to be there so dosbox will do 'exit' correctly
-    printf "\n" > ./ALLTESTS.LOG
-    dosbox -conf ../platforms/Dos/dosbox-0.74.conf exit \
-      -c "echo.>>ALLTESTS.LOG" \
-      -c "echo *** CPPU1.EXE **********************************************>>ALLTESTS.LOG" \
-      -c "CPPU1.EXE>>ALLTESTS.LOG" \
-      -noconsole -exit || exit 1
-    dosbox -conf ../platforms/Dos/dosbox-0.74.conf exit \
-      -c "echo.>>ALLTESTS.LOG" \
-      -c "echo *** CPPU2.EXE **********************************************>>ALLTESTS.LOG" \
-      -c "CPPU2.EXE>>ALLTESTS.LOG" \
-      -noconsole -exit || exit 1
-    dosbox -conf ../platforms/Dos/dosbox-0.74.conf exit \
-      -c "echo.>>ALLTESTS.LOG" \
-      -c "echo *** CPPUEXT1.EXE **********************************************>>ALLTESTS.LOG" \
-      -c "CPPUEXT1.EXE>>ALLTESTS.LOG" \
-      -noconsole -exit || exit 1
-    dosbox -conf ../platforms/Dos/dosbox-0.74.conf exit \
-      -c "echo.>>ALLTESTS.LOG" \
-      -c "echo *** CPPUEXT2.EXE **********************************************>>ALLTESTS.LOG" \
-      -c "CPPUEXT2.EXE>>ALLTESTS.LOG" \
-      -noconsole -exit || exit 1
-    dosbox -conf ../platforms/Dos/dosbox-0.74.conf exit \
-      -c "echo.>>ALLTESTS.LOG" \
-      -c "echo *** CPPUEXT3.EXE **********************************************>>ALLTESTS.LOG" \
-      -c "CPPUEXT3.EXE>>ALLTESTS.LOG">> \
-      -noconsole -exit || exit 1
-    dosbox -conf ../platforms/Dos/dosbox-0.74.conf exit \
-      -c "echo.>>ALLTESTS.LOG" \
-      -c "echo *** CPPUEXT4.EXE **********************************************>>ALLTESTS.LOG" \
-      -c "CPPUEXT4.EXE>>ALLTESTS.LOG">> \
-      -noconsole -exit || exit 1
-    printf "\n" >>ALLTESTS.LOG
-    cat ALLTESTS.LOG
-    [ -z "`cat ALLTESTS.LOG | grep Failure`" ] || { printf "There were failed tests\n"; exit 1; }
-fi
+    printf "" >ALLTESTS.LOG
+    ../platforms/Dos/alltests.sh || exit 1
+ fi
+
