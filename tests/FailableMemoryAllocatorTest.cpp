@@ -100,14 +100,13 @@ static void _setUpTooManyFailedMallocs()
 
 TEST(FailableMemoryAllocator, SettingUpTooManyFailedAllocsWillFail)
 {
-    TestTestingFixture *fixture = new TestTestingFixture;
-    fixture->setTestFunction(_setUpTooManyFailedMallocs);
+    TestTestingFixture fixture;
+    fixture.setTestFunction(_setUpTooManyFailedMallocs);
 
-    fixture->runAllTests();
+    fixture.runAllTests();
 
-    LONGS_EQUAL(1, fixture->getFailureCount());
-    fixture->assertPrintContains("Maximum number of failed memory allocations exceeded");
-    delete fixture;
+    LONGS_EQUAL(1, fixture.getFailureCount());
+    fixture.assertPrintContains("Maximum number of failed memory allocations exceeded");
 }
 #endif
 
