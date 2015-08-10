@@ -545,7 +545,7 @@ public:
     }
 };
 
-class SomeClass
+struct SomeClass
 {
     int someDummy_;
 };
