@@ -727,10 +727,10 @@ TEST(SimpleString, StrCmp)
     char blabla[] = "blabla";
     char bla[] = "bla";
     CHECK(SimpleString::StrCmp(empty, empty) == 0);
-    CHECK(SimpleString::StrCmp(bla, blabla) == -'b');
+    CHECK(SimpleString::StrCmp(bla, blabla) == -(int)'b');
     CHECK(SimpleString::StrCmp(blabla, bla) == 'b');
     CHECK(SimpleString::StrCmp(bla, empty) == 'b');
-    CHECK(SimpleString::StrCmp(empty, bla) == -'b');
+    CHECK(SimpleString::StrCmp(empty, bla) == -(int)'b');
     CHECK(SimpleString::StrCmp(bla, bla) == 0);
 }
 
