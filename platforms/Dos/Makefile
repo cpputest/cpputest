@@ -11,8 +11,13 @@ V := /
 -include ../platforms/Dos/platform.mk
 include ../platforms/Dos/sources.mk
 
+# Disable W013 unreachable code - it overreacts to CHECK_EQUAL macros
+# Disable W367 conditional expression in if statement is always true - same
+# Disable W368 conditional expression in if statement is always false - same
+# Disable W391 assignment found in boolean expression - because we do that
+
 CFLAGS := \
-  -q -c -os -oc -d0 -w=3 -ml -zm \
+  -q -c -os -oc -d0 -we -w=3 -wcd=13 -wcd=367 -wcd=368 -wcd391 -ml -zm \
   -dCPPUTEST_MEM_LEAK_DETECTION_DISABLED=1 \
   -dCPPUTEST_STD_CPP_LIB_DISABLED=1 \
   -i$(CPPUTEST_HOME)/include \
