@@ -203,7 +203,6 @@ TestMemoryAllocator* NullUnknownAllocator::defaultAllocator()
     return &allocator;
 }
 
-
 FailableMemoryAllocator::FailableMemoryAllocator(const char* name_str, const char* alloc_name_str, const char* free_name_str)
 : TestMemoryAllocator(name_str, alloc_name_str, free_name_str)
 , toFailCount_(0), locationToFailCount_(0), currentAllocNumber_(0)
@@ -244,17 +243,24 @@ bool FailableMemoryAllocator::shouldBeFailedAlloc_()
 
 bool FailableMemoryAllocator::shouldBeFailedLocationAlloc_(const char* file, int line)
 {
-    SimpleString fileFullPath(file);
-    SimpleStringCollection pathElements;
-    fileFullPath.split("/", pathElements);
-    SimpleString baseName = pathElements[pathElements.size() - 1];
-    for (int i = 0; i < locationToFailCount_; i++)
-        if (SimpleString::StrCmp(locationAllocsToFail_[i].file, baseName.asCharString()) == 0
-                && locationAllocsToFail_[i].line == line)
+    SimpleString allocBaseName = getBaseName_(file);
+
+    for (int i = 0; i < locationToFailCount_; i++) {
+        SimpleString toFailBasename = getBaseName_(locationAllocsToFail_[i].file);
+        if (allocBaseName == toFailBasename && locationAllocsToFail_[i].line == line)
             return true;
+    }
     return false;
 }
 
+SimpleString FailableMemoryAllocator::getBaseName_(const char* file)
+{
+    SimpleString fileFullPath(file);
+    fileFullPath.replace('\\', '/');
+    SimpleStringCollection pathElements;
+    fileFullPath.split("/", pathElements);
+    return pathElements[pathElements.size() - 1];
+}
 
 char* FailableMemoryAllocator::allocMemoryLeakNode(size_t size)
 {

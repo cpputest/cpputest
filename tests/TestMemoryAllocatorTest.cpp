@@ -130,7 +130,7 @@ TEST(TestMemoryAllocatorTest, TryingToAllocateTooMuchFailsTest)
     fixture.assertPrintContains("malloc returned null pointer");
 }
 
-#if CPPUTEST_USE_MALLOC_MACROS
+//#if CPPUTEST_USE_MALLOC_MACROS
 
 // FailableMemoryAllocator must be global. Otherwise, it does not exist when memory leak detector
 // reports memory leaks.
@@ -202,11 +202,11 @@ TEST(FailableMemoryAllocator, SettingUpTooManyFailedAllocsWillFail)
 TEST(FailableMemoryAllocator, FailFirstAllocationAtGivenLine)
 {
     int *memory1;
-    failableMallocAllocator.failNthAllocationAt(1, "TestMemoryAllocatorTest.cpp", 207);
+    failableMallocAllocator.failNthAllocationAt(1, __FILE__, 207);
     memory1 = (int *)malloc(sizeof(int));
     POINTERS_EQUAL(NULL, malloc(sizeof(int)));
     free(memory1);
 }
 
 
-#endif
+//#endif

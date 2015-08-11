@@ -96,7 +96,6 @@ public:
     static TestMemoryAllocator* defaultAllocator();
 };
 
-// TODO: How to hide this struct?
 struct LocationFailedAlloc
 {
     const char* file;
@@ -117,6 +116,7 @@ public:
 protected:
     virtual bool shouldBeFailedAlloc_();
     virtual bool shouldBeFailedLocationAlloc_(const char* file, int line);
+    virtual SimpleString getBaseName_(const char* file);
     int allocsToFail_[MAX_NUMBER_OF_FAILED_ALLOCS];
     LocationFailedAlloc locationAllocsToFail_[MAX_NUMBER_OF_FAILED_ALLOCS];
     int toFailCount_;
