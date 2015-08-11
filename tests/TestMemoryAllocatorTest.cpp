@@ -130,7 +130,6 @@ TEST(TestMemoryAllocatorTest, TryingToAllocateTooMuchFailsTest)
     fixture.assertPrintContains("malloc returned null pointer");
 }
 
-#include "CppUTest/FailableMemoryAllocator.h"
 
 // FailableMemoryAllocator must be global. Otherwise, it does not exist when memory leak detector
 // reports memory leaks.

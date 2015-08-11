@@ -43,7 +43,6 @@ CLEAN :
 	-@erase "$(INTDIR)\CodeMemoryReportFormatter.obj"
 	-@erase "$(INTDIR)\CommandLineArguments.obj"
 	-@erase "$(INTDIR)\CommandLineTestRunner.obj"
-	-@erase "$(INTDIR)\FailableMemoryAllocator.obj"
 	-@erase "$(INTDIR)\JUnitTestOutput.obj"
 	-@erase "$(INTDIR)\MemoryLeakDetector.obj"
 	-@erase "$(INTDIR)\MemoryLeakWarningPlugin.obj"
@@ -86,7 +85,6 @@ LIB32=link.exe -lib
 LIB32_FLAGS=/nologo /out:"$(OUTDIR)\CppUTest.lib" 
 LIB32_OBJS= \
 	"$(INTDIR)\CodeMemoryReportFormatter.obj" \
-	"$(INTDIR)\FailableMemoryAllocator.obj" \
 	"$(INTDIR)\MemoryReportAllocator.obj" \
 	"$(INTDIR)\MemoryReporterPlugin.obj" \
 	"$(INTDIR)\MemoryReportFormatter.obj" \
@@ -140,8 +138,6 @@ CLEAN :
 	-@erase "$(INTDIR)\CommandLineArguments.sbr"
 	-@erase "$(INTDIR)\CommandLineTestRunner.obj"
 	-@erase "$(INTDIR)\CommandLineTestRunner.sbr"
-    -@erase "$(INTDIR)\FailableMemoryAllocator.obj"
-    -@erase "$(INTDIR)\FailableMemoryAllocator.sbr"
 	-@erase "$(INTDIR)\JUnitTestOutput.obj"
 	-@erase "$(INTDIR)\JUnitTestOutput.sbr"
 	-@erase "$(INTDIR)\MemoryLeakDetector.obj"
@@ -209,7 +205,6 @@ BSC32=bscmake.exe
 BSC32_FLAGS=/nologo /o"$(OUTDIR)\CppUTest.bsc" 
 BSC32_SBRS= \
 	"$(INTDIR)\CodeMemoryReportFormatter.sbr" \
-	"$(INTDIR)\FailableMemoryAllocator.sbr" \
 	"$(INTDIR)\MemoryReportAllocator.sbr" \
 	"$(INTDIR)\MemoryReporterPlugin.sbr" \
 	"$(INTDIR)\MemoryReportFormatter.sbr" \
@@ -249,7 +244,6 @@ LIB32=link.exe -lib
 LIB32_FLAGS=/nologo /out:"lib\CppUTest.lib" 
 LIB32_OBJS= \
 	"$(INTDIR)\CodeMemoryReportFormatter.obj" \
-	"$(INTDIR)\FailableMemoryAllocator.obj" \
 	"$(INTDIR)\MemoryReportAllocator.obj" \
 	"$(INTDIR)\MemoryReporterPlugin.obj" \
 	"$(INTDIR)\MemoryReportFormatter.obj" \
@@ -378,24 +372,6 @@ SOURCE=.\SRC\CPPUTEST\CommandLineTestRunner.cpp
 
 "$(INTDIR)\CommandLineTestRunner.obj"	"$(INTDIR)\CommandLineTestRunner.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
-
-!ENDIF 
-
-SOURCE=.\SRC\CPPUTEST\FailableMemoryAllocator.cpp
-
-!IF  "$(CFG)" == "CppUTest - Win32 Release"
-
-
-"$(INTDIR)\FailableMemoryAllocator.obj" : $(SOURCE) "$(INTDIR)"
-	$(CPP) $(CPP_PROJ) $(SOURCE)
-
-
-!ELSEIF  "$(CFG)" == "CppUTest - Win32 Debug"
-
-
-"$(INTDIR)\FailableMemoryAllocator.obj"	"$(INTDIR)\FailableMemoryAllocator.sbr" : $(SOURCE) "$(INTDIR)"
-	$(CPP) $(CPP_PROJ) $(SOURCE)
-
 
 !ENDIF 
 

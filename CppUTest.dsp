@@ -146,10 +146,6 @@ SOURCE=.\SRC\CPPUTEST\CommandLineTestRunner.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\SRC\CPPUTEST\FailableMemoryAllocator.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\SRC\CPPUTEST\JUnitTestOutput.cpp
 # End Source File
 # Begin Source File

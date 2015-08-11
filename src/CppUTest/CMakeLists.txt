@@ -1,7 +1,6 @@
 set(CppUTest_src
         CommandLineArguments.cpp
         MemoryLeakWarningPlugin.cpp
-        FailableMemoryAllocator.cpp
         TestHarness_c.cpp
         TestRegistry.cpp
         CommandLineTestRunner.cpp
@@ -23,7 +22,6 @@ set(CppUTest_headers
         ${CppUTestRootDirectory}/include/CppUTest/CommandLineArguments.h
         ${CppUTestRootDirectory}/include/CppUTest/PlatformSpecificFunctions.h
         ${CppUTestRootDirectory}/include/CppUTest/TestMemoryAllocator.h
-        ${CppUTestRootDirectory}/include/CppUTest/FailableMemoryAllocator.h
         ${CppUTestRootDirectory}/include/CppUTest/CommandLineTestRunner.h
         ${CppUTestRootDirectory}/include/CppUTest/PlatformSpecificFunctions_c.h
         ${CppUTestRootDirectory}/include/CppUTest/TestOutput.h
