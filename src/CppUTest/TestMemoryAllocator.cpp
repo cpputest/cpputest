@@ -206,9 +206,10 @@ TestMemoryAllocator* NullUnknownAllocator::defaultAllocator()
 
 FailableMemoryAllocator::FailableMemoryAllocator(const char* name_str, const char* alloc_name_str, const char* free_name_str)
 : TestMemoryAllocator(name_str, alloc_name_str, free_name_str)
-, toFailCount_(0), currentAllocNumber_(0)
+, toFailCount_(0), locationToFailCount_(0), currentAllocNumber_(0)
 {
     PlatformSpecificMemset(allocsToFail_, 0, sizeof(allocsToFail_));
+    PlatformSpecificMemset(locationAllocsToFail_, 0, sizeof(locationAllocsToFail_));
 }
 
 void FailableMemoryAllocator::failAllocNumber(int number)
@@ -218,10 +219,17 @@ void FailableMemoryAllocator::failAllocNumber(int number)
     allocsToFail_[toFailCount_++] = number;
 }
 
+void FailableMemoryAllocator::failNthAllocationAt(int n, const char* file, int line)
+{
+    locationAllocsToFail_[locationToFailCount_].file = file;
+    locationAllocsToFail_[locationToFailCount_].line = line;
+    locationToFailCount_++;
+}
+
 char* FailableMemoryAllocator::alloc_memory(size_t size, const char* file, int line)
 {
     currentAllocNumber_++;
-    if (shouldBeFailedAlloc_())
+    if (shouldBeFailedAlloc_() || shouldBeFailedLocationAlloc_(file, line))
         return NULL;
     return TestMemoryAllocator::alloc_memory(size, file, line);
 }
@@ -233,6 +241,20 @@ bool FailableMemoryAllocator::shouldBeFailedAlloc_()
             return true;
     return false;
 }
+
+bool FailableMemoryAllocator::shouldBeFailedLocationAlloc_(const char* file, int line)
+{
+    SimpleString fileFullPath(file);
+    SimpleStringCollection pathElements;
+    fileFullPath.split("/", pathElements);
+    SimpleString baseName = pathElements[pathElements.size() - 1];
+    for (int i = 0; i < locationToFailCount_; i++)
+        if (SimpleString::StrCmp(locationAllocsToFail_[i].file, baseName.asCharString()) == 0
+                && locationAllocsToFail_[i].line == line)
+            return true;
+    return false;
+}
+
 
 char* FailableMemoryAllocator::allocMemoryLeakNode(size_t size)
 {

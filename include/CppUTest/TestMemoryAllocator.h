@@ -96,6 +96,12 @@ public:
     static TestMemoryAllocator* defaultAllocator();
 };
 
+// TODO: How to hide this struct?
+struct LocationFailedAlloc
+{
+    const char* file;
+    int line;
+};
 
 class FailableMemoryAllocator: public TestMemoryAllocator
 {
@@ -104,13 +110,17 @@ public:
     FailableMemoryAllocator(const char* name_str = "failable alloc", const char* alloc_name_str = "alloc", const char* free_name_str = "free");
     virtual ~FailableMemoryAllocator() {}
     virtual void failAllocNumber(int number);
+    virtual void failNthAllocationAt(int n, const char* file, int line);
     virtual char* alloc_memory(size_t size, const char* file, int line);
     virtual char* allocMemoryLeakNode(size_t size);
     virtual void clearFailedAllocations();
 protected:
     virtual bool shouldBeFailedAlloc_();
+    virtual bool shouldBeFailedLocationAlloc_(const char* file, int line);
     int allocsToFail_[MAX_NUMBER_OF_FAILED_ALLOCS];
+    LocationFailedAlloc locationAllocsToFail_[MAX_NUMBER_OF_FAILED_ALLOCS];
     int toFailCount_;
+    int locationToFailCount_;
     int currentAllocNumber_;
 };
 
