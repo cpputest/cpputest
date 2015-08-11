@@ -360,6 +360,12 @@ void MockSupport::setData(const SimpleString& name, const void* value)
     newData->setValue(value);
 }
 
+void MockSupport::setData(const SimpleString& name, void (*value)())
+{
+    MockNamedValue* newData = retrieveDataFromStore(name);
+    newData->setValue(value);
+}
+
 void MockSupport::setDataObject(const SimpleString& name, const SimpleString& type, void* value)
 {
     MockNamedValue* newData = retrieveDataFromStore(name);
@@ -512,6 +518,14 @@ const void* MockSupport::returnConstPointerValueOrDefault(const void * defaultVa
     return defaultValue;
 }
 
+void (*MockSupport::returnFunctionPointerValueOrDefault(void (*defaultValue)()))()
+{
+    if (hasReturnValue()) {
+        return functionPointerReturnValue();
+    }
+    return defaultValue;
+}
+
 void* MockSupport::pointerReturnValue()
 {
     return returnValue().getPointerValue();
@@ -520,6 +534,11 @@ void* MockSupport::pointerReturnValue()
 const void* MockSupport::constPointerReturnValue()
 {
     return returnValue().getConstPointerValue();
+}
+
+void (*MockSupport::functionPointerReturnValue())()
+{
+    return returnValue().getFunctionPointerValue();
 }
 
 bool MockSupport::hasReturnValue()

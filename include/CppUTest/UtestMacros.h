@@ -215,6 +215,15 @@
 #define POINTERS_EQUAL_LOCATION(expected, actual, text, file, line)\
   { UtestShell::getCurrent()->assertPointersEqual((void *)expected, (void *)actual, text, file, line); }
 
+#define FUNCTIONPOINTERS_EQUAL(expected, actual)\
+    FUNCTIONPOINTERS_EQUAL_LOCATION((expected), (actual), NULL, __FILE__, __LINE__)
+
+#define FUNCTIONPOINTERS_EQUAL_TEXT(expected, actual, text)\
+    FUNCTIONPOINTERS_EQUAL_LOCATION((expected), (actual), text, __FILE__, __LINE__)
+
+#define FUNCTIONPOINTERS_EQUAL_LOCATION(expected, actual, text, file, line)\
+  { UtestShell::getCurrent()->assertFunctionPointersEqual((void (*)())expected, (void (*)())actual, text, file, line); }
+
 //Check two doubles for equality within a tolerance threshold
 #define DOUBLES_EQUAL(expected, actual, threshold)\
   DOUBLES_EQUAL_LOCATION(expected, actual, threshold, NULL, __FILE__, __LINE__)

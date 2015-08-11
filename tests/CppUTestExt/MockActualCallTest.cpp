@@ -144,6 +144,8 @@ TEST(MockCheckedActualCall, MockIgnoredActualCallWorksAsItShould)
     CHECK(0 == actual.returnPointerValueOrDefault((void*) 0x0));
     CHECK(0 == actual.returnConstPointerValue());
     CHECK(0 == actual.returnConstPointerValueOrDefault((const void*) 0x0));
+    CHECK(0 == actual.returnFunctionPointerValue());
+    CHECK(0 == actual.returnFunctionPointerValueOrDefault((void(*)()) 0x0));
     CHECK_FALSE(actual.hasReturnValue());
     CHECK(actual.returnValue().equals(MockNamedValue("")));
 }
@@ -153,6 +155,7 @@ TEST(MockCheckedActualCall, remainderOfMockActualCallTraceWorksAsItShould)
     int value;
     const int const_value = 1;
     const unsigned char mem_buffer[] = { 0xFE, 0x15 };
+    void (*function_value)() = (void (*)())0xDEAD;
     MockActualCallTrace actual;
     actual.withName("func");
     actual.withCallOrder(1);
@@ -163,9 +166,10 @@ TEST(MockCheckedActualCall, remainderOfMockActualCallTraceWorksAsItShould)
     actual.withLongIntParameter("long_int", (long int) 1);
     actual.withPointerParameter("pointer", &value);
     actual.withConstPointerParameter("const_pointer", &const_value);
+    actual.withFunctionPointerParameter("function_pointer", function_value);
     actual.withMemoryBufferParameter("mem_buffer", mem_buffer, sizeof(mem_buffer));
     actual.withParameterOfType("int", "named_type", &const_value);
-    
+
     SimpleString expectedString("\nFunction name:func");
     expectedString += " withCallOrder:1";
     expectedString += " onObject:0x";
@@ -177,6 +181,8 @@ TEST(MockCheckedActualCall, remainderOfMockActualCallTraceWorksAsItShould)
     expectedString += HexStringFrom(&value);
     expectedString += " const_pointer:0x";
     expectedString += HexStringFrom(&const_value);
+    expectedString += " function_pointer:0x";
+    expectedString += HexStringFrom(function_value);
     expectedString += " mem_buffer:Size = 2 | HexContents = FE 15";
     expectedString += " int named_type:0x";
     expectedString += HexStringFrom(&const_value);
@@ -201,5 +207,7 @@ TEST(MockCheckedActualCall, remainderOfMockActualCallTraceWorksAsItShould)
     CHECK(0 == actual.returnPointerValueOrDefault((void*) 0x0));
     CHECK(0 == actual.returnConstPointerValue());
     CHECK(0 == actual.returnConstPointerValueOrDefault((const void*) 0x0));
+    CHECK(0 == actual.returnFunctionPointerValue());
+    CHECK(0 == actual.returnFunctionPointerValueOrDefault((void (*)()) 0x0));
 }
 

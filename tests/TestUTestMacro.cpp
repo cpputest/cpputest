@@ -885,6 +885,59 @@ IGNORE_TEST(UnitTestMacros, POINTERS_EQUAL_TEXTWorksInAnIgnoredTest)
     POINTERS_EQUAL_TEXT((void*) 0xbeef, (void*) 0xdead, "Failed because it failed") // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
 
+
+static void _failingTestMethodWithFUNCTIONPOINTERS_EQUAL()
+{
+    FUNCTIONPOINTERS_EQUAL((void (*)())0xa5a5, (void (*)())0xf0f0);
+    lineOfCodeExecutedAfterCheck = true; // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
+
+TEST(UnitTestMacros, FailureWithFUNCTIONPOINTERS_EQUAL)
+{
+    runTestWithMethod(_failingTestMethodWithFUNCTIONPOINTERS_EQUAL);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <0xa5a5>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0xf0f0>");
+}
+
+TEST(UnitTestMacros, FUNCTIONPOINTERS_EQUALBehavesAsProperMacro)
+{
+    if (false) FUNCTIONPOINTERS_EQUAL(0, (void (*)())0xbeefbeef)
+    else FUNCTIONPOINTERS_EQUAL((void (*)())0xdeadbeef, (void (*)())0xdeadbeef)
+}
+
+IGNORE_TEST(UnitTestMacros, FUNCTIONPOINTERS_EQUALWorksInAnIgnoredTest)
+{
+    FUNCTIONPOINTERS_EQUAL((void (*)())0xbeef, (void (*)())0xdead) // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
+
+static void _failingTestMethodWithFUNCTIONPOINTERS_EQUAL_TEXT()
+{
+    FUNCTIONPOINTERS_EQUAL_TEXT((void (*)())0xa5a5, (void (*)())0xf0f0, "Failed because it failed");
+    lineOfCodeExecutedAfterCheck = true; // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
+
+TEST(UnitTestMacros, FailureWithFUNCTIONPOINTERS_EQUAL_TEXT)
+{
+    runTestWithMethod(_failingTestMethodWithFUNCTIONPOINTERS_EQUAL_TEXT);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <0xa5a5>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0xf0f0>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("Failed because it failed");
+}
+
+TEST(UnitTestMacros, FUNCTIONPOINTERS_EQUAL_TEXTBehavesAsProperMacro)
+{
+    if (false) FUNCTIONPOINTERS_EQUAL_TEXT(0, (void (*)())0xbeefbeef, "Failed because it failed")
+    else FUNCTIONPOINTERS_EQUAL_TEXT((void (*)())0xdeadbeef, (void (*)())0xdeadbeef, "Failed because it failed")
+}
+
+IGNORE_TEST(UnitTestMacros, FUNCTIONPOINTERS_EQUAL_TEXTWorksInAnIgnoredTest)
+{
+    FUNCTIONPOINTERS_EQUAL_TEXT((void (*)())0xbeef, (void (*)())0xdead, "Failed because it failed") // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
+
+
+
+
 static void _failingTestMethodWithDOUBLES_EQUAL()
 {
     DOUBLES_EQUAL(0.12, 44.1, 0.3);

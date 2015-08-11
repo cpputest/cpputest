@@ -461,6 +461,18 @@ TEST(SimpleString, Booleans)
     CHECK(s2 == "false");
 }
 
+TEST(SimpleString, Pointers)
+{
+    SimpleString s(StringFrom((void *)0x1234));
+    STRCMP_EQUAL("0x1234", s.asCharString());
+}
+
+TEST(SimpleString, FunctionPointers)
+{
+    SimpleString s(StringFrom((void (*)())0x1234));
+    STRCMP_EQUAL("0x1234", s.asCharString());
+}
+
 TEST(SimpleString, Characters)
 {
     SimpleString s(StringFrom('a'));
@@ -521,6 +533,12 @@ TEST(SimpleString, HexStrings)
 {
     SimpleString h1 = HexStringFrom(0xffffL);
     STRCMP_EQUAL("ffff", h1.asCharString());
+
+    SimpleString h2 = HexStringFrom((void *)0xfffeL);
+    STRCMP_EQUAL("fffe", h2.asCharString());
+
+    SimpleString h3 = HexStringFrom((void (*)())0xfffdL);
+    STRCMP_EQUAL("fffd", h3.asCharString());
 }
 
 TEST(SimpleString, StringFromFormat)

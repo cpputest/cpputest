@@ -184,6 +184,14 @@ TEST(MockParameterTest, expectOneConstPointerParameterAndValue)
     mock().checkExpectations();
 }
 
+TEST(MockParameterTest, expectOneFunctionPointerParameterAndValue)
+{
+    mock().expectOneCall("foo").withParameter("parameter", (void(*)()) 0x01);
+    mock().actualCall("foo").withParameter("parameter", (void(*)()) 0x01);
+
+    mock().checkExpectations();
+}
+
 TEST(MockParameterTest, expectOneMemBufferParameterAndValue)
 {
     unsigned char memBuffer1[] = { 0x12, 0x15, 0xFF };

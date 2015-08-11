@@ -112,6 +112,13 @@ TEST(MockSupportTest, setConstDataPointer)
     POINTERS_EQUAL(ptr, mock().getData("data").getConstPointerValue());
 }
 
+TEST(MockSupportTest, setDataFunctionPointer)
+{
+    void (*ptr)() = (void(*)()) 0x001;
+    mock().setData("data", ptr);
+    FUNCTIONPOINTERS_EQUAL(ptr, mock().getData("data").getFunctionPointerValue());
+}
+
 TEST(MockSupportTest, setDataObject)
 {
     void * ptr = (void*) 0x001;
