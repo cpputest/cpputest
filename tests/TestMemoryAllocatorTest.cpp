@@ -129,3 +129,75 @@ TEST(TestMemoryAllocatorTest, TryingToAllocateTooMuchFailsTest)
     fixture.runAllTests();
     fixture.assertPrintContains("malloc returned null pointer");
 }
+
+#include "CppUTest/FailableMemoryAllocator.h"
+
+// FailableMemoryAllocator must be global. Otherwise, it does not exist when memory leak detector
+// reports memory leaks.
+static FailableMemoryAllocator failableMallocAllocator("Failable Malloc Allocator", "malloc", "free");
+
+#if CPPUTEST_USE_MALLOC_MACROS
+
+TEST_GROUP(FailableMemoryAllocator)
+{
+    void setup()
+    {
+        failableMallocAllocator.clearFailedAllocations();
+        setCurrentMallocAllocator(&failableMallocAllocator);
+    }
+    void teardown()
+    {
+        setCurrentMallocAllocatorToDefault();
+    }
+};
+
+TEST(FailableMemoryAllocator, MallocWorksNormallyIfNotAskedToFail)
+{
+    int *memory = (int*)malloc(sizeof(int));
+    *memory = 1;
+    CHECK(memory != NULL);
+    free(memory);
+}
+
+TEST(FailableMemoryAllocator, FailFirstMalloc)
+{
+    failableMallocAllocator.failAllocNumber(1);
+    POINTERS_EQUAL(NULL, (int*)malloc(sizeof(int)));
+}
+
+TEST(FailableMemoryAllocator, FailSecondAndFourthMalloc)
+{
+    failableMallocAllocator.failAllocNumber(2);
+    failableMallocAllocator.failAllocNumber(4);
+    int *memory1 = (int*)malloc(sizeof(int));
+    int *memory2 = (int*)malloc(sizeof(int));
+    int *memory3 = (int*)malloc(sizeof(int));
+    int *memory4 = (int*)malloc(sizeof(int));
+
+    CHECK(NULL != memory1);
+    POINTERS_EQUAL(NULL, memory2);
+    CHECK(NULL != memory3);
+    POINTERS_EQUAL(NULL, memory4);
+
+    free(memory1);
+    free(memory3);
+}
+
+static void _setUpTooManyFailedMallocs()
+{
+    FailableMemoryAllocator allocator;
+    for (int i = 0; i <= allocator.MAX_NUMBER_OF_FAILED_ALLOCS; i++)
+        allocator.failAllocNumber(i + 1);
+}
+
+TEST(FailableMemoryAllocator, SettingUpTooManyFailedAllocsWillFail)
+{
+    TestTestingFixture fixture;
+    fixture.setTestFunction(_setUpTooManyFailedMallocs);
+
+    fixture.runAllTests();
+
+    LONGS_EQUAL(1, fixture.getFailureCount());
+    fixture.assertPrintContains("Maximum number of failed memory allocations exceeded");
+}
+#endif

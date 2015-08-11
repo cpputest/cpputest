@@ -43,7 +43,6 @@ SOURCE FailureTest.cpp MemoryLeakWarningTest.cpp NullTestTest.cpp
 SOURCE SimpleStringTest.cpp TestInstallerTest.cpp
 SOURCE TestOutputTest.cpp TestRegistryTest.cpp UtestTest.cpp CommandLineTestRunnerTest.cpp JUnitOutputTest.cpp
 SOURCE TestHarness_cTest.cpp
-SOURCE FailableMemoryAllocatorTest.cpp
 
 SOURCEPATH ..\tests
 SOURCE AllTests.cpp TestResultTest.cpp PluginTest.cpp SetPluginTest.cpp
