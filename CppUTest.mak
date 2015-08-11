@@ -373,6 +373,7 @@ SOURCE=.\SRC\CPPUTEST\CommandLineTestRunner.cpp
 "$(INTDIR)\CommandLineTestRunner.obj"	"$(INTDIR)\CommandLineTestRunner.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
+
 !ENDIF 
 
 SOURCE=.\SRC\CPPUTEST\JUnitTestOutput.cpp
