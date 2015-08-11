@@ -41,7 +41,7 @@ static double not_a_number = zero / zero;
 static double infinity = one / zero;
 
 extern "C" {
-    static int IsNanForSystemsWithoutNan(double d) { return ((long)not_a_number == d); }
+    static int IsNanForSystemsWithoutNan(double d) { return ((long)not_a_number == (long)d); }
     static int IsInfForSystemsWithoutInf(double d) { return ((long)infinity == (long)d); }
 }
 
