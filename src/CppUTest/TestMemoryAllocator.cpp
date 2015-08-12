@@ -209,7 +209,6 @@ FailableMemoryAllocator::FailableMemoryAllocator(const char* name_str, const cha
 {
     PlatformSpecificMemset(allocsToFail_, 0, sizeof(allocsToFail_));
     PlatformSpecificMemset(locationAllocsToFail_, 0, sizeof(locationAllocsToFail_));
-    PlatformSpecificMemset(locationActualAllocs_, 0, sizeof(locationActualAllocs_));
 
 }
 
@@ -222,13 +221,10 @@ void FailableMemoryAllocator::failAllocNumber(int number)
 
 void FailableMemoryAllocator::failNthAllocationAt(int allocationNumber, const char* file, int line)
 {
-    locationAllocsToFail_[locationToFailCount_].allocationNumber = allocationNumber;
+    locationAllocsToFail_[locationToFailCount_].allocNumberToFail = allocationNumber;
+    locationAllocsToFail_[locationToFailCount_].actualAllocNumber = 0;
     locationAllocsToFail_[locationToFailCount_].file = file;
     locationAllocsToFail_[locationToFailCount_].line = line;
-
-    locationActualAllocs_[locationToFailCount_].allocationNumber = 0;
-    locationActualAllocs_[locationToFailCount_].file = file;
-    locationActualAllocs_[locationToFailCount_].line = line;
     locationToFailCount_++;
 }
 
@@ -255,8 +251,8 @@ bool FailableMemoryAllocator::shouldBeFailedLocationAlloc_(const char* file, int
     for (int i = 0; i < locationToFailCount_; i++) {
         SimpleString toFailBasename = getBaseName_(locationAllocsToFail_[i].file);
         if (allocBaseName == toFailBasename && locationAllocsToFail_[i].line == line) {
-            locationActualAllocs_[i].allocationNumber++;
-            if (locationAllocsToFail_[i].allocationNumber == locationActualAllocs_[i].allocationNumber)
+            locationAllocsToFail_[i].actualAllocNumber++;
+            if (locationAllocsToFail_[i].allocNumberToFail == locationAllocsToFail_[i].actualAllocNumber)
                 return true;
         }
     }
@@ -280,9 +276,9 @@ char* FailableMemoryAllocator::allocMemoryLeakNode(size_t size)
 void FailableMemoryAllocator::clearFailedAllocations()
 {
     toFailCount_ = 0;
+    locationToFailCount_ = 0;
     currentAllocNumber_ = 0;
     PlatformSpecificMemset(allocsToFail_, 0, sizeof(allocsToFail_));
     PlatformSpecificMemset(locationAllocsToFail_, 0, sizeof(locationAllocsToFail_));
-    PlatformSpecificMemset(locationActualAllocs_, 0, sizeof(locationActualAllocs_));
 }
 

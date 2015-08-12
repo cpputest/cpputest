@@ -98,7 +98,8 @@ public:
 
 struct LocationFailedAlloc
 {
-    int allocationNumber;
+    int allocNumberToFail;
+    int actualAllocNumber;
     const char* file;
     int line;
 };
@@ -120,7 +121,6 @@ protected:
     virtual SimpleString getBaseName_(const char* file);
     int allocsToFail_[MAX_NUMBER_OF_FAILED_ALLOCS];
     LocationFailedAlloc locationAllocsToFail_[MAX_NUMBER_OF_FAILED_ALLOCS];
-    LocationFailedAlloc locationActualAllocs_[MAX_NUMBER_OF_FAILED_ALLOCS];
     int toFailCount_;
     int locationToFailCount_;
     int currentAllocNumber_;
