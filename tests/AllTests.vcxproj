@@ -99,7 +99,6 @@
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <ForcedIncludeFiles>..\include\Platforms\VisualCpp\Platform.h;..\include\CppUTest\MemoryLeakDetectorMallocMacros.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>

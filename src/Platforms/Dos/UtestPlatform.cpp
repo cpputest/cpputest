@@ -60,8 +60,19 @@ static void DummyRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin
     result->addFailure(TestFailure(shell, "-p doesn't work on this platform, as it is lacking fork.\b"));
 }
 
-void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell*, TestPlugin*, TestResult*) =
-    DummyRunTestInASeperateProcess;
+static int DummyPlatformSpecificFork(void)
+{
+    return 0;
+}
+
+static int DummyPlatformSpecificWaitPid(int, int*, int)
+{
+    return 0;
+}
+
+void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell*, TestPlugin*, TestResult*) = DummyRunTestInASeperateProcess;
+int (*PlatformSpecificFork)() = DummyPlatformSpecificFork;
+int (*PlatformSpecificWaitPid)(int, int*, int) = DummyPlatformSpecificWaitPid;
 
 extern "C" {
 
@@ -96,16 +107,19 @@ static long DosTimeInMillis()
     return clock() * 1000 / CLOCKS_PER_SEC;
 }
 
-static const char* TimeStringImplementation()
+static const char* DosTimeString()
 {
     time_t tm = time(NULL);
     return ctime(&tm);
 }
 
-long (*GetPlatformSpecificTimeInMillis)() = DosTimeInMillis;
-const char* (*GetPlatformSpecificTimeString)() = TimeStringImplementation;
+static int DosVSNprintf(char* str, size_t size, const char* format, va_list args) {
+    return vsnprintf(str, size, format, args);
+}
 
-extern int (*PlatformSpecificVSNprintf)(char *, size_t, const char*, va_list) = vsnprintf;
+long (*GetPlatformSpecificTimeInMillis)() = DosTimeInMillis;
+const char* (*GetPlatformSpecificTimeString)() = DosTimeString;
+int (*PlatformSpecificVSNprintf)(char *, size_t, const char*, va_list) = DosVSNprintf;
 
 PlatformSpecificFile DosFOpen(const char* filename, const char* flag)
 {
@@ -170,19 +184,24 @@ void (*PlatformSpecificFree)(void* memory) = DosFree;
 void* (*PlatformSpecificMemCpy)(void* s1, const void* s2, size_t size) = DosMemCpy;
 void* (*PlatformSpecificMemset)(void* mem, int c, size_t size) = DosMemset;
 
-static int IsNanImplementation(double d)
+static double DosFabs(double d)
+{
+    return fabs(d);
+}
+
+static int DosIsNan(double d)
 {
     return isnan(d);
 }
 
-static int IsInfImplementation(double d)
+static int DosIsInf(double d)
 {
     return isinf(d);
 }
 
-double (*PlatformSpecificFabs)(double) = fabs;
-int (*PlatformSpecificIsNan)(double d) = IsNanImplementation;
-int (*PlatformSpecificIsInf)(double d) = IsInfImplementation;
+double (*PlatformSpecificFabs)(double) = DosFabs;
+int (*PlatformSpecificIsNan)(double d) = DosIsNan;
+int (*PlatformSpecificIsInf)(double d) = DosIsInf;
 
 static PlatformSpecificMutex DummyMutexCreate(void)
 {
