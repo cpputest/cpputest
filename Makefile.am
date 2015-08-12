@@ -179,9 +179,11 @@ CppUTestExtTests_SOURCES = \
 	tests/CppUTestExt/MockActualCallTest.cpp \
 	tests/CppUTestExt/MockCheatSheetTest.cpp \
 	tests/CppUTestExt/MockCallTest.cpp \
+	tests/CppUTestExt/MockComparatorCopierTest.cpp \
 	tests/CppUTestExt/MockExpectedCallTest.cpp \
 	tests/CppUTestExt/ExpectedFunctionsListTest.cpp \
 	tests/CppUTestExt/MockFailureTest.cpp \
+	tests/CppUTestExt/MockHierarchyTest.cpp \
 	tests/CppUTestExt/MockNamedValueTest.cpp \
 	tests/CppUTestExt/MockParameterTest.cpp \
 	tests/CppUTestExt/MockPluginTest.cpp \
@@ -189,6 +191,7 @@ CppUTestExtTests_SOURCES = \
 	tests/CppUTestExt/MockSupport_cTest.cpp \
 	tests/CppUTestExt/MockSupport_cTestCFile.c \
 	tests/CppUTestExt/MockStrictOrderTest.cpp \
+	tests/CppUTestExt/MockReturnValueTest.cpp \
 	tests/CppUTestExt/OrderedTestTest.cpp
 
 if INCLUDE_GMOCKTESTS

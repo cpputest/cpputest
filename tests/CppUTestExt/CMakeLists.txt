@@ -9,9 +9,11 @@ set(CppUTestExtTests_src
     MockActualCallTest.cpp
     MockCheatSheetTest.cpp
     MockCallTest.cpp
+    MockComparatorCopierTest.cpp
     MockExpectedCallTest.cpp
     ExpectedFunctionsListTest.cpp
     MockFailureTest.cpp
+    MockHierarchyTest.cpp
     MockNamedValueTest.cpp
     MockParameterTest.cpp
     MockPluginTest.cpp
@@ -19,6 +21,7 @@ set(CppUTestExtTests_src
     MockSupport_cTestCFile.c
     MockSupport_cTest.cpp
     MockStrictOrderTest.cpp
+    MockReturnValueTest.cpp
     OrderedTestTest.cpp
 )
 

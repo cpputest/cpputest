@@ -44,10 +44,6 @@ public:
     {
     }
 
-    virtual ~DummyPlugin()
-    {
-    }
-
     virtual void preTestAction(UtestShell&, TestResult&)
     {
         preAction++;

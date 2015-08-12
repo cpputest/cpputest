@@ -90,7 +90,6 @@ class SetPointerPlugin: public TestPlugin
 {
 public:
     SetPointerPlugin(const SimpleString& name);
-    virtual ~SetPointerPlugin();
     virtual void postTestAction(UtestShell&, TestResult&) _override;
 
     enum
@@ -108,9 +107,6 @@ class NullTestPlugin: public TestPlugin
 public:
 
     NullTestPlugin();
-    virtual ~NullTestPlugin()
-    {
-    }
 
     virtual void runAllPreTestAction(UtestShell& test, TestResult& result) _override;
     virtual void runAllPostTestAction(UtestShell& test, TestResult& result) _override;
