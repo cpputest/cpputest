@@ -214,18 +214,24 @@ FailableMemoryAllocator::FailableMemoryAllocator(const char* name_str, const cha
 
 void FailableMemoryAllocator::failAllocNumber(int number)
 {
-    if (toFailCount_ >= MAX_NUMBER_OF_FAILED_ALLOCS)
-        FAIL("Maximum number of failed memory allocations exceeded");
+    failIfMaximumNumberOfFailedAllocsExceeded_(toFailCount_);
     allocsToFail_[toFailCount_++] = number;
 }
 
-void FailableMemoryAllocator::failNthAllocationAt(int allocationNumber, const char* file, int line)
+void FailableMemoryAllocator::failNthAllocAt(int allocationNumber, const char* file, int line)
 {
+    failIfMaximumNumberOfFailedAllocsExceeded_(locationToFailCount_);
     locationAllocsToFail_[locationToFailCount_].allocNumberToFail = allocationNumber;
     locationAllocsToFail_[locationToFailCount_].actualAllocNumber = 0;
     locationAllocsToFail_[locationToFailCount_].file = file;
     locationAllocsToFail_[locationToFailCount_].line = line;
     locationToFailCount_++;
+}
+
+void FailableMemoryAllocator::failIfMaximumNumberOfFailedAllocsExceeded_(int toFailCount)
+{
+    if (toFailCount >= MAX_NUMBER_OF_FAILED_ALLOCS)
+        FAIL("Maximum number of failed memory allocations exceeded");
 }
 
 char* FailableMemoryAllocator::alloc_memory(size_t size, const char* file, int line)
@@ -273,7 +279,7 @@ char* FailableMemoryAllocator::allocMemoryLeakNode(size_t size)
     return (char*)PlatformSpecificMalloc(size);
 }
 
-void FailableMemoryAllocator::clearFailedAllocations()
+void FailableMemoryAllocator::clearFailedAllocs()
 {
     toFailCount_ = 0;
     locationToFailCount_ = 0;

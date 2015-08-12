@@ -111,14 +111,15 @@ public:
     FailableMemoryAllocator(const char* name_str = "failable alloc", const char* alloc_name_str = "alloc", const char* free_name_str = "free");
     virtual ~FailableMemoryAllocator() {}
     virtual void failAllocNumber(int number);
-    virtual void failNthAllocationAt(int allocationNumber, const char* file, int line);
+    virtual void failNthAllocAt(int allocationNumber, const char* file, int line);
     virtual char* alloc_memory(size_t size, const char* file, int line);
     virtual char* allocMemoryLeakNode(size_t size);
-    virtual void clearFailedAllocations();
+    virtual void clearFailedAllocs();
 protected:
     virtual bool shouldBeFailedAlloc_();
     virtual bool shouldBeFailedLocationAlloc_(const char* file, int line);
     virtual SimpleString getBaseName_(const char* file);
+    virtual void failIfMaximumNumberOfFailedAllocsExceeded_(int toFailCount);
     int allocsToFail_[MAX_NUMBER_OF_FAILED_ALLOCS];
     LocationFailedAlloc locationAllocsToFail_[MAX_NUMBER_OF_FAILED_ALLOCS];
     int toFailCount_;

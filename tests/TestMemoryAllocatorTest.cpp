@@ -141,7 +141,7 @@ TEST_GROUP(FailableMemoryAllocator)
 {
     void setup()
     {
-        failableMallocAllocator.clearFailedAllocations();
+        failableMallocAllocator.clearFailedAllocs();
         setCurrentMallocAllocator(&failableMallocAllocator);
     }
     void teardown()
@@ -181,7 +181,7 @@ TEST(FailableMemoryAllocator, FailSecondAndFourthMalloc)
     free(memory3);
 }
 
-static void _setUpTooManyFailedMallocs()
+static void _setUpTooManyFailedAllocs()
 {
     FailableMemoryAllocator allocator;
     for (int i = 0; i <= allocator.MAX_NUMBER_OF_FAILED_ALLOCS; i++)
@@ -191,7 +191,7 @@ static void _setUpTooManyFailedMallocs()
 TEST(FailableMemoryAllocator, SettingUpTooManyFailedAllocsWillFail)
 {
     TestTestingFixture fixture;
-    fixture.setTestFunction(_setUpTooManyFailedMallocs);
+    fixture.setTestFunction(_setUpTooManyFailedAllocs);
 
     fixture.runAllTests();
 
@@ -201,7 +201,7 @@ TEST(FailableMemoryAllocator, SettingUpTooManyFailedAllocsWillFail)
 
 TEST(FailableMemoryAllocator, FailFirstAllocationAtGivenLine)
 {
-    failableMallocAllocator.failNthAllocationAt(1, __FILE__, __LINE__ + 2);
+    failableMallocAllocator.failNthAllocAt(1, __FILE__, __LINE__ + 2);
 
     POINTERS_EQUAL(NULL, malloc(sizeof(int)));
 }
@@ -210,7 +210,7 @@ TEST(FailableMemoryAllocator, FailThirdAllocationAtGivenLine)
 {
     int *memory[10];
     int allocation;
-    failableMallocAllocator.failNthAllocationAt(3, __FILE__, __LINE__ + 4);
+    failableMallocAllocator.failNthAllocAt(3, __FILE__, __LINE__ + 4);
 
     for (allocation = 1; allocation <= 10; allocation++)
     {
@@ -220,9 +220,26 @@ TEST(FailableMemoryAllocator, FailThirdAllocationAtGivenLine)
     }
 
     LONGS_EQUAL(3, allocation);
-
     free(memory[0]); free(memory[1]);
 }
 
+static void _setUpTooManyFailedLocationAllocs()
+{
+    FailableMemoryAllocator allocator;
+    for (int i = 0; i <= allocator.MAX_NUMBER_OF_FAILED_ALLOCS; i++)
+        allocator.failNthAllocAt(i + 1, "foo.cpp", 100 + 1);
+}
+
+
+TEST(FailableMemoryAllocator, SettingUpTooManyFailingLocationAllocsWillFail)
+{
+    TestTestingFixture fixture;
+    fixture.setTestFunction(_setUpTooManyFailedLocationAllocs);
+
+    fixture.runAllTests();
+
+    LONGS_EQUAL(1, fixture.getFailureCount());
+    fixture.assertPrintContains("Maximum number of failed memory allocations exceeded");
+}
 
 #endif
