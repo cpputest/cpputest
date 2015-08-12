@@ -206,5 +206,23 @@ TEST(FailableMemoryAllocator, FailFirstAllocationAtGivenLine)
     POINTERS_EQUAL(NULL, malloc(sizeof(int)));
 }
 
+TEST(FailableMemoryAllocator, FailThirdAllocationAtGivenLine)
+{
+    int *memory[10];
+    int allocation;
+    failableMallocAllocator.failNthAllocationAt(3, __FILE__, __LINE__ + 4);
+
+    for (allocation = 1; allocation <= 10; allocation++)
+    {
+        memory[allocation - 1] = (int *)malloc(sizeof(int));
+        if (memory[allocation - 1] == NULL)
+            break;
+    }
+
+    LONGS_EQUAL(3, allocation);
+
+    free(memory[0]); free(memory[1]);
+}
+
 
 #endif

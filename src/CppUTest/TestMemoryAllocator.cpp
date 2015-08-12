@@ -209,6 +209,8 @@ FailableMemoryAllocator::FailableMemoryAllocator(const char* name_str, const cha
 {
     PlatformSpecificMemset(allocsToFail_, 0, sizeof(allocsToFail_));
     PlatformSpecificMemset(locationAllocsToFail_, 0, sizeof(locationAllocsToFail_));
+    PlatformSpecificMemset(locationActualAllocs_, 0, sizeof(locationActualAllocs_));
+
 }
 
 void FailableMemoryAllocator::failAllocNumber(int number)
@@ -218,16 +220,20 @@ void FailableMemoryAllocator::failAllocNumber(int number)
     allocsToFail_[toFailCount_++] = number;
 }
 
-void FailableMemoryAllocator::failNthAllocationAt(int n, const char* file, int line)
+void FailableMemoryAllocator::failNthAllocationAt(int allocationNumber, const char* file, int line)
 {
+    locationAllocsToFail_[locationToFailCount_].allocationNumber = allocationNumber;
     locationAllocsToFail_[locationToFailCount_].file = file;
     locationAllocsToFail_[locationToFailCount_].line = line;
+
+    locationActualAllocs_[locationToFailCount_].allocationNumber = 0;
+    locationActualAllocs_[locationToFailCount_].file = file;
+    locationActualAllocs_[locationToFailCount_].line = line;
     locationToFailCount_++;
 }
 
 char* FailableMemoryAllocator::alloc_memory(size_t size, const char* file, int line)
 {
-    currentAllocNumber_++;
     if (shouldBeFailedAlloc_() || shouldBeFailedLocationAlloc_(file, line))
         return NULL;
     return TestMemoryAllocator::alloc_memory(size, file, line);
@@ -235,6 +241,7 @@ char* FailableMemoryAllocator::alloc_memory(size_t size, const char* file, int l
 
 bool FailableMemoryAllocator::shouldBeFailedAlloc_()
 {
+    currentAllocNumber_++;
     for (int i = 0; i < toFailCount_; i++)
         if (currentAllocNumber_ == allocsToFail_[i])
             return true;
@@ -247,8 +254,11 @@ bool FailableMemoryAllocator::shouldBeFailedLocationAlloc_(const char* file, int
 
     for (int i = 0; i < locationToFailCount_; i++) {
         SimpleString toFailBasename = getBaseName_(locationAllocsToFail_[i].file);
-        if (allocBaseName == toFailBasename && locationAllocsToFail_[i].line == line)
-            return true;
+        if (allocBaseName == toFailBasename && locationAllocsToFail_[i].line == line) {
+            locationActualAllocs_[i].allocationNumber++;
+            if (locationAllocsToFail_[i].allocationNumber == locationActualAllocs_[i].allocationNumber)
+                return true;
+        }
     }
     return false;
 }
@@ -272,5 +282,7 @@ void FailableMemoryAllocator::clearFailedAllocations()
     toFailCount_ = 0;
     currentAllocNumber_ = 0;
     PlatformSpecificMemset(allocsToFail_, 0, sizeof(allocsToFail_));
+    PlatformSpecificMemset(locationAllocsToFail_, 0, sizeof(locationAllocsToFail_));
+    PlatformSpecificMemset(locationActualAllocs_, 0, sizeof(locationActualAllocs_));
 }
 
