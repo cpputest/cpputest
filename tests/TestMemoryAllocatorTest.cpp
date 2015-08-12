@@ -201,11 +201,9 @@ TEST(FailableMemoryAllocator, SettingUpTooManyFailedAllocsWillFail)
 
 TEST(FailableMemoryAllocator, FailFirstAllocationAtGivenLine)
 {
-    int *memory1;
     failableMallocAllocator.failNthAllocationAt(1, __FILE__, __LINE__ + 2);
-    memory1 = (int *)malloc(sizeof(int));
+
     POINTERS_EQUAL(NULL, malloc(sizeof(int)));
-    free(memory1);
 }
 
 
