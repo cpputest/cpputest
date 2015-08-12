@@ -214,13 +214,13 @@ FailableMemoryAllocator::FailableMemoryAllocator(const char* name_str, const cha
 
 void FailableMemoryAllocator::failAllocNumber(int number)
 {
-    failIfMaximumNumberOfFailedAllocsExceeded_(toFailCount_);
+    failIfMaximumNumberOfFailedAllocsExceeded(toFailCount_);
     allocsToFail_[toFailCount_++] = number;
 }
 
 void FailableMemoryAllocator::failNthAllocAt(int allocationNumber, const char* file, int line)
 {
-    failIfMaximumNumberOfFailedAllocsExceeded_(locationToFailCount_);
+    failIfMaximumNumberOfFailedAllocsExceeded(locationToFailCount_);
     locationAllocsToFail_[locationToFailCount_].allocNumberToFail = allocationNumber;
     locationAllocsToFail_[locationToFailCount_].actualAllocNumber = 0;
     locationAllocsToFail_[locationToFailCount_].file = file;
@@ -228,7 +228,7 @@ void FailableMemoryAllocator::failNthAllocAt(int allocationNumber, const char* f
     locationToFailCount_++;
 }
 
-void FailableMemoryAllocator::failIfMaximumNumberOfFailedAllocsExceeded_(int toFailCount)
+void FailableMemoryAllocator::failIfMaximumNumberOfFailedAllocsExceeded(int toFailCount)
 {
     if (toFailCount >= MAX_NUMBER_OF_FAILED_ALLOCS)
         FAIL("Maximum number of failed memory allocations exceeded");
@@ -236,12 +236,12 @@ void FailableMemoryAllocator::failIfMaximumNumberOfFailedAllocsExceeded_(int toF
 
 char* FailableMemoryAllocator::alloc_memory(size_t size, const char* file, int line)
 {
-    if (shouldBeFailedAlloc_() || shouldBeFailedLocationAlloc_(file, line))
+    if (shouldBeFailedAlloc() || shouldBeFailedLocationAlloc(file, line))
         return NULL;
     return TestMemoryAllocator::alloc_memory(size, file, line);
 }
 
-bool FailableMemoryAllocator::shouldBeFailedAlloc_()
+bool FailableMemoryAllocator::shouldBeFailedAlloc()
 {
     currentAllocNumber_++;
     for (int i = 0; i < toFailCount_; i++)
@@ -250,12 +250,12 @@ bool FailableMemoryAllocator::shouldBeFailedAlloc_()
     return false;
 }
 
-bool FailableMemoryAllocator::shouldBeFailedLocationAlloc_(const char* file, int line)
+bool FailableMemoryAllocator::shouldBeFailedLocationAlloc(const char* file, int line)
 {
-    SimpleString allocBaseName = getBaseName_(file);
+    SimpleString allocBaseName = getBaseName(file);
 
     for (int i = 0; i < locationToFailCount_; i++) {
-        SimpleString toFailBasename = getBaseName_(locationAllocsToFail_[i].file);
+        SimpleString toFailBasename = getBaseName(locationAllocsToFail_[i].file);
         if (allocBaseName == toFailBasename && locationAllocsToFail_[i].line == line) {
             locationAllocsToFail_[i].actualAllocNumber++;
             if (locationAllocsToFail_[i].allocNumberToFail == locationAllocsToFail_[i].actualAllocNumber)
@@ -265,7 +265,7 @@ bool FailableMemoryAllocator::shouldBeFailedLocationAlloc_(const char* file, int
     return false;
 }
 
-SimpleString FailableMemoryAllocator::getBaseName_(const char* file)
+SimpleString FailableMemoryAllocator::getBaseName(const char* file)
 {
     SimpleString fileFullPath(file);
     fileFullPath.replace('\\', '/');

@@ -96,7 +96,8 @@ public:
     static TestMemoryAllocator* defaultAllocator();
 };
 
-struct LocationFailedAlloc
+
+struct LocationToFailAlloc
 {
     int allocNumberToFail;
     int actualAllocNumber;
@@ -116,12 +117,12 @@ public:
     virtual char* allocMemoryLeakNode(size_t size);
     virtual void clearFailedAllocs();
 protected:
-    virtual bool shouldBeFailedAlloc_();
-    virtual bool shouldBeFailedLocationAlloc_(const char* file, int line);
-    virtual SimpleString getBaseName_(const char* file);
-    virtual void failIfMaximumNumberOfFailedAllocsExceeded_(int toFailCount);
+    virtual bool shouldBeFailedAlloc();
+    virtual bool shouldBeFailedLocationAlloc(const char* file, int line);
+    virtual SimpleString getBaseName(const char* file);
+    virtual void failIfMaximumNumberOfFailedAllocsExceeded(int toFailCount);
     int allocsToFail_[MAX_NUMBER_OF_FAILED_ALLOCS];
-    LocationFailedAlloc locationAllocsToFail_[MAX_NUMBER_OF_FAILED_ALLOCS];
+    LocationToFailAlloc locationAllocsToFail_[MAX_NUMBER_OF_FAILED_ALLOCS];
     int toFailCount_;
     int locationToFailCount_;
     int currentAllocNumber_;
