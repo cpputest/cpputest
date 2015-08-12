@@ -36,19 +36,16 @@ CPPU1_OBJECTS := \
   $(CPPUTEST_HOME)/tests/AllTests.obj \
   $(CPPUTEST_HOME)/tests/AllocLetTestFree.obj \
   $(CPPUTEST_HOME)/tests/AllocLetTestFreeTest.obj \
-  $(CPPUTEST_HOME)/tests/AllocationInCFile.obj \
-  $(CPPUTEST_HOME)/tests/AllocationInCppFile.obj \
   $(CPPUTEST_HOME)/tests/CheatSheetTest.obj \
   $(CPPUTEST_HOME)/tests/CommandLineArgumentsTest.obj \
   $(CPPUTEST_HOME)/tests/CommandLineTestRunnerTest.obj \
   $(CPPUTEST_HOME)/tests/JUnitOutputTest.obj \
-  $(CPPUTEST_HOME)/tests/MemoryLeakDetectorTest.obj \
-  $(CPPUTEST_HOME)/tests/MemoryLeakWarningTest.obj \
-  $(CPPUTEST_HOME)/tests/MemoryOperatorOverloadTest.obj \
   $(CPPUTEST_HOME)/tests/PluginTest.obj \
   $(CPPUTEST_HOME)/tests/PreprocessorTest.obj \
   $(CPPUTEST_HOME)/tests/SetPluginTest.obj \
   $(CPPUTEST_HOME)/tests/SimpleMutexTest.obj \
+  $(CPPUTEST_HOME)/tests/TestFailureNaNTest.obj \
+  $(CPPUTEST_HOME)/tests/TestFailureTest.obj \
   $(CPPUTEST_HOME)/tests/TestOutputTest.obj \
   $(CPPUTEST_HOME)/tests/TestRegistryTest.obj \
   $(CPPUTEST_HOME)/tests/TestResultTest.obj \
@@ -57,9 +54,12 @@ CPPU1_OBJECTS := \
 
 CPPU2_OBJECTS := \
   $(CPPUTEST_HOME)/tests/AllTests.obj \
+  $(CPPUTEST_HOME)/tests/AllocationInCFile.obj \
+  $(CPPUTEST_HOME)/tests/AllocationInCppFile.obj \
+  $(CPPUTEST_HOME)/tests/MemoryLeakDetectorTest.obj \
+  $(CPPUTEST_HOME)/tests/MemoryLeakWarningTest.obj \
+  $(CPPUTEST_HOME)/tests/MemoryOperatorOverloadTest.obj \
   $(CPPUTEST_HOME)/tests/SimpleStringTest.obj \
-  $(CPPUTEST_HOME)/tests/TestFailureNaNTest.obj \
-  $(CPPUTEST_HOME)/tests/TestFailureTest.obj \
   $(CPPUTEST_HOME)/tests/TestFilterTest.obj \
   $(CPPUTEST_HOME)/tests/TestHarness_cTest.obj \
   $(CPPUTEST_HOME)/tests/TestHarness_cTestCFile.obj \
