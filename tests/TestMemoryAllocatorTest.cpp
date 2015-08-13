@@ -130,7 +130,7 @@ TEST(TestMemoryAllocatorTest, TryingToAllocateTooMuchFailsTest)
     fixture.assertPrintContains("malloc returned null pointer");
 }
 
-#if CPPUTEST_USE_MALLOC_MACROS
+//#if CPPUTEST_USE_MALLOC_MACROS
 
 // FailableMemoryAllocator must be global. Otherwise, it does not exist when memory leak detector
 // reports memory leaks.
@@ -146,6 +146,7 @@ TEST_GROUP(FailableMemoryAllocator)
     }
     void teardown()
     {
+        failableMallocAllocator.checkFailedLocationAllocsWereDone();
         setCurrentMallocAllocatorToDefault();
     }
 };
@@ -242,4 +243,24 @@ TEST(FailableMemoryAllocator, SettingUpTooManyFailingLocationAllocsWillFail)
     fixture.assertPrintContains("Maximum number of failed memory allocations exceeded");
 }
 
-#endif
+static void _failingLocationAllocIsNeverDone()
+{
+    failableMallocAllocator.failNthAllocAt(1, "TestMemoryAllocatorTest.cpp", __LINE__);
+    failableMallocAllocator.checkFailedLocationAllocsWereDone();
+}
+
+TEST(FailableMemoryAllocator, CheckAllFailingLocationAllocsWereDone)
+{
+    TestTestingFixture fixture;
+    fixture.setTestFunction(_failingLocationAllocIsNeverDone);
+
+    fixture.runAllTests();
+
+    LONGS_EQUAL(1, fixture.getFailureCount());
+    fixture.assertPrintContains("Expected failing alloc at TestMemoryAllocatorTest.cpp:");
+    fixture.assertPrintContains("was never done");
+
+    failableMallocAllocator.clearFailedAllocs();
+}
+
+//#endif

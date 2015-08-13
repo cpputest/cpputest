@@ -258,8 +258,10 @@ bool FailableMemoryAllocator::shouldBeFailedLocationAlloc(const char* file, int 
         SimpleString toFailBasename = getBaseName(locationAllocsToFail_[i].file);
         if (allocBaseName == toFailBasename && locationAllocsToFail_[i].line == line) {
             locationAllocsToFail_[i].actualAllocNumber++;
-            if (locationAllocsToFail_[i].allocNumberToFail == locationAllocsToFail_[i].actualAllocNumber)
+            if (locationAllocsToFail_[i].allocNumberToFail == locationAllocsToFail_[i].actualAllocNumber) {
+                locationAllocsToFail_[i].done = true;
                 return true;
+            }
         }
     }
     return false;
@@ -277,6 +279,20 @@ SimpleString FailableMemoryAllocator::getBaseName(const char* file)
 char* FailableMemoryAllocator::allocMemoryLeakNode(size_t size)
 {
     return (char*)PlatformSpecificMalloc(size);
+}
+
+void FailableMemoryAllocator::checkFailedLocationAllocsWereDone()
+{
+    for (int i = 0; i < locationToFailCount_; i++)
+        if (!locationAllocsToFail_[i].done)
+        {
+            UtestShell* currentTest = UtestShell::getCurrent();
+            SimpleString failText = StringFromFormat("Expected failing alloc at %s:%d was never done",
+                    locationAllocsToFail_[i].file,
+                    locationAllocsToFail_[i].line);
+            currentTest->failWith(FailFailure(currentTest, currentTest->getName().asCharString(),
+                    currentTest->getLineNumber(), failText), TestTerminatorWithoutExceptions());
+        }
 }
 
 void FailableMemoryAllocator::clearFailedAllocs()
