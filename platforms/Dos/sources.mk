@@ -36,19 +36,16 @@ CPPU1_OBJECTS := \
   $(CPPUTEST_HOME)/tests/AllTests.o \
   $(CPPUTEST_HOME)/tests/AllocLetTestFree.o \
   $(CPPUTEST_HOME)/tests/AllocLetTestFreeTest.o \
-  $(CPPUTEST_HOME)/tests/AllocationInCFile.o \
-  $(CPPUTEST_HOME)/tests/AllocationInCppFile.o \
   $(CPPUTEST_HOME)/tests/CheatSheetTest.o \
   $(CPPUTEST_HOME)/tests/CommandLineArgumentsTest.o \
   $(CPPUTEST_HOME)/tests/CommandLineTestRunnerTest.o \
   $(CPPUTEST_HOME)/tests/JUnitOutputTest.o \
-  $(CPPUTEST_HOME)/tests/MemoryLeakDetectorTest.o \
-  $(CPPUTEST_HOME)/tests/MemoryLeakWarningTest.o \
-  $(CPPUTEST_HOME)/tests/MemoryOperatorOverloadTest.o \
   $(CPPUTEST_HOME)/tests/PluginTest.o \
   $(CPPUTEST_HOME)/tests/PreprocessorTest.o \
   $(CPPUTEST_HOME)/tests/SetPluginTest.o \
   $(CPPUTEST_HOME)/tests/SimpleMutexTest.o \
+  $(CPPUTEST_HOME)/tests/TestFailureNaNTest.o \
+  $(CPPUTEST_HOME)/tests/TestFailureTest.o \
   $(CPPUTEST_HOME)/tests/TestOutputTest.o \
   $(CPPUTEST_HOME)/tests/TestRegistryTest.o \
   $(CPPUTEST_HOME)/tests/TestResultTest.o \
@@ -57,9 +54,12 @@ CPPU1_OBJECTS := \
 
 CPPU2_OBJECTS := \
   $(CPPUTEST_HOME)/tests/AllTests.o \
+  $(CPPUTEST_HOME)/tests/AllocationInCFile.o \
+  $(CPPUTEST_HOME)/tests/AllocationInCppFile.o \
+  $(CPPUTEST_HOME)/tests/MemoryLeakDetectorTest.o \
+  $(CPPUTEST_HOME)/tests/MemoryLeakWarningTest.o \
+  $(CPPUTEST_HOME)/tests/MemoryOperatorOverloadTest.o \
   $(CPPUTEST_HOME)/tests/SimpleStringTest.o \
-  $(CPPUTEST_HOME)/tests/TestFailureNaNTest.o \
-  $(CPPUTEST_HOME)/tests/TestFailureTest.o \
   $(CPPUTEST_HOME)/tests/TestFilterTest.o \
   $(CPPUTEST_HOME)/tests/TestHarness_cTest.o \
   $(CPPUTEST_HOME)/tests/TestHarness_cTestCFile.o \
@@ -100,5 +100,10 @@ CPPU5_OBJECTS := \
 
 CPPU6_OBJECTS := \
   $(CPPUTEST_HOME)/tests/CppUTestExt/AllTests.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/MockSupportTest.o \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/ExpectedFunctionsListTest.o \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/MockCallTest.o \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/MockComparatorCopierTest.o \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/MockHierarchyTest.o \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/MockReturnValueTest.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockStrictOrderTest.o \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/MockSupportTest.o \
