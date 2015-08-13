@@ -202,3 +202,135 @@ TestMemoryAllocator* NullUnknownAllocator::defaultAllocator()
     static NullUnknownAllocator allocator;
     return &allocator;
 }
+
+FailableMemoryAllocator::FailableMemoryAllocator(const char* name_str, const char* alloc_name_str, const char* free_name_str)
+: TestMemoryAllocator(name_str, alloc_name_str, free_name_str)
+, toFailCount_(0), locationToFailCount_(0), currentAllocNumber_(0)
+{
+    PlatformSpecificMemset(allocsToFail_, 0, sizeof(allocsToFail_));
+    PlatformSpecificMemset(locationAllocsToFail_, 0, sizeof(locationAllocsToFail_));
+
+}
+
+void FailableMemoryAllocator::failAllocNumber(int number)
+{
+    failIfMaximumNumberOfFailedAllocsExceeded(toFailCount_);
+    allocsToFail_[toFailCount_++] = number;
+}
+
+void FailableMemoryAllocator::failNthAllocAt(int allocationNumber, const char* file, int line)
+{
+    failIfMaximumNumberOfFailedAllocsExceeded(locationToFailCount_);
+    locationAllocsToFail_[locationToFailCount_].allocNumberToFail = allocationNumber;
+    locationAllocsToFail_[locationToFailCount_].actualAllocNumber = 0;
+    locationAllocsToFail_[locationToFailCount_].file = file;
+    locationAllocsToFail_[locationToFailCount_].line = line;
+    locationAllocsToFail_[locationToFailCount_].done = false;
+    locationToFailCount_++;
+}
+
+void FailableMemoryAllocator::failIfMaximumNumberOfFailedAllocsExceeded(int toFailCount)
+{
+    UtestShell* currentTest = UtestShell::getCurrent();
+
+    if (toFailCount >= MAX_NUMBER_OF_FAILED_ALLOCS)
+        currentTest->failWith(FailFailure(currentTest, currentTest->getName().asCharString(),
+            currentTest->getLineNumber(), "Maximum number of failed memory allocations exceeded"),
+            TestTerminatorWithoutExceptions());
+}
+
+char* FailableMemoryAllocator::alloc_memory(size_t size, const char* file, int line)
+{
+    if (shouldBeFailedAlloc() || shouldBeFailedLocationAlloc(file, line))
+        return NULL;
+    return TestMemoryAllocator::alloc_memory(size, file, line);
+}
+
+bool FailableMemoryAllocator::shouldBeFailedAlloc()
+{
+    currentAllocNumber_++;
+    for (int i = 0; i < toFailCount_; i++) {
+        if (currentAllocNumber_ == allocsToFail_[i]) {
+            allocsToFail_[i] = FAILED_ALLOC_DONE;
+            return true;
+        }
+    }
+    return false;
+}
+
+bool FailableMemoryAllocator::shouldBeFailedLocationAlloc(const char* file, int line)
+{
+    for (int i = 0; i < locationToFailCount_; i++) {
+        if (isFailedLocation(&locationAllocsToFail_[i], file, line)) {
+            locationAllocsToFail_[i].actualAllocNumber++;
+            if (locationAllocsToFail_[i].allocNumberToFail == locationAllocsToFail_[i].actualAllocNumber) {
+                locationAllocsToFail_[i].done = true;
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+bool FailableMemoryAllocator::isFailedLocation(LocationToFailAlloc* locationFail, const char* allocFile, int allocLine)
+{
+    SimpleString allocBaseName = getBaseName(allocFile);
+    SimpleString failBaseName = getBaseName(locationFail->file);
+    return allocBaseName == failBaseName && allocLine == locationFail->line;
+}
+
+SimpleString FailableMemoryAllocator::getBaseName(const char* file)
+{
+    SimpleString fileFullPath(file);
+    fileFullPath.replace('\\', '/');
+    SimpleStringCollection pathElements;
+    fileFullPath.split("/", pathElements);
+    return pathElements[pathElements.size() - 1];
+}
+
+char* FailableMemoryAllocator::allocMemoryLeakNode(size_t size)
+{
+    return (char*)PlatformSpecificMalloc(size);
+}
+
+void FailableMemoryAllocator::checkAllFailedAllocsWereDone()
+{
+    failIfUndoneFailedAllocs();
+    failIfUndoneFailedLocationAllocs();
+}
+
+void FailableMemoryAllocator::failIfUndoneFailedAllocs()
+{
+    for (int i = 0; i < toFailCount_; i++) {
+        if (allocsToFail_[i] != FAILED_ALLOC_DONE) {
+            UtestShell* currentTest = UtestShell::getCurrent();
+            SimpleString failText = StringFromFormat("Expected allocation number %d was never done", allocsToFail_[i]);
+            currentTest->failWith(FailFailure(currentTest, currentTest->getName().asCharString(),
+                    currentTest->getLineNumber(), failText), TestTerminatorWithoutExceptions());
+        }
+    }
+}
+
+void FailableMemoryAllocator::failIfUndoneFailedLocationAllocs()
+{
+    for (int i = 0; i < locationToFailCount_; i++) {
+        if (!locationAllocsToFail_[i].done) {
+            UtestShell* currentTest = UtestShell::getCurrent();
+            SimpleString failText = StringFromFormat("Expected failing alloc at %s:%d was never done",
+                    locationAllocsToFail_[i].file,
+                    locationAllocsToFail_[i].line);
+            currentTest->failWith(FailFailure(currentTest, currentTest->getName().asCharString(),
+                    currentTest->getLineNumber(), failText), TestTerminatorWithoutExceptions());
+        }
+    }
+}
+
+void FailableMemoryAllocator::clearFailedAllocs()
+{
+    toFailCount_ = 0;
+    locationToFailCount_ = 0;
+    currentAllocNumber_ = 0;
+    PlatformSpecificMemset(allocsToFail_, 0, sizeof(allocsToFail_));
+    PlatformSpecificMemset(locationAllocsToFail_, 0, sizeof(locationAllocsToFail_));
+}
+
