@@ -259,7 +259,6 @@ TEST(FailableMemoryAllocator, CheckAllFailingLocationAllocsWereDone)
     LONGS_EQUAL(1, fixture.getFailureCount());
     fixture.assertPrintContains("Expected failing alloc at TestMemoryAllocatorTest.cpp:");
     fixture.assertPrintContains("was never done");
-
     failableMallocAllocator.clearFailedAllocs();
 }
 

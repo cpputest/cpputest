@@ -225,6 +225,7 @@ void FailableMemoryAllocator::failNthAllocAt(int allocationNumber, const char* f
     locationAllocsToFail_[locationToFailCount_].actualAllocNumber = 0;
     locationAllocsToFail_[locationToFailCount_].file = file;
     locationAllocsToFail_[locationToFailCount_].line = line;
+    locationAllocsToFail_[locationToFailCount_].done = false;
     locationToFailCount_++;
 }
 
@@ -291,9 +292,8 @@ char* FailableMemoryAllocator::allocMemoryLeakNode(size_t size)
 
 void FailableMemoryAllocator::checkFailedLocationAllocsWereDone()
 {
-    for (int i = 0; i < locationToFailCount_; i++)
-        if (!locationAllocsToFail_[i].done)
-        {
+    for (int i = 0; i < locationToFailCount_; i++) {
+        if (!locationAllocsToFail_[i].done) {
             UtestShell* currentTest = UtestShell::getCurrent();
             SimpleString failText = StringFromFormat("Expected failing alloc at %s:%d was never done",
                     locationAllocsToFail_[i].file,
@@ -301,6 +301,7 @@ void FailableMemoryAllocator::checkFailedLocationAllocsWereDone()
             currentTest->failWith(FailFailure(currentTest, currentTest->getName().asCharString(),
                     currentTest->getLineNumber(), failText), TestTerminatorWithoutExceptions());
         }
+    }
 }
 
 void FailableMemoryAllocator::clearFailedAllocs()
