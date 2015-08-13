@@ -121,6 +121,7 @@ public:
 protected:
     virtual bool shouldBeFailedAlloc();
     virtual bool shouldBeFailedLocationAlloc(const char* file, int line);
+    virtual bool isFailedLocation(LocationToFailAlloc* locationFail, const char* allocFile, int allocLine);
     virtual SimpleString getBaseName(const char* file);
     virtual void failIfMaximumNumberOfFailedAllocsExceeded(int toFailCount);
     int allocsToFail_[MAX_NUMBER_OF_FAILED_ALLOCS];

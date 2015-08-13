@@ -252,11 +252,8 @@ bool FailableMemoryAllocator::shouldBeFailedAlloc()
 
 bool FailableMemoryAllocator::shouldBeFailedLocationAlloc(const char* file, int line)
 {
-    SimpleString allocBaseName = getBaseName(file);
-
     for (int i = 0; i < locationToFailCount_; i++) {
-        SimpleString toFailBasename = getBaseName(locationAllocsToFail_[i].file);
-        if (allocBaseName == toFailBasename && locationAllocsToFail_[i].line == line) {
+        if (isFailedLocation(&locationAllocsToFail_[i], file, line)) {
             locationAllocsToFail_[i].actualAllocNumber++;
             if (locationAllocsToFail_[i].allocNumberToFail == locationAllocsToFail_[i].actualAllocNumber) {
                 locationAllocsToFail_[i].done = true;
@@ -265,6 +262,13 @@ bool FailableMemoryAllocator::shouldBeFailedLocationAlloc(const char* file, int 
         }
     }
     return false;
+}
+
+bool FailableMemoryAllocator::isFailedLocation(LocationToFailAlloc* locationFail, const char* allocFile, int allocLine)
+{
+    SimpleString allocBaseName = getBaseName(allocFile);
+    SimpleString failBaseName = getBaseName(locationFail->file);
+    return allocBaseName == failBaseName && allocLine == locationFail->line;
 }
 
 SimpleString FailableMemoryAllocator::getBaseName(const char* file)
