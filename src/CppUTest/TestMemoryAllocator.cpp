@@ -230,8 +230,12 @@ void FailableMemoryAllocator::failNthAllocAt(int allocationNumber, const char* f
 
 void FailableMemoryAllocator::failIfMaximumNumberOfFailedAllocsExceeded(int toFailCount)
 {
+    UtestShell* currentTest = UtestShell::getCurrent();
+
     if (toFailCount >= MAX_NUMBER_OF_FAILED_ALLOCS)
-        FAIL("Maximum number of failed memory allocations exceeded");
+        currentTest->failWith(FailFailure(currentTest, currentTest->getName().asCharString(),
+            currentTest->getLineNumber(), "Maximum number of failed memory allocations exceeded"),
+            TestTerminatorWithoutExceptions());
 }
 
 char* FailableMemoryAllocator::alloc_memory(size_t size, const char* file, int line)
