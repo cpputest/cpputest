@@ -4,9 +4,12 @@ AR := wlib
 LINK := wlink
 LOG := ALLTESTS.LOG
 NULL :=
-S := $(NULL) #
-C := ,
-V := /
+space := $(NULL) #
+comma := ,
+path_separator := /
+convert_paths = $(subst /,$(path_separator),$(subst /cygdrive/c/,c:$(path_separator),$(1)))
+comma_separated_list = $(subst $(space),$(comma),$(call convert_paths,$(1)))
+add_to_library_list = $(addprefix +,$(call convert_paths,$?))
 
 -include ../platforms/Dos/platform.mk
 include ../platforms/Dos/sources.mk
@@ -14,47 +17,37 @@ include ../platforms/Dos/sources.mk
 # Disable W013 unreachable code - it overreacts to CHECK_EQUAL macros
 # Disable W367 conditional expression in if statement is always true - same
 # Disable W368 conditional expression in if statement is always false - same
-# Disable W391 assignment found in boolean expression - because we do that
+# Disable W391 assignment found in boolean expression - we don't care
 
 CFLAGS := \
   -q -c -os -oc -d0 -we -w=3 -wcd=13 -wcd=367 -wcd=368 -wcd391 -ml -zm \
-  -dCPPUTEST_MEM_LEAK_DETECTION_DISABLED=1 \
-  -dCPPUTEST_STD_CPP_LIB_DISABLED=1 \
-  -i$(CPPUTEST_HOME)/include \
-  -i$(CPPUTEST_HOME)/include/Platforms/dos \
-  -i$(WATCOM)/h \
-  -i$(WATCOM)/h/nt \
+  -dCPPUTEST_MEM_LEAK_DETECTION_DISABLED=1 -dCPPUTEST_STD_CPP_LIB_DISABLED=1 \
+  -i$(call convert_paths,$(CPPUTEST_HOME)/include) \
+  -i$(call convert_paths,$(CPPUTEST_HOME)/include/Platforms/Dos) \
+  -i$(call convert_paths,$(WATCOM)/h) -i$(call convert_paths,$(WATCOM)/h/nt) \
 
 CXXFLAGS := $(CFLAGS) -xds
 
 .PHONY: all clean
 
-all: CPPU1$(EXE) CPPU2$(EXE) CPPUEXT1$(EXE) CPPUEXT2$(EXE) CPPUEXT3$(EXE) \
-  CPPUEXT4$(EXE)
-
-%.obj: %.cpp
-	$(CXX) $(CXXFLAGS) -fo=$(notdir $@) $(subst /,$V, $<)
-
-%.obj: %.c
-	$(CC) $(subst /,$V, $(CFLAGS)) -fo=$(notdir $@) $(subst /,$V, $<)
-
-CPPU1$(EXE): $(CPPU_OBJECTS) $(CPPU1_OBJECTS)
-	$(LINK) opt quiet,map,stack=50k sys dos file $(subst $S,$C,$(notdir $?)) name $@
-
-CPPU2$(EXE): $(CPPU_OBJECTS) $(CPPU2_OBJECTS)
-	$(LINK) opt quiet,map,stack=50k sys dos file $(subst $S,$C,$(notdir $?)) name $@
-
-CPPUEXT1$(EXE): $(CPPU_OBJECTS) $(CPPUEXT_OBJECTS) $(CPPUEXT1_OBJECTS)
-	$(LINK) opt quiet,map,stack=50k sys dos file $(subst $S,$C,$(notdir $?)) name $@
-
-CPPUEXT2$(EXE): $(CPPU_OBJECTS) $(CPPUEXT_OBJECTS) $(CPPUEXT2_OBJECTS)
-	$(LINK) opt quiet,map,stack=50k sys dos file $(subst $S,$C,$(notdir $?)) name $@
-
-CPPUEXT3$(EXE): $(CPPU_OBJECTS) $(CPPUEXT_OBJECTS) $(CPPUEXT3_OBJECTS)
-	$(LINK) opt quiet,map,stack=50k sys dos file $(subst $S,$C,$(notdir $?)) name $@
-
-CPPUEXT4$(EXE): $(CPPU_OBJECTS) $(CPPUEXT_OBJECTS) $(CPPUEXT4_OBJECTS)
-	$(LINK) opt quiet,map,stack=50k sys dos file $(subst $S,$C,$(notdir $?)) name $@
+all: CPPU.LIB CPPUX.LIB CPPU1.EXE CPPU2.EXE CPPU3.EXE CPPU4.EXE CPPU5.EXE CPPU6.EXE
 
 clean:
-	rm -rf *.obj *.map *.txt *.LOG *.EXE *.err
+	rm -rf ../src/CppUTest/*.o ../src/CppUTestExt/*.o \
+    ../src/Platforms/dos/*.o ../tests/*.o ../tests/CppUTestExt/*.o \
+    *.o *.map *.txt *.LOG *.EXE *.err *.LIB *.LST
+
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -fo=$(call convert_paths,$@) $(call convert_paths,$<)
+
+%.o: %.c
+	$(CC) $(CFLAGS) -fo=$(call convert_paths,$@) $(call convert_paths,$<)
+
+.SECONDEXPANSION:
+
+%.LIB: $$($$*_OBJECTS)
+	$(AR) -q -lCPPU.LST $@ $(call add_to_library_list,$?)
+
+%.EXE: $$($$*_OBJECTS) | CPPU.LIB CPPUX.LIB
+	$(LINK) opt q,map,st=50k sys dos lib CPPU.LIB,CPPUX.LIB \
+    file $(call comma_separated_list,$?) name $@

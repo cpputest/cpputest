@@ -1,13 +1,14 @@
 #!/bin/bash
-for TESTS in CPPU1 CPPU2 CPPUEXT1 CPPUEXT2 CPPUEXT3 CPPUEXT4
-do
-    printf "Running ${TESTS}.EXE inside DOSBox...\n"
+printf "" > exit  # so dosbox will run 'external' command 'exit' correctly
+printf "" >ALLTESTS.LOG
+for TESTS in `ls *.EXE`; do
+    printf "Running ${TESTS} inside DOSBox...\n"
     dosbox -conf ../platforms/Dos/dosbox-0.74.conf exit \
-    -c "echo.>>ALLTESTS.LOG" \
-    -c "echo *** ${TESTS}.EXE *********************************>>ALLTESTS.LOG" \
-    -c "${TESTS}.EXE>>ALLTESTS.LOG" \
+    -c "echo *** ${TESTS} ************************************>>ALLTESTS.LOG" \
+    -c "${TESTS}>>ALLTESTS.LOG" \
     -noconsole -exit || exit 1
 done
-printf "\n" >>ALLTESTS.LOG
+printf "\n"
+[ "`cat ALLTESTS.LOG`" ] || { printf "There were no tests to run!\n"; exit 1; }
 cat ALLTESTS.LOG
-[ -z "`cat ALLTESTS.LOG|grep Failure`" ] || { printf "There were failed tests\n"; exit 1; }
+[ -z "`cat ALLTESTS.LOG|grep Failure`" ] || { printf "There were failed tests!\n"; exit 1; }
