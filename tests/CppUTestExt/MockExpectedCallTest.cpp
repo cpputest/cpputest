@@ -239,6 +239,14 @@ TEST(MockExpectedCall, callWithConstPointerParameter)
     POINTERS_EQUAL(ptr, call->getInputParameter("constPointer").getConstPointerValue());
 }
 
+TEST(MockExpectedCall, callWithFunctionPointerParameter)
+{
+    void (*ptr)() = (void (*)()) 0x123;
+    call->withParameter("functionPointer", ptr);
+    STRCMP_EQUAL("void (*)()", call->getInputParameterType("functionPointer").asCharString());
+    FUNCTIONPOINTERS_EQUAL(ptr, call->getInputParameter("functionPointer").getFunctionPointerValue());
+}
+
 TEST(MockExpectedCall, callWithMemoryBuffer)
 {
     const unsigned char mem_buffer[] = { 0x12, 0xFE, 0xA1 };
@@ -580,6 +588,12 @@ TEST(MockExpectedCallComposite, hasConstPointerParameter)
     STRCMP_EQUAL("name -> const void* param: <0x0>", call.callToString().asCharString());
 }
 
+TEST(MockExpectedCallComposite, hasFunctionPointerParameter)
+{
+    composite.withParameter("param", (void (*)()) 0);
+    STRCMP_EQUAL("name -> void (*)() param: <0x0>", call.callToString().asCharString());
+}
+
 TEST(MockExpectedCallComposite, hasMemoryBufferParameter)
 {
     const unsigned char mem_buffer[] = { 0x89, 0xFE, 0x15 };
@@ -655,6 +669,13 @@ TEST(MockExpectedCallComposite, hasConstPointerReturnValue)
     POINTERS_EQUAL((const void*) 0, call.returnValue().getConstPointerValue());
 }
 
+TEST(MockExpectedCallComposite, hasFunctionPointerReturnValue)
+{
+    composite.andReturnValue((void(*)()) 0);
+    STRCMP_EQUAL("void (*)()", call.returnValue().getType().asCharString());
+    FUNCTIONPOINTERS_EQUAL((void(*)()) 0, call.returnValue().getFunctionPointerValue());
+}
+
 TEST(MockExpectedCallComposite, isOnObject)
 {
     composite.onObject(&composite);
@@ -697,6 +718,7 @@ TEST(MockIgnoredExpectedCall, worksAsItShould)
     ignored.withStringParameter("goo", "hello");
     ignored.withPointerParameter("pie", (void*) 0);
     ignored.withConstPointerParameter("woo", (const void*) 0);
+    ignored.withFunctionPointerParameter("fop", (void(*)()) 0);
     ignored.withMemoryBufferParameter("waa", (const unsigned char*) 0, 0);
     ignored.withParameterOfType("top", "mytype", (const void*) 0);
     ignored.withOutputParameterReturning("bar", (const void*) 0, 1);
@@ -709,4 +731,5 @@ TEST(MockIgnoredExpectedCall, worksAsItShould)
     ignored.andReturnValue("boo");
     ignored.andReturnValue((void*) 0);
     ignored.andReturnValue((const void*) 0);
+    ignored.andReturnValue((void(*)()) 0);
 }

@@ -88,6 +88,12 @@ void MockNamedValue::setValue(const void* value)
     value_.constPointerValue_ = value;
 }
 
+void MockNamedValue::setValue(void (*value)())
+{
+    type_ = "void (*)()";
+    value_.functionPointerValue_ = value;
+}
+
 void MockNamedValue::setValue(const char* value)
 {
     type_ = "const char*";
@@ -201,6 +207,12 @@ const void* MockNamedValue::getConstPointerValue() const
     return value_.pointerValue_;
 }
 
+void (*MockNamedValue::getFunctionPointerValue() const)()
+{
+    STRCMP_EQUAL("void (*)()", type_.asCharString());
+    return value_.functionPointerValue_;
+}
+
 const unsigned char* MockNamedValue::getMemoryBuffer() const
 {
     STRCMP_EQUAL("const unsigned char*", type_.asCharString());
@@ -270,6 +282,8 @@ bool MockNamedValue::equals(const MockNamedValue& p) const
         return value_.pointerValue_ == p.value_.pointerValue_;
     else if (type_ == "const void*")
         return value_.constPointerValue_ == p.value_.constPointerValue_;
+    else if (type_ == "void (*)()")
+        return value_.functionPointerValue_ == p.value_.functionPointerValue_;
     else if (type_ == "double")
         return (doubles_equal(value_.doubleValue_, p.value_.doubleValue_, 0.005));
     else if (type_ == "const unsigned char*")
@@ -310,6 +324,8 @@ SimpleString MockNamedValue::toString() const
         return value_.stringValue_;
     else if (type_ == "void*")
         return StringFrom(value_.pointerValue_);
+    else if (type_ == "void (*)()")
+        return StringFrom(value_.functionPointerValue_);
     else if (type_ == "const void*")
         return StringFrom(value_.constPointerValue_);
     else if (type_ == "double")

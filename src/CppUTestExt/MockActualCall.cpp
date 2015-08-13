@@ -261,6 +261,14 @@ MockActualCall& MockCheckedActualCall::withConstPointerParameter(const SimpleStr
     return *this;
 }
 
+MockActualCall& MockCheckedActualCall::withFunctionPointerParameter(const SimpleString& name, void (*value)())
+{
+    MockNamedValue actualParameter(name);
+    actualParameter.setValue(value);
+    checkInputParameter(actualParameter);
+    return *this;
+}
+
 MockActualCall& MockCheckedActualCall::withMemoryBufferParameter(const SimpleString& name, const unsigned char* value, size_t size)
 {
     MockNamedValue actualParameter(name);
@@ -447,6 +455,19 @@ const void * MockCheckedActualCall::returnConstPointerValueOrDefault(const void 
     return returnConstPointerValue();
 }
 
+void (*MockCheckedActualCall::returnFunctionPointerValue())()
+{
+    return returnValue().getFunctionPointerValue();
+}
+
+void (*MockCheckedActualCall::returnFunctionPointerValueOrDefault(void (*default_value)()))()
+{
+    if (!hasReturnValue()) {
+        return default_value;
+    }
+    return returnFunctionPointerValue();
+}
+
 const char * MockCheckedActualCall::returnStringValueOrDefault(const char * default_value)
 {
     if (!hasReturnValue()) {
@@ -594,6 +615,13 @@ MockActualCall& MockActualCallTrace::withConstPointerParameter(const SimpleStrin
     return *this;
 }
 
+MockActualCall& MockActualCallTrace::withFunctionPointerParameter(const SimpleString& name, void (*value)())
+{
+    addParameterName(name);
+    traceBuffer_ += StringFrom(value);
+    return *this;
+}
+
 MockActualCall& MockActualCallTrace::withMemoryBufferParameter(const SimpleString& name, const unsigned char* value, size_t size)
 {
     addParameterName(name);
@@ -686,6 +714,11 @@ const void * MockActualCallTrace::returnConstPointerValue()
     return NULL;
 }
 
+void (*MockActualCallTrace::returnFunctionPointerValue())()
+{
+    return NULL;
+}
+
 const void * MockActualCallTrace::returnConstPointerValueOrDefault(const void *)
 {
     return returnConstPointerValue();
@@ -694,6 +727,11 @@ const void * MockActualCallTrace::returnConstPointerValueOrDefault(const void *)
 void * MockActualCallTrace::returnPointerValueOrDefault(void *)
 {
     return returnPointerValue();
+}
+
+void (*MockActualCallTrace::returnFunctionPointerValueOrDefault(void (*)()))()
+{
+    return returnFunctionPointerValue();
 }
 
 const char * MockActualCallTrace::returnStringValue()

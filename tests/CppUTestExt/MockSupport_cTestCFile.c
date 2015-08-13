@@ -46,10 +46,12 @@ void all_mock_support_c_calls(void)
 
     mock_c()->expectOneCall("boo")->withIntParameters("integer", 1)->withDoubleParameters("double", 1.0)->
             withStringParameters("string", "string")->withPointerParameters("pointer", (void*) 1)->
-            withConstPointerParameters("constpointer", (const void*) 1);
+            withConstPointerParameters("constpointer", (const void*) 1)->
+            withFunctionPointerParameters("functionpointer", (void(*)()) 1);
     mock_c()->actualCall("boo")->withIntParameters("integer", 1)->withDoubleParameters("double", 1.0)->
             withStringParameters("string", "string")->withPointerParameters("pointer", (void*) 1)->
-            withConstPointerParameters("constpointer", (const void*) 1);
+            withConstPointerParameters("constpointer", (const void*) 1)->
+            withFunctionPointerParameters("functionpointer", (void(*)()) 1);
 
     mock_c()->expectOneCall("boo")->withMemoryBufferParameter("name", (void*) 1, 0);
     mock_c()->actualCall("boo")->withMemoryBufferParameter("name", (void*) 1, 0);
@@ -74,6 +76,10 @@ void all_mock_support_c_calls(void)
 
     mock_c()->expectOneCall("boo4")->andReturnPointerValue((void*) 10);
     mock_c()->actualCall("boo4")->returnValue();
+    mock_c()->returnValue();
+
+    mock_c()->expectOneCall("boo5")->andReturnFunctionPointerValue((void(*)()) 10);
+    mock_c()->actualCall("boo5")->returnValue();
     mock_c()->returnValue();
 
     mock_c()->disable();

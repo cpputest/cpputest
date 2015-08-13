@@ -46,9 +46,11 @@ TEST(MockSupport_c, expectAndActualOneCall)
 TEST(MockSupport_c, expectAndActualParameters)
 {
     mock_c()->expectOneCall("boo")->withIntParameters("integer", 1)->withDoubleParameters("double", 1.0)->
-            withStringParameters("string", "string")->withPointerParameters("pointer", (void*) 1);
+            withStringParameters("string", "string")->withPointerParameters("pointer", (void*) 1)->
+            withFunctionPointerParameters("functionPointer", (void(*)()) 1);
     mock_c()->actualCall("boo")->withIntParameters("integer", 1)->withDoubleParameters("double", 1.0)->
-            withStringParameters("string", "string")->withPointerParameters("pointer", (void*) 1);
+            withStringParameters("string", "string")->withPointerParameters("pointer", (void*) 1)->
+            withFunctionPointerParameters("functionPointer", (void(*)()) 1);
 }
 
 extern "C"{
@@ -174,6 +176,13 @@ TEST(MockSupport_c, returnConstPointerValue)
     LONGS_EQUAL(MOCKVALUETYPE_CONST_POINTER, mock_c()->returnValue().type);
 }
 
+TEST(MockSupport_c, returnFunctionPointerValue)
+{
+    mock_c()->expectOneCall("boo")->andReturnFunctionPointerValue((void(*)()) 10);
+    FUNCTIONPOINTERS_EQUAL((void(*)()) 10, mock_c()->actualCall("boo")->returnValue().value.functionPointerValue);
+    LONGS_EQUAL(MOCKVALUETYPE_FUNCTIONPOINTER, mock_c()->returnValue().type);
+}
+
 TEST(MockSupport_c, MockSupportWithScope)
 {
     mock_scope_c("scope")->expectOneCall("boo");
@@ -210,6 +219,12 @@ TEST(MockSupport_c, MockSupportSetConstPointerData)
 {
     mock_c()->setConstPointerData("constPointer", (const void*) 1);
     POINTERS_EQUAL((const void*) 1, mock_c()->getData("constPointer").value.constPointerValue);
+}
+
+TEST(MockSupport_c, MockSupportSetFunctionPointerData)
+{
+    mock_c()->setFunctionPointerData("functionPointer", (void(*)()) 1);
+    FUNCTIONPOINTERS_EQUAL((void(*)()) 1, mock_c()->getData("functionPointer").value.functionPointerValue);
 }
 
 TEST(MockSupport_c, MockSupportSetDataObject)
@@ -265,11 +280,11 @@ TEST_ORDERED(MockSupport_c, shouldCrashOnFailure, 21)
     UtestShell::setCrashMethod(crashMethod);
     mock_c()->crashOnFailure(true);
     fixture.setTestFunction(failedCallToMockC);
-    
+
     fixture.runAllTests();
 
     CHECK(cpputestHasCrashed);
-    
+
     UtestShell::resetCrashMethod();
     mock_c()->crashOnFailure(false);
 }
@@ -280,7 +295,7 @@ TEST_ORDERED(MockSupport_c, nextTestShouldNotCrashOnFailure, 22)
     TestTestingFixture fixture;
     UtestShell::setCrashMethod(crashMethod);
     fixture.setTestFunction(failedCallToMockC);
-    
+
     fixture.runAllTests();
 
     CHECK_FALSE(cpputestHasCrashed);

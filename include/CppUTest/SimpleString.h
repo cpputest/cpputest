@@ -133,6 +133,7 @@ private:
 
 SimpleString StringFrom(bool value);
 SimpleString StringFrom(const void* value);
+SimpleString StringFrom(void (*value)());
 SimpleString StringFrom(char value);
 SimpleString StringFrom(const char *value);
 SimpleString StringFromOrNull(const char * value);
@@ -143,6 +144,7 @@ SimpleString StringFrom(unsigned long value);
 SimpleString HexStringFrom(long value);
 SimpleString HexStringFrom(unsigned long value);
 SimpleString HexStringFrom(const void* value);
+SimpleString HexStringFrom(void (*value)());
 SimpleString StringFrom(double value, int precision = 6);
 SimpleString StringFrom(const SimpleString& other);
 SimpleString StringFromFormat(const char* format, ...) __check_format__(printf, 1, 2);
