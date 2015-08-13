@@ -4,7 +4,7 @@ printf "" >ALLTESTS.LOG
 for TESTS in `ls *.EXE`; do
     printf "Running ${TESTS} inside DOSBox...\n"
     dosbox -conf ../platforms/Dos/dosbox-0.74.conf exit \
-    -c "echo *** ${TESTS} ************************************>>ALLTESTS.LOG" \
+    -c "echo *** ${TESTS} (`wc -c <${TESTS}` bytes) *********************>>ALLTESTS.LOG" \
     -c "${TESTS}>>ALLTESTS.LOG" \
     -noconsole -exit || exit 1
 done
