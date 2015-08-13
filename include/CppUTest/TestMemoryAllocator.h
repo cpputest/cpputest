@@ -116,7 +116,7 @@ public:
     virtual char* allocMemoryLeakNode(size_t size);
     virtual void failAllocNumber(int number);
     virtual void failNthAllocAt(int allocationNumber, const char* file, int line);
-    virtual void checkFailedLocationAllocsWereDone();
+    virtual void checkAllFailedAllocsWereDone();
     virtual void clearFailedAllocs();
 protected:
     virtual bool shouldBeFailedAlloc();
@@ -124,11 +124,14 @@ protected:
     virtual bool isFailedLocation(LocationToFailAlloc* locationFail, const char* allocFile, int allocLine);
     virtual SimpleString getBaseName(const char* file);
     virtual void failIfMaximumNumberOfFailedAllocsExceeded(int toFailCount);
+    virtual void failIfUndoneFailedAllocs();
+    virtual void failIfUndoneFailedLocationAllocs();
     int allocsToFail_[MAX_NUMBER_OF_FAILED_ALLOCS];
     LocationToFailAlloc locationAllocsToFail_[MAX_NUMBER_OF_FAILED_ALLOCS];
     int toFailCount_;
     int locationToFailCount_;
     int currentAllocNumber_;
+    enum {FAILED_ALLOC_DONE = 0};
 };
 
 #endif

@@ -130,7 +130,8 @@ TEST(TestMemoryAllocatorTest, TryingToAllocateTooMuchFailsTest)
     fixture.assertPrintContains("malloc returned null pointer");
 }
 
-//#if CPPUTEST_USE_MALLOC_MACROS
+
+#if CPPUTEST_USE_MALLOC_MACROS
 
 // FailableMemoryAllocator must be global. Otherwise, it does not exist when memory leak detector
 // reports memory leaks.
@@ -139,15 +140,18 @@ static FailableMemoryAllocator failableMallocAllocator("Failable Malloc Allocato
 
 TEST_GROUP(FailableMemoryAllocator)
 {
+    TestTestingFixture *fixture;
     void setup()
     {
+        fixture = new TestTestingFixture;
         failableMallocAllocator.clearFailedAllocs();
         setCurrentMallocAllocator(&failableMallocAllocator);
     }
     void teardown()
     {
-        failableMallocAllocator.checkFailedLocationAllocsWereDone();
+        failableMallocAllocator.checkAllFailedAllocsWereDone();
         setCurrentMallocAllocatorToDefault();
+        delete fixture;
     }
 };
 
@@ -191,13 +195,33 @@ static void _setUpTooManyFailedAllocs()
 
 TEST(FailableMemoryAllocator, SettingUpTooManyFailedAllocsWillFail)
 {
-    TestTestingFixture fixture;
-    fixture.setTestFunction(_setUpTooManyFailedAllocs);
+    fixture->setTestFunction(_setUpTooManyFailedAllocs);
 
-    fixture.runAllTests();
+    fixture->runAllTests();
 
-    LONGS_EQUAL(1, fixture.getFailureCount());
-    fixture.assertPrintContains("Maximum number of failed memory allocations exceeded");
+    LONGS_EQUAL(1, fixture->getFailureCount());
+    fixture->assertPrintContains("Maximum number of failed memory allocations exceeded");
+}
+
+static void _failingAllocIsNeverDone()
+{
+    failableMallocAllocator.failAllocNumber(1);
+    failableMallocAllocator.failAllocNumber(2);
+    failableMallocAllocator.failAllocNumber(3);
+    malloc(sizeof(int));
+    malloc(sizeof(int));
+    failableMallocAllocator.checkAllFailedAllocsWereDone();
+}
+
+TEST(FailableMemoryAllocator, CheckAllFailingAllocsWereDone)
+{
+    fixture->setTestFunction(_failingAllocIsNeverDone);
+
+    fixture->runAllTests();
+
+    LONGS_EQUAL(1, fixture->getFailureCount());
+    fixture->assertPrintContains("Expected allocation number 3 was never done");
+    failableMallocAllocator.clearFailedAllocs();
 }
 
 TEST(FailableMemoryAllocator, FailFirstAllocationAtGivenLine)
@@ -231,35 +255,32 @@ static void _setUpTooManyFailedLocationAllocs()
         allocator.failNthAllocAt(i + 1, "foo.cpp", 100 + 1);
 }
 
-
 TEST(FailableMemoryAllocator, SettingUpTooManyFailingLocationAllocsWillFail)
 {
-    TestTestingFixture fixture;
-    fixture.setTestFunction(_setUpTooManyFailedLocationAllocs);
+    fixture->setTestFunction(_setUpTooManyFailedLocationAllocs);
 
-    fixture.runAllTests();
+    fixture->runAllTests();
 
-    LONGS_EQUAL(1, fixture.getFailureCount());
-    fixture.assertPrintContains("Maximum number of failed memory allocations exceeded");
+    LONGS_EQUAL(1, fixture->getFailureCount());
+    fixture->assertPrintContains("Maximum number of failed memory allocations exceeded");
 }
 
 static void _failingLocationAllocIsNeverDone()
 {
     failableMallocAllocator.failNthAllocAt(1, "TestMemoryAllocatorTest.cpp", __LINE__);
-    failableMallocAllocator.checkFailedLocationAllocsWereDone();
+    failableMallocAllocator.checkAllFailedAllocsWereDone();
 }
 
 TEST(FailableMemoryAllocator, CheckAllFailingLocationAllocsWereDone)
 {
-    TestTestingFixture fixture;
-    fixture.setTestFunction(_failingLocationAllocIsNeverDone);
+    fixture->setTestFunction(_failingLocationAllocIsNeverDone);
 
-    fixture.runAllTests();
+    fixture->runAllTests();
 
-    LONGS_EQUAL(1, fixture.getFailureCount());
-    fixture.assertPrintContains("Expected failing alloc at TestMemoryAllocatorTest.cpp:");
-    fixture.assertPrintContains("was never done");
+    LONGS_EQUAL(1, fixture->getFailureCount());
+    fixture->assertPrintContains("Expected failing alloc at TestMemoryAllocatorTest.cpp:");
+    fixture->assertPrintContains("was never done");
     failableMallocAllocator.clearFailedAllocs();
 }
 
-//#endif
+#endif
