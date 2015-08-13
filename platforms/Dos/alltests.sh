@@ -1,11 +1,12 @@
 #!/bin/bash
 printf "" > exit  # so dosbox will run 'external' command 'exit' correctly
 printf "" >ALLTESTS.LOG
-for TESTS in `ls *.EXE`; do
-    printf "Running ${TESTS} inside DOSBox...\n"
+for test in `ls *.EXE`; do
+    bytes=`ls -l ${test} | awk '{print $6}'`
+    printf "Running ${test} (${bytes} bytes) inside DOSBox...\n"
     dosbox -conf ../platforms/Dos/dosbox-0.74.conf exit \
-    -c "echo *** ${TESTS} (`wc -c <${TESTS}` bytes) *********************>>ALLTESTS.LOG" \
-    -c "${TESTS}>>ALLTESTS.LOG" \
+    -c "echo *** ${test} (${bytes} bytes) *********************>>ALLTESTS.LOG" \
+    -c "${test}>>ALLTESTS.LOG" \
     -noconsole -exit || exit 1
 done
 printf "\n"
