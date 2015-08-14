@@ -7,9 +7,8 @@ NULL :=
 space := $(NULL) #
 comma := ,
 path_separator := /
-convert_paths = $(subst /,$(path_separator),$(subst /cygdrive/c/,c:$(path_separator),$(1)))
-comma_separated_list = $(subst $(space),$(comma),$(call convert_paths,$(1)))
-add_to_library_list = $(addprefix +,$(call convert_paths,$?))
+drive = $(subst $(CYGDRIVE),$(lastword $(subst /, ,$(CYGDRIVE))):/,$(1))
+convert_paths = $(if $(CYGDRIVE),$(subst /,$(path_separator),$(call drive,$(1))),$(1))
 
 -include ../platforms/Dos/platform.mk
 include ../platforms/Dos/sources.mk
@@ -46,8 +45,8 @@ clean:
 .SECONDEXPANSION:
 
 %.LIB: $$($$*_OBJECTS)
-	$(AR) -q -lCPPU.LST $@ $(call add_to_library_list,$?)
+	$(AR) -q -lCPPU.LST $@ $(addprefix +,$(call convert_paths,$?))
 
 %.EXE: $$($$*_OBJECTS) | CPPU.LIB CPPUX.LIB
 	$(LINK) opt q,map,st=50k sys dos lib CPPU.LIB,CPPUX.LIB \
-    file $(call comma_separated_list,$?) name $@
+    file $(subst $(space),$(comma),$(call convert_paths,$?)) name $@
