@@ -81,8 +81,6 @@ if [ "x$BUILD" = "xmake-dos" ]; then
     export CXX=wcl
     $CC --version
     make -f ../platforms/Dos/Makefile || exit 1
-    printf "" > exit  # has to be there so dosbox will do 'exit' correctly
-    printf "" >ALLTESTS.LOG
     ../platforms/Dos/alltests.sh || exit 1
  fi
 
