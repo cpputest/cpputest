@@ -37,11 +37,11 @@ const char* failFileName = "fail.cpp";
 
 static double zero = 0.0;
 static double one = 1.0;
-static const double not_a_number = zero / zero;
-static const double infinity = one / zero;
+static double not_a_number = zero / zero;
+static double infinity = one / zero;
 
 extern "C" {
-    static int IsNanForSystemsWithoutNan(double d) { return (0.0 == d); }
+    static int IsNanForSystemsWithoutNan(double d) { return ((long)not_a_number == (long)d); }
     static int IsInfForSystemsWithoutInf(double d) { return ((long)infinity == (long)d); }
 }
 
@@ -53,9 +53,15 @@ TEST_GROUP(TestFailureNanAndInf)
     {
         test = new UtestShell("groupname", "testname", failFileName, failLineNumber-1);
         if(PlatformSpecificIsNan(not_a_number) == false)
+        {
+            not_a_number = -1.0;
             UT_PTR_SET(PlatformSpecificIsNan, IsNanForSystemsWithoutNan);
+        }
         if(PlatformSpecificIsInf(infinity) == false)
+        {
+            infinity = -2.0;
             UT_PTR_SET(PlatformSpecificIsInf, IsInfForSystemsWithoutInf);
+        }
     }
     void teardown() _override
     {
