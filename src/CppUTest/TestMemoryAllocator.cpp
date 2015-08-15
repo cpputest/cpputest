@@ -203,89 +203,89 @@ TestMemoryAllocator* NullUnknownAllocator::defaultAllocator()
     return &allocator;
 }
 
-FailableMemoryAllocator::FailableMemoryAllocator(const char* name_str, const char* alloc_name_str, const char* free_name_str)
-: TestMemoryAllocator(name_str, alloc_name_str, free_name_str)
-, toFailCount_(0), locationToFailCount_(0), currentAllocNumber_(0)
+class LocationToFailAllocNode
 {
-    PlatformSpecificMemset(allocsToFail_, 0, sizeof(allocsToFail_));
-    PlatformSpecificMemset(locationAllocsToFail_, 0, sizeof(locationAllocsToFail_));
+  public:
+    int allocNumberToFail_;
+    int actualAllocNumber_;
+    const char* file_;
+    int line_;
+    LocationToFailAllocNode* next_;
 
+    void failAtAllocNumber(int number, LocationToFailAllocNode* next)
+    {
+      init(next);
+      allocNumberToFail_ = number;
+    }
+
+    void failNthAllocAt(int allocationNumber, const char* file, int line, LocationToFailAllocNode* next)
+    {
+      init(next);
+      allocNumberToFail_ = allocationNumber;
+      file_ = file;
+      line_ = line;
+    }
+
+    bool shouldFail(int allocationNumber, const char* file, int line)
+    {
+      if (file_ && SimpleString::StrCmp(file, file_) == 0 && line == line_) {
+        actualAllocNumber_++;
+        return actualAllocNumber_ == allocNumberToFail_;
+      }
+      if (allocationNumber == allocNumberToFail_)
+        return true;
+      return false;
+    }
+
+  private:
+    void init(LocationToFailAllocNode* next = NULL)
+    {
+      allocNumberToFail_ = 0;
+      actualAllocNumber_ = 0;
+      file_ = NULL;
+      line_ = 0;
+      next_ = next;
+    }
+
+};
+
+FailableMemoryAllocator::FailableMemoryAllocator(const char* name_str, const char* alloc_name_str, const char* free_name_str)
+: TestMemoryAllocator(name_str, alloc_name_str, free_name_str), head_(NULL), currentAllocNumber_(0)
+{
 }
 
 void FailableMemoryAllocator::failAllocNumber(int number)
 {
-    failIfMaximumNumberOfFailedAllocsExceeded(toFailCount_);
-    allocsToFail_[toFailCount_++] = number;
+    LocationToFailAllocNode* newNode = (LocationToFailAllocNode*) (void*) allocMemoryLeakNode(sizeof(LocationToFailAllocNode));
+    newNode->failAtAllocNumber(number, head_);
+    head_ = newNode;
 }
 
 void FailableMemoryAllocator::failNthAllocAt(int allocationNumber, const char* file, int line)
 {
-    failIfMaximumNumberOfFailedAllocsExceeded(locationToFailCount_);
-    locationAllocsToFail_[locationToFailCount_].allocNumberToFail = allocationNumber;
-    locationAllocsToFail_[locationToFailCount_].actualAllocNumber = 0;
-    locationAllocsToFail_[locationToFailCount_].file = file;
-    locationAllocsToFail_[locationToFailCount_].line = line;
-    locationAllocsToFail_[locationToFailCount_].done = false;
-    locationToFailCount_++;
-}
-
-void FailableMemoryAllocator::failIfMaximumNumberOfFailedAllocsExceeded(int toFailCount)
-{
-    UtestShell* currentTest = UtestShell::getCurrent();
-
-    if (toFailCount >= MAX_NUMBER_OF_FAILED_ALLOCS)
-        currentTest->failWith(FailFailure(currentTest, currentTest->getName().asCharString(),
-            currentTest->getLineNumber(), "Maximum number of failed memory allocations exceeded"),
-            TestTerminatorWithoutExceptions());
+    LocationToFailAllocNode* newNode = (LocationToFailAllocNode*) (void*) allocMemoryLeakNode(sizeof(LocationToFailAllocNode));
+    newNode->failNthAllocAt(allocationNumber, file, line, head_);
+    head_ = newNode;
 }
 
 char* FailableMemoryAllocator::alloc_memory(size_t size, const char* file, int line)
 {
-    if (shouldBeFailedAlloc() || shouldBeFailedLocationAlloc(file, line))
-        return NULL;
-    return TestMemoryAllocator::alloc_memory(size, file, line);
-}
-
-bool FailableMemoryAllocator::shouldBeFailedAlloc()
-{
     currentAllocNumber_++;
-    for (int i = 0; i < toFailCount_; i++) {
-        if (currentAllocNumber_ == allocsToFail_[i]) {
-            allocsToFail_[i] = FAILED_ALLOC_DONE;
-            return true;
-        }
+    LocationToFailAllocNode* current = head_;
+    LocationToFailAllocNode* previous = NULL;
+
+    while (current) {
+      if (current->shouldFail(currentAllocNumber_, file, line)) {
+        if (previous) previous->next_ = current->next_;
+        else head_ = current->next_;
+
+        free_memory((char*) current, __FILE__, __LINE__);
+        return NULL;
+      }
+      previous = current;
+      current = current->next_;
     }
-    return false;
-}
-
-bool FailableMemoryAllocator::shouldBeFailedLocationAlloc(const char* file, int line)
-{
-    for (int i = 0; i < locationToFailCount_; i++) {
-        if (isFailedLocation(&locationAllocsToFail_[i], file, line)) {
-            locationAllocsToFail_[i].actualAllocNumber++;
-            if (locationAllocsToFail_[i].allocNumberToFail == locationAllocsToFail_[i].actualAllocNumber) {
-                locationAllocsToFail_[i].done = true;
-                return true;
-            }
-        }
-    }
-    return false;
-}
-
-bool FailableMemoryAllocator::isFailedLocation(LocationToFailAlloc* locationFail, const char* allocFile, int allocLine)
-{
-    SimpleString allocBaseName = getBaseName(allocFile);
-    SimpleString failBaseName = getBaseName(locationFail->file);
-    return allocBaseName == failBaseName && allocLine == locationFail->line;
-}
-
-SimpleString FailableMemoryAllocator::getBaseName(const char* file)
-{
-    SimpleString fileFullPath(file);
-    fileFullPath.replace('\\', '/');
-    SimpleStringCollection pathElements;
-    fileFullPath.split("/", pathElements);
-    return pathElements[pathElements.size() - 1];
+    return TestMemoryAllocator::alloc_memory(size, file, line);
 }
 
 char* FailableMemoryAllocator::allocMemoryLeakNode(size_t size)
@@ -295,42 +295,27 @@ char* FailableMemoryAllocator::allocMemoryLeakNode(size_t size)
 
 void FailableMemoryAllocator::checkAllFailedAllocsWereDone()
 {
-    failIfUndoneFailedAllocs();
-    failIfUndoneFailedLocationAllocs();
-}
+  if (head_) {
+    UtestShell* currentTest = UtestShell::getCurrent();
+    SimpleString failText;
+    if (head_->file_)
+      failText = StringFromFormat("Expected failing alloc at %s:%d was never done", head_->file_, head_->line_);
+    else
+      failText = StringFromFormat("Expected allocation number %d was never done", head_->allocNumberToFail_);
 
-void FailableMemoryAllocator::failIfUndoneFailedAllocs()
-{
-    for (int i = 0; i < toFailCount_; i++) {
-        if (allocsToFail_[i] != FAILED_ALLOC_DONE) {
-            UtestShell* currentTest = UtestShell::getCurrent();
-            SimpleString failText = StringFromFormat("Expected allocation number %d was never done", allocsToFail_[i]);
-            currentTest->failWith(FailFailure(currentTest, currentTest->getName().asCharString(),
-                    currentTest->getLineNumber(), failText), TestTerminatorWithoutExceptions());
-        }
-    }
-}
-
-void FailableMemoryAllocator::failIfUndoneFailedLocationAllocs()
-{
-    for (int i = 0; i < locationToFailCount_; i++) {
-        if (!locationAllocsToFail_[i].done) {
-            UtestShell* currentTest = UtestShell::getCurrent();
-            SimpleString failText = StringFromFormat("Expected failing alloc at %s:%d was never done",
-                    locationAllocsToFail_[i].file,
-                    locationAllocsToFail_[i].line);
-            currentTest->failWith(FailFailure(currentTest, currentTest->getName().asCharString(),
-                    currentTest->getLineNumber(), failText), TestTerminatorWithoutExceptions());
-        }
-    }
+    currentTest->failWith(FailFailure(currentTest, currentTest->getName().asCharString(),
+    currentTest->getLineNumber(), failText), TestTerminatorWithoutExceptions());
+  }
 }
 
 void FailableMemoryAllocator::clearFailedAllocs()
 {
-    toFailCount_ = 0;
-    locationToFailCount_ = 0;
-    currentAllocNumber_ = 0;
-    PlatformSpecificMemset(allocsToFail_, 0, sizeof(allocsToFail_));
-    PlatformSpecificMemset(locationAllocsToFail_, 0, sizeof(locationAllocsToFail_));
+  LocationToFailAllocNode* current = head_;
+  while (current) {
+    head_ = current->next_;
+    free_memory((char*) current, __FILE__, __LINE__);
+    current = head_;
+  }
+  currentAllocNumber_ = 0;
 }
 
