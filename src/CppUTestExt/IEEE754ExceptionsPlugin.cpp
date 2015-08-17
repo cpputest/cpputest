@@ -33,7 +33,7 @@
 #include <cfenv>
 
 #define IEEE754_CHECK_CLEAR(flag) { \
-    if(!hasFailed_) { \
+    if(/*willRun_ &&*/ !hasFailed_) { \
         result_->countCheck(); \
         if(flag) { \
             CheckFailure failure(test_, __FILE__, __LINE__, "IEEE754_CHECK_CLEAR", #flag); \
@@ -50,16 +50,15 @@ void IEEE754ExceptionsPlugin::preTestAction(UtestShell&, TestResult&)
 
 void IEEE754ExceptionsPlugin::postTestAction(UtestShell& test, TestResult& result)
 {
-    if (test.willRun()) {
-        hasFailed_ = test.hasFailed();
-        test_ = &test;
-        result_ = &result;
-        IEEE754_CHECK_CLEAR(std::fetestexcept(FE_DIVBYZERO));
-        IEEE754_CHECK_CLEAR(std::fetestexcept(FE_OVERFLOW));
-        IEEE754_CHECK_CLEAR(std::fetestexcept(FE_UNDERFLOW));
-        IEEE754_CHECK_CLEAR(std::fetestexcept(FE_INVALID));
-        IEEE754_CHECK_CLEAR(std::fetestexcept(FE_INEXACT));
-    }
+    willRun_ = test.willRun();
+    hasFailed_ = test.hasFailed();
+    test_ = &test;
+    result_ = &result;
+    IEEE754_CHECK_CLEAR(std::fetestexcept(FE_DIVBYZERO));
+    IEEE754_CHECK_CLEAR(std::fetestexcept(FE_OVERFLOW));
+    IEEE754_CHECK_CLEAR(std::fetestexcept(FE_UNDERFLOW));
+    IEEE754_CHECK_CLEAR(std::fetestexcept(FE_INVALID));
+    IEEE754_CHECK_CLEAR(std::fetestexcept(FE_INEXACT));
 }
 
 #endif

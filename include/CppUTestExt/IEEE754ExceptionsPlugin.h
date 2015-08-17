@@ -39,6 +39,7 @@ public:
     virtual void postTestAction(UtestShell& test, TestResult& result) _override;
 
 private:
+    bool willRun_;
     bool hasFailed_;
     UtestShell* test_;
     TestResult* result_;

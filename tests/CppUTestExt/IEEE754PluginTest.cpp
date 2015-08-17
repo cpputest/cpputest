@@ -108,4 +108,18 @@ TEST(IEEE754ExceptionsPlugin, should_not_fail_again_when_test_has_already_failed
     LONGS_EQUAL(1, fixture.getFailureCount());
 }
 
+static IEEE754ExceptionsPlugin ip{"IEEE754"};
+
+TEST_GROUP(IEEE754ExceptionsPlugin2) {
+    
+    TestRegistry* registry = TestRegistry::getCurrentRegistry();
+    void setup(void) override {
+        registry->installPlugin(&ip);
+    }
+};
+
+TEST(IEEE754ExceptionsPlugin, should_not_fail_in_ignored_test) {
+    set_everything_c();
+}
+
 #endif
