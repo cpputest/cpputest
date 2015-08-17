@@ -45,7 +45,7 @@ void set_underflow_c(void) {
 }
 
 void set_invalid_c(void) {
-    float f = sqrt(-1.0f);
+    float f = (float) sqrt(-1.0f);
     (void) f;
 }
 
