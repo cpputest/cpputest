@@ -206,7 +206,7 @@ static void crashOnFailureTestFunction_(void)
 
 #include "CppUTestExt/OrderedTest.h"
 
-TEST_ORDERED(MockSupportTestWithFixture, shouldCrashOnFailure, 10)
+TEST(MockSupportTestWithFixture, shouldCrashOnFailure)
 {
     mock().crashOnFailure(true);
     UtestShell::setCrashMethod(crashMethod);
@@ -220,17 +220,16 @@ TEST_ORDERED(MockSupportTestWithFixture, shouldCrashOnFailure, 10)
     UtestShell::resetCrashMethod();
 }
 
-TEST_ORDERED(MockSupportTestWithFixture, nextTestShouldNotCrashOnFailure, 11)
+TEST(MockSupportTestWithFixture, ShouldNotCrashOnFailureAfterCrashMethodWasReset)
 {
     cpputestHasCrashed = false;
     UtestShell::setCrashMethod(crashMethod);
     fixture.setTestFunction(crashOnFailureTestFunction_);
+    UtestShell::resetCrashMethod();
 
     fixture.runAllTests();
 
     fixture.assertPrintContains("Unexpected call to function: unexpected");
     CHECK_FALSE(cpputestHasCrashed);
-
-    UtestShell::resetCrashMethod();
 }
 
