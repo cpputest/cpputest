@@ -88,6 +88,7 @@ lib_libCppUTestExt_a_CXXFLAGS = $(lib_libCppUTest_a_CXXFLAGS)
 
 lib_libCppUTestExt_a_SOURCES = \
    src/CppUTestExt/CodeMemoryReportFormatter.cpp \
+   src/CppUTestExt/IEEE754ExceptionsPlugin.cpp \
    src/CppUTestExt/MemoryReportAllocator.cpp \
    src/CppUTestExt/MemoryReporterPlugin.cpp \
    src/CppUTestExt/MemoryReportFormatter.cpp \
@@ -108,6 +109,7 @@ include_cpputestext_HEADERS = \
 	include/CppUTestExt/GMock.h \
 	include/CppUTestExt/GTest.h \
 	include/CppUTestExt/GTestConvertor.h \
+	include/CppUTestExt/IEEE754ExceptionsPlugin.h \
 	include/CppUTestExt/MemoryReportAllocator.h \
 	include/CppUTestExt/MemoryReporterPlugin.h \
 	include/CppUTestExt/MemoryReportFormatter.h \
@@ -176,6 +178,8 @@ CppUTestExtTests_SOURCES = \
 	tests/CppUTestExt/GMockTest.cpp \
 	tests/CppUTestExt/GTest1Test.cpp \
 	tests/CppUTestExt/GTest2ConvertorTest.cpp \
+	tests/CppUTestExt/IEEE754PluginTest.cpp \
+	tests/CppUTestExt/IEEE754PluginTest_c.c \
 	tests/CppUTestExt/MemoryReportAllocatorTest.cpp \
 	tests/CppUTestExt/MemoryReporterPluginTest.cpp \
 	tests/CppUTestExt/MemoryReportFormatterTest.cpp \

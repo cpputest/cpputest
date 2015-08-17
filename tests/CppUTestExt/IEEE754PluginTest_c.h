@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Michael Feathers, James Grenning, Bas Vodde
- * and Arnd Strube. All rights reserved.
+ * and Arnd R. Strube. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -25,23 +25,9 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef D_IEEE754ExceptionFlagsPlugin_h
-#define D_IEEE754ExceptionFlagsPlugin_h
-
-#include "CppUTest/TestPlugin.h"
-
-class IEEE754ExceptionFlagsPlugin: public TestPlugin
-{
-public:
-    IEEE754ExceptionFlagsPlugin(const SimpleString& name) : TestPlugin(name), hasFailed_(false) {}
-    
-    virtual void preTestAction(UtestShell& test, TestResult& result) _override;
-    virtual void postTestAction(UtestShell& test, TestResult& result) _override;
-
-private:
-    bool hasFailed_;
-    UtestShell* test_;
-    TestResult* result_;
-};
-
-#endif
+void set_divisionbyzero_c(void);
+void set_overflow_c(void);
+void set_underflow_c(void);
+void set_invalid_c(void);
+void set_nothing_c(void);
+void set_everything_c(void);

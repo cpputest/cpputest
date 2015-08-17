@@ -25,10 +25,41 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-void set_divisionbyzero_c(void);
-void set_overflow_c(void);
-void set_underflow_c(void);
-void set_invalid_c(void);
-void set_inexact_c(void);
-void set_nothing_c(void);
-void set_everything_c(void);
+#include "IEEE754PluginTest_c.h"
+#include <math.h>
+
+void set_divisionbyzero_c(void) {
+    float f = 1.0f;
+    f /= 0.0f;
+    (void) f;
+}
+
+void set_overflow_c(void) {
+    float f = 1000.0f;
+    while (f < INFINITY) f *= f;
+}
+
+void set_underflow_c(void) {
+    float f = 0.01f;
+    while (f > 0.0f) f *= f;
+}
+
+void set_invalid_c(void) {
+    float f = sqrt(-1.0f);
+    (void) f;
+}
+
+void set_inexact_c(void) {
+    /* Clang ignores -frounding-math, so this flag cannot be provoked */
+}
+
+void set_nothing_c(void) {
+}
+
+void set_everything_c() {
+    set_divisionbyzero_c();
+    set_overflow_c();
+    set_underflow_c();
+    set_invalid_c();
+    set_inexact_c();
+}

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2015, Michael Feathers, James Grenning, Bas Vodde
- * and Arnd R. Strube. All rights reserved.
+ * and Arnd Strube. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -25,35 +25,23 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "CppUTest/TestHarness.h"
-#include "IEEE754ExceptionFlagsPlugin.h"
+#ifndef D_IEEE754ExceptionsPlugin_h
+#define D_IEEE754ExceptionsPlugin_h
 
-#include <cfenv>
+#include "CppUTest/TestPlugin.h"
 
-#define IEEE754_CHECK_CLEAR(flag) { \
-    if(!hasFailed_) { \
-        result_->countCheck(); \
-        if(flag) { \
-            CheckFailure failure(test_, __FILE__, __LINE__, "IEEE754_CHECK_CLEAR", #flag); \
-            result_->addFailure(failure); \
-            hasFailed_ = true; \
-        } \
-    } \
-}
-
-void IEEE754ExceptionFlagsPlugin::preTestAction(UtestShell&, TestResult&)
+class IEEE754ExceptionsPlugin: public TestPlugin
 {
-    std::feclearexcept(FE_ALL_EXCEPT);
-}
+public:
+    IEEE754ExceptionsPlugin(const SimpleString& name) : TestPlugin(name), hasFailed_(false) {}
+    
+    virtual void preTestAction(UtestShell& test, TestResult& result) _override;
+    virtual void postTestAction(UtestShell& test, TestResult& result) _override;
 
-void IEEE754ExceptionFlagsPlugin::postTestAction(UtestShell& test, TestResult& result)
-{
-    hasFailed_ = test.hasFailed();
-    test_ = &test;
-    result_ = &result;
-    IEEE754_CHECK_CLEAR(std::fetestexcept(FE_DIVBYZERO));
-    IEEE754_CHECK_CLEAR(std::fetestexcept(FE_OVERFLOW));
-    IEEE754_CHECK_CLEAR(std::fetestexcept(FE_UNDERFLOW));
-    IEEE754_CHECK_CLEAR(std::fetestexcept(FE_INVALID));
-    IEEE754_CHECK_CLEAR(std::fetestexcept(FE_INEXACT));
-}
+private:
+    bool hasFailed_;
+    UtestShell* test_;
+    TestResult* result_;
+};
+
+#endif

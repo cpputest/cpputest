@@ -25,42 +25,39 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "FETests_c.h"
-#include <math.h>
-#include <fenv.h>
+#if defined(__cplusplus) && ((__cplusplus >= 201103L) || (defined(_MSC_VER) && (_MSC_VER >= 1600)))
 
-void set_divisionbyzero_c(void) {
-    float f = 1.0f;
-    f /= 0.0f;
-    (void) f;
+#include "CppUTest/TestHarness.h"
+#include "CppUTestExt/IEEE754ExceptionsPlugin.h"
+
+#include <cfenv>
+
+#define IEEE754_CHECK_CLEAR(flag) { \
+    if(!hasFailed_) { \
+        result_->countCheck(); \
+        if(flag) { \
+            CheckFailure failure(test_, __FILE__, __LINE__, "IEEE754_CHECK_CLEAR", #flag); \
+            result_->addFailure(failure); \
+            hasFailed_ = true; \
+        } \
+    } \
 }
 
-void set_overflow_c(void) {
-    float f = 1000.0f;
-    while (f < INFINITY) f *= f;
+void IEEE754ExceptionsPlugin::preTestAction(UtestShell&, TestResult&)
+{
+    std::feclearexcept(FE_ALL_EXCEPT);
 }
 
-void set_underflow_c(void) {
-    float f = 0.01f;
-    while (f > 0.0f) f *= f;
+void IEEE754ExceptionsPlugin::postTestAction(UtestShell& test, TestResult& result)
+{
+    hasFailed_ = test.hasFailed();
+    test_ = &test;
+    result_ = &result;
+    IEEE754_CHECK_CLEAR(std::fetestexcept(FE_DIVBYZERO));
+    IEEE754_CHECK_CLEAR(std::fetestexcept(FE_OVERFLOW));
+    IEEE754_CHECK_CLEAR(std::fetestexcept(FE_UNDERFLOW));
+    IEEE754_CHECK_CLEAR(std::fetestexcept(FE_INVALID));
+    IEEE754_CHECK_CLEAR(std::fetestexcept(FE_INEXACT));
 }
 
-void set_invalid_c(void) {
-    float f = sqrt(-1.0f);
-    (void) f;
-}
-
-void set_inexact_c(void) {
-    feraiseexcept(FE_INEXACT); /* Clang ignores -frounding-math */
-}
-
-void set_nothing_c(void) {
-}
-
-void set_everything_c() {
-    set_divisionbyzero_c();
-    set_overflow_c();
-    set_underflow_c();
-    set_invalid_c();
-    set_inexact_c();
-}
+#endif

@@ -25,20 +25,24 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+/* The IEEE754ExceptionFlags plugin by definition requires C++11 */
+
+#if defined(__cplusplus) && ((__cplusplus >= 201103L) || (defined(_MSC_VER) && (_MSC_VER >= 1600)))
+
 #include "CppUTest/CommandLineTestRunner.h"
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TestRegistry.h"
 #include "CppUTest/TestTestingFixture.h"
-#include "IEEE754ExceptionFlagsPlugin.h"
+#include "CppUTestExt/IEEE754ExceptionsPlugin.h"
 #include <cfenv>
 
 extern "C" { 
-    #include "FETests_c.h"
+    #include "IEEE754PluginTest_c.h"
 }
 
 TEST_GROUP(FE__with_Plugin) {
     TestTestingFixture fixture;
-    IEEE754ExceptionFlagsPlugin ieee754Plugin{"IEEE754"};
+    IEEE754ExceptionsPlugin ieee754Plugin{"IEEE754"};
     void setup(void) override {
         fixture.registry_->installPlugin(&ieee754Plugin);
     }
@@ -68,7 +72,7 @@ TEST(FE__with_Plugin, should_fail_when__FE_INVALID____is_set) {
     fixture.assertPrintContains("IEEE754_CHECK_CLEAR(std::fetestexcept(FE_INVALID)) failed");
 }
 
-TEST(FE__with_Plugin, should_fail_when__FE_INEXACT____is_set) {
+IGNORE_TEST(FE__with_Plugin, should_fail_when__FE_INEXACT____is_set) {
     fixture.setTestFunction(set_inexact_c);
     fixture.runAllTests();
     fixture.assertPrintContains("IEEE754_CHECK_CLEAR(std::fetestexcept(FE_INEXACT)) failed");
@@ -107,3 +111,5 @@ TEST(FE__with_Plugin, should_not_fail_again_when_test_has_already_failed) {
 int main(int ac, char** av) {
 	return RUN_ALL_TESTS(ac, av);
 }
+
+#endif
