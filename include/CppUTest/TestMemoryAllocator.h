@@ -102,7 +102,6 @@ class FailableMemoryAllocator: public TestMemoryAllocator
 {
 public:
     FailableMemoryAllocator(const char* name_str = "failable alloc", const char* alloc_name_str = "alloc", const char* free_name_str = "free");
-    virtual ~FailableMemoryAllocator() {}
 
     virtual char* alloc_memory(size_t size, const char* file, int line);
     virtual char* allocMemoryLeakNode(size_t size);

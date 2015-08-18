@@ -65,7 +65,6 @@ public:
 
     MockFunctionComparator(isEqualFunction equal, valueToStringFunction valToString)
         : equal_(equal), valueToString_(valToString) {}
-    virtual ~MockFunctionComparator(){}
 
     virtual bool isEqual(const void* object1, const void* object2) _override { return equal_(object1, object2); }
     virtual SimpleString valueToString(const void* object) _override { return valueToString_(object); }
@@ -80,7 +79,6 @@ public:
     typedef void (*copyFunction)(void*, const void*);
 
     MockFunctionCopier(copyFunction copier) : copier_(copier) {}
-    virtual ~MockFunctionCopier(){}
 
     virtual void copy(void* dst, const void* src) _override { copier_(dst, src); }
 
