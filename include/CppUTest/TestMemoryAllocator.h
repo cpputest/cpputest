@@ -96,41 +96,26 @@ public:
     static TestMemoryAllocator* defaultAllocator();
 };
 
-
-struct LocationToFailAlloc
-{
-    int allocNumberToFail;
-    int actualAllocNumber;
-    const char* file;
-    int line;
-    bool done;
-};
+class LocationToFailAllocNode;
 
 class FailableMemoryAllocator: public TestMemoryAllocator
 {
 public:
-    enum {MAX_NUMBER_OF_FAILED_ALLOCS = 10};
     FailableMemoryAllocator(const char* name_str = "failable alloc", const char* alloc_name_str = "alloc", const char* free_name_str = "free");
+
     virtual char* alloc_memory(size_t size, const char* file, int line);
     virtual char* allocMemoryLeakNode(size_t size);
+
     virtual void failAllocNumber(int number);
     virtual void failNthAllocAt(int allocationNumber, const char* file, int line);
+
     virtual void checkAllFailedAllocsWereDone();
     virtual void clearFailedAllocs();
+
 protected:
-    virtual bool shouldBeFailedAlloc();
-    virtual bool shouldBeFailedLocationAlloc(const char* file, int line);
-    virtual bool isFailedLocation(LocationToFailAlloc* locationFail, const char* allocFile, int allocLine);
-    virtual SimpleString getBaseName(const char* file);
-    virtual void failIfMaximumNumberOfFailedAllocsExceeded(int toFailCount);
-    virtual void failIfUndoneFailedAllocs();
-    virtual void failIfUndoneFailedLocationAllocs();
-    int allocsToFail_[MAX_NUMBER_OF_FAILED_ALLOCS];
-    LocationToFailAlloc locationAllocsToFail_[MAX_NUMBER_OF_FAILED_ALLOCS];
-    int toFailCount_;
-    int locationToFailCount_;
+
+    LocationToFailAllocNode* head_;
     int currentAllocNumber_;
-    enum {FAILED_ALLOC_DONE = 0};
 };
 
 #endif

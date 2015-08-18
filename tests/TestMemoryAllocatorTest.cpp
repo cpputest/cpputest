@@ -186,23 +186,6 @@ TEST(FailableMemoryAllocator, FailSecondAndFourthMalloc)
     free(memory3);
 }
 
-static void _setUpTooManyFailedAllocs()
-{
-    FailableMemoryAllocator allocator;
-    for (int i = 0; i <= allocator.MAX_NUMBER_OF_FAILED_ALLOCS; i++)
-        allocator.failAllocNumber(i + 1);
-}
-
-TEST(FailableMemoryAllocator, SettingUpTooManyFailedAllocsWillFail)
-{
-    fixture->setTestFunction(_setUpTooManyFailedAllocs);
-
-    fixture->runAllTests();
-
-    LONGS_EQUAL(1, fixture->getFailureCount());
-    fixture->assertPrintContains("Maximum number of failed memory allocations exceeded");
-}
-
 static void _failingAllocIsNeverDone()
 {
     failableMallocAllocator.failAllocNumber(1);
@@ -246,23 +229,6 @@ TEST(FailableMemoryAllocator, FailThirdAllocationAtGivenLine)
 
     LONGS_EQUAL(3, allocation);
     free(memory[0]); free(memory[1]);
-}
-
-static void _setUpTooManyFailedLocationAllocs()
-{
-    FailableMemoryAllocator allocator;
-    for (int i = 0; i <= allocator.MAX_NUMBER_OF_FAILED_ALLOCS; i++)
-        allocator.failNthAllocAt(i + 1, "foo.cpp", 100 + 1);
-}
-
-TEST(FailableMemoryAllocator, SettingUpTooManyFailingLocationAllocsWillFail)
-{
-    fixture->setTestFunction(_setUpTooManyFailedLocationAllocs);
-
-    fixture->runAllTests();
-
-    LONGS_EQUAL(1, fixture->getFailureCount());
-    fixture->assertPrintContains("Maximum number of failed memory allocations exceeded");
 }
 
 static void _failingLocationAllocIsNeverDone()
