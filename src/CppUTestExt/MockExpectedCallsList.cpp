@@ -28,7 +28,7 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTestExt/MockExpectedCallsList.h"
 #include "CppUTestExt/MockCheckedExpectedCall.h"
-#include <cassert>
+#include <assert.h>
 
 MockExpectedCallsList::MockExpectedCallsList() : head_(NULL), tail_(NULL)
 {
@@ -147,7 +147,7 @@ void MockExpectedCallsList::addExpectations(const MockExpectedCallsList& list)
 // of pruneEmptyNodeFromList(), and letting the "parent = p" execute normally in the for loop).
 //
 // You need to close the curly bracket after the processing step.
-#define ITERATE_WITH_PREV_AND_NEXT \
+#define ITERATE_WITH_PARENT_AND_NEXT \
     for (MockExpectedCallsListNode* p = head_, *parent = NULL, *next; p; parent = p, p = next) {\
         next = p->next_;
 
@@ -174,7 +174,7 @@ void MockExpectedCallsList::pruneEmptyNodeFromList(MockExpectedCallsListNode*& p
 
 void MockExpectedCallsList::onlyKeepExpectationsRelatedTo(const SimpleString& name)
 {
-    ITERATE_WITH_PREV_AND_NEXT
+    ITERATE_WITH_PARENT_AND_NEXT
         if (! p->expectedCall_->relatesTo(name)) {
             p->expectedCall_ = NULL;
             pruneEmptyNodeFromList(parent, p);
@@ -184,7 +184,7 @@ void MockExpectedCallsList::onlyKeepExpectationsRelatedTo(const SimpleString& na
 
 void MockExpectedCallsList::onlyKeepUnfulfilledExpectations()
 {
-    ITERATE_WITH_PREV_AND_NEXT
+    ITERATE_WITH_PARENT_AND_NEXT
         if (p->expectedCall_->isFulfilled())
         {
             p->expectedCall_->resetExpectation();
@@ -196,7 +196,7 @@ void MockExpectedCallsList::onlyKeepUnfulfilledExpectations()
 
 void MockExpectedCallsList::onlyKeepExpectationsWithInputParameterName(const SimpleString& name)
 {
-    ITERATE_WITH_PREV_AND_NEXT
+    ITERATE_WITH_PARENT_AND_NEXT
         if (! p->expectedCall_->hasInputParameterWithName(name)) {
             p->expectedCall_ = NULL;
             pruneEmptyNodeFromList(parent, p);
@@ -206,7 +206,7 @@ void MockExpectedCallsList::onlyKeepExpectationsWithInputParameterName(const Sim
 
 void MockExpectedCallsList::onlyKeepExpectationsWithOutputParameterName(const SimpleString& name)
 {
-    ITERATE_WITH_PREV_AND_NEXT
+    ITERATE_WITH_PARENT_AND_NEXT
         if (! p->expectedCall_->hasOutputParameterWithName(name)) {
             p->expectedCall_ = NULL;
             pruneEmptyNodeFromList(parent, p);
@@ -216,7 +216,7 @@ void MockExpectedCallsList::onlyKeepExpectationsWithOutputParameterName(const Si
 
 void MockExpectedCallsList::onlyKeepExpectationsWithInputParameter(const MockNamedValue& parameter)
 {
-    ITERATE_WITH_PREV_AND_NEXT
+    ITERATE_WITH_PARENT_AND_NEXT
         if (! p->expectedCall_->hasInputParameter(parameter)) {
             p->expectedCall_ = NULL;
             pruneEmptyNodeFromList(parent, p);
@@ -226,7 +226,7 @@ void MockExpectedCallsList::onlyKeepExpectationsWithInputParameter(const MockNam
 
 void MockExpectedCallsList::onlyKeepExpectationsWithOutputParameter(const MockNamedValue& parameter)
 {
-    ITERATE_WITH_PREV_AND_NEXT
+    ITERATE_WITH_PARENT_AND_NEXT
         if (! p->expectedCall_->hasOutputParameter(parameter)) {
             p->expectedCall_ = NULL;
             pruneEmptyNodeFromList(parent, p);
@@ -236,7 +236,7 @@ void MockExpectedCallsList::onlyKeepExpectationsWithOutputParameter(const MockNa
 
 void MockExpectedCallsList::onlyKeepExpectationsOnObject(void* objectPtr)
 {
-    ITERATE_WITH_PREV_AND_NEXT
+    ITERATE_WITH_PARENT_AND_NEXT
         if (! p->expectedCall_->relatesToObject(objectPtr)) {
             p->expectedCall_ = NULL;
             pruneEmptyNodeFromList(parent, p);
@@ -246,7 +246,7 @@ void MockExpectedCallsList::onlyKeepExpectationsOnObject(void* objectPtr)
 
 MockCheckedExpectedCall* MockExpectedCallsList::removeOneFulfilledExpectation()
 {
-    ITERATE_WITH_PREV_AND_NEXT
+    ITERATE_WITH_PARENT_AND_NEXT
         if (p->expectedCall_->isFulfilled()) {
             MockCheckedExpectedCall* fulfilledCall = p->expectedCall_;
             p->expectedCall_ = NULL;
@@ -269,7 +269,7 @@ MockCheckedExpectedCall* MockExpectedCallsList::getOneFulfilledExpectationWithIg
 
 MockCheckedExpectedCall* MockExpectedCallsList::removeOneFulfilledExpectationWithIgnoredParameters()
 {
-    ITERATE_WITH_PREV_AND_NEXT
+    ITERATE_WITH_PARENT_AND_NEXT
         if (p->expectedCall_->isFulfilledWithoutIgnoredParameters()) {
             MockCheckedExpectedCall* fulfilledCall = p->expectedCall_;
             p->expectedCall_->parametersWereIgnored();
