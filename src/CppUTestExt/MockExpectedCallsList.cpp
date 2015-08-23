@@ -28,7 +28,6 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTestExt/MockExpectedCallsList.h"
 #include "CppUTestExt/MockCheckedExpectedCall.h"
-#include <assert.h>
 
 MockExpectedCallsList::MockExpectedCallsList() : head_(NULL), tail_(NULL)
 {
@@ -154,18 +153,13 @@ void MockExpectedCallsList::addExpectations(const MockExpectedCallsList& list)
 
 void MockExpectedCallsList::pruneEmptyNodeFromList(MockExpectedCallsListNode*& parent,
                                                    MockExpectedCallsListNode*& p) {
-    assert(p);
-    assert(p->expectedCall_ == NULL);
     if (!parent) {
-        assert(head_ == p);
         head_ = p->next_;
     } else {
-        assert(parent->next_ == p);
         parent->next_ = p->next_;
     }
     if (tail_ == p) {   // we're removing the tail
         tail_ = parent;
-        assert(parent || (head_ == NULL));
     }
     delete p;
     p = parent;     // so that parent doesn't advance in the next iteration
