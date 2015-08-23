@@ -78,7 +78,6 @@ public:
     virtual SimpleString missingParametersToString() const;
 
 protected:
-    virtual void pruneEmptyNodeFromList();
 
     class MockExpectedCallsListNode
     {
@@ -91,8 +90,12 @@ protected:
     };
 
     virtual MockExpectedCallsListNode* findNodeWithCallOrderOf(int callOrder) const;
+    virtual void pruneEmptyNodeFromList(MockExpectedCallsListNode*& parent,
+                                        MockExpectedCallsListNode*& p);
 private:
     MockExpectedCallsListNode* head_;
+    // we maintain a pointer to the last element in order to provide O(1) insertion
+    MockExpectedCallsListNode* tail_;
 
     MockExpectedCallsList(const MockExpectedCallsList&);
 };
