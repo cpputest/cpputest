@@ -55,6 +55,11 @@ void CHECK_EQUAL_C_STRING_LOCATION(const char* expected, const char* actual, con
     UtestShell::getCurrent()->assertCstrEqual(expected, actual, NULL, fileName, lineNumber, TestTerminatorWithoutExceptions());
 }
 
+void CHECK_EQUAL_C_POINTER_LOCATION(const void* expected, const void* actual, const char* fileName, int lineNumber)
+{
+    UtestShell::getCurrent()->assertPointersEqual(expected, actual, NULL, fileName, lineNumber, TestTerminatorWithoutExceptions());
+}
+
 void FAIL_TEXT_C_LOCATION(const char* text, const char* fileName, int lineNumber)
 {
     UtestShell::getCurrent()->fail(text,  fileName, lineNumber, TestTerminatorWithoutExceptions());
