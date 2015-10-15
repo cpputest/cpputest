@@ -52,6 +52,8 @@ public:
     virtual MockActualCall& withParameterOfType(const SimpleString& type, const SimpleString& name, const void* value) _override;
     virtual MockActualCall& withOutputParameter(const SimpleString& name, void* output) _override;
     virtual MockActualCall& withOutputParameterOfType(const SimpleString& type, const SimpleString& name, void* output) _override;
+    virtual MockActualCall& withInputParameter(const SimpleString& name, const void* output) _override;
+    virtual MockActualCall& withInputParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* output) _override;
 
     virtual bool hasReturnValue() _override;
     virtual MockNamedValue returnValue() _override;
@@ -144,6 +146,8 @@ private:
     MockOutputParametersListNode* outputParameterExpectations_;
 
     virtual void addOutputParameter(const SimpleString& name, const SimpleString& type, void* ptr);
+    virtual void addOutputParameter(const SimpleString& name, const SimpleString& type, const void* constPtr);
+    virtual void addOutputParameterNode(MockOutputParametersListNode *newNode);
     virtual void cleanUpOutputParameterList();
 };
 
@@ -168,6 +172,8 @@ public:
     virtual MockActualCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value) _override;
     virtual MockActualCall& withOutputParameter(const SimpleString& name, void* output) _override;
     virtual MockActualCall& withOutputParameterOfType(const SimpleString& typeName, const SimpleString& name, void* output) _override;
+    virtual MockActualCall& withInputParameter(const SimpleString& name, const void* output) _override;
+    virtual MockActualCall& withInputParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* output) _override;
 
     virtual bool hasReturnValue() _override;
     virtual MockNamedValue returnValue() _override;
@@ -229,6 +235,8 @@ public:
     virtual MockActualCall& withParameterOfType(const SimpleString&, const SimpleString&, const void*) _override { return *this; }
     virtual MockActualCall& withOutputParameter(const SimpleString&, void*) _override { return *this; }
     virtual MockActualCall& withOutputParameterOfType(const SimpleString&, const SimpleString&, void*) _override { return *this; }
+    virtual MockActualCall& withInputParameter(const SimpleString&, const void*) _override { return *this; }
+    virtual MockActualCall& withInputParameterOfType(const SimpleString&, const SimpleString&, const void*) _override { return *this; }
 
     virtual bool hasReturnValue() _override { return false; }
     virtual MockNamedValue returnValue() _override { return MockNamedValue(""); }

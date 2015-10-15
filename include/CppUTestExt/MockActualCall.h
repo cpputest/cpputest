@@ -56,6 +56,8 @@ public:
     virtual MockActualCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value)=0;
     virtual MockActualCall& withOutputParameter(const SimpleString& name, void* output)=0;
     virtual MockActualCall& withOutputParameterOfType(const SimpleString& typeName, const SimpleString& name, void* output)=0;
+    virtual MockActualCall& withInputParameter(const SimpleString& name, const void* output)=0;
+    virtual MockActualCall& withInputParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* output)=0;
 
     virtual MockActualCall& withIntParameter(const SimpleString& name, int value)=0;
     virtual MockActualCall& withUnsignedIntParameter(const SimpleString& name, unsigned int value)=0;

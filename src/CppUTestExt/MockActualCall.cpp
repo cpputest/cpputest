@@ -326,6 +326,28 @@ MockActualCall& MockCheckedActualCall::withOutputParameterOfType(const SimpleStr
     return *this;
 }
 
+MockActualCall& MockCheckedActualCall::withInputParameter(const SimpleString& name, const void* output)
+{
+    addOutputParameter(name, "const void*", output);
+
+    MockNamedValue outputParameter(name);
+    outputParameter.setValue(output);
+    checkOutputParameter(outputParameter);
+
+    return *this;
+}
+
+MockActualCall& MockCheckedActualCall::withInputParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* output)
+{
+    addOutputParameter(name, typeName, output);
+
+    MockNamedValue outputParameter(name);
+    outputParameter.setConstObjectPointer(typeName, output);
+    checkOutputParameter(outputParameter);
+
+    return *this;
+}
+
 bool MockCheckedActualCall::isFulfilled() const
 {
     return state_ == CALL_SUCCEED;
@@ -519,8 +541,16 @@ MockActualCall& MockCheckedActualCall::onObject(void* objectPtr)
 
 void MockCheckedActualCall::addOutputParameter(const SimpleString& name, const SimpleString& type, void* ptr)
 {
-    MockOutputParametersListNode* newNode = new MockOutputParametersListNode(name, type, ptr);
+    addOutputParameterNode(new MockOutputParametersListNode(name, type, ptr));
+}
 
+void MockCheckedActualCall::addOutputParameter(const SimpleString& name, const SimpleString& type, const void* constPtr)
+{
+    addOutputParameterNode(new MockOutputParametersListNode(name, type, constPtr));
+}
+
+void MockCheckedActualCall::addOutputParameterNode(MockOutputParametersListNode *newNode)
+{
     if (outputParameterExpectations_ == NULL)
         outputParameterExpectations_ = newNode;
     else {
@@ -659,6 +689,22 @@ MockActualCall& MockActualCallTrace::withOutputParameter(const SimpleString& nam
 }
 
 MockActualCall& MockActualCallTrace::withOutputParameterOfType(const SimpleString& typeName, const SimpleString& name, void* output)
+{
+    traceBuffer_ += " ";
+    traceBuffer_ += typeName;
+    addParameterName(name);
+    traceBuffer_ += StringFrom(output);
+    return *this;
+}
+
+MockActualCall& MockActualCallTrace::withInputParameter(const SimpleString& name, const void* output)
+{
+    addParameterName(name);
+    traceBuffer_ += StringFrom(output);
+    return *this;
+}
+
+MockActualCall& MockActualCallTrace::withInputParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* output)
 {
     traceBuffer_ += " ";
     traceBuffer_ += typeName;

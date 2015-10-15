@@ -178,6 +178,23 @@ MockExpectedCall& MockCheckedExpectedCall::withOutputParameterOfTypeReturning(co
     return *this;
 }
 
+MockExpectedCall& MockCheckedExpectedCall::withInputParameterForwarding(const SimpleString& name, void* value, size_t size)
+{
+    MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
+    outputParameters_->add(newParameter);
+    newParameter->setValue(value);
+    newParameter->setSize(size);
+    return *this;
+}
+
+MockExpectedCall& MockCheckedExpectedCall::withInputParameterOfTypeForwarding(const SimpleString& typeName, const SimpleString& name, void* value)
+{
+    MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
+    outputParameters_->add(newParameter);
+    newParameter->setObjectPointer(typeName, value);
+    return *this;
+}
+
 SimpleString MockCheckedExpectedCall::getInputParameterType(const SimpleString& name)
 {
     MockNamedValue * p = inputParameters_->getValueByName(name);
@@ -625,6 +642,20 @@ MockExpectedCall& MockExpectedCallComposite::withOutputParameterOfTypeReturning(
 {
     for (MockExpectedCallCompositeNode* node = head_; node != NULL; node = node->next_)
         node->call_.withOutputParameterOfTypeReturning(typeName, name, value);
+    return *this;
+}
+
+MockExpectedCall& MockExpectedCallComposite::withInputParameterForwarding(const SimpleString& name, void* value, size_t size)
+{
+    for (MockExpectedCallCompositeNode* node = head_; node != NULL; node = node->next_)
+        node->call_.withInputParameterForwarding(name, value, size);
+    return *this;
+}
+
+MockExpectedCall& MockExpectedCallComposite::withInputParameterOfTypeForwarding(const SimpleString& typeName, const SimpleString& name, void* value)
+{
+    for (MockExpectedCallCompositeNode* node = head_; node != NULL; node = node->next_)
+        node->call_.withInputParameterOfTypeForwarding(typeName, name, value);
     return *this;
 }
 

@@ -145,6 +145,7 @@ MockExpectedCall_c* withFunctionPointerParameters_c(const char* name, void (*val
 MockExpectedCall_c* withMemoryBufferParameters_c(const char* name, const unsigned char* value, size_t size);
 MockExpectedCall_c* withParameterOfType_c(const char* type, const char* name, const void* value);
 MockExpectedCall_c* withOutputParameterReturning_c(const char* name, const void* value, size_t size);
+MockExpectedCall_c* withInputParameterForwarding_c(const char* name, void* value, size_t size);
 MockExpectedCall_c* andReturnIntValue_c(int value);
 MockExpectedCall_c* andReturnUnsignedIntValue_c(unsigned int value);
 MockExpectedCall_c* andReturnLongIntValue_c(long int value);
@@ -168,6 +169,7 @@ MockActualCall_c* withActualFunctionPointerParameters_c(const char* name, void (
 MockActualCall_c* withActualMemoryBufferParameters_c(const char* name, const unsigned char* value, size_t size);
 MockActualCall_c* withActualParameterOfType_c(const char* type, const char* name, const void* value);
 MockActualCall_c* withActualOutputParameter_c(const char* name, void* value);
+MockActualCall_c* withActualInputParameter_c(const char* name, const void* value);
 MockValue_c actualReturnValue_c();
 
 
@@ -211,6 +213,7 @@ static MockExpectedCall_c gExpectedCall = {
         withMemoryBufferParameters_c,
         withParameterOfType_c,
         withOutputParameterReturning_c,
+        withInputParameterForwarding_c,
         andReturnUnsignedIntValue_c,
         andReturnIntValue_c,
         andReturnLongIntValue_c,
@@ -235,6 +238,7 @@ static MockActualCall_c gActualCall = {
         withActualMemoryBufferParameters_c,
         withActualParameterOfType_c,
         withActualOutputParameter_c,
+        withActualInputParameter_c,
         actualReturnValue_c
 };
 
@@ -330,6 +334,12 @@ MockExpectedCall_c* withParameterOfType_c(const char* type, const char* name, co
 MockExpectedCall_c* withOutputParameterReturning_c(const char* name, const void* value, size_t size)
 {
     expectedCall = &expectedCall->withOutputParameterReturning(name, value, size);
+    return &gExpectedCall;
+}
+
+MockExpectedCall_c* withInputParameterForwarding_c(const char* name, void* value, size_t size)
+{
+    expectedCall = &expectedCall->withInputParameterForwarding(name, value, size);
     return &gExpectedCall;
 }
 
@@ -518,6 +528,12 @@ MockActualCall_c* withActualParameterOfType_c(const char* type, const char* name
 MockActualCall_c* withActualOutputParameter_c(const char* name, void* value)
 {
     actualCall = &actualCall->withOutputParameter(name, value);
+    return &gActualCall;
+}
+
+MockActualCall_c* withActualInputParameter_c(const char* name, const void* value)
+{
+    actualCall = &actualCall->withInputParameter(name, value);
     return &gActualCall;
 }
 

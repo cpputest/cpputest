@@ -81,6 +81,7 @@ struct SMockActualCall_c
     MockActualCall_c* (*withMemoryBufferParameter)(const char* name, const unsigned char* value, size_t size);
     MockActualCall_c* (*withParameterOfType)(const char* type, const char* name, const void* value);
     MockActualCall_c* (*withOutputParameter)(const char* name, void* value);
+    MockActualCall_c* (*withInputParameter)(const char* name, const void* value);
 
     MockValue_c (*returnValue)(void);
 };
@@ -100,6 +101,7 @@ struct SMockExpectedCall_c
     MockExpectedCall_c* (*withMemoryBufferParameter)(const char* name, const unsigned char* value, size_t size);
     MockExpectedCall_c* (*withParameterOfType)(const char* type, const char* name, const void* value);
     MockExpectedCall_c* (*withOutputParameterReturning)(const char* name, const void* value, size_t size);
+    MockExpectedCall_c* (*withInputParameterForwarding)(const char* name, void* value, size_t size);
 
     MockExpectedCall_c* (*andReturnUnsignedIntValue)(unsigned int value);
     MockExpectedCall_c* (*andReturnIntValue)(int value);
