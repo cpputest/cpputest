@@ -140,7 +140,7 @@ TEST(MockDocumentation, setData)
 
     ClassFromProductionCode * pobject;
     int value = mock().getData("importantValue").getIntValue();
-    pobject = (ClassFromProductionCode*) mock().getData("importantObject").getObjectPointer();
+    pobject = (ClassFromProductionCode*) mock().getData("importantObject").getConstObjectPointer();
 
     LONGS_EQUAL(10, value);
     POINTERS_EQUAL(pobject, &object);

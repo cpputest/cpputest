@@ -123,7 +123,7 @@ TEST(MockSupportTest, setDataObject)
 {
     void * ptr = (void*) 0x001;
     mock().setDataObject("data", "type", ptr);
-    POINTERS_EQUAL(ptr, mock().getData("data").getObjectPointer());
+    POINTERS_EQUAL(ptr, mock().getData("data").getConstObjectPointer());
     STRCMP_EQUAL("type", mock().getData("data").getType().asCharString());
 }
 

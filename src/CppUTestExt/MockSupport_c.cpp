@@ -432,7 +432,7 @@ static MockValue_c getMockValueCFromNamedValue(const MockNamedValue& namedValue)
     }
     else {
         returnValue.type = MOCKVALUETYPE_OBJECT;
-        returnValue.value.objectValue = namedValue.getObjectPointer();
+        returnValue.value.objectValue = namedValue.getConstObjectPointer();
     }
     return returnValue;
 }

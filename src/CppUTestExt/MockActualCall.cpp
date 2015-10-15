@@ -86,13 +86,26 @@ void MockCheckedActualCall::finalizeOutputParameters(MockCheckedExpectedCall* ex
         MockNamedValueCopier* copier = outputParameter.getCopier();
         if (copier)
         {
-            copier->copy(p->ptr_, outputParameter.getObjectPointer());
+            if (p->direction_ == MockOutputParametersListNode::TestToCode)
+            {
+                copier->copy(p->ptr_, outputParameter.getConstObjectPointer());
+            }
+            else
+            {
+                copier->copy(outputParameter.getObjectPointer(), p->constPtr_);
+            }
         }
         else if ((outputParameter.getType() == "const void*") && (p->type_ == "void*"))
         {
             const void* data = outputParameter.getConstPointerValue();
             size_t size = outputParameter.getSize();
             PlatformSpecificMemCpy(p->ptr_, data, size);
+        }
+        else if ((outputParameter.getType() == "void*") && (p->type_ == "const void*"))
+        {
+            void* data = outputParameter.getPointerValue();
+            size_t size = outputParameter.getSize();
+            PlatformSpecificMemCpy(data, p->constPtr_, size);
         }
         else if (outputParameter.getName() != "")
         {
@@ -280,7 +293,7 @@ MockActualCall& MockCheckedActualCall::withMemoryBufferParameter(const SimpleStr
 MockActualCall& MockCheckedActualCall::withParameterOfType(const SimpleString& type, const SimpleString& name, const void* value)
 {
     MockNamedValue actualParameter(name);
-    actualParameter.setObjectPointer(type, value);
+    actualParameter.setConstObjectPointer(type, value);
 
     if (actualParameter.getComparator() == NULL) {
         MockNoWayToCompareCustomTypeFailure failure(getTest(), type);
@@ -307,7 +320,7 @@ MockActualCall& MockCheckedActualCall::withOutputParameterOfType(const SimpleStr
     addOutputParameter(name, type, output);
 
     MockNamedValue outputParameter(name);
-    outputParameter.setObjectPointer(type, output);
+    outputParameter.setConstObjectPointer(type, output);
     checkOutputParameter(outputParameter);
 
     return *this;

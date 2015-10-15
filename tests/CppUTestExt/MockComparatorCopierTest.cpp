@@ -205,7 +205,7 @@ TEST(MockComparatorCopierTest, unexpectedCustomTypeOutputParameter)
     MockExpectedCallsListForTest expectations;
     expectations.addFunction("foo");
     MockNamedValue parameter("parameterName");
-    parameter.setObjectPointer("MyTypeForTesting", &actualObject);
+    parameter.setConstObjectPointer("MyTypeForTesting", &actualObject);
     MockUnexpectedOutputParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, expectations);
 
     mock().expectOneCall("foo");
@@ -250,7 +250,7 @@ TEST(MockComparatorCopierTest, customTypeOutputParameterOfWrongType)
     MockExpectedCallsListForTest expectations;
     expectations.addFunction("foo")->withOutputParameterOfTypeReturning("MyTypeForTesting", "output", &expectedObject);
     MockNamedValue parameter("output");
-    parameter.setObjectPointer("OtherTypeForTesting", &actualObject);
+    parameter.setConstObjectPointer("OtherTypeForTesting", &actualObject);
     MockUnexpectedOutputParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, expectations);
 
     mock().expectOneCall("foo").withOutputParameterOfTypeReturning("MyTypeForTesting", "output", &expectedObject);

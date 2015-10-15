@@ -369,7 +369,7 @@ void MockSupport::setData(const SimpleString& name, void (*value)())
 void MockSupport::setDataObject(const SimpleString& name, const SimpleString& type, void* value)
 {
     MockNamedValue* newData = retrieveDataFromStore(name);
-    newData->setObjectPointer(type, value);
+    newData->setConstObjectPointer(type, value);
 }
 
 MockNamedValue MockSupport::getData(const SimpleString& name)
@@ -402,7 +402,7 @@ MockSupport* MockSupport::getMockSupportScope(const SimpleString& name)
 
     if (hasData(mockingSupportName)) {
         STRCMP_EQUAL("MockSupport", getData(mockingSupportName).getType().asCharString());
-        return (MockSupport*) getData(mockingSupportName).getObjectPointer();
+        return (MockSupport*) getData(mockingSupportName).getConstObjectPointer();
     }
 
     MockSupport *newMock = clone();
@@ -414,7 +414,7 @@ MockSupport* MockSupport::getMockSupportScope(const SimpleString& name)
 MockSupport* MockSupport::getMockSupport(MockNamedValueListNode* node)
 {
     if (node->getType() == "MockSupport" && node->getName().contains(MOCK_SUPPORT_SCOPE_PREFIX))
-        return  (MockSupport*) node->item()->getObjectPointer();
+        return  (MockSupport*) node->item()->getConstObjectPointer();
     return NULL;
 }
 

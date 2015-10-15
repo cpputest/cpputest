@@ -157,7 +157,7 @@ MockExpectedCall& MockCheckedExpectedCall::withParameterOfType(const SimpleStrin
 {
     MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
     inputParameters_->add(newParameter);
-    newParameter->setObjectPointer(type, value);
+    newParameter->setConstObjectPointer(type, value);
     return *this;
 }
 
@@ -174,7 +174,7 @@ MockExpectedCall& MockCheckedExpectedCall::withOutputParameterOfTypeReturning(co
 {
     MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
     outputParameters_->add(newParameter);
-    newParameter->setObjectPointer(type, value);
+    newParameter->setConstObjectPointer(type, value);
     return *this;
 }
 

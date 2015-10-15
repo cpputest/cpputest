@@ -131,7 +131,7 @@ private:
 
         enum Direction {
             TestToCode = 0,
-            CodeToTest,
+            CodeToTest
         } direction_;
 
         MockOutputParametersListNode* next_;
