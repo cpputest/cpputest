@@ -12,6 +12,11 @@ else (MSVC)
     set(CPP_PLATFORM GccNoStdC)
 endif (MSVC)
 
+if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    set(CPPUTEST_CXX_FLAGS "${CPPUTEST_CXX_FLAGS} -Wno-reserved-id-macro -Wno-keyword-macro")
+    set(CPPUTEST_C_FLAGS "${CPPUTEST_C_FLAGS} -Wno-reserved-id-macro -Wno-keyword-macro")
+endif (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+
 include("${CppUTestRootDirectory}/cmake/Modules/CppUTestWarningFlags.cmake")
 
 if (NOT STD_CPP)
