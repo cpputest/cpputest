@@ -176,6 +176,18 @@ AC_MSG_CHECKING([whether CC and CXX supports -Wno-padded])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wno-padded"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wno-padded" ], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 
+# FLag -Wno-reserved-id-macro.
+CXXFLAGS="-Werror -Wno-reserved-id-macro"
+AC_MSG_CHECKING([whether CC and CXX supports -Wno-reserved-id-macro])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wno-reserved-id-macro"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wno-reserved-id-macro" ], [AC_MSG_RESULT([no])])
+CFLAGS="$saved_cflags"
+
+# FLag -Wno-keyword-macro.
+CXXFLAGS="-Werror -Wno-keyword-macro"
+AC_MSG_CHECKING([whether CC and CXX supports -Wno-keyword-macro])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wno-keyword-macro"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wno-keyword-macro" ], [AC_MSG_RESULT([no])])
+CFLAGS="$saved_cflags"
+
 # FLag -Wno-global-constructors.
 AC_LANG_PUSH([C++])
 CXXFLAGS="-Werror -Wno-global-constructors"
