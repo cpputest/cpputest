@@ -241,6 +241,14 @@ TEST(CommandLineArguments, setJUnitOutputDifferentParameter)
     CHECK(args->isJUnitOutput());
 }
 
+TEST(CommandLineArguments, setTeamCityOutputDifferentParameter)
+{
+    int argc = 3;
+    const char* argv[] = { "tests.exe", "-o", "teamcity" };
+    CHECK(newArgumentParser(argc, argv));
+    CHECK(args->isTeamCityOutput());
+}
+
 TEST(CommandLineArguments, setOutputToGarbage)
 {
     int argc = 3;
@@ -269,7 +277,7 @@ TEST(CommandLineArguments, weirdParamatersPrintsUsageAndReturnsFalse)
     int argc = 2;
     const char* argv[] = { "tests.exe", "-SomethingWeird" };
     CHECK(!newArgumentParser(argc, argv));
-    STRCMP_EQUAL("usage [-v] [-c] [-p] [-lg] [-ln] [-r#] [-g|sg groupName]... [-n|sn testName]... [\"TEST(groupName, testName)\"]... [-o{normal, junit}] [-k packageName]\n",
+    STRCMP_EQUAL("usage [-v] [-c] [-p] [-lg] [-ln] [-r#] [-g|sg groupName]... [-n|sn testName]... [\"TEST(groupName, testName)\"]... [-o{normal, junit, teamcity}] [-k packageName]\n",
             args->usage());
 }
 

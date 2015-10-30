@@ -60,9 +60,11 @@ class CommandLineTestRunnerWithStringBufferOutput : public CommandLineTestRunner
 public:
   StringBufferTestOutput* fakeJUnitOutputWhichIsReallyABuffer_;
   StringBufferTestOutput* fakeConsoleOutputWhichIsReallyABuffer;
+  StringBufferTestOutput* fakeTCOutputWhichIsReallyABuffer;
 
   CommandLineTestRunnerWithStringBufferOutput(int argc, const char** argv, TestRegistry* registry)
-    : CommandLineTestRunner(argc, argv, registry), fakeJUnitOutputWhichIsReallyABuffer_(NULL), fakeConsoleOutputWhichIsReallyABuffer(NULL)
+    : CommandLineTestRunner(argc, argv, registry), fakeJUnitOutputWhichIsReallyABuffer_(NULL),
+    fakeConsoleOutputWhichIsReallyABuffer(NULL), fakeTCOutputWhichIsReallyABuffer(NULL)
   {}
 
   TestOutput* createConsoleOutput()
@@ -75,6 +77,12 @@ public:
   {
     fakeJUnitOutputWhichIsReallyABuffer_ = new StringBufferTestOutput;
     return fakeJUnitOutputWhichIsReallyABuffer_;
+  }
+
+  TestOutput* createTeamCityOutput()
+  {
+    fakeTCOutputWhichIsReallyABuffer = new StringBufferTestOutput;
+    return fakeTCOutputWhichIsReallyABuffer;
   }
 };
 
@@ -120,6 +128,14 @@ TEST(CommandLineTestRunner, NoPluginsAreInstalledAtTheEndOfARunWhenTheArgumentsA
 
     LONGS_EQUAL(0, registry.countPlugins());
 
+}
+
+TEST(CommandLineTestRunner, TeamcityOutputEnabled)
+{
+    const char* argv[] = {"tests.exe", "-oteamcity"};
+    CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(2, argv, &registry);
+    commandLineTestRunner.runAllTestsMain();
+    CHECK(commandLineTestRunner.fakeTCOutputWhichIsReallyABuffer);
 }
 
 TEST(CommandLineTestRunner, JunitOutputEnabled)

@@ -8,6 +8,7 @@ set(CppUTest_src
         TestMemoryAllocator.cpp
         TestResult.cpp
         JUnitTestOutput.cpp
+        TeamCityTestOutput.cpp
         TestFailure.cpp
         TestOutput.cpp
         MemoryLeakDetector.cpp
@@ -29,6 +30,7 @@ set(CppUTest_headers
         ${CppUTestRootDirectory}/include/CppUTest/SimpleString.h
         ${CppUTestRootDirectory}/include/CppUTest/TestPlugin.h
         ${CppUTestRootDirectory}/include/CppUTest/JUnitTestOutput.h
+        ${CppUTestRootDirectory}/include/CppUTest/TeamCityTestOutput.h
         ${CppUTestRootDirectory}/include/CppUTest/StandardCLibrary.h
         ${CppUTestRootDirectory}/include/CppUTest/TestRegistry.h
         ${CppUTestRootDirectory}/include/CppUTest/MemoryLeakDetector.h

@@ -50,6 +50,7 @@ public:
     const TestFilter* getNameFilters() const;
     bool isJUnitOutput() const;
     bool isEclipseOutput() const;
+    bool isTeamCityOutput() const;
     bool runTestsInSeperateProcess() const;
     const SimpleString& getPackageName() const;
     const char* usage() const;
@@ -58,7 +59,7 @@ private:
 
     enum OutputType
     {
-        OUTPUT_ECLIPSE, OUTPUT_JUNIT
+        OUTPUT_ECLIPSE, OUTPUT_JUNIT, OUTPUT_TEAMCITY
     };
     int ac_;
     const char** av_;
