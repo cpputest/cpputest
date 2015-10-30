@@ -62,7 +62,7 @@ public:
     virtual void print(const char*);
     virtual void print(long);
     virtual void printDouble(double);
-    virtual void print(const TestFailure& failure);
+    virtual void printFailure(const TestFailure& failure);
     virtual void printTestRun(int number, int total);
     virtual void setProgressIndicator(const char*);
 
@@ -190,7 +190,7 @@ public:
     virtual void print(const char*);
     virtual void print(long);
     virtual void printDouble(double);
-    virtual void print(const TestFailure& failure);
+    virtual void printFailure(const TestFailure& failure);
     virtual void setProgressIndicator(const char*);
 
     virtual void flush();
