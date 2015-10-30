@@ -221,7 +221,7 @@ MockNoWayToCopyCustomTypeFailure::MockNoWayToCopyCustomTypeFailure(UtestShell* t
 
 MockUnexpectedObjectFailure::MockUnexpectedObjectFailure(UtestShell* test, const SimpleString& functionName, void* actual, const MockExpectedCallsList& expectations) : MockFailure(test)
 {
-    message_ = StringFromFormat ("MockFailure: Function called on a unexpected object: %s\n"
+    message_ = StringFromFormat ("MockFailure: Function called on an unexpected object: %s\n"
                                  "\tActual object for call has address: <%p>\n", functionName.asCharString(),actual);
     addExpectationsAndCallHistoryRelatedTo(functionName, expectations);
 }
