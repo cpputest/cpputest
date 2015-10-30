@@ -83,7 +83,7 @@ public:
     virtual void (*returnFunctionPointerValue())() _override;
     virtual void (*returnFunctionPointerValueOrDefault(void (*)()))() _override;
 
-    virtual MockActualCall& onObject(void* objectPtr) _override;
+    virtual MockActualCall& onObject(const void* objectPtr) _override;
 
     virtual bool isFulfilled() const;
     virtual bool hasFailed() const;
@@ -191,7 +191,7 @@ public:
     virtual void (*returnFunctionPointerValue())() _override;
     virtual void (*returnFunctionPointerValueOrDefault(void (*)()))() _override;
 
-    virtual MockActualCall& onObject(void* objectPtr) _override;
+    virtual MockActualCall& onObject(const void* objectPtr) _override;
 
     const char* getTraceOutput();
     void clear();
@@ -252,7 +252,7 @@ public:
     virtual void (*returnFunctionPointerValue())() _override { return NULL; }
     virtual void (*returnFunctionPointerValueOrDefault(void (*)()))() _override { return returnFunctionPointerValue(); }
 
-    virtual MockActualCall& onObject(void* ) _override { return *this; }
+    virtual MockActualCall& onObject(const void* ) _override { return *this; }
 
     static MockIgnoredActualCall& instance();
 };

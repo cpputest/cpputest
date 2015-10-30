@@ -98,7 +98,7 @@ public:
     virtual void (*returnFunctionPointerValue())()=0;
     virtual void (*returnFunctionPointerValueOrDefault(void (*default_value)()))()=0;
 
-    virtual MockActualCall& onObject(void* objectPtr)=0;
+    virtual MockActualCall& onObject(const void* objectPtr)=0;
 };
 
 #endif

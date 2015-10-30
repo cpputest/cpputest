@@ -219,7 +219,7 @@ MockNoWayToCopyCustomTypeFailure::MockNoWayToCopyCustomTypeFailure(UtestShell* t
     message_ = StringFromFormat("MockFailure: No way to copy type <%s>. Please install a MockNamedValueCopier.", typeName.asCharString());
 }
 
-MockUnexpectedObjectFailure::MockUnexpectedObjectFailure(UtestShell* test, const SimpleString& functionName, void* actual, const MockExpectedCallsList& expectations) : MockFailure(test)
+MockUnexpectedObjectFailure::MockUnexpectedObjectFailure(UtestShell* test, const SimpleString& functionName, const void* actual, const MockExpectedCallsList& expectations) : MockFailure(test)
 {
     message_ = StringFromFormat ("MockFailure: Function called on an unexpected object: %s\n"
                                  "\tActual object for call has address: <%p>\n", functionName.asCharString(),actual);

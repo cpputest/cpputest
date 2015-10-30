@@ -376,7 +376,7 @@ bool MockCheckedExpectedCall::relatesTo(const SimpleString& functionName)
     return functionName == getName();
 }
 
-bool MockCheckedExpectedCall::relatesToObject(void*objectPtr) const
+bool MockCheckedExpectedCall::relatesToObject(const void* objectPtr) const
 {
     return objectPtr_ == objectPtr;
 }

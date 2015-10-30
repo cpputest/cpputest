@@ -193,7 +193,7 @@ void MockExpectedCallsList::onlyKeepExpectationsWithOutputParameter(const MockNa
     pruneEmptyNodeFromList();
 }
 
-void MockExpectedCallsList::onlyKeepExpectationsOnObject(void* objectPtr)
+void MockExpectedCallsList::onlyKeepExpectationsOnObject(const void* objectPtr)
 {
     for (MockExpectedCallsListNode* p = head_; p; p = p->next_)
         if (! p->expectedCall_->relatesToObject(objectPtr))
