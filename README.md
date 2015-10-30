@@ -149,7 +149,7 @@ TEST(MemoryLeakWarningTest, Ignore1)
 ## Example Main
 
 ```C++
-#include "UnitTestHarness/CommandLineTestRunner.h"
+#include "CppUTest/CommandLineTestRunner.h"
 
 int main(int ac, char** av)
 {
@@ -162,7 +162,7 @@ IMPORT_TEST_GROUP(ClassName)
 ## Example Test
 
 ```C++
-#include "UnitTestHarness/TestHarness.h"
+#include "CppUTest/TestHarness.h"
 #include "ClassName.h"
 
 TEST_GROUP(ClassName)
