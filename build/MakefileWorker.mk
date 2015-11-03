@@ -13,10 +13,10 @@
 #----------
 # Inputs - these variables describe what to build
 #
-#   INCLUDE_DIRS - Directories used to search for include files.
+#	INCLUDE_DIRS - Directories used to search for include files.
 #                   This generates a -I for each directory
-#	SRC_DIRS - Directories containing source file to built into the library
-#   SRC_FILES - Specific source files to build into library. Helpful when not all code
+#	SRC_DIRS - Directories containing source files to build into the library
+#	SRC_FILES - Specific source files to build into library. Helpful when not all code
 #				in a directory can be built for test (hopefully a temporary situation)
 #	TEST_SRC_DIRS - Directories containing unit test code build into the unit test runner
 #				These do not go in a library. They are explicitly included in the test runner
@@ -29,7 +29,7 @@
 # and where to put and name outputs
 # See below to determine defaults
 #   COMPONENT_NAME - the name of the thing being built
-#   TEST_TARGET - name the test executable. By default it is
+#   TEST_TARGET - name of the test executable. By default it is
 #			$(COMPONENT_NAME)_tests
 #		Helpful if you want 1 > make files in the same directory with different
 #		executables as output.
@@ -48,9 +48,9 @@
 #		Clean then build with this flag set to Y, then 'make gcov'
 #   CPPUTEST_MAPFILE - generate a map file
 #   CPPUTEST_WARNINGFLAGS - overly picky by default
-#	OTHER_MAKEFILE_TO_INCLUDE - a hook to use this makefile to make
+#   OTHER_MAKEFILE_TO_INCLUDE - a hook to use this makefile to make
 #		other targets. Like CSlim, which is part of fitnesse
-#	CPPUTEST_USE_VPATH - Use Make's VPATH functionality to support user
+#   CPPUTEST_USE_VPATH - Use Make's VPATH functionality to support user
 #		specification of source files and directories that aren't below
 #		the user's Makefile in the directory tree, like:
 #			SRC_DIRS += ../../lib/foo
@@ -498,7 +498,7 @@ $(CPPUTEST_OBJS_DIR)/%.o: %.cpp
 $(CPPUTEST_OBJS_DIR)/%.o: %.c
 	@echo compiling $(notdir $<)
 	$(SILENCE)mkdir -p $(dir $@)
-	$(SILENCE)$(COMPILE.c) $(DEP_FLAGS)  $(OUTPUT_OPTION) $<
+	$(SILENCE)$(COMPILE.c) $(DEP_FLAGS) $(OUTPUT_OPTION) $<
 
 ifneq "$(MAKECMDGOALS)" "clean"
 -include $(DEP_FILES)
@@ -539,11 +539,11 @@ endif
 	$(SILENCE)mv gcov_* gcov
 	@echo "See gcov directory for details"
 
-.PHONEY: format
+.PHONY: format
 format:
 	$(CPPUTEST_HOME)/scripts/reformat.sh $(PROJECT_HOME_DIR)
 
-.PHONEY: debug
+.PHONY: debug
 debug:
 	@echo
 	@echo "Target Source files:"

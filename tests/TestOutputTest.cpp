@@ -199,7 +199,7 @@ TEST(TestOutput, PrintFailureWithFailInHelper)
 
 TEST(TestOutput, PrintInVisualStudioFormat)
 {
-    TestOutput::setWorkingEnvironment(TestOutput::vistualStudio);
+    TestOutput::setWorkingEnvironment(TestOutput::visualStudio);
     printer->print(*f3);
     const char* expected =
             "\nfile(10): error: Failure in TEST(group, test)"

@@ -486,7 +486,7 @@ bool MockCheckedActualCall::hasReturnValue()
     return ! returnValue().getName().isEmpty();
 }
 
-MockActualCall& MockCheckedActualCall::onObject(void* objectPtr)
+MockActualCall& MockCheckedActualCall::onObject(const void* objectPtr)
 {
     callIsInProgress();
 
@@ -754,7 +754,7 @@ unsigned int MockActualCallTrace::returnUnsignedIntValueOrDefault(unsigned int)
     return returnUnsignedIntValue();
 }
 
-MockActualCall& MockActualCallTrace::onObject(void* objectPtr)
+MockActualCall& MockActualCallTrace::onObject(const void* objectPtr)
 {
     traceBuffer_ += " onObject:";
     traceBuffer_ += StringFrom(objectPtr);

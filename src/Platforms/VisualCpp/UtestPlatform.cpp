@@ -68,7 +68,7 @@ void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell* shell, TestPlugin*
 
 TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
 {
-    return TestOutput::vistualStudio;
+    return TestOutput::visualStudio;
 }
 
 ///////////// Time in millis

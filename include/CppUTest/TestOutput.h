@@ -30,12 +30,14 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-//  This is a minimal printer inteface.
-//  We kept streams out too keep footprint small, and so the test
+//  This is a minimal printer interface.
+//  We kept streams out to keep footprint small, and so the test
 //  harness could be used with less capable compilers so more
 //  platforms could use this test harness
 //
 ///////////////////////////////////////////////////////////////////////////////
+
+#include "SimpleString.h"
 
 class UtestShell;
 class TestFailure;
@@ -66,7 +68,7 @@ public:
 
     virtual void flush()=0;
 
-    enum WorkingEnvironment {vistualStudio, eclipse, detectEnvironment};
+    enum WorkingEnvironment {visualStudio, eclipse, detectEnvironment};
 
     static void setWorkingEnvironment(WorkingEnvironment workEnvironment);
     static WorkingEnvironment getWorkingEnvironment();
@@ -74,7 +76,7 @@ public:
 protected:
 
     virtual void printEclipseErrorInFileOnLine(SimpleString file, int lineNumber);
-    virtual void printVistualStudioErrorInFileOnLine(SimpleString file, int lineNumber);
+    virtual void printVisualStudioErrorInFileOnLine(SimpleString file, int lineNumber);
 
     virtual void printProgressIndicator();
     void printFileAndLineForTestAndFailure(const TestFailure& failure);

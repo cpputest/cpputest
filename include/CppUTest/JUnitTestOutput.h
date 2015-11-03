@@ -68,7 +68,7 @@ protected:
     virtual void closeFile();
 
     virtual void writeXmlHeader();
-    virtual void writeTestSuiteSummery();
+    virtual void writeTestSuiteSummary();
     virtual void writeProperties();
     virtual void writeTestCases();
     virtual void writeFailure(JUnitTestCaseResultNode* node);

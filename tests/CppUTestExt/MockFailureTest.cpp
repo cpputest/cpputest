@@ -208,7 +208,7 @@ TEST(MockFailureTest, MockUnexpectedObjectFailure)
 
     MockUnexpectedObjectFailure failure(UtestShell::getCurrent(), "foo", (void*)0x1, *list);
     STRCMP_EQUAL(StringFromFormat (
-                 "MockFailure: Function called on a unexpected object: foo\n"
+                 "MockFailure: Function called on an unexpected object: foo\n"
                  "\tActual object for call has address: <%p>\n"
                  "\tEXPECTED calls that DID NOT happen related to function: foo\n"
                  "\t\t(object address: %p)::foo -> no parameters\n"

@@ -111,7 +111,7 @@ public:
 class MockUnexpectedObjectFailure : public MockFailure
 {
 public:
-    MockUnexpectedObjectFailure(UtestShell* test, const SimpleString& functionName, void* expected, const MockExpectedCallsList& expectations);
+    MockUnexpectedObjectFailure(UtestShell* test, const SimpleString& functionName, const void* expected, const MockExpectedCallsList& expectations);
 };
 
 class MockExpectedObjectDidntHappenFailure : public MockFailure

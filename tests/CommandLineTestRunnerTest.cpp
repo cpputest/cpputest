@@ -58,11 +58,11 @@ private:
 class CommandLineTestRunnerWithStringBufferOutput : public CommandLineTestRunner
 {
 public:
-  StringBufferTestOutput* fakeJUnitOuputWhichIsReallyABuffer_;
+  StringBufferTestOutput* fakeJUnitOutputWhichIsReallyABuffer_;
   StringBufferTestOutput* fakeConsoleOutputWhichIsReallyABuffer;
 
   CommandLineTestRunnerWithStringBufferOutput(int argc, const char** argv, TestRegistry* registry)
-    : CommandLineTestRunner(argc, argv, registry), fakeJUnitOuputWhichIsReallyABuffer_(NULL), fakeConsoleOutputWhichIsReallyABuffer(NULL)
+    : CommandLineTestRunner(argc, argv, registry), fakeJUnitOutputWhichIsReallyABuffer_(NULL), fakeConsoleOutputWhichIsReallyABuffer(NULL)
   {}
 
   TestOutput* createConsoleOutput()
@@ -73,8 +73,8 @@ public:
 
   TestOutput* createJUnitOutput(const SimpleString&)
   {
-    fakeJUnitOuputWhichIsReallyABuffer_ = new StringBufferTestOutput;
-    return fakeJUnitOuputWhichIsReallyABuffer_;
+    fakeJUnitOutputWhichIsReallyABuffer_ = new StringBufferTestOutput;
+    return fakeJUnitOutputWhichIsReallyABuffer_;
   }
 };
 
@@ -128,7 +128,7 @@ TEST(CommandLineTestRunner, JunitOutputEnabled)
 
     CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(2, argv, &registry);
     commandLineTestRunner.runAllTestsMain();
-    CHECK(commandLineTestRunner.fakeJUnitOuputWhichIsReallyABuffer_);
+    CHECK(commandLineTestRunner.fakeJUnitOutputWhichIsReallyABuffer_);
 }
 
 TEST(CommandLineTestRunner, JunitOutputAndVerboseEnabled)
@@ -137,7 +137,7 @@ TEST(CommandLineTestRunner, JunitOutputAndVerboseEnabled)
 
     CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(3, argv, &registry);
     commandLineTestRunner.runAllTestsMain();
-    STRCMP_CONTAINS("TEST(group, test)", commandLineTestRunner.fakeJUnitOuputWhichIsReallyABuffer_->getOutput().asCharString());
+    STRCMP_CONTAINS("TEST(group, test)", commandLineTestRunner.fakeJUnitOutputWhichIsReallyABuffer_->getOutput().asCharString());
     STRCMP_CONTAINS("TEST(group, test)", commandLineTestRunner.fakeConsoleOutputWhichIsReallyABuffer->getOutput().asCharString());
 }
 

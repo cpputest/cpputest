@@ -36,7 +36,7 @@ You can also use CMake, which also works for Windows Visual Studio.
 Then to get started, you'll need to do the following:
 * Add the include path to the Makefile. Something like:
     * CPPFLAGS += -I(CPPUTEST_HOME)/include
-* Add the memory leak macros to you Makefile (needed for additional debug info!). Something like:
+* Add the memory leak macros to your Makefile (needed for additional debug info!). Something like:
     * CXXFLAGS += -include $(CPPUTEST_HOME)/include/CppUTest/MemoryLeakDetectorNewMacros.h
     * CFLAGS += -include $(CPPUTEST_HOME)/include/CppUTest/MemoryLeakDetectorMallocMacros.h
 * Add the library linking to your Makefile. Something like:
@@ -58,7 +58,7 @@ TEST(FirstTestGroup, FirstTest)
 ## Command line switches
 
 * -v verbose, print each test name as it runs
-* -r# repeat the tests some number of times, default is one, default is # is not specified is 2. This is handy if you are experiencing memory leaks related to statics and caches.
+* -r# repeat the tests some number of times, default is one, default if # is not specified is 2. This is handy if you are experiencing memory leaks. A second run that has no leaks indicates that someone
 * -g group only run test whose group contains the substring group
 * -n name only run test whose name contains the substring name
 
@@ -149,7 +149,7 @@ TEST(MemoryLeakWarningTest, Ignore1)
 ## Example Main
 
 ```C++
-#include "UnitTestHarness/CommandLineTestRunner.h"
+#include "CppUTest/CommandLineTestRunner.h"
 
 int main(int ac, char** av)
 {
@@ -162,7 +162,7 @@ IMPORT_TEST_GROUP(ClassName)
 ## Example Test
 
 ```C++
-#include "UnitTestHarness/TestHarness.h"
+#include "CppUTest/TestHarness.h"
 #include "ClassName.h"
 
 TEST_GROUP(ClassName)

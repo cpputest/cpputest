@@ -122,7 +122,7 @@ bool SimpleStringBuffer::reachedItsCapacity()
 
 ////////////////////////
 
-#define MEM_LEAK_TOO_MUCH "\netc etc etc etc. !!!! Too much memory leaks to report. Bailing out\n"
+#define MEM_LEAK_TOO_MUCH "\netc etc etc etc. !!!! Too many memory leaks to report. Bailing out\n"
 #define MEM_LEAK_FOOTER "Total number of leaks: "
 #define MEM_LEAK_ADDITION_MALLOC_WARNING "NOTE:\n" \
                                          "\tMemory leak reports about malloc and free can be caused by allocating using the cpputest version of malloc,\n" \

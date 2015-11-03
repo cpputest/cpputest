@@ -222,8 +222,8 @@ void TestOutput::printFailureMessage(SimpleString reason)
 
 void TestOutput::printErrorInFileOnLineFormattedForWorkingEnvironment(SimpleString file, int lineNumber)
 {
-    if (TestOutput::getWorkingEnvironment() == TestOutput::vistualStudio)
-        printVistualStudioErrorInFileOnLine(file, lineNumber);
+    if (TestOutput::getWorkingEnvironment() == TestOutput::visualStudio)
+        printVisualStudioErrorInFileOnLine(file, lineNumber);
     else
         printEclipseErrorInFileOnLine(file, lineNumber);
 }
@@ -238,7 +238,7 @@ void TestOutput::printEclipseErrorInFileOnLine(SimpleString file, int lineNumber
     print(" error:");
 }
 
-void TestOutput::printVistualStudioErrorInFileOnLine(SimpleString file, int lineNumber)
+void TestOutput::printVisualStudioErrorInFileOnLine(SimpleString file, int lineNumber)
 {
     print("\n");
     print(file.asCharString());

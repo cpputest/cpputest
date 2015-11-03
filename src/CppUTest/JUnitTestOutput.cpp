@@ -162,7 +162,7 @@ void JUnitTestOutput::writeXmlHeader()
     writeToFile("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n");
 }
 
-void JUnitTestOutput::writeTestSuiteSummery()
+void JUnitTestOutput::writeTestSuiteSummary()
 {
     SimpleString
             buf =
@@ -232,7 +232,7 @@ void JUnitTestOutput::writeTestGroupToFile()
 {
     openFileForWrite(createFileName(impl_->results_.group_));
     writeXmlHeader();
-    writeTestSuiteSummery();
+    writeTestSuiteSummary();
     writeProperties();
     writeTestCases();
     writeFileEnding();
