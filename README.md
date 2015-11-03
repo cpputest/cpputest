@@ -58,7 +58,7 @@ TEST(FirstTestGroup, FirstTest)
 ## Command line switches
 
 * -v verbose, print each test name as it runs
-* -r# repeat the tests some number of times, default is one, default if # is not specified is 2. This is handy if you are experiencing memory leaks. A second run that has no leaks indicates that someone
+* -r# repeat the tests some number of times, default is one, default if # is not specified is 2. This is handy if you are experiencing memory leaks related to statics and caches.
 * -g group only run test whose group contains the substring group
 * -n name only run test whose name contains the substring name
 
