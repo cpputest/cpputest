@@ -2,6 +2,7 @@ CPPU_OBJECTS := \
   $(CPPUTEST_HOME)/src/CppUTest/CommandLineArguments.o \
   $(CPPUTEST_HOME)/src/CppUTest/CommandLineTestRunner.o \
   $(CPPUTEST_HOME)/src/CppUTest/JUnitTestOutput.o \
+  $(CPPUTEST_HOME)/src/CppUTest/TeamCityTestOutput.o \
   $(CPPUTEST_HOME)/src/CppUTest/MemoryLeakDetector.o \
   $(CPPUTEST_HOME)/src/CppUTest/MemoryLeakWarningPlugin.o \
   $(CPPUTEST_HOME)/src/CppUTest/SimpleMutex.o \
@@ -40,6 +41,7 @@ CPPU1_OBJECTS := \
   $(CPPUTEST_HOME)/tests/CommandLineArgumentsTest.o \
   $(CPPUTEST_HOME)/tests/CommandLineTestRunnerTest.o \
   $(CPPUTEST_HOME)/tests/JUnitOutputTest.o \
+  $(CPPUTEST_HOME)/tests/TeamCityOutputTest.o \
   $(CPPUTEST_HOME)/tests/PluginTest.o \
   $(CPPUTEST_HOME)/tests/PreprocessorTest.o \
   $(CPPUTEST_HOME)/tests/SetPluginTest.o \

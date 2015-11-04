@@ -127,6 +127,7 @@
     <ClCompile Include="src\CppUTest\CommandLineArguments.cpp" />
     <ClCompile Include="src\CppUTest\CommandLineTestRunner.cpp" />
     <ClCompile Include="src\CppUTest\JUnitTestOutput.cpp" />
+    <ClCompile Include="src\CppUTest\TeamCityTestOutput.cpp" />
     <ClCompile Include="src\CppUTest\MemoryLeakDetector.cpp" />
     <ClCompile Include="src\CppUTest\MemoryLeakWarningPlugin.cpp" />
     <ClCompile Include="src\CppUTest\SimpleMutex.cpp" />
@@ -165,6 +166,7 @@
     <ClInclude Include="include\CppUTest\CommandLineArguments.h" />
     <ClInclude Include="include\CppUTest\CommandLineTestRunner.h" />
     <ClInclude Include="include\CppUTest\JUnitTestOutput.h" />
+    <ClInclude Include="include\CppUTest\TeamCityTestOutput.h" />
     <ClInclude Include="include\CppUTest\MemoryLeakDetector.h" />
     <ClInclude Include="include\CppUTest\MemoryLeakDetectorMallocMacros.h" />
     <ClInclude Include="include\CppUTest\MemoryLeakDetectorNewMacros.h" />
