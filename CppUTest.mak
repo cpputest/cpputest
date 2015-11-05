@@ -44,6 +44,7 @@ CLEAN :
 	-@erase "$(INTDIR)\CommandLineArguments.obj"
 	-@erase "$(INTDIR)\CommandLineTestRunner.obj"
 	-@erase "$(INTDIR)\JUnitTestOutput.obj"
+	-@erase "$(INTDIR)\TeamCityTestOutput.obj"
 	-@erase "$(INTDIR)\MemoryLeakDetector.obj"
 	-@erase "$(INTDIR)\MemoryLeakWarningPlugin.obj"
 	-@erase "$(INTDIR)\MemoryReportAllocator.obj"
@@ -100,6 +101,7 @@ LIB32_OBJS= \
 	"$(INTDIR)\CommandLineArguments.obj" \
 	"$(INTDIR)\CommandLineTestRunner.obj" \
 	"$(INTDIR)\JUnitTestOutput.obj" \
+	"$(INTDIR)\TeamCityTestOutput.obj" \
 	"$(INTDIR)\MemoryLeakDetector.obj" \
 	"$(INTDIR)\MemoryLeakWarningPlugin.obj" \
 	"$(INTDIR)\SimpleMutex.obj" \
@@ -140,6 +142,8 @@ CLEAN :
 	-@erase "$(INTDIR)\CommandLineTestRunner.sbr"
 	-@erase "$(INTDIR)\JUnitTestOutput.obj"
 	-@erase "$(INTDIR)\JUnitTestOutput.sbr"
+	-@erase "$(INTDIR)\TeamCityTestOutput.obj"
+	-@erase "$(INTDIR)\TeamCityTestOutput.sbr"
 	-@erase "$(INTDIR)\MemoryLeakDetector.obj"
 	-@erase "$(INTDIR)\MemoryLeakDetector.sbr"
 	-@erase "$(INTDIR)\MemoryLeakWarningPlugin.obj"
@@ -220,6 +224,7 @@ BSC32_SBRS= \
 	"$(INTDIR)\CommandLineArguments.sbr" \
 	"$(INTDIR)\CommandLineTestRunner.sbr" \
 	"$(INTDIR)\JUnitTestOutput.sbr" \
+	"$(INTDIR)\TeamCityTestOutput.sbr" \
 	"$(INTDIR)\MemoryLeakDetector.sbr" \
 	"$(INTDIR)\MemoryLeakWarningPlugin.sbr" \
 	"$(INTDIR)\SimpleMutex.sbr" \
@@ -259,6 +264,7 @@ LIB32_OBJS= \
 	"$(INTDIR)\CommandLineArguments.obj" \
 	"$(INTDIR)\CommandLineTestRunner.obj" \
 	"$(INTDIR)\JUnitTestOutput.obj" \
+	"$(INTDIR)\TeamCityTestOutput.obj" \
 	"$(INTDIR)\MemoryLeakDetector.obj" \
 	"$(INTDIR)\MemoryLeakWarningPlugin.obj" \
 	"$(INTDIR)\SimpleMutex.obj" \
@@ -393,6 +399,24 @@ SOURCE=.\SRC\CPPUTEST\JUnitTestOutput.cpp
 
 
 !ENDIF 
+
+SOURCE=.\SRC\CPPUTEST\TeamCityTestOutput.cpp
+
+!IF  "$(CFG)" == "CppUTest - Win32 Release"
+
+
+"$(INTDIR)\TeamCityTestOutput.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+!ELSEIF  "$(CFG)" == "CppUTest - Win32 Debug"
+
+
+"$(INTDIR)\TeamCityTestOutput.obj"	"$(INTDIR)\TeamCityTestOutput.sbr" : $(SOURCE) "$(INTDIR)"
+	$(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+!ENDIF
 
 SOURCE=.\SRC\CPPUTEST\MemoryLeakDetector.cpp
 

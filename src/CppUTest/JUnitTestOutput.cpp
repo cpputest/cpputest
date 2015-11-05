@@ -259,7 +259,7 @@ void JUnitTestOutput::flush()
 
 // LCOV_EXCL_STOP
 
-void JUnitTestOutput::print(const TestFailure& failure)
+void JUnitTestOutput::printFailure(const TestFailure& failure)
 {
     if (impl_->results_.tail_->failure_ == 0) {
         impl_->results_.failureCount_++;

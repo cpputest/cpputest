@@ -61,22 +61,22 @@ static SimpleString addMarkerToString(const SimpleString& str, int markerPos)
 }
 
 TestFailure::TestFailure(UtestShell* test, const char* fileName, int lineNumber, const SimpleString& theMessage) :
-    testName_(test->getFormattedName()), fileName_(fileName), lineNumber_(lineNumber), testFileName_(test->getFile()), testLineNumber_(test->getLineNumber()), message_(theMessage)
+    testName_(test->getFormattedName()), testNameOnly_(test->getName()), fileName_(fileName), lineNumber_(lineNumber), testFileName_(test->getFile()), testLineNumber_(test->getLineNumber()), message_(theMessage)
 {
 }
 
 TestFailure::TestFailure(UtestShell* test, const SimpleString& theMessage) :
-    testName_(test->getFormattedName()), fileName_(test->getFile()), lineNumber_(test->getLineNumber()), testFileName_(test->getFile()), testLineNumber_(test->getLineNumber()), message_(theMessage)
+    testName_(test->getFormattedName()), testNameOnly_(test->getName()), fileName_(test->getFile()), lineNumber_(test->getLineNumber()), testFileName_(test->getFile()), testLineNumber_(test->getLineNumber()), message_(theMessage)
 {
 }
 
 TestFailure::TestFailure(UtestShell* test, const char* fileName, int lineNum) :
-    testName_(test->getFormattedName()), fileName_(fileName), lineNumber_(lineNum), testFileName_(test->getFile()), testLineNumber_(test->getLineNumber()), message_("no message")
+    testName_(test->getFormattedName()), testNameOnly_(test->getName()), fileName_(fileName), lineNumber_(lineNum), testFileName_(test->getFile()), testLineNumber_(test->getLineNumber()), message_("no message")
 {
 }
 
 TestFailure::TestFailure(const TestFailure& f) :
-    testName_(f.testName_), fileName_(f.fileName_), lineNumber_(f.lineNumber_), testFileName_(f.testFileName_), testLineNumber_(f.testLineNumber_), message_(f.message_)
+    testName_(f.testName_), testNameOnly_(f.testNameOnly_), fileName_(f.fileName_), lineNumber_(f.lineNumber_), testFileName_(f.testFileName_), testLineNumber_(f.testLineNumber_), message_(f.message_)
 {
 }
 
@@ -98,6 +98,11 @@ SimpleString TestFailure::getTestFileName() const
 SimpleString TestFailure::getTestName() const
 {
     return testName_;
+}
+
+SimpleString TestFailure::getTestNameOnly() const
+{
+    return testNameOnly_;
 }
 
 int TestFailure::getFailureLineNumber() const

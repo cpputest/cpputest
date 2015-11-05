@@ -73,7 +73,7 @@ void TestResult::currentTestEnded(UtestShell* /*test*/)
 
 void TestResult::addFailure(const TestFailure& failure)
 {
-    output_.print(failure);
+    output_.printFailure(failure);
     failureCount_++;
 }
 

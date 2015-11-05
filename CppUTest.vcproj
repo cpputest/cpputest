@@ -249,6 +249,28 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="SRC\CPPUTEST\TeamCityTestOutput.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="SRC\CPPUTEST\MemoryLeakDetector.cpp"
 				>
 				<FileConfiguration

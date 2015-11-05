@@ -41,7 +41,7 @@ LIBRARY		 euser.lib libc.lib libm.lib libpthread.lib
 SOURCEPATH ..\tests
 SOURCE FailureTest.cpp MemoryLeakWarningTest.cpp NullTestTest.cpp 
 SOURCE SimpleStringTest.cpp TestInstallerTest.cpp
-SOURCE TestOutputTest.cpp TestRegistryTest.cpp UtestTest.cpp CommandLineTestRunnerTest.cpp JUnitOutputTest.cpp
+SOURCE TestOutputTest.cpp TestRegistryTest.cpp UtestTest.cpp CommandLineTestRunnerTest.cpp JUnitOutputTest.cpp TeamCityOutputTest.cpp
 SOURCE TestHarness_cTest.cpp
 
 SOURCEPATH ..\tests

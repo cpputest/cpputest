@@ -80,7 +80,7 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
 
 const char* CommandLineArguments::usage() const
 {
-    return "usage [-v] [-c] [-p] [-lg] [-ln] [-r#] [-g|sg groupName]... [-n|sn testName]... [\"TEST(groupName, testName)\"]... [-o{normal, junit}] [-k packageName]\n";
+    return "usage [-v] [-c] [-p] [-lg] [-ln] [-r#] [-g|sg groupName]... [-n|sn testName]... [\"TEST(groupName, testName)\"]... [-o{normal, junit, teamcity}] [-k packageName]\n";
 }
 
 bool CommandLineArguments::isVerbose() const
@@ -208,6 +208,11 @@ bool CommandLineArguments::SetOutputType(int ac, const char** av, int& i)
         outputType_ = OUTPUT_JUNIT;
         return true;
     }
+    if (outputType == "teamcity") {
+        outputType_ = OUTPUT_TEAMCITY;
+        return true;
+    }
+
     return false;
 }
 
@@ -219,6 +224,11 @@ bool CommandLineArguments::isEclipseOutput() const
 bool CommandLineArguments::isJUnitOutput() const
 {
     return outputType_ == OUTPUT_JUNIT;
+}
+
+bool CommandLineArguments::isTeamCityOutput() const
+{
+    return outputType_ == OUTPUT_TEAMCITY;
 }
 
 const SimpleString& CommandLineArguments::getPackageName() const

@@ -54,6 +54,7 @@ public:
 
     virtual SimpleString getFileName() const;
     virtual SimpleString getTestName() const;
+    virtual SimpleString getTestNameOnly() const;
     virtual int getFailureLineNumber() const;
     virtual SimpleString getMessage() const;
     virtual SimpleString getTestFileName() const;
@@ -73,6 +74,7 @@ protected:
     SimpleString createUserText(const SimpleString& text);
 
     SimpleString testName_;
+    SimpleString testNameOnly_;
     SimpleString fileName_;
     int lineNumber_;
     SimpleString testFileName_;

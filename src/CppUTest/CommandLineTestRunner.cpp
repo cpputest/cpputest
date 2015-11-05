@@ -29,6 +29,7 @@
 #include "CppUTest/CommandLineTestRunner.h"
 #include "CppUTest/TestOutput.h"
 #include "CppUTest/JUnitTestOutput.h"
+#include "CppUTest/TeamCityTestOutput.h"
 #include "CppUTest/TestRegistry.h"
 
 int CommandLineTestRunner::RunAllTests(int ac, char** av)
@@ -123,6 +124,11 @@ int CommandLineTestRunner::runAllTests()
     return failureCount;
 }
 
+TestOutput* CommandLineTestRunner::createTeamCityOutput()
+{
+    return new TeamCityTestOutput;
+}
+
 TestOutput* CommandLineTestRunner::createJUnitOutput(const SimpleString& packageName)
 {
     JUnitTestOutput* junitOutput = new JUnitTestOutput;
@@ -157,8 +163,9 @@ bool CommandLineTestRunner::parseArguments(TestPlugin* plugin)
     output_= createJUnitOutput(arguments_->getPackageName());
     if (arguments_->isVerbose())
       output_ = createCompositeOutput(output_, createConsoleOutput());
-  }
-  else
+  } else if (arguments_->isTeamCityOutput()) {
+    output_ = createTeamCityOutput();
+  } else
     output_ = createConsoleOutput();
   return true;
 }

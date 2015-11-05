@@ -125,7 +125,7 @@ Current compiler options:
     CppUTest CXXFLAGS:                  ${CPPUTEST_CXX_FLAGS}
     CppUTest LDFLAGS:                   ${CPPUTEST_LD_FLAGS}
 
-Features configure in CppUTest:
+Features configured in CppUTest:
     Memory Leak Detection:              ${MEMORY_LEAK_DETECTION}
     Compiling Extensions:               ${EXTENSIONS}
     Use CppUTest flags:                 ${CPPUTEST_FLAGS}
