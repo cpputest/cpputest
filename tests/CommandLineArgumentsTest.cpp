@@ -154,6 +154,25 @@ TEST(CommandLineArguments, setStrictGroupFilterSameParameter)
     CHECK_EQUAL(groupFilter, *args->getGroupFilters());
 }
 
+TEST(CommandLineArguments, setExcludeGroupFilter)
+{
+    int argc = 3;
+    const char* argv[] = { "tests.exe", "-xg", "group" };
+    CHECK(newArgumentParser(argc, argv));
+    TestFilter groupFilter("group");
+    groupFilter.invertMatching();
+    CHECK_EQUAL(groupFilter, *args->getGroupFilters());
+}
+
+TEST(CommandLineArguments, setExcludeGroupFilterSameParameter)
+{
+    int argc = 2;
+    const char* argv[] = { "tests.exe", "-xggroup" };
+    CHECK(newArgumentParser(argc, argv));
+    TestFilter groupFilter("group");
+    groupFilter.invertMatching();
+    CHECK_EQUAL(groupFilter, *args->getGroupFilters());
+}
 
 TEST(CommandLineArguments, setNameFilter)
 {
@@ -188,6 +207,26 @@ TEST(CommandLineArguments, setStrictNameFilterSameParameter)
     CHECK(newArgumentParser(argc, argv));
     TestFilter nameFilter("name");
     nameFilter.strictMatching();
+    CHECK_EQUAL(nameFilter, *args->getNameFilters());
+}
+
+TEST(CommandLineArguments, setExcludeNameFilter)
+{
+    int argc = 3;
+    const char* argv[] = { "tests.exe", "-xn", "name" };
+    CHECK(newArgumentParser(argc, argv));
+    TestFilter nameFilter("name");
+    nameFilter.invertMatching();
+    CHECK_EQUAL(nameFilter, *args->getNameFilters());
+}
+
+TEST(CommandLineArguments, setExcludeNameFilterSameParameter)
+{
+    int argc = 2;
+    const char* argv[] = { "tests.exe", "-xnname" };
+    CHECK(newArgumentParser(argc, argv));
+    TestFilter nameFilter("name");
+    nameFilter.invertMatching();
     CHECK_EQUAL(nameFilter, *args->getNameFilters());
 }
 
@@ -287,7 +326,7 @@ TEST(CommandLineArguments, weirdParamatersPrintsUsageAndReturnsFalse)
     int argc = 2;
     const char* argv[] = { "tests.exe", "-SomethingWeird" };
     CHECK(!newArgumentParser(argc, argv));
-    STRCMP_EQUAL("usage [-v] [-c] [-p] [-lg] [-ln] [-r#] [-g|sg groupName]... [-n|sn testName]... [\"TEST(groupName, testName)\"]... [-o{normal, junit, teamcity}] [-k packageName]\n",
+    STRCMP_EQUAL("usage [-v] [-c] [-p] [-lg] [-ln] [-r#] [-g|sg|xg groupName]... [-n|sn|xn testName]... [\"TEST(groupName, testName)\"]... [-o{normal, junit, teamcity}] [-k packageName]\n",
             args->usage());
 }
 
@@ -324,10 +363,10 @@ TEST(CommandLineArguments, setPackageName)
 TEST(CommandLineArguments, lotsOfGroupsAndTests)
 {
     int argc = 10;
-    const char* argv[] = { "tests.exe", "-sggroup1", "-sntest1", "-sggroup2", "-sntest2", "-sntest3", "-sggroup3", "-sntest4", "-sggroup4", "-sntest5" };
+    const char* argv[] = { "tests.exe", "-sggroup1", "-xntest1", "-sggroup2", "-sntest2", "-sntest3", "-sggroup3", "-sntest4", "-sggroup4", "-sntest5" };
     CHECK(newArgumentParser(argc, argv));
     TestFilter nameFilter("test1");
-    nameFilter.strictMatching();
+    nameFilter.invertMatching();
     TestFilter groupFilter("group1");
     groupFilter.strictMatching();
     CHECK_EQUAL(nameFilter, *args->getNameFilters()->getNext()->getNext()->getNext()->getNext());
