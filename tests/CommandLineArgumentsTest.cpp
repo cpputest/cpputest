@@ -163,6 +163,14 @@ TEST(CommandLineArguments, setNameFilter)
     CHECK_EQUAL(TestFilter("name"), *args->getNameFilters());
 }
 
+TEST(CommandLineArguments, setNameFilterSameParameter)
+{
+    int argc = 2;
+    const char* argv[] = { "tests.exe", "-nname" };
+    CHECK(newArgumentParser(argc, argv));
+    CHECK_EQUAL(TestFilter("name"), *args->getNameFilters());
+}
+
 TEST(CommandLineArguments, setStrictNameFilter)
 {
     int argc = 3;
@@ -173,12 +181,14 @@ TEST(CommandLineArguments, setStrictNameFilter)
     CHECK_EQUAL(nameFilter, *args->getNameFilters());
 }
 
-TEST(CommandLineArguments, setNameFilterSameParameter)
+TEST(CommandLineArguments, setStrictNameFilterSameParameter)
 {
     int argc = 2;
-    const char* argv[] = { "tests.exe", "-nname" };
+    const char* argv[] = { "tests.exe", "-snname" };
     CHECK(newArgumentParser(argc, argv));
-    CHECK_EQUAL(TestFilter("name"), *args->getNameFilters());
+    TestFilter nameFilter("name");
+    nameFilter.strictMatching();
+    CHECK_EQUAL(nameFilter, *args->getNameFilters());
 }
 
 TEST(CommandLineArguments, setTestToRunUsingVerboseOutput)
