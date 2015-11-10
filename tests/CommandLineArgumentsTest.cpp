@@ -174,6 +174,28 @@ TEST(CommandLineArguments, setExcludeGroupFilterSameParameter)
     CHECK_EQUAL(groupFilter, *args->getGroupFilters());
 }
 
+TEST(CommandLineArguments, setExcludeStrictGroupFilter)
+{
+    int argc = 3;
+    const char* argv[] = { "tests.exe", "-xsg", "group" };
+    CHECK(newArgumentParser(argc, argv));
+    TestFilter groupFilter("group");
+    groupFilter.invertMatching();
+    groupFilter.strictMatching();
+    CHECK_EQUAL(groupFilter, *args->getGroupFilters());
+}
+
+TEST(CommandLineArguments, setExcludeStrictGroupFilterSameParameter)
+{
+    int argc = 2;
+    const char* argv[] = { "tests.exe", "-xsggroup" };
+    CHECK(newArgumentParser(argc, argv));
+    TestFilter groupFilter("group");
+    groupFilter.invertMatching();
+    groupFilter.strictMatching();
+    CHECK_EQUAL(groupFilter, *args->getGroupFilters());
+}
+
 TEST(CommandLineArguments, setNameFilter)
 {
     int argc = 3;
@@ -227,6 +249,28 @@ TEST(CommandLineArguments, setExcludeNameFilterSameParameter)
     CHECK(newArgumentParser(argc, argv));
     TestFilter nameFilter("name");
     nameFilter.invertMatching();
+    CHECK_EQUAL(nameFilter, *args->getNameFilters());
+}
+
+TEST(CommandLineArguments, setExcludeStrictNameFilter)
+{
+    int argc = 3;
+    const char* argv[] = { "tests.exe", "-xsn", "name" };
+    CHECK(newArgumentParser(argc, argv));
+    TestFilter nameFilter("name");
+    nameFilter.invertMatching();
+    nameFilter.strictMatching();
+    CHECK_EQUAL(nameFilter, *args->getNameFilters());
+}
+
+TEST(CommandLineArguments, setExcludeStrictNameFilterSameParameter)
+{
+    int argc = 2;
+    const char* argv[] = { "tests.exe", "-xsnname" };
+    CHECK(newArgumentParser(argc, argv));
+    TestFilter nameFilter("name");
+    nameFilter.invertMatching();
+    nameFilter.strictMatching();
     CHECK_EQUAL(nameFilter, *args->getNameFilters());
 }
 
@@ -326,7 +370,7 @@ TEST(CommandLineArguments, weirdParamatersPrintsUsageAndReturnsFalse)
     int argc = 2;
     const char* argv[] = { "tests.exe", "-SomethingWeird" };
     CHECK(!newArgumentParser(argc, argv));
-    STRCMP_EQUAL("usage [-v] [-c] [-p] [-lg] [-ln] [-r#] [-g|sg|xg groupName]... [-n|sn|xn testName]... [\"TEST(groupName, testName)\"]... [-o{normal, junit, teamcity}] [-k packageName]\n",
+    STRCMP_EQUAL("usage [-v] [-c] [-p] [-lg] [-ln] [-r#] [-g|sg|xg|xsg groupName]... [-n|sn|xn|xsn testName]... [\"TEST(groupName, testName)\"]... [-o{normal, junit, teamcity}] [-k packageName]\n",
             args->usage());
 }
 

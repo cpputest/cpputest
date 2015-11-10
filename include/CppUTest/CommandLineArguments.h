@@ -80,9 +80,11 @@ private:
     void AddGroupFilter(int ac, const char** av, int& index);
     void AddStrictGroupFilter(int ac, const char** av, int& index);
     void AddExcludeGroupFilter(int ac, const char** av, int& index);
+    void AddExcludeStrictGroupFilter(int ac, const char** av, int& index);
     void AddNameFilter(int ac, const char** av, int& index);
     void AddStrictNameFilter(int ac, const char** av, int& index);
     void AddExcludeNameFilter(int ac, const char** av, int& index);
+    void AddExcludeStrictNameFilter(int ac, const char** av, int& index);
     void AddTestToRunBasedOnVerboseOutput(int ac, const char** av, int& index, const char* parameterName);
     bool SetOutputType(int ac, const char** av, int& index);
     void SetPackageName(int ac, const char** av, int& index);
