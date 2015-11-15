@@ -1,7 +1,7 @@
 
 AC_PREREQ([2.68])
 AC_INIT([CppUTest], [3.7.2], [https://github.com/cpputest/cpputest])
-AM_INIT_AUTOMAKE
+AM_INIT_AUTOMAKE([subdir-objects])
 AC_CONFIG_SRCDIR([src/CppUTest/Utest.cpp])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([cpputest.pc])
