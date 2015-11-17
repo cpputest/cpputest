@@ -122,6 +122,7 @@ if ($env:PlatformToolset -eq 'MinGW')
     Remove-PathFolder "C:\Program Files\Git\cmd"
     Remove-PathFolder "C:\Program Files (x86)\Git\bin"
     Remove-PathFolder "C:\Program Files (x86)\Git\cmd"
+    Remove-PathFolder "C:\Program Files\Git\usr\bin"
 
     # Add mingw to the path
     Add-PathFolder $mingw_path

@@ -9,6 +9,7 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_LIBTOOL_DLOPEN
 AC_PROG_LIBTOOL
 
+
 AC_CANONICAL_HOST
 
 default_use_std_cpp=yes
