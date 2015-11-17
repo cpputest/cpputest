@@ -22,7 +22,6 @@ case "x$build_os" in
 		;;
 esac
 
-
 AC_PROG_CC
 AC_PROG_CPP
 AC_PROG_CXX
@@ -32,7 +31,6 @@ AM_PROG_CC_C_O
 AM_SILENT_RULES
 
 ACX_PTHREAD([LIBS="$PTHREAD_LIBS $LIBS"])
-
 
 # This additional -lpthread was added due to a bug on gcc for MacOSX: http://gcc.gnu.org/bugzilla/show_bug.cgi?id=42159
 # According to the bug report, a workaround is to link -lpthread. Even the ACX_PTHREAD doesn't do that, so we add an
