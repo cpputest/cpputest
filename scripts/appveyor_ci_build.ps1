@@ -120,6 +120,7 @@ if ($env:PlatformToolset -eq 'MinGW')
     Remove-PathFolder "C:\MinGW\bin"
     Remove-PathFolder "C:\Program Files\Git\bin"
     Remove-PathFolder "C:\Program Files\Git\cmd"
+    Remove-PathFolder "C:\Program Files\Git\usr\bin"
     Remove-PathFolder "C:\Program Files (x86)\Git\bin"
     Remove-PathFolder "C:\Program Files (x86)\Git\cmd"
 
