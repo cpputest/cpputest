@@ -67,15 +67,15 @@ set (INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
 # Pkg-config file.
 set (prefix "${CMAKE_INSTALL_PREFIX}")
-set (exec_prefix "${CMAKE_INSTALL_PREFIX}")
-set (libdir "${LIB_INSTALL_DIR}")
-set (includedir "${INCLUDE_INSTALL_DIR}")
+set (exec_prefix "\${prefix}")
+set (libdir "\${exec_prefix}/${LIB_INSTALL_DIR}")
+set (includedir "\${prefix}/${INCLUDE_INSTALL_DIR}")
 set (PACKAGE_VERSION "${CppUTest_version_major}.${CppUTest_version_minor}")
 
 configure_file (cpputest.pc.in
-    ${CMAKE_CURRENT_SOURCE_DIR}/${CppUTest_PKGCONFIG_FILE} @ONLY)
+    ${CMAKE_CURRENT_BINARY_DIR}/${CppUTest_PKGCONFIG_FILE} @ONLY)
 
-install(FILES  ${CMAKE_CURRENT_SOURCE_DIR}/${CppUTest_PKGCONFIG_FILE}
+install(FILES  ${CMAKE_CURRENT_BINARY_DIR}/${CppUTest_PKGCONFIG_FILE}
     DESTINATION ${LIB_INSTALL_DIR}/pkgconfig
     )
 
