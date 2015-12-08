@@ -57,6 +57,26 @@ TEST(TestFilter, strictMatching)
     CHECK(!filter.match(" filter"));
 }
 
+TEST(TestFilter, invertMatching)
+{
+    TestFilter filter("filter");
+    filter.invertMatching();
+    CHECK(!filter.match("filter"));
+    CHECK(!filter.match("filterr"));
+    CHECK(filter.match("notevenclose"));
+    CHECK(filter.match(""));
+}
+
+TEST(TestFilter, invertStrictMatching)
+{
+    TestFilter filter("filter");
+    filter.invertMatching();
+    filter.strictMatching();
+    CHECK(!filter.match("filter"));
+    CHECK(filter.match("filterr"));
+    CHECK(filter.match(" filter"));
+}
+
 TEST(TestFilter, equality)
 {
     TestFilter filter1("filter");
@@ -71,6 +91,14 @@ TEST(TestFilter, equalityWithStrictness)
     TestFilter filter1("filter");
     TestFilter filter2("filter");
     filter2.strictMatching();
+    CHECK(! (filter1 == filter2));
+}
+
+TEST(TestFilter, equalityWithInvertion)
+{
+    TestFilter filter1("filter");
+    TestFilter filter2("filter");
+    filter2.invertMatching();
     CHECK(! (filter1 == filter2));
 }
 
@@ -94,6 +122,21 @@ TEST(TestFilter, stringFromWithStrictMatching)
     TestFilter filter("filter");
     filter.strictMatching();
     STRCMP_EQUAL("TestFilter: \"filter\" with strict matching", StringFrom(filter).asCharString());
+}
+
+TEST(TestFilter, stringFromWithInvertMatching)
+{
+    TestFilter filter("filter");
+    filter.invertMatching();
+    STRCMP_EQUAL("TestFilter: \"filter\" with invert matching", StringFrom(filter).asCharString());
+}
+
+TEST(TestFilter, stringFromWithStrictInvertMatching)
+{
+    TestFilter filter("filter");
+    filter.strictMatching();
+    filter.invertMatching();
+    STRCMP_EQUAL("TestFilter: \"filter\" with strict, invert matching", StringFrom(filter).asCharString());
 }
 
 TEST(TestFilter, listOfFilters)
