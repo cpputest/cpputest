@@ -25,7 +25,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <iostream>
+#include <algorithm>
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/JUnitTestOutput.h"
 #include "CppUTest/TestResult.h"
@@ -271,17 +271,21 @@ void JUnitTestOutput::printFailure(const TestFailure& failure)
 void JUnitTestOutput::openFileForWrite(const SimpleString& fileName)
 {
     std::string fileName_string(fileName.asCharString());
-    if (fileMap_.count(fileName_string)==0)
+
+    if (find(fileList_.begin(), fileList_.end(), fileName_string)==
+        fileList_.end())
     {
+      // not found -> create new
       impl_->file_ = PlatformSpecificFOpen(fileName.asCharString(), "w");
+      if (impl_->file_ != NULL)
+      {
+        fileList_.push_back(fileName_string);
+      }
     }
     else
     {
+      // found -> append
       impl_->file_ = PlatformSpecificFOpen(fileName.asCharString(), "a");
-    }
-    if (impl_->file_ != NULL)
-    {
-      fileMap_[fileName_string] = impl_->file_;
     }
 }
 

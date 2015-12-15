@@ -28,7 +28,8 @@
 #ifndef D_JUnitTestOutput_h
 #define D_JUnitTestOutput_h
 
-#include <map>
+#include <string>
+#include <list>
 #include "TestOutput.h"
 #include "SimpleString.h"
 #include "PlatformSpecificFunctions_c.h"
@@ -77,7 +78,7 @@ protected:
     virtual void writeFileEnding();
 
 private:
-    std::map<std::string, PlatformSpecificFile> fileMap_;
+    std::list<std::string> fileList_;
 };
 
 #endif
