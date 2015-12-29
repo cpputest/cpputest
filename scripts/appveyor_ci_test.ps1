@@ -106,8 +106,8 @@ switch ($env:PlatformToolset)
 {
     'Cygwin'
     {
-        Invoke-CygwinTests('cpputest_build\CppUTestTests.exe')
-        Invoke-CygwinTests('cpputest_build\CppUTestExtTests.exe')
+        Invoke-CygwinTests 'cpputest_build\CppUTestTests.exe'
+        Invoke-CygwinTests 'cpputest_build\CppUTestExtTests.exe'
     }
 
     'MinGW'
@@ -119,15 +119,15 @@ switch ($env:PlatformToolset)
         }
 
         Add-PathFolder $mingw_path
-        Invoke-Tests('.\cpputest_build\tests\CppUTestTests.exe')
-        Invoke-Tests('.\cpputest_build\tests\CppUTestExt\CppUTestExtTests.exe')
+        Invoke-Tests '.\cpputest_build\tests\CppUTestTests.exe'
+        Invoke-Tests '.\cpputest_build\tests\CppUTestExt\CppUTestExtTests.exe'
         Remove-PathFolder $mingw_path
     }
 
     default
     {
-        Invoke-Tests('.\cpputest_build\AllTests.exe')
+        Invoke-Tests '.\cpputest_build\AllTests.exe'
     }
 }
 
-Publish-TestResults
+Publish-TestResults (Get-ChildItem 'cpputest_*.xml')
