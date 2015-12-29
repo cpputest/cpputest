@@ -36,6 +36,51 @@ function Invoke-Tests($executable)
     }
 }
 
+function Invoke-CygwinTests($executable)
+{
+    # Assume cygwin is located at C:\cygwin for now
+    $cygwin_bin = "C:\cygwin\bin"
+
+    # Get the full path to the executable
+    $cygwin_folder = . "${cygwin_bin}\cygpath.exe" (Resolve-Path ".")
+    $cygwin_exe = . "${cygwin_bin}\cygpath.exe" $executable
+    
+    # Run tests from the cygwin prompt
+    $test_command = "${cygwin_exe} -ojunit"
+    $cygwin_command = "${cygwin_bin}\bash.exe --login -c 'cd ${cygwin_folder} ; ${test_command}'"
+
+    Write-Host $test_command
+    Invoke-Expression $cygwin_command
+
+    $anyFailures = $FALSE
+
+    # Upload results to AppVeyor one by one
+    Get-ChildItem cpputest_*.xml | foreach {
+        $testsuite = ([xml](get-content $_.Name)).testsuite
+
+        foreach ($testcase in $testsuite.testcase) {
+            if ($testcase.failure) {
+                Add-AppveyorTest $testcase.name -Outcome Failed -FileName $testsuite.name -ErrorMessage $testcase.failure.message
+                Add-AppveyorMessage "$($testcase.name) failed" -Category Error
+                $anyFailures = $TRUE
+            }
+            elseif ($testcase.skipped) {
+                Add-AppveyorTest $testcase.name -Outcome Ignored -Filename $testsuite.name
+            }
+            else {
+                Add-AppveyorTest $testcase.name -Outcome Passed -FileName $testsuite.name
+            }
+        }
+
+        Remove-Item $_.Name
+    }
+
+    if ($anyFailures -eq $TRUE){
+        write-host "Failing build as there are broken tests"
+        $host.SetShouldExit(1)
+    }
+}
+
 function Remove-PathFolder($folder)
 {
     [System.Collections.ArrayList]$pathFolders = New-Object System.Collections.ArrayList
@@ -82,7 +127,12 @@ function Add-PathFolder($folder)
     }
 }
 
-if ($env:PlatformToolset -ne 'MinGW')
+if ($env:PlatformToolset -eq 'Cygwin')
+{
+    Invoke-CygwinTests('cpputest_build\CppUTestTests.exe')
+    Invoke-CygwinTests('cpputest_build\CppUTestExtTests.exe')
+}
+elseif ($env:PlatformToolset -ne 'MinGW')
 {
     Invoke-Tests('.\cpputest_build\AllTests.exe')
 }

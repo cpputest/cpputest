@@ -26,6 +26,23 @@ function Invoke-BuildCommand($command, $directory = '.')
     Pop-Location
 }
 
+function Invoke-CygwinCommand($command, $directory = '.')
+{
+    # Assume cygwin is located at C:\cygwin for now
+    $cygwin_bin = "C:\cygwin\bin"
+    $cygwin_directory = (. "${cygwin_bin}\cygpath.exe" (Resolve-Path $directory))
+    $command_wrapped = "${cygwin_bin}\bash.exe --login -c 'cd $cygwin_directory ; $command' ; `$err = `$?"
+    
+    Write-Host $command
+    Invoke-Expression $command_wrapped
+
+    if ($LASTEXITCODE -ne 0)
+    {
+        Write-Host "Command Returned error: $LASTEXITCODE"
+        Exit $LASTEXITCODE
+    }
+}
+
 function Remove-PathFolder($folder)
 {
     [System.Collections.ArrayList]$pathFolders = New-Object System.Collections.ArrayList
@@ -104,6 +121,11 @@ if ($env:PlatformToolset -eq 'v100')
     $VS2010ProjectFiles | foreach {
         Invoke-BuildCommand "msbuild $logger_arg $_"
     }
+}
+
+if ($env:PlatformToolset -eq 'Cygwin')
+{
+    Invoke-CygwinCommand "autoreconf -i .. ; ../configure ; make -j ${NUMBER_OF_PROCESSORS} all" "cpputest_build"
 }
 
 if ($env:PlatformToolset -eq 'MinGW')
