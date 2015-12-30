@@ -58,6 +58,30 @@ function Invoke-CygwinTests($executable)
     Invoke-Expression $cygwin_command
 }
 
+$TestCount = 0
+
+if (-not $env:APPVEYOR)
+{
+    function Add-AppVeyorTest()
+    {
+        # Wacky way to access a script variable, but it works
+        $count = Get-Variable -Name TestCount -Scope script
+        Set-Variable -Name TestCount -Scope script -Value ($count.Value + 1)
+    }
+
+    function Add-AppVeyorMessage($Message, $Category)
+    {
+        if ($Category -eq 'Error')
+        {
+            Write-Error $Message
+        }
+        else
+        {
+            Write-Host $Message
+        }
+    }
+}
+
 switch ($env:PlatformToolset)
 {
     'Cygwin'
@@ -87,3 +111,8 @@ switch ($env:PlatformToolset)
 }
 
 Publish-TestResults (Get-ChildItem 'cpputest_*.xml')
+
+if (-not $env:APPVEYOR)
+{
+    Write-Host "Tests Ran: $TestCount"
+}
