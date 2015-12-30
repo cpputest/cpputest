@@ -19,16 +19,25 @@ env:
 matrix:
     exclude:
     - env: BUILD=cmake-coverage
+      compiler: clang
+    - env: BUILD=cmake-coverage
+      compiler: wcl
     - env: BUILD=autotools_old_compilers
     - env: BUILD=make-dos
-    - env: BUILD=test_report
-    - compiler: wcl
-    include:
-    - env: BUILD=cmake-coverage
-      compiler: gcc
-    - env: BUILD=test_report
-      compiler: gcc
+      compiler: clang
     - env: BUILD=make-dos
+      compiler: gcc
+    - env: BUILD=test_report
+      compiler: clang
+    - env: BUILD=test_report
+      compiler: wcl
+    - env: BUILD=autotools
+      compiler: wcl
+    - env: BUILD=cmake
+      compiler: wcl
+    - env: BUILD=autotools_gtest
+      compiler: wcl
+    - env: BUILD=cmake_gtest
       compiler: wcl
 global:
 - secure: |-
