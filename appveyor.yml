@@ -20,6 +20,7 @@ environment:
     Version: 5.3.0
   - PlatformToolset: v90
   - PlatformToolset: v100
+  - PlatformToolset: v140
 
 install:
 - ps: if ($env:PlatformToolset -eq 'MinGW') { choco install mingw --version $env:Version $( if ($env:Platform -eq 'Win32') { Write-Output -forcex86 } ) | Out-Null }
