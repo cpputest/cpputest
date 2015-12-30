@@ -102,58 +102,57 @@ else
     $logger_arg = ''
 }
 
-if ($env:PlatformToolset -eq 'v90')
+# Clean up some paths for any configuration
+Remove-PathFolder "C:\MinGW\bin"
+Remove-PathFolder "C:\Program Files\Git\bin"
+Remove-PathFolder "C:\Program Files\Git\cmd"
+Remove-PathFolder "C:\Program Files\Git\usr\bin"
+Remove-PathFolder "C:\Program Files (x86)\Git\bin"
+Remove-PathFolder "C:\Program Files (x86)\Git\cmd"
+Remove-PathFolder "C:\Program Files (x86)\Git\usr\bin"
+
+switch ($env:PlatformToolset)
 {
-    $vsvarspath = Join-Path $env:VS90COMNTOOLS vsvars32.bat
-    Get-BatchFile($vsvarspath)
-
-    $VS2008ProjectFiles | foreach {
-        Invoke-BuildCommand "vcbuild /upgrade $_"
-    }
-
-    $VS2008ProjectFiles | foreach {
-        Invoke-BuildCommand "vcbuild $_ $env:CONFIGURATION"
-    }
-}
-
-if ($env:PlatformToolset -eq 'v100')
-{
-    $VS2010ProjectFiles | foreach {
-        Invoke-BuildCommand "msbuild $logger_arg $_"
-    }
-}
-
-if ($env:PlatformToolset -eq 'Cygwin')
-{
-    Invoke-CygwinCommand "autoreconf -i .. ; ../configure ; make CppUTestTests.exe CppUTestExtTests.exe" "cpputest_build"
-}
-
-if ($env:PlatformToolset -eq 'MinGW')
-{
-    $mingw_path = 'C:\Tools\mingw32\bin'
-    if ($env:Platform -eq 'x64')
+    'Cygwin'
     {
-        $mingw_path = 'C:\Tools\mingw64\bin'
+        Invoke-CygwinCommand "autoreconf -i .. ; ../configure ; make CppUTestTests.exe CppUTestExtTests.exe" "cpputest_build"
     }
 
-    Write-Host "Initial Path: $env:Path"
+    'MinGW'
+    {
+        $mingw_path = 'C:\Tools\mingw32\bin'
+        if ($env:Platform -eq 'x64')
+        {
+            $mingw_path = 'C:\Tools\mingw64\bin'
+        }
 
-    # Need to do some path cleanup first
-    Remove-PathFolder "C:\MinGW\bin"
-    Remove-PathFolder "C:\Program Files\Git\bin"
-    Remove-PathFolder "C:\Program Files\Git\cmd"
-    Remove-PathFolder "C:\Program Files\Git\usr\bin"
-    Remove-PathFolder "C:\Program Files (x86)\Git\bin"
-    Remove-PathFolder "C:\Program Files (x86)\Git\cmd"
-    Remove-PathFolder "C:\Program Files (x86)\Git\usr\bin"
+        # Add mingw to the path
+        Add-PathFolder $mingw_path
 
-    # Add mingw to the path
-    Add-PathFolder $mingw_path
+        Invoke-BuildCommand "cmake -G 'MinGW Makefiles' .." 'cpputest_build'
+        Invoke-BuildCommand "mingw32-make all" 'cpputest_build'
 
-    Write-Host "Building with Path: $env:Path"
+        Remove-PathFolder $mingw_path
+    }
 
-    Invoke-BuildCommand "cmake -G 'MinGW Makefiles' .." 'cpputest_build'
-    Invoke-BuildCommand "mingw32-make all" 'cpputest_build'
+    'v90'
+    {
+        $vsvarspath = Join-Path $env:VS90COMNTOOLS vsvars32.bat
+        Get-BatchFile($vsvarspath)
 
-    Remove-PathFolder $mingw_path
+        $VS2008ProjectFiles | foreach {
+            Invoke-BuildCommand "vcbuild /upgrade $_"
+        }
+
+        $VS2008ProjectFiles | foreach {
+            Invoke-BuildCommand "vcbuild $_ $env:CONFIGURATION"
+        }
+    }
+
+    default   # Mainly for v100, should also support anything newer I think
+    {
+        $VS2010ProjectFiles | foreach {
+            Invoke-BuildCommand "msbuild $logger_arg $_"
+        }
+    }
 }
