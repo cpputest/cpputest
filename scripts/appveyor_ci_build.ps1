@@ -100,7 +100,7 @@ switch ($env:PlatformToolset)
     default   # Mainly for v100, should also support anything newer I think
     {
         $VS2010ProjectFiles | foreach {
-            Invoke-BuildCommand "msbuild $logger_arg $_"
+            Invoke-BuildCommand "msbuild /ToolsVersion:14.0 $logger_arg $_"
         }
     }
 }
