@@ -130,7 +130,7 @@ TEST(TestMemoryAllocatorTest, TryingToAllocateTooMuchFailsTest)
     fixture.assertPrintContains("malloc returned null pointer");
 }
 
-
+#if CPPUTEST_USE_MEM_LEAK_DETECTION
 #if CPPUTEST_USE_MALLOC_MACROS
 
 // FailableMemoryAllocator must be global. Otherwise, it does not exist when memory leak detector
@@ -249,4 +249,5 @@ TEST(FailableMemoryAllocator, CheckAllFailingLocationAllocsWereDone)
     failableMallocAllocator.clearFailedAllocs();
 }
 
+#endif
 #endif
