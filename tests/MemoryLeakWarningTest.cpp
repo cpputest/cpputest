@@ -272,7 +272,7 @@ TEST(MemoryLeakWarningGlobalDetectorTest, crashOnLeakWithOperatorNew)
     crash_on_allocation_number(1);
     char* memory = new char[100];
     CHECK(cpputestHasCrashed);
-    delete memory;
+    delete [] memory;
 }
 
 TEST(MemoryLeakWarningGlobalDetectorTest, crashOnLeakWithOperatorNewArray)
