@@ -401,6 +401,29 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="CppUTestExt\ExpectedFunctionsListTest.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						ForcedIncludeFiles=""
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="CppUTestExt\GMockTest.cpp"
 				>
 				<FileConfiguration
@@ -493,29 +516,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="TeamCityOutputTest.cpp"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						ForcedIncludeFiles=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="MemoryLeakDetectorTest.cpp"
 				>
 				<FileConfiguration
@@ -539,7 +539,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="MemoryOperatorOverloadTest.cpp"
+				RelativePath="MemoryLeakWarningTest.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -562,7 +562,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="MemoryLeakWarningTest.cpp"
+				RelativePath="MemoryOperatorOverloadTest.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -677,6 +677,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\CppUTestExt\MockCallTest.cpp"
+				>
+			</File>
+			<File
 				RelativePath="CppUTestExt\MockCheatSheetTest.cpp"
 				>
 				<FileConfiguration
@@ -700,30 +704,11 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="CppUTestExt\MockExpectedCallTest.cpp"
+				RelativePath=".\CppUTestExt\MockComparatorCopierTest.cpp"
 				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						ForcedIncludeFiles=""
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="CppUTestExt\ExpectedFunctionsListTest.cpp"
+				RelativePath="CppUTestExt\MockExpectedCallTest.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -773,6 +758,18 @@
 				>
 			</File>
 			<File
+				RelativePath=".\CppUTestExt\MockHierarchyTest.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CppUTestExt\MockNamedValueTest.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CppUTestExt\MockParameterTest.cpp"
+				>
+			</File>
+			<File
 				RelativePath="CppUTestExt\MockPluginTest.cpp"
 				>
 				<FileConfiguration
@@ -794,6 +791,14 @@
 						ForcedIncludeFiles=""
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\CppUTestExt\MockReturnValueTest.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CppUTestExt\MockStrictOrderTest.cpp"
+				>
 			</File>
 			<File
 				RelativePath="CppUTestExt\MockSupport_cTest.cpp"
@@ -985,6 +990,29 @@
 			</File>
 			<File
 				RelativePath="SimpleStringTest.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						ForcedIncludeFiles=""
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="TeamCityOutputTest.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
