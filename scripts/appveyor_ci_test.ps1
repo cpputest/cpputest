@@ -44,7 +44,7 @@ function Invoke-Tests($executable)
 function Invoke-CygwinTests($executable)
 {
     # Assume cygwin is located at C:\cygwin for now
-    $cygwin_bin = "C:\cygwin\bin"
+    $cygwin_bin = Get-CygwinBin
 
     # Get the full path to the executable
     $cygwin_folder = . "${cygwin_bin}\cygpath.exe" (Resolve-Path ".")
@@ -92,11 +92,7 @@ switch ($env:PlatformToolset)
 
     'MinGW'
     {
-        $mingw_path = 'C:\Tools\mingw32\bin'
-        if ($env:Platform -eq 'x64')
-        {
-            $mingw_path = 'C:\Tools\mingw64\bin'
-        }
+        $mingw_path = Get-MinGWBin
 
         Add-PathFolder $mingw_path
         Invoke-Tests '.\cpputest_build\tests\CppUTestTests.exe'

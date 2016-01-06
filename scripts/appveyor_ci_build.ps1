@@ -22,8 +22,9 @@ function Invoke-BuildCommand($command, $directory = '.')
 
 function Invoke-CygwinCommand($command, $directory = '.')
 {
-    # Assume cygwin is located at C:\cygwin for now
-    $cygwin_bin = "C:\cygwin\bin"
+    # Assume cygwin is located at C:\cygwin on x86 and C:\cygwin64 on x64 for now
+    $cygwin_bin = Get-CygwinBin
+
     $cygwin_directory = (. "${cygwin_bin}\cygpath.exe" (Resolve-Path $directory))
     $command_wrapped = "${cygwin_bin}\bash.exe --login -c 'cd $cygwin_directory ; $command' ; `$err = `$?"
     
@@ -68,11 +69,7 @@ switch ($env:PlatformToolset)
 
     'MinGW'
     {
-        $mingw_path = 'C:\Tools\mingw32\bin'
-        if ($env:Platform -eq 'x64')
-        {
-            $mingw_path = 'C:\Tools\mingw64\bin'
-        }
+        $mingw_path = Get-MinGWBin
 
         # Add mingw to the path
         Add-PathFolder $mingw_path
