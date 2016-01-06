@@ -149,12 +149,18 @@
     <ClCompile Include="CppUTestExt\MemoryReporterPluginTest.cpp" />
     <ClCompile Include="CppUTestExt\MemoryReportFormatterTest.cpp" />
     <ClCompile Include="CppUTestExt\MockActualCallTest.cpp" />
+    <ClCompile Include="CppUTestExt\MockCallTest.cpp" />
     <ClCompile Include="CppUTestExt\MockCheatSheetTest.cpp" />
+    <ClCompile Include="CppUTestExt\MockComparatorCopierTest.cpp" />
     <ClCompile Include="CppUTestExt\MockExpectedCallTest.cpp" />
     <ClCompile Include="CppUTestExt\ExpectedFunctionsListTest.cpp" />
     <ClCompile Include="CppUTestExt\MockFailureTest.cpp" />
+    <ClCompile Include="CppUTestExt\MockHierarchyTest.cpp" />
     <ClCompile Include="CppUTestExt\MockNamedValueTest.cpp" />
+    <ClCompile Include="CppUTestExt\MockParameterTest.cpp" />
     <ClCompile Include="CppUTestExt\MockPluginTest.cpp" />
+    <ClCompile Include="CppUTestExt\MockReturnValueTest.cpp" />
+    <ClCompile Include="CppUTestExt\MockStrictOrderTest.cpp" />
     <ClCompile Include="CppUTestExt\MockSupportTest.cpp" />
     <ClCompile Include="CppUTestExt\MockSupport_cTest.cpp" />
     <ClCompile Include="CppUTestExt\MockSupport_cTestCFile.c" />
@@ -168,6 +174,7 @@
     <ClCompile Include="SetPluginTest.cpp" />
     <ClCompile Include="SimpleMutexTest.cpp" />
     <ClCompile Include="SimpleStringTest.cpp" />
+    <ClCompile Include="TeamCityOutputTest.cpp" />
     <ClCompile Include="TestFailureNaNTest.cpp" />
     <ClCompile Include="TestFailureTest.cpp" />
     <ClCompile Include="TestFilterTest.cpp" />
