@@ -100,16 +100,19 @@ public:
         return genTest_->hasFailed();
     }
 
-
     void assertPrintContains(const SimpleString& contains)
     {
-        assertPrintContains(output_, contains);
+        assertPrintContains(getOutput(), contains);
     }
 
-    static void assertPrintContains(StringBufferTestOutput* output,
-            const SimpleString& contains)
+    const SimpleString& getOutput()
     {
-        STRCMP_CONTAINS(contains.asCharString(), output->getOutput().asCharString());
+        return output_->getOutput();
+    }
+
+    static void assertPrintContains(const SimpleString& output, const SimpleString& contains)
+    {
+        STRCMP_CONTAINS(contains.asCharString(), output.asCharString());
 
     }
 
