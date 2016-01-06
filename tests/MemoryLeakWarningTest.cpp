@@ -350,8 +350,8 @@ TEST(MemoryLeakWarningGlobalDetectorTest, turnOffNewOverloadsNoThrowCausesNoAddi
     LONGS_EQUAL(storedAmountOfLeaks, detector->totalMemoryLeaks(mem_leak_period_all));
 
     delete nonMemoryNoThrow;
-    delete nonArrayMemoryNoThrow;
-    delete nonArrayMemoryThrow;
+    delete [] nonArrayMemoryNoThrow;
+    delete [] nonArrayMemoryThrow;
 #ifdef CPPUTEST_USE_NEW_MACROS
     #include "CppUTest/MemoryLeakDetectorNewMacros.h"
 #endif
