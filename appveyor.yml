@@ -6,6 +6,7 @@ os:
 environment:
   matrix:
   - PlatformToolset: Cygwin
+    Platform: x86
   - PlatformToolset: MinGW
     Platform: Win32
     Version: 4.8.5
@@ -19,8 +20,14 @@ environment:
     Platform: x64
     Version: 5.3.0
   - PlatformToolset: v90
+    Platform: Win32
+    Configuration: Release
   - PlatformToolset: v100
+    Platform: Win32
+    Configuration: Release
   - PlatformToolset: v140
+    Platform: Win32
+    Configuration: Release
 
 install:
 - ps: if ($env:PlatformToolset -eq 'MinGW') { choco install mingw --version $env:Version $( if ($env:Platform -eq 'Win32') { Write-Output -forcex86 } ) | Out-Null }
@@ -36,6 +43,3 @@ artifacts:
 - path: lib\CppUTest.lib
   name: CppUTest
 
-# Other configuration options
-platform: Win32
-configuration: Release
