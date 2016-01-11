@@ -1,21 +1,8 @@
 language: cpp
 os:
  - linux
-compiler:
-- clang
-- gcc
-- wcl
 rvm:
 - 1.9.3
-env:
-  - BUILD=autotools
-  - BUILD=cmake
-  - BUILD=autotools_gtest
-  - BUILD=cmake_gtest
-  - BUILD=test_report
-  - BUILD=autotools_old_compilers
-  - BUILD=cmake-coverage
-  - BUILD=make-dos
 matrix:
     include:
     - compiler: clang
