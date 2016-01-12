@@ -1,36 +1,31 @@
 language: cpp
-os:
- - linux
-compiler:
-- clang
-- gcc
-- wcl
-rvm:
-- 1.9.3
-env:
-  - BUILD=autotools
-  - BUILD=cmake
-  - BUILD=autotools_gtest
-  - BUILD=cmake_gtest
-  - BUILD=test_report
-  - BUILD=autotools_old_compilers
-  - BUILD=cmake-coverage
-  - BUILD=make-dos
 matrix:
-    exclude:
-    - env: BUILD=cmake-coverage
-    - env: BUILD=autotools_old_compilers
-    - env: BUILD=make-dos
-    - env: BUILD=test_report
-    - compiler: wcl
     include:
-    - env: BUILD=cmake-coverage
-      compiler: gcc
-    - env: BUILD=test_report
-      compiler: gcc
-    - env: BUILD=make-dos
-      compiler: wcl
+    - compiler: clang
+      env: BUILD=autotools
+    - compiler: clang
+      env: BUILD=cmake
+    - compiler: clang
+      env: BUILD=autotools_gtest
+    - compiler: clang
+      env: BUILD=cmake_gtest
+    - compiler: gcc
+      env: BUILD=autotools
+    - compiler: gcc
+      env: BUILD=cmake
+    - compiler: gcc
+      env: BUILD=autotools_gtest
+    - compiler: gcc
+      env: BUILD=cmake_gtest
+    - compiler: gcc
+      env: BUILD=cmake-coverage
+    - compiler: gcc
+      env: BUILD=test_report
+    - compiler: wcl
+      env: BUILD=make-dos
 global:
+- os: linux
+- rvm: '1.9.3'
 - secure: |-
       P05xUfJVw5YM4hF7hzQLjyMzDD4Q1/fyWP9Uk5aK5VrSWNY99EuxldXI5QK/
       vA1NkcW49tQW1wQvBlRtdlLNOmUfDP/oiJFXPwNn4dqwOIOEet2P7JO/5hnH
