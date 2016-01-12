@@ -1,8 +1,4 @@
 language: cpp
-os:
- - linux
-rvm:
-- 1.9.3
 matrix:
     include:
     - compiler: clang
@@ -28,6 +24,8 @@ matrix:
     - compiler: wcl
       env: BUILD=make-dos
 global:
+- os: linux
+- rvm: '1.9.3'
 - secure: |-
       P05xUfJVw5YM4hF7hzQLjyMzDD4Q1/fyWP9Uk5aK5VrSWNY99EuxldXI5QK/
       vA1NkcW49tQW1wQvBlRtdlLNOmUfDP/oiJFXPwNn4dqwOIOEet2P7JO/5hnH
