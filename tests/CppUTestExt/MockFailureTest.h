@@ -72,10 +72,8 @@ inline UtestShell* mockFailureTest()
     return MockFailureReporterForTest::getReporter()->getTestToFail();
 }
 
-inline SimpleString mockFailureString()
-{
-    return MockFailureReporterForTest::getReporter()->mockFailureString;
-}
+#define mockFailureString() /* inline function will not work in VC6 */ \
+    MockFailureReporterForTest::getReporter()->mockFailureString
 
 inline void CLEAR_MOCK_FAILURE()
 {
