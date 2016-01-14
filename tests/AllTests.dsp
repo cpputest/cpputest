@@ -190,11 +190,15 @@ SOURCE=.\CppUTestExt\MockExpectedCallTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\CppUTestExt\MockFailureTest.cpp
+SOURCE=.\CppUTestExt\MockFailureReporterForTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\CppUTestExt\MockFailureTest.h
+SOURCE=.\CppUTestExt\MockFailureReporterForTest.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\CppUTestExt\MockFailureTest.cpp
 # End Source File
 # Begin Source File
 
