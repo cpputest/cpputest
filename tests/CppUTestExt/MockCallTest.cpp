@@ -27,7 +27,7 @@
 
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TestTestingFixture.h"
-#include "MockFailureTest.h"
+#include "MockFailureReporterForTest.h"
 
 TEST_GROUP(MockCallTest)
 {

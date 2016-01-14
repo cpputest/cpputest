@@ -27,7 +27,7 @@
  */
 
 #include "CppUTest/TestHarness.h"
-#include "MockFailureTest.h"
+#include "MockFailureReporterForTest.h"
 
 TEST_GROUP(MockParameterTest)
 {

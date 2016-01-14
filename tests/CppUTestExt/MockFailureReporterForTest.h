@@ -25,113 +25,42 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef D_TestMockFailure_h
-#define D_TestMockFailure_h
+#ifndef D_MockFailureReporterForTest_h
+#define D_MockFailureReporterForTest_h
 
 #include "CppUTestExt/MockSupport.h"
 
 #define CHECK_EXPECTED_MOCK_FAILURE(expectedFailure) CHECK_EXPECTED_MOCK_FAILURE_LOCATION(expectedFailure, __FILE__, __LINE__)
 #define CHECK_NO_MOCK_FAILURE() CHECK_NO_MOCK_FAILURE_LOCATION(__FILE__, __LINE__)
 
-
 class MockFailureReporterForTest : public MockFailureReporter
 {
 public:
-
     SimpleString mockFailureString;
 
-    virtual void failTest(const MockFailure& failure)
-    {
-        mockFailureString = failure.getMessage();
-    }
-
-    static MockFailureReporterForTest* getReporter()
-    {
-        static MockFailureReporterForTest reporter;
-        return &reporter;
-    }
+    virtual void failTest(const MockFailure& failure);
+    static MockFailureReporterForTest* getReporter();
 };
 
 class MockFailureReporterInstaller
 {
   public:
-    MockFailureReporterInstaller()
-    {
-      mock().setMockFailureStandardReporter(MockFailureReporterForTest::getReporter());
-    }
-
-    ~MockFailureReporterInstaller()
-    {
-      mock().setMockFailureStandardReporter(NULL);
-    }
+    MockFailureReporterInstaller();
+    ~MockFailureReporterInstaller();
 };
 
-
-inline UtestShell* mockFailureTest()
-{
-    return MockFailureReporterForTest::getReporter()->getTestToFail();
-}
-
-inline SimpleString mockFailureString()
-{
-    return MockFailureReporterForTest::getReporter()->mockFailureString;
-}
-
-inline void CLEAR_MOCK_FAILURE()
-{
-    MockFailureReporterForTest::getReporter()->mockFailureString = "";
-}
-
-inline void CHECK_EXPECTED_MOCK_FAILURE_LOCATION(const MockFailure& expectedFailure, const char* file, int line)
-{
-    SimpleString expectedFailureString = expectedFailure.getMessage();
-    SimpleString actualFailureString = mockFailureString();
-    CLEAR_MOCK_FAILURE();
-    if (expectedFailureString != actualFailureString)
-    {
-        SimpleString error = "MockFailures are different.\n";
-        error += "Expected MockFailure:\n\t";
-        error += expectedFailureString;
-        error += "\nActual MockFailure:\n\t";
-        error += actualFailureString;
-        FAIL_LOCATION(error.asCharString(), file, line);
-    }
-}
-
-inline void CHECK_NO_MOCK_FAILURE_LOCATION(const char* file, int line)
-{
-    if (mockFailureString() != "") {
-        SimpleString error = "Unexpected mock failure:\n";
-        error += mockFailureString();
-        CLEAR_MOCK_FAILURE();
-        FAIL_LOCATION(error.asCharString(), file, line);
-
-    }
-    CLEAR_MOCK_FAILURE();
-}
+UtestShell* mockFailureTest();
+SimpleString mockFailureString();
+void CLEAR_MOCK_FAILURE();
+void CHECK_EXPECTED_MOCK_FAILURE_LOCATION(const MockFailure& expectedFailure, const char* file, int line);
+void CHECK_NO_MOCK_FAILURE_LOCATION(const char* file, int line);
 
 class MockExpectedCallsListForTest : public MockExpectedCallsList
 {
   public:
-    ~MockExpectedCallsListForTest()
-    {
-      deleteAllExpectationsAndClearList();
-    }
-
-    MockCheckedExpectedCall* addFunction(const SimpleString& name)
-    {
-      MockCheckedExpectedCall* newCall = new MockCheckedExpectedCall;
-      newCall->withName(name);
-      addExpectedCall(newCall);
-      return newCall;
-    }
-
-    MockCheckedExpectedCall* addFunction(const SimpleString& name, int order)
-    {
-      MockCheckedExpectedCall* newCall = addFunction(name);
-      newCall->withCallOrder(order);
-      return newCall;
-    }
+    ~MockExpectedCallsListForTest();
+    MockCheckedExpectedCall* addFunction(const SimpleString& name);
+    MockCheckedExpectedCall* addFunction(const SimpleString& name, int order);
 };
 
 #endif
