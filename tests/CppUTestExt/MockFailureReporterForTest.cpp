@@ -27,32 +27,26 @@
 
 #include "MockFailureReporterForTest.h"
 
-#define CHECK_EXPECTED_MOCK_FAILURE(expectedFailure) CHECK_EXPECTED_MOCK_FAILURE_LOCATION(expectedFailure, __FILE__, __LINE__)
-#define CHECK_NO_MOCK_FAILURE() CHECK_NO_MOCK_FAILURE_LOCATION(__FILE__, __LINE__)
+void MockFailureReporterForTest::failTest(const MockFailure& failure)
+{
+    mockFailureString = failure.getMessage();
+}
 
+MockFailureReporterForTest* MockFailureReporterForTest::getReporter()
+{
+    static MockFailureReporterForTest reporter;
+    return &reporter;
+}
 
+MockFailureReporterInstaller::MockFailureReporterInstaller()
+{
+  mock().setMockFailureStandardReporter(MockFailureReporterForTest::getReporter());
+}
 
-    void MockFailureReporterForTest::failTest(const MockFailure& failure)
-    {
-        mockFailureString = failure.getMessage();
-    }
-
-    MockFailureReporterForTest* MockFailureReporterForTest::getReporter()
-    {
-        static MockFailureReporterForTest reporter;
-        return &reporter;
-    }
-
-    MockFailureReporterInstaller::MockFailureReporterInstaller()
-    {
-      mock().setMockFailureStandardReporter(MockFailureReporterForTest::getReporter());
-    }
-
-    MockFailureReporterInstaller::~MockFailureReporterInstaller()
-    {
-      mock().setMockFailureStandardReporter(NULL);
-    }
-
+MockFailureReporterInstaller::~MockFailureReporterInstaller()
+{
+  mock().setMockFailureStandardReporter(NULL);
+}
 
 UtestShell* mockFailureTest()
 {
@@ -97,24 +91,24 @@ void CHECK_NO_MOCK_FAILURE_LOCATION(const char* file, int line)
     CLEAR_MOCK_FAILURE();
 }
 
-    MockExpectedCallsListForTest::~MockExpectedCallsListForTest()
-    {
-      deleteAllExpectationsAndClearList();
-    }
+MockExpectedCallsListForTest::~MockExpectedCallsListForTest()
+{
+  deleteAllExpectationsAndClearList();
+}
 
-    MockCheckedExpectedCall* MockExpectedCallsListForTest::addFunction(const SimpleString& name)
-    {
-      MockCheckedExpectedCall* newCall = new MockCheckedExpectedCall;
-      newCall->withName(name);
-      addExpectedCall(newCall);
-      return newCall;
-    }
+MockCheckedExpectedCall* MockExpectedCallsListForTest::addFunction(const SimpleString& name)
+{
+  MockCheckedExpectedCall* newCall = new MockCheckedExpectedCall;
+  newCall->withName(name);
+  addExpectedCall(newCall);
+  return newCall;
+}
 
-    MockCheckedExpectedCall* MockExpectedCallsListForTest::addFunction(const SimpleString& name, int order)
-    {
-      MockCheckedExpectedCall* newCall = addFunction(name);
-      newCall->withCallOrder(order);
-      return newCall;
-    }
+MockCheckedExpectedCall* MockExpectedCallsListForTest::addFunction(const SimpleString& name, int order)
+{
+  MockCheckedExpectedCall* newCall = addFunction(name);
+  newCall->withCallOrder(order);
+  return newCall;
+}
 
 
