@@ -106,6 +106,14 @@ SOURCE=.\AllocationInCppFile.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\AllocLetTestFree.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\AllocLetTestFreeTest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\CppUTestExt\AllTests.cpp
 # End Source File
 # Begin Source File
@@ -230,7 +238,15 @@ SOURCE=.\SetPluginTest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\SimpleMutexTest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\SimpleStringTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\TestFailureNaNTest.cpp
 # End Source File
 # Begin Source File
 
@@ -267,6 +283,14 @@ SOURCE=.\TestRegistryTest.cpp
 # Begin Source File
 
 SOURCE=.\TestResultTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\TestUtestMacro.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\UtestPlatformTest.cpp
 # End Source File
 # Begin Source File
 
