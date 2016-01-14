@@ -754,7 +754,11 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="CppUTestExt\MockFailureTest.h"
+				RelativePath="CppUTestExt\MockFailureReporterForTest.cpp"
+				>
+			</File>
+			<File
+				RelativePath="CppUTestExt\MockFailureReporterForTest.h"
 				>
 			</File>
 			<File
