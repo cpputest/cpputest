@@ -67,13 +67,8 @@ class MockFailureReporterInstaller
 };
 
 
-inline UtestShell* mockFailureTest()
-{
-    return MockFailureReporterForTest::getReporter()->getTestToFail();
-}
-
-#define mockFailureString() /* inline function will not work in VC6 */ \
-    MockFailureReporterForTest::getReporter()->mockFailureString
+extern UtestShell* mockFailureTest();
+extern SimpleString mockFailureString();
 
 inline void CLEAR_MOCK_FAILURE()
 {

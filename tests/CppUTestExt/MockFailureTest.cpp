@@ -31,6 +31,17 @@
 #include "CppUTestExt/MockExpectedCallsList.h"
 #include "MockFailureTest.h"
 
+UtestShell* mockFailureTest()
+{
+    return MockFailureReporterForTest::getReporter()->getTestToFail();
+}
+
+SimpleString mockFailureString()
+{
+    return MockFailureReporterForTest::getReporter()->mockFailureString;
+}
+
+
 TEST_GROUP(MockFailureTest)
 {
     MockFailureReporter reporter;
