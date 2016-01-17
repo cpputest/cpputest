@@ -1,0 +1,32 @@
+version: 3.7.0-ci{build}
+
+os:
+- Windows Server 2012 R2
+
+environment:
+  matrix:
+  - PlatformToolset: Cygwin
+  - PlatformToolset: MinGW
+    Platform: Win32
+  - PlatformToolset: MinGW
+    Platform: x64
+  - PlatformToolset: v90
+  - PlatformToolset: v100
+
+install:
+- ps: if ($env:PlatformToolset -eq 'MinGW') { choco install mingw $( if ($env:Platform -eq 'Win32') { Write-Output -forcex86 } ) }
+- ps: if ($env:PlatformToolset -eq 'Cygwin') { (New-Object System.Net.WebClient).DownloadFile('https://cygwin.com/setup-x86.exe', "${env:TEMP}\cygwin-setup.exe") ; . "${env:TEMP}\cygwin-setup.exe" --quiet-mode --packages autoconf automake make gcc-core libtool gcc-g++ }
+
+build_script:
+- ps: scripts\appveyor_ci_build.ps1
+
+test_script:
+- ps: scripts\appveyor_ci_test.ps1
+
+artifacts:
+- path: lib\CppUTest.lib
+  name: CppUTest
+
+# Other configuration options
+platform: Win32
+configuration: Release

@@ -31,12 +31,6 @@
 #include "CppUTestExt/MockExpectedCallsList.h"
 #include "MockFailureTest.h"
 
-MockFailureReporterForTest* MockFailureReporterForTest::getReporter()
-{
-    static MockFailureReporterForTest reporter;
-    return &reporter;
-}
-
 TEST_GROUP(MockFailureTest)
 {
     MockFailureReporter reporter;
@@ -115,7 +109,7 @@ TEST(MockFailureTest, MockUnexpectedAdditionalCallFailure)
 TEST(MockFailureTest, MockUnexpectedInputParameterFailure)
 {
     call1->withName("foo").withParameter("boo", 2);
-    call2->withName("foo").withParameter("boo", 10);
+    call2->withName("foo").withParameter("boo", 3.3f);
     call3->withName("unrelated");
     addAllToList();
 
@@ -126,7 +120,7 @@ TEST(MockFailureTest, MockUnexpectedInputParameterFailure)
     STRCMP_EQUAL("Mock Failure: Unexpected parameter name to function \"foo\": bar\n"
                  "\tEXPECTED calls that DID NOT happen related to function: foo\n"
                  "\t\tfoo -> int boo: <2>\n"
-                 "\t\tfoo -> int boo: <10>\n"
+                 "\t\tfoo -> double boo: <3.3>\n"
                  "\tACTUAL calls that DID happen related to function: foo\n"
                  "\t\t<none>\n"
                  "\tACTUAL unexpected parameter passed to function: foo\n"
@@ -200,7 +194,7 @@ TEST(MockFailureTest, MockExpectedParameterDidntHappenFailure)
 TEST(MockFailureTest, MockNoWayToCompareCustomTypeFailure)
 {
     MockNoWayToCompareCustomTypeFailure failure(UtestShell::getCurrent(), "myType");
-    STRCMP_EQUAL("MockFailure: No way to compare type <myType>. Please install a ParameterTypeComparator.", failure.getMessage().asCharString());
+    STRCMP_EQUAL("MockFailure: No way to compare type <myType>. Please install a MockNamedValueComparator.", failure.getMessage().asCharString());
 }
 
 TEST(MockFailureTest, MockUnexpectedObjectFailure)
@@ -214,7 +208,7 @@ TEST(MockFailureTest, MockUnexpectedObjectFailure)
 
     MockUnexpectedObjectFailure failure(UtestShell::getCurrent(), "foo", (void*)0x1, *list);
     STRCMP_EQUAL(StringFromFormat (
-                 "MockFailure: Function called on a unexpected object: foo\n"
+                 "MockFailure: Function called on an unexpected object: foo\n"
                  "\tActual object for call has address: <%p>\n"
                  "\tEXPECTED calls that DID NOT happen related to function: foo\n"
                  "\t\t(object address: %p)::foo -> no parameters\n"

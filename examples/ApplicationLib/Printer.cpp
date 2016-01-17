@@ -26,8 +26,6 @@
  */
 
 #include "Printer.h"
-#include "CppUTest/TestHarness.h"
-#include "CppUTest/SimpleString.h"
 #include <stdio.h>
 
 Printer::Printer()
@@ -44,9 +42,9 @@ void Printer::Print(const char* s)
         putchar(*p);
 }
 
-void Printer::Print(long n)
+void Printer::Print(long int n)
 {
-    Print(StringFrom(n).asCharString());
+	printf("%ld", n);
 }
 
 Printer& operator<<(Printer& p, const char* s)
@@ -60,4 +58,3 @@ Printer& operator<<(Printer& p, long int i)
     p.Print(i);
     return p;
 }
-

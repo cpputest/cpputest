@@ -29,69 +29,62 @@
 #include "CppUTestExt/MockSupport.h"
 #include "CppUTestExt/MockSupportPlugin.h"
 #include "MockFailureTest.h"
+#include "CppUTest/TestTestingFixture.h"
 
 TEST_GROUP(MockPlugin)
 {
-    UtestShell *test;
-    StringBufferTestOutput *output;
-    TestResult *result;
-    MockExpectedCallsList *expectationsList;
-    MockCheckedExpectedCall *call;
+    StringBufferTestOutput output;
 
-    MockSupportPlugin *plugin;
+    UtestShell *test;
+    TestResult *result;
+
+    MockSupportPlugin plugin;
 
     void setup()
     {
-        mock().setMockFailureStandardReporter(MockFailureReporterForTest::getReporter());
-
         test = new UtestShell("group", "name", "file", 1);
-        output = new StringBufferTestOutput;
-        result = new TestResult(*output);
-        expectationsList = new MockExpectedCallsList;
-        call = new MockCheckedExpectedCall;
-        expectationsList->addExpectedCall(call);
-        plugin = new MockSupportPlugin;;
+        result = new TestResult(output);
     }
 
     void teardown()
     {
         delete test;
-        delete output;
         delete result;
-        delete expectationsList;
-        delete call;
-        delete plugin;
-
-        CHECK_NO_MOCK_FAILURE();
-        mock().setMockFailureStandardReporter(NULL);
     }
 };
 
 TEST(MockPlugin, checkExpectationsAndClearAtEnd)
 {
-    call->withName("foobar");
-    MockExpectedCallsDidntHappenFailure expectedFailure(test, *expectationsList);
+    MockFailureReporterInstaller failureReporterInstaller;
+
+    MockExpectedCallsListForTest expectations;
+    expectations.addFunction("foobar");
+    MockExpectedCallsDidntHappenFailure expectedFailure(test, expectations);
 
     mock().expectOneCall("foobar");
 
-    plugin->postTestAction(*test, *result);
+    plugin.postTestAction(*test, *result);
 
-    STRCMP_CONTAINS(expectedFailure.getMessage().asCharString(), output->getOutput().asCharString())
+    STRCMP_CONTAINS(expectedFailure.getMessage().asCharString(), output.getOutput().asCharString())
     LONGS_EQUAL(0, mock().expectedCallsLeft());
-//	clear makes sure there are no memory leaks.
+    CHECK_NO_MOCK_FAILURE();
 }
 
 TEST(MockPlugin, checkExpectationsWorksAlsoWithHierachicalObjects)
 {
-    call->withName("foobar").onObject((void*) 1);
-    MockExpectedObjectDidntHappenFailure expectedFailure(test, "foobar", *expectationsList);
+    MockFailureReporterInstaller failureReporterInstaller;
+
+    MockExpectedCallsListForTest expectations;
+    expectations.addFunction("foobar")->onObject((void*) 1);
+    MockExpectedObjectDidntHappenFailure expectedFailure(test, "foobar", expectations);
 
     mock("differentScope").expectOneCall("foobar").onObject((void*) 1);
     mock("differentScope").actualCall("foobar");
 
-    plugin->postTestAction(*test, *result);
+    plugin.postTestAction(*test, *result);
 
-    STRCMP_CONTAINS(expectedFailure.getMessage().asCharString(), output->getOutput().asCharString())
+    STRCMP_CONTAINS(expectedFailure.getMessage().asCharString(), output.getOutput().asCharString())
+    CHECK_NO_MOCK_FAILURE();
 }
 
 class DummyComparator : public MockNamedValueComparator
@@ -105,17 +98,40 @@ public:
     {
         return "string";
     }
-
 };
 
 TEST(MockPlugin, installComparatorRecordsTheComparatorButNotInstallsItYet)
 {
+    MockFailureReporterInstaller failureReporterInstaller;
+
     DummyComparator comparator;
-    plugin->installComparator("myType", comparator);
-    mock().expectOneCall("foo").withParameterOfType("myType", "name", &comparator);
-    mock().actualCall("foo").withParameterOfType("myType", "name", &comparator);
+    plugin.installComparator("myType", comparator);
+    mock().expectOneCall("foo").withParameterOfType("myType", "name", NULL);
+    mock().actualCall("foo").withParameterOfType("myType", "name", NULL);
 
     MockNoWayToCompareCustomTypeFailure failure(test, "myType");
+    CHECK_EXPECTED_MOCK_FAILURE(failure);
+}
+
+class DummyCopier : public MockNamedValueCopier
+{
+public:
+    void copy(void* dst, const void* src)
+    {
+        *(int*)dst = *(const int*)src;
+    }
+};
+
+TEST(MockPlugin, installCopierRecordsTheCopierButNotInstallsItYet)
+{
+    MockFailureReporterInstaller failureReporterInstaller;
+
+    DummyCopier copier;
+    plugin.installCopier("myType", copier);
+    mock().expectOneCall("foo").withOutputParameterOfTypeReturning("myType", "name", NULL);
+    mock().actualCall("foo").withOutputParameterOfType("myType", "name", NULL);
+
+    MockNoWayToCopyCustomTypeFailure failure(test, "myType");
     CHECK_EXPECTED_MOCK_FAILURE(failure);
 }
 
@@ -123,16 +139,31 @@ TEST(MockPlugin, preTestActionWillEnableMultipleComparatorsToTheGlobalMockSuppor
 {
     DummyComparator comparator;
     DummyComparator comparator2;
-    plugin->installComparator("myType", comparator);
-    plugin->installComparator("myOtherType", comparator2);
+    plugin.installComparator("myType", comparator);
+    plugin.installComparator("myOtherType", comparator2);
 
-    plugin->preTestAction(*test, *result);
+    plugin.preTestAction(*test, *result);
     mock().expectOneCall("foo").withParameterOfType("myType", "name", &comparator);
     mock().expectOneCall("foo").withParameterOfType("myOtherType", "name", &comparator);
     mock().actualCall("foo").withParameterOfType("myType", "name", &comparator);
     mock().actualCall("foo").withParameterOfType("myOtherType", "name", &comparator);
 
     mock().checkExpectations();
-    CHECK_NO_MOCK_FAILURE();
     LONGS_EQUAL(0, result->getFailureCount());
 }
+
+static void _failTwiceFunction()
+{
+    mock().expectOneCall("foobar");
+    FAIL("This failed");
+}
+
+TEST(MockPlugin, shouldNotFailAgainWhenTestAlreadyFailed)
+{
+    TestTestingFixture fixture;
+    fixture.registry_->installPlugin(&plugin);
+    fixture.setTestFunction(_failTwiceFunction);
+    fixture.runAllTests();
+    fixture.assertPrintContains("1 failures, 1 tests, 1 ran, 2 checks,");
+}
+

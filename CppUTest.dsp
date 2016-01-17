@@ -49,7 +49,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo
+# ADD LIB32 /nologo /out:"lib\CppUTest.lib"
 
 !ELSEIF  "$(CFG)" == "CppUTest - Win32 Debug"
 
@@ -73,7 +73,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"lib\CppUTest.lib"
+# ADD LIB32 /nologo /out:"lib\CppUTestd.lib"
 
 !ENDIF 
 
@@ -163,6 +163,10 @@ SOURCE=.\SRC\CPPUTEST\SimpleMutex.cpp
 # Begin Source File
 
 SOURCE=.\SRC\CPPUTEST\SimpleString.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\SRC\CPPUTEST\TeamCityTestOutput.cpp
 # End Source File
 # Begin Source File
 

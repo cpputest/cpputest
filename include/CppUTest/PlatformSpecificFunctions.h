@@ -40,7 +40,7 @@ extern int (*PlatformSpecificWaitPid)(int pid, int* status, int options);
  * This enables porting to different embedded platforms.
  *
  */
- 
+
 #include "CppUTest/PlatformSpecificFunctions_c.h"
 
 #endif

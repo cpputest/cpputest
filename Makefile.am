@@ -40,6 +40,7 @@ lib_libCppUTest_a_SOURCES = \
 	src/CppUTest/MemoryLeakWarningPlugin.cpp \
 	src/CppUTest/SimpleString.cpp \
 	src/CppUTest/SimpleMutex.cpp \
+	src/CppUTest/TeamCityTestOutput.cpp \
 	src/CppUTest/TestFailure.cpp \
 	src/CppUTest/TestFilter.cpp \
 	src/CppUTest/TestHarness_c.cpp \
@@ -49,7 +50,7 @@ lib_libCppUTest_a_SOURCES = \
 	src/CppUTest/TestRegistry.cpp \
 	src/CppUTest/TestResult.cpp \
 	src/CppUTest/Utest.cpp \
-	src/Platforms/$(CPP_PLATFORM)/UtestPlatform.cpp
+	src/Platforms/@CPP_PLATFORM@/UtestPlatform.cpp
 
 include_cpputestdir = $(includedir)/CppUTest
 
@@ -67,6 +68,7 @@ include_cpputest_HEADERS = \
 	include/CppUTest/SimpleString.h \
 	include/CppUTest/SimpleMutex.h \
 	include/CppUTest/StandardCLibrary.h \
+	include/CppUTest/TeamCityTestOutput.h \
 	include/CppUTest/TestFailure.h \
 	include/CppUTest/TestFilter.h \
 	include/CppUTest/TestHarness.h \
@@ -119,13 +121,13 @@ include_cpputestext_HEADERS = \
 	include/CppUTestExt/MockSupport.h \
 	include/CppUTestExt/MockSupportPlugin.h \
 	include/CppUTestExt/MockSupport_c.h \
-	include/CppUTestExt/OrderedTest.h	
-	
+	include/CppUTestExt/OrderedTest.h
+
 endif
 
 CppUTestTests_CPPFLAGS = $(lib_libCppUTest_a_CPPFLAGS)
 CppUTestTests_CFLAGS = $(lib_libCppUTest_a_CFLAGS)
-CppUTestTests_CXXFLAGS = $(lib_libCppUTest_a_CXXFLAGS) 
+CppUTestTests_CXXFLAGS = $(lib_libCppUTest_a_CXXFLAGS)
 CppUTestTests_LDADD = lib/libCppUTest.a $(CPPUTEST_LDADD)
 CppUTestTests_LDFLAGS = $(AM_LDFLAGS) $(CPPUTEST_LDFLAGS) $(CPPUTEST_ADDITIONAL_LDFLAGS)
 
@@ -140,13 +142,14 @@ CppUTestTests_SOURCES = \
 	tests/CommandLineTestRunnerTest.cpp \
 	tests/JUnitOutputTest.cpp \
 	tests/MemoryLeakDetectorTest.cpp \
-	tests/MemoryLeakOperatorOverloadsTest.cpp \
+	tests/MemoryOperatorOverloadTest.cpp \
 	tests/MemoryLeakWarningTest.cpp \
 	tests/PluginTest.cpp \
 	tests/PreprocessorTest.cpp \
 	tests/SetPluginTest.cpp \
 	tests/SimpleStringTest.cpp \
 	tests/SimpleMutexTest.cpp \
+	tests/TeamCityOutputTest.cpp \
 	tests/TestFailureNaNTest.cpp \
 	tests/TestFailureTest.cpp \
 	tests/TestFilterTest.cpp \
@@ -163,13 +166,13 @@ CppUTestTests_SOURCES = \
 
 CppUTestExtTests_CPPFLAGS = $(lib_libCppUTestExt_a_CPPFLAGS)
 CppUTestExtTests_CFLAGS = $(lib_libCppUTestExt_a_CFLAGS)
-CppUTestExtTests_CXXFLAGS = $(lib_libCppUTestExt_a_CXXFLAGS) 
+CppUTestExtTests_CXXFLAGS = $(lib_libCppUTestExt_a_CXXFLAGS)
 CppUTestExtTests_LDADD = lib/libCppUTestExt.a lib/libCppUTest.a $(CPPUTEST_LDADD)
 CppUTestExtTests_LDFLAGS = $(CppUTestTests_LDFLAGS)
 
 CppUTestExtTests_SOURCES = \
 	tests/CppUTestExt/AllTests.cpp \
-	tests/CppUTestExt/CodeMemoryReportFormatterTest.cpp \
+	tests/CppUTestExt/CodeMemoryReporterTest.cpp \
 	tests/CppUTestExt/GMockTest.cpp \
 	tests/CppUTestExt/GTest1Test.cpp \
 	tests/CppUTestExt/GTest2ConvertorTest.cpp \
@@ -178,13 +181,20 @@ CppUTestExtTests_SOURCES = \
 	tests/CppUTestExt/MemoryReportFormatterTest.cpp \
 	tests/CppUTestExt/MockActualCallTest.cpp \
 	tests/CppUTestExt/MockCheatSheetTest.cpp \
+	tests/CppUTestExt/MockCallTest.cpp \
+	tests/CppUTestExt/MockComparatorCopierTest.cpp \
 	tests/CppUTestExt/MockExpectedCallTest.cpp \
-	tests/CppUTestExt/MockExpectedFunctionsListTest.cpp \
+	tests/CppUTestExt/ExpectedFunctionsListTest.cpp \
 	tests/CppUTestExt/MockFailureTest.cpp \
+	tests/CppUTestExt/MockHierarchyTest.cpp \
+	tests/CppUTestExt/MockNamedValueTest.cpp \
+	tests/CppUTestExt/MockParameterTest.cpp \
 	tests/CppUTestExt/MockPluginTest.cpp \
 	tests/CppUTestExt/MockSupportTest.cpp \
 	tests/CppUTestExt/MockSupport_cTest.cpp \
 	tests/CppUTestExt/MockSupport_cTestCFile.c \
+	tests/CppUTestExt/MockStrictOrderTest.cpp \
+	tests/CppUTestExt/MockReturnValueTest.cpp \
 	tests/CppUTestExt/OrderedTestTest.cpp
 
 if INCLUDE_GMOCKTESTS
@@ -197,7 +207,7 @@ if INCLUDE_GMOCKTESTS
 
 #GTestTests_SOURCES = \
 	$(GMOCK_HOME)/test/gmock-spec-builders_test.cc \
-	tests/CppUTestExt/AllTests.cpp 
+	tests/CppUTestExt/AllTests.cpp
 endif
 
 RUN_CPPUTEST_TESTS = ./$(CPPUTEST_TESTS)
@@ -216,19 +226,19 @@ endif
 cpputest_build_gtest17:
 	mkdir -p cpputest_build_gtest17
 	cd cpputest_build_gtest17; \
-	wget https://googlemock.googlecode.com/files/gmock-1.7.0.zip && unzip gmock-1.7.0.zip 
+	wget https://googlemock.googlecode.com/files/gmock-1.7.0.zip && unzip gmock-1.7.0.zip
 	cd cpputest_build_gtest17/gmock-1.7.0; ./configure && make check
 
 cpputest_build_gtest16:
 	mkdir -p cpputest_build_gtest16
 	cd cpputest_build_gtest16; \
-	wget https://googlemock.googlecode.com/files/gmock-1.6.0.zip && unzip gmock-1.6.0.zip 
+	wget https://googlemock.googlecode.com/files/gmock-1.6.0.zip && unzip gmock-1.6.0.zip
 	cd cpputest_build_gtest16/gmock-1.6.0; ./configure CXXFLAGS=-DGTEST_USE_OWN_TR1_TUPLE=1 && make check
 
 cpputest_build_gtest15:
 	mkdir -p cpputest_build_gtest15
 	cd cpputest_build_gtest15; \
-	wget https://googlemock.googlecode.com/files/gmock-1.5.0.zip && unzip gmock-1.5.0.zip 
+	wget https://googlemock.googlecode.com/files/gmock-1.5.0.zip && unzip gmock-1.5.0.zip
 	cd cpputest_build_gtest15/gmock-1.5.0; ./configure CXXFLAGS=-DGTEST_USE_OWN_TR1_TUPLE=1 && make
 
 check_gtest15: cpputest_build_gtest15
@@ -245,7 +255,7 @@ check_gtest17: cpputest_build_gtest17
 	@echo "Build using gmock 1.7"
 	export GMOCK_HOME=`pwd`/cpputest_build_gtest17/gmock-1.7.0; \
 	make distclean; $(srcdir)/configure; make check
-	
+
 remove_gtest_directories:
 	rm -rf cpputest_build_gtest15
 	rm -rf cpputest_build_gtest16
@@ -255,13 +265,13 @@ check_gtest: remove_gtest_directories check_gtest15 check_gtest16 check_gtest17
 
 check_basic:
 	@echo "If dash is available, run the configure with dash to find bash-isms and increase portability"
-	make distclean; if test "x$(CPPUTEST_HAS_DASH)" = xyes; then CONFIG_SHELL=dash $(srcdir)/configure; fi 
+	make distclean; if test "x$(CPPUTEST_HAS_DASH)" = xyes; then CONFIG_SHELL=dash $(srcdir)/configure; fi
 
 	@echo "Building and valgrinding (skipping this on MacOS due to buggy Valgrind"
 	if test "x$(CPPUTEST_ON_MACOSX)" = xno; then \
 		make distclean; $(srcdir)/configure; make valgrind; \
 	fi
-	
+
 	@echo "Building without extensions"
 	make distclean; $(srcdir)/configure --disable-extensions; make check
 
@@ -305,38 +315,53 @@ check_special_situations:
 check_coverage:
 	@echo "Compile with coverage (switch to clang for Mac OSX)"
 	if test "x$(CPPUTEST_HAS_CLANG)" = xyes && test "x$(CPPUTEST_ON_MACOSX)" = xyes; then \
-	   echo "Compiling with clang"; make distclean; $(srcdir)/configure CC="clang" CXX="clang++" --enable-coverage; \
+	   echo "Compiling with clang"; make distclean; $(srcdir)/configure CC="clang" CXX="clang++" --enable-coverage CFLAGS="-O0" CXXFLAGS="-O0"; \
 	else \
-		make distclean; $(srcdir)/configure -enable-coverage $CFLAGS="-g -O0" $CXXFLAGS="-g -O0";  \
+		make distclean; $(srcdir)/configure -enable-coverage CFLAGS="-O0" CXXFLAGS="-O0";  \
 	fi
-	
+
 	make check
 
-	./$(CPPUTEST_TESTS) >> test_output.txt; ./$(CPPUTESTEXT_TESTS) >> test_output.txt 
+	./$(CPPUTEST_TESTS) >> test_output.txt; ./$(CPPUTESTEXT_TESTS) >> test_output.txt
 	$(SILENCE)for f in `ls *.gcno` ; do \
 		gcov $(CppUTestExtTests_SOURCES) $(CppUTestTests_SOURCES) $(lib_libCppUTest_a_SOURCES) $(lib_libCppUTestExt_a_SOURCES) -o $$f 1>>gcov_output.txt 2>>gcov_error.txt; \
 	done
 	$(srcdir)/scripts/filterGcov.sh gcov_output.txt gcov_error.txt gcov_report.txt test_output.txt
 	cat gcov_report.txt
-	if test "x$(CPPUTEST_HAS_LCOV)" = xyes; then  lcov -c -d . -o coverage.info; genhtml -o test_coverage coverage.info; fi
-	rm -f gcov_output.txt gcov_error.txt gcov_report.txt test_output.txt gcov_report.txt.html coverage.info
+	if test "x$(CPPUTEST_HAS_LCOV)" = xyes; then lcov -c -d . -o temp.info; lcov -r temp.info /usr\* -o coverage.info; genhtml -o test_coverage coverage.info; fi
+
+remove_coverage_output:
+	rm -f gcov_output.txt gcov_error.txt gcov_report.txt test_output.txt gcov_report.txt.html temp.info coverage.info
 	rm -rf test_coverage
 
 check_examples:
 	@echo "Using the old Makefile and examples"
 	make distclean
-	$(MAKE) -C $(srcdir) -f Makefile_using_MakefileWorker extensions 
+	$(MAKE) -C $(srcdir) -f Makefile_using_MakefileWorker extensions
 	$(MAKE) -C $(srcdir)/examples all clean
-	
+
 	@echo "Compiling and running the examples. This will use the old Makefile"
 	make distclean; $(srcdir)/configure; make; $(MAKE) -C $(srcdir)/examples all clean CPPUTEST_LIB_LINK_DIR="`pwd`/lib"
 
-check_all: check_basic check_special_situations check_coverage check_examples check_gtest
+check_all: check_basic check_special_situations check_coverage remove_coverage_output check_examples check_gtest
 	@echo "Last... one normal build and test"
-	make distclean; $(srcdir)/configure; make check; 
+	make distclean; $(srcdir)/configure; make check;
 	@echo "Check running tests repeatedly"
 	$(RUN_CPPUTEST_TESTS) - r; $(RUN_CPPUTESTEXT_TESTS) -r
 	@echo "Check running tests in separate process (CppUTestExtTests TEST_GROUP(TestOrderedTestMacro) would have to fail)"
 	$(RUN_CPPUTEST_TESTS) -p;
 
+# Mac OSX adds an annoying directory when packaging. This can be prevented by setting COPYFILE_DISABLE=1
+# However, I've not figured out how to set it automatically and neither google nor stackoverflow knew the answer.
+# The automake mailing list is still thinking about it, and thus, I've added this check so that I don't forget to do it :)
+# More info: http://superuser.com/questions/61185/why-do-i-get-files-like-foo-in-my-tarball-on-os-x
+dist-hook:
+	if test "x$(CPPUTEST_ON_MACOSX)" = "xyes"; then \
+		if test ! "x$(COPYFILE_DISABLE)" = "x1"; then \
+			echo ""; \
+			echo 'ERROR: When packaging on MacOSX, please run "COPYFILE_DISABLE=1 make dist"'; \
+			echo ""; \
+			exit 1; \
+		fi \
+	fi
 

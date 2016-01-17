@@ -114,6 +114,7 @@ TEST_GROUP(TestRegistry)
     MockTest* test1;
     MockTest* test2;
     MockTest* test3;
+    MockTest* test4;
     TestResult *result;
     MockTestResult *mockResult;
     void setup()
@@ -124,6 +125,7 @@ TEST_GROUP(TestRegistry)
         test1 = new MockTest();
         test2 = new MockTest();
         test3 = new MockTest("group2");
+        test4 = new MockTest();
         myRegistry = new TestRegistry();
         myRegistry->setCurrentRegistry(myRegistry);
     }
@@ -135,6 +137,7 @@ TEST_GROUP(TestRegistry)
         delete test1;
         delete test2;
         delete test3;
+        delete test4;
         delete result;
         delete output;
     }
@@ -239,7 +242,9 @@ TEST(TestRegistry, findTestWithNameDoesntExist)
 TEST(TestRegistry, findTestWithName)
 {
     test1->setTestName("NameOfATestThatDoesExist");
+    test2->setTestName("SomeOtherTest");
     myRegistry->addTest(test1);
+    myRegistry->addTest(test2);
     CHECK(myRegistry->findTestWithName("NameOfATestThatDoesExist"));
 }
 
@@ -251,7 +256,9 @@ TEST(TestRegistry, findTestWithGroupDoesntExist)
 TEST(TestRegistry, findTestWithGroup)
 {
     test1->setGroupName("GroupOfATestThatDoesExist");
+    test2->setGroupName("SomeOtherGroup");
     myRegistry->addTest(test1);
+    myRegistry->addTest(test2);
     CHECK(myRegistry->findTestWithGroup("GroupOfATestThatDoesExist"));
 }
 
@@ -300,3 +307,55 @@ TEST(TestRegistry, CurrentRepetitionIsCorrectTwo)
     LONGS_EQUAL(2, myRegistry->getCurrentRepetition());
 }
 
+class MyTestPluginDummy: public TestPlugin
+{
+public:
+    MyTestPluginDummy(const SimpleString& name) : TestPlugin(name) {}
+    virtual ~MyTestPluginDummy() {}
+    virtual void runAllPreTestAction(UtestShell&, TestResult&) _override {}
+    virtual void runAllPostTestAction(UtestShell&, TestResult&) _override {}
+};
+
+TEST(TestRegistry, ResetPluginsWorks)
+{
+    MyTestPluginDummy plugin1("Plugin-1");
+    MyTestPluginDummy plugin2("Plugin-2");
+    myRegistry->installPlugin(&plugin1);
+    myRegistry->installPlugin(&plugin2);
+    LONGS_EQUAL(2, myRegistry->countPlugins());
+    myRegistry->resetPlugins();
+    LONGS_EQUAL(0, myRegistry->countPlugins());
+}
+
+TEST(TestRegistry, listTestGroupNames_shouldListBackwardsGroup1AfterGroup11AndGroup2OnlyOnce)
+{
+    test1->setGroupName("GROUP_1");
+    myRegistry->addTest(test1);
+    test2->setGroupName("GROUP_2");
+    myRegistry->addTest(test2);
+    test3->setGroupName("GROUP_11");
+    myRegistry->addTest(test3);
+    test4->setGroupName("GROUP_2");
+    myRegistry->addTest(test4);
+
+    myRegistry->listTestGroupNames(*result);
+    SimpleString s = output->getOutput();
+    STRCMP_EQUAL("GROUP_2 GROUP_11 GROUP_1", s.asCharString());
+}
+
+TEST(TestRegistry, listTestGroupAndCaseNames_shouldListBackwardsGroupATestaAfterGroupAtestaa)
+{
+    test1->setGroupName("GROUP_A");
+    test1->setTestName("test_a");
+    myRegistry->addTest(test1);
+    test2->setGroupName("GROUP_B");
+    test2->setTestName("test_b");
+    myRegistry->addTest(test2);
+    test3->setGroupName("GROUP_A");
+    test3->setTestName("test_aa");
+    myRegistry->addTest(test3);
+
+    myRegistry->listTestGroupAndCaseNames(*result);
+    SimpleString s = output->getOutput();
+    STRCMP_EQUAL("GROUP_A.test_aa GROUP_B.test_b GROUP_A.test_a", s.asCharString());
+}

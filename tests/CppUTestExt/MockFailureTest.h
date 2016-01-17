@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2007, Michael Feathers, James Grenning and Bas Vodde
  * All rights reserved.
@@ -29,6 +28,8 @@
 #ifndef D_TestMockFailure_h
 #define D_TestMockFailure_h
 
+#include "CppUTestExt/MockSupport.h"
+
 #define CHECK_EXPECTED_MOCK_FAILURE(expectedFailure) CHECK_EXPECTED_MOCK_FAILURE_LOCATION(expectedFailure, __FILE__, __LINE__)
 #define CHECK_NO_MOCK_FAILURE() CHECK_NO_MOCK_FAILURE_LOCATION(__FILE__, __LINE__)
 
@@ -44,8 +45,27 @@ public:
         mockFailureString = failure.getMessage();
     }
 
-    static MockFailureReporterForTest* getReporter();
+    static MockFailureReporterForTest* getReporter()
+    {
+        static MockFailureReporterForTest reporter;
+        return &reporter;
+    }
 };
+
+class MockFailureReporterInstaller
+{
+  public:
+    MockFailureReporterInstaller()
+    {
+      mock().setMockFailureStandardReporter(MockFailureReporterForTest::getReporter());
+    }
+
+    ~MockFailureReporterInstaller()
+    {
+      mock().setMockFailureStandardReporter(NULL);
+    }
+};
+
 
 inline UtestShell* mockFailureTest()
 {
@@ -90,4 +110,29 @@ inline void CHECK_NO_MOCK_FAILURE_LOCATION(const char* file, int line)
     CLEAR_MOCK_FAILURE();
 }
 
+class MockExpectedCallsListForTest : public MockExpectedCallsList
+{
+  public:
+    ~MockExpectedCallsListForTest()
+    {
+      deleteAllExpectationsAndClearList();
+    }
+
+    MockCheckedExpectedCall* addFunction(const SimpleString& name)
+    {
+      MockCheckedExpectedCall* newCall = new MockCheckedExpectedCall;
+      newCall->withName(name);
+      addExpectedCall(newCall);
+      return newCall;
+    }
+
+    MockCheckedExpectedCall* addFunction(const SimpleString& name, int order)
+    {
+      MockCheckedExpectedCall* newCall = addFunction(name);
+      newCall->withCallOrder(order);
+      return newCall;
+    }
+};
+
 #endif
+

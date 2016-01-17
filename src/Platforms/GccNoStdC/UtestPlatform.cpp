@@ -33,180 +33,46 @@
 
 #include "CppUTest/PlatformSpecificFunctions.h"
 
-int PlatformSpecificSetJmp(void (*function) (void* data), void* data)
-{
-    (void) data;
-    (void) function;
-    /* To be implemented */
-    return 0;
-}
-
-void PlatformSpecificLongJmp()
-{
-    /* To be implemented */
-}
-
-void PlatformSpecificRestoreJumpBuffer()
-{
-    /* To be implemented */
-}
-
-void GccNoStdCPlatformSpecificRunTestInASeperateProcess(UtestShell*, TestPlugin*, TestResult*)
-{
-    /* To be implemented */
-}
-void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell* shell, TestPlugin* plugin, TestResult* result) =
-        GccNoStdCPlatformSpecificRunTestInASeperateProcess;
-
-long (*GetPlatformSpecificTimeInMillis)() = NULL;
+void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell*, TestPlugin*, TestResult*) = NULL;
+int (*PlatformSpecificFork)() = NULL;
+int (*PlatformSpecificWaitPid)(int, int*, int) = NULL;
 
 TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
 {
     return TestOutput::eclipse;
 }
 
+void (*PlatformSpecificLongJmp)() = NULL;
+int (*PlatformSpecificSetJmp)(void (*)(void*), void*) = NULL;
+void (*PlatformSpecificRestoreJumpBuffer)() = NULL;
+
+long (*GetPlatformSpecificTimeInMillis)() = NULL;
 const char* (*GetPlatformSpecificTimeString)() = NULL;
 
-int PlatformSpecificVSNprintf(char *str, size_t size, const char* format, va_list args)
-{
-    /* To be implemented */
-    (void) size;
-    (void) args;
-    (void) format;
-    (void) args;
-    (void) str;
-    return 0;
-}
+/* IO operations */
+PlatformSpecificFile (*PlatformSpecificFOpen)(const char* filename, const char* flag) = NULL;
+void (*PlatformSpecificFPuts)(const char* str, PlatformSpecificFile file) = NULL;
+void (*PlatformSpecificFClose)(PlatformSpecificFile file) = NULL;
 
-PlatformSpecificFile PlatformSpecificFOpen(const char* filename, const char* flag)
-{
-    /* To be implemented */
-    (void) filename;
-    (void) flag;
-    return NULL;
-}
+int (*PlatformSpecificPutchar)(int c) = NULL;
+void (*PlatformSpecificFlush)(void) = NULL;
 
+int (*PlatformSpecificVSNprintf)(char *str, size_t size, const char* format, va_list va_args_list) = NULL;
 
-void PlatformSpecificFPuts(const char* str, PlatformSpecificFile file)
-{
-    /* To be implemented */
-    (void) str;
-    (void) file;
-}
+/* Dynamic Memory operations */
+void* (*PlatformSpecificMalloc)(size_t) = NULL;
+void* (*PlatformSpecificRealloc)(void*, size_t) = NULL;
+void (*PlatformSpecificFree)(void*) = NULL;
+void* (*PlatformSpecificMemCpy)(void*, const void*, size_t) = NULL;
+void* (*PlatformSpecificMemset)(void*, int, size_t) = NULL;
 
-void PlatformSpecificFClose(PlatformSpecificFile file)
-{
-    /* To be implemented */
-    (void) file;
-}
+double (*PlatformSpecificFabs)(double) = NULL;
+int (*PlatformSpecificIsNan)(double) = NULL;
+int (*PlatformSpecificIsInf)(double) = NULL;
+int (*PlatformSpecificAtExit)(void(*func)(void)) = NULL;
 
-void PlatformSpecificFlush()
-{
-    /* To be implemented */
-}
-
-int PlatformSpecificPutchar(int c)
-{
-    /* To be implemented */
-    (void) c;
-    return 0;
-}
-
-void* PlatformSpecificMalloc(size_t size)
-{
-    /* To be implemented */
-    (void) size;
-    return NULL;
-}
-
-void* PlatformSpecificRealloc (void* memory, size_t size)
-{
-    /* To be implemented */
-    (void) memory;
-    (void) size;
-    return NULL;
-}
-
-void PlatformSpecificFree(void* memory)
-{
-    /* To be implemented */
-    (void) memory;
-}
-
-void* PlatformSpecificMemCpy(void* s1, const void* s2, size_t size)
-{
-    /* To be implemented */
-    (void) size;
-    (void) s1;
-    (void) s2;
-    return NULL;
-}
-
-void* PlatformSpecificMemset(void* mem, int c, size_t size)
-{
-    /* To be implemented */
-    (void) mem;
-    (void) c;
-    (void) size;
-    return NULL;
-}
-
-double PlatformSpecificFabs(double d)
-{
-    /* To be implemented */
-    (void) d;
-    return 0.0;
-}
-
-extern "C" {
-
-static int IsNanImplementation(double d)
-{
-    /* To be implemented */
-    (void) d;
-    return 0;
-}
-
-int (*PlatformSpecificIsNan)(double) = IsNanImplementation;
-
-}
-
-void* malloc(size_t)
-{
-    return NULL;
-}
-
-void free(void *)
-{
-}
-
-static PlatformSpecificMutex DummyMutexCreate(void)
-{
-    FAIL("PlatformSpecificMutexCreate is not implemented");
-    return 0;
-}
-
-static void DummyMutexLock(PlatformSpecificMutex mtx)
-{
-    (void)mtx;
-    FAIL("PlatformSpecificMutexLock is not implemented");
-}
-
-static void DummyMutexUnlock(PlatformSpecificMutex mtx)
-{
-    (void)mtx;
-    FAIL("PlatformSpecificMutexUnlock is not implemented");
-}
-
-static void DummyMutexDestroy(PlatformSpecificMutex mtx)
-{
-    (void)mtx;
-    FAIL("PlatformSpecificMutexDestroy is not implemented");
-}
-
-PlatformSpecificMutex (*PlatformSpecificMutexCreate)(void) = DummyMutexCreate;
-void (*PlatformSpecificMutexLock)(PlatformSpecificMutex) = DummyMutexLock;
-void (*PlatformSpecificMutexUnlock)(PlatformSpecificMutex) = DummyMutexUnlock;
-void (*PlatformSpecificMutexDestroy)(PlatformSpecificMutex) = DummyMutexDestroy;
-
+PlatformSpecificMutex (*PlatformSpecificMutexCreate)(void) = NULL;
+void (*PlatformSpecificMutexLock)(PlatformSpecificMutex mtx) = NULL;
+void (*PlatformSpecificMutexUnlock)(PlatformSpecificMutex mtx) = NULL;
+void (*PlatformSpecificMutexDestroy)(PlatformSpecificMutex mtx) = NULL;
 

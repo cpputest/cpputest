@@ -87,7 +87,7 @@ static void _failIntMethod()
 {
     HasTheDestructorBeenCalledChecker checker;
     CHECK_EQUAL_C_INT(1, 2);
-}
+} // LCOV_EXCL_LINE
 
 TEST(TestHarness_c, checkInt)
 {
@@ -103,7 +103,7 @@ static void _failRealMethod()
 {
     HasTheDestructorBeenCalledChecker checker;
     CHECK_EQUAL_C_REAL(1.0, 2.0, 0.5);
-}
+} // LCOV_EXCL_LINE
 
 TEST(TestHarness_c, checkReal)
 {
@@ -135,7 +135,7 @@ static void _failStringMethod()
 {
     HasTheDestructorBeenCalledChecker checker;
     CHECK_EQUAL_C_STRING("Hello", "Hello World");
-}
+} // LCOV_EXCL_LINE
 
 TEST(TestHarness_c, checkString)
 {
@@ -143,8 +143,24 @@ TEST(TestHarness_c, checkString)
     fixture->setTestFunction(_failStringMethod);
     fixture->runAllTests();
 
-    StringEqualFailure failure(UtestShell::getCurrent(), "file", 1, "Hello", "Hello World");
+    StringEqualFailure failure(UtestShell::getCurrent(), "file", 1, "Hello", "Hello World", "");
     fixture->assertPrintContains(failure.getMessage());
+    fixture->assertPrintContains("arness_c");
+    CHECK(!hasDestructorOfTheDestructorCheckedBeenCalled)
+}
+
+static void _failPointerMethod()
+{
+    HasTheDestructorBeenCalledChecker checker;
+    CHECK_EQUAL_C_POINTER(NULL, (void *)0x1);
+}
+
+TEST(TestHarness_c, checkPointer)
+{
+    CHECK_EQUAL_C_POINTER(NULL, NULL);
+    fixture->setTestFunction(_failPointerMethod);
+    fixture->runAllTests();
+    fixture->assertPrintContains("expected <0x0>\n	but was  <0x1>");
     fixture->assertPrintContains("arness_c");
     CHECK(!hasDestructorOfTheDestructorCheckedBeenCalled)
 }
@@ -153,7 +169,7 @@ static void _failTextMethod()
 {
     HasTheDestructorBeenCalledChecker checker;
     FAIL_TEXT_C("Booo");
-}
+} // LCOV_EXCL_LINE
 
 TEST(TestHarness_c, checkFailText)
 {
@@ -168,7 +184,7 @@ static void _failMethod()
 {
     HasTheDestructorBeenCalledChecker checker;
     FAIL_C();
-}
+} // LCOV_EXCL_LINE
 
 TEST(TestHarness_c, checkFail)
 {
@@ -183,7 +199,7 @@ static void _CheckMethod()
 {
     HasTheDestructorBeenCalledChecker checker;
     CHECK_C(false);
-}
+} // LCOV_EXCL_LINE
 
 TEST(TestHarness_c, checkCheck)
 {

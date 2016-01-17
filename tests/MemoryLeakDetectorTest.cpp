@@ -137,7 +137,7 @@ TEST(MemoryLeakDetectorTest, OneLeak)
     STRCMP_CONTAINS("Memory leak(s) found", output.asCharString());
     STRCMP_CONTAINS("size: 3", output.asCharString());
     STRCMP_CONTAINS("alloc", output.asCharString());
-    STRCMP_CONTAINS(StringFromFormat("%p", mem).asCharString(), output.asCharString());
+    STRCMP_CONTAINS(StringFromFormat("%p", (void*) mem).asCharString(), output.asCharString());
     STRCMP_CONTAINS("Total number of leaks", output.asCharString());
     PlatformSpecificFree(mem);
     LONGS_EQUAL(1, testAllocator->alloc_called);
@@ -243,8 +243,8 @@ TEST(MemoryLeakDetectorTest, TwoAllocOneFreeOneLeak)
     detector->stopChecking();
     SimpleString output = detector->report(mem_leak_period_checking);
     LONGS_EQUAL(1, detector->totalMemoryLeaks(mem_leak_period_checking));
-    CHECK(output.contains("size: 12"));
-    CHECK(!output.contains("size: 4"));
+    CHECK(output.contains("Leak size: 12"));
+    CHECK(!output.contains("Leak size: 4"));
     PlatformSpecificFree(mem2);
     LONGS_EQUAL(2, testAllocator->alloc_called);
     LONGS_EQUAL(1, testAllocator->free_called);
@@ -364,6 +364,16 @@ TEST(MemoryLeakDetectorTest, OneRealloc)
     LONGS_EQUAL(1, testAllocator->free_called);
     LONGS_EQUAL(2, testAllocator->allocMemoryLeakNodeCalled);
     LONGS_EQUAL(2, testAllocator->freeMemoryLeakNodeCalled);
+}
+
+TEST(MemoryLeakDetectorTest, ReallocNonAllocatedMemory)
+{
+    char mem1;
+    char* mem2 = detector->reallocMemory(testAllocator, &mem1, 5, "other.cpp", 13, true);
+    detector->deallocMemory(testAllocator, mem2, true);
+    detector->stopChecking();
+    CHECK(reporter->message->contains("Deallocating non-allocated memory\n"));
+    CHECK(reporter->message->contains("   deallocated at file: other.cpp line: 13"));
 }
 
 TEST(MemoryLeakDetectorTest, AllocOneTypeFreeAnotherType)
@@ -487,6 +497,25 @@ TEST(MemoryLeakDetectorTest, invalidateMemory)
 TEST(MemoryLeakDetectorTest, invalidateMemoryNULLShouldWork)
 {
   detector->invalidateMemory(NULL);
+}
+
+TEST_GROUP(MemoryLeakDetectorListTest)
+{
+};
+
+TEST(MemoryLeakDetectorListTest, clearAllAccountingIsWorkingProperly)
+{
+    MemoryLeakDetectorList listForTesting;
+    MemoryLeakDetectorNode node1, node2, node3;
+    node3.period_ = mem_leak_period_disabled;
+    listForTesting.addNewNode(&node1);
+    listForTesting.addNewNode(&node2);
+    listForTesting.addNewNode(&node3);
+
+    listForTesting.clearAllAccounting(mem_leak_period_enabled);
+
+    CHECK(NULL == listForTesting.getFirstLeak(mem_leak_period_enabled));
+    CHECK(&node3 == listForTesting.getFirstLeak(mem_leak_period_disabled));
 }
 
 TEST_GROUP(SimpleStringBuffer)

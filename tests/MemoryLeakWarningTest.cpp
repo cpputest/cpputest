@@ -54,6 +54,32 @@ static MemoryLeakWarningPlugin* memPlugin;
 static DummyReporter dummy;
 static TestMemoryAllocator* allocator;
 
+TEST_GROUP(MemoryLeakWarningLocalDetectorTest)
+{
+};
+
+TEST(MemoryLeakWarningLocalDetectorTest, localDetectorReturnsNewGlobalWhenNoneWasSet)
+{
+    MemoryLeakWarningPlugin memoryLeakWarningPlugin("TestMemoryLeakWarningPlugin", NULL);
+    CHECK(0 != memoryLeakWarningPlugin.getMemoryLeakDetector());
+}
+
+TEST(MemoryLeakWarningLocalDetectorTest, localDetectorIsTheOneSpecifiedInConstructor)
+{
+    MemoryLeakDetector localDetector(&dummy);
+    MemoryLeakWarningPlugin memoryLeakWarningPlugin("TestMemoryLeakWarningPlugin", &localDetector);
+    POINTERS_EQUAL(&localDetector, memoryLeakWarningPlugin.getMemoryLeakDetector());
+}
+
+TEST(MemoryLeakWarningLocalDetectorTest, localDetectorIsGlobalDetector)
+{
+    MemoryLeakDetector* globalDetector = MemoryLeakWarningPlugin::getGlobalDetector();
+    MemoryLeakWarningPlugin memoryLeakWarningPlugin("TestMemoryLeakWarningPlugin", NULL);
+    MemoryLeakDetector* localDetector =  memoryLeakWarningPlugin.getMemoryLeakDetector();
+    POINTERS_EQUAL(globalDetector, localDetector);
+}
+
+
 TEST_GROUP(MemoryLeakWarningTest)
 {
     TestTestingFixture* fixture;
@@ -246,7 +272,7 @@ TEST(MemoryLeakWarningGlobalDetectorTest, crashOnLeakWithOperatorNew)
     crash_on_allocation_number(1);
     char* memory = new char[100];
     CHECK(cpputestHasCrashed);
-    delete memory;
+    delete [] memory;
 }
 
 TEST(MemoryLeakWarningGlobalDetectorTest, crashOnLeakWithOperatorNewArray)
@@ -319,11 +345,13 @@ TEST(MemoryLeakWarningGlobalDetectorTest, turnOffNewOverloadsNoThrowCausesNoAddi
 
     char* nonMemoryNoThrow = new (std::nothrow) char;
     char* nonArrayMemoryNoThrow = new (std::nothrow) char[10];
+    char* nonArrayMemoryThrow = new char[10];
 
     LONGS_EQUAL(storedAmountOfLeaks, detector->totalMemoryLeaks(mem_leak_period_all));
 
     delete nonMemoryNoThrow;
-    delete nonArrayMemoryNoThrow;
+    delete [] nonArrayMemoryNoThrow;
+    delete [] nonArrayMemoryThrow;
 #ifdef CPPUTEST_USE_NEW_MACROS
     #include "CppUTest/MemoryLeakDetectorNewMacros.h"
 #endif
@@ -346,7 +374,7 @@ static void StubMutexUnlock(PlatformSpecificMutex)
 
 
 
-TEST_GROUP(MemoryLeakWarningWarningThreadSafe)
+TEST_GROUP(MemoryLeakWarningThreadSafe)
 {
     void setup()
     {
@@ -356,28 +384,55 @@ TEST_GROUP(MemoryLeakWarningWarningThreadSafe)
         mutexLockCount = 0;
         mutexUnlockCount = 0;
     }
-    
+
     void teardown()
     {
     }
 };
 
-TEST(MemoryLeakWarningWarningThreadSafe, turnOnThreadSafeNewDeleteOverloads)
+TEST(MemoryLeakWarningThreadSafe, turnOnThreadSafeMallocFreeReallocOverloadsDebug)
 {
     int storedAmountOfLeaks = MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all);
-    
+
+    MemoryLeakWarningPlugin::turnOnThreadSafeNewDeleteOverloads();
+
+    int *n = (int*) cpputest_malloc(sizeof(int));
+
+    LONGS_EQUAL(storedAmountOfLeaks + 1, MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all));
+    CHECK_EQUAL(1, mutexLockCount);
+    CHECK_EQUAL(1, mutexUnlockCount);
+
+    n = (int*) cpputest_realloc(n, sizeof(int)*3);
+
+    LONGS_EQUAL(storedAmountOfLeaks + 1, MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all));
+    CHECK_EQUAL(2, mutexLockCount);
+    CHECK_EQUAL(2, mutexUnlockCount);
+
+    cpputest_free(n);
+
+    LONGS_EQUAL(storedAmountOfLeaks, MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all));
+    CHECK_EQUAL(3, mutexLockCount);
+    CHECK_EQUAL(3, mutexUnlockCount);
+
+    MemoryLeakWarningPlugin::turnOnNewDeleteOverloads();
+}
+
+TEST(MemoryLeakWarningThreadSafe, turnOnThreadSafeNewDeleteOverloadsDebug)
+{
+    int storedAmountOfLeaks = MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all);
+
     MemoryLeakWarningPlugin::turnOnThreadSafeNewDeleteOverloads();
 
     int *n = new int;
     char *str = new char[20];
-    
+
     LONGS_EQUAL(storedAmountOfLeaks + 2, MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all));
     CHECK_EQUAL(2, mutexLockCount);
     CHECK_EQUAL(2, mutexUnlockCount);
-    
+
     delete [] str;
     delete n;
-    
+
     LONGS_EQUAL(storedAmountOfLeaks, MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all));
     CHECK_EQUAL(4, mutexLockCount);
     CHECK_EQUAL(4, mutexUnlockCount);
@@ -385,8 +440,49 @@ TEST(MemoryLeakWarningWarningThreadSafe, turnOnThreadSafeNewDeleteOverloads)
     MemoryLeakWarningPlugin::turnOnNewDeleteOverloads();
 }
 
+#ifdef __clang__
 
+IGNORE_TEST(MemoryLeakWarningThreadSafe, turnOnThreadSafeNewDeleteOverloads)
+{
+    /*  Clang misbehaves with -O2 - it will not overload operator new or
+     *  operator new[] no matter what. Therefore, this test is must be ignored.
+     */
+}
 
+#else
+
+TEST(MemoryLeakWarningThreadSafe, turnOnThreadSafeNewDeleteOverloads)
+{
+#undef new
+
+    int storedAmountOfLeaks = MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all);
+    MemoryLeakWarningPlugin::turnOnThreadSafeNewDeleteOverloads();
+
+    int *n = new int;
+    int *n_nothrow = new (std::nothrow) int;
+    char *str = new char[20];
+    char *str_nothrow = new (std::nothrow) char[20];
+
+    LONGS_EQUAL(storedAmountOfLeaks + 4, MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all));
+    CHECK_EQUAL(4, mutexLockCount);
+    CHECK_EQUAL(4, mutexUnlockCount);
+
+    delete [] str_nothrow;
+    delete [] str;
+    delete n;
+    delete n_nothrow;
+
+    LONGS_EQUAL(storedAmountOfLeaks, MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all));
+    CHECK_EQUAL(8, mutexLockCount);
+    CHECK_EQUAL(8, mutexUnlockCount);
+
+    MemoryLeakWarningPlugin::turnOnNewDeleteOverloads();
+#ifdef CPPUTEST_USE_NEW_MACROS
+    #include "CppUTest/MemoryLeakDetectorNewMacros.h"
+#endif
+}
+
+#endif
 
 #endif
 

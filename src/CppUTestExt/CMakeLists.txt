@@ -36,10 +36,11 @@ set(CppUTestExt_headers
         ${CppUTestRootDirectory}/include/CppUTestExt/MockSupport.h
 )
 
-add_library(CppUTestExt STATIC ${CppUTestExt_src})
+add_library(CppUTestExt STATIC ${CppUTestExt_src} ${CppUTestExt_headers})
 target_link_libraries(CppUTestExt ${CPPUNIT_EXTERNAL_LIBRARIES})
 install(FILES ${CppUTestExt_headers} DESTINATION include/CppUTestExt)
 install(TARGETS CppUTestExt
+    EXPORT CppUTestTargets
     RUNTIME DESTINATION bin
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib)

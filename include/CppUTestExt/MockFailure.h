@@ -47,7 +47,7 @@ public:
     virtual void failTest(const MockFailure& failure);
     virtual UtestShell* getTestToFail();
 
-    virtual void crashOnFailure() {crashOnFailure_ = true; }
+    virtual void crashOnFailure(bool shouldCrash) { crashOnFailure_ = shouldCrash; }
 };
 
 class MockFailure : public TestFailure
@@ -64,63 +64,60 @@ class MockExpectedCallsDidntHappenFailure : public MockFailure
 {
 public:
     MockExpectedCallsDidntHappenFailure(UtestShell* test, const MockExpectedCallsList& expectations);
-    virtual ~MockExpectedCallsDidntHappenFailure(){}
 };
 
 class MockUnexpectedCallHappenedFailure : public MockFailure
 {
 public:
     MockUnexpectedCallHappenedFailure(UtestShell* test, const SimpleString& name, const MockExpectedCallsList& expectations);
-    virtual ~MockUnexpectedCallHappenedFailure(){}
 };
 
 class MockCallOrderFailure : public MockFailure
 {
 public:
     MockCallOrderFailure(UtestShell* test, const MockExpectedCallsList& expectations);
-    virtual ~MockCallOrderFailure(){}
 };
 
 class MockUnexpectedInputParameterFailure : public MockFailure
 {
 public:
     MockUnexpectedInputParameterFailure(UtestShell* test, const SimpleString& functionName, const MockNamedValue& parameter, const MockExpectedCallsList& expectations);
-    virtual ~MockUnexpectedInputParameterFailure(){}
 };
 
 class MockUnexpectedOutputParameterFailure : public MockFailure
 {
 public:
     MockUnexpectedOutputParameterFailure(UtestShell* test, const SimpleString& functionName, const MockNamedValue& parameter, const MockExpectedCallsList& expectations);
-    virtual ~MockUnexpectedOutputParameterFailure(){}
 };
 
 class MockExpectedParameterDidntHappenFailure : public MockFailure
 {
 public:
     MockExpectedParameterDidntHappenFailure(UtestShell* test, const SimpleString& functionName, const MockExpectedCallsList& expectations);
-    virtual ~MockExpectedParameterDidntHappenFailure(){}
 };
 
 class MockNoWayToCompareCustomTypeFailure : public MockFailure
 {
 public:
     MockNoWayToCompareCustomTypeFailure(UtestShell* test, const SimpleString& typeName);
-    virtual ~MockNoWayToCompareCustomTypeFailure(){}
+};
+
+class MockNoWayToCopyCustomTypeFailure : public MockFailure
+{
+public:
+    MockNoWayToCopyCustomTypeFailure(UtestShell* test, const SimpleString& typeName);
 };
 
 class MockUnexpectedObjectFailure : public MockFailure
 {
 public:
-    MockUnexpectedObjectFailure(UtestShell* test, const SimpleString& functionName, void* expected, const MockExpectedCallsList& expectations);
-    virtual ~MockUnexpectedObjectFailure(){}
+    MockUnexpectedObjectFailure(UtestShell* test, const SimpleString& functionName, const void* expected, const MockExpectedCallsList& expectations);
 };
 
 class MockExpectedObjectDidntHappenFailure : public MockFailure
 {
 public:
     MockExpectedObjectDidntHappenFailure(UtestShell* test, const SimpleString& functionName, const MockExpectedCallsList& expectations);
-    virtual ~MockExpectedObjectDidntHappenFailure(){}
 };
 
 #endif

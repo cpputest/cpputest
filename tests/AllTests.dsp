@@ -42,7 +42,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /W3 /GX /O2 /I "..\include" /I "..\include\Platforms\VisualCpp" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
+# ADD CPP /nologo /W3 /GX /O2 /Ob0 /I "..\include" /I "..\include\Platforms\VisualCpp" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /D "CPPUTEST_MEM_LEAK_DETECTION_DISABLED" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -50,18 +50,12 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
-# Begin Custom Build
-TargetDir=.\Release
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib /nologo /subsystem:console /incremental:yes /machine:I386
+# Begin Special Build Tool
 TargetPath=.\Release\AllTests.exe
-TargetName=AllTests
-InputPath=.\Release\AllTests.exe
 SOURCE="$(InputPath)"
-
-"$(TargetDir)" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	$(TargetPath)$(TargetName)
-
-# End Custom Build
+PostBuild_Cmds=$(TargetPath)
+# End Special Build Tool
 
 !ELSEIF  "$(CFG)" == "AllTests - Win32 Debug"
 
@@ -77,8 +71,7 @@ SOURCE="$(InputPath)"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /GX /ZI /Od /I "..\include" /I "..\include\Platforms\VisualCpp" /D "_CONSOLE" /D "WIN32" /D "_DEBUG" /D "_MBCS" /FR /FD /GZ /c
-# SUBTRACT CPP /YX
+# ADD CPP /nologo /MDd /W3 /GX /ZI /Od /I "..\include" /I "..\include\Platforms\VisualCpp" /FI"CppUTest/MemoryLeakDetectorMallocMacros.h" /FI"CppUTest/MemoryLeakDetectorNewMacros.h" /D "_CONSOLE" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "CPPUTEST_MEM_LEAK_DETECTION_DISABLED" /FR /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -86,18 +79,13 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 ..\lib\CppUTest.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
+# ADD LINK32 ..\lib\CppUTestd.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
 # SUBTRACT LINK32 /incremental:no
-# Begin Custom Build
-TargetDir=.\Debug
+# Begin Special Build Tool
 TargetPath=.\Debug\AllTests.exe
-InputPath=.\Debug\AllTests.exe
 SOURCE="$(InputPath)"
-
-"$(TargetDir)" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	$(TargetPath)
-
-# End Custom Build
+PostBuild_Cmds=$(TargetPath) -v
+# End Special Build Tool
 
 !ENDIF 
 
@@ -118,7 +106,15 @@ SOURCE=.\AllocationInCppFile.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\AllTests.cpp
+SOURCE=.\AllocLetTestFree.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\AllocLetTestFreeTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\CppUTestExt\AllTests.cpp
 # End Source File
 # Begin Source File
 
@@ -126,7 +122,7 @@ SOURCE=.\CheatSheetTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\CppUTestExt\CodeMemoryReportFormatterTest.cpp
+SOURCE=.\CppUTestExt\CodeMemoryReporterTest.cpp
 # End Source File
 # Begin Source File
 
@@ -135,6 +131,10 @@ SOURCE=.\CommandLineArgumentsTest.cpp
 # Begin Source File
 
 SOURCE=.\CommandLineTestRunnerTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\CppUTestExt\ExpectedFunctionsListTest.cpp
 # End Source File
 # Begin Source File
 
@@ -158,13 +158,11 @@ SOURCE=.\MemoryLeakDetectorTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\MemoryLeakOperatorOverloadsTest.cpp
-# PROP Exclude_From_Build 1
+SOURCE=.\MemoryLeakWarningTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\MemoryLeakWarningTest.cpp
-# PROP Exclude_From_Build 1
+SOURCE=.\MemoryOperatorOverloadTest.cpp
 # End Source File
 # Begin Source File
 
@@ -192,15 +190,15 @@ SOURCE=.\CppUTestExt\MockExpectedCallTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\CppUTestExt\MockExpectedFunctionsListTest.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\CppUTestExt\MockFailureTest.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\CppUTestExt\MockFailureTest.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\CppUTestExt\MockNamedValueTest.cpp
 # End Source File
 # Begin Source File
 
@@ -240,7 +238,15 @@ SOURCE=.\SetPluginTest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\SimpleMutexTest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\SimpleStringTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\TestFailureNaNTest.cpp
 # End Source File
 # Begin Source File
 
@@ -277,6 +283,14 @@ SOURCE=.\TestRegistryTest.cpp
 # Begin Source File
 
 SOURCE=.\TestResultTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\TestUtestMacro.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\UtestPlatformTest.cpp
 # End Source File
 # Begin Source File
 

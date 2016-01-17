@@ -121,7 +121,7 @@ TEST(MockDocumentation, ObjectParameters)
     mock().installComparator("myType", comparator);
     mock().expectOneCall("function").withParameterOfType("myType", "parameterName", object);
     mock().clear();
-    mock().removeAllComparators();
+    mock().removeAllComparatorsAndCopiers();
 }
 
 TEST(MockDocumentation, returnValue)
@@ -179,9 +179,9 @@ static  int equalMethod(const void* object1, const void* object2)
     return object1 == object2;
 }
 
-static char* toStringMethod(const void*)
+static const char* toStringMethod(const void*)
 {
-    return (char*) "string";
+    return "string";
 }
 
 TEST(MockDocumentation, CInterface)
@@ -196,7 +196,7 @@ TEST(MockDocumentation, CInterface)
     mock_c()->installComparator("type", equalMethod, toStringMethod);
     mock_scope_c("scope")->expectOneCall("bar")->withParameterOfType("type", "name", object);
     mock_scope_c("scope")->actualCall("bar")->withParameterOfType("type", "name", object);
-    mock_c()->removeAllComparators();
+    mock_c()->removeAllComparatorsAndCopiers();
 
     mock_c()->setIntData("important", 10);
     mock_c()->checkExpectations();

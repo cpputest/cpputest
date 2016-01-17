@@ -44,10 +44,6 @@ public:
     {
     }
 
-    virtual ~DummyPlugin()
-    {
-    }
-
     virtual void preTestAction(UtestShell&, TestResult&)
     {
         preAction++;
@@ -83,7 +79,6 @@ public:
     }
 
 };
-
 
 TEST_GROUP(PluginTest)
 {
@@ -153,6 +148,27 @@ TEST(PluginTest, Sequence)
     LONGS_EQUAL(2, registry->countPlugins());
 }
 
+TEST(PluginTest, RemovePluginByName)
+{
+    registry->installPlugin(secondPlugin);
+    registry->installPlugin(thirdPlugin);
+    LONGS_EQUAL(3, registry->countPlugins());
+    registry->removePluginByName(GENERIC_PLUGIN2);
+    LONGS_EQUAL(2, registry->countPlugins());
+}
+
+struct DefaultPlugin : public TestPlugin
+{
+    DefaultPlugin() : TestPlugin("default") {}
+};
+
+TEST(PluginTest, DefaultPostTestActionDoesntDoAnything)
+{
+    DefaultPlugin defaultPlugin;
+    registry->installPlugin(&defaultPlugin);
+    genFixture->runAllTests();
+}
+
 TEST(PluginTest, DisablesPluginsDontRun)
 {
     registry->installPlugin(thirdPlugin);
@@ -170,13 +186,12 @@ TEST(PluginTest, ParseArgumentsForUnknownArgumentsFails)
 {
     registry->installPlugin(secondPlugin);
     const char *cmd_line[] = {"nonsense", "andmorenonsense"};
-    CHECK(registry->getFirstPlugin()->parseAllArguments(2, cmd_line, 0) == false	);
+    CHECK(registry->getFirstPlugin()->parseAllArguments(2, const_cast<char**>(cmd_line), 0) == false); /* cover non-const wrapper, too */
 }
 
 TEST(PluginTest, ParseArgumentsContinuesAndSucceedsWhenAPluginCanParse)
 {
     registry->installPlugin(secondPlugin);
     const char *cmd_line[] = {"-paccept", "andmorenonsense"};
-    CHECK(registry->getFirstPlugin()->parseAllArguments(2, cmd_line, 0));
+    CHECK(registry->getFirstPlugin()->parseAllArguments(2, const_cast<char**>(cmd_line), 0)); /* cover non-const wrapper, too */
 }
-

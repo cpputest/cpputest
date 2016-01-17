@@ -33,27 +33,45 @@
 class TypeForTestingExpectedFunctionCall
 {
 public:
-    TypeForTestingExpectedFunctionCall(int val) : value(val) {}
-    int value;
+    TypeForTestingExpectedFunctionCall(int val)
+    {
+        value = new int(val);
+    }
+    virtual ~TypeForTestingExpectedFunctionCall()
+    {
+        delete value;
+    }
+    int *value;
 };
 
 class TypeForTestingExpectedFunctionCallComparator : public MockNamedValueComparator
 {
 public:
-    TypeForTestingExpectedFunctionCallComparator() {}
-    virtual ~TypeForTestingExpectedFunctionCallComparator() {}
-
     virtual bool isEqual(const void* object1, const void* object2)
     {
-        return ((TypeForTestingExpectedFunctionCall*)object1)->value == ((TypeForTestingExpectedFunctionCall*)object2)->value;
+        const TypeForTestingExpectedFunctionCall* obj1 = (const TypeForTestingExpectedFunctionCall*) object1;
+        const TypeForTestingExpectedFunctionCall* obj2 = (const TypeForTestingExpectedFunctionCall*) object2;
+        return *(obj1->value) == *(obj2->value);
     }
     virtual SimpleString valueToString(const void* object)
     {
-        return StringFrom(((TypeForTestingExpectedFunctionCall*)object)->value);
+        const TypeForTestingExpectedFunctionCall* obj = (const TypeForTestingExpectedFunctionCall*) object;
+        return StringFrom(*(obj->value));
     }
 };
 
-TEST_GROUP(MockNamedValueComparatorRepository)
+class TypeForTestingExpectedFunctionCallCopier : public MockNamedValueCopier
+{
+public:
+    virtual void copy(void* dst_, const void* src_)
+    {
+        TypeForTestingExpectedFunctionCall* dst = (TypeForTestingExpectedFunctionCall*) dst_;
+        const TypeForTestingExpectedFunctionCall* src = (const TypeForTestingExpectedFunctionCall*) src_;
+        *(dst->value) = *(src->value);
+    }
+};
+
+TEST_GROUP(MockNamedValueHandlerRepository)
 {
     void teardown()
     {
@@ -61,30 +79,75 @@ TEST_GROUP(MockNamedValueComparatorRepository)
     }
 };
 
-TEST(MockNamedValueComparatorRepository, getComparatorForNonExistingName)
+TEST(MockNamedValueHandlerRepository, getComparatorForNonExistingName)
 {
-    MockNamedValueComparatorRepository repository;
+    MockNamedValueComparatorsAndCopiersRepository repository;
     POINTERS_EQUAL(NULL, repository.getComparatorForType("typeName"));
 }
 
-TEST(MockNamedValueComparatorRepository, installComparator)
+TEST(MockNamedValueHandlerRepository, installComparator)
 {
     TypeForTestingExpectedFunctionCallComparator comparator;
-    MockNamedValueComparatorRepository repository;
+    MockNamedValueComparatorsAndCopiersRepository repository;
     repository.installComparator("typeName", comparator);
     POINTERS_EQUAL(&comparator, repository.getComparatorForType("typeName"));
 }
 
-TEST(MockNamedValueComparatorRepository, installMultipleComparator)
+TEST(MockNamedValueHandlerRepository, installMultipleComparators)
 {
     TypeForTestingExpectedFunctionCallComparator comparator1, comparator2, comparator3;
-    MockNamedValueComparatorRepository repository;
+    MockNamedValueComparatorsAndCopiersRepository repository;
     repository.installComparator("type1", comparator1);
     repository.installComparator("type2", comparator2);
     repository.installComparator("type3", comparator3);
     POINTERS_EQUAL(&comparator3, repository.getComparatorForType("type3"));
     POINTERS_EQUAL(&comparator2, repository.getComparatorForType("type2"));
     POINTERS_EQUAL(&comparator1, repository.getComparatorForType("type1"));
+}
+
+TEST(MockNamedValueHandlerRepository, getCopierForNonExistingName)
+{
+    MockNamedValueComparatorsAndCopiersRepository repository;
+    POINTERS_EQUAL(NULL, repository.getCopierForType("typeName"));
+}
+
+TEST(MockNamedValueHandlerRepository, installCopier)
+{
+    TypeForTestingExpectedFunctionCallCopier copier;
+    MockNamedValueComparatorsAndCopiersRepository repository;
+    repository.installCopier("typeName", copier);
+    POINTERS_EQUAL(&copier, repository.getCopierForType("typeName"));
+}
+
+TEST(MockNamedValueHandlerRepository, installMultipleCopiers)
+{
+    TypeForTestingExpectedFunctionCallCopier copier1, copier2, copier3;
+    MockNamedValueComparatorsAndCopiersRepository repository;
+    repository.installCopier("type1", copier1);
+    repository.installCopier("type2", copier2);
+    repository.installCopier("type3", copier3);
+    POINTERS_EQUAL(&copier3, repository.getCopierForType("type3"));
+    POINTERS_EQUAL(&copier2, repository.getCopierForType("type2"));
+    POINTERS_EQUAL(&copier1, repository.getCopierForType("type1"));
+}
+
+TEST(MockNamedValueHandlerRepository, installMultipleHandlers)
+{
+    TypeForTestingExpectedFunctionCallCopier copier1, copier2, copier3;
+    TypeForTestingExpectedFunctionCallComparator comparator1, comparator2, comparator3;
+    MockNamedValueComparatorsAndCopiersRepository repository;
+    repository.installCopier("type1", copier1);
+    repository.installComparator("type1", comparator1);
+    repository.installCopier("type2", copier2);
+    repository.installCopier("type3", copier3);
+    repository.installComparator("type2", comparator2);
+    repository.installComparator("type3", comparator3);
+    POINTERS_EQUAL(&comparator3, repository.getComparatorForType("type3"));
+    POINTERS_EQUAL(&comparator2, repository.getComparatorForType("type2"));
+    POINTERS_EQUAL(&comparator1, repository.getComparatorForType("type1"));
+    POINTERS_EQUAL(&copier3, repository.getCopierForType("type3"));
+    POINTERS_EQUAL(&copier2, repository.getCopierForType("type2"));
+    POINTERS_EQUAL(&copier1, repository.getCopierForType("type1"));
 }
 
 TEST_GROUP(MockExpectedCall)
@@ -176,6 +239,23 @@ TEST(MockExpectedCall, callWithConstPointerParameter)
     POINTERS_EQUAL(ptr, call->getInputParameter("constPointer").getConstPointerValue());
 }
 
+TEST(MockExpectedCall, callWithFunctionPointerParameter)
+{
+    void (*ptr)() = (void (*)()) 0x123;
+    call->withParameter("functionPointer", ptr);
+    STRCMP_EQUAL("void (*)()", call->getInputParameterType("functionPointer").asCharString());
+    FUNCTIONPOINTERS_EQUAL(ptr, call->getInputParameter("functionPointer").getFunctionPointerValue());
+}
+
+TEST(MockExpectedCall, callWithMemoryBuffer)
+{
+    const unsigned char mem_buffer[] = { 0x12, 0xFE, 0xA1 };
+    call->withParameter("memoryBuffer", mem_buffer, sizeof(mem_buffer));
+    STRCMP_EQUAL("const unsigned char*", call->getInputParameterType("memoryBuffer").asCharString());
+    POINTERS_EQUAL( (void*) mem_buffer, (void*) call->getInputParameter("memoryBuffer").getMemoryBuffer() );
+    LONGS_EQUAL(sizeof(mem_buffer),  call->getInputParameter("memoryBuffer").getSize());
+}
+
 TEST(MockExpectedCall, callWithObjectParameter)
 {
     void* ptr = (void*) 0x123;
@@ -204,8 +284,8 @@ TEST(MockExpectedCall, callWithObjectParameterEqualComparisonButFailsWithoutRepo
 
 TEST(MockExpectedCall, callWithObjectParameterEqualComparisonButFailsWithoutComparator)
 {
-    MockNamedValueComparatorRepository repository;
-    MockNamedValue::setDefaultComparatorRepository(&repository);
+    MockNamedValueComparatorsAndCopiersRepository repository;
+    MockNamedValue::setDefaultComparatorsAndCopiersRepository(&repository);
 
     TypeForTestingExpectedFunctionCall type(1), equalType(1);
     MockNamedValue parameter("name");
@@ -217,8 +297,8 @@ TEST(MockExpectedCall, callWithObjectParameterEqualComparisonButFailsWithoutComp
 TEST(MockExpectedCall, callWithObjectParameterEqualComparison)
 {
     TypeForTestingExpectedFunctionCallComparator comparator;
-    MockNamedValueComparatorRepository repository;
-    MockNamedValue::setDefaultComparatorRepository(&repository);
+    MockNamedValueComparatorsAndCopiersRepository repository;
+    MockNamedValue::setDefaultComparatorsAndCopiersRepository(&repository);
     repository.installComparator("type", comparator);
 
     TypeForTestingExpectedFunctionCall type(1), equalType(1);
@@ -232,8 +312,8 @@ TEST(MockExpectedCall, callWithObjectParameterEqualComparison)
 TEST(MockExpectedCall, getParameterValueOfObjectType)
 {
     TypeForTestingExpectedFunctionCallComparator comparator;
-    MockNamedValueComparatorRepository repository;
-    MockNamedValue::setDefaultComparatorRepository(&repository);
+    MockNamedValueComparatorsAndCopiersRepository repository;
+    MockNamedValue::setDefaultComparatorsAndCopiersRepository(&repository);
     repository.installComparator("type", comparator);
 
     TypeForTestingExpectedFunctionCall type(1);
@@ -252,8 +332,8 @@ TEST(MockExpectedCall, getParameterValueOfObjectTypeWithoutRepository)
 TEST(MockExpectedCall, getParameterValueOfObjectTypeWithoutComparator)
 {
     TypeForTestingExpectedFunctionCall type(1);
-    MockNamedValueComparatorRepository repository;
-    MockNamedValue::setDefaultComparatorRepository(&repository);
+    MockNamedValueComparatorsAndCopiersRepository repository;
+    MockNamedValue::setDefaultComparatorsAndCopiersRepository(&repository);
     call->withParameterOfType("type", "name", &type);
     STRCMP_EQUAL("No comparator found for type: \"type\"", call->getInputParameterValueString("name").asCharString());
 }
@@ -351,7 +431,7 @@ TEST(MockExpectedCall, toStringForIgnoredParameters)
     STRCMP_EQUAL("name -> all parameters ignored", call->callToString().asCharString());
 }
 
-TEST(MockExpectedCall, toStringForMultipleParameters)
+TEST(MockExpectedCall, toStringForMultipleInputParameters)
 {
     int int_value = 10;
     unsigned int uint_value = 7;
@@ -361,6 +441,31 @@ TEST(MockExpectedCall, toStringForMultipleParameters)
     call->withParameter("integer", int_value);
     call->withParameter("unsigned-integer", uint_value);
     STRCMP_EQUAL("name -> const char* string: <value>, int integer: <10>, unsigned int unsigned-integer: <         7 (0x00000007)>", call->callToString().asCharString());
+}
+
+TEST(MockExpectedCall, toStringForMultipleInputAndOutputParameters)
+{
+    int int_value = 10;
+    unsigned int uint_value = 7;
+    unsigned char buffer_value[3];
+
+    call->withName("name");
+    call->withParameter("string", "value");
+    call->withParameter("integer", int_value);
+    call->withParameter("unsigned-integer", uint_value);
+    call->withOutputParameterReturning("buffer", buffer_value, sizeof(buffer_value));
+    STRCMP_EQUAL("name -> const char* string: <value>, int integer: <10>, unsigned int unsigned-integer: <         7 (0x00000007)>, "
+                 "const void* buffer: <output>", call->callToString().asCharString());
+}
+
+TEST(MockExpectedCall, toStringForMultipleOutputParameters)
+{
+    unsigned char buffer_value[3];
+
+    call->withName("name");
+    call->withOutputParameterReturning("buffer1", buffer_value, sizeof(buffer_value));
+    call->withOutputParameterReturning("buffer2", buffer_value, sizeof(buffer_value));
+    STRCMP_EQUAL("name -> const void* buffer1: <output>, const void* buffer2: <output>", call->callToString().asCharString());
 }
 
 TEST(MockExpectedCall, toStringForParameterAndIgnored)
@@ -413,30 +518,218 @@ TEST(MockExpectedCall, hasNoOutputParameter)
     CHECK_FALSE(call->hasOutputParameter(foo));
 }
 
-TEST(MockExpectedCall, MockIgnoredExpectedCallWorksAsItShould)
+TEST(MockExpectedCall, hasOutputParameterOfType)
+{
+    TypeForTestingExpectedFunctionCall object(6789);
+    call->withOutputParameterOfTypeReturning("TypeForTestingExpectedFunctionCall", "foo", &object);
+    MockNamedValue foo("foo");
+    foo.setObjectPointer("TypeForTestingExpectedFunctionCall", &object);
+    CHECK(call->hasOutputParameter(foo));
+}
+
+TEST(MockExpectedCall, hasNoOutputParameterOfTypeSameTypeButInput)
+{
+    TypeForTestingExpectedFunctionCall object(543);
+    call->withParameterOfType("TypeForTestingExpectedFunctionCall", "foo", &object);
+    MockNamedValue foo("foo");
+    foo.setObjectPointer("TypeForTestingExpectedFunctionCall", &object);
+    CHECK_FALSE(call->hasOutputParameter(foo));
+}
+
+TEST(MockExpectedCall, hasNoOutputParameterOfTypeDifferentType)
+{
+    TypeForTestingExpectedFunctionCall object(543);
+    call->withOutputParameterOfTypeReturning("TypeForTestingExpectedFunctionCall", "foo", &object);
+    MockNamedValue foo("foo");
+    foo.setObjectPointer("OtherTypeForTestingExpectedFunctionCall", &object);
+    CHECK_FALSE(call->hasOutputParameter(foo));
+}
+
+static MockExpectedCallComposite composite;
+
+TEST_GROUP(MockExpectedCallComposite)
+{
+    MockCheckedExpectedCall call;
+
+    void setup() _override
+    {
+        composite.add(call);
+        composite.withName("name");
+    }
+
+    void teardown() _override
+    {
+        CHECK_NO_MOCK_FAILURE();
+        composite.clear();
+    }
+};
+
+TEST(MockExpectedCallComposite, hasLongIntParameter)
+{
+    composite.withParameter("param", (long int) -1);
+    STRCMP_EQUAL("name -> long int param: <-1>", call.callToString().asCharString());
+}
+
+TEST(MockExpectedCallComposite, hasUnsignedLongIntParameter)
+{
+    composite.withParameter("param", (unsigned long int) 5);
+    STRCMP_EQUAL("name -> unsigned long int param: <5 (0x5)>", call.callToString().asCharString());
+}
+
+TEST(MockExpectedCallComposite, hasPointerParameter)
+{
+    composite.withParameter("param", (void*) 0);
+    STRCMP_EQUAL("name -> void* param: <0x0>", call.callToString().asCharString());
+}
+
+TEST(MockExpectedCallComposite, hasConstPointerParameter)
+{
+    composite.withParameter("param", (const void*) 0);
+    STRCMP_EQUAL("name -> const void* param: <0x0>", call.callToString().asCharString());
+}
+
+TEST(MockExpectedCallComposite, hasFunctionPointerParameter)
+{
+    composite.withParameter("param", (void (*)()) 0);
+    STRCMP_EQUAL("name -> void (*)() param: <0x0>", call.callToString().asCharString());
+}
+
+TEST(MockExpectedCallComposite, hasMemoryBufferParameter)
+{
+    const unsigned char mem_buffer[] = { 0x89, 0xFE, 0x15 };
+    composite.withParameter("param", mem_buffer, sizeof(mem_buffer));
+    STRCMP_EQUAL("name -> const unsigned char* param: <Size = 3 | HexContents = 89 FE 15>", call.callToString().asCharString());
+}
+
+TEST(MockExpectedCallComposite, hasParameterOfType)
+{
+    composite.withParameterOfType("type", "param", (const void*) 0);
+    STRCMP_EQUAL("name -> type param: <No comparator found for type: \"type\">", call.callToString().asCharString());
+}
+
+TEST(MockExpectedCallComposite, hasOutputParameterReturning)
+{
+    composite.withOutputParameterReturning("out", (const void*) 0, 1);
+    STRCMP_EQUAL("name -> const void* out: <output>", call.callToString().asCharString());
+}
+
+TEST(MockExpectedCallComposite, hasUnsignedIntReturnValue)
+{
+    composite.andReturnValue((unsigned int) 2);
+    STRCMP_EQUAL("unsigned int", call.returnValue().getType().asCharString());
+    LONGS_EQUAL(2, call.returnValue().getUnsignedIntValue());
+}
+
+TEST(MockExpectedCallComposite, hasIntReturnValue)
+{
+    composite.andReturnValue((int) -5);
+    STRCMP_EQUAL("int", call.returnValue().getType().asCharString());
+    LONGS_EQUAL(-5, call.returnValue().getIntValue());
+}
+
+TEST(MockExpectedCallComposite, hasLongIntReturnValue)
+{
+    composite.andReturnValue((long int) -17);
+    STRCMP_EQUAL("long int", call.returnValue().getType().asCharString());
+    LONGS_EQUAL(-17, call.returnValue().getLongIntValue());
+}
+
+TEST(MockExpectedCallComposite, hasUnsignedLongIntReturnValue)
+{
+    composite.andReturnValue((unsigned long int) 6);
+    STRCMP_EQUAL("unsigned long int", call.returnValue().getType().asCharString());
+    LONGS_EQUAL(6, call.returnValue().getUnsignedLongIntValue());
+}
+
+TEST(MockExpectedCallComposite, hasDoubleReturnValue)
+{
+    composite.andReturnValue((double) 3.005);
+    STRCMP_EQUAL("double", call.returnValue().getType().asCharString());
+    DOUBLES_EQUAL(3.005, call.returnValue().getDoubleValue(), 0.0001);
+}
+
+TEST(MockExpectedCallComposite, hasStringReturnValue)
+{
+    composite.andReturnValue("hello");
+    STRCMP_EQUAL("const char*", call.returnValue().getType().asCharString());
+    STRCMP_EQUAL("hello", call.returnValue().getStringValue());
+}
+
+TEST(MockExpectedCallComposite, hasPointerReturnValue)
+{
+    composite.andReturnValue((void*) 0);
+    STRCMP_EQUAL("void*", call.returnValue().getType().asCharString());
+    POINTERS_EQUAL((void*) 0, call.returnValue().getPointerValue());
+}
+
+TEST(MockExpectedCallComposite, hasConstPointerReturnValue)
+{
+    composite.andReturnValue((const void*) 0);
+    STRCMP_EQUAL("const void*", call.returnValue().getType().asCharString());
+    POINTERS_EQUAL((const void*) 0, call.returnValue().getConstPointerValue());
+}
+
+TEST(MockExpectedCallComposite, hasFunctionPointerReturnValue)
+{
+    composite.andReturnValue((void(*)()) 0);
+    STRCMP_EQUAL("void (*)()", call.returnValue().getType().asCharString());
+    FUNCTIONPOINTERS_EQUAL((void(*)()) 0, call.returnValue().getFunctionPointerValue());
+}
+
+TEST(MockExpectedCallComposite, isOnObject)
+{
+    composite.onObject(&composite);
+    SimpleString info("(object address: ");
+    info += StringFromFormat("%p", (void*) &composite);
+    info += ")::name -> no parameters";
+    STRCMP_EQUAL(info.asCharString(), call.callToString().asCharString());
+}
+
+#include "CppUTest/TestTestingFixture.h"
+
+static void withCallOrderNotSupportedFailMethod_(void)
+{
+    composite.withCallOrder(5);
+} // LCOV_EXCL_LINE
+
+TEST(MockExpectedCallComposite, doesNotSupportCallOrder)
+{
+    TestTestingFixture fixture;
+    fixture.setTestFunction(&withCallOrderNotSupportedFailMethod_);
+    fixture.runAllTests();
+    fixture.assertPrintContains("withCallOrder not supported for CompositeCalls");
+}
+
+TEST_GROUP(MockIgnoredExpectedCall)
 {
     MockIgnoredExpectedCall ignored;
+};
+
+TEST(MockIgnoredExpectedCall, worksAsItShould)
+{
     ignored.withName("func");
-    ignored.withCallOrder(1)
-            .onObject((void*) 0)
-            .withIntParameter("bla", (int) 1)
-            .withUnsignedIntParameter("foo", (unsigned int) 1)
-            .withLongIntParameter("hey", (long int) 1)
-            .withUnsignedLongIntParameter("bah", (unsigned long int) 1)
-            .withDoubleParameter("hah", (double) 1.1f)
-            .withStringParameter("goo", "hello")
-            .withPointerParameter("pie", (void*) 0)
-            .withConstPointerParameter("woo", (const void*) 0)
-            .withParameterOfType("top", "mytype", (const void*) 0)
-            .withOutputParameterReturning("bar", (const void*) 0, 1)
-            .andReturnValue((double) 1.0f)
-            .andReturnValue((unsigned int) 1)
-            .andReturnValue((int) 1)
-            .andReturnValue((unsigned long int) 1)
-            .andReturnValue((long int) 1)
-            .andReturnValue("boo")
-            .andReturnValue((void*) 0)
-            .andReturnValue((const void*) 0)
-    ;
-    CHECK_FALSE(ignored.hasReturnValue());
+    ignored.withCallOrder(1);
+    ignored.onObject((void*) 0);
+    ignored.withIntParameter("bla", (int) 1);
+    ignored.withUnsignedIntParameter("foo", (unsigned int) 1);
+    ignored.withLongIntParameter("hey", (long int) 1);
+    ignored.withUnsignedLongIntParameter("bah", (unsigned long int) 1);
+    ignored.withDoubleParameter("hah", (double) 1.1f);
+    ignored.withStringParameter("goo", "hello");
+    ignored.withPointerParameter("pie", (void*) 0);
+    ignored.withConstPointerParameter("woo", (const void*) 0);
+    ignored.withFunctionPointerParameter("fop", (void(*)()) 0);
+    ignored.withMemoryBufferParameter("waa", (const unsigned char*) 0, 0);
+    ignored.withParameterOfType("top", "mytype", (const void*) 0);
+    ignored.withOutputParameterReturning("bar", (const void*) 0, 1);
+    ignored.ignoreOtherParameters();
+    ignored.andReturnValue((double) 1.0f);
+    ignored.andReturnValue((unsigned int) 1);
+    ignored.andReturnValue((int) 1);
+    ignored.andReturnValue((unsigned long int) 1);
+    ignored.andReturnValue((long int) 1);
+    ignored.andReturnValue("boo");
+    ignored.andReturnValue((void*) 0);
+    ignored.andReturnValue((const void*) 0);
+    ignored.andReturnValue((void(*)()) 0);
 }

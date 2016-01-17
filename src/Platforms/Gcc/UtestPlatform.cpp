@@ -44,6 +44,7 @@
 #include <signal.h>
 #ifndef __MINGW32__
 #include <sys/wait.h>
+#include <errno.h>
 #endif
 #include <pthread.h>
 
@@ -52,19 +53,26 @@
 static jmp_buf test_exit_jmp_buf[10];
 static int jmp_buf_index = 0;
 
-#ifdef __MINGW32__
+#ifndef HAVE_FORK
 
-static void GccNoPThreadPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin*, TestResult* result)
+static void GccPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin*, TestResult* result)
 {
-    result->addFailure(TestFailure(shell, "-p doesn't work on MinGW as it is lacking fork.\b"));
+    result->addFailure(TestFailure(shell, "-p doesn't work on this platform, as it is lacking fork.\b"));
 }
 
-void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell* shell, TestPlugin* plugin, TestResult* result) =
-        GccNoPThreadPlatformSpecificRunTestInASeperateProcess;
+static int PlatformSpecificForkImplementation(void)
+{
+    return 0;
+}
+
+static int PlatformSpecificWaitPidImplementation(int, int*, int)
+{
+    return 0;
+}
 
 #else
 
-static void GccCygwinPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
+static void GccPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
 {
     pid_t cpid, w;
     int status;
@@ -83,6 +91,7 @@ static void GccCygwinPlatformSpecificRunTestInASeperateProcess(UtestShell* shell
         do {
             w = PlatformSpecificWaitPid(cpid, &status, WUNTRACED);
             if (w == -1) {
+                if(EINTR ==errno) continue; /* OS X debugger */
                 result->addFailure(TestFailure(shell, "Call to waitpid() failed"));
                 return;
             }
@@ -104,33 +113,31 @@ static void GccCygwinPlatformSpecificRunTestInASeperateProcess(UtestShell* shell
     }
 }
 
-void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell* shell, TestPlugin* plugin, TestResult* result) =
-        GccCygwinPlatformSpecificRunTestInASeperateProcess;
-
-#endif
-
 static pid_t PlatformSpecificForkImplementation(void)
 {
     return fork();
 }
 
-int (*PlatformSpecificFork)(void) = PlatformSpecificForkImplementation;
-
-static int PlatformSpecificWaitPidImplementation(int pid, int* status, int options)
+static pid_t PlatformSpecificWaitPidImplementation(int pid, int* status, int options)
 {
     return waitpid(pid, status, options);
 }
 
-int (*PlatformSpecificWaitPid)(int, int*, int) = PlatformSpecificWaitPidImplementation;
+#endif
 
 TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
 {
     return TestOutput::eclipse;
 }
 
+void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell* shell, TestPlugin* plugin, TestResult* result) =
+        GccPlatformSpecificRunTestInASeperateProcess;
+int (*PlatformSpecificFork)(void) = PlatformSpecificForkImplementation;
+int (*PlatformSpecificWaitPid)(int, int*, int) = PlatformSpecificWaitPidImplementation;
+
 extern "C" {
 
-int PlatformSpecificSetJmp(void (*function) (void* data), void* data)
+static int PlatformSpecificSetJmpImplementation(void (*function) (void* data), void* data)
 {
     if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
         jmp_buf_index++;
@@ -148,16 +155,20 @@ int PlatformSpecificSetJmp(void (*function) (void* data), void* data)
 #if !((__clang_major__ == 3) && (__clang_minor__ == 0))
 __no_return__
 #endif
-void PlatformSpecificLongJmp()
+static void PlatformSpecificLongJmpImplementation()
 {
     jmp_buf_index--;
     longjmp(test_exit_jmp_buf[jmp_buf_index], 1);
 }
 
-void PlatformSpecificRestoreJumpBuffer()
+static void PlatformSpecificRestoreJumpBufferImplementation()
 {
     jmp_buf_index--;
 }
+
+void (*PlatformSpecificLongJmp)() = PlatformSpecificLongJmpImplementation;
+int (*PlatformSpecificSetJmp)(void (*)(void*), void*) = PlatformSpecificSetJmpImplementation;
+void (*PlatformSpecificRestoreJumpBuffer)() = PlatformSpecificRestoreJumpBufferImplementation;
 
 ///////////// Time in millis
 
@@ -169,8 +180,6 @@ static long TimeInMillisImplementation()
     return (tv.tv_sec * 1000) + (long)((double)tv.tv_usec * 0.001);
 }
 
-long (*GetPlatformSpecificTimeInMillis)() = TimeInMillisImplementation;
-
 static const char* TimeStringImplementation()
 {
     time_t tm = time(NULL);
@@ -180,6 +189,7 @@ static const char* TimeStringImplementation()
     return dateTime;
 }
 
+long (*GetPlatformSpecificTimeInMillis)() = TimeInMillisImplementation;
 const char* (*GetPlatformSpecificTimeString)() = TimeStringImplementation;
 
 /* Wish we could add an attribute to the format for discovering mis-use... but the __attribute__(format) seems to not work on va_list */
@@ -187,75 +197,55 @@ const char* (*GetPlatformSpecificTimeString)() = TimeStringImplementation;
 #pragma clang diagnostic ignored "-Wformat-nonliteral"
 #endif
 
-int PlatformSpecificVSNprintf(char *str, size_t size, const char* format, va_list args)
-{
-   return vsnprintf( str, size, format, args);
-}
+int (*PlatformSpecificVSNprintf)(char *str, size_t size, const char* format, va_list va_args_list) = vsnprintf;
 
-PlatformSpecificFile PlatformSpecificFOpen(const char* filename, const char* flag)
+static PlatformSpecificFile PlatformSpecificFOpenImplementation(const char* filename, const char* flag)
 {
    return fopen(filename, flag);
 }
 
-
-void PlatformSpecificFPuts(const char* str, PlatformSpecificFile file)
+static void PlatformSpecificFPutsImplementation(const char* str, PlatformSpecificFile file)
 {
    fputs(str, (FILE*)file);
 }
 
-void PlatformSpecificFClose(PlatformSpecificFile file)
+static void PlatformSpecificFCloseImplementation(PlatformSpecificFile file)
 {
    fclose((FILE*)file);
 }
 
-void PlatformSpecificFlush()
+static void PlatformSpecificFlushImplementation()
 {
   fflush(stdout);
 }
 
-int PlatformSpecificPutchar(int c)
-{
-  return putchar(c);
-}
+PlatformSpecificFile (*PlatformSpecificFOpen)(const char*, const char*) = PlatformSpecificFOpenImplementation;
+void (*PlatformSpecificFPuts)(const char*, PlatformSpecificFile) = PlatformSpecificFPutsImplementation;
+void (*PlatformSpecificFClose)(PlatformSpecificFile) = PlatformSpecificFCloseImplementation;
 
-void* PlatformSpecificMalloc(size_t size)
-{
-   return malloc(size);
-}
+int (*PlatformSpecificPutchar)(int) = putchar;
+void (*PlatformSpecificFlush)() = PlatformSpecificFlushImplementation;
 
-void* PlatformSpecificRealloc (void* memory, size_t size)
-{
-   return realloc(memory, size);
-}
-
-void PlatformSpecificFree(void* memory)
-{
-   free(memory);
-}
-
-void* PlatformSpecificMemCpy(void* s1, const void* s2, size_t size)
-{
-   return memcpy(s1, s2, size);
-}
-
-void* PlatformSpecificMemset(void* mem, int c, size_t size)
-{
-    return memset(mem, c, size);
-}
-
-
-double PlatformSpecificFabs(double d)
-{
-   return fabs(d);
-}
+void* (*PlatformSpecificMalloc)(size_t size) = malloc;
+void* (*PlatformSpecificRealloc)(void*, size_t) = realloc;
+void (*PlatformSpecificFree)(void* memory) = free;
+void* (*PlatformSpecificMemCpy)(void*, const void*, size_t) = memcpy;
+void* (*PlatformSpecificMemset)(void*, int, size_t) = memset;
 
 static int IsNanImplementation(double d)
 {
     return isnan((float)d);
 }
 
-int (*PlatformSpecificIsNan)(double) = IsNanImplementation;
+static int IsInfImplementation(double d)
+{
+    return isinf((float)d);
+}
 
+double (*PlatformSpecificFabs)(double) = fabs;
+int (*PlatformSpecificIsNan)(double) = IsNanImplementation;
+int (*PlatformSpecificIsInf)(double) = IsInfImplementation;
+int (*PlatformSpecificAtExit)(void(*func)(void)) = atexit;  /// this was undefined before
 
 static PlatformSpecificMutex PThreadMutexCreate(void)
 {

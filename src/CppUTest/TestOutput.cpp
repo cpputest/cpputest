@@ -78,11 +78,6 @@ void TestOutput::printDouble(double d)
     print(StringFrom(d).asCharString());
 }
 
-void TestOutput::printHex(long n)
-{
-    print(HexStringFrom(n).asCharString());
-}
-
 TestOutput& operator<<(TestOutput& p, const char* s)
 {
     p.print(s);
@@ -142,10 +137,6 @@ void TestOutput::printCurrentGroupEnded(const TestResult& /*res*/)
 {
 }
 
-void TestOutput::flush()
-{
-}
-
 void TestOutput::printTestsEnded(const TestResult& result)
 {
     print("\n");
@@ -192,7 +183,7 @@ void TestOutput::printTestRun(int number, int total)
     }
 }
 
-void TestOutput::print(const TestFailure& failure)
+void TestOutput::printFailure(const TestFailure& failure)
 {
     if (failure.isOutsideTestFile() || failure.isInHelperFunction())
         printFileAndLineForTestAndFailure(failure);
@@ -231,8 +222,8 @@ void TestOutput::printFailureMessage(SimpleString reason)
 
 void TestOutput::printErrorInFileOnLineFormattedForWorkingEnvironment(SimpleString file, int lineNumber)
 {
-    if (TestOutput::getWorkingEnvironment() == TestOutput::vistualStudio)
-        printVistualStudioErrorInFileOnLine(file, lineNumber);
+    if (TestOutput::getWorkingEnvironment() == TestOutput::visualStudio)
+        printVisualStudioErrorInFileOnLine(file, lineNumber);
     else
         printEclipseErrorInFileOnLine(file, lineNumber);
 }
@@ -247,7 +238,7 @@ void TestOutput::printEclipseErrorInFileOnLine(SimpleString file, int lineNumber
     print(" error:");
 }
 
-void TestOutput::printVistualStudioErrorInFileOnLine(SimpleString file, int lineNumber)
+void TestOutput::printVisualStudioErrorInFileOnLine(SimpleString file, int lineNumber)
 {
     print("\n");
     print(file.asCharString());
@@ -274,3 +265,117 @@ void ConsoleTestOutput::flush()
 StringBufferTestOutput::~StringBufferTestOutput()
 {
 }
+
+CompositeTestOutput::CompositeTestOutput()
+  : outputOne_(NULL), outputTwo_(NULL)
+{
+}
+
+CompositeTestOutput::~CompositeTestOutput()
+{
+  delete outputOne_;
+  delete outputTwo_;
+}
+
+void CompositeTestOutput::setOutputOne(TestOutput* output)
+{
+  delete outputOne_;
+  outputOne_ = output;
+}
+
+void CompositeTestOutput::setOutputTwo(TestOutput* output)
+{
+  delete outputTwo_;
+  outputTwo_ = output;
+}
+
+void CompositeTestOutput::printTestsStarted()
+{
+  if (outputOne_) outputOne_->printTestsStarted();
+  if (outputTwo_) outputTwo_->printTestsStarted();
+}
+
+void CompositeTestOutput::printTestsEnded(const TestResult& result)
+{
+  if (outputOne_) outputOne_->printTestsEnded(result);
+  if (outputTwo_) outputTwo_->printTestsEnded(result);
+}
+
+void CompositeTestOutput::printCurrentTestStarted(const UtestShell& test)
+{
+  if (outputOne_) outputOne_->printCurrentTestStarted(test);
+  if (outputTwo_) outputTwo_->printCurrentTestStarted(test);
+}
+
+void CompositeTestOutput::printCurrentTestEnded(const TestResult& res)
+{
+  if (outputOne_) outputOne_->printCurrentTestEnded(res);
+  if (outputTwo_) outputTwo_->printCurrentTestEnded(res);
+}
+
+void CompositeTestOutput::printCurrentGroupStarted(const UtestShell& test)
+{
+  if (outputOne_) outputOne_->printCurrentGroupStarted(test);
+  if (outputTwo_) outputTwo_->printCurrentGroupStarted(test);
+}
+
+void CompositeTestOutput::printCurrentGroupEnded(const TestResult& res)
+{
+  if (outputOne_) outputOne_->printCurrentGroupEnded(res);
+  if (outputTwo_) outputTwo_->printCurrentGroupEnded(res);
+}
+
+void CompositeTestOutput::verbose()
+{
+  if (outputOne_) outputOne_->verbose();
+  if (outputTwo_) outputTwo_->verbose();
+}
+
+void CompositeTestOutput::color()
+{
+  if (outputOne_) outputOne_->color();
+  if (outputTwo_) outputTwo_->color();
+}
+
+void CompositeTestOutput::printBuffer(const char* buffer)
+{
+  if (outputOne_) outputOne_->printBuffer(buffer);
+  if (outputTwo_) outputTwo_->printBuffer(buffer);
+}
+
+void CompositeTestOutput::print(const char* buffer)
+{
+  if (outputOne_) outputOne_->print(buffer);
+  if (outputTwo_) outputTwo_->print(buffer);
+}
+
+void CompositeTestOutput::print(long number)
+{
+  if (outputOne_) outputOne_->print(number);
+  if (outputTwo_) outputTwo_->print(number);
+}
+
+void CompositeTestOutput::printDouble(double number)
+{
+  if (outputOne_) outputOne_->printDouble(number);
+  if (outputTwo_) outputTwo_->printDouble(number);
+}
+
+void CompositeTestOutput::printFailure(const TestFailure& failure)
+{
+  if (outputOne_) outputOne_->printFailure(failure);
+  if (outputTwo_) outputTwo_->printFailure(failure);
+}
+
+void CompositeTestOutput::setProgressIndicator(const char* indicator)
+{
+  if (outputOne_) outputOne_->setProgressIndicator(indicator);
+  if (outputTwo_) outputTwo_->setProgressIndicator(indicator);
+}
+
+void CompositeTestOutput::flush()
+{
+  if (outputOne_) outputOne_->flush();
+  if (outputTwo_) outputTwo_->flush();
+}
+

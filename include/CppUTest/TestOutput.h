@@ -30,12 +30,14 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-//  This is a minimal printer inteface.
-//  We kept streams out too keep footprint small, and so the test
+//  This is a minimal printer interface.
+//  We kept streams out to keep footprint small, and so the test
 //  harness could be used with less capable compilers so more
 //  platforms could use this test harness
 //
 ///////////////////////////////////////////////////////////////////////////////
+
+#include "SimpleString.h"
 
 class UtestShell;
 class TestFailure;
@@ -60,14 +62,13 @@ public:
     virtual void print(const char*);
     virtual void print(long);
     virtual void printDouble(double);
-    virtual void printHex(long);
-    virtual void print(const TestFailure& failure);
+    virtual void printFailure(const TestFailure& failure);
     virtual void printTestRun(int number, int total);
     virtual void setProgressIndicator(const char*);
 
-    virtual void flush();
+    virtual void flush()=0;
 
-    enum WorkingEnvironment {vistualStudio, eclipse, detectEnvironment};
+    enum WorkingEnvironment {visualStudio, eclipse, detectEnvironment};
 
     static void setWorkingEnvironment(WorkingEnvironment workEnvironment);
     static WorkingEnvironment getWorkingEnvironment();
@@ -75,7 +76,7 @@ public:
 protected:
 
     virtual void printEclipseErrorInFileOnLine(SimpleString file, int lineNumber);
-    virtual void printVistualStudioErrorInFileOnLine(SimpleString file, int lineNumber);
+    virtual void printVisualStudioErrorInFileOnLine(SimpleString file, int lineNumber);
 
     virtual void printProgressIndicator();
     void printFileAndLineForTestAndFailure(const TestFailure& failure);
@@ -157,12 +158,50 @@ public:
         return output;
     }
 
-private:
+protected:
     SimpleString output;
 
+private:
     StringBufferTestOutput(const StringBufferTestOutput&);
     StringBufferTestOutput& operator=(const StringBufferTestOutput&);
 
+};
+
+class CompositeTestOutput : public TestOutput
+{
+public:
+    virtual void setOutputOne(TestOutput* output);
+    virtual void setOutputTwo(TestOutput* output);
+
+    CompositeTestOutput();
+    virtual ~CompositeTestOutput();
+
+    virtual void printTestsStarted();
+    virtual void printTestsEnded(const TestResult& result);
+
+    virtual void printCurrentTestStarted(const UtestShell& test);
+    virtual void printCurrentTestEnded(const TestResult& res);
+    virtual void printCurrentGroupStarted(const UtestShell& test);
+    virtual void printCurrentGroupEnded(const TestResult& res);
+
+    virtual void verbose();
+    virtual void color();
+    virtual void printBuffer(const char*);
+    virtual void print(const char*);
+    virtual void print(long);
+    virtual void printDouble(double);
+    virtual void printFailure(const TestFailure& failure);
+    virtual void setProgressIndicator(const char*);
+
+    virtual void flush();
+
+protected:
+    CompositeTestOutput(const TestOutput&);
+    CompositeTestOutput& operator=(const TestOutput&);
+
+private:
+    TestOutput* outputOne_;
+    TestOutput* outputTwo_;
 };
 
 #endif

@@ -47,8 +47,11 @@ public:
     virtual MockActualCall& withStringParameter(const SimpleString& name, const char* value) _override;
     virtual MockActualCall& withPointerParameter(const SimpleString& name, void* value) _override;
     virtual MockActualCall& withConstPointerParameter(const SimpleString& name, const void* value) _override;
+    virtual MockActualCall& withFunctionPointerParameter(const SimpleString& name, void (*value)()) _override;
+    virtual MockActualCall& withMemoryBufferParameter(const SimpleString& name, const unsigned char* value, size_t size) _override;
     virtual MockActualCall& withParameterOfType(const SimpleString& type, const SimpleString& name, const void* value) _override;
     virtual MockActualCall& withOutputParameter(const SimpleString& name, void* output) _override;
+    virtual MockActualCall& withOutputParameterOfType(const SimpleString& type, const SimpleString& name, void* output) _override;
 
     virtual bool hasReturnValue() _override;
     virtual MockNamedValue returnValue() _override;
@@ -77,7 +80,10 @@ public:
     virtual void * returnPointerValue() _override;
     virtual void * returnPointerValueOrDefault(void *) _override;
 
-    virtual MockActualCall& onObject(void* objectPtr) _override;
+    virtual void (*returnFunctionPointerValue())() _override;
+    virtual void (*returnFunctionPointerValueOrDefault(void (*)()))() _override;
+
+    virtual MockActualCall& onObject(const void* objectPtr) _override;
 
     virtual bool isFulfilled() const;
     virtual bool hasFailed() const;
@@ -95,13 +101,13 @@ protected:
     virtual void failTest(const MockFailure& failure);
     virtual void checkInputParameter(const MockNamedValue& actualParameter);
     virtual void checkOutputParameter(const MockNamedValue& outputParameter);
+    virtual void callIsInProgress();
 
     enum ActualCallState {
-        CALL_IN_PROGESS,
+        CALL_IN_PROGRESS,
         CALL_FAILED,
         CALL_SUCCEED
     };
-    virtual const char* stringFromState(ActualCallState state);
     virtual void setState(ActualCallState state);
 
 private:
@@ -118,17 +124,18 @@ private:
     class MockOutputParametersListNode
     {
     public:
-        SimpleString* name_;
+        SimpleString name_;
+        SimpleString type_;
         void* ptr_;
 
         MockOutputParametersListNode* next_;
-        MockOutputParametersListNode(SimpleString* name, void* ptr)
-            : name_(name), ptr_(ptr), next_(NULL) {}
+        MockOutputParametersListNode(const SimpleString& name, const SimpleString& type, void* ptr)
+            : name_(name), type_(type), ptr_(ptr), next_(NULL) {}
     };
 
     MockOutputParametersListNode* outputParameterExpectations_;
 
-    virtual void addOutputParameter(const SimpleString& name, void* ptr);
+    virtual void addOutputParameter(const SimpleString& name, const SimpleString& type, void* ptr);
     virtual void cleanUpOutputParameterList();
 };
 
@@ -148,8 +155,11 @@ public:
     virtual MockActualCall& withStringParameter(const SimpleString& name, const char* value) _override;
     virtual MockActualCall& withPointerParameter(const SimpleString& name, void* value) _override;
     virtual MockActualCall& withConstPointerParameter(const SimpleString& name, const void* value) _override;
+    virtual MockActualCall& withFunctionPointerParameter(const SimpleString& name, void (*value)()) _override;
+    virtual MockActualCall& withMemoryBufferParameter(const SimpleString& name, const unsigned char* value, size_t size) _override;
     virtual MockActualCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value) _override;
     virtual MockActualCall& withOutputParameter(const SimpleString& name, void* output) _override;
+    virtual MockActualCall& withOutputParameterOfType(const SimpleString& typeName, const SimpleString& name, void* output) _override;
 
     virtual bool hasReturnValue() _override;
     virtual MockNamedValue returnValue() _override;
@@ -178,7 +188,10 @@ public:
     virtual const void * returnConstPointerValue() _override;
     virtual const void * returnConstPointerValueOrDefault(const void * default_value) _override;
 
-    virtual MockActualCall& onObject(void* objectPtr) _override;
+    virtual void (*returnFunctionPointerValue())() _override;
+    virtual void (*returnFunctionPointerValueOrDefault(void (*)()))() _override;
+
+    virtual MockActualCall& onObject(const void* objectPtr) _override;
 
     const char* getTraceOutput();
     void clear();
@@ -203,8 +216,11 @@ public:
     virtual MockActualCall& withStringParameter(const SimpleString&, const char*) _override { return *this; }
     virtual MockActualCall& withPointerParameter(const SimpleString& , void*) _override { return *this; }
     virtual MockActualCall& withConstPointerParameter(const SimpleString& , const void*) _override { return *this; }
+    virtual MockActualCall& withFunctionPointerParameter(const SimpleString& , void (*)()) _override { return *this; }
+    virtual MockActualCall& withMemoryBufferParameter(const SimpleString&, const unsigned char*, size_t) _override  { return *this; }
     virtual MockActualCall& withParameterOfType(const SimpleString&, const SimpleString&, const void*) _override { return *this; }
     virtual MockActualCall& withOutputParameter(const SimpleString&, void*) _override { return *this; }
+    virtual MockActualCall& withOutputParameterOfType(const SimpleString&, const SimpleString&, void*) _override { return *this; }
 
     virtual bool hasReturnValue() _override { return false; }
     virtual MockNamedValue returnValue() _override { return MockNamedValue(""); }
@@ -233,7 +249,10 @@ public:
     virtual const void * returnConstPointerValue() _override { return NULL; }
     virtual const void * returnConstPointerValueOrDefault(const void *) _override { return returnConstPointerValue(); }
 
-    virtual MockActualCall& onObject(void* ) _override { return *this; }
+    virtual void (*returnFunctionPointerValue())() _override { return NULL; }
+    virtual void (*returnFunctionPointerValueOrDefault(void (*)()))() _override { return returnFunctionPointerValue(); }
+
+    virtual MockActualCall& onObject(const void* ) _override { return *this; }
 
     static MockIgnoredActualCall& instance();
 };

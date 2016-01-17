@@ -50,6 +50,8 @@ public:
     virtual void unDoLastAddTest();
     virtual int countTests();
     virtual void runAllTests(TestResult& result);
+    virtual void listTestGroupNames(TestResult& result);
+    virtual void listTestGroupAndCaseNames(TestResult& result);
     virtual void setNameFilters(const TestFilter* filters);
     virtual void setGroupFilters(const TestFilter* filters);
 
@@ -61,7 +63,6 @@ public:
     virtual int countPlugins();
 
     virtual UtestShell* getFirstTest();
-    virtual UtestShell* getLastTest();
     virtual UtestShell* getTestWithNext(UtestShell* test);
 
     virtual UtestShell* findTestWithName(const SimpleString& name);

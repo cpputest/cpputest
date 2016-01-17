@@ -67,6 +67,8 @@ public:
     virtual void* returnPointerValueOrDefault(void * defaultValue);
     virtual const void* returnConstPointerValueOrDefault(const void * defaultValue);
     virtual const void* constPointerReturnValue();
+    virtual void (*returnFunctionPointerValueOrDefault(void (*defaultValue)()))();
+    virtual void (*functionPointerReturnValue())();
 
     bool hasData(const SimpleString& name);
     void setData(const SimpleString& name, int value);
@@ -75,6 +77,7 @@ public:
     void setData(const SimpleString& name, double value);
     void setData(const SimpleString& name, void* value);
     void setData(const SimpleString& name, const void* value);
+    void setData(const SimpleString& name, void (*value)());
     void setDataObject(const SimpleString& name, const SimpleString& type, void* value);
     MockNamedValue getData(const SimpleString& name);
 
@@ -95,7 +98,7 @@ public:
     virtual bool expectedCallsLeft();
 
     virtual void clear();
-    virtual void crashOnFailure();
+    virtual void crashOnFailure(bool shouldFail = true);
 
     /*
      * Each mock() call will set the activeReporter to standard, unless a special reporter is passed for this call.
@@ -103,16 +106,19 @@ public:
 
     virtual void setMockFailureStandardReporter(MockFailureReporter* reporter);
     virtual void setActiveReporter(MockFailureReporter* activeReporter);
-    virtual void setDefaultComparatorRepository();
+    virtual void setDefaultComparatorsAndCopiersRepository();
 
     virtual void installComparator(const SimpleString& typeName, MockNamedValueComparator& comparator);
-    virtual void installComparators(const MockNamedValueComparatorRepository& repository);
-    virtual void removeAllComparators();
+    virtual void installCopier(const SimpleString& typeName, MockNamedValueCopier& copier);
+    virtual void installComparatorsAndCopiers(const MockNamedValueComparatorsAndCopiersRepository& repository);
+    virtual void removeAllComparatorsAndCopiers();
 
 protected:
     MockSupport* clone();
     virtual MockCheckedActualCall *createActualFunctionCall();
     virtual void failTest(MockFailure& failure);
+    void countCheck();
+
 private:
     int callOrder_;
     int expectedCallOrder_;
@@ -125,7 +131,7 @@ private:
     bool enabled_;
     MockCheckedActualCall *lastActualFunctionCall_;
     MockExpectedCallComposite compositeCalls_;
-    MockNamedValueComparatorRepository comparatorRepository_;
+    MockNamedValueComparatorsAndCopiersRepository comparatorsAndCopiersRepository_;
     MockNamedValueList data_;
 
     bool tracing_;

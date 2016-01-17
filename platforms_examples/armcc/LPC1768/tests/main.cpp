@@ -18,10 +18,11 @@
 
 #include "CppUTest/CommandLineTestRunner.h"
 #include <iostream>
+#include <cstdint>
 
 extern "C" void _clock_init(void);
-extern uint32_t SystemCoreClock;
-extern const uint32_t SystemCoreClock12;
+extern std::uint32_t SystemCoreClock;
+extern const std::uint32_t SystemCoreClock12;
 
 int main(int ac, char** av)
 {

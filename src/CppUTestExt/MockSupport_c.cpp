@@ -45,11 +45,12 @@ public:
             UT_CRASH();
 
         TestTerminatorWithoutExceptions::exitCurrentTest();
-    }
-
+    } // LCOV_EXCL_LINE
+    // LCOV_EXCL_START
     virtual ~MockFailureReporterTestTerminatorForInCOnlyCode()
     {
     }
+    // LCOV_EXCL_STOP
 private:
     bool crashOnFailure_;
 
@@ -62,7 +63,7 @@ public:
     {
         if (!getTestToFail()->hasFailed())
             getTestToFail()->failWith(failure, MockFailureReporterTestTerminatorForInCOnlyCode(crashOnFailure_));
-    }
+    } // LCOV_EXCL_LINE
 
 };
 
@@ -94,6 +95,24 @@ public:
 
 static MockCFunctionComparatorNode* comparatorList_ = NULL;
 
+class MockCFunctionCopierNode : public MockNamedValueCopier
+{
+public:
+    MockCFunctionCopierNode(MockCFunctionCopierNode* next, MockTypeCopyFunction_c copier)
+        : next_(next), copier_(copier) {}
+    virtual ~MockCFunctionCopierNode() {}
+
+    virtual void copy(void* dst, const void* src) _override
+    {
+        copier_(dst, src);
+    }
+
+    MockCFunctionCopierNode* next_;
+    MockTypeCopyFunction_c copier_;
+};
+
+static MockCFunctionCopierNode* copierList_ = NULL;
+
 extern "C" {
 
 MockExpectedCall_c* expectOneCall_c(const char* name);
@@ -105,12 +124,14 @@ void setDoubleData_c(const char* name, double value);
 void setStringData_c(const char* name, const char* value);
 void setPointerData_c(const char* name, void* value);
 void setConstPointerData_c(const char* name, const void* value);
+void setFunctionPointerData_c(const char* name, void (*value)());
 void setDataObject_c(const char* name, const char* type, void* value);
 MockValue_c getData_c(const char* name);
 
 void checkExpectations_c();
 int expectedCallsLeft_c();
 void clear_c();
+void crashOnFailure_c(unsigned shouldCrash);
 
 MockExpectedCall_c* withIntParameters_c(const char* name, int value);
 MockExpectedCall_c* withUnsignedIntParameters_c(const char* name, unsigned int value);
@@ -120,6 +141,8 @@ MockExpectedCall_c* withDoubleParameters_c(const char* name, double value);
 MockExpectedCall_c* withStringParameters_c(const char* name, const char* value);
 MockExpectedCall_c* withPointerParameters_c(const char* name, void* value);
 MockExpectedCall_c* withConstPointerParameters_c(const char* name, const void* value);
+MockExpectedCall_c* withFunctionPointerParameters_c(const char* name, void (*value)());
+MockExpectedCall_c* withMemoryBufferParameters_c(const char* name, const unsigned char* value, size_t size);
 MockExpectedCall_c* withParameterOfType_c(const char* type, const char* name, const void* value);
 MockExpectedCall_c* withOutputParameterReturning_c(const char* name, const void* value, size_t size);
 MockExpectedCall_c* andReturnIntValue_c(int value);
@@ -130,6 +153,7 @@ MockExpectedCall_c* andReturnDoubleValue_c(double value);
 MockExpectedCall_c* andReturnStringValue_c(const char* value);
 MockExpectedCall_c* andReturnPointerValue_c(void* value);
 MockExpectedCall_c* andReturnConstPointerValue_c(const void* value);
+MockExpectedCall_c* andReturnFunctionPointerValue_c(void (*value)());
 MockValue_c expectedReturnValue_c();
 
 MockActualCall_c* withActualIntParameters_c(const char* name, int value);
@@ -140,6 +164,8 @@ MockActualCall_c* withActualDoubleParameters_c(const char* name, double value);
 MockActualCall_c* withActualStringParameters_c(const char* name, const char* value);
 MockActualCall_c* withActualPointerParameters_c(const char* name, void* value);
 MockActualCall_c* withActualConstPointerParameters_c(const char* name, const void* value);
+MockActualCall_c* withActualFunctionPointerParameters_c(const char* name, void (*value)());
+MockActualCall_c* withActualMemoryBufferParameters_c(const char* name, const unsigned char* value, size_t size);
 MockActualCall_c* withActualParameterOfType_c(const char* type, const char* name, const void* value);
 MockActualCall_c* withActualOutputParameter_c(const char* name, void* value);
 MockValue_c actualReturnValue_c();
@@ -151,14 +177,25 @@ static void installComparator_c (const char* typeName, MockTypeEqualFunction_c i
     currentMockSupport->installComparator(typeName, *comparatorList_);
 }
 
-static void removeAllComparators_c()
+static void installCopier_c (const char* typeName, MockTypeCopyFunction_c copier)
+{
+    copierList_ = new MockCFunctionCopierNode(copierList_, copier);
+    currentMockSupport->installCopier(typeName, *copierList_);
+}
+
+static void removeAllComparatorsAndCopiers_c()
 {
     while (comparatorList_) {
         MockCFunctionComparatorNode *next = comparatorList_->next_;
         delete comparatorList_;
         comparatorList_ = next;
     }
-    currentMockSupport->removeAllComparators();
+    while (copierList_) {
+        MockCFunctionCopierNode *next = copierList_->next_;
+        delete copierList_;
+        copierList_ = next;
+    }
+    currentMockSupport->removeAllComparatorsAndCopiers();
 }
 
 static MockExpectedCall_c gExpectedCall = {
@@ -170,6 +207,8 @@ static MockExpectedCall_c gExpectedCall = {
         withStringParameters_c,
         withPointerParameters_c,
         withConstPointerParameters_c,
+        withFunctionPointerParameters_c,
+        withMemoryBufferParameters_c,
         withParameterOfType_c,
         withOutputParameterReturning_c,
         andReturnUnsignedIntValue_c,
@@ -180,6 +219,7 @@ static MockExpectedCall_c gExpectedCall = {
         andReturnStringValue_c,
         andReturnPointerValue_c,
         andReturnConstPointerValue_c,
+        andReturnFunctionPointerValue_c,
 };
 
 static MockActualCall_c gActualCall = {
@@ -191,6 +231,8 @@ static MockActualCall_c gActualCall = {
         withActualStringParameters_c,
         withActualPointerParameters_c,
         withActualConstPointerParameters_c,
+        withActualFunctionPointerParameters_c,
+        withActualMemoryBufferParameters_c,
         withActualParameterOfType_c,
         withActualOutputParameter_c,
         actualReturnValue_c
@@ -207,13 +249,16 @@ static MockSupport_c gMockSupport = {
         setStringData_c,
         setPointerData_c,
         setConstPointerData_c,
+        setFunctionPointerData_c,
         setDataObject_c,
         getData_c,
         checkExpectations_c,
         expectedCallsLeft_c,
         clear_c,
+        crashOnFailure_c,
         installComparator_c,
-        removeAllComparators_c
+        installCopier_c,
+        removeAllComparatorsAndCopiers_c,
 };
 
 MockExpectedCall_c* withIntParameters_c(const char* name, int value)
@@ -261,6 +306,18 @@ MockExpectedCall_c* withPointerParameters_c(const char* name, void* value)
 MockExpectedCall_c* withConstPointerParameters_c(const char* name, const void* value)
 {
     expectedCall = &expectedCall->withParameter(name, value);
+    return &gExpectedCall;
+}
+
+MockExpectedCall_c* withFunctionPointerParameters_c(const char* name, void (*value)())
+{
+    expectedCall = &expectedCall->withParameter(name, value);
+    return &gExpectedCall;
+}
+
+MockExpectedCall_c* withMemoryBufferParameters_c(const char* name, const unsigned char* value, size_t size)
+{
+    expectedCall = &expectedCall->withParameter(name, value, size);
     return &gExpectedCall;
 }
 
@@ -324,6 +381,12 @@ MockExpectedCall_c* andReturnConstPointerValue_c(const void* value)
     return &gExpectedCall;
 }
 
+MockExpectedCall_c* andReturnFunctionPointerValue_c(void (*value)())
+{
+    expectedCall = &expectedCall->andReturnValue(value);
+    return &gExpectedCall;
+}
+
 static MockValue_c getMockValueCFromNamedValue(const MockNamedValue& namedValue)
 {
     MockValue_c returnValue;
@@ -358,6 +421,14 @@ static MockValue_c getMockValueCFromNamedValue(const MockNamedValue& namedValue)
     else if (SimpleString::StrCmp(namedValue.getType().asCharString(), "const void*") == 0) {
         returnValue.type = MOCKVALUETYPE_CONST_POINTER;
         returnValue.value.constPointerValue = namedValue.getConstPointerValue();
+    }
+    else if (SimpleString::StrCmp(namedValue.getType().asCharString(), "void (*)()") == 0) {
+        returnValue.type = MOCKVALUETYPE_FUNCTIONPOINTER;
+        returnValue.value.functionPointerValue = namedValue.getFunctionPointerValue();
+    }
+    else if (SimpleString::StrCmp(namedValue.getType().asCharString(), "const unsigned char*") == 0) {
+        returnValue.type = MOCKVALUETYPE_MEMORYBUFFER;
+        returnValue.value.memoryBufferValue = namedValue.getMemoryBuffer();
     }
     else {
         returnValue.type = MOCKVALUETYPE_OBJECT;
@@ -426,6 +497,18 @@ MockActualCall_c* withActualConstPointerParameters_c(const char* name, const voi
     return &gActualCall;
 }
 
+MockActualCall_c* withActualFunctionPointerParameters_c(const char* name, void (*value)())
+{
+    actualCall = &actualCall->withParameter(name, value);
+    return &gActualCall;
+}
+
+MockActualCall_c* withActualMemoryBufferParameters_c(const char* name, const unsigned char* value, size_t size)
+{
+    actualCall = &actualCall->withParameter(name, value, size);
+    return &gActualCall;
+}
+
 MockActualCall_c* withActualParameterOfType_c(const char* type, const char* name, const void* value)
 {
     actualCall = &actualCall->withParameterOfType(type, name, value);
@@ -478,6 +561,11 @@ void setConstPointerData_c(const char* name, const void* value)
     currentMockSupport->setData(name, value);
 }
 
+void setFunctionPointerData_c(const char* name, void (*value)())
+{
+    currentMockSupport->setData(name, value);
+}
+
 void setDataObject_c(const char* name, const char* type, void* value)
 {
     currentMockSupport->setDataObject(name, type, value);
@@ -501,6 +589,11 @@ int expectedCallsLeft_c()
 void clear_c()
 {
     currentMockSupport->clear();
+}
+
+void crashOnFailure_c(unsigned shouldCrash)
+{
+    currentMockSupport->crashOnFailure(0 != shouldCrash);
 }
 
 MockSupport_c* mock_c()

@@ -25,31 +25,56 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <cstdlib>
-#include "CppUTest/TestHarness.h"
-#undef malloc
-#undef free
-#undef calloc
-#undef realloc
 
-#define  far  // eliminate "meaningless type qualifier" warning
 #include <time.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include <stdlib.h>
 #include <setjmp.h>
 #include <string.h>
-#include <math.h>
 #include <ctype.h>
+#include <math.h>
+#include "CppUTest/TestHarness.h"
+#undef malloc
+#undef calloc
+#undef realloc
+#undef free
+
+#define  far  // eliminate "meaningless type qualifier" warning
 
 #include "CppUTest/PlatformSpecificFunctions.h"
 
 static jmp_buf test_exit_jmp_buf[10];
 static int jmp_buf_index = 0;
 
-/* The ARMCC compiler will compile this function with C++ linkage, unless
- * we specifically tell it to use C linkage again, in the function definiton.
- */
-extern "C" int PlatformSpecificSetJmp(void (*function) (void* data), void* data)
+TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
+{
+    return TestOutput::eclipse;
+}
+
+static void DummyPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin*, TestResult* result)
+{
+    result->addFailure(TestFailure(shell, "-p doesn't work on this platform, as it is lacking fork.\b"));
+}
+
+static int DummyPlatformSpecificFork(void)
+{
+    return 0;
+}
+
+static int DummyPlatformSpecificWaitPid(int, int*, int)
+{
+    return 0;
+}
+
+void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell* shell, TestPlugin* plugin, TestResult* result) =
+        DummyPlatformSpecificRunTestInASeperateProcess;
+int (*PlatformSpecificFork)(void) = DummyPlatformSpecificFork;
+int (*PlatformSpecificWaitPid)(int, int*, int) = DummyPlatformSpecificWaitPid;
+
+extern "C" {
+
+static int PlatformSpecificSetJmpImplementation(void (*function) (void* data), void* data)
 {
     if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
         jmp_buf_index++;
@@ -60,27 +85,20 @@ extern "C" int PlatformSpecificSetJmp(void (*function) (void* data), void* data)
     return 0;
 }
 
-void PlatformSpecificLongJmp()
+static void PlatformSpecificLongJmpImplementation()
 {
     jmp_buf_index--;
     longjmp(test_exit_jmp_buf[jmp_buf_index], 1);
 }
 
-void PlatformSpecificRestoreJumpBuffer()
+static void PlatformSpecificRestoreJumpBufferImplementation()
 {
     jmp_buf_index--;
 }
 
-void PlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
-{
-    printf("-p isn' implemented for armcc. Running inside the process\b");
-    shell->runOneTest(plugin, *result);
-}
-
-TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
-{
-    return TestOutput::eclipse;
-}
+void (*PlatformSpecificLongJmp)() = PlatformSpecificLongJmpImplementation;
+int (*PlatformSpecificSetJmp)(void (*)(void*), void*) = PlatformSpecificSetJmpImplementation;
+void (*PlatformSpecificRestoreJumpBuffer)() = PlatformSpecificRestoreJumpBufferImplementation;
 
 ///////////// Time in millis
 /*
@@ -93,116 +111,92 @@ static long TimeInMillisImplementation()
     return t;
 }
 
-extern "C" long (*GetPlatformSpecificTimeInMillis)() = TimeInMillisImplementation;
+///////////// Time in String
 
-static const char* TimeStringImplementation()
+static const char* DummyTimeStringImplementation()
 {
-    time_t tm = time(NULL);
+    time_t tm = 0;
     return ctime(&tm);
 }
 
-extern "C" const char* (*GetPlatformSpecificTimeString)() = TimeStringImplementation;
+long (*GetPlatformSpecificTimeInMillis)() = TimeInMillisImplementation;
+const char* (*GetPlatformSpecificTimeString)() = DummyTimeStringImplementation;
 
-int PlatformSpecificAtoI(const char* str)
+int (*PlatformSpecificVSNprintf)(char *str, size_t size, const char* format, va_list args) = vsnprintf;
+
+static PlatformSpecificFile PlatformSpecificFOpenImplementation(const char* filename, const char* flag)
 {
-    return atoi(str);
+   return fopen(filename, flag);
 }
 
-/* The ARMCC compiler will compile this function with C++ linkage, unless
- * we specifically tell it to use C linkage again, in the function definiton.
- */
-// extern "C" int PlatformSpecificVSNprintf(char *str, size_t size, const char* format, va_list args)
-int PlatformSpecificVSNprintf(char *str, size_t size, const char* format, va_list args)
-{
-    return vsnprintf( str, size, format, args);
-}
-
-PlatformSpecificFile PlatformSpecificFOpen(const char* filename, const char* flag)
-{
-    return fopen(filename, flag);
-}
-
-
-void PlatformSpecificFPuts(const char* str, PlatformSpecificFile file)
+static void PlatformSpecificFPutsImplementation(const char* str, PlatformSpecificFile file)
 {
     fputs(str, (FILE*)file);
 }
 
-void PlatformSpecificFClose(PlatformSpecificFile file)
+static void PlatformSpecificFCloseImplementation(PlatformSpecificFile file)
 {
     fclose((FILE*)file);
 }
 
-void PlatformSpecificFlush()
+static void PlatformSpecificFlushImplementation()
 {
     fflush(stdout);
 }
 
-int PlatformSpecificPutchar(int c)
-{
-    return putchar(c);
-}
+PlatformSpecificFile (*PlatformSpecificFOpen)(const char*, const char*) = PlatformSpecificFOpenImplementation;
+void (*PlatformSpecificFPuts)(const char*, PlatformSpecificFile) = PlatformSpecificFPutsImplementation;
+void (*PlatformSpecificFClose)(PlatformSpecificFile) = PlatformSpecificFCloseImplementation;
 
-void* PlatformSpecificMalloc(size_t size)
-{
-    return malloc(size);
-}
+int (*PlatformSpecificPutchar)(int) = putchar;
+void (*PlatformSpecificFlush)() = PlatformSpecificFlushImplementation;
 
-void* PlatformSpecificRealloc (void* memory, size_t size)
-{
-    return realloc(memory, size);
-}
-
-void PlatformSpecificFree(void* memory)
-{
-    free(memory);
-}
-
-void* PlatformSpecificMemCpy(void* s1, const void* s2, size_t size)
-{
-    return memcpy(s1, s2, size);
-}
-
-void* PlatformSpecificMemset(void* mem, int c, size_t size)
-{
-    return memset(mem, c, size);
-}
-
-double PlatformSpecificFabs(double d)
-{
-   return fabs(d);
-}
+void* (*PlatformSpecificMalloc)(size_t size) = malloc;
+void* (*PlatformSpecificRealloc)(void*, size_t) = realloc;
+void (*PlatformSpecificFree)(void* memory) = free;
+void* (*PlatformSpecificMemCpy)(void*, const void*, size_t) = memcpy;
+void* (*PlatformSpecificMemset)(void*, int, size_t) = memset;
 
 static int IsNanImplementation(double d)
 {
     return isnan(d);
 }
 
-extern "C" int (*PlatformSpecificIsNan)(double) = IsNanImplementation;
+static int IsInfImplementation(double d)
+{
+    return isinf(d);
+}
+
+static int AtExitImplementation(void(*func)(void))
+{
+    return atexit(func);
+}
+
+double (*PlatformSpecificFabs)(double) = fabs;
+int (*PlatformSpecificIsNan)(double) = IsNanImplementation;
+int (*PlatformSpecificIsInf)(double) = IsInfImplementation;
+int (*PlatformSpecificAtExit)(void(*func)(void)) = AtExitImplementation;
 
 static PlatformSpecificMutex DummyMutexCreate(void)
 {
-    FAIL("PlatformSpecificMutexCreate is not implemented");
     return 0;
 }
 
-static void DummyMutexLock(PlatformSpecificMutex mtx)
+static void DummyMutexLock(PlatformSpecificMutex)
 {
-    FAIL("PlatformSpecificMutexLock is not implemented");
 }
 
-static void DummyMutexUnlock(PlatformSpecificMutex mtx)
+static void DummyMutexUnlock(PlatformSpecificMutex)
 {
-    FAIL("PlatformSpecificMutexUnlock is not implemented");
 }
 
-static void DummyMutexDestroy(PlatformSpecificMutex mtx)
+static void DummyMutexDestroy(PlatformSpecificMutex)
 {
-    FAIL("PlatformSpecificMutexDestroy is not implemented");
 }
 
-extern "C" PlatformSpecificMutex (*PlatformSpecificMutexCreate)(void) = DummyMutexCreate;
-extern "C" void (*PlatformSpecificMutexLock)(PlatformSpecificMutex) = DummyMutexLock;
-extern "C" void (*PlatformSpecificMutexUnlock)(PlatformSpecificMutex) = DummyMutexUnlock;
-extern "C" void (*PlatformSpecificMutexDestroy)(PlatformSpecificMutex) = DummyMutexDestroy;
+PlatformSpecificMutex (*PlatformSpecificMutexCreate)(void) = DummyMutexCreate;
+void (*PlatformSpecificMutexLock)(PlatformSpecificMutex) = DummyMutexLock;
+void (*PlatformSpecificMutexUnlock)(PlatformSpecificMutex) = DummyMutexUnlock;
+void (*PlatformSpecificMutexDestroy)(PlatformSpecificMutex) = DummyMutexDestroy;
 
+}

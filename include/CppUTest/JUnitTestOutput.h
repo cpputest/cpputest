@@ -47,12 +47,10 @@ public:
     virtual void printCurrentGroupStarted(const UtestShell& test) _override;
     virtual void printCurrentGroupEnded(const TestResult& res) _override;
 
-    virtual void verbose() _override;
     virtual void printBuffer(const char*) _override;
     virtual void print(const char*) _override;
     virtual void print(long) _override;
-    virtual void print(const TestFailure& failure) _override;
-    virtual void printTestRun(int number, int total) _override;
+    virtual void printFailure(const TestFailure& failure) _override;
 
     virtual void flush() _override;
 
@@ -70,7 +68,7 @@ protected:
     virtual void closeFile();
 
     virtual void writeXmlHeader();
-    virtual void writeTestSuiteSummery();
+    virtual void writeTestSuiteSummary();
     virtual void writeProperties();
     virtual void writeTestCases();
     virtual void writeFailure(JUnitTestCaseResultNode* node);

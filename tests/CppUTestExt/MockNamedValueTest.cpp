@@ -25,17 +25,52 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifdef _MSC_VER
-//#pragma warning(disable:4786)
-//#pragma warning(disable:4290)
-//#pragma warning(disable:4996)
-#endif
+#include "CppUTest/TestHarness.h"
+#include "CppUTestExt/MockNamedValue.h"
 
-#ifdef WIN32
-    #ifdef _VC80_UPGRADE
-        //#pragma warning(disable:4996)
-        //#pragma warning(disable:4290)
-    #else
-        //#define vsnprintf _vsnprintf
-    #endif
-#endif
+TEST_GROUP(ComparatorsAndCopiersRepository)
+{
+};
+
+class MyComparator : public MockNamedValueComparator
+{
+  public:
+
+    MyComparator() {}
+    virtual ~MyComparator() {}
+
+    virtual bool isEqual(const void*, const void*) _override { return false; }
+    virtual SimpleString valueToString(const void*) _override { return ""; }
+};
+
+class MyCopier : public MockNamedValueCopier
+{
+  public:
+
+    MyCopier() {}
+    virtual ~MyCopier() {}
+
+    virtual void copy(void*, const void*) _override {}
+};
+
+TEST(ComparatorsAndCopiersRepository, InstallCopierAndRetrieveIt)
+{
+  MyCopier copier;
+  MockNamedValueComparatorsAndCopiersRepository repository;
+  repository.installCopier("MyType", copier);
+  POINTERS_EQUAL(&copier, repository.getCopierForType("MyType"));
+  repository.clear();
+}
+
+TEST(ComparatorsAndCopiersRepository, ComparatorAndCopierByTheSameNameShouldBothBeFound)
+{
+  MyComparator comparator;
+  MyCopier copier;
+  MockNamedValueComparatorsAndCopiersRepository repository;
+  repository.installCopier("MyType", copier);
+  repository.installComparator("MyType", comparator);
+  POINTERS_EQUAL(&comparator, repository.getComparatorForType("MyType"));
+  POINTERS_EQUAL(&copier, repository.getCopierForType("MyType"));
+  repository.clear();
+}
+

@@ -30,6 +30,7 @@
 #include "CppUTest/TestTestingFixture.h"
 #include "CppUTestExt/MockSupport_c.h"
 #include "MockSupport_cTestCFile.h"
+#include "CppUTestExt/OrderedTest.h"
 
 TEST_GROUP(MockSupport_c)
 {
@@ -45,9 +46,11 @@ TEST(MockSupport_c, expectAndActualOneCall)
 TEST(MockSupport_c, expectAndActualParameters)
 {
     mock_c()->expectOneCall("boo")->withIntParameters("integer", 1)->withDoubleParameters("double", 1.0)->
-            withStringParameters("string", "string")->withPointerParameters("pointer", (void*) 1);
+            withStringParameters("string", "string")->withPointerParameters("pointer", (void*) 1)->
+            withFunctionPointerParameters("functionPointer", (void(*)()) 1);
     mock_c()->actualCall("boo")->withIntParameters("integer", 1)->withDoubleParameters("double", 1.0)->
-            withStringParameters("string", "string")->withPointerParameters("pointer", (void*) 1);
+            withStringParameters("string", "string")->withPointerParameters("pointer", (void*) 1)->
+            withFunctionPointerParameters("functionPointer", (void(*)()) 1);
 }
 
 extern "C"{
@@ -57,9 +60,9 @@ extern "C"{
         return object1 == object2;
     }
 
-    static char* typeNameValueToString(const void* PUNUSED(object))
+    static const char* typeNameValueToString(const void* PUNUSED(object))
     {
-        return (char*) "valueToString";
+        return "valueToString";
     }
 
 }
@@ -70,7 +73,7 @@ TEST(MockSupport_c, expectAndActualParametersOnObject)
     mock_c()->expectOneCall("boo")->withParameterOfType("typeName", "name", (const void*) 1);
     mock_c()->actualCall("boo")->withParameterOfType("typeName", "name", (const void*) 1);
     mock_c()->checkExpectations();
-    mock_c()->removeAllComparators();
+    mock_c()->removeAllComparatorsAndCopiers();
 }
 
 TEST(MockSupport_c, unsignedIntParameter)
@@ -173,6 +176,13 @@ TEST(MockSupport_c, returnConstPointerValue)
     LONGS_EQUAL(MOCKVALUETYPE_CONST_POINTER, mock_c()->returnValue().type);
 }
 
+TEST(MockSupport_c, returnFunctionPointerValue)
+{
+    mock_c()->expectOneCall("boo")->andReturnFunctionPointerValue((void(*)()) 10);
+    FUNCTIONPOINTERS_EQUAL((void(*)()) 10, mock_c()->actualCall("boo")->returnValue().value.functionPointerValue);
+    LONGS_EQUAL(MOCKVALUETYPE_FUNCTIONPOINTER, mock_c()->returnValue().type);
+}
+
 TEST(MockSupport_c, MockSupportWithScope)
 {
     mock_scope_c("scope")->expectOneCall("boo");
@@ -211,6 +221,12 @@ TEST(MockSupport_c, MockSupportSetConstPointerData)
     POINTERS_EQUAL((const void*) 1, mock_c()->getData("constPointer").value.constPointerValue);
 }
 
+TEST(MockSupport_c, MockSupportSetFunctionPointerData)
+{
+    mock_c()->setFunctionPointerData("functionPointer", (void(*)()) 1);
+    FUNCTIONPOINTERS_EQUAL((void(*)()) 1, mock_c()->getData("functionPointer").value.functionPointerValue);
+}
+
 TEST(MockSupport_c, MockSupportSetDataObject)
 {
     mock_c()->setDataObject("name", "type", (void*) 1);
@@ -228,7 +244,7 @@ static void failedCallToMockC()
 {
     SetBooleanOnDestructorCall setOneDestructor(destructorWasCalled);
     mock_c()->actualCall("Not a call");
-}
+} // LCOV_EXCL_LINE
 
 // Silly wrapper because of a test that only fails in Visual C++ due to different
 // destructor behaviors
@@ -250,3 +266,72 @@ MSC_SWITCHED_TEST(MockSupport_c, NoExceptionsAreThrownWhenAMock_cCallFailed)
     CHECK(!destructorWasCalled);
 }
 
+static bool cpputestHasCrashed;
+
+static void crashMethod()
+{
+    cpputestHasCrashed = true;
+}
+
+TEST_ORDERED(MockSupport_c, shouldCrashOnFailure, 21)
+{
+    cpputestHasCrashed = false;
+    TestTestingFixture fixture;
+    UtestShell::setCrashMethod(crashMethod);
+    mock_c()->crashOnFailure(true);
+    fixture.setTestFunction(failedCallToMockC);
+
+    fixture.runAllTests();
+
+    CHECK(cpputestHasCrashed);
+
+    UtestShell::resetCrashMethod();
+    mock_c()->crashOnFailure(false);
+}
+
+TEST_ORDERED(MockSupport_c, nextTestShouldNotCrashOnFailure, 22)
+{
+    cpputestHasCrashed = false;
+    TestTestingFixture fixture;
+    UtestShell::setCrashMethod(crashMethod);
+    fixture.setTestFunction(failedCallToMockC);
+
+    fixture.runAllTests();
+
+    CHECK_FALSE(cpputestHasCrashed);
+
+    UtestShell::resetCrashMethod();
+}
+
+static void failingCallToMockCWithParameterOfType_()
+{
+    mock_c()->expectOneCall("bar")->withParameterOfType("typeName", "name", (const void*) 1);
+    mock_c()->actualCall("bar")->withParameterOfType("typeName", "name", (const void*) 2);
+} // LCOV_EXCL_LINE
+
+TEST(MockSupport_c, failureWithParameterOfTypeCoversValueToString)
+{
+    TestTestingFixture fixture;
+    mock_c()->installComparator("typeName", typeNameIsEqual, typeNameValueToString);
+    fixture.setTestFunction(failingCallToMockCWithParameterOfType_);
+    fixture.runAllTests();
+    fixture.assertPrintContains("typeName name: <valueToString>");
+    mock_c()->removeAllComparatorsAndCopiers();
+}
+
+static void failingCallToMockCWithMemoryBuffer_()
+{
+    unsigned char memBuffer1[] = { 0x12, 0x15, 0xFF };
+    unsigned char memBuffer2[] = { 0x12, 0x05, 0xFF };
+    mock_c()->expectOneCall("bar")->withMemoryBufferParameter("name", memBuffer1, sizeof(memBuffer1));
+    mock_c()->actualCall("bar")->withMemoryBufferParameter("name", memBuffer2, sizeof(memBuffer2));
+} // LCOV_EXCL_LINE
+
+TEST(MockSupport_c, expectOneMemBufferParameterAndValueFailsDueToContents)
+{
+    TestTestingFixture fixture;
+    fixture.setTestFunction(failingCallToMockCWithMemoryBuffer_);
+    fixture.runAllTests();
+    fixture.assertPrintContains("Unexpected parameter value to parameter \"name\" "
+                                "to function \"bar\": <Size = 3 | HexContents = 12 05 FF>");
+}

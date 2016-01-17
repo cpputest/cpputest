@@ -30,6 +30,10 @@
 #include "CppUTest/TestTestingFixture.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
+TEST_GROUP(Utest)
+{
+};
+
 TEST_GROUP(UtestShell)
 {
     TestTestingFixture fixture;
@@ -81,7 +85,7 @@ TEST(UtestShell, PassedCheckEqualWillIncreaseTheAmountOfChecks)
 
 IGNORE_TEST(UtestShell, IgnoreTestAccessingFixture)
 {
-    CHECK(&fixture != 0);
+    CHECK(&fixture != NULL);
 }
 
 TEST(UtestShell, MacrosUsedInSetup)
@@ -174,14 +178,21 @@ TEST(UtestShell, RunInSeparateProcessTest)
     fixture.assertPrintContains("Failed in separate process");
 }
 
-#if !defined(__MINGW32__) && !defined(_MSC_VER)
+#ifndef HAVE_FORK
+
+IGNORE_TEST(UtestShell, TestDefaultCrashMethodInSeparateProcessTest) {}
+
+#else
 
 TEST(UtestShell, TestDefaultCrashMethodInSeparateProcessTest)
 {
     fixture.setTestFunction(UtestShell::crash);
     fixture.registry_->setRunTestsInSeperateProcess();
     fixture.runAllTests();
-    fixture.assertPrintContains("Failed in separate process - killed by signal 11");
+    fixture.assertPrintContains("Failed in separate process - killed by signal");
+
+    /* Signal 11 usually happens, but with clang3.7 on Linux, it produced signal 4 */
+    CHECK(fixture.getOutput().contains("signal 11") || fixture.getOutput().contains("signal 4"));
 }
 
 #endif

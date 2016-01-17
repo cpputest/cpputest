@@ -29,14 +29,41 @@
 #include "CppUTest/SimpleString.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 #include "CppUTest/TestMemoryAllocator.h"
+#include "CppUTest/MemoryLeakDetector.h"
+
+class JustUseNewStringAllocator : public TestMemoryAllocator
+{
+public:
+    virtual ~JustUseNewStringAllocator() {}
+
+    char* alloc_memory(size_t size, const char* file, int line)
+    {
+      return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewArrayAllocator(), size, (char*) file, line);
+    }
+    void free_memory(char* str, const char* file, int line)
+    {
+      MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(getCurrentNewArrayAllocator(), str, (char*) file, line);
+    }
+};
+
 
 TEST_GROUP(SimpleString)
 {
+  JustUseNewStringAllocator justNewForSimpleStringTestAllocator;
+  void setup()
+  {
+    SimpleString::setStringAllocator(&justNewForSimpleStringTestAllocator);
+  }
+  void teardown()
+  {
+    SimpleString::setStringAllocator(NULL);
+  }
 };
 
 TEST(SimpleString, defaultAllocatorIsNewArrayAllocator)
 {
-    POINTERS_EQUAL(getCurrentNewArrayAllocator(), SimpleString::getStringAllocator());
+  SimpleString::setStringAllocator(NULL);
+  POINTERS_EQUAL(getCurrentNewArrayAllocator(), SimpleString::getStringAllocator());
 }
 
 class MyOwnStringAllocator : public TestMemoryAllocator
@@ -257,6 +284,18 @@ TEST(SimpleString, countTogether)
     LONGS_EQUAL(4, str.count("ha"));
 }
 
+TEST(SimpleString, countEmptyString)
+{
+    SimpleString str("hahahaha");
+	LONGS_EQUAL(8, str.count(""));
+}
+
+TEST(SimpleString, countEmptyStringInEmptyString)
+{
+    SimpleString str;
+    LONGS_EQUAL(0, str.count(""));
+}
+
 TEST(SimpleString, endsWith)
 {
     SimpleString str("Hello World");
@@ -278,6 +317,20 @@ TEST(SimpleString, replaceCharWithChar)
     SimpleString str("abcabcabca");
     str.replace('a', 'b');
     STRCMP_EQUAL("bbcbbcbbcb", str.asCharString());
+}
+
+TEST(SimpleString, replaceEmptyStringWithEmptyString)
+{
+    SimpleString str;
+    str.replace("", "");
+    STRCMP_EQUAL("", str.asCharString());
+}
+
+TEST(SimpleString, replaceWholeString)
+{
+    SimpleString str("boo");
+    str.replace("boo", "");
+    STRCMP_EQUAL("", str.asCharString());
 }
 
 TEST(SimpleString, replaceStringWithString)
@@ -400,6 +453,26 @@ TEST(SimpleString, NULLReportsNullString)
     STRCMP_EQUAL("(null)", StringFromOrNull((char*) NULL).asCharString());
 }
 
+TEST(SimpleString, Booleans)
+{
+    SimpleString s1(StringFrom(true));
+    SimpleString s2(StringFrom(false));
+    CHECK(s1 == "true");
+    CHECK(s2 == "false");
+}
+
+TEST(SimpleString, Pointers)
+{
+    SimpleString s(StringFrom((void *)0x1234));
+    STRCMP_EQUAL("0x1234", s.asCharString());
+}
+
+TEST(SimpleString, FunctionPointers)
+{
+    SimpleString s(StringFrom((void (*)())0x1234));
+    STRCMP_EQUAL("0x1234", s.asCharString());
+}
+
 TEST(SimpleString, Characters)
 {
     SimpleString s(StringFrom('a'));
@@ -426,6 +499,24 @@ TEST(SimpleString, Doubles)
     STRCMP_EQUAL("1.2", s.asCharString());
 }
 
+extern "C" {
+    static int alwaysTrue(double) { return true; }
+}
+
+TEST(SimpleString, NaN)
+{
+    UT_PTR_SET(PlatformSpecificIsNan, alwaysTrue);
+    SimpleString s(StringFrom(0.0));
+    STRCMP_EQUAL("Nan - Not a number", s.asCharString());
+}
+
+TEST(SimpleString, Inf)
+{
+    UT_PTR_SET(PlatformSpecificIsInf, alwaysTrue);
+    SimpleString s(StringFrom(0.0));
+    STRCMP_EQUAL("Inf - Infinity", s.asCharString());
+}
+
 TEST(SimpleString, SmallDoubles)
 {
     SimpleString s(StringFrom(1.2e-10));
@@ -442,6 +533,12 @@ TEST(SimpleString, HexStrings)
 {
     SimpleString h1 = HexStringFrom(0xffffL);
     STRCMP_EQUAL("ffff", h1.asCharString());
+
+    SimpleString h2 = HexStringFrom((void *)0xfffeL);
+    STRCMP_EQUAL("fffe", h2.asCharString());
+
+    SimpleString h3 = HexStringFrom((void (*)())0xfffdL);
+    STRCMP_EQUAL("fffd", h3.asCharString());
 }
 
 TEST(SimpleString, StringFromFormat)
@@ -458,6 +555,8 @@ TEST(SimpleString, StringFromFormatpointer)
         STRCMP_EQUAL("0x1", h1.asCharString())
     else if (h1.size() == 8)
         STRCMP_EQUAL("00000001", h1.asCharString())
+    else if (h1.size() == 9)
+        STRCMP_EQUAL("0000:0001", h1.asCharString())
     else if (h1.size() == 16)
         STRCMP_EQUAL("0000000000000001", h1.asCharString())
     else if (h1.size() == 1)
@@ -471,6 +570,11 @@ TEST(SimpleString, StringFromFormatLarge)
     const char* s = "ThisIsAPrettyLargeStringAndIfWeAddThisManyTimesToABufferItWillbeFull";
     SimpleString h1 = StringFromFormat("%s%s%s%s%s%s%s%s%s%s", s, s, s, s, s, s, s, s, s, s);
     LONGS_EQUAL(10, h1.count(s));
+}
+
+TEST(SimpleString, StringFromConstSimpleString)
+{
+	STRCMP_EQUAL("bla", StringFrom(SimpleString("bla")).asCharString());
 }
 
 static int WrappedUpVSNPrintf(char* buf, size_t n, const char* format, ...)
@@ -573,9 +677,9 @@ TEST(SimpleString, _64BitAddressPrintsCorrectly)
 
 #else
 /*
- * This test case should pass on 64 bit systems with 32 bit longs, 
+ * This test case should pass on 64 bit systems with 32 bit longs,
  * but actually fails due to an implementation problem: Right now,
- * the 64 bit pointers are casted to 32bit as the %p is causing 
+ * the 64 bit pointers are casted to 32bit as the %p is causing
  * different formats on different platforms. However, this will
  * need to be fixed in the future.
  */
@@ -641,10 +745,10 @@ TEST(SimpleString, StrCmp)
     char blabla[] = "blabla";
     char bla[] = "bla";
     CHECK(SimpleString::StrCmp(empty, empty) == 0);
-    CHECK(SimpleString::StrCmp(bla, blabla) == -'b');
+    CHECK(SimpleString::StrCmp(bla, blabla) == -(int)'b');
     CHECK(SimpleString::StrCmp(blabla, bla) == 'b');
     CHECK(SimpleString::StrCmp(bla, empty) == 'b');
-    CHECK(SimpleString::StrCmp(empty, bla) == -'b');
+    CHECK(SimpleString::StrCmp(empty, bla) == -(int)'b');
     CHECK(SimpleString::StrCmp(bla, bla) == 0);
 }
 
@@ -760,4 +864,88 @@ TEST(SimpleString, AtoI)
     CHECK(0      == SimpleString::AtoI("-foo"));
     CHECK(-32768 == SimpleString::AtoI(min_short_str));
     CHECK(32767  == SimpleString::AtoI(max_short_str));
+}
+
+TEST(SimpleString, Binary)
+{
+    const unsigned char value[] = { 0x00, 0x01, 0x2A, 0xFF };
+    const char expectedString[] = "00 01 2A FF";
+
+    STRCMP_EQUAL(expectedString, StringFromBinary(value, sizeof(value)).asCharString());
+    STRCMP_EQUAL(expectedString, StringFromBinaryOrNull(value, sizeof(value)).asCharString());
+    STRCMP_EQUAL("", StringFromBinary(value, 0).asCharString());
+    STRCMP_EQUAL("(null)", StringFromBinaryOrNull(NULL, 0).asCharString());
+}
+
+TEST(SimpleString, BinaryWithSize)
+{
+    const unsigned char value[] = { 0x12, 0xFE, 0xA1 };
+    const char expectedString[] = "Size = 3 | HexContents = 12 FE A1";
+
+    STRCMP_EQUAL(expectedString, StringFromBinaryWithSize(value, sizeof(value)).asCharString());
+    STRCMP_EQUAL(expectedString, StringFromBinaryWithSizeOrNull(value, sizeof(value)).asCharString());
+    STRCMP_EQUAL("Size = 0 | HexContents = ", StringFromBinaryWithSize(value, 0).asCharString());
+    STRCMP_EQUAL("(null)", StringFromBinaryWithSizeOrNull(NULL, 0).asCharString());
+}
+
+
+TEST(SimpleString, MemCmp)
+{
+    unsigned char smaller[] = { 0x00, 0x01, 0x2A, 0xFF };
+    unsigned char greater[] = { 0x00, 0x01, 0xFF, 0xFF };
+
+    LONGS_EQUAL(0, SimpleString::MemCmp(smaller, smaller, sizeof(smaller)));
+    CHECK(SimpleString::MemCmp(smaller, greater, sizeof(smaller)) < 0);
+    CHECK(SimpleString::MemCmp(greater, smaller, sizeof(smaller)) > 0);
+    LONGS_EQUAL(0, SimpleString::MemCmp(NULL, NULL, 0));
+}
+
+TEST(SimpleString, MemCmpFirstLastNotMatching)
+{
+    unsigned char base[] = { 0x00, 0x01, 0x2A, 0xFF };
+    unsigned char firstNotMatching[] = { 0x01, 0x01, 0x2A, 0xFF };
+    unsigned char lastNotMatching[] = { 0x00, 0x01, 0x2A, 0x00 };
+    CHECK(0 != SimpleString::MemCmp(base, firstNotMatching, sizeof(base)));
+    CHECK(0 != SimpleString::MemCmp(base, lastNotMatching, sizeof(base)));
+}
+
+
+TEST(SimpleString, MaskedBits1byte)
+{
+    STRCMP_EQUAL("xxxxxxxx", StringFromMaskedBits(0x00, 0x00, 1).asCharString());
+    STRCMP_EQUAL("00000000", StringFromMaskedBits(0x00, 0xFF, 1).asCharString());
+    STRCMP_EQUAL("11111111", StringFromMaskedBits(0xFF, 0xFF, 1).asCharString());
+    STRCMP_EQUAL("1xxxxxxx", StringFromMaskedBits(0x80, 0x80, 1).asCharString());
+    STRCMP_EQUAL("xxxxxxx1", StringFromMaskedBits(0x01, 0x01, 1).asCharString());
+    STRCMP_EQUAL("11xx11xx", StringFromMaskedBits(0xFF, 0xCC, 1).asCharString());
+}
+
+TEST(SimpleString, MaskedBits2bytes)
+{
+    STRCMP_EQUAL("xxxxxxxx xxxxxxxx", StringFromMaskedBits(0x0000, 0x0000, 2).asCharString());
+    STRCMP_EQUAL("00000000 00000000", StringFromMaskedBits(0x0000, 0xFFFF, 2).asCharString());
+    STRCMP_EQUAL("11111111 11111111", StringFromMaskedBits(0xFFFF, 0xFFFF, 2).asCharString());
+    STRCMP_EQUAL("1xxxxxxx xxxxxxxx", StringFromMaskedBits(0x8000, 0x8000, 2).asCharString());
+    STRCMP_EQUAL("xxxxxxxx xxxxxxx1", StringFromMaskedBits(0x0001, 0x0001, 2).asCharString());
+    STRCMP_EQUAL("11xx11xx 11xx11xx", StringFromMaskedBits(0xFFFF, 0xCCCC, 2).asCharString());
+}
+
+TEST(SimpleString, MaskedBits4bytes)
+{
+    if(sizeof(long) < 4) {
+        STRCMP_EQUAL("xxxxxxxx xxxxxxxx", StringFromMaskedBits(0x00000000, 0x00000000, 4).asCharString());
+        STRCMP_EQUAL("00000000 00000000", StringFromMaskedBits(0x00000000, 0xFFFFFFFF, 4).asCharString());
+        STRCMP_EQUAL("11111111 11111111", StringFromMaskedBits(0xFFFFFFFF, 0xFFFFFFFF, 4).asCharString());
+        STRCMP_EQUAL("1xxxxxxx xxxxxxxx", StringFromMaskedBits(0x00008000, 0x00008000, 4).asCharString());
+        STRCMP_EQUAL("xxxxxxxx xxxxxxx1", StringFromMaskedBits(0x00000001, 0x00000001, 4).asCharString());
+        STRCMP_EQUAL("11xx11xx 11xx11xx", StringFromMaskedBits(0xFFFFFFFF, 0xCCCCCCCC, 4).asCharString());
+    }
+    else {
+        STRCMP_EQUAL("xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx", StringFromMaskedBits(0x00000000, 0x00000000, 4).asCharString());
+        STRCMP_EQUAL("00000000 00000000 00000000 00000000", StringFromMaskedBits(0x00000000, 0xFFFFFFFF, 4).asCharString());
+        STRCMP_EQUAL("11111111 11111111 11111111 11111111", StringFromMaskedBits(0xFFFFFFFF, 0xFFFFFFFF, 4).asCharString());
+        STRCMP_EQUAL("1xxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx", StringFromMaskedBits(0x80000000, 0x80000000, 4).asCharString());
+        STRCMP_EQUAL("xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxx1", StringFromMaskedBits(0x00000001, 0x00000001, 4).asCharString());
+        STRCMP_EQUAL("11xx11xx 11xx11xx 11xx11xx 11xx11xx", StringFromMaskedBits(0xFFFFFFFF, 0xCCCCCCCC, 4).asCharString());
+    }
 }

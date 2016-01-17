@@ -89,7 +89,6 @@ public:
     static TestMemoryAllocator* getStringAllocator();
     static void setStringAllocator(TestMemoryAllocator* allocator);
 
-    static char* allocStringBuffer(size_t size);
     static int AtoI(const char*str);
     static int StrCmp(const char* s1, const char* s2);
     static size_t StrLen(const char*);
@@ -97,7 +96,9 @@ public:
     static char* StrNCpy(char* s1, const char* s2, size_t n);
     static char* StrStr(const char* s1, const char* s2);
     static char ToLower(char ch);
-    static void deallocStringBuffer(char* str);
+    static int MemCmp(const void* s1, const void *s2, size_t n);
+    static char* allocStringBuffer(size_t size, const char* file, int line);
+    static void deallocStringBuffer(char* str, const char* file, int line);
 private:
     char *buffer_;
 
@@ -132,6 +133,7 @@ private:
 
 SimpleString StringFrom(bool value);
 SimpleString StringFrom(const void* value);
+SimpleString StringFrom(void (*value)());
 SimpleString StringFrom(char value);
 SimpleString StringFrom(const char *value);
 SimpleString StringFromOrNull(const char * value);
@@ -142,15 +144,20 @@ SimpleString StringFrom(unsigned long value);
 SimpleString HexStringFrom(long value);
 SimpleString HexStringFrom(unsigned long value);
 SimpleString HexStringFrom(const void* value);
+SimpleString HexStringFrom(void (*value)());
 SimpleString StringFrom(double value, int precision = 6);
 SimpleString StringFrom(const SimpleString& other);
 SimpleString StringFromFormat(const char* format, ...) __check_format__(printf, 1, 2);
 SimpleString VStringFromFormat(const char* format, va_list args);
+SimpleString StringFromBinary(const unsigned char* value, size_t size);
+SimpleString StringFromBinaryOrNull(const unsigned char* value, size_t size);
+SimpleString StringFromBinaryWithSize(const unsigned char* value, size_t size);
+SimpleString StringFromBinaryWithSizeOrNull(const unsigned char* value, size_t size);
+SimpleString StringFromMaskedBits(unsigned long value, unsigned long mask, size_t byteCount);
 
 #if CPPUTEST_USE_STD_CPP_LIB
 
 #include <string>
-#include <stdint.h>
 
 SimpleString StringFrom(const std::string& other);
 

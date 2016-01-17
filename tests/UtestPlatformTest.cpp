@@ -35,24 +35,13 @@ TEST_GROUP(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess)
     TestTestingFixture fixture;
 };
 
-#if defined(__MINGW32__)
+#ifndef HAVE_FORK
 
-TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, MinGwWorks)
+TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, DummyFailsWithMessage)
 {
     fixture.registry_->setRunTestsInSeperateProcess();
     fixture.runAllTests();
-    fixture.assertPrintContains(
-       "-p doesn't work on MinGW as it is lacking fork.");
-}
-
-#elif defined(_MSC_VER)
-
-TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, VisualCppWorks)
-{
-   fixture.registry_->setRunTestsInSeperateProcess();
-   fixture.runAllTests();
-   fixture.assertPrintContains(
-      "-p doesn't work on Visual C++ as it is lacking fork.");
+    fixture.assertPrintContains("-p doesn't work on this platform, as it is lacking fork.\b");
 }
 
 #else
@@ -62,20 +51,36 @@ static void _failFunction()
     FAIL("This test fails");
 }
 
+#include <errno.h>
+
 extern "C" {
+
+    static int (*original_waitpid)(int, int*, int) = NULL;
+
     static int fork_failed_stub(void) { return -1; }
+
+    static int waitpid_while_debugging_stub(int pid, int* status, int options)
+    {
+        static int number_called = 0;
+        static int saved_status;
+
+        if (number_called++ < 10) {
+            saved_status = *status;
+            errno=EINTR;
+            return -1;
+        }
+        else {
+            *status = saved_status;
+            return original_waitpid(pid, status, options);
+        }
+    }
+
     static int waitpid_failed_stub(int, int*, int) { return -1; }
 }
 
 static int _accessViolationTestFunction()
 {
     return *(volatile int*) 0;
-}
-
-static int _divisionByZeroTestFunction()
-{
-    volatile int a = 1;
-    return 1 / (a - a);
 }
 
 #include <unistd.h>
@@ -102,14 +107,6 @@ TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, AccessViolati
     fixture.assertPrintContains("Failed in separate process - killed by signal 11");
 }
 
-TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, DivisionByZeroInSeparateProcessWorks)
-{
-    fixture.registry_->setRunTestsInSeperateProcess();
-    fixture.setTestFunction((void(*)())_divisionByZeroTestFunction);
-    fixture.runAllTests();
-    fixture.assertPrintContains("Failed in separate process - killed by signal 8");
-}
-
 TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, StoppedInSeparateProcessWorks)
 {
     fixture.registry_->setRunTestsInSeperateProcess();
@@ -124,6 +121,15 @@ TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, CallToForkFai
     fixture.registry_->setRunTestsInSeperateProcess();
     fixture.runAllTests();
     fixture.assertPrintContains("Call to fork() failed");
+}
+
+TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, CallToWaitPidWhileDebuggingInSeparateProcessWorks)
+{
+    UT_PTR_SET(original_waitpid, PlatformSpecificWaitPid);
+    UT_PTR_SET(PlatformSpecificWaitPid, waitpid_while_debugging_stub);
+    fixture.registry_->setRunTestsInSeperateProcess();
+    fixture.runAllTests();
+    fixture.assertPrintContains("OK (1 tests, 0 ran, 0 checks, 0 ignored, 0 filtered out");
 }
 
 TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, CallToWaitPidFailedInSeparateProcessWorks)

@@ -13,10 +13,10 @@
 #----------
 # Inputs - these variables describe what to build
 #
-#   INCLUDE_DIRS - Directories used to search for include files.
+#	INCLUDE_DIRS - Directories used to search for include files.
 #                   This generates a -I for each directory
-#	SRC_DIRS - Directories containing source file to built into the library
-#   SRC_FILES - Specific source files to build into library. Helpful when not all code
+#	SRC_DIRS - Directories containing source files to build into the library
+#	SRC_FILES - Specific source files to build into library. Helpful when not all code
 #				in a directory can be built for test (hopefully a temporary situation)
 #	TEST_SRC_DIRS - Directories containing unit test code build into the unit test runner
 #				These do not go in a library. They are explicitly included in the test runner
@@ -29,7 +29,7 @@
 # and where to put and name outputs
 # See below to determine defaults
 #   COMPONENT_NAME - the name of the thing being built
-#   TEST_TARGET - name the test executable. By default it is
+#   TEST_TARGET - name of the test executable. By default it is
 #			$(COMPONENT_NAME)_tests
 #		Helpful if you want 1 > make files in the same directory with different
 #		executables as output.
@@ -48,9 +48,9 @@
 #		Clean then build with this flag set to Y, then 'make gcov'
 #   CPPUTEST_MAPFILE - generate a map file
 #   CPPUTEST_WARNINGFLAGS - overly picky by default
-#	OTHER_MAKEFILE_TO_INCLUDE - a hook to use this makefile to make
+#   OTHER_MAKEFILE_TO_INCLUDE - a hook to use this makefile to make
 #		other targets. Like CSlim, which is part of fitnesse
-#	CPPUTEST_USE_VPATH - Use Make's VPATH functionality to support user
+#   CPPUTEST_USE_VPATH - Use Make's VPATH functionality to support user
 #		specification of source files and directories that aren't below
 #		the user's Makefile in the directory tree, like:
 #			SRC_DIRS += ../../lib/foo
@@ -188,8 +188,17 @@ ifeq ($(COMPILER_NAME),$(CLANG_STR))
 # -Wno-padded -> I sort-of like this warning but if there is a bool at the end of the class, it seems impossible to remove it! (except by making padding explicit)
 # -Wno-global-constructors Wno-exit-time-destructors -> Great warnings, but in CppUTest it is impossible to avoid as the automatic test registration depends on the global ctor and dtor
 # -Wno-weak-vtables -> The TEST_GROUP macro declares a class and will automatically inline its methods. Thats ok as they are only in one translation unit. Unfortunately, the warning can't detect that, so it must be disabled.
-	CPPUTEST_CXX_WARNINGFLAGS += -Weverything -Wno-disabled-macro-expansion -Wno-padded -Wno-global-constructors -Wno-exit-time-destructors -Wno-weak-vtables
+# -Wno-old-style-casts -> We only use old style casts by decision
+	CPPUTEST_CXX_WARNINGFLAGS += -Weverything -Wno-disabled-macro-expansion -Wno-padded -Wno-global-constructors -Wno-exit-time-destructors -Wno-weak-vtables -Wno-old-style-cast
 	CPPUTEST_C_WARNINGFLAGS += -Weverything -Wno-padded
+
+# Clang "7" (Xcode 7 command-line tools) introduced new warnings by default that don't exist on previous versions of clang and cause errors when present.
+ifeq ($(findstring clang-7,$(CC_VERSION_OUTPUT)),clang-7)
+# -Wno-reserved-id-macro -> Many CppUTest macros start with __, which is a reserved namespace
+# -Wno-keyword-macro -> CppUTest redefines the 'new' keyword for memory leak tracking
+	CPPUTEST_CXX_WARNINGFLAGS += -Wno-reserved-id-macro -Wno-keyword-macro
+	CPPUTEST_C_WARNINGFLAGS += -Wno-reserved-id-macro -Wno-keyword-macro
+endif
 endif
 
 # Uhm. Maybe put some warning flags for SunStudio here?
@@ -489,7 +498,7 @@ $(CPPUTEST_OBJS_DIR)/%.o: %.cpp
 $(CPPUTEST_OBJS_DIR)/%.o: %.c
 	@echo compiling $(notdir $<)
 	$(SILENCE)mkdir -p $(dir $@)
-	$(SILENCE)$(COMPILE.c) $(DEP_FLAGS)  $(OUTPUT_OPTION) $<
+	$(SILENCE)$(COMPILE.c) $(DEP_FLAGS) $(OUTPUT_OPTION) $<
 
 ifneq "$(MAKECMDGOALS)" "clean"
 -include $(DEP_FILES)
@@ -516,7 +525,8 @@ ifeq ($(CPPUTEST_USE_VPATH), Y)
 	$(SILENCE)gcov --object-directory $(CPPUTEST_OBJS_DIR) $(SRC) >> $(GCOV_OUTPUT) 2>> $(GCOV_ERROR)
 else
 	$(SILENCE)for d in $(SRC_DIRS) ; do \
-		gcov --object-directory $(CPPUTEST_OBJS_DIR)/$$d $$d/*.c $$d/*.cpp >> $(GCOV_OUTPUT) 2>>$(GCOV_ERROR) ; \
+		FILES=`ls $$d/*.c $$d/*.cc $$d/*.cpp 2> /dev/null` ; \
+		gcov --object-directory $(CPPUTEST_OBJS_DIR)/$$d $$FILES >> $(GCOV_OUTPUT) 2>>$(GCOV_ERROR) ; \
 	done
 	$(SILENCE)for f in $(SRC_FILES) ; do \
 		gcov --object-directory $(CPPUTEST_OBJS_DIR)/$$f $$f >> $(GCOV_OUTPUT) 2>>$(GCOV_ERROR) ; \
@@ -529,11 +539,11 @@ endif
 	$(SILENCE)mv gcov_* gcov
 	@echo "See gcov directory for details"
 
-.PHONEY: format
+.PHONY: format
 format:
 	$(CPPUTEST_HOME)/scripts/reformat.sh $(PROJECT_HOME_DIR)
 
-.PHONEY: debug
+.PHONY: debug
 debug:
 	@echo
 	@echo "Target Source files:"
