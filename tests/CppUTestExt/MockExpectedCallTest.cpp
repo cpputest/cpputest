@@ -28,7 +28,7 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTestExt/MockCheckedExpectedCall.h"
 #include "CppUTestExt/MockFailure.h"
-#include "MockFailureTest.h"
+#include "MockFailureReporterForTest.h"
 
 class TypeForTestingExpectedFunctionCall
 {

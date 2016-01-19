@@ -7,6 +7,7 @@ CPPU_OBJECTS := \
   $(CPPUTEST_HOME)/src/CppUTest/MemoryLeakWarningPlugin.o \
   $(CPPUTEST_HOME)/src/CppUTest/SimpleMutex.o \
   $(CPPUTEST_HOME)/src/CppUTest/SimpleString.o \
+  $(CPPUTEST_HOME)/src/CppUTest/TeamCityTestOutput.o \
   $(CPPUTEST_HOME)/src/CppUTest/TestFailure.o \
   $(CPPUTEST_HOME)/src/CppUTest/TestFilter.o \
   $(CPPUTEST_HOME)/src/CppUTest/TestHarness_c.o \
@@ -62,6 +63,7 @@ CPPU2_OBJECTS := \
   $(CPPUTEST_HOME)/tests/MemoryLeakWarningTest.o \
   $(CPPUTEST_HOME)/tests/MemoryOperatorOverloadTest.o \
   $(CPPUTEST_HOME)/tests/SimpleStringTest.o \
+  $(CPPUTEST_HOME)/tests/TeamCityOutputTest.o \
   $(CPPUTEST_HOME)/tests/TestFilterTest.o \
   $(CPPUTEST_HOME)/tests/TestHarness_cTest.o \
   $(CPPUTEST_HOME)/tests/TestHarness_cTestCFile.o \
@@ -79,12 +81,17 @@ CPPU3_OBJECTS := \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MemoryReporterPluginTest.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockActualCallTest.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockCheatSheetTest.o \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/MockComparatorCopierTest.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockExpectedCallTest.o \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/MockFailureReporterForTest.o \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/MockHierarchyTest.o \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/MockReturnValueTest.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/OrderedTestTest.o \
 
 CPPU4_OBJECTS := \
   $(CPPUTEST_HOME)/tests/TestUTestMacro.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/AllTests.o \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/MockFailureReporterForTest.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockNamedValueTest.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockPluginTest.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockSupport_cTest.o \
@@ -95,6 +102,7 @@ CPPU5_OBJECTS := \
   $(CPPUTEST_HOME)/tests/CppUTestExt/CodeMemoryReporterTest.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockCallTest.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockComparatorCopierTest.o \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/MockFailureReporterForTest.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockFailureTest.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockHierarchyTest.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockParameterTest.o \
@@ -105,6 +113,7 @@ CPPU6_OBJECTS := \
   $(CPPUTEST_HOME)/tests/CppUTestExt/ExpectedFunctionsListTest.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockCallTest.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockComparatorCopierTest.o \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/MockFailureReporterForTest.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockHierarchyTest.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockReturnValueTest.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockStrictOrderTest.o \

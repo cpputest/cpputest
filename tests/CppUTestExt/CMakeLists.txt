@@ -12,6 +12,7 @@ set(CppUTestExtTests_src
     MockComparatorCopierTest.cpp
     MockExpectedCallTest.cpp
     ExpectedFunctionsListTest.cpp
+    MockFailureReporterForTest.cpp
     MockFailureTest.cpp
     MockHierarchyTest.cpp
     MockNamedValueTest.cpp

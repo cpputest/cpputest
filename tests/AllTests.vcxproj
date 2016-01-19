@@ -154,6 +154,7 @@
     <ClCompile Include="CppUTestExt\MockComparatorCopierTest.cpp" />
     <ClCompile Include="CppUTestExt\MockExpectedCallTest.cpp" />
     <ClCompile Include="CppUTestExt\ExpectedFunctionsListTest.cpp" />
+    <ClCompile Include="CppUTestExt\MockFailureReporterForTest.cpp" />
     <ClCompile Include="CppUTestExt\MockFailureTest.cpp" />
     <ClCompile Include="CppUTestExt\MockHierarchyTest.cpp" />
     <ClCompile Include="CppUTestExt\MockNamedValueTest.cpp" />

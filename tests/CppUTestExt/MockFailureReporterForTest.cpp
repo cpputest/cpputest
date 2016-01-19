@@ -25,64 +25,45 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef D_TestMockFailure_h
-#define D_TestMockFailure_h
+#include "MockFailureReporterForTest.h"
 
-#include "CppUTestExt/MockSupport.h"
-
-#define CHECK_EXPECTED_MOCK_FAILURE(expectedFailure) CHECK_EXPECTED_MOCK_FAILURE_LOCATION(expectedFailure, __FILE__, __LINE__)
-#define CHECK_NO_MOCK_FAILURE() CHECK_NO_MOCK_FAILURE_LOCATION(__FILE__, __LINE__)
-
-
-class MockFailureReporterForTest : public MockFailureReporter
+void MockFailureReporterForTest::failTest(const MockFailure& failure)
 {
-public:
+    mockFailureString = failure.getMessage();
+}
 
-    SimpleString mockFailureString;
-
-    virtual void failTest(const MockFailure& failure)
-    {
-        mockFailureString = failure.getMessage();
-    }
-
-    static MockFailureReporterForTest* getReporter()
-    {
-        static MockFailureReporterForTest reporter;
-        return &reporter;
-    }
-};
-
-class MockFailureReporterInstaller
+MockFailureReporterForTest* MockFailureReporterForTest::getReporter()
 {
-  public:
-    MockFailureReporterInstaller()
-    {
-      mock().setMockFailureStandardReporter(MockFailureReporterForTest::getReporter());
-    }
+    static MockFailureReporterForTest reporter;
+    return &reporter;
+}
 
-    ~MockFailureReporterInstaller()
-    {
-      mock().setMockFailureStandardReporter(NULL);
-    }
-};
+MockFailureReporterInstaller::MockFailureReporterInstaller()
+{
+  mock().setMockFailureStandardReporter(MockFailureReporterForTest::getReporter());
+}
 
+MockFailureReporterInstaller::~MockFailureReporterInstaller()
+{
+  mock().setMockFailureStandardReporter(NULL);
+}
 
-inline UtestShell* mockFailureTest()
+UtestShell* mockFailureTest()
 {
     return MockFailureReporterForTest::getReporter()->getTestToFail();
 }
 
-inline SimpleString mockFailureString()
+SimpleString mockFailureString()
 {
     return MockFailureReporterForTest::getReporter()->mockFailureString;
 }
 
-inline void CLEAR_MOCK_FAILURE()
+void CLEAR_MOCK_FAILURE()
 {
     MockFailureReporterForTest::getReporter()->mockFailureString = "";
 }
 
-inline void CHECK_EXPECTED_MOCK_FAILURE_LOCATION(const MockFailure& expectedFailure, const char* file, int line)
+void CHECK_EXPECTED_MOCK_FAILURE_LOCATION(const MockFailure& expectedFailure, const char* file, int line)
 {
     SimpleString expectedFailureString = expectedFailure.getMessage();
     SimpleString actualFailureString = mockFailureString();
@@ -98,7 +79,7 @@ inline void CHECK_EXPECTED_MOCK_FAILURE_LOCATION(const MockFailure& expectedFail
     }
 }
 
-inline void CHECK_NO_MOCK_FAILURE_LOCATION(const char* file, int line)
+void CHECK_NO_MOCK_FAILURE_LOCATION(const char* file, int line)
 {
     if (mockFailureString() != "") {
         SimpleString error = "Unexpected mock failure:\n";
@@ -110,29 +91,24 @@ inline void CHECK_NO_MOCK_FAILURE_LOCATION(const char* file, int line)
     CLEAR_MOCK_FAILURE();
 }
 
-class MockExpectedCallsListForTest : public MockExpectedCallsList
+MockExpectedCallsListForTest::~MockExpectedCallsListForTest()
 {
-  public:
-    ~MockExpectedCallsListForTest()
-    {
-      deleteAllExpectationsAndClearList();
-    }
+  deleteAllExpectationsAndClearList();
+}
 
-    MockCheckedExpectedCall* addFunction(const SimpleString& name)
-    {
-      MockCheckedExpectedCall* newCall = new MockCheckedExpectedCall;
-      newCall->withName(name);
-      addExpectedCall(newCall);
-      return newCall;
-    }
+MockCheckedExpectedCall* MockExpectedCallsListForTest::addFunction(const SimpleString& name)
+{
+  MockCheckedExpectedCall* newCall = new MockCheckedExpectedCall;
+  newCall->withName(name);
+  addExpectedCall(newCall);
+  return newCall;
+}
 
-    MockCheckedExpectedCall* addFunction(const SimpleString& name, int order)
-    {
-      MockCheckedExpectedCall* newCall = addFunction(name);
-      newCall->withCallOrder(order);
-      return newCall;
-    }
-};
+MockCheckedExpectedCall* MockExpectedCallsListForTest::addFunction(const SimpleString& name, int order)
+{
+  MockCheckedExpectedCall* newCall = addFunction(name);
+  newCall->withCallOrder(order);
+  return newCall;
+}
 
-#endif
 

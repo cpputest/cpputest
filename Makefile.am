@@ -185,6 +185,7 @@ CppUTestExtTests_SOURCES = \
 	tests/CppUTestExt/MockComparatorCopierTest.cpp \
 	tests/CppUTestExt/MockExpectedCallTest.cpp \
 	tests/CppUTestExt/ExpectedFunctionsListTest.cpp \
+    tests/CppUTestExt/MockFailureReporterForTest.cpp \
 	tests/CppUTestExt/MockFailureTest.cpp \
 	tests/CppUTestExt/MockHierarchyTest.cpp \
 	tests/CppUTestExt/MockNamedValueTest.cpp \
