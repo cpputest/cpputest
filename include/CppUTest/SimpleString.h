@@ -55,7 +55,7 @@ public:
     ~SimpleString();
 
     SimpleString& operator=(const SimpleString& other);
-    SimpleString operator+(const SimpleString&);
+    SimpleString operator+(const SimpleString&) const;
     SimpleString& operator+=(const SimpleString&);
     SimpleString& operator+=(const char*);
 
