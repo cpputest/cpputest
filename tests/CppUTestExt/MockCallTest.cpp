@@ -117,6 +117,65 @@ TEST(MockCallTest, expectOneCallHoweverMultipleHappened)
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 
+TEST(MockCallTest, expectNoCallThatHappened)
+{
+    MockFailureReporterInstaller failureReporterInstaller;
+    
+    MockExpectedCallsListForTest expectations;
+    MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "lazy", expectations);
+
+    mock().expectNoCall("lazy");
+    mock().actualCall("lazy");
+    
+    CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
+TEST(MockCallTest, expectNoCallDoesntInfluenceExpectOneCall)
+{
+    MockFailureReporterInstaller failureReporterInstaller;
+    
+    MockExpectedCallsListForTest expectations;
+    expectations.addFunction("influence", MockCheckedExpectedCall::NO_EXPECTED_CALL_ORDER)->callWasMade(1);
+    MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "lazy", expectations);
+
+    mock().expectNoCall("lazy");
+    mock().expectOneCall("influence");
+    mock().actualCall("influence");
+    mock().actualCall("lazy");
+
+    CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
+TEST(MockCallTest, expectNoCallOnlyFailureOnceWhenMultipleHappened)
+{
+    MockFailureReporterInstaller failureReporterInstaller;
+    
+    MockExpectedCallsListForTest expectations;
+    MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "lazy", expectations);
+
+    mock().expectNoCall("lazy");
+    mock().actualCall("lazy");
+    mock().actualCall("lazy");
+    CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
+TEST(MockCallTest, ignoreOtherCallsExceptForTheUnExpectedOne)
+{
+    MockFailureReporterInstaller failureReporterInstaller;
+
+    MockExpectedCallsListForTest expectations;
+    MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "lazy", expectations);
+
+    mock().expectNoCall("lazy");
+    mock().ignoreOtherCalls();
+    mock().actualCall("bar").withParameter("foo", 1);
+    mock().actualCall("bar1").withParameter("foo", 1);
+    mock().actualCall("bar2").withParameter("foo", 1);
+    mock().actualCall("lazy");
+
+    CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
 TEST(MockCallTest, ignoreOtherCallsExceptForTheExpectedOne)
 {
     mock().expectOneCall("foo");
@@ -264,6 +323,7 @@ static void mocksAreCountedAsChecksTestFunction_()
 {
     mock().expectOneCall("foo");
     mock().expectNCalls(3, "bar");
+    mock().expectNoCall("lazy");
     mock().clear();
 }
 
@@ -272,6 +332,6 @@ TEST(MockCallTest, mockExpectationShouldIncreaseNumberOfChecks)
     TestTestingFixture fixture;
     fixture.setTestFunction(mocksAreCountedAsChecksTestFunction_);
     fixture.runAllTests();
-    LONGS_EQUAL(4, fixture.getCheckCount());
+    LONGS_EQUAL(5, fixture.getCheckCount());
 }
 

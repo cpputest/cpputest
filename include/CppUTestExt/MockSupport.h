@@ -47,6 +47,7 @@ public:
 
     virtual void strictOrder();
     virtual MockExpectedCall& expectOneCall(const SimpleString& functionName);
+    virtual void expectNoCall(const SimpleString& functionName);
     virtual MockExpectedCall& expectNCalls(int amount, const SimpleString& functionName);
     virtual MockActualCall& actualCall(const SimpleString& functionName);
     virtual bool hasReturnValue();
@@ -127,6 +128,7 @@ private:
     MockFailureReporter *standardReporter_;
     MockFailureReporter defaultReporter_;
     MockExpectedCallsList expectations_;
+    MockExpectedCallsList unExpectations_;
     bool ignoreOtherCalls_;
     bool enabled_;
     MockCheckedActualCall *lastActualFunctionCall_;
@@ -144,6 +146,9 @@ private:
     MockNamedValue* retrieveDataFromStore(const SimpleString& name);
 
     MockSupport* getMockSupport(MockNamedValueListNode* node);
+    
+    bool hasntExpectationWithName(const SimpleString& functionName);
+    bool hasntUnexpectationWithName(const SimpleString& functionName);
 };
 
 #endif
