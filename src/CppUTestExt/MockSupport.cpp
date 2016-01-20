@@ -310,19 +310,14 @@ void MockSupport::countCheck()
     UtestShell::getCurrent()->countCheck();
 }
 
-void MockSupport::checkExpectationsOfLastCall()
-{
-    if(lastActualFunctionCall_)
-        lastActualFunctionCall_->checkExpectations();
-
-    for(MockNamedValueListNode *p = data_.begin();p;p = p->next())
-        if(getMockSupport(p) && getMockSupport(p)->lastActualFunctionCall_)
-            getMockSupport(p)->lastActualFunctionCall_->checkExpectations();
-}
-
 void MockSupport::checkExpectations()
 {
-    checkExpectationsOfLastCall();
+    for(MockNamedValueListNode *p = data_.begin(); p; p = p->next())
+        if(getMockSupport(p) && getMockSupport(p)->lastActualFunctionCall_)
+            getMockSupport(p)->checkExpectations();
+    
+    if(lastActualFunctionCall_)
+        lastActualFunctionCall_->checkExpectations();
 
     if (wasLastCallFulfilled() && expectedCallsLeft())
         failTestWithUnexpectedCalls();
