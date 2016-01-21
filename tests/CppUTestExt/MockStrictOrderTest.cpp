@@ -36,7 +36,6 @@ TEST_GROUP(MockStrictOrderTest)
   }
 };
 
-
 TEST(MockStrictOrderTest, OrderObserved)
 {
     mock().strictOrder();
@@ -95,12 +94,12 @@ TEST(MockStrictOrderTest, orderViolatedWorksHierarchically)
     MockCallOrderFailure expectedFailure(mockFailureTest(), expectations);
 
     mock("bla").expectOneCall("foo1");
-    mock().expectOneCall("foo1");
-    mock().expectOneCall("foo2");
+    mock("foo").expectOneCall("foo1");
+    mock("foo").expectOneCall("foo2");
 
     mock("bla").actualCall("foo1");
-    mock().actualCall("foo2");
-    mock().actualCall("foo1");
+    mock("foo").actualCall("foo2");
+    mock("foo").actualCall("foo1");
 
     mock().checkExpectations();
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
@@ -121,7 +120,7 @@ TEST(MockStrictOrderTest, orderViolatedWithinAScope)
     mock("scope").actualCall("foo2");
     mock("scope").actualCall("foo1");
 
-    mock("scope").checkExpectations();
+    mock().checkExpectations();
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 
