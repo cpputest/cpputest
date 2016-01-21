@@ -320,7 +320,7 @@ bool operator!=(const SimpleString& left, const SimpleString& right)
     return !(left == right);
 }
 
-SimpleString SimpleString::operator+(const SimpleString& rhs)
+SimpleString SimpleString::operator+(const SimpleString& rhs) const
 {
     SimpleString t(buffer_);
     t += rhs.buffer_;
