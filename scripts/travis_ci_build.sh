@@ -67,7 +67,7 @@ if [ "x$BUILD" = "xcmake-coverage" ]; then
     make
     ctest
 
-    coveralls -b . -r .. -i "src" -i "include" --gcov-options="-bc" || true
+    coveralls -b . -r .. -i "src" -i "include" --gcov-options="-lbc" || true
 fi
 
 if [ "x$BUILD" = "xmake-dos" ]; then
