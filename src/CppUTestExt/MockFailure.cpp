@@ -115,9 +115,13 @@ MockUnexpectedCallHappenedFailure::MockUnexpectedCallHappenedFailure(UtestShell*
 
 MockCallOrderFailure::MockCallOrderFailure(UtestShell* test, const MockExpectedCallsList& expectations) : MockFailure(test)
 {
+    MockExpectedCallsList expectationsForOutOfOrder;
+    expectationsForOutOfOrder.addExpectations(expectations);
+    expectationsForOutOfOrder.onlyKeepOutOfOrderExpectations();
+
     message_ = "Mock Failure: Out of order calls";
     message_ += "\n";
-    addExpectationsAndCallHistory(expectations);
+    addExpectationsAndCallHistory(expectationsForOutOfOrder);
 }
 
 MockUnexpectedInputParameterFailure::MockUnexpectedInputParameterFailure(UtestShell* test, const SimpleString& functionName, const MockNamedValue& parameter, const MockExpectedCallsList& expectations)  : MockFailure(test)

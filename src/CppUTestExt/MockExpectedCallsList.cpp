@@ -149,6 +149,14 @@ void MockExpectedCallsList::onlyKeepExpectationsRelatedTo(const SimpleString& na
     pruneEmptyNodeFromList();
 }
 
+void MockExpectedCallsList::onlyKeepOutOfOrderExpectations()
+{
+    for (MockExpectedCallsListNode* p = head_; p; p = p->next_)
+        if (!p->expectedCall_->isOutOfOrder())
+            p->expectedCall_ = NULL;
+    pruneEmptyNodeFromList();
+}
+
 void MockExpectedCallsList::onlyKeepUnfulfilledExpectations()
 {
     for (MockExpectedCallsListNode* p = head_; p; p = p->next_)
