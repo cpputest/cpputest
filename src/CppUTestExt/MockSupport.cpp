@@ -310,21 +310,41 @@ void MockSupport::countCheck()
     UtestShell::getCurrent()->countCheck();
 }
 
-void MockSupport::checkExpectations()
+void MockSupport::checkExpectationsOfLastCall()
 {
-    for(MockNamedValueListNode *p = data_.begin(); p; p = p->next())
-        if(getMockSupport(p) && getMockSupport(p)->lastActualFunctionCall_)
-            getMockSupport(p)->checkExpectations();
-    
     if(lastActualFunctionCall_)
         lastActualFunctionCall_->checkExpectations();
+
+    for(MockNamedValueListNode *p = data_.begin();p;p = p->next())
+        if(getMockSupport(p) && getMockSupport(p)->lastActualFunctionCall_)
+            getMockSupport(p)->lastActualFunctionCall_->checkExpectations();
+}
+
+bool MockSupport::hasCallsOutOfOrder()
+{
+    if (expectations_.hasCallsOutOfOrder())
+    {
+        return true;
+    }
+    for (MockNamedValueListNode* p = data_.begin(); p; p = p->next())
+        if (getMockSupport(p) && getMockSupport(p)->hasCallsOutOfOrder())
+        {
+            return true;
+        }
+    return false;
+}
+
+void MockSupport::checkExpectations()
+{
+    checkExpectationsOfLastCall();
 
     if (wasLastCallFulfilled() && expectedCallsLeft())
         failTestWithUnexpectedCalls();
 
-    if (expectations_.hasCallsOutOfOrder())
+    if (hasCallsOutOfOrder())
         failTestWithOutOfOrderCalls();
 }
+
 
 bool MockSupport::hasData(const SimpleString& name)
 {

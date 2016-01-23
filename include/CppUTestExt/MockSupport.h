@@ -149,6 +149,7 @@ private:
     
     bool hasntExpectationWithName(const SimpleString& functionName);
     bool hasntUnexpectationWithName(const SimpleString& functionName);
+    bool hasCallsOutOfOrder();
 };
 
 #endif

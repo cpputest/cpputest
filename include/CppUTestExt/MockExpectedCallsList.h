@@ -53,6 +53,8 @@ public:
     virtual void addExpectedCall(MockCheckedExpectedCall* call);
     virtual void addExpectations(const MockExpectedCallsList& list);
     virtual void addExpectationsRelatedTo(const SimpleString& name, const MockExpectedCallsList& list);
+    
+    virtual void onlyKeepOutOfOrderExpectations();
     virtual void addUnfulfilledExpectations(const MockExpectedCallsList& list);
 
     virtual void onlyKeepExpectationsRelatedTo(const SimpleString& name);

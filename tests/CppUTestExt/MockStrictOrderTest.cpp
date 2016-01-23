@@ -105,6 +105,32 @@ TEST(MockStrictOrderTest, orderViolatedWorksHierarchically)
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 
+TEST(MockStrictOrderTest, orderViolatedWorksWithExtraUnexpectedCall)
+{
+    MockFailureReporterInstaller failureReporterInstaller;
+    mock().strictOrder();
+    mock("bla").strictOrder();
+	mock().ignoreOtherCalls();
+
+    MockExpectedCallsListForTest expectations;
+    expectations.addFunction("foo1", 1)->callWasMade(2);
+    expectations.addFunction("foo2", 2)->callWasMade(1);
+    MockCallOrderFailure expectedFailure(mockFailureTest(), expectations);
+
+    mock("bla").expectOneCall("foo1");
+    mock("foo").expectOneCall("foo1");
+    mock("foo").expectOneCall("foo2"); 
+
+    mock("bla").actualCall("foo1");
+    mock("foo").actualCall("foo2");
+	mock("foo").actualCall("unexpected1");
+    mock("foo").actualCall("foo1");
+	mock("foo").actualCall("unexpected2");
+
+    mock().checkExpectations();
+    CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
 TEST(MockStrictOrderTest, orderViolatedWithinAScope)
 {
     MockFailureReporterInstaller failureReporterInstaller;
