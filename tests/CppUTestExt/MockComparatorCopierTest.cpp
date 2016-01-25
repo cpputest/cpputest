@@ -548,6 +548,20 @@ TEST(MockComparatorCopierTest, installComparatorsWorksHierarchical)
     mock().removeAllComparatorsAndCopiers();
 }
 
+TEST(MockComparatorCopierTest, installCopiersWorksHierarchically)
+{
+    MyTypeForTesting object(1);
+    MyTypeForTestingCopier copier;
+
+    mock("existing");
+    mock().installCopier("MyTypeForTesting", copier);
+    mock("existing").expectOneCall("function").withOutputParameterOfTypeReturning("MyTypeForTesting", "parameterName", &object);
+    mock("existing").actualCall("function").withOutputParameterOfType("MyTypeForTesting", "parameterName", &object);
+
+    mock().checkExpectations();
+    mock().removeAllComparatorsAndCopiers();
+}
+
 class StubComparator : public MockNamedValueComparator
 {
 public:
