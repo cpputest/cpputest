@@ -447,7 +447,6 @@ TEST(MockParameterTest, ignoreOtherParametersMultipleCallsButOneDidntHappen)
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 
-
 TEST(MockParameterTest, newCallStartsWhileNotAllParametersWerePassed)
 {
     MockFailureReporterInstaller failureReporterInstaller;

@@ -726,8 +726,9 @@ TEST(MockIgnoredExpectedCall, worksAsItShould)
     ignored.withConstPointerParameter("woo", (const void*) 0);
     ignored.withFunctionPointerParameter("fop", (void(*)()) 0);
     ignored.withMemoryBufferParameter("waa", (const unsigned char*) 0, 0);
-    ignored.withParameterOfType("top", "mytype", (const void*) 0);
+    ignored.withParameterOfType( "mytype", "top", (const void*) 0);
     ignored.withOutputParameterReturning("bar", (void*) 0, 1);
+    ignored.withOutputParameterOfTypeReturning("mytype", "bar", (const void*) 0);
     ignored.ignoreOtherParameters();
     ignored.andReturnValue((double) 1.0f);
     ignored.andReturnValue((unsigned int) 1);
