@@ -613,6 +613,12 @@ TEST(MockExpectedCallComposite, hasOutputParameterReturning)
     STRCMP_EQUAL("name -> const void* out: <output>", call.callToString().asCharString());
 }
 
+TEST(MockExpectedCallComposite, hasOutputParameterOfTypeReturning)
+{
+    composite.withOutputParameterOfTypeReturning("type", "out", (const void*) 0);
+    STRCMP_EQUAL("name -> type out: <output>", call.callToString().asCharString());
+}
+
 TEST(MockExpectedCallComposite, hasUnsignedIntReturnValue)
 {
     composite.andReturnValue((unsigned int) 2);
@@ -721,7 +727,7 @@ TEST(MockIgnoredExpectedCall, worksAsItShould)
     ignored.withFunctionPointerParameter("fop", (void(*)()) 0);
     ignored.withMemoryBufferParameter("waa", (const unsigned char*) 0, 0);
     ignored.withParameterOfType("top", "mytype", (const void*) 0);
-    ignored.withOutputParameterReturning("bar", (const void*) 0, 1);
+    ignored.withOutputParameterReturning("bar", (void*) 0, 1);
     ignored.ignoreOtherParameters();
     ignored.andReturnValue((double) 1.0f);
     ignored.andReturnValue((unsigned int) 1);
