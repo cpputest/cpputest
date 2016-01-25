@@ -134,6 +134,13 @@ TEST(MockSupport_c, outputParametersOfType)
     mock_c()->removeAllComparatorsAndCopiers();
 }
 
+TEST(MockSupport_c, ignoreOtherParameters)
+{
+    mock_c()->expectOneCall("foo")->withIntParameters("int", 1)->ignoreOtherParameters();
+    mock_c()->actualCall("foo")->withIntParameters("int", 1)->withDoubleParameters("double", 0.01f);
+    mock_c()->checkExpectations();
+}
+
 TEST(MockSupport_c, returnUnsignedIntValue)
 {
     unsigned int expected_value = 7;
