@@ -888,6 +888,14 @@ TEST(SimpleString, BinaryWithSize)
     STRCMP_EQUAL("(null)", StringFromBinaryWithSizeOrNull(NULL, 0).asCharString());
 }
 
+TEST(SimpleString, BinaryWithSizeLargerThan128)
+{
+    unsigned char value[129];
+    value[127] = 0x00;
+    value[128] = 0xff;
+
+    STRCMP_CONTAINS("00 ...", StringFromBinaryWithSize(value, sizeof(value)).asCharString());
+}
 
 TEST(SimpleString, MemCmp)
 {
