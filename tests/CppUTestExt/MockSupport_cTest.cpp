@@ -99,6 +99,14 @@ TEST(MockSupport_c, unsignedLongIntParameter)
     mock_c()->actualCall("foo")->withUnsignedLongIntParameters("p", 1);
 }
 
+TEST(MockSupport_c, memoryBufferParameter)
+{
+    const unsigned char mem_buffer[] = { 1, 2, 3};
+    mock_c()->expectOneCall("foo")->withMemoryBufferParameter("out", mem_buffer, sizeof(mem_buffer));
+    mock_c()->actualCall("foo")->withMemoryBufferParameter("out", mem_buffer, sizeof(mem_buffer));
+    mock_c()->checkExpectations();
+}
+
 TEST(MockSupport_c, outputParameters)
 {
     int param = 1;
