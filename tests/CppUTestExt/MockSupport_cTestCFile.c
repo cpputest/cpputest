@@ -40,21 +40,47 @@ static const char* typeNameValueToString(const void* object)
 
 void all_mock_support_c_calls(void)
 {
+    mock_c()->strictOrder();
     mock_c()->expectOneCall("boo");
+    mock_c()->expectNoCall("bla");
+    mock_c()->expectNCalls(1, "foo");
     mock_c()->actualCall("boo");
+    mock_c()->actualCall("foo");
     mock_c()->checkExpectations();
 
-    mock_c()->expectOneCall("boo")->withIntParameters("integer", 1)->withDoubleParameters("double", 1.0)->
-            withStringParameters("string", "string")->withPointerParameters("pointer", (void*) 1)->
+    mock_c()->expectOneCall("boo")->withIntParameters("integer", 1)->
+            withUnsignedIntParameters("unsigned", 1)->
+            withLongIntParameters("long int", (long int) -1)->
+            withUnsignedLongIntParameters("unsigned long int", (unsigned long int) 1)->
+            withDoubleParameters("double", 1.0)->
+            withStringParameters("string", "string")->
+            withPointerParameters("pointer", (void*) 1)->
             withConstPointerParameters("constpointer", (const void*) 1)->
-            withFunctionPointerParameters("functionpointer", (void(*)()) 1);
-    mock_c()->actualCall("boo")->withIntParameters("integer", 1)->withDoubleParameters("double", 1.0)->
-            withStringParameters("string", "string")->withPointerParameters("pointer", (void*) 1)->
-            withConstPointerParameters("constpointer", (const void*) 1)->
-            withFunctionPointerParameters("functionpointer", (void(*)()) 1);
+            withFunctionPointerParameters("functionpointer", (void(*)()) 1)->
+            withMemoryBufferParameter("name", (void*) 1, 0)->
+            ignoreOtherParameters();
 
-    mock_c()->expectOneCall("boo")->withMemoryBufferParameter("name", (void*) 1, 0);
-    mock_c()->actualCall("boo")->withMemoryBufferParameter("name", (void*) 1, 0);
+    mock_c()->actualCall("boo")->withIntParameters("integer", 1)->
+            withUnsignedIntParameters("unsigned", 1)->
+            withLongIntParameters("long int", (long int) -1)->
+            withUnsignedLongIntParameters("unsigned long int", (unsigned long int) 1)->
+            withDoubleParameters("double", 1.0)->
+            withStringParameters("string", "string")->
+            withPointerParameters("pointer", (void*) 1)->
+            withConstPointerParameters("constpointer", (const void*) 1)->
+            withFunctionPointerParameters("functionpointer", (void(*)()) 1)->
+            withMemoryBufferParameter("name", (void*) 1, 0)->
+            hasReturnValue();
+
+    mock_c()->disable();
+    mock_c()->expectOneCall("boo")->withParameterOfType("type", "name", (void*) 1)->
+            withOutputParameterReturning("name", (void*)1, 0)->
+            withOutputParameterOfTypeReturning("type", "name", (void*)1);
+    mock_c()->actualCall("boo")->withParameterOfType("type", "name", (void*) 1)->
+            withOutputParameter("name", (void*)1)->
+            withOutputParameterOfType("type", "name", (void*)1);
+    mock_c()->enable();
+
     mock_c()->clear();
 
     mock_c()->installComparator("typeName", typeNameIsEqual, typeNameValueToString);
@@ -81,6 +107,30 @@ void all_mock_support_c_calls(void)
     mock_c()->expectOneCall("boo5")->andReturnFunctionPointerValue((void(*)()) 10);
     mock_c()->actualCall("boo5")->returnValue();
     mock_c()->returnValue();
+
+    mock_c()->setIntData("int", 5);
+    mock_c()->expectOneCall("bla")->withIntParameters("int", 5);
+    mock_c()->actualCall("bla")->withIntParameters("int", mock_c()->getData("int").value.intValue);
+
+    mock_c()->setStringData("string", "lol");
+    mock_c()->expectOneCall("bla")->withStringParameters("str", "lol");
+    mock_c()->actualCall("bla")->withStringParameters("str", mock_c()->getData("string").value.stringValue);
+
+    mock_c()->setDoubleData("double", 0.001f);
+    mock_c()->expectOneCall("bla")->withDoubleParameters("double", 0.001f);
+    mock_c()->actualCall("bla")->withDoubleParameters("double", mock_c()->getData("double").value.doubleValue);
+
+    mock_c()->setPointerData("ptr", (void*)1);
+    mock_c()->expectOneCall("bla")->withPointerParameters("ptr", (void*)1);
+    mock_c()->actualCall("bla")->withPointerParameters("ptr", mock_c()->getData("ptr").value.pointerValue);
+
+    mock_c()->setConstPointerData("cptr", (const void*)1);
+    mock_c()->expectOneCall("bla")->withConstPointerParameters("cptr", (const void*)1);
+    mock_c()->actualCall("bla")->withConstPointerParameters("cptr", mock_c()->getData("ptr").value.constPointerValue);
+
+    mock_c()->setFunctionPointerData("ptr", (void(*)())1);
+    mock_c()->expectOneCall("bla")->withFunctionPointerParameters("ptr", (void(*)())1);
+    mock_c()->actualCall("bla")->withFunctionPointerParameters("ptr", mock_c()->getData("ptr").value.functionPointerValue);
 
     mock_c()->disable();
     mock_c()->actualCall("disabled");

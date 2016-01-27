@@ -149,7 +149,7 @@ struct SMockSupport_c
 /** void (*functionPointerReturnValue())(void); */
 
     void (*setIntData) (const char* name, int value);
-/** void (*setUnsignedIntData) (unsigned int value): */
+/** void (*setUnsignedIntData) (unsigned int value); */
     void (*setStringData) (const char* name, const char* value);
     void (*setDoubleData) (const char* name, double value);
     void (*setPointerData) (const char* name, void* value);
