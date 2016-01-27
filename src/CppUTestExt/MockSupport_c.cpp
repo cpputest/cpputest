@@ -131,6 +131,7 @@ void setConstPointerData_c(const char* name, const void* value);
 void setFunctionPointerData_c(const char* name, void (*value)());
 void setDataObject_c(const char* name, const char* type, void* value);
 MockValue_c getData_c(const char* name);
+int hasReturnValue_c(void);
 
 void checkExpectations_c();
 int expectedCallsLeft_c();
@@ -175,7 +176,7 @@ MockActualCall_c* withActualMemoryBufferParameters_c(const char* name, const uns
 MockActualCall_c* withActualParameterOfType_c(const char* type, const char* name, const void* value);
 MockActualCall_c* withActualOutputParameter_c(const char* name, void* value);
 MockActualCall_c* withActualOutputParameterOfType_c(const char* type, const char* name, void* value);
-int hasReturnValue_c(void);
+int hasActualReturnValue_c(void);
 MockValue_c actualReturnValue_c();
 
 
@@ -246,7 +247,7 @@ static MockActualCall_c gActualCall = {
         withActualParameterOfType_c,
         withActualOutputParameter_c,
         withActualOutputParameterOfType_c,
-        hasReturnValue_c,
+        hasActualReturnValue_c,
         actualReturnValue_c
 };
 
@@ -256,6 +257,7 @@ static MockSupport_c gMockSupport = {
         expectNoCall_c,
         expectNCalls_c,
         actualCall_c,
+        hasReturnValue_c,
         actualReturnValue_c,
         setIntData_c,
         setStringData_c,
@@ -571,7 +573,7 @@ MockActualCall_c* withActualOutputParameterOfType_c(const char* type, const char
     return &gActualCall;
 }
 
-int hasReturnValue_c(void)
+int hasActualReturnValue_c(void)
 {
     return actualCall->hasReturnValue();
 }
@@ -634,6 +636,11 @@ void setDataObject_c(const char* name, const char* type, void* value)
 MockValue_c getData_c(const char* name)
 {
     return getMockValueCFromNamedValue(currentMockSupport->getData(name));
+}
+
+int hasReturnValue_c()
+{
+    return currentMockSupport->hasReturnValue();
 }
 
 void checkExpectations_c()

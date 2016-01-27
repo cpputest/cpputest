@@ -52,9 +52,11 @@ TEST(MockSupport_c, hasReturnValue)
 {
     mock_c()->expectOneCall("foo");
     CHECK(!mock_c()->actualCall("foo")->hasReturnValue());
+    CHECK(!mock_c()->hasReturnValue());
 
     mock_c()->expectOneCall("foo2")->andReturnIntValue(1);
     CHECK(mock_c()->actualCall("foo2")->hasReturnValue());
+    CHECK(mock_c()->hasReturnValue());
 }
 
 TEST(MockSupport_c, expectAndActualOneCall)

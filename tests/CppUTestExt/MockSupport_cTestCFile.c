@@ -40,6 +40,7 @@ static const char* typeNameValueToString(const void* object)
 
 void all_mock_support_c_calls(void)
 {
+    int hasReturnValue;
     mock_c()->strictOrder();
     mock_c()->expectOneCall("boo");
     mock_c()->expectNoCall("bla");
@@ -131,6 +132,12 @@ void all_mock_support_c_calls(void)
     mock_c()->setFunctionPointerData("ptr", (void(*)())1);
     mock_c()->expectOneCall("bla")->withFunctionPointerParameters("ptr", (void(*)())1);
     mock_c()->actualCall("bla")->withFunctionPointerParameters("ptr", mock_c()->getData("ptr").value.functionPointerValue);
+
+    mock_c()->expectOneCall("bla")->andReturnIntValue(-3);
+    mock_c()->expectOneCall("foo")->withIntParameters("bool", 1);
+    mock_c()->actualCall("bla");
+    hasReturnValue = mock_c()->hasReturnValue();
+    mock_c()->actualCall("foo")->withIntParameters("bool", hasReturnValue);
 
     mock_c()->disable();
     mock_c()->actualCall("disabled");
