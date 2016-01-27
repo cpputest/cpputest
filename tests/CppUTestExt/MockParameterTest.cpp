@@ -447,7 +447,6 @@ TEST(MockParameterTest, ignoreOtherParametersMultipleCallsButOneDidntHappen)
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 
-
 TEST(MockParameterTest, newCallStartsWhileNotAllParametersWerePassed)
 {
     MockFailureReporterInstaller failureReporterInstaller;
@@ -683,8 +682,11 @@ TEST(MockParameterTest, ignoreOtherCallsIgnoresWithAllKindsOfParameters)
            .withParameter("hey", 1ul)
            .withParameter("duh", 1.0f)
            .withParameter("yoo", (const void*) 0)
+           .withParameter("func", (void(*)()) 0)
+           .withParameter("mem", (const unsigned char*) 0, 0)
            .withParameterOfType("hoo", "int", (const void*) 0)
-           .withOutputParameter("gah", (void*) 0);
+           .withOutputParameter("gah", (void*) 0)
+           .withOutputParameterOfType("goo", "int", (void*) 0);
 
     mock().checkExpectations();
 }

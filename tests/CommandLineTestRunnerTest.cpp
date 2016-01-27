@@ -243,3 +243,20 @@ TEST(CommandLineTestRunner, realJunitOutputShouldBeCreatedAndWorkProperly)
     STRCMP_CONTAINS("<testcase classname=\"package.group\" name=\"test\"", FakeOutput::file.asCharString());
     STRCMP_CONTAINS("TEST(group, test)", FakeOutput::console.asCharString());
 }
+
+TEST(CommandLineTestRunner, realTeamCityOutputShouldBeCreatedAndWorkProperly)
+{
+    const char* argv[] = { "tests.exe", "-oteamcity", "-v", "-kpackage", };
+
+    FakeOutput* fakeOutput = new FakeOutput; /* UT_PTR_SET() is not reentrant */
+
+    CommandLineTestRunner commandLineTestRunner(4, argv, &registry);
+    commandLineTestRunner.runAllTestsMain();
+    
+    delete fakeOutput; /* Original output must be restored before further output occurs */
+
+    STRCMP_CONTAINS("##teamcity[testSuiteStarted name='group'", FakeOutput::console.asCharString());
+    STRCMP_CONTAINS("##teamcity[testStarted name='test'", FakeOutput::console.asCharString());
+    STRCMP_CONTAINS("##teamcity[testFinished name='test'", FakeOutput::console.asCharString());
+    STRCMP_CONTAINS("##teamcity[testSuiteFinished name='group'", FakeOutput::console.asCharString());
+}

@@ -64,6 +64,11 @@ extern "C"{
     {
         return "valueToString";
     }
+    
+    static void typeCopyFunction(void* dst, const void* src)
+    {
+        *(int*) dst = *(int*) src;
+    }
 
 }
 
@@ -316,6 +321,26 @@ TEST(MockSupport_c, failureWithParameterOfTypeCoversValueToString)
     fixture.setTestFunction(failingCallToMockCWithParameterOfType_);
     fixture.runAllTests();
     fixture.assertPrintContains("typeName name: <valueToString>");
+    mock_c()->removeAllComparatorsAndCopiers();
+}
+
+static void callToMockCWithOutputParameter_()
+{
+    int value1 = 7;
+    const int value2 = 9;
+    mock_c()->expectOneCall("bar")->withOutputParameterReturning("bla", &value2, sizeof(int));
+    mock_c()->actualCall("bar")->withOutputParameter("bla", &value1);
+    LONGS_EQUAL(value1, value2);
+}
+
+TEST(MockSupport_c, successWithOutputParameter)
+{
+    TestTestingFixture fixture;
+    mock_c()->installCopier("intType", typeCopyFunction);
+    fixture.setTestFunction(callToMockCWithOutputParameter_);
+    fixture.runAllTests();
+    LONGS_EQUAL(3, fixture.getCheckCount());
+    LONGS_EQUAL(0, fixture.getFailureCount());
     mock_c()->removeAllComparatorsAndCopiers();
 }
 

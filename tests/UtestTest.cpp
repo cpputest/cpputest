@@ -58,12 +58,17 @@ TEST(UtestShell, compareDoubles)
 {
     double zero = 0.0;
     double not_a_number = zero / zero;
+    double infinity = 1 / zero;
     CHECK(doubles_equal(1.0, 1.001, 0.01));
     CHECK(!doubles_equal(not_a_number, 1.001, 0.01));
     CHECK(!doubles_equal(1.0, not_a_number, 0.01));
     CHECK(!doubles_equal(1.0, 1.001, not_a_number));
     CHECK(!doubles_equal(1.0, 1.1, 0.05));
-
+    CHECK(!doubles_equal(infinity, 1.0, 0.01));
+    CHECK(!doubles_equal(1.0, infinity, 0.01));
+    CHECK(doubles_equal(1.0, -1.0, infinity));
+    CHECK(doubles_equal(infinity, infinity, 0.01));
+    CHECK(doubles_equal(infinity, infinity, infinity));
     double a = 1.2345678;
     CHECK(doubles_equal(a, a, 0.000000001));
 }
