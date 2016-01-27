@@ -117,6 +117,7 @@ extern "C" {
 
 void strictOrder_c(void);
 MockExpectedCall_c* expectOneCall_c(const char* name);
+void expectNoCall_c(const char* name);
 MockExpectedCall_c* expectNCalls_c(const int number, const char* name);
 MockActualCall_c* actualCall_c(const char* name);
 void disable_c(void);
@@ -252,6 +253,7 @@ static MockActualCall_c gActualCall = {
 static MockSupport_c gMockSupport = {
         strictOrder_c,
         expectOneCall_c,
+        expectNoCall_c,
         expectNCalls_c,
         actualCall_c,
         actualReturnValue_c,
@@ -474,12 +476,16 @@ MockExpectedCall_c* expectOneCall_c(const char* name)
     return &gExpectedCall;
 }
 
+void expectNoCall_c(const char* name)
+{
+    currentMockSupport->expectNoCall(name);
+}
+
 MockExpectedCall_c* expectNCalls_c(const int number, const char* name)
 {
     expectedCall = &currentMockSupport->expectNCalls(number, name);
     return &gExpectedCall;
 }
-
 
 MockActualCall_c* actualCall_c(const char* name)
 {

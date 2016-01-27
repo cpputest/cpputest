@@ -125,11 +125,28 @@ struct SMockSupport_c
 {
     void (*strictOrder)(void);
     MockExpectedCall_c* (*expectOneCall)(const char* name);
-/** MockExpectedCall_c* (*expectNoCall)(const char* name); */  
+    void (*expectNoCall)(const char* name);
     MockExpectedCall_c* (*expectNCalls)(int number, const char* name);
     MockActualCall_c* (*actualCall)(const char* name);
 /** bool (*hasReturnValue)(void); */
     MockValue_c (*returnValue)(void);
+/** int returnIntValueOrDefault(int defaultValue); */
+/** unsigned int unsignedIntReturnValue(void); */
+/** long int longIntReturnValue(void); */
+/** long int returnLongIntValueOrDefault(long int defaultValue); */
+/** unsigned long int unsignedLongIntReturnValue(void); */
+/** unsigned long int returnUnsignedLongIntValueOrDefault(unsigned long int defaultValue); */
+/** unsigned int returnUnsignedIntValueOrDefault(unsigned int defaultValue); */
+/** const char* stringReturnValue(void); */
+/** const char* returnStringValueOrDefault(const char * defaultValue); */
+/** double returnDoubleValueOrDefault(double defaultValue); */
+/** double doubleReturnValue(void); */
+/** void* pointerReturnValue(void); */
+/** void* returnPointerValueOrDefault(void * defaultValue); */
+/** const void* returnConstPointerValueOrDefault(const void * defaultValue); */
+/** const void* constPointerReturnValue(void); */
+/** void (*returnFunctionPointerValueOrDefault(void (*defaultValue)()))(); */
+/** void (*functionPointerReturnValue())(void); */
 
     void (*setIntData) (const char* name, int value);
 /** void (*setUnsignedIntData) (unsigned int value): */
