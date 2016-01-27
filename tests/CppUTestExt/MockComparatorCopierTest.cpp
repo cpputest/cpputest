@@ -484,7 +484,7 @@ TEST(MockComparatorCopierTest, customObjectWithFunctionCopier)
     mock().removeAllComparatorsAndCopiers();
 }
 
-TEST(MockComparatorCopierTest, removeComparatorsAndCopiersWorksHierachically)
+TEST(MockComparatorCopierTest, removingComparatorsWorksHierachically)
 {
     MockFailureReporterInstaller failureReporterInstaller;
 
@@ -497,6 +497,22 @@ TEST(MockComparatorCopierTest, removeComparatorsAndCopiersWorksHierachically)
     mock("scope").actualCall("function").withParameterOfType("MyTypeForTesting", "parameterName", &object);
 
     MockNoWayToCompareCustomTypeFailure expectedFailure(mockFailureTest(), "MyTypeForTesting");
+    CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
+TEST(MockComparatorCopierTest, removingCopiersWorksHierachically)
+{
+    MockFailureReporterInstaller failureReporterInstaller;
+    MyTypeForTesting object(1);
+    
+    MyTypeForTestingCopier copier;
+
+    mock("scope").installCopier("MyTypeForTesting", copier);
+    mock().removeAllComparatorsAndCopiers();
+    mock("scope").expectOneCall("foo").withOutputParameterOfTypeReturning("MyTypeForTesting", "bar", &object);
+    mock("scope").actualCall("foo").withOutputParameterOfType("MyTypeForTesting", "bar", &object);
+
+    MockNoWayToCopyCustomTypeFailure expectedFailure(mockFailureTest(), "MyTypeForTesting");
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 
@@ -527,6 +543,20 @@ TEST(MockComparatorCopierTest, installComparatorsWorksHierarchical)
     mock().installComparatorsAndCopiers(repos);
     mock("existing").expectOneCall("function").withParameterOfType("MyTypeForTesting", "parameterName", &object);
     mock("existing").actualCall("function").withParameterOfType("MyTypeForTesting", "parameterName", &object);
+
+    mock().checkExpectations();
+    mock().removeAllComparatorsAndCopiers();
+}
+
+TEST(MockComparatorCopierTest, installCopiersWorksHierarchically)
+{
+    MyTypeForTesting object(1);
+    MyTypeForTestingCopier copier;
+
+    mock("existing");
+    mock().installCopier("MyTypeForTesting", copier);
+    mock("existing").expectOneCall("function").withOutputParameterOfTypeReturning("MyTypeForTesting", "parameterName", &object);
+    mock("existing").actualCall("function").withOutputParameterOfType("MyTypeForTesting", "parameterName", &object);
 
     mock().checkExpectations();
     mock().removeAllComparatorsAndCopiers();
