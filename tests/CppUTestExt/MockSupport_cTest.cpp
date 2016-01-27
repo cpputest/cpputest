@@ -64,6 +64,15 @@ TEST(MockSupport_c, expectAndActualOneCall)
     mock_c()->checkExpectations();
 }
 
+TEST(MockSupport_c, expectAndActualThreeCalls)
+{
+    mock_c()->expectNCalls(3, "boo");
+    mock_c()->actualCall("boo");
+    mock_c()->actualCall("boo");
+    mock_c()->actualCall("boo");
+    mock_c()->checkExpectations();
+}
+
 TEST(MockSupport_c, expectAndActualParameters)
 {
     mock_c()->expectOneCall("boo")->withIntParameters("integer", 1)->withDoubleParameters("double", 1.0)->

@@ -126,7 +126,7 @@ struct SMockSupport_c
     void (*strictOrder)(void);
     MockExpectedCall_c* (*expectOneCall)(const char* name);
 /** MockExpectedCall_c* (*expectNoCall)(const char* name); */  
-/** MockExpectedCall_c* (*expectNCalls)(int number, const char* name); */
+    MockExpectedCall_c* (*expectNCalls)(int number, const char* name);
     MockActualCall_c* (*actualCall)(const char* name);
 /** bool (*hasReturnValue)(void); */
     MockValue_c (*returnValue)(void);
