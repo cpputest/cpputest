@@ -122,7 +122,7 @@ typedef void (*MockTypeCopyFunction_c)(void* dst, const void* src);
 typedef struct SMockSupport_c MockSupport_c;
 struct SMockSupport_c
 {
-/** void (*strictOrder)(void); */
+    void (*strictOrder)(void);
     MockExpectedCall_c* (*expectOneCall)(const char* name);
 /** MockExpectedCall_c* (*expectNoCall)(const char* name); */  
 /** MockExpectedCall_c* (*expectNCalls)(int number, const char* name); */

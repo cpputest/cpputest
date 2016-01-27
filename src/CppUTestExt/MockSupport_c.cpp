@@ -115,6 +115,7 @@ static MockCFunctionCopierNode* copierList_ = NULL;
 
 extern "C" {
 
+void strictOrder_c(void);
 MockExpectedCall_c* expectOneCall_c(const char* name);
 MockActualCall_c* actualCall_c(const char* name);
 void disable_c(void);
@@ -246,6 +247,7 @@ static MockActualCall_c gActualCall = {
 };
 
 static MockSupport_c gMockSupport = {
+        strictOrder_c,
         expectOneCall_c,
         actualCall_c,
         actualReturnValue_c,
@@ -455,6 +457,11 @@ static MockValue_c getMockValueCFromNamedValue(const MockNamedValue& namedValue)
         returnValue.value.objectValue = namedValue.getObjectPointer();
     }
     return returnValue;
+}
+
+void strictOrder_c(void)
+{
+    currentMockSupport->strictOrder();
 }
 
 MockExpectedCall_c* expectOneCall_c(const char* name)

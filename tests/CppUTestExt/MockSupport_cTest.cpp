@@ -36,6 +36,18 @@ TEST_GROUP(MockSupport_c)
 {
 };
 
+TEST(MockSupport_c, OrderObserved)
+{
+    mock_c()->strictOrder();
+
+    mock_c()->expectOneCall("foo1");
+    mock_c()->expectOneCall("foo2");
+    mock_c()->actualCall("foo1");
+    mock_c()->actualCall("foo2");
+
+    mock_c()->checkExpectations();
+}
+
 TEST(MockSupport_c, expectAndActualOneCall)
 {
     mock_c()->expectOneCall("boo");
