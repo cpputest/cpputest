@@ -173,6 +173,7 @@ MockActualCall_c* withActualMemoryBufferParameters_c(const char* name, const uns
 MockActualCall_c* withActualParameterOfType_c(const char* type, const char* name, const void* value);
 MockActualCall_c* withActualOutputParameter_c(const char* name, void* value);
 MockActualCall_c* withActualOutputParameterOfType_c(const char* type, const char* name, void* value);
+int hasReturnValue_c(void);
 MockValue_c actualReturnValue_c();
 
 
@@ -243,6 +244,7 @@ static MockActualCall_c gActualCall = {
         withActualParameterOfType_c,
         withActualOutputParameter_c,
         withActualOutputParameterOfType_c,
+        hasReturnValue_c,
         actualReturnValue_c
 };
 
@@ -552,6 +554,11 @@ MockActualCall_c* withActualOutputParameterOfType_c(const char* type, const char
 {
     actualCall = &actualCall->withOutputParameterOfType(type, name, value);
     return &gActualCall;
+}
+
+int hasReturnValue_c(void)
+{
+    return actualCall->hasReturnValue();
 }
 
 MockValue_c actualReturnValue_c()

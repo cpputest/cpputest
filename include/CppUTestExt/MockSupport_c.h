@@ -82,6 +82,7 @@ struct SMockActualCall_c
     MockActualCall_c* (*withParameterOfType)(const char* type, const char* name, const void* value);
     MockActualCall_c* (*withOutputParameter)(const char* name, void* value);
     MockActualCall_c* (*withOutputParameterOfType)(const char* type, const char* name, void* value);
+    int (*hasReturnValue)(void);
     MockValue_c (*returnValue)(void);
 /** MockActualCall_c* (*onObject)(const void* objectPtr); */ /* Probably makes no sense in C */
 };
@@ -127,7 +128,7 @@ struct SMockSupport_c
 /** MockExpectedCall_c* (*expectNoCall)(const char* name); */  
 /** MockExpectedCall_c* (*expectNCalls)(int number, const char* name); */
     MockActualCall_c* (*actualCall)(const char* name);
-/** bool (*hasReturnValue)(void) */
+/** bool (*hasReturnValue)(void); */
     MockValue_c (*returnValue)(void);
 
     void (*setIntData) (const char* name, int value);

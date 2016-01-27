@@ -48,6 +48,15 @@ TEST(MockSupport_c, OrderObserved)
     mock_c()->checkExpectations();
 }
 
+TEST(MockSupport_c, hasReturnValue)
+{
+    mock_c()->expectOneCall("foo");
+    CHECK(!mock_c()->actualCall("foo")->hasReturnValue());
+
+    mock_c()->expectOneCall("foo2")->andReturnIntValue(1);
+    CHECK(mock_c()->actualCall("foo2")->hasReturnValue());
+}
+
 TEST(MockSupport_c, expectAndActualOneCall)
 {
     mock_c()->expectOneCall("boo");
