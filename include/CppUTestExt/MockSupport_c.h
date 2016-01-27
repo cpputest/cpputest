@@ -84,6 +84,8 @@ struct SMockActualCall_c
     MockActualCall_c* (*withOutputParameterOfType)(const char* type, const char* name, void* value);
     int (*hasReturnValue)(void);
     MockValue_c (*returnValue)(void);
+    int (*intReturnValue)(void);
+    int (*returnIntValueOrDefault)(int defaultValue);
 /** MockActualCall_c* (*onObject)(const void* objectPtr); */ /* Probably makes no sense in C */
 };
 
@@ -130,7 +132,8 @@ struct SMockSupport_c
     MockActualCall_c* (*actualCall)(const char* name);
     int (*hasReturnValue)(void);
     MockValue_c (*returnValue)(void);
-/** int returnIntValueOrDefault(int defaultValue); */
+    int (*intReturnValue)(void);
+    int (*returnIntValueOrDefault)(int defaultValue);
 /** unsigned int unsignedIntReturnValue(void); */
 /** long int longIntReturnValue(void); */
 /** long int returnLongIntValueOrDefault(long int defaultValue); */

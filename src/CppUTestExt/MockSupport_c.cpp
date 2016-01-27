@@ -115,14 +115,14 @@ static MockCFunctionCopierNode* copierList_ = NULL;
 
 extern "C" {
 
-void strictOrder_c(void);
+void strictOrder_c();
 MockExpectedCall_c* expectOneCall_c(const char* name);
 void expectNoCall_c(const char* name);
 MockExpectedCall_c* expectNCalls_c(const int number, const char* name);
 MockActualCall_c* actualCall_c(const char* name);
-void disable_c(void);
-void enable_c(void);
-void ignoreOtherCalls_c(void);
+void disable_c();
+void enable_c();
+void ignoreOtherCalls_c();
 void setIntData_c(const char* name, int value);
 void setDoubleData_c(const char* name, double value);
 void setStringData_c(const char* name, const char* value);
@@ -131,7 +131,7 @@ void setConstPointerData_c(const char* name, const void* value);
 void setFunctionPointerData_c(const char* name, void (*value)());
 void setDataObject_c(const char* name, const char* type, void* value);
 MockValue_c getData_c(const char* name);
-int hasReturnValue_c(void);
+int hasReturnValue_c();
 
 void checkExpectations_c();
 int expectedCallsLeft_c();
@@ -176,8 +176,10 @@ MockActualCall_c* withActualMemoryBufferParameters_c(const char* name, const uns
 MockActualCall_c* withActualParameterOfType_c(const char* type, const char* name, const void* value);
 MockActualCall_c* withActualOutputParameter_c(const char* name, void* value);
 MockActualCall_c* withActualOutputParameterOfType_c(const char* type, const char* name, void* value);
-int hasActualReturnValue_c(void);
+int hasActualReturnValue_c();
 MockValue_c actualReturnValue_c();
+int actualReturnIntValueOrDefault_c(int defaultValue);
+int actualIntReturnValue_c();
 
 
 static void installComparator_c (const char* typeName, MockTypeEqualFunction_c isEqual, MockTypeValueToStringFunction_c valueToString)
@@ -248,7 +250,9 @@ static MockActualCall_c gActualCall = {
         withActualOutputParameter_c,
         withActualOutputParameterOfType_c,
         hasActualReturnValue_c,
-        actualReturnValue_c
+        actualReturnValue_c,
+        actualIntReturnValue_c,
+        actualReturnIntValueOrDefault_c
 };
 
 static MockSupport_c gMockSupport = {
@@ -259,6 +263,8 @@ static MockSupport_c gMockSupport = {
         actualCall_c,
         hasReturnValue_c,
         actualReturnValue_c,
+        actualIntReturnValue_c,
+        actualReturnIntValueOrDefault_c,
         setIntData_c,
         setStringData_c,
         setDoubleData_c,
@@ -581,6 +587,20 @@ int hasActualReturnValue_c(void)
 MockValue_c actualReturnValue_c()
 {
     return getMockValueCFromNamedValue(actualCall->returnValue());
+}
+
+int actualIntReturnValue_c()
+{
+    return getMockValueCFromNamedValue(actualCall->returnValue()).value.intValue;
+}
+
+int actualReturnIntValueOrDefault_c(int defaultValue)
+{
+    if (!hasActualReturnValue_c()) {
+        return defaultValue;
+    }
+    return actualIntReturnValue_c();
+
 }
 
 void disable_c(void)

@@ -199,10 +199,28 @@ TEST(MockSupport_c, returnUnsignedIntValue)
 
 TEST(MockSupport_c, returnIntValue)
 {
-    int expected_value = 10;
+    int expected_value = -10;
     mock_c()->expectOneCall("boo")->andReturnIntValue(expected_value);
     LONGS_EQUAL(expected_value, mock_c()->actualCall("boo")->returnValue().value.intValue);
+    LONGS_EQUAL(expected_value, mock_c()->intReturnValue());
     LONGS_EQUAL(MOCKVALUETYPE_INTEGER, mock_c()->returnValue().type);
+}
+
+TEST(MockSupport_c, whenReturnValueIsGivenReturnIntValueOrDefaultShouldIgnoreTheDefault)
+{
+    int defaultValue = -10;
+    int expectedValue = defaultValue - 1;
+    mock_c()->expectOneCall("foo")->andReturnIntValue(expectedValue);
+    LONGS_EQUAL(expectedValue, mock_c()->actualCall("foo")->returnIntValueOrDefault(defaultValue));
+    LONGS_EQUAL(expectedValue, mock_c()->returnIntValueOrDefault(defaultValue));
+}
+
+TEST(MockSupport_c, whenNoReturnValueIsGivenReturnIntValueOrDefaultShouldlUseTheDefaultValue)
+{
+    int defaultValue = -10;
+    mock_c()->expectOneCall("foo");
+    LONGS_EQUAL(defaultValue, mock_c()->actualCall("foo")->returnIntValueOrDefault(defaultValue));
+    LONGS_EQUAL(defaultValue, mock_c()->returnIntValueOrDefault(defaultValue));
 }
 
 TEST(MockSupport_c, returnLongIntValue)
