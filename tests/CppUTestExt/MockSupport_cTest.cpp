@@ -64,6 +64,11 @@ extern "C"{
     {
         return "valueToString";
     }
+    
+    static void typeCopy(void* dst, const void* src)
+    {
+        *(int*) dst = *(int*) src;
+    }
 
 }
 
@@ -97,7 +102,7 @@ TEST(MockSupport_c, unsignedLongIntParameter)
 TEST(MockSupport_c, outputParameters)
 {
     int param = 1;
-    int retval = 2;
+    const int retval = 2;
     mock_c()->expectOneCall("foo")->withOutputParameterReturning("out", &retval, sizeof(retval));
     mock_c()->actualCall("foo")->withOutputParameter("out", &param);
     mock_c()->checkExpectations();
@@ -108,12 +113,25 @@ TEST(MockSupport_c, outputParameters)
 TEST(MockSupport_c, outputParameters_differentType)
 {
     long param = 1;
-    long retval = 2;
+    const long retval = 2;
     mock_c()->expectOneCall("foo")->withOutputParameterReturning("out", &retval, sizeof(retval));
     mock_c()->actualCall("foo")->withOutputParameter("out", &param);
     mock_c()->checkExpectations();
     LONGS_EQUAL(2, param);
     LONGS_EQUAL(2, retval);
+}
+
+TEST(MockSupport_c, outputParametersOfType)
+{
+    long param = 1;
+    const long retval = 2;
+    mock_c()->installCopier("typeName", typeCopy);
+    mock_c()->expectOneCall("foo")->withOutputParameterOfTypeReturning("typeName", "out", &retval);
+    mock_c()->actualCall("foo")->withOutputParameterOfType("typeName", "out", &param);
+    LONGS_EQUAL(2, param);
+    LONGS_EQUAL(2, retval);
+    mock_c()->checkExpectations();
+    mock_c()->removeAllComparatorsAndCopiers();
 }
 
 TEST(MockSupport_c, returnUnsignedIntValue)
@@ -316,6 +334,26 @@ TEST(MockSupport_c, failureWithParameterOfTypeCoversValueToString)
     fixture.setTestFunction(failingCallToMockCWithParameterOfType_);
     fixture.runAllTests();
     fixture.assertPrintContains("typeName name: <valueToString>");
+    mock_c()->removeAllComparatorsAndCopiers();
+}
+
+static void callToMockCWithOutputParameter_()
+{
+    int value1 = 7;
+    const int value2 = 9;
+    mock_c()->expectOneCall("bar")->withOutputParameterReturning("bla", &value2, sizeof(int));
+    mock_c()->actualCall("bar")->withOutputParameter("bla", &value1);
+    LONGS_EQUAL(value1, value2);
+}
+
+TEST(MockSupport_c, successWithOutputParameter)
+{
+    TestTestingFixture fixture;
+    mock_c()->installCopier("intType", typeCopy);
+    fixture.setTestFunction(callToMockCWithOutputParameter_);
+    fixture.runAllTests();
+    LONGS_EQUAL(3, fixture.getCheckCount());
+    LONGS_EQUAL(0, fixture.getFailureCount());
     mock_c()->removeAllComparatorsAndCopiers();
 }
 
