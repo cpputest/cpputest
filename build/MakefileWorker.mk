@@ -522,14 +522,14 @@ realclean: clean
 
 gcov: test
 ifeq ($(CPPUTEST_USE_VPATH), Y)
-	$(SILENCE)gcov --object-directory $(CPPUTEST_OBJS_DIR) $(SRC) >> $(GCOV_OUTPUT) 2>> $(GCOV_ERROR)
+	$(SILENCE)gcov $(GCOV_ARGS) --object-directory $(CPPUTEST_OBJS_DIR) $(SRC) >> $(GCOV_OUTPUT) 2>> $(GCOV_ERROR)
 else
 	$(SILENCE)for d in $(SRC_DIRS) ; do \
 		FILES=`ls $$d/*.c $$d/*.cc $$d/*.cpp 2> /dev/null` ; \
-		gcov --object-directory $(CPPUTEST_OBJS_DIR)/$$d $$FILES >> $(GCOV_OUTPUT) 2>>$(GCOV_ERROR) ; \
+		gcov $(GCOV_ARGS) --object-directory $(CPPUTEST_OBJS_DIR)/$$d $$FILES >> $(GCOV_OUTPUT) 2>>$(GCOV_ERROR) ; \
 	done
 	$(SILENCE)for f in $(SRC_FILES) ; do \
-		gcov --object-directory $(CPPUTEST_OBJS_DIR)/$$f $$f >> $(GCOV_OUTPUT) 2>>$(GCOV_ERROR) ; \
+		gcov $(GCOV_ARGS) --object-directory $(CPPUTEST_OBJS_DIR)/$$f $$f >> $(GCOV_OUTPUT) 2>>$(GCOV_ERROR) ; \
 	done
 endif
 	$(CPPUTEST_HOME)/scripts/filterGcov.sh $(GCOV_OUTPUT) $(GCOV_ERROR) $(GCOV_REPORT) $(TEST_OUTPUT)
