@@ -119,6 +119,7 @@ MockExpectedCall_c* expectOneCall_c(const char* name);
 MockActualCall_c* actualCall_c(const char* name);
 void disable_c(void);
 void enable_c(void);
+void ignoreOtherCalls_c(void);
 void setIntData_c(const char* name, int value);
 void setDoubleData_c(const char* name, double value);
 void setStringData_c(const char* name, const char* value);
@@ -258,6 +259,7 @@ static MockSupport_c gMockSupport = {
         getData_c,
         disable_c,
         enable_c,
+        ignoreOtherCalls_c,
         checkExpectations_c,
         expectedCallsLeft_c,
         clear_c,
@@ -558,6 +560,11 @@ void disable_c(void)
 void enable_c(void)
 {
     currentMockSupport->enable();
+}
+
+void ignoreOtherCalls_c(void)
+{
+    currentMockSupport->ignoreOtherCalls();
 }
 
 void setIntData_c(const char* name, int value)

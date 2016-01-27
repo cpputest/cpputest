@@ -380,3 +380,13 @@ TEST(MockSupport_c, expectOneMemBufferParameterAndValueFailsDueToContents)
     fixture.assertPrintContains("Unexpected parameter value to parameter \"name\" "
                                 "to function \"bar\": <Size = 3 | HexContents = 12 05 FF>");
 }
+
+TEST(MockSupport_c, ignoreOtherCalls)
+{
+    mock_c()->expectOneCall("foo");
+    mock_c()->ignoreOtherCalls();
+    mock_c()->actualCall("foo");
+    mock_c()->actualCall("bar");
+    mock_c()->checkExpectations();
+}
+
