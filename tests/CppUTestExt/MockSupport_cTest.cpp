@@ -293,18 +293,36 @@ TEST(MockSupport_c, whenNoReturnValueIsGivenReturnUnsignedLongIntValueOrDefaultS
     LONGS_EQUAL(defaultValue, mock_c()->returnUnsignedLongIntValueOrDefault(defaultValue));
 }
 
+TEST(MockSupport_c, returnStringValue)
+{
+    mock_c()->expectOneCall("boo")->andReturnStringValue("hello world");
+    STRCMP_EQUAL("hello world", mock_c()->actualCall("boo")->stringReturnValue());
+    STRCMP_EQUAL("hello world", mock_c()->stringReturnValue());
+    LONGS_EQUAL(MOCKVALUETYPE_STRING, mock_c()->returnValue().type);
+}
+
+TEST(MockSupport_c, whenReturnValueIsGivenReturnStringValueOrDefaultShouldIgnoreTheDefault)
+{
+    const char defaultValue[] = "bar";
+    const char expectedValue[] = "bla";
+    mock_c()->expectOneCall("foo")->andReturnStringValue(expectedValue);
+    STRCMP_EQUAL(expectedValue, mock_c()->actualCall("foo")->returnStringValueOrDefault(defaultValue));
+    STRCMP_EQUAL(expectedValue, mock_c()->returnStringValueOrDefault(defaultValue));
+}
+
+TEST(MockSupport_c, whenNoReturnValueIsGivenReturnStringValueOrDefaultShouldlUseTheDefaultValue)
+{
+    const char defaultValue[] = "bar";
+    mock_c()->expectOneCall("foo");
+    STRCMP_EQUAL(defaultValue, mock_c()->actualCall("foo")->returnStringValueOrDefault(defaultValue));
+    STRCMP_EQUAL(defaultValue, mock_c()->returnStringValueOrDefault(defaultValue));
+}
+
 TEST(MockSupport_c, returnDoubleValue)
 {
     mock_c()->expectOneCall("boo")->andReturnDoubleValue(1.0);
     DOUBLES_EQUAL(1.0, mock_c()->actualCall("boo")->returnValue().value.doubleValue, 0.005);
     LONGS_EQUAL(MOCKVALUETYPE_DOUBLE, mock_c()->returnValue().type);
-}
-
-TEST(MockSupport_c, returnStringValue)
-{
-    mock_c()->expectOneCall("boo")->andReturnStringValue("hello world");
-    STRCMP_EQUAL("hello world", mock_c()->actualCall("boo")->returnValue().value.stringValue);
-    LONGS_EQUAL(MOCKVALUETYPE_STRING, mock_c()->returnValue().type);
 }
 
 TEST(MockSupport_c, returnPointerValue)
