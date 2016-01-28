@@ -346,8 +346,26 @@ TEST(MockSupport_c, whenNoReturnValueIsGivenReturnDoubleValueOrDefaultShouldlUse
 TEST(MockSupport_c, returnPointerValue)
 {
     mock_c()->expectOneCall("boo")->andReturnPointerValue((void*) 10);
-    POINTERS_EQUAL((void*) 10, mock_c()->actualCall("boo")->returnValue().value.pointerValue);
+    POINTERS_EQUAL((void*) 10, mock_c()->actualCall("boo")->pointerReturnValue());
+    POINTERS_EQUAL((void*) 10, mock_c()->pointerReturnValue());
     LONGS_EQUAL(MOCKVALUETYPE_POINTER, mock_c()->returnValue().type);
+}
+
+TEST(MockSupport_c, whenReturnValueIsGivenReturnPointerValueOrDefaultShouldIgnoreTheDefault)
+{
+    void* defaultValue = (void*) 10;
+    void* expectedValue = (void*) 27;
+    mock_c()->expectOneCall("foo")->andReturnPointerValue(expectedValue);
+    POINTERS_EQUAL(expectedValue, mock_c()->actualCall("foo")->returnPointerValueOrDefault(defaultValue));
+    POINTERS_EQUAL(expectedValue, mock_c()->returnPointerValueOrDefault(defaultValue));
+}
+
+TEST(MockSupport_c, whenNoReturnValueIsGivenReturnPointerValueOrDefaultShouldlUseTheDefaultValue)
+{
+    void* defaultValue = (void*) 10;
+    mock_c()->expectOneCall("foo");
+    POINTERS_EQUAL(defaultValue, mock_c()->actualCall("foo")->returnPointerValueOrDefault(defaultValue));
+    POINTERS_EQUAL(defaultValue, mock_c()->returnPointerValueOrDefault(defaultValue));
 }
 
 TEST(MockSupport_c, returnConstPointerValue)

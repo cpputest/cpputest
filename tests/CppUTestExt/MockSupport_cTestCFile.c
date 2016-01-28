@@ -145,6 +145,8 @@ void all_mock_support_c_calls(void)
     mock_c()->returnStringValueOrDefault("");
     mock_c()->doubleReturnValue();
     mock_c()->returnDoubleValueOrDefault(0.01F);
+    mock_c()->pointerReturnValue();
+    mock_c()->returnPointerValueOrDefault(0);
 
     mock_c()->disable();
     mock_c()->actualCall("disabled");
