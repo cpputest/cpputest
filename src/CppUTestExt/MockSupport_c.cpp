@@ -124,6 +124,7 @@ void disable_c();
 void enable_c();
 void ignoreOtherCalls_c();
 void setIntData_c(const char* name, int value);
+void setUnsignedIntData_c(const char* name, unsigned int value);
 void setDoubleData_c(const char* name, double value);
 void setStringData_c(const char* name, const char* value);
 void setPointerData_c(const char* name, void* value);
@@ -305,6 +306,7 @@ static MockSupport_c gMockSupport = {
         constPointerReturnValue_c,
         returnConstPointerValueOrDefault_c,
         setIntData_c,
+        setUnsignedIntData_c,
         setStringData_c,
         setDoubleData_c,
         setPointerData_c,
@@ -321,7 +323,7 @@ static MockSupport_c gMockSupport = {
         crashOnFailure_c,
         installComparator_c,
         installCopier_c,
-        removeAllComparatorsAndCopiers_c,
+        removeAllComparatorsAndCopiers_c
 };
 
 MockExpectedCall_c* withIntParameters_c(const char* name, int value)
@@ -743,6 +745,11 @@ void ignoreOtherCalls_c(void)
 }
 
 void setIntData_c(const char* name, int value)
+{
+    currentMockSupport->setData(name, value);
+}
+
+void setUnsignedIntData_c(const char* name, unsigned int value)
 {
     currentMockSupport->setData(name, value);
 }

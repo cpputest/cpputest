@@ -155,6 +155,16 @@ void all_mock_support_c_calls(void)
     mock_c()->enable();
     mock_c()->checkExpectations();
 
+    mock_c()->setIntData("bla1", -2);
+    mock_c()->setUnsignedIntData("bla2", 2);
+    mock_c()->setDoubleData("bla3", 0.035);
+    mock_c()->setStringData("bla4", "abc");
+    mock_c()->setPointerData("bla", (void*) 2);
+    mock_c()->setConstPointerData("bla", (const void*) 2);
+    mock_c()->setFunctionPointerData("bla", (void (*)()) 2);
+    mock_c()->setDataObject("bla", "type", (void*) 2);
+    mock_c()->getData("bla");
+
     mock_scope_c("scope")->expectOneCall("boo");
     mock_scope_c("other")->expectedCallsLeft();
     mock_scope_c("scope")->expectedCallsLeft();
