@@ -324,6 +324,13 @@ TEST(MockSupport_c, MockSupportSetDataObject)
     POINTERS_EQUAL((void*) 1, mock_c()->getData("name").value.objectValue);
 }
 
+TEST(MockSupport_c, TestMockGetMemoryBufferDataObjectCHereBecauseItIsNotCurrentlyUsedByCppUTest)
+{
+    mock_c()->setDataObject("name", "const unsigned char*", (void *) 0xDEAD);
+    POINTERS_EQUAL(0xDEAD, mock_c()->getData("name").value.memoryBufferValue);
+    LONGS_EQUAL(MOCKVALUETYPE_MEMORYBUFFER, mock_c()->getData("name").type);
+}
+
 TEST(MockSupport_c, WorksInCFile)
 {
     all_mock_support_c_calls();
