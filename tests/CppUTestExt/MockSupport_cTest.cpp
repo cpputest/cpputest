@@ -189,14 +189,6 @@ TEST(MockSupport_c, ignoreOtherParameters)
     mock_c()->checkExpectations();
 }
 
-TEST(MockSupport_c, returnUnsignedIntValue)
-{
-    unsigned int expected_value = 7;
-    mock_c()->expectOneCall("boo")->andReturnUnsignedIntValue(expected_value);
-    LONGS_EQUAL(expected_value, mock_c()->actualCall("boo")->returnValue().value.unsignedIntValue);
-    LONGS_EQUAL(MOCKVALUETYPE_UNSIGNED_INTEGER, mock_c()->returnValue().type);
-}
-
 TEST(MockSupport_c, returnIntValue)
 {
     int expected_value = -10;
@@ -221,6 +213,32 @@ TEST(MockSupport_c, whenNoReturnValueIsGivenReturnIntValueOrDefaultShouldlUseThe
     mock_c()->expectOneCall("foo");
     LONGS_EQUAL(defaultValue, mock_c()->actualCall("foo")->returnIntValueOrDefault(defaultValue));
     LONGS_EQUAL(defaultValue, mock_c()->returnIntValueOrDefault(defaultValue));
+}
+
+TEST(MockSupport_c, returnUnsignedIntValue)
+{
+    unsigned int expected_value = 7;
+    mock_c()->expectOneCall("boo")->andReturnUnsignedIntValue(expected_value);
+    LONGS_EQUAL(expected_value, mock_c()->actualCall("boo")->returnValue().value.unsignedIntValue);
+    LONGS_EQUAL(expected_value, mock_c()->unsignedIntReturnValue());
+    LONGS_EQUAL(MOCKVALUETYPE_UNSIGNED_INTEGER, mock_c()->returnValue().type);
+}
+
+TEST(MockSupport_c, whenReturnValueIsGivenReturnUnsignedIntValueOrDefaultShouldIgnoreTheDefault)
+{
+    unsigned int defaultValue = 10;
+    unsigned int expectedValue = defaultValue + 1;
+    mock_c()->expectOneCall("foo")->andReturnUnsignedIntValue(expectedValue);
+    LONGS_EQUAL(expectedValue, mock_c()->actualCall("foo")->returnUnsignedIntValueOrDefault(defaultValue));
+    LONGS_EQUAL(expectedValue, mock_c()->returnUnsignedIntValueOrDefault(defaultValue));
+}
+
+TEST(MockSupport_c, whenNoReturnValueIsGivenReturnUnsignedIntValueOrDefaultShouldlUseTheDefaultValue)
+{
+    unsigned int defaultValue = 10;
+    mock_c()->expectOneCall("foo");
+    LONGS_EQUAL(defaultValue, mock_c()->actualCall("foo")->returnUnsignedIntValueOrDefault(defaultValue));
+    LONGS_EQUAL(defaultValue, mock_c()->returnUnsignedIntValueOrDefault(defaultValue));
 }
 
 TEST(MockSupport_c, returnLongIntValue)

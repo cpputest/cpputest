@@ -178,8 +178,10 @@ MockActualCall_c* withActualOutputParameter_c(const char* name, void* value);
 MockActualCall_c* withActualOutputParameterOfType_c(const char* type, const char* name, void* value);
 int hasActualReturnValue_c();
 MockValue_c actualReturnValue_c();
-int actualReturnIntValueOrDefault_c(int defaultValue);
 int actualIntReturnValue_c();
+int actualReturnIntValueOrDefault_c(int defaultValue);
+unsigned int actualUnsignedIntReturnValue_c();
+unsigned int actualReturnUnsignedIntValueOrDefault_c(unsigned int defaultValue);
 
 
 static void installComparator_c (const char* typeName, MockTypeEqualFunction_c isEqual, MockTypeValueToStringFunction_c valueToString)
@@ -252,7 +254,9 @@ static MockActualCall_c gActualCall = {
         hasActualReturnValue_c,
         actualReturnValue_c,
         actualIntReturnValue_c,
-        actualReturnIntValueOrDefault_c
+        actualReturnIntValueOrDefault_c,
+        actualUnsignedIntReturnValue_c,
+        actualReturnUnsignedIntValueOrDefault_c
 };
 
 static MockSupport_c gMockSupport = {
@@ -265,6 +269,8 @@ static MockSupport_c gMockSupport = {
         actualReturnValue_c,
         actualIntReturnValue_c,
         actualReturnIntValueOrDefault_c,
+        actualUnsignedIntReturnValue_c,
+        actualReturnUnsignedIntValueOrDefault_c,
         setIntData_c,
         setStringData_c,
         setDoubleData_c,
@@ -600,7 +606,19 @@ int actualReturnIntValueOrDefault_c(int defaultValue)
         return defaultValue;
     }
     return actualIntReturnValue_c();
+}
 
+unsigned int actualUnsignedIntReturnValue_c()
+{
+    return getMockValueCFromNamedValue(actualCall->returnValue()).value.unsignedIntValue;
+}
+
+unsigned int actualReturnUnsignedIntValueOrDefault_c(unsigned int defaultValue)
+{
+    if (!hasActualReturnValue_c()) {
+        return defaultValue;
+    }
+    return actualUnsignedIntReturnValue_c();
 }
 
 void disable_c(void)
