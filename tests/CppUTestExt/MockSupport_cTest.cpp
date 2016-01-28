@@ -321,8 +321,26 @@ TEST(MockSupport_c, whenNoReturnValueIsGivenReturnStringValueOrDefaultShouldlUse
 TEST(MockSupport_c, returnDoubleValue)
 {
     mock_c()->expectOneCall("boo")->andReturnDoubleValue(1.0);
-    DOUBLES_EQUAL(1.0, mock_c()->actualCall("boo")->returnValue().value.doubleValue, 0.005);
+    DOUBLES_EQUAL(1.0, mock_c()->actualCall("boo")->doubleReturnValue(), 0.005);
+    DOUBLES_EQUAL(1.0, mock_c()->doubleReturnValue(), 0.005);
     LONGS_EQUAL(MOCKVALUETYPE_DOUBLE, mock_c()->returnValue().type);
+}
+
+TEST(MockSupport_c, whenReturnValueIsGivenReturnDoubleValueOrDefaultShouldIgnoreTheDefault)
+{
+    double defaultValue = 2.2;
+    double expectedValue = defaultValue + 0.1;
+    mock_c()->expectOneCall("foo")->andReturnDoubleValue(expectedValue);
+    DOUBLES_EQUAL(expectedValue, mock_c()->actualCall("foo")->returnDoubleValueOrDefault(defaultValue), 0.005);
+    DOUBLES_EQUAL(expectedValue, mock_c()->returnDoubleValueOrDefault(defaultValue), 0.005);
+}
+
+TEST(MockSupport_c, whenNoReturnValueIsGivenReturnDoubleValueOrDefaultShouldlUseTheDefaultValue)
+{
+    double defaultValue = 2.2;
+    mock_c()->expectOneCall("foo");
+    DOUBLES_EQUAL(defaultValue, mock_c()->actualCall("foo")->returnDoubleValueOrDefault(defaultValue), 0.005);
+    DOUBLES_EQUAL(defaultValue, mock_c()->returnDoubleValueOrDefault(defaultValue), 0.005);
 }
 
 TEST(MockSupport_c, returnPointerValue)

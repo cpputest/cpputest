@@ -143,6 +143,8 @@ void all_mock_support_c_calls(void)
     mock_c()->returnUnsignedLongIntValueOrDefault(1L);
     mock_c()->stringReturnValue();
     mock_c()->returnStringValueOrDefault("");
+    mock_c()->doubleReturnValue();
+    mock_c()->returnDoubleValueOrDefault(0.01F);
 
     mock_c()->disable();
     mock_c()->actualCall("disabled");
