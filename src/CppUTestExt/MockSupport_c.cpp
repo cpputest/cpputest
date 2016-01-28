@@ -161,7 +161,6 @@ MockExpectedCall_c* andReturnStringValue_c(const char* value);
 MockExpectedCall_c* andReturnPointerValue_c(void* value);
 MockExpectedCall_c* andReturnConstPointerValue_c(const void* value);
 MockExpectedCall_c* andReturnFunctionPointerValue_c(void (*value)());
-MockValue_c expectedReturnValue_c();
 
 MockActualCall_c* withActualIntParameters_c(const char* name, int value);
 MockActualCall_c* withActualUnsignedIntParameters_c(const char* name, unsigned int value);
@@ -177,19 +176,19 @@ MockActualCall_c* withActualParameterOfType_c(const char* type, const char* name
 MockActualCall_c* withActualOutputParameter_c(const char* name, void* value);
 MockActualCall_c* withActualOutputParameterOfType_c(const char* type, const char* name, void* value);
 int hasActualReturnValue_c();
-MockValue_c actualReturnValue_c();
-int actualIntReturnValue_c();
-int actualReturnIntValueOrDefault_c(int defaultValue);
-unsigned int actualUnsignedIntReturnValue_c();
-unsigned int actualReturnUnsignedIntValueOrDefault_c(unsigned int defaultValue);
-long int actualLongIntReturnValue_c();
-long int actualReturnLongIntValueOrDefault_c(long int defaultValue);
-unsigned long int actualUnsignedLongIntReturnValue_c();
-unsigned long int actualReturnUnsignedLongIntValueOrDefault_c(unsigned long int defaultValue);
-const char* actualStringReturnValue_c(void);
-const char* actualReturnStringValueOrDefault_c(const char * defaultValue);
-double actualDoubleReturnValue_c(void);
-double actualReturnDoubleValueOrDefault_c(double defaultValue);
+MockValue_c returnValue_c();
+int intReturnValue_c();
+int returnIntValueOrDefault_c(int defaultValue);
+unsigned int unsignedIntReturnValue_c();
+unsigned int returnUnsignedIntValueOrDefault_c(unsigned int defaultValue);
+long int longIntReturnValue_c();
+long int returnLongIntValueOrDefault_c(long int defaultValue);
+unsigned long int unsignedLongIntReturnValue_c();
+unsigned long int returnUnsignedLongIntValueOrDefault_c(unsigned long int defaultValue);
+const char* stringReturnValue_c(void);
+const char* returnStringValueOrDefault_c(const char * defaultValue);
+double doubleReturnValue_c(void);
+double returnDoubleValueOrDefault_c(double defaultValue);
 
 static void installComparator_c (const char* typeName, MockTypeEqualFunction_c isEqual, MockTypeValueToStringFunction_c valueToString)
 {
@@ -259,19 +258,19 @@ static MockActualCall_c gActualCall = {
         withActualOutputParameter_c,
         withActualOutputParameterOfType_c,
         hasActualReturnValue_c,
-        actualReturnValue_c,
-        actualIntReturnValue_c,
-        actualReturnIntValueOrDefault_c,
-        actualUnsignedIntReturnValue_c,
-        actualReturnUnsignedIntValueOrDefault_c,
-        actualLongIntReturnValue_c,
-        actualReturnLongIntValueOrDefault_c,
-        actualUnsignedLongIntReturnValue_c,
-        actualReturnUnsignedLongIntValueOrDefault_c,
-        actualStringReturnValue_c,
-        actualReturnStringValueOrDefault_c,
-        actualDoubleReturnValue_c,
-        actualReturnDoubleValueOrDefault_c,
+        returnValue_c,
+        intReturnValue_c,
+        returnIntValueOrDefault_c,
+        unsignedIntReturnValue_c,
+        returnUnsignedIntValueOrDefault_c,
+        longIntReturnValue_c,
+        returnLongIntValueOrDefault_c,
+        unsignedLongIntReturnValue_c,
+        returnUnsignedLongIntValueOrDefault_c,
+        stringReturnValue_c,
+        returnStringValueOrDefault_c,
+        doubleReturnValue_c,
+        returnDoubleValueOrDefault_c,
 };
 
 static MockSupport_c gMockSupport = {
@@ -281,19 +280,19 @@ static MockSupport_c gMockSupport = {
         expectNCalls_c,
         actualCall_c,
         hasReturnValue_c,
-        actualReturnValue_c,
-        actualIntReturnValue_c,
-        actualReturnIntValueOrDefault_c,
-        actualUnsignedIntReturnValue_c,
-        actualReturnUnsignedIntValueOrDefault_c,
-        actualLongIntReturnValue_c,
-        actualReturnLongIntValueOrDefault_c,
-        actualUnsignedLongIntReturnValue_c,
-        actualReturnUnsignedLongIntValueOrDefault_c,
-        actualStringReturnValue_c,
-        actualReturnStringValueOrDefault_c,
-        actualDoubleReturnValue_c,
-        actualReturnDoubleValueOrDefault_c,
+        returnValue_c,
+        intReturnValue_c,
+        returnIntValueOrDefault_c,
+        unsignedIntReturnValue_c,
+        returnUnsignedIntValueOrDefault_c,
+        longIntReturnValue_c,
+        returnLongIntValueOrDefault_c,
+        unsignedLongIntReturnValue_c,
+        returnUnsignedLongIntValueOrDefault_c,
+        stringReturnValue_c,
+        returnStringValueOrDefault_c,
+        doubleReturnValue_c,
+        returnDoubleValueOrDefault_c,
         setIntData_c,
         setStringData_c,
         setDoubleData_c,
@@ -613,87 +612,87 @@ int hasActualReturnValue_c(void)
     return actualCall->hasReturnValue();
 }
 
-MockValue_c actualReturnValue_c()
+MockValue_c returnValue_c()
 {
     return getMockValueCFromNamedValue(actualCall->returnValue());
 }
 
-int actualIntReturnValue_c()
+int intReturnValue_c()
 {
     return getMockValueCFromNamedValue(actualCall->returnValue()).value.intValue;
 }
 
-int actualReturnIntValueOrDefault_c(int defaultValue)
+int returnIntValueOrDefault_c(int defaultValue)
 {
     if (!hasActualReturnValue_c()) {
         return defaultValue;
     }
-    return actualIntReturnValue_c();
+    return intReturnValue_c();
 }
 
-unsigned int actualUnsignedIntReturnValue_c()
+unsigned int unsignedIntReturnValue_c()
 {
     return getMockValueCFromNamedValue(actualCall->returnValue()).value.unsignedIntValue;
 }
 
-unsigned int actualReturnUnsignedIntValueOrDefault_c(unsigned int defaultValue)
+unsigned int returnUnsignedIntValueOrDefault_c(unsigned int defaultValue)
 {
     if (!hasActualReturnValue_c()) {
         return defaultValue;
     }
-    return actualUnsignedIntReturnValue_c();
+    return unsignedIntReturnValue_c();
 }
 
-long int actualLongIntReturnValue_c()
+long int longIntReturnValue_c()
 {
     return getMockValueCFromNamedValue(actualCall->returnValue()).value.longIntValue;
 }
 
-long int actualReturnLongIntValueOrDefault_c(long int defaultValue)
+long int returnLongIntValueOrDefault_c(long int defaultValue)
 {
     if (!hasActualReturnValue_c()) {
         return defaultValue;
     }
-    return actualLongIntReturnValue_c();
+    return longIntReturnValue_c();
 }
 
-unsigned long int actualUnsignedLongIntReturnValue_c()
+unsigned long int unsignedLongIntReturnValue_c()
 {
     return getMockValueCFromNamedValue(actualCall->returnValue()).value.unsignedLongIntValue;
 }
 
-unsigned long int actualReturnUnsignedLongIntValueOrDefault_c(unsigned long int defaultValue)
+unsigned long int returnUnsignedLongIntValueOrDefault_c(unsigned long int defaultValue)
 {
     if (!hasActualReturnValue_c()) {
         return defaultValue;
     }
-    return actualUnsignedLongIntReturnValue_c();
+    return unsignedLongIntReturnValue_c();
 }
 
-const char* actualStringReturnValue_c(void)
+const char* stringReturnValue_c(void)
 {
     return getMockValueCFromNamedValue(actualCall->returnValue()).value.stringValue;
 }
 
-const char* actualReturnStringValueOrDefault_c(const char * defaultValue)
+const char* returnStringValueOrDefault_c(const char * defaultValue)
 {
     if (!hasActualReturnValue_c()) {
         return defaultValue;
     }
-    return actualStringReturnValue_c();
+    return stringReturnValue_c();
 }
 
-double actualDoubleReturnValue_c()
+double doubleReturnValue_c()
 {
     return getMockValueCFromNamedValue(actualCall->returnValue()).value.doubleValue;
 }
 
-double actualReturnDoubleValueOrDefault_c(double defaultValue)
+double returnDoubleValueOrDefault_c(double defaultValue)
 {
     if (!hasActualReturnValue_c()) {
         return defaultValue;
     }
-    return actualDoubleReturnValue_c();
+    return doubleReturnValue_c();
 }
 
 void disable_c(void)
