@@ -175,7 +175,6 @@ MockActualCall_c* withActualMemoryBufferParameters_c(const char* name, const uns
 MockActualCall_c* withActualParameterOfType_c(const char* type, const char* name, const void* value);
 MockActualCall_c* withActualOutputParameter_c(const char* name, void* value);
 MockActualCall_c* withActualOutputParameterOfType_c(const char* type, const char* name, void* value);
-int hasActualReturnValue_c();
 MockValue_c returnValue_c();
 int intReturnValue_c();
 int returnIntValueOrDefault_c(int defaultValue);
@@ -257,7 +256,7 @@ static MockActualCall_c gActualCall = {
         withActualParameterOfType_c,
         withActualOutputParameter_c,
         withActualOutputParameterOfType_c,
-        hasActualReturnValue_c,
+        hasReturnValue_c,
         returnValue_c,
         intReturnValue_c,
         returnIntValueOrDefault_c,
@@ -607,11 +606,6 @@ MockActualCall_c* withActualOutputParameterOfType_c(const char* type, const char
     return &gActualCall;
 }
 
-int hasActualReturnValue_c(void)
-{
-    return actualCall->hasReturnValue();
-}
-
 MockValue_c returnValue_c()
 {
     return getMockValueCFromNamedValue(actualCall->returnValue());
@@ -624,7 +618,7 @@ int intReturnValue_c()
 
 int returnIntValueOrDefault_c(int defaultValue)
 {
-    if (!hasActualReturnValue_c()) {
+    if (!hasReturnValue_c()) {
         return defaultValue;
     }
     return intReturnValue_c();
@@ -637,7 +631,7 @@ unsigned int unsignedIntReturnValue_c()
 
 unsigned int returnUnsignedIntValueOrDefault_c(unsigned int defaultValue)
 {
-    if (!hasActualReturnValue_c()) {
+    if (!hasReturnValue_c()) {
         return defaultValue;
     }
     return unsignedIntReturnValue_c();
@@ -650,7 +644,7 @@ long int longIntReturnValue_c()
 
 long int returnLongIntValueOrDefault_c(long int defaultValue)
 {
-    if (!hasActualReturnValue_c()) {
+    if (!hasReturnValue_c()) {
         return defaultValue;
     }
     return longIntReturnValue_c();
@@ -663,7 +657,7 @@ unsigned long int unsignedLongIntReturnValue_c()
 
 unsigned long int returnUnsignedLongIntValueOrDefault_c(unsigned long int defaultValue)
 {
-    if (!hasActualReturnValue_c()) {
+    if (!hasReturnValue_c()) {
         return defaultValue;
     }
     return unsignedLongIntReturnValue_c();
@@ -676,7 +670,7 @@ const char* stringReturnValue_c(void)
 
 const char* returnStringValueOrDefault_c(const char * defaultValue)
 {
-    if (!hasActualReturnValue_c()) {
+    if (!hasReturnValue_c()) {
         return defaultValue;
     }
     return stringReturnValue_c();
@@ -689,7 +683,7 @@ double doubleReturnValue_c()
 
 double returnDoubleValueOrDefault_c(double defaultValue)
 {
-    if (!hasActualReturnValue_c()) {
+    if (!hasReturnValue_c()) {
         return defaultValue;
     }
     return doubleReturnValue_c();
