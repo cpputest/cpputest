@@ -193,7 +193,7 @@ TEST(MockSupport_c, returnIntValue)
 {
     int expected_value = -10;
     mock_c()->expectOneCall("boo")->andReturnIntValue(expected_value);
-    LONGS_EQUAL(expected_value, mock_c()->actualCall("boo")->returnValue().value.intValue);
+    LONGS_EQUAL(expected_value, mock_c()->actualCall("boo")->intReturnValue());
     LONGS_EQUAL(expected_value, mock_c()->intReturnValue());
     LONGS_EQUAL(MOCKVALUETYPE_INTEGER, mock_c()->returnValue().type);
 }
@@ -219,7 +219,7 @@ TEST(MockSupport_c, returnUnsignedIntValue)
 {
     unsigned int expected_value = 7;
     mock_c()->expectOneCall("boo")->andReturnUnsignedIntValue(expected_value);
-    LONGS_EQUAL(expected_value, mock_c()->actualCall("boo")->returnValue().value.unsignedIntValue);
+    LONGS_EQUAL(expected_value, mock_c()->actualCall("boo")->unsignedIntReturnValue());
     LONGS_EQUAL(expected_value, mock_c()->unsignedIntReturnValue());
     LONGS_EQUAL(MOCKVALUETYPE_UNSIGNED_INTEGER, mock_c()->returnValue().type);
 }
@@ -245,8 +245,26 @@ TEST(MockSupport_c, returnLongIntValue)
 {
     long int expected_value = 10;
     mock_c()->expectOneCall("boo")->andReturnLongIntValue(expected_value);
-    LONGS_EQUAL(expected_value, mock_c()->actualCall("boo")->returnValue().value.longIntValue);
+    LONGS_EQUAL(expected_value, mock_c()->actualCall("boo")->longIntReturnValue());
+    LONGS_EQUAL(expected_value, mock_c()->longIntReturnValue());
     LONGS_EQUAL(MOCKVALUETYPE_LONG_INTEGER, mock_c()->returnValue().type);
+}
+
+TEST(MockSupport_c, whenReturnValueIsGivenReturnLongIntValueOrDefaultShouldIgnoreTheDefault)
+{
+    long int defaultValue = 10L;
+    long int expectedValue = defaultValue + 1L;
+    mock_c()->expectOneCall("foo")->andReturnLongIntValue(expectedValue);
+    LONGS_EQUAL(expectedValue, mock_c()->actualCall("foo")->returnLongIntValueOrDefault(defaultValue));
+    LONGS_EQUAL(expectedValue, mock_c()->returnLongIntValueOrDefault(defaultValue));
+}
+
+TEST(MockSupport_c, whenNoReturnValueIsGivenReturnLongIntValueOrDefaultShouldlUseTheDefaultValue)
+{
+    long int defaultValue = 10L;
+    mock_c()->expectOneCall("foo");
+    LONGS_EQUAL(defaultValue, mock_c()->actualCall("foo")->returnLongIntValueOrDefault(defaultValue));
+    LONGS_EQUAL(defaultValue, mock_c()->returnLongIntValueOrDefault(defaultValue));
 }
 
 TEST(MockSupport_c, returnUnsignedLongIntValue)
