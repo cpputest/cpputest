@@ -98,6 +98,8 @@ struct SMockActualCall_c
     double (*returnDoubleValueOrDefault)(double defaultValue);
     void* (*pointerReturnValue)(void);
     void* (*returnPointerValueOrDefault)(void * defaultValue);
+    const void* (*constPointerReturnValue)(void);
+    const void* (*returnConstPointerValueOrDefault)(const void * defaultValue);
 /** MockActualCall_c* (*onObject)(const void* objectPtr); */ /* Probably makes no sense in C */
 };
 
@@ -158,8 +160,8 @@ struct SMockSupport_c
     double (*returnDoubleValueOrDefault)(double defaultValue);
     void* (*pointerReturnValue)(void);
     void* (*returnPointerValueOrDefault)(void * defaultValue);
-/** const void* returnConstPointerValueOrDefault(const void * defaultValue); */
-/** const void* constPointerReturnValue(void); */
+    const void* (*constPointerReturnValue)(void);
+    const void* (*returnConstPointerValueOrDefault)(const void * defaultValue);
 /** void (*returnFunctionPointerValueOrDefault(void (*defaultValue)()))(); */
 /** void (*functionPointerReturnValue())(void); */
 

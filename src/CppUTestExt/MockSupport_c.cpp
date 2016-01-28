@@ -190,6 +190,8 @@ double doubleReturnValue_c(void);
 double returnDoubleValueOrDefault_c(double defaultValue);
 void* pointerReturnValue_c(void);
 void* returnPointerValueOrDefault_c(void * defaultValue);
+const void* constPointerReturnValue_c(void);
+const void* returnConstPointerValueOrDefault_c(const void * defaultValue);
 
 static void installComparator_c (const char* typeName, MockTypeEqualFunction_c isEqual, MockTypeValueToStringFunction_c valueToString)
 {
@@ -274,7 +276,8 @@ static MockActualCall_c gActualCall = {
         returnDoubleValueOrDefault_c,
         pointerReturnValue_c,
         returnPointerValueOrDefault_c,
-
+        constPointerReturnValue_c,
+        returnConstPointerValueOrDefault_c,
 };
 
 static MockSupport_c gMockSupport = {
@@ -299,6 +302,8 @@ static MockSupport_c gMockSupport = {
         returnDoubleValueOrDefault_c,
         pointerReturnValue_c,
         returnPointerValueOrDefault_c,
+        constPointerReturnValue_c,
+        returnConstPointerValueOrDefault_c,
         setIntData_c,
         setStringData_c,
         setDoubleData_c,
@@ -709,6 +714,18 @@ void* returnPointerValueOrDefault_c(void * defaultValue)
     return pointerReturnValue_c();
 }
 
+const void* constPointerReturnValue_c(void)
+{
+    return getMockValueCFromNamedValue(actualCall->returnValue()).value.constPointerValue;
+}
+
+const void* returnConstPointerValueOrDefault_c(const void * defaultValue)
+{
+    if (!hasReturnValue_c()) {
+        return defaultValue;
+    }
+    return constPointerReturnValue_c();
+}
 
 void disable_c(void)
 {
