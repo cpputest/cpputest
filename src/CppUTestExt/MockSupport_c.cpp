@@ -193,8 +193,8 @@ void* pointerReturnValue_c(void);
 void* returnPointerValueOrDefault_c(void * defaultValue);
 const void* constPointerReturnValue_c(void);
 const void* returnConstPointerValueOrDefault_c(const void * defaultValue);
-void (*functionPointerReturnValue_c())(void);
-void (*returnFunctionPointerValueOrDefault_c(void (*defaultValue)()))();
+void (*functionPointerReturnValue_c())();
+void (*returnFunctionPointerValueOrDefault_c(void(*defaultValue)()))();
 
 static void installComparator_c (const char* typeName, MockTypeEqualFunction_c isEqual, MockTypeValueToStringFunction_c valueToString)
 {
