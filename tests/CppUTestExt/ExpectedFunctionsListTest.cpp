@@ -271,9 +271,9 @@ TEST(MockExpectedCallsList, removeOneFulfilledExpectationFromEmptyList)
     POINTERS_EQUAL(NULL, list->removeOneFulfilledExpectation());
 }
 
-TEST(MockExpectedCallsList, getOneFulfilledExpectationWithIgnoredParametersFromEmptyList)
+TEST(MockExpectedCallsList, getOneFulfilledExpectationWithoutIgnoredParametersFromEmptyList)
 {
-    POINTERS_EQUAL(NULL, list->getOneFulfilledExpectationWithIgnoredParameters());
+    POINTERS_EQUAL(NULL, list->getOneFulfilledExpectationWithoutIgnoredParameters());
 }
 
 TEST(MockExpectedCallsList, toStringOnEmptyList)
