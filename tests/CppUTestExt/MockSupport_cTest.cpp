@@ -104,7 +104,7 @@ extern "C"{
     {
         return "valueToString";
     }
-    
+
     static void typeCopy(void* dst, const void* src)
     {
         *(int*) dst = *(int*) src;

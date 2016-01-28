@@ -115,7 +115,7 @@ struct SMockExpectedCall_c
     MockExpectedCall_c* (*withParameterOfType)(const char* type, const char* name, const void* value);
     MockExpectedCall_c* (*withOutputParameterReturning)(const char* name, const void* value, size_t size);
     MockExpectedCall_c* (*withOutputParameterOfTypeReturning)(const char* type, const char* name, const void* value);
-    MockExpectedCall_c* (*ignoreOtherParameters)(void); 
+    MockExpectedCall_c* (*ignoreOtherParameters)(void);
 
     MockExpectedCall_c* (*andReturnUnsignedIntValue)(unsigned int value);
     MockExpectedCall_c* (*andReturnIntValue)(int value);
@@ -170,7 +170,7 @@ struct SMockSupport_c
     void (*setFunctionPointerData) (const char* name, void (*value)(void));
     void (*setDataObject) (const char* name, const char* type, void* value);
     MockValue_c (*getData)(const char* name);
-    
+
 /** MockSupport_c* getMockSupportScope(const char* name); */
 
 /** const char (*getTraceOutput+)(void); */

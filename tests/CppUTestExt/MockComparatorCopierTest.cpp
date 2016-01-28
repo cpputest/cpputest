@@ -504,7 +504,7 @@ TEST(MockComparatorCopierTest, removingCopiersWorksHierachically)
 {
     MockFailureReporterInstaller failureReporterInstaller;
     MyTypeForTesting object(1);
-    
+
     MyTypeForTestingCopier copier;
 
     mock("scope").installCopier("MyTypeForTesting", copier);
