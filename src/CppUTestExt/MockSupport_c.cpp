@@ -193,6 +193,8 @@ void* pointerReturnValue_c(void);
 void* returnPointerValueOrDefault_c(void * defaultValue);
 const void* constPointerReturnValue_c(void);
 const void* returnConstPointerValueOrDefault_c(const void * defaultValue);
+void (*functionPointerReturnValue_c())(void);
+void (*returnFunctionPointerValueOrDefault_c(void (*defaultValue)()))();
 
 static void installComparator_c (const char* typeName, MockTypeEqualFunction_c isEqual, MockTypeValueToStringFunction_c valueToString)
 {
@@ -279,6 +281,8 @@ static MockActualCall_c gActualCall = {
         returnPointerValueOrDefault_c,
         constPointerReturnValue_c,
         returnConstPointerValueOrDefault_c,
+        functionPointerReturnValue_c,
+        returnFunctionPointerValueOrDefault_c
 };
 
 static MockSupport_c gMockSupport = {
@@ -305,6 +309,8 @@ static MockSupport_c gMockSupport = {
         returnPointerValueOrDefault_c,
         constPointerReturnValue_c,
         returnConstPointerValueOrDefault_c,
+        functionPointerReturnValue_c,
+        returnFunctionPointerValueOrDefault_c,
         setIntData_c,
         setUnsignedIntData_c,
         setStringData_c,
@@ -727,6 +733,19 @@ const void* returnConstPointerValueOrDefault_c(const void * defaultValue)
         return defaultValue;
     }
     return constPointerReturnValue_c();
+}
+
+void (*functionPointerReturnValue_c())(void)
+{
+    return getMockValueCFromNamedValue(actualCall->returnValue()).value.functionPointerValue;
+}
+
+void (*returnFunctionPointerValueOrDefault_c(void (*defaultValue)()))()
+{
+    if (!hasReturnValue_c()) {
+        return defaultValue;
+    }
+    return functionPointerReturnValue_c();
 }
 
 void disable_c(void)

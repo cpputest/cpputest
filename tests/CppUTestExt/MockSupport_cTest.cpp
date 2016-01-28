@@ -399,6 +399,23 @@ TEST(MockSupport_c, returnFunctionPointerValue)
     LONGS_EQUAL(MOCKVALUETYPE_FUNCTIONPOINTER, mock_c()->returnValue().type);
 }
 
+TEST(MockSupport_c, whenReturnValueIsGivenReturnFunctionPointerValueOrDefaultShouldIgnoreTheDefault)
+{
+    void (*defaultValue)() = (void (*)()) 10;
+    void (*expectedValue)() = (void (*)()) 14;
+    mock_c()->expectOneCall("foo")->andReturnFunctionPointerValue(expectedValue);
+    FUNCTIONPOINTERS_EQUAL(expectedValue,  mock_c()->actualCall("foo")->returnFunctionPointerValueOrDefault(defaultValue));
+    FUNCTIONPOINTERS_EQUAL(expectedValue, mock_c()->returnFunctionPointerValueOrDefault(defaultValue));
+}
+
+TEST(MockSupport_c, whenNoReturnValueIsGivenReturnFunctionPointerValueOrDefaultShouldlUseTheDefaultValue)
+{
+    void (*defaultValue)() = (void (*)()) 10;
+    mock_c()->expectOneCall("foo");
+    FUNCTIONPOINTERS_EQUAL(defaultValue, mock_c()->actualCall("foo")->returnFunctionPointerValueOrDefault(defaultValue));
+    FUNCTIONPOINTERS_EQUAL(defaultValue, mock_c()->returnFunctionPointerValueOrDefault(defaultValue));
+}
+
 TEST(MockSupport_c, MockSupportWithScope)
 {
     mock_scope_c("scope")->expectOneCall("boo");

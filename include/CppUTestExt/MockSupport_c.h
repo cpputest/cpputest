@@ -100,6 +100,8 @@ struct SMockActualCall_c
     void* (*returnPointerValueOrDefault)(void * defaultValue);
     const void* (*constPointerReturnValue)(void);
     const void* (*returnConstPointerValueOrDefault)(const void * defaultValue);
+    void (*(*functionPointerReturnValue)())(void);
+    void (*(*returnFunctionPointerValueOrDefault)(void (*defaultValue)()))();
 /** MockActualCall_c* (*onObject)(const void* objectPtr); */ /* Probably makes no sense in C */
 };
 
@@ -162,8 +164,8 @@ struct SMockSupport_c
     void* (*returnPointerValueOrDefault)(void * defaultValue);
     const void* (*constPointerReturnValue)(void);
     const void* (*returnConstPointerValueOrDefault)(const void * defaultValue);
-/** void (*returnFunctionPointerValueOrDefault(void (*defaultValue)()))(); */
-/** void (*functionPointerReturnValue())(void); */
+    void (*(*functionPointerReturnValue)())(void);
+    void (*(*returnFunctionPointerValueOrDefault)(void (*defaultValue)()))();
 
     void (*setIntData) (const char* name, int value);
     void (*setUnsignedIntData) (const char* name, unsigned int value);

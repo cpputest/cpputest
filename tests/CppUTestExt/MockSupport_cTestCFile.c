@@ -149,6 +149,8 @@ void all_mock_support_c_calls(void)
     mock_c()->returnPointerValueOrDefault(0);
     mock_c()->constPointerReturnValue();
     mock_c()->returnConstPointerValueOrDefault(0);
+    mock_c()->functionPointerReturnValue();
+    mock_c()->returnFunctionPointerValueOrDefault(0);
 
     mock_c()->disable();
     mock_c()->actualCall("disabled");
