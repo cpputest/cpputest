@@ -41,6 +41,8 @@ public:
 
     void disableInexact(void);
     void enableInexact(void);
+    static void disableSignal(void);
+    static void enableSignal(void);
 
 private:
     bool hasFailed_;

@@ -69,3 +69,13 @@ void IEEE754ExceptionFlagsPlugin::enableInexact()
 {
     inexactEnabled_ = true;
 }
+
+void IEEE754ExceptionFlagsPlugin::disableSignal()
+{
+    fedisableexcept(FE_ALL_EXCEPT);
+}
+
+void IEEE754ExceptionFlagsPlugin::enableSignal()
+{
+    feenableexcept(FE_ALL_EXCEPT);
+}
