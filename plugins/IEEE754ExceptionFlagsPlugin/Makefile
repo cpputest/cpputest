@@ -3,7 +3,7 @@ PLUGIN_HOME := .
 AR := ar
 CXX := g++
 CC := gcc
-CFLAGS := -g3 -Wextra -Wall -Werror \
+CFLAGS := -g3 -O0 -Wextra -Wall -Werror \
           -I$(CPPUTEST_HOME)/include \
           -I$(PLUGIN_HOME)/include \
 

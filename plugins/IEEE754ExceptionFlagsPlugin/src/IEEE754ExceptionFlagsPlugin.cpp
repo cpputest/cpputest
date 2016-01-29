@@ -55,5 +55,17 @@ void IEEE754ExceptionFlagsPlugin::postTestAction(UtestShell& test, TestResult& r
     IEEE754_CHECK_CLEAR(std::fetestexcept(FE_OVERFLOW));
     IEEE754_CHECK_CLEAR(std::fetestexcept(FE_UNDERFLOW));
     IEEE754_CHECK_CLEAR(std::fetestexcept(FE_INVALID));
-    IEEE754_CHECK_CLEAR(std::fetestexcept(FE_INEXACT));
+    if (inexactEnabled_) {
+        IEEE754_CHECK_CLEAR(std::fetestexcept(FE_INEXACT));
+    }
+}
+
+void IEEE754ExceptionFlagsPlugin::disableInexact()
+{
+    inexactEnabled_ = false;
+}
+
+void IEEE754ExceptionFlagsPlugin::enableInexact()
+{
+    inexactEnabled_ = true;
 }

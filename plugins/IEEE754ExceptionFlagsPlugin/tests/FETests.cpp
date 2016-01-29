@@ -44,40 +44,51 @@ TEST_GROUP(FE__with_Plugin) {
     }
 };
 
-TEST(FE__with_Plugin, should_fail_when__FE_DIVBYZERO__is_set) {
+TEST(FE__with_Plugin, should_fail____when__FE_DIVBYZERO__is_set) {
     fixture.setTestFunction(set_divisionbyzero_c);
     fixture.runAllTests();
     fixture.assertPrintContains("IEEE754_CHECK_CLEAR(std::fetestexcept(FE_DIVBYZERO)) failed");
 }
 
-TEST(FE__with_Plugin, should_fail_when__FE_OVERFLOW___is_set) {
+TEST(FE__with_Plugin, should_fail____when__FE_OVERFLOW___is_set) {
     fixture.setTestFunction(set_overflow_c);
     fixture.runAllTests();
     fixture.assertPrintContains("IEEE754_CHECK_CLEAR(std::fetestexcept(FE_OVERFLOW)) failed");
 }
 
-TEST(FE__with_Plugin, should_fail_when__FE_UNDERFLOW__is_set) {
+TEST(FE__with_Plugin, should_fail____when__FE_UNDERFLOW__is_set) {
     fixture.setTestFunction(set_underflow_c);
     fixture.runAllTests();
     fixture.assertPrintContains("IEEE754_CHECK_CLEAR(std::fetestexcept(FE_UNDERFLOW)) failed");
 }
 
-TEST(FE__with_Plugin, should_fail_when__FE_INVALID____is_set) {
+TEST(FE__with_Plugin, should_fail____when__FE_INVALID____is_set) {
     fixture.setTestFunction(set_invalid_c);
     fixture.runAllTests();
     fixture.assertPrintContains("IEEE754_CHECK_CLEAR(std::fetestexcept(FE_INVALID)) failed");
 }
 
-TEST(FE__with_Plugin, should_fail_when__FE_INEXACT____is_set) {
+TEST(FE__with_Plugin, should_fail____when__FE_INEXACT____is_set_and_enabled) {
+    ieee754Plugin.enableInexact();
     fixture.setTestFunction(set_inexact_c);
     fixture.runAllTests();
     fixture.assertPrintContains("IEEE754_CHECK_CLEAR(std::fetestexcept(FE_INEXACT)) failed");
 }
 
+TEST(FE__with_Plugin, should_succeed_when__FE_INEXACT____is_set_and_disabled) {
+    ieee754Plugin.enableInexact();
+    ieee754Plugin.disableInexact();
+    fixture.setTestFunction(set_inexact_c);
+    fixture.runAllTests();
+    fixture.assertPrintContains("OK");
+}
+
 TEST(FE__with_Plugin, should_succeed_with_5_checks_when_no_flags_are_set) {
+    ieee754Plugin.enableInexact();
     fixture.setTestFunction(set_nothing_c);
     fixture.runAllTests();
     fixture.assertPrintContains("OK (1 tests, 1 ran, 5 checks, 0 ignored, 0 filtered out, 0 ms)");
+    ieee754Plugin.disableInexact();
 }
 
 TEST(FE__with_Plugin, should_check_only_once_when_all_flags_are_set) {

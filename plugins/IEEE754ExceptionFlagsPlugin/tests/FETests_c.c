@@ -51,7 +51,10 @@ void set_invalid_c(void) {
 }
 
 void set_inexact_c(void) {
-    feraiseexcept(FE_INEXACT); /* Clang ignores -frounding-math */
+ // feraiseexcept(FE_INEXACT); /* Clang ignores -frounding-math */
+    float f = 10.0f;
+    f /= 3.0f;
+    (void) f;
 }
 
 void set_nothing_c(void) {

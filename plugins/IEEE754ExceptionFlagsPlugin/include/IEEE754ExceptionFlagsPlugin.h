@@ -33,15 +33,20 @@
 class IEEE754ExceptionFlagsPlugin: public TestPlugin
 {
 public:
-    IEEE754ExceptionFlagsPlugin(const SimpleString& name) : TestPlugin(name), hasFailed_(false) {}
-    
+    IEEE754ExceptionFlagsPlugin(const SimpleString& name) : TestPlugin(name),
+        hasFailed_(false), inexactEnabled_(false) {}
+
     virtual void preTestAction(UtestShell& test, TestResult& result) _override;
     virtual void postTestAction(UtestShell& test, TestResult& result) _override;
+
+    void disableInexact(void);
+    void enableInexact(void);
 
 private:
     bool hasFailed_;
     UtestShell* test_;
     TestResult* result_;
+    bool inexactEnabled_;
 };
 
 #endif
