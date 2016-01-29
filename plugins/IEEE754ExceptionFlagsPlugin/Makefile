@@ -40,7 +40,7 @@ tests/FETests.o tests/FETests_c.o: Makefile
 
 clobber:
 	find . -name '*.o' -delete
-	rm -f *.exe
+	rm -f *.exe *.stackdump
 
 clean: clobber
 	rm -f $(LIB)

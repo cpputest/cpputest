@@ -36,8 +36,6 @@ extern "C" {
     #include "FETests_c.h"
 }
 
-
-
 TEST_GROUP(FE__with_Plugin) {
     TestTestingFixture fixture;
     IEEE754ExceptionFlagsPlugin ieee754Plugin{"IEEE754"};
@@ -46,7 +44,7 @@ TEST_GROUP(FE__with_Plugin) {
     }
 };
 
-#if 0
+#if 1
 IGNORE_TEST(FE__with_Plugin, should_crash___when__feenableexcept_was_called) {}
 #else
 TEST(FE__with_Plugin, should_crash___when__feenableexcept_was_called)
