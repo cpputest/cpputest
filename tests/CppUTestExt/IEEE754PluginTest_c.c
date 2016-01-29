@@ -27,6 +27,7 @@
 
 #include "IEEE754PluginTest_c.h"
 #include <math.h>
+#include <fenv.h>
 
 void set_divisionbyzero_c(void) {
     float f = 1.0f;
@@ -50,7 +51,10 @@ void set_invalid_c(void) {
 }
 
 void set_inexact_c(void) {
-    /* Clang ignores -frounding-math, so this flag cannot be provoked */
+/* feraiseexcept(FE_INEXACT); */ /* Clang ignores -frounding-math */
+    float f = 10.0f;
+    f /= 3.0f;
+    (void) f;
 }
 
 void set_nothing_c(void) {

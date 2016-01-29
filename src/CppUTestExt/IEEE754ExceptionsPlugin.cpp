@@ -33,7 +33,7 @@
 #include <cfenv>
 
 #define IEEE754_CHECK_CLEAR(flag) { \
-    if(/*willRun_ &&*/ !hasFailed_) { \
+    if(!hasFailed_) { \
         result_->countCheck(); \
         if(flag) { \
             CheckFailure failure(test_, __FILE__, __LINE__, "IEEE754_CHECK_CLEAR", #flag); \
@@ -50,7 +50,6 @@ void IEEE754ExceptionsPlugin::preTestAction(UtestShell&, TestResult&)
 
 void IEEE754ExceptionsPlugin::postTestAction(UtestShell& test, TestResult& result)
 {
-    willRun_ = test.willRun();
     hasFailed_ = test.hasFailed();
     test_ = &test;
     result_ = &result;
@@ -58,7 +57,19 @@ void IEEE754ExceptionsPlugin::postTestAction(UtestShell& test, TestResult& resul
     IEEE754_CHECK_CLEAR(std::fetestexcept(FE_OVERFLOW));
     IEEE754_CHECK_CLEAR(std::fetestexcept(FE_UNDERFLOW));
     IEEE754_CHECK_CLEAR(std::fetestexcept(FE_INVALID));
-    IEEE754_CHECK_CLEAR(std::fetestexcept(FE_INEXACT));
+    if (inexactEnabled_) {
+        IEEE754_CHECK_CLEAR(std::fetestexcept(FE_INEXACT));
+    }
+}
+
+void IEEE754ExceptionsPlugin::disableInexact()
+{
+    inexactEnabled_ = false;
+}
+
+void IEEE754ExceptionsPlugin::enableInexact()
+{
+    inexactEnabled_ = true;
 }
 
 #endif
