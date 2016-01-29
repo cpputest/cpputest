@@ -371,7 +371,8 @@ TEST(MockSupport_c, whenNoReturnValueIsGivenReturnPointerValueOrDefaultShouldlUs
 TEST(MockSupport_c, returnConstPointerValue)
 {
     mock_c()->expectOneCall("boo")->andReturnConstPointerValue((const void*) 10);
-    POINTERS_EQUAL((const void*) 10, mock_c()->actualCall("boo")->returnValue().value.constPointerValue);
+    POINTERS_EQUAL((const void*) 10, mock_c()->actualCall("boo")->constPointerReturnValue());
+    POINTERS_EQUAL((const void*) 10, mock_c()->constPointerReturnValue());
     LONGS_EQUAL(MOCKVALUETYPE_CONST_POINTER, mock_c()->returnValue().type);
 }
 
@@ -395,7 +396,8 @@ TEST(MockSupport_c, whenNoReturnValueIsGivenReturnConstPointerValueOrDefaultShou
 TEST(MockSupport_c, returnFunctionPointerValue)
 {
     mock_c()->expectOneCall("boo")->andReturnFunctionPointerValue((void(*)()) 10);
-    FUNCTIONPOINTERS_EQUAL((void(*)()) 10, mock_c()->actualCall("boo")->returnValue().value.functionPointerValue);
+    FUNCTIONPOINTERS_EQUAL((void(*)()) 10, mock_c()->actualCall("boo")->functionPointerReturnValue());
+    FUNCTIONPOINTERS_EQUAL((void(*)()) 10, mock_c()->functionPointerReturnValue());
     LONGS_EQUAL(MOCKVALUETYPE_FUNCTIONPOINTER, mock_c()->returnValue().type);
 }
 
@@ -454,6 +456,13 @@ TEST(MockSupport_c, MockSupportSetConstPointerData)
     POINTERS_EQUAL((const void*) 1, mock_c()->getData("constPointer").value.constPointerValue);
 }
 
+TEST(MockSupport_c, MockSupportMemoryBufferData)
+{
+    mock_c()->setDataObject("name", "const unsigned char*", (void *) 0xDEAD);
+    POINTERS_EQUAL(0xDEAD, mock_c()->getData("name").value.memoryBufferValue);
+    LONGS_EQUAL(MOCKVALUETYPE_MEMORYBUFFER, mock_c()->getData("name").type);
+}
+
 TEST(MockSupport_c, MockSupportSetFunctionPointerData)
 {
     mock_c()->setFunctionPointerData("functionPointer", (void(*)()) 1);
@@ -464,13 +473,6 @@ TEST(MockSupport_c, MockSupportSetDataObject)
 {
     mock_c()->setDataObject("name", "type", (void*) 1);
     POINTERS_EQUAL((void*) 1, mock_c()->getData("name").value.objectValue);
-}
-
-TEST(MockSupport_c, TestMockGetMemoryBufferDataObjectCHereBecauseItIsNotCurrentlyUsedByCppUTest)
-{
-    mock_c()->setDataObject("name", "const unsigned char*", (void *) 0xDEAD);
-    POINTERS_EQUAL(0xDEAD, mock_c()->getData("name").value.memoryBufferValue);
-    LONGS_EQUAL(MOCKVALUETYPE_MEMORYBUFFER, mock_c()->getData("name").type);
 }
 
 TEST(MockSupport_c, WorksInCFile)
@@ -604,4 +606,3 @@ TEST(MockSupport_c, ignoreOtherCalls)
     mock_c()->actualCall("bar");
     mock_c()->checkExpectations();
 }
-
