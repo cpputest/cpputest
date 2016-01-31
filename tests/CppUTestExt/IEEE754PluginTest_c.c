@@ -27,7 +27,6 @@
 
 #include "IEEE754PluginTest_c.h"
 #include <math.h>
-#include <fenv.h>
 
 void set_divisionbyzero_c(void) {
     float f = 1.0f;
