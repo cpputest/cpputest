@@ -34,6 +34,7 @@ global:
 addons:
   apt:
     packages:
+#     - dosbox
       - valgrind
 before_script:
   - export CPPUTEST_BUILD_DIR=$TRAVIS_BUILD_DIR/cpputest_build
