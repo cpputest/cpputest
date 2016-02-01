@@ -26,6 +26,8 @@ option(C++11 "Compile with C++11 support" OFF)
 option(TESTS "Compile and make tests for the code?" ON)
 option(TESTS_DETAILED "Run each test separately instead of grouped?" OFF)
 
+option(PLUGINS "Compile and make plugins?" ON)
+
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "What kind of build this is" FORCE)
 endif(NOT CMAKE_BUILD_TYPE)
@@ -60,6 +62,10 @@ endif (EXTENSIONS)
 if (TESTS)
     add_subdirectory(tests)
 endif (TESTS)
+
+if (PLUGINS)
+    add_subdirectory(plugins/IEEE754ExceptionFlagsPlugin)
+endif (PLUGINS)
 
 set (INCLUDE_INSTALL_DIR "include")
 set (LIB_INSTALL_DIR "lib")
