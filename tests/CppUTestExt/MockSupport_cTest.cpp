@@ -561,22 +561,22 @@ TEST(MockSupport_c, failureWithParameterOfTypeCoversValueToString)
     mock_c()->removeAllComparatorsAndCopiers();
 }
 
-static void callToMockCWithOutputParameter_()
+static void callToMockCWithOutputParameterOfType_()
 {
     int value1 = 7;
     const int value2 = 9;
-    mock_c()->expectOneCall("bar")->withOutputParameterReturning("bla", &value2, sizeof(int));
-    mock_c()->actualCall("bar")->withOutputParameter("bla", &value1);
+    mock_c()->expectOneCall("bar")->withOutputParameterOfTypeReturning("intType", "bla", &value2);
+    mock_c()->actualCall("bar")->withOutputParameterOfType("intType", "bla", &value1);
     LONGS_EQUAL(value1, value2);
 }
 
-TEST(MockSupport_c, successWithOutputParameter)
+TEST(MockSupport_c, successWithOutputParameterOfType)
 {
     TestTestingFixture fixture;
     mock_c()->installCopier("intType", typeCopy);
-    fixture.setTestFunction(callToMockCWithOutputParameter_);
+    fixture.setTestFunction(callToMockCWithOutputParameterOfType_);
     fixture.runAllTests();
-    LONGS_EQUAL(3, fixture.getCheckCount());
+    LONGS_EQUAL(2, fixture.getCheckCount());
     LONGS_EQUAL(0, fixture.getFailureCount());
     mock_c()->removeAllComparatorsAndCopiers();
 }
