@@ -44,7 +44,7 @@ TEST_GROUP(FE__with_Plugin) {
     }
 };
 
-#if 1
+#if 0
 IGNORE_TEST(FE__with_Plugin, should_crash___when__feenableexcept_was_called) {}
 #else
 TEST(FE__with_Plugin, should_crash___when__feenableexcept_was_called)
