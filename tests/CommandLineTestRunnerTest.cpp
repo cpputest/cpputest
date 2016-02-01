@@ -252,7 +252,7 @@ TEST(CommandLineTestRunner, realTeamCityOutputShouldBeCreatedAndWorkProperly)
 
     CommandLineTestRunner commandLineTestRunner(4, argv, &registry);
     commandLineTestRunner.runAllTestsMain();
-    
+
     delete fakeOutput; /* Original output must be restored before further output occurs */
 
     STRCMP_CONTAINS("##teamcity[testSuiteStarted name='group'", FakeOutput::console.asCharString());
