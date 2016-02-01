@@ -30,6 +30,70 @@
 
 #include <cfenv>
 
+#if defined(MAC_OS)
+
+/* This code is taken from:
+ 
+ Title:  Floating-point exception handling example
+ Author:  David N. Williams
+ File:  fe-handlng-example.c
+ License:  Public Domain
+ Version:  0.5.0
+ Started:  21-Sep-09
+ Revised:  22-Sep-09
+ Revised:  30-Sep-09 (comment typo)
+
+*/
+
+extern "C" {
+
+#if 0
+static int zXfegetexcept (void)
+{
+    static fenv_t fenv;
+
+    return fegetenv (&fenv) ? -1 : (fenv.__control & FE_ALL_EXCEPT);
+}
+#endif
+
+static int feenableexcept (unsigned int excepts)
+{
+    static fenv_t fenv;
+    unsigned int new_excepts = excepts & FE_ALL_EXCEPT,
+    old_excepts;  // previous masks
+
+    if ( fegetenv (&fenv) ) return -1;
+    old_excepts = fenv.__control & FE_ALL_EXCEPT;
+
+    // unmask
+    fenv.__control &= ~new_excepts;
+    fenv.__mxcsr   &= ~(new_excepts << 7);
+
+    return ( fesetenv (&fenv) ? -1 : old_excepts );
+}
+
+static int fedisableexcept (unsigned int excepts)
+{
+    static fenv_t fenv;
+    unsigned int new_excepts = excepts & FE_ALL_EXCEPT,
+    old_excepts;  // all previous masks
+
+    if ( fegetenv (&fenv) ) return -1;
+    old_excepts = fenv.__control & FE_ALL_EXCEPT;
+
+    // mask
+    fenv.__control |= new_excepts;
+    fenv.__mxcsr   |= new_excepts << 7;
+
+    return ( fesetenv (&fenv) ? -1 : old_excepts );
+}
+
+}
+
+/****** End of Public Domain code ******/
+
+#endif
+
 #define IEEE754_CHECK_CLEAR(flag) { \
     if(!hasFailed_) { \
         result_->countCheck(); \
