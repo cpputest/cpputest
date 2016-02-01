@@ -146,5 +146,7 @@ Features configured in CppUTest:
     Compile and run self-tests          ${TESTS}
     Run self-tests separately           ${TESTS_DETAILED}
 
+    Compile plugin and run self-tests   ${PLUGINS}
+
 -------------------------------------------------------
 ")
