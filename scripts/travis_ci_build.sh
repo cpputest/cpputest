@@ -13,7 +13,8 @@ if [ "x$BUILD" = "xautotools" ]; then
 
     if [ "x$CXX" = "xg++" ]; then
       echo "Deploy please"
-#        cd .. && travis_github_deployer -v || exit 1
+#      gem install travis_github_deployer
+#      cd .. && travis_github_deployer -v || exit 1
     fi;
 fi
 
@@ -60,8 +61,8 @@ if [ "x$BUILD" = "xtest_report" ]; then
     ant -f generate_junit_report_ant.xml
 fi
 
-if [ "x$BUILD" = "xcmake-coverage" ]; then
-  pip install cpp-coveralls --user `whoami`
+if [ "x$BUILD" = "xcmake_coverage" ]; then
+    pip install cpp-coveralls --user `whoami`
 
     cmake .. -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE -DCOVERAGE=ON
     make
@@ -70,7 +71,8 @@ if [ "x$BUILD" = "xcmake-coverage" ]; then
     coveralls -b . -r .. -i "src" -i "include" --gcov-options="-lbc" || true
 fi
 
-if [ "x$BUILD" = "xmake-dos" ]; then
+if [ "x$BUILD" = "xmake_dos" ]; then
+    sudo apt-get install dosbox
     wget ftp://ftp.openwatcom.org/pub/open-watcom-c-linux-1.9 -O /tmp/watcom.zip
     mkdir -p watcom && unzip -aqd watcom /tmp/watcom.zip && sudo chmod -R 755 watcom/binl
     export PATH=$PATH:$PWD/watcom/binl

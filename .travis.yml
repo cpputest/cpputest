@@ -18,11 +18,11 @@ matrix:
     - compiler: gcc
       env: BUILD=cmake_gtest
     - compiler: gcc
-      env: BUILD=cmake-coverage
+      env: BUILD=cmake_coverage
     - compiler: gcc
       env: BUILD=test_report
     - compiler: wcl
-      env: BUILD=make-dos
+      env: BUILD=make_dos
 global:
 - os: linux
 - rvm: '1.9.3'
@@ -34,15 +34,8 @@ global:
 addons:
   apt:
     packages:
-      # - dosbox
+#     - dosbox
       - valgrind
-before_install:
-  #  - sudo pip install cpp-coveralls
-  - sudo apt-get install dosbox
-install:
-  - gem install travis_github_deployer
-  - sudo apt-get update --fix-missing
-    #  - sudo apt-get install valgrind
 before_script:
   - export CPPUTEST_BUILD_DIR=$TRAVIS_BUILD_DIR/cpputest_build
   - mkdir -p $CPPUTEST_BUILD_DIR && cd $CPPUTEST_BUILD_DIR
