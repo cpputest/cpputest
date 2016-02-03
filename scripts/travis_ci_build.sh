@@ -72,7 +72,6 @@ if [ "x$BUILD" = "xcmake_coverage" ]; then
 fi
 
 if [ "x$BUILD" = "xmake_dos" ]; then
-    sudo apt-get install dosbox
     wget ftp://ftp.openwatcom.org/pub/open-watcom-c-linux-1.9 -O /tmp/watcom.zip
     mkdir -p watcom && unzip -aqd watcom /tmp/watcom.zip && sudo chmod -R 755 watcom/binl
     export PATH=$PATH:$PWD/watcom/binl

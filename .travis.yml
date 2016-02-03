@@ -23,6 +23,10 @@ matrix:
       env: BUILD=test_report
     - compiler: wcl
       env: BUILD=make_dos
+      addons:
+        apt:
+          packages:
+          - dosbox
 global:
 - os: linux
 - rvm: '1.9.3'
@@ -34,7 +38,6 @@ global:
 addons:
   apt:
     packages:
-#     - dosbox
       - valgrind
 before_script:
   - export CPPUTEST_BUILD_DIR=$TRAVIS_BUILD_DIR/cpputest_build
