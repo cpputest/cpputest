@@ -277,17 +277,17 @@
 #if CPPUTEST_USE_STD_CPP_LIB
 #define CHECK_THROWS(expected, expression) \
     { \
-    SimpleString msg("expected to throw "#expected "\nbut threw nothing"); \
+    SimpleString failure_msg("expected to throw "#expected "\nbut threw nothing"); \
     bool caught_expected = false; \
     try { \
         (expression); \
     } catch(const expected &) { \
         caught_expected = true; \
     } catch(...) { \
-        msg = "expected to throw " #expected "\nbut threw a different type"; \
+        failure_msg = "expected to throw " #expected "\nbut threw a different type"; \
     } \
     if (!caught_expected) { \
-        UtestShell::getCurrent()->fail(msg.asCharString(), __FILE__, __LINE__); \
+        UtestShell::getCurrent()->fail(failure_msg.asCharString(), __FILE__, __LINE__); \
     } \
     else { \
         UtestShell::getCurrent()->countCheck(); \
