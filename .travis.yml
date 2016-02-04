@@ -40,13 +40,15 @@ global:
 - os: linux
 - rvm: '1.9.3'
 - secure: |-
-      P05xUfJVw5YM4hF7hzQLjyMzDD4Q1/fyWP9Uk5aK5VrSWNY99EuxldXI5QK/
-      vA1NkcW49tQW1wQvBlRtdlLNOmUfDP/oiJFXPwNn4dqwOIOEet2P7JO/5hnH
-      MNHlZmGu2WpoZREhOFBfsIhK0IP8mloqLDq2XemBdga/LWygrLU=
-- secure: Y/8iNkf6uEbE3qltnM+7mGlCvFWzyttwwRGgVGw1m9xOiUJcobvOImQRU8XZ91dgO+Fz0A3mljqs1sK1OPjpXmFGE1jP/NlotMw0WlDOuSIDjQ4ubwdTNGAwNY53R9ygbIjEmqxHAJm9mOZqxW2hNaoI7TcX6oX248/hLibyx8M=
-  env: BUILD=make_dos
+    P05xUfJVw5YM4hF7hzQLjyMzDD4Q1/fyWP9Uk5aK5VrSWNY99EuxldXI5QK/
+    vA1NkcW49tQW1wQvBlRtdlLNOmUfDP/oiJFXPwNn4dqwOIOEet2P7JO/5hnH
+    MNHlZmGu2WpoZREhOFBfsIhK0IP8mloqLDq2XemBdga/LWygrLU=
+- secure: |-
+    Y/8iNkf6uEbE3qltnM+7mGlCvFWzyttwwRGgVGw1m9xOiUJcobvOImQRU8XZ
+    91dgO+Fz0A3mljqs1sK1OPjpXmFGE1jP/NlotMw0WlDOuSIDjQ4ubwdTNGAw
+    NY53R9ygbIjEmqxHAJm9mOZqxW2hNaoI7TcX6oX248/hLibyx8M=
 before_script:
-  - export CPPUTEST_BUILD_DIR=$TRAVIS_BUILD_DIR/cpputest_build
-  - mkdir -p $CPPUTEST_BUILD_DIR && cd $CPPUTEST_BUILD_DIR
+- export CPPUTEST_BUILD_DIR=$TRAVIS_BUILD_DIR/cpputest_build
+- mkdir -p $CPPUTEST_BUILD_DIR && cd $CPPUTEST_BUILD_DIR
 script:
 - "../scripts/travis_ci_build.sh"
