@@ -73,11 +73,10 @@ fi
 
 if [ "x$BUILD" = "xmake_dos" ]; then
     wget ftp://ftp.openwatcom.org/pub/open-watcom-c-linux-1.9 -O /tmp/watcom.zip
-    mkdir -p watcom && unzip -aqd watcom /tmp/watcom.zip && sudo chmod -R 755 watcom/binl
+    mkdir -p watcom && unzip -aqd watcom /tmp/watcom.zip && chmod -R +x watcom/binl
     export PATH=$PATH:$PWD/watcom/binl
     export WATCOM=$PWD/watcom
     export CPPUTEST_HOME=$TRAVIS_BUILD_DIR
-    wcl --version
     export CC=wcl
     export CXX=wcl
     $CC --version
