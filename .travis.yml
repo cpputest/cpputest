@@ -3,6 +3,10 @@ matrix:
     include:
     - compiler: clang
       env: BUILD=autotools
+      addons:
+        apt:
+          packages:
+          - valgrind
     - compiler: clang
       env: BUILD=cmake
     - compiler: clang
@@ -11,6 +15,10 @@ matrix:
       env: BUILD=cmake_gtest
     - compiler: gcc
       env: BUILD=autotools
+      addons:
+        apt:
+          packages:
+          - valgrind
     - compiler: gcc
       env: BUILD=cmake
     - compiler: gcc
@@ -35,10 +43,12 @@ global:
       vA1NkcW49tQW1wQvBlRtdlLNOmUfDP/oiJFXPwNn4dqwOIOEet2P7JO/5hnH
       MNHlZmGu2WpoZREhOFBfsIhK0IP8mloqLDq2XemBdga/LWygrLU=
 - secure: Y/8iNkf6uEbE3qltnM+7mGlCvFWzyttwwRGgVGw1m9xOiUJcobvOImQRU8XZ91dgO+Fz0A3mljqs1sK1OPjpXmFGE1jP/NlotMw0WlDOuSIDjQ4ubwdTNGAwNY53R9ygbIjEmqxHAJm9mOZqxW2hNaoI7TcX6oX248/hLibyx8M=
+  env: BUILD=make_dos
 addons:
-  apt:
-    packages:
-      - valgrind
+#  env: BUILD=autotools
+#    apt:
+#      packages:
+#      - valgrind
 before_script:
   - export CPPUTEST_BUILD_DIR=$TRAVIS_BUILD_DIR/cpputest_build
   - mkdir -p $CPPUTEST_BUILD_DIR && cd $CPPUTEST_BUILD_DIR
