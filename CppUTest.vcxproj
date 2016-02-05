@@ -150,12 +150,15 @@
   <ItemGroup>
     <ClInclude Include="include\CppUTestExt\CodeMemoryReportFormatter.h" />
     <ClInclude Include="include\CppUTestExt\GMock.h" />
+    <ClInclude Include="include\CppUTestExt\GTest.h" />
     <ClInclude Include="include\CppUTestExt\GTestConvertor.h" />
     <ClInclude Include="include\CppUTestExt\MemoryReportAllocator.h" />
     <ClInclude Include="include\CppUTestExt\MemoryReporterPlugin.h" />
     <ClInclude Include="include\CppUTestExt\MemoryReportFormatter.h" />
+    <ClInclude Include="include\CppUTestExt\MockActualCall.h" />
     <ClInclude Include="include\CppUTestExt\MockCheckedActualCall.h" />
     <ClInclude Include="include\CppUTestExt\MockCheckedExpectedCall.h" />
+    <ClInclude Include="include\CppUTestExt\MockExpectedCall.h" />
     <ClInclude Include="include\CppUTestExt\MockExpectedCallsList.h" />
     <ClInclude Include="include\CppUTestExt\MockFailure.h" />
     <ClInclude Include="include\CppUTestExt\MockNamedValue.h" />
