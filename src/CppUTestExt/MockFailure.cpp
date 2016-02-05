@@ -103,11 +103,12 @@ MockExpectedCallsDidntHappenFailure::MockExpectedCallsDidntHappenFailure(UtestSh
 
 MockUnexpectedCallHappenedFailure::MockUnexpectedCallHappenedFailure(UtestShell* test, const SimpleString& name, const MockExpectedCallsList& expectations) : MockFailure(test)
 {
-    int amountOfExpectations = expectations.amountOfExpectationsFor(name);
-    if (amountOfExpectations)
-        message_ = StringFromFormat("Mock Failure: Unexpected additional (%dth) call to function: ", amountOfExpectations+1);
-    else
+    if (expectations.amountOfExpectationsFor(name)) {
+        SimpleString ordinalNumber = StringFromOrdinalNumber((unsigned)(expectations.amountOfExpectationsFor(name) + 1));
+        message_ = StringFromFormat("Mock Failure: Unexpected additional (%s) call to function: ", ordinalNumber.asCharString());
+    } else {
         message_ = "Mock Failure: Unexpected call to function: ";
+    }
     message_ += name;
     message_ += "\n";
     addExpectationsAndCallHistory(expectations);
