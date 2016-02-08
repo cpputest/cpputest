@@ -95,10 +95,10 @@ TEST(FE__with_Plugin, should_succeed_with_5_checks_when_no_flags_are_set) {
     ieee754Plugin.disableInexact();
 }
 
-TEST(FE__with_Plugin, should_check_only_once_when_all_flags_are_set) {
+TEST(FE__with_Plugin, should_check_four_times_when_all_flags_are_set) {
     fixture.setTestFunction(set_everything_c);
     fixture.runAllTests();
-    LONGS_EQUAL(1, fixture.getCheckCount());
+    LONGS_EQUAL(4, fixture.getCheckCount());
 }
 
 TEST(FE__with_Plugin, should_fail_only_once_when_all_flags_are_set) {

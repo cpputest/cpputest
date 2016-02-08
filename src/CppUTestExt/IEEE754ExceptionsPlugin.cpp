@@ -41,13 +41,14 @@ void IEEE754ExceptionsPlugin::preTestAction(UtestShell&, TestResult&)
 
 void IEEE754ExceptionsPlugin::postTestAction(UtestShell& test, TestResult& result)
 {
-    hasFailed_ = test.hasFailed();
-    IEEE754_CHECK_CLEAR(test, result, FE_DIVBYZERO);
-    IEEE754_CHECK_CLEAR(test, result, FE_OVERFLOW);
-    IEEE754_CHECK_CLEAR(test, result, FE_UNDERFLOW);
-    IEEE754_CHECK_CLEAR(test, result, FE_INVALID);
-    if (inexactEnabled_) {
-        IEEE754_CHECK_CLEAR(test, result, FE_INEXACT);
+    if(!test.hasFailed()) {
+        IEEE754_CHECK_CLEAR(test, result, FE_DIVBYZERO);
+        IEEE754_CHECK_CLEAR(test, result, FE_OVERFLOW);
+        IEEE754_CHECK_CLEAR(test, result, FE_UNDERFLOW);
+        IEEE754_CHECK_CLEAR(test, result, FE_INVALID);
+        if (inexactEnabled_) {
+            IEEE754_CHECK_CLEAR(test, result, FE_INEXACT);
+        }
     }
 }
 
@@ -63,13 +64,11 @@ void IEEE754ExceptionsPlugin::enableInexact()
 
 void IEEE754ExceptionsPlugin::ieee754Check(UtestShell& test, TestResult& result, int flag, const char* text)
 {
-    if(!hasFailed_) {
-        result.countCheck();
-        if(std::fetestexcept(flag)) {
-            CheckFailure failure(&test, __FILE__, __LINE__, "IEEE754_CHECK_CLEAR", text);
-            result.addFailure(failure);
-            hasFailed_ = true;
-        }
+    gitresult.countCheck();
+    if(std::fetestexcept(flag)) {
+        std::feclearexcept(FE_ALL_EXCEPT);
+        CheckFailure failure(&test, __FILE__, __LINE__, "IEEE754_CHECK_CLEAR", text);
+        result.addFailure(failure);
     }
 }
 

@@ -34,7 +34,7 @@ class IEEE754ExceptionsPlugin: public TestPlugin
 {
 public:
     IEEE754ExceptionsPlugin(const SimpleString& name) : TestPlugin(name),
-        hasFailed_(false), inexactEnabled_(false) {}
+        inexactEnabled_(false) {}
 
     virtual void preTestAction(UtestShell& test, TestResult& result) _override;
     virtual void postTestAction(UtestShell& test, TestResult& result) _override;
@@ -44,7 +44,6 @@ public:
 
 private:
     void ieee754Check(UtestShell& test, TestResult& result, int flag, const char* text);
-    bool hasFailed_;
     bool inexactEnabled_;
 };
 
