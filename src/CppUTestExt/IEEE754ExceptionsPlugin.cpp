@@ -32,7 +32,7 @@
 
 #include <cfenv>
 
-#define IEEE754_CHECK_CLEAR(flag) ieee754Check(flag, #flag)
+#define IEEE754_CHECK_CLEAR(test, result, flag) ieee754Check(test, result, flag, #flag)
 
 void IEEE754ExceptionsPlugin::preTestAction(UtestShell&, TestResult&)
 {
@@ -42,14 +42,12 @@ void IEEE754ExceptionsPlugin::preTestAction(UtestShell&, TestResult&)
 void IEEE754ExceptionsPlugin::postTestAction(UtestShell& test, TestResult& result)
 {
     hasFailed_ = test.hasFailed();
-    test_ = &test;
-    result_ = &result;
-    IEEE754_CHECK_CLEAR(FE_DIVBYZERO);
-    IEEE754_CHECK_CLEAR(FE_OVERFLOW);
-    IEEE754_CHECK_CLEAR(FE_UNDERFLOW);
-    IEEE754_CHECK_CLEAR(FE_INVALID);
+    IEEE754_CHECK_CLEAR(test, result, FE_DIVBYZERO);
+    IEEE754_CHECK_CLEAR(test, result, FE_OVERFLOW);
+    IEEE754_CHECK_CLEAR(test, result, FE_UNDERFLOW);
+    IEEE754_CHECK_CLEAR(test, result, FE_INVALID);
     if (inexactEnabled_) {
-        IEEE754_CHECK_CLEAR(FE_INEXACT);
+        IEEE754_CHECK_CLEAR(test, result, FE_INEXACT);
     }
 }
 
@@ -63,13 +61,13 @@ void IEEE754ExceptionsPlugin::enableInexact()
     inexactEnabled_ = true;
 }
 
-void IEEE754ExceptionsPlugin::ieee754Check(int flag, const char* text)
+void IEEE754ExceptionsPlugin::ieee754Check(UtestShell& test, TestResult& result, int flag, const char* text)
 {
     if(!hasFailed_) {
-        result_->countCheck();
+        result.countCheck();
         if(std::fetestexcept(flag)) {
-            CheckFailure failure(test_, __FILE__, __LINE__, "IEEE754_CHECK_CLEAR", text);
-            result_->addFailure(failure);
+            CheckFailure failure(&test, __FILE__, __LINE__, "IEEE754_CHECK_CLEAR", text);
+            result.addFailure(failure);
             hasFailed_ = true;
         }
     }

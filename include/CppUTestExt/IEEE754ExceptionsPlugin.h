@@ -43,10 +43,8 @@ public:
     void enableInexact(void);
 
 private:
-    void ieee754Check(int flag, const char* test);
+    void ieee754Check(UtestShell& test, TestResult& result, int flag, const char* text);
     bool hasFailed_;
-    UtestShell* test_;
-    TestResult* result_;
     bool inexactEnabled_;
 };
 
