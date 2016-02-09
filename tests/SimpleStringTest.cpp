@@ -957,3 +957,34 @@ TEST(SimpleString, MaskedBits4bytes)
         STRCMP_EQUAL("11xx11xx 11xx11xx 11xx11xx 11xx11xx", StringFromMaskedBits(0xFFFFFFFF, 0xCCCCCCCC, 4).asCharString());
     }
 }
+
+TEST(SimpleString, StringFromOrdinalNumberOnes)
+{
+    STRCMP_EQUAL("2nd", StringFromOrdinalNumber(2).asCharString());
+    STRCMP_EQUAL("3rd", StringFromOrdinalNumber(3).asCharString());
+    STRCMP_EQUAL("4th", StringFromOrdinalNumber(4).asCharString());
+    STRCMP_EQUAL("5th", StringFromOrdinalNumber(5).asCharString());
+    STRCMP_EQUAL("6th", StringFromOrdinalNumber(6).asCharString());
+    STRCMP_EQUAL("7th", StringFromOrdinalNumber(7).asCharString());
+}
+
+TEST(SimpleString, StringFromOrdinalNumberTens)
+{
+    STRCMP_EQUAL("10th", StringFromOrdinalNumber(10).asCharString());
+    STRCMP_EQUAL("11th", StringFromOrdinalNumber(11).asCharString());
+    STRCMP_EQUAL("12th", StringFromOrdinalNumber(12).asCharString());
+    STRCMP_EQUAL("13th", StringFromOrdinalNumber(13).asCharString());
+    STRCMP_EQUAL("14th", StringFromOrdinalNumber(14).asCharString());
+    STRCMP_EQUAL("18th", StringFromOrdinalNumber(18).asCharString());
+}
+
+TEST(SimpleString, StringFromOrdinalNumberOthers)
+{
+    STRCMP_EQUAL("21st", StringFromOrdinalNumber(21).asCharString());
+    STRCMP_EQUAL("22nd", StringFromOrdinalNumber(22).asCharString());
+    STRCMP_EQUAL("23rd", StringFromOrdinalNumber(23).asCharString());
+    STRCMP_EQUAL("24th", StringFromOrdinalNumber(24).asCharString());
+    STRCMP_EQUAL("32nd", StringFromOrdinalNumber(32).asCharString());
+    STRCMP_EQUAL("100th", StringFromOrdinalNumber(100).asCharString());
+    STRCMP_EQUAL("101st", StringFromOrdinalNumber(101).asCharString());
+}

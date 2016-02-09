@@ -61,6 +61,23 @@ TEST_GROUP(MockFailureTest)
         list->addExpectedCall(call2);
         list->addExpectedCall(call3);
     }
+
+    void checkUnexpectedNthCallMessage(unsigned int count, const char* expectedOrdinal)
+    {
+        MockExpectedCallsList callList;
+        MockCheckedExpectedCall expCall;
+
+        expCall.withName("bar");
+        for (unsigned int i = 0; i < (count - 1); i++) {
+            expCall.callWasMade(1);
+            callList.addExpectedCall(&expCall);
+        }
+
+        MockUnexpectedCallHappenedFailure failure(UtestShell::getCurrent(), "bar", callList);
+
+        SimpleString expectedMessage = StringFromFormat("Mock Failure: Unexpected additional (%s) call to function: bar\n\tEXPECTED", expectedOrdinal);
+        STRCMP_CONTAINS(expectedMessage.asCharString(), failure.getMessage().asCharString());
+    }
 };
 
 TEST(MockFailureTest, noErrorFailureSomethingGoneWrong)
@@ -96,14 +113,18 @@ TEST(MockFailureTest, expectedCallDidNotHappen)
                  "\t\thaphaphap -> no parameters", failure.getMessage().asCharString());
 }
 
-TEST(MockFailureTest, MockUnexpectedAdditionalCallFailure)
+TEST(MockFailureTest, MockUnexpectedNthAdditionalCallFailure)
 {
-    call1->withName("bar");
-    call1->callWasMade(1);
-    list->addExpectedCall(call1);
-
-    MockUnexpectedCallHappenedFailure failure(UtestShell::getCurrent(), "bar", *list);
-    STRCMP_CONTAINS("Mock Failure: Unexpected additional (2th) call to function: bar\n\tEXPECTED", failure.getMessage().asCharString());
+    checkUnexpectedNthCallMessage(2, "2nd");
+    checkUnexpectedNthCallMessage(3, "3rd");
+    checkUnexpectedNthCallMessage(4, "4th");
+    checkUnexpectedNthCallMessage(11, "11th");
+    checkUnexpectedNthCallMessage(12, "12th");
+    checkUnexpectedNthCallMessage(13, "13th");
+    checkUnexpectedNthCallMessage(14, "14th");
+    checkUnexpectedNthCallMessage(21, "21st");
+    checkUnexpectedNthCallMessage(22, "22nd");
+    checkUnexpectedNthCallMessage(23, "23rd");
 }
 
 TEST(MockFailureTest, MockUnexpectedInputParameterFailure)

@@ -653,6 +653,26 @@ SimpleString StringFromMaskedBits(unsigned long value, unsigned long mask, size_
     return result;
 }
 
+SimpleString StringFromOrdinalNumber(unsigned int number)
+{
+    unsigned int onesDigit = number % 10;
+
+    const char* suffix;
+    if (number >= 11 && number <= 13) {
+        suffix = "th";
+    } else if (3 == onesDigit) {
+        suffix = "rd";
+    } else if (2 == onesDigit) {
+        suffix = "nd";
+    } else if (1 == onesDigit) {
+        suffix = "st";
+    } else {
+        suffix = "th";
+    }
+
+    return StringFromFormat("%u%s", number, suffix);
+}
+
 SimpleStringCollection::SimpleStringCollection()
 {
     collection_ = 0;
