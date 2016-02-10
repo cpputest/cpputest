@@ -34,7 +34,7 @@
 #include "CppUTest/TestRegistry.h"
 #include "CppUTest/TestTestingFixture.h"
 #include "CppUTestExt/IEEE754ExceptionsPlugin.h"
-#include <cfenv>
+#include <fenv.h>
 
 extern "C" { 
     #include "IEEE754PluginTest_c.h"
@@ -42,8 +42,8 @@ extern "C" {
 
 TEST_GROUP(FE__with_Plugin) {
     TestTestingFixture fixture;
-    IEEE754ExceptionsPlugin ieee754Plugin{"IEEE754"};
-    void setup(void) override {
+    IEEE754ExceptionsPlugin ieee754Plugin;
+    void setup(void) _override {
         fixture.registry_->installPlugin(&ieee754Plugin);
     }
 };
@@ -119,13 +119,11 @@ TEST(FE__with_Plugin, should_not_fail_again_when_test_has_already_failed) {
     LONGS_EQUAL(1, fixture.getFailureCount());
 }
 
-static IEEE754ExceptionsPlugin ip{"IEEE754"};
+static IEEE754ExceptionsPlugin ip;
 
 TEST_GROUP(IEEE754ExceptionsPlugin2) {
-    
-    TestRegistry* registry = TestRegistry::getCurrentRegistry();
-    void setup(void) override {
-        registry->installPlugin(&ip);
+    void setup(void) _override {
+        TestRegistry::getCurrentRegistry()->installPlugin(&ip);
     }
 };
 

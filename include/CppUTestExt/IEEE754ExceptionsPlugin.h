@@ -33,8 +33,7 @@
 class IEEE754ExceptionsPlugin: public TestPlugin
 {
 public:
-    IEEE754ExceptionsPlugin(const SimpleString& name) : TestPlugin(name),
-        inexactEnabled_(false) {}
+    IEEE754ExceptionsPlugin(const SimpleString& name = "IEEE754ExceptionsPlugin");
 
     virtual void preTestAction(UtestShell& test, TestResult& result) _override;
     virtual void postTestAction(UtestShell& test, TestResult& result) _override;
