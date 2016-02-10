@@ -30,13 +30,18 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTestExt/IEEE754ExceptionsPlugin.h"
 
-#include <cfenv>
+#include <fenv.h>
 
 #define IEEE754_CHECK_CLEAR(test, result, flag) ieee754Check(test, result, flag, #flag)
 
+IEEE754ExceptionsPlugin::IEEE754ExceptionsPlugin(const SimpleString& name)
+    : TestPlugin(name), inexactEnabled_(false)
+{
+}
+
 void IEEE754ExceptionsPlugin::preTestAction(UtestShell&, TestResult&)
 {
-    std::feclearexcept(FE_ALL_EXCEPT);
+    feclearexcept(FE_ALL_EXCEPT);
 }
 
 void IEEE754ExceptionsPlugin::postTestAction(UtestShell& test, TestResult& result)
@@ -65,8 +70,8 @@ void IEEE754ExceptionsPlugin::enableInexact()
 void IEEE754ExceptionsPlugin::ieee754Check(UtestShell& test, TestResult& result, int flag, const char* text)
 {
     result.countCheck();
-    if(std::fetestexcept(flag)) {
-        std::feclearexcept(FE_ALL_EXCEPT);
+    if(fetestexcept(flag)) {
+        feclearexcept(FE_ALL_EXCEPT);
         CheckFailure failure(&test, __FILE__, __LINE__, "IEEE754_CHECK_CLEAR", text);
         result.addFailure(failure);
     }
