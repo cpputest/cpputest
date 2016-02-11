@@ -25,12 +25,14 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifdef CPPUTEST_COMPILER_FULLY_SUPPORTS_CXX11
-
 #include "CppUTest/TestHarness.h"
 #include "CppUTestExt/IEEE754ExceptionsPlugin.h"
 
-#include <fenv.h>
+#if CPPUTEST_USE_STD_C_LIB
+
+extern "C" {
+    #include <fenv.h>
+}
 
 #define IEEE754_CHECK_CLEAR(test, result, flag) ieee754Check(test, result, flag, #flag)
 
@@ -41,7 +43,7 @@ IEEE754ExceptionsPlugin::IEEE754ExceptionsPlugin(const SimpleString& name)
 
 void IEEE754ExceptionsPlugin::preTestAction(UtestShell&, TestResult&)
 {
-    feclearexcept(FE_ALL_EXCEPT);
+    CHECK(!feclearexcept(FE_ALL_EXCEPT));
 }
 
 void IEEE754ExceptionsPlugin::postTestAction(UtestShell& test, TestResult& result)
@@ -71,7 +73,7 @@ void IEEE754ExceptionsPlugin::ieee754Check(UtestShell& test, TestResult& result,
 {
     result.countCheck();
     if(fetestexcept(flag)) {
-        feclearexcept(FE_ALL_EXCEPT);
+        CHECK(!feclearexcept(FE_ALL_EXCEPT));
         CheckFailure failure(&test, __FILE__, __LINE__, "IEEE754_CHECK_CLEAR", text);
         result.addFailure(failure);
     }

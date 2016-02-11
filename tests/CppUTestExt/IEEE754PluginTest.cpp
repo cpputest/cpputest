@@ -27,14 +27,13 @@
 
 /* The IEEE754ExceptionFlags plugin by definition requires C++11 */
 
-#ifdef CPPUTEST_COMPILER_FULLY_SUPPORTS_CXX11
-
 #include "CppUTest/CommandLineTestRunner.h"
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TestRegistry.h"
 #include "CppUTest/TestTestingFixture.h"
 #include "CppUTestExt/IEEE754ExceptionsPlugin.h"
-#include <fenv.h>
+
+#if CPPUTEST_USE_STD_C_LIB
 
 extern "C" { 
     #include "IEEE754PluginTest_c.h"
