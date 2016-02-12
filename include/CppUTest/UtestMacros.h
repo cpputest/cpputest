@@ -268,6 +268,9 @@
 #define FAIL_TEST_LOCATION(text, file,line)\
   { UtestShell::getCurrent()->fail(text, file, line); }
 
+#define TEST_EXIT\
+  { UtestShell::getCurrent()->exitTest(); }
+
 #define UT_PRINT_LOCATION(text, file, line) \
    { UtestShell::getCurrent()->print(text, file, line); }
 

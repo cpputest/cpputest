@@ -54,6 +54,12 @@ static void _passingCheckEqualTestMethod()
     CHECK_EQUAL(1, 1);
 }
 
+static void _exitTestMethod()
+{
+    TEST_EXIT;
+    FAIL("Should not get here");
+}
+
 TEST(UtestShell, compareDoubles)
 {
     double zero = 0.0;
@@ -87,7 +93,6 @@ TEST(UtestShell, PassedCheckEqualWillIncreaseTheAmountOfChecks)
     LONGS_EQUAL(1, fixture.getCheckCount());
 }
 
-
 IGNORE_TEST(UtestShell, IgnoreTestAccessingFixture)
 {
     CHECK(&fixture != NULL);
@@ -110,6 +115,15 @@ TEST(UtestShell, MacrosUsedInTearDown)
     fixture.runAllTests();
     LONGS_EQUAL(1, fixture.getFailureCount());
 }
+
+TEST(UtestShell, ExitLeavesQuietly)
+{
+    fixture.setTestFunction(_exitTestMethod);
+    fixture.runAllTests();
+    LONGS_EQUAL(0, fixture.getFailureCount());
+}
+
+
 
 static int teardownCalled = 0;
 

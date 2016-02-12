@@ -341,6 +341,11 @@ void UtestShell::failWith(const TestFailure& failure, const TestTerminator& term
     terminator.exitCurrentTest();
 } // LCOV_EXCL_LINE
 
+void UtestShell::exitTest(const TestTerminator& terminator)
+{
+    terminator.exitCurrentTest();
+} // LCOV_EXCL_LINE
+
 void UtestShell::assertTrue(bool condition, const char *checkString, const char *conditionString, const char* text, const char *fileName, int lineNumber, const TestTerminator& testTerminator)
 {
     getTestResult()->countCheck();
