@@ -38,12 +38,12 @@ public:
     virtual void preTestAction(UtestShell& test, TestResult& result) _override;
     virtual void postTestAction(UtestShell& test, TestResult& result) _override;
 
-    void disableInexact(void);
-    void enableInexact(void);
+    static void disableInexact(void);
+    static void enableInexact(void);
 
 private:
     void ieee754Check(UtestShell& test, TestResult& result, int flag, const char* text);
-    bool inexactEnabled_;
+    static bool inexactDisabled_;
 };
 
 #endif
