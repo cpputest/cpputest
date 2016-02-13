@@ -421,6 +421,22 @@ static int _countingMethod()
     return countInCountingMethod++;
 }
 
+TEST(UnitTestMacros, LONGS_EQUAL_macroExpressionSafety)
+{
+    LONGS_EQUAL(1, 0.4 + 0.7);
+    LONGS_EQUAL(0.4 + 0.7, 1);
+    LONGS_EQUAL_TEXT(1, 0.4 + 0.7, "-Wconversion=great");
+    LONGS_EQUAL_TEXT(0.4 + 0.7, 1, "-Wconversion=great");
+}
+
+TEST(UnitTestMacros, UNSIGNED_LONGS_EQUAL_macroExpressionSafety)
+{
+    UNSIGNED_LONGS_EQUAL(1, 0.4 + 0.7);
+    UNSIGNED_LONGS_EQUAL(0.4 + 0.7, 1);
+    UNSIGNED_LONGS_EQUAL_TEXT(1, 0.4 + 0.7, "-Wconversion=great");
+    UNSIGNED_LONGS_EQUAL_TEXT(0.4 + 0.7, 1, "-Wconversion=great");
+}
+
 TEST(UnitTestMacros, passingCheckEqualWillNotBeEvaluatedMultipleTimesWithCHECK_EQUAL)
 {
     countInCountingMethod = 0;

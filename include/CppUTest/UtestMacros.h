@@ -183,16 +183,16 @@
 
 //Check two long integers for equality
 #define LONGS_EQUAL(expected, actual)\
-  LONGS_EQUAL_LOCATION(expected, actual, NULL, __FILE__, __LINE__)
+  LONGS_EQUAL_LOCATION((expected), (actual), NULL, __FILE__, __LINE__)
 
 #define LONGS_EQUAL_TEXT(expected, actual, text)\
-  LONGS_EQUAL_LOCATION(expected, actual, text, __FILE__, __LINE__)
+  LONGS_EQUAL_LOCATION((expected), (actual), text, __FILE__, __LINE__)
 
 #define UNSIGNED_LONGS_EQUAL(expected, actual)\
-  UNSIGNED_LONGS_EQUAL_LOCATION(expected, actual, NULL, __FILE__, __LINE__)
+  UNSIGNED_LONGS_EQUAL_LOCATION((expected), (actual), NULL, __FILE__, __LINE__)
 
 #define UNSIGNED_LONGS_EQUAL_TEXT(expected, actual, text)\
-  UNSIGNED_LONGS_EQUAL_LOCATION(expected, actual, text, __FILE__, __LINE__)
+  UNSIGNED_LONGS_EQUAL_LOCATION((expected), (actual), text, __FILE__, __LINE__)
 
 #define LONGS_EQUAL_LOCATION(expected, actual, text, file, line)\
   { UtestShell::getCurrent()->assertLongsEqual((long)expected, (long)actual, text, file, line); }
