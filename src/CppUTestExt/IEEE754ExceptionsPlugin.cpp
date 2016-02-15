@@ -25,23 +25,27 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifdef CPPUTEST_COMPILER_FULLY_SUPPORTS_CXX11
-
 #include "CppUTest/TestHarness.h"
 #include "CppUTestExt/IEEE754ExceptionsPlugin.h"
 
-#include <fenv.h>
+#ifdef CPPUTEST_HAVE_FENV
+
+extern "C" {
+    #include <fenv.h>
+}
 
 #define IEEE754_CHECK_CLEAR(test, result, flag) ieee754Check(test, result, flag, #flag)
 
+bool IEEE754ExceptionsPlugin::inexactDisabled_ = true;
+
 IEEE754ExceptionsPlugin::IEEE754ExceptionsPlugin(const SimpleString& name)
-    : TestPlugin(name), inexactEnabled_(false)
+    : TestPlugin(name)
 {
 }
 
 void IEEE754ExceptionsPlugin::preTestAction(UtestShell&, TestResult&)
 {
-    feclearexcept(FE_ALL_EXCEPT);
+    CHECK(!feclearexcept(FE_ALL_EXCEPT));
 }
 
 void IEEE754ExceptionsPlugin::postTestAction(UtestShell& test, TestResult& result)
@@ -51,27 +55,26 @@ void IEEE754ExceptionsPlugin::postTestAction(UtestShell& test, TestResult& resul
         IEEE754_CHECK_CLEAR(test, result, FE_OVERFLOW);
         IEEE754_CHECK_CLEAR(test, result, FE_UNDERFLOW);
         IEEE754_CHECK_CLEAR(test, result, FE_INVALID);
-        if (inexactEnabled_) {
-            IEEE754_CHECK_CLEAR(test, result, FE_INEXACT);
-        }
+        IEEE754_CHECK_CLEAR(test, result, FE_INEXACT);
     }
 }
 
 void IEEE754ExceptionsPlugin::disableInexact()
 {
-    inexactEnabled_ = false;
+    inexactDisabled_ = true;
 }
 
 void IEEE754ExceptionsPlugin::enableInexact()
 {
-    inexactEnabled_ = true;
+    inexactDisabled_ = false;
 }
 
 void IEEE754ExceptionsPlugin::ieee754Check(UtestShell& test, TestResult& result, int flag, const char* text)
 {
     result.countCheck();
+    if(inexactDisabled_) feclearexcept(FE_INEXACT);
     if(fetestexcept(flag)) {
-        feclearexcept(FE_ALL_EXCEPT);
+        CHECK(!feclearexcept(FE_ALL_EXCEPT));
         CheckFailure failure(&test, __FILE__, __LINE__, "IEEE754_CHECK_CLEAR", text);
         result.addFailure(failure);
     }

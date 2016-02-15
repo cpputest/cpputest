@@ -27,7 +27,6 @@
 
 #include "IEEE754PluginTest_c.h"
 #include <math.h>
-#include <fenv.h>
 
 static volatile float f;
 

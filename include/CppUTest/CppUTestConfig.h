@@ -166,6 +166,19 @@
 #endif
 
 /*
+ * Handling of IEEE754 floating point exceptions via fenv.h
+ */
+
+#if CPPUTEST_USE_STD_C_LIB
+#define CPPUTEST_HAVE_FENV
+#if defined(__WATCOMC__)
+#define CPPUTEST_FENV_IS_WORKING_PROPERLY 0
+#else
+#define CPPUTEST_FENV_IS_WORKING_PROPERLY 1
+#endif
+#endif
+
+/*
  * Detection of different 64 bit environments
  */
 

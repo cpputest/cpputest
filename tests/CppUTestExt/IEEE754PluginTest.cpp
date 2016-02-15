@@ -25,16 +25,13 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/* The IEEE754ExceptionFlags plugin by definition requires C++11 */
-
-#ifdef CPPUTEST_COMPILER_FULLY_SUPPORTS_CXX11
-
 #include "CppUTest/CommandLineTestRunner.h"
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TestRegistry.h"
 #include "CppUTest/TestTestingFixture.h"
 #include "CppUTestExt/IEEE754ExceptionsPlugin.h"
-#include <fenv.h>
+
+#if CPPUTEST_FENV_IS_WORKING_PROPERLY
 
 extern "C" { 
     #include "IEEE754PluginTest_c.h"
@@ -66,7 +63,13 @@ TEST(FE__with_Plugin, should_fail____when__FE_UNDERFLOW__is_set) {
     fixture.assertPrintContains("IEEE754_CHECK_CLEAR(FE_UNDERFLOW) failed");
 }
 
-TEST(FE__with_Plugin, should_fail____when__FE_INVALID____is_set) {
+#ifndef __MINGW64__
+#define NOT_MINGW64_TEST TEST
+#else
+#define NOT_MINGW64_TEST IGNORE_TEST
+#endif
+
+NOT_MINGW64_TEST(FE__with_Plugin, should_fail____when__FE_INVALID____is_set) {
     fixture.setTestFunction(set_invalid_c);
     fixture.runAllTests();
     fixture.assertPrintContains("IEEE754_CHECK_CLEAR(FE_INVALID) failed");
@@ -95,10 +98,10 @@ TEST(FE__with_Plugin, should_succeed_with_5_checks_when_no_flags_are_set) {
     ieee754Plugin.disableInexact();
 }
 
-TEST(FE__with_Plugin, should_check_four_times_when_all_flags_are_set) {
+TEST(FE__with_Plugin, should_check_five_times_when_all_flags_are_set) {
     fixture.setTestFunction(set_everything_c);
     fixture.runAllTests();
-    LONGS_EQUAL(4, fixture.getCheckCount());
+    LONGS_EQUAL(5, fixture.getCheckCount());
 }
 
 TEST(FE__with_Plugin, should_fail_only_once_when_all_flags_are_set) {
