@@ -94,7 +94,7 @@ TEST(FE__with_Plugin, should_succeed_with_5_checks_when_no_flags_are_set) {
     ieee754Plugin.enableInexact();
     fixture.setTestFunction(set_nothing_c);
     fixture.runAllTests();
-    fixture.assertPrintContains("OK (1 tests, 1 ran, 5 checks, 0 ignored, 0 filtered out, 0 ms)");
+    fixture.assertPrintContains("OK (1 tests, 1 ran, 5 checks, 0 ignored, 0 filtered out");
     ieee754Plugin.disableInexact();
 }
 
