@@ -139,22 +139,22 @@ TEST(MockCheckedActualCall, MockIgnoredActualCallWorksAsItShould)
 
     CHECK(0 == actual.returnUnsignedLongIntValue());
     CHECK(0 == actual.returnIntValue());
-    CHECK(0 == actual.returnUnsignedLongIntValueOrDefault(1ul));
-    CHECK(0 == actual.returnIntValueOrDefault(1));
+    CHECK(1ul == actual.returnUnsignedLongIntValueOrDefault(1ul));
+    CHECK(1 == actual.returnIntValueOrDefault(1));
     CHECK(0 == actual.returnLongIntValue());
-    CHECK(0 == actual.returnLongIntValueOrDefault(1l));
+    CHECK(1l == actual.returnLongIntValueOrDefault(1l));
     CHECK(0 == actual.returnUnsignedIntValue());
-    CHECK(0 == actual.returnUnsignedIntValueOrDefault(1u));
+    CHECK(1u == actual.returnUnsignedIntValueOrDefault(1u));
     DOUBLES_EQUAL(0.0f, actual.returnDoubleValue(), 0.0f);
-    DOUBLES_EQUAL(0.0f, actual.returnDoubleValueOrDefault(1.0f), 0.0f);
-    STRCMP_EQUAL("", actual.returnStringValueOrDefault("bla"));
+    DOUBLES_EQUAL(1.5f, actual.returnDoubleValueOrDefault(1.5f), 0.0f);
+    STRCMP_EQUAL("bla", actual.returnStringValueOrDefault("bla"));
     STRCMP_EQUAL("", actual.returnStringValue());
     CHECK(0 == actual.returnPointerValue());
-    CHECK(0 == actual.returnPointerValueOrDefault((void*) 0x0));
+    CHECK((void*) 0x2 == actual.returnPointerValueOrDefault((void*) 0x2));
     CHECK(0 == actual.returnConstPointerValue());
-    CHECK(0 == actual.returnConstPointerValueOrDefault((const void*) 0x0));
+    CHECK((const void*) 0x2 == actual.returnConstPointerValueOrDefault((const void*) 0x2));
     CHECK(0 == actual.returnFunctionPointerValue());
-    CHECK(0 == actual.returnFunctionPointerValueOrDefault((void(*)()) 0x0));
+    CHECK((void(*)()) 1 == actual.returnFunctionPointerValueOrDefault((void(*)()) 0x1));
     CHECK_FALSE(actual.hasReturnValue());
     CHECK(actual.returnValue().equals(MockNamedValue("")));
 }
