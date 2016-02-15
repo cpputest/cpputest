@@ -225,32 +225,32 @@ public:
     virtual bool hasReturnValue() _override { return false; }
     virtual MockNamedValue returnValue() _override { return MockNamedValue(""); }
 
-    virtual int returnIntValueOrDefault(int) _override { return 0; }
     virtual int returnIntValue() _override { return 0; }
+    virtual int returnIntValueOrDefault(int value) _override { return value; }
 
     virtual unsigned long int returnUnsignedLongIntValue() _override { return 0; }
-    virtual unsigned long int returnUnsignedLongIntValueOrDefault(unsigned long int) _override { return 0; }
+    virtual unsigned long int returnUnsignedLongIntValueOrDefault(unsigned long int value) _override { return value; }
 
     virtual long int returnLongIntValue() _override { return 0; }
-    virtual long int returnLongIntValueOrDefault(long int) _override { return returnLongIntValue(); }
+    virtual long int returnLongIntValueOrDefault(long int value) _override { return value; }
 
     virtual unsigned int returnUnsignedIntValue() _override { return 0; }
-    virtual unsigned int returnUnsignedIntValueOrDefault(unsigned int) _override { return returnUnsignedIntValue(); }
+    virtual unsigned int returnUnsignedIntValueOrDefault(unsigned int value) _override { return value; }
 
     virtual double returnDoubleValue() _override { return 0.0; }
-    virtual double returnDoubleValueOrDefault(double) _override { return returnDoubleValue(); }
+    virtual double returnDoubleValueOrDefault(double value) _override { return value; }
 
-    virtual const char * returnStringValueOrDefault(const char *) _override { return returnStringValue(); }
     virtual const char * returnStringValue() _override { return ""; }
+    virtual const char * returnStringValueOrDefault(const char * value) _override { return value; }
 
     virtual void * returnPointerValue() _override { return NULL; }
-    virtual void * returnPointerValueOrDefault(void * ) _override { return returnPointerValue(); }
+    virtual void * returnPointerValueOrDefault(void * value) _override { return value; }
 
     virtual const void * returnConstPointerValue() _override { return NULL; }
-    virtual const void * returnConstPointerValueOrDefault(const void *) _override { return returnConstPointerValue(); }
+    virtual const void * returnConstPointerValueOrDefault(const void * value) _override { return value; }
 
     virtual void (*returnFunctionPointerValue())() _override { return NULL; }
-    virtual void (*returnFunctionPointerValueOrDefault(void (*)()))() _override { return returnFunctionPointerValue(); }
+    virtual void (*returnFunctionPointerValueOrDefault(void (*value)()))() _override { return value; }
 
     virtual MockActualCall& onObject(const void* ) _override { return *this; }
 
