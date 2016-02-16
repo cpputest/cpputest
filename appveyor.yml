@@ -14,7 +14,7 @@ environment:
   - PlatformToolset: v100
 
 install:
-- ps: if ($env:PlatformToolset -eq 'MinGW') { choco install mingw $( if ($env:Platform -eq 'Win32') { Write-Output -forcex86 } ) }
+- ps: if ($env:PlatformToolset -eq 'MinGW') { choco install mingw --version 4.8.5 $( if ($env:Platform -eq 'Win32') { Write-Output -forcex86 } ) }
 - ps: if ($env:PlatformToolset -eq 'Cygwin') { (New-Object System.Net.WebClient).DownloadFile('https://cygwin.com/setup-x86.exe', "${env:TEMP}\cygwin-setup.exe") ; . "${env:TEMP}\cygwin-setup.exe" --quiet-mode --packages autoconf automake make gcc-core libtool gcc-g++ }
 
 build_script:
