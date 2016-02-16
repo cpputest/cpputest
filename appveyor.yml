@@ -8,13 +8,21 @@ environment:
   - PlatformToolset: Cygwin
   - PlatformToolset: MinGW
     Platform: Win32
+    Version: 4.8.5
   - PlatformToolset: MinGW
     Platform: x64
+    Version: 4.8.5
+  - PlatformToolset: MinGW
+    Platform: Win32
+    Version: 5.3.0
+  - PlatformToolset: MinGW
+    Platform: x64
+    Version: 5.3.0
   - PlatformToolset: v90
   - PlatformToolset: v100
 
 install:
-- ps: if ($env:PlatformToolset -eq 'MinGW') { choco install mingw $( if ($env:Platform -eq 'Win32') { Write-Output -forcex86 } ) }
+- ps: if ($env:PlatformToolset -eq 'MinGW') { choco install mingw --version $env:Version $( if ($env:Platform -eq 'Win32') { Write-Output -forcex86 } ) }
 - ps: if ($env:PlatformToolset -eq 'Cygwin') { (New-Object System.Net.WebClient).DownloadFile('https://cygwin.com/setup-x86.exe', "${env:TEMP}\cygwin-setup.exe") ; . "${env:TEMP}\cygwin-setup.exe" --quiet-mode --packages autoconf automake make gcc-core libtool gcc-g++ }
 
 build_script:
