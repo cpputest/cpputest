@@ -235,7 +235,7 @@ void* (*PlatformSpecificMemset)(void*, int, size_t) = memset;
 /* MinGw GCC 5.3.0 isnan / isinf macros are not working properly, causing a conversion
  * warning / error
  */
-#if defined(__MINGW32__) || (defined(__GNUC__) && __GNUC__ >= 5)
+#if defined(__GNUC__) && __GNUC__ >= 5
 #pragma GCC diagnostic ignored "-Wfloat-conversion"
 #endif
 
