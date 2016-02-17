@@ -72,7 +72,7 @@ void IEEE754ExceptionsPlugin::enableInexact()
 void IEEE754ExceptionsPlugin::ieee754Check(UtestShell& test, TestResult& result, int flag, const char* text)
 {
     result.countCheck();
-    if(inexactDisabled_) feclearexcept(FE_INEXACT);
+    if(inexactDisabled_) CHECK(!feclearexcept(FE_INEXACT));
     if(fetestexcept(flag)) {
         CHECK(!feclearexcept(FE_ALL_EXCEPT));
         CheckFailure failure(&test, __FILE__, __LINE__, "IEEE754_CHECK_CLEAR", text);
