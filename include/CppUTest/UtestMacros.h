@@ -76,12 +76,26 @@
   \
   class IGNORE##testGroup##_##testName##_Test : public TEST_GROUP_##CppUTestGroup##testGroup \
 { public: IGNORE##testGroup##_##testName##_Test () : TEST_GROUP_##CppUTestGroup##testGroup () {} \
-  public: void testBodyThatNeverRuns (); }; \
+  public: void testBodyThatNeverRuns(); }; \
   class IGNORE##testGroup##_##testName##_TestShell : public IgnoredUtestShell { \
       virtual Utest* createTest() _override { return new IGNORE##testGroup##_##testName##_Test; } \
   } IGNORE##testGroup##_##testName##_TestShell_instance; \
    static TestInstaller TEST_##testGroup##testName##_Installer(IGNORE##testGroup##_##testName##_TestShell_instance, #testGroup, #testName, __FILE__,__LINE__); \
-    void IGNORE##testGroup##_##testName##_Test::testBodyThatNeverRuns ()
+    void IGNORE##testGroup##_##testName##_Test::testBodyThatNeverRuns()
+
+#define DORMANT_TEST(testGroup, testName)\
+  /* External declarations for strict compilers */ \
+  class DORMANT_##testGroup##_##testName##_TestShell; \
+  extern DORMANT_##testGroup##_##testName##_TestShell DORMANT_##testGroup##_##testName##_TestShell_instance; \
+  \
+  class DORMANT_##testGroup##_##testName##_Test : public TEST_GROUP_##CppUTestGroup##testGroup \
+{ public: DORMANT_##testGroup##_##testName##_Test () : TEST_GROUP_##CppUTestGroup##testGroup () {} \
+  public: void testBody(); }; \
+  class DORMANT_##testGroup##_##testName##_TestShell : public DormantUtestShell { \
+      virtual Utest* createTest() _override { return new DORMANT_##testGroup##_##testName##_Test; } \
+  } DORMANT_##testGroup##_##testName##_TestShell_instance; \
+   static TestInstaller TEST_##testGroup##testName##_Installer(DORMANT_##testGroup##_##testName##_TestShell_instance, #testGroup, #testName, __FILE__,__LINE__); \
+	void DORMANT_##testGroup##_##testName##_Test::testBody()
 
 #define IMPORT_TEST_GROUP(testGroup) \
   extern int externTestGroup##testGroup;\

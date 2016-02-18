@@ -302,6 +302,8 @@ TEST(CommandLineArguments, setTestToRunUsingVerboseOutputOfIgnoreTest)
     CHECK_EQUAL(groupFilter, *args->getGroupFilters());
 }
 
+// TODO: test DORMANT_TEST
+
 TEST(CommandLineArguments, setNormalOutput)
 {
     int argc = 2;
