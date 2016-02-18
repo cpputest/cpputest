@@ -63,6 +63,11 @@ void TestFilter::invertMatching()
     invertMatching_ = true;
 }
 
+bool TestFilter::isStrictMatching() const
+{
+	return strictMatching_;
+}
+
 bool TestFilter::match(const SimpleString& name) const
 {
     bool matches = false;
