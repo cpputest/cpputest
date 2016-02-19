@@ -176,6 +176,7 @@ void UtestShell::crash()
 
 void UtestShell::runOneTest(TestPlugin* plugin, TestResult& result)
 {
+    hasFailed_ = false;
     HelperTestRunInfo runInfo(this, plugin, &result);
     if (isRunInSeperateProcess())
         PlatformSpecificSetJmp(helperDoRunOneTestSeperateProcess, &runInfo);
