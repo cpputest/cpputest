@@ -82,15 +82,15 @@ if (-not $env:APPVEYOR)
     }
 }
 
-switch ($env:PlatformToolset)
+switch -Wildcard ($env:Platform)
 {
-    'Cygwin'
+    'Cygwin*'
     {
         Invoke-CygwinTests 'cpputest_build\CppUTestTests.exe'
         Invoke-CygwinTests 'cpputest_build\CppUTestExtTests.exe'
     }
 
-    'MinGW'
+    'MinGW*'
     {
         $mingw_path = Get-MinGWBin
 
