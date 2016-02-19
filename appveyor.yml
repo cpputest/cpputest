@@ -23,7 +23,7 @@ environment:
     PlatformToolset: v140
 
 install:
-- ps: if ($env:PlatformToolset -like 'MinGW*') { choco install mingw --version $env:PlatformToolset $( if ($env:Platform -eq 'MinGW32') { Write-Output -forcex86 } ) | Out-Null }
+- ps: if ($env:Platform -like 'MinGW*') { choco install mingw --version $env:PlatformToolset $( if ($env:Platform -like '*32') { Write-Output -forcex86 } ) | Out-Null }
 
 build_script:
 - ps: scripts\appveyor_ci_build.ps1
