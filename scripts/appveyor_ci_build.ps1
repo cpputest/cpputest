@@ -60,14 +60,14 @@ Remove-PathFolder "C:\Program Files (x86)\Git\bin"
 Remove-PathFolder "C:\Program Files (x86)\Git\cmd"
 Remove-PathFolder "C:\Program Files (x86)\Git\usr\bin"
 
-switch ($env:PlatformToolset)
+switch -Wildcard ($env:Platform)
 {
-    'Cygwin'
+    'Cygwin*'
     {
         Invoke-CygwinCommand "autoreconf -i .. ; ../configure ; make CppUTestTests.exe CppUTestExtTests.exe" "cpputest_build"
     }
 
-    'MinGW'
+    'MinGW*'
     {
         $mingw_path = Get-MinGWBin
 
@@ -80,24 +80,27 @@ switch ($env:PlatformToolset)
         Remove-PathFolder $mingw_path
     }
 
-    'v90'
+    default   # Assume that anything else uses Visual C++
     {
-        $vsvarspath = Join-Path $env:VS90COMNTOOLS vsvars32.bat
-        Get-BatchFile($vsvarspath)
+        if ($env:PlatformToolset -eq 'v90')
+        {
+            # Load environment variables from vsvars32.bat
+            $vsvarspath = Join-Path $env:VS90COMNTOOLS vsvars32.bat
+            Get-BatchFile($vsvarspath)
 
-        $VS2008ProjectFiles | foreach {
-            Invoke-BuildCommand "vcbuild /upgrade $_"
+            $VS2008ProjectFiles | foreach {
+                Invoke-BuildCommand "vcbuild /upgrade $_"
+            }
+
+            $VS2008ProjectFiles | foreach {
+                Invoke-BuildCommand "vcbuild $_ $env:CONFIGURATION"
+            }
         }
-
-        $VS2008ProjectFiles | foreach {
-            Invoke-BuildCommand "vcbuild $_ $env:CONFIGURATION"
-        }
-    }
-
-    default   # Mainly for v100, should also support anything newer I think
-    {
-        $VS2010ProjectFiles | foreach {
-            Invoke-BuildCommand "msbuild /ToolsVersion:14.0 $logger_arg $_"
+        else
+        {
+            $VS2010ProjectFiles | foreach {
+                Invoke-BuildCommand "msbuild /ToolsVersion:14.0 $logger_arg $_"
+            }
         }
     }
 }

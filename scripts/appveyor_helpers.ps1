@@ -10,7 +10,7 @@ function Get-Batchfile ($file) {
 
 # Helper function to provide the bin-folder path to mingw
 function Get-MinGWBin() {
-    if ($env:Platform -eq 'x64') {
+    if ($env:Platform -like '*64') {
         Write-Output 'C:\Tools\mingw64\bin'
     }
     else {
@@ -20,7 +20,7 @@ function Get-MinGWBin() {
 
 # Helper function to provide the bin-folder path to cygwin
 function Get-CygwinBin() {
-    if ($env:Platform -eq 'x64') {
+    if ($env:Platform -like '*64') {
         Write-Output 'C:\cygwin64\bin'
     }
     else {
