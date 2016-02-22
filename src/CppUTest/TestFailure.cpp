@@ -189,8 +189,24 @@ DoublesEqualFailure::DoublesEqualFailure(UtestShell* test, const char* fileName,
 : TestFailure(test, fileName, lineNumber)
 {
     message_ = createUserText(text);
+    bool nums_valid = !((PlatformSpecificIsNan(expected)) || (PlatformSpecificIsInf(expected)) ||
+                        (PlatformSpecificIsNan(actual)) || (PlatformSpecificIsInf(actual)));
+    
+    int prec = 7;
+    SimpleString exp = StringFrom(expected, prec);
+    SimpleString act = StringFrom(actual, prec);
 
-    message_ += createButWasString(StringFrom(expected, 7), StringFrom(actual, 7));
+    if (nums_valid)
+    {
+        while ((prec < 50) && (exp == act))
+        {
+            prec++;
+            exp = StringFrom(expected, prec);
+            act = StringFrom(actual, prec);
+        }
+    }
+    message_ += createButWasString(exp, act);
+
     message_ += " threshold used was <";
     message_ += StringFrom(threshold, 7);
     message_ += ">";
