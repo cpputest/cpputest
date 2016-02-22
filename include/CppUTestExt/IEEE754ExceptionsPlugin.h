@@ -40,6 +40,8 @@ public:
 
     static void disableInexact(void);
     static void enableInexact(void);
+    static void disableSignal(void);
+    static void enableSignal(void);
 
 private:
     void ieee754Check(UtestShell& test, TestResult& result, int flag, const char* text);

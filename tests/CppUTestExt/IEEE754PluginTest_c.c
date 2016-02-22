@@ -30,34 +30,41 @@
 
 static volatile float f;
 
-void set_divisionbyzero_c(void) {
+void set_divisionbyzero_c(void)
+{
     f = 1.0f;
     f /= 0.0f;
 }
 
-void set_overflow_c(void) {
+void set_overflow_c(void)
+{
     f = 1000.0f;
     while (f < INFINITY) f *= f;
 }
 
-void set_underflow_c(void) {
+void set_underflow_c(void)
+{
     f = 0.01f;
     while (f > 0.0f) f *= f;
 }
 
-void set_invalid_c(void) {
+void set_invalid_c(void)
+{
     f = (float) sqrt(-1.0f);
 }
 
-void set_inexact_c(void) {
+void set_inexact_c(void)
+{
     f = 10.0f;
     f /= 3.0f;
 }
 
-void set_nothing_c(void) {
+void set_nothing_c(void)
+{
 }
 
-void set_everything_c() {
+void set_everything_c()
+{
     set_divisionbyzero_c();
     set_overflow_c();
     set_underflow_c();
