@@ -142,6 +142,12 @@ void MockSupport::strictOrder()
     strictOrdering_ = true;
 }
 
+SimpleString MockSupport::appendScopeToName(const SimpleString& functionName)
+{
+    if (scope_.isEmpty()) return functionName;
+    return scope_ + "::" + functionName;
+}
+
 MockExpectedCall& MockSupport::expectOneCall(const SimpleString& functionName)
 {
     if (!enabled_) return MockIgnoredExpectedCall::instance();
@@ -149,7 +155,7 @@ MockExpectedCall& MockSupport::expectOneCall(const SimpleString& functionName)
     countCheck();
 
     MockCheckedExpectedCall* call = new MockCheckedExpectedCall;
-    call->withName(functionName);
+    call->withName(appendScopeToName(functionName));
     if (strictOrdering_)
         call->withCallOrder(++expectedCallOrder_);
     expectations_.addExpectedCall(call);
@@ -194,6 +200,8 @@ bool MockSupport::hasntUnexpectationWithName(const SimpleString& functionName)
 
 MockActualCall& MockSupport::actualCall(const SimpleString& functionName)
 {
+    const SimpleString scopeFuntionName = appendScopeToName(functionName);
+
     if (lastActualFunctionCall_) {
         lastActualFunctionCall_->checkExpectations();
         delete lastActualFunctionCall_;
@@ -201,15 +209,15 @@ MockActualCall& MockSupport::actualCall(const SimpleString& functionName)
     }
 
     if (!enabled_) return MockIgnoredActualCall::instance();
-    if (tracing_) return MockActualCallTrace::instance().withName(functionName);
+    if (tracing_) return MockActualCallTrace::instance().withName(scopeFuntionName);
 
 
-    if (hasntUnexpectationWithName(functionName) && hasntExpectationWithName(functionName)) {
+    if (hasntUnexpectationWithName(scopeFuntionName) && hasntExpectationWithName(scopeFuntionName)) {
         return MockIgnoredActualCall::instance();
     }
 
     MockCheckedActualCall* call = createActualFunctionCall();
-    call->withName(functionName);
+    call->withName(scopeFuntionName);
     return *call;
 }
 
@@ -443,9 +451,15 @@ MockSupport* MockSupport::getMockSupportScope(const SimpleString& name)
     }
 
     MockSupport *newMock = clone();
+    newMock->withScope(name);
 
     setDataObject(mockingSupportName, "MockSupport", newMock);
     return newMock;
+}
+
+void MockSupport::withScope(const SimpleString& name)
+{
+    scope_ = name;
 }
 
 MockSupport* MockSupport::getMockSupport(MockNamedValueListNode* node)
