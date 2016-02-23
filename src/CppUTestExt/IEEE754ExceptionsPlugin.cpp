@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2007, Michael Feathers, James Grenning and Bas Vodde
- * All rights reserved.
+ * Copyright (c) 2015, Michael Feathers, James Grenning, Bas Vodde
+ * and Arnd R. Strube. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -25,36 +25,59 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "CppUTest/CommandLineTestRunner.h"
-#include "CppUTest/TestPlugin.h"
-#include "CppUTest/TestRegistry.h"
+#include "CppUTest/TestHarness.h"
 #include "CppUTestExt/IEEE754ExceptionsPlugin.h"
-#include "CppUTestExt/MockSupportPlugin.h"
 
-class MyDummyComparator : public MockNamedValueComparator
-{
-public:
-    virtual bool isEqual(const void* object1, const void* object2)
-    {
-        return object1 == object2;
-    }
+#ifdef CPPUTEST_HAVE_FENV
 
-    virtual SimpleString valueToString(const void* object)
-    {
-        return StringFrom(object);
-    }
-};
-
-int main(int ac, char** av)
-{
-    MyDummyComparator dummyComparator;
-    MockSupportPlugin mockPlugin;
-    IEEE754ExceptionsPlugin ieee754Plugin;
-    
-    mockPlugin.installComparator("MyDummyType", dummyComparator);
-    TestRegistry::getCurrentRegistry()->installPlugin(&mockPlugin);
-    TestRegistry::getCurrentRegistry()->installPlugin(&ieee754Plugin);
-    return CommandLineTestRunner::RunAllTests(ac, av);
+extern "C" {
+    #include <fenv.h>
 }
 
-#include "AllTests.h"
+#define IEEE754_CHECK_CLEAR(test, result, flag) ieee754Check(test, result, flag, #flag)
+
+bool IEEE754ExceptionsPlugin::inexactDisabled_ = true;
+
+IEEE754ExceptionsPlugin::IEEE754ExceptionsPlugin(const SimpleString& name)
+    : TestPlugin(name)
+{
+}
+
+void IEEE754ExceptionsPlugin::preTestAction(UtestShell&, TestResult&)
+{
+    CHECK(!feclearexcept(FE_ALL_EXCEPT));
+}
+
+void IEEE754ExceptionsPlugin::postTestAction(UtestShell& test, TestResult& result)
+{
+    if(!test.hasFailed()) {
+        IEEE754_CHECK_CLEAR(test, result, FE_DIVBYZERO);
+        IEEE754_CHECK_CLEAR(test, result, FE_OVERFLOW);
+        IEEE754_CHECK_CLEAR(test, result, FE_UNDERFLOW);
+        IEEE754_CHECK_CLEAR(test, result, FE_INVALID);
+        IEEE754_CHECK_CLEAR(test, result, FE_INEXACT);
+    }
+}
+
+void IEEE754ExceptionsPlugin::disableInexact()
+{
+    inexactDisabled_ = true;
+}
+
+void IEEE754ExceptionsPlugin::enableInexact()
+{
+    inexactDisabled_ = false;
+}
+
+void IEEE754ExceptionsPlugin::ieee754Check(UtestShell& test, TestResult& result, int flag, const char* text)
+{
+    result.countCheck();
+    if(inexactDisabled_) CHECK(!feclearexcept(FE_INEXACT));
+    if(fetestexcept(flag)) {
+        CHECK(!feclearexcept(FE_ALL_EXCEPT));
+        CheckFailure failure(&test, __FILE__, __LINE__, "IEEE754_CHECK_CLEAR", text);
+        result.addFailure(failure);
+    }
+}
+
+#endif

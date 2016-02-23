@@ -176,6 +176,7 @@ void UtestShell::crash()
 
 void UtestShell::runOneTest(TestPlugin* plugin, TestResult& result)
 {
+    hasFailed_ = false;
     HelperTestRunInfo runInfo(this, plugin, &result);
     if (isRunInSeperateProcess())
         PlatformSpecificSetJmp(helperDoRunOneTestSeperateProcess, &runInfo);
@@ -338,6 +339,11 @@ void UtestShell::failWith(const TestFailure& failure, const TestTerminator& term
 {
     hasFailed_ = true;
     getTestResult()->addFailure(failure);
+    terminator.exitCurrentTest();
+} // LCOV_EXCL_LINE
+
+void UtestShell::exitTest(const TestTerminator& terminator)
+{
     terminator.exitCurrentTest();
 } // LCOV_EXCL_LINE
 

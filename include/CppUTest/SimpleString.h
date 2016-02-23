@@ -154,6 +154,7 @@ SimpleString StringFromBinaryOrNull(const unsigned char* value, size_t size);
 SimpleString StringFromBinaryWithSize(const unsigned char* value, size_t size);
 SimpleString StringFromBinaryWithSizeOrNull(const unsigned char* value, size_t size);
 SimpleString StringFromMaskedBits(unsigned long value, unsigned long mask, size_t byteCount);
+SimpleString StringFromOrdinalNumber(unsigned int number);
 
 #if CPPUTEST_USE_STD_CPP_LIB
 

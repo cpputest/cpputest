@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2007, Michael Feathers, James Grenning and Bas Vodde
- * All rights reserved.
+ * Copyright (c) 2016, Michael Feathers, James Grenning, Bas Vodde
+ * and Arnd Strube. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -26,35 +26,63 @@
  */
 
 #include "CppUTest/CommandLineTestRunner.h"
-#include "CppUTest/TestPlugin.h"
+#include "CppUTest/TestHarness.h"
 #include "CppUTest/TestRegistry.h"
 #include "CppUTestExt/IEEE754ExceptionsPlugin.h"
-#include "CppUTestExt/MockSupportPlugin.h"
 
-class MyDummyComparator : public MockNamedValueComparator
-{
-public:
-    virtual bool isEqual(const void* object1, const void* object2)
-    {
-        return object1 == object2;
-    }
+#ifdef CPPUTEST_HAVE_FENV
 
-    virtual SimpleString valueToString(const void* object)
-    {
-        return StringFrom(object);
+/*
+ * Un-comment the following line to see a demonstration of failing and
+ * crashing tests
+ */
+// #define RUN_FAILING_TESTS
+
+extern "C" {
+    #include <fenv.h>
+}
+
+#include <limits>
+
+static volatile float f;
+
+TEST_GROUP(FE_Demo) {
+    void setup() {
+        IEEE754ExceptionsPlugin::disableInexact();
     }
 };
 
-int main(int ac, char** av)
-{
-    MyDummyComparator dummyComparator;
-    MockSupportPlugin mockPlugin;
-    IEEE754ExceptionsPlugin ieee754Plugin;
-    
-    mockPlugin.installComparator("MyDummyType", dummyComparator);
-    TestRegistry::getCurrentRegistry()->installPlugin(&mockPlugin);
-    TestRegistry::getCurrentRegistry()->installPlugin(&ieee754Plugin);
-    return CommandLineTestRunner::RunAllTests(ac, av);
+#ifdef RUN_FAILING_TESTS
+#define FAILING_TEST TEST
+#else
+#define FAILING_TEST IGNORE_TEST
+#endif
+
+FAILING_TEST(FE_Demo, should_fail_when__FE_DIVBYZERO__is_set) {
+    f = 1.0f;
+    CHECK((f /= 0.0f) >= std::numeric_limits<float>::infinity() );
 }
 
-#include "AllTests.h"
+FAILING_TEST(FE_Demo, should_fail_when__FE_UNDERFLOW__is_set) {
+    f = 0.01f;
+    while (f > 0.0f) f *= f;
+    CHECK(f == 0.0f);
+}
+
+FAILING_TEST(FE_Demo, should_fail_when__FE_OVERFLOW__is_set) {
+    f = 1000.0f;
+    while (f < std::numeric_limits<float>::infinity()) f *= f;
+    CHECK(f >= std::numeric_limits<float>::infinity());
+}
+
+FAILING_TEST(FE_Demo, should_fail_when__FE_INEXACT____is_set) {
+    IEEE754ExceptionsPlugin::enableInexact();
+    f = 10.0f;
+    DOUBLES_EQUAL(f / 3.0f, 3.333f, 0.001f);
+}
+
+TEST(FE_Demo, should_succeed_when_no_flags_are_set) {
+    CHECK(5.0f == 15.0f / 3.0f);
+}
+
+#endif

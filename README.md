@@ -91,6 +91,7 @@ The failure of one of these macros causes the current test to immediately exit
 * POINTERS_EQUAL(expected, actual) - Compares two const void *
 * DOUBLES_EQUAL(expected, actual, tolerance) - Compares two doubles within some tolerance
 * FAIL(text) - always fails
+* TEST_EXIT - Exit the test without failure - useful for contract testing (implementing an assert fake)
 
 
 Customize CHECK_EQUAL to work with your types that support operator==()
@@ -104,7 +105,6 @@ The Extensions directory has a few of these.
 
 * CppUTest can support extra checking functionality by inserting TestPlugins
 * TestPlugin is derived from the TestPlugin class and can be inserted in the TestRegistry via the installPlugin method.
-* All TestPlugins are called before and after running all tests and before and after running a single test (like Setup and Teardown). TestPlugins are typically inserted in the main.
 * TestPlugins can be used for, for example, system stability and resource handling like files, memory or network connection clean-up.
 * In CppUTest, the memory leak detection is done via a default enabled TestPlugin
 

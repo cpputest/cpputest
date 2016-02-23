@@ -166,6 +166,19 @@
 #endif
 
 /*
+ * Handling of IEEE754 floating point exceptions via fenv.h
+ */
+
+#if CPPUTEST_USE_STD_C_LIB
+#define CPPUTEST_HAVE_FENV
+#if defined(__WATCOMC__)
+#define CPPUTEST_FENV_IS_WORKING_PROPERLY 0
+#else
+#define CPPUTEST_FENV_IS_WORKING_PROPERLY 1
+#endif
+#endif
+
+/*
  * Detection of different 64 bit environments
  */
 
@@ -178,6 +191,7 @@
 
 /* Visual C++ 10.0+ (2010+) supports the override keyword, but doesn't define the C++ version as C++11 */
 #if defined(__cplusplus) && ((__cplusplus >= 201103L) || (defined(_MSC_VER) && (_MSC_VER >= 1600)))
+#define CPPUTEST_COMPILER_FULLY_SUPPORTS_CXX11
 #define _override override
 #else
 #define _override

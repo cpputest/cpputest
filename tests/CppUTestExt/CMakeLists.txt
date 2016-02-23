@@ -3,6 +3,8 @@ set(CppUTestExtTests_src
     CodeMemoryReporterTest.cpp
     GMockTest.cpp
     GTest1Test.cpp
+    IEEE754PluginTest.cpp
+    IEEE754PluginTest_c.c
     MemoryReportAllocatorTest.cpp
     MemoryReporterPluginTest.cpp
     MemoryReportFormatterTest.cpp

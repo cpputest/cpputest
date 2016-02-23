@@ -183,16 +183,16 @@
 
 //Check two long integers for equality
 #define LONGS_EQUAL(expected, actual)\
-  LONGS_EQUAL_LOCATION(expected, actual, NULL, __FILE__, __LINE__)
+  LONGS_EQUAL_LOCATION((expected), (actual), NULL, __FILE__, __LINE__)
 
 #define LONGS_EQUAL_TEXT(expected, actual, text)\
-  LONGS_EQUAL_LOCATION(expected, actual, text, __FILE__, __LINE__)
+  LONGS_EQUAL_LOCATION((expected), (actual), text, __FILE__, __LINE__)
 
 #define UNSIGNED_LONGS_EQUAL(expected, actual)\
-  UNSIGNED_LONGS_EQUAL_LOCATION(expected, actual, NULL, __FILE__, __LINE__)
+  UNSIGNED_LONGS_EQUAL_LOCATION((expected), (actual), NULL, __FILE__, __LINE__)
 
 #define UNSIGNED_LONGS_EQUAL_TEXT(expected, actual, text)\
-  UNSIGNED_LONGS_EQUAL_LOCATION(expected, actual, text, __FILE__, __LINE__)
+  UNSIGNED_LONGS_EQUAL_LOCATION((expected), (actual), text, __FILE__, __LINE__)
 
 #define LONGS_EQUAL_LOCATION(expected, actual, text, file, line)\
   { UtestShell::getCurrent()->assertLongsEqual((long)expected, (long)actual, text, file, line); }
@@ -268,6 +268,9 @@
 #define FAIL_TEST_LOCATION(text, file,line)\
   { UtestShell::getCurrent()->fail(text, file, line); }
 
+#define TEST_EXIT\
+  { UtestShell::getCurrent()->exitTest(); }
+
 #define UT_PRINT_LOCATION(text, file, line) \
    { UtestShell::getCurrent()->print(text, file, line); }
 
@@ -277,17 +280,17 @@
 #if CPPUTEST_USE_STD_CPP_LIB
 #define CHECK_THROWS(expected, expression) \
     { \
-    SimpleString msg("expected to throw "#expected "\nbut threw nothing"); \
+    SimpleString failure_msg("expected to throw "#expected "\nbut threw nothing"); \
     bool caught_expected = false; \
     try { \
         (expression); \
     } catch(const expected &) { \
         caught_expected = true; \
     } catch(...) { \
-        msg = "expected to throw " #expected "\nbut threw a different type"; \
+        failure_msg = "expected to throw " #expected "\nbut threw a different type"; \
     } \
     if (!caught_expected) { \
-        UtestShell::getCurrent()->fail(msg.asCharString(), __FILE__, __LINE__); \
+        UtestShell::getCurrent()->fail(failure_msg.asCharString(), __FILE__, __LINE__); \
     } \
     else { \
         UtestShell::getCurrent()->countCheck(); \

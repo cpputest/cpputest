@@ -22,6 +22,7 @@ CPPU_OBJECTS := \
 CPPUX_OBJECTS := \
   $(CPPUTEST_HOME)/src/CppUTestExt/CodeMemoryReportFormatter.o \
   $(CPPUTEST_HOME)/src/CppUTestExt/MemoryReporterPlugin.o \
+  $(CPPUTEST_HOME)/src/CppUTestExt/IEEE754ExceptionsPlugin.o \
   $(CPPUTEST_HOME)/src/CppUTestExt/MockFailure.o \
   $(CPPUTEST_HOME)/src/CppUTestExt/MockSupportPlugin.o \
   $(CPPUTEST_HOME)/src/CppUTestExt/MockActualCall.o \
@@ -111,6 +112,8 @@ CPPU5_OBJECTS := \
 CPPU6_OBJECTS := \
   $(CPPUTEST_HOME)/tests/CppUTestExt/AllTests.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/ExpectedFunctionsListTest.o \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/IEEE754PluginTest.o \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/IEEE754PluginTest_c.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockCallTest.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockComparatorCopierTest.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockFailureReporterForTest.o \

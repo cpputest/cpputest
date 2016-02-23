@@ -199,7 +199,7 @@ static void crashMethod()
     cpputestHasCrashed = true;
 }
 
-static void crashOnFailureTestFunction_(void)
+static void unexpectedCallTestFunction_(void)
 {
     mock().actualCall("unexpected");
 } // LCOV_EXCL_LINE
@@ -210,7 +210,7 @@ TEST(MockSupportTestWithFixture, shouldCrashOnFailure)
 {
     mock().crashOnFailure(true);
     UtestShell::setCrashMethod(crashMethod);
-    fixture.setTestFunction(crashOnFailureTestFunction_);
+    fixture.setTestFunction(unexpectedCallTestFunction_);
 
     fixture.runAllTests();
 
@@ -224,12 +224,27 @@ TEST(MockSupportTestWithFixture, ShouldNotCrashOnFailureAfterCrashMethodWasReset
 {
     cpputestHasCrashed = false;
     UtestShell::setCrashMethod(crashMethod);
-    fixture.setTestFunction(crashOnFailureTestFunction_);
+    fixture.setTestFunction(unexpectedCallTestFunction_);
     UtestShell::resetCrashMethod();
 
     fixture.runAllTests();
 
     fixture.assertPrintContains("Unexpected call to function: unexpected");
     CHECK_FALSE(cpputestHasCrashed);
+}
+
+TEST(MockSupportTestWithFixture, failedMockShouldFailAgainWhenRepeated)
+{
+    fixture.setTestFunction(unexpectedCallTestFunction_);
+    int repeatCount = 2;
+    while(repeatCount--)
+    {
+        fixture.runAllTests();
+        fixture.assertPrintContains("Unexpected call to function: unexpected");
+        fixture.assertPrintContains("Errors (1 failures, 1 tests, 1 ran, 0 checks, 0 ignored, 0 filtered out");
+        fixture.output_->flush();
+        delete fixture.result_;
+        fixture.result_ = new TestResult(*fixture.output_);
+    }
 }
 
