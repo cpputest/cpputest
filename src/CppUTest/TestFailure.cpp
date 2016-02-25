@@ -189,13 +189,14 @@ DoublesEqualFailure::DoublesEqualFailure(UtestShell* test, const char* fileName,
 : TestFailure(test, fileName, lineNumber)
 {
     message_ = createUserText(text);
-    
+
     bool nums_valid = !((PlatformSpecificIsNan(expected)) || (PlatformSpecificIsInf(expected)) ||
                         (PlatformSpecificIsNan(actual)) || (PlatformSpecificIsInf(actual)));
+    int prec = 3;
     SimpleString sexp = StringFrom(expected, prec);
     SimpleString sact = StringFrom(actual, prec);
-    const int prec_max = sizeof(double) >= 8 ? 17 : 7;
-    int prec = 1;
+    int dsize = sizeof(double);
+    const int prec_max = dsize == 8 ? 17 : 7;
 
     if (nums_valid)
     {
