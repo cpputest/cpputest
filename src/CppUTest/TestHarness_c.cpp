@@ -60,6 +60,11 @@ void CHECK_EQUAL_C_POINTER_LOCATION(const void* expected, const void* actual, co
     UtestShell::getCurrent()->assertPointersEqual(expected, actual, NULL, fileName, lineNumber, TestTerminatorWithoutExceptions());
 }
 
+extern void CHECK_EQUAL_C_BITS_LOCATION(unsigned int expected, unsigned int actual, unsigned int mask, size_t size, const char* fileName, int lineNumber)
+{
+    UtestShell::getCurrent()->assertBitsEqual(expected, actual, mask, size, NULL, fileName, lineNumber, TestTerminatorWithoutExceptions());
+}
+
 void FAIL_TEXT_C_LOCATION(const char* text, const char* fileName, int lineNumber)
 {
     UtestShell::getCurrent()->fail(text,  fileName, lineNumber, TestTerminatorWithoutExceptions());
