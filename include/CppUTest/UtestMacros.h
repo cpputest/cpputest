@@ -195,10 +195,18 @@
   UNSIGNED_LONGS_EQUAL_LOCATION((expected), (actual), text, __FILE__, __LINE__)
 
 #define LONGS_EQUAL_LOCATION(expected, actual, text, file, line)\
-  { UtestShell::getCurrent()->assertLongsEqual((long)expected, (long)actual, text, file, line); }
+  { if ((sizeof(expected) > sizeof(long)) || (sizeof(actual) > sizeof(long))) \
+        UtestShell::getCurrent()->print( \
+            "Size of `expected` or `actual` is bigger than size of `long int`\nConsider use of MEMCMP_EQUAL().\n", \
+            file, line); \
+    UtestShell::getCurrent()->assertLongsEqual((long)expected, (long)actual, text, file, line); }
 
 #define UNSIGNED_LONGS_EQUAL_LOCATION(expected, actual, text, file, line)\
-  { UtestShell::getCurrent()->assertUnsignedLongsEqual((unsigned long)expected, (unsigned long)actual, text, file, line); }
+  { if ((sizeof(expected) > sizeof(long)) || (sizeof(actual) > sizeof(long))) \
+        UtestShell::getCurrent()->print( \
+            "Size of `expected` or `actual` is bigger than size of `long int`\nConsider use of MEMCMP_EQUAL().\n", \
+            file, line); \
+    UtestShell::getCurrent()->assertUnsignedLongsEqual((unsigned long)expected, (unsigned long)actual, text, file, line); }
 
 #define BYTES_EQUAL(expected, actual)\
     LONGS_EQUAL((expected) & 0xff,(actual) & 0xff)

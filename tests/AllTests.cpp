@@ -33,6 +33,11 @@ int main(int ac, const char** av)
     CHECK(true);
     LONGS_EQUAL(1, 1);
 
+#ifdef __GNUC__
+//    __int128_t i128 = 1;
+//    LONGS_EQUAL(1, i128);
+#endif
+
     return CommandLineTestRunner::RunAllTests(ac, const_cast<char**>(av)); /* cover alternate method */
 }
 
