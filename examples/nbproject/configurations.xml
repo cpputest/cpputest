@@ -178,12 +178,13 @@
           <incDir>
             <pElem>../include</pElem>
           </incDir>
+          <commandLine>-Wall -Wextra -Wshadow -Wswitch-default -Wswitch-enum -Wconversion -Wsign-conversion -Wno-padded -Werror -pedantic-errors -Wstrict-prototypes</commandLine>
         </cTool>
         <ccTool>
           <incDir>
             <pElem>../include</pElem>
           </incDir>
-          <warningLevel>2</warningLevel>
+          <commandLine>-Wall -Wextra -Wshadow -Wswitch-default -Wswitch-enum -Wconversion -pedantic -Wsign-conversion -Woverloaded-virtual -Wno-disabled-macro-expansion -Wno-padded -Wno-reserved-id-macro -Wno-keyword-macro -Wno-global-constructors -Wno-exit-time-destructors -Wno-weak-vtables -Wno-old-style-cast</commandLine>
         </ccTool>
         <fortranCompilerTool>
           <commandLine>-Werror=float-conversion</commandLine>

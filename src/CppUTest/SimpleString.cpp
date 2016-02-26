@@ -632,9 +632,8 @@ SimpleString StringFromAnyInteger(const unsigned char* value, size_t size)
 {
     SimpleString result = "0x";
 
-    for (int i = size-1; i >= 0; i--)
-    {
-        result += StringFromFormat("%02X", value[i]);
+    for (size_t i = 0; i < size; i++) {
+        result += StringFromFormat("%02X", value[size-1-i]);
     }
 
     return result;

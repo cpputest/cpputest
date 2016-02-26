@@ -42,7 +42,7 @@ int main(int ac, const char** av)
         // expected <0x00000000000000000000000000000001>
         // but was  <0x00000000000000000080000000000000>
         __int128_t c128 = 1;
-        __int128_t d128 = 1LL << 55;
+        __int128_t d128 = 1L << 55;
         INTS_EQUAL(&c128, &d128, sizeof(c128));
 #endif
 
