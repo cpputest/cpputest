@@ -318,6 +318,15 @@ BinaryEqualFailure::BinaryEqualFailure(UtestShell* test, const char* fileName, i
 	}
 }
 
+IntsEqualFailure::IntsEqualFailure(UtestShell* test, const char* fileName, int lineNumber, const unsigned char* expected,
+                                       const unsigned char* actual, size_t size, const SimpleString& text)
+: TestFailure(test, fileName, lineNumber)
+{
+    message_ = createUserText(text);
+
+	message_ += createButWasString(StringFromAnyIntegerOrNull(expected, size), StringFromAnyIntegerOrNull(actual, size));
+}
+
 BitsEqualFailure::BitsEqualFailure(UtestShell* test, const char* fileName, int lineNumber, unsigned long expected, unsigned long actual,
                                    unsigned long mask, size_t byteCount, const SimpleString& text)
 : TestFailure(test, fileName, lineNumber)

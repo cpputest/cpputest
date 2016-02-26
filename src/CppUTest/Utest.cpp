@@ -455,6 +455,16 @@ void UtestShell::assertBinaryEqual(const void *expected, const void *actual, siz
         failWith(BinaryEqualFailure(this, fileName, lineNumber, (const unsigned char *) expected, (const unsigned char *) actual, length, text), testTerminator);
 }
 
+void UtestShell::assertIntsEqual(const void *expected, const void *actual, size_t length, const char* text, const char *fileName, int lineNumber, const TestTerminator& testTerminator)
+{
+    getTestResult()->countCheck();
+    if (actual == 0 && expected == 0) return;
+    if (actual == 0 || expected == 0)
+        failWith(IntsEqualFailure(this, fileName, lineNumber, (const unsigned char *) expected, (const unsigned char *) actual, length, text), testTerminator);
+    if (SimpleString::MemCmp(expected, actual, length) != 0)
+        failWith(IntsEqualFailure(this, fileName, lineNumber, (const unsigned char *) expected, (const unsigned char *) actual, length, text), testTerminator);
+}
+
 void UtestShell::assertBitsEqual(unsigned long expected, unsigned long actual, unsigned long mask, size_t byteCount, const char* text, const char *fileName, int lineNumber, const TestTerminator& testTerminator)
 {
     getTestResult()->countCheck();

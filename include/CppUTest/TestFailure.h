@@ -153,6 +153,12 @@ public:
 	BinaryEqualFailure(UtestShell* test, const char* fileName, int lineNumber, const unsigned char* expected, const unsigned char* actual, size_t size, const SimpleString& text);
 };
 
+class IntsEqualFailure : public TestFailure
+{
+public:
+	IntsEqualFailure(UtestShell* test, const char* fileName, int lineNumber, const unsigned char* expected, const unsigned char* actual, size_t size, const SimpleString& text);
+};
+
 class BitsEqualFailure : public TestFailure
 {
 public:
