@@ -33,7 +33,7 @@ int main(int ac, const char** av)
     CHECK(true);
     LONGS_EQUAL(1, 1);
 
-#ifdef __GNUC__
+#if 0
         // print int size warning
         __int128_t a128 = 1;
         __int128_t b128 = 1;

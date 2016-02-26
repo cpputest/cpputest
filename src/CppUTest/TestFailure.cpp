@@ -322,6 +322,19 @@ IntsEqualFailure::IntsEqualFailure(UtestShell* test, const char* fileName, int l
                                        const unsigned char* actual, size_t size, const SimpleString& text)
 : TestFailure(test, fileName, lineNumber)
 {
+    if (size <= sizeof(long))
+    {
+        long lexp = 0, lact = 0;
+        for (size_t i = 0; i < size; i++)
+            ((unsigned char*)&lexp)[i] = ((const unsigned char *)expected)[i];
+        for (size_t i = 0; i < size; i++)
+            ((unsigned char*)&lact)[i] = ((const unsigned char *)actual)[i];
+
+        LongsEqualFailure f(test, fileName, lineNumber, lexp, lact, text);
+        message_ = f.getMessage();
+        return;
+    }
+
     message_ = createUserText(text);
 
 	message_ += createButWasString(StringFromAnyIntegerOrNull(expected, size), StringFromAnyIntegerOrNull(actual, size));

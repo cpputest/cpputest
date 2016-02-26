@@ -333,6 +333,38 @@ TEST(TestFailure, BinaryEqualFullWidth)
     			"\t                                               ^", f);
 }
 
+TEST(TestFailure, IntsEqualOneByte)
+{
+    const unsigned char expectedData[] = { 0x01 };
+    const unsigned char actualData[] = { 0x02 };
+    IntsEqualFailure f(test, failFileName, failLineNumber, expectedData, actualData, sizeof(expectedData), "");
+    FAILURE_EQUAL("expected <1 0x1>\n\tbut was  <2 0x2>", f);
+}
+
+TEST(TestFailure, IntsEqualTwoBytes)
+{
+    const unsigned char expectedData[] = {0x00, 0x01};
+    const unsigned char actualData[] = {0x00, 0x02};
+    IntsEqualFailure f(test, failFileName, failLineNumber, expectedData, actualData, sizeof(expectedData), "");
+    FAILURE_EQUAL("expected <256 0x100>\n\tbut was  <512 0x200>", f);
+}
+
+TEST(TestFailure, IntsEqualFourBytes)
+{
+    const unsigned char expectedData[] = {0x00, 0x01, 0x00, 0x00};
+    const unsigned char actualData[] = {0x00, 0x02, 0x00, 0x00};
+    IntsEqualFailure f(test, failFileName, failLineNumber, expectedData, actualData, sizeof(expectedData), "");
+
+    if (sizeof(long) >= 4)
+    {
+        FAILURE_EQUAL("expected <256 0x100>\n\tbut was  <512 0x200>", f);
+    }
+    else
+    {
+        FAILURE_EQUAL("expected <0x00000100>\n\tbut was  <0x00000200>", f);
+    }
+}
+
 TEST(TestFailure, BinaryEqualLast)
 {
     const unsigned char expectedData[] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
