@@ -318,7 +318,7 @@ BinaryEqualFailure::BinaryEqualFailure(UtestShell* test, const char* fileName, i
 	}
 }
 
-IntsEqualFailure::IntsEqualFailure(UtestShell* test, const char* fileName, int lineNumber, const unsigned char* expected,
+AnyIntsEqualFailure::AnyIntsEqualFailure(UtestShell* test, const char* fileName, int lineNumber, const unsigned char* expected,
                                        const unsigned char* actual, size_t size, const SimpleString& text)
 : TestFailure(test, fileName, lineNumber)
 {

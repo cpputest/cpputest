@@ -33,7 +33,7 @@ int main(int ac, const char** av)
     CHECK(true);
     LONGS_EQUAL(1, 1);
 
-#if 0
+#if (defined __GNUG__) && 0
         // print int size warning
         __int128_t a128 = 1;
         __int128_t b128 = 1;
@@ -43,7 +43,7 @@ int main(int ac, const char** av)
         // but was  <0x00000000000000000080000000000000>
         __int128_t c128 = 1;
         __int128_t d128 = 1L << 55;
-        INTS_EQUAL(&c128, &d128, sizeof(c128));
+        ANYINTS_EQUAL(&c128, &d128, sizeof(c128));
 #endif
 
     return CommandLineTestRunner::RunAllTests(ac, const_cast<char**>(av)); /* cover alternate method */

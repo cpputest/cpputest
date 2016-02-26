@@ -103,7 +103,7 @@
           <itemPath>../src/Platforms/Gcc/UtestPlatform.cpp</itemPath>
         </logicalFolder>
       </logicalFolder>
-      <logicalFolder name="tests" displayName="tests" projectFiles="true">
+      <logicalFolder name="tests" displayName="Tests" projectFiles="true">
         <itemPath>../tests/AllTests.cpp</itemPath>
         <itemPath>../tests/AllocLetTestFree.c</itemPath>
         <itemPath>../tests/AllocLetTestFreeTest.cpp</itemPath>
