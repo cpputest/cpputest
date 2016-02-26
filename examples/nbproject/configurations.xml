@@ -4,15 +4,6 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <logicalFolder name="ApplicationLib"
-                     displayName="ApplicationLib"
-                     projectFiles="true">
-        <itemPath>ApplicationLib/CircularBuffer.h</itemPath>
-        <itemPath>ApplicationLib/EventDispatcher.h</itemPath>
-        <itemPath>ApplicationLib/ExamplesNewOverrides.h</itemPath>
-        <itemPath>ApplicationLib/Printer.h</itemPath>
-        <itemPath>ApplicationLib/hello.h</itemPath>
-      </logicalFolder>
       <logicalFolder name="CppUTest" displayName="CppUTest" projectFiles="true">
         <itemPath>../include/CppUTest/CommandLineArguments.h</itemPath>
         <itemPath>../include/CppUTest/CommandLineTestRunner.h</itemPath>
@@ -579,19 +570,6 @@
       <item path="../tests/UtestPlatformTest.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../tests/UtestTest.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="ApplicationLib/CircularBuffer.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="ApplicationLib/EventDispatcher.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="ApplicationLib/ExamplesNewOverrides.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
-      <item path="ApplicationLib/Printer.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="ApplicationLib/hello.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>
