@@ -19,7 +19,7 @@ include ../platforms/Dos/sources.mk
 # Disable W391 assignment found in boolean expression - we don't care
 
 CFLAGS := \
-  -q -c -os -oc -d0 -we -w=3 -wcd=13 -wcd=367 -wcd=368 -wcd391 -ml -zm \
+  -q -c -os -oc -d0 -we -w=3 -wcd=13 -wcd=367 -wcd=368 -wcd391 -wcd=472 -ml -zm \
   -dCPPUTEST_MEM_LEAK_DETECTION_DISABLED=1 -dCPPUTEST_STD_CPP_LIB_DISABLED=1 \
   -i$(call convert_paths,$(CPPUTEST_HOME)/include) \
   -i$(call convert_paths,$(CPPUTEST_HOME)/include/Platforms/Dos) \
