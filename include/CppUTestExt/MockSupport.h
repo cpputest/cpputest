@@ -83,6 +83,7 @@ public:
     MockNamedValue getData(const SimpleString& name);
 
     MockSupport* getMockSupportScope(const SimpleString& name);
+    
 
     const char* getTraceOutput();
     /*
@@ -148,13 +149,18 @@ private:
 
     MockSupport* getMockSupport(MockNamedValueListNode* node);
     
+    SimpleString* getMockScope(MockNamedValueListNode* node);
+    
+    
     bool hasntExpectationWithName(const SimpleString& functionName);
     bool hasntUnexpectationWithName(const SimpleString& functionName);
     bool hasCallsOutOfOrder();
     
     SimpleString appendScopeToName(const SimpleString& functionName);
     
-    void withScope(const SimpleString& name);
+    
+    
+    
 };
 
 #endif

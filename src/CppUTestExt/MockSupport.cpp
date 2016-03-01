@@ -133,6 +133,10 @@ void MockSupport::clear()
             support->clear();
             delete support;
         }
+        SimpleString* scope = getMockScope(p);
+        if (scope) {
+            delete scope;
+        }
     }
     data_.clear();
 }
@@ -142,10 +146,17 @@ void MockSupport::strictOrder()
     strictOrdering_ = true;
 }
 
+
+
 SimpleString MockSupport::appendScopeToName(const SimpleString& functionName)
 {
-    if (scope_.isEmpty()) return functionName;
-    return scope_ + "::" + functionName;
+    for (MockNamedValueListNode* p = data_.begin(); p; p = p->next()) {
+        if (getMockScope(p) && !getMockScope(p)->isEmpty()) {
+			return *getMockScope(p) + "::" + functionName;
+        }
+    }
+
+	return functionName;
 }
 
 MockExpectedCall& MockSupport::expectOneCall(const SimpleString& functionName)
@@ -451,21 +462,24 @@ MockSupport* MockSupport::getMockSupportScope(const SimpleString& name)
     }
 
     MockSupport *newMock = clone();
-    newMock->withScope(name);
+    newMock->setDataObject(mockingSupportName, "MockScope", new SimpleString(name));
 
     setDataObject(mockingSupportName, "MockSupport", newMock);
     return newMock;
 }
 
-void MockSupport::withScope(const SimpleString& name)
-{
-    scope_ = name;
-}
 
 MockSupport* MockSupport::getMockSupport(MockNamedValueListNode* node)
 {
     if (node->getType() == "MockSupport" && node->getName().contains(MOCK_SUPPORT_SCOPE_PREFIX))
         return  (MockSupport*) node->item()->getObjectPointer();
+    return NULL;
+}
+
+SimpleString* MockSupport::getMockScope(MockNamedValueListNode* node)
+{
+    if (node->getType() == "MockScope" && node->getName().contains(MOCK_SUPPORT_SCOPE_PREFIX))
+        return  (SimpleString*) node->item()->getObjectPointer();
     return NULL;
 }
 
