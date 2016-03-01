@@ -136,7 +136,6 @@ private:
     MockExpectedCallComposite compositeCalls_;
     MockNamedValueComparatorsAndCopiersRepository comparatorsAndCopiersRepository_;
     MockNamedValueList data_;
-    SimpleString scope_; 
         
     bool tracing_;
 
@@ -151,16 +150,11 @@ private:
     
     SimpleString* getMockScope(MockNamedValueListNode* node);
     
-    
     bool hasntExpectationWithName(const SimpleString& functionName);
     bool hasntUnexpectationWithName(const SimpleString& functionName);
     bool hasCallsOutOfOrder();
     
     SimpleString appendScopeToName(const SimpleString& functionName);
-    
-    
-    
-    
 };
 
 #endif
