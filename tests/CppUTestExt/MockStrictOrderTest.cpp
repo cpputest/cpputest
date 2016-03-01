@@ -89,8 +89,8 @@ TEST(MockStrictOrderTest, orderViolatedWorksHierarchically)
     mock("bla").strictOrder();
 
     MockExpectedCallsListForTest expectations;
-    expectations.addFunction("foo1", 1)->callWasMade(2);
-    expectations.addFunction("foo2", 2)->callWasMade(1);
+    expectations.addFunction("foo::foo1", 1)->callWasMade(2);
+    expectations.addFunction("foo::foo2", 2)->callWasMade(1);
     MockCallOrderFailure expectedFailure(mockFailureTest(), expectations);
 
     mock("bla").expectOneCall("foo1");
@@ -113,8 +113,8 @@ TEST(MockStrictOrderTest, orderViolatedWorksWithExtraUnexpectedCall)
 	mock().ignoreOtherCalls();
 
     MockExpectedCallsListForTest expectations;
-    expectations.addFunction("foo1", 1)->callWasMade(2);
-    expectations.addFunction("foo2", 2)->callWasMade(1);
+    expectations.addFunction("foo::foo1", 1)->callWasMade(2);
+    expectations.addFunction("foo::foo2", 2)->callWasMade(1);
     MockCallOrderFailure expectedFailure(mockFailureTest(), expectations);
 
     mock("bla").expectOneCall("foo1");
@@ -137,8 +137,8 @@ TEST(MockStrictOrderTest, orderViolatedWithinAScope)
     mock().strictOrder();
 
     MockExpectedCallsListForTest expectations;
-    expectations.addFunction("foo1", 1)->callWasMade(2);
-    expectations.addFunction("foo2", 2)->callWasMade(1);
+    expectations.addFunction("scope::foo1", 1)->callWasMade(2);
+    expectations.addFunction("scope::foo2", 2)->callWasMade(1);
     MockCallOrderFailure expectedFailure(mockFailureTest(), expectations);
 
     mock("scope").expectOneCall("foo1");
