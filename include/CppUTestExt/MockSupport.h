@@ -136,7 +136,7 @@ private:
     MockExpectedCallComposite compositeCalls_;
     MockNamedValueComparatorsAndCopiersRepository comparatorsAndCopiersRepository_;
     MockNamedValueList data_;
-    SimpleString scope_;
+    SimpleString scope_; 
         
     bool tracing_;
 

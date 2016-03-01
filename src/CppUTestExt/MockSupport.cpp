@@ -368,7 +368,7 @@ void MockSupport::checkExpectations()
 bool MockSupport::hasData(const SimpleString& name)
 {
     return data_.getValueByName(name) != NULL;
-}
+} 
 
 MockNamedValue* MockSupport::retrieveDataFromStore(const SimpleString& name)
 {
