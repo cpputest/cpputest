@@ -78,6 +78,22 @@ TEST(MockCallTest, checkExpectationsClearsTheExpectations)
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 
+TEST(MockCallTest, expectOneCallInScopeButNotHappen)
+{
+
+    MockFailureReporterInstaller failureReporterInstaller;
+
+    MockExpectedCallsListForTest expectations;
+    expectations.addFunction("scope::foobar");
+    MockExpectedCallsDidntHappenFailure expectedFailure(mockFailureTest(), expectations);
+
+    mock("scope").expectOneCall("foobar");
+    mock().checkExpectations();
+
+    CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+
+}
+
 TEST(MockCallTest, unexpectedCallHappened)
 {
     MockFailureReporterInstaller failureReporterInstaller;
@@ -89,6 +105,47 @@ TEST(MockCallTest, unexpectedCallHappened)
 
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
+
+TEST(MockCallTest, unexpectedScopeCallHappened)
+{
+    MockFailureReporterInstaller failureReporterInstaller;
+
+    MockExpectedCallsListForTest emptyExpectations;
+    MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "scope::func", emptyExpectations);
+
+    mock("scope").actualCall("func");
+
+    CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
+TEST(MockCallTest, expectOneCallInOneScopeButActualCallInAnotherScope)
+{
+    MockFailureReporterInstaller failureReporterInstaller;
+
+    MockExpectedCallsListForTest emptyExpectations;
+    MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "class::foo", emptyExpectations);
+    
+    mock("scope").expectOneCall("foo");
+    mock("class").actualCall("foo");
+
+    CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+    mock().clear();
+}
+
+TEST(MockCallTest, expectOneCallInScopeButActualCallInGlobal)
+{
+    MockFailureReporterInstaller failureReporterInstaller;
+
+    MockExpectedCallsListForTest emptyExpectations;
+    MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "foo", emptyExpectations);
+    
+    mock("scope").expectOneCall("foo");
+    mock().actualCall("foo");
+
+    CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+    mock().clear();
+}
+
 
 TEST(MockCallTest, expectMultipleCallsThatHappen)
 {

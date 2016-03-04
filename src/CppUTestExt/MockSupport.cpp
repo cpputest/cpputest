@@ -43,8 +43,8 @@ MockSupport& mock(const SimpleString& mockName, MockFailureReporter* failureRepo
     return mock_support;
 }
 
-MockSupport::MockSupport()
-    : callOrder_(0), expectedCallOrder_(0), strictOrdering_(false), standardReporter_(&defaultReporter_), ignoreOtherCalls_(false), enabled_(true), lastActualFunctionCall_(NULL), tracing_(false)
+MockSupport::MockSupport(const SimpleString& mockName)
+    : callOrder_(0), expectedCallOrder_(0), strictOrdering_(false), standardReporter_(&defaultReporter_), ignoreOtherCalls_(false), enabled_(true), lastActualFunctionCall_(NULL), mockName_(mockName), tracing_(false) 
 {
     setActiveReporter(NULL);
 }
@@ -142,6 +142,12 @@ void MockSupport::strictOrder()
     strictOrdering_ = true;
 }
 
+SimpleString MockSupport::appendScopeToName(const SimpleString& functionName)
+{
+    if (mockName_.isEmpty()) return functionName;
+    return mockName_ + "::" + functionName;
+}
+
 MockExpectedCall& MockSupport::expectOneCall(const SimpleString& functionName)
 {
     if (!enabled_) return MockIgnoredExpectedCall::instance();
@@ -149,7 +155,7 @@ MockExpectedCall& MockSupport::expectOneCall(const SimpleString& functionName)
     countCheck();
 
     MockCheckedExpectedCall* call = new MockCheckedExpectedCall;
-    call->withName(functionName);
+    call->withName(appendScopeToName(functionName));
     if (strictOrdering_)
         call->withCallOrder(++expectedCallOrder_);
     expectations_.addExpectedCall(call);
@@ -194,6 +200,8 @@ bool MockSupport::hasntUnexpectationWithName(const SimpleString& functionName)
 
 MockActualCall& MockSupport::actualCall(const SimpleString& functionName)
 {
+    const SimpleString scopeFuntionName = appendScopeToName(functionName);
+
     if (lastActualFunctionCall_) {
         lastActualFunctionCall_->checkExpectations();
         delete lastActualFunctionCall_;
@@ -201,15 +209,15 @@ MockActualCall& MockSupport::actualCall(const SimpleString& functionName)
     }
 
     if (!enabled_) return MockIgnoredActualCall::instance();
-    if (tracing_) return MockActualCallTrace::instance().withName(functionName);
+    if (tracing_) return MockActualCallTrace::instance().withName(scopeFuntionName);
 
 
-    if (hasntUnexpectationWithName(functionName) && hasntExpectationWithName(functionName)) {
+    if (hasntUnexpectationWithName(scopeFuntionName) && hasntExpectationWithName(scopeFuntionName)) {
         return MockIgnoredActualCall::instance();
     }
 
     MockCheckedActualCall* call = createActualFunctionCall();
-    call->withName(functionName);
+    call->withName(scopeFuntionName);
     return *call;
 }
 
@@ -417,9 +425,9 @@ MockNamedValue MockSupport::getData(const SimpleString& name)
     return *value;
 }
 
-MockSupport* MockSupport::clone()
+MockSupport* MockSupport::clone(const SimpleString& mockName)
 {
-    MockSupport* newMock = new MockSupport;
+    MockSupport* newMock = new MockSupport(mockName);
     newMock->setMockFailureStandardReporter(standardReporter_);
     if (ignoreOtherCalls_) newMock->ignoreOtherCalls();
 
@@ -442,7 +450,7 @@ MockSupport* MockSupport::getMockSupportScope(const SimpleString& name)
         return (MockSupport*) getData(mockingSupportName).getObjectPointer();
     }
 
-    MockSupport *newMock = clone();
+    MockSupport *newMock = clone(name);
 
     setDataObject(mockingSupportName, "MockSupport", newMock);
     return newMock;
