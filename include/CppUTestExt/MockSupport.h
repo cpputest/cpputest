@@ -115,7 +115,7 @@ public:
     virtual void removeAllComparatorsAndCopiers();
 
 protected:
-    MockSupport* clone(const SimpleString& mockName = "");
+    MockSupport* clone(const SimpleString& mockName);
     virtual MockCheckedActualCall *createActualFunctionCall();
     virtual void failTest(MockFailure& failure);
     void countCheck();
