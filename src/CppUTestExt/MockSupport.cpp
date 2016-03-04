@@ -43,8 +43,8 @@ MockSupport& mock(const SimpleString& mockName, MockFailureReporter* failureRepo
     return mock_support;
 }
 
-MockSupport::MockSupport()
-    : callOrder_(0), expectedCallOrder_(0), strictOrdering_(false), standardReporter_(&defaultReporter_), ignoreOtherCalls_(false), enabled_(true), lastActualFunctionCall_(NULL), tracing_(false)
+MockSupport::MockSupport(const SimpleString& mockName)
+    : callOrder_(0), expectedCallOrder_(0), strictOrdering_(false), standardReporter_(&defaultReporter_), ignoreOtherCalls_(false), enabled_(true), lastActualFunctionCall_(NULL), tracing_(false), mockName_(mockName)
 {
     setActiveReporter(NULL);
 }
@@ -144,8 +144,8 @@ void MockSupport::strictOrder()
 
 SimpleString MockSupport::appendScopeToName(const SimpleString& functionName)
 {
-    if (scope_.isEmpty()) return functionName;
-    return scope_ + "::" + functionName;
+    if (mockName_.isEmpty()) return functionName;
+    return mockName_ + "::" + functionName;
 }
 
 MockExpectedCall& MockSupport::expectOneCall(const SimpleString& functionName)
@@ -425,9 +425,9 @@ MockNamedValue MockSupport::getData(const SimpleString& name)
     return *value;
 }
 
-MockSupport* MockSupport::clone()
+MockSupport* MockSupport::clone(const SimpleString& mockName)
 {
-    MockSupport* newMock = new MockSupport;
+    MockSupport* newMock = new MockSupport(mockName);
     newMock->setMockFailureStandardReporter(standardReporter_);
     if (ignoreOtherCalls_) newMock->ignoreOtherCalls();
 
@@ -450,16 +450,10 @@ MockSupport* MockSupport::getMockSupportScope(const SimpleString& name)
         return (MockSupport*) getData(mockingSupportName).getObjectPointer();
     }
 
-    MockSupport *newMock = clone();
-    newMock->withScope(name);
+    MockSupport *newMock = clone(name);
 
     setDataObject(mockingSupportName, "MockSupport", newMock);
     return newMock;
-}
-
-void MockSupport::withScope(const SimpleString& name)
-{
-    scope_ = name;
 }
 
 MockSupport* MockSupport::getMockSupport(MockNamedValueListNode* node)

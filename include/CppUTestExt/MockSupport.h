@@ -42,7 +42,7 @@ MockSupport& mock(const SimpleString& mockName = "", MockFailureReporter* failur
 class MockSupport
 {
 public:
-    MockSupport();
+    MockSupport(const SimpleString& mockName = "");
     virtual ~MockSupport();
 
     virtual void strictOrder();
@@ -115,7 +115,7 @@ public:
     virtual void removeAllComparatorsAndCopiers();
 
 protected:
-    MockSupport* clone();
+    MockSupport* clone(const SimpleString& mockName = "");
     virtual MockCheckedActualCall *createActualFunctionCall();
     virtual void failTest(MockFailure& failure);
     void countCheck();
@@ -135,7 +135,7 @@ private:
     MockExpectedCallComposite compositeCalls_;
     MockNamedValueComparatorsAndCopiersRepository comparatorsAndCopiersRepository_;
     MockNamedValueList data_;
-    SimpleString scope_;
+    const SimpleString mockName_;
         
     bool tracing_;
 
@@ -154,7 +154,6 @@ private:
     
     SimpleString appendScopeToName(const SimpleString& functionName);
     
-    void withScope(const SimpleString& name);
 };
 
 #endif
