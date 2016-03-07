@@ -360,25 +360,33 @@ TEST(TestFailure, BinaryEqualExpectedNull)
 
 TEST(TestFailure, BitsEqualWithText)
 {
-    BitsEqualFailure f(test, failFileName, failLineNumber, 0x01, 0x03, 0xFF, 1, "text");
+    BitsEqualFailure f(test, failFileName, failLineNumber, 0x0001, 0x0003, 0x00FF, 2*8/CPPUTEST_CHAR_BIT, "text");
     FAILURE_EQUAL("Message: text\n"
-                  "\texpected <00000001>\n\tbut was  <00000011>", f);
+                  "\texpected <xxxxxxxx 00000001>\n\tbut was  <xxxxxxxx 00000011>", f);
 }
 
-TEST(TestFailure, BitsEqual1byte)
+#if (CPPUTEST_CHAR_BIT == 16)
+TEST(TestFailure, BitsEqualChar)
 {
-    BitsEqualFailure f(test, failFileName, failLineNumber, 0x01, 0x03, 0xFF, 1, "");
+    BitsEqualFailure f(test, failFileName, failLineNumber, 0x01, 0x03, 0xFF, sizeof(char), "");
+    FAILURE_EQUAL("expected <xxxxxxxx 00000001>\n\tbut was  <xxxxxxxx 00000011>", f);
+}
+#else
+TEST(TestFailure, BitsEqualChar)
+{
+    BitsEqualFailure f(test, failFileName, failLineNumber, 0x01, 0x03, 0xFF, sizeof(char), "");
     FAILURE_EQUAL("expected <00000001>\n\tbut was  <00000011>", f);
 }
+#endif
 
-TEST(TestFailure, BitsEqual2bytes)
+TEST(TestFailure, BitsEqual16Bit)
 {
-    BitsEqualFailure f(test, failFileName, failLineNumber, 0x0001, 0x0003, 0xFFFF, 2, "");
+    BitsEqualFailure f(test, failFileName, failLineNumber, 0x0001, 0x0003, 0xFFFF, 2*8/CPPUTEST_CHAR_BIT, "");
     FAILURE_EQUAL("expected <00000000 00000001>\n\tbut was  <00000000 00000011>", f);
 }
 
-TEST(TestFailure, BitsEqual4bytes)
+TEST(TestFailure, BitsEqual32Bit)
 {
-    BitsEqualFailure f(test, failFileName, failLineNumber, 0x00000001, 0x00000003, 0xFFFFFFFF, 4, "");
+    BitsEqualFailure f(test, failFileName, failLineNumber, 0x00000001, 0x00000003, 0xFFFFFFFF, 4*8/CPPUTEST_CHAR_BIT, "");
     FAILURE_EQUAL("expected <00000000 00000000 00000000 00000001>\n\tbut was  <00000000 00000000 00000000 00000011>", f);
 }

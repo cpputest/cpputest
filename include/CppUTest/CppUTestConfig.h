@@ -189,6 +189,16 @@
 #endif
 #endif
 
+/* Handling of systems with a different byte-width (e.g. 16 bit).
+ * Since CHAR_BIT is defined in limits.h (ANSI C), use default of 8 when building without Std C library.
+ */
+#if CPPUTEST_USE_STD_C_LIB
+#include <limits.h>
+#define CPPUTEST_CHAR_BIT CHAR_BIT
+#else
+#define CPPUTEST_CHAR_BIT 8
+#endif
+
 /* Visual C++ 10.0+ (2010+) supports the override keyword, but doesn't define the C++ version as C++11 */
 #if defined(__cplusplus) && ((__cplusplus >= 201103L) || (defined(_MSC_VER) && (_MSC_VER >= 1600)))
 #define CPPUTEST_COMPILER_FULLY_SUPPORTS_CXX11
