@@ -631,7 +631,7 @@ SimpleString StringFromBinaryWithSizeOrNull(const unsigned char* value, size_t s
 SimpleString StringFromMaskedBits(unsigned long value, unsigned long mask, size_t byteCount)
 {
     SimpleString result;
-    size_t bitCount = (byteCount > sizeof(unsigned long)) ? (sizeof(unsigned long) * 8) : (byteCount * 8);
+    size_t bitCount = (byteCount > sizeof(unsigned long)) ? (sizeof(unsigned long) * CPPUTEST_CHAR_BIT) : (byteCount * CPPUTEST_CHAR_BIT);
     const unsigned long msbMask = (((unsigned long) 1) << (bitCount - 1));
 
     for (size_t i = 0; i < bitCount; i++) {

@@ -507,7 +507,7 @@ static MockValue_c getMockValueCFromNamedValue(const MockNamedValue& namedValue)
     }
     else if (SimpleString::StrCmp(namedValue.getType().asCharString(), "void (*)()") == 0) {
         returnValue.type = MOCKVALUETYPE_FUNCTIONPOINTER;
-        returnValue.value.functionPointerValue = namedValue.getFunctionPointerValue();
+        returnValue.value.functionPointerValue = (void (*)()) namedValue.getFunctionPointerValue();
     }
     else if (SimpleString::StrCmp(namedValue.getType().asCharString(), "const unsigned char*") == 0) {
         returnValue.type = MOCKVALUETYPE_MEMORYBUFFER;
