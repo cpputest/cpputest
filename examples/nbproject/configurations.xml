@@ -1,0 +1,576 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="97">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header Files"
+                   projectFiles="true">
+      <logicalFolder name="CppUTest" displayName="CppUTest" projectFiles="true">
+        <itemPath>../include/CppUTest/CommandLineArguments.h</itemPath>
+        <itemPath>../include/CppUTest/CommandLineTestRunner.h</itemPath>
+        <itemPath>../include/CppUTest/CppUTestConfig.h</itemPath>
+        <itemPath>../include/CppUTest/JUnitTestOutput.h</itemPath>
+        <itemPath>../include/CppUTest/MemoryLeakDetector.h</itemPath>
+        <itemPath>../include/CppUTest/MemoryLeakDetectorMallocMacros.h</itemPath>
+        <itemPath>../include/CppUTest/MemoryLeakDetectorNewMacros.h</itemPath>
+        <itemPath>../include/CppUTest/MemoryLeakWarningPlugin.h</itemPath>
+        <itemPath>../include/CppUTest/PlatformSpecificFunctions.h</itemPath>
+        <itemPath>../include/CppUTest/PlatformSpecificFunctions_c.h</itemPath>
+        <itemPath>../include/CppUTest/SimpleMutex.h</itemPath>
+        <itemPath>../include/CppUTest/SimpleString.h</itemPath>
+        <itemPath>../include/CppUTest/StandardCLibrary.h</itemPath>
+        <itemPath>../include/CppUTest/TeamCityTestOutput.h</itemPath>
+        <itemPath>../include/CppUTest/TestFailure.h</itemPath>
+        <itemPath>../include/CppUTest/TestFilter.h</itemPath>
+        <itemPath>../include/CppUTest/TestHarness.h</itemPath>
+        <itemPath>../include/CppUTest/TestHarness_c.h</itemPath>
+        <itemPath>../include/CppUTest/TestMemoryAllocator.h</itemPath>
+        <itemPath>../include/CppUTest/TestOutput.h</itemPath>
+        <itemPath>../include/CppUTest/TestPlugin.h</itemPath>
+        <itemPath>../include/CppUTest/TestRegistry.h</itemPath>
+        <itemPath>../include/CppUTest/TestResult.h</itemPath>
+        <itemPath>../include/CppUTest/TestTestingFixture.h</itemPath>
+        <itemPath>../include/CppUTest/Utest.h</itemPath>
+        <itemPath>../include/CppUTest/UtestMacros.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="CppUTestExt" displayName="CppUTestExt" projectFiles="true">
+        <itemPath>../include/CppUTestExt/CodeMemoryReportFormatter.h</itemPath>
+        <itemPath>../include/CppUTestExt/GMock.h</itemPath>
+        <itemPath>../include/CppUTestExt/GTest.h</itemPath>
+        <itemPath>../include/CppUTestExt/GTestConvertor.h</itemPath>
+        <itemPath>../include/CppUTestExt/IEEE754ExceptionsPlugin.h</itemPath>
+        <itemPath>../include/CppUTestExt/MemoryReportAllocator.h</itemPath>
+        <itemPath>../include/CppUTestExt/MemoryReportFormatter.h</itemPath>
+        <itemPath>../include/CppUTestExt/MemoryReporterPlugin.h</itemPath>
+        <itemPath>../include/CppUTestExt/MockActualCall.h</itemPath>
+        <itemPath>../include/CppUTestExt/MockCheckedActualCall.h</itemPath>
+        <itemPath>../include/CppUTestExt/MockCheckedExpectedCall.h</itemPath>
+        <itemPath>../include/CppUTestExt/MockExpectedCall.h</itemPath>
+        <itemPath>../include/CppUTestExt/MockExpectedCallsList.h</itemPath>
+        <itemPath>../include/CppUTestExt/MockFailure.h</itemPath>
+        <itemPath>../include/CppUTestExt/MockNamedValue.h</itemPath>
+        <itemPath>../include/CppUTestExt/MockSupport.h</itemPath>
+        <itemPath>../include/CppUTestExt/MockSupportPlugin.h</itemPath>
+        <itemPath>../include/CppUTestExt/MockSupport_c.h</itemPath>
+        <itemPath>../include/CppUTestExt/OrderedTest.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="Platforms" displayName="Platforms" projectFiles="true">
+      </logicalFolder>
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+      <logicalFolder name="CppUTest" displayName="CppUTest" projectFiles="true">
+        <itemPath>../src/CppUTest/CommandLineArguments.cpp</itemPath>
+        <itemPath>../src/CppUTest/CommandLineTestRunner.cpp</itemPath>
+        <itemPath>../src/CppUTest/JUnitTestOutput.cpp</itemPath>
+        <itemPath>../src/CppUTest/MemoryLeakDetector.cpp</itemPath>
+        <itemPath>../src/CppUTest/MemoryLeakWarningPlugin.cpp</itemPath>
+        <itemPath>../src/CppUTest/SimpleMutex.cpp</itemPath>
+        <itemPath>../src/CppUTest/SimpleString.cpp</itemPath>
+        <itemPath>../src/CppUTest/TeamCityTestOutput.cpp</itemPath>
+        <itemPath>../src/CppUTest/TestFailure.cpp</itemPath>
+        <itemPath>../src/CppUTest/TestFilter.cpp</itemPath>
+        <itemPath>../src/CppUTest/TestHarness_c.cpp</itemPath>
+        <itemPath>../src/CppUTest/TestMemoryAllocator.cpp</itemPath>
+        <itemPath>../src/CppUTest/TestOutput.cpp</itemPath>
+        <itemPath>../src/CppUTest/TestPlugin.cpp</itemPath>
+        <itemPath>../src/CppUTest/TestRegistry.cpp</itemPath>
+        <itemPath>../src/CppUTest/TestResult.cpp</itemPath>
+        <itemPath>../src/CppUTest/Utest.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="CppUTestExt" displayName="CppUTestExt" projectFiles="true">
+        <itemPath>../src/CppUTestExt/CodeMemoryReportFormatter.cpp</itemPath>
+        <itemPath>../src/CppUTestExt/IEEE754ExceptionsPlugin.cpp</itemPath>
+        <itemPath>../src/CppUTestExt/MemoryReportAllocator.cpp</itemPath>
+        <itemPath>../src/CppUTestExt/MemoryReportFormatter.cpp</itemPath>
+        <itemPath>../src/CppUTestExt/MemoryReporterPlugin.cpp</itemPath>
+        <itemPath>../src/CppUTestExt/MockActualCall.cpp</itemPath>
+        <itemPath>../src/CppUTestExt/MockExpectedCall.cpp</itemPath>
+        <itemPath>../src/CppUTestExt/MockExpectedCallsList.cpp</itemPath>
+        <itemPath>../src/CppUTestExt/MockFailure.cpp</itemPath>
+        <itemPath>../src/CppUTestExt/MockNamedValue.cpp</itemPath>
+        <itemPath>../src/CppUTestExt/MockSupport.cpp</itemPath>
+        <itemPath>../src/CppUTestExt/MockSupportPlugin.cpp</itemPath>
+        <itemPath>../src/CppUTestExt/MockSupport_c.cpp</itemPath>
+        <itemPath>../src/CppUTestExt/OrderedTest.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="Platforms" displayName="Platforms" projectFiles="true">
+        <logicalFolder name="Gcc" displayName="Gcc" projectFiles="true">
+          <itemPath>../src/Platforms/Gcc/UtestPlatform.cpp</itemPath>
+        </logicalFolder>
+      </logicalFolder>
+      <logicalFolder name="tests" displayName="tests" projectFiles="true">
+        <itemPath>../tests/AllTests.cpp</itemPath>
+        <itemPath>../tests/AllocLetTestFree.c</itemPath>
+        <itemPath>../tests/AllocLetTestFreeTest.cpp</itemPath>
+        <itemPath>../tests/AllocationInCFile.c</itemPath>
+        <itemPath>../tests/AllocationInCppFile.cpp</itemPath>
+        <itemPath>../tests/CheatSheetTest.cpp</itemPath>
+        <itemPath>../tests/CommandLineArgumentsTest.cpp</itemPath>
+        <itemPath>../tests/CommandLineTestRunnerTest.cpp</itemPath>
+        <itemPath>../tests/JUnitOutputTest.cpp</itemPath>
+        <itemPath>../tests/MemoryLeakDetectorTest.cpp</itemPath>
+        <itemPath>../tests/MemoryLeakWarningTest.cpp</itemPath>
+        <itemPath>../tests/MemoryOperatorOverloadTest.cpp</itemPath>
+        <itemPath>../tests/PluginTest.cpp</itemPath>
+        <itemPath>../tests/PreprocessorTest.cpp</itemPath>
+        <itemPath>../tests/SetPluginTest.cpp</itemPath>
+        <itemPath>../tests/SimpleMutexTest.cpp</itemPath>
+        <itemPath>../tests/SimpleStringTest.cpp</itemPath>
+        <itemPath>../tests/TeamCityOutputTest.cpp</itemPath>
+        <itemPath>../tests/TestFailureNaNTest.cpp</itemPath>
+        <itemPath>../tests/TestFailureTest.cpp</itemPath>
+        <itemPath>../tests/TestFilterTest.cpp</itemPath>
+        <itemPath>../tests/TestHarness_cTest.cpp</itemPath>
+        <itemPath>../tests/TestHarness_cTestCFile.c</itemPath>
+        <itemPath>../tests/TestInstallerTest.cpp</itemPath>
+        <itemPath>../tests/TestMemoryAllocatorTest.cpp</itemPath>
+        <itemPath>../tests/TestOutputTest.cpp</itemPath>
+        <itemPath>../tests/TestRegistryTest.cpp</itemPath>
+        <itemPath>../tests/TestResultTest.cpp</itemPath>
+        <itemPath>../tests/TestUTestMacro.cpp</itemPath>
+        <itemPath>../tests/UtestPlatformTest.cpp</itemPath>
+        <itemPath>../tests/UtestTest.cpp</itemPath>
+      </logicalFolder>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>NBMakefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <sourceRootList>
+    <Elem>src/CppUTest</Elem>
+    <Elem>src/CppUTestExt</Elem>
+    <Elem>src/Platforms</Elem>
+    <Elem>include</Elem>
+    <Elem>examples/AllTests</Elem>
+    <Elem>../include/CppUTest</Elem>
+    <Elem>../include/CppUTestExt</Elem>
+    <Elem>../include/Platforms</Elem>
+    <Elem>AllTests</Elem>
+    <Elem>ApplicationLib</Elem>
+    <Elem>../src/CppUTest</Elem>
+    <Elem>../src/CppUTestExt</Elem>
+    <Elem>../src/Platforms</Elem>
+    <Elem>../tests</Elem>
+  </sourceRootList>
+  <projectmakefile>NBMakefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="1">
+      <toolsSet>
+        <compilerSet>Cygwin|Cygwin</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>../include</pElem>
+          </incDir>
+          <commandLine>-Werror=float-conversion</commandLine>
+          <warningLevel>2</warningLevel>
+        </ccTool>
+      </compileType>
+      <item path="../include/CppUTest/CommandLineArguments.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../include/CppUTest/CommandLineTestRunner.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../include/CppUTest/CppUTestConfig.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../include/CppUTest/JUnitTestOutput.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../include/CppUTest/MemoryLeakDetector.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../include/CppUTest/MemoryLeakDetectorMallocMacros.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../include/CppUTest/MemoryLeakDetectorNewMacros.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../include/CppUTest/MemoryLeakWarningPlugin.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../include/CppUTest/PlatformSpecificFunctions.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../include/CppUTest/PlatformSpecificFunctions_c.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../include/CppUTest/SimpleMutex.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../include/CppUTest/SimpleString.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../include/CppUTest/StandardCLibrary.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../include/CppUTest/TeamCityTestOutput.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../include/CppUTest/TestFailure.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../include/CppUTest/TestFilter.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../include/CppUTest/TestHarness.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../include/CppUTest/TestHarness_c.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../include/CppUTest/TestMemoryAllocator.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../include/CppUTest/TestOutput.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../include/CppUTest/TestPlugin.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../include/CppUTest/TestRegistry.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../include/CppUTest/TestResult.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../include/CppUTest/TestTestingFixture.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../include/CppUTest/Utest.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../include/CppUTest/UtestMacros.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../include/CppUTestExt/CodeMemoryReportFormatter.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../include/CppUTestExt/GMock.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../include/CppUTestExt/GTest.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../include/CppUTestExt/GTestConvertor.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../include/CppUTestExt/IEEE754ExceptionsPlugin.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../include/CppUTestExt/MemoryReportAllocator.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../include/CppUTestExt/MemoryReportFormatter.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../include/CppUTestExt/MemoryReporterPlugin.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../include/CppUTestExt/MockActualCall.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../include/CppUTestExt/MockCheckedActualCall.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../include/CppUTestExt/MockCheckedExpectedCall.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../include/CppUTestExt/MockExpectedCall.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../include/CppUTestExt/MockExpectedCallsList.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../include/CppUTestExt/MockFailure.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../include/CppUTestExt/MockNamedValue.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../include/CppUTestExt/MockSupport.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../include/CppUTestExt/MockSupportPlugin.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../include/CppUTestExt/MockSupport_c.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../include/CppUTestExt/OrderedTest.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../src/CppUTest/CommandLineArguments.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/CppUTest/CommandLineTestRunner.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/CppUTest/JUnitTestOutput.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/CppUTest/MemoryLeakDetector.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/CppUTest/MemoryLeakWarningPlugin.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/CppUTest/SimpleMutex.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/CppUTest/SimpleString.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/CppUTest/TeamCityTestOutput.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/CppUTest/TestFailure.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/CppUTest/TestFilter.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/CppUTest/TestHarness_c.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/CppUTest/TestMemoryAllocator.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/CppUTest/TestOutput.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/CppUTest/TestPlugin.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/CppUTest/TestRegistry.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/CppUTest/TestResult.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/CppUTest/Utest.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/CppUTestExt/CodeMemoryReportFormatter.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/CppUTestExt/IEEE754ExceptionsPlugin.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/CppUTestExt/MemoryReportAllocator.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/CppUTestExt/MemoryReportFormatter.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/CppUTestExt/MemoryReporterPlugin.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/CppUTestExt/MockActualCall.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/CppUTestExt/MockExpectedCall.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/CppUTestExt/MockExpectedCallsList.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/CppUTestExt/MockFailure.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/CppUTestExt/MockNamedValue.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/CppUTestExt/MockSupport.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/CppUTestExt/MockSupportPlugin.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/CppUTestExt/MockSupport_c.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../src/CppUTestExt/OrderedTest.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../src/Platforms/Gcc/UtestPlatform.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../tests/AllTests.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../tests/AllocLetTestFree.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../tests/AllocLetTestFreeTest.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../tests/AllocationInCFile.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../tests/AllocationInCppFile.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../tests/CheatSheetTest.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../tests/CommandLineArgumentsTest.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../tests/CommandLineTestRunnerTest.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../tests/JUnitOutputTest.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../tests/MemoryLeakDetectorTest.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../tests/MemoryLeakWarningTest.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../tests/MemoryOperatorOverloadTest.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../tests/PluginTest.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../tests/PreprocessorTest.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../tests/SetPluginTest.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../tests/SimpleMutexTest.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../tests/SimpleStringTest.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../tests/TeamCityOutputTest.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../tests/TestFailureNaNTest.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../tests/TestFailureTest.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../tests/TestFilterTest.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../tests/TestHarness_cTest.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../tests/TestHarness_cTestCFile.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="../tests/TestInstallerTest.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../tests/TestMemoryAllocatorTest.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../tests/TestOutputTest.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../tests/TestRegistryTest.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../tests/TestResultTest.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../tests/TestUTestMacro.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../tests/UtestPlatformTest.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../tests/UtestTest.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>

@@ -190,7 +190,25 @@ DoublesEqualFailure::DoublesEqualFailure(UtestShell* test, const char* fileName,
 {
     message_ = createUserText(text);
 
-    message_ += createButWasString(StringFrom(expected, 7), StringFrom(actual, 7));
+    bool nums_valid = !((PlatformSpecificIsNan(expected)) || (PlatformSpecificIsInf(expected)) ||
+                        (PlatformSpecificIsNan(actual)) || (PlatformSpecificIsInf(actual)));
+    int prec = 3;
+    SimpleString sexp = StringFrom(expected, prec);
+    SimpleString sact = StringFrom(actual, prec);
+    int dsize = sizeof(double);
+    const int prec_max = dsize == 8 ? 17 : 7;
+
+    if (nums_valid)
+    {
+        while ((prec < prec_max) && (sexp == sact))
+        {
+            prec++;
+            sexp = StringFrom(expected, prec);
+            sact = StringFrom(actual, prec);
+        }
+    }
+    message_ += createButWasString(sexp, sact);
+
     message_ += " threshold used was <";
     message_ += StringFrom(threshold, 7);
     message_ += ">";

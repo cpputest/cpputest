@@ -43,8 +43,8 @@
 #include <unistd.h>
 #include <signal.h>
 #ifndef __MINGW32__
-#include <sys/wait.h>
-#include <errno.h>
+# include <sys/wait.h>
+# include <errno.h>
 #endif
 #include <pthread.h>
 
@@ -234,9 +234,11 @@ void* (*PlatformSpecificMemset)(void*, int, size_t) = memset;
 
 /* MinGw GCC 5.3.0 isnan / isinf macros are not working properly, causing a conversion
  * warning / error
+ * Same for GCC 4.9
  */
-#if defined(__GNUC__) && __GNUC__ >= 5
-#pragma GCC diagnostic ignored "-Wfloat-conversion"
+
+#if defined(__GNUC__) && defined(__GNUC_MINOR__) && ((__GNUC__ >= 5) || ((__GNUC__ == 4 && __GNUC_MINOR__ >= 9)))
+# pragma GCC diagnostic ignored "-Wfloat-conversion"
 #endif
 
 static int IsNanImplementation(double d)

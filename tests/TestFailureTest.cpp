@@ -277,6 +277,13 @@ TEST(TestFailure, DoublesEqualNormal)
                 "\tbut was  <2> threshold used was <3>", f);
 }
 
+TEST(TestFailure, DoublesEqualBigValues)
+{
+    DoublesEqualFailure f(test, failFileName, failLineNumber, 1000000.000, 1000000.001, 0.001, "");
+    FAILURE_EQUAL("expected <1000000>\n"
+                "\tbut was  <1000000.001> threshold used was <0.001>", f);
+}
+
 TEST(TestFailure, BinaryEqualWithText)
 {
     const unsigned char expectedData[] = { 0x00 };
