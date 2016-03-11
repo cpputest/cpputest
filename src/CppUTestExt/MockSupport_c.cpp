@@ -32,6 +32,16 @@
 #include "CppUTestExt/MockSupport.h"
 #include "CppUTestExt/MockSupport_c.h"
 
+extern "C"
+{
+    typedef void (*cpputest_c_function_pointer)();
+}
+
+static void (*to_cpp(cpputest_c_function_pointer value))()
+{
+    return (void(*)())value;
+}
+
 class MockFailureReporterTestTerminatorForInCOnlyCode : public TestTerminatorWithoutExceptions
 {
 public:
@@ -382,7 +392,7 @@ MockExpectedCall_c* withConstPointerParameters_c(const char* name, const void* v
 
 MockExpectedCall_c* withFunctionPointerParameters_c(const char* name, void (*value)())
 {
-    expectedCall = &expectedCall->withParameter(name, value);
+    expectedCall = &expectedCall->withParameter(name, to_cpp(value));
     return &gExpectedCall;
 }
 
@@ -466,7 +476,7 @@ MockExpectedCall_c* andReturnConstPointerValue_c(const void* value)
 
 MockExpectedCall_c* andReturnFunctionPointerValue_c(void (*value)())
 {
-    expectedCall = &expectedCall->andReturnValue(value);
+    expectedCall = &expectedCall->andReturnValue(to_cpp(value));
     return &gExpectedCall;
 }
 
@@ -598,7 +608,7 @@ MockActualCall_c* withActualConstPointerParameters_c(const char* name, const voi
 
 MockActualCall_c* withActualFunctionPointerParameters_c(const char* name, void (*value)())
 {
-    actualCall = &actualCall->withParameter(name, value);
+    actualCall = &actualCall->withParameter(name, to_cpp(value));
     return &gActualCall;
 }
 
@@ -795,7 +805,7 @@ void setConstPointerData_c(const char* name, const void* value)
 
 void setFunctionPointerData_c(const char* name, void (*value)())
 {
-    currentMockSupport->setData(name, value);
+    currentMockSupport->setData(name, to_cpp(value));
 }
 
 void setDataObject_c(const char* name, const char* type, void* value)
