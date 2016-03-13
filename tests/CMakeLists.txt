@@ -44,6 +44,12 @@ if (MINGW)
     set(THREAD_LIB "pthread")
 endif (MINGW)
 
+if (${CMAKE_HOST_SYSTEM_NAME} MATCHES "OpenBSD")
+   set (THREADS_HAVE_PTHREAD_ARG 1)
+   find_package (Threads REQUIRED)
+   set (THREAD_LIB "pthread")
+endif ()
+
 add_executable(CppUTestTests ${CppUTestTests_src})
 cpputest_set_test_output_location(CppUTestTests "${CMAKE_BINARY_DIR}/tests")
 target_link_libraries(CppUTestTests CppUTest ${THREAD_LIB})
