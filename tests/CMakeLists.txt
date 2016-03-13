@@ -45,7 +45,8 @@ if (MINGW)
 endif (MINGW)
 
 add_executable(CppUTestTests ${CppUTestTests_src})
+cpputest_set_test_output_location(CppUTestTests "${CMAKE_BINARY_DIR}/tests")
 target_link_libraries(CppUTestTests CppUTest ${THREAD_LIB})
 
 add_subdirectory(CppUTestExt)
-cpputest_buildtime_discover_tests (CppUTestTests)
+cpputest_buildtime_discover_tests(CppUTestTests)
