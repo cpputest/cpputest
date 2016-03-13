@@ -88,6 +88,14 @@
   extern int* p##testGroup; \
   int* p##testGroup = &externTestGroup##testGroup
 
+#define CPPUTEST_DEFAULT_MAIN \
+  /*#include <CppUTest/CommandLineTestRunner.h>*/ \
+  int main(int argc, char** argv) \
+  { \
+     return CommandLineTestRunner::RunAllTests(argc, argv); \
+  }
+
+
 // Different checking macros
 
 #define CHECK(condition)\
