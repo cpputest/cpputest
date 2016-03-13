@@ -8,7 +8,7 @@ CppUTest unit testing and mocking framework for C/C++
 Travis Linux build status:
 [![Build Status](https://travis-ci.org/cpputest/cpputest.png?branch=master)](https://travis-ci.org/cpputest/cpputest)
 
-AppVeyer Windows build status:
+AppVeyor Windows build status:
 [![Build status](https://ci.appveyor.com/api/projects/status/irh38i4wblsb5tew?svg=true)](https://ci.appveyor.com/project/basvodde/cpputest)
 
 Coverage:
