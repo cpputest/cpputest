@@ -32,6 +32,15 @@
 #include "MockSupport_cTestCFile.h"
 #include "CppUTestExt/OrderedTest.h"
 
+extern "C" {
+  static void dummy_function_for_mock_c_test()
+  {
+  }
+  static void dummy_function_for_mock_c_test_two()
+  {
+  }
+}
+
 TEST_GROUP(MockSupport_c)
 {
 };
@@ -87,10 +96,10 @@ TEST(MockSupport_c, expectAndActualParameters)
 {
     mock_c()->expectOneCall("boo")->withIntParameters("integer", 1)->withDoubleParameters("double", 1.0)->
             withStringParameters("string", "string")->withPointerParameters("pointer", (void*) 1)->
-            withFunctionPointerParameters("functionPointer", (void(*)()) 1);
+            withFunctionPointerParameters("functionPointer", dummy_function_for_mock_c_test);
     mock_c()->actualCall("boo")->withIntParameters("integer", 1)->withDoubleParameters("double", 1.0)->
             withStringParameters("string", "string")->withPointerParameters("pointer", (void*) 1)->
-            withFunctionPointerParameters("functionPointer", (void(*)()) 1);
+            withFunctionPointerParameters("functionPointer", dummy_function_for_mock_c_test);
 }
 
 extern "C"{
@@ -395,27 +404,24 @@ TEST(MockSupport_c, whenNoReturnValueIsGivenReturnConstPointerValueOrDefaultShou
 
 TEST(MockSupport_c, returnFunctionPointerValue)
 {
-    mock_c()->expectOneCall("boo")->andReturnFunctionPointerValue((void(*)()) 10);
-    FUNCTIONPOINTERS_EQUAL((void(*)()) 10, mock_c()->actualCall("boo")->functionPointerReturnValue());
-    FUNCTIONPOINTERS_EQUAL((void(*)()) 10, mock_c()->functionPointerReturnValue());
+    mock_c()->expectOneCall("boo")->andReturnFunctionPointerValue(dummy_function_for_mock_c_test);
+    FUNCTIONPOINTERS_EQUAL(dummy_function_for_mock_c_test, mock_c()->actualCall("boo")->functionPointerReturnValue());
+    FUNCTIONPOINTERS_EQUAL(dummy_function_for_mock_c_test, mock_c()->functionPointerReturnValue());
     LONGS_EQUAL(MOCKVALUETYPE_FUNCTIONPOINTER, mock_c()->returnValue().type);
 }
 
 TEST(MockSupport_c, whenReturnValueIsGivenReturnFunctionPointerValueOrDefaultShouldIgnoreTheDefault)
 {
-    void (*defaultValue)() = (void (*)()) 10;
-    void (*expectedValue)() = (void (*)()) 14;
-    mock_c()->expectOneCall("foo")->andReturnFunctionPointerValue(expectedValue);
-    FUNCTIONPOINTERS_EQUAL(expectedValue,  mock_c()->actualCall("foo")->returnFunctionPointerValueOrDefault(defaultValue));
-    FUNCTIONPOINTERS_EQUAL(expectedValue, mock_c()->returnFunctionPointerValueOrDefault(defaultValue));
+    mock_c()->expectOneCall("foo")->andReturnFunctionPointerValue(dummy_function_for_mock_c_test);
+    FUNCTIONPOINTERS_EQUAL(dummy_function_for_mock_c_test,  mock_c()->actualCall("foo")->returnFunctionPointerValueOrDefault(dummy_function_for_mock_c_test_two));
+    FUNCTIONPOINTERS_EQUAL(dummy_function_for_mock_c_test, mock_c()->returnFunctionPointerValueOrDefault(dummy_function_for_mock_c_test_two));
 }
 
 TEST(MockSupport_c, whenNoReturnValueIsGivenReturnFunctionPointerValueOrDefaultShouldlUseTheDefaultValue)
 {
-    void (*defaultValue)() = (void (*)()) 10;
     mock_c()->expectOneCall("foo");
-    FUNCTIONPOINTERS_EQUAL(defaultValue, mock_c()->actualCall("foo")->returnFunctionPointerValueOrDefault(defaultValue));
-    FUNCTIONPOINTERS_EQUAL(defaultValue, mock_c()->returnFunctionPointerValueOrDefault(defaultValue));
+    FUNCTIONPOINTERS_EQUAL(dummy_function_for_mock_c_test_two, mock_c()->actualCall("foo")->returnFunctionPointerValueOrDefault(dummy_function_for_mock_c_test_two));
+    FUNCTIONPOINTERS_EQUAL(dummy_function_for_mock_c_test_two, mock_c()->returnFunctionPointerValueOrDefault(dummy_function_for_mock_c_test_two));
 }
 
 TEST(MockSupport_c, MockSupportWithScope)
@@ -465,8 +471,8 @@ TEST(MockSupport_c, MockSupportMemoryBufferData)
 
 TEST(MockSupport_c, MockSupportSetFunctionPointerData)
 {
-    mock_c()->setFunctionPointerData("functionPointer", (void(*)()) 1);
-    FUNCTIONPOINTERS_EQUAL((void(*)()) 1, mock_c()->getData("functionPointer").value.functionPointerValue);
+    mock_c()->setFunctionPointerData("functionPointer", dummy_function_for_mock_c_test);
+    FUNCTIONPOINTERS_EQUAL(dummy_function_for_mock_c_test, mock_c()->getData("functionPointer").value.functionPointerValue);
 }
 
 TEST(MockSupport_c, MockSupportSetDataObject)
