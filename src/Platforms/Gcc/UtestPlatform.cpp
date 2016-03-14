@@ -232,12 +232,18 @@ void (*PlatformSpecificFree)(void* memory) = free;
 void* (*PlatformSpecificMemCpy)(void*, const void*, size_t) = memcpy;
 void* (*PlatformSpecificMemset)(void*, int, size_t) = memset;
 
-/* MinGw GCC 5.3.0 isnan / isinf macros are not working properly, causing a conversion
+/* GCC 4.9+ isnan / isinf macros are not working properly, causing a conversion
  * warning / error
  */
-#if defined(__GNUC__) && __GNUC__ >= 5
+#if ( defined(__GNUC_PREREQ) && __GNUC_PREREQ(4, 9) )
+# define NEED_FLOAT_CONV_FIX
+#elif( defined(__MINGW_GNUC_PREREQ) && __MINGW_GNUC_PREREQ(4, 9) )
+# define NEED_FLOAT_CONV_FIX
+#endif /* Gcc 4.9+ */
+
+#ifdef NEED_FLOAT_CONV_FIX
 #pragma GCC diagnostic ignored "-Wfloat-conversion"
-#endif
+#endif /* NEED_FLOAT_CONV_FIX */
 
 static int IsNanImplementation(double d)
 {
