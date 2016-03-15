@@ -110,6 +110,7 @@ public:
 private:
     SimpleString name_;
     SimpleString type_;
+    SimpleString cachedToString_;
     union {
         int intValue_;
         unsigned int unsignedIntValue_;

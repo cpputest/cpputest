@@ -100,6 +100,7 @@ void MockNamedValue::setObjectPointer(const SimpleString& type, const void* obje
     value_.objectPointerValue_ = objectPtr;
     if (defaultRepository_)
         comparator_ = defaultRepository_->getComparatorForType(type);
+    cachedToString_ = this->toString();
 }
 
 void MockNamedValue::setSize(size_t size)
@@ -260,6 +261,8 @@ bool MockNamedValue::equals(const MockNamedValue& p) const
 
 SimpleString MockNamedValue::toString() const
 {
+    if(cachedToString_ != "")
+       return cachedToString_;
     if (type_ == "int")
         return StringFrom(value_.intValue_);
     else if (type_ == "unsigned int")
