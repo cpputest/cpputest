@@ -115,8 +115,9 @@ void MockNamedValue::setObjectPointer(const SimpleString& type, const void* obje
     {
         comparator_ = defaultRepository_->getComparatorForType(type);
         copier_ = defaultRepository_->getCopierForType(type);
+        if(comparator_ && copier_)
+           cachedToString_ = this->toString();
     }
-    cachedToString_ = this->toString();
 }
 
 void MockNamedValue::setSize(size_t size)
@@ -313,9 +314,6 @@ bool MockNamedValue::compatibleForCopying(const MockNamedValue& p) const
 
 SimpleString MockNamedValue::toString() const
 {
-    if(cachedToString_ != "")
-       return cachedToString_;
-
     if (type_ == "int")
         return StringFrom(value_.intValue_);
     else if (type_ == "unsigned int")
@@ -337,8 +335,13 @@ SimpleString MockNamedValue::toString() const
     else if (type_ == "const unsigned char*")
         return StringFromBinaryWithSizeOrNull(value_.memoryBufferValue_, size_);
 
+    if(!cachedToString_.isEmpty())
+       return cachedToString_;
+
     if (comparator_)
-        return comparator_->valueToString(value_.objectPointerValue_);
+    {
+       return comparator_->valueToString(value_.objectPointerValue_);
+    }
 
     return StringFromFormat("No comparator found for type: \"%s\"", type_.asCharString());
 
