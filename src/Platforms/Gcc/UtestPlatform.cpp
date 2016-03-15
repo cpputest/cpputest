@@ -53,11 +53,11 @@
 static jmp_buf test_exit_jmp_buf[10];
 static int jmp_buf_index = 0;
 
-#ifdef __MINGW32__
+#ifndef HAVE_FORK
 
 static void GccPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin*, TestResult* result)
 {
-    result->addFailure(TestFailure(shell, "-p doesn't work on MinGW as it is lacking fork.\b"));
+    result->addFailure(TestFailure(shell, "-p doesn't work on this platform, as it is lacking fork.\b"));
 }
 
 static int PlatformSpecificForkImplementation(void)
@@ -232,13 +232,26 @@ void (*PlatformSpecificFree)(void* memory) = free;
 void* (*PlatformSpecificMemCpy)(void*, const void*, size_t) = memcpy;
 void* (*PlatformSpecificMemset)(void*, int, size_t) = memset;
 
+/* GCC 4.9.x introduces -Wfloat-conversion, which causes a warning / error
+ * in GCC's own (macro) implementation of isnan() and isinf().
+ */
+#if defined(__GNUC__) && (__GNUC__ >= 5 || (__GNUC__ == 4 && __GNUC_MINOR__ > 8))
+#pragma GCC diagnostic ignored "-Wfloat-conversion"
+#endif
+
 static int IsNanImplementation(double d)
 {
-    return isnan((float)d);
+    return isnan(d);
+}
+
+static int IsInfImplementation(double d)
+{
+    return isinf(d);
 }
 
 double (*PlatformSpecificFabs)(double) = fabs;
 int (*PlatformSpecificIsNan)(double) = IsNanImplementation;
+int (*PlatformSpecificIsInf)(double) = IsInfImplementation;
 int (*PlatformSpecificAtExit)(void(*func)(void)) = atexit;  /// this was undefined before
 
 static PlatformSpecificMutex PThreadMutexCreate(void)

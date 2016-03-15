@@ -272,7 +272,7 @@ TEST(MemoryLeakWarningGlobalDetectorTest, crashOnLeakWithOperatorNew)
     crash_on_allocation_number(1);
     char* memory = new char[100];
     CHECK(cpputestHasCrashed);
-    delete memory;
+    delete [] memory;
 }
 
 TEST(MemoryLeakWarningGlobalDetectorTest, crashOnLeakWithOperatorNewArray)
@@ -350,8 +350,8 @@ TEST(MemoryLeakWarningGlobalDetectorTest, turnOffNewOverloadsNoThrowCausesNoAddi
     LONGS_EQUAL(storedAmountOfLeaks, detector->totalMemoryLeaks(mem_leak_period_all));
 
     delete nonMemoryNoThrow;
-    delete nonArrayMemoryNoThrow;
-    delete nonArrayMemoryThrow;
+    delete [] nonArrayMemoryNoThrow;
+    delete [] nonArrayMemoryThrow;
 #ifdef CPPUTEST_USE_NEW_MACROS
     #include "CppUTest/MemoryLeakDetectorNewMacros.h"
 #endif

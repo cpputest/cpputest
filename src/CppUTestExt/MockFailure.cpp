@@ -103,11 +103,12 @@ MockExpectedCallsDidntHappenFailure::MockExpectedCallsDidntHappenFailure(UtestSh
 
 MockUnexpectedCallHappenedFailure::MockUnexpectedCallHappenedFailure(UtestShell* test, const SimpleString& name, const MockExpectedCallsList& expectations) : MockFailure(test)
 {
-    int amountOfExpectations = expectations.amountOfExpectationsFor(name);
-    if (amountOfExpectations)
-        message_ = StringFromFormat("Mock Failure: Unexpected additional (%dth) call to function: ", amountOfExpectations+1);
-    else
+    if (expectations.amountOfExpectationsFor(name)) {
+        SimpleString ordinalNumber = StringFromOrdinalNumber((unsigned)(expectations.amountOfExpectationsFor(name) + 1));
+        message_ = StringFromFormat("Mock Failure: Unexpected additional (%s) call to function: ", ordinalNumber.asCharString());
+    } else {
         message_ = "Mock Failure: Unexpected call to function: ";
+    }
     message_ += name;
     message_ += "\n";
     addExpectationsAndCallHistory(expectations);
@@ -115,9 +116,13 @@ MockUnexpectedCallHappenedFailure::MockUnexpectedCallHappenedFailure(UtestShell*
 
 MockCallOrderFailure::MockCallOrderFailure(UtestShell* test, const MockExpectedCallsList& expectations) : MockFailure(test)
 {
+    MockExpectedCallsList expectationsForOutOfOrder;
+    expectationsForOutOfOrder.addExpectations(expectations);
+    expectationsForOutOfOrder.onlyKeepOutOfOrderExpectations();
+
     message_ = "Mock Failure: Out of order calls";
     message_ += "\n";
-    addExpectationsAndCallHistory(expectations);
+    addExpectationsAndCallHistory(expectationsForOutOfOrder);
 }
 
 MockUnexpectedInputParameterFailure::MockUnexpectedInputParameterFailure(UtestShell* test, const SimpleString& functionName, const MockNamedValue& parameter, const MockExpectedCallsList& expectations)  : MockFailure(test)
@@ -160,10 +165,25 @@ MockUnexpectedInputParameterFailure::MockUnexpectedInputParameterFailure(UtestSh
 
 MockUnexpectedOutputParameterFailure::MockUnexpectedOutputParameterFailure(UtestShell* test, const SimpleString& functionName, const MockNamedValue& parameter, const MockExpectedCallsList& expectations)  : MockFailure(test)
 {
-    message_ = "Mock Failure: Unexpected output parameter name to function \"";
-    message_ += functionName;
-    message_ += "\": ";
-    message_ += parameter.getName();
+    MockExpectedCallsList expectationsForFunctionWithParameterName;
+    expectationsForFunctionWithParameterName.addExpectationsRelatedTo(functionName, expectations);
+    expectationsForFunctionWithParameterName.onlyKeepExpectationsWithOutputParameterName(parameter.getName());
+
+    if (expectationsForFunctionWithParameterName.isEmpty()) {
+        message_ = "Mock Failure: Unexpected output parameter name to function \"";
+        message_ += functionName;
+        message_ += "\": ";
+        message_ += parameter.getName();
+    }
+    else {
+        message_ = "Mock Failure: Unexpected parameter type \"";
+        message_ += parameter.getType();
+        message_ += "\" to output parameter \"";
+        message_ += parameter.getName();
+        message_ += "\" to function \"";
+        message_ += functionName;
+        message_ += "\"";
+    }
 
     message_ += "\n";
     addExpectationsAndCallHistoryRelatedTo(functionName, expectations);
@@ -196,12 +216,17 @@ MockExpectedParameterDidntHappenFailure::MockExpectedParameterDidntHappenFailure
 
 MockNoWayToCompareCustomTypeFailure::MockNoWayToCompareCustomTypeFailure(UtestShell* test, const SimpleString& typeName) : MockFailure(test)
 {
-    message_ = StringFromFormat("MockFailure: No way to compare type <%s>. Please install a ParameterTypeComparator.", typeName.asCharString());
+    message_ = StringFromFormat("MockFailure: No way to compare type <%s>. Please install a MockNamedValueComparator.", typeName.asCharString());
 }
 
-MockUnexpectedObjectFailure::MockUnexpectedObjectFailure(UtestShell* test, const SimpleString& functionName, void* actual, const MockExpectedCallsList& expectations) : MockFailure(test)
+MockNoWayToCopyCustomTypeFailure::MockNoWayToCopyCustomTypeFailure(UtestShell* test, const SimpleString& typeName) : MockFailure(test)
 {
-    message_ = StringFromFormat ("MockFailure: Function called on a unexpected object: %s\n"
+    message_ = StringFromFormat("MockFailure: No way to copy type <%s>. Please install a MockNamedValueCopier.", typeName.asCharString());
+}
+
+MockUnexpectedObjectFailure::MockUnexpectedObjectFailure(UtestShell* test, const SimpleString& functionName, const void* actual, const MockExpectedCallsList& expectations) : MockFailure(test)
+{
+    message_ = StringFromFormat ("MockFailure: Function called on an unexpected object: %s\n"
                                  "\tActual object for call has address: <%p>\n", functionName.asCharString(),actual);
     addExpectationsAndCallHistoryRelatedTo(functionName, expectations);
 }

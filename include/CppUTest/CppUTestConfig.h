@@ -41,6 +41,13 @@
  *
  */
 
+#ifdef __clang__
+ #pragma clang diagnostic push
+ #if __clang_major__ >= 3 && __clang_minor__ >= 6
+  #pragma clang diagnostic ignored "-Wreserved-id-macro"
+ #endif
+#endif
+
 /*
  * Lib C dependencies that are currently still left:
  *
@@ -159,6 +166,19 @@
 #endif
 
 /*
+ * Handling of IEEE754 floating point exceptions via fenv.h
+ */
+
+#if CPPUTEST_USE_STD_C_LIB
+#define CPPUTEST_HAVE_FENV
+#if defined(__WATCOMC__)
+#define CPPUTEST_FENV_IS_WORKING_PROPERLY 0
+#else
+#define CPPUTEST_FENV_IS_WORKING_PROPERLY 1
+#endif
+#endif
+
+/*
  * Detection of different 64 bit environments
  */
 
@@ -169,15 +189,31 @@
 #endif
 #endif
 
+/* Handling of systems with a different byte-width (e.g. 16 bit).
+ * Since CHAR_BIT is defined in limits.h (ANSI C), use default of 8 when building without Std C library.
+ */
+#if CPPUTEST_USE_STD_C_LIB
+#include <limits.h>
+#define CPPUTEST_CHAR_BIT CHAR_BIT
+#else
+#define CPPUTEST_CHAR_BIT 8
+#endif
+
 /* Visual C++ 10.0+ (2010+) supports the override keyword, but doesn't define the C++ version as C++11 */
 #if defined(__cplusplus) && ((__cplusplus >= 201103L) || (defined(_MSC_VER) && (_MSC_VER >= 1600)))
+#define CPPUTEST_COMPILER_FULLY_SUPPORTS_CXX11
 #define _override override
 #else
 #define _override
 #endif
 
 /* MinGW-w64 prefers to act like Visual C++, but we want the ANSI behaviors instead */
+#undef __USE_MINGW_ANSI_STDIO
 #define __USE_MINGW_ANSI_STDIO 1
+
+#ifdef __clang__
+ #pragma clang diagnostic pop
+#endif
 
 /* Should be the only #include here. Standard C library wrappers */
 #include "StandardCLibrary.h"

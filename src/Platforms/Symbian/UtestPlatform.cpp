@@ -144,7 +144,13 @@ static int IsNanImplementation(double d)
     return isnan(d);
 }
 
+static int IsInfImplementation(double d)
+{
+    return isinf(d);
+}
+
 int (*PlatformSpecificIsNan)(double) = IsNanImplementation;
+int (*PlatformSpecificIsInf)(double) = IsInfImplementation;
 
 }
 

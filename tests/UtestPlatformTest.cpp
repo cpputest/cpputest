@@ -30,29 +30,23 @@
 #include "CppUTest/TestTestingFixture.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
+// This will cause a crash in VS2010 due to PlatformSpecificFree being uninitialized
+static const SimpleString str1("abc");
+static const SimpleString str2("def");
+static const SimpleString str3(str1 + str2);
+
 TEST_GROUP(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess)
 {
     TestTestingFixture fixture;
 };
 
-#if defined(__MINGW32__)
+#ifndef HAVE_FORK
 
-TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, MinGwWorks)
+TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, DummyFailsWithMessage)
 {
     fixture.registry_->setRunTestsInSeperateProcess();
     fixture.runAllTests();
-    fixture.assertPrintContains(
-       "-p doesn't work on MinGW as it is lacking fork.");
-}
-
-#elif defined(_MSC_VER)
-
-TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, VisualCppWorks)
-{
-   fixture.registry_->setRunTestsInSeperateProcess();
-   fixture.runAllTests();
-   fixture.assertPrintContains(
-      "-p doesn't work on Visual C++ as it is lacking fork.");
+    fixture.assertPrintContains("-p doesn't work on this platform, as it is lacking fork.\b");
 }
 
 #else
@@ -94,13 +88,6 @@ static int _accessViolationTestFunction()
     return *(volatile int*) 0;
 }
 
-static int _divisionByZeroTestFunction()
-{
-    int divisionByZero =  division(1, 0);
-    FAIL(StringFromFormat("Should have divided by zero. Outcome: %d", divisionByZero).asCharString());
-    return divisionByZero;
-}
-
 #include <unistd.h>
 #include <signal.h>
 
@@ -123,14 +110,6 @@ TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, AccessViolati
     fixture.setTestFunction((void(*)())_accessViolationTestFunction);
     fixture.runAllTests();
     fixture.assertPrintContains("Failed in separate process - killed by signal 11");
-}
-
-TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, DivisionByZeroInSeparateProcessWorks)
-{
-    fixture.registry_->setRunTestsInSeperateProcess();
-    fixture.setTestFunction((void(*)())_divisionByZeroTestFunction);
-    fixture.runAllTests();
-    fixture.assertPrintContains("Failed in separate process - killed by signal 8");
 }
 
 TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, StoppedInSeparateProcessWorks)

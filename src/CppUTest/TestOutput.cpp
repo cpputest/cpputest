@@ -183,7 +183,7 @@ void TestOutput::printTestRun(int number, int total)
     }
 }
 
-void TestOutput::print(const TestFailure& failure)
+void TestOutput::printFailure(const TestFailure& failure)
 {
     if (failure.isOutsideTestFile() || failure.isInHelperFunction())
         printFileAndLineForTestAndFailure(failure);
@@ -222,8 +222,8 @@ void TestOutput::printFailureMessage(SimpleString reason)
 
 void TestOutput::printErrorInFileOnLineFormattedForWorkingEnvironment(SimpleString file, int lineNumber)
 {
-    if (TestOutput::getWorkingEnvironment() == TestOutput::vistualStudio)
-        printVistualStudioErrorInFileOnLine(file, lineNumber);
+    if (TestOutput::getWorkingEnvironment() == TestOutput::visualStudio)
+        printVisualStudioErrorInFileOnLine(file, lineNumber);
     else
         printEclipseErrorInFileOnLine(file, lineNumber);
 }
@@ -238,7 +238,7 @@ void TestOutput::printEclipseErrorInFileOnLine(SimpleString file, int lineNumber
     print(" error:");
 }
 
-void TestOutput::printVistualStudioErrorInFileOnLine(SimpleString file, int lineNumber)
+void TestOutput::printVisualStudioErrorInFileOnLine(SimpleString file, int lineNumber)
 {
     print("\n");
     print(file.asCharString());
@@ -361,10 +361,10 @@ void CompositeTestOutput::printDouble(double number)
   if (outputTwo_) outputTwo_->printDouble(number);
 }
 
-void CompositeTestOutput::print(const TestFailure& failure)
+void CompositeTestOutput::printFailure(const TestFailure& failure)
 {
-  if (outputOne_) outputOne_->print(failure);
-  if (outputTwo_) outputTwo_->print(failure);
+  if (outputOne_) outputOne_->printFailure(failure);
+  if (outputTwo_) outputTwo_->printFailure(failure);
 }
 
 void CompositeTestOutput::setProgressIndicator(const char* indicator)

@@ -162,7 +162,7 @@ void JUnitTestOutput::writeXmlHeader()
     writeToFile("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n");
 }
 
-void JUnitTestOutput::writeTestSuiteSummery()
+void JUnitTestOutput::writeTestSuiteSummary()
 {
     SimpleString
             buf =
@@ -232,7 +232,7 @@ void JUnitTestOutput::writeTestGroupToFile()
 {
     openFileForWrite(createFileName(impl_->results_.group_));
     writeXmlHeader();
-    writeTestSuiteSummery();
+    writeTestSuiteSummary();
     writeProperties();
     writeTestCases();
     writeFileEnding();
@@ -259,7 +259,7 @@ void JUnitTestOutput::flush()
 
 // LCOV_EXCL_STOP
 
-void JUnitTestOutput::print(const TestFailure& failure)
+void JUnitTestOutput::printFailure(const TestFailure& failure)
 {
     if (impl_->results_.tail_->failure_ == 0) {
         impl_->results_.failureCount_++;

@@ -48,6 +48,12 @@
 #define CHECK_EQUAL_C_STRING(expected,actual) \
   CHECK_EQUAL_C_STRING_LOCATION(expected,actual,__FILE__,__LINE__)
 
+#define CHECK_EQUAL_C_POINTER(expected,actual) \
+  CHECK_EQUAL_C_POINTER_LOCATION(expected,actual,__FILE__,__LINE__)
+
+#define CHECK_EQUAL_C_BITS(expected, actual, mask)\
+  CHECK_EQUAL_C_BITS_LOCATION(expected, actual, mask, sizeof(actual), __FILE__, __LINE__)
+
 #define FAIL_TEXT_C(text) \
   FAIL_TEXT_C_LOCATION(text,__FILE__,__LINE__)
 
@@ -116,6 +122,10 @@ extern void CHECK_EQUAL_C_CHAR_LOCATION(char expected, char actual,
         const char* fileName, int lineNumber);
 extern void CHECK_EQUAL_C_STRING_LOCATION(const char* expected,
         const char* actual, const char* fileName, int lineNumber);
+extern void CHECK_EQUAL_C_POINTER_LOCATION(const void* expected,
+        const void* actual, const char* fileName, int lineNumber);
+extern void CHECK_EQUAL_C_BITS_LOCATION(unsigned int expected, unsigned int actual,
+        unsigned int mask, size_t size, const char* fileName, int lineNumber);
 extern void FAIL_TEXT_C_LOCATION(const char* text, const char* fileName,
         int lineNumber);
 extern void FAIL_C_LOCATION(const char* fileName, int lineNumber);

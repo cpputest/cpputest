@@ -58,11 +58,13 @@ private:
 class CommandLineTestRunnerWithStringBufferOutput : public CommandLineTestRunner
 {
 public:
-  StringBufferTestOutput* fakeJUnitOuputWhichIsReallyABuffer_;
+  StringBufferTestOutput* fakeJUnitOutputWhichIsReallyABuffer_;
   StringBufferTestOutput* fakeConsoleOutputWhichIsReallyABuffer;
+  StringBufferTestOutput* fakeTCOutputWhichIsReallyABuffer;
 
   CommandLineTestRunnerWithStringBufferOutput(int argc, const char** argv, TestRegistry* registry)
-    : CommandLineTestRunner(argc, argv, registry), fakeJUnitOuputWhichIsReallyABuffer_(NULL), fakeConsoleOutputWhichIsReallyABuffer(NULL)
+    : CommandLineTestRunner(argc, argv, registry), fakeJUnitOutputWhichIsReallyABuffer_(NULL),
+    fakeConsoleOutputWhichIsReallyABuffer(NULL), fakeTCOutputWhichIsReallyABuffer(NULL)
   {}
 
   TestOutput* createConsoleOutput()
@@ -73,8 +75,14 @@ public:
 
   TestOutput* createJUnitOutput(const SimpleString&)
   {
-    fakeJUnitOuputWhichIsReallyABuffer_ = new StringBufferTestOutput;
-    return fakeJUnitOuputWhichIsReallyABuffer_;
+    fakeJUnitOutputWhichIsReallyABuffer_ = new StringBufferTestOutput;
+    return fakeJUnitOutputWhichIsReallyABuffer_;
+  }
+
+  TestOutput* createTeamCityOutput()
+  {
+    fakeTCOutputWhichIsReallyABuffer = new StringBufferTestOutput;
+    return fakeTCOutputWhichIsReallyABuffer;
   }
 };
 
@@ -122,13 +130,21 @@ TEST(CommandLineTestRunner, NoPluginsAreInstalledAtTheEndOfARunWhenTheArgumentsA
 
 }
 
+TEST(CommandLineTestRunner, TeamcityOutputEnabled)
+{
+    const char* argv[] = {"tests.exe", "-oteamcity"};
+    CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(2, argv, &registry);
+    commandLineTestRunner.runAllTestsMain();
+    CHECK(commandLineTestRunner.fakeTCOutputWhichIsReallyABuffer);
+}
+
 TEST(CommandLineTestRunner, JunitOutputEnabled)
 {
     const char* argv[] = { "tests.exe", "-ojunit"};
 
     CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(2, argv, &registry);
     commandLineTestRunner.runAllTestsMain();
-    CHECK(commandLineTestRunner.fakeJUnitOuputWhichIsReallyABuffer_);
+    CHECK(commandLineTestRunner.fakeJUnitOutputWhichIsReallyABuffer_);
 }
 
 TEST(CommandLineTestRunner, JunitOutputAndVerboseEnabled)
@@ -137,7 +153,7 @@ TEST(CommandLineTestRunner, JunitOutputAndVerboseEnabled)
 
     CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(3, argv, &registry);
     commandLineTestRunner.runAllTestsMain();
-    STRCMP_CONTAINS("TEST(group, test)", commandLineTestRunner.fakeJUnitOuputWhichIsReallyABuffer_->getOutput().asCharString());
+    STRCMP_CONTAINS("TEST(group, test)", commandLineTestRunner.fakeJUnitOutputWhichIsReallyABuffer_->getOutput().asCharString());
     STRCMP_CONTAINS("TEST(group, test)", commandLineTestRunner.fakeConsoleOutputWhichIsReallyABuffer->getOutput().asCharString());
 }
 
@@ -161,15 +177,22 @@ TEST(CommandLineTestRunner, listTestGroupAndCaseNamesShouldWorkProperly)
     STRCMP_CONTAINS("group.test", commandLineTestRunner.fakeConsoleOutputWhichIsReallyABuffer->getOutput().asCharString());
 }
 
+extern "C" {
+    typedef PlatformSpecificFile (*FOpenFunc)(const char*, const char*);
+    typedef void (*FPutsFunc)(const char*, PlatformSpecificFile);
+    typedef void (*FCloseFunc)(PlatformSpecificFile);
+    typedef int (*PutcharFunc)(int);
+}
+
 struct FakeOutput
 {
     FakeOutput() : SaveFOpen(PlatformSpecificFOpen), SaveFPuts(PlatformSpecificFPuts),
         SaveFClose(PlatformSpecificFClose), SavePutchar(PlatformSpecificPutchar)
     {
-        PlatformSpecificFOpen = fopen_fake;
-        PlatformSpecificFPuts = fputs_fake;
-        PlatformSpecificFClose = fclose_fake;
-        PlatformSpecificPutchar = putchar_fake;
+        PlatformSpecificFOpen = (FOpenFunc)fopen_fake;
+        PlatformSpecificFPuts = (FPutsFunc)fputs_fake;
+        PlatformSpecificFClose = (FCloseFunc)fclose_fake;
+        PlatformSpecificPutchar = (PutcharFunc)putchar_fake;
     }
     ~FakeOutput()
     {
@@ -197,10 +220,10 @@ struct FakeOutput
     static SimpleString file;
     static SimpleString console;
 private:
-    PlatformSpecificFile (*SaveFOpen)(const char*, const char*);
-    void (*SaveFPuts)(const char*, PlatformSpecificFile);
-    void (*SaveFClose)(PlatformSpecificFile);
-    int (*SavePutchar)(int);
+    FOpenFunc SaveFOpen;
+    FPutsFunc SaveFPuts;
+    FCloseFunc SaveFClose;
+    PutcharFunc SavePutchar;
 };
 
 SimpleString FakeOutput::console = "";
@@ -219,4 +242,21 @@ TEST(CommandLineTestRunner, realJunitOutputShouldBeCreatedAndWorkProperly)
 
     STRCMP_CONTAINS("<testcase classname=\"package.group\" name=\"test\"", FakeOutput::file.asCharString());
     STRCMP_CONTAINS("TEST(group, test)", FakeOutput::console.asCharString());
+}
+
+TEST(CommandLineTestRunner, realTeamCityOutputShouldBeCreatedAndWorkProperly)
+{
+    const char* argv[] = { "tests.exe", "-oteamcity", "-v", "-kpackage", };
+
+    FakeOutput* fakeOutput = new FakeOutput; /* UT_PTR_SET() is not reentrant */
+
+    CommandLineTestRunner commandLineTestRunner(4, argv, &registry);
+    commandLineTestRunner.runAllTestsMain();
+
+    delete fakeOutput; /* Original output must be restored before further output occurs */
+
+    STRCMP_CONTAINS("##teamcity[testSuiteStarted name='group'", FakeOutput::console.asCharString());
+    STRCMP_CONTAINS("##teamcity[testStarted name='test'", FakeOutput::console.asCharString());
+    STRCMP_CONTAINS("##teamcity[testFinished name='test'", FakeOutput::console.asCharString());
+    STRCMP_CONTAINS("##teamcity[testSuiteFinished name='group'", FakeOutput::console.asCharString());
 }

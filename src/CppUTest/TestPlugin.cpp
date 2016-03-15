@@ -130,10 +130,6 @@ SetPointerPlugin::SetPointerPlugin(const SimpleString& name) :
     pointerTableIndex = 0;
 }
 
-SetPointerPlugin::~SetPointerPlugin()
-{
-}
-
 void CppUTestStore(void**function)
 {
     if (pointerTableIndex >= SetPointerPlugin::MAX_SET) {

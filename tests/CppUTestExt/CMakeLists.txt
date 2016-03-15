@@ -1,33 +1,39 @@
 set(CppUTestExtTests_src
     AllTests.cpp
-    CodeMemoryReportFormatterTest.cpp
+    CodeMemoryReporterTest.cpp
     GMockTest.cpp
     GTest1Test.cpp
+    IEEE754PluginTest.cpp
+    IEEE754PluginTest_c.c
     MemoryReportAllocatorTest.cpp
     MemoryReporterPluginTest.cpp
     MemoryReportFormatterTest.cpp
     MockActualCallTest.cpp
     MockCheatSheetTest.cpp
+    MockCallTest.cpp
+    MockComparatorCopierTest.cpp
     MockExpectedCallTest.cpp
-    MockExpectedFunctionsListTest.cpp
+    ExpectedFunctionsListTest.cpp
+    MockFailureReporterForTest.cpp
     MockFailureTest.cpp
+    MockHierarchyTest.cpp
+    MockNamedValueTest.cpp
+    MockParameterTest.cpp
     MockPluginTest.cpp
     MockSupportTest.cpp
     MockSupport_cTestCFile.c
     MockSupport_cTest.cpp
+    MockStrictOrderTest.cpp
+    MockReturnValueTest.cpp
     OrderedTestTest.cpp
 )
 
-add_executable(CppUTestExtTests ${CppUTestExtTests_src})
-target_link_libraries(CppUTestExtTests CppUTest CppUTestExt ${CPPUNIT_EXTERNAL_LIBRARIES})
+if (MINGW)
+    find_package (Threads REQUIRED)
+    set(THREAD_LIB "pthread")
+endif (MINGW)
 
-if (TESTS)
-    # get all test groups
-    execute_process(COMMAND tests/CppUTestExt/CppUTestExtTests -lg OUTPUT_VARIABLE CppUTestTestsExt_Groups)
-    # create separate test for each group
-    separate_arguments(CppUTestTestsExt_Groups)
-    foreach(group ${CppUTestTestsExt_Groups})
-        message("TestGroup2: ${group}:")
-        add_test(NAME CppUTestExt.${group} COMMAND ${EXECUTABLE_OUTPUT_PATH}/CppUTestExtTests -sg ${group} -c)
-    endforeach()
-endif (TESTS)
+add_executable(CppUTestExtTests ${CppUTestExtTests_src})
+cpputest_set_test_output_location(CppUTestExtTests "${CMAKE_BINARY_DIR}/tests/CppUTestExt")
+target_link_libraries(CppUTestExtTests CppUTest CppUTestExt ${THREAD_LIB} ${CPPUNIT_EXTERNAL_LIBRARIES})
+cpputest_buildtime_discover_tests(CppUTestExtTests)

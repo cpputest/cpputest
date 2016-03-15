@@ -50,9 +50,12 @@ public:
     MockActualCall& withParameter(const SimpleString& name, double value) { return withDoubleParameter(name, value); }
     MockActualCall& withParameter(const SimpleString& name, const char* value) { return withStringParameter(name, value); }
     MockActualCall& withParameter(const SimpleString& name, void* value) { return withPointerParameter(name, value); }
+    MockActualCall& withParameter(const SimpleString& name, void (*value)()) { return withFunctionPointerParameter(name, value); }
     MockActualCall& withParameter(const SimpleString& name, const void* value) { return withConstPointerParameter(name, value); }
+    MockActualCall& withParameter(const SimpleString& name, const unsigned char* value, size_t size) { return withMemoryBufferParameter(name, value, size); }
     virtual MockActualCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value)=0;
     virtual MockActualCall& withOutputParameter(const SimpleString& name, void* output)=0;
+    virtual MockActualCall& withOutputParameterOfType(const SimpleString& typeName, const SimpleString& name, void* output)=0;
 
     virtual MockActualCall& withIntParameter(const SimpleString& name, int value)=0;
     virtual MockActualCall& withUnsignedIntParameter(const SimpleString& name, unsigned int value)=0;
@@ -61,7 +64,9 @@ public:
     virtual MockActualCall& withDoubleParameter(const SimpleString& name, double value)=0;
     virtual MockActualCall& withStringParameter(const SimpleString& name, const char* value)=0;
     virtual MockActualCall& withPointerParameter(const SimpleString& name, void* value)=0;
+    virtual MockActualCall& withFunctionPointerParameter(const SimpleString& name, void (*value)())=0;
     virtual MockActualCall& withConstPointerParameter(const SimpleString& name, const void* value)=0;
+    virtual MockActualCall& withMemoryBufferParameter(const SimpleString& name, const unsigned char* value, size_t size)=0;
 
     virtual bool hasReturnValue()=0;
     virtual MockNamedValue returnValue()=0;
@@ -90,7 +95,10 @@ public:
     virtual const void * returnConstPointerValue()=0;
     virtual const void * returnConstPointerValueOrDefault(const void * default_value)=0;
 
-    virtual MockActualCall& onObject(void* objectPtr)=0;
+    virtual void (*returnFunctionPointerValue())()=0;
+    virtual void (*returnFunctionPointerValueOrDefault(void (*default_value)()))()=0;
+
+    virtual MockActualCall& onObject(const void* objectPtr)=0;
 };
 
 #endif

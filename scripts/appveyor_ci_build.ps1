@@ -26,6 +26,23 @@ function Invoke-BuildCommand($command, $directory = '.')
     Pop-Location
 }
 
+function Invoke-CygwinCommand($command, $directory = '.')
+{
+    # Assume cygwin is located at C:\cygwin for now
+    $cygwin_bin = "C:\cygwin\bin"
+    $cygwin_directory = (. "${cygwin_bin}\cygpath.exe" (Resolve-Path $directory))
+    $command_wrapped = "${cygwin_bin}\bash.exe --login -c 'cd $cygwin_directory ; $command' ; `$err = `$?"
+    
+    Write-Host $command
+    Invoke-Expression $command_wrapped
+
+    if ($LASTEXITCODE -ne 0)
+    {
+        Write-Host "Command Returned error: $LASTEXITCODE"
+        Exit $LASTEXITCODE
+    }
+}
+
 function Remove-PathFolder($folder)
 {
     [System.Collections.ArrayList]$pathFolders = New-Object System.Collections.ArrayList
@@ -106,24 +123,36 @@ if ($env:PlatformToolset -eq 'v100')
     }
 }
 
+if ($env:PlatformToolset -eq 'Cygwin')
+{
+    Invoke-CygwinCommand "autoreconf -i .. ; ../configure ; make CppUTestTests.exe CppUTestExtTests.exe" "cpputest_build"
+}
+
 if ($env:PlatformToolset -eq 'MinGW')
 {
+    $mingw_path = 'C:\Tools\mingw32\bin'
+    if ($env:Platform -eq 'x64')
+    {
+        $mingw_path = 'C:\Tools\mingw64\bin'
+    }
+
     Write-Host "Initial Path: $env:Path"
 
     # Need to do some path cleanup first
     Remove-PathFolder "C:\MinGW\bin"
     Remove-PathFolder "C:\Program Files\Git\bin"
     Remove-PathFolder "C:\Program Files\Git\cmd"
+    Remove-PathFolder "C:\Program Files\Git\usr\bin"
     Remove-PathFolder "C:\Program Files (x86)\Git\bin"
     Remove-PathFolder "C:\Program Files (x86)\Git\cmd"
 
     # Add mingw to the path
-    Add-PathFolder "C:\Tools\mingw32\bin"
+    Add-PathFolder $mingw_path
 
     Write-Host "Building with Path: $env:Path"
 
     Invoke-BuildCommand "cmake -G 'MinGW Makefiles' .." 'cpputest_build'
     Invoke-BuildCommand "mingw32-make all" 'cpputest_build'
 
-    Remove-PathFolder "C:\Tools\mingw32\bin"
+    Remove-PathFolder $mingw_path
 }

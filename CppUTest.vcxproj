@@ -39,9 +39,9 @@
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">lib\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">cpputest_build\Debug\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">cpputest_build\Debug\$(ProjectName)\</IntDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">lib\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">cpputest_build\Release\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">cpputest_build\Release\$(ProjectName)\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectName)d</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -54,7 +54,6 @@
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <ForcedIncludeFiles>..\include\Platforms\VisualCpp\Platform.h;..\include\CppUTest\MemoryLeakDetectorMallocMacros.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -88,7 +87,6 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <ForcedIncludeFiles>..\include\Platforms\VisualCpp\Platform.h;..\include\CppUTest\MemoryLeakDetectorMallocMacros.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
@@ -129,6 +127,7 @@
     <ClCompile Include="src\CppUTest\CommandLineArguments.cpp" />
     <ClCompile Include="src\CppUTest\CommandLineTestRunner.cpp" />
     <ClCompile Include="src\CppUTest\JUnitTestOutput.cpp" />
+    <ClCompile Include="src\CppUTest\TeamCityTestOutput.cpp" />
     <ClCompile Include="src\CppUTest\MemoryLeakDetector.cpp" />
     <ClCompile Include="src\CppUTest\MemoryLeakWarningPlugin.cpp" />
     <ClCompile Include="src\CppUTest\SimpleMutex.cpp" />
@@ -151,12 +150,15 @@
   <ItemGroup>
     <ClInclude Include="include\CppUTestExt\CodeMemoryReportFormatter.h" />
     <ClInclude Include="include\CppUTestExt\GMock.h" />
+    <ClInclude Include="include\CppUTestExt\GTest.h" />
     <ClInclude Include="include\CppUTestExt\GTestConvertor.h" />
     <ClInclude Include="include\CppUTestExt\MemoryReportAllocator.h" />
     <ClInclude Include="include\CppUTestExt\MemoryReporterPlugin.h" />
     <ClInclude Include="include\CppUTestExt\MemoryReportFormatter.h" />
+    <ClInclude Include="include\CppUTestExt\MockActualCall.h" />
     <ClInclude Include="include\CppUTestExt\MockCheckedActualCall.h" />
     <ClInclude Include="include\CppUTestExt\MockCheckedExpectedCall.h" />
+    <ClInclude Include="include\CppUTestExt\MockExpectedCall.h" />
     <ClInclude Include="include\CppUTestExt\MockExpectedCallsList.h" />
     <ClInclude Include="include\CppUTestExt\MockFailure.h" />
     <ClInclude Include="include\CppUTestExt\MockNamedValue.h" />
@@ -167,6 +169,7 @@
     <ClInclude Include="include\CppUTest\CommandLineArguments.h" />
     <ClInclude Include="include\CppUTest\CommandLineTestRunner.h" />
     <ClInclude Include="include\CppUTest\JUnitTestOutput.h" />
+    <ClInclude Include="include\CppUTest\TeamCityTestOutput.h" />
     <ClInclude Include="include\CppUTest\MemoryLeakDetector.h" />
     <ClInclude Include="include\CppUTest\MemoryLeakDetectorMallocMacros.h" />
     <ClInclude Include="include\CppUTest\MemoryLeakDetectorNewMacros.h" />

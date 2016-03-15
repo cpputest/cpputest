@@ -54,6 +54,7 @@ public:
 
     virtual SimpleString getFileName() const;
     virtual SimpleString getTestName() const;
+    virtual SimpleString getTestNameOnly() const;
     virtual int getFailureLineNumber() const;
     virtual SimpleString getMessage() const;
     virtual SimpleString getTestFileName() const;
@@ -70,8 +71,10 @@ protected:
 
     SimpleString createButWasString(const SimpleString& expected, const SimpleString& actual);
     SimpleString createDifferenceAtPosString(const SimpleString& actual, size_t position, DifferenceFormat format = DIFFERENCE_STRING);
+    SimpleString createUserText(const SimpleString& text);
 
     SimpleString testName_;
+    SimpleString testNameOnly_;
     SimpleString fileName_;
     int lineNumber_;
     SimpleString testFileName_;
@@ -85,26 +88,26 @@ protected:
 class EqualsFailure: public TestFailure
 {
 public:
-    EqualsFailure(UtestShell*, const char* fileName, int lineNumber, const char* expected, const char* actual);
-    EqualsFailure(UtestShell*, const char* fileName, int lineNumber, const SimpleString& expected, const SimpleString& actual);
+    EqualsFailure(UtestShell*, const char* fileName, int lineNumber, const char* expected, const char* actual, const SimpleString& text);
+    EqualsFailure(UtestShell*, const char* fileName, int lineNumber, const SimpleString& expected, const SimpleString& actual, const SimpleString& text);
 };
 
 class DoublesEqualFailure: public TestFailure
 {
 public:
-    DoublesEqualFailure(UtestShell*, const char* fileName, int lineNumber, double expected, double actual, double threshold);
+    DoublesEqualFailure(UtestShell*, const char* fileName, int lineNumber, double expected, double actual, double threshold, const SimpleString& text);
 };
 
 class CheckEqualFailure : public TestFailure
 {
 public:
-    CheckEqualFailure(UtestShell* test, const char* fileName, int lineNumber, const SimpleString& expected, const SimpleString& actual);
+    CheckEqualFailure(UtestShell* test, const char* fileName, int lineNumber, const SimpleString& expected, const SimpleString& actual, const SimpleString& text);
 };
 
 class ContainsFailure: public TestFailure
 {
 public:
-    ContainsFailure(UtestShell*, const char* fileName, int lineNumber, const SimpleString& expected, const SimpleString& actual);
+    ContainsFailure(UtestShell*, const char* fileName, int lineNumber, const SimpleString& expected, const SimpleString& actual, const SimpleString& text);
 
 };
 
@@ -123,31 +126,37 @@ public:
 class LongsEqualFailure : public TestFailure
 {
 public:
-    LongsEqualFailure(UtestShell* test, const char* fileName, int lineNumber, long expected, long actual);
+    LongsEqualFailure(UtestShell* test, const char* fileName, int lineNumber, long expected, long actual, const SimpleString& text);
 };
 
 class UnsignedLongsEqualFailure : public TestFailure
 {
 public:
-    UnsignedLongsEqualFailure(UtestShell* test, const char* fileName, int lineNumber, unsigned long expected, unsigned long actual);
+    UnsignedLongsEqualFailure(UtestShell* test, const char* fileName, int lineNumber, unsigned long expected, unsigned long actual, const SimpleString& text);
 };
 
 class StringEqualFailure : public TestFailure
 {
 public:
-    StringEqualFailure(UtestShell* test, const char* fileName, int lineNumber, const char* expected, const char* actual);
+    StringEqualFailure(UtestShell* test, const char* fileName, int lineNumber, const char* expected, const char* actual, const SimpleString& text);
 };
 
 class StringEqualNoCaseFailure : public TestFailure
 {
 public:
-    StringEqualNoCaseFailure(UtestShell* test, const char* fileName, int lineNumber, const char* expected, const char* actual);
+    StringEqualNoCaseFailure(UtestShell* test, const char* fileName, int lineNumber, const char* expected, const char* actual, const SimpleString& text);
 };
 
 class BinaryEqualFailure : public TestFailure
 {
 public:
-	BinaryEqualFailure(UtestShell* test, const char* fileName, int lineNumber, const unsigned char* expected, const unsigned char* actual, size_t size);
+	BinaryEqualFailure(UtestShell* test, const char* fileName, int lineNumber, const unsigned char* expected, const unsigned char* actual, size_t size, const SimpleString& text);
+};
+
+class BitsEqualFailure : public TestFailure
+{
+public:
+	BitsEqualFailure(UtestShell* test, const char* fileName, int lineNumber, unsigned long expected, unsigned long actual, unsigned long mask, size_t byteCount, const SimpleString& text);
 };
 
 #endif

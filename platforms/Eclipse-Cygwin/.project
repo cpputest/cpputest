@@ -230,11 +230,6 @@
 			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/configure.ac</locationURI>
 		</link>
 		<link>
-			<name>cpputest-hist.txt</name>
-			<type>1</type>
-			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/cpputest-hist.txt</locationURI>
-		</link>
-		<link>
 			<name>cpputest.pc.in</name>
 			<type>1</type>
 			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/cpputest.pc.in</locationURI>

@@ -66,7 +66,7 @@ void SimpleStringBuffer::addMemoryDump(const void* memory, size_t memorySize)
 	size_t p;
 
     while (currentPos < memorySize) {
-        add("    %04lx: ", currentPos);
+        add("    %04lx: ", (unsigned long) currentPos);
         size_t bytesInLine = memorySize - currentPos;
         if (bytesInLine > maxLineBytes) {
             bytesInLine = maxLineBytes;
@@ -74,7 +74,7 @@ void SimpleStringBuffer::addMemoryDump(const void* memory, size_t memorySize)
         const size_t leftoverBytes = maxLineBytes - bytesInLine;
 
         for (p = 0; p < bytesInLine; p++) {
-            add("%02hhx ", byteMemory[currentPos + p]);
+            add("%02hx ", (unsigned short) byteMemory[currentPos + p]);
             if (p == ((maxLineBytes / 2) - 1)) {
                 add(" ");
             }
@@ -122,7 +122,7 @@ bool SimpleStringBuffer::reachedItsCapacity()
 
 ////////////////////////
 
-#define MEM_LEAK_TOO_MUCH "\netc etc etc etc. !!!! Too much memory leaks to report. Bailing out\n"
+#define MEM_LEAK_TOO_MUCH "\netc etc etc etc. !!!! Too many memory leaks to report. Bailing out\n"
 #define MEM_LEAK_FOOTER "Total number of leaks: "
 #define MEM_LEAK_ADDITION_MALLOC_WARNING "NOTE:\n" \
                                          "\tMemory leak reports about malloc and free can be caused by allocating using the cpputest version of malloc,\n" \
@@ -168,7 +168,7 @@ void MemoryLeakOutputStringBuffer::reportMemoryLeak(MemoryLeakDetectorNode* leak
 
     total_leaks_++;
     outputBuffer_.add("Alloc num (%u) Leak size: %lu Allocated at: %s and line: %d. Type: \"%s\"\n\tMemory: <%p> Content:\n",
-            leak->number_, (unsigned long) leak->size_, leak->file_, leak->line_, leak->allocator_->alloc_name(), leak->memory_);
+            leak->number_, (unsigned long) leak->size_, leak->file_, leak->line_, leak->allocator_->alloc_name(), (void*) leak->memory_);
     outputBuffer_.addMemoryDump(leak->memory_, leak->size_);
 
     if (SimpleString::StrCmp(leak->allocator_->alloc_name(), (const char*) "malloc") == 0)

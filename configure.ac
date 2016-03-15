@@ -1,7 +1,7 @@
 
 AC_PREREQ([2.68])
-AC_INIT([CppUTest], [3.7.1], [https://github.com/cpputest/cpputest])
-AM_INIT_AUTOMAKE
+AC_INIT([CppUTest], [3.7.2], [https://github.com/cpputest/cpputest])
+AM_INIT_AUTOMAKE([subdir-objects])
 AC_CONFIG_SRCDIR([src/CppUTest/Utest.cpp])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([cpputest.pc])
@@ -22,7 +22,6 @@ case "x$build_os" in
 		;;
 esac
 
-
 AC_PROG_CC
 AC_PROG_CPP
 AC_PROG_CXX
@@ -32,7 +31,6 @@ AM_PROG_CC_C_O
 AM_SILENT_RULES
 
 ACX_PTHREAD([LIBS="$PTHREAD_LIBS $LIBS"])
-
 
 # This additional -lpthread was added due to a bug on gcc for MacOSX: http://gcc.gnu.org/bugzilla/show_bug.cgi?id=42159
 # According to the bug report, a workaround is to link -lpthread. Even the ACX_PTHREAD doesn't do that, so we add an
@@ -174,6 +172,18 @@ CFLAGS="$saved_cflags"
 CFLAGS="-Werror -Wno-padded"
 AC_MSG_CHECKING([whether CC and CXX supports -Wno-padded])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wno-padded"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wno-padded" ], [AC_MSG_RESULT([no])])
+CFLAGS="$saved_cflags"
+
+# FLag -Wno-reserved-id-macro.
+CXXFLAGS="-Werror -Wno-reserved-id-macro"
+AC_MSG_CHECKING([whether CC and CXX supports -Wno-reserved-id-macro])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wno-reserved-id-macro"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wno-reserved-id-macro" ], [AC_MSG_RESULT([no])])
+CFLAGS="$saved_cflags"
+
+# FLag -Wno-keyword-macro.
+CXXFLAGS="-Werror -Wno-keyword-macro"
+AC_MSG_CHECKING([whether CC and CXX supports -Wno-keyword-macro])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wno-keyword-macro"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wno-keyword-macro" ], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 
 # FLag -Wno-global-constructors.

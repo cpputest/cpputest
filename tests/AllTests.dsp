@@ -42,7 +42,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /W3 /GX /O2 /I "..\include" /I "..\include\Platforms\VisualCpp" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /D "CPPUTEST_MEM_LEAK_DETECTION_DISABLED" /YX /FD /c
+# ADD CPP /nologo /W3 /GX /O2 /Ob0 /I "..\include" /I "..\include\Platforms\VisualCpp" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /D "CPPUTEST_MEM_LEAK_DETECTION_DISABLED" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -79,7 +79,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 ..\lib\CppUTest.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
+# ADD LINK32 ..\lib\CppUTestd.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
 # SUBTRACT LINK32 /incremental:no
 # Begin Special Build Tool
 TargetPath=.\Debug\AllTests.exe
@@ -106,6 +106,14 @@ SOURCE=.\AllocationInCppFile.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\AllocLetTestFree.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\AllocLetTestFreeTest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\CppUTestExt\AllTests.cpp
 # End Source File
 # Begin Source File
@@ -114,7 +122,7 @@ SOURCE=.\CheatSheetTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\CppUTestExt\CodeMemoryReportFormatterTest.cpp
+SOURCE=.\CppUTestExt\CodeMemoryReporterTest.cpp
 # End Source File
 # Begin Source File
 
@@ -123,6 +131,10 @@ SOURCE=.\CommandLineArgumentsTest.cpp
 # Begin Source File
 
 SOURCE=.\CommandLineTestRunnerTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\CppUTestExt\ExpectedFunctionsListTest.cpp
 # End Source File
 # Begin Source File
 
@@ -146,11 +158,11 @@ SOURCE=.\MemoryLeakDetectorTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\MemoryLeakOperatorOverloadsTest.cpp
+SOURCE=.\MemoryLeakWarningTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\MemoryLeakWarningTest.cpp
+SOURCE=.\MemoryOperatorOverloadTest.cpp
 # End Source File
 # Begin Source File
 
@@ -178,7 +190,11 @@ SOURCE=.\CppUTestExt\MockExpectedCallTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\CppUTestExt\MockExpectedFunctionsListTest.cpp
+SOURCE=.\CppUTestExt\MockFailureReporterForTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\CppUTestExt\MockFailureReporterForTest.h
 # End Source File
 # Begin Source File
 
@@ -186,7 +202,7 @@ SOURCE=.\CppUTestExt\MockFailureTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\CppUTestExt\MockFailureTest.h
+SOURCE=.\CppUTestExt\MockNamedValueTest.cpp
 # End Source File
 # Begin Source File
 
@@ -226,7 +242,15 @@ SOURCE=.\SetPluginTest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\SimpleMutexTest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\SimpleStringTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\TestFailureNaNTest.cpp
 # End Source File
 # Begin Source File
 
@@ -263,6 +287,14 @@ SOURCE=.\TestRegistryTest.cpp
 # Begin Source File
 
 SOURCE=.\TestResultTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\TestUtestMacro.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\UtestPlatformTest.cpp
 # End Source File
 # Begin Source File
 

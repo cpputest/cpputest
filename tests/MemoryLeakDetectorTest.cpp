@@ -137,7 +137,7 @@ TEST(MemoryLeakDetectorTest, OneLeak)
     STRCMP_CONTAINS("Memory leak(s) found", output.asCharString());
     STRCMP_CONTAINS("size: 3", output.asCharString());
     STRCMP_CONTAINS("alloc", output.asCharString());
-    STRCMP_CONTAINS(StringFromFormat("%p", mem).asCharString(), output.asCharString());
+    STRCMP_CONTAINS(StringFromFormat("%p", (void*) mem).asCharString(), output.asCharString());
     STRCMP_CONTAINS("Total number of leaks", output.asCharString());
     PlatformSpecificFree(mem);
     LONGS_EQUAL(1, testAllocator->alloc_called);
@@ -243,8 +243,8 @@ TEST(MemoryLeakDetectorTest, TwoAllocOneFreeOneLeak)
     detector->stopChecking();
     SimpleString output = detector->report(mem_leak_period_checking);
     LONGS_EQUAL(1, detector->totalMemoryLeaks(mem_leak_period_checking));
-    CHECK(output.contains("size: 12"));
-    CHECK(!output.contains("size: 4"));
+    CHECK(output.contains("Leak size: 12"));
+    CHECK(!output.contains("Leak size: 4"));
     PlatformSpecificFree(mem2);
     LONGS_EQUAL(2, testAllocator->alloc_called);
     LONGS_EQUAL(1, testAllocator->free_called);

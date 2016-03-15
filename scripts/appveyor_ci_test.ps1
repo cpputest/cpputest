@@ -1,19 +1,13 @@
 ﻿
 
-function Invoke-Tests($executable)
+function Publish-TestResults($files)
 {
-    # Run tests and output the results using junit
-    $TestCommand = "$executable -ojunit"
-    Write-Host $TestCommand
-    Invoke-Expression $TestCommand
-
     $anyFailures = $FALSE
 
     # Upload results to AppVeyor one by one
-    Get-ChildItem cpputest_*.xml | foreach {
+    $files | foreach {
         $testsuite = ([xml](get-content $_.Name)).testsuite
 
-        write-host " $($testsuite.name)"
         foreach ($testcase in $testsuite.testcase) {
             if ($testcase.failure) {
                 Add-AppveyorTest $testcase.name -Outcome Failed -FileName $testsuite.name -ErrorMessage $testcase.failure.message
@@ -35,6 +29,31 @@ function Invoke-Tests($executable)
         write-host "Failing build as there are broken tests"
         $host.SetShouldExit(1)
     }
+}
+
+function Invoke-Tests($executable)
+{
+    # Run tests and output the results using junit
+    $TestCommand = "$executable -ojunit"
+    Write-Host $TestCommand
+    Invoke-Expression $TestCommand
+}
+
+function Invoke-CygwinTests($executable)
+{
+    # Assume cygwin is located at C:\cygwin for now
+    $cygwin_bin = "C:\cygwin\bin"
+
+    # Get the full path to the executable
+    $cygwin_folder = . "${cygwin_bin}\cygpath.exe" (Resolve-Path ".")
+    $cygwin_exe = . "${cygwin_bin}\cygpath.exe" $executable
+    
+    # Run tests from the cygwin prompt
+    $test_command = "${cygwin_exe} -ojunit"
+    $cygwin_command = "${cygwin_bin}\bash.exe --login -c 'cd ${cygwin_folder} ; ${test_command}'"
+
+    Write-Host $test_command
+    Invoke-Expression $cygwin_command
 }
 
 function Remove-PathFolder($folder)
@@ -83,14 +102,32 @@ function Add-PathFolder($folder)
     }
 }
 
-if ($env:PlatformToolset -ne 'MinGW')
+switch ($env:PlatformToolset)
 {
-    Invoke-Tests('.\cpputest_build\AllTests.exe')
+    'Cygwin'
+    {
+        Invoke-CygwinTests 'cpputest_build\CppUTestTests.exe'
+        Invoke-CygwinTests 'cpputest_build\CppUTestExtTests.exe'
+    }
+
+    'MinGW'
+    {
+        $mingw_path = 'C:\Tools\mingw32\bin'
+        if ($env:Platform -eq 'x64')
+        {
+            $mingw_path = 'C:\Tools\mingw64\bin'
+        }
+
+        Add-PathFolder $mingw_path
+        Invoke-Tests '.\cpputest_build\tests\CppUTestTests.exe'
+        Invoke-Tests '.\cpputest_build\tests\CppUTestExt\CppUTestExtTests.exe'
+        Remove-PathFolder $mingw_path
+    }
+
+    default
+    {
+        Invoke-Tests '.\cpputest_build\AllTests.exe'
+    }
 }
-else
-{
-    Add-PathFolder 'C:\Tools\mingw32\bin'
-    Invoke-Tests('.\cpputest_build\tests\CppUTestTests.exe')
-    Invoke-Tests('.\cpputest_build\tests\CppUTestExt\CppUTestExtTests.exe')
-    Remove-PathFolder 'C:\Tools\mingw32\bin'
-}
+
+Publish-TestResults (Get-ChildItem 'cpputest_*.xml')

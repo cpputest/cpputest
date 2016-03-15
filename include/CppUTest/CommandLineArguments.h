@@ -50,6 +50,7 @@ public:
     const TestFilter* getNameFilters() const;
     bool isJUnitOutput() const;
     bool isEclipseOutput() const;
+    bool isTeamCityOutput() const;
     bool runTestsInSeperateProcess() const;
     const SimpleString& getPackageName() const;
     const char* usage() const;
@@ -58,7 +59,7 @@ private:
 
     enum OutputType
     {
-        OUTPUT_ECLIPSE, OUTPUT_JUNIT
+        OUTPUT_ECLIPSE, OUTPUT_JUNIT, OUTPUT_TEAMCITY
     };
     int ac_;
     const char** av_;
@@ -78,8 +79,12 @@ private:
     void SetRepeatCount(int ac, const char** av, int& index);
     void AddGroupFilter(int ac, const char** av, int& index);
     void AddStrictGroupFilter(int ac, const char** av, int& index);
+    void AddExcludeGroupFilter(int ac, const char** av, int& index);
+    void AddExcludeStrictGroupFilter(int ac, const char** av, int& index);
     void AddNameFilter(int ac, const char** av, int& index);
     void AddStrictNameFilter(int ac, const char** av, int& index);
+    void AddExcludeNameFilter(int ac, const char** av, int& index);
+    void AddExcludeStrictNameFilter(int ac, const char** av, int& index);
     void AddTestToRunBasedOnVerboseOutput(int ac, const char** av, int& index, const char* parameterName);
     bool SetOutputType(int ac, const char** av, int& index);
     void SetPackageName(int ac, const char** av, int& index);

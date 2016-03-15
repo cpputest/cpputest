@@ -175,13 +175,13 @@ TEST(TestOutput, PrintTestRunOnlyOne)
 
 TEST(TestOutput, PrintWithFailureInSameFile)
 {
-    printer->print(*f2);
+    printer->printFailure(*f2);
     STRCMP_EQUAL("\nfile:20: error: Failure in TEST(group, test)\n\tmessage\n\n", mock->getOutput().asCharString());
 }
 
 TEST(TestOutput, PrintFailureWithFailInDifferentFile)
 {
-    printer->print(*f);
+    printer->printFailure(*f);
     const char* expected =
             "\nfile:10: error: Failure in TEST(group, test)"
             "\nfailfile:20: error:\n\tmessage\n\n";
@@ -190,7 +190,7 @@ TEST(TestOutput, PrintFailureWithFailInDifferentFile)
 
 TEST(TestOutput, PrintFailureWithFailInHelper)
 {
-    printer->print(*f3);
+    printer->printFailure(*f3);
     const char* expected =
             "\nfile:10: error: Failure in TEST(group, test)"
             "\nfile:2: error:\n\tmessage\n\n";
@@ -199,8 +199,8 @@ TEST(TestOutput, PrintFailureWithFailInHelper)
 
 TEST(TestOutput, PrintInVisualStudioFormat)
 {
-    TestOutput::setWorkingEnvironment(TestOutput::vistualStudio);
-    printer->print(*f3);
+    TestOutput::setWorkingEnvironment(TestOutput::visualStudio);
+    printer->printFailure(*f3);
     const char* expected =
             "\nfile(10): error: Failure in TEST(group, test)"
             "\nfile(2): error:\n\tmessage\n\n";
@@ -379,7 +379,7 @@ TEST(CompositeTestOutput, PrintTestFailure)
   TestOutput::WorkingEnvironment previousEnvironment = TestOutput::getWorkingEnvironment();
   TestOutput::setWorkingEnvironment(TestOutput::eclipse);
   TestFailure failure(test, "file", 10, "failed");
-  compositeOutput.print(failure);
+  compositeOutput.printFailure(failure);
   STRCMP_EQUAL("\nfile:10: error: Failure in TEST(Group, Name)\n\tfailed\n\n", output1->getOutput().asCharString());
   STRCMP_EQUAL("\nfile:10: error: Failure in TEST(Group, Name)\n\tfailed\n\n", output2->getOutput().asCharString());
   TestOutput::setWorkingEnvironment(previousEnvironment);

@@ -37,6 +37,18 @@ void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell*, TestPlugin*, Test
 int (*PlatformSpecificFork)() = NULL;
 int (*PlatformSpecificWaitPid)(int, int*, int) = NULL;
 
+TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
+{
+    return TestOutput::eclipse;
+}
+
+void (*PlatformSpecificLongJmp)() = NULL;
+int (*PlatformSpecificSetJmp)(void (*)(void*), void*) = NULL;
+void (*PlatformSpecificRestoreJumpBuffer)() = NULL;
+
+long (*GetPlatformSpecificTimeInMillis)() = NULL;
+const char* (*GetPlatformSpecificTimeString)() = NULL;
+
 /* IO operations */
 PlatformSpecificFile (*PlatformSpecificFOpen)(const char* filename, const char* flag) = NULL;
 void (*PlatformSpecificFPuts)(const char* str, PlatformSpecificFile file) = NULL;
@@ -45,12 +57,19 @@ void (*PlatformSpecificFClose)(PlatformSpecificFile file) = NULL;
 int (*PlatformSpecificPutchar)(int c) = NULL;
 void (*PlatformSpecificFlush)(void) = NULL;
 
+int (*PlatformSpecificVSNprintf)(char *str, size_t size, const char* format, va_list va_args_list) = NULL;
+
 /* Dynamic Memory operations */
 void* (*PlatformSpecificMalloc)(size_t) = NULL;
 void* (*PlatformSpecificRealloc)(void*, size_t) = NULL;
 void (*PlatformSpecificFree)(void*) = NULL;
 void* (*PlatformSpecificMemCpy)(void*, const void*, size_t) = NULL;
 void* (*PlatformSpecificMemset)(void*, int, size_t) = NULL;
+
+double (*PlatformSpecificFabs)(double) = NULL;
+int (*PlatformSpecificIsNan)(double) = NULL;
+int (*PlatformSpecificIsInf)(double) = NULL;
+int (*PlatformSpecificAtExit)(void(*func)(void)) = NULL;
 
 PlatformSpecificMutex (*PlatformSpecificMutexCreate)(void) = NULL;
 void (*PlatformSpecificMutexLock)(PlatformSpecificMutex mtx) = NULL;

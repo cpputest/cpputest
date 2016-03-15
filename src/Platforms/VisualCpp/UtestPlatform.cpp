@@ -1,4 +1,3 @@
-#include "Platform.h"
 #include <stdlib.h>
 #include "CppUTest/TestHarness.h"
 #undef malloc
@@ -58,10 +57,10 @@ static void VisualCppRestoreJumpBuffer()
 int (*PlatformSpecificSetJmp)(void (*function) (void*), void* data) = VisualCppSetJmp;
 void (*PlatformSpecificLongJmp)(void) = VisualCppLongJmp;
 void (*PlatformSpecificRestoreJumpBuffer)(void) = VisualCppRestoreJumpBuffer;
- 
+
 static void VisualCppRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
 {
-   result->addFailure(TestFailure(shell, "-p doesn't work on Visual C++ as it is lacking fork.\b"));
+    result->addFailure(TestFailure(shell, "-p doesn't work on this platform, as it is lacking fork.\b"));
 }
 
 void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell* shell, TestPlugin* plugin, TestResult* result) =
@@ -69,7 +68,7 @@ void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell* shell, TestPlugin*
 
 TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
 {
-    return TestOutput::vistualStudio;
+    return TestOutput::visualStudio;
 }
 
 ///////////// Time in millis
@@ -80,7 +79,7 @@ static long VisualCppTimeInMillis()
 }
 
 long (*GetPlatformSpecificTimeInMillis)() = VisualCppTimeInMillis;
-	
+
 ///////////// Time in String
 
 static const char* VisualCppTimeString()
@@ -123,19 +122,19 @@ int (*PlatformSpecificVSNprintf)(char *str, size_t size, const char* format, va_
 
 static PlatformSpecificFile VisualCppFOpen(const char* filename, const char* flag)
 {
-   FILE* file;
-   FOPEN(&file, filename, flag);
-   return file;
+    FILE* file;
+    FOPEN(&file, filename, flag);
+    return file;
 }
 
 static void VisualCppFPuts(const char* str, PlatformSpecificFile file)
 {
-   fputs(str, (FILE*)file);
+    fputs(str, (FILE*)file);
 }
 
 static void VisualCppFClose(PlatformSpecificFile file)
 {
-   fclose((FILE*)file);
+    fclose((FILE*)file);
 }
 
 PlatformSpecificFile (*PlatformSpecificFOpen)(const char* filename, const char* flag) = VisualCppFOpen;
@@ -144,7 +143,7 @@ void (*PlatformSpecificFClose)(PlatformSpecificFile file) = VisualCppFClose;
 
 static void VisualCppFlush()
 {
-  fflush(stdout);
+    fflush(stdout);
 }
 
 int (*PlatformSpecificPutchar)(int c) = putchar;
@@ -152,17 +151,33 @@ void (*PlatformSpecificFlush)(void) = VisualCppFlush;
 
 static void* VisualCppMalloc(size_t size)
 {
-   return malloc(size);
+    return malloc(size);
+}
+
+static void* VisualCppReAlloc(void* memory, size_t size)
+{
+    return realloc(memory, size);
+}
+
+static void VisualCppFree(void* memory)
+{
+    free(memory);
 }
 
 void* (*PlatformSpecificMalloc)(size_t size) = VisualCppMalloc;
-void* (*PlatformSpecificRealloc)(void* memory, size_t size) = realloc;
-void (*PlatformSpecificFree)(void* memory) = free;
+void* (*PlatformSpecificRealloc)(void* memory, size_t size) = VisualCppReAlloc;
+void (*PlatformSpecificFree)(void* memory) = VisualCppFree;
 void* (*PlatformSpecificMemCpy)(void* s1, const void* s2, size_t size) = memcpy;
 void* (*PlatformSpecificMemset)(void* mem, int c, size_t size) = memset;
 
+static int IsInfImplementation(double d)
+{
+    return !_finite(d);
+}
+
 double (*PlatformSpecificFabs)(double d) = fabs;
 extern "C" int (*PlatformSpecificIsNan)(double) = _isnan;
+extern "C" int (*PlatformSpecificIsInf)(double) = IsInfImplementation;
 int (*PlatformSpecificAtExit)(void(*func)(void)) = atexit;
 
 static PlatformSpecificMutex VisualCppMutexCreate(void)

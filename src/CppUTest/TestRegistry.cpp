@@ -77,12 +77,19 @@ void TestRegistry::listTestGroupNames(TestResult& result)
     SimpleString groupList;
 
     for (UtestShell *test = tests_; test != NULL; test = test->getNext()) {
-        SimpleString gname = test->getGroup();
+        SimpleString gname;
+        gname += "#";
+        gname += test->getGroup();
+        gname += "#";
+
         if (!groupList.contains(gname)) {
             groupList += gname;
             groupList += " ";
         }
     }
+
+    groupList.replace("#", "");
+
     if (groupList.endsWith(" "))
         groupList = groupList.subString(0, groupList.size() - 1);
     result.print(groupList.asCharString());
@@ -94,15 +101,22 @@ void TestRegistry::listTestGroupAndCaseNames(TestResult& result)
 
     for (UtestShell *test = tests_; test != NULL; test = test->getNext()) {
         if (testShouldRun(test, result)) {
-            SimpleString groupAndName = test->getGroup();
+            SimpleString groupAndName;
+            groupAndName += "#";
+            groupAndName += test->getGroup();
             groupAndName += ".";
             groupAndName += test->getName();
-            groupAndName += " ";
+            groupAndName += "#";
+
             if (!groupAndNameList.contains(groupAndName)) {
                 groupAndNameList += groupAndName;
+                groupAndNameList += " ";
             }
         }
     }
+
+    groupAndNameList.replace("#", "");
+
     if (groupAndNameList.endsWith(" "))
         groupAndNameList = groupAndNameList.subString(0, groupAndNameList.size() - 1);
     result.print(groupAndNameList.asCharString());

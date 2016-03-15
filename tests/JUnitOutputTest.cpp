@@ -296,7 +296,7 @@ TEST_GROUP(JUnitOutputTest)
 
     void setup()
     {
-        UT_PTR_SET(PlatformSpecificFOpen, (PlatformSpecificFile(*)(const char*, const char*))mockFOpen);
+        UT_PTR_SET(PlatformSpecificFOpen, mockFOpen);
         UT_PTR_SET(PlatformSpecificFPuts, mockFPuts);
         UT_PTR_SET(PlatformSpecificFClose, mockFClose);
         junitOutput = new JUnitTestOutput();

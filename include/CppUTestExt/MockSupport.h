@@ -42,11 +42,12 @@ MockSupport& mock(const SimpleString& mockName = "", MockFailureReporter* failur
 class MockSupport
 {
 public:
-    MockSupport();
+    MockSupport(const SimpleString& mockName = "");
     virtual ~MockSupport();
 
     virtual void strictOrder();
     virtual MockExpectedCall& expectOneCall(const SimpleString& functionName);
+    virtual void expectNoCall(const SimpleString& functionName);
     virtual MockExpectedCall& expectNCalls(int amount, const SimpleString& functionName);
     virtual MockActualCall& actualCall(const SimpleString& functionName);
     virtual bool hasReturnValue();
@@ -67,6 +68,8 @@ public:
     virtual void* returnPointerValueOrDefault(void * defaultValue);
     virtual const void* returnConstPointerValueOrDefault(const void * defaultValue);
     virtual const void* constPointerReturnValue();
+    virtual void (*returnFunctionPointerValueOrDefault(void (*defaultValue)()))();
+    virtual void (*functionPointerReturnValue())();
 
     bool hasData(const SimpleString& name);
     void setData(const SimpleString& name, int value);
@@ -75,6 +78,7 @@ public:
     void setData(const SimpleString& name, double value);
     void setData(const SimpleString& name, void* value);
     void setData(const SimpleString& name, const void* value);
+    void setData(const SimpleString& name, void (*value)());
     void setDataObject(const SimpleString& name, const SimpleString& type, void* value);
     MockNamedValue getData(const SimpleString& name);
 
@@ -103,14 +107,15 @@ public:
 
     virtual void setMockFailureStandardReporter(MockFailureReporter* reporter);
     virtual void setActiveReporter(MockFailureReporter* activeReporter);
-    virtual void setDefaultComparatorRepository();
+    virtual void setDefaultComparatorsAndCopiersRepository();
 
     virtual void installComparator(const SimpleString& typeName, MockNamedValueComparator& comparator);
-    virtual void installComparators(const MockNamedValueComparatorRepository& repository);
-    virtual void removeAllComparators();
+    virtual void installCopier(const SimpleString& typeName, MockNamedValueCopier& copier);
+    virtual void installComparatorsAndCopiers(const MockNamedValueComparatorsAndCopiersRepository& repository);
+    virtual void removeAllComparatorsAndCopiers();
 
 protected:
-    MockSupport* clone();
+    MockSupport* clone(const SimpleString& mockName);
     virtual MockCheckedActualCall *createActualFunctionCall();
     virtual void failTest(MockFailure& failure);
     void countCheck();
@@ -123,13 +128,15 @@ private:
     MockFailureReporter *standardReporter_;
     MockFailureReporter defaultReporter_;
     MockExpectedCallsList expectations_;
+    MockExpectedCallsList unExpectations_;
     bool ignoreOtherCalls_;
     bool enabled_;
     MockCheckedActualCall *lastActualFunctionCall_;
     MockExpectedCallComposite compositeCalls_;
-    MockNamedValueComparatorRepository comparatorRepository_;
+    MockNamedValueComparatorsAndCopiersRepository comparatorsAndCopiersRepository_;
     MockNamedValueList data_;
-
+    const SimpleString mockName_;
+        
     bool tracing_;
 
     void checkExpectationsOfLastCall();
@@ -140,6 +147,13 @@ private:
     MockNamedValue* retrieveDataFromStore(const SimpleString& name);
 
     MockSupport* getMockSupport(MockNamedValueListNode* node);
+    
+    bool hasntExpectationWithName(const SimpleString& functionName);
+    bool hasntUnexpectationWithName(const SimpleString& functionName);
+    bool hasCallsOutOfOrder();
+    
+    SimpleString appendScopeToName(const SimpleString& functionName);
+    
 };
 
 #endif

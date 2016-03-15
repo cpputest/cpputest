@@ -53,7 +53,7 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
     bool correctParameters = true;
     for (int i = 1; i < ac_; i++) {
         SimpleString argument = av_[i];
-        
+
         if      (argument == "-v") verbose_ = true;
         else if (argument == "-c") color_ = true;
         else if (argument == "-p") runTestsAsSeperateProcess_ = true;
@@ -62,8 +62,12 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
         else if (argument.startsWith("-r")) SetRepeatCount(ac_, av_, i);
         else if (argument.startsWith("-g")) AddGroupFilter(ac_, av_, i);
         else if (argument.startsWith("-sg")) AddStrictGroupFilter(ac_, av_, i);
+        else if (argument.startsWith("-xg")) AddExcludeGroupFilter(ac_, av_, i);
+        else if (argument.startsWith("-xsg")) AddExcludeStrictGroupFilter(ac_, av_, i);
         else if (argument.startsWith("-n")) AddNameFilter(ac_, av_, i);
         else if (argument.startsWith("-sn")) AddStrictNameFilter(ac_, av_, i);
+        else if (argument.startsWith("-xn")) AddExcludeNameFilter(ac_, av_, i);
+        else if (argument.startsWith("-xsn")) AddExcludeStrictNameFilter(ac_, av_, i);
         else if (argument.startsWith("TEST(")) AddTestToRunBasedOnVerboseOutput(ac_, av_, i, "TEST(");
         else if (argument.startsWith("IGNORE_TEST(")) AddTestToRunBasedOnVerboseOutput(ac_, av_, i, "IGNORE_TEST(");
         else if (argument.startsWith("-o")) correctParameters = SetOutputType(ac_, av_, i);
@@ -80,7 +84,7 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
 
 const char* CommandLineArguments::usage() const
 {
-    return "usage [-v] [-c] [-p] [-lg] [-ln] [-r#] [-g|sg groupName]... [-n|sn testName]... [\"TEST(groupName, testName)\"]... [-o{normal, junit}] [-k packageName]\n";
+    return "usage [-v] [-c] [-p] [-lg] [-ln] [-r#] [-g|sg|xg|xsg groupName]... [-n|sn|xn|xsn testName]... [\"TEST(groupName, testName)\"]... [-o{normal, junit, teamcity}] [-k packageName]\n";
 }
 
 bool CommandLineArguments::isVerbose() const
@@ -161,6 +165,21 @@ void CommandLineArguments::AddStrictGroupFilter(int ac, const char** av, int& i)
     groupFilters_ = groupFilter->add(groupFilters_);
 }
 
+void CommandLineArguments::AddExcludeGroupFilter(int ac, const char** av, int& i)
+{
+    TestFilter* groupFilter = new TestFilter(getParameterField(ac, av, i, "-xg"));
+    groupFilter->invertMatching();
+    groupFilters_ = groupFilter->add(groupFilters_);
+}
+
+void CommandLineArguments::AddExcludeStrictGroupFilter(int ac, const char** av, int& i)
+{
+    TestFilter* groupFilter = new TestFilter(getParameterField(ac, av, i, "-xsg"));
+    groupFilter->strictMatching();
+    groupFilter->invertMatching();
+    groupFilters_ = groupFilter->add(groupFilters_);
+}
+
 void CommandLineArguments::AddNameFilter(int ac, const char** av, int& i)
 {
     TestFilter* nameFilter = new TestFilter(getParameterField(ac, av, i, "-n"));
@@ -170,6 +189,21 @@ void CommandLineArguments::AddNameFilter(int ac, const char** av, int& i)
 void CommandLineArguments::AddStrictNameFilter(int ac, const char** av, int& index)
 {
     TestFilter* nameFilter = new TestFilter(getParameterField(ac, av, index, "-sn"));
+    nameFilter->strictMatching();
+    nameFilters_= nameFilter->add(nameFilters_);
+}
+
+void CommandLineArguments::AddExcludeNameFilter(int ac, const char** av, int& index)
+{
+    TestFilter* nameFilter = new TestFilter(getParameterField(ac, av, index, "-xn"));
+    nameFilter->invertMatching();
+    nameFilters_= nameFilter->add(nameFilters_);
+}
+
+void CommandLineArguments::AddExcludeStrictNameFilter(int ac, const char** av, int& index)
+{
+    TestFilter* nameFilter = new TestFilter(getParameterField(ac, av, index, "-xsn"));
+    nameFilter->invertMatching();
     nameFilter->strictMatching();
     nameFilters_= nameFilter->add(nameFilters_);
 }
@@ -208,6 +242,11 @@ bool CommandLineArguments::SetOutputType(int ac, const char** av, int& i)
         outputType_ = OUTPUT_JUNIT;
         return true;
     }
+    if (outputType == "teamcity") {
+        outputType_ = OUTPUT_TEAMCITY;
+        return true;
+    }
+
     return false;
 }
 
@@ -219,6 +258,11 @@ bool CommandLineArguments::isEclipseOutput() const
 bool CommandLineArguments::isJUnitOutput() const
 {
     return outputType_ == OUTPUT_JUNIT;
+}
+
+bool CommandLineArguments::isTeamCityOutput() const
+{
+    return outputType_ == OUTPUT_TEAMCITY;
 }
 
 const SimpleString& CommandLineArguments::getPackageName() const

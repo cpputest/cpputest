@@ -25,17 +25,19 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifdef _MSC_VER
-//#pragma warning(disable:4786)
-//#pragma warning(disable:4290)
-//#pragma warning(disable:4996)
-#endif
+//Include this in the test main to execute these tests
+IMPORT_TEST_GROUP( Utest);
+IMPORT_TEST_GROUP( Failure);
+IMPORT_TEST_GROUP( TestOutput);
+IMPORT_TEST_GROUP( SimpleString);
+IMPORT_TEST_GROUP( TestInstaller);
+IMPORT_TEST_GROUP( NullTest);
+IMPORT_TEST_GROUP( MemoryLeakWarningTest);
+IMPORT_TEST_GROUP( TestHarness_c);
+IMPORT_TEST_GROUP( CommandLineTestRunner);
+IMPORT_TEST_GROUP( JUnitOutputTest);
+IMPORT_TEST_GROUP( MemoryLeakDetectorTest);
 
-#ifdef WIN32
-    #ifdef _VC80_UPGRADE
-        //#pragma warning(disable:4996)
-        //#pragma warning(disable:4290)
-    #else
-        //#define vsnprintf _vsnprintf
-    #endif
-#endif
+/* In allTest.cpp */
+IMPORT_TEST_GROUP(CheatSheet);
+

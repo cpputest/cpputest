@@ -34,6 +34,8 @@ else (MSVC)
         Wsign-conversion
         Wno-padded
         Wno-disabled-macro-expansion
+        Wno-reserved-id-macro
+        Wno-keyword-macro
         )
 
     if (NOT GMOCK AND NOT REAL_GTEST)

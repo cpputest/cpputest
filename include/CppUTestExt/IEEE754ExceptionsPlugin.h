@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2007, Michael Feathers, James Grenning and Bas Vodde
- * All rights reserved.
+ * Copyright (c) 2015, Michael Feathers, James Grenning, Bas Vodde
+ * and Arnd Strube. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -25,7 +25,25 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef D_c2000_Platform_H
-#define D_c2000_Platform_H
+#ifndef D_IEEE754ExceptionsPlugin_h
+#define D_IEEE754ExceptionsPlugin_h
+
+#include "CppUTest/TestPlugin.h"
+
+class IEEE754ExceptionsPlugin: public TestPlugin
+{
+public:
+    IEEE754ExceptionsPlugin(const SimpleString& name = "IEEE754ExceptionsPlugin");
+
+    virtual void preTestAction(UtestShell& test, TestResult& result) _override;
+    virtual void postTestAction(UtestShell& test, TestResult& result) _override;
+
+    static void disableInexact(void);
+    static void enableInexact(void);
+
+private:
+    void ieee754Check(UtestShell& test, TestResult& result, int flag, const char* text);
+    static bool inexactDisabled_;
+};
 
 #endif

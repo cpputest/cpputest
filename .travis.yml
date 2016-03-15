@@ -1,24 +1,52 @@
 language: cpp
-compiler:
-- clang
-- gcc
-rvm:
-- 1.9.3
-env:
-  matrix:
-  - BUILDTOOL=autotools
-  - BUILDTOOL=cmake
-  - BUILDTOOL=autotools_old_compilers
-  global:
-  - secure: |-
-      P05xUfJVw5YM4hF7hzQLjyMzDD4Q1/fyWP9Uk5aK5VrSWNY99EuxldXI5QK/
-      vA1NkcW49tQW1wQvBlRtdlLNOmUfDP/oiJFXPwNn4dqwOIOEet2P7JO/5hnH
-      MNHlZmGu2WpoZREhOFBfsIhK0IP8mloqLDq2XemBdga/LWygrLU=
-  - secure: Y/8iNkf6uEbE3qltnM+7mGlCvFWzyttwwRGgVGw1m9xOiUJcobvOImQRU8XZ91dgO+Fz0A3mljqs1sK1OPjpXmFGE1jP/NlotMw0WlDOuSIDjQ4ubwdTNGAwNY53R9ygbIjEmqxHAJm9mOZqxW2hNaoI7TcX6oX248/hLibyx8M=
-install:
-- gem install travis_github_deployer
-- sudo apt-get update --fix-missing
-- sudo apt-get install valgrind
+sudo: false
+matrix:
+    include:
+    - compiler: clang
+      env: BUILD=autotools
+      addons:
+        apt:
+          packages:
+          - valgrind
+    - compiler: clang
+      env: BUILD=cmake
+    - compiler: clang
+      env: BUILD=autotools_gtest
+    - compiler: clang
+      env: BUILD=cmake_gtest
+    - compiler: gcc
+      env: BUILD=autotools
+      addons:
+        apt:
+          packages:
+          - valgrind
+    - compiler: gcc
+      env: BUILD=cmake
+    - compiler: gcc
+      env: BUILD=autotools_gtest
+    - compiler: gcc
+      env: BUILD=cmake_gtest
+    - compiler: gcc
+      env: BUILD=cmake_coverage
+    - compiler: gcc
+      env: BUILD=test_report
+    - compiler: wcl
+      env: BUILD=make_dos
+      addons:
+        apt:
+          packages:
+          - dosbox
+global:
+- os: linux
+- rvm: '1.9.3'
+- secure: |-
+    P05xUfJVw5YM4hF7hzQLjyMzDD4Q1/fyWP9Uk5aK5VrSWNY99EuxldXI5QK/
+    vA1NkcW49tQW1wQvBlRtdlLNOmUfDP/oiJFXPwNn4dqwOIOEet2P7JO/5hnH
+    MNHlZmGu2WpoZREhOFBfsIhK0IP8mloqLDq2XemBdga/LWygrLU=
+- secure: |-
+    Y/8iNkf6uEbE3qltnM+7mGlCvFWzyttwwRGgVGw1m9xOiUJcobvOImQRU8XZ
+    91dgO+Fz0A3mljqs1sK1OPjpXmFGE1jP/NlotMw0WlDOuSIDjQ4ubwdTNGAw
+    NY53R9ygbIjEmqxHAJm9mOZqxW2hNaoI7TcX6oX248/hLibyx8M=
 before_script:
 - export CPPUTEST_BUILD_DIR=$TRAVIS_BUILD_DIR/cpputest_build
 - mkdir -p $CPPUTEST_BUILD_DIR && cd $CPPUTEST_BUILD_DIR

@@ -143,8 +143,40 @@ TEST(TestHarness_c, checkString)
     fixture->setTestFunction(_failStringMethod);
     fixture->runAllTests();
 
-    StringEqualFailure failure(UtestShell::getCurrent(), "file", 1, "Hello", "Hello World");
+    StringEqualFailure failure(UtestShell::getCurrent(), "file", 1, "Hello", "Hello World", "");
     fixture->assertPrintContains(failure.getMessage());
+    fixture->assertPrintContains("arness_c");
+    CHECK(!hasDestructorOfTheDestructorCheckedBeenCalled)
+}
+
+static void _failPointerMethod()
+{
+    HasTheDestructorBeenCalledChecker checker;
+    CHECK_EQUAL_C_POINTER(NULL, (void *)0x1);
+}
+
+TEST(TestHarness_c, checkPointer)
+{
+    CHECK_EQUAL_C_POINTER(NULL, NULL);
+    fixture->setTestFunction(_failPointerMethod);
+    fixture->runAllTests();
+    fixture->assertPrintContains("expected <0x0>\n	but was  <0x1>");
+    fixture->assertPrintContains("arness_c");
+    CHECK(!hasDestructorOfTheDestructorCheckedBeenCalled)
+}
+
+static void _failBitsMethod()
+{
+    HasTheDestructorBeenCalledChecker checker;
+    CHECK_EQUAL_C_BITS(0x0001, (unsigned short)0x0003, 0xFFFF);
+}
+
+TEST(TestHarness_c, checkBits)
+{
+    CHECK_EQUAL_C_POINTER(NULL, NULL);
+    fixture->setTestFunction(_failBitsMethod);
+    fixture->runAllTests();
+    fixture->assertPrintContains("expected <00000000 00000001>\n\tbut was  <00000000 00000011>");
     fixture->assertPrintContains("arness_c");
     CHECK(!hasDestructorOfTheDestructorCheckedBeenCalled)
 }
