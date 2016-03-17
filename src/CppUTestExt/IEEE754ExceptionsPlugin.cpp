@@ -34,6 +34,43 @@ extern "C" {
     #include <fenv.h>
 }
 
+#if CPPUTEST_FENV_LACKS_SIGNALLING
+
+#if defined(__APPLE__)
+#define CONTROL_WORD __control
+#elif defined(__MINGW32__)
+#define CONTROL_WORD __control_word
+#elif defined(__WATCOMC__)
+#define CONTROL_WORD control_word
+#endif
+
+int feenableexcept (int excepts)
+{
+    fenv_t fenv;
+
+    if (fegetenv (&fenv)) return -1;
+
+    int old_excepts = fenv.CONTROL_WORD & FE_ALL_EXCEPT;
+    fenv.CONTROL_WORD &= (unsigned short)~(excepts & FE_ALL_EXCEPT);
+
+    return (fesetenv(&fenv) ? -1 : old_excepts);
+}
+
+int fedisableexcept (int excepts)
+{
+    fenv_t fenv;
+
+    if (fegetenv(&fenv)) return -1;
+
+    unsigned short new_excepts = (unsigned short)excepts & FE_ALL_EXCEPT;
+    int old_excepts = fenv.CONTROL_WORD & FE_ALL_EXCEPT;
+    fenv.CONTROL_WORD |= new_excepts;
+
+    return (fesetenv(&fenv) ? -1 : old_excepts);
+}
+
+#endif
+
 #define IEEE754_CHECK_CLEAR(test, result, flag) ieee754Check(test, result, flag, #flag)
 
 bool IEEE754ExceptionsPlugin::inexactDisabled_ = true;
@@ -67,6 +104,16 @@ void IEEE754ExceptionsPlugin::disableInexact()
 void IEEE754ExceptionsPlugin::enableInexact()
 {
     inexactDisabled_ = false;
+}
+
+void IEEE754ExceptionsPlugin::disableSignal()
+{
+    fedisableexcept(FE_ALL_EXCEPT);
+}
+
+void IEEE754ExceptionsPlugin::enableSignal()
+{
+    feenableexcept(FE_DIVBYZERO|FE_OVERFLOW|FE_UNDERFLOW|FE_INVALID);
 }
 
 void IEEE754ExceptionsPlugin::ieee754Check(UtestShell& test, TestResult& result, int flag, const char* text)
