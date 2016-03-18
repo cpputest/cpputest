@@ -118,6 +118,9 @@ static void set_everything_but_already_failed(void) {
 TEST(FE__with_Plugin, should_not_fail_again_when_test_has_already_failed) {
     fixture.setTestFunction(set_everything_but_already_failed);
     fixture.runAllTests();
+    CHECK(ieee754Plugin.checkIeee754ExeptionFlag(0x04));
+    CHECK(ieee754Plugin.checkIeee754ExeptionFlag(0x08));
+    CHECK(ieee754Plugin.checkIeee754ExeptionFlag(0x10));
     LONGS_EQUAL(1, fixture.getCheckCount());
     LONGS_EQUAL(1, fixture.getFailureCount());
 }
