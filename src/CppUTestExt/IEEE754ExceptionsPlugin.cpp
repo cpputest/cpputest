@@ -69,6 +69,11 @@ void IEEE754ExceptionsPlugin::enableInexact()
     inexactDisabled_ = false;
 }
 
+bool IEEE754ExceptionsPlugin::checkIeee754ExeptionFlag(int flag)
+{
+    return fetestexcept(flag);
+}
+
 void IEEE754ExceptionsPlugin::ieee754Check(UtestShell& test, TestResult& result, int flag, const char* text)
 {
     result.countCheck();
