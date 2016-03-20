@@ -83,6 +83,21 @@
    static TestInstaller TEST_##testGroup##testName##_Installer(IGNORE##testGroup##_##testName##_TestShell_instance, #testGroup, #testName, __FILE__,__LINE__); \
     void IGNORE##testGroup##_##testName##_Test::testBodyThatNeverRuns ()
 
+#define OPTRUN_TEST(testGroup, testName)\
+  /* External declarations for strict compilers */ \
+  class OPTRUN##testGroup##_##testName##_TestShell; \
+  extern OPTRUN##testGroup##_##testName##_TestShell OPTRUN##testGroup##_##testName##_TestShell_instance; \
+  \
+  class OPTRUN##testGroup##_##testName##_Test : public TEST_GROUP_##CppUTestGroup##testGroup \
+{ public: OPTRUN##testGroup##_##testName##_Test () : TEST_GROUP_##CppUTestGroup##testGroup () {} \
+  public: void testBody (); }; \
+  class OPTRUN##testGroup##_##testName##_TestShell : public OptRunUtestShell { \
+      virtual Utest* createTest() _override { return new OPTRUN##testGroup##_##testName##_Test; } \
+  } OPTRUN##testGroup##_##testName##_TestShell_instance; \
+   static TestInstaller TEST_##testGroup##testName##_Installer(OPTRUN##testGroup##_##testName##_TestShell_instance, #testGroup, #testName, __FILE__,__LINE__); \
+    void OPTRUN##testGroup##_##testName##_Test::testBody ()
+
+
 #define IMPORT_TEST_GROUP(testGroup) \
   extern int externTestGroup##testGroup;\
   extern int* p##testGroup; \

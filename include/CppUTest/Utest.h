@@ -103,6 +103,7 @@ public:
     int getLineNumber() const;
     virtual bool willRun() const;
     virtual bool hasFailed() const;
+	bool isOptRun() const;
     void countCheck();
 
     virtual void assertTrue(bool condition, const char *checkString, const char *conditionString, const char* text, const char *fileName, int lineNumber, const TestTerminator& testTerminator = NormalTestTerminator());
@@ -137,6 +138,8 @@ public:
     virtual bool isRunInSeperateProcess() const;
     virtual void setRunInSeperateProcess();
 
+	void setOptRun();
+
     virtual Utest* createTest();
     virtual void destroyTest(Utest* test);
 
@@ -160,6 +163,7 @@ private:
     UtestShell *next_;
     bool isRunAsSeperateProcess_;
     bool hasFailed_;
+	bool isOptRun_;
 
     void setTestResult(TestResult* result);
     void setCurrentTest(UtestShell* test);
@@ -169,6 +173,8 @@ private:
     static TestResult* testResult_;
 
 };
+
+
 
 //////////////////// ExecFunctionTest
 
@@ -229,6 +235,20 @@ private:
     IgnoredUtestShell(const IgnoredUtestShell&);
     IgnoredUtestShell& operator=(const IgnoredUtestShell&);
 
+};
+
+////////////////////optRunTest
+class OptRunUtestShell : public IgnoredUtestShell
+{
+public:
+	OptRunUtestShell();
+	virtual ~OptRunUtestShell();
+    explicit OptRunUtestShell(const char* groupName, const char* testName,
+            const char* fileName, int lineNumber);
+    virtual bool willRun() const _override;
+	virtual void runOneTest(TestPlugin* plugin, TestResult& result) _override;
+protected:
+	virtual SimpleString getMacroName() const _override;
 };
 
 //////////////////// TestInstaller

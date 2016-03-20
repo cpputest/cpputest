@@ -54,7 +54,6 @@ public:
     virtual void listTestGroupAndCaseNames(TestResult& result);
     virtual void setNameFilters(const TestFilter* filters);
     virtual void setGroupFilters(const TestFilter* filters);
-
     virtual void installPlugin(TestPlugin* plugin);
     virtual void resetPlugins();
     virtual TestPlugin* getFirstPlugin();
@@ -73,7 +72,7 @@ public:
 
     virtual void setRunTestsInSeperateProcess();
     int getCurrentRepetition();
-
+	void setOptRun();
 private:
 
     bool testShouldRun(UtestShell* test, TestResult& result);
@@ -86,7 +85,7 @@ private:
     static TestRegistry* currentRegistry_;
     bool runInSeperateProcess_;
     int currentRepetition_;
-
+	bool isOptRun_;
 };
 
 #endif

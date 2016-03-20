@@ -32,6 +32,8 @@
 #include "CppUTest/TestPlugin.h"
 #include "CppUTest/JUnitTestOutput.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
+#include "CppUTestExt/MockSupport.h"
+
 
 class DummyPluginWhichCountsThePlugins : public TestPlugin
 {
@@ -260,3 +262,67 @@ TEST(CommandLineTestRunner, realTeamCityOutputShouldBeCreatedAndWorkProperly)
     STRCMP_CONTAINS("##teamcity[testFinished name='test'", FakeOutput::console.asCharString());
     STRCMP_CONTAINS("##teamcity[testSuiteFinished name='group'", FakeOutput::console.asCharString());
 }
+static bool bChecker = false;
+
+class OptRunUtestForTest : public Utest
+{
+public:
+    void testBody()
+    {
+        bChecker = true;
+    }
+};
+
+class optRunUtestShellForTest : public OptRunUtestShell
+{
+public:
+    optRunUtestShellForTest(const char* groupName, const char* testName, const char* fileName, int lineNumber)
+        : OptRunUtestShell(groupName, testName, fileName, lineNumber) {}
+    virtual Utest* createTest() _override { return new OptRunUtestForTest; }
+};
+
+TEST_GROUP(OptRunTestTests)
+{
+    TestRegistry registry;
+    optRunUtestShellForTest *optRunTest_;
+    DummyPluginWhichCountsThePlugins* pluginCountingPlugin;
+
+    void setup()
+    {
+      optRunTest_ = new optRunUtestShellForTest("group", "test", "file", 1);
+      registry.addTest(optRunTest_);
+      pluginCountingPlugin = new DummyPluginWhichCountsThePlugins("PluginCountingPlugin", &registry);
+    }
+    void teardown()
+    {
+      delete pluginCountingPlugin;
+      delete optRunTest_;
+	  bChecker = false;
+    }
+};
+
+TEST(OptRunTestTests, optRunWillBeIgnoredIfNoOptionSpecified)
+{
+    const char* argv[] = { "tests.exe" };
+
+    CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(1, argv, &registry);
+    commandLineTestRunner.runAllTestsMain();
+
+    CHECK_FALSE( bChecker );
+}
+
+TEST(OptRunTestTests, optRunWillGetRunIfOptionSpecified)
+{
+	const char* argv[] = { "tests.exe", "-optRun" };
+
+	CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(2, argv, &registry);
+	commandLineTestRunner.runAllTestsMain();
+
+    CHECK_TRUE( bChecker );
+}
+
+OPTRUN_TEST(OptRunTestTests, ThisIsATestFromUserView)
+{
+	CHECK(0);
+}
+

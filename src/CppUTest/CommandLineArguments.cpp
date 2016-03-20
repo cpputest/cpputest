@@ -30,7 +30,7 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 
 CommandLineArguments::CommandLineArguments(int ac, const char** av) :
-    ac_(ac), av_(av), verbose_(false), color_(false), runTestsAsSeperateProcess_(false), listTestGroupNames_(false), listTestGroupAndCaseNames_(false), repeat_(1), groupFilters_(NULL), nameFilters_(NULL), outputType_(OUTPUT_ECLIPSE)
+    ac_(ac), av_(av), verbose_(false), color_(false), runTestsAsSeperateProcess_(false), listTestGroupNames_(false), listTestGroupAndCaseNames_(false), isOptRun_(false), repeat_(1), groupFilters_(NULL), nameFilters_(NULL), outputType_(OUTPUT_ECLIPSE)
 {
 }
 
@@ -59,6 +59,7 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
         else if (argument == "-p") runTestsAsSeperateProcess_ = true;
         else if (argument == "-lg") listTestGroupNames_ = true;
         else if (argument == "-ln") listTestGroupAndCaseNames_ = true;
+		else if (argument == "-optRun") isOptRun_ = true;
         else if (argument.startsWith("-r")) SetRepeatCount(ac_, av_, i);
         else if (argument.startsWith("-g")) AddGroupFilter(ac_, av_, i);
         else if (argument.startsWith("-sg")) AddStrictGroupFilter(ac_, av_, i);
@@ -70,6 +71,7 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
         else if (argument.startsWith("-xsn")) AddExcludeStrictNameFilter(ac_, av_, i);
         else if (argument.startsWith("TEST(")) AddTestToRunBasedOnVerboseOutput(ac_, av_, i, "TEST(");
         else if (argument.startsWith("IGNORE_TEST(")) AddTestToRunBasedOnVerboseOutput(ac_, av_, i, "IGNORE_TEST(");
+		else if (argument.startsWith("OPTRUN_TEST(")) AddTestToRunBasedOnVerboseOutput(ac_, av_, i, "OPTRUN_TEST(");
         else if (argument.startsWith("-o")) correctParameters = SetOutputType(ac_, av_, i);
         else if (argument.startsWith("-p")) correctParameters = plugin->parseAllArguments(ac_, av_, i);
         else if (argument.startsWith("-k")) SetPackageName(ac_, av_, i);
@@ -84,7 +86,7 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
 
 const char* CommandLineArguments::usage() const
 {
-    return "usage [-v] [-c] [-p] [-lg] [-ln] [-r#] [-g|sg|xg|xsg groupName]... [-n|sn|xn|xsn testName]... [\"TEST(groupName, testName)\"]... [-o{normal, junit, teamcity}] [-k packageName]\n";
+    return "usage [-v] [-c] [-p] [-lg] [-ln] [-optRun] [-r#] [-g|sg|xg|xsg groupName]... [-n|sn|xn|xsn testName]... [\"TEST(groupName, testName)\"]... [-o{normal, junit, teamcity}] [-k packageName]\n";
 }
 
 bool CommandLineArguments::isVerbose() const
@@ -105,6 +107,11 @@ bool CommandLineArguments::isListingTestGroupNames() const
 bool CommandLineArguments::isListingTestGroupAndCaseNames() const
 {
     return listTestGroupAndCaseNames_;
+}
+
+bool CommandLineArguments::isOptRun() const
+{
+	return isOptRun_;
 }
 
 bool CommandLineArguments::runTestsInSeperateProcess() const

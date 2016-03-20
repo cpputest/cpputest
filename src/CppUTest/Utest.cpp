@@ -132,17 +132,17 @@ extern "C" {
 /******************************** */
 
 UtestShell::UtestShell() :
-    group_("UndefinedTestGroup"), name_("UndefinedTest"), file_("UndefinedFile"), lineNumber_(0), next_(NULL), isRunAsSeperateProcess_(false), hasFailed_(false)
+    group_("UndefinedTestGroup"), name_("UndefinedTest"), file_("UndefinedFile"), lineNumber_(0), next_(NULL), isRunAsSeperateProcess_(false), hasFailed_(false), isOptRun_(false)
 {
 }
 
 UtestShell::UtestShell(const char* groupName, const char* testName, const char* fileName, int lineNumber) :
-        group_(groupName), name_(testName), file_(fileName), lineNumber_(lineNumber), next_(NULL), isRunAsSeperateProcess_(false), hasFailed_(false)
+        group_(groupName), name_(testName), file_(fileName), lineNumber_(lineNumber), next_(NULL), isRunAsSeperateProcess_(false), hasFailed_(false), isOptRun_(false)
 {
 }
 
 UtestShell::UtestShell(const char* groupName, const char* testName, const char* fileName, int lineNumber, UtestShell* nextTest) :
-    group_(groupName), name_(testName), file_(fileName), lineNumber_(lineNumber), next_(nextTest), isRunAsSeperateProcess_(false), hasFailed_(false)
+    group_(groupName), name_(testName), file_(fileName), lineNumber_(lineNumber), next_(nextTest), isRunAsSeperateProcess_(false), hasFailed_(false), isOptRun_(false)
 {
 }
 
@@ -264,6 +264,11 @@ bool UtestShell::hasFailed() const
     return hasFailed_;
 }
 
+bool UtestShell::isOptRun() const
+{
+	return isOptRun_; 
+}
+
 void UtestShell::countCheck()
 {
     getTestResult()->countCheck();
@@ -284,6 +289,11 @@ void UtestShell::setRunInSeperateProcess()
     isRunAsSeperateProcess_ = true;
 }
 
+
+void UtestShell::setOptRun()
+{
+	isOptRun_ = true;
+}
 
 void UtestShell::setFileName(const char* fileName)
 {
@@ -674,4 +684,39 @@ TestInstaller::~TestInstaller()
 void TestInstaller::unDo()
 {
     TestRegistry::getCurrentRegistry()->unDoLastAddTest();
+}
+
+OptRunUtestShell::OptRunUtestShell()
+{
+
+}
+OptRunUtestShell::OptRunUtestShell(const char* groupName, const char* testName, const char* fileName, int lineNumber) :
+   IgnoredUtestShell(groupName, testName, fileName, lineNumber)
+{
+}
+
+OptRunUtestShell::~OptRunUtestShell()
+{
+
+}
+bool OptRunUtestShell::willRun() const
+{
+	if (isOptRun()) return UtestShell::willRun();
+
+	return IgnoredUtestShell::willRun();
+}
+
+void OptRunUtestShell::runOneTest(TestPlugin* plugin, TestResult& result)
+{
+	if (isOptRun()) 
+	{		
+		UtestShell::runOneTest(plugin, result);
+		return;
+	}
+	IgnoredUtestShell::runOneTest(plugin, result);
+}
+
+SimpleString OptRunUtestShell::getMacroName() const
+{
+	return "OPTRUN_TEST";
 }
