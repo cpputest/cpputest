@@ -302,20 +302,6 @@ TEST(CommandLineArguments, setTestToRunUsingVerboseOutputOfIgnoreTest)
     CHECK_EQUAL(groupFilter, *args->getGroupFilters());
 }
 
-TEST(CommandLineArguments, setTestToRunUsingVerboseOutputOfOptRunTest)
-{
-	int argc = 2;
-	const char* argv[] = { "tests.exe", "OPTRUN_TEST(testgroup, testname) - stuff" };
-	CHECK(newArgumentParser(argc, argv));
-
-	TestFilter nameFilter("testname");
-	TestFilter groupFilter("testgroup");
-	nameFilter.strictMatching();
-	groupFilter.strictMatching();
-	CHECK_EQUAL(nameFilter, *args->getNameFilters());
-	CHECK_EQUAL(groupFilter, *args->getGroupFilters());
-}
-
 TEST(CommandLineArguments, setNormalOutput)
 {
     int argc = 2;
@@ -384,7 +370,7 @@ TEST(CommandLineArguments, weirdParamatersPrintsUsageAndReturnsFalse)
     int argc = 2;
     const char* argv[] = { "tests.exe", "-SomethingWeird" };
     CHECK(!newArgumentParser(argc, argv));
-    STRCMP_EQUAL("usage [-v] [-c] [-p] [-lg] [-ln] [-optRun] [-r#] [-g|sg|xg|xsg groupName]... [-n|sn|xn|xsn testName]... [\"TEST(groupName, testName)\"]... [-o{normal, junit, teamcity}] [-k packageName]\n",
+    STRCMP_EQUAL("usage [-v] [-c] [-p] [-lg] [-ln] [-runIgnore] [-r#] [-g|sg|xg|xsg groupName]... [-n|sn|xn|xsn testName]... [\"TEST(groupName, testName)\"]... [-o{normal, junit, teamcity}] [-k packageName]\n",
             args->usage());
 }
 
@@ -442,8 +428,8 @@ TEST(CommandLineArguments, lastParameterFieldMissing)
 TEST(CommandLineArguments, setOptRun)
 {
     int argc = 2;
-    const char* argv[] = { "tests.exe", "-optRun"};
+    const char* argv[] = { "tests.exe", "-runIgnore"};
     CHECK(newArgumentParser(argc, argv));
-    CHECK(args->isOptRun());
+    CHECK(args->isRunIgnore());
 }
 

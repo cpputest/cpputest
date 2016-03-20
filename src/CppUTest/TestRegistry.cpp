@@ -29,7 +29,7 @@
 #include "CppUTest/TestRegistry.h"
 
 TestRegistry::TestRegistry() :
-    tests_(NULL), nameFilters_(NULL), groupFilters_(NULL), firstPlugin_(NullTestPlugin::instance()), runInSeperateProcess_(false), currentRepetition_(0), isOptRun_(false)
+    tests_(NULL), nameFilters_(NULL), groupFilters_(NULL), firstPlugin_(NullTestPlugin::instance()), runInSeperateProcess_(false), currentRepetition_(0), runIgnore_(false)
 
 {
 }
@@ -50,7 +50,7 @@ void TestRegistry::runAllTests(TestResult& result)
     result.testsStarted();
     for (UtestShell *test = tests_; test != NULL; test = test->getNext()) {
         if (runInSeperateProcess_) test->setRunInSeperateProcess();
-		if (isOptRun_) test->setOptRun();
+		if (runIgnore_) test->setRunIgnore();
 
         if (groupStart) {
             result.currentGroupStarted(test);
@@ -162,9 +162,9 @@ void TestRegistry::setGroupFilters(const TestFilter* filters)
     groupFilters_ = filters;
 }
 
-void TestRegistry::setOptRun()
+void TestRegistry::setRunIgnore()
 {
-	isOptRun_ = true;
+	runIgnore_ = true;
 }
 
 void TestRegistry::setRunTestsInSeperateProcess()

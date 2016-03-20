@@ -1362,37 +1362,30 @@ TEST(IgnoreTest, printsIGNORE_TESTwhenVerbose)
     fixture.assertPrintContains("IGNORE_TEST");
 }
 
-TEST_GROUP(OptRunTest)
+TEST_GROUP(OptRunIgnoredTest)
 {
     TestTestingFixture fixture;
-    OptRunUtestShell optRunTest;
+    IgnoredUtestShell optRunIgnoreTest;
 
     void setup() _override
     {
-        fixture.addTest(&optRunTest);
+        fixture.addTest(&optRunIgnoreTest);
     }
 };
 
-TEST(OptRunTest, optRunOptionSpecifiedThenIncreaseRunCount)
+TEST(OptRunIgnoredTest, optRunOptionSpecifiedThenIncreaseRunCount)
 {
-    optRunTest.setOptRun();
+    optRunIgnoreTest.setRunIgnore();
     fixture.runAllTests();
     LONGS_EQUAL(2, fixture.getRunCount());
     LONGS_EQUAL(0, fixture.getIgnoreCount());
 };
 
-TEST(OptRunTest, optRunOptionNotSpecifiedThenIncreaseIgnoredCount)
+TEST(OptRunIgnoredTest, optRunOptionNotSpecifiedThenIncreaseIgnoredCount)
 {
     fixture.runAllTests();
     LONGS_EQUAL(1, fixture.getRunCount());
     LONGS_EQUAL(1, fixture.getIgnoreCount());
 };
-
-TEST(OptRunTest, printsOPTRUN_TESTwhenVerbose)
-{
-	fixture.output_->verbose();
-	fixture.runAllTests();
-	fixture.assertPrintContains("OPTRUN_TEST");
-}
 
 

@@ -132,17 +132,17 @@ extern "C" {
 /******************************** */
 
 UtestShell::UtestShell() :
-    group_("UndefinedTestGroup"), name_("UndefinedTest"), file_("UndefinedFile"), lineNumber_(0), next_(NULL), isRunAsSeperateProcess_(false), hasFailed_(false), isOptRun_(false)
+    group_("UndefinedTestGroup"), name_("UndefinedTest"), file_("UndefinedFile"), lineNumber_(0), next_(NULL), isRunAsSeperateProcess_(false), hasFailed_(false), runIgnore_(false)
 {
 }
 
 UtestShell::UtestShell(const char* groupName, const char* testName, const char* fileName, int lineNumber) :
-        group_(groupName), name_(testName), file_(fileName), lineNumber_(lineNumber), next_(NULL), isRunAsSeperateProcess_(false), hasFailed_(false), isOptRun_(false)
+        group_(groupName), name_(testName), file_(fileName), lineNumber_(lineNumber), next_(NULL), isRunAsSeperateProcess_(false), hasFailed_(false), runIgnore_(false)
 {
 }
 
 UtestShell::UtestShell(const char* groupName, const char* testName, const char* fileName, int lineNumber, UtestShell* nextTest) :
-    group_(groupName), name_(testName), file_(fileName), lineNumber_(lineNumber), next_(nextTest), isRunAsSeperateProcess_(false), hasFailed_(false), isOptRun_(false)
+    group_(groupName), name_(testName), file_(fileName), lineNumber_(lineNumber), next_(nextTest), isRunAsSeperateProcess_(false), hasFailed_(false), runIgnore_(false)
 {
 }
 
@@ -264,9 +264,9 @@ bool UtestShell::hasFailed() const
     return hasFailed_;
 }
 
-bool UtestShell::isOptRun() const
+bool UtestShell::isRunIgnore() const
 {
-	return isOptRun_; 
+	return runIgnore_; 
 }
 
 void UtestShell::countCheck()
@@ -290,9 +290,9 @@ void UtestShell::setRunInSeperateProcess()
 }
 
 
-void UtestShell::setOptRun()
+void UtestShell::setRunIgnore()
 {
-	isOptRun_ = true;
+	runIgnore_ = true;
 }
 
 void UtestShell::setFileName(const char* fileName)
@@ -651,7 +651,9 @@ IgnoredUtestShell::~IgnoredUtestShell()
 }
 
 bool IgnoredUtestShell::willRun() const
-{
+{    
+	if (isRunIgnore()) return UtestShell::willRun();
+
     return false;
 }
 
@@ -660,8 +662,14 @@ SimpleString IgnoredUtestShell::getMacroName() const
     return "IGNORE_TEST";
 }
 
-void IgnoredUtestShell::runOneTest(TestPlugin* /* plugin */, TestResult& result)
+void IgnoredUtestShell::runOneTest(TestPlugin* plugin, TestResult& result)
 {
+	if (isRunIgnore()) 
+	{		
+		UtestShell::runOneTest(plugin, result);
+		return;
+	}
+
     result.countIgnored();
 }
 
@@ -684,39 +692,4 @@ TestInstaller::~TestInstaller()
 void TestInstaller::unDo()
 {
     TestRegistry::getCurrentRegistry()->unDoLastAddTest();
-}
-
-OptRunUtestShell::OptRunUtestShell()
-{
-
-}
-OptRunUtestShell::OptRunUtestShell(const char* groupName, const char* testName, const char* fileName, int lineNumber) :
-   IgnoredUtestShell(groupName, testName, fileName, lineNumber)
-{
-}
-
-OptRunUtestShell::~OptRunUtestShell()
-{
-
-}
-bool OptRunUtestShell::willRun() const
-{
-	if (isOptRun()) return UtestShell::willRun();
-
-	return IgnoredUtestShell::willRun();
-}
-
-void OptRunUtestShell::runOneTest(TestPlugin* plugin, TestResult& result)
-{
-	if (isOptRun()) 
-	{		
-		UtestShell::runOneTest(plugin, result);
-		return;
-	}
-	IgnoredUtestShell::runOneTest(plugin, result);
-}
-
-SimpleString OptRunUtestShell::getMacroName() const
-{
-	return "OPTRUN_TEST";
 }

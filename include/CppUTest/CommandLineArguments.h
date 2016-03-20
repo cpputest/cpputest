@@ -45,7 +45,7 @@ public:
     bool isColor() const;
     bool isListingTestGroupNames() const;
     bool isListingTestGroupAndCaseNames() const;
-	bool isOptRun() const;
+	bool isRunIgnore() const;
     int getRepeatCount() const;
     const TestFilter* getGroupFilters() const;
     const TestFilter* getNameFilters() const;
@@ -70,7 +70,7 @@ private:
     bool runTestsAsSeperateProcess_;
     bool listTestGroupNames_;
     bool listTestGroupAndCaseNames_;
-	bool isOptRun_;
+	bool runIgnore_;
     int repeat_;
     TestFilter* groupFilters_;
     TestFilter* nameFilters_;

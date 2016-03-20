@@ -262,67 +262,62 @@ TEST(CommandLineTestRunner, realTeamCityOutputShouldBeCreatedAndWorkProperly)
     STRCMP_CONTAINS("##teamcity[testFinished name='test'", FakeOutput::console.asCharString());
     STRCMP_CONTAINS("##teamcity[testSuiteFinished name='group'", FakeOutput::console.asCharString());
 }
-static bool bChecker = false;
+static bool Checker = false;
 
-class OptRunUtestForTest : public Utest
+class RunIgnoreUtest : public Utest
 {
 public:
     void testBody()
     {
-        bChecker = true;
+        Checker = true;
     }
 };
 
-class optRunUtestShellForTest : public OptRunUtestShell
+class RunIgnoreUtestShell : public IgnoredUtestShell
 {
 public:
-    optRunUtestShellForTest(const char* groupName, const char* testName, const char* fileName, int lineNumber)
-        : OptRunUtestShell(groupName, testName, fileName, lineNumber) {}
-    virtual Utest* createTest() _override { return new OptRunUtestForTest; }
+    RunIgnoreUtestShell(const char* groupName, const char* testName, const char* fileName, int lineNumber)
+        : IgnoredUtestShell(groupName, testName, fileName, lineNumber) {}
+    virtual Utest* createTest() _override { return new RunIgnoreUtest; }
 };
 
-TEST_GROUP(OptRunTestTests)
+TEST_GROUP(RunIgnoreTest)
 {
     TestRegistry registry;
-    optRunUtestShellForTest *optRunTest_;
+    RunIgnoreUtestShell *runIgnoreTest;
     DummyPluginWhichCountsThePlugins* pluginCountingPlugin;
 
     void setup()
     {
-      optRunTest_ = new optRunUtestShellForTest("group", "test", "file", 1);
-      registry.addTest(optRunTest_);
+      runIgnoreTest = new RunIgnoreUtestShell("group", "test", "file", 1);
+      registry.addTest(runIgnoreTest);
       pluginCountingPlugin = new DummyPluginWhichCountsThePlugins("PluginCountingPlugin", &registry);
     }
     void teardown()
     {
       delete pluginCountingPlugin;
-      delete optRunTest_;
-	  bChecker = false;
+      delete runIgnoreTest;
+	  Checker = false;
     }
 };
 
-TEST(OptRunTestTests, optRunWillBeIgnoredIfNoOptionSpecified)
+TEST(RunIgnoreTest, IgnoreTestWillBeIgnoredIfNoOptionSpecified)
 {
     const char* argv[] = { "tests.exe" };
 
     CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(1, argv, &registry);
     commandLineTestRunner.runAllTestsMain();
 
-    CHECK_FALSE( bChecker );
+    CHECK_FALSE( Checker );
 }
 
-TEST(OptRunTestTests, optRunWillGetRunIfOptionSpecified)
+TEST(RunIgnoreTest, IgnoreTestWillGetRunIfOptionSpecified)
 {
-	const char* argv[] = { "tests.exe", "-optRun" };
+	const char* argv[] = { "tests.exe", "-runIgnore" };
 
 	CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(2, argv, &registry);
 	commandLineTestRunner.runAllTestsMain();
 
-    CHECK_TRUE( bChecker );
-}
-
-OPTRUN_TEST(OptRunTestTests, ThisIsATestFromUserView)
-{
-	CHECK(0);
+    CHECK_TRUE( Checker );
 }
 
