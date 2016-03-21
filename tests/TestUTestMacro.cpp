@@ -1371,7 +1371,7 @@ TEST_GROUP(OptRunIgnoredTest)
     {
         fixture.addTest(&optRunIgnoreTest);
     }
-}
+};
 
 TEST(OptRunIgnoredTest, optRunOptionSpecifiedThenIncreaseRunCount)
 {
