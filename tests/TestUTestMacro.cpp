@@ -1371,7 +1371,7 @@ TEST_GROUP(OptRunIgnoredTest)
     {
         fixture.addTest(&optRunIgnoreTest);
     }
-};
+}
 
 TEST(OptRunIgnoredTest, optRunOptionSpecifiedThenIncreaseRunCount)
 {
@@ -1379,13 +1379,13 @@ TEST(OptRunIgnoredTest, optRunOptionSpecifiedThenIncreaseRunCount)
     fixture.runAllTests();
     LONGS_EQUAL(2, fixture.getRunCount());
     LONGS_EQUAL(0, fixture.getIgnoreCount());
-};
+}
 
 TEST(OptRunIgnoredTest, optRunOptionNotSpecifiedThenIncreaseIgnoredCount)
 {
     fixture.runAllTests();
     LONGS_EQUAL(1, fixture.getRunCount());
     LONGS_EQUAL(1, fixture.getIgnoreCount());
-};
+}
 
 
