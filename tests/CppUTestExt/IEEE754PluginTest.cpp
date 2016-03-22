@@ -33,31 +33,37 @@
 
 #if CPPUTEST_FENV_IS_WORKING_PROPERLY
 
-extern "C" { 
+extern "C"
+{
     #include "IEEE754PluginTest_c.h"
 }
 
-TEST_GROUP(FE__with_Plugin) {
+TEST_GROUP(FE__with_Plugin)
+{
     TestTestingFixture fixture;
     IEEE754ExceptionsPlugin ieee754Plugin;
-    void setup(void) _override {
+    void setup(void) _override
+    {
         fixture.registry_->installPlugin(&ieee754Plugin);
     }
 };
 
-TEST(FE__with_Plugin, should_fail____when__FE_DIVBYZERO__is_set) {
+TEST(FE__with_Plugin, should_fail____when__FE_DIVBYZERO__is_set)
+{
     fixture.setTestFunction(set_divisionbyzero_c);
     fixture.runAllTests();
     fixture.assertPrintContains("IEEE754_CHECK_CLEAR(FE_DIVBYZERO) failed");
 }
 
-TEST(FE__with_Plugin, should_fail____when__FE_OVERFLOW___is_set) {
+TEST(FE__with_Plugin, should_fail____when__FE_OVERFLOW___is_set)
+{
     fixture.setTestFunction(set_overflow_c);
     fixture.runAllTests();
     fixture.assertPrintContains("IEEE754_CHECK_CLEAR(FE_OVERFLOW) failed");
 }
 
-TEST(FE__with_Plugin, should_fail____when__FE_UNDERFLOW__is_set) {
+TEST(FE__with_Plugin, should_fail____when__FE_UNDERFLOW__is_set)
+{
     fixture.setTestFunction(set_underflow_c);
     fixture.runAllTests();
     fixture.assertPrintContains("IEEE754_CHECK_CLEAR(FE_UNDERFLOW) failed");
@@ -69,20 +75,23 @@ TEST(FE__with_Plugin, should_fail____when__FE_UNDERFLOW__is_set) {
 #define NOT_MINGW64_TEST IGNORE_TEST
 #endif
 
-NOT_MINGW64_TEST(FE__with_Plugin, should_fail____when__FE_INVALID____is_set) {
+NOT_MINGW64_TEST(FE__with_Plugin, should_fail____when__FE_INVALID____is_set)
+{
     fixture.setTestFunction(set_invalid_c);
     fixture.runAllTests();
     fixture.assertPrintContains("IEEE754_CHECK_CLEAR(FE_INVALID) failed");
 }
 
-TEST(FE__with_Plugin, should_fail____when__FE_INEXACT____is_set_and_enabled) {
+TEST(FE__with_Plugin, should_fail____when__FE_INEXACT____is_set_and_enabled)
+{
     ieee754Plugin.enableInexact();
     fixture.setTestFunction(set_inexact_c);
     fixture.runAllTests();
     fixture.assertPrintContains("IEEE754_CHECK_CLEAR(FE_INEXACT) failed");
 }
 
-TEST(FE__with_Plugin, should_succeed_when__FE_INEXACT____is_set_and_disabled) {
+TEST(FE__with_Plugin, should_succeed_when__FE_INEXACT____is_set_and_disabled)
+{
     ieee754Plugin.enableInexact();
     ieee754Plugin.disableInexact();
     fixture.setTestFunction(set_inexact_c);
@@ -90,7 +99,8 @@ TEST(FE__with_Plugin, should_succeed_when__FE_INEXACT____is_set_and_disabled) {
     fixture.assertPrintContains("OK");
 }
 
-TEST(FE__with_Plugin, should_succeed_with_5_checks_when_no_flags_are_set) {
+TEST(FE__with_Plugin, should_succeed_with_5_checks_when_no_flags_are_set)
+{
     ieee754Plugin.enableInexact();
     fixture.setTestFunction(set_nothing_c);
     fixture.runAllTests();
@@ -98,24 +108,28 @@ TEST(FE__with_Plugin, should_succeed_with_5_checks_when_no_flags_are_set) {
     ieee754Plugin.disableInexact();
 }
 
-TEST(FE__with_Plugin, should_check_five_times_when_all_flags_are_set) {
+TEST(FE__with_Plugin, should_check_five_times_when_all_flags_are_set)
+{
     fixture.setTestFunction(set_everything_c);
     fixture.runAllTests();
     LONGS_EQUAL(5, fixture.getCheckCount());
 }
 
-TEST(FE__with_Plugin, should_fail_only_once_when_all_flags_are_set) {
+TEST(FE__with_Plugin, should_fail_only_once_when_all_flags_are_set)
+{
     fixture.setTestFunction(set_everything_c);
     fixture.runAllTests();
     LONGS_EQUAL(1, fixture.getFailureCount());
 }
 
-static void set_everything_but_already_failed(void) {
+static void set_everything_but_already_failed(void)
+{
     set_everything_c();
     CHECK(1 == 2);
 }
 
-TEST(FE__with_Plugin, should_not_fail_again_when_test_has_already_failed) {
+TEST(FE__with_Plugin, should_not_fail_again_when_test_has_already_failed)
+{
     fixture.setTestFunction(set_everything_but_already_failed);
     fixture.runAllTests();
     CHECK(ieee754Plugin.checkIeee754ExeptionFlag(0x04));
@@ -127,13 +141,16 @@ TEST(FE__with_Plugin, should_not_fail_again_when_test_has_already_failed) {
 
 static IEEE754ExceptionsPlugin ip;
 
-TEST_GROUP(IEEE754ExceptionsPlugin2) {
-    void setup(void) _override {
+TEST_GROUP(IEEE754ExceptionsPlugin2)
+{
+    void setup(void) _override
+    {
         TestRegistry::getCurrentRegistry()->installPlugin(&ip);
     }
 };
 
-IGNORE_TEST(IEEE754ExceptionsPlugin2, should_not_fail_in_ignored_test) {
+IGNORE_TEST(IEEE754ExceptionsPlugin2, should_not_fail_in_ignored_test)
+{
     set_everything_c();
 }
 
