@@ -84,7 +84,7 @@ NOT_MINGW64_TEST(FE__with_Plugin, should_fail____when__FE_INVALID____is_set)
 
 TEST(FE__with_Plugin, should_fail____when__FE_INEXACT____is_set_and_enabled)
 {
-    ieee754Plugin.enableInexact();
+    IEEE754ExceptionsPlugin::enableInexact();
     fixture.setTestFunction(set_inexact_c);
     fixture.runAllTests();
     fixture.assertPrintContains("IEEE754_CHECK_CLEAR(FE_INEXACT) failed");
@@ -92,8 +92,8 @@ TEST(FE__with_Plugin, should_fail____when__FE_INEXACT____is_set_and_enabled)
 
 TEST(FE__with_Plugin, should_succeed_when__FE_INEXACT____is_set_and_disabled)
 {
-    ieee754Plugin.enableInexact();
-    ieee754Plugin.disableInexact();
+    IEEE754ExceptionsPlugin::enableInexact();
+    IEEE754ExceptionsPlugin::disableInexact();
     fixture.setTestFunction(set_inexact_c);
     fixture.runAllTests();
     fixture.assertPrintContains("OK");
@@ -101,11 +101,11 @@ TEST(FE__with_Plugin, should_succeed_when__FE_INEXACT____is_set_and_disabled)
 
 TEST(FE__with_Plugin, should_succeed_with_5_checks_when_no_flags_are_set)
 {
-    ieee754Plugin.enableInexact();
+    IEEE754ExceptionsPlugin::enableInexact();
     fixture.setTestFunction(set_nothing_c);
     fixture.runAllTests();
     fixture.assertPrintContains("OK (1 tests, 1 ran, 5 checks, 0 ignored, 0 filtered out");
-    ieee754Plugin.disableInexact();
+    IEEE754ExceptionsPlugin::disableInexact();
 }
 
 TEST(FE__with_Plugin, should_check_five_times_when_all_flags_are_set)
@@ -132,9 +132,9 @@ TEST(FE__with_Plugin, should_not_fail_again_when_test_has_already_failed)
 {
     fixture.setTestFunction(set_everything_but_already_failed);
     fixture.runAllTests();
-    CHECK(ieee754Plugin.checkIeee754ExeptionFlag(0x04));
-    CHECK(ieee754Plugin.checkIeee754ExeptionFlag(0x08));
-    CHECK(ieee754Plugin.checkIeee754ExeptionFlag(0x10));
+    CHECK(IEEE754ExceptionsPlugin::checkIeee754ExeptionFlag(0x04));
+    CHECK(IEEE754ExceptionsPlugin::checkIeee754ExeptionFlag(0x08));
+    CHECK(IEEE754ExceptionsPlugin::checkIeee754ExeptionFlag(0x10));
     LONGS_EQUAL(1, fixture.getCheckCount());
     LONGS_EQUAL(1, fixture.getFailureCount());
 }
