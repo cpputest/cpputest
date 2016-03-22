@@ -103,7 +103,7 @@ public:
     int getLineNumber() const;
     virtual bool willRun() const;
     virtual bool hasFailed() const;
-	bool isRunIgnore() const;
+    bool isRunIgnore() const;
     void countCheck();
 
     virtual void assertTrue(bool condition, const char *checkString, const char *conditionString, const char* text, const char *fileName, int lineNumber, const TestTerminator& testTerminator = NormalTestTerminator());
@@ -138,7 +138,7 @@ public:
     virtual bool isRunInSeperateProcess() const;
     virtual void setRunInSeperateProcess();
 
-	void setRunIgnore();
+    void setRunIgnore();
 
     virtual Utest* createTest();
     virtual void destroyTest(Utest* test);
@@ -163,7 +163,7 @@ private:
     UtestShell *next_;
     bool isRunAsSeperateProcess_;
     bool hasFailed_;
-	bool runIgnore_;
+    bool runIgnore_;
 
     void setTestResult(TestResult* result);
     void setCurrentTest(UtestShell* test);

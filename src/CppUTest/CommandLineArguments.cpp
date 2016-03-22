@@ -59,7 +59,7 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
         else if (argument == "-p") runTestsAsSeperateProcess_ = true;
         else if (argument == "-lg") listTestGroupNames_ = true;
         else if (argument == "-ln") listTestGroupAndCaseNames_ = true;
-		else if (argument == "-runIgnore") runIgnore_ = true;
+        else if (argument == "-ri") runIgnore_ = true;
         else if (argument.startsWith("-r")) SetRepeatCount(ac_, av_, i);
         else if (argument.startsWith("-g")) AddGroupFilter(ac_, av_, i);
         else if (argument.startsWith("-sg")) AddStrictGroupFilter(ac_, av_, i);
@@ -85,7 +85,7 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
 
 const char* CommandLineArguments::usage() const
 {
-    return "usage [-v] [-c] [-p] [-lg] [-ln] [-runIgnore] [-r#] [-g|sg|xg|xsg groupName]... [-n|sn|xn|xsn testName]... [\"TEST(groupName, testName)\"]... [-o{normal, junit, teamcity}] [-k packageName]\n";
+    return "usage [-v] [-c] [-p] [-lg] [-ln] [-ri] [-r#] [-g|sg|xg|xsg groupName]... [-n|sn|xn|xsn testName]... [\"TEST(groupName, testName)\"]... [-o{normal, junit, teamcity}] [-k packageName]\n";
 }
 
 bool CommandLineArguments::isVerbose() const

@@ -50,7 +50,7 @@ void TestRegistry::runAllTests(TestResult& result)
     result.testsStarted();
     for (UtestShell *test = tests_; test != NULL; test = test->getNext()) {
         if (runInSeperateProcess_) test->setRunInSeperateProcess();
-		if (runIgnore_) test->setRunIgnore();
+        if (runIgnore_) test->setRunIgnore();
 
         if (groupStart) {
             result.currentGroupStarted(test);

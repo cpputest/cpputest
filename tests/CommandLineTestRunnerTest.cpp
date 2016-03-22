@@ -313,7 +313,7 @@ TEST(RunIgnoreTest, IgnoreTestWillBeIgnoredIfNoOptionSpecified)
 
 TEST(RunIgnoreTest, IgnoreTestWillGetRunIfOptionSpecified)
 {
-	const char* argv[] = { "tests.exe", "-runIgnore" };
+	const char* argv[] = { "tests.exe", "-ri" };
 
 	CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(2, argv, &registry);
 	commandLineTestRunner.runAllTestsMain();

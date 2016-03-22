@@ -92,7 +92,7 @@ void CommandLineTestRunner::initializeTestRun()
     if (arguments_->isVerbose()) output_->verbose();
     if (arguments_->isColor()) output_->color();
     if (arguments_->runTestsInSeperateProcess()) registry_->setRunTestsInSeperateProcess();
-	if (arguments_->isRunIgnore()) registry_->setRunIgnore();
+    if (arguments_->isRunIgnore()) registry_->setRunIgnore();
 }
 
 int CommandLineTestRunner::runAllTests()

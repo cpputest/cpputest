@@ -45,7 +45,7 @@ public:
     bool isColor() const;
     bool isListingTestGroupNames() const;
     bool isListingTestGroupAndCaseNames() const;
-	bool isRunIgnore() const;
+    bool isRunIgnore() const;
     int getRepeatCount() const;
     const TestFilter* getGroupFilters() const;
     const TestFilter* getNameFilters() const;

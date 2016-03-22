@@ -116,10 +116,10 @@ public:
 
     }
 
-	int getRunCount()
-	{
-		return result_->getRunCount();
-	}
+    int getRunCount()
+    {
+    	return result_->getRunCount();
+    }
 
 
     TestRegistry* registry_;
