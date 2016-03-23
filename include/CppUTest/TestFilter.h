@@ -42,6 +42,7 @@ public:
     TestFilter* getNext() const;
 
     bool match(const SimpleString& name) const;
+	bool isStrictMatching() const;
 
     void strictMatching();
     void invertMatching();

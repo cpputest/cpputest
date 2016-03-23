@@ -325,7 +325,7 @@ bool UtestShell::match(const char* target, const TestFilter* filters) const
     return false;
 }
 
-bool UtestShell::shouldRun(const TestFilter* groupFilters, const TestFilter* nameFilters) const
+bool UtestShell::shouldRun(const TestFilter* groupFilters, const TestFilter* nameFilters)
 {
     return match(group_, groupFilters) && match(name_, nameFilters);
 }
@@ -642,17 +642,66 @@ IgnoredUtestShell::~IgnoredUtestShell()
 
 bool IgnoredUtestShell::willRun() const
 {
-    return false;
+	return false;
 }
 
 SimpleString IgnoredUtestShell::getMacroName() const
 {
-    return "IGNORE_TEST";
+	return "IGNORE_TEST";
 }
 
 void IgnoredUtestShell::runOneTest(TestPlugin* /* plugin */, TestResult& result)
 {
-    result.countIgnored();
+	result.countIgnored();
+}
+
+
+/////////////// DormantUtestShell /////////////
+DormantUtestShell::DormantUtestShell() : willRun_(false)
+{
+}
+
+DormantUtestShell::DormantUtestShell(const char* groupName, const char* testName, const char* fileName, int lineNumber) :
+	IgnoredUtestShell(groupName, testName, fileName, lineNumber)
+{
+}
+
+DormantUtestShell::~DormantUtestShell()
+{
+}
+
+bool DormantUtestShell::match(const char* target, const TestFilter* filters, const bool strict) const
+{
+	if (filters == NULL) return false;
+
+	for (; filters != NULL; filters = filters->getNext())
+		if (filters->match(target) && (!strict || filters->isStrictMatching())) return true;
+
+	return false;
+}
+
+bool DormantUtestShell::shouldRun(const TestFilter* groupFilters, const TestFilter* nameFilters)
+{
+	willRun_ = match(group_, groupFilters, true) && match(name_, nameFilters, true);
+	return match(group_, groupFilters, false) && match(name_, nameFilters, false);
+}
+
+bool DormantUtestShell::willRun() const
+{
+	return willRun_;
+}
+
+SimpleString DormantUtestShell::getMacroName() const
+{
+	return "DORMANT_TEST";
+}
+
+void DormantUtestShell::runOneTest(TestPlugin* plugin, TestResult& result)
+{
+	if (willRun())
+		UtestShell::runOneTest(plugin, result);
+	else
+		IgnoredUtestShell::runOneTest(plugin, result);
 }
 
 

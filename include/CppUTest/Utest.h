@@ -95,7 +95,7 @@ public:
     virtual UtestShell *getNext() const;
     virtual int countTests();
 
-    bool shouldRun(const TestFilter* groupFilters, const TestFilter* nameFilters) const;
+	virtual bool shouldRun(const TestFilter* groupFilters, const TestFilter* nameFilters);
     const SimpleString getName() const;
     const SimpleString getGroup() const;
     virtual SimpleString getFormattedName() const;
@@ -152,9 +152,10 @@ protected:
 
     virtual SimpleString getMacroName() const;
     TestResult *getTestResult();
+	bool match(const char* target, const TestFilter* filters) const;
+	const char *group_;
+	const char *name_;
 private:
-    const char *group_;
-    const char *name_;
     const char *file_;
     int lineNumber_;
     UtestShell *next_;
@@ -163,7 +164,6 @@ private:
 
     void setTestResult(TestResult* result);
     void setCurrentTest(UtestShell* test);
-    bool match(const char* target, const TestFilter* filters) const;
 
     static UtestShell* currentTest_;
     static TestResult* testResult_;
@@ -229,6 +229,28 @@ private:
     IgnoredUtestShell(const IgnoredUtestShell&);
     IgnoredUtestShell& operator=(const IgnoredUtestShell&);
 
+};
+
+//////////////////// DormantTest
+
+class DormantUtestShell : public IgnoredUtestShell
+{
+public:
+	DormantUtestShell();
+	virtual ~DormantUtestShell();
+	explicit DormantUtestShell(const char* groupName, const char* testName,
+		const char* fileName, int lineNumber);
+	virtual bool willRun() const _override;
+	bool match(const char* target, const TestFilter* filters, const bool strict) const;
+	virtual bool shouldRun(const TestFilter* groupFilters, const TestFilter* nameFilters) _override;
+protected:  virtual SimpleString getMacroName() const _override;
+			virtual void runOneTest(TestPlugin* plugin, TestResult& result) _override;
+
+private:
+
+	DormantUtestShell(const DormantUtestShell&);
+	DormantUtestShell& operator=(const DormantUtestShell&);
+	bool willRun_;
 };
 
 //////////////////// TestInstaller
