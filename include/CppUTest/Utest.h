@@ -137,6 +137,8 @@ public:
     virtual bool isRunInSeperateProcess() const;
     virtual void setRunInSeperateProcess();
 
+    virtual void setRunIgnored();
+
     virtual Utest* createTest();
     virtual void destroyTest(Utest* test);
 
@@ -169,6 +171,8 @@ private:
     static TestResult* testResult_;
 
 };
+
+
 
 //////////////////// ExecFunctionTest
 
@@ -221,13 +225,16 @@ public:
     explicit IgnoredUtestShell(const char* groupName, const char* testName,
             const char* fileName, int lineNumber);
     virtual bool willRun() const _override;
-    protected:  virtual SimpleString getMacroName() const _override;
+    virtual void setRunIgnored() _override;
+protected:  
+    virtual SimpleString getMacroName() const _override;
     virtual void runOneTest(TestPlugin* plugin, TestResult& result) _override;
-
 private:
 
     IgnoredUtestShell(const IgnoredUtestShell&);
     IgnoredUtestShell& operator=(const IgnoredUtestShell&);
+    
+    bool runIgnored_;
 
 };
 

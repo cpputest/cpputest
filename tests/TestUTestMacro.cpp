@@ -1362,4 +1362,67 @@ TEST(IgnoreTest, printsIGNORE_TESTwhenVerbose)
     fixture.assertPrintContains("IGNORE_TEST");
 }
 
+TEST_GROUP(OptRunIgnoredTest)
+{
+    TestTestingFixture fixture;
+    IgnoredUtestShell optRunIgnoredTest;
+    ExecFunctionTestShell normalUtestShell;
+
+    void setup() _override
+    {
+        fixture.addTest(&optRunIgnoredTest);
+        fixture.addTest(&normalUtestShell);
+    }
+};
+
+TEST(OptRunIgnoredTest, optRunOptionSpecifiedThenIncreaseRunCount)
+{
+    optRunIgnoredTest.setRunIgnored();
+    fixture.runAllTests();
+    LONGS_EQUAL(3, fixture.getRunCount());
+    LONGS_EQUAL(0, fixture.getIgnoreCount());
+}
+
+TEST(OptRunIgnoredTest, optRunOptionNotSpecifiedThenIncreaseIgnoredCount)
+{
+    fixture.runAllTests();
+    LONGS_EQUAL(2, fixture.getRunCount());
+    LONGS_EQUAL(1, fixture.getIgnoreCount());
+}
+
+TEST(OptRunIgnoredTest, optRunOptionSpecifiedWillNotInfluenceNormalTestCount)
+{
+    normalUtestShell.setRunIgnored();
+    fixture.runAllTests();
+    LONGS_EQUAL(2, fixture.getRunCount());
+    LONGS_EQUAL(1, fixture.getIgnoreCount());
+}
+
+TEST(OptRunIgnoredTest, optRunOptionSpecifiedThenReturnTESTInFormattedName)
+{
+    optRunIgnoredTest.setGroupName("TestGroup");
+    optRunIgnoredTest.setTestName("TestName");
+    optRunIgnoredTest.setRunIgnored();
+    fixture.runAllTests();
+    STRCMP_EQUAL("TEST(TestGroup, TestName)", optRunIgnoredTest.getFormattedName().asCharString());   
+}
+
+TEST(OptRunIgnoredTest, optRunOptionNotSpecifiedThenReturnIGNORETESTInFormattedName)
+{
+    optRunIgnoredTest.setGroupName("TestGroup");
+    optRunIgnoredTest.setTestName("TestName");
+    fixture.runAllTests();
+    STRCMP_EQUAL("IGNORE_TEST(TestGroup, TestName)", optRunIgnoredTest.getFormattedName().asCharString());   
+}
+
+TEST(OptRunIgnoredTest, optRunOptionNotSpecifiedThenWillRunReturnFalse)
+{
+    CHECK_FALSE(optRunIgnoredTest.willRun());
+}
+
+TEST(OptRunIgnoredTest, optRunOptionSpecifiedThenWillRunReturnTrue)
+{
+    optRunIgnoredTest.setRunIgnored();
+    CHECK_TRUE(optRunIgnoredTest.willRun());
+}
 

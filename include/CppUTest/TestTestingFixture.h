@@ -116,6 +116,12 @@ public:
 
     }
 
+    int getRunCount()
+    {
+    	return result_->getRunCount();
+    }
+
+
     TestRegistry* registry_;
     ExecFunctionTestShell* genTest_;
     StringBufferTestOutput* output_;
