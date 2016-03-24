@@ -30,10 +30,6 @@
 #include "CppUTest/TestTestingFixture.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
-TEST_GROUP(Utest)
-{
-};
-
 TEST_GROUP(UtestShell)
 {
     TestTestingFixture fixture;
@@ -235,6 +231,83 @@ TEST(UtestShell, DestructorIsCalledForLocalObjectsWhenTheTestFails)
 }
 
 #endif
+
+TEST_GROUP(IgnoredUtestShell)
+{
+    TestTestingFixture fixture;
+    IgnoredUtestShell ignoredTest;
+    ExecFunctionTestShell normalUtestShell;
+
+    void setup() _override
+    {
+        fixture.addTest(&ignoredTest);
+        fixture.addTest(&normalUtestShell);
+    }
+};
+
+TEST(IgnoredUtestShell, doesIgnoreCount)
+{
+    fixture.runAllTests();
+    LONGS_EQUAL(1, fixture.getIgnoreCount());
+}
+
+TEST(IgnoredUtestShell, printsIGNORE_TESTwhenVerbose)
+{
+    fixture.output_->verbose();
+    fixture.runAllTests();
+    fixture.assertPrintContains("IGNORE_TEST");
+}
+
+TEST(IgnoredUtestShell, runIgnoredOptionSpecifiedThenIncreaseRunCount)
+{
+    ignoredTest.setRunIgnored();
+    fixture.runAllTests();
+    LONGS_EQUAL(3, fixture.getRunCount());
+    LONGS_EQUAL(0, fixture.getIgnoreCount());
+}
+
+TEST(IgnoredUtestShell, runIgnoredOptionNotSpecifiedThenIncreaseIgnoredCount)
+{
+    fixture.runAllTests();
+    LONGS_EQUAL(2, fixture.getRunCount());
+    LONGS_EQUAL(1, fixture.getIgnoreCount());
+}
+
+TEST(IgnoredUtestShell, runIgnoredOptionSpecifiedWillNotInfluenceNormalTestCount)
+{
+    normalUtestShell.setRunIgnored();
+    fixture.runAllTests();
+    LONGS_EQUAL(2, fixture.getRunCount());
+    LONGS_EQUAL(1, fixture.getIgnoreCount());
+}
+
+TEST(IgnoredUtestShell, runIgnoredOptionSpecifiedThenReturnTESTInFormattedName)
+{
+    ignoredTest.setGroupName("TestGroup");
+    ignoredTest.setTestName("TestName");
+    ignoredTest.setRunIgnored();
+    fixture.runAllTests();
+    STRCMP_EQUAL("TEST(TestGroup, TestName)", ignoredTest.getFormattedName().asCharString());
+}
+
+TEST(IgnoredUtestShell, runIgnoredOptionNotSpecifiedThenReturnIGNORETESTInFormattedName)
+{
+    ignoredTest.setGroupName("TestGroup");
+    ignoredTest.setTestName("TestName");
+    fixture.runAllTests();
+    STRCMP_EQUAL("IGNORE_TEST(TestGroup, TestName)", ignoredTest.getFormattedName().asCharString());
+}
+
+TEST(IgnoredUtestShell, runIgnoredOptionNotSpecifiedThenWillRunReturnFalse)
+{
+    CHECK_FALSE(ignoredTest.willRun());
+}
+
+TEST(IgnoredUtestShell, runIgnoredOptionSpecifiedThenWillRunReturnTrue)
+{
+    ignoredTest.setRunIgnored();
+    CHECK_TRUE(ignoredTest.willRun());
+}
 
 TEST_BASE(MyOwnTest)
 {
