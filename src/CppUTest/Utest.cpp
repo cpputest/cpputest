@@ -647,7 +647,7 @@ IgnoredUtestShell::~IgnoredUtestShell()
 
 bool IgnoredUtestShell::willRun() const
 {    
-	if (runIgnore_) return UtestShell::willRun();
+    if (runIgnore_) return UtestShell::willRun();
 
     return false;
 }
