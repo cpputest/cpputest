@@ -431,6 +431,6 @@ TEST(CommandLineArguments, setOptRun)
     int argc = 2;
     const char* argv[] = { "tests.exe", "-ri"};
     CHECK(newArgumentParser(argc, argv));
-    CHECK(args->isRunIgnore());
+    CHECK(args->isRunIgnored());
 }
 

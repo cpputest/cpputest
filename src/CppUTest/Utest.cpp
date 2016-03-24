@@ -285,7 +285,7 @@ void UtestShell::setRunInSeperateProcess()
 }
 
 
-void UtestShell::setRunIgnore()
+void UtestShell::setRunIgnored()
 {
 
 }
@@ -632,12 +632,12 @@ void ExecFunctionTest::teardown()
 }
 
 /////////////// IgnoredUtestShell /////////////
-IgnoredUtestShell::IgnoredUtestShell(): runIgnore_(false)
+IgnoredUtestShell::IgnoredUtestShell(): runIgnored_(false)
 {
 }
 
 IgnoredUtestShell::IgnoredUtestShell(const char* groupName, const char* testName, const char* fileName, int lineNumber) :
-   UtestShell(groupName, testName, fileName, lineNumber), runIgnore_(false)
+   UtestShell(groupName, testName, fileName, lineNumber), runIgnored_(false)
 {
 }
 
@@ -647,21 +647,21 @@ IgnoredUtestShell::~IgnoredUtestShell()
 
 bool IgnoredUtestShell::willRun() const
 {    
-    if (runIgnore_) return UtestShell::willRun();
+    if (runIgnored_) return UtestShell::willRun();
 
     return false;
 }
 
 SimpleString IgnoredUtestShell::getMacroName() const
 {
-    if (runIgnore_) return "TEST";
+    if (runIgnored_) return "TEST";
 
     return "IGNORE_TEST";
 }
 
 void IgnoredUtestShell::runOneTest(TestPlugin* plugin, TestResult& result)
 {
-	if (runIgnore_) 
+	if (runIgnored_) 
 	{		
 		UtestShell::runOneTest(plugin, result);
 		return;
@@ -670,9 +670,9 @@ void IgnoredUtestShell::runOneTest(TestPlugin* plugin, TestResult& result)
     result.countIgnored();
 }
 
-void IgnoredUtestShell::setRunIgnore()
+void IgnoredUtestShell::setRunIgnored()
 {
-    runIgnore_ = true;
+    runIgnored_ = true;
 }
 
 

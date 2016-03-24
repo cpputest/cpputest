@@ -1365,55 +1365,64 @@ TEST(IgnoreTest, printsIGNORE_TESTwhenVerbose)
 TEST_GROUP(OptRunIgnoredTest)
 {
     TestTestingFixture fixture;
-    IgnoredUtestShell optRunIgnoreTest;
+    IgnoredUtestShell optRunIgnoredTest;
+    ExecFunctionTestShell normalUtestShell;
 
     void setup() _override
     {
-        fixture.addTest(&optRunIgnoreTest);
+        fixture.addTest(&optRunIgnoredTest);
+        fixture.addTest(&normalUtestShell);
     }
 };
 
 TEST(OptRunIgnoredTest, optRunOptionSpecifiedThenIncreaseRunCount)
 {
-    optRunIgnoreTest.setRunIgnore();
+    optRunIgnoredTest.setRunIgnored();
     fixture.runAllTests();
-    LONGS_EQUAL(2, fixture.getRunCount());
+    LONGS_EQUAL(3, fixture.getRunCount());
     LONGS_EQUAL(0, fixture.getIgnoreCount());
 }
 
 TEST(OptRunIgnoredTest, optRunOptionNotSpecifiedThenIncreaseIgnoredCount)
 {
     fixture.runAllTests();
-    LONGS_EQUAL(1, fixture.getRunCount());
+    LONGS_EQUAL(2, fixture.getRunCount());
     LONGS_EQUAL(1, fixture.getIgnoreCount());
 }
 
+TEST(OptRunIgnoredTest, optRunOptionSpecifiedWillNotInfluenceNormalTestCount)
+{
+    normalUtestShell.setRunIgnored();
+    fixture.runAllTests();
+    LONGS_EQUAL(2, fixture.getRunCount());
+    LONGS_EQUAL(1, fixture.getIgnoreCount());
+}
 
 TEST(OptRunIgnoredTest, optRunOptionSpecifiedThenReturnTESTInFormattedName)
 {
-    optRunIgnoreTest.setGroupName("TestGroup");
-    optRunIgnoreTest.setTestName("TestName");
-    optRunIgnoreTest.setRunIgnore();
+    optRunIgnoredTest.setGroupName("TestGroup");
+    optRunIgnoredTest.setTestName("TestName");
+    optRunIgnoredTest.setRunIgnored();
     fixture.runAllTests();
-    STRCMP_EQUAL("TEST(TestGroup, TestName)", optRunIgnoreTest.getFormattedName().asCharString());   
+    STRCMP_EQUAL("TEST(TestGroup, TestName)", optRunIgnoredTest.getFormattedName().asCharString());   
 }
 
 TEST(OptRunIgnoredTest, optRunOptionNotSpecifiedThenReturnIGNORETESTInFormattedName)
 {
-    optRunIgnoreTest.setGroupName("TestGroup");
-    optRunIgnoreTest.setTestName("TestName");
+    optRunIgnoredTest.setGroupName("TestGroup");
+    optRunIgnoredTest.setTestName("TestName");
     fixture.runAllTests();
-    STRCMP_EQUAL("IGNORE_TEST(TestGroup, TestName)", optRunIgnoreTest.getFormattedName().asCharString());   
+    STRCMP_EQUAL("IGNORE_TEST(TestGroup, TestName)", optRunIgnoredTest.getFormattedName().asCharString());   
 }
 
 TEST(OptRunIgnoredTest, optRunOptionNotSpecifiedThenWillRunReturnFalse)
 {
-    CHECK_FALSE(optRunIgnoreTest.willRun());
+    CHECK_FALSE(optRunIgnoredTest.willRun());
 }
 
 TEST(OptRunIgnoredTest, optRunOptionSpecifiedThenWillRunReturnTrue)
 {
-    optRunIgnoreTest.setRunIgnore();
-    CHECK_TRUE(optRunIgnoreTest.willRun());
+    optRunIgnoredTest.setRunIgnored();
+    CHECK_TRUE(optRunIgnoredTest.willRun());
 }
 

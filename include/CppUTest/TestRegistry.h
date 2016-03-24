@@ -72,7 +72,7 @@ public:
 
     virtual void setRunTestsInSeperateProcess();
     int getCurrentRepetition();
-    void setRunIgnore();
+    void setRunIgnored();
 private:
 
     bool testShouldRun(UtestShell* test, TestResult& result);
@@ -85,7 +85,7 @@ private:
     static TestRegistry* currentRegistry_;
     bool runInSeperateProcess_;
     int currentRepetition_;
-    bool runIgnore_;
+    bool runIgnored_;
 };
 
 #endif

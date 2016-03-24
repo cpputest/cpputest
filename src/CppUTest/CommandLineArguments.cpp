@@ -30,7 +30,7 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 
 CommandLineArguments::CommandLineArguments(int ac, const char** av) :
-    ac_(ac), av_(av), verbose_(false), color_(false), runTestsAsSeperateProcess_(false), listTestGroupNames_(false), listTestGroupAndCaseNames_(false), runIgnore_(false), repeat_(1), groupFilters_(NULL), nameFilters_(NULL), outputType_(OUTPUT_ECLIPSE)
+    ac_(ac), av_(av), verbose_(false), color_(false), runTestsAsSeperateProcess_(false), listTestGroupNames_(false), listTestGroupAndCaseNames_(false), runIgnored_(false), repeat_(1), groupFilters_(NULL), nameFilters_(NULL), outputType_(OUTPUT_ECLIPSE)
 {
 }
 
@@ -59,7 +59,7 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
         else if (argument == "-p") runTestsAsSeperateProcess_ = true;
         else if (argument == "-lg") listTestGroupNames_ = true;
         else if (argument == "-ln") listTestGroupAndCaseNames_ = true;
-        else if (argument == "-ri") runIgnore_ = true;
+        else if (argument == "-ri") runIgnored_ = true;
         else if (argument.startsWith("-r")) SetRepeatCount(ac_, av_, i);
         else if (argument.startsWith("-g")) AddGroupFilter(ac_, av_, i);
         else if (argument.startsWith("-sg")) AddStrictGroupFilter(ac_, av_, i);
@@ -108,9 +108,9 @@ bool CommandLineArguments::isListingTestGroupAndCaseNames() const
     return listTestGroupAndCaseNames_;
 }
 
-bool CommandLineArguments::isRunIgnore() const
+bool CommandLineArguments::isRunIgnored() const
 {
-    return runIgnore_;
+    return runIgnored_;
 }
 
 bool CommandLineArguments::runTestsInSeperateProcess() const
