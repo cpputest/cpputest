@@ -164,7 +164,7 @@ void TestRegistry::setGroupFilters(const TestFilter* filters)
 
 void TestRegistry::setRunIgnore()
 {
-	runIgnore_ = true;
+    runIgnore_ = true;
 }
 
 void TestRegistry::setRunTestsInSeperateProcess()

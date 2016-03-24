@@ -1389,3 +1389,31 @@ TEST(OptRunIgnoredTest, optRunOptionNotSpecifiedThenIncreaseIgnoredCount)
 }
 
 
+TEST(OptRunIgnoredTest, optRunOptionSpecifiedThenReturnTESTInFormattedName)
+{
+    optRunIgnoreTest.setGroupName("TestGroup");
+    optRunIgnoreTest.setTestName("TestName");
+    optRunIgnoreTest.setRunIgnore();
+    fixture.runAllTests();
+    STRCMP_EQUAL("TEST(TestGroup, TestName)", optRunIgnoreTest.getFormattedName().asCharString());   
+}
+
+TEST(OptRunIgnoredTest, optRunOptionNotSpecifiedThenReturnIGNORETESTInFormattedName)
+{
+    optRunIgnoreTest.setGroupName("TestGroup");
+    optRunIgnoreTest.setTestName("TestName");
+    fixture.runAllTests();
+    STRCMP_EQUAL("IGNORE_TEST(TestGroup, TestName)", optRunIgnoreTest.getFormattedName().asCharString());   
+}
+
+TEST(OptRunIgnoredTest, optRunOptionNotSpecifiedThenWillRunReturnFalse)
+{
+    CHECK_FALSE(optRunIgnoreTest.willRun());
+}
+
+TEST(OptRunIgnoredTest, optRunOptionSpecifiedThenWillRunReturnTrue)
+{
+    optRunIgnoreTest.setRunIgnore();
+    CHECK_TRUE(optRunIgnoreTest.willRun());
+}
+

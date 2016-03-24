@@ -103,7 +103,6 @@ public:
     int getLineNumber() const;
     virtual bool willRun() const;
     virtual bool hasFailed() const;
-    bool isRunIgnore() const;
     void countCheck();
 
     virtual void assertTrue(bool condition, const char *checkString, const char *conditionString, const char* text, const char *fileName, int lineNumber, const TestTerminator& testTerminator = NormalTestTerminator());
@@ -138,7 +137,7 @@ public:
     virtual bool isRunInSeperateProcess() const;
     virtual void setRunInSeperateProcess();
 
-    void setRunIgnore();
+    virtual void setRunIgnore();
 
     virtual Utest* createTest();
     virtual void destroyTest(Utest* test);
@@ -163,7 +162,6 @@ private:
     UtestShell *next_;
     bool isRunAsSeperateProcess_;
     bool hasFailed_;
-    bool runIgnore_;
 
     void setTestResult(TestResult* result);
     void setCurrentTest(UtestShell* test);
@@ -227,13 +225,16 @@ public:
     explicit IgnoredUtestShell(const char* groupName, const char* testName,
             const char* fileName, int lineNumber);
     virtual bool willRun() const _override;
-    protected:  virtual SimpleString getMacroName() const _override;
+    virtual void setRunIgnore() _override;
+protected:  
+    virtual SimpleString getMacroName() const _override;
     virtual void runOneTest(TestPlugin* plugin, TestResult& result) _override;
-
 private:
 
     IgnoredUtestShell(const IgnoredUtestShell&);
     IgnoredUtestShell& operator=(const IgnoredUtestShell&);
+    
+    bool runIgnore_;
 
 };
 

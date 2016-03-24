@@ -132,17 +132,17 @@ extern "C" {
 /******************************** */
 
 UtestShell::UtestShell() :
-    group_("UndefinedTestGroup"), name_("UndefinedTest"), file_("UndefinedFile"), lineNumber_(0), next_(NULL), isRunAsSeperateProcess_(false), hasFailed_(false), runIgnore_(false)
+    group_("UndefinedTestGroup"), name_("UndefinedTest"), file_("UndefinedFile"), lineNumber_(0), next_(NULL), isRunAsSeperateProcess_(false), hasFailed_(false)
 {
 }
 
 UtestShell::UtestShell(const char* groupName, const char* testName, const char* fileName, int lineNumber) :
-        group_(groupName), name_(testName), file_(fileName), lineNumber_(lineNumber), next_(NULL), isRunAsSeperateProcess_(false), hasFailed_(false), runIgnore_(false)
+    group_(groupName), name_(testName), file_(fileName), lineNumber_(lineNumber), next_(NULL), isRunAsSeperateProcess_(false), hasFailed_(false)
 {
 }
 
 UtestShell::UtestShell(const char* groupName, const char* testName, const char* fileName, int lineNumber, UtestShell* nextTest) :
-    group_(groupName), name_(testName), file_(fileName), lineNumber_(lineNumber), next_(nextTest), isRunAsSeperateProcess_(false), hasFailed_(false), runIgnore_(false)
+    group_(groupName), name_(testName), file_(fileName), lineNumber_(lineNumber), next_(nextTest), isRunAsSeperateProcess_(false), hasFailed_(false)
 {
 }
 
@@ -264,11 +264,6 @@ bool UtestShell::hasFailed() const
     return hasFailed_;
 }
 
-bool UtestShell::isRunIgnore() const
-{
-	return runIgnore_; 
-}
-
 void UtestShell::countCheck()
 {
     getTestResult()->countCheck();
@@ -292,7 +287,7 @@ void UtestShell::setRunInSeperateProcess()
 
 void UtestShell::setRunIgnore()
 {
-	runIgnore_ = true;
+
 }
 
 void UtestShell::setFileName(const char* fileName)
@@ -637,12 +632,12 @@ void ExecFunctionTest::teardown()
 }
 
 /////////////// IgnoredUtestShell /////////////
-IgnoredUtestShell::IgnoredUtestShell()
+IgnoredUtestShell::IgnoredUtestShell(): runIgnore_(false)
 {
 }
 
 IgnoredUtestShell::IgnoredUtestShell(const char* groupName, const char* testName, const char* fileName, int lineNumber) :
-   UtestShell(groupName, testName, fileName, lineNumber)
+   UtestShell(groupName, testName, fileName, lineNumber), runIgnore_(false)
 {
 }
 
@@ -652,25 +647,32 @@ IgnoredUtestShell::~IgnoredUtestShell()
 
 bool IgnoredUtestShell::willRun() const
 {    
-	if (isRunIgnore()) return UtestShell::willRun();
+	if (runIgnore_) return UtestShell::willRun();
 
     return false;
 }
 
 SimpleString IgnoredUtestShell::getMacroName() const
 {
+    if (runIgnore_) return "TEST";
+
     return "IGNORE_TEST";
 }
 
 void IgnoredUtestShell::runOneTest(TestPlugin* plugin, TestResult& result)
 {
-	if (isRunIgnore()) 
+	if (runIgnore_) 
 	{		
 		UtestShell::runOneTest(plugin, result);
 		return;
 	}
 
     result.countIgnored();
+}
+
+void IgnoredUtestShell::setRunIgnore()
+{
+    runIgnore_ = true;
 }
 
 

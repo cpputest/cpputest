@@ -383,6 +383,7 @@ TEST(CommandLineArguments, pluginKnowsOption)
     TestRegistry::getCurrentRegistry()->removePluginByName("options");
 }
 
+
 TEST(CommandLineArguments, checkDefaultArguments)
 {
     int argc = 1;

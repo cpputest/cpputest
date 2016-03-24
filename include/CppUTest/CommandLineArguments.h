@@ -70,7 +70,7 @@ private:
     bool runTestsAsSeperateProcess_;
     bool listTestGroupNames_;
     bool listTestGroupAndCaseNames_;
-	bool runIgnore_;
+    bool runIgnore_;
     int repeat_;
     TestFilter* groupFilters_;
     TestFilter* nameFilters_;

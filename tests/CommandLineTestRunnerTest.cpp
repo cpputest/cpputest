@@ -264,6 +264,8 @@ TEST(CommandLineTestRunner, realTeamCityOutputShouldBeCreatedAndWorkProperly)
 }
 static bool Checker = false;
 
+
+
 class RunIgnoreUtest : public Utest
 {
 public:
@@ -272,6 +274,7 @@ public:
         Checker = true;
     }
 };
+
 
 class RunIgnoreUtestShell : public IgnoredUtestShell
 {

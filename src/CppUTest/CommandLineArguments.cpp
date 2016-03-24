@@ -110,7 +110,7 @@ bool CommandLineArguments::isListingTestGroupAndCaseNames() const
 
 bool CommandLineArguments::isRunIgnore() const
 {
-	return runIgnore_;
+    return runIgnore_;
 }
 
 bool CommandLineArguments::runTestsInSeperateProcess() const
