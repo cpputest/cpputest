@@ -138,7 +138,7 @@ void PlatformSpecificFClose(PlatformSpecificFile file) {
 }
 
 extern "C" {
-    
+
 static int IsNanImplementation(double d)
 {
     return isnan(d);

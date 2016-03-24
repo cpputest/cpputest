@@ -42,7 +42,7 @@ void SimpleMutex::Lock(void)
 {
     PlatformSpecificMutexLock(psMtx);
 }
-    
+
 void SimpleMutex::Unlock(void)
 {
     PlatformSpecificMutexUnlock(psMtx);

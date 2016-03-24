@@ -226,14 +226,14 @@ public:
             const char* fileName, int lineNumber);
     virtual bool willRun() const _override;
     virtual void setRunIgnored() _override;
-protected:  
+protected:
     virtual SimpleString getMacroName() const _override;
     virtual void runOneTest(TestPlugin* plugin, TestResult& result) _override;
 private:
 
     IgnoredUtestShell(const IgnoredUtestShell&);
     IgnoredUtestShell& operator=(const IgnoredUtestShell&);
-    
+
     bool runIgnored_;
 
 };

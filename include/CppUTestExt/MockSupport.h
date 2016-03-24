@@ -136,7 +136,7 @@ private:
     MockNamedValueComparatorsAndCopiersRepository comparatorsAndCopiersRepository_;
     MockNamedValueList data_;
     const SimpleString mockName_;
-        
+
     bool tracing_;
 
     void checkExpectationsOfLastCall();
@@ -147,13 +147,13 @@ private:
     MockNamedValue* retrieveDataFromStore(const SimpleString& name);
 
     MockSupport* getMockSupport(MockNamedValueListNode* node);
-    
+
     bool hasntExpectationWithName(const SimpleString& functionName);
     bool hasntUnexpectationWithName(const SimpleString& functionName);
     bool hasCallsOutOfOrder();
-    
+
     SimpleString appendScopeToName(const SimpleString& functionName);
-    
+
 };
 
 #endif
