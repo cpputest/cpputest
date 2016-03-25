@@ -26,9 +26,9 @@ function Invoke-CygwinCommand($command, $directory = '.')
     $cygwin_bin = Get-CygwinBin
 
     $cygwin_directory = (. "${cygwin_bin}\cygpath.exe" (Resolve-Path $directory))
-    $command_wrapped = "${cygwin_bin}\bash.exe --login -c 'cd $cygwin_directory ; $command' ; `$err = `$?"
+    $command_wrapped = "${cygwin_bin}\bash.exe --login -c 'cd $cygwin_directory ; $command'"
     
-    Write-Host $command
+    Write-Host "Executing <$command> in <$cygwin_directory>"
     Invoke-Expression $command_wrapped
 
     if ($LASTEXITCODE -ne 0)
@@ -64,7 +64,9 @@ switch -Wildcard ($env:Platform)
 {
     'Cygwin*'
     {
-        Invoke-CygwinCommand "autoreconf -i .. ; ../configure ; make CppUTestTests.exe CppUTestExtTests.exe" "cpputest_build"
+        Invoke-CygwinCommand "autoreconf -i .." "cpputest_build"
+        Invoke-CygwinCommand "../configure" "cpputest_build"
+        Invoke-CygwinCommand "make CppUTestTests.exe CppUTestExtTests.exe" "cpputest_build"
     }
 
     'MinGW*'

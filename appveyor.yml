@@ -1,7 +1,6 @@
 version: 3.7.0-ci{build}
 
-os:
-- Windows Server 2012 R2
+image: Visual Studio 2013
 
 environment:
   Configuration: Release
