@@ -101,7 +101,7 @@ switch -Wildcard ($env:Platform)
         else
         {
             $VS2010ProjectFiles | foreach {
-                Invoke-BuildCommand "msbuild /ToolsVersion:14.0 $logger_arg $_"
+                Invoke-BuildCommand "msbuild /ToolsVersion:12.0 $logger_arg $_"
             }
         }
     }
