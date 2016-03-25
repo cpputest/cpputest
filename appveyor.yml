@@ -1,6 +1,6 @@
 version: 3.7.0-ci{build}
 
-image: Visual Studio 2013
+image: Visual Studio 2015
 
 environment:
   Configuration: Release
@@ -18,6 +18,8 @@ environment:
     PlatformToolset: v90
   - Platform: Win32
     PlatformToolset: v100
+  - Platform: Win32
+    PlatformToolset: v140
 
 install:
 - ps: if ($env:Platform -like 'MinGW*') { choco install mingw --version $env:PlatformToolset $( if ($env:Platform -like '*32') { Write-Output -forcex86 } ) | Out-Null }
