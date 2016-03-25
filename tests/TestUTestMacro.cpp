@@ -1404,7 +1404,7 @@ TEST(OptRunIgnoredTest, optRunOptionSpecifiedThenReturnTESTInFormattedName)
     optRunIgnoredTest.setTestName("TestName");
     optRunIgnoredTest.setRunIgnored();
     fixture.runAllTests();
-    STRCMP_EQUAL("TEST(TestGroup, TestName)", optRunIgnoredTest.getFormattedName().asCharString());   
+    STRCMP_EQUAL("TEST(TestGroup, TestName)", optRunIgnoredTest.getFormattedName().asCharString());
 }
 
 TEST(OptRunIgnoredTest, optRunOptionNotSpecifiedThenReturnIGNORETESTInFormattedName)
@@ -1412,7 +1412,7 @@ TEST(OptRunIgnoredTest, optRunOptionNotSpecifiedThenReturnIGNORETESTInFormattedN
     optRunIgnoredTest.setGroupName("TestGroup");
     optRunIgnoredTest.setTestName("TestName");
     fixture.runAllTests();
-    STRCMP_EQUAL("IGNORE_TEST(TestGroup, TestName)", optRunIgnoredTest.getFormattedName().asCharString());   
+    STRCMP_EQUAL("IGNORE_TEST(TestGroup, TestName)", optRunIgnoredTest.getFormattedName().asCharString());
 }
 
 TEST(OptRunIgnoredTest, optRunOptionNotSpecifiedThenWillRunReturnFalse)

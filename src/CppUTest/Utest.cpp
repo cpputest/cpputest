@@ -646,7 +646,7 @@ IgnoredUtestShell::~IgnoredUtestShell()
 }
 
 bool IgnoredUtestShell::willRun() const
-{    
+{
     if (runIgnored_) return UtestShell::willRun();
 
     return false;
@@ -661,11 +661,11 @@ SimpleString IgnoredUtestShell::getMacroName() const
 
 void IgnoredUtestShell::runOneTest(TestPlugin* plugin, TestResult& result)
 {
-	if (runIgnored_) 
-	{		
-		UtestShell::runOneTest(plugin, result);
-		return;
-	}
+    if (runIgnored_)
+    {
+        UtestShell::runOneTest(plugin, result);
+        return;
+    }
 
     result.countIgnored();
 }

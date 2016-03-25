@@ -109,9 +109,9 @@ extern "C"
     static long TimeInMillisImplementation()
     {
         clock_t t = clock();
-        
+
        t = t * 10;
-       
+
         return t;
     }
 

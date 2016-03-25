@@ -119,7 +119,7 @@ TEST(MockStrictOrderTest, orderViolatedWorksWithExtraUnexpectedCall)
 
     mock("bla").expectOneCall("foo1");
     mock("foo").expectOneCall("foo1");
-    mock("foo").expectOneCall("foo2"); 
+    mock("foo").expectOneCall("foo2");
 
     mock("bla").actualCall("foo1");
     mock("foo").actualCall("foo2");

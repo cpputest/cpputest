@@ -28,9 +28,9 @@
 
  #ifndef stdint_wrapper_h
  #define stdint_wrapper_h
- 
+
  #include <stdint.h>
- 
+
  typedef unsigned char uint8_t; /* This will still compile to 16 bit */
- 
+
  #endif                                    /* stdint_wrapper_h */

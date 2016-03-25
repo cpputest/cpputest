@@ -300,7 +300,7 @@ TEST_GROUP(RunIgnoredTest)
     {
       delete pluginCountingPlugin;
       delete runIgnoredTest;
-	  RunIgnoredUtest::Checker = false;
+      RunIgnoredUtest::Checker = false;
     }
 };
 
@@ -316,10 +316,10 @@ TEST(RunIgnoredTest, IgnoreTestWillBeIgnoredIfNoOptionSpecified)
 
 TEST(RunIgnoredTest, IgnoreTestWillGetRunIfOptionSpecified)
 {
-	const char* argv[] = { "tests.exe", "-ri" };
+    const char* argv[] = { "tests.exe", "-ri" };
 
-	CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(2, argv, &registry);
-	commandLineTestRunner.runAllTestsMain();
+    CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(2, argv, &registry);
+    commandLineTestRunner.runAllTestsMain();
 
     CHECK_TRUE( RunIgnoredUtest::Checker );
 }
