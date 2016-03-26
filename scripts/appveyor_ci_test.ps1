@@ -1,4 +1,6 @@
 ﻿
+# Load functions from the helper file
+. (Join-Path (Split-Path $MyInvocation.MyCommand.Path) 'appveyor_helpers.ps1')
 
 function Publish-TestResults($files)
 {
@@ -42,7 +44,7 @@ function Invoke-Tests($executable)
 function Invoke-CygwinTests($executable)
 {
     # Assume cygwin is located at C:\cygwin for now
-    $cygwin_bin = "C:\cygwin\bin"
+    $cygwin_bin = Get-CygwinBin
 
     # Get the full path to the executable
     $cygwin_folder = . "${cygwin_bin}\cygpath.exe" (Resolve-Path ".")
@@ -56,67 +58,41 @@ function Invoke-CygwinTests($executable)
     Invoke-Expression $cygwin_command
 }
 
-function Remove-PathFolder($folder)
+$TestCount = 0
+
+if (-not $env:APPVEYOR)
 {
-    [System.Collections.ArrayList]$pathFolders = New-Object System.Collections.ArrayList
-    $env:Path -split ";" | foreach { $pathFolders.Add($_) | Out-Null }
-
-    for ([int]$i = 0; $i -lt $pathFolders.Count; $i++)
+    function Add-AppVeyorTest()
     {
-        if ([string]::Compare($pathFolders[$i], $folder, $true) -eq 0)
+        # Wacky way to access a script variable, but it works
+        $count = Get-Variable -Name TestCount -Scope script
+        Set-Variable -Name TestCount -Scope script -Value ($count.Value + 1)
+    }
+
+    function Add-AppVeyorMessage($Message, $Category)
+    {
+        if ($Category -eq 'Error')
         {
-            Write-Host "Removing $folder from the PATH"
-            $pathFolders.RemoveAt($i)
-            $i--
+            Write-Error $Message
         }
-    }
-
-    $env:Path = $pathFolders -join ";"
-}
-
-function Add-PathFolder($folder)
-{
-    if (-not (Test-Path $folder))
-    {
-        Write-Host "Not adding $folder to the PATH, it does not exist"
-    }
-
-    [bool]$alreadyInPath = $false
-    [System.Collections.ArrayList]$pathFolders = New-Object System.Collections.ArrayList
-    $env:Path -split ";" | foreach { $pathFolders.Add($_) | Out-Null }
-
-    for ([int]$i = 0; $i -lt $pathFolders.Count; $i++)
-    {
-        if ([string]::Compare($pathFolders[$i], $folder, $true) -eq 0)
+        else
         {
-            $alreadyInPath = $true
-            break
+            Write-Host $Message
         }
-    }
-
-    if (-not $alreadyInPath)
-    {
-        Write-Host "Adding $folder to the PATH"
-        $pathFolders.Insert(0, $folder)
-        $env:Path = $pathFolders -join ";"
     }
 }
 
-switch ($env:PlatformToolset)
+switch -Wildcard ($env:Platform)
 {
-    'Cygwin'
+    'Cygwin*'
     {
         Invoke-CygwinTests 'cpputest_build\CppUTestTests.exe'
         Invoke-CygwinTests 'cpputest_build\CppUTestExtTests.exe'
     }
 
-    'MinGW'
+    'MinGW*'
     {
-        $mingw_path = 'C:\Tools\mingw32\bin'
-        if ($env:Platform -eq 'x64')
-        {
-            $mingw_path = 'C:\Tools\mingw64\bin'
-        }
+        $mingw_path = Get-MinGWBin
 
         Add-PathFolder $mingw_path
         Invoke-Tests '.\cpputest_build\tests\CppUTestTests.exe'
@@ -131,3 +107,8 @@ switch ($env:PlatformToolset)
 }
 
 Publish-TestResults (Get-ChildItem 'cpputest_*.xml')
+
+if (-not $env:APPVEYOR)
+{
+    Write-Host "Tests Ran: $TestCount"
+}

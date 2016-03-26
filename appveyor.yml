@@ -1,29 +1,28 @@
 version: 3.7.0-ci{build}
 
-os:
-- Windows Server 2012 R2
+image: Visual Studio 2015
 
 environment:
+  Configuration: Release
   matrix:
-  - PlatformToolset: Cygwin
-  - PlatformToolset: MinGW
-    Platform: Win32
-    Version: 4.8.5
-  - PlatformToolset: MinGW
-    Platform: x64
-    Version: 4.8.5
-  - PlatformToolset: MinGW
-    Platform: Win32
-    Version: 5.3.0
-  - PlatformToolset: MinGW
-    Platform: x64
-    Version: 5.3.0
-  - PlatformToolset: v90
-  - PlatformToolset: v100
+  - Platform: Cygwin32
+  - Platform: MinGW32
+    PlatformToolset: 4.8.5
+  - Platform: MinGW64
+    PlatformToolset: 4.8.5
+  - Platform: MinGW32
+    PlatformToolset: 5.3.0
+  - Platform: MinGW64
+    PlatformToolset: 5.3.0
+  - Platform: Win32
+    PlatformToolset: v90
+  - Platform: Win32
+    PlatformToolset: v100
+  - Platform: Win32
+    PlatformToolset: v140
 
 install:
-- ps: if ($env:PlatformToolset -eq 'MinGW') { choco install mingw --version $env:Version $( if ($env:Platform -eq 'Win32') { Write-Output -forcex86 } ) | Out-Null }
-- ps: if ($env:PlatformToolset -eq 'Cygwin') { (New-Object System.Net.WebClient).DownloadFile('https://cygwin.com/setup-x86.exe', "${env:TEMP}\cygwin-setup.exe") ; . "${env:TEMP}\cygwin-setup.exe" --quiet-mode --packages autoconf automake make gcc-core libtool gcc-g++ }
+- ps: if ($env:Platform -like 'MinGW*') { choco install mingw --version $env:PlatformToolset $( if ($env:Platform -like '*32') { Write-Output -forcex86 } ) | Out-Null }
 
 build_script:
 - ps: scripts\appveyor_ci_build.ps1
@@ -34,7 +33,3 @@ test_script:
 artifacts:
 - path: lib\CppUTest.lib
   name: CppUTest
-
-# Other configuration options
-platform: Win32
-configuration: Release
