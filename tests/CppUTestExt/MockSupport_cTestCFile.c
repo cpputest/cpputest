@@ -116,8 +116,8 @@ void all_mock_support_c_calls(void)
     mock_c()->expectOneCall("bla")->withStringParameters("str", "lol");
     mock_c()->actualCall("bla")->withStringParameters("str", mock_c()->getData("string").value.stringValue);
 
-    mock_c()->setDoubleData("double", 0.001f);
-    mock_c()->expectOneCall("bla")->withDoubleParameters("double", 0.001f);
+    mock_c()->setDoubleData("double", 0.001);
+    mock_c()->expectOneCall("bla")->withDoubleParameters("double", 0.001);
     mock_c()->actualCall("bla")->withDoubleParameters("double", mock_c()->getData("double").value.doubleValue);
 
     mock_c()->setPointerData("ptr", (void*)1);
@@ -144,7 +144,7 @@ void all_mock_support_c_calls(void)
     mock_c()->stringReturnValue();
     mock_c()->returnStringValueOrDefault("");
     mock_c()->doubleReturnValue();
-    mock_c()->returnDoubleValueOrDefault(0.01F);
+    mock_c()->returnDoubleValueOrDefault(0.01);
     mock_c()->pointerReturnValue();
     mock_c()->returnPointerValueOrDefault(0);
     mock_c()->constPointerReturnValue();

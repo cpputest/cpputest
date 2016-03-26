@@ -194,7 +194,7 @@ TEST(MockSupport_c, outputParametersOfType)
 TEST(MockSupport_c, ignoreOtherParameters)
 {
     mock_c()->expectOneCall("foo")->withIntParameters("int", 1)->ignoreOtherParameters();
-    mock_c()->actualCall("foo")->withIntParameters("int", 1)->withDoubleParameters("double", 0.01f);
+    mock_c()->actualCall("foo")->withIntParameters("int", 1)->withDoubleParameters("double", 0.01);
     mock_c()->checkExpectations();
 }
 
