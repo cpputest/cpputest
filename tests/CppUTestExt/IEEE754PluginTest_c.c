@@ -50,7 +50,7 @@ void set_underflow_c(void)
 
 void set_invalid_c(void)
 {
-    f = (float) sqrt(-1.0f);
+    f = (float) sqrt(-1.0);
 }
 
 void set_inexact_c(void)

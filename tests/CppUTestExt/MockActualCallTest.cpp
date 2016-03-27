@@ -145,8 +145,8 @@ TEST(MockCheckedActualCall, MockIgnoredActualCallWorksAsItShould)
     CHECK(1l == actual.returnLongIntValueOrDefault(1l));
     CHECK(0 == actual.returnUnsignedIntValue());
     CHECK(1u == actual.returnUnsignedIntValueOrDefault(1u));
-    DOUBLES_EQUAL(0.0f, actual.returnDoubleValue(), 0.0f);
-    DOUBLES_EQUAL(1.5f, actual.returnDoubleValueOrDefault(1.5f), 0.0f);
+    DOUBLES_EQUAL(0.0, actual.returnDoubleValue(), 0.0);
+    DOUBLES_EQUAL(1.5, actual.returnDoubleValueOrDefault(1.5), 0.0);
     STRCMP_EQUAL("bla", actual.returnStringValueOrDefault("bla"));
     STRCMP_EQUAL("", actual.returnStringValue());
     CHECK(0 == actual.returnPointerValue());
@@ -208,8 +208,8 @@ TEST(MockCheckedActualCall, remainderOfMockActualCallTraceWorksAsItShould)
     CHECK(0 == actual.returnLongIntValueOrDefault(1l));
     CHECK(0 == actual.returnUnsignedIntValue());
     CHECK(0 == actual.returnUnsignedIntValueOrDefault(1u));
-    DOUBLES_EQUAL(0.0f, actual.returnDoubleValue(), 0.0f);
-    DOUBLES_EQUAL(0.0f, actual.returnDoubleValueOrDefault(1.0f), 0.0f);
+    DOUBLES_EQUAL(0.0, actual.returnDoubleValue(), 0.0);
+    DOUBLES_EQUAL(0.0, actual.returnDoubleValueOrDefault(1.0), 0.0);
     STRCMP_EQUAL("", actual.returnStringValueOrDefault("bla"));
     STRCMP_EQUAL("", actual.returnStringValue());
     CHECK(0 == actual.returnPointerValue());

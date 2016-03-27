@@ -130,7 +130,7 @@ TEST(MockFailureTest, MockUnexpectedNthAdditionalCallFailure)
 TEST(MockFailureTest, MockUnexpectedInputParameterFailure)
 {
     call1->withName("foo").withParameter("boo", 2);
-    call2->withName("foo").withParameter("boo", 3.3f);
+    call2->withName("foo").withParameter("boo", 3.3);
     call3->withName("unrelated");
     addAllToList();
 
