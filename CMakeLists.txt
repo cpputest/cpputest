@@ -42,7 +42,7 @@ include("${CppUTestRootDirectory}/cmake/Modules/CppUTestConfigurationOptions.cma
 include(CTest)
 #include("${CppUTestRootDirectory}/cmake/Modules/CheckFunctionExists.cmake")
 include("${CppUTestRootDirectory}/cmake/Modules/CppUTestBuildTimeDiscoverTests.cmake")
-include("${CppUTestRootDirectory}/cmake/Modules/CppUTestSetTestOutputLocation.cmake")
+include("${CppUTestRootDirectory}/cmake/Modules/CppUTestNormalizeTestOutputLocation.cmake")
 
 configure_file (
     "${PROJECT_SOURCE_DIR}/config.h.cmake"

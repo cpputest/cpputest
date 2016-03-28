@@ -51,7 +51,7 @@ if (${CMAKE_HOST_SYSTEM_NAME} MATCHES "OpenBSD")
 endif ()
 
 add_executable(CppUTestTests ${CppUTestTests_src})
-cpputest_set_test_output_location(CppUTestTests "${CMAKE_BINARY_DIR}/tests")
+cpputest_normalize_test_output_location(CppUTestTests)
 target_link_libraries(CppUTestTests CppUTest ${THREAD_LIB})
 
 add_subdirectory(CppUTestExt)

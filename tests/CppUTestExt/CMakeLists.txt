@@ -34,6 +34,6 @@ if (MINGW)
 endif (MINGW)
 
 add_executable(CppUTestExtTests ${CppUTestExtTests_src})
-cpputest_set_test_output_location(CppUTestExtTests "${CMAKE_BINARY_DIR}/tests/CppUTestExt")
+cpputest_normalize_test_output_location(CppUTestExtTests)
 target_link_libraries(CppUTestExtTests CppUTest CppUTestExt ${THREAD_LIB} ${CPPUNIT_EXTERNAL_LIBRARIES})
 cpputest_buildtime_discover_tests(CppUTestExtTests)
