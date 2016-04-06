@@ -10,6 +10,10 @@ matrix:
           - valgrind
     - compiler: clang
       env: BUILD=cmake
+      addons:
+        apt:
+          packages:
+          - cmake
     - compiler: clang
       env: BUILD=autotools_gtest
     - compiler: clang
