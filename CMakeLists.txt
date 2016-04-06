@@ -4,7 +4,7 @@ set(CppUTest_version_major 3)
 set(CppUTest_version_minor 7.2)
 
 # 2.6.3 is needed for ctest support
-cmake_minimum_required(VERSION 2.8.7)
+cmake_minimum_required(VERSION 2.8.11)
 
 # Check for functions before setting a lot of stuff
 include(CheckFunctionExists)
