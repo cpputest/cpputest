@@ -1,18 +1,18 @@
 # Create target to discover tests
 function (cpputest_buildtime_discover_tests EXECUTABLE)
-    # The that to the discover script depends execution mode:
-    # - imported (installed, imported, and executed by a client of the CppUTest lib) or
-    # - internal (building CppUTest it self).
-    if (CppUTest_DIR) # Installed (path is relative to install directory)
-        SET(DISCOVER_SCRIPT ${CppUTest_DIR}/Scripts/CppUTestBuildTimeDiscoverTests.cmake)
-    else (CppUTest_DIR) # internal - (path is relative to source dir)
-        SET(DISCOVER_SCRIPT ${PROJECT_SOURCE_DIR}/cmake/Scripts/CppUTestBuildTimeDiscoverTests.cmake)
-    endif (CppUTest_DIR)
+  # The path to the discover script depends on execution mode:
+  # - internal (building CppUTest it self).
+  # - imported (installed, imported, and executed by a client of the CppUTest lib)
+  if (PROJECT_NAME STREQUAL "CppUTest") # internal - (path is relative to source dir)
+    SET(DISCOVER_SCRIPT ${PROJECT_SOURCE_DIR}/cmake/Scripts/CppUTestBuildTimeDiscoverTests.cmake)
+  else (PROJECT_NAME STREQUAL "CppUTest") # Installed (path is relative to install directory)
+    SET(DISCOVER_SCRIPT ${CppUTest_DIR}/Scripts/CppUTestBuildTimeDiscoverTests.cmake)
+  endif (PROJECT_NAME STREQUAL "CppUTest")
 
-    add_custom_command (TARGET ${EXECUTABLE}
-                        POST_BUILD
-                        COMMAND ${CMAKE_COMMAND} -DTESTS_DETAILED:BOOL=${TESTS_DETAILED} -DEXECUTABLE=${EXECUTABLE} -P ${DISCOVER_SCRIPT}
-                        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-			COMMENT "Discovering Tests in ${EXECUTABLE}"
-			VERBATIM)
+  add_custom_command (TARGET ${EXECUTABLE}
+    POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -DTESTS_DETAILED:BOOL=${TESTS_DETAILED} -DEXECUTABLE=${EXECUTABLE} -P ${DISCOVER_SCRIPT}
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    COMMENT "Discovering Tests in ${EXECUTABLE}"
+    VERBATIM)
 endfunction ()
