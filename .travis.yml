@@ -1,5 +1,9 @@
 language: cpp
 sudo: false
+addons:
+  apt:
+    sources: ['kubuntu-backports']
+    packages: ['cmake']
 matrix:
     include:
     - compiler: clang
@@ -38,10 +42,6 @@ matrix:
           - dosbox
 global:
 - os: linux
-  addons:
-    apt:
-      sources: ['kalakris-cmake']
-      packages: ['cmake']
 - rvm: '1.9.3'
 - secure: |-
     P05xUfJVw5YM4hF7hzQLjyMzDD4Q1/fyWP9Uk5aK5VrSWNY99EuxldXI5QK/
