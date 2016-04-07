@@ -10,10 +10,6 @@ matrix:
           - valgrind
     - compiler: clang
       env: BUILD=cmake
-      addons:
-        apt:
-          packages:
-          - cmake
     - compiler: clang
       env: BUILD=autotools_gtest
     - compiler: clang
@@ -42,6 +38,10 @@ matrix:
           - dosbox
 global:
 - os: linux
+  addons:
+    apt:
+      sources: ['kalakris-cmake']
+      packages: ['cmake']
 - rvm: '1.9.3'
 - secure: |-
     P05xUfJVw5YM4hF7hzQLjyMzDD4Q1/fyWP9Uk5aK5VrSWNY99EuxldXI5QK/
