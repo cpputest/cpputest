@@ -169,7 +169,7 @@ void MockSupport::expectNoCall(const SimpleString& functionName)
     countCheck();
 
     MockCheckedExpectedCall* call = new MockCheckedExpectedCall;
-    call->withName(functionName);
+    call->withName(appendScopeToName(functionName));
     unExpectations_.addExpectedCall(call);
 }
 
