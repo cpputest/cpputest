@@ -233,6 +233,46 @@ TEST(MockCallTest, ignoreOtherCallsExceptForTheUnExpectedOne)
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 
+
+TEST(MockCallTest, expectNoCallInScopeThatHappened)
+{
+    MockFailureReporterInstaller failureReporterInstaller;
+
+    MockExpectedCallsListForTest expectations;
+    MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "scope::lazy", expectations);
+
+    mock("scope").expectNoCall("lazy");
+    mock("scope").actualCall("lazy");
+
+    CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
+TEST(MockCallTest, expectNoCallInScopeButActualCallInAnotherScope)
+{
+    MockFailureReporterInstaller failureReporterInstaller;
+
+    MockExpectedCallsListForTest expectations;
+    MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "scope2::lazy", expectations);
+
+    mock("scope1").expectNoCall("lazy");
+    mock("scope2").actualCall("lazy");
+
+    CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
+TEST(MockCallTest, expectNoCallInScopeButActualCallInGlobal)
+{
+    MockFailureReporterInstaller failureReporterInstaller;
+
+    MockExpectedCallsListForTest expectations;
+    MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "lazy", expectations);
+
+    mock("scope1").expectNoCall("lazy");
+    mock().actualCall("lazy");
+
+    CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
 TEST(MockCallTest, ignoreOtherCallsExceptForTheExpectedOne)
 {
     mock().expectOneCall("foo");

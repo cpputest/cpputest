@@ -71,7 +71,7 @@ void IEEE754ExceptionsPlugin::enableInexact()
 
 bool IEEE754ExceptionsPlugin::checkIeee754ExeptionFlag(int flag)
 {
-    return fetestexcept(flag);
+    return fetestexcept(flag) != 0;
 }
 
 void IEEE754ExceptionsPlugin::ieee754Check(UtestShell& test, TestResult& result, int flag, const char* text)
