@@ -89,24 +89,41 @@ void all_mock_support_c_calls(void)
     mock_c()->clear();
     mock_c()->removeAllComparatorsAndCopiers();
 
-    mock_c()->expectOneCall("boo")->andReturnIntValue(10);
-    mock_c()->actualCall("boo")->returnValue();
-    mock_c()->returnValue();
-    mock_c()->expectOneCall("boo2")->andReturnDoubleValue(1.0);
-    mock_c()->actualCall("boo2")->returnValue();
-    mock_c()->returnValue();
+    mock_c()->expectOneCall("boo")->andReturnIntValue(-10);
+    mock_c()->actualCall("boo")->intReturnValue();
+    mock_c()->intReturnValue();
 
-    mock_c()->expectOneCall("boo3")->andReturnStringValue("hello world");
-    mock_c()->actualCall("boo3")->returnValue();
-    mock_c()->returnValue();
+    mock_c()->expectOneCall("boo2")->andReturnUnsignedIntValue(1.0);
+    mock_c()->actualCall("boo2")->unsignedIntReturnValue();
+    mock_c()->unsignedIntReturnValue();
 
-    mock_c()->expectOneCall("boo4")->andReturnPointerValue((void*) 10);
-    mock_c()->actualCall("boo4")->returnValue();
-    mock_c()->returnValue();
+    mock_c()->expectOneCall("boo3")->andReturnLongIntValue(1.0);
+    mock_c()->actualCall("boo3")->longIntReturnValue();
+    mock_c()->longIntReturnValue();
 
-    mock_c()->expectOneCall("boo5")->andReturnFunctionPointerValue((void(*)(void)) 10);
-    mock_c()->actualCall("boo5")->returnValue();
-    mock_c()->returnValue();
+    mock_c()->expectOneCall("boo3")->andReturnUnsignedLongIntValue(1.0);
+    mock_c()->actualCall("boo3")->unsignedLongIntReturnValue();
+    mock_c()->unsignedLongIntReturnValue();
+
+    mock_c()->expectOneCall("boo4")->andReturnDoubleValue(1.0);
+    mock_c()->actualCall("boo4")->doubleReturnValue();
+    mock_c()->doubleReturnValue();
+
+    mock_c()->expectOneCall("boo5")->andReturnStringValue("hello world");
+    mock_c()->actualCall("boo5")->stringReturnValue();
+    mock_c()->stringReturnValue();
+
+    mock_c()->expectOneCall("boo6")->andReturnPointerValue((void*) 10);
+    mock_c()->actualCall("boo6")->pointerReturnValue();
+    mock_c()->pointerReturnValue();
+
+    mock_c()->expectOneCall("boo7")->andReturnConstPointerValue((void*) 10);
+    mock_c()->actualCall("boo7")->constPointerReturnValue();
+    mock_c()->constPointerReturnValue();
+
+    mock_c()->expectOneCall("boo8")->andReturnFunctionPointerValue((void(*)(void)) 10);
+    mock_c()->actualCall("boo8")->functionPointerReturnValue();
+    mock_c()->functionPointerReturnValue();
 
     mock_c()->setIntData("int", 5);
     mock_c()->expectOneCall("bla")->withIntParameters("int", 5);
@@ -132,24 +149,17 @@ void all_mock_support_c_calls(void)
     mock_c()->expectOneCall("bla")->withFunctionPointerParameters("ptr", (void(*)(void))1);
     mock_c()->actualCall("bla")->withFunctionPointerParameters("ptr", mock_c()->getData("ptr").value.functionPointerValue);
 
+    mock_c()->clear();
+
     mock_c()->hasReturnValue();
-    mock_c()->intReturnValue();
     mock_c()->returnIntValueOrDefault(-1);
-    mock_c()->unsignedIntReturnValue();
     mock_c()->returnUnsignedIntValueOrDefault(1);
-    mock_c()->longIntReturnValue();
     mock_c()->returnLongIntValueOrDefault(-1L);
-    mock_c()->unsignedLongIntReturnValue();
     mock_c()->returnUnsignedLongIntValueOrDefault(1L);
-    mock_c()->stringReturnValue();
     mock_c()->returnStringValueOrDefault("");
-    mock_c()->doubleReturnValue();
     mock_c()->returnDoubleValueOrDefault(0.01);
-    mock_c()->pointerReturnValue();
     mock_c()->returnPointerValueOrDefault(0);
-    mock_c()->constPointerReturnValue();
     mock_c()->returnConstPointerValueOrDefault(0);
-    mock_c()->functionPointerReturnValue();
     mock_c()->returnFunctionPointerValueOrDefault(0);
 
     mock_c()->disable();

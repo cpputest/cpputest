@@ -635,7 +635,7 @@ MockValue_c returnValue_c()
 
 int intReturnValue_c()
 {
-    return getMockValueCFromNamedValue(actualCall->returnValue()).value.intValue;
+    return actualCall->returnIntValue();
 }
 
 int returnIntValueOrDefault_c(int defaultValue)
@@ -648,7 +648,7 @@ int returnIntValueOrDefault_c(int defaultValue)
 
 unsigned int unsignedIntReturnValue_c()
 {
-    return getMockValueCFromNamedValue(actualCall->returnValue()).value.unsignedIntValue;
+    return actualCall->returnUnsignedIntValue();
 }
 
 unsigned int returnUnsignedIntValueOrDefault_c(unsigned int defaultValue)
@@ -661,7 +661,7 @@ unsigned int returnUnsignedIntValueOrDefault_c(unsigned int defaultValue)
 
 long int longIntReturnValue_c()
 {
-    return getMockValueCFromNamedValue(actualCall->returnValue()).value.longIntValue;
+    return actualCall->returnLongIntValue();
 }
 
 long int returnLongIntValueOrDefault_c(long int defaultValue)
@@ -674,7 +674,7 @@ long int returnLongIntValueOrDefault_c(long int defaultValue)
 
 unsigned long int unsignedLongIntReturnValue_c()
 {
-    return getMockValueCFromNamedValue(actualCall->returnValue()).value.unsignedLongIntValue;
+    return actualCall->returnUnsignedLongIntValue();
 }
 
 unsigned long int returnUnsignedLongIntValueOrDefault_c(unsigned long int defaultValue)
@@ -687,7 +687,7 @@ unsigned long int returnUnsignedLongIntValueOrDefault_c(unsigned long int defaul
 
 const char* stringReturnValue_c()
 {
-    return getMockValueCFromNamedValue(actualCall->returnValue()).value.stringValue;
+    return actualCall->returnStringValue();
 }
 
 const char* returnStringValueOrDefault_c(const char * defaultValue)
@@ -700,7 +700,7 @@ const char* returnStringValueOrDefault_c(const char * defaultValue)
 
 double doubleReturnValue_c()
 {
-    return getMockValueCFromNamedValue(actualCall->returnValue()).value.doubleValue;
+    return actualCall->returnDoubleValue();
 }
 
 double returnDoubleValueOrDefault_c(double defaultValue)
@@ -713,7 +713,7 @@ double returnDoubleValueOrDefault_c(double defaultValue)
 
 void* pointerReturnValue_c()
 {
-    return getMockValueCFromNamedValue(actualCall->returnValue()).value.pointerValue;
+    return actualCall->returnPointerValue();
 }
 
 void* returnPointerValueOrDefault_c(void * defaultValue)
@@ -726,7 +726,7 @@ void* returnPointerValueOrDefault_c(void * defaultValue)
 
 const void* constPointerReturnValue_c()
 {
-    return getMockValueCFromNamedValue(actualCall->returnValue()).value.constPointerValue;
+    return actualCall->returnConstPointerValue();
 }
 
 const void* returnConstPointerValueOrDefault_c(const void * defaultValue)
@@ -739,7 +739,7 @@ const void* returnConstPointerValueOrDefault_c(const void * defaultValue)
 
 void (*functionPointerReturnValue_c())()
 {
-    return getMockValueCFromNamedValue(actualCall->returnValue()).value.functionPointerValue;
+    return actualCall->returnFunctionPointerValue();
 }
 
 void (*returnFunctionPointerValueOrDefault_c(void (*defaultValue)()))()
