@@ -73,6 +73,14 @@ MockExpectedCall& MockCheckedExpectedCall::withName(const SimpleString& name)
     return *this;
 }
 
+MockExpectedCall& MockCheckedExpectedCall::withBoolParameter(const SimpleString& name, bool value)
+{
+    MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
+    inputParameters_->add(newParameter);
+    newParameter->setValue(value);
+    return *this;
+}
+
 MockExpectedCall& MockCheckedExpectedCall::withUnsignedIntParameter(const SimpleString& name, unsigned int value)
 {
     MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
@@ -401,6 +409,13 @@ bool MockCheckedExpectedCall::MockExpectedFunctionParameter::isFulfilled() const
     return fulfilled_;
 }
 
+MockExpectedCall& MockCheckedExpectedCall::andReturnValue(bool value)
+{
+    returnValue_.setName("returnValue");
+    returnValue_.setValue(value);
+    return *this;
+}
+
 MockExpectedCall& MockCheckedExpectedCall::andReturnValue(unsigned int value)
 {
     returnValue_.setName("returnValue");
@@ -536,6 +551,13 @@ MockExpectedCall& MockExpectedCallComposite::withCallOrder(int)
     return *this; // LCOV_EXCL_LINE
 }
 
+MockExpectedCall& MockExpectedCallComposite::withBoolParameter(const SimpleString& name, bool value)
+{
+    for (MockExpectedCallCompositeNode* node = head_; node != NULL; node = node->next_)
+        node->call_.withParameter(name, value);
+    return *this;
+}
+
 MockExpectedCall& MockExpectedCallComposite::withUnsignedIntParameter(const SimpleString& name, unsigned int value)
 {
     for (MockExpectedCallCompositeNode* node = head_; node != NULL; node = node->next_)
@@ -632,6 +654,13 @@ MockExpectedCall& MockExpectedCallComposite::ignoreOtherParameters()
 {
     for (MockExpectedCallCompositeNode* node = head_; node != NULL; node = node->next_)
         node->call_.ignoreOtherParameters();
+    return *this;
+}
+
+MockExpectedCall& MockExpectedCallComposite::andReturnValue(bool value)
+{
+    for (MockExpectedCallCompositeNode* node = head_; node != NULL; node = node->next_)
+        node->call_.andReturnValue(value);
     return *this;
 }
 

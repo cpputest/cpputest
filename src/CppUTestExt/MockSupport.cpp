@@ -369,6 +369,12 @@ MockNamedValue* MockSupport::retrieveDataFromStore(const SimpleString& name)
     return newData;
 }
 
+void MockSupport::setData(const SimpleString& name, bool value)
+{
+    MockNamedValue* newData = retrieveDataFromStore(name);
+    newData->setValue(value);
+}
+
 void MockSupport::setData(const SimpleString& name, unsigned int value)
 {
     MockNamedValue* newData = retrieveDataFromStore(name);
@@ -469,6 +475,11 @@ MockNamedValue MockSupport::returnValue()
     return MockNamedValue("");
 }
 
+bool MockSupport::boolReturnValue()
+{
+    return returnValue().getBoolValue();
+}
+
 unsigned int MockSupport::unsignedIntReturnValue()
 {
     return returnValue().getUnsignedIntValue();
@@ -499,6 +510,14 @@ long int MockSupport::returnLongIntValueOrDefault(long int defaultValue)
 {
     if (hasReturnValue()) {
         return longIntReturnValue();
+    }
+    return defaultValue;
+}
+
+bool MockSupport::returnBoolValueOrDefault(bool defaultValue)
+{
+    if (hasReturnValue()) {
+        return boolReturnValue();
     }
     return defaultValue;
 }

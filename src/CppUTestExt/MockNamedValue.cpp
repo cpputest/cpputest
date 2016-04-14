@@ -46,6 +46,12 @@ MockNamedValue::~MockNamedValue()
 {
 }
 
+void MockNamedValue::setValue(bool value)
+{
+    type_ = "bool";
+    value_.boolValue_ = value;
+}
+
 void MockNamedValue::setValue(unsigned int value)
 {
     type_ = "unsigned int";
@@ -136,6 +142,12 @@ SimpleString MockNamedValue::getName() const
 SimpleString MockNamedValue::getType() const
 {
     return type_;
+}
+
+bool MockNamedValue::getBoolValue() const
+{
+    STRCMP_EQUAL("bool", type_.asCharString());
+    return value_.boolValue_;
 }
 
 unsigned int MockNamedValue::getUnsignedIntValue() const
@@ -268,7 +280,9 @@ bool MockNamedValue::equals(const MockNamedValue& p) const
 
     if (type_ != p.type_) return false;
 
-    if (type_ == "int")
+    if (type_ == "bool")
+        return value_.boolValue_ == p.value_.boolValue_;
+    else if (type_ == "int")
         return value_.intValue_ == p.value_.intValue_;
     else if (type_ == "unsigned int")
         return value_.unsignedIntValue_ == p.value_.unsignedIntValue_;
@@ -312,7 +326,9 @@ bool MockNamedValue::compatibleForCopying(const MockNamedValue& p) const
 
 SimpleString MockNamedValue::toString() const
 {
-    if (type_ == "int")
+    if (type_ == "bool")
+        return StringFrom(value_.boolValue_);
+    else if (type_ == "int")
         return StringFrom(value_.intValue_);
     else if (type_ == "unsigned int")
         return StringFrom(value_.unsignedIntValue_);

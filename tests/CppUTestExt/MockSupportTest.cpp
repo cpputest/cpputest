@@ -58,6 +58,13 @@ TEST(MockSupportTest, setDataForIntegerValues)
     LONGS_EQUAL(expected_data, mock().getData("data").getIntValue());
 }
 
+TEST(MockSupportTest, setDataForBooleanValues)
+{
+    bool expected_data = true;
+    mock().setData("data", expected_data);
+    CHECK_EQUAL(expected_data, mock().getData("data").getBoolValue());
+}
+
 TEST(MockSupportTest, hasDataBeenSet)
 {
     CHECK(!mock().hasData("data"));

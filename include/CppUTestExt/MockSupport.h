@@ -52,6 +52,8 @@ public:
     virtual MockActualCall& actualCall(const SimpleString& functionName);
     virtual bool hasReturnValue();
     virtual MockNamedValue returnValue();
+    virtual bool boolReturnValue();
+    virtual bool returnBoolValueOrDefault(bool defaultValue);
     virtual int intReturnValue();
     virtual int returnIntValueOrDefault(int defaultValue);
     virtual unsigned int unsignedIntReturnValue();
@@ -72,6 +74,7 @@ public:
     virtual void (*functionPointerReturnValue())();
 
     bool hasData(const SimpleString& name);
+    void setData(const SimpleString& name, bool value);
     void setData(const SimpleString& name, int value);
     void setData(const SimpleString& name, unsigned int value);
     void setData(const SimpleString& name, const char* value);

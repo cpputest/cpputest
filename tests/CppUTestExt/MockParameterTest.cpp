@@ -37,6 +37,14 @@ TEST_GROUP(MockParameterTest)
   }
 };
 
+TEST(MockParameterTest, expectOneBooleanParameterAndValue)
+{
+    mock().expectOneCall("foo").withParameter("parameter", true);
+    mock().actualCall("foo").withParameter("parameter", true);
+
+    mock().checkExpectations();
+}
+
 TEST(MockParameterTest, expectOneUnsignedIntegerParameterAndValue)
 {
     unsigned int value = 14400;
@@ -677,6 +685,7 @@ TEST(MockParameterTest, ignoreOtherCallsIgnoresWithAllKindsOfParameters)
 {
      mock().ignoreOtherCalls();
      mock().actualCall("boo")
+           .withParameter("umm", true)
            .withParameter("bar", 1u)
            .withParameter("foo", 1l)
            .withParameter("hey", 1ul)

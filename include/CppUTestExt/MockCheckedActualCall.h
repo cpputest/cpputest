@@ -39,6 +39,7 @@ public:
 
     virtual MockActualCall& withName(const SimpleString& name) _override;
     virtual MockActualCall& withCallOrder(int) _override;
+    virtual MockActualCall& withBoolParameter(const SimpleString& name, bool value) _override;
     virtual MockActualCall& withIntParameter(const SimpleString& name, int value) _override;
     virtual MockActualCall& withUnsignedIntParameter(const SimpleString& name, unsigned int value) _override;
     virtual MockActualCall& withLongIntParameter(const SimpleString& name, long int value) _override;
@@ -55,6 +56,9 @@ public:
 
     virtual bool hasReturnValue() _override;
     virtual MockNamedValue returnValue() _override;
+
+    virtual bool returnBoolValueOrDefault(bool default_value) _override;
+    virtual bool returnBoolValue() _override;
 
     virtual int returnIntValueOrDefault(int default_value) _override;
     virtual int returnIntValue() _override;
@@ -147,6 +151,7 @@ public:
 
     virtual MockActualCall& withName(const SimpleString& name) _override;
     virtual MockActualCall& withCallOrder(int) _override;
+    virtual MockActualCall& withBoolParameter(const SimpleString& name, bool value) _override;
     virtual MockActualCall& withIntParameter(const SimpleString& name, int value) _override;
     virtual MockActualCall& withUnsignedIntParameter(const SimpleString& name, unsigned int value) _override;
     virtual MockActualCall& withLongIntParameter(const SimpleString& name, long int value) _override;
@@ -163,6 +168,9 @@ public:
 
     virtual bool hasReturnValue() _override;
     virtual MockNamedValue returnValue() _override;
+
+    virtual bool returnBoolValueOrDefault(bool default_value) _override;
+    virtual bool returnBoolValue() _override;
 
     virtual int returnIntValueOrDefault(int default_value) _override;
     virtual int returnIntValue() _override;
@@ -208,6 +216,7 @@ class MockIgnoredActualCall: public MockActualCall
 public:
     virtual MockActualCall& withName(const SimpleString&) _override { return *this;}
     virtual MockActualCall& withCallOrder(int) _override { return *this; }
+    virtual MockActualCall& withBoolParameter(const SimpleString&, bool) _override { return *this; }
     virtual MockActualCall& withIntParameter(const SimpleString&, int) _override { return *this; }
     virtual MockActualCall& withUnsignedIntParameter(const SimpleString&, unsigned int) _override { return *this; }
     virtual MockActualCall& withLongIntParameter(const SimpleString&, long int) _override { return *this; }
@@ -224,6 +233,9 @@ public:
 
     virtual bool hasReturnValue() _override { return false; }
     virtual MockNamedValue returnValue() _override { return MockNamedValue(""); }
+
+    virtual bool returnBoolValueOrDefault(bool) _override { return false; }
+    virtual bool returnBoolValue() _override { return false; }
 
     virtual int returnIntValue() _override { return 0; }
     virtual int returnIntValueOrDefault(int value) _override { return value; }

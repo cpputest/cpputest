@@ -189,6 +189,14 @@ TEST(MockExpectedCall, callWithIntegerParameter)
     CHECK(call->hasInputParameterWithName("integer"));
 }
 
+TEST(MockExpectedCall, callWithBooleanParameter)
+{
+    call->withParameter("boolean", true);
+    STRCMP_EQUAL("bool", call->getInputParameterType("boolean").asCharString());
+    CHECK_EQUAL(true, call->getInputParameter("boolean").getBoolValue());
+    CHECK(call->hasInputParameterWithName("boolean"));
+}
+
 TEST(MockExpectedCall, callWithUnsignedLongIntegerParameter)
 {
     const SimpleString name = "unsigned long integer";
@@ -564,6 +572,12 @@ TEST_GROUP(MockExpectedCallComposite)
     }
 };
 
+TEST(MockExpectedCallComposite, hasBoolParameter)
+{
+    composite.withParameter("param", true);
+    STRCMP_EQUAL("name -> bool param: <true>", call.callToString().asCharString());
+}
+
 TEST(MockExpectedCallComposite, hasLongIntParameter)
 {
     composite.withParameter("param", (long int) -1);
@@ -617,6 +631,13 @@ TEST(MockExpectedCallComposite, hasOutputParameterOfTypeReturning)
 {
     composite.withOutputParameterOfTypeReturning("type", "out", (const void*) 0);
     STRCMP_EQUAL("name -> type out: <output>", call.callToString().asCharString());
+}
+
+TEST(MockExpectedCallComposite, hasBoolReturnValue)
+{
+    composite.andReturnValue(true);
+    STRCMP_EQUAL("bool", call.returnValue().getType().asCharString());
+    CHECK_EQUAL(true, call.returnValue().getBoolValue());
 }
 
 TEST(MockExpectedCallComposite, hasUnsignedIntReturnValue)
@@ -716,6 +737,7 @@ TEST(MockIgnoredExpectedCall, worksAsItShould)
     ignored.withName("func");
     ignored.withCallOrder(1);
     ignored.onObject((void*) 0);
+    ignored.withBoolParameter("umm", true);
     ignored.withIntParameter("bla", (int) 1);
     ignored.withUnsignedIntParameter("foo", (unsigned int) 1);
     ignored.withLongIntParameter("hey", (long int) 1);
@@ -730,6 +752,7 @@ TEST(MockIgnoredExpectedCall, worksAsItShould)
     ignored.withOutputParameterReturning("bar", (void*) 0, 1);
     ignored.withOutputParameterOfTypeReturning("mytype", "bar", (const void*) 0);
     ignored.ignoreOtherParameters();
+    ignored.andReturnValue(true);
     ignored.andReturnValue((double) 1.0f);
     ignored.andReturnValue((unsigned int) 1);
     ignored.andReturnValue((int) 1);

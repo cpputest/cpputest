@@ -130,6 +130,12 @@ TEST(MockSupport_c, expectAndActualParametersOnObject)
     mock_c()->removeAllComparatorsAndCopiers();
 }
 
+TEST(MockSupport_c, boolParameter)
+{
+    mock_c()->expectOneCall("foo")->withBoolParameters("p", 1);
+    mock_c()->actualCall("foo")->withBoolParameters("p", 1);
+}
+
 TEST(MockSupport_c, unsignedIntParameter)
 {
     mock_c()->expectOneCall("foo")->withUnsignedIntParameters("p", 1);
@@ -196,6 +202,32 @@ TEST(MockSupport_c, ignoreOtherParameters)
     mock_c()->expectOneCall("foo")->withIntParameters("int", 1)->ignoreOtherParameters();
     mock_c()->actualCall("foo")->withIntParameters("int", 1)->withDoubleParameters("double", 0.01);
     mock_c()->checkExpectations();
+}
+
+TEST(MockSupport_c, returnBoolValue)
+{
+    int expected_value = 1;
+    mock_c()->expectOneCall("boo")->andReturnBoolValue(expected_value);
+    CHECK_EQUAL(expected_value, mock_c()->actualCall("boo")->boolReturnValue());
+    CHECK_EQUAL(expected_value, mock_c()->boolReturnValue());
+    LONGS_EQUAL(MOCKVALUETYPE_BOOL, mock_c()->returnValue().type);
+}
+
+TEST(MockSupport_c, whenReturnValueIsGivenReturnBoolValueOrDefaultShouldIgnoreTheDefault)
+{
+    int defaultValue = 1;
+    int expectedValue = 0;
+    mock_c()->expectOneCall("foo")->andReturnBoolValue(expectedValue);
+    LONGS_EQUAL(expectedValue, mock_c()->actualCall("foo")->returnBoolValueOrDefault(defaultValue));
+    LONGS_EQUAL(expectedValue, mock_c()->returnBoolValueOrDefault(defaultValue));
+}
+
+TEST(MockSupport_c, whenNoReturnValueIsGivenReturnBoolValueOrDefaultShouldlUseTheDefaultValue)
+{
+    int defaultValue = 1;
+    mock_c()->expectOneCall("foo");
+    LONGS_EQUAL(defaultValue, mock_c()->actualCall("foo")->returnBoolValueOrDefault(defaultValue));
+    LONGS_EQUAL(defaultValue, mock_c()->returnBoolValueOrDefault(defaultValue));
 }
 
 TEST(MockSupport_c, returnIntValue)
@@ -430,6 +462,12 @@ TEST(MockSupport_c, MockSupportWithScope)
     LONGS_EQUAL(0, mock_scope_c("other")->expectedCallsLeft());
     LONGS_EQUAL(1, mock_scope_c("scope")->expectedCallsLeft());
     mock_scope_c("scope")->actualCall("boo");
+}
+
+TEST(MockSupport_c, MockSupportSetBoolData)
+{
+    mock_c()->setBoolData("boolean", 1);
+    CHECK_EQUAL(1, mock_c()->getData("boolean").value.boolValue);
 }
 
 TEST(MockSupport_c, MockSupportSetIntData)
