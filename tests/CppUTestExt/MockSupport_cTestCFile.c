@@ -49,6 +49,7 @@ void all_mock_support_c_calls(void)
     mock_c()->checkExpectations();
 
     mock_c()->expectOneCall("boo")->withIntParameters("integer", 1)->
+            withBoolParameters("bool", 1)->
             withUnsignedIntParameters("unsigned", 1)->
             withLongIntParameters("long int", (long int) -1)->
             withUnsignedLongIntParameters("unsigned long int", (unsigned long int) 1)->
@@ -61,6 +62,7 @@ void all_mock_support_c_calls(void)
             ignoreOtherParameters();
 
     mock_c()->actualCall("boo")->withIntParameters("integer", 1)->
+            withBoolParameters("bool", 1)->
             withUnsignedIntParameters("unsigned", 1)->
             withLongIntParameters("long int", (long int) -1)->
             withUnsignedLongIntParameters("unsigned long int", (unsigned long int) 1)->
@@ -89,9 +91,14 @@ void all_mock_support_c_calls(void)
     mock_c()->clear();
     mock_c()->removeAllComparatorsAndCopiers();
 
+    mock_c()->expectOneCall("boo")->andReturnBoolValue(1);
+    mock_c()->actualCall("boo")->boolReturnValue();
+    mock_c()->boolReturnValue();
+
     mock_c()->expectOneCall("boo")->andReturnIntValue(-10);
     mock_c()->actualCall("boo")->intReturnValue();
     mock_c()->intReturnValue();
+    mock_c()->returnValue();
 
     mock_c()->expectOneCall("boo2")->andReturnUnsignedIntValue(1.0);
     mock_c()->actualCall("boo2")->unsignedIntReturnValue();
@@ -125,6 +132,10 @@ void all_mock_support_c_calls(void)
     mock_c()->actualCall("boo8")->functionPointerReturnValue();
     mock_c()->functionPointerReturnValue();
 
+    mock_c()->setBoolData("bool", 1);
+    mock_c()->expectOneCall("bla")->withBoolParameters("bool", 1);
+    mock_c()->actualCall("bla")->withBoolParameters("bool", mock_c()->getData("bool").value.boolValue);
+
     mock_c()->setIntData("int", 5);
     mock_c()->expectOneCall("bla")->withIntParameters("int", 5);
     mock_c()->actualCall("bla")->withIntParameters("int", mock_c()->getData("int").value.intValue);
@@ -152,6 +163,7 @@ void all_mock_support_c_calls(void)
     mock_c()->clear();
 
     mock_c()->hasReturnValue();
+    mock_c()->returnBoolValueOrDefault(1);
     mock_c()->returnIntValueOrDefault(-1);
     mock_c()->returnUnsignedIntValueOrDefault(1);
     mock_c()->returnLongIntValueOrDefault(-1L);

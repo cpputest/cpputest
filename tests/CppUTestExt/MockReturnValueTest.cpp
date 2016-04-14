@@ -202,6 +202,23 @@ TEST(MockReturnValueTest, WhenNoLongIntegerReturnValueIsExpectedButThereIsADefau
     LONGS_EQUAL(default_return_value, mock().returnLongIntValueOrDefault(default_return_value));
 }
 
+TEST(MockReturnValueTest, WhenABooleanReturnValueIsExpectedAndAlsoThereIsADefaultShouldlIgnoreTheDefault)
+{
+    bool default_return_value = true;
+    bool expected_return_value = false;
+    mock().expectOneCall("foo").andReturnValue(expected_return_value);
+    CHECK_EQUAL(expected_return_value, mock().actualCall("foo").returnBoolValueOrDefault(default_return_value));
+    CHECK_EQUAL(expected_return_value, mock().returnBoolValueOrDefault(default_return_value));
+}
+
+TEST(MockReturnValueTest, WhenNoBooleanReturnValueIsExpectedButThereIsADefaultShouldlUseTheDefaultValue)
+{
+    bool default_return_value = true;
+    mock().expectOneCall("foo");
+    CHECK_EQUAL(default_return_value, mock().actualCall("foo").returnBoolValueOrDefault(default_return_value));
+    CHECK_EQUAL(default_return_value, mock().returnBoolValueOrDefault(default_return_value));
+}
+
 TEST(MockReturnValueTest, WhenAIntegerReturnValueIsExpectedAndAlsoThereIsADefaultShouldlIgnoreTheDefault)
 {
     int default_return_value = 777;
@@ -217,6 +234,47 @@ TEST(MockReturnValueTest, WhenNoIntegerReturnValueIsExpectedButThereIsADefaultSh
     mock().expectOneCall("foo");
     LONGS_EQUAL(default_return_value, mock().actualCall("foo").returnIntValueOrDefault(default_return_value));
     LONGS_EQUAL(default_return_value, mock().returnIntValueOrDefault(default_return_value));
+}
+
+TEST(MockReturnValueTest, BooleanReturnValue)
+{
+    bool expected_value = true;
+    mock().expectOneCall("foo").andReturnValue(true);
+    MockActualCall& actual_call = mock().actualCall("foo");
+
+    CHECK_EQUAL(expected_value, actual_call.returnValue().getBoolValue());
+    CHECK_EQUAL(expected_value, actual_call.returnBoolValue());
+
+    CHECK_EQUAL(expected_value, mock().returnValue().getBoolValue());
+    CHECK_EQUAL(expected_value, mock().boolReturnValue());
+}
+
+TEST(MockReturnValueTest, BooleanReturnValueSetsDifferentValues)
+{
+    bool expected_value = true;
+    bool another_expected_value = false;
+
+    mock().expectOneCall("foo").andReturnValue(expected_value);
+    mock().expectOneCall("foo").andReturnValue(another_expected_value);
+
+    CHECK_EQUAL(expected_value, mock().actualCall("foo").returnValue().getBoolValue());
+    CHECK_EQUAL(expected_value, mock().returnValue().getBoolValue());
+    CHECK_EQUAL(another_expected_value, mock().actualCall("foo").returnValue().getBoolValue());
+    CHECK_EQUAL(another_expected_value, mock().returnValue().getBoolValue());
+}
+
+TEST(MockReturnValueTest, BooleanReturnValueSetsDifferentValuesWhileParametersAreIgnored)
+{
+    bool ret_value = true;
+    bool another_ret_value = false;
+
+    mock().expectOneCall("foo").withParameter("p1", 1).ignoreOtherParameters().andReturnValue(ret_value);
+    mock().expectOneCall("foo").withParameter("p1", 1).ignoreOtherParameters().andReturnValue(another_ret_value);
+
+    CHECK_EQUAL(ret_value, mock().actualCall("foo").withParameter("p1", 1).returnValue().getBoolValue());
+    CHECK_EQUAL(ret_value, mock().returnValue().getBoolValue());
+    CHECK_EQUAL(another_ret_value, mock().actualCall("foo").withParameter("p1", 1).returnValue().getBoolValue());
+    CHECK_EQUAL(another_ret_value, mock().returnValue().getBoolValue());
 }
 
 TEST(MockReturnValueTest, IntegerReturnValue)

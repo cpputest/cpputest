@@ -197,6 +197,14 @@ void MockCheckedActualCall::checkOutputParameter(const MockNamedValue& outputPar
     finalizeCallWhenFulfilled();
 }
 
+MockActualCall& MockCheckedActualCall::withBoolParameter(const SimpleString& name, bool value)
+{
+    MockNamedValue actualParameter(name);
+    actualParameter.setValue(value);
+    checkInputParameter(actualParameter);
+    return *this;
+}
+
 MockActualCall& MockCheckedActualCall::withUnsignedIntParameter(const SimpleString& name, unsigned int value)
 {
     MockNamedValue actualParameter(name);
@@ -362,6 +370,19 @@ MockNamedValue MockCheckedActualCall::returnValue()
     if (fulfilledExpectation_)
         return fulfilledExpectation_->returnValue();
     return MockNamedValue("no return value");
+}
+
+bool MockCheckedActualCall::returnBoolValueOrDefault(bool default_value)
+{
+    if (!hasReturnValue()) {
+        return default_value;
+    }
+    return returnBoolValue();
+}
+
+bool MockCheckedActualCall::returnBoolValue()
+{
+    return returnValue().getBoolValue();
 }
 
 int MockCheckedActualCall::returnIntValueOrDefault(int default_value)
@@ -559,6 +580,13 @@ void MockActualCallTrace::addParameterName(const SimpleString& name)
     traceBuffer_ += ":";
 }
 
+MockActualCall& MockActualCallTrace::withBoolParameter(const SimpleString& name, bool value)
+{
+    addParameterName(name);
+    traceBuffer_ += StringFrom(value);
+    return *this;
+}
+
 MockActualCall& MockActualCallTrace::withUnsignedIntParameter(const SimpleString& name, unsigned int value)
 {
     addParameterName(name);
@@ -682,6 +710,16 @@ unsigned long int MockActualCallTrace::returnUnsignedLongIntValueOrDefault(unsig
 long int MockActualCallTrace::returnLongIntValueOrDefault(long int)
 {
     return returnLongIntValue();
+}
+
+bool MockActualCallTrace::returnBoolValue()
+{
+    return false;
+}
+
+bool MockActualCallTrace::returnBoolValueOrDefault(bool)
+{
+    return false;
 }
 
 int MockActualCallTrace::returnIntValue()
