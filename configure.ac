@@ -317,6 +317,9 @@ AC_ARG_ENABLE([memory-leak-detection], [AC_HELP_STRING([--disable-memory-leak-de
 AC_ARG_ENABLE([extensions], [AC_HELP_STRING([--disable-extensions], [disable CppUTest extension library])],
    [cpputest_ext=${enableval}], [cpputest_ext=yes])
 
+AC_ARG_ENABLE([longlong], [AC_HELP_STRING([--enable-longlong], [enable support for long long type])],
+   [use_longlong=${enableval}], [use_longlong=no])
+
 AC_ARG_ENABLE([generate-map-file], [AC_HELP_STRING([--enable-generate-map-file], [enable the creation of a map file])],
    [generate_map_file=${enableval}], [generate_map_file=no])
 
@@ -363,6 +366,11 @@ if test "x${memory_leak_detection}" = xno; then
 else
 	CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} -include ${srcdir}/include/CppUTest/MemoryLeakDetectorNewMacros.h"
 	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -include ${srcdir}/include/CppUTest/MemoryLeakDetectorMallocMacros.h"
+fi
+
+# Support for long long
+if test "x${use_longlong}" = xyes; then
+	AC_DEFINE([CPPUTEST_USE_LONG_LONG], 1, [enable long long])
 fi
 
 # Generating map files.
@@ -484,6 +492,7 @@ Current compiler options:
 Features configured in ${PACKAGE_NAME}:
    Memory Leak Detection:               ${memory_leak_detection}
    Compiling extensions:                ${cpputest_ext}
+   Long Long support:                   ${use_longlong}
    Disable CppUTest compile/link flags: ${cpputest_flags}
 
    Using Standard C++ Library:          ${use_std_cpp}
