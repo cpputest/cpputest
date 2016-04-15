@@ -160,6 +160,11 @@ ifndef CPPUTEST_USE_STD_CPP_LIB
 	CPPUTEST_USE_STD_CPP_LIB = Y
 endif
 
+# Use long long, off by default
+ifndef CPPUTEST_USE_LONG_LONG
+	CPPUTEST_USE_LONG_LONG = N
+endif
+
 # Use gcov, off by default
 ifndef CPPUTEST_USE_GCOV
 	CPPUTEST_USE_GCOV = N
@@ -273,6 +278,10 @@ else
     ifndef CPPUTEST_MEMLEAK_DETECTOR_MALLOC_MACRO_FILE
 	    CPPUTEST_MEMLEAK_DETECTOR_MALLOC_MACRO_FILE = -include $(CPPUTEST_HOME)/include/CppUTest/MemoryLeakDetectorMallocMacros.h
 	endif
+endif
+
+ifeq ($(CPPUTEST_USE_LONG_LONG), Y)
+	CPPUTEST_CPPFLAGS += -DCPPUTEST_USE_LONG_LONG
 endif
 
 ifeq ($(CPPUTEST_ENABLE_DEBUG), Y)

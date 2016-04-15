@@ -36,6 +36,7 @@ else (MSVC)
         Wno-disabled-macro-expansion
         Wno-reserved-id-macro
         Wno-keyword-macro
+	Wno-long-long
         )
 
     if (NOT GMOCK AND NOT REAL_GTEST)
