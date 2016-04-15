@@ -162,6 +162,49 @@ TEST(MockSupport_c, memoryBufferParameter)
     mock_c()->checkExpectations();
 }
 
+#ifdef CPPUTEST_USE_LONG_LONG
+
+TEST(MockSupport_c, longLongIntParameter)
+{
+    mock_c()->expectOneCall("foo")->withLongLongIntParameters("p", 1);
+    mock_c()->actualCall("foo")->withLongLongIntParameters("p", 1);
+}
+TEST(MockSupport_c, unsignedLongLongIntParameter)
+{
+    mock_c()->expectOneCall("foo")->withUnsignedLongLongIntParameters("p", 1);
+    mock_c()->actualCall("foo")->withUnsignedLongLongIntParameters("p", 1);
+}
+
+#else /* CPPUTEST_USE_LONG_LONG */
+
+static void longLongIntParameter_failure()
+{
+    mock_c()->expectOneCall("foo")->withLongLongIntParameters("p", CPPUTEST_LONGLONG_DEFAULT);
+	mock_c()->actualCall("foo")->withLongLongIntParameters("p", CPPUTEST_LONGLONG_DEFAULT);
+} // LCOV_EXCL_LINE
+static void unsignedLongLongIntParameter_failure()
+{
+	mock_c()->expectOneCall("foo")->withUnsignedLongLongIntParameters("p", CPPUTEST_ULONGLONG_DEFAULT);
+	mock_c()->actualCall("foo")->withUnsignedLongLongIntParameters("p", CPPUTEST_ULONGLONG_DEFAULT);
+} // LCOV_EXCL_LINE
+
+TEST(MockSupport_c, longLongIntParameter)
+{
+    TestTestingFixture fixture;
+    fixture.setTestFunction(longLongIntParameter_failure);
+    fixture.runAllTests();
+    fixture.assertPrintContains("<longlong_unsupported>");
+}
+TEST(MockSupport_c, unsignedLongLongIntParameter)
+{
+    TestTestingFixture fixture;
+    fixture.setTestFunction(unsignedLongLongIntParameter_failure);
+    fixture.runAllTests();
+    fixture.assertPrintContains("<ulonglong_unsupported>");
+}
+
+#endif /* CPPUTEST_USE_LONG_LONG */
+
 TEST(MockSupport_c, outputParameters)
 {
     int param = 1;
@@ -334,6 +377,110 @@ TEST(MockSupport_c, whenNoReturnValueIsGivenReturnUnsignedLongIntValueOrDefaultS
     LONGS_EQUAL(defaultValue, mock_c()->returnUnsignedLongIntValueOrDefault(defaultValue));
 }
 
+#ifdef CPPUTEST_USE_LONG_LONG
+
+TEST(MockSupport_c, returnLongLongIntValue)
+{
+    long long expected_value = 10;
+    mock_c()->expectOneCall("boo")->andReturnLongLongIntValue(expected_value);
+    LONGLONGS_EQUAL(expected_value, mock_c()->actualCall("boo")->returnValue().value.longLongIntValue);
+    LONGS_EQUAL(MOCKVALUETYPE_LONG_LONG_INTEGER, mock_c()->returnValue().type);
+}
+
+TEST(MockSupport_c, returnUnsignedLongLongIntValue)
+{
+    unsigned long long expected_value = 10;
+    mock_c()->expectOneCall("boo")->andReturnUnsignedLongLongIntValue(expected_value);
+    UNSIGNED_LONGLONGS_EQUAL(expected_value, mock_c()->actualCall("boo")->returnValue().value.unsignedLongLongIntValue);
+    LONGS_EQUAL(MOCKVALUETYPE_UNSIGNED_LONG_LONG_INTEGER, mock_c()->returnValue().type);
+}
+
+TEST(MockSupport_c, whenReturnValueIsGivenReturnUnsignedLongLongIntValueOrDefaultShouldIgnoreTheDefault)
+{
+    unsigned long long int defaultValue = 10L;
+    unsigned long long int expectedValue = defaultValue + 1L;
+    mock_c()->expectOneCall("foo")->andReturnUnsignedLongLongIntValue(expectedValue);
+    UNSIGNED_LONGLONGS_EQUAL(expectedValue, mock_c()->actualCall("foo")->returnUnsignedLongLongIntValueOrDefault(defaultValue));
+    UNSIGNED_LONGLONGS_EQUAL(expectedValue, mock_c()->returnUnsignedLongLongIntValueOrDefault(defaultValue));
+}
+
+TEST(MockSupport_c, whenNoReturnValueIsGivenReturnUnsignedLongLongIntValueOrDefaultShouldlUseTheDefaultValue)
+{
+    unsigned long long int defaultValue = 10L;
+    mock_c()->expectOneCall("foo");
+    LONGLONGS_EQUAL(defaultValue, mock_c()->actualCall("foo")->returnUnsignedLongLongIntValueOrDefault(defaultValue));
+    LONGLONGS_EQUAL(defaultValue, mock_c()->returnUnsignedLongLongIntValueOrDefault(defaultValue));
+}
+
+#else /* CPPUTEST_USE_LONG_LONG */
+
+static void returnLongLongIntValue_failure()
+{
+    mock_c()->expectOneCall("boo")->andReturnLongLongIntValue(CPPUTEST_LONGLONG_DEFAULT);
+    mock_c()->actualCall("boo")->longLongIntReturnValue();
+} // LCOV_EXCL_LINE
+static void returnUnsignedLongLongIntValue_failure()
+{
+    mock_c()->expectOneCall("boo")->andReturnUnsignedLongLongIntValue(CPPUTEST_ULONGLONG_DEFAULT);
+    mock_c()->actualCall("boo")->unsignedLongLongIntReturnValue();
+} // LCOV_EXCL_LINE
+
+static void returnLongLongIntValueOrDefault_failure()
+{
+    mock_c()->expectOneCall("boo")->andReturnLongLongIntValue(CPPUTEST_LONGLONG_DEFAULT);
+    mock_c()->actualCall("boo")->returnLongLongIntValueOrDefault(CPPUTEST_LONGLONG_DEFAULT);
+} // LCOV_EXCL_LINE
+static void returnUnsignedLongLongIntValueOrDefault_failure()
+{
+    mock_c()->expectOneCall("boo")->andReturnUnsignedLongLongIntValue(CPPUTEST_ULONGLONG_DEFAULT);
+    mock_c()->actualCall("boo")->returnUnsignedLongLongIntValueOrDefault(CPPUTEST_ULONGLONG_DEFAULT);
+} // LCOV_EXCL_LINE
+
+TEST(MockSupport_c, returnLongLongIntValue)
+{
+    TestTestingFixture fixture;
+    fixture.setTestFunction(returnLongLongIntValue_failure);
+    fixture.runAllTests();
+    fixture.assertPrintContains("\"CPPUTEST_USE_LONG_LONG\" is not supported");
+}
+TEST(MockSupport_c, returnUnsignedLongLongIntValue)
+{
+    TestTestingFixture fixture;
+    fixture.setTestFunction(returnUnsignedLongLongIntValue_failure);
+    fixture.runAllTests();
+    fixture.assertPrintContains("\"CPPUTEST_USE_LONG_LONG\" is not supported");
+}
+
+TEST(MockSupport_c, whenReturnValueIsGivenReturnLongLongIntValueOrDefaultShouldIgnoreTheDefaultAndThenFail)
+{
+    TestTestingFixture fixture;
+    fixture.setTestFunction(returnLongLongIntValueOrDefault_failure);
+    fixture.runAllTests();
+    fixture.assertPrintContains("\"CPPUTEST_USE_LONG_LONG\" is not supported");
+}
+TEST(MockSupport_c, whenReturnValueIsGivenReturnUnsignedLongLongIntValueOrDefaultShouldIgnoreTheDefaultAndThenFail)
+{
+    TestTestingFixture fixture;
+    fixture.setTestFunction(returnUnsignedLongLongIntValueOrDefault_failure);
+    fixture.runAllTests();
+    fixture.assertPrintContains("\"CPPUTEST_USE_LONG_LONG\" is not supported");
+}
+
+TEST(MockSupport_c, whenNoReturnValueIsGivenReturnLongLongIntValueOrDefaultShouldlUseTheDefaultValue)
+{
+    mock_c()->expectOneCall("foo");
+    mock_c()->actualCall("foo")->returnLongLongIntValueOrDefault(CPPUTEST_LONGLONG_DEFAULT);
+    // don't really care what this returns, but it doesn't trigger test failure
+}
+TEST(MockSupport_c, whenNoReturnValueIsGivenReturnUnsignedLongLongIntValueOrDefaultShouldlUseTheDefaultValue)
+{
+    mock_c()->expectOneCall("foo");
+    mock_c()->actualCall("foo")->returnUnsignedLongLongIntValueOrDefault(CPPUTEST_ULONGLONG_DEFAULT);
+    // don't really care what this returns, but it doesn't trigger test failure
+}
+
+#endif /* CPPUTEST_USE_LONG_LONG */
+
 TEST(MockSupport_c, returnStringValue)
 {
     mock_c()->expectOneCall("boo")->andReturnStringValue("hello world");
@@ -475,6 +622,50 @@ TEST(MockSupport_c, MockSupportSetIntData)
     mock_c()->setIntData("integer", 10);
     LONGS_EQUAL(10, mock_c()->getData("integer").value.intValue);
 }
+
+#ifdef CPPUTEST_USE_LONG_LONG
+
+TEST(MockSupport_c, MockSupportSetLongLongData)
+{
+    mock_c()->setLongLongIntData("long long integer", 10);
+    LONGLONGS_EQUAL(10, mock_c()->getData("long long integer").value.longLongIntValue);
+}
+
+TEST(MockSupport_c, MockSupportSetUnsignedLongLongData)
+{
+    mock_c()->setUnsignedLongLongIntData("long long integer", 10);
+    UNSIGNED_LONGLONGS_EQUAL(10, mock_c()->getData("long long integer").value.unsignedLongLongIntValue);
+}
+
+#else /* CPPUTEST_USE_LONG_LONG */
+
+static void MockSupportSetLongLongData_failure()
+{
+    mock_c()->setLongLongIntData("long long integer", CPPUTEST_LONGLONG_DEFAULT);
+    mock_c()->getData("long long integer");
+} // LCOV_EXCL_LINE
+static void MockSupportSetUnsignedLongLongData_failure()
+{
+    mock_c()->setUnsignedLongLongIntData("long long integer", CPPUTEST_ULONGLONG_DEFAULT);
+    mock_c()->getData("long long integer");
+} // LCOV_EXCL_LINE
+
+TEST(MockSupport_c, MockSupportSetLongLongData)
+{
+    TestTestingFixture fixture;
+    fixture.setTestFunction(MockSupportSetLongLongData_failure);
+    fixture.runAllTests();
+    fixture.assertPrintContains("\"CPPUTEST_USE_LONG_LONG\" is not supported");
+}
+TEST(MockSupport_c, MockSupportSetUnsignedLongLongData)
+{
+    TestTestingFixture fixture;
+    fixture.setTestFunction(MockSupportSetUnsignedLongLongData_failure);
+    fixture.runAllTests();
+    fixture.assertPrintContains("\"CPPUTEST_USE_LONG_LONG\" is not supported");
+}
+
+#endif /* CPPUTEST_USE_LONG_LONG */
 
 TEST(MockSupport_c, MockSupportSetDoubleData)
 {

@@ -237,4 +237,8 @@ MockExpectedObjectDidntHappenFailure::MockExpectedObjectDidntHappenFailure(Utest
     addExpectationsAndCallHistoryRelatedTo(functionName, expectations);
 }
 
+MockUnsupportedFeatureFailure::MockUnsupportedFeatureFailure(UtestShell* test, const SimpleString& featureName) : MockFailure(test)
+{
+    message_ = StringFromFormat("Mock Failure: The feature \"%s\" is not supported in this environment or with the feature set selected when building the library.\n", featureName.asCharString());
+}
 

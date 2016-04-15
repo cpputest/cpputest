@@ -45,6 +45,8 @@ public:
     virtual MockExpectedCall& withUnsignedIntParameter(const SimpleString& name, unsigned int value) _override;
     virtual MockExpectedCall& withLongIntParameter(const SimpleString& name, long int value) _override;
     virtual MockExpectedCall& withUnsignedLongIntParameter(const SimpleString& name, unsigned long int value) _override;
+    virtual MockExpectedCall& withLongLongIntParameter(const SimpleString& name, cpputest_longlong value) _override;
+    virtual MockExpectedCall& withUnsignedLongLongIntParameter(const SimpleString& name, cpputest_ulonglong value) _override;
     virtual MockExpectedCall& withDoubleParameter(const SimpleString& name, double value) _override;
     virtual MockExpectedCall& withStringParameter(const SimpleString& name, const char* value) _override;
     virtual MockExpectedCall& withPointerParameter(const SimpleString& name, void* value) _override;
@@ -61,6 +63,8 @@ public:
     virtual MockExpectedCall& andReturnValue(unsigned int value) _override;
     virtual MockExpectedCall& andReturnValue(long int value) _override;
     virtual MockExpectedCall& andReturnValue(unsigned long int value) _override;
+    virtual MockExpectedCall& andReturnValue(cpputest_longlong value) _override;
+    virtual MockExpectedCall& andReturnValue(cpputest_ulonglong value) _override;
     virtual MockExpectedCall& andReturnValue(double value) _override;
     virtual MockExpectedCall& andReturnValue(const char* value) _override;
     virtual MockExpectedCall& andReturnValue(void* value) _override;
@@ -148,6 +152,8 @@ public:
     virtual MockExpectedCall& withUnsignedIntParameter(const SimpleString& name, unsigned int value) _override;
     virtual MockExpectedCall& withLongIntParameter(const SimpleString& name, long int value) _override;
     virtual MockExpectedCall& withUnsignedLongIntParameter(const SimpleString& name, unsigned long int value) _override;
+    virtual MockExpectedCall& withLongLongIntParameter(const SimpleString& name, cpputest_longlong value) _override;
+    virtual MockExpectedCall& withUnsignedLongLongIntParameter(const SimpleString& name, cpputest_ulonglong value) _override;
     virtual MockExpectedCall& withDoubleParameter(const SimpleString& name, double value) _override;
     virtual MockExpectedCall& withStringParameter(const SimpleString& name, const char* value) _override;
     virtual MockExpectedCall& withConstPointerParameter(const SimpleString& name, const void* value) _override;
@@ -164,6 +170,8 @@ public:
     virtual MockExpectedCall& andReturnValue(unsigned int value) _override;
     virtual MockExpectedCall& andReturnValue(long int value) _override;
     virtual MockExpectedCall& andReturnValue(unsigned long int value) _override;
+    virtual MockExpectedCall& andReturnValue(cpputest_longlong value) _override;
+    virtual MockExpectedCall& andReturnValue(cpputest_ulonglong value) _override;
     virtual MockExpectedCall& andReturnValue(double value) _override;
     virtual MockExpectedCall& andReturnValue(const char* value) _override;
     virtual MockExpectedCall& andReturnValue(void* value) _override;
@@ -189,6 +197,8 @@ public:
     virtual MockExpectedCall& withUnsignedIntParameter(const SimpleString&, unsigned int) _override{ return *this; }
     virtual MockExpectedCall& withLongIntParameter(const SimpleString&, long int) _override { return *this; }
     virtual MockExpectedCall& withUnsignedLongIntParameter(const SimpleString&, unsigned long int) _override { return *this; }
+    virtual MockExpectedCall& withLongLongIntParameter(const SimpleString&, cpputest_longlong) _override { return *this; }
+    virtual MockExpectedCall& withUnsignedLongLongIntParameter(const SimpleString&, cpputest_ulonglong) _override { return *this; }
     virtual MockExpectedCall& withDoubleParameter(const SimpleString&, double) _override { return *this; }
     virtual MockExpectedCall& withStringParameter(const SimpleString&, const char*) _override { return *this; }
     virtual MockExpectedCall& withPointerParameter(const SimpleString& , void*) _override { return *this; }
@@ -205,6 +215,8 @@ public:
     virtual MockExpectedCall& andReturnValue(unsigned int) _override { return *this; }
     virtual MockExpectedCall& andReturnValue(long int) _override { return *this; }
     virtual MockExpectedCall& andReturnValue(unsigned long int) _override { return *this; }
+    virtual MockExpectedCall& andReturnValue(cpputest_longlong) _override { return *this; }
+    virtual MockExpectedCall& andReturnValue(cpputest_ulonglong) _override { return *this; }
     virtual MockExpectedCall& andReturnValue(double) _override { return *this;}
     virtual MockExpectedCall& andReturnValue(const char*) _override { return *this; }
     virtual MockExpectedCall& andReturnValue(void*) _override { return *this; }

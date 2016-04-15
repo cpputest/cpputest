@@ -45,6 +45,8 @@ public:
     MockExpectedCall& withParameter(const SimpleString& name, unsigned int value) { return withUnsignedIntParameter(name, value); }
     MockExpectedCall& withParameter(const SimpleString& name, long int value) { return withLongIntParameter(name, value); }
     MockExpectedCall& withParameter(const SimpleString& name, unsigned long int value) { return withUnsignedLongIntParameter(name, value); }
+    MockExpectedCall& withParameter(const SimpleString& name, cpputest_longlong value) { return withLongLongIntParameter(name, value); }
+    MockExpectedCall& withParameter(const SimpleString& name, cpputest_ulonglong value) { return withUnsignedLongLongIntParameter(name, value); }
     MockExpectedCall& withParameter(const SimpleString& name, double value) { return withDoubleParameter(name, value); }
     MockExpectedCall& withParameter(const SimpleString& name, const char* value) { return withStringParameter(name, value); }
     MockExpectedCall& withParameter(const SimpleString& name, void* value) { return withPointerParameter(name, value); }
@@ -61,6 +63,8 @@ public:
     virtual MockExpectedCall& withUnsignedIntParameter(const SimpleString& name, unsigned int value)=0;
     virtual MockExpectedCall& withLongIntParameter(const SimpleString& name, long int value)=0;
     virtual MockExpectedCall& withUnsignedLongIntParameter(const SimpleString& name, unsigned long int value)=0;
+    virtual MockExpectedCall& withLongLongIntParameter(const SimpleString& name, cpputest_longlong value)=0;
+    virtual MockExpectedCall& withUnsignedLongLongIntParameter(const SimpleString& name, cpputest_ulonglong value)=0;
     virtual MockExpectedCall& withDoubleParameter(const SimpleString& name, double value)=0;
     virtual MockExpectedCall& withStringParameter(const SimpleString& name, const char* value)=0;
     virtual MockExpectedCall& withPointerParameter(const SimpleString& name, void* value)=0;
@@ -72,6 +76,8 @@ public:
     virtual MockExpectedCall& andReturnValue(unsigned int value)=0;
     virtual MockExpectedCall& andReturnValue(long int value)=0;
     virtual MockExpectedCall& andReturnValue(unsigned long int value)=0;
+    virtual MockExpectedCall& andReturnValue(cpputest_longlong value)=0;
+    virtual MockExpectedCall& andReturnValue(cpputest_ulonglong value)=0;
     virtual MockExpectedCall& andReturnValue(double value)=0;
     virtual MockExpectedCall& andReturnValue(const char* value)=0;
     virtual MockExpectedCall& andReturnValue(void* value)=0;

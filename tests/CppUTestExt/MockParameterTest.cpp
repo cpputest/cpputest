@@ -160,6 +160,97 @@ TEST(MockParameterTest, unsignedLongAndLongWithSameBitRepresentationShouldnotBeT
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 
+#ifdef CPPUTEST_USE_LONG_LONG
+
+TEST(MockParameterTest, mismatchedIntegerTypesIntAndUnsignedLongLongAreAllowed)
+{
+    mock().expectOneCall("foo").withParameter("parameter", (int)1);
+    mock().actualCall("foo").withParameter("parameter", (unsigned long long)1);
+
+    mock().expectOneCall("foo").withParameter("parameter", (unsigned long long)1);
+    mock().actualCall("foo").withParameter("parameter", (int)1);
+
+    mock().checkExpectations();
+}
+
+TEST(MockParameterTest, mismatchedIntegerTypesUnsignedAndLongLongAreAllowed)
+{
+    mock().expectOneCall("foo").withParameter("parameter", (unsigned)1);
+    mock().actualCall("foo").withParameter("parameter", (long long)1);
+
+    mock().expectOneCall("foo").withParameter("parameter", (long long)1);
+    mock().actualCall("foo").withParameter("parameter", (unsigned)1);
+
+    mock().checkExpectations();
+}
+
+TEST(MockParameterTest, mismatchedIntegerTypesUnsignedAndUnsignedLongLongAreAllowed)
+{
+    mock().expectOneCall("foo").withParameter("parameter", (unsigned)1);
+    mock().actualCall("foo").withParameter("parameter", (unsigned long long)1);
+
+    mock().expectOneCall("foo").withParameter("parameter", (unsigned long long)1);
+    mock().actualCall("foo").withParameter("parameter", (unsigned)1);
+
+    mock().checkExpectations();
+}
+
+TEST(MockParameterTest, mismatchedIntegerTypesLongAndUnsignedLongLongAreAllowed)
+{
+    mock().expectOneCall("foo").withParameter("parameter", (long)1);
+    mock().actualCall("foo").withParameter("parameter", (unsigned long long)1);
+
+    mock().expectOneCall("foo").withParameter("parameter", (unsigned long long)1);
+    mock().actualCall("foo").withParameter("parameter", (long)1);
+
+    mock().checkExpectations();
+}
+
+TEST(MockParameterTest, mismatchedIntegerTypesLongLongAndUnsignedLongLongAreAllowed)
+{
+    mock().expectOneCall("foo").withParameter("parameter", (long long)1);
+    mock().actualCall("foo").withParameter("parameter", (unsigned long long)1);
+
+    mock().expectOneCall("foo").withParameter("parameter", (unsigned long long)1);
+    mock().actualCall("foo").withParameter("parameter", (long long)1);
+
+    mock().checkExpectations();
+}
+
+TEST(MockParameterTest, longLongAndUnsignedLongLongWithSameBitRepresentationShouldNotBeTreatedAsEqual)
+{
+    MockFailureReporterInstaller failureReporterInstaller;
+
+    MockExpectedCallsListForTest expectations;
+    expectations.addFunction("foo")->withParameter("parameter", (long long)-1);
+    MockNamedValue parameter("parameter");
+    parameter.setValue((unsigned long long)-1);
+    MockUnexpectedInputParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, expectations);
+
+    mock().expectOneCall("foo").withParameter("parameter", (long long)-1);
+    mock().actualCall("foo").withParameter("parameter", (unsigned long long)-1);
+
+    CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
+TEST(MockParameterTest, unsignedLongLongAndLongLongWithSameBitRepresentationShouldnotBeTreatedAsEqual)
+{
+    MockFailureReporterInstaller failureReporterInstaller;
+
+    MockExpectedCallsListForTest expectations;
+    expectations.addFunction("foo")->withParameter("parameter", (unsigned long long)-1);
+    MockNamedValue parameter("parameter");
+    parameter.setValue((long long)-1);
+    MockUnexpectedInputParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, expectations);
+
+    mock().expectOneCall("foo").withParameter("parameter", (unsigned long long)-1);
+    mock().actualCall("foo").withParameter("parameter", (long long)-1);
+
+    CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
+#endif /* CPPUTEST_USE_LONG_LONG */
+
 TEST(MockParameterTest, expectOneDoubleParameterAndValue)
 {
     mock().expectOneCall("foo").withParameter("parameter", 1.0);
@@ -690,6 +781,8 @@ TEST(MockParameterTest, ignoreOtherCallsIgnoresWithAllKindsOfParameters)
            .withParameter("foo", 1l)
            .withParameter("hey", 1ul)
            .withParameter("duh", 1.0)
+           .withParameter("sll", CPPUTEST_LONGLONG_DEFAULT)
+           .withParameter("ull", CPPUTEST_ULONGLONG_DEFAULT)
            .withParameter("yoo", (const void*) 0)
            .withParameter("func", (void(*)()) 0)
            .withParameter("mem", (const unsigned char*) 0, 0)

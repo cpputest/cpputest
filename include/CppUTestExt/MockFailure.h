@@ -120,4 +120,10 @@ public:
     MockExpectedObjectDidntHappenFailure(UtestShell* test, const SimpleString& functionName, const MockExpectedCallsList& expectations);
 };
 
+class MockUnsupportedFeatureFailure : public MockFailure
+{
+public:
+    MockUnsupportedFeatureFailure(UtestShell* test, const SimpleString& featureName);
+};
+
 #endif

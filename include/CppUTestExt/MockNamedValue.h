@@ -106,6 +106,8 @@ public:
     virtual void setValue(unsigned int value);
     virtual void setValue(long int value);
     virtual void setValue(unsigned long int value);
+    virtual void setValue(cpputest_longlong value);
+    virtual void setValue(cpputest_ulonglong value);
     virtual void setValue(double value);
     virtual void setValue(void* value);
     virtual void setValue(const void* value);
@@ -130,6 +132,8 @@ public:
     virtual unsigned int getUnsignedIntValue() const;
     virtual long int getLongIntValue() const;
     virtual unsigned long int getUnsignedLongIntValue() const;
+    virtual cpputest_longlong getLongLongIntValue() const;
+    virtual cpputest_ulonglong getUnsignedLongLongIntValue() const;
     virtual double getDoubleValue() const;
     virtual const char* getStringValue() const;
     virtual void* getPointerValue() const;
@@ -152,6 +156,8 @@ private:
         unsigned int unsignedIntValue_;
         long int longIntValue_;
         unsigned long int unsignedLongIntValue_;
+        cpputest_longlong longLongIntValue_;
+        cpputest_ulonglong unsignedLongLongIntValue_;
         double doubleValue_;
         const char* stringValue_;
         void* pointerValue_;
@@ -165,6 +171,8 @@ private:
     MockNamedValueComparator* comparator_;
     MockNamedValueCopier* copier_;
     static MockNamedValueComparatorsAndCopiersRepository* defaultRepository_;
+
+    MockNamedValue integerPromotion() const;
 };
 
 class MockNamedValueListNode

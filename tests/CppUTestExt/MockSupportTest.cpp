@@ -44,6 +44,30 @@ TEST_GROUP(MockSupportTest)
   }
 };
 
+TEST(MockSupportTest, setDataForUnsignedLongLongIntegerValues)
+{
+#ifdef CPPUTEST_USE_LONG_LONG
+    unsigned long long int expected_data = 7;
+    mock().setData("data", expected_data);
+    UNSIGNED_LONGLONGS_EQUAL(expected_data, mock().getData("data").getUnsignedLongLongIntValue());
+#else
+    mock().setData("data", CPPUTEST_ULONGLONG_DEFAULT);
+    STRCMP_EQUAL("unsigned long long int", mock().getData("data").getType().asCharString());
+#endif
+}
+
+TEST(MockSupportTest, setDataForLongLongIntegerValues)
+{
+#ifdef CPPUTEST_USE_LONG_LONG
+    long long int expected_data = -7;
+    mock().setData("data", expected_data);
+    LONGLONGS_EQUAL(expected_data, mock().getData("data").getLongLongIntValue());
+#else
+    mock().setData("data", CPPUTEST_LONGLONG_DEFAULT);
+    STRCMP_EQUAL("long long int", mock().getData("data").getType().asCharString());
+#endif
+}
+
 TEST(MockSupportTest, setDataForUnsignedIntegerValues)
 {
     unsigned int expected_data = 7;
