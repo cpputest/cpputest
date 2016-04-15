@@ -261,6 +261,129 @@ IGNORE_TEST(UnitTestMacros, UNSIGNED_LONGS_EQUAL_TEXTWorksInAnIgnoredTest)
     UNSIGNED_LONGS_EQUAL_TEXT(1, 0, "Failed because it failed"); // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
 
+#ifdef CPPUTEST_USE_LONG_LONG
+
+static void _LONGLONGS_EQUALTestMethod()
+{
+    LONGLONGS_EQUAL(1, 1);
+    LONGLONGS_EQUAL(1, 0);
+} // LCOV_EXCL_LINE
+
+TEST(UnitTestMacros, TestLONGLONGS_EQUAL)
+{
+    runTestWithMethod(_LONGLONGS_EQUALTestMethod);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1 0x1>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0 0x0>");
+}
+
+TEST(UnitTestMacros, LONGLONGS_EQUALBehavesAsProperMacro)
+{
+    if (false) LONGLONGS_EQUAL(1, 0)
+    else LONGLONGS_EQUAL(1, 1)
+}
+
+IGNORE_TEST(UnitTestMacros, LONGLONGS_EQUALWorksInAnIgnoredTest)
+{
+    LONGLONGS_EQUAL(1, 0); // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
+
+static void _LONGLONGS_EQUAL_TEXTTestMethod()
+{
+    LONGLONGS_EQUAL_TEXT(1, 0, "Failed because it failed");
+} // LCOV_EXCL_LINE
+
+TEST(UnitTestMacros, TestLONGLONGS_EQUAL_TEXT)
+{
+    runTestWithMethod(_LONGLONGS_EQUAL_TEXTTestMethod);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1 0x1>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0 0x0>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("Failed because it failed");
+}
+
+TEST(UnitTestMacros, LONGLONGS_EQUAL_TEXTBehavesAsProperMacro)
+{
+    if (false) LONGLONGS_EQUAL_TEXT(1, 0, "Failed because it failed")
+    else LONGLONGS_EQUAL_TEXT(1, 1, "Failed because it failed")
+}
+
+IGNORE_TEST(UnitTestMacros, LONGLONGS_EQUAL_TEXTWorksInAnIgnoredTest)
+{
+    LONGLONGS_EQUAL_TEXT(1, 0, "Failed because it failed"); // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
+
+static void _UNSIGNED_LONGLONGS_EQUALTestMethod()
+{
+    UNSIGNED_LONGLONGS_EQUAL(1, 1);
+    UNSIGNED_LONGLONGS_EQUAL(1, 0);
+} // LCOV_EXCL_LINE
+
+TEST(UnitTestMacros, TestUNSIGNED_LONGLONGS_EQUAL)
+{
+    runTestWithMethod(_UNSIGNED_LONGLONGS_EQUALTestMethod);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1 (0x1) 0x1>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0 (0x0) 0x0>");
+}
+
+TEST(UnitTestMacros, UNSIGNED_LONGLONGS_EQUALBehavesAsProperMacro)
+{
+    if (false) UNSIGNED_LONGLONGS_EQUAL(1, 0)
+    else UNSIGNED_LONGLONGS_EQUAL(1, 1)
+}
+
+IGNORE_TEST(UnitTestMacros, UNSIGNED_LONGLONGS_EQUALWorksInAnIgnoredTest)
+{
+    UNSIGNED_LONGLONGS_EQUAL(1, 0); // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
+
+static void _UNSIGNED_LONGLONGS_EQUAL_TEXTTestMethod()
+{
+    UNSIGNED_LONGLONGS_EQUAL_TEXT(1, 0, "Failed because it failed");
+} // LCOV_EXCL_LINE
+
+TEST(UnitTestMacros, TestUNSIGNED_LONGLONGS_EQUAL_TEXT)
+{
+    runTestWithMethod(_UNSIGNED_LONGLONGS_EQUAL_TEXTTestMethod);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1 (0x1) 0x1>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0 (0x0) 0x0>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("Failed because it failed");
+}
+
+TEST(UnitTestMacros, UNSIGNED_LONGLONGS_EQUAL_TEXTBehavesAsProperMacro)
+{
+    if (false) UNSIGNED_LONGLONGS_EQUAL_TEXT(1, 0, "Failed because it failed")
+    else UNSIGNED_LONGLONGS_EQUAL_TEXT(1, 1, "Failed because it failed")
+}
+
+IGNORE_TEST(UnitTestMacros, UNSIGNED_LONGLONGS_EQUAL_TEXTWorksInAnIgnoredTest)
+{
+    UNSIGNED_LONGLONGS_EQUAL_TEXT(1, 0, "Failed because it failed"); // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
+
+
+#else /* CPPUTEST_USE_LONG_LONG */
+
+static void _LONGLONGS_EQUALFailsWithUnsupportedFeatureTestMethod()
+{
+    LONGLONGS_EQUAL(CPPUTEST_LONGLONG_DEFAULT, CPPUTEST_LONGLONG_DEFAULT);
+} // LCOV_EXCL_LINE
+static void _UNSIGNED_LONGLONGS_EQUALFailsWithUnsupportedFeatureTestMethod()
+{
+    UNSIGNED_LONGLONGS_EQUAL(CPPUTEST_ULONGLONG_DEFAULT, CPPUTEST_ULONGLONG_DEFAULT);
+} // LCOV_EXCL_LINE
+
+TEST(UnitTestMacros, LONGLONGS_EQUALFailsWithUnsupportedFeature)
+{
+    runTestWithMethod(_LONGLONGS_EQUALFailsWithUnsupportedFeatureTestMethod);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("\"CPPUTEST_USE_LONG_LONG\" is not supported");
+}
+TEST(UnitTestMacros, UNSIGNED_LONGLONGS_EQUALFailsWithUnsupportedFeature)
+{
+    runTestWithMethod(_UNSIGNED_LONGLONGS_EQUALFailsWithUnsupportedFeatureTestMethod);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("\"CPPUTEST_USE_LONG_LONG\" is not supported");
+}
+
+#endif /* CPPUTEST_USE_LONG_LONG */
+
 static void _failingTestMethodWithCHECK()
 {
     CHECK(false);

@@ -56,6 +56,7 @@ AC_TYPE_UINT16_T
 AC_TYPE_UINT32_T
 AC_TYPE_UINT64_T
 AC_TYPE_UINT8_T
+AC_TYPE_LONG_LONG_INT
 
 # Checks for library functions.
 AC_FUNC_FORK
@@ -185,6 +186,12 @@ CFLAGS="$saved_cflags"
 CXXFLAGS="-Werror -Wno-keyword-macro"
 AC_MSG_CHECKING([whether CC and CXX supports -Wno-keyword-macro])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wno-keyword-macro"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wno-keyword-macro" ], [AC_MSG_RESULT([no])])
+CFLAGS="$saved_cflags"
+
+# FLag -Wno-long-long.
+CXXFLAGS="-Werror -Wno-long-long"
+AC_MSG_CHECKING([whether CC and CXX supports -Wno-long-long])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wno-long-long"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wno-long-long" ], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 
 # FLag -Wno-global-constructors.
