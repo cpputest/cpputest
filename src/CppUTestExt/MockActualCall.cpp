@@ -106,7 +106,7 @@ void MockCheckedActualCall::finalizeOutputParameters(MockCheckedExpectedCall* ex
 void MockCheckedActualCall::finalizeCallWhenFulfilled()
 {
     if (unfulfilledExpectations_.hasFulfilledExpectationsWithoutIgnoredParameters()) {
-        finalizeOutputParameters(unfulfilledExpectations_.getOneFulfilledExpectationWithIgnoredParameters());
+        finalizeOutputParameters(unfulfilledExpectations_.getOneFulfilledExpectationWithoutIgnoredParameters());
     }
 
     if (unfulfilledExpectations_.hasFulfilledExpectations()) {

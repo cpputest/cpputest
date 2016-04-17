@@ -222,7 +222,7 @@ MockCheckedExpectedCall* MockExpectedCallsList::removeOneFulfilledExpectation()
     return NULL;
 }
 
-MockCheckedExpectedCall* MockExpectedCallsList::getOneFulfilledExpectationWithIgnoredParameters()
+MockCheckedExpectedCall* MockExpectedCallsList::getOneFulfilledExpectationWithoutIgnoredParameters()
 {
     for (MockExpectedCallsListNode* p = head_; p; p = p->next_) {
         if (p->expectedCall_->isFulfilledWithoutIgnoredParameters()) {
