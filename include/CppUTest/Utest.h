@@ -114,7 +114,7 @@ public:
     virtual void assertLongsEqual(long expected, long actual, const char* text, const char *fileName, int lineNumber, const TestTerminator& testTerminator = NormalTestTerminator());
     virtual void assertUnsignedLongsEqual(unsigned long expected, unsigned long actual, const char* text, const char *fileName, int lineNumber, const TestTerminator& testTerminator = NormalTestTerminator());
     virtual void assertPointersEqual(const void *expected, const void *actual, const char* text, const char *fileName, int lineNumber, const TestTerminator& testTerminator = NormalTestTerminator());
-    virtual void assertFunctionPointersEqual(void (*expected)(), void (*actual)(), const char* text, const char* fileName, int lineNumber);
+    virtual void assertFunctionPointersEqual(void (*expected)(), void (*actual)(), const char* text, const char* fileName, int lineNumber, const TestTerminator& testTerminator = NormalTestTerminator());
     virtual void assertDoublesEqual(double expected, double actual, double threshold, const char* text, const char *fileName, int lineNumber, const TestTerminator& testTerminator = NormalTestTerminator());
     virtual void assertEquals(bool failed, const char* expected, const char* actual, const char* text, const char* file, int line, const TestTerminator& testTerminator = NormalTestTerminator());
     virtual void assertBinaryEqual(const void *expected, const void *actual, size_t length, const char* text, const char *fileName, int lineNumber, const TestTerminator& testTerminator = NormalTestTerminator());
@@ -136,6 +136,8 @@ public:
 
     virtual bool isRunInSeperateProcess() const;
     virtual void setRunInSeperateProcess();
+
+    virtual void setRunIgnored();
 
     virtual Utest* createTest();
     virtual void destroyTest(Utest* test);
@@ -169,6 +171,8 @@ private:
     static TestResult* testResult_;
 
 };
+
+
 
 //////////////////// ExecFunctionTest
 
@@ -221,13 +225,16 @@ public:
     explicit IgnoredUtestShell(const char* groupName, const char* testName,
             const char* fileName, int lineNumber);
     virtual bool willRun() const _override;
-    protected:  virtual SimpleString getMacroName() const _override;
+    virtual void setRunIgnored() _override;
+protected:
+    virtual SimpleString getMacroName() const _override;
     virtual void runOneTest(TestPlugin* plugin, TestResult& result) _override;
-
 private:
 
     IgnoredUtestShell(const IgnoredUtestShell&);
     IgnoredUtestShell& operator=(const IgnoredUtestShell&);
+
+    bool runIgnored_;
 
 };
 

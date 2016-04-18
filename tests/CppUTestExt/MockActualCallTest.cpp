@@ -137,6 +137,8 @@ TEST(MockCheckedActualCall, MockIgnoredActualCallWorksAsItShould)
     actual.withName("func");
     actual.withCallOrder(1);
 
+    CHECK(false == actual.returnBoolValue());
+    CHECK(false == actual.returnBoolValueOrDefault(true));
     CHECK(0 == actual.returnUnsignedLongIntValue());
     CHECK(0 == actual.returnIntValue());
     CHECK(1ul == actual.returnUnsignedLongIntValueOrDefault(1ul));
@@ -145,8 +147,8 @@ TEST(MockCheckedActualCall, MockIgnoredActualCallWorksAsItShould)
     CHECK(1l == actual.returnLongIntValueOrDefault(1l));
     CHECK(0 == actual.returnUnsignedIntValue());
     CHECK(1u == actual.returnUnsignedIntValueOrDefault(1u));
-    DOUBLES_EQUAL(0.0f, actual.returnDoubleValue(), 0.0f);
-    DOUBLES_EQUAL(1.5f, actual.returnDoubleValueOrDefault(1.5f), 0.0f);
+    DOUBLES_EQUAL(0.0, actual.returnDoubleValue(), 0.0);
+    DOUBLES_EQUAL(1.5, actual.returnDoubleValueOrDefault(1.5), 0.0);
     STRCMP_EQUAL("bla", actual.returnStringValueOrDefault("bla"));
     STRCMP_EQUAL("", actual.returnStringValue());
     CHECK(0 == actual.returnPointerValue());
@@ -170,6 +172,7 @@ TEST(MockCheckedActualCall, remainderOfMockActualCallTraceWorksAsItShould)
     actual.withCallOrder(1);
     actual.onObject(&value);
 
+    actual.withBoolParameter("bool", true);
     actual.withUnsignedIntParameter("unsigned_int", (unsigned int) 1);
     actual.withUnsignedLongIntParameter("unsigned_long", (unsigned long)1);
     actual.withLongIntParameter("long_int", (long int) 1);
@@ -183,6 +186,7 @@ TEST(MockCheckedActualCall, remainderOfMockActualCallTraceWorksAsItShould)
     expectedString += " withCallOrder:1";
     expectedString += " onObject:0x";
     expectedString += HexStringFrom(&value);
+    expectedString += " bool:true";
     expectedString += " unsigned_int:         1 (0x00000001)";
     expectedString += " unsigned_long:1 (0x1)";
     expectedString += " long_int:1";
@@ -199,6 +203,8 @@ TEST(MockCheckedActualCall, remainderOfMockActualCallTraceWorksAsItShould)
 
     CHECK_FALSE(actual.hasReturnValue());
     CHECK(actual.returnValue().equals(MockNamedValue("")));
+    CHECK(false == actual.returnBoolValue());
+    CHECK(false == actual.returnBoolValueOrDefault(true));
     CHECK(0 == actual.returnLongIntValue());
     CHECK(0 == actual.returnUnsignedLongIntValue());
     CHECK(0 == actual.returnIntValue());
@@ -208,8 +214,8 @@ TEST(MockCheckedActualCall, remainderOfMockActualCallTraceWorksAsItShould)
     CHECK(0 == actual.returnLongIntValueOrDefault(1l));
     CHECK(0 == actual.returnUnsignedIntValue());
     CHECK(0 == actual.returnUnsignedIntValueOrDefault(1u));
-    DOUBLES_EQUAL(0.0f, actual.returnDoubleValue(), 0.0f);
-    DOUBLES_EQUAL(0.0f, actual.returnDoubleValueOrDefault(1.0f), 0.0f);
+    DOUBLES_EQUAL(0.0, actual.returnDoubleValue(), 0.0);
+    DOUBLES_EQUAL(0.0, actual.returnDoubleValueOrDefault(1.0), 0.0);
     STRCMP_EQUAL("", actual.returnStringValueOrDefault("bla"));
     STRCMP_EQUAL("", actual.returnStringValue());
     CHECK(0 == actual.returnPointerValue());

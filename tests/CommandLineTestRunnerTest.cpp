@@ -32,6 +32,8 @@
 #include "CppUTest/TestPlugin.h"
 #include "CppUTest/JUnitTestOutput.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
+#include "CppUTestExt/MockSupport.h"
+
 
 class DummyPluginWhichCountsThePlugins : public TestPlugin
 {
@@ -260,3 +262,65 @@ TEST(CommandLineTestRunner, realTeamCityOutputShouldBeCreatedAndWorkProperly)
     STRCMP_CONTAINS("##teamcity[testFinished name='test'", FakeOutput::console.asCharString());
     STRCMP_CONTAINS("##teamcity[testSuiteFinished name='group'", FakeOutput::console.asCharString());
 }
+
+
+class RunIgnoredUtest : public Utest
+{
+public:
+    static bool Checker;
+    void testBody()
+    {
+        Checker = true;
+    }
+};
+
+bool RunIgnoredUtest::Checker = false;
+
+class RunIgnoredUtestShell : public IgnoredUtestShell
+{
+public:
+    RunIgnoredUtestShell(const char* groupName, const char* testName, const char* fileName, int lineNumber)
+        : IgnoredUtestShell(groupName, testName, fileName, lineNumber) {}
+    virtual Utest* createTest() _override { return new RunIgnoredUtest; }
+};
+
+TEST_GROUP(RunIgnoredTest)
+{
+    TestRegistry registry;
+    RunIgnoredUtestShell *runIgnoredTest;
+    DummyPluginWhichCountsThePlugins* pluginCountingPlugin;
+
+    void setup()
+    {
+      runIgnoredTest = new RunIgnoredUtestShell("group", "test", "file", 1);
+      registry.addTest(runIgnoredTest);
+      pluginCountingPlugin = new DummyPluginWhichCountsThePlugins("PluginCountingPlugin", &registry);
+    }
+    void teardown()
+    {
+      delete pluginCountingPlugin;
+      delete runIgnoredTest;
+      RunIgnoredUtest::Checker = false;
+    }
+};
+
+TEST(RunIgnoredTest, IgnoreTestWillBeIgnoredIfNoOptionSpecified)
+{
+    const char* argv[] = { "tests.exe" };
+
+    CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(1, argv, &registry);
+    commandLineTestRunner.runAllTestsMain();
+
+    CHECK_FALSE( RunIgnoredUtest::Checker );
+}
+
+TEST(RunIgnoredTest, IgnoreTestWillGetRunIfOptionSpecified)
+{
+    const char* argv[] = { "tests.exe", "-ri" };
+
+    CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(2, argv, &registry);
+    commandLineTestRunner.runAllTestsMain();
+
+    CHECK_TRUE( RunIgnoredUtest::Checker );
+}
+

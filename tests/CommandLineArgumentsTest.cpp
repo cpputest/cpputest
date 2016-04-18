@@ -370,7 +370,7 @@ TEST(CommandLineArguments, weirdParamatersPrintsUsageAndReturnsFalse)
     int argc = 2;
     const char* argv[] = { "tests.exe", "-SomethingWeird" };
     CHECK(!newArgumentParser(argc, argv));
-    STRCMP_EQUAL("usage [-v] [-c] [-p] [-lg] [-ln] [-r#] [-g|sg|xg|xsg groupName]... [-n|sn|xn|xsn testName]... [\"TEST(groupName, testName)\"]... [-o{normal, junit, teamcity}] [-k packageName]\n",
+    STRCMP_EQUAL("usage [-v] [-c] [-p] [-lg] [-ln] [-ri] [-r#] [-g|sg|xg|xsg groupName]... [-n|sn|xn|xsn testName]... [\"TEST(groupName, testName)\"]... [-o{normal, junit, teamcity}] [-k packageName]\n",
             args->usage());
 }
 
@@ -382,6 +382,7 @@ TEST(CommandLineArguments, pluginKnowsOption)
     CHECK(newArgumentParser(argc, argv));
     TestRegistry::getCurrentRegistry()->removePluginByName("options");
 }
+
 
 TEST(CommandLineArguments, checkDefaultArguments)
 {
@@ -424,3 +425,12 @@ TEST(CommandLineArguments, lastParameterFieldMissing)
     CHECK(newArgumentParser(argc, argv));
     CHECK_EQUAL(SimpleString(""), args->getPackageName());
 }
+
+TEST(CommandLineArguments, setOptRun)
+{
+    int argc = 2;
+    const char* argv[] = { "tests.exe", "-ri"};
+    CHECK(newArgumentParser(argc, argv));
+    CHECK(args->isRunIgnored());
+}
+

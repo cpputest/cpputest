@@ -1,12 +1,6 @@
 ﻿
-# Helper function to extract vars out of the vsvars batch file
-function Get-Batchfile ($file) {
-    $cmd = "`"$file`" & set"
-    cmd /c $cmd | Foreach-Object {
-        $p, $v = $_.split('=')
-        Set-Item -path env:$p -value $v
-    }
-}
+# Load functions from the helper file
+. (Join-Path (Split-Path $MyInvocation.MyCommand.Path) 'appveyor_helpers.ps1')
 
 function Invoke-BuildCommand($command, $directory = '.')
 {
@@ -28,64 +22,19 @@ function Invoke-BuildCommand($command, $directory = '.')
 
 function Invoke-CygwinCommand($command, $directory = '.')
 {
-    # Assume cygwin is located at C:\cygwin for now
-    $cygwin_bin = "C:\cygwin\bin"
+    # Assume cygwin is located at C:\cygwin on x86 and C:\cygwin64 on x64 for now
+    $cygwin_bin = Get-CygwinBin
+
     $cygwin_directory = (. "${cygwin_bin}\cygpath.exe" (Resolve-Path $directory))
-    $command_wrapped = "${cygwin_bin}\bash.exe --login -c 'cd $cygwin_directory ; $command' ; `$err = `$?"
+    $command_wrapped = "${cygwin_bin}\bash.exe --login -c 'cd $cygwin_directory ; $command'"
     
-    Write-Host $command
+    Write-Host "Executing <$command> in <$cygwin_directory>"
     Invoke-Expression $command_wrapped
 
     if ($LASTEXITCODE -ne 0)
     {
         Write-Host "Command Returned error: $LASTEXITCODE"
         Exit $LASTEXITCODE
-    }
-}
-
-function Remove-PathFolder($folder)
-{
-    [System.Collections.ArrayList]$pathFolders = New-Object System.Collections.ArrayList
-    $env:Path -split ";" | foreach { $pathFolders.Add($_) | Out-Null }
-
-    for ([int]$i = 0; $i -lt $pathFolders.Count; $i++)
-    {
-        if ([string]::Compare($pathFolders[$i], $folder, $true) -eq 0)
-        {
-            Write-Host "Removing $folder from the PATH"
-            $pathFolders.RemoveAt($i)
-            $i--
-        }
-    }
-
-    $env:Path = $pathFolders -join ";"
-}
-
-function Add-PathFolder($folder)
-{
-    if (-not (Test-Path $folder))
-    {
-        Write-Host "Not adding $folder to the PATH, it does not exist"
-    }
-
-    [bool]$alreadyInPath = $false
-    [System.Collections.ArrayList]$pathFolders = New-Object System.Collections.ArrayList
-    $env:Path -split ";" | foreach { $pathFolders.Add($_) | Out-Null }
-
-    for ([int]$i = 0; $i -lt $pathFolders.Count; $i++)
-    {
-        if ([string]::Compare($pathFolders[$i], $folder, $true) -eq 0)
-        {
-            $alreadyInPath = $true
-            break
-        }
-    }
-
-    if (-not $alreadyInPath)
-    {
-        Write-Host "Adding $folder to the PATH"
-        $pathFolders.Insert(0, $folder)
-        $env:Path = $pathFolders -join ";"
     }
 }
 
@@ -102,57 +51,58 @@ else
     $logger_arg = ''
 }
 
-if ($env:PlatformToolset -eq 'v90')
+# Clean up some paths for any configuration
+Remove-PathFolder "C:\MinGW\bin"
+Remove-PathFolder "C:\Program Files\Git\bin"
+Remove-PathFolder "C:\Program Files\Git\cmd"
+Remove-PathFolder "C:\Program Files\Git\usr\bin"
+Remove-PathFolder "C:\Program Files (x86)\Git\bin"
+Remove-PathFolder "C:\Program Files (x86)\Git\cmd"
+Remove-PathFolder "C:\Program Files (x86)\Git\usr\bin"
+
+switch -Wildcard ($env:Platform)
 {
-    $vsvarspath = Join-Path $env:VS90COMNTOOLS vsvars32.bat
-    Get-BatchFile($vsvarspath)
-
-    $VS2008ProjectFiles | foreach {
-        Invoke-BuildCommand "vcbuild /upgrade $_"
-    }
-
-    $VS2008ProjectFiles | foreach {
-        Invoke-BuildCommand "vcbuild $_ $env:CONFIGURATION"
-    }
-}
-
-if ($env:PlatformToolset -eq 'v100')
-{
-    $VS2010ProjectFiles | foreach {
-        Invoke-BuildCommand "msbuild $logger_arg $_"
-    }
-}
-
-if ($env:PlatformToolset -eq 'Cygwin')
-{
-    Invoke-CygwinCommand "autoreconf -i .. ; ../configure ; make CppUTestTests.exe CppUTestExtTests.exe" "cpputest_build"
-}
-
-if ($env:PlatformToolset -eq 'MinGW')
-{
-    $mingw_path = 'C:\Tools\mingw32\bin'
-    if ($env:Platform -eq 'x64')
+    'Cygwin*'
     {
-        $mingw_path = 'C:\Tools\mingw64\bin'
+        Invoke-CygwinCommand "autoreconf -i .." "cpputest_build"
+        Invoke-CygwinCommand "../configure" "cpputest_build"
+        Invoke-CygwinCommand "make CppUTestTests.exe CppUTestExtTests.exe" "cpputest_build"
     }
 
-    Write-Host "Initial Path: $env:Path"
+    'MinGW*'
+    {
+        $mingw_path = Get-MinGWBin
 
-    # Need to do some path cleanup first
-    Remove-PathFolder "C:\MinGW\bin"
-    Remove-PathFolder "C:\Program Files\Git\bin"
-    Remove-PathFolder "C:\Program Files\Git\cmd"
-    Remove-PathFolder "C:\Program Files\Git\usr\bin"
-    Remove-PathFolder "C:\Program Files (x86)\Git\bin"
-    Remove-PathFolder "C:\Program Files (x86)\Git\cmd"
+        # Add mingw to the path
+        Add-PathFolder $mingw_path
 
-    # Add mingw to the path
-    Add-PathFolder $mingw_path
+        Invoke-BuildCommand "cmake -G 'MinGW Makefiles' .." 'cpputest_build'
+        Invoke-BuildCommand "mingw32-make all" 'cpputest_build'
 
-    Write-Host "Building with Path: $env:Path"
+        Remove-PathFolder $mingw_path
+    }
 
-    Invoke-BuildCommand "cmake -G 'MinGW Makefiles' .." 'cpputest_build'
-    Invoke-BuildCommand "mingw32-make all" 'cpputest_build'
+    default   # Assume that anything else uses Visual C++
+    {
+        if ($env:PlatformToolset -eq 'v90')
+        {
+            # Load environment variables from vsvars32.bat
+            $vsvarspath = Join-Path $env:VS90COMNTOOLS vsvars32.bat
+            Get-BatchFile($vsvarspath)
 
-    Remove-PathFolder $mingw_path
+            $VS2008ProjectFiles | foreach {
+                Invoke-BuildCommand "vcbuild /upgrade $_"
+            }
+
+            $VS2008ProjectFiles | foreach {
+                Invoke-BuildCommand "vcbuild $_ $env:CONFIGURATION"
+            }
+        }
+        else
+        {
+            $VS2010ProjectFiles | foreach {
+                Invoke-BuildCommand "msbuild /ToolsVersion:14.0 $logger_arg $_"
+            }
+        }
+    }
 }

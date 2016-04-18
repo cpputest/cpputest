@@ -1337,29 +1337,3 @@ TEST(UnitTestMacros, MultipleCHECK_THROWS_inOneScope)
     CHECK_THROWS(int, throw 4);
 }
 #endif
-
-TEST_GROUP(IgnoreTest)
-{
-    TestTestingFixture fixture;
-    IgnoredUtestShell ignoreTest;
-
-    void setup() _override
-    {
-        fixture.addTest(&ignoreTest);
-    }
-};
-
-TEST(IgnoreTest, doesIgnoreCount)
-{
-    fixture.runAllTests();
-    LONGS_EQUAL(1, fixture.getIgnoreCount());
-}
-
-TEST(IgnoreTest, printsIGNORE_TESTwhenVerbose)
-{
-    fixture.output_->verbose();
-    fixture.runAllTests();
-    fixture.assertPrintContains("IGNORE_TEST");
-}
-
-

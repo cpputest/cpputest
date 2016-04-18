@@ -44,7 +44,7 @@ MockSupport& mock(const SimpleString& mockName, MockFailureReporter* failureRepo
 }
 
 MockSupport::MockSupport(const SimpleString& mockName)
-    : callOrder_(0), expectedCallOrder_(0), strictOrdering_(false), standardReporter_(&defaultReporter_), ignoreOtherCalls_(false), enabled_(true), lastActualFunctionCall_(NULL), mockName_(mockName), tracing_(false) 
+    : callOrder_(0), expectedCallOrder_(0), strictOrdering_(false), standardReporter_(&defaultReporter_), ignoreOtherCalls_(false), enabled_(true), lastActualFunctionCall_(NULL), mockName_(mockName), tracing_(false)
 {
     setActiveReporter(NULL);
 }
@@ -118,7 +118,7 @@ void MockSupport::clear()
     tracing_ = false;
     MockActualCallTrace::instance().clear();
 
-    expectations_.deleteAllExpectationsAndClearList();    
+    expectations_.deleteAllExpectationsAndClearList();
     unExpectations_.deleteAllExpectationsAndClearList();
     compositeCalls_.clear();
     ignoreOtherCalls_ = false;
@@ -169,7 +169,7 @@ void MockSupport::expectNoCall(const SimpleString& functionName)
     countCheck();
 
     MockCheckedExpectedCall* call = new MockCheckedExpectedCall;
-    call->withName(functionName);
+    call->withName(appendScopeToName(functionName));
     unExpectations_.addExpectedCall(call);
 }
 
@@ -369,6 +369,12 @@ MockNamedValue* MockSupport::retrieveDataFromStore(const SimpleString& name)
     return newData;
 }
 
+void MockSupport::setData(const SimpleString& name, bool value)
+{
+    MockNamedValue* newData = retrieveDataFromStore(name);
+    newData->setValue(value);
+}
+
 void MockSupport::setData(const SimpleString& name, unsigned int value)
 {
     MockNamedValue* newData = retrieveDataFromStore(name);
@@ -469,6 +475,11 @@ MockNamedValue MockSupport::returnValue()
     return MockNamedValue("");
 }
 
+bool MockSupport::boolReturnValue()
+{
+    return returnValue().getBoolValue();
+}
+
 unsigned int MockSupport::unsignedIntReturnValue()
 {
     return returnValue().getUnsignedIntValue();
@@ -499,6 +510,14 @@ long int MockSupport::returnLongIntValueOrDefault(long int defaultValue)
 {
     if (hasReturnValue()) {
         return longIntReturnValue();
+    }
+    return defaultValue;
+}
+
+bool MockSupport::returnBoolValueOrDefault(bool defaultValue)
+{
+    if (hasReturnValue()) {
+        return boolReturnValue();
     }
     return defaultValue;
 }

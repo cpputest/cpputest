@@ -71,7 +71,7 @@ TEST_GROUP(SimpleMutexTest)
         mutexLockCount = 0;
         mutexUnlockCount = 0;
     }
-    
+
     void teardown()
     {
     }

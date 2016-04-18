@@ -50,7 +50,7 @@ int main(int ac, char** av)
     MyDummyComparator dummyComparator;
     MockSupportPlugin mockPlugin;
     IEEE754ExceptionsPlugin ieee754Plugin;
-    
+
     mockPlugin.installComparator("MyDummyType", dummyComparator);
     TestRegistry::getCurrentRegistry()->installPlugin(&mockPlugin);
     TestRegistry::getCurrentRegistry()->installPlugin(&ieee754Plugin);
