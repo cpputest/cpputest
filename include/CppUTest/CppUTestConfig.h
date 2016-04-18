@@ -200,7 +200,7 @@
 #endif
 
 /* Support for "long long" type */
-#ifdef CPPUTEST_USE_LONG_LONG
+#if defined(CPPUTEST_USE_LONG_LONG) && !defined(CPPUTEST_BUILD_DOWNLEVEL_API)
 typedef long long cpputest_longlong;
 typedef unsigned long long cpputest_ulonglong;
 #define CPPUTEST_LONGLONG_DEFAULT ((cpputest_longlong)0)

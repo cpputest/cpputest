@@ -41,6 +41,7 @@ lib_libCppUTest_a_SOURCES = \
 	src/CppUTest/SimpleString.cpp \
 	src/CppUTest/SimpleMutex.cpp \
 	src/CppUTest/TeamCityTestOutput.cpp \
+	src/CppUTest/TestDownlevelApi.cpp \
 	src/CppUTest/TestFailure.cpp \
 	src/CppUTest/TestFilter.cpp \
 	src/CppUTest/TestHarness_c.cpp \

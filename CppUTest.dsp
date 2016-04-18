@@ -170,6 +170,10 @@ SOURCE=.\SRC\CPPUTEST\TeamCityTestOutput.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\SRC\CPPUTEST\TestDownlevelApi.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\SRC\CPPUTEST\TestFailure.cpp
 # End Source File
 # Begin Source File

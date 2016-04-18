@@ -132,6 +132,7 @@
     <ClCompile Include="src\CppUTest\MemoryLeakWarningPlugin.cpp" />
     <ClCompile Include="src\CppUTest\SimpleMutex.cpp" />
     <ClCompile Include="src\CppUTest\SimpleString.cpp" />
+    <ClCompile Include="src\CppUTest\TestDownlevelApi.cpp" />
     <ClCompile Include="src\CppUTest\TestFailure.cpp" />
     <ClCompile Include="src\CppUTest\TestFilter.cpp" />
     <ClCompile Include="src\CppUTest\TestHarness_c.cpp" />
