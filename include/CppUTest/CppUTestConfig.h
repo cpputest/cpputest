@@ -29,8 +29,8 @@
 #ifndef CPPUTESTCONFIG_H_
 #define CPPUTESTCONFIG_H_
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
+#ifndef CPPUTEST_USE_OWN_CONFIGURATION
+#include "CppUTestGeneratedConfig.h"
 #endif
 
 /*
