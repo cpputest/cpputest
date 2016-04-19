@@ -31,13 +31,3 @@ TEST_GROUP(PreprocessorTest)
 {
 };
 
-/* TODO: Need to fix this on all platforms! */
-#if 0
-#ifndef CPPUTEST_COMPILATION
-
-TEST(PreprocessorTest, FailWhenCPPUTEST_COMPILATIONIsNotDefined)
-{
-    FAIL("CPPUTEST_COMPILATION should always be defined when compiling CppUTest");
-}
-#endif
-#endif
