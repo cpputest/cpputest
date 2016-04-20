@@ -200,11 +200,13 @@
 #endif
 
 /* Support for "long long" type */
+#ifdef CPPUTEST_HAVE_LONG_LONG_INT
+#define CPPUTEST_USE_LONG_LONG 1
+#endif
+
 #ifdef CPPUTEST_USE_LONG_LONG
 typedef long long cpputest_longlong;
 typedef unsigned long long cpputest_ulonglong;
-#define CPPUTEST_LONGLONG_DEFAULT ((cpputest_longlong)0)
-#define CPPUTEST_ULONGLONG_DEFAULT ((cpputest_ulonglong)0U)
 #else
 /* Define some placeholders to disable the overloaded methods.
  * It's not required to have these match the size of the "real" type, but it's occasionally convenient.
@@ -216,8 +218,6 @@ typedef struct { char dummy[16]; } cpputest_ulonglong;
 typedef struct { char dummy[8]; } cpputest_longlong;
 typedef struct { char dummy[8]; } cpputest_ulonglong;
 #endif
-#define CPPUTEST_LONGLONG_DEFAULT cpputest_longlong()
-#define CPPUTEST_ULONGLONG_DEFAULT cpputest_ulonglong()
 #endif
 
 /* Visual C++ 10.0+ (2010+) supports the override keyword, but doesn't define the C++ version as C++11 */

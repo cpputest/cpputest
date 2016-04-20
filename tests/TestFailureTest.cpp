@@ -145,7 +145,8 @@ TEST(TestFailure, LongLongsEqualFailure)
     LongLongsEqualFailure f(test, failFileName, failLineNumber, 1, 2, "");
     FAILURE_EQUAL("expected <1 0x1>\n\tbut was  <2 0x2>", f);
 #else
-    LongLongsEqualFailure f(test, failFileName, failLineNumber, CPPUTEST_LONGLONG_DEFAULT, CPPUTEST_LONGLONG_DEFAULT, "");
+    cpputest_longlong dummy_longlong;
+    LongLongsEqualFailure f(test, failFileName, failLineNumber, dummy_longlong, dummy_longlong, "");
     FAILURE_EQUAL("expected <<longlong_unsupported> 0x<longlong_unsupported>>\n\tbut was  <<longlong_unsupported> 0x<longlong_unsupported>>", f);
 #endif
 }
@@ -156,7 +157,8 @@ TEST(TestFailure, UnsignedLongLongsEqualFailure)
     UnsignedLongLongsEqualFailure f(test, failFileName, failLineNumber, 1, 2, "");
     FAILURE_EQUAL("expected <1 (0x1) 0x1>\n\tbut was  <2 (0x2) 0x2>", f);
 #else
-    UnsignedLongLongsEqualFailure f(test, failFileName, failLineNumber, CPPUTEST_ULONGLONG_DEFAULT, CPPUTEST_ULONGLONG_DEFAULT, "");
+    cpputest_ulonglong dummy_ulonglong;
+    UnsignedLongLongsEqualFailure f(test, failFileName, failLineNumber, dummy_ulonglong, dummy_ulonglong, "");
     FAILURE_EQUAL("expected <<ulonglong_unsupported> 0x<ulonglong_unsupported>>\n\tbut was  <<ulonglong_unsupported> 0x<ulonglong_unsupported>>", f);
 #endif
 }
