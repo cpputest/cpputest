@@ -56,7 +56,7 @@ endif (C++11)
 set(GMOCK_HOME $ENV{GMOCK_HOME})
 if (DEFINED ENV{GMOCK_HOME})
     # GMock pulls in gtest.
-    set(INCLUDE_GTEST_TESTS 1)
+    set(CPPUTEST_INCLUDE_GTEST_TESTS 1)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGTEST_USE_OWN_TR1_TUPLE=1")
     include_directories(${GMOCK_HOME}/include ${GMOCK_HOME}/gtest ${GMOCK_HOME}/gtest/include)
     add_subdirectory(${GMOCK_HOME} "${CMAKE_CURRENT_BINARY_DIR}/gmock")

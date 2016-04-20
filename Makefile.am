@@ -81,7 +81,7 @@ include_cpputest_HEADERS = \
 	include/CppUTest/TestTestingFixture.h \
 	include/CppUTest/Utest.h \
 	include/CppUTest/UtestMacros.h \
-	CppUTestGeneratedConfig.h
+	generated/CppUTestGeneratedConfig.h
 
 lib_libCppUTestExt_a_CPPFLAGS = $(lib_libCppUTest_a_CPPFLAGS)
 lib_libCppUTestExt_a_CFLAGS = $(lib_libCppUTest_a_CFLAGS)

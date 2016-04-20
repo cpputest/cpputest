@@ -25,37 +25,23 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "CppUTest/CommandLineTestRunner.h"
-#include "CppUTest/TestRegistry.h"
-#include "CppUTestExt/MemoryReporterPlugin.h"
-#include "CppUTestExt/MockSupportPlugin.h"
+/*
+ * This file is confusing, sorry for that :) Please never edit this file.
+ *
+ * It serves 3 purposes
+ *
+ * 1) When you installed CppUTest on your system (make install), then this file should be overwritten by one that
+ *    actually contains some configuration of your system. Mostly info such as availability of types, headers, etc.
+ * 2) When you build CppUTest using autotools, this file will be included and it will include the generated file.
+ *    That should be the same file as will be installed if you run make install
+ * 3) When you use CppUTest on another platform that doesn't require configuration, then this file does nothing and
+ *    should be harmless.
+ *
+ * If you have done make install and you still found this text, then please report a bug :)
+ *
+ */
 
-#ifdef CPPUTEST_INCLUDE_GTEST_TESTS
-#include "CppUTestExt/GTestConvertor.h"
+#ifdef HAVE_CONFIG_H
+#include "generated/CppUTestGeneratedConfig.h"
 #endif
-
-int main(int ac, const char** av)
-{
-#ifdef CPPUTEST_INCLUDE_GTEST_TESTS
-    GTestConvertor convertor;
-    convertor.addAllGTestToTestRegistry();
-#endif
-
-    MemoryReporterPlugin plugin;
-    MockSupportPlugin mockPlugin;
-    TestRegistry::getCurrentRegistry()->installPlugin(&plugin);
-    TestRegistry::getCurrentRegistry()->installPlugin(&mockPlugin);
-
-#ifndef GMOCK_RENAME_MAIN
-    return CommandLineTestRunner::RunAllTests(ac, av);
-#else
-    /* Don't have any memory leak detector when running the Google Test tests */
-
-    testing::GMOCK_FLAG(verbose) = testing::internal::kWarningVerbosity;
-
-    ConsoleTestOutput output;
-    CommandLineTestRunner runner(ac, av, &output, TestRegistry::getCurrentRegistry());
-    return runner.runAllTestsMain();
-#endif
-}
 

@@ -4,7 +4,7 @@ AC_INIT([CppUTest], [3.7.2], [https://github.com/cpputest/cpputest])
 AM_INIT_AUTOMAKE([subdir-objects])
 AC_CONFIG_SRCDIR([src/CppUTest/Utest.cpp])
 AC_CONFIG_HEADERS([config.h])
-AX_PREFIX_CONFIG_H(CppUTestGeneratedConfig.h)
+AX_PREFIX_CONFIG_H(generated/CppUTestGeneratedConfig.h)
 AC_CONFIG_FILES([cpputest.pc])
 AC_CONFIG_MACRO_DIR([m4])
 AC_LIBTOOL_DLOPEN
@@ -327,7 +327,7 @@ if test "x${use_std_c}" = xno; then
 	memory_leak_detection=no
     CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -nostdinc"
     CPPUTEST_LDFLAGS="${CPPUTEST_LDFLAGS} -nostdlib"
-    AC_DEFINE([CPPUTEST_STD_C_LIB_DISABLED], [1], [Standard C library disabled])
+    AC_DEFINE([STD_C_LIB_DISABLED], [1], [Standard C library disabled])
     CPP_PLATFORM="GccNoStdC"
 else
 	CPP_PLATFORM="Gcc"
@@ -335,7 +335,7 @@ fi
 
 # Using standard C++
 if test "x${use_std_cpp}" = xno; then
-	AC_DEFINE([CPPUTEST_STD_CPP_LIB_DISABLED], 1, [Standard C++ library disabled])
+	AC_DEFINE([STD_CPP_LIB_DISABLED], 1, [Standard C++ library disabled])
 	if test "x${use_std_c}" = xyes; then
     	CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} -nostdinc++"
 
@@ -353,7 +353,7 @@ fi
 
 # Dealing with memory leak detection
 if test "x${memory_leak_detection}" = xno; then
-	AC_DEFINE([CPPUTEST_MEM_LEAK_DETECTION_DISABLED], 1, [memory leak detection disabled])
+	AC_DEFINE([MEM_LEAK_DETECTION_DISABLED], 1, [memory leak detection disabled])
 else
 	CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} -include ${srcdir}/include/CppUTest/MemoryLeakDetectorNewMacros.h"
 	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -include ${srcdir}/include/CppUTest/MemoryLeakDetectorMallocMacros.h"

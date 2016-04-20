@@ -25,7 +25,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifdef INCLUDE_GTEST_TESTS
+#ifdef CPPUTEST_INCLUDE_GTEST_TESTS
 
 #include "CppUTestExt/GMock.h"
 #include "CppUTest/TestHarness.h"
