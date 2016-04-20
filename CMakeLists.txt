@@ -11,7 +11,7 @@ include(CheckFunctionExists)
 set (CMAKE_REQUIRED_INCLUDES "unistd.h")
 check_function_exists(fork HAVE_FORK)
 if(HAVE_FORK)
-  add_definitions(-DHAVE_FORK)
+  add_definitions(-DCPPUTEST_HAVE_FORK)
 endif(HAVE_FORK)
 
 option(STD_C "Use the standard C library" ON)
@@ -49,7 +49,7 @@ configure_file (
     "${PROJECT_BINARY_DIR}/config.h"
     )
 include_directories(${PROJECT_BINARY_DIR})
-add_definitions(-DHAVE_CONFIG_H)
+add_definitions(-DCPPUTEST_HAVE_CONFIG_H)
 
 include_directories(${CppUTestRootDirectory}/include)
 add_subdirectory(src/CppUTest)
