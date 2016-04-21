@@ -16,6 +16,7 @@ set(CppUTest_src
         TestPlugin.cpp
         SimpleMutex.cpp
         Utest.cpp
+        TestDownlevelApi.cpp
         ../Platforms/${CPP_PLATFORM}/UtestPlatform.cpp
 )
 

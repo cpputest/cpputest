@@ -42,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories=".\include\Platforms\VisualCpp,.\include"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;STDC_WANT_SECURE_LIB"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;STDC_WANT_SECURE_LIB;CPPUTEST_USE_LONG_LONG"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				PrecompiledHeaderFile=".\Debug/CppUTest.pch"
@@ -113,7 +113,7 @@
 				Optimization="0"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories=".\include\Platforms\VisualCpp,.\include"
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;STDC_WANT_SECURE_LIB"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;STDC_WANT_SECURE_LIB;CPPUTEST_USE_LONG_LONG"
 				StringPooling="true"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
@@ -602,6 +602,28 @@
 			</File>
 			<File
 				RelativePath="SRC\CPPUTEST\SimpleString.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="SRC\CPPUTEST\TestDownlevelApi.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"

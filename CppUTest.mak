@@ -61,6 +61,7 @@ CLEAN :
 	-@erase "$(INTDIR)\OrderedTest.obj"
 	-@erase "$(INTDIR)\SimpleMutex.obj"
 	-@erase "$(INTDIR)\SimpleString.obj"
+	-@erase "$(INTDIR)\TestDownlevelApi.obj"
 	-@erase "$(INTDIR)\TestFailure.obj"
 	-@erase "$(INTDIR)\TestFilter.obj"
 	-@erase "$(INTDIR)\TestHarness_c.obj"
@@ -77,7 +78,7 @@ CLEAN :
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
-CPP_PROJ=/nologo /ML /W3 /GX /O2 /I ".\include\Platforms\VisualCpp" /I ".\include" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /D "CPPUTEST_MEM_LEAK_DETECTION_DISABLED" /Fp"$(INTDIR)\CppUTest.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
+CPP_PROJ=/nologo /ML /W3 /GX /O2 /I ".\include\Platforms\VisualCpp" /I ".\include" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /D "CPPUTEST_MEM_LEAK_DETECTION_DISABLED" /D "CPPUTEST_USE_LONG_LONG" /Fp"$(INTDIR)\CppUTest.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
 BSC32=bscmake.exe
 BSC32_FLAGS=/nologo /o"$(OUTDIR)\CppUTest.bsc" 
 BSC32_SBRS= \
@@ -106,6 +107,7 @@ LIB32_OBJS= \
 	"$(INTDIR)\MemoryLeakWarningPlugin.obj" \
 	"$(INTDIR)\SimpleMutex.obj" \
 	"$(INTDIR)\SimpleString.obj" \
+	"$(INTDIR)\TestDownlevelApi.obj" \
 	"$(INTDIR)\TestFailure.obj" \
 	"$(INTDIR)\TestFilter.obj" \
 	"$(INTDIR)\TestHarness_c.obj" \
@@ -176,6 +178,8 @@ CLEAN :
 	-@erase "$(INTDIR)\SimpleMutex.sbr"
 	-@erase "$(INTDIR)\SimpleString.obj"
 	-@erase "$(INTDIR)\SimpleString.sbr"
+	-@erase "$(INTDIR)\TestDownlevelApi.obj"
+	-@erase "$(INTDIR)\TestDownlevelApi.sbr"
 	-@erase "$(INTDIR)\TestFailure.obj"
 	-@erase "$(INTDIR)\TestFailure.sbr"
 	-@erase "$(INTDIR)\TestFilter.obj"
@@ -204,7 +208,7 @@ CLEAN :
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
-CPP_PROJ=/nologo /MDd /W3 /GX /ZI /Od /I ".\include\Platforms\VisualCpp" /I ".\include" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /D "CPPUTEST_MEM_LEAK_DETECTION_DISABLED" /FR"$(INTDIR)\\" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+CPP_PROJ=/nologo /MDd /W3 /GX /ZI /Od /I ".\include\Platforms\VisualCpp" /I ".\include" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /D "CPPUTEST_MEM_LEAK_DETECTION_DISABLED" /D "CPPUTEST_USE_LONG_LONG" /FR"$(INTDIR)\\" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
 BSC32=bscmake.exe
 BSC32_FLAGS=/nologo /o"$(OUTDIR)\CppUTest.bsc" 
 BSC32_SBRS= \
@@ -229,6 +233,7 @@ BSC32_SBRS= \
 	"$(INTDIR)\MemoryLeakWarningPlugin.sbr" \
 	"$(INTDIR)\SimpleMutex.sbr" \
 	"$(INTDIR)\SimpleString.sbr" \
+	"$(INTDIR)\TestDownlevelApi.sbr" \
 	"$(INTDIR)\TestFailure.sbr" \
 	"$(INTDIR)\TestFilter.sbr" \
 	"$(INTDIR)\TestHarness_c.sbr" \
@@ -269,6 +274,7 @@ LIB32_OBJS= \
 	"$(INTDIR)\MemoryLeakWarningPlugin.obj" \
 	"$(INTDIR)\SimpleMutex.obj" \
 	"$(INTDIR)\SimpleString.obj" \
+	"$(INTDIR)\TestDownlevelApi.obj" \
 	"$(INTDIR)\TestFailure.obj" \
 	"$(INTDIR)\TestFilter.obj" \
 	"$(INTDIR)\TestHarness_c.obj" \
@@ -701,6 +707,24 @@ SOURCE=.\SRC\CPPUTEST\SimpleString.cpp
 
 
 "$(INTDIR)\SimpleString.obj"	"$(INTDIR)\SimpleString.sbr" : $(SOURCE) "$(INTDIR)"
+	$(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+!ENDIF 
+
+SOURCE=.\SRC\CPPUTEST\TestDownlevelApi.cpp
+
+!IF  "$(CFG)" == "CppUTest - Win32 Release"
+
+
+"$(INTDIR)\TestDownlevelApi.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+!ELSEIF  "$(CFG)" == "CppUTest - Win32 Debug"
+
+
+"$(INTDIR)\TestDownlevelApi.obj"	"$(INTDIR)\TestDownlevelApi.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
 

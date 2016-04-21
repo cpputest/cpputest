@@ -199,6 +199,27 @@
 #define CPPUTEST_CHAR_BIT 8
 #endif
 
+/* Support for "long long" type */
+#if defined(CPPUTEST_USE_LONG_LONG) && !defined(CPPUTEST_BUILD_DOWNLEVEL_API)
+typedef long long cpputest_longlong;
+typedef unsigned long long cpputest_ulonglong;
+#define CPPUTEST_LONGLONG_DEFAULT ((cpputest_longlong)0)
+#define CPPUTEST_ULONGLONG_DEFAULT ((cpputest_ulonglong)0U)
+#else
+/* Define some placeholders to disable the overloaded methods.
+ * It's not required to have these match the size of the "real" type, but it's occasionally convenient.
+ */
+#if defined(CPPUTEST_64BIT) && !defined(CPPUTEST_64BIT_32BIT_LONGS)
+typedef struct { char dummy[16]; } cpputest_longlong;
+typedef struct { char dummy[16]; } cpputest_ulonglong;
+#else
+typedef struct { char dummy[8]; } cpputest_longlong;
+typedef struct { char dummy[8]; } cpputest_ulonglong;
+#endif
+#define CPPUTEST_LONGLONG_DEFAULT cpputest_longlong()
+#define CPPUTEST_ULONGLONG_DEFAULT cpputest_ulonglong()
+#endif
+
 /* Visual C++ 10.0+ (2010+) supports the override keyword, but doesn't define the C++ version as C++11 */
 #if defined(__cplusplus) && ((__cplusplus >= 201103L) || (defined(_MSC_VER) && (_MSC_VER >= 1600)))
 #define CPPUTEST_COMPILER_FULLY_SUPPORTS_CXX11
