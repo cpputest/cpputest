@@ -232,6 +232,33 @@ TEST(UtestShell, DestructorIsCalledForLocalObjectsWhenTheTestFails)
 
 #endif
 
+#ifndef CPPUTEST_USE_LONG_LONG
+// otherwise these are tested by UnitTestMacros
+
+static void assertLongLongsEqualFailsWithUnsupportedFeature_()
+{
+    UtestShell::getCurrent()->assertLongLongsEqual(CPPUTEST_LONGLONG_DEFAULT, CPPUTEST_LONGLONG_DEFAULT, NULL, "file", 1);
+}
+static void assertUnsignedLongLongsEqualFailsWithUnsupportedFeature_()
+{
+    UtestShell::getCurrent()->assertUnsignedLongLongsEqual(CPPUTEST_ULONGLONG_DEFAULT, CPPUTEST_ULONGLONG_DEFAULT, NULL, "file", 1);
+}
+
+TEST(UtestShell, assertLongLongsEqualFailsWithUnsupportedFeature)
+{
+    fixture.setTestFunction(assertLongLongsEqualFailsWithUnsupportedFeature_);
+    fixture.runAllTests();
+    fixture.assertPrintContains("\"CPPUTEST_USE_LONG_LONG\" is not supported");
+}
+TEST(UtestShell, assertUnsignedLongLongsEqualFailsWithUnsupportedFeature)
+{
+    fixture.setTestFunction(assertUnsignedLongLongsEqualFailsWithUnsupportedFeature_);
+    fixture.runAllTests();
+    fixture.assertPrintContains("\"CPPUTEST_USE_LONG_LONG\" is not supported");
+}
+
+#endif /* CPPUTEST_USE_LONG_LONG */
+
 TEST_GROUP(IgnoredUtestShell)
 {
     TestTestingFixture fixture;

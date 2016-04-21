@@ -478,6 +478,40 @@ SimpleString HexStringFrom(unsigned long value)
     return StringFromFormat("%lx", value);
 }
 
+#ifdef CPPUTEST_USE_LONG_LONG
+
+SimpleString StringFrom(cpputest_longlong value)
+{
+    return StringFromFormat("%lld", value);
+}
+
+SimpleString StringFrom(cpputest_ulonglong value)
+{
+    return StringFromFormat("%llu (0x%llx)", value, value);
+}
+
+SimpleString HexStringFrom(cpputest_longlong value)
+{
+    return StringFromFormat("%llx", value);
+}
+
+SimpleString HexStringFrom(cpputest_ulonglong value)
+{
+    return StringFromFormat("%llx", value);
+}
+
+SimpleString HexStringFrom(const void* value)
+{
+    return HexStringFrom((cpputest_ulonglong) value);
+}
+
+SimpleString HexStringFrom(void (*value)())
+{
+    return HexStringFrom((cpputest_ulonglong) value);
+}
+
+#else   /* CPPUTEST_USE_LONG_LONG */
+
 static long convertPointerToLongValue(const void* value)
 {
     /*
@@ -500,6 +534,26 @@ static long convertFunctionPointerToLongValue(void (*value)())
     return *long_value;
 }
 
+SimpleString StringFrom(cpputest_longlong)
+{
+    return "<longlong_unsupported>";
+}
+
+SimpleString StringFrom(cpputest_ulonglong)
+{
+    return "<ulonglong_unsupported>";
+}
+
+SimpleString HexStringFrom(cpputest_longlong)
+{
+    return "<longlong_unsupported>";
+}
+
+SimpleString HexStringFrom(cpputest_ulonglong)
+{
+    return "<ulonglong_unsupported>";
+}
+
 SimpleString HexStringFrom(const void* value)
 {
     return StringFromFormat("%lx", convertPointerToLongValue(value));
@@ -509,6 +563,8 @@ SimpleString HexStringFrom(void (*value)())
 {
     return StringFromFormat("%lx", convertFunctionPointerToLongValue(value));
 }
+
+#endif  /* CPPUTEST_USE_LONG_LONG */
 
 SimpleString StringFrom(double value, int precision)
 {

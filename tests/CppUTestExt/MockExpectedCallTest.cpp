@@ -217,6 +217,58 @@ TEST(MockExpectedCall, callWithLongIntegerParameter)
     CHECK(call->hasInputParameterWithName(name));
 }
 
+#ifdef CPPUTEST_USE_LONG_LONG
+
+TEST(MockExpectedCall, callWithUnsignedLongLongIntegerParameter)
+{
+    const SimpleString name = "unsigned long long integer";
+    unsigned long long value = 777;
+    call->withParameter(name, value);
+    STRCMP_EQUAL("unsigned long long int", call->getInputParameterType(name).asCharString());
+    UNSIGNED_LONGLONGS_EQUAL(value, call->getInputParameter(name).getUnsignedLongLongIntValue());
+    CHECK(call->hasInputParameterWithName(name));
+}
+
+TEST(MockExpectedCall, callWithLongLongIntegerParameter)
+{
+    const SimpleString name = "long long integer";
+    long long value = 777;
+    call->withParameter(name, value);
+    STRCMP_EQUAL("long long int", call->getInputParameterType(name).asCharString());
+    LONGLONGS_EQUAL(value, call->getInputParameter(name).getLongLongIntValue());
+    CHECK(call->hasInputParameterWithName(name));
+}
+
+#else
+
+TEST(MockExpectedCall, callWithUnsignedLongLongIntegerParameter)
+{
+    const SimpleString name = "unsigned long long integer";
+    cpputest_ulonglong value = CPPUTEST_ULONGLONG_DEFAULT;
+    call->withParameter(name, value);
+    STRCMP_EQUAL("unsigned long long int", call->getInputParameterType(name).asCharString());
+    CHECK(call->hasInputParameterWithName(name));
+
+    mock().setMockFailureStandardReporter(MockFailureReporterForTest::getReporter());
+    call->getInputParameter(name).getUnsignedLongLongIntValue();
+    CHECK_EXPECTED_MOCK_FAILURE(MockUnsupportedFeatureFailure(UtestShell::getCurrent(), "CPPUTEST_USE_LONG_LONG"));
+}
+
+TEST(MockExpectedCall, callWithLongLongIntegerParameter)
+{
+    const SimpleString name = "long long integer";
+    cpputest_longlong value = CPPUTEST_LONGLONG_DEFAULT;
+    call->withParameter(name, value);
+    STRCMP_EQUAL("long long int", call->getInputParameterType(name).asCharString());
+    CHECK(call->hasInputParameterWithName(name));
+
+    mock().setMockFailureStandardReporter(MockFailureReporterForTest::getReporter());
+    call->getInputParameter(name).getLongLongIntValue();
+    CHECK_EXPECTED_MOCK_FAILURE(MockUnsupportedFeatureFailure(UtestShell::getCurrent(), "CPPUTEST_USE_LONG_LONG"));
+}
+
+#endif /* CPPUTEST_USE_LONG_LONG */
+
 TEST(MockExpectedCall, callWithDoubleParameter)
 {
     call->withParameter("double", 1.2);
@@ -590,6 +642,28 @@ TEST(MockExpectedCallComposite, hasUnsignedLongIntParameter)
     STRCMP_EQUAL("name -> unsigned long int param: <5 (0x5)>", call.callToString().asCharString());
 }
 
+TEST(MockExpectedCallComposite, hasLongLongIntParameter)
+{
+#ifdef CPPUTEST_USE_LONG_LONG
+    composite.withParameter("param", (long long int) -1);
+    STRCMP_EQUAL("name -> long long int param: <-1>", call.callToString().asCharString());
+#else
+    composite.withParameter("param", CPPUTEST_LONGLONG_DEFAULT);
+    STRCMP_EQUAL("name -> long long int param: <<longlong_unsupported>>", call.callToString().asCharString());
+#endif
+}
+
+TEST(MockExpectedCallComposite, hasUnsignedLongLongIntParameter)
+{
+#ifdef CPPUTEST_USE_LONG_LONG
+    composite.withParameter("param", (unsigned long long int) 5);
+    STRCMP_EQUAL("name -> unsigned long long int param: <5 (0x5)>", call.callToString().asCharString());
+#else
+    composite.withParameter("param", CPPUTEST_ULONGLONG_DEFAULT);
+    STRCMP_EQUAL("name -> unsigned long long int param: <<ulonglong_unsupported>>", call.callToString().asCharString());
+#endif
+}
+
 TEST(MockExpectedCallComposite, hasPointerParameter)
 {
     composite.withParameter("param", (void*) 0);
@@ -668,6 +742,30 @@ TEST(MockExpectedCallComposite, hasUnsignedLongIntReturnValue)
     LONGS_EQUAL(6, call.returnValue().getUnsignedLongIntValue());
 }
 
+TEST(MockExpectedCallComposite, hasLongLongIntReturnValue)
+{
+#ifdef CPPUTEST_USE_LONG_LONG
+    composite.andReturnValue((long long int) -17);
+    STRCMP_EQUAL("long long int", call.returnValue().getType().asCharString());
+    LONGLONGS_EQUAL(-17, call.returnValue().getLongLongIntValue());
+#else
+    composite.andReturnValue(CPPUTEST_LONGLONG_DEFAULT);
+    STRCMP_EQUAL("long long int", call.returnValue().getType().asCharString());
+#endif
+}
+
+TEST(MockExpectedCallComposite, hasUnsignedLongLongIntReturnValue)
+{
+#ifdef CPPUTEST_USE_LONG_LONG
+    composite.andReturnValue((unsigned long long int) 6);
+    STRCMP_EQUAL("unsigned long long int", call.returnValue().getType().asCharString());
+    UNSIGNED_LONGLONGS_EQUAL(6, call.returnValue().getUnsignedLongLongIntValue());
+#else
+    composite.andReturnValue(CPPUTEST_ULONGLONG_DEFAULT);
+    STRCMP_EQUAL("unsigned long long int", call.returnValue().getType().asCharString());
+#endif
+}
+
 TEST(MockExpectedCallComposite, hasDoubleReturnValue)
 {
     composite.andReturnValue((double) 3.005);
@@ -743,6 +841,8 @@ TEST(MockIgnoredExpectedCall, worksAsItShould)
     ignored.withLongIntParameter("hey", (long int) 1);
     ignored.withUnsignedLongIntParameter("bah", (unsigned long int) 1);
     ignored.withDoubleParameter("hah", (double) 1.1f);
+    ignored.withLongLongIntParameter("sll", CPPUTEST_LONGLONG_DEFAULT);
+    ignored.withUnsignedLongLongIntParameter("ull", CPPUTEST_ULONGLONG_DEFAULT);
     ignored.withStringParameter("goo", "hello");
     ignored.withPointerParameter("pie", (void*) 0);
     ignored.withConstPointerParameter("woo", (const void*) 0);
@@ -758,6 +858,8 @@ TEST(MockIgnoredExpectedCall, worksAsItShould)
     ignored.andReturnValue((int) 1);
     ignored.andReturnValue((unsigned long int) 1);
     ignored.andReturnValue((long int) 1);
+    ignored.andReturnValue(CPPUTEST_LONGLONG_DEFAULT);
+    ignored.andReturnValue(CPPUTEST_ULONGLONG_DEFAULT);
     ignored.andReturnValue("boo");
     ignored.andReturnValue((void*) 0);
     ignored.andReturnValue((const void*) 0);

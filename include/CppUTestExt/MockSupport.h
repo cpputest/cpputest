@@ -62,6 +62,10 @@ public:
     virtual unsigned long int unsignedLongIntReturnValue();
     virtual unsigned long int returnUnsignedLongIntValueOrDefault(unsigned long int defaultValue);
     virtual unsigned int returnUnsignedIntValueOrDefault(unsigned int defaultValue);
+    virtual cpputest_longlong longLongIntReturnValue();
+    virtual cpputest_longlong returnLongLongIntValueOrDefault(cpputest_longlong defaultValue);
+    virtual cpputest_ulonglong unsignedLongLongIntReturnValue();
+    virtual cpputest_ulonglong returnUnsignedLongLongIntValueOrDefault(cpputest_ulonglong defaultValue);
     virtual const char* stringReturnValue();
     virtual const char* returnStringValueOrDefault(const char * defaultValue);
     virtual double returnDoubleValueOrDefault(double defaultValue);
@@ -77,6 +81,8 @@ public:
     void setData(const SimpleString& name, bool value);
     void setData(const SimpleString& name, int value);
     void setData(const SimpleString& name, unsigned int value);
+    void setData(const SimpleString& name, cpputest_longlong value);
+    void setData(const SimpleString& name, cpputest_ulonglong value);
     void setData(const SimpleString& name, const char* value);
     void setData(const SimpleString& name, double value);
     void setData(const SimpleString& name, void* value);
@@ -111,6 +117,7 @@ public:
     virtual void setMockFailureStandardReporter(MockFailureReporter* reporter);
     virtual void setActiveReporter(MockFailureReporter* activeReporter);
     virtual void setDefaultComparatorsAndCopiersRepository();
+    virtual MockFailureReporter* getActiveReporter();
 
     virtual void installComparator(const SimpleString& typeName, MockNamedValueComparator& comparator);
     virtual void installCopier(const SimpleString& typeName, MockNamedValueCopier& copier);

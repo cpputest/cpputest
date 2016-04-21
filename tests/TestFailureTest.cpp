@@ -139,6 +139,28 @@ TEST(TestFailure, LongsEqualFailure)
     FAILURE_EQUAL("expected <1 0x1>\n\tbut was  <2 0x2>", f);
 }
 
+TEST(TestFailure, LongLongsEqualFailure)
+{
+#ifdef CPPUTEST_USE_LONG_LONG
+    LongLongsEqualFailure f(test, failFileName, failLineNumber, 1, 2, "");
+    FAILURE_EQUAL("expected <1 0x1>\n\tbut was  <2 0x2>", f);
+#else
+    LongLongsEqualFailure f(test, failFileName, failLineNumber, CPPUTEST_LONGLONG_DEFAULT, CPPUTEST_LONGLONG_DEFAULT, "");
+    FAILURE_EQUAL("expected <<longlong_unsupported> 0x<longlong_unsupported>>\n\tbut was  <<longlong_unsupported> 0x<longlong_unsupported>>", f);
+#endif
+}
+
+TEST(TestFailure, UnsignedLongLongsEqualFailure)
+{
+#ifdef CPPUTEST_USE_LONG_LONG
+    UnsignedLongLongsEqualFailure f(test, failFileName, failLineNumber, 1, 2, "");
+    FAILURE_EQUAL("expected <1 (0x1) 0x1>\n\tbut was  <2 (0x2) 0x2>", f);
+#else
+    UnsignedLongLongsEqualFailure f(test, failFileName, failLineNumber, CPPUTEST_ULONGLONG_DEFAULT, CPPUTEST_ULONGLONG_DEFAULT, "");
+    FAILURE_EQUAL("expected <<ulonglong_unsupported> 0x<ulonglong_unsupported>>\n\tbut was  <<ulonglong_unsupported> 0x<ulonglong_unsupported>>", f);
+#endif
+}
+
 TEST(TestFailure, StringsEqualFailureWithText)
 {
     StringEqualFailure f(test, failFileName, failLineNumber, "abc", "abd", "text");
@@ -389,4 +411,10 @@ TEST(TestFailure, BitsEqual32Bit)
 {
     BitsEqualFailure f(test, failFileName, failLineNumber, 0x00000001, 0x00000003, 0xFFFFFFFF, 4*8/CPPUTEST_CHAR_BIT, "");
     FAILURE_EQUAL("expected <00000000 00000000 00000000 00000001>\n\tbut was  <00000000 00000000 00000000 00000011>", f);
+}
+
+TEST(TestFailure, FeatureUnsupported)
+{
+    FeatureUnsupportedFailure f(test, failFileName, failLineNumber, "SOME_FEATURE", "");
+    FAILURE_EQUAL("The feature \"SOME_FEATURE\" is not supported in this environment or with the feature set selected when building the library.", f);
 }

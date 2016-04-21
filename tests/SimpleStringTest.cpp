@@ -493,6 +493,23 @@ TEST(SimpleString, UnsignedLongInts)
     CHECK(s == s2);
 }
 
+#ifdef CPPUTEST_USE_LONG_LONG
+
+TEST(SimpleString, LongLongInts)
+{
+    SimpleString s(StringFrom((long long)1));
+    CHECK(s == "1");
+}
+
+TEST(SimpleString, UnsignedLongLongInts)
+{
+    SimpleString s(StringFrom((unsigned long long)1));
+    SimpleString s2(StringFrom((unsigned long long)1));
+    CHECK(s == s2);
+}
+
+#endif /* CPPUTEST_USE_LONG_LONG */
+
 TEST(SimpleString, Doubles)
 {
     SimpleString s(StringFrom(1.2));
@@ -533,6 +550,11 @@ TEST(SimpleString, HexStrings)
 {
     SimpleString h1 = HexStringFrom(0xffffL);
     STRCMP_EQUAL("ffff", h1.asCharString());
+
+#ifdef CPPUTEST_USE_LONG_LONG
+    SimpleString h15 = HexStringFrom(0xffffLL);
+    STRCMP_EQUAL("ffff", h15.asCharString());
+#endif
 
     SimpleString h2 = HexStringFrom((void *)0xfffeL);
     STRCMP_EQUAL("fffe", h2.asCharString());

@@ -79,6 +79,11 @@ void MockSupport::setDefaultComparatorsAndCopiersRepository()
     MockNamedValue::setDefaultComparatorsAndCopiersRepository(&comparatorsAndCopiersRepository_);
 }
 
+MockFailureReporter* MockSupport::getActiveReporter()
+{
+    return activeReporter_;
+}
+
 void MockSupport::installComparator(const SimpleString& typeName, MockNamedValueComparator& comparator)
 {
     comparatorsAndCopiersRepository_.installComparator(typeName, comparator);
@@ -387,6 +392,18 @@ void MockSupport::setData(const SimpleString& name, int value)
     newData->setValue(value);
 }
 
+void MockSupport::setData(const SimpleString& name, cpputest_ulonglong value)
+{
+    MockNamedValue* newData = retrieveDataFromStore(name);
+    newData->setValue(value);
+}
+
+void MockSupport::setData(const SimpleString& name, cpputest_longlong value)
+{
+    MockNamedValue* newData = retrieveDataFromStore(name);
+    newData->setValue(value);
+}
+
 void MockSupport::setData(const SimpleString& name, const char* value)
 {
     MockNamedValue* newData = retrieveDataFromStore(name);
@@ -554,6 +571,32 @@ long int MockSupport::longIntReturnValue()
 unsigned long int MockSupport::unsignedLongIntReturnValue()
 {
     return returnValue().getUnsignedLongIntValue();
+}
+
+cpputest_longlong MockSupport::returnLongLongIntValueOrDefault(cpputest_longlong defaultValue)
+{
+    if (hasReturnValue()) {
+        return longLongIntReturnValue();
+    }
+    return defaultValue;
+}
+
+cpputest_ulonglong MockSupport::returnUnsignedLongLongIntValueOrDefault(cpputest_ulonglong defaultValue)
+{
+    if (hasReturnValue()) {
+        return unsignedLongLongIntReturnValue();
+    }
+    return defaultValue;
+}
+
+cpputest_longlong MockSupport::longLongIntReturnValue()
+{
+    return returnValue().getLongLongIntValue();
+}
+
+cpputest_ulonglong MockSupport::unsignedLongLongIntReturnValue()
+{
+    return returnValue().getUnsignedLongLongIntValue();
 }
 
 const char* MockSupport::stringReturnValue()

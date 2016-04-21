@@ -27,6 +27,7 @@
 
 #include "CppUTest/TestHarness.h"
 #include "CppUTestExt/MockNamedValue.h"
+#include "CppUTestExt/MockSupport.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
 
@@ -74,6 +75,18 @@ void MockNamedValue::setValue(unsigned long int value)
 {
     type_ = "unsigned long int";
     value_.unsignedLongIntValue_ = value;
+}
+
+void MockNamedValue::setValue(cpputest_longlong value)
+{
+    type_ = "long long int";
+    value_.longLongIntValue_ = value;
+}
+
+void MockNamedValue::setValue(cpputest_ulonglong value)
+{
+    type_ = "unsigned long long int";
+    value_.unsignedLongLongIntValue_ = value;
 }
 
 void MockNamedValue::setValue(double value)
@@ -195,6 +208,60 @@ unsigned long int MockNamedValue::getUnsignedLongIntValue() const
     }
 }
 
+#ifdef CPPUTEST_USE_LONG_LONG
+
+cpputest_longlong MockNamedValue::getLongLongIntValue() const
+{
+    if(type_ == "int")
+        return value_.intValue_;
+    else if(type_ == "unsigned int")
+        return (cpputest_longlong) value_.unsignedIntValue_;
+    else if(type_ == "long int")
+        return value_.longIntValue_;
+    else if(type_ == "unsigned long int")
+        return (cpputest_longlong) value_.unsignedLongIntValue_;
+    else
+    {
+        STRCMP_EQUAL("long long int", type_.asCharString());
+        return value_.longLongIntValue_;
+    }
+}
+
+cpputest_ulonglong MockNamedValue::getUnsignedLongLongIntValue() const
+{
+    if(type_ == "unsigned int")
+        return value_.unsignedIntValue_;
+    else if(type_ == "unsigned long int")
+        return value_.unsignedLongIntValue_;
+    else if(type_ == "int" && value_.intValue_ >= 0)
+        return (cpputest_ulonglong) value_.intValue_;
+    else if(type_ == "long int" && value_.longIntValue_ >= 0)
+        return (cpputest_ulonglong) value_.longIntValue_;
+    else if(type_ == "long long int" && value_.longLongIntValue_ >= 0)
+        return (cpputest_ulonglong) value_.longLongIntValue_;
+    else
+    {
+        STRCMP_EQUAL("unsigned long long int", type_.asCharString());
+        return value_.unsignedLongLongIntValue_;
+    }
+}
+
+#else  /* CPPUTEST_USE_LONG_LONG */
+
+cpputest_longlong MockNamedValue::getLongLongIntValue() const
+{
+    mock().getActiveReporter()->failTest(MockUnsupportedFeatureFailure(mock().getActiveReporter()->getTestToFail(), "CPPUTEST_USE_LONG_LONG"));
+    return CPPUTEST_LONGLONG_DEFAULT;
+}
+
+cpputest_ulonglong MockNamedValue::getUnsignedLongLongIntValue() const
+{
+    mock().getActiveReporter()->failTest(MockUnsupportedFeatureFailure(mock().getActiveReporter()->getTestToFail(), "CPPUTEST_USE_LONG_LONG"));
+    return CPPUTEST_ULONGLONG_DEFAULT;
+}
+
+#endif /* CPPUTEST_USE_LONG_LONG */
+
 double MockNamedValue::getDoubleValue() const
 {
     STRCMP_EQUAL("double", type_.asCharString());
@@ -251,45 +318,67 @@ MockNamedValueCopier* MockNamedValue::getCopier() const
     return copier_;
 }
 
+MockNamedValue MockNamedValue::integerPromotion() const
+{
+    MockNamedValue result(*this);
+    if (result.type_ == "int")
+    {
+        result.value_.longIntValue_ = result.value_.intValue_;
+        result.type_ = "long int";
+    }
+    if (result.type_ == "unsigned int")
+    {
+        result.value_.unsignedLongIntValue_ = result.value_.unsignedIntValue_;
+        result.type_ = "unsigned long int";
+    }
+#ifdef CPPUTEST_USE_LONG_LONG
+    if (result.type_ == "long int")
+    {
+        result.value_.longLongIntValue_ = result.value_.longIntValue_;
+        result.type_ = "long long int";
+    }
+    if (result.type_ == "unsigned long int")
+    {
+        result.value_.unsignedLongLongIntValue_ = result.value_.unsignedLongIntValue_;
+        result.type_ = "unsigned long long int";
+    }
+#endif /* CPPUTEST_USE_LONG_LONG */
+    return result;
+}
+
 bool MockNamedValue::equals(const MockNamedValue& p) const
 {
-    if((type_ == "long int") && (p.type_ == "int"))
-        return value_.longIntValue_ == p.value_.intValue_;
-    else if((type_ == "int") && (p.type_ == "long int"))
-        return value_.intValue_ == p.value_.longIntValue_;
-    else if((type_ == "unsigned int") && (p.type_ == "int"))
-        return (long)value_.unsignedIntValue_ == (long)p.value_.intValue_;
-    else if((type_ == "int") && (p.type_ == "unsigned int"))
-        return (long)value_.intValue_ == (long)p.value_.unsignedIntValue_;
-    else if((type_ == "unsigned long int") && (p.type_ == "int"))
-        return value_.unsignedLongIntValue_ == (unsigned long)p.value_.intValue_;
-    else if((type_ == "int") && (p.type_ == "unsigned long int"))
-        return (unsigned long)value_.intValue_ == p.value_.unsignedLongIntValue_;
-    else if((type_ == "unsigned int") && (p.type_ == "long int"))
-        return (long int)value_.unsignedIntValue_ == p.value_.longIntValue_;
-    else if((type_ == "long int") && (p.type_ == "unsigned int"))
-        return value_.longIntValue_ == (long int)p.value_.unsignedIntValue_;
-    else if((type_ == "unsigned int") && (p.type_ == "unsigned long int"))
-        return value_.unsignedIntValue_ == p.value_.unsignedLongIntValue_;
-    else if((type_ == "unsigned long int") && (p.type_ == "unsigned int"))
-        return value_.unsignedLongIntValue_ == p.value_.unsignedIntValue_;
-    else if((type_ == "long int") && (p.type_ == "unsigned long int"))
-        return (value_.longIntValue_ >= 0) && (value_.longIntValue_ == (long) p.value_.unsignedLongIntValue_);
-    else if((type_ == "unsigned long int") && (p.type_ == "long int"))
-        return (p.value_.longIntValue_ >= 0) && ((long)value_.unsignedLongIntValue_ == p.value_.longIntValue_);
+    MockNamedValue promotedThis = integerPromotion();
+    MockNamedValue promotedP = p.integerPromotion();
+
+#ifdef CPPUTEST_USE_LONG_LONG
+    if ((promotedThis.type_ == "long long int") && (promotedP.type_ == "long long int"))
+        return (promotedThis.value_.longLongIntValue_ == promotedP.value_.longLongIntValue_);
+    else if ((promotedThis.type_ == "unsigned long long int") && (promotedP.type_ == "unsigned long long int"))
+        return (promotedThis.value_.unsignedLongLongIntValue_ == promotedP.value_.unsignedLongLongIntValue_);
+    else if ((promotedThis.type_ == "long long int") && (promotedP.type_ == "unsigned long long int"))
+        return (promotedThis.value_.longLongIntValue_ >= 0)
+            && (promotedThis.value_.longLongIntValue_ == (long long)promotedP.value_.unsignedLongLongIntValue_);
+    else if ((promotedThis.type_ == "unsigned long long int") && (promotedP.type_ == "long long int"))
+        return (promotedP.value_.longLongIntValue_ >= 0)
+            && ((long long)promotedThis.value_.unsignedLongLongIntValue_ == promotedP.value_.longLongIntValue_);
+#else
+    if ((promotedThis.type_ == "long int") && (promotedP.type_ == "long int"))
+        return (promotedThis.value_.longIntValue_ == promotedP.value_.longIntValue_);
+    else if ((promotedThis.type_ == "unsigned long int") && (promotedP.type_ == "unsigned long int"))
+        return (promotedThis.value_.unsignedLongIntValue_ == promotedP.value_.unsignedLongIntValue_);
+    else if ((promotedThis.type_ == "long int") && (promotedP.type_ == "unsigned long int"))
+        return (promotedThis.value_.longIntValue_ >= 0)
+            && (promotedThis.value_.longIntValue_ == (long)promotedP.value_.unsignedLongIntValue_);
+    else if ((promotedThis.type_ == "unsigned long int") && (promotedP.type_ == "long int"))
+        return (promotedP.value_.longIntValue_ >= 0)
+            && ((long)promotedThis.value_.unsignedLongIntValue_ == promotedP.value_.longIntValue_);
+#endif /* CPPUTEST_USE_LONG_LONG */
 
     if (type_ != p.type_) return false;
 
     if (type_ == "bool")
         return value_.boolValue_ == p.value_.boolValue_;
-    else if (type_ == "int")
-        return value_.intValue_ == p.value_.intValue_;
-    else if (type_ == "unsigned int")
-        return value_.unsignedIntValue_ == p.value_.unsignedIntValue_;
-    else if (type_ == "long int")
-        return value_.longIntValue_ == p.value_.longIntValue_;
-    else if (type_ == "unsigned long int")
-        return value_.unsignedLongIntValue_ == p.value_.unsignedLongIntValue_;
     else if (type_ == "const char*")
         return SimpleString(value_.stringValue_) == SimpleString(p.value_.stringValue_);
     else if (type_ == "void*")
@@ -336,6 +425,10 @@ SimpleString MockNamedValue::toString() const
         return StringFrom(value_.longIntValue_);
     else if (type_ == "unsigned long int")
         return StringFrom(value_.unsignedLongIntValue_);
+    else if (type_ == "long long int")
+        return StringFrom(value_.longLongIntValue_);
+    else if (type_ == "unsigned long long int")
+        return StringFrom(value_.unsignedLongLongIntValue_);
     else if (type_ == "const char*")
         return value_.stringValue_;
     else if (type_ == "void*")

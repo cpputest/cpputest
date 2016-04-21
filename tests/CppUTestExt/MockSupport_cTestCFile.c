@@ -83,6 +83,10 @@ void all_mock_support_c_calls(void)
             withOutputParameterOfType("type", "name", (void*)1);
     mock_c()->enable();
 
+#ifdef CPPUTEST_USE_LONG_LONG
+    mock_c()->expectOneCall("boo")->withLongLongIntParameters("signed", 1)->withUnsignedLongLongIntParameters("unsigned", 1);
+    mock_c()->actualCall("boo")->withLongLongIntParameters("signed", 1)->withUnsignedLongLongIntParameters("unsigned", 1);
+#endif
     mock_c()->clear();
 
     mock_c()->installComparator("typeName", typeNameIsEqual, typeNameValueToString);
@@ -99,6 +103,16 @@ void all_mock_support_c_calls(void)
     mock_c()->actualCall("boo")->intReturnValue();
     mock_c()->intReturnValue();
     mock_c()->returnValue();
+
+#ifdef CPPUTEST_USE_LONG_LONG
+    mock_c()->expectOneCall("boo")->andReturnLongLongIntValue(100);
+    mock_c()->actualCall("boo")->longLongIntReturnValue();
+    mock_c()->longLongIntReturnValue();
+
+    mock_c()->expectOneCall("boo")->andReturnUnsignedLongLongIntValue(100);
+    mock_c()->actualCall("boo")->unsignedLongLongIntReturnValue();
+    mock_c()->unsignedLongLongIntReturnValue();
+#endif
 
     mock_c()->expectOneCall("boo2")->andReturnUnsignedIntValue(1.0);
     mock_c()->actualCall("boo2")->unsignedIntReturnValue();
@@ -168,6 +182,10 @@ void all_mock_support_c_calls(void)
     mock_c()->returnUnsignedIntValueOrDefault(1);
     mock_c()->returnLongIntValueOrDefault(-1L);
     mock_c()->returnUnsignedLongIntValueOrDefault(1L);
+#ifdef CPPUTEST_USE_LONG_LONG
+    mock_c()->returnLongLongIntValueOrDefault(-1LL);
+    mock_c()->returnUnsignedLongLongIntValueOrDefault(1ULL);
+#endif
     mock_c()->returnStringValueOrDefault("");
     mock_c()->returnDoubleValueOrDefault(0.01);
     mock_c()->returnPointerValueOrDefault(0);

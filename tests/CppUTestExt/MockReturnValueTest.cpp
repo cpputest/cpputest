@@ -202,6 +202,88 @@ TEST(MockReturnValueTest, WhenNoLongIntegerReturnValueIsExpectedButThereIsADefau
     LONGS_EQUAL(default_return_value, mock().returnLongIntValueOrDefault(default_return_value));
 }
 
+#ifdef CPPUTEST_USE_LONG_LONG
+
+TEST(MockReturnValueTest, WhenAUnsignedLongLongIntegerReturnValueIsExpectedAndAlsoThereIsADefaultShouldlIgnoreTheDefault)
+{
+    unsigned long long default_return_value = 121487;
+    unsigned long long expected_return_value = default_return_value + 1;
+    mock().expectOneCall("foo").andReturnValue(expected_return_value);
+    UNSIGNED_LONGLONGS_EQUAL(expected_return_value, mock().actualCall("foo").returnUnsignedLongLongIntValueOrDefault(default_return_value));
+    UNSIGNED_LONGLONGS_EQUAL(expected_return_value, mock().returnUnsignedLongLongIntValueOrDefault(default_return_value));
+}
+
+TEST(MockReturnValueTest, WhenNoUnsignedLongLongIntegerReturnValueIsExpectedButThereIsADefaultShouldlUseTheDefaultValue)
+{
+    unsigned long long default_return_value = 7710144;
+    mock().expectOneCall("foo");
+    UNSIGNED_LONGLONGS_EQUAL(default_return_value, mock().actualCall("foo").returnUnsignedLongLongIntValueOrDefault(default_return_value));
+    UNSIGNED_LONGLONGS_EQUAL(default_return_value, mock().returnUnsignedLongLongIntValueOrDefault(default_return_value));
+}
+
+TEST(MockReturnValueTest, WhenALongLongIntegerReturnValueIsExpectedAndAlsoThereIsADefaultShouldlIgnoreTheDefault)
+{
+    long long default_return_value = 748797;
+    long long expected_return_value = default_return_value + 1;
+    mock().expectOneCall("foo").andReturnValue(expected_return_value);
+    LONGLONGS_EQUAL(expected_return_value, mock().actualCall("foo").returnLongLongIntValueOrDefault(default_return_value));
+    LONGLONGS_EQUAL(expected_return_value, mock().returnLongLongIntValueOrDefault(default_return_value));
+}
+
+TEST(MockReturnValueTest, WhenNoLongLongIntegerReturnValueIsExpectedButThereIsADefaultShouldlUseTheDefaultValue)
+{
+    long long default_return_value = 123659;
+    mock().expectOneCall("foo");
+    LONGLONGS_EQUAL(default_return_value, mock().actualCall("foo").returnLongLongIntValueOrDefault(default_return_value));
+    LONGLONGS_EQUAL(default_return_value, mock().returnLongLongIntValueOrDefault(default_return_value));
+}
+
+#else
+
+TEST(MockReturnValueTest, WhenAUnsignedLongLongIntegerReturnValueIsExpectedAndAlsoThereIsADefaultShouldlIgnoreTheDefault)
+{
+    mock().expectOneCall("foo").andReturnValue(CPPUTEST_ULONGLONG_DEFAULT);
+
+    mock().setMockFailureStandardReporter(MockFailureReporterForTest::getReporter());
+    mock().actualCall("foo").returnUnsignedLongLongIntValueOrDefault(CPPUTEST_ULONGLONG_DEFAULT);
+    CHECK_EXPECTED_MOCK_FAILURE(MockUnsupportedFeatureFailure(UtestShell::getCurrent(), "CPPUTEST_USE_LONG_LONG"));
+
+    CLEAR_MOCK_FAILURE();
+    mock().returnUnsignedLongLongIntValueOrDefault(CPPUTEST_ULONGLONG_DEFAULT);
+    CHECK_EXPECTED_MOCK_FAILURE(MockUnsupportedFeatureFailure(UtestShell::getCurrent(), "CPPUTEST_USE_LONG_LONG"));
+}
+
+TEST(MockReturnValueTest, WhenNoUnsignedLongLongIntegerReturnValueIsExpectedButThereIsADefaultShouldlUseTheDefaultValue)
+{
+    mock().expectOneCall("foo");
+    mock().actualCall("foo").returnUnsignedLongLongIntValueOrDefault(CPPUTEST_ULONGLONG_DEFAULT);
+    mock().returnUnsignedLongLongIntValueOrDefault(CPPUTEST_ULONGLONG_DEFAULT);
+    // these do not fail
+}
+
+TEST(MockReturnValueTest, WhenALongLongIntegerReturnValueIsExpectedAndAlsoThereIsADefaultShouldlIgnoreTheDefault)
+{
+    mock().expectOneCall("foo").andReturnValue(CPPUTEST_LONGLONG_DEFAULT);
+
+    mock().setMockFailureStandardReporter(MockFailureReporterForTest::getReporter());
+    mock().actualCall("foo").returnLongLongIntValueOrDefault(CPPUTEST_LONGLONG_DEFAULT);
+    CHECK_EXPECTED_MOCK_FAILURE(MockUnsupportedFeatureFailure(UtestShell::getCurrent(), "CPPUTEST_USE_LONG_LONG"));
+
+    CLEAR_MOCK_FAILURE();
+    mock().returnLongLongIntValueOrDefault(CPPUTEST_LONGLONG_DEFAULT);
+    CHECK_EXPECTED_MOCK_FAILURE(MockUnsupportedFeatureFailure(UtestShell::getCurrent(), "CPPUTEST_USE_LONG_LONG"));
+}
+
+TEST(MockReturnValueTest, WhenNoLongLongIntegerReturnValueIsExpectedButThereIsADefaultShouldlUseTheDefaultValue)
+{
+    mock().expectOneCall("foo");
+    mock().actualCall("foo").returnLongLongIntValueOrDefault(CPPUTEST_LONGLONG_DEFAULT);
+    mock().returnLongLongIntValueOrDefault(CPPUTEST_LONGLONG_DEFAULT);
+    // these do not fail
+}
+
+#endif /* CPPUTEST_USE_LONG_LONG */
+
 TEST(MockReturnValueTest, WhenABooleanReturnValueIsExpectedAndAlsoThereIsADefaultShouldlIgnoreTheDefault)
 {
     bool default_return_value = true;
@@ -397,6 +479,125 @@ TEST(MockReturnValueTest, UnsignedLongIntegerReturnValueSetsDifferentValuesWhile
     LONGS_EQUAL(another_ret_value, mock().actualCall("foo").withParameter("p1", 1).returnValue().getUnsignedLongIntValue());
     LONGS_EQUAL(another_ret_value, mock().returnValue().getUnsignedLongIntValue());
 }
+
+#ifdef CPPUTEST_USE_LONG_LONG
+
+TEST(MockReturnValueTest, LongLongIntegerReturnValue)
+{
+    long long expected_value = 7;
+    mock().expectOneCall("foo").andReturnValue(expected_value);
+
+    MockActualCall& actual_call = mock().actualCall("foo");
+    LONGLONGS_EQUAL(expected_value, actual_call.returnValue().getLongLongIntValue());
+    LONGLONGS_EQUAL(expected_value, actual_call.returnLongLongIntValue());
+    LONGLONGS_EQUAL(expected_value, mock().returnValue().getLongLongIntValue());
+    LONGLONGS_EQUAL(expected_value, mock().longLongIntReturnValue());
+}
+
+TEST(MockReturnValueTest, LongLongIntegerReturnValueSetsDifferentValues)
+{
+    long long expected_value = 1;
+    long long another_expected_value = 2;
+
+    mock().expectOneCall("foo").andReturnValue(expected_value);
+    mock().expectOneCall("foo").andReturnValue(another_expected_value);
+
+    LONGLONGS_EQUAL(expected_value, mock().actualCall("foo").returnValue().getLongLongIntValue());
+    LONGLONGS_EQUAL(expected_value, mock().returnValue().getLongLongIntValue());
+    LONGLONGS_EQUAL(another_expected_value, mock().actualCall("foo").returnValue().getLongLongIntValue());
+    LONGLONGS_EQUAL(another_expected_value, mock().returnValue().getLongLongIntValue());
+}
+
+TEST(MockReturnValueTest, LongLongIntegerReturnValueSetsDifferentValuesWhileParametersAreIgnored)
+{
+    long long ret_value = 1;
+    long long another_ret_value = 2;
+
+    mock().expectOneCall("foo").withParameter("p1", 1).ignoreOtherParameters().andReturnValue(ret_value);
+    mock().expectOneCall("foo").withParameter("p1", 1).ignoreOtherParameters().andReturnValue(another_ret_value);
+
+    LONGLONGS_EQUAL(ret_value, mock().actualCall("foo").withParameter("p1", 1).returnValue().getLongLongIntValue());
+    LONGLONGS_EQUAL(ret_value, mock().returnValue().getLongLongIntValue());
+    LONGLONGS_EQUAL(another_ret_value, mock().actualCall("foo").withParameter("p1", 1).returnValue().getLongLongIntValue());
+    LONGLONGS_EQUAL(another_ret_value, mock().returnValue().getLongLongIntValue());
+}
+
+TEST(MockReturnValueTest, UnsignedLongLongIntegerReturnValue)
+{
+    unsigned long long expected_value = 7;
+    mock().expectOneCall("foo").andReturnValue(expected_value);
+
+    MockActualCall& actual_call = mock().actualCall("foo");
+    UNSIGNED_LONGLONGS_EQUAL(expected_value, actual_call.returnValue().getUnsignedLongLongIntValue());
+    UNSIGNED_LONGLONGS_EQUAL(expected_value, actual_call.returnUnsignedLongLongIntValue());
+    UNSIGNED_LONGLONGS_EQUAL(expected_value, mock().returnValue().getUnsignedLongLongIntValue());
+    UNSIGNED_LONGLONGS_EQUAL(expected_value, mock().unsignedLongLongIntReturnValue());
+}
+
+TEST(MockReturnValueTest, UnsignedLongLongIntegerReturnValueSetsDifferentValues)
+{
+    unsigned long long expected_value = 1;
+    unsigned long long another_expected_value = 2;
+
+    mock().expectOneCall("foo").andReturnValue(expected_value);
+    mock().expectOneCall("foo").andReturnValue(another_expected_value);
+
+    UNSIGNED_LONGLONGS_EQUAL(expected_value, mock().actualCall("foo").returnValue().getUnsignedLongLongIntValue());
+    UNSIGNED_LONGLONGS_EQUAL(expected_value, mock().returnValue().getUnsignedLongLongIntValue());
+    UNSIGNED_LONGLONGS_EQUAL(another_expected_value, mock().actualCall("foo").returnValue().getUnsignedLongLongIntValue());
+    UNSIGNED_LONGLONGS_EQUAL(another_expected_value, mock().returnValue().getUnsignedLongLongIntValue());
+}
+
+TEST(MockReturnValueTest, UnsignedLongLongIntegerReturnValueSetsDifferentValuesWhileParametersAreIgnored)
+{
+    unsigned long long ret_value = 1;
+    unsigned long long another_ret_value = 2;
+
+    mock().expectOneCall("foo").withParameter("p1", 1).ignoreOtherParameters().andReturnValue(ret_value);
+    mock().expectOneCall("foo").withParameter("p1", 1).ignoreOtherParameters().andReturnValue(another_ret_value);
+
+    UNSIGNED_LONGLONGS_EQUAL(ret_value, mock().actualCall("foo").withParameter("p1", 1).returnValue().getUnsignedLongLongIntValue());
+    UNSIGNED_LONGLONGS_EQUAL(ret_value, mock().returnValue().getUnsignedLongLongIntValue());
+    UNSIGNED_LONGLONGS_EQUAL(another_ret_value, mock().actualCall("foo").withParameter("p1", 1).returnValue().getUnsignedLongLongIntValue());
+    UNSIGNED_LONGLONGS_EQUAL(another_ret_value, mock().returnValue().getUnsignedLongLongIntValue());
+}
+
+TEST(MockReturnValueTest, IntReturnValueCanBeRetrievedAsLongLongInt)
+{
+    int expected_value = 7;
+    mock().expectOneCall("foo").andReturnValue(expected_value);
+    LONGLONGS_EQUAL(expected_value, mock().actualCall("foo").returnValue().getLongLongIntValue());
+}
+
+TEST(MockReturnValueTest, UnsignedIntReturnValueCanBeRetrievedAsLongLongInt)
+{
+    unsigned int expected_value = 7;
+    mock().expectOneCall("foo").andReturnValue(expected_value);
+    LONGLONGS_EQUAL(expected_value, mock().actualCall("foo").returnValue().getLongLongIntValue());
+}
+
+TEST(MockReturnValueTest, PositiveIntReturnValueCanBeRetrievedAsUnsignedLongLongInt)
+{
+    int expected_value = 7;
+    mock().expectOneCall("foo").andReturnValue(expected_value);
+    UNSIGNED_LONGLONGS_EQUAL(expected_value, mock().actualCall("foo").returnValue().getUnsignedLongLongIntValue());
+}
+
+TEST(MockReturnValueTest, PositiveLongIntReturnValueCanBeRetrievedAsUnsignedLongLongInt)
+{
+    long int expected_value = 7;
+    mock().expectOneCall("foo").andReturnValue(expected_value);
+    UNSIGNED_LONGLONGS_EQUAL(expected_value, mock().actualCall("foo").returnValue().getUnsignedLongLongIntValue());
+}
+
+TEST(MockReturnValueTest, UnsignedIntReturnValueCanBeRetrievedAsUnsignedLongLongInt)
+{
+    unsigned int expected_value = 7;
+    mock().expectOneCall("foo").andReturnValue(expected_value);
+    UNSIGNED_LONGLONGS_EQUAL(expected_value, mock().actualCall("foo").returnValue().getUnsignedLongLongIntValue());
+}
+
+#endif /* CPPUTEST_USE_LONG_LONG */
 
 TEST(MockReturnValueTest, MatchingReturnValueOnWhileSignature)
 {

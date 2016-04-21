@@ -48,6 +48,8 @@ public:
     MockActualCall& withParameter(const SimpleString& name, unsigned int value) { return withUnsignedIntParameter(name, value); }
     MockActualCall& withParameter(const SimpleString& name, long int value) { return withLongIntParameter(name, value); }
     MockActualCall& withParameter(const SimpleString& name, unsigned long int value) { return withUnsignedLongIntParameter(name, value); }
+    MockActualCall& withParameter(const SimpleString& name, cpputest_longlong value) { return withLongLongIntParameter(name, value); }
+    MockActualCall& withParameter(const SimpleString& name, cpputest_ulonglong value) { return withUnsignedLongLongIntParameter(name, value); }
     MockActualCall& withParameter(const SimpleString& name, double value) { return withDoubleParameter(name, value); }
     MockActualCall& withParameter(const SimpleString& name, const char* value) { return withStringParameter(name, value); }
     MockActualCall& withParameter(const SimpleString& name, void* value) { return withPointerParameter(name, value); }
@@ -63,6 +65,8 @@ public:
     virtual MockActualCall& withUnsignedIntParameter(const SimpleString& name, unsigned int value)=0;
     virtual MockActualCall& withLongIntParameter(const SimpleString& name, long int value)=0;
     virtual MockActualCall& withUnsignedLongIntParameter(const SimpleString& name, unsigned long int value)=0;
+    virtual MockActualCall& withLongLongIntParameter(const SimpleString& name, cpputest_longlong value) = 0;
+    virtual MockActualCall& withUnsignedLongLongIntParameter(const SimpleString& name, cpputest_ulonglong value) = 0;
     virtual MockActualCall& withDoubleParameter(const SimpleString& name, double value)=0;
     virtual MockActualCall& withStringParameter(const SimpleString& name, const char* value)=0;
     virtual MockActualCall& withPointerParameter(const SimpleString& name, void* value)=0;
@@ -87,6 +91,12 @@ public:
 
     virtual unsigned int returnUnsignedIntValue()=0;
     virtual unsigned int returnUnsignedIntValueOrDefault(unsigned int default_value)=0;
+
+    virtual cpputest_longlong returnLongLongIntValue() = 0;
+    virtual cpputest_longlong returnLongLongIntValueOrDefault(cpputest_longlong default_value) = 0;
+
+    virtual cpputest_ulonglong returnUnsignedLongLongIntValue() = 0;
+    virtual cpputest_ulonglong returnUnsignedLongLongIntValueOrDefault(cpputest_ulonglong default_value) = 0;
 
     virtual const char * returnStringValueOrDefault(const char * default_value)=0;
     virtual const char * returnStringValue()=0;

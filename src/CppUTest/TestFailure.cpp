@@ -272,6 +272,42 @@ UnsignedLongsEqualFailure::UnsignedLongsEqualFailure(UtestShell* test, const cha
     message_ += createButWasString(expectedReported, actualReported);
 }
 
+LongLongsEqualFailure::LongLongsEqualFailure(UtestShell* test, const char* fileName, int lineNumber, cpputest_longlong expected, cpputest_longlong actual, const SimpleString& text)
+: TestFailure(test, fileName, lineNumber)
+{
+    message_ = createUserText(text);
+
+    SimpleString aDecimal = StringFrom(actual);
+    SimpleString aHex = HexStringFrom(actual);
+    SimpleString eDecimal = StringFrom(expected);
+    SimpleString eHex = HexStringFrom(expected);
+
+    SimpleString::padStringsToSameLength(aDecimal, eDecimal, ' ');
+    SimpleString::padStringsToSameLength(aHex, eHex, '0');
+
+    SimpleString actualReported = aDecimal + " 0x" + aHex;
+    SimpleString expectedReported = eDecimal + " 0x" + eHex;
+    message_ += createButWasString(expectedReported, actualReported);
+}
+
+UnsignedLongLongsEqualFailure::UnsignedLongLongsEqualFailure(UtestShell* test, const char* fileName, int lineNumber, cpputest_ulonglong expected, cpputest_ulonglong actual, const SimpleString& text)
+: TestFailure(test, fileName, lineNumber)
+{
+    message_ = createUserText(text);
+
+    SimpleString aDecimal = StringFrom(actual);
+    SimpleString aHex = HexStringFrom(actual);
+    SimpleString eDecimal = StringFrom(expected);
+    SimpleString eHex = HexStringFrom(expected);
+
+    SimpleString::padStringsToSameLength(aDecimal, eDecimal, ' ');
+    SimpleString::padStringsToSameLength(aHex, eHex, '0');
+
+    SimpleString actualReported = aDecimal + " 0x" + aHex;
+    SimpleString expectedReported = eDecimal + " 0x" + eHex;
+    message_ += createButWasString(expectedReported, actualReported);
+}
+
 StringEqualFailure::StringEqualFailure(UtestShell* test, const char* fileName, int lineNumber, const char* expected, const char* actual, const SimpleString& text)
 : TestFailure(test, fileName, lineNumber)
 {
@@ -325,4 +361,13 @@ BitsEqualFailure::BitsEqualFailure(UtestShell* test, const char* fileName, int l
     message_ = createUserText(text);
 
     message_ += createButWasString(StringFromMaskedBits(expected, mask, byteCount), StringFromMaskedBits(actual, mask, byteCount));
+}
+
+FeatureUnsupportedFailure::FeatureUnsupportedFailure(UtestShell* test, const char* fileName, int lineNumber,
+                                                     const SimpleString& featureName, const SimpleString& text)
+: TestFailure(test, fileName, lineNumber)
+{
+    message_ = createUserText(text);
+
+    message_ += StringFromFormat("The feature \"%s\" is not supported in this environment or with the feature set selected when building the library.", featureName.asCharString());;
 }
