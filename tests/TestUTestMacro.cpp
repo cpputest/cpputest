@@ -359,6 +359,30 @@ IGNORE_TEST(UnitTestMacros, UNSIGNED_LONGLONGS_EQUAL_TEXTWorksInAnIgnoredTest)
     UNSIGNED_LONGLONGS_EQUAL_TEXT(1, 0, "Failed because it failed"); // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
 
+#else
+
+static void _LONGLONGS_EQUALFailsWithUnsupportedFeatureTestMethod()
+{
+    LONGLONGS_EQUAL(1, 1);
+} // LCOV_EXCL_LINE
+
+static void _UNSIGNED_LONGLONGS_EQUALFailsWithUnsupportedFeatureTestMethod()
+{
+    UNSIGNED_LONGLONGS_EQUAL(1, 1);
+} // LCOV_EXCL_LINE
+
+TEST(UnitTestMacros, LONGLONGS_EQUALFailsWithUnsupportedFeature)
+{
+    runTestWithMethod(_LONGLONGS_EQUALFailsWithUnsupportedFeatureTestMethod);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("\"CPPUTEST_USE_LONG_LONG\" is not supported");
+}
+
+TEST(UnitTestMacros, UNSIGNED_LONGLONGS_EQUALFailsWithUnsupportedFeature)
+{
+    runTestWithMethod(_UNSIGNED_LONGLONGS_EQUALFailsWithUnsupportedFeatureTestMethod);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("\"CPPUTEST_USE_LONG_LONG\" is not supported");
+}
+
 #endif /* CPPUTEST_USE_LONG_LONG */
 
 static void _failingTestMethodWithCHECK()
