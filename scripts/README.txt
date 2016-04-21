@@ -10,7 +10,7 @@ Run InstallScripts.sh to
 	2) Define symbolic links for each of the scripts
 
 Like this:
-	./InstallScripts.sh
+	./scripts/InstallScripts.sh
 	
 You might have to add the execute privilege to the shell scripts.
 Like this:
