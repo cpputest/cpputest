@@ -25,7 +25,6 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #ifndef CPPUTESTCONFIG_H_
 #define CPPUTESTCONFIG_H_
 
@@ -199,8 +198,11 @@
 #define CPPUTEST_CHAR_BIT 8
 #endif
 
-/* Support for "long long" type */
-#ifdef CPPUTEST_HAVE_LONG_LONG_INT
+/*
+ * Support for "long long" type
+ */
+
+#if defined(CPPUTEST_HAVE_LONG_LONG_INT) && !defined(CPPUTEST_DISABLE_LONG_LONG) && !defined(CPPUTEST_USE_LONG_LONG)
 #define CPPUTEST_USE_LONG_LONG 1
 #endif
 
@@ -211,13 +213,31 @@ typedef unsigned long long cpputest_ulonglong;
 /* Define some placeholders to disable the overloaded methods.
  * It's not required to have these match the size of the "real" type, but it's occasionally convenient.
  */
+
 #if defined(CPPUTEST_64BIT) && !defined(CPPUTEST_64BIT_32BIT_LONGS)
-typedef struct { char dummy[16]; } cpputest_longlong;
-typedef struct { char dummy[16]; } cpputest_ulonglong;
+#define CPPUTEST_SIZE_OF_FAKE_LONG_LONG_TYPE 16
 #else
-typedef struct { char dummy[8]; } cpputest_longlong;
-typedef struct { char dummy[8]; } cpputest_ulonglong;
+#define CPPUTEST_SIZE_OF_FAKE_LONG_LONG_TYPE 8
 #endif
+
+struct cpputest_longlong
+{
+#if defined(__cplusplus)
+  cpputest_longlong() {}
+  cpputest_longlong(int) {}
+#endif
+  char dummy[CPPUTEST_SIZE_OF_FAKE_LONG_LONG_TYPE];
+};
+
+struct cpputest_ulonglong
+{
+#if defined(__cplusplus)
+  cpputest_ulonglong() {}
+  cpputest_ulonglong(int) {}
+#endif
+  char dummy[CPPUTEST_SIZE_OF_FAKE_LONG_LONG_TYPE];
+};
+
 #endif
 
 /* Visual C++ 10.0+ (2010+) supports the override keyword, but doesn't define the C++ version as C++11 */
