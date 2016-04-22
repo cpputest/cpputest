@@ -47,10 +47,10 @@ include("${CppUTestRootDirectory}/cmake/Modules/CppUTestNormalizeTestOutputLocat
 
 configure_file (
     "${PROJECT_SOURCE_DIR}/config.h.cmake"
-    "${PROJECT_BINARY_DIR}/config.h"
+    "${PROJECT_BINARY_DIR}/generated/CppUTestGeneratedConfig.h"
     )
 include_directories(${PROJECT_BINARY_DIR})
-add_definitions(-DCPPUTEST_HAVE_CONFIG_H)
+add_definitions(-DHAVE_CONFIG_H)
 
 include_directories(${CppUTestRootDirectory}/include)
 add_subdirectory(src/CppUTest)
@@ -79,6 +79,10 @@ configure_file (cpputest.pc.in
 
 install(FILES  ${CMAKE_CURRENT_BINARY_DIR}/${CppUTest_PKGCONFIG_FILE}
     DESTINATION ${LIB_INSTALL_DIR}/pkgconfig
+    )
+
+install(FILES  "${CMAKE_CURRENT_BINARY_DIR}/generated/CppUTestGeneratedConfig.h"
+    DESTINATION "${INCLUDE_INSTALL_DIR}/CppUTest"
     )
 
 # Try to include helper module
