@@ -25,7 +25,6 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #ifndef CPPUTESTCONFIG_H_
 #define CPPUTESTCONFIG_H_
 
@@ -197,6 +196,48 @@
 #define CPPUTEST_CHAR_BIT CHAR_BIT
 #else
 #define CPPUTEST_CHAR_BIT 8
+#endif
+
+/*
+ * Support for "long long" type
+ */
+
+#if defined(CPPUTEST_HAVE_LONG_LONG_INT) && !defined(CPPUTEST_LONG_LONG_DISABLED) && !defined(CPPUTEST_USE_LONG_LONG)
+#define CPPUTEST_USE_LONG_LONG 1
+#endif
+
+#ifdef CPPUTEST_USE_LONG_LONG
+typedef long long cpputest_longlong;
+typedef unsigned long long cpputest_ulonglong;
+#else
+/* Define some placeholders to disable the overloaded methods.
+ * It's not required to have these match the size of the "real" type, but it's occasionally convenient.
+ */
+
+#if defined(CPPUTEST_64BIT) && !defined(CPPUTEST_64BIT_32BIT_LONGS)
+#define CPPUTEST_SIZE_OF_FAKE_LONG_LONG_TYPE 16
+#else
+#define CPPUTEST_SIZE_OF_FAKE_LONG_LONG_TYPE 8
+#endif
+
+struct cpputest_longlong
+{
+#if defined(__cplusplus)
+  cpputest_longlong() {}
+  cpputest_longlong(int) {}
+#endif
+  char dummy[CPPUTEST_SIZE_OF_FAKE_LONG_LONG_TYPE];
+};
+
+struct cpputest_ulonglong
+{
+#if defined(__cplusplus)
+  cpputest_ulonglong() {}
+  cpputest_ulonglong(int) {}
+#endif
+  char dummy[CPPUTEST_SIZE_OF_FAKE_LONG_LONG_TYPE];
+};
+
 #endif
 
 /* Visual C++ 10.0+ (2010+) supports the override keyword, but doesn't define the C++ version as C++11 */

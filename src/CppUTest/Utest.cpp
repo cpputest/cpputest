@@ -429,6 +429,32 @@ void UtestShell::assertUnsignedLongsEqual(unsigned long expected, unsigned long 
         failWith(UnsignedLongsEqualFailure (this, fileName, lineNumber, expected, actual, text), testTerminator);
 }
 
+void UtestShell::assertLongLongsEqual(cpputest_longlong expected, cpputest_longlong actual, const char* text, const char* fileName, int lineNumber, const TestTerminator& testTerminator)
+{
+    getTestResult()->countCheck();
+#ifdef CPPUTEST_USE_LONG_LONG
+    if (expected != actual)
+        failWith(LongLongsEqualFailure(this, fileName, lineNumber, expected, actual, text), testTerminator);
+#else
+    (void)expected;
+    (void)actual;
+    failWith(FeatureUnsupportedFailure(this, fileName, lineNumber, "CPPUTEST_USE_LONG_LONG", text), testTerminator);
+#endif
+}
+
+void UtestShell::assertUnsignedLongLongsEqual(cpputest_ulonglong expected, cpputest_ulonglong actual, const char* text, const char* fileName, int lineNumber, const TestTerminator& testTerminator)
+{
+    getTestResult()->countCheck();
+#ifdef CPPUTEST_USE_LONG_LONG
+    if (expected != actual)
+        failWith(UnsignedLongLongsEqualFailure(this, fileName, lineNumber, expected, actual, text), testTerminator);
+#else
+    (void)expected;
+    (void)actual;
+    failWith(FeatureUnsupportedFailure(this, fileName, lineNumber, "CPPUTEST_USE_LONG_LONG", text), testTerminator);
+#endif
+}
+
 void UtestShell::assertPointersEqual(const void* expected, const void* actual, const char* text, const char* fileName, int lineNumber, const TestTerminator& testTerminator)
 {
     getTestResult()->countCheck();

@@ -208,6 +208,24 @@
 #define UNSIGNED_LONGS_EQUAL_LOCATION(expected, actual, text, file, line)\
   { UtestShell::getCurrent()->assertUnsignedLongsEqual((unsigned long)expected, (unsigned long)actual, text, file, line); }
 
+#define LONGLONGS_EQUAL(expected, actual)\
+  LONGLONGS_EQUAL_LOCATION(expected, actual, NULL, __FILE__, __LINE__)
+
+#define LONGLONGS_EQUAL_TEXT(expected, actual, text)\
+  LONGLONGS_EQUAL_LOCATION(expected, actual, text, __FILE__, __LINE__)
+
+#define UNSIGNED_LONGLONGS_EQUAL(expected, actual)\
+  UNSIGNED_LONGLONGS_EQUAL_LOCATION(expected, actual, NULL, __FILE__, __LINE__)
+
+#define UNSIGNED_LONGLONGS_EQUAL_TEXT(expected, actual, text)\
+  UNSIGNED_LONGLONGS_EQUAL_LOCATION(expected, actual, text, __FILE__, __LINE__)
+
+#define LONGLONGS_EQUAL_LOCATION(expected, actual, text, file, line)\
+        { UtestShell::getCurrent()->assertLongLongsEqual(expected, actual, text, file, line); }
+
+#define UNSIGNED_LONGLONGS_EQUAL_LOCATION(expected, actual, text, file, line)\
+        { UtestShell::getCurrent()->assertUnsignedLongLongsEqual(expected, actual, text, file, line); }
+
 #define BYTES_EQUAL(expected, actual)\
     LONGS_EQUAL((expected) & 0xff,(actual) & 0xff)
 

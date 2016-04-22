@@ -190,7 +190,7 @@ CppUTestExtTests_SOURCES = \
 	tests/CppUTestExt/MockComparatorCopierTest.cpp \
 	tests/CppUTestExt/MockExpectedCallTest.cpp \
 	tests/CppUTestExt/ExpectedFunctionsListTest.cpp \
-    tests/CppUTestExt/MockFailureReporterForTest.cpp \
+	tests/CppUTestExt/MockFailureReporterForTest.cpp \
 	tests/CppUTestExt/MockFailureTest.cpp \
 	tests/CppUTestExt/MockHierarchyTest.cpp \
 	tests/CppUTestExt/MockNamedValueTest.cpp \
@@ -287,8 +287,8 @@ check_basic:
 	@echo "Building without the Standard C library"
 	make distclean; $(srcdir)/configure --disable-std-c; make
 
-	@echo "Building without the Standard C++ library"
-	make distclean; $(srcdir)/configure --disable-std-cpp; make check
+	@echo "Building without the Standard C++ library and without long long"
+	make distclean; $(srcdir)/configure --disable-std-cpp --disable-long-long; make check
 
 	@echo "Building without memory leak detection"
 	make distclean; $(srcdir)/configure --disable-memory-leak-detection; make check
@@ -347,7 +347,7 @@ check_examples:
 	$(MAKE) -C $(srcdir)/examples all clean
 
 	@echo "Compiling and running the examples. This will use the old Makefile"
-	make distclean; $(srcdir)/configure; make; $(MAKE) -C $(srcdir)/examples all clean CPPUTEST_LIB_LINK_DIR="`pwd`/lib"
+	make distclean; $(srcdir)/configure --disable-longlong; make; $(MAKE) -C $(srcdir)/examples all clean CPPUTEST_LIB_LINK_DIR="`pwd`/lib"
 
 check_all: check_basic check_special_situations check_coverage remove_coverage_output check_examples check_gtest
 	@echo "Last... one normal build and test"
