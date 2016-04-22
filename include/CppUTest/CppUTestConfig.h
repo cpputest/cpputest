@@ -202,7 +202,7 @@
  * Support for "long long" type
  */
 
-#if defined(CPPUTEST_HAVE_LONG_LONG_INT) && !defined(CPPUTEST_DISABLE_LONG_LONG) && !defined(CPPUTEST_USE_LONG_LONG)
+#if defined(CPPUTEST_HAVE_LONG_LONG_INT) && !defined(CPPUTEST_LONG_LONG_DISABLED) && !defined(CPPUTEST_USE_LONG_LONG)
 #define CPPUTEST_USE_LONG_LONG 1
 #endif
 

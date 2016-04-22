@@ -368,9 +368,9 @@ else
 	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -include ${srcdir}/include/CppUTest/MemoryLeakDetectorMallocMacros.h"
 fi
 
-# Disablong long long support
+# Disabling long long support
 if test "x${use_longlong}" = xno; then
-  AC_DEFINE([DISABLE_LONG_LONG], 1, [enable long long])
+  AC_DEFINE([LONG_LONG_DISABLED], 1, [disable long long])
 fi
 
 # Generating map files.
