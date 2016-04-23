@@ -129,6 +129,20 @@ bool TestFailure::isInHelperFunction() const
 {
     return lineNumber_ < testLineNumber_;
 }
+SimpleString TestFailure::createNumericalCheckDescription(const SimpleString& longsEqualString, const SimpleString& expected, const SimpleString& actual)
+{
+    SimpleString result;
+    
+    result += longsEqualString;
+    result += "(";
+    result += expected;
+    result += ", ";
+    result += actual;
+    result += ")";
+    result += " failed!\n";
+
+    return result;
+}
 
 SimpleString TestFailure::createButWasString(const SimpleString& expected, const SimpleString& actual)
 {
@@ -235,12 +249,31 @@ FailFailure::FailFailure(UtestShell* test, const char* fileName, int lineNumber,
 {
     message_ = message;
 }
+LongsEqualFailure::LongsEqualFailure(UtestShell* test, const char* fileName, int lineNumber, long expected, long actual, const SimpleString& longsEqualString, const SimpleString& expectedString, const SimpleString& actualString, const SimpleString& text)
+: TestFailure(test, fileName, lineNumber)
+{
+    message_ = createUserText(text);
+
+    message_ += createNumericalCheckDescription(longsEqualString, expectedString, actualString);
+
+    SimpleString aDecimal = StringFrom(actual);
+    SimpleString aHex = HexStringFrom(actual);
+    SimpleString eDecimal = StringFrom(expected);
+    SimpleString eHex = HexStringFrom(expected);
+
+    SimpleString::padStringsToSameLength(aDecimal, eDecimal, ' ');
+    SimpleString::padStringsToSameLength(aHex, eHex, '0');
+
+    SimpleString actualReported = aDecimal + " 0x" + aHex;
+    SimpleString expectedReported = eDecimal + " 0x" + eHex;
+    message_ += createButWasString(expectedReported, actualReported);
+}
 
 LongsEqualFailure::LongsEqualFailure(UtestShell* test, const char* fileName, int lineNumber, long expected, long actual, const SimpleString& text)
 : TestFailure(test, fileName, lineNumber)
 {
     message_ = createUserText(text);
-
+    
     SimpleString aDecimal = StringFrom(actual);
     SimpleString aHex = HexStringFrom(actual);
     SimpleString eDecimal = StringFrom(expected);

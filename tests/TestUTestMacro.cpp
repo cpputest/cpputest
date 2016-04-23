@@ -883,6 +883,47 @@ static void _failingTestMethodWithLONGS_EQUAL()
     LONGS_EQUAL(1, 0xff);
     lineOfCodeExecutedAfterCheck = true; // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
+class globalConfigureFactory
+{
+public:
+    static int getUserHighestPriority()
+    {
+        return 4;
+    }
+};
+
+class usersPriorityGenerator
+{
+public:
+    usersPriorityGenerator()
+    {
+        usersPriority[0] = 4;
+        usersPriority[1] = 2;
+    }
+    int(&getUsersPriority())[2]
+    {
+        return usersPriority;
+    }
+private:
+    int usersPriority[2];
+};
+static void _failingTestMethodWithLONGS_EQUALUsedForNonMagicValue()
+{
+    usersPriorityGenerator uPG;
+        
+    LONGS_EQUAL(globalConfigureFactory::getUserHighestPriority(), uPG.getUsersPriority()[0]);
+    LONGS_EQUAL(globalConfigureFactory::getUserHighestPriority() - 1, uPG.getUsersPriority()[1]);
+
+    lineOfCodeExecutedAfterCheck = true; // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
+
+TEST(UnitTestMacros, FailureWithLONGS_EQUALSUsedForNonMagicValue)
+{
+    runTestWithMethod(_failingTestMethodWithLONGS_EQUALUsedForNonMagicValue);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("LONGS_EQUAL(globalConfigureFactory::getUserHighestPriority() - 1, uPG.getUsersPriority()[1]) failed!");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <3 0x3>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <2 0x2>");
+}
 
 TEST(UnitTestMacros, FailureWithLONGS_EQUALS)
 {
