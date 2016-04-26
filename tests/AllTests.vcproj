@@ -493,6 +493,14 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\CppUTestExt\IEEE754PluginTest.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CppUTestExt\IEEE754PluginTest_c.c"
+				>
+			</File>
+			<File
 				RelativePath="JUnitOutputTest.cpp"
 				>
 				<FileConfiguration
@@ -731,6 +739,14 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="CppUTestExt\MockFailureReporterForTest.cpp"
+				>
+			</File>
+			<File
+				RelativePath="CppUTestExt\MockFailureReporterForTest.h"
+				>
+			</File>
+			<File
 				RelativePath="CppUTestExt\MockFailureTest.cpp"
 				>
 				<FileConfiguration
@@ -752,14 +768,6 @@
 						ForcedIncludeFiles=""
 					/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="CppUTestExt\MockFailureReporterForTest.cpp"
-				>
-			</File>
-			<File
-				RelativePath="CppUTestExt\MockFailureReporterForTest.h"
-				>
 			</File>
 			<File
 				RelativePath=".\CppUTestExt\MockHierarchyTest.cpp"
@@ -1364,6 +1372,10 @@
 			</File>
 			<File
 				RelativePath="..\include\CppUTest\CppUTestConfig.h"
+				>
+			</File>
+			<File
+				RelativePath=".\CppUTestExt\IEEE754PluginTest_c.h"
 				>
 			</File>
 			<File
