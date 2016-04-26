@@ -81,17 +81,49 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNIN
 CFLAGS="$saved_cflags"
 fi
 
+#####################################################################################
+##### C++ 11 checks
+
+### Checking for Standard C++ 11 compiler flags
+AC_LANG_PUSH([C++])
+
+# FLag -std=c++0x
+CXXFLAGS="-std=c++0x"
+AC_MSG_CHECKING([whether CXX supports -std=c++0x])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CPP11FLAG="-std=c++0x" ], [AC_MSG_RESULT([no])])
+CXXFLAGS="$saved_cxxflags"
+
+CXXFLAGS="-std=c++11"
+AC_MSG_CHECKING([whether CXX supports -std=c++11])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CPP11FLAG="-std=c++11" ], [AC_MSG_RESULT([no])])
+CXXFLAGS="$saved_cxxflags"
+
+CXXFLAGS="-stdlib=libc++"
+AC_MSG_CHECKING([whether CXX supports -stdlib=libc++])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <cstdio>]])], [AC_MSG_RESULT([yes]); CPPUTEST_CPP11FLAG="${CPPUTEST_CPP11FLAG} -stdlib=libc++" ], [AC_MSG_RESULT([no])])
+CXXFLAGS="$saved_cxxflags"
+
+AC_LANG_POP
+
+# Flag -Wno-c++98-compat
+CXXFLAGS="-Wno-c++98-compat"
+AC_MSG_CHECKING([whether CXX supports -Wno-c++98-compat])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CPP11BLACKLIST="${CPPUTEST_CPP11BLACKLIST} -Wno-c++98-compat" ], [AC_MSG_RESULT([no])])
+CXXFLAGS="$saved_cxxflags"
+
+# Flag -Wno-c++98-compat-pedantic
+CXXFLAGS="-Wno-c++98-compat-pedantic"
+AC_MSG_CHECKING([whether CXX supports -Wno-c++98-compat-pedantic])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CPP11BLACKLIST="${CPPUTEST_CPP11BLACKLIST} -Wno-c++98-compat-pedantic" ], [AC_MSG_RESULT([no])])
+CXXFLAGS="$saved_cxxflags"
+
+#####################################################################################
+##### More of these warnings
 # FLag -Weverything.
 CFLAGS="-Werror -Weverything -Wno-unused-macros"
 AC_MSG_CHECKING([whether CC and CXX supports -Weverything])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Weverything"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Weverything" ], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
-
-# Flag -Wno-c++98-compat
-CXXFLAGS="-Wno-c++98-compat"
-AC_MSG_CHECKING([whether CXX supports -Wno-c++98-compat])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CPP11BLACKLIST=" -Wno-c++98-compat" ], [AC_MSG_RESULT([no])])
-CXXFLAGS="$saved_cxxflags"
 
 # FLag -Wall.
 CFLAGS="-Werror -Wall"
@@ -163,6 +195,10 @@ AC_MSG_CHECKING([whether CC supports -Wstrict-prototypes])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wstrict-prototypes" ], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 
+
+#####################################################################################
+##### Less of these warnings
+#
 # Disable some warnings as CppUTest has this and can't be prevented at the moment.
 # FLag -Wno-disabled-macro-expansion.
 CFLAGS="-Werror -Wno-disabled-macro-expansion"
@@ -188,11 +224,11 @@ AC_MSG_CHECKING([whether CC and CXX supports -Wno-keyword-macro])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wno-keyword-macro"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wno-keyword-macro" ], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 
-# FLag -Wno-long-long.
-CXXFLAGS="-Werror -Wno-long-long"
-AC_MSG_CHECKING([whether CC and CXX supports -Wno-long-long])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wno-long-long"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wno-long-long" ], [AC_MSG_RESULT([no])])
-CFLAGS="$saved_cflags"
+# FLag -Wno-c++11-long-long
+CXXFLAGS="-Werror -Wno-c++11-long-long"
+AC_MSG_CHECKING([whether CC and CXX supports -Wno-c++11-long-long])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wno-c++11-long-long"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wno-c++11-long-long" ], [AC_MSG_RESULT([no])])
+#CFLAGS="$saved_cflags"
 
 # FLag -Wno-global-constructors.
 AC_LANG_PUSH([C++])
@@ -226,6 +262,9 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CXXWARN
 CXXFLAGS="$saved_cxxflags"
 AC_LANG_POP
 
+#####################################################
+######## End warning section
+
 # FLag --coverage
 AC_LANG_PUSH([C++])
 CXXFLAGS="-Werror --coverage"
@@ -234,29 +273,10 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); coverage_flag_suppo
 CXXFLAGS="$saved_cxxflags"
 AC_LANG_POP
 
-### Checking for Standard C++ 11 compiler flags
-AC_LANG_PUSH([C++])
-
-# FLag -std=c++0x
-CXXFLAGS="-std=c++0x"
-AC_MSG_CHECKING([whether CXX supports -std=c++0x])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CPP11FLAG="-std=c++0x" ], [AC_MSG_RESULT([no])])
-CXXFLAGS="$saved_cxxflags"
-
-CXXFLAGS="-std=c++11"
-AC_MSG_CHECKING([whether CXX supports -std=c++11])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CPP11FLAG="-std=c++11" ], [AC_MSG_RESULT([no])])
-CXXFLAGS="$saved_cxxflags"
-
-CXXFLAGS="-stdlib=libc++"
-AC_MSG_CHECKING([whether CXX supports -stdlib=libc++])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <cstdio>]])], [AC_MSG_RESULT([yes]); CPPUTEST_CPP11FLAG="${CPPUTEST_CPP11FLAG} -stdlib=libc++" ], [AC_MSG_RESULT([no])])
-CXXFLAGS="$saved_cxxflags"
-
-AC_LANG_POP
-
-### Checking for strange exception handling behavior, related to bugs in compilers...
-### TODO: This part isn't finished yet. It will need to generate different CppUTestConfig.h files based on the result of these checks.
+######################################################
+# Exception Handling
+#
+# Checking for strange exception handling behavior, related to bugs in compilers...
 AC_LANG_PUSH([C++])
 
 # Can we use operator delete without exception handling specifier? (clang warns on this!)
@@ -269,6 +289,12 @@ CXXFLAGS="$saved_cxxflags"
 CXXFLAGS="-Werror"
 AC_MSG_CHECKING([whether CXX supports operator new with exception handling specifier])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <new>\nvoid* operator new(size_t size) throw(std::bad_alloc);;])], [AC_MSG_RESULT([yes])], [AC_MSG_RESULT([no]); UT_NEW_CANT_HAVE_EXCEPTION_SPECIFIER="yes"])
+CXXFLAGS="$saved_cxxflags"
+
+# FLag -Wno-missing-exception-spec
+CXXFLAGS="-Werror -Wno-missing-exception-spec"
+AC_MSG_CHECKING([whether CXX supports -Wno-missing-exception-spec])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CXX_NO_INC_WARNINGFLAGS="${CPPUTEST_CXX_NO_INC_WARNINGFLAGS} -Wno-missing-exception-spec" ], [AC_MSG_RESULT([no])])
 CXXFLAGS="$saved_cxxflags"
 
 AC_LANG_POP
@@ -347,7 +373,7 @@ fi
 if test "x${use_std_cpp}" = xno; then
 	AC_DEFINE([STD_CPP_LIB_DISABLED], 1, [Standard C++ library disabled])
 	if test "x${use_std_c}" = xyes; then
-    	CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} -nostdinc++"
+    	CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} -nostdinc++ ${CPPUTEST_CXX_NO_INC_WARNINGFLAGS}"
 
     	# Since automake passes the CXXFLAGS to the linker, this will cause warnings with clang 3.2 (which become errors)
     	CPPUTEST_LDFLAGS="${CPPUTEST_LDFLAGS} ${CPPUTEST_NO_UNUSED_ARGUMENT_WARNING}"
