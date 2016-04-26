@@ -91,6 +91,9 @@
  #endif
 #endif
 
+/* Should be the only #include here. Standard C library wrappers */
+#include "StandardCLibrary.h"
+
 /* Create a __no_return__ macro, which is used to flag a function as not returning.
  * Used for functions that always throws for instance.
  *
@@ -192,7 +195,6 @@
  * Since CHAR_BIT is defined in limits.h (ANSI C), use default of 8 when building without Std C library.
  */
 #if CPPUTEST_USE_STD_C_LIB
-#include <limits.h>
 #define CPPUTEST_CHAR_BIT CHAR_BIT
 #else
 #define CPPUTEST_CHAR_BIT 8
@@ -255,8 +257,5 @@ struct cpputest_ulonglong
 #ifdef __clang__
  #pragma clang diagnostic pop
 #endif
-
-/* Should be the only #include here. Standard C library wrappers */
-#include "StandardCLibrary.h"
 
 #endif
