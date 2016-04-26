@@ -23,6 +23,10 @@ else (MSVC)
       endforeach (flag)
     endmacro(check_and_append_cxx_warning_flags)
 
+    if (NOT GMOCK AND NOT REAL_GTEST)
+      list(APPEND WARNING_C_FLAGS Werror pedantic-errors)
+    endif (NOT GMOCK AND NOT REAL_GTEST)
+
     set(WARNING_C_FLAGS
         Weverything
         Wall
@@ -36,12 +40,8 @@ else (MSVC)
         Wno-disabled-macro-expansion
         Wno-reserved-id-macro
         Wno-keyword-macro
-	Wno-long-long
+        Wno-long-long
         )
-
-    if (NOT GMOCK AND NOT REAL_GTEST)
-      list(APPEND WARNING_C_FLAGS Werror pedantic-errors)
-    endif (NOT GMOCK AND NOT REAL_GTEST)
 
     set(WARNING_C_ONLY_FLAGS
         Wstrict-prototypes
@@ -62,8 +62,12 @@ else (MSVC)
 
     if (C++11)
         check_cxx_compiler_flag("-Wno-c++98-compat" NO_WARNING_CXX_98_COMPAT_FLAG)
+        check_cxx_compiler_flag("-Wno-c++98-compat-pedantic" NO_WARNING_CXX_98_COMPAT_PEDANTIC_FLAG)
         if (NO_WARNING_CXX_98_COMPAT_FLAG)
             set(CPPUTEST_CXX_WARNING_FLAGS "${CPPUTEST_CXX_WARNING_FLAGS} -Wno-c++98-compat")
         endif (NO_WARNING_CXX_98_COMPAT_FLAG)
+        if (NO_WARNING_CXX_98_COMPAT_PEDANTIC_FLAG)
+            set(CPPUTEST_CXX_WARNING_FLAGS "${CPPUTEST_CXX_WARNING_FLAGS} -Wno-c++98-compat-pedantic")
+        endif (NO_WARNING_CXX_98_COMPAT_PEDANTIC_FLAG)
     endif (C++11)
 endif (MSVC)
