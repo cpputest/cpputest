@@ -22,6 +22,9 @@
 /* Needed for ... */
 #include <stdarg.h>
 
+/* Needed for some detection of long long and 64 bit */
+#include <limits.h>
+
 #else
 
 #ifdef __KERNEL__
