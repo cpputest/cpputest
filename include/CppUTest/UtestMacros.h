@@ -191,7 +191,7 @@
 
 //Check two long integers for equality
 #define LONGS_EQUAL(expected, actual)\
-  LONGS_EQUAL_LOCATION((expected), (actual), NULL, __FILE__, __LINE__)
+  LONGS_EQUAL_LOCATION_WITH_DESCRIPTION((expected), (actual), "LONGS_EQUAL", #expected, #actual, NULL, __FILE__, __LINE__)
 
 #define LONGS_EQUAL_TEXT(expected, actual, text)\
   LONGS_EQUAL_LOCATION((expected), (actual), text, __FILE__, __LINE__)
@@ -201,6 +201,10 @@
 
 #define UNSIGNED_LONGS_EQUAL_TEXT(expected, actual, text)\
   UNSIGNED_LONGS_EQUAL_LOCATION((expected), (actual), text, __FILE__, __LINE__)
+
+#define LONGS_EQUAL_LOCATION_WITH_DESCRIPTION(expected, actual, longsEqualString, expectedString, actualString, text, file, line)\
+  { UtestShell::getCurrent()->assertLongsEqual((long)expected, (long)actual, longsEqualString, expectedString, actualString, text, file, line); }
+
 
 #define LONGS_EQUAL_LOCATION(expected, actual, text, file, line)\
   { UtestShell::getCurrent()->assertLongsEqual((long)expected, (long)actual, text, file, line); }
@@ -227,7 +231,7 @@
         { UtestShell::getCurrent()->assertUnsignedLongLongsEqual(expected, actual, text, file, line); }
 
 #define BYTES_EQUAL(expected, actual)\
-    LONGS_EQUAL((expected) & 0xff,(actual) & 0xff)
+    LONGS_EQUAL_LOCATION_WITH_DESCRIPTION(((expected) & 0xff), ((actual) & 0xff), "BYTES_EQUAL", #expected, #actual, NULL, __FILE__, __LINE__)
 
 #define BYTES_EQUAL_TEXT(expected, actual, text)\
     LONGS_EQUAL_TEXT((expected) & 0xff, (actual) & 0xff, text)

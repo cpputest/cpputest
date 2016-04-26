@@ -415,6 +415,14 @@ void UtestShell::assertCstrNoCaseContains(const char* expected, const char* actu
         failWith(ContainsFailure(this, fileName, lineNumber, expected, actual, text));
 }
 
+void UtestShell::assertLongsEqual(long expected, long actual, const char* longsEqualString, const char* expectedString, const char* actualString, const char* text, const char* fileName, int lineNumber, const TestTerminator& testTerminator)
+{
+    getTestResult()->countCheck();
+    if (expected != actual)
+        failWith(LongsEqualFailure (this, fileName, lineNumber, expected, actual, longsEqualString, expectedString, actualString, text), testTerminator);
+}
+
+
 void UtestShell::assertLongsEqual(long expected, long actual, const char* text, const char* fileName, int lineNumber, const TestTerminator& testTerminator)
 {
     getTestResult()->countCheck();

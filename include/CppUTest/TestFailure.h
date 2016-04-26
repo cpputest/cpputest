@@ -72,6 +72,7 @@ protected:
     SimpleString createButWasString(const SimpleString& expected, const SimpleString& actual);
     SimpleString createDifferenceAtPosString(const SimpleString& actual, size_t position, DifferenceFormat format = DIFFERENCE_STRING);
     SimpleString createUserText(const SimpleString& text);
+    SimpleString createNumericalCheckDescription(const SimpleString& longsEqualString, const SimpleString& expected, const SimpleString& actual);
 
     SimpleString testName_;
     SimpleString testNameOnly_;
@@ -127,6 +128,7 @@ class LongsEqualFailure : public TestFailure
 {
 public:
     LongsEqualFailure(UtestShell* test, const char* fileName, int lineNumber, long expected, long actual, const SimpleString& text);
+    LongsEqualFailure(UtestShell* test, const char* fileName, int lineNumber, long expected, long actual, const SimpleString& longsEqualString, const SimpleString& expectedString, const SimpleString& actualString, const SimpleString& text);
 };
 
 class UnsignedLongsEqualFailure : public TestFailure
