@@ -25,6 +25,10 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <CppUTest/CppUTestConfig.h>
+
+#ifdef CPPUTEST_HAVE_FENV
+
 #include "IEEE754PluginTest_c.h"
 #include <math.h>
 
@@ -71,3 +75,5 @@ void set_everything_c()
     set_invalid_c();
     set_inexact_c();
 }
+
+#endif // CPPUTEST_HAVE_FENV
