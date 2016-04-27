@@ -375,6 +375,6 @@ dist-hook:
 		fi \
 	fi
 
-distclean-local: distclean
+distclean-local:
 	test -z "generated" || rmdir generated
 
