@@ -76,4 +76,4 @@ void set_everything_c()
     set_inexact_c();
 }
 
-#endif // CPPUTEST_HAVE_FENV
+#endif /* CPPUTEST_HAVE_FENV */
