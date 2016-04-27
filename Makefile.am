@@ -203,6 +203,10 @@ CppUTestExtTests_SOURCES = \
 	tests/CppUTestExt/MockReturnValueTest.cpp \
 	tests/CppUTestExt/OrderedTestTest.cpp
 
+DISTCLEANFILES = \
+	filename.map.txt \
+	generated/CppUTestGeneratedConfig.h
+
 if INCLUDE_GMOCKTESTS
 
 #GTestTests_CPPFLAGS = $(lib_libCppUTestExt_a_CPPFLAGS)
@@ -370,4 +374,7 @@ dist-hook:
 			exit 1; \
 		fi \
 	fi
+
+distclean-local: distclean
+	test -z "generated" || rmdir generated
 
