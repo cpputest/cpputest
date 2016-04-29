@@ -27,8 +27,6 @@
 
 #include <CppUTest/CppUTestConfig.h>
 
-#ifdef CPPUTEST_HAVE_FENV
-
 #include "IEEE754PluginTest_c.h"
 #include <math.h>
 
@@ -42,14 +40,14 @@ void set_divisionbyzero_c(void)
 
 void set_overflow_c(void)
 {
-    f = 1000.0f;
-    while (f < INFINITY) f *= f;
+   f = 1e38f;
+   f *= f;
 }
 
 void set_underflow_c(void)
 {
-    f = 0.01f;
-    while (f > 0.0f) f *= f;
+   f = 1e-38f;
+   f *= f;
 }
 
 void set_invalid_c(void)
@@ -75,5 +73,3 @@ void set_everything_c()
     set_invalid_c();
     set_inexact_c();
 }
-
-#endif /* CPPUTEST_HAVE_FENV */
