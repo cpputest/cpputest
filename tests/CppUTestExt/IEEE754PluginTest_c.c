@@ -25,8 +25,6 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <CppUTest/CppUTestConfig.h>
-
 #include "IEEE754PluginTest_c.h"
 #include <math.h>
 
