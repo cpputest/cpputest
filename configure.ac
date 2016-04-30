@@ -103,8 +103,6 @@ AC_MSG_CHECKING([whether CXX supports -stdlib=libc++])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <cstdio>]])], [AC_MSG_RESULT([yes]); CPPUTEST_CPP11FLAG="${CPPUTEST_CPP11FLAG} -stdlib=libc++" ], [AC_MSG_RESULT([no])])
 CXXFLAGS="$saved_cxxflags"
 
-AC_LANG_POP
-
 # Flag -Wno-c++98-compat
 CXXFLAGS="-Wno-c++98-compat"
 AC_MSG_CHECKING([whether CXX supports -Wno-c++98-compat])
@@ -116,6 +114,21 @@ CXXFLAGS="-Wno-c++98-compat-pedantic"
 AC_MSG_CHECKING([whether CXX supports -Wno-c++98-compat-pedantic])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CPP11BLACKLIST="${CPPUTEST_CPP11BLACKLIST} -Wno-c++98-compat-pedantic" ], [AC_MSG_RESULT([no])])
 CXXFLAGS="$saved_cxxflags"
+
+AC_LANG_POP
+
+# FLag -Wno-c++11-long-long. This must be on if it is available as otherwise long long is supported but causes a warning.
+CFLAGS="-Werror -Wno-c++11-long-long"
+AC_MSG_CHECKING([whether CC and CXX supports -Wno-c++11-long-long])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wno-c++11-long-long" CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wno-c++11-long-long" ], [AC_MSG_RESULT([no])])
+CFLAGS="$saved_cflags"
+
+# FLag -Wno-long-long must be on for C.
+CFLAGS="-Werror -Wno-long-long"
+AC_MSG_CHECKING([whether CC supports -Wno-long-long])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wno-long-long" CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wno-long-long"], [AC_MSG_RESULT([no])])
+CFLAGS="$saved_cflags"
+
 
 #####################################################################################
 ##### More of these warnings
@@ -173,20 +186,21 @@ AC_MSG_CHECKING([whether CC supports -Wsign-conversion])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wsign-conversion"], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 
+##### C++ Warnings
 # FLag -Wsign-conversion (for CXX)
 AC_LANG_PUSH([C++])
+
 CXXFLAGS="-Werror -Wsign-conversion"
 AC_MSG_CHECKING([whether CXX supports -Wsign-conversion])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wsign-conversion"], [AC_MSG_RESULT([no])])
-CFLAGS="$saved_cxxflags"
-AC_LANG_POP
+CXXFLAGS="$saved_cxxflags"
 
 # FLag -Woverloaded-virtual
-AC_LANG_PUSH([C++])
 CXXFLAGS="-Werror -Woverloaded-virtual"
 AC_MSG_CHECKING([whether CXX supports -Woverloaded-virtual])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Woverloaded-virtual" ], [AC_MSG_RESULT([no])])
 CXXFLAGS="$saved_cxxflags"
+
 AC_LANG_POP
 
 # FLag -Wstrict-prototypes
@@ -213,53 +227,42 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNIN
 CFLAGS="$saved_cflags"
 
 # FLag -Wno-reserved-id-macro.
-CXXFLAGS="-Werror -Wno-reserved-id-macro"
+CFLAGS="-Werror -Wno-reserved-id-macro"
 AC_MSG_CHECKING([whether CC and CXX supports -Wno-reserved-id-macro])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wno-reserved-id-macro"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wno-reserved-id-macro" ], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 
 # FLag -Wno-keyword-macro.
-CXXFLAGS="-Werror -Wno-keyword-macro"
+CFLAGS="-Werror -Wno-keyword-macro"
 AC_MSG_CHECKING([whether CC and CXX supports -Wno-keyword-macro])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wno-keyword-macro"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wno-keyword-macro" ], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 
-# FLag -Wno-c++11-long-long
-CXXFLAGS="-Werror -Wno-c++11-long-long"
-AC_MSG_CHECKING([whether CC and CXX supports -Wno-c++11-long-long])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wno-c++11-long-long"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wno-c++11-long-long" ], [AC_MSG_RESULT([no])])
-#CFLAGS="$saved_cflags"
-
-# FLag -Wno-global-constructors.
 AC_LANG_PUSH([C++])
+# FLag -Wno-global-constructors.
 CXXFLAGS="-Werror -Wno-global-constructors"
 AC_MSG_CHECKING([whether CXX supports -Wno-global-constructors])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wno-global-constructors" ], [AC_MSG_RESULT([no])])
 CXXFLAGS="$saved_cxxflags"
-AC_LANG_POP
 
 # FLag -Wno-exit-time-destructors.
-AC_LANG_PUSH([C++])
 CXXFLAGS="-Werror -Wno-exit-time-destructors"
 AC_MSG_CHECKING([whether CXX supports -Wno-exit-time-destructors])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wno-exit-time-destructors" ], [AC_MSG_RESULT([no])])
 CXXFLAGS="$saved_cxxflags"
-AC_LANG_POP
 
 # FLag -Wno-weak-vtables.
-AC_LANG_PUSH([C++])
 CXXFLAGS="-Werror -Wno-weak-vtables"
 AC_MSG_CHECKING([whether CXX supports -Wno-weak-vtables])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wno-weak-vtables" ], [AC_MSG_RESULT([no])])
 CXXFLAGS="$saved_cxxflags"
-AC_LANG_POP
 
 # FLag -Wno-old-style-cast.
-AC_LANG_PUSH([C++])
 CXXFLAGS="-Werror -Wno-old-style-cast"
 AC_MSG_CHECKING([whether CXX supports -Wno-old-style-cast])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wno-old-style-cast" ], [AC_MSG_RESULT([no])])
 CXXFLAGS="$saved_cxxflags"
+
 AC_LANG_POP
 
 #####################################################
