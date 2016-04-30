@@ -203,6 +203,10 @@ CppUTestExtTests_SOURCES = \
 	tests/CppUTestExt/MockReturnValueTest.cpp \
 	tests/CppUTestExt/OrderedTestTest.cpp
 
+DISTCLEANFILES = \
+	filename.map.txt \
+	generated/CppUTestGeneratedConfig.h
+
 if INCLUDE_GMOCKTESTS
 
 #GTestTests_CPPFLAGS = $(lib_libCppUTestExt_a_CPPFLAGS)
@@ -347,7 +351,7 @@ check_examples:
 	$(MAKE) -C $(srcdir)/examples all clean
 
 	@echo "Compiling and running the examples. This will use the old Makefile"
-	make distclean; $(srcdir)/configure --disable-longlong; make; $(MAKE) -C $(srcdir)/examples all clean CPPUTEST_LIB_LINK_DIR="`pwd`/lib"
+	make distclean; $(srcdir)/configure; make; $(MAKE) -C $(srcdir)/examples all clean CPPUTEST_LIB_LINK_DIR="`pwd`/lib"
 
 check_all: check_basic check_special_situations check_coverage remove_coverage_output check_examples check_gtest
 	@echo "Last... one normal build and test"
@@ -370,4 +374,7 @@ dist-hook:
 			exit 1; \
 		fi \
 	fi
+
+distclean-local:
+	test -z "generated" || rmdir generated
 

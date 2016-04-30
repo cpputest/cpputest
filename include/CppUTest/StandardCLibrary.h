@@ -1,8 +1,10 @@
 
+/* Must include this first to ensure the StandardC include in CppUTestConfig still happens at the right moment */
+#include "CppUTestConfig.h"
+
 #ifndef STANDARDCLIBRARY_H_
 #define STANDARDCLIBRARY_H_
 
-#include "CppUTestConfig.h"
 
 #if CPPUTEST_USE_STD_C_LIB
 

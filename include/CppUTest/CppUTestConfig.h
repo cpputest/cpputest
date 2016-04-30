@@ -201,11 +201,20 @@
 #endif
 
 /*
- * Support for "long long" type
+ * Support for "long long" type.
+ *
+ * Not supported when CPUTEST_LONG_LONG_DISABLED is set.
+ * Can be overridden by using CPPUTEST_USE_LONG_LONG
+ *
+ * CPPUTEST_HAVE_LONG_LONG_INT is set by configure
+ * LLONG_MAX is set in limits.h. This is a crude attempt to detect long long support when no configure is used
+ *
  */
 
-#if defined(CPPUTEST_HAVE_LONG_LONG_INT) && !defined(CPPUTEST_LONG_LONG_DISABLED) && !defined(CPPUTEST_USE_LONG_LONG)
+#if !defined(CPPUTEST_LONG_LONG_DISABLED) && !defined(CPPUTEST_USE_LONG_LONG)
+#if defined(CPPUTEST_HAVE_LONG_LONG_INT) || defined(LLONG_MAX)
 #define CPPUTEST_USE_LONG_LONG 1
+#endif
 #endif
 
 #ifdef CPPUTEST_USE_LONG_LONG
