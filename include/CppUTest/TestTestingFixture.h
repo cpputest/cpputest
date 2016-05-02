@@ -44,6 +44,8 @@ public:
 
         registry_->setCurrentRegistry(registry_);
         registry_->addTest(genTest_);
+
+        lineOfCodeExecutedAfterCheck = false;
     }
 
     virtual ~TestTestingFixture()
@@ -73,6 +75,12 @@ public:
     void setTeardown(void(*teardownFunction)())
     {
         genTest_->teardown_ = teardownFunction;
+    }
+
+    void runTestWithMethod(void(*method)())
+    {
+        setTestFunction(method);
+        runAllTests();
     }
 
     void runAllTests()
@@ -113,7 +121,6 @@ public:
     static void assertPrintContains(const SimpleString& output, const SimpleString& contains)
     {
         STRCMP_CONTAINS(contains.asCharString(), output.asCharString());
-
     }
 
     int getRunCount()
@@ -121,6 +128,19 @@ public:
     	return result_->getRunCount();
     }
 
+    void checkTestFailsWithProperTestLocation(const char* text, const char* file, int line)
+    {
+      if (getFailureCount() != 1)
+        FAIL_LOCATION(StringFromFormat("Expected one test failure, but got %d amount of test failures", getFailureCount()).asCharString(), file, line);
+
+      STRCMP_CONTAINS_LOCATION(text, output_->getOutput().asCharString(), "", file, line);
+
+      if (lineOfCodeExecutedAfterCheck)
+        FAIL_LOCATION("The test should jump/throw on failure and not execute the next line. However, the next line was executed.", file, line)
+    }
+
+    static void lineExecutedAfterCheck();
+    static bool lineOfCodeExecutedAfterCheck;
 
     TestRegistry* registry_;
     ExecFunctionTestShell* genTest_;

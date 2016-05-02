@@ -49,6 +49,7 @@ lib_libCppUTest_a_SOURCES = \
 	src/CppUTest/TestPlugin.cpp \
 	src/CppUTest/TestRegistry.cpp \
 	src/CppUTest/TestResult.cpp \
+	src/CppUTest/TestTestingFixture.cpp \
 	src/CppUTest/Utest.cpp \
 	src/Platforms/@CPP_PLATFORM@/UtestPlatform.cpp
 
@@ -164,6 +165,7 @@ CppUTestTests_SOURCES = \
 	tests/TestRegistryTest.cpp \
 	tests/TestResultTest.cpp \
 	tests/TestUTestMacro.cpp \
+	tests/TestUTestStringMacro.cpp \
 	tests/UtestTest.cpp \
 	tests/UtestPlatformTest.cpp
 
