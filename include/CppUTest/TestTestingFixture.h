@@ -28,8 +28,9 @@
 #ifndef D_TestTestingFixture_H
 #define D_TestTestingFixture_H
 
-#include "TestRegistry.h"
-#include "TestOutput.h"
+#include "CppUTest/TestHarness.h"
+#include "CppUTest/TestRegistry.h"
+#include "CppUTest/TestOutput.h"
 
 #define CHECK_TEST_FAILS_PROPER_WITH_TEXT(text) TestTestingFixture::CHECK_TEST_FAILS_PROPER_WITH_TEXT_LOCATION(text, fixture, __FILE__, __LINE__)
 
