@@ -34,3 +34,15 @@ void TestTestingFixture::lineExecutedAfterCheck()
 {
   lineOfCodeExecutedAfterCheck = true;
 }
+
+void TestTestingFixture::checkTestFailsWithProperTestLocation(const char* text, const char* file, int line)
+{
+  if (getFailureCount() != 1)
+    FAIL_LOCATION(StringFromFormat("Expected one test failure, but got %d amount of test failures", getFailureCount()).asCharString(), file, line);
+
+  STRCMP_CONTAINS_LOCATION(text, output_->getOutput().asCharString(), "", file, line);
+
+  if (lineOfCodeExecutedAfterCheck)
+    FAIL_LOCATION("The test should jump/throw on failure and not execute the next line. However, the next line was executed.", file, line)
+}
+
