@@ -28,7 +28,6 @@
 #ifndef D_TestTestingFixture_H
 #define D_TestTestingFixture_H
 
-#include "CppUTest/TestHarness.h"
 #include "CppUTest/TestRegistry.h"
 #include "CppUTest/TestOutput.h"
 
