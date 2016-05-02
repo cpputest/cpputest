@@ -227,29 +227,11 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="SRC\CPPUTEST\JUnitTestOutput.cpp"
+				RelativePath=".\src\CppUTestExt\IEEE754ExceptionsPlugin.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="SRC\CPPUTEST\TeamCityTestOutput.cpp"
+				RelativePath="SRC\CPPUTEST\JUnitTestOutput.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -623,6 +605,28 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="SRC\CPPUTEST\TeamCityTestOutput.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="SRC\CPPUTEST\TestFailure.cpp"
 				>
 				<FileConfiguration
@@ -852,7 +856,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\include\CppUTest\CommandLineArguments.h"
+				>
+			</File>
+			<File
 				RelativePath="include\CppUTest\CommandLineTestRunner.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTest\CppUTestConfig.h"
 				>
 			</File>
 			<File
@@ -872,7 +884,23 @@
 				>
 			</File>
 			<File
+				RelativePath=".\include\CppUTestExt\IEEE754ExceptionsPlugin.h"
+				>
+			</File>
+			<File
 				RelativePath="include\CppUTest\JunitTestOutput.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTest\MemoryLeakDetector.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTest\MemoryLeakDetectorMallocMacros.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTest\MemoryLeakDetectorNewMacros.h"
 				>
 			</File>
 			<File
@@ -896,11 +924,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\include\CppUTestExt\MockActualCall.h"
+				>
+			</File>
+			<File
 				RelativePath="include\CppUTestExt\MockCheckedActualCall.h"
 				>
 			</File>
 			<File
 				RelativePath="include\CppUTestExt\MockCheckedExpectedCall.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTestExt\MockExpectedCall.h"
 				>
 			</File>
 			<File
@@ -944,7 +980,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\include\CppUTest\PlatformSpecificFunctions.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTest\PlatformSpecificFunctions_c.h"
+				>
+			</File>
+			<File
 				RelativePath="include\CppUTest\RealTestOutput.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTest\SimpleMutex.h"
 				>
 			</File>
 			<File
@@ -953,6 +1001,22 @@
 			</File>
 			<File
 				RelativePath="include\CppUTest\SimpleStringExtensions.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTest\StandardCLibrary.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTest\TeamCityTestOutput.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTest\TestFailure.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTest\TestFilter.h"
 				>
 			</File>
 			<File
@@ -965,6 +1029,10 @@
 			</File>
 			<File
 				RelativePath="include\CppUTest\TestInstaller.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTest\TestMemoryAllocator.h"
 				>
 			</File>
 			<File
@@ -984,7 +1052,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\include\CppUTest\TestTestingFixture.h"
+				>
+			</File>
+			<File
 				RelativePath="include\CppUTest\Utest.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTest\UtestMacros.h"
 				>
 			</File>
 			<File

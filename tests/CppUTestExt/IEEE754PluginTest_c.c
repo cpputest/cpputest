@@ -38,14 +38,14 @@ void set_divisionbyzero_c(void)
 
 void set_overflow_c(void)
 {
-    f = 1000.0f;
-    while (f < INFINITY) f *= f;
+   f = 1e38f;
+   f *= f;
 }
 
 void set_underflow_c(void)
 {
-    f = 0.01f;
-    while (f > 0.0f) f *= f;
+   f = 1e-38f;
+   f *= f;
 }
 
 void set_invalid_c(void)
