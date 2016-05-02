@@ -68,7 +68,8 @@ TEST(GTestSimpleTest, GTestExpectStreq)
 static void crashMe ()
 {
     fprintf(stderr, "Crash me!");
-    *((int*) 0) = 10;
+    volatile int* pointer_to_null = 0;
+    *pointer_to_null = 10;
 }
 
 TEST(GTestSimpleTest, GTestDeathTest)
