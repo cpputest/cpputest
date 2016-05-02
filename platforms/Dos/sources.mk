@@ -72,6 +72,7 @@ CPPU3_OBJECTS := \
   $(CPPUTEST_HOME)/tests/TestInstallerTest.o \
   $(CPPUTEST_HOME)/tests/TestMemoryAllocatorTest.o \
   $(CPPUTEST_HOME)/tests/TestUTestMacro.o \
+  $(CPPUTEST_HOME)/tests/TestUTestMacro2.o \
   $(CPPUTEST_HOME)/tests/UtestPlatformTest.o \
   $(CPPUTEST_HOME)/tests/UtestTest.o \
 

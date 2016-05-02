@@ -31,6 +31,8 @@
 #include "TestRegistry.h"
 #include "TestOutput.h"
 
+#define CHECK_TEST_FAILS_PROPER_WITH_TEXT(text) TestTestingFixture::CHECK_TEST_FAILS_PROPER_WITH_TEXT_LOCATION(text, fixture, __FILE__, __LINE__)
+
 class TestTestingFixture
 {
 public:
@@ -121,11 +123,40 @@ public:
     	return result_->getRunCount();
     }
 
+    static void CHECK_TEST_FAILS_PROPER_WITH_TEXT_LOCATION(const char* text, TestTestingFixture& fixture, const char* file, int line)
+    {
+        if (fixture.getFailureCount() != 1)
+            FAIL_LOCATION(StringFromFormat("Expected one test failure, but got %d amount of test failures", fixture.getFailureCount()).asCharString(), file, line); // LCOV_EXCL_LINE
+
+        STRCMP_CONTAINS_LOCATION(text, fixture.output_->getOutput().asCharString(), "", file, line);
+
+        if (getLineOfCodeExecutedAfterCheck())
+            FAIL_LOCATION("The test should jump/throw on failure and not execute the next line. However, the next line was executed.", file, line); // LCOV_EXCL_LINE
+
+    }
+ 
+    static void setLineOfCodeExecutedAfterCheck(const bool executed)
+    {
+        lineOfCodeExecutedAfterCheck(&executed);
+    }
+
+    static bool getLineOfCodeExecutedAfterCheck()
+    {
+        return lineOfCodeExecutedAfterCheck();
+    }
 
     TestRegistry* registry_;
     ExecFunctionTestShell* genTest_;
     StringBufferTestOutput* output_;
     TestResult * result_;
+    
+private:
+    static bool lineOfCodeExecutedAfterCheck(const bool* const value = 0)
+    {
+         static bool lineOfCodeExecutedAfterCheck;
+         if (value) lineOfCodeExecutedAfterCheck = *value;
+         return lineOfCodeExecutedAfterCheck;
+    }
 };
 
 class SetBooleanOnDestructorCall

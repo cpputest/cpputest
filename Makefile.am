@@ -164,6 +164,7 @@ CppUTestTests_SOURCES = \
 	tests/TestRegistryTest.cpp \
 	tests/TestResultTest.cpp \
 	tests/TestUTestMacro.cpp \
+	tests/TestUTestMacro2.cpp \
 	tests/UtestTest.cpp \
 	tests/UtestPlatformTest.cpp
 

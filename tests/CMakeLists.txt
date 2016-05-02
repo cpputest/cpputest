@@ -27,6 +27,7 @@ set(CppUTestTests_src
     TestResultTest.cpp
     PreprocessorTest.cpp
     TestUTestMacro.cpp
+    TestUTestMacro2.cpp
     AllocationInCppFile.cpp
     UtestTest.cpp
     SimpleMutexTest.cpp
