@@ -14,6 +14,7 @@ set(CppUTest_src
         MemoryLeakDetector.cpp
         TestFilter.cpp
         TestPlugin.cpp
+        TestTestingFixture.cpp
         SimpleMutex.cpp
         Utest.cpp
         ../Platforms/${CPP_PLATFORM}/UtestPlatform.cpp

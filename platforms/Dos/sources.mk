@@ -15,6 +15,7 @@ CPPU_OBJECTS := \
   $(CPPUTEST_HOME)/src/CppUTest/TestOutput.o \
   $(CPPUTEST_HOME)/src/CppUTest/TestPlugin.o \
   $(CPPUTEST_HOME)/src/CppUTest/TestRegistry.o \
+  $(CPPUTEST_HOME)/src/CppUTest/TestTestingFixture.o \
   $(CPPUTEST_HOME)/src/CppUTest/TestResult.o \
   $(CPPUTEST_HOME)/src/CppUTest/Utest.o \
   $(CPPUTEST_HOME)/src/Platforms/Dos/UtestPlatform.o \
@@ -110,6 +111,7 @@ CPPU6_OBJECTS := \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockComparatorCopierTest.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockHierarchyTest.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockParameterTest.o \
+  $(CPPUTEST_HOME)/tests/TestUTestStringMacro.o \
 
   CPPU7_OBJECTS := \
   $(CPPUTEST_HOME)/tests/CppUTestExt/AllTests.o \
