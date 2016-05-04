@@ -69,19 +69,6 @@ TEST(FE__with_Plugin, should_fail____when__FE_UNDERFLOW__is_set)
     fixture.assertPrintContains("IEEE754_CHECK_CLEAR(FE_UNDERFLOW) failed");
 }
 
-#ifndef __MINGW64__
-#define NOT_MINGW64_TEST TEST
-#else
-#define NOT_MINGW64_TEST IGNORE_TEST
-#endif
-
-NOT_MINGW64_TEST(FE__with_Plugin, should_fail____when__FE_INVALID____is_set)
-{
-    fixture.setTestFunction(set_invalid_c);
-    fixture.runAllTests();
-    fixture.assertPrintContains("IEEE754_CHECK_CLEAR(FE_INVALID) failed");
-}
-
 TEST(FE__with_Plugin, should_fail____when__FE_INEXACT____is_set_and_enabled)
 {
     IEEE754ExceptionsPlugin::enableInexact();
