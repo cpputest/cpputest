@@ -26,7 +26,6 @@
  */
 
 #include "IEEE754PluginTest_c.h"
-#include <math.h>
 
 static volatile float f;
 
@@ -48,11 +47,6 @@ void set_underflow_c(void)
    f *= f;
 }
 
-void set_invalid_c(void)
-{
-    f = (float) sqrt(-1.0);
-}
-
 void set_inexact_c(void)
 {
     f = 10.0f;
@@ -68,6 +62,5 @@ void set_everything_c()
     set_divisionbyzero_c();
     set_overflow_c();
     set_underflow_c();
-    set_invalid_c();
     set_inexact_c();
 }
