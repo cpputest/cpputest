@@ -172,6 +172,7 @@
     <ClInclude Include="include\CppUTest\CommandLineArguments.h" />
     <ClInclude Include="include\CppUTest\CommandLineTestRunner.h" />
     <ClInclude Include="include\cpputest\cpputestconfig.h" />
+    <ClInclude Include="include\CppUTest\CppUTestGeneratedConfig.h" />
     <ClInclude Include="include\CppUTest\JUnitTestOutput.h" />
     <ClInclude Include="include\cpputest\platformspecificfunctions_c.h" />
     <ClInclude Include="include\CppUTest\TeamCityTestOutput.h" />
