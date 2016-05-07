@@ -189,6 +189,7 @@
     <ClCompile Include="TestRegistryTest.cpp" />
     <ClCompile Include="TestResultTest.cpp" />
     <ClCompile Include="TestUTestMacro.cpp" />
+    <ClCompile Include="TestUTestStringMacro.cpp" />
     <ClCompile Include="UtestPlatformTest.cpp" />
     <ClCompile Include="UtestTest.cpp" />
   </ItemGroup>

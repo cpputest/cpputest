@@ -803,6 +803,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\src\CppUTest\TestTestingFixture.cpp"
+				>
+			</File>
+			<File
 				RelativePath="SRC\CPPUTEST\Utest.cpp"
 				>
 				<FileConfiguration
@@ -868,15 +872,15 @@
 				>
 			</File>
 			<File
-				RelativePath="include\CppUTest\EqualsFailure.h"
-				>
-			</File>
-			<File
-				RelativePath="include\CppUTest\Failure.h"
+				RelativePath=".\include\CppUTest\CppUTestGeneratedConfig.h"
 				>
 			</File>
 			<File
 				RelativePath="include\CppUTestExt\GMock.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTestExt\GTest.h"
 				>
 			</File>
 			<File
@@ -901,10 +905,6 @@
 			</File>
 			<File
 				RelativePath=".\include\CppUTest\MemoryLeakDetectorNewMacros.h"
-				>
-			</File>
-			<File
-				RelativePath="include\CppUTest\MemoryLeakWarning.h"
 				>
 			</File>
 			<File
@@ -964,19 +964,7 @@
 				>
 			</File>
 			<File
-				RelativePath="include\CppUTest\MockTestOutput.h"
-				>
-			</File>
-			<File
-				RelativePath="include\CppUTest\NullTest.h"
-				>
-			</File>
-			<File
 				RelativePath="include\CppUTestExt\OrderedTest.h"
-				>
-			</File>
-			<File
-				RelativePath="src\Platforms\VisualCpp\Platform.h"
 				>
 			</File>
 			<File
@@ -988,19 +976,11 @@
 				>
 			</File>
 			<File
-				RelativePath="include\CppUTest\RealTestOutput.h"
-				>
-			</File>
-			<File
 				RelativePath=".\include\CppUTest\SimpleMutex.h"
 				>
 			</File>
 			<File
 				RelativePath="include\CppUTest\SimpleString.h"
-				>
-			</File>
-			<File
-				RelativePath="include\CppUTest\SimpleStringExtensions.h"
 				>
 			</File>
 			<File
@@ -1025,10 +1005,6 @@
 			</File>
 			<File
 				RelativePath="include\CppUTest\TestHarness_c.h"
-				>
-			</File>
-			<File
-				RelativePath="include\CppUTest\TestInstaller.h"
 				>
 			</File>
 			<File
@@ -1061,10 +1037,6 @@
 			</File>
 			<File
 				RelativePath=".\include\CppUTest\UtestMacros.h"
-				>
-			</File>
-			<File
-				RelativePath="include\CppUTest\VirtualCall.h"
 				>
 			</File>
 		</Filter>
