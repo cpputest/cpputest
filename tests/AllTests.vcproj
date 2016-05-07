@@ -1300,6 +1300,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\TestUTestStringMacro.cpp"
+				>
+			</File>
+			<File
 				RelativePath="UtestPlatformTest.cpp"
 				>
 				<FileConfiguration

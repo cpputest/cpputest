@@ -803,6 +803,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\src\CppUTest\TestTestingFixture.cpp"
+				>
+			</File>
+			<File
 				RelativePath="SRC\CPPUTEST\Utest.cpp"
 				>
 				<FileConfiguration
