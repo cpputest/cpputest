@@ -141,6 +141,7 @@
     <ClCompile Include="src\CppUTest\TestPlugin.cpp" />
     <ClCompile Include="src\CppUTest\TestRegistry.cpp" />
     <ClCompile Include="src\CppUTest\TestResult.cpp" />
+    <ClCompile Include="src\CppUTest\TestTestingFixture.cpp" />
     <ClCompile Include="src\CppUTest\Utest.cpp" />
     <ClCompile Include="src\Platforms\VisualCpp\UtestPlatform.cpp">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
