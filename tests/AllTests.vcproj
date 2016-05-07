@@ -1371,63 +1371,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\include\CppUTest\CommandLineArguments.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\CppUTest\CppUTestConfig.h"
-				>
-			</File>
-			<File
 				RelativePath=".\CppUTestExt\IEEE754PluginTest_c.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\CppUTest\MemoryLeakDetector.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\CppUTest\MemoryLeakDetectorNewMacros.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\CppUTest\PlatformSpecificFunctions.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\CppUTest\PlatformSpecificFunctions_c.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\CppUTest\SimpleMutex.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\CppUTest\StandardCLibrary.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\CppUTest\TestFailure.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\CppUTest\TestFilter.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\CppUTest\TestMemoryAllocator.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\CppUTest\TestTestingFixture.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\CppUTest\UtestMacros.h"
 				>
 			</File>
 		</Filter>
