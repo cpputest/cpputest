@@ -119,11 +119,10 @@ TEST(FE__with_Plugin, should_not_fail_again_when_test_has_already_failed)
 {
     fixture.setTestFunction(set_everything_but_already_failed);
     fixture.runAllTests();
-    CHECK(
-        IEEE754ExceptionsPlugin::checkIeee754ExeptionFlag(1 << 2) ||
-        IEEE754ExceptionsPlugin::checkIeee754ExeptionFlag(1 << 3) ||
-        IEEE754ExceptionsPlugin::checkIeee754ExeptionFlag(1 << 4)
-    );
+    CHECK(IEEE754ExceptionsPlugin::checkIeee754OverflowExceptionFlag());
+    CHECK(IEEE754ExceptionsPlugin::checkIeee754UnderflowExceptionFlag());
+    CHECK(IEEE754ExceptionsPlugin::checkIeee754InexactExceptionFlag());
+    CHECK(IEEE754ExceptionsPlugin::checkIeee754DivByZeroExceptionFlag());
     LONGS_EQUAL(1, fixture.getCheckCount());
     LONGS_EQUAL(1, fixture.getFailureCount());
 }
