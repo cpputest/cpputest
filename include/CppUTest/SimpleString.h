@@ -61,9 +61,9 @@ public:
 
     static const size_t npos = (size_t) -1;
 
-    char at(int pos) const;
-    int find(char ch) const;
-    int findFrom(size_t starting_position, char ch) const;
+    char at(size_t pos) const;
+    size_t find(char ch) const;
+    size_t findFrom(size_t starting_position, char ch) const;
     bool contains(const SimpleString& other) const;
     bool containsNoCase(const SimpleString& other) const;
     bool startsWith(const SimpleString& other) const;

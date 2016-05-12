@@ -411,7 +411,7 @@ TEST(SimpleString, findNormal)
     SimpleString str("Hello World");
     LONGS_EQUAL(0, str.find('H'));
     LONGS_EQUAL(1, str.find('e'));
-    LONGS_EQUAL(-1, str.find('!'));
+    LONGS_EQUAL(SimpleString::npos, str.find('!'));
 }
 
 TEST(SimpleString, at)
