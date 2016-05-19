@@ -59,6 +59,8 @@ public:
     SimpleString& operator+=(const SimpleString&);
     SimpleString& operator+=(const char*);
 
+    static const size_t npos = (size_t) -1;
+
     char at(int pos) const;
     int find(char ch) const;
     int findFrom(size_t starting_position, char ch) const;
@@ -76,7 +78,7 @@ public:
     void replace(const char* to, const char* with);
 
     SimpleString lowerCase() const;
-    SimpleString subString(size_t beginPos, size_t amount) const;
+    SimpleString subString(size_t beginPos, size_t amount = SimpleString::npos) const;
     SimpleString subStringFromTill(char startChar, char lastExcludedChar) const;
     void copyToBuffer(char* buffer, size_t bufferSize) const;
 
