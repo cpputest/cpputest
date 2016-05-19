@@ -277,8 +277,19 @@ TEST(MockCallTest, ignoreOtherCallsExceptForTheExpectedOne)
 {
     mock().expectOneCall("foo");
     mock().ignoreOtherCalls();
-    mock().actualCall("bar").withParameter("foo", 1);;
+    mock().actualCall("bar").withParameter("foo", 1);
 
+    mock().clear();
+}
+
+TEST(MockCallTest, ignoreAdditionalCallsExceptForTheExpectedOne)
+{
+    mock().expectOneCall("foo");
+    mock().ignoreAdditionalCalls();
+    mock().actualCall("foo");
+    mock().actualCall("foo");
+    mock().actualCall("foo").withParameter("foo", 1);
+	
     mock().clear();
 }
 
@@ -299,6 +310,23 @@ TEST(MockCallTest, ignoreOtherCallsDoesntIgnoreMultipleCallsOfTheSameFunction)
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 
+TEST(MockCallTest, ignoreAdditionalCallsOfTheSameFunctionDoesntIgnoreOtherCalls)
+{
+    MockFailureReporterInstaller failureReporterInstaller;
+
+    MockExpectedCallsListForTest expectations;
+    expectations.addFunction("foo")->callWasMade(1);
+    MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "bar", expectations);
+
+    mock().expectOneCall("foo");
+    mock().ignoreAdditionalCalls();
+    mock().actualCall("foo");
+    mock().actualCall("foo");
+    mock().actualCall("bar");
+
+    CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
 TEST(MockCallTest, ignoreOtherStillFailsIfExpectedOneDidntHappen)
 {
     MockFailureReporterInstaller failureReporterInstaller;
@@ -309,6 +337,21 @@ TEST(MockCallTest, ignoreOtherStillFailsIfExpectedOneDidntHappen)
 
     mock().expectOneCall("foo");
     mock().ignoreOtherCalls();
+    mock().checkExpectations();
+
+    CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
+TEST(MockCallTest, ignoreAdditionalStillFailsIfExpectedOneDidntHappen)
+{
+    MockFailureReporterInstaller failureReporterInstaller;
+
+    MockExpectedCallsListForTest expectations;
+    expectations.addFunction("foo");
+    MockExpectedCallsDidntHappenFailure expectedFailure(mockFailureTest(), expectations);
+
+    mock().expectOneCall("foo");
+    mock().ignoreAdditionalCalls();
     mock().checkExpectations();
 
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);

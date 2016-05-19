@@ -44,7 +44,7 @@ MockSupport& mock(const SimpleString& mockName, MockFailureReporter* failureRepo
 }
 
 MockSupport::MockSupport(const SimpleString& mockName)
-    : callOrder_(0), expectedCallOrder_(0), strictOrdering_(false), standardReporter_(&defaultReporter_), ignoreOtherCalls_(false), enabled_(true), lastActualFunctionCall_(NULL), mockName_(mockName), tracing_(false)
+    : callOrder_(0), expectedCallOrder_(0), strictOrdering_(false), standardReporter_(&defaultReporter_), ignoreOtherCalls_(false), ignoreAdditionalCalls_(false), enabled_(true), lastActualFunctionCall_(NULL), mockName_(mockName), tracing_(false)
 {
     setActiveReporter(NULL);
 }
@@ -122,6 +122,7 @@ void MockSupport::clear()
     unExpectations_.deleteAllExpectationsAndClearList();
     compositeCalls_.clear();
     ignoreOtherCalls_ = false;
+    ignoreAdditionalCalls_ = false;
     enabled_ = true;
     callOrder_ = 0;
     expectedCallOrder_ = 0;
@@ -198,6 +199,18 @@ bool MockSupport::hasntUnexpectationWithName(const SimpleString& functionName)
     return !unExpectations_.hasExpectationWithName(functionName);
 }
 
+bool MockSupport::hasntUnFulfilledWithName(const SimpleString& functionName)
+{
+    if (expectations_.hasExpectationWithName(functionName)) {
+        MockExpectedCallsList unfulfilledExpectations;
+        unfulfilledExpectations.addUnfulfilledExpectations(expectations_);
+        if (!unfulfilledExpectations.hasExpectationWithName(functionName) && ignoreAdditionalCalls_) {
+            return true;
+        }
+    }
+    return false;
+}
+
 MockActualCall& MockSupport::actualCall(const SimpleString& functionName)
 {
     const SimpleString scopeFuntionName = appendScopeToName(functionName);
@@ -216,6 +229,10 @@ MockActualCall& MockSupport::actualCall(const SimpleString& functionName)
         return MockIgnoredActualCall::instance();
     }
 
+    if (hasntUnFulfilledWithName(scopeFuntionName)) {
+        return MockIgnoredActualCall::instance();
+    }
+
     MockCheckedActualCall* call = createActualFunctionCall();
     call->withName(scopeFuntionName);
     return *call;
@@ -227,6 +244,14 @@ void MockSupport::ignoreOtherCalls()
 
     for (MockNamedValueListNode* p = data_.begin(); p; p = p->next())
         if (getMockSupport(p)) getMockSupport(p)->ignoreOtherCalls();
+}
+
+void MockSupport::ignoreAdditionalCalls()
+{
+    ignoreAdditionalCalls_ = true;
+
+    for (MockNamedValueListNode* p = data_.begin(); p; p = p->next())
+        if (getMockSupport(p)) getMockSupport(p)->ignoreAdditionalCalls();
 }
 
 void MockSupport::disable()
@@ -436,6 +461,7 @@ MockSupport* MockSupport::clone(const SimpleString& mockName)
     MockSupport* newMock = new MockSupport(mockName);
     newMock->setMockFailureStandardReporter(standardReporter_);
     if (ignoreOtherCalls_) newMock->ignoreOtherCalls();
+    if (ignoreAdditionalCalls_) newMock->ignoreAdditionalCalls();
 
     if (!enabled_) newMock->disable();
 
