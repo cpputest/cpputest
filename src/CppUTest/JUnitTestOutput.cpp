@@ -42,6 +42,8 @@ struct JUnitTestCaseResultNode
     long execTime_;
     TestFailure* failure_;
     bool ignored_;
+    SimpleString file_;
+    int lineNumber_;
     JUnitTestCaseResultNode* next_;
 };
 
@@ -136,6 +138,8 @@ void JUnitTestOutput::printCurrentTestStarted(const UtestShell& test)
         impl_->results_.tail_ = impl_->results_.tail_->next_;
     }
     impl_->results_.tail_->name_ = test.getName();
+    impl_->results_.tail_->file_ = test.getFile();
+    impl_->results_.tail_->lineNumber_ = test.getLineNumber();
     if (!test.willRun()) {
         impl_->results_.tail_->ignored_ = true;
     }
@@ -187,11 +191,14 @@ void JUnitTestOutput::writeTestCases()
     JUnitTestCaseResultNode* cur = impl_->results_.head_;
     while (cur) {
         SimpleString buf = StringFromFormat(
-                "<testcase classname=\"%s%s%s\" name=\"%s\" time=\"%d.%03d\">\n",
+                "<testcase classname=\"%s%s%s\" name=\"%s\" time=\"%d.%03d\" file=\"%s\" line=\"%d\">\n",
                 impl_->package_.asCharString(),
                 impl_->package_.isEmpty() == true ? "" : ".",
                 impl_->results_.group_.asCharString(),
-                cur->name_.asCharString(), (int) (cur->execTime_ / 1000), (int)(cur->execTime_ % 1000));
+                cur->name_.asCharString(),
+                (int) (cur->execTime_ / 1000), (int)(cur->execTime_ % 1000),
+                cur->file_.asCharString(),
+                cur->lineNumber_);
         writeToFile(buf.asCharString());
 
         if (cur->failure_) {
