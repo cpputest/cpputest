@@ -40,7 +40,10 @@ public:
 
     static void disableInexact(void);
     static void enableInexact(void);
-    static bool checkIeee754ExeptionFlag(int flag);
+    static bool checkIeee754OverflowExceptionFlag();
+    static bool checkIeee754UnderflowExceptionFlag();
+    static bool checkIeee754InexactExceptionFlag();
+    static bool checkIeee754DivByZeroExceptionFlag();
 
 private:
     void ieee754Check(UtestShell& test, TestResult& result, int flag, const char* text);

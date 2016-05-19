@@ -69,9 +69,24 @@ void IEEE754ExceptionsPlugin::enableInexact()
     inexactDisabled_ = false;
 }
 
-bool IEEE754ExceptionsPlugin::checkIeee754ExeptionFlag(int flag)
+bool IEEE754ExceptionsPlugin::checkIeee754OverflowExceptionFlag()
 {
-    return fetestexcept(flag) != 0;
+    return fetestexcept(FE_OVERFLOW) != 0;
+}
+
+bool IEEE754ExceptionsPlugin::checkIeee754UnderflowExceptionFlag()
+{
+    return fetestexcept(FE_UNDERFLOW) != 0;
+}
+
+bool IEEE754ExceptionsPlugin::checkIeee754InexactExceptionFlag()
+{
+    return fetestexcept(FE_INEXACT) != 0;
+}
+
+bool IEEE754ExceptionsPlugin::checkIeee754DivByZeroExceptionFlag()
+{
+    return fetestexcept(FE_DIVBYZERO) != 0;
 }
 
 void IEEE754ExceptionsPlugin::ieee754Check(UtestShell& test, TestResult& result, int flag, const char* text)
