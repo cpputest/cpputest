@@ -788,7 +788,7 @@ const void* returnConstPointerValueOrDefault_c(const void * defaultValue)
 
 void (*functionPointerReturnValue_c())()
 {
-    return actualCall->returnFunctionPointerValue();
+    return (void (*)()) actualCall->returnFunctionPointerValue();
 }
 
 void (*returnFunctionPointerValueOrDefault_c(void (*defaultValue)()))()
