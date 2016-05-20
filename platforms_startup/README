@@ -1,4 +1,0 @@
-Directory to place startup files for different toolchains/chips combinations.
-
-Source files from this directory is compiled to library placed in lib
-  directory in CppUTest home.
