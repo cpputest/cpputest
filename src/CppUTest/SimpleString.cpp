@@ -369,6 +369,11 @@ SimpleString SimpleString::subString(size_t beginPos, size_t amount) const
     return newString;
 }
 
+SimpleString SimpleString::subString(size_t beginPos) const
+{
+    return subString(beginPos, npos);
+}
+
 char SimpleString::at(size_t pos) const
 {
     return buffer_[pos];
@@ -393,7 +398,7 @@ SimpleString SimpleString::subStringFromTill(char startChar, char lastExcludedCh
     if (beginPos == npos) return "";
 
     size_t endPos = findFrom(beginPos, lastExcludedChar);
-    if (endPos == npos) return subString(beginPos, size());
+    if (endPos == npos) return subString(beginPos);
 
     return subString(beginPos, endPos - beginPos);
 }

@@ -370,7 +370,7 @@ TEST(SimpleString, subStringFromPos5WithAmountLargerThanString)
     STRCMP_EQUAL("World", str.subString(6, 10).asCharString());
 }
 
-TEST(SimpleString, subStringFromPos3ToEndOfStringUsingNposAsDefault)
+TEST(SimpleString, subStringFromPos6ToEndOfString)
 {
     SimpleString str("Hello World");
     STRCMP_EQUAL("World", str.subString(6).asCharString());
