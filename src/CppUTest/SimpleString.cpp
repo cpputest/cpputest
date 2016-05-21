@@ -478,6 +478,11 @@ SimpleString HexStringFrom(long value)
     return StringFromFormat("%lx", value);
 }
 
+SimpleString HexStringFrom(unsigned long value)
+{
+    return StringFromFormat("%lx", value);
+}
+
 #ifdef CPPUTEST_USE_LONG_LONG
 
 SimpleString StringFrom(cpputest_longlong value)

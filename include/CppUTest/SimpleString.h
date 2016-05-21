@@ -147,6 +147,7 @@ SimpleString StringFrom(unsigned long value);
 SimpleString StringFrom(cpputest_longlong value);
 SimpleString StringFrom(cpputest_ulonglong value);
 SimpleString HexStringFrom(long value);
+SimpleString HexStringFrom(unsigned long value);
 SimpleString HexStringFrom(cpputest_longlong value);
 SimpleString HexStringFrom(cpputest_ulonglong value);
 SimpleString HexStringFrom(const void* value);
