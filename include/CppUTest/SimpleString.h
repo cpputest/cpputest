@@ -59,9 +59,11 @@ public:
     SimpleString& operator+=(const SimpleString&);
     SimpleString& operator+=(const char*);
 
-    char at(int pos) const;
-    int find(char ch) const;
-    int findFrom(size_t starting_position, char ch) const;
+    static const size_t npos = (size_t) -1;
+
+    char at(size_t pos) const;
+    size_t find(char ch) const;
+    size_t findFrom(size_t starting_position, char ch) const;
     bool contains(const SimpleString& other) const;
     bool containsNoCase(const SimpleString& other) const;
     bool startsWith(const SimpleString& other) const;
@@ -76,6 +78,7 @@ public:
     void replace(const char* to, const char* with);
 
     SimpleString lowerCase() const;
+    SimpleString subString(size_t beginPos) const;
     SimpleString subString(size_t beginPos, size_t amount) const;
     SimpleString subStringFromTill(char startChar, char lastExcludedChar) const;
     void copyToBuffer(char* buffer, size_t bufferSize) const;

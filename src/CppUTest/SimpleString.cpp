@@ -369,33 +369,38 @@ SimpleString SimpleString::subString(size_t beginPos, size_t amount) const
     return newString;
 }
 
-char SimpleString::at(int pos) const
+SimpleString SimpleString::subString(size_t beginPos) const
+{
+    return subString(beginPos, npos);
+}
+
+char SimpleString::at(size_t pos) const
 {
     return buffer_[pos];
 }
 
-int SimpleString::find(char ch) const
+size_t SimpleString::find(char ch) const
 {
     return findFrom(0, ch);
 }
 
-int SimpleString::findFrom(size_t starting_position, char ch) const
+size_t SimpleString::findFrom(size_t starting_position, char ch) const
 {
     size_t length = size();
     for (size_t i = starting_position; i < length; i++)
-        if (buffer_[i] == ch) return (int) i;
-    return -1;
+        if (buffer_[i] == ch) return i;
+    return npos;
 }
 
 SimpleString SimpleString::subStringFromTill(char startChar, char lastExcludedChar) const
 {
-    int beginPos = find(startChar);
-    if (beginPos < 0) return "";
+    size_t beginPos = find(startChar);
+    if (beginPos == npos) return "";
 
-    int endPos = findFrom((size_t)beginPos, lastExcludedChar);
-    if (endPos == -1) return subString((size_t)beginPos, size());
+    size_t endPos = findFrom(beginPos, lastExcludedChar);
+    if (endPos == npos) return subString(beginPos);
 
-    return subString((size_t)beginPos, (size_t) (endPos - beginPos));
+    return subString(beginPos, endPos - beginPos);
 }
 
 char* SimpleString::copyToNewBuffer(const char* bufferToCopy, size_t bufferSize)
