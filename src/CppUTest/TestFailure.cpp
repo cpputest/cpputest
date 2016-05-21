@@ -267,8 +267,8 @@ UnsignedLongsEqualFailure::UnsignedLongsEqualFailure(UtestShell* test, const cha
     SimpleString::padStringsToSameLength(aDecimal, eDecimal, ' ');
     SimpleString::padStringsToSameLength(aHex, eHex, '0');
 
-    SimpleString actualReported = aDecimal + " 0x" + aHex;
-    SimpleString expectedReported = eDecimal + " 0x" + eHex;
+    SimpleString actualReported = aDecimal;
+    SimpleString expectedReported = eDecimal;
     message_ += createButWasString(expectedReported, actualReported);
 }
 
@@ -303,8 +303,8 @@ UnsignedLongLongsEqualFailure::UnsignedLongLongsEqualFailure(UtestShell* test, c
     SimpleString::padStringsToSameLength(aDecimal, eDecimal, ' ');
     SimpleString::padStringsToSameLength(aHex, eHex, '0');
 
-    SimpleString actualReported = aDecimal + " 0x" + aHex;
-    SimpleString expectedReported = eDecimal + " 0x" + eHex;
+    SimpleString actualReported = aDecimal;
+    SimpleString expectedReported = eDecimal;
     message_ += createButWasString(expectedReported, actualReported);
 }
 

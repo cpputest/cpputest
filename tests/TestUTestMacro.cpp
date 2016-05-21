@@ -77,8 +77,8 @@ static void _UNSIGNED_LONGS_EQUALTestMethod()
 TEST(UnitTestMacros, TestUNSIGNED_LONGS_EQUAL)
 {
     fixture.runTestWithMethod(_UNSIGNED_LONGS_EQUALTestMethod);
-    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1 (0x1) 0x1>");
-    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0 (0x0) 0x0>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1 (0x1)>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0 (0x0)>");
 }
 
 TEST(UnitTestMacros, UNSIGNED_LONGS_EQUALBehavesAsProperMacro)
@@ -100,8 +100,8 @@ static void _UNSIGNED_LONGS_EQUAL_TEXTTestMethod()
 TEST(UnitTestMacros, TestUNSIGNED_LONGS_EQUAL_TEXT)
 {
     fixture.runTestWithMethod(_UNSIGNED_LONGS_EQUAL_TEXTTestMethod);
-    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1 (0x1) 0x1>");
-    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0 (0x0) 0x0>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1 (0x1)>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0 (0x0)>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("Failed because it failed");
 }
 
@@ -175,8 +175,8 @@ static void _UNSIGNED_LONGLONGS_EQUALTestMethod()
 TEST(UnitTestMacros, TestUNSIGNED_LONGLONGS_EQUAL)
 {
     fixture.runTestWithMethod(_UNSIGNED_LONGLONGS_EQUALTestMethod);
-    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1 (0x1) 0x1>");
-    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0 (0x0) 0x0>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1 (0x1)>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0 (0x0)>");
 }
 
 TEST(UnitTestMacros, UNSIGNED_LONGLONGS_EQUALBehavesAsProperMacro)
@@ -198,8 +198,8 @@ static void _UNSIGNED_LONGLONGS_EQUAL_TEXTTestMethod()
 TEST(UnitTestMacros, TestUNSIGNED_LONGLONGS_EQUAL_TEXT)
 {
     fixture.runTestWithMethod(_UNSIGNED_LONGLONGS_EQUAL_TEXTTestMethod);
-    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1 (0x1) 0x1>");
-    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0 (0x0) 0x0>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1 (0x1)>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0 (0x0)>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("Failed because it failed");
 }
 
