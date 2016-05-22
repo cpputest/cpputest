@@ -731,12 +731,21 @@ IGNORE_TEST(SimpleString, _64BitAddressPrintsCorrectly)
 
 #endif
 
-TEST(SimpleString, BuildStringFromUnsignedInteger)
+TEST(SimpleString, BuildStringFromUnsignedLongInteger)
 {
     unsigned long int i = 0xffffffff;
 
     SimpleString result = StringFrom(i);
-    const char* expected_string = "4294967295 (0xffffffff)";
+    const char* expected_string = "4294967295";
+    CHECK_EQUAL(expected_string, result);
+}
+
+TEST(SimpleString, BuildStringFromUnsignedInteger)
+{
+    unsigned int i = 0xffffffff;
+
+    SimpleString result = StringFrom(i);
+    const char* expected_string = "4294967295";
     CHECK_EQUAL(expected_string, result);
 }
 
@@ -761,7 +770,7 @@ TEST(SimpleString, unsigned_long)
     unsigned long i = 0xffffffffUL;
 
     SimpleString result = StringFrom(i);
-    const char* expected_string = "4294967295 (0xffffffff)";
+    const char* expected_string = "4294967295";
     CHECK_EQUAL(expected_string, result);
 }
 

@@ -590,7 +590,7 @@ MockActualCall& MockActualCallTrace::withBoolParameter(const SimpleString& name,
 MockActualCall& MockActualCallTrace::withUnsignedIntParameter(const SimpleString& name, unsigned int value)
 {
     addParameterName(name);
-    traceBuffer_ += StringFrom(value);
+    traceBuffer_ += StringFrom(value) + " " + "(0x" + HexStringFrom(value) + ")";
     return *this;
 }
 
@@ -604,7 +604,7 @@ MockActualCall& MockActualCallTrace::withIntParameter(const SimpleString& name, 
 MockActualCall& MockActualCallTrace::withUnsignedLongIntParameter(const SimpleString& name, unsigned long int value)
 {
     addParameterName(name);
-    traceBuffer_ += StringFrom(value);
+    traceBuffer_ += StringFrom(value) + " " + "(0x" + HexStringFrom(value) + ")";
     return *this;
 }
 
