@@ -370,6 +370,12 @@ TEST(SimpleString, subStringFromPos5WithAmountLargerThanString)
     STRCMP_EQUAL("World", str.subString(6, 10).asCharString());
 }
 
+TEST(SimpleString, subStringFromPos6ToEndOfString)
+{
+    SimpleString str("Hello World");
+    STRCMP_EQUAL("World", str.subString(6).asCharString());
+}
+
 TEST(SimpleString, subStringBeginPosOutOfBounds)
 {
     SimpleString str("Hello World");
@@ -405,7 +411,7 @@ TEST(SimpleString, findNormal)
     SimpleString str("Hello World");
     LONGS_EQUAL(0, str.find('H'));
     LONGS_EQUAL(1, str.find('e'));
-    LONGS_EQUAL(-1, str.find('!'));
+    LONGS_EQUAL(SimpleString::npos, str.find('!'));
 }
 
 TEST(SimpleString, at)

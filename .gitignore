@@ -45,6 +45,8 @@ Release
 *.tlog
 *.cache
 *.user
+*.VC.db
+*.VC.opendb
 _build_
 _build
 builds/*gcc*
