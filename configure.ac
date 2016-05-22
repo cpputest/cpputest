@@ -104,13 +104,13 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <cstdio>]])], [AC_MSG_RESULT([yes]
 CXXFLAGS="$saved_cxxflags"
 
 # Flag -Wno-c++98-compat
-CXXFLAGS="-Wno-c++98-compat"
+CXXFLAGS="-Werror -Wno-c++98-compat"
 AC_MSG_CHECKING([whether CXX supports -Wno-c++98-compat])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CPP11BLACKLIST="${CPPUTEST_CPP11BLACKLIST} -Wno-c++98-compat" ], [AC_MSG_RESULT([no])])
 CXXFLAGS="$saved_cxxflags"
 
 # Flag -Wno-c++98-compat-pedantic
-CXXFLAGS="-Wno-c++98-compat-pedantic"
+CXXFLAGS="-Werror -Wno-c++98-compat-pedantic"
 AC_MSG_CHECKING([whether CXX supports -Wno-c++98-compat-pedantic])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CPP11BLACKLIST="${CPPUTEST_CPP11BLACKLIST} -Wno-c++98-compat-pedantic" ], [AC_MSG_RESULT([no])])
 CXXFLAGS="$saved_cxxflags"
