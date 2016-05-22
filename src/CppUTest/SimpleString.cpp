@@ -488,6 +488,21 @@ SimpleString HexStringFrom(unsigned int value)
     return StringFromFormat("%08x", value);
 }
 
+SimpleString BracketsFormattedHexStringFrom(unsigned int value)
+{
+    return BracketsFormattedHexString(HexStringFrom(value));
+}
+
+SimpleString BracketsFormattedHexStringFrom(unsigned long value)
+{
+    return BracketsFormattedHexString(HexStringFrom(value));
+}
+
+SimpleString BracketsFormattedHexString(SimpleString hexString)
+{
+    return SimpleString("(0x") + hexString + ")" ;
+}
+
 
 #ifdef CPPUTEST_USE_LONG_LONG
 

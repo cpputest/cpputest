@@ -1026,3 +1026,22 @@ TEST(SimpleString, StringFromOrdinalNumberOthers)
     STRCMP_EQUAL("100th", StringFromOrdinalNumber(100).asCharString());
     STRCMP_EQUAL("101st", StringFromOrdinalNumber(101).asCharString());
 }
+
+TEST(SimpleString, BracketsFormattedHexStringFromForUnsignedInt)
+{
+	unsigned int value = 1;
+
+	STRCMP_EQUAL("(0x00000001)", BracketsFormattedHexStringFrom(value).asCharString());
+}
+
+TEST(SimpleString, BracketsFormattedHexStringFromForUnsignedLong)
+{
+	unsigned long value = 1;
+
+	STRCMP_EQUAL("(0x1)", BracketsFormattedHexStringFrom(value).asCharString());
+}
+
+TEST(SimpleString, FormattedHexStringFromForUnsignedLong)
+{
+
+}

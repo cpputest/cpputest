@@ -331,11 +331,11 @@ SimpleString MockNamedValue::toString() const
     else if (type_ == "int")
         return StringFrom(value_.intValue_);
     else if (type_ == "unsigned int")
-        return StringFrom(value_.unsignedIntValue_) + " " + "(0x" + HexStringFrom(value_.unsignedIntValue_) + ")";
+        return StringFrom(value_.unsignedIntValue_) + " " + BracketsFormattedHexStringFrom(value_.unsignedIntValue_);
     else if (type_ == "long int")
         return StringFrom(value_.longIntValue_);
     else if (type_ == "unsigned long int")
-        return StringFrom(value_.unsignedLongIntValue_) + " " + "(0x" + HexStringFrom(value_.unsignedLongIntValue_) + ")";
+        return StringFrom(value_.unsignedLongIntValue_) + " " + BracketsFormattedHexStringFrom(value_.unsignedLongIntValue_);
     else if (type_ == "const char*")
         return value_.stringValue_;
     else if (type_ == "void*")
