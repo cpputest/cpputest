@@ -106,7 +106,7 @@ void MockCheckedActualCall::finalizeOutputParameters(MockCheckedExpectedCall* ex
 void MockCheckedActualCall::finalizeCallWhenFulfilled()
 {
     if (unfulfilledExpectations_.hasFulfilledExpectationsWithoutIgnoredParameters()) {
-        finalizeOutputParameters(unfulfilledExpectations_.getOneFulfilledExpectationWithIgnoredParameters());
+        finalizeOutputParameters(unfulfilledExpectations_.getOneFulfilledExpectationWithOutIgnoredParameters());
     }
 
     if (unfulfilledExpectations_.hasFulfilledExpectations()) {
@@ -342,7 +342,7 @@ void MockCheckedActualCall::checkExpectations()
     if (! unfulfilledExpectations_.hasUnfulfilledExpectations())
         FAIL("Actual call is in progress. Checking expectations. But no unfulfilled expectations. Cannot happen.") // LCOV_EXCL_LINE
 
-    fulfilledExpectation_ = unfulfilledExpectations_.removeOneFulfilledExpectationWithIgnoredParameters();
+    fulfilledExpectation_ = unfulfilledExpectations_.removeOneFulfilledExpectationWithOutIgnoredParameters();
     if (fulfilledExpectation_) {
         callHasSucceeded();
         unfulfilledExpectations_.resetExpectations();

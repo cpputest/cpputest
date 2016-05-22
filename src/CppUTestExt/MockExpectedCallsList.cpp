@@ -222,7 +222,7 @@ MockCheckedExpectedCall* MockExpectedCallsList::removeOneFulfilledExpectation()
     return NULL;
 }
 
-MockCheckedExpectedCall* MockExpectedCallsList::getOneFulfilledExpectationWithIgnoredParameters()
+MockCheckedExpectedCall* MockExpectedCallsList::getOneFulfilledExpectationWithOutIgnoredParameters()
 {
     for (MockExpectedCallsListNode* p = head_; p; p = p->next_) {
         if (p->expectedCall_->isFulfilledWithoutIgnoredParameters()) {
@@ -232,7 +232,7 @@ MockCheckedExpectedCall* MockExpectedCallsList::getOneFulfilledExpectationWithIg
     return NULL;
 }
 
-MockCheckedExpectedCall* MockExpectedCallsList::removeOneFulfilledExpectationWithIgnoredParameters()
+MockCheckedExpectedCall* MockExpectedCallsList::removeOneFulfilledExpectationWithOutIgnoredParameters()
 {
     for (MockExpectedCallsListNode* p = head_; p; p = p->next_) {
         if (p->expectedCall_->isFulfilledWithoutIgnoredParameters()) {

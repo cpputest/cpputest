@@ -66,8 +66,8 @@ public:
     virtual void onlyKeepUnfulfilledExpectations();
 
     virtual MockCheckedExpectedCall* removeOneFulfilledExpectation();
-    virtual MockCheckedExpectedCall* removeOneFulfilledExpectationWithIgnoredParameters();
-    virtual MockCheckedExpectedCall* getOneFulfilledExpectationWithIgnoredParameters();
+    virtual MockCheckedExpectedCall* removeOneFulfilledExpectationWithOutIgnoredParameters();
+    virtual MockCheckedExpectedCall* getOneFulfilledExpectationWithOutIgnoredParameters();
 
     virtual void resetExpectations();
     virtual void callWasMade(int callOrder);
