@@ -478,6 +478,16 @@ SimpleString HexStringFrom(long value)
     return StringFromFormat("%lx", value);
 }
 
+SimpleString HexStringFrom(signed char value)
+{
+    SimpleString result = StringFromFormat("%x", value);
+    if(value < 0) {
+        size_t size = result.size();
+        result = result.subString(size-(CPPUTEST_CHAR_BIT/4));
+    }
+    return result;
+}
+
 SimpleString HexStringFrom(unsigned long value)
 {
     return StringFromFormat("%lx", value);

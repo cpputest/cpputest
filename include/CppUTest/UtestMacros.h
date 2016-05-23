@@ -232,6 +232,18 @@
 #define BYTES_EQUAL_TEXT(expected, actual, text)\
     LONGS_EQUAL_TEXT((expected) & 0xff, (actual) & 0xff, text)
 
+#define SIGNED_BYTES_EQUAL(expected, actual)\
+    SIGNED_BYTES_EQUAL_LOCATION(expected, actual, __FILE__, __LINE__)
+
+#define SIGNED_BYTES_EQUAL_LOCATION(expected, actual, file, line) \
+       { UtestShell::getCurrent()->assertSignedBytesEqual(expected, actual, NULL, file, line); }
+
+#define SIGNED_BYTES_EQUAL_TEXT(expected, actual, text)\
+    SIGNED_BYTES_EQUAL_TEXT_LOCATION(expected, actual, text, __FILE__, __LINE__)
+
+#define SIGNED_BYTES_EQUAL_TEXT_LOCATION(expected, actual, text, file, line) \
+        { UtestShell::getCurrent()->assertSignedBytesEqual(expected, actual, text, file, line); }
+
 #define POINTERS_EQUAL(expected, actual)\
     POINTERS_EQUAL_LOCATION((expected), (actual), NULL, __FILE__, __LINE__)
 
