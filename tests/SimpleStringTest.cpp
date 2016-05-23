@@ -742,12 +742,21 @@ IGNORE_TEST(SimpleString, _64BitAddressPrintsCorrectly)
 
 #endif
 
-TEST(SimpleString, BuildStringFromUnsignedInteger)
+TEST(SimpleString, BuildStringFromUnsignedLongInteger)
 {
     unsigned long int i = 0xffffffff;
 
     SimpleString result = StringFrom(i);
-    const char* expected_string = "4294967295 (0xffffffff)";
+    const char* expected_string = "4294967295";
+    CHECK_EQUAL(expected_string, result);
+}
+
+TEST(SimpleString, BuildStringFromUnsignedInteger)
+{
+    unsigned int i = 0xffffffff;
+
+    SimpleString result = StringFrom(i);
+    const char* expected_string = "4294967295";
     CHECK_EQUAL(expected_string, result);
 }
 
@@ -772,7 +781,7 @@ TEST(SimpleString, unsigned_long)
     unsigned long i = 0xffffffffUL;
 
     SimpleString result = StringFrom(i);
-    const char* expected_string = "4294967295 (0xffffffff)";
+    const char* expected_string = "4294967295";
     CHECK_EQUAL(expected_string, result);
 }
 
@@ -1027,4 +1036,18 @@ TEST(SimpleString, StringFromOrdinalNumberOthers)
     STRCMP_EQUAL("32nd", StringFromOrdinalNumber(32).asCharString());
     STRCMP_EQUAL("100th", StringFromOrdinalNumber(100).asCharString());
     STRCMP_EQUAL("101st", StringFromOrdinalNumber(101).asCharString());
+}
+
+TEST(SimpleString, BracketsFormattedHexStringFromForUnsignedInt)
+{
+	unsigned int value = 1;
+
+	STRCMP_EQUAL("(0x00000001)", BracketsFormattedHexStringFrom(value).asCharString());
+}
+
+TEST(SimpleString, BracketsFormattedHexStringFromForUnsignedLong)
+{
+	unsigned long value = 1;
+
+	STRCMP_EQUAL("(0x1)", BracketsFormattedHexStringFrom(value).asCharString());
 }
