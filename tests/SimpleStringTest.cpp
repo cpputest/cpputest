@@ -482,8 +482,17 @@ TEST(SimpleString, FunctionPointers)
 TEST(SimpleString, Characters)
 {
     SimpleString s(StringFrom('a'));
-    SimpleString s2(StringFrom('a'));
-    CHECK(s == s2);
+    STRCMP_EQUAL("a", s.asCharString());
+}
+
+TEST(SimpleString, NegativeSignedBytes)
+{
+    STRCMP_EQUAL("-15", StringFrom((signed char)-15).asCharString());
+}
+
+TEST(SimpleString, PositiveSignedBytes)
+{
+    STRCMP_EQUAL("4", StringFrom(4).asCharString());
 }
 
 TEST(SimpleString, LongInts)
@@ -554,6 +563,8 @@ TEST(SimpleString, Sizes)
 
 TEST(SimpleString, HexStrings)
 {
+    STRCMP_EQUAL("f3", HexStringFrom((signed char)-13).asCharString());
+
     SimpleString h1 = HexStringFrom(0xffffL);
     STRCMP_EQUAL("ffff", h1.asCharString());
 
