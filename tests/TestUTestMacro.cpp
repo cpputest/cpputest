@@ -77,8 +77,8 @@ static void _UNSIGNED_LONGS_EQUALTestMethod()
 TEST(UnitTestMacros, TestUNSIGNED_LONGS_EQUAL)
 {
     fixture.runTestWithMethod(_UNSIGNED_LONGS_EQUALTestMethod);
-    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1 0x1>");
-    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0 0x0>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1 (0x1)>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0 (0x0)>");
 }
 
 TEST(UnitTestMacros, UNSIGNED_LONGS_EQUALBehavesAsProperMacro)
@@ -100,8 +100,8 @@ static void _UNSIGNED_LONGS_EQUAL_TEXTTestMethod()
 TEST(UnitTestMacros, TestUNSIGNED_LONGS_EQUAL_TEXT)
 {
     fixture.runTestWithMethod(_UNSIGNED_LONGS_EQUAL_TEXTTestMethod);
-    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1 0x1>");
-    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0 0x0>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1 (0x1)>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0 (0x0)>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("Failed because it failed");
 }
 
@@ -127,8 +127,8 @@ static void _LONGLONGS_EQUALTestMethod()
 TEST(UnitTestMacros, TestLONGLONGS_EQUAL)
 {
     fixture.runTestWithMethod(_LONGLONGS_EQUALTestMethod);
-    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1 0x1>");
-    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0 0x0>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1 (0x1)>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0 (0x0)>");
 }
 
 TEST(UnitTestMacros, LONGLONGS_EQUALBehavesAsProperMacro)
@@ -150,8 +150,8 @@ static void _LONGLONGS_EQUAL_TEXTTestMethod()
 TEST(UnitTestMacros, TestLONGLONGS_EQUAL_TEXT)
 {
     fixture.runTestWithMethod(_LONGLONGS_EQUAL_TEXTTestMethod);
-    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1 0x1>");
-    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0 0x0>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1 (0x1)>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0 (0x0)>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("Failed because it failed");
 }
 
@@ -175,8 +175,8 @@ static void _UNSIGNED_LONGLONGS_EQUALTestMethod()
 TEST(UnitTestMacros, TestUNSIGNED_LONGLONGS_EQUAL)
 {
     fixture.runTestWithMethod(_UNSIGNED_LONGLONGS_EQUALTestMethod);
-    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1 0x1>");
-    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0 0x0>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1 (0x1)>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0 (0x0)>");
 }
 
 TEST(UnitTestMacros, UNSIGNED_LONGLONGS_EQUALBehavesAsProperMacro)
@@ -198,8 +198,8 @@ static void _UNSIGNED_LONGLONGS_EQUAL_TEXTTestMethod()
 TEST(UnitTestMacros, TestUNSIGNED_LONGLONGS_EQUAL_TEXT)
 {
     fixture.runTestWithMethod(_UNSIGNED_LONGLONGS_EQUAL_TEXTTestMethod);
-    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1 0x1>");
-    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0 0x0>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1 (0x1)>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0 (0x0)>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("Failed because it failed");
 }
 
@@ -497,8 +497,8 @@ static void _failingTestMethodWithLONGS_EQUAL()
 TEST(UnitTestMacros, FailureWithLONGS_EQUALS)
 {
     fixture.runTestWithMethod(_failingTestMethodWithLONGS_EQUAL);
-    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <  1 0x01>");
-    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <255 0xff>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <  1 (0x1)>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <255 (0xff)>");
 }
 
 TEST(UnitTestMacros, LONGS_EQUALBehavesAsProperMacro)
@@ -521,8 +521,8 @@ static void _failingTestMethodWithLONGS_EQUAL_TEXT()
 TEST(UnitTestMacros, FailureWithLONGS_EQUALS_TEXT)
 {
     fixture.runTestWithMethod(_failingTestMethodWithLONGS_EQUAL_TEXT);
-    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <  1 0x01>");
-    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <255 0xff>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <  1 (0x1)>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <255 (0xff)>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("Failed because it failed");
 }
 
@@ -546,8 +546,8 @@ static void _failingTestMethodWithBYTES_EQUAL()
 TEST(UnitTestMacros, FailureWithBYTES_EQUAL)
 {
     fixture.runTestWithMethod(_failingTestMethodWithBYTES_EQUAL);
-    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <97 0x61>");
-    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <98 0x62>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <97 (0x61)>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <98 (0x62)>");
 }
 
 TEST(UnitTestMacros, BYTES_EQUALBehavesAsProperMacro)
@@ -570,8 +570,8 @@ static void _failingTestMethodWithBYTES_EQUAL_TEXT()
 TEST(UnitTestMacros, FailureWithBYTES_EQUAL_TEXT)
 {
     fixture.runTestWithMethod(_failingTestMethodWithBYTES_EQUAL_TEXT);
-    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <97 0x61>");
-    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <98 0x62>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <97 (0x61)>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <98 (0x62)>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("Failed because it failed");
 }
 

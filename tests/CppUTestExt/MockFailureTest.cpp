@@ -108,7 +108,7 @@ TEST(MockFailureTest, expectedCallDidNotHappen)
     STRCMP_EQUAL("Mock Failure: Expected call did not happen.\n"
                  "\tEXPECTED calls that did NOT happen:\n"
                  "\t\tfoobar -> no parameters\n"
-                 "\t\tworld -> int boo: <2>, const char* hello: <world>\n"
+                 "\t\tworld -> int boo: <2 (0x00000002)>, const char* hello: <world>\n"
                  "\tACTUAL calls that did happen (in call order):\n"
                  "\t\thaphaphap -> no parameters", failure.getMessage().asCharString());
 }
@@ -140,12 +140,12 @@ TEST(MockFailureTest, MockUnexpectedInputParameterFailure)
     MockUnexpectedInputParameterFailure failure(UtestShell::getCurrent(), "foo", actualParameter, *list);
     STRCMP_EQUAL("Mock Failure: Unexpected parameter name to function \"foo\": bar\n"
                  "\tEXPECTED calls that DID NOT happen related to function: foo\n"
-                 "\t\tfoo -> int boo: <2>\n"
+                 "\t\tfoo -> int boo: <2 (0x00000002)>\n"
                  "\t\tfoo -> double boo: <3.3>\n"
                  "\tACTUAL calls that DID happen related to function: foo\n"
                  "\t\t<none>\n"
                  "\tACTUAL unexpected parameter passed to function: foo\n"
-                 "\t\tint bar: <2>", failure.getMessage().asCharString());
+                 "\t\tint bar: <2 (0x00000002)>", failure.getMessage().asCharString());
 }
 
 TEST(MockFailureTest, MockUnexpectedOutputParameterFailure)
@@ -182,14 +182,14 @@ TEST(MockFailureTest, MockUnexpectedParameterValueFailure)
     actualParameter.setValue(20);
 
     MockUnexpectedInputParameterFailure failure(UtestShell::getCurrent(), "foo", actualParameter, *list);
-    STRCMP_EQUAL("Mock Failure: Unexpected parameter value to parameter \"boo\" to function \"foo\": <20>\n"
+    STRCMP_EQUAL("Mock Failure: Unexpected parameter value to parameter \"boo\" to function \"foo\": <20 (0x00000014)>\n"
                  "\tEXPECTED calls that DID NOT happen related to function: foo\n"
-                 "\t\tfoo -> int boo: <2>\n"
-                 "\t\tfoo -> int boo: <10>\n"
+                 "\t\tfoo -> int boo: <2 (0x00000002)>\n"
+                 "\t\tfoo -> int boo: <10 (0x0000000a)>\n"
                  "\tACTUAL calls that DID happen related to function: foo\n"
                  "\t\t<none>\n"
                  "\tACTUAL unexpected parameter passed to function: foo\n"
-                 "\t\tint boo: <20>", failure.getMessage().asCharString());
+                 "\t\tint boo: <20 (0x00000014)>", failure.getMessage().asCharString());
 }
 
 TEST(MockFailureTest, MockExpectedParameterDidntHappenFailure)
@@ -205,9 +205,9 @@ TEST(MockFailureTest, MockExpectedParameterDidntHappenFailure)
     MockExpectedParameterDidntHappenFailure failure(UtestShell::getCurrent(), "foo", *list);
     STRCMP_EQUAL("Mock Failure: Expected parameter for function \"foo\" did not happen.\n"
                  "\tEXPECTED calls that DID NOT happen related to function: foo\n"
-                 "\t\tfoo -> int bar: <2>, const char* boo: <str>\n"
+                 "\t\tfoo -> int bar: <2 (0x00000002)>, const char* boo: <str>\n"
                  "\tACTUAL calls that DID happen related to function: foo\n"
-                 "\t\tfoo -> int bar: <10>, const char* boo: <bleh>\n"
+                 "\t\tfoo -> int bar: <10 (0x0000000a)>, const char* boo: <bleh>\n"
                  "\tMISSING parameters that didn't happen:\n"
                  "\t\tint bar, const char* boo", failure.getMessage().asCharString());
 }

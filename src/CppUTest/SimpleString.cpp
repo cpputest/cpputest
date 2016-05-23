@@ -478,6 +478,11 @@ SimpleString HexStringFrom(long value)
     return StringFromFormat("%lx", value);
 }
 
+SimpleString HexStringFrom(int value)
+{
+    return StringFromFormat("%08x", value);
+}
+
 SimpleString HexStringFrom(unsigned long value)
 {
     return StringFromFormat("%lx", value);
@@ -488,10 +493,21 @@ SimpleString HexStringFrom(unsigned int value)
     return StringFromFormat("%08x", value);
 }
 
+SimpleString BracketsFormattedHexStringFrom(int value)
+{
+    return BracketsFormattedHexString(HexStringFrom(value));
+}
+
 SimpleString BracketsFormattedHexStringFrom(unsigned int value)
 {
     return BracketsFormattedHexString(HexStringFrom(value));
 }
+
+SimpleString BracketsFormattedHexStringFrom(long value)
+{
+    return BracketsFormattedHexString(HexStringFrom(value));
+}
+
 
 SimpleString BracketsFormattedHexStringFrom(unsigned long value)
 {
@@ -513,7 +529,7 @@ SimpleString StringFrom(cpputest_longlong value)
 
 SimpleString StringFrom(cpputest_ulonglong value)
 {
-    return StringFromFormat("%llu", value, value);
+    return StringFromFormat("%llu", value);
 }
 
 SimpleString HexStringFrom(cpputest_longlong value)
@@ -534,6 +550,17 @@ SimpleString HexStringFrom(const void* value)
 SimpleString HexStringFrom(void (*value)())
 {
     return HexStringFrom((cpputest_ulonglong) value);
+}
+
+SimpleString BracketsFormattedHexStringFrom(cpputest_longlong value)
+{
+    return BracketsFormattedHexString(HexStringFrom(value));
+}
+
+
+SimpleString BracketsFormattedHexStringFrom(cpputest_ulonglong value)
+{
+    return BracketsFormattedHexString(HexStringFrom(value));
 }
 
 #else   /* CPPUTEST_USE_LONG_LONG */
@@ -588,6 +615,17 @@ SimpleString HexStringFrom(const void* value)
 SimpleString HexStringFrom(void (*value)())
 {
     return StringFromFormat("%lx", convertFunctionPointerToLongValue(value));
+}
+
+SimpleString BracketsFormattedHexStringFrom(cpputest_longlong value)
+{
+    return "";
+}
+
+
+SimpleString BracketsFormattedHexStringFrom(cpputest_ulonglong value)
+{
+    return "";
 }
 
 #endif  /* CPPUTEST_USE_LONG_LONG */

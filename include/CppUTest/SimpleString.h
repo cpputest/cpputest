@@ -147,6 +147,7 @@ SimpleString StringFrom(unsigned long value);
 SimpleString HexStringFrom(unsigned int value);
 SimpleString StringFrom(cpputest_longlong value);
 SimpleString StringFrom(cpputest_ulonglong value);
+SimpleString HexStringFrom(int value);
 SimpleString HexStringFrom(long value);
 SimpleString HexStringFrom(unsigned long value);
 SimpleString HexStringFrom(cpputest_longlong value);
@@ -163,9 +164,14 @@ SimpleString StringFromBinaryWithSize(const unsigned char* value, size_t size);
 SimpleString StringFromBinaryWithSizeOrNull(const unsigned char* value, size_t size);
 SimpleString StringFromMaskedBits(unsigned long value, unsigned long mask, size_t byteCount);
 SimpleString StringFromOrdinalNumber(unsigned int number);
+SimpleString BracketsFormattedHexStringFrom(int value);
 SimpleString BracketsFormattedHexStringFrom(unsigned int value);
+SimpleString BracketsFormattedHexStringFrom(long value);
 SimpleString BracketsFormattedHexStringFrom(unsigned long value);
+SimpleString BracketsFormattedHexStringFrom(cpputest_longlong value);
+SimpleString BracketsFormattedHexStringFrom(cpputest_ulonglong value);
 SimpleString BracketsFormattedHexString(SimpleString hexString);
+
 
 
 #if CPPUTEST_USE_STD_CPP_LIB
