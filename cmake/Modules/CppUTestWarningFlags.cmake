@@ -56,18 +56,16 @@ else (MSVC)
         Wno-old-style-cast
         )
 
+    if (C++11)
+        set(WARNING_CXX_FLAGS
+           ${WARNING_CXX_FLAGS}
+           Wno-c++98-compat
+           Wno-c++98-compat-pedantic
+           )
+    endif (C++11)
+
     check_and_append_c_warning_flags(${WARNING_C_FLAGS})
     check_and_append_c_warning_flags(${WARNING_C_ONLY_FLAGS})
     check_and_append_cxx_warning_flags(${WARNING_CXX_FLAGS})
 
-    if (C++11)
-        check_cxx_compiler_flag("-Wno-c++98-compat" NO_WARNING_CXX_98_COMPAT_FLAG)
-        check_cxx_compiler_flag("-Wno-c++98-compat-pedantic" NO_WARNING_CXX_98_COMPAT_PEDANTIC_FLAG)
-        if (NO_WARNING_CXX_98_COMPAT_FLAG)
-            set(CPPUTEST_CXX_WARNING_FLAGS "${CPPUTEST_CXX_WARNING_FLAGS} -Wno-c++98-compat")
-        endif (NO_WARNING_CXX_98_COMPAT_FLAG)
-        if (NO_WARNING_CXX_98_COMPAT_PEDANTIC_FLAG)
-            set(CPPUTEST_CXX_WARNING_FLAGS "${CPPUTEST_CXX_WARNING_FLAGS} -Wno-c++98-compat-pedantic")
-        endif (NO_WARNING_CXX_98_COMPAT_PEDANTIC_FLAG)
-    endif (C++11)
 endif (MSVC)
