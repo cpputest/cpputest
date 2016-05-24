@@ -478,6 +478,11 @@ SimpleString HexStringFrom(long value)
     return StringFromFormat("%lx", value);
 }
 
+SimpleString HexStringFrom(int value)
+{
+    return StringFromFormat("%x", value);
+}
+
 SimpleString HexStringFrom(signed char value)
 {
     SimpleString result = StringFromFormat("%x", value);
@@ -493,6 +498,38 @@ SimpleString HexStringFrom(unsigned long value)
     return StringFromFormat("%lx", value);
 }
 
+SimpleString HexStringFrom(unsigned int value)
+{
+    return StringFromFormat("%x", value);
+}
+
+SimpleString BracketsFormattedHexStringFrom(int value)
+{
+    return BracketsFormattedHexString(HexStringFrom(value));
+}
+
+SimpleString BracketsFormattedHexStringFrom(unsigned int value)
+{
+    return BracketsFormattedHexString(HexStringFrom(value));
+}
+
+SimpleString BracketsFormattedHexStringFrom(long value)
+{
+    return BracketsFormattedHexString(HexStringFrom(value));
+}
+
+
+SimpleString BracketsFormattedHexStringFrom(unsigned long value)
+{
+    return BracketsFormattedHexString(HexStringFrom(value));
+}
+
+SimpleString BracketsFormattedHexString(SimpleString hexString)
+{
+    return SimpleString("(0x") + hexString + ")" ;
+}
+
+
 #ifdef CPPUTEST_USE_LONG_LONG
 
 SimpleString StringFrom(cpputest_longlong value)
@@ -502,7 +539,7 @@ SimpleString StringFrom(cpputest_longlong value)
 
 SimpleString StringFrom(cpputest_ulonglong value)
 {
-    return StringFromFormat("%llu (0x%llx)", value, value);
+    return StringFromFormat("%llu", value);
 }
 
 SimpleString HexStringFrom(cpputest_longlong value)
@@ -523,6 +560,17 @@ SimpleString HexStringFrom(const void* value)
 SimpleString HexStringFrom(void (*value)())
 {
     return HexStringFrom((cpputest_ulonglong) value);
+}
+
+SimpleString BracketsFormattedHexStringFrom(cpputest_longlong value)
+{
+    return BracketsFormattedHexString(HexStringFrom(value));
+}
+
+
+SimpleString BracketsFormattedHexStringFrom(cpputest_ulonglong value)
+{
+    return BracketsFormattedHexString(HexStringFrom(value));
 }
 
 #else   /* CPPUTEST_USE_LONG_LONG */
@@ -579,6 +627,17 @@ SimpleString HexStringFrom(void (*value)())
     return StringFromFormat("%lx", convertFunctionPointerToLongValue(value));
 }
 
+SimpleString BracketsFormattedHexStringFrom(cpputest_longlong value)
+{
+    return "";
+}
+
+
+SimpleString BracketsFormattedHexStringFrom(cpputest_ulonglong value)
+{
+    return "";
+}
+
 #endif  /* CPPUTEST_USE_LONG_LONG */
 
 SimpleString StringFrom(double value, int precision)
@@ -614,7 +673,7 @@ SimpleString StringFromFormat(const char* format, ...)
 
 SimpleString StringFrom(unsigned int i)
 {
-    return StringFromFormat("%10u (0x%08x)", i, i);
+    return StringFromFormat("%10u", i);
 }
 
 #if CPPUTEST_USE_STD_CPP_LIB
@@ -630,7 +689,7 @@ SimpleString StringFrom(const std::string& value)
 
 SimpleString StringFrom(unsigned long i)
 {
-    return StringFromFormat("%lu (0x%lx)", i, i);
+    return StringFromFormat("%lu", i);
 }
 
 //Kludge to get a va_copy in VC++ V6
