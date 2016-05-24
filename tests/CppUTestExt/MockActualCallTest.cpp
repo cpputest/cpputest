@@ -187,7 +187,7 @@ TEST(MockCheckedActualCall, remainderOfMockActualCallTraceWorksAsItShould)
     expectedString += " onObject:0x";
     expectedString += HexStringFrom(&value);
     expectedString += " bool:true";
-    expectedString += " unsigned_int:         1 (0x00000001)";
+    expectedString += " unsigned_int:         1 (0x1)";
     expectedString += " unsigned_long:1 (0x1)";
     expectedString += " long_int:1 (0x1)";
     expectedString += " pointer:0x";

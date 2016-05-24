@@ -448,7 +448,7 @@ TEST(MockExpectedCall, toStringForMultipleInputParameters)
     call->withParameter("string", "value");
     call->withParameter("integer", int_value);
     call->withParameter("unsigned-integer", uint_value);
-    STRCMP_EQUAL("name -> const char* string: <value>, int integer: <10 (0x0000000a)>, unsigned int unsigned-integer: <         7 (0x00000007)>", call->callToString().asCharString());
+    STRCMP_EQUAL("name -> const char* string: <value>, int integer: <10 (0xa)>, unsigned int unsigned-integer: <         7 (0x7)>", call->callToString().asCharString());
 }
 
 TEST(MockExpectedCall, toStringForMultipleInputAndOutputParameters)
@@ -462,7 +462,7 @@ TEST(MockExpectedCall, toStringForMultipleInputAndOutputParameters)
     call->withParameter("integer", int_value);
     call->withParameter("unsigned-integer", uint_value);
     call->withOutputParameterReturning("buffer", buffer_value, sizeof(buffer_value));
-    STRCMP_EQUAL("name -> const char* string: <value>, int integer: <10 (0x0000000a)>, unsigned int unsigned-integer: <         7 (0x00000007)>, "
+    STRCMP_EQUAL("name -> const char* string: <value>, int integer: <10 (0xa)>, unsigned int unsigned-integer: <         7 (0x7)>, "
                  "const void* buffer: <output>", call->callToString().asCharString());
 }
 

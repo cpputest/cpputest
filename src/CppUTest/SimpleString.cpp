@@ -480,7 +480,7 @@ SimpleString HexStringFrom(long value)
 
 SimpleString HexStringFrom(int value)
 {
-    return StringFromFormat("%08x", value);
+    return StringFromFormat("%x", value);
 }
 
 SimpleString HexStringFrom(unsigned long value)
@@ -490,7 +490,7 @@ SimpleString HexStringFrom(unsigned long value)
 
 SimpleString HexStringFrom(unsigned int value)
 {
-    return StringFromFormat("%08x", value);
+    return StringFromFormat("%x", value);
 }
 
 SimpleString BracketsFormattedHexStringFrom(int value)

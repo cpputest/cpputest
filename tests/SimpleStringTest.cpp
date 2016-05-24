@@ -1031,7 +1031,7 @@ TEST(SimpleString, BracketsFormattedHexStringFromForUnsignedInt)
 {
 	unsigned int value = 1;
 
-	STRCMP_EQUAL("(0x00000001)", BracketsFormattedHexStringFrom(value).asCharString());
+	STRCMP_EQUAL("(0x1)", BracketsFormattedHexStringFrom(value).asCharString());
 }
 
 TEST(SimpleString, BracketsFormattedHexStringFromForUnsignedLong)
@@ -1040,3 +1040,45 @@ TEST(SimpleString, BracketsFormattedHexStringFromForUnsignedLong)
 
 	STRCMP_EQUAL("(0x1)", BracketsFormattedHexStringFrom(value).asCharString());
 }
+
+TEST(SimpleString, BracketsFormattedHexStringFromForInt)
+{
+	int value = 1;
+
+	STRCMP_EQUAL("(0x1)", BracketsFormattedHexStringFrom(value).asCharString());
+}
+
+TEST(SimpleString, BracketsFormattedHexStringFromForLong)
+{
+	long value = 1;
+
+	STRCMP_EQUAL("(0x1)", BracketsFormattedHexStringFrom(value).asCharString());
+}
+#ifdef CPPUTEST_USE_LONG_LONG
+
+TEST(SimpleString, BracketsFormattedHexStringFromForLongLong)
+{
+	cpputest_longlong value = 1;
+
+	STRCMP_EQUAL("(0x1)", BracketsFormattedHexStringFrom(value).asCharString());
+}
+TEST(SimpleString, BracketsFormattedHexStringFromForULongLong)
+{
+	cpputest_ulonglong value = 1;
+
+	STRCMP_EQUAL("(0x1)", BracketsFormattedHexStringFrom(value).asCharString());
+}
+#else
+TEST(SimpleString, BracketsFormattedHexStringFromForLongLong)
+{
+	cpputest_longlong value = 1;
+
+	STRCMP_EQUAL("", BracketsFormattedHexStringFrom(value).asCharString());
+}
+TEST(SimpleString, BracketsFormattedHexStringFromForULongLong)
+{
+	cpputest_ulonglong value = 1;
+
+	STRCMP_EQUAL("", BracketsFormattedHexStringFrom(value).asCharString());
+}
+#endif
