@@ -45,6 +45,12 @@
 #define CHECK_EQUAL_C_CHAR(expected,actual) \
   CHECK_EQUAL_C_CHAR_LOCATION(expected,actual,__FILE__,__LINE__)
 
+#define CHECK_EQUAL_C_UBYTE(expected,actual) \
+  CHECK_EQUAL_C_UBYTE_LOCATION(expected,actual,__FILE__,__LINE__)
+
+#define CHECK_EQUAL_C_SBYTE(expected,actual) \
+  CHECK_EQUAL_C_SBYTE_LOCATION(expected,actual,__FILE__,__LINE__)
+
 #define CHECK_EQUAL_C_STRING(expected,actual) \
   CHECK_EQUAL_C_STRING_LOCATION(expected,actual,__FILE__,__LINE__)
 
@@ -119,6 +125,10 @@ extern void CHECK_EQUAL_C_INT_LOCATION(int expected, int actual,
 extern void CHECK_EQUAL_C_REAL_LOCATION(double expected, double actual,
         double threshold, const char* fileName, int lineNumber);
 extern void CHECK_EQUAL_C_CHAR_LOCATION(char expected, char actual,
+        const char* fileName, int lineNumber);
+extern void CHECK_EQUAL_C_UBYTE_LOCATION(unsigned char expected, unsigned char actual, 
+        const char* fileName, int lineNumber);
+extern void CHECK_EQUAL_C_SBYTE_LOCATION(signed char expected, signed char actual, 
         const char* fileName, int lineNumber);
 extern void CHECK_EQUAL_C_STRING_LOCATION(const char* expected,
         const char* actual, const char* fileName, int lineNumber);

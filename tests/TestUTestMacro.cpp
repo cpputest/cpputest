@@ -586,6 +586,60 @@ IGNORE_TEST(UnitTestMacros, BYTES_EQUAL_TEXTWorksInAnIgnoredTest)
     BYTES_EQUAL_TEXT('q', 'w', "Failed because it failed") // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
 
+static void _failingTestMethodWithSIGNED_BYTES_EQUAL()
+{
+    SIGNED_BYTES_EQUAL(-1, -2);
+    TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
+}
+
+TEST(UnitTestMacros, FailureWithSIGNED_BYTES_EQUAL)
+{
+    fixture.runTestWithMethod(_failingTestMethodWithSIGNED_BYTES_EQUAL);
+#if CPPUTEST_CHAR_BIT == 16
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <-1 0xffff>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <-2 0xfffe>");
+#else
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <-1 0xff>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <-2 0xfe>");
+#endif
+}
+
+TEST(UnitTestMacros, CHARS_EQUALBehavesAsProperMacro)
+{
+    if (false) SIGNED_BYTES_EQUAL(-1, -2)
+    else SIGNED_BYTES_EQUAL(-3, -3)
+}
+
+IGNORE_TEST(UnitTestMacros, CHARS_EQUALWorksInAnIgnoredTest)
+{
+    SIGNED_BYTES_EQUAL(-7, 19) // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
+
+static void _failingTestMethodWithSIGNED_BYTES_EQUAL_TEXT()
+{
+    SIGNED_BYTES_EQUAL_TEXT(-127, -126, "Failed because it failed");
+    TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
+}
+
+TEST(UnitTestMacros, FailureWithSIGNED_BYTES_EQUAL_TEXT)
+{
+    fixture.runTestWithMethod(_failingTestMethodWithSIGNED_BYTES_EQUAL_TEXT);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <-127 0x81>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <-126 0x82>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("Failed because it failed");
+}
+
+TEST(UnitTestMacros, CHARS_EQUAL_TEXTBehavesAsProperMacro)
+{
+    if (false) SIGNED_BYTES_EQUAL_TEXT(-1, -2, "Failed because it failed")
+    else SIGNED_BYTES_EQUAL_TEXT(-3, -3, "Failed because it failed")
+}
+
+IGNORE_TEST(UnitTestMacros, SIGNED_BYTES_EQUAL_TEXTWorksInAnIgnoredTest)
+{
+    SIGNED_BYTES_EQUAL_TEXT(-7, 19, "Failed because it failed") // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
+
 static void _failingTestMethodWithPOINTERS_EQUAL()
 {
     POINTERS_EQUAL((void*)0xa5a5, (void*)0xf0f0);

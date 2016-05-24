@@ -148,6 +148,7 @@ SimpleString HexStringFrom(unsigned int value);
 SimpleString StringFrom(cpputest_longlong value);
 SimpleString StringFrom(cpputest_ulonglong value);
 SimpleString HexStringFrom(int value);
+SimpleString HexStringFrom(signed char value);
 SimpleString HexStringFrom(long value);
 SimpleString HexStringFrom(unsigned long value);
 SimpleString HexStringFrom(cpputest_longlong value);

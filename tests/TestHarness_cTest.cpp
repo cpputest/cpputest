@@ -131,6 +131,38 @@ TEST(TestHarness_c, checkChar)
     CHECK(!hasDestructorOfTheDestructorCheckedBeenCalled)
 }
 
+static void _failUnsignedByteMethod()
+{
+    HasTheDestructorBeenCalledChecker checker;
+    CHECK_EQUAL_C_UBYTE(254, 253);
+}
+
+TEST(TestHarness_c, checkUnsignedByte)
+{
+    CHECK_EQUAL_C_UBYTE(254, 254);
+    fixture->setTestFunction(_failUnsignedByteMethod);
+    fixture->runAllTests();
+    fixture->assertPrintContains("expected <254>\n	but was  <253>");
+    fixture->assertPrintContains("arness_c");
+    CHECK(!hasDestructorOfTheDestructorCheckedBeenCalled)
+}
+
+static void _failSignedByteMethod()
+{
+    HasTheDestructorBeenCalledChecker checker;
+    CHECK_EQUAL_C_SBYTE(-3, -5);
+}
+
+TEST(TestHarness_c, checkSignedByte)
+{
+    CHECK_EQUAL_C_SBYTE(-3, -3);
+    fixture->setTestFunction(_failSignedByteMethod);
+    fixture->runAllTests();
+    fixture->assertPrintContains("expected <-3>\n	but was  <-5>");
+    fixture->assertPrintContains("arness_c");
+    CHECK(!hasDestructorOfTheDestructorCheckedBeenCalled)
+}
+
 static void _failStringMethod()
 {
     HasTheDestructorBeenCalledChecker checker;
