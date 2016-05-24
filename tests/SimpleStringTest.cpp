@@ -1054,9 +1054,9 @@ TEST(SimpleString, BracketsFormattedHexStringFromForUnsignedLong)
 
 TEST(SimpleString, BracketsFormattedHexStringFromForInt)
 {
-	int value = 1;
+	int value = -1;
 
-	STRCMP_EQUAL("(0x1)", BracketsFormattedHexStringFrom(value).asCharString());
+	STRCMP_EQUAL("(0xffffffff)", BracketsFormattedHexStringFrom(value).asCharString());
 }
 
 TEST(SimpleString, BracketsFormattedHexStringFromForLong)

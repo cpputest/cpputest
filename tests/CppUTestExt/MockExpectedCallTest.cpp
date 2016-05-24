@@ -580,8 +580,8 @@ TEST(MockExpectedCallComposite, hasBoolParameter)
 
 TEST(MockExpectedCallComposite, hasLongIntParameter)
 {
-    composite.withParameter("param", (long int) -1);
-    STRCMP_EQUAL("name -> long int param: <-1 (0xffffffff)>", call.callToString().asCharString());
+    composite.withParameter("param", (long int) 1);
+    STRCMP_EQUAL("name -> long int param: <1 (0x1)>", call.callToString().asCharString());
 }
 
 TEST(MockExpectedCallComposite, hasUnsignedLongIntParameter)
