@@ -673,7 +673,7 @@ SimpleString StringFromFormat(const char* format, ...)
 
 SimpleString StringFrom(unsigned int i)
 {
-    return StringFromFormat("%10u", i);
+    return StringFromFormat("%u", i);
 }
 
 #if CPPUTEST_USE_STD_CPP_LIB

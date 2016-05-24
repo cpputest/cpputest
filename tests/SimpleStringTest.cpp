@@ -753,10 +753,10 @@ TEST(SimpleString, BuildStringFromUnsignedLongInteger)
 
 TEST(SimpleString, BuildStringFromUnsignedInteger)
 {
-    unsigned int i = 0xffffffff;
+    unsigned int i = 0xff;
 
     SimpleString result = StringFrom(i);
-    const char* expected_string = "4294967295";
+    const char* expected_string = "255";
     CHECK_EQUAL(expected_string, result);
 }
 
@@ -1054,9 +1054,9 @@ TEST(SimpleString, BracketsFormattedHexStringFromForUnsignedLong)
 
 TEST(SimpleString, BracketsFormattedHexStringFromForInt)
 {
-	int value = 1;
+	int value = -1;
 
-	STRCMP_EQUAL("(0x1)", BracketsFormattedHexStringFrom(value).asCharString());
+	STRCMP_EQUAL("(0xffffffff)", BracketsFormattedHexStringFrom(value).asCharString());
 }
 
 TEST(SimpleString, BracketsFormattedHexStringFromForLong)
