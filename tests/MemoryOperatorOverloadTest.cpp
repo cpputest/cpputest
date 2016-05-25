@@ -38,6 +38,15 @@ TEST(BasicBehavior, deleteInvalidatesMemory)
     CHECK(*memory != 0xAD);
 }
 
+TEST(BasicBehavior, DeleteWithSizeParameterWorks)
+{
+    char* charMemory = new char;
+    char* charArrayMemory = new char[10];
+    ::operator delete(charMemory, sizeof(char));
+    ::operator delete[](charArrayMemory, sizeof(char)* 10);
+}
+
+
 static void deleteUnallocatedMemory()
 {
     delete (char*) 0x1234678;
