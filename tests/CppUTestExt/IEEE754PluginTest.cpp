@@ -115,7 +115,7 @@ static void set_everything_but_already_failed(void)
     CHECK(1 == 2);
 }
 
-IGNORE_TEST(FE__with_Plugin, should_not_fail_again_when_test_has_already_failed)
+TEST(FE__with_Plugin, should_not_fail_again_when_test_has_already_failed)
 {
     fixture.setTestFunction(set_everything_but_already_failed);
     fixture.runAllTests();
