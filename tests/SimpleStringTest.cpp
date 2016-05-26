@@ -714,6 +714,13 @@ TEST(SimpleString, _64BitAddressPrintsCorrectly)
     STRCMP_EQUAL(expected.asCharString(), actual.asCharString());
 }
 
+TEST(SimpleString, BracketsFormattedHexStringFromForLongOnDifferentPlatform)
+{
+	long value = -1;
+
+	STRCMP_EQUAL("(0xffffffffffffffff)", BracketsFormattedHexStringFrom(value).asCharString());
+}
+
 #else
 /*
  * This test case should pass on 64 bit systems with 32 bit longs,
@@ -722,7 +729,12 @@ TEST(SimpleString, _64BitAddressPrintsCorrectly)
  * different formats on different platforms. However, this will
  * need to be fixed in the future.
  */
+TEST(SimpleString, BracketsFormattedHexStringFromForLongOnDifferentPlatform)
+{
+	long value = -1;
 
+	STRCMP_EQUAL("(0xffffffff)", BracketsFormattedHexStringFrom(value).asCharString());
+}
 IGNORE_TEST(SimpleString, _64BitAddressPrintsCorrectly)
 {
     char* p = (char*) 0xffffffff;
@@ -740,6 +752,12 @@ IGNORE_TEST(SimpleString, _64BitAddressPrintsCorrectly)
 {
 }
 
+TEST(SimpleString, BracketsFormattedHexStringFromForLongOnDifferentPlatform)
+{
+	long value = -1;
+
+	STRCMP_EQUAL("(0xffffffff)", BracketsFormattedHexStringFrom(value).asCharString());
+}
 #endif
 
 TEST(SimpleString, BuildStringFromUnsignedLongInteger)
