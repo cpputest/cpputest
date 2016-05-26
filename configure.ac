@@ -81,24 +81,39 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNIN
 CFLAGS="$saved_cflags"
 fi
 
+AC_LANG_PUSH([C++])
+#####################################################################################
+##### C++ 14 checks
+
+# FLag -std=c++1y
+CXXFLAGS="-Werror -std=c++1y"
+AC_MSG_CHECKING([whether CXX supports -std=c++1y])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CPP14FLAG="-std=c++1y" ], [AC_MSG_RESULT([no])])
+CXXFLAGS="$saved_cxxflags"
+
+# FLag std=c++14
+CXXFLAGS="-Werror -std=c++14"
+AC_MSG_CHECKING([whether CXX supports -std=c++14])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CPP14FLAG="-std=c++14" ], [AC_MSG_RESULT([no])])
+CXXFLAGS="$saved_cxxflags"
+
 #####################################################################################
 ##### C++ 11 checks
 
 ### Checking for Standard C++ 11 compiler flags
-AC_LANG_PUSH([C++])
 
 # FLag -std=c++0x
-CXXFLAGS="-std=c++0x"
+CXXFLAGS="-Werror -std=c++0x"
 AC_MSG_CHECKING([whether CXX supports -std=c++0x])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CPP11FLAG="-std=c++0x" ], [AC_MSG_RESULT([no])])
 CXXFLAGS="$saved_cxxflags"
 
-CXXFLAGS="-std=c++11"
+CXXFLAGS="-Werror -std=c++11"
 AC_MSG_CHECKING([whether CXX supports -std=c++11])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CPP11FLAG="-std=c++11" ], [AC_MSG_RESULT([no])])
 CXXFLAGS="$saved_cxxflags"
 
-CXXFLAGS="-stdlib=libc++"
+CXXFLAGS="-Werror -stdlib=libc++"
 AC_MSG_CHECKING([whether CXX supports -stdlib=libc++])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <cstdio>]])], [AC_MSG_RESULT([yes]); CPPUTEST_CPP11FLAG="${CPPUTEST_CPP11FLAG} -stdlib=libc++" ], [AC_MSG_RESULT([no])])
 CXXFLAGS="$saved_cxxflags"
@@ -115,6 +130,12 @@ AC_MSG_CHECKING([whether CXX supports -Wno-c++98-compat-pedantic])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CPP11BLACKLIST="${CPPUTEST_CPP11BLACKLIST} -Wno-c++98-compat-pedantic" ], [AC_MSG_RESULT([no])])
 CXXFLAGS="$saved_cxxflags"
 
+# Flag -Wno-c++14-compat
+CXXFLAGS="-Werror -Wno-c++14-compat"
+AC_MSG_CHECKING([whether CXX supports -Wno-c++14-compat])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CPP11BLACKLIST="${CPPUTEST_CPP11BLACKLIST} -Wno-c++14-compat" ], [AC_MSG_RESULT([no])])
+CXXFLAGS="$saved_cxxflags"
+
 AC_LANG_POP
 
 # FLag -Wno-c++11-long-long. This must be on if it is available as otherwise long long is supported but causes a warning.
@@ -125,7 +146,7 @@ CFLAGS="$saved_cflags"
 
 # FLag -Wno-long-long must be on for C.
 CFLAGS="-Werror -Wno-long-long"
-AC_MSG_CHECKING([whether CC supports -Wno-long-long])
+AC_MSG_CHECKING([whether CC and CXX supports -Wno-long-long])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wno-long-long" CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wno-long-long"], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 
@@ -338,6 +359,9 @@ AC_ARG_ENABLE([std-cpp], [AC_HELP_STRING([--disable-std-cpp], [disable the use o
 AC_ARG_ENABLE([std-cpp11], [AC_HELP_STRING([--enable-std-cpp11], [enable the use of Standard C++ 11 (if the compiler supports that)])],
    [use_std_cpp11=${enableval}], [use_std_cpp11=no])
 
+AC_ARG_ENABLE([std-cpp14], [AC_HELP_STRING([--enable-std-cpp14], [enable the use of Standard C++ 14 (if the compiler supports that)])],
+   [use_std_cpp14=${enableval}], [use_std_cpp14=no])
+
 AC_ARG_ENABLE([cpputest-flags], [AC_HELP_STRING([--disable-cpputest-flags], [disable CFLAGS/CPPFLAGS/CXXFLAGS set by CppUTest])],
    [cpputest_flags=${enableval}], [cpputest_flags=yes])
 
@@ -383,10 +407,18 @@ if test "x${use_std_cpp}" = xno; then
 
     fi
 fi
+cpp_standard_used="default"
 
 # Using the C++11 standard?
 if test "x${use_std_cpp11}" = xyes; then
 	CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} ${CPPUTEST_CPP11FLAG} ${CPPUTEST_CPP11BLACKLIST}"
+  cpp_standard_used="C++11"
+fi
+
+# Using the C++14 standard?
+if test "x${use_std_cpp14}" = xyes; then
+	CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} ${CPPUTEST_CPP14FLAG} ${CPPUTEST_CPP11BLACKLIST}"
+  cpp_standard_used="C++14"
 fi
 
 # Dealing with memory leak detection
@@ -499,6 +531,7 @@ LT_INIT
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
 
+
 echo \
 "----------------------------------------------------------------
 
@@ -517,6 +550,7 @@ Current compiler options:
    CppUTest LIB:                        ${LIBS}
 
 Features configured in ${PACKAGE_NAME}:
+   C++ standard used:                   ${cpp_standard_used}
    Memory Leak Detection:               ${memory_leak_detection}
    Compiling extensions:                ${cpputest_ext}
    Use Long Long (if available):        ${use_longlong}
