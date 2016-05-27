@@ -201,6 +201,18 @@
 #define CPPUTEST_CHAR_BIT 8
 #endif
 
+/* Handling of systems with a different int-width (e.g. 16 bit).
+ */
+#if CPPUTEST_USE_STD_C_LIB
+#if (INT_MAX == 0x7fff)
+#define CPPUTEST_INT_BIT 2
+#else
+#define CPPUTEST_INT_BIT 4
+#endif
+#else
+#define CPPUTEST_INT_BIT 4
+#endif
+
 /*
  * Support for "long long" type.
  *

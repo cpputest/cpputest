@@ -1056,6 +1056,14 @@ TEST(SimpleString, StringFromOrdinalNumberOthers)
     STRCMP_EQUAL("101st", StringFromOrdinalNumber(101).asCharString());
 }
 
+TEST(SimpleString, BracketsFormattedHexStringFromForSignedChar)
+{
+	signed char value = 'c';
+
+	STRCMP_EQUAL("(0x63)", BracketsFormattedHexStringFrom(value).asCharString());
+}
+
+
 TEST(SimpleString, BracketsFormattedHexStringFromForUnsignedInt)
 {
 	unsigned int value = 1;
@@ -1070,12 +1078,22 @@ TEST(SimpleString, BracketsFormattedHexStringFromForUnsignedLong)
 	STRCMP_EQUAL("(0x1)", BracketsFormattedHexStringFrom(value).asCharString());
 }
 
+#if (CPPUTEST_INT_BIT == 4)
 TEST(SimpleString, BracketsFormattedHexStringFromForInt)
 {
 	int value = -1;
 
 	STRCMP_EQUAL("(0xffffffff)", BracketsFormattedHexStringFrom(value).asCharString());
 }
+#else
+TEST(SimpleString, BracketsFormattedHexStringFromForInt)
+{
+	int value = -1;
+
+	STRCMP_EQUAL("(0xffff)", BracketsFormattedHexStringFrom(value).asCharString());
+}
+
+#endif
 
 TEST(SimpleString, BracketsFormattedHexStringFromForLong)
 {
@@ -1110,4 +1128,6 @@ TEST(SimpleString, BracketsFormattedHexStringFromForULongLong)
 
 	STRCMP_EQUAL("", BracketsFormattedHexStringFrom(value).asCharString());
 }
+
 #endif
+
