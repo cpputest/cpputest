@@ -524,6 +524,11 @@ SimpleString BracketsFormattedHexStringFrom(unsigned long value)
     return BracketsFormattedHexString(HexStringFrom(value));
 }
 
+SimpleString BracketsFormattedHexStringFrom(signed char value)
+{
+    return BracketsFormattedHexString(HexStringFrom(value));
+}
+
 SimpleString BracketsFormattedHexString(SimpleString hexString)
 {
     return SimpleString("(0x") + hexString + ")" ;

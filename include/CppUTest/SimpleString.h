@@ -171,6 +171,7 @@ SimpleString BracketsFormattedHexStringFrom(long value);
 SimpleString BracketsFormattedHexStringFrom(unsigned long value);
 SimpleString BracketsFormattedHexStringFrom(cpputest_longlong value);
 SimpleString BracketsFormattedHexStringFrom(cpputest_ulonglong value);
+SimpleString BracketsFormattedHexStringFrom(signed char value);
 SimpleString BracketsFormattedHexString(SimpleString hexString);
 
 

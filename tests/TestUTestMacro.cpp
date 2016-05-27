@@ -596,11 +596,11 @@ TEST(UnitTestMacros, FailureWithSIGNED_BYTES_EQUAL)
 {
     fixture.runTestWithMethod(_failingTestMethodWithSIGNED_BYTES_EQUAL);
 #if CPPUTEST_CHAR_BIT == 16
-    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <-1 0xffff>");
-    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <-2 0xfffe>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <-1 (0xffff)>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <-2 (0xfffe)>");
 #else
-    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <-1 0xff>");
-    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <-2 0xfe>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <-1 (0xff)>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <-2 (0xfe)>");
 #endif
 }
 
@@ -624,8 +624,8 @@ static void _failingTestMethodWithSIGNED_BYTES_EQUAL_TEXT()
 TEST(UnitTestMacros, FailureWithSIGNED_BYTES_EQUAL_TEXT)
 {
     fixture.runTestWithMethod(_failingTestMethodWithSIGNED_BYTES_EQUAL_TEXT);
-    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <-127 0x81>");
-    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <-126 0x82>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <-127 (0x81)>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <-126 (0x82)>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("Failed because it failed");
 }
 
