@@ -203,20 +203,13 @@
 
 /* Handling of systems with a different int-width (e.g. 16 bit).
  */
-#if CPPUTEST_USE_STD_C_LIB
-#if (INT_MAX == 0x7fff)
-#define CPPUTEST_INT_BIT 2
-#else
-#define CPPUTEST_INT_BIT 4
+#if defined(__WATCOMC__)
+#define CPPUTEST_16BIT_INTS
 #endif
-#else
-#define CPPUTEST_INT_BIT 4
-#endif
-
 /*
  * Support for "long long" type.
  *
- * Not supported when CPUTEST_LONG_LONG_DISABLED is set.
+ * No-=-  =-9----------------- =99t supported when CPUTEST_LONG_LONG_DISABLED is set.
  * Can be overridden by using CPPUTEST_USE_LONG_LONG
  *
  * CPPUTEST_HAVE_LONG_LONG_INT is set by configure

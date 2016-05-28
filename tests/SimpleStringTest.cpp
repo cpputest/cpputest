@@ -1078,21 +1078,19 @@ TEST(SimpleString, BracketsFormattedHexStringFromForUnsignedLong)
 	STRCMP_EQUAL("(0x1)", BracketsFormattedHexStringFrom(value).asCharString());
 }
 
-#if (CPPUTEST_INT_BIT == 4)
-TEST(SimpleString, BracketsFormattedHexStringFromForInt)
-{
-	int value = -1;
-
-	STRCMP_EQUAL("(0xffffffff)", BracketsFormattedHexStringFrom(value).asCharString());
-}
-#else
+#ifdef CPPUTEST_16BIT_INTS
 TEST(SimpleString, BracketsFormattedHexStringFromForInt)
 {
 	int value = -1;
 
 	STRCMP_EQUAL("(0xffff)", BracketsFormattedHexStringFrom(value).asCharString());
 }
-
+#else
+TEST(SimpleString, BracketsFormattedHexStringFromForInt)
+{
+	int value = -1;
+	STRCMP_EQUAL("(0xffffffff)", BracketsFormattedHexStringFrom(value).asCharString());
+}
 #endif
 
 TEST(SimpleString, BracketsFormattedHexStringFromForLong)
