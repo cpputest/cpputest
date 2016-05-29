@@ -242,15 +242,12 @@ LongsEqualFailure::LongsEqualFailure(UtestShell* test, const char* fileName, int
     message_ = createUserText(text);
 
     SimpleString aDecimal = StringFrom(actual);
-    SimpleString aHex = HexStringFrom(actual);
     SimpleString eDecimal = StringFrom(expected);
-    SimpleString eHex = HexStringFrom(expected);
 
     SimpleString::padStringsToSameLength(aDecimal, eDecimal, ' ');
-    SimpleString::padStringsToSameLength(aHex, eHex, '0');
 
-    SimpleString actualReported = aDecimal + " 0x" + aHex;
-    SimpleString expectedReported = eDecimal + " 0x" + eHex;
+    SimpleString actualReported = aDecimal + " " + BracketsFormattedHexStringFrom(actual);
+    SimpleString expectedReported = eDecimal + " " + BracketsFormattedHexStringFrom(expected);
     message_ += createButWasString(expectedReported, actualReported);
 }
 
@@ -260,15 +257,13 @@ UnsignedLongsEqualFailure::UnsignedLongsEqualFailure(UtestShell* test, const cha
     message_ = createUserText(text);
 
     SimpleString aDecimal = StringFrom(actual);
-    SimpleString aHex = HexStringFrom(actual);
     SimpleString eDecimal = StringFrom(expected);
-    SimpleString eHex = HexStringFrom(expected);
 
     SimpleString::padStringsToSameLength(aDecimal, eDecimal, ' ');
-    SimpleString::padStringsToSameLength(aHex, eHex, '0');
 
-    SimpleString actualReported = aDecimal + " 0x" + aHex;
-    SimpleString expectedReported = eDecimal + " 0x" + eHex;
+    SimpleString actualReported = aDecimal + " " + BracketsFormattedHexStringFrom(actual);
+    SimpleString expectedReported = eDecimal + " " + BracketsFormattedHexStringFrom(expected);
+
     message_ += createButWasString(expectedReported, actualReported);
 }
 
@@ -278,15 +273,12 @@ LongLongsEqualFailure::LongLongsEqualFailure(UtestShell* test, const char* fileN
     message_ = createUserText(text);
 
     SimpleString aDecimal = StringFrom(actual);
-    SimpleString aHex = HexStringFrom(actual);
     SimpleString eDecimal = StringFrom(expected);
-    SimpleString eHex = HexStringFrom(expected);
 
     SimpleString::padStringsToSameLength(aDecimal, eDecimal, ' ');
-    SimpleString::padStringsToSameLength(aHex, eHex, '0');
 
-    SimpleString actualReported = aDecimal + " 0x" + aHex;
-    SimpleString expectedReported = eDecimal + " 0x" + eHex;
+    SimpleString actualReported = aDecimal + " " + BracketsFormattedHexStringFrom(actual);
+    SimpleString expectedReported = eDecimal + " " + BracketsFormattedHexStringFrom(expected);
     message_ += createButWasString(expectedReported, actualReported);
 }
 
@@ -296,15 +288,12 @@ UnsignedLongLongsEqualFailure::UnsignedLongLongsEqualFailure(UtestShell* test, c
     message_ = createUserText(text);
 
     SimpleString aDecimal = StringFrom(actual);
-    SimpleString aHex = HexStringFrom(actual);
     SimpleString eDecimal = StringFrom(expected);
-    SimpleString eHex = HexStringFrom(expected);
 
     SimpleString::padStringsToSameLength(aDecimal, eDecimal, ' ');
-    SimpleString::padStringsToSameLength(aHex, eHex, '0');
 
-    SimpleString actualReported = aDecimal + " 0x" + aHex;
-    SimpleString expectedReported = eDecimal + " 0x" + eHex;
+    SimpleString actualReported = aDecimal + " " + BracketsFormattedHexStringFrom(actual);
+    SimpleString expectedReported = eDecimal + " " + BracketsFormattedHexStringFrom(expected);
     message_ += createButWasString(expectedReported, actualReported);
 }
 
@@ -314,15 +303,12 @@ SignedBytesEqualFailure::SignedBytesEqualFailure (UtestShell* test, const char* 
     message_ = createUserText(text);
 
     SimpleString aDecimal = StringFrom((int)actual);
-    SimpleString aHex = HexStringFrom(actual);
     SimpleString eDecimal = StringFrom((int)expected);
-    SimpleString eHex = HexStringFrom(expected);
 
     SimpleString::padStringsToSameLength(aDecimal, eDecimal, ' ');
-    SimpleString::padStringsToSameLength(aHex, eHex, '0');
 
-    SimpleString actualReported = aDecimal + " 0x" + aHex;
-    SimpleString expectedReported = eDecimal + " 0x" + eHex;
+    SimpleString actualReported = aDecimal + " " + BracketsFormattedHexStringFrom(actual);
+    SimpleString expectedReported = eDecimal + " " + BracketsFormattedHexStringFrom(expected);
     message_ += createButWasString(expectedReported, actualReported);
 }
 
