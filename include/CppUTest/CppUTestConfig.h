@@ -209,7 +209,7 @@
 /*
  * Support for "long long" type.
  *
- * No-=-  =-9----------------- =99t supported when CPUTEST_LONG_LONG_DISABLED is set.
+ * Not supported when CPUTEST_LONG_LONG_DISABLED is set.
  * Can be overridden by using CPPUTEST_USE_LONG_LONG
  *
  * CPPUTEST_HAVE_LONG_LONG_INT is set by configure
