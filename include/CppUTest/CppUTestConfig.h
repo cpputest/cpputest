@@ -203,9 +203,10 @@
 
 /* Handling of systems with a different int-width (e.g. 16 bit).
  */
-#if defined(__WATCOMC__)
+#if CPPUTEST_USE_STD_C_LIB && (INT_MAX == 0x7fff)
 #define CPPUTEST_16BIT_INTS
 #endif
+
 /*
  * Support for "long long" type.
  *
