@@ -501,6 +501,23 @@ TEST(UnitTestMacros, FailureWithLONGS_EQUALS)
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <255 (0xff)>");
 }
 
+static void _failingTestMethodWithLONGS_EQUALWithSymbolicParameters()
+{
+#define _MONDAY 1
+    int day_of_the_week = _MONDAY+1;
+    LONGS_EQUAL(_MONDAY, day_of_the_week);
+    TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
+
+TEST(UnitTestMacros, FailureWithLONGS_EQUALShowsSymbolicParameters)
+{
+    fixture.runTestWithMethod(_failingTestMethodWithLONGS_EQUALWithSymbolicParameters);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("LONGS_EQUAL(_MONDAY, day_of_the_week) failed");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1 (0x1)>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <2 (0x2)>");
+    CHECK_FALSE(fixture.getOutput().contains("Message: "));
+}
+
 TEST(UnitTestMacros, LONGS_EQUALBehavesAsProperMacro)
 {
     if (false) LONGS_EQUAL(1, 2)

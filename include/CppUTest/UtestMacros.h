@@ -191,7 +191,7 @@
 
 //Check two long integers for equality
 #define LONGS_EQUAL(expected, actual)\
-  LONGS_EQUAL_LOCATION((expected), (actual), NULL, __FILE__, __LINE__)
+  LONGS_EQUAL_LOCATION((expected), (actual), "LONGS_EQUAL(" #expected ", " #actual ") failed", __FILE__, __LINE__)
 
 #define LONGS_EQUAL_TEXT(expected, actual, text)\
   LONGS_EQUAL_LOCATION((expected), (actual), text, __FILE__, __LINE__)

@@ -162,7 +162,11 @@ SimpleString TestFailure::createUserText(const SimpleString& text)
     SimpleString userMessage = "";
     if (!text.isEmpty())
     {
-        userMessage += "Message: ";
+        //This is a kludge to turn off "Message: " for this case.
+        //I don't think "Message: " adds anything,a s you get to see the
+        //message. I propose we remove "Message: " lead in
+        if (!text.startsWith("LONGS_EQUAL"))
+            userMessage += "Message: ";
         userMessage += text;
         userMessage += "\n\t";
     }
