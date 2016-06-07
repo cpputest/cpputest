@@ -133,7 +133,7 @@ CXXFLAGS="$saved_cxxflags"
 # Flag -Wno-c++14-compat
 CXXFLAGS="-Werror -Wno-c++14-compat"
 AC_MSG_CHECKING([whether CXX supports -Wno-c++14-compat])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CPP11BLACKLIST="${CPPUTEST_CPP11BLACKLIST} -Wno-c++14-compat" ], [AC_MSG_RESULT([no])])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wno-c++14-compat" ], [AC_MSG_RESULT([no])])
 CXXFLAGS="$saved_cxxflags"
 
 AC_LANG_POP
