@@ -99,6 +99,120 @@ TEST(TestHarness_c, checkInt)
     CHECK(!hasDestructorOfTheDestructorCheckedBeenCalled)
 }
 
+static void _failUnsignedIntMethod()
+{
+    HasTheDestructorBeenCalledChecker checker;
+    CHECK_EQUAL_C_UINT(1, 2);
+} // LCOV_EXCL_LINE
+
+TEST(TestHarness_c, checkUnsignedInt)
+{
+    CHECK_EQUAL_C_UINT(2, 2);
+    fixture->setTestFunction(_failUnsignedIntMethod);
+    fixture->runAllTests();
+    fixture->assertPrintContains("expected <1 (0x1)>\n	but was  <2 (0x2)>");
+    fixture->assertPrintContains("arness_c");
+    CHECK(!hasDestructorOfTheDestructorCheckedBeenCalled)
+}
+
+static void _failLongIntMethod()
+{
+    HasTheDestructorBeenCalledChecker checker;
+    CHECK_EQUAL_C_LONG(1, 2);
+} // LCOV_EXCL_LINE
+
+TEST(TestHarness_c, checkLongInt)
+{
+    CHECK_EQUAL_C_LONG(2, 2);
+    fixture->setTestFunction(_failLongIntMethod);
+    fixture->runAllTests();
+    fixture->assertPrintContains("expected <1 (0x1)>\n	but was  <2 (0x2)>");
+    fixture->assertPrintContains("arness_c");
+    CHECK(!hasDestructorOfTheDestructorCheckedBeenCalled)
+}
+
+static void _failUnsignedLongIntMethod()
+{
+    HasTheDestructorBeenCalledChecker checker;
+    CHECK_EQUAL_C_ULONG(1, 2);
+} // LCOV_EXCL_LINE
+
+TEST(TestHarness_c, checkUnsignedLongInt)
+{
+    CHECK_EQUAL_C_ULONG(2, 2);
+    fixture->setTestFunction(_failUnsignedLongIntMethod);
+    fixture->runAllTests();
+    fixture->assertPrintContains("expected <1 (0x1)>\n	but was  <2 (0x2)>");
+    fixture->assertPrintContains("arness_c");
+    CHECK(!hasDestructorOfTheDestructorCheckedBeenCalled)
+}
+
+#ifdef CPPUTEST_USE_LONG_LONG
+
+static void _failLongLongIntMethod()
+{
+    HasTheDestructorBeenCalledChecker checker;
+    CHECK_EQUAL_C_LONGLONG(1, 2);
+} // LCOV_EXCL_LINE
+
+TEST(TestHarness_c, checkLongLongInt)
+{
+    CHECK_EQUAL_C_LONGLONG(2, 2);
+    fixture->setTestFunction(_failLongLongIntMethod);
+    fixture->runAllTests();
+    fixture->assertPrintContains("expected <1 (0x1)>\n	but was  <2 (0x2)>");
+    fixture->assertPrintContains("arness_c");
+    CHECK(!hasDestructorOfTheDestructorCheckedBeenCalled)
+}
+
+static void _failUnsignedLongLongIntMethod()
+{
+    HasTheDestructorBeenCalledChecker checker;
+    CHECK_EQUAL_C_ULONGLONG(1, 2);
+} // LCOV_EXCL_LINE
+
+TEST(TestHarness_c, checkUnsignedLongLongInt)
+{
+    CHECK_EQUAL_C_ULONGLONG(2, 2);
+    fixture->setTestFunction(_failUnsignedLongLongIntMethod);
+    fixture->runAllTests();
+    fixture->assertPrintContains("expected <1 (0x1)>\n	but was  <2 (0x2)>");
+    fixture->assertPrintContains("arness_c");
+    CHECK(!hasDestructorOfTheDestructorCheckedBeenCalled)
+}
+
+#else
+
+static void _failLongLongIntMethod()
+{
+    cpputest_longlong dummy_longlong;
+    CHECK_EQUAL_C_LONGLONG(dummy_longlong, dummy_longlong);
+} // LCOV_EXCL_LINE
+
+TEST(TestHarness_c, checkLongLongInt)
+{
+    fixture->setTestFunction(_failLongLongIntMethod);
+    fixture->runAllTests();
+    fixture->assertPrintContains("is not supported");
+    fixture->assertPrintContains("arness_c");
+}
+
+static void _failUnsignedLongLongIntMethod()
+{
+    cpputest_ulonglong dummy_ulonglong;
+    CHECK_EQUAL_C_ULONGLONG(dummy_ulonglong, dummy_ulonglong);
+} // LCOV_EXCL_LINE
+
+TEST(TestHarness_c, checkUnsignedLongLongInt)
+{
+    fixture->setTestFunction(_failUnsignedLongLongIntMethod);
+    fixture->runAllTests();
+    fixture->assertPrintContains("is not supported");
+    fixture->assertPrintContains("arness_c");
+}
+
+#endif
+
 static void _failRealMethod()
 {
     HasTheDestructorBeenCalledChecker checker;

@@ -40,6 +40,31 @@ void CHECK_EQUAL_C_INT_LOCATION(int expected, int actual, const char* fileName, 
     UtestShell::getCurrent()->assertLongsEqual((long)expected, (long)actual, NULL, fileName, lineNumber, TestTerminatorWithoutExceptions());
 }
 
+void CHECK_EQUAL_C_UINT_LOCATION(unsigned int expected, unsigned int actual, const char* fileName, int lineNumber)
+{
+    UtestShell::getCurrent()->assertUnsignedLongsEqual((unsigned long)expected, (unsigned long)actual, NULL, fileName, lineNumber, TestTerminatorWithoutExceptions());
+}
+
+void CHECK_EQUAL_C_LONG_LOCATION(long expected, long actual, const char* fileName, int lineNumber)
+{
+    UtestShell::getCurrent()->assertLongsEqual(expected, actual, NULL, fileName, lineNumber, TestTerminatorWithoutExceptions());
+}
+
+void CHECK_EQUAL_C_ULONG_LOCATION(unsigned long expected, unsigned long actual, const char* fileName, int lineNumber)
+{
+    UtestShell::getCurrent()->assertUnsignedLongsEqual(expected, actual, NULL, fileName, lineNumber, TestTerminatorWithoutExceptions());
+}
+
+void CHECK_EQUAL_C_LONGLONG_LOCATION(cpputest_longlong expected, cpputest_longlong actual, const char* fileName, int lineNumber)
+{
+    UtestShell::getCurrent()->assertLongLongsEqual(expected, actual, NULL, fileName, lineNumber, TestTerminatorWithoutExceptions());
+}
+
+void CHECK_EQUAL_C_ULONGLONG_LOCATION(cpputest_ulonglong expected, cpputest_ulonglong actual, const char* fileName, int lineNumber)
+{
+    UtestShell::getCurrent()->assertUnsignedLongLongsEqual(expected, actual, NULL, fileName, lineNumber, TestTerminatorWithoutExceptions());
+}
+
 void CHECK_EQUAL_C_REAL_LOCATION(double expected, double actual, double threshold, const char* fileName, int lineNumber)
 {
     UtestShell::getCurrent()->assertDoublesEqual(expected, actual, threshold, NULL, fileName, lineNumber, TestTerminatorWithoutExceptions());
