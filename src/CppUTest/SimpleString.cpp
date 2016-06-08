@@ -632,13 +632,13 @@ SimpleString HexStringFrom(void (*value)())
     return StringFromFormat("%lx", convertFunctionPointerToLongValue(value));
 }
 
-SimpleString BracketsFormattedHexStringFrom(cpputest_longlong value)
+SimpleString BracketsFormattedHexStringFrom(cpputest_longlong)
 {
     return "";
 }
 
 
-SimpleString BracketsFormattedHexStringFrom(cpputest_ulonglong value)
+SimpleString BracketsFormattedHexStringFrom(cpputest_ulonglong)
 {
     return "";
 }

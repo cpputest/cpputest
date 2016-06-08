@@ -147,7 +147,7 @@ TEST(TestFailure, LongLongsEqualFailure)
 #else
     cpputest_longlong dummy_longlong;
     LongLongsEqualFailure f(test, failFileName, failLineNumber, dummy_longlong, dummy_longlong, "");
-    FAILURE_EQUAL("expected <<longlong_unsupported> 0x<longlong_unsupported>>\n\tbut was  <<longlong_unsupported> 0x<longlong_unsupported>>", f);
+    FAILURE_EQUAL("expected <<longlong_unsupported> >\n\tbut was  <<longlong_unsupported> >", f);
 #endif
 }
 
@@ -159,7 +159,7 @@ TEST(TestFailure, UnsignedLongLongsEqualFailure)
 #else
     cpputest_ulonglong dummy_ulonglong;
     UnsignedLongLongsEqualFailure f(test, failFileName, failLineNumber, dummy_ulonglong, dummy_ulonglong, "");
-    FAILURE_EQUAL("expected <<ulonglong_unsupported> 0x<ulonglong_unsupported>>\n\tbut was  <<ulonglong_unsupported> 0x<ulonglong_unsupported>>", f);
+    FAILURE_EQUAL("expected <<ulonglong_unsupported> >\n\tbut was  <<ulonglong_unsupported> >", f);
 #endif
 }
 
