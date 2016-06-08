@@ -36,6 +36,9 @@
 
 #include "CppUTestConfig.h"
 
+#define CHECK_EQUAL_C_BOOL(expected,actual) \
+  CHECK_EQUAL_C_BOOL_LOCATION(expected,actual,__FILE__,__LINE__)
+
 #define CHECK_EQUAL_C_INT(expected,actual) \
   CHECK_EQUAL_C_INT_LOCATION(expected,actual,__FILE__,__LINE__)
 
@@ -120,6 +123,8 @@ extern "C"
 
 
 /* CHECKS that can be used from C code */
+extern void CHECK_EQUAL_C_BOOL_LOCATION(int expected, int actual,
+        const char* fileName, int lineNumber);
 extern void CHECK_EQUAL_C_INT_LOCATION(int expected, int actual,
         const char* fileName, int lineNumber);
 extern void CHECK_EQUAL_C_REAL_LOCATION(double expected, double actual,

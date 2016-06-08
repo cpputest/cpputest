@@ -83,6 +83,23 @@ TEST_GROUP(TestHarness_c)
     }
 };
 
+static void _failBoolMethod()
+{
+    HasTheDestructorBeenCalledChecker checker;
+    CHECK_EQUAL_C_BOOL(1, 0);
+} // LCOV_EXCL_LINE
+
+TEST(TestHarness_c, checkBool)
+{
+    CHECK_EQUAL_C_BOOL(1, 1);
+    CHECK_EQUAL_C_BOOL(1, 2);
+    fixture->setTestFunction(_failBoolMethod);
+    fixture->runAllTests();
+    fixture->assertPrintContains("expected <true>\n	but was  <false>");
+    fixture->assertPrintContains("arness_c");
+    CHECK(!hasDestructorOfTheDestructorCheckedBeenCalled)
+}
+
 static void _failIntMethod()
 {
     HasTheDestructorBeenCalledChecker checker;
