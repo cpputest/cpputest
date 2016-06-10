@@ -35,6 +35,11 @@ extern "C"
 {
 
 
+void CHECK_EQUAL_C_BOOL_LOCATION(int expected, int actual, const char* fileName, int lineNumber)
+{
+    UtestShell::getCurrent()->assertEquals(!!expected != !!actual, expected ? "true" : "false", actual ? "true" : "false", NULL, fileName, lineNumber, TestTerminatorWithoutExceptions());
+}
+
 void CHECK_EQUAL_C_INT_LOCATION(int expected, int actual, const char* fileName, int lineNumber)
 {
     UtestShell::getCurrent()->assertLongsEqual((long)expected, (long)actual, NULL, fileName, lineNumber, TestTerminatorWithoutExceptions());
