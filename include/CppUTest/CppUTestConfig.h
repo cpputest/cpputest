@@ -256,6 +256,11 @@ struct cpputest_ulonglong
   char dummy[CPPUTEST_SIZE_OF_FAKE_LONG_LONG_TYPE];
 };
 
+#if !defined(__cplusplus)
+typedef struct cpputest_longlong cpputest_longlong;
+typedef struct cpputest_ulonglong cpputest_ulonglong;
+#endif
+
 #endif
 
 /* Visual C++ 10.0+ (2010+) supports the override keyword, but doesn't define the C++ version as C++11 */
