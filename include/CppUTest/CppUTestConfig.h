@@ -174,7 +174,7 @@
 
 #if CPPUTEST_USE_STD_C_LIB && (!defined(_MSC_VER) || (_MSC_VER >= 1800))
 #define CPPUTEST_HAVE_FENV
-#if defined(__WATCOMC__)
+#if defined(__WATCOMC__) || defined(__ARMEL__) || defined(__m68k__)
 #define CPPUTEST_FENV_IS_WORKING_PROPERLY 0
 #else
 #define CPPUTEST_FENV_IS_WORKING_PROPERLY 1
