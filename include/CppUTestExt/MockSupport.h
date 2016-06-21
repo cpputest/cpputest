@@ -142,8 +142,8 @@ private:
 
     bool tracing_;
 
-    void checkExpectationsOfLastCall();
-    bool wasLastCallFulfilled();
+    void checkExpectationsOfLastActualCall();
+    bool wasLastActualCallFulfilled();
     void failTestWithUnexpectedCalls();
     void failTestWithOutOfOrderCalls();
 

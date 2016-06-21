@@ -268,13 +268,13 @@ bool MockSupport::expectedCallsLeft()
     return callsLeft != 0;
 }
 
-bool MockSupport::wasLastCallFulfilled()
+bool MockSupport::wasLastActualCallFulfilled()
 {
     if (lastActualFunctionCall_ && !lastActualFunctionCall_->isFulfilled())
         return false;
 
     for (MockNamedValueListNode* p = data_.begin(); p; p = p->next())
-        if (getMockSupport(p) && !getMockSupport(p)->wasLastCallFulfilled())
+        if (getMockSupport(p) && !getMockSupport(p)->wasLastActualCallFulfilled())
                 return false;
 
     return true;
@@ -318,7 +318,7 @@ void MockSupport::countCheck()
     UtestShell::getCurrent()->countCheck();
 }
 
-void MockSupport::checkExpectationsOfLastCall()
+void MockSupport::checkExpectationsOfLastActualCall()
 {
     if(lastActualFunctionCall_)
         lastActualFunctionCall_->checkExpectations();
@@ -344,9 +344,9 @@ bool MockSupport::hasCallsOutOfOrder()
 
 void MockSupport::checkExpectations()
 {
-    checkExpectationsOfLastCall();
+    checkExpectationsOfLastActualCall();
 
-    if (wasLastCallFulfilled() && expectedCallsLeft())
+    if (wasLastActualCallFulfilled() && expectedCallsLeft())
         failTestWithUnexpectedCalls();
 
     if (hasCallsOutOfOrder())

@@ -101,7 +101,7 @@ protected:
     virtual UtestShell* getTest() const;
     virtual void callHasSucceeded();
     virtual void finalizeOutputParameters(MockCheckedExpectedCall* call);
-    virtual void finalizeCallWhenFulfilled();
+    virtual void finalizeCallWhenMatchIsFound();
     virtual void failTest(const MockFailure& failure);
     virtual void checkInputParameter(const MockNamedValue& actualParameter);
     virtual void checkOutputParameter(const MockNamedValue& outputParameter);
@@ -120,9 +120,9 @@ private:
     MockFailureReporter* reporter_;
 
     ActualCallState state_;
-    MockCheckedExpectedCall* fulfilledExpectation_;
+    MockCheckedExpectedCall* matchingExpectation_;
 
-    MockExpectedCallsList unfulfilledExpectations_;
+    MockExpectedCallsList potentiallyMatchingExpectations_;
     const MockExpectedCallsList& allExpectations_;
 
     class MockOutputParametersListNode
