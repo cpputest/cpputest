@@ -44,7 +44,7 @@ MockSupport& mock(const SimpleString& mockName, MockFailureReporter* failureRepo
 }
 
 MockSupport::MockSupport(const SimpleString& mockName)
-    : callOrder_(0), expectedCallOrder_(0), strictOrdering_(false), standardReporter_(&defaultReporter_), ignoreOtherCalls_(false), enabled_(true), lastActualFunctionCall_(NULL), mockName_(mockName), tracing_(false)
+    : actualCallOrder_(0), expectedCallOrder_(0), strictOrdering_(false), standardReporter_(&defaultReporter_), ignoreOtherCalls_(false), enabled_(true), lastActualFunctionCall_(NULL), mockName_(mockName), tracing_(false)
 {
     setActiveReporter(NULL);
 }
@@ -123,7 +123,7 @@ void MockSupport::clear()
     compositeCalls_.clear();
     ignoreOtherCalls_ = false;
     enabled_ = true;
-    callOrder_ = 0;
+    actualCallOrder_ = 0;
     expectedCallOrder_ = 0;
     strictOrdering_ = false;
 
@@ -184,7 +184,7 @@ MockExpectedCall& MockSupport::expectNCalls(int amount, const SimpleString& func
 
 MockCheckedActualCall* MockSupport::createActualFunctionCall()
 {
-    lastActualFunctionCall_ = new MockCheckedActualCall(++callOrder_, activeReporter_, expectations_);
+    lastActualFunctionCall_ = new MockCheckedActualCall(++actualCallOrder_, activeReporter_, expectations_);
     return lastActualFunctionCall_;
 }
 
@@ -268,13 +268,13 @@ bool MockSupport::expectedCallsLeft()
     return callsLeft != 0;
 }
 
-bool MockSupport::wasLastCallFulfilled()
+bool MockSupport::wasLastActualCallFulfilled()
 {
     if (lastActualFunctionCall_ && !lastActualFunctionCall_->isFulfilled())
         return false;
 
     for (MockNamedValueListNode* p = data_.begin(); p; p = p->next())
-        if (getMockSupport(p) && !getMockSupport(p)->wasLastCallFulfilled())
+        if (getMockSupport(p) && !getMockSupport(p)->wasLastActualCallFulfilled())
                 return false;
 
     return true;
@@ -318,7 +318,7 @@ void MockSupport::countCheck()
     UtestShell::getCurrent()->countCheck();
 }
 
-void MockSupport::checkExpectationsOfLastCall()
+void MockSupport::checkExpectationsOfLastActualCall()
 {
     if(lastActualFunctionCall_)
         lastActualFunctionCall_->checkExpectations();
@@ -344,9 +344,9 @@ bool MockSupport::hasCallsOutOfOrder()
 
 void MockSupport::checkExpectations()
 {
-    checkExpectationsOfLastCall();
+    checkExpectationsOfLastActualCall();
 
-    if (wasLastCallFulfilled() && expectedCallsLeft())
+    if (wasLastActualCallFulfilled() && expectedCallsLeft())
         failTestWithUnexpectedCalls();
 
     if (hasCallsOutOfOrder())

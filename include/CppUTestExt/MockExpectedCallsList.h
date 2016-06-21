@@ -43,7 +43,8 @@ public:
     virtual int amountOfExpectationsFor(const SimpleString& name) const;
     virtual int amountOfUnfulfilledExpectations() const;
     virtual bool hasUnfulfilledExpectations() const;
-    virtual bool hasUnfulfilledExpectationsBecauseOfMissingParameters() const;
+    virtual bool hasFinalizedMatchingExpectations() const;
+    virtual bool hasUnmatchingExpectationsBecauseOfMissingParameters() const;
     virtual bool hasExpectationWithName(const SimpleString& name) const;
     virtual bool hasCallsOutOfOrder() const;
     virtual bool isEmpty() const;
@@ -53,7 +54,7 @@ public:
     virtual void addExpectationsRelatedTo(const SimpleString& name, const MockExpectedCallsList& list);
 
     virtual void onlyKeepOutOfOrderExpectations();
-    virtual void addUnfulfilledExpectations(const MockExpectedCallsList& list);
+    virtual void addPotentiallyMatchingExpectations(const MockExpectedCallsList& list);
 
     virtual void onlyKeepExpectationsRelatedTo(const SimpleString& name);
     virtual void onlyKeepExpectationsWithInputParameter(const MockNamedValue& parameter);
@@ -61,13 +62,13 @@ public:
     virtual void onlyKeepExpectationsWithOutputParameter(const MockNamedValue& parameter);
     virtual void onlyKeepExpectationsWithOutputParameterName(const SimpleString& name);
     virtual void onlyKeepExpectationsOnObject(const void* objectPtr);
-    virtual void onlyKeepUnfulfilledExpectations();
+    virtual void onlyKeepUnmatchingExpectations();
 
-    virtual MockCheckedExpectedCall* removeOneFulfilledExpectation();
-    virtual MockCheckedExpectedCall* removeOneFulfilledExpectationWithIgnoredParameters();
-    virtual MockCheckedExpectedCall* getOneFulfilledExpectationWithIgnoredParameters();
+    virtual MockCheckedExpectedCall* removeFirstFinalizedMatchingExpectation();
+    virtual MockCheckedExpectedCall* removeFirstMatchingExpectation();
+    virtual MockCheckedExpectedCall* getFirstMatchingExpectation();
 
-    virtual void resetExpectations();
+    virtual void resetActualCallMatchingState();
     virtual void callWasMade(int callOrder);
     virtual void wasPassedToObject();
     virtual void parameterWasPassed(const SimpleString& parameterName);
