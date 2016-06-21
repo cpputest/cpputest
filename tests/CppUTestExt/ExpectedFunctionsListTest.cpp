@@ -63,7 +63,7 @@ TEST_GROUP(MockExpectedCallsList)
 TEST(MockExpectedCallsList, emptyList)
 {
     CHECK(! list->hasUnfulfilledExpectations());
-    CHECK(! list->hasFulfilledExpectations());
+    CHECK(list->size() == list->amountOfUnfulfilledExpectations());
     LONGS_EQUAL(0, list->size());
 }
 
