@@ -105,13 +105,17 @@ void MockCheckedActualCall::finalizeOutputParameters(MockCheckedExpectedCall* ex
 
 void MockCheckedActualCall::finalizeCallWhenFulfilled()
 {
-    if (unfulfilledExpectations_.hasFulfilledExpectationsWithoutIgnoredParameters()) {
-        finalizeOutputParameters(unfulfilledExpectations_.getOneFulfilledExpectationWithIgnoredParameters());
-    }
+	// Expectations that don't ignore parameters have higher fulfillment preference than those that ignore parameters
 
-    if (unfulfilledExpectations_.hasFulfilledExpectations()) {
-        fulfilledExpectation_ = unfulfilledExpectations_.removeOneFulfilledExpectation();
+    fulfilledExpectation_ = unfulfilledExpectations_.removeOneFulfilledExpectation();
+    if (fulfilledExpectation_) {
+        finalizeOutputParameters(fulfilledExpectation_);
         callHasSucceeded();
+    } else {
+    	MockCheckedExpectedCall* fulfilledExpectationWithIgnoredParameters = unfulfilledExpectations_.getOneFulfilledExpectationWithIgnoredParameters();
+    	if (fulfilledExpectationWithIgnoredParameters) {
+    		finalizeOutputParameters(fulfilledExpectationWithIgnoredParameters);
+    	}
     }
 }
 

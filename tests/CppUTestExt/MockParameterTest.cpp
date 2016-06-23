@@ -678,6 +678,29 @@ TEST(MockParameterTest, outputParameterWithIgnoredParameters)
     mock().actualCall("foo").withOutputParameter("bar", &retval).withParameter("other", 1);
 
     LONGS_EQUAL(param, retval);
+
+    mock().checkExpectations();
+}
+
+/*
+ * This test checks that the proper output parameters are copied when multiple calls to the same
+ * function are expected.
+ */
+TEST(MockParameterTest, properOutputParametersAreCopied)
+{
+    int expectedValue1 = 1;
+    int expectedValue2 = 2;
+    mock().expectOneCall("foo").withOutputParameterReturning("param", &expectedValue1, sizeof(expectedValue1)).ignoreOtherParameters();
+    mock().expectOneCall("foo").withOutputParameterReturning("param", &expectedValue2, sizeof(expectedValue2));
+
+    int returnedValue1 = 0;
+    int returnedValue2 = 0;
+    mock().actualCall("foo").withOutputParameter("param", &returnedValue1);
+    mock().actualCall("foo").withOutputParameter("param", &returnedValue2).withParameter("optional", 50);
+
+    CHECK_EQUAL_TEXT(expectedValue2, returnedValue1, "Wrong output value in 1st call");
+    CHECK_EQUAL_TEXT(expectedValue1, returnedValue2, "Wrong output value in 2nd call");
+
     mock().checkExpectations();
 }
 
