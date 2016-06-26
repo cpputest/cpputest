@@ -50,7 +50,7 @@ SimpleString MockCheckedActualCall::getName() const
 }
 
 MockCheckedActualCall::MockCheckedActualCall(int callOrder, MockFailureReporter* reporter, const MockExpectedCallsList& allExpectations)
-    : callOrder_(callOrder), reporter_(reporter), state_(CALL_SUCCEED), matchingExpectation_(NULL), allExpectations_(allExpectations), outputParameterExpectations_(NULL)
+    : callOrder_(callOrder), reporter_(reporter), state_(CALL_SUCCEED), expectationsChecked_(false), matchingExpectation_(NULL), allExpectations_(allExpectations), outputParameterExpectations_(NULL)
 {
     potentiallyMatchingExpectations_.addPotentiallyMatchingExpectations(allExpectations);
 }
@@ -124,9 +124,8 @@ void MockCheckedActualCall::callHasSucceeded()
     setState(CALL_SUCCEED);
 }
 
-void MockCheckedActualCall::callIsInProgress()
+void MockCheckedActualCall::discardCurrentlyMatchingExpectations()
 {
-    setState(CALL_IN_PROGRESS);
     if (matchingExpectation_)
     {
         matchingExpectation_->resetActualCallMatchingState();
@@ -138,7 +137,7 @@ void MockCheckedActualCall::callIsInProgress()
 MockActualCall& MockCheckedActualCall::withName(const SimpleString& name)
 {
     setName(name);
-    callIsInProgress();
+    setState(CALL_IN_PROGRESS);
 
     potentiallyMatchingExpectations_.onlyKeepExpectationsRelatedTo(name);
     if (potentiallyMatchingExpectations_.isEmpty()) {
@@ -147,7 +146,6 @@ MockActualCall& MockCheckedActualCall::withName(const SimpleString& name)
         return *this;
     }
 
-    potentiallyMatchingExpectations_.callWasMade(callOrder_);
     finalizeCallWhenMatchIsFound();
 
     return *this;
@@ -165,7 +163,8 @@ void MockCheckedActualCall::checkInputParameter(const MockNamedValue& actualPara
         return;
     }
 
-    callIsInProgress();
+    setState(CALL_IN_PROGRESS);
+    discardCurrentlyMatchingExpectations();
 
     potentiallyMatchingExpectations_.onlyKeepExpectationsWithInputParameter(actualParameter);
 
@@ -186,7 +185,8 @@ void MockCheckedActualCall::checkOutputParameter(const MockNamedValue& outputPar
         return;
     }
 
-    callIsInProgress();
+    setState(CALL_IN_PROGRESS);
+    discardCurrentlyMatchingExpectations();
 
     potentiallyMatchingExpectations_.onlyKeepExpectationsWithOutputParameter(outputParameter);
 
@@ -336,8 +336,19 @@ bool MockCheckedActualCall::hasFailed() const
 
 void MockCheckedActualCall::checkExpectations()
 {
+    if(expectationsChecked_)
+    {
+        return;
+    }
+
+    expectationsChecked_ = true;
+
     if (state_ != CALL_IN_PROGRESS)
     {
+        if(state_ == CALL_SUCCEED)
+        {
+            matchingExpectation_->callWasMade(callOrder_);
+        }
         potentiallyMatchingExpectations_.resetActualCallMatchingState();
         return;
     }
@@ -349,6 +360,7 @@ void MockCheckedActualCall::checkExpectations()
     if (matchingExpectation_) {
         matchingExpectation_->finalizeActualCallMatch();
         callHasSucceeded();
+        matchingExpectation_->callWasMade(callOrder_);
         potentiallyMatchingExpectations_.resetActualCallMatchingState();
         return;
     }
@@ -518,7 +530,8 @@ MockActualCall& MockCheckedActualCall::onObject(const void* objectPtr)
         return *this;
     }
 
-    callIsInProgress();
+    setState(CALL_IN_PROGRESS);
+    discardCurrentlyMatchingExpectations();
 
     potentiallyMatchingExpectations_.onlyKeepExpectationsOnObject(objectPtr);
 

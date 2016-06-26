@@ -44,7 +44,7 @@ MockSupport& mock(const SimpleString& mockName, MockFailureReporter* failureRepo
 }
 
 MockSupport::MockSupport(const SimpleString& mockName)
-    : callOrder_(0), expectedCallOrder_(0), strictOrdering_(false), standardReporter_(&defaultReporter_), ignoreOtherCalls_(false), enabled_(true), lastActualFunctionCall_(NULL), mockName_(mockName), tracing_(false)
+    : actualCallOrder_(0), expectedCallOrder_(0), strictOrdering_(false), standardReporter_(&defaultReporter_), ignoreOtherCalls_(false), enabled_(true), lastActualFunctionCall_(NULL), mockName_(mockName), tracing_(false)
 {
     setActiveReporter(NULL);
 }
@@ -120,10 +120,12 @@ void MockSupport::clear()
 
     expectations_.deleteAllExpectationsAndClearList();
     unExpectations_.deleteAllExpectationsAndClearList();
+#if 0
     compositeCalls_.clear();
+#endif
     ignoreOtherCalls_ = false;
     enabled_ = true;
-    callOrder_ = 0;
+    actualCallOrder_ = 0;
     expectedCallOrder_ = 0;
     strictOrdering_ = false;
 
@@ -150,16 +152,12 @@ SimpleString MockSupport::appendScopeToName(const SimpleString& functionName)
 
 MockExpectedCall& MockSupport::expectOneCall(const SimpleString& functionName)
 {
-    if (!enabled_) return MockIgnoredExpectedCall::instance();
+    return expectRangeOfCalls(1, 1, functionName);
+}
 
-    countCheck();
-
-    MockCheckedExpectedCall* call = new MockCheckedExpectedCall;
-    call->withName(appendScopeToName(functionName));
-    if (strictOrdering_)
-        call->withCallOrder(++expectedCallOrder_);
-    expectations_.addExpectedCall(call);
-    return *call;
+MockExpectedCall& MockSupport::expectNCalls(unsigned int amount, const SimpleString& functionName)
+{
+    return expectRangeOfCalls(amount, amount, functionName);
 }
 
 void MockSupport::expectNoCall(const SimpleString& functionName)
@@ -173,18 +171,48 @@ void MockSupport::expectNoCall(const SimpleString& functionName)
     unExpectations_.addExpectedCall(call);
 }
 
-MockExpectedCall& MockSupport::expectNCalls(int amount, const SimpleString& functionName)
+MockExpectedCall& MockSupport::expectAtLeastOneCall(const SimpleString& functionName)
 {
-    compositeCalls_.clear();
+    return expectRangeOfCalls(1, (unsigned int)-1, functionName);
+}
 
-    for (int i = 0; i < amount; i++)
-        compositeCalls_.add(expectOneCall(functionName));
-    return compositeCalls_;
+MockExpectedCall& MockSupport::expectAtLeastNCalls(unsigned int amount, const SimpleString& functionName)
+{
+    return expectRangeOfCalls(amount, (unsigned int)-1, functionName);
+}
+
+MockExpectedCall& MockSupport::expectAtMostOneCall(const SimpleString& functionName)
+{
+    return expectRangeOfCalls(0, 1, functionName);
+}
+
+MockExpectedCall& MockSupport::expectAtMostNCalls(unsigned int amount, const SimpleString& functionName)
+{
+    return expectRangeOfCalls(0, amount, functionName);
+}
+
+MockExpectedCall& MockSupport::expectAnyCalls(const SimpleString& functionName)
+{
+    return expectRangeOfCalls(0, (unsigned int)-1, functionName);
+}
+
+MockExpectedCall& MockSupport::expectRangeOfCalls(unsigned int minCalls, unsigned int maxCalls, const SimpleString& functionName)
+{
+    if (!enabled_) return MockIgnoredExpectedCall::instance();
+
+    countCheck();
+
+    MockCheckedExpectedCall* call = new MockCheckedExpectedCall(minCalls, maxCalls);
+    call->withName(appendScopeToName(functionName));
+    if (strictOrdering_)
+        call->withCallOrder(++expectedCallOrder_);
+    expectations_.addExpectedCall(call);
+    return *call;
 }
 
 MockCheckedActualCall* MockSupport::createActualFunctionCall()
 {
-    lastActualFunctionCall_ = new MockCheckedActualCall(++callOrder_, activeReporter_, expectations_);
+    lastActualFunctionCall_ = new MockCheckedActualCall(++actualCallOrder_, activeReporter_, expectations_);
     return lastActualFunctionCall_;
 }
 
@@ -280,7 +308,7 @@ bool MockSupport::wasLastActualCallFulfilled()
     return true;
 }
 
-void MockSupport::failTestWithUnexpectedCalls()
+void MockSupport::failTestWithExpectedCallsNotFulfilled()
 {
     MockExpectedCallsList expectationsList;
     expectationsList.addExpectations(expectations_);
@@ -347,7 +375,7 @@ void MockSupport::checkExpectations()
     checkExpectationsOfLastActualCall();
 
     if (wasLastActualCallFulfilled() && expectedCallsLeft())
-        failTestWithUnexpectedCalls();
+        failTestWithExpectedCallsNotFulfilled();
 
     if (hasCallsOutOfOrder())
         failTestWithOutOfOrderCalls();

@@ -48,7 +48,13 @@ public:
     virtual void strictOrder();
     virtual MockExpectedCall& expectOneCall(const SimpleString& functionName);
     virtual void expectNoCall(const SimpleString& functionName);
-    virtual MockExpectedCall& expectNCalls(int amount, const SimpleString& functionName);
+    virtual MockExpectedCall& expectNCalls(unsigned int amount, const SimpleString& functionName);
+    virtual MockExpectedCall& expectAtLeastOneCall(const SimpleString& functionName);
+    virtual MockExpectedCall& expectAtLeastNCalls(unsigned int amount, const SimpleString& functionName);
+    virtual MockExpectedCall& expectAtMostOneCall(const SimpleString& functionName);
+    virtual MockExpectedCall& expectAtMostNCalls(unsigned int amount, const SimpleString& functionName);
+    virtual MockExpectedCall& expectAnyCalls(const SimpleString& functionName);
+    virtual MockExpectedCall& expectRangeOfCalls(unsigned int minCalls, unsigned int maxCalls, const SimpleString& functionName);
     virtual MockActualCall& actualCall(const SimpleString& functionName);
     virtual bool hasReturnValue();
     virtual MockNamedValue returnValue();
@@ -124,7 +130,7 @@ protected:
     void countCheck();
 
 private:
-    int callOrder_;
+    int actualCallOrder_;
     int expectedCallOrder_;
     bool strictOrdering_;
     MockFailureReporter *activeReporter_;
@@ -135,7 +141,9 @@ private:
     bool ignoreOtherCalls_;
     bool enabled_;
     MockCheckedActualCall *lastActualFunctionCall_;
+#if 0
     MockExpectedCallComposite compositeCalls_;
+#endif
     MockNamedValueComparatorsAndCopiersRepository comparatorsAndCopiersRepository_;
     MockNamedValueList data_;
     const SimpleString mockName_;
@@ -144,7 +152,7 @@ private:
 
     void checkExpectationsOfLastActualCall();
     bool wasLastActualCallFulfilled();
-    void failTestWithUnexpectedCalls();
+    void failTestWithExpectedCallsNotFulfilled();
     void failTestWithOutOfOrderCalls();
 
     MockNamedValue* retrieveDataFromStore(const SimpleString& name);

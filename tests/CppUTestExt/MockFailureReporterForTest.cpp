@@ -104,6 +104,14 @@ MockCheckedExpectedCall* MockExpectedCallsListForTest::addFunction(const SimpleS
   return newCall;
 }
 
+MockCheckedExpectedCall* MockExpectedCallsListForTest::addFunction(unsigned int minCalls, unsigned int maxCalls, const SimpleString& name)
+{
+  MockCheckedExpectedCall* newCall = new MockCheckedExpectedCall(minCalls, maxCalls);
+  newCall->withName(name);
+  addExpectedCall(newCall);
+  return newCall;
+}
+
 MockCheckedExpectedCall* MockExpectedCallsListForTest::addFunction(const SimpleString& name, int order)
 {
   MockCheckedExpectedCall* newCall = addFunction(name);
