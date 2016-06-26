@@ -40,7 +40,7 @@ public:
     virtual void deleteAllExpectationsAndClearList();
 
     virtual unsigned int size() const;
-    virtual unsigned int amountOfExpectationsFor(const SimpleString& name) const;
+    virtual unsigned int amountOfActualCallsFulfilledFor(const SimpleString& name) const;
     virtual unsigned int amountOfUnfulfilledExpectations() const;
     virtual bool hasUnfulfilledExpectations() const;
     virtual bool hasFinalizedMatchingExpectations() const;
@@ -69,7 +69,6 @@ public:
     virtual MockCheckedExpectedCall* getFirstMatchingExpectation();
 
     virtual void resetActualCallMatchingState();
-    virtual void callWasMade(unsigned int callOrder);
     virtual void wasPassedToObject();
     virtual void parameterWasPassed(const SimpleString& parameterName);
     virtual void outputParameterWasPassed(const SimpleString& parameterName);
@@ -91,7 +90,6 @@ protected:
             : expectedCall_(expectedCall), next_(NULL) {}
     };
 
-    virtual MockExpectedCallsListNode* findNodeWithCallOrderOf(unsigned int callOrder) const;
 private:
     MockExpectedCallsListNode* head_;
 

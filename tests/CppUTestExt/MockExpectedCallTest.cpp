@@ -385,58 +385,121 @@ TEST(MockExpectedCall, callWithThreeDifferentParameter)
     DOUBLES_EQUAL(0.12, call->getInputParameter("double").getDoubleValue(), 0.05);
 }
 
-TEST(MockExpectedCall, withoutANameItsNotFulfilled)
+TEST(MockExpectedCall, singleCallNotMadeIsNotFulfilledButCanMatchActualCalls)
 {
-    CHECK(!call->isFulfilled());
+    MockCheckedExpectedCall expectedCall(1);
+    expectedCall.withName("name");
+    CHECK(!expectedCall.isFulfilled());
+    CHECK(expectedCall.canMatchActualCalls());
 }
 
-TEST(MockExpectedCall, withANameItsNotFulfilled)
+TEST(MockExpectedCall, singleCallMadeIsFulFilledAndCannotMatchActualCalls)
 {
-    call->withName("name");
-    CHECK(!call->isFulfilled());
+    MockCheckedExpectedCall expectedCall(1);
+    expectedCall.callWasMade(1);
+    CHECK(expectedCall.isFulfilled());
+    CHECK(!expectedCall.canMatchActualCalls());
 }
 
-TEST(MockExpectedCall, afterSettingCallFulfilledItsFulFilled)
+TEST(MockExpectedCall, multiCallNotMadeIsNotFulfilledButCanMatchActualCalls)
 {
-    call->withName("name");
-    call->callWasMade(1);
-    CHECK(call->isFulfilled());
+    MockCheckedExpectedCall expectedCall(2);
+    expectedCall.withName("name");
+    CHECK(!expectedCall.isFulfilled());
+    CHECK(expectedCall.canMatchActualCalls());
 }
 
-TEST(MockExpectedCall, calledButNotWithParameterIsNotFulFilled)
+TEST(MockExpectedCall, multiCallNotMadeExpectedTimesIsNotFulfilledButCanMatchActualCalls)
 {
-    call->withName("name").withParameter("para", 1);
-    call->callWasMade(1);
-    CHECK(!call->isFulfilled());
+    MockCheckedExpectedCall expectedCall(2);
+    expectedCall.withName("name");
+    expectedCall.callWasMade(1);
+    CHECK(!expectedCall.isFulfilled());
+    CHECK(expectedCall.canMatchActualCalls());
 }
 
-TEST(MockExpectedCall, calledAndParametersAreFulfilled)
+TEST(MockExpectedCall, multiCallsMadeExpectedTimesIsFulfilledAndCannotMatchActualCalls)
 {
-    call->withName("name").withParameter("para", 1);
-    call->callWasMade(1);
-    call->inputParameterWasPassed("para");
-    CHECK(call->isFulfilled());
+    MockCheckedExpectedCall expectedCall(3);
+    expectedCall.withName("name");
+    expectedCall.callWasMade(1);
+    expectedCall.callWasMade(2);
+    expectedCall.callWasMade(3);
+    CHECK(expectedCall.isFulfilled());
+    CHECK(!expectedCall.canMatchActualCalls());
 }
 
-TEST(MockExpectedCall, calledButNotAllParametersAreFulfilled)
+TEST(MockExpectedCall, multiCallsMadeMoreThanExpectedTimesIsNotFulfilledAndCannotMatchActualCalls)
 {
-    call->withName("name").withParameter("para", 1).withParameter("two", 2);
-    call->callWasMade(1);
-    call->inputParameterWasPassed("para");
-    CHECK(!call->isFulfilled());
+    MockCheckedExpectedCall expectedCall(3);
+    expectedCall.withName("name");
+    expectedCall.callWasMade(1);
+    expectedCall.callWasMade(2);
+    expectedCall.callWasMade(3);
+    expectedCall.callWasMade(4);
+    CHECK(!expectedCall.isFulfilled());
+    CHECK(!expectedCall.canMatchActualCalls());
 }
 
-TEST(MockExpectedCall, toStringForNoParameters)
+TEST(MockExpectedCall, callsWithoutParameterAlwaysMatch)
 {
-    call->withName("name");
-    STRCMP_EQUAL("name -> no parameters", call->callToString().asCharString());
+    MockCheckedExpectedCall expectedCall(1);
+    CHECK(expectedCall.isMatchingActualCall());
+}
+
+TEST(MockExpectedCall, callsWithParameterNotFulfilledDontMatch)
+{
+    MockCheckedExpectedCall expectedCall(1);
+    expectedCall.withParameter("para", 1);
+    CHECK(!expectedCall.isMatchingActualCall());
+}
+
+TEST(MockExpectedCall, callsWithParameterFulfilledDoMatch)
+{
+    MockCheckedExpectedCall expectedCall(1);
+    expectedCall.withParameter("para", 1);
+    expectedCall.inputParameterWasPassed("para");
+    CHECK(expectedCall.isMatchingActualCall());
+}
+
+TEST(MockExpectedCall, callsWithSomeParametersNotFulfilledDontMatch)
+{
+    MockCheckedExpectedCall expectedCall(1);
+    expectedCall.withParameter("para", 1).withParameter("two", 2);
+    expectedCall.inputParameterWasPassed("para");
+    CHECK(!expectedCall.isMatchingActualCall());
+}
+
+TEST(MockExpectedCall, toStringForNoParametersSingleCallNotCalled)
+{
+    MockCheckedExpectedCall expectedCall(1);
+    expectedCall.withName("name");
+    STRCMP_EQUAL("name -> no parameters (expected 1 call, called 0 times)", expectedCall.callToString().asCharString());
+}
+
+TEST(MockExpectedCall, toStringForNoParametersMultiCallCalledLessThanExpectedTimes)
+{
+    MockCheckedExpectedCall expectedCall(2);
+    expectedCall.withName("name");
+    expectedCall.callWasMade(1);
+    STRCMP_EQUAL("name -> no parameters (expected 2 calls, called 1 time)", expectedCall.callToString().asCharString());
+}
+
+TEST(MockExpectedCall, toStringForNoParametersMultiCallCalledExpectedTimes)
+{
+    MockCheckedExpectedCall expectedCall(2);
+    expectedCall.withName("name");
+    expectedCall.callWasMade(1);
+    expectedCall.callWasMade(2);
+    STRCMP_EQUAL("name -> no parameters (expected 2 calls, called 2 times)", expectedCall.callToString().asCharString());
 }
 
 TEST(MockExpectedCall, toStringForIgnoredParameters)
 {
-    call->withName("name");
-    call->ignoreOtherParameters();
-    STRCMP_EQUAL("name -> all parameters ignored", call->callToString().asCharString());
+    MockCheckedExpectedCall expectedCall(1);
+    expectedCall.withName("name");
+    expectedCall.ignoreOtherParameters();
+    STRCMP_EQUAL("name -> all parameters ignored (expected 1 call, called 0 times)", expectedCall.callToString().asCharString());
 }
 
 TEST(MockExpectedCall, toStringForMultipleInputParameters)
@@ -444,11 +507,14 @@ TEST(MockExpectedCall, toStringForMultipleInputParameters)
     int int_value = 10;
     unsigned int uint_value = 7;
 
-    call->withName("name");
-    call->withParameter("string", "value");
-    call->withParameter("integer", int_value);
-    call->withParameter("unsigned-integer", uint_value);
-    STRCMP_EQUAL("name -> const char* string: <value>, int integer: <10 (0xa)>, unsigned int unsigned-integer: <7 (0x7)>", call->callToString().asCharString());
+    MockCheckedExpectedCall expectedCall(1);
+    expectedCall.withName("name");
+    expectedCall.withParameter("string", "value");
+    expectedCall.withParameter("integer", int_value);
+    expectedCall.withParameter("unsigned-integer", uint_value);
+    expectedCall.callWasMade(1);
+    STRCMP_EQUAL("name -> const char* string: <value>, int integer: <10 (0xa)>, unsigned int unsigned-integer: <7 (0x7)> "
+                 "(expected 1 call, called 1 time)", expectedCall.callToString().asCharString());
 }
 
 TEST(MockExpectedCall, toStringForMultipleInputAndOutputParameters)
@@ -457,38 +523,46 @@ TEST(MockExpectedCall, toStringForMultipleInputAndOutputParameters)
     unsigned int uint_value = 7;
     unsigned char buffer_value[3];
 
-    call->withName("name");
-    call->withParameter("string", "value");
-    call->withParameter("integer", int_value);
-    call->withParameter("unsigned-integer", uint_value);
-    call->withOutputParameterReturning("buffer", buffer_value, sizeof(buffer_value));
+    MockCheckedExpectedCall expectedCall(1);
+    expectedCall.withName("name");
+    expectedCall.withParameter("string", "value");
+    expectedCall.withParameter("integer", int_value);
+    expectedCall.withParameter("unsigned-integer", uint_value);
+    expectedCall.withOutputParameterReturning("buffer", buffer_value, sizeof(buffer_value));
+    expectedCall.callWasMade(1);
     STRCMP_EQUAL("name -> const char* string: <value>, int integer: <10 (0xa)>, unsigned int unsigned-integer: <7 (0x7)>, "
-                 "const void* buffer: <output>", call->callToString().asCharString());
+                 "const void* buffer: <output> (expected 1 call, called 1 time)", expectedCall.callToString().asCharString());
 }
 
 TEST(MockExpectedCall, toStringForMultipleOutputParameters)
 {
     unsigned char buffer_value[3];
 
-    call->withName("name");
-    call->withOutputParameterReturning("buffer1", buffer_value, sizeof(buffer_value));
-    call->withOutputParameterReturning("buffer2", buffer_value, sizeof(buffer_value));
-    STRCMP_EQUAL("name -> const void* buffer1: <output>, const void* buffer2: <output>", call->callToString().asCharString());
+    MockCheckedExpectedCall expectedCall(1);
+    expectedCall.withName("name");
+    expectedCall.withOutputParameterReturning("buffer1", buffer_value, sizeof(buffer_value));
+    expectedCall.withOutputParameterReturning("buffer2", buffer_value, sizeof(buffer_value));
+    expectedCall.callWasMade(1);
+    STRCMP_EQUAL("name -> const void* buffer1: <output>, const void* buffer2: <output> (expected 1 call, called 1 time)", expectedCall.callToString().asCharString());
 }
 
 TEST(MockExpectedCall, toStringForParameterAndIgnored)
 {
-    call->withName("name");
-    call->withParameter("string", "value");
-    call->ignoreOtherParameters();
-    STRCMP_EQUAL("name -> const char* string: <value>, other parameters are ignored", call->callToString().asCharString());
+    MockCheckedExpectedCall expectedCall(1);
+    expectedCall.withName("name");
+    expectedCall.withParameter("string", "value");
+    expectedCall.ignoreOtherParameters();
+    expectedCall.callWasMade(1);
+    STRCMP_EQUAL("name -> const char* string: <value>, other parameters are ignored (expected 1 call, called 1 time)", expectedCall.callToString().asCharString());
 }
 
 TEST(MockExpectedCall, toStringForCallOrder)
 {
-    call->withName("name");
-    call->withCallOrder(2);
-    STRCMP_EQUAL("name -> expected call order: <2> -> no parameters", call->callToString().asCharString());
+    MockCheckedExpectedCall expectedCall(1);
+    expectedCall.withName("name");
+    expectedCall.withCallOrder(2);
+    expectedCall.callWasMade(1);
+    STRCMP_EQUAL("name -> expected call order: <2> -> no parameters (expected 1 call, called 1 time)", expectedCall.callToString().asCharString());
 }
 
 TEST(MockExpectedCall, callOrderIsNotFulfilledWithWrongOrder)
@@ -553,6 +627,7 @@ TEST(MockExpectedCall, hasNoOutputParameterOfTypeDifferentType)
     CHECK_FALSE(call->hasOutputParameter(foo));
 }
 
+#if 0
 static MockExpectedCallComposite composite;
 
 TEST_GROUP(MockExpectedCallComposite)
@@ -726,6 +801,7 @@ TEST(MockExpectedCallComposite, doesNotSupportCallOrder)
     fixture.runAllTests();
     fixture.assertPrintContains("withCallOrder not supported for CompositeCalls");
 }
+#endif
 
 TEST_GROUP(MockIgnoredExpectedCall)
 {

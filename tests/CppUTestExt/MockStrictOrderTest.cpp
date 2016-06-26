@@ -178,7 +178,7 @@ TEST(MockStrictOrderTest, orderViolatedAcrossScopes)
     mock("mock2").checkExpectations();
 }
 
-TEST(MockStrictOrderTest, orderUsingNCalls)
+IGNORE_TEST(MockStrictOrderTest, orderUsingNCalls)
 {
     mock().strictOrder();
 

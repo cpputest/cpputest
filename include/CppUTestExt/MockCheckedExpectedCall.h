@@ -36,6 +36,7 @@ class MockCheckedExpectedCall : public MockExpectedCall
 
 public:
     MockCheckedExpectedCall();
+    MockCheckedExpectedCall(unsigned int numCalls);
     virtual ~MockCheckedExpectedCall();
 
     virtual MockExpectedCall& withName(const SimpleString& name) _override;
@@ -103,6 +104,8 @@ public:
     enum { NOT_CALLED_YET = 0, NO_EXPECTED_CALL_ORDER = 0 };
     virtual unsigned int getCallOrder() const;
 
+    virtual unsigned int getActualCallsFulfilled() const;
+
 protected:
     void setName(const SimpleString& name);
     SimpleString getName() const;
@@ -133,8 +136,11 @@ private:
     MockNamedValue returnValue_;
     void* objectPtr_;
     bool wasPassedToObject_;
+    unsigned int actualCalls_;
+    unsigned int expectedCalls_;
 };
 
+#if 0
 struct MockExpectedCallCompositeNode;
 class MockExpectedCallComposite : public MockExpectedCall
 {
@@ -178,6 +184,7 @@ public:
 private:
     MockExpectedCallCompositeNode* head_;
 };
+#endif
 
 class MockIgnoredExpectedCall: public MockExpectedCall
 {
