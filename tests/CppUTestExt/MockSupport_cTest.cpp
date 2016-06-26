@@ -92,6 +92,52 @@ TEST(MockSupport_c, expectNoCall)
     mock_c()->checkExpectations();
 }
 
+TEST(MockSupport_c, expectAtLeastOneCallFulfilled)
+{
+    mock_c()->expectAtLeastOneCall("boo");
+    mock_c()->actualCall("boo");
+    mock_c()->checkExpectations();
+}
+
+TEST(MockSupport_c, expectAtLeastNCallsFulfilled)
+{
+    mock_c()->expectAtLeastNCalls(2, "boo");
+    mock_c()->actualCall("boo");
+    mock_c()->actualCall("boo");
+    mock_c()->checkExpectations();
+}
+
+TEST(MockSupport_c, expectAtMostOneCallFulfilled)
+{
+    mock_c()->expectAtMostOneCall("boo");
+    mock_c()->checkExpectations();
+}
+
+TEST(MockSupport_c, expectAtMostNCallsFulfilled)
+{
+    mock_c()->expectAtMostNCalls(4, "boo");
+    mock_c()->actualCall("boo");
+    mock_c()->actualCall("boo");
+    mock_c()->actualCall("boo");
+    mock_c()->actualCall("boo");
+    mock_c()->checkExpectations();
+}
+
+TEST(MockSupport_c, expectAnyCallsFulfilled)
+{
+    mock_c()->expectAnyCalls("boo");
+    mock_c()->checkExpectations();
+}
+
+TEST(MockSupport_c, expectRangeOfCallsFulfilled)
+{
+    mock_c()->expectRangeOfCalls(2, 4, "boo");
+    mock_c()->actualCall("boo");
+    mock_c()->actualCall("boo");
+    mock_c()->actualCall("boo");
+    mock_c()->checkExpectations();
+}
+
 TEST(MockSupport_c, expectAndActualParameters)
 {
     mock_c()->expectOneCall("boo")->withIntParameters("integer", 1)->withDoubleParameters("double", 1.0)->
