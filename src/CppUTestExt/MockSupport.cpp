@@ -120,9 +120,6 @@ void MockSupport::clear()
 
     expectations_.deleteAllExpectationsAndClearList();
     unExpectations_.deleteAllExpectationsAndClearList();
-#if 0
-    compositeCalls_.clear();
-#endif
     ignoreOtherCalls_ = false;
     enabled_ = true;
     actualCallOrder_ = 0;

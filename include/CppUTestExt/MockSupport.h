@@ -141,9 +141,6 @@ private:
     bool ignoreOtherCalls_;
     bool enabled_;
     MockCheckedActualCall *lastActualFunctionCall_;
-#if 0
-    MockExpectedCallComposite compositeCalls_;
-#endif
     MockNamedValueComparatorsAndCopiersRepository comparatorsAndCopiersRepository_;
     MockNamedValueList data_;
     const SimpleString mockName_;
