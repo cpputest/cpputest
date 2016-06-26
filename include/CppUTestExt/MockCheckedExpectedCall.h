@@ -140,52 +140,6 @@ private:
     unsigned int expectedCalls_;
 };
 
-#if 0
-struct MockExpectedCallCompositeNode;
-class MockExpectedCallComposite : public MockExpectedCall
-{
-public:
-    MockExpectedCallComposite();
-    virtual ~MockExpectedCallComposite();
-
-    virtual MockExpectedCall& withName(const SimpleString& name) _override;
-    virtual MockExpectedCall& withCallOrder(unsigned int callOrder) _override;
-    virtual MockExpectedCall& withBoolParameter(const SimpleString& name, bool value) _override;
-    virtual MockExpectedCall& withIntParameter(const SimpleString& name, int value) _override;
-    virtual MockExpectedCall& withUnsignedIntParameter(const SimpleString& name, unsigned int value) _override;
-    virtual MockExpectedCall& withLongIntParameter(const SimpleString& name, long int value) _override;
-    virtual MockExpectedCall& withUnsignedLongIntParameter(const SimpleString& name, unsigned long int value) _override;
-    virtual MockExpectedCall& withDoubleParameter(const SimpleString& name, double value) _override;
-    virtual MockExpectedCall& withStringParameter(const SimpleString& name, const char* value) _override;
-    virtual MockExpectedCall& withConstPointerParameter(const SimpleString& name, const void* value) _override;
-    virtual MockExpectedCall& withPointerParameter(const SimpleString& name, void* value) _override;
-    virtual MockExpectedCall& withFunctionPointerParameter(const SimpleString& name, void (*value)()) _override;
-    virtual MockExpectedCall& withMemoryBufferParameter(const SimpleString& name, const unsigned char* value, size_t size) _override;
-    virtual MockExpectedCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value) _override;
-    virtual MockExpectedCall& withOutputParameterReturning(const SimpleString& name, const void* value, size_t size) _override;
-    virtual MockExpectedCall& withOutputParameterOfTypeReturning(const SimpleString& typeName, const SimpleString& name, const void* value) _override;
-    virtual MockExpectedCall& ignoreOtherParameters() _override;
-
-    virtual MockExpectedCall& andReturnValue(bool value) _override;
-    virtual MockExpectedCall& andReturnValue(int value) _override;
-    virtual MockExpectedCall& andReturnValue(unsigned int value) _override;
-    virtual MockExpectedCall& andReturnValue(long int value) _override;
-    virtual MockExpectedCall& andReturnValue(unsigned long int value) _override;
-    virtual MockExpectedCall& andReturnValue(double value) _override;
-    virtual MockExpectedCall& andReturnValue(const char* value) _override;
-    virtual MockExpectedCall& andReturnValue(void* value) _override;
-    virtual MockExpectedCall& andReturnValue(const void* value) _override;
-    virtual MockExpectedCall& andReturnValue(void (*value)()) _override;
-
-    virtual MockExpectedCall& onObject(void* objectPtr) _override;
-
-    virtual void add(MockExpectedCall& call);
-    virtual void clear();
-private:
-    MockExpectedCallCompositeNode* head_;
-};
-#endif
-
 class MockIgnoredExpectedCall: public MockExpectedCall
 {
 public:
