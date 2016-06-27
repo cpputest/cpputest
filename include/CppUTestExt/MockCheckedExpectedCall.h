@@ -40,7 +40,8 @@ public:
     virtual ~MockCheckedExpectedCall();
 
     virtual MockExpectedCall& withName(const SimpleString& name) _override;
-    virtual MockExpectedCall& withCallOrder(int callOrder) _override;
+    virtual MockExpectedCall& withCallOrder(unsigned int callOrder) _override { return withCallOrder(callOrder, callOrder); }
+    virtual MockExpectedCall& withCallOrder(unsigned int initialCallOrder, unsigned int finalCallOrder) _override;
     virtual MockExpectedCall& withBoolParameter(const SimpleString& name, bool value) _override;
     virtual MockExpectedCall& withIntParameter(const SimpleString& name, int value) _override;
     virtual MockExpectedCall& withUnsignedIntParameter(const SimpleString& name, unsigned int value) _override;
@@ -101,8 +102,7 @@ public:
     virtual SimpleString callToString();
     virtual SimpleString missingParametersToString();
 
-    enum { NOT_CALLED_YET = -1, NO_EXPECTED_CALL_ORDER = -1};
-    virtual int getCallOrder() const;
+    enum { NO_EXPECTED_CALL_ORDER = 0 };
 
     virtual unsigned int getMaxCalls() const;
 
@@ -128,8 +128,8 @@ private:
 
     bool ignoreOtherParameters_;
     bool isActualCallMatchFinalized_;
-    int actualCallOrder_;
-    int expectedCallOrder_;
+    unsigned int initialExpectedCallOrder_;
+    unsigned int finalExpectedCallOrder_;
     bool outOfOrder_;
     MockNamedValueList* inputParameters_;
     MockNamedValueList* outputParameters_;
@@ -146,7 +146,8 @@ class MockIgnoredExpectedCall: public MockExpectedCall
 public:
 
     virtual MockExpectedCall& withName(const SimpleString&) _override { return *this;}
-    virtual MockExpectedCall& withCallOrder(int) _override { return *this; }
+    virtual MockExpectedCall& withCallOrder(unsigned int) _override { return *this; }
+    virtual MockExpectedCall& withCallOrder(unsigned int, unsigned int) _override { return *this; }
     virtual MockExpectedCall& withBoolParameter(const SimpleString&, bool) _override { return *this; }
     virtual MockExpectedCall& withIntParameter(const SimpleString&, int) _override { return *this; }
     virtual MockExpectedCall& withUnsignedIntParameter(const SimpleString&, unsigned int) _override{ return *this; }

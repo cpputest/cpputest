@@ -52,7 +52,8 @@ SimpleString MockCheckedExpectedCall::getName() const
 }
 
 MockCheckedExpectedCall::MockCheckedExpectedCall()
-    : ignoreOtherParameters_(false), isActualCallMatchFinalized_(false), actualCallOrder_(NOT_CALLED_YET), expectedCallOrder_(NO_EXPECTED_CALL_ORDER),
+    : ignoreOtherParameters_(false), isActualCallMatchFinalized_(false),
+      initialExpectedCallOrder_(NO_EXPECTED_CALL_ORDER), finalExpectedCallOrder_(NO_EXPECTED_CALL_ORDER),
       outOfOrder_(false), returnValue_(""), objectPtr_(NULL), wasPassedToObject_(true),
       actualCalls_(0), minCalls_(1), maxCalls_(1)
 {
@@ -61,7 +62,8 @@ MockCheckedExpectedCall::MockCheckedExpectedCall()
 }
 
 MockCheckedExpectedCall::MockCheckedExpectedCall(unsigned int minCalls, unsigned int maxCalls)
-    : ignoreOtherParameters_(false), isActualCallMatchFinalized_(false), actualCallOrder_(NOT_CALLED_YET), expectedCallOrder_(NO_EXPECTED_CALL_ORDER),
+    : ignoreOtherParameters_(false), isActualCallMatchFinalized_(false),
+      initialExpectedCallOrder_(NO_EXPECTED_CALL_ORDER), finalExpectedCallOrder_(NO_EXPECTED_CALL_ORDER),
       outOfOrder_(false), returnValue_(""), objectPtr_(NULL), wasPassedToObject_(true),
       actualCalls_(0), minCalls_(minCalls), maxCalls_(maxCalls)
 {
@@ -267,14 +269,11 @@ bool MockCheckedExpectedCall::isMatchingActualCall()
 void MockCheckedExpectedCall::callWasMade(int callOrder)
 {
     actualCalls_++;
-    actualCallOrder_ = callOrder;
 
-    if (expectedCallOrder_ == NO_EXPECTED_CALL_ORDER)
-        outOfOrder_ = false;
-    else if (actualCallOrder_ == expectedCallOrder_)
-        outOfOrder_ = false;
-    else
+    if ( (initialExpectedCallOrder_ != NO_EXPECTED_CALL_ORDER) &&
+         ((callOrder < initialExpectedCallOrder_) || (callOrder > finalExpectedCallOrder_)) ) {
         outOfOrder_ = true;
+    }
 
     resetActualCallMatchingState();
 }
@@ -292,7 +291,6 @@ void MockCheckedExpectedCall::wasPassedToObject()
 
 void MockCheckedExpectedCall::resetActualCallMatchingState()
 {
-    actualCallOrder_ = NOT_CALLED_YET;
     wasPassedToObject_ = (objectPtr_ == NULL);
     isActualCallMatchFinalized_ = false;
 
@@ -346,8 +344,12 @@ SimpleString MockCheckedExpectedCall::callToString()
 
     str += getName();
     str += " -> ";
-    if (expectedCallOrder_ != NO_EXPECTED_CALL_ORDER) {
-        str += StringFromFormat("expected call order: <%d> -> ", expectedCallOrder_);
+    if (initialExpectedCallOrder_ != NO_EXPECTED_CALL_ORDER) {
+        if (initialExpectedCallOrder_ == finalExpectedCallOrder_) {
+            str += StringFromFormat("expected call order: <%u> -> ", initialExpectedCallOrder_);
+        } else {
+            str += StringFromFormat("expected calls order: <%u..%u> -> ", initialExpectedCallOrder_, finalExpectedCallOrder_);
+        }
     }
 
     if (inputParameters_->begin() == NULL && outputParameters_->begin() == NULL) {
@@ -529,14 +531,10 @@ MockNamedValue MockCheckedExpectedCall::returnValue()
     return returnValue_;
 }
 
-int MockCheckedExpectedCall::getCallOrder() const
+MockExpectedCall& MockCheckedExpectedCall::withCallOrder(unsigned int initialCallOrder, unsigned int finalCallOrder)
 {
-    return actualCallOrder_;
-}
-
-MockExpectedCall& MockCheckedExpectedCall::withCallOrder(int callOrder)
-{
-    expectedCallOrder_ = callOrder;
+    initialExpectedCallOrder_ = initialCallOrder;
+    finalExpectedCallOrder_ = finalCallOrder;
     return *this;
 }
 

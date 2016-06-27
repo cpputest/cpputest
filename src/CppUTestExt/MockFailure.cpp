@@ -238,4 +238,8 @@ MockExpectedObjectDidntHappenFailure::MockExpectedObjectDidntHappenFailure(Utest
     addExpectationsAndCallHistoryRelatedTo(functionName, expectations);
 }
 
-
+MockStrictOrderingIncompatibleWithOptionalCallsFailure::MockStrictOrderingIncompatibleWithOptionalCallsFailure(UtestShell* test, const SimpleString& functionName, unsigned int minCalls, unsigned int maxCalls) : MockFailure(test)
+{
+    message_ = StringFromFormat("MockFailure: Expected optional calls are not supported when strict ordering is enabled,"
+                                " but function \"%s\" expected calls range was %u..%u.", functionName.asCharString(), minCalls, maxCalls);
+}

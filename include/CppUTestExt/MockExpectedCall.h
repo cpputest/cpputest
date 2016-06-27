@@ -39,7 +39,8 @@ public:
     virtual ~MockExpectedCall();
 
     virtual MockExpectedCall& withName(const SimpleString& name)=0;
-    virtual MockExpectedCall& withCallOrder(int)=0;
+    virtual MockExpectedCall& withCallOrder(unsigned int)=0;
+    virtual MockExpectedCall& withCallOrder(unsigned int, unsigned int)=0;
     MockExpectedCall& withParameter(const SimpleString& name, bool value) { return withBoolParameter(name, value); }
     MockExpectedCall& withParameter(const SimpleString& name, int value) { return withIntParameter(name, value); }
     MockExpectedCall& withParameter(const SimpleString& name, unsigned int value) { return withUnsignedIntParameter(name, value); }

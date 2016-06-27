@@ -130,8 +130,8 @@ protected:
     void countCheck();
 
 private:
-    int actualCallOrder_;
-    int expectedCallOrder_;
+    unsigned int actualCallOrder_;
+    unsigned int expectedCallOrder_;
     bool strictOrdering_;
     MockFailureReporter *activeReporter_;
     MockFailureReporter *standardReporter_;
@@ -151,6 +151,7 @@ private:
     bool wasLastActualCallFulfilled();
     void failTestWithExpectedCallsNotFulfilled();
     void failTestWithOutOfOrderCalls();
+    void failTestWithStrictOrderingIncompatibleWithOptionalCalls();
 
     MockNamedValue* retrieveDataFromStore(const SimpleString& name);
 

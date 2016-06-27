@@ -201,8 +201,15 @@ MockExpectedCall& MockSupport::expectRangeOfCalls(unsigned int minCalls, unsigne
 
     MockCheckedExpectedCall* call = new MockCheckedExpectedCall(minCalls, maxCalls);
     call->withName(appendScopeToName(functionName));
-    if (strictOrdering_)
-        call->withCallOrder(++expectedCallOrder_);
+    if (strictOrdering_) {
+        if (minCalls == maxCalls) {
+            call->withCallOrder(expectedCallOrder_ + 1, expectedCallOrder_ + minCalls);
+            expectedCallOrder_ += minCalls;
+        } else {
+            MockStrictOrderingIncompatibleWithOptionalCallsFailure failure(activeReporter_->getTestToFail(), functionName, minCalls, maxCalls);
+            failTest(failure);
+        }
+    }
     expectations_.addExpectedCall(call);
     return *call;
 }
@@ -315,7 +322,6 @@ void MockSupport::failTestWithExpectedCallsNotFulfilled()
             expectationsList.addExpectations(getMockSupport(p)->expectations_);
 
     MockExpectedCallsNotFulfilledFailure failure(activeReporter_->getTestToFail(), expectationsList);
-    clear();
     failTest(failure);
 }
 
@@ -329,12 +335,12 @@ void MockSupport::failTestWithOutOfOrderCalls()
             expectationsList.addExpectations(getMockSupport(p)->expectations_);
 
     MockCallOrderFailure failure(activeReporter_->getTestToFail(), expectationsList);
-    clear();
     failTest(failure);
 }
 
 void MockSupport::failTest(MockFailure& failure)
 {
+    clear();
     activeReporter_->failTest(failure);
 }
 
