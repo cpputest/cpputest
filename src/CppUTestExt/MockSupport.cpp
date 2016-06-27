@@ -241,7 +241,7 @@ MockActualCall& MockSupport::actualCall(const SimpleString& functionName)
     }
 
     if (!enabled_) return MockIgnoredActualCall::instance();
-    if (tracing_) return MockActualCallTrace::instance().withName(scopeFuntionName);
+    if (tracing_) return MockActualCallTrace::instance().withCallOrder(++actualCallOrder_).withName(scopeFuntionName);
 
 
     if (hasntUnexpectationWithName(scopeFuntionName) && hasntExpectationWithName(scopeFuntionName)) {

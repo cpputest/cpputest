@@ -266,7 +266,7 @@ bool MockCheckedExpectedCall::isMatchingActualCall()
     return areParametersMatchingActualCall() && wasPassedToObject_;
 }
 
-void MockCheckedExpectedCall::callWasMade(int callOrder)
+void MockCheckedExpectedCall::callWasMade(unsigned int callOrder)
 {
     actualCalls_++;
 

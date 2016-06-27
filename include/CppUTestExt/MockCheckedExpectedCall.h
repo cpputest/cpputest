@@ -92,7 +92,7 @@ public:
     virtual bool areParametersMatchingActualCall();
     virtual bool isOutOfOrder() const;
 
-    virtual void callWasMade(int callOrder);
+    virtual void callWasMade(unsigned int callOrder);
     virtual void inputParameterWasPassed(const SimpleString& name);
     virtual void outputParameterWasPassed(const SimpleString& name);
     virtual void finalizeActualCallMatch();

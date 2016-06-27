@@ -83,7 +83,7 @@ TEST(MockCheckedActualCall, unExpectedCallWithAnOutputParameter)
 TEST(MockCheckedActualCall, actualCallWithNoReturnValueAndMeaninglessCallOrderForCoverage)
 {
     MockCheckedActualCall actualCall(1, reporter, *emptyList);
-    actualCall.withName("noreturn").withCallOrder(0).returnValue();
+    actualCall.withName("noreturn").returnValue();
 
     MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "noreturn", *list);
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
@@ -135,7 +135,6 @@ TEST(MockCheckedActualCall, MockIgnoredActualCallWorksAsItShould)
 {
     MockIgnoredActualCall actual;
     actual.withName("func");
-    actual.withCallOrder(1);
 
     CHECK(false == actual.returnBoolValue());
     CHECK(false == actual.returnBoolValueOrDefault(true));
@@ -168,8 +167,8 @@ TEST(MockCheckedActualCall, remainderOfMockActualCallTraceWorksAsItShould)
     const unsigned char mem_buffer[] = { 0xFE, 0x15 };
     void (*function_value)() = (void (*)())0xDEAD;
     MockActualCallTrace actual;
-    actual.withName("func");
     actual.withCallOrder(1);
+    actual.withName("func");
     actual.onObject(&value);
 
     actual.withBoolParameter("bool", true);
@@ -182,8 +181,7 @@ TEST(MockCheckedActualCall, remainderOfMockActualCallTraceWorksAsItShould)
     actual.withMemoryBufferParameter("mem_buffer", mem_buffer, sizeof(mem_buffer));
     actual.withParameterOfType("int", "named_type", &const_value);
 
-    SimpleString expectedString("\nFunction name:func");
-    expectedString += " withCallOrder:1";
+    SimpleString expectedString("\n1 > Function name:func");
     expectedString += " onObject:0x";
     expectedString += HexStringFrom(&value);
     expectedString += " bool:true";

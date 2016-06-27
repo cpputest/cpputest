@@ -49,7 +49,7 @@ SimpleString MockCheckedActualCall::getName() const
     return functionName_;
 }
 
-MockCheckedActualCall::MockCheckedActualCall(int callOrder, MockFailureReporter* reporter, const MockExpectedCallsList& allExpectations)
+MockCheckedActualCall::MockCheckedActualCall(unsigned int callOrder, MockFailureReporter* reporter, const MockExpectedCallsList& allExpectations)
     : callOrder_(callOrder), reporter_(reporter), state_(CALL_SUCCEED), expectationsChecked_(false), matchingExpectation_(NULL), allExpectations_(allExpectations), outputParameterExpectations_(NULL)
 {
     potentiallyMatchingExpectations_.addPotentiallyMatchingExpectations(allExpectations);
@@ -148,11 +148,6 @@ MockActualCall& MockCheckedActualCall::withName(const SimpleString& name)
 
     finalizeCallWhenMatchIsFound();
 
-    return *this;
-}
-
-MockActualCall& MockCheckedActualCall::withCallOrder(int)
-{
     return *this;
 }
 
@@ -583,15 +578,8 @@ MockActualCallTrace::~MockActualCallTrace()
 
 MockActualCall& MockActualCallTrace::withName(const SimpleString& name)
 {
-    traceBuffer_ += "\nFunction name:";
+    traceBuffer_ += " Function name:";
     traceBuffer_ += name;
-    return *this;
-}
-
-MockActualCall& MockActualCallTrace::withCallOrder(int callOrder)
-{
-    traceBuffer_ += " withCallOrder:";
-    traceBuffer_ += StringFrom(callOrder);
     return *this;
 }
 
@@ -600,6 +588,14 @@ void MockActualCallTrace::addParameterName(const SimpleString& name)
     traceBuffer_ += " ";
     traceBuffer_ += name;
     traceBuffer_ += ":";
+}
+
+MockActualCall& MockActualCallTrace::withCallOrder(unsigned int callOrder)
+{
+    traceBuffer_ += "\n";
+    traceBuffer_ += StringFrom(callOrder);
+    traceBuffer_ += " >";
+    return *this;
 }
 
 MockActualCall& MockActualCallTrace::withBoolParameter(const SimpleString& name, bool value)

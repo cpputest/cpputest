@@ -34,11 +34,10 @@
 class MockCheckedActualCall : public MockActualCall
 {
 public:
-    MockCheckedActualCall(int callOrder, MockFailureReporter* reporter, const MockExpectedCallsList& expectations);
+    MockCheckedActualCall(unsigned int callOrder, MockFailureReporter* reporter, const MockExpectedCallsList& expectations);
     virtual ~MockCheckedActualCall();
 
     virtual MockActualCall& withName(const SimpleString& name) _override;
-    virtual MockActualCall& withCallOrder(int) _override;
     virtual MockActualCall& withBoolParameter(const SimpleString& name, bool value) _override;
     virtual MockActualCall& withIntParameter(const SimpleString& name, int value) _override;
     virtual MockActualCall& withUnsignedIntParameter(const SimpleString& name, unsigned int value) _override;
@@ -116,7 +115,7 @@ protected:
 
 private:
     SimpleString functionName_;
-    int callOrder_;
+    unsigned int callOrder_;
     MockFailureReporter* reporter_;
 
     ActualCallState state_;
@@ -151,7 +150,6 @@ public:
     virtual ~MockActualCallTrace();
 
     virtual MockActualCall& withName(const SimpleString& name) _override;
-    virtual MockActualCall& withCallOrder(int) _override;
     virtual MockActualCall& withBoolParameter(const SimpleString& name, bool value) _override;
     virtual MockActualCall& withIntParameter(const SimpleString& name, int value) _override;
     virtual MockActualCall& withUnsignedIntParameter(const SimpleString& name, unsigned int value) _override;
@@ -202,6 +200,8 @@ public:
 
     virtual MockActualCall& onObject(const void* objectPtr) _override;
 
+    MockActualCall& withCallOrder(unsigned int callOrder);
+
     const char* getTraceOutput();
     void clear();
     static MockActualCallTrace& instance();
@@ -216,7 +216,6 @@ class MockIgnoredActualCall: public MockActualCall
 {
 public:
     virtual MockActualCall& withName(const SimpleString&) _override { return *this;}
-    virtual MockActualCall& withCallOrder(int) _override { return *this; }
     virtual MockActualCall& withBoolParameter(const SimpleString&, bool) _override { return *this; }
     virtual MockActualCall& withIntParameter(const SimpleString&, int) _override { return *this; }
     virtual MockActualCall& withUnsignedIntParameter(const SimpleString&, unsigned int) _override { return *this; }
