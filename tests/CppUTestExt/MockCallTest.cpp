@@ -642,6 +642,18 @@ TEST(MockCallTest, expectRangeOfCalls_NotFulfilled_AboveMaximum)
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 
+TEST(MockCallTest, expectedCallsNotFulfilledMatchBeforeFulfilledOnes)
+{
+    mock().expectAtLeastOneCall("foo");
+    mock().expectAtLeastNCalls(2, "foo");
+
+    mock().actualCall("foo");
+    mock().actualCall("foo");
+    mock().actualCall("foo");
+
+    mock().checkExpectations();
+}
+
 TEST(MockCallTest, shouldntFailTwice)
 {
   MockFailureReporterInstaller failureReporterInstaller;
