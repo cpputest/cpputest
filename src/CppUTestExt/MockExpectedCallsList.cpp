@@ -122,9 +122,21 @@ void MockExpectedCallsList::addExpectedCall(MockCheckedExpectedCall* call)
 
 void MockExpectedCallsList::addPotentiallyMatchingExpectations(const MockExpectedCallsList& list)
 {
-    for (MockExpectedCallsListNode* p = list.head_; p; p = p->next_)
-        if (p->expectedCall_->canMatchActualCalls())
-            addExpectedCall(p->expectedCall_);
+    MockExpectedCallsList alreadyFulfilled;
+
+    for (MockExpectedCallsListNode* p = list.head_; p; p = p->next_) {
+        if (p->expectedCall_->canMatchActualCalls()) {
+            // Calls that can match actual calls but are already fulfilled (i.e. have been called at least the minimum number of times)
+            // have lower preference, so they will be added _after_ non-fulfilled ones.
+            if (p->expectedCall_->isFulfilled()) {
+                alreadyFulfilled.addExpectedCall(p->expectedCall_);
+            } else {
+                addExpectedCall(p->expectedCall_);
+            }
+        }
+    }
+
+    addExpectations(alreadyFulfilled);
 }
 
 void MockExpectedCallsList::addExpectationsRelatedTo(const SimpleString& name, const MockExpectedCallsList& list)
