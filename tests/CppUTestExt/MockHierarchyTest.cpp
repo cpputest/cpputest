@@ -96,7 +96,7 @@ TEST(MockHierarchyTest, checkExpectationsWorksHierarchically)
     MockExpectedCallsListForTest expectations;
     expectations.addFunction("first::foobar");
     expectations.addFunction("second::helloworld");
-    MockExpectedCallsDidntHappenFailure expectedFailure(mockFailureTest(), expectations);
+    MockExpectedCallsNotFulfilledFailure expectedFailure(mockFailureTest(), expectations);
 
     mock("first").expectOneCall("foobar");
     mock("second").expectOneCall("helloworld");

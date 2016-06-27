@@ -95,7 +95,7 @@ void MockFailure::addExpectationsAndCallHistoryRelatedTo(const SimpleString& nam
     message_ += expectationsForFunction.fulfilledCallsToString("\t\t");
 }
 
-MockExpectedCallsDidntHappenFailure::MockExpectedCallsDidntHappenFailure(UtestShell* test, const MockExpectedCallsList& expectations) : MockFailure(test)
+MockExpectedCallsNotFulfilledFailure::MockExpectedCallsNotFulfilledFailure(UtestShell* test, const MockExpectedCallsList& expectations) : MockFailure(test)
 {
     message_ = "Mock Failure: Expected call WAS NOT fulfilled.\n";
     addExpectationsAndCallHistory(expectations);

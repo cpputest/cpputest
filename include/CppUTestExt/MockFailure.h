@@ -60,10 +60,10 @@ protected:
     void addExpectationsAndCallHistoryRelatedTo(const SimpleString& function, const MockExpectedCallsList& expectations);
 };
 
-class MockExpectedCallsDidntHappenFailure : public MockFailure
+class MockExpectedCallsNotFulfilledFailure : public MockFailure
 {
 public:
-    MockExpectedCallsDidntHappenFailure(UtestShell* test, const MockExpectedCallsList& expectations);
+    MockExpectedCallsNotFulfilledFailure(UtestShell* test, const MockExpectedCallsList& expectations);
 };
 
 class MockUnexpectedCallHappenedFailure : public MockFailure

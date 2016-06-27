@@ -104,7 +104,7 @@ TEST(MockFailureTest, expectedCallDidNotHappen)
     call3->callWasMade(1);
     addAllToList();
 
-    MockExpectedCallsDidntHappenFailure failure(UtestShell::getCurrent(), *list);
+    MockExpectedCallsNotFulfilledFailure failure(UtestShell::getCurrent(), *list);
     STRCMP_EQUAL("Mock Failure: Expected call WAS NOT fulfilled.\n"
                  "\tEXPECTED calls that WERE NOT fulfilled:\n"
                  "\t\tfoobar -> no parameters (expected 1 call, but was called 0 times)\n"

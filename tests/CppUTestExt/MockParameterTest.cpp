@@ -445,7 +445,7 @@ TEST(MockParameterTest, ignoreOtherParametersMultipleCallsButOneDidntHappen)
     call->finalizeActualCallMatch();
     call->ignoreOtherParameters();
     expectations.addFunction("boo")->ignoreOtherParameters();
-    MockExpectedCallsDidntHappenFailure expectedFailure(mockFailureTest(), expectations);
+    MockExpectedCallsNotFulfilledFailure expectedFailure(mockFailureTest(), expectations);
 
     mock().expectOneCall("boo").ignoreOtherParameters();
     mock().expectOneCall("boo").ignoreOtherParameters();
@@ -492,7 +492,7 @@ TEST(MockParameterTest, noActualCallForOutputParameter)
     mock().expectOneCall("foo").withOutputParameterReturning("output", &output, sizeof(output));
 
     expectations.addFunction("foo")->withOutputParameterReturning("output", &output, sizeof(output));
-    MockExpectedCallsDidntHappenFailure expectedFailure(mockFailureTest(), expectations);
+    MockExpectedCallsNotFulfilledFailure expectedFailure(mockFailureTest(), expectations);
 
     mock().checkExpectations();
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);

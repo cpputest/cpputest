@@ -149,7 +149,7 @@ TEST(MockComparatorCopierTest, customObjectWithFunctionComparatorThatFailsCovers
 
     MockExpectedCallsListForTest expectations;
     expectations.addFunction("function")->withParameterOfType("MyTypeForTesting", "parameterName", &object);
-    MockExpectedCallsDidntHappenFailure failure(UtestShell::getCurrent(), expectations);
+    MockExpectedCallsNotFulfilledFailure failure(UtestShell::getCurrent(), expectations);
 
     mock().expectOneCall("function").withParameterOfType("MyTypeForTesting", "parameterName", &object);
     mock().checkExpectations();
@@ -184,7 +184,7 @@ TEST(MockComparatorCopierTest, noActualCallForCustomTypeOutputParameter)
 
     MockExpectedCallsListForTest expectations;
     expectations.addFunction("foo")->withOutputParameterOfTypeReturning("MyTypeForTesting", "output", &expectedObject);
-    MockExpectedCallsDidntHappenFailure expectedFailure(mockFailureTest(), expectations);
+    MockExpectedCallsNotFulfilledFailure expectedFailure(mockFailureTest(), expectations);
 
     mock().expectOneCall("foo").withOutputParameterOfTypeReturning("MyTypeForTesting", "output", &expectedObject);
     mock().checkExpectations();
