@@ -556,7 +556,7 @@ TEST(MockExpectedCall, toStringForParameterAndIgnored)
     STRCMP_EQUAL("name -> const char* string: <value>, other parameters are ignored (expected 1 call, called 1 time)", expectedCall.callToString().asCharString());
 }
 
-TEST(MockExpectedCall, toStringForCallOrder)
+TEST(MockExpectedCall, toStringForCallOrderSingle)
 {
     MockCheckedExpectedCall expectedCall(1);
     expectedCall.withName("name");
@@ -565,7 +565,20 @@ TEST(MockExpectedCall, toStringForCallOrder)
     STRCMP_EQUAL("name -> expected call order: <2> -> no parameters (expected 1 call, called 1 time)", expectedCall.callToString().asCharString());
 }
 
-TEST(MockExpectedCall, callOrderIsNotFulfilledWithWrongOrder)
+TEST(MockExpectedCall, toStringForCallOrderMultiple)
+{
+    MockCheckedExpectedCall expectedCall(5);
+    expectedCall.withName("name");
+    expectedCall.withCallOrder(5, 9);
+    expectedCall.callWasMade(5);
+    expectedCall.callWasMade(6);
+    expectedCall.callWasMade(7);
+    expectedCall.callWasMade(8);
+    expectedCall.callWasMade(9);
+    STRCMP_EQUAL("name -> expected calls order: <5..9> -> no parameters (expected 5 calls, called 5 times)", expectedCall.callToString().asCharString());
+}
+
+TEST(MockExpectedCall, callOrderIsFulfilledButWithWrongOrderSingle)
 {
     call->withName("name");
     call->withCallOrder(2);
@@ -574,13 +587,50 @@ TEST(MockExpectedCall, callOrderIsNotFulfilledWithWrongOrder)
     CHECK(call->isOutOfOrder());
 }
 
-TEST(MockExpectedCall, callOrderIsFulfilled)
+TEST(MockExpectedCall, callOrderIsFulfilledButWithWrongOrderMultipleTooEarly)
+{
+    MockCheckedExpectedCall expectedCall(3);
+    expectedCall.withName("name");
+    expectedCall.withCallOrder(10, 12);
+    expectedCall.callWasMade(9);
+    expectedCall.callWasMade(10);
+    expectedCall.callWasMade(11);
+    CHECK(expectedCall.isFulfilled());
+    CHECK(expectedCall.isOutOfOrder());
+}
+
+TEST(MockExpectedCall, callOrderIsFulfilledButWithWrongOrderMultipleTooLate)
+{
+    MockCheckedExpectedCall expectedCall(3);
+    expectedCall.withName("name");
+    expectedCall.withCallOrder(10, 12);
+    expectedCall.callWasMade(11);
+    expectedCall.callWasMade(12);
+    expectedCall.callWasMade(13);
+    CHECK(expectedCall.isFulfilled());
+    CHECK(expectedCall.isOutOfOrder());
+}
+
+TEST(MockExpectedCall, callOrderIsFulfilledSingle)
 {
     call->withName("name");
     call->withCallOrder(1);
     call->callWasMade(1);
     CHECK(call->isFulfilled());
     CHECK_FALSE(call->isOutOfOrder());
+}
+
+TEST(MockExpectedCall, callOrderIsFulfilledMultiple)
+{
+    MockCheckedExpectedCall expectedCall(4);
+    expectedCall.withName("name");
+    expectedCall.withCallOrder(150, 153);
+    expectedCall.callWasMade(150);
+    expectedCall.callWasMade(151);
+    expectedCall.callWasMade(152);
+    expectedCall.callWasMade(153);
+    CHECK(expectedCall.isFulfilled());
+    CHECK_FALSE(expectedCall.isOutOfOrder());
 }
 
 TEST(MockExpectedCall, hasOutputParameter)
@@ -636,6 +686,7 @@ TEST(MockIgnoredExpectedCall, worksAsItShould)
 {
     ignored.withName("func");
     ignored.withCallOrder(1);
+    ignored.withCallOrder(1, 1);
     ignored.onObject((void*) 0);
     ignored.withBoolParameter("umm", true);
     ignored.withIntParameter("bla", (int) 1);

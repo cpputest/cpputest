@@ -172,7 +172,8 @@ MockExpectedCall& MockSupport::expectNCalls(unsigned int amount, const SimpleStr
     MockCheckedExpectedCall* call = new MockCheckedExpectedCall(amount);
     call->withName(appendScopeToName(functionName));
     if (strictOrdering_) {
-        call->withCallOrder(++expectedCallOrder_);
+        call->withCallOrder(expectedCallOrder_ + 1, expectedCallOrder_ + amount);
+        expectedCallOrder_ += amount;
     }
     expectations_.addExpectedCall(call);
     return *call;
@@ -286,7 +287,6 @@ void MockSupport::failTestWithExpectedCallsNotFulfilled()
             expectationsList.addExpectations(getMockSupport(p)->expectations_);
 
     MockExpectedCallsDidntHappenFailure failure(activeReporter_->getTestToFail(), expectationsList);
-    clear();
     failTest(failure);
 }
 
@@ -300,12 +300,12 @@ void MockSupport::failTestWithOutOfOrderCalls()
             expectationsList.addExpectations(getMockSupport(p)->expectations_);
 
     MockCallOrderFailure failure(activeReporter_->getTestToFail(), expectationsList);
-    clear();
     failTest(failure);
 }
 
 void MockSupport::failTest(MockFailure& failure)
 {
+    clear();
     activeReporter_->failTest(failure);
 }
 
