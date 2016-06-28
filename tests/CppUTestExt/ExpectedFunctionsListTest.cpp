@@ -41,10 +41,10 @@ TEST_GROUP(MockExpectedCallsList)
     void setup()
     {
         list = new MockExpectedCallsList;
-        call1 = new MockCheckedExpectedCall;
-        call2 = new MockCheckedExpectedCall;
-        call3 = new MockCheckedExpectedCall;
-        call4 = new MockCheckedExpectedCall;
+        call1 = new MockCheckedExpectedCall(1, 1);
+        call2 = new MockCheckedExpectedCall(1, 1);
+        call3 = new MockCheckedExpectedCall(1, 1);
+        call4 = new MockCheckedExpectedCall(1, 1);
         call1->withName("foo");
         call2->withName("bar");
         call3->withName("boo");
@@ -85,8 +85,8 @@ TEST(MockExpectedCallsList, listWithFulfilledExpectationHasNoUnfulfilledOnes)
 
 TEST(MockExpectedCallsList, listWithFulfilledExpectationButOutOfOrder)
 {
-    call1->withCallOrder(1);
-    call2->withCallOrder(2);
+    call1->withCallOrder(1, 1);
+    call2->withCallOrder(2, 2);
     list->addExpectedCall(call1);
     list->addExpectedCall(call2);
     call2->callWasMade(1);
@@ -107,8 +107,8 @@ TEST(MockExpectedCallsList, listWithUnFulfilledExpectationHasNoUnfillfilledOnes)
 
 TEST(MockExpectedCallsList, deleteAllExpectationsAndClearList)
 {
-    list->addExpectedCall(new MockCheckedExpectedCall);
-    list->addExpectedCall(new MockCheckedExpectedCall);
+    list->addExpectedCall(new MockCheckedExpectedCall(1, 1));
+    list->addExpectedCall(new MockCheckedExpectedCall(1, 1));
     list->deleteAllExpectationsAndClearList();
 }
 

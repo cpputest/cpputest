@@ -50,7 +50,7 @@ TEST(MockStrictOrderTest, OrderObserved)
 
 TEST(MockStrictOrderTest, someOrderObserved)
 {
-    mock().expectOneCall("foo3").withCallOrder(3);
+    mock().expectOneCall("foo3").withCallOrder(3, 3);
     mock().expectOneCall("foo1");
     mock().expectOneCall("foo2");
     mock().actualCall("foo2");

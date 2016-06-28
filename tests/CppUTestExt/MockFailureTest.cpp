@@ -43,9 +43,9 @@ TEST_GROUP(MockFailureTest)
     void setup ()
     {
         list = new MockExpectedCallsList;
-        call1 = new MockCheckedExpectedCall;
-        call2 = new MockCheckedExpectedCall;
-        call3 = new MockCheckedExpectedCall;
+        call1 = new MockCheckedExpectedCall(1, 1);
+        call2 = new MockCheckedExpectedCall(1, 1);
+        call3 = new MockCheckedExpectedCall(1, 1);
     }
     void teardown ()
     {

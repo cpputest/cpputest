@@ -35,12 +35,10 @@ class MockCheckedExpectedCall : public MockExpectedCall
 {
 
 public:
-    MockCheckedExpectedCall();
     MockCheckedExpectedCall(unsigned int minCalls, unsigned int maxCalls);
     virtual ~MockCheckedExpectedCall();
 
     virtual MockExpectedCall& withName(const SimpleString& name) _override;
-    virtual MockExpectedCall& withCallOrder(unsigned int callOrder) _override { return withCallOrder(callOrder, callOrder); }
     virtual MockExpectedCall& withCallOrder(unsigned int initialCallOrder, unsigned int finalCallOrder) _override;
     virtual MockExpectedCall& withBoolParameter(const SimpleString& name, bool value) _override;
     virtual MockExpectedCall& withIntParameter(const SimpleString& name, int value) _override;
@@ -146,7 +144,6 @@ class MockIgnoredExpectedCall: public MockExpectedCall
 public:
 
     virtual MockExpectedCall& withName(const SimpleString&) _override { return *this;}
-    virtual MockExpectedCall& withCallOrder(unsigned int) _override { return *this; }
     virtual MockExpectedCall& withCallOrder(unsigned int, unsigned int) _override { return *this; }
     virtual MockExpectedCall& withBoolParameter(const SimpleString&, bool) _override { return *this; }
     virtual MockExpectedCall& withIntParameter(const SimpleString&, int) _override { return *this; }

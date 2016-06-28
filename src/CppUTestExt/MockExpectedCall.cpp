@@ -51,16 +51,6 @@ SimpleString MockCheckedExpectedCall::getName() const
     return functionName_;
 }
 
-MockCheckedExpectedCall::MockCheckedExpectedCall()
-    : ignoreOtherParameters_(false), isActualCallMatchFinalized_(false),
-      initialExpectedCallOrder_(NO_EXPECTED_CALL_ORDER), finalExpectedCallOrder_(NO_EXPECTED_CALL_ORDER),
-      outOfOrder_(false), returnValue_(""), objectPtr_(NULL), wasPassedToObject_(true),
-      actualCalls_(0), minCalls_(1), maxCalls_(1)
-{
-    inputParameters_ = new MockNamedValueList();
-    outputParameters_ = new MockNamedValueList();
-}
-
 MockCheckedExpectedCall::MockCheckedExpectedCall(unsigned int minCalls, unsigned int maxCalls)
     : ignoreOtherParameters_(false), isActualCallMatchFinalized_(false),
       initialExpectedCallOrder_(NO_EXPECTED_CALL_ORDER), finalExpectedCallOrder_(NO_EXPECTED_CALL_ORDER),
