@@ -696,6 +696,7 @@ TEST(MockIgnoredExpectedCall, worksAsItShould)
 {
     ignored.withName("func");
     ignored.withCallOrder(1);
+    ignored.withCallOrder(1, 1);
     ignored.onObject((void*) 0);
     ignored.withBoolParameter("umm", true);
     ignored.withIntParameter("bla", (int) 1);

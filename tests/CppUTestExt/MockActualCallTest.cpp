@@ -62,13 +62,15 @@ TEST(MockCheckedActualCall, unExpectedCall)
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 
-TEST(MockCheckedActualCall, unExpectedCallWithAParameter)
+TEST(MockCheckedActualCall, unExpectedCallWithAnInputParameter)
 {
     MockCheckedActualCall actualCall(1, reporter, *emptyList);
     actualCall.withName("unexpected").withParameter("bar", 0);
 
     MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "unexpected", *list);
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+
+    CHECK(actualCall.hasFailed()); // Checks that withParameter() doesn't "reset" call state
 }
 
 TEST(MockCheckedActualCall, unExpectedCallWithAnOutputParameter)
@@ -78,6 +80,21 @@ TEST(MockCheckedActualCall, unExpectedCallWithAnOutputParameter)
 
     MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "unexpected", *list);
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+
+    CHECK(actualCall.hasFailed()); // Checks that withOutputParameter() doesn't "reset" call state
+}
+
+TEST(MockCheckedActualCall, unExpectedCallOnObject)
+{
+    int object;
+
+    MockCheckedActualCall actualCall(1, reporter, *emptyList);
+    actualCall.withName("unexpected").onObject(&object);
+
+    MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "unexpected", *list);
+    CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+
+    CHECK(actualCall.hasFailed()); // Checks that onObject() doesn't "reset" call state
 }
 
 TEST(MockCheckedActualCall, actualCallWithNoReturnValueAndMeaninglessCallOrderForCoverage)
