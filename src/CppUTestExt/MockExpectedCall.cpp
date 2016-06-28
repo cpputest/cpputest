@@ -543,9 +543,9 @@ bool MockCheckedExpectedCall::isOutOfOrder() const
     return outOfOrder_;
 }
 
-unsigned int MockCheckedExpectedCall::getMaxCalls() const
+unsigned int MockCheckedExpectedCall::getActualCallsFulfilled() const
 {
-    return maxCalls_;
+    return actualCalls_;
 }
 
 MockExpectedCall& MockIgnoredExpectedCall::instance()

@@ -137,7 +137,6 @@ private:
     MockFailureReporter *standardReporter_;
     MockFailureReporter defaultReporter_;
     MockExpectedCallsList expectations_;
-    MockExpectedCallsList unExpectations_;
     bool ignoreOtherCalls_;
     bool enabled_;
     MockCheckedActualCall *lastActualFunctionCall_;
@@ -157,8 +156,7 @@ private:
 
     MockSupport* getMockSupport(MockNamedValueListNode* node);
 
-    bool hasntExpectationWithName(const SimpleString& functionName);
-    bool hasntUnexpectationWithName(const SimpleString& functionName);
+    bool callIsIgnored(const SimpleString& functionName);
     bool hasCallsOutOfOrder();
 
     SimpleString appendScopeToName(const SimpleString& functionName);

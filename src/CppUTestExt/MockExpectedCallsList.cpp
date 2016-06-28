@@ -63,11 +63,11 @@ bool MockExpectedCallsList::isEmpty() const
     return size() == 0;
 }
 
-unsigned int MockExpectedCallsList::amountOfExpectationsFor(const SimpleString& name) const
+unsigned int MockExpectedCallsList::amountOfActualCallsFulfilledFor(const SimpleString& name) const
 {
     unsigned int count = 0;
     for (MockExpectedCallsListNode* p = head_; p; p = p->next_)
-        if (p->expectedCall_->relatesTo(name)) count += p->expectedCall_->getMaxCalls();
+        if (p->expectedCall_->relatesTo(name)) count += p->expectedCall_->getActualCallsFulfilled();
     return count;
 }
 

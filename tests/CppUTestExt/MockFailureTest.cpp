@@ -65,12 +65,12 @@ TEST_GROUP(MockFailureTest)
     void checkUnexpectedNthCallMessage(unsigned int count, const char* expectedOrdinal)
     {
         MockExpectedCallsList callList;
-        MockCheckedExpectedCall expCall;
+        MockCheckedExpectedCall expCall(count-1, count-1);
 
+        callList.addExpectedCall(&expCall);
         expCall.withName("bar");
         for (unsigned int i = 0; i < (count - 1); i++) {
             expCall.callWasMade(1);
-            callList.addExpectedCall(&expCall);
         }
 
         MockUnexpectedCallHappenedFailure failure(UtestShell::getCurrent(), "bar", callList);

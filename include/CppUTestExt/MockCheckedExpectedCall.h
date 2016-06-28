@@ -104,7 +104,7 @@ public:
 
     enum { NO_EXPECTED_CALL_ORDER = 0 };
 
-    virtual unsigned int getMaxCalls() const;
+    virtual unsigned int getActualCallsFulfilled() const;
 
 protected:
     void setName(const SimpleString& name);

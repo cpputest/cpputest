@@ -40,7 +40,7 @@ public:
     virtual void deleteAllExpectationsAndClearList();
 
     virtual unsigned int size() const;
-    virtual unsigned int amountOfExpectationsFor(const SimpleString& name) const;
+    virtual unsigned int amountOfActualCallsFulfilledFor(const SimpleString& name) const;
     virtual unsigned int amountOfUnfulfilledExpectations() const;
     virtual bool hasUnfulfilledExpectations() const;
     virtual bool hasFinalizedMatchingExpectations() const;

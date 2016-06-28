@@ -119,7 +119,6 @@ void MockSupport::clear()
     MockActualCallTrace::instance().clear();
 
     expectations_.deleteAllExpectationsAndClearList();
-    unExpectations_.deleteAllExpectationsAndClearList();
     ignoreOtherCalls_ = false;
     enabled_ = true;
     actualCallOrder_ = 0;
@@ -159,13 +158,14 @@ MockExpectedCall& MockSupport::expectNCalls(unsigned int amount, const SimpleStr
 
 void MockSupport::expectNoCall(const SimpleString& functionName)
 {
-    if (!enabled_) return;
-
-    countCheck();
-
-    MockCheckedExpectedCall* call = new MockCheckedExpectedCall;
-    call->withName(appendScopeToName(functionName));
-    unExpectations_.addExpectedCall(call);
+    expectRangeOfCalls(0, 0, functionName);
+//    if (!enabled_) return;
+//
+//    countCheck();
+//
+//    MockCheckedExpectedCall* call = new MockCheckedExpectedCall;
+//    call->withName(appendScopeToName(functionName));
+//    unExpectations_.addExpectedCall(call);
 }
 
 MockExpectedCall& MockSupport::expectAtLeastOneCall(const SimpleString& functionName)
@@ -220,14 +220,9 @@ MockCheckedActualCall* MockSupport::createActualFunctionCall()
     return lastActualFunctionCall_;
 }
 
-bool MockSupport::hasntExpectationWithName(const SimpleString& functionName)
+bool MockSupport::callIsIgnored(const SimpleString& functionName)
 {
-    return !expectations_.hasExpectationWithName(functionName) && ignoreOtherCalls_;
-}
-
-bool MockSupport::hasntUnexpectationWithName(const SimpleString& functionName)
-{
-    return !unExpectations_.hasExpectationWithName(functionName);
+    return ignoreOtherCalls_ && !expectations_.hasExpectationWithName(functionName);
 }
 
 MockActualCall& MockSupport::actualCall(const SimpleString& functionName)
@@ -244,7 +239,7 @@ MockActualCall& MockSupport::actualCall(const SimpleString& functionName)
     if (tracing_) return MockActualCallTrace::instance().withCallOrder(++actualCallOrder_).withName(scopeFuntionName);
 
 
-    if (hasntUnexpectationWithName(scopeFuntionName) && hasntExpectationWithName(scopeFuntionName)) {
+    if (callIsIgnored(scopeFuntionName)) {
         return MockIgnoredActualCall::instance();
     }
 

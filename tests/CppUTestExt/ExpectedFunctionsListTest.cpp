@@ -216,20 +216,25 @@ TEST(MockExpectedCallsList, addPotentiallyMatchingExpectationsMultipleUnmatchedE
     LONGS_EQUAL(2, newList.size());
 }
 
-TEST(MockExpectedCallsList, amountOfExpectationsFor)
+TEST(MockExpectedCallsList, amountOfActualCallsFulfilledFor)
 {
     call1->withName("foo");
     call2->withName("bar");
+    call1->callWasMade(1);
+    call2->callWasMade(2);
     list->addExpectedCall(call1);
     list->addExpectedCall(call2);
-    LONGS_EQUAL(1, list->amountOfExpectationsFor("bar"));
+    LONGS_EQUAL(1, list->amountOfActualCallsFulfilledFor("bar"));
 }
 
-TEST(MockExpectedCallsList, amountOfExpectationsForHasNone)
+TEST(MockExpectedCallsList, amountOfActualCallsFulfilledForHasNone)
 {
     call1->withName("foo");
+    call2->withName("bar");
+    call1->callWasMade(1);
     list->addExpectedCall(call1);
-    LONGS_EQUAL(0, list->amountOfExpectationsFor("bar"));
+    list->addExpectedCall(call2);
+    LONGS_EQUAL(0, list->amountOfActualCallsFulfilledFor("bar"));
 }
 
 TEST(MockExpectedCallsList, callToStringForUnfulfilledFunctions)

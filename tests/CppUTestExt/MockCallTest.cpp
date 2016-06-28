@@ -198,6 +198,7 @@ TEST(MockCallTest, expectNoCallThatHappened)
     MockFailureReporterInstaller failureReporterInstaller;
 
     MockExpectedCallsListForTest expectations;
+    expectations.addFunction(0, 0, "lazy");
     MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "lazy", expectations);
 
     mock().expectNoCall("lazy");
@@ -211,6 +212,7 @@ TEST(MockCallTest, expectNoCallDoesntInfluenceExpectOneCall)
     MockFailureReporterInstaller failureReporterInstaller;
 
     MockExpectedCallsListForTest expectations;
+    expectations.addFunction(0, 0, "lazy");
     expectations.addFunction("influence", MockCheckedExpectedCall::NO_EXPECTED_CALL_ORDER)->callWasMade(1);
     MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "lazy", expectations);
 
@@ -227,6 +229,7 @@ TEST(MockCallTest, expectNoCallOnlyFailureOnceWhenMultipleHappened)
     MockFailureReporterInstaller failureReporterInstaller;
 
     MockExpectedCallsListForTest expectations;
+    expectations.addFunction(0, 0, "lazy");
     MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "lazy", expectations);
 
     mock().expectNoCall("lazy");
@@ -240,6 +243,7 @@ TEST(MockCallTest, ignoreOtherCallsExceptForTheUnExpectedOne)
     MockFailureReporterInstaller failureReporterInstaller;
 
     MockExpectedCallsListForTest expectations;
+    expectations.addFunction(0, 0, "lazy");
     MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "lazy", expectations);
 
     mock().expectNoCall("lazy");
@@ -258,6 +262,7 @@ TEST(MockCallTest, expectNoCallInScopeThatHappened)
     MockFailureReporterInstaller failureReporterInstaller;
 
     MockExpectedCallsListForTest expectations;
+    expectations.addFunction(0, 0, "scope::lazy");
     MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "scope::lazy", expectations);
 
     mock("scope").expectNoCall("lazy");
