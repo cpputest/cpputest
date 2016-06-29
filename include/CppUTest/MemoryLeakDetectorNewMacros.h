@@ -38,10 +38,12 @@
     void* operator new(size_t size) UT_THROW(std::bad_alloc);
     void* operator new[](size_t size) UT_THROW(std::bad_alloc);
 
-    void operator delete(void* mem) UT_NOTHROW;
-    void operator delete[](void* mem) UT_NOTHROW;
     void operator delete(void* mem, const char* file, int line) UT_NOTHROW;
     void operator delete[](void* mem, const char* file, int line) UT_NOTHROW;
+    void operator delete(void* mem) UT_NOTHROW;
+    void operator delete[](void* mem) UT_NOTHROW;
+    void operator delete (void* mem, size_t size) UT_NOTHROW;
+    void operator delete[] (void* mem, size_t size) UT_NOTHROW;
 
 #endif
 

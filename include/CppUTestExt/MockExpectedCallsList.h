@@ -43,8 +43,6 @@ public:
     virtual int amountOfExpectationsFor(const SimpleString& name) const;
     virtual int amountOfUnfulfilledExpectations() const;
     virtual bool hasUnfulfilledExpectations() const;
-    virtual bool hasFulfilledExpectations() const;
-    virtual bool hasFulfilledExpectationsWithoutIgnoredParameters() const;
     virtual bool hasUnfulfilledExpectationsBecauseOfMissingParameters() const;
     virtual bool hasExpectationWithName(const SimpleString& name) const;
     virtual bool hasCallsOutOfOrder() const;

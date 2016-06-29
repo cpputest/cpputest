@@ -319,6 +319,11 @@ void operator delete(void* mem, const char*, int) UT_NOTHROW
     operator_delete_fptr(mem);
 }
 
+void operator delete (void* mem, size_t) UT_NOTHROW
+{
+    operator_delete_fptr(mem);
+}
+
 void* operator new[](size_t size) UT_THROW(std::bad_alloc)
 {
     return operator_new_array_fptr(size);
@@ -339,6 +344,10 @@ void operator delete[](void* mem, const char*, int) UT_NOTHROW
      operator_delete_array_fptr(mem);
 }
 
+void operator delete[] (void* mem, size_t) UT_NOTHROW
+{
+     operator_delete_array_fptr(mem);
+}
 
 #if CPPUTEST_USE_STD_CPP_LIB
 

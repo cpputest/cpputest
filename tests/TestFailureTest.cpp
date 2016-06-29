@@ -130,24 +130,24 @@ TEST(TestFailure, LongsEqualFailureWithText)
 {
     LongsEqualFailure f(test, failFileName, failLineNumber, 1, 2, "text");
     FAILURE_EQUAL("Message: text\n"
-                  "\texpected <1 0x1>\n\tbut was  <2 0x2>", f);
+                  "\texpected <1 (0x1)>\n\tbut was  <2 (0x2)>", f);
 }
 
 TEST(TestFailure, LongsEqualFailure)
 {
     LongsEqualFailure f(test, failFileName, failLineNumber, 1, 2, "");
-    FAILURE_EQUAL("expected <1 0x1>\n\tbut was  <2 0x2>", f);
+    FAILURE_EQUAL("expected <1 (0x1)>\n\tbut was  <2 (0x2)>", f);
 }
 
 TEST(TestFailure, LongLongsEqualFailure)
 {
 #ifdef CPPUTEST_USE_LONG_LONG
     LongLongsEqualFailure f(test, failFileName, failLineNumber, 1, 2, "");
-    FAILURE_EQUAL("expected <1 0x1>\n\tbut was  <2 0x2>", f);
+    FAILURE_EQUAL("expected <1 (0x1)>\n\tbut was  <2 (0x2)>", f);
 #else
     cpputest_longlong dummy_longlong;
     LongLongsEqualFailure f(test, failFileName, failLineNumber, dummy_longlong, dummy_longlong, "");
-    FAILURE_EQUAL("expected <<longlong_unsupported> 0x<longlong_unsupported>>\n\tbut was  <<longlong_unsupported> 0x<longlong_unsupported>>", f);
+    FAILURE_EQUAL("expected <<longlong_unsupported> >\n\tbut was  <<longlong_unsupported> >", f);
 #endif
 }
 
@@ -155,12 +155,18 @@ TEST(TestFailure, UnsignedLongLongsEqualFailure)
 {
 #ifdef CPPUTEST_USE_LONG_LONG
     UnsignedLongLongsEqualFailure f(test, failFileName, failLineNumber, 1, 2, "");
-    FAILURE_EQUAL("expected <1 (0x1) 0x1>\n\tbut was  <2 (0x2) 0x2>", f);
+    FAILURE_EQUAL("expected <1 (0x1)>\n\tbut was  <2 (0x2)>", f);
 #else
     cpputest_ulonglong dummy_ulonglong;
     UnsignedLongLongsEqualFailure f(test, failFileName, failLineNumber, dummy_ulonglong, dummy_ulonglong, "");
-    FAILURE_EQUAL("expected <<ulonglong_unsupported> 0x<ulonglong_unsupported>>\n\tbut was  <<ulonglong_unsupported> 0x<ulonglong_unsupported>>", f);
+    FAILURE_EQUAL("expected <<ulonglong_unsupported> >\n\tbut was  <<ulonglong_unsupported> >", f);
 #endif
+}
+
+TEST(TestFailure, SignedBytesEqualFailure)
+{
+    SignedBytesEqualFailure f(test, failFileName, failLineNumber, (signed char)-1, (signed char)2, "");
+    FAILURE_EQUAL("expected <-1 (0xff)>\n\tbut was  < 2 (0x2)>", f);
 }
 
 TEST(TestFailure, StringsEqualFailureWithText)

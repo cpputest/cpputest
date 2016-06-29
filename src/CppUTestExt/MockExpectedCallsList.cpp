@@ -81,19 +81,6 @@ int MockExpectedCallsList::amountOfUnfulfilledExpectations() const
     return count;
 }
 
-bool MockExpectedCallsList::hasFulfilledExpectations() const
-{
-    return (size() - amountOfUnfulfilledExpectations()) != 0;
-}
-
-bool MockExpectedCallsList::hasFulfilledExpectationsWithoutIgnoredParameters() const
-{
-    for (MockExpectedCallsListNode* p = head_; p; p = p->next_)
-        if (p->expectedCall_->isFulfilledWithoutIgnoredParameters())
-            return true;
-    return false;
-}
-
 bool MockExpectedCallsList::hasUnfulfilledExpectations() const
 {
     return amountOfUnfulfilledExpectations() != 0;

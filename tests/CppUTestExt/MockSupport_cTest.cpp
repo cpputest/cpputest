@@ -186,8 +186,8 @@ TEST(MockSupport_c, outputParameters_differentType)
 
 TEST(MockSupport_c, outputParametersOfType)
 {
-    long param = 1;
-    const long retval = 2;
+    int param = 1;
+    const int retval = 2;
     mock_c()->installCopier("typeName", typeCopy);
     mock_c()->expectOneCall("foo")->withOutputParameterOfTypeReturning("typeName", "out", &retval);
     mock_c()->actualCall("foo")->withOutputParameterOfType("typeName", "out", &param);

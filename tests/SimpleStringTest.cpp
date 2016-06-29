@@ -482,8 +482,17 @@ TEST(SimpleString, FunctionPointers)
 TEST(SimpleString, Characters)
 {
     SimpleString s(StringFrom('a'));
-    SimpleString s2(StringFrom('a'));
-    CHECK(s == s2);
+    STRCMP_EQUAL("a", s.asCharString());
+}
+
+TEST(SimpleString, NegativeSignedBytes)
+{
+    STRCMP_EQUAL("-15", StringFrom((signed char)-15).asCharString());
+}
+
+TEST(SimpleString, PositiveSignedBytes)
+{
+    STRCMP_EQUAL("4", StringFrom(4).asCharString());
 }
 
 TEST(SimpleString, LongInts)
@@ -554,6 +563,8 @@ TEST(SimpleString, Sizes)
 
 TEST(SimpleString, HexStrings)
 {
+    STRCMP_EQUAL("f3", HexStringFrom((signed char)-13).asCharString());
+
     SimpleString h1 = HexStringFrom(0xffffL);
     STRCMP_EQUAL("ffff", h1.asCharString());
 
@@ -703,6 +714,13 @@ TEST(SimpleString, _64BitAddressPrintsCorrectly)
     STRCMP_EQUAL(expected.asCharString(), actual.asCharString());
 }
 
+TEST(SimpleString, BracketsFormattedHexStringFromForLongOnDifferentPlatform)
+{
+	long value = -1;
+
+	STRCMP_EQUAL("(0xffffffffffffffff)", BracketsFormattedHexStringFrom(value).asCharString());
+}
+
 #else
 /*
  * This test case should pass on 64 bit systems with 32 bit longs,
@@ -711,7 +729,12 @@ TEST(SimpleString, _64BitAddressPrintsCorrectly)
  * different formats on different platforms. However, this will
  * need to be fixed in the future.
  */
+TEST(SimpleString, BracketsFormattedHexStringFromForLongOnDifferentPlatform)
+{
+	long value = -1;
 
+	STRCMP_EQUAL("(0xffffffff)", BracketsFormattedHexStringFrom(value).asCharString());
+}
 IGNORE_TEST(SimpleString, _64BitAddressPrintsCorrectly)
 {
     char* p = (char*) 0xffffffff;
@@ -729,14 +752,29 @@ IGNORE_TEST(SimpleString, _64BitAddressPrintsCorrectly)
 {
 }
 
+TEST(SimpleString, BracketsFormattedHexStringFromForLongOnDifferentPlatform)
+{
+	long value = -1;
+
+	STRCMP_EQUAL("(0xffffffff)", BracketsFormattedHexStringFrom(value).asCharString());
+}
 #endif
 
-TEST(SimpleString, BuildStringFromUnsignedInteger)
+TEST(SimpleString, BuildStringFromUnsignedLongInteger)
 {
     unsigned long int i = 0xffffffff;
 
     SimpleString result = StringFrom(i);
-    const char* expected_string = "4294967295 (0xffffffff)";
+    const char* expected_string = "4294967295";
+    CHECK_EQUAL(expected_string, result);
+}
+
+TEST(SimpleString, BuildStringFromUnsignedInteger)
+{
+    unsigned int i = 0xff;
+
+    SimpleString result = StringFrom(i);
+    const char* expected_string = "255";
     CHECK_EQUAL(expected_string, result);
 }
 
@@ -761,7 +799,7 @@ TEST(SimpleString, unsigned_long)
     unsigned long i = 0xffffffffUL;
 
     SimpleString result = StringFrom(i);
-    const char* expected_string = "4294967295 (0xffffffff)";
+    const char* expected_string = "4294967295";
     CHECK_EQUAL(expected_string, result);
 }
 
@@ -1017,3 +1055,77 @@ TEST(SimpleString, StringFromOrdinalNumberOthers)
     STRCMP_EQUAL("100th", StringFromOrdinalNumber(100).asCharString());
     STRCMP_EQUAL("101st", StringFromOrdinalNumber(101).asCharString());
 }
+
+TEST(SimpleString, BracketsFormattedHexStringFromForSignedChar)
+{
+	signed char value = 'c';
+
+	STRCMP_EQUAL("(0x63)", BracketsFormattedHexStringFrom(value).asCharString());
+}
+
+
+TEST(SimpleString, BracketsFormattedHexStringFromForUnsignedInt)
+{
+	unsigned int value = 1;
+
+	STRCMP_EQUAL("(0x1)", BracketsFormattedHexStringFrom(value).asCharString());
+}
+
+TEST(SimpleString, BracketsFormattedHexStringFromForUnsignedLong)
+{
+	unsigned long value = 1;
+
+	STRCMP_EQUAL("(0x1)", BracketsFormattedHexStringFrom(value).asCharString());
+}
+
+#ifdef CPPUTEST_16BIT_INTS
+TEST(SimpleString, BracketsFormattedHexStringFromForInt)
+{
+	int value = -1;
+
+	STRCMP_EQUAL("(0xffff)", BracketsFormattedHexStringFrom(value).asCharString());
+}
+#else
+TEST(SimpleString, BracketsFormattedHexStringFromForInt)
+{
+	int value = -1;
+	STRCMP_EQUAL("(0xffffffff)", BracketsFormattedHexStringFrom(value).asCharString());
+}
+#endif
+
+TEST(SimpleString, BracketsFormattedHexStringFromForLong)
+{
+	long value = 1;
+
+	STRCMP_EQUAL("(0x1)", BracketsFormattedHexStringFrom(value).asCharString());
+}
+#ifdef CPPUTEST_USE_LONG_LONG
+
+TEST(SimpleString, BracketsFormattedHexStringFromForLongLong)
+{
+	cpputest_longlong value = 1;
+
+	STRCMP_EQUAL("(0x1)", BracketsFormattedHexStringFrom(value).asCharString());
+}
+TEST(SimpleString, BracketsFormattedHexStringFromForULongLong)
+{
+	cpputest_ulonglong value = 1;
+
+	STRCMP_EQUAL("(0x1)", BracketsFormattedHexStringFrom(value).asCharString());
+}
+#else
+TEST(SimpleString, BracketsFormattedHexStringFromForLongLong)
+{
+	cpputest_longlong value = 1;
+
+	STRCMP_EQUAL("", BracketsFormattedHexStringFrom(value).asCharString());
+}
+TEST(SimpleString, BracketsFormattedHexStringFromForULongLong)
+{
+	cpputest_ulonglong value = 1;
+
+	STRCMP_EQUAL("", BracketsFormattedHexStringFrom(value).asCharString());
+}
+
+#endif
+

@@ -290,6 +290,9 @@ check_basic:
 	@echo "Building with the Std C++ 11 turned on. Compiler acts differently then."
 	make distclean; $(srcdir)/configure --enable-std-cpp11; make
 
+	@echo "Building with the Std C++ 14 turned on. Compiler acts differently then."
+	make distclean; $(srcdir)/configure --enable-std-cpp14; make
+
 	@echo "Building without the Standard C library"
 	make distclean; $(srcdir)/configure --disable-std-c; make
 

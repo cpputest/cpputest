@@ -96,8 +96,7 @@ The failure of one of these macros causes the current test to immediately exit
 
 Customize CHECK_EQUAL to work with your types that support operator==()
 
-* Create the function:
-** SimpleString StringFrom (const yourType&)
+* Create the function: `SimpleString StringFrom(const yourType&)`
 
 The Extensions directory has a few of these.
 
@@ -153,10 +152,8 @@ TEST(MemoryLeakWarningTest, Ignore1)
 
 int main(int ac, char** av)
 {
-  return CommandLineTestRunner::RunAllTests(ac, av);
+  return RUN_ALL_TESTS(ac, av);
 }
-
-IMPORT_TEST_GROUP(ClassName)
 ```
 
 ## Example Test

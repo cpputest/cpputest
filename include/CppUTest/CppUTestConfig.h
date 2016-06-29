@@ -174,7 +174,7 @@
 
 #if CPPUTEST_USE_STD_C_LIB && (!defined(_MSC_VER) || (_MSC_VER >= 1800))
 #define CPPUTEST_HAVE_FENV
-#if defined(__WATCOMC__)
+#if defined(__WATCOMC__) || defined(__ARMEL__) || defined(__m68k__)
 #define CPPUTEST_FENV_IS_WORKING_PROPERLY 0
 #else
 #define CPPUTEST_FENV_IS_WORKING_PROPERLY 1
@@ -199,6 +199,12 @@
 #define CPPUTEST_CHAR_BIT CHAR_BIT
 #else
 #define CPPUTEST_CHAR_BIT 8
+#endif
+
+/* Handling of systems with a different int-width (e.g. 16 bit).
+ */
+#if CPPUTEST_USE_STD_C_LIB && (INT_MAX == 0x7fff)
+#define CPPUTEST_16BIT_INTS
 #endif
 
 /*
@@ -249,6 +255,11 @@ struct cpputest_ulonglong
 #endif
   char dummy[CPPUTEST_SIZE_OF_FAKE_LONG_LONG_TYPE];
 };
+
+#if !defined(__cplusplus)
+typedef struct cpputest_longlong cpputest_longlong;
+typedef struct cpputest_ulonglong cpputest_ulonglong;
+#endif
 
 #endif
 

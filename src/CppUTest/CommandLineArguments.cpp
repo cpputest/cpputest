@@ -218,7 +218,7 @@ void CommandLineArguments::AddTestToRunBasedOnVerboseOutput(int ac, const char**
 {
     SimpleString wholename = getParameterField(ac, av, index, parameterName);
     SimpleString testname = wholename.subStringFromTill(',', ')');
-    testname = testname.subString(2, testname.size());
+    testname = testname.subString(2);
     TestFilter* namefilter = new TestFilter(testname);
     TestFilter* groupfilter = new TestFilter(wholename.subStringFromTill(wholename.at(0), ','));
     namefilter->strictMatching();
