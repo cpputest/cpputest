@@ -199,14 +199,15 @@ MockExpectedCall& MockSupport::expectRangeOfCalls(unsigned int minCalls, unsigne
 
     countCheck();
 
+    const SimpleString scopeFunctionName = appendScopeToName(functionName);
     MockCheckedExpectedCall* call = new MockCheckedExpectedCall(minCalls, maxCalls);
-    call->withName(appendScopeToName(functionName));
+    call->withName(scopeFunctionName);
     if (strictOrdering_) {
         if (minCalls == maxCalls) {
             call->withCallOrder(expectedCallOrder_ + 1, expectedCallOrder_ + minCalls);
             expectedCallOrder_ += minCalls;
         } else {
-            MockStrictOrderingIncompatibleWithOptionalCallsFailure failure(activeReporter_->getTestToFail(), functionName, minCalls, maxCalls);
+            MockStrictOrderingIncompatibleWithOptionalCallsFailure failure(activeReporter_->getTestToFail(), scopeFunctionName, minCalls, maxCalls);
             failTest(failure);
         }
     }
@@ -227,7 +228,7 @@ bool MockSupport::callIsIgnored(const SimpleString& functionName)
 
 MockActualCall& MockSupport::actualCall(const SimpleString& functionName)
 {
-    const SimpleString scopeFuntionName = appendScopeToName(functionName);
+    const SimpleString scopeFunctionName = appendScopeToName(functionName);
 
     if (lastActualFunctionCall_) {
         lastActualFunctionCall_->checkExpectations();
@@ -236,15 +237,15 @@ MockActualCall& MockSupport::actualCall(const SimpleString& functionName)
     }
 
     if (!enabled_) return MockIgnoredActualCall::instance();
-    if (tracing_) return MockActualCallTrace::instance().withCallOrder(++actualCallOrder_).withName(scopeFuntionName);
+    if (tracing_) return MockActualCallTrace::instance().withCallOrder(++actualCallOrder_).withName(scopeFunctionName);
 
 
-    if (callIsIgnored(scopeFuntionName)) {
+    if (callIsIgnored(scopeFunctionName)) {
         return MockIgnoredActualCall::instance();
     }
 
     MockCheckedActualCall* call = createActualFunctionCall();
-    call->withName(scopeFuntionName);
+    call->withName(scopeFunctionName);
     return *call;
 }
 

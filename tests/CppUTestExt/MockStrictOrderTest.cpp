@@ -208,3 +208,14 @@ TEST(MockStrictOrderTest, orderUsingOptionalCalls)
     MockStrictOrderingIncompatibleWithOptionalCallsFailure expectedFailure(mockFailureTest(), "foo", 0, 1);
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
+
+TEST(MockStrictOrderTest, orderUsingOptionalCallsOnScope)
+{
+    MockFailureReporterInstaller failureReporterInstaller;
+
+    mock("bar").strictOrder();
+    mock("bar").expectRangeOfCalls(5, 11, "foo");
+
+    MockStrictOrderingIncompatibleWithOptionalCallsFailure expectedFailure(mockFailureTest(), "bar::foo", 5, 11);
+    CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
