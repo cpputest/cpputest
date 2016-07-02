@@ -100,15 +100,15 @@ void all_mock_support_c_calls(void)
     mock_c()->intReturnValue();
     mock_c()->returnValue();
 
-    mock_c()->expectOneCall("boo2")->andReturnUnsignedIntValue(1.0);
+    mock_c()->expectOneCall("boo2")->andReturnUnsignedIntValue(1);
     mock_c()->actualCall("boo2")->unsignedIntReturnValue();
     mock_c()->unsignedIntReturnValue();
 
-    mock_c()->expectOneCall("boo3")->andReturnLongIntValue(1.0);
+    mock_c()->expectOneCall("boo3")->andReturnLongIntValue(1);
     mock_c()->actualCall("boo3")->longIntReturnValue();
     mock_c()->longIntReturnValue();
 
-    mock_c()->expectOneCall("boo3")->andReturnUnsignedLongIntValue(1.0);
+    mock_c()->expectOneCall("boo3")->andReturnUnsignedLongIntValue(1);
     mock_c()->actualCall("boo3")->unsignedLongIntReturnValue();
     mock_c()->unsignedLongIntReturnValue();
 
