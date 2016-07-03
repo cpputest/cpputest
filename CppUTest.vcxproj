@@ -117,6 +117,7 @@
     <ClCompile Include="src\CppUTestExt\MemoryReporterPlugin.cpp" />
     <ClCompile Include="src\CppUTestExt\MemoryReportFormatter.cpp" />
     <ClCompile Include="src\CppUTestExt\MockActualCall.cpp" />
+    <ClCompile Include="src\CppUTestExt\MockActualCallsQueue.cpp" />
     <ClCompile Include="src\CppUTestExt\MockExpectedCall.cpp" />
     <ClCompile Include="src\CppUTestExt\MockExpectedCallsList.cpp" />
     <ClCompile Include="src\CppUTestExt\MockFailure.cpp" />
@@ -159,6 +160,7 @@
     <ClInclude Include="include\CppUTestExt\MemoryReporterPlugin.h" />
     <ClInclude Include="include\CppUTestExt\MemoryReportFormatter.h" />
     <ClInclude Include="include\CppUTestExt\MockActualCall.h" />
+    <ClInclude Include="include\CppUTestExt\MockActualCallsQueue.h" />
     <ClInclude Include="include\CppUTestExt\MockCheckedActualCall.h" />
     <ClInclude Include="include\CppUTestExt\MockCheckedExpectedCall.h" />
     <ClInclude Include="include\CppUTestExt\MockExpectedCall.h" />

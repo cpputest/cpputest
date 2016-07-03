@@ -106,6 +106,10 @@ SOURCE=.\src\CppUTestExt\MockActualCall.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\CppUTestExt\MockActualCallsQueue.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\CppUTestExt\MockExpectedCall.cpp"
 # End Source File
 # Begin Source File
@@ -239,6 +243,10 @@ SOURCE=.\include\CppUTestExt\MemoryReportFormatter.h
 # Begin Source File
 
 SOURCE=.\include\CppUTestExt\MockCheckedActualCall.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\include\CppUTestExt\MockActualCallsQueue.h
 # End Source File
 # Begin Source File
 

@@ -95,6 +95,7 @@ lib_libCppUTestExt_a_SOURCES = \
    src/CppUTestExt/MemoryReporterPlugin.cpp \
    src/CppUTestExt/MemoryReportFormatter.cpp \
    src/CppUTestExt/MockActualCall.cpp \
+   src/CppUTestExt/MockActualCallsQueue.cpp \
    src/CppUTestExt/MockExpectedCall.cpp \
    src/CppUTestExt/MockExpectedCallsList.cpp \
    src/CppUTestExt/MockFailure.cpp \
@@ -118,6 +119,7 @@ include_cpputestext_HEADERS = \
 	include/CppUTestExt/MockActualCall.h \
 	include/CppUTestExt/MockCheckedActualCall.h \
 	include/CppUTestExt/MockCheckedExpectedCall.h \
+	include/CppUTestExt/MockActualCallsQueue.h \
 	include/CppUTestExt/MockExpectedCall.h \
 	include/CppUTestExt/MockExpectedCallsList.h \
 	include/CppUTestExt/MockFailure.h \
@@ -192,6 +194,7 @@ CppUTestExtTests_SOURCES = \
 	tests/CppUTestExt/MockComparatorCopierTest.cpp \
 	tests/CppUTestExt/MockExpectedCallTest.cpp \
 	tests/CppUTestExt/ExpectedFunctionsListTest.cpp \
+	tests/CppUTestExt/ActualCallsQueueTest.cpp \
 	tests/CppUTestExt/MockFailureReporterForTest.cpp \
 	tests/CppUTestExt/MockFailureTest.cpp \
 	tests/CppUTestExt/MockHierarchyTest.cpp \

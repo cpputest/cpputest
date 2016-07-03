@@ -14,6 +14,7 @@ set(CppUTestExtTests_src
     MockComparatorCopierTest.cpp
     MockExpectedCallTest.cpp
     ExpectedFunctionsListTest.cpp
+    ActualCallsQueueTest.cpp
     MockFailureReporterForTest.cpp
     MockFailureTest.cpp
     MockHierarchyTest.cpp
