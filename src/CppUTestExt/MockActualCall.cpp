@@ -30,6 +30,7 @@
 #include "CppUTestExt/MockCheckedExpectedCall.h"
 #include "CppUTestExt/MockFailure.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
+#include "CppUTestExt/MockSupport.h"
 
 MockActualCall::MockActualCall()
 {
@@ -49,10 +50,10 @@ SimpleString MockCheckedActualCall::getName() const
     return functionName_;
 }
 
-MockCheckedActualCall::MockCheckedActualCall(unsigned int callOrder, MockFailureReporter* reporter, const MockExpectedCallsList& allExpectations)
-    : callOrder_(callOrder), reporter_(reporter), state_(CALL_SUCCEED), expectationsChecked_(false), matchingExpectation_(NULL), allExpectations_(allExpectations), outputParameterExpectations_(NULL)
+MockCheckedActualCall::MockCheckedActualCall(unsigned int callOrder, MockFailureReporter* reporter, const MockSupport& mockSupport)
+    : callOrder_(callOrder), reporter_(reporter), state_(CALL_SUCCEED), expectationsChecked_(false), matchingExpectation_(NULL), mockSupport_(mockSupport), outputParameterExpectations_(NULL)
 {
-    potentiallyMatchingExpectations_.addPotentiallyMatchingExpectations(allExpectations);
+    potentiallyMatchingExpectations_.addPotentiallyMatchingExpectations(mockSupport.getExpectedCalls());
 }
 
 MockCheckedActualCall::~MockCheckedActualCall()
@@ -141,7 +142,7 @@ MockActualCall& MockCheckedActualCall::withName(const SimpleString& name)
 
     potentiallyMatchingExpectations_.onlyKeepExpectationsRelatedTo(name);
     if (potentiallyMatchingExpectations_.isEmpty()) {
-        MockUnexpectedCallHappenedFailure failure(getTest(), name, allExpectations_);
+        MockUnexpectedCallHappenedFailure failure(getTest(), name, mockSupport_.getExpectedCalls());
         failTest(failure);
         return *this;
     }
@@ -164,7 +165,7 @@ void MockCheckedActualCall::checkInputParameter(const MockNamedValue& actualPara
     potentiallyMatchingExpectations_.onlyKeepExpectationsWithInputParameter(actualParameter);
 
     if (potentiallyMatchingExpectations_.isEmpty()) {
-        MockUnexpectedInputParameterFailure failure(getTest(), getName(), actualParameter, allExpectations_);
+        MockUnexpectedInputParameterFailure failure(getTest(), getName(), actualParameter, mockSupport_.getExpectedCalls());
         failTest(failure);
         return;
     }
@@ -186,7 +187,7 @@ void MockCheckedActualCall::checkOutputParameter(const MockNamedValue& outputPar
     potentiallyMatchingExpectations_.onlyKeepExpectationsWithOutputParameter(outputParameter);
 
     if (potentiallyMatchingExpectations_.isEmpty()) {
-        MockUnexpectedOutputParameterFailure failure(getTest(), getName(), outputParameter, allExpectations_);
+        MockUnexpectedOutputParameterFailure failure(getTest(), getName(), outputParameter, mockSupport_.getExpectedCalls());
         failTest(failure);
         return;
     }
@@ -361,11 +362,11 @@ void MockCheckedActualCall::checkExpectations()
     }
 
     if (potentiallyMatchingExpectations_.hasUnmatchingExpectationsBecauseOfMissingParameters()) {
-        MockExpectedParameterDidntHappenFailure failure(getTest(), getName(), allExpectations_);
+        MockExpectedParameterDidntHappenFailure failure(getTest(), getName(), mockSupport_.getExpectedCalls());
         failTest(failure);
     }
     else {
-        MockExpectedObjectDidntHappenFailure failure(getTest(), getName(), allExpectations_);
+        MockExpectedObjectDidntHappenFailure failure(getTest(), getName(), mockSupport_.getExpectedCalls());
         failTest(failure);
     }
 }
@@ -531,7 +532,7 @@ MockActualCall& MockCheckedActualCall::onObject(const void* objectPtr)
     potentiallyMatchingExpectations_.onlyKeepExpectationsOnObject(objectPtr);
 
     if (potentiallyMatchingExpectations_.isEmpty()) {
-        MockUnexpectedObjectFailure failure(getTest(), getName(), objectPtr, allExpectations_);
+        MockUnexpectedObjectFailure failure(getTest(), getName(), objectPtr, mockSupport_.getExpectedCalls());
         failTest(failure);
         return *this;
     }

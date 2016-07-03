@@ -34,40 +34,38 @@
 
 TEST_GROUP(MockCheckedActualCall)
 {
-    MockExpectedCallsList* emptyList;
-    MockExpectedCallsList* list;
     MockFailureReporter* reporter;
+    MockSupport* testMock;
 
     void setup()
     {
-        emptyList = new MockExpectedCallsList;
-        list = new MockExpectedCallsList;
+        testMock = new MockSupport();
         reporter = MockFailureReporterForTest::getReporter();
     }
 
     void teardown()
     {
         CHECK_NO_MOCK_FAILURE();
-        delete emptyList;
-        delete list;
+        testMock->clear();
+        delete testMock;
     }
 };
 
 TEST(MockCheckedActualCall, unExpectedCall)
 {
-    MockCheckedActualCall actualCall(1, reporter, *emptyList);
+    MockCheckedActualCall actualCall(1, reporter, *testMock);
     actualCall.withName("unexpected");
 
-    MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "unexpected", *list);
+    MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "unexpected", testMock->getExpectedCalls());
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 
 TEST(MockCheckedActualCall, unExpectedCallWithAnInputParameter)
 {
-    MockCheckedActualCall actualCall(1, reporter, *emptyList);
+    MockCheckedActualCall actualCall(1, reporter, *testMock);
     actualCall.withName("unexpected").withParameter("bar", 0);
 
-    MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "unexpected", *list);
+    MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "unexpected", testMock->getExpectedCalls());
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 
     CHECK(actualCall.hasFailed()); // Checks that withParameter() doesn't "reset" call state
@@ -75,10 +73,10 @@ TEST(MockCheckedActualCall, unExpectedCallWithAnInputParameter)
 
 TEST(MockCheckedActualCall, unExpectedCallWithAnOutputParameter)
 {
-    MockCheckedActualCall actualCall(1, reporter, *emptyList);
+    MockCheckedActualCall actualCall(1, reporter, *testMock);
     actualCall.withName("unexpected").withOutputParameter("bar", (void*)0);
 
-    MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "unexpected", *list);
+    MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "unexpected", testMock->getExpectedCalls());
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 
     CHECK(actualCall.hasFailed()); // Checks that withOutputParameter() doesn't "reset" call state
@@ -88,10 +86,10 @@ TEST(MockCheckedActualCall, unExpectedCallOnObject)
 {
     int object;
 
-    MockCheckedActualCall actualCall(1, reporter, *emptyList);
+    MockCheckedActualCall actualCall(1, reporter, *testMock);
     actualCall.withName("unexpected").onObject(&object);
 
-    MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "unexpected", *list);
+    MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "unexpected", testMock->getExpectedCalls());
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 
     CHECK(actualCall.hasFailed()); // Checks that onObject() doesn't "reset" call state
@@ -99,53 +97,45 @@ TEST(MockCheckedActualCall, unExpectedCallOnObject)
 
 TEST(MockCheckedActualCall, actualCallWithNoReturnValueAndMeaninglessCallOrderForCoverage)
 {
-    MockCheckedActualCall actualCall(1, reporter, *emptyList);
+    MockCheckedActualCall actualCall(1, reporter, *testMock);
     actualCall.withName("noreturn").returnValue();
 
-    MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "noreturn", *list);
+    MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "noreturn", testMock->getExpectedCalls());
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 
 TEST(MockCheckedActualCall, unExpectedParameterName)
 {
-    MockCheckedExpectedCall call1(1, 1);
-    call1.withName("func");
-    list->addExpectedCall(&call1);
+    testMock->expectOneCall("func");
 
-    MockCheckedActualCall actualCall(1, reporter, *list);
+    MockCheckedActualCall actualCall(1, reporter, *testMock);
     actualCall.withName("func").withParameter("integer", 1);
 
     MockNamedValue parameter("integer");
     parameter.setValue(1);
 
-    MockUnexpectedInputParameterFailure expectedFailure(mockFailureTest(), "func", parameter, *list);
+    MockUnexpectedInputParameterFailure expectedFailure(mockFailureTest(), "func", parameter, testMock->getExpectedCalls());
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 
 TEST(MockCheckedActualCall, multipleSameFunctionsExpectingAndHappenGradually)
 {
-    MockCheckedExpectedCall* call1 = new MockCheckedExpectedCall(1, 1);
-    MockCheckedExpectedCall* call2 = new MockCheckedExpectedCall(1, 1);
-    call1->withName("func");
-    call2->withName("func");
-    list->addExpectedCall(call1);
-    list->addExpectedCall(call2);
+    testMock->expectOneCall("func");
+    testMock->expectOneCall("func");
 
-    LONGS_EQUAL(2, list->amountOfUnfulfilledExpectations());
+    LONGS_EQUAL(2, testMock->getExpectedCalls().amountOfUnfulfilledExpectations());
 
-    MockCheckedActualCall actualCall1(1, reporter, *list);
+    MockCheckedActualCall actualCall1(1, reporter, *testMock);
     actualCall1.withName("func");
     actualCall1.checkExpectations();
 
-    LONGS_EQUAL(1, list->amountOfUnfulfilledExpectations());
+    LONGS_EQUAL(1, testMock->getExpectedCalls().amountOfUnfulfilledExpectations());
 
-    MockCheckedActualCall actualCall2(2, reporter, *list);
+    MockCheckedActualCall actualCall2(2, reporter, *testMock);
     actualCall2.withName("func");
     actualCall2.checkExpectations();
 
-    LONGS_EQUAL(0, list->amountOfUnfulfilledExpectations());
-
-    list->deleteAllExpectationsAndClearList();
+    LONGS_EQUAL(0, testMock->getExpectedCalls().amountOfUnfulfilledExpectations());
 }
 
 TEST(MockCheckedActualCall, MockIgnoredActualCallWorksAsItShould)

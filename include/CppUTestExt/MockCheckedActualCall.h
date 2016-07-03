@@ -31,10 +31,12 @@
 #include "CppUTestExt/MockActualCall.h"
 #include "CppUTestExt/MockExpectedCallsList.h"
 
+class MockSupport;
+
 class MockCheckedActualCall : public MockActualCall
 {
 public:
-    MockCheckedActualCall(unsigned int callOrder, MockFailureReporter* reporter, const MockExpectedCallsList& expectations);
+    MockCheckedActualCall(unsigned int callOrder, MockFailureReporter* reporter, const MockSupport& mockSupport);
     virtual ~MockCheckedActualCall();
 
     virtual MockActualCall& withName(const SimpleString& name) _override;
@@ -123,7 +125,7 @@ private:
     MockCheckedExpectedCall* matchingExpectation_;
 
     MockExpectedCallsList potentiallyMatchingExpectations_;
-    const MockExpectedCallsList& allExpectations_;
+    const MockSupport& mockSupport_;
 
     class MockOutputParametersListNode
     {

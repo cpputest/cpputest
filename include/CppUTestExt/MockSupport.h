@@ -123,6 +123,8 @@ public:
     virtual void installComparatorsAndCopiers(const MockNamedValueComparatorsAndCopiersRepository& repository);
     virtual void removeAllComparatorsAndCopiers();
 
+    virtual const MockExpectedCallsList& getExpectedCalls() const;
+
 protected:
     MockSupport* clone(const SimpleString& mockName);
     virtual MockCheckedActualCall *createActualFunctionCall();

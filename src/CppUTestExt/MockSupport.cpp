@@ -217,7 +217,7 @@ MockExpectedCall& MockSupport::expectRangeOfCalls(unsigned int minCalls, unsigne
 
 MockCheckedActualCall* MockSupport::createActualFunctionCall()
 {
-    lastActualFunctionCall_ = new MockCheckedActualCall(++actualCallOrder_, activeReporter_, expectations_);
+    lastActualFunctionCall_ = new MockCheckedActualCall(++actualCallOrder_, activeReporter_, *this);
     return lastActualFunctionCall_;
 }
 
@@ -637,3 +637,9 @@ bool MockSupport::hasReturnValue()
     if (lastActualFunctionCall_) return lastActualFunctionCall_->hasReturnValue();
     return false;
 }
+
+const MockExpectedCallsList& MockSupport::getExpectedCalls() const
+{
+    return expectations_;
+}
+

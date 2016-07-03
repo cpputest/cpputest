@@ -33,11 +33,12 @@
 
 TEST_GROUP(MockActualCallsQueue)
 {
-    MockExpectedCallsList emptyList;
+    MockSupport testMock;
 
     void teardown()
     {
         CHECK_NO_MOCK_FAILURE();
+        testMock.clear();
     }
 };
 
@@ -53,8 +54,8 @@ TEST(MockActualCallsQueue, emptyQueue)
 TEST(MockActualCallsQueue, pushBack_Owner)
 {
     MockActualCallsQueue* actualCalls = new MockActualCallsQueue(true);
-    MockCheckedActualCall* call1 = new MockCheckedActualCall(1, NULL, emptyList);
-    MockCheckedActualCall* call2 = new MockCheckedActualCall(2, NULL, emptyList);
+    MockCheckedActualCall* call1 = new MockCheckedActualCall(1, NULL, testMock);
+    MockCheckedActualCall* call2 = new MockCheckedActualCall(2, NULL, testMock);
 
     actualCalls->pushBack(call1);
     CHECK_FALSE(actualCalls->isEmpty());
@@ -69,8 +70,8 @@ TEST(MockActualCallsQueue, pushBack_Owner)
 TEST(MockActualCallsQueue, pushBack_NotOwner)
 {
     MockActualCallsQueue* actualCalls = new MockActualCallsQueue(false);
-    MockCheckedActualCall* call1 = new MockCheckedActualCall(1, NULL, emptyList);
-    MockCheckedActualCall* call2 = new MockCheckedActualCall(2, NULL, emptyList);
+    MockCheckedActualCall* call1 = new MockCheckedActualCall(1, NULL, testMock);
+    MockCheckedActualCall* call2 = new MockCheckedActualCall(2, NULL, testMock);
 
     actualCalls->pushBack(call1);
     CHECK_FALSE(actualCalls->isEmpty());
@@ -87,9 +88,9 @@ TEST(MockActualCallsQueue, pushBack_NotOwner)
 TEST(MockActualCallsQueue, pushBack_MaxSizeReached_Owner)
 {
     MockActualCallsQueue* actualCalls = new MockActualCallsQueue(true, 2);
-    MockCheckedActualCall* call1 = new MockCheckedActualCall(1, NULL, emptyList);
-    MockCheckedActualCall* call2 = new MockCheckedActualCall(2, NULL, emptyList);
-    MockCheckedActualCall* call3 = new MockCheckedActualCall(3, NULL, emptyList);
+    MockCheckedActualCall* call1 = new MockCheckedActualCall(1, NULL, testMock);
+    MockCheckedActualCall* call2 = new MockCheckedActualCall(2, NULL, testMock);
+    MockCheckedActualCall* call3 = new MockCheckedActualCall(3, NULL, testMock);
 
     actualCalls->pushBack(call1);
     CHECK_FALSE(actualCalls->isEmpty());
@@ -107,9 +108,9 @@ TEST(MockActualCallsQueue, pushBack_MaxSizeReached_Owner)
 TEST(MockActualCallsQueue, pushBack_MaxSizeReached_NotOwner)
 {
     MockActualCallsQueue* actualCalls = new MockActualCallsQueue(false, 2);
-    MockCheckedActualCall* call1 = new MockCheckedActualCall(1, NULL, emptyList);
-    MockCheckedActualCall* call2 = new MockCheckedActualCall(2, NULL, emptyList);
-    MockCheckedActualCall* call3 = new MockCheckedActualCall(3, NULL, emptyList);
+    MockCheckedActualCall* call1 = new MockCheckedActualCall(1, NULL, testMock);
+    MockCheckedActualCall* call2 = new MockCheckedActualCall(2, NULL, testMock);
+    MockCheckedActualCall* call3 = new MockCheckedActualCall(3, NULL, testMock);
 
     actualCalls->pushBack(call1);
     CHECK_FALSE(actualCalls->isEmpty());
@@ -127,8 +128,8 @@ TEST(MockActualCallsQueue, pushBack_MaxSizeReached_NotOwner)
 TEST(MockActualCallsQueue, clear_Owner)
 {
     MockActualCallsQueue* actualCalls = new MockActualCallsQueue(true);
-    MockCheckedActualCall* call1 = new MockCheckedActualCall(1, NULL, emptyList);
-    MockCheckedActualCall* call2 = new MockCheckedActualCall(2, NULL, emptyList);
+    MockCheckedActualCall* call1 = new MockCheckedActualCall(1, NULL, testMock);
+    MockCheckedActualCall* call2 = new MockCheckedActualCall(2, NULL, testMock);
     actualCalls->pushBack(call1);
     actualCalls->pushBack(call2);
 
@@ -142,8 +143,8 @@ TEST(MockActualCallsQueue, clear_Owner)
 TEST(MockActualCallsQueue, clear_NotOwner)
 {
     MockActualCallsQueue* actualCalls = new MockActualCallsQueue(false);
-    MockCheckedActualCall* call1 = new MockCheckedActualCall(1, NULL, emptyList);
-    MockCheckedActualCall* call2 = new MockCheckedActualCall(2, NULL, emptyList);
+    MockCheckedActualCall* call1 = new MockCheckedActualCall(1, NULL, testMock);
+    MockCheckedActualCall* call2 = new MockCheckedActualCall(2, NULL, testMock);
     actualCalls->pushBack(call1);
     actualCalls->pushBack(call2);
 
@@ -159,8 +160,8 @@ TEST(MockActualCallsQueue, clear_NotOwner)
 TEST(MockActualCallsQueue, popFront_Owner)
 {
     MockActualCallsQueue* actualCalls = new MockActualCallsQueue(true);
-    MockCheckedActualCall* call1 = new MockCheckedActualCall(1, NULL, emptyList);
-    MockCheckedActualCall* call2 = new MockCheckedActualCall(2, NULL, emptyList);
+    MockCheckedActualCall* call1 = new MockCheckedActualCall(1, NULL, testMock);
+    MockCheckedActualCall* call2 = new MockCheckedActualCall(2, NULL, testMock);
     actualCalls->pushBack(call1);
     actualCalls->pushBack(call2);
 
@@ -175,8 +176,8 @@ TEST(MockActualCallsQueue, popFront_Owner)
 TEST(MockActualCallsQueue, popFront_NotOwner)
 {
     MockActualCallsQueue* actualCalls = new MockActualCallsQueue(false);
-    MockCheckedActualCall* call1 = new MockCheckedActualCall(1, NULL, emptyList);
-    MockCheckedActualCall* call2 = new MockCheckedActualCall(2, NULL, emptyList);
+    MockCheckedActualCall* call1 = new MockCheckedActualCall(1, NULL, testMock);
+    MockCheckedActualCall* call2 = new MockCheckedActualCall(2, NULL, testMock);
     actualCalls->pushBack(call1);
     actualCalls->pushBack(call2);
 
@@ -223,8 +224,8 @@ TEST(MockActualCallsQueue, pushBackAll_NotEmpty_FromNotOwner)
 {
     MockActualCallsQueue* actualCalls1 = new MockActualCallsQueue(false);
     MockActualCallsQueue* actualCalls2 = new MockActualCallsQueue(false);
-    MockCheckedActualCall* call1 = new MockCheckedActualCall(1, NULL, emptyList);
-    MockCheckedActualCall* call2 = new MockCheckedActualCall(2, NULL, emptyList);
+    MockCheckedActualCall* call1 = new MockCheckedActualCall(1, NULL, testMock);
+    MockCheckedActualCall* call2 = new MockCheckedActualCall(2, NULL, testMock);
     actualCalls1->pushBack(call1);
     actualCalls1->pushBack(call2);
 
@@ -242,8 +243,8 @@ TEST(MockActualCallsQueue, pushBackAll_NotEmpty_FromOwner)
 {
     MockActualCallsQueue* actualCalls1 = new MockActualCallsQueue(true);
     MockActualCallsQueue* actualCalls2 = new MockActualCallsQueue(false);
-    MockCheckedActualCall* call1 = new MockCheckedActualCall(1, NULL, emptyList);
-    MockCheckedActualCall* call2 = new MockCheckedActualCall(2, NULL, emptyList);
+    MockCheckedActualCall* call1 = new MockCheckedActualCall(1, NULL, testMock);
+    MockCheckedActualCall* call2 = new MockCheckedActualCall(2, NULL, testMock);
     actualCalls1->pushBack(call1);
     actualCalls1->pushBack(call2);
 
@@ -258,8 +259,8 @@ TEST(MockActualCallsQueue, pushBackAll_NotEmpty_FromOwner)
 TEST(MockActualCallsQueue, setMaxSize_GreaterThanCurrent)
 {
     MockActualCallsQueue* actualCalls = new MockActualCallsQueue(false, 2);
-    MockCheckedActualCall* call1 = new MockCheckedActualCall(1, NULL, emptyList);
-    MockCheckedActualCall* call2 = new MockCheckedActualCall(2, NULL, emptyList);
+    MockCheckedActualCall* call1 = new MockCheckedActualCall(1, NULL, testMock);
+    MockCheckedActualCall* call2 = new MockCheckedActualCall(2, NULL, testMock);
     actualCalls->pushBack(call1);
     actualCalls->pushBack(call2);
 
@@ -275,9 +276,9 @@ TEST(MockActualCallsQueue, setMaxSize_GreaterThanCurrent)
 TEST(MockActualCallsQueue, setMaxSize_LowerThanCurrent)
 {
     MockActualCallsQueue* actualCalls = new MockActualCallsQueue(false);
-    MockCheckedActualCall* call1 = new MockCheckedActualCall(1, NULL, emptyList);
-    MockCheckedActualCall* call2 = new MockCheckedActualCall(2, NULL, emptyList);
-    MockCheckedActualCall* call3 = new MockCheckedActualCall(3, NULL, emptyList);
+    MockCheckedActualCall* call1 = new MockCheckedActualCall(1, NULL, testMock);
+    MockCheckedActualCall* call2 = new MockCheckedActualCall(2, NULL, testMock);
+    MockCheckedActualCall* call3 = new MockCheckedActualCall(3, NULL, testMock);
     actualCalls->pushBack(call1);
     actualCalls->pushBack(call2);
     actualCalls->pushBack(call3);
@@ -295,3 +296,4 @@ TEST(MockActualCallsQueue, setMaxSize_LowerThanCurrent)
     delete call2;
     delete call3;
 }
+
