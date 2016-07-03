@@ -643,3 +643,8 @@ const MockExpectedCallsList& MockSupport::getExpectedCalls() const
     return expectations_;
 }
 
+const SimpleString&  MockSupport::getName() const
+{
+    return mockName_;
+}
+

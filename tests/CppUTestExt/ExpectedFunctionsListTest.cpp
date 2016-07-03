@@ -249,7 +249,7 @@ TEST(MockExpectedCallsList, callToStringForUnfulfilledFunctions)
     list->addExpectedCall(call3);
 
     SimpleString expectedString;
-    expectedString = StringFromFormat("%s\n%s", call1->callToString().asCharString(), call2->callToString().asCharString());
+    expectedString = StringFromFormat("%s\n%s", call1->callToString(false).asCharString(), call2->callToString(false).asCharString());
     STRCMP_EQUAL(expectedString.asCharString(), list->unfulfilledCallsToString().asCharString());
 }
 
@@ -265,7 +265,7 @@ TEST(MockExpectedCallsList, callToStringForFulfilledFunctions)
     list->addExpectedCall(call2);
 
     SimpleString expectedString;
-    expectedString = StringFromFormat("%s\n%s", call1->callToString().asCharString(), call2->callToString().asCharString());
+    expectedString = StringFromFormat("%s\n%s", call1->callToString(false).asCharString(), call2->callToString(false).asCharString());
     STRCMP_EQUAL(expectedString.asCharString(), list->fulfilledCallsToString().asCharString());
 }
 

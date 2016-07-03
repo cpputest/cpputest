@@ -96,9 +96,13 @@ public:
     virtual void checkExpectations();
 
     virtual void setMockFailureReporter(MockFailureReporter* reporter);
+
+    virtual SimpleString toString() const;
+
+    const SimpleString& getName() const;
+
 protected:
     void setName(const SimpleString& name);
-    SimpleString getName() const;
     virtual UtestShell* getTest() const;
     virtual void callHasSucceeded();
     virtual void finalizeOutputParameters(MockCheckedExpectedCall* call);
@@ -114,6 +118,10 @@ protected:
         CALL_SUCCEED
     };
     virtual void setState(ActualCallState state);
+
+    virtual const SimpleString& getScopeName() const;
+
+    void setMatchingExpectedCall(MockCheckedExpectedCall* call);
 
 private:
     SimpleString functionName_;

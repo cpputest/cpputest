@@ -74,7 +74,7 @@ public:
     virtual MockNamedValue getInputParameter(const SimpleString& name);
     virtual MockNamedValue getOutputParameter(const SimpleString& name);
     virtual SimpleString getInputParameterType(const SimpleString& name);
-    virtual SimpleString getInputParameterValueString(const SimpleString& name);
+    virtual SimpleString getInputParameterValueString(const SimpleString& name) const;
 
     virtual bool hasInputParameterWithName(const SimpleString& name);
     virtual bool hasInputParameter(const MockNamedValue& parameter);
@@ -97,16 +97,17 @@ public:
     virtual void wasPassedToObject();
     virtual void resetActualCallMatchingState();
 
-    virtual SimpleString callToString();
+    virtual SimpleString callToString(bool asActualCall) const;
     virtual SimpleString missingParametersToString();
 
     enum { NO_EXPECTED_CALL_ORDER = 0 };
 
     virtual unsigned int getActualCallsFulfilled() const;
 
+    const SimpleString& getName() const;
+
 protected:
     void setName(const SimpleString& name);
-    SimpleString getName() const;
 
 private:
     SimpleString functionName_;

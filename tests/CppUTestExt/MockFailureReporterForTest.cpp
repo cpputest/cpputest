@@ -118,3 +118,36 @@ MockCheckedExpectedCall* MockExpectedCallsListForTest::addFunction(const SimpleS
   newCall->withCallOrder(order, order);
   return newCall;
 }
+
+static MockSupport testMockSupport;
+
+MockCheckedActualCallForTest::MockCheckedActualCallForTest(unsigned int callOrder, const SimpleString& scopeName, MockCheckedExpectedCall* matchingCall)
+: MockCheckedActualCall(callOrder, NULL, testMockSupport), scopeName_(scopeName)
+{
+    setName(matchingCall->getName());
+    setMatchingExpectedCall(matchingCall);
+}
+
+const SimpleString& MockCheckedActualCallForTest::getScopeName() const
+{
+    return scopeName_;
+}
+
+MockActualCallsQueueForTest::MockActualCallsQueueForTest() : MockActualCallsQueue(true)
+{
+}
+
+MockCheckedActualCall* MockActualCallsQueueForTest::addCall(unsigned int callOrder, MockCheckedExpectedCall* matchingCall)
+{
+    return addCall(callOrder, "", matchingCall);
+}
+
+MockCheckedActualCall* MockActualCallsQueueForTest::addCall(unsigned int callOrder, const SimpleString& mockScope, MockCheckedExpectedCall* matchingCall)
+{
+    MockCheckedActualCallForTest* newCall = new MockCheckedActualCallForTest(callOrder, mockScope, matchingCall);
+    matchingCall->finalizeActualCallMatch();
+    matchingCall->callWasMade(callOrder);
+    pushBack(newCall);
+    return newCall;
+}
+

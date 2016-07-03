@@ -127,6 +127,24 @@ public:
      */
     virtual void setMaxSize(unsigned int maxSize);
 
+    /**
+     * Returns a string representation of the queue as a list with the description of all its stored calls, each on a new line.
+     *
+     * @param linePrefix String to be added before each individual call description
+     * @return String representation of the queue
+     */
+    virtual SimpleString toString(const SimpleString& linePrefix) const;
+
+    /**
+     * Returns a string representation of the queue as a list with the description of its stored calls for function @c functionName,
+     * each on a new line.
+     *
+     * @param functionName Name of the function to be filtered through
+     * @param linePrefix String to be added before each individual call description
+     * @return String representation of the queue
+     */
+    virtual SimpleString toStringFilterByFunction(const SimpleString& functionName, const SimpleString& linePrefix) const;
+
 protected:
     class MockActualCallsQueueNode
     {

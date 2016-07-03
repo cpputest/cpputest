@@ -297,3 +297,67 @@ TEST(MockActualCallsQueue, setMaxSize_LowerThanCurrent)
     delete call3;
 }
 
+TEST(MockActualCallsQueue, callToString_Empty)
+{
+    MockActualCallsQueue* actualCalls = new MockActualCallsQueue(true);
+
+    STRCMP_EQUAL("###<none>", actualCalls->toString("###").asCharString());
+
+    delete actualCalls;
+}
+
+TEST(MockActualCallsQueue, callToString_NotEmpty)
+{
+    MockCheckedExpectedCall expectedCall1(1, 1);
+    expectedCall1.withName("foo");
+    MockCheckedExpectedCall expectedCall2(1, 1);
+    expectedCall2.withName("bar");
+
+    MockActualCallsQueue* actualCalls = new MockActualCallsQueue(true);
+    MockCheckedActualCall* actualCall1 = new MockCheckedActualCallForTest(1, "", &expectedCall1);
+    MockCheckedActualCall* actualCall2 = new MockCheckedActualCallForTest(2, "", &expectedCall2);
+    actualCalls->pushBack(actualCall1);
+    actualCalls->pushBack(actualCall2);
+
+    SimpleString expectedString = StringFromFormat("$\t%s\n$\t%s", actualCall1->toString().asCharString(), actualCall2->toString().asCharString());
+    STRCMP_EQUAL(expectedString.asCharString(), actualCalls->toString("$\t").asCharString());
+
+    delete actualCalls;
+}
+
+TEST(MockActualCallsQueue, toStringFilterByFunction_NoMatches)
+{
+    MockCheckedExpectedCall expectedCall1(1, 1);
+    expectedCall1.withName("foo");
+    MockCheckedExpectedCall expectedCall2(1, 1);
+    expectedCall2.withName("bar");
+
+    MockActualCallsQueue* actualCalls = new MockActualCallsQueue(true);
+    MockCheckedActualCall* actualCall1 = new MockCheckedActualCallForTest(1, "", &expectedCall1);
+    MockCheckedActualCall* actualCall2 = new MockCheckedActualCallForTest(2, "", &expectedCall2);
+    actualCalls->pushBack(actualCall1);
+    actualCalls->pushBack(actualCall2);
+
+    STRCMP_EQUAL("[@]<none>", actualCalls->toStringFilterByFunction("foobar", "[@]").asCharString());
+
+    delete actualCalls;
+}
+
+TEST(MockActualCallsQueue, toStringFilterByFunction_WithMatches)
+{
+    MockCheckedExpectedCall expectedCall1(1, 1);
+    expectedCall1.withName("foo");
+    MockCheckedExpectedCall expectedCall2(1, 1);
+    expectedCall2.withName("bar");
+
+    MockActualCallsQueue* actualCalls = new MockActualCallsQueue(true);
+    MockCheckedActualCall* actualCall1 = new MockCheckedActualCallForTest(1, "", &expectedCall1);
+    MockCheckedActualCall* actualCall2 = new MockCheckedActualCallForTest(2, "", &expectedCall2);
+    actualCalls->pushBack(actualCall1);
+    actualCalls->pushBack(actualCall2);
+
+    SimpleString expectedString = StringFromFormat("\t~ %s", actualCall1->toString().asCharString());
+    STRCMP_EQUAL(expectedString.asCharString(), actualCalls->toStringFilterByFunction("foo", "\t~ ").asCharString());
+
+    delete actualCalls;
+}

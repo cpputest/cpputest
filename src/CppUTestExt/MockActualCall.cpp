@@ -45,7 +45,7 @@ void MockCheckedActualCall::setName(const SimpleString& name)
     functionName_ = name;
 }
 
-SimpleString MockCheckedActualCall::getName() const
+const SimpleString& MockCheckedActualCall::getName() const
 {
     return functionName_;
 }
@@ -568,6 +568,36 @@ void MockCheckedActualCall::cleanUpOutputParameterList()
     }
 }
 
+const SimpleString& MockCheckedActualCall::getScopeName() const
+{
+    return mockSupport_.getName();
+}
+
+SimpleString MockCheckedActualCall::toString() const
+{
+    SimpleString str;
+    const SimpleString& scopeName = getScopeName();
+
+    if (scopeName.isEmpty()) {
+        str += StringFromFormat("(%u) ", callOrder_);
+    } else {
+        str += StringFromFormat("(%s::%u) ", scopeName.asCharString(), callOrder_);
+    }
+
+    if (matchingExpectation_) {
+        str += matchingExpectation_->callToString(true);
+    } else {
+        str += functionName_;
+        str += " (NOT matching any expected call)";
+    }
+
+    return str;
+}
+
+void MockCheckedActualCall::setMatchingExpectedCall(MockCheckedExpectedCall* call)
+{
+    matchingExpectation_ = call;
+}
 
 MockActualCallTrace::MockActualCallTrace()
 {

@@ -32,6 +32,7 @@
 #include "CppUTestExt/MockCheckedActualCall.h"
 #include "CppUTestExt/MockCheckedExpectedCall.h"
 #include "CppUTestExt/MockExpectedCallsList.h"
+#include "CppUTestExt/MockActualCallsQueue.h"
 
 class UtestShell;
 class MockSupport;
@@ -124,6 +125,8 @@ public:
     virtual void removeAllComparatorsAndCopiers();
 
     virtual const MockExpectedCallsList& getExpectedCalls() const;
+
+    const SimpleString& getName() const;
 
 protected:
     MockSupport* clone(const SimpleString& mockName);

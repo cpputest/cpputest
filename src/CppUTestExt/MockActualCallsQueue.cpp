@@ -126,3 +126,24 @@ void MockActualCallsQueue::deleteFromFront()
         delete frontCall;
     }
 }
+
+SimpleString MockActualCallsQueue::toString(const SimpleString& linePrefix) const
+{
+    SimpleString str;
+    for (MockActualCallsQueueNode* p = head_; p; p = p->next_) {
+        str = AppendStringOnANewLine(str, p->call_->toString(), linePrefix);
+    }
+    return ReplaceWithTextNoneWhenEmpty(str, linePrefix);
+}
+
+SimpleString MockActualCallsQueue::toStringFilterByFunction(const SimpleString& functionName, const SimpleString& linePrefix) const
+{
+    SimpleString str;
+    for (MockActualCallsQueueNode* p = head_; p; p = p->next_) {
+        if (p->call_->getName() == functionName) {
+            str = AppendStringOnANewLine(str, p->call_->toString(), linePrefix);
+        }
+    }
+    return ReplaceWithTextNoneWhenEmpty(str, linePrefix);
+}
+

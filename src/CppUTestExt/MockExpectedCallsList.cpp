@@ -314,32 +314,14 @@ void MockExpectedCallsList::outputParameterWasPassed(const SimpleString& paramet
         p->expectedCall_->outputParameterWasPassed(parameterName);
 }
 
-static SimpleString stringOrNoneTextWhenEmpty(const SimpleString& inputString, const SimpleString& linePrefix)
-{
-    SimpleString str = inputString;
-    if (str == "") {
-        str += linePrefix;
-        str += "<none>";
-    }
-    return str;
-}
-
-static SimpleString appendStringOnANewLine(const SimpleString& inputString, const SimpleString& linePrefix, const SimpleString& stringToAppend)
-{
-    SimpleString str = inputString;
-    if (str != "") str += "\n";
-    str += linePrefix;
-    str += stringToAppend;
-    return str;
-}
-
 SimpleString MockExpectedCallsList::unfulfilledCallsToString(const SimpleString& linePrefix) const
 {
     SimpleString str;
     for (MockExpectedCallsListNode* p = head_; p; p = p->next_)
         if (!p->expectedCall_->isFulfilled())
-            str = appendStringOnANewLine(str, linePrefix, p->expectedCall_->callToString());
-    return stringOrNoneTextWhenEmpty(str, linePrefix);
+            str = AppendStringOnANewLine(str, p->expectedCall_->callToString(false), linePrefix);
+
+    return ReplaceWithTextNoneWhenEmpty(str, linePrefix);
 }
 
 SimpleString MockExpectedCallsList::fulfilledCallsToString(const SimpleString& linePrefix) const
@@ -348,19 +330,19 @@ SimpleString MockExpectedCallsList::fulfilledCallsToString(const SimpleString& l
 
     for (MockExpectedCallsListNode* p = head_; p; p = p->next_)
         if (p->expectedCall_->isFulfilled())
-            str = appendStringOnANewLine(str, linePrefix, p->expectedCall_->callToString());
+            str = AppendStringOnANewLine(str, p->expectedCall_->callToString(false), linePrefix);
 
-    return stringOrNoneTextWhenEmpty(str, linePrefix);
+    return ReplaceWithTextNoneWhenEmpty(str, linePrefix);
 }
 
-SimpleString MockExpectedCallsList::missingParametersToString() const
+SimpleString MockExpectedCallsList::missingParametersToString(const SimpleString& linePrefix) const
 {
     SimpleString str;
     for (MockExpectedCallsListNode* p = head_; p; p = p->next_)
-        if (! p->expectedCall_->isMatchingActualCall())
-            str = appendStringOnANewLine(str, "", p->expectedCall_->missingParametersToString());
+        if (p->expectedCall_->canMatchActualCalls())
+            str = AppendStringOnANewLine(str, p->expectedCall_->missingParametersToString(), linePrefix);
 
-    return stringOrNoneTextWhenEmpty(str, "");
+    return ReplaceWithTextNoneWhenEmpty(str, linePrefix);
 }
 
 bool MockExpectedCallsList::hasUnmatchingExpectationsBecauseOfMissingParameters() const

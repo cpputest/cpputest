@@ -173,8 +173,9 @@ SimpleString BracketsFormattedHexStringFrom(cpputest_longlong value);
 SimpleString BracketsFormattedHexStringFrom(cpputest_ulonglong value);
 SimpleString BracketsFormattedHexStringFrom(signed char value);
 SimpleString BracketsFormattedHexString(SimpleString hexString);
-
-
+SimpleString AppendStringOnANewLine(const SimpleString& inputString, const SimpleString& stringToAppend,
+                                    const SimpleString& linePrefix = "");
+SimpleString ReplaceWithTextNoneWhenEmpty(const SimpleString& inputString, const SimpleString& linePrefix);
 
 #if CPPUTEST_USE_STD_CPP_LIB
 

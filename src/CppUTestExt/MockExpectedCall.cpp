@@ -46,7 +46,7 @@ void MockCheckedExpectedCall::setName(const SimpleString& name)
     functionName_ = name;
 }
 
-SimpleString MockCheckedExpectedCall::getName() const
+const SimpleString& MockCheckedExpectedCall::getName() const
 {
     return functionName_;
 }
@@ -308,7 +308,7 @@ void MockCheckedExpectedCall::outputParameterWasPassed(const SimpleString& name)
     }
 }
 
-SimpleString MockCheckedExpectedCall::getInputParameterValueString(const SimpleString& name)
+SimpleString MockCheckedExpectedCall::getInputParameterValueString(const SimpleString& name) const
 {
     MockNamedValue * p = inputParameters_->getValueByName(name);
     return (p) ? StringFrom(*p) : "failed";
@@ -326,7 +326,7 @@ bool MockCheckedExpectedCall::hasOutputParameter(const MockNamedValue& parameter
     return (p) ? p->compatibleForCopying(parameter) : ignoreOtherParameters_;
 }
 
-SimpleString MockCheckedExpectedCall::callToString()
+SimpleString MockCheckedExpectedCall::callToString(bool asActualCall) const
 {
     SimpleString str;
     if (objectPtr_)
@@ -334,6 +334,7 @@ SimpleString MockCheckedExpectedCall::callToString()
 
     str += getName();
     str += " -> ";
+
     if (initialExpectedCallOrder_ != NO_EXPECTED_CALL_ORDER) {
         if (initialExpectedCallOrder_ == finalExpectedCallOrder_) {
             str += StringFromFormat("expected call order: <%u> -> ", initialExpectedCallOrder_);
@@ -368,22 +369,24 @@ SimpleString MockCheckedExpectedCall::callToString()
             str += ", other parameters are ignored";
     }
 
-    if (actualCalls_ < minCalls_)
-    {
-        if (minCalls_ == maxCalls_)
+    if (!asActualCall) {
+        if (actualCalls_ < minCalls_)
         {
-            str += StringFromFormat(" (expected %d call%s, but was called %d time%s)",
-                                    minCalls_, (minCalls_ == 1) ? "" : "s", actualCalls_, (actualCalls_ == 1) ? "" : "s" );
+            if (minCalls_ == maxCalls_)
+            {
+                str += StringFromFormat(" (expected %d call%s, but was called %d time%s)",
+                                        minCalls_, (minCalls_ == 1) ? "" : "s", actualCalls_, (actualCalls_ == 1) ? "" : "s" );
+            }
+            else
+            {
+                str += StringFromFormat(" (expected at least %d call%s, but was called %d time%s)",
+                                        minCalls_, (minCalls_ == 1) ? "" : "s", actualCalls_, (actualCalls_ == 1) ? "" : "s" );
+            }
         }
         else
         {
-            str += StringFromFormat(" (expected at least %d call%s, but was called %d time%s)",
-                                    minCalls_, (minCalls_ == 1) ? "" : "s", actualCalls_, (actualCalls_ == 1) ? "" : "s" );
+            str += StringFromFormat(" (called %d time%s)", actualCalls_, (actualCalls_ == 1) ? "" : "s");
         }
-    }
-    else
-    {
-        str += StringFromFormat(" (called %d time%s)", actualCalls_, (actualCalls_ == 1) ? "" : "s");
     }
 
     return str;

@@ -138,6 +138,46 @@ TEST(MockCheckedActualCall, multipleSameFunctionsExpectingAndHappenGradually)
     LONGS_EQUAL(0, testMock->getExpectedCalls().amountOfUnfulfilledExpectations());
 }
 
+TEST(MockCheckedActualCall, toString_NotMatchingExpectedCall)
+{
+    mock().expectOneCall("foo").withParameter("bar", 1);
+
+    MockCheckedActualCall actualCall(10, reporter, mock());
+    actualCall.withName("foo");
+
+    STRCMP_EQUAL("(10) foo (NOT matching any expected call)", actualCall.toString().asCharString());
+
+    mock().clear();
+}
+
+TEST(MockCheckedActualCall, toString_NoScope)
+{
+    void* object = (void*) 0xAA;
+    MockCheckedExpectedCall& expectedCall = (MockCheckedExpectedCall&) mock().expectOneCall("foo");
+    expectedCall.onObject(object).withParameter("bar", 5);
+
+    MockCheckedActualCall actualCall(99, reporter, mock());
+    actualCall.withName("foo").onObject(object).withParameter("bar", 5);
+
+    SimpleString expectedString = StringFromFormat("(99) %s", expectedCall.callToString(true).asCharString());
+    STRCMP_EQUAL(expectedString.asCharString(), actualCall.toString().asCharString());
+
+    mock().clear();
+}
+
+TEST(MockCheckedActualCall, toString_WithScope)
+{
+    MockCheckedExpectedCall& expectedCall = (MockCheckedExpectedCall&) mock("bar").expectOneCall("foo");
+
+    MockCheckedActualCall actualCall(7765, reporter, mock("bar"));
+    actualCall.withName("bar::foo");
+
+    SimpleString expectedString = StringFromFormat("(bar::7765) %s", expectedCall.callToString(true).asCharString());
+    STRCMP_EQUAL(expectedString.asCharString(), actualCall.toString().asCharString());
+
+    mock().clear();
+}
+
 TEST(MockCheckedActualCall, MockIgnoredActualCallWorksAsItShould)
 {
     MockIgnoredActualCall actual;

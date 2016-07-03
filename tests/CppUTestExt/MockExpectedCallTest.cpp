@@ -484,7 +484,7 @@ TEST(MockExpectedCall, toStringForNoParametersSingleCallNotCalled)
 {
     MockCheckedExpectedCall expectedCall(1, 1);
     expectedCall.withName("name");
-    STRCMP_EQUAL("name -> no parameters (expected 1 call, but was called 0 times)", expectedCall.callToString().asCharString());
+    STRCMP_EQUAL("name -> no parameters (expected 1 call, but was called 0 times)", expectedCall.callToString(false).asCharString());
 }
 
 TEST(MockExpectedCall, toStringForNoParametersMultiCallCalledLessThanMinimum)
@@ -492,7 +492,7 @@ TEST(MockExpectedCall, toStringForNoParametersMultiCallCalledLessThanMinimum)
     MockCheckedExpectedCall expectedCall(2, 2);
     expectedCall.withName("name");
     expectedCall.callWasMade(1);
-    STRCMP_EQUAL("name -> no parameters (expected 2 calls, but was called 1 time)", expectedCall.callToString().asCharString());
+    STRCMP_EQUAL("name -> no parameters (expected 2 calls, but was called 1 time)", expectedCall.callToString(false).asCharString());
 }
 
 TEST(MockExpectedCall, toStringForNoParametersMultiCallCalledMinimum)
@@ -501,7 +501,7 @@ TEST(MockExpectedCall, toStringForNoParametersMultiCallCalledMinimum)
     expectedCall.withName("name");
     expectedCall.callWasMade(1);
     expectedCall.callWasMade(2);
-    STRCMP_EQUAL("name -> no parameters (called 2 times)", expectedCall.callToString().asCharString());
+    STRCMP_EQUAL("name -> no parameters (called 2 times)", expectedCall.callToString(false).asCharString());
 }
 
 TEST(MockExpectedCall, toStringForIgnoredParameters)
@@ -509,7 +509,7 @@ TEST(MockExpectedCall, toStringForIgnoredParameters)
     MockCheckedExpectedCall expectedCall(1, 1);
     expectedCall.withName("name");
     expectedCall.ignoreOtherParameters();
-    STRCMP_EQUAL("name -> all parameters ignored (expected 1 call, but was called 0 times)", expectedCall.callToString().asCharString());
+    STRCMP_EQUAL("name -> all parameters ignored (expected 1 call, but was called 0 times)", expectedCall.callToString(false).asCharString());
 }
 
 TEST(MockExpectedCall, toStringForMultipleInputParameters)
@@ -524,7 +524,7 @@ TEST(MockExpectedCall, toStringForMultipleInputParameters)
     expectedCall.withParameter("unsigned-integer", uint_value);
     expectedCall.callWasMade(1);
     STRCMP_EQUAL("name -> const char* string: <value>, int integer: <10 (0xa)>, unsigned int unsigned-integer: <7 (0x7)> "
-                 "(called 1 time)", expectedCall.callToString().asCharString());
+                 "(called 1 time)", expectedCall.callToString(false).asCharString());
 }
 
 TEST(MockExpectedCall, toStringForMultipleInputAndOutputParameters)
@@ -541,7 +541,7 @@ TEST(MockExpectedCall, toStringForMultipleInputAndOutputParameters)
     expectedCall.withOutputParameterReturning("buffer", buffer_value, sizeof(buffer_value));
     expectedCall.callWasMade(1);
     STRCMP_EQUAL("name -> const char* string: <value>, int integer: <10 (0xa)>, unsigned int unsigned-integer: <7 (0x7)>, "
-                 "const void* buffer: <output> (called 1 time)", expectedCall.callToString().asCharString());
+                 "const void* buffer: <output> (called 1 time)", expectedCall.callToString(false).asCharString());
 }
 
 TEST(MockExpectedCall, toStringForMultipleOutputParameters)
@@ -553,7 +553,7 @@ TEST(MockExpectedCall, toStringForMultipleOutputParameters)
     expectedCall.withOutputParameterReturning("buffer1", buffer_value, sizeof(buffer_value));
     expectedCall.withOutputParameterReturning("buffer2", buffer_value, sizeof(buffer_value));
     expectedCall.callWasMade(1);
-    STRCMP_EQUAL("name -> const void* buffer1: <output>, const void* buffer2: <output> (called 1 time)", expectedCall.callToString().asCharString());
+    STRCMP_EQUAL("name -> const void* buffer1: <output>, const void* buffer2: <output> (called 1 time)", expectedCall.callToString(false).asCharString());
 }
 
 TEST(MockExpectedCall, toStringForParameterAndIgnored)
@@ -563,7 +563,7 @@ TEST(MockExpectedCall, toStringForParameterAndIgnored)
     expectedCall.withParameter("string", "value");
     expectedCall.ignoreOtherParameters();
     expectedCall.callWasMade(1);
-    STRCMP_EQUAL("name -> const char* string: <value>, other parameters are ignored (called 1 time)", expectedCall.callToString().asCharString());
+    STRCMP_EQUAL("name -> const char* string: <value>, other parameters are ignored (called 1 time)", expectedCall.callToString(false).asCharString());
 }
 
 TEST(MockExpectedCall, toStringForCallOrderSingle)
@@ -572,7 +572,7 @@ TEST(MockExpectedCall, toStringForCallOrderSingle)
     expectedCall.withName("name");
     expectedCall.withCallOrder(2, 2);
     expectedCall.callWasMade(1);
-    STRCMP_EQUAL("name -> expected call order: <2> -> no parameters (called 1 time)", expectedCall.callToString().asCharString());
+    STRCMP_EQUAL("name -> expected call order: <2> -> no parameters (called 1 time)", expectedCall.callToString(false).asCharString());
 }
 
 TEST(MockExpectedCall, toStringForCallOrderMultiple)
@@ -585,7 +585,7 @@ TEST(MockExpectedCall, toStringForCallOrderMultiple)
     expectedCall.callWasMade(7);
     expectedCall.callWasMade(8);
     expectedCall.callWasMade(9);
-    STRCMP_EQUAL("name -> expected calls order: <5..9> -> no parameters (called 5 times)", expectedCall.callToString().asCharString());
+    STRCMP_EQUAL("name -> expected calls order: <5..9> -> no parameters (called 5 times)", expectedCall.callToString(false).asCharString());
 }
 
 TEST(MockExpectedCall, callOrderIsFulfilledButWithWrongOrderSingle)

@@ -75,7 +75,7 @@ public:
 
     virtual SimpleString unfulfilledCallsToString(const SimpleString& linePrefix = "") const;
     virtual SimpleString fulfilledCallsToString(const SimpleString& linePrefix = "") const;
-    virtual SimpleString missingParametersToString() const;
+    virtual SimpleString missingParametersToString(const SimpleString& linePrefix = "") const;
 
 protected:
     virtual void pruneEmptyNodeFromList();

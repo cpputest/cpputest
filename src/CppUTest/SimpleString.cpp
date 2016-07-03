@@ -808,6 +808,25 @@ SimpleString StringFromOrdinalNumber(unsigned int number)
     return StringFromFormat("%u%s", number, suffix);
 }
 
+SimpleString AppendStringOnANewLine(const SimpleString& inputString, const SimpleString& stringToAppend, const SimpleString& linePrefix)
+{
+    SimpleString str = inputString;
+    if (!str.isEmpty()) str += "\n";
+    str += linePrefix;
+    str += stringToAppend;
+    return str;
+}
+
+SimpleString ReplaceWithTextNoneWhenEmpty(const SimpleString& inputString, const SimpleString& linePrefix)
+{
+    SimpleString str = inputString;
+    if (str == "") {
+        str += linePrefix;
+        str += "<none>";
+    }
+    return str;
+}
+
 SimpleStringCollection::SimpleStringCollection()
 {
     collection_ = 0;
