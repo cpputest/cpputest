@@ -44,7 +44,8 @@ MockSupport& mock(const SimpleString& mockName, MockFailureReporter* failureRepo
 }
 
 MockSupport::MockSupport(const SimpleString& mockName)
-    : actualCallOrder_(0), expectedCallOrder_(0), strictOrdering_(false), standardReporter_(&defaultReporter_), ignoreOtherCalls_(false), enabled_(true), lastActualFunctionCall_(NULL), mockName_(mockName), tracing_(false)
+    : actualCallOrder_(0), expectedCallOrder_(0), strictOrdering_(false), standardReporter_(&defaultReporter_), ignoreOtherCalls_(false), 
+      enabled_(true), lastActualFunctionCall_(NULL), mockName_(mockName), actualCalls_(true), tracing_(false)
 {
     setActiveReporter(NULL);
 }
@@ -317,7 +318,7 @@ void MockSupport::failTestWithExpectedCallsNotFulfilled()
         if(getMockSupport(p))
             expectationsList.addExpectations(getMockSupport(p)->expectations_);
 
-    MockExpectedCallsNotFulfilledFailure failure(activeReporter_->getTestToFail(), expectationsList);
+    MockExpectedCallsNotFulfilledFailure failure(activeReporter_->getTestToFail(), expectationsList, actualCalls_);
     failTest(failure);
 }
 
@@ -330,7 +331,7 @@ void MockSupport::failTestWithOutOfOrderCalls()
         if(getMockSupport(p))
             expectationsList.addExpectations(getMockSupport(p)->expectations_);
 
-    MockCallOrderFailure failure(activeReporter_->getTestToFail(), expectationsList);
+    MockCallOrderFailure failure(activeReporter_->getTestToFail(), expectationsList, actualCalls_);
     failTest(failure);
 }
 
@@ -641,6 +642,11 @@ bool MockSupport::hasReturnValue()
 const MockExpectedCallsList& MockSupport::getExpectedCalls() const
 {
     return expectations_;
+}
+
+const MockActualCallsQueue& MockSupport::getActualCalls() const
+{
+    return actualCalls_;
 }
 
 const SimpleString&  MockSupport::getName() const

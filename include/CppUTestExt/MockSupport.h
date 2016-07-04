@@ -125,6 +125,7 @@ public:
     virtual void removeAllComparatorsAndCopiers();
 
     virtual const MockExpectedCallsList& getExpectedCalls() const;
+    virtual const MockActualCallsQueue& getActualCalls() const;
 
     const SimpleString& getName() const;
 
@@ -148,7 +149,7 @@ private:
     MockNamedValueComparatorsAndCopiersRepository comparatorsAndCopiersRepository_;
     MockNamedValueList data_;
     const SimpleString mockName_;
-
+    MockActualCallsQueue actualCalls_;
     bool tracing_;
 
     void checkExpectationsOfLastActualCall();

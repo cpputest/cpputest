@@ -166,8 +166,9 @@ TEST_GROUP(MockSupportTestWithFixture)
 
 static void CHECK_EXPECTED_MOCK_FAILURE_LOCATION_failedTestMethod_()
 {
-    MockExpectedCallsList list;
-    MockUnexpectedCallHappenedFailure expectedFailure(UtestShell::getCurrent(), "unexpected", list);
+    MockExpectedCallsList expectedCalls;
+    MockActualCallsQueue actualCalls(false);
+    MockUnexpectedCallHappenedFailure expectedFailure(UtestShell::getCurrent(), "unexpected", expectedCalls, actualCalls);
     mock().actualCall("boo");
     CHECK_EXPECTED_MOCK_FAILURE_LOCATION(expectedFailure, "file", 1);
 }

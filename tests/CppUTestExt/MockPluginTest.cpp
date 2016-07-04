@@ -59,7 +59,8 @@ TEST(MockPlugin, checkExpectationsAndClearAtEnd)
 
     MockExpectedCallsListForTest expectations;
     expectations.addFunction("foobar");
-    MockExpectedCallsNotFulfilledFailure expectedFailure(test, expectations);
+    MockActualCallsQueueForTest actualCalls;
+    MockExpectedCallsNotFulfilledFailure expectedFailure(test, expectations, actualCalls);
 
     mock().expectOneCall("foobar");
 
@@ -76,7 +77,8 @@ TEST(MockPlugin, checkExpectationsWorksAlsoWithHierachicalObjects)
 
     MockExpectedCallsListForTest expectations;
     expectations.addFunction("differentScope::foobar")->onObject((void*) 1);
-    MockExpectedObjectDidntHappenFailure expectedFailure(test, "differentScope::foobar", expectations);
+    MockActualCallsQueueForTest actualCalls;
+    MockExpectedObjectDidntHappenFailure expectedFailure(test, "differentScope::foobar", expectations, actualCalls);
 
     mock("differentScope").expectOneCall("foobar").onObject((void*) 1);
     mock("differentScope").actualCall("foobar");
