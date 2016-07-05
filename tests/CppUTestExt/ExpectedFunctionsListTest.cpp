@@ -283,3 +283,13 @@ TEST(MockExpectedCallsList, toStringOnEmptyList)
 {
     STRCMP_EQUAL("<none>", list->unfulfilledCallsToString().asCharString());
 }
+
+TEST(MockExpectedCallsList, hasFinalizedMatchingExpectations)
+{
+    call1->ignoreOtherParameters();
+    list->addExpectedCall(call1);
+    CHECK(! list->hasFinalizedMatchingExpectations());
+
+    call1->finalizeActualCallMatch();
+    CHECK(list->hasFinalizedMatchingExpectations());
+}
