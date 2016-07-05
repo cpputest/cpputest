@@ -123,6 +123,7 @@ void MockSupport::clear()
 
     expectations_.deleteAllExpectationsAndClearList();
     actualCalls_.clear();
+    actualCalls_.setMaxSize((unsigned int) -1);
     ignoreOtherCalls_ = false;
     enabled_ = true;
     actualCallOrder_ = 0;
@@ -286,6 +287,17 @@ void MockSupport::tracing(bool enabled)
 
     for (MockNamedValueListNode* p = data_.begin(); p; p = p->next())
         if (getMockSupport(p)) getMockSupport(p)->tracing(enabled);
+}
+
+void MockSupport::setMaxCallLogSize(unsigned int maxSize)
+{
+    actualCalls_.setMaxSize(maxSize);
+
+    for (MockNamedValueListNode* p = data_.begin(); p; p = p->next()) {
+        if (getMockSupport(p)) {
+            getMockSupport(p)->setMaxCallLogSize(maxSize);
+        }
+    }
 }
 
 const char* MockSupport::getTraceOutput()
@@ -523,6 +535,7 @@ MockSupport* MockSupport::clone(const SimpleString& mockName)
     if (strictOrdering_) newMock->strictOrder();
 
     newMock->tracing(tracing_);
+    newMock->setMaxCallLogSize(actualCalls_.getMaxSize());
     newMock->installComparatorsAndCopiers(comparatorsAndCopiersRepository_);
     return newMock;
 }

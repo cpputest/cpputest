@@ -104,6 +104,7 @@ public:
     virtual void enable();
     virtual void tracing(bool enabled);
     virtual void ignoreOtherCalls();
+    virtual void setMaxCallLogSize(unsigned int maxSize);
 
     virtual void checkExpectations();
     virtual bool expectedCallsLeft();

@@ -146,6 +146,36 @@ TEST(MockSupportTest, tracing)
     STRCMP_CONTAINS("foo", mock().getTraceOutput());
 }
 
+TEST(MockSupportTest, setMaxCallLogSize)
+{
+    mock().setMaxCallLogSize(2);
+    mock("foo").setMaxCallLogSize(3);
+
+    mock().expectAnyCalls("boo");
+    mock("foo").expectAnyCalls("baa");
+    mock("bar").expectAnyCalls("buu");
+
+    mock().actualCall("boo");
+    mock().actualCall("boo");
+    mock().actualCall("boo");
+    mock("foo").actualCall("baa");
+    mock("foo").actualCall("baa");
+    mock("foo").actualCall("baa");
+    mock("foo").actualCall("baa");
+    mock("foo").actualCall("baa");
+    mock("foo").actualCall("baa");
+    mock("foo").actualCall("baa");
+    mock("bar").actualCall("buu");
+    mock("bar").actualCall("buu");
+    mock("bar").actualCall("buu");
+    mock("bar").actualCall("buu");
+    mock("bar").actualCall("buu");
+
+    LONGS_EQUAL(2, mock().getActualCalls().size())
+    LONGS_EQUAL(3, mock("foo").getActualCalls().size())
+    LONGS_EQUAL(2, mock("bar").getActualCalls().size())
+}
+
 TEST(MockSupportTest, tracingWorksHierarchically)
 {
     mock("scope").tracing(true);
