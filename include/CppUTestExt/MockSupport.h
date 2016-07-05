@@ -131,7 +131,7 @@ public:
 
 protected:
     MockSupport* clone(const SimpleString& mockName);
-    virtual MockCheckedActualCall *createActualFunctionCall();
+    virtual MockCheckedActualCall *createActualCall();
     virtual void failTest(MockFailure& failure);
     void countCheck();
 
@@ -145,7 +145,7 @@ private:
     MockExpectedCallsList expectations_;
     bool ignoreOtherCalls_;
     bool enabled_;
-    MockCheckedActualCall *lastActualFunctionCall_;
+    MockCheckedActualCall *currentActualCall_;
     MockNamedValueComparatorsAndCopiersRepository comparatorsAndCopiersRepository_;
     MockNamedValueList data_;
     const SimpleString mockName_;
@@ -153,7 +153,10 @@ private:
     bool tracing_;
 
     void checkExpectationsOfLastActualCall();
-    bool wasLastActualCallFulfilled();
+    void checkExpectationsOfLastActualCallsInAllScopes();
+    bool isLastActualCallFulfilled();
+    bool shallFailWithExpectedCallsNotFulfilled();
+
     void failTestWithExpectedCallsNotFulfilled();
     void failTestWithOutOfOrderCalls();
     void failTestWithStrictOrderingIncompatibleWithOptionalCalls();
@@ -163,10 +166,12 @@ private:
     MockSupport* getMockSupport(MockNamedValueListNode* node);
 
     bool callIsIgnored(const SimpleString& functionName);
-    bool hasCallsOutOfOrder();
+    bool hasCallsOutOfOrderInAnyScope();
 
     SimpleString appendScopeToName(const SimpleString& functionName);
 
+    void addExpectedCallsForAllScopes(MockExpectedCallsList& expectedCalls);
+    void addActualCallsForAllScopes(MockActualCallsQueue& expectedCalls);
 };
 
 #endif

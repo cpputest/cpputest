@@ -450,15 +450,16 @@ TEST(MockParameterTest, ignoreOtherParametersMultipleCallsButOneDidntHappen)
 {
     MockFailureReporterInstaller failureReporterInstaller;
 
-    MockExpectedCallsListForTest expectations;
-    MockCheckedExpectedCall* call = expectations.addFunction("boo");
-    call->ignoreOtherParameters();
-    call->callWasMade(1);
-    call->finalizeActualCallMatch();
-    call->ignoreOtherParameters();
-    expectations.addFunction("boo")->ignoreOtherParameters();
+    MockExpectedCallsListForTest expectedCalls;
+    MockCheckedExpectedCall* expectedCall1 = expectedCalls.addFunction("boo");
+    expectedCall1->ignoreOtherParameters();
+    MockCheckedExpectedCall* expectedCall2 = expectedCalls.addFunction("boo");
+    expectedCall2->ignoreOtherParameters();
+
     MockActualCallsQueueForTest actualCalls;
-    MockExpectedCallsNotFulfilledFailure expectedFailure(mockFailureTest(), expectations, actualCalls);
+    actualCalls.addCall(1, expectedCall1);
+
+    MockExpectedCallsNotFulfilledFailure expectedFailure(mockFailureTest(), expectedCalls, actualCalls);
 
     mock().expectOneCall("boo").ignoreOtherParameters();
     mock().expectOneCall("boo").ignoreOtherParameters();

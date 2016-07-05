@@ -63,15 +63,20 @@ TEST(MockStrictOrderTest, someOrderObserved)
 TEST(MockStrictOrderTest, orderViolated)
 {
     MockFailureReporterInstaller failureReporterInstaller;
-    mock().strictOrder();
 
-    MockExpectedCallsListForTest expectations;
-    expectations.addFunction("foo1", 1)->callWasMade(1);
-    expectations.addFunction("foo1", 2)->callWasMade(3);
-    expectations.addFunction("foo2", 3)->callWasMade(2);
+    MockExpectedCallsListForTest expectedCalls;
+    MockCheckedExpectedCall* expectedCall1 = expectedCalls.addFunction("foo1", 1);
+    MockCheckedExpectedCall* expectedCall2 = expectedCalls.addFunction("foo1", 2);
+    MockCheckedExpectedCall* expectedCall3 = expectedCalls.addFunction("foo2", 3);
+
     MockActualCallsQueueForTest actualCalls;
-    MockCallOrderFailure expectedFailure(mockFailureTest(), expectations, actualCalls);
+    actualCalls.addCall(1, expectedCall1);
+    actualCalls.addCall(2, expectedCall3);
+    actualCalls.addCall(3, expectedCall2);
 
+    MockCallOrderFailure expectedFailure(mockFailureTest(), expectedCalls, actualCalls);
+
+    mock().strictOrder();
     mock().expectOneCall("foo1");
     mock().expectOneCall("foo1");
     mock().expectOneCall("foo2");
@@ -86,14 +91,22 @@ TEST(MockStrictOrderTest, orderViolated)
 TEST(MockStrictOrderTest, orderViolatedWorksHierarchically)
 {
     MockFailureReporterInstaller failureReporterInstaller;
+
+    MockExpectedCallsListForTest expectedCallsReported;
+    MockExpectedCallsListForTest expectedCallsNotReported;
+    MockCheckedExpectedCall* expectedCall1 = expectedCallsNotReported.addFunction("bla::foo1", 1);
+    MockCheckedExpectedCall* expectedCall2 = expectedCallsReported.addFunction("foo::foo1", 1);
+    MockCheckedExpectedCall* expectedCall3 = expectedCallsReported.addFunction("foo::foo2", 2);
+
+    MockActualCallsQueueForTest actualCalls;
+    actualCalls.addCall(1, "bla", expectedCall1);
+    actualCalls.addCall(1, "foo", expectedCall3);
+    actualCalls.addCall(2, "foo", expectedCall2);
+
+    MockCallOrderFailure expectedFailure(mockFailureTest(), expectedCallsReported, actualCalls);
+
     mock().strictOrder();
     mock("bla").strictOrder();
-
-    MockExpectedCallsListForTest expectations;
-    expectations.addFunction("foo::foo1", 1)->callWasMade(2);
-    expectations.addFunction("foo::foo2", 2)->callWasMade(1);
-    MockActualCallsQueueForTest actualCalls;
-    MockCallOrderFailure expectedFailure(mockFailureTest(), expectations, actualCalls);
 
     mock("bla").expectOneCall("foo1");
     mock("foo").expectOneCall("foo1");
@@ -110,15 +123,23 @@ TEST(MockStrictOrderTest, orderViolatedWorksHierarchically)
 TEST(MockStrictOrderTest, orderViolatedWorksWithExtraUnexpectedCall)
 {
     MockFailureReporterInstaller failureReporterInstaller;
+
+    MockExpectedCallsListForTest expectedCallsReported;
+    MockExpectedCallsListForTest expectedCallsNotReported;
+    MockCheckedExpectedCall* expectedCall1 = expectedCallsNotReported.addFunction("bla::foo1", 1);
+    MockCheckedExpectedCall* expectedCall2 = expectedCallsReported.addFunction("foo::foo1", 1);
+    MockCheckedExpectedCall* expectedCall3 = expectedCallsReported.addFunction("foo::foo2", 2);
+
+    MockActualCallsQueueForTest actualCalls;
+    actualCalls.addCall(1, "bla", expectedCall1);
+    actualCalls.addCall(1, "foo", expectedCall3);
+    actualCalls.addCall(2, "foo", expectedCall2);
+
+    MockCallOrderFailure expectedFailure(mockFailureTest(), expectedCallsReported, actualCalls);
+
     mock().strictOrder();
     mock("bla").strictOrder();
-	mock().ignoreOtherCalls();
-
-    MockExpectedCallsListForTest expectations;
-    expectations.addFunction("foo::foo1", 1)->callWasMade(2);
-    expectations.addFunction("foo::foo2", 2)->callWasMade(1);
-    MockActualCallsQueueForTest actualCalls;
-    MockCallOrderFailure expectedFailure(mockFailureTest(), expectations, actualCalls);
+    mock().ignoreOtherCalls();
 
     mock("bla").expectOneCall("foo1");
     mock("foo").expectOneCall("foo1");
@@ -126,9 +147,9 @@ TEST(MockStrictOrderTest, orderViolatedWorksWithExtraUnexpectedCall)
 
     mock("bla").actualCall("foo1");
     mock("foo").actualCall("foo2");
-	mock("foo").actualCall("unexpected1");
+    mock("foo").actualCall("unexpected1");
     mock("foo").actualCall("foo1");
-	mock("foo").actualCall("unexpected2");
+    mock("foo").actualCall("unexpected2");
 
     mock().checkExpectations();
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
@@ -139,11 +160,15 @@ TEST(MockStrictOrderTest, orderViolatedWithinAScope)
     MockFailureReporterInstaller failureReporterInstaller;
     mock().strictOrder();
 
-    MockExpectedCallsListForTest expectations;
-    expectations.addFunction("scope::foo1", 1)->callWasMade(2);
-    expectations.addFunction("scope::foo2", 2)->callWasMade(1);
+    MockExpectedCallsListForTest expectedCalls;
+    MockCheckedExpectedCall* expectedCall1 = expectedCalls.addFunction("scope::foo1", 1);
+    MockCheckedExpectedCall* expectedCall2 = expectedCalls.addFunction("scope::foo2", 2);
+
     MockActualCallsQueueForTest actualCalls;
-    MockCallOrderFailure expectedFailure(mockFailureTest(), expectations, actualCalls);
+    actualCalls.addCall(1, "scope", expectedCall2);
+    actualCalls.addCall(2, "scope", expectedCall1);
+
+    MockCallOrderFailure expectedFailure(mockFailureTest(), expectedCalls, actualCalls);
 
     mock("scope").expectOneCall("foo1");
     mock("scope").expectOneCall("foo2");
