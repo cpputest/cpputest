@@ -696,3 +696,23 @@ TEST(MockSupport_c, ignoreOtherCalls)
     mock_c()->actualCall("bar");
     mock_c()->checkExpectations();
 }
+
+static void failingUnexpectedCallWithActualCallLogLimited_()
+{
+    mock_c()->setMaxCallLogSize(2);
+    mock_c()->expectAnyCalls("foo");
+    mock_c()->actualCall("foo");
+    mock_c()->actualCall("foo");
+    mock_c()->actualCall("foo");
+    mock_c()->actualCall("bar");
+} // LCOV_EXCL_LINE
+
+TEST(MockSupport_c, setMaxCallLogSize)
+{
+    TestTestingFixture fixture;
+    fixture.runTestWithMethod(failingUnexpectedCallWithActualCallLogLimited_);
+    fixture.assertPrintContains("ACTUAL calls that were expected (in call order):\n"
+                                "\t\t(2) foo -> no parameters\n"
+                                "\t\t(3) foo -> no parameters");
+}
+

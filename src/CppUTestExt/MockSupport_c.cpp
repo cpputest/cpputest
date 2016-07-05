@@ -131,6 +131,7 @@ MockActualCall_c* actualCall_c(const char* name);
 void disable_c();
 void enable_c();
 void ignoreOtherCalls_c();
+void setMaxCallLogSize_c(unsigned int maxSize);
 void setBoolData_c(const char* name, int value);
 void setIntData_c(const char* name, int value);
 void setUnsignedIntData_c(const char* name, unsigned int value);
@@ -351,6 +352,7 @@ static MockSupport_c gMockSupport = {
         disable_c,
         enable_c,
         ignoreOtherCalls_c,
+        setMaxCallLogSize_c,
         checkExpectations_c,
         expectedCallsLeft_c,
         clear_c,
@@ -860,6 +862,11 @@ void enable_c()
 void ignoreOtherCalls_c()
 {
     currentMockSupport->ignoreOtherCalls();
+}
+
+void setMaxCallLogSize_c(unsigned int maxSize)
+{
+    currentMockSupport->setMaxCallLogSize(maxSize);
 }
 
 void setBoolData_c(const char* name, int value)

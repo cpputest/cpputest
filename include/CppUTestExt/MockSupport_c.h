@@ -195,6 +195,7 @@ struct SMockSupport_c
     void (*disable)(void);
     void (*enable)(void);
     void (*ignoreOtherCalls)(void);
+    void (*setMaxCallLogSize)(unsigned int maxSize);
 
     void (*checkExpectations)(void);
     int (*expectedCallsLeft)(void);
