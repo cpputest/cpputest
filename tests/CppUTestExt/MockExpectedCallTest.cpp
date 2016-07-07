@@ -156,6 +156,7 @@ TEST_GROUP(MockExpectedCall)
     void setup()
     {
         call = new MockCheckedExpectedCall(1, 1);
+        call->withName("funcName");
     }
     void teardown()
     {
@@ -173,103 +174,128 @@ TEST(MockExpectedCall, callWithoutParameterSetOrNotFound)
 
 TEST(MockExpectedCall, callWithUnsignedIntegerParameter)
 {
-    const SimpleString name = "unsigned integer";
-    unsigned int value = 777;
-    call->withParameter(name, value);
-    STRCMP_EQUAL("unsigned int", call->getInputParameterType(name).asCharString());
-    LONGS_EQUAL(value, call->getInputParameter(name).getUnsignedIntValue());
-    CHECK(call->hasInputParameterWithName(name));
+    const SimpleString paramName = "paramName";
+    unsigned int value = 356;
+    call->withParameter(paramName, value);
+    STRCMP_EQUAL("unsigned int", call->getInputParameterType(paramName).asCharString());
+    LONGS_EQUAL(value, call->getInputParameter(paramName).getUnsignedIntValue());
+    CHECK(call->hasInputParameterWithName(paramName));
+    STRCMP_EQUAL("funcName -> unsigned int paramName: <356 (0x164)>", call->callToString(true).asCharString());
 }
 
 TEST(MockExpectedCall, callWithIntegerParameter)
 {
-    call->withParameter("integer", 1);
-    STRCMP_EQUAL("int", call->getInputParameterType("integer").asCharString());
-    LONGS_EQUAL(1, call->getInputParameter("integer").getIntValue());
-    CHECK(call->hasInputParameterWithName("integer"));
+    const SimpleString paramName = "paramName";
+    int value = 2;
+    call->withParameter(paramName, value);
+    STRCMP_EQUAL("int", call->getInputParameterType(paramName).asCharString());
+    LONGS_EQUAL(value, call->getInputParameter(paramName).getIntValue());
+    CHECK(call->hasInputParameterWithName(paramName));
+    STRCMP_EQUAL("funcName -> int paramName: <2 (0x2)>", call->callToString(true).asCharString());
 }
 
 TEST(MockExpectedCall, callWithBooleanParameter)
 {
-    call->withParameter("boolean", true);
-    STRCMP_EQUAL("bool", call->getInputParameterType("boolean").asCharString());
-    CHECK_EQUAL(true, call->getInputParameter("boolean").getBoolValue());
-    CHECK(call->hasInputParameterWithName("boolean"));
+    const SimpleString paramName = "paramName";
+    bool value = true;
+    call->withParameter(paramName, value);
+    STRCMP_EQUAL("bool", call->getInputParameterType(paramName).asCharString());
+    CHECK_EQUAL(value, call->getInputParameter(paramName).getBoolValue());
+    CHECK(call->hasInputParameterWithName(paramName));
+    STRCMP_EQUAL("funcName -> bool paramName: <true>", call->callToString(true).asCharString());
 }
 
 TEST(MockExpectedCall, callWithUnsignedLongIntegerParameter)
 {
-    const SimpleString name = "unsigned long integer";
-    unsigned long value = 777;
-    call->withParameter(name, value);
-    STRCMP_EQUAL("unsigned long int", call->getInputParameterType(name).asCharString());
-    LONGS_EQUAL(value, call->getInputParameter(name).getUnsignedLongIntValue());
-    CHECK(call->hasInputParameterWithName(name));
+    const SimpleString paramName = "paramName";
+    unsigned long value = 888;
+    call->withParameter(paramName, value);
+    STRCMP_EQUAL("unsigned long int", call->getInputParameterType(paramName).asCharString());
+    LONGS_EQUAL(value, call->getInputParameter(paramName).getUnsignedLongIntValue());
+    CHECK(call->hasInputParameterWithName(paramName));
+    STRCMP_EQUAL("funcName -> unsigned long int paramName: <888 (0x378)>", call->callToString(true).asCharString());
 }
 
 TEST(MockExpectedCall, callWithLongIntegerParameter)
 {
-    const SimpleString name = "long integer";
+    const SimpleString paramName = "paramName";
     long value = 777;
-    call->withParameter(name, value);
-    STRCMP_EQUAL("long int", call->getInputParameterType(name).asCharString());
-    LONGS_EQUAL(value, call->getInputParameter(name).getLongIntValue());
-    CHECK(call->hasInputParameterWithName(name));
+    call->withParameter(paramName, value);
+    STRCMP_EQUAL("long int", call->getInputParameterType(paramName).asCharString());
+    LONGS_EQUAL(value, call->getInputParameter(paramName).getLongIntValue());
+    CHECK(call->hasInputParameterWithName(paramName));
+    STRCMP_EQUAL("funcName -> long int paramName: <777 (0x309)>", call->callToString(true).asCharString());
 }
 
 TEST(MockExpectedCall, callWithDoubleParameter)
 {
-    call->withParameter("double", 1.2);
-    STRCMP_EQUAL("double", call->getInputParameterType("double").asCharString());
-    DOUBLES_EQUAL(1.2, call->getInputParameter("double").getDoubleValue(), 0.05);
+    const SimpleString paramName = "paramName";
+    double value = 1.2;
+    call->withParameter(paramName, value);
+    STRCMP_EQUAL("double", call->getInputParameterType(paramName).asCharString());
+    DOUBLES_EQUAL(value, call->getInputParameter(paramName).getDoubleValue(), 0.05);
+    STRCMP_EQUAL("funcName -> double paramName: <1.2>", call->callToString(true).asCharString());
 }
 
 TEST(MockExpectedCall, callWithStringParameter)
 {
-    call->withParameter("string", "hello world");
-    STRCMP_EQUAL("const char*", call->getInputParameterType("string").asCharString());
-    STRCMP_EQUAL("hello world", call->getInputParameter("string").getStringValue());
+    const SimpleString paramName = "paramName";
+    const char* value = "hello world";
+    call->withParameter(paramName, value);
+    STRCMP_EQUAL("const char*", call->getInputParameterType(paramName).asCharString());
+    STRCMP_EQUAL(value, call->getInputParameter(paramName).getStringValue());
+    STRCMP_EQUAL("funcName -> const char* paramName: <hello world>", call->callToString(true).asCharString());
 }
 
 TEST(MockExpectedCall, callWithPointerParameter)
 {
-    void* ptr = (void*) 0x123;
-    call->withParameter("pointer", ptr);
-    STRCMP_EQUAL("void*", call->getInputParameterType("pointer").asCharString());
-    POINTERS_EQUAL(ptr, call->getInputParameter("pointer").getPointerValue());
+    const SimpleString paramName = "paramName";
+    void* value = (void*) 0x123;
+    call->withParameter(paramName, value);
+    STRCMP_EQUAL("void*", call->getInputParameterType(paramName).asCharString());
+    POINTERS_EQUAL(value, call->getInputParameter(paramName).getPointerValue());
+    STRCMP_EQUAL("funcName -> void* paramName: <0x123>", call->callToString(true).asCharString());
 }
 
 TEST(MockExpectedCall, callWithConstPointerParameter)
 {
-    const void* ptr = (const void*) 0x345;
-    call->withParameter("constPointer", ptr);
-    STRCMP_EQUAL("const void*", call->getInputParameterType("constPointer").asCharString());
-    POINTERS_EQUAL(ptr, call->getInputParameter("constPointer").getConstPointerValue());
+    const SimpleString paramName = "paramName";
+    const void* value = (const void*) 0x345;
+    call->withParameter(paramName, value);
+    STRCMP_EQUAL("const void*", call->getInputParameterType(paramName).asCharString());
+    POINTERS_EQUAL(value, call->getInputParameter(paramName).getConstPointerValue());
+    STRCMP_EQUAL("funcName -> const void* paramName: <0x345>", call->callToString(true).asCharString());
 }
 
 TEST(MockExpectedCall, callWithFunctionPointerParameter)
 {
-    void (*ptr)() = (void (*)()) 0x123;
-    call->withParameter("functionPointer", ptr);
-    STRCMP_EQUAL("void (*)()", call->getInputParameterType("functionPointer").asCharString());
-    FUNCTIONPOINTERS_EQUAL(ptr, call->getInputParameter("functionPointer").getFunctionPointerValue());
+    const SimpleString paramName = "paramName";
+    void (*value)() = (void (*)()) 0xdead;
+    call->withParameter(paramName, value);
+    STRCMP_EQUAL("void (*)()", call->getInputParameterType(paramName).asCharString());
+    FUNCTIONPOINTERS_EQUAL(value, call->getInputParameter(paramName).getFunctionPointerValue());
+    STRCMP_EQUAL("funcName -> void (*)() paramName: <0xdead>", call->callToString(true).asCharString());
 }
 
 TEST(MockExpectedCall, callWithMemoryBuffer)
 {
-    const unsigned char mem_buffer[] = { 0x12, 0xFE, 0xA1 };
-    call->withParameter("memoryBuffer", mem_buffer, sizeof(mem_buffer));
-    STRCMP_EQUAL("const unsigned char*", call->getInputParameterType("memoryBuffer").asCharString());
-    POINTERS_EQUAL( (void*) mem_buffer, (void*) call->getInputParameter("memoryBuffer").getMemoryBuffer() );
-    LONGS_EQUAL(sizeof(mem_buffer),  call->getInputParameter("memoryBuffer").getSize());
+    const SimpleString paramName = "paramName";
+    const unsigned char value[] = { 0x12, 0xFE, 0xA1 };
+    call->withParameter(paramName, value, sizeof(value));
+    STRCMP_EQUAL("const unsigned char*", call->getInputParameterType(paramName).asCharString());
+    POINTERS_EQUAL( (void*) value, (void*) call->getInputParameter(paramName).getMemoryBuffer() );
+    LONGS_EQUAL(sizeof(value),  call->getInputParameter(paramName).getSize());
+    STRCMP_EQUAL("funcName -> const unsigned char* paramName: <Size = 3 | HexContents = 12 FE A1>", call->callToString(true).asCharString());
 }
 
 TEST(MockExpectedCall, callWithObjectParameter)
 {
-    void* ptr = (void*) 0x123;
-    call->withParameterOfType("class", "object", ptr);
-    POINTERS_EQUAL(ptr, call->getInputParameter("object").getObjectPointer());
-    STRCMP_EQUAL("class", call->getInputParameterType("object").asCharString());
+    const SimpleString paramName = "paramName";
+    void* value = (void*) 0x123;
+    call->withParameterOfType("ClassName", paramName, value);
+    POINTERS_EQUAL(value, call->getInputParameter(paramName).getObjectPointer());
+    STRCMP_EQUAL("ClassName", call->getInputParameterType(paramName).asCharString());
+    STRCMP_EQUAL("funcName -> ClassName paramName: <No comparator found for type: \"ClassName\">", call->callToString(true).asCharString());
 }
 
 TEST(MockExpectedCall, callWithObjectParameterUnequalComparison)
