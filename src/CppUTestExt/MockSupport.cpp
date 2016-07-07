@@ -164,13 +164,6 @@ MockExpectedCall& MockSupport::expectNCalls(unsigned int amount, const SimpleStr
 void MockSupport::expectNoCall(const SimpleString& functionName)
 {
     expectRangeOfCalls(0, 0, functionName);
-//    if (!enabled_) return;
-//
-//    countCheck();
-//
-//    MockCheckedExpectedCall* call = new MockCheckedExpectedCall;
-//    call->withName(appendScopeToName(functionName));
-//    unExpectations_.addExpectedCall(call);
 }
 
 MockExpectedCall& MockSupport::expectAtLeastOneCall(const SimpleString& functionName)
