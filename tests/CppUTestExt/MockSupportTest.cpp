@@ -148,12 +148,14 @@ TEST(MockSupportTest, tracing)
 
 TEST(MockSupportTest, setMaxCallLogSize)
 {
+	mock("bii").setMaxCallLogSize(10);
     mock().setMaxCallLogSize(2);
     mock("foo").setMaxCallLogSize(3);
 
     mock().expectAnyCalls("boo");
     mock("foo").expectAnyCalls("baa");
     mock("bar").expectAnyCalls("buu");
+    mock("bii").expectAnyCalls("bee");
 
     mock().actualCall("boo");
     mock().actualCall("boo");
@@ -170,10 +172,15 @@ TEST(MockSupportTest, setMaxCallLogSize)
     mock("bar").actualCall("buu");
     mock("bar").actualCall("buu");
     mock("bar").actualCall("buu");
+    mock("bii").actualCall("bee");
+    mock("bii").actualCall("bee");
+    mock("bii").actualCall("bee");
+    mock("bii").actualCall("bee");
 
     LONGS_EQUAL(2, mock().getActualCalls().size())
     LONGS_EQUAL(3, mock("foo").getActualCalls().size())
     LONGS_EQUAL(2, mock("bar").getActualCalls().size())
+    LONGS_EQUAL(2, mock("bii").getActualCalls().size())
 }
 
 TEST(MockSupportTest, tracingWorksHierarchically)
