@@ -189,6 +189,7 @@ struct SMockSupport_c
     void (*disable)(void);
     void (*enable)(void);
     void (*ignoreOtherCalls)(void);
+    void (*ignoreAdditionalCalls)(void);	
 
     void (*checkExpectations)(void);
     int (*expectedCallsLeft)(void);

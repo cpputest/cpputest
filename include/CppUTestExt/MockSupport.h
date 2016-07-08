@@ -97,6 +97,7 @@ public:
     virtual void enable();
     virtual void tracing(bool enabled);
     virtual void ignoreOtherCalls();
+    virtual void ignoreAdditionalCalls();
 
     virtual void checkExpectations();
     virtual bool expectedCallsLeft();
@@ -133,6 +134,7 @@ private:
     MockExpectedCallsList expectations_;
     MockExpectedCallsList unExpectations_;
     bool ignoreOtherCalls_;
+    bool ignoreAdditionalCalls_;
     bool enabled_;
     MockCheckedActualCall *lastActualFunctionCall_;
     MockExpectedCallComposite compositeCalls_;
@@ -153,6 +155,7 @@ private:
 
     bool hasntExpectationWithName(const SimpleString& functionName);
     bool hasntUnexpectationWithName(const SimpleString& functionName);
+    bool hasntUnFulfilledWithName(const SimpleString& functionName);
     bool hasCallsOutOfOrder();
 
     SimpleString appendScopeToName(const SimpleString& functionName);

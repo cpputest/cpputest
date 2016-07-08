@@ -122,6 +122,27 @@ TEST(MockHierarchyTest, ignoreOtherCallsWorksHierarchicallyWhenDynamicallyCreate
     mock().checkExpectations();
 }
 
+TEST(MockHierarchyTest, ignoreAdditionalCallsWorksHierarchically)
+{
+    mock("first").expectOneCall("boo");
+    mock().ignoreAdditionalCalls();
+    mock("first").actualCall("boo");
+    mock("first").actualCall("boo");
+
+    mock().checkExpectations();
+}
+
+TEST(MockHierarchyTest, ignoreAdditionalCallsWorksHierarchicallyWhenDynamicallyCreated)
+{
+    mock().ignoreAdditionalCalls();
+    mock("first").expectOneCall("boo");
+    mock("first").actualCall("boo");
+    mock("first").actualCall("boo");
+
+    mock().checkExpectations();
+}
+
+
 TEST(MockHierarchyTest, checkExpectationsWorksHierarchicallyForLastCallNotFinished)
 {
     MockFailureReporterInstaller failureReporterInstaller;

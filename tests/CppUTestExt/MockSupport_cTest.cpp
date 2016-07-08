@@ -650,3 +650,13 @@ TEST(MockSupport_c, ignoreOtherCalls)
     mock_c()->actualCall("bar");
     mock_c()->checkExpectations();
 }
+
+TEST(MockSupport_c, ignoreAdditionalCalls)
+{
+    mock_c()->expectOneCall("foo");
+    mock_c()->ignoreAdditionalCalls();
+    mock_c()->actualCall("foo");
+    mock_c()->actualCall("foo");
+    mock_c()->checkExpectations();
+}
+
