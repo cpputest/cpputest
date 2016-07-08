@@ -12,6 +12,7 @@ set(CppUTestExt_src
         OrderedTest.cpp
         MemoryReportFormatter.cpp
         MockExpectedCallsList.cpp
+        MockActualCallsQueue.cpp
         MockSupport.cpp
 )
 
@@ -34,6 +35,7 @@ set(CppUTestExt_headers
         ${CppUTestRootDirectory}/include/CppUTestExt/GTestConvertor.h
         ${CppUTestRootDirectory}/include/CppUTestExt/MockActualCall.h
         ${CppUTestRootDirectory}/include/CppUTestExt/MockCheckedActualCall.h
+        ${CppUTestRootDirectory}/include/CppUTestExt/MockActualCallsQueue.h
         ${CppUTestRootDirectory}/include/CppUTestExt/MockNamedValue.h
         ${CppUTestRootDirectory}/include/CppUTestExt/MockSupport.h
 )

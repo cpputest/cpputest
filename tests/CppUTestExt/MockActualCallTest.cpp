@@ -34,108 +34,154 @@
 
 TEST_GROUP(MockCheckedActualCall)
 {
-    MockExpectedCallsList* emptyList;
-    MockExpectedCallsList* list;
     MockFailureReporter* reporter;
+    MockSupport* testMock;
 
     void setup()
     {
-        emptyList = new MockExpectedCallsList;
-        list = new MockExpectedCallsList;
+        testMock = new MockSupport();
         reporter = MockFailureReporterForTest::getReporter();
     }
 
     void teardown()
     {
         CHECK_NO_MOCK_FAILURE();
-        delete emptyList;
-        delete list;
+        testMock->clear();
+        delete testMock;
     }
 };
 
 TEST(MockCheckedActualCall, unExpectedCall)
 {
-    MockCheckedActualCall actualCall(1, reporter, *emptyList);
+    MockCheckedActualCall actualCall(1, reporter, *testMock);
     actualCall.withName("unexpected");
 
-    MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "unexpected", *list);
+    MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "unexpected", testMock->getExpectedCalls(), testMock->getActualCalls());
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 
-TEST(MockCheckedActualCall, unExpectedCallWithAParameter)
+TEST(MockCheckedActualCall, unExpectedCallWithAnInputParameter)
 {
-    MockCheckedActualCall actualCall(1, reporter, *emptyList);
+    MockCheckedActualCall actualCall(1, reporter, *testMock);
     actualCall.withName("unexpected").withParameter("bar", 0);
 
-    MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "unexpected", *list);
+    MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "unexpected", testMock->getExpectedCalls(), testMock->getActualCalls());
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+
+    CHECK(actualCall.hasFailed()); // Checks that withParameter() doesn't "reset" call state
 }
 
 TEST(MockCheckedActualCall, unExpectedCallWithAnOutputParameter)
 {
-    MockCheckedActualCall actualCall(1, reporter, *emptyList);
+    MockCheckedActualCall actualCall(1, reporter, *testMock);
     actualCall.withName("unexpected").withOutputParameter("bar", (void*)0);
 
-    MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "unexpected", *list);
+    MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "unexpected", testMock->getExpectedCalls(), testMock->getActualCalls());
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+
+    CHECK(actualCall.hasFailed()); // Checks that withOutputParameter() doesn't "reset" call state
+}
+
+TEST(MockCheckedActualCall, unExpectedCallOnObject)
+{
+    int object;
+
+    MockCheckedActualCall actualCall(1, reporter, *testMock);
+    actualCall.withName("unexpected").onObject(&object);
+
+    MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "unexpected", testMock->getExpectedCalls(), testMock->getActualCalls());
+    CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+
+    CHECK(actualCall.hasFailed()); // Checks that onObject() doesn't "reset" call state
 }
 
 TEST(MockCheckedActualCall, actualCallWithNoReturnValueAndMeaninglessCallOrderForCoverage)
 {
-    MockCheckedActualCall actualCall(1, reporter, *emptyList);
-    actualCall.withName("noreturn").withCallOrder(0).returnValue();
+    MockCheckedActualCall actualCall(1, reporter, *testMock);
+    actualCall.withName("noreturn").returnValue();
 
-    MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "noreturn", *list);
+    MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "noreturn", testMock->getExpectedCalls(), testMock->getActualCalls());
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 
 TEST(MockCheckedActualCall, unExpectedParameterName)
 {
-    MockCheckedExpectedCall call1;
-    call1.withName("func");
-    list->addExpectedCall(&call1);
+    testMock->expectOneCall("func");
 
-    MockCheckedActualCall actualCall(1, reporter, *list);
+    MockCheckedActualCall actualCall(1, reporter, *testMock);
     actualCall.withName("func").withParameter("integer", 1);
 
     MockNamedValue parameter("integer");
     parameter.setValue(1);
 
-    MockUnexpectedInputParameterFailure expectedFailure(mockFailureTest(), "func", parameter, *list);
+    MockUnexpectedInputParameterFailure expectedFailure(mockFailureTest(), "func", parameter, testMock->getExpectedCalls(), testMock->getActualCalls());
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 
 TEST(MockCheckedActualCall, multipleSameFunctionsExpectingAndHappenGradually)
 {
-    MockCheckedExpectedCall* call1 = new MockCheckedExpectedCall();
-    MockCheckedExpectedCall* call2 = new MockCheckedExpectedCall();
-    call1->withName("func");
-    call2->withName("func");
-    list->addExpectedCall(call1);
-    list->addExpectedCall(call2);
+    testMock->expectOneCall("func");
+    testMock->expectOneCall("func");
 
-    LONGS_EQUAL(2, list->amountOfUnfulfilledExpectations());
+    LONGS_EQUAL(2, testMock->getExpectedCalls().amountOfUnfulfilledExpectations());
 
-    MockCheckedActualCall actualCall1(1, reporter, *list);
+    MockCheckedActualCall actualCall1(1, reporter, *testMock);
     actualCall1.withName("func");
     actualCall1.checkExpectations();
 
-    LONGS_EQUAL(1, list->amountOfUnfulfilledExpectations());
+    LONGS_EQUAL(1, testMock->getExpectedCalls().amountOfUnfulfilledExpectations());
 
-    MockCheckedActualCall actualCall2(2, reporter, *list);
+    MockCheckedActualCall actualCall2(2, reporter, *testMock);
     actualCall2.withName("func");
     actualCall2.checkExpectations();
 
-    LONGS_EQUAL(0, list->amountOfUnfulfilledExpectations());
+    LONGS_EQUAL(0, testMock->getExpectedCalls().amountOfUnfulfilledExpectations());
+}
 
-    list->deleteAllExpectationsAndClearList();
+TEST(MockCheckedActualCall, toString_NotMatchingExpectedCall)
+{
+    mock().expectOneCall("foo").withParameter("bar", 1);
+
+    MockCheckedActualCall actualCall(10, reporter, mock());
+    actualCall.withName("foo");
+
+    STRCMP_EQUAL("(10) foo (NOT matching any expected call)", actualCall.toString().asCharString());
+
+    mock().clear();
+}
+
+TEST(MockCheckedActualCall, toString_NoScope)
+{
+    void* object = (void*) 0xAA;
+    MockCheckedExpectedCall& expectedCall = (MockCheckedExpectedCall&) mock().expectOneCall("foo");
+    expectedCall.onObject(object).withParameter("bar", 5);
+
+    MockCheckedActualCall actualCall(99, reporter, mock());
+    actualCall.withName("foo").onObject(object).withParameter("bar", 5);
+
+    SimpleString expectedString = StringFromFormat("(99) %s", expectedCall.callToString(true).asCharString());
+    STRCMP_EQUAL(expectedString.asCharString(), actualCall.toString().asCharString());
+
+    mock().clear();
+}
+
+TEST(MockCheckedActualCall, toString_WithScope)
+{
+    MockCheckedExpectedCall& expectedCall = (MockCheckedExpectedCall&) mock("bar").expectOneCall("foo");
+
+    MockCheckedActualCall actualCall(7765, reporter, mock("bar"));
+    actualCall.withName("bar::foo");
+
+    SimpleString expectedString = StringFromFormat("(bar::7765) %s", expectedCall.callToString(true).asCharString());
+    STRCMP_EQUAL(expectedString.asCharString(), actualCall.toString().asCharString());
+
+    mock().clear();
 }
 
 TEST(MockCheckedActualCall, MockIgnoredActualCallWorksAsItShould)
 {
     MockIgnoredActualCall actual;
     actual.withName("func");
-    actual.withCallOrder(1);
 
     CHECK(false == actual.returnBoolValue());
     CHECK(false == actual.returnBoolValueOrDefault(true));
@@ -168,8 +214,8 @@ TEST(MockCheckedActualCall, remainderOfMockActualCallTraceWorksAsItShould)
     const unsigned char mem_buffer[] = { 0xFE, 0x15 };
     void (*function_value)() = (void (*)())0xDEAD;
     MockActualCallTrace actual;
-    actual.withName("func");
     actual.withCallOrder(1);
+    actual.withName("func");
     actual.onObject(&value);
 
     actual.withBoolParameter("bool", true);
@@ -182,8 +228,7 @@ TEST(MockCheckedActualCall, remainderOfMockActualCallTraceWorksAsItShould)
     actual.withMemoryBufferParameter("mem_buffer", mem_buffer, sizeof(mem_buffer));
     actual.withParameterOfType("int", "named_type", &const_value);
 
-    SimpleString expectedString("\nFunction name:func");
-    expectedString += " withCallOrder:1";
+    SimpleString expectedString("\n1 > Function name:func");
     expectedString += " onObject:0x";
     expectedString += HexStringFrom(&value);
     expectedString += " bool:true";

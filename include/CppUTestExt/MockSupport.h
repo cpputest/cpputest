@@ -32,6 +32,7 @@
 #include "CppUTestExt/MockCheckedActualCall.h"
 #include "CppUTestExt/MockCheckedExpectedCall.h"
 #include "CppUTestExt/MockExpectedCallsList.h"
+#include "CppUTestExt/MockActualCallsQueue.h"
 
 class UtestShell;
 class MockSupport;
@@ -48,7 +49,13 @@ public:
     virtual void strictOrder();
     virtual MockExpectedCall& expectOneCall(const SimpleString& functionName);
     virtual void expectNoCall(const SimpleString& functionName);
-    virtual MockExpectedCall& expectNCalls(int amount, const SimpleString& functionName);
+    virtual MockExpectedCall& expectNCalls(unsigned int amount, const SimpleString& functionName);
+    virtual MockExpectedCall& expectAtLeastOneCall(const SimpleString& functionName);
+    virtual MockExpectedCall& expectAtLeastNCalls(unsigned int amount, const SimpleString& functionName);
+    virtual MockExpectedCall& expectAtMostOneCall(const SimpleString& functionName);
+    virtual MockExpectedCall& expectAtMostNCalls(unsigned int amount, const SimpleString& functionName);
+    virtual MockExpectedCall& expectAnyCalls(const SimpleString& functionName);
+    virtual MockExpectedCall& expectRangeOfCalls(unsigned int minCalls, unsigned int maxCalls, const SimpleString& functionName);
     virtual MockActualCall& actualCall(const SimpleString& functionName);
     virtual bool hasReturnValue();
     virtual MockNamedValue returnValue();
@@ -97,6 +104,7 @@ public:
     virtual void enable();
     virtual void tracing(bool enabled);
     virtual void ignoreOtherCalls();
+    virtual void setMaxCallLogSize(unsigned int maxSize);
 
     virtual void checkExpectations();
     virtual bool expectedCallsLeft();
@@ -117,46 +125,54 @@ public:
     virtual void installComparatorsAndCopiers(const MockNamedValueComparatorsAndCopiersRepository& repository);
     virtual void removeAllComparatorsAndCopiers();
 
+    virtual const MockExpectedCallsList& getExpectedCalls() const;
+    virtual const MockActualCallsQueue& getActualCalls() const;
+
+    const SimpleString& getName() const;
+
 protected:
     MockSupport* clone(const SimpleString& mockName);
-    virtual MockCheckedActualCall *createActualFunctionCall();
+    virtual MockCheckedActualCall *createActualCall();
     virtual void failTest(MockFailure& failure);
     void countCheck();
 
 private:
-    int callOrder_;
-    int expectedCallOrder_;
+    unsigned int actualCallOrder_;
+    unsigned int expectedCallOrder_;
     bool strictOrdering_;
     MockFailureReporter *activeReporter_;
     MockFailureReporter *standardReporter_;
     MockFailureReporter defaultReporter_;
     MockExpectedCallsList expectations_;
-    MockExpectedCallsList unExpectations_;
     bool ignoreOtherCalls_;
     bool enabled_;
-    MockCheckedActualCall *lastActualFunctionCall_;
-    MockExpectedCallComposite compositeCalls_;
+    MockCheckedActualCall *currentActualCall_;
     MockNamedValueComparatorsAndCopiersRepository comparatorsAndCopiersRepository_;
     MockNamedValueList data_;
     const SimpleString mockName_;
-
+    MockActualCallsQueue actualCalls_;
     bool tracing_;
 
-    void checkExpectationsOfLastCall();
-    bool wasLastCallFulfilled();
-    void failTestWithUnexpectedCalls();
+    void checkExpectationsOfLastActualCall();
+    void checkExpectationsOfLastActualCallsInAllScopes();
+    bool isLastActualCallFulfilled();
+    bool shallFailWithExpectedCallsNotFulfilled();
+
+    void failTestWithExpectedCallsNotFulfilled();
     void failTestWithOutOfOrderCalls();
+    void failTestWithStrictOrderingIncompatibleWithOptionalCalls();
 
     MockNamedValue* retrieveDataFromStore(const SimpleString& name);
 
     MockSupport* getMockSupport(MockNamedValueListNode* node);
 
-    bool hasntExpectationWithName(const SimpleString& functionName);
-    bool hasntUnexpectationWithName(const SimpleString& functionName);
-    bool hasCallsOutOfOrder();
+    bool callIsIgnored(const SimpleString& functionName);
+    bool hasCallsOutOfOrderInAnyScope();
 
     SimpleString appendScopeToName(const SimpleString& functionName);
 
+    void addExpectedCallsForAllScopes(MockExpectedCallsList& expectedCalls);
+    void addActualCallsForAllScopes(MockActualCallsQueue& expectedCalls);
 };
 
 #endif

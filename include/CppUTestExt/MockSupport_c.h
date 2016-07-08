@@ -150,7 +150,13 @@ struct SMockSupport_c
     void (*strictOrder)(void);
     MockExpectedCall_c* (*expectOneCall)(const char* name);
     void (*expectNoCall)(const char* name);
-    MockExpectedCall_c* (*expectNCalls)(int number, const char* name);
+    MockExpectedCall_c* (*expectNCalls)(unsigned int number, const char* name);
+    MockExpectedCall_c* (*expectAtLeastOneCall)(const char* name);
+    MockExpectedCall_c* (*expectAtLeastNCalls)(unsigned int amount, const char* name);
+    MockExpectedCall_c* (*expectAtMostOneCall)(const char* name);
+    MockExpectedCall_c* (*expectAtMostNCalls)(unsigned int amount, const char* name);
+    MockExpectedCall_c* (*expectAnyCalls)(const char* name);
+    MockExpectedCall_c* (*expectRangeOfCalls)(unsigned int minCalls, unsigned int maxCalls, const char* name);
     MockActualCall_c* (*actualCall)(const char* name);
     int (*hasReturnValue)(void);
     MockValue_c (*returnValue)(void);
@@ -189,6 +195,7 @@ struct SMockSupport_c
     void (*disable)(void);
     void (*enable)(void);
     void (*ignoreOtherCalls)(void);
+    void (*setMaxCallLogSize)(unsigned int maxSize);
 
     void (*checkExpectations)(void);
     int (*expectedCallsLeft)(void);

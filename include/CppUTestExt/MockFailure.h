@@ -32,6 +32,7 @@
 #include "CppUTest/TestFailure.h"
 
 class MockExpectedCallsList;
+class MockActualCallsQueue;
 class MockCheckedActualCall;
 class MockNamedValue;
 class MockFailure;
@@ -56,44 +57,50 @@ public:
     MockFailure(UtestShell* test);
     virtual ~MockFailure(){}
 protected:
-    void addExpectationsAndCallHistory(const MockExpectedCallsList& expectations);
-    void addExpectationsAndCallHistoryRelatedTo(const SimpleString& function, const MockExpectedCallsList& expectations);
+    void addExpectationsAndCallHistory(const MockExpectedCallsList& expectedCalls, const MockActualCallsQueue& actualCalls);
+    void addExpectationsAndCallHistoryRelatedTo(const SimpleString& function, const MockExpectedCallsList& expectedCalls,
+                                                const MockActualCallsQueue& actualCalls);
 };
 
-class MockExpectedCallsDidntHappenFailure : public MockFailure
+class MockExpectedCallsNotFulfilledFailure : public MockFailure
 {
 public:
-    MockExpectedCallsDidntHappenFailure(UtestShell* test, const MockExpectedCallsList& expectations);
+    MockExpectedCallsNotFulfilledFailure(UtestShell* test, const MockExpectedCallsList& expectations,
+                                         const MockActualCallsQueue& actualCalls);
 };
 
 class MockUnexpectedCallHappenedFailure : public MockFailure
 {
 public:
-    MockUnexpectedCallHappenedFailure(UtestShell* test, const SimpleString& name, const MockExpectedCallsList& expectations);
+    MockUnexpectedCallHappenedFailure(UtestShell* test, const SimpleString& name, const MockExpectedCallsList& expectations,
+                                      const MockActualCallsQueue& actualCalls);
 };
 
 class MockCallOrderFailure : public MockFailure
 {
 public:
-    MockCallOrderFailure(UtestShell* test, const MockExpectedCallsList& expectations);
+    MockCallOrderFailure(UtestShell* test, const MockExpectedCallsList& expectations, const MockActualCallsQueue& actualCalls);
 };
 
 class MockUnexpectedInputParameterFailure : public MockFailure
 {
 public:
-    MockUnexpectedInputParameterFailure(UtestShell* test, const SimpleString& functionName, const MockNamedValue& parameter, const MockExpectedCallsList& expectations);
+    MockUnexpectedInputParameterFailure(UtestShell* test, const SimpleString& functionName, const MockNamedValue& parameter,
+                                        const MockExpectedCallsList& expectations, const MockActualCallsQueue& actualCalls);
 };
 
 class MockUnexpectedOutputParameterFailure : public MockFailure
 {
 public:
-    MockUnexpectedOutputParameterFailure(UtestShell* test, const SimpleString& functionName, const MockNamedValue& parameter, const MockExpectedCallsList& expectations);
+    MockUnexpectedOutputParameterFailure(UtestShell* test, const SimpleString& functionName, const MockNamedValue& parameter,
+                                         const MockExpectedCallsList& expectations, const MockActualCallsQueue& actualCalls);
 };
 
 class MockExpectedParameterDidntHappenFailure : public MockFailure
 {
 public:
-    MockExpectedParameterDidntHappenFailure(UtestShell* test, const SimpleString& functionName, const MockExpectedCallsList& expectations);
+    MockExpectedParameterDidntHappenFailure(UtestShell* test, const SimpleString& functionName, const MockExpectedCallsList& expectations,
+                                            const MockActualCallsQueue& actualCalls);
 };
 
 class MockNoWayToCompareCustomTypeFailure : public MockFailure
@@ -111,13 +118,22 @@ public:
 class MockUnexpectedObjectFailure : public MockFailure
 {
 public:
-    MockUnexpectedObjectFailure(UtestShell* test, const SimpleString& functionName, const void* expected, const MockExpectedCallsList& expectations);
+    MockUnexpectedObjectFailure(UtestShell* test, const SimpleString& functionName, const void* expected,
+                                const MockExpectedCallsList& expectations, const MockActualCallsQueue& actualCalls);
 };
 
 class MockExpectedObjectDidntHappenFailure : public MockFailure
 {
 public:
-    MockExpectedObjectDidntHappenFailure(UtestShell* test, const SimpleString& functionName, const MockExpectedCallsList& expectations);
+    MockExpectedObjectDidntHappenFailure(UtestShell* test, const SimpleString& functionName, const MockExpectedCallsList& expectations,
+                                         const MockActualCallsQueue& actualCalls);
+};
+
+class MockStrictOrderingIncompatibleWithOptionalCallsFailure : public MockFailure
+{
+public:
+    MockStrictOrderingIncompatibleWithOptionalCallsFailure(UtestShell* test, const SimpleString& functionName, unsigned int minCalls, unsigned int maxCalls);
+    virtual ~MockStrictOrderingIncompatibleWithOptionalCallsFailure(){}
 };
 
 #endif

@@ -31,14 +31,15 @@
 #include "CppUTestExt/MockActualCall.h"
 #include "CppUTestExt/MockExpectedCallsList.h"
 
+class MockSupport;
+
 class MockCheckedActualCall : public MockActualCall
 {
 public:
-    MockCheckedActualCall(int callOrder, MockFailureReporter* reporter, const MockExpectedCallsList& expectations);
+    MockCheckedActualCall(unsigned int callOrder, MockFailureReporter* reporter, const MockSupport& mockSupport);
     virtual ~MockCheckedActualCall();
 
     virtual MockActualCall& withName(const SimpleString& name) _override;
-    virtual MockActualCall& withCallOrder(int) _override;
     virtual MockActualCall& withBoolParameter(const SimpleString& name, bool value) _override;
     virtual MockActualCall& withIntParameter(const SimpleString& name, int value) _override;
     virtual MockActualCall& withUnsignedIntParameter(const SimpleString& name, unsigned int value) _override;
@@ -95,17 +96,21 @@ public:
     virtual void checkExpectations();
 
     virtual void setMockFailureReporter(MockFailureReporter* reporter);
+
+    virtual SimpleString toString() const;
+
+    const SimpleString& getName() const;
+
 protected:
     void setName(const SimpleString& name);
-    SimpleString getName() const;
     virtual UtestShell* getTest() const;
     virtual void callHasSucceeded();
     virtual void finalizeOutputParameters(MockCheckedExpectedCall* call);
-    virtual void finalizeCallWhenFulfilled();
+    virtual void finalizeCallWhenMatchIsFound();
     virtual void failTest(const MockFailure& failure);
     virtual void checkInputParameter(const MockNamedValue& actualParameter);
     virtual void checkOutputParameter(const MockNamedValue& outputParameter);
-    virtual void callIsInProgress();
+    virtual void discardCurrentlyMatchingExpectations();
 
     enum ActualCallState {
         CALL_IN_PROGRESS,
@@ -114,16 +119,21 @@ protected:
     };
     virtual void setState(ActualCallState state);
 
+    virtual const SimpleString& getScopeName() const;
+
+    void setMatchingExpectedCall(MockCheckedExpectedCall* call);
+
 private:
     SimpleString functionName_;
-    int callOrder_;
+    unsigned int callOrder_;
     MockFailureReporter* reporter_;
 
     ActualCallState state_;
-    MockCheckedExpectedCall* fulfilledExpectation_;
+    bool expectationsChecked_;
+    MockCheckedExpectedCall* matchingExpectation_;
 
-    MockExpectedCallsList unfulfilledExpectations_;
-    const MockExpectedCallsList& allExpectations_;
+    MockExpectedCallsList potentiallyMatchingExpectations_;
+    const MockSupport& mockSupport_;
 
     class MockOutputParametersListNode
     {
@@ -150,7 +160,6 @@ public:
     virtual ~MockActualCallTrace();
 
     virtual MockActualCall& withName(const SimpleString& name) _override;
-    virtual MockActualCall& withCallOrder(int) _override;
     virtual MockActualCall& withBoolParameter(const SimpleString& name, bool value) _override;
     virtual MockActualCall& withIntParameter(const SimpleString& name, int value) _override;
     virtual MockActualCall& withUnsignedIntParameter(const SimpleString& name, unsigned int value) _override;
@@ -201,6 +210,8 @@ public:
 
     virtual MockActualCall& onObject(const void* objectPtr) _override;
 
+    MockActualCall& withCallOrder(unsigned int callOrder);
+
     const char* getTraceOutput();
     void clear();
     static MockActualCallTrace& instance();
@@ -215,7 +226,6 @@ class MockIgnoredActualCall: public MockActualCall
 {
 public:
     virtual MockActualCall& withName(const SimpleString&) _override { return *this;}
-    virtual MockActualCall& withCallOrder(int) _override { return *this; }
     virtual MockActualCall& withBoolParameter(const SimpleString&, bool) _override { return *this; }
     virtual MockActualCall& withIntParameter(const SimpleString&, int) _override { return *this; }
     virtual MockActualCall& withUnsignedIntParameter(const SimpleString&, unsigned int) _override { return *this; }

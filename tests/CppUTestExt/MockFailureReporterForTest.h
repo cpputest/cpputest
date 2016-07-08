@@ -60,7 +60,26 @@ class MockExpectedCallsListForTest : public MockExpectedCallsList
   public:
     ~MockExpectedCallsListForTest();
     MockCheckedExpectedCall* addFunction(const SimpleString& name);
-    MockCheckedExpectedCall* addFunction(const SimpleString& name, int order);
+    MockCheckedExpectedCall* addFunction(unsigned int minCalls, unsigned int maxCalls, const SimpleString& name);
+    MockCheckedExpectedCall* addFunction(const SimpleString& name, unsigned int order);
+};
+
+class MockCheckedActualCallForTest : public MockCheckedActualCall
+{
+public:
+    MockCheckedActualCallForTest(unsigned int callOrder, const SimpleString& scopeName, MockCheckedExpectedCall* matchingCall);
+    virtual const SimpleString& getScopeName() const _override;
+
+private:
+    SimpleString scopeName_;
+};
+
+class MockActualCallsQueueForTest : public MockActualCallsQueue
+{
+public:
+    MockActualCallsQueueForTest();
+    MockCheckedActualCall* addCall(unsigned int callOrder, MockCheckedExpectedCall* matchingCall);
+    MockCheckedActualCall* addCall(unsigned int callOrder, const SimpleString& mockScope, MockCheckedExpectedCall* matchingCall);
 };
 
 #endif

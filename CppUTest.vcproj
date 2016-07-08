@@ -385,6 +385,28 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="src\CppUTestExt\MockActualCallsQueue.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="src\CppUTestExt\MockExpectedCall.cpp"
 				>
 				<FileConfiguration
@@ -925,6 +947,10 @@
 			</File>
 			<File
 				RelativePath=".\include\CppUTestExt\MockActualCall.h"
+				>
+			</File>
+			<File
+				RelativePath="include\CppUTestExt\MockActualCallsQueue.h"
 				>
 			</File>
 			<File

@@ -136,7 +136,8 @@ TEST(MockParameterTest, longAndUnsignedLongWithSameBitRepresentationShouldNotBeT
     expectations.addFunction("foo")->withParameter("parameter", (long)-1);
     MockNamedValue parameter("parameter");
     parameter.setValue((unsigned long)-1);
-    MockUnexpectedInputParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, expectations);
+    MockActualCallsQueueForTest actualCalls;
+    MockUnexpectedInputParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, expectations, actualCalls);
 
     mock().expectOneCall("foo").withParameter("parameter", (long)-1);
     mock().actualCall("foo").withParameter("parameter", (unsigned long)-1);
@@ -152,7 +153,8 @@ TEST(MockParameterTest, unsignedLongAndLongWithSameBitRepresentationShouldnotBeT
     expectations.addFunction("foo")->withParameter("parameter", (unsigned long)-1);
     MockNamedValue parameter("parameter");
     parameter.setValue((long)-1);
-    MockUnexpectedInputParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, expectations);
+    MockActualCallsQueueForTest actualCalls;
+    MockUnexpectedInputParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, expectations, actualCalls);
 
     mock().expectOneCall("foo").withParameter("parameter", (unsigned long)-1);
     mock().actualCall("foo").withParameter("parameter", (long)-1);
@@ -220,7 +222,8 @@ TEST(MockParameterTest, expectOneMemBufferParameterAndValueFailsDueToContents)
     expectations.addFunction("foo")->withParameter("parameter", memBuffer1, sizeof(memBuffer1));
     MockNamedValue parameter("parameter");
     parameter.setMemoryBuffer( memBuffer2, sizeof(memBuffer2) );
-    MockUnexpectedInputParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, expectations);
+    MockActualCallsQueueForTest actualCalls;
+    MockUnexpectedInputParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, expectations, actualCalls);
 
     mock().expectOneCall("foo").withParameter("parameter", memBuffer1, sizeof(memBuffer1));
     mock().actualCall("foo").withParameter("parameter", memBuffer2, sizeof(memBuffer2));
@@ -239,7 +242,8 @@ TEST(MockParameterTest, expectOneMemBufferParameterAndValueFailsDueToSize)
     expectations.addFunction("foo")->withParameter("parameter", memBuffer1, sizeof(memBuffer1));
     MockNamedValue parameter("parameter");
     parameter.setMemoryBuffer( memBuffer2, sizeof(memBuffer2) );
-    MockUnexpectedInputParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, expectations);
+    MockActualCallsQueueForTest actualCalls;
+    MockUnexpectedInputParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, expectations, actualCalls);
 
     mock().expectOneCall("foo").withParameter("parameter", memBuffer1, sizeof(memBuffer1));
     mock().actualCall("foo").withParameter("parameter", memBuffer2, sizeof(memBuffer2));
@@ -255,7 +259,8 @@ TEST(MockParameterTest, expectOneStringParameterAndValueFails)
     expectations.addFunction("foo")->withParameter("parameter", "string");
     MockNamedValue parameter("parameter");
     parameter.setValue("different");
-    MockUnexpectedInputParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, expectations);
+    MockActualCallsQueueForTest actualCalls;
+    MockUnexpectedInputParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, expectations, actualCalls);
 
     mock().expectOneCall("foo").withParameter("parameter", "string");
     mock().actualCall("foo").withParameter("parameter", "different");
@@ -272,7 +277,8 @@ TEST(MockParameterTest, expectOneUnsignedIntegerParameterAndFailsDueToParameterN
     expectations.addFunction("foo")->withParameter("parameter", value);
     MockNamedValue parameter("different");
     parameter.setValue(value);
-    MockUnexpectedInputParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, expectations);
+    MockActualCallsQueueForTest actualCalls;
+    MockUnexpectedInputParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, expectations, actualCalls);
 
     mock().expectOneCall("foo").withParameter("parameter", value);
     mock().actualCall("foo").withParameter("different", value);
@@ -288,7 +294,8 @@ TEST(MockParameterTest, expectOneIntegerParameterAndFailsDueToParameterName)
     expectations.addFunction("foo")->withParameter("parameter", 10);
     MockNamedValue parameter("different");
     parameter.setValue(10);
-    MockUnexpectedInputParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, expectations);
+    MockActualCallsQueueForTest actualCalls;
+    MockUnexpectedInputParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, expectations, actualCalls);
 
     mock().expectOneCall("foo").withParameter("parameter", 10);
     mock().actualCall("foo").withParameter("different", 10);
@@ -306,7 +313,8 @@ TEST(MockParameterTest, expectOneUnsignedIntegerParameterAndFailsDueToValue)
     expectations.addFunction("foo")->withParameter("parameter", expected_value);
     MockNamedValue parameter("parameter");
     parameter.setValue(actual_value);
-    MockUnexpectedInputParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, expectations);
+    MockActualCallsQueueForTest actualCalls;
+    MockUnexpectedInputParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, expectations, actualCalls);
 
     mock().expectOneCall("foo").withParameter("parameter", expected_value);
     mock().actualCall("foo").withParameter("parameter", actual_value);
@@ -322,7 +330,8 @@ TEST(MockParameterTest, expectOneIntegerParameterAndFailsDueToValue)
     expectations.addFunction("foo")->withParameter("parameter", 10);
     MockNamedValue parameter("parameter");
     parameter.setValue(8);
-    MockUnexpectedInputParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, expectations);
+    MockActualCallsQueueForTest actualCalls;
+    MockUnexpectedInputParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, expectations, actualCalls);
 
     mock().expectOneCall("foo").withParameter("parameter", 10);
     mock().actualCall("foo").withParameter("parameter", 8);
@@ -338,7 +347,8 @@ TEST(MockParameterTest, expectOneIntegerParameterAndFailsDueToTypes)
     expectations.addFunction("foo")->withParameter("parameter", 10);
     MockNamedValue parameter("parameter");
     parameter.setValue("heh");
-    MockUnexpectedInputParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, expectations);
+    MockActualCallsQueueForTest actualCalls;
+    MockUnexpectedInputParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, expectations, actualCalls);
 
     mock().expectOneCall("foo").withParameter("parameter", 10);
     mock().actualCall("foo").withParameter("parameter", "heh");
@@ -383,7 +393,8 @@ TEST(MockParameterTest, calledWithoutParameters)
 
     MockExpectedCallsListForTest expectations;
     expectations.addFunction("foo")->withParameter("p1", 1);
-    MockExpectedParameterDidntHappenFailure expectedFailure(mockFailureTest(), "foo", expectations);
+    MockActualCallsQueueForTest actualCalls;
+    MockExpectedParameterDidntHappenFailure expectedFailure(mockFailureTest(), "foo", expectations, actualCalls);
 
     mock().expectOneCall("foo").withParameter("p1", 1);
     mock().actualCall("foo");
@@ -414,7 +425,8 @@ TEST(MockParameterTest, ignoreOtherParametersButExpectedParameterDidntHappen)
 
     MockExpectedCallsListForTest expectations;
     expectations.addFunction("foo")->withParameter("p1", 1).ignoreOtherParameters();
-    MockExpectedParameterDidntHappenFailure expectedFailure(mockFailureTest(), "foo", expectations);
+    MockActualCallsQueueForTest actualCalls;
+    MockExpectedParameterDidntHappenFailure expectedFailure(mockFailureTest(), "foo", expectations, actualCalls);
 
     mock().expectOneCall("foo").withParameter("p1", 1).ignoreOtherParameters();
     mock().actualCall("foo").withParameter("p2", 2).withParameter("p3", 3).withParameter("p4", 4);
@@ -438,14 +450,16 @@ TEST(MockParameterTest, ignoreOtherParametersMultipleCallsButOneDidntHappen)
 {
     MockFailureReporterInstaller failureReporterInstaller;
 
-    MockExpectedCallsListForTest expectations;
-    MockCheckedExpectedCall* call = expectations.addFunction("boo");
-    call->ignoreOtherParameters();
-    call->callWasMade(1);
-    call->parametersWereIgnored();
-    call->ignoreOtherParameters();
-    expectations.addFunction("boo")->ignoreOtherParameters();
-    MockExpectedCallsDidntHappenFailure expectedFailure(mockFailureTest(), expectations);
+    MockExpectedCallsListForTest expectedCalls;
+    MockCheckedExpectedCall* expectedCall1 = expectedCalls.addFunction("boo");
+    expectedCall1->ignoreOtherParameters();
+    MockCheckedExpectedCall* expectedCall2 = expectedCalls.addFunction("boo");
+    expectedCall2->ignoreOtherParameters();
+
+    MockActualCallsQueueForTest actualCalls;
+    actualCalls.addCall(1, expectedCall1);
+
+    MockExpectedCallsNotFulfilledFailure expectedFailure(mockFailureTest(), expectedCalls, actualCalls);
 
     mock().expectOneCall("boo").ignoreOtherParameters();
     mock().expectOneCall("boo").ignoreOtherParameters();
@@ -461,7 +475,8 @@ TEST(MockParameterTest, newCallStartsWhileNotAllParametersWerePassed)
 
     MockExpectedCallsListForTest expectations;
     expectations.addFunction("foo")->withParameter("p1", 1);
-    MockExpectedParameterDidntHappenFailure expectedFailure(mockFailureTest(), "foo", expectations);
+    MockActualCallsQueueForTest actualCalls;
+    MockExpectedParameterDidntHappenFailure expectedFailure(mockFailureTest(), "foo", expectations, actualCalls);
 
     mock().expectOneCall("foo").withParameter("p1", 1);
     mock().actualCall("foo");
@@ -492,7 +507,8 @@ TEST(MockParameterTest, noActualCallForOutputParameter)
     mock().expectOneCall("foo").withOutputParameterReturning("output", &output, sizeof(output));
 
     expectations.addFunction("foo")->withOutputParameterReturning("output", &output, sizeof(output));
-    MockExpectedCallsDidntHappenFailure expectedFailure(mockFailureTest(), expectations);
+    MockActualCallsQueueForTest actualCalls;
+    MockExpectedCallsNotFulfilledFailure expectedFailure(mockFailureTest(), expectations, actualCalls);
 
     mock().checkExpectations();
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
@@ -510,7 +526,8 @@ TEST(MockParameterTest, unexpectedOutputParameter)
     expectations.addFunction("foo");
     MockNamedValue parameter("parameterName");
     parameter.setValue(&param);
-    MockUnexpectedOutputParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, expectations);
+    MockActualCallsQueueForTest actualCalls;
+    MockUnexpectedOutputParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, expectations, actualCalls);
 
     mock().checkExpectations();
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
@@ -526,7 +543,8 @@ TEST(MockParameterTest, outputParameterMissing)
     mock().actualCall("foo");
 
     expectations.addFunction("foo")->withOutputParameterReturning("output", &output, sizeof(output));
-    MockExpectedParameterDidntHappenFailure expectedFailure(mockFailureTest(), "foo", expectations);
+    MockActualCallsQueueForTest actualCalls;
+    MockExpectedParameterDidntHappenFailure expectedFailure(mockFailureTest(), "foo", expectations, actualCalls);
 
     mock().checkExpectations();
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);

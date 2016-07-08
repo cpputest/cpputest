@@ -140,6 +140,7 @@
     <ClCompile Include="CheatSheetTest.cpp" />
     <ClCompile Include="CommandLineArgumentsTest.cpp" />
     <ClCompile Include="CommandLineTestRunnerTest.cpp" />
+    <ClCompile Include="CppUTestExt\ActualCallsQueueTest.cpp" />
     <ClCompile Include="CppUTestExt\AllTests.cpp" />
     <ClCompile Include="CppUTestExt\CodeMemoryReporterTest.cpp" />
     <ClCompile Include="CppUTestExt\GMockTest.cpp" />

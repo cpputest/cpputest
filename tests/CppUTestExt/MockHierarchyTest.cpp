@@ -96,7 +96,8 @@ TEST(MockHierarchyTest, checkExpectationsWorksHierarchically)
     MockExpectedCallsListForTest expectations;
     expectations.addFunction("first::foobar");
     expectations.addFunction("second::helloworld");
-    MockExpectedCallsDidntHappenFailure expectedFailure(mockFailureTest(), expectations);
+    MockActualCallsQueueForTest actualCalls;
+    MockExpectedCallsNotFulfilledFailure expectedFailure(mockFailureTest(), expectations, actualCalls);
 
     mock("first").expectOneCall("foobar");
     mock("second").expectOneCall("helloworld");
@@ -128,7 +129,8 @@ TEST(MockHierarchyTest, checkExpectationsWorksHierarchicallyForLastCallNotFinish
 
     MockExpectedCallsListForTest expectations;
     expectations.addFunction("first::foobar")->withParameter("boo", 1);
-    MockExpectedParameterDidntHappenFailure expectedFailure(mockFailureTest(), "first::foobar", expectations);
+    MockActualCallsQueueForTest actualCalls;
+    MockExpectedParameterDidntHappenFailure expectedFailure(mockFailureTest(), "first::foobar", expectations, actualCalls);
 
     mock("first").expectOneCall("foobar").withParameter("boo", 1);
     mock("first").actualCall("foobar");
@@ -144,7 +146,8 @@ TEST(MockHierarchyTest, reporterIsInheritedInHierarchicalMocks)
 
     mock("differentScope").actualCall("foobar");
 
-    MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "differentScope::foobar", expectations);
+    MockActualCallsQueueForTest actualCalls;
+    MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "differentScope::foobar", expectations, actualCalls);
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 

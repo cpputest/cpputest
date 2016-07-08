@@ -98,17 +98,56 @@ MockExpectedCallsListForTest::~MockExpectedCallsListForTest()
 
 MockCheckedExpectedCall* MockExpectedCallsListForTest::addFunction(const SimpleString& name)
 {
-  MockCheckedExpectedCall* newCall = new MockCheckedExpectedCall;
+  MockCheckedExpectedCall* newCall = new MockCheckedExpectedCall(1, 1);
   newCall->withName(name);
   addExpectedCall(newCall);
   return newCall;
 }
 
-MockCheckedExpectedCall* MockExpectedCallsListForTest::addFunction(const SimpleString& name, int order)
+MockCheckedExpectedCall* MockExpectedCallsListForTest::addFunction(unsigned int minCalls, unsigned int maxCalls, const SimpleString& name)
 {
-  MockCheckedExpectedCall* newCall = addFunction(name);
-  newCall->withCallOrder(order);
+  MockCheckedExpectedCall* newCall = new MockCheckedExpectedCall(minCalls, maxCalls);
+  newCall->withName(name);
+  addExpectedCall(newCall);
   return newCall;
 }
 
+MockCheckedExpectedCall* MockExpectedCallsListForTest::addFunction(const SimpleString& name, unsigned int order)
+{
+  MockCheckedExpectedCall* newCall = addFunction(name);
+  newCall->withCallOrder(order, order);
+  return newCall;
+}
+
+static MockSupport testMockSupport;
+
+MockCheckedActualCallForTest::MockCheckedActualCallForTest(unsigned int callOrder, const SimpleString& scopeName, MockCheckedExpectedCall* matchingCall)
+: MockCheckedActualCall(callOrder, NULL, testMockSupport), scopeName_(scopeName)
+{
+    setName(matchingCall->getName());
+    setMatchingExpectedCall(matchingCall);
+}
+
+const SimpleString& MockCheckedActualCallForTest::getScopeName() const
+{
+    return scopeName_;
+}
+
+MockActualCallsQueueForTest::MockActualCallsQueueForTest() : MockActualCallsQueue(true)
+{
+}
+
+MockCheckedActualCall* MockActualCallsQueueForTest::addCall(unsigned int callOrder, MockCheckedExpectedCall* matchingCall)
+{
+    return addCall(callOrder, "", matchingCall);
+}
+
+MockCheckedActualCall* MockActualCallsQueueForTest::addCall(unsigned int callOrder, const SimpleString& mockScope, MockCheckedExpectedCall* matchingCall)
+{
+    MockCheckedActualCallForTest* newCall = new MockCheckedActualCallForTest(callOrder, mockScope, matchingCall);
+    matchingCall->finalizeActualCallMatch();
+    matchingCall->callWasMade(callOrder);
+    pushBack(newCall);
+    return newCall;
+}
 

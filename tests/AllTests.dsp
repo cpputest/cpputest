@@ -134,6 +134,10 @@ SOURCE=.\CommandLineTestRunnerTest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\CppUTestExt\ActualCallsQueueTest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\CppUTestExt\ExpectedFunctionsListTest.cpp
 # End Source File
 # Begin Source File

@@ -146,6 +146,43 @@ TEST(MockSupportTest, tracing)
     STRCMP_CONTAINS("foo", mock().getTraceOutput());
 }
 
+TEST(MockSupportTest, setMaxCallLogSize)
+{
+	mock("bii").setMaxCallLogSize(10);
+    mock().setMaxCallLogSize(2);
+    mock("foo").setMaxCallLogSize(3);
+
+    mock().expectAnyCalls("boo");
+    mock("foo").expectAnyCalls("baa");
+    mock("bar").expectAnyCalls("buu");
+    mock("bii").expectAnyCalls("bee");
+
+    mock().actualCall("boo");
+    mock().actualCall("boo");
+    mock().actualCall("boo");
+    mock("foo").actualCall("baa");
+    mock("foo").actualCall("baa");
+    mock("foo").actualCall("baa");
+    mock("foo").actualCall("baa");
+    mock("foo").actualCall("baa");
+    mock("foo").actualCall("baa");
+    mock("foo").actualCall("baa");
+    mock("bar").actualCall("buu");
+    mock("bar").actualCall("buu");
+    mock("bar").actualCall("buu");
+    mock("bar").actualCall("buu");
+    mock("bar").actualCall("buu");
+    mock("bii").actualCall("bee");
+    mock("bii").actualCall("bee");
+    mock("bii").actualCall("bee");
+    mock("bii").actualCall("bee");
+
+    LONGS_EQUAL(2, mock().getActualCalls().size())
+    LONGS_EQUAL(3, mock("foo").getActualCalls().size())
+    LONGS_EQUAL(2, mock("bar").getActualCalls().size())
+    LONGS_EQUAL(2, mock("bii").getActualCalls().size())
+}
+
 TEST(MockSupportTest, tracingWorksHierarchically)
 {
     mock("scope").tracing(true);
@@ -166,8 +203,9 @@ TEST_GROUP(MockSupportTestWithFixture)
 
 static void CHECK_EXPECTED_MOCK_FAILURE_LOCATION_failedTestMethod_()
 {
-    MockExpectedCallsList list;
-    MockUnexpectedCallHappenedFailure expectedFailure(UtestShell::getCurrent(), "unexpected", list);
+    MockExpectedCallsList expectedCalls;
+    MockActualCallsQueue actualCalls(false);
+    MockUnexpectedCallHappenedFailure expectedFailure(UtestShell::getCurrent(), "unexpected", expectedCalls, actualCalls);
     mock().actualCall("boo");
     CHECK_EXPECTED_MOCK_FAILURE_LOCATION(expectedFailure, "file", 1);
 }

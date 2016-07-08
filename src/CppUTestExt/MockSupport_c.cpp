@@ -120,11 +120,18 @@ extern "C" {
 void strictOrder_c();
 MockExpectedCall_c* expectOneCall_c(const char* name);
 void expectNoCall_c(const char* name);
-MockExpectedCall_c* expectNCalls_c(const int number, const char* name);
+MockExpectedCall_c* expectNCalls_c(const unsigned int number, const char* name);
+MockExpectedCall_c* expectAtLeastOneCall_c(const char* name);
+MockExpectedCall_c* expectAtLeastNCalls_c(const unsigned int number, const char* name);
+MockExpectedCall_c* expectAtMostOneCall_c(const char* name);
+MockExpectedCall_c* expectAtMostNCalls_c(const unsigned int number, const char* name);
+MockExpectedCall_c* expectAnyCalls_c(const char* name);
+MockExpectedCall_c* expectRangeOfCalls_c(const unsigned int minCalls, const unsigned int maxCalls, const char* name);
 MockActualCall_c* actualCall_c(const char* name);
 void disable_c();
 void enable_c();
 void ignoreOtherCalls_c();
+void setMaxCallLogSize_c(unsigned int maxSize);
 void setBoolData_c(const char* name, int value);
 void setIntData_c(const char* name, int value);
 void setUnsignedIntData_c(const char* name, unsigned int value);
@@ -303,6 +310,12 @@ static MockSupport_c gMockSupport = {
         expectOneCall_c,
         expectNoCall_c,
         expectNCalls_c,
+        expectAtLeastOneCall_c,
+        expectAtLeastNCalls_c,
+        expectAtMostOneCall_c,
+        expectAtMostNCalls_c,
+        expectAnyCalls_c,
+        expectRangeOfCalls_c,
         actualCall_c,
         hasReturnValue_c,
         returnValue_c,
@@ -339,6 +352,7 @@ static MockSupport_c gMockSupport = {
         disable_c,
         enable_c,
         ignoreOtherCalls_c,
+        setMaxCallLogSize_c,
         checkExpectations_c,
         expectedCallsLeft_c,
         clear_c,
@@ -568,9 +582,45 @@ void expectNoCall_c(const char* name)
     currentMockSupport->expectNoCall(name);
 }
 
-MockExpectedCall_c* expectNCalls_c(const int number, const char* name)
+MockExpectedCall_c* expectNCalls_c(const unsigned int number, const char* name)
 {
     expectedCall = &currentMockSupport->expectNCalls(number, name);
+    return &gExpectedCall;
+}
+
+MockExpectedCall_c* expectAtLeastOneCall_c(const char* name)
+{
+    expectedCall = &currentMockSupport->expectAtLeastOneCall(name);
+    return &gExpectedCall;
+}
+
+MockExpectedCall_c* expectAtLeastNCalls_c(const unsigned int number, const char* name)
+{
+    expectedCall = &currentMockSupport->expectAtLeastNCalls(number, name);
+    return &gExpectedCall;
+}
+
+MockExpectedCall_c* expectAtMostOneCall_c(const char* name)
+{
+    expectedCall = &currentMockSupport->expectAtMostOneCall(name);
+    return &gExpectedCall;
+}
+
+MockExpectedCall_c* expectAtMostNCalls_c(const unsigned int number, const char* name)
+{
+    expectedCall = &currentMockSupport->expectAtMostNCalls(number, name);
+    return &gExpectedCall;
+}
+
+MockExpectedCall_c* expectAnyCalls_c(const char* name)
+{
+    expectedCall = &currentMockSupport->expectAnyCalls(name);
+    return &gExpectedCall;
+}
+
+MockExpectedCall_c* expectRangeOfCalls_c(const unsigned int minCalls, const unsigned int maxCalls, const char* name)
+{
+    expectedCall = &currentMockSupport->expectRangeOfCalls(minCalls, maxCalls, name);
     return &gExpectedCall;
 }
 
@@ -812,6 +862,11 @@ void enable_c()
 void ignoreOtherCalls_c()
 {
     currentMockSupport->ignoreOtherCalls();
+}
+
+void setMaxCallLogSize_c(unsigned int maxSize)
+{
+    currentMockSupport->setMaxCallLogSize(maxSize);
 }
 
 void setBoolData_c(const char* name, int value)
