@@ -34,7 +34,7 @@
 struct JUnitTestCaseResultNode
 {
     JUnitTestCaseResultNode() :
-        execTime_(0), failure_(0), ignored_(false), next_(0)
+        execTime_(0), failure_(0), ignored_(false), lineNumber_ (0), checkCount_ (0), next_(0)
     {
     }
 
@@ -42,18 +42,22 @@ struct JUnitTestCaseResultNode
     long execTime_;
     TestFailure* failure_;
     bool ignored_;
+    SimpleString file_;
+    int lineNumber_;
+    int checkCount_;
     JUnitTestCaseResultNode* next_;
 };
 
 struct JUnitTestGroupResult
 {
     JUnitTestGroupResult() :
-        testCount_(0), failureCount_(0), startTime_(0), groupExecTime_(0), head_(0), tail_(0)
+        testCount_(0), failureCount_(0), totalCheckCount_(0), startTime_(0), groupExecTime_(0), head_(0), tail_(0)
     {
     }
 
     int testCount_;
     int failureCount_;
+    int totalCheckCount_;
     long startTime_;
     long groupExecTime_;
     SimpleString group_;
@@ -108,6 +112,7 @@ void JUnitTestOutput::printCurrentTestEnded(const TestResult& result)
 {
     impl_->results_.tail_->execTime_
             = result.getCurrentTestTotalExecutionTime();
+    impl_->results_.tail_->checkCount_ = result.getCheckCount();
 }
 
 void JUnitTestOutput::printTestsEnded(const TestResult& /*result*/)
@@ -136,6 +141,8 @@ void JUnitTestOutput::printCurrentTestStarted(const UtestShell& test)
         impl_->results_.tail_ = impl_->results_.tail_->next_;
     }
     impl_->results_.tail_->name_ = test.getName();
+    impl_->results_.tail_->file_ = test.getFile();
+    impl_->results_.tail_->lineNumber_ = test.getLineNumber();
     if (!test.willRun()) {
         impl_->results_.tail_->ignored_ = true;
     }
@@ -185,14 +192,21 @@ void JUnitTestOutput::writeProperties()
 void JUnitTestOutput::writeTestCases()
 {
     JUnitTestCaseResultNode* cur = impl_->results_.head_;
+
     while (cur) {
         SimpleString buf = StringFromFormat(
-                "<testcase classname=\"%s%s%s\" name=\"%s\" time=\"%d.%03d\">\n",
+                "<testcase classname=\"%s%s%s\" name=\"%s\" assertions=\"%d\" time=\"%d.%03d\" file=\"%s\" line=\"%d\">\n",
                 impl_->package_.asCharString(),
                 impl_->package_.isEmpty() == true ? "" : ".",
                 impl_->results_.group_.asCharString(),
-                cur->name_.asCharString(), (int) (cur->execTime_ / 1000), (int)(cur->execTime_ % 1000));
+                cur->name_.asCharString(),
+                cur->checkCount_ - impl_->results_.totalCheckCount_,
+                (int) (cur->execTime_ / 1000), (int)(cur->execTime_ % 1000),
+                cur->file_.asCharString(),
+                cur->lineNumber_);
         writeToFile(buf.asCharString());
+
+        impl_->results_.totalCheckCount_ = cur->checkCount_;
 
         if (cur->failure_) {
             writeFailure(cur);
