@@ -60,7 +60,7 @@ class MockExpectedCallsListForTest : public MockExpectedCallsList
   public:
     ~MockExpectedCallsListForTest();
     MockCheckedExpectedCall* addFunction(const SimpleString& name);
-    MockCheckedExpectedCall* addFunction(const SimpleString& name, int order);
+    MockCheckedExpectedCall* addFunction(const SimpleString& name, unsigned int order);
 };
 
 #endif

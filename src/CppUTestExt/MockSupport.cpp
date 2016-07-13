@@ -173,11 +173,11 @@ void MockSupport::expectNoCall(const SimpleString& functionName)
     unExpectations_.addExpectedCall(call);
 }
 
-MockExpectedCall& MockSupport::expectNCalls(int amount, const SimpleString& functionName)
+MockExpectedCall& MockSupport::expectNCalls(unsigned int amount, const SimpleString& functionName)
 {
     compositeCalls_.clear();
 
-    for (int i = 0; i < amount; i++)
+    for (unsigned int i = 0; i < amount; i++)
         compositeCalls_.add(expectOneCall(functionName));
     return compositeCalls_;
 }
