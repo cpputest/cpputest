@@ -60,7 +60,7 @@ int MockExpectedCallsList::size() const
 
 bool MockExpectedCallsList::isEmpty() const
 {
-    return size() == 0;
+    return head_ == NULL;
 }
 
 
