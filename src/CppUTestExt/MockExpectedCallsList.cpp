@@ -50,9 +50,9 @@ bool MockExpectedCallsList::hasCallsOutOfOrder() const
     return false;
 }
 
-int MockExpectedCallsList::size() const
+unsigned int MockExpectedCallsList::size() const
 {
-    int count = 0;
+	unsigned int count = 0;
     for (MockExpectedCallsListNode* p = head_; p; p = p->next_)
         count++;
     return count;
@@ -64,18 +64,18 @@ bool MockExpectedCallsList::isEmpty() const
 }
 
 
-int MockExpectedCallsList::amountOfExpectationsFor(const SimpleString& name) const
+unsigned int MockExpectedCallsList::amountOfExpectationsFor(const SimpleString& name) const
 {
-    int count = 0;
+	unsigned int count = 0;
     for (MockExpectedCallsListNode* p = head_; p; p = p->next_)
         if (p->expectedCall_->relatesTo(name)) count++;
     return count;
 
 }
 
-int MockExpectedCallsList::amountOfUnfulfilledExpectations() const
+unsigned int MockExpectedCallsList::amountOfUnfulfilledExpectations() const
 {
-    int count = 0;
+	unsigned int count = 0;
     for (MockExpectedCallsListNode* p = head_; p; p = p->next_)
         if (! p->expectedCall_->isFulfilled()) count++;
     return count;
