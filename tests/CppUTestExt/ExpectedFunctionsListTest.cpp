@@ -281,13 +281,48 @@ TEST(MockExpectedCallsList, toStringOnEmptyList)
     STRCMP_EQUAL("<none>", list->unfulfilledCallsToString().asCharString());
 }
 
-TEST(MockExpectedCallsList, hasFinalizedMatchingExpectations)
+TEST(MockExpectedCallsList, hasFinalizedMatchingExpectations_emptyList)
 {
-    call1->ignoreOtherParameters();
-    list->addExpectedCall(call1);
     CHECK(! list->hasFinalizedMatchingExpectations());
+}
 
+TEST(MockExpectedCallsList, hasFinalizedMatchingExpectations_listHasNonMatchingCalls)
+{
+    list->addExpectedCall(call1);
+    list->addExpectedCall(call2);
+    list->addExpectedCall(call3);
+
+    CHECK(! list->hasFinalizedMatchingExpectations());
+}
+
+TEST(MockExpectedCallsList, hasFinalizedMatchingExpectations_listHasMatchingButNotFinalizedCall)
+{
+    list->addExpectedCall(call1);
+    list->addExpectedCall(call2);
+    call1->ignoreOtherParameters();
+    call1->callWasMade(1);
+
+    CHECK(! list->hasFinalizedMatchingExpectations());
+}
+
+TEST(MockExpectedCallsList, hasFinalizedMatchingExpectations_listHasFinalizedCallThatIgnoresParameters)
+{
+    list->addExpectedCall(call1);
+    list->addExpectedCall(call2);
+    call1->ignoreOtherParameters();
     call1->callWasMade(1);
     call1->finalizeActualCallMatch();
+
+    CHECK(list->hasFinalizedMatchingExpectations());
+}
+
+TEST(MockExpectedCallsList, hasFinalizedMatchingExpectations_listHasFinalizedCallThatDoesntIgnoreParameters)
+{
+    list->addExpectedCall(call1);
+    list->addExpectedCall(call2);
+    call1->withParameter("param", 1);
+    call1->callWasMade(1);
+    call1->inputParameterWasPassed("param");
+
     CHECK(list->hasFinalizedMatchingExpectations());
 }
