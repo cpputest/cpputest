@@ -442,7 +442,7 @@ TEST(MockParameterTest, ignoreOtherParametersMultipleCallsButOneDidntHappen)
     MockCheckedExpectedCall* call = expectations.addFunction("boo");
     call->ignoreOtherParameters();
     call->callWasMade(1);
-    call->parametersWereIgnored();
+    call->finalizeActualCallMatch();
     call->ignoreOtherParameters();
     expectations.addFunction("boo")->ignoreOtherParameters();
     MockExpectedCallsDidntHappenFailure expectedFailure(mockFailureTest(), expectations);

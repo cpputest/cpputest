@@ -124,7 +124,7 @@ protected:
     void countCheck();
 
 private:
-    int callOrder_;
+    int actualCallOrder_;
     int expectedCallOrder_;
     bool strictOrdering_;
     MockFailureReporter *activeReporter_;
@@ -142,8 +142,8 @@ private:
 
     bool tracing_;
 
-    void checkExpectationsOfLastCall();
-    bool wasLastCallFulfilled();
+    void checkExpectationsOfLastActualCall();
+    bool wasLastActualCallFulfilled();
     void failTestWithUnexpectedCalls();
     void failTestWithOutOfOrderCalls();
 
