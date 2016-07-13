@@ -254,7 +254,7 @@ bool MockCheckedExpectedCall::isMatchingActualCall()
     return (actualCallOrder_ != NOT_CALLED_YET) && areParametersMatchingActualCall() && wasPassedToObject_;
 }
 
-void MockCheckedExpectedCall::callWasMade(int callOrder)
+void MockCheckedExpectedCall::callWasMade(unsigned int callOrder)
 {
     actualCallOrder_ = callOrder;
     if (expectedCallOrder_ == NO_EXPECTED_CALL_ORDER)
@@ -495,12 +495,12 @@ MockNamedValue MockCheckedExpectedCall::returnValue()
     return returnValue_;
 }
 
-int MockCheckedExpectedCall::getCallOrder() const
+unsigned int MockCheckedExpectedCall::getCallOrder() const
 {
     return actualCallOrder_;
 }
 
-MockExpectedCall& MockCheckedExpectedCall::withCallOrder(int callOrder)
+MockExpectedCall& MockCheckedExpectedCall::withCallOrder(unsigned int callOrder)
 {
     expectedCallOrder_ = callOrder;
     return *this;
@@ -549,7 +549,7 @@ MockExpectedCall& MockExpectedCallComposite::withName(const SimpleString& name)
     return *this;
 }
 
-MockExpectedCall& MockExpectedCallComposite::withCallOrder(int)
+MockExpectedCall& MockExpectedCallComposite::withCallOrder(unsigned int)
 {
     FAIL("withCallOrder not supported for CompositeCalls");
     return *this; // LCOV_EXCL_LINE

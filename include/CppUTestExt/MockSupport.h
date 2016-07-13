@@ -48,7 +48,7 @@ public:
     virtual void strictOrder();
     virtual MockExpectedCall& expectOneCall(const SimpleString& functionName);
     virtual void expectNoCall(const SimpleString& functionName);
-    virtual MockExpectedCall& expectNCalls(int amount, const SimpleString& functionName);
+    virtual MockExpectedCall& expectNCalls(unsigned int amount, const SimpleString& functionName);
     virtual MockActualCall& actualCall(const SimpleString& functionName);
     virtual bool hasReturnValue();
     virtual MockNamedValue returnValue();
@@ -124,8 +124,8 @@ protected:
     void countCheck();
 
 private:
-    int actualCallOrder_;
-    int expectedCallOrder_;
+    unsigned int actualCallOrder_;
+    unsigned int expectedCallOrder_;
     bool strictOrdering_;
     MockFailureReporter *activeReporter_;
     MockFailureReporter *standardReporter_;
