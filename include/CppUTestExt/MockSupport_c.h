@@ -150,7 +150,7 @@ struct SMockSupport_c
     void (*strictOrder)(void);
     MockExpectedCall_c* (*expectOneCall)(const char* name);
     void (*expectNoCall)(const char* name);
-    MockExpectedCall_c* (*expectNCalls)(int number, const char* name);
+    MockExpectedCall_c* (*expectNCalls)(unsigned int number, const char* name);
     MockActualCall_c* (*actualCall)(const char* name);
     int (*hasReturnValue)(void);
     MockValue_c (*returnValue)(void);

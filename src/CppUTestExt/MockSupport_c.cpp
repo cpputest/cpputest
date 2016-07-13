@@ -120,7 +120,7 @@ extern "C" {
 void strictOrder_c();
 MockExpectedCall_c* expectOneCall_c(const char* name);
 void expectNoCall_c(const char* name);
-MockExpectedCall_c* expectNCalls_c(const int number, const char* name);
+MockExpectedCall_c* expectNCalls_c(const unsigned int number, const char* name);
 MockActualCall_c* actualCall_c(const char* name);
 void disable_c();
 void enable_c();
@@ -568,7 +568,7 @@ void expectNoCall_c(const char* name)
     currentMockSupport->expectNoCall(name);
 }
 
-MockExpectedCall_c* expectNCalls_c(const int number, const char* name)
+MockExpectedCall_c* expectNCalls_c(const unsigned int number, const char* name)
 {
     expectedCall = &currentMockSupport->expectNCalls(number, name);
     return &gExpectedCall;

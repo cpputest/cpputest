@@ -173,16 +173,16 @@ void MockSupport::expectNoCall(const SimpleString& functionName)
     unExpectations_.addExpectedCall(call);
 }
 
-MockExpectedCall& MockSupport::expectNCalls(int amount, const SimpleString& functionName)
+MockExpectedCall& MockSupport::expectNCalls(unsigned int amount, const SimpleString& functionName)
 {
     compositeCalls_.clear();
 
-    for (int i = 0; i < amount; i++)
+    for (unsigned int i = 0; i < amount; i++)
         compositeCalls_.add(expectOneCall(functionName));
     return compositeCalls_;
 }
 
-MockCheckedActualCall* MockSupport::createActualFunctionCall()
+MockCheckedActualCall* MockSupport::createActualCall()
 {
     lastActualFunctionCall_ = new MockCheckedActualCall(++actualCallOrder_, activeReporter_, expectations_);
     return lastActualFunctionCall_;
@@ -216,7 +216,7 @@ MockActualCall& MockSupport::actualCall(const SimpleString& functionName)
         return MockIgnoredActualCall::instance();
     }
 
-    MockCheckedActualCall* call = createActualFunctionCall();
+    MockCheckedActualCall* call = createActualCall();
     call->withName(scopeFuntionName);
     return *call;
 }

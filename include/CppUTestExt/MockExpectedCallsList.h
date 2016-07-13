@@ -39,9 +39,9 @@ public:
     virtual ~MockExpectedCallsList();
     virtual void deleteAllExpectationsAndClearList();
 
-    virtual int size() const;
-    virtual int amountOfExpectationsFor(const SimpleString& name) const;
-    virtual int amountOfUnfulfilledExpectations() const;
+    virtual unsigned int size() const;
+    virtual unsigned int amountOfExpectationsFor(const SimpleString& name) const;
+    virtual unsigned int amountOfUnfulfilledExpectations() const;
     virtual bool hasUnfulfilledExpectations() const;
     virtual bool hasFinalizedMatchingExpectations() const;
     virtual bool hasUnmatchingExpectationsBecauseOfMissingParameters() const;
@@ -69,7 +69,7 @@ public:
     virtual MockCheckedExpectedCall* getFirstMatchingExpectation();
 
     virtual void resetActualCallMatchingState();
-    virtual void callWasMade(int callOrder);
+    virtual void callWasMade(unsigned int callOrder);
     virtual void wasPassedToObject();
     virtual void parameterWasPassed(const SimpleString& parameterName);
     virtual void outputParameterWasPassed(const SimpleString& parameterName);
@@ -91,7 +91,7 @@ protected:
             : expectedCall_(expectedCall), next_(NULL) {}
     };
 
-    virtual MockExpectedCallsListNode* findNodeWithCallOrderOf(int callOrder) const;
+    virtual MockExpectedCallsListNode* findNodeWithCallOrderOf(unsigned int callOrder) const;
 private:
     MockExpectedCallsListNode* head_;
 

@@ -385,9 +385,9 @@ TEST(MockExpectedCall, callWithThreeDifferentParameter)
     DOUBLES_EQUAL(0.12, call->getInputParameter("double").getDoubleValue(), 0.05);
 }
 
-TEST(MockExpectedCall, withoutANameItsFulfilled)
+TEST(MockExpectedCall, withoutANameItsNotFulfilled)
 {
-    CHECK(call->isFulfilled());
+    CHECK(!call->isFulfilled());
 }
 
 TEST(MockExpectedCall, withANameItsNotFulfilled)

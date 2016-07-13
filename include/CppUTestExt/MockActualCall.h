@@ -42,7 +42,7 @@ public:
     virtual ~MockActualCall();
 
     virtual MockActualCall& withName(const SimpleString& name)=0;
-    virtual MockActualCall& withCallOrder(int callOrder)=0;
+    virtual MockActualCall& withCallOrder(unsigned int callOrder)=0;
     MockActualCall& withParameter(const SimpleString& name, bool value) { return withBoolParameter(name, value); }
     MockActualCall& withParameter(const SimpleString& name, int value) { return withIntParameter(name, value); }
     MockActualCall& withParameter(const SimpleString& name, unsigned int value) { return withUnsignedIntParameter(name, value); }
