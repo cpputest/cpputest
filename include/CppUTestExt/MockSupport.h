@@ -119,7 +119,7 @@ public:
 
 protected:
     MockSupport* clone(const SimpleString& mockName);
-    virtual MockCheckedActualCall *createActualFunctionCall();
+    virtual MockCheckedActualCall *createActualCall();
     virtual void failTest(MockFailure& failure);
     void countCheck();
 
