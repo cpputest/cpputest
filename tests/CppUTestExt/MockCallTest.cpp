@@ -192,7 +192,7 @@ TEST(MockCallTest, expectNoCallDoesntInfluenceExpectOneCall)
     MockFailureReporterInstaller failureReporterInstaller;
 
     MockExpectedCallsListForTest expectations;
-    expectations.addFunction("influence", MockCheckedExpectedCall::NO_EXPECTED_CALL_ORDER)->callWasMade(1);
+    expectations.addFunction("influence")->callWasMade(1);
     MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "lazy", expectations);
 
     mock().expectNoCall("lazy");
