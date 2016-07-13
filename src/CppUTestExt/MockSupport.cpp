@@ -182,7 +182,7 @@ MockExpectedCall& MockSupport::expectNCalls(unsigned int amount, const SimpleStr
     return compositeCalls_;
 }
 
-MockCheckedActualCall* MockSupport::createActualFunctionCall()
+MockCheckedActualCall* MockSupport::createActualCall()
 {
     lastActualFunctionCall_ = new MockCheckedActualCall(++actualCallOrder_, activeReporter_, expectations_);
     return lastActualFunctionCall_;
@@ -216,7 +216,7 @@ MockActualCall& MockSupport::actualCall(const SimpleString& functionName)
         return MockIgnoredActualCall::instance();
     }
 
-    MockCheckedActualCall* call = createActualFunctionCall();
+    MockCheckedActualCall* call = createActualCall();
     call->withName(scopeFuntionName);
     return *call;
 }
