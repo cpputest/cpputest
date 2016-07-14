@@ -50,9 +50,9 @@ bool MockExpectedCallsList::hasCallsOutOfOrder() const
     return false;
 }
 
-int MockExpectedCallsList::size() const
+unsigned int MockExpectedCallsList::size() const
 {
-    int count = 0;
+    unsigned int count = 0;
     for (MockExpectedCallsListNode* p = head_; p; p = p->next_)
         count++;
     return count;
@@ -60,22 +60,22 @@ int MockExpectedCallsList::size() const
 
 bool MockExpectedCallsList::isEmpty() const
 {
-    return size() == 0;
+    return head_ == NULL;
 }
 
 
-int MockExpectedCallsList::amountOfExpectationsFor(const SimpleString& name) const
+unsigned int MockExpectedCallsList::amountOfExpectationsFor(const SimpleString& name) const
 {
-    int count = 0;
+    unsigned int count = 0;
     for (MockExpectedCallsListNode* p = head_; p; p = p->next_)
         if (p->expectedCall_->relatesTo(name)) count++;
     return count;
 
 }
 
-int MockExpectedCallsList::amountOfUnfulfilledExpectations() const
+unsigned int MockExpectedCallsList::amountOfUnfulfilledExpectations() const
 {
-    int count = 0;
+    unsigned int count = 0;
     for (MockExpectedCallsListNode* p = head_; p; p = p->next_)
         if (! p->expectedCall_->isFulfilled()) count++;
     return count;
@@ -285,7 +285,7 @@ void MockExpectedCallsList::resetActualCallMatchingState()
         p->expectedCall_->resetActualCallMatchingState();
 }
 
-void MockExpectedCallsList::callWasMade(int callOrder)
+void MockExpectedCallsList::callWasMade(unsigned int callOrder)
 {
     for (MockExpectedCallsListNode* p = head_; p; p = p->next_)
         p->expectedCall_->callWasMade(callOrder);
@@ -310,7 +310,7 @@ void MockExpectedCallsList::outputParameterWasPassed(const SimpleString& paramet
         p->expectedCall_->outputParameterWasPassed(parameterName);
 }
 
-MockExpectedCallsList::MockExpectedCallsListNode* MockExpectedCallsList::findNodeWithCallOrderOf(int callOrder) const
+MockExpectedCallsList::MockExpectedCallsListNode* MockExpectedCallsList::findNodeWithCallOrderOf(unsigned int callOrder) const
 {
     for (MockExpectedCallsListNode* p = head_; p; p = p->next_)
         if (p->expectedCall_->getCallOrder() == callOrder && p->expectedCall_->isFulfilled())
@@ -351,7 +351,7 @@ SimpleString MockExpectedCallsList::fulfilledCallsToString(const SimpleString& l
     SimpleString str;
 
     MockExpectedCallsListNode* nextNodeInOrder;
-    for (int callOrder = 1; (nextNodeInOrder = findNodeWithCallOrderOf(callOrder)); callOrder++)
+    for (unsigned int callOrder = 1; (nextNodeInOrder = findNodeWithCallOrderOf(callOrder)); callOrder++)
         if (nextNodeInOrder)
             str = appendStringOnANewLine(str, linePrefix, nextNodeInOrder->expectedCall_->callToString());
 
