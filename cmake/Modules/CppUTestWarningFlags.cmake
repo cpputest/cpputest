@@ -16,10 +16,10 @@ else (MSVC)
 
     macro(check_and_append_cxx_warning_flags)
       foreach (flag ${ARGN})
-        check_cxx_compiler_flag("-${flag}" WARNING_CXX_FLAG_TO_CHECK)
-        if (WARNING_CXX_FLAG_TO_CHECK)
+        check_cxx_compiler_flag("-${flag}" WARNING_CXX_FLAG_${flag})
+        if (WARNING_CXX_FLAG_${flag})
             set(CPPUTEST_CXX_WARNING_FLAGS "${CPPUTEST_CXX_WARNING_FLAGS} -${flag}")
-          endif (WARNING_CXX_FLAG_TO_CHECK)
+          endif (WARNING_CXX_FLAG_${flag})
       endforeach (flag)
     endmacro(check_and_append_cxx_warning_flags)
 
