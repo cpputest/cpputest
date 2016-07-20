@@ -44,6 +44,11 @@ else (MSVC)
         Wno-long-long
         )
 
+    if (WERROR)
+        list(APPEND WARNING_C_FLAGS Werror)
+    endif (WERROR)
+
+
     set(WARNING_C_ONLY_FLAGS
         Wstrict-prototypes
         )
