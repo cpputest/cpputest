@@ -19,12 +19,12 @@ if [ "x$BUILD" = "xautotools" ]; then
 fi
 
 if [ "x$BUILD" = "xcmake" ]; then
-    cmake .. -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE
+    cmake .. -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE -DWERROR=ON
     make
     ctest -V
 
     if [ "x$CXX" != "xg++" ]; then
-        cmake .. -DC++11=ON -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE
+        cmake .. -DC++11=ON -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE -DWERROR=ON
         make
         ctest -V
     fi
