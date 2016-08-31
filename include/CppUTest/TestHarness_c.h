@@ -113,17 +113,15 @@
 #define TEST_GROUP_C_WRAPPER(group_name) \
     extern "C" void group_##group_name##_setup_wrapper_c(void); \
     extern "C" void group_##group_name##_teardown_wrapper_c(void); \
-    TEST_GROUP(group_name)
-
-#define TEST_GROUP_C_SETUP_WRAPPER(group_name) \
-    void setup() { \
-       group_##group_name##_setup_wrapper_c(); \
-    }
-
-#define TEST_GROUP_C_TEARDOWN_WRAPPER(group_name) \
-    void teardown() { \
-       group_##group_name##_teardown_wrapper_c(); \
-    }
+    TEST_GROUP(group_name) \
+    { \
+        void setup() { \
+            group_##group_name##_setup_wrapper_c(); \
+        } \
+        void teardown() { \
+            group_##group_name##_teardown_wrapper_c(); \
+        } \
+    };
 
 #define TEST_C_WRAPPER(group_name, test_name) \
     extern "C" void test_##group_name##_##test_name##_wrapper_c(); \
