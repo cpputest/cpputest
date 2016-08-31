@@ -163,6 +163,8 @@ SimpleString StringFromBinary(const unsigned char* value, size_t size);
 SimpleString StringFromBinaryOrNull(const unsigned char* value, size_t size);
 SimpleString StringFromBinaryWithSize(const unsigned char* value, size_t size);
 SimpleString StringFromBinaryWithSizeOrNull(const unsigned char* value, size_t size);
+SimpleString StringFromAnyInteger(const unsigned char* value, size_t size);
+SimpleString StringFromAnyIntegerOrNull(const unsigned char* value, size_t size);
 SimpleString StringFromMaskedBits(unsigned long value, unsigned long mask, size_t byteCount);
 SimpleString StringFromOrdinalNumber(unsigned int number);
 SimpleString BracketsFormattedHexStringFrom(int value);

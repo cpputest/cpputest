@@ -203,10 +203,18 @@
   UNSIGNED_LONGS_EQUAL_LOCATION((expected), (actual), text, __FILE__, __LINE__)
 
 #define LONGS_EQUAL_LOCATION(expected, actual, text, file, line)\
-  { UtestShell::getCurrent()->assertLongsEqual((long)expected, (long)actual, text, file, line); }
+  { if ((sizeof(expected) > sizeof(long)) || (sizeof(actual) > sizeof(long))) \
+        UtestShell::getCurrent()->print( \
+            "WARNING:\n\tSize of `expected` or `actual` is bigger than size of `long int`\n\tConsider use of ANYINTS_EQUAL().\n", \
+            file, line); \
+    UtestShell::getCurrent()->assertLongsEqual((long)expected, (long)actual, text, file, line); }
 
 #define UNSIGNED_LONGS_EQUAL_LOCATION(expected, actual, text, file, line)\
-  { UtestShell::getCurrent()->assertUnsignedLongsEqual((unsigned long)expected, (unsigned long)actual, text, file, line); }
+  { if ((sizeof(expected) > sizeof(long)) || (sizeof(actual) > sizeof(long))) \
+        UtestShell::getCurrent()->print( \
+            "WARNING:\n\tSize of `expected` or `actual` is bigger than size of `long int`\n\tConsider use of ANYINTS_EQUAL().\n", \
+            file, line); \
+    UtestShell::getCurrent()->assertUnsignedLongsEqual((unsigned long)expected, (unsigned long)actual, text, file, line); }
 
 #define LONGLONGS_EQUAL(expected, actual)\
   LONGLONGS_EQUAL_LOCATION(expected, actual, NULL, __FILE__, __LINE__)
@@ -280,6 +288,15 @@
 
 #define MEMCMP_EQUAL_LOCATION(expected, actual, size, text, file, line)\
   { UtestShell::getCurrent()->assertBinaryEqual(expected, actual, size, text, file, line); }
+
+#define ANYINTS_EQUAL(expected, actual, size)\
+  ANYINTS_EQUAL_LOCATION(expected, actual, size, NULL, __FILE__, __LINE__)
+
+#define ANYINTS_EQUAL_TEXT(expected, actual, size, text)\
+  ANYINTS_EQUAL_LOCATION(expected, actual, size, text, __FILE__, __LINE__)
+
+#define ANYINTS_EQUAL_LOCATION(expected, actual, size, text, file, line)\
+  { UtestShell::getCurrent()->assertAnyIntsEqual(expected, actual, size, text, file, line); }
 
 #define BITS_EQUAL(expected, actual, mask)\
   BITS_LOCATION(expected, actual, mask, NULL, __FILE__, __LINE__)

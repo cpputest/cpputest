@@ -362,6 +362,28 @@ BinaryEqualFailure::BinaryEqualFailure(UtestShell* test, const char* fileName, i
 	}
 }
 
+AnyIntsEqualFailure::AnyIntsEqualFailure(UtestShell* test, const char* fileName, int lineNumber, const unsigned char* expected,
+                                       const unsigned char* actual, size_t size, const SimpleString& text)
+: TestFailure(test, fileName, lineNumber)
+{
+    if (size <= sizeof(long))
+    {
+        long lexp = 0, lact = 0;
+        for (size_t i = 0; i < size; i++)
+            ((unsigned char*)&lexp)[i] = ((const unsigned char *)expected)[i];
+        for (size_t i = 0; i < size; i++)
+            ((unsigned char*)&lact)[i] = ((const unsigned char *)actual)[i];
+
+        LongsEqualFailure f(test, fileName, lineNumber, lexp, lact, text);
+        message_ = f.getMessage();
+        return;
+    }
+
+    message_ = createUserText(text);
+
+	message_ += createButWasString(StringFromAnyIntegerOrNull(expected, size), StringFromAnyIntegerOrNull(actual, size));
+}
+
 BitsEqualFailure::BitsEqualFailure(UtestShell* test, const char* fileName, int lineNumber, unsigned long expected, unsigned long actual,
                                    unsigned long mask, size_t byteCount, const SimpleString& text)
 : TestFailure(test, fileName, lineNumber)

@@ -763,6 +763,22 @@ SimpleString StringFromBinaryWithSizeOrNull(const unsigned char* value, size_t s
     return (value) ? StringFromBinaryWithSize(value, size) : "(null)";
 }
 
+SimpleString StringFromAnyInteger(const unsigned char* value, size_t size)
+{
+    SimpleString result = "0x";
+
+    for (size_t i = 0; i < size; i++) {
+        result += StringFromFormat("%02X", value[size-1-i]);
+    }
+
+    return result;
+}
+
+SimpleString StringFromAnyIntegerOrNull(const unsigned char* value, size_t size)
+{
+    return (value && size) ? StringFromAnyInteger(value, size) : "(null)";
+}
+
 SimpleString StringFromMaskedBits(unsigned long value, unsigned long mask, size_t byteCount)
 {
     SimpleString result;
