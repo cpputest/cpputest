@@ -5,7 +5,8 @@ image: Visual Studio 2015
 cache:
   - C:\ProgramData\chocolatey\bin -> appveyor.yml
   - C:\ProgramData\chocolatey\lib -> appveyor.yml
-  - C:\Tools\MinGW* -> appveyor.yml
+  - C:\Tools\MinGW32 -> appveyor.yml
+  - C:\Tools\MinGW64 -> appveyor.yml
 
 environment:
   Configuration: Release
