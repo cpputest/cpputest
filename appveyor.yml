@@ -2,6 +2,11 @@ version: 3.7.0-ci{build}
 
 image: Visual Studio 2015
 
+cache:
+  - C:\ProgramData\chocolatey\bin -> appveyor.yml
+  - C:\ProgramData\chocolatey\lib -> appveyor.yml
+  - C:\Tools\MinGW* -> appveyor.yml
+
 environment:
   Configuration: Release
   matrix:
