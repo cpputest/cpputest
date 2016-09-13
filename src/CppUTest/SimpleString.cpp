@@ -80,8 +80,10 @@ int SimpleString::AtoI(const char* str)
 
 int SimpleString::StrCmp(const char* s1, const char* s2)
 {
-   while(*s1 && *s1 == *s2)
-       s1++, s2++;
+   while(*s1 && *s1 == *s2) {
+       ++s1;
+       ++s2;
+   }
    return *(unsigned char *) s1 - *(unsigned char *) s2;
 }
 
@@ -95,7 +97,9 @@ size_t SimpleString::StrLen(const char* str)
 int SimpleString::StrNCmp(const char* s1, const char* s2, size_t n)
 {
     while (n && *s1 && *s1 == *s2) {
-        n--, s1++, s2++;
+        --n;
+        ++s1;
+        ++s2;
     }
     return n ? *(unsigned char *) s1 - *(unsigned char *) s2 : 0;
 }
@@ -131,10 +135,12 @@ int SimpleString::MemCmp(const void* s1, const void *s2, size_t n)
     const unsigned char* p2 = (const unsigned char*) s2;
 
     while (n--)
-        if (*p1 != *p2)
+        if (*p1 != *p2) {
             return *p1 - *p2;
-        else
-            p1++, p2++;
+        } else {
+            ++p1;
+            ++p2;
+        }
     return 0;
 }
 
