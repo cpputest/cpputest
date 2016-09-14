@@ -458,7 +458,10 @@ if test -n "${GMOCK_HOME}"; then
 
 	AC_DEFINE([INCLUDE_GTEST_TESTS], 1, [Include the GTest-related tests in the build])
 	AC_ARG_VAR([GMOCK_HOME], [Location of the GMock])
-	GTEST_HOME=${GMOCK_HOME}/gtest
+
+  if test -z "${GTEST_HOME}"; then
+	  GTEST_HOME=${GMOCK_HOME}/gtest
+  fi
 
 	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I${GMOCK_HOME}/include -I${GTEST_HOME}/include -I${GTEST_HOME}"
 	CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} -DGTEST_USE_OWN_TR1_TUPLE=1"
@@ -466,6 +469,8 @@ if test -n "${GMOCK_HOME}"; then
 		CPPUTEST_LDADD="${CPPUTEST_LDADD} ${GMOCK_HOME}/lib/libgmock.la ${GTEST_HOME}/lib/libgtest.la"; \
 	elif test -e ${GMOCK_HOME}/libgmock.a && test -e ${GTEST_HOME}/libgtest.a; then \
 		CPPUTEST_LDADD="${CPPUTEST_LDADD} ${GMOCK_HOME}/libgmock.a ${GTEST_HOME}/libgtest.a"; \
+	elif test -e ${GMOCK_HOME}/libgmock.a && test -e ${GMOCK_HOME}/gtest/libgtest.a; then \
+		CPPUTEST_LDADD="${CPPUTEST_LDADD} ${GMOCK_HOME}/libgmock.a ${GMOCK_HOME}/gtest/libgtest.a"; \
 	else \
 		AC_MSG_ERROR([
 -------------------------------------

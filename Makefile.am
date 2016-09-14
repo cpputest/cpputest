@@ -282,7 +282,8 @@ check_gtest17: cpputest_build_gtest17
 
 check_gtest18: cpputest_build_gtest18
 	@echo "Build using gmock 1.8"
-	export GMOCK_HOME=`pwd`/cpputest_build_gtest18/googletest-release-1.8.0; \
+	export GMOCK_HOME=`pwd`/cpputest_build_gtest18/googletest-release-1.8.0/googlemock; \
+	export GTEST_HOME=`pwd`/cpputest_build_gtest18/googletest-release-1.8.0/googletest; \
 	make distclean; $(srcdir)/configure; make check
 
 remove_gtest_directories:
@@ -292,8 +293,6 @@ remove_gtest_directories:
 	rm -rf cpputest_build_gtest18
 
 check_gtest: remove_gtest_directories check_gtest15 check_gtest16 check_gtest17 check_gtest18
-
-#check_gtest: remove_gtest_directories check_gtest18
 
 check_basic:
 	@echo "If dash is available, run the configure with dash to find bash-isms and increase portability"
