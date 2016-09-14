@@ -235,45 +235,64 @@ if INCLUDE_CPPUTEST_EXT
 	./$(CPPUTESTEXT_TESTS)
 endif
 
+cpputest_build_gtest18:
+	mkdir -p cpputest_build_gtest18
+	cd cpputest_build_gtest18; \
+	wget https://github.com/google/googletest/archive/release-1.8.0.zip -O gtest-1.8.0.zip  && unzip gtest-1.8.0.zip; \
+	cd googletest-release-1.8.0; cmake .; make
+
 cpputest_build_gtest17:
 	mkdir -p cpputest_build_gtest17
 	cd cpputest_build_gtest17; \
-	wget https://googlemock.googlecode.com/files/gmock-1.7.0.zip && unzip gmock-1.7.0.zip
-	cd cpputest_build_gtest17/gmock-1.7.0; ./configure && make check
+	wget https://github.com/google/googletest/archive/release-1.7.0.zip -O gtest-1.7.0.zip  && unzip gtest-1.7.0.zip; \
+	wget https://github.com/google/googlemock/archive/release-1.7.0.zip -O gmock-1.7.0.zip  && unzip gmock-1.7.0.zip; \
+	mv googletest-release-1.7.0 googlemock-release-1.7.0/gtest; \
+	cd googlemock-release-1.7.0; autoreconf -i; ./configure && make
 
 cpputest_build_gtest16:
 	mkdir -p cpputest_build_gtest16
 	cd cpputest_build_gtest16; \
-	wget https://googlemock.googlecode.com/files/gmock-1.6.0.zip && unzip gmock-1.6.0.zip
-	cd cpputest_build_gtest16/gmock-1.6.0; ./configure CXXFLAGS=-DGTEST_USE_OWN_TR1_TUPLE=1 && make check
+	wget https://github.com/google/googletest/archive/release-1.6.0.zip -O gtest-1.6.0.zip  && unzip gtest-1.6.0.zip; \
+	wget https://github.com/google/googlemock/archive/release-1.6.0.zip -O gmock-1.6.0.zip  && unzip gmock-1.6.0.zip; \
+	mv googletest-release-1.6.0 googlemock-release-1.6.0/gtest; \
+	cd googlemock-release-1.6.0; autoreconf -i; ./configure CXXFLAGS=-DGTEST_USE_OWN_TR1_TUPLE=1 && make
 
 cpputest_build_gtest15:
 	mkdir -p cpputest_build_gtest15
 	cd cpputest_build_gtest15; \
-	wget https://googlemock.googlecode.com/files/gmock-1.5.0.zip && unzip gmock-1.5.0.zip
-	cd cpputest_build_gtest15/gmock-1.5.0; ./configure CXXFLAGS=-DGTEST_USE_OWN_TR1_TUPLE=1 && make
+	wget https://github.com/google/googletest/archive/release-1.5.0.zip -O gtest-1.5.0.zip  && unzip gtest-1.5.0.zip; \
+	wget https://github.com/google/googlemock/archive/release-1.5.0.zip -O gmock-1.5.0.zip  && unzip gmock-1.5.0.zip; \
+	mv googletest-release-1.5.0 googlemock-release-1.5.0/gtest; \
+	cd googlemock-release-1.5.0; autoreconf -i; ./configure CXXFLAGS=-DGTEST_USE_OWN_TR1_TUPLE=1 && make
 
 check_gtest15: cpputest_build_gtest15
 	@echo "Build using gmock 1.5";
-	export GMOCK_HOME=`pwd`/cpputest_build_gtest15/gmock-1.5.0; \
+	export GMOCK_HOME=`pwd`/cpputest_build_gtest15/googlemock-release-1.5.0; \
 	make distclean; $(srcdir)/configure; make check
 
 check_gtest16: cpputest_build_gtest16
 	@echo "Build using gmock 1.6";
-	export GMOCK_HOME=`pwd`/cpputest_build_gtest16/gmock-1.6.0; \
+	export GMOCK_HOME=`pwd`/cpputest_build_gtest16/googlemock-release-1.6.0; \
 	make distclean; $(srcdir)/configure; make check
 
 check_gtest17: cpputest_build_gtest17
 	@echo "Build using gmock 1.7"
-	export GMOCK_HOME=`pwd`/cpputest_build_gtest17/gmock-1.7.0; \
+	export GMOCK_HOME=`pwd`/cpputest_build_gtest17/googlemock-release-1.7.0; \
+	make distclean; $(srcdir)/configure; make check
+
+check_gtest18: cpputest_build_gtest18
+	@echo "Build using gmock 1.8"
+	export GMOCK_HOME=`pwd`/cpputest_build_gtest18/googletest-release-1.8.0/googlemock; \
+	export GTEST_HOME=`pwd`/cpputest_build_gtest18/googletest-release-1.8.0/googletest; \
 	make distclean; $(srcdir)/configure; make check
 
 remove_gtest_directories:
 	rm -rf cpputest_build_gtest15
 	rm -rf cpputest_build_gtest16
 	rm -rf cpputest_build_gtest17
+	rm -rf cpputest_build_gtest18
 
-check_gtest: remove_gtest_directories check_gtest15 check_gtest16 check_gtest17
+check_gtest: remove_gtest_directories check_gtest15 check_gtest16 check_gtest17 check_gtest18
 
 check_basic:
 	@echo "If dash is available, run the configure with dash to find bash-isms and increase portability"
