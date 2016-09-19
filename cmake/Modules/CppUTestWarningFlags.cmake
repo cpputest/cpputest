@@ -32,6 +32,7 @@ else (MSVC)
         Weverything
         Wall
         Wextra
+        pedantic
         Wshadow
         Wswitch-default
         Wswitch-enum
