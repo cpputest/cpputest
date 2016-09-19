@@ -38,15 +38,19 @@ if [ "x$BUILD" = "xautotools_gtest" ]; then
 fi
 
 if [ "x$BUILD" = "xcmake_gtest" ]; then
-    wget https://googlemock.googlecode.com/files/gmock-1.6.0.zip
+    pwd
+	  wget https://github.com/google/googletest/archive/release-1.6.0.zip -O gtest-1.6.0.zip  && unzip gtest-1.6.0.zip;
+	  wget https://github.com/google/googlemock/archive/release-1.6.0.zip -O gmock-1.6.0.zip  && unzip gmock-1.6.0.zip;
+    unzip gtest-1.6.0.zip -d $TRAVIS_BUILD_DIR
     unzip gmock-1.6.0.zip -d $TRAVIS_BUILD_DIR
-    cd $TRAVIS_BUILD_DIR/gmock-1.6.0
-    ./configure && make
+    cd $TRAVIS_BUILD_DIR
+    mv googletest-release-1.6.0 googlemock-release-1.6.0/gtest
+    cd googlemock-release-1.6.0
+    autoreconf -i; ./configure CXXFLAGS=-DGTEST_USE_OWN_TR1_TUPLE=1 && make
     cd -
-
-    export GMOCK_HOME=$TRAVIS_BUILD_DIR/gmock-1.6.0
-    export GTEST_HOME=$TRAVIS_BUILD_DIR/gmock-1.6.0/gtest
-    cmake .. -DGMOCK=ON
+    export GMOCK_HOME=$TRAVIS_BUILD_DIR/googlemock-release-1.6.0
+    export GTEST_HOME=$TRAVIS_BUILD_DIR/googlemock-release-1.6.0/gtest
+    cmake . -DGMOCK=ON
     make
     ctest -V
 fi
