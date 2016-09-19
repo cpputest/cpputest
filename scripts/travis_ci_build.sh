@@ -47,9 +47,8 @@ if [ "x$BUILD" = "xcmake_gtest" ]; then
     cd googlemock-release-1.6.0
     autoreconf -i; ./configure CXXFLAGS=-DGTEST_USE_OWN_TR1_TUPLE=1 && make
     cd -
-
-    export GMOCK_HOME=$TRAVIS_BUILD_DIR/gmock-1.6.0
-    export GTEST_HOME=$TRAVIS_BUILD_DIR/gmock-1.6.0/gtest
+    export GMOCK_HOME=$TRAVIS_BUILD_DIR/googlemock-release-1.6.0
+    export GTEST_HOME=$TRAVIS_BUILD_DIR/googlemock-release-1.6.0/gtest
     cmake .. -DGMOCK=ON
     make
     ctest -V
