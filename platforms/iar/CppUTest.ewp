@@ -1912,6 +1912,9 @@
         <name>$PROJ_DIR$\..\..\src\CppUTest\SimpleString.cpp</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\..\src\CppUTest\TeamCityTestOutput.cpp</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\..\src\CppUTest\TestFailure.cpp</name>
       </file>
       <file>
@@ -1934,6 +1937,9 @@
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\src\CppUTest\TestResult.cpp</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\src\CppUTest\TestTestingFixture.cpp</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\src\CppUTest\Utest.cpp</name>
