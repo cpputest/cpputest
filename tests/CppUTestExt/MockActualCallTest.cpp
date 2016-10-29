@@ -151,7 +151,8 @@ TEST(MockCheckedActualCall, MockIgnoredActualCallWorksAsItShould)
     actual.withCallOrder(1);
 
     CHECK(false == actual.returnBoolValue());
-    CHECK(false == actual.returnBoolValueOrDefault(true));
+    CHECK(true == actual.returnBoolValueOrDefault(true));
+    CHECK(false == actual.returnBoolValueOrDefault(false));
     CHECK(0 == actual.returnUnsignedLongIntValue());
     CHECK(0 == actual.returnIntValue());
     CHECK(1ul == actual.returnUnsignedLongIntValueOrDefault(1ul));

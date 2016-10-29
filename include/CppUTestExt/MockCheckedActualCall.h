@@ -234,7 +234,7 @@ public:
     virtual bool hasReturnValue() _override { return false; }
     virtual MockNamedValue returnValue() _override { return MockNamedValue(""); }
 
-    virtual bool returnBoolValueOrDefault(bool) _override { return false; }
+    virtual bool returnBoolValueOrDefault(bool value) _override { return value; }
     virtual bool returnBoolValue() _override { return false; }
 
     virtual int returnIntValue() _override { return 0; }
