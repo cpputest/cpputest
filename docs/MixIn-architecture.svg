@@ -1,0 +1,2308 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="2104.7244"
+   height="1488.189"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.5 r10040"
+   sodipodi:docname="MixIn-architecture.svg">
+  <defs
+     id="defs4">
+    <marker
+       inkscape:stockid="Arrow1Lstart"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow1Lstart"
+       style="overflow:visible">
+      <path
+         id="path3802"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(0.8,0,0,0.8,10,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow1Lend"
+       style="overflow:visible">
+      <path
+         id="path3805"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="EmptyTriangleOutL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="EmptyTriangleOutL"
+       style="overflow:visible">
+      <path
+         id="path3962"
+         d="m 5.77,0 -8.65,5 0,-10 8.65,5 z"
+         style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(0.8,0,0,0.8,-4.8,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow1Lend-1"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path3805-7"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker5180"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path5182"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker5184"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path5186"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="EmptyTriangleOutL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="EmptyTriangleOutL-4"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path3962-0"
+         d="m 5.77,0 -8.65,5 0,-10 8.65,5 z"
+         style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(0.8,0,0,0.8,-4.8,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="EmptyTriangleOutL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker5190"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path5192"
+         d="m 5.77,0 -8.65,5 0,-10 8.65,5 z"
+         style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(0.8,0,0,0.8,-4.8,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="EmptyTriangleOutL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="EmptyTriangleOutL-3"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path3962-1"
+         d="m 5.77,0 -8.65,5 0,-10 8.65,5 z"
+         style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(0.8,0,0,0.8,-4.8,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="EmptyTriangleOutL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="EmptyTriangleOutL-33"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path3962-4"
+         d="m 5.77,0 -8.65,5 0,-10 8.65,5 z"
+         style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(0.8,0,0,0.8,-4.8,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="EmptyTriangleOutL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="EmptyTriangleOutL-1"
+       style="overflow:visible">
+      <path
+         id="path3962-3"
+         d="m 5.77,0 -8.65,5 0,-10 8.65,5 z"
+         style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(0.8,0,0,0.8,-4.8,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="EmptyTriangleOutL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker5434"
+       style="overflow:visible">
+      <path
+         id="path5436"
+         d="m 5.77,0 -8.65,5 0,-10 8.65,5 z"
+         style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(0.8,0,0,0.8,-4.8,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow1Lend-8"
+       style="overflow:visible">
+      <path
+         id="path3805-74"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker5440"
+       style="overflow:visible">
+      <path
+         id="path5442"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="EmptyTriangleOutL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker5444"
+       style="overflow:visible">
+      <path
+         id="path5446"
+         d="m 5.77,0 -8.65,5 0,-10 8.65,5 z"
+         style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(0.8,0,0,0.8,-4.8,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker5448"
+       style="overflow:visible">
+      <path
+         id="path5450"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker5452"
+       style="overflow:visible">
+      <path
+         id="path5454"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker5456"
+       style="overflow:visible">
+      <path
+         id="path5458"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="EmptyTriangleOutL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker5460"
+       style="overflow:visible">
+      <path
+         id="path5462"
+         d="m 5.77,0 -8.65,5 0,-10 8.65,5 z"
+         style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(0.8,0,0,0.8,-4.8,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="EmptyTriangleOutL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker5464"
+       style="overflow:visible">
+      <path
+         id="path5466"
+         d="m 5.77,0 -8.65,5 0,-10 8.65,5 z"
+         style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(0.8,0,0,0.8,-4.8,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="EmptyTriangleOutL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="EmptyTriangleOutL-7"
+       style="overflow:visible">
+      <path
+         id="path3962-6"
+         d="m 5.77,0 -8.65,5 0,-10 8.65,5 z"
+         style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(0.8,0,0,0.8,-4.8,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker5456-5"
+       style="overflow:visible">
+      <path
+         id="path5458-4"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker7795"
+       style="overflow:visible">
+      <path
+         id="path7797"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker7799"
+       style="overflow:visible">
+      <path
+         id="path7801"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker7803"
+       style="overflow:visible">
+      <path
+         id="path7805"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker7807"
+       style="overflow:visible">
+      <path
+         id="path7809"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker7811"
+       style="overflow:visible">
+      <path
+         id="path7813"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker7815"
+       style="overflow:visible">
+      <path
+         id="path7817"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="EmptyTriangleOutL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="EmptyTriangleOutL-2"
+       style="overflow:visible">
+      <path
+         id="path3962-09"
+         d="m 5.77,0 -8.65,5 0,-10 8.65,5 z"
+         style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(0.8,0,0,0.8,-4.8,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="EmptyTriangleOutL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker7821"
+       style="overflow:visible">
+      <path
+         id="path7823"
+         d="m 5.77,0 -8.65,5 0,-10 8.65,5 z"
+         style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(0.8,0,0,0.8,-4.8,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="EmptyTriangleOutL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker7825"
+       style="overflow:visible">
+      <path
+         id="path7827"
+         d="m 5.77,0 -8.65,5 0,-10 8.65,5 z"
+         style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(0.8,0,0,0.8,-4.8,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="EmptyTriangleOutL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker7829"
+       style="overflow:visible">
+      <path
+         id="path7831"
+         d="m 5.77,0 -8.65,5 0,-10 8.65,5 z"
+         style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(0.8,0,0,0.8,-4.8,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="EmptyTriangleOutL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker7833"
+       style="overflow:visible">
+      <path
+         id="path7835"
+         d="m 5.77,0 -8.65,5 0,-10 8.65,5 z"
+         style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(0.8,0,0,0.8,-4.8,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker5456-7"
+       style="overflow:visible">
+      <path
+         id="path5458-7"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker8131"
+       style="overflow:visible">
+      <path
+         id="path8133"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker8135"
+       style="overflow:visible">
+      <path
+         id="path8137"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker8139"
+       style="overflow:visible">
+      <path
+         id="path8141"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker8143"
+       style="overflow:visible">
+      <path
+         id="path8145"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker8147"
+       style="overflow:visible">
+      <path
+         id="path8149"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="EmptyTriangleOutL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="EmptyTriangleOutL-8"
+       style="overflow:visible">
+      <path
+         id="path3962-38"
+         d="m 5.77,0 -8.65,5 0,-10 8.65,5 z"
+         style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(0.8,0,0,0.8,-4.8,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="EmptyTriangleOutL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker8153"
+       style="overflow:visible">
+      <path
+         id="path8155"
+         d="m 5.77,0 -8.65,5 0,-10 8.65,5 z"
+         style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(0.8,0,0,0.8,-4.8,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="EmptyTriangleOutL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker8157"
+       style="overflow:visible">
+      <path
+         id="path8159"
+         d="m 5.77,0 -8.65,5 0,-10 8.65,5 z"
+         style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(0.8,0,0,0.8,-4.8,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="EmptyTriangleOutL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker8161"
+       style="overflow:visible">
+      <path
+         id="path8163"
+         d="m 5.77,0 -8.65,5 0,-10 8.65,5 z"
+         style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(0.8,0,0,0.8,-4.8,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker8147-9"
+       style="overflow:visible">
+      <path
+         id="path8149-5"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt"
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.7"
+     inkscape:cx="1024.8418"
+     inkscape:cy="398.4825"
+     inkscape:document-units="px"
+     inkscape:current-layer="g2998-2-7-4"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1058"
+     inkscape:window-x="1912"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,435.82679)">
+    <g
+       id="g2993"
+       transform="translate(1077.7103,-585.88847)">
+      <rect
+         rx="2"
+         ry="2"
+         y="277.88861"
+         x="197.79825"
+         height="33.718342"
+         width="80.69043"
+         id="rect2991"
+         style="fill:#ececec;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text2987"
+         y="298.96945"
+         x="209.39151"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         xml:space="preserve"><tspan
+           y="298.96945"
+           x="209.39151"
+           id="tspan2989"
+           sodipodi:role="line">MixInUtest</tspan></text>
+    </g>
+    <g
+       id="g2998"
+       transform="translate(976.94752,-519.21841)">
+      <rect
+         style="fill:#ececec;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+         id="rect3000"
+         width="275.58295"
+         height="63.824715"
+         x="201.11473"
+         y="276.65936"
+         ry="2"
+         rx="2" />
+      <text
+         xml:space="preserve"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         x="211.5439"
+         y="298.17609"
+         id="text3002"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan3004"
+           x="211.5439"
+           y="298.17609">MIXIN_BASE_##CppUTestGroup##mixinGroup</tspan><tspan
+           sodipodi:role="line"
+           x="211.5439"
+           y="313.17609"
+           id="tspan6152" /><tspan
+           sodipodi:role="line"
+           x="211.5439"
+           y="328.17609"
+           id="tspan6154">getParams()</tspan></text>
+    </g>
+    <g
+       transform="translate(976.94752,-357.30684)"
+       id="g3774">
+      <rect
+         rx="2"
+         ry="2"
+         y="276.65936"
+         x="201.11473"
+         height="36.681858"
+         width="275.58295"
+         id="rect3776"
+         style="fill:#ececec;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text3778"
+         y="298.17609"
+         x="211.5439"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         xml:space="preserve"><tspan
+           y="298.17609"
+           x="211.5439"
+           id="tspan3780"
+           sodipodi:role="line">TEST_GROUP_##CppUTestGroup##mixinGroup</tspan></text>
+    </g>
+    <g
+       id="g6426"
+       transform="translate(1171.1345,-715.62454)">
+      <rect
+         y="574.50507"
+         x="-88.571426"
+         height="24.285715"
+         width="147.85715"
+         id="rect6394-6"
+         style="fill:#e6f2e8;fill-opacity:1;stroke:none" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text3782"
+         y="591.00958"
+         x="-79.246216"
+         style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+         xml:space="preserve"><tspan
+           style="font-size:13px;font-weight:bold;-inkscape-font-specification:Sans Bold"
+           y="591.00958"
+           x="-79.246216"
+           id="tspan3784"
+           sodipodi:role="line">TEST_GROUP_BASE</tspan></text>
+    </g>
+    <g
+       id="g6431"
+       transform="translate(1164.7059,-794.68765)">
+      <rect
+         transform="translate(0,308.2677)"
+         y="167.66591"
+         x="-82.14286"
+         height="24.285715"
+         width="101.42857"
+         id="rect6394"
+         style="fill:#e6f2e8;fill-opacity:1;stroke:none" />
+      <text
+         xml:space="preserve"
+         style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+         x="-74.246216"
+         y="493.24274"
+         id="text3786"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan3788"
+           x="-74.246216"
+           y="493.24274"
+           style="font-size:13px;font-weight:bold;-inkscape-font-specification:Sans Bold">MIXIN_GROUP</tspan></text>
+    </g>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#EmptyTriangleOutL)"
+       d="m 1315.8537,-242.55905 1e-4,-31.72247"
+       id="path3790"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g2998"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#g2993"
+       inkscape:connection-end-point="d4" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#EmptyTriangleOutL)"
+       d="m 1315.8537,-80.647477 0,-98.086853"
+       id="path3792"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g3774"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#g2998"
+       inkscape:connection-end-point="d4" />
+    <g
+       id="g2998-2"
+       transform="translate(976.94752,-271.08295)">
+      <rect
+         style="fill:#ececec;fill-opacity:1;stroke:#000000;stroke-width:0.99999994;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+         id="rect3000-4"
+         width="275.58295"
+         height="67.396141"
+         x="201.11473"
+         y="276.65936"
+         ry="2"
+         rx="2" />
+      <text
+         xml:space="preserve"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         x="211.5439"
+         y="298.17609"
+         id="text3002-5"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan3004-5"
+           x="211.5439"
+           y="298.17609">MIXIN_##mixinGroup##_##testName##_Test</tspan><tspan
+           sodipodi:role="line"
+           x="211.5439"
+           y="313.17609"
+           id="tspan6160" /><tspan
+           sodipodi:role="line"
+           x="211.5439"
+           y="328.17609"
+           id="tspan6162">testBody()</tspan></text>
+    </g>
+    <g
+       transform="translate(1279.5497,-271.08295)"
+       id="g3774-1">
+      <rect
+         rx="2"
+         ry="2"
+         y="276.65936"
+         x="201.11475"
+         height="65.967575"
+         width="289.15439"
+         id="rect3776-7"
+         style="fill:#ececec;fill-opacity:1;stroke:#000000;stroke-width:0.99999994;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text3778-1"
+         y="298.17609"
+         x="211.5439"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         xml:space="preserve"><tspan
+           y="298.17609"
+           x="211.5439"
+           id="tspan3780-1"
+           sodipodi:role="line">MIXIN_##mixinGroup##_##testName##_TestShell</tspan><tspan
+           y="313.17609"
+           x="211.5439"
+           sodipodi:role="line"
+           id="tspan6164" /><tspan
+           y="328.17609"
+           x="211.5439"
+           sodipodi:role="line"
+           id="tspan6166">createTest()</tspan></text>
+    </g>
+    <g
+       id="g6436"
+       transform="translate(1643.0988,-517.19809)">
+      <rect
+         y="717.36218"
+         x="-68.571426"
+         height="24.285715"
+         width="101.42857"
+         id="rect6394-1"
+         style="fill:#e6f2e8;fill-opacity:1;stroke:none" />
+      <text
+         xml:space="preserve"
+         style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+         x="-52.870419"
+         y="734.30713"
+         id="text3786-7"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan3788-6"
+           x="-52.870419"
+           y="734.30713"
+           style="font-size:13px;font-weight:bold;-inkscape-font-specification:Sans Bold">MIXIN_TEST</tspan></text>
+    </g>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#EmptyTriangleOutL);display:inline"
+       d="m 1315.8537,5.5764128 0,-49.5420318"
+       id="path3790-1"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g2998-2"
+       inkscape:connection-start-point="d4"
+       sodipodi:nodetypes="cc"
+       inkscape:connection-end="#g3774"
+       inkscape:connection-end-point="d4" />
+    <g
+       transform="translate(1385.0779,-381.5851)"
+       id="g3774-1-8">
+      <rect
+         rx="2"
+         ry="2"
+         y="276.65936"
+         x="201.11473"
+         height="36.681858"
+         width="78.098122"
+         id="rect3776-7-5"
+         style="fill:#ececec;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text3778-1-7"
+         y="298.17609"
+         x="211.5439"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         xml:space="preserve"><tspan
+           y="298.17609"
+           x="211.5439"
+           id="tspan3780-1-6"
+           sodipodi:role="line">UtestShell</tspan></text>
+    </g>
+    <g
+       transform="translate(1595.972,-271.08295)"
+       id="g3774-1-1">
+      <rect
+         rx="2"
+         ry="2"
+         y="276.65936"
+         x="201.11473"
+         height="36.681858"
+         width="275.58295"
+         id="rect3776-7-8"
+         style="fill:#ececec;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text3778-1-9"
+         y="298.17609"
+         x="211.5439"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         xml:space="preserve"><tspan
+           y="298.17609"
+           x="211.5439"
+           id="tspan3780-1-2"
+           sodipodi:role="line">MIXIN_##mixinGroup##_##testName##_Installer</tspan></text>
+    </g>
+    <g
+       transform="translate(1686.3807,-378.72744)"
+       id="g3774-1-8-7">
+      <rect
+         rx="1.9999999"
+         ry="2"
+         y="276.65936"
+         x="201.11472"
+         height="36.681858"
+         width="94.765633"
+         id="rect3776-7-5-9"
+         style="fill:#ececec;fill-opacity:1;stroke:#000000;stroke-width:0.99999994;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text3778-1-7-5"
+         y="298.17609"
+         x="211.5439"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         xml:space="preserve"><tspan
+           y="298.17609"
+           x="211.5439"
+           id="tspan3780-1-6-4"
+           sodipodi:role="line">MixInInstaller</tspan></text>
+    </g>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#EmptyTriangleOutL);display:inline"
+       d="m 1625.2417,5.5764128 0,-73.8202918"
+       id="path3790-1-2"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc"
+       inkscape:connection-end="#g3774-1-8"
+       inkscape:connection-end-point="d4"
+       inkscape:connection-start="#g3774-1"
+       inkscape:connection-start-point="d4" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#EmptyTriangleOutL);display:inline"
+       d="m 1934.8782,5.5764128 0,-70.9626318"
+       id="path3790-1-1"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc"
+       inkscape:connection-end="#g3774-1-8-7"
+       inkscape:connection-end-point="d4"
+       inkscape:connection-start="#g3774-1-1"
+       inkscape:connection-start-point="d4" />
+    <g
+       transform="translate(1536.5369,-454.48888)"
+       id="g3774-1-8-7-9">
+      <rect
+         rx="1.9999999"
+         ry="2"
+         y="276.65936"
+         x="201.11472"
+         height="36.681858"
+         width="94.765633"
+         id="rect3776-7-5-9-8"
+         style="fill:#ececec;fill-opacity:1;stroke:#000000;stroke-width:0.99999994;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text3778-1-7-5-4"
+         y="298.17609"
+         x="211.5439"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         xml:space="preserve"><tspan
+           y="298.17609"
+           x="211.5439"
+           id="tspan3780-1-6-4-0"
+           sodipodi:role="line">MixInRegistry</tspan></text>
+    </g>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:6, 2;stroke-dashoffset:0;marker-end:url(#marker5456);display:inline"
+       d="m 1898.6029,-102.06808 -77.2931,-39.07958"
+       id="path6168"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g3774-1-8-7"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#g3774-1-8-7-9"
+       inkscape:connection-end-point="d4" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:1, 1;stroke-dashoffset:0;marker-end:url(#marker5456)"
+       d="m 1156.3796,-294.46833 98.7596,51.90928"
+       id="path6443"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g6431"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#g2998"
+       inkscape:connection-end-point="d4" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:1, 1;stroke-dashoffset:0;marker-end:url(#marker5456)"
+       d="m 1185.5168,-116.83376 86.4964,36.186283"
+       id="path6665"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g6426"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#g3774"
+       inkscape:connection-end-point="d4" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:1, 1;stroke-dashoffset:0;marker-end:url(#marker5456)"
+       d="M 1603.5298,200.16409 1376.107,72.972554"
+       id="path6887"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g6436"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#g2998-2"
+       inkscape:connection-end-point="d4" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:1, 1;stroke-dashoffset:0;marker-end:url(#marker5456)"
+       d="m 1625.2417,200.16409 -10e-5,-128.620102"
+       id="path7109"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g6436"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#g3774-1"
+       inkscape:connection-end-point="d4" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:1, 1;stroke-dashoffset:0;marker-end:url(#marker5456);display:inline"
+       d="M 1645.1996,200.16409 1904.7331,42.258271"
+       id="path7331"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g6436"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#g3774-1-1"
+       inkscape:connection-end-point="d4" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:1, 1;stroke-dashoffset:0;marker-end:url(#marker5456)"
+       d="m 1134.8642,-294.46833 20.0405,153.34886"
+       id="path7561"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g6431"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#g6426"
+       inkscape:connection-end-point="d4" />
+    <g
+       id="g2993-7"
+       transform="translate(18.712336,-465.96307)">
+      <rect
+         rx="2"
+         ry="2"
+         y="277.88861"
+         x="197.79825"
+         height="33.718342"
+         width="80.69043"
+         id="rect2991-3"
+         style="fill:#ececec;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text2987-7"
+         y="298.96945"
+         x="223.39151"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         xml:space="preserve"><tspan
+           y="298.96945"
+           x="223.39151"
+           id="tspan2989-2"
+           sodipodi:role="line">Utest</tspan></text>
+    </g>
+    <g
+       transform="translate(-82.050364,-357.58957)"
+       id="g3774-5">
+      <rect
+         rx="2"
+         ry="2"
+         y="276.65936"
+         x="201.11473"
+         height="36.681858"
+         width="275.58295"
+         id="rect3776-4"
+         style="fill:#ececec;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text3778-12"
+         y="298.17609"
+         x="211.5439"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         xml:space="preserve"><tspan
+           y="298.17609"
+           x="211.5439"
+           id="tspan3780-0"
+           sodipodi:role="line">TEST_GROUP_##CppUTestGroup##testGroup</tspan></text>
+    </g>
+    <g
+       id="g6426-0"
+       transform="translate(112.13655,-715.90729)">
+      <rect
+         y="574.50507"
+         x="-88.571426"
+         height="24.285715"
+         width="147.85715"
+         id="rect6394-6-1"
+         style="fill:#e6f2e8;fill-opacity:1;stroke:none" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text3782-4"
+         y="591.00958"
+         x="-79.246216"
+         style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+         xml:space="preserve"><tspan
+           style="font-size:13px;font-weight:bold;-inkscape-font-specification:Sans Bold"
+           y="591.00958"
+           x="-79.246216"
+           id="tspan3784-6"
+           sodipodi:role="line">TEST_GROUP_BASE</tspan></text>
+    </g>
+    <g
+       id="g6431-0"
+       transform="translate(127.93134,-684.86377)">
+      <rect
+         transform="translate(0,308.2677)"
+         y="167.66591"
+         x="-82.14286"
+         height="24.285715"
+         width="101.42857"
+         id="rect6394-7"
+         style="fill:#e6f2e8;fill-opacity:1;stroke:none" />
+      <text
+         xml:space="preserve"
+         style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+         x="-74.246216"
+         y="493.24274"
+         id="text3786-1"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan3788-7"
+           x="-74.246216"
+           y="493.24274"
+           style="font-size:13px;font-weight:bold;-inkscape-font-specification:Sans Bold">TEST_GROUP</tspan></text>
+    </g>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#EmptyTriangleOutL);display:inline"
+       d="m 256.85583,-80.930207 -2e-5,-73.425913"
+       id="path3792-7"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g3774-5"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#g2993-7"
+       inkscape:connection-end-point="d4" />
+    <g
+       id="g2998-2-7"
+       transform="translate(-82.050364,-271.36567)">
+      <rect
+         style="fill:#ececec;fill-opacity:1;stroke:#000000;stroke-width:0.99999994;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+         id="rect3000-4-3"
+         width="275.58295"
+         height="67.396141"
+         x="201.11473"
+         y="276.65936"
+         ry="2"
+         rx="2" />
+      <text
+         xml:space="preserve"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         x="211.5439"
+         y="298.17609"
+         id="text3002-5-3"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan3004-5-5"
+           x="211.5439"
+           y="298.17609">TEST_##testGroup##_##testName##_Test</tspan><tspan
+           sodipodi:role="line"
+           x="211.5439"
+           y="313.17609"
+           id="tspan6160-9" /><tspan
+           sodipodi:role="line"
+           x="211.5439"
+           y="328.17609"
+           id="tspan6162-9">testBody()</tspan></text>
+    </g>
+    <g
+       transform="translate(220.55181,-271.36567)"
+       id="g3774-1-81">
+      <rect
+         rx="2"
+         ry="2"
+         y="276.65936"
+         x="201.11475"
+         height="65.967575"
+         width="289.15439"
+         id="rect3776-7-82"
+         style="fill:#ececec;fill-opacity:1;stroke:#000000;stroke-width:0.99999994;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text3778-1-6"
+         y="298.17609"
+         x="211.5439"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         xml:space="preserve"><tspan
+           y="298.17609"
+           x="211.5439"
+           id="tspan3780-1-60"
+           sodipodi:role="line">TEST_##testGroup##_##testName##_TestShell</tspan><tspan
+           y="313.17609"
+           x="211.5439"
+           sodipodi:role="line"
+           id="tspan6164-3" /><tspan
+           y="328.17609"
+           x="211.5439"
+           sodipodi:role="line"
+           id="tspan6166-8">createTest()</tspan></text>
+    </g>
+    <g
+       id="g6436-0"
+       transform="translate(584.10089,-517.48084)">
+      <rect
+         y="717.36218"
+         x="-68.571426"
+         height="24.285715"
+         width="101.42857"
+         id="rect6394-1-1"
+         style="fill:#e6f2e8;fill-opacity:1;stroke:none" />
+      <text
+         xml:space="preserve"
+         style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+         x="-36.870419"
+         y="734.30713"
+         id="text3786-7-2"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan3788-6-5"
+           x="-36.870419"
+           y="734.30713"
+           style="font-size:13px;font-weight:bold;-inkscape-font-specification:Sans Bold">TEST</tspan></text>
+    </g>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#EmptyTriangleOutL);display:inline"
+       d="m 256.85584,5.2936928 0,-49.5420418"
+       id="path3790-1-0"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g2998-2-7"
+       inkscape:connection-start-point="d4"
+       sodipodi:nodetypes="cc"
+       inkscape:connection-end="#g3774-5"
+       inkscape:connection-end-point="d4" />
+    <g
+       transform="translate(326.07996,-381.86777)"
+       id="g3774-1-8-9">
+      <rect
+         rx="2"
+         ry="2"
+         y="276.65936"
+         x="201.11473"
+         height="36.681858"
+         width="78.098122"
+         id="rect3776-7-5-4"
+         style="fill:#ececec;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text3778-1-7-7"
+         y="298.17609"
+         x="211.5439"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         xml:space="preserve"><tspan
+           y="298.17609"
+           x="211.5439"
+           id="tspan3780-1-6-8"
+           sodipodi:role="line">UtestShell</tspan></text>
+    </g>
+    <g
+       transform="translate(536.97408,-271.36567)"
+       id="g3774-1-1-3">
+      <rect
+         rx="2"
+         ry="2"
+         y="276.65936"
+         x="201.11473"
+         height="36.681858"
+         width="275.58295"
+         id="rect3776-7-8-5"
+         style="fill:#ececec;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text3778-1-9-1"
+         y="298.17609"
+         x="211.5439"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         xml:space="preserve"><tspan
+           y="298.17609"
+           x="211.5439"
+           id="tspan3780-1-2-2"
+           sodipodi:role="line">TEST_##testGroup##_##testName##_Installer</tspan></text>
+    </g>
+    <g
+       transform="translate(627.38275,-379.01017)"
+       id="g3774-1-8-7-0">
+      <rect
+         rx="1.9999999"
+         ry="2"
+         y="276.65936"
+         x="201.11472"
+         height="36.681858"
+         width="94.765633"
+         id="rect3776-7-5-9-1"
+         style="fill:#ececec;fill-opacity:1;stroke:#000000;stroke-width:0.99999994;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text3778-1-7-5-6"
+         y="298.17609"
+         x="211.5439"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         xml:space="preserve"><tspan
+           y="298.17609"
+           x="211.5439"
+           id="tspan3780-1-6-4-4"
+           sodipodi:role="line">TestInstaller</tspan></text>
+    </g>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#EmptyTriangleOutL);display:inline"
+       d="m 566.24375,5.2936928 0,-73.8202418"
+       id="path3790-1-2-0"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc"
+       inkscape:connection-end="#g3774-1-8-9"
+       inkscape:connection-end-point="d4"
+       inkscape:connection-start="#g3774-1-81"
+       inkscape:connection-start-point="d4" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#EmptyTriangleOutL);display:inline"
+       d="m 875.88028,5.2936928 0,-70.9626418"
+       id="path3790-1-1-6"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc"
+       inkscape:connection-end="#g3774-1-8-7-0"
+       inkscape:connection-end-point="d4"
+       inkscape:connection-start="#g3774-1-1-3"
+       inkscape:connection-start-point="d4" />
+    <g
+       transform="translate(477.53904,-454.77161)"
+       id="g3774-1-8-7-9-1">
+      <rect
+         rx="1.9999999"
+         ry="2"
+         y="276.65936"
+         x="201.11472"
+         height="36.681858"
+         width="94.765633"
+         id="rect3776-7-5-9-8-8"
+         style="fill:#ececec;fill-opacity:1;stroke:#000000;stroke-width:0.99999994;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text3778-1-7-5-4-9"
+         y="298.17609"
+         x="205.5439"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         xml:space="preserve"><tspan
+           y="298.17609"
+           x="205.5439"
+           id="tspan3780-1-6-4-0-8"
+           sodipodi:role="line">CurrentRegistry</tspan></text>
+    </g>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:6, 2;stroke-dashoffset:0;marker-end:url(#marker5456);display:inline"
+       d="m 839.60493,-102.35081 -77.29301,-39.07958"
+       id="path6168-4"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g3774-1-8-7-0"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#g3774-1-8-7-9-1"
+       inkscape:connection-end-point="d4" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:1, 1;stroke-dashoffset:0;marker-end:url(#marker5456)"
+       d="m 126.51888,-117.11651 86.49646,36.186303"
+       id="path6665-4"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g6426-0"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#g3774-5"
+       inkscape:connection-end-point="d4" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:1, 1;stroke-dashoffset:0;marker-end:url(#marker5456)"
+       d="M 544.53191,199.88134 317.10914,72.689834"
+       id="path6887-3"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g6436-0"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#g2998-2-7"
+       inkscape:connection-end-point="d4" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:1, 1;stroke-dashoffset:0;marker-end:url(#marker5456)"
+       d="m 566.24375,199.88134 0,-128.620072"
+       id="path7109-9"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g6436-0"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#g3774-1-81"
+       inkscape:connection-end-point="d4" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:1, 1;stroke-dashoffset:0;marker-end:url(#marker5456);display:inline"
+       d="M 586.20171,199.88134 845.73519,41.975551"
+       id="path7331-8"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g6436-0"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#g3774-1-1-3"
+       inkscape:connection-end-point="d4" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:1, 1;stroke-dashoffset:0;marker-end:url(#marker5456)"
+       d="m 96.680955,-184.64445 0.634553,43.24223"
+       id="path7561-8"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g6431-0"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#g6426-0"
+       inkscape:connection-end-point="d4" />
+    <text
+       xml:space="preserve"
+       style="font-size:10px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="1867.7721"
+       y="-127.49598"
+       id="text8088"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan8090"
+         x="1867.7721"
+         y="-127.49598">register test</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:10px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="807.61261"
+       y="-129.76076"
+       id="text8088-0"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan8090-8"
+         x="807.61261"
+         y="-129.76076">register test</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:1, 1;stroke-dashoffset:0;display:inline"
+       d="M 649.76003,5.2936928 829.7767,-65.801803"
+       id="path8113"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g3774-1-81"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#g3774-1-8-7-0"
+       inkscape:connection-end-point="d4" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:1, 1;stroke-dashoffset:0;display:inline"
+       d="M 1708.7579,5.5764128 1888.7746,-65.519076"
+       id="path8115"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g3774-1"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#g3774-1-8-7"
+       inkscape:connection-end-point="d4" />
+    <g
+       id="g2993-7-3"
+       transform="translate(1064.9334,128.57164)"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100">
+      <rect
+         rx="2"
+         ry="2"
+         y="277.88861"
+         x="197.79825"
+         height="33.718342"
+         width="80.69043"
+         id="rect2991-3-7"
+         style="fill:#ececec;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text2987-7-1"
+         y="298.96945"
+         x="223.39151"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         xml:space="preserve"><tspan
+           y="298.96945"
+           x="223.39151"
+           id="tspan2989-2-0"
+           sodipodi:role="line">Utest</tspan></text>
+    </g>
+    <g
+       transform="translate(964.17067,236.94514)"
+       id="g3774-5-7"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100">
+      <rect
+         rx="2"
+         ry="2"
+         y="276.65936"
+         x="201.11473"
+         height="36.681858"
+         width="275.58295"
+         id="rect3776-4-3"
+         style="fill:#ececec;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text3778-12-4"
+         y="298.17609"
+         x="211.5439"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         xml:space="preserve"><tspan
+           y="298.17609"
+           x="211.5439"
+           id="tspan3780-0-9"
+           sodipodi:role="line">TEST_GROUP_##CppUTestGroup##testGroup</tspan></text>
+    </g>
+    <g
+       id="g6426-0-6"
+       transform="translate(1158.3576,-121.37258)"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100">
+      <rect
+         y="574.50507"
+         x="-88.571426"
+         height="24.285715"
+         width="147.85715"
+         id="rect6394-6-1-5"
+         style="fill:#e6f2e8;fill-opacity:1;stroke:none" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text3782-4-1"
+         y="591.00958"
+         x="-79.246216"
+         style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+         xml:space="preserve"><tspan
+           style="font-size:13px;font-weight:bold;-inkscape-font-specification:Sans Bold"
+           y="591.00958"
+           x="-79.246216"
+           id="tspan3784-6-0"
+           sodipodi:role="line">TEST_GROUP_BASE</tspan></text>
+    </g>
+    <g
+       id="g6431-0-9"
+       transform="translate(1174.1524,-90.329061)"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100">
+      <rect
+         transform="translate(0,308.2677)"
+         y="167.66591"
+         x="-82.14286"
+         height="24.285715"
+         width="101.42857"
+         id="rect6394-7-9"
+         style="fill:#e6f2e8;fill-opacity:1;stroke:none" />
+      <text
+         xml:space="preserve"
+         style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+         x="-74.246216"
+         y="493.24274"
+         id="text3786-1-6"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan3788-7-8"
+           x="-74.246216"
+           y="493.24274"
+           style="font-size:13px;font-weight:bold;-inkscape-font-specification:Sans Bold">TEST_GROUP</tspan></text>
+    </g>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#EmptyTriangleOutL);display:inline"
+       d="m 1303.0769,513.6045 0,-73.42591"
+       id="path3792-7-3"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g3774-5-7"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#g2993-7-3"
+       inkscape:connection-end-point="d4"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100" />
+    <g
+       id="g2998-2-7-4"
+       transform="translate(964.17067,323.16903)">
+      <rect
+         style="fill:#ececec;fill-opacity:1;stroke:#000000;stroke-width:0.99999994;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+         id="rect3000-4-3-8"
+         width="275.58295"
+         height="90.967567"
+         x="201.11473"
+         y="276.65936"
+         ry="2"
+         rx="2"
+         inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+         inkscape:export-xdpi="100"
+         inkscape:export-ydpi="100" />
+      <text
+         xml:space="preserve"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         x="211.5439"
+         y="298.17609"
+         id="text3002-5-3-4"
+         sodipodi:linespacing="125%"
+         inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+         inkscape:export-xdpi="100"
+         inkscape:export-ydpi="100"><tspan
+           sodipodi:role="line"
+           id="tspan3004-5-5-9"
+           x="211.5439"
+           y="298.17609">TEST_##testGroup##_##testName##_Test</tspan><tspan
+           sodipodi:role="line"
+           x="211.5439"
+           y="313.17609"
+           id="tspan6160-9-9" /><tspan
+           sodipodi:role="line"
+           x="211.5439"
+           y="328.17609"
+           id="tspan6162-9-2">testBody() -&gt; mixinInjection()</tspan><tspan
+           sodipodi:role="line"
+           x="211.5439"
+           y="343.17609"
+           id="tspan8393">setParams()</tspan><tspan
+           sodipodi:role="line"
+           x="211.5439"
+           y="358.17609"
+           id="tspan8694">prepareParams()</tspan></text>
+    </g>
+    <g
+       transform="translate(1266.7728,323.16903)"
+       id="g3774-1-81-5"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100">
+      <rect
+         rx="2"
+         ry="2"
+         y="276.65936"
+         x="201.11475"
+         height="65.967575"
+         width="289.15439"
+         id="rect3776-7-82-5"
+         style="fill:#ececec;fill-opacity:1;stroke:#000000;stroke-width:0.99999994;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text3778-1-6-3"
+         y="298.17609"
+         x="211.5439"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         xml:space="preserve"><tspan
+           y="298.17609"
+           x="211.5439"
+           id="tspan3780-1-60-3"
+           sodipodi:role="line">TEST_##testGroup##_##testName##_TestShell</tspan><tspan
+           y="313.17609"
+           x="211.5439"
+           sodipodi:role="line"
+           id="tspan6164-3-3" /><tspan
+           y="328.17609"
+           x="211.5439"
+           sodipodi:role="line"
+           id="tspan6166-8-7">createTest()</tspan></text>
+    </g>
+    <g
+       id="g6436-0-4"
+       transform="translate(1630.3219,108.34076)"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100">
+      <rect
+         y="717.36218"
+         x="-68.571426"
+         height="24.285715"
+         width="101.42857"
+         id="rect6394-1-1-3"
+         style="fill:#e6f2e8;fill-opacity:1;stroke:none" />
+      <text
+         xml:space="preserve"
+         style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+         x="-62.870419"
+         y="734.30713"
+         id="text3786-7-2-8"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan3788-6-5-0"
+           x="-62.870419"
+           y="734.30713"
+           style="font-size:13px;font-weight:bold;-inkscape-font-specification:Sans Bold">MIXIN_APPLY</tspan></text>
+    </g>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#EmptyTriangleOutL);display:inline"
+       d="m 1303.0769,599.82839 0,-49.54203"
+       id="path3790-1-0-8"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g2998-2-7-4"
+       inkscape:connection-start-point="d4"
+       sodipodi:nodetypes="cc"
+       inkscape:connection-end="#g3774-5-7"
+       inkscape:connection-end-point="d4"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100" />
+    <g
+       transform="translate(1372.301,212.66694)"
+       id="g3774-1-8-9-8"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100">
+      <rect
+         rx="2"
+         ry="2"
+         y="276.65936"
+         x="201.11473"
+         height="36.681858"
+         width="78.098122"
+         id="rect3776-7-5-4-0"
+         style="fill:#ececec;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text3778-1-7-7-6"
+         y="298.17609"
+         x="211.5439"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         xml:space="preserve"><tspan
+           y="298.17609"
+           x="211.5439"
+           id="tspan3780-1-6-8-8"
+           sodipodi:role="line">UtestShell</tspan></text>
+    </g>
+    <g
+       transform="translate(1583.1951,323.16903)"
+       id="g3774-1-1-3-1"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100">
+      <rect
+         rx="2"
+         ry="2"
+         y="276.65936"
+         x="201.11473"
+         height="36.681858"
+         width="275.58295"
+         id="rect3776-7-8-5-9"
+         style="fill:#ececec;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text3778-1-9-1-8"
+         y="298.17609"
+         x="211.5439"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         xml:space="preserve"><tspan
+           y="298.17609"
+           x="211.5439"
+           id="tspan3780-1-2-2-9"
+           sodipodi:role="line">TEST_##testGroup##_##testName##_Installer</tspan></text>
+    </g>
+    <g
+       id="g11010"
+       transform="translate(-16.071448,0)"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100">
+      <rect
+         rx="1.9999998"
+         ry="2"
+         y="492.1839"
+         x="1874.7185"
+         height="36.681858"
+         width="126.90849"
+         id="rect3776-7-5-9-1-2"
+         style="fill:#ececec;fill-opacity:1;stroke:#000000;stroke-width:0.99999994;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text3778-1-7-5-6-2"
+         y="513.70062"
+         x="1885.1477"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         xml:space="preserve"><tspan
+           y="513.70062"
+           x="1885.1477"
+           id="tspan3780-1-6-4-4-8"
+           sodipodi:role="line">MixinApplyInstaller</tspan></text>
+    </g>
+    <text
+       sodipodi:linespacing="125%"
+       id="text8698"
+       y="515.72461"
+       x="1775.0895"
+       style="font-size:10px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       xml:space="preserve"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100"><tspan
+         style="font-size:12px;font-weight:bold;-inkscape-font-specification:Sans Bold"
+         y="515.72461"
+         x="1775.0895"
+         id="tspan8700"
+         sodipodi:role="line">mixinGroup</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#EmptyTriangleOutL);display:inline"
+       d="m 1612.4648,599.82839 0,-73.82023"
+       id="path3790-1-2-0-2"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc"
+       inkscape:connection-end="#g3774-1-8-9-8"
+       inkscape:connection-end-point="d4"
+       inkscape:connection-start="#g3774-1-81-5"
+       inkscape:connection-start-point="d4"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100" />
+    <g
+       transform="translate(1523.7601,139.7631)"
+       id="g3774-1-8-7-9-1-9"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100">
+      <rect
+         rx="1.9999999"
+         ry="2"
+         y="276.65936"
+         x="201.11472"
+         height="36.681858"
+         width="94.765633"
+         id="rect3776-7-5-9-8-8-0"
+         style="fill:#ececec;fill-opacity:1;stroke:#000000;stroke-width:0.99999994;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text3778-1-7-5-4-9-7"
+         y="298.17609"
+         x="205.5439"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         xml:space="preserve"><tspan
+           y="298.17609"
+           x="205.5439"
+           id="tspan3780-1-6-4-0-8-8"
+           sodipodi:role="line">CurrentRegistry</tspan></text>
+    </g>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:6, 2;stroke-dashoffset:0;marker-end:url(#marker5456);display:inline"
+       d="m 1885.826,492.1839 -77.293,-39.07958"
+       id="path6168-4-1"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-end="#g3774-1-8-7-9-1-9"
+       inkscape:connection-end-point="d4"
+       inkscape:connection-start="#g11010"
+       inkscape:connection-start-point="d4"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:1, 1;stroke-dashoffset:0;marker-end:url(#marker5456)"
+       d="m 1172.7399,477.4182 86.4965,36.1863"
+       id="path6665-4-5"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g6426-0-6"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#g3774-5-7"
+       inkscape:connection-end-point="d4"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:1, 1;stroke-dashoffset:0;marker-end:url(#marker5456)"
+       d="M 1592.952,825.70294 1376.1661,690.79596"
+       id="path6887-3-8"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g6436-0-4"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#g2998-2-7-4"
+       inkscape:connection-end-point="d4"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:1, 1;stroke-dashoffset:0;marker-end:url(#marker5456)"
+       d="m 1612.4648,825.70294 -10e-5,-159.90697"
+       id="path7109-9-6"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g6436-0-4"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#g3774-1-81-5"
+       inkscape:connection-end-point="d4"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:1, 1;stroke-dashoffset:0;marker-end:url(#marker5456);display:inline"
+       d="M 1629.5803,825.70294 1896.2496,636.51025"
+       id="path7331-8-1"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g6436-0-4"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#g3774-1-1-3-1"
+       inkscape:connection-end-point="d4"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:1, 1;stroke-dashoffset:0;marker-end:url(#marker5456)"
+       d="m 1142.902,409.89026 0.6346,43.24223"
+       id="path7561-8-2"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g6431-0-9"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#g6426-0-6"
+       inkscape:connection-end-point="d4"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100" />
+    <text
+       xml:space="preserve"
+       style="font-size:10px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="1853.8337"
+       y="464.77393"
+       id="text8088-0-4"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100"><tspan
+         sodipodi:role="line"
+         id="tspan8090-8-2"
+         x="1853.8337"
+         y="464.77393">register test</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:1, 1;stroke-dashoffset:0;display:inline"
+       d="m 1695.981,599.82839 179.6803,-70.96263"
+       id="path8113-5"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g3774-1-81-5"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#g11010"
+       inkscape:connection-end-point="d4"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100" />
+    <g
+       transform="translate(1114.0404,160.01001)"
+       id="g3774-5-7-8"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100">
+      <rect
+         rx="1.9999998"
+         ry="2"
+         y="353.80219"
+         x="-230.31381"
+         height="90.967567"
+         width="157.01152"
+         id="rect3776-4-3-6"
+         style="fill:#ececec;fill-opacity:1;stroke:#000000;stroke-width:0.99999988;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text3778-12-4-2"
+         y="375.31894"
+         x="-219.88467"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         xml:space="preserve"><tspan
+           y="375.31894"
+           x="-219.88467"
+           id="tspan3780-0-9-6"
+           sodipodi:role="line">MixInInjectionUTest</tspan><tspan
+           y="390.31894"
+           x="-219.88467"
+           sodipodi:role="line"
+           id="tspan8688" /><tspan
+           y="405.31894"
+           x="-219.88467"
+           sodipodi:role="line"
+           id="tspan8696">mixinInjection()</tspan><tspan
+           y="420.35501"
+           x="-219.88467"
+           sodipodi:role="line"
+           id="tspan8690"
+           style="font-style:oblique;-inkscape-font-specification:Sans Oblique">setParams() &lt;abstract&gt;</tspan><tspan
+           y="435.35501"
+           x="-219.88467"
+           sodipodi:role="line"
+           style="font-style:oblique;-inkscape-font-specification:Sans Oblique"
+           id="tspan8692">prepareScope &lt;abstract&gt;</tspan></text>
+    </g>
+    <g
+       transform="translate(709.44909,122.15286)"
+       id="g3774-1-8-7-9-5"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100">
+      <rect
+         rx="1.9999999"
+         ry="2"
+         y="276.65936"
+         x="201.11472"
+         height="36.681858"
+         width="94.765633"
+         id="rect3776-7-5-9-8-3"
+         style="fill:#ececec;fill-opacity:1;stroke:#000000;stroke-width:0.99999994;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text3778-1-7-5-4-92"
+         y="298.17609"
+         x="211.5439"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         xml:space="preserve"><tspan
+           y="298.17609"
+           x="211.5439"
+           id="tspan3780-1-6-4-0-4"
+           sodipodi:role="line">MixInRegistry</tspan></text>
+    </g>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:6, 6;stroke-dashoffset:0;marker-end:url(#marker8147)"
+       d="m 960.86097,513.8122 -2.36135,-78.31812"
+       id="path8731"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g3774-5-7-8"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#g3774-1-8-7-9-5"
+       inkscape:connection-end-point="d4"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker8161)"
+       d="m 1165.2854,610.53885 -124.5473,-31.431"
+       id="path8733"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g2998-2-7-4"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#g3774-5-7-8"
+       inkscape:connection-end-point="d4"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100" />
+    <text
+       xml:space="preserve"
+       style="font-size:10px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="932.94659"
+       y="481.43896"
+       id="text9263"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100"><tspan
+         sodipodi:role="line"
+         id="tspan9265"
+         x="932.94659"
+         y="481.43896">uses</tspan></text>
+    <g
+       transform="translate(1301.8975,-505.64698)"
+       id="g3774-6">
+      <rect
+         rx="2"
+         ry="2"
+         y="276.65936"
+         x="201.11473"
+         height="36.681858"
+         width="195.58295"
+         id="rect3776-1"
+         style="fill:#ececec;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text3778-8"
+         y="298.17609"
+         x="211.5439"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         xml:space="preserve"><tspan
+           y="298.17609"
+           x="211.5439"
+           id="tspan3780-2"
+           sodipodi:role="line">MIXIN_##mixinGroup##_Params</tspan></text>
+    </g>
+    <g
+       id="g6431-1"
+       transform="translate(1626.1609,-786.6376)">
+      <rect
+         y="475.93359"
+         x="-82.14286"
+         height="24.285715"
+         width="113.57143"
+         id="rect6394-19"
+         style="fill:#e6f2e8;fill-opacity:1;stroke:none" />
+      <text
+         xml:space="preserve"
+         style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+         x="-74.246216"
+         y="493.24274"
+         id="text3786-76"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan3788-2"
+           x="-74.246216"
+           y="493.24274"
+           style="font-size:13px;font-weight:bold;-inkscape-font-specification:Sans Bold">MIXIN_PARAMS</tspan></text>
+    </g>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:1, 1;stroke-dashoffset:0;marker-end:url(#marker8147)"
+       d="m 1600.8037,-286.41829 0,57.43067"
+       id="path9321"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g6431-1"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#g3774-6"
+       inkscape:connection-end-point="d4" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:6, 6;stroke-dashoffset:0;marker-start:url(#Arrow1Lstart)"
+       d="m 1503.0122,-210.64669 -49.367,0"
+       id="path9323"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g3774-6"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#g2998"
+       inkscape:connection-end-point="d4" />
+    <g
+       transform="translate(1004.1707,454.18963)"
+       id="g3774-6-2"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100">
+      <rect
+         rx="2"
+         ry="2"
+         y="276.65936"
+         x="201.11473"
+         height="36.681858"
+         width="195.58295"
+         id="rect3776-1-0"
+         style="fill:#ececec;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text3778-8-0"
+         y="298.17609"
+         x="211.5439"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         xml:space="preserve"><tspan
+           y="298.17609"
+           x="211.5439"
+           id="tspan3780-2-3"
+           sodipodi:role="line">MIXIN_##mixinGroup##_Params</tspan></text>
+    </g>
+    <g
+       id="g6431-1-9"
+       transform="translate(1328.434,349.76933)"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100">
+      <rect
+         y="475.93359"
+         x="-82.14286"
+         height="24.285715"
+         width="113.57143"
+         id="rect6394-19-1"
+         style="fill:#e6f2e8;fill-opacity:1;stroke:none" />
+      <text
+         xml:space="preserve"
+         style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+         x="-74.246216"
+         y="493.24274"
+         id="text3786-76-8"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan3788-2-1"
+           x="-74.246216"
+           y="493.24274"
+           style="font-size:13px;font-weight:bold;-inkscape-font-specification:Sans Bold">MIXIN_PARAMS</tspan></text>
+    </g>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:1, 1;stroke-dashoffset:0;marker-end:url(#marker8147)"
+       d="m 1303.0769,825.70292 0,-58.17207"
+       id="path9321-9"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g6431-1-9"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#g3774-6-2"
+       inkscape:connection-end-point="d4"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:6, 2;stroke-dashoffset:0;marker-start:url(#Arrow1Lstart);marker-mid:none"
+       d="m 1303.0769,730.84899 0,-40.05303"
+       id="path9901"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g3774-6-2"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#g2998-2-7-4"
+       inkscape:connection-end-point="d4"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100" />
+    <text
+       xml:space="preserve"
+       style="font-size:10px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="1269.3961"
+       y="714.03162"
+       id="text9263-5"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100"><tspan
+         sodipodi:role="line"
+         id="tspan9265-3"
+         x="1269.3961"
+         y="714.03162">uses</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:10px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="1466.5389"
+       y="-221.68266"
+       id="text9263-2"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan9265-5"
+         x="1466.5389"
+         y="-221.68266">uses</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker8161)"
+       d="m 1922.1013,599.82839 0,-70.96263"
+       id="path11015"
+       inkscape:connector-type="polyline"
+       inkscape:connector-curvature="0"
+       inkscape:connection-start="#g3774-1-1-3-1"
+       inkscape:connection-start-point="d4"
+       inkscape:connection-end="#g11010"
+       inkscape:connection-end-point="d4"
+       inkscape:export-filename="D:\cpputest\docs\architecture-mixin_apply.png"
+       inkscape:export-xdpi="100"
+       inkscape:export-ydpi="100" />
+  </g>
+</svg>

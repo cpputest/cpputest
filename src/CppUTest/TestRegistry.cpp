@@ -141,6 +141,12 @@ TestRegistry* TestRegistry::getCurrentRegistry()
     return (currentRegistry_ == 0) ? &registry : currentRegistry_;
 }
 
+TestRegistry* TestRegistry::getMixInRegistry()
+{
+    static TestRegistry registry;
+    return &registry;
+}
+
 void TestRegistry::setCurrentRegistry(TestRegistry* registry)
 {
     currentRegistry_ = registry;

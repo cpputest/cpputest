@@ -172,6 +172,7 @@
     <ClCompile Include="MemoryLeakDetectorTest.cpp" />
     <ClCompile Include="MemoryOperatorOverloadTest.cpp" />
     <ClCompile Include="MemoryLeakWarningTest.cpp" />
+    <ClCompile Include="MixInTest.cpp" />
     <ClCompile Include="PluginTest.cpp" />
     <ClCompile Include="PreprocessorTest.cpp" />
     <ClCompile Include="SetPluginTest.cpp" />

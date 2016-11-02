@@ -70,6 +70,8 @@ public:
     static TestRegistry* getCurrentRegistry();
     virtual void setCurrentRegistry(TestRegistry* registry);
 
+	static TestRegistry* getMixInRegistry();
+
     virtual void setRunTestsInSeperateProcess();
     int getCurrentRepetition();
     void setRunIgnored();

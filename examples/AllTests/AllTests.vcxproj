@@ -149,6 +149,8 @@
     <ClCompile Include="CircularBufferTest.cpp" />
     <ClCompile Include="EventDispatcherTest.cpp" />
     <ClCompile Include="HelloTest.cpp" />
+    <ClCompile Include="MixInApplyTest.cpp" />
+    <ClCompile Include="MixInTest.cpp" />
     <ClCompile Include="MockDocumentationTest.cpp" />
     <ClCompile Include="PrinterTest.cpp" />
   </ItemGroup>
@@ -160,6 +162,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AllTests.h" />
+    <ClInclude Include="MixInTest.h" />
     <ClInclude Include="MockPrinter.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
