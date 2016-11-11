@@ -174,6 +174,7 @@ extern void CHECK_C_LOCATION(int condition, const char* conditionString,
 
 extern void* cpputest_malloc(size_t size);
 extern char* cpputest_strdup(const char* str);
+extern char* cpputest_strndup(const char* str, size_t n);
 extern void* cpputest_calloc(size_t num, size_t size);
 extern void* cpputest_realloc(void* ptr, size_t size);
 extern void  cpputest_free(void* buffer);

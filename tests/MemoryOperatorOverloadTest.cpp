@@ -125,7 +125,6 @@ TEST(MemoryLeakOverridesToBeUsedInProductionCode, StrdupOverrideIsUsed)
 {
     int memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
     char* memory = strdup("0123456789");
-    STRCMP_EQUAL("0123456789", memory);
     LONGS_EQUAL(memLeaks+1, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
     free (memory);
 }
@@ -133,8 +132,7 @@ TEST(MemoryLeakOverridesToBeUsedInProductionCode, StrdupOverrideIsUsed)
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, StrndupOverrideIsUsed)
 {
     int memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
-    char* memory = strndup("0123456789", 3);
-    STRCMP_EQUAL("012", memory);
+    char* memory = strndup("0123456789", 10);
     LONGS_EQUAL(memLeaks+1, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
     free (memory);
 }

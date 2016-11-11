@@ -161,6 +161,11 @@ char* cpputest_strdup(const char* str)
     return cpputest_strdup_location(str, "<unknown>", 0);
 }
 
+char* cpputest_strndup(const char* str, size_t n)
+{
+    return cpputest_strndup_location(str, n, "<unknown>", 0);
+}
+
 void* cpputest_calloc(size_t num, size_t size)
 {
     return cpputest_calloc_location(num, size, "<unknown>", 0);
