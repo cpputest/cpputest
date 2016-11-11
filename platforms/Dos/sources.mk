@@ -111,7 +111,7 @@ CPPU6_OBJECTS := \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockComparatorCopierTest.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockHierarchyTest.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockParameterTest.o \
-  $(CPPUTEST_HOME)/tests/TestUTestStringMacro.o \
+  $(CPPUTEST_HOME)/tests/CppUTest/TestUTestStringMacro.o \
 
   CPPU7_OBJECTS := \
   $(CPPUTEST_HOME)/tests/CppUTestExt/AllTests.o \
