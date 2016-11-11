@@ -1925,58 +1925,46 @@
     <group>
       <name>CppUTestExt</name>
       <file>
-        <name>$PROJ_DIR$\..\..\src\CppUTest\CommandLineArguments.cpp</name>
+        <name>$PROJ_DIR$\..\..\src\CppUTestExt\CodeMemoryReportFormatter.cpp</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\src\CppUTest\CommandLineTestRunner.cpp</name>
+        <name>$PROJ_DIR$\..\..\src\CppUTestExt\IEEE754ExceptionsPlugin.cpp</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\src\CppUTest\JUnitTestOutput.cpp</name>
+        <name>$PROJ_DIR$\..\..\src\CppUTestExt\MemoryReportAllocator.cpp</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\src\CppUTest\MemoryLeakDetector.cpp</name>
+        <name>$PROJ_DIR$\..\..\src\CppUTestExt\MemoryReporterPlugin.cpp</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\src\CppUTest\MemoryLeakWarningPlugin.cpp</name>
+        <name>$PROJ_DIR$\..\..\src\CppUTestExt\MemoryReportFormatter.cpp</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\src\CppUTest\SimpleMutex.cpp</name>
+        <name>$PROJ_DIR$\..\..\src\CppUTestExt\MockActualCall.cpp</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\src\CppUTest\SimpleString.cpp</name>
+        <name>$PROJ_DIR$\..\..\src\CppUTestExt\MockExpectedCall.cpp</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\src\CppUTest\TeamCityTestOutput.cpp</name>
+        <name>$PROJ_DIR$\..\..\src\CppUTestExt\MockExpectedCallsList.cpp</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\src\CppUTest\TestFailure.cpp</name>
+        <name>$PROJ_DIR$\..\..\src\CppUTestExt\MockFailure.cpp</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\src\CppUTest\TestFilter.cpp</name>
+        <name>$PROJ_DIR$\..\..\src\CppUTestExt\MockNamedValue.cpp</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\src\CppUTest\TestHarness_c.cpp</name>
+        <name>$PROJ_DIR$\..\..\src\CppUTestExt\MockSupport.cpp</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\src\CppUTest\TestMemoryAllocator.cpp</name>
+        <name>$PROJ_DIR$\..\..\src\CppUTestExt\MockSupport_c.cpp</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\src\CppUTest\TestOutput.cpp</name>
+        <name>$PROJ_DIR$\..\..\src\CppUTestExt\MockSupportPlugin.cpp</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\src\CppUTest\TestPlugin.cpp</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\src\CppUTest\TestRegistry.cpp</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\src\CppUTest\TestResult.cpp</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\src\CppUTest\TestTestingFixture.cpp</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\src\CppUTest\Utest.cpp</name>
+        <name>$PROJ_DIR$\..\..\src\CppUTestExt\OrderedTest.cpp</name>
       </file>
     </group>
     <group>
