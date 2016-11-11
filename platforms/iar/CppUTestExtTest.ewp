@@ -128,7 +128,7 @@
         <option>
           <name>GBECoreSlave</name>
           <version>24</version>
-          <state>40</state>
+          <state>39</state>
         </option>
         <option>
           <name>OGUseCmsis</name>
@@ -725,7 +725,7 @@
         </option>
         <option>
           <name>IlinkIcfFile</name>
-          <state>$PROJ_DIR$\CppUTestTest.icf</state>
+          <state>$PROJ_DIR$\CppUTestExtTest.icf</state>
         </option>
         <option>
           <name>IlinkIcfFileSlave</name>
@@ -773,7 +773,8 @@
         </option>
         <option>
           <name>IlinkAdditionalLibs</name>
-          <state>$PROJ_DIR$\Debug\Exe\cpputest.a</state>
+          <state>$PROJ_DIR$\Debug\Exe\CppUTest.a</state>
+          <state>$PROJ_DIR$\Debug\Exe\CppUTestExt.a</state>
         </option>
         <option>
           <name>IlinkOverrideProgramEntryLabel</name>
