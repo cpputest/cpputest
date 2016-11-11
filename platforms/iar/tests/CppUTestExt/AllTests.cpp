@@ -36,6 +36,7 @@
 
 int main(int ac, const char** av)
 {
+    const char * av_override[] = {"exe", "-v"};
 #ifdef CPPUTEST_INCLUDE_GTEST_TESTS
     GTestConvertor convertor;
     convertor.addAllGTestToTestRegistry();
@@ -47,7 +48,7 @@ int main(int ac, const char** av)
     TestRegistry::getCurrentRegistry()->installPlugin(&mockPlugin);
 
 #ifndef GMOCK_RENAME_MAIN
-    return CommandLineTestRunner::RunAllTests(ac, av);
+    int rv = CommandLineTestRunner::RunAllTests(2, av_override);
 #else
     /* Don't have any memory leak detector when running the Google Test tests */
 
@@ -57,5 +58,10 @@ int main(int ac, const char** av)
     CommandLineTestRunner runner(ac, av, &output, TestRegistry::getCurrentRegistry());
     return runner.runAllTestsMain();
 #endif
+    
+    //Exiting from main causes IAR simulator to issue out-of-bounds memory access warnings.
+    volatile int wait = 1;
+    while (wait){}
+    return rv;
 }
 
