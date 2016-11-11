@@ -4,6 +4,7 @@
 #undef free
 #undef calloc
 #undef realloc
+#undef strdup
 
 #include <stdio.h>
 #include <stdarg.h>

@@ -34,6 +34,7 @@
 #undef free
 #undef calloc
 #undef realloc
+#undef strdup
 
 #define  far  // eliminate "meaningless type qualifier" warning
 #include <time.h>

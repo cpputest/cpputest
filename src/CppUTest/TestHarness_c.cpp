@@ -34,7 +34,6 @@
 extern "C"
 {
 
-
 void CHECK_EQUAL_C_BOOL_LOCATION(int expected, int actual, const char* fileName, int lineNumber)
 {
     UtestShell::getCurrent()->assertEquals(!!expected != !!actual, expected ? "true" : "false", actual ? "true" : "false", NULL, fileName, lineNumber, TestTerminatorWithoutExceptions());
@@ -157,6 +156,11 @@ void* cpputest_malloc(size_t size)
     return cpputest_malloc_location(size, "<unknown>", 0);
 }
 
+char* cpputest_strdup(const char* str)
+{
+    return cpputest_strdup_location(str, "<unknown>", 0);
+}
+
 void* cpputest_calloc(size_t num, size_t size)
 {
     return cpputest_calloc_location(num, size, "<unknown>", 0);
@@ -191,6 +195,21 @@ void* cpputest_malloc_location(size_t size, const char* file, int line)
     countdown();
     malloc_count++;
     return cpputest_malloc_location_with_leak_detection(size, file, line);
+}
+
+static size_t strlen(const char * str)
+{
+	size_t n = 0;
+	while (*str++) n++;
+	return n;
+}
+
+char* cpputest_strdup_location(const char * str, const char* file, int line)
+{
+	 size_t length = 1 + strlen(str);
+	 char* result = (char*) cpputest_malloc_location(length, file, line);
+	 PlatformSpecificMemCpy(result, str, length);
+	 return result;
 }
 
 void* cpputest_calloc_location(size_t num, size_t size, const char* file, int line)

@@ -30,6 +30,7 @@
 #undef free
 #undef calloc
 #undef realloc
+#undef strdup
 
 #include "CppUTest/PlatformSpecificFunctions.h"
 

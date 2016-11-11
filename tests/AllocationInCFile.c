@@ -9,6 +9,11 @@ char* mallocAllocation()
     return (char*) malloc(10UL);
 }
 
+char* strdupAllocation()
+{
+    return strdup("0123456789");
+}
+
 void freeAllocation(void* memory)
 {
     free(memory);

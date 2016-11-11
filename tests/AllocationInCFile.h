@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 extern char* mallocAllocation(void);
+extern char* strdupAllocation(void);
 extern void freeAllocation(void* memory);
 extern void freeAllocationWithoutMacro(void* memory);
 

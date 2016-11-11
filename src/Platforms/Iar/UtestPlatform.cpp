@@ -39,6 +39,7 @@
 #undef calloc
 #undef realloc
 #undef free
+#undef strdup
 #include "CppUTest/PlatformSpecificFunctions.h"
 
 static jmp_buf test_exit_jmp_buf[10];
