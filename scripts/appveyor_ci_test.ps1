@@ -95,7 +95,7 @@ switch -Wildcard ($env:Platform)
         $mingw_path = Get-MinGWBin
 
         Add-PathFolder $mingw_path
-        Invoke-Tests '.\cpputest_build\tests\CppUTestTests.exe'
+        Invoke-Tests '.\cpputest_build\tests\CppUTest\CppUTestTests.exe'
         Invoke-Tests '.\cpputest_build\tests\CppUTestExt\CppUTestExtTests.exe'
         Remove-PathFolder $mingw_path
     }
