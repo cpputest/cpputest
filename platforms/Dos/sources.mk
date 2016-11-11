@@ -111,9 +111,8 @@ CPPU6_OBJECTS := \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockComparatorCopierTest.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockHierarchyTest.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockParameterTest.o \
-  $(CPPUTEST_HOME)/tests/TestUTestStringMacro.o \
 
-  CPPU7_OBJECTS := \
+CPPU7_OBJECTS := \
   $(CPPUTEST_HOME)/tests/CppUTestExt/AllTests.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockFailureReporterForTest.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/IEEE754PluginTest.o \
@@ -125,3 +124,9 @@ CPPU6_OBJECTS := \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockReturnValueTest.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockStrictOrderTest.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockSupportTest.o \
+
+CPPU8_OBJECTS := \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/AllTests.o \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/MockFailureReporterForTest.o \
+  $(CPPUTEST_HOME)/tests/TestUTestStringMacro.o \
+
