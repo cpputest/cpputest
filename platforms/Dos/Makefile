@@ -30,7 +30,7 @@ CXXFLAGS := $(CFLAGS) -xds
 .PHONY: all clean
 
 all: CPPU.LIB CPPUX.LIB CPPU1.EXE CPPU2.EXE CPPU3.EXE CPPU4.EXE \
-    CPPU5.EXE CPPU6.EXE CPPU7.EXE
+    CPPU5.EXE CPPU6.EXE CPPU7.EXE CPPU8.EXE
 
 clean:
 	rm -rf ../src/CppUTest/*.o ../src/CppUTestExt/*.o \
