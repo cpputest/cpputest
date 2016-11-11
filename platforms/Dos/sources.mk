@@ -75,8 +75,9 @@ CPPU3_OBJECTS := \
   $(CPPUTEST_HOME)/tests/TestUTestMacro.o \
   $(CPPUTEST_HOME)/tests/UtestPlatformTest.o \
   $(CPPUTEST_HOME)/tests/UtestTest.o \
+  $(CPPUTEST_HOME)/tests/TestUTestStringMacro.o \
 
-CPPU4_OBJECTS := \
+CPPUX1_OBJECTS := \
   $(CPPUTEST_HOME)/tests/CppUTestExt/AllTests.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockFailureReporterForTest.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/ExpectedFunctionsListTest.o \
@@ -92,7 +93,7 @@ CPPU4_OBJECTS := \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockExpectedCallTest.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockHierarchyTest.o \
 
-CPPU5_OBJECTS := \
+CPPUX2_OBJECTS := \
   $(CPPUTEST_HOME)/tests/CppUTestExt/AllTests.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockFailureReporterForTest.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/CodeMemoryReporterTest.o \
@@ -103,7 +104,7 @@ CPPU5_OBJECTS := \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockSupport_cTest.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockSupport_cTestCFile.o \
 
-CPPU6_OBJECTS := \
+CPPUX3_OBJECTS := \
   $(CPPUTEST_HOME)/tests/CppUTestExt/AllTests.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockFailureReporterForTest.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/ExpectedFunctionsListTest.o \
@@ -111,9 +112,8 @@ CPPU6_OBJECTS := \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockComparatorCopierTest.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockHierarchyTest.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockParameterTest.o \
-  $(CPPUTEST_HOME)/tests/TestUTestStringMacro.o \
 
-  CPPU7_OBJECTS := \
+CPPUX4_OBJECTS := \
   $(CPPUTEST_HOME)/tests/CppUTestExt/AllTests.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockFailureReporterForTest.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/IEEE754PluginTest.o \
