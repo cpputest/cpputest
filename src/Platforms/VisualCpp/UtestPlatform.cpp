@@ -5,6 +5,7 @@
 #undef calloc
 #undef realloc
 #undef strdup
+#undef strndup
 
 #include <stdio.h>
 #include <stdarg.h>

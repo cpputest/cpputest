@@ -40,6 +40,7 @@
 #undef realloc
 #undef free
 #undef strdup
+#undef strndup
 
 #define  far  // eliminate "meaningless type qualifier" warning
 

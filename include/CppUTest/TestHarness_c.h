@@ -180,6 +180,7 @@ extern void  cpputest_free(void* buffer);
 
 extern void* cpputest_malloc_location(size_t size, const char* file, int line);
 extern char* cpputest_strdup_location(const char* str, const char* file, int line);
+extern char* cpputest_strndup_location(const char* str, size_t n, const char* file, int line);
 extern void* cpputest_calloc_location(size_t num, size_t size,
         const char* file, int line);
 extern void* cpputest_realloc_location(void* memory, size_t size,

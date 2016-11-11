@@ -23,6 +23,7 @@ extern "C"
 
 extern void* cpputest_malloc_location(size_t size, const char* file, int line);
 extern char* cpputest_strdup_location(const char* str, const char* file, int line);
+extern char* cpputest_strndup_location(const char* str, size_t n, const char* file, int line);
 extern void* cpputest_calloc_location(size_t count, size_t size, const char* file, int line);
 extern void* cpputest_realloc_location(void *, size_t, const char* file, int line);
 extern void cpputest_free_location(void* buffer, const char* file, int line);
@@ -37,6 +38,7 @@ extern void crash_on_allocation_number(unsigned number);
 
 #ifdef CPPUTEST_HAVE_STRDUP
 #define strdup(str) cpputest_strdup_location(str, __FILE__, __LINE__)
+#define strndup(str, n) cpputest_strndup_location(str, n, __FILE__, __LINE__)
 #define CPPUTEST_USE_STRDUP_MACROS 1
 #endif
 

@@ -14,6 +14,12 @@ char* strdupAllocation()
     return strdup("0123456789");
 }
 
+
+char* strndupAllocation()
+{
+    return strndup("0123456789", 10);
+}
+
 void freeAllocation(void* memory)
 {
     free(memory);

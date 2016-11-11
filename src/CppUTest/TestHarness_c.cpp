@@ -199,18 +199,34 @@ void* cpputest_malloc_location(size_t size, const char* file, int line)
 
 static size_t strlen(const char * str)
 {
-	size_t n = 0;
-	while (*str++) n++;
-	return n;
+    size_t n = 0;
+    while (*str++) n++;
+    return n;
+}
+
+static char* strdup_alloc(const char * str, size_t size, const char* file, int line)
+{
+    char* result = (char*) cpputest_malloc_location(size, file, line);
+    PlatformSpecificMemCpy(result, str, size);
+    /* Reinforce null termination in case size is less than strlen(str) */
+    result[size-1] = '\0';
+    return result;
 }
 
 char* cpputest_strdup_location(const char * str, const char* file, int line)
 {
-	 size_t length = 1 + strlen(str);
-	 char* result = (char*) cpputest_malloc_location(length, file, line);
-	 PlatformSpecificMemCpy(result, str, length);
-	 return result;
+    size_t length = 1 + strlen(str);
+    return strdup_alloc(str, length, file, line);
 }
+
+char* cpputest_strndup_location(const char * str, size_t n, const char* file, int line)
+{
+    size_t length = strlen(str);
+    length = length < n ? length : n;
+    length = length + 1;
+    return strdup_alloc(str, length, file, line);
+}
+
 
 void* cpputest_calloc_location(size_t num, size_t size, const char* file, int line)
 {
