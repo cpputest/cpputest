@@ -14,6 +14,11 @@ if(HAVE_FORK)
   add_definitions(-DCPPUTEST_HAVE_FORK)
 endif(HAVE_FORK)
 
+check_function_exists(strdup HAVE_STRDUP)
+if(HAVE_STRDUP)
+  add_definitions(-DCPPUTEST_HAVE_STRDUP=1)
+endif(HAVE_STRDUP)
+
 # Apply workaround for MinGW timespec redefinition (pthread.h / time.h)
 if (MINGW)
     include(CheckStructHasMember)
