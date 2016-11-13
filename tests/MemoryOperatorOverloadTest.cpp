@@ -119,6 +119,25 @@ TEST(MemoryLeakOverridesToBeUsedInProductionCode, MallocOverrideIsUsed)
     free (memory);
 }
 
+#ifdef CPPUTEST_USE_STRDUP_MACROS
+
+TEST(MemoryLeakOverridesToBeUsedInProductionCode, StrdupOverrideIsUsed)
+{
+    int memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
+    char* memory = strdup("0123456789");
+    LONGS_EQUAL(memLeaks+1, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
+    free (memory);
+}
+
+TEST(MemoryLeakOverridesToBeUsedInProductionCode, StrndupOverrideIsUsed)
+{
+    int memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
+    char* memory = strndup("0123456789", 10);
+    LONGS_EQUAL(memLeaks+1, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
+    free (memory);
+}
+#endif
+
 #endif
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, UseNativeMallocByTemporarlySwitchingOffMalloc)
@@ -213,6 +232,22 @@ TEST(MemoryLeakOverridesToBeUsedInProductionCode, MallocOverrideWorks)
     STRCMP_NOCASE_CONTAINS("AllocationInCFile.c", memLeakDetector->report(mem_leak_period_checking));
     freeAllocation(leak);
 }
+
+#ifdef CPPUTEST_USE_STRDUP_MACROS
+TEST(MemoryLeakOverridesToBeUsedInProductionCode, StrdupOverrideWorks)
+{
+    char* leak = strdupAllocation();
+    STRCMP_NOCASE_CONTAINS("AllocationInCFile.c", memLeakDetector->report(mem_leak_period_checking));
+    freeAllocation(leak);
+}
+
+TEST(MemoryLeakOverridesToBeUsedInProductionCode, StrndupOverrideWorks)
+{
+    char* leak = strndupAllocation();
+    STRCMP_NOCASE_CONTAINS("AllocationInCFile.c", memLeakDetector->report(mem_leak_period_checking));
+    freeAllocation(leak);
+}
+#endif
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, MallocWithButFreeWithoutLeakDetectionDoesntCrash)
 {
