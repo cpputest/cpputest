@@ -31,6 +31,8 @@
 #undef free
 #undef calloc
 #undef realloc
+#undef strdup
+#undef strndup
 
 #include <sys/time.h>
 #include <time.h>

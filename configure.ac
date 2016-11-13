@@ -60,7 +60,7 @@ AC_TYPE_LONG_LONG_INT
 
 # Checks for library functions.
 AC_FUNC_FORK
-AC_CHECK_FUNCS([gettimeofday memset strstr])
+AC_CHECK_FUNCS([gettimeofday memset strstr strdup])
 
 AC_CHECK_PROG([CPPUTEST_HAS_GCC], [gcc], [yes], [no])
 AC_CHECK_PROG([CPPUTEST_HAS_CLANG], [clang], [yes], [no])
