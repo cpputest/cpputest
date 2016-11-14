@@ -75,7 +75,10 @@ if (EXTENSIONS)
 endif (EXTENSIONS)
 
 if (TESTS)
-    add_subdirectory(tests)
+    add_subdirectory(tests/CppUTest)
+    if (EXTENSIONS)
+        add_subdirectory(tests/CppUTestExt)
+    endif (EXTENSIONS)
 endif (TESTS)
 
 set (INCLUDE_INSTALL_DIR "include")

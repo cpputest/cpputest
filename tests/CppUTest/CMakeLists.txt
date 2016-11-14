@@ -55,5 +55,4 @@ add_executable(CppUTestTests ${CppUTestTests_src})
 cpputest_normalize_test_output_location(CppUTestTests)
 target_link_libraries(CppUTestTests CppUTest ${THREAD_LIB})
 
-add_subdirectory(CppUTestExt)
 cpputest_buildtime_discover_tests(CppUTestTests)

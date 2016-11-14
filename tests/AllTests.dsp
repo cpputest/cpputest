@@ -98,19 +98,19 @@ PostBuild_Cmds=$(TargetPath) -v
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=.\AllocationInCFile.c
+SOURCE=.\CppUTest\AllocationInCFile.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\AllocationInCppFile.cpp
+SOURCE=.\CppUTest\AllocationInCppFile.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\AllocLetTestFree.c
+SOURCE=.\CppUTest\AllocLetTestFree.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\AllocLetTestFreeTest.cpp
+SOURCE=.\CppUTest\AllocLetTestFreeTest.cpp
 # End Source File
 # Begin Source File
 
@@ -118,7 +118,7 @@ SOURCE=.\CppUTestExt\AllTests.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\CheatSheetTest.cpp
+SOURCE=.\CppUTest\CheatSheetTest.cpp
 # End Source File
 # Begin Source File
 
@@ -126,11 +126,11 @@ SOURCE=.\CppUTestExt\CodeMemoryReporterTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\CommandLineArgumentsTest.cpp
+SOURCE=.\CppUTest\CommandLineArgumentsTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\CommandLineTestRunnerTest.cpp
+SOURCE=.\CppUTest\CommandLineTestRunnerTest.cpp
 # End Source File
 # Begin Source File
 
@@ -150,19 +150,19 @@ SOURCE=.\CppUTestExt\GTest2ConvertorTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\JUnitOutputTest.cpp
+SOURCE=.\CppUTest\JUnitOutputTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\MemoryLeakDetectorTest.cpp
+SOURCE=.\CppUTest\MemoryLeakDetectorTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\MemoryLeakWarningTest.cpp
+SOURCE=.\CppUTest\MemoryLeakWarningTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\MemoryOperatorOverloadTest.cpp
+SOURCE=.\CppUTest\MemoryOperatorOverloadTest.cpp
 # End Source File
 # Begin Source File
 
@@ -230,75 +230,75 @@ SOURCE=.\CppUTestExt\OrderedTestTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\PluginTest.cpp
+SOURCE=.\CppUTest\PluginTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\PreprocessorTest.cpp
+SOURCE=.\CppUTest\PreprocessorTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\SetPluginTest.cpp
+SOURCE=.\CppUTest\SetPluginTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\SimpleMutexTest.cpp
+SOURCE=.\CppUTest\SimpleMutexTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\SimpleStringTest.cpp
+SOURCE=.\CppUTest\SimpleStringTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\TestFailureNaNTest.cpp
+SOURCE=.\CppUTest\TestFailureNaNTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\TestFailureTest.cpp
+SOURCE=.\CppUTest\TestFailureTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\TestFilterTest.cpp
+SOURCE=.\CppUTest\TestFilterTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\TestHarness_cTest.cpp
+SOURCE=.\CppUTest\TestHarness_cTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\TestHarness_cTestCFile.c
+SOURCE=.\CppUTest\TestHarness_cTestCFile.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\TestInstallerTest.cpp
+SOURCE=.\CppUTest\TestInstallerTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\TestMemoryAllocatorTest.cpp
+SOURCE=.\CppUTest\TestMemoryAllocatorTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\TestOutputTest.cpp
+SOURCE=.\CppUTest\TestOutputTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\TestRegistryTest.cpp
+SOURCE=.\CppUTest\TestRegistryTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\TestResultTest.cpp
+SOURCE=.\CppUTest\TestResultTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\TestUtestMacro.cpp
+SOURCE=.\CppUTest\TestUtestMacro.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\UtestPlatformTest.cpp
+SOURCE=.\CppUTest\UtestPlatformTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\UtestTest.cpp
+SOURCE=.\CppUTest\UtestTest.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -306,15 +306,15 @@ SOURCE=.\UtestTest.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=.\AllocationInCFile.h
+SOURCE=.\CppUTest\AllocationInCFile.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\AllocationInCppFile.h
+SOURCE=.\CppUTest\AllocationInCppFile.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\AllTests.h
+SOURCE=.\CppUTest\AllTests.h
 # End Source File
 # Begin Source File
 
