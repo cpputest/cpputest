@@ -5,6 +5,12 @@
     <path>$WS_DIR$\CppUTest.ewp</path>
   </project>
   <project>
+    <path>$WS_DIR$\CppUTestExt.ewp</path>
+  </project>
+  <project>
+    <path>$WS_DIR$\CppUTestExtTest.ewp</path>
+  </project>
+  <project>
     <path>$WS_DIR$\CppUTestTest.ewp</path>
   </project>
   <batchBuild/>

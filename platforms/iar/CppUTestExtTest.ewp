@@ -128,7 +128,7 @@
         <option>
           <name>GBECoreSlave</name>
           <version>24</version>
-          <state>40</state>
+          <state>39</state>
         </option>
         <option>
           <name>OGUseCmsis</name>
@@ -661,7 +661,7 @@
         </option>
         <option>
           <name>IlinkOutputFile</name>
-          <state>CppUTestTest.out</state>
+          <state>CppUTestExtTest.out</state>
         </option>
         <option>
           <name>IlinkDebugInfoEnable</name>
@@ -725,7 +725,7 @@
         </option>
         <option>
           <name>IlinkIcfFile</name>
-          <state>$PROJ_DIR$\CppUTestTest.icf</state>
+          <state>$PROJ_DIR$\CppUTestExtTest.icf</state>
         </option>
         <option>
           <name>IlinkIcfFileSlave</name>
@@ -773,7 +773,8 @@
         </option>
         <option>
           <name>IlinkAdditionalLibs</name>
-          <state>$PROJ_DIR$\Debug\Exe\cpputest.a</state>
+          <state>$PROJ_DIR$\Debug\Exe\CppUTest.a</state>
+          <state>$PROJ_DIR$\Debug\Exe\CppUTestExt.a</state>
         </option>
         <option>
           <name>IlinkOverrideProgramEntryLabel</name>
@@ -1928,98 +1929,101 @@
     <group>
       <name>passing</name>
       <file>
-        <name>$PROJ_DIR$\..\..\tests\AllocationInCFile.c</name>
+        <name>$PROJ_DIR$\..\..\tests\CppUTestExt\CodeMemoryReporterTest.cpp</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\tests\AllocationInCppFile.cpp</name>
+        <name>$PROJ_DIR$\..\..\tests\CppUTestExt\ExpectedFunctionsListTest.cpp</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\tests\AllocLetTestFree.c</name>
+        <name>$PROJ_DIR$\..\..\tests\CppUTestExt\GMockTest.cpp</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\tests\AllocLetTestFreeTest.cpp</name>
+        <name>$PROJ_DIR$\..\..\tests\CppUTestExt\GTest1Test.cpp</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\tests\CheatSheetTest.cpp</name>
+        <name>$PROJ_DIR$\..\..\tests\CppUTestExt\GTest2ConvertorTest.cpp</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\tests\CommandLineArgumentsTest.cpp</name>
+        <name>$PROJ_DIR$\..\..\tests\CppUTestExt\IEEE754PluginTest.cpp</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\tests\CommandLineTestRunnerTest.cpp</name>
+        <name>$PROJ_DIR$\..\..\tests\CppUTestExt\IEEE754PluginTest_c.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\tests\JUnitOutputTest.cpp</name>
+        <name>$PROJ_DIR$\..\..\tests\CppUTestExt\IEEE754PluginTest_c.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\tests\MemoryLeakDetectorTest.cpp</name>
+        <name>$PROJ_DIR$\..\..\tests\CppUTestExt\MemoryReportAllocatorTest.cpp</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\tests\MemoryLeakWarningTest.cpp</name>
+        <name>$PROJ_DIR$\..\..\tests\CppUTestExt\MemoryReporterPluginTest.cpp</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\tests\MemoryOperatorOverloadTest.cpp</name>
+        <name>$PROJ_DIR$\..\..\tests\CppUTestExt\MemoryReportFormatterTest.cpp</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\tests\PluginTest.cpp</name>
+        <name>$PROJ_DIR$\..\..\tests\CppUTestExt\MockActualCallTest.cpp</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\tests\PreprocessorTest.cpp</name>
+        <name>$PROJ_DIR$\..\..\tests\CppUTestExt\MockCallTest.cpp</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\tests\SetPluginTest.cpp</name>
+        <name>$PROJ_DIR$\..\..\tests\CppUTestExt\MockCheatSheetTest.cpp</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\tests\SimpleMutexTest.cpp</name>
+        <name>$PROJ_DIR$\..\..\tests\CppUTestExt\MockComparatorCopierTest.cpp</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\tests\SimpleStringTest.cpp</name>
+        <name>$PROJ_DIR$\..\..\tests\CppUTestExt\MockExpectedCallTest.cpp</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\tests\TestFailureNaNTest.cpp</name>
+        <name>$PROJ_DIR$\..\..\tests\CppUTestExt\MockFailureReporterForTest.cpp</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\tests\TestFailureTest.cpp</name>
+        <name>$PROJ_DIR$\..\..\tests\CppUTestExt\MockFailureReporterForTest.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\tests\TestFilterTest.cpp</name>
+        <name>$PROJ_DIR$\..\..\tests\CppUTestExt\MockFailureTest.cpp</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\tests\TestHarness_cTest.cpp</name>
+        <name>$PROJ_DIR$\..\..\tests\CppUTestExt\MockHierarchyTest.cpp</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\tests\TestHarness_cTestCFile.c</name>
+        <name>$PROJ_DIR$\..\..\tests\CppUTestExt\MockNamedValueTest.cpp</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\tests\TestInstallerTest.cpp</name>
+        <name>$PROJ_DIR$\..\..\tests\CppUTestExt\MockParameterTest.cpp</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\tests\TestMemoryAllocatorTest.cpp</name>
+        <name>$PROJ_DIR$\..\..\tests\CppUTestExt\MockPluginTest.cpp</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\tests\TestOutputTest.cpp</name>
+        <name>$PROJ_DIR$\..\..\tests\CppUTestExt\MockReturnValueTest.cpp</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\tests\TestRegistryTest.cpp</name>
+        <name>$PROJ_DIR$\..\..\tests\CppUTestExt\MockStrictOrderTest.cpp</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\tests\TestResultTest.cpp</name>
+        <name>$PROJ_DIR$\..\..\tests\CppUTestExt\MockSupport_cTest.cpp</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\tests\TestUTestMacro.cpp</name>
+        <name>$PROJ_DIR$\..\..\tests\CppUTestExt\MockSupport_cTestCFile.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\tests\UtestPlatformTest.cpp</name>
+        <name>$PROJ_DIR$\..\..\tests\CppUTestExt\MockSupport_cTestCFile.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\tests\UtestTest.cpp</name>
+        <name>$PROJ_DIR$\..\..\tests\CppUTestExt\MockSupportTest.cpp</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\tests\CppUTestExt\OrderedTestTest.cpp</name>
       </file>
     </group>
     <group>
       <name>warnings</name>
     </group>
     <file>
-      <name>$PROJ_DIR$\tests\AllTests.cpp</name>
+      <name>$PROJ_DIR$\tests\CppUTestExt\AllTests.cpp</name>
     </file>
   </group>
 </project>
