@@ -75,7 +75,7 @@ if [ "x$BUILD" = "xtest_report" ]; then
 fi
 
 if [ "x$BUILD" = "xcmake_coverage" ]; then
-    pip install --user cpp-coveralls 
+    pip install cpp-coveralls --user `whois` 
 
     cmake .. -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE -DCOVERAGE=ON -DLONGLONG=ON
     make
