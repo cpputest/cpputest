@@ -56,6 +56,9 @@ if [ "x$BUILD" = "xcmake_gtest" ]; then
 fi
 
 if [ "x$BUILD" = "xtest_report" ]; then
+    if [ "x$TRAVIS_OS_NAME" = "xosx" ]; then
+        brew install ant
+    fi
     autoreconf -i ..
     ../configure
     make check
@@ -66,7 +69,7 @@ if [ "x$BUILD" = "xtest_report" ]; then
 fi
 
 if [ "x$BUILD" = "xcmake_coverage" ]; then
-    pip install cpp-coveralls --user `whoami`
+    pip install --user cpp-coveralls 
 
     cmake .. -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE -DCOVERAGE=ON -DLONGLONG=ON
     make
