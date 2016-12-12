@@ -30,6 +30,44 @@ matrix:
       env: BUILD=cmake_coverage
     - compiler: gcc
       env: BUILD=test_report
+    - compiler: clang
+      os: osx
+      env: BUILD=autotools
+      addons:
+        apt:
+          packages:
+          - valgrind
+    - compiler: clang
+      os: osx
+      env: BUILD=cmake
+    - compiler: clang
+      os: osx
+      env: BUILD=autotools_gtest
+    - compiler: clang
+      os: osx
+      env: BUILD=cmake_gtest
+    - compiler: gcc
+      os: osx
+      env: BUILD=autotools
+      addons:
+        apt:
+          packages:
+          - valgrind
+    - compiler: gcc
+      os: osx
+      env: BUILD=cmake
+    - compiler: gcc
+      os: osx
+      env: BUILD=autotools_gtest
+    - compiler: gcc
+      os: osx
+      env: BUILD=cmake_gtest
+    - compiler: gcc
+      os: osx
+      env: BUILD=cmake_coverage
+    - compiler: gcc
+      os: osx
+      env: BUILD=test_report
     - compiler: wcl
       env: BUILD=make_dos
       addons:
@@ -52,3 +90,7 @@ before_script:
 - mkdir -p $CPPUTEST_BUILD_DIR && cd $CPPUTEST_BUILD_DIR
 script:
 - "../scripts/travis_ci_build.sh"
+after_failure:
+- "../scripts/travis_ci_after.sh"
+after_success:
+- "../scripts/travis_ci_after.sh"
