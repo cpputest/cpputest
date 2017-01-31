@@ -436,6 +436,8 @@ struct MockNamedValueComparatorsAndCopiersRepositoryNode
         : name_(name), comparator_(comparator), copier_(NULL), next_(next) {}
     MockNamedValueComparatorsAndCopiersRepositoryNode(const SimpleString& name, MockNamedValueCopier* copier, MockNamedValueComparatorsAndCopiersRepositoryNode* next)
         : name_(name), comparator_(NULL), copier_(copier), next_(next) {}
+    MockNamedValueComparatorsAndCopiersRepositoryNode(const SimpleString& name, MockNamedValueComparator* comparator, MockNamedValueCopier* copier, MockNamedValueComparatorsAndCopiersRepositoryNode* next)
+        : name_(name), comparator_(comparator), copier_(copier), next_(next) {}
     SimpleString name_;
     MockNamedValueComparator* comparator_;
     MockNamedValueCopier* copier_;
@@ -488,5 +490,5 @@ MockNamedValueCopier* MockNamedValueComparatorsAndCopiersRepository::getCopierFo
 void MockNamedValueComparatorsAndCopiersRepository::installComparatorsAndCopiers(const MockNamedValueComparatorsAndCopiersRepository& repository)
 {
     for (MockNamedValueComparatorsAndCopiersRepositoryNode* p = repository.head_; p; p = p->next_)
-      head_ = new MockNamedValueComparatorsAndCopiersRepositoryNode(p->name_, p->comparator_, head_);
+      head_ = new MockNamedValueComparatorsAndCopiersRepositoryNode(p->name_, p->comparator_, p->copier_, head_);
 }
