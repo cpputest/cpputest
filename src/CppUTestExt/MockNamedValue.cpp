@@ -436,7 +436,7 @@ struct MockNamedValueComparatorsAndCopiersRepositoryNode
         : name_(name), comparator_(comparator), copier_(NULL), next_(next) {}
     MockNamedValueComparatorsAndCopiersRepositoryNode(const SimpleString& name, MockNamedValueCopier* copier, MockNamedValueComparatorsAndCopiersRepositoryNode* next)
         : name_(name), comparator_(NULL), copier_(copier), next_(next) {}
-	MockNamedValueComparatorsAndCopiersRepositoryNode(const SimpleString& name, MockNamedValueComparator* comparator, MockNamedValueCopier* copier, MockNamedValueComparatorsAndCopiersRepositoryNode* next)
+    MockNamedValueComparatorsAndCopiersRepositoryNode(const SimpleString& name, MockNamedValueComparator* comparator, MockNamedValueCopier* copier, MockNamedValueComparatorsAndCopiersRepositoryNode* next)
         : name_(name), comparator_(comparator), copier_(copier), next_(next) {}
     SimpleString name_;
     MockNamedValueComparator* comparator_;
