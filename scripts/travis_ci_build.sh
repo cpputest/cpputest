@@ -2,6 +2,11 @@
 # Script run in the travis CI
 set -ex
 
+if [[ "$CXX" == "lang" ]]; then
+    export CXXFLAGS="-stdlib=libc++"
+fi
+
+
 if [ "x$BUILD" = "xautotools" ]; then
     autoreconf -i ..
     ../configure
