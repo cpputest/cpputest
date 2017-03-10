@@ -6,8 +6,6 @@ sudo: false
 matrix:
     include:
     - compiler: clang
-      env: BUILD=autotools
-    - compiler: clang
       env: BUILD=cmake CPP11=OFF
     - compiler: clang
       env: BUILD=cmake CPP11=ON
@@ -16,8 +14,19 @@ matrix:
       env: BUILD=cmake CPP11=OFF
     - compiler: gcc
       env: BUILD=cmake CPP11=ON
+
     - compiler: gcc
       env: BUILD=autotools
+      addons:
+        apt:
+          packages:
+            - valgrind
+    - compiler: clang
+      env: BUILD=autotools
+      addons:
+        apt:
+          packages:
+            - valgrind
 
     - compiler: gcc
       env: BUILD=cmake_coverage

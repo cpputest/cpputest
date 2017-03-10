@@ -2,7 +2,7 @@
 # Script run in the travis CI
 set -ex
 
-if [[ "$CXX" == "lang" ]]; then
+if [[ "$CXX" == "clang*" ]]; then
     export CXXFLAGS="-stdlib=libc++"
 fi
 
@@ -12,8 +12,10 @@ if [ "x$BUILD" = "xautotools" ]; then
     ../configure
     echo "CONFIGURATION DONE. Compiling now."
 
-    # TODO: Move this to a nightly build
-    #make check_all
+    if [ "${TRAVIS_EVENT_TYPE}" == "cron" ]; then
+        make check_all
+    fi
+
 
     if [ "x$TRAVIS_OS_NAME" = "xosx" ]; then
         COPYFILE_DISABLE=1 make dist
