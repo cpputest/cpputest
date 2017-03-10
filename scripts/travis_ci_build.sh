@@ -2,7 +2,7 @@
 # Script run in the travis CI
 set -ex
 
-if [[ "$CXX" == "clang*" ]]; then
+if [[ "$CXX" == clang* ]]; then
     export CXXFLAGS="-stdlib=libc++"
 fi
 
