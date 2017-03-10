@@ -7,8 +7,16 @@ matrix:
     include:
     - compiler: clang
       env: BUILD=cmake CPP11=OFF
+      addons:
+        apt:
+          packages:
+            - libc++-dev
     - compiler: clang
       env: BUILD=cmake CPP11=ON
+      addons:
+        apt:
+          packages:
+            - libc++-dev
 
     - compiler: gcc
       env: BUILD=cmake CPP11=OFF
@@ -26,6 +34,7 @@ matrix:
       addons:
         apt:
           packages:
+            - libc++-dev
             - valgrind
 
     - compiler: gcc
