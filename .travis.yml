@@ -30,6 +30,12 @@ matrix:
 
     - compiler: gcc
       env: BUILD=cmake_coverage
+    - compiler: wcl
+      env: BUILD=make_dos
+      addons:
+        apt:
+          packages:
+            - dosbox
 
 
 before_script:
