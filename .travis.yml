@@ -19,6 +19,9 @@ matrix:
     - compiler: gcc
       env: BUILD=autotools
 
+    - compiler: gcc
+      env: BUILD=cmake_coverage
+
 
 before_script:
     - export CPPUTEST_BUILD_DIR=$TRAVIS_BUILD_DIR/cpputest_build

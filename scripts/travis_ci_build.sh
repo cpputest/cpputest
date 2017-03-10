@@ -78,7 +78,7 @@ fi
 if [ "x$BUILD" = "xcmake_coverage" ]; then
     pip install --user cpp-coveralls
 
-    cmake .. -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE -DCOVERAGE=ON -DLONGLONG=ON
+    cmake .. -DCMAKE_BUILD_TYPE=C++11=ON -DCOVERAGE=ON -DLONGLONG=ON
     make
     ctest
 
