@@ -37,6 +37,10 @@ matrix:
           packages:
             - dosbox
 
+    - compiler: clang
+      os: osx
+      env: BUILD=cmake
+
 
 before_script:
     - export CPPUTEST_BUILD_DIR=$TRAVIS_BUILD_DIR/cpputest_build
