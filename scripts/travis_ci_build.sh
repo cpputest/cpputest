@@ -11,7 +11,9 @@ if [ "x$BUILD" = "xautotools" ]; then
     autoreconf -i ..
     ../configure
     echo "CONFIGURATION DONE. Compiling now."
-    make check_all
+
+    # TODO: Move this to a nightly build
+    #make check_all
 
     if [ "x$TRAVIS_OS_NAME" = "xosx" ]; then
         COPYFILE_DISABLE=1 make dist
