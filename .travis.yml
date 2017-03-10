@@ -1,96 +1,25 @@
 language: cpp
+
 sudo: false
+
 matrix:
     include:
-    - compiler: clang
-      env: BUILD=autotools
-      addons:
-        apt:
-          packages:
-          - valgrind
+    #- compiler: clang
+      #env: BUILD=autotools
     - compiler: clang
       env: BUILD=cmake
-    - compiler: clang
-      env: BUILD=autotools_gtest
-    - compiler: clang
-      env: BUILD=cmake_gtest
-    - compiler: gcc
-      env: BUILD=autotools
-      addons:
-        apt:
-          packages:
-          - valgrind
+
+    #- compiler: gcc
+      #env: BUILD=autotools
     - compiler: gcc
       env: BUILD=cmake
-    - compiler: gcc
-      env: BUILD=autotools_gtest
-    - compiler: gcc
-      env: BUILD=cmake_gtest
-    - compiler: gcc
-      env: BUILD=cmake_coverage
-    - compiler: gcc
-      env: BUILD=test_report
-    - compiler: clang
-      os: osx
-      env: BUILD=autotools
-      addons:
-        apt:
-          packages:
-          - valgrind
-    - compiler: clang
-      os: osx
-      env: BUILD=cmake
-    - compiler: clang
-      os: osx
-      env: BUILD=autotools_gtest
-    - compiler: clang
-      os: osx
-      env: BUILD=cmake_gtest
-    - compiler: gcc
-      os: osx
-      env: BUILD=autotools
-      addons:
-        apt:
-          packages:
-          - valgrind
-    - compiler: gcc
-      os: osx
-      env: BUILD=cmake
-    - compiler: gcc
-      os: osx
-      env: BUILD=autotools_gtest
-    - compiler: gcc
-      os: osx
-      env: BUILD=cmake_gtest
-    - compiler: gcc
-      os: osx
-      env: BUILD=cmake_coverage
-    - compiler: gcc
-      os: osx
-      env: BUILD=test_report
-    - compiler: wcl
-      env: BUILD=make_dos
-      addons:
-        apt:
-          packages:
-          - dosbox
-global:
-- os: linux
-- rvm: '1.9.3'
-- secure: |-
-    P05xUfJVw5YM4hF7hzQLjyMzDD4Q1/fyWP9Uk5aK5VrSWNY99EuxldXI5QK/
-    vA1NkcW49tQW1wQvBlRtdlLNOmUfDP/oiJFXPwNn4dqwOIOEet2P7JO/5hnH
-    MNHlZmGu2WpoZREhOFBfsIhK0IP8mloqLDq2XemBdga/LWygrLU=
-- secure: |-
-    Y/8iNkf6uEbE3qltnM+7mGlCvFWzyttwwRGgVGw1m9xOiUJcobvOImQRU8XZ
-    91dgO+Fz0A3mljqs1sK1OPjpXmFGE1jP/NlotMw0WlDOuSIDjQ4ubwdTNGAw
-    NY53R9ygbIjEmqxHAJm9mOZqxW2hNaoI7TcX6oX248/hLibyx8M=
+
 before_script:
-- export CPPUTEST_BUILD_DIR=$TRAVIS_BUILD_DIR/cpputest_build
-- mkdir -p $CPPUTEST_BUILD_DIR && cd $CPPUTEST_BUILD_DIR
+    - export CPPUTEST_BUILD_DIR=$TRAVIS_BUILD_DIR/cpputest_build
+    - mkdir -p $CPPUTEST_BUILD_DIR && cd $CPPUTEST_BUILD_DIR
 script:
-- "../scripts/travis_ci_build.sh"
+    - "../scripts/travis_ci_build.sh"
 after_failure:
-- "../scripts/travis_ci_after.sh"
+    - "../scripts/travis_ci_after.sh"
 after_success:
-- "../scripts/travis_ci_after.sh"
+    - "../scripts/travis_ci_after.sh"

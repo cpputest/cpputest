@@ -25,7 +25,7 @@ if [ "x$BUILD" = "xautotools" ]; then
 fi
 
 if [ "x$BUILD" = "xcmake" ]; then
-    cmake .. -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE -DWERROR=ON
+    cmake -DWERROR=ON ..
     make
     ctest -V
 
@@ -45,8 +45,8 @@ fi
 
 if [ "x$BUILD" = "xcmake_gtest" ]; then
     pwd
-	  wget https://github.com/google/googletest/archive/release-1.6.0.zip -O gtest-1.6.0.zip  && unzip gtest-1.6.0.zip;
-	  wget https://github.com/google/googlemock/archive/release-1.6.0.zip -O gmock-1.6.0.zip  && unzip gmock-1.6.0.zip;
+      wget https://github.com/google/googletest/archive/release-1.6.0.zip -O gtest-1.6.0.zip  && unzip gtest-1.6.0.zip;
+      wget https://github.com/google/googlemock/archive/release-1.6.0.zip -O gmock-1.6.0.zip  && unzip gmock-1.6.0.zip;
     unzip gtest-1.6.0.zip -d $TRAVIS_BUILD_DIR
     unzip gmock-1.6.0.zip -d $TRAVIS_BUILD_DIR
     cd $TRAVIS_BUILD_DIR
