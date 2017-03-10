@@ -30,6 +30,8 @@ matrix:
 
     - compiler: gcc
       env: BUILD=cmake_coverage
+    - compiler: gcc
+      env: BUILD=cmake_gtest
     - compiler: wcl
       env: BUILD=make_dos
       addons:
