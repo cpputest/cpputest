@@ -7,12 +7,17 @@ matrix:
     #- compiler: clang
       #env: BUILD=autotools
     - compiler: clang
-      env: BUILD=cmake
+      env: BUILD=cmake CPP11=OFF
+    - compiler: clang
+      env: BUILD=cmake CPP11=ON
 
     #- compiler: gcc
       #env: BUILD=autotools
     - compiler: gcc
-      env: BUILD=cmake
+      env: BUILD=cmake CPP11=OFF
+    - compiler: gcc
+      env: BUILD=cmake CPP11=ON
+
 
 before_script:
     - export CPPUTEST_BUILD_DIR=$TRAVIS_BUILD_DIR/cpputest_build
