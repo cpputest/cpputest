@@ -356,9 +356,19 @@ void* operator new(size_t size, const std::nothrow_t&) UT_NOTHROW
     return operator_new_nothrow_fptr(size);
 }
 
+void operator delete(void* mem, const std::nothrow_t&) UT_NOTHROW
+{
+    operator_delete_fptr(mem);
+}
+
 void* operator new[](size_t size, const std::nothrow_t&) UT_NOTHROW
 {
     return operator_new_array_nothrow_fptr(size);
+}
+
+void operator delete[](void* mem, const std::nothrow_t&) UT_NOTHROW
+{
+    operator_delete_array_fptr(mem);
 }
 
 #else
