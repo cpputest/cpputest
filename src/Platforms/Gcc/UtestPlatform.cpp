@@ -40,7 +40,7 @@
 #include <stdarg.h>
 #include <setjmp.h>
 #include <string.h>
-#include <math.h>
+#include <cmath>
 #include <ctype.h>
 #include <unistd.h>
 #include <signal.h>
