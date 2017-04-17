@@ -28,8 +28,11 @@
 #ifndef D_JUnitTestOutput_h
 #define D_JUnitTestOutput_h
 
+#include <string>
+#include <list>
 #include "TestOutput.h"
 #include "SimpleString.h"
+#include "PlatformSpecificFunctions_c.h"
 
 struct JUnitTestOutputImpl;
 struct JUnitTestCaseResultNode;
@@ -74,6 +77,8 @@ protected:
     virtual void writeFailure(JUnitTestCaseResultNode* node);
     virtual void writeFileEnding();
 
+private:
+    std::list<std::string> fileList_;
 };
 
 #endif
