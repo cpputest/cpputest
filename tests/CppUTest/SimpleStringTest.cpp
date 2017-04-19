@@ -455,7 +455,7 @@ TEST(SimpleString, copyInBufferWithSmallerBufferThanNeeded)
     char* buffer= (char*) malloc(bufferSize);
     str.copyToBuffer(buffer, bufferSize);
     STRNCMP_EQUAL(str.asCharString(), buffer, (bufferSize-1));
-    LONGS_EQUAL( 0, buffer[bufferSize-1]);
+    LONGS_EQUAL(0, buffer[bufferSize-1]);
     free(buffer);
 }
 
