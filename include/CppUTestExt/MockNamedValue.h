@@ -146,6 +146,7 @@ public:
 private:
     SimpleString name_;
     SimpleString type_;
+    SimpleString cachedToString_;
     union {
         bool boolValue_;
         int intValue_;
