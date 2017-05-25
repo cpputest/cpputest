@@ -42,6 +42,8 @@ option(WERROR "Compile with warnings as errors" OFF)
 option(TESTS "Compile and make tests for the code?" ON)
 option(TESTS_DETAILED "Run each test separately instead of grouped?" OFF)
 
+option(PLUGINS "Compile and make plugins?" ON)
+
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "What kind of build this is" FORCE)
 endif(NOT CMAKE_BUILD_TYPE)
@@ -80,6 +82,10 @@ if (TESTS)
         add_subdirectory(tests/CppUTestExt)
     endif (EXTENSIONS)
 endif (TESTS)
+
+if (PLUGINS)
+    add_subdirectory(plugins/IEEE754ExceptionFlagsPlugin)
+endif (PLUGINS)
 
 set (INCLUDE_INSTALL_DIR "include")
 set (LIB_INSTALL_DIR "lib")
@@ -164,6 +170,8 @@ Features configured in CppUTest:
 
     Compile and run self-tests          ${TESTS}
     Run self-tests separately           ${TESTS_DETAILED}
+
+    Compile plugin and run self-tests   ${PLUGINS}
 
 -------------------------------------------------------
 ")
