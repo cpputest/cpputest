@@ -70,6 +70,7 @@ struct JUnitTestOutputImpl
     JUnitTestGroupResult results_;
     PlatformSpecificFile file_;
     SimpleString package_;
+    SimpleString stdOutput_;
 };
 
 JUnitTestOutput::JUnitTestOutput() :
@@ -237,7 +238,7 @@ void JUnitTestOutput::writeFailure(JUnitTestCaseResultNode* node)
 
 void JUnitTestOutput::writeFileEnding()
 {
-    writeToFile("<system-out></system-out>\n");
+    writeToFile("<system-out>"); writeToFile(impl_->stdOutput_); writeToFile("</system-out>\n");
     writeToFile("<system-err></system-err>\n");
     writeToFile("</testsuite>");
 }
@@ -259,8 +260,9 @@ void JUnitTestOutput::printBuffer(const char*)
 {
 }
 
-void JUnitTestOutput::print(const char*)
+void JUnitTestOutput::print(const char *output)
 {
+    impl_->stdOutput_ += output;
 }
 
 void JUnitTestOutput::print(long)
