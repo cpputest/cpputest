@@ -301,6 +301,13 @@ public:
         theTime = newTime;
         return *this;
     }
+
+    JUnitTestOutputTestRunner& thatPrints(const char* output)
+    {
+        runPreviousTest();
+        result_.print(output);
+        return *this;
+    }
 };
 
 extern "C" {
@@ -707,3 +714,13 @@ TEST(JUnitOutputTest, MultipleTestCasesInDifferentGroupsWithAssertions)
     STRCMP_EQUAL("<testcase classname=\"groupTwo\" name=\"testB\" assertions=\"678\" time=\"0.000\" file=\"file\" line=\"1\">\n", outputFile->line(5));
 }
 
+TEST(JUnitOutputTest, UTPRINTOutputInJUnitOutput)
+{
+    testCaseRunner->start()
+            .withGroup("groupname")
+            .withTest("testname").thatPrints("someoutput")
+            .end();
+
+    outputFile = fileSystem.file("cpputest_groupname.xml");
+    STRCMP_EQUAL("<system-out>someoutput</system-out>\n", outputFile->lineFromTheBack(3));
+}
