@@ -394,6 +394,31 @@ TEST(UnitTestMacros, FailureWithCHECK_EQUAL)
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <2>");
 }
 
+static void _failingTestMethodWithCHECK_RELATION()
+{
+    double actual = 0.5, minimum = 0.8;
+    CHECK_RELATION(actual, >=, minimum);
+    TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
+
+TEST(UnitTestMacros, FailureWithCHECK_RELATION)
+{
+    fixture.runTestWithMethod(_failingTestMethodWithCHECK_RELATION);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("CHECK(actual >= minimum)");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("0.5 >= 0.8");
+}
+
+TEST(UnitTestMacros, CHECK_RELATIONBehavesAsProperMacro)
+{
+    if (false) CHECK_RELATION(1, >, 2)
+    else CHECK_RELATION(1, <, 2)
+}
+
+IGNORE_TEST(UnitTestMacros, CHECK_RELATIONWorksInAnIgnoredTest)
+{
+  CHECK_RELATION(1, >, 2) // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
+
 static int countInCountingMethod;
 static int _countingMethod()
 {
