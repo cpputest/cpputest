@@ -1,4 +1,4 @@
-set(CppUTest_src
+add_library(CppUTest
         CommandLineArguments.cpp
         MemoryLeakWarningPlugin.cpp
         TestHarness_c.cpp
@@ -17,7 +17,20 @@ set(CppUTest_src
         TestTestingFixture.cpp
         SimpleMutex.cpp
         Utest.cpp
-        ../Platforms/${CPP_PLATFORM}/UtestPlatform.cpp
+)
+
+if (CPP_PLATFORM) #[[Set CPP_PLATFORM in a parent CMakeLists.txt if reusing one of the provided platforms,
+                     else supply the missing definitions]]
+    target_sources(CppUTest
+        PRIVATE
+            ../Platforms/${CPP_PLATFORM}/UtestPlatform.cpp
+    )
+endif(CPP_PLATFORM)
+
+#[[Arrange for ../../include to be added to the include paths of any CMake target depending on CppUTest.]]
+target_include_directories(CppUTest
+    PUBLIC
+        ../../include
 )
 
 set(CppUTest_headers
@@ -48,7 +61,6 @@ set(CppUTest_headers
         ${CppUTestRootDirectory}/include/CppUTest/UtestMacros.h
 )
 
-add_library(CppUTest STATIC ${CppUTest_src} ${CppUTest_headers})
 if (WIN32)
     target_link_libraries(CppUTest winmm.lib)
 endif (WIN32)
