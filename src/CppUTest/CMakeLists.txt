@@ -27,10 +27,11 @@ if (CPP_PLATFORM) #[[Set CPP_PLATFORM in a parent CMakeLists.txt if reusing one 
     )
 endif(CPP_PLATFORM)
 
-#[[Arrange for ../../include to be added to the include paths of any CMake target depending on CppUTest.]]
+#[[Arrange for the include directory to be added to the include paths of any CMake target depending on CppUTest.]]
 target_include_directories(CppUTest
     PUBLIC
-        ../../include
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../include>
+        $<INSTALL_INTERFACE:include/CppUTest>
 )
 
 set(CppUTest_headers
