@@ -107,6 +107,10 @@
     extern void test_##group_name##_##test_name##_wrapper_c(void);\
     void test_##group_name##_##test_name##_wrapper_c()
 
+#define IGNORE_TEST_C(group_name, test_name) \
+    extern void ignore_##group_name##_##test_name##_wrapper_c(void);\
+    void ignore_##group_name##_##test_name##_wrapper_c()
+
 
 /* For use in C++ file */
 
@@ -129,6 +133,12 @@
     extern "C" void test_##group_name##_##test_name##_wrapper_c(); \
     TEST(group_name, test_name) { \
         test_##group_name##_##test_name##_wrapper_c(); \
+    }
+
+#define IGNORE_TEST_C_WRAPPER(group_name, test_name) \
+    extern "C" void ignore_##group_name##_##test_name##_wrapper_c(); \
+    IGNORE_TEST(group_name, test_name) { \
+        ignore_##group_name##_##test_name##_wrapper_c(); \
     }
 
 #ifdef __cplusplus
