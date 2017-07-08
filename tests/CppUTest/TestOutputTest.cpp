@@ -117,6 +117,22 @@ TEST(TestOutput, PrintTestALot)
     STRCMP_EQUAL("..................................................\n..........", mock->getOutput().asCharString());
 }
 
+TEST(TestOutput, PrintTestALotAndSimulateRepeatRun)
+{
+    for (int i = 0; i < 60; ++i) {
+        printer->printCurrentTestEnded(*result);
+    }
+
+    printer->printTestsEnded(*result);
+
+    for (int i = 0; i < 60; ++i) {
+        printer->printCurrentTestEnded(*result);
+    }
+    STRCMP_EQUAL("..................................................\n.........." \
+        "\nOK (0 tests, 0 ran, 0 checks, 0 ignored, 0 filtered out, 10 ms)\n\n" \
+        "..................................................\n..........", mock->getOutput().asCharString());
+}
+
 TEST(TestOutput, SetProgressIndicator)
 {
     printer->setProgressIndicator(".");

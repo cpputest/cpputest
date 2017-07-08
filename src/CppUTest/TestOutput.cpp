@@ -170,6 +170,8 @@ void TestOutput::printTestsEnded(const TestResult& result)
         print("\033[m");
     }
     print("\n\n");
+
+    dotCount_ = 0;
 }
 
 void TestOutput::printTestRun(int number, int total)
