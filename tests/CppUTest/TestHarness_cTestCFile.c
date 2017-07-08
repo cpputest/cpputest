@@ -29,3 +29,8 @@ TEST_C(TestGroupInC, checkThatTheTestHasRun)
 {
     test_was_called_in_test_group_in_C++;
 }
+
+IGNORE_TEST_C(TestGroupInC, ignoreMacroForCFile)
+{
+    test_was_called_in_test_group_in_C++;
+}

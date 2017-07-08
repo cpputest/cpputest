@@ -46,6 +46,7 @@ TEST_GROUP_C_WRAPPER(TestGroupInC)
 };
 
 TEST_C_WRAPPER(TestGroupInC, checkThatTheTestHasRun)
+IGNORE_TEST_C_WRAPPER(TestGroupInC, ignoreMacroForCFile)
 
 /*
  * This test is a bit strange. They use the fact that you can do -r2 for repeating the same run.
