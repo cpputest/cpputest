@@ -142,6 +142,20 @@
     UtestShell::getCurrent()->assertLongsEqual((long)0, (long)0, NULL, file, line); \
   } }
 
+#define CHECK_COMPARE(first, relop, second)\
+  CHECK_COMPARE_TEXT(first, relop, second, NULL)
+
+#define CHECK_COMPARE_TEXT(first, relop, second, text)\
+  CHECK_COMPARE_LOCATION(first, relop, second, text, __FILE__, __LINE__)
+
+#define CHECK_COMPARE_LOCATION(first, relop, second, text, file, line)\
+ { SimpleString conditionString;\
+   conditionString += StringFrom(first); conditionString += " ";\
+   conditionString += #relop; conditionString += " ";\
+   conditionString += StringFrom(second);\
+   UtestShell::getCurrent()->assertCompare((first) relop (second), "CHECK_COMPARE", conditionString.asCharString(), text, __FILE__, __LINE__);\
+ }
+
 //This check checks for char* string equality using strcmp.
 //This makes up for the fact that CHECK_EQUAL only compares the pointers to char*'s
 #define STRCMP_EQUAL(expected, actual)\

@@ -163,7 +163,7 @@ SimpleString TestFailure::createUserText(const SimpleString& text)
     if (!text.isEmpty())
     {
         //This is a kludge to turn off "Message: " for this case.
-        //I don't think "Message: " adds anything,a s you get to see the
+        //I don't think "Message: " adds anything, as you get to see the
         //message. I propose we remove "Message: " lead in
         if (!text.startsWith("LONGS_EQUAL"))
             userMessage += "Message: ";
@@ -214,6 +214,16 @@ CheckEqualFailure::CheckEqualFailure(UtestShell* test, const char* fileName, int
     message_ += createButWasString(expected, actual);
     message_ += createDifferenceAtPosString(actual, failStart);
 
+}
+
+ComparisonFailure::ComparisonFailure(UtestShell *test, const char *fileName, int lineNumber, const SimpleString& checkString, const SimpleString &comparisonString, const SimpleString &text)
+: TestFailure(test, fileName, lineNumber)
+{
+    message_ = createUserText(text);
+    message_ += checkString;
+    message_ += "(";
+    message_ += comparisonString;
+    message_ += ") failed";
 }
 
 ContainsFailure::ContainsFailure(UtestShell* test, const char* fileName, int lineNumber, const SimpleString& expected, const SimpleString& actual, const SimpleString& text)

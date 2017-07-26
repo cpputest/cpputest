@@ -104,11 +104,16 @@ public:
     CheckEqualFailure(UtestShell* test, const char* fileName, int lineNumber, const SimpleString& expected, const SimpleString& actual, const SimpleString& text);
 };
 
+class ComparisonFailure : public TestFailure
+{
+public:
+    ComparisonFailure(UtestShell* test, const char *fileName, int lineNumber, const SimpleString& checkString, const SimpleString& comparisonString, const SimpleString& text);
+};
+
 class ContainsFailure: public TestFailure
 {
 public:
     ContainsFailure(UtestShell*, const char* fileName, int lineNumber, const SimpleString& expected, const SimpleString& actual, const SimpleString& text);
-
 };
 
 class CheckFailure : public TestFailure
