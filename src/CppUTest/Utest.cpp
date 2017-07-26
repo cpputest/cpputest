@@ -507,6 +507,12 @@ void UtestShell::assertEquals(bool failed, const char* expected, const char* act
         failWith(CheckEqualFailure(this, file, line, expected, actual, text), testTerminator);
 }
 
+void UtestShell::assertCompare(bool comparison, const char *checkString, const char *comparisonString, const char *text, const char *fileName, int lineNumber, const TestTerminator &testTerminator)
+{
+    getTestResult()->countCheck();
+    if (!comparison)
+        failWith(ComparisonFailure(this, fileName, lineNumber, checkString, comparisonString, text), testTerminator);
+}
 
 void UtestShell::print(const char *text, const char* fileName, int lineNumber)
 {

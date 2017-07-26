@@ -142,12 +142,12 @@
     UtestShell::getCurrent()->assertLongsEqual((long)0, (long)0, NULL, file, line); \
   } }
 
-#define CHECK_RELATION(first, relop, second)\
- { SimpleString conditionString = "evaluates to ";\
+#define CHECK_COMPARE(first, relop, second)\
+ { SimpleString conditionString;\
    conditionString += StringFrom(first); conditionString += " ";\
    conditionString += #relop; conditionString += " ";\
    conditionString += StringFrom(second);\
-   CHECK_TRUE_LOCATION((first) relop (second), "CHECK", #first " " #relop " " #second, conditionString.asCharString(), __FILE__, __LINE__)\
+   UtestShell::getCurrent()->assertCompare((first) relop (second), "CHECK_COMPARE", conditionString.asCharString(), NULL, __FILE__, __LINE__);\
  }
 
 //This check checks for char* string equality using strcmp.
