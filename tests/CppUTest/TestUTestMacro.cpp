@@ -396,8 +396,8 @@ TEST(UnitTestMacros, FailureWithCHECK_EQUAL)
 
 static void _failingTestMethodWithCHECK_COMPARE()
 {
-    double actual = 0.5, minimum = 0.8;
-    CHECK_COMPARE(actual, >=, minimum);
+    double small = 0.5, big = 0.8;
+    CHECK_COMPARE(small, >=, big);
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
 
@@ -416,6 +416,31 @@ TEST(UnitTestMacros, CHECK_COMPAREBehavesAsProperMacro)
 IGNORE_TEST(UnitTestMacros, CHECK_COMPAREWorksInAnIgnoredTest)
 {
   CHECK_COMPARE(1, >, 2) // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
+
+static void _failingTestMethodWithCHECK_COMPARE_TEXT()
+{
+    double small = 0.5, big = 0.8;
+    CHECK_COMPARE_TEXT(small, >=, big, "small bigger than big");
+    TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
+
+TEST(UnitTestMacros, FailureWithCHECK_COMPARE_TEXT)
+{
+    fixture.runTestWithMethod(_failingTestMethodWithCHECK_COMPARE_TEXT);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("CHECK_COMPARE(0.5 >= 0.8)");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("small bigger than big");
+}
+
+TEST(UnitTestMacros, CHECK_COMPARE_TEXTBehavesAsProperMacro)
+{
+  if (false) CHECK_COMPARE_TEXT(1, >, 2, "1 bigger than 2")
+  else CHECK_COMPARE_TEXT(1, <, 2, "1 smaller than 2")
+}
+
+IGNORE_TEST(UnitTestMacros, CHECK_COMPARE_TEXTWorksInAnIgnoredTest)
+{
+  CHECK_COMPARE_TEXT(1, >, 2, "1 smaller than 2") // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
 
 static int countInCountingMethod;

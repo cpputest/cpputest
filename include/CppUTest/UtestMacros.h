@@ -143,11 +143,17 @@
   } }
 
 #define CHECK_COMPARE(first, relop, second)\
+  CHECK_COMPARE_TEXT(first, relop, second, NULL)
+
+#define CHECK_COMPARE_TEXT(first, relop, second, text)\
+  CHECK_COMPARE_LOCATION(first, relop, second, text, __FILE__, __LINE__)
+
+#define CHECK_COMPARE_LOCATION(first, relop, second, text, file, line)\
  { SimpleString conditionString;\
    conditionString += StringFrom(first); conditionString += " ";\
    conditionString += #relop; conditionString += " ";\
    conditionString += StringFrom(second);\
-   UtestShell::getCurrent()->assertCompare((first) relop (second), "CHECK_COMPARE", conditionString.asCharString(), NULL, __FILE__, __LINE__);\
+   UtestShell::getCurrent()->assertCompare((first) relop (second), "CHECK_COMPARE", conditionString.asCharString(), text, __FILE__, __LINE__);\
  }
 
 //This check checks for char* string equality using strcmp.
