@@ -56,9 +56,10 @@ static void _exitTestMethod()
     FAIL("Should not get here");
 }
 
+static volatile double zero = 0.0;
+
 TEST(UtestShell, compareDoubles)
 {
-    double zero = 0.0;
     double not_a_number = zero / zero;
     double infinity = 1 / zero;
     CHECK(doubles_equal(1.0, 1.001, 0.01));

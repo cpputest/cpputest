@@ -28,11 +28,12 @@
 #include "IEEE754PluginTest_c.h"
 
 static volatile float f;
+static volatile float zero_float = 0.0f;
 
 void set_divisionbyzero_c(void)
 {
     f = 1.0f;
-    f /= 0.0f;
+    f /= zero_float;
 }
 
 void set_overflow_c(void)
