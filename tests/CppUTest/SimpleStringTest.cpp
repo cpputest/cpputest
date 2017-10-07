@@ -748,7 +748,7 @@ TEST(SimpleString, BracketsFormattedHexStringFromForLongOnDifferentPlatform)
 }
 IGNORE_TEST(SimpleString, _64BitAddressPrintsCorrectly)
 {
-    char* p = (char*) 0xffffffff;
+    char* p = (char*)(size_t)0xffffffff;
     SimpleString expected("0x123456789");
     SimpleString actual = StringFrom((void*)&p[0x2345678A]);
     STRCMP_EQUAL(expected.asCharString(), actual.asCharString());
