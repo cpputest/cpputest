@@ -126,8 +126,13 @@ if(PkgHelpers_AVAILABLE)
     ${CMAKE_CURRENT_BINARY_DIR}/CppUTestConfig.cmake
     INSTALL_DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
     PATH_VARS INCLUDE_DIR CMAKE_CURRENT_BINARY_DIR)
-  export(TARGETS CppUTest CppUTestExt
-    FILE "${CMAKE_CURRENT_BINARY_DIR}/CppUTestTargets.cmake")
+  if (EXTENSIONS)
+    export(TARGETS CppUTest CppUTestExt
+      FILE "${CMAKE_CURRENT_BINARY_DIR}/CppUTestTargets.cmake")
+  else()
+    export(TARGETS CppUTest
+      FILE "${CMAKE_CURRENT_BINARY_DIR}/CppUTestTargets.cmake")
+  endif()
   write_basic_package_version_file(
     ${CMAKE_CURRENT_BINARY_DIR}/CppUTestConfigVersion.cmake
     VERSION ${CppUTest_version_major}.${CppUTest_version_minor}
