@@ -24,8 +24,6 @@ environment:
     PlatformToolset: v90
   - Platform: Win32
     PlatformToolset: v100
-  - Platform: x64
-    PlatformToolset: v100
   - Platform: Win32
     PlatformToolset: v140
   - Platform: x64
