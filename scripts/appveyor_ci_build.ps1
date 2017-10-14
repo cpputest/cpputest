@@ -76,6 +76,7 @@ switch -Wildcard ($env:Platform)
         # Add mingw to the path
         Add-PathFolder $mingw_path
 
+        Invoke-BuildCommand "cmake --version"
         Invoke-BuildCommand "cmake -G 'MinGW Makefiles' .." 'cpputest_build'
         Invoke-BuildCommand "mingw32-make all" 'cpputest_build'
 
