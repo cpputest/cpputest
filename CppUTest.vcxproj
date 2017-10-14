@@ -240,14 +240,7 @@
     <ClCompile Include="src\CppUTest\TestResult.cpp" />
     <ClCompile Include="src\CppUTest\TestTestingFixture.cpp" />
     <ClCompile Include="src\CppUTest\Utest.cpp" />
-    <ClCompile Include="src\Platforms\VisualCpp\UtestPlatform.cpp">
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
-    </ClCompile>
+    <ClCompile Include="src\Platforms\VisualCpp\UtestPlatform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\CppUTestExt\CodeMemoryReportFormatter.h" />
