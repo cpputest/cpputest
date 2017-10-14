@@ -721,8 +721,8 @@ TEST(UnitTestMacros, FailureWithPOINTERS_EQUAL)
 
 TEST(UnitTestMacros, POINTERS_EQUALBehavesAsProperMacro)
 {
-    if (false) POINTERS_EQUAL(0, (void*) 0xbeefbeef)
-    else POINTERS_EQUAL((void*)0xdeadbeef, (void*)0xdeadbeef)
+    if (false) POINTERS_EQUAL(0, 0x0ea1beef)
+    else POINTERS_EQUAL(0x01debeef, 0x01debeef)
 }
 
 IGNORE_TEST(UnitTestMacros, POINTERS_EQUALWorksInAnIgnoredTest)
@@ -746,8 +746,8 @@ TEST(UnitTestMacros, FailureWithPOINTERS_EQUAL_TEXT)
 
 TEST(UnitTestMacros, POINTERS_EQUAL_TEXTBehavesAsProperMacro)
 {
-    if (false) POINTERS_EQUAL_TEXT(0, (void*) 0xbeefbeef, "Failed because it failed")
-    else POINTERS_EQUAL_TEXT((void*)0xdeadbeef, (void*)0xdeadbeef, "Failed because it failed")
+    if (false) POINTERS_EQUAL_TEXT(0, (void*) 0x0ea1beef, "Failed because it failed")
+    else POINTERS_EQUAL_TEXT((void*)0x01debeef, (void*)0x01debeef, "Failed because it failed")
 }
 
 IGNORE_TEST(UnitTestMacros, POINTERS_EQUAL_TEXTWorksInAnIgnoredTest)
@@ -771,8 +771,8 @@ TEST(UnitTestMacros, FailureWithFUNCTIONPOINTERS_EQUAL)
 
 TEST(UnitTestMacros, FUNCTIONPOINTERS_EQUALBehavesAsProperMacro)
 {
-    if (false) FUNCTIONPOINTERS_EQUAL(0, (void (*)())0xbeefbeef)
-    else FUNCTIONPOINTERS_EQUAL((void (*)())0xdeadbeef, (void (*)())0xdeadbeef)
+    if (false) FUNCTIONPOINTERS_EQUAL(0, (void (*)())0x0ea1beef)
+    else FUNCTIONPOINTERS_EQUAL((void (*)())0x01debeef, (void (*)())0x01debeef)
 }
 
 IGNORE_TEST(UnitTestMacros, FUNCTIONPOINTERS_EQUALWorksInAnIgnoredTest)
@@ -796,8 +796,8 @@ TEST(UnitTestMacros, FailureWithFUNCTIONPOINTERS_EQUAL_TEXT)
 
 TEST(UnitTestMacros, FUNCTIONPOINTERS_EQUAL_TEXTBehavesAsProperMacro)
 {
-    if (false) FUNCTIONPOINTERS_EQUAL_TEXT(0, (void (*)())0xbeefbeef, "Failed because it failed")
-    else FUNCTIONPOINTERS_EQUAL_TEXT((void (*)())0xdeadbeef, (void (*)())0xdeadbeef, "Failed because it failed")
+    if (false) FUNCTIONPOINTERS_EQUAL_TEXT(0, (void (*)())0x0ea1beef, "Failed because it failed")
+    else FUNCTIONPOINTERS_EQUAL_TEXT((void (*)())0x01debeef, (void (*)())0x01debeef, "Failed because it failed")
 }
 
 IGNORE_TEST(UnitTestMacros, FUNCTIONPOINTERS_EQUAL_TEXTWorksInAnIgnoredTest)
