@@ -20,13 +20,20 @@ if(HAVE_STRDUP)
   add_definitions(-DCPPUTEST_HAVE_STRDUP=1)
 endif(HAVE_STRDUP)
 
-# Apply workaround for MinGW timespec redefinition (pthread.h / time.h)
 if (MINGW)
+    # Apply workaround for MinGW timespec redefinition (pthread.h / time.h)
     include(CheckStructHasMember)
     check_struct_has_member("struct timespec" tv_sec time.h HAVE_STRUCT_TIMESPEC)
     if (HAVE_STRUCT_TIMESPEC)
         add_definitions(-D_TIMESPEC_DEFINED=1)
     endif()
+
+    # Apply workaround for static/shared libraries on MinGW C/C++ compiler
+    # Issue occurs with CMake >= 3.9.0, it doesn't filter out gcc,gcc_s,gcc_eh from
+    # the implicit library list anymore, so the C++ linker is getting passed the static
+    # gcc_eh library since that's what the C linker uses by default. Only solution appears
+    # to be to force static linkage.
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static")
 endif()
 
 option(STD_C "Use the standard C library" ON)
