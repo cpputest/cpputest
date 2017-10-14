@@ -37,8 +37,12 @@ function Invoke-Tests($executable)
 {
     # Run tests and output the results using junit
     $TestCommand = "$executable -ojunit"
-    Write-Host $TestCommand
+    Write-Host $TestCommand -NoNewline
     Invoke-Expression $TestCommand
+    Write-Host " - return code: $LASTEXITCODE"
+    if ($LASTEXITCODE -lt 0) {
+        Write-Error "Runtime Exception during test execution"
+    }
 }
 
 function Invoke-CygwinTests($executable)
@@ -94,10 +98,10 @@ switch -Wildcard ($env:Platform)
     {
         $mingw_path = Get-MinGWBin
 
-        Add-PathFolder $mingw_path
+        Set-Path "$mingw_path;C:\Windows;C:\Windows\System32"
         Invoke-Tests '.\cpputest_build\tests\CppUTest\CppUTestTests.exe'
         Invoke-Tests '.\cpputest_build\tests\CppUTestExt\CppUTestExtTests.exe'
-        Remove-PathFolder $mingw_path
+        Restore-Path
     }
 
     default

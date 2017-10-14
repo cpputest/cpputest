@@ -74,3 +74,13 @@ function Remove-PathFolder($folder)
     $env:Path = $pathFolders -join ";"
 }
 
+function Set-Path($newPath)
+{
+    $env:RestorePath = $env:Path
+    $env:Path = $newPath
+}
+
+function Restore-Path()
+{
+    $env:Path = $env:RestorePath
+}
