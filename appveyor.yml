@@ -1,6 +1,6 @@
 version: 3.7.0-ci{build}
 
-image: Previous Visual Studio 2015
+image: Visual Studio 2015
 
 cache:
   - C:\ProgramData\chocolatey\bin -> appveyor.yml
@@ -28,7 +28,7 @@ environment:
     PlatformToolset: v140
 
 install:
-- ps: if ($env:Platform -like 'MinGW*') { choco install mingw --version $env:PlatformToolset $( if ($env:Platform -like '*32') { Write-Output -forcex86 } ) | Out-Null }
+- ps: if ($env:Platform -like 'MinGW*') { choco install mingw --version $env:PlatformToolset $( if ($env:Platform -like '*32') { Write-Output --forcex86 } ) }
 
 build_script:
 - ps: scripts\appveyor_ci_build.ps1

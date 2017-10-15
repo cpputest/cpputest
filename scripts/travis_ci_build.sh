@@ -34,6 +34,7 @@ if [ "x$BUILD" = "xautotools" ]; then
 fi
 
 if [ "x$BUILD" = "xcmake" ]; then
+    cmake --version
     cmake -DWERROR=ON -DC++11=${CPP11} ..
     make
     ctest -V

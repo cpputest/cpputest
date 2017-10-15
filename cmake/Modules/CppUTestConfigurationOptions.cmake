@@ -45,7 +45,7 @@ if (LONGLONG)
 endif (LONGLONG)
 
 if (MAP_FILE AND NOT MSVC)
-    set(CPPUTEST_LD_FLAGS "${CPPUTEST_LD_FLAGS} -Wl,-map,$<.map.txt")
+    set(CPPUTEST_LD_FLAGS "${CPPUTEST_LD_FLAGS} -Wl,-Map,$<.map.txt")
 endif (MAP_FILE AND NOT MSVC)
 
 if (COVERAGE AND NOT MSVC)
