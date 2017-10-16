@@ -715,7 +715,6 @@ TEST(SimpleString, CollectionWritingToEmptyString)
 }
 
 #ifdef CPPUTEST_64BIT
-#ifndef CPPUTEST_64BIT_32BIT_LONGS
 
 TEST(SimpleString, _64BitAddressPrintsCorrectly)
 {
@@ -725,6 +724,8 @@ TEST(SimpleString, _64BitAddressPrintsCorrectly)
     STRCMP_EQUAL(expected.asCharString(), actual.asCharString());
 }
 
+#ifndef CPPUTEST_64BIT_32BIT_LONGS
+
 TEST(SimpleString, BracketsFormattedHexStringFromForLongOnDifferentPlatform)
 {
 	long value = -1;
@@ -733,25 +734,12 @@ TEST(SimpleString, BracketsFormattedHexStringFromForLongOnDifferentPlatform)
 }
 
 #else
-/*
- * This test case should pass on 64 bit systems with 32 bit longs,
- * but actually fails due to an implementation problem: Right now,
- * the 64 bit pointers are casted to 32bit as the %p is causing
- * different formats on different platforms. However, this will
- * need to be fixed in the future.
- */
+
 TEST(SimpleString, BracketsFormattedHexStringFromForLongOnDifferentPlatform)
 {
 	long value = -1;
 
 	STRCMP_EQUAL("(0xffffffff)", BracketsFormattedHexStringFrom(value).asCharString());
-}
-IGNORE_TEST(SimpleString, _64BitAddressPrintsCorrectly)
-{
-    char* p = (char*) 0xffffffff;
-    SimpleString expected("0x123456789");
-    SimpleString actual = StringFrom((void*)&p[0x2345678A]);
-    STRCMP_EQUAL(expected.asCharString(), actual.asCharString());
 }
 
 #endif
