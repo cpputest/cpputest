@@ -31,6 +31,18 @@
 
 #define CHECK_TEST_FAILS_PROPER_WITH_TEXT(text) fixture.checkTestFailsWithProperTestLocation(text, __FILE__, __LINE__)
 
+// Mainly this is for Visual C++, but we'll define it for any system that has the same behavior
+// of a 32-bit long on a 64-bit system
+#if defined(CPPUTEST_64BIT) && defined(CPPUTEST_64BIT_32BIT_LONGS)
+// Forcing the value to be unsigned long long means that there's no sign-extension to perform
+#define to_void_pointer(x) ((void *)x##ULL)
+#define to_func_pointer(x) ((void (*)())x##ULL)
+#else
+// Probably not needed, but let's guarantee that the value is an unsigned long
+#define to_void_pointer(x) ((void *)x##UL)
+#define to_func_pointer(x) ((void (*)())x##UL)
+#endif
+
 TEST_GROUP(UnitTestMacros)
 {
     TestTestingFixture fixture;
@@ -721,8 +733,8 @@ TEST(UnitTestMacros, FailureWithPOINTERS_EQUAL)
 
 TEST(UnitTestMacros, POINTERS_EQUALBehavesAsProperMacro)
 {
-    if (false) POINTERS_EQUAL(0, 0x0ea1beef)
-    else POINTERS_EQUAL(0x01debeef, 0x01debeef)
+    if (false) POINTERS_EQUAL(0, to_void_pointer(0xbeefbeef))
+    else POINTERS_EQUAL(to_void_pointer(0xdeadbeef), to_void_pointer(0xdeadbeef))
 }
 
 IGNORE_TEST(UnitTestMacros, POINTERS_EQUALWorksInAnIgnoredTest)
@@ -746,8 +758,8 @@ TEST(UnitTestMacros, FailureWithPOINTERS_EQUAL_TEXT)
 
 TEST(UnitTestMacros, POINTERS_EQUAL_TEXTBehavesAsProperMacro)
 {
-    if (false) POINTERS_EQUAL_TEXT(0, (void*) 0x0ea1beef, "Failed because it failed")
-    else POINTERS_EQUAL_TEXT((void*)0x01debeef, (void*)0x01debeef, "Failed because it failed")
+    if (false) POINTERS_EQUAL_TEXT(0, to_void_pointer(0xbeefbeef), "Failed because it failed")
+    else POINTERS_EQUAL_TEXT(to_void_pointer(0xdeadbeef), to_void_pointer(0xdeadbeef), "Failed because it failed")
 }
 
 IGNORE_TEST(UnitTestMacros, POINTERS_EQUAL_TEXTWorksInAnIgnoredTest)
@@ -771,8 +783,8 @@ TEST(UnitTestMacros, FailureWithFUNCTIONPOINTERS_EQUAL)
 
 TEST(UnitTestMacros, FUNCTIONPOINTERS_EQUALBehavesAsProperMacro)
 {
-    if (false) FUNCTIONPOINTERS_EQUAL(0, (void (*)())0x0ea1beef)
-    else FUNCTIONPOINTERS_EQUAL((void (*)())0x01debeef, (void (*)())0x01debeef)
+    if (false) FUNCTIONPOINTERS_EQUAL(0, to_func_pointer(0xbeefbeef))
+    else FUNCTIONPOINTERS_EQUAL(to_func_pointer(0xdeadbeef), to_func_pointer(0xdeadbeef))
 }
 
 IGNORE_TEST(UnitTestMacros, FUNCTIONPOINTERS_EQUALWorksInAnIgnoredTest)
@@ -796,8 +808,8 @@ TEST(UnitTestMacros, FailureWithFUNCTIONPOINTERS_EQUAL_TEXT)
 
 TEST(UnitTestMacros, FUNCTIONPOINTERS_EQUAL_TEXTBehavesAsProperMacro)
 {
-    if (false) FUNCTIONPOINTERS_EQUAL_TEXT(0, (void (*)())0x0ea1beef, "Failed because it failed")
-    else FUNCTIONPOINTERS_EQUAL_TEXT((void (*)())0x01debeef, (void (*)())0x01debeef, "Failed because it failed")
+    if (false) FUNCTIONPOINTERS_EQUAL_TEXT(0, to_func_pointer(0xbeefbeef), "Failed because it failed")
+    else FUNCTIONPOINTERS_EQUAL_TEXT(to_func_pointer(0xdeadbeef), to_func_pointer(0xdeadbeef), "Failed because it failed")
 }
 
 IGNORE_TEST(UnitTestMacros, FUNCTIONPOINTERS_EQUAL_TEXTWorksInAnIgnoredTest)
