@@ -26,6 +26,8 @@ environment:
     PlatformToolset: v100
   - Platform: Win32
     PlatformToolset: v140
+  - Platform: x64
+    PlatformToolset: v140
 
 install:
 - ps: if ($env:Platform -like 'MinGW*') { choco install mingw --version $env:PlatformToolset $( if ($env:Platform -like '*32') { Write-Output --forcex86 } ) }
