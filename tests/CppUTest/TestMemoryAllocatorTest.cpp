@@ -216,7 +216,7 @@ TEST(FailableMemoryAllocator, FailFirstAllocationAtGivenLine)
 
 TEST(FailableMemoryAllocator, FailThirdAllocationAtGivenLine)
 {
-    int *memory[10];
+    int *memory[10] = { NULL };
     int allocation;
     failableMallocAllocator.failNthAllocAt(3, __FILE__, __LINE__ + 4);
 
