@@ -22,6 +22,7 @@ void AllocLetTestFree_Destroy(AllocLetTestFree self)
     AllocLetTestFree no_use = self;
     self = NULL;
     self = no_use;
+    (void)self;
 
 }
 #endif
