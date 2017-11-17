@@ -99,7 +99,7 @@ public:
 };
 
 #ifdef __cplusplus
-#define UT_PTR_SET(a, b) { CppUTestStore( reinterpret_cast<void**>(&a) ); a = b; }
+#define UT_PTR_SET(a, b) { CppUTestStore( (reinterpret_cast<void**>(&a)) ); a = b; }
 #else
 #define UT_PTR_SET(a, b) { CppUTestStore( (void**)&a ); a = b; }
 #endif
