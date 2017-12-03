@@ -54,6 +54,10 @@ builds/*gcc*
 CppUTestExtTests
 CppUTestTests
 /Makefile
+build/Makefile
+build/generated
+build/src
+build/tests
 config.h
 config.h.in
 config.status
