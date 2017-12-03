@@ -8,7 +8,9 @@
 2. Build CppUTest and examples
 
 2a. For unix/gcc (including cygwin)
- > cd <someDirectory>/CppUTest/cpputest_build
+ > cd <someDirectory>/CppUTest
+ > ./autogen.sh
+ > cd build
  > ../configure
  > make
  > make tdd   # This is to run the CppUTest unit tests
