@@ -50,6 +50,8 @@ option(WERROR "Compile with warnings as errors" OFF)
 option(TESTS "Compile and make tests for the code?" ON)
 option(TESTS_DETAILED "Run each test separately instead of grouped?" OFF)
 
+option(VERBOSE_CONFIG "Print configuration to stdout during generation" ON)
+
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "What kind of build this is" FORCE)
 endif(NOT CMAKE_BUILD_TYPE)
@@ -151,7 +153,8 @@ else()
     " or write generators for CppUTestConfig.cmake by yourself.")
 endif()
 
-message("
+if(VERBOSE_CONFIG)
+  message("
 -------------------------------------------------------
 CppUTest Version ${CppUTest_version_major}.${CppUTest_version_minor}
 
@@ -180,3 +183,4 @@ Features configured in CppUTest:
 
 -------------------------------------------------------
 ")
+endif()
