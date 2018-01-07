@@ -185,11 +185,15 @@ TEST(MockStrictOrderTest, orderUsingNCalls)
     mock().expectOneCall("foo1");
     mock().expectNCalls(2, "foo2");
     mock().expectOneCall("foo1");
+    mock().expectNCalls(3, "foo2");
+
     mock().actualCall("foo1");
     mock().actualCall("foo2");
     mock().actualCall("foo2");
     mock().actualCall("foo1");
+    mock().actualCall("foo2");
+    mock().actualCall("foo2");
+    mock().actualCall("foo2");
 
     mock().checkExpectations();
 }
-

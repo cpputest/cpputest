@@ -135,7 +135,6 @@ private:
     bool ignoreOtherCalls_;
     bool enabled_;
     MockCheckedActualCall *lastActualFunctionCall_;
-    MockExpectedCallComposite compositeCalls_;
     MockNamedValueComparatorsAndCopiersRepository comparatorsAndCopiersRepository_;
     MockNamedValueList data_;
     const SimpleString mockName_;
@@ -144,7 +143,7 @@ private:
 
     void checkExpectationsOfLastActualCall();
     bool wasLastActualCallFulfilled();
-    void failTestWithUnexpectedCalls();
+    void failTestWithExpectedCallsNotFulfilled();
     void failTestWithOutOfOrderCalls();
 
     MockNamedValue* retrieveDataFromStore(const SimpleString& name);
