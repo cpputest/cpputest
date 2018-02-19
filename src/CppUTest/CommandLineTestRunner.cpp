@@ -34,10 +34,10 @@
 
 int CommandLineTestRunner::RunAllTests(int ac, char** av)
 {
-    return RunAllTests(ac, (const char**) av);
+    return RunAllTests(ac, (const char *const *) av);
 }
 
-int CommandLineTestRunner::RunAllTests(int ac, const char** av)
+int CommandLineTestRunner::RunAllTests(int ac, const char *const *av)
 {
     int result = 0;
     ConsoleTestOutput backupOutput;
@@ -58,7 +58,7 @@ int CommandLineTestRunner::RunAllTests(int ac, const char** av)
     return result;
 }
 
-CommandLineTestRunner::CommandLineTestRunner(int ac, const char** av, TestRegistry* registry) :
+CommandLineTestRunner::CommandLineTestRunner(int ac, const char *const *av, TestRegistry* registry) :
     output_(NULL), arguments_(NULL), registry_(registry)
 {
     arguments_ = new CommandLineArguments(ac, av);

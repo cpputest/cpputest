@@ -41,7 +41,7 @@ MemoryReporterPlugin::~MemoryReporterPlugin()
     destroyMemoryFormatter(formatter_);
 }
 
-bool MemoryReporterPlugin::parseArguments(int /* ac */, const char** av, int index)
+bool MemoryReporterPlugin::parseArguments(int /* ac */, const char *const *av, int index)
 {
     SimpleString argument (av[index]);
     if (argument.contains("-pmemoryreport=")) {

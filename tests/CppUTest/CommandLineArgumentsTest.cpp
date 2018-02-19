@@ -39,7 +39,7 @@ public:
     ~OptionsPlugin()
     {
     }
-    bool parseArguments(int /*ac*/, const char** /*av*/, int /*index*/)
+    bool parseArguments(int /*ac*/, const char *const * /*av*/, int /*index*/)
     {
         return true;
     }
@@ -61,7 +61,7 @@ TEST_GROUP(CommandLineArguments)
         delete plugin;
     }
 
-    bool newArgumentParser(int argc, const char** argv)
+    bool newArgumentParser(int argc, const char *const *argv)
     {
         args = new CommandLineArguments(argc, argv);
         return args->parse(plugin);

@@ -47,7 +47,7 @@ public:
     {
     }
 
-    virtual bool parseArguments(int, const char**, int)
+    virtual bool parseArguments(int, const char *const *, int)
     {
         /* Remove ourselves from the count */
         amountOfPlugins = registry_->countPlugins() - 1;
@@ -64,7 +64,7 @@ public:
   StringBufferTestOutput* fakeConsoleOutputWhichIsReallyABuffer;
   StringBufferTestOutput* fakeTCOutputWhichIsReallyABuffer;
 
-  CommandLineTestRunnerWithStringBufferOutput(int argc, const char** argv, TestRegistry* registry)
+  CommandLineTestRunnerWithStringBufferOutput(int argc, const char *const *argv, TestRegistry* registry)
     : CommandLineTestRunner(argc, argv, registry), fakeJUnitOutputWhichIsReallyABuffer_(NULL),
     fakeConsoleOutputWhichIsReallyABuffer(NULL), fakeTCOutputWhichIsReallyABuffer(NULL)
   {}

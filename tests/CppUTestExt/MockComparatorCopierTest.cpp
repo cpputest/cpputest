@@ -117,12 +117,12 @@ TEST(MockComparatorCopierTest, customObjectParameterSucceeds)
 
 static bool myTypeIsEqual(const void* object1, const void* object2)
 {
-    return ((MyTypeForTesting*)object1)->value == ((MyTypeForTesting*)object2)->value;
+    return ((const MyTypeForTesting*)object1)->value == ((const MyTypeForTesting*)object2)->value;
 }
 
 static SimpleString myTypeValueToString(const void* object)
 {
-    return StringFrom(((MyTypeForTesting*)object)->value);
+    return StringFrom(((const MyTypeForTesting*)object)->value);
 }
 
 TEST(MockComparatorCopierTest, customObjectWithFunctionComparator)

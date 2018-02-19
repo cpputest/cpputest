@@ -199,6 +199,9 @@ const char* (*GetPlatformSpecificTimeString)() = TimeStringImplementation;
 #pragma clang diagnostic ignored "-Wformat-nonliteral"
 #endif
 
+#ifdef __clang__
+#pragma clang diagnostic ignored "-Wused-but-marked-unused"
+#endif
 int (*PlatformSpecificVSNprintf)(char *str, size_t size, const char* format, va_list va_args_list) = vsnprintf;
 
 static PlatformSpecificFile PlatformSpecificFOpenImplementation(const char* filename, const char* flag)

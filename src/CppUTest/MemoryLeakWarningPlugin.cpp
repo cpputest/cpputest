@@ -150,7 +150,7 @@ static void* threadsafe_mem_leak_operator_new_nothrow (size_t size) UT_NOTHROW
 static void* threadsafe_mem_leak_operator_new_debug (size_t size, const char* file, int line) UT_THROW(std::bad_alloc)
 {
     MemLeakScopedMutex lock;
-    void *memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewAllocator(), size, (char*) file, line);
+    void *memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewAllocator(), size, file, line);
     UT_THROW_BAD_ALLOC_WHEN_NULL(memory);
     return memory;
 }
@@ -172,7 +172,7 @@ static void* threadsafe_mem_leak_operator_new_array_nothrow (size_t size) UT_NOT
 static void* threadsafe_mem_leak_operator_new_array_debug (size_t size, const char* file, int line) UT_THROW(std::bad_alloc)
 {
     MemLeakScopedMutex lock;
-    void* memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewArrayAllocator(), size, (char*) file, line);
+    void* memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewArrayAllocator(), size, file, line);
     UT_THROW_BAD_ALLOC_WHEN_NULL(memory);
     return memory;
 }
@@ -206,7 +206,7 @@ static void* mem_leak_operator_new_nothrow (size_t size) UT_NOTHROW
 
 static void* mem_leak_operator_new_debug (size_t size, const char* file, int line) UT_THROW(std::bad_alloc)
 {
-    void *memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewAllocator(), size, (char*) file, line);
+    void *memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewAllocator(), size, file, line);
     UT_THROW_BAD_ALLOC_WHEN_NULL(memory);
     return memory;
 }
@@ -225,7 +225,7 @@ static void* mem_leak_operator_new_array_nothrow (size_t size) UT_NOTHROW
 
 static void* mem_leak_operator_new_array_debug (size_t size, const char* file, int line) UT_THROW(std::bad_alloc)
 {
-    void* memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewArrayAllocator(), size, (char*) file, line);
+    void* memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewArrayAllocator(), size, file, line);
     UT_THROW_BAD_ALLOC_WHEN_NULL(memory);
     return memory;
 }

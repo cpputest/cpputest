@@ -265,7 +265,7 @@
     POINTERS_EQUAL_LOCATION((expected), (actual), text, __FILE__, __LINE__)
 
 #define POINTERS_EQUAL_LOCATION(expected, actual, text, file, line)\
-  { UtestShell::getCurrent()->assertPointersEqual((void *)expected, (void *)actual, text, file, line); }
+  { UtestShell::getCurrent()->assertPointersEqual((const void *)expected, (const void *)actual, text, file, line); }
 
 #define FUNCTIONPOINTERS_EQUAL(expected, actual)\
     FUNCTIONPOINTERS_EQUAL_LOCATION((expected), (actual), NULL, __FILE__, __LINE__)

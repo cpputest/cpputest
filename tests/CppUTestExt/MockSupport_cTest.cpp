@@ -116,7 +116,7 @@ extern "C"{
 
     static void typeCopy(void* dst, const void* src)
     {
-        *(int*) dst = *(int*) src;
+        *(int*) dst = *(const int*) src;
     }
 
 }

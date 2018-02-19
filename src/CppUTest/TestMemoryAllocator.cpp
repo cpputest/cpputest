@@ -149,17 +149,17 @@ void TestMemoryAllocator::free_memory(char* memory, const char*, int)
 {
     PlatformSpecificFree(memory);
 }
-const char* TestMemoryAllocator::name()
+const char* TestMemoryAllocator::name() const
 {
     return name_;
 }
 
-const char* TestMemoryAllocator::alloc_name()
+const char* TestMemoryAllocator::alloc_name() const
 {
     return alloc_name_;
 }
 
-const char* TestMemoryAllocator::free_name()
+const char* TestMemoryAllocator::free_name() const
 {
     return free_name_;
 }

@@ -70,7 +70,7 @@ public:
     {
     }
 
-    virtual bool parseArguments(int ac, const char** av, int index)
+    virtual bool parseArguments(int ac, const char *const *av, int index)
     {
         SimpleString argument (av[index]);
         if (argument == "-paccept")

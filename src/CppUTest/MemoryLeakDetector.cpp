@@ -30,7 +30,7 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 #include "CppUTest/SimpleMutex.h"
 
-#define UNKNOWN ((char*)("<unknown>"))
+static const char* UNKNOWN = "<unknown>";
 
 SimpleStringBuffer::SimpleStringBuffer() :
     positions_filled_(0), write_limit_(SIMPLE_STRING_BUFFER_LEN-1)

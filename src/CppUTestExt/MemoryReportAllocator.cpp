@@ -37,17 +37,17 @@ MemoryReportAllocator::~MemoryReportAllocator()
 {
 }
 
-const char* MemoryReportAllocator::name()
+const char* MemoryReportAllocator::name() const
 {
     return realAllocator_->name();
 }
 
-const char* MemoryReportAllocator::alloc_name()
+const char* MemoryReportAllocator::alloc_name() const
 {
     return realAllocator_->alloc_name();
 }
 
-const char* MemoryReportAllocator::free_name()
+const char* MemoryReportAllocator::free_name() const
 {
     return realAllocator_->free_name();
 }
