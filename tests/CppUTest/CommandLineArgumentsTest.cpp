@@ -53,7 +53,7 @@ TEST_GROUP(CommandLineArguments)
     void setup()
     {
         plugin = new OptionsPlugin("options");
-        args = NULL;
+        args = NULLPTR;
     }
     void teardown()
     {
@@ -391,8 +391,8 @@ TEST(CommandLineArguments, checkDefaultArguments)
     CHECK(newArgumentParser(argc, argv));
     CHECK(!args->isVerbose());
     LONGS_EQUAL(1, args->getRepeatCount());
-    CHECK(NULL == args->getGroupFilters());
-    CHECK(NULL == args->getNameFilters());
+    CHECK(NULLPTR == args->getGroupFilters());
+    CHECK(NULLPTR == args->getNameFilters());
     CHECK(args->isEclipseOutput());
     CHECK(SimpleString("") == args->getPackageName());
 }

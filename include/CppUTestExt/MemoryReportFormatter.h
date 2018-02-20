@@ -50,7 +50,7 @@ class NormalMemoryReportFormatter : public MemoryReportFormatter
 {
 public:
     NormalMemoryReportFormatter();
-    virtual ~NormalMemoryReportFormatter();
+    virtual ~NormalMemoryReportFormatter() _destructor_override;
 
     virtual void report_testgroup_start(TestResult* /*result*/, UtestShell& /*test*/) _override;
     virtual void report_testgroup_end(TestResult* /*result*/, UtestShell& /*test*/) _override {} // LCOV_EXCL_LINE

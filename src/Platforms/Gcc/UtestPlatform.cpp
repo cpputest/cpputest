@@ -184,7 +184,7 @@ static long TimeInMillisImplementation()
 
 static const char* TimeStringImplementation()
 {
-    time_t tm = time(NULL);
+    time_t tm = time(NULLPTR);
     static char dateTime[80];
     struct tm *tmp = localtime(&tm);
     strftime(dateTime, 80, "%Y-%m-%dT%H:%M:%S", tmp);
@@ -263,7 +263,7 @@ static PlatformSpecificMutex PThreadMutexCreate(void)
 {
     pthread_mutex_t *mutex = new pthread_mutex_t;
 
-    pthread_mutex_init(mutex, NULL);
+    pthread_mutex_init(mutex, NULLPTR);
 
     return (PlatformSpecificMutex)mutex;
 }

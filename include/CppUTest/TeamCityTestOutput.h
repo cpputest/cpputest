@@ -8,7 +8,7 @@ class TeamCityTestOutput: public ConsoleTestOutput
 {
 public:
     TeamCityTestOutput(void);
-    virtual ~TeamCityTestOutput(void);
+    virtual ~TeamCityTestOutput(void) _destructor_override;
 
     virtual void printCurrentTestStarted(const UtestShell& test) _override;
     virtual void printCurrentTestEnded(const TestResult& res) _override;

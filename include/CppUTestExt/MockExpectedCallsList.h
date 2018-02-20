@@ -87,7 +87,7 @@ protected:
 
         MockExpectedCallsListNode* next_;
         MockExpectedCallsListNode(MockCheckedExpectedCall* expectedCall)
-            : expectedCall_(expectedCall), next_(NULL) {}
+            : expectedCall_(expectedCall), next_(NULLPTR) {}
     };
 
 private:

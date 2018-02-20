@@ -90,7 +90,7 @@ TestPlugin* TestPlugin::getNext()
 }
 TestPlugin* TestPlugin::removePluginByName(const SimpleString& name)
 {
-    TestPlugin* removed = 0;
+    TestPlugin* removed = NULLPTR;
     if (next_ && next_->getName() == name) {
         removed = next_;
         next_ = next_->next_;
@@ -150,7 +150,7 @@ void SetPointerPlugin::postTestAction(UtestShell& /*test*/, TestResult& /*result
 //////// NullPlugin
 
 NullTestPlugin::NullTestPlugin() :
-    TestPlugin(0)
+    TestPlugin(NULLPTR)
 {
 }
 

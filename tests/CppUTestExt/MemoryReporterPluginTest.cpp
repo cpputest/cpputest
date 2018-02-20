@@ -255,7 +255,7 @@ public:
 
 TEST(MemoryReporterPlugin, endOfaTestGroupWillReportSo)
 {
-    UtestForMemoryReportingPlugingTest fourthTest("differentGroupName", NULL);
+    UtestForMemoryReportingPlugingTest fourthTest("differentGroupName", NULLPTR);
     UtestForMemoryReportingPlugingTest thirdTest("differentGroupName", &fourthTest);
     UtestForMemoryReportingPlugingTest secondTest("groupname", &thirdTest);
     UtestForMemoryReportingPlugingTest firstTest("groupname", &secondTest);

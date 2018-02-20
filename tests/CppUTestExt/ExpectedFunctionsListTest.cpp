@@ -270,12 +270,12 @@ TEST(MockExpectedCallsList, callToStringForFulfilledFunctions)
 
 TEST(MockExpectedCallsList, removeOneFinalizedMatchingExpectationFromEmptyList)
 {
-    POINTERS_EQUAL(NULL, list->removeFirstFinalizedMatchingExpectation());
+    POINTERS_EQUAL(NULLPTR, list->removeFirstFinalizedMatchingExpectation());
 }
 
 TEST(MockExpectedCallsList, getOneMatchingExpectationFromEmptyList)
 {
-    POINTERS_EQUAL(NULL, list->getFirstMatchingExpectation());
+    POINTERS_EQUAL(NULLPTR, list->getFirstMatchingExpectation());
 }
 
 TEST(MockExpectedCallsList, toStringOnEmptyList)

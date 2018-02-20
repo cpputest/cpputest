@@ -40,7 +40,7 @@ protected:
     MemoryReportFormatter* formatter_;
 public:
     MemoryReportAllocator();
-    virtual ~MemoryReportAllocator();
+    virtual ~MemoryReportAllocator() _destructor_override;
 
     virtual void setFormatter(MemoryReportFormatter* formatter);
     virtual void setTestResult(TestResult* result);

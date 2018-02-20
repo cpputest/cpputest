@@ -442,7 +442,7 @@ TEST(MemoryLeakDetectorTest, memoryCorruption)
 
 TEST(MemoryLeakDetectorTest, safelyDeleteNULL)
 {
-    detector->deallocMemory(defaultNewAllocator(), 0);
+    detector->deallocMemory(defaultNewAllocator(), NULLPTR);
     STRCMP_EQUAL("", reporter->message->asCharString());
 }
 
@@ -496,7 +496,7 @@ TEST(MemoryLeakDetectorTest, invalidateMemory)
 
 TEST(MemoryLeakDetectorTest, invalidateMemoryNULLShouldWork)
 {
-  detector->invalidateMemory(NULL);
+  detector->invalidateMemory(NULLPTR);
 }
 
 TEST_GROUP(MemoryLeakDetectorListTest)
@@ -514,7 +514,7 @@ TEST(MemoryLeakDetectorListTest, clearAllAccountingIsWorkingProperly)
 
     listForTesting.clearAllAccounting(mem_leak_period_enabled);
 
-    CHECK(NULL == listForTesting.getFirstLeak(mem_leak_period_enabled));
+    POINTERS_EQUAL(NULLPTR, listForTesting.getFirstLeak(mem_leak_period_enabled));
     CHECK(&node3 == listForTesting.getFirstLeak(mem_leak_period_disabled));
 }
 

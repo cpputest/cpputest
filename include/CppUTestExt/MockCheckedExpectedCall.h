@@ -37,7 +37,7 @@ class MockCheckedExpectedCall : public MockExpectedCall
 public:
     MockCheckedExpectedCall();
     MockCheckedExpectedCall(unsigned int numCalls);
-    virtual ~MockCheckedExpectedCall();
+    virtual ~MockCheckedExpectedCall() _destructor_override;
 
     virtual MockExpectedCall& withName(const SimpleString& name) _override;
     virtual MockExpectedCall& withCallOrder(unsigned int callOrder) _override { return withCallOrder(callOrder, callOrder); }

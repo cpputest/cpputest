@@ -124,7 +124,7 @@ TEST(CodeMemoryReportFormatter, NewAllocatorGeneratesDeleteCode)
 
 TEST(CodeMemoryReportFormatter, DeleteNullWorksFine)
 {
-    formatter->report_free_memory(testResult, newAllocator, NULL, "boo", 4);
+    formatter->report_free_memory(testResult, newAllocator, NULLPTR, "boo", 4);
     TESTOUTPUT_CONTAINS("delete [] NULL; /* using delete at boo:4 */");
 }
 

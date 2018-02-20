@@ -29,7 +29,7 @@
 #include "CppUTestExt/MemoryReportAllocator.h"
 #include "CppUTestExt/MemoryReportFormatter.h"
 
-MemoryReportAllocator::MemoryReportAllocator() : result_(NULL), realAllocator_(NULL), formatter_(NULL)
+MemoryReportAllocator::MemoryReportAllocator() : result_(NULLPTR), realAllocator_(NULLPTR), formatter_(NULLPTR)
 {
 }
 

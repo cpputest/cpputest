@@ -60,8 +60,8 @@ TEST_GROUP(MemoryLeakWarningLocalDetectorTest)
 
 TEST(MemoryLeakWarningLocalDetectorTest, localDetectorReturnsNewGlobalWhenNoneWasSet)
 {
-    MemoryLeakWarningPlugin memoryLeakWarningPlugin("TestMemoryLeakWarningPlugin", NULL);
-    CHECK(0 != memoryLeakWarningPlugin.getMemoryLeakDetector());
+    MemoryLeakWarningPlugin memoryLeakWarningPlugin("TestMemoryLeakWarningPlugin", NULLPTR);
+    CHECK(NULLPTR != memoryLeakWarningPlugin.getMemoryLeakDetector());
 }
 
 TEST(MemoryLeakWarningLocalDetectorTest, localDetectorIsTheOneSpecifiedInConstructor)
@@ -74,7 +74,7 @@ TEST(MemoryLeakWarningLocalDetectorTest, localDetectorIsTheOneSpecifiedInConstru
 TEST(MemoryLeakWarningLocalDetectorTest, localDetectorIsGlobalDetector)
 {
     MemoryLeakDetector* globalDetector = MemoryLeakWarningPlugin::getGlobalDetector();
-    MemoryLeakWarningPlugin memoryLeakWarningPlugin("TestMemoryLeakWarningPlugin", NULL);
+    MemoryLeakWarningPlugin memoryLeakWarningPlugin("TestMemoryLeakWarningPlugin", NULLPTR);
     MemoryLeakDetector* localDetector =  memoryLeakWarningPlugin.getMemoryLeakDetector();
     POINTERS_EQUAL(globalDetector, localDetector);
 }
@@ -93,8 +93,8 @@ TEST_GROUP(MemoryLeakWarningTest)
         fixture->registry_->installPlugin(memPlugin);
         memPlugin->enable();
 
-        leak1 = 0;
-        leak2 = 0;
+        leak1 = NULLPTR;
+        leak2 = NULLPTR;
     }
     void teardown()
     {
@@ -230,7 +230,7 @@ TEST(MemoryLeakWarningGlobalDetectorTest, turnOffNewOverloadsCausesNoAdditionalL
     char* arrayMemory = new char[100];
     char* nonArrayMemory = new char;
     char* mallocMemory = (char*) cpputest_malloc_location_with_leak_detection(10, "file", 10);
-    char* reallocMemory = (char*) cpputest_realloc_location_with_leak_detection(NULL, 10, "file", 10);
+    char* reallocMemory = (char*) cpputest_realloc_location_with_leak_detection(NULLPTR, 10, "file", 10);
 
     LONGS_EQUAL(storedAmountOfLeaks, detector->totalMemoryLeaks(mem_leak_period_all));
 
@@ -301,7 +301,7 @@ TEST(MemoryLeakWarningGlobalDetectorTest, crashOnLeakWithOperatorMalloc)
 
 TEST(MemoryLeakWarningGlobalDetectorTest, gettingTheGlobalDetectorDoesNotRestoreTheMemoryLeakOverloadsWhenTheyWereAlreadyOff)
 {
-    MemoryLeakWarningPlugin::setGlobalDetector(NULL, NULL);
+    MemoryLeakWarningPlugin::setGlobalDetector(NULLPTR, NULLPTR);
     MemoryLeakDetector* temporaryDetector = MemoryLeakWarningPlugin::getGlobalDetector();
     MemoryLeakFailure*  temporaryReporter = MemoryLeakWarningPlugin::getGlobalFailureReporter();
 

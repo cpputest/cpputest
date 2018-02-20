@@ -44,7 +44,7 @@ class MemoryReporterPlugin : public TestPlugin
     SimpleString currentTestGroup_;
 public:
     MemoryReporterPlugin();
-    virtual ~MemoryReporterPlugin();
+    virtual ~MemoryReporterPlugin() _destructor_override;
 
     virtual void preTestAction(UtestShell & test, TestResult & result) _override;
     virtual void postTestAction(UtestShell & test, TestResult & result) _override;

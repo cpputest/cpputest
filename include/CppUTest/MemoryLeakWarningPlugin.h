@@ -42,8 +42,8 @@ class MemoryLeakFailure;
 class MemoryLeakWarningPlugin: public TestPlugin
 {
 public:
-    MemoryLeakWarningPlugin(const SimpleString& name, MemoryLeakDetector* localDetector = 0);
-    virtual ~MemoryLeakWarningPlugin();
+    MemoryLeakWarningPlugin(const SimpleString& name, MemoryLeakDetector* localDetector = NULLPTR);
+    virtual ~MemoryLeakWarningPlugin() _destructor_override;
 
     virtual void preTestAction(UtestShell& test, TestResult& result) _override;
     virtual void postTestAction(UtestShell& test, TestResult& result) _override;

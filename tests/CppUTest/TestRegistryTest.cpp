@@ -132,7 +132,7 @@ TEST_GROUP(TestRegistry)
 
     void teardown()
     {
-        myRegistry->setCurrentRegistry(0);
+        myRegistry->setCurrentRegistry(NULLPTR);
         delete myRegistry;
         delete test1;
         delete test2;
@@ -236,7 +236,7 @@ TEST(TestRegistry, reallyUndoLastTest)
 
 TEST(TestRegistry, findTestWithNameDoesntExist)
 {
-    CHECK(myRegistry->findTestWithName("ThisTestDoesntExists") == NULL);
+    CHECK(myRegistry->findTestWithName("ThisTestDoesntExists") == NULLPTR);
 }
 
 TEST(TestRegistry, findTestWithName)
@@ -245,12 +245,12 @@ TEST(TestRegistry, findTestWithName)
     test2->setTestName("SomeOtherTest");
     myRegistry->addTest(test1);
     myRegistry->addTest(test2);
-    CHECK(myRegistry->findTestWithName("NameOfATestThatDoesExist"));
+    CHECK(myRegistry->findTestWithName("NameOfATestThatDoesExist") != NULLPTR);
 }
 
 TEST(TestRegistry, findTestWithGroupDoesntExist)
 {
-    CHECK(myRegistry->findTestWithGroup("ThisTestGroupDoesntExists") == NULL);
+    CHECK(myRegistry->findTestWithGroup("ThisTestGroupDoesntExists") == NULLPTR);
 }
 
 TEST(TestRegistry, findTestWithGroup)
@@ -259,7 +259,7 @@ TEST(TestRegistry, findTestWithGroup)
     test2->setGroupName("SomeOtherGroup");
     myRegistry->addTest(test1);
     myRegistry->addTest(test2);
-    CHECK(myRegistry->findTestWithGroup("GroupOfATestThatDoesExist"));
+    CHECK(myRegistry->findTestWithGroup("GroupOfATestThatDoesExist") != NULLPTR);
 }
 
 TEST(TestRegistry, nameFilterWorks)
@@ -311,7 +311,7 @@ class MyTestPluginDummy: public TestPlugin
 {
 public:
     MyTestPluginDummy(const SimpleString& name) : TestPlugin(name) {}
-    virtual ~MyTestPluginDummy() {}
+    virtual ~MyTestPluginDummy() _destructor_override {}
     virtual void runAllPreTestAction(UtestShell&, TestResult&) _override {}
     virtual void runAllPostTestAction(UtestShell&, TestResult&) _override {}
 };

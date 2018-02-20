@@ -70,14 +70,14 @@ class NormalTestTerminator : public TestTerminator
 {
 public:
     virtual void exitCurrentTest() const _override;
-    virtual ~NormalTestTerminator();
+    virtual ~NormalTestTerminator() _destructor_override;
 };
 
 class TestTerminatorWithoutExceptions  : public TestTerminator
 {
 public:
     virtual void exitCurrentTest() const _override;
-    virtual ~TestTerminatorWithoutExceptions();
+    virtual ~TestTerminatorWithoutExceptions() _destructor_override;
 };
 
 //////////////////// UtestShell
@@ -202,9 +202,9 @@ public:
     void (*teardown_)();
     void (*testFunction_)();
 
-    ExecFunctionTestShell(void(*set)() = 0, void(*tear)() = 0) :
+    ExecFunctionTestShell(void(*set)() = NULLPTR, void(*tear)() = NULLPTR) :
         UtestShell("Generic", "Generic", "Generic", 1), setup_(set), teardown_(
-                tear), testFunction_(0)
+                tear), testFunction_(NULLPTR)
     {
     }
     Utest* createTest() { return new ExecFunctionTest(this); }
@@ -225,7 +225,7 @@ class IgnoredUtestShell : public UtestShell
 {
 public:
     IgnoredUtestShell();
-    virtual ~IgnoredUtestShell();
+    virtual ~IgnoredUtestShell() _destructor_override;
     explicit IgnoredUtestShell(const char* groupName, const char* testName,
             const char* fileName, int lineNumber);
     virtual bool willRun() const _override;
