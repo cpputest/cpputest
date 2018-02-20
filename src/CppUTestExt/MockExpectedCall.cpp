@@ -54,7 +54,7 @@ SimpleString MockCheckedExpectedCall::getName() const
 MockCheckedExpectedCall::MockCheckedExpectedCall()
     : ignoreOtherParameters_(false), isActualCallMatchFinalized_(false),
       initialExpectedCallOrder_(NO_EXPECTED_CALL_ORDER), finalExpectedCallOrder_(NO_EXPECTED_CALL_ORDER),
-      outOfOrder_(false), returnValue_(""), objectPtr_(NULL), wasPassedToObject_(true),
+      outOfOrder_(false), returnValue_(""), objectPtr_(NULL), isSpecificObjectExpected_(false), wasPassedToObject_(true),
       actualCalls_(0), expectedCalls_(1)
 {
     inputParameters_ = new MockNamedValueList();
@@ -64,7 +64,7 @@ MockCheckedExpectedCall::MockCheckedExpectedCall()
 MockCheckedExpectedCall::MockCheckedExpectedCall(unsigned int numCalls)
     : ignoreOtherParameters_(false), isActualCallMatchFinalized_(false),
       initialExpectedCallOrder_(NO_EXPECTED_CALL_ORDER), finalExpectedCallOrder_(NO_EXPECTED_CALL_ORDER),
-      outOfOrder_(false), returnValue_(""), objectPtr_(NULL), wasPassedToObject_(true),
+      outOfOrder_(false), returnValue_(""), objectPtr_(NULL), isSpecificObjectExpected_(false), wasPassedToObject_(true),
       actualCalls_(0), expectedCalls_(numCalls)
 {
     inputParameters_ = new MockNamedValueList();
@@ -291,7 +291,7 @@ void MockCheckedExpectedCall::wasPassedToObject()
 
 void MockCheckedExpectedCall::resetActualCallMatchingState()
 {
-    wasPassedToObject_ = (objectPtr_ == NULL);
+    wasPassedToObject_ = !isSpecificObjectExpected_;
     isActualCallMatchFinalized_ = false;
 
     MockNamedValueListNode* p;
@@ -339,7 +339,7 @@ bool MockCheckedExpectedCall::hasOutputParameter(const MockNamedValue& parameter
 SimpleString MockCheckedExpectedCall::callToString()
 {
     SimpleString str;
-    if (objectPtr_)
+    if (isSpecificObjectExpected_)
         str = StringFromFormat("(object address: %p)::", objectPtr_);
 
     str += getName();
@@ -409,7 +409,7 @@ bool MockCheckedExpectedCall::relatesTo(const SimpleString& functionName)
 
 bool MockCheckedExpectedCall::relatesToObject(const void* objectPtr) const
 {
-    return objectPtr_ == objectPtr;
+    return (!isSpecificObjectExpected_) || (objectPtr_ == objectPtr);
 }
 
 MockCheckedExpectedCall::MockExpectedFunctionParameter* MockCheckedExpectedCall::item(MockNamedValueListNode* node)
@@ -504,6 +504,7 @@ MockExpectedCall& MockCheckedExpectedCall::andReturnValue(void (*value)())
 
 MockExpectedCall& MockCheckedExpectedCall::onObject(void* objectPtr)
 {
+    isSpecificObjectExpected_ = true;
     wasPassedToObject_ = false;
     objectPtr_ = objectPtr;
     return *this;

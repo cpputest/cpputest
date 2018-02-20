@@ -527,19 +527,22 @@ MockActualCall& MockCheckedActualCall::onObject(const void* objectPtr)
         return *this;
     }
 
-    setState(CALL_IN_PROGRESS);
-    discardCurrentlyMatchingExpectations();
+    // Currently matching expectations are not discarded because the passed object
+    // is ignored if not specifically set in the expectation
 
     potentiallyMatchingExpectations_.onlyKeepExpectationsOnObject(objectPtr);
 
-    if (potentiallyMatchingExpectations_.isEmpty()) {
+    if ((!matchingExpectation_) && potentiallyMatchingExpectations_.isEmpty()) {
         MockUnexpectedObjectFailure failure(getTest(), getName(), objectPtr, allExpectations_);
         failTest(failure);
         return *this;
     }
 
     potentiallyMatchingExpectations_.wasPassedToObject();
-    completeCallWhenMatchIsFound();
+
+    if (!matchingExpectation_) {
+        completeCallWhenMatchIsFound();
+    }
 
     return *this;
 }

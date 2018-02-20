@@ -135,6 +135,7 @@ private:
     MockNamedValueList* outputParameters_;
     MockNamedValue returnValue_;
     void* objectPtr_;
+    bool isSpecificObjectExpected_;
     bool wasPassedToObject_;
     unsigned int actualCalls_;
     unsigned int expectedCalls_;
