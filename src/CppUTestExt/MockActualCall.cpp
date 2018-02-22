@@ -87,7 +87,7 @@ void MockCheckedActualCall::copyOutputParameters(MockCheckedExpectedCall* expect
         MockNamedValueCopier* copier = outputParameter.getCopier();
         if (copier)
         {
-            copier->copy(p->ptr_, outputParameter.getObjectPointer());
+            copier->copy(p->ptr_, outputParameter.getConstObjectPointer());
         }
         else if ((outputParameter.getType() == "const void*") && (p->type_ == "void*"))
         {
@@ -292,7 +292,7 @@ MockActualCall& MockCheckedActualCall::withMemoryBufferParameter(const SimpleStr
 MockActualCall& MockCheckedActualCall::withParameterOfType(const SimpleString& type, const SimpleString& name, const void* value)
 {
     MockNamedValue actualParameter(name);
-    actualParameter.setObjectPointer(type, value);
+    actualParameter.setConstObjectPointer(type, value);
 
     if (actualParameter.getComparator() == NULL) {
         MockNoWayToCompareCustomTypeFailure failure(getTest(), type);
@@ -319,7 +319,7 @@ MockActualCall& MockCheckedActualCall::withOutputParameterOfType(const SimpleStr
     addOutputParameter(name, type, output);
 
     MockNamedValue outputParameter(name);
-    outputParameter.setObjectPointer(type, output);
+    outputParameter.setConstObjectPointer(type, output);
     checkOutputParameter(outputParameter);
 
     return *this;

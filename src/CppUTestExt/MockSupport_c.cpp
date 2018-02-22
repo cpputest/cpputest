@@ -134,6 +134,7 @@ void setPointerData_c(const char* name, void* value);
 void setConstPointerData_c(const char* name, const void* value);
 void setFunctionPointerData_c(const char* name, void (*value)());
 void setDataObject_c(const char* name, const char* type, void* value);
+void setDataConstObject_c(const char* name, const char* type, const void* value);
 MockValue_c getData_c(const char* name);
 int hasReturnValue_c();
 
@@ -335,6 +336,7 @@ static MockSupport_c gMockSupport = {
         setConstPointerData_c,
         setFunctionPointerData_c,
         setDataObject_c,
+        setDataConstObject_c,
         getData_c,
         disable_c,
         enable_c,
@@ -857,6 +859,11 @@ void setFunctionPointerData_c(const char* name, void (*value)())
 void setDataObject_c(const char* name, const char* type, void* value)
 {
     currentMockSupport->setDataObject(name, type, value);
+}
+
+void setDataConstObject_c(const char* name, const char* type, const void* value)
+{
+    currentMockSupport->setDataConstObject(name, type, value);
 }
 
 MockValue_c getData_c(const char* name)
