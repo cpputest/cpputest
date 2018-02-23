@@ -94,7 +94,7 @@ class FileSystemForJUnitTestOutputTests
     FileForJUnitOutputTests* firstFile_;
 
 public:
-    FileSystemForJUnitTestOutputTests() : firstFile_(0) {}
+    FileSystemForJUnitTestOutputTests() : firstFile_(NULLPTR) {}
     ~FileSystemForJUnitTestOutputTests() { clear(); }
 
     void clear(void)
@@ -114,7 +114,7 @@ public:
 
     int amountOfFiles() {
         int totalAmountOfFiles = 0;
-        for (FileForJUnitOutputTests* current = firstFile_; current != NULL; current = current->nextFile())
+        for (FileForJUnitOutputTests* current = firstFile_; current != NULLPTR; current = current->nextFile())
             totalAmountOfFiles++;
         return totalAmountOfFiles;
     }
@@ -122,15 +122,15 @@ public:
     bool fileExists(const char* filename)
     {
         FileForJUnitOutputTests *searchedFile = file(filename);
-        return (searchedFile != NULL);
+        return (searchedFile != NULLPTR);
     }
 
     FileForJUnitOutputTests* file(const char* filename)
     {
-        for (FileForJUnitOutputTests* current = firstFile_; current != NULL; current = current->nextFile())
+        for (FileForJUnitOutputTests* current = firstFile_; current != NULLPTR; current = current->nextFile())
             if (current->name() == filename)
                 return current;
-        return NULL;
+        return NULLPTR;
     }
 };
 
@@ -163,7 +163,7 @@ class JUnitTestOutputTestRunner
 public:
 
     JUnitTestOutputTestRunner(TestResult result) :
-        result_(result), currentGroupName_(0), currentTest_(0), firstTestInGroup_(true), timeTheTestTakes_(0), numberOfChecksInTest_(0), testFailure_(0)
+        result_(result), currentGroupName_(NULLPTR), currentTest_(NULLPTR), firstTestInGroup_(true), timeTheTestTakes_(0), numberOfChecksInTest_(0), testFailure_(NULLPTR)
     {
         millisTime = 0;
         theTime =  "1978-10-03T00:00:00";
@@ -190,7 +190,7 @@ public:
     {
         endOfPreviousTestGroup();
         delete currentTest_;
-        currentTest_ = 0;
+        currentTest_ = NULLPTR;
         return *this;
     }
 
@@ -202,7 +202,7 @@ public:
             firstTestInGroup_ = true;
         }
 
-        currentGroupName_ = 0;
+        currentGroupName_ = NULLPTR;
     }
 
     JUnitTestOutputTestRunner& withGroup(const char* groupName)
@@ -250,7 +250,7 @@ public:
 
     void runPreviousTest()
     {
-        if (currentTest_ == 0) return;
+        if (currentTest_ == NULLPTR) return;
 
         if (firstTestInGroup_) {
             result_.currentGroupStarted(currentTest_);
@@ -267,7 +267,7 @@ public:
         if (testFailure_) {
             result_.addFailure(*testFailure_);
             delete testFailure_;
-            testFailure_ = 0;
+            testFailure_ = NULLPTR;
         }
 
         result_.currentTestEnded(currentTest_);
@@ -605,8 +605,8 @@ TEST(JUnitOutputTest, twoTestGroupsWriteToTwoDifferentFiles)
                 .withTest("testName")
             .end();
 
-    CHECK(fileSystem.file("cpputest_firstTestGroup.xml"));
-    CHECK(fileSystem.file("cpputest_secondTestGroup.xml"));
+    CHECK(fileSystem.file("cpputest_firstTestGroup.xml") != NULLPTR);
+    CHECK(fileSystem.file("cpputest_secondTestGroup.xml") != NULLPTR);
 
 }
 

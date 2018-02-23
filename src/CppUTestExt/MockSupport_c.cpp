@@ -49,7 +49,7 @@ public:
         TestTerminatorWithoutExceptions::exitCurrentTest();
     } // LCOV_EXCL_LINE
     // LCOV_EXCL_START
-    virtual ~MockFailureReporterTestTerminatorForInCOnlyCode()
+    virtual ~MockFailureReporterTestTerminatorForInCOnlyCode() _destructor_override
     {
     }
     // LCOV_EXCL_STOP
@@ -69,9 +69,9 @@ public:
 
 };
 
-static MockSupport* currentMockSupport = NULL;
-static MockExpectedCall* expectedCall = NULL;
-static MockActualCall* actualCall = NULL;
+static MockSupport* currentMockSupport = NULLPTR;
+static MockExpectedCall* expectedCall = NULLPTR;
+static MockActualCall* actualCall = NULLPTR;
 static MockFailureReporterForInCOnlyCode failureReporterForC;
 
 class MockCFunctionComparatorNode : public MockNamedValueComparator
@@ -79,7 +79,7 @@ class MockCFunctionComparatorNode : public MockNamedValueComparator
 public:
     MockCFunctionComparatorNode(MockCFunctionComparatorNode* next, MockTypeEqualFunction_c equal, MockTypeValueToStringFunction_c toString)
         : next_(next), equal_(equal), toString_(toString) {}
-    virtual ~MockCFunctionComparatorNode() {}
+    virtual ~MockCFunctionComparatorNode() _destructor_override {}
 
     virtual bool isEqual(const void* object1, const void* object2) _override
     {
@@ -95,14 +95,14 @@ public:
     MockTypeValueToStringFunction_c toString_;
 };
 
-static MockCFunctionComparatorNode* comparatorList_ = NULL;
+static MockCFunctionComparatorNode* comparatorList_ = NULLPTR;
 
 class MockCFunctionCopierNode : public MockNamedValueCopier
 {
 public:
     MockCFunctionCopierNode(MockCFunctionCopierNode* next, MockTypeCopyFunction_c copier)
         : next_(next), copier_(copier) {}
-    virtual ~MockCFunctionCopierNode() {}
+    virtual ~MockCFunctionCopierNode() _destructor_override {}
 
     virtual void copy(void* dst, const void* src) _override
     {
@@ -113,7 +113,7 @@ public:
     MockTypeCopyFunction_c copier_;
 };
 
-static MockCFunctionCopierNode* copierList_ = NULL;
+static MockCFunctionCopierNode* copierList_ = NULLPTR;
 
 extern "C" {
 

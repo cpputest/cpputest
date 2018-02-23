@@ -267,8 +267,17 @@ typedef struct cpputest_ulonglong cpputest_ulonglong;
 #if defined(__cplusplus) && ((__cplusplus >= 201103L) || (defined(_MSC_VER) && (_MSC_VER >= 1600)))
 #define CPPUTEST_COMPILER_FULLY_SUPPORTS_CXX11
 #define _override override
+#define NULLPTR nullptr
 #else
 #define _override
+#define NULLPTR NULL
+#endif
+
+/* Visual C++ 11.0+ (2012+) supports the override keyword on destructors */
+#if defined(__cplusplus) && ((__cplusplus >= 201103L) || (defined(_MSC_VER) && (_MSC_VER >= 1700)))
+#define _destructor_override override
+#else
+#define _destructor_override
 #endif
 
 /* MinGW-w64 prefers to act like Visual C++, but we want the ANSI behaviors instead */
@@ -278,5 +287,6 @@ typedef struct cpputest_ulonglong cpputest_ulonglong;
 #ifdef __clang__
  #pragma clang diagnostic pop
 #endif
+
 
 #endif

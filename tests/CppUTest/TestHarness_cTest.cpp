@@ -316,12 +316,12 @@ TEST(TestHarness_c, checkString)
 static void _failPointerMethod()
 {
     HasTheDestructorBeenCalledChecker checker;
-    CHECK_EQUAL_C_POINTER(NULL, (void *)0x1);
+    CHECK_EQUAL_C_POINTER(NULLPTR, (void *)0x1);
 }
 
 TEST(TestHarness_c, checkPointer)
 {
-    CHECK_EQUAL_C_POINTER(NULL, NULL);
+    CHECK_EQUAL_C_POINTER(NULLPTR, NULLPTR);
     fixture->setTestFunction(_failPointerMethod);
     fixture->runAllTests();
     fixture->assertPrintContains("expected <0x0>\n	but was  <0x1>");
@@ -337,7 +337,7 @@ static void _failBitsMethod()
 
 TEST(TestHarness_c, checkBits)
 {
-    CHECK_EQUAL_C_POINTER(NULL, NULL);
+    CHECK_EQUAL_C_POINTER(NULLPTR, NULLPTR);
     fixture->setTestFunction(_failBitsMethod);
     fixture->runAllTests();
     fixture->assertPrintContains("expected <00000000 00000001>\n\tbut was  <00000000 00000011>");
@@ -395,11 +395,11 @@ TEST(TestHarness_c, checkCheck)
 TEST(TestHarness_c, cpputest_malloc_out_of_memory)
 {
     cpputest_malloc_set_out_of_memory();
-    CHECK(0 == cpputest_malloc(100));
+    CHECK(NULLPTR == cpputest_malloc(100));
 
     cpputest_malloc_set_not_out_of_memory();
     void * mem = cpputest_malloc(100);
-    CHECK(0 != mem);
+    CHECK(NULLPTR != mem);
     cpputest_free(mem);
 }
 
@@ -409,9 +409,9 @@ TEST(TestHarness_c, cpputest_malloc_out_of_memory_after_n_mallocs)
     void * m1 = cpputest_malloc(10);
     void * m2 = cpputest_malloc(11);
     void * m3 = cpputest_malloc(12);
-    CHECK(m1);
-    CHECK(m2);
-    POINTERS_EQUAL(0, m3);
+    CHECK(m1 != NULLPTR);
+    CHECK(m2 != NULLPTR);
+    CHECK(m3 == NULLPTR);
     cpputest_malloc_set_not_out_of_memory();
     cpputest_free(m1);
     cpputest_free(m2);
@@ -421,7 +421,7 @@ TEST(TestHarness_c, cpputest_malloc_out_of_memory_after_0_mallocs)
 {
     cpputest_malloc_set_out_of_memory_countdown(0);
     void * m1 = cpputest_malloc(10);
-    CHECK(m1 == 0);
+    CHECK(m1 == NULLPTR);
     cpputest_malloc_set_not_out_of_memory();
 }
 
@@ -442,7 +442,7 @@ TEST(TestHarness_c, count_mallocs)
 TEST(TestHarness_c, cpputest_strdup)
 {
     char * mem = cpputest_strdup("0123456789");
-    CHECK(0 != mem);
+    CHECK(NULLPTR != mem);
     STRCMP_EQUAL("0123456789", mem)
     cpputest_free(mem);
 }
@@ -450,7 +450,7 @@ TEST(TestHarness_c, cpputest_strdup)
 TEST(TestHarness_c, cpputest_strndup)
 {
     char * mem = cpputest_strndup("0123456789", 3);
-    CHECK(0 != mem);
+    CHECK(NULLPTR != mem);
     STRCMP_EQUAL("012", mem)
     cpputest_free(mem);
 }
@@ -460,7 +460,7 @@ TEST(TestHarness_c, cpputest_strndup)
 TEST(TestHarness_c, cpputest_calloc)
 {
     void * mem = cpputest_calloc(10, 10);
-    CHECK(0 != mem);
+    CHECK(NULLPTR != mem);
     cpputest_free(mem);
 }
 
@@ -472,11 +472,11 @@ TEST(TestHarness_c, cpputest_realloc_larger)
 
     SimpleString::StrNCpy(mem1, number_string, 10);
 
-    CHECK(mem1 != 0);
+    CHECK(mem1 != NULLPTR);
 
     char* mem2 = (char*) cpputest_realloc(mem1, 1000);
 
-    CHECK(mem2 != 0);
+    CHECK(mem2 != NULLPTR);
     STRCMP_EQUAL(number_string, mem2);
 
     cpputest_free(mem2);
@@ -516,7 +516,7 @@ TEST(TestHarness_c, callocShouldReturnNULLWhenOutOfMeory)
 {
     cpputest_malloc_set_out_of_memory_countdown(0);
     void * m = cpputest_calloc(1, 1);
-    CHECK(m == 0);
+    CHECK(m == NULLPTR);
     cpputest_malloc_set_not_out_of_memory();
 }
 #endif

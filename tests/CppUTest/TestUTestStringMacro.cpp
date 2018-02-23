@@ -38,7 +38,7 @@ TEST_GROUP(UnitTestStringMacros)
 
 static void _STRCMP_EQUALWithActualIsNULLTestMethod()
 {
-    STRCMP_EQUAL("ok", NULL);
+    STRCMP_EQUAL("ok", NULLPTR);
 } // LCOV_EXCL_LINE
 
 TEST(UnitTestStringMacros, FailureWithSTRCMP_EQUALAndActualIsNULL)
@@ -49,7 +49,7 @@ TEST(UnitTestStringMacros, FailureWithSTRCMP_EQUALAndActualIsNULL)
 
 static void _STRCMP_EQUALWithExpectedIsNULLTestMethod()
 {
-    STRCMP_EQUAL(NULL, "ok");
+    STRCMP_EQUAL(NULLPTR, "ok");
 } // LCOV_EXCL_LINE
 
 TEST(UnitTestStringMacros, FailureWithSTRCMP_EQUALAndExpectedIsNULL)
@@ -60,7 +60,7 @@ TEST(UnitTestStringMacros, FailureWithSTRCMP_EQUALAndExpectedIsNULL)
 
 static void _STRCMP_CONTAINSWithActualIsNULLTestMethod()
 {
-    STRCMP_CONTAINS("ok", NULL);
+    STRCMP_CONTAINS("ok", NULLPTR);
 } // LCOV_EXCL_LINE
 
 TEST(UnitTestStringMacros, FailureWithSTRCMP_CONTAINSAndActualIsNULL)
@@ -71,7 +71,7 @@ TEST(UnitTestStringMacros, FailureWithSTRCMP_CONTAINSAndActualIsNULL)
 
 static void _STRCMP_CONTAINSWithExpectedIsNULLTestMethod()
 {
-    STRCMP_CONTAINS(NULL, "ok");
+    STRCMP_CONTAINS(NULLPTR, "ok");
 } // LCOV_EXCL_LINE
 
 TEST(UnitTestStringMacros, FailureWithSTRCMP_CONTAINSAndExpectedIsNULL)
@@ -82,7 +82,7 @@ TEST(UnitTestStringMacros, FailureWithSTRCMP_CONTAINSAndExpectedIsNULL)
 
 static void _STRNCMP_EQUALWithActualIsNULLTestMethod()
 {
-    STRNCMP_EQUAL("ok", NULL, 2);
+    STRNCMP_EQUAL("ok", NULLPTR, 2);
 } // LCOV_EXCL_LINE
 
 TEST(UnitTestStringMacros, FailureWithSTRNCMP_EQUALAndActualIsNULL)
@@ -93,7 +93,7 @@ TEST(UnitTestStringMacros, FailureWithSTRNCMP_EQUALAndActualIsNULL)
 
 static void _STRNCMP_EQUALWithExpectedIsNULLTestMethod()
 {
-    STRNCMP_EQUAL(NULL, "ok", 2);
+    STRNCMP_EQUAL(NULLPTR, "ok", 2);
 } // LCOV_EXCL_LINE
 
 TEST(UnitTestStringMacros, FailureWithSTRNCMP_EQUALAndExpectedIsNULL)
@@ -104,7 +104,7 @@ TEST(UnitTestStringMacros, FailureWithSTRNCMP_EQUALAndExpectedIsNULL)
 
 static void _STRCMP_NOCASE_EQUALWithActualIsNULLTestMethod()
 {
-    STRCMP_NOCASE_EQUAL("ok", NULL);
+    STRCMP_NOCASE_EQUAL("ok", NULLPTR);
 } // LCOV_EXCL_LINE
 
 TEST(UnitTestStringMacros, FailureWithSTRCMP_NOCASE_EQUALAndActualIsNULL)
@@ -115,7 +115,7 @@ TEST(UnitTestStringMacros, FailureWithSTRCMP_NOCASE_EQUALAndActualIsNULL)
 
 static void _STRCMP_NOCASE_EQUALWithExpectedIsNULLTestMethod()
 {
-    STRCMP_NOCASE_EQUAL(NULL, "ok");
+    STRCMP_NOCASE_EQUAL(NULLPTR, "ok");
 } // LCOV_EXCL_LINE
 
 TEST(UnitTestStringMacros, FailureWithSTRCMP_NOCASE_EQUALAndExpectedIsNULL)
@@ -137,7 +137,7 @@ TEST(UnitTestStringMacros, FailureWithSTRCMP_NOCASE_EQUALAndUnequalInput)
 
 static void _STRCMP_NOCASE_CONTAINSWithActualIsNULLTestMethod()
 {
-    STRCMP_NOCASE_CONTAINS("ok", NULL);
+    STRCMP_NOCASE_CONTAINS("ok", NULLPTR);
 } // LCOV_EXCL_LINE
 
 TEST(UnitTestStringMacros, FailureWithSTRCMP_NOCASE_CONTAINSAndActualIsNULL)
@@ -148,7 +148,7 @@ TEST(UnitTestStringMacros, FailureWithSTRCMP_NOCASE_CONTAINSAndActualIsNULL)
 
 static void _STRCMP_NOCASE_CONTAINSWithExpectedIsNULLTestMethod()
 {
-    STRCMP_NOCASE_CONTAINS(NULL, "ok");
+    STRCMP_NOCASE_CONTAINS(NULLPTR, "ok");
 } // LCOV_EXCL_LINE
 
 TEST(UnitTestStringMacros, FailureWithSTRCMP_NOCASE_CONTAINSAndExpectedIsNULL)

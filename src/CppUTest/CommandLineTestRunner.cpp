@@ -34,10 +34,10 @@
 
 int CommandLineTestRunner::RunAllTests(int ac, char** av)
 {
-    return RunAllTests(ac, (const char**) av);
+    return RunAllTests(ac, (const char *const *) av);
 }
 
-int CommandLineTestRunner::RunAllTests(int ac, const char** av)
+int CommandLineTestRunner::RunAllTests(int ac, const char *const *av)
 {
     int result = 0;
     ConsoleTestOutput backupOutput;
@@ -58,8 +58,8 @@ int CommandLineTestRunner::RunAllTests(int ac, const char** av)
     return result;
 }
 
-CommandLineTestRunner::CommandLineTestRunner(int ac, const char** av, TestRegistry* registry) :
-    output_(NULL), arguments_(NULL), registry_(registry)
+CommandLineTestRunner::CommandLineTestRunner(int ac, const char *const *av, TestRegistry* registry) :
+    output_(NULLPTR), arguments_(NULLPTR), registry_(registry)
 {
     arguments_ = new CommandLineArguments(ac, av);
 }
@@ -134,7 +134,7 @@ TestOutput* CommandLineTestRunner::createTeamCityOutput()
 TestOutput* CommandLineTestRunner::createJUnitOutput(const SimpleString& packageName)
 {
     JUnitTestOutput* junitOutput = new JUnitTestOutput;
-    if (junitOutput != NULL) {
+    if (junitOutput != NULLPTR) {
       junitOutput->setPackageName(packageName);
     }
     return junitOutput;

@@ -30,11 +30,11 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 #include "CppUTest/TestMemoryAllocator.h"
 
-TestMemoryAllocator* SimpleString::stringAllocator_ = NULL;
+TestMemoryAllocator* SimpleString::stringAllocator_ = NULLPTR;
 
 TestMemoryAllocator* SimpleString::getStringAllocator()
 {
-    if (stringAllocator_ == NULL)
+    if (stringAllocator_ == NULLPTR)
         return defaultNewArrayAllocator();
     return stringAllocator_;
 }
@@ -84,7 +84,7 @@ int SimpleString::StrCmp(const char* s1, const char* s2)
        ++s1;
        ++s2;
    }
-   return *(unsigned char *) s1 - *(unsigned char *) s2;
+   return *(const unsigned char *) s1 - *(const unsigned char *) s2;
 }
 
 size_t SimpleString::StrLen(const char* str)
@@ -101,27 +101,27 @@ int SimpleString::StrNCmp(const char* s1, const char* s2, size_t n)
         ++s1;
         ++s2;
     }
-    return n ? *(unsigned char *) s1 - *(unsigned char *) s2 : 0;
+    return n ? *(const unsigned char *) s1 - *(const unsigned char *) s2 : 0;
 }
 
 char* SimpleString::StrNCpy(char* s1, const char* s2, size_t n)
 {
     char* result = s1;
 
-    if((NULL == s1) || (0 == n)) return result;
+    if((NULLPTR == s1) || (0 == n)) return result;
 
     while ((*s1++ = *s2++) && --n != 0)
         ;
     return result;
 }
 
-char* SimpleString::StrStr(const char* s1, const char* s2)
+const char* SimpleString::StrStr(const char* s1, const char* s2)
 {
-    if(!*s2) return (char*) s1;
+    if(!*s2) return s1;
     for (; *s1; s1++)
         if (StrNCmp(s1, s2, StrLen(s2)) == 0)
-            return (char*) s1;
-    return NULL;
+            return s1;
+    return NULLPTR;
 }
 
 char SimpleString::ToLower(char ch)
@@ -146,7 +146,7 @@ int SimpleString::MemCmp(const void* s1, const void *s2, size_t n)
 
 SimpleString::SimpleString(const char *otherBuffer)
 {
-    if (otherBuffer == 0) {
+    if (otherBuffer == NULLPTR) {
         buffer_ = getEmptyString();
     }
     else {
@@ -183,7 +183,7 @@ SimpleString& SimpleString::operator=(const SimpleString& other)
 
 bool SimpleString::contains(const SimpleString& other) const
 {
-    return StrStr(buffer_, other.buffer_) != 0;
+    return StrStr(buffer_, other.buffer_) != NULLPTR;
 }
 
 bool SimpleString::containsNoCase(const SimpleString& other) const
@@ -211,7 +211,7 @@ bool SimpleString::endsWith(const SimpleString& other) const
 size_t SimpleString::count(const SimpleString& substr) const
 {
     size_t num = 0;
-    char* str = buffer_;
+    const char* str = buffer_;
     while (*str && (str = StrStr(str, substr.buffer_))) {
         num++;
         str++;
@@ -225,8 +225,8 @@ void SimpleString::split(const SimpleString& delimiter, SimpleStringCollection& 
     size_t extraEndToken = (endsWith(delimiter)) ? 0 : 1U;
     col.allocate(num + extraEndToken);
 
-    char* str = buffer_;
-    char* prev;
+    const char* str = buffer_;
+    const char* prev;
     for (size_t i = 0; i < num; ++i) {
         prev = str;
         str = StrStr(str, delimiter.buffer_) + 1;
@@ -421,7 +421,7 @@ char* SimpleString::copyToNewBuffer(const char* bufferToCopy, size_t bufferSize)
 
 void SimpleString::copyToBuffer(char* bufferToCopy, size_t bufferSize) const
 {
-    if (bufferToCopy == NULL || bufferSize == 0) return;
+    if (bufferToCopy == NULLPTR || bufferSize == 0) return;
 
     size_t sizeToCopy = (bufferSize-1 < size()) ? (bufferSize-1) : size();
 
@@ -816,7 +816,7 @@ SimpleString StringFromOrdinalNumber(unsigned int number)
 
 SimpleStringCollection::SimpleStringCollection()
 {
-    collection_ = 0;
+    collection_ = NULLPTR;
     size_ = 0;
 }
 

@@ -37,7 +37,7 @@ static int mutexDestroyCount = 0;
 static PlatformSpecificMutex StubMutexCreate(void)
 {
     mutexCreateCount++;
-    return 0;
+    return NULLPTR;
 }
 
 static void StubMutexLock(PlatformSpecificMutex)

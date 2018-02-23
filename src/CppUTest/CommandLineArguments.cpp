@@ -29,8 +29,8 @@
 #include "CppUTest/CommandLineArguments.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
-CommandLineArguments::CommandLineArguments(int ac, const char** av) :
-    ac_(ac), av_(av), verbose_(false), color_(false), runTestsAsSeperateProcess_(false), listTestGroupNames_(false), listTestGroupAndCaseNames_(false), runIgnored_(false), repeat_(1), groupFilters_(NULL), nameFilters_(NULL), outputType_(OUTPUT_ECLIPSE)
+CommandLineArguments::CommandLineArguments(int ac, const char *const *av) :
+    ac_(ac), av_(av), verbose_(false), color_(false), runTestsAsSeperateProcess_(false), listTestGroupNames_(false), listTestGroupAndCaseNames_(false), runIgnored_(false), repeat_(1), groupFilters_(NULLPTR), nameFilters_(NULLPTR), outputType_(OUTPUT_ECLIPSE)
 {
 }
 
@@ -134,7 +134,7 @@ const TestFilter* CommandLineArguments::getNameFilters() const
     return nameFilters_;
 }
 
-void CommandLineArguments::SetRepeatCount(int ac, const char** av, int& i)
+void CommandLineArguments::SetRepeatCount(int ac, const char *const *av, int& i)
 {
     repeat_ = 0;
 
@@ -149,7 +149,7 @@ void CommandLineArguments::SetRepeatCount(int ac, const char** av, int& i)
 
 }
 
-SimpleString CommandLineArguments::getParameterField(int ac, const char** av, int& i, const SimpleString& parameterName)
+SimpleString CommandLineArguments::getParameterField(int ac, const char * const *av, int& i, const SimpleString& parameterName)
 {
     size_t parameterLength = parameterName.size();
     SimpleString parameter(av[i]);
@@ -158,27 +158,27 @@ SimpleString CommandLineArguments::getParameterField(int ac, const char** av, in
     return "";
 }
 
-void CommandLineArguments::AddGroupFilter(int ac, const char** av, int& i)
+void CommandLineArguments::AddGroupFilter(int ac, const char *const *av, int& i)
 {
     TestFilter* groupFilter = new TestFilter(getParameterField(ac, av, i, "-g"));
     groupFilters_ = groupFilter->add(groupFilters_);
 }
 
-void CommandLineArguments::AddStrictGroupFilter(int ac, const char** av, int& i)
+void CommandLineArguments::AddStrictGroupFilter(int ac, const char *const *av, int& i)
 {
     TestFilter* groupFilter = new TestFilter(getParameterField(ac, av, i, "-sg"));
     groupFilter->strictMatching();
     groupFilters_ = groupFilter->add(groupFilters_);
 }
 
-void CommandLineArguments::AddExcludeGroupFilter(int ac, const char** av, int& i)
+void CommandLineArguments::AddExcludeGroupFilter(int ac, const char *const *av, int& i)
 {
     TestFilter* groupFilter = new TestFilter(getParameterField(ac, av, i, "-xg"));
     groupFilter->invertMatching();
     groupFilters_ = groupFilter->add(groupFilters_);
 }
 
-void CommandLineArguments::AddExcludeStrictGroupFilter(int ac, const char** av, int& i)
+void CommandLineArguments::AddExcludeStrictGroupFilter(int ac, const char *const *av, int& i)
 {
     TestFilter* groupFilter = new TestFilter(getParameterField(ac, av, i, "-xsg"));
     groupFilter->strictMatching();
@@ -186,27 +186,27 @@ void CommandLineArguments::AddExcludeStrictGroupFilter(int ac, const char** av, 
     groupFilters_ = groupFilter->add(groupFilters_);
 }
 
-void CommandLineArguments::AddNameFilter(int ac, const char** av, int& i)
+void CommandLineArguments::AddNameFilter(int ac, const char *const *av, int& i)
 {
     TestFilter* nameFilter = new TestFilter(getParameterField(ac, av, i, "-n"));
     nameFilters_ = nameFilter->add(nameFilters_);
 }
 
-void CommandLineArguments::AddStrictNameFilter(int ac, const char** av, int& index)
+void CommandLineArguments::AddStrictNameFilter(int ac, const char *const *av, int& index)
 {
     TestFilter* nameFilter = new TestFilter(getParameterField(ac, av, index, "-sn"));
     nameFilter->strictMatching();
     nameFilters_= nameFilter->add(nameFilters_);
 }
 
-void CommandLineArguments::AddExcludeNameFilter(int ac, const char** av, int& index)
+void CommandLineArguments::AddExcludeNameFilter(int ac, const char *const *av, int& index)
 {
     TestFilter* nameFilter = new TestFilter(getParameterField(ac, av, index, "-xn"));
     nameFilter->invertMatching();
     nameFilters_= nameFilter->add(nameFilters_);
 }
 
-void CommandLineArguments::AddExcludeStrictNameFilter(int ac, const char** av, int& index)
+void CommandLineArguments::AddExcludeStrictNameFilter(int ac, const char *const *av, int& index)
 {
     TestFilter* nameFilter = new TestFilter(getParameterField(ac, av, index, "-xsn"));
     nameFilter->invertMatching();
@@ -214,7 +214,7 @@ void CommandLineArguments::AddExcludeStrictNameFilter(int ac, const char** av, i
     nameFilters_= nameFilter->add(nameFilters_);
 }
 
-void CommandLineArguments::AddTestToRunBasedOnVerboseOutput(int ac, const char** av, int& index, const char* parameterName)
+void CommandLineArguments::AddTestToRunBasedOnVerboseOutput(int ac, const char *const *av, int& index, const char* parameterName)
 {
     SimpleString wholename = getParameterField(ac, av, index, parameterName);
     SimpleString testname = wholename.subStringFromTill(',', ')');
@@ -227,7 +227,7 @@ void CommandLineArguments::AddTestToRunBasedOnVerboseOutput(int ac, const char**
     nameFilters_ = namefilter->add(nameFilters_);
 }
 
-void CommandLineArguments::SetPackageName(int ac, const char** av, int& i)
+void CommandLineArguments::SetPackageName(int ac, const char *const *av, int& i)
 {
     SimpleString packageName = getParameterField(ac, av, i, "-k");
     if (packageName.size() == 0) return;
@@ -235,7 +235,7 @@ void CommandLineArguments::SetPackageName(int ac, const char** av, int& i)
     packageName_ = packageName;
 }
 
-bool CommandLineArguments::SetOutputType(int ac, const char** av, int& i)
+bool CommandLineArguments::SetOutputType(int ac, const char *const *av, int& i)
 {
     SimpleString outputType = getParameterField(ac, av, i, "-o");
     if (outputType.size() == 0) return false;

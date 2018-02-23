@@ -50,7 +50,7 @@ public:
 
     virtual ~TestTestingFixture()
     {
-        registry_->setCurrentRegistry(0);
+        registry_->setCurrentRegistry(NULLPTR);
         delete registry_;
         delete result_;
         delete output_;

@@ -106,8 +106,8 @@ TEST(MockPlugin, installComparatorRecordsTheComparatorButNotInstallsItYet)
 
     DummyComparator comparator;
     plugin.installComparator("myType", comparator);
-    mock().expectOneCall("foo").withParameterOfType("myType", "name", NULL);
-    mock().actualCall("foo").withParameterOfType("myType", "name", NULL);
+    mock().expectOneCall("foo").withParameterOfType("myType", "name", NULLPTR);
+    mock().actualCall("foo").withParameterOfType("myType", "name", NULLPTR);
 
     MockNoWayToCompareCustomTypeFailure failure(test, "myType");
     CHECK_EXPECTED_MOCK_FAILURE(failure);
@@ -128,8 +128,8 @@ TEST(MockPlugin, installCopierRecordsTheCopierButNotInstallsItYet)
 
     DummyCopier copier;
     plugin.installCopier("myType", copier);
-    mock().expectOneCall("foo").withOutputParameterOfTypeReturning("myType", "name", NULL);
-    mock().actualCall("foo").withOutputParameterOfType("myType", "name", NULL);
+    mock().expectOneCall("foo").withOutputParameterOfTypeReturning("myType", "name", NULLPTR);
+    mock().actualCall("foo").withOutputParameterOfType("myType", "name", NULLPTR);
 
     MockNoWayToCopyCustomTypeFailure failure(test, "myType");
     CHECK_EXPECTED_MOCK_FAILURE(failure);

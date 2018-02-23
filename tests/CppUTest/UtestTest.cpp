@@ -92,7 +92,7 @@ TEST(UtestShell, PassedCheckEqualWillIncreaseTheAmountOfChecks)
 
 IGNORE_TEST(UtestShell, IgnoreTestAccessingFixture)
 {
-    CHECK(&fixture != NULL);
+    CHECK(&fixture != NULLPTR);
 }
 
 TEST(UtestShell, MacrosUsedInSetup)
@@ -358,7 +358,7 @@ public:
     AllocateAndDeallocateInConstructorAndDestructor()
     {
         memory_ = new char[100];
-        morememory_ = NULL;
+        morememory_ = NULLPTR;
     }
     void allocateMoreMemory()
     {

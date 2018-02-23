@@ -82,7 +82,7 @@ TEST_GROUP(MockNamedValueHandlerRepository)
 TEST(MockNamedValueHandlerRepository, getComparatorForNonExistingName)
 {
     MockNamedValueComparatorsAndCopiersRepository repository;
-    POINTERS_EQUAL(NULL, repository.getComparatorForType("typeName"));
+    POINTERS_EQUAL(NULLPTR, repository.getComparatorForType("typeName"));
 }
 
 TEST(MockNamedValueHandlerRepository, installComparator)
@@ -108,7 +108,7 @@ TEST(MockNamedValueHandlerRepository, installMultipleComparators)
 TEST(MockNamedValueHandlerRepository, getCopierForNonExistingName)
 {
     MockNamedValueComparatorsAndCopiersRepository repository;
-    POINTERS_EQUAL(NULL, repository.getCopierForType("typeName"));
+    POINTERS_EQUAL(NULLPTR, repository.getCopierForType("typeName"));
 }
 
 TEST(MockNamedValueHandlerRepository, installCopier)
@@ -713,7 +713,7 @@ TEST(MockIgnoredExpectedCall, worksAsItShould)
     ignored.withName("func");
     ignored.withCallOrder(1);
     ignored.withCallOrder(1, 1);
-    ignored.onObject((void*) 0);
+    ignored.onObject(NULLPTR);
     ignored.withBoolParameter("umm", true);
     ignored.withIntParameter("bla", (int) 1);
     ignored.withUnsignedIntParameter("foo", (unsigned int) 1);
@@ -721,13 +721,13 @@ TEST(MockIgnoredExpectedCall, worksAsItShould)
     ignored.withUnsignedLongIntParameter("bah", (unsigned long int) 1);
     ignored.withDoubleParameter("hah", (double) 1.1f);
     ignored.withStringParameter("goo", "hello");
-    ignored.withPointerParameter("pie", (void*) 0);
-    ignored.withConstPointerParameter("woo", (const void*) 0);
-    ignored.withFunctionPointerParameter("fop", (void(*)()) 0);
-    ignored.withMemoryBufferParameter("waa", (const unsigned char*) 0, 0);
-    ignored.withParameterOfType( "mytype", "top", (const void*) 0);
-    ignored.withOutputParameterReturning("bar", (void*) 0, 1);
-    ignored.withOutputParameterOfTypeReturning("mytype", "bar", (const void*) 0);
+    ignored.withPointerParameter("pie", (void*) NULLPTR);
+    ignored.withConstPointerParameter("woo", (const void*) NULLPTR);
+    ignored.withFunctionPointerParameter("fop", (void(*)()) NULLPTR);
+    ignored.withMemoryBufferParameter("waa", (const unsigned char*) NULLPTR, 0);
+    ignored.withParameterOfType( "mytype", "top", (const void*) NULLPTR);
+    ignored.withOutputParameterReturning("bar", (void*) NULLPTR, 1);
+    ignored.withOutputParameterOfTypeReturning("mytype", "bar", (const void*) NULLPTR);
     ignored.ignoreOtherParameters();
     ignored.andReturnValue(true);
     ignored.andReturnValue((double) 1.0f);
@@ -736,7 +736,7 @@ TEST(MockIgnoredExpectedCall, worksAsItShould)
     ignored.andReturnValue((unsigned long int) 1);
     ignored.andReturnValue((long int) 1);
     ignored.andReturnValue("boo");
-    ignored.andReturnValue((void*) 0);
-    ignored.andReturnValue((const void*) 0);
-    ignored.andReturnValue((void(*)()) 0);
+    ignored.andReturnValue((void*) NULLPTR);
+    ignored.andReturnValue((const void*) NULLPTR);
+    ignored.andReturnValue((void(*)()) NULLPTR);
 }

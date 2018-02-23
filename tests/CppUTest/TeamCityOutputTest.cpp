@@ -9,7 +9,7 @@ public:
     {
     }
 
-    virtual ~TeamCityOutputToBuffer()
+    virtual ~TeamCityOutputToBuffer() _destructor_override
     {
     }
 

@@ -39,7 +39,7 @@ public:
     ~OptionsPlugin()
     {
     }
-    bool parseArguments(int /*ac*/, const char** /*av*/, int /*index*/)
+    bool parseArguments(int /*ac*/, const char *const * /*av*/, int /*index*/)
     {
         return true;
     }
@@ -53,7 +53,7 @@ TEST_GROUP(CommandLineArguments)
     void setup()
     {
         plugin = new OptionsPlugin("options");
-        args = NULL;
+        args = NULLPTR;
     }
     void teardown()
     {
@@ -61,7 +61,7 @@ TEST_GROUP(CommandLineArguments)
         delete plugin;
     }
 
-    bool newArgumentParser(int argc, const char** argv)
+    bool newArgumentParser(int argc, const char *const *argv)
     {
         args = new CommandLineArguments(argc, argv);
         return args->parse(plugin);
@@ -391,8 +391,8 @@ TEST(CommandLineArguments, checkDefaultArguments)
     CHECK(newArgumentParser(argc, argv));
     CHECK(!args->isVerbose());
     LONGS_EQUAL(1, args->getRepeatCount());
-    CHECK(NULL == args->getGroupFilters());
-    CHECK(NULL == args->getNameFilters());
+    CHECK(NULLPTR == args->getGroupFilters());
+    CHECK(NULLPTR == args->getNameFilters());
     CHECK(args->isEclipseOutput());
     CHECK(SimpleString("") == args->getPackageName());
 }

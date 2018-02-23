@@ -47,7 +47,7 @@ public:
     {
     }
 
-    virtual bool parseArguments(int, const char**, int)
+    virtual bool parseArguments(int, const char *const *, int)
     {
         /* Remove ourselves from the count */
         amountOfPlugins = registry_->countPlugins() - 1;
@@ -64,9 +64,9 @@ public:
   StringBufferTestOutput* fakeConsoleOutputWhichIsReallyABuffer;
   StringBufferTestOutput* fakeTCOutputWhichIsReallyABuffer;
 
-  CommandLineTestRunnerWithStringBufferOutput(int argc, const char** argv, TestRegistry* registry)
-    : CommandLineTestRunner(argc, argv, registry), fakeJUnitOutputWhichIsReallyABuffer_(NULL),
-    fakeConsoleOutputWhichIsReallyABuffer(NULL), fakeTCOutputWhichIsReallyABuffer(NULL)
+  CommandLineTestRunnerWithStringBufferOutput(int argc, const char *const *argv, TestRegistry* registry)
+    : CommandLineTestRunner(argc, argv, registry), fakeJUnitOutputWhichIsReallyABuffer_(NULLPTR),
+    fakeConsoleOutputWhichIsReallyABuffer(NULLPTR), fakeTCOutputWhichIsReallyABuffer(NULLPTR)
   {}
 
   TestOutput* createConsoleOutput()
@@ -137,7 +137,7 @@ TEST(CommandLineTestRunner, TeamcityOutputEnabled)
     const char* argv[] = {"tests.exe", "-oteamcity"};
     CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(2, argv, &registry);
     commandLineTestRunner.runAllTestsMain();
-    CHECK(commandLineTestRunner.fakeTCOutputWhichIsReallyABuffer);
+    CHECK(commandLineTestRunner.fakeTCOutputWhichIsReallyABuffer != NULLPTR);
 }
 
 TEST(CommandLineTestRunner, JunitOutputEnabled)
@@ -146,7 +146,7 @@ TEST(CommandLineTestRunner, JunitOutputEnabled)
 
     CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(2, argv, &registry);
     commandLineTestRunner.runAllTestsMain();
-    CHECK(commandLineTestRunner.fakeJUnitOutputWhichIsReallyABuffer_);
+    CHECK(commandLineTestRunner.fakeJUnitOutputWhichIsReallyABuffer_ != NULLPTR);
 }
 
 TEST(CommandLineTestRunner, JunitOutputAndVerboseEnabled)
@@ -205,7 +205,7 @@ struct FakeOutput
     }
     static PlatformSpecificFile fopen_fake(const char*, const char*)
     {
-        return (PlatformSpecificFile)0;
+        return (PlatformSpecificFile) NULLPTR;
     }
     static void fputs_fake(const char* str, PlatformSpecificFile)
     {

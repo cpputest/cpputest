@@ -72,7 +72,7 @@ void MockSupportPlugin::postTestAction(UtestShell& test, TestResult& result)
     if (!test.hasFailed())
         mock().checkExpectations();
     mock().clear();
-    mock().setMockFailureStandardReporter(NULL);
+    mock().setMockFailureStandardReporter(NULLPTR);
     mock().removeAllComparatorsAndCopiers();
 }
 

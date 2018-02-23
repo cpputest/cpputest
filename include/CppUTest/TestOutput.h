@@ -113,7 +113,7 @@ public:
     explicit ConsoleTestOutput()
     {
     }
-    virtual ~ConsoleTestOutput()
+    virtual ~ConsoleTestOutput() _destructor_override
     {
     }
 
@@ -141,7 +141,7 @@ public:
     {
     }
 
-    virtual ~StringBufferTestOutput();
+    virtual ~StringBufferTestOutput() _destructor_override;
 
     void printBuffer(const char* s) _override
     {
