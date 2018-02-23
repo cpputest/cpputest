@@ -293,7 +293,7 @@ TEST(MockExpectedCall, callWithObjectParameter)
     const SimpleString paramName = "paramName";
     void* value = (void*) 0x123;
     call->withParameterOfType("ClassName", paramName, value);
-    POINTERS_EQUAL(value, call->getInputParameter(paramName).getObjectPointer());
+    POINTERS_EQUAL(value, call->getInputParameter(paramName).getConstObjectPointer());
     STRCMP_EQUAL("ClassName", call->getInputParameterType(paramName).asCharString());
     STRCMP_CONTAINS("funcName -> ClassName paramName: <No comparator found for type: \"ClassName\">", call->callToString().asCharString());
 }
@@ -302,7 +302,7 @@ TEST(MockExpectedCall, callWithObjectParameterUnequalComparison)
 {
     TypeForTestingExpectedFunctionCall type(1), unequalType(2);
     MockNamedValue parameter("name");
-    parameter.setObjectPointer("type", &unequalType);
+    parameter.setConstObjectPointer("type", &unequalType);
     call->withParameterOfType("type", "name", &type);
     CHECK(!call->hasInputParameter(parameter));
 }
@@ -311,7 +311,7 @@ TEST(MockExpectedCall, callWithObjectParameterEqualComparisonButFailsWithoutRepo
 {
     TypeForTestingExpectedFunctionCall type(1), equalType(1);
     MockNamedValue parameter("name");
-    parameter.setObjectPointer("type", &equalType);
+    parameter.setConstObjectPointer("type", &equalType);
     call->withParameterOfType("type", "name", &type);
     CHECK(!call->hasInputParameter(parameter));
 }
@@ -323,7 +323,7 @@ TEST(MockExpectedCall, callWithObjectParameterEqualComparisonButFailsWithoutComp
 
     TypeForTestingExpectedFunctionCall type(1), equalType(1);
     MockNamedValue parameter("name");
-    parameter.setObjectPointer("type", &equalType);
+    parameter.setConstObjectPointer("type", &equalType);
     call->withParameterOfType("type", "name", &type);
     CHECK(!call->hasInputParameter(parameter));
 }
@@ -337,7 +337,7 @@ TEST(MockExpectedCall, callWithObjectParameterEqualComparison)
 
     TypeForTestingExpectedFunctionCall type(1), equalType(1);
     MockNamedValue parameter("name");
-    parameter.setObjectPointer("type", &equalType);
+    parameter.setConstObjectPointer("type", &equalType);
 
     call->withParameterOfType("type", "name", &type);
     CHECK(call->hasInputParameter(parameter));
@@ -352,7 +352,7 @@ TEST(MockExpectedCall, getParameterValueOfObjectType)
 
     TypeForTestingExpectedFunctionCall type(1);
     call->withParameterOfType("type", "name", &type);
-    POINTERS_EQUAL(&type, call->getInputParameter("name").getObjectPointer());
+    POINTERS_EQUAL(&type, call->getInputParameter("name").getConstObjectPointer());
     STRCMP_EQUAL("1", call->getInputParameterValueString("name").asCharString());
 }
 
@@ -681,7 +681,7 @@ TEST(MockExpectedCall, hasOutputParameterOfType)
     TypeForTestingExpectedFunctionCall object(6789);
     call->withOutputParameterOfTypeReturning("TypeForTestingExpectedFunctionCall", "foo", &object);
     MockNamedValue foo("foo");
-    foo.setObjectPointer("TypeForTestingExpectedFunctionCall", &object);
+    foo.setConstObjectPointer("TypeForTestingExpectedFunctionCall", &object);
     CHECK(call->hasOutputParameter(foo));
 }
 
@@ -690,7 +690,7 @@ TEST(MockExpectedCall, hasNoOutputParameterOfTypeSameTypeButInput)
     TypeForTestingExpectedFunctionCall object(543);
     call->withParameterOfType("TypeForTestingExpectedFunctionCall", "foo", &object);
     MockNamedValue foo("foo");
-    foo.setObjectPointer("TypeForTestingExpectedFunctionCall", &object);
+    foo.setConstObjectPointer("TypeForTestingExpectedFunctionCall", &object);
     CHECK_FALSE(call->hasOutputParameter(foo));
 }
 
@@ -699,7 +699,7 @@ TEST(MockExpectedCall, hasNoOutputParameterOfTypeDifferentType)
     TypeForTestingExpectedFunctionCall object(543);
     call->withOutputParameterOfTypeReturning("TypeForTestingExpectedFunctionCall", "foo", &object);
     MockNamedValue foo("foo");
-    foo.setObjectPointer("OtherTypeForTestingExpectedFunctionCall", &object);
+    foo.setConstObjectPointer("OtherTypeForTestingExpectedFunctionCall", &object);
     CHECK_FALSE(call->hasOutputParameter(foo));
 }
 

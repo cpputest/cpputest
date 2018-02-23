@@ -112,7 +112,8 @@ public:
     virtual void setValue(void (*value)());
     virtual void setValue(const char* value);
     virtual void setMemoryBuffer(const unsigned char* value, size_t size);
-    virtual void setObjectPointer(const SimpleString& type, const void* objectPtr);
+    virtual void setConstObjectPointer(const SimpleString& type, const void* objectPtr);
+    virtual void setObjectPointer(const SimpleString& type, void* objectPtr);
     virtual void setSize(size_t size);
 
     virtual void setName(const char* name);
@@ -136,7 +137,8 @@ public:
     virtual const void* getConstPointerValue() const;
     virtual void (*getFunctionPointerValue() const)();
     virtual const unsigned char* getMemoryBuffer() const;
-    virtual const void* getObjectPointer() const;
+    virtual const void* getConstObjectPointer() const;
+    virtual void* getObjectPointer() const;
     virtual size_t getSize() const;
 
     virtual MockNamedValueComparator* getComparator() const;
@@ -158,7 +160,8 @@ private:
         const void* constPointerValue_;
         void (*functionPointerValue_)();
         const unsigned char* memoryBufferValue_;
-        const void* objectPointerValue_;
+        const void* constObjectPointerValue_;
+        void* objectPointerValue_;
         const void* outputPointerValue_;
     } value_;
     size_t size_;

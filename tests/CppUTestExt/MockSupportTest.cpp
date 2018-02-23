@@ -134,6 +134,14 @@ TEST(MockSupportTest, setDataObject)
     STRCMP_EQUAL("type", mock().getData("data").getType().asCharString());
 }
 
+TEST(MockSupportTest, setDataConstObject)
+{
+    void * ptr = (void*) 0x011;
+    mock().setDataConstObject("data", "type", ptr);
+    POINTERS_EQUAL(ptr, mock().getData("data").getConstObjectPointer());
+    STRCMP_EQUAL("type", mock().getData("data").getType().asCharString());
+}
+
 TEST(MockSupportTest, tracing)
 {
     mock().tracing(true);

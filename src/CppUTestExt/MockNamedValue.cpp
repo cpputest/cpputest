@@ -113,7 +113,18 @@ void MockNamedValue::setMemoryBuffer(const unsigned char* value, size_t size)
     size_ = size;
 }
 
-void MockNamedValue::setObjectPointer(const SimpleString& type, const void* objectPtr)
+void MockNamedValue::setConstObjectPointer(const SimpleString& type, const void* objectPtr)
+{
+    type_ = type;
+    value_.constObjectPointerValue_ = objectPtr;
+    if (defaultRepository_)
+    {
+        comparator_ = defaultRepository_->getComparatorForType(type);
+        copier_ = defaultRepository_->getCopierForType(type);
+    }
+}
+
+void MockNamedValue::setObjectPointer(const SimpleString& type, void* objectPtr)
 {
     type_ = type;
     value_.objectPointerValue_ = objectPtr;
@@ -231,7 +242,12 @@ const unsigned char* MockNamedValue::getMemoryBuffer() const
     return value_.memoryBufferValue_;
 }
 
-const void* MockNamedValue::getObjectPointer() const
+const void* MockNamedValue::getConstObjectPointer() const
+{
+    return value_.constObjectPointerValue_;
+}
+
+void* MockNamedValue::getObjectPointer() const
 {
     return value_.objectPointerValue_;
 }
@@ -309,7 +325,7 @@ bool MockNamedValue::equals(const MockNamedValue& p) const
     }
 
     if (comparator_)
-        return comparator_->isEqual(value_.objectPointerValue_, p.value_.objectPointerValue_);
+        return comparator_->isEqual(value_.constObjectPointerValue_, p.value_.constObjectPointerValue_);
 
     return false;
 }
@@ -350,7 +366,7 @@ SimpleString MockNamedValue::toString() const
         return StringFromBinaryWithSizeOrNull(value_.memoryBufferValue_, size_);
 
     if (comparator_)
-        return comparator_->valueToString(value_.objectPointerValue_);
+        return comparator_->valueToString(value_.constObjectPointerValue_);
 
     return StringFromFormat("No comparator found for type: \"%s\"", type_.asCharString());
 

@@ -419,6 +419,12 @@ void MockSupport::setDataObject(const SimpleString& name, const SimpleString& ty
     newData->setObjectPointer(type, value);
 }
 
+void MockSupport::setDataConstObject(const SimpleString& name, const SimpleString& type, const void* value)
+{
+    MockNamedValue* newData = retrieveDataFromStore(name);
+    newData->setConstObjectPointer(type, value);
+}
+
 MockNamedValue MockSupport::getData(const SimpleString& name)
 {
     MockNamedValue* value = data_.getValueByName(name);

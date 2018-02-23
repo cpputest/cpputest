@@ -519,6 +519,12 @@ TEST(MockSupport_c, MockSupportSetDataObject)
     POINTERS_EQUAL((void*) 1, mock_c()->getData("name").value.objectValue);
 }
 
+TEST(MockSupport_c, MockSupportSetDataConstObject)
+{
+    mock_c()->setDataConstObject("name", "type", (const void*) 5);
+    POINTERS_EQUAL((void*) 5, mock_c()->getData("name").value.constObjectValue);
+}
+
 TEST(MockSupport_c, WorksInCFile)
 {
     all_mock_support_c_calls();
