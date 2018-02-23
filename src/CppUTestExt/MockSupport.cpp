@@ -455,7 +455,7 @@ MockSupport* MockSupport::getMockSupportScope(const SimpleString& name)
 
     if (hasData(mockingSupportName)) {
         STRCMP_EQUAL("MockSupport", getData(mockingSupportName).getType().asCharString());
-        return static_cast<MockSupport*>( const_cast<void*>( getData(mockingSupportName).getObjectPointer() ) );
+        return (MockSupport*) getData(mockingSupportName).getObjectPointer();
     }
 
     MockSupport *newMock = clone(name);
@@ -467,7 +467,7 @@ MockSupport* MockSupport::getMockSupportScope(const SimpleString& name)
 MockSupport* MockSupport::getMockSupport(MockNamedValueListNode* node)
 {
     if (node->getType() == "MockSupport" && node->getName().contains(MOCK_SUPPORT_SCOPE_PREFIX))
-        return static_cast<MockSupport*>( const_cast<void*>( node->item()->getObjectPointer() ) );
+        return (MockSupport*) node->item()->getObjectPointer();
     return NULLPTR;
 }
 
