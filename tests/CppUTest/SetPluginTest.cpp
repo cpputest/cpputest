@@ -41,7 +41,7 @@ TEST_GROUP(SetPointerPluginTest)
 
     void teardown()
     {
-        myRegistry_->setCurrentRegistry(0);
+        myRegistry_->setCurrentRegistry(NULLPTR);
         delete myRegistry_;
         delete plugin_;
         delete output_;

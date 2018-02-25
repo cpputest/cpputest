@@ -40,7 +40,7 @@ protected:
     MemoryReportFormatter* formatter_;
 public:
     MemoryReportAllocator();
-    virtual ~MemoryReportAllocator();
+    virtual ~MemoryReportAllocator() _destructor_override;
 
     virtual void setFormatter(MemoryReportFormatter* formatter);
     virtual void setTestResult(TestResult* result);
@@ -51,9 +51,9 @@ public:
     virtual char* alloc_memory(size_t size, const char* file, int line) _override;
     virtual void free_memory(char* memory, const char* file, int line) _override;
 
-    virtual const char* name() _override;
-    virtual const char* alloc_name() _override;
-    virtual const char* free_name() _override;
+    virtual const char* name() const _override;
+    virtual const char* alloc_name() const _override;
+    virtual const char* free_name() const _override;
 };
 
 #endif

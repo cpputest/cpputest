@@ -16,8 +16,8 @@ TEST_GROUP(BasicBehavior)
 
 TEST(BasicBehavior, CanDeleteNullPointers)
 {
-    delete (char*) NULL;
-    delete [] (char*) NULL;
+    delete (char*) NULLPTR;
+    delete [] (char*) NULLPTR;
 }
 
 #ifndef CPPUTEST_MEM_LEAK_DETECTION_DISABLED
@@ -332,12 +332,12 @@ TEST(TestForExceptionsInConstructor,ConstructorThrowsAnExceptionAllocatedAsArray
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorReturnsNull)
 {
-    POINTERS_EQUAL(NULL, new char);
+    POINTERS_EQUAL(NULLPTR, new char);
 }
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorReturnsNull)
 {
-    POINTERS_EQUAL(NULL, new char[10]);
+    POINTERS_EQUAL(NULLPTR, new char[10]);
 }
 
 #endif
@@ -386,24 +386,24 @@ TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorThrowsAnExceptionWhe
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorReturnsNullWithoutOverride)
 {
-    POINTERS_EQUAL(NULL, new (std::nothrow) char);
+    POINTERS_EQUAL(NULLPTR, new (std::nothrow) char);
 }
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorReturnsNullWithoutOverride)
 {
-    POINTERS_EQUAL(NULL, new (std::nothrow) char[10]);
+    POINTERS_EQUAL(NULLPTR, new (std::nothrow) char[10]);
 }
 
 #else
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorReturnsNullWithoutOverride)
 {
-    POINTERS_EQUAL(NULL, new char);
+    POINTERS_EQUAL(NULLPTR, new char);
 }
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorReturnsNullWithoutOverride)
 {
-    POINTERS_EQUAL(NULL, new char[10]);
+    POINTERS_EQUAL(NULLPTR, new char[10]);
 }
 
 #endif

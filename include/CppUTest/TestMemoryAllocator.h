@@ -56,9 +56,9 @@ public:
     virtual char* alloc_memory(size_t size, const char* file, int line);
     virtual void free_memory(char* memory, const char* file, int line);
 
-    virtual const char* name();
-    virtual const char* alloc_name();
-    virtual const char* free_name();
+    virtual const char* name() const;
+    virtual const char* alloc_name() const;
+    virtual const char* free_name() const;
 
     virtual bool isOfEqualType(TestMemoryAllocator* allocator);
 

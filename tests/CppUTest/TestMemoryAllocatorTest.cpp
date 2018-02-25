@@ -35,7 +35,7 @@ TEST_GROUP(TestMemoryAllocatorTest)
 
     void setup()
     {
-        allocator = NULL;
+        allocator = NULLPTR;
     }
 
     void teardown()
@@ -158,14 +158,14 @@ TEST_GROUP(FailableMemoryAllocator)
 TEST(FailableMemoryAllocator, MallocWorksNormallyIfNotAskedToFail)
 {
     int *memory = (int*)malloc(sizeof(int));
-    CHECK(memory != NULL);
+    CHECK(memory != NULLPTR);
     free(memory);
 }
 
 TEST(FailableMemoryAllocator, FailFirstMalloc)
 {
     failableMallocAllocator.failAllocNumber(1);
-    POINTERS_EQUAL(NULL, (int*)malloc(sizeof(int)));
+    POINTERS_EQUAL(NULLPTR, (int*)malloc(sizeof(int)));
 }
 
 TEST(FailableMemoryAllocator, FailSecondAndFourthMalloc)
@@ -177,10 +177,10 @@ TEST(FailableMemoryAllocator, FailSecondAndFourthMalloc)
     int *memory3 = (int*)malloc(sizeof(int));
     int *memory4 = (int*)malloc(sizeof(int));
 
-    CHECK(NULL != memory1);
-    POINTERS_EQUAL(NULL, memory2);
-    CHECK(NULL != memory3);
-    POINTERS_EQUAL(NULL, memory4);
+    CHECK(NULLPTR != memory1);
+    POINTERS_EQUAL(NULLPTR, memory2);
+    CHECK(NULLPTR != memory3);
+    POINTERS_EQUAL(NULLPTR, memory4);
 
     free(memory1);
     free(memory3);
@@ -211,19 +211,19 @@ TEST(FailableMemoryAllocator, FailFirstAllocationAtGivenLine)
 {
     failableMallocAllocator.failNthAllocAt(1, __FILE__, __LINE__ + 2);
 
-    POINTERS_EQUAL(NULL, malloc(sizeof(int)));
+    POINTERS_EQUAL(NULLPTR, malloc(sizeof(int)));
 }
 
 TEST(FailableMemoryAllocator, FailThirdAllocationAtGivenLine)
 {
-    int *memory[10] = { NULL };
+    int *memory[10] = { NULLPTR };
     int allocation;
     failableMallocAllocator.failNthAllocAt(3, __FILE__, __LINE__ + 4);
 
     for (allocation = 1; allocation <= 10; allocation++)
     {
         memory[allocation - 1] = (int *)malloc(sizeof(int));
-        if (memory[allocation - 1] == NULL)
+        if (memory[allocation - 1] == NULLPTR)
             break;
     }
 

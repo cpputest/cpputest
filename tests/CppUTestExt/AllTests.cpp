@@ -34,7 +34,7 @@
 #include "CppUTestExt/GTestConvertor.h"
 #endif
 
-int main(int ac, const char** av)
+int main(int ac, const char *const *av)
 {
 #ifdef CPPUTEST_INCLUDE_GTEST_TESTS
     GTestConvertor convertor;

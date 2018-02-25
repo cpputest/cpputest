@@ -1,7 +1,7 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TeamCityTestOutput.h"
 
-TeamCityTestOutput::TeamCityTestOutput() : currtest_(0), currGroup_()
+TeamCityTestOutput::TeamCityTestOutput() : currtest_(NULLPTR), currGroup_()
 {
 }
 

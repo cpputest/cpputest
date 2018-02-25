@@ -70,7 +70,7 @@ public:
     {
     }
 
-    virtual bool parseArguments(int ac, const char** av, int index)
+    virtual bool parseArguments(int ac, const char *const *av, int index)
     {
         SimpleString argument (av[index]);
         if (argument == "-paccept")
@@ -126,7 +126,7 @@ TEST(PluginTest, InstallMultiplePlugins)
     registry->installPlugin(thirdPlugin);
     CHECK_EQUAL(firstPlugin, registry->getPluginByName(GENERIC_PLUGIN));
     CHECK_EQUAL(thirdPlugin, registry->getPluginByName(GENERIC_PLUGIN3));
-    CHECK_EQUAL(0, registry->getPluginByName("I do not exist"));
+    POINTERS_EQUAL(NULLPTR, registry->getPluginByName("I do not exist"));
 }
 
 TEST(PluginTest, ActionsAllRun)

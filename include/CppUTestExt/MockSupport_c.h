@@ -64,7 +64,8 @@ typedef struct SMockValue_c
         const void* constPointerValue;
         void (*functionPointerValue)(void);
         const unsigned char* memoryBufferValue;
-        const void* objectValue;
+        void* objectValue;
+        const void* constObjectValue;
     } value;
 } MockValue_c;
 
@@ -184,6 +185,7 @@ struct SMockSupport_c
     void (*setConstPointerData) (const char* name, const void* value);
     void (*setFunctionPointerData) (const char* name, void (*value)(void));
     void (*setDataObject) (const char* name, const char* type, void* value);
+    void (*setDataConstObject) (const char* name, const char* type, const void* value);
     MockValue_c (*getData)(const char* name);
 
     void (*disable)(void);

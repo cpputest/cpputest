@@ -45,7 +45,7 @@ MockFailureReporterInstaller::MockFailureReporterInstaller()
 
 MockFailureReporterInstaller::~MockFailureReporterInstaller()
 {
-  mock().setMockFailureStandardReporter(NULL);
+  mock().setMockFailureStandardReporter(NULLPTR);
 }
 
 UtestShell* mockFailureTest()

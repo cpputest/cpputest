@@ -50,8 +50,8 @@ SimpleString MockCheckedActualCall::getName() const
 }
 
 MockCheckedActualCall::MockCheckedActualCall(unsigned int callOrder, MockFailureReporter* reporter, const MockExpectedCallsList& allExpectations)
-    : callOrder_(callOrder), reporter_(reporter), state_(CALL_SUCCEED), expectationsChecked_(false), matchingExpectation_(NULL),
-      allExpectations_(allExpectations), outputParameterExpectations_(NULL)
+    : callOrder_(callOrder), reporter_(reporter), state_(CALL_SUCCEED), expectationsChecked_(false), matchingExpectation_(NULLPTR),
+      allExpectations_(allExpectations), outputParameterExpectations_(NULLPTR)
 {
     potentiallyMatchingExpectations_.addPotentiallyMatchingExpectations(allExpectations);
 }
@@ -87,7 +87,7 @@ void MockCheckedActualCall::copyOutputParameters(MockCheckedExpectedCall* expect
         MockNamedValueCopier* copier = outputParameter.getCopier();
         if (copier)
         {
-            copier->copy(p->ptr_, outputParameter.getObjectPointer());
+            copier->copy(p->ptr_, outputParameter.getConstObjectPointer());
         }
         else if ((outputParameter.getType() == "const void*") && (p->type_ == "void*"))
         {
@@ -130,7 +130,7 @@ void MockCheckedActualCall::discardCurrentlyMatchingExpectations()
     if (matchingExpectation_)
     {
         matchingExpectation_->resetActualCallMatchingState();
-        matchingExpectation_ = NULL;
+        matchingExpectation_ = NULLPTR;
     }
     potentiallyMatchingExpectations_.onlyKeepUnmatchingExpectations();
 }
@@ -292,9 +292,9 @@ MockActualCall& MockCheckedActualCall::withMemoryBufferParameter(const SimpleStr
 MockActualCall& MockCheckedActualCall::withParameterOfType(const SimpleString& type, const SimpleString& name, const void* value)
 {
     MockNamedValue actualParameter(name);
-    actualParameter.setObjectPointer(type, value);
+    actualParameter.setConstObjectPointer(type, value);
 
-    if (actualParameter.getComparator() == NULL) {
+    if (actualParameter.getComparator() == NULLPTR) {
         MockNoWayToCompareCustomTypeFailure failure(getTest(), type);
         failTest(failure);
         return *this;
@@ -319,7 +319,7 @@ MockActualCall& MockCheckedActualCall::withOutputParameterOfType(const SimpleStr
     addOutputParameter(name, type, output);
 
     MockNamedValue outputParameter(name);
-    outputParameter.setObjectPointer(type, output);
+    outputParameter.setConstObjectPointer(type, output);
     checkOutputParameter(outputParameter);
 
     return *this;
@@ -551,7 +551,7 @@ void MockCheckedActualCall::addOutputParameter(const SimpleString& name, const S
 {
     MockOutputParametersListNode* newNode = new MockOutputParametersListNode(name, type, ptr);
 
-    if (outputParameterExpectations_ == NULL)
+    if (outputParameterExpectations_ == NULLPTR)
         outputParameterExpectations_ = newNode;
     else {
         MockOutputParametersListNode* lastNode = outputParameterExpectations_;
@@ -563,7 +563,7 @@ void MockCheckedActualCall::addOutputParameter(const SimpleString& name, const S
 void MockCheckedActualCall::cleanUpOutputParameterList()
 {
     MockOutputParametersListNode* current = outputParameterExpectations_;
-    MockOutputParametersListNode* toBeDeleted = NULL;
+    MockOutputParametersListNode* toBeDeleted = NULLPTR;
 
     while (current) {
         toBeDeleted = current;
@@ -766,17 +766,17 @@ unsigned int MockActualCallTrace::returnUnsignedIntValue()
 
 void * MockActualCallTrace::returnPointerValue()
 {
-    return NULL;
+    return NULLPTR;
 }
 
 const void * MockActualCallTrace::returnConstPointerValue()
 {
-    return NULL;
+    return NULLPTR;
 }
 
 void (*MockActualCallTrace::returnFunctionPointerValue())()
 {
-    return NULL;
+    return NULLPTR;
 }
 
 const void * MockActualCallTrace::returnConstPointerValueOrDefault(const void *)

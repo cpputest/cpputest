@@ -97,7 +97,7 @@ public:
     static size_t StrLen(const char*);
     static int StrNCmp(const char* s1, const char* s2, size_t n);
     static char* StrNCpy(char* s1, const char* s2, size_t n);
-    static char* StrStr(const char* s1, const char* s2);
+    static const char* StrStr(const char* s1, const char* s2);
     static char ToLower(char ch);
     static int MemCmp(const void* s1, const void *s2, size_t n);
     static char* allocStringBuffer(size_t size, const char* file, int line);

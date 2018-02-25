@@ -37,7 +37,7 @@ class MyComparator : public MockNamedValueComparator
   public:
 
     MyComparator() {}
-    virtual ~MyComparator() {}
+    virtual ~MyComparator() _destructor_override {}
 
     virtual bool isEqual(const void*, const void*) _override { return false; }
     virtual SimpleString valueToString(const void*) _override { return ""; }
@@ -48,7 +48,7 @@ class MyCopier : public MockNamedValueCopier
   public:
 
     MyCopier() {}
-    virtual ~MyCopier() {}
+    virtual ~MyCopier() _destructor_override {}
 
     virtual void copy(void*, const void*) _override {}
 };

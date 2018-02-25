@@ -74,7 +74,7 @@ TEST(MockCheckedActualCall, unExpectedCallWithAParameter)
 TEST(MockCheckedActualCall, unExpectedCallWithAnOutputParameter)
 {
     MockCheckedActualCall actualCall(1, reporter, *emptyList);
-    actualCall.withName("unexpected").withOutputParameter("bar", (void*)0);
+    actualCall.withName("unexpected").withOutputParameter("bar", NULLPTR);
 
     MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "unexpected", *list);
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
@@ -165,11 +165,11 @@ TEST(MockCheckedActualCall, MockIgnoredActualCallWorksAsItShould)
     DOUBLES_EQUAL(1.5, actual.returnDoubleValueOrDefault(1.5), 0.0);
     STRCMP_EQUAL("bla", actual.returnStringValueOrDefault("bla"));
     STRCMP_EQUAL("", actual.returnStringValue());
-    CHECK(0 == actual.returnPointerValue());
+    CHECK(NULLPTR == actual.returnPointerValue());
     CHECK((void*) 0x2 == actual.returnPointerValueOrDefault((void*) 0x2));
-    CHECK(0 == actual.returnConstPointerValue());
+    CHECK(NULLPTR == actual.returnConstPointerValue());
     CHECK((const void*) 0x2 == actual.returnConstPointerValueOrDefault((const void*) 0x2));
-    CHECK(0 == actual.returnFunctionPointerValue());
+    CHECK(NULLPTR == actual.returnFunctionPointerValue());
     CHECK((void(*)()) 1 == actual.returnFunctionPointerValueOrDefault((void(*)()) 0x1));
     CHECK_FALSE(actual.hasReturnValue());
     CHECK(actual.returnValue().equals(MockNamedValue("")));
@@ -232,11 +232,11 @@ TEST(MockCheckedActualCall, remainderOfMockActualCallTraceWorksAsItShould)
     DOUBLES_EQUAL(0.0, actual.returnDoubleValueOrDefault(1.0), 0.0);
     STRCMP_EQUAL("", actual.returnStringValueOrDefault("bla"));
     STRCMP_EQUAL("", actual.returnStringValue());
-    CHECK(0 == actual.returnPointerValue());
-    CHECK(0 == actual.returnPointerValueOrDefault((void*) 0x0));
-    CHECK(0 == actual.returnConstPointerValue());
-    CHECK(0 == actual.returnConstPointerValueOrDefault((const void*) 0x0));
-    CHECK(0 == actual.returnFunctionPointerValue());
-    CHECK(0 == actual.returnFunctionPointerValueOrDefault((void (*)()) 0x0));
+    CHECK(NULLPTR == actual.returnPointerValue());
+    CHECK(NULLPTR == actual.returnPointerValueOrDefault((void*) NULLPTR));
+    CHECK(NULLPTR == actual.returnConstPointerValue());
+    CHECK(NULLPTR == actual.returnConstPointerValueOrDefault((const void*) NULLPTR));
+    CHECK(NULLPTR == actual.returnFunctionPointerValue());
+    CHECK(NULLPTR == actual.returnFunctionPointerValueOrDefault((void (*)()) NULLPTR));
 }
 

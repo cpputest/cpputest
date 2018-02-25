@@ -50,7 +50,7 @@ TEST_GROUP(TestInstaller)
     }
     void teardown()
     {
-        myRegistry->setCurrentRegistry(0);
+        myRegistry->setCurrentRegistry(NULLPTR);
         testInstaller->unDo();
         delete testInstaller;
         delete myRegistry;

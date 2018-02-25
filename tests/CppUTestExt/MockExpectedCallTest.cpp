@@ -82,7 +82,7 @@ TEST_GROUP(MockNamedValueHandlerRepository)
 TEST(MockNamedValueHandlerRepository, getComparatorForNonExistingName)
 {
     MockNamedValueComparatorsAndCopiersRepository repository;
-    POINTERS_EQUAL(NULL, repository.getComparatorForType("typeName"));
+    POINTERS_EQUAL(NULLPTR, repository.getComparatorForType("typeName"));
 }
 
 TEST(MockNamedValueHandlerRepository, installComparator)
@@ -108,7 +108,7 @@ TEST(MockNamedValueHandlerRepository, installMultipleComparators)
 TEST(MockNamedValueHandlerRepository, getCopierForNonExistingName)
 {
     MockNamedValueComparatorsAndCopiersRepository repository;
-    POINTERS_EQUAL(NULL, repository.getCopierForType("typeName"));
+    POINTERS_EQUAL(NULLPTR, repository.getCopierForType("typeName"));
 }
 
 TEST(MockNamedValueHandlerRepository, installCopier)
@@ -293,7 +293,7 @@ TEST(MockExpectedCall, callWithObjectParameter)
     const SimpleString paramName = "paramName";
     void* value = (void*) 0x123;
     call->withParameterOfType("ClassName", paramName, value);
-    POINTERS_EQUAL(value, call->getInputParameter(paramName).getObjectPointer());
+    POINTERS_EQUAL(value, call->getInputParameter(paramName).getConstObjectPointer());
     STRCMP_EQUAL("ClassName", call->getInputParameterType(paramName).asCharString());
     STRCMP_CONTAINS("funcName -> ClassName paramName: <No comparator found for type: \"ClassName\">", call->callToString().asCharString());
 }
@@ -302,7 +302,7 @@ TEST(MockExpectedCall, callWithObjectParameterUnequalComparison)
 {
     TypeForTestingExpectedFunctionCall type(1), unequalType(2);
     MockNamedValue parameter("name");
-    parameter.setObjectPointer("type", &unequalType);
+    parameter.setConstObjectPointer("type", &unequalType);
     call->withParameterOfType("type", "name", &type);
     CHECK(!call->hasInputParameter(parameter));
 }
@@ -311,7 +311,7 @@ TEST(MockExpectedCall, callWithObjectParameterEqualComparisonButFailsWithoutRepo
 {
     TypeForTestingExpectedFunctionCall type(1), equalType(1);
     MockNamedValue parameter("name");
-    parameter.setObjectPointer("type", &equalType);
+    parameter.setConstObjectPointer("type", &equalType);
     call->withParameterOfType("type", "name", &type);
     CHECK(!call->hasInputParameter(parameter));
 }
@@ -323,7 +323,7 @@ TEST(MockExpectedCall, callWithObjectParameterEqualComparisonButFailsWithoutComp
 
     TypeForTestingExpectedFunctionCall type(1), equalType(1);
     MockNamedValue parameter("name");
-    parameter.setObjectPointer("type", &equalType);
+    parameter.setConstObjectPointer("type", &equalType);
     call->withParameterOfType("type", "name", &type);
     CHECK(!call->hasInputParameter(parameter));
 }
@@ -337,7 +337,7 @@ TEST(MockExpectedCall, callWithObjectParameterEqualComparison)
 
     TypeForTestingExpectedFunctionCall type(1), equalType(1);
     MockNamedValue parameter("name");
-    parameter.setObjectPointer("type", &equalType);
+    parameter.setConstObjectPointer("type", &equalType);
 
     call->withParameterOfType("type", "name", &type);
     CHECK(call->hasInputParameter(parameter));
@@ -352,7 +352,7 @@ TEST(MockExpectedCall, getParameterValueOfObjectType)
 
     TypeForTestingExpectedFunctionCall type(1);
     call->withParameterOfType("type", "name", &type);
-    POINTERS_EQUAL(&type, call->getInputParameter("name").getObjectPointer());
+    POINTERS_EQUAL(&type, call->getInputParameter("name").getConstObjectPointer());
     STRCMP_EQUAL("1", call->getInputParameterValueString("name").asCharString());
 }
 
@@ -681,7 +681,7 @@ TEST(MockExpectedCall, hasOutputParameterOfType)
     TypeForTestingExpectedFunctionCall object(6789);
     call->withOutputParameterOfTypeReturning("TypeForTestingExpectedFunctionCall", "foo", &object);
     MockNamedValue foo("foo");
-    foo.setObjectPointer("TypeForTestingExpectedFunctionCall", &object);
+    foo.setConstObjectPointer("TypeForTestingExpectedFunctionCall", &object);
     CHECK(call->hasOutputParameter(foo));
 }
 
@@ -690,7 +690,7 @@ TEST(MockExpectedCall, hasNoOutputParameterOfTypeSameTypeButInput)
     TypeForTestingExpectedFunctionCall object(543);
     call->withParameterOfType("TypeForTestingExpectedFunctionCall", "foo", &object);
     MockNamedValue foo("foo");
-    foo.setObjectPointer("TypeForTestingExpectedFunctionCall", &object);
+    foo.setConstObjectPointer("TypeForTestingExpectedFunctionCall", &object);
     CHECK_FALSE(call->hasOutputParameter(foo));
 }
 
@@ -699,7 +699,7 @@ TEST(MockExpectedCall, hasNoOutputParameterOfTypeDifferentType)
     TypeForTestingExpectedFunctionCall object(543);
     call->withOutputParameterOfTypeReturning("TypeForTestingExpectedFunctionCall", "foo", &object);
     MockNamedValue foo("foo");
-    foo.setObjectPointer("OtherTypeForTestingExpectedFunctionCall", &object);
+    foo.setConstObjectPointer("OtherTypeForTestingExpectedFunctionCall", &object);
     CHECK_FALSE(call->hasOutputParameter(foo));
 }
 
@@ -713,7 +713,7 @@ TEST(MockIgnoredExpectedCall, worksAsItShould)
     ignored.withName("func");
     ignored.withCallOrder(1);
     ignored.withCallOrder(1, 1);
-    ignored.onObject((void*) 0);
+    ignored.onObject(NULLPTR);
     ignored.withBoolParameter("umm", true);
     ignored.withIntParameter("bla", (int) 1);
     ignored.withUnsignedIntParameter("foo", (unsigned int) 1);
@@ -721,13 +721,13 @@ TEST(MockIgnoredExpectedCall, worksAsItShould)
     ignored.withUnsignedLongIntParameter("bah", (unsigned long int) 1);
     ignored.withDoubleParameter("hah", (double) 1.1f);
     ignored.withStringParameter("goo", "hello");
-    ignored.withPointerParameter("pie", (void*) 0);
-    ignored.withConstPointerParameter("woo", (const void*) 0);
-    ignored.withFunctionPointerParameter("fop", (void(*)()) 0);
-    ignored.withMemoryBufferParameter("waa", (const unsigned char*) 0, 0);
-    ignored.withParameterOfType( "mytype", "top", (const void*) 0);
-    ignored.withOutputParameterReturning("bar", (void*) 0, 1);
-    ignored.withOutputParameterOfTypeReturning("mytype", "bar", (const void*) 0);
+    ignored.withPointerParameter("pie", (void*) NULLPTR);
+    ignored.withConstPointerParameter("woo", (const void*) NULLPTR);
+    ignored.withFunctionPointerParameter("fop", (void(*)()) NULLPTR);
+    ignored.withMemoryBufferParameter("waa", (const unsigned char*) NULLPTR, 0);
+    ignored.withParameterOfType( "mytype", "top", (const void*) NULLPTR);
+    ignored.withOutputParameterReturning("bar", (void*) NULLPTR, 1);
+    ignored.withOutputParameterOfTypeReturning("mytype", "bar", (const void*) NULLPTR);
     ignored.ignoreOtherParameters();
     ignored.andReturnValue(true);
     ignored.andReturnValue((double) 1.0f);
@@ -736,7 +736,7 @@ TEST(MockIgnoredExpectedCall, worksAsItShould)
     ignored.andReturnValue((unsigned long int) 1);
     ignored.andReturnValue((long int) 1);
     ignored.andReturnValue("boo");
-    ignored.andReturnValue((void*) 0);
-    ignored.andReturnValue((const void*) 0);
-    ignored.andReturnValue((void(*)()) 0);
+    ignored.andReturnValue((void*) NULLPTR);
+    ignored.andReturnValue((const void*) NULLPTR);
+    ignored.andReturnValue((void(*)()) NULLPTR);
 }

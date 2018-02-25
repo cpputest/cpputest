@@ -25,6 +25,10 @@ environment:
   - Platform: Win32
     PlatformToolset: v100
   - Platform: Win32
+    PlatformToolset: v110
+  - Platform: Win32
+    PlatformToolset: v120
+  - Platform: Win32
     PlatformToolset: v140
   - Platform: x64
     PlatformToolset: v140

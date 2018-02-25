@@ -49,7 +49,7 @@ public:
         TestTerminatorWithoutExceptions::exitCurrentTest();
     } // LCOV_EXCL_LINE
     // LCOV_EXCL_START
-    virtual ~MockFailureReporterTestTerminatorForInCOnlyCode()
+    virtual ~MockFailureReporterTestTerminatorForInCOnlyCode() _destructor_override
     {
     }
     // LCOV_EXCL_STOP
@@ -69,9 +69,9 @@ public:
 
 };
 
-static MockSupport* currentMockSupport = NULL;
-static MockExpectedCall* expectedCall = NULL;
-static MockActualCall* actualCall = NULL;
+static MockSupport* currentMockSupport = NULLPTR;
+static MockExpectedCall* expectedCall = NULLPTR;
+static MockActualCall* actualCall = NULLPTR;
 static MockFailureReporterForInCOnlyCode failureReporterForC;
 
 class MockCFunctionComparatorNode : public MockNamedValueComparator
@@ -79,7 +79,7 @@ class MockCFunctionComparatorNode : public MockNamedValueComparator
 public:
     MockCFunctionComparatorNode(MockCFunctionComparatorNode* next, MockTypeEqualFunction_c equal, MockTypeValueToStringFunction_c toString)
         : next_(next), equal_(equal), toString_(toString) {}
-    virtual ~MockCFunctionComparatorNode() {}
+    virtual ~MockCFunctionComparatorNode() _destructor_override {}
 
     virtual bool isEqual(const void* object1, const void* object2) _override
     {
@@ -95,14 +95,14 @@ public:
     MockTypeValueToStringFunction_c toString_;
 };
 
-static MockCFunctionComparatorNode* comparatorList_ = NULL;
+static MockCFunctionComparatorNode* comparatorList_ = NULLPTR;
 
 class MockCFunctionCopierNode : public MockNamedValueCopier
 {
 public:
     MockCFunctionCopierNode(MockCFunctionCopierNode* next, MockTypeCopyFunction_c copier)
         : next_(next), copier_(copier) {}
-    virtual ~MockCFunctionCopierNode() {}
+    virtual ~MockCFunctionCopierNode() _destructor_override {}
 
     virtual void copy(void* dst, const void* src) _override
     {
@@ -113,7 +113,7 @@ public:
     MockTypeCopyFunction_c copier_;
 };
 
-static MockCFunctionCopierNode* copierList_ = NULL;
+static MockCFunctionCopierNode* copierList_ = NULLPTR;
 
 extern "C" {
 
@@ -134,6 +134,7 @@ void setPointerData_c(const char* name, void* value);
 void setConstPointerData_c(const char* name, const void* value);
 void setFunctionPointerData_c(const char* name, void (*value)());
 void setDataObject_c(const char* name, const char* type, void* value);
+void setDataConstObject_c(const char* name, const char* type, const void* value);
 MockValue_c getData_c(const char* name);
 int hasReturnValue_c();
 
@@ -335,6 +336,7 @@ static MockSupport_c gMockSupport = {
         setConstPointerData_c,
         setFunctionPointerData_c,
         setDataObject_c,
+        setDataConstObject_c,
         getData_c,
         disable_c,
         enable_c,
@@ -857,6 +859,11 @@ void setFunctionPointerData_c(const char* name, void (*value)())
 void setDataObject_c(const char* name, const char* type, void* value)
 {
     currentMockSupport->setDataObject(name, type, value);
+}
+
+void setDataConstObject_c(const char* name, const char* type, const void* value)
+{
+    currentMockSupport->setDataConstObject(name, type, value);
 }
 
 MockValue_c getData_c(const char* name)

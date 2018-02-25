@@ -269,7 +269,7 @@ StringBufferTestOutput::~StringBufferTestOutput()
 }
 
 CompositeTestOutput::CompositeTestOutput()
-  : outputOne_(NULL), outputTwo_(NULL)
+  : outputOne_(NULLPTR), outputTwo_(NULLPTR)
 {
 }
 

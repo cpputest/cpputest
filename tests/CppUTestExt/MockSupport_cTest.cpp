@@ -60,12 +60,12 @@ TEST(MockSupport_c, OrderObserved)
 TEST(MockSupport_c, hasReturnValue)
 {
     mock_c()->expectOneCall("foo");
-    CHECK(!mock_c()->actualCall("foo")->hasReturnValue());
-    CHECK(!mock_c()->hasReturnValue());
+    CHECK(mock_c()->actualCall("foo")->hasReturnValue() == 0);
+    CHECK(mock_c()->hasReturnValue() == 0);
 
     mock_c()->expectOneCall("foo2")->andReturnIntValue(1);
-    CHECK(mock_c()->actualCall("foo2")->hasReturnValue());
-    CHECK(mock_c()->hasReturnValue());
+    CHECK(mock_c()->actualCall("foo2")->hasReturnValue() != 0);
+    CHECK(mock_c()->hasReturnValue() != 0);
 }
 
 TEST(MockSupport_c, expectAndActualOneCall)
@@ -116,7 +116,7 @@ extern "C"{
 
     static void typeCopy(void* dst, const void* src)
     {
-        *(int*) dst = *(int*) src;
+        *(int*) dst = *(const int*) src;
     }
 
 }
@@ -517,6 +517,12 @@ TEST(MockSupport_c, MockSupportSetDataObject)
 {
     mock_c()->setDataObject("name", "type", (void*) 1);
     POINTERS_EQUAL((void*) 1, mock_c()->getData("name").value.objectValue);
+}
+
+TEST(MockSupport_c, MockSupportSetDataConstObject)
+{
+    mock_c()->setDataConstObject("name", "type", (const void*) 5);
+    POINTERS_EQUAL((void*) 5, mock_c()->getData("name").value.constObjectValue);
 }
 
 TEST(MockSupport_c, WorksInCFile)

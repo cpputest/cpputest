@@ -713,12 +713,12 @@ TEST(MockParameterTest, ignoreOtherCallsIgnoresWithAllKindsOfParameters)
            .withParameter("foo", 1l)
            .withParameter("hey", 1ul)
            .withParameter("duh", 1.0)
-           .withParameter("yoo", (const void*) 0)
-           .withParameter("func", (void(*)()) 0)
-           .withParameter("mem", (const unsigned char*) 0, 0)
-           .withParameterOfType("hoo", "int", (const void*) 0)
-           .withOutputParameter("gah", (void*) 0)
-           .withOutputParameterOfType("goo", "int", (void*) 0);
+           .withParameter("yoo", (const void*) NULLPTR)
+           .withParameter("func", (void(*)()) NULLPTR)
+           .withParameter("mem", (const unsigned char*) NULLPTR, 0)
+           .withParameterOfType("hoo", "int", (const void*) NULLPTR)
+           .withOutputParameter("gah", (void*) NULLPTR)
+           .withOutputParameterOfType("goo", "int", (void*) NULLPTR);
 
     mock().checkExpectations();
 }
