@@ -227,6 +227,32 @@ TEST(MockExpectedCall, callWithLongIntegerParameter)
     STRCMP_CONTAINS("funcName -> long int paramName: <777 (0x309)>", call->callToString().asCharString());
 }
 
+#ifdef CPPUTEST_USE_LONG_LONG
+
+TEST(MockExpectedCall, callWithUnsignedLongLongIntegerParameter)
+{
+    const SimpleString paramName = "paramName";
+    unsigned long long value = 888;
+    call->withParameter(paramName, value);
+    STRCMP_EQUAL("unsigned long long int", call->getInputParameterType(paramName).asCharString());
+    UNSIGNED_LONGLONGS_EQUAL(value, call->getInputParameter(paramName).getUnsignedLongLongIntValue());
+    CHECK(call->hasInputParameterWithName(paramName));
+    STRCMP_CONTAINS("funcName -> unsigned long long int paramName: <888 (0x378)>", call->callToString().asCharString());
+}
+
+TEST(MockExpectedCall, callWithLongLongIntegerParameter)
+{
+    const SimpleString paramName = "paramName";
+    long long value = 777;
+    call->withParameter(paramName, value);
+    STRCMP_EQUAL("long long int", call->getInputParameterType(paramName).asCharString());
+    LONGLONGS_EQUAL(value, call->getInputParameter(paramName).getLongLongIntValue());
+    CHECK(call->hasInputParameterWithName(paramName));
+    STRCMP_CONTAINS("funcName -> long long int paramName: <777 (0x309)>", call->callToString().asCharString());
+}
+
+#endif
+
 TEST(MockExpectedCall, callWithDoubleParameter)
 {
     const SimpleString paramName = "paramName";
@@ -719,6 +745,10 @@ TEST(MockIgnoredExpectedCall, worksAsItShould)
     ignored.withUnsignedIntParameter("foo", (unsigned int) 1);
     ignored.withLongIntParameter("hey", (long int) 1);
     ignored.withUnsignedLongIntParameter("bah", (unsigned long int) 1);
+#ifdef CPPUTEST_USE_LONG_LONG
+    ignored.withLongLongIntParameter("yo", (long long int) 1);
+    ignored.withUnsignedLongLongIntParameter("grr", (unsigned long long int) 1);
+#endif
     ignored.withDoubleParameter("hah", (double) 1.1f);
     ignored.withStringParameter("goo", "hello");
     ignored.withPointerParameter("pie", (void*) NULLPTR);
@@ -735,6 +765,10 @@ TEST(MockIgnoredExpectedCall, worksAsItShould)
     ignored.andReturnValue((int) 1);
     ignored.andReturnValue((unsigned long int) 1);
     ignored.andReturnValue((long int) 1);
+#ifdef CPPUTEST_USE_LONG_LONG
+    ignored.andReturnValue((unsigned long long int) 1);
+    ignored.andReturnValue((long long int) 1);
+#endif
     ignored.andReturnValue("boo");
     ignored.andReturnValue((void*) NULLPTR);
     ignored.andReturnValue((const void*) NULLPTR);

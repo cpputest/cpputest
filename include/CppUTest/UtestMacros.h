@@ -235,10 +235,10 @@
   UNSIGNED_LONGLONGS_EQUAL_LOCATION(expected, actual, text, __FILE__, __LINE__)
 
 #define LONGLONGS_EQUAL_LOCATION(expected, actual, text, file, line)\
-        { UtestShell::getCurrent()->assertLongLongsEqual(expected, actual, text, file, line); }
+        { UtestShell::getCurrent()->assertLongLongsEqual((long long)expected, (long long)actual, text, file, line); }
 
 #define UNSIGNED_LONGLONGS_EQUAL_LOCATION(expected, actual, text, file, line)\
-        { UtestShell::getCurrent()->assertUnsignedLongLongsEqual(expected, actual, text, file, line); }
+        { UtestShell::getCurrent()->assertUnsignedLongLongsEqual((unsigned long long)expected, (unsigned long long)actual, text, file, line); }
 
 #define BYTES_EQUAL(expected, actual)\
     LONGS_EQUAL((expected) & 0xff,(actual) & 0xff)

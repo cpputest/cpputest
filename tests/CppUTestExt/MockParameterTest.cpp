@@ -62,6 +62,29 @@ TEST(MockParameterTest, expectOneIntegerParameterAndValue)
     mock().checkExpectations();
 }
 
+#ifdef CPPUTEST_USE_LONGLONG
+
+TEST(MockParameterTest, expectOneUnsignedLongLongIntegerParameterAndValue)
+{
+    unsigned long long value = 0xFFFFAAAAFFFFAAAA;
+    mock().expectOneCall("foo").withParameter("parameter", value);
+    mock().actualCall("foo").withParameter("parameter", value);
+
+    mock().checkExpectations();
+}
+
+TEST(MockParameterTest, expectOneLongLongIntegerParameterAndValue)
+{
+    long long value = 0x7FFFAAAAFFFFAAAA;
+
+    mock().expectOneCall("foo").withParameter("parameter", value);
+    mock().actualCall("foo").withParameter("parameter", value);
+
+    mock().checkExpectations();
+}
+
+#endif
+
 TEST(MockParameterTest, mismatchedIntegerTypesIntAndLongAreAllowed)
 {
     mock().expectOneCall("foo").withParameter("parameter", (int)1);
@@ -72,6 +95,21 @@ TEST(MockParameterTest, mismatchedIntegerTypesIntAndLongAreAllowed)
 
     mock().checkExpectations();
 }
+
+#ifdef CPPUTEST_USE_LONG_LONG
+
+TEST(MockParameterTest, mismatchedIntegerTypesIntAndLongLongAreAllowed)
+{
+    mock().expectOneCall("foo").withParameter("parameter", (int)1);
+    mock().actualCall("foo").withParameter("parameter", (long long)1);
+
+    mock().expectOneCall("foo").withParameter("parameter", (long long)1);
+    mock().actualCall("foo").withParameter("parameter", (int)1);
+
+    mock().checkExpectations();
+}
+
+#endif
 
 TEST(MockParameterTest, mismatchedIntegerTypesIntAndUnsignedAreAllowed)
 {
@@ -95,6 +133,21 @@ TEST(MockParameterTest, mismatchedIntegerTypesIntAndUnsignedLongAreAllowed)
     mock().checkExpectations();
 }
 
+#ifdef CPPUTEST_USE_LONG_LONG
+
+TEST(MockParameterTest, mismatchedIntegerTypesIntAndUnsignedLongLongAreAllowed)
+{
+    mock().expectOneCall("foo").withParameter("parameter", (int)1);
+    mock().actualCall("foo").withParameter("parameter", (unsigned long long)1);
+
+    mock().expectOneCall("foo").withParameter("parameter", (unsigned long long)1);
+    mock().actualCall("foo").withParameter("parameter", (int)1);
+
+    mock().checkExpectations();
+}
+
+#endif
+
 TEST(MockParameterTest, mismatchedIntegerTypesUnsignedAndLongAreAllowed)
 {
     mock().expectOneCall("foo").withParameter("parameter", (unsigned)1);
@@ -105,6 +158,21 @@ TEST(MockParameterTest, mismatchedIntegerTypesUnsignedAndLongAreAllowed)
 
     mock().checkExpectations();
 }
+
+#ifdef CPPUTEST_USE_LONG_LONG
+
+TEST(MockParameterTest, mismatchedIntegerTypesUnsignedAndLongLongAreAllowed)
+{
+    mock().expectOneCall("foo").withParameter("parameter", (unsigned)1);
+    mock().actualCall("foo").withParameter("parameter", (long long)1);
+
+    mock().expectOneCall("foo").withParameter("parameter", (long long)1);
+    mock().actualCall("foo").withParameter("parameter", (unsigned)1);
+
+    mock().checkExpectations();
+}
+
+#endif
 
 TEST(MockParameterTest, mismatchedIntegerTypesUnsignedAndUnsignedLongAreAllowed)
 {
@@ -117,6 +185,43 @@ TEST(MockParameterTest, mismatchedIntegerTypesUnsignedAndUnsignedLongAreAllowed)
     mock().checkExpectations();
 }
 
+#ifdef CPPUTEST_USE_LONG_LONG
+
+TEST(MockParameterTest, mismatchedIntegerTypesUnsignedAndUnsignedLongLongAreAllowed)
+{
+    mock().expectOneCall("foo").withParameter("parameter", (unsigned)1);
+    mock().actualCall("foo").withParameter("parameter", (unsigned long long)1);
+
+    mock().expectOneCall("foo").withParameter("parameter", (unsigned long long)1);
+    mock().actualCall("foo").withParameter("parameter", (unsigned)1);
+
+    mock().checkExpectations();
+}
+
+TEST(MockParameterTest, mismatchedIntegerTypesUnsignedLongAndUnsignedLongLongAreAllowed)
+{
+    mock().expectOneCall("foo").withParameter("parameter", (unsigned long)1);
+    mock().actualCall("foo").withParameter("parameter", (unsigned long long)1);
+
+    mock().expectOneCall("foo").withParameter("parameter", (unsigned long long)1);
+    mock().actualCall("foo").withParameter("parameter", (unsigned long)1);
+
+    mock().checkExpectations();
+}
+
+TEST(MockParameterTest, mismatchedIntegerTypesLongAndLongLongAreAllowed)
+{
+    mock().expectOneCall("foo").withParameter("parameter", (long)1);
+    mock().actualCall("foo").withParameter("parameter", (long long)1);
+
+    mock().expectOneCall("foo").withParameter("parameter", (long long)1);
+    mock().actualCall("foo").withParameter("parameter", (long)1);
+
+    mock().checkExpectations();
+}
+
+#endif
+
 TEST(MockParameterTest, mismatchedIntegerTypesLongAndUnsignedLongAreAllowed)
 {
     mock().expectOneCall("foo").withParameter("parameter", (long)1);
@@ -127,6 +232,43 @@ TEST(MockParameterTest, mismatchedIntegerTypesLongAndUnsignedLongAreAllowed)
 
     mock().checkExpectations();
 }
+
+#ifdef CPPUTEST_USE_LONG_LONG
+
+TEST(MockParameterTest, mismatchedIntegerTypesLongAndUnsignedLongLongAreAllowed)
+{
+    mock().expectOneCall("foo").withParameter("parameter", (long)1);
+    mock().actualCall("foo").withParameter("parameter", (unsigned long long)1);
+
+    mock().expectOneCall("foo").withParameter("parameter", (unsigned long long)1);
+    mock().actualCall("foo").withParameter("parameter", (long)1);
+
+    mock().checkExpectations();
+}
+
+TEST(MockParameterTest, mismatchedIntegerTypesUnsignedLongAndLongLongAreAllowed)
+{
+    mock().expectOneCall("foo").withParameter("parameter", (unsigned long)1);
+    mock().actualCall("foo").withParameter("parameter", (long long)1);
+
+    mock().expectOneCall("foo").withParameter("parameter", (long long)1);
+    mock().actualCall("foo").withParameter("parameter", (unsigned long)1);
+
+    mock().checkExpectations();
+}
+
+TEST(MockParameterTest, mismatchedIntegerTypesLongLongAndUnsignedLongLongAreAllowed)
+{
+    mock().expectOneCall("foo").withParameter("parameter", (long long)1);
+    mock().actualCall("foo").withParameter("parameter", (unsigned long long)1);
+
+    mock().expectOneCall("foo").withParameter("parameter", (unsigned long long)1);
+    mock().actualCall("foo").withParameter("parameter", (long long)1);
+
+    mock().checkExpectations();
+}
+
+#endif
 
 TEST(MockParameterTest, longAndUnsignedLongWithSameBitRepresentationShouldNotBeTreatedAsEqual)
 {
@@ -712,6 +854,10 @@ TEST(MockParameterTest, ignoreOtherCallsIgnoresWithAllKindsOfParameters)
            .withParameter("bar", 1u)
            .withParameter("foo", 1l)
            .withParameter("hey", 1ul)
+#ifdef CPPUTEST_USE_LONG_LONG
+           .withParameter("ick", 1ll)
+           .withParameter("grr", 1ull)
+#endif
            .withParameter("duh", 1.0)
            .withParameter("yoo", (const void*) NULLPTR)
            .withParameter("func", (void(*)()) NULLPTR)

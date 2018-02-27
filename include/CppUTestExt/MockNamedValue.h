@@ -27,6 +27,9 @@
 
 #ifndef D_MockNamedValue_h
 #define D_MockNamedValue_h
+
+#include "CppUTest/CppUTestConfig.h"
+
 /*
  * MockNamedValueComparator is an interface that needs to be used when creating Comparators.
  * This is needed when comparing values of non-native type.
@@ -106,6 +109,8 @@ public:
     virtual void setValue(unsigned int value);
     virtual void setValue(long int value);
     virtual void setValue(unsigned long int value);
+    virtual void setValue(cpputest_longlong value);
+    virtual void setValue(cpputest_ulonglong value);
     virtual void setValue(double value);
     virtual void setValue(void* value);
     virtual void setValue(const void* value);
@@ -131,6 +136,8 @@ public:
     virtual unsigned int getUnsignedIntValue() const;
     virtual long int getLongIntValue() const;
     virtual unsigned long int getUnsignedLongIntValue() const;
+    virtual cpputest_longlong getLongLongIntValue() const;
+    virtual cpputest_ulonglong getUnsignedLongLongIntValue() const;
     virtual double getDoubleValue() const;
     virtual const char* getStringValue() const;
     virtual void* getPointerValue() const;
@@ -140,6 +147,7 @@ public:
     virtual const void* getConstObjectPointer() const;
     virtual void* getObjectPointer() const;
     virtual size_t getSize() const;
+
 
     virtual MockNamedValueComparator* getComparator() const;
     virtual MockNamedValueCopier* getCopier() const;
@@ -154,6 +162,12 @@ private:
         unsigned int unsignedIntValue_;
         long int longIntValue_;
         unsigned long int unsignedLongIntValue_;
+#ifdef CPPUTEST_USE_LONG_LONG
+        cpputest_longlong longLongIntValue_;
+        cpputest_ulonglong unsignedLongLongIntValue_;
+#else
+        char longLongPlaceholder_[CPPUTEST_SIZE_OF_FAKE_LONG_LONG_TYPE];
+#endif
         double doubleValue_;
         const char* stringValue_;
         void* pointerValue_;
