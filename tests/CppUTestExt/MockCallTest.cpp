@@ -366,6 +366,31 @@ TEST(MockCallTest, OnObject)
     mock().actualCall("boo").onObject(objectPtr);
 }
 
+TEST(MockCallTest, OnObjectIgnored_MatchingAlreadyWhenObjectPassed)
+{
+    void* objectPtr = (void*) 0x001;
+    mock().expectOneCall("boo");
+    mock().actualCall("boo").onObject(objectPtr);
+}
+
+TEST(MockCallTest, OnObjectIgnored_NotMatchingYetWhenObjectPassed)
+{
+    void* objectPtr = (void*) 0x001;
+    mock().expectOneCall("boo").withBoolParameter("p", true);
+    mock().actualCall("boo").onObject(objectPtr).withBoolParameter("p", true);
+}
+
+TEST(MockCallTest, OnObjectIgnored_InitialMatchDiscarded)
+{
+    void* objectPtr1 = (void*) 0x001;
+    void* objectPtr2 = (void*) 0x002;
+
+    mock().expectOneCall("boo");
+    mock().expectOneCall("boo").withBoolParameter("p", true);
+    mock().actualCall("boo").onObject(objectPtr2).withBoolParameter("p", true);;
+    mock().actualCall("boo").onObject(objectPtr1);
+}
+
 TEST(MockCallTest, OnObjectFails)
 {
     MockFailureReporterInstaller failureReporterInstaller;
