@@ -274,25 +274,25 @@ bool MockNamedValue::equals(const MockNamedValue& p) const
     else if((type_ == "int") && (p.type_ == "long int"))
         return value_.intValue_ == p.value_.longIntValue_;
     else if((type_ == "unsigned int") && (p.type_ == "int"))
-        return (long)value_.unsignedIntValue_ == (long)p.value_.intValue_;
+        return (p.value_.intValue_ >= 0) && (value_.unsignedIntValue_ == (unsigned int)p.value_.intValue_);
     else if((type_ == "int") && (p.type_ == "unsigned int"))
-        return (long)value_.intValue_ == (long)p.value_.unsignedIntValue_;
+        return (value_.intValue_ >= 0) && ((unsigned int)value_.intValue_ == p.value_.unsignedIntValue_);
     else if((type_ == "unsigned long int") && (p.type_ == "int"))
-        return value_.unsignedLongIntValue_ == (unsigned long)p.value_.intValue_;
+        return (p.value_.intValue_ >= 0) && (value_.unsignedLongIntValue_ == (unsigned long)p.value_.intValue_);
     else if((type_ == "int") && (p.type_ == "unsigned long int"))
-        return (unsigned long)value_.intValue_ == p.value_.unsignedLongIntValue_;
+        return (value_.intValue_ >= 0) && ((unsigned long)value_.intValue_ == p.value_.unsignedLongIntValue_);
     else if((type_ == "unsigned int") && (p.type_ == "long int"))
-        return (long int)value_.unsignedIntValue_ == p.value_.longIntValue_;
+        return (p.value_.longIntValue_ >= 0) && (value_.unsignedIntValue_ == (unsigned long)p.value_.longIntValue_);
     else if((type_ == "long int") && (p.type_ == "unsigned int"))
-        return value_.longIntValue_ == (long int)p.value_.unsignedIntValue_;
+        return (value_.longIntValue_ >= 0) && ((unsigned long)value_.longIntValue_ == p.value_.unsignedIntValue_);
     else if((type_ == "unsigned int") && (p.type_ == "unsigned long int"))
         return value_.unsignedIntValue_ == p.value_.unsignedLongIntValue_;
     else if((type_ == "unsigned long int") && (p.type_ == "unsigned int"))
         return value_.unsignedLongIntValue_ == p.value_.unsignedIntValue_;
     else if((type_ == "long int") && (p.type_ == "unsigned long int"))
-        return (value_.longIntValue_ >= 0) && (value_.longIntValue_ == (long) p.value_.unsignedLongIntValue_);
+        return (value_.longIntValue_ >= 0) && ((unsigned long)value_.longIntValue_ == p.value_.unsignedLongIntValue_);
     else if((type_ == "unsigned long int") && (p.type_ == "long int"))
-        return (p.value_.longIntValue_ >= 0) && ((long)value_.unsignedLongIntValue_ == p.value_.longIntValue_);
+        return (p.value_.longIntValue_ >= 0) && (value_.unsignedLongIntValue_ == (unsigned long) p.value_.longIntValue_);
 
     if (type_ != p.type_) return false;
 
