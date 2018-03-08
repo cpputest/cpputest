@@ -220,6 +220,21 @@ TEST(MockSupport_c, outputParametersOfType)
     mock_c()->removeAllComparatorsAndCopiers();
 }
 
+TEST(MockSupport_c, inputParametersOfType)
+{
+
+    int param = 1;
+    const int retval = 2;
+    mock_c()->installCopier("typeName", typeCopy);
+
+    mock_c()->expectOneCall("foo")->withInputParameterOfTypeForwarding("typeName", "in", &param);
+    mock_c()->actualCall("foo")->withInputParameterOfType("typeName", "in", &retval);
+    LONGS_EQUAL(2, param);
+    LONGS_EQUAL(2, retval);
+    mock_c()->checkExpectations();
+    mock_c()->removeAllComparatorsAndCopiers();
+}
+
 TEST(MockSupport_c, ignoreOtherParameters)
 {
     mock_c()->expectOneCall("foo")->withIntParameters("int", 1)->ignoreOtherParameters();
