@@ -930,7 +930,8 @@ TEST(MockParameterTest, ignoreOtherCallsIgnoresWithAllKindsOfParameters)
            .withParameterOfType("hoo", "int", (const void*) NULLPTR)
            .withOutputParameter("gah", (void*) NULLPTR)
            .withOutputParameterOfType("goo", "int", (void*) NULLPTR)
-           .withInputParameter("fos", (void*) NULLPTR);
+           .withInputParameter("fos", (void*) NULLPTR)
+           .withInputParameterOfType("haz", "cso", (const void*) NULLPTR);
 
     mock().checkExpectations();
 }
