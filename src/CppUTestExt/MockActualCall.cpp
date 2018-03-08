@@ -87,12 +87,14 @@ void MockCheckedActualCall::copyOutputParameters(MockCheckedExpectedCall* expect
         MockNamedValueCopier* copier = outputParameter.getCopier();
         if (copier)
         {
-            if (p->direction_ == MockOutputParametersListNode::TestToCode)
+            if (p->ptr_ != NULLPTR)
             {
+                // Test to code direction
                 copier->copy(p->ptr_, outputParameter.getConstObjectPointer());
             }
-            else
+            else if (p->constPtr_ != NULLPTR)
             {
+                // Code to test direction
                 copier->copy(outputParameter.getObjectPointer(), p->constPtr_);
             }
         }

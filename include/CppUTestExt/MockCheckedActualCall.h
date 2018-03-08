@@ -136,16 +136,11 @@ private:
         void* ptr_;
         const void* constPtr_;
 
-        enum Direction {
-            TestToCode = 0,
-            CodeToTest
-        } direction_;
-
         MockOutputParametersListNode* next_;
         MockOutputParametersListNode(const SimpleString& name, const SimpleString& type, void* ptr)
-            : name_(name), type_(type), ptr_(ptr), constPtr_(NULLPTR), direction_(TestToCode), next_(NULLPTR) {}
+            : name_(name), type_(type), ptr_(ptr), constPtr_(NULLPTR), next_(NULLPTR) {}
         MockOutputParametersListNode(const SimpleString& name, const SimpleString& type, const void* constPtr)
-            : name_(name), type_(type), ptr_(NULLPTR), constPtr_(constPtr), direction_(CodeToTest), next_(NULLPTR) {}
+            : name_(name), type_(type), ptr_(NULLPTR), constPtr_(constPtr), next_(NULLPTR) {}
     };
 
     MockOutputParametersListNode* outputParameterExpectations_;
