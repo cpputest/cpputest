@@ -37,20 +37,23 @@ class UtestShell;
 class MockSupport;
 
 /* This allows access to "the global" mocking support for easier testing */
-MockSupport& mock(const SimpleString& mockName = "", MockFailureReporter* failureReporterForThisCall = NULL);
+MockSupport& mock(const SimpleString& mockName = "", MockFailureReporter* failureReporterForThisCall = NULLPTR);
 
 class MockSupport
 {
 public:
-    MockSupport();
+    MockSupport(const SimpleString& mockName = "");
     virtual ~MockSupport();
 
     virtual void strictOrder();
     virtual MockExpectedCall& expectOneCall(const SimpleString& functionName);
-    virtual MockExpectedCall& expectNCalls(int amount, const SimpleString& functionName);
+    virtual void expectNoCall(const SimpleString& functionName);
+    virtual MockExpectedCall& expectNCalls(unsigned int amount, const SimpleString& functionName);
     virtual MockActualCall& actualCall(const SimpleString& functionName);
     virtual bool hasReturnValue();
     virtual MockNamedValue returnValue();
+    virtual bool boolReturnValue();
+    virtual bool returnBoolValueOrDefault(bool defaultValue);
     virtual int intReturnValue();
     virtual int returnIntValueOrDefault(int defaultValue);
     virtual unsigned int unsignedIntReturnValue();
@@ -71,6 +74,7 @@ public:
     virtual void (*functionPointerReturnValue())();
 
     bool hasData(const SimpleString& name);
+    void setData(const SimpleString& name, bool value);
     void setData(const SimpleString& name, int value);
     void setData(const SimpleString& name, unsigned int value);
     void setData(const SimpleString& name, const char* value);
@@ -79,6 +83,7 @@ public:
     void setData(const SimpleString& name, const void* value);
     void setData(const SimpleString& name, void (*value)());
     void setDataObject(const SimpleString& name, const SimpleString& type, void* value);
+    void setDataConstObject(const SimpleString& name, const SimpleString& type, const void* value);
     MockNamedValue getData(const SimpleString& name);
 
     MockSupport* getMockSupportScope(const SimpleString& name);
@@ -114,36 +119,44 @@ public:
     virtual void removeAllComparatorsAndCopiers();
 
 protected:
-    MockSupport* clone();
-    virtual MockCheckedActualCall *createActualFunctionCall();
+    MockSupport* clone(const SimpleString& mockName);
+    virtual MockCheckedActualCall *createActualCall();
     virtual void failTest(MockFailure& failure);
     void countCheck();
 
 private:
-    int callOrder_;
-    int expectedCallOrder_;
+    unsigned int actualCallOrder_;
+    unsigned int expectedCallOrder_;
     bool strictOrdering_;
     MockFailureReporter *activeReporter_;
     MockFailureReporter *standardReporter_;
     MockFailureReporter defaultReporter_;
     MockExpectedCallsList expectations_;
+    MockExpectedCallsList unExpectations_;
     bool ignoreOtherCalls_;
     bool enabled_;
     MockCheckedActualCall *lastActualFunctionCall_;
-    MockExpectedCallComposite compositeCalls_;
     MockNamedValueComparatorsAndCopiersRepository comparatorsAndCopiersRepository_;
     MockNamedValueList data_;
+    const SimpleString mockName_;
 
     bool tracing_;
 
-    void checkExpectationsOfLastCall();
-    bool wasLastCallFulfilled();
-    void failTestWithUnexpectedCalls();
+    void checkExpectationsOfLastActualCall();
+    bool wasLastActualCallFulfilled();
+    void failTestWithExpectedCallsNotFulfilled();
     void failTestWithOutOfOrderCalls();
 
     MockNamedValue* retrieveDataFromStore(const SimpleString& name);
 
     MockSupport* getMockSupport(MockNamedValueListNode* node);
+
+    bool hasntExpectationWithName(const SimpleString& functionName);
+    bool hasntUnexpectationWithName(const SimpleString& functionName);
+    bool hasCallsOutOfOrder();
+
+    SimpleString appendScopeToName(const SimpleString& functionName);
+
 };
 
 #endif

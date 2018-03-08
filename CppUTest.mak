@@ -44,6 +44,7 @@ CLEAN :
 	-@erase "$(INTDIR)\CommandLineArguments.obj"
 	-@erase "$(INTDIR)\CommandLineTestRunner.obj"
 	-@erase "$(INTDIR)\JUnitTestOutput.obj"
+	-@erase "$(INTDIR)\TeamCityTestOutput.obj"
 	-@erase "$(INTDIR)\MemoryLeakDetector.obj"
 	-@erase "$(INTDIR)\MemoryLeakWarningPlugin.obj"
 	-@erase "$(INTDIR)\MemoryReportAllocator.obj"
@@ -76,7 +77,7 @@ CLEAN :
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
-CPP_PROJ=/nologo /ML /W3 /GX /O2 /I ".\include\Platforms\VisualCpp" /I ".\include" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /D "CPPUTEST_MEM_LEAK_DETECTION_DISABLED" /Fp"$(INTDIR)\CppUTest.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
+CPP_PROJ=/nologo /ML /W3 /GX /O2 /I ".\include\Platforms\VisualCpp" /I ".\include" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /D "CPPUTEST_MEM_LEAK_DETECTION_DISABLED" /D "CPPUTEST_USE_LONG_LONG" /Fp"$(INTDIR)\CppUTest.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
 BSC32=bscmake.exe
 BSC32_FLAGS=/nologo /o"$(OUTDIR)\CppUTest.bsc" 
 BSC32_SBRS= \
@@ -100,6 +101,7 @@ LIB32_OBJS= \
 	"$(INTDIR)\CommandLineArguments.obj" \
 	"$(INTDIR)\CommandLineTestRunner.obj" \
 	"$(INTDIR)\JUnitTestOutput.obj" \
+	"$(INTDIR)\TeamCityTestOutput.obj" \
 	"$(INTDIR)\MemoryLeakDetector.obj" \
 	"$(INTDIR)\MemoryLeakWarningPlugin.obj" \
 	"$(INTDIR)\SimpleMutex.obj" \
@@ -140,6 +142,8 @@ CLEAN :
 	-@erase "$(INTDIR)\CommandLineTestRunner.sbr"
 	-@erase "$(INTDIR)\JUnitTestOutput.obj"
 	-@erase "$(INTDIR)\JUnitTestOutput.sbr"
+	-@erase "$(INTDIR)\TeamCityTestOutput.obj"
+	-@erase "$(INTDIR)\TeamCityTestOutput.sbr"
 	-@erase "$(INTDIR)\MemoryLeakDetector.obj"
 	-@erase "$(INTDIR)\MemoryLeakDetector.sbr"
 	-@erase "$(INTDIR)\MemoryLeakWarningPlugin.obj"
@@ -200,7 +204,7 @@ CLEAN :
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
-CPP_PROJ=/nologo /MDd /W3 /GX /ZI /Od /I ".\include\Platforms\VisualCpp" /I ".\include" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /D "CPPUTEST_MEM_LEAK_DETECTION_DISABLED" /FR"$(INTDIR)\\" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+CPP_PROJ=/nologo /MDd /W3 /GX /ZI /Od /I ".\include\Platforms\VisualCpp" /I ".\include" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /D "CPPUTEST_MEM_LEAK_DETECTION_DISABLED" /D "CPPUTEST_USE_LONG_LONG" /FR"$(INTDIR)\\" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
 BSC32=bscmake.exe
 BSC32_FLAGS=/nologo /o"$(OUTDIR)\CppUTest.bsc" 
 BSC32_SBRS= \
@@ -220,6 +224,7 @@ BSC32_SBRS= \
 	"$(INTDIR)\CommandLineArguments.sbr" \
 	"$(INTDIR)\CommandLineTestRunner.sbr" \
 	"$(INTDIR)\JUnitTestOutput.sbr" \
+	"$(INTDIR)\TeamCityTestOutput.sbr" \
 	"$(INTDIR)\MemoryLeakDetector.sbr" \
 	"$(INTDIR)\MemoryLeakWarningPlugin.sbr" \
 	"$(INTDIR)\SimpleMutex.sbr" \
@@ -259,6 +264,7 @@ LIB32_OBJS= \
 	"$(INTDIR)\CommandLineArguments.obj" \
 	"$(INTDIR)\CommandLineTestRunner.obj" \
 	"$(INTDIR)\JUnitTestOutput.obj" \
+	"$(INTDIR)\TeamCityTestOutput.obj" \
 	"$(INTDIR)\MemoryLeakDetector.obj" \
 	"$(INTDIR)\MemoryLeakWarningPlugin.obj" \
 	"$(INTDIR)\SimpleMutex.obj" \
@@ -393,6 +399,24 @@ SOURCE=.\SRC\CPPUTEST\JUnitTestOutput.cpp
 
 
 !ENDIF 
+
+SOURCE=.\SRC\CPPUTEST\TeamCityTestOutput.cpp
+
+!IF  "$(CFG)" == "CppUTest - Win32 Release"
+
+
+"$(INTDIR)\TeamCityTestOutput.obj" : $(SOURCE) "$(INTDIR)"
+	$(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+!ELSEIF  "$(CFG)" == "CppUTest - Win32 Debug"
+
+
+"$(INTDIR)\TeamCityTestOutput.obj"	"$(INTDIR)\TeamCityTestOutput.sbr" : $(SOURCE) "$(INTDIR)"
+	$(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+!ENDIF
 
 SOURCE=.\SRC\CPPUTEST\MemoryLeakDetector.cpp
 

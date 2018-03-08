@@ -29,14 +29,15 @@
 #include "CppUTest/CommandLineTestRunner.h"
 #include "CppUTest/TestOutput.h"
 #include "CppUTest/JUnitTestOutput.h"
+#include "CppUTest/TeamCityTestOutput.h"
 #include "CppUTest/TestRegistry.h"
 
 int CommandLineTestRunner::RunAllTests(int ac, char** av)
 {
-    return RunAllTests(ac, (const char**) av);
+    return RunAllTests(ac, (const char *const *) av);
 }
 
-int CommandLineTestRunner::RunAllTests(int ac, const char** av)
+int CommandLineTestRunner::RunAllTests(int ac, const char *const *av)
 {
     int result = 0;
     ConsoleTestOutput backupOutput;
@@ -57,8 +58,8 @@ int CommandLineTestRunner::RunAllTests(int ac, const char** av)
     return result;
 }
 
-CommandLineTestRunner::CommandLineTestRunner(int ac, const char** av, TestRegistry* registry) :
-    output_(NULL), arguments_(NULL), registry_(registry)
+CommandLineTestRunner::CommandLineTestRunner(int ac, const char *const *av, TestRegistry* registry) :
+    output_(NULLPTR), arguments_(NULLPTR), registry_(registry)
 {
     arguments_ = new CommandLineArguments(ac, av);
 }
@@ -87,9 +88,11 @@ void CommandLineTestRunner::initializeTestRun()
 {
     registry_->setGroupFilters(arguments_->getGroupFilters());
     registry_->setNameFilters(arguments_->getNameFilters());
+	
     if (arguments_->isVerbose()) output_->verbose();
     if (arguments_->isColor()) output_->color();
     if (arguments_->runTestsInSeperateProcess()) registry_->setRunTestsInSeperateProcess();
+    if (arguments_->isRunIgnored()) registry_->setRunIgnored();
 }
 
 int CommandLineTestRunner::runAllTests()
@@ -123,10 +126,15 @@ int CommandLineTestRunner::runAllTests()
     return failureCount;
 }
 
+TestOutput* CommandLineTestRunner::createTeamCityOutput()
+{
+    return new TeamCityTestOutput;
+}
+
 TestOutput* CommandLineTestRunner::createJUnitOutput(const SimpleString& packageName)
 {
     JUnitTestOutput* junitOutput = new JUnitTestOutput;
-    if (junitOutput != NULL) {
+    if (junitOutput != NULLPTR) {
       junitOutput->setPackageName(packageName);
     }
     return junitOutput;
@@ -157,8 +165,9 @@ bool CommandLineTestRunner::parseArguments(TestPlugin* plugin)
     output_= createJUnitOutput(arguments_->getPackageName());
     if (arguments_->isVerbose())
       output_ = createCompositeOutput(output_, createConsoleOutput());
-  }
-  else
+  } else if (arguments_->isTeamCityOutput()) {
+    output_ = createTeamCityOutput();
+  } else
     output_ = createConsoleOutput();
   return true;
 }

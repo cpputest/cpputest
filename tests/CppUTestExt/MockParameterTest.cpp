@@ -27,7 +27,7 @@
  */
 
 #include "CppUTest/TestHarness.h"
-#include "MockFailureTest.h"
+#include "MockFailureReporterForTest.h"
 
 TEST_GROUP(MockParameterTest)
 {
@@ -36,6 +36,14 @@ TEST_GROUP(MockParameterTest)
     mock().checkExpectations();
   }
 };
+
+TEST(MockParameterTest, expectOneBooleanParameterAndValue)
+{
+    mock().expectOneCall("foo").withParameter("parameter", true);
+    mock().actualCall("foo").withParameter("parameter", true);
+
+    mock().checkExpectations();
+}
 
 TEST(MockParameterTest, expectOneUnsignedIntegerParameterAndValue)
 {
@@ -434,7 +442,7 @@ TEST(MockParameterTest, ignoreOtherParametersMultipleCallsButOneDidntHappen)
     MockCheckedExpectedCall* call = expectations.addFunction("boo");
     call->ignoreOtherParameters();
     call->callWasMade(1);
-    call->parametersWereIgnored();
+    call->finalizeActualCallMatch();
     call->ignoreOtherParameters();
     expectations.addFunction("boo")->ignoreOtherParameters();
     MockExpectedCallsDidntHappenFailure expectedFailure(mockFailureTest(), expectations);
@@ -446,7 +454,6 @@ TEST(MockParameterTest, ignoreOtherParametersMultipleCallsButOneDidntHappen)
     mock().checkExpectations();
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
-
 
 TEST(MockParameterTest, newCallStartsWhileNotAllParametersWerePassed)
 {
@@ -870,6 +877,29 @@ TEST(MockParameterTest, outputParameterWithIgnoredParameters)
     mock().actualCall("foo").withOutputParameter("bar", &retval).withParameter("other", 1);
 
     LONGS_EQUAL(param, retval);
+
+    mock().checkExpectations();
+}
+
+/*
+ * This test checks that the proper output parameters are copied when multiple calls to the same
+ * function are expected.
+ */
+TEST(MockParameterTest, properOutputParametersAreCopied)
+{
+    int expectedValue1 = 1;
+    int expectedValue2 = 2;
+    mock().expectOneCall("foo").withOutputParameterReturning("param", &expectedValue1, sizeof(expectedValue1)).ignoreOtherParameters();
+    mock().expectOneCall("foo").withOutputParameterReturning("param", &expectedValue2, sizeof(expectedValue2));
+
+    int returnedValue1 = 0;
+    int returnedValue2 = 0;
+    mock().actualCall("foo").withOutputParameter("param", &returnedValue1);
+    mock().actualCall("foo").withOutputParameter("param", &returnedValue2).withParameter("optional", 50);
+
+    CHECK_EQUAL_TEXT(expectedValue2, returnedValue1, "Wrong output value in 1st call");
+    CHECK_EQUAL_TEXT(expectedValue1, returnedValue2, "Wrong output value in 2nd call");
+
     mock().checkExpectations();
 }
 
@@ -889,14 +919,18 @@ TEST(MockParameterTest, ignoreOtherCallsIgnoresWithAllKindsOfParameters)
 {
      mock().ignoreOtherCalls();
      mock().actualCall("boo")
+           .withParameter("umm", true)
            .withParameter("bar", 1u)
            .withParameter("foo", 1l)
            .withParameter("hey", 1ul)
-           .withParameter("duh", 1.0f)
-           .withParameter("yoo", (const void*) 0)
-           .withParameterOfType("hoo", "int", (const void*) 0)
-           .withOutputParameter("gah", (void*) 0)
-           .withInputParameter("fos", (void*) 0);
+           .withParameter("duh", 1.0)
+           .withParameter("yoo", (const void*) NULLPTR)
+           .withParameter("func", (void(*)()) NULLPTR)
+           .withParameter("mem", (const unsigned char*) NULLPTR, 0)
+           .withParameterOfType("hoo", "int", (const void*) NULLPTR)
+           .withOutputParameter("gah", (void*) NULLPTR)
+           .withOutputParameterOfType("goo", "int", (void*) NULLPTR)
+           .withInputParameter("fos", (void*) NULLPTR);
 
     mock().checkExpectations();
 }

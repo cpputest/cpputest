@@ -18,12 +18,17 @@ set(CXX11_FLAG_CANDIDATES
     "-std=c++11"
     # Intel windows
     "/Qstd=c++0x"
+    "/Qstd=c++11"
     )
 
 set(CXX11_TEST_SOURCE
 "
-#if __cplusplus < 201103L
-#error \"Can not compile with C++11\"
+#if defined(_MSC_VER)
+  #if _MSC_VER < 1800
+    #error \"Can not compile with C++11\"
+  #endif
+#elif __cplusplus < 201103L
+  #error \"Can not compile with C++11\"
 #endif
 
 int main()

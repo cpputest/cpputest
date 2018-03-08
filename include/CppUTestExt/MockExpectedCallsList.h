@@ -39,13 +39,12 @@ public:
     virtual ~MockExpectedCallsList();
     virtual void deleteAllExpectationsAndClearList();
 
-    virtual int size() const;
-    virtual int amountOfExpectationsFor(const SimpleString& name) const;
-    virtual int amountOfUnfulfilledExpectations() const;
+    virtual unsigned int size() const;
+    virtual unsigned int amountOfActualCallsFulfilledFor(const SimpleString& name) const;
+    virtual unsigned int amountOfUnfulfilledExpectations() const;
     virtual bool hasUnfulfilledExpectations() const;
-    virtual bool hasFulfilledExpectations() const;
-    virtual bool hasFulfilledExpectationsWithoutIgnoredParameters() const;
-    virtual bool hasUnfulfilledExpectationsBecauseOfMissingParameters() const;
+    virtual bool hasFinalizedMatchingExpectations() const;
+    virtual bool hasUnmatchingExpectationsBecauseOfMissingParameters() const;
     virtual bool hasExpectationWithName(const SimpleString& name) const;
     virtual bool hasCallsOutOfOrder() const;
     virtual bool isEmpty() const;
@@ -53,22 +52,23 @@ public:
     virtual void addExpectedCall(MockCheckedExpectedCall* call);
     virtual void addExpectations(const MockExpectedCallsList& list);
     virtual void addExpectationsRelatedTo(const SimpleString& name, const MockExpectedCallsList& list);
-    virtual void addUnfulfilledExpectations(const MockExpectedCallsList& list);
+
+    virtual void onlyKeepOutOfOrderExpectations();
+    virtual void addPotentiallyMatchingExpectations(const MockExpectedCallsList& list);
 
     virtual void onlyKeepExpectationsRelatedTo(const SimpleString& name);
     virtual void onlyKeepExpectationsWithInputParameter(const MockNamedValue& parameter);
     virtual void onlyKeepExpectationsWithInputParameterName(const SimpleString& name);
     virtual void onlyKeepExpectationsWithOutputParameter(const MockNamedValue& parameter);
     virtual void onlyKeepExpectationsWithOutputParameterName(const SimpleString& name);
-    virtual void onlyKeepExpectationsOnObject(void* objectPtr);
-    virtual void onlyKeepUnfulfilledExpectations();
+    virtual void onlyKeepExpectationsOnObject(const void* objectPtr);
+    virtual void onlyKeepUnmatchingExpectations();
 
-    virtual MockCheckedExpectedCall* removeOneFulfilledExpectation();
-    virtual MockCheckedExpectedCall* removeOneFulfilledExpectationWithIgnoredParameters();
-    virtual MockCheckedExpectedCall* getOneFulfilledExpectationWithIgnoredParameters();
+    virtual MockCheckedExpectedCall* removeFirstFinalizedMatchingExpectation();
+    virtual MockCheckedExpectedCall* removeFirstMatchingExpectation();
+    virtual MockCheckedExpectedCall* getFirstMatchingExpectation();
 
-    virtual void resetExpectations();
-    virtual void callWasMade(int callOrder);
+    virtual void resetActualCallMatchingState();
     virtual void wasPassedToObject();
     virtual void parameterWasPassed(const SimpleString& parameterName);
     virtual void outputParameterWasPassed(const SimpleString& parameterName);
@@ -87,10 +87,9 @@ protected:
 
         MockExpectedCallsListNode* next_;
         MockExpectedCallsListNode(MockCheckedExpectedCall* expectedCall)
-            : expectedCall_(expectedCall), next_(NULL) {}
+            : expectedCall_(expectedCall), next_(NULLPTR) {}
     };
 
-    virtual MockExpectedCallsListNode* findNodeWithCallOrderOf(int callOrder) const;
 private:
     MockExpectedCallsListNode* head_;
 

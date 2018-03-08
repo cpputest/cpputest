@@ -61,22 +61,22 @@ static SimpleString addMarkerToString(const SimpleString& str, int markerPos)
 }
 
 TestFailure::TestFailure(UtestShell* test, const char* fileName, int lineNumber, const SimpleString& theMessage) :
-    testName_(test->getFormattedName()), fileName_(fileName), lineNumber_(lineNumber), testFileName_(test->getFile()), testLineNumber_(test->getLineNumber()), message_(theMessage)
+    testName_(test->getFormattedName()), testNameOnly_(test->getName()), fileName_(fileName), lineNumber_(lineNumber), testFileName_(test->getFile()), testLineNumber_(test->getLineNumber()), message_(theMessage)
 {
 }
 
 TestFailure::TestFailure(UtestShell* test, const SimpleString& theMessage) :
-    testName_(test->getFormattedName()), fileName_(test->getFile()), lineNumber_(test->getLineNumber()), testFileName_(test->getFile()), testLineNumber_(test->getLineNumber()), message_(theMessage)
+    testName_(test->getFormattedName()), testNameOnly_(test->getName()), fileName_(test->getFile()), lineNumber_(test->getLineNumber()), testFileName_(test->getFile()), testLineNumber_(test->getLineNumber()), message_(theMessage)
 {
 }
 
 TestFailure::TestFailure(UtestShell* test, const char* fileName, int lineNum) :
-    testName_(test->getFormattedName()), fileName_(fileName), lineNumber_(lineNum), testFileName_(test->getFile()), testLineNumber_(test->getLineNumber()), message_("no message")
+    testName_(test->getFormattedName()), testNameOnly_(test->getName()), fileName_(fileName), lineNumber_(lineNum), testFileName_(test->getFile()), testLineNumber_(test->getLineNumber()), message_("no message")
 {
 }
 
 TestFailure::TestFailure(const TestFailure& f) :
-    testName_(f.testName_), fileName_(f.fileName_), lineNumber_(f.lineNumber_), testFileName_(f.testFileName_), testLineNumber_(f.testLineNumber_), message_(f.message_)
+    testName_(f.testName_), testNameOnly_(f.testNameOnly_), fileName_(f.fileName_), lineNumber_(f.lineNumber_), testFileName_(f.testFileName_), testLineNumber_(f.testLineNumber_), message_(f.message_)
 {
 }
 
@@ -98,6 +98,11 @@ SimpleString TestFailure::getTestFileName() const
 SimpleString TestFailure::getTestName() const
 {
     return testName_;
+}
+
+SimpleString TestFailure::getTestNameOnly() const
+{
+    return testNameOnly_;
 }
 
 int TestFailure::getFailureLineNumber() const
@@ -157,7 +162,11 @@ SimpleString TestFailure::createUserText(const SimpleString& text)
     SimpleString userMessage = "";
     if (!text.isEmpty())
     {
-        userMessage += "Message: ";
+        //This is a kludge to turn off "Message: " for this case.
+        //I don't think "Message: " adds anything, as you get to see the
+        //message. I propose we remove "Message: " lead in
+        if (!text.startsWith("LONGS_EQUAL"))
+            userMessage += "Message: ";
         userMessage += text;
         userMessage += "\n\t";
     }
@@ -207,6 +216,16 @@ CheckEqualFailure::CheckEqualFailure(UtestShell* test, const char* fileName, int
 
 }
 
+ComparisonFailure::ComparisonFailure(UtestShell *test, const char *fileName, int lineNumber, const SimpleString& checkString, const SimpleString &comparisonString, const SimpleString &text)
+: TestFailure(test, fileName, lineNumber)
+{
+    message_ = createUserText(text);
+    message_ += checkString;
+    message_ += "(";
+    message_ += comparisonString;
+    message_ += ") failed";
+}
+
 ContainsFailure::ContainsFailure(UtestShell* test, const char* fileName, int lineNumber, const SimpleString& expected, const SimpleString& actual, const SimpleString& text)
 : TestFailure(test, fileName, lineNumber)
 {
@@ -237,15 +256,12 @@ LongsEqualFailure::LongsEqualFailure(UtestShell* test, const char* fileName, int
     message_ = createUserText(text);
 
     SimpleString aDecimal = StringFrom(actual);
-    SimpleString aHex = HexStringFrom(actual);
     SimpleString eDecimal = StringFrom(expected);
-    SimpleString eHex = HexStringFrom(expected);
 
     SimpleString::padStringsToSameLength(aDecimal, eDecimal, ' ');
-    SimpleString::padStringsToSameLength(aHex, eHex, '0');
 
-    SimpleString actualReported = aDecimal + " 0x" + aHex;
-    SimpleString expectedReported = eDecimal + " 0x" + eHex;
+    SimpleString actualReported = aDecimal + " " + BracketsFormattedHexStringFrom(actual);
+    SimpleString expectedReported = eDecimal + " " + BracketsFormattedHexStringFrom(expected);
     message_ += createButWasString(expectedReported, actualReported);
 }
 
@@ -255,15 +271,58 @@ UnsignedLongsEqualFailure::UnsignedLongsEqualFailure(UtestShell* test, const cha
     message_ = createUserText(text);
 
     SimpleString aDecimal = StringFrom(actual);
-    SimpleString aHex = HexStringFrom(actual);
     SimpleString eDecimal = StringFrom(expected);
-    SimpleString eHex = HexStringFrom(expected);
 
     SimpleString::padStringsToSameLength(aDecimal, eDecimal, ' ');
-    SimpleString::padStringsToSameLength(aHex, eHex, '0');
 
-    SimpleString actualReported = aDecimal + " 0x" + aHex;
-    SimpleString expectedReported = eDecimal + " 0x" + eHex;
+    SimpleString actualReported = aDecimal + " " + BracketsFormattedHexStringFrom(actual);
+    SimpleString expectedReported = eDecimal + " " + BracketsFormattedHexStringFrom(expected);
+
+    message_ += createButWasString(expectedReported, actualReported);
+}
+
+LongLongsEqualFailure::LongLongsEqualFailure(UtestShell* test, const char* fileName, int lineNumber, cpputest_longlong expected, cpputest_longlong actual, const SimpleString& text)
+: TestFailure(test, fileName, lineNumber)
+{
+    message_ = createUserText(text);
+
+    SimpleString aDecimal = StringFrom(actual);
+    SimpleString eDecimal = StringFrom(expected);
+
+    SimpleString::padStringsToSameLength(aDecimal, eDecimal, ' ');
+
+    SimpleString actualReported = aDecimal + " " + BracketsFormattedHexStringFrom(actual);
+    SimpleString expectedReported = eDecimal + " " + BracketsFormattedHexStringFrom(expected);
+    message_ += createButWasString(expectedReported, actualReported);
+}
+
+UnsignedLongLongsEqualFailure::UnsignedLongLongsEqualFailure(UtestShell* test, const char* fileName, int lineNumber, cpputest_ulonglong expected, cpputest_ulonglong actual, const SimpleString& text)
+: TestFailure(test, fileName, lineNumber)
+{
+    message_ = createUserText(text);
+
+    SimpleString aDecimal = StringFrom(actual);
+    SimpleString eDecimal = StringFrom(expected);
+
+    SimpleString::padStringsToSameLength(aDecimal, eDecimal, ' ');
+
+    SimpleString actualReported = aDecimal + " " + BracketsFormattedHexStringFrom(actual);
+    SimpleString expectedReported = eDecimal + " " + BracketsFormattedHexStringFrom(expected);
+    message_ += createButWasString(expectedReported, actualReported);
+}
+
+SignedBytesEqualFailure::SignedBytesEqualFailure (UtestShell* test, const char* fileName, int lineNumber, signed char expected, signed char actual, const SimpleString& text)
+: TestFailure(test, fileName, lineNumber)
+{
+    message_ = createUserText(text);
+
+    SimpleString aDecimal = StringFrom((int)actual);
+    SimpleString eDecimal = StringFrom((int)expected);
+
+    SimpleString::padStringsToSameLength(aDecimal, eDecimal, ' ');
+
+    SimpleString actualReported = aDecimal + " " + BracketsFormattedHexStringFrom(actual);
+    SimpleString expectedReported = eDecimal + " " + BracketsFormattedHexStringFrom(expected);
     message_ += createButWasString(expectedReported, actualReported);
 }
 
@@ -320,4 +379,13 @@ BitsEqualFailure::BitsEqualFailure(UtestShell* test, const char* fileName, int l
     message_ = createUserText(text);
 
     message_ += createButWasString(StringFromMaskedBits(expected, mask, byteCount), StringFromMaskedBits(actual, mask, byteCount));
+}
+
+FeatureUnsupportedFailure::FeatureUnsupportedFailure(UtestShell* test, const char* fileName, int lineNumber,
+                                                     const SimpleString& featureName, const SimpleString& text)
+: TestFailure(test, fileName, lineNumber)
+{
+    message_ = createUserText(text);
+
+    message_ += StringFromFormat("The feature \"%s\" is not supported in this environment or with the feature set selected when building the library.", featureName.asCharString());;
 }

@@ -3,6 +3,8 @@ set(CppUTestExtTests_src
     CodeMemoryReporterTest.cpp
     GMockTest.cpp
     GTest1Test.cpp
+    IEEE754PluginTest.cpp
+    IEEE754PluginTest_c.c
     MemoryReportAllocatorTest.cpp
     MemoryReporterPluginTest.cpp
     MemoryReportFormatterTest.cpp
@@ -12,6 +14,7 @@ set(CppUTestExtTests_src
     MockComparatorCopierTest.cpp
     MockExpectedCallTest.cpp
     ExpectedFunctionsListTest.cpp
+    MockFailureReporterForTest.cpp
     MockFailureTest.cpp
     MockHierarchyTest.cpp
     MockNamedValueTest.cpp
@@ -31,5 +34,6 @@ if (MINGW)
 endif (MINGW)
 
 add_executable(CppUTestExtTests ${CppUTestExtTests_src})
+cpputest_normalize_test_output_location(CppUTestExtTests)
 target_link_libraries(CppUTestExtTests CppUTest CppUTestExt ${THREAD_LIB} ${CPPUNIT_EXTERNAL_LIBRARIES})
-cpputest_buildtime_discover_tests (CppUTestExtTests)
+cpputest_buildtime_discover_tests(CppUTestExtTests)

@@ -1,19 +1,40 @@
 version: 3.7.0-ci{build}
 
-os:
-- Windows Server 2012 R2
+image: Visual Studio 2015
+
+cache:
+  - C:\ProgramData\chocolatey\bin -> appveyor.yml
+  - C:\ProgramData\chocolatey\lib -> appveyor.yml
+  - C:\Tools\MinGW32 -> appveyor.yml
+  - C:\Tools\MinGW64 -> appveyor.yml
 
 environment:
+  Configuration: Release
   matrix:
-  - PlatformToolset: MinGW
-    Platform: Win32
-  - PlatformToolset: MinGW
-    Platform: x64
-  - PlatformToolset: v90
-  - PlatformToolset: v100
+  - Platform: Cygwin32
+  - Platform: MinGW32
+    PlatformToolset: 4.8.5
+  - Platform: MinGW64
+    PlatformToolset: 4.8.5
+  - Platform: MinGW32
+    PlatformToolset: 5.3.0
+  - Platform: MinGW64
+    PlatformToolset: 5.3.0
+  - Platform: Win32
+    PlatformToolset: v90
+  - Platform: Win32
+    PlatformToolset: v100
+  - Platform: Win32
+    PlatformToolset: v110
+  - Platform: Win32
+    PlatformToolset: v120
+  - Platform: Win32
+    PlatformToolset: v140
+  - Platform: x64
+    PlatformToolset: v140
 
 install:
-- ps: if ($env:PlatformToolset -eq 'MinGW') { choco install mingw $( if ($env:Platform -eq 'Win32') { Write-Output -forcex86 } ) }
+- ps: if ($env:Platform -like 'MinGW*') { choco install mingw --version $env:PlatformToolset $( if ($env:Platform -like '*32') { Write-Output --forcex86 } ) }
 
 build_script:
 - ps: scripts\appveyor_ci_build.ps1
@@ -24,7 +45,3 @@ test_script:
 artifacts:
 - path: lib\CppUTest.lib
   name: CppUTest
-
-# Other configuration options
-platform: Win32
-configuration: Release

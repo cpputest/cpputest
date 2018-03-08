@@ -30,13 +30,13 @@
 #include "CppUTestExt/MemoryReporterPlugin.h"
 #include "CppUTestExt/MockSupportPlugin.h"
 
-#ifdef INCLUDE_GTEST_TESTS
+#ifdef CPPUTEST_INCLUDE_GTEST_TESTS
 #include "CppUTestExt/GTestConvertor.h"
 #endif
 
-int main(int ac, const char** av)
+int main(int ac, const char *const *av)
 {
-#ifdef INCLUDE_GTEST_TESTS
+#ifdef CPPUTEST_INCLUDE_GTEST_TESTS
     GTestConvertor convertor;
     convertor.addAllGTestToTestRegistry();
 #endif

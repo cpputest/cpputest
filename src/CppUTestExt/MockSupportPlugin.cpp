@@ -69,9 +69,10 @@ void MockSupportPlugin::postTestAction(UtestShell& test, TestResult& result)
 {
     MockSupportPluginReporter reporter(test, result);
     mock().setMockFailureStandardReporter(&reporter);
-    mock().checkExpectations();
+    if (!test.hasFailed())
+        mock().checkExpectations();
     mock().clear();
-    mock().setMockFailureStandardReporter(NULL);
+    mock().setMockFailureStandardReporter(NULLPTR);
     mock().removeAllComparatorsAndCopiers();
 }
 

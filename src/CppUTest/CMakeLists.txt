@@ -1,4 +1,4 @@
-set(CppUTest_src
+add_library(CppUTest
         CommandLineArguments.cpp
         MemoryLeakWarningPlugin.cpp
         TestHarness_c.cpp
@@ -8,14 +8,30 @@ set(CppUTest_src
         TestMemoryAllocator.cpp
         TestResult.cpp
         JUnitTestOutput.cpp
+        TeamCityTestOutput.cpp
         TestFailure.cpp
         TestOutput.cpp
         MemoryLeakDetector.cpp
         TestFilter.cpp
         TestPlugin.cpp
+        TestTestingFixture.cpp
         SimpleMutex.cpp
         Utest.cpp
-        ../Platforms/${CPP_PLATFORM}/UtestPlatform.cpp
+)
+
+#[[Set CPP_PLATFORM in a parent CMakeLists.txt if reusing one of the provided platforms, else supply the missing definitions]]
+if (CPP_PLATFORM)
+    target_sources(CppUTest
+        PRIVATE
+            ../Platforms/${CPP_PLATFORM}/UtestPlatform.cpp
+    )
+endif(CPP_PLATFORM)
+
+#[[Arrange for the include directory to be added to the include paths of any CMake target depending on CppUTest.]]
+target_include_directories(CppUTest
+    PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../include>
+        $<INSTALL_INTERFACE:include/CppUTest>
 )
 
 set(CppUTest_headers
@@ -29,6 +45,7 @@ set(CppUTest_headers
         ${CppUTestRootDirectory}/include/CppUTest/SimpleString.h
         ${CppUTestRootDirectory}/include/CppUTest/TestPlugin.h
         ${CppUTestRootDirectory}/include/CppUTest/JUnitTestOutput.h
+        ${CppUTestRootDirectory}/include/CppUTest/TeamCityTestOutput.h
         ${CppUTestRootDirectory}/include/CppUTest/StandardCLibrary.h
         ${CppUTestRootDirectory}/include/CppUTest/TestRegistry.h
         ${CppUTestRootDirectory}/include/CppUTest/MemoryLeakDetector.h
@@ -45,7 +62,6 @@ set(CppUTest_headers
         ${CppUTestRootDirectory}/include/CppUTest/UtestMacros.h
 )
 
-add_library(CppUTest STATIC ${CppUTest_src} ${CppUTest_headers})
 if (WIN32)
     target_link_libraries(CppUTest winmm.lib)
 endif (WIN32)

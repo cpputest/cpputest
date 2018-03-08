@@ -33,14 +33,14 @@
 static char* checkedMalloc(size_t size)
 {
     char* mem = (char*) PlatformSpecificMalloc(size);
-    if (mem == 0)
+    if (mem == NULLPTR)
     FAIL("malloc returned null pointer");
     return mem;
 }
 
-static TestMemoryAllocator* currentNewAllocator = 0;
-static TestMemoryAllocator* currentNewArrayAllocator = 0;
-static TestMemoryAllocator* currentMallocAllocator = 0;
+static TestMemoryAllocator* currentNewAllocator = NULLPTR;
+static TestMemoryAllocator* currentNewArrayAllocator = NULLPTR;
+static TestMemoryAllocator* currentMallocAllocator = NULLPTR;
 
 void setCurrentNewAllocator(TestMemoryAllocator* allocator)
 {
@@ -49,7 +49,7 @@ void setCurrentNewAllocator(TestMemoryAllocator* allocator)
 
 TestMemoryAllocator* getCurrentNewAllocator()
 {
-    if (currentNewAllocator == 0) setCurrentNewAllocatorToDefault();
+    if (currentNewAllocator == NULLPTR) setCurrentNewAllocatorToDefault();
     return currentNewAllocator;
 }
 
@@ -71,7 +71,7 @@ void setCurrentNewArrayAllocator(TestMemoryAllocator* allocator)
 
 TestMemoryAllocator* getCurrentNewArrayAllocator()
 {
-    if (currentNewArrayAllocator == 0) setCurrentNewArrayAllocatorToDefault();
+    if (currentNewArrayAllocator == NULLPTR) setCurrentNewArrayAllocatorToDefault();
     return currentNewArrayAllocator;
 }
 
@@ -93,7 +93,7 @@ void setCurrentMallocAllocator(TestMemoryAllocator* allocator)
 
 TestMemoryAllocator* getCurrentMallocAllocator()
 {
-    if (currentMallocAllocator == 0) setCurrentMallocAllocatorToDefault();
+    if (currentMallocAllocator == NULLPTR) setCurrentMallocAllocatorToDefault();
     return currentMallocAllocator;
 }
 
@@ -149,17 +149,17 @@ void TestMemoryAllocator::free_memory(char* memory, const char*, int)
 {
     PlatformSpecificFree(memory);
 }
-const char* TestMemoryAllocator::name()
+const char* TestMemoryAllocator::name() const
 {
     return name_;
 }
 
-const char* TestMemoryAllocator::alloc_name()
+const char* TestMemoryAllocator::alloc_name() const
 {
     return alloc_name_;
 }
 
-const char* TestMemoryAllocator::free_name()
+const char* TestMemoryAllocator::free_name() const
 {
     return free_name_;
 }
@@ -184,7 +184,7 @@ char* CrashOnAllocationAllocator::alloc_memory(size_t size, const char* file, in
 
 char* NullUnknownAllocator::alloc_memory(size_t /*size*/, const char*, int)
 {
-    return 0;
+    return NULLPTR;
 }
 
 void NullUnknownAllocator::free_memory(char* /*memory*/, const char*, int)
@@ -238,11 +238,11 @@ class LocationToFailAllocNode
     }
 
   private:
-    void init(LocationToFailAllocNode* next = NULL)
+    void init(LocationToFailAllocNode* next = NULLPTR)
     {
       allocNumberToFail_ = 0;
       actualAllocNumber_ = 0;
-      file_ = NULL;
+      file_ = NULLPTR;
       line_ = 0;
       next_ = next;
     }
@@ -250,7 +250,7 @@ class LocationToFailAllocNode
 };
 
 FailableMemoryAllocator::FailableMemoryAllocator(const char* name_str, const char* alloc_name_str, const char* free_name_str)
-: TestMemoryAllocator(name_str, alloc_name_str, free_name_str), head_(NULL), currentAllocNumber_(0)
+: TestMemoryAllocator(name_str, alloc_name_str, free_name_str), head_(NULLPTR), currentAllocNumber_(0)
 {
 }
 
@@ -272,7 +272,7 @@ char* FailableMemoryAllocator::alloc_memory(size_t size, const char* file, int l
 {
     currentAllocNumber_++;
     LocationToFailAllocNode* current = head_;
-    LocationToFailAllocNode* previous = NULL;
+    LocationToFailAllocNode* previous = NULLPTR;
 
     while (current) {
       if (current->shouldFail(currentAllocNumber_, file, line)) {
@@ -280,7 +280,7 @@ char* FailableMemoryAllocator::alloc_memory(size_t size, const char* file, int l
         else head_ = current->next_;
 
         free_memory((char*) current, __FILE__, __LINE__);
-        return NULL;
+        return NULLPTR;
       }
       previous = current;
       current = current->next_;

@@ -40,6 +40,7 @@ lib_libCppUTest_a_SOURCES = \
 	src/CppUTest/MemoryLeakWarningPlugin.cpp \
 	src/CppUTest/SimpleString.cpp \
 	src/CppUTest/SimpleMutex.cpp \
+	src/CppUTest/TeamCityTestOutput.cpp \
 	src/CppUTest/TestFailure.cpp \
 	src/CppUTest/TestFilter.cpp \
 	src/CppUTest/TestHarness_c.cpp \
@@ -48,8 +49,9 @@ lib_libCppUTest_a_SOURCES = \
 	src/CppUTest/TestPlugin.cpp \
 	src/CppUTest/TestRegistry.cpp \
 	src/CppUTest/TestResult.cpp \
+	src/CppUTest/TestTestingFixture.cpp \
 	src/CppUTest/Utest.cpp \
-	src/Platforms/$(CPP_PLATFORM)/UtestPlatform.cpp
+	src/Platforms/@CPP_PLATFORM@/UtestPlatform.cpp
 
 include_cpputestdir = $(includedir)/CppUTest
 
@@ -67,6 +69,7 @@ include_cpputest_HEADERS = \
 	include/CppUTest/SimpleString.h \
 	include/CppUTest/SimpleMutex.h \
 	include/CppUTest/StandardCLibrary.h \
+	include/CppUTest/TeamCityTestOutput.h \
 	include/CppUTest/TestFailure.h \
 	include/CppUTest/TestFilter.h \
 	include/CppUTest/TestHarness.h \
@@ -78,7 +81,8 @@ include_cpputest_HEADERS = \
 	include/CppUTest/TestResult.h \
 	include/CppUTest/TestTestingFixture.h \
 	include/CppUTest/Utest.h \
-	include/CppUTest/UtestMacros.h
+	include/CppUTest/UtestMacros.h \
+	generated/CppUTestGeneratedConfig.h
 
 lib_libCppUTestExt_a_CPPFLAGS = $(lib_libCppUTest_a_CPPFLAGS)
 lib_libCppUTestExt_a_CFLAGS = $(lib_libCppUTest_a_CFLAGS)
@@ -86,6 +90,7 @@ lib_libCppUTestExt_a_CXXFLAGS = $(lib_libCppUTest_a_CXXFLAGS)
 
 lib_libCppUTestExt_a_SOURCES = \
    src/CppUTestExt/CodeMemoryReportFormatter.cpp \
+   src/CppUTestExt/IEEE754ExceptionsPlugin.cpp \
    src/CppUTestExt/MemoryReportAllocator.cpp \
    src/CppUTestExt/MemoryReporterPlugin.cpp \
    src/CppUTestExt/MemoryReportFormatter.cpp \
@@ -106,6 +111,7 @@ include_cpputestext_HEADERS = \
 	include/CppUTestExt/GMock.h \
 	include/CppUTestExt/GTest.h \
 	include/CppUTestExt/GTestConvertor.h \
+	include/CppUTestExt/IEEE754ExceptionsPlugin.h \
 	include/CppUTestExt/MemoryReportAllocator.h \
 	include/CppUTestExt/MemoryReporterPlugin.h \
 	include/CppUTestExt/MemoryReportFormatter.h \
@@ -130,36 +136,38 @@ CppUTestTests_LDADD = lib/libCppUTest.a $(CPPUTEST_LDADD)
 CppUTestTests_LDFLAGS = $(AM_LDFLAGS) $(CPPUTEST_LDFLAGS) $(CPPUTEST_ADDITIONAL_LDFLAGS)
 
 CppUTestTests_SOURCES = \
-	tests/AllocationInCFile.c \
-	tests/AllocationInCppFile.cpp \
-	tests/AllocLetTestFree.c \
-	tests/AllocLetTestFreeTest.cpp \
-	tests/AllTests.cpp \
-	tests/CheatSheetTest.cpp \
-	tests/CommandLineArgumentsTest.cpp \
-	tests/CommandLineTestRunnerTest.cpp \
-	tests/JUnitOutputTest.cpp \
-	tests/MemoryLeakDetectorTest.cpp \
-	tests/MemoryOperatorOverloadTest.cpp \
-	tests/MemoryLeakWarningTest.cpp \
-	tests/PluginTest.cpp \
-	tests/PreprocessorTest.cpp \
-	tests/SetPluginTest.cpp \
-	tests/SimpleStringTest.cpp \
-	tests/SimpleMutexTest.cpp \
-	tests/TestFailureNaNTest.cpp \
-	tests/TestFailureTest.cpp \
-	tests/TestFilterTest.cpp \
-	tests/TestHarness_cTest.cpp \
-	tests/TestHarness_cTestCFile.c \
-	tests/TestInstallerTest.cpp \
-	tests/TestMemoryAllocatorTest.cpp \
-	tests/TestOutputTest.cpp \
-	tests/TestRegistryTest.cpp \
-	tests/TestResultTest.cpp \
-	tests/TestUTestMacro.cpp \
-	tests/UtestTest.cpp \
-	tests/UtestPlatformTest.cpp
+	tests/CppUTest/AllocationInCFile.c \
+	tests/CppUTest/AllocationInCppFile.cpp \
+	tests/CppUTest/AllocLetTestFree.c \
+	tests/CppUTest/AllocLetTestFreeTest.cpp \
+	tests/CppUTest/AllTests.cpp \
+	tests/CppUTest/CheatSheetTest.cpp \
+	tests/CppUTest/CommandLineArgumentsTest.cpp \
+	tests/CppUTest/CommandLineTestRunnerTest.cpp \
+	tests/CppUTest/JUnitOutputTest.cpp \
+	tests/CppUTest/MemoryLeakDetectorTest.cpp \
+	tests/CppUTest/MemoryOperatorOverloadTest.cpp \
+	tests/CppUTest/MemoryLeakWarningTest.cpp \
+	tests/CppUTest/PluginTest.cpp \
+	tests/CppUTest/PreprocessorTest.cpp \
+	tests/CppUTest/SetPluginTest.cpp \
+	tests/CppUTest/SimpleStringTest.cpp \
+	tests/CppUTest/SimpleMutexTest.cpp \
+	tests/CppUTest/TeamCityOutputTest.cpp \
+	tests/CppUTest/TestFailureNaNTest.cpp \
+	tests/CppUTest/TestFailureTest.cpp \
+	tests/CppUTest/TestFilterTest.cpp \
+	tests/CppUTest/TestHarness_cTest.cpp \
+	tests/CppUTest/TestHarness_cTestCFile.c \
+	tests/CppUTest/TestInstallerTest.cpp \
+	tests/CppUTest/TestMemoryAllocatorTest.cpp \
+	tests/CppUTest/TestOutputTest.cpp \
+	tests/CppUTest/TestRegistryTest.cpp \
+	tests/CppUTest/TestResultTest.cpp \
+	tests/CppUTest/TestUTestMacro.cpp \
+	tests/CppUTest/TestUTestStringMacro.cpp \
+	tests/CppUTest/UtestTest.cpp \
+	tests/CppUTest/UtestPlatformTest.cpp
 
 CppUTestExtTests_CPPFLAGS = $(lib_libCppUTestExt_a_CPPFLAGS)
 CppUTestExtTests_CFLAGS = $(lib_libCppUTestExt_a_CFLAGS)
@@ -173,6 +181,8 @@ CppUTestExtTests_SOURCES = \
 	tests/CppUTestExt/GMockTest.cpp \
 	tests/CppUTestExt/GTest1Test.cpp \
 	tests/CppUTestExt/GTest2ConvertorTest.cpp \
+	tests/CppUTestExt/IEEE754PluginTest.cpp \
+	tests/CppUTestExt/IEEE754PluginTest_c.c \
 	tests/CppUTestExt/MemoryReportAllocatorTest.cpp \
 	tests/CppUTestExt/MemoryReporterPluginTest.cpp \
 	tests/CppUTestExt/MemoryReportFormatterTest.cpp \
@@ -182,6 +192,7 @@ CppUTestExtTests_SOURCES = \
 	tests/CppUTestExt/MockComparatorCopierTest.cpp \
 	tests/CppUTestExt/MockExpectedCallTest.cpp \
 	tests/CppUTestExt/ExpectedFunctionsListTest.cpp \
+	tests/CppUTestExt/MockFailureReporterForTest.cpp \
 	tests/CppUTestExt/MockFailureTest.cpp \
 	tests/CppUTestExt/MockHierarchyTest.cpp \
 	tests/CppUTestExt/MockNamedValueTest.cpp \
@@ -193,6 +204,10 @@ CppUTestExtTests_SOURCES = \
 	tests/CppUTestExt/MockStrictOrderTest.cpp \
 	tests/CppUTestExt/MockReturnValueTest.cpp \
 	tests/CppUTestExt/OrderedTestTest.cpp
+
+DISTCLEANFILES = \
+	filename.map.txt \
+	generated/CppUTestGeneratedConfig.h
 
 if INCLUDE_GMOCKTESTS
 
@@ -220,45 +235,64 @@ if INCLUDE_CPPUTEST_EXT
 	./$(CPPUTESTEXT_TESTS)
 endif
 
+cpputest_build_gtest18:
+	mkdir -p cpputest_build_gtest18
+	cd cpputest_build_gtest18; \
+	wget https://github.com/google/googletest/archive/release-1.8.0.zip -O gtest-1.8.0.zip  && unzip gtest-1.8.0.zip; \
+	cd googletest-release-1.8.0; cmake .; make
+
 cpputest_build_gtest17:
 	mkdir -p cpputest_build_gtest17
 	cd cpputest_build_gtest17; \
-	wget https://googlemock.googlecode.com/files/gmock-1.7.0.zip && unzip gmock-1.7.0.zip
-	cd cpputest_build_gtest17/gmock-1.7.0; ./configure && make check
+	wget https://github.com/google/googletest/archive/release-1.7.0.zip -O gtest-1.7.0.zip  && unzip gtest-1.7.0.zip; \
+	wget https://github.com/google/googlemock/archive/release-1.7.0.zip -O gmock-1.7.0.zip  && unzip gmock-1.7.0.zip; \
+	mv googletest-release-1.7.0 googlemock-release-1.7.0/gtest; \
+	cd googlemock-release-1.7.0; autoreconf -i; ./configure && make
 
 cpputest_build_gtest16:
 	mkdir -p cpputest_build_gtest16
 	cd cpputest_build_gtest16; \
-	wget https://googlemock.googlecode.com/files/gmock-1.6.0.zip && unzip gmock-1.6.0.zip
-	cd cpputest_build_gtest16/gmock-1.6.0; ./configure CXXFLAGS=-DGTEST_USE_OWN_TR1_TUPLE=1 && make check
+	wget https://github.com/google/googletest/archive/release-1.6.0.zip -O gtest-1.6.0.zip  && unzip gtest-1.6.0.zip; \
+	wget https://github.com/google/googlemock/archive/release-1.6.0.zip -O gmock-1.6.0.zip  && unzip gmock-1.6.0.zip; \
+	mv googletest-release-1.6.0 googlemock-release-1.6.0/gtest; \
+	cd googlemock-release-1.6.0; autoreconf -i; ./configure CXXFLAGS=-DGTEST_USE_OWN_TR1_TUPLE=1 && make
 
 cpputest_build_gtest15:
 	mkdir -p cpputest_build_gtest15
 	cd cpputest_build_gtest15; \
-	wget https://googlemock.googlecode.com/files/gmock-1.5.0.zip && unzip gmock-1.5.0.zip
-	cd cpputest_build_gtest15/gmock-1.5.0; ./configure CXXFLAGS=-DGTEST_USE_OWN_TR1_TUPLE=1 && make
+	wget https://github.com/google/googletest/archive/release-1.5.0.zip -O gtest-1.5.0.zip  && unzip gtest-1.5.0.zip; \
+	wget https://github.com/google/googlemock/archive/release-1.5.0.zip -O gmock-1.5.0.zip  && unzip gmock-1.5.0.zip; \
+	mv googletest-release-1.5.0 googlemock-release-1.5.0/gtest; \
+	cd googlemock-release-1.5.0; autoreconf -i; ./configure CXXFLAGS=-DGTEST_USE_OWN_TR1_TUPLE=1 && make
 
 check_gtest15: cpputest_build_gtest15
 	@echo "Build using gmock 1.5";
-	export GMOCK_HOME=`pwd`/cpputest_build_gtest15/gmock-1.5.0; \
+	export GMOCK_HOME=`pwd`/cpputest_build_gtest15/googlemock-release-1.5.0; \
 	make distclean; $(srcdir)/configure; make check
 
 check_gtest16: cpputest_build_gtest16
 	@echo "Build using gmock 1.6";
-	export GMOCK_HOME=`pwd`/cpputest_build_gtest16/gmock-1.6.0; \
+	export GMOCK_HOME=`pwd`/cpputest_build_gtest16/googlemock-release-1.6.0; \
 	make distclean; $(srcdir)/configure; make check
 
 check_gtest17: cpputest_build_gtest17
 	@echo "Build using gmock 1.7"
-	export GMOCK_HOME=`pwd`/cpputest_build_gtest17/gmock-1.7.0; \
+	export GMOCK_HOME=`pwd`/cpputest_build_gtest17/googlemock-release-1.7.0; \
+	make distclean; $(srcdir)/configure; make check
+
+check_gtest18: cpputest_build_gtest18
+	@echo "Build using gmock 1.8"
+	export GMOCK_HOME=`pwd`/cpputest_build_gtest18/googletest-release-1.8.0/googlemock; \
+	export GTEST_HOME=`pwd`/cpputest_build_gtest18/googletest-release-1.8.0/googletest; \
 	make distclean; $(srcdir)/configure; make check
 
 remove_gtest_directories:
 	rm -rf cpputest_build_gtest15
 	rm -rf cpputest_build_gtest16
 	rm -rf cpputest_build_gtest17
+	rm -rf cpputest_build_gtest18
 
-check_gtest: remove_gtest_directories check_gtest15 check_gtest16 check_gtest17
+check_gtest: remove_gtest_directories check_gtest15 check_gtest16 check_gtest17 check_gtest18
 
 check_basic:
 	@echo "If dash is available, run the configure with dash to find bash-isms and increase portability"
@@ -275,11 +309,14 @@ check_basic:
 	@echo "Building with the Std C++ 11 turned on. Compiler acts differently then."
 	make distclean; $(srcdir)/configure --enable-std-cpp11; make
 
+	@echo "Building with the Std C++ 14 turned on. Compiler acts differently then."
+	make distclean; $(srcdir)/configure --enable-std-cpp14; make
+
 	@echo "Building without the Standard C library"
 	make distclean; $(srcdir)/configure --disable-std-c; make
 
-	@echo "Building without the Standard C++ library"
-	make distclean; $(srcdir)/configure --disable-std-cpp; make check
+	@echo "Building without the Standard C++ library and without long long"
+	make distclean; $(srcdir)/configure --disable-std-cpp --disable-long-long; make check
 
 	@echo "Building without memory leak detection"
 	make distclean; $(srcdir)/configure --disable-memory-leak-detection; make check
@@ -361,4 +398,7 @@ dist-hook:
 			exit 1; \
 		fi \
 	fi
+
+distclean-local:
+	test -z "generated" || rmdir generated
 

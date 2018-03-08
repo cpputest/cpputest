@@ -8,7 +8,7 @@ CppUTest unit testing and mocking framework for C/C++
 Travis Linux build status:
 [![Build Status](https://travis-ci.org/cpputest/cpputest.png?branch=master)](https://travis-ci.org/cpputest/cpputest)
 
-AppVeyer Windows build status:
+AppVeyor Windows build status:
 [![Build status](https://ci.appveyor.com/api/projects/status/irh38i4wblsb5tew?svg=true)](https://ci.appveyor.com/project/basvodde/cpputest)
 
 Coverage:
@@ -36,7 +36,7 @@ You can also use CMake, which also works for Windows Visual Studio.
 Then to get started, you'll need to do the following:
 * Add the include path to the Makefile. Something like:
     * CPPFLAGS += -I(CPPUTEST_HOME)/include
-* Add the memory leak macros to you Makefile (needed for additional debug info!). Something like:
+* Add the memory leak macros to your Makefile (needed for additional debug info!). Something like:
     * CXXFLAGS += -include $(CPPUTEST_HOME)/include/CppUTest/MemoryLeakDetectorNewMacros.h
     * CFLAGS += -include $(CPPUTEST_HOME)/include/CppUTest/MemoryLeakDetectorMallocMacros.h
 * Add the library linking to your Makefile. Something like:
@@ -58,7 +58,7 @@ TEST(FirstTestGroup, FirstTest)
 ## Command line switches
 
 * -v verbose, print each test name as it runs
-* -r# repeat the tests some number of times, default is one, default is # is not specified is 2. This is handy if you are experiencing memory leaks related to statics and caches.
+* -r# repeat the tests some number of times, default is one, default if # is not specified is 2. This is handy if you are experiencing memory leaks related to statics and caches.
 * -g group only run test whose group contains the substring group
 * -n name only run test whose name contains the substring name
 
@@ -91,12 +91,12 @@ The failure of one of these macros causes the current test to immediately exit
 * POINTERS_EQUAL(expected, actual) - Compares two const void *
 * DOUBLES_EQUAL(expected, actual, tolerance) - Compares two doubles within some tolerance
 * FAIL(text) - always fails
+* TEST_EXIT - Exit the test without failure - useful for contract testing (implementing an assert fake)
 
 
 Customize CHECK_EQUAL to work with your types that support operator==()
 
-* Create the function:
-** SimpleString StringFrom (const yourType&)
+* Create the function: `SimpleString StringFrom(const yourType&)`
 
 The Extensions directory has a few of these.
 
@@ -104,7 +104,6 @@ The Extensions directory has a few of these.
 
 * CppUTest can support extra checking functionality by inserting TestPlugins
 * TestPlugin is derived from the TestPlugin class and can be inserted in the TestRegistry via the installPlugin method.
-* All TestPlugins are called before and after running all tests and before and after running a single test (like Setup and Teardown). TestPlugins are typically inserted in the main.
 * TestPlugins can be used for, for example, system stability and resource handling like files, memory or network connection clean-up.
 * In CppUTest, the memory leak detection is done via a default enabled TestPlugin
 
@@ -149,20 +148,18 @@ TEST(MemoryLeakWarningTest, Ignore1)
 ## Example Main
 
 ```C++
-#include "UnitTestHarness/CommandLineTestRunner.h"
+#include "CppUTest/CommandLineTestRunner.h"
 
 int main(int ac, char** av)
 {
-  return CommandLineTestRunner::RunAllTests(ac, av);
+  return RUN_ALL_TESTS(ac, av);
 }
-
-IMPORT_TEST_GROUP(ClassName)
 ```
 
 ## Example Test
 
 ```C++
-#include "UnitTestHarness/TestHarness.h"
+#include "CppUTest/TestHarness.h"
 #include "ClassName.h"
 
 TEST_GROUP(ClassName)

@@ -99,7 +99,7 @@ CLEAN :
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
-CPP_PROJ=/nologo /ML /W3 /GX /O2 /I "..\include" /I "..\include\Platforms\VisualCpp" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /D "CPPUTEST_MEM_LEAK_DETECTION_DISABLED" /Fp"$(INTDIR)\AllTests.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
+CPP_PROJ=/nologo /ML /W3 /GX /O2 /I "..\include" /I "..\include\Platforms\VisualCpp" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /D "CPPUTEST_MEM_LEAK_DETECTION_DISABLED" /D "CPPUTEST_USE_LONG_LONG" /Fp"$(INTDIR)\AllTests.pch" /YX /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c 
 BSC32=bscmake.exe
 BSC32_FLAGS=/nologo /o"$(OUTDIR)\AllTests.bsc" 
 BSC32_SBRS= \
@@ -284,7 +284,7 @@ CLEAN :
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
 
-CPP_PROJ=/nologo /MDd /W3 /GX /ZI /Od /I "..\include" /I "..\include\Platforms\VisualCpp" /FI"CppUTest/MemoryLeakDetectorMallocMacros.h" /FI"CppUTest/MemoryLeakDetectorNewMacros.h" /D "_CONSOLE" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "CPPUTEST_MEM_LEAK_DETECTION_DISABLED" /FR"$(INTDIR)\\" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
+CPP_PROJ=/nologo /MDd /W3 /GX /ZI /Od /I "..\include" /I "..\include\Platforms\VisualCpp" /FI"CppUTest/MemoryLeakDetectorMallocMacros.h" /FI"CppUTest/MemoryLeakDetectorNewMacros.h" /D "_CONSOLE" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "CPPUTEST_MEM_LEAK_DETECTION_DISABLED" /D "CPPUTEST_USE_LONG_LONG" /FR"$(INTDIR)\\" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c 
 BSC32=bscmake.exe
 BSC32_FLAGS=/nologo /o"$(OUTDIR)\AllTests.bsc" 
 BSC32_SBRS= \
@@ -443,7 +443,7 @@ $(DS_POSTBUILD_DEP) : "CppUTest - Win32 Debug" "$(OUTDIR)\AllTests.exe" "$(OUTDI
 
 
 !IF "$(CFG)" == "AllTests - Win32 Release" || "$(CFG)" == "AllTests - Win32 Debug"
-SOURCE=.\AllocationInCFile.c
+SOURCE=.\CppUTest\AllocationInCFile.c
 
 !IF  "$(CFG)" == "AllTests - Win32 Release"
 
@@ -459,7 +459,7 @@ SOURCE=.\AllocationInCFile.c
 
 !ENDIF 
 
-SOURCE=.\AllocationInCppFile.cpp
+SOURCE=.\CppUTest\AllocationInCppFile.cpp
 
 !IF  "$(CFG)" == "AllTests - Win32 Release"
 
@@ -493,7 +493,7 @@ SOURCE=.\CppUTestExt\AllTests.cpp
 
 !ENDIF 
 
-SOURCE=.\CheatSheetTest.cpp
+SOURCE=.\CppUTest\CheatSheetTest.cpp
 
 !IF  "$(CFG)" == "AllTests - Win32 Release"
 
@@ -527,7 +527,7 @@ SOURCE=.\CppUTestExt\CodeMemoryReportFormatterTest.cpp
 
 !ENDIF 
 
-SOURCE=.\CommandLineArgumentsTest.cpp
+SOURCE=.\CppUTest\CommandLineArgumentsTest.cpp
 
 !IF  "$(CFG)" == "AllTests - Win32 Release"
 
@@ -543,7 +543,7 @@ SOURCE=.\CommandLineArgumentsTest.cpp
 
 !ENDIF 
 
-SOURCE=.\CommandLineTestRunnerTest.cpp
+SOURCE=.\CppUTest\CommandLineTestRunnerTest.cpp
 
 !IF  "$(CFG)" == "AllTests - Win32 Release"
 
@@ -613,7 +613,7 @@ SOURCE=.\CppUTestExt\GTest2ConvertorTest.cpp
 
 !ENDIF 
 
-SOURCE=.\JUnitOutputTest.cpp
+SOURCE=.\CppUTest\JUnitOutputTest.cpp
 
 !IF  "$(CFG)" == "AllTests - Win32 Release"
 
@@ -629,7 +629,7 @@ SOURCE=.\JUnitOutputTest.cpp
 
 !ENDIF 
 
-SOURCE=.\MemoryLeakDetectorTest.cpp
+SOURCE=.\CppUTest\MemoryLeakDetectorTest.cpp
 
 !IF  "$(CFG)" == "AllTests - Win32 Release"
 
@@ -645,7 +645,7 @@ SOURCE=.\MemoryLeakDetectorTest.cpp
 
 !ENDIF 
 
-SOURCE=.\MemoryLeakOperatorOverloadsTest.cpp
+SOURCE=.\CppUTest\MemoryLeakOperatorOverloadsTest.cpp
 
 !IF  "$(CFG)" == "AllTests - Win32 Release"
 
@@ -661,7 +661,7 @@ SOURCE=.\MemoryLeakOperatorOverloadsTest.cpp
 
 !ENDIF 
 
-SOURCE=.\MemoryLeakWarningTest.cpp
+SOURCE=.\CppUTest\MemoryLeakWarningTest.cpp
 
 !IF  "$(CFG)" == "AllTests - Win32 Release"
 
@@ -911,7 +911,7 @@ SOURCE=.\CppUTestExt\OrderedTestTest.cpp
 
 !ENDIF 
 
-SOURCE=.\PluginTest.cpp
+SOURCE=.\CppUTest\PluginTest.cpp
 
 !IF  "$(CFG)" == "AllTests - Win32 Release"
 
@@ -927,7 +927,7 @@ SOURCE=.\PluginTest.cpp
 
 !ENDIF 
 
-SOURCE=.\PreprocessorTest.cpp
+SOURCE=.\CppUTest\PreprocessorTest.cpp
 
 !IF  "$(CFG)" == "AllTests - Win32 Release"
 
@@ -943,7 +943,7 @@ SOURCE=.\PreprocessorTest.cpp
 
 !ENDIF 
 
-SOURCE=.\SetPluginTest.cpp
+SOURCE=.\CppUTest\SetPluginTest.cpp
 
 !IF  "$(CFG)" == "AllTests - Win32 Release"
 
@@ -959,7 +959,7 @@ SOURCE=.\SetPluginTest.cpp
 
 !ENDIF 
 
-SOURCE=.\SimpleStringTest.cpp
+SOURCE=.\CppUTest\SimpleStringTest.cpp
 
 !IF  "$(CFG)" == "AllTests - Win32 Release"
 
@@ -975,7 +975,7 @@ SOURCE=.\SimpleStringTest.cpp
 
 !ENDIF 
 
-SOURCE=.\TestFailureTest.cpp
+SOURCE=.\CppUTest\TestFailureTest.cpp
 
 !IF  "$(CFG)" == "AllTests - Win32 Release"
 
@@ -991,7 +991,7 @@ SOURCE=.\TestFailureTest.cpp
 
 !ENDIF 
 
-SOURCE=.\TestFilterTest.cpp
+SOURCE=.\CppUTest\TestFilterTest.cpp
 
 !IF  "$(CFG)" == "AllTests - Win32 Release"
 
@@ -1007,7 +1007,7 @@ SOURCE=.\TestFilterTest.cpp
 
 !ENDIF 
 
-SOURCE=.\TestHarness_cTest.cpp
+SOURCE=.\CppUTest\TestHarness_cTest.cpp
 
 !IF  "$(CFG)" == "AllTests - Win32 Release"
 
@@ -1023,7 +1023,7 @@ SOURCE=.\TestHarness_cTest.cpp
 
 !ENDIF 
 
-SOURCE=.\TestHarness_cTestCFile.c
+SOURCE=.\CppUTest\TestHarness_cTestCFile.c
 
 !IF  "$(CFG)" == "AllTests - Win32 Release"
 
@@ -1039,7 +1039,7 @@ SOURCE=.\TestHarness_cTestCFile.c
 
 !ENDIF 
 
-SOURCE=.\TestInstallerTest.cpp
+SOURCE=.\CppUTest\TestInstallerTest.cpp
 
 !IF  "$(CFG)" == "AllTests - Win32 Release"
 
@@ -1055,7 +1055,7 @@ SOURCE=.\TestInstallerTest.cpp
 
 !ENDIF 
 
-SOURCE=.\TestMemoryAllocatorTest.cpp
+SOURCE=.\CppUTest\TestMemoryAllocatorTest.cpp
 
 !IF  "$(CFG)" == "AllTests - Win32 Release"
 
@@ -1071,7 +1071,7 @@ SOURCE=.\TestMemoryAllocatorTest.cpp
 
 !ENDIF 
 
-SOURCE=.\TestOutputTest.cpp
+SOURCE=.\CppUTest\TestOutputTest.cpp
 
 !IF  "$(CFG)" == "AllTests - Win32 Release"
 
@@ -1087,7 +1087,7 @@ SOURCE=.\TestOutputTest.cpp
 
 !ENDIF 
 
-SOURCE=.\TestRegistryTest.cpp
+SOURCE=.\CppUTest\TestRegistryTest.cpp
 
 !IF  "$(CFG)" == "AllTests - Win32 Release"
 
@@ -1103,7 +1103,7 @@ SOURCE=.\TestRegistryTest.cpp
 
 !ENDIF 
 
-SOURCE=.\TestResultTest.cpp
+SOURCE=.\CppUTest\TestResultTest.cpp
 
 !IF  "$(CFG)" == "AllTests - Win32 Release"
 
@@ -1119,7 +1119,7 @@ SOURCE=.\TestResultTest.cpp
 
 !ENDIF 
 
-SOURCE=.\UtestTest.cpp
+SOURCE=.\CppUTest\UtestTest.cpp
 
 !IF  "$(CFG)" == "AllTests - Win32 Release"
 

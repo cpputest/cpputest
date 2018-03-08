@@ -29,7 +29,7 @@
 #include "CppUTestExt/MemoryReportAllocator.h"
 #include "CppUTestExt/MemoryReportFormatter.h"
 
-MemoryReportAllocator::MemoryReportAllocator() : result_(NULL), realAllocator_(NULL), formatter_(NULL)
+MemoryReportAllocator::MemoryReportAllocator() : result_(NULLPTR), realAllocator_(NULLPTR), formatter_(NULLPTR)
 {
 }
 
@@ -37,17 +37,17 @@ MemoryReportAllocator::~MemoryReportAllocator()
 {
 }
 
-const char* MemoryReportAllocator::name()
+const char* MemoryReportAllocator::name() const
 {
     return realAllocator_->name();
 }
 
-const char* MemoryReportAllocator::alloc_name()
+const char* MemoryReportAllocator::alloc_name() const
 {
     return realAllocator_->alloc_name();
 }
 
-const char* MemoryReportAllocator::free_name()
+const char* MemoryReportAllocator::free_name() const
 {
     return realAllocator_->free_name();
 }

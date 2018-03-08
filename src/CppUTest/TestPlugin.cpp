@@ -62,10 +62,10 @@ void TestPlugin::runAllPostTestAction(UtestShell& test, TestResult& result)
 
 bool TestPlugin::parseAllArguments(int ac, char** av, int index)
 {
-    return parseAllArguments(ac, const_cast<const char**> (av), index);
+    return parseAllArguments(ac, const_cast<const char *const *> (av), index);
 }
 
-bool TestPlugin::parseAllArguments(int ac, const char** av, int index)
+bool TestPlugin::parseAllArguments(int ac, const char *const *av, int index)
 {
     if (parseArguments(ac, av, index)) return true;
     if (next_) return next_->parseAllArguments(ac, av, index);
@@ -90,7 +90,7 @@ TestPlugin* TestPlugin::getNext()
 }
 TestPlugin* TestPlugin::removePluginByName(const SimpleString& name)
 {
-    TestPlugin* removed = 0;
+    TestPlugin* removed = NULLPTR;
     if (next_ && next_->getName() == name) {
         removed = next_;
         next_ = next_->next_;
@@ -150,7 +150,7 @@ void SetPointerPlugin::postTestAction(UtestShell& /*test*/, TestResult& /*result
 //////// NullPlugin
 
 NullTestPlugin::NullTestPlugin() :
-    TestPlugin(0)
+    TestPlugin(NULLPTR)
 {
 }
 

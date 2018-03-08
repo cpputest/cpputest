@@ -29,7 +29,7 @@
 #include "CppUTest/TestRegistry.h"
 
 TestRegistry::TestRegistry() :
-    tests_(NULL), nameFilters_(NULL), groupFilters_(NULL), firstPlugin_(NullTestPlugin::instance()), runInSeperateProcess_(false), currentRepetition_(0)
+    tests_(NULLPTR), nameFilters_(NULLPTR), groupFilters_(NULLPTR), firstPlugin_(NullTestPlugin::instance()), runInSeperateProcess_(false), currentRepetition_(0), runIgnored_(false)
 
 {
 }
@@ -48,8 +48,9 @@ void TestRegistry::runAllTests(TestResult& result)
     bool groupStart = true;
 
     result.testsStarted();
-    for (UtestShell *test = tests_; test != NULL; test = test->getNext()) {
+    for (UtestShell *test = tests_; test != NULLPTR; test = test->getNext()) {
         if (runInSeperateProcess_) test->setRunInSeperateProcess();
+        if (runIgnored_) test->setRunIgnored();
 
         if (groupStart) {
             result.currentGroupStarted(test);
@@ -76,7 +77,7 @@ void TestRegistry::listTestGroupNames(TestResult& result)
 {
     SimpleString groupList;
 
-    for (UtestShell *test = tests_; test != NULL; test = test->getNext()) {
+    for (UtestShell *test = tests_; test != NULLPTR; test = test->getNext()) {
         SimpleString gname;
         gname += "#";
         gname += test->getGroup();
@@ -99,7 +100,7 @@ void TestRegistry::listTestGroupAndCaseNames(TestResult& result)
 {
     SimpleString groupAndNameList;
 
-    for (UtestShell *test = tests_; test != NULL; test = test->getNext()) {
+    for (UtestShell *test = tests_; test != NULLPTR; test = test->getNext()) {
         if (testShouldRun(test, result)) {
             SimpleString groupAndName;
             groupAndName += "#";
@@ -132,12 +133,12 @@ int TestRegistry::countTests()
     return tests_ ? tests_->countTests() : 0;
 }
 
-TestRegistry* TestRegistry::currentRegistry_ = 0;
+TestRegistry* TestRegistry::currentRegistry_ = NULLPTR;
 
 TestRegistry* TestRegistry::getCurrentRegistry()
 {
     static TestRegistry registry;
-    return (currentRegistry_ == 0) ? &registry : currentRegistry_;
+    return (currentRegistry_ == NULLPTR) ? &registry : currentRegistry_;
 }
 
 void TestRegistry::setCurrentRegistry(TestRegistry* registry)
@@ -147,7 +148,7 @@ void TestRegistry::setCurrentRegistry(TestRegistry* registry)
 
 void TestRegistry::unDoLastAddTest()
 {
-    tests_ = tests_ ? tests_->getNext() : NULL;
+    tests_ = tests_ ? tests_->getNext() : NULLPTR;
 
 }
 
@@ -159,6 +160,11 @@ void TestRegistry::setNameFilters(const TestFilter* filters)
 void TestRegistry::setGroupFilters(const TestFilter* filters)
 {
     groupFilters_ = filters;
+}
+
+void TestRegistry::setRunIgnored()
+{
+    runIgnored_ = true;
 }
 
 void TestRegistry::setRunTestsInSeperateProcess()
@@ -237,7 +243,7 @@ UtestShell* TestRegistry::findTestWithName(const SimpleString& name)
             return current;
         current = current->getNext();
     }
-    return NULL;
+    return NULLPTR;
 }
 
 UtestShell* TestRegistry::findTestWithGroup(const SimpleString& group)
@@ -248,6 +254,6 @@ UtestShell* TestRegistry::findTestWithGroup(const SimpleString& group)
             return current;
         current = current->getNext();
     }
-    return NULL;
+    return NULLPTR;
 }
 

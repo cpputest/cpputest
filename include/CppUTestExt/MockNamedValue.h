@@ -101,6 +101,7 @@ public:
     DEFAULT_COPY_CONSTRUCTOR(MockNamedValue)
     virtual ~MockNamedValue();
 
+    virtual void setValue(bool value);
     virtual void setValue(int value);
     virtual void setValue(unsigned int value);
     virtual void setValue(long int value);
@@ -125,6 +126,7 @@ public:
     virtual SimpleString getName() const;
     virtual SimpleString getType() const;
 
+    virtual bool getBoolValue() const;
     virtual int getIntValue() const;
     virtual unsigned int getUnsignedIntValue() const;
     virtual long int getLongIntValue() const;
@@ -147,6 +149,7 @@ private:
     SimpleString name_;
     SimpleString type_;
     union {
+        bool boolValue_;
         int intValue_;
         unsigned int unsignedIntValue_;
         long int longIntValue_;

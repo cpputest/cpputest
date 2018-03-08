@@ -38,7 +38,7 @@ class JUnitTestOutput: public TestOutput
 {
 public:
     JUnitTestOutput();
-    virtual ~JUnitTestOutput();
+    virtual ~JUnitTestOutput() _destructor_override;
 
     virtual void printTestsStarted() _override;
     virtual void printTestsEnded(const TestResult& result) _override;
@@ -50,7 +50,7 @@ public:
     virtual void printBuffer(const char*) _override;
     virtual void print(const char*) _override;
     virtual void print(long) _override;
-    virtual void print(const TestFailure& failure) _override;
+    virtual void printFailure(const TestFailure& failure) _override;
 
     virtual void flush() _override;
 
@@ -68,7 +68,7 @@ protected:
     virtual void closeFile();
 
     virtual void writeXmlHeader();
-    virtual void writeTestSuiteSummery();
+    virtual void writeTestSuiteSummary();
     virtual void writeProperties();
     virtual void writeTestCases();
     virtual void writeFailure(JUnitTestCaseResultNode* node);

@@ -46,7 +46,7 @@
 				Optimization="0"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="..\include,..\include\Platforms\VisualCpp"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;CPPUTEST_USE_LONG_LONG"
 				StringPooling="true"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
@@ -130,7 +130,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\include,..\include\Platforms\VisualCpp"
-				PreprocessorDefinitions="_CONSOLE;WIN32;_DEBUG"
+				PreprocessorDefinitions="_CONSOLE;WIN32;_DEBUG;CPPUTEST_USE_LONG_LONG"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				WarningLevel="3"
@@ -194,7 +194,7 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
-				RelativePath="AllocationInCFile.c"
+				RelativePath="CppUTest\AllocationInCFile.c"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -217,7 +217,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="AllocationInCppFile.cpp"
+				RelativePath="CppUTest\AllocationInCppFile.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -240,7 +240,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="AllocLetTestFree.c"
+				RelativePath="CppUTest\AllocLetTestFree.c"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -263,7 +263,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="AllocLetTestFreeTest.cpp"
+				RelativePath="CppUTest\AllocLetTestFreeTest.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -309,7 +309,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="CheatSheetTest.cpp"
+				RelativePath="CppUTest\CheatSheetTest.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -355,7 +355,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="CommandLineArgumentsTest.cpp"
+				RelativePath="CppUTest\CommandLineArgumentsTest.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -378,7 +378,30 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="CommandLineTestRunnerTest.cpp"
+				RelativePath="CppUTest\CommandLineTestRunnerTest.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						ForcedIncludeFiles=""
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="CppUTestExt\ExpectedFunctionsListTest.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -470,7 +493,15 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="JUnitOutputTest.cpp"
+				RelativePath=".\CppUTestExt\IEEE754PluginTest.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CppUTestExt\IEEE754PluginTest_c.c"
+				>
+			</File>
+			<File
+				RelativePath="CppUTest\JUnitOutputTest.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -493,7 +524,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="MemoryLeakDetectorTest.cpp"
+				RelativePath="CppUTest\MemoryLeakDetectorTest.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -516,7 +547,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="MemoryOperatorOverloadTest.cpp"
+				RelativePath="CppUTest\MemoryLeakWarningTest.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -539,7 +570,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="MemoryLeakWarningTest.cpp"
+				RelativePath="CppUTest\MemoryOperatorOverloadTest.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -654,6 +685,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\CppUTestExt\MockCallTest.cpp"
+				>
+			</File>
+			<File
 				RelativePath="CppUTestExt\MockCheatSheetTest.cpp"
 				>
 				<FileConfiguration
@@ -675,6 +710,10 @@
 						ForcedIncludeFiles=""
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\CppUTestExt\MockComparatorCopierTest.cpp"
+				>
 			</File>
 			<File
 				RelativePath="CppUTestExt\MockExpectedCallTest.cpp"
@@ -700,27 +739,12 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="CppUTestExt\ExpectedFunctionsListTest.cpp"
+				RelativePath="CppUTestExt\MockFailureReporterForTest.cpp"
 				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						ForcedIncludeFiles=""
-					/>
-				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="CppUTestExt\MockFailureReporterForTest.h"
+				>
 			</File>
 			<File
 				RelativePath="CppUTestExt\MockFailureTest.cpp"
@@ -746,7 +770,15 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="CppUTestExt\MockFailureTest.h"
+				RelativePath=".\CppUTestExt\MockHierarchyTest.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CppUTestExt\MockNamedValueTest.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CppUTestExt\MockParameterTest.cpp"
 				>
 			</File>
 			<File
@@ -771,6 +803,14 @@
 						ForcedIncludeFiles=""
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\CppUTestExt\MockReturnValueTest.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CppUTestExt\MockStrictOrderTest.cpp"
+				>
 			</File>
 			<File
 				RelativePath="CppUTestExt\MockSupport_cTest.cpp"
@@ -869,7 +909,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="PluginTest.cpp"
+				RelativePath="CppUTest\PluginTest.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -892,7 +932,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="PreprocessorTest.cpp"
+				RelativePath="CppUTest\PreprocessorTest.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -915,7 +955,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="SetPluginTest.cpp"
+				RelativePath="CppUTest\SetPluginTest.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -938,7 +978,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="SimpleMutexTest.cpp"
+				RelativePath="CppUTest\SimpleMutexTest.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -961,7 +1001,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="SimpleStringTest.cpp"
+				RelativePath="CppUTest\SimpleStringTest.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -984,7 +1024,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="TestFailureNaNTest.cpp"
+				RelativePath="CppUTest\TeamCityOutputTest.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -1007,7 +1047,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="TestFailureTest.cpp"
+				RelativePath="CppUTest\TestFailureNaNTest.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -1030,7 +1070,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="TestFilterTest.cpp"
+				RelativePath="CppUTest\TestFailureTest.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -1053,7 +1093,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="TestHarness_cTest.cpp"
+				RelativePath="CppUTest\TestFilterTest.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -1076,7 +1116,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="TestHarness_cTestCFile.c"
+				RelativePath="CppUTest\TestHarness_cTest.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -1099,7 +1139,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="TestInstallerTest.cpp"
+				RelativePath="CppUTest\TestHarness_cTestCFile.c"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -1122,7 +1162,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="TestMemoryAllocatorTest.cpp"
+				RelativePath="CppUTest\TestInstallerTest.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -1145,7 +1185,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="TestOutputTest.cpp"
+				RelativePath="CppUTest\TestMemoryAllocatorTest.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -1168,7 +1208,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="TestRegistryTest.cpp"
+				RelativePath="CppUTest\TestOutputTest.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -1191,7 +1231,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="TestResultTest.cpp"
+				RelativePath="CppUTest\TestRegistryTest.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -1214,7 +1254,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="TestUTestMacro.cpp"
+				RelativePath="CppUTest\TestResultTest.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -1237,7 +1277,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="UtestPlatformTest.cpp"
+				RelativePath="CppUTest\TestUTestMacro.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -1260,7 +1300,34 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="UtestTest.cpp"
+				RelativePath="CppUTest\TestUTestStringMacro.cpp"
+				>
+			</File>
+			<File
+				RelativePath="CppUTest\UtestPlatformTest.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						ForcedIncludeFiles=""
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="CppUTest\UtestTest.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -1288,75 +1355,23 @@
 			Filter="h;hpp;hxx;hm;inl"
 			>
 			<File
-				RelativePath="AllocationInCFile.h"
+				RelativePath="CppUTest\AllocationInCFile.h"
 				>
 			</File>
 			<File
-				RelativePath="AllocationInCppFile.h"
+				RelativePath="CppUTest\AllocationInCppFile.h"
 				>
 			</File>
 			<File
-				RelativePath="AllocLetTestFree.h"
+				RelativePath="CppUTest\AllocLetTestFree.h"
 				>
 			</File>
 			<File
-				RelativePath="AllTests.h"
+				RelativePath="CppUTest\AllTests.h"
 				>
 			</File>
 			<File
-				RelativePath="..\include\CppUTest\CommandLineArguments.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\CppUTest\CppUTestConfig.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\CppUTest\MemoryLeakDetector.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\CppUTest\MemoryLeakDetectorMallocMacros.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\CppUTest\MemoryLeakDetectorNewMacros.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\CppUTest\PlatformSpecificFunctions.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\CppUTest\PlatformSpecificFunctions_c.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\CppUTest\SimpleMutex.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\CppUTest\StandardCLibrary.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\CppUTest\TestFailure.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\CppUTest\TestFilter.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\CppUTest\TestMemoryAllocator.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\CppUTest\TestTestingFixture.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\CppUTest\UtestMacros.h"
+				RelativePath=".\CppUTestExt\IEEE754PluginTest_c.h"
 				>
 			</File>
 		</Filter>

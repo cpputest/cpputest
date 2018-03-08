@@ -34,7 +34,7 @@
 struct JUnitTestCaseResultNode
 {
     JUnitTestCaseResultNode() :
-        execTime_(0), failure_(0), ignored_(false), next_(0)
+        execTime_(0), failure_(NULLPTR), ignored_(false), lineNumber_ (0), checkCount_ (0), next_(NULLPTR)
     {
     }
 
@@ -42,18 +42,22 @@ struct JUnitTestCaseResultNode
     long execTime_;
     TestFailure* failure_;
     bool ignored_;
+    SimpleString file_;
+    int lineNumber_;
+    int checkCount_;
     JUnitTestCaseResultNode* next_;
 };
 
 struct JUnitTestGroupResult
 {
     JUnitTestGroupResult() :
-        testCount_(0), failureCount_(0), startTime_(0), groupExecTime_(0), head_(0), tail_(0)
+        testCount_(0), failureCount_(0), totalCheckCount_(0), startTime_(0), groupExecTime_(0), head_(NULLPTR), tail_(NULLPTR)
     {
     }
 
     int testCount_;
     int failureCount_;
+    int totalCheckCount_;
     long startTime_;
     long groupExecTime_;
     SimpleString group_;
@@ -66,6 +70,7 @@ struct JUnitTestOutputImpl
     JUnitTestGroupResult results_;
     PlatformSpecificFile file_;
     SimpleString package_;
+    SimpleString stdOutput_;
 };
 
 JUnitTestOutput::JUnitTestOutput() :
@@ -92,8 +97,8 @@ void JUnitTestOutput::resetTestGroupResult()
         delete cur;
         cur = tmp;
     }
-    impl_->results_.head_ = 0;
-    impl_->results_.tail_ = 0;
+    impl_->results_.head_ = NULLPTR;
+    impl_->results_.tail_ = NULLPTR;
 }
 
 void JUnitTestOutput::printTestsStarted()
@@ -108,6 +113,7 @@ void JUnitTestOutput::printCurrentTestEnded(const TestResult& result)
 {
     impl_->results_.tail_->execTime_
             = result.getCurrentTestTotalExecutionTime();
+    impl_->results_.tail_->checkCount_ = result.getCheckCount();
 }
 
 void JUnitTestOutput::printTestsEnded(const TestResult& /*result*/)
@@ -127,7 +133,7 @@ void JUnitTestOutput::printCurrentTestStarted(const UtestShell& test)
     impl_->results_.group_ = test.getGroup();
     impl_->results_.startTime_ = GetPlatformSpecificTimeInMillis();
 
-    if (impl_->results_.tail_ == 0) {
+    if (impl_->results_.tail_ == NULLPTR) {
         impl_->results_.head_ = impl_->results_.tail_
                 = new JUnitTestCaseResultNode;
     }
@@ -136,6 +142,8 @@ void JUnitTestOutput::printCurrentTestStarted(const UtestShell& test)
         impl_->results_.tail_ = impl_->results_.tail_->next_;
     }
     impl_->results_.tail_->name_ = test.getName();
+    impl_->results_.tail_->file_ = test.getFile();
+    impl_->results_.tail_->lineNumber_ = test.getLineNumber();
     if (!test.willRun()) {
         impl_->results_.tail_->ignored_ = true;
     }
@@ -152,7 +160,7 @@ SimpleString JUnitTestOutput::createFileName(const SimpleString& group)
 
 void JUnitTestOutput::setPackageName(const SimpleString& package)
 {
-    if (impl_ != NULL) {
+    if (impl_ != NULLPTR) {
         impl_->package_ = package;
     }
 }
@@ -162,7 +170,7 @@ void JUnitTestOutput::writeXmlHeader()
     writeToFile("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n");
 }
 
-void JUnitTestOutput::writeTestSuiteSummery()
+void JUnitTestOutput::writeTestSuiteSummary()
 {
     SimpleString
             buf =
@@ -185,14 +193,21 @@ void JUnitTestOutput::writeProperties()
 void JUnitTestOutput::writeTestCases()
 {
     JUnitTestCaseResultNode* cur = impl_->results_.head_;
+
     while (cur) {
         SimpleString buf = StringFromFormat(
-                "<testcase classname=\"%s%s%s\" name=\"%s\" time=\"%d.%03d\">\n",
+                "<testcase classname=\"%s%s%s\" name=\"%s\" assertions=\"%d\" time=\"%d.%03d\" file=\"%s\" line=\"%d\">\n",
                 impl_->package_.asCharString(),
                 impl_->package_.isEmpty() == true ? "" : ".",
                 impl_->results_.group_.asCharString(),
-                cur->name_.asCharString(), (int) (cur->execTime_ / 1000), (int)(cur->execTime_ % 1000));
+                cur->name_.asCharString(),
+                cur->checkCount_ - impl_->results_.totalCheckCount_,
+                (int) (cur->execTime_ / 1000), (int)(cur->execTime_ % 1000),
+                cur->file_.asCharString(),
+                cur->lineNumber_);
         writeToFile(buf.asCharString());
+
+        impl_->results_.totalCheckCount_ = cur->checkCount_;
 
         if (cur->failure_) {
             writeFailure(cur);
@@ -223,7 +238,7 @@ void JUnitTestOutput::writeFailure(JUnitTestCaseResultNode* node)
 
 void JUnitTestOutput::writeFileEnding()
 {
-    writeToFile("<system-out></system-out>\n");
+    writeToFile("<system-out>"); writeToFile(impl_->stdOutput_); writeToFile("</system-out>\n");
     writeToFile("<system-err></system-err>\n");
     writeToFile("</testsuite>");
 }
@@ -232,7 +247,7 @@ void JUnitTestOutput::writeTestGroupToFile()
 {
     openFileForWrite(createFileName(impl_->results_.group_));
     writeXmlHeader();
-    writeTestSuiteSummery();
+    writeTestSuiteSummary();
     writeProperties();
     writeTestCases();
     writeFileEnding();
@@ -245,8 +260,9 @@ void JUnitTestOutput::printBuffer(const char*)
 {
 }
 
-void JUnitTestOutput::print(const char*)
+void JUnitTestOutput::print(const char *output)
 {
+    impl_->stdOutput_ += output;
 }
 
 void JUnitTestOutput::print(long)
@@ -259,9 +275,9 @@ void JUnitTestOutput::flush()
 
 // LCOV_EXCL_STOP
 
-void JUnitTestOutput::print(const TestFailure& failure)
+void JUnitTestOutput::printFailure(const TestFailure& failure)
 {
-    if (impl_->results_.tail_->failure_ == 0) {
+    if (impl_->results_.tail_->failure_ == NULLPTR) {
         impl_->results_.failureCount_++;
         impl_->results_.tail_->failure_ = new TestFailure(failure);
     }

@@ -42,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories=".\include\Platforms\VisualCpp,.\include"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;STDC_WANT_SECURE_LIB"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;STDC_WANT_SECURE_LIB;CPPUTEST_USE_LONG_LONG"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				PrecompiledHeaderFile=".\Debug/CppUTest.pch"
@@ -113,7 +113,7 @@
 				Optimization="0"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories=".\include\Platforms\VisualCpp,.\include"
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;STDC_WANT_SECURE_LIB"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;STDC_WANT_SECURE_LIB;CPPUTEST_USE_LONG_LONG"
 				StringPooling="true"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
@@ -225,6 +225,10 @@
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\src\CppUTestExt\IEEE754ExceptionsPlugin.cpp"
+				>
 			</File>
 			<File
 				RelativePath="SRC\CPPUTEST\JUnitTestOutput.cpp"
@@ -601,6 +605,28 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="SRC\CPPUTEST\TeamCityTestOutput.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="SRC\CPPUTEST\TestFailure.cpp"
 				>
 				<FileConfiguration
@@ -777,6 +803,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\src\CppUTest\TestTestingFixture.cpp"
+				>
+			</File>
+			<File
 				RelativePath="SRC\CPPUTEST\Utest.cpp"
 				>
 				<FileConfiguration
@@ -830,15 +860,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\include\CppUTest\CommandLineArguments.h"
+				>
+			</File>
+			<File
 				RelativePath="include\CppUTest\CommandLineTestRunner.h"
 				>
 			</File>
 			<File
-				RelativePath="include\CppUTest\EqualsFailure.h"
+				RelativePath=".\include\CppUTest\CppUTestConfig.h"
 				>
 			</File>
 			<File
-				RelativePath="include\CppUTest\Failure.h"
+				RelativePath=".\include\CppUTest\CppUTestGeneratedConfig.h"
 				>
 			</File>
 			<File
@@ -846,7 +880,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\include\CppUTestExt\GTest.h"
+				>
+			</File>
+			<File
 				RelativePath="include\CppUTestExt\GTestConvertor.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTestExt\IEEE754ExceptionsPlugin.h"
 				>
 			</File>
 			<File
@@ -854,7 +896,15 @@
 				>
 			</File>
 			<File
-				RelativePath="include\CppUTest\MemoryLeakWarning.h"
+				RelativePath=".\include\CppUTest\MemoryLeakDetector.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTest\MemoryLeakDetectorMallocMacros.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTest\MemoryLeakDetectorNewMacros.h"
 				>
 			</File>
 			<File
@@ -874,11 +924,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\include\CppUTestExt\MockActualCall.h"
+				>
+			</File>
+			<File
 				RelativePath="include\CppUTestExt\MockCheckedActualCall.h"
 				>
 			</File>
 			<File
 				RelativePath="include\CppUTestExt\MockCheckedExpectedCall.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTestExt\MockExpectedCall.h"
 				>
 			</File>
 			<File
@@ -906,23 +964,19 @@
 				>
 			</File>
 			<File
-				RelativePath="include\CppUTest\MockTestOutput.h"
-				>
-			</File>
-			<File
-				RelativePath="include\CppUTest\NullTest.h"
-				>
-			</File>
-			<File
 				RelativePath="include\CppUTestExt\OrderedTest.h"
 				>
 			</File>
 			<File
-				RelativePath="src\Platforms\VisualCpp\Platform.h"
+				RelativePath=".\include\CppUTest\PlatformSpecificFunctions.h"
 				>
 			</File>
 			<File
-				RelativePath="include\CppUTest\RealTestOutput.h"
+				RelativePath=".\include\CppUTest\PlatformSpecificFunctions_c.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTest\SimpleMutex.h"
 				>
 			</File>
 			<File
@@ -930,7 +984,19 @@
 				>
 			</File>
 			<File
-				RelativePath="include\CppUTest\SimpleStringExtensions.h"
+				RelativePath=".\include\CppUTest\StandardCLibrary.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTest\TeamCityTestOutput.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTest\TestFailure.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CppUTest\TestFilter.h"
 				>
 			</File>
 			<File
@@ -942,7 +1008,7 @@
 				>
 			</File>
 			<File
-				RelativePath="include\CppUTest\TestInstaller.h"
+				RelativePath=".\include\CppUTest\TestMemoryAllocator.h"
 				>
 			</File>
 			<File
@@ -962,11 +1028,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\include\CppUTest\TestTestingFixture.h"
+				>
+			</File>
+			<File
 				RelativePath="include\CppUTest\Utest.h"
 				>
 			</File>
 			<File
-				RelativePath="include\CppUTest\VirtualCall.h"
+				RelativePath=".\include\CppUTest\UtestMacros.h"
 				>
 			</File>
 		</Filter>

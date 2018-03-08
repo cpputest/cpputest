@@ -31,6 +31,8 @@
 #undef free
 #undef calloc
 #undef realloc
+#undef strdup
+#undef strndup
 
 #include <sys/time.h>
 #include <time.h>
@@ -53,7 +55,7 @@
 static jmp_buf test_exit_jmp_buf[10];
 static int jmp_buf_index = 0;
 
-#ifndef HAVE_FORK
+#ifndef CPPUTEST_HAVE_FORK
 
 static void GccPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin*, TestResult* result)
 {
@@ -182,7 +184,7 @@ static long TimeInMillisImplementation()
 
 static const char* TimeStringImplementation()
 {
-    time_t tm = time(NULL);
+    time_t tm = time(NULLPTR);
     static char dateTime[80];
     struct tm *tmp = localtime(&tm);
     strftime(dateTime, 80, "%Y-%m-%dT%H:%M:%S", tmp);
@@ -197,6 +199,9 @@ const char* (*GetPlatformSpecificTimeString)() = TimeStringImplementation;
 #pragma clang diagnostic ignored "-Wformat-nonliteral"
 #endif
 
+#ifdef __clang__
+#pragma clang diagnostic ignored "-Wused-but-marked-unused"
+#endif
 int (*PlatformSpecificVSNprintf)(char *str, size_t size, const char* format, va_list va_args_list) = vsnprintf;
 
 static PlatformSpecificFile PlatformSpecificFOpenImplementation(const char* filename, const char* flag)
@@ -232,14 +237,21 @@ void (*PlatformSpecificFree)(void* memory) = free;
 void* (*PlatformSpecificMemCpy)(void*, const void*, size_t) = memcpy;
 void* (*PlatformSpecificMemset)(void*, int, size_t) = memset;
 
+/* GCC 4.9.x introduces -Wfloat-conversion, which causes a warning / error
+ * in GCC's own (macro) implementation of isnan() and isinf().
+ */
+#if defined(__GNUC__) && (__GNUC__ >= 5 || (__GNUC__ == 4 && __GNUC_MINOR__ > 8))
+#pragma GCC diagnostic ignored "-Wfloat-conversion"
+#endif
+
 static int IsNanImplementation(double d)
 {
-    return isnan((float)d);
+    return isnan(d);
 }
 
 static int IsInfImplementation(double d)
 {
-    return isinf((float)d);
+    return isinf(d);
 }
 
 double (*PlatformSpecificFabs)(double) = fabs;
@@ -251,7 +263,7 @@ static PlatformSpecificMutex PThreadMutexCreate(void)
 {
     pthread_mutex_t *mutex = new pthread_mutex_t;
 
-    pthread_mutex_init(mutex, NULL);
+    pthread_mutex_init(mutex, NULLPTR);
 
     return (PlatformSpecificMutex)mutex;
 }

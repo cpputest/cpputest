@@ -28,9 +28,27 @@
 #ifndef CPPUTEST_USE_NEW_MACROS
 
     #if CPPUTEST_USE_STD_CPP_LIB
+        #ifdef CPPUTEST_USE_STRDUP_MACROS
+            #if CPPUTEST_USE_STRDUP_MACROS == 1
+            /*
+             * Some platforms (OSx, i.e.) will get <string.h> or <cstring> included when using <memory> header,
+             *  in order to avoid conflicts with strdup and strndup macros defined by MemoryLeakDetectorMallocMacros.h
+             *  we will undefined those macros, include the C++ headers and then reinclude MemoryLeakDetectorMallocMacros.h.
+             * The check `#if CPPUTEST_USE_STRDUP_MACROS` will ensure we only include MemoryLeakDetectorMallocMacros.h if
+             *  it has already been includeded earlier.
+             */
+                #undef strdup
+                #undef strndup
+                #undef CPPUTEST_USE_STRDUP_MACROS
+                #define __CPPUTEST_REINCLUDE_MALLOC_MEMORY_LEAK_DETECTOR
+            #endif
+        #endif
         #include <new>
         #include <memory>
         #include <string>
+        #ifdef __CPPUTEST_REINCLUDE_MALLOC_MEMORY_LEAK_DETECTOR
+            #include "MemoryLeakDetectorMallocMacros.h"
+        #endif
     #endif
 
     void* operator new(size_t size, const char* file, int line) UT_THROW (std::bad_alloc);
@@ -38,10 +56,12 @@
     void* operator new(size_t size) UT_THROW(std::bad_alloc);
     void* operator new[](size_t size) UT_THROW(std::bad_alloc);
 
-    void operator delete(void* mem) UT_NOTHROW;
-    void operator delete[](void* mem) UT_NOTHROW;
     void operator delete(void* mem, const char* file, int line) UT_NOTHROW;
     void operator delete[](void* mem, const char* file, int line) UT_NOTHROW;
+    void operator delete(void* mem) UT_NOTHROW;
+    void operator delete[](void* mem) UT_NOTHROW;
+    void operator delete (void* mem, size_t size) UT_NOTHROW;
+    void operator delete[] (void* mem, size_t size) UT_NOTHROW;
 
 #endif
 

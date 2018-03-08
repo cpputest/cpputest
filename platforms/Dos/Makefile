@@ -19,7 +19,7 @@ include ../platforms/Dos/sources.mk
 # Disable W391 assignment found in boolean expression - we don't care
 
 CFLAGS := \
-  -q -c -os -oc -d0 -we -w=3 -wcd=13 -wcd=367 -wcd=368 -wcd391 -ml -zm \
+  -q -c -os -oc -d0 -we -w=3 -wcd=13 -wcd=367 -wcd=368 -wcd391 -wcd=472 -ml -zm \
   -dCPPUTEST_MEM_LEAK_DETECTION_DISABLED=1 -dCPPUTEST_STD_CPP_LIB_DISABLED=1 \
   -i$(call convert_paths,$(CPPUTEST_HOME)/include) \
   -i$(call convert_paths,$(CPPUTEST_HOME)/include/Platforms/Dos) \
@@ -29,7 +29,9 @@ CXXFLAGS := $(CFLAGS) -xds
 
 .PHONY: all clean
 
-all: CPPU.LIB CPPUX.LIB CPPU1.EXE CPPU2.EXE CPPU3.EXE CPPU4.EXE CPPU5.EXE CPPU6.EXE
+all: CPPU.LIB CPPUX.LIB \
+     CPPU1.EXE CPPU2.EXE CPPU3.EXE \
+     CPPUX1.EXE CPPUX2.EXE CPPUX3.EXE CPPUX4.EXE
 
 clean:
 	rm -rf ../src/CppUTest/*.o ../src/CppUTestExt/*.o \

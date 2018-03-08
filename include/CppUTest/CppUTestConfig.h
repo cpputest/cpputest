@@ -25,12 +25,11 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #ifndef CPPUTESTCONFIG_H_
 #define CPPUTESTCONFIG_H_
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
+#ifndef CPPUTEST_USE_OWN_CONFIGURATION
+#include "CppUTestGeneratedConfig.h"
 #endif
 
 /*
@@ -91,6 +90,9 @@
   #define CPPUTEST_USE_MEM_LEAK_DETECTION 1
  #endif
 #endif
+
+/* Should be the only #include here. Standard C library wrappers */
+#include "StandardCLibrary.h"
 
 /* Create a __no_return__ macro, which is used to flag a function as not returning.
  * Used for functions that always throws for instance.
@@ -166,6 +168,20 @@
 #endif
 
 /*
+ * Handling of IEEE754 floating point exceptions via fenv.h
+ * Works on non-Visual C++ compilers and Visual C++ 2008 and newer
+ */
+
+#if CPPUTEST_USE_STD_C_LIB && (!defined(_MSC_VER) || (_MSC_VER >= 1800)) && (!defined(__APPLE__))
+#define CPPUTEST_HAVE_FENV
+#if defined(__WATCOMC__) || defined(__ARMEL__) || defined(__m68k__)
+#define CPPUTEST_FENV_IS_WORKING_PROPERLY 0
+#else
+#define CPPUTEST_FENV_IS_WORKING_PROPERLY 1
+#endif
+#endif
+
+/*
  * Detection of different 64 bit environments
  */
 
@@ -176,11 +192,92 @@
 #endif
 #endif
 
+/* Handling of systems with a different byte-width (e.g. 16 bit).
+ * Since CHAR_BIT is defined in limits.h (ANSI C), use default of 8 when building without Std C library.
+ */
+#if CPPUTEST_USE_STD_C_LIB
+#define CPPUTEST_CHAR_BIT CHAR_BIT
+#else
+#define CPPUTEST_CHAR_BIT 8
+#endif
+
+/* Handling of systems with a different int-width (e.g. 16 bit).
+ */
+#if CPPUTEST_USE_STD_C_LIB && (INT_MAX == 0x7fff)
+#define CPPUTEST_16BIT_INTS
+#endif
+
+/*
+ * Support for "long long" type.
+ *
+ * Not supported when CPUTEST_LONG_LONG_DISABLED is set.
+ * Can be overridden by using CPPUTEST_USE_LONG_LONG
+ *
+ * CPPUTEST_HAVE_LONG_LONG_INT is set by configure
+ * LLONG_MAX is set in limits.h. This is a crude attempt to detect long long support when no configure is used
+ *
+ */
+
+#if !defined(CPPUTEST_LONG_LONG_DISABLED) && !defined(CPPUTEST_USE_LONG_LONG)
+#if defined(CPPUTEST_HAVE_LONG_LONG_INT) || defined(LLONG_MAX)
+#define CPPUTEST_USE_LONG_LONG 1
+#endif
+#endif
+
+#ifdef CPPUTEST_USE_LONG_LONG
+typedef long long cpputest_longlong;
+typedef unsigned long long cpputest_ulonglong;
+#else
+/* Define some placeholders to disable the overloaded methods.
+ * It's not required to have these match the size of the "real" type, but it's occasionally convenient.
+ */
+
+#if defined(CPPUTEST_64BIT) && !defined(CPPUTEST_64BIT_32BIT_LONGS)
+#define CPPUTEST_SIZE_OF_FAKE_LONG_LONG_TYPE 16
+#else
+#define CPPUTEST_SIZE_OF_FAKE_LONG_LONG_TYPE 8
+#endif
+
+struct cpputest_longlong
+{
+#if defined(__cplusplus)
+  cpputest_longlong() {}
+  cpputest_longlong(int) {}
+#endif
+  char dummy[CPPUTEST_SIZE_OF_FAKE_LONG_LONG_TYPE];
+};
+
+struct cpputest_ulonglong
+{
+#if defined(__cplusplus)
+  cpputest_ulonglong() {}
+  cpputest_ulonglong(int) {}
+#endif
+  char dummy[CPPUTEST_SIZE_OF_FAKE_LONG_LONG_TYPE];
+};
+
+#if !defined(__cplusplus)
+typedef struct cpputest_longlong cpputest_longlong;
+typedef struct cpputest_ulonglong cpputest_ulonglong;
+#endif
+
+#endif
+
 /* Visual C++ 10.0+ (2010+) supports the override keyword, but doesn't define the C++ version as C++11 */
 #if defined(__cplusplus) && ((__cplusplus >= 201103L) || (defined(_MSC_VER) && (_MSC_VER >= 1600)))
+#define CPPUTEST_COMPILER_FULLY_SUPPORTS_CXX11
 #define _override override
+#define NULLPTR nullptr
 #else
 #define _override
+#define NULLPTR NULL
+#endif
+
+/* Visual C++ 11.0+ (2012+) supports the override keyword on destructors */
+#if defined(__cplusplus) && ((__cplusplus >= 201103L) || (defined(_MSC_VER) && (_MSC_VER >= 1700)))
+#define _destructor_override override
+#else
+#define _destructor_override
 #endif
 
 /* MinGW-w64 prefers to act like Visual C++, but we want the ANSI behaviors instead */
@@ -191,7 +288,5 @@
  #pragma clang diagnostic pop
 #endif
 
-/* Should be the only #include here. Standard C library wrappers */
-#include "StandardCLibrary.h"
 
 #endif

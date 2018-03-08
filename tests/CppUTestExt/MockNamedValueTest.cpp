@@ -37,7 +37,7 @@ class MyComparator : public MockNamedValueComparator
   public:
 
     MyComparator() {}
-    virtual ~MyComparator() {}
+    virtual ~MyComparator() _destructor_override {}
 
     virtual bool isEqual(const void*, const void*) _override { return false; }
     virtual SimpleString valueToString(const void*) _override { return ""; }
@@ -48,7 +48,7 @@ class MyCopier : public MockNamedValueCopier
   public:
 
     MyCopier() {}
-    virtual ~MyCopier() {}
+    virtual ~MyCopier() _destructor_override {}
 
     virtual void copy(void*, const void*) _override {}
 };
@@ -72,5 +72,24 @@ TEST(ComparatorsAndCopiersRepository, ComparatorAndCopierByTheSameNameShouldBoth
   POINTERS_EQUAL(&comparator, repository.getComparatorForType("MyType"));
   POINTERS_EQUAL(&copier, repository.getCopierForType("MyType"));
   repository.clear();
+}
+
+TEST(ComparatorsAndCopiersRepository, InstallComparatorsAndCopiersFromRepository)
+{
+  MyComparator comparator;
+  MyCopier copier;
+  MockNamedValueComparatorsAndCopiersRepository source;
+  MockNamedValueComparatorsAndCopiersRepository target;
+	
+  source.installCopier("MyType", copier);
+  source.installComparator("MyType", comparator);
+  
+  target.installComparatorsAndCopiers(source);
+  
+  POINTERS_EQUAL(&comparator, target.getComparatorForType("MyType"));
+  POINTERS_EQUAL(&copier, target.getCopierForType("MyType"));
+  
+  source.clear();
+  target.clear();
 }
 

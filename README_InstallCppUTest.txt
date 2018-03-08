@@ -57,8 +57,8 @@
 4. to setup the support scripts. These scripts work in various unix systems 
 and cygwin.  (these are quite handy)  If you are using windows
 install some tool like cygwin, msys or MKSToolkit to run these scripts.
- > cd <someDirectory>/CppUTest/CppSourceTemplates
- > ./InstallScripts.sh
+ > cd <someDirectory>/CppUTest
+ > ./scripts/InstallScripts.sh
 
 This command adds some symbolic links to /usr/local/bin, so you have 
 to run it as root.

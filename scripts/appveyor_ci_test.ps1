@@ -1,16 +1,13 @@
 ﻿
+# Load functions from the helper file
+. (Join-Path (Split-Path $MyInvocation.MyCommand.Path) 'appveyor_helpers.ps1')
 
-function Invoke-Tests($executable)
+function Publish-TestResults($files)
 {
-    # Run tests and output the results using junit
-    $TestCommand = "$executable -ojunit"
-    Write-Host $TestCommand
-    Invoke-Expression $TestCommand
-
     $anyFailures = $FALSE
 
     # Upload results to AppVeyor one by one
-    Get-ChildItem cpputest_*.xml | foreach {
+    $files | foreach {
         $testsuite = ([xml](get-content $_.Name)).testsuite
 
         foreach ($testcase in $testsuite.testcase) {
@@ -36,66 +33,86 @@ function Invoke-Tests($executable)
     }
 }
 
-function Remove-PathFolder($folder)
+function Invoke-Tests($executable)
 {
-    [System.Collections.ArrayList]$pathFolders = New-Object System.Collections.ArrayList
-    $env:Path -split ";" | foreach { $pathFolders.Add($_) | Out-Null }
+    # Run tests and output the results using junit
+    $TestCommand = "$executable -ojunit"
+    Write-Host $TestCommand -NoNewline
+    Invoke-Expression $TestCommand
+    Write-Host " - return code: $LASTEXITCODE"
+    if ($LASTEXITCODE -lt 0) {
+        Write-Error "Runtime Exception during test execution"
+    }
+}
 
-    for ([int]$i = 0; $i -lt $pathFolders.Count; $i++)
+function Invoke-CygwinTests($executable)
+{
+    # Assume cygwin is located at C:\cygwin for now
+    $cygwin_bin = Get-CygwinBin
+
+    # Get the full path to the executable
+    $cygwin_folder = . "${cygwin_bin}\cygpath.exe" (Resolve-Path ".")
+    $cygwin_exe = . "${cygwin_bin}\cygpath.exe" $executable
+    
+    # Run tests from the cygwin prompt
+    $test_command = "${cygwin_exe} -ojunit"
+    $cygwin_command = "${cygwin_bin}\bash.exe --login -c 'cd ${cygwin_folder} ; ${test_command}'"
+
+    Write-Host $test_command
+    Invoke-Expression $cygwin_command
+}
+
+$TestCount = 0
+
+if (-not $env:APPVEYOR)
+{
+    function Add-AppVeyorTest()
     {
-        if ([string]::Compare($pathFolders[$i], $folder, $true) -eq 0)
+        # Wacky way to access a script variable, but it works
+        $count = Get-Variable -Name TestCount -Scope script
+        Set-Variable -Name TestCount -Scope script -Value ($count.Value + 1)
+    }
+
+    function Add-AppVeyorMessage($Message, $Category)
+    {
+        if ($Category -eq 'Error')
         {
-            Write-Host "Removing $folder from the PATH"
-            $pathFolders.RemoveAt($i)
-            $i--
+            Write-Error $Message
+        }
+        else
+        {
+            Write-Host $Message
         }
     }
-
-    $env:Path = $pathFolders -join ";"
 }
 
-function Add-PathFolder($folder)
+switch -Wildcard ($env:Platform)
 {
-    if (-not (Test-Path $folder))
+    'Cygwin*'
     {
-        Write-Host "Not adding $folder to the PATH, it does not exist"
+        Invoke-CygwinTests 'cpputest_build\CppUTestTests.exe'
+        Invoke-CygwinTests 'cpputest_build\CppUTestExtTests.exe'
     }
 
-    [bool]$alreadyInPath = $false
-    [System.Collections.ArrayList]$pathFolders = New-Object System.Collections.ArrayList
-    $env:Path -split ";" | foreach { $pathFolders.Add($_) | Out-Null }
-
-    for ([int]$i = 0; $i -lt $pathFolders.Count; $i++)
+    'MinGW*'
     {
-        if ([string]::Compare($pathFolders[$i], $folder, $true) -eq 0)
-        {
-            $alreadyInPath = $true
-            break
-        }
+        $mingw_path = Get-MinGWBin
+
+        Set-Path "$mingw_path;C:\Windows;C:\Windows\System32"
+        Invoke-Tests '.\cpputest_build\tests\CppUTest\CppUTestTests.exe'
+        Invoke-Tests '.\cpputest_build\tests\CppUTestExt\CppUTestExtTests.exe'
+        Restore-Path
     }
 
-    if (-not $alreadyInPath)
+    default
     {
-        Write-Host "Adding $folder to the PATH"
-        $pathFolders.Insert(0, $folder)
-        $env:Path = $pathFolders -join ";"
+        Invoke-Tests '.\cpputest_build\AllTests.exe'
     }
 }
 
-if ($env:PlatformToolset -ne 'MinGW')
-{
-    Invoke-Tests('.\cpputest_build\AllTests.exe')
-}
-else
-{
-    $mingw_path = 'C:\Tools\mingw32\bin'
-    if ($env:Platform -eq 'x64')
-    {
-        $mingw_path = 'C:\Tools\mingw64\bin'
-    }
+Publish-TestResults (Get-ChildItem 'cpputest_*.xml')
 
-    Add-PathFolder $mingw_path
-    Invoke-Tests('.\cpputest_build\tests\CppUTestTests.exe')
-    Invoke-Tests('.\cpputest_build\tests\CppUTestExt\CppUTestExtTests.exe')
-    Remove-PathFolder $mingw_path
+if (-not $env:APPVEYOR)
+{
+    Write-Host "Tests Ran: $TestCount"
 }

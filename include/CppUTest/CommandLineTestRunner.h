@@ -41,15 +41,16 @@ class TestRegistry;
 class CommandLineTestRunner
 {
 public:
-    static int RunAllTests(int ac, const char** av);
+    static int RunAllTests(int ac, const char *const *av);
     static int RunAllTests(int ac, char** av);
 
-    CommandLineTestRunner(int ac, const char** av, TestRegistry* registry);
+    CommandLineTestRunner(int ac, const char *const *av, TestRegistry* registry);
     virtual ~CommandLineTestRunner();
 
     int runAllTestsMain();
 
 protected:
+    virtual TestOutput* createTeamCityOutput();
     virtual TestOutput* createJUnitOutput(const SimpleString& packageName);
     virtual TestOutput* createConsoleOutput();
     virtual TestOutput* createCompositeOutput(TestOutput* outputOne, TestOutput* outputTwo);

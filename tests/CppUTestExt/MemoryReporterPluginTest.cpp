@@ -106,11 +106,11 @@ class TestMemoryAllocatorComparator : public MockNamedValueComparator
 public:
     bool isEqual(const void* object1, const void* object2)
     {
-        return ((TestMemoryAllocator*)object1)->name() == ((TestMemoryAllocator*)object2)->name();
+        return ((const TestMemoryAllocator*)object1)->name() == ((const TestMemoryAllocator*)object2)->name();
     }
     SimpleString valueToString(const void* object)
     {
-        return ((TestMemoryAllocator*)object)->name();
+        return ((const TestMemoryAllocator*)object)->name();
     }
 
 };
@@ -255,7 +255,7 @@ public:
 
 TEST(MemoryReporterPlugin, endOfaTestGroupWillReportSo)
 {
-    UtestForMemoryReportingPlugingTest fourthTest("differentGroupName", NULL);
+    UtestForMemoryReportingPlugingTest fourthTest("differentGroupName", NULLPTR);
     UtestForMemoryReportingPlugingTest thirdTest("differentGroupName", &fourthTest);
     UtestForMemoryReportingPlugingTest secondTest("groupname", &thirdTest);
     UtestForMemoryReportingPlugingTest firstTest("groupname", &secondTest);

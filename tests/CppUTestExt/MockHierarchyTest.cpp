@@ -26,7 +26,7 @@
  */
 
 #include "CppUTest/TestHarness.h"
-#include "MockFailureTest.h"
+#include "MockFailureReporterForTest.h"
 
 TEST_GROUP(MockHierarchyTest)
 {
@@ -94,8 +94,8 @@ TEST(MockHierarchyTest, checkExpectationsWorksHierarchically)
     MockFailureReporterInstaller failureReporterInstaller;
 
     MockExpectedCallsListForTest expectations;
-    expectations.addFunction("foobar");
-    expectations.addFunction("helloworld");
+    expectations.addFunction("first::foobar");
+    expectations.addFunction("second::helloworld");
     MockExpectedCallsDidntHappenFailure expectedFailure(mockFailureTest(), expectations);
 
     mock("first").expectOneCall("foobar");
@@ -127,8 +127,8 @@ TEST(MockHierarchyTest, checkExpectationsWorksHierarchicallyForLastCallNotFinish
     MockFailureReporterInstaller failureReporterInstaller;
 
     MockExpectedCallsListForTest expectations;
-    expectations.addFunction("foobar")->withParameter("boo", 1);
-    MockExpectedParameterDidntHappenFailure expectedFailure(mockFailureTest(), "foobar", expectations);
+    expectations.addFunction("first::foobar")->withParameter("boo", 1);
+    MockExpectedParameterDidntHappenFailure expectedFailure(mockFailureTest(), "first::foobar", expectations);
 
     mock("first").expectOneCall("foobar").withParameter("boo", 1);
     mock("first").actualCall("foobar");
@@ -144,7 +144,7 @@ TEST(MockHierarchyTest, reporterIsInheritedInHierarchicalMocks)
 
     mock("differentScope").actualCall("foobar");
 
-    MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "foobar", expectations);
+    MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "differentScope::foobar", expectations);
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
 

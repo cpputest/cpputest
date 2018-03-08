@@ -1,55 +1,69 @@
 language: cpp
-os:
- - linux
-compiler:
-- clang
-- gcc
-- wcl
-rvm:
-- 1.9.3
-env:
-  - BUILD=autotools
-  - BUILD=cmake
-  - BUILD=autotools_gtest
-  - BUILD=cmake_gtest
-  - BUILD=test_report
-  - BUILD=autotools_old_compilers
-  - BUILD=cmake-coverage
-  - BUILD=make-dos
+
+dist: trusty
+sudo: false
+
 matrix:
-    exclude:
-    - env: BUILD=cmake-coverage
-    - env: BUILD=autotools_old_compilers
-    - env: BUILD=make-dos
-    - env: BUILD=test_report
-    - compiler: wcl
     include:
-    - env: BUILD=cmake-coverage
-      compiler: gcc
-    - env: BUILD=test_report
-      compiler: gcc
-    - env: BUILD=make-dos
-      compiler: wcl
+    - compiler: clang
+      env: BUILD=cmake CPP11=OFF
+      addons:
+        apt:
+          packages:
+            - libc++-dev
+    - compiler: clang
+      env: BUILD=cmake CPP11=ON
+      addons:
+        apt:
+          packages:
+            - libc++-dev
+
+    - compiler: gcc
+      env: BUILD=cmake CPP11=OFF
+    - compiler: gcc
+      env: BUILD=cmake CPP11=ON
+
+    - compiler: gcc
+      env: BUILD=autotools
+      addons:
+        apt:
+          packages:
+            - valgrind
+    - compiler: clang
+      env: BUILD=autotools
+      addons:
+        apt:
+          packages:
+            - libc++-dev
+            - valgrind
+
+    - compiler: gcc
+      env: BUILD=cmake_coverage
+    - compiler: gcc
+      env: BUILD=cmake_gtest
+    - compiler: wcl
+      env: BUILD=make_dos
+      addons:
+        apt:
+          packages:
+            - dosbox
+
 global:
 - secure: |-
-      P05xUfJVw5YM4hF7hzQLjyMzDD4Q1/fyWP9Uk5aK5VrSWNY99EuxldXI5QK/
-      vA1NkcW49tQW1wQvBlRtdlLNOmUfDP/oiJFXPwNn4dqwOIOEet2P7JO/5hnH
-      MNHlZmGu2WpoZREhOFBfsIhK0IP8mloqLDq2XemBdga/LWygrLU=
-- secure: Y/8iNkf6uEbE3qltnM+7mGlCvFWzyttwwRGgVGw1m9xOiUJcobvOImQRU8XZ91dgO+Fz0A3mljqs1sK1OPjpXmFGE1jP/NlotMw0WlDOuSIDjQ4ubwdTNGAwNY53R9ygbIjEmqxHAJm9mOZqxW2hNaoI7TcX6oX248/hLibyx8M=
-addons:
-  apt:
-    packages:
-      # - dosbox
-      - valgrind
-before_install:
-  #  - sudo pip install cpp-coveralls
-  - sudo apt-get install dosbox
-install:
-  - gem install travis_github_deployer
-  - sudo apt-get update --fix-missing
-    #  - sudo apt-get install valgrind
+    P05xUfJVw5YM4hF7hzQLjyMzDD4Q1/fyWP9Uk5aK5VrSWNY99EuxldXI5QK/
+    vA1NkcW49tQW1wQvBlRtdlLNOmUfDP/oiJFXPwNn4dqwOIOEet2P7JO/5hnH
+    MNHlZmGu2WpoZREhOFBfsIhK0IP8mloqLDq2XemBdga/LWygrLU=
+- secure: |-
+    Y/8iNkf6uEbE3qltnM+7mGlCvFWzyttwwRGgVGw1m9xOiUJcobvOImQRU8XZ
+    91dgO+Fz0A3mljqs1sK1OPjpXmFGE1jP/NlotMw0WlDOuSIDjQ4ubwdTNGAw
+    NY53R9ygbIjEmqxHAJm9mOZqxW2hNaoI7TcX6oX248/hLibyx8M=
+
 before_script:
-  - export CPPUTEST_BUILD_DIR=$TRAVIS_BUILD_DIR/cpputest_build
-  - mkdir -p $CPPUTEST_BUILD_DIR && cd $CPPUTEST_BUILD_DIR
+    - export CPPUTEST_BUILD_DIR=$TRAVIS_BUILD_DIR/cpputest_build
+    - mkdir -p $CPPUTEST_BUILD_DIR && cd $CPPUTEST_BUILD_DIR
 script:
-- "../scripts/travis_ci_build.sh"
+    - "../scripts/travis_ci_build.sh"
+after_failure:
+    - "../scripts/travis_ci_after.sh"
+after_success:
+    - "../scripts/travis_ci_after.sh"

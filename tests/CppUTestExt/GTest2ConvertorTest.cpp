@@ -25,7 +25,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifdef INCLUDE_GTEST_TESTS
+#ifdef CPPUTEST_INCLUDE_GTEST_TESTS
 
 #include "CppUTestExt/GTestConvertor.h"
 
@@ -68,7 +68,7 @@ TEST_GROUP(GTestConvertor)
 {
 };
 
-#ifdef INCLUDE_GTEST_TESTS
+#ifdef CPPUTEST_INCLUDE_GTEST_TESTS
 
 /*
  * These tests depend on the amount of GTests that are actually added (also in other files).

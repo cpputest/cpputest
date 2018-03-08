@@ -128,7 +128,7 @@ void cpputest_free_location_with_leak_detection(void* buffer, const char* file, 
 #undef new
 
 #if CPPUTEST_USE_STD_CPP_LIB
-#define UT_THROW_BAD_ALLOC_WHEN_NULL(memory) if (memory == NULL) throw std::bad_alloc();
+#define UT_THROW_BAD_ALLOC_WHEN_NULL(memory) if (memory == NULLPTR) throw std::bad_alloc();
 #else
 #define UT_THROW_BAD_ALLOC_WHEN_NULL(memory)
 #endif
@@ -150,7 +150,7 @@ static void* threadsafe_mem_leak_operator_new_nothrow (size_t size) UT_NOTHROW
 static void* threadsafe_mem_leak_operator_new_debug (size_t size, const char* file, int line) UT_THROW(std::bad_alloc)
 {
     MemLeakScopedMutex lock;
-    void *memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewAllocator(), size, (char*) file, line);
+    void *memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewAllocator(), size, file, line);
     UT_THROW_BAD_ALLOC_WHEN_NULL(memory);
     return memory;
 }
@@ -172,7 +172,7 @@ static void* threadsafe_mem_leak_operator_new_array_nothrow (size_t size) UT_NOT
 static void* threadsafe_mem_leak_operator_new_array_debug (size_t size, const char* file, int line) UT_THROW(std::bad_alloc)
 {
     MemLeakScopedMutex lock;
-    void* memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewArrayAllocator(), size, (char*) file, line);
+    void* memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewArrayAllocator(), size, file, line);
     UT_THROW_BAD_ALLOC_WHEN_NULL(memory);
     return memory;
 }
@@ -206,7 +206,7 @@ static void* mem_leak_operator_new_nothrow (size_t size) UT_NOTHROW
 
 static void* mem_leak_operator_new_debug (size_t size, const char* file, int line) UT_THROW(std::bad_alloc)
 {
-    void *memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewAllocator(), size, (char*) file, line);
+    void *memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewAllocator(), size, file, line);
     UT_THROW_BAD_ALLOC_WHEN_NULL(memory);
     return memory;
 }
@@ -225,7 +225,7 @@ static void* mem_leak_operator_new_array_nothrow (size_t size) UT_NOTHROW
 
 static void* mem_leak_operator_new_array_debug (size_t size, const char* file, int line) UT_THROW(std::bad_alloc)
 {
-    void* memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewArrayAllocator(), size, (char*) file, line);
+    void* memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewArrayAllocator(), size, file, line);
     UT_THROW_BAD_ALLOC_WHEN_NULL(memory);
     return memory;
 }
@@ -319,6 +319,11 @@ void operator delete(void* mem, const char*, int) UT_NOTHROW
     operator_delete_fptr(mem);
 }
 
+void operator delete (void* mem, size_t) UT_NOTHROW
+{
+    operator_delete_fptr(mem);
+}
+
 void* operator new[](size_t size) UT_THROW(std::bad_alloc)
 {
     return operator_new_array_fptr(size);
@@ -339,6 +344,10 @@ void operator delete[](void* mem, const char*, int) UT_NOTHROW
      operator_delete_array_fptr(mem);
 }
 
+void operator delete[] (void* mem, size_t) UT_NOTHROW
+{
+     operator_delete_array_fptr(mem);
+}
 
 #if CPPUTEST_USE_STD_CPP_LIB
 
@@ -347,9 +356,19 @@ void* operator new(size_t size, const std::nothrow_t&) UT_NOTHROW
     return operator_new_nothrow_fptr(size);
 }
 
+void operator delete(void* mem, const std::nothrow_t&) UT_NOTHROW
+{
+    operator_delete_fptr(mem);
+}
+
 void* operator new[](size_t size, const std::nothrow_t&) UT_NOTHROW
 {
     return operator_new_array_nothrow_fptr(size);
+}
+
+void operator delete[](void* mem, const std::nothrow_t&) UT_NOTHROW
+{
+    operator_delete_array_fptr(mem);
 }
 
 #else
@@ -456,12 +475,12 @@ public:
     } // LCOV_EXCL_LINE
 };
 
-static MemoryLeakFailure* globalReporter = 0;
-static MemoryLeakDetector* globalDetector = 0;
+static MemoryLeakFailure* globalReporter = NULLPTR;
+static MemoryLeakDetector* globalDetector = NULLPTR;
 
 MemoryLeakDetector* MemoryLeakWarningPlugin::getGlobalDetector()
 {
-    if (globalDetector == 0) {
+    if (globalDetector == NULLPTR) {
         bool newDeleteOverloaded = areNewDeleteOverloaded();
         turnOffNewDeleteOverloads();
 
@@ -494,11 +513,11 @@ void MemoryLeakWarningPlugin::destroyGlobalDetector()
     turnOffNewDeleteOverloads();
     delete globalDetector;
     delete globalReporter;
-    globalDetector = NULL;
+    globalDetector = NULLPTR;
 }
 
 
-MemoryLeakWarningPlugin* MemoryLeakWarningPlugin::firstPlugin_ = 0;
+MemoryLeakWarningPlugin* MemoryLeakWarningPlugin::firstPlugin_ = NULLPTR;
 
 MemoryLeakWarningPlugin* MemoryLeakWarningPlugin::getFirstPlugin()
 {
@@ -523,7 +542,7 @@ void MemoryLeakWarningPlugin::expectLeaksInTest(int n)
 MemoryLeakWarningPlugin::MemoryLeakWarningPlugin(const SimpleString& name, MemoryLeakDetector* localDetector) :
     TestPlugin(name), ignoreAllWarnings_(false), destroyGlobalDetectorAndTurnOfMemoryLeakDetectionInDestructor_(false), expectedLeaks_(0)
 {
-    if (firstPlugin_ == 0) firstPlugin_ = this;
+    if (firstPlugin_ == NULLPTR) firstPlugin_ = this;
 
     if (localDetector) memLeakDetector_ = localDetector;
     else memLeakDetector_ = getGlobalDetector();

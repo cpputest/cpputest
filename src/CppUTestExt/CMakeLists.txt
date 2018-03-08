@@ -1,5 +1,6 @@
 set(CppUTestExt_src
         CodeMemoryReportFormatter.cpp
+        IEEE754ExceptionsPlugin.cpp
         MemoryReporterPlugin.cpp
         MockFailure.cpp
         MockSupportPlugin.cpp
@@ -16,6 +17,7 @@ set(CppUTestExt_src
 
 set(CppUTestExt_headers
         ${CppUTestRootDirectory}/include/CppUTestExt/CodeMemoryReportFormatter.h
+        ${CppUTestRootDirectory}/include/CppUTestExt/IEEE754ExceptionsPlugin.h
         ${CppUTestRootDirectory}/include/CppUTestExt/MemoryReportAllocator.h
         ${CppUTestRootDirectory}/include/CppUTestExt/MockExpectedCall.h
         ${CppUTestRootDirectory}/include/CppUTestExt/MockCheckedExpectedCall.h

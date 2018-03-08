@@ -37,13 +37,14 @@ public:
     TestFilter();
     TestFilter(const char* filter);
     TestFilter(const SimpleString& filter);
-    
+
     TestFilter* add(TestFilter* filter);
     TestFilter* getNext() const;
 
     bool match(const SimpleString& name) const;
 
     void strictMatching();
+    void invertMatching();
 
     bool operator==(const TestFilter& filter) const;
     bool operator!=(const TestFilter& filter) const;
@@ -52,6 +53,7 @@ public:
 private:
     SimpleString filter_;
     bool strictMatching_;
+    bool invertMatching_;
     TestFilter* next_;
 };
 
