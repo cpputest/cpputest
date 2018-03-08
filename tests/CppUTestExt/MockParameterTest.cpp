@@ -850,6 +850,18 @@ TEST(MockParameterTest, inputParameterTraced)
     mock().checkExpectations();
 }
 
+TEST(MockParameterTest, inputParameterOfTypeTraced)
+{
+    mock().tracing(true);
+
+    int param = 1;
+    mock().actualCall("someFunc").withInputParameterOfType("someType", "someParameter", &param);
+    mock().checkExpectations();
+    STRCMP_CONTAINS("Function name:someFunc someType someParameter:", mock().getTraceOutput());
+
+    mock().checkExpectations();
+}
+
 TEST(MockParameterTest, outputParameterThatIsIgnoredShouldNotFail)
 {
     int param;
