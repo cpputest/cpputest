@@ -91,7 +91,7 @@
  #endif
 #endif
 
-#if (CPPUTEST_USE_MEM_LEAK_DETECTION == 1) && defined(__GNUC__) && !defined(WIN32)
+#if (CPPUTEST_USE_MEM_LEAK_DETECTION == 1) && defined(__GNUC__) && !defined(__CYGWIN__) && !defined(__MINGW32__) && !defined(WIN32) && !defined(_WIN32) && !defined(__WIN32__) && !defined(WIN64) && !defined(_WIN64) && !defined(__WIN64__)
 #define CPPUTEST_GNU_STACKTRACE_SUPPORTED 1
 #else
 #define CPPUTEST_GNU_STACKTRACE_SUPPORTED 0

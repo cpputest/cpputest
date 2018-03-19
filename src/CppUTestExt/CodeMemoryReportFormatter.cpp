@@ -153,14 +153,14 @@ void CodeMemoryReportFormatter::report_testgroup_start(TestResult* result, Utest
             test.getGroup().asCharString()).asCharString());
 }
 
-void CodeMemoryReportFormatter::report_alloc_memory(TestResult* result, TestMemoryAllocator* allocator, size_t size, char* memory, const char* file, int line, void *addr)
+void CodeMemoryReportFormatter::report_alloc_memory(TestResult* result, TestMemoryAllocator* allocator, size_t size, char* memory, const char* file, int line, void *)
 {
     SimpleString variableName = createVariableNameFromFileLineInfo(file, line);
     result->print(StringFromFormat("\t%s\n", getAllocationString(allocator, variableName, size).asCharString()).asCharString());
     addNodeToList(variableName.asCharString(), memory, codeReportingList_);
 }
 
-void CodeMemoryReportFormatter::report_free_memory(TestResult* result, TestMemoryAllocator* allocator, char* memory, const char* file, int line, void *addr)
+void CodeMemoryReportFormatter::report_free_memory(TestResult* result, TestMemoryAllocator* allocator, char* memory, const char* file, int line, void *)
 {
     SimpleString variableName;
     CodeReportingAllocationNode* node = findNode(memory);

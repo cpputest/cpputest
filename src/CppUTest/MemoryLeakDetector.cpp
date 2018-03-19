@@ -31,8 +31,12 @@
 #include "CppUTest/SimpleMutex.h"
 
 #if CPPUTEST_GNU_STACKTRACE_SUPPORTED == 1
+
 #include <execinfo.h>
 #include <cxxabi.h>
+
+SimpleString demangle(const char* line);
+
 #endif
 
 static const char* UNKNOWN = "<unknown>";
@@ -187,8 +191,8 @@ SimpleString demangle(const char* line)
     SimpleString symbol = buffer.subString(fPos+1, len);
 
     int status;
-    char* demangled = abi::__cxa_demangle( symbol.asCharString(), NULL, NULL, &status );
-    if( demangled != NULL && status == 0 )
+    char* demangled = abi::__cxa_demangle( symbol.asCharString(), NULLPTR, NULLPTR, &status );
+    if( demangled != NULLPTR && status == 0 )
     {
         return buffer.subString(0, fPos+1) + demangled + buffer.subString(ePos);
     }
@@ -207,12 +211,12 @@ void MemoryLeakOutputStringBuffer::reportMemoryLeak(MemoryLeakDetectorNode* leak
 
     total_leaks_++;
 #if CPPUTEST_GNU_STACKTRACE_SUPPORTED == 1
-    if( leak->addr_ != NULL )
+    if( leak->addr_ != NULLPTR )
     {
         void* fnAddr = leak->addr_;
         char** fnSyms = backtrace_symbols(&fnAddr, 1);
 
-        if( fnSyms != NULL )
+        if( fnSyms != NULLPTR )
         {
             outputBuffer_.add("Alloc num (%u) Leak size: %lu Allocated at: %s. Type: \"%s\"\n\tMemory: <%p> Content:\n",
                     leak->number_, (unsigned long) leak->size_, demangle(fnSyms[0]).asCharString(), leak->allocator_->alloc_name(), (void*) leak->memory_);
@@ -623,7 +627,7 @@ char* MemoryLeakDetector::allocateMemoryWithAccountingInformation(TestMemoryAllo
     else return allocator->alloc_memory(sizeOfMemoryWithCorruptionInfo(size) + sizeof(MemoryLeakDetectorNode), file, line, addr);
 }
 
-char* MemoryLeakDetector::reallocateMemoryWithAccountingInformation(TestMemoryAllocator* /*allocator*/, char* memory, size_t size, const char* /*file*/, int /*line*/, void */*addr*/, bool allocatNodesSeperately)
+char* MemoryLeakDetector::reallocateMemoryWithAccountingInformation(TestMemoryAllocator* /*allocator*/, char* memory, size_t size, const char* /*file*/, int /*line*/, void * /*addr*/, bool allocatNodesSeperately)
 {
     if (allocatNodesSeperately) return (char*) PlatformSpecificRealloc(memory, sizeOfMemoryWithCorruptionInfo(size));
     else return (char*) PlatformSpecificRealloc(memory, sizeOfMemoryWithCorruptionInfo(size) + sizeof(MemoryLeakDetectorNode));

@@ -54,15 +54,16 @@ void NormalMemoryReportFormatter::report_test_end(TestResult* result, UtestShell
     result->print(StringFromFormat("ENDTEST(%s, %s)\n", test.getGroup().asCharString(), test.getName().asCharString()).asCharString());
 }
 
+#if CPPUTEST_GNU_STACKTRACE_SUPPORTED == 1
+
 void NormalMemoryReportFormatter::report_alloc_memory(TestResult* result, TestMemoryAllocator* allocator, size_t size, char* memory, const char* file, int line, void *addr)
 {
-#if CPPUTEST_GNU_STACKTRACE_SUPPORTED == 1
     if( addr != NULLPTR )
     {
         void* fnAddr = addr;
         char** fnSyms = backtrace_symbols(&fnAddr, 1);
 
-        if( fnSyms != NULL )
+        if( fnSyms != NULLPTR )
         {
             result->print(StringFromFormat("\tAllocation using %s of size: %lu pointer: %p at function %s\n", allocator->alloc_name(), (unsigned long) size, (void*) memory, demangle(fnSyms[0]).asCharString()).asCharString());
 
@@ -75,22 +76,18 @@ void NormalMemoryReportFormatter::report_alloc_memory(TestResult* result, TestMe
     }
     else
     {
-#endif
         result->print(StringFromFormat("\tAllocation using %s of size: %lu pointer: %p at %s:%d\n", allocator->alloc_name(), (unsigned long) size, (void*) memory, file, line).asCharString());
-#if CPPUTEST_GNU_STACKTRACE_SUPPORTED == 1
     }
-#endif
 }
 
 void NormalMemoryReportFormatter::report_free_memory(TestResult* result, TestMemoryAllocator* allocator, char* memory, const char* file, int line, void *addr)
 {
-#if CPPUTEST_GNU_STACKTRACE_SUPPORTED == 1
     if( addr != NULLPTR )
     {
         void* fnAddr = addr;
         char** fnSyms = backtrace_symbols(&fnAddr, 1);
 
-        if( fnSyms != NULL )
+        if( fnSyms != NULLPTR )
         {
             result->print(StringFromFormat("\tDeallocation using %s of pointer: %p at function %s\n", allocator->free_name(),  (void*) memory, demangle(fnSyms[0]).asCharString()).asCharString());
 
@@ -103,12 +100,23 @@ void NormalMemoryReportFormatter::report_free_memory(TestResult* result, TestMem
     }
     else
     {
-#endif
         result->print(StringFromFormat("\tDeallocation using %s of pointer: %p at %s:%d\n", allocator->free_name(),  (void*) memory, file, line).asCharString());
-#if CPPUTEST_GNU_STACKTRACE_SUPPORTED == 1
     }
-#endif
 }
+
+#else
+
+void NormalMemoryReportFormatter::report_alloc_memory(TestResult* result, TestMemoryAllocator* allocator, size_t size, char* memory, const char* file, int line, void *)
+{
+    result->print(StringFromFormat("\tAllocation using %s of size: %lu pointer: %p at %s:%d\n", allocator->alloc_name(), (unsigned long) size, (void*) memory, file, line).asCharString());
+}
+
+void NormalMemoryReportFormatter::report_free_memory(TestResult* result, TestMemoryAllocator* allocator, char* memory, const char* file, int line, void *)
+{
+    result->print(StringFromFormat("\tDeallocation using %s of pointer: %p at %s:%d\n", allocator->free_name(),  (void*) memory, file, line).asCharString());
+}
+
+#endif
 
 void NormalMemoryReportFormatter::report_testgroup_start(TestResult* result, UtestShell& test)
 {
