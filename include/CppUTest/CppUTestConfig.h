@@ -91,6 +91,13 @@
  #endif
 #endif
 
+#if (CPPUTEST_USE_MEM_LEAK_DETECTION == 1) && defined(__GNUC__) && !defined(WIN32)
+#define CPPUTEST_GNU_STACKTRACE_SUPPORTED 1
+#else
+#define CPPUTEST_GNU_STACKTRACE_SUPPORTED 0
+#endif
+
+
 /* Should be the only #include here. Standard C library wrappers */
 #include "StandardCLibrary.h"
 

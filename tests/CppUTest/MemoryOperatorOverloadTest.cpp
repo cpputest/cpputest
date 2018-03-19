@@ -257,6 +257,24 @@ TEST(MemoryLeakOverridesToBeUsedInProductionCode, MallocWithButFreeWithoutLeakDe
     memLeakDetector->removeMemoryLeakInformationWithoutCheckingOrDeallocatingTheMemoryButDeallocatingTheAccountInformation(getCurrentMallocAllocator(), leak, true);
 }
 
+#if CPPUTEST_GNU_STACKTRACE_SUPPORTED == 1
+
+TEST(MemoryLeakOverridesToBeUsedInProductionCode, OperatorNewOverloadingWithoutMacroWorks)
+{
+    char* leak = newAllocationWithoutMacro();
+    STRCMP_CONTAINS("tests/CppUTest/CppUTestTests(newAllocationWithoutMacro", memLeakDetector->report(mem_leak_period_checking));
+    delete leak;
+}
+
+TEST(MemoryLeakOverridesToBeUsedInProductionCode, OperatorNewArrayOverloadingWithoutMacroWorks)
+{
+    char* leak = newArrayAllocationWithoutMacro();
+    STRCMP_CONTAINS("tests/CppUTest/CppUTestTests(newArrayAllocationWithoutMacro", memLeakDetector->report(mem_leak_period_checking));
+    delete[] leak;
+}
+
+#else
+
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, OperatorNewOverloadingWithoutMacroWorks)
 {
     char* leak = newAllocationWithoutMacro();
@@ -270,6 +288,8 @@ TEST(MemoryLeakOverridesToBeUsedInProductionCode, OperatorNewArrayOverloadingWit
     STRCMP_CONTAINS("unknown", memLeakDetector->report(mem_leak_period_checking));
     delete[] leak;
 }
+
+#endif
 
 #else
 

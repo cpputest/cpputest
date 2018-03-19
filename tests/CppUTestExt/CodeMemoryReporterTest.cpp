@@ -67,97 +67,97 @@ TEST_GROUP(CodeMemoryReportFormatter)
 
 TEST(CodeMemoryReportFormatter, mallocCreatesAnMallocCall)
 {
-    formatter->report_alloc_memory(testResult, cAllocator, 10, memory01, "file", 9);
+    formatter->report_alloc_memory(testResult, cAllocator, 10, memory01, "file", 9, NULLPTR);
     TESTOUTPUT_EQUAL("\tvoid* file_9_1 = malloc(10);\n");
 }
 
 TEST(CodeMemoryReportFormatter, freeCreatesAnFreeCall)
 {
-    formatter->report_alloc_memory(testResult, cAllocator, 10, memory01, "file", 9);
+    formatter->report_alloc_memory(testResult, cAllocator, 10, memory01, "file", 9, NULLPTR);
     testOutput.flush();
-    formatter->report_free_memory(testResult, cAllocator, memory01, "boo", 6);
+    formatter->report_free_memory(testResult, cAllocator, memory01, "boo", 6, NULLPTR);
     TESTOUTPUT_EQUAL("\tfree(file_9_1); /* at boo:6 */\n");
 }
 
 TEST(CodeMemoryReportFormatter, twoMallocAndTwoFree)
 {
-    formatter->report_alloc_memory(testResult, cAllocator, 10, memory01, "file", 2);
-    formatter->report_alloc_memory(testResult, cAllocator, 10, memory02, "boo", 4);
+    formatter->report_alloc_memory(testResult, cAllocator, 10, memory01, "file", 2, NULLPTR);
+    formatter->report_alloc_memory(testResult, cAllocator, 10, memory02, "boo", 4, NULLPTR);
     testOutput.flush();
-    formatter->report_free_memory(testResult, cAllocator, memory01, "foo", 6);
-    formatter->report_free_memory(testResult, cAllocator, memory02, "bar", 8);
+    formatter->report_free_memory(testResult, cAllocator, memory01, "foo", 6, NULLPTR);
+    formatter->report_free_memory(testResult, cAllocator, memory02, "bar", 8, NULLPTR);
     TESTOUTPUT_CONTAINS("\tfree(file_2_1); /* at foo:6 */\n");
     TESTOUTPUT_CONTAINS("\tfree(boo_4_1); /* at bar:8 */\n");
 }
 
 TEST(CodeMemoryReportFormatter, variableNamesShouldNotContainSlahses)
 {
-    formatter->report_alloc_memory(testResult, cAllocator, 10, memory01, "dir/file", 2);
+    formatter->report_alloc_memory(testResult, cAllocator, 10, memory01, "dir/file", 2, NULLPTR);
     TESTOUTPUT_CONTAINS("\tvoid* file_2");
 }
 
 TEST(CodeMemoryReportFormatter, variableNamesShouldNotContainDotButUseUnderscore)
 {
-    formatter->report_alloc_memory(testResult, cAllocator, 10, memory01, "foo.cpp", 2);
+    formatter->report_alloc_memory(testResult, cAllocator, 10, memory01, "foo.cpp", 2, NULLPTR);
     TESTOUTPUT_CONTAINS("foo_cpp");
 }
 
 TEST(CodeMemoryReportFormatter, newArrayAllocatorGeneratesNewArrayCode)
 {
-    formatter->report_alloc_memory(testResult, newArrayAllocator, 10, memory01, "file", 8);
+    formatter->report_alloc_memory(testResult, newArrayAllocator, 10, memory01, "file", 8, NULLPTR);
     TESTOUTPUT_CONTAINS("char* file_8_1 = new char[10]; /* using new [] */");
 }
 
 TEST(CodeMemoryReportFormatter, newArrayGeneratesNewCode)
 {
-    formatter->report_alloc_memory(testResult, newAllocator, 6, memory01, "file", 4);
+    formatter->report_alloc_memory(testResult, newAllocator, 6, memory01, "file", 4, NULLPTR);
     TESTOUTPUT_CONTAINS("new char[6]; /* using new */");
 }
 
 TEST(CodeMemoryReportFormatter, NewAllocatorGeneratesDeleteCode)
 {
-    formatter->report_alloc_memory(testResult, newAllocator, 10, memory01, "file", 8);
+    formatter->report_alloc_memory(testResult, newAllocator, 10, memory01, "file", 8, NULLPTR);
     testOutput.flush();
-    formatter->report_free_memory(testResult, newAllocator, memory01, "boo", 4);
+    formatter->report_free_memory(testResult, newAllocator, memory01, "boo", 4, NULLPTR);
     TESTOUTPUT_CONTAINS("delete [] file_8_1; /* using delete at boo:4 */");
 }
 
 TEST(CodeMemoryReportFormatter, DeleteNullWorksFine)
 {
-    formatter->report_free_memory(testResult, newAllocator, NULLPTR, "boo", 4);
+    formatter->report_free_memory(testResult, newAllocator, NULLPTR, "boo", 4, NULLPTR);
     TESTOUTPUT_CONTAINS("delete [] NULL; /* using delete at boo:4 */");
 }
 
 TEST(CodeMemoryReportFormatter, NewArrayAllocatorGeneratesDeleteArrayCode)
 {
-    formatter->report_alloc_memory(testResult, newArrayAllocator, 10, memory01, "file", 8);
+    formatter->report_alloc_memory(testResult, newArrayAllocator, 10, memory01, "file", 8, NULLPTR);
     testOutput.flush();
-    formatter->report_free_memory(testResult, newArrayAllocator, memory01, "boo", 4);
+    formatter->report_free_memory(testResult, newArrayAllocator, memory01, "boo", 4, NULLPTR);
     TESTOUTPUT_CONTAINS("delete [] file_8_1; /* using delete [] at boo:4 */");
 }
 
 TEST(CodeMemoryReportFormatter, allocationUsingMallocOnTheSameLineDoesntGenerateTheSameVariableTwice)
 {
-    formatter->report_alloc_memory(testResult, cAllocator, 10, memory01, "file", 8);
+    formatter->report_alloc_memory(testResult, cAllocator, 10, memory01, "file", 8, NULLPTR);
     testOutput.flush();
-    formatter->report_alloc_memory(testResult, cAllocator, 10, memory02, "file", 8);
+    formatter->report_alloc_memory(testResult, cAllocator, 10, memory02, "file", 8, NULLPTR);
     CHECK(testOutput.getOutput().contains("2"));
 }
 
 TEST(CodeMemoryReportFormatter, allocationUsingNewcOnTheSameLineDoesntGenerateTheSameVariableTwice)
 {
-    formatter->report_alloc_memory(testResult, newAllocator, 10, memory01, "file", 8);
+    formatter->report_alloc_memory(testResult, newAllocator, 10, memory01, "file", 8, NULLPTR);
     testOutput.flush();
-    formatter->report_alloc_memory(testResult, newAllocator, 10, memory01, "file", 8);
+    formatter->report_alloc_memory(testResult, newAllocator, 10, memory01, "file", 8, NULLPTR);
     CHECK(testOutput.getOutput().contains("2"));
 }
 
 TEST(CodeMemoryReportFormatter, allocationUsingNewcOnTheSameLineDoesntGenerateVariableTwiceExceptWhenInANewTest)
 {
-    formatter->report_alloc_memory(testResult, newAllocator, 10, memory01, "file", 8);
+    formatter->report_alloc_memory(testResult, newAllocator, 10, memory01, "file", 8, NULLPTR);
     formatter->report_test_start(testResult, *UtestShell::getCurrent());
     testOutput.flush();
-    formatter->report_alloc_memory(testResult, newAllocator, 10, memory01, "file", 8);
+    formatter->report_alloc_memory(testResult, newAllocator, 10, memory01, "file", 8, NULLPTR);
     CHECK(testOutput.getOutput().contains("char*"));
 }
 
@@ -185,11 +185,11 @@ TEST(CodeMemoryReportFormatter, TestGroupGeneratesTestGroupCode)
 TEST(CodeMemoryReportFormatter, VariableFromFileLineInfoAlreadyExists)
 {
     for(int i = 1; i < 100; i++) {
-         formatter->report_alloc_memory(testResult, newArrayAllocator, 10, memory01, "file", 8);
+         formatter->report_alloc_memory(testResult, newArrayAllocator, 10, memory01, "file", 8, NULLPTR);
     }
-    formatter->report_alloc_memory(testResult, newArrayAllocator, 10, memory01, "file", 8);
+    formatter->report_alloc_memory(testResult, newArrayAllocator, 10, memory01, "file", 8, NULLPTR);
     testOutput.flush();
-    formatter->report_free_memory(testResult, newArrayAllocator, memory01, "boo", 8);
+    formatter->report_free_memory(testResult, newArrayAllocator, memory01, "boo", 8, NULLPTR);
     TESTOUTPUT_CONTAINS("delete [] ; /* using delete [] at boo:8 */");
 }
 

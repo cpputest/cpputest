@@ -47,12 +47,12 @@ void SimpleString::setStringAllocator(TestMemoryAllocator* allocator)
 /* Avoid using the memory leak detector INSIDE SimpleString as its used inside the detector */
 char* SimpleString::allocStringBuffer(size_t _size, const char* file, int line)
 {
-    return getStringAllocator()->alloc_memory(_size, file, line);
+    return getStringAllocator()->alloc_memory(_size, file, line, NULLPTR);
 }
 
 void SimpleString::deallocStringBuffer(char* str, const char* file, int line)
 {
-    getStringAllocator()->free_memory(str, file, line);
+    getStringAllocator()->free_memory(str, file, line, NULLPTR);
 }
 
 char* SimpleString::getEmptyString() const
@@ -395,6 +395,41 @@ size_t SimpleString::findFrom(size_t starting_position, char ch) const
     size_t length = size();
     for (size_t i = starting_position; i < length; i++)
         if (buffer_[i] == ch) return i;
+    return npos;
+}
+
+size_t SimpleString::rfind(char ch) const
+{
+    size_t strSize = size();
+    if( strSize > 0 )
+    {
+        return rfindFrom(strSize-1, ch);
+    }
+    else
+    {
+        return npos;
+    }
+}
+
+size_t SimpleString::rfindFrom(size_t starting_position, char ch) const
+{
+    size_t i = starting_position;
+    while( true )
+    {
+        if( buffer_[i] == ch )
+        {
+            return i;
+        }
+
+        if( i > 0 )
+        {
+            i--;
+        }
+        else
+        {
+            break;
+        }
+    }
     return npos;
 }
 

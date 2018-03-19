@@ -74,7 +74,7 @@ TEST(TestMemoryAllocatorTest, SetCurrentMallocAllocator)
 TEST(TestMemoryAllocatorTest, MemoryAllocation)
 {
     allocator = new TestMemoryAllocator();
-    allocator->free_memory(allocator->alloc_memory(100, "file", 1), "file", 1);
+    allocator->free_memory(allocator->alloc_memory(100, "file", 1, NULLPTR), "file", 1, NULLPTR);
 }
 
 TEST(TestMemoryAllocatorTest, MallocNames)
@@ -101,7 +101,7 @@ TEST(TestMemoryAllocatorTest, NewArrayNames)
 TEST(TestMemoryAllocatorTest, NullUnknownAllocation)
 {
     allocator = new NullUnknownAllocator;
-    allocator->free_memory(allocator->alloc_memory(100, "file", 1), "file", 1);
+    allocator->free_memory(allocator->alloc_memory(100, "file", 1, NULLPTR), "file", 1, NULLPTR);
 }
 
 TEST(TestMemoryAllocatorTest, NullUnknownNames)
@@ -117,7 +117,7 @@ TEST(TestMemoryAllocatorTest, NullUnknownNames)
 static void failTryingToAllocateTooMuchMemory(void)
 {
     TestMemoryAllocator allocator;
-    allocator.alloc_memory(MAX_SIZE_FOR_ALLOC, "file", 1);
+    allocator.alloc_memory(MAX_SIZE_FOR_ALLOC, "file", 1, NULLPTR);
 } // LCOV_EXCL_LINE
 
 #include "CppUTest/TestTestingFixture.h"
