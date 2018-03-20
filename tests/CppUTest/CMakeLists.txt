@@ -52,6 +52,9 @@ if (${CMAKE_HOST_SYSTEM_NAME} MATCHES "OpenBSD")
 endif ()
 
 add_executable(CppUTestTests ${CppUTestTests_src})
+if( NOT WIN32 AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU" )
+    set_source_files_properties(AllocationInCppFile.cpp PROPERTIES COMPILE_FLAGS -fno-optimize-sibling-calls)
+endif()
 cpputest_normalize_test_output_location(CppUTestTests)
 target_link_libraries(CppUTestTests CppUTest ${THREAD_LIB})
 

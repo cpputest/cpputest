@@ -17,11 +17,13 @@ char* newArrayAllocation()
 
 #undef new
 
+__disable_tail_calls__
 char* newAllocationWithoutMacro()
 {
     return new char;
 }
 
+__disable_tail_calls__
 char* newArrayAllocationWithoutMacro()
 {
     return new char[100];

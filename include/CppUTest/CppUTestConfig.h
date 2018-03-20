@@ -97,6 +97,11 @@
 #define CPPUTEST_GNU_STACKTRACE_SUPPORTED 0
 #endif
 
+#if CPPUTEST_GNU_STACKTRACE_SUPPORTED == 1 && defined(__clang__)
+#define __disable_tail_calls__ __attribute__((disable_tail_calls))
+#else
+#define __disable_tail_calls__
+#endif
 
 /* Should be the only #include here. Standard C library wrappers */
 #include "StandardCLibrary.h"

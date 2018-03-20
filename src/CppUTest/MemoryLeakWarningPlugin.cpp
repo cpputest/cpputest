@@ -412,6 +412,7 @@ static void *(*operator_new_array_debug_fptr)(size_t size, const char* file, int
 static void (*operator_delete_fptr)(void* mem) UT_NOTHROW = mem_leak_operator_delete;
 static void (*operator_delete_array_fptr)(void* mem) UT_NOTHROW = mem_leak_operator_delete_array;
 
+__disable_tail_calls__
 void* operator new(size_t size) UT_THROW(std::bad_alloc)
 {
     return operator_new_fptr(size);
@@ -437,6 +438,7 @@ void operator delete (void* mem, size_t) UT_NOTHROW
     operator_delete_fptr(mem);
 }
 
+__disable_tail_calls__
 void* operator new[](size_t size) UT_THROW(std::bad_alloc)
 {
     return operator_new_array_fptr(size);
@@ -464,6 +466,7 @@ void operator delete[] (void* mem, size_t) UT_NOTHROW
 
 #if CPPUTEST_USE_STD_CPP_LIB
 
+__disable_tail_calls__
 void* operator new(size_t size, const std::nothrow_t&) UT_NOTHROW
 {
     return operator_new_nothrow_fptr(size);
@@ -474,6 +477,7 @@ void operator delete(void* mem, const std::nothrow_t&) UT_NOTHROW
     operator_delete_fptr(mem);
 }
 
+__disable_tail_calls__
 void* operator new[](size_t size, const std::nothrow_t&) UT_NOTHROW
 {
     return operator_new_array_nothrow_fptr(size);
@@ -491,11 +495,13 @@ void operator delete[](void* mem, const std::nothrow_t&) UT_NOTHROW
 extern void* operator_new_nothrow(size_t size) UT_NOTHROW;
 extern void* operator_new_array_nothrow(size_t size) UT_NOTHROW;
 
+__disable_tail_calls__
 void* operator_new_nothrow(size_t size) UT_NOTHROW
 {
     return operator_new_nothrow_fptr(size);
 }
 
+__disable_tail_calls__
 void* operator_new_array_nothrow(size_t size) UT_NOTHROW
 {
     return operator_new_array_nothrow_fptr(size);
