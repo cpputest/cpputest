@@ -11,7 +11,8 @@ endif
 
 #--- Inputs ----#
 COMPONENT_NAME = CppUTestExamples
-CPPUTEST_HOME = ..
+CPPUTEST_BUILD = ..
+CPPUTEST_HOME := ..
 
 CPPUTEST_USE_EXTENSIONS = Y
 CPP_PLATFORM = Gcc
@@ -31,6 +32,6 @@ INCLUDE_DIRS =\
   ApplicationLib\
   $(CPPUTEST_HOME)/include\
 
-include $(CPPUTEST_HOME)/build/MakefileWorker.mk
+include $(CPPUTEST_BUILD)/build/MakefileWorker.mk
 
 

@@ -27,6 +27,7 @@
 
 #include "hello.h"
 
+#include <cstring>
 #include <stdio.h>
 #include <stdarg.h>
 #include "CppUTest/TestHarness.h"
@@ -49,6 +50,7 @@ void setup()
 }
 void teardown()
 {
+    memset(buffer, 0, sizeof(*buffer));
     delete buffer;
 }
 };
