@@ -30,7 +30,7 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 #include "CppUTest/SimpleMutex.h"
 
-#if CPPUTEST_GNU_STACKTRACE_SUPPORTED == 1
+#if CPPUTEST_GNU_CALLSTACK_SUPPORTED
 
 #include <execinfo.h>
 #include <cxxabi.h>
@@ -169,7 +169,7 @@ void MemoryLeakOutputStringBuffer::startMemoryLeakReporting()
     outputBuffer_.setWriteLimit(SimpleStringBuffer::SIMPLE_STRING_BUFFER_LEN - memory_leak_foot_size_with_malloc_warning);
 }
 
-#if CPPUTEST_GNU_STACKTRACE_SUPPORTED == 1
+#if CPPUTEST_GNU_CALLSTACK_SUPPORTED
 SimpleString demangle(const char* line)
 {
     SimpleString buffer(line);
@@ -210,7 +210,7 @@ void MemoryLeakOutputStringBuffer::reportMemoryLeak(MemoryLeakDetectorNode* leak
     }
 
     total_leaks_++;
-#if CPPUTEST_GNU_STACKTRACE_SUPPORTED == 1
+#if CPPUTEST_GNU_CALLSTACK_SUPPORTED
     if( leak->addr_ != NULLPTR )
     {
         void* fnAddr = leak->addr_;
@@ -234,7 +234,7 @@ void MemoryLeakOutputStringBuffer::reportMemoryLeak(MemoryLeakDetectorNode* leak
 #endif
         outputBuffer_.add("Alloc num (%u) Leak size: %lu Allocated at: %s and line: %d. Type: \"%s\"\n\tMemory: <%p> Content:\n",
                 leak->number_, (unsigned long) leak->size_, leak->file_, leak->line_, leak->allocator_->alloc_name(), (void*) leak->memory_);
-#if CPPUTEST_GNU_STACKTRACE_SUPPORTED == 1
+#if CPPUTEST_GNU_CALLSTACK_SUPPORTED
     }
 #endif
     outputBuffer_.addMemoryDump(leak->memory_, leak->size_);

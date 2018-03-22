@@ -32,10 +32,10 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 #include "CppUTest/SimpleMutex.h"
 
-#if CPPUTEST_GNU_STACKTRACE_SUPPORTED == 1
+#if CPPUTEST_GNU_CALLSTACK_SUPPORTED
 #include <execinfo.h>
 
-#define BACKTRACE_CALLING_FUNCTION_DISTANCE 2
+#define CALLSTACK_CALLING_FUNCTION_DISTANCE 2
 #endif
 
 /********** Enabling and disabling for C also *********/
@@ -143,18 +143,18 @@ static void* threadsafe_mem_leak_operator_new (size_t size) UT_THROW(std::bad_al
 {
     MemLeakScopedMutex lock;
     void* memory;
-#if CPPUTEST_GNU_STACKTRACE_SUPPORTED == 1
-    void* fnAddr[BACKTRACE_CALLING_FUNCTION_DISTANCE+1];
-    int backtraceSize = backtrace(fnAddr, BACKTRACE_CALLING_FUNCTION_DISTANCE+1);
-    if( backtraceSize > BACKTRACE_CALLING_FUNCTION_DISTANCE )
+#if CPPUTEST_GNU_CALLSTACK_SUPPORTED
+    void* fnAddr[CALLSTACK_CALLING_FUNCTION_DISTANCE+1];
+    int backtraceSize = backtrace(fnAddr, CALLSTACK_CALLING_FUNCTION_DISTANCE+1);
+    if( backtraceSize > CALLSTACK_CALLING_FUNCTION_DISTANCE )
     {
-        memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewAllocator(), size, NULLPTR, 0, fnAddr[BACKTRACE_CALLING_FUNCTION_DISTANCE]);
+        memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewAllocator(), size, NULLPTR, 0, fnAddr[CALLSTACK_CALLING_FUNCTION_DISTANCE]);
     }
     else
     {
 #endif
         memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewAllocator(), size);
-#if CPPUTEST_GNU_STACKTRACE_SUPPORTED == 1
+#if CPPUTEST_GNU_CALLSTACK_SUPPORTED
     }
 #endif
     UT_THROW_BAD_ALLOC_WHEN_NULL(memory);
@@ -164,18 +164,18 @@ static void* threadsafe_mem_leak_operator_new (size_t size) UT_THROW(std::bad_al
 static void* threadsafe_mem_leak_operator_new_nothrow (size_t size) UT_NOTHROW
 {
     MemLeakScopedMutex lock;
-#if CPPUTEST_GNU_STACKTRACE_SUPPORTED == 1
-    void* fnAddr[BACKTRACE_CALLING_FUNCTION_DISTANCE+1];
-    int backtraceSize = backtrace(fnAddr, BACKTRACE_CALLING_FUNCTION_DISTANCE+1);
-    if( backtraceSize > BACKTRACE_CALLING_FUNCTION_DISTANCE )
+#if CPPUTEST_GNU_CALLSTACK_SUPPORTED
+    void* fnAddr[CALLSTACK_CALLING_FUNCTION_DISTANCE+1];
+    int backtraceSize = backtrace(fnAddr, CALLSTACK_CALLING_FUNCTION_DISTANCE+1);
+    if( backtraceSize > CALLSTACK_CALLING_FUNCTION_DISTANCE )
     {
-        return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewAllocator(), size, NULLPTR, 0, fnAddr[BACKTRACE_CALLING_FUNCTION_DISTANCE]);
+        return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewAllocator(), size, NULLPTR, 0, fnAddr[CALLSTACK_CALLING_FUNCTION_DISTANCE]);
     }
     else
     {
 #endif
         return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewAllocator(), size);
-#if CPPUTEST_GNU_STACKTRACE_SUPPORTED == 1
+#if CPPUTEST_GNU_CALLSTACK_SUPPORTED
     }
 #endif
 }
@@ -192,18 +192,18 @@ static void* threadsafe_mem_leak_operator_new_array (size_t size) UT_THROW(std::
 {
     MemLeakScopedMutex lock;
     void* memory;
-#if CPPUTEST_GNU_STACKTRACE_SUPPORTED == 1
-   void* fnAddr[BACKTRACE_CALLING_FUNCTION_DISTANCE+1];
-    int backtraceSize = backtrace(fnAddr, BACKTRACE_CALLING_FUNCTION_DISTANCE+1);
-    if( backtraceSize > BACKTRACE_CALLING_FUNCTION_DISTANCE )
+#if CPPUTEST_GNU_CALLSTACK_SUPPORTED
+   void* fnAddr[CALLSTACK_CALLING_FUNCTION_DISTANCE+1];
+    int backtraceSize = backtrace(fnAddr, CALLSTACK_CALLING_FUNCTION_DISTANCE+1);
+    if( backtraceSize > CALLSTACK_CALLING_FUNCTION_DISTANCE )
     {
-        memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewArrayAllocator(), size, NULLPTR, 0, fnAddr[BACKTRACE_CALLING_FUNCTION_DISTANCE]);
+        memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewArrayAllocator(), size, NULLPTR, 0, fnAddr[CALLSTACK_CALLING_FUNCTION_DISTANCE]);
     }
     else
     {
 #endif
         memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewArrayAllocator(), size);
-#if CPPUTEST_GNU_STACKTRACE_SUPPORTED == 1
+#if CPPUTEST_GNU_CALLSTACK_SUPPORTED
     }
 #endif
     UT_THROW_BAD_ALLOC_WHEN_NULL(memory);
@@ -213,18 +213,18 @@ static void* threadsafe_mem_leak_operator_new_array (size_t size) UT_THROW(std::
 static void* threadsafe_mem_leak_operator_new_array_nothrow (size_t size) UT_NOTHROW
 {
     MemLeakScopedMutex lock;
-#if CPPUTEST_GNU_STACKTRACE_SUPPORTED == 1
-    void* fnAddr[BACKTRACE_CALLING_FUNCTION_DISTANCE+1];
-    int backtraceSize = backtrace(fnAddr, BACKTRACE_CALLING_FUNCTION_DISTANCE+1);
-    if( backtraceSize > BACKTRACE_CALLING_FUNCTION_DISTANCE )
+#if CPPUTEST_GNU_CALLSTACK_SUPPORTED
+    void* fnAddr[CALLSTACK_CALLING_FUNCTION_DISTANCE+1];
+    int backtraceSize = backtrace(fnAddr, CALLSTACK_CALLING_FUNCTION_DISTANCE+1);
+    if( backtraceSize > CALLSTACK_CALLING_FUNCTION_DISTANCE )
     {
-    	return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewArrayAllocator(), size, NULLPTR, 0, fnAddr[BACKTRACE_CALLING_FUNCTION_DISTANCE]);
+    	return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewArrayAllocator(), size, NULLPTR, 0, fnAddr[CALLSTACK_CALLING_FUNCTION_DISTANCE]);
     }
     else
     {
 #endif
         return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewArrayAllocator(), size);
-#if CPPUTEST_GNU_STACKTRACE_SUPPORTED == 1
+#if CPPUTEST_GNU_CALLSTACK_SUPPORTED
     }
 #endif
 }
@@ -254,18 +254,18 @@ static void threadsafe_mem_leak_operator_delete_array (void* mem) UT_NOTHROW
 static void* mem_leak_operator_new (size_t size) UT_THROW(std::bad_alloc)
 {
     void* memory;
-#if CPPUTEST_GNU_STACKTRACE_SUPPORTED == 1
-    void* fnAddr[BACKTRACE_CALLING_FUNCTION_DISTANCE+1];
-    int backtraceSize = backtrace(fnAddr, BACKTRACE_CALLING_FUNCTION_DISTANCE+1);
-    if( backtraceSize > BACKTRACE_CALLING_FUNCTION_DISTANCE )
+#if CPPUTEST_GNU_CALLSTACK_SUPPORTED
+    void* fnAddr[CALLSTACK_CALLING_FUNCTION_DISTANCE+1];
+    int backtraceSize = backtrace(fnAddr, CALLSTACK_CALLING_FUNCTION_DISTANCE+1);
+    if( backtraceSize > CALLSTACK_CALLING_FUNCTION_DISTANCE )
     {
-        memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewAllocator(), size, NULLPTR, 0, fnAddr[BACKTRACE_CALLING_FUNCTION_DISTANCE]);
+        memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewAllocator(), size, NULLPTR, 0, fnAddr[CALLSTACK_CALLING_FUNCTION_DISTANCE]);
     }
     else
     {
 #endif
         memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewAllocator(), size);
-#if CPPUTEST_GNU_STACKTRACE_SUPPORTED == 1
+#if CPPUTEST_GNU_CALLSTACK_SUPPORTED
     }
 #endif
     UT_THROW_BAD_ALLOC_WHEN_NULL(memory);
@@ -274,18 +274,18 @@ static void* mem_leak_operator_new (size_t size) UT_THROW(std::bad_alloc)
 
 static void* mem_leak_operator_new_nothrow (size_t size) UT_NOTHROW
 {
-#if CPPUTEST_GNU_STACKTRACE_SUPPORTED == 1
-    void* fnAddr[BACKTRACE_CALLING_FUNCTION_DISTANCE+1];
-    int backtraceSize = backtrace(fnAddr, BACKTRACE_CALLING_FUNCTION_DISTANCE+1);
-    if( backtraceSize > BACKTRACE_CALLING_FUNCTION_DISTANCE )
+#if CPPUTEST_GNU_CALLSTACK_SUPPORTED
+    void* fnAddr[CALLSTACK_CALLING_FUNCTION_DISTANCE+1];
+    int backtraceSize = backtrace(fnAddr, CALLSTACK_CALLING_FUNCTION_DISTANCE+1);
+    if( backtraceSize > CALLSTACK_CALLING_FUNCTION_DISTANCE )
     {
-        return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewAllocator(), size, NULLPTR, 0, fnAddr[BACKTRACE_CALLING_FUNCTION_DISTANCE]);
+        return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewAllocator(), size, NULLPTR, 0, fnAddr[CALLSTACK_CALLING_FUNCTION_DISTANCE]);
     }
     else
     {
 #endif
         return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewAllocator(), size);
-#if CPPUTEST_GNU_STACKTRACE_SUPPORTED == 1
+#if CPPUTEST_GNU_CALLSTACK_SUPPORTED
     }
 #endif
 }
@@ -300,18 +300,18 @@ static void* mem_leak_operator_new_debug (size_t size, const char* file, int lin
 static void* mem_leak_operator_new_array (size_t size) UT_THROW(std::bad_alloc)
 {
     void* memory;
-#if CPPUTEST_GNU_STACKTRACE_SUPPORTED == 1
-    void* fnAddr[BACKTRACE_CALLING_FUNCTION_DISTANCE+1];
-    int backtraceSize = backtrace(fnAddr, BACKTRACE_CALLING_FUNCTION_DISTANCE+1);
-    if( backtraceSize > BACKTRACE_CALLING_FUNCTION_DISTANCE )
+#if CPPUTEST_GNU_CALLSTACK_SUPPORTED
+    void* fnAddr[CALLSTACK_CALLING_FUNCTION_DISTANCE+1];
+    int backtraceSize = backtrace(fnAddr, CALLSTACK_CALLING_FUNCTION_DISTANCE+1);
+    if( backtraceSize > CALLSTACK_CALLING_FUNCTION_DISTANCE )
     {
-        memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewArrayAllocator(), size, NULLPTR, 0, fnAddr[BACKTRACE_CALLING_FUNCTION_DISTANCE]);
+        memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewArrayAllocator(), size, NULLPTR, 0, fnAddr[CALLSTACK_CALLING_FUNCTION_DISTANCE]);
     }
     else
     {
 #endif
         memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewArrayAllocator(), size);
-#if CPPUTEST_GNU_STACKTRACE_SUPPORTED == 1
+#if CPPUTEST_GNU_CALLSTACK_SUPPORTED
     }
 #endif
     UT_THROW_BAD_ALLOC_WHEN_NULL(memory);
@@ -320,18 +320,18 @@ static void* mem_leak_operator_new_array (size_t size) UT_THROW(std::bad_alloc)
 
 static void* mem_leak_operator_new_array_nothrow (size_t size) UT_NOTHROW
 {
-#if CPPUTEST_GNU_STACKTRACE_SUPPORTED == 1
-    void* fnAddr[BACKTRACE_CALLING_FUNCTION_DISTANCE+1];
-    int backtraceSize = backtrace(fnAddr, BACKTRACE_CALLING_FUNCTION_DISTANCE+1);
-    if( backtraceSize > BACKTRACE_CALLING_FUNCTION_DISTANCE )
+#if CPPUTEST_GNU_CALLSTACK_SUPPORTED
+    void* fnAddr[CALLSTACK_CALLING_FUNCTION_DISTANCE+1];
+    int backtraceSize = backtrace(fnAddr, CALLSTACK_CALLING_FUNCTION_DISTANCE+1);
+    if( backtraceSize > CALLSTACK_CALLING_FUNCTION_DISTANCE )
     {
-        return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewArrayAllocator(), size, NULLPTR, 0, fnAddr[BACKTRACE_CALLING_FUNCTION_DISTANCE]);
+        return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewArrayAllocator(), size, NULLPTR, 0, fnAddr[CALLSTACK_CALLING_FUNCTION_DISTANCE]);
     }
     else
     {
 #endif
         return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewArrayAllocator(), size);
-#if CPPUTEST_GNU_STACKTRACE_SUPPORTED == 1
+#if CPPUTEST_GNU_CALLSTACK_SUPPORTED
     }
 #endif
 }

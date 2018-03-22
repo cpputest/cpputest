@@ -257,7 +257,7 @@ TEST(MemoryLeakOverridesToBeUsedInProductionCode, MallocWithButFreeWithoutLeakDe
     memLeakDetector->removeMemoryLeakInformationWithoutCheckingOrDeallocatingTheMemoryButDeallocatingTheAccountInformation(getCurrentMallocAllocator(), leak, true);
 }
 
-#if CPPUTEST_GNU_STACKTRACE_SUPPORTED == 1
+#if CPPUTEST_GNU_CALLSTACK_SUPPORTED
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, OperatorNewOverloadingWithoutMacroWorks)
 {

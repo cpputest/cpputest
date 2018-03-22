@@ -32,6 +32,10 @@
 #include "CppUTestGeneratedConfig.h"
 #endif
 
+#ifndef __has_attribute
+  #define __has_attribute(x) 0
+#endif
+
 /*
  * This file is added for some specific CppUTest configurations that earlier were spread out into multiple files.
  *
@@ -91,16 +95,18 @@
  #endif
 #endif
 
-#if (CPPUTEST_USE_MEM_LEAK_DETECTION == 1) && defined(__GNUC__) && !defined(__CYGWIN__) && !defined(__MINGW32__) && !defined(WIN32) && !defined(_WIN32) && !defined(__WIN32__) && !defined(WIN64) && !defined(_WIN64) && !defined(__WIN64__)
-#define CPPUTEST_GNU_STACKTRACE_SUPPORTED 1
-#else
-#define CPPUTEST_GNU_STACKTRACE_SUPPORTED 0
+#if CPPUTEST_USE_MEM_LEAK_DETECTION && defined(__GNUC__) && defined(__linux__)
+  #ifdef CALLSTACK_INSPECTION_DISABLED
+    #define CPPUTEST_GNU_CALLSTACK_SUPPORTED 0
+  #else
+    #define CPPUTEST_GNU_CALLSTACK_SUPPORTED 1
+  #endif
 #endif
 
-#if CPPUTEST_GNU_STACKTRACE_SUPPORTED == 1 && defined(__clang__)
-#define __disable_tail_calls__ __attribute__((disable_tail_calls))
+#if CPPUTEST_GNU_CALLSTACK_SUPPORTED && __has_attribute(disable_tail_calls)
+  #define __disable_tail_calls__ __attribute__((disable_tail_calls))
 #else
-#define __disable_tail_calls__
+  #define __disable_tail_calls__
 #endif
 
 /* Should be the only #include here. Standard C library wrappers */
@@ -111,10 +117,6 @@
  *
  * This is needed for compiling with clang, without breaking other compilers.
  */
-#ifndef __has_attribute
-  #define __has_attribute(x) 0
-#endif
-
 #if __has_attribute(noreturn)
   #define __no_return__ __attribute__((noreturn))
 #else

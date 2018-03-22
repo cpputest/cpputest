@@ -30,7 +30,7 @@
 #include "CppUTestExt/MemoryReportFormatter.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
-#if CPPUTEST_GNU_STACKTRACE_SUPPORTED == 1
+#if CPPUTEST_GNU_CALLSTACK_SUPPORTED
 #include <execinfo.h>
 
 SimpleString demangle(const char* line);
@@ -54,7 +54,7 @@ void NormalMemoryReportFormatter::report_test_end(TestResult* result, UtestShell
     result->print(StringFromFormat("ENDTEST(%s, %s)\n", test.getGroup().asCharString(), test.getName().asCharString()).asCharString());
 }
 
-#if CPPUTEST_GNU_STACKTRACE_SUPPORTED == 1
+#if CPPUTEST_GNU_CALLSTACK_SUPPORTED
 
 void NormalMemoryReportFormatter::report_alloc_memory(TestResult* result, TestMemoryAllocator* allocator, size_t size, char* memory, const char* file, int line, void *addr)
 {
