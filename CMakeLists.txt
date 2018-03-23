@@ -69,6 +69,7 @@ include(CTest)
 #include("${CppUTestRootDirectory}/cmake/Modules/CheckFunctionExists.cmake")
 include("${CppUTestRootDirectory}/cmake/Modules/CppUTestBuildTimeDiscoverTests.cmake")
 include("${CppUTestRootDirectory}/cmake/Modules/CppUTestNormalizeTestOutputLocation.cmake")
+include(GNUInstallDirs)
 
 configure_file (
     "${PROJECT_SOURCE_DIR}/config.h.cmake"
@@ -91,8 +92,8 @@ if (TESTS)
     endif (EXTENSIONS)
 endif (TESTS)
 
-set (INCLUDE_INSTALL_DIR "include")
-set (LIB_INSTALL_DIR "lib")
+set (INCLUDE_INSTALL_DIR "${CMAKE_INSTALL_INCLUDEDIR}")
+set (LIB_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}")
 set (INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
 # Pkg-config file.
