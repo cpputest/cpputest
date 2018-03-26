@@ -61,10 +61,10 @@ public:
         alloc_called++;
         return TestMemoryAllocator::alloc_memory(size, "file", 1, NULLPTR);
     }
-    void free_memory(char* memory, const char* file, int line, void *addr)
+    void free_memory(char* memory, const char* file, int line, void *caller)
     {
         free_called++;
-        TestMemoryAllocator::free_memory(memory, file, line, addr);
+        TestMemoryAllocator::free_memory(memory, file, line, caller);
     }
 };
 
@@ -81,15 +81,15 @@ public:
     int allocMemoryLeakNodeCalled;
     int freeMemoryLeakNodeCalled;
 
-    char* alloc_memory(size_t size, const char* file, int line, void *addr)
+    char* alloc_memory(size_t size, const char* file, int line, void *caller)
     {
         alloc_called++;
-        return TestMemoryAllocator::alloc_memory(size, file, line, addr);
+        return TestMemoryAllocator::alloc_memory(size, file, line, caller);
     }
-    void free_memory(char* memory, const char* file, int line, void *addr)
+    void free_memory(char* memory, const char* file, int line, void *caller)
     {
         free_called++;
-        TestMemoryAllocator::free_memory(memory, file, line, addr);
+        TestMemoryAllocator::free_memory(memory, file, line, caller);
     }
 
     char* allocMemoryLeakNode(size_t size)

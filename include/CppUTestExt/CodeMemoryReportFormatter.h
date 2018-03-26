@@ -47,8 +47,8 @@ public:
     virtual void report_test_start(TestResult* result, UtestShell& test) _override;
     virtual void report_test_end(TestResult* result, UtestShell& test) _override;
 
-    virtual void report_alloc_memory(TestResult* result, TestMemoryAllocator* allocator, size_t size, char* memory, const char* file, int line, void *addr) _override;
-    virtual void report_free_memory(TestResult* result, TestMemoryAllocator* allocator, char* memory, const char* file, int line, void *addr) _override;
+    virtual void report_alloc_memory(TestResult* result, TestMemoryAllocator* allocator, size_t size, char* memory, const char* file, int line, void *caller) _override;
+    virtual void report_free_memory(TestResult* result, TestMemoryAllocator* allocator, char* memory, const char* file, int line, void *caller) _override;
 
 private:
 

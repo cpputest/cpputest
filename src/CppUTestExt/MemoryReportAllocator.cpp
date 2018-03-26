@@ -72,17 +72,17 @@ void MemoryReportAllocator::setFormatter(MemoryReportFormatter* formatter)
     formatter_ = formatter;
 }
 
-char* MemoryReportAllocator::alloc_memory(size_t size, const char* file, int line, void *addr)
+char* MemoryReportAllocator::alloc_memory(size_t size, const char* file, int line, void *caller)
 {
-    char* memory = realAllocator_->alloc_memory(size, file, line, addr);
+    char* memory = realAllocator_->alloc_memory(size, file, line, caller);
     if (result_ && formatter_)
-        formatter_->report_alloc_memory(result_, this, size, memory, file, line, addr);
+        formatter_->report_alloc_memory(result_, this, size, memory, file, line, caller);
     return memory;
 }
 
-void MemoryReportAllocator::free_memory(char* memory, const char* file, int line, void *addr)
+void MemoryReportAllocator::free_memory(char* memory, const char* file, int line, void *caller)
 {
-    realAllocator_->free_memory(memory, file, line, addr);
+    realAllocator_->free_memory(memory, file, line, caller);
     if (result_ && formatter_)
-        formatter_->report_free_memory(result_, this, memory, file, line, addr);
+        formatter_->report_free_memory(result_, this, memory, file, line, caller);
 }

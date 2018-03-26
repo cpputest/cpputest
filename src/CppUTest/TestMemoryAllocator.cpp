@@ -173,12 +173,12 @@ void CrashOnAllocationAllocator::setNumberToCrashOn(unsigned allocationToCrashOn
     allocationToCrashOn_ = allocationToCrashOn;
 }
 
-char* CrashOnAllocationAllocator::alloc_memory(size_t size, const char* file, int line, void *addr)
+char* CrashOnAllocationAllocator::alloc_memory(size_t size, const char* file, int line, void *caller)
 {
     if (MemoryLeakWarningPlugin::getGlobalDetector()->getCurrentAllocationNumber() == allocationToCrashOn_)
         UT_CRASH();
 
-    return TestMemoryAllocator::alloc_memory(size, file, line, addr);
+    return TestMemoryAllocator::alloc_memory(size, file, line, caller);
 }
 
 
@@ -268,7 +268,7 @@ void FailableMemoryAllocator::failNthAllocAt(int allocationNumber, const char* f
     head_ = newNode;
 }
 
-char* FailableMemoryAllocator::alloc_memory(size_t size, const char* file, int line, void *addr)
+char* FailableMemoryAllocator::alloc_memory(size_t size, const char* file, int line, void *caller)
 {
     currentAllocNumber_++;
     LocationToFailAllocNode* current = head_;
@@ -285,7 +285,7 @@ char* FailableMemoryAllocator::alloc_memory(size_t size, const char* file, int l
       previous = current;
       current = current->next_;
     }
-    return TestMemoryAllocator::alloc_memory(size, file, line, addr);
+    return TestMemoryAllocator::alloc_memory(size, file, line, caller);
 }
 
 char* FailableMemoryAllocator::allocMemoryLeakNode(size_t size)

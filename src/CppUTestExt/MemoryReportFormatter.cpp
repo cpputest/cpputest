@@ -31,9 +31,7 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 
 #if CPPUTEST_GNU_CALLSTACK_SUPPORTED
-#include <execinfo.h>
-
-SimpleString getAddressInfo(const char* file, int line, void *caller_addr);
+SimpleString getCallerInfo(const char* file, int line, void *caller);
 #endif
 
 NormalMemoryReportFormatter::NormalMemoryReportFormatter()
@@ -56,14 +54,14 @@ void NormalMemoryReportFormatter::report_test_end(TestResult* result, UtestShell
 
 #if CPPUTEST_GNU_CALLSTACK_SUPPORTED
 
-void NormalMemoryReportFormatter::report_alloc_memory(TestResult* result, TestMemoryAllocator* allocator, size_t size, char* memory, const char* file, int line, void *addr)
+void NormalMemoryReportFormatter::report_alloc_memory(TestResult* result, TestMemoryAllocator* allocator, size_t size, char* memory, const char* file, int line, void *caller)
 {
-    result->print(StringFromFormat("\tAllocation using %s of size: %lu pointer: %p from: %s\n", allocator->alloc_name(), (unsigned long) size, (void*) memory, getAddressInfo(file, line, addr).asCharString()).asCharString());
+    result->print(StringFromFormat("\tAllocation using %s of size: %lu pointer: %p from: %s\n", allocator->alloc_name(), (unsigned long) size, (void*) memory, getCallerInfo(file, line, caller).asCharString()).asCharString());
 }
 
-void NormalMemoryReportFormatter::report_free_memory(TestResult* result, TestMemoryAllocator* allocator, char* memory, const char* file, int line, void *addr)
+void NormalMemoryReportFormatter::report_free_memory(TestResult* result, TestMemoryAllocator* allocator, char* memory, const char* file, int line, void *caller)
 {
-    result->print(StringFromFormat("\tDeallocation using %s of pointer: %p allocated from: %s\n", allocator->free_name(),  (void*) memory, getAddressInfo(file, line, addr).asCharString()).asCharString());
+    result->print(StringFromFormat("\tDeallocation using %s of pointer: %p allocated from: %s\n", allocator->free_name(),  (void*) memory, getCallerInfo(file, line, caller).asCharString()).asCharString());
 }
 
 #else
