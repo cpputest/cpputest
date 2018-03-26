@@ -33,7 +33,7 @@
 #if CPPUTEST_GNU_CALLSTACK_SUPPORTED
 #include <execinfo.h>
 
-SimpleString demangle(const char* line);
+SimpleString getAddressInfo(const char* file, int line, void *caller_addr);
 #endif
 
 NormalMemoryReportFormatter::NormalMemoryReportFormatter()
@@ -58,62 +58,24 @@ void NormalMemoryReportFormatter::report_test_end(TestResult* result, UtestShell
 
 void NormalMemoryReportFormatter::report_alloc_memory(TestResult* result, TestMemoryAllocator* allocator, size_t size, char* memory, const char* file, int line, void *addr)
 {
-    if( addr != NULLPTR )
-    {
-        void* fnAddr = addr;
-        char** fnSyms = backtrace_symbols(&fnAddr, 1);
-
-        if( fnSyms != NULLPTR )
-        {
-            result->print(StringFromFormat("\tAllocation using %s of size: %lu pointer: %p at function %s\n", allocator->alloc_name(), (unsigned long) size, (void*) memory, demangle(fnSyms[0]).asCharString()).asCharString());
-
-            PlatformSpecificFree(fnSyms);
-        }
-        else
-        {
-            result->print(StringFromFormat("\tAllocation using %s of size: %lu pointer: %p at function at address %p\n", allocator->alloc_name(), (unsigned long) size, (void*) memory, fnAddr).asCharString());
-        }
-    }
-    else
-    {
-        result->print(StringFromFormat("\tAllocation using %s of size: %lu pointer: %p at %s:%d\n", allocator->alloc_name(), (unsigned long) size, (void*) memory, file, line).asCharString());
-    }
+    result->print(StringFromFormat("\tAllocation using %s of size: %lu pointer: %p from: %s\n", allocator->alloc_name(), (unsigned long) size, (void*) memory, getAddressInfo(file, line, addr).asCharString()).asCharString());
 }
 
 void NormalMemoryReportFormatter::report_free_memory(TestResult* result, TestMemoryAllocator* allocator, char* memory, const char* file, int line, void *addr)
 {
-    if( addr != NULLPTR )
-    {
-        void* fnAddr = addr;
-        char** fnSyms = backtrace_symbols(&fnAddr, 1);
-
-        if( fnSyms != NULLPTR )
-        {
-            result->print(StringFromFormat("\tDeallocation using %s of pointer: %p at function %s\n", allocator->free_name(),  (void*) memory, demangle(fnSyms[0]).asCharString()).asCharString());
-
-            PlatformSpecificFree(fnSyms);
-        }
-        else
-        {
-            result->print(StringFromFormat("\tDeallocation using %s of pointer: %p at function at address %p\n", allocator->free_name(),  (void*) memory, fnAddr).asCharString());
-        }
-    }
-    else
-    {
-        result->print(StringFromFormat("\tDeallocation using %s of pointer: %p at %s:%d\n", allocator->free_name(),  (void*) memory, file, line).asCharString());
-    }
+    result->print(StringFromFormat("\tDeallocation using %s of pointer: %p allocated from: %s\n", allocator->free_name(),  (void*) memory, getAddressInfo(file, line, addr).asCharString()).asCharString());
 }
 
 #else
 
 void NormalMemoryReportFormatter::report_alloc_memory(TestResult* result, TestMemoryAllocator* allocator, size_t size, char* memory, const char* file, int line, void *)
 {
-    result->print(StringFromFormat("\tAllocation using %s of size: %lu pointer: %p at %s:%d\n", allocator->alloc_name(), (unsigned long) size, (void*) memory, file, line).asCharString());
+    result->print(StringFromFormat("\tAllocation using %s of size: %lu pointer: %p from: Source '%s'<Line:%d>\n", allocator->alloc_name(), (unsigned long) size, (void*) memory, file, line).asCharString());
 }
 
 void NormalMemoryReportFormatter::report_free_memory(TestResult* result, TestMemoryAllocator* allocator, char* memory, const char* file, int line, void *)
 {
-    result->print(StringFromFormat("\tDeallocation using %s of pointer: %p at %s:%d\n", allocator->free_name(),  (void*) memory, file, line).asCharString());
+    result->print(StringFromFormat("\tDeallocation using %s of pointer: %p allocated from: Source '%s'<Line:%d>\n", allocator->free_name(),  (void*) memory, file, line).asCharString());
 }
 
 #endif

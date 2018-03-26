@@ -56,13 +56,13 @@ TEST_GROUP(NormalMemoryReportFormatter)
 TEST(NormalMemoryReportFormatter, mallocCreatesAnMallocCall)
 {
     formatter.report_alloc_memory(testResult, defaultMallocAllocator(), 10, memory01, "file", 9, NULLPTR);
-    TESTOUTPUT_EQUAL(StringFromFormat("\tAllocation using malloc of size: 10 pointer: %p at file:9\n", (void*) memory01).asCharString());
+    TESTOUTPUT_EQUAL(StringFromFormat("\tAllocation using malloc of size: 10 pointer: %p from: Source 'file'<Line:9>\n", (void*) memory01).asCharString());
 }
 
 TEST(NormalMemoryReportFormatter, freeCreatesAnFreeCall)
 {
     formatter.report_free_memory(testResult, defaultMallocAllocator(), memory01, "boo", 6, NULLPTR);
-    TESTOUTPUT_EQUAL(StringFromFormat("\tDeallocation using free of pointer: %p at boo:6\n", (void*) memory01).asCharString());
+    TESTOUTPUT_EQUAL(StringFromFormat("\tDeallocation using free of pointer: %p allocated from: Source 'boo'<Line:6>\n", (void*) memory01).asCharString());
 }
 
 TEST(NormalMemoryReportFormatter, testStarts)

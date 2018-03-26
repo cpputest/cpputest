@@ -34,8 +34,9 @@
 
 #include <execinfo.h>
 #include <cxxabi.h>
+#include <stdio.h>
 
-SimpleString demangle(const char* line);
+SimpleString getAddressInfo(const char* file, int line, void *caller_addr);
 
 #endif
 
@@ -170,37 +171,132 @@ void MemoryLeakOutputStringBuffer::startMemoryLeakReporting()
 }
 
 #if CPPUTEST_GNU_CALLSTACK_SUPPORTED
-SimpleString demangle(const char* line)
+
+// TODO: Move this function to a new source file
+static SimpleString demangle_symbol(const SimpleString &mangled_symbol)
 {
-    SimpleString buffer(line);
-
-    size_t fPos = buffer.rfind('(');
-    size_t e2Pos = buffer.findFrom(fPos+1, ')');
-    if( (fPos == SimpleString::npos) || (e2Pos == SimpleString::npos) )
-    {
-        return line;
-    }
-
-    size_t ePos = buffer.rfindFrom(e2Pos-1, '+');
-    if( (ePos == SimpleString::npos) || (fPos >= ePos) )
-    {
-        return line;
-    }
-
-    size_t len = ePos-fPos-1;
-    SimpleString symbol = buffer.subString(fPos+1, len);
+    SimpleString result;
 
     int status;
-    char* demangled = abi::__cxa_demangle( symbol.asCharString(), NULLPTR, NULLPTR, &status );
-    if( demangled != NULLPTR && status == 0 )
-    {
-        return buffer.subString(0, fPos+1) + demangled + buffer.subString(ePos);
+    char* demangled_symbol = abi::__cxa_demangle( mangled_symbol.asCharString(), NULLPTR, NULLPTR, &status );
+    if (demangled_symbol != NULLPTR) {
+        if (status == 0) {
+            result = demangled_symbol;
+        }
+        PlatformSpecificFree(demangled_symbol);
     }
-    else
-    {
-        return line;
+
+    if (result.isEmpty()) {
+        result = mangled_symbol;
     }
+
+    return result;
 }
+
+// TODO: Move this function to a new source file
+static SimpleString getAddress2Line(const SimpleString &filename, void *address)
+{
+    SimpleString cmd_result;
+
+    SimpleString cmd_line = StringFromFormat("addr2line -e %s %p", filename.asCharString(), address);
+
+    FILE* cmd_pipe = popen(cmd_line.asCharString(), "r");
+    if (cmd_pipe) {
+        char buffer[256];
+
+        while (!feof(cmd_pipe)) {
+            if (fgets(buffer, sizeof(buffer), cmd_pipe) != NULLPTR) {
+                cmd_result += buffer;
+            }
+        }
+
+        pclose(cmd_pipe);
+    }
+
+    return cmd_result;
+}
+
+// TODO: Move this function to a new source file
+static SimpleString getAddressInfo(const SimpleString &filename, void *address)
+{
+    SimpleString result;
+
+    SimpleString address_line = getAddress2Line(filename, address);
+
+    size_t colon_pos = address_line.find(':');
+    if (colon_pos != SimpleString::npos) {
+        SimpleString source_file = address_line.subString(0, colon_pos);
+        SimpleString line_num_str = address_line.subString(colon_pos + 1);
+        int line_num = SimpleString::AtoI(line_num_str.asCharString());
+
+        static const SimpleString UNKNOWN_SOURCE_FILE = "??";
+        if (source_file != UNKNOWN_SOURCE_FILE) {
+            result = StringFromFormat("Source '%s'<Line:%d>, ", source_file.asCharString(), line_num);
+        }
+    }
+
+    return result;
+}
+
+// TODO: Move this function to a new source file
+static bool parseSymbolInfo(const char* symbol_info, SimpleString &caller_info, SimpleString &binary_module)
+{
+    SimpleString buffer(symbol_info);
+
+    size_t first_parenthesis_pos = buffer.find('(');
+    size_t last_parenthesis_pos = buffer.rfind(')');
+    if ((first_parenthesis_pos == SimpleString::npos) || (last_parenthesis_pos == SimpleString::npos)) {
+        return false;
+    }
+
+    size_t plus_pos = buffer.rfindFrom(last_parenthesis_pos-1, '+');
+    if ((plus_pos == SimpleString::npos) || (first_parenthesis_pos >= plus_pos)) {
+        return false;
+    }
+
+    binary_module = buffer.subString(0, first_parenthesis_pos);
+
+    SimpleString mangled_function_name = buffer.subString((first_parenthesis_pos + 1), (plus_pos - first_parenthesis_pos - 1));
+    SimpleString demangled_function_name = demangle_symbol(mangled_function_name);
+
+    caller_info = demangled_function_name + buffer.subString(plus_pos, (last_parenthesis_pos - plus_pos));
+
+    return true;
+}
+
+// TODO: Move this function to a new source file
+SimpleString getAddressInfo(const char* file, int line, void *caller_addr)
+{
+    SimpleString result;
+
+    if (caller_addr != NULLPTR) {
+        char** symbol_info = backtrace_symbols(&caller_addr, 1);
+
+        if (symbol_info != NULLPTR) {
+            SimpleString caller_info, binary_module;
+            if (parseSymbolInfo(symbol_info[0], caller_info, binary_module)) {
+                result = StringFromFormat("Function %s, ", caller_info.asCharString());
+                result += getAddressInfo(binary_module, caller_addr);
+                result += StringFromFormat("Binary '%s'", binary_module.asCharString());
+            } else {
+                result = StringFromFormat("Function %s", symbol_info[0]);
+            }
+            PlatformSpecificFree(symbol_info);
+        } else {
+            result = StringFromFormat("Unknown function (Address:%p), ", caller_addr);
+        }
+    } else {
+        result = StringFromFormat("Source '%s'<Line:%d>", file, line);
+    }
+
+    return result;
+}
+
+static SimpleString getAddressInfo(MemoryLeakDetectorNode *leak)
+{
+    return getAddressInfo(leak->file_, leak->line_, leak->addr_);
+}
+
 #endif
 
 void MemoryLeakOutputStringBuffer::reportMemoryLeak(MemoryLeakDetectorNode* leak)
@@ -211,31 +307,11 @@ void MemoryLeakOutputStringBuffer::reportMemoryLeak(MemoryLeakDetectorNode* leak
 
     total_leaks_++;
 #if CPPUTEST_GNU_CALLSTACK_SUPPORTED
-    if( leak->addr_ != NULLPTR )
-    {
-        void* fnAddr = leak->addr_;
-        char** fnSyms = backtrace_symbols(&fnAddr, 1);
-
-        if( fnSyms != NULLPTR )
-        {
-            outputBuffer_.add("Alloc num (%u) Leak size: %lu Allocated at: %s. Type: \"%s\"\n\tMemory: <%p> Content:\n",
-                    leak->number_, (unsigned long) leak->size_, demangle(fnSyms[0]).asCharString(), leak->allocator_->alloc_name(), (void*) leak->memory_);
-
-            PlatformSpecificFree(fnSyms);
-        }
-        else
-        {
-            outputBuffer_.add("Alloc num (%u) Leak size: %lu Allocated at: %p. Type: \"%s\"\n\tMemory: <%p> Content:\n",
-                    leak->number_, (unsigned long) leak->size_, fnAddr, leak->allocator_->alloc_name(), (void*) leak->memory_);
-        }
-    }
-    else
-    {
-#endif
-        outputBuffer_.add("Alloc num (%u) Leak size: %lu Allocated at: %s and line: %d. Type: \"%s\"\n\tMemory: <%p> Content:\n",
-                leak->number_, (unsigned long) leak->size_, leak->file_, leak->line_, leak->allocator_->alloc_name(), (void*) leak->memory_);
-#if CPPUTEST_GNU_CALLSTACK_SUPPORTED
-    }
+    outputBuffer_.add("Alloc num (%u) Leak size: %lu Allocated from: %s. Type: \"%s\"\n\tMemory: <%p> Content:\n",
+            leak->number_, (unsigned long) leak->size_, getAddressInfo(leak).asCharString(), leak->allocator_->alloc_name(), (void*) leak->memory_);
+#else
+    outputBuffer_.add("Alloc num (%u) Leak size: %lu Allocated from: Source '%s'<Line:%d>. Type: \"%s\"\n\tMemory: <%p> Content:\n",
+            leak->number_, (unsigned long) leak->size_, leak->file_, leak->line_, leak->allocator_->alloc_name(), (void*) leak->memory_);
 #endif
     outputBuffer_.addMemoryDump(leak->memory_, leak->size_);
 

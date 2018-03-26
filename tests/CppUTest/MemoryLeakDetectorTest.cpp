@@ -167,7 +167,7 @@ TEST(MemoryLeakDetectorTest, memoryDumpOutput)
     SimpleString output = detector->report(mem_leak_period_checking);
 
     STRCMP_CONTAINS("Alloc num (1)", output.asCharString());
-    STRCMP_CONTAINS("Leak size: 6 Allocated at",  output.asCharString());
+    STRCMP_CONTAINS("Leak size: 6 Allocated from",  output.asCharString());
     STRCMP_CONTAINS("Content:",  output.asCharString());
     STRCMP_CONTAINS("0000: 74 65 73 74 31 00                                |test1.|", output.asCharString());
 

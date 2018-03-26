@@ -262,14 +262,20 @@ TEST(MemoryLeakOverridesToBeUsedInProductionCode, MallocWithButFreeWithoutLeakDe
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, OperatorNewOverloadingWithoutMacroWorks)
 {
     char* leak = newAllocationWithoutMacro();
-    STRCMP_CONTAINS("tests/CppUTest/CppUTestTests(newAllocationWithoutMacro", memLeakDetector->report(mem_leak_period_checking));
+    const char* leak_report = memLeakDetector->report(mem_leak_period_checking);
+    STRCMP_CONTAINS("Function newAllocationWithoutMacro", leak_report);
+    STRCMP_CONTAINS("tests/CppUTest/AllocationInCppFile.cpp'<Line:", leak_report);
+    STRCMP_CONTAINS("tests/CppUTest/CppUTestTests", leak_report);
     delete leak;
 }
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, OperatorNewArrayOverloadingWithoutMacroWorks)
 {
     char* leak = newArrayAllocationWithoutMacro();
-    STRCMP_CONTAINS("tests/CppUTest/CppUTestTests(newArrayAllocationWithoutMacro", memLeakDetector->report(mem_leak_period_checking));
+    const char* leak_report = memLeakDetector->report(mem_leak_period_checking);
+    STRCMP_CONTAINS("Function newArrayAllocationWithoutMacro", leak_report);
+    STRCMP_CONTAINS("tests/CppUTest/AllocationInCppFile.cpp'<Line:", leak_report);
+    STRCMP_CONTAINS("tests/CppUTest/CppUTestTests", leak_report);
     delete[] leak;
 }
 
