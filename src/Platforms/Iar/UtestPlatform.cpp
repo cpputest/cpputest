@@ -115,7 +115,10 @@ static long TimeInMillisImplementation()
 static const char* TimeStringImplementation()
 {
     time_t tm = time(NULL);
-    return ctime(&tm);
+    char* pTimeStr = ctime(&tm);
+    char* newlineChar = strchr(pTimeStr, '\n');   // Find the terminating newline character.
+    if(newlineChar != NULL) *newlineChar = '\0';   //If newline is found replace it with the string terminator.
+    return (pTimeStr);
 }
 
 long (*GetPlatformSpecificTimeInMillis)() = TimeInMillisImplementation;
