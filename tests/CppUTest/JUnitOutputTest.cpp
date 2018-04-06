@@ -383,7 +383,7 @@ TEST(JUnitOutputTest, withOneTestGroupAndOneTestOutputsTestSuiteStartAndEndBlock
 
     outputFile = fileSystem.file("cpputest_groupname.xml");
     STRCMP_EQUAL("<testsuite errors=\"0\" failures=\"0\" hostname=\"localhost\" name=\"groupname\" tests=\"1\" time=\"0.000\" timestamp=\"1978-10-03T00:00:00\">\n", outputFile->line(2));
-    STRCMP_EQUAL("</testsuite>", outputFile->lineFromTheBack(1));
+    STRCMP_EQUAL("</testsuite>\n", outputFile->lineFromTheBack(1));
 }
 
 TEST(JUnitOutputTest, withOneTestGroupAndOneTestFileShouldContainAnEmptyPropertiesBlock)
