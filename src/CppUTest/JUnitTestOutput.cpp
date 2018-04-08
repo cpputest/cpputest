@@ -240,7 +240,7 @@ void JUnitTestOutput::writeFileEnding()
 {
     writeToFile("<system-out>"); writeToFile(impl_->stdOutput_); writeToFile("</system-out>\n");
     writeToFile("<system-err></system-err>\n");
-    writeToFile("</testsuite>");
+    writeToFile("</testsuite>\n");
 }
 
 void JUnitTestOutput::writeTestGroupToFile()
