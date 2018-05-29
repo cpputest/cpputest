@@ -572,6 +572,16 @@ TEST(SimpleString, Sizes)
     STRCMP_EQUAL("10", StringFrom((int) size).asCharString());
 }
 
+#if __cplusplus > 199711L
+TEST(SimpleString, nullptr_type)
+{
+    SimpleString s(StringFrom(nullptr));
+    STRCMP_EQUAL("(null)", s.asCharString());
+
+    CHECK_EQUAL(nullptr, (nullptr_t)0);
+}
+#endif
+
 TEST(SimpleString, HexStrings)
 {
     STRCMP_EQUAL("f3", HexStringFrom((signed char)-13).asCharString());

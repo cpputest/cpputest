@@ -540,6 +540,12 @@ SimpleString BracketsFormattedHexString(SimpleString hexString)
     return SimpleString("(0x") + hexString + ")" ;
 }
 
+#if __cplusplus > 199711L
+SimpleString StringFrom(const std::nullptr_t __attribute__((unused)) value)
+{
+    return "(null)";
+}
+#endif
 
 #ifdef CPPUTEST_USE_LONG_LONG
 
