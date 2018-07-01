@@ -47,11 +47,11 @@ class EventComparator : public MockNamedValueComparator
 public:
     virtual bool isEqual(const void* object1, const void* object2)
     {
-        return ((Event*)object1)->type == ((Event*)object2)->type;
+        return ((const Event*)object1)->type == ((const Event*)object2)->type;
     }
     virtual SimpleString valueToString(const void* object)
     {
-        return StringFrom(((Event*)object)->type);
+        return StringFrom(((const Event*)object)->type);
     }
 };
 
