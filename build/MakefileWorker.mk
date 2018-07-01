@@ -198,8 +198,12 @@ ifeq ($(COMPILER_NAME),$(CLANG_STR))
 	CPPUTEST_CXX_WARNINGFLAGS += -Weverything -Wno-disabled-macro-expansion -Wno-padded -Wno-global-constructors -Wno-exit-time-destructors -Wno-weak-vtables -Wno-old-style-cast -Wno-c++11-long-long
 	CPPUTEST_C_WARNINGFLAGS += -Weverything -Wno-padded
 
-# Clang "7" (Xcode 7 command-line tools) introduced new warnings by default that don't exist on previous versions of clang and cause errors when present.
-ifeq ($(findstring clang-7,$(CC_VERSION_OUTPUT)),clang-7)
+# Clang "7" or newer (Xcode 7 or newer command-line tools) introduced new warnings by default that don't exist on previous versions of clang and cause errors when present.
+CLANG_VERSION := $(shell echo $(CC_VERSION_OUTPUT) | grep -o 'clang-[0-9][0-9][0-9]*.')
+CLANG_VERSION_NUM := $(subst .,,$(subst clang-,,$(CLANG_VERSION)))
+CLANG_VERSION_NUM_GT_700 := $(shell [[ $(CLANG_VERSION_NUM) -ge 700 ]] && echo Y)
+
+ifeq ($(CLANG_VERSION_NUM_GT_700), Y)
 # -Wno-reserved-id-macro -> Many CppUTest macros start with __, which is a reserved namespace
 # -Wno-keyword-macro -> CppUTest redefines the 'new' keyword for memory leak tracking
 	CPPUTEST_CXX_WARNINGFLAGS += -Wno-reserved-id-macro -Wno-keyword-macro
