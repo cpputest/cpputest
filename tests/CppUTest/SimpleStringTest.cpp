@@ -577,8 +577,6 @@ TEST(SimpleString, nullptr_type)
 {
     SimpleString s(StringFrom(nullptr));
     STRCMP_EQUAL("(null)", s.asCharString());
-
-    CHECK_EQUAL(nullptr, (nullptr_t)0);
 }
 #endif
 
