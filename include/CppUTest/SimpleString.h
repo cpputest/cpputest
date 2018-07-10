@@ -174,7 +174,9 @@ SimpleString BracketsFormattedHexStringFrom(cpputest_ulonglong value);
 SimpleString BracketsFormattedHexStringFrom(signed char value);
 SimpleString BracketsFormattedHexString(SimpleString hexString);
 
-
+#if __cplusplus > 199711L
+SimpleString StringFrom(const std::nullptr_t value);
+#endif
 
 #if CPPUTEST_USE_STD_CPP_LIB
 
