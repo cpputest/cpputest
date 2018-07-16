@@ -160,6 +160,67 @@ TEST(TeamCityOutputTest, PrintFailureWithFailInDifferentFile)
     STRCMP_EQUAL(expected, mock->getOutput().asCharString());
 }
 
+TEST(TeamCityOutputTest, TestGroupEscaped_Start)
+{
+	tst->setGroupName("'[]\n\r");
+	result->currentGroupStarted(tst);
+	const char* expected =
+		"##teamcity[testSuiteStarted name='|'|[|]|n|r']\n";
+	STRCMP_EQUAL(expected, mock->getOutput().asCharString());
+}
+
+TEST(TeamCityOutputTest, TestGroupEscaped_End)
+{
+	tst->setGroupName("'[]\n\r");
+	result->currentGroupStarted(tst);
+	result->currentGroupEnded(tst);
+	const char* expected =
+		"##teamcity[testSuiteStarted name='|'|[|]|n|r']\n"
+		"##teamcity[testSuiteFinished name='|'|[|]|n|r']\n";
+	STRCMP_EQUAL(expected, mock->getOutput().asCharString());
+}
+
+TEST(TeamCityOutputTest, TestNameEscaped_Start)
+{
+	tst->setTestName("'[]\n\r");
+	result->currentTestStarted(tst);
+	const char* expected =
+		"##teamcity[testStarted name='|'|[|]|n|r']\n";
+	STRCMP_EQUAL(expected, mock->getOutput().asCharString());
+}
+
+TEST(TeamCityOutputTest, TestNameEscaped_End)
+{
+	tst->setTestName("'[]\n\r");
+	result->currentTestStarted(tst);
+	result->currentTestEnded(tst);
+	const char* expected =
+		"##teamcity[testStarted name='|'|[|]|n|r']\n"
+		"##teamcity[testFinished name='|'|[|]|n|r' duration='0']\n";
+	STRCMP_EQUAL(expected, mock->getOutput().asCharString());
+}
+
+TEST(TeamCityOutputTest, TestNameEscaped_Ignore)
+{
+	IgnoredUtestShell itst("group", "'[]\n\r", "file", 10);
+	result->currentTestStarted(&itst);
+	const char* expected =
+		"##teamcity[testStarted name='|'|[|]|n|r']\n"
+		"##teamcity[testIgnored name='|'|[|]|n|r']\n";
+	STRCMP_EQUAL(expected, mock->getOutput().asCharString());
+}
+
+TEST(TeamCityOutputTest, TestNameEscaped_Fail)
+{
+	tst->setTestName("'[]\n\r");
+	TestFailure fail(tst, "failfile", 20, "failure message");
+	tcout->printFailure(fail);
+	const char* expected =
+		"##teamcity[testFailed name='|'|[|]|n|r' message='TEST failed (file:10): failfile:20' "
+		"details='failure message']\n";
+	STRCMP_EQUAL(expected, mock->getOutput().asCharString());
+}
+
 /* Todo:
  * -Detect when running in TeamCity and switch output to -o teamcity automatically
  */
