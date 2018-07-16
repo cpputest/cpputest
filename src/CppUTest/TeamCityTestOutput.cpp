@@ -84,7 +84,7 @@ void TeamCityTestOutput::printFailure(const TestFailure& failure)
     print("' message='");
     if (failure.isOutsideTestFile() || failure.isInHelperFunction()) {
         print("TEST failed (");
-        printEscaped(failure.getTestFileName().asCharString());
+        print(failure.getTestFileName().asCharString());
         print(":");
         print(failure.getTestLineNumber());
         print("): ");
