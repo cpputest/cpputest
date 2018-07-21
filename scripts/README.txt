@@ -1,5 +1,5 @@
 The New*.sh scripts are helpful for creating the initial files for a new class...
-	NewClass.sh - for TTDing a new C++ class
+	NewClass.sh - for TDDing a new C++ class
 	NewInterface.sh - for TDDing a new interface along with its Mock
 	NewCModule.sh - for TDDing a C module
 	NewCmiModule.sh - for TDDing a C module where there will be multiple 
