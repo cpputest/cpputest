@@ -7,6 +7,15 @@ set(CppUTest_version_minor 8)
 # 3.1 is needed for target_sources
 cmake_minimum_required(VERSION 3.1)
 
+###############
+# Conan support
+###############
+if (EXISTS "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
+    include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+    message(STATUS "conan_basic_setup()")
+    conan_basic_setup()
+endif()
+
 # Check for functions before setting a lot of stuff
 include(CheckFunctionExists)
 set (CMAKE_REQUIRED_INCLUDES "unistd.h")
