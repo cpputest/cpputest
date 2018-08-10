@@ -853,7 +853,7 @@ unsigned long int MockActualCallTrace::returnUnsignedLongIntValueOrDefault(unsig
 
 long int MockActualCallTrace::returnLongIntValueOrDefault(long int)
 {
-    return returnLongIntValue();
+    return 0;
 }
 
 #ifdef CPPUTEST_USE_LONG_LONG
@@ -875,7 +875,7 @@ cpputest_ulonglong MockActualCallTrace::returnUnsignedLongLongIntValueOrDefault(
 
 cpputest_longlong MockActualCallTrace::returnLongLongIntValueOrDefault(cpputest_longlong)
 {
-    return returnLongLongIntValue();
+    return 0;
 }
 
 #else
