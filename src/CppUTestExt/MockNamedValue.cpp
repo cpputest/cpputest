@@ -259,10 +259,10 @@ cpputest_ulonglong MockNamedValue::getUnsignedLongLongIntValue() const
         return value_.unsignedIntValue_;
     else if(type_ == "int" && value_.intValue_ >= 0)
         return (unsigned long long int)value_.intValue_;
-    else if(type_ == "unsigned long int")
-        return value_.unsignedLongIntValue_;
     else if(type_ == "long int" && value_.longIntValue_ >= 0)
         return (unsigned long long int)value_.longIntValue_;
+    else if(type_ == "unsigned long int")
+        return value_.unsignedLongIntValue_;
     else if(type_ == "long long int" && value_.longLongIntValue_ >= 0)
         return (unsigned long long int)value_.longLongIntValue_;
     else
