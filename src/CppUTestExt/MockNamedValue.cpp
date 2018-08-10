@@ -241,9 +241,9 @@ cpputest_longlong MockNamedValue::getLongLongIntValue() const
     if(type_ == "int")
         return value_.intValue_;
     else if(type_ == "unsigned int")
-        return (long int)value_.unsignedIntValue_;
+        return (long long int)value_.unsignedIntValue_;
     else if(type_ == "long int")
-        return (long long int)value_.longIntValue_;
+        return value_.longIntValue_;
     else if(type_ == "unsigned long int")
         return (long long int)value_.unsignedLongIntValue_;
     else
