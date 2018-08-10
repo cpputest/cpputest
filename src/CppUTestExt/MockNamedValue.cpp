@@ -249,7 +249,7 @@ cpputest_longlong MockNamedValue::getLongLongIntValue() const
     else
     {
         STRCMP_EQUAL("long long int", type_.asCharString());
-        return value_.longIntValue_;
+        return value_.longLongIntValue_;
     }
 }
 
