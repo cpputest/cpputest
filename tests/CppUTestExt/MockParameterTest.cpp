@@ -96,21 +96,6 @@ TEST(MockParameterTest, mismatchedIntegerTypesIntAndLongAreAllowed)
     mock().checkExpectations();
 }
 
-#ifdef CPPUTEST_USE_LONG_LONG
-
-TEST(MockParameterTest, mismatchedIntegerTypesIntAndLongLongAreAllowed)
-{
-    mock().expectOneCall("foo").withParameter("parameter", (int)1);
-    mock().actualCall("foo").withParameter("parameter", (long long)1);
-
-    mock().expectOneCall("foo").withParameter("parameter", (long long)1);
-    mock().actualCall("foo").withParameter("parameter", (int)1);
-
-    mock().checkExpectations();
-}
-
-#endif
-
 TEST(MockParameterTest, mismatchedIntegerTypesIntAndUnsignedAreAllowed)
 {
     mock().expectOneCall("foo").withParameter("parameter", (int)1);
@@ -133,21 +118,6 @@ TEST(MockParameterTest, mismatchedIntegerTypesIntAndUnsignedLongAreAllowed)
     mock().checkExpectations();
 }
 
-#ifdef CPPUTEST_USE_LONG_LONG
-
-TEST(MockParameterTest, mismatchedIntegerTypesIntAndUnsignedLongLongAreAllowed)
-{
-    mock().expectOneCall("foo").withParameter("parameter", (int)1);
-    mock().actualCall("foo").withParameter("parameter", (unsigned long long)1);
-
-    mock().expectOneCall("foo").withParameter("parameter", (unsigned long long)1);
-    mock().actualCall("foo").withParameter("parameter", (int)1);
-
-    mock().checkExpectations();
-}
-
-#endif
-
 TEST(MockParameterTest, mismatchedIntegerTypesUnsignedAndLongAreAllowed)
 {
     mock().expectOneCall("foo").withParameter("parameter", (unsigned)1);
@@ -158,21 +128,6 @@ TEST(MockParameterTest, mismatchedIntegerTypesUnsignedAndLongAreAllowed)
 
     mock().checkExpectations();
 }
-
-#ifdef CPPUTEST_USE_LONG_LONG
-
-TEST(MockParameterTest, mismatchedIntegerTypesUnsignedAndLongLongAreAllowed)
-{
-    mock().expectOneCall("foo").withParameter("parameter", (unsigned)1);
-    mock().actualCall("foo").withParameter("parameter", (long long)1);
-
-    mock().expectOneCall("foo").withParameter("parameter", (long long)1);
-    mock().actualCall("foo").withParameter("parameter", (unsigned)1);
-
-    mock().checkExpectations();
-}
-
-#endif
 
 TEST(MockParameterTest, mismatchedIntegerTypesUnsignedAndUnsignedLongAreAllowed)
 {
@@ -185,7 +140,51 @@ TEST(MockParameterTest, mismatchedIntegerTypesUnsignedAndUnsignedLongAreAllowed)
     mock().checkExpectations();
 }
 
+TEST(MockParameterTest, mismatchedIntegerTypesLongAndUnsignedLongAreAllowed)
+{
+    mock().expectOneCall("foo").withParameter("parameter", (long)1);
+    mock().actualCall("foo").withParameter("parameter", (unsigned long)1);
+
+    mock().expectOneCall("foo").withParameter("parameter", (unsigned long)1);
+    mock().actualCall("foo").withParameter("parameter", (long)1);
+
+    mock().checkExpectations();
+}
+
 #ifdef CPPUTEST_USE_LONG_LONG
+
+TEST(MockParameterTest, mismatchedIntegerTypesIntAndLongLongAreAllowed)
+{
+    mock().expectOneCall("foo").withParameter("parameter", (int)1);
+    mock().actualCall("foo").withParameter("parameter", (long long)1);
+
+    mock().expectOneCall("foo").withParameter("parameter", (long long)1);
+    mock().actualCall("foo").withParameter("parameter", (int)1);
+
+    mock().checkExpectations();
+}
+
+TEST(MockParameterTest, mismatchedIntegerTypesIntAndUnsignedLongLongAreAllowed)
+{
+    mock().expectOneCall("foo").withParameter("parameter", (int)1);
+    mock().actualCall("foo").withParameter("parameter", (unsigned long long)1);
+
+    mock().expectOneCall("foo").withParameter("parameter", (unsigned long long)1);
+    mock().actualCall("foo").withParameter("parameter", (int)1);
+
+    mock().checkExpectations();
+}
+
+TEST(MockParameterTest, mismatchedIntegerTypesUnsignedAndLongLongAreAllowed)
+{
+    mock().expectOneCall("foo").withParameter("parameter", (unsigned)1);
+    mock().actualCall("foo").withParameter("parameter", (long long)1);
+
+    mock().expectOneCall("foo").withParameter("parameter", (long long)1);
+    mock().actualCall("foo").withParameter("parameter", (unsigned)1);
+
+    mock().checkExpectations();
+}
 
 TEST(MockParameterTest, mismatchedIntegerTypesUnsignedAndUnsignedLongLongAreAllowed)
 {
@@ -219,21 +218,6 @@ TEST(MockParameterTest, mismatchedIntegerTypesLongAndLongLongAreAllowed)
 
     mock().checkExpectations();
 }
-
-#endif
-
-TEST(MockParameterTest, mismatchedIntegerTypesLongAndUnsignedLongAreAllowed)
-{
-    mock().expectOneCall("foo").withParameter("parameter", (long)1);
-    mock().actualCall("foo").withParameter("parameter", (unsigned long)1);
-
-    mock().expectOneCall("foo").withParameter("parameter", (unsigned long)1);
-    mock().actualCall("foo").withParameter("parameter", (long)1);
-
-    mock().checkExpectations();
-}
-
-#ifdef CPPUTEST_USE_LONG_LONG
 
 TEST(MockParameterTest, mismatchedIntegerTypesLongAndUnsignedLongLongAreAllowed)
 {
