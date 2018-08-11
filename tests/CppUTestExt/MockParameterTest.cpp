@@ -62,7 +62,7 @@ TEST(MockParameterTest, expectOneIntegerParameterAndValue)
     mock().checkExpectations();
 }
 
-#ifdef CPPUTEST_USE_LONGLONG
+#ifdef CPPUTEST_USE_LONG_LONG
 
 TEST(MockParameterTest, expectOneUnsignedLongLongIntegerParameterAndValue)
 {
