@@ -27,7 +27,6 @@
 
 #include "CppUTest/TestHarness.h"
 #include "MockFailureReporterForTest.h"
-#include <climits>
 
 TEST_GROUP(MockReturnValueTest)
 {
