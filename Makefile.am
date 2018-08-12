@@ -203,7 +203,8 @@ CppUTestExtTests_SOURCES = \
 	tests/CppUTestExt/MockSupport_cTestCFile.c \
 	tests/CppUTestExt/MockStrictOrderTest.cpp \
 	tests/CppUTestExt/MockReturnValueTest.cpp \
-	tests/CppUTestExt/OrderedTestTest.cpp
+	tests/CppUTestExt/OrderedTestTest.cpp \
+	tests/CppUTestExt/MockFakeLongLong.cpp
 
 DISTCLEANFILES = \
 	filename.map.txt \
