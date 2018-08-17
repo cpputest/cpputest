@@ -119,7 +119,6 @@ void MockSupport::clear()
     MockActualCallTrace::instance().clear();
 
     expectations_.deleteAllExpectationsAndClearList();
-    unExpectations_.deleteAllExpectationsAndClearList();
     ignoreOtherCalls_ = false;
     enabled_ = true;
     actualCallOrder_ = 0;
@@ -154,13 +153,7 @@ MockExpectedCall& MockSupport::expectOneCall(const SimpleString& functionName)
 
 void MockSupport::expectNoCall(const SimpleString& functionName)
 {
-    if (!enabled_) return;
-
-    countCheck();
-
-    MockCheckedExpectedCall* call = new MockCheckedExpectedCall;
-    call->withName(appendScopeToName(functionName));
-    unExpectations_.addExpectedCall(call);
+    expectNCalls(0, functionName);
 }
 
 MockExpectedCall& MockSupport::expectNCalls(unsigned int amount, const SimpleString& functionName)
@@ -185,14 +178,9 @@ MockCheckedActualCall* MockSupport::createActualCall()
     return lastActualFunctionCall_;
 }
 
-bool MockSupport::hasntExpectationWithName(const SimpleString& functionName)
+bool MockSupport::callIsIgnored(const SimpleString& functionName)
 {
-    return !expectations_.hasExpectationWithName(functionName) && ignoreOtherCalls_;
-}
-
-bool MockSupport::hasntUnexpectationWithName(const SimpleString& functionName)
-{
-    return !unExpectations_.hasExpectationWithName(functionName);
+    return ignoreOtherCalls_ && !expectations_.hasExpectationWithName(functionName);
 }
 
 MockActualCall& MockSupport::actualCall(const SimpleString& functionName)
@@ -209,7 +197,7 @@ MockActualCall& MockSupport::actualCall(const SimpleString& functionName)
     if (tracing_) return MockActualCallTrace::instance().withName(scopeFuntionName);
 
 
-    if (hasntUnexpectationWithName(scopeFuntionName) && hasntExpectationWithName(scopeFuntionName)) {
+    if (callIsIgnored(scopeFuntionName)) {
         return MockIgnoredActualCall::instance();
     }
 
