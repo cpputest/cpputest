@@ -30,6 +30,7 @@
 <tool id="cdt.managedbuild.tool.gnu.assembler.macosx.base.2144619367" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.macosx.base">
 <option id="gnu.both.asm.option.include.paths.1383507133" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
 <listOptionValue builtIn="false" value="../../CppUTest/include"/>
+<listOptionValue builtIn="false" value="&quot;${CPPUTEST_HOME}/include&quot;"/>
 </option>
 <inputType id="cdt.managedbuild.tool.gnu.assembler.input.1764406066" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 </tool>
@@ -37,12 +38,14 @@
 <tool id="cdt.managedbuild.tool.gnu.cpp.compiler.macosx.base.1144241685" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.macosx.base">
 <option id="gnu.cpp.compiler.option.include.paths.110149452" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 <listOptionValue builtIn="false" value="../../CppUTest/include"/>
+<listOptionValue builtIn="false" value="&quot;${CPPUTEST_HOME}/include&quot;"/>
 </option>
 <inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.569662101" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 </tool>
 <tool id="cdt.managedbuild.tool.gnu.c.compiler.macosx.base.698840757" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.macosx.base">
 <option id="gnu.c.compiler.option.include.paths.898597770" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
 <listOptionValue builtIn="false" value="../../CppUTest/include"/>
+<listOptionValue builtIn="false" value="&quot;${CPPUTEST_HOME}/include&quot;"/>
 </option>
 <inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1077250187" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 </tool>
