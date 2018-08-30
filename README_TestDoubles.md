@@ -1,7 +1,7 @@
 What is a Test Double?
 ------------------------------------------------------------------------------------------------------------------------
 Test Doubles are created to focus on the Code Under Test (CuT) based on how the CuT behaves in regards to a Dependency
-of Code (DoC).
+of Component (DoC).
 
 By using Test Doubles, testing efforts can focus on the behavior of the CuT.  Once the developer is confident in the CuT
 implementation, Test Doubles can be replaced with the actual DoC implementation creating a new CuT-
