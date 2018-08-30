@@ -120,7 +120,7 @@ explicitly requires it.  In this way, the tester can concentrate on the CuT beha
 how the DoC is invoked.
 
 #### Differences from CppUMock
-Expectation frameworks are expressive rather than constrained.  If constraints are needed, they can be expressed, rather
+Expectation Frameworks are expressive rather than constrained.  If constraints are needed, they can be expressed, rather
 than forcing unexpected constraints upon all use cases.
 
 * Parameters are only necessary to be matched if part of the expectation
@@ -155,8 +155,8 @@ need of the other parameters to test the CuT, there should be no need to opine u
 
 * Unexpected DoC invocations **only** FAIL when expected.
     The CppUMock framework forces all DoC invocations to be explicitly identified.  Instead, an Expectation Framework
-    handles the expected invocations.  The Expectation Framework can be configured to FAIL upon unexpected invocation of
-    the DoC, but doesn't opine about the tester's understanding of the CuT's usage of the DoC.
+    focuses on the expected invocations.  The Expectation Framework can be configured to FAIL upon unexpected invocation
+    of the DoC, but doesn't opine about the tester's understanding of the CuT's usage of the DoC.
 
 
 Schema  Legend
