@@ -13,6 +13,8 @@ set(CppUTestExt_src
         MemoryReportFormatter.cpp
         MockExpectedCallsList.cpp
         MockSupport.cpp
+        CppUTestExpect.cpp
+        CppUTestActual.cpp
 )
 
 set(CppUTestExt_headers
