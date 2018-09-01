@@ -91,7 +91,7 @@ test case needs.
         expect().call( "DoC" ).use( model );
     }
 
-    // expectation based DoC Test Double
+    // universal test double
     bool DoC( int param0, int param1 )
     {
         return actual().call( "DoC" )
@@ -169,11 +169,11 @@ Schema of an Expectation
 ------------------------------------------------------------------------------------------------------------------------
 ```C
 expect( {<context>} )                   // expectation context, default is global
-    .call( <DoC> )
+    .call( <DoC> )                      // name of function/method
     {.times( count )}                   // number of invocations to apply expectation, default=always
     {.next( sequence )}                 // assert that previous sequence expectations have occurred
-    {.with( <parameter>, value )}       // parameter is either a uuid (i.e. string) or Matcher, validates parameter
-    {.output( <parameter>, value )}     // parameter is either a uuid (i.e. string) or Matcher, sets an expected value
+    {.with( parameter, value )}         // name of parameter and value to validate
+    {.output( parameter, value )}       // name of parameter, sets an expected value
     {.use( Model )}                     // Model of behavior
     {.returns<type>()}                  // return value
 ```
@@ -184,8 +184,8 @@ Schema of an Actual
 actual( {<context>} )                   // expectation context, default is global
     .call( <DoC> )
     {.with( String, value )}            // parameter name and value upon invocation
-    {.output( <parameter>, value )}     // sets parameter to expected value
-    {.returns<type>()}                  // return value
+    {.output( parameter, value )}       // name of parameter and reference to value to set (value based on expectation or else 0 )
+    {.return<type>()}                   // return value
 ```
 
 
