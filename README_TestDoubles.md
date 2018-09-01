@@ -169,7 +169,7 @@ Schema of an Expectation
 ------------------------------------------------------------------------------------------------------------------------
 ```C
 expect( {<context>} )                   // expectation context, default is global
-    .call( <DoC> )                      // name of function/method
+    .call( <method> )                   // name of method/function used by actual
     {.times( count )}                   // number of invocations to apply expectation, default=always
     {.next( sequence )}                 // assert that previous sequence expectations have occurred
     {.with( parameter, value )}         // name of parameter and value to validate
@@ -182,7 +182,7 @@ Schema of an Actual
 ------------------------------------------------------------------------------------------------------------------------
 ```C
 actual( {<context>} )                   // expectation context, default is global
-    .call( <DoC> )
+    .call( <method> )                   // name of method/function
     {.with( String, value )}            // parameter name and value upon invocation
     {.output( parameter, value )}       // name of parameter and reference to value to set (value based on expectation or else 0 )
     {.return<type>()}                   // return value
