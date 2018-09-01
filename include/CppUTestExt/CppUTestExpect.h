@@ -60,6 +60,10 @@ class IModel;
 class Expectation
 {
 public:
+
+    /// @post registers the expectation
+    ~Expectation();
+
     // /// expectation of position in sequence
     // Expectation inSequence( Sequence& );
 

@@ -54,9 +54,13 @@ private:
 };
 
 
+/// @post effects expectation
 class Actual
 {
 public:
+    /// @post effects expectation if return<type> has not been called
+    ~Actual();
+
     /// expectation for an input parameter with value
     Actual with( const SimpleString& parameterName, const bool value );
     // Actual with( const SimpleString& parameterName, const char value );
@@ -91,8 +95,8 @@ public:
 //     Expectation output( const SimpleString& parameterName, void* const& value, const std::size_t );
 //     Expectation output( const SimpleString& parameterName, void (value*&)() );
 
+//  return based methods invoke matched expectation (or else do nothing and return 0)
 
-//     /// return value (must come last)
 //     bool returnBool();
 //     char returnChar();
 //     unsigned char returnUnsignedChar();
