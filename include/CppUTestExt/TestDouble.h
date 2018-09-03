@@ -24,32 +24,14 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+#ifndef TEST_DOUBLE_H
+#define TEST_DOUBLE_H
 
-#include "CppUTest/TestHarness.h"
-#include "CppUTest/TestTestingFixture.h"
-//#include "CppUTestExt/MockExpectedCall.h"
-//#include "CppUTestExt/MockFailure.h"
-#include "CppUTestExt/CppUTestExpect.h"
-#include "CppUTestExt/CppUTestActual.h"
-#include "MockFailureReporterForTest.h"
+#include "CppUTestExt/MockSupport.h"
 
-TEST_GROUP( CppUTestDouble )
+class TestDoubleFramework
 {
 
 };
 
-IGNORE_TEST( CppUTestDouble, upon_FAIL_report_unexpected_calls )
-{
-  // TODO CppUMock FAILS upon first unexpected call
-}
-
-IGNORE_TEST( CppUTestDouble, FAIL_if_expected_calls_arent_actualized )
-{
-}
-
-TEST( CppUTestDouble, expect_boolean_parameter )
-{
-  expect().call("foo").with("bool", true);
-  actual().call("foo").with("bool", true);
-  mock().checkExpectations();
-}
+#endif /* TEST_DOUBLE_H */

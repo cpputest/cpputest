@@ -25,31 +25,34 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "CppUTestExt/CppUTestExpect.h"
+#include "CppUTestExt/Actual.h"
 
 // FIXME using CppUMock for now
 #include "CppUTestExt/MockSupport.h"
 
 
-Expectations expect( const SimpleString& mockNamespace )
+Actual actual( const SimpleString& mockNamespace )
 {
-  return Expectations( mockNamespace );
+  return Actual( mockNamespace );
+}
+
+Actual::Actual( const SimpleString& name )
+{
+
 }
 
 
-Expectations::Expectations( const SimpleString& mockNamespace )
-  : _mockNamespace( mockNamespace )
+Actual::~Actual()
 {
-
+  // TODO publish expectations
 }
 
-
-Expectation Expectations::call( const SimpleString& functionName )
+Actual Actual::call( const SimpleString& functionName )
 {
-  mock( _mockNamespace ).expectOneCall( functionName );
+  // mock( _mockNamespace ).actualCall( functionName );
 }
 
-Expectation Expectations::with( const SimpleString& parameter, bool value )
+Actual Actual::with( const SimpleString& parameter, bool value )
 {
-  _expectation.withParameter( parameter, value );
+  // _expectation.withParameter( parameter, value );
 }

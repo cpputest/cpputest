@@ -53,7 +53,7 @@ builds/*gcc*
 /.deps
 CppUTestExtTests
 CppUTestTests
-/Makefile
+Makefile
 config.h
 config.h.in
 config.status
@@ -84,3 +84,10 @@ cpputest_*.xml
 #IAR automatically generated files
 *.dep
 *.ewt
+
+#CMake files
+CMakeFiles/
+CMakeCache.txt
+*.cmake
+Testing/
+generated/

@@ -25,43 +25,31 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "CppUTest/SimpleString.h"
+#ifndef ACTUAL_H
+#define ACTUAL_H
 
-
-class Actuals;
-
-/** @returns expectations of the namespace */
-Actuals& actual(
-    const SimpleString& mockNamespace = ""
-    // MockFailureReporter* failureReporterForThisCall = nullptr
-);
+#include "CppUTestExt/TestDouble.h"
 
 
 class Actual;
-/**
- * @brief Registry of expectations
- */
-class Actuals
-{
-public:
-    Actuals( const SimpleString& mockNamespace );
 
-    /// adds an expectation for a call of the function name
-    Actual call( const SimpleString& functionName );
-
-private:
-    const SimpleString _mockNamespace;
-};
+/// @returns actual based for mockNamespace
+Actual actual( const SimpleString& mockNamespace = "" );
 
 
 /// @post effects expectation
 class Actual
 {
 public:
+    Actual( const SimpleString& mockNamespace );
+
     /// @post effects expectation if return<type> has not been called
     ~Actual();
 
-    /// expectation for an input parameter with value
+
+    /// @note an Actual can only have one call invocation
+    Actual call( const SimpleString& name );
+
     Actual with( const SimpleString& parameterName, const bool value );
     // Actual with( const SimpleString& parameterName, const char value );
     // Actual with( const SimpleString& parameterName, const unsigned char value );
@@ -78,7 +66,6 @@ public:
     // Actual with( const SimpleString& parameterName, const void* const value, const std::size_t );
     // Actual with( const SimpleString& parameterName, void (value*)() );
 
-//     /// identify output parameter
 //     Expectation output( const SimpleString& parameterName, bool& value );
 //     Expectation output( const SimpleString& parameterName, char& value );
 //     Expectation output( const SimpleString& parameterName, unsigned char& value );
@@ -114,3 +101,5 @@ public:
 // private:
 //     const SimpleString& _mockName;  ///< namespace for this actual
 };
+
+#endif /* ACTUAL_H */

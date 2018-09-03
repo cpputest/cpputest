@@ -25,30 +25,31 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "CppUTestExt/CppUTestActual.h"
+#include "CppUTest/TestHarness.h"
+#include "CppUTest/TestTestingFixture.h"
+//#include "CppUTestExt/MockExpectedCall.h"
+//#include "CppUTestExt/MockFailure.h"
+#include "CppUTestExt/Expect.h"
+#include "CppUTestExt/Actual.h"
+#include "MockFailureReporterForTest.h"
 
-// FIXME using CppUMock for now
-#include "CppUTestExt/MockSupport.h"
-
-
-Actuals actual( const SimpleString& mockNamespace )
+TEST_GROUP( TestDouble )
 {
-  return Actuals( mockNamespace );
+
+};
+
+IGNORE_TEST( TestDouble, upon_FAIL_report_unexpected_calls )
+{
+  // TODO CppUMock FAILS upon first unexpected call
 }
 
-
-Actuals::Actuals( const SimpleString& mockNamespace )
-  : _mockNamespace( mockNamespace )
+IGNORE_TEST( TestDouble, FAIL_if_expected_calls_arent_actualized )
 {
 }
 
-
-Actual Actuals::call( const SimpleString& functionName )
+TEST( TestDouble, expect_boolean_parameter_with_value )
 {
-  mock( _mockNamespace ).actualCall( functionName );
-}
-
-Actual Actual::with( const SimpleString& parameter, bool value )
-{
-  _expectation.withParameter( parameter, value );
+  expect().call("foo").with("bool", true);
+  actual().call("foo").with("bool", true);
+  mock().checkExpectations();
 }

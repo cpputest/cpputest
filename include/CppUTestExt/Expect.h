@@ -25,14 +25,16 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "CppUTest/SimpleString.h"
+#ifndef EXPECT_H
+#define EXPECT_H
+
+#include "CppUTestExt/TestDouble.h"
 
 
 /** @returns expectations of the namespace */
 class Expectations;
 Expectations expect(
     const SimpleString& mockNamespace = ""
-    // MockFailureReporter* failureReporterForThisCall = nullptr
 );
 
 
@@ -68,7 +70,6 @@ public:
     // Expectation inSequence( Sequence& );
 
 
-    /// expectation for an input parameter with value
     Expectation with( const SimpleString& parameterName, const bool value );
     // Expectation with( const SimpleString& parameterName, const char value );
     // Expectation with( const SimpleString& parameterName, const unsigned char value );
@@ -110,7 +111,6 @@ public:
     // Expectation use( IModel& );
 
 
-    // /// handle output parameter
     // Expectation output( const SimpleString& parameterName, const bool value );
     // Expectation output( const SimpleString& parameterName, const char value );
     // Expectation output( const SimpleString& parameterName, const unsigned char value );
@@ -170,3 +170,5 @@ public:
 //     /// modifies the actual call instance based on expectation and model state
 //     virtual void behave( const Expectation&, Actual& ) = 0;
 // };
+
+#endif /* EXPECT_H */
