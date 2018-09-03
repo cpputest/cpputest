@@ -30,16 +30,14 @@
 
 #include "CppUTestExt/TestDouble.h"
 
-
 class Expectation;
-Expectation expect( const SimpleString& context = TEST_DOUBLE_GLOBAL );
+Expectation expect( const SimpleString& context = TEST_DOUBLE_GLOBAL_CONTEXT );
 
 
 class IModel;
 class Expectation
 {
 public:
-
     Expectation( const SimpleString& context ) : _context(context) {};
 
     /// @post registers the expectation

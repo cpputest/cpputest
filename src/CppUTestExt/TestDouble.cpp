@@ -32,7 +32,7 @@
 
 void checkExpectations( const SimpleString& context )
 {
-  mock().checkExpectations();
+  mock( context ).checkExpectations();
   // FIXME allow check per context
   // mock().checkExpectations( context );
 }

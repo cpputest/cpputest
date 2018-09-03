@@ -30,18 +30,15 @@
 
 #include "CppUTestExt/TestDouble.h"
 
-
 class Actual;
-
-/// @returns actual based for mockNamespace
-Actual actual( const SimpleString& mockNamespace = "" );
+Actual actual( const SimpleString& context = TEST_DOUBLE_GLOBAL_CONTEXT );
 
 
 /// @post effects expectation
 class Actual
 {
 public:
-    Actual( const SimpleString& context = TEST_DOUBLE_GLOBAL ) : _context(context) {};
+    Actual( const SimpleString& context ) : _context(context) {};
 
     /// @post effects expectation if return<type> has not been called
     ~Actual();

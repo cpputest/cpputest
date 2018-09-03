@@ -28,14 +28,16 @@
 #define TEST_DOUBLE_H
 
 #include "CppUTestExt/MockSupport.h"
+class Expectation;
+class Actual;
 
-const static SimpleString TEST_DOUBLE_GLOBAL = "::";
+const static SimpleString TEST_DOUBLE_GLOBAL_CONTEXT = "::";
 
-void checkExpectations( const SimpleString& context = TEST_DOUBLE_GLOBAL );
+void checkExpectations( const SimpleString& context = TEST_DOUBLE_GLOBAL_CONTEXT );
 
-class TestDoubleFramework
-{
+void addExpectation( const Expectation& expectation );
 
-};
+void checkActual( Actual& actual );
+
 
 #endif /* TEST_DOUBLE_H */
