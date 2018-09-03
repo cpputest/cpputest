@@ -31,31 +31,8 @@
 #include "CppUTestExt/TestDouble.h"
 
 
-/** @returns expectations of the namespace */
-class Expectations;
-Expectations expect(
-    const SimpleString& mockNamespace = ""
-);
-
-
-/**
- * @brief Registry of expectations
- */
 class Expectation;
-class Expectations
-{
-public:
-    Expectations( const SimpleString& mockNamespace );
-
-    /// whether to FAIL when a mocked call has no matching expectation
-    void strict( const bool = false );
-
-    /// adds an expectation for a call based on the name used in the actual()
-    Expectation call( const SimpleString& functionName );
-
-private:
-    const SimpleString _mockNamespace;
-};
+Expectation expect( const SimpleString& context = "" );
 
 
 class IModel;
@@ -63,8 +40,12 @@ class Expectation
 {
 public:
 
+    Expectation( const SimpleString& context );
+
     /// @post registers the expectation
     ~Expectation();
+
+    Expectation call( const SimpleString& context );
 
     // /// expectation of position in sequence
     // Expectation inSequence( Sequence& );
@@ -160,6 +141,10 @@ public:
     // void andReturn( const void* value, const std::size_t );
     // void andReturn( const void* const value, const std::size_t );
     // void andReturn( void (value*)() );
+
+private:
+  SimpleString _context;
+  SimpleString _call;
 };
 
 

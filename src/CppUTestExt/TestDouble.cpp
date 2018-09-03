@@ -24,17 +24,16 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#ifndef TEST_DOUBLE_H
-#define TEST_DOUBLE_H
 
-#include "CppUTestExt/MockSupport.h"
+#include <CppUTestExt/TestDouble.h>
 
-void checkExpectations();
-void checkExpectations( SimpleString& name );
-
-class TestDoubleFramework
+void checkExpectations()
 {
 
-};
+}
 
-#endif /* TEST_DOUBLE_H */
+
+void checkExpectations( SimpleString& name )
+{
+
+}

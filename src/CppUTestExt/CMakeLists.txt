@@ -13,6 +13,7 @@ set(CppUTestExt_src
         MemoryReportFormatter.cpp
         MockExpectedCallsList.cpp
         MockSupport.cpp
+        TestDouble.cpp
         Expect.cpp
         Actual.cpp
 )

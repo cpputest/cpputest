@@ -29,9 +29,10 @@
 #include "CppUTest/TestTestingFixture.h"
 //#include "CppUTestExt/MockExpectedCall.h"
 //#include "CppUTestExt/MockFailure.h"
+// #include "MockFailureReporterForTest.h"
 #include "CppUTestExt/Expect.h"
 #include "CppUTestExt/Actual.h"
-#include "MockFailureReporterForTest.h"
+#include "CppUTestExt/TestDouble.h"
 
 TEST_GROUP( TestDouble )
 {
@@ -51,5 +52,5 @@ TEST( TestDouble, expect_boolean_parameter_with_value )
 {
   expect().call("foo").with("bool", true);
   actual().call("foo").with("bool", true);
-  mock().checkExpectations();
+  checkExpectations();
 }

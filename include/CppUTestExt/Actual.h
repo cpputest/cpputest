@@ -41,7 +41,7 @@ Actual actual( const SimpleString& mockNamespace = "" );
 class Actual
 {
 public:
-    Actual( const SimpleString& mockNamespace );
+    Actual( const SimpleString& context );
 
     /// @post effects expectation if return<type> has not been called
     ~Actual();

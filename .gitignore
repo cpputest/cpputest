@@ -91,3 +91,6 @@ CMakeCache.txt
 *.cmake
 Testing/
 generated/
+
+# Dart files
+DartConfiguration.tcl

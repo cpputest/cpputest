@@ -31,16 +31,9 @@
 #include "CppUTestExt/MockSupport.h"
 
 
-Expectations expect( const SimpleString& mockNamespace )
+Expectation expect( const SimpleString& context )
 {
-  return Expectations( mockNamespace );
-}
-
-
-Expectations::Expectations( const SimpleString& mockNamespace )
-  : _mockNamespace( mockNamespace )
-{
-
+  return Expectation( context );
 }
 
 Expectation::~Expectation()
@@ -48,9 +41,9 @@ Expectation::~Expectation()
   // TODO publish expectation
 }
 
-Expectation Expectations::call( const SimpleString& functionName )
+Expectation Expectation::call( const SimpleString& functionName )
 {
-  // mock( _mockNamespace ).expectOneCall( functionName );
+  _call = functionName;
 }
 
 Expectation Expectation::with( const SimpleString& parameterName, const bool value )
