@@ -36,12 +36,6 @@ Actual actual( const SimpleString& mockNamespace )
   return Actual( mockNamespace );
 }
 
-Actual::Actual( const SimpleString& name )
-{
-
-}
-
-
 Actual::~Actual()
 {
   // TODO publish expectations
@@ -49,6 +43,7 @@ Actual::~Actual()
 
 Actual Actual::call( const SimpleString& functionName )
 {
+  // TODO can a second call() be detected at compile time?
   // mock( _mockNamespace ).actualCall( functionName );
 }
 

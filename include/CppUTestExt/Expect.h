@@ -32,7 +32,7 @@
 
 
 class Expectation;
-Expectation expect( const SimpleString& context = "" );
+Expectation expect( const SimpleString& context = TEST_DOUBLE_GLOBAL );
 
 
 class IModel;
@@ -40,7 +40,7 @@ class Expectation
 {
 public:
 
-    Expectation( const SimpleString& context );
+    Expectation( const SimpleString& context ) : _context(context) {};
 
     /// @post registers the expectation
     ~Expectation();

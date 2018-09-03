@@ -43,6 +43,7 @@ Expectation::~Expectation()
 
 Expectation Expectation::call( const SimpleString& functionName )
 {
+  // TODO can a second call() be detected at compile time?
   _call = functionName;
 }
 

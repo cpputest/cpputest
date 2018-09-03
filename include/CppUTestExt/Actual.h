@@ -41,7 +41,7 @@ Actual actual( const SimpleString& mockNamespace = "" );
 class Actual
 {
 public:
-    Actual( const SimpleString& context );
+    Actual( const SimpleString& context = TEST_DOUBLE_GLOBAL ) : _context(context) {};
 
     /// @post effects expectation if return<type> has not been called
     ~Actual();
@@ -98,8 +98,8 @@ public:
 //     const void* returnConstPointer();
 //     void (*)() returnFunctionPointer();
 
-// private:
-//     const SimpleString& _mockName;  ///< namespace for this actual
+private:
+    const SimpleString _context;
 };
 
 #endif /* ACTUAL_H */

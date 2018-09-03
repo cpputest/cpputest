@@ -29,8 +29,9 @@
 
 #include "CppUTestExt/MockSupport.h"
 
-void checkExpectations();
-void checkExpectations( SimpleString& name );
+const static SimpleString TEST_DOUBLE_GLOBAL = "::";
+
+void checkExpectations( const SimpleString& context = TEST_DOUBLE_GLOBAL );
 
 class TestDoubleFramework
 {

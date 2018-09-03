@@ -27,13 +27,12 @@
 
 #include <CppUTestExt/TestDouble.h>
 
-void checkExpectations()
+// FIXME uses CppUMock for now
+#include <CppUTestExt/MockSupport.h>
+
+void checkExpectations( const SimpleString& context )
 {
-
-}
-
-
-void checkExpectations( SimpleString& name )
-{
-
+  mock().checkExpectations();
+  // FIXME allow check per context
+  // mock().checkExpectations( context );
 }
