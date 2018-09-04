@@ -33,6 +33,4 @@
 void checkExpectations( const SimpleString& context )
 {
   mock( context ).checkExpectations();
-  // FIXME allow check per context
-  // mock().checkExpectations( context );
 }

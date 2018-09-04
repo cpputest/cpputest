@@ -43,13 +43,13 @@ public:
     /// @post registers the expectation
     ~Expectation();
 
-    Expectation call( const SimpleString& context );
+    Expectation& call( const SimpleString& context );
 
     // /// expectation of position in sequence
     // Expectation inSequence( Sequence& );
 
 
-    Expectation with( const SimpleString& parameterName, const bool value );
+    Expectation& with( const SimpleString& parameterName, const bool value );
     // Expectation with( const SimpleString& parameterName, const char value );
     // Expectation with( const SimpleString& parameterName, const unsigned char value );
     // Expectation with( const SimpleString& parameterName, const int value );

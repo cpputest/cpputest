@@ -48,9 +48,11 @@ IGNORE_TEST( TestDouble, FAIL_if_expected_calls_arent_actualized )
 {
 }
 
+
+#include <iostream>
 TEST( TestDouble, expect_boolean_parameter_with_value )
 {
   expect().call("foo").with("bool", true);
-  actual().call("foo").with("bool", true);
+  // actual().call("foo").with("bool", true);
   checkExpectations();
 }

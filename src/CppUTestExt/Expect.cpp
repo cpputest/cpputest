@@ -29,6 +29,7 @@
 
 // FIXME using CppUMock for now
 #include "CppUTestExt/MockSupport.h"
+#include <iostream>
 
 
 Expectation expect( const SimpleString& context )
@@ -38,16 +39,20 @@ Expectation expect( const SimpleString& context )
 
 Expectation::~Expectation()
 {
-  // TODO publish expectation
+  // publish expectation
+  std::cout << "context: " << _context.asCharString() << " call: " << _call.asCharString() << "\n";
+  mock( _context ).expectOneCall( _call );
 }
 
-Expectation Expectation::call( const SimpleString& functionName )
+Expectation& Expectation::call( const SimpleString& functionName )
 {
   // TODO can a second call() be detected at compile time?
   _call = functionName;
+  return *this;
 }
 
-Expectation Expectation::with( const SimpleString& parameterName, const bool value )
+Expectation& Expectation::with( const SimpleString& parameterName, const bool value )
 {
-  // _expectation.withParameter( parameter, value );
+  std::cout << "context: " << _context.asCharString() << " call: " << _call.asCharString() << "\n";
+  return *this;
 }
