@@ -1,3 +1,14 @@
+Notes
+========================================================================================================================
+* TestDoubles currently wraps CppUMock.
+    * `expect().call(foo)` without `.times()`, rather than use the Test Double default of EVERY_TIME, `.times()`
+        must be explicitly called to set the expected call cardinality.
+    * Where CppuMock does not support strong typing, casting is used. (casts should be transparent to behavior)
+    * TestDoubles does not support .onObject()
+        * Rationale: the CppUMock implementation is only a pointer compare.  For expectations, it is simpler for the .with() to expose the object's state via with()s.
+    * .nextIn(Sequence) and .use(Model) are not implemented (need to coordinate with CppUTest developers)
+
+
 What is a Test Double?
 ------------------------------------------------------------------------------------------------------------------------
 Test Doubles are created to focus on the Code Under Test (CuT) based on how the CuT behaves in regards to a Dependency
@@ -171,7 +182,7 @@ Schema of an Expectation
 expect( {<context>} )                   // expectation context, default is global
     .call( <method> )                   // name of method/function used by actual
     {.times( count )}                   // number of invocations to apply expectation, default=always
-    {.next( sequence )}                 // assert that previous sequence expectations have occurred
+    {.nextIn( sequence )}               // assert that previous sequence expectations have occurred
     {.with( parameter, value )}         // name of parameter and value to validate
     {.output( parameter, value )}       // name of parameter, sets an expected value
     {.use( Model )}                     // Model of behavior

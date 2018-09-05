@@ -57,7 +57,7 @@ public:
   ExpectedCall& times( const unsigned int count );
 
   // /// expectation of position in sequence
-  // Expectation inSequence( Sequence& );
+  // Expectation nextIn( Sequence& );
 
   template<typename T>
   ExpectedCall& with( const SimpleString& name, const T value )

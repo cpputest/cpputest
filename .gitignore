@@ -51,9 +51,6 @@ _build_
 _build
 builds/*gcc*
 /.deps
-CppUTestExtTests
-CppUTestTests
-Makefile
 config.h
 config.h.in
 config.status
@@ -86,6 +83,9 @@ cpputest_*.xml
 *.ewt
 
 #CMake files
+CppUTestExtTests
+CppUTestTests
+Makefile
 CMakeFiles/
 CMakeCache.txt
 *.cmake
