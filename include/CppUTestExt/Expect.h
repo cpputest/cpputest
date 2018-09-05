@@ -35,116 +35,106 @@ Expectation expect( const SimpleString& context = TEST_DOUBLE_GLOBAL_CONTEXT );
 
 
 class IModel;
+class ExpectedCall;
 class Expectation
 {
 public:
     Expectation( const SimpleString& context ) : _context(context) {};
 
-    /// @post registers the expectation
-    ~Expectation();
-
-    Expectation& call( const SimpleString& context );
-
-    // /// expectation of position in sequence
-    // Expectation inSequence( Sequence& );
-
-
-    Expectation& with( const SimpleString& parameterName, const bool value );
-    // Expectation with( const SimpleString& parameterName, const char value );
-    // Expectation with( const SimpleString& parameterName, const unsigned char value );
-    // Expectation with( const SimpleString& parameterName, const int value );
-    // Expectation with( const SimpleString& parameterName, const unsigned int value );
-    // Expectation with( const SimpleString& parameterName, const long value );
-    // Expectation with( const SimpleString& parameterName, const unsigned long value );
-    // Expectation with( const SimpleString& parameterName, const long long value );
-    // Expectation with( const SimpleString& parameterName, const unsigned long long value );
-    // Expectation with( const SimpleString& parameterName, const double value );
-    // Expectation with( const SimpleString& parameterName, const void* value );
-    // Expectation with( const SimpleString& parameterName, const void* const value );
-    // Expectation with( const SimpleString& parameterName, const void* value, const std::size_t );
-    // Expectation with( const SimpleString& parameterName, const void* const value, const std::size_t );
-    // Expectation with( const SimpleString& parameterName, void (value*)() );
-    // /// expectation for an input parameter matched by comparator with value
-    // Expectation with( const ParameterComparator&, const bool value );
-    // Expectation with( const ParameterComparator&, const char value );
-    // Expectation with( const ParameterComparator&, const unsigned char value );
-    // Expectation with( const ParameterComparator&, const int value );
-    // Expectation with( const ParameterComparator&, const unsigned int value );
-    // Expectation with( const ParameterComparator&, const long value );
-    // Expectation with( const ParameterComparator&, const unsigned long value );
-    // Expectation with( const ParameterComparator&, const long long value );
-    // Expectation with( const ParameterComparator&, const unsigned long long value );
-    // Expectation with( const ParameterComparator&, const double value );
-    // Expectation with( const ParameterComparator&, const void* value ) ;
-    // Expectation with( const ParameterComparator&, const void* const value ) ;
-    // Expectation with( const ParameterComparator&, const void* value, const std::size_t ) ;
-    // Expectation with( const ParameterComparator&, const void* const value, const std::size_t ) ;
-    // Expectation with( const ParameterComparator&, void (value*)() );
-
-
-    // /// expectation for the number of calls (cardinality)
-    // Expectation times( const std::size_t count );
-
-
-    // /// use model to perform behavior (i.e. use this to extend a mock into a model)
-    // Expectation use( IModel& );
-
-
-    // Expectation output( const SimpleString& parameterName, const bool value );
-    // Expectation output( const SimpleString& parameterName, const char value );
-    // Expectation output( const SimpleString& parameterName, const unsigned char value );
-    // Expectation output( const SimpleString& parameterName, const int value );
-    // Expectation output( const SimpleString& parameterName, const unsigned int value );
-    // Expectation output( const SimpleString& parameterName, const long value );
-    // Expectation output( const SimpleString& parameterName, const unsigned long value );
-    // Expectation output( const SimpleString& parameterName, const long long value );
-    // Expectation output( const SimpleString& parameterName, const long long value );
-    // Expectation output( const SimpleString& parameterName, const double value );
-    // Expectation output( const SimpleString& parameterName, const void* value );
-    // Expectation output( const SimpleString& parameterName, const void* const value );
-    // Expectation output( const SimpleString& parameterName, const void* value, const std::size_t );
-    // Expectation output( const SimpleString& parameterName, const void* const value, const std::size_t );
-    // Expectation output( const SimpleString& parameterName, void (value*)() );
-    // /// handle output parameter matching comparator
-    // Expectation output( const ParameterComparator&, const bool value );
-    // Expectation output( const ParameterComparator&, const char value );
-    // Expectation output( const ParameterComparator&, const unsigned char value );
-    // Expectation output( const ParameterComparator&, const int value );
-    // Expectation output( const ParameterComparator&, const unsigned int value );
-    // Expectation output( const ParameterComparator&, const long value );
-    // Expectation output( const ParameterComparator&, const unsigned long value );
-    // Expectation output( const ParameterComparator&, const long long value );
-    // Expectation output( const ParameterComparator&, const unsigned long long value );
-    // Expectation output( const ParameterComparator&, const double value );
-    // Expectation output( const ParameterComparator&, const void* value ) ;
-    // Expectation output( const ParameterComparator&, const void* const value ) ;
-    // Expectation output( const ParameterComparator&, const void* value, const std::size_t ) ;
-    // Expectation output( const ParameterComparator&, const void* const value, const std::size_t ) ;
-    // Expectation output( const ParameterComparator&, void (value*)() );
-
-
-    // /// return value (must come last)
-    // void andReturn( const bool value );
-    // void andReturn( const char value );
-    // void andReturn( const unsigned char value );
-    // void andReturn( const int value );
-    // void andReturn( const unsigned int value );
-    // void andReturn( const long value );
-    // void andReturn( const unsigned long value );
-    // void andReturn( const long long value );
-    // void andReturn( const long long value );
-    // void andReturn( const double value );
-    // void andReturn( const void* value );
-    // void andReturn( const void* const value );
-    // void andReturn( const void* value, const std::size_t );
-    // void andReturn( const void* const value, const std::size_t );
-    // void andReturn( void (value*)() );
+    ExpectedCall call( const SimpleString& name );
 
 private:
-  SimpleString _context;
-  SimpleString _call;
+  const SimpleString _context;
 };
 
+
+class ExpectedCall
+{
+public:
+  ExpectedCall( const SimpleString& context, const SimpleString& name );
+
+  /// expectation for the number of calls (cardinality)
+  ExpectedCall& times( const unsigned int count );
+
+  // /// expectation of position in sequence
+  // Expectation inSequence( Sequence& );
+
+
+  ExpectedCall& with( const SimpleString& name, const bool value );
+  // Expectation with( const SimpleString& parameterName, const char value );
+  // Expectation with( const SimpleString& parameterName, const unsigned char value );
+  // Expectation with( const SimpleString& parameterName, const int value );
+  // Expectation with( const SimpleString& parameterName, const unsigned int value );
+  // Expectation with( const SimpleString& parameterName, const long value );
+  // Expectation with( const SimpleString& parameterName, const unsigned long value );
+  // Expectation with( const SimpleString& parameterName, const long long value );
+  // Expectation with( const SimpleString& parameterName, const unsigned long long value );
+  // Expectation with( const SimpleString& parameterName, const double value );
+  // Expectation with( const SimpleString& parameterName, const void* value );
+  // Expectation with( const SimpleString& parameterName, const void* const value );
+  // Expectation with( const SimpleString& parameterName, const void* value, const std::size_t );
+  // Expectation with( const SimpleString& parameterName, const void* const value, const std::size_t );
+  // Expectation with( const SimpleString& parameterName, void (value*)() );
+  // /// expectation for an input parameter matched by comparator with value
+  // Expectation with( const ParameterComparator&, const bool value );
+  // Expectation with( const ParameterComparator&, const char value );
+  // Expectation with( const ParameterComparator&, const unsigned char value );
+  // Expectation with( const ParameterComparator&, const int value );
+  // Expectation with( const ParameterComparator&, const unsigned int value );
+  // Expectation with( const ParameterComparator&, const long value );
+  // Expectation with( const ParameterComparator&, const unsigned long value );
+  // Expectation with( const ParameterComparator&, const long long value );
+  // Expectation with( const ParameterComparator&, const unsigned long long value );
+  // Expectation with( const ParameterComparator&, const double value );
+  // Expectation with( const ParameterComparator&, const void* value ) ;
+  // Expectation with( const ParameterComparator&, const void* const value ) ;
+  // Expectation with( const ParameterComparator&, const void* value, const std::size_t ) ;
+  // Expectation with( const ParameterComparator&, const void* const value, const std::size_t ) ;
+  // Expectation with( const ParameterComparator&, void (value*)() );
+
+  // /// use model to perform behavior (i.e. use this to extend a mock into a model)
+  // Expectation use( IModel& );
+
+
+  // Expectation output( const SimpleString& parameterName, const bool value );
+  // Expectation output( const SimpleString& parameterName, const char value );
+  // Expectation output( const SimpleString& parameterName, const unsigned char value );
+  // Expectation output( const SimpleString& parameterName, const int value );
+  // Expectation output( const SimpleString& parameterName, const unsigned int value );
+  // Expectation output( const SimpleString& parameterName, const long value );
+  // Expectation output( const SimpleString& parameterName, const unsigned long value );
+  // Expectation output( const SimpleString& parameterName, const long long value );
+  // Expectation output( const SimpleString& parameterName, const long long value );
+  // Expectation output( const SimpleString& parameterName, const double value );
+  // Expectation output( const SimpleString& parameterName, const void* value );
+  // Expectation output( const SimpleString& parameterName, const void* const value );
+  // Expectation output( const SimpleString& parameterName, const void* value, const std::size_t );
+  // Expectation output( const SimpleString& parameterName, const void* const value, const std::size_t );
+  // Expectation output( const SimpleString& parameterName, void (value*)() );
+
+  // /// return value (must come last)
+  // void andReturn( const bool value );
+  // void andReturn( const char value );
+  // void andReturn( const unsigned char value );
+  // void andReturn( const int value );
+  // void andReturn( const unsigned int value );
+  // void andReturn( const long value );
+  // void andReturn( const unsigned long value );
+  // void andReturn( const long long value );
+  // void andReturn( const long long value );
+  // void andReturn( const double value );
+  // void andReturn( const void* value );
+  // void andReturn( const void* const value );
+  // void andReturn( const void* value, const std::size_t );
+  // void andReturn( const void* const value, const std::size_t );
+  // void andReturn( void (value*)() );
+
+private:
+  SimpleString  _context;
+  SimpleString  _methodName;
+  unsigned int  _times;
+  MockExpectedCall* _expectedCall;
+};
 
 // class Actual;
 // /// Behavior handler for an expectation (e.g. Aspect Oriented Programming AoP)

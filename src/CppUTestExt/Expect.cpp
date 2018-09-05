@@ -29,7 +29,6 @@
 
 // FIXME using CppUMock for now
 #include "CppUTestExt/MockSupport.h"
-#include <iostream>
 
 
 Expectation expect( const SimpleString& context )
@@ -37,22 +36,32 @@ Expectation expect( const SimpleString& context )
   return Expectation( context );
 }
 
-Expectation::~Expectation()
+ExpectedCall Expectation::call( const SimpleString& name )
 {
-  // publish expectation
-  std::cout << "context: " << _context.asCharString() << " call: " << _call.asCharString() << "\n";
-  mock( _context ).expectOneCall( _call );
+  return ExpectedCall( _context, name );
 }
 
-Expectation& Expectation::call( const SimpleString& functionName )
+
+ExpectedCall::ExpectedCall( const SimpleString& context, const SimpleString& name )
+  : _context(context), _methodName(name),
+    // TODO default times should be EVERY time (but not supported by CppUMock)
+   _times(0)
+{ }
+
+
+ExpectedCall& ExpectedCall::times( const unsigned int count )
 {
-  // TODO can a second call() be detected at compile time?
-  _call = functionName;
+  // TODO times should default to EVERY, but CppUMock requires an explicit count
+  _times = count;
+
+  _expectedCall = &mock(_context).expectNCalls( _times, _methodName );
+
   return *this;
 }
 
-Expectation& Expectation::with( const SimpleString& parameterName, const bool value )
+
+ExpectedCall& ExpectedCall::with( const SimpleString& name, const bool value )
 {
-  std::cout << "context: " << _context.asCharString() << " call: " << _call.asCharString() << "\n";
+  _expectedCall->withParameter( name, value );
   return *this;
 }

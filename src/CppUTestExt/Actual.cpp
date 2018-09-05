@@ -30,24 +30,27 @@
 // FIXME using CppUMock for now
 #include "CppUTestExt/MockSupport.h"
 
-
-Actual actual( const SimpleString& mockNamespace )
+Actual actual( const SimpleString& context )
 {
-  return Actual( mockNamespace );
+  return Actual( context );
 }
 
-Actual::~Actual()
+
+ActualCall Actual::call( const SimpleString& name )
 {
-  // TODO publish expectations
+  return ActualCall( _context, name );
 }
 
-Actual Actual::call( const SimpleString& functionName )
-{
-  // TODO can a second call() be detected at compile time?
-  // mock( _mockNamespace ).actualCall( functionName );
-}
 
-Actual Actual::with( const SimpleString& parameter, bool value )
+ActualCall::ActualCall( const SimpleString& context, const SimpleString& name )
+  : _context(context), _methodName(name), _actualCall(mock(context).actualCall(name))
+{ }
+
+
+
+ActualCall& ActualCall::with( const SimpleString& name, bool value )
 {
-  // _expectation.withParameter( parameter, value );
+  _actualCall.withParameter( name, value );
+
+  return *this;
 }

@@ -34,20 +34,25 @@ class Actual;
 Actual actual( const SimpleString& context = TEST_DOUBLE_GLOBAL_CONTEXT );
 
 
-/// @post effects expectation
+class ActualCall;
 class Actual
 {
 public:
     Actual( const SimpleString& context ) : _context(context) {};
 
-    /// @post effects expectation if return<type> has not been called
-    ~Actual();
-
-
     /// @note an Actual can only have one call invocation
-    Actual call( const SimpleString& name );
+    ActualCall call( const SimpleString& name );
 
-    Actual with( const SimpleString& parameterName, const bool value );
+private:
+  const SimpleString& _context;
+};
+
+class ActualCall
+{
+public:
+    ActualCall( const SimpleString& context, const SimpleString& methodName );
+
+    ActualCall& with( const SimpleString& parameterName, const bool value );
     // Actual with( const SimpleString& parameterName, const char value );
     // Actual with( const SimpleString& parameterName, const unsigned char value );
     // Actual with( const SimpleString& parameterName, const int value );
@@ -96,7 +101,9 @@ public:
 //     void (*)() returnFunctionPointer();
 
 private:
-    const SimpleString _context;
+  SimpleString  _context;
+  SimpleString  _methodName;
+  MockActualCall& _actualCall;
 };
 
 #endif /* ACTUAL_H */
