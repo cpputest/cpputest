@@ -50,23 +50,22 @@ private:
 class ActualCall
 {
 public:
-    ActualCall( const SimpleString& context, const SimpleString& methodName );
+  ActualCall( const SimpleString& context, const SimpleString& methodName );
 
-    ActualCall& with( const SimpleString& parameterName, const bool value );
-    // Actual with( const SimpleString& parameterName, const char value );
-    // Actual with( const SimpleString& parameterName, const unsigned char value );
-    // Actual with( const SimpleString& parameterName, const int value );
-    // Actual with( const SimpleString& parameterName, const unsigned int value );
-    // Actual with( const SimpleString& parameterName, const long value );
-    // Actual with( const SimpleString& parameterName, const unsigned long value );
-    // Actual with( const SimpleString& parameterName, const long long value );
-    // Actual with( const SimpleString& parameterName, const long long value );
-    // Actual with( const SimpleString& parameterName, const double value );
-    // Actual with( const SimpleString& parameterName, const void* value );
-    // Actual with( const SimpleString& parameterName, const void* const value );
-    // Actual with( const SimpleString& parameterName, const void* value, const std::size_t );
-    // Actual with( const SimpleString& parameterName, const void* const value, const std::size_t );
-    // Actual with( const SimpleString& parameterName, void (value*)() );
+  template<typename T>
+  ActualCall& with( const SimpleString& name, T value )
+  {
+    _actualCall.withParameter( name, value );
+    return *this;
+  }
+
+  template<typename T>
+  ActualCall& with( const SimpleString& name, const T* value, std::size_t size )
+  {
+    _actualCall.withMemoryBufferParameter( name, (unsigned char*)value, size );
+    return *this;
+  }
+
 
 //     Expectation output( const SimpleString& parameterName, bool& value );
 //     Expectation output( const SimpleString& parameterName, char& value );

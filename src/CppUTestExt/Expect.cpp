@@ -60,8 +60,3 @@ ExpectedCall& ExpectedCall::times( const unsigned int count )
 }
 
 
-ExpectedCall& ExpectedCall::with( const SimpleString& name, const bool value )
-{
-  _expectedCall->withParameter( name, value );
-  return *this;
-}
