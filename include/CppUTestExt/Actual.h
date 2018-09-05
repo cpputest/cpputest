@@ -66,38 +66,29 @@ public:
     return *this;
   }
 
+  template<typename T>
+  ActualCall& output( const SimpleString& name, T* const value )
+  {
+    _actualCall.withOutputParameter( name, value );
+    return *this;
+  }
 
-//     Expectation output( const SimpleString& parameterName, bool& value );
-//     Expectation output( const SimpleString& parameterName, char& value );
-//     Expectation output( const SimpleString& parameterName, unsigned char& value );
-//     Expectation output( const SimpleString& parameterName, int& value );
-//     Expectation output( const SimpleString& parameterName, unsigned int& value );
-//     Expectation output( const SimpleString& parameterName, long& value );
-//     Expectation output( const SimpleString& parameterName, unsigned long& value );
-//     Expectation output( const SimpleString& parameterName, long long& value );
-//     Expectation output( const SimpleString& parameterName, unsigned long long& value );
-//     Expectation output( const SimpleString& parameterName, double& value );
-//     Expectation output( const SimpleString& parameterName, void*& value );
-//     Expectation output( const SimpleString& parameterName, void* const& value );
-//     Expectation output( const SimpleString& parameterName, void* value, const std::size_t );
-//     Expectation output( const SimpleString& parameterName, void* const& value, const std::size_t );
-//     Expectation output( const SimpleString& parameterName, void (value*&)() );
-
-//  return based methods invoke matched expectation (or else do nothing and return 0)
-
-//     bool returnBool();
-//     char returnChar();
-//     unsigned char returnUnsignedChar();
-//     int returnInt();
-//     unsigned int returnUnsignedInt();
-//     long returnLong();
-//     unsigned long returnLong();
-//     long long returnLongLong();
-//     unsigned long long returnUnsignedLongLong();
-//     double returnDouble();
-//     void* returnPointer();
-//     const void* returnConstPointer();
-//     void (*)() returnFunctionPointer();
+  //  return based methods invoke matched expectation (or else do nothing and return 0)
+  // TODO template returns
+  bool returnBool();
+  char returnChar();
+  unsigned char returnUnsignedChar();
+  int returnInt();
+  unsigned int returnUnsignedInt();
+  long int returnLongInt();
+  unsigned long int returnUnsignedLongInt();
+  long long int returnLongLongInt();
+  unsigned long long int returnUnsignedLongLongInt();
+  float returnFloat();
+  double returnDouble();
+  void* returnPointer();
+  const void* returnConstPointer();
+  void (*returnFunctionPointer())();
 
 private:
   SimpleString  _context;

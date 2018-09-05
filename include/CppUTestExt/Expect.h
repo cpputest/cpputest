@@ -77,9 +77,15 @@ public:
   // Expectation use( IModel& );
 
   template<typename T>
-  ExpectedCall& output( const SimpleString& name, T& value )
+  ExpectedCall& output( const SimpleString& name, T* const value )
   {
     _expectedCall->withOutputParameterReturning( name, value, sizeof(T) );
+    return *this;
+  }
+  template<typename T>
+  ExpectedCall& output( const SimpleString& name, T* const value, const std::size_t size )
+  {
+    _expectedCall->withOutputParameterReturning( name, value, size );
     return *this;
   }
 

@@ -46,3 +46,75 @@ ActualCall::ActualCall( const SimpleString& context, const SimpleString& name )
   : _context(context), _methodName(name), _actualCall(mock(context).actualCall(name))
 { }
 
+bool ActualCall::returnBool()
+{
+  return _actualCall.returnBoolValue();
+}
+
+char ActualCall::returnChar()
+{
+  // FIXME CppUMock has not returnCharValue
+  return (char)_actualCall.returnIntValue();
+}
+
+unsigned char ActualCall::returnUnsignedChar()
+{
+  // FIXME CppUMock has not returnUnsignedCharValue
+  return (unsigned char)_actualCall.returnUnsignedIntValue();
+}
+
+int ActualCall::returnInt()
+{
+  return _actualCall.returnIntValue();
+}
+
+unsigned int ActualCall::returnUnsignedInt()
+{
+  return _actualCall.returnUnsignedIntValue();
+}
+
+long ActualCall::returnLongInt()
+{
+  return _actualCall.returnLongIntValue();
+}
+
+unsigned long ActualCall::returnUnsignedLongInt()
+{
+  return _actualCall.returnUnsignedLongIntValue();
+}
+
+long long ActualCall::returnLongLongInt()
+{
+  return _actualCall.returnLongLongIntValue();
+}
+
+unsigned long long ActualCall::returnUnsignedLongLongInt()
+{
+  return _actualCall.returnUnsignedLongLongIntValue();
+}
+
+float ActualCall::returnFloat()
+{
+  // FIXME CppUMock doesn't support float
+  return static_cast<float>(_actualCall.returnDoubleValue());
+}
+
+double ActualCall::returnDouble()
+{
+  return _actualCall.returnDoubleValue();
+}
+
+void* ActualCall::returnPointer()
+{
+  return _actualCall.returnPointerValue();
+}
+
+const void* ActualCall::returnConstPointer()
+{
+  return _actualCall.returnConstPointerValue();
+}
+
+void (*ActualCall::returnFunctionPointer())()
+{
+  return _actualCall.returnFunctionPointerValue();
+}
