@@ -400,7 +400,7 @@ TEST( TestDoubleReturns, returns_pointer )
   void* const expectedValue = 0;
   expect().call("foo").times(1).andReturn(expectedValue);
   const void* const actualValue = actual().call("foo").returnPointer();
-  CHECK( expectedValue == actualValue );
+  POINTERS_EQUAL( expectedValue, actualValue );
 }
 
 TEST( TestDoubleReturns, returns_const_pointer )
@@ -408,12 +408,12 @@ TEST( TestDoubleReturns, returns_const_pointer )
   const void* const expectedValue = 0;
   expect().call("foo").times(1).andReturn(expectedValue);
   const void* const actualValue = actual().call("foo").returnConstPointer();
-  CHECK( expectedValue == actualValue );
+  POINTERS_EQUAL( expectedValue, actualValue );
 }
 
 TEST( TestDoubleReturns, returns_function_pointer )
 {
   expect().call("foo").times(1).andReturn(_fn);
-  const void* actualValue = (void*)actual().call("foo").returnFunctionPointer();
-  CHECK( _fn == actualValue );
+  void (*actualValue)() = actual().call("foo").returnFunctionPointer();
+  FUNCTIONPOINTERS_EQUAL( _fn, actualValue );
 }
