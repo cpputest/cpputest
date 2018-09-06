@@ -179,12 +179,12 @@ Schema  Legend
 Schema of an Expectation
 ------------------------------------------------------------------------------------------------------------------------
 ```C
-expect( {<context>} )                   // expectation context, default is global
-    .call( <method> )                   // name of method/function used by actual
+expect( {"<context>"} )                 // expectation context, default is global
+    .call( "<method>" )                 // name of method/function used by actual
     {.times( count )}                   // number of invocations to apply expectation, default=always
     {.nextIn( sequence )}               // assert that previous sequence expectations have occurred
-    {.with( parameter, value )}         // name of parameter and value to validate
-    {.output( parameter, value )}       // name of parameter, sets an expected value
+    {.with( "parameter", value )}       // name of parameter and value to validate
+    {.output( "parameter", value )}     // name of parameter, sets an expected value
     {.use( Model )}                     // Model of behavior
     {.returns<type>()}                  // return value
 ```
@@ -192,10 +192,10 @@ expect( {<context>} )                   // expectation context, default is globa
 Schema of an Actual
 ------------------------------------------------------------------------------------------------------------------------
 ```C
-actual( {<context>} )                   // expectation context, default is global
-    .call( <method> )                   // name of method/function
-    {.with( String, value )}            // parameter name and value upon invocation
-    {.output( parameter, value )}       // name of parameter and reference to value to set (value based on expectation or else 0 )
+actual( {"<context>"} )                 // expectation context, default is global
+    .call( "<method>" )                 // name of method/function
+    {.with( "parameter", value )}       // parameter name and value upon invocation
+    {.output( "parameter", value& )}    // name of parameter and reference to value to set (value based on expectation or else 0 )
     {.return<type>()}                   // return value
 ```
 

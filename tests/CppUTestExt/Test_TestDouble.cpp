@@ -278,7 +278,7 @@ TEST( TestDoubleOutputs, sets_output_float_parameter )
   expect().call("foo").times(1).output("value", &expectedValue);
   float actualValue = 0;
   actual().call("foo").output("value", &actualValue);
-  CHECK( expectedValue == actualValue );
+  DOUBLES_EQUAL( expectedValue, actualValue, 0 );
 }
 
 TEST( TestDoubleOutputs, sets_output_double_parameter )
@@ -287,7 +287,7 @@ TEST( TestDoubleOutputs, sets_output_double_parameter )
   expect().call("foo").times(1).output("value", &expectedValue);
   double actualValue = 0;
   actual().call("foo").output("value", &actualValue);
-  CHECK( expectedValue == actualValue );
+  DOUBLES_EQUAL( expectedValue, actualValue, 0 );
 }
 
 TEST( TestDoubleOutputs, sets_buffer_parameter )
@@ -384,7 +384,7 @@ TEST( TestDoubleReturns, returns_float )
   const float expectedValue = 1;
   expect().call("foo").times(1).andReturn(expectedValue);
   const float actualValue = actual().call("foo").returnFloat();
-  CHECK( expectedValue == actualValue );
+  DOUBLES_EQUAL( expectedValue, actualValue, 0 );
 }
 
 TEST( TestDoubleReturns, returns_double )
@@ -392,7 +392,7 @@ TEST( TestDoubleReturns, returns_double )
   const double expectedValue = 1;
   expect().call("foo").times(1).andReturn(expectedValue);
   const double actualValue = actual().call("foo").returnDouble();
-  CHECK( expectedValue == actualValue );
+  DOUBLES_EQUAL( expectedValue, actualValue, 0 );
 }
 
 TEST( TestDoubleReturns, returns_pointer )
