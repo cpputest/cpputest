@@ -38,7 +38,7 @@ class ActualCall;
 class Actual
 {
 public:
-    Actual( const SimpleString& context ) : _context(context) {};
+    Actual( const SimpleString& context ) : _context(context) {}
 
     /// @note an Actual can only have one call invocation
     ActualCall call( const SimpleString& name );
@@ -62,7 +62,7 @@ public:
   template<typename T>
   ActualCall& with( const SimpleString& name, const T* value, std::size_t size )
   {
-    _actualCall.withMemoryBufferParameter( name, (unsigned char*)value, size );
+    _actualCall.withMemoryBufferParameter( name, reinterpret_cast<const unsigned char*>(value), size );
     return *this;
   }
 
