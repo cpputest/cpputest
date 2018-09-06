@@ -140,14 +140,14 @@ TEST( TestDoubleParameters, expect_string_with_value )
 
 TEST( TestDoubleParameters, expect_pointer_parameter_with_value )
 {
-  void* const value = 0;
+  void* const value = static_cast<void*>(0);
   expect().call("foo").times(1).with("value", value);
   actual().call("foo").with("value", value);
 }
 
 TEST( TestDoubleParameters, expect_const_pointer_parameter_with_value )
 {
-  const void* const value = 0;
+  const void* const value = static_cast<void*>(0);
   expect().call("foo").times(1).with("value", value);
   actual().call("foo").with("value", value);
 }
@@ -177,7 +177,7 @@ IGNORE_TEST( TestDoubleParameters, expect_every_call )
 IGNORE_TEST( TestDoubleParameters, expect_every_call_with_parameter_match )
 {
   // Not supported by CppUMock
-  const void* const value = 0;
+  const void* const value = static_cast<void*>(0);
   expect().call("foo").with("value", value);
   actual().call("foo").with("value", value);
   actual().call("foo").with("value", value);
@@ -413,7 +413,7 @@ TEST( TestDoubleReturns, returns_double )
 
 TEST( TestDoubleReturns, returns_pointer )
 {
-  void* const expectedValue = 0;
+  void* const expectedValue = static_cast<void*>(0);
   expect().call("foo").times(1).andReturn(expectedValue);
   const void* const actualValue = actual().call("foo").returnPointer();
   POINTERS_EQUAL( expectedValue, actualValue );
@@ -421,7 +421,7 @@ TEST( TestDoubleReturns, returns_pointer )
 
 TEST( TestDoubleReturns, returns_const_pointer )
 {
-  const void* const expectedValue = 0;
+  const void* const expectedValue = static_cast<void*>(0);
   expect().call("foo").times(1).andReturn(expectedValue);
   const void* const actualValue = actual().call("foo").returnConstPointer();
   POINTERS_EQUAL( expectedValue, actualValue );
