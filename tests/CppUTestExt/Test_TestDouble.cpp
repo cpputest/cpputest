@@ -299,6 +299,19 @@ TEST( TestDoubleOutputs, sets_buffer_parameter )
   MEMCMP_EQUAL( expectedString, actualString, sizeof(expectedString));
 }
 
+IGNORE_TEST( TestDoubleOutputs, sets_pointer )
+{
+  // an output pointer is a borrowed object provided by the method
+  // attempts to implement this via a templated .output() do not meet C++ syntax
+  // CppUMock uses a specialized method (.withOutputParameterOfType), and TestDouble may need to follow suit
+
+  // char* const expectedValue = reinterpret_cast<char*>(0x100);
+  // expect().call("foo").times(1).output("value", expectedValue);
+  // char* const actualValue = 0;
+  // actual().call("foo").output("value", &actualValue );
+  // POINTERS_EQUAL( expectedValue, actualValue );
+}
+
 TEST_GROUP( TestDoubleReturns )
 {
   TEST_TEARDOWN()
