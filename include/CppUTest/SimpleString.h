@@ -174,7 +174,11 @@ SimpleString BracketsFormattedHexStringFrom(cpputest_ulonglong value);
 SimpleString BracketsFormattedHexStringFrom(signed char value);
 SimpleString BracketsFormattedHexString(SimpleString hexString);
 
-#if __cplusplus > 199711L
+/*
+ * ARM compiler has only partial support for C++11.
+ * Specifically std::nullptr_t is not officially supported
+ */
+#if __cplusplus > 199711L && !defined __arm__
 SimpleString StringFrom(const std::nullptr_t value);
 #endif
 
