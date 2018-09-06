@@ -278,7 +278,7 @@ TEST( TestDoubleOutputs, sets_output_float_parameter )
   expect().call("foo").times(1).output("value", &expectedValue);
   float actualValue = 0;
   actual().call("foo").output("value", &actualValue);
-  DOUBLES_EQUAL( expectedValue, actualValue, 0 );
+  FLOATS_EQUAL( expectedValue, actualValue, 0 );
 }
 
 TEST( TestDoubleOutputs, sets_output_double_parameter )
@@ -397,7 +397,7 @@ TEST( TestDoubleReturns, returns_float )
   const float expectedValue = 1;
   expect().call("foo").times(1).andReturn(expectedValue);
   const float actualValue = actual().call("foo").returnFloat();
-  DOUBLES_EQUAL( expectedValue, actualValue, 0 );
+  FLOATS_EQUAL( expectedValue, actualValue, 0 );
 }
 
 TEST( TestDoubleReturns, returns_double )
