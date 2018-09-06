@@ -39,7 +39,7 @@ class ExpectedCall;
 class Expectation
 {
 public:
-    Expectation( const SimpleString& context ) : _context(context) {};
+    Expectation( const SimpleString& context ) : _context(context) {}
 
     ExpectedCall call( const SimpleString& name );
 
@@ -69,7 +69,7 @@ public:
   template<typename T>
   ExpectedCall& with( const SimpleString& name, const T* value, std::size_t size )
   {
-    _expectedCall->withMemoryBufferParameter( name, (unsigned char*)value, size );
+    _expectedCall->withMemoryBufferParameter( name, reinterpret_cast<const unsigned char*>(value), size );
     return *this;
   }
 
