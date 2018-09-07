@@ -93,11 +93,11 @@ unsigned long long ActualCall::returnUnsignedLongLongInt()
   return _actualCall.returnUnsignedLongLongIntValue();
 }
 
-float ActualCall::returnFloat()
-{
-  // FIXME CppUMock doesn't support float
-  return static_cast<float>(_actualCall.returnDoubleValue());
-}
+// FIXME CppUMock doesn't support float
+// float ActualCall::returnFloat()
+// {
+//   return static_cast<float>(_actualCall.returnDoubleValue());
+// }
 
 double ActualCall::returnDouble()
 {
