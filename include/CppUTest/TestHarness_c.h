@@ -37,85 +37,85 @@
 #include "CppUTestConfig.h"
 
 #define CHECK_EQUAL_C_BOOL(expected,actual) \
-  CHECK_EQUAL_C_BOOL_LOCATION(expected,actual,NULL,__FILE__,__LINE__)
+  CHECK_EQUAL_C_BOOL_LOCATION(expected,actual,NULLPTR,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_BOOL_TEXT(expected,actual,text) \
   CHECK_EQUAL_C_BOOL_LOCATION(expected,actual,text,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_INT(expected,actual) \
-  CHECK_EQUAL_C_INT_LOCATION(expected,actual,NULL,__FILE__,__LINE__)
+  CHECK_EQUAL_C_INT_LOCATION(expected,actual,NULLPTR,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_INT_TEXT(expected,actual,text) \
   CHECK_EQUAL_C_INT_LOCATION(expected,actual,text,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_UINT(expected,actual) \
-  CHECK_EQUAL_C_UINT_LOCATION(expected,actual,NULL,__FILE__,__LINE__)
+  CHECK_EQUAL_C_UINT_LOCATION(expected,actual,NULLPTR,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_UINT_TEXT(expected,actual,text) \
   CHECK_EQUAL_C_UINT_LOCATION(expected,actual,text,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_LONG(expected,actual) \
-  CHECK_EQUAL_C_LONG_LOCATION(expected,actual,NULL,__FILE__,__LINE__)
+  CHECK_EQUAL_C_LONG_LOCATION(expected,actual,NULLPTR,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_LONG_TEXT(expected,actual,text) \
   CHECK_EQUAL_C_LONG_LOCATION(expected,actual,text,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_ULONG(expected,actual) \
-  CHECK_EQUAL_C_ULONG_LOCATION(expected,actual,NULL,__FILE__,__LINE__)
+  CHECK_EQUAL_C_ULONG_LOCATION(expected,actual,NULLPTR,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_ULONG_TEXT(expected,actual,text) \
   CHECK_EQUAL_C_ULONG_LOCATION(expected,actual,text,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_LONGLONG(expected,actual) \
-  CHECK_EQUAL_C_LONGLONG_LOCATION(expected,actual,NULL,__FILE__,__LINE__)
+  CHECK_EQUAL_C_LONGLONG_LOCATION(expected,actual,NULLPTR,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_LONGLONG_TEXT(expected,actual,text) \
   CHECK_EQUAL_C_LONGLONG_LOCATION(expected,actual,text,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_ULONGLONG(expected,actual) \
-  CHECK_EQUAL_C_ULONGLONG_LOCATION(expected,actual,NULL,__FILE__,__LINE__)
+  CHECK_EQUAL_C_ULONGLONG_LOCATION(expected,actual,NULLPTR,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_ULONGLONG_TEXT(expected,actual,text) \
   CHECK_EQUAL_C_ULONGLONG_LOCATION(expected,actual,text,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_REAL(expected,actual,threshold) \
-  CHECK_EQUAL_C_REAL_LOCATION(expected,actual,threshold,NULL,__FILE__,__LINE__)
+  CHECK_EQUAL_C_REAL_LOCATION(expected,actual,threshold,NULLPTR,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_REAL_TEXT(expected,actual,threshold,text) \
   CHECK_EQUAL_C_REAL_LOCATION(expected,actual,threshold,text,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_CHAR(expected,actual) \
-  CHECK_EQUAL_C_CHAR_LOCATION(expected,actual,NULL,__FILE__,__LINE__)
+  CHECK_EQUAL_C_CHAR_LOCATION(expected,actual,NULLPTR,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_CHAR_TEXT(expected,actual,text) \
   CHECK_EQUAL_C_CHAR_LOCATION(expected,actual,text,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_UBYTE(expected,actual) \
-  CHECK_EQUAL_C_UBYTE_LOCATION(expected,actual,NULL,__FILE__,__LINE__)
+  CHECK_EQUAL_C_UBYTE_LOCATION(expected,actual,NULLPTR,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_UBYTE_TEXT(expected,actual,text) \
   CHECK_EQUAL_C_UBYTE_LOCATION(expected,actual,text,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_SBYTE(expected,actual) \
-  CHECK_EQUAL_C_SBYTE_LOCATION(expected,actual,NULL,__FILE__,__LINE__)
+  CHECK_EQUAL_C_SBYTE_LOCATION(expected,actual,NULLPTR,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_SBYTE_TEXT(expected,actual,text) \
   CHECK_EQUAL_C_SBYTE_LOCATION(expected,actual,text,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_STRING(expected,actual) \
-  CHECK_EQUAL_C_STRING_LOCATION(expected,actual,NULL,__FILE__,__LINE__)
+  CHECK_EQUAL_C_STRING_LOCATION(expected,actual,NULLPTR,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_STRING_TEXT(expected,actual,text) \
   CHECK_EQUAL_C_STRING_LOCATION(expected,actual,text,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_POINTER(expected,actual) \
-  CHECK_EQUAL_C_POINTER_LOCATION(expected,actual,NULL,__FILE__,__LINE__)
+  CHECK_EQUAL_C_POINTER_LOCATION(expected,actual,NULLPTR,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_POINTER_TEXT(expected,actual,text) \
   CHECK_EQUAL_C_POINTER_LOCATION(expected,actual,text,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_BITS(expected, actual, mask) \
-  CHECK_EQUAL_C_BITS_LOCATION(expected, actual, mask, sizeof(actual), NULL, __FILE__, __LINE__)
+  CHECK_EQUAL_C_BITS_LOCATION(expected, actual, mask, sizeof(actual), NULLPTR, __FILE__, __LINE__)
 
 #define CHECK_EQUAL_C_BITS_TEXT(expected, actual, mask, text) \
   CHECK_EQUAL_C_BITS_LOCATION(expected, actual, mask, sizeof(actual), text, __FILE__, __LINE__)
