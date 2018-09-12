@@ -127,7 +127,7 @@
   FAIL_C_LOCATION(__FILE__,__LINE__)
 
 #define CHECK_C(condition) \
-  CHECK_C_LOCATION(condition, #condition, NULL, __FILE__,__LINE__)
+  CHECK_C_LOCATION(condition, #condition, NULLPTR, __FILE__,__LINE__)
 
 #define CHECK_C_TEXT(condition, text) \
   CHECK_C_LOCATION(condition, #condition, text, __FILE__, __LINE__)
