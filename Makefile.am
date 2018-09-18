@@ -204,6 +204,7 @@ CppUTestExtTests_SOURCES = \
 	tests/CppUTestExt/MockStrictOrderTest.cpp \
 	tests/CppUTestExt/MockReturnValueTest.cpp \
 	tests/CppUTestExt/OrderedTestTest.cpp \
+	tests/CppUTestExt/OrderedTestTest_c.c \
 	tests/CppUTestExt/MockFakeLongLong.cpp
 
 DISTCLEANFILES = \
