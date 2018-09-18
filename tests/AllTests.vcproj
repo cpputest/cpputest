@@ -909,6 +909,29 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="CppUTestExt\OrderedTestTest_c.c"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						ForcedIncludeFiles=""
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="CppUTest\PluginTest.cpp"
 				>
 				<FileConfiguration
@@ -1372,6 +1395,10 @@
 			</File>
 			<File
 				RelativePath=".\CppUTestExt\IEEE754PluginTest_c.h"
+				>
+			</File>
+			<File
+				RelativePath=".\CppUTestExt\OrderedTestTest.h"
 				>
 			</File>
 		</Filter>
