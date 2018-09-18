@@ -30,6 +30,7 @@
 #include "CppUTest/TestRegistry.h"
 #include "CppUTest/TestTestingFixture.h"
 #include "CppUTestExt/OrderedTest.h"
+#include "OrderedTestTest.h"
 
 TEST_GROUP(TestOrderedTest)
 {
