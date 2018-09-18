@@ -78,5 +78,11 @@ class OrderedTestInstaller
   static OrderedTestInstaller TEST_##testGroup##_##testName##_Installer(TEST_##testGroup##_##testName##_Instance, #testGroup, #testName, __FILE__,__LINE__, testLevel); \
    void TEST_##testGroup##_##testName##_Test::testBody()
 
+#define TEST_ORDERED_C_WRAPPER(group_name, test_name, testLevel) \
+  extern "C" void test_##group_name##_##test_name##_wrapper_c(void); \
+  TEST_ORDERED(group_name, test_name, testLevel) { \
+      test_##group_name##_##test_name##_wrapper_c(); \
+  }
+
 #endif
 

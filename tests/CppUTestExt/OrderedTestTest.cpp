@@ -198,3 +198,48 @@ TEST_ORDERED(TestOrderedTestMacros, Test3, 3)
 {
     CHECK(OrderedTestTestingFixture::count() == 3);
 }
+
+// Test with same level
+TEST_ORDERED(TestOrderedTestMacros, Test5_1, 5)
+{
+    CHECK(OrderedTestTestingFixture::count() == 5);
+}
+
+TEST_ORDERED(TestOrderedTestMacros, Test6_1, 6)
+{
+    CHECK(OrderedTestTestingFixture::count() == 7);
+}
+
+TEST_ORDERED(TestOrderedTestMacros, Test5_2, 5)
+{
+    CHECK(OrderedTestTestingFixture::count() == 6);
+}
+
+TEST_ORDERED(TestOrderedTestMacros, Test6_2, 6)
+{
+    CHECK(OrderedTestTestingFixture::count() == 8);
+}
+
+// Test C-Interface
+TEST_ORDERED(TestOrderedTestMacros, Test10, 10)
+{
+    CHECK(OrderedTestTestingFixture::count() == 12);
+}
+
+TEST_ORDERED(TestOrderedTestMacros, Test8, 8)
+{
+    CHECK(OrderedTestTestingFixture::count() == 10);
+}
+
+// Export to be usable in OrderedTestTest_c.c
+extern "C" {
+int orderedTestFixtureCWrapper(void) {
+    return OrderedTestTestingFixture::count();
+}
+}
+
+TEST_ORDERED_C_WRAPPER(TestOrderedTestMacros, Test11, 11)
+
+TEST_ORDERED_C_WRAPPER(TestOrderedTestMacros, Test7, 7)
+
+TEST_ORDERED_C_WRAPPER(TestOrderedTestMacros, Test9, 9)
