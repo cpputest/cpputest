@@ -1,6 +1,5 @@
 #include "CppUTest/TestHarness_c.h"
-
-int orderedTestFixtureCWrapper(void);
+#include "OrderedTestTest.h"
 
 TEST_C(TestOrderedTestMacros, Test11)
 {
