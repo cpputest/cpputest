@@ -496,6 +496,14 @@
 	"..\include\platforms\visualcpp\stdint.h"\
 	
 
+.\CppUTest\OrderedTestTest_c.c : \
+	"..\include\CppUTest\CppUTestConfig.h"\
+	"..\include\CppUTest\PlatformSpecificFunctions_c.h"\
+	"..\include\CppUTest\StandardCLibrary.h"\
+	"..\include\CppUTest\TestHarness_c.h"\
+	".\CppUTestExt\OrderedTestTest.h"\
+	
+
 .\CppUTest\PluginTest.cpp : \
 	"..\include\CppUTest\CppUTestConfig.h"\
 	"..\include\CppUTest\MemoryLeakDetectorNewMacros.h"\

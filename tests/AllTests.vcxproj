@@ -277,6 +277,7 @@
     <ClCompile Include="CppUTestExt\MockSupport_cTest.cpp" />
     <ClCompile Include="CppUTestExt\MockSupport_cTestCFile.c" />
     <ClCompile Include="CppUTestExt\OrderedTestTest.cpp" />
+    <ClCompile Include="CppUTestExt\OrderedTestTest_c.c" />
     <ClCompile Include="CppUTest\JUnitOutputTest.cpp" />
     <ClCompile Include="CppUTest\MemoryLeakDetectorTest.cpp" />
     <ClCompile Include="CppUTest\MemoryOperatorOverloadTest.cpp" />
@@ -311,6 +312,7 @@
     <ClInclude Include="CppUTestExt\mockfailurereporterfortest.h" />
     <ClInclude Include="CppUTestExt\MockFailureTest.h" />
     <ClInclude Include="CppUTestExt\MockSupport_cTestCFile.h" />
+    <ClInclude Include="CppUTestExt\OrderedTestTest.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
