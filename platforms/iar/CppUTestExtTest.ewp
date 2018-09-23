@@ -2018,6 +2018,12 @@
       <file>
         <name>$PROJ_DIR$\..\..\tests\CppUTestExt\OrderedTestTest.cpp</name>
       </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\tests\CppUTestExt\OrderedTestTest_c.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\tests\CppUTestExt\OrderedTestTest.h</name>
+      </file>
     </group>
     <group>
       <name>warnings</name>

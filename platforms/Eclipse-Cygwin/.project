@@ -1765,6 +1765,16 @@
 			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/tests/CppUTestExt/OrderedTestTest.cpp</locationURI>
 		</link>
 		<link>
+			<name>tests/CppUTestExt/OrderedTestTest_c.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/tests/CppUTestExt/OrderedTestTest_c.c</locationURI>
+		</link>
+		<link>
+			<name>tests/CppUTestExt/OrderedTestTest.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/tests/CppUTestExt/OrderedTestTest.h</locationURI>
+		</link>
+		<link>
 			<name>tests/Debug/AllTests.bsc</name>
 			<type>1</type>
 			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/tests/Debug/AllTests.bsc</locationURI>
@@ -2063,6 +2073,16 @@
 			<name>tests/Debug/OrderedTestTest.sbr</name>
 			<type>1</type>
 			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/tests/Debug/OrderedTestTest.sbr</locationURI>
+		</link>
+		<link>
+			<name>tests/Debug/OrderedTestTest_c.obj</name>
+			<type>1</type>
+			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/tests/Debug/OrderedTestTest_c.obj</locationURI>
+		</link>
+		<link>
+			<name>tests/Debug/OrderedTestTest_c.sbr</name>
+			<type>1</type>
+			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/tests/Debug/OrderedTestTest_c.sbr</locationURI>
 		</link>
 		<link>
 			<name>tests/Debug/PluginTest.obj</name>

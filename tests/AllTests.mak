@@ -78,6 +78,7 @@ CLEAN :
 	-@erase "$(INTDIR)\MockSupport_cTestCFile.obj"
 	-@erase "$(INTDIR)\MockSupportTest.obj"
 	-@erase "$(INTDIR)\OrderedTestTest.obj"
+	-@erase "$(INTDIR)\OrderedTestTest_c.obj"
 	-@erase "$(INTDIR)\PluginTest.obj"
 	-@erase "$(INTDIR)\PreprocessorTest.obj"
 	-@erase "$(INTDIR)\SetPluginTest.obj"
@@ -134,6 +135,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\MockSupport_cTestCFile.obj" \
 	"$(INTDIR)\MockSupportTest.obj" \
 	"$(INTDIR)\OrderedTestTest.obj" \
+	"$(INTDIR)\OrderedTestTest_c.obj" \
 	"$(INTDIR)\PluginTest.obj" \
 	"$(INTDIR)\PreprocessorTest.obj" \
 	"$(INTDIR)\SetPluginTest.obj" \
@@ -246,6 +248,8 @@ CLEAN :
 	-@erase "$(INTDIR)\MockSupportTest.sbr"
 	-@erase "$(INTDIR)\OrderedTestTest.obj"
 	-@erase "$(INTDIR)\OrderedTestTest.sbr"
+	-@erase "$(INTDIR)\OrderedTestTest_c.obj"
+	-@erase "$(INTDIR)\OrderedTestTest_c.sbr"
 	-@erase "$(INTDIR)\PluginTest.obj"
 	-@erase "$(INTDIR)\PluginTest.sbr"
 	-@erase "$(INTDIR)\PreprocessorTest.obj"
@@ -315,6 +319,7 @@ BSC32_SBRS= \
 	"$(INTDIR)\MockSupport_cTestCFile.sbr" \
 	"$(INTDIR)\MockSupportTest.sbr" \
 	"$(INTDIR)\OrderedTestTest.sbr" \
+	"$(INTDIR)\OrderedTestTest_c.sbr" \
 	"$(INTDIR)\PluginTest.sbr" \
 	"$(INTDIR)\PreprocessorTest.sbr" \
 	"$(INTDIR)\SetPluginTest.sbr" \
@@ -365,6 +370,7 @@ LINK32_OBJS= \
 	"$(INTDIR)\MockSupport_cTestCFile.obj" \
 	"$(INTDIR)\MockSupportTest.obj" \
 	"$(INTDIR)\OrderedTestTest.obj" \
+	"$(INTDIR)\OrderedTestTest_c.obj" \
 	"$(INTDIR)\PluginTest.obj" \
 	"$(INTDIR)\PreprocessorTest.obj" \
 	"$(INTDIR)\SetPluginTest.obj" \
@@ -907,6 +913,22 @@ SOURCE=.\CppUTestExt\OrderedTestTest.cpp
 
 "$(INTDIR)\OrderedTestTest.obj"	"$(INTDIR)\OrderedTestTest.sbr" : $(SOURCE) "$(INTDIR)"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
+
+
+!ENDIF 
+
+SOURCE=.\CppUTestExt\OrderedTestTest_c.c
+
+!IF  "$(CFG)" == "AllTests - Win32 Release"
+
+
+"$(INTDIR)\OrderedTestTest_c.obj" : $(SOURCE) "$(INTDIR)"
+
+
+!ELSEIF  "$(CFG)" == "AllTests - Win32 Debug"
+
+
+"$(INTDIR)\OrderedTestTest_c.obj"	"$(INTDIR)\OrderedTestTest_c.sbr" : $(SOURCE) "$(INTDIR)"
 
 
 !ENDIF 

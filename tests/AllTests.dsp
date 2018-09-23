@@ -230,6 +230,14 @@ SOURCE=.\CppUTestExt\OrderedTestTest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\CppUTestExt\OrderedTestTest_c.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\CppUTestExt\OrderedTestTest.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\CppUTest\PluginTest.cpp
 # End Source File
 # Begin Source File

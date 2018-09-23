@@ -98,6 +98,7 @@ CPPUX2_OBJECTS := \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockFailureReporterForTest.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/CodeMemoryReporterTest.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/OrderedTestTest.o \
+  $(CPPUTEST_HOME)/tests/CppUTestExt/OrderedTestTest_c.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockReturnValueTest.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockNamedValueTest.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockPluginTest.o \
