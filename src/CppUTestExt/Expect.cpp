@@ -25,11 +25,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "CppUTestExt/Expect.h"
-
-// FIXME using CppUMock for now
-#include "CppUTestExt/MockSupport.h"
-
+#include "CppUTestExt/TestSupport.h"
 
 Expectation expect( const SimpleString& context )
 {

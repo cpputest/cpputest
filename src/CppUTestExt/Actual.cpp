@@ -27,9 +27,6 @@
 
 #include "CppUTestExt/Actual.h"
 
-// FIXME using CppUMock for now
-#include "CppUTestExt/MockSupport.h"
-
 Actual actual( const SimpleString& context )
 {
   return Actual( context );
@@ -51,13 +48,11 @@ bool ActualCall::returnBool()
 
 char ActualCall::returnChar()
 {
-  // FIXME CppUMock has not returnCharValue
   return (char)_actualCall.returnIntValue();
 }
 
 unsigned char ActualCall::returnUnsignedChar()
 {
-  // FIXME CppUMock has not returnUnsignedCharValue
   return (unsigned char)_actualCall.returnUnsignedIntValue();
 }
 

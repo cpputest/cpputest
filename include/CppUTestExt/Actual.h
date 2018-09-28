@@ -28,7 +28,7 @@
 #ifndef ACTUAL_H
 #define ACTUAL_H
 
-#include "CppUTestExt/TestDouble.h"
+#include "CppUTestExt/TestSupport.h"
 
 /**
  * actual( {"<context>"} )             // expectation context, default is global
@@ -38,7 +38,7 @@
  * {.return<type>()}                   // return value
  */
 class Actual;
-Actual actual( const SimpleString& context = TEST_DOUBLE_GLOBAL_CONTEXT );
+Actual actual( const SimpleString& context = TEST_GLOBAL_CONTEXT );
 
 class ActualCall;
 class Actual
@@ -81,8 +81,7 @@ public:
     return *this;
   }
 
-  //  return based methods invoke matched expectation (or else do nothing and return 0)
-  // TODO template returns
+  // return based upon expectations
   bool returnBool();
   char returnChar();
   unsigned char returnUnsignedChar();
