@@ -13,6 +13,9 @@ set(CppUTestExt_src
         MemoryReportFormatter.cpp
         MockExpectedCallsList.cpp
         MockSupport.cpp
+        TestDouble.cpp
+        Expect.cpp
+        Actual.cpp
 )
 
 set(CppUTestExt_headers
@@ -36,6 +39,9 @@ set(CppUTestExt_headers
         ${CppUTestRootDirectory}/include/CppUTestExt/MockCheckedActualCall.h
         ${CppUTestRootDirectory}/include/CppUTestExt/MockNamedValue.h
         ${CppUTestRootDirectory}/include/CppUTestExt/MockSupport.h
+        ${CppUTestRootDirectory}/include/CppUTestExt/TestDouble.h
+        ${CppUTestRootDirectory}/include/CppUTestExt/Expect.h
+        ${CppUTestRootDirectory}/include/CppUTestExt/Actual.h
 )
 
 add_library(CppUTestExt STATIC ${CppUTestExt_src} ${CppUTestExt_headers})
