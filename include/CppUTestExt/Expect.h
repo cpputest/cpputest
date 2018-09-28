@@ -28,10 +28,10 @@
 #ifndef EXPECT_H
 #define EXPECT_H
 
-#include "CppUTestExt/TestDouble.h"
+#include "CppUTestExt/TestSupport.h"
 
 class Expectation;
-Expectation expect( const SimpleString& context = TEST_DOUBLE_GLOBAL_CONTEXT );
+Expectation expect( const SimpleString& context = TEST_GLOBAL_CONTEXT );
 
 
 class IModel;

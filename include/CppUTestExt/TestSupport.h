@@ -24,20 +24,31 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#ifndef TEST_DOUBLE_H
-#define TEST_DOUBLE_H
+#ifndef TEST_SUPPORT_H
+#define TEST_SUPPORT_H
 
-#include "CppUTestExt/MockSupport.h"
+#include "CppUTest/SimpleString.h"
 
-const static SimpleString TEST_DOUBLE_GLOBAL_CONTEXT = " ";
+const static SimpleString TEST_GLOBAL_CONTEXT = " ";
 
-void checkExpectations( const SimpleString& context = TEST_DOUBLE_GLOBAL_CONTEXT );
+static void checkExpectations( const SimpleString& context = TEST_GLOBAL_CONTEXT );
 
-class Expectation;
-void addExpectation( const Expectation& expectation );
+class ExpectedCall;
+static void addExpectation( const ExpectedCall& );
 
-class Actual;
-void checkActual( Actual& actual );
+class ActualCall;
+static void checkActual( const ActualCall& actual );
 
+template< typename T >
+struct Parameter
+{
+  const SimpleString name;
+  const T value;
+  const SimpleString type;
 
-#endif /* TEST_DOUBLE_H */
+  Parameter( const SimpleString& _name, const SimpleString& _type, T _value )
+  : name(_name), type(_type), value(_value) {}
+
+};
+
+#endif /* TEST_SUPPORT_H */
