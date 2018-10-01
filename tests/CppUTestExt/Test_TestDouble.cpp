@@ -32,7 +32,7 @@
 // #include "MockFailureReporterForTest.h"
 #include "CppUTestExt/Expect.h"
 #include "CppUTestExt/Actual.h"
-#include "CppUTestExt/TestDouble.h"
+#include "CppUTestExt/TestSupport.h"
 
 TEST_GROUP( TestDoubleParameters )
 {

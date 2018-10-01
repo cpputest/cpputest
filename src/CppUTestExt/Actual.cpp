@@ -38,52 +38,61 @@ ActualCall Actual::call( const SimpleString& name )
 }
 
 ActualCall::ActualCall( const SimpleString& context, const SimpleString& name )
-  : _context(context), _methodName(name), _actualCall(mock(context).actualCall(name))
+  : _context(context), _methodName(name)
 { }
 
 bool ActualCall::returnBool()
 {
-  return _actualCall.returnBoolValue();
+  // return _actualCall.returnBoolValue();
+  return true;
 }
 
 char ActualCall::returnChar()
 {
-  return (char)_actualCall.returnIntValue();
+  // return (char)_actualCall.returnIntValue();
+  return 0;
 }
 
 unsigned char ActualCall::returnUnsignedChar()
 {
-  return (unsigned char)_actualCall.returnUnsignedIntValue();
+  // return (unsigned char)_actualCall.returnUnsignedIntValue();
+  return 0;
 }
 
 int ActualCall::returnInt()
 {
-  return _actualCall.returnIntValue();
+  // return _actualCall.returnIntValue();
+  return 0;
 }
 
 unsigned int ActualCall::returnUnsignedInt()
 {
-  return _actualCall.returnUnsignedIntValue();
+  // return _actualCall.returnUnsignedIntValue();
+  return 0;
 }
 
 long ActualCall::returnLongInt()
 {
-  return _actualCall.returnLongIntValue();
+  // return _actualCall.returnLongIntValue();
+  return 0;
 }
 
 unsigned long ActualCall::returnUnsignedLongInt()
 {
-  return _actualCall.returnUnsignedLongIntValue();
+  // return _actualCall.returnUnsignedLongIntValue();
+  return 0;
 }
 
 long long ActualCall::returnLongLongInt()
 {
-  return _actualCall.returnLongLongIntValue();
+  // return _actualCall.returnLongLongIntValue();
+  return 0;
 }
 
 unsigned long long ActualCall::returnUnsignedLongLongInt()
 {
-  return _actualCall.returnUnsignedLongLongIntValue();
+  // return _actualCall.returnUnsignedLongLongIntValue();
+  return 0;
 }
 
 // FIXME CppUMock doesn't support float
@@ -94,20 +103,24 @@ unsigned long long ActualCall::returnUnsignedLongLongInt()
 
 double ActualCall::returnDouble()
 {
-  return _actualCall.returnDoubleValue();
+  // return _actualCall.returnDoubleValue();
+  return 0;
 }
 
 void* ActualCall::returnPointer()
 {
-  return _actualCall.returnPointerValue();
+  // return _actualCall.returnPointerValue();
+  return 0;
 }
 
 const void* ActualCall::returnConstPointer()
 {
-  return _actualCall.returnConstPointerValue();
+  // return _actualCall.returnConstPointerValue();
+  return 0;
 }
 
 void (*ActualCall::returnFunctionPointer())()
 {
-  return _actualCall.returnFunctionPointerValue();
+  // return _actualCall.returnFunctionPointerValue();
+  return 0;
 }

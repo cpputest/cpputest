@@ -70,14 +70,14 @@ public:
   template<typename T>
   ActualCall& with( const SimpleString& name, const T* value, std::size_t size )
   {
-    _actualCall.withMemoryBufferParameter( name, reinterpret_cast<const unsigned char*>(value), size );
+    // withMemoryBufferParameter( name, reinterpret_cast<const unsigned char*>(value), size );
     return *this;
   }
 
   template<typename T>
   ActualCall& output( const SimpleString& name, T* const value )
   {
-    _actualCall.withOutputParameter( name, value );
+    // withOutputParameter( name, value );
     return *this;
   }
 

@@ -26,6 +26,7 @@
  */
 
 #include "CppUTestExt/TestSupport.h"
+#include "CppUTestExt/Expect.h"
 
 Expectation expect( const SimpleString& context )
 {
@@ -50,7 +51,7 @@ ExpectedCall& ExpectedCall::times( const unsigned int count )
   // TODO times should default to EVERY, but CppUMock requires an explicit count
   _times = count;
 
-  _expectedCall = &mock(_context).expectNCalls( _times, _methodName );
+  // _expectedCall = &mock(_context).expectNCalls( _times, _methodName );
 
   return *this;
 }
