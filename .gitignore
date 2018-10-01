@@ -103,3 +103,4 @@ tests/CppUTestExt/cmake_install.cmake
 
 # Dart files
 DartConfiguration.tcl
+.cproject
