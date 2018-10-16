@@ -63,7 +63,7 @@ public:
   ActualCall& with( const SimpleString& name, const T& value )
   {
     _actualCall.withParameter( name, value );
-    _addParameter( name, value );
+    _testParameter( name, value );
     return *this;
   }
 
@@ -103,12 +103,17 @@ private:
   SimpleString  _methodName;
   MockActualCall& _actualCall;
 
-
   template<typename T>
-  void _addParameter( const SimpleString& name, const T& value )
+  void _testParameter( const SimpleString& name, const T& value )
   {
-    // Parameter _parameter( name, value );
+
   }
 };  // class ActualCall
+
+
+class PossibleExpectations
+{
+
+};  // class PossibleExpectations
 
 #endif /* ACTUAL_H */

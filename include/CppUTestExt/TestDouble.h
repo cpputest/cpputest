@@ -80,5 +80,21 @@ private:
 
 };  // class Parameter
 
+// class ParameterEntry;
+// class Parameters
+// {
+// public:
+//   void add( const Parameter& parameter );
+
+//   ParameterEntry* head = NULL;
+
+// };  // class Parameters
+
+// class ParameterEntry
+// {
+//   const Parameter& parameter;
+//   Parameter* pNext = NULL;
+// };  // class ParameterEntry
+
 
 #endif /* TEST_DOUBLE_H */
