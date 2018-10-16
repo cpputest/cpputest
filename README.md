@@ -22,10 +22,11 @@ Building from source (unix-based, cygwin, MacOSX):
 
 * Download latest version
 * autogen.sh
-* configure
-* make
-* make check
-* You can use "make install" if you want to install CppUTest system-wide
+* make a build directory and change to it `mkdir a_build_dir && cd a_build_dir`
+* configure `../configure`
+* `make`
+* `make check`
+* You can use `make install` if you want to install CppUTest system-wide
 
 You can also use CMake, which also works for Windows Visual Studio.
 
