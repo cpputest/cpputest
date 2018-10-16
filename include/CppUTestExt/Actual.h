@@ -30,9 +30,15 @@
 
 #include "CppUTestExt/TestDouble.h"
 
+/**
+ * actual( {"<context>"} )             // expectation context, default is global
+ * .call( "<method>" )                 // name of method/function
+ *  {.with( "parameter", value )}      // parameter name and value upon invocation
+ * {.output( "parameter", value& )}    // name of parameter and reference to value to set (value based on expectation or else 0 )
+ * {.return<type>()}                   // return value
+ */
 class Actual;
 Actual actual( const SimpleString& context = TEST_DOUBLE_GLOBAL_CONTEXT );
-
 
 class ActualCall;
 class Actual
@@ -45,7 +51,8 @@ public:
 
 private:
   const SimpleString& _context;
-};
+};  // class Actual
+
 
 class ActualCall
 {
@@ -53,9 +60,10 @@ public:
   ActualCall( const SimpleString& context, const SimpleString& methodName );
 
   template<typename T>
-  ActualCall& with( const SimpleString& name, T value )
+  ActualCall& with( const SimpleString& name, const T& value )
   {
     _actualCall.withParameter( name, value );
+    _addParameter( name, value );
     return *this;
   }
 
@@ -88,12 +96,19 @@ public:
   double returnDouble();
   void* returnPointer();
   const void* returnConstPointer();
-  void (*returnFunctionPointer())();
+  void(*returnFunctionPointer())();
 
 private:
   SimpleString  _context;
   SimpleString  _methodName;
   MockActualCall& _actualCall;
-};
+
+
+  template<typename T>
+  void _addParameter( const SimpleString& name, const T& value )
+  {
+    // Parameter _parameter( name, value );
+  }
+};  // class ActualCall
 
 #endif /* ACTUAL_H */

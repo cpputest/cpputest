@@ -35,12 +35,10 @@ Actual actual( const SimpleString& context )
   return Actual( context );
 }
 
-
 ActualCall Actual::call( const SimpleString& name )
 {
   return ActualCall( _context, name );
 }
-
 
 ActualCall::ActualCall( const SimpleString& context, const SimpleString& name )
   : _context(context), _methodName(name), _actualCall(mock(context).actualCall(name))

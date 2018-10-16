@@ -29,6 +29,9 @@
 
 #include "CppUTestExt/MockSupport.h"
 
+#include <typeinfo>
+#include <CppUTest/PlatformSpecificFunctions.h>
+
 const static SimpleString TEST_DOUBLE_GLOBAL_CONTEXT = " ";
 
 void checkExpectations( const SimpleString& context = TEST_DOUBLE_GLOBAL_CONTEXT );
@@ -38,6 +41,44 @@ void addExpectation( const Expectation& expectation );
 
 class Actual;
 void checkActual( Actual& actual );
+
+class Parameter
+{
+public:
+  const SimpleString& name;
+  const SimpleString  type;
+
+  template<typename T>
+  Parameter( const SimpleString& _name, const T& _value )
+  : name(_name), type( typeid(_value).name() ), _variant(_value)
+  { }
+
+private:
+  const union Variant {
+    bool                    asBool;
+    char                    asChar;
+    unsigned char           asUnsignedChar;
+    int                     asInt;
+    unsigned int            asUnsignedInt;
+    long int                asLongInt;
+    unsigned long int       asUnsignedLongInt;
+    long long int           asLongLongInt;
+    unsigned long long int  asUnsignedLongLongInt;
+    float                   asFloat;
+    double                  asDouble;
+    void*                   asPointer;
+    const void*             asConstPointer;
+    void(*asFunctionPointer());
+
+    template<typename T>
+    Variant( const T& value )
+    {
+      // FIXME sizeof( function pointer ) is not allowed
+      PlatformSpecificMemCpy( this, &value, sizeof(T) );
+    }
+  } _variant;
+
+};  // class Parameter
 
 
 #endif /* TEST_DOUBLE_H */

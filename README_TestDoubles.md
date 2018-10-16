@@ -188,17 +188,3 @@ expect( {"<context>"} )                 // expectation context, default is globa
     {.use( Model )}                     // Model of behavior
     {.returns<type>()}                  // return value
 ```
-
-Schema of an Actual
-------------------------------------------------------------------------------------------------------------------------
-```C
-actual( {"<context>"} )                 // expectation context, default is global
-    .call( "<method>" )                 // name of method/function
-    {.with( "parameter", value )}       // parameter name and value upon invocation
-    {.output( "parameter", value& )}    // name of parameter and reference to value to set (value based on expectation or else 0 )
-    {.return<type>()}                   // return value
-```
-
-
-
-
