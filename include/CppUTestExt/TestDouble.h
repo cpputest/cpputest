@@ -30,7 +30,7 @@
 #include "CppUTestExt/MockSupport.h"
 
 #include <typeinfo>
-#include <CppUTest/PlatformSpecificFunctions.h>
+#include "CppUTest/UtestMacros.h"
 
 const static SimpleString TEST_DOUBLE_GLOBAL_CONTEXT = " ";
 
@@ -52,6 +52,12 @@ public:
   Parameter( const SimpleString& _name, const T& _value )
   : name(_name), type( typeid(_value).name() ), _variant(_value)
   { }
+
+  template< typename T >
+  T value() const
+  {
+    if( type != typeid(T).name() )  FAIL( StringFromFormat( "illegal use of a %s as a %s.", type, typeid(T).name() ).asCharString() );
+  }
 
 private:
   const union Variant {
