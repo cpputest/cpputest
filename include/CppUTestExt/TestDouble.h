@@ -53,9 +53,6 @@ public:
   : name(_name), type( typeid(_value).name() ), _variant(_value)
   { }
 
-  template< typename T >
-  T value() const;
-
   bool boolValue() const
   {
     const char* const returnType = typeid(bool).name();
