@@ -106,7 +106,7 @@ private:
   template<typename T>
   void _testParameter( const SimpleString& name, const T& value )
   {
-
+    Parameter parameter( name, value );
   }
 };  // class ActualCall
 

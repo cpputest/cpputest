@@ -153,12 +153,11 @@ TEST( TestDoubleParameters, expect_const_pointer_parameter_with_value )
 }
 
 static void _fn( void ) {}
-// FIXME function pointers in C++ not handled
-// TEST( TestDoubleParameters, expect_function_pointer_parameter_with_value )
-// {
-//   expect().call("foo").times(1).with("value", _fn);
-//   actual().call("foo").with("value", _fn);
-// }
+TEST( TestDoubleParameters, expect_function_pointer_parameter_with_value )
+{
+  expect().call("foo").times(1).with("value", _fn);
+  actual().call("foo").with("value", _fn);
+}
 
 TEST( TestDoubleParameters, expect_buffer_parameter_with_value )
 {

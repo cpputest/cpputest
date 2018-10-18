@@ -68,33 +68,24 @@ private:
     double                  asDouble;
     void*                   asPointer;
     const void*             asConstPointer;
-    void(*asFunctionPointer());
+    void(*asFunctionPointer)();
 
-    template<typename T>
-    Variant( const T& value )
-    {
-      // FIXME sizeof( function pointer ) is not allowed
-      PlatformSpecificMemCpy( this, &value, sizeof(T) );
-    }
+    Variant( const bool& value ) : asBool(value) {}
+    Variant( const char& value ) : asChar(value) {}
+    Variant( const unsigned char& value ) : asUnsignedChar(value) {}
+    Variant( const int& value ) : asInt(value) {}
+    Variant( const unsigned int& value ) : asUnsignedInt(value) {}
+    Variant( const long int& value ) : asLongInt(value) {}
+    Variant( const unsigned long int& value ) : asUnsignedLongInt(value) {}
+    Variant( const long long int& value ) : asLongLongInt(value) {}
+    Variant( const unsigned long long int& value ) : asUnsignedLongLongInt(value) {}
+    Variant( const float& value ) : asFloat(value) {}
+    Variant( const double& value ) : asDouble(value) {}
+    Variant( void*& value ) : asPointer(value) {}
+    Variant( const void*& value ) : asConstPointer(value) {}
+    Variant( void(*value)() ) : asFunctionPointer(value) {}
   } _variant;
 
 };  // class Parameter
-
-// class ParameterEntry;
-// class Parameters
-// {
-// public:
-//   void add( const Parameter& parameter );
-
-//   ParameterEntry* head = NULL;
-
-// };  // class Parameters
-
-// class ParameterEntry
-// {
-//   const Parameter& parameter;
-//   Parameter* pNext = NULL;
-// };  // class ParameterEntry
-
 
 #endif /* TEST_DOUBLE_H */
