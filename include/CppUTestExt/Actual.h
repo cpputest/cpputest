@@ -28,7 +28,7 @@
 #ifndef ACTUAL_H
 #define ACTUAL_H
 
-#include "CppUTestExt/TestSupport.h"
+#include "CppUTestExt/TestDouble.h"
 
 /**
  * actual( {"<context>"} )             // expectation context, default is global
@@ -38,7 +38,7 @@
  * {.return<type>()}                   // return value
  */
 class Actual;
-Actual actual( const SimpleString& context = TEST_GLOBAL_CONTEXT );
+Actual actual( const SimpleString& context = TEST_DOUBLE_GLOBAL_CONTEXT );
 
 class ActualCall;
 class Actual
@@ -70,18 +70,19 @@ public:
   template<typename T>
   ActualCall& with( const SimpleString& name, const T* value, std::size_t size )
   {
-    // withMemoryBufferParameter( name, reinterpret_cast<const unsigned char*>(value), size );
+    _actualCall.withMemoryBufferParameter( name, reinterpret_cast<const unsigned char*>(value), size );
     return *this;
   }
 
   template<typename T>
   ActualCall& output( const SimpleString& name, T* const value )
   {
-    // withOutputParameter( name, value );
+    _actualCall.withOutputParameter( name, value );
     return *this;
   }
 
-  // return based upon expectations
+  //  return based methods invoke matched expectation (or else do nothing and return 0)
+  // TODO template returns
   bool returnBool();
   char returnChar();
   unsigned char returnUnsignedChar();

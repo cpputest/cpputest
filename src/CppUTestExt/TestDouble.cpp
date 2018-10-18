@@ -25,9 +25,12 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <CppUTestExt/TestSupport.h>
+#include <CppUTestExt/TestDouble.h>
+
+// FIXME uses CppUMock for now
+#include <CppUTestExt/MockSupport.h>
 
 void checkExpectations( const SimpleString& context )
 {
-  // mock( context ).checkExpectations();
+  mock( context ).checkExpectations();
 }

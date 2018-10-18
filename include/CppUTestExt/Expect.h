@@ -28,10 +28,10 @@
 #ifndef EXPECT_H
 #define EXPECT_H
 
-#include "CppUTestExt/TestSupport.h"
+#include "CppUTestExt/TestDouble.h"
 
 class Expectation;
-Expectation expect( const SimpleString& context = TEST_GLOBAL_CONTEXT );
+Expectation expect( const SimpleString& context = TEST_DOUBLE_GLOBAL_CONTEXT );
 
 
 class IModel;
@@ -62,14 +62,14 @@ public:
   template<typename T>
   ExpectedCall& with( const SimpleString& name, const T value )
   {
-    // _expectedCall->withParameter( name, value );
+    _expectedCall->withParameter( name, value );
     return *this;
   }
 
   template<typename T>
   ExpectedCall& with( const SimpleString& name, const T* value, std::size_t size )
   {
-    // _expectedCall->withMemoryBufferParameter( name, reinterpret_cast<const unsigned char*>(value), size );
+    _expectedCall->withMemoryBufferParameter( name, reinterpret_cast<const unsigned char*>(value), size );
     return *this;
   }
 
@@ -79,20 +79,20 @@ public:
   template<typename T>
   ExpectedCall& output( const SimpleString& name, T* const value )
   {
-    // _expectedCall->withOutputParameterReturning( name, value, sizeof(T) );
+    _expectedCall->withOutputParameterReturning( name, value, sizeof(T) );
     return *this;
   }
   template<typename T>
   ExpectedCall& output( const SimpleString& name, T* const value, const std::size_t size )
   {
-    // _expectedCall->withOutputParameterReturning( name, value, size );
+    _expectedCall->withOutputParameterReturning( name, value, size );
     return *this;
   }
 
   template<typename T>
   ExpectedCall& andReturn( const T value )
   {
-    // _expectedCall->andReturnValue( value );
+    _expectedCall->andReturnValue( value );
     return *this;
   }
 
@@ -100,6 +100,7 @@ private:
   SimpleString  _context;
   SimpleString  _methodName;
   unsigned int  _times;
+  MockExpectedCall* _expectedCall;
 };
 
 // class Actual;

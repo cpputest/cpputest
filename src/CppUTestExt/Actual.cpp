@@ -27,6 +27,9 @@
 
 #include "CppUTestExt/Actual.h"
 
+// FIXME using CppUMock for now
+#include "CppUTestExt/MockSupport.h"
+
 Actual actual( const SimpleString& context )
 {
   return Actual( context );
@@ -38,61 +41,54 @@ ActualCall Actual::call( const SimpleString& name )
 }
 
 ActualCall::ActualCall( const SimpleString& context, const SimpleString& name )
-  : _context(context), _methodName(name)
+  : _context(context), _methodName(name), _actualCall(mock(context).actualCall(name))
 { }
 
 bool ActualCall::returnBool()
 {
-  // return _actualCall.returnBoolValue();
-  return true;
+  return _actualCall.returnBoolValue();
 }
 
 char ActualCall::returnChar()
 {
-  // return (char)_actualCall.returnIntValue();
-  return 0;
+  // FIXME CppUMock has not returnCharValue
+  return (char)_actualCall.returnIntValue();
 }
 
 unsigned char ActualCall::returnUnsignedChar()
 {
-  // return (unsigned char)_actualCall.returnUnsignedIntValue();
-  return 0;
+  // FIXME CppUMock has not returnUnsignedCharValue
+  return (unsigned char)_actualCall.returnUnsignedIntValue();
 }
 
 int ActualCall::returnInt()
 {
-  // return _actualCall.returnIntValue();
-  return 0;
+  return _actualCall.returnIntValue();
 }
 
 unsigned int ActualCall::returnUnsignedInt()
 {
-  // return _actualCall.returnUnsignedIntValue();
-  return 0;
+  return _actualCall.returnUnsignedIntValue();
 }
 
 long ActualCall::returnLongInt()
 {
-  // return _actualCall.returnLongIntValue();
-  return 0;
+  return _actualCall.returnLongIntValue();
 }
 
 unsigned long ActualCall::returnUnsignedLongInt()
 {
-  // return _actualCall.returnUnsignedLongIntValue();
-  return 0;
+  return _actualCall.returnUnsignedLongIntValue();
 }
 
 long long ActualCall::returnLongLongInt()
 {
-  // return _actualCall.returnLongLongIntValue();
-  return 0;
+  return _actualCall.returnLongLongIntValue();
 }
 
 unsigned long long ActualCall::returnUnsignedLongLongInt()
 {
-  // return _actualCall.returnUnsignedLongLongIntValue();
-  return 0;
+  return _actualCall.returnUnsignedLongLongIntValue();
 }
 
 // FIXME CppUMock doesn't support float
@@ -103,24 +99,20 @@ unsigned long long ActualCall::returnUnsignedLongLongInt()
 
 double ActualCall::returnDouble()
 {
-  // return _actualCall.returnDoubleValue();
-  return 0;
+  return _actualCall.returnDoubleValue();
 }
 
 void* ActualCall::returnPointer()
 {
-  // return _actualCall.returnPointerValue();
-  return 0;
+  return _actualCall.returnPointerValue();
 }
 
 const void* ActualCall::returnConstPointer()
 {
-  // return _actualCall.returnConstPointerValue();
-  return 0;
+  return _actualCall.returnConstPointerValue();
 }
 
 void (*ActualCall::returnFunctionPointer())()
 {
-  // return _actualCall.returnFunctionPointerValue();
-  return 0;
+  return _actualCall.returnFunctionPointerValue();
 }
