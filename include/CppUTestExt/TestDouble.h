@@ -34,6 +34,7 @@
 
 const static SimpleString TEST_DOUBLE_GLOBAL_CONTEXT = " ";
 
+
 class ExpectedCall;
 void addExpectation( const ExpectedCall& );
 
@@ -141,6 +142,13 @@ public:
 
 
 private:
+  struct ExpectedCallHead
+  {
+    ExpectedCall&   self;
+    ExpectedCall*   pNext;
+  };
+  static ExpectedCallHead   _expectedCalls;
+
   const union Variant {
     bool                    asBool;
     char                    asChar;
