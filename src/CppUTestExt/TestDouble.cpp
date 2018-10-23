@@ -30,6 +30,11 @@
 // FIXME uses CppUMock for now
 #include <CppUTestExt/MockSupport.h>
 
+void addExpectation( const ExpectedCall& )
+{
+
+}
+
 void checkExpectations( const SimpleString& context )
 {
   mock( context ).checkExpectations();

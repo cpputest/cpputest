@@ -58,5 +58,3 @@ ExpectedCall& ExpectedCall::times( const unsigned int count )
 
   return *this;
 }
-
-

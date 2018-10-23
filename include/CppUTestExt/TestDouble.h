@@ -34,13 +34,13 @@
 
 const static SimpleString TEST_DOUBLE_GLOBAL_CONTEXT = " ";
 
+class ExpectedCall;
+void addExpectation( const ExpectedCall& );
+
 void checkExpectations( const SimpleString& context = TEST_DOUBLE_GLOBAL_CONTEXT );
 
-class Expectation;
-void addExpectation( const Expectation& expectation );
-
 class Actual;
-void checkActual( Actual& actual );
+void checkActual( Actual& );
 
 class Parameter
 {
