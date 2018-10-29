@@ -30,19 +30,17 @@
 
 #include "CppUTestExt/TestDouble.h"
 
+
 class Expectation;
 Expectation expect( const SimpleString& context = TEST_DOUBLE_GLOBAL_CONTEXT );
 
 
 class IModel;
-class ExpectedSequence;
 class ExpectedCall;
 class Expectation
 {
 public:
     Expectation( const SimpleString& context ) : _context(context) {}
-
-    ExpectedSequence nextIn( const ExpectedSequence );
 
     ExpectedCall call( const SimpleString& name );
 
@@ -56,8 +54,12 @@ class ExpectedCall
 public:
   ExpectedCall( const SimpleString& context, const SimpleString& name );
 
+  /// Verifies actual occurred.
+  ~ExpectedCall();
+
+  static const int EXPECT_ALWAYS = 0;
   /// expectation for the number of calls (cardinality)
-  ExpectedCall& times( const unsigned int count );
+  ExpectedCall& times( const unsigned int count = EXPECT_ALWAYS );
 
   // /// expectation of position in sequence
   // Expectation nextIn( Sequence& );

@@ -179,12 +179,14 @@ Schema  Legend
 Schema of an Expectation
 ------------------------------------------------------------------------------------------------------------------------
 ```C
-expect( {"<context>"} )                 // expectation context, default is global
-    {.nextIn( sequence )}               // assert that previous sequence expectations have occurred
+expect( {"<context>"} )                 // expect call (within context)
     .call( "<method>" )                 // name of method/function used by actual
     {.times( count )}                   // number of invocations to apply expectation, default=always
     {.with( "parameter", value )}       // name of parameter and value to validate
     {.output( "parameter", value )}     // name of parameter, sets an expected value
     {.use( Model )}                     // Model of behavior
     {.returns<type>()}                  // return value
+
+nextIn( <sequence> )                    // expect calls in a sequence
+    .expect( ... )                      // expect as described above
 ```

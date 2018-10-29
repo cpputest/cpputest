@@ -41,6 +41,10 @@ ExpectedCall Expectation::call( const SimpleString& name )
   return ExpectedCall( _context, name );
 }
 
+ExpectedCall::~ExpectedCall()
+{
+  // TODO verify actuals have occurred
+}
 
 ExpectedCall::ExpectedCall( const SimpleString& context, const SimpleString& name )
   : _context(context), _methodName(name),
