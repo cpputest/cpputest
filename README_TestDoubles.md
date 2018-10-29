@@ -204,8 +204,4 @@ of the CuT.
 Expectations and Actuals lifecycles are scoped to their static usage- i.e. an Expectation created in TEST_SETUP will
 *FAIL* if not Actual call is made before the end of TEST_SETUP.
 
-In this way, there is no need for mock().checkexpectations() as Expects and Actuals verify themselves per there
-lifecycle.
-
-
-
+In this way, there is no need for mock().checkexpectations() as Expects and Actuals verify themselves per lifecycle.
