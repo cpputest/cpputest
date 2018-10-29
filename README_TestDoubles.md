@@ -190,3 +190,22 @@ expect( {"<context>"} )                 // expect call (within context)
 nextIn( <sequence> )                    // expect calls in a sequence
     .expect( ... )                      // expect as described above
 ```
+
+Design Details
+------------------------------------------------------------------------------------------------------------------------
+### Scoped Expectations
+The intent of an Expectation is that it will occur within the scope of the usage of the CuT.
+
+The design of MockCppUTest led to a pattern of creating lots of unnecessary expectations for general CuT usage rather
+than focusing on the Expectations for a specific usage.  With TestDoubles, expectations only need to satisfy the usage
+of the CuT.
+
+#### Differences from MockCppUTest
+Expectations and Actuals lifecycles are scoped to their static usage- i.e. an Expectation created in TEST_SETUP will
+*FAIL* if not Actual call is made before the end of TEST_SETUP.
+
+In this way, there is no need for mock().checkexpectations() as Expects and Actuals verify themselves per there
+lifecycle.
+
+
+
