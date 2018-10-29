@@ -65,6 +65,7 @@ public:
   ExpectedCall& with( const SimpleString& name, const T value )
   {
     _expectedCall->withParameter( name, value );
+
     return *this;
   }
 
@@ -99,10 +100,17 @@ public:
   }
 
 private:
-  SimpleString  _context;
-  SimpleString  _methodName;
-  unsigned int  _times;
   MockExpectedCall* _expectedCall;
+  SimpleString      _context;
+  SimpleString      _methodName;
+  unsigned int      _times;
+
+  class ParameterEntry
+  {
+    const Parameter& parameter;
+    const ParameterEntry* pNext;
+  };
+  ParameterEntry*   parameters = 0;
 };
 
 // class Actual;

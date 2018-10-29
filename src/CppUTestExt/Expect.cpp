@@ -56,6 +56,8 @@ ExpectedCall::ExpectedCall( const SimpleString& context, const SimpleString& nam
 
 ExpectedCall& ExpectedCall::times( const unsigned int count )
 {
+  // FIXME remove
+  _expectedCall = &mock(_context).expectNCalls( count, _methodName );
   _times = count;
   return *this;
 }
