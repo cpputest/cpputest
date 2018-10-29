@@ -61,9 +61,6 @@ public:
   /// expectation for the number of calls (cardinality)
   ExpectedCall& times( const unsigned int count = EXPECT_ALWAYS );
 
-  // /// expectation of position in sequence
-  // Expectation nextIn( Sequence& );
-
   template<typename T>
   ExpectedCall& with( const SimpleString& name, const T value )
   {

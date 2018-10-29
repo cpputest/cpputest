@@ -43,6 +43,7 @@ ExpectedCall Expectation::call( const SimpleString& name )
 
 ExpectedCall::~ExpectedCall()
 {
+  mock().checkExpectations();
   // TODO verify actuals have occurred
 }
 
@@ -55,10 +56,6 @@ ExpectedCall::ExpectedCall( const SimpleString& context, const SimpleString& nam
 
 ExpectedCall& ExpectedCall::times( const unsigned int count )
 {
-  // TODO times should default to EVERY, but CppUMock requires an explicit count
   _times = count;
-
-  _expectedCall = &mock(_context).expectNCalls( _times, _methodName );
-
   return *this;
 }

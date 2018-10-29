@@ -34,15 +34,6 @@
 
 const static SimpleString TEST_DOUBLE_GLOBAL_CONTEXT = " ";
 
-
-class ExpectedCall;
-void addExpectation( const ExpectedCall& );
-
-void checkExpectations( const SimpleString& context = TEST_DOUBLE_GLOBAL_CONTEXT );
-
-class Actual;
-void checkActual( Actual& );
-
 class Parameter
 {
 public:
@@ -132,23 +123,14 @@ public:
     if( type != returnType )  FAIL( StringFromFormat( "illegal use of a %s as a %s.", type.asCharString(), returnType ).asCharString() );
     return _variant.asConstPointer;
   }
-  const void (*functionPointerValue())() const
+  const void (*functionPointerValue())()
   {
     const char* const returnType = typeid(const void(*)()).name();
     if( type != returnType )  FAIL( StringFromFormat( "illegal use of a %s as a %s.", type.asCharString(), returnType ).asCharString() );
     return _variant.asFunctionPointer;
   }
 
-
-
 private:
-  struct ExpectedCallHead
-  {
-    ExpectedCall&   self;
-    ExpectedCall*   pNext;
-  };
-  static ExpectedCallHead   _expectedCalls;
-
   const union Variant {
     bool                    asBool;
     char                    asChar;
