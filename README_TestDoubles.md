@@ -180,9 +180,9 @@ Schema of an Expectation
 ------------------------------------------------------------------------------------------------------------------------
 ```C
 expect( {"<context>"} )                 // expectation context, default is global
+    {.nextIn( sequence )}               // assert that previous sequence expectations have occurred
     .call( "<method>" )                 // name of method/function used by actual
     {.times( count )}                   // number of invocations to apply expectation, default=always
-    {.nextIn( sequence )}               // assert that previous sequence expectations have occurred
     {.with( "parameter", value )}       // name of parameter and value to validate
     {.output( "parameter", value )}     // name of parameter, sets an expected value
     {.use( Model )}                     // Model of behavior

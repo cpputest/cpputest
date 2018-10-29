@@ -35,11 +35,14 @@ Expectation expect( const SimpleString& context = TEST_DOUBLE_GLOBAL_CONTEXT );
 
 
 class IModel;
+class ExpectedSequence;
 class ExpectedCall;
 class Expectation
 {
 public:
     Expectation( const SimpleString& context ) : _context(context) {}
+
+    ExpectedSequence nextIn( const ExpectedSequence );
 
     ExpectedCall call( const SimpleString& name );
 
