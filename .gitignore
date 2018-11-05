@@ -77,6 +77,10 @@ missing
 test-driver
 platforms/iar/settings
 cpputest_*.xml
+generated/
+*.deps/
+*.dirstamp
+*.trs
 
 #IAR automatically generated files
 *.dep
