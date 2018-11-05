@@ -227,6 +227,23 @@ UtestShell* TestRegistry::getFirstTest()
     return tests_;
 }
 
+void TestRegistry::shuffleRunOrder()
+{
+    std::vector<UtestShell *> tests;
+    for (UtestShell *test = tests_; test != NULL; test = test->getNext()) {
+        tests.push_back(test);
+    }
+    std::random_shuffle(tests.begin(), tests.end());
+
+    // Store shuffled vector back to linked list
+    UtestShell *prev = NULL;
+    for (size_t i = 0; i < tests.size(); ++i)
+    {
+        prev = tests[i]->addTest(prev);
+    }
+    tests_ = prev;
+}
+
 UtestShell* TestRegistry::getTestWithNext(UtestShell* test)
 {
     UtestShell* current = tests_;

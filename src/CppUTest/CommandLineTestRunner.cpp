@@ -29,6 +29,7 @@
 #include "CppUTest/CommandLineTestRunner.h"
 #include "CppUTest/TestOutput.h"
 #include "CppUTest/JUnitTestOutput.h"
+#include "CppUTest/PlatformSpecificFunctions.h"
 #include "CppUTest/TeamCityTestOutput.h"
 #include "CppUTest/TestRegistry.h"
 
@@ -88,11 +89,23 @@ void CommandLineTestRunner::initializeTestRun()
 {
     registry_->setGroupFilters(arguments_->getGroupFilters());
     registry_->setNameFilters(arguments_->getNameFilters());
-	
+
     if (arguments_->isVerbose()) output_->verbose();
     if (arguments_->isColor()) output_->color();
     if (arguments_->runTestsInSeperateProcess()) registry_->setRunTestsInSeperateProcess();
     if (arguments_->isRunIgnored()) registry_->setRunIgnored();
+}
+
+static unsigned int getSeed(unsigned int shuffleArg)
+{
+    if (shuffleArg > 1) return shuffleArg;
+
+    const unsigned int generatedSeed = GetPlatformSpecificTimeInMillis();
+
+    // do not allow seed values 0 or 1 because they cannot be given as cmd line arguments
+    if (generatedSeed > 1) return generatedSeed;
+
+    return 2;
 }
 
 int CommandLineTestRunner::runAllTests()
@@ -115,14 +128,32 @@ int CommandLineTestRunner::runAllTests()
         registry_->listTestGroupAndCaseNames(tr);
         return 0;
     }
-
+    const bool shuffleEnabled = arguments_->getShuffle() != 0;
+    unsigned int seed = 0;
+    if (shuffleEnabled)
+    {
+        seed = getSeed(arguments_->getShuffle());
+        output_->print("Test order shuffling enabled, seed: ");
+        output_->print(seed);
+        output_->print("\n");
+        std::srand(seed);
+    }
     while (loopCount++ < repeat_) {
+        if (shuffleEnabled)
+        {
+            registry_->shuffleRunOrder();
+        }
         output_->printTestRun(loopCount, repeat_);
         TestResult tr(*output_);
         registry_->runAllTests(tr);
         failureCount += tr.getFailureCount();
     }
-
+    if (shuffleEnabled && arguments_->isVerbose())
+    {
+        output_->print("Random seed was: ");
+        output_->print(seed);
+        output_->print("\n");
+    }
     return failureCount;
 }
 
