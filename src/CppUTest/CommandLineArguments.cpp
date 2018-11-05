@@ -30,7 +30,7 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 
 CommandLineArguments::CommandLineArguments(int ac, const char *const *av) :
-    ac_(ac), av_(av), verbose_(false), color_(false), runTestsAsSeperateProcess_(false), listTestGroupNames_(false), listTestGroupAndCaseNames_(false), runIgnored_(false), repeat_(1), groupFilters_(NULLPTR), nameFilters_(NULLPTR), outputType_(OUTPUT_ECLIPSE)
+    ac_(ac), av_(av), verbose_(false), color_(false), runTestsAsSeperateProcess_(false), listTestGroupNames_(false), listTestGroupAndCaseNames_(false), runIgnored_(false), repeat_(1), shuffle_(0), groupFilters_(NULLPTR), nameFilters_(NULLPTR), outputType_(OUTPUT_ECLIPSE)
 {
 }
 
@@ -69,6 +69,7 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
         else if (argument.startsWith("-sn")) AddStrictNameFilter(ac_, av_, i);
         else if (argument.startsWith("-xn")) AddExcludeNameFilter(ac_, av_, i);
         else if (argument.startsWith("-xsn")) AddExcludeStrictNameFilter(ac_, av_, i);
+        else if (argument.startsWith("-s")) SetShuffle(ac_, av_, i);
         else if (argument.startsWith("TEST(")) AddTestToRunBasedOnVerboseOutput(ac_, av_, i, "TEST(");
         else if (argument.startsWith("IGNORE_TEST(")) AddTestToRunBasedOnVerboseOutput(ac_, av_, i, "IGNORE_TEST(");
         else if (argument.startsWith("-o")) correctParameters = SetOutputType(ac_, av_, i);
@@ -85,7 +86,7 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
 
 const char* CommandLineArguments::usage() const
 {
-    return "usage [-v] [-c] [-p] [-lg] [-ln] [-ri] [-r#] [-g|sg|xg|xsg groupName]... [-n|sn|xn|xsn testName]... [\"TEST(groupName, testName)\"]... [-o{normal, junit, teamcity}] [-k packageName]\n";
+    return "usage [-v] [-c] [-p] [-lg] [-ln] [-ri] [-r#] [-g|sg|xg|xsg groupName]... [-n|sn|xn|xsn testName]... [-s [randomizerSeed]] [\"TEST(groupName, testName)\"]... [-o{normal, junit, teamcity}] [-k packageName]\n";
 }
 
 bool CommandLineArguments::isVerbose() const
@@ -124,6 +125,11 @@ int CommandLineArguments::getRepeatCount() const
     return repeat_;
 }
 
+unsigned int CommandLineArguments::getShuffle() const
+{
+    return shuffle_;
+}
+
 const TestFilter* CommandLineArguments::getGroupFilters() const
 {
     return groupFilters_;
@@ -147,6 +153,21 @@ void CommandLineArguments::SetRepeatCount(int ac, const char *const *av, int& i)
 
     if (0 == repeat_) repeat_ = 2;
 
+}
+
+void CommandLineArguments::SetShuffle(int ac, const char * const *av, int& i)
+{
+    shuffle_ = 1;
+    SimpleString shuffleParameter(av[i]);
+    if (shuffleParameter.size() > 2) {
+        shuffle_ = SimpleString::AtoI(av[i] + 2);
+    } else if (i + 1 < ac) {
+        const int parsed = SimpleString::AtoI(av[i + 1]);
+        if (parsed != 0) {
+            i++;
+            shuffle_ = parsed;
+        }
+    }
 }
 
 SimpleString CommandLineArguments::getParameterField(int ac, const char * const *av, int& i, const SimpleString& parameterName)
