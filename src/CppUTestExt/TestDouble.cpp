@@ -39,3 +39,8 @@ void expect( ExpectedCallSequence& call )
 {
   //TODO memo expectation
 }
+
+void actual( ActualCall& call )
+{
+  // TODO test actual against expectations
+}

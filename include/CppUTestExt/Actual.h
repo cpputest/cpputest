@@ -60,7 +60,7 @@ public:
   ActualCall( const SimpleString& context, const SimpleString& methodName );
 
   /// assert the actual
-  ~ActualCall();
+  ~ActualCall() { actual( *this ); }
 
   template<typename T>
   ActualCall& with( const SimpleString& name, const T& value )
