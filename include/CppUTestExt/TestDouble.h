@@ -34,6 +34,12 @@
 
 const static SimpleString TEST_DOUBLE_GLOBAL_CONTEXT = " ";
 
+class ExpectedCall;
+void expect( ExpectedCall& call );  ///< add expectation to registry
+
+class ExpectedCallSequence;
+void expect( ExpectedCallSequence& call );  ///< add expectation to registry
+
 class Parameter
 {
 public:

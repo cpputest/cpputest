@@ -29,3 +29,13 @@
 
 // FIXME uses CppUMock for now
 #include <CppUTestExt/MockSupport.h>
+
+void expect( ExpectedCall& call )
+{
+  //TODO memo expectation
+}
+
+void expect( ExpectedCallSequence& call )
+{
+  //TODO memo expectation
+}

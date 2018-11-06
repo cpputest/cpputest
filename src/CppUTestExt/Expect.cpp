@@ -43,8 +43,7 @@ ExpectedCall Expectation::call( const SimpleString& name )
 
 ExpectedCall::~ExpectedCall()
 {
-  mock().checkExpectations();
-  // TODO verify actuals have occurred
+  expect( *this );
 }
 
 ExpectedCall::ExpectedCall( const SimpleString& context, const SimpleString& name )
