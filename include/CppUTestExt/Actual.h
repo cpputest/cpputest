@@ -59,11 +59,13 @@ class ActualCall
 public:
   ActualCall( const SimpleString& context, const SimpleString& methodName );
 
+  /// assert the actual
+  ~ActualCall();
+
   template<typename T>
   ActualCall& with( const SimpleString& name, const T& value )
   {
     _actualCall.withParameter( name, value );
-    _testParameter( name, value );
     return *this;
   }
 
