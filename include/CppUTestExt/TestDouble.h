@@ -28,19 +28,20 @@
 #define TEST_DOUBLE_H
 
 #include "CppUTestExt/MockSupport.h"
+const static SimpleString TEST_DOUBLE_GLOBAL_CONTEXT = " ";
 
 #include <typeinfo>
 #include "CppUTest/UtestMacros.h"
 
-const static SimpleString TEST_DOUBLE_GLOBAL_CONTEXT = " ";
-
 class ExpectedCall;
-void expect( ExpectedCall& call );  ///< add expectation to registry
-class ActualCall;
-void actual( ActualCall& call );    ///< test actual against expectations
+void expect( ExpectedCall& call );          ///< add expectation to registry
 
-class ExpectedCallSequence;
-void expect( ExpectedCallSequence& call );  ///< add expectation to registry
+ExpectedCall expectNext( SimpleString& sequenceName );  ///< start or append a sequence of expected calls
+
+void failUponUnexpected( bool mode = true );
+
+class ActualCall;
+void verifyActual( ActualCall& call );
 
 class Parameter
 {

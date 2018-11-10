@@ -160,15 +160,28 @@ need of the other parameters to test the CuT, there should be no need to opine u
 
 * Aspect Oriented Programming (AOP) - the use of a DoC interface only needs to fulfill the needs of the test for the
     CuT.    
-    When testing, a Model is only needed when the DoC performs some global behavior.  Under CppUMock, the Model behavior
-    would have to be implemented as part of the Test Double. Under an Expectation Framework, the Model behavior can be
+    When testing, a Model is only needed when the DoC has some global state.  Under CppUMock, the Model behavior
+    would have to be implemented as part of the Mock. Under an Expectation Framework, the Model behavior can be
     imposed as needed.
 
-* Unexpected DoC invocations **only** FAIL when expected.
+* DoC invocations **only** FAIL per expectations.
     The CppUMock framework forces all DoC invocations to be explicitly identified.  Instead, an Expectation Framework
     focuses on the expected invocations.  The Expectation Framework can be configured to FAIL upon unexpected invocation
-    of the DoC, but doesn't opine about the tester's understanding of the CuT's usage of the DoC.
+    of the DoC, but by default doesn't opine about the tester's understanding of the CuT's usage of the DoC.
+    If you want unexpected calls to fail, use:
+    ```C
+        failUponUnexpected();
+    ```
 
+* Specialized Context
+    Per the design above, specialization necessary for testing is readily available.  CppUMock's usage of expectation
+    namespacing (i.e. *mock( context )* is unnecessary and overly complicates the understanding of the test intent for
+    the CuT.  With TestDoubles, the *actual* has one universal implementation to satisfy all expectations and needs no
+    specialization of context in order to evaluate assertions.
+
+* Expected Sequences
+    CppUMock enforces a global strictness upon order.  Test Doubles only enforces order of actual calls if the sequence
+    is explicitly required by the test (i.e. expectNext()).
 
 Schema  Legend
 ------------------------------------------------------------------------------------------------------------------------
@@ -179,17 +192,28 @@ Schema  Legend
 Schema of an Expectation
 ------------------------------------------------------------------------------------------------------------------------
 ```C
-expect( {"<context>"} )                 // expect call (within context)
-    .call( "<method>" )                 // name of method/function used by actual
+expectCall( "<method>" )                // name of method/function used by actual
+    {.onObject( object ) }              // object is a reference to a harness object
+    {.onObjectType( objectType ) }      // objectType is a class type
     {.times( count )}                   // number of invocations to apply expectation, default=always
     {.with( "parameter", value )}       // name of parameter and value to validate
     {.output( "parameter", value )}     // name of parameter, sets an expected value
     {.use( Model )}                     // Model of behavior
     {.returns<type>()}                  // return value
 
-nextIn( <sequence> )                    // expect calls in a sequence
-    .expect( ... )                      // expect as described above
+Schema of a Sequential Expectation
+------------------------------------------------------------------------------------------------------------------------
+expectNext( "<sequence>" )              // name of sequence
 ```
+
+```C
+actualCall( "<method>" )                // name of method/function used by actual
+    {.onObject( this ) }                // object of the DoC
+    {.onObjectType( objectType ) }      // objectType of the object DoC
+    {.with( "parameter", value )}       // name of parameter and value to validate
+    {.returns<type>()}                  // return value
+```
+
 
 Design Details
 ------------------------------------------------------------------------------------------------------------------------

@@ -35,12 +35,14 @@ void expect( ExpectedCall& call )
   //TODO memo expectation
 }
 
-void expect( ExpectedCallSequence& call )
+static bool _failActuals = false;
+void failUponUnexpected( bool mode )
 {
-  //TODO memo expectation
+  _failActuals = mode;
 }
 
-void actual( ActualCall& call )
+void verifyActual( ActualCall& call )
 {
-  // TODO test actual against expectations
+  // TODO test actual against sequenced expectations
+  // TODO test actual against non-sequenced expectations
 }
