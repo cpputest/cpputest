@@ -30,9 +30,9 @@
 //#include "CppUTestExt/MockExpectedCall.h"
 //#include "CppUTestExt/MockFailure.h"
 // #include "MockFailureReporterForTest.h"
-#include "CppUTestExt/Expect.h"
-#include "CppUTestExt/Actual.h"
 #include "CppUTestExt/TestDouble.h"
+#include "CppUTestExt/Expect.h"
+#include "CppUTestExt/ActualCall.h"
 
 TEST_GROUP( TestDoubleParameters )
 {
@@ -64,8 +64,8 @@ IGNORE_TEST( TestDoubleParameters, FAIL_if_expected_calls_arent_actualized )
 TEST( TestDoubleParameters, expect_boolean_parameter_with_value )
 {
   const bool value = true;
-  expect().call("foo").times(1).with("value", value);
-  actual().call("foo").with("value", value);
+  expectCall("foo").times(1).with("value", value);
+  actualCall("foo").with("value", value);
 }
 
 // TEST( TestDoubleParameters, expect_char_parameter_with_value )

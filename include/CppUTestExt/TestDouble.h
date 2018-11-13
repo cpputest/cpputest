@@ -33,14 +33,14 @@ const static SimpleString TEST_DOUBLE_GLOBAL_CONTEXT = " ";
 #include <typeinfo>
 #include "CppUTest/UtestMacros.h"
 
-class ExpectedCall;
-void expect( ExpectedCall& call );          ///< add expectation to registry
-
-ExpectedCall expectNext( SimpleString& sequenceName );  ///< start or append a sequence of expected calls
-
 void failUponUnexpected( bool mode = true );
 
+class ExpectedCall;
+ExpectedCall expectCall( const SimpleString& call );            ///< add expectation to registry
+ExpectedCall expectNext( SimpleString& sequenceName );  ///< start or append a sequence of expected calls
+
 class ActualCall;
+ActualCall actualCall( const SimpleString& call );
 void verifyActual( ActualCall& call );
 
 class Parameter

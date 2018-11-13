@@ -31,25 +31,8 @@
 #include "CppUTestExt/MockSupport.h"
 
 
-Expectation expect( const SimpleString& context )
-{
-  return Expectation( context );
-}
-
-ExpectedCall Expectation::call( const SimpleString& name )
-{
-  return ExpectedCall( _context, name );
-}
-
-ExpectedCall::~ExpectedCall()
-{
-  expect( *this );
-}
-
-ExpectedCall::ExpectedCall( const SimpleString& context, const SimpleString& name )
-  : _context(context), _methodName(name),
-    // TODO default times should be EVERY time (but not supported by CppUMock)
-   _times(0)
+ExpectedCall::ExpectedCall( const SimpleString& name )
+  : _methodName(name), _times(1)
 { }
 
 

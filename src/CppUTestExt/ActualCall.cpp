@@ -25,25 +25,16 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "CppUTestExt/Actual.h"
+#include "CppUTestExt/ActualCall.h"
 
 // FIXME using CppUMock for now
 #include "CppUTestExt/MockSupport.h"
 
-Actual actual( const SimpleString& context )
+ActualCall::ActualCall( const SimpleString& call )
+  : _actualCall( mock().actualCall(call) )
 {
-  return Actual( context );
+
 }
-
-ActualCall Actual::call( const SimpleString& name )
-{
-  return ActualCall( _context, name );
-}
-
-ActualCall::ActualCall( const SimpleString& context, const SimpleString& name )
-  : _context(context), _methodName(name), _actualCall(mock(context).actualCall(name))
-{ }
-
 
 bool ActualCall::returnBool()
 {

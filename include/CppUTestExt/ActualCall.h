@@ -25,39 +25,15 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef ACTUAL_H
-#define ACTUAL_H
+#ifndef ACTUAL_CALL_H
+#define ACTUAL_CALL_H
 
 #include "CppUTestExt/TestDouble.h"
-
-/**
- * actual( {"<context>"} )             // expectation context, default is global
- * .call( "<method>" )                 // name of method/function
- *  {.with( "parameter", value )}      // parameter name and value upon invocation
- * {.output( "parameter", value& )}    // name of parameter and reference to value to set (value based on expectation or else 0 )
- * {.return<type>()}                   // return value
- */
-class Actual;
-Actual actual( const SimpleString& context = TEST_DOUBLE_GLOBAL_CONTEXT );
-
-class ActualCall;
-class Actual
-{
-public:
-    Actual( const SimpleString& context ) : _context(context) {}
-
-    /// @note an Actual can only have one call invocation
-    ActualCall call( const SimpleString& name );
-
-private:
-  const SimpleString& _context;
-};  // class Actual
-
 
 class ActualCall
 {
 public:
-  ActualCall( const SimpleString& context, const SimpleString& methodName );
+  ActualCall( const SimpleString& call );
 
   /// assert the actual
   ~ActualCall() { verifyActual( *this ); }
@@ -112,10 +88,4 @@ private:
   }
 };  // class ActualCall
 
-
-class PossibleExpectations
-{
-
-};  // class PossibleExpectations
-
-#endif /* ACTUAL_H */
+#endif /* ACTUAL_CALL_H */

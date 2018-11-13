@@ -36,26 +36,11 @@ Expectation expect( const SimpleString& context = TEST_DOUBLE_GLOBAL_CONTEXT );
 
 
 class IModel;
-class ExpectedCall;
-class Expectation
-{
-public:
-    Expectation( const SimpleString& context ) : _context(context) {}
-
-    ExpectedCall call( const SimpleString& name );
-
-private:
-  const SimpleString _context;
-};
-
 
 class ExpectedCall
 {
 public:
-  ExpectedCall( const SimpleString& context, const SimpleString& name );
-
-  /// Verifies actual occurred.
-  ~ExpectedCall();
+  ExpectedCall( const SimpleString& call );
 
   static const int EXPECT_ALWAYS = 0;
   /// expectation for the number of calls (cardinality)

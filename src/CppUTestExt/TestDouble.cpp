@@ -30,15 +30,29 @@
 // FIXME uses CppUMock for now
 #include <CppUTestExt/MockSupport.h>
 
-void expect( ExpectedCall& call )
-{
-  //TODO memo expectation
-}
+#include "CppUTestExt/Expect.h"
+#include "CppUTestExt/ActualCall.h"
 
 static bool _failActuals = false;
 void failUponUnexpected( bool mode )
 {
   _failActuals = mode;
+}
+
+ExpectedCall expectCall( const SimpleString& call )
+{
+  ExpectedCall* pExpectedCall = new ExpectedCall( call );
+  return *pExpectedCall;
+}
+
+ExpectedCall expectNext( SimpleString& sequenceName )
+{
+  // FIXME
+}
+
+ActualCall actualCall( const SimpleString& call )
+{
+  return ActualCall( call );
 }
 
 void verifyActual( ActualCall& call )
