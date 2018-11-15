@@ -85,8 +85,8 @@ public:
   }
 
 private:
-  MockExpectedCall* _expectedCall;
-  SimpleString      _context;
+  MockExpectedCall* _expectedCall; SimpleString      _context;
+
   SimpleString      _methodName;
   unsigned int      _times;
 

@@ -39,13 +39,24 @@ void failUponUnexpected( bool mode )
   _failActuals = mode;
 }
 
-ExpectedCall expectCall( const SimpleString& call )
+class Expectations
 {
-  ExpectedCall* pExpectedCall = new ExpectedCall( call );
-  return *pExpectedCall;
+public:
+  ExpectedCall add( const SimpleString& call );
+  ExpectedCall add( const SimpleString& sequence, const SimpleString& call );
+  void check( const ActualCall& call );
+  void check();
+};
+static Expectations expectations;
+
+void checkExpectations()
+{
+  expectations.check();
 }
 
-ExpectedCall expectNext( SimpleString& sequenceName )
+ExpectedCall expectCall( const SimpleString& call ) { return expectations.add( call ); }
+
+ExpectedCall expectNext( const SimpleString& sequenceName, const SimpleString& call )
 {
   // FIXME
 }
@@ -55,8 +66,76 @@ ActualCall actualCall( const SimpleString& call )
   return ActualCall( call );
 }
 
-void verifyActual( ActualCall& call )
+void verifyActual( const ActualCall& call )
 {
-  // TODO test actual against sequenced expectations
-  // TODO test actual against non-sequenced expectations
+  expectations.check( call );
 }
+
+
+
+// Implementation of Expectation framework
+
+struct ExpectedCallEntry
+{
+  const ExpectedCall*       self;
+  int                       callCount;
+  ExpectedCallEntry*        pNext;
+};
+static ExpectedCallEntry* expectedCalls = 0;
+void _add( const ExpectedCall* const pExpectation )
+{
+  ExpectedCallEntry* pEntry = new ExpectedCallEntry();
+  pEntry->self = pExpectation;
+  pEntry->callCount = 0;
+  pEntry->pNext = expectedCalls;
+  expectedCalls = pEntry;
+}
+
+ExpectedCall Expectations::add( const SimpleString& call )
+{
+  //FIXME
+  ExpectedCall* pExpected = new ExpectedCall( call );
+  _add( pExpected );
+  return *pExpected;
+}
+ExpectedCall Expectations::add( const SimpleString& sequence, const SimpleString& call )
+{
+  // FIXMe
+  ExpectedCall* pExpected = new ExpectedCall( call );
+  return *pExpected;
+}
+
+void Expectations::check( const ActualCall& call )
+{
+  // FIXME
+}
+void Expectations::check()
+{
+  // FIXME
+
+  // clean up expectations
+  while( expectedCalls != 0 )
+  {
+    ExpectedCallEntry* pNext = expectedCalls->pNext;
+    delete expectedCalls->self;
+    delete expectedCalls;
+    expectedCalls = pNext;
+  }
+}
+
+// class Expectations
+// {
+//   ExpectedCall _addExpectation( const SimpleString& call )
+//   {
+//     ExpectedCallEntry* pExpectedCallEntry = new ExpectedCallEntry();
+//     ExpectedCall* pExpectedCall = new ExpectedCall( call );
+
+//     pExpectedCallEntry->self = pExpectedCall;
+//     pExpectedCallEntry->callCount = 0;
+//     pExpectedCallEntry->pNext = ExpectedCallsHead;
+//     ExpectedCallsHead = pExpectedCallEntry;
+
+//     return *pExpectedCall;
+//   }
+// }
+

@@ -111,7 +111,8 @@ expectCall( "<call>" )                  // name of method/function used by actua
 
 Schema of a Sequential Expectation
 ------------------------------------------------------------------------------------------------------------------------
-expectNext( "<sequence>" )              // name of sequence, returns expectCall reference under the sequence
+expectNext( "<sequence>", "<call>" )    // name of sequence and method/function used by actual,
+                                            returns expectCall reference under the sequence
 ```
 
 ```C

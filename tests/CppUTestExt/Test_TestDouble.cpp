@@ -38,8 +38,7 @@ TEST_GROUP( TestDoubleParameters )
 {
   TEST_TEARDOWN()
   {
-    // FIXME allow non-scoped expectations
-    // checkExpectations();
+    checkExpectations();
   }
 };
 
@@ -71,15 +70,15 @@ TEST( TestDoubleParameters, expect_boolean_parameter_with_value )
 // TEST( TestDoubleParameters, expect_char_parameter_with_value )
 // {
 //   const char value = -1;
-//   expect().call("foo").times(1).with("value", value);
-//   actual().call("foo").with("value", value);
+//   expectCall("foo").with("value", value);
+//   actualCall("foo").with("value", value);
 // }
 
 // TEST( TestDoubleParameters, expect_unsigned_char_parameter_with_value )
 // {
 //   const unsigned char value = 1;
-//   expect().call("foo").times(1).with("value", value);
-//   actual().call("foo").with("value", value);
+//   expectCall("foo").times(1).with("value", value);
+//   actualCall("foo").with("value", value);
 // }
 
 // TEST( TestDoubleParameters, expect_int_parameter_with_value )
