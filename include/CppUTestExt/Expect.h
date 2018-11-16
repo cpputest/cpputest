@@ -30,13 +30,6 @@
 
 #include "CppUTestExt/TestDouble.h"
 
-// FIXME remove depdendency on CppUMock
-#include "CppUTestExt/MockSupport.h"
-
-class Expectation;
-Expectation expect( const SimpleString& context = TEST_DOUBLE_GLOBAL_CONTEXT );
-
-
 class IModel;
 
 class ExpectedCall
@@ -45,13 +38,12 @@ public:
   ExpectedCall( const SimpleString& call );
 
   static const int EXPECT_ALWAYS = 0;
-  /// expectation for the number of calls (cardinality)
-  ExpectedCall& times( const unsigned int count = EXPECT_ALWAYS );
+  ExpectedCall& times( const unsigned int count );
 
   template<typename T>
   ExpectedCall& with( const SimpleString& name, const T value )
   {
-    _expectedCall->withParameter( name, value );
+    // FIXME add parameter
 
     return *this;
   }
@@ -59,7 +51,8 @@ public:
   template<typename T>
   ExpectedCall& with( const SimpleString& name, const T* value, std::size_t size )
   {
-    _expectedCall->withMemoryBufferParameter( name, reinterpret_cast<const unsigned char*>(value), size );
+    // FIXME add parameter
+    
     return *this;
   }
 
@@ -69,28 +62,29 @@ public:
   template<typename T>
   ExpectedCall& output( const SimpleString& name, T* const value )
   {
-    _expectedCall->withOutputParameterReturning( name, value, sizeof(T) );
+    // FIXME add parameter
+    
     return *this;
   }
   template<typename T>
   ExpectedCall& output( const SimpleString& name, T* const value, const std::size_t size )
   {
-    _expectedCall->withOutputParameterReturning( name, value, size );
+    // FIXME add parameter
+    
     return *this;
   }
 
   template<typename T>
   ExpectedCall& andReturn( const T value )
   {
-    _expectedCall->andReturnValue( value );
+    // FIXME add parameter
+    
     return *this;
   }
 
 private:
-  MockExpectedCall* _expectedCall; SimpleString      _context;
-
   SimpleString      _methodName;
-  unsigned int      _times;
+  unsigned int      _times = EXPECT_ALWAYS;
 
   class ParameterEntry
   {

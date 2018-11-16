@@ -67,6 +67,7 @@ public:
   template<typename T>
   ActualCall& output( const SimpleString& name, T* const value )
   {
+    // TODO should overriding output be allowed?
     if( 0 != _pOutputParameter ) delete _pOutputParameter;
     _pOutputParameter = new Parameter( name, value );
     return *this;

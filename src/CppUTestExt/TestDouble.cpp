@@ -77,18 +77,16 @@ void verifyActual( const ActualCall& call )
 
 struct ExpectedCallEntry
 {
-  const ExpectedCall*       self;
-  int                       callCount;
-  ExpectedCallEntry*        pNext;
+  const ExpectedCall* const pExpectedCall;
+  int                       calledCount;
+  ExpectedCallEntry* const  pNext;
 };
+
+
 static ExpectedCallEntry* expectedCalls = 0;
 void _add( const ExpectedCall* const pExpectation )
 {
-  ExpectedCallEntry* pEntry = new ExpectedCallEntry();
-  pEntry->self = pExpectation;
-  pEntry->callCount = 0;
-  pEntry->pNext = expectedCalls;
-  expectedCalls = pEntry;
+  expectedCalls = new ExpectedCallEntry{ pExpectation, 0, expectedCalls };
 }
 
 ExpectedCall Expectations::add( const SimpleString& call )
@@ -117,7 +115,7 @@ void Expectations::check()
   while( expectedCalls != 0 )
   {
     ExpectedCallEntry* pNext = expectedCalls->pNext;
-    delete expectedCalls->self;
+    delete expectedCalls->pExpectedCall;
     delete expectedCalls;
     expectedCalls = pNext;
   }

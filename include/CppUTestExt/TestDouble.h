@@ -29,9 +29,7 @@
 
 #include <typeinfo>
 
-// FIXME remove depdendency on CppUMock
 #include <CppUTest/SimpleString.h>
-const static SimpleString TEST_DOUBLE_GLOBAL_CONTEXT = "MOCK CONTEXT IS GARBAGE";
 
 void failUponUnexpected( bool mode = true );
 
