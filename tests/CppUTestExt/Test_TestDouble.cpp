@@ -45,9 +45,9 @@ TEST_GROUP( TestDoubleParameters )
 IGNORE_TEST( TestDoubleParameters, variant_misuse_results_in_FAIL )
 {
   // FIXME Implementation correctly FAILs, but not sure how to make the assertion and not fail the TEST_GROUP
-  Parameter parameter( "bool", true );
-  int integer = parameter.intValue();
-  CHECK( integer == 1 );
+  // Parameter parameter( "bool", true );
+  // int integer = parameter.intValue();
+  // CHECK( integer == 1 );
 }
 
 IGNORE_TEST( TestDoubleParameters, upon_FAIL_report_unexpected_calls )

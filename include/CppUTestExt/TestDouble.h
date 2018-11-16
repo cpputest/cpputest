@@ -28,9 +28,9 @@
 #define TEST_DOUBLE_H
 
 #include <typeinfo>
-#include "CppUTest/TestHarness.h"
 
 // FIXME remove depdendency on CppUMock
+#include <CppUTest/SimpleString.h>
 const static SimpleString TEST_DOUBLE_GLOBAL_CONTEXT = "MOCK CONTEXT IS GARBAGE";
 
 void failUponUnexpected( bool mode = true );
@@ -58,90 +58,6 @@ public:
   : name(_name), type( typeid(_value).name() ), _variant(_value)
   { }
 
-  bool boolValue() const
-  {
-    const char* const returnType = typeid(bool).name();
-    if( type != returnType )  FAIL( StringFromFormat( "illegal use of a %s as a %s.", type.asCharString(), returnType ).asCharString() );
-    return _variant.asBool;
-  }
-  char charValue() const
-  {
-    const char* const returnType = typeid(char).name();
-    if( type != returnType )  FAIL( StringFromFormat( "illegal use of a %s as a %s.", type.asCharString(), returnType ).asCharString() );
-    return _variant.asChar;
-  }
-  unsigned char unsignedCharValue() const
-  {
-    const char* const returnType = typeid(unsigned char).name();
-    if( type != returnType )  FAIL( StringFromFormat( "illegal use of a %s as a %s.", type.asCharString(), returnType ).asCharString() );
-    return _variant.asUnsignedChar;
-  }
-  int intValue() const
-  {
-    const char* const returnType = typeid(int).name();
-    if( type != returnType )  FAIL( StringFromFormat( "illegal use of a %s as a %s.", type.asCharString(), returnType ).asCharString() );
-    return _variant.asInt;
-  }
-  unsigned int unsignedIntValue() const
-  {
-    const char* const returnType = typeid(unsigned int).name();
-    if( type != returnType )  FAIL( StringFromFormat( "illegal use of a %s as a %s.", type.asCharString(), returnType ).asCharString() );
-    return _variant.asUnsignedInt;
-  }
-  long int longIntValue() const
-  {
-    const char* const returnType = typeid(long int).name();
-    if( type != returnType )  FAIL( StringFromFormat( "illegal use of a %s as a %s.", type.asCharString(), returnType ).asCharString() );
-    return _variant.asLongInt;
-  }
-  unsigned long int unsignedLongIntValue() const
-  {
-    const char* const returnType = typeid(unsigned long int).name();
-    if( type != returnType )  FAIL( StringFromFormat( "illegal use of a %s as a %s.", type.asCharString(), returnType ).asCharString() );
-    return _variant.asUnsignedLongInt;
-  }
-  long long int longlongIntValue() const
-  {
-    const char* const returnType = typeid(long long int).name();
-    if( type != returnType )  FAIL( StringFromFormat( "illegal use of a %s as a %s.", type.asCharString(), returnType ).asCharString() );
-    return _variant.asLongLongInt;
-  }
-  unsigned long long int unsignedLongLongIntValue() const
-  {
-    const char* const returnType = typeid(unsigned long long int).name();
-    if( type != returnType )  FAIL( StringFromFormat( "illegal use of a %s as a %s.", type.asCharString(), returnType ).asCharString() );
-    return _variant.asUnsignedLongLongInt;
-  }
-  float floatValue() const
-  {
-    const char* const returnType = typeid(float).name();
-    if( type != returnType )  FAIL( StringFromFormat( "illegal use of a %s as a %s.", type.asCharString(), returnType ).asCharString() );
-    return _variant.asFloat;
-  }
-  double doubleValue() const
-  {
-    const char* const returnType = typeid(double).name();
-    if( type != returnType )  FAIL( StringFromFormat( "illegal use of a %s as a %s.", type.asCharString(), returnType ).asCharString() );
-    return _variant.asDouble;
-  }
-  void* pointerValue() const
-  {
-    const char* const returnType = typeid(void*).name();
-    if( type != returnType )  FAIL( StringFromFormat( "illegal use of a %s as a %s.", type.asCharString(), returnType ).asCharString() );
-    return _variant.asPointer;
-  }
-  const void* constPointerValue() const
-  {
-    const char* const returnType = typeid(const void*).name();
-    if( type != returnType )  FAIL( StringFromFormat( "illegal use of a %s as a %s.", type.asCharString(), returnType ).asCharString() );
-    return _variant.asConstPointer;
-  }
-  const void (*functionPointerValue())()
-  {
-    const char* const returnType = typeid(const void(*)()).name();
-    if( type != returnType )  FAIL( StringFromFormat( "illegal use of a %s as a %s.", type.asCharString(), returnType ).asCharString() );
-    return _variant.asFunctionPointer;
-  }
 
 private:
   const union Variant {

@@ -30,35 +30,44 @@
 
 #include "CppUTestExt/TestDouble.h"
 
-// FIXME remove depdendency on CppUMock
-#include "CppUTestExt/MockSupport.h"
-
 class ActualCall
 {
 public:
   ActualCall( const SimpleString& call );
 
-  /// assert the actual
-  ~ActualCall() { verifyActual( *this ); }
+  ~ActualCall()
+  {
+    /// assert the actual
+    verifyActual( *this );
+
+    if( 0 != _pOutputParameter) delete _pOutputParameter;
+    while( 0 != _pParameterHead )
+    {
+      _pParameterHead = _pParameterHead->pNext;
+      delete _pParameterHead->pParameter;
+      delete _pParameterHead;
+    }
+  }
 
   template<typename T>
   ActualCall& with( const SimpleString& name, const T& value )
   {
-    _actualCall.withParameter( name, value );
+    _addParameter( name, value );
     return *this;
   }
 
   template<typename T>
   ActualCall& with( const SimpleString& name, const T* value, std::size_t size )
   {
-    _actualCall.withMemoryBufferParameter( name, reinterpret_cast<const unsigned char*>(value), size );
+    _addParameter( name, value, size );
     return *this;
   }
 
   template<typename T>
   ActualCall& output( const SimpleString& name, T* const value )
   {
-    _actualCall.withOutputParameter( name, value );
+    if( 0 != _pOutputParameter ) delete _pOutputParameter;
+    _pOutputParameter = new Parameter( name, value );
     return *this;
   }
 
@@ -80,15 +89,29 @@ public:
   void(*returnFunctionPointer())();
 
 private:
-  SimpleString  _context;
-  SimpleString  _methodName;
-  MockActualCall& _actualCall;
+  const SimpleString  _methodName;
+  Parameter*    _pOutputParameter = 0;
+
+  struct ParameterEntry
+  {
+    const Parameter* const pParameter;
+    ParameterEntry* const pNext;
+  };
+  ParameterEntry*_pParameterHead = 0;
 
   template<typename T>
-  void _testParameter( const SimpleString& name, const T& value )
+  void _addParameter( const SimpleString& name, const T& value )
   {
-    Parameter parameter( name, value );
+    Parameter* pParameter = new Parameter( name, value );
+    _pParameterHead = new ParameterEntry{ pParameter, _pParameterHead };
   }
+
+  template<typename T>
+  void _addParameter( const SimpleString& name, const T& value, std::size_t size )
+  {
+    // FIXME support buffer return
+  }
+
 };  // class ActualCall
 
 #endif /* ACTUAL_CALL_H */
