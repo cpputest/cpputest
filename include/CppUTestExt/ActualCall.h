@@ -30,6 +30,9 @@
 
 #include "CppUTestExt/TestDouble.h"
 
+// FIXME remove depdendency on CppUMock
+#include "CppUTestExt/MockSupport.h"
+
 class ActualCall
 {
 public:

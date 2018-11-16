@@ -30,6 +30,8 @@
 
 #include "CppUTestExt/TestDouble.h"
 
+// FIXME remove depdendency on CppUMock
+#include "CppUTestExt/MockSupport.h"
 
 class Expectation;
 Expectation expect( const SimpleString& context = TEST_DOUBLE_GLOBAL_CONTEXT );

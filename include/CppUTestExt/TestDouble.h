@@ -27,11 +27,11 @@
 #ifndef TEST_DOUBLE_H
 #define TEST_DOUBLE_H
 
-#include "CppUTestExt/MockSupport.h"
-const static SimpleString TEST_DOUBLE_GLOBAL_CONTEXT = "MOCK CONTEXT IS GARBAGE";
-
 #include <typeinfo>
-#include "CppUTest/UtestMacros.h"
+#include "CppUTest/TestHarness.h"
+
+// FIXME remove depdendency on CppUMock
+const static SimpleString TEST_DOUBLE_GLOBAL_CONTEXT = "MOCK CONTEXT IS GARBAGE";
 
 void failUponUnexpected( bool mode = true );
 
