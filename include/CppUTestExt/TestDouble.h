@@ -27,69 +27,13 @@
 #ifndef TEST_DOUBLE_H
 #define TEST_DOUBLE_H
 
-#include <typeinfo>
-
 #include <CppUTest/SimpleString.h>
 
-void failUponUnexpected( bool mode = true );
+void failUnexpected( bool mode = true );
 
 void checkExpectations();
 
-class ExpectedCall;
-ExpectedCall expectCall( const SimpleString& call );            ///< add expectation to registry
-ExpectedCall expectNext( const SimpleString& sequenceName );    ///< start or append a sequence of expected calls
-
 class ActualCall;
-ActualCall actualCall( const SimpleString& call );
 void verifyActual( const ActualCall& call );
-
-
-
-class Parameter
-{
-public:
-  const SimpleString& name;
-  const SimpleString  type;
-
-  template<typename T>
-  Parameter( const SimpleString& _name, const T& _value )
-  : name(_name), type( typeid(_value).name() ), _variant(_value)
-  { }
-
-
-private:
-  const union Variant {
-    bool                    asBool;
-    char                    asChar;
-    unsigned char           asUnsignedChar;
-    int                     asInt;
-    unsigned int            asUnsignedInt;
-    long int                asLongInt;
-    unsigned long int       asUnsignedLongInt;
-    long long int           asLongLongInt;
-    unsigned long long int  asUnsignedLongLongInt;
-    float                   asFloat;
-    double                  asDouble;
-    void*                   asPointer;
-    const void*             asConstPointer;
-    const void(*asFunctionPointer)();
-
-    Variant( const bool& value ) : asBool(value) {}
-    Variant( const char& value ) : asChar(value) {}
-    Variant( const unsigned char& value ) : asUnsignedChar(value) {}
-    Variant( const int& value ) : asInt(value) {}
-    Variant( const unsigned int& value ) : asUnsignedInt(value) {}
-    Variant( const long int& value ) : asLongInt(value) {}
-    Variant( const unsigned long int& value ) : asUnsignedLongInt(value) {}
-    Variant( const long long int& value ) : asLongLongInt(value) {}
-    Variant( const unsigned long long int& value ) : asUnsignedLongLongInt(value) {}
-    Variant( const float& value ) : asFloat(value) {}
-    Variant( const double& value ) : asDouble(value) {}
-    Variant( void*& value ) : asPointer(value) {}
-    Variant( const void*& value ) : asConstPointer(value) {}
-    Variant( const void(*value)() ) : asFunctionPointer(value) {}
-  } _variant;
-
-};  // class Parameter
 
 #endif /* TEST_DOUBLE_H */

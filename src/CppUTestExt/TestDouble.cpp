@@ -34,10 +34,8 @@
 #include "CppUTestExt/ActualCall.h"
 
 static bool _failActuals = false;
-void failUponUnexpected( bool mode )
-{
-  _failActuals = mode;
-}
+void failUnexpected( bool mode ) { _failActuals = mode; }
+
 
 class Expectations
 {

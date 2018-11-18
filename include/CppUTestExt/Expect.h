@@ -28,9 +28,12 @@
 #ifndef EXPECT_H
 #define EXPECT_H
 
-#include "CppUTestExt/TestDouble.h"
+#include <CppUTest/SimpleString.h>
+#include "CppUTestExt/TestDoubleParameter.h"
 
-class IModel;
+class ExpectedCall;
+ExpectedCall expectCall( const SimpleString& call );            ///< add expectation to registry
+ExpectedCall expectNext( const SimpleString& sequenceName );    ///< start or append a sequence of expected calls
 
 class ExpectedCall
 {

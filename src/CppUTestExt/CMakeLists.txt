@@ -40,6 +40,7 @@ set(CppUTestExt_headers
         ${CppUTestRootDirectory}/include/CppUTestExt/MockNamedValue.h
         ${CppUTestRootDirectory}/include/CppUTestExt/MockSupport.h
         ${CppUTestRootDirectory}/include/CppUTestExt/TestDouble.h
+        ${CppUTestRootDirectory}/include/CppUTestExt/TestDoubleParameter.h
         ${CppUTestRootDirectory}/include/CppUTestExt/Expect.h
         ${CppUTestRootDirectory}/include/CppUTestExt/ActualCall.h
 )

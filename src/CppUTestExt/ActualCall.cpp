@@ -27,9 +27,6 @@
 
 #include "CppUTestExt/ActualCall.h"
 
-// FIXME using CppUMock for now
-#include "CppUTestExt/MockSupport.h"
-
 ActualCall::ActualCall( const SimpleString& call )
   : _methodName( call )
 { }

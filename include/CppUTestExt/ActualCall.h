@@ -30,6 +30,11 @@
 
 #include "CppUTestExt/TestDouble.h"
 
+#include "CppUTestExt/TestDoubleParameter.h"
+
+class ActualCall;
+ActualCall actualCall( const SimpleString& call );
+
 class ActualCall
 {
 public:
