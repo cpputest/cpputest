@@ -33,7 +33,6 @@
 
 class ExpectedCall;
 ExpectedCall expectCall( const SimpleString& call );            ///< add expectation to registry
-ExpectedCall expectNext( const SimpleString& sequenceName );    ///< start or append a sequence of expected calls
 
 class ExpectedCall
 {

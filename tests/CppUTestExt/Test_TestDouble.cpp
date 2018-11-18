@@ -27,10 +27,6 @@
 
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TestTestingFixture.h"
-//#include "CppUTestExt/MockExpectedCall.h"
-//#include "CppUTestExt/MockFailure.h"
-// #include "MockFailureReporterForTest.h"
-#include "CppUTestExt/TestDouble.h"
 #include "CppUTestExt/Expect.h"
 #include "CppUTestExt/ActualCall.h"
 

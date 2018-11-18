@@ -78,4 +78,4 @@ private:
 
 };  // class Parameter
 
-#endif TEST_DOUBLE_PARAMETER_H
+#endif // TEST_DOUBLE_PARAMETER_H
