@@ -112,13 +112,6 @@ private:
     Parameter* pParameter = new Parameter( name, value );
     _pParameterHead = new ParameterEntry{ pParameter, _pParameterHead };
   }
-
-  template<typename T>
-  void _addParameter( const SimpleString& name, const T& value, std::size_t size )
-  {
-    // FIXME support buffer return
-  }
-
 };  // class ActualCall
 
 #endif /* ACTUAL_CALL_H */
