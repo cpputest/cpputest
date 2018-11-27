@@ -28,6 +28,7 @@
 #define TEST_DOUBLE_H
 
 #include <CppUTest/SimpleString.h>
+#include <CppUTestExt/TestDoubleParameter.h>
 
 void failUnexpected( bool mode = true );
 
@@ -35,5 +36,13 @@ void checkExpectations();
 
 class ActualCall;
 void verifyActual( const ActualCall& call );
+
+// generic list of parameters (both input and output)
+struct ParameterEntry
+{
+  const TestDouble::Parameter* const pParameter;
+  ParameterEntry* const pNext;
+};
+
 
 #endif /* TEST_DOUBLE_H */

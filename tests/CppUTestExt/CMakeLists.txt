@@ -27,7 +27,7 @@ set(CppUTestExtTests_src
     MockReturnValueTest.cpp
     OrderedTestTest_c.c
     OrderedTestTest.cpp
-    Test_TestDouble.cpp
+    TestDoubleTest.cpp
 )
 
 if (MINGW)

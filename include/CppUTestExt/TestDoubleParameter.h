@@ -31,6 +31,8 @@
 #include <typeinfo>
 #include <CppUTest/SimpleString.h>
 
+namespace TestDouble {
+
 class Parameter
 {
 public:
@@ -41,6 +43,24 @@ public:
   Parameter( const SimpleString& _name, const T& _value )
   : name(_name), type( typeid(_value).name() ), _variant(_value)
   { }
+
+  bool equals( const Parameter* pOther ) const
+  {
+    if( type != pOther->type ) return false;
+    if( type == typeid(bool).name() ) { return _variant.asBool == pOther->_variant.asBool; }
+    if( type == typeid(char).name() ) { return _variant.asChar == pOther->_variant.asChar; }
+    if( type == typeid(unsigned char).name() ) { return _variant.asUnsignedChar == pOther->_variant.asUnsignedChar; }
+    if( type == typeid(int).name() ) { return _variant.asInt == pOther->_variant.asInt; }
+    if( type == typeid(unsigned int).name() ) { return _variant.asUnsignedInt == pOther->_variant.asUnsignedInt; }
+    if( type == typeid(long int).name() ) { return _variant.asLongInt == pOther->_variant.asLongInt; }
+    if( type == typeid(unsigned long int).name() ) { return _variant.asUnsignedLongInt == pOther->_variant.asUnsignedLongInt; }
+    if( type == typeid(long long int).name() ) { return _variant.asLongLongInt == pOther->_variant.asLongLongInt; }
+    if( type == typeid(unsigned long long int).name() ) { return _variant.asUnsignedLongLongInt == pOther->_variant.asUnsignedLongLongInt; }
+    if( type == typeid(float).name() ) { return _variant.asFloat == pOther->_variant.asFloat; }
+    if( type == typeid(double).name() ) { return _variant.asDouble == pOther->_variant.asDouble; }
+    if( type == typeid(void*).name() ) { return _variant.asPointer == pOther->_variant.asPointer; }
+    return _variant.asFunctionPointer == pOther->_variant.asFunctionPointer;
+  }
 
 
 private:
@@ -77,5 +97,7 @@ private:
   } _variant;
 
 };  // class Parameter
+
+} // namespace TestDouble
 
 #endif // TEST_DOUBLE_PARAMETER_H

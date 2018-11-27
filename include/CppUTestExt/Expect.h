@@ -29,7 +29,7 @@
 #define EXPECT_H
 
 #include <CppUTest/SimpleString.h>
-#include "CppUTestExt/TestDoubleParameter.h"
+#include "CppUTestExt/TestDouble.h"
 
 class ExpectedCall;
 ExpectedCall expectCall( const SimpleString& call );            ///< add expectation to registry
@@ -39,61 +39,43 @@ class ExpectedCall
 public:
   ExpectedCall( const SimpleString& call );
 
+  ~ExpectedCall()
+  {
+    while( 0 != _parameters )
+    {
+      ParameterEntry* nextHead = _parameters->pNext;
+      delete _parameters->pParameter;
+      delete _parameters;
+      _parameters = nextHead;
+    }
+  }
+
+
   static const int EXPECT_ALWAYS = 0;
   ExpectedCall& times( const unsigned int count );
 
   template<typename T>
   ExpectedCall& with( const SimpleString& name, const T value )
   {
-    // FIXME add parameter
+    _addParameter( name, value );
 
     return *this;
   }
 
-  template<typename T>
-  ExpectedCall& with( const SimpleString& name, const T* value, std::size_t size )
-  {
-    // FIXME add parameter
-    
-    return *this;
-  }
+  const SimpleString  methodName;
+  unsigned int        count;
+  const ParameterEntry* getParameters() const { return _parameters; }
 
-  // /// use model to perform behavior (i.e. use this to extend a mock into a model)
-  // Expectation use( IModel& );
-
-  template<typename T>
-  ExpectedCall& output( const SimpleString& name, T* const value )
-  {
-    // FIXME add parameter
-    
-    return *this;
-  }
-  template<typename T>
-  ExpectedCall& output( const SimpleString& name, T* const value, const std::size_t size )
-  {
-    // FIXME add parameter
-    
-    return *this;
-  }
-
-  template<typename T>
-  ExpectedCall& andReturn( const T value )
-  {
-    // FIXME add parameter
-    
-    return *this;
-  }
 
 private:
-  SimpleString      _methodName;
-  unsigned int      _times = EXPECT_ALWAYS;
+  ParameterEntry*   _parameters = 0;
 
-  class ParameterEntry
+  template<typename T>
+  void _addParameter( const SimpleString& name, const T& value )
   {
-    const Parameter& parameter;
-    const ParameterEntry* pNext;
-  };
-  ParameterEntry*   parameters = 0;
+    TestDouble::Parameter* pParameter = new TestDouble::Parameter( name, value );
+    _parameters = new ParameterEntry{ pParameter, _parameters };
+  }
 };
 
 // class Actual;

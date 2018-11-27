@@ -46,77 +46,103 @@ public:
   void check();
 };
 static Expectations expectations;
-
-void checkExpectations()
-{
-  expectations.check();
-}
+void checkExpectations() { expectations.check(); }
 
 ExpectedCall expectCall( const SimpleString& call ) { return expectations.add( call ); }
-
-ExpectedCall expectNext( const SimpleString& sequenceName, const SimpleString& call )
-{
-  // FIXME
-}
-
-ActualCall actualCall( const SimpleString& call )
-{
-  return ActualCall( call );
-}
-
-void verifyActual( const ActualCall& call )
-{
-  expectations.check( call );
-}
-
+ActualCall actualCall( const SimpleString& call ) { return ActualCall( call ); }
+void verifyActual( const ActualCall& call ) { expectations.check( call ); }
 
 
 // Implementation of Expectation framework
-
 struct ExpectedCallEntry
 {
   const ExpectedCall* const pExpectedCall;
-  int                       calledCount;
+  unsigned int              calledCount;
   ExpectedCallEntry* const  pNext;
 };
-
-
 static ExpectedCallEntry* expectedCalls = 0;
-void _add( const ExpectedCall* const pExpectation )
-{
-  expectedCalls = new ExpectedCallEntry{ pExpectation, 0, expectedCalls };
-}
+
 
 ExpectedCall Expectations::add( const SimpleString& call )
 {
-  //FIXME
   ExpectedCall* pExpected = new ExpectedCall( call );
-  _add( pExpected );
-  return *pExpected;
-}
-ExpectedCall Expectations::add( const SimpleString& sequence, const SimpleString& call )
-{
-  // FIXMe
-  ExpectedCall* pExpected = new ExpectedCall( call );
+  // prepend expected chain
+  expectedCalls = new ExpectedCallEntry{ pExpected, 0, expectedCalls };
   return *pExpected;
 }
 
+bool matches( const ActualCall& actual, const ExpectedCall& expected );
 void Expectations::check( const ActualCall& call )
 {
-  // FIXME
+  // TODO check sequence expectations first
+
+  bool verified = false;
+  for( ExpectedCallEntry* pExpectedEntry=expectedCalls; pExpectedEntry != 0; pExpectedEntry=pExpectedEntry->pNext )
+  {
+    const ExpectedCall expectedCall = *(pExpectedEntry->pExpectedCall);
+    // skip fulfilled expectations
+    if( ( expectedCall.count != ExpectedCall::EXPECT_ALWAYS ) && ( pExpectedEntry->calledCount >= expectedCall.count ) ) continue;
+
+    if( matches( call, expectedCall ) )
+    {
+      pExpectedEntry->calledCount++;
+      verified = true;
+      break;
+    }
+  }
+
+  if( ( false == verified ) && ( true == _failActuals ) )
+  {
+    // TODO failActual()
+    FAIL( "icky" );
+  }
 }
+
 void Expectations::check()
 {
-  // FIXME
-
   // clean up expectations
   while( expectedCalls != 0 )
   {
     ExpectedCallEntry* pNext = expectedCalls->pNext;
+
+    // TODO fail upon unfullfilled expectation
+
     delete expectedCalls->pExpectedCall;
     delete expectedCalls;
     expectedCalls = pNext;
   }
+}
+
+void failTypeMismatch( const ActualCall& actual, const ExpectedCall& expected, const SimpleString& parameterName );
+bool matches( const ActualCall& actual, const ExpectedCall& expected )
+{
+  if( actual.methodName != expected.methodName ) return false;
+
+  for( const ParameterEntry* pExpectedEntry=expected.getParameters(); pExpectedEntry != 0; pExpectedEntry=pExpectedEntry->pNext )
+  {
+    for( const ParameterEntry* pActualEntry=actual.getParameters(); pActualEntry != 0; pActualEntry=pActualEntry->pNext )
+    {
+      if( pExpectedEntry->pParameter->name == pActualEntry->pParameter->name )
+      {
+        if( pExpectedEntry->pParameter->type != pActualEntry->pParameter->type )
+        {
+          failTypeMismatch( actual, expected, pActualEntry->pParameter->name );
+          return false;
+        }
+
+        if( false == pExpectedEntry->pParameter->equals( pActualEntry->pParameter ) ) return false;
+      }
+    }
+  }
+
+  return true;
+}
+
+
+void failTypeMismatch( const ActualCall& actual, const ExpectedCall& expected, const SimpleString& parameterName )
+{
+  // TODO provide detailed failure
+  FAIL( "Type mismatch" );
 }
 
 // class Expectations

@@ -30,8 +30,6 @@
 
 #include "CppUTestExt/TestDouble.h"
 
-#include "CppUTestExt/TestDoubleParameter.h"
-
 class ActualCall;
 ActualCall actualCall( const SimpleString& call );
 
@@ -46,15 +44,20 @@ public:
     verifyActual( *this );
 
     if( 0 != _pOutputParameter) delete _pOutputParameter;
-    while( 0 != _pParameterHead )
+    while( 0 != _parameters )
     {
-      ParameterEntry* nextHead = _pParameterHead->pNext;
-      delete _pParameterHead->pParameter;
-      delete _pParameterHead;
-      _pParameterHead = nextHead;
+      ParameterEntry* nextHead = _parameters->pNext;
+      delete _parameters->pParameter;
+      delete _parameters;
+      _parameters = nextHead;
     }
   }
 
+  const SimpleString& methodName;
+
+  const ParameterEntry* getParameters() const { return _parameters; }
+
+  // named input parameter
   template<typename T>
   ActualCall& with( const SimpleString& name, const T& value )
   {
@@ -62,24 +65,7 @@ public:
     return *this;
   }
 
-  template<typename T>
-  ActualCall& with( const SimpleString& name, const T* value, std::size_t size )
-  {
-    _addParameter( name, value, size );
-    return *this;
-  }
-
-  template<typename T>
-  ActualCall& output( const SimpleString& name, T* const value )
-  {
-    // TODO should overriding output be allowed?
-    if( 0 != _pOutputParameter ) delete _pOutputParameter;
-    _pOutputParameter = new Parameter( name, value );
-    return *this;
-  }
-
   //  return based methods invoke matched expectation (or else do nothing and return 0)
-  // TODO template returns
   bool returnBool();
   char returnChar();
   unsigned char returnUnsignedChar();
@@ -95,22 +81,18 @@ public:
   const void* returnConstPointer();
   void(*returnFunctionPointer())();
 
-private:
-  const SimpleString  _methodName;
-  Parameter*    _pOutputParameter = 0;
 
-  struct ParameterEntry
-  {
-    const Parameter* const pParameter;
-    ParameterEntry* const pNext;
-  };
-  ParameterEntry*_pParameterHead = 0;
+private:
+  const SimpleString      _methodName;
+  ParameterEntry*         _parameters = 0;
+  TestDouble::Parameter*  _pOutputParameter = 0;
+
 
   template<typename T>
   void _addParameter( const SimpleString& name, const T& value )
   {
-    Parameter* pParameter = new Parameter( name, value );
-    _pParameterHead = new ParameterEntry{ pParameter, _pParameterHead };
+    TestDouble::Parameter* pParameter = new TestDouble::Parameter( name, value );
+    _parameters = new ParameterEntry{ pParameter, _parameters };
   }
 };  // class ActualCall
 

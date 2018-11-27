@@ -28,7 +28,7 @@
 #include "CppUTestExt/ActualCall.h"
 
 ActualCall::ActualCall( const SimpleString& call )
-  : _methodName( call )
+  : methodName( call )
 { }
 
 // bool ActualCall::returnBool()

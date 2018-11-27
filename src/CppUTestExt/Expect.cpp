@@ -32,12 +32,12 @@
 
 
 ExpectedCall::ExpectedCall( const SimpleString& name )
-  : _methodName(name), _times(1)
+  : count(EXPECT_ALWAYS), methodName(name)
 { }
 
 
-ExpectedCall& ExpectedCall::times( const unsigned int count )
+ExpectedCall& ExpectedCall::times( const unsigned int _count )
 {
-  _times = count;
+  count = _count;
   return *this;
 }
