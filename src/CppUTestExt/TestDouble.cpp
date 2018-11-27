@@ -33,6 +33,8 @@
 #include "CppUTestExt/Expect.h"
 #include "CppUTestExt/ActualCall.h"
 
+#include <stdio.h>
+
 static bool _failActuals = false;
 void failUnexpected( bool mode ) { _failActuals = mode; }
 
@@ -94,8 +96,10 @@ void Expectations::check( const ActualCall& call )
   if( ( false == verified ) && ( true == _failActuals ) )
   {
     // TODO failActual()
-    FAIL( "icky" );
+    FAIL( "Actual call had no matching expectation." );
   }
+
+  // TODO set output parameters
 }
 
 void Expectations::check()
@@ -105,7 +109,8 @@ void Expectations::check()
   {
     ExpectedCallEntry* pNext = expectedCalls->pNext;
 
-    // TODO fail upon unfullfilled expectation
+    // TODO fail upon unfulfilled expectation
+    // if( ( expectedCall.count != ExpectedCall::EXPECT_ALWAYS ) && ( pExpectedEntry->calledCount >= expectedCall.count ) ) continue;
 
     delete expectedCalls->pExpectedCall;
     delete expectedCalls;
@@ -135,7 +140,7 @@ bool matches( const ActualCall& actual, const ExpectedCall& expected )
     }
   }
 
-  return true;
+  return false;
 }
 
 
@@ -144,20 +149,3 @@ void failTypeMismatch( const ActualCall& actual, const ExpectedCall& expected, c
   // TODO provide detailed failure
   FAIL( "Type mismatch" );
 }
-
-// class Expectations
-// {
-//   ExpectedCall _addExpectation( const SimpleString& call )
-//   {
-//     ExpectedCallEntry* pExpectedCallEntry = new ExpectedCallEntry();
-//     ExpectedCall* pExpectedCall = new ExpectedCall( call );
-
-//     pExpectedCallEntry->self = pExpectedCall;
-//     pExpectedCallEntry->callCount = 0;
-//     pExpectedCallEntry->pNext = ExpectedCallsHead;
-//     ExpectedCallsHead = pExpectedCallEntry;
-
-//     return *pExpectedCall;
-//   }
-// }
-

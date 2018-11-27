@@ -32,6 +32,10 @@
 
 TEST_GROUP( TestDoubleParameters )
 {
+  TEST_SETUP()
+  {
+    failUnexpected( true );
+  }
   TEST_TEARDOWN()
   {
     checkExpectations();
@@ -60,7 +64,7 @@ TEST( TestDoubleParameters, expect_boolean_parameter_with_value )
 {
   const bool value = true;
   expectCall("foo").times(1).with("value", value);
-  actualCall("foo").with("value", value);
+  actualCall("foo").with("value", !value);
 }
 
 // TEST( TestDoubleParameters, expect_char_parameter_with_value )
