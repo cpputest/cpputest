@@ -114,7 +114,6 @@ void Expectations::check()
   }
 }
 
-void failTypeMismatch( const SimpleString& methodName, const SimpleString& parameterName, const SimpleString& expectedTypeName, const SimpleString& actualTypeName );
 bool matches( const ActualCall& actual, const ExpectedCall& expected )
 {
   if( actual.methodName != expected.methodName ) return false;
@@ -127,7 +126,11 @@ bool matches( const ActualCall& actual, const ExpectedCall& expected )
       {
         if( pExpectedEntry->pParameter->type != pActualEntry->pParameter->type )
         {
-          failTypeMismatch( actual.methodName, pExpectedEntry->pParameter->name, pExpectedEntry->pParameter->type, pActualEntry->pParameter->type );
+          FAIL(
+            StringFromFormat("Type Mismatch: Expected call to '%s' with parameter '%s' of type '%s', but actual paramter was of type '%s'.",
+            expected.methodName.asCharString(), pExpectedEntry->pParameter->name.asCharString(),
+            pExpectedEntry->pParameter->type.asCharString(), pActualEntry->pParameter->type.asCharString() ).asCharString()
+          );
           return false;
         }
 
@@ -137,13 +140,4 @@ bool matches( const ActualCall& actual, const ExpectedCall& expected )
   }
 
   return true;
-}
-
-
-void failTypeMismatch( const SimpleString& methodName, const SimpleString& parameterName, const SimpleString& expectedTypeName, const SimpleString& actualTypeName )
-{
-  FAIL(
-     StringFromFormat("Type Mismatch: Expected call to '%s' with parameter '%s' of type '%s', but actual paramter was of type '%s'.",
-      methodName.asCharString(), parameterName.asCharString(), expectedTypeName.asCharString(), actualTypeName.asCharString() ).asCharString()
-  );
 }

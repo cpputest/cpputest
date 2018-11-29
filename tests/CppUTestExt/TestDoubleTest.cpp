@@ -140,19 +140,6 @@ TEST( TestDoubleParameters, expect_function_pointer_parameter_with_value )
   actualCall("foo").with("value", _fn);
 }
 
-TEST( TestDoubleParameters, expect_string_with_value )
-{
-  char value[] = "HELLO WORLD";
-  expectCall("foo").with("value", value);
-  actualCall("foo").with("value", value);
-}
-
-
-
-
-
-
-
 
 // TEST( TestDoubleParameters, expect_buffer_parameter_with_value )
 // {
