@@ -27,12 +27,10 @@
 
 #include <CppUTestExt/TestDouble.h>
 
-// FIXME uses CppUMock for now
-#include <CppUTestExt/MockSupport.h>
-
 #include "CppUTestExt/Expect.h"
 #include "CppUTestExt/ActualCall.h"
 
+#include <CppUTest/TestHarness.h>
 
 static bool _failActuals = false;
 void failUnexpected( bool mode ) { _failActuals = mode; }
@@ -116,7 +114,7 @@ void Expectations::check()
   }
 }
 
-void failTypeMismatch( const ActualCall& actual, const ExpectedCall& expected, const SimpleString& parameterName );
+void failTypeMismatch( const SimpleString& methodName, const SimpleString& parameterName, const SimpleString& expectedTypeName, const SimpleString& actualTypeName );
 bool matches( const ActualCall& actual, const ExpectedCall& expected )
 {
   if( actual.methodName != expected.methodName ) return false;
@@ -129,7 +127,7 @@ bool matches( const ActualCall& actual, const ExpectedCall& expected )
       {
         if( pExpectedEntry->pParameter->type != pActualEntry->pParameter->type )
         {
-          failTypeMismatch( actual, expected, pActualEntry->pParameter->name );
+          failTypeMismatch( actual.methodName, pExpectedEntry->pParameter->name, pExpectedEntry->pParameter->type, pActualEntry->pParameter->type );
           return false;
         }
 
@@ -142,8 +140,10 @@ bool matches( const ActualCall& actual, const ExpectedCall& expected )
 }
 
 
-void failTypeMismatch( const ActualCall& actual, const ExpectedCall& expected, const SimpleString& parameterName )
+void failTypeMismatch( const SimpleString& methodName, const SimpleString& parameterName, const SimpleString& expectedTypeName, const SimpleString& actualTypeName )
 {
-  // TODO provide detailed failure
-  UT_PRINT( "Type mismatch" );
+  FAIL(
+     StringFromFormat("Type Mismatch: Expected call to '%s' with parameter '%s' of type '%s', but actual paramter was of type '%s'.",
+      methodName.asCharString(), parameterName.asCharString(), expectedTypeName.asCharString(), actualTypeName.asCharString() ).asCharString()
+  );
 }

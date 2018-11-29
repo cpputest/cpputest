@@ -133,12 +133,12 @@ TEST( TestDoubleParameters, expect_const_pointer_parameter_with_value )
   actualCall("foo").with("value", value);
 }
 
-// static void _fn( void ) {}
-// TEST( TestDoubleParameters, expect_function_pointer_parameter_with_value )
-// {
-//   expectCall("foo").with("value", _fn);
-//   actualCall("foo").with("value", _fn);
-// }
+static void _fn( void ) {}
+TEST( TestDoubleParameters, expect_function_pointer_parameter_with_value )
+{
+  expectCall("foo").with("value", _fn);
+  actualCall("foo").with("value", _fn);
+}
 
 TEST( TestDoubleParameters, expect_string_with_value )
 {

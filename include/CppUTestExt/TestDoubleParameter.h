@@ -46,7 +46,6 @@ public:
 
   bool equals( const Parameter* pOther ) const
   {
-    if( type != pOther->type ) return false;
     if( type == typeid(bool).name() ) { return _variant.asBool == pOther->_variant.asBool; }
     if( type == typeid(char).name() ) { return _variant.asChar == pOther->_variant.asChar; }
     if( type == typeid(unsigned char).name() ) { return _variant.asUnsignedChar == pOther->_variant.asUnsignedChar; }
@@ -58,9 +57,10 @@ public:
     if( type == typeid(unsigned long long).name() ) { return _variant.asUnsignedLongLongInt == pOther->_variant.asUnsignedLongLongInt; }
     if( type == typeid(float).name() ) { return _variant.asFloat == pOther->_variant.asFloat; }
     if( type == typeid(double).name() ) { return _variant.asDouble == pOther->_variant.asDouble; }
-    if( type == typeid(void*).name() ) { return _variant.asPointer == pOther->_variant.asPointer; }
-    if( type == typeid(const void*).name() ) { return _variant.asConstPointer == pOther->_variant.asConstPointer; }
-    return _variant.asFunctionPointer == pOther->_variant.asFunctionPointer;
+    // if( type == typeid(void*).name() ) { return _variant.asPointer == pOther->_variant.asPointer; }
+    // if( type == typeid(const void*).name() ) { return _variant.asConstPointer == pOther->_variant.asConstPointer; }
+    // return _variant.asFunctionPointer == pOther->_variant.asFunctionPointer;
+    return _variant.asPointer == pOther->_variant.asPointer;
   }
 
 
