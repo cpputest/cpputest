@@ -67,103 +67,102 @@ TEST( TestDoubleParameters, expect_boolean_parameter_with_value )
   actualCall("foo").with("value", value);
 }
 
-// TEST( TestDoubleParameters, expect_char_parameter_with_value )
-// {
-//   const char value = -1;
-//   expectCall("foo").with("value", value);
-//   actualCall("foo").with("value", value);
-// }
-
-// TEST( TestDoubleParameters, expect_unsigned_char_parameter_with_value )
-// {
-//   const unsigned char value = 1;
-//   expectCall("foo").times(1).with("value", value);
-//   actualCall("foo").with("value", value);
-// }
-
-// TEST( TestDoubleParameters, expect_int_parameter_with_value )
-// {
-//   const int value = 1;
-//   expect().call("foo").times(1).with("value", value);
-//   actual().call("foo").with("value", value);
-// }
-
-// TEST( TestDoubleParameters, expect_unsigned_int_parameter_with_value )
-// {
-//   const unsigned int value = 1;
-//   expect().call("foo").times(1).with("value", value);
-//   actual().call("foo").with("value", value);
-// }
-
-// TEST( TestDoubleParameters, expect_long_parameter_with_value )
-// {
-//   const long value = 1;
-//   expect().call("foo").times(1).with("value", value);
-//   actual().call("foo").with("value", value);
-// }
-
-// TEST( TestDoubleParameters, expect_unsigned_long_parameter_with_value )
-// {
-//   const unsigned long value = 1;
-//   expect().call("foo").times(1).with("value", value);
-//   actual().call("foo").with("value", value);
-// }
-
-// TEST( TestDoubleParameters, expect_long_long_parameter_with_value )
-// {
-//   const long long value = 1;
-//   expect().call("foo").times(1).with("value", value);
-//   actual().call("foo").with("value", value);
-// }
-
-// TEST( TestDoubleParameters, expect_unsigned_long_long_parameter_with_value )
-// {
-//   const unsigned long long value = 1;
-//   expect().call("foo").times(1).with("value", value);
-//   actual().call("foo").with("value", value);
-// }
-
-IGNORE_TEST( TestDoubleParameters, expect_float_parameter_with_value )
+TEST( TestDoubleParameters, expect_char_parameter_with_value )
 {
-  // Since CppUMock doesn't support float, clang is unhappy
-  // const float value = 1.1f;
-  // expect().call("foo").times(1).with("value", value);
-  // actual().call("foo").with("value", value);
+  const char value = -1;
+  expectCall("foo").with("value", value);
+  actualCall("foo").with("value", value);
 }
 
-// TEST( TestDoubleParameters, expect_double_parameter_with_value )
-// {
-//   const double value = 1.1;
-//   expect().call("foo").times(1).with("value", value);
-//   actual().call("foo").with("value", value);
-// }
+TEST( TestDoubleParameters, expect_unsigned_char_parameter_with_value )
+{
+  const unsigned char value = 1;
+  expectCall("foo").times(1).with("value", value);
+  actualCall("foo").with("value", value);
+}
+
+TEST( TestDoubleParameters, expect_int_parameter_with_value )
+{
+  const int value = 1;
+  expectCall("foo").times(1).with("value", value);
+  actualCall("foo").with("value", value);
+}
+
+TEST( TestDoubleParameters, expect_unsigned_int_parameter_with_value )
+{
+  const unsigned int value = 1;
+  expectCall("foo").times(1).with("value", value);
+  actualCall("foo").with("value", value);
+}
+
+TEST( TestDoubleParameters, expect_long_parameter_with_value )
+{
+  const long value = 1;
+  expectCall("foo").times(1).with("value", value);
+  actualCall("foo").with("value", value);
+}
+
+TEST( TestDoubleParameters, expect_unsigned_long_parameter_with_value )
+{
+  const unsigned long value = 1;
+  expectCall("foo").times(1).with("value", value);
+  actualCall("foo").with("value", value);
+}
+
+TEST( TestDoubleParameters, expect_long_long_parameter_with_value )
+{
+  const long long value = 1;
+  expectCall("foo").times(1).with("value", value);
+  actualCall("foo").with("value", value);
+}
+
+TEST( TestDoubleParameters, expect_unsigned_long_long_parameter_with_value )
+{
+  const unsigned long long value = 1;
+  expectCall("foo").times(1).with("value", value);
+  actualCall("foo").with("value", value);
+}
+
+TEST( TestDoubleParameters, expect_float_parameter_with_value )
+{
+  const float value = 1.1f;
+  expectCall("foo").times(1).with("value", value);
+  actualCall("foo").with("value", value);
+}
+
+TEST( TestDoubleParameters, expect_double_parameter_with_value )
+{
+  const double value = 1.1;
+  expectCall("foo").times(1).with("value", value);
+  actualCall("foo").with("value", value);
+}
 
 // TEST( TestDoubleParameters, expect_string_with_value )
 // {
 //   char value[] = "HELLO WORLD";
-//   expect().call("foo").times(1).with("value", value);
-//   actual().call("foo").with("value", value);
+//   expectCall("foo").times(1).with("value", value);
+//   actualCall("foo").with("value", value);
 // }
 
 // TEST( TestDoubleParameters, expect_pointer_parameter_with_value )
 // {
 //   void* const value = reinterpret_cast<void*>(0x100);
-//   expect().call("foo").times(1).with("value", value);
-//   actual().call("foo").with("value", value);
+//   expectCall("foo").times(1).with("value", value);
+//   actualCall("foo").with("value", value);
 // }
 
-// TEST( TestDoubleParameters, expect_const_pointer_parameter_with_value )
-// {
-//   const void* const value = reinterpret_cast<void*>(0x100);
-//   expect().call("foo").times(1).with("value", value);
-//   actual().call("foo").with("value", value);
-// }
+TEST( TestDoubleParameters, expect_const_pointer_parameter_with_value )
+{
+  const void* const value = reinterpret_cast<void*>(0x100);
+  expectCall("foo").times(1).with("value", value);
+  actualCall("foo").with("value", value);
+}
 
 // static void _fn( void ) {}
 // TEST( TestDoubleParameters, expect_function_pointer_parameter_with_value )
 // {
-//   expect().call("foo").times(1).with("value", _fn);
-//   actual().call("foo").with("value", _fn);
+//   expectCall("foo").times(1).with("value", _fn);
+//   actualCall("foo").with("value", _fn);
 // }
 
 // TEST( TestDoubleParameters, expect_buffer_parameter_with_value )
