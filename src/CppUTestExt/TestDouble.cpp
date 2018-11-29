@@ -42,15 +42,14 @@ void failUnexpected( bool mode ) { _failActuals = mode; }
 class Expectations
 {
 public:
-  ExpectedCall add( const SimpleString& call );
-  ExpectedCall add( const SimpleString& sequence, const SimpleString& call );
+  ExpectedCall& add( const SimpleString& call );
   void check( const ActualCall& call );
   void check();
 };
 static Expectations expectations;
 void checkExpectations() { expectations.check(); }
 
-ExpectedCall expectCall( const SimpleString& call ) { return expectations.add( call ); }
+ExpectedCall& expectCall( const SimpleString& call ) { return expectations.add( call ); }
 ActualCall actualCall( const SimpleString& call ) { return ActualCall( call ); }
 void verifyActual( const ActualCall& call ) { expectations.check( call ); }
 
@@ -65,7 +64,7 @@ struct ExpectedCallEntry
 static ExpectedCallEntry* expectedCalls = 0;
 
 
-ExpectedCall Expectations::add( const SimpleString& call )
+ExpectedCall& Expectations::add( const SimpleString& call )
 {
   ExpectedCall* pExpected = new ExpectedCall( call );
   // prepend expected chain
@@ -81,7 +80,7 @@ void Expectations::check( const ActualCall& call )
   bool verified = false;
   for( ExpectedCallEntry* pExpectedEntry=expectedCalls; pExpectedEntry != 0; pExpectedEntry=pExpectedEntry->pNext )
   {
-    const ExpectedCall expectedCall = *(pExpectedEntry->pExpectedCall);
+    const ExpectedCall& expectedCall = *(pExpectedEntry->pExpectedCall);
     // skip fulfilled expectations
     if( ( expectedCall.count != ExpectedCall::EXPECT_ALWAYS ) && ( pExpectedEntry->calledCount >= expectedCall.count ) ) continue;
 
@@ -127,7 +126,7 @@ bool matches( const ActualCall& actual, const ExpectedCall& expected )
   {
     for( const ParameterEntry* pActualEntry=actual.getParameters(); pActualEntry != 0; pActualEntry=pActualEntry->pNext )
     {
-      if( pExpectedEntry->pParameter->name == pActualEntry->pParameter->name )
+      if( pExpectedEntry->pParameter->name.equalsNoCase( pActualEntry->pParameter->name ) )
       {
         if( pExpectedEntry->pParameter->type != pActualEntry->pParameter->type )
         {
@@ -140,7 +139,7 @@ bool matches( const ActualCall& actual, const ExpectedCall& expected )
     }
   }
 
-  return false;
+  return true;
 }
 
 

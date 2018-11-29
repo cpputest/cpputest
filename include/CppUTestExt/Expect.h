@@ -32,7 +32,7 @@
 #include "CppUTestExt/TestDouble.h"
 
 class ExpectedCall;
-ExpectedCall expectCall( const SimpleString& call );            ///< add expectation to registry
+ExpectedCall& expectCall( const SimpleString& call );            ///< add expectation to registry
 
 class ExpectedCall
 {

@@ -36,7 +36,7 @@ namespace TestDouble {
 class Parameter
 {
 public:
-  const SimpleString& name;
+  const SimpleString  name;
   const SimpleString  type;
 
   template<typename T>
