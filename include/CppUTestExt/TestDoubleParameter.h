@@ -85,10 +85,10 @@ private:
     Variant( const unsigned char& value ) : asUnsignedChar(value) {}
     Variant( const int& value ) : asInt(value) {}
     Variant( const unsigned int& value ) : asUnsignedInt(value) {}
-    Variant( const long int& value ) : asLongInt(value) {}
-    Variant( const unsigned long int& value ) : asUnsignedLongInt(value) {}
-    Variant( const long long int& value ) : asLongLongInt(value) {}
-    Variant( const unsigned long long int& value ) : asUnsignedLongLongInt(value) {}
+    Variant( const long& value ) : asLongInt(value) {}
+    Variant( const unsigned long& value ) : asUnsignedLongInt(value) {}
+    Variant( const long long& value ) : asLongLongInt(value) {}
+    Variant( const unsigned long long& value ) : asUnsignedLongLongInt(value) {}
     Variant( const float& value ) : asFloat(value) {}
     Variant( const double& value ) : asDouble(value) {}
     Variant( void*& value ) : asPointer(value) {}

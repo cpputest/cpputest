@@ -42,28 +42,10 @@ TEST_GROUP( TestDoubleParameters )
   }
 };
 
-IGNORE_TEST( TestDoubleParameters, variant_misuse_results_in_FAIL )
-{
-  // FIXME Implementation correctly FAILs, but not sure how to make the assertion and not fail the TEST_GROUP
-  // Parameter parameter( "bool", true );
-  // int integer = parameter.intValue();
-  // CHECK( integer == 1 );
-}
-
-IGNORE_TEST( TestDoubleParameters, upon_FAIL_report_unexpected_calls )
-{
-  // TODO CppUMock FAILS upon first unexpected call
-}
-
-IGNORE_TEST( TestDoubleParameters, FAIL_if_expected_calls_arent_actualized )
-{
-  // see MockSupporTest.cpp for how to
-}
-
 TEST( TestDoubleParameters, expect_boolean_parameter_with_value )
 {
   const bool value = true;
-  expectCall("foo").times(1).with("value", value);
+  expectCall("foo").with("value", value);
   actualCall("foo").with("value", value);
 }
 
@@ -77,63 +59,63 @@ TEST( TestDoubleParameters, expect_char_parameter_with_value )
 TEST( TestDoubleParameters, expect_unsigned_char_parameter_with_value )
 {
   const unsigned char value = 1;
-  expectCall("foo").times(1).with("value", value);
+  expectCall("foo").with("value", value);
   actualCall("foo").with("value", value);
 }
 
 TEST( TestDoubleParameters, expect_int_parameter_with_value )
 {
   const int value = 1;
-  expectCall("foo").times(1).with("value", value);
+  expectCall("foo").with("value", value);
   actualCall("foo").with("value", value);
 }
 
 TEST( TestDoubleParameters, expect_unsigned_int_parameter_with_value )
 {
   const unsigned int value = 1;
-  expectCall("foo").times(1).with("value", value);
+  expectCall("foo").with("value", value);
   actualCall("foo").with("value", value);
 }
 
 TEST( TestDoubleParameters, expect_long_parameter_with_value )
 {
   const long value = 1;
-  expectCall("foo").times(1).with("value", value);
+  expectCall("foo").with("value", value);
   actualCall("foo").with("value", value);
 }
 
 TEST( TestDoubleParameters, expect_unsigned_long_parameter_with_value )
 {
   const unsigned long value = 1;
-  expectCall("foo").times(1).with("value", value);
+  expectCall("foo").with("value", value);
   actualCall("foo").with("value", value);
 }
 
 TEST( TestDoubleParameters, expect_long_long_parameter_with_value )
 {
   const long long value = 1;
-  expectCall("foo").times(1).with("value", value);
+  expectCall("foo").with("value", value);
   actualCall("foo").with("value", value);
 }
 
 TEST( TestDoubleParameters, expect_unsigned_long_long_parameter_with_value )
 {
   const unsigned long long value = 1;
-  expectCall("foo").times(1).with("value", value);
+  expectCall("foo").with("value", value);
   actualCall("foo").with("value", value);
 }
 
 TEST( TestDoubleParameters, expect_float_parameter_with_value )
 {
   const float value = 1.1f;
-  expectCall("foo").times(1).with("value", value);
+  expectCall("foo").with("value", value);
   actualCall("foo").with("value", value);
 }
 
 TEST( TestDoubleParameters, expect_double_parameter_with_value )
 {
   const double value = 1.1;
-  expectCall("foo").times(1).with("value", value);
+  expectCall("foo").with("value", value);
   actualCall("foo").with("value", value);
 }
 
@@ -164,6 +146,15 @@ TEST( TestDoubleParameters, expect_const_pointer_parameter_with_value )
 //   expectCall("foo").times(1).with("value", _fn);
 //   actualCall("foo").with("value", _fn);
 // }
+
+
+
+
+
+
+
+
+
 
 // TEST( TestDoubleParameters, expect_buffer_parameter_with_value )
 // {
@@ -441,3 +432,23 @@ TEST( TestDoubleParameters, expect_const_pointer_parameter_with_value )
 //   void (*actualValue)() = actual().call("foo").returnFunctionPointer();
 //   FUNCTIONPOINTERS_EQUAL( _fn, actualValue );
 // }
+
+
+IGNORE_TEST( TestDoubleParameters, variant_misuse_results_in_FAIL )
+{
+  // FIXME Implementation correctly FAILs, but not sure how to make the assertion and not fail the TEST_GROUP
+  // Parameter parameter( "bool", true );
+  // int integer = parameter.intValue();
+  // CHECK( integer == 1 );
+}
+
+IGNORE_TEST( TestDoubleParameters, upon_FAIL_report_unexpected_calls )
+{
+  // TODO CppUMock FAILS upon first unexpected call
+}
+
+IGNORE_TEST( TestDoubleParameters, FAIL_if_expected_calls_arent_actualized )
+{
+  // see MockSupporTest.cpp for how to
+}
+
