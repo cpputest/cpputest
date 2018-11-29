@@ -52,13 +52,14 @@ public:
     if( type == typeid(unsigned char).name() ) { return _variant.asUnsignedChar == pOther->_variant.asUnsignedChar; }
     if( type == typeid(int).name() ) { return _variant.asInt == pOther->_variant.asInt; }
     if( type == typeid(unsigned int).name() ) { return _variant.asUnsignedInt == pOther->_variant.asUnsignedInt; }
-    if( type == typeid(long int).name() ) { return _variant.asLongInt == pOther->_variant.asLongInt; }
+    if( type == typeid(long).name() ) { return _variant.asLongInt == pOther->_variant.asLongInt; }
     if( type == typeid(unsigned long).name() ) { return _variant.asUnsignedLongInt == pOther->_variant.asUnsignedLongInt; }
     if( type == typeid(long long).name() ) { return _variant.asLongLongInt == pOther->_variant.asLongLongInt; }
     if( type == typeid(unsigned long long).name() ) { return _variant.asUnsignedLongLongInt == pOther->_variant.asUnsignedLongLongInt; }
     if( type == typeid(float).name() ) { return _variant.asFloat == pOther->_variant.asFloat; }
     if( type == typeid(double).name() ) { return _variant.asDouble == pOther->_variant.asDouble; }
     if( type == typeid(void*).name() ) { return _variant.asPointer == pOther->_variant.asPointer; }
+    if( type == typeid(const void*).name() ) { return _variant.asConstPointer == pOther->_variant.asConstPointer; }
     return _variant.asFunctionPointer == pOther->_variant.asFunctionPointer;
   }
 

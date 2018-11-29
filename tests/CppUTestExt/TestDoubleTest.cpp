@@ -119,35 +119,33 @@ TEST( TestDoubleParameters, expect_double_parameter_with_value )
   actualCall("foo").with("value", value);
 }
 
-// TEST( TestDoubleParameters, expect_string_with_value )
-// {
-//   char value[] = "HELLO WORLD";
-//   expectCall("foo").times(1).with("value", value);
-//   actualCall("foo").with("value", value);
-// }
-
-// TEST( TestDoubleParameters, expect_pointer_parameter_with_value )
-// {
-//   void* const value = reinterpret_cast<void*>(0x100);
-//   expectCall("foo").times(1).with("value", value);
-//   actualCall("foo").with("value", value);
-// }
+TEST( TestDoubleParameters, expect_pointer_parameter_with_value )
+{
+  void* const value = reinterpret_cast<void*>(0x100);
+  expectCall("foo").with("value", value);
+  actualCall("foo").with("value", value);
+}
 
 TEST( TestDoubleParameters, expect_const_pointer_parameter_with_value )
 {
   const void* const value = reinterpret_cast<void*>(0x100);
-  expectCall("foo").times(1).with("value", value);
+  expectCall("foo").with("value", value);
   actualCall("foo").with("value", value);
 }
 
 // static void _fn( void ) {}
 // TEST( TestDoubleParameters, expect_function_pointer_parameter_with_value )
 // {
-//   expectCall("foo").times(1).with("value", _fn);
+//   expectCall("foo").with("value", _fn);
 //   actualCall("foo").with("value", _fn);
 // }
 
-
+TEST( TestDoubleParameters, expect_string_with_value )
+{
+  char value[] = "HELLO WORLD";
+  expectCall("foo").with("value", value);
+  actualCall("foo").with("value", value);
+}
 
 
 

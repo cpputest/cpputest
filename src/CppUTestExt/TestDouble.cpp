@@ -33,7 +33,6 @@
 #include "CppUTestExt/Expect.h"
 #include "CppUTestExt/ActualCall.h"
 
-#include <stdio.h>
 
 static bool _failActuals = false;
 void failUnexpected( bool mode ) { _failActuals = mode; }
@@ -61,14 +60,14 @@ struct ExpectedCallEntry
   unsigned int              calledCount;
   ExpectedCallEntry* const  pNext;
 };
-static ExpectedCallEntry* expectedCalls = 0;
+static ExpectedCallEntry* _expectedCalls = 0;
 
 
 ExpectedCall& Expectations::add( const SimpleString& call )
 {
   ExpectedCall* pExpected = new ExpectedCall( call );
   // prepend expected chain
-  expectedCalls = new ExpectedCallEntry{ pExpected, 0, expectedCalls };
+  _expectedCalls = new ExpectedCallEntry{ pExpected, 0, _expectedCalls };
   return *pExpected;
 }
 
@@ -78,7 +77,7 @@ void Expectations::check( const ActualCall& call )
   // TODO check sequence expectations first
 
   bool verified = false;
-  for( ExpectedCallEntry* pExpectedEntry=expectedCalls; pExpectedEntry != 0; pExpectedEntry=pExpectedEntry->pNext )
+  for( ExpectedCallEntry* pExpectedEntry=_expectedCalls; pExpectedEntry != 0; pExpectedEntry=pExpectedEntry->pNext )
   {
     const ExpectedCall& expectedCall = *(pExpectedEntry->pExpectedCall);
     // skip fulfilled expectations
@@ -95,7 +94,7 @@ void Expectations::check( const ActualCall& call )
   if( ( false == verified ) && ( true == _failActuals ) )
   {
     // TODO failActual()
-    FAIL( "Actual call had no matching expectation." );
+    UT_PRINT( "Actual call had no matching expectation." );
   }
 
   // TODO set output parameters
@@ -104,16 +103,16 @@ void Expectations::check( const ActualCall& call )
 void Expectations::check()
 {
   // clean up expectations
-  while( expectedCalls != 0 )
+  while( _expectedCalls != 0 )
   {
-    ExpectedCallEntry* pNext = expectedCalls->pNext;
+    ExpectedCallEntry* pNext = _expectedCalls->pNext;
 
     // TODO fail upon unfulfilled expectation
     // if( ( expectedCall.count != ExpectedCall::EXPECT_ALWAYS ) && ( pExpectedEntry->calledCount >= expectedCall.count ) ) continue;
 
-    delete expectedCalls->pExpectedCall;
-    delete expectedCalls;
-    expectedCalls = pNext;
+    delete _expectedCalls->pExpectedCall;
+    delete _expectedCalls;
+    _expectedCalls = pNext;
   }
 }
 
@@ -146,5 +145,5 @@ bool matches( const ActualCall& actual, const ExpectedCall& expected )
 void failTypeMismatch( const ActualCall& actual, const ExpectedCall& expected, const SimpleString& parameterName )
 {
   // TODO provide detailed failure
-  FAIL( "Type mismatch" );
+  UT_PRINT( "Type mismatch" );
 }
