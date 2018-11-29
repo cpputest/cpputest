@@ -55,7 +55,7 @@ public:
   ExpectedCall& times( const unsigned int count );
 
   template<typename T>
-  ExpectedCall& with( const SimpleString& name, const T value )
+  ExpectedCall& with( const SimpleString& name, const T& value )
   {
     _addParameter( name, value );
 
