@@ -41,7 +41,7 @@ public:
   ~ActualCall()
   {
     /// assert the actual
-    verifyActual( *this );
+    verifyActual( this );
 
     if( 0 != _pOutputParameter) delete _pOutputParameter;
     while( 0 != _parameters )

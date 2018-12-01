@@ -34,6 +34,7 @@ TEST_GROUP( TestDoubleParameters )
 {
   TEST_SETUP()
   {
+    failUnexpected( false );
   }
 
   TEST_TEARDOWN()
@@ -157,20 +158,29 @@ TEST( TestDoubleParameters, unexpected_calls_pass )
 
 TEST_GROUP( TestDoubleParametersFailure )
 {
+  TestTestingFixture fixture;
 };
 
-
-IGNORE_TEST( TestDoubleParametersFailure, mismatch_type )
+static void _mismatch_type()
 {
-  // FIXME Implementation correctly FAILs, but not sure how to make the assertion and not fail the TEST_GROUP
-  // Parameter parameter( "bool", true );
-  // int integer = parameter.intValue();
-  // CHECK( integer == 1 );
+  expectCall("foo").with( "value", true );
+  actualCall("foo").with( "value", "string" );
+}
+TEST( TestDoubleParametersFailure, mismatch_type )
+{
+  fixture.runTestWithMethod( _mismatch_type );
+  CHECK( fixture.hasTestFailed() );
 }
 
-IGNORE_TEST( TestDoubleParametersFailure, when_failUnexpected )
+static void _unexpected()
 {
-  // TODO CppUMock FAILS upon first unexpected call
+  actualCall("foo").with( "value", true );
+}
+TEST( TestDoubleParametersFailure, when_failUnexpected )
+{
+  failUnexpected( true );
+  fixture.runTestWithMethod( _unexpected );
+  CHECK( fixture.hasTestFailed() );
 }
 
 IGNORE_TEST( TestDoubleParameters, when_unactualized_expecptations )

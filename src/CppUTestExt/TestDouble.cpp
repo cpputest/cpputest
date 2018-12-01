@@ -40,7 +40,7 @@ class Expectations
 {
 public:
   ExpectedCall& add( const SimpleString& call );
-  void check( const ActualCall& call );
+  void check( const ActualCall* const pActualCall );
   void check();
 };
 static Expectations expectations;
@@ -48,7 +48,7 @@ void checkExpectations() { expectations.check(); }
 
 ExpectedCall& expectCall( const SimpleString& call ) { return expectations.add( call ); }
 ActualCall actualCall( const SimpleString& call ) { return ActualCall( call ); }
-void verifyActual( const ActualCall& call ) { expectations.check( call ); }
+void verifyActual( const ActualCall* const pCall ) { expectations.check( pCall ); }
 
 
 // Implementation of Expectation framework
@@ -69,33 +69,49 @@ ExpectedCall& Expectations::add( const SimpleString& call )
   return *pExpected;
 }
 
-bool matches( const ActualCall& actual, const ExpectedCall& expected );
-void Expectations::check( const ActualCall& call )
+#include <stdio.h>
+enum Match { TypeMismatch, Equal, NotEqual };
+Match matches( const ActualCall* const pCall, const ExpectedCall& expected );
+void Expectations::check( const ActualCall* const pCall )
 {
   // TODO check sequence expectations first
 
-  bool verified = false;
-  for( ExpectedCallEntry* pExpectedEntry=_expectedCalls; pExpectedEntry != 0; pExpectedEntry=pExpectedEntry->pNext )
+  if( ( 0 == _expectedCalls ) && _failActuals )
+  {
+      FAIL( "Actual call had no matching expectation." );
+      return;
+  }
+
+  for( ExpectedCallEntry* pExpectedEntry =_expectedCalls; pExpectedEntry != 0; pExpectedEntry=pExpectedEntry->pNext )
   {
     const ExpectedCall& expectedCall = *(pExpectedEntry->pExpectedCall);
     // skip fulfilled expectations
     if( ( expectedCall.count != ExpectedCall::EXPECT_ALWAYS ) && ( pExpectedEntry->calledCount >= expectedCall.count ) ) continue;
 
-    if( matches( call, expectedCall ) )
+    switch( matches( pCall, expectedCall ) )
     {
-      pExpectedEntry->calledCount++;
-      verified = true;
-      break;
+      case TypeMismatch:
+      {
+        checkExpectations();
+        FAIL( "Parameter type mismatch" );
+        return;
+      }
+      case Equal:
+      {
+        pExpectedEntry->calledCount++;
+        break;
+      }
+      case NotEqual:
+      {
+        if( _failActuals )
+        {
+          // TODO failActual()
+          checkExpectations();
+          FAIL( "Actual call had no matching expectation." );
+        }
+      }
     }
   }
-
-  if( ( false == verified ) && ( true == _failActuals ) )
-  {
-    // TODO failActual()
-    UT_PRINT( "Actual call had no matching expectation." );
-  }
-
-  // TODO set output parameters
 }
 
 void Expectations::check()
@@ -114,30 +130,29 @@ void Expectations::check()
   }
 }
 
-bool matches( const ActualCall& actual, const ExpectedCall& expected )
+Match matches( const ActualCall* const pActual, const ExpectedCall& expected )
 {
-  if( actual.methodName != expected.methodName ) return false;
+  if( pActual->methodName != expected.methodName ) return NotEqual;
 
   for( const ParameterEntry* pExpectedEntry=expected.getParameters(); pExpectedEntry != 0; pExpectedEntry=pExpectedEntry->pNext )
   {
-    for( const ParameterEntry* pActualEntry=actual.getParameters(); pActualEntry != 0; pActualEntry=pActualEntry->pNext )
+    for( const ParameterEntry* pActualEntry=pActual->getParameters(); pActualEntry != 0; pActualEntry=pActualEntry->pNext )
     {
       if( pExpectedEntry->pParameter->name.equalsNoCase( pActualEntry->pParameter->name ) )
       {
         if( pExpectedEntry->pParameter->type != pActualEntry->pParameter->type )
         {
-          FAIL(
-            StringFromFormat("Type Mismatch: Expected call to '%s' with parameter '%s' of type '%s', but actual paramter was of type '%s'.",
+          UT_PRINT( StringFromFormat( "Type Mismatch: Expected call to '%s' with parameter '%s' of type '%s', but actual paramter was of type '%s'.",
             expected.methodName.asCharString(), pExpectedEntry->pParameter->name.asCharString(),
             pExpectedEntry->pParameter->type.asCharString(), pActualEntry->pParameter->type.asCharString() ).asCharString()
           );
-          return false;
+          return TypeMismatch;
         }
 
-        if( false == pExpectedEntry->pParameter->equals( pActualEntry->pParameter ) ) return false;
+        if( false == pExpectedEntry->pParameter->equals( pActualEntry->pParameter ) ) return NotEqual;
       }
     }
   }
 
-  return true;
+  return Equal;
 }
