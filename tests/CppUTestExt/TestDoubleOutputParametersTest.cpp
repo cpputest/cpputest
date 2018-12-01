@@ -30,143 +30,7 @@
 #include "CppUTestExt/Expect.h"
 #include "CppUTestExt/ActualCall.h"
 
-TEST_GROUP( TestDoubleParameters )
-{
-  TEST_SETUP()
-  {
-    failUnexpected( true );
-  }
-  TEST_TEARDOWN()
-  {
-    checkExpectations();
-  }
-};
-
-TEST( TestDoubleParameters, expect_boolean_parameter_with_value )
-{
-  const bool value = true;
-  expectCall("foo").with("value", value);
-  actualCall("foo").with("value", value);
-}
-
-TEST( TestDoubleParameters, expect_char_parameter_with_value )
-{
-  const char value = -1;
-  expectCall("foo").with("value", value);
-  actualCall("foo").with("value", value);
-}
-
-TEST( TestDoubleParameters, expect_unsigned_char_parameter_with_value )
-{
-  const unsigned char value = 1;
-  expectCall("foo").with("value", value);
-  actualCall("foo").with("value", value);
-}
-
-TEST( TestDoubleParameters, expect_int_parameter_with_value )
-{
-  const int value = 1;
-  expectCall("foo").with("value", value);
-  actualCall("foo").with("value", value);
-}
-
-TEST( TestDoubleParameters, expect_unsigned_int_parameter_with_value )
-{
-  const unsigned int value = 1;
-  expectCall("foo").with("value", value);
-  actualCall("foo").with("value", value);
-}
-
-TEST( TestDoubleParameters, expect_long_parameter_with_value )
-{
-  const long value = 1;
-  expectCall("foo").with("value", value);
-  actualCall("foo").with("value", value);
-}
-
-TEST( TestDoubleParameters, expect_unsigned_long_parameter_with_value )
-{
-  const unsigned long value = 1;
-  expectCall("foo").with("value", value);
-  actualCall("foo").with("value", value);
-}
-
-TEST( TestDoubleParameters, expect_long_long_parameter_with_value )
-{
-  const long long value = 1;
-  expectCall("foo").with("value", value);
-  actualCall("foo").with("value", value);
-}
-
-TEST( TestDoubleParameters, expect_unsigned_long_long_parameter_with_value )
-{
-  const unsigned long long value = 1;
-  expectCall("foo").with("value", value);
-  actualCall("foo").with("value", value);
-}
-
-TEST( TestDoubleParameters, expect_float_parameter_with_value )
-{
-  const float value = 1.1f;
-  expectCall("foo").with("value", value);
-  actualCall("foo").with("value", value);
-}
-
-TEST( TestDoubleParameters, expect_double_parameter_with_value )
-{
-  const double value = 1.1;
-  expectCall("foo").with("value", value);
-  actualCall("foo").with("value", value);
-}
-
-TEST( TestDoubleParameters, expect_pointer_parameter_with_value )
-{
-  void* const value = reinterpret_cast<void*>(0x100);
-  expectCall("foo").with("value", value);
-  actualCall("foo").with("value", value);
-}
-
-TEST( TestDoubleParameters, expect_const_pointer_parameter_with_value )
-{
-  const void* const value = reinterpret_cast<void*>(0x100);
-  expectCall("foo").with("value", value);
-  actualCall("foo").with("value", value);
-}
-
-static void _fn( void ) {}
-TEST( TestDoubleParameters, expect_function_pointer_parameter_with_value )
-{
-  expectCall("foo").with("value", _fn);
-  actualCall("foo").with("value", _fn);
-}
-
-
-// TEST( TestDoubleParameters, expect_buffer_parameter_with_value )
-// {
-//   char buffer[] = "HELLO WORLD";
-//   expect().call("foo").times(1).with("value", buffer, sizeof(buffer));
-//   actual().call("foo").with("value", buffer, sizeof(buffer));
-// }
-
-// IGNORE_TEST( TestDoubleParameters, expect_every_call )
-// {
-//   // Not supported by CppUMock
-//   expect().call("foo");
-//   actual().call("foo");
-//   actual().call("foo");
-// }
-
-// IGNORE_TEST( TestDoubleParameters, expect_every_call_with_parameter_match )
-// {
-//   // Not supported by CppUMock
-//   const void* const value = reinterpret_cast<void*>(0x100);
-//   expect().call("foo").with("value", value);
-//   actual().call("foo").with("value", value);
-//   actual().call("foo").with("value", value);
-// }
-
-
-// TEST_GROUP( TestDoubleOutputs )
+// TEST_GROUP( TestDoubleOutputParameters )
 // {
 //   TEST_TEARDOWN()
 //   {
@@ -175,7 +39,7 @@ TEST( TestDoubleParameters, expect_function_pointer_parameter_with_value )
 //   }
 // };
 
-// TEST( TestDoubleOutputs, sets_output_bool_parameter )
+// TEST( TestDoubleOutputParameters, sets_output_bool_parameter )
 // {
 //   const bool expectedValue = true;
 //   expect().call("foo").times(1).output("value", &expectedValue);
@@ -184,7 +48,7 @@ TEST( TestDoubleParameters, expect_function_pointer_parameter_with_value )
 //   CHECK( expectedValue == actualValue );
 // }
 
-// TEST( TestDoubleOutputs, sets_output_char_parameter )
+// TEST( TestDoubleOutputParameters, sets_output_char_parameter )
 // {
 //   const char expectedValue = -1;
 //   expect().call("foo").times(1).output("value", &expectedValue);
@@ -193,7 +57,7 @@ TEST( TestDoubleParameters, expect_function_pointer_parameter_with_value )
 //   CHECK( expectedValue == actualValue );
 // }
 
-// TEST( TestDoubleOutputs, sets_output_unsigned_char_parameter )
+// TEST( TestDoubleOutputParameters, sets_output_unsigned_char_parameter )
 // {
 //   const unsigned char expectedValue = 1;
 //   expect().call("foo").times(1).output("value", &expectedValue);
@@ -202,7 +66,7 @@ TEST( TestDoubleParameters, expect_function_pointer_parameter_with_value )
 //   CHECK( expectedValue == actualValue );
 // }
 
-// TEST( TestDoubleOutputs, sets_output_int_parameter )
+// TEST( TestDoubleOutputParameters, sets_output_int_parameter )
 // {
 //   const int expectedValue = -1;
 //   expect().call("foo").times(1).output("value", &expectedValue);
@@ -211,7 +75,7 @@ TEST( TestDoubleParameters, expect_function_pointer_parameter_with_value )
 //   CHECK( expectedValue == actualValue );
 // }
 
-// TEST( TestDoubleOutputs, sets_output_unsigned_int_parameter )
+// TEST( TestDoubleOutputParameters, sets_output_unsigned_int_parameter )
 // {
 //   const unsigned int expectedValue = 1;
 //   expect().call("foo").times(1).output("value", &expectedValue);
@@ -220,7 +84,7 @@ TEST( TestDoubleParameters, expect_function_pointer_parameter_with_value )
 //   CHECK( expectedValue == actualValue );
 // }
 
-// TEST( TestDoubleOutputs, sets_output_long_int_parameter )
+// TEST( TestDoubleOutputParameters, sets_output_long_int_parameter )
 // {
 //   const long int expectedValue = -1;
 //   expect().call("foo").times(1).output("value", &expectedValue);
@@ -229,7 +93,7 @@ TEST( TestDoubleParameters, expect_function_pointer_parameter_with_value )
 //   CHECK( expectedValue == actualValue );
 // }
 
-// TEST( TestDoubleOutputs, sets_output_unsigned_long_int_parameter )
+// TEST( TestDoubleOutputParameters, sets_output_unsigned_long_int_parameter )
 // {
 //   const unsigned long int expectedValue = 1;
 //   expect().call("foo").times(1).output("value", &expectedValue);
@@ -238,7 +102,7 @@ TEST( TestDoubleParameters, expect_function_pointer_parameter_with_value )
 //   CHECK( expectedValue == actualValue );
 // }
 
-// TEST( TestDoubleOutputs, sets_output_long_long_int_parameter )
+// TEST( TestDoubleOutputParameters, sets_output_long_long_int_parameter )
 // {
 //   const long long int expectedValue = -1;
 //   expect().call("foo").times(1).output("value", &expectedValue);
@@ -247,7 +111,7 @@ TEST( TestDoubleParameters, expect_function_pointer_parameter_with_value )
 //   CHECK( expectedValue == actualValue );
 // }
 
-// TEST( TestDoubleOutputs, sets_output_unsigned_long_long_int_parameter )
+// TEST( TestDoubleOutputParameters, sets_output_unsigned_long_long_int_parameter )
 // {
 //   const unsigned long long int expectedValue = 1;
 //   expect().call("foo").times(1).output("value", &expectedValue);
@@ -256,7 +120,7 @@ TEST( TestDoubleParameters, expect_function_pointer_parameter_with_value )
 //   CHECK( expectedValue == actualValue );
 // }
 
-// IGNORE_TEST( TestDoubleOutputs, sets_output_float_parameter )
+// IGNORE_TEST( TestDoubleOutputParameters, sets_output_float_parameter )
 // {
 //   // since CppUMock doesn't support float clang is unhappy
 //   // const float expectedValue = 1.1f;
@@ -266,7 +130,7 @@ TEST( TestDoubleParameters, expect_function_pointer_parameter_with_value )
 //   // FLOATS_EQUAL( expectedValue, actualValue, 0 );
 // }
 
-// TEST( TestDoubleOutputs, sets_output_double_parameter )
+// TEST( TestDoubleOutputParameters, sets_output_double_parameter )
 // {
 //   const double expectedValue = 1.1;
 //   expect().call("foo").times(1).output("value", &expectedValue);
@@ -275,7 +139,7 @@ TEST( TestDoubleParameters, expect_function_pointer_parameter_with_value )
 //   DOUBLES_EQUAL( expectedValue, actualValue, 0 );
 // }
 
-// TEST( TestDoubleOutputs, sets_buffer_parameter )
+// TEST( TestDoubleOutputParameters, sets_buffer_parameter )
 // {
 //   const char expectedString[] = "HELLO WORLD";
 //   expect().call("foo").times(1).output("value", expectedString, sizeof(expectedString));
@@ -284,7 +148,7 @@ TEST( TestDoubleParameters, expect_function_pointer_parameter_with_value )
 //   MEMCMP_EQUAL( expectedString, actualString, sizeof(expectedString));
 // }
 
-// IGNORE_TEST( TestDoubleOutputs, sets_pointer )
+// IGNORE_TEST( TestDoubleOutputParameters, sets_pointer )
 // {
 //   // an output pointer is a borrowed object provided by the method
 //   // attempts to implement this via a templated .output() do not meet C++ syntax
@@ -418,22 +282,4 @@ TEST( TestDoubleParameters, expect_function_pointer_parameter_with_value )
 //   FUNCTIONPOINTERS_EQUAL( _fn, actualValue );
 // }
 
-
-IGNORE_TEST( TestDoubleParameters, variant_misuse_results_in_FAIL )
-{
-  // FIXME Implementation correctly FAILs, but not sure how to make the assertion and not fail the TEST_GROUP
-  // Parameter parameter( "bool", true );
-  // int integer = parameter.intValue();
-  // CHECK( integer == 1 );
-}
-
-IGNORE_TEST( TestDoubleParameters, upon_FAIL_report_unexpected_calls )
-{
-  // TODO CppUMock FAILS upon first unexpected call
-}
-
-IGNORE_TEST( TestDoubleParameters, FAIL_if_expected_calls_arent_actualized )
-{
-  // see MockSupporTest.cpp for how to
-}
 
