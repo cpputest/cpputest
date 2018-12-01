@@ -161,7 +161,7 @@ TEST_GROUP( TestDoubleParametersFailure )
   TestTestingFixture fixture;
 };
 
-static void _mismatch_type()
+static void _mismatch_type( void )
 {
   expectCall("foo").with( "value", true );
   actualCall("foo").with( "value", "string" );
@@ -172,7 +172,7 @@ TEST( TestDoubleParametersFailure, mismatch_type )
   CHECK( fixture.hasTestFailed() );
 }
 
-static void _unexpected()
+static void _unexpected( void )
 {
   actualCall("foo").with( "value", true );
 }
@@ -183,8 +183,14 @@ TEST( TestDoubleParametersFailure, when_failUnexpected )
   CHECK( fixture.hasTestFailed() );
 }
 
-IGNORE_TEST( TestDoubleParameters, when_unactualized_expecptations )
+static void _expected( void )
 {
-  // see MockSupporTest.cpp for how to
+  expectCall("foo").with( "value", true );
+}
+TEST( TestDoubleParametersFailure, when_unactualized_expectations )
+{
+  fixture.runTestWithMethod( _unexpected );
+  checkExpectations();
+  CHECK( fixture.hasTestFailed() );
 }
 
