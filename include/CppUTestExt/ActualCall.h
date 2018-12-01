@@ -29,6 +29,7 @@
 #define ACTUAL_CALL_H
 
 #include "CppUTestExt/TestDouble.h"
+#include "CppUTest/TestHarness.h"
 
 class ActualCall;
 ActualCall actualCall( const SimpleString& call );
@@ -41,7 +42,7 @@ public:
   ~ActualCall()
   {
     /// assert the actual
-    verifyActual( this );
+    bool verified = verifyActual( *this );
 
     if( 0 != _pOutputParameter) delete _pOutputParameter;
     while( 0 != _parameters )
@@ -50,6 +51,12 @@ public:
       delete _parameters->pParameter;
       delete _parameters;
       _parameters = nextHead;
+    }
+
+    if( false == verified )
+    {
+      checkExpectations();
+      FAIL( "Actual had no expectation" );
     }
   }
 

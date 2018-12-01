@@ -35,7 +35,7 @@ void failUnexpected( bool mode = true );
 void checkExpectations();
 
 class ActualCall;
-void verifyActual( const ActualCall* const pCall );
+bool verifyActual( const ActualCall& call );
 
 // generic list of parameters (both input and output)
 struct ParameterEntry

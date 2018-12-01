@@ -40,7 +40,7 @@ class Expectations
 {
 public:
   ExpectedCall& add( const SimpleString& call );
-  void check( const ActualCall* const pActualCall );
+  bool check( const ActualCall& pActualCall );
   void check();
 };
 static Expectations expectations;
@@ -48,7 +48,7 @@ void checkExpectations() { expectations.check(); }
 
 ExpectedCall& expectCall( const SimpleString& call ) { return expectations.add( call ); }
 ActualCall actualCall( const SimpleString& call ) { return ActualCall( call ); }
-void verifyActual( const ActualCall* const pCall ) { expectations.check( pCall ); }
+bool verifyActual( const ActualCall& call ) { expectations.check( call ); }
 
 
 // Implementation of Expectation framework
@@ -71,16 +71,12 @@ ExpectedCall& Expectations::add( const SimpleString& call )
 
 #include <stdio.h>
 enum Match { TypeMismatch, Equal, NotEqual };
-Match matches( const ActualCall* const pCall, const ExpectedCall& expected );
-void Expectations::check( const ActualCall* const pCall )
+Match matches( const ActualCall& pCall, const ExpectedCall& expected );
+bool Expectations::check( const ActualCall& call )
 {
   // TODO check sequence expectations first
 
-  if( ( 0 == _expectedCalls ) && _failActuals )
-  {
-      FAIL( "Actual call had no matching expectation." );
-      return;
-  }
+  if( ( 0 == _expectedCalls ) && _failActuals ) return false;
 
   for( ExpectedCallEntry* pExpectedEntry =_expectedCalls; pExpectedEntry != 0; pExpectedEntry=pExpectedEntry->pNext )
   {
@@ -88,13 +84,11 @@ void Expectations::check( const ActualCall* const pCall )
     // skip fulfilled expectations
     if( ( expectedCall.count != ExpectedCall::EXPECT_ALWAYS ) && ( pExpectedEntry->calledCount >= expectedCall.count ) ) continue;
 
-    switch( matches( pCall, expectedCall ) )
+    switch( matches( call, expectedCall ) )
     {
       case TypeMismatch:
       {
-        checkExpectations();
-        FAIL( "Parameter type mismatch" );
-        return;
+        return false;
       }
       case Equal:
       {
@@ -105,9 +99,10 @@ void Expectations::check( const ActualCall* const pCall )
       {
         if( _failActuals )
         {
+          return false;
           // TODO failActual()
-          checkExpectations();
-          FAIL( "Actual call had no matching expectation." );
+          // checkExpectations();
+          // FAIL( "Actual call had no matching expectation." );
         }
       }
     }
@@ -130,13 +125,13 @@ void Expectations::check()
   }
 }
 
-Match matches( const ActualCall* const pActual, const ExpectedCall& expected )
+Match matches( const ActualCall& actual, const ExpectedCall& expected )
 {
-  if( pActual->methodName != expected.methodName ) return NotEqual;
+  if( actual.methodName != expected.methodName ) return NotEqual;
 
   for( const ParameterEntry* pExpectedEntry=expected.getParameters(); pExpectedEntry != 0; pExpectedEntry=pExpectedEntry->pNext )
   {
-    for( const ParameterEntry* pActualEntry=pActual->getParameters(); pActualEntry != 0; pActualEntry=pActualEntry->pNext )
+    for( const ParameterEntry* pActualEntry=actual.getParameters(); pActualEntry != 0; pActualEntry=pActualEntry->pNext )
     {
       if( pExpectedEntry->pParameter->name.equalsNoCase( pActualEntry->pParameter->name ) )
       {
