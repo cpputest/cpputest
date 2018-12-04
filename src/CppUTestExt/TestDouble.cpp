@@ -124,7 +124,7 @@ bool Expectations::check()
   {
     const ExpectedCallEntry* pExpectedCallEntry = _expectedCalls;
     const ExpectedCall& expectedCall = *(_expectedCalls->pExpectedCall);
-    if( ( ( expectedCall.count == ExpectedCall::EXPECT_ALWAYS ) && ( pExpectedCallEntry->calledCount <= 0 ) )   ||
+    if( ( ( expectedCall.count == ExpectedCall::EXPECT_ALWAYS ) && ( pExpectedCallEntry->calledCount == 0 ) )   ||
         ( ( expectedCall.count != ExpectedCall::EXPECT_ALWAYS ) && ( pExpectedCallEntry->calledCount <= expectedCall.count ) ) )
     {
       // TODO log unexpected
