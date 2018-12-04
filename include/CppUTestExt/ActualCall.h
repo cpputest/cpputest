@@ -47,10 +47,10 @@ public:
     if( 0 != _pOutputParameter) delete _pOutputParameter;
     while( 0 != _parameters )
     {
-      ParameterEntry* nextHead = _parameters->pNext;
       delete _parameters->pParameter;
+      ParameterEntry* pNextHead = _parameters->pNext;
       delete _parameters;
-      _parameters = nextHead;
+      _parameters = pNextHead;
     }
 
     if( false == verified )
