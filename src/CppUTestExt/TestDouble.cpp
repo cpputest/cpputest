@@ -41,10 +41,16 @@ class Expectations
 public:
   ExpectedCall& add( const SimpleString& call );
   bool check( const ActualCall& pActualCall );
-  void check();
+  bool check();
 };
 static Expectations expectations;
-void checkExpectations() { expectations.check(); }
+void checkExpectations()
+{
+  if( false == expectations.check() )
+  {
+    FAIL( "Unmet expectations" );
+  }
+}
 
 ExpectedCall& expectCall( const SimpleString& call ) { return expectations.add( call ); }
 ActualCall actualCall( const SimpleString& call ) { return ActualCall( call ); }
@@ -109,20 +115,29 @@ bool Expectations::check( const ActualCall& call )
   }
 }
 
-void Expectations::check()
+bool Expectations::check()
 {
+  bool passed = true;
+
   // clean up expectations
   while( _expectedCalls != 0 )
   {
-    ExpectedCallEntry* pNext = _expectedCalls->pNext;
-
-    // TODO fail upon unfulfilled expectation
-    // if( ( expectedCall.count != ExpectedCall::EXPECT_ALWAYS ) && ( pExpectedEntry->calledCount >= expectedCall.count ) ) continue;
+    const ExpectedCallEntry* pExpectedCallEntry = _expectedCalls;
+    const ExpectedCall& expectedCall = *(_expectedCalls->pExpectedCall);
+    if( ( ( expectedCall.count == ExpectedCall::EXPECT_ALWAYS ) && ( pExpectedCallEntry->calledCount <= 0 ) )   ||
+        ( ( expectedCall.count != ExpectedCall::EXPECT_ALWAYS ) && ( pExpectedCallEntry->calledCount <= expectedCall.count ) ) )
+    {
+      // TODO log unexpected
+      passed = false;
+    }
 
     delete _expectedCalls->pExpectedCall;
-    delete _expectedCalls;
-    _expectedCalls = pNext;
+    ExpectedCallEntry* pNextExpectedEntry = _expectedCalls->pNext;
+    delete pExpectedCallEntry;
+    _expectedCalls = pNextExpectedEntry;
   }
+
+  return passed;
 }
 
 Match matches( const ActualCall& actual, const ExpectedCall& expected )

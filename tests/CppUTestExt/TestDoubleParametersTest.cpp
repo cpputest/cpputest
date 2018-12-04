@@ -159,6 +159,11 @@ TEST( TestDoubleParameters, unexpected_calls_pass )
 TEST_GROUP( TestDoubleParametersFailure )
 {
   TestTestingFixture fixture;
+
+  TEST_TEARDOWN()
+  {
+    checkExpectations();
+  }
 };
 
 static void _mismatch_type( void )
@@ -189,7 +194,7 @@ static void _expected( void )
 }
 TEST( TestDoubleParametersFailure, when_unactualized_expectations )
 {
-  fixture.runTestWithMethod( _unexpected );
+  fixture.runTestWithMethod( _expected );
   checkExpectations();
   CHECK( fixture.hasTestFailed() );
 }

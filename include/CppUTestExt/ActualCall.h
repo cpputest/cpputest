@@ -55,7 +55,6 @@ public:
 
     if( false == verified )
     {
-      checkExpectations();
       FAIL( "Actual had no expectation" );
     }
   }
