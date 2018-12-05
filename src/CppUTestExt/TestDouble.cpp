@@ -76,8 +76,7 @@ ExpectedCall& Expectations::add( const SimpleString& call )
 }
 
 #include <stdio.h>
-enum Match { TypeMismatch, Equal, NotEqual };
-Match matches( const ActualCall& pCall, const ExpectedCall& expected );
+bool _matches( const ActualCall& pCall, const ExpectedCall& expected );
 bool Expectations::check( const ActualCall& call )
 {
   // TODO check sequence expectations first
@@ -90,27 +89,11 @@ bool Expectations::check( const ActualCall& call )
     // skip fulfilled expectations
     if( ( expectedCall.count != ExpectedCall::EXPECT_ALWAYS ) && ( pExpectedEntry->calledCount >= expectedCall.count ) ) continue;
 
-    switch( matches( call, expectedCall ) )
+    if( _matches( call, expectedCall ) ) pExpectedEntry->calledCount++;
+    else
     {
-      case TypeMismatch:
-      {
-        return false;
-      }
-      case Equal:
-      {
-        pExpectedEntry->calledCount++;
-        break;
-      }
-      case NotEqual:
-      {
-        if( _failActuals )
-        {
-          return false;
-          // TODO failActual()
-          // checkExpectations();
-          // FAIL( "Actual call had no matching expectation." );
-        }
-      }
+      check();
+      return false;
     }
   }
 }
@@ -123,16 +106,17 @@ bool Expectations::check()
   while( _expectedCalls != 0 )
   {
     const ExpectedCallEntry* pExpectedCallEntry = _expectedCalls;
-    const ExpectedCall& expectedCall = *(_expectedCalls->pExpectedCall);
+    const ExpectedCall& expectedCall = *(pExpectedCallEntry->pExpectedCall);
     if( ( ( expectedCall.count == ExpectedCall::EXPECT_ALWAYS ) && ( pExpectedCallEntry->calledCount == 0 ) )   ||
         ( ( expectedCall.count != ExpectedCall::EXPECT_ALWAYS ) && ( pExpectedCallEntry->calledCount <= expectedCall.count ) ) )
     {
       // TODO log unexpected
+      UT_PRINT( StringFromFormat( "\texpected %s", expectedCall.methodName ) );
       passed = false;
     }
 
-    delete _expectedCalls->pExpectedCall;
-    ExpectedCallEntry* pNextExpectedEntry = _expectedCalls->pNext;
+    ExpectedCallEntry* pNextExpectedEntry = pExpectedCallEntry->pNext;
+    delete pExpectedCallEntry->pExpectedCall;
     delete pExpectedCallEntry;
     _expectedCalls = pNextExpectedEntry;
   }
@@ -140,9 +124,9 @@ bool Expectations::check()
   return passed;
 }
 
-Match matches( const ActualCall& actual, const ExpectedCall& expected )
+bool _matches( const ActualCall& actual, const ExpectedCall& expected )
 {
-  if( actual.methodName != expected.methodName ) return NotEqual;
+  if( actual.methodName != expected.methodName ) return false;
 
   for( const ParameterEntry* pExpectedEntry=expected.getParameters(); pExpectedEntry != 0; pExpectedEntry=pExpectedEntry->pNext )
   {
@@ -156,13 +140,13 @@ Match matches( const ActualCall& actual, const ExpectedCall& expected )
             expected.methodName.asCharString(), pExpectedEntry->pParameter->name.asCharString(),
             pExpectedEntry->pParameter->type.asCharString(), pActualEntry->pParameter->type.asCharString() ).asCharString()
           );
-          return TypeMismatch;
+          return false;
         }
 
-        if( false == pExpectedEntry->pParameter->equals( pActualEntry->pParameter ) ) return NotEqual;
+        if( false == pExpectedEntry->pParameter->equals( pActualEntry->pParameter ) ) return false;
       }
     }
   }
 
-  return Equal;
+  return true;
 }
