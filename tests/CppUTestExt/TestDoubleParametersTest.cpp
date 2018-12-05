@@ -159,6 +159,12 @@ TEST( TestDoubleParameters, unexpected_calls_pass )
 TEST_GROUP( TestDoubleParametersFailure )
 {
   TestTestingFixture fixture;
+
+  TEST_TEARDOWN()
+  {
+    // for reference only
+    // UT_PRINT( fixture.getOutput() );
+  }
 };
 
 static void _mismatch_type( void )

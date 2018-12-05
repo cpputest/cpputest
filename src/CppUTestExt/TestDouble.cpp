@@ -110,8 +110,10 @@ bool Expectations::check()
     if( ( ( expectedCall.count == ExpectedCall::EXPECT_ALWAYS ) && ( pExpectedCallEntry->calledCount == 0 ) )   ||
         ( ( expectedCall.count != ExpectedCall::EXPECT_ALWAYS ) && ( pExpectedCallEntry->calledCount <= expectedCall.count ) ) )
     {
-      // TODO log unexpected
-      UT_PRINT( StringFromFormat( "\texpected %s", expectedCall.methodName ) );
+      // FIXME why is the test result protected?!
+      // UtestShell::getCurrent()->getTestResult()->print( expectedCall.asCharString() );
+      // Fake access to test result
+      UtestShell::getCurrent()->print( expectedCall.toString().asCharString(), "", 0 );
       passed = false;
     }
 

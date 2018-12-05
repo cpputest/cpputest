@@ -50,7 +50,6 @@ public:
     }
   }
 
-
   static const int EXPECT_ALWAYS = 0;
   ExpectedCall& times( const unsigned int count );
 
@@ -66,6 +65,7 @@ public:
   unsigned int        count;
   const ParameterEntry* getParameters() const { return _parameters; }
 
+  SimpleString toString() const;
 
 private:
   ParameterEntry*   _parameters = 0;

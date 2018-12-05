@@ -55,7 +55,8 @@ public:
 
     if( false == verified )
     {
-      FAIL( "Actual had no expectation" );
+      // TODO print actual (input and output parameters)
+      FAIL( "Actual didn't match expectations" );
     }
   }
 

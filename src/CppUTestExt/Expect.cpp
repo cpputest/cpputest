@@ -41,3 +41,17 @@ ExpectedCall& ExpectedCall::times( const unsigned int _count )
   count = _count;
   return *this;
 }
+
+
+SimpleString ExpectedCall::toString() const
+{
+  SimpleString ret;
+
+  ret += "expected call to ";
+  ret += methodName;
+  ret += " with\n";
+  // TODO list input parameters
+  // TODO list output paramaters
+
+  return ret;
+}
