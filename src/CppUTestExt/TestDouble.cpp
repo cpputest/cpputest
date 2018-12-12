@@ -75,7 +75,6 @@ ExpectedCall& Expectations::add( const SimpleString& call )
   return *pExpected;
 }
 
-#include <stdio.h>
 bool _matches( const ActualCall& pCall, const ExpectedCall& expected );
 bool Expectations::check( const ActualCall& call )
 {
