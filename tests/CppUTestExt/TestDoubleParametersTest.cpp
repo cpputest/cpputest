@@ -124,7 +124,6 @@ TEST( TestDoubleParameters, expect_double_parameter )
 TEST( TestDoubleParameters, expect_pointer_parameter_with_value )
 {
   static char value[] = "HELLO";
-  printf( "expected pointer: %x (%s)\n", value, value );
   expectCall("foo").with("value", value);
   actualCall("foo").with("value", value);
 }

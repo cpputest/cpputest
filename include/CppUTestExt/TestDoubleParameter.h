@@ -45,10 +45,7 @@ public:
   template<typename T>
   Parameter( const SimpleString& _name, const T& value )
   : name(_name), type( typeid(value).name() ), _variant(value)
-  {
-    printf("created parameter type: %s, name: %s, &value: %x, variant: %x\n",
-        type.asCharString(), name.asCharString(), &value, _variant.asPointer );
-  }
+  { }
 
   bool equals( const Parameter* pOther ) const
   {
@@ -101,7 +98,7 @@ private:
     explicit Variant( const double& value ) : asDouble(value) {}
     Variant( void* value ) : asPointer(value) {}
     Variant( const void* value ) : asConstPointer(value) {}
-    // Variant( const void(*value)() ) : asFunctionPointer(&value) {}
+    Variant( const void(*value)() ) : asFunctionPointer(value) {}
 
     // enforce interface abstraction
     Variant() = delete;
