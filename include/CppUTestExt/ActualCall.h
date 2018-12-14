@@ -91,15 +91,15 @@ public:
 
 private:
   const SimpleString      _methodName;
-  ParameterEntry*         _parameters = 0;
-  TestDouble::Parameter*  _pOutputParameter = 0;
+  ParameterEntry*         _parameters;
+  TestDouble::Parameter*  _pOutputParameter;
 
 
   template<typename T>
   void _addParameter( const SimpleString& name, const T& value )
   {
     TestDouble::Parameter* pParameter = new TestDouble::Parameter( name, value );
-    _parameters = new ParameterEntry{ pParameter, _parameters };
+    _parameters = new ParameterEntry( pParameter, _parameters );
   }
 };  // class ActualCall
 

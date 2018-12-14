@@ -142,7 +142,6 @@ TEST( TestDoubleParameters, expect_const_pointer_parameter_with_value )
 //   actualCall("foo").with("value", _fn);
 // }
 
-// FIXME add support for buffers
 // TEST( TestDoubleParameters, expect_buffer_parameter_with_value )
 // {
 //   char buffer[] = "HELLO WORLD";
@@ -155,7 +154,6 @@ TEST( TestDoubleParameters, unexpected_calls_pass )
   const bool value = true;
   actualCall("foo").with("value", value);
 }
-
 
 TEST_GROUP( TestDoubleParametersFailure )
 {

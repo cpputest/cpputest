@@ -29,6 +29,8 @@
 
 ActualCall::ActualCall( const SimpleString& call )
   : methodName( call )
+   ,_parameters(0)
+   ,_pOutputParameter(0)
 { }
 
 // bool ActualCall::returnBool()
