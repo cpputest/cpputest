@@ -135,6 +135,7 @@ TEST( TestDoubleParameters, expect_const_pointer_parameter_with_value )
   actualCall("foo").with("value", value);
 }
 
+// FIXME support function pointers
 // static void _fn( void ) {}
 // TEST( TestDoubleParameters, expect_function_pointer_parameter_with_value )
 // {
@@ -142,6 +143,7 @@ TEST( TestDoubleParameters, expect_const_pointer_parameter_with_value )
 //   actualCall("foo").with("value", _fn);
 // }
 
+// FIXME support buffers
 // TEST( TestDoubleParameters, expect_buffer_parameter_with_value )
 // {
 //   char buffer[] = "HELLO WORLD";

@@ -83,9 +83,14 @@ private:
     double                  asDouble;
     void*                   asPointer;
     const void*             asConstPointer;
-    // FIXME const void(*asFunctionPointer)();
+    const void(*asFunctionPointer)();
 
-    // all types will degrade to bool so no constructor necessary
+    // all types will degrade to bool so no constructor necessary for bool
+    // provide pointer support first (so references won't degrade to primitives)
+    // Variant( const void(*value)() ) : asFunctionPointer(value) {}
+    Variant( void* value ) : asPointer(value) {}
+    Variant( const void* value ) : asConstPointer(value) {}
+    // provide primitive support
     Variant( const char& value ) : asChar(value) {}
     Variant( const unsigned char& value ) : asUnsignedChar(value) {}
     Variant( const int& value ) : asInt(value) {}
@@ -96,9 +101,6 @@ private:
     Variant( const unsigned long long& value ) : asUnsignedLongLongInt(value) {}
     Variant( const float& value ) : asFloat(value) {}
     Variant( const double& value ) : asDouble(value) {}
-    Variant( void* value ) : asPointer(value) {}
-    Variant( const void* value ) : asConstPointer(value) {}
-    // Variant( const void(*value)() ) : asFunctionPointer(value) {}
 
   } _variant;
 
