@@ -68,13 +68,13 @@ public:
   SimpleString toString() const;
 
 private:
-  ParameterEntry*   _parameters = 0;
+  ParameterEntry*   _parameters;
 
   template<typename T>
   void _addParameter( const SimpleString& name, const T& value )
   {
     TestDouble::Parameter* pParameter = new TestDouble::Parameter( name, value );
-    _parameters = new ParameterEntry{ pParameter, _parameters };
+    _parameters = new ParameterEntry( pParameter, _parameters );
   }
 };
 

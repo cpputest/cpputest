@@ -33,6 +33,7 @@
 
 ExpectedCall::ExpectedCall( const SimpleString& name )
   : count(EXPECT_ALWAYS), methodName(name)
+   ,_parameters(0)
 { }
 
 

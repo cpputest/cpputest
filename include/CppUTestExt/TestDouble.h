@@ -42,6 +42,12 @@ struct ParameterEntry
 {
   const TestDouble::Parameter* const pParameter;
   ParameterEntry* const pNext;
+
+  ParameterEntry( const TestDouble::Parameter* const _pParameter,
+                  ParameterEntry* const _pNext )
+  : pParameter(_pParameter)
+   ,pNext(_pNext)
+  {}
 };
 
 

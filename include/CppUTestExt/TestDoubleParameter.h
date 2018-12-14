@@ -85,26 +85,21 @@ private:
     const void*             asConstPointer;
     const void(*asFunctionPointer)();
 
-    explicit Variant( const char& value ) : asChar(value) {}
-    explicit Variant( const unsigned char& value ) : asUnsignedChar(value) {}
-    explicit Variant( const int& value ) : asInt(value) {}
-    explicit Variant( const unsigned int& value ) : asUnsignedInt(value) {}
-    explicit Variant( const long& value ) : asLongInt(value) {}
-    explicit Variant( const unsigned long& value ) : asUnsignedLongInt(value) {}
-    explicit Variant( const long long& value ) : asLongLongInt(value) {}
-    explicit Variant( const unsigned long long& value ) : asUnsignedLongLongInt(value) {}
-    explicit Variant( const float& value ) : asFloat(value) {}
-    explicit Variant( const double& value ) : asDouble(value) {}
+    Variant( const char& value ) : asChar(value) {}
+    Variant( const unsigned char& value ) : asUnsignedChar(value) {}
+    Variant( const int& value ) : asInt(value) {}
+    Variant( const unsigned int& value ) : asUnsignedInt(value) {}
+    Variant( const long& value ) : asLongInt(value) {}
+    Variant( const unsigned long& value ) : asUnsignedLongInt(value) {}
+    Variant( const long long& value ) : asLongLongInt(value) {}
+    Variant( const unsigned long long& value ) : asUnsignedLongLongInt(value) {}
+    Variant( const float& value ) : asFloat(value) {}
+    Variant( const double& value ) : asDouble(value) {}
     Variant( void* value ) : asPointer(value) {}
     Variant( const void* value ) : asConstPointer(value) {}
     Variant( const void(*value)() ) : asFunctionPointer(value) {}
-    // explicit Variant( const bool& value ) : asBool(value) {}
-
-    // enforce interface abstraction
-    Variant() = delete;
-    Variant( const Variant& ) = delete;             ///< disable copy constructor
-    void operator=( const Variant& ) = delete;      ///< disable assignment operator
-    ~Variant() = default;                           ///< interfaces have no destructor behavior
+    // must be last as all types will degrade to bool
+    // Variant( const bool& value ) : asBool(value) {}
 
   } _variant;
 
