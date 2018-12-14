@@ -85,7 +85,6 @@ private:
     const void*             asConstPointer;
     const void(*asFunctionPointer)();
 
-    // explicit Variant( const bool& value ) : asBool(value) {}
     explicit Variant( const char& value ) : asChar(value) {}
     explicit Variant( const unsigned char& value ) : asUnsignedChar(value) {}
     explicit Variant( const int& value ) : asInt(value) {}
@@ -99,6 +98,7 @@ private:
     Variant( void* value ) : asPointer(value) {}
     Variant( const void* value ) : asConstPointer(value) {}
     Variant( const void(*value)() ) : asFunctionPointer(value) {}
+    // explicit Variant( const bool& value ) : asBool(value) {}
 
     // enforce interface abstraction
     Variant() = delete;
