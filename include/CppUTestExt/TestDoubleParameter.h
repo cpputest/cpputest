@@ -83,11 +83,11 @@ private:
     double                  asDouble;
     void*                   asPointer;
     const void*             asConstPointer;
-    const void(*asFunctionPointer)();
+    void(*asFunctionPointer)();
 
     // all types will degrade to bool so no constructor necessary for bool
     // provide pointer support first (so references won't degrade to primitives)
-    // Variant( const void(*value)() ) : asFunctionPointer(value) {}
+    Variant( void(*value)() ) : asFunctionPointer(value) {}
     Variant( void* value ) : asPointer(value) {}
     Variant( const void* value ) : asConstPointer(value) {}
     // provide primitive support
