@@ -112,6 +112,7 @@ public:
     virtual void setValue(cpputest_longlong value);
     virtual void setValue(cpputest_ulonglong value);
     virtual void setValue(double value);
+    virtual void setValue(double value, double tolerance);
     virtual void setValue(void* value);
     virtual void setValue(const void* value);
     virtual void setValue(void (*value)());
@@ -139,6 +140,7 @@ public:
     virtual cpputest_longlong getLongLongIntValue() const;
     virtual cpputest_ulonglong getUnsignedLongLongIntValue() const;
     virtual double getDoubleValue() const;
+    virtual double getDoubleTolerance() const;
     virtual const char* getStringValue() const;
     virtual void* getPointerValue() const;
     virtual const void* getConstPointerValue() const;
@@ -153,6 +155,8 @@ public:
     virtual MockNamedValueCopier* getCopier() const;
 
     static void setDefaultComparatorsAndCopiersRepository(MockNamedValueComparatorsAndCopiersRepository* repository);
+
+    static const double defaultDoubleTolerance;
 private:
     SimpleString name_;
     SimpleString type_;
@@ -168,7 +172,10 @@ private:
 #else
         char longLongPlaceholder_[CPPUTEST_SIZE_OF_FAKE_LONG_LONG_TYPE];
 #endif
-        double doubleValue_;
+        struct {
+            double value;
+            double tolerance;
+        } doubleValue_;
         const char* stringValue_;
         void* pointerValue_;
         const void* constPointerValue_;

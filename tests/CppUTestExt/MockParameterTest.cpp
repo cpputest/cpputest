@@ -294,6 +294,31 @@ TEST(MockParameterTest, expectOneDoubleParameterAndValue)
     mock().checkExpectations();
 }
 
+TEST(MockParameterTest, expectOneDoubleParameterAndValueAndTolerance)
+{
+    mock( ).expectOneCall("foo").withParameter("parameter", 100.0, 5.0);
+    mock( ).actualCall("foo").withParameter("parameter", 96.0);
+
+    mock( ).checkExpectations();
+}
+
+TEST(MockParameterTest, doubleParameterNotEqualIfOutsideTolerance)
+{
+    MockFailureReporterInstaller failureReporterInstaller;
+
+    MockExpectedCallsListForTest expectations;
+    expectations.addFunction("foo")->withParameter("parameter", 100.0);
+    MockNamedValue parameter("parameter");
+    parameter.setValue(106.0);
+    MockUnexpectedInputParameterFailure expectedFailure(mockFailureTest(), "foo", parameter, expectations);
+
+    mock( ).expectOneCall("foo").withParameter("parameter", 100.0, 5.0);
+    mock( ).actualCall("foo").withParameter("parameter", 106.0);
+
+    CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
+
 TEST(MockParameterTest, expectOneStringParameterAndValue)
 {
     mock().expectOneCall("foo").withParameter("parameter", "string");

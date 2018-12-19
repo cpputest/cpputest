@@ -31,6 +31,7 @@
 
 
 MockNamedValueComparatorsAndCopiersRepository* MockNamedValue::defaultRepository_ = NULLPTR;
+const double MockNamedValue::defaultDoubleTolerance = 0.005;
 
 void MockNamedValue::setDefaultComparatorsAndCopiersRepository(MockNamedValueComparatorsAndCopiersRepository* repository)
 {
@@ -106,8 +107,14 @@ void MockNamedValue::setValue(cpputest_ulonglong)
 
 void MockNamedValue::setValue(double value)
 {
+    setValue(value, defaultDoubleTolerance);
+}
+
+void MockNamedValue::setValue(double value, double tolerance)
+{
     type_ = "double";
-    value_.doubleValue_ = value;
+    value_.doubleValue_.value = value;
+    value_.doubleValue_.tolerance = tolerance;
 }
 
 void MockNamedValue::setValue(void* value)
@@ -291,7 +298,13 @@ cpputest_ulonglong MockNamedValue::getUnsignedLongLongIntValue() const
 double MockNamedValue::getDoubleValue() const
 {
     STRCMP_EQUAL("double", type_.asCharString());
-    return value_.doubleValue_;
+    return value_.doubleValue_.value;
+}
+
+double MockNamedValue::getDoubleTolerance() const
+{
+    STRCMP_EQUAL("double", type_.asCharString());
+    return value_.doubleValue_.tolerance;
 }
 
 const char* MockNamedValue::getStringValue() const
@@ -441,7 +454,7 @@ bool MockNamedValue::equals(const MockNamedValue& p) const
     else if (type_ == "void (*)()")
         return value_.functionPointerValue_ == p.value_.functionPointerValue_;
     else if (type_ == "double")
-        return (doubles_equal(value_.doubleValue_, p.value_.doubleValue_, 0.005));
+        return (doubles_equal(value_.doubleValue_.value, p.value_.doubleValue_.value, value_.doubleValue_.tolerance));
     else if (type_ == "const unsigned char*")
     {
         if (size_ != p.size_) {
@@ -493,7 +506,7 @@ SimpleString MockNamedValue::toString() const
     else if (type_ == "const void*")
         return StringFrom(value_.constPointerValue_);
     else if (type_ == "double")
-        return StringFrom(value_.doubleValue_);
+        return StringFrom(value_.doubleValue_.value);
     else if (type_ == "const unsigned char*")
         return StringFromBinaryWithSizeOrNull(value_.memoryBufferValue_, size_);
 

@@ -167,6 +167,14 @@ MockExpectedCall& MockCheckedExpectedCall::withDoubleParameter(const SimpleStrin
     return *this;
 }
 
+MockExpectedCall& MockCheckedExpectedCall::withDoubleParameter(const SimpleString& name, double value, double tolerance)
+{
+    MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
+    inputParameters_->add(newParameter);
+    newParameter->setValue(value, tolerance);
+    return *this;
+}
+
 MockExpectedCall& MockCheckedExpectedCall::withStringParameter(const SimpleString& name, const char* value)
 {
     MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);

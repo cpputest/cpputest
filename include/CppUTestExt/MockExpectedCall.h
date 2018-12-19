@@ -51,6 +51,7 @@ public:
     MockExpectedCall& withParameter(const SimpleString& name, cpputest_longlong value) { return withLongLongIntParameter(name, value); }
     MockExpectedCall& withParameter(const SimpleString& name, cpputest_ulonglong value) { return withUnsignedLongLongIntParameter(name, value); }
     MockExpectedCall& withParameter(const SimpleString& name, double value) { return withDoubleParameter(name, value); }
+    MockExpectedCall& withParameter(const SimpleString& name, double value, double tolerance) { return withDoubleParameter(name, value, tolerance); }
     MockExpectedCall& withParameter(const SimpleString& name, const char* value) { return withStringParameter(name, value); }
     MockExpectedCall& withParameter(const SimpleString& name, void* value) { return withPointerParameter(name, value); }
     MockExpectedCall& withParameter(const SimpleString& name, const void* value) { return withConstPointerParameter(name, value); }
@@ -69,6 +70,7 @@ public:
     virtual MockExpectedCall& withLongLongIntParameter(const SimpleString& name, cpputest_longlong value)=0;
     virtual MockExpectedCall& withUnsignedLongLongIntParameter(const SimpleString& name, cpputest_ulonglong value)=0;
     virtual MockExpectedCall& withDoubleParameter(const SimpleString& name, double value)=0;
+    virtual MockExpectedCall& withDoubleParameter(const SimpleString& name, double value, double tolerance)=0;
     virtual MockExpectedCall& withStringParameter(const SimpleString& name, const char* value)=0;
     virtual MockExpectedCall& withPointerParameter(const SimpleString& name, void* value)=0;
     virtual MockExpectedCall& withFunctionPointerParameter(const SimpleString& name, void (*value)())=0;
