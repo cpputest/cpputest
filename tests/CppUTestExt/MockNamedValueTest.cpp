@@ -27,6 +27,7 @@
 
 #include "CppUTest/TestHarness.h"
 #include "CppUTestExt/MockNamedValue.h"
+#include <cfloat>
 
 TEST_GROUP(ComparatorsAndCopiersRepository)
 {
@@ -110,15 +111,15 @@ TEST_GROUP(MockNamedValue)
 TEST(MockNamedValue, DefaultToleranceUsedWhenNoToleranceGiven)
 {
   value->setValue(0.2);
-  CHECK_EQUAL(MockNamedValue::defaultDoubleTolerance, value->getDoubleTolerance());
+  DOUBLES_EQUAL(MockNamedValue::defaultDoubleTolerance, value->getDoubleTolerance(), 0.0);
 }
 
 TEST(MockNamedValue, GivenToleranceUsed)
 {
   value->setValue(0.2, 3.2);
   STRCMP_EQUAL("double", value->getType().asCharString());
-  CHECK_EQUAL(0.2, value->getDoubleValue());
-  CHECK_EQUAL(3.2, value->getDoubleTolerance());
+  DOUBLES_EQUAL(0.2, value->getDoubleValue(), 0.0);
+  DOUBLES_EQUAL(3.2, value->getDoubleTolerance(), 0.0);
 }
 
 TEST(MockNamedValue, DoublesEqualIfWithinTolerance)
