@@ -216,7 +216,11 @@ public:
     void removeMemoryLeakInformationWithoutCheckingOrDeallocatingTheMemoryButDeallocatingTheAccountInformation(TestMemoryAllocator* allocator, void* memory, bool allocatNodesSeperately);
     enum
     {
+#ifdef CPPUTEST_DISABLE_MEM_CORRUPTION_CHECK
+        memory_corruption_buffer_size = 0
+#else
         memory_corruption_buffer_size = 3
+#endif
     };
 
     unsigned getCurrentAllocationNumber();

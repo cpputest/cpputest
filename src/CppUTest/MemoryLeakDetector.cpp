@@ -32,6 +32,8 @@
 
 static const char* UNKNOWN = "<unknown>";
 
+static const char GuardBytes[] = {'B','A','S'};
+
 SimpleStringBuffer::SimpleStringBuffer() :
     positions_filled_(0), write_limit_(SIMPLE_STRING_BUFFER_LEN-1)
 {
@@ -481,7 +483,11 @@ SimpleMutex *MemoryLeakDetector::getMutex()
 
 static size_t calculateVoidPointerAlignedSize(size_t size)
 {
+#ifndef CPPUTEST_DISABLE_MEM_CORRUPTION_CHECK
     return (sizeof(void*) - (size % sizeof(void*))) + size;
+#else
+   return size;
+#endif
 }
 
 size_t MemoryLeakDetector::sizeOfMemoryWithCorruptionInfo(size_t size)
@@ -513,21 +519,25 @@ char* MemoryLeakDetector::reallocateMemoryAndLeakInformation(TestMemoryAllocator
 
 void MemoryLeakDetector::invalidateMemory(char* memory)
 {
+#ifndef CPPUTEST_DISABLE_HEAP_POISON
   MemoryLeakDetectorNode* node = memoryTable_.retrieveNode(memory);
   if (node)
     PlatformSpecificMemset(memory, 0xCD, node->size_);
+#endif
 }
 
 void MemoryLeakDetector::addMemoryCorruptionInformation(char* memory)
 {
-    memory[0] = 'B';
-    memory[1] = 'A';
-    memory[2] = 'S';
+   for (size_t i=0; i<memory_corruption_buffer_size; i++)
+      memory[i] = GuardBytes[i % sizeof(GuardBytes)];
 }
 
 bool MemoryLeakDetector::validMemoryCorruptionInformation(char* memory)
 {
-    return memory[0] == 'B' && memory[1] == 'A' && memory[2] == 'S';
+   for (size_t i=0; i<memory_corruption_buffer_size; i++)
+      if (memory[i] != GuardBytes[i % sizeof(GuardBytes)])
+          return false;
+   return true;
 }
 
 bool MemoryLeakDetector::matchingAllocation(TestMemoryAllocator *alloc_allocator, TestMemoryAllocator *free_allocator)
