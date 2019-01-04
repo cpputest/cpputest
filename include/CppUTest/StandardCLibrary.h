@@ -27,6 +27,11 @@
 /* Needed for some detection of long long and 64 bit */
 #include <limits.h>
 
+/* Needed to ensure that string.h is included prior to strdup redefinition */
+#ifdef CPPUTEST_HAVE_STRING_H
+#include <string.h>
+#endif
+
 #else
 
 #ifdef __KERNEL__
