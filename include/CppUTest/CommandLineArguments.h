@@ -73,7 +73,7 @@ private:
     bool listTestGroupAndCaseNames_;
     bool runIgnored_;
     int repeat_;
-    unsigned int shuffle_; // 0: shuffling disabled, 1: random seed, other values: specific random seed
+    unsigned int shuffle_;
     TestFilter* groupFilters_;
     TestFilter* nameFilters_;
     OutputType outputType_;

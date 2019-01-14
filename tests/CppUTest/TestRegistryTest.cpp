@@ -359,3 +359,50 @@ TEST(TestRegistry, listTestGroupAndCaseNames_shouldListBackwardsGroupATestaAfter
     SimpleString s = output->getOutput();
     STRCMP_EQUAL("GROUP_A.test_aa GROUP_B.test_b GROUP_A.test_a", s.asCharString());
 }
+
+static int getZero()
+{
+    return 0;
+}
+
+TEST(TestRegistry, shuffleEmptyListIsNoOp)
+{
+    CHECK_TRUE(myRegistry->getFirstTest() == NULLPTR);
+    myRegistry->shuffleRunOrder(getZero);
+    CHECK_TRUE(myRegistry->getFirstTest() == NULLPTR);
+}
+
+TEST(TestRegistry, shuffleSingleTestIsNoOp)
+{
+    myRegistry->addTest(test1);
+    myRegistry->shuffleRunOrder(getZero);
+    CHECK_TRUE(myRegistry->getFirstTest() == test1);
+}
+
+TEST(TestRegistry, shuffleTestList)
+{
+    myRegistry->addTest(test3);
+    myRegistry->addTest(test2);
+    myRegistry->addTest(test1);
+
+    UtestShell* first_before  = myRegistry->getFirstTest();
+    UtestShell* second_before = first_before->getNext();
+    UtestShell* third_before  = second_before->getNext();
+
+    CHECK_TRUE(first_before  == test1);
+    CHECK_TRUE(second_before == test2);
+    CHECK_TRUE(third_before  == test3);
+    CHECK_TRUE(third_before->getNext()  == NULLPTR);
+
+    // shuffle always with element at index 0: [1] 2 [3] --> [3] [2] 1 --> 2 3 1
+    myRegistry->shuffleRunOrder(getZero);
+
+    UtestShell* first_after  = myRegistry->getFirstTest();
+    UtestShell* second_after = first_after->getNext();
+    UtestShell* third_after  = second_after->getNext();
+
+    CHECK_TRUE(first_after  == test2);
+    CHECK_TRUE(second_after == test3);
+    CHECK_TRUE(third_after  == test1);
+    CHECK_TRUE(third_after->getNext() == NULLPTR);
+}

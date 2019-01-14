@@ -227,21 +227,32 @@ UtestShell* TestRegistry::getFirstTest()
     return tests_;
 }
 
-void TestRegistry::shuffleRunOrder()
-{
-    std::vector<UtestShell *> tests;
-    for (UtestShell *test = tests_; test != NULL; test = test->getNext()) {
-        tests.push_back(test);
-    }
-    std::random_shuffle(tests.begin(), tests.end());
 
-    // Store shuffled vector back to linked list
-    UtestShell *prev = NULL;
-    for (size_t i = 0; i < tests.size(); ++i)
+void TestRegistry::shuffleRunOrder(rand_func_t rand_func)
+{
+    if (getFirstTest() == NULLPTR)
     {
-        prev = tests[i]->addTest(prev);
+        return;
+    }
+    int numTests = getFirstTest()->countTests();
+    typedef UtestShell* listElem;
+    listElem* tests = new listElem[numTests];
+    UtestShell *test = getFirstTest();
+    for (int testsIdx = 0; testsIdx < numTests; ++testsIdx)
+    {
+        tests[testsIdx] = test;
+        test = test->getNext();
+    }
+    shuffle_list(rand_func, numTests, reinterpret_cast<void**>(tests));
+
+    // Store shuffled list back to linked list
+    UtestShell *prev = NULLPTR;
+    for (int i = 0; i < numTests; ++i)
+    {
+        prev = tests[numTests - 1 - i]->addTest(prev);
     }
     tests_ = prev;
+    delete[] tests;
 }
 
 UtestShell* TestRegistry::getTestWithNext(UtestShell* test)

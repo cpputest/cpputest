@@ -939,6 +939,35 @@ TEST(SimpleString, AtoI)
     CHECK(32767  == SimpleString::AtoI(max_short_str));
 }
 
+TEST(SimpleString, AtoU)
+{
+    char max_short_str[] = "65535";
+    CHECK(12345  == SimpleString::AtoU("012345"));
+    CHECK(6789   == SimpleString::AtoU("6789"));
+    CHECK(12345  == SimpleString::AtoU("12345/"));
+    CHECK(12345  == SimpleString::AtoU("12345:"));
+    CHECK(123    == SimpleString::AtoU("\t \r\n123"));
+    CHECK(123    == SimpleString::AtoU("123-foo"));
+    CHECK(65535  == SimpleString::AtoU(max_short_str));
+
+    bool parsedDigit;
+
+    CHECK(0 == SimpleString::AtoU("foo", parsedDigit));
+    CHECK_FALSE(parsedDigit);
+
+    CHECK(0 == SimpleString::AtoU("-foo", parsedDigit));
+    CHECK_FALSE(parsedDigit);
+
+    CHECK(0 == SimpleString::AtoU("+1", parsedDigit));
+    CHECK_FALSE(parsedDigit);
+
+    CHECK(0 == SimpleString::AtoU("-1", parsedDigit));
+    CHECK_FALSE(parsedDigit);
+
+    CHECK(0 == SimpleString::AtoU("0", parsedDigit));
+    CHECK_TRUE(parsedDigit);
+}
+
 TEST(SimpleString, Binary)
 {
     const unsigned char value[] = { 0x00, 0x01, 0x2A, 0xFF };

@@ -25,12 +25,13 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "CppUTest/Shuffle.h"
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/CommandLineArguments.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
 CommandLineArguments::CommandLineArguments(int ac, const char *const *av) :
-    ac_(ac), av_(av), verbose_(false), color_(false), runTestsAsSeperateProcess_(false), listTestGroupNames_(false), listTestGroupAndCaseNames_(false), runIgnored_(false), repeat_(1), shuffle_(0), groupFilters_(NULLPTR), nameFilters_(NULLPTR), outputType_(OUTPUT_ECLIPSE)
+    ac_(ac), av_(av), verbose_(false), color_(false), runTestsAsSeperateProcess_(false), listTestGroupNames_(false), listTestGroupAndCaseNames_(false), runIgnored_(false), repeat_(1), shuffle_(SHUFFLE_DISABLED), groupFilters_(NULLPTR), nameFilters_(NULLPTR), outputType_(OUTPUT_ECLIPSE)
 {
 }
 
@@ -157,13 +158,15 @@ void CommandLineArguments::SetRepeatCount(int ac, const char *const *av, int& i)
 
 void CommandLineArguments::SetShuffle(int ac, const char * const *av, int& i)
 {
-    shuffle_ = 1;
+    shuffle_ = SHUFFLE_ENABLED_RANDOM_SEED;
     SimpleString shuffleParameter(av[i]);
     if (shuffleParameter.size() > 2) {
-        shuffle_ = SimpleString::AtoI(av[i] + 2);
+        shuffle_ = SimpleString::AtoU(av[i] + 2);
     } else if (i + 1 < ac) {
-        const int parsed = SimpleString::AtoI(av[i + 1]);
-        if (parsed != 0) {
+        bool wasAbleToParseDigit = false;
+        const unsigned parsed = SimpleString::AtoU(av[i + 1], wasAbleToParseDigit);
+        if (wasAbleToParseDigit)
+        {
             i++;
             shuffle_ = parsed;
         }
