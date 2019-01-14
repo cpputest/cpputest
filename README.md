@@ -60,6 +60,7 @@ TEST(FirstTestGroup, FirstTest)
 
 * -v verbose, print each test name as it runs
 * -r# repeat the tests some number of times, default is one, default if # is not specified is 2. This is handy if you are experiencing memory leaks related to statics and caches.
+* -s# random shuffle the test execution order. # is an integer used for seeding the random number generator. # is optional, and if omitted, the seed value is chosen automatically, which results in a different order every time. The seed value is printed to console to make it possible to reproduce a previously generated execution order. Handy for detecting problems related to dependencies between tests.
 * -g group only run test whose group contains the substring group
 * -n name only run test whose name contains the substring name
 

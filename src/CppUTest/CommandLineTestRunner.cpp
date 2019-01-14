@@ -96,16 +96,17 @@ void CommandLineTestRunner::initializeTestRun()
     if (arguments_->isRunIgnored()) registry_->setRunIgnored();
 }
 
-static unsigned int getSeed(unsigned int shuffleArg)
+static unsigned getSeed(unsigned shuffleArg)
 {
-    if (shuffleArg > 1) return shuffleArg;
+    if (shuffleArg != SHUFFLE_ENABLED_RANDOM_SEED) return shuffleArg;
 
-    const unsigned int generatedSeed = GetPlatformSpecificTimeInMillis();
+    const unsigned generatedSeed = static_cast<unsigned>(GetPlatformSpecificTimeInMillis());
 
     // do not allow seed values 0 or 1 because they cannot be given as cmd line arguments
-    if (generatedSeed > 1) return generatedSeed;
+    // (0 and 1 overloaded by SHUFFLE_DISABLED and SHUFFLE_ENABLED_RANDOM_SEED)
+    if (generatedSeed < SHUFFLE_SEED_MINIMUM_VALUE) return SHUFFLE_SEED_MINIMUM_VALUE;
 
-    return 2;
+    return generatedSeed;
 }
 
 int CommandLineTestRunner::runAllTests()
@@ -128,31 +129,25 @@ int CommandLineTestRunner::runAllTests()
         registry_->listTestGroupAndCaseNames(tr);
         return 0;
     }
-    const bool shuffleEnabled = arguments_->getShuffle() != 0;
-    unsigned int seed = 0;
+    const bool shuffleEnabled = arguments_->getShuffle() != SHUFFLE_DISABLED;
     if (shuffleEnabled)
     {
-        seed = getSeed(arguments_->getShuffle());
-        output_->print("Test order shuffling enabled, seed: ");
+        const unsigned seed = getSeed(arguments_->getShuffle());
+        output_->setShuffleSeed(seed);
+        output_->print("Test order shuffling enabled with seed: ");
         output_->print(seed);
         output_->print("\n");
-        std::srand(seed);
+        srand(seed);
     }
     while (loopCount++ < repeat_) {
         if (shuffleEnabled)
         {
-            registry_->shuffleRunOrder();
+            registry_->shuffleRunOrder(rand_);
         }
         output_->printTestRun(loopCount, repeat_);
         TestResult tr(*output_);
         registry_->runAllTests(tr);
         failureCount += tr.getFailureCount();
-    }
-    if (shuffleEnabled && arguments_->isVerbose())
-    {
-        output_->print("Random seed was: ");
-        output_->print(seed);
-        output_->print("\n");
     }
     return failureCount;
 }

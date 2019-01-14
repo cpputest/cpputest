@@ -57,7 +57,6 @@ public:
     virtual void countCheck();
     virtual void countFilteredOut();
     virtual void countIgnored();
-    virtual void setShuffleSeed(unsigned int);
     virtual void addFailure(const TestFailure& failure);
     virtual void print(const char* text);
 
@@ -85,10 +84,6 @@ public:
     {
         return failureCount_;
     }
-    unsigned int getShuffleSeed() const
-    {
-        return shuffleSeed_;
-    }
 
     long getTotalExecutionTime() const;
     void setTotalExecutionTime(long exTime);
@@ -104,7 +99,6 @@ private:
     int failureCount_;
     int filteredOutCount_;
     int ignoredCount_;
-    unsigned int shuffleSeed_;
     long totalExecutionTime_;
     long timeStarted_;
     long currentTestTimeStarted_;
