@@ -27,7 +27,6 @@
 
 #include "CppUTest/TestHarness.h"
 #include "CppUTestExt/MockNamedValue.h"
-#include <cfloat>
 
 TEST_GROUP(ComparatorsAndCopiersRepository)
 {
