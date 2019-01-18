@@ -151,6 +151,7 @@ MockExpectedCall_c* withUnsignedLongIntParameters_c(const char* name, unsigned l
 MockExpectedCall_c* withLongLongIntParameters_c(const char* name, cpputest_longlong value);
 MockExpectedCall_c* withUnsignedLongLongIntParameters_c(const char* name, cpputest_ulonglong value);
 MockExpectedCall_c* withDoubleParameters_c(const char* name, double value);
+MockExpectedCall_c* withDoubleParametersAndTolerance_c(const char* name, double value, double tolerance);
 MockExpectedCall_c* withStringParameters_c(const char* name, const char* value);
 MockExpectedCall_c* withPointerParameters_c(const char* name, void* value);
 MockExpectedCall_c* withConstPointerParameters_c(const char* name, const void* value);
@@ -251,6 +252,7 @@ static MockExpectedCall_c gExpectedCall = {
         withLongLongIntParameters_c,
         withUnsignedLongLongIntParameters_c,
         withDoubleParameters_c,
+        withDoubleParametersAndTolerance_c,
         withStringParameters_c,
         withPointerParameters_c,
         withConstPointerParameters_c,
@@ -437,6 +439,12 @@ MockExpectedCall_c* withUnsignedLongLongIntParameters_c(const char*, cpputest_ul
 MockExpectedCall_c* withDoubleParameters_c(const char* name, double value)
 {
     expectedCall = &expectedCall->withParameter(name, value);
+    return &gExpectedCall;
+}
+
+MockExpectedCall_c* withDoubleParametersAndTolerance_c(const char* name, double value, double tolerance)
+{
+    expectedCall = &expectedCall->withParameter(name, value, tolerance);
     return &gExpectedCall;
 }
 

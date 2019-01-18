@@ -59,6 +59,7 @@ void all_mock_support_c_calls(void)
 #endif
 
             withDoubleParameters("double", 1.0)->
+            withDoubleParametersAndTolerance("doubleWithTolerance", 1.0, 1.0)->
             withStringParameters("string", "string")->
             withPointerParameters("pointer", (void*) 1)->
             withConstPointerParameters("constpointer", (const void*) 1)->
@@ -76,6 +77,7 @@ void all_mock_support_c_calls(void)
             withUnsignedLongLongIntParameters("unsigned long long int", (unsigned long long int) 1)->
 #endif
             withDoubleParameters("double", 1.0)->
+            withDoubleParameters("doubleWithTolerance", 0.0 )->
             withStringParameters("string", "string")->
             withPointerParameters("pointer", (void*) 1)->
             withConstPointerParameters("constpointer", (const void*) 1)->
