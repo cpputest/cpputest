@@ -33,6 +33,7 @@
 
 // FIXME
 #include <stdio.h>
+extern "C" int memcmp ( const void * ptr1, const void * ptr2, size_t num );
 
 namespace TestDouble {
 
@@ -41,14 +42,28 @@ class Parameter
 public:
   const SimpleString  name;
   const SimpleString  type;
+  // TODO should buffer require a static reference or should this clone?
+  const void* buffer = 0;
+  const std::size_t bufferSize_bytes = 0;
 
   template<typename T>
   Parameter( const SimpleString& _name, const T& value )
   : name(_name), type( typeid(value).name() ), _variant(value)
   { }
 
+  Parameter( const SimpleString& _name, const void* const _buffer, const std::size_t _bufferSize_bytes )
+  : name(_name), type( typeid(void*).name() ), buffer(_buffer), bufferSize_bytes(_bufferSize_bytes)
+  { }
+
   bool equals( const Parameter* pOther ) const
   {
+    if( buffer !=0 )
+    {
+      if( 0 == pOther->buffer ) return false;
+      if( bufferSize_bytes != pOther->bufferSize_bytes ) return false;
+      return ( 0 == memcmp( buffer, pOther->buffer, bufferSize_bytes ) );
+    }
+
     if( type == typeid(bool).name() ) { return _variant.asBool == pOther->_variant.asBool; }
     if( type == typeid(char).name() ) { return _variant.asChar == pOther->_variant.asChar; }
     if( type == typeid(unsigned char).name() ) { return _variant.asUnsignedChar == pOther->_variant.asUnsignedChar; }
@@ -69,6 +84,7 @@ public:
 
 
 private:
+
   const union Variant {
     bool                    asBool;
     char                    asChar;
@@ -102,7 +118,7 @@ private:
     Variant( const float& value ) : asFloat(value) {}
     Variant( const double& value ) : asDouble(value) {}
 
-  } _variant;
+  } _variant = 0;
 
 };  // class Parameter
 

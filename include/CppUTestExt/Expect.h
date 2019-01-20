@@ -56,8 +56,22 @@ public:
   template<typename T>
   ExpectedCall& with( const SimpleString& name, const T& value )
   {
-    _addParameter( name, value );
+    TestDouble::Parameter* pParameter = new TestDouble::Parameter( name, value );
+    _parameters = new ParameterEntry( pParameter, _parameters );
+    return *this;
+  }
 
+  ExpectedCall& with( const SimpleString& name, const void* buffer, std::size_t size )
+  {
+    TestDouble::Parameter* pParameter = new TestDouble::Parameter( name, buffer, size );
+    _parameters = new ParameterEntry( pParameter, _parameters );
+    return *this;
+  }
+
+  template<typename T>
+  ExpectedCall& output( const SimpleString& name, const T& value )
+  {
+    //FIXME _addOutputParameter( name, value );
     return *this;
   }
 
@@ -69,13 +83,6 @@ public:
 
 private:
   ParameterEntry*   _parameters;
-
-  template<typename T>
-  void _addParameter( const SimpleString& name, const T& value )
-  {
-    TestDouble::Parameter* pParameter = new TestDouble::Parameter( name, value );
-    _parameters = new ParameterEntry( pParameter, _parameters );
-  }
 };
 
 // class Actual;

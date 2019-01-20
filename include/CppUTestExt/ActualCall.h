@@ -68,9 +68,25 @@ public:
   template<typename T>
   ActualCall& with( const SimpleString& name, const T& value )
   {
-    _addParameter( name, value );
+    TestDouble::Parameter* pParameter = new TestDouble::Parameter( name, value );
+    _parameters = new ParameterEntry( pParameter, _parameters );
     return *this;
   }
+
+  ActualCall& with( const SimpleString& name, const void* const buffer, const std::size_t size )
+  {
+    TestDouble::Parameter* pParameter = new TestDouble::Parameter( name, buffer, size );
+    _parameters = new ParameterEntry( pParameter, _parameters );
+    return *this;
+  }
+
+  template<typename T>
+  ActualCall& output( const SimpleString& name, const T& value )
+  {
+    //FIXME _addOutputParameter( name, value );
+    return *this;
+  }
+
 
   //  return based methods invoke matched expectation (or else do nothing and return 0)
   bool returnBool();
@@ -94,13 +110,6 @@ private:
   ParameterEntry*         _parameters;
   TestDouble::Parameter*  _pOutputParameter;
 
-
-  template<typename T>
-  void _addParameter( const SimpleString& name, const T& value )
-  {
-    TestDouble::Parameter* pParameter = new TestDouble::Parameter( name, value );
-    _parameters = new ParameterEntry( pParameter, _parameters );
-  }
 };  // class ActualCall
 
 #endif /* ACTUAL_CALL_H */

@@ -142,13 +142,13 @@ TEST( TestDoubleParameters, expect_function_pointer_parameter_with_value )
   actualCall("foo").with("value", _fn);
 }
 
-// FIXME support buffers
-// TEST( TestDoubleParameters, expect_buffer_parameter_with_value )
-// {
-//   char buffer[] = "HELLO WORLD";
-//   expectCall("foo").times(1).with("value", buffer, sizeof(buffer));
-//   actualCall("foo").with("value", buffer, sizeof(buffer));
-// }
+// FIXME support memcmp
+TEST( TestDoubleParameters, expect_buffer )
+{
+  char buffer[] = "HELLO WORLD";
+  expectCall("foo").with("value", buffer, sizeof(buffer));
+  actualCall("foo").with("value", buffer, sizeof(buffer));
+}
 
 TEST( TestDoubleParameters, unexpected_calls_pass )
 {

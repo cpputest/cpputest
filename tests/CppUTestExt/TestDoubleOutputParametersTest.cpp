@@ -30,23 +30,27 @@
 #include "CppUTestExt/Expect.h"
 #include "CppUTestExt/ActualCall.h"
 
-// TEST_GROUP( TestDoubleOutputParameters )
-// {
-//   TEST_TEARDOWN()
-//   {
-//     // FIXME allow non-scoped expectations
-//     // checkExpectations();
-//   }
-// };
+TEST_GROUP( TestDoubleOutputParameters )
+{
+  TEST_SETUP()
+  {
+    failUnexpected( false );
+  }
 
-// TEST( TestDoubleOutputParameters, sets_output_bool_parameter )
-// {
-//   const bool expectedValue = true;
-//   expect().call("foo").times(1).output("value", &expectedValue);
-//   bool actualValue = false;
-//   actual().call("foo").output("value", &actualValue);
-//   CHECK( expectedValue == actualValue );
-// }
+  TEST_TEARDOWN()
+  {
+    checkExpectations();
+  }
+};
+
+TEST( TestDoubleOutputParameters, sets_output_bool_parameter )
+{
+  const bool expectedValue = true;
+  expectCall("foo").output("value", &expectedValue);
+  bool actualValue = false;
+  actualCall("foo").output("value", &actualValue);
+  CHECK( expectedValue == actualValue );
+}
 
 // TEST( TestDoubleOutputParameters, sets_output_char_parameter )
 // {
