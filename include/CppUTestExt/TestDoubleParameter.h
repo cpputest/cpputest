@@ -51,7 +51,7 @@ public:
   : name(_name), type( typeid(value).name() ), _variant(value)
   { }
 
-  Parameter( const SimpleString& _name, const void* const _buffer, const std::size_t _bufferSize_bytes )
+  Parameter( const SimpleString& _name, const void* const _buffer, const std::size_t& _bufferSize_bytes )
   : name(_name), type( typeid(void*).name() ), buffer(_buffer), bufferSize_bytes(_bufferSize_bytes)
   { }
 

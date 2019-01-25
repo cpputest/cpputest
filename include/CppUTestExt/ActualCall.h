@@ -73,7 +73,7 @@ public:
     return *this;
   }
 
-  ActualCall& with( const SimpleString& name, const void* const buffer, const std::size_t size )
+  ActualCall& with( const SimpleString& name, const void* const buffer, const std::size_t& size )
   {
     TestDouble::Parameter* pParameter = new TestDouble::Parameter( name, buffer, size );
     _parameters = new ParameterEntry( pParameter, _parameters );
