@@ -32,6 +32,8 @@
 
 static const char* UNKNOWN = "<unknown>";
 
+static const char GuardBytes[] = {'B','A','S'};
+
 SimpleStringBuffer::SimpleStringBuffer() :
     positions_filled_(0), write_limit_(SIMPLE_STRING_BUFFER_LEN-1)
 {
@@ -481,7 +483,11 @@ SimpleMutex *MemoryLeakDetector::getMutex()
 
 static size_t calculateVoidPointerAlignedSize(size_t size)
 {
+#ifndef CPPUTEST_DISABLE_MEM_CORRUPTION_CHECK
     return (sizeof(void*) - (size % sizeof(void*))) + size;
+#else
+   return size;
+#endif
 }
 
 size_t MemoryLeakDetector::sizeOfMemoryWithCorruptionInfo(size_t size)
@@ -513,21 +519,25 @@ char* MemoryLeakDetector::reallocateMemoryAndLeakInformation(TestMemoryAllocator
 
 void MemoryLeakDetector::invalidateMemory(char* memory)
 {
+#ifndef CPPUTEST_DISABLE_HEAP_POISON
   MemoryLeakDetectorNode* node = memoryTable_.retrieveNode(memory);
   if (node)
     PlatformSpecificMemset(memory, 0xCD, node->size_);
+#endif
 }
 
 void MemoryLeakDetector::addMemoryCorruptionInformation(char* memory)
 {
-    memory[0] = 'B';
-    memory[1] = 'A';
-    memory[2] = 'S';
+   for (size_t i=0; i<memory_corruption_buffer_size; i++)
+      memory[i] = GuardBytes[i % sizeof(GuardBytes)];
 }
 
 bool MemoryLeakDetector::validMemoryCorruptionInformation(char* memory)
 {
-    return memory[0] == 'B' && memory[1] == 'A' && memory[2] == 'S';
+   for (size_t i=0; i<memory_corruption_buffer_size; i++)
+      if (memory[i] != GuardBytes[i % sizeof(GuardBytes)])
+          return false;
+   return true;
 }
 
 bool MemoryLeakDetector::matchingAllocation(TestMemoryAllocator *alloc_allocator, TestMemoryAllocator *free_allocator)
@@ -572,6 +582,9 @@ MemoryLeakDetectorNode* MemoryLeakDetector::createMemoryLeakAccountingInformatio
 
 char* MemoryLeakDetector::allocMemory(TestMemoryAllocator* allocator, size_t size, const char* file, int line, bool allocatNodesSeperately)
 {
+#ifdef CPPUTEST_DISABLE_MEM_CORRUPTION_CHECK
+   allocatNodesSeperately = true;
+#endif
     /* With malloc, it is harder to guarantee that the allocator free is called.
      * This is because operator new is overloaded via linker symbols, but malloc just via #defines.
      * If the same allocation is used and the wrong free is called, it will deallocate the memory leak information
@@ -602,6 +615,9 @@ void MemoryLeakDetector::deallocMemory(TestMemoryAllocator* allocator, void* mem
         outputBuffer_.reportDeallocateNonAllocatedMemoryFailure(file, line, allocator, reporter_);
         return;
     }
+#ifdef CPPUTEST_DISABLE_MEM_CORRUPTION_CHECK
+   allocatNodesSeperately = true;
+#endif
     if (!allocator->hasBeenDestroyed()) {
         checkForCorruption(node, file, line, allocator, allocatNodesSeperately);
         allocator->free_memory((char*) memory, file, line);
@@ -615,6 +631,9 @@ void MemoryLeakDetector::deallocMemory(TestMemoryAllocator* allocator, void* mem
 
 char* MemoryLeakDetector::reallocMemory(TestMemoryAllocator* allocator, char* memory, size_t size, const char* file, int line, bool allocatNodesSeperately)
 {
+#ifdef CPPUTEST_DISABLE_MEM_CORRUPTION_CHECK
+   allocatNodesSeperately = true;
+#endif
     if (memory) {
         MemoryLeakDetectorNode* node = memoryTable_.removeNode(memory);
         if (node == NULLPTR) {
