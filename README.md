@@ -91,6 +91,8 @@ The failure of one of these macros causes the current test to immediately exit
 * BYTES_EQUAL(expected, actual) - Compares two numbers, eight bits wide
 * POINTERS_EQUAL(expected, actual) - Compares two const void *
 * DOUBLES_EQUAL(expected, actual, tolerance) - Compares two doubles within some tolerance
+* ENUMS_EQUAL_INT(excepted, actual) - Compares two enums which their underlying type is int
+* ENUMS_EQUAL_TYPE(underlying_type, excepted, actual) - Compares two enums which they have the same underlying type
 * FAIL(text) - always fails
 * TEST_EXIT - Exit the test without failure - useful for contract testing (implementing an assert fake)
 
