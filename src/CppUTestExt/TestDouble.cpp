@@ -93,7 +93,7 @@ bool Expectations::check( const ActualCall& call )
   {
     const ExpectedCall& expectedCall = *(pExpectedEntry->pExpectedCall);
     // skip fulfilled expectations
-    if( ( expectedCall.count != ExpectedCall::EXPECT_ALWAYS ) && ( pExpectedEntry->calledCount >= expectedCall.count ) ) continue;
+    if( ( expectedCall.getCount() != ExpectedCall::EXPECT_ALWAYS ) && ( pExpectedEntry->calledCount >= expectedCall.getCount() ) ) continue;
 
     if( _matches( call, expectedCall ) ) pExpectedEntry->calledCount++;
     else
@@ -113,8 +113,8 @@ bool Expectations::check()
   {
     const ExpectedCallEntry* pExpectedCallEntry = _expectedCalls;
     const ExpectedCall& expectedCall = *(pExpectedCallEntry->pExpectedCall);
-    if( ( ( expectedCall.count == ExpectedCall::EXPECT_ALWAYS ) && ( pExpectedCallEntry->calledCount == 0 ) )   ||
-        ( ( expectedCall.count != ExpectedCall::EXPECT_ALWAYS ) && ( pExpectedCallEntry->calledCount <= expectedCall.count ) ) )
+    if( ( ( expectedCall.getCount() == ExpectedCall::EXPECT_ALWAYS ) && ( pExpectedCallEntry->calledCount == 0 ) )   ||
+        ( ( expectedCall.getCount() != ExpectedCall::EXPECT_ALWAYS ) && ( pExpectedCallEntry->calledCount <= expectedCall.getCount() ) ) )
     {
       // FIXME why is the test result protected?!
       // UtestShell::getCurrent()->getTestResult()->print( expectedCall.asCharString() );

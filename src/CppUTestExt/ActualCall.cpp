@@ -45,10 +45,16 @@ ActualCall::~ActualCall()
   delete _parameters;
   delete _pOutputParameter;
 
-  if( NULL == pExpectation )
+  if( 0 == pExpectation )
   {
     // TODO print actual (input and output parameters)
     // FAIL( "Actual didn't match expectations" );
   }
 }
 
+ActualCall& ActualCall::with( const SimpleString& name, const void* const buffer, const std::size_t& size )
+{
+  TestDouble::Parameter* pParameter = new TestDouble::Parameter( name, buffer, size );
+  _parameters = new ParameterEntry( pParameter, _parameters );
+  return *this;
+}

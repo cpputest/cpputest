@@ -41,12 +41,9 @@ public:
 
   ActualCall( const SimpleString& name );
 
-  /// assert the actual
+  /// match this against expectations
   ~ActualCall();
 
-  const ParameterEntry* getParameters() const { return _parameters; }
-
-  // named input parameter
   template<typename T>
   ActualCall& with( const SimpleString& name, const T& value )
   {
@@ -55,12 +52,7 @@ public:
     return *this;
   }
 
-  ActualCall& with( const SimpleString& name, const void* const buffer, const std::size_t& size )
-  {
-    TestDouble::Parameter* pParameter = new TestDouble::Parameter( name, buffer, size );
-    _parameters = new ParameterEntry( pParameter, _parameters );
-    return *this;
-  }
+  ActualCall& with( const SimpleString& name, const void* const buffer, const std::size_t& size );
 
   template<typename T>
   ActualCall& output( const SimpleString& name, const T& value )
@@ -68,7 +60,6 @@ public:
     //FIXME _addOutputParameter( name, value );
     return *this;
   }
-
 
   //  return based methods invoke matched expectation (or else do nothing and return 0)
   bool returnBool();
@@ -86,6 +77,7 @@ public:
   const void* returnConstPointer();
   void(*returnFunctionPointer())();
 
+  const ParameterEntry* getParameters() const { return _parameters; }
 
 private:
   ParameterEntry*         _parameters;

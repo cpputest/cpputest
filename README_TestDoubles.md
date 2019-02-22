@@ -120,5 +120,5 @@ actualCall( "<call>" )                  // name of method/function used by actua
     {.onObject( this ) }                // object of the DoC
     {.onObjectType( objectType ) }      // objectType of the object DoC
     {.with( "parameter", value )}       // name of parameter and value to validate
-    {.returns<type>()}                  // return expected value
+    {.return<type>()}                   // return expected value
 ```

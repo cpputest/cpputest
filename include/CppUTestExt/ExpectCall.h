@@ -34,13 +34,16 @@
 class ExpectedCall;
 ExpectedCall& expectCall( const SimpleString& call );            ///< add expectation to registry
 
+/// A builder for an expectation
 class ExpectedCall
 {
 public:
+  const SimpleString  methodName;
+
   ExpectedCall( const SimpleString& call );
   ~ExpectedCall();
 
-  static const int EXPECT_ALWAYS = 0;
+  static const int EXPECT_ALWAYS = -1;
   ExpectedCall& times( const unsigned int count );
 
   template<typename T>
@@ -51,12 +54,7 @@ public:
     return *this;
   }
 
-  ExpectedCall& with( const SimpleString& name, const void* buffer, const std::size_t& size )
-  {
-    TestDouble::Parameter* pParameter = new TestDouble::Parameter( name, buffer, size );
-    _parameters = new ParameterEntry( pParameter, _parameters );
-    return *this;
-  }
+  ExpectedCall& with( const SimpleString& name, const void* buffer, const std::size_t& size );
 
   template<typename T>
   ExpectedCall& output( const SimpleString& name, const T& value )
@@ -65,13 +63,12 @@ public:
     return *this;
   }
 
-  const SimpleString  methodName;
-  unsigned int        count;
+  const int& getCount() const { return _count; }
   const ParameterEntry* getParameters() const { return _parameters; }
-
   SimpleString toString() const;
 
 private:
+  int               _count;
   ParameterEntry*   _parameters;
 };
 

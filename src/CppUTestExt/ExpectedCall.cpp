@@ -32,7 +32,8 @@
 
 
 ExpectedCall::ExpectedCall( const SimpleString& name )
-  : count(EXPECT_ALWAYS), methodName(name)
+  : methodName(name)
+   ,_count(EXPECT_ALWAYS)
    ,_parameters(0)
 { }
 
@@ -41,14 +42,18 @@ ExpectedCall::~ExpectedCall()
   delete _parameters;
 }
 
-
-
-ExpectedCall& ExpectedCall::times( const unsigned int _count )
+ExpectedCall& ExpectedCall::times( const unsigned int count )
 {
-  count = _count;
+  _count = count;
   return *this;
 }
 
+ExpectedCall& ExpectedCall::with( const SimpleString& name, const void* buffer, const std::size_t& size )
+{
+  TestDouble::Parameter* pParameter = new TestDouble::Parameter( name, buffer, size );
+  _parameters = new ParameterEntry( pParameter, _parameters );
+  return *this;
+}
 
 SimpleString ExpectedCall::toString() const
 {
