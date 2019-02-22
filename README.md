@@ -25,10 +25,11 @@ Building from source (unix-based, cygwin, MacOSX):
 
 * Download latest version
 * autogen.sh
-* configure
-* make
-* make check
-* You can use "make install" if you want to install CppUTest system-wide
+* make a build directory and change to it `mkdir a_build_dir && cd a_build_dir`
+* configure `../configure`
+* `make`
+* `make check`
+* You can use `make install` if you want to install CppUTest system-wide
 
 You can also use CMake, which also works for Windows Visual Studio.
 
@@ -93,6 +94,8 @@ The failure of one of these macros causes the current test to immediately exit
 * BYTES_EQUAL(expected, actual) - Compares two numbers, eight bits wide
 * POINTERS_EQUAL(expected, actual) - Compares two const void *
 * DOUBLES_EQUAL(expected, actual, tolerance) - Compares two doubles within some tolerance
+* ENUMS_EQUAL_INT(excepted, actual) - Compares two enums which their underlying type is int
+* ENUMS_EQUAL_TYPE(underlying_type, excepted, actual) - Compares two enums which they have the same underlying type
 * FAIL(text) - always fails
 * TEST_EXIT - Exit the test without failure - useful for contract testing (implementing an assert fake)
 

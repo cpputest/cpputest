@@ -307,6 +307,30 @@
 #define BITS_LOCATION(expected, actual, mask, text, file, line)\
   { UtestShell::getCurrent()->assertBitsEqual(expected, actual, mask, sizeof(actual), text, file, line); }
 
+#define ENUMS_EQUAL_INT(expected, actual)\
+  ENUMS_EQUAL_TYPE(int, expected, actual)
+
+#define ENUMS_EQUAL_INT_TEXT(expected, actual, text)\
+  ENUMS_EQUAL_TYPE_TEXT(int, expected, actual, text)
+
+#define ENUMS_EQUAL_TYPE(underlying_type, expected, actual)\
+  ENUMS_EQUAL_TYPE_LOCATION(underlying_type, expected, actual, NULLPTR, __FILE__, __LINE__)
+
+#define ENUMS_EQUAL_TYPE_TEXT(underlying_type, expected, actual, text)\
+  ENUMS_EQUAL_TYPE_LOCATION(underlying_type, expected, actual, text, __FILE__, __LINE__)
+
+#define ENUMS_EQUAL_TYPE_LOCATION(underlying_type, expected, actual, text, file, line)\
+  { underlying_type expected_underlying_value = (underlying_type)(expected); \
+    underlying_type actual_underlying_value = (underlying_type)(actual); \
+    if (expected_underlying_value != actual_underlying_value) { \
+      UtestShell::getCurrent()->assertEquals(true, StringFrom(expected_underlying_value).asCharString(), StringFrom(actual_underlying_value).asCharString(), text, file, line); \
+    } \
+    else \
+    { \
+      UtestShell::getCurrent()->assertLongsEqual((long)0, long(0), NULLPTR, file, line); \
+    } \
+  }
+
 //Fail if you get to this macro
 //The macro FAIL may already be taken, so allow FAIL_TEST too
 #ifndef FAIL

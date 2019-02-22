@@ -154,6 +154,12 @@ TEST(MockSupport_c, unsignedLongIntParameter)
     mock_c()->actualCall("foo")->withUnsignedLongIntParameters("p", 1);
 }
 
+TEST(MockSupport_c, doubleParameterWithTolerance)
+{
+    mock_c( )->expectOneCall("foo")->withDoubleParametersAndTolerance("p", 2.0, 0.2);
+    mock_c( )->actualCall("foo")->withDoubleParameters("p", 1.9);
+}
+
 #ifdef CPPUTEST_USE_LONG_LONG
 
 TEST(MockSupport_c, longLongIntParameter)

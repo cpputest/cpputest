@@ -1094,6 +1094,165 @@ IGNORE_TEST(UnitTestMacros, BITS_EQUAL_TEXTWorksInAnIgnoredTest)
     BITS_EQUAL_TEXT(0x00, 0xFF, 0xFF, "Failed because it failed"); // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
 
+#if defined(__cplusplus) && __cplusplus >= 201103L
+enum class ScopedIntEnum {
+    A, B
+};
+
+static void _ENUMS_EQUAL_INTWithScopedIntEnumTestMethod()
+{
+    ENUMS_EQUAL_INT(ScopedIntEnum::B, ScopedIntEnum::B);
+    ENUMS_EQUAL_INT(ScopedIntEnum::B, ScopedIntEnum::A);
+} // LCOV_EXCL_LINE
+
+TEST(UnitTestMacros, TestENUMS_EQUAL_INTWithScopedIntEnum)
+{
+    fixture.runTestWithMethod(_ENUMS_EQUAL_INTWithScopedIntEnumTestMethod);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0>");
+}
+
+TEST(UnitTestMacros, ENUMS_EQUAL_INTWithScopedIntEnumBehavesAsProperMacro)
+{
+    if (false) ENUMS_EQUAL_INT(ScopedIntEnum::B, ScopedIntEnum::A)
+    else ENUMS_EQUAL_INT(ScopedIntEnum::B, ScopedIntEnum::B)
+}
+
+IGNORE_TEST(UnitTestMacros, ENUMS_EQUAL_INTWithScopedIntEnumWorksInAnIgnoredTest)
+{
+    ENUMS_EQUAL_INT(ScopedIntEnum::B, ScopedIntEnum::A); // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
+
+static void _ENUMS_EQUAL_INT_TEXTWithScopedIntEnumTestMethod()
+{
+    ENUMS_EQUAL_INT_TEXT(ScopedIntEnum::B, ScopedIntEnum::A, "Failed because it failed");
+} // LCOV_EXCL_LINE
+
+TEST(UnitTestMacros, TestENUMS_EQUAL_INT_TEXTWithScopedIntEnum)
+{
+    fixture.runTestWithMethod(_ENUMS_EQUAL_INT_TEXTWithScopedIntEnumTestMethod);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("Failed because it failed");
+}
+
+TEST(UnitTestMacros, ENUMS_EQUAL_INT_TEXTWithScopedIntEnumBehavesAsProperMacro)
+{
+    if (false) ENUMS_EQUAL_INT_TEXT(ScopedIntEnum::B, ScopedIntEnum::A, "Failed because it failed")
+    else ENUMS_EQUAL_INT_TEXT(ScopedIntEnum::B, ScopedIntEnum::B, "Failed because it failed")
+}
+
+IGNORE_TEST(UnitTestMacros, ENUMS_EQUAL_EQUAL_INT_TEXTWithScopedIntEnumWorksInAnIgnoredTest)
+{
+    ENUMS_EQUAL_INT_TEXT(ScopedIntEnum::B, ScopedIntEnum::A, "Failed because it failed"); // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
+
+enum class ScopedLongEnum : long {
+    A, B
+};
+
+static void _ENUMS_EQUAL_TYPEWithScopedLongEnumTestMethod()
+{
+    ENUMS_EQUAL_TYPE(long, ScopedLongEnum::B, ScopedLongEnum::B);
+    ENUMS_EQUAL_TYPE(long, ScopedLongEnum::B, ScopedLongEnum::A);
+} // LCOV_EXCL_LINE
+
+TEST(UnitTestMacros, TestENUMS_EQUAL_TYPEWithScopedLongEnum)
+{
+    fixture.runTestWithMethod(_ENUMS_EQUAL_TYPEWithScopedLongEnumTestMethod);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0>");
+}
+
+TEST(UnitTestMacros, ENUMS_EQUAL_TYPEWithScopedLongEnumBehavesAsProperMacro)
+{
+    if (false) ENUMS_EQUAL_TYPE(long, ScopedLongEnum::B, ScopedLongEnum::A)
+    else ENUMS_EQUAL_TYPE(long, ScopedLongEnum::B, ScopedLongEnum::B)
+}
+
+IGNORE_TEST(UnitTestMacros, ENUMS_EQUAL_TYPEWithScopedLongEnumWorksInAnIgnoredTest)
+{
+    ENUMS_EQUAL_TYPE(long, ScopedLongEnum::B, ScopedLongEnum::A); // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
+
+static void _ENUMS_EQUAL_TYPE_TEXTWithScopedLongEnumTestMethod()
+{
+    ENUMS_EQUAL_TYPE_TEXT(long, ScopedLongEnum::B, ScopedLongEnum::A, "Failed because it failed");
+} // LCOV_EXCL_LINE
+
+TEST(UnitTestMacros, TestENUMS_EQUAL_TYPE_TEXTWithScopedLongEnum)
+{
+    fixture.runTestWithMethod(_ENUMS_EQUAL_TYPE_TEXTWithScopedLongEnumTestMethod);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("Failed because it failed");
+}
+
+TEST(UnitTestMacros, ENUMS_EQUAL_TYPE_TEXTWithScopedLongEnumBehavesAsProperMacro)
+{
+    if (false) ENUMS_EQUAL_TYPE_TEXT(long, ScopedLongEnum::B, ScopedLongEnum::A, "Failed because it failed")
+    else ENUMS_EQUAL_TYPE_TEXT(long, ScopedLongEnum::B, ScopedLongEnum::B, "Failed because it failed")
+}
+
+IGNORE_TEST(UnitTestMacros, ENUMS_EQUAL_EQUAL_TYPE_TEXTWithScopedLongEnumWorksInAnIgnoredTest)
+{
+    ENUMS_EQUAL_TYPE_TEXT(long, ScopedLongEnum::B, ScopedLongEnum::A, "Failed because it failed"); // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
+
+#endif
+
+enum UnscopedEnum {
+    UNSCOPED_ENUM_A, UNSCOPED_ENUM_B
+};
+
+static void _ENUMS_EQUAL_INTWithUnscopedEnumTestMethod()
+{
+    ENUMS_EQUAL_INT(UNSCOPED_ENUM_B, UNSCOPED_ENUM_B);
+    ENUMS_EQUAL_INT(UNSCOPED_ENUM_B, UNSCOPED_ENUM_A);
+} // LCOV_EXCL_LINE
+
+TEST(UnitTestMacros, TestENUMS_EQUAL_INTWithUnscopedEnum)
+{
+    fixture.runTestWithMethod(_ENUMS_EQUAL_INTWithUnscopedEnumTestMethod);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0>");
+}
+
+TEST(UnitTestMacros, ENUMS_EQUAL_INTWithUnscopedEnumBehavesAsProperMacro)
+{
+    if (false) ENUMS_EQUAL_INT(UNSCOPED_ENUM_B, UNSCOPED_ENUM_A)
+    else ENUMS_EQUAL_INT(UNSCOPED_ENUM_B, UNSCOPED_ENUM_B)
+}
+
+IGNORE_TEST(UnitTestMacros, ENUMS_EQUAL_INTWithUnscopedEnumWorksInAnIgnoredTest)
+{
+    ENUMS_EQUAL_INT(UNSCOPED_ENUM_B, UNSCOPED_ENUM_A); // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
+
+static void _ENUMS_EQUAL_INT_TEXTWithUnscopedEnumTestMethod()
+{
+    ENUMS_EQUAL_INT_TEXT(UNSCOPED_ENUM_B, UNSCOPED_ENUM_A, "Failed because it failed");
+} // LCOV_EXCL_LINE
+
+TEST(UnitTestMacros, TestENUMS_EQUAL_INT_TEXTWithUnscopedEnum)
+{
+    fixture.runTestWithMethod(_ENUMS_EQUAL_INT_TEXTWithUnscopedEnumTestMethod);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("Failed because it failed");
+}
+
+TEST(UnitTestMacros, ENUMS_EQUAL_INT_TEXTWithUnscopedEnumBehavesAsProperMacro)
+{
+    if (false) ENUMS_EQUAL_INT_TEXT(UNSCOPED_ENUM_B, UNSCOPED_ENUM_A, "Failed because it failed")
+    else ENUMS_EQUAL_INT_TEXT(UNSCOPED_ENUM_B, UNSCOPED_ENUM_B, "Failed because it failed")
+}
+
+IGNORE_TEST(UnitTestMacros, ENUMS_EQUAL_EQUAL_INT_TEXTWithUnscopedEnumWorksInAnIgnoredTest)
+{
+    ENUMS_EQUAL_INT_TEXT(UNSCOPED_ENUM_B, UNSCOPED_ENUM_A, "Failed because it failed"); // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
+
 #if CPPUTEST_USE_STD_CPP_LIB
 static void _failingTestMethod_NoThrowWithCHECK_THROWS()
 {

@@ -259,7 +259,19 @@ TEST(MockExpectedCall, callWithDoubleParameter)
     double value = 1.2;
     call->withParameter(paramName, value);
     STRCMP_EQUAL("double", call->getInputParameterType(paramName).asCharString());
-    DOUBLES_EQUAL(value, call->getInputParameter(paramName).getDoubleValue(), 0.05);
+    DOUBLES_EQUAL(value, call->getInputParameter(paramName).getDoubleValue(), 0.0);
+    STRCMP_CONTAINS("funcName -> double paramName: <1.2>", call->callToString().asCharString());
+}
+
+TEST(MockExpectedCall, callWithDoubleParameterAndTolerance)
+{
+    const SimpleString paramName = "paramName";
+    double value = 1.2;
+    double tolerance = 0.2;
+    call->withParameter(paramName, value, tolerance);
+    STRCMP_EQUAL("double", call->getInputParameterType(paramName).asCharString());
+    DOUBLES_EQUAL(value, call->getInputParameter(paramName).getDoubleValue(), 0.0);
+    DOUBLES_EQUAL(tolerance, call->getInputParameter(paramName).getDoubleTolerance(), 0.0);
     STRCMP_CONTAINS("funcName -> double paramName: <1.2>", call->callToString().asCharString());
 }
 
@@ -750,6 +762,7 @@ TEST(MockIgnoredExpectedCall, worksAsItShould)
     ignored.withUnsignedLongLongIntParameter("grr", (unsigned long long int) 1);
 #endif
     ignored.withDoubleParameter("hah", (double) 1.1f);
+    ignored.withDoubleParameter("gah", 2.1, 0.3);
     ignored.withStringParameter("goo", "hello");
     ignored.withPointerParameter("pie", (void*) NULLPTR);
     ignored.withConstPointerParameter("woo", (const void*) NULLPTR);

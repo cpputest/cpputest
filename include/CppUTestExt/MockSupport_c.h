@@ -136,6 +136,7 @@ struct SMockExpectedCall_c
     MockExpectedCall_c* (*withLongLongIntParameters)(const char* name, cpputest_longlong value);
     MockExpectedCall_c* (*withUnsignedLongLongIntParameters)(const char* name, cpputest_ulonglong value);
     MockExpectedCall_c* (*withDoubleParameters)(const char* name, double value);
+    MockExpectedCall_c* (*withDoubleParametersAndTolerance)(const char* name, double value, double tolerance);
     MockExpectedCall_c* (*withStringParameters)(const char* name, const char* value);
     MockExpectedCall_c* (*withPointerParameters)(const char* name, void* value);
     MockExpectedCall_c* (*withConstPointerParameters)(const char* name, const void* value);
