@@ -36,6 +36,12 @@ ExpectedCall::ExpectedCall( const SimpleString& name )
    ,_parameters(0)
 { }
 
+ExpectedCall::~ExpectedCall()
+{
+  delete _parameters;
+}
+
+
 
 ExpectedCall& ExpectedCall::times( const unsigned int _count )
 {

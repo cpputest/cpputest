@@ -50,6 +50,12 @@ struct ParameterEntry
   : pParameter(_pParameter)
    ,pNext(_pNext)
   {}
+
+  ~ParameterEntry()
+  {
+    delete pParameter;
+    delete pNext;
+  }
 };
 
 

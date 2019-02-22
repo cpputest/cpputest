@@ -38,17 +38,7 @@ class ExpectedCall
 {
 public:
   ExpectedCall( const SimpleString& call );
-
-  ~ExpectedCall()
-  {
-    while( 0 != _parameters )
-    {
-      ParameterEntry* nextHead = _parameters->pNext;
-      delete _parameters->pParameter;
-      delete _parameters;
-      _parameters = nextHead;
-    }
-  }
+  ~ExpectedCall();
 
   static const int EXPECT_ALWAYS = 0;
   ExpectedCall& times( const unsigned int count );

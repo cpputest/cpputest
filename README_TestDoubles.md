@@ -107,7 +107,7 @@ expectCall( "<call>" )                  // name of method/function used by actua
     {.with( "parameter", value )}       // name of parameter and value to validate
     {.output( "parameter", value )}     // name of parameter, sets an expected value
     {.use( Model )}                     // Model of behavior
-    {.returns<type>()}                  // return value
+    {.returns<type>( value )}           // return value
 
 Schema of a Sequential Expectation
 ------------------------------------------------------------------------------------------------------------------------
@@ -120,5 +120,5 @@ actualCall( "<call>" )                  // name of method/function used by actua
     {.onObject( this ) }                // object of the DoC
     {.onObjectType( objectType ) }      // objectType of the object DoC
     {.with( "parameter", value )}       // name of parameter and value to validate
-    {.returns<type>()}                  // return value
+    {.returns<type>()}                  // return expected value
 ```

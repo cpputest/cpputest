@@ -27,6 +27,7 @@
 
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TestTestingFixture.h"
+#include "CppUTestExt/TestDouble.h"
 #include "CppUTestExt/ExpectedCall.h"
 #include "CppUTestExt/ActualCall.h"
 
