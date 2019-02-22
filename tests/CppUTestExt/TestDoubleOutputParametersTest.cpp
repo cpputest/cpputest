@@ -27,7 +27,7 @@
 
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TestTestingFixture.h"
-#include "CppUTestExt/Expect.h"
+#include "CppUTestExt/ExpectedCall.h"
 #include "CppUTestExt/ActualCall.h"
 
 TEST_GROUP( TestDoubleOutputParameters )
@@ -47,7 +47,7 @@ TEST( TestDoubleOutputParameters, sets_output_bool_parameter )
 {
   const bool expectedValue = true;
   expectCall("foo").output("value", &expectedValue);
-  bool actualValue = false;
+  bool actualValue = ~expectedValue;
   actualCall("foo").output("value", &actualValue);
   CHECK( expectedValue == actualValue );
 }

@@ -27,7 +27,7 @@
 
 #include <CppUTestExt/TestDouble.h>
 
-#include "CppUTestExt/Expect.h"
+#include "CppUTestExt/ExpectedCall.h"
 #include "CppUTestExt/ActualCall.h"
 
 #include <CppUTest/TestHarness.h>
@@ -73,6 +73,13 @@ ExpectedCall& Expectations::add( const SimpleString& call )
   // prepend expected chain
   _expectedCalls = new ExpectedCallEntry{ pExpected, 0, _expectedCalls };
   return *pExpected;
+}
+
+
+ExpectedCall* findExpectation( const ActualCall& call )
+{
+  // FIXME
+  return NULL;
 }
 
 bool _matches( const ActualCall& pCall, const ExpectedCall& expected );

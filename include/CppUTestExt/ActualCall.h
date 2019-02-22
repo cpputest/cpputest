@@ -32,35 +32,17 @@
 #include "CppUTest/TestHarness.h"
 
 class ActualCall;
-ActualCall actualCall( const SimpleString& call );
+ActualCall actualCall( const SimpleString& name );
 
 class ActualCall
 {
 public:
-  ActualCall( const SimpleString& call );
+  const SimpleString      methodName;
 
-  ~ActualCall()
-  {
-    /// assert the actual
-    bool verified = verifyActual( *this );
+  ActualCall( const SimpleString& name );
 
-    if( 0 != _pOutputParameter) delete _pOutputParameter;
-    while( 0 != _parameters )
-    {
-      delete _parameters->pParameter;
-      ParameterEntry* pNextHead = _parameters->pNext;
-      delete _parameters;
-      _parameters = pNextHead;
-    }
-
-    if( false == verified )
-    {
-      // TODO print actual (input and output parameters)
-      FAIL( "Actual didn't match expectations" );
-    }
-  }
-
-  const SimpleString& methodName;
+  /// assert the actual
+  ~ActualCall();
 
   const ParameterEntry* getParameters() const { return _parameters; }
 
@@ -106,7 +88,6 @@ public:
 
 
 private:
-  const SimpleString      _methodName;
   ParameterEntry*         _parameters;
   TestDouble::Parameter*  _pOutputParameter;
 

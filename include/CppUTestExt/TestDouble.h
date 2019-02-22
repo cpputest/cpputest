@@ -30,12 +30,14 @@
 #include <CppUTest/SimpleString.h>
 #include <CppUTestExt/TestDoubleParameter.h>
 
+class ExpectedCall;
+class ActualCall;
+// Expectation* findExpectation( const ActualCall& call );
+ExpectedCall* findExpectation( const ActualCall& call );
+
 void failUnexpected( bool mode = true );
 
 void checkExpectations();
-
-class ActualCall;
-bool verifyActual( const ActualCall& call );
 
 // generic list of parameters (both input and output)
 struct ParameterEntry

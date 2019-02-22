@@ -31,8 +31,7 @@
 #include <typeinfo>
 #include <CppUTest/SimpleString.h>
 
-// FIXME
-#include <stdio.h>
+// CppUTest replaces string.h API but not memcmp
 extern "C" int memcmp ( const void * ptr1, const void * ptr2, size_t num );
 
 namespace TestDouble {
@@ -64,6 +63,8 @@ public:
       return ( 0 == memcmp( buffer, pOther->buffer, bufferSize_bytes ) );
     }
 
+    if( type == typeid(void*).name() ) { return _variant.asPointer == pOther->_variant.asPointer; }
+    if( type == typeid(const void*).name() ) { return _variant.asConstPointer == pOther->_variant.asConstPointer; }
     if( type == typeid(bool).name() ) { return _variant.asBool == pOther->_variant.asBool; }
     if( type == typeid(char).name() ) { return _variant.asChar == pOther->_variant.asChar; }
     if( type == typeid(unsigned char).name() ) { return _variant.asUnsignedChar == pOther->_variant.asUnsignedChar; }
@@ -75,16 +76,11 @@ public:
     if( type == typeid(unsigned long long).name() ) { return _variant.asUnsignedLongLongInt == pOther->_variant.asUnsignedLongLongInt; }
     if( type == typeid(float).name() ) { return _variant.asFloat == pOther->_variant.asFloat; }
     if( type == typeid(double).name() ) { return _variant.asDouble == pOther->_variant.asDouble; }
-    // if( type == typeid(void*).name() ) { return _variant.asPointer == pOther->_variant.asPointer; }
-    // if( type == typeid(const void*).name() ) { return _variant.asConstPointer == pOther->_variant.asConstPointer; }
-    // return _variant.asFunctionPointer == pOther->_variant.asFunctionPointer;
-    // printf( "Pointers   this: %x  other: %x\n", _variant.asPointer, pOther->_variant.asPointer );
     return _variant.asPointer == pOther->_variant.asPointer;
   }
 
 
 private:
-
   const union Variant {
     bool                    asBool;
     char                    asChar;

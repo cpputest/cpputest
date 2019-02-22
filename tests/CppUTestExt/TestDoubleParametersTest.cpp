@@ -27,7 +27,7 @@
 
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TestTestingFixture.h"
-#include "CppUTestExt/Expect.h"
+#include "CppUTestExt/ExpectedCall.h"
 #include "CppUTestExt/ActualCall.h"
 
 TEST_GROUP( TestDoubleParameters )
@@ -121,16 +121,16 @@ TEST( TestDoubleParameters, expect_double_parameter )
 }
 
 #include <stdio.h>
-TEST( TestDoubleParameters, expect_pointer_parameter_with_value )
+TEST( TestDoubleParameters, expect_pointer_parameter )
 {
-  static char value[] = "HELLO";
+  char value[] = "HELLO";
   expectCall("foo").with("value", value);
   actualCall("foo").with("value", value);
 }
 
-TEST( TestDoubleParameters, expect_const_pointer_parameter_with_value )
+TEST( TestDoubleParameters, expect_const_pointer_parameter )
 {
-  const void* const value = reinterpret_cast<void*>(0x100);
+  const char value[] = "HELLO";
   expectCall("foo").with("value", value);
   actualCall("foo").with("value", value);
 }
@@ -142,7 +142,7 @@ TEST( TestDoubleParameters, expect_function_pointer_parameter_with_value )
   actualCall("foo").with("value", _fn);
 }
 
-// FIXME support memcmp
+// TODO expectation buffer should be memoized, test should place exepected buffer in non-static space
 TEST( TestDoubleParameters, expect_buffer )
 {
   char buffer[] = "HELLO WORLD";
@@ -159,12 +159,6 @@ TEST( TestDoubleParameters, unexpected_calls_pass )
 TEST_GROUP( TestDoubleParametersFailure )
 {
   TestTestingFixture fixture;
-
-  TEST_TEARDOWN()
-  {
-    // for reference only
-    // UT_PRINT( fixture.getOutput() );
-  }
 };
 
 static void _mismatch_type( void )

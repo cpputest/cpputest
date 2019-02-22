@@ -25,11 +25,11 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef EXPECT_H
-#define EXPECT_H
+#ifndef EXPECTED_CALL_H
+#define EXPECTED_CALL_H
 
 #include <CppUTest/SimpleString.h>
-#include "CppUTestExt/TestDouble.h"
+#include "TestDouble.h"
 
 class ExpectedCall;
 ExpectedCall& expectCall( const SimpleString& call );            ///< add expectation to registry
@@ -93,4 +93,4 @@ private:
 //     virtual void behave( const Expectation&, Actual& ) = 0;
 // };
 
-#endif /* EXPECT_H */
+#endif /* EXPECTED_CALL_H */

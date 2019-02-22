@@ -14,7 +14,7 @@ set(CppUTestExt_src
         MockExpectedCallsList.cpp
         MockSupport.cpp
         TestDouble.cpp
-        Expect.cpp
+        ExpectedCall.cpp
         ActualCall.cpp
 )
 
@@ -41,7 +41,7 @@ set(CppUTestExt_headers
         ${CppUTestRootDirectory}/include/CppUTestExt/MockSupport.h
         ${CppUTestRootDirectory}/include/CppUTestExt/TestDouble.h
         ${CppUTestRootDirectory}/include/CppUTestExt/TestDoubleParameter.h
-        ${CppUTestRootDirectory}/include/CppUTestExt/Expect.h
+        ${CppUTestRootDirectory}/include/CppUTestExt/ExpectedCall.h
         ${CppUTestRootDirectory}/include/CppUTestExt/ActualCall.h
 )
 

@@ -27,81 +27,34 @@
 
 #include "CppUTestExt/ActualCall.h"
 
-ActualCall::ActualCall( const SimpleString& call )
-  : methodName( call )
+#include "CppUTestExt/ExpectedCall.h"
+
+
+ActualCall::ActualCall( const SimpleString& name )
+  : methodName( name )
    ,_parameters(0)
    ,_pOutputParameter(0)
 { }
 
-// bool ActualCall::returnBool()
-// {
-//   return findExpectation( this ).returnValue().boolValue();
-// }
+ActualCall::~ActualCall()
+{
+  /// find an expectation
+  ExpectedCall* pExpectation = findExpectation( *this );
 
-// char ActualCall::returnChar()
-// {
-//   // FIXME CppUMock has not returnCharValue
-//   return (char)_actualCall.returnIntValue();
-// }
+  // clean up memory resources
+  if( 0 != _pOutputParameter) delete _pOutputParameter;
+  while( 0 != _parameters )
+  {
+    delete _parameters->pParameter;
+    ParameterEntry* pNextHead = _parameters->pNext;
+    delete _parameters;
+    _parameters = pNextHead;
+  }
 
-// unsigned char ActualCall::returnUnsignedChar()
-// {
-//   // FIXME CppUMock has not returnUnsignedCharValue
-//   return (unsigned char)_actualCall.returnUnsignedIntValue();
-// }
+  if( NULL == pExpectation )
+  {
+    // TODO print actual (input and output parameters)
+    FAIL( "Actual didn't match expectations" );
+  }
+}
 
-// int ActualCall::returnInt()
-// {
-//   return _actualCall.returnIntValue();
-// }
-
-// unsigned int ActualCall::returnUnsignedInt()
-// {
-//   return _actualCall.returnUnsignedIntValue();
-// }
-
-// long ActualCall::returnLongInt()
-// {
-//   return _actualCall.returnLongIntValue();
-// }
-
-// unsigned long ActualCall::returnUnsignedLongInt()
-// {
-//   return _actualCall.returnUnsignedLongIntValue();
-// }
-
-// long long ActualCall::returnLongLongInt()
-// {
-//   return _actualCall.returnLongLongIntValue();
-// }
-
-// unsigned long long ActualCall::returnUnsignedLongLongInt()
-// {
-//   return _actualCall.returnUnsignedLongLongIntValue();
-// }
-
-// // FIXME CppUMock doesn't support float
-// // float ActualCall::returnFloat()
-// // {
-// //   return static_cast<float>(_actualCall.returnDoubleValue());
-// // }
-
-// double ActualCall::returnDouble()
-// {
-//   return _actualCall.returnDoubleValue();
-// }
-
-// void* ActualCall::returnPointer()
-// {
-//   return _actualCall.returnPointerValue();
-// }
-
-// const void* ActualCall::returnConstPointer()
-// {
-//   return _actualCall.returnConstPointerValue();
-// }
-
-// void (*ActualCall::returnFunctionPointer())()
-// {
-//   return _actualCall.returnFunctionPointerValue();
-// }
