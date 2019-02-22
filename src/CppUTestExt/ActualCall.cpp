@@ -27,7 +27,7 @@
 
 #include "CppUTestExt/ActualCall.h"
 
-#include "CppUTestExt/ExpectedCall.h"
+#include "CppUTestExt/ExpectCall.h"
 
 
 ActualCall::ActualCall( const SimpleString& name )

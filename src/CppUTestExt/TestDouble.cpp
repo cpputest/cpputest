@@ -27,7 +27,7 @@
 
 #include <CppUTestExt/TestDouble.h>
 
-#include "CppUTestExt/ExpectedCall.h"
+#include "CppUTestExt/ExpectCall.h"
 #include "CppUTestExt/ActualCall.h"
 
 #include <CppUTest/TestHarness.h>
@@ -119,7 +119,7 @@ bool Expectations::check()
       // FIXME why is the test result protected?!
       // UtestShell::getCurrent()->getTestResult()->print( expectedCall.asCharString() );
       // Fake access to test result
-      UtestShell::getCurrent()->print( expectedCall.toString().asCharString(), "", 0 );
+      // UtestShell::getCurrent()->print( expectedCall.toString().asCharString(), "", 0 );
       passed = false;
     }
 

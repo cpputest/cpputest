@@ -27,7 +27,7 @@
 
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TestTestingFixture.h"
-#include "CppUTestExt/ExpectedCall.h"
+#include "CppUTestExt/ExpectCall.h"
 #include "CppUTestExt/ActualCall.h"
 
 // TEST_GROUP( TestDoubleReturns )

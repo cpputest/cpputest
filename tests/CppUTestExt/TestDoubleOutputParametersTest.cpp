@@ -28,7 +28,7 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TestTestingFixture.h"
 #include "CppUTestExt/TestDouble.h"
-#include "CppUTestExt/ExpectedCall.h"
+#include "CppUTestExt/ExpectCall.h"
 #include "CppUTestExt/ActualCall.h"
 
 TEST_GROUP( TestDoubleOutputParameters )

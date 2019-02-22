@@ -25,8 +25,8 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef EXPECTED_CALL_H
-#define EXPECTED_CALL_H
+#ifndef EXPECT_CALL_H
+#define EXPECT_CALL_H
 
 #include <CppUTest/SimpleString.h>
 #include "TestDouble.h"
@@ -83,4 +83,4 @@ private:
 //     virtual void behave( const Expectation&, Actual& ) = 0;
 // };
 
-#endif /* EXPECTED_CALL_H */
+#endif /* EXPECT_CALL_H */

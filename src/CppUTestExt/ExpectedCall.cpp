@@ -25,7 +25,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "CppUTestExt/ExpectedCall.h"
+#include "CppUTestExt/ExpectCall.h"
 
 // FIXME using CppUMock for now
 #include "CppUTestExt/MockSupport.h"
