@@ -131,22 +131,20 @@ static bool _matches( const ExpectationChain& expectation, const ActualCall& act
     {
       if( pExpectedEntry->pParameter->name == pActualEntry->pParameter->name )
       {
-        if( pExpectedEntry->pParameter->type != pActualEntry->pParameter->type )
-        {
-          UT_PRINT( StringFromFormat( "Type Mismatch: Expected call to '%s' with parameter '%s' of type '%s', but actual paramter was of type '%s'.",
-            expected.methodName.asCharString(), pExpectedEntry->pParameter->name.asCharString(),
-            pExpectedEntry->pParameter->type.asCharString(), pActualEntry->pParameter->type.asCharString() ).asCharString()
-          );
-          return false;
-        }
-
         if( false == pExpectedEntry->pParameter->equals( pActualEntry->pParameter ) ) return false;
       }
     }
+
+    // TODO match output parameters type
+
+    // TODO match return type
   }
 
   return true;
 }
+
+
+
 // bool Expectations::check()
 // {
 //   bool passed = true;

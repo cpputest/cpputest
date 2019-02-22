@@ -14,6 +14,7 @@ set(CppUTestExt_src
         MockExpectedCallsList.cpp
         MockSupport.cpp
         TestDouble.cpp
+        TestDoubleParameter.cpp
         ExpectedCall.cpp
         ActualCall.cpp
 )

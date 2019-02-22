@@ -49,6 +49,12 @@ ActualCall::~ActualCall()
   {
     // TODO print actual (input and output parameters)
     // FAIL( "Actual didn't match expectations" );
+
+    // UT_PRINT( StringFromFormat( "Type Mismatch: Expected call to '%s' with parameter '%s' of type '%s', but actual paramter was of type '%s'.",
+    //   expected.methodName.asCharString(), pExpectedEntry->pParameter->name.asCharString(),
+    //   pExpectedEntry->pParameter->type.asCharString(), pActualEntry->pParameter->type.asCharString() ).asCharString()
+    // );
+
   }
 }
 

@@ -54,31 +54,7 @@ public:
   : name(_name), type( typeid(void*).name() ), buffer(_buffer), bufferSize_bytes(_bufferSize_bytes)
   { }
 
-  bool equals( const Parameter* pOther ) const
-  {
-    if( buffer !=0 )
-    {
-      if( 0 == pOther->buffer ) return false;
-      if( bufferSize_bytes != pOther->bufferSize_bytes ) return false;
-      return ( 0 == memcmp( buffer, pOther->buffer, bufferSize_bytes ) );
-    }
-
-    if( type == typeid(void*).name() ) { return _variant.asPointer == pOther->_variant.asPointer; }
-    if( type == typeid(const void*).name() ) { return _variant.asConstPointer == pOther->_variant.asConstPointer; }
-    if( type == typeid(bool).name() ) { return _variant.asBool == pOther->_variant.asBool; }
-    if( type == typeid(char).name() ) { return _variant.asChar == pOther->_variant.asChar; }
-    if( type == typeid(unsigned char).name() ) { return _variant.asUnsignedChar == pOther->_variant.asUnsignedChar; }
-    if( type == typeid(int).name() ) { return _variant.asInt == pOther->_variant.asInt; }
-    if( type == typeid(unsigned int).name() ) { return _variant.asUnsignedInt == pOther->_variant.asUnsignedInt; }
-    if( type == typeid(long).name() ) { return _variant.asLongInt == pOther->_variant.asLongInt; }
-    if( type == typeid(unsigned long).name() ) { return _variant.asUnsignedLongInt == pOther->_variant.asUnsignedLongInt; }
-    if( type == typeid(long long).name() ) { return _variant.asLongLongInt == pOther->_variant.asLongLongInt; }
-    if( type == typeid(unsigned long long).name() ) { return _variant.asUnsignedLongLongInt == pOther->_variant.asUnsignedLongLongInt; }
-    if( type == typeid(float).name() ) { return _variant.asFloat == pOther->_variant.asFloat; }
-    if( type == typeid(double).name() ) { return _variant.asDouble == pOther->_variant.asDouble; }
-    return _variant.asPointer == pOther->_variant.asPointer;
-  }
-
+  bool equal( const Parameter* const pOther ) const;
 
 private:
   const union Variant {
