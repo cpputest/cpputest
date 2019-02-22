@@ -70,7 +70,6 @@ ExpectationChain::~ExpectationChain()
 }
 
 
-ExpectationQueue::ExpectationQueue() : _pExpectations(0), _pLastExpectation(0) {};
 ExpectationQueue::~ExpectationQueue()
 {
   delete _pExpectations;
@@ -81,11 +80,11 @@ void ExpectationQueue::enqueue( const ExpectedCall* pCall )
   if( 0 == TestDouble::expectations._pExpectations )
   {
     TestDouble::expectations._pExpectations = new ExpectationChain( pCall, 0 );
-    TestDouble::expectations._pLastExpectation = _pExpectations;
+    TestDouble::expectations._pTail = _pExpectations;
   }
   else 
   {
-    TestDouble::expectations._pLastExpectation = new ExpectationChain( pCall, TestDouble::expectations._pLastExpectation );
+    TestDouble::expectations._pTail = new ExpectationChain( pCall, TestDouble::expectations._pTail );
   }
 }
 
@@ -99,20 +98,15 @@ void ExpectationQueue::check()
 }
 
 
-
-
-
-ExpectedCall* findExpectation( const ActualCall& call )
+static bool _matches( const ExpectationChain& expectation, const ActualCall& actual );
+const ExpectedCall* findExpectation( const ActualCall& call )
 {
-  // FIXME
+  for( ExpectationChain* pExpectation = TestDouble::expectations.get(); 0 != pExpectation; pExpectation = pExpectation->pNext )
+  {
+    if( _matches( *pExpectation, call ) ) return pExpectation->pExpectedCall;
+  }
   return NULL;
 }
-
-
-
-
-
-
 
 ParameterChain::ParameterChain( const TestDouble::Parameter* const _pParameter, ParameterChain* const _pNext )
   : pParameter(_pParameter)
@@ -125,32 +119,34 @@ ParameterChain::~ParameterChain()
 }
 
 
+/// upon match, the expectation::calledCount will be incremented
+static bool _matches( const ExpectationChain& expectation, const ActualCall& actual )
+{
+  const ExpectedCall expected = *(expectation.pExpectedCall);
+  if( actual.methodName != expected.methodName ) return false;
 
+  for( const TestDouble::ParameterChain* pExpectedEntry=expected.getParameters(); 0 != pExpectedEntry; pExpectedEntry = pExpectedEntry->pNext )
+  {
+    for( const TestDouble::ParameterChain* pActualEntry=actual.getParameters(); 0 != pActualEntry; pActualEntry = pActualEntry->pNext )
+    {
+      if( pExpectedEntry->pParameter->name == pActualEntry->pParameter->name )
+      {
+        if( pExpectedEntry->pParameter->type != pActualEntry->pParameter->type )
+        {
+          UT_PRINT( StringFromFormat( "Type Mismatch: Expected call to '%s' with parameter '%s' of type '%s', but actual paramter was of type '%s'.",
+            expected.methodName.asCharString(), pExpectedEntry->pParameter->name.asCharString(),
+            pExpectedEntry->pParameter->type.asCharString(), pActualEntry->pParameter->type.asCharString() ).asCharString()
+          );
+          return false;
+        }
 
+        if( false == pExpectedEntry->pParameter->equals( pActualEntry->pParameter ) ) return false;
+      }
+    }
+  }
 
-bool _matches( const ActualCall& pCall, const ExpectedCall& expected );
-// bool Expectations::check( const ActualCall& call )
-// {
-//   // TODO check sequence expectations first
-
-//   if( ( 0 == _expectedCalls ) && _failActuals ) return false;
-
-//   for( ExpectedCallEntry* pExpectedEntry =_expectedCalls; pExpectedEntry != 0; pExpectedEntry=pExpectedEntry->pNext )
-//   {
-//     const ExpectedCall& expectedCall = *(pExpectedEntry->pExpectedCall);
-//     // skip fulfilled expectations
-//     if( ( expectedCall.getCount() != ExpectedCall::EXPECT_ALWAYS ) && ( pExpectedEntry->calledCount >= expectedCall.getCount() ) ) continue;
-
-//     if( _matches( call, expectedCall ) ) pExpectedEntry->calledCount++;
-//     else
-//     {
-//       check();
-//       return false;
-//     }
-//   }
-//   return false;
-// }
-
+  return true;
+}
 // bool Expectations::check()
 // {
 //   bool passed = true;
@@ -178,33 +174,6 @@ bool _matches( const ActualCall& pCall, const ExpectedCall& expected );
 
 //   return passed;
 // }
-
-bool _matches( const ActualCall& actual, const ExpectedCall& expected )
-{
-  // if( actual.methodName != expected.methodName ) return false;
-
-  // for( const TestDouble::ParameterChain* pExpectedEntry=expected.getParameters(); pExpectedEntry != 0; pExpectedEntry=pExpectedEntry->pNext )
-  // {
-  //   for( const TestDouble::ParameterChain* pActualEntry=actual.getParameters(); pActualEntry != 0; pActualEntry=pActualEntry->pNext )
-  //   {
-  //     if( pExpectedEntry->pParameter->name.equalsNoCase( pActualEntry->pParameter->name ) )
-  //     {
-  //       if( pExpectedEntry->pParameter->type != pActualEntry->pParameter->type )
-  //       {
-  //         UT_PRINT( StringFromFormat( "Type Mismatch: Expected call to '%s' with parameter '%s' of type '%s', but actual paramter was of type '%s'.",
-  //           expected.methodName.asCharString(), pExpectedEntry->pParameter->name.asCharString(),
-  //           pExpectedEntry->pParameter->type.asCharString(), pActualEntry->pParameter->type.asCharString() ).asCharString()
-  //         );
-  //         return false;
-  //       }
-
-  //       if( false == pExpectedEntry->pParameter->equals( pActualEntry->pParameter ) ) return false;
-  //     }
-  //   }
-  // }
-
-  return true;
-}
 
 } // namespace TestDouble
 

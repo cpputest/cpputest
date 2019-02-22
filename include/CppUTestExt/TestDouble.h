@@ -40,6 +40,9 @@ class ExpectedCall;
 class ActualCall;
 namespace TestDouble {
 
+/// retval 0    no expectation found
+const ExpectedCall* findExpectation( const ActualCall& call );
+
 // list of expectations
 class ExpectationChain
 {
@@ -55,19 +58,16 @@ public:
 class ExpectationQueue
 {
 public:
-  ExpectationQueue();
   ~ExpectationQueue();
 
   void enqueue( const ExpectedCall* pCall );
+  ExpectationChain*   get() const { return _pExpectations; }
   void check();
 private:
   ExpectationChain*   _pExpectations;
-  ExpectationChain*   _pLastExpectation;
+  ExpectationChain*   _pTail;   ///< reference to last enqueued
 };
 static ExpectationQueue expectations;
-
-// Expectation* findExpectation( const ActualCall& call );
-ExpectedCall* findExpectation( const ActualCall& call );
 
 
 // generic list of parameters (used for both input and output)
