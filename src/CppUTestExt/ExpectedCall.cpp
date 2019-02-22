@@ -27,9 +27,6 @@
 
 #include "CppUTestExt/ExpectCall.h"
 
-// FIXME using CppUMock for now
-#include "CppUTestExt/MockSupport.h"
-
 
 ExpectedCall::ExpectedCall( const SimpleString& name )
   : methodName(name)
@@ -44,7 +41,7 @@ ExpectedCall::~ExpectedCall()
 
 ExpectedCall& ExpectedCall::times( const unsigned int count )
 {
-  _count = count;
+  _count = (int)count;
   return *this;
 }
 

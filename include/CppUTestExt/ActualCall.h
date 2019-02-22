@@ -32,6 +32,7 @@
 #include "CppUTest/TestHarness.h"
 
 class ActualCall;
+/// implemented in TestDouble.cpp
 ActualCall actualCall( const SimpleString& name );
 
 class ActualCall

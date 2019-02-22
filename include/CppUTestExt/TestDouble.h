@@ -30,16 +30,45 @@
 #include <CppUTest/SimpleString.h>
 #include <CppUTestExt/TestDoubleParameter.h>
 
+void failUnexpected( bool mode = true );
+void checkExpectations();
+
+
+
+// Expectation framework
 class ExpectedCall;
 class ActualCall;
+namespace TestDouble {
+
+// list of expectations
+class ExpectationChain
+{
+public:
+  const ExpectedCall* const pExpectedCall;
+  int                       calledCount;
+  ExpectationChain*         pNext;
+
+  ExpectationChain( const ExpectedCall* const _pExpectedCall, ExpectationChain* const pLast );
+  ~ExpectationChain();
+};
+
+class ExpectationQueue
+{
+public:
+  ExpectationQueue();
+  ~ExpectationQueue();
+
+  void enqueue( const ExpectedCall* pCall );
+  void check();
+private:
+  ExpectationChain*   _pExpectations;
+  ExpectationChain*   _pLastExpectation;
+};
+static ExpectationQueue expectations;
+
 // Expectation* findExpectation( const ActualCall& call );
 ExpectedCall* findExpectation( const ActualCall& call );
 
-void failUnexpected( bool mode = true );
-
-void checkExpectations();
-
-namespace TestDouble {
 
 // generic list of parameters (used for both input and output)
 struct ParameterChain
@@ -47,17 +76,8 @@ struct ParameterChain
   const TestDouble::Parameter* const pParameter;
   ParameterChain* const pNext;
 
-  ParameterChain( const TestDouble::Parameter* const _pParameter,
-                  ParameterChain* const _pNext )
-  : pParameter(_pParameter)
-   ,pNext(_pNext)
-  {}
-
-  ~ParameterChain()
-  {
-    delete pParameter;
-    delete pNext;
-  }
+  ParameterChain( const TestDouble::Parameter* const _pParameter, ParameterChain* const _pNext );
+  ~ParameterChain();
 };
 
 } // namespace TestDouble

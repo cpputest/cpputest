@@ -39,7 +39,7 @@ ActualCall::ActualCall( const SimpleString& name )
 ActualCall::~ActualCall()
 {
   /// find an expectation
-  ExpectedCall* pExpectation = findExpectation( *this );
+  ExpectedCall* pExpectation = TestDouble::findExpectation( *this );
 
   // clean up memory resources
   delete _parameters;

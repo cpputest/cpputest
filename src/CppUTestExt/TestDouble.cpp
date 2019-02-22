@@ -35,45 +35,71 @@
 static bool _failActuals = false;
 void failUnexpected( bool mode ) { _failActuals = mode; }
 
-
-class Expectations
-{
-public:
-  ExpectedCall& add( const SimpleString& call );
-  bool check( const ActualCall& pActualCall );
-  bool check();
-};
-static Expectations expectations;
 void checkExpectations()
 {
-  if( false == expectations.check() )
+  TestDouble::expectations.check();
+}
+
+ExpectedCall& expectCall( const SimpleString& call )
+{
+  ExpectedCall* pExpected = new ExpectedCall( call );
+  TestDouble::expectations.enqueue( pExpected );
+  return *pExpected;
+}
+
+ActualCall actualCall( const SimpleString& call ) { return ActualCall( call ); }
+
+
+
+namespace TestDouble {
+
+ExpectationChain::ExpectationChain( const ExpectedCall* const _pExpectedCall, ExpectationChain* const pLast )
+  : pExpectedCall( _pExpectedCall )
+   ,pNext(0)
+{
+  if( 0 != pLast )
   {
-    // FAIL( "Unmet expectations" );
+    // append to chain
+    pLast->pNext = this;
+  }
+}
+ExpectationChain::~ExpectationChain()
+{
+  delete pExpectedCall;
+  delete pNext;
+}
+
+
+ExpectationQueue::ExpectationQueue() : _pExpectations(0), _pLastExpectation(0) {};
+ExpectationQueue::~ExpectationQueue()
+{
+  delete _pExpectations;
+}
+
+void ExpectationQueue::enqueue( const ExpectedCall* pCall )
+{
+  if( 0 == TestDouble::expectations._pExpectations )
+  {
+    TestDouble::expectations._pExpectations = new ExpectationChain( pCall, 0 );
+    TestDouble::expectations._pLastExpectation = _pExpectations;
+  }
+  else 
+  {
+    TestDouble::expectations._pLastExpectation = new ExpectationChain( pCall, TestDouble::expectations._pLastExpectation );
   }
 }
 
-ExpectedCall& expectCall( const SimpleString& call ) { return expectations.add( call ); }
-ActualCall actualCall( const SimpleString& call ) { return ActualCall( call ); }
-bool verifyActual( const ActualCall& call ) { expectations.check( call ); }
-
-
-// Implementation of Expectation framework
-struct ExpectedCallEntry
+void ExpectationQueue::check()
 {
-  const ExpectedCall* const pExpectedCall;
-  unsigned int              calledCount;
-  ExpectedCallEntry* const  pNext;
-};
-static ExpectedCallEntry* _expectedCalls = 0;
+  // TODO find uncalled expectations
 
-
-ExpectedCall& Expectations::add( const SimpleString& call )
-{
-  ExpectedCall* pExpected = new ExpectedCall( call );
-  // prepend expected chain
-  _expectedCalls = new ExpectedCallEntry{ pExpected, 0, _expectedCalls };
-  return *pExpected;
+  // drop expectations state
+  delete TestDouble::expectations._pExpectations;
+  TestDouble::expectations._pExpectations = 0;
 }
+
+
+
 
 
 ExpectedCall* findExpectation( const ActualCall& call )
@@ -82,79 +108,104 @@ ExpectedCall* findExpectation( const ActualCall& call )
   return NULL;
 }
 
+
+
+
+
+
+
+ParameterChain::ParameterChain( const TestDouble::Parameter* const _pParameter, ParameterChain* const _pNext )
+  : pParameter(_pParameter)
+   ,pNext(_pNext)   ///< prepend chain
+{}
+ParameterChain::~ParameterChain()
+{
+  delete pParameter;
+  delete pNext;
+}
+
+
+
+
+
 bool _matches( const ActualCall& pCall, const ExpectedCall& expected );
-bool Expectations::check( const ActualCall& call )
-{
-  // TODO check sequence expectations first
+// bool Expectations::check( const ActualCall& call )
+// {
+//   // TODO check sequence expectations first
 
-  if( ( 0 == _expectedCalls ) && _failActuals ) return false;
+//   if( ( 0 == _expectedCalls ) && _failActuals ) return false;
 
-  for( ExpectedCallEntry* pExpectedEntry =_expectedCalls; pExpectedEntry != 0; pExpectedEntry=pExpectedEntry->pNext )
-  {
-    const ExpectedCall& expectedCall = *(pExpectedEntry->pExpectedCall);
-    // skip fulfilled expectations
-    if( ( expectedCall.getCount() != ExpectedCall::EXPECT_ALWAYS ) && ( pExpectedEntry->calledCount >= expectedCall.getCount() ) ) continue;
+//   for( ExpectedCallEntry* pExpectedEntry =_expectedCalls; pExpectedEntry != 0; pExpectedEntry=pExpectedEntry->pNext )
+//   {
+//     const ExpectedCall& expectedCall = *(pExpectedEntry->pExpectedCall);
+//     // skip fulfilled expectations
+//     if( ( expectedCall.getCount() != ExpectedCall::EXPECT_ALWAYS ) && ( pExpectedEntry->calledCount >= expectedCall.getCount() ) ) continue;
 
-    if( _matches( call, expectedCall ) ) pExpectedEntry->calledCount++;
-    else
-    {
-      check();
-      return false;
-    }
-  }
-}
+//     if( _matches( call, expectedCall ) ) pExpectedEntry->calledCount++;
+//     else
+//     {
+//       check();
+//       return false;
+//     }
+//   }
+//   return false;
+// }
 
-bool Expectations::check()
-{
-  bool passed = true;
+// bool Expectations::check()
+// {
+//   bool passed = true;
 
-  // clean up expectations
-  while( _expectedCalls != 0 )
-  {
-    const ExpectedCallEntry* pExpectedCallEntry = _expectedCalls;
-    const ExpectedCall& expectedCall = *(pExpectedCallEntry->pExpectedCall);
-    if( ( ( expectedCall.getCount() == ExpectedCall::EXPECT_ALWAYS ) && ( pExpectedCallEntry->calledCount == 0 ) )   ||
-        ( ( expectedCall.getCount() != ExpectedCall::EXPECT_ALWAYS ) && ( pExpectedCallEntry->calledCount <= expectedCall.getCount() ) ) )
-    {
-      // FIXME why is the test result protected?!
-      // UtestShell::getCurrent()->getTestResult()->print( expectedCall.asCharString() );
-      // Fake access to test result
-      // UtestShell::getCurrent()->print( expectedCall.toString().asCharString(), "", 0 );
-      passed = false;
-    }
+//   // clean up expectations
+//   while( _expectedCalls != 0 )
+//   {
+//     const ExpectedCallEntry* pExpectedCallEntry = _expectedCalls;
+//     const ExpectedCall& expectedCall = *(pExpectedCallEntry->pExpectedCall);
+//     if( ( ( expectedCall.getCount() == ExpectedCall::EXPECT_ALWAYS ) && ( pExpectedCallEntry->calledCount == 0 ) )   ||
+//         ( ( expectedCall.getCount() != ExpectedCall::EXPECT_ALWAYS ) && ( pExpectedCallEntry->calledCount <= expectedCall.getCount() ) ) )
+//     {
+//       // FIXME why is the test result protected?!
+//       // UtestShell::getCurrent()->getTestResult()->print( expectedCall.asCharString() );
+//       // Fake access to test result
+//       // UtestShell::getCurrent()->print( expectedCall.toString().asCharString(), "", 0 );
+//       passed = false;
+//     }
 
-    ExpectedCallEntry* pNextExpectedEntry = pExpectedCallEntry->pNext;
-    delete pExpectedCallEntry->pExpectedCall;
-    delete pExpectedCallEntry;
-    _expectedCalls = pNextExpectedEntry;
-  }
+//     ExpectedCallEntry* pNextExpectedEntry = pExpectedCallEntry->pNext;
+//     delete pExpectedCallEntry->pExpectedCall;
+//     delete pExpectedCallEntry;
+//     _expectedCalls = pNextExpectedEntry;
+//   }
 
-  return passed;
-}
+//   return passed;
+// }
 
 bool _matches( const ActualCall& actual, const ExpectedCall& expected )
 {
-  if( actual.methodName != expected.methodName ) return false;
+  // if( actual.methodName != expected.methodName ) return false;
 
-  for( const TestDouble::ParameterChain* pExpectedEntry=expected.getParameters(); pExpectedEntry != 0; pExpectedEntry=pExpectedEntry->pNext )
-  {
-    for( const TestDouble::ParameterChain* pActualEntry=actual.getParameters(); pActualEntry != 0; pActualEntry=pActualEntry->pNext )
-    {
-      if( pExpectedEntry->pParameter->name.equalsNoCase( pActualEntry->pParameter->name ) )
-      {
-        if( pExpectedEntry->pParameter->type != pActualEntry->pParameter->type )
-        {
-          UT_PRINT( StringFromFormat( "Type Mismatch: Expected call to '%s' with parameter '%s' of type '%s', but actual paramter was of type '%s'.",
-            expected.methodName.asCharString(), pExpectedEntry->pParameter->name.asCharString(),
-            pExpectedEntry->pParameter->type.asCharString(), pActualEntry->pParameter->type.asCharString() ).asCharString()
-          );
-          return false;
-        }
+  // for( const TestDouble::ParameterChain* pExpectedEntry=expected.getParameters(); pExpectedEntry != 0; pExpectedEntry=pExpectedEntry->pNext )
+  // {
+  //   for( const TestDouble::ParameterChain* pActualEntry=actual.getParameters(); pActualEntry != 0; pActualEntry=pActualEntry->pNext )
+  //   {
+  //     if( pExpectedEntry->pParameter->name.equalsNoCase( pActualEntry->pParameter->name ) )
+  //     {
+  //       if( pExpectedEntry->pParameter->type != pActualEntry->pParameter->type )
+  //       {
+  //         UT_PRINT( StringFromFormat( "Type Mismatch: Expected call to '%s' with parameter '%s' of type '%s', but actual paramter was of type '%s'.",
+  //           expected.methodName.asCharString(), pExpectedEntry->pParameter->name.asCharString(),
+  //           pExpectedEntry->pParameter->type.asCharString(), pActualEntry->pParameter->type.asCharString() ).asCharString()
+  //         );
+  //         return false;
+  //       }
 
-        if( false == pExpectedEntry->pParameter->equals( pActualEntry->pParameter ) ) return false;
-      }
-    }
-  }
+  //       if( false == pExpectedEntry->pParameter->equals( pActualEntry->pParameter ) ) return false;
+  //     }
+  //   }
+  // }
 
   return true;
 }
+
+} // namespace TestDouble
+
+
