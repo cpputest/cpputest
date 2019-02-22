@@ -48,7 +48,7 @@ public:
   ActualCall& with( const SimpleString& name, const T& value )
   {
     TestDouble::Parameter* pParameter = new TestDouble::Parameter( name, value );
-    _parameters = new ParameterEntry( pParameter, _parameters );
+    _parameters = new TestDouble::ParameterChain( pParameter, _parameters );
     return *this;
   }
 
@@ -77,11 +77,11 @@ public:
   const void* returnConstPointer();
   void(*returnFunctionPointer())();
 
-  const ParameterEntry* getParameters() const { return _parameters; }
+  const TestDouble::ParameterChain* getParameters() const { return _parameters; }
 
 private:
-  ParameterEntry*         _parameters;
-  TestDouble::Parameter*  _pOutputParameter;
+  TestDouble::ParameterChain*   _parameters;
+  // TestDouble::Parameter*  _pOutputParameter;
 
 };  // class ActualCall
 

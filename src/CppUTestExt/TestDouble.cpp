@@ -136,9 +136,9 @@ bool _matches( const ActualCall& actual, const ExpectedCall& expected )
 {
   if( actual.methodName != expected.methodName ) return false;
 
-  for( const ParameterEntry* pExpectedEntry=expected.getParameters(); pExpectedEntry != 0; pExpectedEntry=pExpectedEntry->pNext )
+  for( const TestDouble::ParameterChain* pExpectedEntry=expected.getParameters(); pExpectedEntry != 0; pExpectedEntry=pExpectedEntry->pNext )
   {
-    for( const ParameterEntry* pActualEntry=actual.getParameters(); pActualEntry != 0; pActualEntry=pActualEntry->pNext )
+    for( const TestDouble::ParameterChain* pActualEntry=actual.getParameters(); pActualEntry != 0; pActualEntry=pActualEntry->pNext )
     {
       if( pExpectedEntry->pParameter->name.equalsNoCase( pActualEntry->pParameter->name ) )
       {

@@ -33,7 +33,7 @@
 ActualCall::ActualCall( const SimpleString& name )
   : methodName( name )
    ,_parameters(0)
-   ,_pOutputParameter(0)
+  //  ,_pOutputParameter(0)
 { }
 
 ActualCall::~ActualCall()
@@ -43,7 +43,7 @@ ActualCall::~ActualCall()
 
   // clean up memory resources
   delete _parameters;
-  delete _pOutputParameter;
+  // delete _pOutputParameter;
 
   if( 0 == pExpectation )
   {
@@ -55,6 +55,6 @@ ActualCall::~ActualCall()
 ActualCall& ActualCall::with( const SimpleString& name, const void* const buffer, const std::size_t& size )
 {
   TestDouble::Parameter* pParameter = new TestDouble::Parameter( name, buffer, size );
-  _parameters = new ParameterEntry( pParameter, _parameters );
+  _parameters = new TestDouble::ParameterChain( pParameter, _parameters );
   return *this;
 }

@@ -39,24 +39,27 @@ void failUnexpected( bool mode = true );
 
 void checkExpectations();
 
-// generic list of parameters (both input and output)
-struct ParameterEntry
+namespace TestDouble {
+
+// generic list of parameters (used for both input and output)
+struct ParameterChain
 {
   const TestDouble::Parameter* const pParameter;
-  ParameterEntry* const pNext;
+  ParameterChain* const pNext;
 
-  ParameterEntry( const TestDouble::Parameter* const _pParameter,
-                  ParameterEntry* const _pNext )
+  ParameterChain( const TestDouble::Parameter* const _pParameter,
+                  ParameterChain* const _pNext )
   : pParameter(_pParameter)
    ,pNext(_pNext)
   {}
 
-  ~ParameterEntry()
+  ~ParameterChain()
   {
     delete pParameter;
     delete pNext;
   }
 };
 
+} // namespace TestDouble
 
 #endif /* TEST_DOUBLE_H */
