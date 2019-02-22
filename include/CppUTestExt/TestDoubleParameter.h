@@ -54,7 +54,7 @@ public:
   : name(_name), type( typeid(void*).name() ), buffer(_buffer), bufferSize_bytes(_bufferSize_bytes)
   { }
 
-  bool equal( const Parameter* const pOther ) const;
+  bool equals( const Parameter* const pOther ) const;
 
 private:
   const union Variant {

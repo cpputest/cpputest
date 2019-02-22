@@ -44,14 +44,14 @@ TEST_GROUP( TestDoubleOutputParameters )
   }
 };
 
-TEST( TestDoubleOutputParameters, sets_output_bool_parameter )
-{
-  const bool expectedValue = true;
-  expectCall("foo").output("value", &expectedValue);
-  bool actualValue = ~expectedValue;
-  actualCall("foo").output("value", &actualValue);
-  CHECK( expectedValue == actualValue );
-}
+// TEST( TestDoubleOutputParameters, sets_output_bool_parameter )
+// {
+//   const bool expectedValue = true;
+//   expectCall("foo").output("value", &expectedValue);
+//   bool actualValue = !expectedValue;
+//   actualCall("foo").output("value", &actualValue);
+//   CHECK( expectedValue == actualValue );
+// }
 
 // TEST( TestDoubleOutputParameters, sets_output_char_parameter )
 // {

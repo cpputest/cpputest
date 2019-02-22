@@ -42,7 +42,7 @@ set(CppUTestExt_headers
         ${CppUTestRootDirectory}/include/CppUTestExt/MockSupport.h
         ${CppUTestRootDirectory}/include/CppUTestExt/TestDouble.h
         ${CppUTestRootDirectory}/include/CppUTestExt/TestDoubleParameter.h
-        ${CppUTestRootDirectory}/include/CppUTestExt/ExpectedCall.h
+        ${CppUTestRootDirectory}/include/CppUTestExt/ExpectCall.h
         ${CppUTestRootDirectory}/include/CppUTestExt/ActualCall.h
 )
 
