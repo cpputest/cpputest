@@ -30,11 +30,15 @@
 #include "CppUTestExt/ExpectCall.h"
 #include "CppUTestExt/ActualCall.h"
 
+//======================================================================================================================
 /// Demonstrate parity with CppuMock (i.e. actuals must meet expectations)
 TEST_GROUP( MatchedActual )
 {
   TEST_SETUP()
   {
+    // clear any expectations
+    checkExpectations();
+
     failUnexpected();
   }
 
@@ -95,10 +99,15 @@ TEST( MatchedActual, match_all )
   actualCall("foo").with("value", buffer, sizeof(buffer));
 }
 
+
+//======================================================================================================================
 TEST_GROUP( IgnoreUnmatchedActual )
 {
   TEST_SETUP()
   {
+    // clear any expectations
+    checkExpectations();
+
     // default don't fail unmatched actuals
   }
 
@@ -131,11 +140,24 @@ TEST( IgnoreUnmatchedActual, ignore_all )
   actualCall("foo").with("value", buffer, sizeof(buffer));
 }
 
-TEST_GROUP( TestDoubleState )
-{};
 
-TEST( TestDoubleState, upon_check_return_default_state )
+//======================================================================================================================
+TEST_GROUP( TestDoubleState )
 {
+  TEST_SETUP()
+  {
+    // clear any expectations
+    checkExpectations();
+  }
+};
+
+TEST( TestDoubleState, upon_checkExpectations_restore_default_state )
+{
+  // assert default state
+  CHECK_FALSE( TestDouble::shouldFailUnexpected() );
+  CHECK_FALSE( TestDouble::shouldEnforceOrder() );
+
+  // modify state
   failUnexpected();
   CHECK_TRUE( TestDouble::shouldFailUnexpected() );
   strictOrder();
@@ -143,26 +165,46 @@ TEST( TestDoubleState, upon_check_return_default_state )
 
   checkExpectations();
 
+  // assert default state
   CHECK_FALSE( TestDouble::shouldFailUnexpected() );
   CHECK_FALSE( TestDouble::shouldEnforceOrder() );
 }
 
 
-
-
-
-TEST_GROUP( TestDoubleParametersFailure )
+//======================================================================================================================
+TEST_GROUP( TestDoubleParametersFailures )
 {
   TestTestingFixture fixture;
+
+  TEST_SETUP()
+  {
+    // clear any expectations
+    checkExpectations();
+  }
+
+  TEST_TEARDOWN()
+  {
+    CHECK( fixture.hasTestFailed() );
+  }
 };
+
+static void unexpectedParameter()
+{
+  expectCall("foo");
+  checkExpectations();
+}
+IGNORE_TEST( TestDoubleParametersFailures, when_unmatched_expecations_fail )
+{
+  fixture.runTestWithMethod( unexpectedParameter );
+}
+
 
 // static void _mismatch_type( void )
 // {
 //   expectCall("foo").with( "value", true );
 //   actualCall("foo").with( "value", "string" );
 // }
-// TEST( TestDoubleParametersFailure, mismatch_type )
-// {
+// TEST( TestDoubleParametersFailure, mismatch_type ) // {
 //   fixture.runTestWithMethod( _mismatch_type );
 //   CHECK( fixture.hasTestFailed() );
 // }

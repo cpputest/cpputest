@@ -95,7 +95,15 @@ void ExpectationQueue::enqueue( const ExpectedCall* const pCall )
 
 void ExpectationQueue::check()
 {
-  // TODO find uncalled expectations
+  // find uncalled expectations
+  for( ExpectationChain* pExpectation = expectations.get(); 0 != pExpectation; pExpectation = pExpectation->pNext )
+  {
+    if( ( ExpectedCall::EXPECT_ALWAYS != pExpectation->pExpectedCall->getCount() )  &&
+        ( pExpectation->actualCount = pExpectation->pExpectedCall->getCount() ) )
+    {
+      FAIL("uht oh");
+    }
+  }
 
   // drop expectations state
   delete _pExpectations;
@@ -157,8 +165,6 @@ static bool _matches( ExpectationChain& expectation, const ActualCall& actual )
     }
 
     // TODO match output parameters type
-
-    // TODO match return type
   }
 
   return true;
