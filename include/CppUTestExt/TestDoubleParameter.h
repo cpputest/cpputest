@@ -51,7 +51,7 @@ public:
   { }
 
   Parameter( const SimpleString& _name, const void* const _buffer, const std::size_t& _bufferSize_bytes )
-  : name(_name), type( typeid(void*).name() ), buffer(_buffer), bufferSize_bytes(_bufferSize_bytes)
+  : name(_name), type( typeid(_buffer).name() ), buffer(_buffer), bufferSize_bytes(_bufferSize_bytes)
   { }
 
   bool equals( const Parameter* const pOther ) const;
@@ -64,10 +64,10 @@ private:
     unsigned char           asUnsignedChar;
     int                     asInt;
     unsigned int            asUnsignedInt;
-    long int                asLongInt;
-    unsigned long int       asUnsignedLongInt;
-    long long int           asLongLongInt;
-    unsigned long long int  asUnsignedLongLongInt;
+    long int                asLong;
+    unsigned long int       asUnsignedLong;
+    long long int           asLongLong;
+    unsigned long long int  asUnsignedLongLong;
     float                   asFloat;
     double                  asDouble;
     void*                   asPointer;
@@ -84,10 +84,10 @@ private:
     Variant( const unsigned char& value ) : asUnsignedChar(value) {}
     Variant( const int& value ) : asInt(value) {}
     Variant( const unsigned int& value ) : asUnsignedInt(value) {}
-    Variant( const long& value ) : asLongInt(value) {}
-    Variant( const unsigned long& value ) : asUnsignedLongInt(value) {}
-    Variant( const long long& value ) : asLongLongInt(value) {}
-    Variant( const unsigned long long& value ) : asUnsignedLongLongInt(value) {}
+    Variant( const long& value ) : asLong(value) {}
+    Variant( const unsigned long& value ) : asUnsignedLong(value) {}
+    Variant( const long long& value ) : asLongLong(value) {}
+    Variant( const unsigned long long& value ) : asUnsignedLongLong(value) {}
     Variant( const float& value ) : asFloat(value) {}
     Variant( const double& value ) : asDouble(value) {}
 

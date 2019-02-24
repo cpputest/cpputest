@@ -30,8 +30,8 @@
 #include "CppUTestExt/ExpectCall.h"
 #include "CppUTestExt/ActualCall.h"
 
-/// Demonstrate parity with CppuMock
-TEST_GROUP( MatchActuals )
+/// Demonstrate parity with CppuMock (i.e. actuals must meet expectations)
+TEST_GROUP( MatchedActual )
 {
   TEST_SETUP()
   {
@@ -44,111 +44,56 @@ TEST_GROUP( MatchActuals )
   }
 };
 
-TEST( MatchActuals, expect_boolean_parameter )
-{
-  const bool value = true;
-  expectCall("foo").with("value", value);
-  actualCall("foo").with("value", value);
-}
-
-TEST( MatchActuals, expect_char_parameter )
-{
-  const char value = -1;
-  expectCall("foo").with("value", value);
-  actualCall("foo").with("value", value);
-}
-
-TEST( MatchActuals, expect_unsigned_char_parameter )
-{
-  const unsigned char value = 1;
-  expectCall("foo").with("value", value);
-  actualCall("foo").with("value", value);
-}
-
-TEST( MatchActuals, expect_int_parameter )
-{
-  const int value = 1;
-  expectCall("foo").with("value", value);
-  actualCall("foo").with("value", value);
-}
-
-TEST( MatchActuals, expect_unsigned_int_parameter )
-{
-  const unsigned int value = 1;
-  expectCall("foo").with("value", value);
-  actualCall("foo").with("value", value);
-}
-
-TEST( MatchActuals, expect_long_parameter )
-{
-  const long value = 1;
-  expectCall("foo").with("value", value);
-  actualCall("foo").with("value", value);
-}
-
-TEST( MatchActuals, expect_unsigned_long_parameter )
-{
-  const unsigned long value = 1;
-  expectCall("foo").with("value", value);
-  actualCall("foo").with("value", value);
-}
-
-TEST( MatchActuals, expect_long_long_parameter )
-{
-  const long long value = 1;
-  expectCall("foo").with("value", value);
-  actualCall("foo").with("value", value);
-}
-
-TEST( MatchActuals, expect_unsigned_long_long_parameter )
-{
-  const unsigned long long value = 1;
-  expectCall("foo").with("value", value);
-  actualCall("foo").with("value", value);
-}
-
-TEST( MatchActuals, expect_float_parameter )
-{
-  const float value = 1.1f;
-  expectCall("foo").with("value", value);
-  actualCall("foo").with("value", value);
-}
-
-TEST( MatchActuals, expect_double_parameter )
-{
-  const double value = 1.1;
-  expectCall("foo").with("value", value);
-  actualCall("foo").with("value", value);
-}
-
-TEST( MatchActuals, expect_pointer_parameter )
-{
-  char value[] = "HELLO";
-  expectCall("foo").with("value", value);
-  actualCall("foo").with("value", value);
-}
-
-TEST( MatchActuals, expect_const_pointer_parameter )
-{
-  const char value[] = "HELLO";
-  expectCall("foo").with("value", value);
-  actualCall("foo").with("value", value);
-}
-
 static void _fn( void ) {}
-TEST( MatchActuals, expect_function_pointer_parameter_with_value )
+TEST( MatchedActual, match_all )
 {
+  // allow bool to upcast to type
+  expectCall("foo").with("value", (bool)true);
+  actualCall("foo").with("value", (bool)true);
+
+  expectCall("foo").with("value", (char)true);
+  actualCall("foo").with("value", (char)true);
+
+  expectCall("foo").with("value", (unsigned char)true);
+  actualCall("foo").with("value", (unsigned char)true);
+
+  expectCall("foo").with("value", (int)true);
+  actualCall("foo").with("value", (int)true);
+
+  expectCall("foo").with("value", (unsigned int)true);
+  actualCall("foo").with("value", (unsigned int)true);
+
+  expectCall("foo").with("value", (long)true);
+  actualCall("foo").with("value", (long)true);
+
+  expectCall("foo").with("value", (unsigned long)true);
+  actualCall("foo").with("value", (unsigned long)true);
+
+  expectCall("foo").with("value", (long long)true);
+  actualCall("foo").with("value", (long long)true);
+
+  expectCall("foo").with("value", (unsigned long long)true);
+  actualCall("foo").with("value", (unsigned long long)true);
+
+  expectCall("foo").with("value", (float)true);
+  actualCall("foo").with("value", (float)true);
+
+  expectCall("foo").with("value", (double)true);
+  actualCall("foo").with("value", (double)true);
+
+  char buffer[] = "HELLO";
+  expectCall("foo").with("value", buffer);
+  actualCall("foo").with("value", buffer);
+
+  expectCall("foo").with("value", (const char*)buffer);
+  actualCall("foo").with("value", (const char*)buffer);
+
   expectCall("foo").with("value", _fn);
   actualCall("foo").with("value", _fn);
-}
 
-TEST( MatchActuals, expect_buffer )
-{
-  char buffer[] = "HELLO WORLD";
   expectCall("foo").with("value", buffer, sizeof(buffer));
   actualCall("foo").with("value", buffer, sizeof(buffer));
 }
-
 
 TEST_GROUP( IgnoreUnmatchedActual )
 {
@@ -186,12 +131,6 @@ TEST( IgnoreUnmatchedActual, ignore_all )
   actualCall("foo").with("value", buffer, sizeof(buffer));
 }
 
-
-// TEST( TestDoubleParameters, unexpected_calls_pass )
-// {
-//   const bool value = true;
-//   actualCall("foo").with("value", value);
-// }
 
 // TEST_GROUP( TestDoubleParametersFailure )
 // {
