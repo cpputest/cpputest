@@ -150,8 +150,41 @@ TEST( MatchActuals, expect_buffer )
 }
 
 
+TEST_GROUP( IgnoreUnmatchedActual )
+{
+  TEST_SETUP()
+  {
+    // default failUnexpected( false );
+  }
 
+  TEST_TEARDOWN()
+  {
+    checkExpectations();
+  }
+};
 
+TEST( IgnoreUnmatchedActual, ignore_all )
+{
+  // allow bool to upcast to type
+  actualCall("foo").with("value", true);
+  actualCall("foo").with("value", (char)true);
+  actualCall("foo").with("value", (unsigned char)true);
+  actualCall("foo").with("value", (int)true);
+  actualCall("foo").with("value", (unsigned int)true);
+  actualCall("foo").with("value", (long)true);
+  actualCall("foo").with("value", (unsigned long)true);
+  actualCall("foo").with("value", (long)true);
+  actualCall("foo").with("value", (unsigned long)true);
+  actualCall("foo").with("value", (long long)true);
+  actualCall("foo").with("value", (unsigned long long)true);
+  actualCall("foo").with("value", (float)true);
+  actualCall("foo").with("value", (double)true);
+  char buffer[] = "HELLO";
+  actualCall("foo").with("value", buffer);
+  actualCall("foo").with("value", (const char*)buffer);
+  actualCall("foo").with("value", _fn);
+  actualCall("foo").with("value", buffer, sizeof(buffer));
+}
 
 
 // TEST( TestDoubleParameters, unexpected_calls_pass )

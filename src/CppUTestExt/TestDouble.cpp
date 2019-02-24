@@ -53,7 +53,7 @@ ActualCall actualCall( const SimpleString& call ) { return ActualCall( call ); }
 
 namespace TestDouble {
 
-const bool shouldFailUnexpected() { return _failActuals; }
+bool shouldFailUnexpected() { return _failActuals; }
 
 
 ExpectationChain::ExpectationChain( const ExpectedCall* const _pExpectedCall, ExpectationChain* const pLast )

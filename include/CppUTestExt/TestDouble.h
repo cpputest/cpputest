@@ -41,7 +41,7 @@ class ExpectedCall;
 class ActualCall;
 namespace TestDouble {
 
-const bool shouldFailUnexpected();
+bool shouldFailUnexpected();
 
 /// retval 0    no expectation found
 const ExpectedCall* findExpectation( const ActualCall& call );
