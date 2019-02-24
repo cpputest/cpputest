@@ -35,15 +35,18 @@
 static bool _failActuals = false;
 void failUnexpected( bool mode ) { _failActuals = mode; }
 
+/// single set of expectations
+static TestDouble::ExpectationQueue expectations;
+
 void checkExpectations()
 {
-  TestDouble::expectations.check();
+  expectations.check();
 }
 
 ExpectedCall& expectCall( const SimpleString& call )
 {
   ExpectedCall* pExpected = new ExpectedCall( call );
-  TestDouble::expectations.enqueue( pExpected );
+  expectations.enqueue( pExpected );
   return *pExpected;
 }
 
@@ -70,21 +73,17 @@ ExpectationChain::~ExpectationChain()
 }
 
 
-ExpectationQueue::~ExpectationQueue()
-{
-  delete _pExpectations;
-}
 
 void ExpectationQueue::enqueue( const ExpectedCall* pCall )
 {
-  if( 0 == TestDouble::expectations._pExpectations )
+  if( 0 == expectations._pExpectations )
   {
-    TestDouble::expectations._pExpectations = new ExpectationChain( pCall, 0 );
-    TestDouble::expectations._pTail = _pExpectations;
+    expectations._pExpectations = new ExpectationChain( pCall, 0 );
+    expectations._pTail = _pExpectations;
   }
   else 
   {
-    TestDouble::expectations._pTail = new ExpectationChain( pCall, TestDouble::expectations._pTail );
+    expectations._pTail = new ExpectationChain( pCall, expectations._pTail );
   }
 }
 
@@ -93,15 +92,16 @@ void ExpectationQueue::check()
   // TODO find uncalled expectations
 
   // drop expectations state
-  delete TestDouble::expectations._pExpectations;
-  TestDouble::expectations._pExpectations = 0;
+  delete _pExpectations;
+  _pExpectations = 0;
+  _pTail = 0;
 }
 
 
 static bool _matches( const ExpectationChain& expectation, const ActualCall& actual );
 const ExpectedCall* findExpectation( const ActualCall& call )
 {
-  for( ExpectationChain* pExpectation = TestDouble::expectations.get(); 0 != pExpectation; pExpectation = pExpectation->pNext )
+  for( ExpectationChain* pExpectation = expectations.get(); 0 != pExpectation; pExpectation = pExpectation->pNext )
   {
     if( _matches( *pExpectation, call ) ) return pExpectation->pExpectedCall;
   }
@@ -122,10 +122,10 @@ ParameterChain::~ParameterChain()
 /// upon match, the expectation::calledCount will be incremented
 static bool _matches( const ExpectationChain& expectation, const ActualCall& actual )
 {
-  const ExpectedCall expected = *(expectation.pExpectedCall);
-  if( actual.methodName != expected.methodName ) return false;
+  const ExpectedCall* const pExpected = expectation.pExpectedCall;
+  if( actual.methodName != pExpected->methodName ) return false;
 
-  for( const TestDouble::ParameterChain* pExpectedEntry=expected.getParameters(); 0 != pExpectedEntry; pExpectedEntry = pExpectedEntry->pNext )
+  for( const TestDouble::ParameterChain* pExpectedEntry=pExpected->getParameters(); 0 != pExpectedEntry; pExpectedEntry = pExpectedEntry->pNext )
   {
     for( const TestDouble::ParameterChain* pActualEntry=actual.getParameters(); 0 != pActualEntry; pActualEntry = pActualEntry->pNext )
     {
