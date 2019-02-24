@@ -33,7 +33,10 @@
 #include <CppUTest/TestHarness.h>
 
 static bool _failActuals = false;
-void failUnexpected( bool mode ) { _failActuals = mode; }
+void failUnexpected() { _failActuals = true; }
+
+static bool _strictOrder = false;
+void strictOrder() { _strictOrder = true; }
 
 /// global set of expectations
 static TestDouble::ExpectationQueue expectations;
@@ -54,6 +57,7 @@ ActualCall actualCall( const SimpleString& call ) { return ActualCall( call ); }
 namespace TestDouble {
 
 bool shouldFailUnexpected() { return _failActuals; }
+bool shouldEnforceOrder() { return _strictOrder; }
 
 
 ExpectationChain::ExpectationChain( const ExpectedCall* const _pExpectedCall, ExpectationChain* const pLast )
@@ -97,6 +101,8 @@ void ExpectationQueue::check()
   delete _pExpectations;
   _pExpectations = 0;
   _pTail = 0;
+  _failActuals = false;
+  _strictOrder = false;
 }
 
 
@@ -116,6 +122,10 @@ const ExpectedCall* findExpectation( const ActualCall& call )
       pExpectation->actualCount++;
       return pExpectation->pExpectedCall;
     }
+    // if( TestDouble::enforceOrder() )
+    // {
+    //   break;
+    // }
   }
   return NULL;
 }

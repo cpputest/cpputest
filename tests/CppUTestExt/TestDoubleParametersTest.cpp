@@ -35,7 +35,7 @@ TEST_GROUP( MatchedActual )
 {
   TEST_SETUP()
   {
-    failUnexpected( true );
+    failUnexpected();
   }
 
   TEST_TEARDOWN()
@@ -99,7 +99,7 @@ TEST_GROUP( IgnoreUnmatchedActual )
 {
   TEST_SETUP()
   {
-    // default failUnexpected( false );
+    // default don't fail unmatched actuals
   }
 
   TEST_TEARDOWN()
@@ -131,11 +131,30 @@ TEST( IgnoreUnmatchedActual, ignore_all )
   actualCall("foo").with("value", buffer, sizeof(buffer));
 }
 
+TEST_GROUP( TestDoubleState )
+{};
 
-// TEST_GROUP( TestDoubleParametersFailure )
-// {
-//   TestTestingFixture fixture;
-// };
+TEST( TestDoubleState, upon_check_return_default_state )
+{
+  failUnexpected();
+  CHECK_TRUE( TestDouble::shouldFailUnexpected() );
+  strictOrder();
+  CHECK_TRUE( TestDouble::shouldEnforceOrder() );
+
+  checkExpectations();
+
+  CHECK_FALSE( TestDouble::shouldFailUnexpected() );
+  CHECK_FALSE( TestDouble::shouldEnforceOrder() );
+}
+
+
+
+
+
+TEST_GROUP( TestDoubleParametersFailure )
+{
+  TestTestingFixture fixture;
+};
 
 // static void _mismatch_type( void )
 // {

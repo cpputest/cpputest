@@ -83,7 +83,6 @@ public:
 private:
   TestDouble::ParameterChain*   _parameters;
   // TestDouble::Parameter*  _pOutputParameter;
-  void _deconstructor();
 
 };  // class ActualCall
 

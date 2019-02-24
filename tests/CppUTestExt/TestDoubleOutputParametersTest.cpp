@@ -35,7 +35,7 @@ TEST_GROUP( TestDoubleOutputParameters )
 {
   TEST_SETUP()
   {
-    failUnexpected( false );
+    failUnexpected();
   }
 
   TEST_TEARDOWN()

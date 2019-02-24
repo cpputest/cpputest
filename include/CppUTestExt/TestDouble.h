@@ -30,7 +30,8 @@
 #include <CppUTest/SimpleString.h>
 #include <CppUTestExt/TestDoubleParameter.h>
 
-void failUnexpected( bool mode = true );
+void failUnexpected();
+void strictOrder();
 
 void checkExpectations();
 
@@ -42,6 +43,7 @@ class ActualCall;
 namespace TestDouble {
 
 bool shouldFailUnexpected();
+bool shouldEnforceOrder();
 
 /// retval 0    no expectation found
 const ExpectedCall* findExpectation( const ActualCall& call );
