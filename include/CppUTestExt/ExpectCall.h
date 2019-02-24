@@ -55,7 +55,7 @@ public:
     return *this;
   }
 
-  ExpectedCall& with( const SimpleString& name, const void* buffer, const std::size_t& size );
+  ExpectedCall& with( const SimpleString& name, const void* staticBuffer, const std::size_t& size );
 
   template<typename T>
   ExpectedCall& output( const SimpleString& name, const T& value )
@@ -66,7 +66,6 @@ public:
 
   const int& getCount() const { return _count; }
   const TestDouble::ParameterChain* getParameters() const { return _parameters; }
-  SimpleString toString() const;
 
 private:
   int   _count;

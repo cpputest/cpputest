@@ -31,6 +31,7 @@
 #include <CppUTestExt/TestDoubleParameter.h>
 
 void failUnexpected( bool mode = true );
+
 void checkExpectations();
 
 
@@ -40,6 +41,8 @@ class ExpectedCall;
 class ActualCall;
 namespace TestDouble {
 
+const bool shouldFailUnexpected();
+
 /// retval 0    no expectation found
 const ExpectedCall* findExpectation( const ActualCall& call );
 
@@ -48,7 +51,7 @@ class ExpectationChain
 {
 public:
   const ExpectedCall* const pExpectedCall;
-  int                       calledCount;
+  int                       actualCount;
   ExpectationChain*         pNext;
 
   ExpectationChain( const ExpectedCall* const _pExpectedCall, ExpectationChain* const pLast );
@@ -58,17 +61,15 @@ public:
 class ExpectationQueue
 {
 public:
-  ~ExpectationQueue();
-
-  void enqueue( const ExpectedCall* pCall );
+  void enqueue( const ExpectedCall* const pCall );
   ExpectationChain*   get() const { return _pExpectations; }
+
+  /// detect unactualized expectations and then clear expectations
   void check();
 private:
   ExpectationChain*   _pExpectations;
   ExpectationChain*   _pTail;   ///< reference to last enqueued
 };
-static ExpectationQueue expectations;
-
 
 // generic list of parameters (used for both input and output)
 struct ParameterChain

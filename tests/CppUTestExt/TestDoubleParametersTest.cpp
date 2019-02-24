@@ -30,11 +30,12 @@
 #include "CppUTestExt/ExpectCall.h"
 #include "CppUTestExt/ActualCall.h"
 
-TEST_GROUP( TestDoubleParameters )
+/// Demonstrate parity with CppuMock
+TEST_GROUP( MatchActuals )
 {
   TEST_SETUP()
   {
-    failUnexpected( false );
+    failUnexpected( true );
   }
 
   TEST_TEARDOWN()
@@ -43,92 +44,91 @@ TEST_GROUP( TestDoubleParameters )
   }
 };
 
-TEST( TestDoubleParameters, expect_boolean_parameter )
+TEST( MatchActuals, expect_boolean_parameter )
 {
   const bool value = true;
   expectCall("foo").with("value", value);
   actualCall("foo").with("value", value);
 }
 
-TEST( TestDoubleParameters, expect_char_parameter )
+TEST( MatchActuals, expect_char_parameter )
 {
   const char value = -1;
   expectCall("foo").with("value", value);
   actualCall("foo").with("value", value);
 }
 
-TEST( TestDoubleParameters, expect_unsigned_char_parameter )
+TEST( MatchActuals, expect_unsigned_char_parameter )
 {
   const unsigned char value = 1;
   expectCall("foo").with("value", value);
   actualCall("foo").with("value", value);
 }
 
-TEST( TestDoubleParameters, expect_int_parameter )
+TEST( MatchActuals, expect_int_parameter )
 {
   const int value = 1;
   expectCall("foo").with("value", value);
   actualCall("foo").with("value", value);
 }
 
-TEST( TestDoubleParameters, expect_unsigned_int_parameter )
+TEST( MatchActuals, expect_unsigned_int_parameter )
 {
   const unsigned int value = 1;
   expectCall("foo").with("value", value);
   actualCall("foo").with("value", value);
 }
 
-TEST( TestDoubleParameters, expect_long_parameter )
+TEST( MatchActuals, expect_long_parameter )
 {
   const long value = 1;
   expectCall("foo").with("value", value);
   actualCall("foo").with("value", value);
 }
 
-TEST( TestDoubleParameters, expect_unsigned_long_parameter )
+TEST( MatchActuals, expect_unsigned_long_parameter )
 {
   const unsigned long value = 1;
   expectCall("foo").with("value", value);
   actualCall("foo").with("value", value);
 }
 
-TEST( TestDoubleParameters, expect_long_long_parameter )
+TEST( MatchActuals, expect_long_long_parameter )
 {
   const long long value = 1;
   expectCall("foo").with("value", value);
   actualCall("foo").with("value", value);
 }
 
-TEST( TestDoubleParameters, expect_unsigned_long_long_parameter )
+TEST( MatchActuals, expect_unsigned_long_long_parameter )
 {
   const unsigned long long value = 1;
   expectCall("foo").with("value", value);
   actualCall("foo").with("value", value);
 }
 
-TEST( TestDoubleParameters, expect_float_parameter )
+TEST( MatchActuals, expect_float_parameter )
 {
   const float value = 1.1f;
   expectCall("foo").with("value", value);
   actualCall("foo").with("value", value);
 }
 
-TEST( TestDoubleParameters, expect_double_parameter )
+TEST( MatchActuals, expect_double_parameter )
 {
   const double value = 1.1;
   expectCall("foo").with("value", value);
   actualCall("foo").with("value", value);
 }
 
-#include <stdio.h>
-TEST( TestDoubleParameters, expect_pointer_parameter )
+TEST( MatchActuals, expect_pointer_parameter )
 {
   char value[] = "HELLO";
   expectCall("foo").with("value", value);
   actualCall("foo").with("value", value);
 }
 
-TEST( TestDoubleParameters, expect_const_pointer_parameter )
+TEST( MatchActuals, expect_const_pointer_parameter )
 {
   const char value[] = "HELLO";
   expectCall("foo").with("value", value);
@@ -136,61 +136,65 @@ TEST( TestDoubleParameters, expect_const_pointer_parameter )
 }
 
 static void _fn( void ) {}
-TEST( TestDoubleParameters, expect_function_pointer_parameter_with_value )
+TEST( MatchActuals, expect_function_pointer_parameter_with_value )
 {
   expectCall("foo").with("value", _fn);
   actualCall("foo").with("value", _fn);
 }
 
-// TODO expectation buffer should be memoized, test should place exepected buffer in non-static space
-TEST( TestDoubleParameters, expect_buffer )
+TEST( MatchActuals, expect_buffer )
 {
   char buffer[] = "HELLO WORLD";
   expectCall("foo").with("value", buffer, sizeof(buffer));
   actualCall("foo").with("value", buffer, sizeof(buffer));
 }
 
-TEST( TestDoubleParameters, unexpected_calls_pass )
-{
-  const bool value = true;
-  actualCall("foo").with("value", value);
-}
 
-TEST_GROUP( TestDoubleParametersFailure )
-{
-  TestTestingFixture fixture;
-};
 
-static void _mismatch_type( void )
-{
-  expectCall("foo").with( "value", true );
-  actualCall("foo").with( "value", "string" );
-}
-TEST( TestDoubleParametersFailure, mismatch_type )
-{
-  fixture.runTestWithMethod( _mismatch_type );
-  CHECK( fixture.hasTestFailed() );
-}
 
-static void _unexpected( void )
-{
-  actualCall("foo").with( "value", true );
-}
-TEST( TestDoubleParametersFailure, when_failUnexpected )
-{
-  failUnexpected( true );
-  fixture.runTestWithMethod( _unexpected );
-  CHECK( fixture.hasTestFailed() );
-}
 
-static void _expected( void )
-{
-  expectCall("foo").with( "value", true );
-  checkExpectations();
-}
-TEST( TestDoubleParametersFailure, when_unactualized_expectations )
-{
-  fixture.runTestWithMethod( _expected );
-  CHECK( fixture.hasTestFailed() );
-}
+
+// TEST( TestDoubleParameters, unexpected_calls_pass )
+// {
+//   const bool value = true;
+//   actualCall("foo").with("value", value);
+// }
+
+// TEST_GROUP( TestDoubleParametersFailure )
+// {
+//   TestTestingFixture fixture;
+// };
+
+// static void _mismatch_type( void )
+// {
+//   expectCall("foo").with( "value", true );
+//   actualCall("foo").with( "value", "string" );
+// }
+// TEST( TestDoubleParametersFailure, mismatch_type )
+// {
+//   fixture.runTestWithMethod( _mismatch_type );
+//   CHECK( fixture.hasTestFailed() );
+// }
+
+// static void _unexpected( void )
+// {
+//   actualCall("foo").with( "value", true );
+// }
+// TEST( TestDoubleParametersFailure, when_failUnexpected )
+// {
+//   failUnexpected( true );
+//   fixture.runTestWithMethod( _unexpected );
+//   CHECK( fixture.hasTestFailed() );
+// }
+
+// static void _expected( void )
+// {
+//   expectCall("foo").with( "value", true );
+//   checkExpectations();
+// }
+// TEST( TestDoubleParametersFailure, when_unactualized_expectations )
+// {
+//   fixture.runTestWithMethod( _expected );
+//   CHECK( fixture.hasTestFailed() );
+// }
 

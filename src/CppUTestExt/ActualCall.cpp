@@ -28,6 +28,7 @@
 #include "CppUTestExt/ActualCall.h"
 
 #include "CppUTestExt/ExpectCall.h"
+#include "CppUTest/Utest.h"
 
 
 ActualCall::ActualCall( const SimpleString& name )
@@ -41,14 +42,20 @@ ActualCall::~ActualCall()
   /// find an expectation
   const ExpectedCall* pExpectation = TestDouble::findExpectation( *this );
 
-  // clean up memory resources
-  delete _parameters;
-  // delete _pOutputParameter;
-
-  if( 0 == pExpectation )
+  if( TestDouble::shouldFailUnexpected() && ( 0 == pExpectation ) )
   {
-    // TODO print actual (input and output parameters)
-    // FAIL( "Actual didn't match expectations" );
+    // print actual (input and output parameters)
+    SimpleString msg = StringFromFormat("no expectation matching actual call: \n\t %s \n", methodName.asCharString() );
+    for( const TestDouble::ParameterChain* pEntry = getParameters(); 0 != pEntry; pEntry = pEntry->pNext )
+    {
+      const TestDouble::Parameter* const pParameter = pEntry->pParameter;
+      msg += StringFromFormat( "\t\t %s = %s \n", pParameter->name.asCharString(), pParameter->type.asCharString() );
+    }
+    msg += ")\n";
+    UtestShell& shell = *(UtestShell::getCurrent());
+    // failure never returns so clean up memory
+    _deconstructor();
+    shell.fail( msg.asCharString(), shell.getFile().asCharString(), shell.getLineNumber() );
 
     // UT_PRINT( StringFromFormat( "Type Mismatch: Expected call to '%s' with parameter '%s' of type '%s', but actual paramter was of type '%s'.",
     //   expected.methodName.asCharString(), pExpectedEntry->pParameter->name.asCharString(),
@@ -56,6 +63,13 @@ ActualCall::~ActualCall()
     // );
 
   }
+  else _deconstructor();
+}
+
+void ActualCall::_deconstructor()
+{
+  delete _parameters;
+  // delete _pOutputParameter;
 }
 
 ActualCall& ActualCall::with( const SimpleString& name, const void* const buffer, const std::size_t& size )

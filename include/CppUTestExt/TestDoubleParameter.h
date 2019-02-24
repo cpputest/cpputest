@@ -55,6 +55,7 @@ public:
   { }
 
   bool equals( const Parameter* const pOther ) const;
+  
 
 private:
   const union Variant {

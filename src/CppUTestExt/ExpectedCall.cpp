@@ -45,22 +45,22 @@ ExpectedCall& ExpectedCall::times( const unsigned int count )
   return *this;
 }
 
-ExpectedCall& ExpectedCall::with( const SimpleString& name, const void* buffer, const std::size_t& size )
+ExpectedCall& ExpectedCall::with( const SimpleString& name, const void* staticBuffer, const std::size_t& size )
 {
-  TestDouble::Parameter* pParameter = new TestDouble::Parameter( name, buffer, size );
+  TestDouble::Parameter* pParameter = new TestDouble::Parameter( name, staticBuffer, size );
   _parameters = new TestDouble::ParameterChain( pParameter, _parameters );
   return *this;
 }
 
-SimpleString ExpectedCall::toString() const
-{
-  SimpleString ret;
+// SimpleString ExpectedCall::toString() const
+// {
+//   SimpleString ret;
 
-  ret += "expected call to ";
-  ret += methodName;
-  ret += " with\n";
-  // TODO list input parameters
-  // TODO list output paramaters
+//   ret += "expected call to ";
+//   ret += methodName;
+//   ret += " with\n";
+//   // TODO list input parameters
+//   // TODO list output paramaters
 
-  return ret;
-}
+//   return ret;
+// }
