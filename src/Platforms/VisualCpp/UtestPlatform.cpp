@@ -83,7 +83,7 @@ static long VisualCppTimeInMillis()
 	{
 		LARGE_INTEGER now;
 		QueryPerformanceCounter(&now);
-		return (now.QuadPart * 1000) / s_frequency.QuadPart;
+		return (long)((now.QuadPart * 1000) / s_frequency.QuadPart);
 	} 
 	else 
 	{
@@ -93,7 +93,7 @@ static long VisualCppTimeInMillis()
 		#if !defined(_WIN32_WINNT) || !defined(_WIN32_WINNT_VISTA) || (_WIN32_WINNT < _WIN32_WINNT_VISTA)
 			return GetTickCount();
 		#else
-			return GetTickCount64();
+			return (long)GetTickCount64();
 		#endif
 	#endif
 	}
