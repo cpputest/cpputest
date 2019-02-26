@@ -41,7 +41,14 @@ void strictOrder() { _strictOrder = true; }
 /// global set of expectations
 static TestDouble::ExpectationQueue expectations;
 
-void checkExpectations() { expectations.check(); }
+void checkExpectations()
+{
+  SimpleString report = expectations.check();
+
+  if( report.isEmpty() ) return;
+
+  FAIL( report.asCharString() );
+}
 
 ExpectedCall& expectCall( const SimpleString& call )
 {
@@ -62,6 +69,7 @@ bool shouldEnforceOrder() { return _strictOrder; }
 
 ExpectationChain::ExpectationChain( const ExpectedCall* const _pExpectedCall, ExpectationChain* const pLast )
   : pExpectedCall( _pExpectedCall )
+   ,actualCount(0)
    ,pNext(0)
 {
   if( 0 != pLast )
@@ -93,16 +101,18 @@ void ExpectationQueue::enqueue( const ExpectedCall* const pCall )
   }
 }
 
-void ExpectationQueue::check()
+SimpleString ExpectationQueue::check()
 {
+  SimpleString ret;
+
   // find uncalled expectations
-  for( ExpectationChain* pExpectation = expectations.get(); 0 != pExpectation; pExpectation = pExpectation->pNext )
+  for( const ExpectationChain* pExpectation = expectations.get(); 0 != pExpectation; pExpectation = pExpectation->pNext )
   {
     if( ( ExpectedCall::EXPECT_ALWAYS == pExpectation->pExpectedCall->getCount() )  &&
         ( pExpectation->actualCount <= 0 ) )
     {
       // FIXME FAIL never returns and therefore state must be cleaned first
-      FAIL("unmet expectation");
+      ret += StringFromFormat( "unmet expectation: %s()\n", pExpectation->pExpectedCall->methodName.asCharString() );
     }
   }
 
@@ -112,10 +122,12 @@ void ExpectationQueue::check()
   _pTail = 0;
   _failActuals = false;
   _strictOrder = false;
+
+  return ret;
 }
 
 
-static bool _matches( ExpectationChain& expectation, const ActualCall& actual );
+static bool _matches( const ExpectationChain& expectation, const ActualCall& actual );
 const ExpectedCall* findExpectation( const ActualCall& call )
 {
   for( ExpectationChain* pExpectation = expectations.get(); 0 != pExpectation; pExpectation = pExpectation->pNext )
@@ -150,7 +162,7 @@ ParameterChain::~ParameterChain()
 }
 
 
-static bool _matches( ExpectationChain& expectation, const ActualCall& actual )
+static bool _matches( const ExpectationChain& expectation, const ActualCall& actual )
 {
   const ExpectedCall& expected = *(expectation.pExpectedCall);
   if( actual.methodName != expected.methodName ) return false;

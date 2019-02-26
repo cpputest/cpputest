@@ -64,10 +64,10 @@ class ExpectationQueue
 {
 public:
   void enqueue( const ExpectedCall* const pCall );
-  ExpectationChain*   get() const { return _pExpectations; }
+  ExpectationChain* get() const { return _pExpectations; }
 
   /// detect unactualized expectations and then clear expectations
-  void check();
+  SimpleString check();
 private:
   ExpectationChain*   _pExpectations;
   ExpectationChain*   _pTail;   ///< reference to last enqueued

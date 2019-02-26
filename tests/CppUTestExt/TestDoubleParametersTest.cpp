@@ -194,10 +194,10 @@ static void unexpectedParameter()
   expectCall("foo");
   checkExpectations();
 }
-// TEST( TestDoubleParametersFailures, unmatched_expecations_fail )
-// {
-//   fixture.runTestWithMethod( unexpectedParameter );
-// }
+TEST( TestDoubleParametersFailures, unmatched_expecations_fail )
+{
+  fixture.runTestWithMethod( unexpectedParameter );
+}
 
 
 // static void _mismatch_type( void )
