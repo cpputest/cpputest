@@ -27,6 +27,7 @@ set(CppUTestExtTests_src
     MockReturnValueTest.cpp
     OrderedTestTest_c.c
     OrderedTestTest.cpp
+    TestDoubleTest.cpp
     TestDoubleParametersTest.cpp
     TestDoubleOutputParametersTest.cpp
     TestDoubleReturnsTest.cpp

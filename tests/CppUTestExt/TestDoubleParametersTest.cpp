@@ -186,17 +186,6 @@ TEST_GROUP( TestDoubleParametersFailures )
   }
 };
 
-// FIXME should be in a different test group (i.e. has no parameters)
-static void unmet_expectation()
-{
-  expectCall("foo");
-  checkExpectations();
-}
-TEST( TestDoubleParametersFailures, unmet_expectation_fails )
-{
-  fixture.runTestWithMethod( unmet_expectation );
-}
-
 static void mismatch_type( void )
 {
   expectCall("foo").with( "value", true );
