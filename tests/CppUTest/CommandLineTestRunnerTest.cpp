@@ -186,11 +186,17 @@ TEST(CommandLineTestRunner, listTestGroupAndCaseNamesShouldWorkProperly)
     STRCMP_CONTAINS("group.test", commandLineTestRunner.fakeConsoleOutputWhichIsReallyABuffer->getOutput().asCharString());
 }
 
-TEST(CommandLineTestRunner, randomShuffleSeedIsPrinted)
+TEST(CommandLineTestRunner, randomShuffleSeedIsPrintedAndRandFuncIsExercised)
 {
+    // more than 1 item in test list ensures that shuffle algorithm calls rand_()
+    UtestShell *anotherTest = new UtestShell("group", "test2", "file", 1);
+    registry.addTest(anotherTest);
+
     const char* argv[] = { "tests.exe", "-s"};
     SimpleString text = runAndGetOutput(2, argv);
     STRCMP_CONTAINS("shuffling enabled with seed:", text.asCharString());
+
+    delete anotherTest;
 }
 
 TEST(CommandLineTestRunner, specificShuffleSeedIsPrintedVerbose)

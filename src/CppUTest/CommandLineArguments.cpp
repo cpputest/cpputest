@@ -70,7 +70,7 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
         else if (argument.startsWith("-sn")) AddStrictNameFilter(ac_, av_, i);
         else if (argument.startsWith("-xn")) AddExcludeNameFilter(ac_, av_, i);
         else if (argument.startsWith("-xsn")) AddExcludeStrictNameFilter(ac_, av_, i);
-        else if (argument.startsWith("-s")) SetShuffle(ac_, av_, i);
+        else if (argument.startsWith("-s")) correctParameters = SetShuffle(ac_, av_, i);
         else if (argument.startsWith("TEST(")) AddTestToRunBasedOnVerboseOutput(ac_, av_, i, "TEST(");
         else if (argument.startsWith("IGNORE_TEST(")) AddTestToRunBasedOnVerboseOutput(ac_, av_, i, "IGNORE_TEST(");
         else if (argument.startsWith("-o")) correctParameters = SetOutputType(ac_, av_, i);
@@ -79,6 +79,7 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
         else correctParameters = false;
 
         if (correctParameters == false) {
+            shuffle_ = SHUFFLE_DISABLED;
             return false;
         }
     }
@@ -87,7 +88,7 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
 
 const char* CommandLineArguments::usage() const
 {
-    return "usage [-v] [-c] [-p] [-lg] [-ln] [-ri] [-r#] [-g|sg|xg|xsg groupName]... [-n|sn|xn|xsn testName]... [-s [randomizerSeed]] [\"TEST(groupName, testName)\"]... [-o{normal, junit, teamcity}] [-k packageName]\n";
+    return "usage [-v] [-c] [-p] [-lg] [-ln] [-ri] [-r#] [-g|sg|xg|xsg groupName]... [-n|sn|xn|xsn testName]... [-s [randomizerSeed>0]] [\"TEST(groupName, testName)\"]... [-o{normal, junit, teamcity}] [-k packageName]\n";
 }
 
 bool CommandLineArguments::isVerbose() const
@@ -156,21 +157,24 @@ void CommandLineArguments::SetRepeatCount(int ac, const char *const *av, int& i)
 
 }
 
-void CommandLineArguments::SetShuffle(int ac, const char * const *av, int& i)
+bool CommandLineArguments::SetShuffle(int ac, const char * const *av, int& i)
 {
     shuffle_ = SHUFFLE_ENABLED_RANDOM_SEED;
     SimpleString shuffleParameter(av[i]);
     if (shuffleParameter.size() > 2) {
         shuffle_ = SimpleString::AtoU(av[i] + 2);
+        if (shuffle_ == SHUFFLE_DISABLED) {
+            return false;
+        }
     } else if (i + 1 < ac) {
-        bool wasAbleToParseDigit = false;
-        const unsigned parsed = SimpleString::AtoU(av[i + 1], wasAbleToParseDigit);
-        if (wasAbleToParseDigit)
+        const unsigned parsed = SimpleString::AtoU(av[i + 1]);
+        if (parsed != 0)
         {
-            i++;
             shuffle_ = parsed;
+            i++;
         }
     }
+    return true;
 }
 
 SimpleString CommandLineArguments::getParameterField(int ac, const char * const *av, int& i, const SimpleString& parameterName)

@@ -949,23 +949,11 @@ TEST(SimpleString, AtoU)
     CHECK(123    == SimpleString::AtoU("\t \r\n123"));
     CHECK(123    == SimpleString::AtoU("123-foo"));
     CHECK(65535  == SimpleString::AtoU(max_short_str));
-
-    bool parsedDigit;
-
-    CHECK(0 == SimpleString::AtoU("foo", parsedDigit));
-    CHECK_FALSE(parsedDigit);
-
-    CHECK(0 == SimpleString::AtoU("-foo", parsedDigit));
-    CHECK_FALSE(parsedDigit);
-
-    CHECK(0 == SimpleString::AtoU("+1", parsedDigit));
-    CHECK_FALSE(parsedDigit);
-
-    CHECK(0 == SimpleString::AtoU("-1", parsedDigit));
-    CHECK_FALSE(parsedDigit);
-
-    CHECK(0 == SimpleString::AtoU("0", parsedDigit));
-    CHECK_TRUE(parsedDigit);
+    CHECK(0      == SimpleString::AtoU("foo"));
+    CHECK(0      == SimpleString::AtoU("-foo"));
+    CHECK(0      == SimpleString::AtoU("+1"));
+    CHECK(0      == SimpleString::AtoU("-1"));
+    CHECK(0      == SimpleString::AtoU("0"));
 }
 
 TEST(SimpleString, Binary)

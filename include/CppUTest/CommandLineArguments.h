@@ -81,7 +81,7 @@ private:
 
     SimpleString getParameterField(int ac, const char *const *av, int& i, const SimpleString& parameterName);
     void SetRepeatCount(int ac, const char *const *av, int& index);
-    void SetShuffle(int ac, const char *const *av, int& index);
+    bool SetShuffle(int ac, const char *const *av, int& index);
     void AddGroupFilter(int ac, const char *const *av, int& index);
     void AddStrictGroupFilter(int ac, const char *const *av, int& index);
     void AddExcludeGroupFilter(int ac, const char *const *av, int& index);
