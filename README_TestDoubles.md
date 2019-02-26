@@ -14,20 +14,22 @@ forward.
 * **Separation of interfaces for an expected call and an actual call**
     * As inclusion of MockSupport.h brings in both interfaces, developers new to CppUMock are often confused about which
         interface to use under different contexts (e.g. CuT vs DoC).
+    * Under TestDoubles tests use Expect.h and test double implementations use Actual.h - and each only has access to
+        the necessary interfaces (expectCall(), actualCall() respectively).
 * **No support for test namespacing (i.e. _mock("namespace")_ )**
-    * Where CppUMock supports test namespacing this feature is unnecessary and couples testing of the CuT directly to
+    * CppUMock supports test namespacing.  This feature is unnecessary and couples testing of the CuT directly to
         the DoC Test Double.
 * **Call order is enforced only for sets of expectations requiring ordering**
     * CppUMock's _mock().strictOrder()_ forces all calls to happen in the order of expectations.
 * **Testing is based on Expectations**
     * Upon a DoC call under TestDoubles, only the expected parameters are verified.  Under CppUMock, unexpected
-        parameters (unnecessary for testing the CuT) results in test failure.
+        parameters (often unnecessary for testing the CuT behavior) results in test failures.
 * **Stronger Typing**
-    * TestDoubles leverages the compiler's typing and will degrade (under non-compliant compilers) to CppUMock's set of
-        types which incur implicit transforms.
+    * TestDoubles leverages the compiler's typing, whereas CppuMock introduces its own typing which incurs implicit
+        transforms based upon CppuMock choices.
 * **Smaller memory usage**
-    * TestDoubles avoids unnecessary heap allocations of objects (especially the SimpleStrings)
-    * TestDoubles avoids unnecessary stack allocations to report failures.
+    * TestDoubles avoids unnecessary heap allocations.
+    * TestDoubles avoids unnecessary stack allocations.
 
 What is a Test Double?
 ------------------------------------------------------------------------------------------------------------------------
@@ -36,8 +38,6 @@ inject the necessary behavior per the test's needs.
 
 For instance
 ```c++
-extern "C" long DoC();
-
 long Cut() { return DoC(); }
 
 TEST( TestGroup, CuT_returns_1 )
@@ -48,6 +48,10 @@ TEST( TestGroup, CuT_returns_1 )
 ```
 
 ### Expectation Framework
+An Expectation Framework is a pattern for testing that focuses on expectations.  Tests created under and Expectation
+Framework PASS or FAIL based upon how the CuT performs under the provided expectations.  Tests should be written to
+minimize the expectations.  Not only does minimizing expectations expedite test development, but it also identifies
+additional code in the implementation that is unnecessary to meet test cases.
 
 #### What should a Test Double do?
 Only enough to support your testing of the CuT.  Minimal effort should be exerted in creating a Test Double, as the
@@ -70,7 +74,7 @@ With an Expectation Framework, a single DoC TestDouble can be leveraged.
         const X kReturn;
         expect().call( "DoC" )
             .with( "param0", kInput )
-            .output( "OUTparam1", kOutput )
+            .output( "param1", kOutput )
             .andReturn( kReturn );
     }
 
@@ -82,24 +86,26 @@ With an Expectation Framework, a single DoC TestDouble can be leveraged.
     }
 
     // universal test double
-    bool DoC( int param0, int param1 )
+    bool DoC( int param0, int* pParam1 )
     {
         return actual().call( "DoC" )
             .with( "param0", param0 )
-            .with( "OUTparam1", OUTparam1 )
-            .andReturnBool();
+            .output( "pParam1", pParam1 )   // NOTE: see schema to provide default values
+            .andReturnBool();               // NOTE: see schema to provide default values
     }
 ```
 
+<a name="schema">
 Schema  Legend
+</a>
 ------------------------------------------------------------------------------------------------------------------------
-```C
+```c
     {}      : optional
     <>      : specialization
 ```
 Schema of an Expectation
 ------------------------------------------------------------------------------------------------------------------------
-```C
+```c
 expectCall( "<call>" )                  // name of method/function used by actual
     {.onObject( object ) }              // object is a reference to a harness object
     {.onObjectType( objectType ) }      // objectType is a class type
@@ -107,18 +113,23 @@ expectCall( "<call>" )                  // name of method/function used by actua
     {.with( "parameter", value )}       // name of parameter and value to validate
     {.output( "parameter", value )}     // name of parameter, sets an expected value
     {.use( Model )}                     // Model of behavior
-    {.returns<type>( value )}           // return value
+    {.returns( value )}                 // return value
 
+<!-- TODO
 Schema of a Sequential Expectation
 ------------------------------------------------------------------------------------------------------------------------
 expectNext( "<sequence>", "<call>" )    // name of sequence and method/function used by actual,
                                             returns expectCall reference under the sequence
 ```
+-->
 
-```C
-actualCall( "<call>" )                  // name of method/function used by actual
-    {.onObject( this ) }                // object of the DoC
-    {.onObjectType( objectType ) }      // objectType of the object DoC
-    {.with( "parameter", value )}       // name of parameter and value to validate
-    {.return<type>()}                   // return expected value
+```c
+actualCall( "<call>" )                          // name of method/function used by actual
+    {.onObject( this ) }                        // object of the DoC
+    {.onObjectType( objectType ) }              // objectType of the object DoC
+    {.with( "parameter", value )}               // name of parameter and value to validate
+    {.output( "parameter", pointer )}           // name of parameter, sets an expected value or `true`
+    {.output( "parameter", pointer, default )}  // name of parameter, sets an expected value or default
+    {.return<type>()}                           // return expected value or `true`
+    {.return<type>( default )}                  // return expected value or default
 ```
