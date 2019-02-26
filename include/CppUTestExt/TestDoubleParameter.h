@@ -50,6 +50,12 @@ public:
   : name(_name), type( typeid(value).name() ), _variant(value)
   { }
 
+  template<typename T>
+  Parameter( const SimpleString& _name, T* const _buffer, const T& value )
+  : name(_name), type( typeid(T).name() ), buffer(_buffer), _variant(value), bufferSize_bytes(sizeof(T))
+  { }
+
+  // // FIXME isn't this handled better above?
   Parameter( const SimpleString& _name, const void* const _buffer, const std::size_t& _bufferSize_bytes )
   : name(_name), type( typeid(_buffer).name() ), buffer(_buffer), bufferSize_bytes(_bufferSize_bytes)
   { }

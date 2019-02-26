@@ -31,6 +31,8 @@
 #include "CppUTestExt/TestDouble.h"
 #include "CppUTest/TestHarness.h"
 
+#include <typeinfo>
+
 class ActualCall;
 /// implemented in TestDouble.cpp
 ActualCall actualCall( const SimpleString& name );
@@ -46,19 +48,26 @@ public:
   ~ActualCall();
 
   template<typename T>
-  ActualCall& with( const SimpleString& name, const T& value )
+  ActualCall& with( const SimpleString& _name, const T& value )
   {
-    TestDouble::Parameter* pParameter = new TestDouble::Parameter( name, value );
+    TestDouble::Parameter* pParameter = new TestDouble::Parameter( _name, value );
     _parameters = new TestDouble::ParameterChain( pParameter, _parameters );
     return *this;
   }
 
-  ActualCall& with( const SimpleString& name, const void* const buffer, const std::size_t& size );
+  template<typename T>
+  ActualCall& with( const SimpleString& _name, T* const buffer, const std::size_t& size )
+  {
+    TestDouble::Parameter* pParameter = new TestDouble::Parameter( _name, buffer, size );
+    _parameters = new TestDouble::ParameterChain( pParameter, _parameters );
+    return *this;
+
+  }
 
   template<typename T>
-  ActualCall& output( const SimpleString& name, const T& value )
+  ActualCall& output( const SimpleString& _name, T* const pValue, const T defaultValue=true )
   {
-    TestDouble::Parameter* pParameter = new TestDouble::Parameter( name, value );
+    TestDouble::Parameter* pParameter = new TestDouble::Parameter( _name, typeid(T).name(), pValue, defaultValue );
     _outputs = new TestDouble::ParameterChain( pParameter, _outputs );
     return *this;
   }

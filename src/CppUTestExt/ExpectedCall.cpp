@@ -47,9 +47,9 @@ ExpectedCall& ExpectedCall::times( const unsigned int count )
   return *this;
 }
 
-ExpectedCall& ExpectedCall::with( const SimpleString& name, const void* staticBuffer, const std::size_t& size )
+ExpectedCall& ExpectedCall::with( const SimpleString& _name, const void* staticBuffer, const std::size_t& size )
 {
-  TestDouble::Parameter* pParameter = new TestDouble::Parameter( name, staticBuffer, size );
+  TestDouble::Parameter* pParameter = new TestDouble::Parameter( _name, staticBuffer, size );
   _parameters = new TestDouble::ParameterChain( pParameter, _parameters );
   return *this;
 }

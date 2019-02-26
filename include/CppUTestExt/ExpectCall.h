@@ -48,9 +48,9 @@ public:
   ExpectedCall& times( const unsigned int count );
 
   template<typename T>
-  ExpectedCall& with( const SimpleString& name, const T& value )
+  ExpectedCall& with( const SimpleString& _name, const T& value )
   {
-    TestDouble::Parameter* pParameter = new TestDouble::Parameter( name, value );
+    TestDouble::Parameter* pParameter = new TestDouble::Parameter( _name, value );
     _parameters = new TestDouble::ParameterChain( pParameter, _parameters );
     return *this;
   }
@@ -58,9 +58,9 @@ public:
   ExpectedCall& with( const SimpleString& name, const void* staticBuffer, const std::size_t& size );
 
   template<typename T>
-  ExpectedCall& output( const SimpleString& name, const T& value )
+  ExpectedCall& output( const SimpleString& _name, const T& value )
   {
-    TestDouble::Parameter* pParameter = new TestDouble::Parameter( name, value );
+    TestDouble::Parameter* pParameter = new TestDouble::Parameter( _name, value );
     _outputs = new TestDouble::ParameterChain( pParameter, _outputs );
     return *this;
   }

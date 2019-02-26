@@ -48,9 +48,18 @@ ActualCall::~ActualCall()
     // TODO format a usable report
     failure = "unmet actual";
   }
-  else
+  else for( const TestDouble::ParameterChain* pActualEntry=getOutputs(); 0 != pActualEntry; pActualEntry = pActualEntry->pNext )
   {
-    // set output parameters
+    // set outputs
+    if( 0 != pExpectation ) 
+    {
+      for( const TestDouble::ParameterChain* pExpectedEntry=pExpectation->getOutputs(); 0 != pExpectedEntry; pExpectedEntry = pExpectedEntry->pNext )
+      {
+        if( pExpectedEntry->pParameter->name == pActualEntry->pParameter->name )
+        {
+        }
+      }
+    }
   }
 
   delete _parameters;
@@ -65,12 +74,12 @@ ActualCall::~ActualCall()
   }
 }
 
-ActualCall& ActualCall::with( const SimpleString& name, const void* const buffer, const std::size_t& size )
-{
-  TestDouble::Parameter* pParameter = new TestDouble::Parameter( name, buffer, size );
-  _parameters = new TestDouble::ParameterChain( pParameter, _parameters );
-  return *this;
-}
+// ActualCall& ActualCall::with( const SimpleString& _name, const void* const buffer, const std::size_t& size )
+// {
+//   TestDouble::Parameter* pParameter = new TestDouble::Parameter( _name, buffer, size );
+//   _parameters = new TestDouble::ParameterChain( pParameter, _parameters );
+//   return *this;
+// }
 
     // // print actual (input and output parameters)
     // SimpleString msg = StringFromFormat("no expectation matching actual call: \n\t%s(\n", methodName.asCharString() );
