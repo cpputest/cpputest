@@ -111,7 +111,7 @@ SimpleString ExpectationQueue::check()
     if( ( ExpectedCall::EXPECT_ALWAYS == pExpectation->pExpectedCall->getCount() )  &&
         ( pExpectation->actualCount <= 0 ) )
     {
-      // FIXME FAIL never returns and therefore state must be cleaned first
+      // TOOD format the expectation
       ret += StringFromFormat( "unmet expectation: %s()\n", pExpectation->pExpectedCall->methodName.asCharString() );
     }
   }
@@ -182,36 +182,6 @@ static bool _matches( const ExpectationChain& expectation, const ActualCall& act
 
   return true;
 }
-
-
-
-// bool Expectations::check()
-// {
-//   bool passed = true;
-
-//   // clean up expectations
-//   while( _expectedCalls != 0 )
-//   {
-//     const ExpectedCallEntry* pExpectedCallEntry = _expectedCalls;
-//     const ExpectedCall& expectedCall = *(pExpectedCallEntry->pExpectedCall);
-//     if( ( ( expectedCall.getCount() == ExpectedCall::EXPECT_ALWAYS ) && ( pExpectedCallEntry->calledCount == 0 ) )   ||
-//         ( ( expectedCall.getCount() != ExpectedCall::EXPECT_ALWAYS ) && ( pExpectedCallEntry->calledCount <= expectedCall.getCount() ) ) )
-//     {
-//       // FIXME why is the test result protected?!
-//       // UtestShell::getCurrent()->getTestResult()->print( expectedCall.asCharString() );
-//       // Fake access to test result
-//       // UtestShell::getCurrent()->print( expectedCall.toString().asCharString(), "", 0 );
-//       passed = false;
-//     }
-
-//     ExpectedCallEntry* pNextExpectedEntry = pExpectedCallEntry->pNext;
-//     delete pExpectedCallEntry->pExpectedCall;
-//     delete pExpectedCallEntry;
-//     _expectedCalls = pNextExpectedEntry;
-//   }
-
-//   return passed;
-// }
 
 } // namespace TestDouble
 

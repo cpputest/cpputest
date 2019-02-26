@@ -105,10 +105,8 @@ TEST_GROUP( IgnoreUnmatchedActual )
 {
   TEST_SETUP()
   {
-    // clear any expectations
+    // clear any expectations (default don't fail unmatched actuals)
     checkExpectations();
-
-    // default don't fail unmatched actuals
   }
 
   TEST_TEARDOWN()
@@ -184,51 +182,40 @@ TEST_GROUP( TestDoubleParametersFailures )
 
   TEST_TEARDOWN()
   {
-    checkExpectations();
     CHECK( fixture.hasTestFailed() );
   }
 };
 
-static void unexpectedParameter()
+// FIXME should be in a different test group (i.e. has no parameters)
+static void unmet_expectation()
 {
   expectCall("foo");
   checkExpectations();
 }
-TEST( TestDoubleParametersFailures, unmatched_expecations_fail )
+TEST( TestDoubleParametersFailures, unmet_expectation_fails )
 {
-  fixture.runTestWithMethod( unexpectedParameter );
+  fixture.runTestWithMethod( unmet_expectation );
 }
 
+static void mismatch_type( void )
+{
+  expectCall("foo").with( "value", true );
+  actualCall("foo").with( "value", "string" );
+  checkExpectations();
+}
+TEST( TestDoubleParametersFailures, mismatch_type_fails )
+{
+  fixture.runTestWithMethod( mismatch_type );
+}
 
-// static void _mismatch_type( void )
-// {
-//   expectCall("foo").with( "value", true );
-//   actualCall("foo").with( "value", "string" );
-// }
-// TEST( TestDoubleParametersFailure, mismatch_type ) // {
-//   fixture.runTestWithMethod( _mismatch_type );
-//   CHECK( fixture.hasTestFailed() );
-// }
-
-// static void _unexpected( void )
-// {
-//   actualCall("foo").with( "value", true );
-// }
-// TEST( TestDoubleParametersFailure, when_failUnexpected )
-// {
-//   failUnexpected( true );
-//   fixture.runTestWithMethod( _unexpected );
-//   CHECK( fixture.hasTestFailed() );
-// }
-
-// static void _expected( void )
-// {
-//   expectCall("foo").with( "value", true );
-//   checkExpectations();
-// }
-// TEST( TestDoubleParametersFailure, when_unactualized_expectations )
-// {
-//   fixture.runTestWithMethod( _expected );
-//   CHECK( fixture.hasTestFailed() );
-// }
+static void mismatch_value( void )
+{
+  expectCall("foo").with( "value", true );
+  actualCall("foo").with( "value", false );
+  checkExpectations();
+}
+TEST( TestDoubleParametersFailures, mismatch_value_fails )
+{
+  fixture.runTestWithMethod( mismatch_value );
+}
 
