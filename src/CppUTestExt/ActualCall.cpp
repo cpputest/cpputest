@@ -53,11 +53,9 @@ ActualCall::~ActualCall()
   {
     UtestShell* const pShell = UtestShell::getCurrent();
     TestFailure testFailure( pShell, pShell->getFile().asCharString(), pShell->getLineNumber(), failure );
-    UtestShell::getCurrent()->getTestResult()->addFailure( testFailure );
-    UtestShell::getCurrent()->setFailed();
-    // FAIL( failure.asCharString() );
+    TestTerminatorWithoutExceptions terminator;
+    UtestShell::getCurrent()->failWith( testFailure, terminator );
   }
-
 }
 
 ActualCall& ActualCall::with( const SimpleString& name, const void* const buffer, const std::size_t& size )

@@ -1,9 +1,6 @@
 CppUTest
 ========
 
-#TODO
-* currently CppUTestDouble is only added to the CMakeLists.txt, need to add to all other project formats
-
 CppUTest unit testing and mocking framework for C/C++
 
 [More information on the project page](http://cpputest.github.com)

@@ -277,9 +277,6 @@
   { UtestShell::getCurrent()->assertFunctionPointersEqual((void (*)())expected, (void (*)())actual, text, file, line); }
 
 //Check two doubles for equality within a tolerance threshold
-#define FLOATS_EQUAL(expected, actual, threshold)\
-  DOUBLES_EQUAL_LOCATION( static_cast<double>(expected), static_cast<double>(actual), threshold, NULLPTR, __FILE__, __LINE__)
-
 #define DOUBLES_EQUAL(expected, actual, threshold)\
   DOUBLES_EQUAL_LOCATION(expected, actual, threshold, NULLPTR, __FILE__, __LINE__)
 
