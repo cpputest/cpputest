@@ -146,7 +146,7 @@ TEST_GROUP( TestDoubleState )
 {
   TEST_SETUP()
   {
-    // clear any expectations
+    // clear any expectations and reset TestDouble state
     checkExpectations();
   }
 };
@@ -184,6 +184,7 @@ TEST_GROUP( TestDoubleParametersFailures )
 
   TEST_TEARDOWN()
   {
+    checkExpectations();
     CHECK( fixture.hasTestFailed() );
   }
 };
@@ -193,10 +194,10 @@ static void unexpectedParameter()
   expectCall("foo");
   checkExpectations();
 }
-IGNORE_TEST( TestDoubleParametersFailures, when_unmatched_expecations_fail )
-{
-  fixture.runTestWithMethod( unexpectedParameter );
-}
+// TEST( TestDoubleParametersFailures, unmatched_expecations_fail )
+// {
+//   fixture.runTestWithMethod( unexpectedParameter );
+// }
 
 
 // static void _mismatch_type( void )

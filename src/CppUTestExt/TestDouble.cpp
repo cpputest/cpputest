@@ -98,10 +98,11 @@ void ExpectationQueue::check()
   // find uncalled expectations
   for( ExpectationChain* pExpectation = expectations.get(); 0 != pExpectation; pExpectation = pExpectation->pNext )
   {
-    if( ( ExpectedCall::EXPECT_ALWAYS != pExpectation->pExpectedCall->getCount() )  &&
-        ( pExpectation->actualCount = pExpectation->pExpectedCall->getCount() ) )
+    if( ( ExpectedCall::EXPECT_ALWAYS == pExpectation->pExpectedCall->getCount() )  &&
+        ( pExpectation->actualCount <= 0 ) )
     {
-      FAIL("uht oh");
+      // FIXME FAIL never returns and therefore state must be cleaned first
+      FAIL("unmet expectation");
     }
   }
 
