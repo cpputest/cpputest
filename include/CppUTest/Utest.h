@@ -152,12 +152,16 @@ public:
     virtual void failWith(const TestFailure& failure);
     virtual void failWith(const TestFailure& failure, const TestTerminator& terminator);
 
+    // FIXME had to promote to public for access from ActualCall::~ActualCall()
+    TestResult *getTestResult();
+    void setFailed() { hasFailed_ = true; }
+
 protected:
     UtestShell();
     UtestShell(const char *groupName, const char *testName, const char *fileName, int lineNumber, UtestShell *nextTest);
 
     virtual SimpleString getMacroName() const;
-    TestResult *getTestResult();
+
 private:
     const char *group_;
     const char *name_;

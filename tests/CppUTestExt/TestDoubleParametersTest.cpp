@@ -32,7 +32,7 @@
 
 //======================================================================================================================
 /// Demonstrate parity with CppuMock (i.e. actuals must meet expectations)
-TEST_GROUP( MatchedActual )
+TEST_GROUP( MatchedParameter )
 {
   TEST_SETUP()
   {
@@ -48,81 +48,81 @@ TEST_GROUP( MatchedActual )
   }
 };
 
-TEST( MatchedActual, match_bool )
+TEST( MatchedParameter, match_bool )
 {
   // allow bool to upcast to type
   expectCall("foo").with("value", (bool)true);
   actualCall("foo").with("value", (bool)true);
 }
 
-TEST( MatchedActual, match_char )
+TEST( MatchedParameter, match_char )
 {
   expectCall("foo").with("value", (char)true);
   actualCall("foo").with("value", (char)true);
 }
 
-TEST( MatchedActual, match_unsigned_char )
+TEST( MatchedParameter, match_unsigned_char )
 {
   expectCall("foo").with("value", (unsigned char)true);
   actualCall("foo").with("value", (unsigned char)true);
 }
 
-TEST( MatchedActual, match_int )
+TEST( MatchedParameter, match_int )
 {
   expectCall("foo").with("value", (int)true);
   actualCall("foo").with("value", (int)true);
 }
 
-TEST( MatchedActual, match_unsigned_int )
+TEST( MatchedParameter, match_unsigned_int )
 {
   expectCall("foo").with("value", (unsigned int)true);
   actualCall("foo").with("value", (unsigned int)true);
 }
 
-TEST( MatchedActual, match_long )
+TEST( MatchedParameter, match_long )
 {
   expectCall("foo").with("value", (long)true);
   actualCall("foo").with("value", (long)true);
 }
 
-TEST( MatchedActual, match_unsigned_long )
+TEST( MatchedParameter, match_unsigned_long )
 {
   expectCall("foo").with("value", (unsigned long)true);
   actualCall("foo").with("value", (unsigned long)true);
 }
 
-TEST( MatchedActual, match_long_long )
+TEST( MatchedParameter, match_long_long )
 {
   expectCall("foo").with("value", (long long)true);
   actualCall("foo").with("value", (long long)true);
 }
 
-TEST( MatchedActual, match_unsigned_long_long )
+TEST( MatchedParameter, match_unsigned_long_long )
 {
   expectCall("foo").with("value", (unsigned long long)true);
   actualCall("foo").with("value", (unsigned long long)true);
 }
 
-TEST( MatchedActual, match_float )
+TEST( MatchedParameter, match_float )
 {
   expectCall("foo").with("value", (float)true);
   actualCall("foo").with("value", (float)true);
 }
 
-TEST( MatchedActual, match_double )
+TEST( MatchedParameter, match_double )
 {
   expectCall("foo").with("value", (double)true);
   actualCall("foo").with("value", (double)true);
 }
 
-TEST( MatchedActual, match_pointer )
+TEST( MatchedParameter, match_pointer )
 {
   char buffer[] = "HELLO";
   expectCall("foo").with("value", buffer);
   actualCall("foo").with("value", buffer);
 }
 
-TEST( MatchedActual, match_const_pointer )
+TEST( MatchedParameter, match_const_pointer )
 {
   const char buffer[] = "HELLO";
   expectCall("foo").with("value", buffer);
@@ -130,17 +130,41 @@ TEST( MatchedActual, match_const_pointer )
 }
 
 static void _fn( void ) {}
-TEST( MatchedActual, match_fn )
+TEST( MatchedParameter, match_fn )
 {
   expectCall("foo").with("value", _fn);
   actualCall("foo").with("value", _fn);
 }
 
-TEST( MatchedActual, match_static_buffer )
+TEST( MatchedParameter, match_static_buffer )
 {
   char buffer[] = "HELLO";
   expectCall("foo").with("value", buffer, sizeof(buffer));
   actualCall("foo").with("value", buffer, sizeof(buffer));
+}
+
+//======================================================================================================================
+TEST_GROUP( UnmatchedParameter )
+{
+  TEST_SETUP()
+  {
+    // clear any expectations
+    checkExpectations();
+
+    failUnexpected();
+  }
+
+  TEST_TEARDOWN()
+  {
+    checkExpectations();
+  }
+};
+
+TEST( UnmatchedParameter, unexpected_parameters_are_ignored )
+{
+  char buffer[] = "HELLO";
+  expectCall("foo").with("value", buffer, sizeof(buffer));
+  actualCall("foo").with("value", buffer, sizeof(buffer)).with("bar", true);
 }
 
 //======================================================================================================================

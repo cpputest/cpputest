@@ -42,27 +42,22 @@ ActualCall::~ActualCall()
   /// find an expectation
   const ExpectedCall* pExpectation = TestDouble::findExpectation( *this );
 
+  SimpleString failure;
   if( TestDouble::shouldFailUnexpected() && ( 0 == pExpectation ) )
   {
-    // print actual (input and output parameters)
-    SimpleString msg = StringFromFormat("no expectation matching actual call: \n\t%s(\n", methodName.asCharString() );
-    for( const TestDouble::ParameterChain* pEntry = getParameters(); 0 != pEntry; pEntry = pEntry->pNext )
-    {
-      const TestDouble::Parameter* const pParameter = pEntry->pParameter;
-      msg += StringFromFormat( "\t\t %s = %s \n", pParameter->name.asCharString(), pParameter->type.asCharString() );
-    }
-    msg += "\t)\n";
-    UtestShell& shell = *(UtestShell::getCurrent());
-    // FIXME  does failure never return?
-    // shell.fail( msg.asCharString(), shell.getFile().asCharString(), shell.getLineNumber() );
-
-    // UT_PRINT( StringFromFormat( "Type Mismatch: Expected call to '%s' with parameter '%s' of type '%s', but actual paramter was of type '%s'.",
-    //   expected.methodName.asCharString(), pExpectedEntry->pParameter->name.asCharString(),
-    //   pExpectedEntry->pParameter->type.asCharString(), pActualEntry->pParameter->type.asCharString() ).asCharString()
-    // );
-
+    failure = "unmet actual";
   }
   delete _parameters;
+
+  if( false == failure.isEmpty() )
+  {
+    UtestShell* const pShell = UtestShell::getCurrent();
+    TestFailure testFailure( pShell, pShell->getFile().asCharString(), pShell->getLineNumber(), failure );
+    UtestShell::getCurrent()->getTestResult()->addFailure( testFailure );
+    UtestShell::getCurrent()->setFailed();
+    // FAIL( failure.asCharString() );
+  }
+
 }
 
 ActualCall& ActualCall::with( const SimpleString& name, const void* const buffer, const std::size_t& size )
@@ -71,3 +66,20 @@ ActualCall& ActualCall::with( const SimpleString& name, const void* const buffer
   _parameters = new TestDouble::ParameterChain( pParameter, _parameters );
   return *this;
 }
+
+    // // print actual (input and output parameters)
+    // SimpleString msg = StringFromFormat("no expectation matching actual call: \n\t%s(\n", methodName.asCharString() );
+    // for( const TestDouble::ParameterChain* pEntry = getParameters(); 0 != pEntry; pEntry = pEntry->pNext )
+    // {
+    //   const TestDouble::Parameter* const pParameter = pEntry->pParameter;
+    //   msg += StringFromFormat( "\t\t %s = %s \n", pParameter->name.asCharString(), pParameter->type.asCharString() );
+    // }
+    // msg += "\t)\n";
+    // UtestShell& shell = *(UtestShell::getCurrent());
+    // // FIXME  does failure never return?
+    // // shell.fail( msg.asCharString(), shell.getFile().asCharString(), shell.getLineNumber() );
+
+    // // UT_PRINT( StringFromFormat( "Type Mismatch: Expected call to '%s' with parameter '%s' of type '%s', but actual paramter was of type '%s'.",
+    // //   expected.methodName.asCharString(), pExpectedEntry->pParameter->name.asCharString(),
+    // //   pExpectedEntry->pParameter->type.asCharString(), pActualEntry->pParameter->type.asCharString() ).asCharString()
+    // // );

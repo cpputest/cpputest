@@ -133,11 +133,12 @@ const ExpectedCall* findExpectation( const ActualCall& call )
 {
   for( ExpectationChain* pExpectation = expectations.get(); 0 != pExpectation; pExpectation = pExpectation->pNext )
   {
-    // if( ( ExpectedCall::EXPECT_ALWAYS != pExpectation->pExpectedCall->getCount() )  &&
-    //     ( pExpectation->actualCount >= pExpectation->pExpectedCall->getCount() ) )
-    // {
-    //   continue;
-    // }
+    if( ( ExpectedCall::EXPECT_ALWAYS != pExpectation->pExpectedCall->getCount() )  &&
+        ( pExpectation->actualCount >= pExpectation->pExpectedCall->getCount() ) )
+    {
+      // this expectation has already met its call limit
+      continue;
+    }
     if( _matches( *pExpectation, call ) )
     {
       pExpectation->actualCount++;
