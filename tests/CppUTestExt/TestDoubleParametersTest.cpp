@@ -48,126 +48,107 @@ TEST_GROUP( MatchedActual )
   }
 };
 
-static void _fn( void ) {}
-TEST( MatchedActual, match_all )
+TEST( MatchedActual, match_bool )
 {
   // allow bool to upcast to type
   expectCall("foo").with("value", (bool)true);
   actualCall("foo").with("value", (bool)true);
+}
 
+TEST( MatchedActual, match_char )
+{
   expectCall("foo").with("value", (char)true);
   actualCall("foo").with("value", (char)true);
+}
 
+TEST( MatchedActual, match_unsigned_char )
+{
   expectCall("foo").with("value", (unsigned char)true);
   actualCall("foo").with("value", (unsigned char)true);
+}
 
+TEST( MatchedActual, match_int )
+{
   expectCall("foo").with("value", (int)true);
   actualCall("foo").with("value", (int)true);
+}
 
+TEST( MatchedActual, match_unsigned_int )
+{
   expectCall("foo").with("value", (unsigned int)true);
   actualCall("foo").with("value", (unsigned int)true);
+}
 
+TEST( MatchedActual, match_long )
+{
   expectCall("foo").with("value", (long)true);
   actualCall("foo").with("value", (long)true);
+}
 
+TEST( MatchedActual, match_unsigned_long )
+{
   expectCall("foo").with("value", (unsigned long)true);
   actualCall("foo").with("value", (unsigned long)true);
+}
 
+TEST( MatchedActual, match_long_long )
+{
   expectCall("foo").with("value", (long long)true);
   actualCall("foo").with("value", (long long)true);
+}
 
+TEST( MatchedActual, match_unsigned_long_long )
+{
   expectCall("foo").with("value", (unsigned long long)true);
   actualCall("foo").with("value", (unsigned long long)true);
+}
 
+TEST( MatchedActual, match_float )
+{
   expectCall("foo").with("value", (float)true);
   actualCall("foo").with("value", (float)true);
+}
 
+TEST( MatchedActual, match_double )
+{
   expectCall("foo").with("value", (double)true);
   actualCall("foo").with("value", (double)true);
+}
 
+TEST( MatchedActual, match_pointer )
+{
   char buffer[] = "HELLO";
   expectCall("foo").with("value", buffer);
   actualCall("foo").with("value", buffer);
+}
 
-  expectCall("foo").with("value", (const char*)buffer);
-  actualCall("foo").with("value", (const char*)buffer);
+TEST( MatchedActual, match_const_pointer )
+{
+  const char buffer[] = "HELLO";
+  expectCall("foo").with("value", buffer);
+  actualCall("foo").with("value", buffer);
+}
 
+static void _fn( void ) {}
+TEST( MatchedActual, match_fn )
+{
   expectCall("foo").with("value", _fn);
   actualCall("foo").with("value", _fn);
+}
 
+TEST( MatchedActual, match_static_buffer )
+{
+  char buffer[] = "HELLO";
   expectCall("foo").with("value", buffer, sizeof(buffer));
   actualCall("foo").with("value", buffer, sizeof(buffer));
 }
 
-
-//======================================================================================================================
-TEST_GROUP( IgnoreUnmatchedActual )
+TEST( MatchedActual, match_const_static_buffer )
 {
-  TEST_SETUP()
-  {
-    // clear any expectations (default don't fail unmatched actuals)
-    checkExpectations();
-  }
-
-  TEST_TEARDOWN()
-  {
-    checkExpectations();
-  }
-};
-
-TEST( IgnoreUnmatchedActual, ignore_all )
-{
-  // allow bool to upcast to type
-  actualCall("foo").with("value", true);
-  actualCall("foo").with("value", (char)true);
-  actualCall("foo").with("value", (unsigned char)true);
-  actualCall("foo").with("value", (int)true);
-  actualCall("foo").with("value", (unsigned int)true);
-  actualCall("foo").with("value", (long)true);
-  actualCall("foo").with("value", (unsigned long)true);
-  actualCall("foo").with("value", (long)true);
-  actualCall("foo").with("value", (unsigned long)true);
-  actualCall("foo").with("value", (long long)true);
-  actualCall("foo").with("value", (unsigned long long)true);
-  actualCall("foo").with("value", (float)true);
-  actualCall("foo").with("value", (double)true);
-  char buffer[] = "HELLO";
-  actualCall("foo").with("value", buffer);
-  actualCall("foo").with("value", (const char*)buffer);
-  actualCall("foo").with("value", _fn);
+  const char buffer[] = "HELLO";
+  expectCall("foo").with("value", buffer, sizeof(buffer));
   actualCall("foo").with("value", buffer, sizeof(buffer));
 }
-
-
-//======================================================================================================================
-TEST_GROUP( TestDoubleState )
-{
-  TEST_SETUP()
-  {
-    // clear any expectations and reset TestDouble state
-    checkExpectations();
-  }
-};
-
-TEST( TestDoubleState, upon_checkExpectations_restore_default_state )
-{
-  // assert default state
-  CHECK_FALSE( TestDouble::shouldFailUnexpected() );
-  CHECK_FALSE( TestDouble::shouldEnforceOrder() );
-
-  // modify state
-  failUnexpected();
-  CHECK_TRUE( TestDouble::shouldFailUnexpected() );
-  strictOrder();
-  CHECK_TRUE( TestDouble::shouldEnforceOrder() );
-
-  checkExpectations();
-
-  // assert default state
-  CHECK_FALSE( TestDouble::shouldFailUnexpected() );
-  CHECK_FALSE( TestDouble::shouldEnforceOrder() );
-}
-
 
 //======================================================================================================================
 TEST_GROUP( TestDoubleParametersFailures )
