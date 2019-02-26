@@ -108,8 +108,9 @@ SimpleString ExpectationQueue::check()
   // find uncalled expectations
   for( const ExpectationChain* pExpectation = expectations.get(); 0 != pExpectation; pExpectation = pExpectation->pNext )
   {
-    if( ( ExpectedCall::EXPECT_ALWAYS == pExpectation->pExpectedCall->getCount() )  &&
-        ( pExpectation->actualCount <= 0 ) )
+    if( ( ExpectedCall::EXPECT_ALWAYS == pExpectation->pExpectedCall->getCount() )  ?
+            ( 0 >= pExpectation->actualCount )    :
+            ( pExpectation->actualCount < pExpectation->pExpectedCall->getCount() ) )
     {
       // TOOD format the expectation
       ret += StringFromFormat( "unmet expectation: %s()\n", pExpectation->pExpectedCall->methodName.asCharString() );
@@ -132,21 +133,21 @@ const ExpectedCall* findExpectation( const ActualCall& call )
 {
   for( ExpectationChain* pExpectation = expectations.get(); 0 != pExpectation; pExpectation = pExpectation->pNext )
   {
-  //   if( ( false == pExpectation->pExpectedCall->EXPECT_ALWAYS )  &&
-  //       ( pExpectation->actualCount >= pExpectation->pExpectedCall->getCount() ) )
-  //   {
-  //     // no more calls left
-  //     continue;
-  //   }
+    // if( ( ExpectedCall::EXPECT_ALWAYS != pExpectation->pExpectedCall->getCount() )  &&
+    //     ( pExpectation->actualCount >= pExpectation->pExpectedCall->getCount() ) )
+    // {
+    //   continue;
+    // }
     if( _matches( *pExpectation, call ) )
     {
       pExpectation->actualCount++;
       return pExpectation->pExpectedCall;
     }
-    // if( TestDouble::enforceOrder() )
-    // {
-    //   break;
-    // }
+    if( TestDouble::shouldEnforceOrder() )
+    {
+      // must match current expectation before looking further
+      break;
+    }
   }
   return NULL;
 }
