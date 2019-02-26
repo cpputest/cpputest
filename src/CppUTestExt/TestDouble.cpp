@@ -171,7 +171,7 @@ static bool _matches( const ExpectationChain& expectation, const ActualCall& act
 
   for( const TestDouble::ParameterChain* pExpectedEntry=expected.getParameters(); 0 != pExpectedEntry; pExpectedEntry = pExpectedEntry->pNext )
   {
-    bool used = false;    ///< ensure that the expectation parameter is used by the actual call
+    bool used = false;  ///< ensure expected parameter is used
     for( const TestDouble::ParameterChain* pActualEntry=actual.getParameters(); 0 != pActualEntry; pActualEntry = pActualEntry->pNext )
     {
       if( pExpectedEntry->pParameter->name == pActualEntry->pParameter->name )
@@ -180,10 +180,21 @@ static bool _matches( const ExpectationChain& expectation, const ActualCall& act
         if( false == pExpectedEntry->pParameter->equals( pActualEntry->pParameter ) ) return false;
       }
     }
+    if( false == used ) return false;
+  }
 
-    // TODO match output parameters type
-
-
+  // match output parameters type
+  for( const TestDouble::ParameterChain* pExpectedEntry=expected.getOutputs(); 0 != pExpectedEntry; pExpectedEntry = pExpectedEntry->pNext )
+  {
+    bool used = false;  ///< ensure expected output is used
+    for( const TestDouble::ParameterChain* pActualEntry=actual.getOutputs(); 0 != pActualEntry; pActualEntry = pActualEntry->pNext )
+    {
+      if( pExpectedEntry->pParameter->name == pActualEntry->pParameter->name )
+      {
+        used = true;
+        if( pExpectedEntry->pParameter->type != pActualEntry->pParameter->type ) return false;
+      }
+    }
     if( false == used ) return false;
   }
 

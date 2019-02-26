@@ -48,6 +48,10 @@ ActualCall::~ActualCall()
     // TODO format a usable report
     failure = "unmet actual";
   }
+  else
+  {
+    // set output parameters
+  }
 
   delete _parameters;
   delete _outputs;

@@ -80,6 +80,7 @@ public:
   void(*returnFunctionPointer())();
 
   const TestDouble::ParameterChain* getParameters() const { return _parameters; }
+  const TestDouble::ParameterChain* getOutputs() const { return _outputs; }
 
 private:
   TestDouble::ParameterChain*   _parameters;

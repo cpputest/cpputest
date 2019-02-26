@@ -67,6 +67,7 @@ public:
 
   const int& getCount() const { return _count; }
   const TestDouble::ParameterChain* getParameters() const { return _parameters; }
+  const TestDouble::ParameterChain* getOutputs() const { return _outputs; }
 
 private:
   int   _count;

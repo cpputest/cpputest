@@ -46,7 +46,7 @@ TEST_GROUP( MatchedOutputParameter )
   }
 };
 
-TEST( MatchedOutputParameter, match_bool )
+IGNORE_TEST( MatchedOutputParameter, match_bool )
 {
   const bool value = true;
   expectCall("foo").output("value", value);
