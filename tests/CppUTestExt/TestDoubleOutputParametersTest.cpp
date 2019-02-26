@@ -32,7 +32,7 @@
 #include "CppUTestExt/ActualCall.h"
 
 //======================================================================================================================
-TEST_GROUP( TestDoubleOutputParameters )
+TEST_GROUP( MatchedOutputParameter )
 {
   TEST_SETUP()
   {
@@ -45,3 +45,108 @@ TEST_GROUP( TestDoubleOutputParameters )
     checkExpectations();
   }
 };
+
+// TEST( MatchedOutputParameter, match_bool )
+// {
+//   const bool value = true;
+//   expectCall("foo").withOutput("value", value);
+//   actualCall("foo").withOutput("value", value);
+// }
+
+// TEST( MatchedOutputParameter, match_char )
+// {
+//   char value = 'a';
+//   expectCall("foo").with("value", value);
+//   actualCall("foo").with("value", value);
+// }
+
+// TEST( MatchedOutputParameter, match_unsigned_char )
+// {
+//   unsigned char value = 'a';
+//   expectCall("foo").with("value", value);
+//   actualCall("foo").with("value", value);
+// }
+
+// TEST( MatchedOutputParameter, match_int )
+// {
+//   int value = 1;
+//   expectCall("foo").with("value", value);
+//   actualCall("foo").with("value", value);
+// }
+
+// TEST( MatchedOutputParameter, match_unsigned_int )
+// {
+//   unsigned int value = 1;
+//   expectCall("foo").with("value", value);
+//   actualCall("foo").with("value", value);
+// }
+
+// TEST( MatchedOutputParameter, match_long )
+// {
+//   long value = 1;
+//   expectCall("foo").with("value", value);
+//   actualCall("foo").with("value", value);
+// }
+
+// TEST( MatchedOutputParameter, match_unsigned_long )
+// {
+//   unsigned long value = 1;
+//   expectCall("foo").with("value", value);
+//   actualCall("foo").with("value", value);
+// }
+
+// TEST( MatchedOutputParameter, match_long_long )
+// {
+//   long long value = 1;
+//   expectCall("foo").with("value", value);
+//   actualCall("foo").with("value", value);
+// }
+
+// TEST( MatchedOutputParameter, match_unsigned_long_long )
+// {
+//   unsigned long long value = 1;
+//   expectCall("foo").with("value", value);
+//   actualCall("foo").with("value", value);
+// }
+
+// TEST( MatchedOutputParameter, match_float )
+// {
+//   float value = 1.0;
+//   expectCall("foo").with("value", value);
+//   actualCall("foo").with("value", value);
+// }
+
+// TEST( MatchedOutputParameter, match_double )
+// {
+//   double value = 1.0;
+//   expectCall("foo").with("value", value);
+//   actualCall("foo").with("value", value);
+// }
+
+// TEST( MatchedOutputParameter, match_pointer )
+// {
+//   char buffer[] = "HELLO";
+//   expectCall("foo").with("value", buffer);
+//   actualCall("foo").with("value", buffer);
+// }
+
+// TEST( MatchedOutputParameter, match_const_pointer )
+// {
+//   const char buffer[] = "HELLO";
+//   expectCall("foo").with("value", buffer);
+//   actualCall("foo").with("value", buffer);
+// }
+
+// static void _fn( void ) {}
+// TEST( MatchedOutputParameter, match_fn )
+// {
+//   expectCall("foo").with("value", _fn);
+//   actualCall("foo").with("value", _fn);
+// }
+
+// TEST( MatchedOutputParameter, match_static_buffer )
+// {
+//   char buffer[] = "HELLO";
+//   expectCall("foo").with("value", buffer, sizeof(buffer));
+//   actualCall("foo").with("value", buffer, sizeof(buffer));
+// }

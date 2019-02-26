@@ -50,77 +50,77 @@ TEST_GROUP( MatchedParameter )
 
 TEST( MatchedParameter, match_bool )
 {
-  bool value = true;
+  const bool value = true;
   expectCall("foo").with("value", value);
   actualCall("foo").with("value", value);
 }
 
 TEST( MatchedParameter, match_char )
 {
-  char value = 'a';
+  const char value = 'a';
   expectCall("foo").with("value", value);
   actualCall("foo").with("value", value);
 }
 
 TEST( MatchedParameter, match_unsigned_char )
 {
-  unsigned char value = 'a';
+  const unsigned char value = 'a';
   expectCall("foo").with("value", value);
   actualCall("foo").with("value", value);
 }
 
 TEST( MatchedParameter, match_int )
 {
-  int value = 1;
+  const int value = 1;
   expectCall("foo").with("value", value);
   actualCall("foo").with("value", value);
 }
 
 TEST( MatchedParameter, match_unsigned_int )
 {
-  unsigned int value = 1;
+  const unsigned int value = 1;
   expectCall("foo").with("value", value);
   actualCall("foo").with("value", value);
 }
 
 TEST( MatchedParameter, match_long )
 {
-  long value = 1;
+  const long value = 1;
   expectCall("foo").with("value", value);
   actualCall("foo").with("value", value);
 }
 
 TEST( MatchedParameter, match_unsigned_long )
 {
-  unsigned long value = 1;
+  const unsigned long value = 1;
   expectCall("foo").with("value", value);
   actualCall("foo").with("value", value);
 }
 
 TEST( MatchedParameter, match_long_long )
 {
-  long long value = 1;
+  const long long value = 1;
   expectCall("foo").with("value", value);
   actualCall("foo").with("value", value);
 }
 
 TEST( MatchedParameter, match_unsigned_long_long )
 {
-  unsigned long long value = 1;
+  const unsigned long long value = 1;
   expectCall("foo").with("value", value);
   actualCall("foo").with("value", value);
 }
 
 TEST( MatchedParameter, match_float )
 {
-  float value = 1.0;
+  const float value = 1.0;
   expectCall("foo").with("value", value);
   actualCall("foo").with("value", value);
 }
 
 TEST( MatchedParameter, match_double )
 {
-  double value = 1.0;
+  const double value = 1.0;
   expectCall("foo").with("value", value);
   actualCall("foo").with("value", value);
 }
