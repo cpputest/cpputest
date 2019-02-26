@@ -31,10 +31,10 @@
 #include "CppUTest/Utest.h"
 
 
-ActualCall::ActualCall( const SimpleString& name )
-  : methodName( name )
+ActualCall::ActualCall( const SimpleString& _name )
+  : name( _name )
    ,_parameters(0)
-  //  ,_pOutputParameter(0)
+   ,_outputs(0)
 { }
 
 ActualCall::~ActualCall()
@@ -48,7 +48,9 @@ ActualCall::~ActualCall()
     // TODO format a usable report
     failure = "unmet actual";
   }
+
   delete _parameters;
+  delete _outputs;
 
   if( false == failure.isEmpty() )
   {

@@ -38,7 +38,7 @@ ActualCall actualCall( const SimpleString& name );
 class ActualCall
 {
 public:
-  const SimpleString      methodName;
+  const SimpleString      name;
 
   ActualCall( const SimpleString& name );
 
@@ -58,7 +58,8 @@ public:
   template<typename T>
   ActualCall& output( const SimpleString& name, const T& value )
   {
-    //FIXME _addOutputParameter( name, value );
+    TestDouble::Parameter* pParameter = new TestDouble::Parameter( name, value );
+    _outputs = new TestDouble::ParameterChain( pParameter, _outputs );
     return *this;
   }
 
@@ -82,7 +83,7 @@ public:
 
 private:
   TestDouble::ParameterChain*   _parameters;
-  // TestDouble::Parameter*  _pOutputParameter;
+  TestDouble::ParameterChain*   _outputs;
 
 };  // class ActualCall
 

@@ -46,12 +46,14 @@ TEST_GROUP( MatchedOutputParameter )
   }
 };
 
-// TEST( MatchedOutputParameter, match_bool )
-// {
-//   const bool value = true;
-//   expectCall("foo").withOutput("value", value);
-//   actualCall("foo").withOutput("value", value);
-// }
+TEST( MatchedOutputParameter, match_bool )
+{
+  const bool value = true;
+  expectCall("foo").output("value", value);
+  bool actual;
+  actualCall("foo").output("value", &actual);
+  LONGS_EQUAL( value, actual );
+}
 
 // TEST( MatchedOutputParameter, match_char )
 // {
@@ -150,3 +152,33 @@ TEST_GROUP( MatchedOutputParameter )
 //   expectCall("foo").with("value", buffer, sizeof(buffer));
 //   actualCall("foo").with("value", buffer, sizeof(buffer));
 // }
+
+
+//======================================================================================================================
+TEST_GROUP( TestDoubleOutputsFailures )
+{
+  TestTestingFixture fixture;
+
+  TEST_SETUP()
+  {
+    // clear any expectations
+    checkExpectations();
+  }
+
+  TEST_TEARDOWN()
+  {
+    CHECK( fixture.hasTestFailed() );
+  }
+};
+
+static void mismatch_type( void )
+{
+  expectCall("foo").output( "value", true );
+  actualCall("foo").output( "value", "string" );
+  checkExpectations();
+}
+IGNORE_TEST( TestDoubleOutputsFailures, mismatch_type_fails )
+{
+  fixture.runTestWithMethod( mismatch_type );
+}
+

@@ -28,15 +28,17 @@
 #include "CppUTestExt/ExpectCall.h"
 
 
-ExpectedCall::ExpectedCall( const SimpleString& name )
-  : methodName(name)
+ExpectedCall::ExpectedCall( const SimpleString& _name )
+  : name(_name)
    ,_count(EXPECT_ALWAYS)
    ,_parameters(0)
+   ,_outputs(0)
 { }
 
 ExpectedCall::~ExpectedCall()
 {
   delete _parameters;
+  delete _outputs;
 }
 
 ExpectedCall& ExpectedCall::times( const unsigned int count )

@@ -194,6 +194,18 @@ TEST_GROUP( TestDoubleParametersFailures )
   }
 };
 
+
+static void mismatch_parameter( void )
+{
+  expectCall("foo").with( "value", true );
+  actualCall("foo");
+  checkExpectations();
+}
+TEST( TestDoubleParametersFailures, mismatch_parameter_fails )
+{
+  fixture.runTestWithMethod( mismatch_parameter );
+}
+
 static void mismatch_type( void )
 {
   expectCall("foo").with( "value", true );

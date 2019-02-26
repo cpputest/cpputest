@@ -113,7 +113,7 @@ SimpleString ExpectationQueue::check()
             ( pExpectation->actualCount < pExpectation->pExpectedCall->getCount() ) )
     {
       // TODO format a usable report
-      ret += StringFromFormat( "unmet expectation: %s()\n", pExpectation->pExpectedCall->methodName.asCharString() );
+      ret += StringFromFormat( "unmet expectation: %s()\n", pExpectation->pExpectedCall->name.asCharString() );
     }
   }
 
@@ -167,19 +167,24 @@ ParameterChain::~ParameterChain()
 static bool _matches( const ExpectationChain& expectation, const ActualCall& actual )
 {
   const ExpectedCall& expected = *(expectation.pExpectedCall);
-  if( actual.methodName != expected.methodName ) return false;
+  if( actual.name != expected.name ) return false;
 
   for( const TestDouble::ParameterChain* pExpectedEntry=expected.getParameters(); 0 != pExpectedEntry; pExpectedEntry = pExpectedEntry->pNext )
   {
+    bool used = false;    ///< ensure that the expectation parameter is used by the actual call
     for( const TestDouble::ParameterChain* pActualEntry=actual.getParameters(); 0 != pActualEntry; pActualEntry = pActualEntry->pNext )
     {
       if( pExpectedEntry->pParameter->name == pActualEntry->pParameter->name )
       {
+        used = true;
         if( false == pExpectedEntry->pParameter->equals( pActualEntry->pParameter ) ) return false;
       }
     }
 
     // TODO match output parameters type
+
+
+    if( false == used ) return false;
   }
 
   return true;

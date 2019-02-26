@@ -39,9 +39,9 @@ ExpectedCall& expectCall( const SimpleString& call );            ///< add expect
 class ExpectedCall
 {
 public:
-  const SimpleString  methodName;
+  const SimpleString  name;
 
-  ExpectedCall( const SimpleString& call );
+  ExpectedCall( const SimpleString& name );
   ~ExpectedCall();
 
   static const int EXPECT_ALWAYS = -1;
@@ -60,7 +60,8 @@ public:
   template<typename T>
   ExpectedCall& output( const SimpleString& name, const T& value )
   {
-    //FIXME _addOutputParameter( name, value );
+    TestDouble::Parameter* pParameter = new TestDouble::Parameter( name, value );
+    _outputs = new TestDouble::ParameterChain( pParameter, _outputs );
     return *this;
   }
 
@@ -70,6 +71,7 @@ public:
 private:
   int   _count;
   TestDouble::ParameterChain*   _parameters;
+  TestDouble::ParameterChain*   _outputs;
 };
 
 // class Actual;
