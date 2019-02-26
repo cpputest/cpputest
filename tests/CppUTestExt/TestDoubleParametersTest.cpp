@@ -143,13 +143,6 @@ TEST( MatchedActual, match_static_buffer )
   actualCall("foo").with("value", buffer, sizeof(buffer));
 }
 
-TEST( MatchedActual, match_const_static_buffer )
-{
-  const char buffer[] = "HELLO";
-  expectCall("foo").with("value", buffer, sizeof(buffer));
-  actualCall("foo").with("value", buffer, sizeof(buffer));
-}
-
 //======================================================================================================================
 TEST_GROUP( TestDoubleParametersFailures )
 {
@@ -189,3 +182,14 @@ TEST( TestDoubleParametersFailures, mismatch_value_fails )
   fixture.runTestWithMethod( mismatch_value );
 }
 
+static void mismatch_constness( void )
+{
+  const char buffer[] = "HELLO";
+  expectCall("foo").with( "value", buffer );
+  actualCall("foo").with( "value", const_cast<char*>(buffer) );
+  checkExpectations();
+}
+TEST( TestDoubleParametersFailures, mismatch_constness_fails )
+{
+  fixture.runTestWithMethod( mismatch_constness );
+}
