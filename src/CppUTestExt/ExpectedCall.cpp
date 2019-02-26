@@ -51,16 +51,3 @@ ExpectedCall& ExpectedCall::with( const SimpleString& name, const void* staticBu
   _parameters = new TestDouble::ParameterChain( pParameter, _parameters );
   return *this;
 }
-
-// SimpleString ExpectedCall::toString() const
-// {
-//   SimpleString ret;
-
-//   ret += "expected call to ";
-//   ret += methodName;
-//   ret += " with\n";
-//   // TODO list input parameters
-//   // TODO list output paramaters
-
-//   return ret;
-// }

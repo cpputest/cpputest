@@ -45,6 +45,7 @@ ActualCall::~ActualCall()
   SimpleString failure;
   if( TestDouble::shouldFailUnexpected() && ( 0 == pExpectation ) )
   {
+    // TODO format a usable report
     failure = "unmet actual";
   }
   delete _parameters;

@@ -50,69 +50,79 @@ TEST_GROUP( MatchedParameter )
 
 TEST( MatchedParameter, match_bool )
 {
-  // allow bool to upcast to type
-  expectCall("foo").with("value", (bool)true);
-  actualCall("foo").with("value", (bool)true);
+  bool value = true;
+  expectCall("foo").with("value", value);
+  actualCall("foo").with("value", value);
 }
 
 TEST( MatchedParameter, match_char )
 {
-  expectCall("foo").with("value", (char)true);
-  actualCall("foo").with("value", (char)true);
+  char value = 'a';
+  expectCall("foo").with("value", value);
+  actualCall("foo").with("value", value);
 }
 
 TEST( MatchedParameter, match_unsigned_char )
 {
-  expectCall("foo").with("value", (unsigned char)true);
-  actualCall("foo").with("value", (unsigned char)true);
+  unsigned char value = 'a';
+  expectCall("foo").with("value", value);
+  actualCall("foo").with("value", value);
 }
 
 TEST( MatchedParameter, match_int )
 {
-  expectCall("foo").with("value", (int)true);
-  actualCall("foo").with("value", (int)true);
+  int value = 1;
+  expectCall("foo").with("value", value);
+  actualCall("foo").with("value", value);
 }
 
 TEST( MatchedParameter, match_unsigned_int )
 {
-  expectCall("foo").with("value", (unsigned int)true);
-  actualCall("foo").with("value", (unsigned int)true);
+  unsigned int value = 1;
+  expectCall("foo").with("value", value);
+  actualCall("foo").with("value", value);
 }
 
 TEST( MatchedParameter, match_long )
 {
-  expectCall("foo").with("value", (long)true);
-  actualCall("foo").with("value", (long)true);
+  long value = 1;
+  expectCall("foo").with("value", value);
+  actualCall("foo").with("value", value);
 }
 
 TEST( MatchedParameter, match_unsigned_long )
 {
-  expectCall("foo").with("value", (unsigned long)true);
-  actualCall("foo").with("value", (unsigned long)true);
+  unsigned long value = 1;
+  expectCall("foo").with("value", value);
+  actualCall("foo").with("value", value);
 }
 
 TEST( MatchedParameter, match_long_long )
 {
-  expectCall("foo").with("value", (long long)true);
-  actualCall("foo").with("value", (long long)true);
+  long long value = 1;
+  expectCall("foo").with("value", value);
+  actualCall("foo").with("value", value);
 }
 
 TEST( MatchedParameter, match_unsigned_long_long )
 {
-  expectCall("foo").with("value", (unsigned long long)true);
-  actualCall("foo").with("value", (unsigned long long)true);
+  unsigned long long value = 1;
+  expectCall("foo").with("value", value);
+  actualCall("foo").with("value", value);
 }
 
 TEST( MatchedParameter, match_float )
 {
-  expectCall("foo").with("value", (float)true);
-  actualCall("foo").with("value", (float)true);
+  float value = 1.0;
+  expectCall("foo").with("value", value);
+  actualCall("foo").with("value", value);
 }
 
 TEST( MatchedParameter, match_double )
 {
-  expectCall("foo").with("value", (double)true);
-  actualCall("foo").with("value", (double)true);
+  double value = 1.0;
+  expectCall("foo").with("value", value);
+  actualCall("foo").with("value", value);
 }
 
 TEST( MatchedParameter, match_pointer )

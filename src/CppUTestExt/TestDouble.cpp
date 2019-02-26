@@ -112,7 +112,7 @@ SimpleString ExpectationQueue::check()
             ( 0 >= pExpectation->actualCount )    :
             ( pExpectation->actualCount < pExpectation->pExpectedCall->getCount() ) )
     {
-      // TOOD format the expectation
+      // TODO format a usable report
       ret += StringFromFormat( "unmet expectation: %s()\n", pExpectation->pExpectedCall->methodName.asCharString() );
     }
   }
