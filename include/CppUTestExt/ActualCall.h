@@ -61,7 +61,6 @@ public:
     TestDouble::Parameter* pParameter = new TestDouble::Parameter( _name, buffer, size );
     _parameters = new TestDouble::ParameterChain( pParameter, _parameters );
     return *this;
-
   }
 
   template<typename T>

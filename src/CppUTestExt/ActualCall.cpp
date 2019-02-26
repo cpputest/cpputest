@@ -42,21 +42,24 @@ ActualCall::~ActualCall()
   /// find an expectation
   const ExpectedCall* pExpectation = TestDouble::findExpectation( *this );
 
-  SimpleString failure;
-  if( TestDouble::shouldFailUnexpected() && ( 0 == pExpectation ) )
+  SimpleString failureMessage;
+  if( TestDouble::shouldFailUnexpected() )
   {
-    // TODO format a usable report
-    failure = "unmet actual";
-  }
-  else for( const TestDouble::ParameterChain* pActualEntry=getOutputs(); 0 != pActualEntry; pActualEntry = pActualEntry->pNext )
-  {
-    // set outputs
-    if( 0 != pExpectation ) 
+    if( 0 == pExpectation )
     {
-      for( const TestDouble::ParameterChain* pExpectedEntry=pExpectation->getOutputs(); 0 != pExpectedEntry; pExpectedEntry = pExpectedEntry->pNext )
+      // TODO format a usable report
+      failureMessage = "unmet actual";
+    }
+    else for( const TestDouble::ParameterChain* pActualEntry=getOutputs(); 0 != pActualEntry; pActualEntry = pActualEntry->pNext )
+    {
+      // set outputs
+      if( 0 != pExpectation ) 
       {
-        if( pExpectedEntry->pParameter->name == pActualEntry->pParameter->name )
+        for( const TestDouble::ParameterChain* pExpectedEntry=pExpectation->getOutputs(); 0 != pExpectedEntry; pExpectedEntry = pExpectedEntry->pNext )
         {
+          if( pExpectedEntry->pParameter->name == pActualEntry->pParameter->name )
+          {
+          }
         }
       }
     }
@@ -65,12 +68,12 @@ ActualCall::~ActualCall()
   delete _parameters;
   delete _outputs;
 
-  if( false == failure.isEmpty() )
+  if( false == failureMessage.isEmpty() )
   {
     UtestShell* const pShell = UtestShell::getCurrent();
-    TestFailure testFailure( pShell, pShell->getFile().asCharString(), pShell->getLineNumber(), failure );
+    TestFailure failure( pShell, pShell->getFile().asCharString(), pShell->getLineNumber(), failureMessage );
     TestTerminatorWithoutExceptions terminator;
-    UtestShell::getCurrent()->failWith( testFailure, terminator );
+    UtestShell::getCurrent()->failWith( failure, terminator );
   }
 }
 
