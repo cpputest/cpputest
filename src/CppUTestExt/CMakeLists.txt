@@ -15,7 +15,6 @@ set(CppUTestExt_src
         MockSupport.cpp
         TestDouble.cpp
         TestDoubleParameter.cpp
-        ExpectedCall.cpp
         ActualCall.cpp
 )
 

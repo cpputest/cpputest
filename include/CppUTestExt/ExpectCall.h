@@ -41,11 +41,23 @@ class ExpectedCall
 public:
   const SimpleString  name;
 
-  ExpectedCall( const SimpleString& name );
-  ~ExpectedCall();
+  ExpectedCall( const SimpleString& _name )
+  : name(_name),_count(EXPECT_ALWAYS),_parameters(0),_outputs(0)
+  {}
+
+  ~ExpectedCall()
+  {
+    delete _parameters;
+    delete _outputs;
+  }
+
 
   static const int EXPECT_ALWAYS = -1;
-  ExpectedCall& times( const unsigned int count );
+  ExpectedCall& times( const unsigned int count )
+  {
+    _count = (int)count;
+    return *this;
+  }
 
   template<typename T>
   ExpectedCall& with( const SimpleString& _name, const T& value )
@@ -55,7 +67,13 @@ public:
     return *this;
   }
 
-  ExpectedCall& with( const SimpleString& name, const void* staticBuffer, const std::size_t& size );
+  template<typename T>
+  ExpectedCall& with( const SimpleString& _name, const T* staticBuffer, const std::size_t& size )
+  {
+    TestDouble::Parameter* pParameter = new TestDouble::Parameter( _name, staticBuffer, size );
+    _parameters = new TestDouble::ParameterChain( pParameter, _parameters );
+    return *this;
+  }
 
   template<typename T>
   ExpectedCall& output( const SimpleString& _name, const T& value )
