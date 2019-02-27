@@ -59,79 +59,99 @@ TEST( MatchedOutputParameter, match_char )
 {
   const char value = 'a';
   expectCall("foo").output("value", value);
-  char actual = ~value;
+  char actual = 'b';
   actualCall("foo").output("value", &actual).returns();
   LONGS_EQUAL( value, actual );
 }
 
-// TEST( MatchedOutputParameter, match_unsigned_char )
-// {
-//   unsigned char value = 'a';
-//   expectCall("foo").with("value", value);
-//   actualCall("foo").with("value", value);
-// }
+TEST( MatchedOutputParameter, match_unsigned_char )
+{
+  const unsigned char value = 'a';
+  expectCall("foo").output("value", value);
+  unsigned char actual = 'b';
+  actualCall("foo").output("value", &actual).returns();
+  LONGS_EQUAL( value, actual );
+}
 
-// TEST( MatchedOutputParameter, match_int )
-// {
-//   int value = 1;
-//   expectCall("foo").with("value", value);
-//   actualCall("foo").with("value", value);
-// }
+TEST( MatchedOutputParameter, match_int )
+{
+  const int value = 1;
+  expectCall("foo").output("value", value);
+  int actual = 2;
+  actualCall("foo").output("value", &actual).returns();
+  LONGS_EQUAL( value, actual );
+}
 
-// TEST( MatchedOutputParameter, match_unsigned_int )
-// {
-//   unsigned int value = 1;
-//   expectCall("foo").with("value", value);
-//   actualCall("foo").with("value", value);
-// }
+TEST( MatchedOutputParameter, match_unsigned_int )
+{
+  const unsigned int value = 1;
+  expectCall("foo").output("value", value);
+  unsigned int actual = 2;
+  actualCall("foo").output("value", &actual).returns();
+  LONGS_EQUAL( value, actual );
+}
 
-// TEST( MatchedOutputParameter, match_long )
-// {
-//   long value = 1;
-//   expectCall("foo").with("value", value);
-//   actualCall("foo").with("value", value);
-// }
+TEST( MatchedOutputParameter, match_long )
+{
+  const long value = 1;
+  expectCall("foo").output("value", value);
+  long actual = 2;
+  actualCall("foo").output("value", &actual).returns();
+  LONGS_EQUAL( value, actual );
+}
 
-// TEST( MatchedOutputParameter, match_unsigned_long )
-// {
-//   unsigned long value = 1;
-//   expectCall("foo").with("value", value);
-//   actualCall("foo").with("value", value);
-// }
+TEST( MatchedOutputParameter, match_unsigned_long )
+{
+  const unsigned long value = 1;
+  expectCall("foo").output("value", value);
+  unsigned long actual = 2;
+  actualCall("foo").output("value", &actual).returns();
+  LONGS_EQUAL( value, actual );
+}
 
-// TEST( MatchedOutputParameter, match_long_long )
-// {
-//   long long value = 1;
-//   expectCall("foo").with("value", value);
-//   actualCall("foo").with("value", value);
-// }
+TEST( MatchedOutputParameter, match_long_long )
+{
+  const long long value = 1;
+  expectCall("foo").output("value", value);
+  long long actual = 2;
+  actualCall("foo").output("value", &actual).returns();
+  LONGS_EQUAL( value, actual );
+}
 
-// TEST( MatchedOutputParameter, match_unsigned_long_long )
-// {
-//   unsigned long long value = 1;
-//   expectCall("foo").with("value", value);
-//   actualCall("foo").with("value", value);
-// }
+TEST( MatchedOutputParameter, match_unsigned_long_long )
+{
+  const unsigned long long value = 1;
+  expectCall("foo").output("value", value);
+  unsigned long long actual = 2;
+  actualCall("foo").output("value", &actual).returns();
+  LONGS_EQUAL( value, actual );
+}
 
-// TEST( MatchedOutputParameter, match_float )
-// {
-//   float value = 1.0;
-//   expectCall("foo").with("value", value);
-//   actualCall("foo").with("value", value);
-// }
+TEST( MatchedOutputParameter, match_float )
+{
+  const float value = 1.1f;
+  expectCall("foo").output("value", value);
+  float actual = 2.2f;
+  actualCall("foo").output("value", &actual).returns();
+  CHECK( value == actual );
+}
 
-// TEST( MatchedOutputParameter, match_double )
-// {
-//   double value = 1.0;
-//   expectCall("foo").with("value", value);
-//   actualCall("foo").with("value", value);
-// }
+TEST( MatchedOutputParameter, match_double )
+{
+  const double value = 1.1;
+  expectCall("foo").output("value", value);
+  double actual = 2.2;
+  actualCall("foo").output("value", &actual).returns();
+  CHECK( value == actual );
+}
 
 // TEST( MatchedOutputParameter, match_pointer )
 // {
 //   char buffer[] = "HELLO";
-//   expectCall("foo").with("value", buffer);
-//   actualCall("foo").with("value", buffer);
+//   expectCall("foo").output("value", buffer);
+//   char* actual = 0;
+//   actualCall("foo").output("value", &actual).returns();
+//   CHECK( buffer == actual );
 // }
 
 // TEST( MatchedOutputParameter, match_const_pointer )

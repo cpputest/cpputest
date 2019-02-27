@@ -53,18 +53,17 @@ public:
   : name(_name), type( typeid(value).name() ), _variant(value)
   { }
 
-  /// an output parameter (must be first to avoid implicit cast to bufferSize_bytes )
-  template<typename T>
-  Parameter( const SimpleString& _name, T* const _buffer, T& defaultValue )
-  : name(_name), type( typeid(T).name() ), buffer(_buffer), bufferSize_bytes(sizeof(T)), _variant(defaultValue)
-  { }
-
   /// an input buffer
   template<typename T>
   Parameter( const SimpleString& _name, T* const _buffer, const std::size_t& _bufferSize_bytes )
   : name(_name), type( typeid(T).name() ), buffer(_buffer), bufferSize_bytes(_bufferSize_bytes)
   { }
 
+  /// an output parameter (FIXME the unused bool parameter is a hack)
+  template<typename T>
+  Parameter( const SimpleString& _name, T* const _buffer, T defaultValue, const bool )
+  : name(_name), type( typeid(T).name() ), buffer(_buffer), bufferSize_bytes(sizeof(T)), _variant(defaultValue)
+  { }
 
   bool equals( const Parameter* const pOther ) const;
 

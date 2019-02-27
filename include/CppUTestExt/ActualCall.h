@@ -64,9 +64,9 @@ public:
   }
 
   template<typename T>
-  ActualCall& output( const SimpleString& _name, T* const pValue, const T defaultValue=true )
+  ActualCall& output( const SimpleString& _name, T* const pValue, const T defaultValue=0 )
   {
-    TestDouble::Parameter* pParameter = new TestDouble::Parameter( _name, pValue, defaultValue );
+    TestDouble::Parameter* pParameter = new TestDouble::Parameter( _name, pValue, defaultValue, true );
     _outputs = new TestDouble::ParameterChain( pParameter, _outputs );
     return *this;
   }
