@@ -52,9 +52,9 @@ const ExpectedCall* findExpectation( const ActualCall& call );
 class ExpectationChain
 {
 public:
-  const ExpectedCall* const pExpectedCall;
-  int                       actualCount;
-  ExpectationChain*         pNext;
+  const ExpectedCall* const pExpectedCall = 0;
+  int                       actualCount = 0;
+  ExpectationChain*         pNext = 0;
 
   ExpectationChain( const ExpectedCall* const _pExpectedCall, ExpectationChain* const pLast );
   ~ExpectationChain();
@@ -66,11 +66,11 @@ public:
   void enqueue( const ExpectedCall* const pCall );
   ExpectationChain* get() const { return _pExpectations; }
 
-  /// detect unactualized expectations and then clear expectations
+  /// detect un-actualized expectations and then clear expectations
   SimpleString check();
 private:
-  ExpectationChain*   _pExpectations;
-  ExpectationChain*   _pTail;   ///< reference to last enqueued
+  ExpectationChain*   _pExpectations = 0;
+  ExpectationChain*   _pTail = 0;         ///< reference to last enqueued
 };
 
 // generic list of parameters (used for both input and output)
