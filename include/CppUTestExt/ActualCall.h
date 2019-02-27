@@ -71,7 +71,8 @@ public:
     return *this;
   }
 
-  void andReturn();
+  /// sets outputs
+  void returns();
 
   //  return based methods invoke matched expectation (or else do nothing and return 0)
   bool returnBool();

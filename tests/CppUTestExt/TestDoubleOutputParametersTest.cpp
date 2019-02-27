@@ -50,17 +50,19 @@ TEST( MatchedOutputParameter, match_bool )
 {
   const bool value = true;
   expectCall("foo").output("value", value);
-  bool actual = false;
-  actualCall("foo").output("value", &actual).andReturn();
+  bool actual = !value;
+  actualCall("foo").output("value", &actual).returns();
   LONGS_EQUAL( value, actual );
 }
 
-// TEST( MatchedOutputParameter, match_char )
-// {
-//   char value = 'a';
-//   expectCall("foo").with("value", value);
-//   actualCall("foo").with("value", value);
-// }
+TEST( MatchedOutputParameter, match_char )
+{
+  const char value = 'a';
+  expectCall("foo").output("value", value);
+  char actual = ~value;
+  actualCall("foo").output("value", &actual).returns();
+  LONGS_EQUAL( value, actual );
+}
 
 // TEST( MatchedOutputParameter, match_unsigned_char )
 // {

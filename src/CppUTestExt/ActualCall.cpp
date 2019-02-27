@@ -46,7 +46,7 @@ ActualCall::~ActualCall()
   delete _outputs;
 }
 
-void ActualCall::andReturn()
+void ActualCall::returns()
 {
   _returned = true;
 
@@ -67,6 +67,7 @@ void ActualCall::andReturn()
         {
           pActualEntry->pParameter->setValue( pExpectedEntry->pParameter );
           used = true;
+          break;
         }
       }
     }
