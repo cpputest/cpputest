@@ -76,10 +76,10 @@ private:
 // generic list of parameters (used for both input and output)
 struct ParameterChain
 {
-  const TestDouble::Parameter* const pParameter;
+  TestDouble::Parameter* const pParameter;
   ParameterChain* const pNext;
 
-  ParameterChain( const TestDouble::Parameter* const _pParameter, ParameterChain* const _pNext );
+  ParameterChain( TestDouble::Parameter* const _pParameter, ParameterChain* const _pNext );
   ~ParameterChain();
 };
 

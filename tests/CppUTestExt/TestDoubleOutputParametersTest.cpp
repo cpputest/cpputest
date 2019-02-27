@@ -46,14 +46,14 @@ TEST_GROUP( MatchedOutputParameter )
   }
 };
 
-// TEST( MatchedOutputParameter, match_bool )
-// {
-//   const bool value = true;
-//   expectCall("foo").output("value", value);
-//   bool actual;
-//   actualCall("foo").output("value", &actual);
-//   LONGS_EQUAL( value, actual );
-// }
+TEST( MatchedOutputParameter, match_bool )
+{
+  const bool value = true;
+  expectCall("foo").output("value", value);
+  bool actual = false;
+  actualCall("foo").output("value", &actual).andReturn();
+  LONGS_EQUAL( value, actual );
+}
 
 // TEST( MatchedOutputParameter, match_char )
 // {

@@ -42,9 +42,9 @@ class ActualCall
 public:
   const SimpleString      name;
 
-  ActualCall( const SimpleString& name );
+  ActualCall( const SimpleString& _name ) : name(_name) { }
 
-  /// match this against expectations
+  /// match this against expectations if not already returned
   ~ActualCall();
 
   template<typename T>
@@ -66,10 +66,12 @@ public:
   template<typename T>
   ActualCall& output( const SimpleString& _name, T* const pValue, const T defaultValue=true )
   {
-    TestDouble::Parameter* pParameter = new TestDouble::Parameter( _name, typeid(T).name(), pValue, defaultValue );
+    TestDouble::Parameter* pParameter = new TestDouble::Parameter( _name, pValue, defaultValue );
     _outputs = new TestDouble::ParameterChain( pParameter, _outputs );
     return *this;
   }
+
+  void andReturn();
 
   //  return based methods invoke matched expectation (or else do nothing and return 0)
   bool returnBool();
@@ -88,11 +90,14 @@ public:
   void(*returnFunctionPointer())();
 
   const TestDouble::ParameterChain* getParameters() const { return _parameters; }
-  const TestDouble::ParameterChain* getOutputs() const { return _outputs; }
+  TestDouble::ParameterChain* getOutputs() const { return _outputs; }
 
 private:
-  TestDouble::ParameterChain*   _parameters;
-  TestDouble::ParameterChain*   _outputs;
+  TestDouble::ParameterChain*   _parameters = 0;
+  TestDouble::ParameterChain*   _outputs = 0;
+  bool  _returned = false;
+
+  void _failActual();
 
 };  // class ActualCall
 

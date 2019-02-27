@@ -153,7 +153,7 @@ const ExpectedCall* findExpectation( const ActualCall& call )
   return NULL;
 }
 
-ParameterChain::ParameterChain( const TestDouble::Parameter* const _pParameter, ParameterChain* const _pNext )
+ParameterChain::ParameterChain( TestDouble::Parameter* const _pParameter, ParameterChain* const _pNext )
   : pParameter(_pParameter)
    ,pNext(_pNext)   ///< prepend chain
 {}

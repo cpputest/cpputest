@@ -30,51 +30,58 @@
 #include "CppUTestExt/ExpectCall.h"
 #include "CppUTest/Utest.h"
 
-
-ActualCall::ActualCall( const SimpleString& _name )
-  : name( _name )
-   ,_parameters(0)
-   ,_outputs(0)
-{ }
-
 ActualCall::~ActualCall()
 {
-  /// find an expectation
-  const ExpectedCall* pExpectation = TestDouble::findExpectation( *this );
-
-  SimpleString failureMessage;
-  if( TestDouble::shouldFailUnexpected() )
+  if( false == _returned )
   {
-    if( 0 == pExpectation )
+    /// find an expectation
+    const ExpectedCall* pExpectation = TestDouble::findExpectation( *this );
+    if( ( TestDouble::shouldFailUnexpected() )  &&  ( 0 == pExpectation ) )
     {
-      // TODO format a usable report
-      failureMessage = "unmet actual";
-    }
-    else for( const TestDouble::ParameterChain* pActualEntry=getOutputs(); 0 != pActualEntry; pActualEntry = pActualEntry->pNext )
-    {
-      // set outputs
-      if( 0 != pExpectation ) 
-      {
-        for( const TestDouble::ParameterChain* pExpectedEntry=pExpectation->getOutputs(); 0 != pExpectedEntry; pExpectedEntry = pExpectedEntry->pNext )
-        {
-          if( pExpectedEntry->pParameter->name == pActualEntry->pParameter->name )
-          {
-          }
-        }
-      }
+      _failActual();
     }
   }
 
   delete _parameters;
   delete _outputs;
+}
 
-  if( false == failureMessage.isEmpty() )
+void ActualCall::andReturn()
+{
+  _returned = true;
+
+  const ExpectedCall* pExpectation = TestDouble::findExpectation( *this );
+  if( ( TestDouble::shouldFailUnexpected() )  &&  ( 0 == pExpectation ) )
   {
-    UtestShell* const pShell = UtestShell::getCurrent();
-    TestFailure failure( pShell, pShell->getFile().asCharString(), pShell->getLineNumber(), failureMessage );
-    TestTerminatorWithoutExceptions terminator;
-    UtestShell::getCurrent()->failWith( failure, terminator );
+      _failActual();
   }
+  else for( const TestDouble::ParameterChain* pActualEntry=getOutputs(); 0 != pActualEntry; pActualEntry = pActualEntry->pNext )
+  {
+    bool used = false;
+    // set outputs
+    if( 0 != pExpectation ) 
+    {
+      for( const TestDouble::ParameterChain* pExpectedEntry=pExpectation->getOutputs(); 0 != pExpectedEntry; pExpectedEntry = pExpectedEntry->pNext )
+      {
+        if( pExpectedEntry->pParameter->name == pActualEntry->pParameter->name )
+        {
+          pActualEntry->pParameter->setValue( pExpectedEntry->pParameter );
+          used = true;
+        }
+      }
+    }
+    if( false == used ) pActualEntry->pParameter->setDefault();
+  }
+}
+
+void ActualCall::_failActual()
+{
+  // TODO format a usable message
+  SimpleString failureMessage = "unmet actual";
+  UtestShell* const pShell = UtestShell::getCurrent();
+  TestFailure failure( pShell, pShell->getFile().asCharString(), pShell->getLineNumber(), failureMessage );
+  TestTerminatorWithoutExceptions terminator;
+  UtestShell::getCurrent()->failWith( failure, terminator );
 }
 
 // ActualCall& ActualCall::with( const SimpleString& _name, const void* const buffer, const std::size_t& size )

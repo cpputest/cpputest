@@ -31,6 +31,8 @@
 #include <typeinfo>
 #include <CppUTest/SimpleString.h>
 
+#include <CppUTest/PlatformSpecificFunctions.h>
+
 // CppUTest replaces string.h API but not memcmp
 extern "C" int memcmp ( const void * ptr1, const void * ptr2, size_t num );
 
@@ -42,25 +44,42 @@ public:
   const SimpleString  name;
   const SimpleString  type;
   // TODO should buffer require a static reference or should this clone?
-  const void* buffer = 0;
+  void* buffer = 0;
   const std::size_t bufferSize_bytes = 0;
 
+  /// an input parameter
   template<typename T>
   Parameter( const SimpleString& _name, const T& value )
   : name(_name), type( typeid(value).name() ), _variant(value)
   { }
 
+  /// an output parameter (must be first to avoid implicit cast to bufferSize_bytes )
   template<typename T>
-  Parameter( const SimpleString& _name, T* const _buffer, const T& value )
-  : name(_name), type( typeid(T).name() ), buffer(_buffer), _variant(value), bufferSize_bytes(sizeof(T))
+  Parameter( const SimpleString& _name, T* const _buffer, T& defaultValue )
+  : name(_name), type( typeid(T).name() ), buffer(_buffer), bufferSize_bytes(sizeof(T)), _variant(defaultValue)
   { }
 
+  /// an input buffer
   template<typename T>
   Parameter( const SimpleString& _name, T* const _buffer, const std::size_t& _bufferSize_bytes )
   : name(_name), type( typeid(T).name() ), buffer(_buffer), bufferSize_bytes(_bufferSize_bytes)
   { }
 
+
   bool equals( const Parameter* const pOther ) const;
+
+  void setValue( const Parameter* const pOther )
+  {
+    PlatformSpecificMemCpy( buffer, &(pOther->_variant), bufferSize_bytes );
+    // memcpy( buffer, pOther->_variant, bufferSize_bytes );
+  }
+
+  void setDefault()
+  {
+    PlatformSpecificMemCpy( buffer, &_variant, bufferSize_bytes );
+    // memcpy( buffer, &_variant, bufferSize_bytes );
+  }
+  
   
 
 private:
