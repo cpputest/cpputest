@@ -146,13 +146,12 @@ TEST( MatchedParameter, match_fn )
   actualCall("foo").with("value", _fn);
 }
 
-// FIXME
-// TEST( MatchedParameter, match_static_buffer )
-// {
-//   char buffer[] = "HELLO";
-//   expectCall("foo").with("value", buffer, sizeof(buffer));
-//   actualCall("foo").with("value", buffer, sizeof(buffer));
-// }
+TEST( MatchedParameter, match_static_buffer )
+{
+  char buffer[] = "HELLO";
+  expectCall("foo").with("value", buffer, sizeof(buffer));
+  actualCall("foo").with("value", buffer, sizeof(buffer));
+}
 
 //======================================================================================================================
 TEST_GROUP( UnmatchedParameter )

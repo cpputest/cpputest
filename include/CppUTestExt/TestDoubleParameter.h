@@ -44,7 +44,8 @@ public:
   const SimpleString  name;
   const SimpleString  type;
   // TODO should buffer require a static reference or should this clone?
-  void* buffer = 0;
+  const void* buffer = 0;
+  void* const outputBuffer = 0;
   const std::size_t bufferSize_bytes = 0;
 
   /// an input parameter
@@ -62,21 +63,19 @@ public:
   /// an output parameter (FIXME the unused bool parameter is a hack)
   template<typename T>
   Parameter( const SimpleString& _name, T* const _buffer, T defaultValue, const bool )
-  : name(_name), type( typeid(T).name() ), buffer(_buffer), bufferSize_bytes(sizeof(T)), _variant(defaultValue)
+  : name(_name), type( typeid(T).name() ), outputBuffer(_buffer), bufferSize_bytes(sizeof(T)), _variant(defaultValue)
   { }
 
   bool equals( const Parameter* const pOther ) const;
 
   void setValue( const Parameter* const pOther )
   {
-    PlatformSpecificMemCpy( buffer, &(pOther->_variant), bufferSize_bytes );
-    // memcpy( buffer, pOther->_variant, bufferSize_bytes );
+    PlatformSpecificMemCpy( outputBuffer, &(pOther->_variant), bufferSize_bytes );
   }
 
   void setDefault()
   {
-    PlatformSpecificMemCpy( buffer, &_variant, bufferSize_bytes );
-    // memcpy( buffer, &_variant, bufferSize_bytes );
+    PlatformSpecificMemCpy( outputBuffer, &_variant, bufferSize_bytes );
   }
   
   
