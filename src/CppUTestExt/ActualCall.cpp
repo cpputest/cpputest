@@ -65,7 +65,14 @@ void ActualCall::returns()
       {
         if( pExpectedEntry->pParameter->name == pActualEntry->pParameter->name )
         {
-          pActualEntry->pParameter->setValue( pExpectedEntry->pParameter );
+          if( false == pActualEntry->pParameter->setValue( pExpectedEntry->pParameter ) )
+          {
+              // TODO format a usable report
+              SimpleString failureMessage = "unmet actual";
+              UtestShell* const pShell = UtestShell::getCurrent();
+              TestFailure failure( pShell, pShell->getFile().asCharString(), pShell->getLineNumber(), failureMessage );
+              pShell->failWith( failure );
+          }
           used = true;
           break;  ///< only use the first expectation of a parameter
         }
@@ -82,7 +89,7 @@ void ActualCall::_failActual()
   UtestShell* const pShell = UtestShell::getCurrent();
   TestFailure failure( pShell, pShell->getFile().asCharString(), pShell->getLineNumber(), failureMessage );
   TestTerminatorWithoutExceptions terminator;
-  UtestShell::getCurrent()->failWith( failure, terminator );
+  pShell->failWith( failure, terminator );
 }
 
 // ActualCall& ActualCall::with( const SimpleString& _name, const void* const buffer, const std::size_t& size )

@@ -177,9 +177,9 @@ TEST( MatchedOutputParameter, match_fn )
 
 TEST( MatchedOutputParameter, match_static_buffer )
 {
-  char values[] = "HELLO";
+  char values[6] = "HELLO";
   expectCall("foo").outputBuffer("value", values, sizeof(values));
-  char actuals[] = "UHTOH";
+  char actuals[6] = "UHTOH";
   actualCall("foo").outputBuffer("value", actuals, sizeof(actuals)).returns();
   MEMCMP_EQUAL( values, actuals, sizeof(values) );
 }
@@ -235,19 +235,43 @@ TEST_GROUP( TestDoubleOutputsFailures )
 
   TEST_TEARDOWN()
   {
+    checkExpectations();
     CHECK( fixture.hasTestFailed() );
   }
 };
 
-// static void mismatch_type( void )
-// {
-//   expectCall("foo").output( "value", true );
-//   char actual;
-//   actualCall("foo").output( "value", &actual );
-//   checkExpectations();
-// }
-// TEST( TestDoubleOutputsFailures, mismatch_type_fails )
-// {
-//   fixture.runTestWithMethod( mismatch_type );
-// }
+static void mismatch_parameter( void )
+{
+  expectCall("foo").output( "value", true );
+  actualCall("foo");
+  checkExpectations();
+}
+TEST( TestDoubleOutputsFailures, mismatch_parameter_fails )
+{
+  fixture.runTestWithMethod( mismatch_parameter );
+}
+
+static void mismatch_type( void )
+{
+  expectCall("foo").output( "value", true );
+  int actual = 0;
+  actualCall("foo").output( "value", &actual );
+  checkExpectations();
+}
+TEST( TestDoubleOutputsFailures, mismatch_type_fails )
+{
+  fixture.runTestWithMethod( mismatch_type );
+}
+
+static void mismatch_size( void )
+{
+  char values[1];
+  expectCall("foo").outputBuffer("value", values, sizeof(values));
+  char actuals[2];
+  actualCall("foo").outputBuffer("value", actuals, sizeof(actuals)).returns();
+}
+TEST( TestDoubleOutputsFailures, mismatch_size_fails )
+{
+  fixture.runTestWithMethod( mismatch_size );
+}
 
