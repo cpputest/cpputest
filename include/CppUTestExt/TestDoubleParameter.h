@@ -55,9 +55,8 @@ public:
   { }
 
   /// an input buffer
-  template<typename T>
-  Parameter( const SimpleString& _name, T* const _buffer, const std::size_t& _bufferSize_bytes )
-  : name(_name), type( typeid(T).name() ), buffer(_buffer), bufferSize_bytes(_bufferSize_bytes)
+  Parameter( const SimpleString& _name, void* const _buffer, const std::size_t& _bufferSize_bytes )
+  : name(_name), type( typeid(_buffer).name() ), buffer(_buffer), bufferSize_bytes(_bufferSize_bytes)
   { }
 
   /// an output parameter (FIXME the unused bool parameter is a hack, should be a class OutputParameter with base Parameter)

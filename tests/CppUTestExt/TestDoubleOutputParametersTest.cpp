@@ -177,7 +177,7 @@ TEST( MatchedOutputParameter, match_fn )
 
 TEST( MatchedOutputParameter, match_static_buffer )
 {
-  const char values[] = "HELLO";
+  char values[] = "HELLO";
   expectCall("foo").outputBuffer("value", values, sizeof(values));
   char actuals[] = "UHTOH";
   actualCall("foo").outputBuffer("value", actuals, sizeof(actuals)).returns();
