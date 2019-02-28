@@ -95,7 +95,6 @@ public:
   
   
 
-private:
   const union Variant {
     bool                    asBool;
     char                    asChar;

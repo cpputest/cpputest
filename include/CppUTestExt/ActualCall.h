@@ -32,6 +32,7 @@
 #include "CppUTest/TestHarness.h"
 
 #include <typeinfo>
+#include "CppUTestExt/ExpectCall.h"
 
 class ActualCall;
 /// implemented in TestDouble.cpp
@@ -81,28 +82,32 @@ public:
   void returns();
 
   //  return based methods invoke matched expectation (or else do nothing and return 0)
-  bool returnBool();
-  char returnChar();
-  unsigned char returnUnsignedChar();
-  int returnInt();
-  unsigned int returnUnsignedInt();
-  long int returnLongInt();
-  unsigned long int returnUnsignedLongInt();
-  long long int returnLongLongInt();
-  unsigned long long int returnUnsignedLongLongInt();
-  float returnFloat();
-  double returnDouble();
-  void* returnPointer();
-  const void* returnConstPointer();
-  void(*returnFunctionPointer())();
+  
+  void(*returnFunctionPointer())();   ///< FIXME provide a default value for a function pointer void* returnPointer( void* defaultValue=0 );
+  void* returnPointer( const void* defaultValue=0 );
+  const void* returnConstPointer( const void* defaultValue=0 );
+  char returnChar( char defaultValue=true );
+  unsigned char returnUnsignedChar( unsigned char defaultValue=true );
+  int returnInt( int defaultValue=true );
+  unsigned int returnUnsignedInt( unsigned int defaultValue=true );
+  long returnLong( long defaultValue=true );
+  unsigned long returnUnsignedLong( unsigned long defaultValue=true );
+  long long returnLongLong( long long defaultValue=true );
+  unsigned long long returnUnsignedLongLong( unsigned long long defaultValue=true );
+  float returnFloat( float defaultValue=true );
+  double returnDouble( double defaultValue=true );
+  bool returnBool( bool defaultValue=true );
 
   const TestDouble::ParameterChain* getParameters() const { return _parameters; }
   TestDouble::ParameterChain* getOutputs() const { return _outputs; }
 
+
 private:
-  TestDouble::ParameterChain*   _parameters = 0;
-  TestDouble::ParameterChain*   _outputs = 0;
+  TestDouble::ParameterChain*     _parameters = 0;
+  TestDouble::ParameterChain*     _outputs = 0;
   bool  _returned = false;
+  void _setOutputs( const ExpectedCall* &pExpectation );
+
 
   void _failActual();
 

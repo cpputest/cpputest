@@ -30,125 +30,151 @@
 #include "CppUTestExt/ExpectCall.h"
 #include "CppUTestExt/ActualCall.h"
 
-// TEST_GROUP( TestDoubleReturns )
-// {
-//   TEST_TEARDOWN()
-//   {
-//     // FIXME allow non-scoped expectations
-//     // checkExpectations();
-//   }
-// };
+//======================================================================================================================
+TEST_GROUP( Result )
+{
+  TEST_SETUP()
+  {
+    // clear any expectations
+    checkExpectations();
+  }
 
-// TEST( TestDoubleReturns, returns_bool )
+  TEST_TEARDOWN()
+  {
+    checkExpectations();
+  }
+};
+
+TEST( Result, match_bool )
+{
+  const bool value = true;
+  expectCall("foo").returns(value);
+  const bool actual = actualCall("foo").returnBool();
+  LONGS_EQUAL( value, actual );
+}
+
+// TEST( Result, match_char )
 // {
-//   const bool expectedValue = true;
-//   expect().call("foo").times(1).andReturn(expectedValue);
-//   const bool actualValue = actual().call("foo").returnBool();
-//   CHECK( expectedValue == actualValue );
+//   const char value = 'a';
+//   expectCall("foo").returns(value);
+//   const char actual = actualCall("foo").returnChar();
+//   LONGS_EQUAL( value, actual );
 // }
 
-// TEST( TestDoubleReturns, returns_char )
+// TEST( Result, match_unsigned_char )
 // {
-//   const char expectedValue = -1;
-//   expect().call("foo").times(1).andReturn(expectedValue);
-//   const char actualValue = actual().call("foo").returnChar();
-//   CHECK( expectedValue == actualValue );
+//   const unsigned char value = 'a';
+//   expectCall("foo").returns(value);
+//   const unsigned actual = actualCall("foo").returnUnsignedChar();
+//   LONGS_EQUAL( value, actual );
 // }
 
-// TEST( TestDoubleReturns, returns_unsigned_char )
+// TEST( Result, match_int )
 // {
-//   const unsigned char expectedValue = 1;
-//   expect().call("foo").times(1).andReturn(expectedValue);
-//   const unsigned char actualValue = actual().call("foo").returnUnsignedChar();
-//   CHECK( expectedValue == actualValue );
+//   const int value = 1;
+//   expectCall("foo").returns(value);
+//   const int actual = actualCall("foo").returnInt();
+//   LONGS_EQUAL( value, actual );
 // }
 
-// TEST( TestDoubleReturns, returns_int )
+// TEST( Result, match_unsigned_int )
 // {
-//   const int expectedValue = -1;
-//   expect().call("foo").times(1).andReturn(expectedValue);
-//   const int actualValue = actual().call("foo").returnInt();
-//   CHECK( expectedValue == actualValue );
+//   const unsigned int value = 1;
+//   expectCall("foo").returns(value);
+//   const unsigned int actual = actualCall("foo").returnUnsignedInt();
+//   LONGS_EQUAL( value, actual );
 // }
 
-// TEST( TestDoubleReturns, returns_unsigned_int )
+// TEST( MatchedOutputParameter, match_long )
 // {
-//   const unsigned int expectedValue = 1;
-//   expect().call("foo").times(1).andReturn(expectedValue);
-//   const unsigned int actualValue = actual().call("foo").returnUnsignedInt();
-//   CHECK( expectedValue == actualValue );
+//   const long value = 1;
+//   expectCall("foo").output("value", value);
+//   long actual = 2;
+//   actualCall("foo").output("value", &actual).returns();
+//   LONGS_EQUAL( value, actual );
 // }
 
-// TEST( TestDoubleReturns, returns_long )
+// TEST( MatchedOutputParameter, match_unsigned_long )
 // {
-//   const long int expectedValue = -1;
-//   expect().call("foo").times(1).andReturn(expectedValue);
-//   const long int actualValue = actual().call("foo").returnLongInt();
-//   CHECK( expectedValue == actualValue );
+//   const unsigned long value = 1;
+//   expectCall("foo").output("value", value);
+//   unsigned long actual = 2;
+//   actualCall("foo").output("value", &actual).returns();
+//   LONGS_EQUAL( value, actual );
 // }
 
-// TEST( TestDoubleReturns, returns_unsigned_long )
+// TEST( MatchedOutputParameter, match_long_long )
 // {
-//   const unsigned long int expectedValue = 1;
-//   expect().call("foo").times(1).andReturn(expectedValue);
-//   const unsigned long int actualValue = actual().call("foo").returnUnsignedLongInt();
-//   CHECK( expectedValue == actualValue );
+//   const long long value = 1;
+//   expectCall("foo").output("value", value);
+//   long long actual = 2;
+//   actualCall("foo").output("value", &actual).returns();
+//   LONGS_EQUAL( value, actual );
 // }
 
-// TEST( TestDoubleReturns, returns_long_long )
+// TEST( MatchedOutputParameter, match_unsigned_long_long )
 // {
-//   const long long int expectedValue = -1;
-//   expect().call("foo").times(1).andReturn(expectedValue);
-//   const long long int actualValue = actual().call("foo").returnLongLongInt();
-//   CHECK( expectedValue == actualValue );
+//   const unsigned long long value = 1;
+//   expectCall("foo").output("value", value);
+//   unsigned long long actual = 2;
+//   actualCall("foo").output("value", &actual).returns();
+//   LONGS_EQUAL( value, actual );
 // }
 
-// TEST( TestDoubleReturns, returns_unsigned_long_long )
+// TEST( MatchedOutputParameter, match_float )
 // {
-//   const unsigned long long int expectedValue = 1;
-//   expect().call("foo").times(1).andReturn(expectedValue);
-//   const unsigned long long int actualValue = actual().call("foo").returnUnsignedLongLongInt();
-//   CHECK( expectedValue == actualValue );
+//   const float value = 1.1f;
+//   expectCall("foo").output("value", value);
+//   float actual = 2.2f;
+//   actualCall("foo").output("value", &actual).returns();
+//   CHECK( value == actual );
 // }
 
-// IGNORE_TEST( TestDoubleReturns, returns_float )
+// TEST( MatchedOutputParameter, match_double )
 // {
-//   // Since CppUMock doesn't support float, clang is unhappy
-//   // const float expectedValue = 1;
-//   // expect().call("foo").times(1).andReturn(expectedValue);
-//   // const float actualValue = actual().call("foo").returnFloat();
-//   // FLOATS_EQUAL( expectedValue, actualValue, 0 );
+//   const double value = 1.1;
+//   expectCall("foo").output("value", value);
+//   double actual = 2.2;
+//   actualCall("foo").output("value", &actual).returns();
+//   CHECK( value == actual );
 // }
 
-// TEST( TestDoubleReturns, returns_double )
+// TEST( MatchedOutputParameter, match_pointer )
 // {
-//   const double expectedValue = 1;
-//   expect().call("foo").times(1).andReturn(expectedValue);
-//   const double actualValue = actual().call("foo").returnDouble();
-//   DOUBLES_EQUAL( expectedValue, actualValue, 0 );
+//   static char values[] = "HELLO";
+//   char* pValue = values;
+//   expectCall("foo").output("value", pValue);
+//   char* pActual = 0;
+//   actualCall("foo").output("value", &pActual).returns();
+//   POINTERS_EQUAL( pValue, pActual );
 // }
 
-// TEST( TestDoubleReturns, returns_pointer )
+// TEST( MatchedOutputParameter, match_const_pointer )
 // {
-//   void* const expectedValue = reinterpret_cast<void*>(0x100);
-//   expect().call("foo").times(1).andReturn(expectedValue);
-//   const void* const actualValue = actual().call("foo").returnPointer();
-//   POINTERS_EQUAL( expectedValue, actualValue );
+//   const char values[] = "HELLO";
+//   const char* pValue = values;
+//   expectCall("foo").output("value", pValue);
+//   const char* pActual = 0;
+//   actualCall("foo").output("value", &pActual).returns();
+//   POINTERS_EQUAL( pValue, pActual );
 // }
 
-// TEST( TestDoubleReturns, returns_const_pointer )
+// typedef void (*fn_t)();
+// static fn_t fn { };
+// TEST( MatchedOutputParameter, match_fn )
 // {
-//   const void* const expectedValue = reinterpret_cast<void*>(0x100);
-//   expect().call("foo").times(1).andReturn(expectedValue);
-//   const void* const actualValue = actual().call("foo").returnConstPointer();
-//   POINTERS_EQUAL( expectedValue, actualValue );
+//   expectCall("foo").output("value", fn);
+//   fn_t pActual = 0;
+//   actualCall("foo").output("value", &pActual).returns();
+//   POINTERS_EQUAL( fn, pActual );
 // }
 
-// TEST( TestDoubleReturns, returns_function_pointer )
+// TEST( MatchedOutputParameter, match_static_buffer )
 // {
-//   expect().call("foo").times(1).andReturn(_fn);
-//   void (*actualValue)() = actual().call("foo").returnFunctionPointer();
-//   FUNCTIONPOINTERS_EQUAL( _fn, actualValue );
+//   char values[6] = "HELLO";
+//   expectCall("foo").outputBuffer("value", values, sizeof(values));
+//   char actuals[6] = "UHTOH";
+//   actualCall("foo").outputBuffer("value", actuals, sizeof(actuals)).returns();
+//   MEMCMP_EQUAL( values, actuals, sizeof(values) );
 // }
-
 

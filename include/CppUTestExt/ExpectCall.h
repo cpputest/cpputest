@@ -89,14 +89,20 @@ public:
     return *this;
   }
 
+  template<typename T > 
+  void returns( const T& value ) { _returnValue = value; }
+
+  const TestDouble::Parameter::Variant getReturn() const { return _returnValue; }
+
   int getCount() const { return _count; }
   const TestDouble::ParameterChain* getParameters() const { return _parameters; }
   const TestDouble::ParameterChain* getOutputs() const { return _outputs; }
 
 private:
   int   _count = 0;
-  TestDouble::ParameterChain*   _parameters = 0;
-  TestDouble::ParameterChain*   _outputs = 0;
+  TestDouble::ParameterChain*     _parameters = 0;
+  TestDouble::ParameterChain*     _outputs = 0;
+  TestDouble::Parameter::Variant  _returnValue = 0;
 };
 
 // class Actual;

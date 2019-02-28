@@ -55,7 +55,12 @@ void ActualCall::returns()
   {
       _failActual();
   }
-  else for( const TestDouble::ParameterChain* pActualEntry=getOutputs(); 0 != pActualEntry; pActualEntry = pActualEntry->pNext )
+  else _setOutputs( pExpectation );
+}
+  
+void ActualCall::_setOutputs( const ExpectedCall* &pExpectation )
+{
+  for( const TestDouble::ParameterChain* pActualEntry=getOutputs(); 0 != pActualEntry; pActualEntry = pActualEntry->pNext )
   {
     bool used = false;
     // set outputs
@@ -67,7 +72,7 @@ void ActualCall::returns()
         {
           if( false == pActualEntry->pParameter->setValue( pExpectedEntry->pParameter ) )
           {
-              // TODO format a usable report
+              // TODO format a usable message
               SimpleString failureMessage = "unmet actual";
               UtestShell* const pShell = UtestShell::getCurrent();
               TestFailure failure( pShell, pShell->getFile().asCharString(), pShell->getLineNumber(), failureMessage );
@@ -81,6 +86,91 @@ void ActualCall::returns()
     if( false == used ) pActualEntry->pParameter->setDefault();
   }
 }
+
+bool ActualCall::returnBool( bool defaultValue )
+{
+  _returned = true;
+
+  const ExpectedCall* pExpectation = TestDouble::findExpectation( *this );
+  if( 0 == pExpectation )
+  {
+    return defaultValue;
+  }
+  else
+  {
+    _setOutputs( pExpectation );
+    return pExpectation->getReturn().asBool;
+  }
+}
+
+char ActualCall::returnChar( char defaultValue )
+{
+  _returned = true;
+
+  const ExpectedCall* pExpectation = TestDouble::findExpectation( *this );
+  if( 0 == pExpectation )
+  {
+    return defaultValue;
+  }
+  else
+  {
+    _setOutputs( pExpectation );
+    return pExpectation->getReturn().asChar;
+  }
+}
+
+unsigned char ActualCall::returnUnsignedChar( unsigned char defaultValue )
+{
+  _returned = true;
+
+  const ExpectedCall* pExpectation = TestDouble::findExpectation( *this );
+  if( 0 == pExpectation )
+  {
+    return defaultValue;
+  }
+  else
+  {
+    _setOutputs( pExpectation );
+    return pExpectation->getReturn().asUnsignedChar;
+  }
+}
+
+int ActualCall::returnInt( int defaultValue )
+{
+  _returned = true;
+
+  const ExpectedCall* pExpectation = TestDouble::findExpectation( *this );
+  if( 0 == pExpectation )
+  {
+    return defaultValue;
+  }
+  else
+  {
+    _setOutputs( pExpectation );
+    return pExpectation->getReturn().asInt;
+  }
+}
+
+unsigned int ActualCall::returnUnsignedInt( unsigned int defaultValue )
+{
+  _returned = true;
+
+  const ExpectedCall* pExpectation = TestDouble::findExpectation( *this );
+  if( 0 == pExpectation )
+  {
+    return defaultValue;
+  }
+  else
+  {
+    _setOutputs( pExpectation );
+    return pExpectation->getReturn().asUnsignedInt;
+  }
+}
+
+
+
+
+
 
 void ActualCall::_failActual()
 {
