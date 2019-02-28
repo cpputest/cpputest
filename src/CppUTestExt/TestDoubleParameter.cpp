@@ -33,7 +33,7 @@ bool Parameter::equals( const Parameter* const &pOther ) const
 {
   if( type != pOther->type ) return false;
 
-  if( buffer !=0 )
+  if( 0 != buffer )
   {
     if( 0 == pOther->buffer ) return false;
     if( bufferSize_bytes != pOther->bufferSize_bytes ) return false;

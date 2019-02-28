@@ -75,7 +75,9 @@ public:
   /// used by ActualCall to set output based on expectation parameter
   void setValue( const Parameter* const &pOther )
   {
-    PlatformSpecificMemCpy( outputBuffer, &(pOther->_variant), bufferSize_bytes );
+    if( 0 != pOther->buffer )
+      PlatformSpecificMemCpy( outputBuffer, pOther->buffer, bufferSize_bytes );
+    else PlatformSpecificMemCpy( outputBuffer, &(pOther->_variant), bufferSize_bytes );
   }
 
   /// used by ActualCall to set output to provided default (or true-ish)
