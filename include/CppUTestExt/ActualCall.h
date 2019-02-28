@@ -61,13 +61,6 @@ public:
     _parameters = new TestDouble::ParameterChain( pParameter, _parameters );
     return *this;
   }
-  // template<typename T>
-  // ActualCall& with( const SimpleString& _name, T* const buffer, const std::size_t& size )
-  // {
-  //   TestDouble::Parameter* pParameter = new TestDouble::Parameter( _name, buffer, size );
-  //   _parameters = new TestDouble::ParameterChain( pParameter, _parameters );
-  //   return *this;
-  // }
 
   template<typename T>
   ActualCall& output( const SimpleString& _name, T* const pValue, const T defaultValue=T(true) )
@@ -77,9 +70,9 @@ public:
     return *this;
   }
 
-  ActualCall& output( const SimpleString& _name, void* const buffer, const std::size_t& size, const void* const defaultBuffer=0 )
+  ActualCall& outputBuffer( const SimpleString& _name, const void* staticBuffer, const std::size_t& size_bytes, const void* pDefault=0 )
   {
-    TestDouble::Parameter* pParameter = new TestDouble::Parameter( _name, buffer, size, defaultBuffer );
+    TestDouble::Parameter* pParameter = new TestDouble::Parameter( _name, staticBuffer, size_bytes );
     _outputs = new TestDouble::ParameterChain( pParameter, _outputs );
     return *this;
   }

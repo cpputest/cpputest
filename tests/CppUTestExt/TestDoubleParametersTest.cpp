@@ -148,9 +148,10 @@ TEST( MatchedParameter, match_fn )
 
 TEST( MatchedParameter, match_static_buffer )
 {
-  char buffer[] = "HELLO";
-  expectCall("foo").withBuffer("value", buffer, sizeof(buffer));
-  actualCall("foo").withBuffer("value", buffer, sizeof(buffer));
+  char values[] = "HELLO";
+  expectCall("foo").withBuffer("value", values, sizeof(values));
+  char actuals[] = "HELLO";
+  actualCall("foo").withBuffer("value", actuals, sizeof(actuals));
 }
 
 //======================================================================================================================
