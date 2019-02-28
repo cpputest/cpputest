@@ -50,14 +50,14 @@ void checkExpectations()
   FAIL( report.asCharString() );
 }
 
-ExpectedCall& expectCall( const SimpleString& call )
+ExpectedCall& expectCall( const SimpleString &call )
 {
   ExpectedCall* pExpected = new ExpectedCall( call );
   expectations.enqueue( pExpected );
   return *pExpected;
 }
 
-ActualCall actualCall( const SimpleString& call ) { return ActualCall( call ); }
+ActualCall actualCall( const SimpleString &call ) { return ActualCall( call ); }
 
 
 
@@ -126,8 +126,8 @@ SimpleString ExpectationQueue::check()
 }
 
 
-static bool _matches( const ExpectationChain& expectation, const ActualCall& actual );
-const ExpectedCall* findExpectation( const ActualCall& call )
+static bool _matches( const ExpectationChain &expectation, const ActualCall &actual );
+const ExpectedCall* findExpectation( const ActualCall &call )
 {
   for( ExpectationChain* pExpectation = expectations.get(); 0 != pExpectation; pExpectation = pExpectation->pNext )
   {
@@ -162,7 +162,7 @@ ParameterChain::~ParameterChain()
 }
 
 
-static bool _matches( const ExpectationChain& expectation, const ActualCall& actual )
+static bool _matches( const ExpectationChain &expectation, const ActualCall &actual )
 {
   const ExpectedCall& expected = *(expectation.pExpectedCall);
   if( actual.name != expected.name ) return false;
