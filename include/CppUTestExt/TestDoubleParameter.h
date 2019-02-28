@@ -60,7 +60,7 @@ public:
   : name(_name), type( typeid(T).name() ), buffer(_buffer), bufferSize_bytes(_bufferSize_bytes)
   { }
 
-  /// an output parameter (FIXME the unused bool parameter is a hack)
+  /// an output parameter (FIXME the unused bool parameter is a hack, should be a class OutputParameter with base Parameter)
   template<typename T>
   Parameter( const SimpleString& _name, T* const _buffer, T defaultValue, const bool )
   : name(_name), type( typeid(T).name() ), outputBuffer(_buffer), bufferSize_bytes(sizeof(T)), _variant(defaultValue)

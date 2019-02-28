@@ -145,34 +145,34 @@ TEST( MatchedOutputParameter, match_double )
   CHECK( value == actual );
 }
 
-// FIXME
-IGNORE_TEST( MatchedOutputParameter, match_pointer )
+TEST( MatchedOutputParameter, match_pointer )
 {
-  const char value[] = "HELLO";
-  expectCall("foo").output("value", value);
-  char* actual = 0;
-  actualCall("foo").output("value", &actual).returns();
-  CHECK( value == actual );
+  static char values[] = "HELLO";
+  char* pValue = values;
+  expectCall("foo").output("value", pValue);
+  char* pActual = 0;
+  actualCall("foo").output("value", &pActual).returns();
+  POINTERS_EQUAL( pValue, pActual );
 }
 
-// FIXME 
-IGNORE_TEST( MatchedOutputParameter, match_const_pointer )
+TEST( MatchedOutputParameter, match_const_pointer )
 {
-  const char value[] = "HELLO";
-  expectCall("foo").output("value", value);
-  const char* actual = 0;
-  actualCall("foo").output("value", &actual).returns();
-  CHECK( value == actual );
+  const char values[] = "HELLO";
+  const char* pValue = values;
+  expectCall("foo").output("value", pValue);
+  const char* pActual = 0;
+  actualCall("foo").output("value", &pActual).returns();
+  POINTERS_EQUAL( pValue, pActual );
 }
 
-// FIXME
-static void _fn( void ) {}
-IGNORE_TEST( MatchedOutputParameter, match_fn )
+typedef void (*fn_t)();
+static fn_t fn { };
+TEST( MatchedOutputParameter, match_fn )
 {
-  expectCall("foo").with("value", _fn);
-  void (*actual)(void) = 0;
-  actualCall("foo").with("value", actual);
-  POINTERS_EQUAL( _fn, actual );
+  expectCall("foo").output("value", fn);
+  fn_t pActual = 0;
+  actualCall("foo").output("value", &pActual).returns();
+  POINTERS_EQUAL( fn, pActual );
 }
 
 // FIXME
