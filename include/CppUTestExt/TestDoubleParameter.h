@@ -56,22 +56,17 @@ public:
 
   /// an input buffer
   Parameter( const SimpleString &_name, const void* const &_buffer, const std::size_t &_bufferSize_bytes )
-  : name(_name), type( typeid(void*).name() ), buffer(_buffer), bufferSize_bytes(_bufferSize_bytes)
-  { }
-
-  /// an input buffer
-  Parameter( const SimpleString &_name, void* const &_buffer, const std::size_t &_bufferSize_bytes )
-  : name(_name), type( typeid(void*).name() ), buffer(_buffer), bufferSize_bytes(_bufferSize_bytes)
+  : name(_name), type(typeid(void*).name()), buffer(_buffer), bufferSize_bytes(_bufferSize_bytes)
   { }
 
   /// an output parameter (FIXME the unused bool parameter is a hack)
   template<typename T>
   Parameter( const SimpleString &_name, T* const &_buffer, T defaultValue, const bool )
-  : name(_name), type( typeid(T).name() ), outputBuffer(_buffer), bufferSize_bytes(sizeof(T)), _variant(defaultValue)
+  : name(_name), type(typeid(T).name()), outputBuffer(_buffer), bufferSize_bytes(sizeof(T)), _variant(defaultValue)
   { }
 
   Parameter( const SimpleString &_name, void* const &_buffer, const std::size_t &_bufferSize_bytes, const void* const defaultValue )
-  : name(_name), type( typeid(_buffer).name() ), outputBuffer(_buffer), bufferSize_bytes(_bufferSize_bytes), _variant(defaultValue)
+  : name(_name), type(typeid(_buffer).name()), buffer(defaultValue), outputBuffer(_buffer), bufferSize_bytes(_bufferSize_bytes)
   { }
 
 
@@ -87,7 +82,8 @@ public:
   /// used by ActualCall to set output to provided default (or true-ish)
   void setDefault()
   {
-    PlatformSpecificMemCpy( outputBuffer, &_variant, bufferSize_bytes );
+    if( 0 != buffer ) PlatformSpecificMemCpy( outputBuffer, buffer, bufferSize_bytes );
+    else PlatformSpecificMemCpy( outputBuffer, &_variant, bufferSize_bytes );
   }
   
   

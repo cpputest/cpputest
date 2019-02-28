@@ -184,6 +184,43 @@ TEST( MatchedOutputParameter, match_static_buffer )
   MEMCMP_EQUAL( values, actuals, sizeof(values) );
 }
 
+//======================================================================================================================
+TEST_GROUP( ActualDefaults )
+{
+  TEST_SETUP()
+  {
+    // clear any expectations
+    checkExpectations();
+  }
+
+  TEST_TEARDOWN()
+  {
+    checkExpectations();
+  }
+};
+
+TEST( ActualDefaults, unexpected_without_default_is_true )
+{
+  bool actual = false;
+  actualCall("foo").output("value", &actual).returns();
+  CHECK( actual );
+}
+
+TEST( ActualDefaults, unexpected_with_default )
+{
+  int actual = 0;
+  const int defaultValue = 2;
+  actualCall("foo").output("value", &actual, defaultValue).returns();
+  LONGS_EQUAL( defaultValue, actual );
+}
+
+TEST( ActualDefaults, unexpected_buffer_with_default )
+{
+  const char buffer[6] = "HELLO";
+  char actuals[6] = "UHTOH";
+  actualCall("foo").outputBuffer("value", actuals, sizeof(buffer), buffer).returns();
+  MEMCMP_EQUAL( buffer, actuals, sizeof(buffer) );
+}
 
 //======================================================================================================================
 TEST_GROUP( TestDoubleOutputsFailures )

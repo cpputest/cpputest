@@ -70,7 +70,7 @@ public:
     return *this;
   }
 
-  ActualCall& outputBuffer( const SimpleString &_name, void* const &staticBuffer, const std::size_t &size_bytes, const void* pDefault=0 )
+  ActualCall& outputBuffer( const SimpleString &_name, void* const &staticBuffer, const std::size_t &size_bytes, const void* const pDefault=0 )
   {
     TestDouble::Parameter* pParameter = new TestDouble::Parameter( _name, staticBuffer, size_bytes, pDefault );
     _outputs = new TestDouble::ParameterChain( pParameter, _outputs );
