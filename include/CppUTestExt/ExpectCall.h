@@ -67,13 +67,19 @@ public:
     return *this;
   }
 
-  template<typename T>
-  ExpectedCall& with( const SimpleString& _name, const T* staticBuffer, const std::size_t& size )
+  ExpectedCall& withBuffer( const SimpleString& _name, const void* staticBuffer, const std::size_t& size )
   {
     TestDouble::Parameter* pParameter = new TestDouble::Parameter( _name, staticBuffer, size );
     _parameters = new TestDouble::ParameterChain( pParameter, _parameters );
     return *this;
   }
+  // template<typename T>
+  // ExpectedCall& with( const SimpleString& _name, const T* staticBuffer, const std::size_t& size )
+  // {
+  //   TestDouble::Parameter* pParameter = new TestDouble::Parameter( _name, staticBuffer, size );
+  //   _parameters = new TestDouble::ParameterChain( pParameter, _parameters );
+  //   return *this;
+  // }
 
   template<typename T>
   ExpectedCall& output( const SimpleString& _name, const T& value )

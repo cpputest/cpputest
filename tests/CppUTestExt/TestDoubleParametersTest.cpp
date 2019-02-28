@@ -149,8 +149,8 @@ TEST( MatchedParameter, match_fn )
 TEST( MatchedParameter, match_static_buffer )
 {
   char buffer[] = "HELLO";
-  expectCall("foo").with("value", buffer, sizeof(buffer));
-  actualCall("foo").with("value", buffer, sizeof(buffer));
+  expectCall("foo").withBuffer("value", buffer, sizeof(buffer));
+  actualCall("foo").withBuffer("value", buffer, sizeof(buffer));
 }
 
 //======================================================================================================================
@@ -172,9 +172,8 @@ TEST_GROUP( UnmatchedParameter )
 
 TEST( UnmatchedParameter, unexpected_parameters_are_ignored )
 {
-  char buffer[] = "HELLO";
-  expectCall("foo").with("value", buffer, sizeof(buffer));
-  actualCall("foo").with("value", buffer, sizeof(buffer)).with("bar", true);
+  expectCall("foo");
+  actualCall("foo").with("bar", true);
 }
 
 //======================================================================================================================
@@ -217,17 +216,17 @@ TEST( TestDoubleParametersFailures, mismatch_type_fails )
   fixture.runTestWithMethod( mismatch_type );
 }
 
-static void mismatch_typed_buffer( void )
+static void mismatch_buffer( void )
 {
-  char buffer[] = "HELLO";
-  expectCall("foo").with( "value", buffer, sizeof(buffer) );
-  uint8_t actual[5];
-  actualCall("foo").with( "value", actual, sizeof(actual) );
+  char buffer[6] = "HELLO";
+  expectCall("foo").withBuffer( "value", buffer, sizeof(buffer) );
+  char actual[6] = "UHTOH";
+  actualCall("foo").withBuffer( "value", actual, sizeof(actual) );
   checkExpectations();
 }
-TEST( TestDoubleParametersFailures, mismatch_typed_buffer_fails )
+TEST( TestDoubleParametersFailures, mismatch_buffer_fails )
 {
-  fixture.runTestWithMethod( mismatch_typed_buffer );
+  fixture.runTestWithMethod( mismatch_buffer );
 }
 
 static void mismatch_value( void )
