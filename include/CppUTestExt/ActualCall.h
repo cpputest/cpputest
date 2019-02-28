@@ -64,9 +64,16 @@ public:
   }
 
   template<typename T>
-  ActualCall& output( const SimpleString& _name, T* const pValue, const T defaultValue=0 )
+  ActualCall& output( const SimpleString& _name, T* const pValue, const T defaultValue=T(true) )
   {
     TestDouble::Parameter* pParameter = new TestDouble::Parameter( _name, pValue, defaultValue, true );
+    _outputs = new TestDouble::ParameterChain( pParameter, _outputs );
+    return *this;
+  }
+
+  ActualCall& output( const SimpleString& _name, void* const buffer, const std::size_t& size, const void* const defaultBuffer=0 )
+  {
+    TestDouble::Parameter* pParameter = new TestDouble::Parameter( _name, buffer, size, defaultBuffer );
     _outputs = new TestDouble::ParameterChain( pParameter, _outputs );
     return *this;
   }

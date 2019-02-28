@@ -66,13 +66,20 @@ public:
   : name(_name), type( typeid(T).name() ), outputBuffer(_buffer), bufferSize_bytes(sizeof(T)), _variant(defaultValue)
   { }
 
+  Parameter( const SimpleString& _name, void* const _buffer, const std::size_t& _bufferSize_bytes, const void* const defaultValue )
+  : name(_name), type( typeid(_buffer).name() ), outputBuffer(_buffer), bufferSize_bytes(_bufferSize_bytes), _variant(defaultValue)
+  { }
+
+
   bool equals( const Parameter* const pOther ) const;
 
+  /// used by ActualCall to set output based on expectation parameter
   void setValue( const Parameter* const pOther )
   {
     PlatformSpecificMemCpy( outputBuffer, &(pOther->_variant), bufferSize_bytes );
   }
 
+  /// used by ActualCall to set output to provided default (or true-ish)
   void setDefault()
   {
     PlatformSpecificMemCpy( outputBuffer, &_variant, bufferSize_bytes );

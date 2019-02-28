@@ -83,6 +83,14 @@ public:
     return *this;
   }
 
+  template<typename T>
+  ExpectedCall& output( const SimpleString& _name, const T* staticBuffer, const std::size_t& size )
+  {
+    TestDouble::Parameter* pParameter = new TestDouble::Parameter( _name, staticBuffer, size );
+    _outputs = new TestDouble::ParameterChain( pParameter, _outputs );
+    return *this;
+  }
+
   const int& getCount() const { return _count; }
   const TestDouble::ParameterChain* getParameters() const { return _parameters; }
   const TestDouble::ParameterChain* getOutputs() const { return _outputs; }

@@ -175,15 +175,14 @@ TEST( MatchedOutputParameter, match_fn )
   POINTERS_EQUAL( fn, pActual );
 }
 
-// FIXME
-// TEST( MatchedOutputParameter, match_static_buffer )
-// {
-//   const char value[] = "HELLO";
-//   expectCall("foo").output("value", value, sizeof(value));
-//   char actual[sizeof(value)] = {0};
-//   actualCall("foo").output("value", actual).returns();
-//   MEMCMP_EQUAL( value, actual, sizeof(value) );
-// }
+TEST( MatchedOutputParameter, match_static_buffer )
+{
+  const char values[] = "HELLO";
+  expectCall("foo").output("value", values, sizeof(values));
+  char actuals[] = "UHTOH";
+  actualCall("foo").output("value", actuals, sizeof(actuals)).returns();
+  MEMCMP_EQUAL( values, actuals, sizeof(values) );
+}
 
 
 //======================================================================================================================
