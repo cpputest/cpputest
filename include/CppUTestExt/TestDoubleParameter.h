@@ -59,7 +59,7 @@ public:
   : name(_name), type( typeid(_buffer).name() ), buffer(_buffer), bufferSize_bytes(_bufferSize_bytes)
   { }
 
-  /// an output parameter (FIXME the unused bool parameter is a hack, should be a class OutputParameter with base Parameter)
+  /// an output parameter (FIXME the unused bool parameter is a hack)
   template<typename T>
   Parameter( const SimpleString &_name, T* const &_buffer, T defaultValue, const bool )
   : name(_name), type( typeid(T).name() ), outputBuffer(_buffer), bufferSize_bytes(sizeof(T)), _variant(defaultValue)
@@ -106,19 +106,19 @@ private:
     // all types will degrade to bool so no constructor necessary for bool
     // provide pointer support first (so references won't degrade to primitives)
     Variant( void(*value)() ) : asFunctionPointer(value) {}
-    Variant( void* value ) : asPointer(value) {}
+    Variant( void* &value ) : asPointer(value) {}
     Variant( const void* value ) : asConstPointer(value) {}
     // provide primitive support
-    Variant( const char& value ) : asChar(value) {}
-    Variant( const unsigned char& value ) : asUnsignedChar(value) {}
-    Variant( const int& value ) : asInt(value) {}
-    Variant( const unsigned int& value ) : asUnsignedInt(value) {}
-    Variant( const long& value ) : asLong(value) {}
-    Variant( const unsigned long& value ) : asUnsignedLong(value) {}
-    Variant( const long long& value ) : asLongLong(value) {}
-    Variant( const unsigned long long& value ) : asUnsignedLongLong(value) {}
-    Variant( const float& value ) : asFloat(value) {}
-    Variant( const double& value ) : asDouble(value) {}
+    Variant( const char &value ) : asChar(value) {}
+    Variant( const unsigned char &value ) : asUnsignedChar(value) {}
+    Variant( const int &value ) : asInt(value) {}
+    Variant( const unsigned int &value ) : asUnsignedInt(value) {}
+    Variant( const long &value ) : asLong(value) {}
+    Variant( const unsigned long &value ) : asUnsignedLong(value) {}
+    Variant( const long long &value ) : asLongLong(value) {}
+    Variant( const unsigned long long &value ) : asUnsignedLongLong(value) {}
+    Variant( const float &value ) : asFloat(value) {}
+    Variant( const double &value ) : asDouble(value) {}
 
   } _variant = 0;
 
