@@ -50,30 +50,30 @@ public:
 
   /// an input parameter
   template<typename T>
-  Parameter( const SimpleString& _name, const T& value )
+  Parameter( const SimpleString &_name, const T &value )
   : name(_name), type( typeid(value).name() ), _variant(value)
   { }
 
   /// an input buffer
-  Parameter( const SimpleString& _name, void* const _buffer, const std::size_t& _bufferSize_bytes )
+  Parameter( const SimpleString &_name, void* const &_buffer, const std::size_t &_bufferSize_bytes )
   : name(_name), type( typeid(_buffer).name() ), buffer(_buffer), bufferSize_bytes(_bufferSize_bytes)
   { }
 
   /// an output parameter (FIXME the unused bool parameter is a hack, should be a class OutputParameter with base Parameter)
   template<typename T>
-  Parameter( const SimpleString& _name, T* const _buffer, T defaultValue, const bool )
+  Parameter( const SimpleString &_name, T* const &_buffer, T defaultValue, const bool )
   : name(_name), type( typeid(T).name() ), outputBuffer(_buffer), bufferSize_bytes(sizeof(T)), _variant(defaultValue)
   { }
 
-  Parameter( const SimpleString& _name, void* const _buffer, const std::size_t& _bufferSize_bytes, const void* const defaultValue )
+  Parameter( const SimpleString &_name, void* const &_buffer, const std::size_t &_bufferSize_bytes, const void* const defaultValue )
   : name(_name), type( typeid(_buffer).name() ), outputBuffer(_buffer), bufferSize_bytes(_bufferSize_bytes), _variant(defaultValue)
   { }
 
 
-  bool equals( const Parameter* const pOther ) const;
+  bool equals( const Parameter* const &pOther ) const;
 
   /// used by ActualCall to set output based on expectation parameter
-  void setValue( const Parameter* const pOther )
+  void setValue( const Parameter* const &pOther )
   {
     PlatformSpecificMemCpy( outputBuffer, &(pOther->_variant), bufferSize_bytes );
   }

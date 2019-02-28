@@ -29,7 +29,7 @@
 
 namespace TestDouble {
 
-bool Parameter::equals( const Parameter* const pOther ) const
+bool Parameter::equals( const Parameter* const &pOther ) const
 {
   if( type != pOther->type ) return false;
 
