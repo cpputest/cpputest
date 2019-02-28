@@ -67,7 +67,7 @@ public:
     return *this;
   }
 
-  ExpectedCall& withBuffer( const SimpleString &_name, void* const &staticBuffer, const std::size_t &size )
+  ExpectedCall& withBuffer( const SimpleString &_name, const void* const &staticBuffer, const std::size_t &size )
   {
     TestDouble::Parameter* pParameter = new TestDouble::Parameter( _name, staticBuffer, size );
     _parameters = new TestDouble::ParameterChain( pParameter, _parameters );

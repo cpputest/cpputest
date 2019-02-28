@@ -55,8 +55,13 @@ public:
   { }
 
   /// an input buffer
+  Parameter( const SimpleString &_name, const void* const &_buffer, const std::size_t &_bufferSize_bytes )
+  : name(_name), type( typeid(void*).name() ), buffer(_buffer), bufferSize_bytes(_bufferSize_bytes)
+  { }
+
+  /// an input buffer
   Parameter( const SimpleString &_name, void* const &_buffer, const std::size_t &_bufferSize_bytes )
-  : name(_name), type( typeid(_buffer).name() ), buffer(_buffer), bufferSize_bytes(_bufferSize_bytes)
+  : name(_name), type( typeid(void*).name() ), buffer(_buffer), bufferSize_bytes(_bufferSize_bytes)
   { }
 
   /// an output parameter (FIXME the unused bool parameter is a hack)
@@ -75,8 +80,7 @@ public:
   /// used by ActualCall to set output based on expectation parameter
   void setValue( const Parameter* const &pOther )
   {
-    if( 0 != pOther->buffer )
-      PlatformSpecificMemCpy( outputBuffer, pOther->buffer, bufferSize_bytes );
+    if( 0 != pOther->buffer ) PlatformSpecificMemCpy( outputBuffer, pOther->buffer, bufferSize_bytes );
     else PlatformSpecificMemCpy( outputBuffer, &(pOther->_variant), bufferSize_bytes );
   }
 

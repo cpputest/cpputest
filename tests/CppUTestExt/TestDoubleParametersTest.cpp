@@ -148,7 +148,7 @@ TEST( MatchedParameter, match_fn )
 
 TEST( MatchedParameter, match_static_buffer )
 {
-  char values[] = "HELLO";
+  const char values[] = "HELLO";
   expectCall("foo").withBuffer("value", values, sizeof(values));
   char actuals[] = "HELLO";
   actualCall("foo").withBuffer("value", actuals, sizeof(actuals));
