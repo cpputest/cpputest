@@ -67,7 +67,7 @@ void ActualCall::returns()
         {
           pActualEntry->pParameter->setValue( pExpectedEntry->pParameter );
           used = true;
-          break;
+          break;  ///< only use the first expectation of a parameter
         }
       }
     }

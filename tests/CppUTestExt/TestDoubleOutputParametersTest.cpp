@@ -175,7 +175,7 @@ TEST( MatchedOutputParameter, match_fn )
   POINTERS_EQUAL( fn, pActual );
 }
 
-IGNORE_TEST( MatchedOutputParameter, match_static_buffer )
+TEST( MatchedOutputParameter, match_static_buffer )
 {
   char values[] = "HELLO";
   expectCall("foo").outputBuffer("value", values, sizeof(values));
