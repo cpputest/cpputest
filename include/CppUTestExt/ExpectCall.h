@@ -33,7 +33,7 @@
 
 class ExpectedCall;
 /// implemented in TestDouble.cpp
-ExpectedCall& expectCall( const SimpleString& call );            ///< add expectation to registry
+ExpectedCall& expectCall( const SimpleString &call );            ///< add expectation to registry
 
 /// A builder for an expectation
 class ExpectedCall
@@ -41,7 +41,7 @@ class ExpectedCall
 public:
   const SimpleString  name;
 
-  ExpectedCall( const SimpleString& _name )
+  ExpectedCall( const SimpleString &_name )
   : name(_name), _count(EXPECT_ALWAYS)
   {}
 
@@ -53,21 +53,21 @@ public:
 
 
   static const int EXPECT_ALWAYS = -1;
-  ExpectedCall& times( const unsigned int count )
+  ExpectedCall& times( const unsigned int &count )
   {
     _count = (int)count;
     return *this;
   }
 
   template<typename T>
-  ExpectedCall& with( const SimpleString& _name, const T& value )
+  ExpectedCall& with( const SimpleString &_name, const T &value )
   {
     TestDouble::Parameter* pParameter = new TestDouble::Parameter( _name, value );
     _parameters = new TestDouble::ParameterChain( pParameter, _parameters );
     return *this;
   }
 
-  ExpectedCall& withBuffer( const SimpleString& _name, void* const staticBuffer, const std::size_t& size )
+  ExpectedCall& withBuffer( const SimpleString &_name, void* const &staticBuffer, const std::size_t &size )
   {
     TestDouble::Parameter* pParameter = new TestDouble::Parameter( _name, staticBuffer, size );
     _parameters = new TestDouble::ParameterChain( pParameter, _parameters );
@@ -75,21 +75,21 @@ public:
   }
 
   template<typename T>
-  ExpectedCall& output( const SimpleString& _name, const T& value )
+  ExpectedCall& output( const SimpleString &_name, const T &value )
   {
     TestDouble::Parameter* pParameter = new TestDouble::Parameter( _name, value );
     _outputs = new TestDouble::ParameterChain( pParameter, _outputs );
     return *this;
   }
 
-  ExpectedCall& outputBuffer( const SimpleString& _name, void* const staticBuffer, const std::size_t& size_bytes )
+  ExpectedCall& outputBuffer( const SimpleString &_name, void* const &staticBuffer, const std::size_t &size_bytes )
   {
     TestDouble::Parameter* pParameter = new TestDouble::Parameter( _name, staticBuffer, size_bytes );
     _outputs = new TestDouble::ParameterChain( pParameter, _outputs );
     return *this;
   }
 
-  const int& getCount() const { return _count; }
+  int getCount() const { return _count; }
   const TestDouble::ParameterChain* getParameters() const { return _parameters; }
   const TestDouble::ParameterChain* getOutputs() const { return _outputs; }
 

@@ -35,27 +35,27 @@
 
 class ActualCall;
 /// implemented in TestDouble.cpp
-ActualCall actualCall( const SimpleString& name );
+ActualCall actualCall( const SimpleString &name );
 
 class ActualCall
 {
 public:
   const SimpleString      name;
 
-  ActualCall( const SimpleString& _name ) : name(_name) { }
+  ActualCall( const SimpleString &_name ) : name(_name) { }
 
   /// match this against expectations if not already returned
   ~ActualCall();
 
   template<typename T>
-  ActualCall& with( const SimpleString& _name, const T& value )
+  ActualCall& with( const SimpleString &_name, const T &value )
   {
     TestDouble::Parameter* pParameter = new TestDouble::Parameter( _name, value );
     _parameters = new TestDouble::ParameterChain( pParameter, _parameters );
     return *this;
   }
 
-  ActualCall& withBuffer( const SimpleString& _name, void* const staticBuffer, const std::size_t& size )
+  ActualCall& withBuffer( const SimpleString &_name, void* const &staticBuffer, const std::size_t &size )
   {
     TestDouble::Parameter* pParameter = new TestDouble::Parameter( _name, staticBuffer, size );
     _parameters = new TestDouble::ParameterChain( pParameter, _parameters );
@@ -63,14 +63,14 @@ public:
   }
 
   template<typename T>
-  ActualCall& output( const SimpleString& _name, T* const pValue, const T defaultValue=T(true) )
+  ActualCall& output( const SimpleString &_name, T* const &pValue, const T defaultValue=T(true) )
   {
     TestDouble::Parameter* pParameter = new TestDouble::Parameter( _name, pValue, defaultValue, true );
     _outputs = new TestDouble::ParameterChain( pParameter, _outputs );
     return *this;
   }
 
-  ActualCall& outputBuffer( const SimpleString& _name, void* const staticBuffer, const std::size_t& size_bytes, const void* pDefault=0 )
+  ActualCall& outputBuffer( const SimpleString &_name, void* const &staticBuffer, const std::size_t &size_bytes, const void* pDefault=0 )
   {
     TestDouble::Parameter* pParameter = new TestDouble::Parameter( _name, staticBuffer, size_bytes );
     _outputs = new TestDouble::ParameterChain( pParameter, _outputs );

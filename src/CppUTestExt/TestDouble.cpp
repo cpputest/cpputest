@@ -67,7 +67,7 @@ bool shouldFailUnexpected() { return _failActuals; }
 bool shouldEnforceOrder() { return _strictOrder; }
 
 
-ExpectationChain::ExpectationChain( const ExpectedCall* const _pExpectedCall, ExpectationChain* const pLast )
+ExpectationChain::ExpectationChain( const ExpectedCall* const &_pExpectedCall, ExpectationChain* const &pLast )
   : pExpectedCall( _pExpectedCall )
 {
   if( 0 != pLast )
@@ -84,7 +84,7 @@ ExpectationChain::~ExpectationChain()
 
 
 
-void ExpectationQueue::enqueue( const ExpectedCall* const pCall )
+void ExpectationQueue::enqueue( const ExpectedCall* const &pCall )
 {
   if( 0 == expectations._pExpectations )
   {
@@ -151,7 +151,7 @@ const ExpectedCall* findExpectation( const ActualCall& call )
   return NULL;
 }
 
-ParameterChain::ParameterChain( TestDouble::Parameter* const _pParameter, ParameterChain* const _pNext )
+ParameterChain::ParameterChain( TestDouble::Parameter* const &_pParameter, ParameterChain* const &_pNext )
   : pParameter(_pParameter)
    ,pNext(_pNext)   ///< prepend chain
 {}

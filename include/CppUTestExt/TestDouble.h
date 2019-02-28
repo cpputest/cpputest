@@ -46,7 +46,7 @@ bool shouldFailUnexpected();
 bool shouldEnforceOrder();
 
 /// retval 0    no expectation found
-const ExpectedCall* findExpectation( const ActualCall& call );
+const ExpectedCall* findExpectation( const ActualCall &call );
 
 // list of expectations
 class ExpectationChain
@@ -56,14 +56,14 @@ public:
   int                       actualCount = 0;
   ExpectationChain*         pNext = 0;
 
-  ExpectationChain( const ExpectedCall* const _pExpectedCall, ExpectationChain* const pLast );
+  ExpectationChain( const ExpectedCall* const &_pExpectedCall, ExpectationChain* const &pLast );
   ~ExpectationChain();
 };
 
 class ExpectationQueue
 {
 public:
-  void enqueue( const ExpectedCall* const pCall );
+  void enqueue( const ExpectedCall* const &pCall );
   ExpectationChain* get() const { return _pExpectations; }
 
   /// detect un-actualized expectations and then clear expectations
@@ -79,7 +79,7 @@ struct ParameterChain
   TestDouble::Parameter* const pParameter;
   ParameterChain* const pNext;
 
-  ParameterChain( TestDouble::Parameter* const _pParameter, ParameterChain* const _pNext );
+  ParameterChain( TestDouble::Parameter* const &_pParameter, ParameterChain* const &_pNext );
   ~ParameterChain();
 };
 
