@@ -109,7 +109,7 @@ private:
   TestDouble::ParameterChain*     _outputs = 0;
   bool  _hasSetOutputs = false;
   const ExpectedCall* _setOutputs();
-  SimpleString _hasFailed;
+  SimpleString _failureMessage;
   void _failActual();
 
 };  // class ActualCall

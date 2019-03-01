@@ -37,7 +37,7 @@ ActualCall::~ActualCall()
   delete _parameters;
   delete _outputs;
 
-  if( false == _hasFailed.isEmpty() )
+  if( false == _failureMessage.isEmpty() )
   {
     _failActual();
   }
@@ -48,7 +48,7 @@ const ExpectedCall* ActualCall::_setOutputs()
   _hasSetOutputs = true;
 
   const ExpectedCall* pExpectation = TestDouble::findExpectation( *this );
-  if( ( TestDouble::shouldFailUnexpected() )  &&  ( 0 == pExpectation ) ) _hasFailed = "unexpected call";
+  if( ( TestDouble::shouldFailUnexpected() )  &&  ( 0 == pExpectation ) ) _failureMessage = "unexpected call";
   else for( const TestDouble::ParameterChain* pActualEntry=getOutputs(); 0 != pActualEntry; pActualEntry = pActualEntry->pNext )
   {
     bool used = false;
@@ -61,8 +61,10 @@ const ExpectedCall* ActualCall::_setOutputs()
         {
           if( false == pActualEntry->pParameter->setValue( pExpectedEntry->pParameter ) )
           {
-              // TODO format a usable message
-              _hasFailed = "mismatch output size";
+            _failureMessage = StringFromFormat( "mismatch output size for parameter '%s', expected size: %zu  actual size: %zu",
+                                           pExpectedEntry->pParameter->name.asCharString(),
+                                           pExpectedEntry->pParameter->bufferSize_bytes,
+                                           pActualEntry->pParameter->bufferSize_bytes );
           }
           used = true;
           break;  ///< only use the first expectation of a parameter
@@ -168,8 +170,8 @@ double ActualCall::returnDouble( double defaultValue )
 
 void ActualCall::_failActual()
 {
-  // TODO format a usable message
-  SimpleString failureMessage = "unmet actual";
+  SimpleString failureMessage = _failureMessage;
+
   UtestShell* const pShell = UtestShell::getCurrent();
   TestFailure failure( pShell, pShell->getFile().asCharString(), pShell->getLineNumber(), failureMessage );
   TestTerminatorWithoutExceptions terminator;
