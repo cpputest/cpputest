@@ -88,9 +88,7 @@ public:
   {
     _returned = true;
 
-    const ExpectedCall* pExpectation = TestDouble::findExpectation( *this );
-    if( ( TestDouble::shouldFailUnexpected() )  &&  ( 0 == pExpectation ) ) _failActual();
-    else _setOutputs( pExpectation );
+    const ExpectedCall* pExpectation = _setOutputs();
 
     if( 0 == pExpectation ) return const_cast<T*>(defaultValue);
     else return static_cast<T*>(pExpectation->getReturn().asPointer);
@@ -115,7 +113,7 @@ private:
   TestDouble::ParameterChain*     _parameters = 0;
   TestDouble::ParameterChain*     _outputs = 0;
   bool  _returned = false;
-  void _setOutputs( const ExpectedCall* &pExpectation );
+  const ExpectedCall* _setOutputs();
 
 
   void _failActual();
