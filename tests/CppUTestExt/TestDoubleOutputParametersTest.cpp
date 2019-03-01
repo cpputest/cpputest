@@ -185,6 +185,19 @@ TEST( MatchedOutputParameter, match_static_buffer )
   MEMCMP_EQUAL( values, actuals, sizeof(values) );
 }
 
+static void foo( const int& value, int& actual )
+{
+  expectCall("foo").output("value", value);
+  actualCall("foo").output("value", &actual);
+}
+TEST( MatchedOutputParameter, actualcall_destructor_sets_outputs )
+{
+  const int value = -1;
+  int actual = 0;
+  foo( value, actual );
+  CHECK( value == actual );
+}
+
 //======================================================================================================================
 TEST_GROUP( ActualDefaults )
 {
@@ -222,6 +235,18 @@ TEST( ActualDefaults, unexpected_buffer_with_default )
   char actuals[6] = "UHTOH";
   actualCall("foo").outputBuffer("value", actuals, sizeof(buffer), buffer).returns();
   MEMCMP_EQUAL( buffer, actuals, sizeof(buffer) );
+}
+
+static void bar( const int& value, int& actual )
+{
+  actualCall("bar").output("value", &actual, value);
+}
+TEST( ActualDefaults, actualcall_destructor_sets_outputs )
+{
+  const int value = -1;
+  int actual = 0;
+  bar( value, actual );
+  CHECK( value == actual );
 }
 
 //======================================================================================================================

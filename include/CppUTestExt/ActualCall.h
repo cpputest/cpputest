@@ -81,8 +81,6 @@ public:
   /// sets outputs
   void returns();
 
-  //  return based methods invoke matched expectation (or else do nothing and return 0)
-  
   template<typename T>
   T* returnPointer( const T* const defaultValue=0 )
   {
@@ -108,14 +106,11 @@ public:
   const TestDouble::ParameterChain* getParameters() const { return _parameters; }
   TestDouble::ParameterChain* getOutputs() const { return _outputs; }
 
-
 private:
   TestDouble::ParameterChain*     _parameters = 0;
   TestDouble::ParameterChain*     _outputs = 0;
   bool  _returned = false;
   const ExpectedCall* _setOutputs();
-
-
   void _failActual();
 
 };  // class ActualCall

@@ -32,17 +32,7 @@
 
 ActualCall::~ActualCall()
 {
-  if( false == _returned )
-  {
-    /// find an expectation
-    const ExpectedCall* pExpectation = TestDouble::findExpectation( *this );
-    if( ( TestDouble::shouldFailUnexpected() )  &&  ( 0 == pExpectation ) )
-    {
-      _failActual();
-    }
-    // FIXME add a test for this
-    // _setOutputs( pExpectation );
-  }
+  if( false == _returned ) _setOutputs();
 
   delete _parameters;
   delete _outputs;
