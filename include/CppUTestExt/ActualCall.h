@@ -89,7 +89,8 @@ public:
     _returned = true;
 
     const ExpectedCall* pExpectation = TestDouble::findExpectation( *this );
-    _setOutputs( pExpectation );
+    if( ( TestDouble::shouldFailUnexpected() )  &&  ( 0 == pExpectation ) ) _failActual();
+    else _setOutputs( pExpectation );
 
     if( 0 == pExpectation ) return defaultValue;
     else return (T*)(pExpectation->getReturn().asPointer);
