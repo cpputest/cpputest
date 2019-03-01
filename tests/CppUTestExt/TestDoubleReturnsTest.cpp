@@ -51,7 +51,7 @@ TEST( Result, match_bool )
   expectCall("foo").returns(value);
   bool actual = false;
   actual = actualCall("foo").returnBool();
-  LONGS_EQUAL( value, actual );
+  CHECK( value == actual );
 }
 
 TEST( Result, match_char )
@@ -60,7 +60,7 @@ TEST( Result, match_char )
   expectCall("foo").returns(value);
   char actual = 'b';
   actual = actualCall("foo").returnChar();
-  LONGS_EQUAL( value, actual );
+  CHECK( value == actual );
 }
 
 TEST( Result, match_unsigned_char )
@@ -69,7 +69,7 @@ TEST( Result, match_unsigned_char )
   expectCall("foo").returns(value);
   unsigned char actual = 'b';
   actual = actualCall("foo").returnUnsignedChar();
-  LONGS_EQUAL( value, actual );
+  CHECK( value == actual );
 }
 
 TEST( Result, match_int )
@@ -78,7 +78,7 @@ TEST( Result, match_int )
   expectCall("foo").returns(value);
   int actual = 2;
   actual = actualCall("foo").returnInt();
-  LONGS_EQUAL( value, actual );
+  CHECK( value == actual );
 }
 
 TEST( Result, match_unsigned_int )
@@ -87,7 +87,7 @@ TEST( Result, match_unsigned_int )
   expectCall("foo").returns(value);
   unsigned int actual = 2;
   actual = actualCall("foo").returnUnsignedInt();
-  LONGS_EQUAL( value, actual );
+  CHECK( value == actual );
 }
 
 TEST( Result, match_long )
@@ -96,7 +96,7 @@ TEST( Result, match_long )
   expectCall("foo").returns(value);
   long actual = 2;
   actual = actualCall("foo").returnLong();
-  LONGS_EQUAL( value, actual );
+  CHECK( value == actual );
 }
 
 TEST( Result, match_unsigned_long )
@@ -105,7 +105,7 @@ TEST( Result, match_unsigned_long )
   expectCall("foo").returns(value);
   unsigned long actual = 2;
   actual = actualCall("foo").returnUnsignedLong();
-  LONGS_EQUAL( value, actual );
+  CHECK( value == actual );
 }
 
 TEST( Result, match_long_long )
@@ -114,7 +114,7 @@ TEST( Result, match_long_long )
   expectCall("foo").returns(value);
   long long actual = 2;
   actual = actualCall("foo").returnLongLong();
-  LONGLONGS_EQUAL( value, actual );
+  CHECK( value == actual );
 }
 
 TEST( Result, match_unsigned_long_long )
@@ -123,7 +123,7 @@ TEST( Result, match_unsigned_long_long )
   expectCall("foo").returns(value);
   unsigned long long actual = 2;
   actual = actualCall("foo").returnUnsignedLongLong();
-  LONGLONGS_EQUAL( value, actual );
+  CHECK( value == actual );
 }
 
 TEST( Result, match_float )
@@ -132,7 +132,7 @@ TEST( Result, match_float )
   expectCall("foo").returns(value);
   float actual = 2;
   actual = actualCall("foo").returnFloat();
-  LONGLONGS_EQUAL( value, actual );
+  CHECK( value == actual );
 }
 
 TEST( Result, match_double )
@@ -141,17 +141,17 @@ TEST( Result, match_double )
   expectCall("foo").returns(value);
   double actual = 2;
   actual = actualCall("foo").returnDouble();
-  LONGLONGS_EQUAL( value, actual );
+  CHECK( value == actual );
 }
 
 TEST( Result, match_pointer )
 {
   static char values[] = "HELLO";
-  const char* value = values;
-  expectCall("foo").returns(value);
-  char* actual = 0;
-  actual = actualCall("foo").returnPointer<char>();
-  POINTERS_EQUAL( value, actual );
+  const char* pValue = values;
+  expectCall("foo").returns(pValue);
+  char* pActual = 0;
+  pActual = actualCall("foo").returnPointer<char>();
+  CHECK( pValue == pActual );
 }
 
 // FIXME
