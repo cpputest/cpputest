@@ -49,132 +49,120 @@ TEST( Result, match_bool )
 {
   const bool value = true;
   expectCall("foo").returns(value);
-  const bool actual = actualCall("foo").returnBool();
+  bool actual = false;
+  actual = actualCall("foo").returnBool();
   LONGS_EQUAL( value, actual );
 }
 
-// TEST( Result, match_char )
-// {
-//   const char value = 'a';
-//   expectCall("foo").returns(value);
-//   const char actual = actualCall("foo").returnChar();
-//   LONGS_EQUAL( value, actual );
-// }
+TEST( Result, match_char )
+{
+  const char value = 'a';
+  expectCall("foo").returns(value);
+  char actual = 'b';
+  actual = actualCall("foo").returnChar();
+  LONGS_EQUAL( value, actual );
+}
 
-// TEST( Result, match_unsigned_char )
-// {
-//   const unsigned char value = 'a';
-//   expectCall("foo").returns(value);
-//   const unsigned actual = actualCall("foo").returnUnsignedChar();
-//   LONGS_EQUAL( value, actual );
-// }
+TEST( Result, match_unsigned_char )
+{
+  const unsigned char value = 'a';
+  expectCall("foo").returns(value);
+  unsigned char actual = 'b';
+  actual = actualCall("foo").returnUnsignedChar();
+  LONGS_EQUAL( value, actual );
+}
 
-// TEST( Result, match_int )
-// {
-//   const int value = 1;
-//   expectCall("foo").returns(value);
-//   const int actual = actualCall("foo").returnInt();
-//   LONGS_EQUAL( value, actual );
-// }
+TEST( Result, match_int )
+{
+  const int value = 1;
+  expectCall("foo").returns(value);
+  int actual = 2;
+  actual = actualCall("foo").returnInt();
+  LONGS_EQUAL( value, actual );
+}
 
-// TEST( Result, match_unsigned_int )
-// {
-//   const unsigned int value = 1;
-//   expectCall("foo").returns(value);
-//   const unsigned int actual = actualCall("foo").returnUnsignedInt();
-//   LONGS_EQUAL( value, actual );
-// }
+TEST( Result, match_unsigned_int )
+{
+  const unsigned int value = 1;
+  expectCall("foo").returns(value);
+  unsigned int actual = 2;
+  actual = actualCall("foo").returnUnsignedInt();
+  LONGS_EQUAL( value, actual );
+}
 
-// TEST( MatchedOutputParameter, match_long )
-// {
-//   const long value = 1;
-//   expectCall("foo").output("value", value);
-//   long actual = 2;
-//   actualCall("foo").output("value", &actual).returns();
-//   LONGS_EQUAL( value, actual );
-// }
+TEST( Result, match_long )
+{
+  const long value = 1;
+  expectCall("foo").returns(value);
+  long actual = 2;
+  actual = actualCall("foo").returnLong();
+  LONGS_EQUAL( value, actual );
+}
 
-// TEST( MatchedOutputParameter, match_unsigned_long )
-// {
-//   const unsigned long value = 1;
-//   expectCall("foo").output("value", value);
-//   unsigned long actual = 2;
-//   actualCall("foo").output("value", &actual).returns();
-//   LONGS_EQUAL( value, actual );
-// }
+TEST( Result, match_unsigned_long )
+{
+  const unsigned long value = 1;
+  expectCall("foo").returns(value);
+  unsigned long actual = 2;
+  actual = actualCall("foo").returnUnsignedLong();
+  LONGS_EQUAL( value, actual );
+}
 
-// TEST( MatchedOutputParameter, match_long_long )
-// {
-//   const long long value = 1;
-//   expectCall("foo").output("value", value);
-//   long long actual = 2;
-//   actualCall("foo").output("value", &actual).returns();
-//   LONGS_EQUAL( value, actual );
-// }
+TEST( Result, match_long_long )
+{
+  const long long value = 1;
+  expectCall("foo").returns(value);
+  long long actual = 2;
+  actual = actualCall("foo").returnLongLong();
+  LONGLONGS_EQUAL( value, actual );
+}
 
-// TEST( MatchedOutputParameter, match_unsigned_long_long )
-// {
-//   const unsigned long long value = 1;
-//   expectCall("foo").output("value", value);
-//   unsigned long long actual = 2;
-//   actualCall("foo").output("value", &actual).returns();
-//   LONGS_EQUAL( value, actual );
-// }
+TEST( Result, match_unsigned_long_long )
+{
+  const unsigned long long value = 1;
+  expectCall("foo").returns(value);
+  unsigned long long actual = 2;
+  actual = actualCall("foo").returnUnsignedLongLong();
+  LONGLONGS_EQUAL( value, actual );
+}
 
-// TEST( MatchedOutputParameter, match_float )
-// {
-//   const float value = 1.1f;
-//   expectCall("foo").output("value", value);
-//   float actual = 2.2f;
-//   actualCall("foo").output("value", &actual).returns();
-//   CHECK( value == actual );
-// }
+TEST( Result, match_float )
+{
+  const float value = 1;
+  expectCall("foo").returns(value);
+  float actual = 2;
+  actual = actualCall("foo").returnFloat();
+  LONGLONGS_EQUAL( value, actual );
+}
 
-// TEST( MatchedOutputParameter, match_double )
-// {
-//   const double value = 1.1;
-//   expectCall("foo").output("value", value);
-//   double actual = 2.2;
-//   actualCall("foo").output("value", &actual).returns();
-//   CHECK( value == actual );
-// }
+TEST( Result, match_double )
+{
+  const double value = 1;
+  expectCall("foo").returns(value);
+  double actual = 2;
+  actual = actualCall("foo").returnDouble();
+  LONGLONGS_EQUAL( value, actual );
+}
 
-// TEST( MatchedOutputParameter, match_pointer )
-// {
-//   static char values[] = "HELLO";
-//   char* pValue = values;
-//   expectCall("foo").output("value", pValue);
-//   char* pActual = 0;
-//   actualCall("foo").output("value", &pActual).returns();
-//   POINTERS_EQUAL( pValue, pActual );
-// }
+TEST( Result, match_pointer )
+{
+  static char values[] = "HELLO";
+  const char* value = values;
+  expectCall("foo").returns(value);
+  char* actual = 0;
+  actual = actualCall("foo").returnPointer<char>();
+  POINTERS_EQUAL( value, actual );
+}
 
-// TEST( MatchedOutputParameter, match_const_pointer )
-// {
-//   const char values[] = "HELLO";
-//   const char* pValue = values;
-//   expectCall("foo").output("value", pValue);
-//   const char* pActual = 0;
-//   actualCall("foo").output("value", &pActual).returns();
-//   POINTERS_EQUAL( pValue, pActual );
-// }
-
+// FIXME
 // typedef void (*fn_t)();
 // static fn_t fn { };
-// TEST( MatchedOutputParameter, match_fn )
+// TEST( Result, match_fn )
 // {
-//   expectCall("foo").output("value", fn);
+//   expectCall("foo").returns(fn);
 //   fn_t pActual = 0;
-//   actualCall("foo").output("value", &pActual).returns();
+//   pActual = actualCall("foo").returnPointer<fn_t>();
 //   POINTERS_EQUAL( fn, pActual );
 // }
 
-// TEST( MatchedOutputParameter, match_static_buffer )
-// {
-//   char values[6] = "HELLO";
-//   expectCall("foo").outputBuffer("value", values, sizeof(values));
-//   char actuals[6] = "UHTOH";
-//   actualCall("foo").outputBuffer("value", actuals, sizeof(actuals)).returns();
-//   MEMCMP_EQUAL( values, actuals, sizeof(values) );
-// }
 

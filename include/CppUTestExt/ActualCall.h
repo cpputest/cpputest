@@ -83,8 +83,17 @@ public:
 
   //  return based methods invoke matched expectation (or else do nothing and return 0)
   
-  void(*returnFunctionPointer())();   ///< FIXME provide a default value for a function pointer void* returnPointer( void* defaultValue=0 );
-  void* returnPointer( const void* defaultValue=0 );
+  template<typename T>
+  T* returnPointer( T* const defaultValue=0 )
+  {
+    _returned = true;
+
+    const ExpectedCall* pExpectation = TestDouble::findExpectation( *this );
+    if( 0 == pExpectation ) return defaultValue;
+
+    _setOutputs( pExpectation );
+    return (T*)(pExpectation->getReturn().asPointer);
+  }
   const void* returnConstPointer( const void* defaultValue=0 );
   char returnChar( char defaultValue=true );
   unsigned char returnUnsignedChar( unsigned char defaultValue=true );
