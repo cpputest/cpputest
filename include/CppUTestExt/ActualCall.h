@@ -84,7 +84,7 @@ public:
   //  return based methods invoke matched expectation (or else do nothing and return 0)
   
   template<typename T>
-  T* returnPointer( T* const defaultValue=0 )
+  T* returnPointer( const T* const defaultValue=0 )
   {
     _returned = true;
 
@@ -92,7 +92,7 @@ public:
     if( ( TestDouble::shouldFailUnexpected() )  &&  ( 0 == pExpectation ) ) _failActual();
     else _setOutputs( pExpectation );
 
-    if( 0 == pExpectation ) return defaultValue;
+    if( 0 == pExpectation ) return (T*)defaultValue;
     else return (T*)(pExpectation->getReturn().asPointer);
   }
   char returnChar( char defaultValue=true );

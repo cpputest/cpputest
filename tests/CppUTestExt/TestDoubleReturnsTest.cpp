@@ -269,23 +269,21 @@ TEST( ResultDefault, match_double )
   CHECK( value == actual );
 }
 
-// FIXME
-// TEST( ResultDefault, match_pointer )
-// {
-//   static char values[] = "HELLO";
-//   const char* pValue = values;
-//   char* pActual = 0;
-//   pActual = actualCall("foo").returnPointer<char>(pValue);
-//   CHECK( pValue == pActual );
-// }
+TEST( ResultDefault, match_pointer )
+{
+  static char values[] = "HELLO";
+  const char* pValue = values;
+  char* pActual = 0;
+  pActual = actualCall("foo").returnPointer<char>(pValue);
+  CHECK( pValue == pActual );
+}
 
-// FIXME
-// TEST( ResultDefault, match_fn )
-// {
-//   fn_t pActual = 0;
-//   pActual = (fn_t)actualCall("foo").returnPointer<void>(fn);
-//   POINTERS_EQUAL( fn, pActual );
-// }
+TEST( ResultDefault, match_fn )
+{
+  fn_t pActual = 0;
+  pActual = (fn_t)actualCall("foo").returnPointer<void>((void*)fn);
+  POINTERS_EQUAL( fn, pActual );
+}
 
 
 
