@@ -295,7 +295,7 @@ static void mismatch_size( void )
   char values[1];
   expectCall("foo").outputBuffer("value", values, sizeof(values));
   char actuals[2];
-  actualCall("foo").outputBuffer("value", actuals, sizeof(actuals)).returns(); ///< returns used here to set outputs immediately
+  actualCall("foo").outputBuffer("value", actuals, sizeof(actuals));
 }
 TEST( TestDoubleOutputsFailures, mismatch_size_fails )
 {

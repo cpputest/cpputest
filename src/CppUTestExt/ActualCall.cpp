@@ -32,24 +32,24 @@
 
 ActualCall::~ActualCall()
 {
-  if( false == _returned ) _setOutputs();
+  if( false == _hasSetOutputs ) _setOutputs();
 
   delete _parameters;
   delete _outputs;
+
+  if( false == _hasFailed.isEmpty() )
+  {
+    _failActual();
+  }
 }
 
-void ActualCall::returns()
-{
-  _returned = true;
-  _setOutputs();
-}
-  
 const ExpectedCall* ActualCall::_setOutputs()
 {
-  const ExpectedCall* pExpectation = TestDouble::findExpectation( *this );
-  if( ( TestDouble::shouldFailUnexpected() )  &&  ( 0 == pExpectation ) ) _failActual();
+  _hasSetOutputs = true;
 
-  for( const TestDouble::ParameterChain* pActualEntry=getOutputs(); 0 != pActualEntry; pActualEntry = pActualEntry->pNext )
+  const ExpectedCall* pExpectation = TestDouble::findExpectation( *this );
+  if( ( TestDouble::shouldFailUnexpected() )  &&  ( 0 == pExpectation ) ) _hasFailed = "unexpected call";
+  else for( const TestDouble::ParameterChain* pActualEntry=getOutputs(); 0 != pActualEntry; pActualEntry = pActualEntry->pNext )
   {
     bool used = false;
     // set outputs
@@ -62,10 +62,7 @@ const ExpectedCall* ActualCall::_setOutputs()
           if( false == pActualEntry->pParameter->setValue( pExpectedEntry->pParameter ) )
           {
               // TODO format a usable message
-              SimpleString failureMessage = "unmet actual";
-              UtestShell* const pShell = UtestShell::getCurrent();
-              TestFailure failure( pShell, pShell->getFile().asCharString(), pShell->getLineNumber(), failureMessage );
-              pShell->failWith( failure );
+              _hasFailed = "mismatch output size";
           }
           used = true;
           break;  ///< only use the first expectation of a parameter
@@ -80,8 +77,6 @@ const ExpectedCall* ActualCall::_setOutputs()
 
 bool ActualCall::returnBool( bool defaultValue )
 {
-  _returned = true;
-
   const ExpectedCall* pExpectation = _setOutputs();
 
   if( 0 == pExpectation ) return defaultValue;
@@ -90,8 +85,6 @@ bool ActualCall::returnBool( bool defaultValue )
 
 char ActualCall::returnChar( char defaultValue )
 {
-  _returned = true;
-
   const ExpectedCall* pExpectation = _setOutputs();
 
   if( 0 == pExpectation ) return defaultValue;
@@ -100,8 +93,6 @@ char ActualCall::returnChar( char defaultValue )
 
 unsigned char ActualCall::returnUnsignedChar( unsigned char defaultValue )
 {
-  _returned = true;
-
   const ExpectedCall* pExpectation = _setOutputs();
 
   if( 0 == pExpectation ) return defaultValue;
@@ -110,8 +101,6 @@ unsigned char ActualCall::returnUnsignedChar( unsigned char defaultValue )
 
 int ActualCall::returnInt( int defaultValue )
 {
-  _returned = true;
-
   const ExpectedCall* pExpectation = _setOutputs();
 
   if( 0 == pExpectation ) return defaultValue;
@@ -120,8 +109,6 @@ int ActualCall::returnInt( int defaultValue )
 
 unsigned int ActualCall::returnUnsignedInt( unsigned int defaultValue )
 {
-  _returned = true;
-
   const ExpectedCall* pExpectation = _setOutputs();
 
   if( 0 == pExpectation ) return defaultValue;
@@ -130,8 +117,6 @@ unsigned int ActualCall::returnUnsignedInt( unsigned int defaultValue )
 
 long ActualCall::returnLong( long defaultValue )
 {
-  _returned = true;
-
   const ExpectedCall* pExpectation = _setOutputs();
 
   if( 0 == pExpectation ) return defaultValue;
@@ -140,8 +125,6 @@ long ActualCall::returnLong( long defaultValue )
 
 unsigned long ActualCall::returnUnsignedLong( unsigned long defaultValue )
 {
-  _returned = true;
-
   const ExpectedCall* pExpectation = _setOutputs();
 
   if( 0 == pExpectation ) return defaultValue;
@@ -150,8 +133,6 @@ unsigned long ActualCall::returnUnsignedLong( unsigned long defaultValue )
 
 long long ActualCall::returnLongLong( long long defaultValue )
 {
-  _returned = true;
-
   const ExpectedCall* pExpectation = _setOutputs();
 
   if( 0 == pExpectation ) return defaultValue;
@@ -160,8 +141,6 @@ long long ActualCall::returnLongLong( long long defaultValue )
 
 unsigned long long ActualCall::returnUnsignedLongLong( unsigned long long defaultValue )
 {
-  _returned = true;
-
   const ExpectedCall* pExpectation = _setOutputs();
 
   if( 0 == pExpectation ) return defaultValue;
@@ -170,8 +149,6 @@ unsigned long long ActualCall::returnUnsignedLongLong( unsigned long long defaul
 
 float ActualCall::returnFloat( float defaultValue )
 {
-  _returned = true;
-
   const ExpectedCall* pExpectation = _setOutputs();
 
   if( 0 == pExpectation ) return defaultValue;
@@ -180,8 +157,6 @@ float ActualCall::returnFloat( float defaultValue )
 
 double ActualCall::returnDouble( double defaultValue )
 {
-  _returned = true;
-
   const ExpectedCall* pExpectation = _setOutputs();
 
   if( 0 == pExpectation ) return defaultValue;

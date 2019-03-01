@@ -79,13 +79,11 @@ public:
   }
 
   /// sets outputs
-  void returns();
+  void returns() { _setOutputs(); }
 
   template<typename T>
   T* returnPointer( const T* const defaultValue=0 )
   {
-    _returned = true;
-
     const ExpectedCall* pExpectation = _setOutputs();
 
     if( 0 == pExpectation ) return const_cast<T*>(defaultValue);
@@ -109,8 +107,9 @@ public:
 private:
   TestDouble::ParameterChain*     _parameters = 0;
   TestDouble::ParameterChain*     _outputs = 0;
-  bool  _returned = false;
+  bool  _hasSetOutputs = false;
   const ExpectedCall* _setOutputs();
+  SimpleString _hasFailed;
   void _failActual();
 
 };  // class ActualCall
