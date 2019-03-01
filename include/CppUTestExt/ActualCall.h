@@ -92,8 +92,8 @@ public:
     if( ( TestDouble::shouldFailUnexpected() )  &&  ( 0 == pExpectation ) ) _failActual();
     else _setOutputs( pExpectation );
 
-    if( 0 == pExpectation ) return (T*)defaultValue;
-    else return (T*)(pExpectation->getReturn().asPointer);
+    if( 0 == pExpectation ) return const_cast<T*>(defaultValue);
+    else return static_cast<T*>(pExpectation->getReturn().asPointer);
   }
   char returnChar( char defaultValue=true );
   unsigned char returnUnsignedChar( unsigned char defaultValue=true );
