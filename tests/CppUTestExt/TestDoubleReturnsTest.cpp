@@ -41,6 +41,7 @@ TEST_GROUP( Result )
 
   TEST_TEARDOWN()
   {
+    // clear any expectations resources
     checkExpectations();
   }
 };
@@ -163,5 +164,128 @@ TEST( Result, match_fn )
   pActual = (fn_t)actualCall("foo").returnPointer<void>();
   POINTERS_EQUAL( fn, pActual );
 }
+
+//======================================================================================================================
+TEST_GROUP( ResultDefault )
+{
+  TEST_SETUP()
+  {
+    // clear any expectations
+    checkExpectations();
+  }
+
+  TEST_TEARDOWN()
+  {
+    // clear any expectations resources
+    checkExpectations();
+  }
+};
+
+TEST( ResultDefault, match_bool )
+{
+  const bool value = true;
+  bool actual = false;
+  actual = actualCall("foo").returnBool(value);
+  CHECK( value == actual );
+}
+
+TEST( ResultDefault, match_char )
+{
+  const char value = 'a';
+  char actual = 'b';
+  actual = actualCall("foo").returnChar(value);
+  CHECK( value == actual );
+}
+
+TEST( ResultDefault, match_unsigned_char )
+{
+  const unsigned char value = 'a';
+  unsigned char actual = 'b';
+  actual = actualCall("foo").returnUnsignedChar(value);
+  CHECK( value == actual );
+}
+
+TEST( ResultDefault, match_int )
+{
+  const int value = 1;
+  int actual = 2;
+  actual = actualCall("foo").returnInt(value);
+  CHECK( value == actual );
+}
+
+TEST( ResultDefault, match_unsigned_int )
+{
+  const unsigned int value = 1;
+  unsigned int actual = 2;
+  actual = actualCall("foo").returnUnsignedInt(value);
+  CHECK( value == actual );
+}
+
+TEST( ResultDefault, match_long )
+{
+  const long value = 1;
+  long actual = 2;
+  actual = actualCall("foo").returnLong(value);
+  CHECK( value == actual );
+}
+
+TEST( ResultDefault, match_unsigned_long )
+{
+  const unsigned long value = 1;
+  unsigned long actual = 2;
+  actual = actualCall("foo").returnUnsignedLong(value);
+  CHECK( value == actual );
+}
+
+TEST( ResultDefault, match_long_long )
+{
+  const long long value = 1;
+  long long actual = 2;
+  actual = actualCall("foo").returnLongLong(value);
+  CHECK( value == actual );
+}
+
+TEST( ResultDefault, match_unsigned_long_long )
+{
+  const unsigned long long value = 1;
+  unsigned long long actual = 2;
+  actual = actualCall("foo").returnUnsignedLongLong(value);
+  CHECK( value == actual );
+}
+
+TEST( ResultDefault, match_float )
+{
+  const float value = 1;
+  float actual = 2;
+  actual = actualCall("foo").returnFloat(value);
+  CHECK( value == actual );
+}
+
+TEST( ResultDefault, match_double )
+{
+  const double value = 1;
+  double actual = 2;
+  actual = actualCall("foo").returnDouble(value);
+  CHECK( value == actual );
+}
+
+// FIXME
+// TEST( ResultDefault, match_pointer )
+// {
+//   static char values[] = "HELLO";
+//   const char* pValue = values;
+//   char* pActual = 0;
+//   pActual = actualCall("foo").returnPointer<char>(pValue);
+//   CHECK( pValue == pActual );
+// }
+
+// FIXME
+// TEST( ResultDefault, match_fn )
+// {
+//   fn_t pActual = 0;
+//   pActual = (fn_t)actualCall("foo").returnPointer<void>(fn);
+//   POINTERS_EQUAL( fn, pActual );
+// }
+
 
 

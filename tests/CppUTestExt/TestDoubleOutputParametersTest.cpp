@@ -42,6 +42,7 @@ TEST_GROUP( MatchedOutputParameter )
 
   TEST_TEARDOWN()
   {
+    // clear any expectations resources
     checkExpectations();
   }
 };
@@ -195,6 +196,7 @@ TEST_GROUP( ActualDefaults )
 
   TEST_TEARDOWN()
   {
+    // clear any expectations resources
     checkExpectations();
   }
 };
@@ -235,6 +237,7 @@ TEST_GROUP( TestDoubleOutputsFailures )
 
   TEST_TEARDOWN()
   {
+    // clear any expectations resources
     checkExpectations();
     CHECK( fixture.hasTestFailed() );
   }

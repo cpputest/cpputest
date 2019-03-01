@@ -71,6 +71,7 @@ TEST_GROUP( IgnoreUnmatchedActual )
 
   TEST_TEARDOWN()
   {
+    // clear any expectations resources
     checkExpectations();
   }
 };
@@ -93,6 +94,7 @@ TEST_GROUP( TestDoubleFailures )
 
   TEST_TEARDOWN()
   {
+    // clear any expectations resources
     checkExpectations();
     CHECK( fixture.hasTestFailed() );
   }

@@ -44,6 +44,7 @@ TEST_GROUP( MatchedParameter )
 
   TEST_TEARDOWN()
   {
+    // clear any expectations resources
     checkExpectations();
   }
 };
@@ -167,6 +168,7 @@ TEST_GROUP( UnmatchedParameter )
 
   TEST_TEARDOWN()
   {
+    // clear any expectations resources
     checkExpectations();
   }
 };
