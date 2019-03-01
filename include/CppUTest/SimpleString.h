@@ -93,6 +93,7 @@ public:
     static void setStringAllocator(TestMemoryAllocator* allocator);
 
     static int AtoI(const char*str);
+    static unsigned AtoU(const char*str);
     static int StrCmp(const char* s1, const char* s2);
     static size_t StrLen(const char*);
     static int StrNCmp(const char* s1, const char* s2, size_t n);

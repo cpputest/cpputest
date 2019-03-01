@@ -47,6 +47,7 @@ public:
     bool isListingTestGroupAndCaseNames() const;
     bool isRunIgnored() const;
     int getRepeatCount() const;
+    unsigned int getShuffle() const;
     const TestFilter* getGroupFilters() const;
     const TestFilter* getNameFilters() const;
     bool isJUnitOutput() const;
@@ -72,6 +73,7 @@ private:
     bool listTestGroupAndCaseNames_;
     bool runIgnored_;
     int repeat_;
+    unsigned int shuffle_;
     TestFilter* groupFilters_;
     TestFilter* nameFilters_;
     OutputType outputType_;
@@ -79,6 +81,7 @@ private:
 
     SimpleString getParameterField(int ac, const char *const *av, int& i, const SimpleString& parameterName);
     void SetRepeatCount(int ac, const char *const *av, int& index);
+    bool SetShuffle(int ac, const char *const *av, int& index);
     void AddGroupFilter(int ac, const char *const *av, int& index);
     void AddStrictGroupFilter(int ac, const char *const *av, int& index);
     void AddExcludeGroupFilter(int ac, const char *const *av, int& index);

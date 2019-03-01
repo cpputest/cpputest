@@ -62,6 +62,20 @@ char* SimpleString::getEmptyString() const
     return empty;
 }
 
+// does not support + or - prefixes
+unsigned SimpleString::AtoU(const char* str)
+{
+    while (isSpace(*str)) str++;
+
+    unsigned result = 0;
+    for(; isDigit(*str) && *str >= '0'; str++)
+    {
+        result *= 10;
+        result += static_cast<unsigned>(*str - '0');
+    }
+    return result;
+}
+
 int SimpleString::AtoI(const char* str)
 {
     while (isSpace(*str)) str++;

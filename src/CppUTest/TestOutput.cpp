@@ -24,7 +24,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
+#include "CppUTest/Shuffle.h"
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TestOutput.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
@@ -45,7 +45,7 @@ TestOutput::WorkingEnvironment TestOutput::getWorkingEnvironment()
 
 
 TestOutput::TestOutput() :
-    dotCount_(0), verbose_(false), color_(false), progressIndication_(".")
+    dotCount_(0), verbose_(false), color_(false), shuffleSeed_(SHUFFLE_DISABLED), progressIndication_(".")
 {
 }
 
@@ -61,6 +61,11 @@ void TestOutput::verbose()
 void TestOutput::color()
 {
     color_ = true;
+}
+
+void TestOutput::setShuffleSeed(unsigned int shuffleSeed)
+{
+    shuffleSeed_ = shuffleSeed;
 }
 
 void TestOutput::print(const char* str)
@@ -140,7 +145,8 @@ void TestOutput::printCurrentGroupEnded(const TestResult& /*res*/)
 void TestOutput::printTestsEnded(const TestResult& result)
 {
     print("\n");
-    if (result.getFailureCount() > 0) {
+    const bool anyTestFailed = result.getFailureCount() > 0;
+    if (anyTestFailed) {
         if (color_) {
             print("\033[31;1m");
         }
@@ -164,6 +170,11 @@ void TestOutput::printTestsEnded(const TestResult& result)
     print(" ignored, ");
     print(result.getFilteredOutCount());
     print(" filtered out, ");
+    if (shuffleSeed_ != SHUFFLE_DISABLED && (verbose_ || anyTestFailed)) {
+        print("shuffle seed was: ");
+        print(shuffleSeed_);
+        print(", ");
+    }
     print(result.getTotalExecutionTime());
     print(" ms)");
     if (color_) {

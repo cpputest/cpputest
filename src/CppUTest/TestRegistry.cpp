@@ -227,6 +227,34 @@ UtestShell* TestRegistry::getFirstTest()
     return tests_;
 }
 
+
+void TestRegistry::shuffleRunOrder(rand_func_t rand_func)
+{
+    if (getFirstTest() == NULLPTR)
+    {
+        return;
+    }
+    int numTests = getFirstTest()->countTests();
+    typedef UtestShell* listElem;
+    listElem* tests = new listElem[numTests];
+    UtestShell *test = getFirstTest();
+    for (int testsIdx = 0; testsIdx < numTests; ++testsIdx)
+    {
+        tests[testsIdx] = test;
+        test = test->getNext();
+    }
+    shuffle_list(rand_func, numTests, reinterpret_cast<void**>(tests));
+
+    // Store shuffled list back to linked list
+    UtestShell *prev = NULLPTR;
+    for (int i = 0; i < numTests; ++i)
+    {
+        prev = tests[numTests - 1 - i]->addTest(prev);
+    }
+    tests_ = prev;
+    delete[] tests;
+}
+
 UtestShell* TestRegistry::getTestWithNext(UtestShell* test)
 {
     UtestShell* current = tests_;

@@ -35,6 +35,7 @@
 
 #include "SimpleString.h"
 #include "TestFilter.h"
+#include "Shuffle.h"
 
 class UtestShell;
 class TestResult;
@@ -50,6 +51,7 @@ public:
     virtual void unDoLastAddTest();
     virtual int countTests();
     virtual void runAllTests(TestResult& result);
+    virtual void shuffleRunOrder(rand_func_t);
     virtual void listTestGroupNames(TestResult& result);
     virtual void listTestGroupAndCaseNames(TestResult& result);
     virtual void setNameFilters(const TestFilter* filters);
