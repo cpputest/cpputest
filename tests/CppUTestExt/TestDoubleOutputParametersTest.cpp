@@ -49,7 +49,7 @@ TEST_GROUP( MatchedOutputParameter )
 
 TEST( MatchedOutputParameter, match_bool )
 {
-  const bool value = true;
+  const bool value = false;
   expectCall("foo").output("value", value);
   bool actual = !value;
   actualCall("foo").output("value", &actual).returns();
@@ -76,54 +76,54 @@ TEST( MatchedOutputParameter, match_unsigned_char )
 
 TEST( MatchedOutputParameter, match_int )
 {
-  const int value = 1;
+  const int value = 0;    ///< don't use 1 as default actual produces true == 1
   expectCall("foo").output("value", value);
-  int actual = 2;
+  int actual = value + 1;
   actualCall("foo").output("value", &actual).returns();
   CHECK( value == actual );
 }
 
 TEST( MatchedOutputParameter, match_unsigned_int )
 {
-  const unsigned int value = 1;
+  const unsigned int value = 0;    ///< don't use 1 as default actual produces true == 1
   expectCall("foo").output("value", value);
-  unsigned int actual = 2;
+  unsigned int actual = value + 1;
   actualCall("foo").output("value", &actual).returns();
   CHECK( value == actual );
 }
 
 TEST( MatchedOutputParameter, match_long )
 {
-  const long value = 1;
+  const long value = 0;    ///< don't use 1 as default actual produces true == 1
   expectCall("foo").output("value", value);
-  long actual = 2;
+  long actual = value + 1;
   actualCall("foo").output("value", &actual).returns();
   CHECK( value == actual );
 }
 
 TEST( MatchedOutputParameter, match_unsigned_long )
 {
-  const unsigned long value = 1;
+  const unsigned long value = 0;    ///< don't use 1 as default actual produces true == 1
   expectCall("foo").output("value", value);
-  unsigned long actual = 2;
+  unsigned long actual = value + 1;
   actualCall("foo").output("value", &actual).returns();
   CHECK( value == actual );
 }
 
 TEST( MatchedOutputParameter, match_long_long )
 {
-  const long long value = 1;
+  const long long value = 0;    ///< don't use 1 as default actual produces true == 1
   expectCall("foo").output("value", value);
-  long long actual = 2;
+  long long actual = value + 1;
   actualCall("foo").output("value", &actual).returns();
   CHECK( value == actual );
 }
 
 TEST( MatchedOutputParameter, match_unsigned_long_long )
 {
-  const unsigned long long value = 1;
+  const unsigned long long value = 0;    ///< don't use 1 as default actual produces true == 1
   expectCall("foo").output("value", value);
-  unsigned long long actual = 2;
+  unsigned long long actual = value + 1;
   actualCall("foo").output("value", &actual).returns();
   CHECK( value == actual );
 }
@@ -192,8 +192,8 @@ static void foo( const int& value, int& actual )
 }
 TEST( MatchedOutputParameter, actualcall_destructor_sets_outputs )
 {
-  const int value = -1;
-  int actual = 0;
+  const int value = 0;    ///< don't use 1 as default actual produces true == 1
+  int actual = value + 1;
   foo( value, actual );
   CHECK( value == actual );
 }
@@ -223,7 +223,7 @@ TEST( ActualDefaults, unexpected_without_default_is_true )
 
 TEST( ActualDefaults, unexpected_with_default )
 {
-  int actual = 0;
+  int actual = 0;   ///< don't use 1 as default actual produces true == 1
   const int defaultValue = 2;
   actualCall("foo").output("value", &actual, defaultValue).returns();
   CHECK( defaultValue == actual );
