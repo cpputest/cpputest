@@ -52,7 +52,7 @@ TEST( MatchedOutputParameter, match_bool )
   expectCall("foo").output("value", value);
   bool actual = !value;
   actualCall("foo").output("value", &actual).returns();
-  LONGS_EQUAL( value, actual );
+  CHECK( value == actual );
 }
 
 TEST( MatchedOutputParameter, match_char )
@@ -61,7 +61,7 @@ TEST( MatchedOutputParameter, match_char )
   expectCall("foo").output("value", value);
   char actual = 'b';
   actualCall("foo").output("value", &actual).returns();
-  LONGS_EQUAL( value, actual );
+  CHECK( value == actual );
 }
 
 TEST( MatchedOutputParameter, match_unsigned_char )
@@ -70,7 +70,7 @@ TEST( MatchedOutputParameter, match_unsigned_char )
   expectCall("foo").output("value", value);
   unsigned char actual = 'b';
   actualCall("foo").output("value", &actual).returns();
-  LONGS_EQUAL( value, actual );
+  CHECK( value == actual );
 }
 
 TEST( MatchedOutputParameter, match_int )
@@ -79,7 +79,7 @@ TEST( MatchedOutputParameter, match_int )
   expectCall("foo").output("value", value);
   int actual = 2;
   actualCall("foo").output("value", &actual).returns();
-  LONGS_EQUAL( value, actual );
+  CHECK( value == actual );
 }
 
 TEST( MatchedOutputParameter, match_unsigned_int )
@@ -88,7 +88,7 @@ TEST( MatchedOutputParameter, match_unsigned_int )
   expectCall("foo").output("value", value);
   unsigned int actual = 2;
   actualCall("foo").output("value", &actual).returns();
-  LONGS_EQUAL( value, actual );
+  CHECK( value == actual );
 }
 
 TEST( MatchedOutputParameter, match_long )
@@ -97,7 +97,7 @@ TEST( MatchedOutputParameter, match_long )
   expectCall("foo").output("value", value);
   long actual = 2;
   actualCall("foo").output("value", &actual).returns();
-  LONGS_EQUAL( value, actual );
+  CHECK( value == actual );
 }
 
 TEST( MatchedOutputParameter, match_unsigned_long )
@@ -106,7 +106,7 @@ TEST( MatchedOutputParameter, match_unsigned_long )
   expectCall("foo").output("value", value);
   unsigned long actual = 2;
   actualCall("foo").output("value", &actual).returns();
-  LONGS_EQUAL( value, actual );
+  CHECK( value == actual );
 }
 
 TEST( MatchedOutputParameter, match_long_long )
@@ -115,7 +115,7 @@ TEST( MatchedOutputParameter, match_long_long )
   expectCall("foo").output("value", value);
   long long actual = 2;
   actualCall("foo").output("value", &actual).returns();
-  LONGS_EQUAL( value, actual );
+  CHECK( value == actual );
 }
 
 TEST( MatchedOutputParameter, match_unsigned_long_long )
@@ -124,7 +124,7 @@ TEST( MatchedOutputParameter, match_unsigned_long_long )
   expectCall("foo").output("value", value);
   unsigned long long actual = 2;
   actualCall("foo").output("value", &actual).returns();
-  LONGS_EQUAL( value, actual );
+  CHECK( value == actual );
 }
 
 TEST( MatchedOutputParameter, match_float )
@@ -152,7 +152,7 @@ TEST( MatchedOutputParameter, match_pointer )
   expectCall("foo").output("value", pValue);
   char* pActual = 0;
   actualCall("foo").output("value", &pActual).returns();
-  POINTERS_EQUAL( pValue, pActual );
+  CHECK( pValue == pActual );
 }
 
 TEST( MatchedOutputParameter, match_const_pointer )
@@ -162,7 +162,7 @@ TEST( MatchedOutputParameter, match_const_pointer )
   expectCall("foo").output("value", pValue);
   const char* pActual = 0;
   actualCall("foo").output("value", &pActual).returns();
-  POINTERS_EQUAL( pValue, pActual );
+  CHECK( pValue == pActual );
 }
 
 typedef void (*fn_t)();
@@ -172,7 +172,7 @@ TEST( MatchedOutputParameter, match_fn )
   expectCall("foo").output("value", fn);
   fn_t pActual = 0;
   actualCall("foo").output("value", &pActual).returns();
-  POINTERS_EQUAL( fn, pActual );
+  CHECK( fn == pActual );
 }
 
 TEST( MatchedOutputParameter, match_static_buffer )
@@ -211,7 +211,7 @@ TEST( ActualDefaults, unexpected_with_default )
   int actual = 0;
   const int defaultValue = 2;
   actualCall("foo").output("value", &actual, defaultValue).returns();
-  LONGS_EQUAL( defaultValue, actual );
+  CHECK( defaultValue == actual );
 }
 
 TEST( ActualDefaults, unexpected_buffer_with_default )
