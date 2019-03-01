@@ -154,15 +154,14 @@ TEST( Result, match_pointer )
   CHECK( pValue == pActual );
 }
 
-// FIXME
-// typedef void (*fn_t)();
-// static fn_t fn { };
-// TEST( Result, match_fn )
-// {
-//   expectCall("foo").returns(fn);
-//   fn_t pActual = 0;
-//   pActual = actualCall("foo").returnPointer<fn_t>();
-//   POINTERS_EQUAL( fn, pActual );
-// }
+typedef void (*fn_t)();
+static fn_t fn { };
+TEST( Result, match_fn )
+{
+  expectCall("foo").returns(fn);
+  fn_t pActual = 0;
+  pActual = (fn_t)actualCall("foo").returnPointer<void>();
+  POINTERS_EQUAL( fn, pActual );
+}
 
 
