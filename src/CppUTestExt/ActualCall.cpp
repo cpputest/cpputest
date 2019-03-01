@@ -30,19 +30,6 @@
 #include "CppUTestExt/ExpectCall.h"
 #include "CppUTest/Utest.h"
 
-ActualCall::~ActualCall()
-{
-  if( false == _hasSetOutputs ) _setOutputs();
-
-  delete _parameters;
-  delete _outputs;
-
-  if( false == _failureMessage.isEmpty() )
-  {
-    _failActual();
-  }
-}
-
 const ExpectedCall* ActualCall::_setOutputs()
 {
   _hasSetOutputs = true;
@@ -165,18 +152,46 @@ double ActualCall::returnDouble( double defaultValue )
   else return pExpectation->getReturn().asDouble;
 }
 
-
-
-
-void ActualCall::_failActual()
+ActualCall::~ActualCall()
 {
-  SimpleString failureMessage = _failureMessage;
+  if( false == _hasSetOutputs ) _setOutputs();
 
-  UtestShell* const pShell = UtestShell::getCurrent();
-  TestFailure failure( pShell, pShell->getFile().asCharString(), pShell->getLineNumber(), failureMessage );
-  TestTerminatorWithoutExceptions terminator;
-  pShell->failWith( failure, terminator );
+  if( false == _failureMessage.isEmpty() )
+  {
+    _failureMessage += "\n";
+    _failureMessage += StringFromFormat( "\tactual call %s(\n", name.asCharString() );
+    _failureMessage += "\tINPUTS:\n";
+    for( const TestDouble::ParameterChain* pEntry = getParameters(); 0 != pEntry; pEntry = pEntry->pNext )
+    {
+      _failureMessage += "\t\t";
+      // _failureMessage += pEntry->pParameter->toString();
+      _failureMessage += "\n";
+    }
+    _failureMessage += "\tOUTPUTS:\n";
+    for( const TestDouble::ParameterChain* pEntry = getOutputs(); 0 != pEntry; pEntry = pEntry->pNext )
+    {
+      _failureMessage += "\t\t";
+      // _failureMessage += pEntry->pParameter->toString();
+      _failureMessage += "\n";
+    }
+    _failureMessage += ")\n";
+  }
+
+  delete _parameters;
+  delete _outputs;
+
+  if( false == _failureMessage.isEmpty() )
+  {
+    UtestShell* const pShell = UtestShell::getCurrent();
+    TestFailure failure( pShell, pShell->getFile().asCharString(), pShell->getLineNumber(), _failureMessage );
+    TestTerminatorWithoutExceptions terminator;
+    pShell->failWith( failure, terminator );
+  }
 }
+
+
+
+
 
 // ActualCall& ActualCall::with( const SimpleString& _name, const void* const buffer, const std::size_t& size )
 // {

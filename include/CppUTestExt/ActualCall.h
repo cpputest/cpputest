@@ -110,7 +110,6 @@ private:
   bool  _hasSetOutputs = false;
   const ExpectedCall* _setOutputs();
   SimpleString _failureMessage;
-  void _failActual();
 
 };  // class ActualCall
 
