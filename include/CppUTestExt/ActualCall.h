@@ -89,12 +89,11 @@ public:
     _returned = true;
 
     const ExpectedCall* pExpectation = TestDouble::findExpectation( *this );
-    if( 0 == pExpectation ) return defaultValue;
-
     _setOutputs( pExpectation );
-    return (T*)(pExpectation->getReturn().asPointer);
+
+    if( 0 == pExpectation ) return defaultValue;
+    else return (T*)(pExpectation->getReturn().asPointer);
   }
-  const void* returnConstPointer( const void* defaultValue=0 );
   char returnChar( char defaultValue=true );
   unsigned char returnUnsignedChar( unsigned char defaultValue=true );
   int returnInt( int defaultValue=true );

@@ -40,6 +40,8 @@ ActualCall::~ActualCall()
     {
       _failActual();
     }
+    // FIXME add a test for this
+    // _setOutputs( pExpectation );
   }
 
   delete _parameters;
@@ -92,10 +94,10 @@ bool ActualCall::returnBool( bool defaultValue )
   _returned = true;
 
   const ExpectedCall* pExpectation = TestDouble::findExpectation( *this );
-  if( 0 == pExpectation ) return defaultValue;
-
   _setOutputs( pExpectation );
-  return pExpectation->getReturn().asBool;
+
+  if( 0 == pExpectation ) return defaultValue;
+  else return pExpectation->getReturn().asBool;
 }
 
 char ActualCall::returnChar( char defaultValue )
@@ -103,10 +105,10 @@ char ActualCall::returnChar( char defaultValue )
   _returned = true;
 
   const ExpectedCall* pExpectation = TestDouble::findExpectation( *this );
-  if( 0 == pExpectation ) return defaultValue;
-
   _setOutputs( pExpectation );
-  return pExpectation->getReturn().asChar;
+
+  if( 0 == pExpectation ) return defaultValue;
+  else return pExpectation->getReturn().asChar;
 }
 
 unsigned char ActualCall::returnUnsignedChar( unsigned char defaultValue )
@@ -114,10 +116,10 @@ unsigned char ActualCall::returnUnsignedChar( unsigned char defaultValue )
   _returned = true;
 
   const ExpectedCall* pExpectation = TestDouble::findExpectation( *this );
-  if( 0 == pExpectation ) return defaultValue;
-
   _setOutputs( pExpectation );
-  return pExpectation->getReturn().asUnsignedChar;
+
+  if( 0 == pExpectation ) return defaultValue;
+  else return pExpectation->getReturn().asUnsignedChar;
 }
 
 int ActualCall::returnInt( int defaultValue )
@@ -125,10 +127,10 @@ int ActualCall::returnInt( int defaultValue )
   _returned = true;
 
   const ExpectedCall* pExpectation = TestDouble::findExpectation( *this );
-  if( 0 == pExpectation ) return defaultValue;
-
   _setOutputs( pExpectation );
-  return pExpectation->getReturn().asInt;
+
+  if( 0 == pExpectation ) return defaultValue;
+  else return pExpectation->getReturn().asInt;
 }
 
 unsigned int ActualCall::returnUnsignedInt( unsigned int defaultValue )
@@ -136,11 +138,10 @@ unsigned int ActualCall::returnUnsignedInt( unsigned int defaultValue )
   _returned = true;
 
   const ExpectedCall* pExpectation = TestDouble::findExpectation( *this );
-  if( 0 == pExpectation ) return defaultValue;
-
-
   _setOutputs( pExpectation );
-  return pExpectation->getReturn().asUnsignedInt;
+
+  if( 0 == pExpectation ) return defaultValue;
+  else return pExpectation->getReturn().asUnsignedInt;
 }
 
 long ActualCall::returnLong( long defaultValue )
@@ -148,10 +149,10 @@ long ActualCall::returnLong( long defaultValue )
   _returned = true;
 
   const ExpectedCall* pExpectation = TestDouble::findExpectation( *this );
-  if( 0 == pExpectation ) return defaultValue;
-
   _setOutputs( pExpectation );
-  return pExpectation->getReturn().asLong;
+
+  if( 0 == pExpectation ) return defaultValue;
+  else return pExpectation->getReturn().asLong;
 }
 
 unsigned long ActualCall::returnUnsignedLong( unsigned long defaultValue )
@@ -159,10 +160,10 @@ unsigned long ActualCall::returnUnsignedLong( unsigned long defaultValue )
   _returned = true;
 
   const ExpectedCall* pExpectation = TestDouble::findExpectation( *this );
-  if( 0 == pExpectation ) return defaultValue;
-
   _setOutputs( pExpectation );
-  return pExpectation->getReturn().asUnsignedLong;
+
+  if( 0 == pExpectation ) return defaultValue;
+  else return pExpectation->getReturn().asUnsignedLong;
 }
 
 long long ActualCall::returnLongLong( long long defaultValue )
@@ -170,10 +171,10 @@ long long ActualCall::returnLongLong( long long defaultValue )
   _returned = true;
 
   const ExpectedCall* pExpectation = TestDouble::findExpectation( *this );
-  if( 0 == pExpectation ) return defaultValue;
-
   _setOutputs( pExpectation );
-  return pExpectation->getReturn().asLongLong;
+
+  if( 0 == pExpectation ) return defaultValue;
+  else return pExpectation->getReturn().asLongLong;
 }
 
 unsigned long long ActualCall::returnUnsignedLongLong( unsigned long long defaultValue )
@@ -181,10 +182,10 @@ unsigned long long ActualCall::returnUnsignedLongLong( unsigned long long defaul
   _returned = true;
 
   const ExpectedCall* pExpectation = TestDouble::findExpectation( *this );
-  if( 0 == pExpectation ) return defaultValue;
-
   _setOutputs( pExpectation );
-  return pExpectation->getReturn().asUnsignedLongLong;
+
+  if( 0 == pExpectation ) return defaultValue;
+  else return pExpectation->getReturn().asUnsignedLongLong;
 }
 
 float ActualCall::returnFloat( float defaultValue )
@@ -192,10 +193,10 @@ float ActualCall::returnFloat( float defaultValue )
   _returned = true;
 
   const ExpectedCall* pExpectation = TestDouble::findExpectation( *this );
-  if( 0 == pExpectation ) return defaultValue;
-
   _setOutputs( pExpectation );
-  return pExpectation->getReturn().asFloat;
+
+  if( 0 == pExpectation ) return defaultValue;
+  else return pExpectation->getReturn().asFloat;
 }
 
 double ActualCall::returnDouble( double defaultValue )
@@ -203,10 +204,10 @@ double ActualCall::returnDouble( double defaultValue )
   _returned = true;
 
   const ExpectedCall* pExpectation = TestDouble::findExpectation( *this );
-  if( 0 == pExpectation ) return defaultValue;
-
   _setOutputs( pExpectation );
-  return pExpectation->getReturn().asDouble;
+
+  if( 0 == pExpectation ) return defaultValue;
+  else return pExpectation->getReturn().asDouble;
 }
 
 
