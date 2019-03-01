@@ -56,4 +56,28 @@ bool Parameter::equals( const Parameter* const &pOther ) const
   return _variant.asPointer == pOther->_variant.asPointer;
 }
 
+bool Parameter::setValue( const Parameter* const &pOther )
+{
+  if( 0 != pOther->buffer )
+  {
+    if( pOther->bufferSize_bytes != bufferSize_bytes ) return false;
+    PlatformSpecificMemCpy( outputBuffer, pOther->buffer, bufferSize_bytes );
+  }
+  else PlatformSpecificMemCpy( outputBuffer, &(pOther->_variant), bufferSize_bytes );
+
+  return true;
+}
+
+void Parameter::setDefault()
+{
+  if( 0 != buffer ) PlatformSpecificMemCpy( outputBuffer, buffer, bufferSize_bytes );
+  else PlatformSpecificMemCpy( outputBuffer, &_variant, bufferSize_bytes );
+}
+
+SimpleString Parameter::toString()
+{
+  SimpleString ret;
+  return ret;
+}
+
 } // namespace TestDouble

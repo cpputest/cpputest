@@ -164,14 +164,15 @@ ActualCall::~ActualCall()
     for( const TestDouble::ParameterChain* pEntry = getParameters(); 0 != pEntry; pEntry = pEntry->pNext )
     {
       _failureMessage += "\t\t";
-      // _failureMessage += pEntry->pParameter->toString();
+      _failureMessage += "\t\t";
+      _failureMessage += pEntry->pParameter->toString();
       _failureMessage += "\n";
     }
     _failureMessage += "\tOUTPUTS:\n";
     for( const TestDouble::ParameterChain* pEntry = getOutputs(); 0 != pEntry; pEntry = pEntry->pNext )
     {
       _failureMessage += "\t\t";
-      // _failureMessage += pEntry->pParameter->toString();
+      _failureMessage += pEntry->pParameter->toString();
       _failureMessage += "\n";
     }
     _failureMessage += ")\n";

@@ -74,26 +74,12 @@ public:
   bool equals( const Parameter* const &pOther ) const;
 
   /// used by ActualCall to set output based on expectation parameter
-  bool setValue( const Parameter* const &pOther )
-  {
-    if( 0 != pOther->buffer )
-    {
-      if( pOther->bufferSize_bytes != bufferSize_bytes ) return false;
-      PlatformSpecificMemCpy( outputBuffer, pOther->buffer, bufferSize_bytes );
-    }
-    else PlatformSpecificMemCpy( outputBuffer, &(pOther->_variant), bufferSize_bytes );
-
-    return true;
-  }
+  bool setValue( const Parameter* const &pOther );
 
   /// used by ActualCall to set output to provided default (or true-ish)
-  void setDefault()
-  {
-    if( 0 != buffer ) PlatformSpecificMemCpy( outputBuffer, buffer, bufferSize_bytes );
-    else PlatformSpecificMemCpy( outputBuffer, &_variant, bufferSize_bytes );
-  }
+  void setDefault();
   
-  
+  SimpleString toString();
 
   const union Variant {
     bool                    asBool;
