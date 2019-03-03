@@ -90,7 +90,7 @@ public:
   }
 
   template<typename T > 
-  void returns( const T& value ) { _returnValue = value; }
+  void returns( const T& value ) { _returnValue.value = {value}; }
 
   const TestDouble::Parameter::Variant getReturn() const { return _returnValue; }
 

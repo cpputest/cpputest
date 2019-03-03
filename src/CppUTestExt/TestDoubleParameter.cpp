@@ -40,20 +40,20 @@ bool Parameter::equals( const Parameter* const &pOther ) const
     return ( 0 == memcmp( buffer, pOther->buffer, bufferSize_bytes ) );
   }
 
-  if( type == typeid(void*).name() ) { return _variant.asPointer == pOther->_variant.asPointer; }
-  if( type == typeid(const void*).name() ) { return _variant.asConstPointer == pOther->_variant.asConstPointer; }
-  if( type == typeid(bool).name() ) { return _variant.asBool == pOther->_variant.asBool; }
-  if( type == typeid(char).name() ) { return _variant.asChar == pOther->_variant.asChar; }
-  if( type == typeid(unsigned char).name() ) { return _variant.asUnsignedChar == pOther->_variant.asUnsignedChar; }
-  if( type == typeid(int).name() ) { return _variant.asInt == pOther->_variant.asInt; }
-  if( type == typeid(unsigned int).name() ) { return _variant.asUnsignedInt == pOther->_variant.asUnsignedInt; }
-  if( type == typeid(long).name() ) { return _variant.asLong == pOther->_variant.asLong; }
-  if( type == typeid(unsigned long).name() ) { return _variant.asUnsignedLong == pOther->_variant.asUnsignedLong; }
-  if( type == typeid(long long).name() ) { return _variant.asLongLong == pOther->_variant.asLongLong; }
-  if( type == typeid(unsigned long long).name() ) { return _variant.asUnsignedLongLong == pOther->_variant.asUnsignedLongLong; }
-  if( type == typeid(float).name() ) { return _variant.asFloat == pOther->_variant.asFloat; }
-  if( type == typeid(double).name() ) { return _variant.asDouble == pOther->_variant.asDouble; }
-  return _variant.asPointer == pOther->_variant.asPointer;
+  if( type == typeid(void*).name() ) { return _variant.value.asPointer == pOther->_variant.value.asPointer; }
+  if( type == typeid(const void*).name() ) { return _variant.value.asConstPointer == pOther->_variant.value.asConstPointer; }
+  if( type == typeid(bool).name() ) { return _variant.value.asBool == pOther->_variant.value.asBool; }
+  if( type == typeid(char).name() ) { return _variant.value.asChar == pOther->_variant.value.asChar; }
+  if( type == typeid(unsigned char).name() ) { return _variant.value.asUnsignedChar == pOther->_variant.value.asUnsignedChar; }
+  if( type == typeid(int).name() ) { return _variant.value.asInt == pOther->_variant.value.asInt; }
+  if( type == typeid(unsigned int).name() ) { return _variant.value.asUnsignedInt == pOther->_variant.value.asUnsignedInt; }
+  if( type == typeid(long).name() ) { return _variant.value.asLong == pOther->_variant.value.asLong; }
+  if( type == typeid(unsigned long).name() ) { return _variant.value.asUnsignedLong == pOther->_variant.value.asUnsignedLong; }
+  if( type == typeid(long long).name() ) { return _variant.value.asLongLong == pOther->_variant.value.asLongLong; }
+  if( type == typeid(unsigned long long).name() ) { return _variant.value.asUnsignedLongLong == pOther->_variant.value.asUnsignedLongLong; }
+  if( type == typeid(float).name() ) { return _variant.value.asFloat == pOther->_variant.value.asFloat; }
+  if( type == typeid(double).name() ) { return _variant.value.asDouble == pOther->_variant.value.asDouble; }
+  return _variant.value.asPointer == pOther->_variant.value.asPointer;
 }
 
 bool Parameter::setValue( const Parameter* const &pOther )
@@ -63,7 +63,7 @@ bool Parameter::setValue( const Parameter* const &pOther )
     if( pOther->bufferSize_bytes != bufferSize_bytes ) return false;
     PlatformSpecificMemCpy( outputBuffer, pOther->buffer, bufferSize_bytes );
   }
-  else PlatformSpecificMemCpy( outputBuffer, &(pOther->_variant), bufferSize_bytes );
+  else PlatformSpecificMemCpy( outputBuffer, &(pOther->_variant.value), bufferSize_bytes );
 
   return true;
 }
@@ -71,7 +71,7 @@ bool Parameter::setValue( const Parameter* const &pOther )
 void Parameter::setDefault()
 {
   if( 0 != buffer ) PlatformSpecificMemCpy( outputBuffer, buffer, bufferSize_bytes );
-  else PlatformSpecificMemCpy( outputBuffer, &_variant, bufferSize_bytes );
+  else PlatformSpecificMemCpy( outputBuffer, &_variant.value, bufferSize_bytes );
 }
 
 SimpleString Parameter::toString()

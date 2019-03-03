@@ -87,7 +87,7 @@ public:
     const ExpectedCall* pExpectation = _setOutputs();
 
     if( 0 == pExpectation ) return const_cast<T*>(defaultValue);
-    else return static_cast<T*>(pExpectation->getReturn().asPointer);
+    else return static_cast<T*>(pExpectation->getReturn().value.asPointer);
   }
   char returnChar( char defaultValue=true );
   unsigned char returnUnsignedChar( unsigned char defaultValue=true );

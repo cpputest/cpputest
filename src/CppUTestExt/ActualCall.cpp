@@ -69,7 +69,7 @@ bool ActualCall::returnBool( bool defaultValue )
   const ExpectedCall* pExpectation = _setOutputs();
 
   if( 0 == pExpectation ) return defaultValue;
-  else return pExpectation->getReturn().asBool;
+  else return pExpectation->getReturn().value.asBool;
 }
 
 char ActualCall::returnChar( char defaultValue )
@@ -77,7 +77,7 @@ char ActualCall::returnChar( char defaultValue )
   const ExpectedCall* pExpectation = _setOutputs();
 
   if( 0 == pExpectation ) return defaultValue;
-  else return pExpectation->getReturn().asChar;
+  else return pExpectation->getReturn().value.asChar;
 }
 
 unsigned char ActualCall::returnUnsignedChar( unsigned char defaultValue )
@@ -85,7 +85,7 @@ unsigned char ActualCall::returnUnsignedChar( unsigned char defaultValue )
   const ExpectedCall* pExpectation = _setOutputs();
 
   if( 0 == pExpectation ) return defaultValue;
-  else return pExpectation->getReturn().asUnsignedChar;
+  else return pExpectation->getReturn().value.asUnsignedChar;
 }
 
 int ActualCall::returnInt( int defaultValue )
@@ -93,7 +93,7 @@ int ActualCall::returnInt( int defaultValue )
   const ExpectedCall* pExpectation = _setOutputs();
 
   if( 0 == pExpectation ) return defaultValue;
-  else return pExpectation->getReturn().asInt;
+  else return pExpectation->getReturn().value.asInt;
 }
 
 unsigned int ActualCall::returnUnsignedInt( unsigned int defaultValue )
@@ -101,7 +101,7 @@ unsigned int ActualCall::returnUnsignedInt( unsigned int defaultValue )
   const ExpectedCall* pExpectation = _setOutputs();
 
   if( 0 == pExpectation ) return defaultValue;
-  else return pExpectation->getReturn().asUnsignedInt;
+  else return pExpectation->getReturn().value.asUnsignedInt;
 }
 
 long ActualCall::returnLong( long defaultValue )
@@ -109,7 +109,7 @@ long ActualCall::returnLong( long defaultValue )
   const ExpectedCall* pExpectation = _setOutputs();
 
   if( 0 == pExpectation ) return defaultValue;
-  else return pExpectation->getReturn().asLong;
+  else return pExpectation->getReturn().value.asLong;
 }
 
 unsigned long ActualCall::returnUnsignedLong( unsigned long defaultValue )
@@ -117,7 +117,7 @@ unsigned long ActualCall::returnUnsignedLong( unsigned long defaultValue )
   const ExpectedCall* pExpectation = _setOutputs();
 
   if( 0 == pExpectation ) return defaultValue;
-  else return pExpectation->getReturn().asUnsignedLong;
+  else return pExpectation->getReturn().value.asUnsignedLong;
 }
 
 long long ActualCall::returnLongLong( long long defaultValue )
@@ -125,7 +125,7 @@ long long ActualCall::returnLongLong( long long defaultValue )
   const ExpectedCall* pExpectation = _setOutputs();
 
   if( 0 == pExpectation ) return defaultValue;
-  else return pExpectation->getReturn().asLongLong;
+  else return pExpectation->getReturn().value.asLongLong;
 }
 
 unsigned long long ActualCall::returnUnsignedLongLong( unsigned long long defaultValue )
@@ -133,7 +133,7 @@ unsigned long long ActualCall::returnUnsignedLongLong( unsigned long long defaul
   const ExpectedCall* pExpectation = _setOutputs();
 
   if( 0 == pExpectation ) return defaultValue;
-  else return pExpectation->getReturn().asUnsignedLongLong;
+  else return pExpectation->getReturn().value.asUnsignedLongLong;
 }
 
 float ActualCall::returnFloat( float defaultValue )
@@ -141,7 +141,7 @@ float ActualCall::returnFloat( float defaultValue )
   const ExpectedCall* pExpectation = _setOutputs();
 
   if( 0 == pExpectation ) return defaultValue;
-  else return pExpectation->getReturn().asFloat;
+  else return pExpectation->getReturn().value.asFloat;
 }
 
 double ActualCall::returnDouble( double defaultValue )
@@ -149,7 +149,7 @@ double ActualCall::returnDouble( double defaultValue )
   const ExpectedCall* pExpectation = _setOutputs();
 
   if( 0 == pExpectation ) return defaultValue;
-  else return pExpectation->getReturn().asDouble;
+  else return pExpectation->getReturn().value.asDouble;
 }
 
 ActualCall::~ActualCall()
