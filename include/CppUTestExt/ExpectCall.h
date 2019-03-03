@@ -28,12 +28,6 @@
 #ifndef EXPECT_CALL_H
 #define EXPECT_CALL_H
 
-#include <CppUTest/SimpleString.h>
-#include "TestDouble.h"
-
-class ExpectedCall;
-/// implemented in TestDouble.cpp
-ExpectedCall& expectCall( const SimpleString &call );            ///< add expectation to registry
 
 /// A builder for an expectation
 class ExpectedCall

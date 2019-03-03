@@ -29,6 +29,16 @@
 
 namespace TestDouble {
 
+ParameterChain::ParameterChain( TestDouble::Parameter* const &_pParameter, ParameterChain* const &_pNext )
+  : pParameter(_pParameter)
+   ,pNext(_pNext)   ///< prepend chain
+{}
+ParameterChain::~ParameterChain()
+{
+  delete pParameter;
+  delete pNext;
+}
+
 bool Parameter::equals( const Parameter* const &pOther ) const
 {
   if( type != pOther->type ) return false;

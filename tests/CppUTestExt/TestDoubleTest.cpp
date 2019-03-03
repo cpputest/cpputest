@@ -25,10 +25,12 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "CppUTestExt/TestDouble.h"
+
+// using following interfaces for testing implementation
+#include "CppUTestExt/ActualCall.h"
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TestTestingFixture.h"
-#include "CppUTestExt/ExpectCall.h"
-#include "CppUTestExt/ActualCall.h"
 
 
 //======================================================================================================================

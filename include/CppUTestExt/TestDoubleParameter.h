@@ -38,6 +38,17 @@ extern "C" int memcmp ( const void * ptr1, const void * ptr2, size_t num );
 
 namespace TestDouble {
 
+class Parameter;
+// generic list of parameters (used for both input and output)
+struct ParameterChain
+{
+  TestDouble::Parameter* const pParameter;
+  ParameterChain* const pNext;
+
+  ParameterChain( TestDouble::Parameter* const &_pParameter, ParameterChain* const &_pNext );
+  ~ParameterChain();
+};
+
 class Parameter
 {
 public:

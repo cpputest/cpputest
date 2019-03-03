@@ -151,17 +151,6 @@ const ExpectedCall* findExpectation( const ActualCall &call )
   return NULL;
 }
 
-ParameterChain::ParameterChain( TestDouble::Parameter* const &_pParameter, ParameterChain* const &_pNext )
-  : pParameter(_pParameter)
-   ,pNext(_pNext)   ///< prepend chain
-{}
-ParameterChain::~ParameterChain()
-{
-  delete pParameter;
-  delete pNext;
-}
-
-
 static bool _matches( const ExpectationChain &expectation, const ActualCall &actual )
 {
   const ExpectedCall& expected = *(expectation.pExpectedCall);

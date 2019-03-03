@@ -28,11 +28,13 @@
 #ifndef ACTUAL_CALL_H
 #define ACTUAL_CALL_H
 
-#include "CppUTestExt/TestDouble.h"
+#include <CppUTest/SimpleString.h>
 #include "CppUTest/TestHarness.h"
+#include <CppUTestExt/TestDoubleParameter.h>
+#include <CppUTestExt/ExpectCall.h>
 
 #include <typeinfo>
-#include "CppUTestExt/ExpectCall.h"
+// #include "CppUTestExt/ExpectCall.h"
 
 class ActualCall;
 /// implemented in TestDouble.cpp

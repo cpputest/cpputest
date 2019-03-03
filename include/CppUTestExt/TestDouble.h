@@ -34,6 +34,9 @@ void failUnexpected();
 void strictOrder();
 void checkExpectations();
 
+class ExpectedCall;
+ExpectedCall& expectCall( const SimpleString &call );            ///< add expectation to registry
+
 
 // Expectation framework
 //======================================================================================================================
@@ -70,16 +73,6 @@ public:
 private:
   ExpectationChain*   _pExpectations = 0;
   ExpectationChain*   _pTail = 0;         ///< reference to last enqueued
-};
-
-// generic list of parameters (used for both input and output)
-struct ParameterChain
-{
-  TestDouble::Parameter* const pParameter;
-  ParameterChain* const pNext;
-
-  ParameterChain( TestDouble::Parameter* const &_pParameter, ParameterChain* const &_pNext );
-  ~ParameterChain();
 };
 
 } // namespace TestDouble

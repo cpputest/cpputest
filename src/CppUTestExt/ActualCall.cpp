@@ -28,6 +28,7 @@
 #include "CppUTestExt/ActualCall.h"
 
 #include "CppUTestExt/ExpectCall.h"
+#include "CppUTestExt/TestDouble.h"
 #include "CppUTest/Utest.h"
 
 const ExpectedCall* ActualCall::_setOutputs()
