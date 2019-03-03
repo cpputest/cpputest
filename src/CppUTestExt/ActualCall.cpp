@@ -64,60 +64,21 @@ const ExpectedCall* ActualCall::_setOutputs()
   return pExpectation;
 }
 
-bool ActualCall::returnBool( bool defaultValue )
+
+double ActualCall::returnDouble( double defaultValue )
 {
   const ExpectedCall* pExpectation = _setOutputs();
 
   if( 0 == pExpectation ) return defaultValue;
-  else return pExpectation->getReturn().value.asBool;
+  else return pExpectation->getReturn().value.asDouble;
 }
 
-char ActualCall::returnChar( char defaultValue )
+float ActualCall::returnFloat( float defaultValue )
 {
   const ExpectedCall* pExpectation = _setOutputs();
 
   if( 0 == pExpectation ) return defaultValue;
-  else return pExpectation->getReturn().value.asChar;
-}
-
-unsigned char ActualCall::returnUnsignedChar( unsigned char defaultValue )
-{
-  const ExpectedCall* pExpectation = _setOutputs();
-
-  if( 0 == pExpectation ) return defaultValue;
-  else return pExpectation->getReturn().value.asUnsignedChar;
-}
-
-int ActualCall::returnInt( int defaultValue )
-{
-  const ExpectedCall* pExpectation = _setOutputs();
-
-  if( 0 == pExpectation ) return defaultValue;
-  else return pExpectation->getReturn().value.asInt;
-}
-
-unsigned int ActualCall::returnUnsignedInt( unsigned int defaultValue )
-{
-  const ExpectedCall* pExpectation = _setOutputs();
-
-  if( 0 == pExpectation ) return defaultValue;
-  else return pExpectation->getReturn().value.asUnsignedInt;
-}
-
-long ActualCall::returnLong( long defaultValue )
-{
-  const ExpectedCall* pExpectation = _setOutputs();
-
-  if( 0 == pExpectation ) return defaultValue;
-  else return pExpectation->getReturn().value.asLong;
-}
-
-unsigned long ActualCall::returnUnsignedLong( unsigned long defaultValue )
-{
-  const ExpectedCall* pExpectation = _setOutputs();
-
-  if( 0 == pExpectation ) return defaultValue;
-  else return pExpectation->getReturn().value.asUnsignedLong;
+  else return pExpectation->getReturn().value.asFloat;
 }
 
 long long ActualCall::returnLongLong( long long defaultValue )
@@ -136,21 +97,78 @@ unsigned long long ActualCall::returnUnsignedLongLong( unsigned long long defaul
   else return pExpectation->getReturn().value.asUnsignedLongLong;
 }
 
-float ActualCall::returnFloat( float defaultValue )
+long ActualCall::returnLong( long defaultValue )
 {
   const ExpectedCall* pExpectation = _setOutputs();
 
   if( 0 == pExpectation ) return defaultValue;
-  else return pExpectation->getReturn().value.asFloat;
+  else return pExpectation->getReturn().value.asLong;
 }
 
-double ActualCall::returnDouble( double defaultValue )
+unsigned long ActualCall::returnUnsignedLong( unsigned long defaultValue )
 {
   const ExpectedCall* pExpectation = _setOutputs();
 
   if( 0 == pExpectation ) return defaultValue;
-  else return pExpectation->getReturn().value.asDouble;
+  else return pExpectation->getReturn().value.asUnsignedLong;
 }
+
+int ActualCall::returnInt( int defaultValue )
+{
+  const ExpectedCall* pExpectation = _setOutputs();
+
+  if( 0 == pExpectation ) return defaultValue;
+  else return pExpectation->getReturn().value.asInt;
+}
+
+unsigned int ActualCall::returnUnsignedInt( unsigned int defaultValue )
+{
+  const ExpectedCall* pExpectation = _setOutputs();
+
+  if( 0 == pExpectation ) return defaultValue;
+  else return pExpectation->getReturn().value.asUnsignedInt;
+}
+
+short ActualCall::returnShort( short defaultValue )
+{
+  const ExpectedCall* pExpectation = _setOutputs();
+
+  if( 0 == pExpectation ) return defaultValue;
+  else return pExpectation->getReturn().value.asShort;
+}
+
+unsigned short ActualCall::returnUnsignedShort( unsigned short defaultValue )
+{
+  const ExpectedCall* pExpectation = _setOutputs();
+
+  if( 0 == pExpectation ) return defaultValue;
+  else return pExpectation->getReturn().value.asUnsignedShort;
+}
+
+char ActualCall::returnChar( char defaultValue )
+{
+  const ExpectedCall* pExpectation = _setOutputs();
+
+  if( 0 == pExpectation ) return defaultValue;
+  else return pExpectation->getReturn().value.asChar;
+}
+
+unsigned char ActualCall::returnUnsignedChar( unsigned char defaultValue )
+{
+  const ExpectedCall* pExpectation = _setOutputs();
+
+  if( 0 == pExpectation ) return defaultValue;
+  else return pExpectation->getReturn().value.asUnsignedChar;
+}
+
+bool ActualCall::returnBool( bool defaultValue )
+{
+  const ExpectedCall* pExpectation = _setOutputs();
+
+  if( 0 == pExpectation ) return defaultValue;
+  else return pExpectation->getReturn().value.asBool;
+}
+
 
 ActualCall::~ActualCall()
 {
@@ -163,7 +181,6 @@ ActualCall::~ActualCall()
     _failureMessage += "\tINPUTS:\n";
     for( const TestDouble::ParameterChain* pEntry = getParameters(); 0 != pEntry; pEntry = pEntry->pNext )
     {
-      _failureMessage += "\t\t";
       _failureMessage += "\t\t";
       _failureMessage += pEntry->pParameter->toString();
       _failureMessage += "\n";
@@ -189,31 +206,3 @@ ActualCall::~ActualCall()
     pShell->failWith( failure, terminator );
   }
 }
-
-
-
-
-
-// ActualCall& ActualCall::with( const SimpleString& _name, const void* const buffer, const std::size_t& size )
-// {
-//   TestDouble::Parameter* pParameter = new TestDouble::Parameter( _name, buffer, size );
-//   _parameters = new TestDouble::ParameterChain( pParameter, _parameters );
-//   return *this;
-// }
-
-    // // print actual (input and output parameters)
-    // SimpleString msg = StringFromFormat("no expectation matching actual call: \n\t%s(\n", methodName.asCharString() );
-    // for( const TestDouble::ParameterChain* pEntry = getParameters(); 0 != pEntry; pEntry = pEntry->pNext )
-    // {
-    //   const TestDouble::Parameter* const pParameter = pEntry->pParameter;
-    //   msg += StringFromFormat( "\t\t %s = %s \n", pParameter->name.asCharString(), pParameter->type.asCharString() );
-    // }
-    // msg += "\t)\n";
-    // UtestShell& shell = *(UtestShell::getCurrent());
-    // // FIXME  does failure never return?
-    // // shell.fail( msg.asCharString(), shell.getFile().asCharString(), shell.getLineNumber() );
-
-    // // UT_PRINT( StringFromFormat( "Type Mismatch: Expected call to '%s' with parameter '%s' of type '%s', but actual paramter was of type '%s'.",
-    // //   expected.methodName.asCharString(), pExpectedEntry->pParameter->name.asCharString(),
-    // //   pExpectedEntry->pParameter->type.asCharString(), pActualEntry->pParameter->type.asCharString() ).asCharString()
-    // // );

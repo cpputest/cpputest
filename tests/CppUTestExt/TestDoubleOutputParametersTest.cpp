@@ -74,6 +74,24 @@ TEST( MatchedOutputParameter, match_unsigned_char )
   CHECK( value == actual );
 }
 
+TEST( MatchedOutputParameter, match_short )
+{
+  const short value = 2;   ///< don't use 1 as default actual produces true == 1
+  expectCall("foo").output("value", value);
+  short actual = value + 1;
+  actualCall("foo").output("value", &actual).returns();   ///< returns used here to set outputs immediately
+  CHECK( value == actual );
+}
+
+TEST( MatchedOutputParameter, match_unsigned_short )
+{
+  const unsigned short value = 2;    ///< don't use 1 as default actual produces true == 1
+  expectCall("foo").output("value", value);
+  unsigned short actual = value + 1;
+  actualCall("foo").output("value", &actual).returns();   ///< returns used here to set outputs immediately
+  CHECK( value == actual );
+}
+
 TEST( MatchedOutputParameter, match_int )
 {
   const int value = 2;    ///< don't use 1 as default actual produces true == 1

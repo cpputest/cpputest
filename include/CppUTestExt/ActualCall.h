@@ -89,16 +89,18 @@ public:
     if( 0 == pExpectation ) return const_cast<T*>(defaultValue);
     else return static_cast<T*>(pExpectation->getReturn().value.asPointer);
   }
-  char returnChar( char defaultValue=true );
-  unsigned char returnUnsignedChar( unsigned char defaultValue=true );
-  int returnInt( int defaultValue=true );
-  unsigned int returnUnsignedInt( unsigned int defaultValue=true );
-  long returnLong( long defaultValue=true );
-  unsigned long returnUnsignedLong( unsigned long defaultValue=true );
+  double returnDouble( double defaultValue=true );
+  float returnFloat( float defaultValue=true );
   long long returnLongLong( long long defaultValue=true );
   unsigned long long returnUnsignedLongLong( unsigned long long defaultValue=true );
-  float returnFloat( float defaultValue=true );
-  double returnDouble( double defaultValue=true );
+  long returnLong( long defaultValue=true );
+  unsigned long returnUnsignedLong( unsigned long defaultValue=true );
+  int returnInt( int defaultValue=true );
+  unsigned int returnUnsignedInt( unsigned int defaultValue=true );
+  short returnShort( short defaultValue=true );
+  unsigned short returnUnsignedShort( unsigned short defaultValue=true );
+  char returnChar( char defaultValue=true );
+  unsigned char returnUnsignedChar( unsigned char defaultValue=true );
   bool returnBool( bool defaultValue=true );
 
   const TestDouble::ParameterChain* getParameters() const { return _parameters; }

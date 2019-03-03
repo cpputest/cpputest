@@ -70,6 +70,20 @@ TEST( MatchedParameter, match_unsigned_char )
   actualCall("foo").with("value", value);
 }
 
+TEST( MatchedParameter, match_short )
+{
+  const short value = 1;
+  expectCall("foo").with("value", value);
+  actualCall("foo").with("value", value);
+}
+
+TEST( MatchedParameter, match_unsigned_short )
+{
+  const unsigned short value = 1;
+  expectCall("foo").with("value", value);
+  actualCall("foo").with("value", value);
+}
+
 TEST( MatchedParameter, match_int )
 {
   const int value = 1;

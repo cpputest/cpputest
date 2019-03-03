@@ -81,57 +81,77 @@ public:
   
   SimpleString toString();
 
-  const struct Variant {
-    const SimpleString name;
-    union Value {
+  const struct Variant
+  {
+    const enum Type
+    {
+        FN_POINTER,
+        POINTER, CONST_POINTER,
+        DOUBLE,
+        FLOAT,
+        LONG_LONG, UNSIGNED_LONG_LONG,
+        LONG, UNSIGNED_LONG,
+        INT, UNSIGNED_INT,
+        SHORT, UNSIGNED_SHORT,
+        CHAR, UNSIGNED_CHAR,
+        BOOL
+    } type;
+
+    union Value
+    {
       void(*asFunctionPointer)();
       void*                   asPointer;
       const void*             asConstPointer;
-      char                    asChar;
-      unsigned char           asUnsignedChar;
-      int                     asInt;
-      unsigned int            asUnsignedInt;
-      long int                asLong;
-      unsigned long int       asUnsignedLong;
+      double                  asDouble;
+      float                   asFloat;
       long long int           asLongLong;
       unsigned long long int  asUnsignedLongLong;
-      float                   asFloat;
-      double                  asDouble;
+      long int                asLong;
+      unsigned long int       asUnsignedLong;
+      int                     asInt;
+      unsigned int            asUnsignedInt;
+      short                   asShort;
+      unsigned short          asUnsignedShort;
+      char                    asChar;
+      unsigned char           asUnsignedChar;
       bool                    asBool;
 
       Value( void(*_value)() ) : asFunctionPointer(_value) {}
       Value( void* const &_value ) : asPointer(_value) {}
       Value( const void* const &_value ) : asConstPointer(_value) {}
-      Value( const char &_value ) : asChar(_value) {}
-      Value( const unsigned char &_value ) : asUnsignedChar(_value) {}
-      Value( const int &_value ) : asInt(_value) {}
-      Value( const unsigned int &_value ) : asUnsignedInt(_value) {}
-      Value( const long &_value ) : asLong(_value) {}
-      Value( const unsigned long &_value ) : asUnsignedLong(_value) {}
+      Value( const double &_value ) : asDouble(_value) {}
+      Value( const float &_value ) : asFloat(_value) {}
       Value( const long long &_value ) : asLongLong(_value) {}
       Value( const unsigned long long &_value ) : asUnsignedLongLong(_value) {}
-      Value( const float &_value ) : asFloat(_value) {}
-      Value( const double &_value ) : asDouble(_value) {}
+      Value( const long &_value ) : asLong(_value) {}
+      Value( const unsigned long &_value ) : asUnsignedLong(_value) {}
+      Value( const int &_value ) : asInt(_value) {}
+      Value( const unsigned int &_value ) : asUnsignedInt(_value) {}
+      Value( const short &_value ) : asShort(_value) {}
+      Value( const unsigned short &_value ) : asUnsignedShort(_value) {}
+      Value( const char &_value ) : asChar(_value) {}
+      Value( const unsigned char &_value ) : asUnsignedChar(_value) {}
       Value( const bool &_value ) : asBool(_value) {}
 
     } value;
 
-
     // provide pointer support first (so references won't degrade to primitives)
-    Variant( void(*_value)() ) : name("function pointer"), value(_value) {}
-    Variant( const void* &_value ) : name("pointer"), value(_value) {}
-    Variant( const void* const &_value ) : name("const pointer"), value(_value) {}
-    Variant( const char &_value ) : name("char"), value(_value) {}
-    Variant( const unsigned char &_value ) : name("unsigned char"), value(_value) {}
-    Variant( const int &_value ) : name("int"), value(_value) {}
-    Variant( const unsigned int &_value ) : name("unsigned int"), value(_value) {}
-    Variant( const long &_value ) : name("long"), value(_value) {}
-    Variant( const unsigned long &_value ) : name("unsigned long"), value(_value) {}
-    Variant( const long long &_value ) : name("long long"), value(_value) {}
-    Variant( const unsigned long long &_value ) : name("unsigned long long"), value(_value) {}
-    Variant( const float &_value ) : name("float"), value(_value) {}
-    Variant( const double &_value ) : name("double"), value(_value) {}
-    Variant( const bool &_value ) : name("bool"), value(_value) {}
+    Variant( void(*_value)() ) : type(FN_POINTER), value(_value) {}
+    Variant( const void* &_value ) : type(POINTER), value(_value) {}
+    Variant( const void* const &_value ) : type(CONST_POINTER), value(_value) {}
+    Variant( const double &_value ) : type(DOUBLE), value(_value) {}
+    Variant( const float &_value ) : type(FLOAT), value(_value) {}
+    Variant( const long long &_value ) : type(LONG_LONG), value(_value) {}
+    Variant( const unsigned long long &_value ) : type(UNSIGNED_LONG_LONG), value(_value) {}
+    Variant( const long &_value ) : type(LONG), value(_value) {}
+    Variant( const unsigned long &_value ) : type(UNSIGNED_LONG), value(_value) {}
+    Variant( const int &_value ) : type(INT), value(_value) {}
+    Variant( const unsigned int &_value ) : type(UNSIGNED_INT), value(_value) {}
+    Variant( const short &_value ) : type(SHORT), value(_value) {}
+    Variant( const unsigned short &_value ) : type(UNSIGNED_SHORT), value(_value) {}
+    Variant( const char &_value ) : type(CHAR), value(_value) {}
+    Variant( const unsigned char &_value ) : type(UNSIGNED_CHAR), value(_value) {}
+    Variant( const bool &_value ) : type(BOOL), value(_value) {}
 
   } _variant = 0;
 

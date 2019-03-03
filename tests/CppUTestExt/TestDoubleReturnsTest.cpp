@@ -50,7 +50,7 @@ TEST( Result, match_bool )
 {
   const bool value = true;
   expectCall("foo").returns(value);
-  bool actual = false;
+  bool actual = false;    ///< don't use true as default actual produces true == 1
   actual = actualCall("foo").returnBool();
   CHECK( value == actual );
 }
@@ -68,8 +68,26 @@ TEST( Result, match_unsigned_char )
 {
   const unsigned char value = 'a';
   expectCall("foo").returns(value);
-  unsigned char actual = 'b';
+  unsigned char actual = 'b';     ///< don't use 1 as default actual produces true == 1
   actual = actualCall("foo").returnUnsignedChar();
+  CHECK( value == actual );
+}
+
+TEST( Result, match_short )
+{
+  const short value = 1;
+  expectCall("foo").returns(value);
+  short actual = 2;   ///< don't use 1 as default actual produces true == 1
+  actual = actualCall("foo").returnShort();
+  CHECK( value == actual );
+}
+
+TEST( Result, match_unsigned_short )
+{
+  const unsigned short value = 1;
+  expectCall("foo").returns(value);
+  unsigned short actual = 2;    ///< don't use 1 as default actual produces true == 1
+  actual = actualCall("foo").returnUnsignedShort();
   CHECK( value == actual );
 }
 
@@ -77,7 +95,7 @@ TEST( Result, match_int )
 {
   const int value = 1;
   expectCall("foo").returns(value);
-  int actual = 2;
+  int actual = 2;     ///< don't use 1 as default actual produces true == 1
   actual = actualCall("foo").returnInt();
   CHECK( value == actual );
 }
@@ -86,7 +104,7 @@ TEST( Result, match_unsigned_int )
 {
   const unsigned int value = 1;
   expectCall("foo").returns(value);
-  unsigned int actual = 2;
+  unsigned int actual = 2;    ///< don't use 1 as default actual produces true == 1
   actual = actualCall("foo").returnUnsignedInt();
   CHECK( value == actual );
 }
@@ -95,7 +113,7 @@ TEST( Result, match_long )
 {
   const long value = 1;
   expectCall("foo").returns(value);
-  long actual = 2;
+  long actual = 2;    ///< don't use 1 as default actual produces true == 1
   actual = actualCall("foo").returnLong();
   CHECK( value == actual );
 }
@@ -104,7 +122,7 @@ TEST( Result, match_unsigned_long )
 {
   const unsigned long value = 1;
   expectCall("foo").returns(value);
-  unsigned long actual = 2;
+  unsigned long actual = 2;     ///< don't use 1 as default actual produces true == 1
   actual = actualCall("foo").returnUnsignedLong();
   CHECK( value == actual );
 }
@@ -113,7 +131,7 @@ TEST( Result, match_long_long )
 {
   const long long value = 1;
   expectCall("foo").returns(value);
-  long long actual = 2;
+  long long actual = 2;     ///< don't use 1 as default actual produces true == 1
   actual = actualCall("foo").returnLongLong();
   CHECK( value == actual );
 }
@@ -122,7 +140,7 @@ TEST( Result, match_unsigned_long_long )
 {
   const unsigned long long value = 1;
   expectCall("foo").returns(value);
-  unsigned long long actual = 2;
+  unsigned long long actual = 2;    ///< don't use 1 as default actual produces true == 1
   actual = actualCall("foo").returnUnsignedLongLong();
   CHECK( value == actual );
 }
@@ -131,7 +149,7 @@ TEST( Result, match_float )
 {
   const float value = 1;
   expectCall("foo").returns(value);
-  float actual = 2;
+  float actual = 2;     ///< don't use 1 as default actual produces true == 1
   actual = actualCall("foo").returnFloat();
   CHECK( value == actual );
 }
@@ -140,7 +158,7 @@ TEST( Result, match_double )
 {
   const double value = 1;
   expectCall("foo").returns(value);
-  double actual = 2;
+  double actual = 2;    ///< don't use 1 as default actual produces true == 1
   actual = actualCall("foo").returnDouble();
   CHECK( value == actual );
 }
@@ -150,7 +168,7 @@ TEST( Result, match_pointer )
   static char values[] = "HELLO";
   const char* pValue = values;
   expectCall("foo").returns(pValue);
-  char* pActual = 0;
+  char* pActual = 0;    ///< don't use 1 as default actual produces true == 1
   pActual = actualCall("foo").returnPointer<char>();
   CHECK( pValue == pActual );
 }
@@ -160,7 +178,7 @@ static fn_t fn { };
 TEST( Result, match_fn )
 {
   expectCall("foo").returns(fn);
-  fn_t pActual = 0;
+  fn_t pActual = 0;     ///< don't use 1 as default actual produces true == 1
   pActual = (fn_t)actualCall("foo").returnPointer<void>();
   POINTERS_EQUAL( fn, pActual );
 }
