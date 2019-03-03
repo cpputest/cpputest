@@ -32,12 +32,11 @@
 
 void failUnexpected();
 void strictOrder();
-
 void checkExpectations();
 
 
-
 // Expectation framework
+//======================================================================================================================
 class ExpectedCall;
 class ActualCall;
 namespace TestDouble {
