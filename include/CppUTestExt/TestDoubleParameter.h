@@ -105,7 +105,8 @@ public:
         INT, UNSIGNED_INT,
         SHORT, UNSIGNED_SHORT,
         CHAR, UNSIGNED_CHAR,
-        BOOL
+        BOOL,
+        RETURN_VALUE
     } type;
 
     /// only copies value (does not change original type)
@@ -147,7 +148,7 @@ public:
       Value( const unsigned char &_value ) : asUnsignedChar(_value) {}
       Value( const bool &_value ) : asBool(_value) {}
 
-    } value;
+    } value = 0;
 
     // provide pointer support first (so references won't degrade to primitives)
     Variant( void(*_value)() ) : type(FN_POINTER), value(_value) {}
@@ -166,6 +167,9 @@ public:
     Variant( const char &_value ) : type(CHAR), value(_value) {}
     Variant( const unsigned char &_value ) : type(UNSIGNED_CHAR), value(_value) {}
     Variant( const bool &_value ) : type(BOOL), value(_value) {}
+
+    /// return value constructor
+    Variant() : type(RETURN_VALUE) {}
 
   } _variant = 0;
 

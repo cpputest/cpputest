@@ -78,7 +78,15 @@ double ActualCall::returnDouble( double defaultValue )
   const ExpectedCall* pExpectation = _setOutputs();
 
   if( 0 == pExpectation ) return defaultValue;
-  else return pExpectation->getReturn().value.asDouble;
+
+  /// allow Model to override expectations
+  if( pExpectation->hasModel() )
+  {
+    pExpectation->handleModel( *this );
+    return _return.value.asDouble;
+  }
+
+  return pExpectation->getReturn().value.asDouble;
 }
 
 float ActualCall::returnFloat( float defaultValue )
@@ -86,7 +94,15 @@ float ActualCall::returnFloat( float defaultValue )
   const ExpectedCall* pExpectation = _setOutputs();
 
   if( 0 == pExpectation ) return defaultValue;
-  else return pExpectation->getReturn().value.asFloat;
+
+  /// allow Model to override expectations
+  if( pExpectation->hasModel() )
+  {
+    pExpectation->handleModel( *this );
+    return _return.value.asFloat;
+  }
+
+  return pExpectation->getReturn().value.asFloat;
 }
 
 long long ActualCall::returnLongLong( long long defaultValue )
@@ -94,7 +110,15 @@ long long ActualCall::returnLongLong( long long defaultValue )
   const ExpectedCall* pExpectation = _setOutputs();
 
   if( 0 == pExpectation ) return defaultValue;
-  else return pExpectation->getReturn().value.asLongLong;
+
+  /// allow Model to override expectations
+  if( pExpectation->hasModel() )
+  {
+    pExpectation->handleModel( *this );
+    return _return.value.asLongLong;
+  }
+
+  return pExpectation->getReturn().value.asLongLong;
 }
 
 unsigned long long ActualCall::returnUnsignedLongLong( unsigned long long defaultValue )
@@ -102,7 +126,15 @@ unsigned long long ActualCall::returnUnsignedLongLong( unsigned long long defaul
   const ExpectedCall* pExpectation = _setOutputs();
 
   if( 0 == pExpectation ) return defaultValue;
-  else return pExpectation->getReturn().value.asUnsignedLongLong;
+
+  /// allow Model to override expectations
+  if( pExpectation->hasModel() )
+  {
+    pExpectation->handleModel( *this );
+    return _return.value.asUnsignedLongLong;
+  }
+
+  return pExpectation->getReturn().value.asUnsignedLongLong;
 }
 
 long ActualCall::returnLong( long defaultValue )
@@ -110,7 +142,15 @@ long ActualCall::returnLong( long defaultValue )
   const ExpectedCall* pExpectation = _setOutputs();
 
   if( 0 == pExpectation ) return defaultValue;
-  else return pExpectation->getReturn().value.asLong;
+
+  /// allow Model to override expectations
+  if( pExpectation->hasModel() )
+  {
+    pExpectation->handleModel( *this );
+    return _return.value.asLong;
+  }
+
+  return pExpectation->getReturn().value.asLong;
 }
 
 unsigned long ActualCall::returnUnsignedLong( unsigned long defaultValue )
@@ -118,7 +158,15 @@ unsigned long ActualCall::returnUnsignedLong( unsigned long defaultValue )
   const ExpectedCall* pExpectation = _setOutputs();
 
   if( 0 == pExpectation ) return defaultValue;
-  else return pExpectation->getReturn().value.asUnsignedLong;
+
+  /// allow Model to override expectations
+  if( pExpectation->hasModel() )
+  {
+    pExpectation->handleModel( *this );
+    return _return.value.asUnsignedLong;
+  }
+
+  return pExpectation->getReturn().value.asUnsignedLong;
 }
 
 int ActualCall::returnInt( int defaultValue )
@@ -126,7 +174,15 @@ int ActualCall::returnInt( int defaultValue )
   const ExpectedCall* pExpectation = _setOutputs();
 
   if( 0 == pExpectation ) return defaultValue;
-  else return pExpectation->getReturn().value.asInt;
+
+  /// allow Model to override expectations
+  if( pExpectation->hasModel() )
+  {
+    pExpectation->handleModel( *this );
+    return _return.value.asInt;
+  }
+
+  return pExpectation->getReturn().value.asInt;
 }
 
 unsigned int ActualCall::returnUnsignedInt( unsigned int defaultValue )
@@ -134,7 +190,15 @@ unsigned int ActualCall::returnUnsignedInt( unsigned int defaultValue )
   const ExpectedCall* pExpectation = _setOutputs();
 
   if( 0 == pExpectation ) return defaultValue;
-  else return pExpectation->getReturn().value.asUnsignedInt;
+
+  /// allow Model to override expectations
+  if( pExpectation->hasModel() )
+  {
+    pExpectation->handleModel( *this );
+    return _return.value.asUnsignedInt;
+  }
+
+  return pExpectation->getReturn().value.asUnsignedInt;
 }
 
 short ActualCall::returnShort( short defaultValue )
@@ -142,7 +206,15 @@ short ActualCall::returnShort( short defaultValue )
   const ExpectedCall* pExpectation = _setOutputs();
 
   if( 0 == pExpectation ) return defaultValue;
-  else return pExpectation->getReturn().value.asShort;
+
+  /// allow Model to override expectations
+  if( pExpectation->hasModel() )
+  {
+    pExpectation->handleModel( *this );
+    return _return.value.asShort;
+  }
+
+  return pExpectation->getReturn().value.asShort;
 }
 
 unsigned short ActualCall::returnUnsignedShort( unsigned short defaultValue )
@@ -150,7 +222,15 @@ unsigned short ActualCall::returnUnsignedShort( unsigned short defaultValue )
   const ExpectedCall* pExpectation = _setOutputs();
 
   if( 0 == pExpectation ) return defaultValue;
-  else return pExpectation->getReturn().value.asUnsignedShort;
+
+  /// allow Model to override expectations
+  if( pExpectation->hasModel() )
+  {
+    pExpectation->handleModel( *this );
+    return _return.value.asUnsignedShort;
+  }
+
+  return pExpectation->getReturn().value.asUnsignedShort;
 }
 
 char ActualCall::returnChar( char defaultValue )
@@ -158,7 +238,15 @@ char ActualCall::returnChar( char defaultValue )
   const ExpectedCall* pExpectation = _setOutputs();
 
   if( 0 == pExpectation ) return defaultValue;
-  else return pExpectation->getReturn().value.asChar;
+
+  /// allow Model to override expectations
+  if( pExpectation->hasModel() )
+  {
+    pExpectation->handleModel( *this );
+    return _return.value.asChar;
+  }
+
+  return pExpectation->getReturn().value.asChar;
 }
 
 unsigned char ActualCall::returnUnsignedChar( unsigned char defaultValue )
@@ -166,7 +254,15 @@ unsigned char ActualCall::returnUnsignedChar( unsigned char defaultValue )
   const ExpectedCall* pExpectation = _setOutputs();
 
   if( 0 == pExpectation ) return defaultValue;
-  else return pExpectation->getReturn().value.asUnsignedChar;
+
+  /// allow Model to override expectations
+  if( pExpectation->hasModel() )
+  {
+    pExpectation->handleModel( *this );
+    return _return.value.asUnsignedChar;
+  }
+
+  return pExpectation->getReturn().value.asUnsignedChar;
 }
 
 bool ActualCall::returnBool( bool defaultValue )
@@ -174,7 +270,15 @@ bool ActualCall::returnBool( bool defaultValue )
   const ExpectedCall* pExpectation = _setOutputs();
 
   if( 0 == pExpectation ) return defaultValue;
-  else return pExpectation->getReturn().value.asBool;
+
+  /// allow Model to override expectations
+  if( pExpectation->hasModel() )
+  {
+    pExpectation->handleModel( *this );
+    return _return.value.asBool;
+  }
+
+  return pExpectation->getReturn().value.asBool;
 }
 
 

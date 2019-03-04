@@ -212,9 +212,16 @@ SimpleString Parameter::toString()
       return ret + "<bool>" + StringFrom( _variant.value.asBool );
       break;
     }
+    case Variant::RETURN_VALUE:
+    {
+      /// for unknown types display the largest union member in hex
+      return ret + "<return value>" + HexStringFrom( _variant.value.asLongLong );
+      break;
+    }
     default:
     {
-      return ret + "<unknown type (" + type + ")>" + HexStringFrom(_variant.value.asConstPointer);
+      /// for unknown types display the largest union member in hex
+      return ret + "<unknown type (" + type + ")>" + HexStringFrom(_variant.value.asLongLong );
     }
   }
 }

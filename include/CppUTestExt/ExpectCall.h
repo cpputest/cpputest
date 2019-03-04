@@ -52,7 +52,17 @@ public:
     // FIXME add failure unable to find parameter
     return false;
   }
+
+  template<typename T>
+  void setReturn( T value )
+  {
+    _return = TestDouble::Parameter::Variant(value);
+  }
+
+protected:
+  TestDouble::Parameter::Variant  _return;
 };
+
 /// Behavior handler for an expectation (e.g. Aspect Oriented Programming AoP)
 class IModel
 {
@@ -117,6 +127,7 @@ public:
   }
 
   void useModel( IModel &staticModel ) { _pModel = &staticModel; }
+  bool hasModel() const { return 0 != _pModel; }
   bool handleModel( AActualCall &actual ) const
   {
     if( 0 == _pModel ) return true;

@@ -89,7 +89,15 @@ public:
     const ExpectedCall* pExpectation = _setOutputs();
 
     if( 0 == pExpectation ) return const_cast<T*>(defaultValue);
-    else return static_cast<T*>(pExpectation->getReturn().value.asPointer);
+
+    /// allow Model to override expectations
+    if( pExpectation->hasModel() )
+    {
+      pExpectation->handleModel( *this );
+      return static_cast<T*>(_return.value.asPointer);
+    }
+
+    return static_cast<T*>(pExpectation->getReturn().value.asPointer);
   }
   double returnDouble( double defaultValue=true );
   float returnFloat( float defaultValue=true );
@@ -111,8 +119,10 @@ public:
 private:
   TestDouble::ParameterChain*     _inputs = 0;
   TestDouble::ParameterChain*     _outputs = 0;
+
   bool  _hasSetOutputs = false;
   const ExpectedCall* _setOutputs();
+
   SimpleString _failureMessage;
 
 };  // class ActualCall

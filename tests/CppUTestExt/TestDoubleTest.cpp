@@ -89,15 +89,26 @@ TEST_GROUP( UseModel )
   class OutputModel : public IModel
   {
   public:
-    const int outputValue = 2;    ///< don't use 1 as default actual produces true == 1
+    const int value = 2;    ///< don't use 1 as default actual produces true == 1
 
-    // virtual void model( IActualCall &call ){}
     virtual bool model( AActualCall &actualCall )
     {
-      CHECK( actualCall.setOutput( "value", outputValue ) );
+      CHECK( actualCall.setOutput( "value", value ) );
       return true;
     }
   } outputModel;
+
+  class ReturnModel : public IModel
+  {
+  public:
+    const int value = 2;    ///< don't use 1 as default actual produces true == 1
+
+    virtual bool model( AActualCall &actualCall )
+    {
+      actualCall.setReturn( value );
+      return true;
+    }
+  } returnModel;
 
   TEST_SETUP()
   {
@@ -117,15 +128,15 @@ TEST( UseModel, set_outputs )
   expectCall("doc").useModel( outputModel );
   int actual = 0;
   actualCall("doc").output( "value", &actual ).returns();
-  CHECK( outputModel.outputValue == actual );
+  CHECK( outputModel.value == actual );
 }
 
-// TEST( UseModel, set_return )
-// {
-//   expectCall("doc").useModel( returnModel );
-//   int value = actualCall("doc");
-//   CHECK( ouputModel.value == value );
-// }
+TEST( UseModel, set_return )
+{
+  expectCall("doc").useModel( returnModel );
+  int actual = actualCall("doc").returnInt();
+  CHECK( returnModel.value == actual );
+}
 
 
 //======================================================================================================================
