@@ -326,7 +326,6 @@ ActualCall::~ActualCall()
 
   if( false == _failureMessage.isEmpty() )
   {
-    printf( "\n%s", _failureMessage.asCharString() );
     UtestShell* const pShell = UtestShell::getCurrent();
     TestFailure failure( pShell, pShell->getFile().asCharString(), pShell->getLineNumber(), _failureMessage );
     TestTerminatorWithoutExceptions terminator;

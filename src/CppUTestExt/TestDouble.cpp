@@ -111,9 +111,41 @@ SimpleString ExpectationQueue::check()
             ( pExpectation->actualCount < pExpectation->pExpectedCall->getCount() ) )
     {
       // TODO format a usable report
-      ret += StringFromFormat( "unmet expectation: %s()\n", pExpectation->pExpectedCall->name.asCharString() );
+      ret += StringFromFormat( "unmet expectation: \"%s\"(\n", pExpectation->pExpectedCall->name.asCharString() );
+
+      const TestDouble::ParameterChain* pFirstInput = pExpectation->pExpectedCall->getInputs();
+      if( 0 != pFirstInput )
+      {
+        ret += "  INPUTS:\n";
+        for( const TestDouble::ParameterChain* pEntry = pFirstInput; 0 != pEntry; pEntry = pEntry->pNext )
+        {
+          ret += "\t";
+          ret += pEntry->pParameter->toString();
+          ret += "\n";
+        }
+      }
+
+      const TestDouble::ParameterChain* pFirstOutput = pExpectation->pExpectedCall->getOutputs();
+      if( 0 != pFirstOutput )
+      {
+        ret += "  OUTPUTS:\n";
+        for( const TestDouble::ParameterChain* pEntry = pFirstOutput; 0 != pEntry; pEntry = pEntry->pNext )
+        {
+          ret += "\t";
+          ret += pEntry->pParameter->toString();
+          ret += "\n";
+        }
+      }
+
+      // ret += "  RETURNS: ";
+      // ret += HexStringFrom( _return.value.asLongLong );
+      // ret += "\n";
+
+      ret += ")\n";
     }
   }
+
+  if( false == ret.isEmpty() ) printf( "\n%s", ret.asCharString() );
 
   // drop expectations state
   delete _pExpectations;
@@ -156,7 +188,7 @@ static bool _matches( const ExpectationChain &expectation, const ActualCall &act
   const ExpectedCall& expected = *(expectation.pExpectedCall);
   if( actual.name != expected.name ) return false;
 
-  for( const TestDouble::ParameterChain* pExpectedEntry=expected.getParameters(); 0 != pExpectedEntry; pExpectedEntry = pExpectedEntry->pNext )
+  for( const TestDouble::ParameterChain* pExpectedEntry=expected.getInputs(); 0 != pExpectedEntry; pExpectedEntry = pExpectedEntry->pNext )
   {
     bool used = false;  ///< ensure expected parameter is used
     for( const TestDouble::ParameterChain* pActualEntry=actual.getInputs(); 0 != pActualEntry; pActualEntry = pActualEntry->pNext )

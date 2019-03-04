@@ -84,7 +84,7 @@ public:
 
   ~ExpectedCall()
   {
-    delete _parameters;
+    delete _inputs;
     delete _outputs;
   }
 
@@ -100,14 +100,14 @@ public:
   ExpectedCall& with( const SimpleString &_name, const T &value )
   {
     TestDouble::Parameter* pParameter = new TestDouble::Parameter( _name, value );
-    _parameters = new TestDouble::ParameterChain( pParameter, _parameters );
+    _inputs = new TestDouble::ParameterChain( pParameter, _inputs );
     return *this;
   }
 
   ExpectedCall& withBuffer( const SimpleString &_name, const void* const &staticBuffer, const std::size_t &size )
   {
     TestDouble::Parameter* pParameter = new TestDouble::Parameter( _name, staticBuffer, size );
-    _parameters = new TestDouble::ParameterChain( pParameter, _parameters );
+    _inputs = new TestDouble::ParameterChain( pParameter, _inputs );
     return *this;
   }
 
@@ -140,12 +140,12 @@ public:
   const TestDouble::Parameter::Variant getReturn() const { return _returnValue; }
 
   int getCount() const { return _count; }
-  const TestDouble::ParameterChain* getParameters() const { return _parameters; }
+  const TestDouble::ParameterChain* getInputs() const { return _inputs; }
   const TestDouble::ParameterChain* getOutputs() const { return _outputs; }
 
 private:
   int   _count = 0;
-  TestDouble::ParameterChain*     _parameters = 0;
+  TestDouble::ParameterChain*     _inputs = 0;
   TestDouble::ParameterChain*     _outputs = 0;
   TestDouble::Parameter::Variant  _returnValue = 0;
   IModel* _pModel = 0;
