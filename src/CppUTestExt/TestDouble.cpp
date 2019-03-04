@@ -145,8 +145,6 @@ SimpleString ExpectationQueue::check()
     }
   }
 
-  if( false == ret.isEmpty() ) printf( "\n%s", ret.asCharString() );
-
   // drop expectations state
   delete _pExpectations;
   _pExpectations = 0;

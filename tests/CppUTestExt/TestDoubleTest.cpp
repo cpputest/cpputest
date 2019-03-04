@@ -199,7 +199,7 @@ static void actual_times_greater()
   actualCall("foo");
   actualCall("foo");
 }
-// FIXME can't FAIL in ~ActualCall as it throws
+
 TEST( TestDoubleFailures, actual_times_fails )
 {
   failUnexpected();
