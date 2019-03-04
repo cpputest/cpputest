@@ -1,11 +1,11 @@
 **Test Double** (An alternative to CppuMock)
 ========================================================================================================================
 
-The CppUMock framework introduces patterns that unnecessarily couple the Component Under Test (CuT) to
-Dependencies of Component (DoC).  The **Test Double** focuses on the testing (expectations) and decouples the DoC
-implementation- i.e. a single **Test Double** implementation of a DoC can be used for all testing.  With **Test Double**
-you can perform the exact same testing as under CppuMock more easily.
+With **Test Double** you can perform the exact same testing as under CppuMock more easily.
 
+The CppUMock framework introduces patterns that unnecessarily couple the Component Under Test (CuT) to
+Dependencies of Component (DoC).  **Test Double** focuses on the testing (expectations) and decouples the DoC
+implementation- i.e. a single **Test Double** implementation of a DoC can be used for all testing.
 
 ### Where can this go?
 
@@ -28,8 +28,8 @@ universal test doubles implementations.
         double.
 
 * **Testing is based on Expectations**
-    * Upon a DoC call under **Test Double**, only the expected parameters are verified.  Under CppUMock, unexpected
-        parameters (often unnecessary for testing the CuT behavior) results in test failures.
+    * **Test Double** DoCs only test the expected parameters.  Under CppUMock, unexpected parameters
+        (often unnecessary for testing the CuT behavior) results in test failures.
 
 * **Stronger Typing**
     * **Test Double** leverages the compiler's typing, whereas CppuMock introduces its own typing which incurs implicit
@@ -38,7 +38,7 @@ universal test doubles implementations.
 * **Smaller memory usage**
     * **Test Double** uses less heap and stack memory than CppUMock, while providing the same functionality.
 
-* **Smaller (simpler) Implementation**
+* **Smaller (simpler) Source Code**
     * `cloc` for **Test Double**
         <!--
         include/CppUTestExt/ActualCall.h
@@ -125,24 +125,24 @@ TEST( TestGroup, CuT_returns_1 )
 
 ### Expectation Framework
 An Expectation Framework is a pattern for testing that focuses on expectations.  Tests created under an Expectation
-Framework PASS or FAIL based upon how the CuT performs under the provided expectations.  Tests should be written to
-minimize the expectations.  Not only does minimizing expectations expedite test development, but it also identifies
-additional code in the implementation that is unnecessary to meet test cases.
+Framework PASS or FAIL based upon how the CuT performs under the provided DoC.  Tests should be written to minimize
+DoC usage.  Not only does minimizing DoC usage expedite test development, but it also identifies unnecessary interfaces
+and code of the actual dependency.
 
 #### What should a test double do?
 Only enough to support your testing of the CuT.  Minimal effort should be exerted in creating a test double, as the
-value is the ability to test the CuT.  If you find yourself investing large amounts of time in creating a Test Double,
-you need to take a step back and analyze what is driving such complexity into the Test Double.
+only value is the ability to test the CuT.  If you find yourself investing large amounts of time in creating a test
+double you need to take a step back and analyze what is driving such complexity.
 
 With an Expectation Framework, a single DoC TestDouble can be leveraged.
 ```c
     // universal test double
-    bool DoC( int param0, int* pParam1 )
+    bool DoC( int param0, int &param1 )
     {
         return actual().call( "DoC" )
             .with( "param0", param0 )
-            .output( "pParam1", pParam1 )   // NOTE: see schema to provide default values
-            .andReturnBool();               // NOTE: see schema to provide default values
+            .output( "param1", param1 )     // NOTE: see schema to provide default values or model behavior
+            .andReturnBool();               // NOTE: see schema to provide default values or model behavior
     }
 
     // Spy - ensure that a call is made
@@ -158,15 +158,14 @@ With an Expectation Framework, a single DoC TestDouble can be leveraged.
         expect().call( "DoC" )
             .with( "param0", 1 )
             .output( "param1", &output )
-            .andReturn( true );
+            .andReturnBool( true );
         CHECK( true == CuT() );
     }
 
     // Model - validate input parameters, manage output parameters and return value per some modelled behavior
     test_Model()
     {
-        IModel model;
-        expect().call( "DoC" ).use( model );
+        expect().call( "DoC" ).use( model );        // NOTE: see IModel interface for how to set output and return values
         CHECK( true == CuT() );
     }
 ```
