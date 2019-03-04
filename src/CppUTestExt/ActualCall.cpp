@@ -289,7 +289,7 @@ ActualCall::~ActualCall()
   if( false == _failureMessage.isEmpty() )
   {
     _failureMessage += "\n";
-    _failureMessage += StringFromFormat( "actual call \"%s\"(\n", name.asCharString() );
+    _failureMessage += StringFromFormat( "\"%s\"(\n", name.asCharString() );
     const TestDouble::ParameterChain* pFirstInput = getInputs();
     if( 0 != pFirstInput )
     {
