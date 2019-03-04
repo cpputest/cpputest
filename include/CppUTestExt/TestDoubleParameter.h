@@ -42,8 +42,8 @@ class Parameter;
 // generic list of parameters (used for both input and output)
 struct ParameterChain
 {
-  TestDouble::Parameter* const pParameter;
-  ParameterChain* const pNext;
+  TestDouble::Parameter* const pParameter = 0;
+  ParameterChain* const pNext = 0;
 
   ParameterChain( TestDouble::Parameter* const &_pParameter, ParameterChain* const &_pNext );
   ~ParameterChain();
@@ -92,7 +92,7 @@ public:
   
   SimpleString toString();
 
-  const struct Variant
+  struct Variant
   {
     const enum Type
     {
@@ -107,6 +107,9 @@ public:
         CHAR, UNSIGNED_CHAR,
         BOOL
     } type;
+
+    /// only copies value (does not change original type)
+    Variant& operator=( const TestDouble::Parameter::Variant &other );
 
     union Value
     {

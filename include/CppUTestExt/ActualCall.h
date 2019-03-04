@@ -80,6 +80,24 @@ public:
     return *this;
   }
 
+  template<typename T>
+  bool setOutput( const SimpleString& _name, T value )
+  {
+    const TestDouble::Parameter::Variant variant( value );
+    for( TestDouble::ParameterChain* pActualEntry=getOutputs(); 0 != pActualEntry; pActualEntry = pActualEntry->pNext )
+    {
+      if( ( pActualEntry->pParameter->name == _name )   &&
+          ( variant.type == pActualEntry->pParameter->_variant.type ) )
+      {
+        pActualEntry->pParameter->_variant = variant;
+        return true;
+      }
+    }
+
+    // FIXME add failure unable to find parameter
+    return false;
+  }
+
   /// sets outputs
   void returns() { _setOutputs(); }
 

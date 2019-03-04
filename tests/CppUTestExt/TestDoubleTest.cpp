@@ -84,6 +84,51 @@ TEST( IgnoreUnmatchedActual, ignore_all )
 }
 
 //======================================================================================================================
+TEST_GROUP( UseModel )
+{
+  class OutputModel : public IModel
+  {
+  public:
+    const int outputValue = 2;    ///< don't use 1 as default actual produces true == 1
+
+    // virtual void model( IActualCall &call ){}
+    virtual bool model( ActualCall &actualCall )
+    {
+      CHECK( actualCall.setOutput( "value", outputValue ) );
+      return true;
+    }
+  } outputModel;
+
+  TEST_SETUP()
+  {
+    // clear any expectations
+    checkExpectations();
+  }
+
+  TEST_TEARDOWN()
+  {
+    // clear any expectations resources
+    checkExpectations();
+  }
+};
+
+TEST( UseModel, set_outputs )
+{
+  expectCall("doc").useModel( outputModel );
+  int actual = 0;
+  actualCall("doc").output( "value", &actual );
+  CHECK( outputModel.outputValue == actual );
+}
+
+// TEST( UseModel, set_return )
+// {
+//   expectCall("doc").useModel( returnModel );
+//   int value = actualCall("doc");
+//   CHECK( ouputModel.value == value );
+// }
+
+
+//======================================================================================================================
 TEST_GROUP( TestDoubleFailures )
 {
   TestTestingFixture fixture;
@@ -150,3 +195,9 @@ TEST( TestDoubleFailures, actual_times_fails )
   fixture.runTestWithMethod( actual_times_greater );
 }
 
+// TODO
+// TEST( TestDoubleFailures, model_fails )
+// {
+//   expectCall("doc").useModel( failModel );
+//   actualCall("doc");
+// }

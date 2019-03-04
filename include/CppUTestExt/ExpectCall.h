@@ -28,6 +28,15 @@
 #ifndef EXPECT_CALL_H
 #define EXPECT_CALL_H
 
+class ActualCall;
+/// Behavior handler for an expectation (e.g. Aspect Oriented Programming AoP)
+class IModel
+{
+public:
+  virtual bool model( ActualCall &call ) = 0;
+};
+
+
 
 /// A builder for an expectation
 class ExpectedCall
@@ -83,6 +92,13 @@ public:
     return *this;
   }
 
+  void useModel( IModel &staticModel ) { _pModel = &staticModel; }
+  bool handleModel( ActualCall &actual ) const
+  {
+    if( 0 == _pModel ) return true;
+    return _pModel->model( actual );
+  }
+
   template<typename T > 
   void returns( const T& value ) { _returnValue.value = {value}; }
 
@@ -97,14 +113,8 @@ private:
   TestDouble::ParameterChain*     _parameters = 0;
   TestDouble::ParameterChain*     _outputs = 0;
   TestDouble::Parameter::Variant  _returnValue = 0;
+  IModel* _pModel = 0;
 };
 
-// class Actual;
-// /// Behavior handler for an expectation (e.g. Aspect Oriented Programming AoP)
-// class IModel
-// {
-//     /// modifies the actual call instance based on expectation and model state
-//     virtual void behave( const Expectation&, Actual& ) = 0;
-// };
 
 #endif /* EXPECT_CALL_H */

@@ -62,6 +62,9 @@ const ExpectedCall* ActualCall::_setOutputs()
     if( false == used ) pActualEntry->pParameter->setDefault();
   }
 
+  if( 0 != pExpectation )
+    pExpectation->handleModel( *this );
+
   return pExpectation;
 }
 
