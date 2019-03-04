@@ -129,7 +129,7 @@ void Parameter::setDefault()
 
 SimpleString Parameter::toString()
 {
-  SimpleString ret = name + "\t";
+  SimpleString ret = StringFromFormat( "\"%s\"\t\t", name.asCharString() );
   switch( _variant.type )
   {
     case Variant::FN_POINTER:

@@ -289,21 +289,35 @@ ActualCall::~ActualCall()
   if( false == _failureMessage.isEmpty() )
   {
     _failureMessage += "\n";
-    _failureMessage += StringFromFormat( "\tactual call %s(\n", name.asCharString() );
-    _failureMessage += "\tINPUTS:\n";
-    for( const TestDouble::ParameterChain* pEntry = getInputs(); 0 != pEntry; pEntry = pEntry->pNext )
+    _failureMessage += StringFromFormat( "actual call \"%s\"(\n", name.asCharString() );
+    const TestDouble::ParameterChain* pFirstInput = getInputs();
+    if( 0 != pFirstInput )
     {
-      _failureMessage += "\t\t";
-      _failureMessage += pEntry->pParameter->toString();
-      _failureMessage += "\n";
+      _failureMessage += "  INPUTS:\n";
+      for( const TestDouble::ParameterChain* pEntry = pFirstInput; 0 != pEntry; pEntry = pEntry->pNext )
+      {
+        _failureMessage += "\t";
+        _failureMessage += pEntry->pParameter->toString();
+        _failureMessage += "\n";
+      }
     }
-    _failureMessage += "\tOUTPUTS:\n";
-    for( const TestDouble::ParameterChain* pEntry = getOutputs(); 0 != pEntry; pEntry = pEntry->pNext )
+
+    const TestDouble::ParameterChain* pFirstOutput = getOutputs();
+    if( 0 != pFirstOutput )
     {
-      _failureMessage += "\t\t";
-      _failureMessage += pEntry->pParameter->toString();
-      _failureMessage += "\n";
+      _failureMessage += "  OUTPUTS:\n";
+      for( const TestDouble::ParameterChain* pEntry = pFirstOutput; 0 != pEntry; pEntry = pEntry->pNext )
+      {
+        _failureMessage += "\t";
+        _failureMessage += pEntry->pParameter->toString();
+        _failureMessage += "\n";
+      }
     }
+
+    _failureMessage += "  RETURNS: ";
+    _failureMessage += HexStringFrom( _return.value.asLongLong );
+    _failureMessage += "\n";
+
     _failureMessage += ")\n";
   }
 
@@ -312,6 +326,7 @@ ActualCall::~ActualCall()
 
   if( false == _failureMessage.isEmpty() )
   {
+    printf( "\n%s", _failureMessage.asCharString() );
     UtestShell* const pShell = UtestShell::getCurrent();
     TestFailure failure( pShell, pShell->getFile().asCharString(), pShell->getLineNumber(), _failureMessage );
     TestTerminatorWithoutExceptions terminator;
