@@ -37,33 +37,37 @@ const ExpectedCall* ActualCall::_setOutputs()
 
   const ExpectedCall* pExpectation = TestDouble::findExpectation( *this );
   if( ( TestDouble::shouldFailUnexpected() )  &&  ( 0 == pExpectation ) ) _failureMessage = "unexpected call";
-  else for( const TestDouble::ParameterChain* pActualEntry=getOutputs(); 0 != pActualEntry; pActualEntry = pActualEntry->pNext )
+  else
   {
-    bool used = false;
-    // set outputs
-    if( 0 != pExpectation ) 
+    /// allow Model to override expectations
+    if( 0 != pExpectation )
+      pExpectation->handleModel( *this );
+
+    for( const TestDouble::ParameterChain* pActualEntry=getOutputs(); 0 != pActualEntry; pActualEntry = pActualEntry->pNext )
     {
-      for( const TestDouble::ParameterChain* pExpectedEntry=pExpectation->getOutputs(); 0 != pExpectedEntry; pExpectedEntry = pExpectedEntry->pNext )
+      bool used = false;
+      // set outputs
+      if( 0 != pExpectation ) 
       {
-        if( pExpectedEntry->pParameter->name == pActualEntry->pParameter->name )
+        for( const TestDouble::ParameterChain* pExpectedEntry=pExpectation->getOutputs(); 0 != pExpectedEntry; pExpectedEntry = pExpectedEntry->pNext )
         {
-          if( false == pActualEntry->pParameter->setValue( pExpectedEntry->pParameter ) )
+          if( pExpectedEntry->pParameter->name == pActualEntry->pParameter->name )
           {
-            _failureMessage = StringFromFormat( "mismatch output size for parameter '%s', expected size: %zu  actual size: %zu",
-                                           pExpectedEntry->pParameter->name.asCharString(),
-                                           pExpectedEntry->pParameter->bufferSize_bytes,
-                                           pActualEntry->pParameter->bufferSize_bytes );
+            if( false == pActualEntry->pParameter->setValue( pExpectedEntry->pParameter ) )
+            {
+              _failureMessage = StringFromFormat( "mismatch output size for parameter '%s', expected size: %zu  actual size: %zu",
+                                            pExpectedEntry->pParameter->name.asCharString(),
+                                            pExpectedEntry->pParameter->bufferSize_bytes,
+                                            pActualEntry->pParameter->bufferSize_bytes );
+            }
+            used = true;
+            break;  ///< only use the first expectation of a parameter
           }
-          used = true;
-          break;  ///< only use the first expectation of a parameter
         }
       }
+      if( false == used ) pActualEntry->pParameter->setDefault();
     }
-    if( false == used ) pActualEntry->pParameter->setDefault();
   }
-
-  if( 0 != pExpectation )
-    pExpectation->handleModel( *this );
 
   return pExpectation;
 }

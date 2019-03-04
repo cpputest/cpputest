@@ -116,7 +116,7 @@ TEST( UseModel, set_outputs )
 {
   expectCall("doc").useModel( outputModel );
   int actual = 0;
-  actualCall("doc").output( "value", &actual );
+  actualCall("doc").output( "value", &actual ).returns();
   CHECK( outputModel.outputValue == actual );
 }
 
