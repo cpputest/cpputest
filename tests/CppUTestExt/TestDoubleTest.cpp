@@ -91,10 +91,9 @@ TEST_GROUP( UseModel )
   public:
     const int value = 2;    ///< don't use 1 as default actual produces true == 1
 
-    virtual bool model( AActualCall &actualCall )
+    virtual void model( AActualCall &actualCall )
     {
-      CHECK( actualCall.setOutput( "value", value ) );
-      return true;
+      actualCall.setOutput( "value", value );
     }
   } outputModel;
 
@@ -103,10 +102,9 @@ TEST_GROUP( UseModel )
   public:
     const int value = 2;    ///< don't use 1 as default actual produces true == 1
 
-    virtual bool model( AActualCall &actualCall )
+    virtual void model( AActualCall &actualCall )
     {
       actualCall.setReturn( value );
-      return true;
     }
   } returnModel;
 

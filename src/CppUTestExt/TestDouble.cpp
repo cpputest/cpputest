@@ -137,10 +137,6 @@ SimpleString ExpectationQueue::check()
         }
       }
 
-      // ret += "  RETURNS: ";
-      // ret += HexStringFrom( _return.value.asLongLong );
-      // ret += "\n";
-
       ret += ")\n";
     }
   }

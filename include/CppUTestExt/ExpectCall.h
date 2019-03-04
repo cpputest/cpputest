@@ -36,7 +36,7 @@ public:
   virtual TestDouble::ParameterChain* getOutputs() const = 0;
 
   template<typename T>
-  bool setOutput( const SimpleString& _name, T value )
+  void setOutput( const SimpleString& _name, T value )
   {
     const TestDouble::Parameter::Variant variant( value );
     for( TestDouble::ParameterChain* pActualEntry=getOutputs(); 0 != pActualEntry; pActualEntry = pActualEntry->pNext )
@@ -45,12 +45,8 @@ public:
           ( variant.type == pActualEntry->pParameter->_variant.type ) )
       {
         pActualEntry->pParameter->_variant = variant;
-        return true;
       }
     }
-
-    // FIXME add failure unable to find parameter
-    return false;
   }
 
   template<typename T>
@@ -67,7 +63,7 @@ protected:
 class IModel
 {
 public:
-  virtual bool model( AActualCall &call ) = 0;
+  virtual void model( AActualCall &call ) = 0;
 };
 
 
@@ -128,10 +124,10 @@ public:
 
   void useModel( IModel &staticModel ) { _pModel = &staticModel; }
   bool hasModel() const { return 0 != _pModel; }
-  bool handleModel( AActualCall &actual ) const
+  void handleModel( AActualCall &actual ) const
   {
-    if( 0 == _pModel ) return true;
-    return _pModel->model( actual );
+    if( 0 == _pModel ) return;
+    else _pModel->model( actual );
   }
 
   template<typename T > 
