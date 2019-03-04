@@ -40,7 +40,7 @@ class ActualCall;
 /// implemented in TestDouble.cpp
 ActualCall actualCall( const SimpleString &name );
 
-class ActualCall
+class ActualCall : public AActualCall
 {
 public:
   const SimpleString      name;
@@ -54,14 +54,14 @@ public:
   ActualCall& with( const SimpleString &_name, const T &value )
   {
     TestDouble::Parameter* pParameter = new TestDouble::Parameter( _name, value );
-    _parameters = new TestDouble::ParameterChain( pParameter, _parameters );
+    _inputs = new TestDouble::ParameterChain( pParameter, _inputs );
     return *this;
   }
 
   ActualCall& withBuffer( const SimpleString &_name, void* const &staticBuffer, const std::size_t &size )
   {
     TestDouble::Parameter* pParameter = new TestDouble::Parameter( _name, staticBuffer, size );
-    _parameters = new TestDouble::ParameterChain( pParameter, _parameters );
+    _inputs = new TestDouble::ParameterChain( pParameter, _inputs );
     return *this;
   }
 
@@ -78,24 +78,6 @@ public:
     TestDouble::Parameter* pParameter = new TestDouble::Parameter( _name, staticBuffer, size_bytes, pDefault );
     _outputs = new TestDouble::ParameterChain( pParameter, _outputs );
     return *this;
-  }
-
-  template<typename T>
-  bool setOutput( const SimpleString& _name, T value )
-  {
-    const TestDouble::Parameter::Variant variant( value );
-    for( TestDouble::ParameterChain* pActualEntry=getOutputs(); 0 != pActualEntry; pActualEntry = pActualEntry->pNext )
-    {
-      if( ( pActualEntry->pParameter->name == _name )   &&
-          ( variant.type == pActualEntry->pParameter->_variant.type ) )
-      {
-        pActualEntry->pParameter->_variant = variant;
-        return true;
-      }
-    }
-
-    // FIXME add failure unable to find parameter
-    return false;
   }
 
   /// sets outputs
@@ -123,11 +105,11 @@ public:
   unsigned char returnUnsignedChar( unsigned char defaultValue=true );
   bool returnBool( bool defaultValue=true );
 
-  const TestDouble::ParameterChain* getParameters() const { return _parameters; }
-  TestDouble::ParameterChain* getOutputs() const { return _outputs; }
+  virtual const TestDouble::ParameterChain* getInputs() const { return _inputs; }
+  virtual TestDouble::ParameterChain* getOutputs() const { return _outputs; }
 
 private:
-  TestDouble::ParameterChain*     _parameters = 0;
+  TestDouble::ParameterChain*     _inputs = 0;
   TestDouble::ParameterChain*     _outputs = 0;
   bool  _hasSetOutputs = false;
   const ExpectedCall* _setOutputs();

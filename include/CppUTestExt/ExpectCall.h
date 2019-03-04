@@ -28,12 +28,36 @@
 #ifndef EXPECT_CALL_H
 #define EXPECT_CALL_H
 
-class ActualCall;
+/// Abstract actual call for model usage
+class AActualCall
+{
+public:
+  virtual const TestDouble::ParameterChain* getInputs() const = 0;
+  virtual TestDouble::ParameterChain* getOutputs() const = 0;
+
+  template<typename T>
+  bool setOutput( const SimpleString& _name, T value )
+  {
+    const TestDouble::Parameter::Variant variant( value );
+    for( TestDouble::ParameterChain* pActualEntry=getOutputs(); 0 != pActualEntry; pActualEntry = pActualEntry->pNext )
+    {
+      if( ( pActualEntry->pParameter->name == _name )   &&
+          ( variant.type == pActualEntry->pParameter->_variant.type ) )
+      {
+        pActualEntry->pParameter->_variant = variant;
+        return true;
+      }
+    }
+
+    // FIXME add failure unable to find parameter
+    return false;
+  }
+};
 /// Behavior handler for an expectation (e.g. Aspect Oriented Programming AoP)
 class IModel
 {
 public:
-  virtual bool model( ActualCall &call ) = 0;
+  virtual bool model( AActualCall &call ) = 0;
 };
 
 
@@ -93,7 +117,7 @@ public:
   }
 
   void useModel( IModel &staticModel ) { _pModel = &staticModel; }
-  bool handleModel( ActualCall &actual ) const
+  bool handleModel( AActualCall &actual ) const
   {
     if( 0 == _pModel ) return true;
     return _pModel->model( actual );

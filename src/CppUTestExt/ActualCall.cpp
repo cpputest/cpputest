@@ -187,7 +187,7 @@ ActualCall::~ActualCall()
     _failureMessage += "\n";
     _failureMessage += StringFromFormat( "\tactual call %s(\n", name.asCharString() );
     _failureMessage += "\tINPUTS:\n";
-    for( const TestDouble::ParameterChain* pEntry = getParameters(); 0 != pEntry; pEntry = pEntry->pNext )
+    for( const TestDouble::ParameterChain* pEntry = getInputs(); 0 != pEntry; pEntry = pEntry->pNext )
     {
       _failureMessage += "\t\t";
       _failureMessage += pEntry->pParameter->toString();
@@ -203,7 +203,7 @@ ActualCall::~ActualCall()
     _failureMessage += ")\n";
   }
 
-  delete _parameters;
+  delete _inputs;
   delete _outputs;
 
   if( false == _failureMessage.isEmpty() )

@@ -159,7 +159,7 @@ static bool _matches( const ExpectationChain &expectation, const ActualCall &act
   for( const TestDouble::ParameterChain* pExpectedEntry=expected.getParameters(); 0 != pExpectedEntry; pExpectedEntry = pExpectedEntry->pNext )
   {
     bool used = false;  ///< ensure expected parameter is used
-    for( const TestDouble::ParameterChain* pActualEntry=actual.getParameters(); 0 != pActualEntry; pActualEntry = pActualEntry->pNext )
+    for( const TestDouble::ParameterChain* pActualEntry=actual.getInputs(); 0 != pActualEntry; pActualEntry = pActualEntry->pNext )
     {
       if( pExpectedEntry->pParameter->name == pActualEntry->pParameter->name )
       {

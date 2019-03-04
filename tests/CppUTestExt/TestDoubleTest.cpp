@@ -92,7 +92,7 @@ TEST_GROUP( UseModel )
     const int outputValue = 2;    ///< don't use 1 as default actual produces true == 1
 
     // virtual void model( IActualCall &call ){}
-    virtual bool model( ActualCall &actualCall )
+    virtual bool model( AActualCall &actualCall )
     {
       CHECK( actualCall.setOutput( "value", outputValue ) );
       return true;
