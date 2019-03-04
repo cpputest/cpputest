@@ -123,7 +123,7 @@ TEST_GROUP( UseModel )
 
 TEST( UseModel, set_outputs )
 {
-  expectCall("doc").useModel( outputModel );
+  expectCall("doc").use( outputModel );
   int actual = 0;
   actualCall("doc").output( "value", &actual ).returns();
   CHECK( outputModel.value == actual );
@@ -131,7 +131,7 @@ TEST( UseModel, set_outputs )
 
 TEST( UseModel, set_return )
 {
-  expectCall("doc").useModel( returnModel );
+  expectCall("doc").use( returnModel );
   int actual = actualCall("doc").returnInt();
   CHECK( returnModel.value == actual );
 }

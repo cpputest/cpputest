@@ -11,7 +11,7 @@ you can perform the exact same testing as under CppuMock more easily.
 
 Since **Test Double** DoC implementations directly follow their header interface, auto-generation of DoC implementations
 is straight-forward.  In this way, CppuTest can provide a much closer parity to GoogleTest for auto-generation of
-test doubles.
+universal test doubles implementations.
 
 
 ### How is this different than CppuMock?
@@ -40,26 +40,24 @@ test doubles.
 
 * **Smaller (simpler) Implementation**
     * `cloc` for **Test Double**
-            <!--
+        <!--
         include/CppUTestExt/ActualCall.h
         include/CppUTestExt/ExpectCall.h
         include/CppUTestExt/TestDouble.h
         include/CppUTestExt/TestDoubleParameter.h
         src/CppUTestExt/ActualCall.cpp
-        src/CppUTestExt/CMakeLists.txt
         src/CppUTestExt/TestDouble.cpp
         src/CppUTestExt/TestDoubleParameter.cpp
         -->
         ~~~
-        github.com/AlDanial/cloc v 1.74  T=0.01 s (534.3 files/s, 74734.9 lines/s)
+        github.com/AlDanial/cloc v 1.74  T=0.02 s (460.4 files/s, 87016.8 lines/s)
         -------------------------------------------------------------------------------
         Language                     files          blank        comment           code
         -------------------------------------------------------------------------------
-        C++                              3             82             89            410
-        C/C++ Header                     4             76            130            278
-        CMake                            1              2              0             52
+        C++                              3            118            106            558
+        C/C++ Header                     4             87            129            325
         -------------------------------------------------------------------------------
-        SUM:                             8            160            219            740
+        SUM:                             7            205            235            883
         -------------------------------------------------------------------------------
         ~~~
     * `cloc` for CppUMock
@@ -169,6 +167,7 @@ With an Expectation Framework, a single DoC TestDouble can be leveraged.
     {
         IModel model;
         expect().call( "DoC" ).use( model );
+        CHECK( true == CuT() );
     }
 ```
 
@@ -192,9 +191,9 @@ Schema of an Test(Expectation) Context
 expectCall( "<call>" )                                  // expect a call with the DoC name matching <call>
     [.times( count )]                                   // necessary invocations for the CuT test (default=infinity)
     [.with( "<parameter>", value )]                     // expected input parameter for CuT test
-    [.withBuffer( "<parameter>", buffer, size )]        // expected input buffer data for CuT test
+    [.withBuffer( "<parameter>", buffer, size )]        // expected input buffer data for CuT test (NOTE: buffer must be static)
     [.output( "<parameter>", value )]                   // necessary value to set for the CuT test
-    [.outputBuffer( "<parameter>", buffer, size )]      // necessary buffer value for the CuT test
+    [.outputBuffer( "<parameter>", buffer, size )]      // necessary buffer value for the CuT test (NOTE: buffer must be static)
     [.use( <Model> )]                                   // necessary Model for the CuT (i.e. override the DoC defaults)
     [.returns( value )]                                 // necessary return value for the CuT test
 ```
@@ -204,8 +203,8 @@ Schema of a DoC Context
 ```c
 actualCall( "<call>" )                                  // name of method/function used by actual
     [.with( "<parameter>", value )]                     // actual input parameter
-    [.withBuffer( "<parameter>", buffer, size )]        // actual input buffer data
-    [.output( "<parameter>", [defaultValue] )]          // necessary output value for general testing
-    [.outputBuffer( "<parameter>", [buffer, size] )]    // necessary output buffer value for general testing
-    [.return<type>( value )]                            // necessary return value for general testing
+    [.withBuffer( "<parameter>", buffer, size )]        // actual input buffer data (NOTE: buffer must be static)
+    [.output( "<parameter>", [defaultValue] )]          // default output value for general testing
+    [.outputBuffer( "<parameter>", buffer, size )]      // default buffer value for the CuT test (NOTE: buffer must be static)
+    [.return<type>( [defaultValue] )]                   // default return value for general testing
 ```

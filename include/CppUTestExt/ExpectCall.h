@@ -122,7 +122,7 @@ public:
     return *this;
   }
 
-  void useModel( IModel &staticModel ) { _pModel = &staticModel; }
+  void use( IModel &staticModel ) { _pModel = &staticModel; }
   bool hasModel() const { return 0 != _pModel; }
   void handleModel( AActualCall &actual ) const
   {
