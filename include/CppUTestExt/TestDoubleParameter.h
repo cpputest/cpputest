@@ -85,7 +85,7 @@ public:
         SHORT, UNSIGNED_SHORT,
         CHAR, UNSIGNED_CHAR,
         BOOL,
-        UNTYPED
+        RETURN_VALUE
     } type;
 
     /// copies value (does not change original type)
@@ -146,8 +146,10 @@ public:
     Variant( const char &_value ) : type(CHAR), value(_value) {}
     Variant( const unsigned char &_value ) : type(UNSIGNED_CHAR), value(_value) {}
     Variant( const bool &_value ) : type(BOOL), value(_value) {}
-    /// default constructor for void value (i.e. return void)
-    Variant() : type(UNTYPED) {}
+
+    /// constructor for return values (C/C++ return values can be implicitly converted,
+    ///    so explicit type cannot be enforced by Variant)
+    Variant() : type(RETURN_VALUE) {}
 
   } _variant = 0;
 
@@ -165,7 +167,6 @@ struct ParameterChain
   : pParameter(_pParameter) ,pNext(_pNext) {}
   ~ParameterChain() { delete pParameter; delete pNext; }
 };
-
 
 } // namespace TestDouble
 

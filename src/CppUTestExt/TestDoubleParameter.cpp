@@ -205,6 +205,7 @@ SimpleString Parameter::toString()
       return ret + StringFrom( _variant.value.asBool );
       break;
     }
+    case Variant::RETURN_VALUE:
     default:
     {
       /// for unknown types display the largest union member in hex
