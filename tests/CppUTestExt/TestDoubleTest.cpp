@@ -54,11 +54,14 @@ TEST( TestDoubleState, expectation_queue_is_FIFO )
 {
   TestDouble::ExpectedCall* pExpectation1 = new TestDouble::ExpectedCall("foo");
   TestDouble::ExpectedCall* pExpectation2 = new TestDouble::ExpectedCall("foo");
+
   TestDouble::ExpectationQueue queue;
   queue.enqueue( pExpectation1 );
   queue.enqueue( pExpectation2 );
   CHECK( pExpectation1 == queue.get()->pExpectedCall );
   CHECK( pExpectation2 == queue.get()->pNext->pExpectedCall );
+
+  // clean up allocated memory
   queue.check();
 }
 
