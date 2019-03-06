@@ -43,11 +43,23 @@ TEST_GROUP( TestDoubleState )
   }
 };
 
-TEST( TestDoubleState, new_expecatation_has_zero_actualCount )
+TEST( TestDoubleState, new_expectation_has_zero_actualCount )
 {
   TestDouble::ExpectedCall* pExpectation = new TestDouble::ExpectedCall("foo");
   TestDouble::ExpectationChain chain( pExpectation, 0 );
   CHECK( 0 == chain.actualCount );
+}
+
+TEST( TestDoubleState, expectation_queue_is_FIFO )
+{
+  TestDouble::ExpectedCall* pExpectation1 = new TestDouble::ExpectedCall("foo");
+  TestDouble::ExpectedCall* pExpectation2 = new TestDouble::ExpectedCall("foo");
+  TestDouble::ExpectationQueue queue;
+  queue.enqueue( pExpectation1 );
+  queue.enqueue( pExpectation2 );
+  CHECK( pExpectation1 == queue.get()->pExpectedCall );
+  CHECK( pExpectation2 == queue.get()->pNext->pExpectedCall );
+  queue.check();
 }
 
 TEST( TestDoubleState, upon_checkExpectations_restore_default_state )

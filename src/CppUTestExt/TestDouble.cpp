@@ -86,11 +86,10 @@ ExpectationChain::~ExpectationChain()
 
 void ExpectationQueue::enqueue( const ExpectedCall* const &pCall )
 {
-  if( 0 == expectations._pExpectations )
+  if( 0 == _pExpectations )
   {
     // create a new chain
-    _pExpectations = new ExpectationChain( pCall, 0 );
-    _pTail = _pExpectations;
+    _pTail = _pExpectations = new ExpectationChain( pCall, 0 );
   }
   else 
   {
@@ -141,8 +140,10 @@ SimpleString ExpectationQueue::check()
     }
   }
 
-  // drop expectations state
+  // drop expectations
   delete _pExpectations;
+
+  // reset expectation framework state
   _pExpectations = 0;
   _pTail = 0;
   _failActuals = false;
