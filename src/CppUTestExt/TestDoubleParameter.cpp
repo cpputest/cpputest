@@ -45,17 +45,19 @@ bool Parameter::equals( const Parameter* const &pOther ) const
 
   if( type == typeid(void*).name() ) { return _variant.value.asPointer == pOther->_variant.value.asPointer; }
   if( type == typeid(const void*).name() ) { return _variant.value.asConstPointer == pOther->_variant.value.asConstPointer; }
-  if( type == typeid(bool).name() ) { return _variant.value.asBool == pOther->_variant.value.asBool; }
-  if( type == typeid(char).name() ) { return _variant.value.asChar == pOther->_variant.value.asChar; }
-  if( type == typeid(unsigned char).name() ) { return _variant.value.asUnsignedChar == pOther->_variant.value.asUnsignedChar; }
-  if( type == typeid(int).name() ) { return _variant.value.asInt == pOther->_variant.value.asInt; }
-  if( type == typeid(unsigned int).name() ) { return _variant.value.asUnsignedInt == pOther->_variant.value.asUnsignedInt; }
-  if( type == typeid(long).name() ) { return _variant.value.asLong == pOther->_variant.value.asLong; }
-  if( type == typeid(unsigned long).name() ) { return _variant.value.asUnsignedLong == pOther->_variant.value.asUnsignedLong; }
+  if( type == typeid(double).name() ) { return _variant.value.asDouble == pOther->_variant.value.asDouble; }
+  if( type == typeid(float).name() ) { return _variant.value.asFloat == pOther->_variant.value.asFloat; }
   if( type == typeid(long long).name() ) { return _variant.value.asLongLong == pOther->_variant.value.asLongLong; }
   if( type == typeid(unsigned long long).name() ) { return _variant.value.asUnsignedLongLong == pOther->_variant.value.asUnsignedLongLong; }
-  if( type == typeid(float).name() ) { return _variant.value.asFloat == pOther->_variant.value.asFloat; }
-  if( type == typeid(double).name() ) { return _variant.value.asDouble == pOther->_variant.value.asDouble; }
+  if( type == typeid(long).name() ) { return _variant.value.asLong == pOther->_variant.value.asLong; }
+  if( type == typeid(unsigned long).name() ) { return _variant.value.asUnsignedLong == pOther->_variant.value.asUnsignedLong; }
+  if( type == typeid(int).name() ) { return _variant.value.asInt == pOther->_variant.value.asInt; }
+  if( type == typeid(unsigned int).name() ) { return _variant.value.asUnsignedInt == pOther->_variant.value.asUnsignedInt; }
+  if( type == typeid(short).name() ) { return _variant.value.asShort == pOther->_variant.value.asShort; }
+  if( type == typeid(unsigned short).name() ) { return _variant.value.asUnsignedShort == pOther->_variant.value.asUnsignedShort; }
+  if( type == typeid(char).name() ) { return _variant.value.asChar == pOther->_variant.value.asChar; }
+  if( type == typeid(unsigned char).name() ) { return _variant.value.asUnsignedChar == pOther->_variant.value.asUnsignedChar; }
+  if( type == typeid(bool).name() ) { return _variant.value.asBool == pOther->_variant.value.asBool; }
   return _variant.value.asPointer == pOther->_variant.value.asPointer;
 }
 
