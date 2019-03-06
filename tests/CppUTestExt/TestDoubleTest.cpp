@@ -60,9 +60,6 @@ TEST( TestDoubleState, expectation_queue_is_FIFO )
   queue.enqueue( pExpectation2 );
   CHECK( pExpectation1 == queue.get()->pExpectedCall );
   CHECK( pExpectation2 == queue.get()->pNext->pExpectedCall );
-
-  // clean up allocated memory
-  queue.check();
 }
 
 TEST( TestDoubleState, upon_checkExpectations_restore_default_state )

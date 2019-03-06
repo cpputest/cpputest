@@ -38,12 +38,17 @@ void failUnexpected() { _failActuals = true; }
 static bool _strictOrder = false;
 void strictOrder() { _strictOrder = true; }
 
+
 /// global set of expectations
 static TestDouble::ExpectationQueue expectations;
 
 void checkExpectations()
 {
   SimpleString report = expectations.check();
+
+  // reset framework state
+  _failActuals = false;
+  _strictOrder = false;
 
   if( report.isEmpty() ) return;
 
@@ -76,12 +81,6 @@ ExpectationChain::ExpectationChain( const ExpectedCall* const &_pExpectedCall, E
     pLast->pNext = this;
   }
 }
-ExpectationChain::~ExpectationChain()
-{
-  delete pExpectedCall;
-  delete pNext;
-}
-
 
 
 void ExpectationQueue::enqueue( const ExpectedCall* const &pCall )
@@ -143,11 +142,9 @@ SimpleString ExpectationQueue::check()
   // drop expectations
   delete _pExpectations;
 
-  // reset expectation framework state
+  // reset expectations chain
   _pExpectations = 0;
   _pTail = 0;
-  _failActuals = false;
-  _strictOrder = false;
 
   return ret;
 }

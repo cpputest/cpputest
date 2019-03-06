@@ -29,6 +29,7 @@
 
 #include <CppUTest/SimpleString.h>
 #include <CppUTestExt/TestDoubleParameter.h>
+#include <CppUTestExt/ExpectCall.h>
 
 /// fail the test if an actual call doesn't match an expectation
 void failUnexpected();
@@ -40,8 +41,6 @@ void strictOrder();
 /// @post resets expectation framework state
 void checkExpectations();
 
-
-namespace TestDouble { class ExpectedCall; }
 /// create an expectation using a [Builder pattern](https://en.wikipedia.org/wiki/Builder_pattern)
 TestDouble::ExpectedCall& expectCall( const SimpleString &call );
 
@@ -67,7 +66,7 @@ public:
   ExpectationChain*         pNext = 0;
 
   ExpectationChain( const ExpectedCall* const &_pExpectedCall, ExpectationChain* const &pLast );
-  ~ExpectationChain();
+  ~ExpectationChain() { delete pExpectedCall; delete pNext; }
 };
 
 class ExpectationQueue
@@ -78,6 +77,8 @@ public:
 
   /// detect un-actualized expectations and then clear expectations
   SimpleString check();
+
+  ~ExpectationQueue() { delete _pExpectations; }
 private:
   ExpectationChain*   _pExpectations = 0;
   ExpectationChain*   _pTail = 0;         ///< reference to last enqueued
