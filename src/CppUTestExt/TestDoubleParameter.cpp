@@ -58,7 +58,7 @@ bool Parameter::equals( const Parameter* const &pOther ) const
   if( type == typeid(char).name() ) { return _variant.value.asChar == pOther->_variant.value.asChar; }
   if( type == typeid(unsigned char).name() ) { return _variant.value.asUnsignedChar == pOther->_variant.value.asUnsignedChar; }
   if( type == typeid(bool).name() ) { return _variant.value.asBool == pOther->_variant.value.asBool; }
-  return _variant.value.asPointer == pOther->_variant.value.asPointer;
+  return _variant.value.asFunctionPointer == pOther->_variant.value.asFunctionPointer;
 }
 
 Parameter::Variant& Parameter::Variant::operator=( const TestDouble::Parameter::Variant &other )
