@@ -291,11 +291,11 @@ ActualCall::~ActualCall()
   if( false == _failureMessage.isEmpty() )
   {
     _failureMessage += "\n";
-    _failureMessage += StringFromFormat( "\"%s\"(\n", name.asCharString() );
+    _failureMessage += StringFromFormat( "%s(", name.asCharString() );
     const TestDouble::ParameterChain* pFirstInput = getInputs();
     if( 0 != pFirstInput )
     {
-      _failureMessage += "  INPUTS:\n";
+      _failureMessage += "\n  INPUTS:\n";
       for( const TestDouble::ParameterChain* pEntry = pFirstInput; 0 != pEntry; pEntry = pEntry->pNext )
       {
         _failureMessage += "\t";
@@ -307,7 +307,7 @@ ActualCall::~ActualCall()
     const TestDouble::ParameterChain* pFirstOutput = getOutputs();
     if( 0 != pFirstOutput )
     {
-      _failureMessage += "  OUTPUTS:\n";
+      _failureMessage += "\n  OUTPUTS:\n";
       for( const TestDouble::ParameterChain* pEntry = pFirstOutput; 0 != pEntry; pEntry = pEntry->pNext )
       {
         _failureMessage += "\t";
@@ -316,11 +316,9 @@ ActualCall::~ActualCall()
       }
     }
 
-    _failureMessage += "  RETURNS: ";
+    _failureMessage += ") RETURNS: 0x";
     _failureMessage += HexStringFrom( _return.value.asLongLong );
     _failureMessage += "\n";
-
-    _failureMessage += ")\n";
   }
 
   delete _inputs;

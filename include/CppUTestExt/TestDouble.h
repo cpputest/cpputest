@@ -57,7 +57,7 @@ bool shouldEnforceOrder();      ///< returns  state of expectation framework, se
 /// retval 0    no expectation found
 const TestDouble::ExpectedCall* findExpectation( const ActualCall &call );
 
-/// list of expectations
+/// appending list of expectations
 class ExpectationChain
 {
 public:
@@ -65,10 +65,12 @@ public:
   int                       actualCount = 0;
   ExpectationChain*         pNext = 0;
 
+  /// appends expectation chain to pLast if pLast != 0
   ExpectationChain( const ExpectedCall* const &_pExpectedCall, ExpectationChain* const &pLast );
   ~ExpectationChain() { delete pExpectedCall; delete pNext; }
 };
 
+/// FIFO of expectations
 class ExpectationQueue
 {
 public:
@@ -81,7 +83,7 @@ public:
   ~ExpectationQueue() { delete _pExpectations; }
 private:
   ExpectationChain*   _pExpectations = 0;
-  ExpectationChain*   _pTail = 0;         ///< reference to last enqueued
+  ExpectationChain*   _pTail = 0;         ///< reference to last enqueued expectation
 };
 
 } // namespace TestDouble

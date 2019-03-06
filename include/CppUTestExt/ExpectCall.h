@@ -135,11 +135,11 @@ public:
   template<typename T > 
   void returns( const T& value ) { _returnValue.value = {value}; }
 
-  const TestDouble::Parameter::Variant getReturn() const { return _returnValue; }
 
   int getCount() const { return _count; }
   const TestDouble::ParameterChain* getInputs() const { return _inputs; }
   const TestDouble::ParameterChain* getOutputs() const { return _outputs; }
+  const TestDouble::Parameter::Variant getReturn() const { return _returnValue; }
 
 private:
   int   _count = 0;

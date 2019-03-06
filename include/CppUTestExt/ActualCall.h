@@ -35,7 +35,8 @@
 #include <typeinfo>
 
 namespace TestDouble { class ActualCall; }
-/// implemented in TestDouble.cpp
+/// create an actual call object using a [Builder pattern](https://en.wikipedia.org/wiki/Builder_pattern)
+/// @note implemented in TestDouble.cpp
 TestDouble::ActualCall actualCall( const SimpleString &name );
 
 namespace TestDouble 

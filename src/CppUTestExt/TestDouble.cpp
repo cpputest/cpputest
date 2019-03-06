@@ -32,27 +32,25 @@
 
 #include <CppUTest/TestHarness.h>
 
-static bool _failActuals = false;
+static bool _failActuals = false;   ///< reset to false upon checkExpectations()
 void failUnexpected() { _failActuals = true; }
 
-static bool _strictOrder = false;
+static bool _strictOrder = false;   ///< reset to false upon checkExpectations()
 void strictOrder() { _strictOrder = true; }
-
 
 /// global set of expectations
 static TestDouble::ExpectationQueue expectations;
 
+
 void checkExpectations()
 {
-  SimpleString report = expectations.check();
-
   // reset framework state
   _failActuals = false;
   _strictOrder = false;
 
-  if( report.isEmpty() ) return;
-
-  FAIL( report.asCharString() );
+  // fail upon unmatched expectations
+  SimpleString report = expectations.check();
+  if( false == report.isEmpty() ) FAIL( report.asCharString() );
 }
 
 TestDouble::ExpectedCall& expectCall( const SimpleString &call )
@@ -66,18 +64,19 @@ TestDouble::ActualCall actualCall( const SimpleString &call ) { return TestDoubl
 
 
 
+// Expectation framework (i.e. Test Double)
+//======================================================================================================================
 namespace TestDouble {
 
 bool shouldFailUnexpected() { return _failActuals; }
 bool shouldEnforceOrder() { return _strictOrder; }
-
 
 ExpectationChain::ExpectationChain( const ExpectedCall* const &_pExpectedCall, ExpectationChain* const &pLast )
   : pExpectedCall( _pExpectedCall )
 {
   if( 0 != pLast )
   {
-    // append to chain
+    // attach to last entry
     pLast->pNext = this;
   }
 }
@@ -86,15 +85,11 @@ ExpectationChain::ExpectationChain( const ExpectedCall* const &_pExpectedCall, E
 void ExpectationQueue::enqueue( const ExpectedCall* const &pCall )
 {
   if( 0 == _pExpectations )
-  {
     // create a new chain
     _pTail = _pExpectations = new ExpectationChain( pCall, 0 );
-  }
   else 
-  {
-    // append the chain at the tail
+    // append to the tail
     _pTail = new ExpectationChain( pCall, _pTail );
-  }
 }
 
 SimpleString ExpectationQueue::check()
@@ -108,13 +103,12 @@ SimpleString ExpectationQueue::check()
             ( 0 >= pExpectation->actualCount )    :
             ( pExpectation->actualCount < pExpectation->pExpectedCall->getCount() ) )
     {
-      // TODO format a usable report
-      ret += StringFromFormat( "unmet expectation: \"%s\"(\n", pExpectation->pExpectedCall->name.asCharString() );
+      ret += StringFromFormat( "unmet expectation: \n%s(", pExpectation->pExpectedCall->name.asCharString() );
 
       const TestDouble::ParameterChain* pFirstInput = pExpectation->pExpectedCall->getInputs();
       if( 0 != pFirstInput )
       {
-        ret += "  INPUTS:\n";
+        ret += "\n  INPUTS:\n";
         for( const TestDouble::ParameterChain* pEntry = pFirstInput; 0 != pEntry; pEntry = pEntry->pNext )
         {
           ret += "\t";
@@ -126,7 +120,7 @@ SimpleString ExpectationQueue::check()
       const TestDouble::ParameterChain* pFirstOutput = pExpectation->pExpectedCall->getOutputs();
       if( 0 != pFirstOutput )
       {
-        ret += "  OUTPUTS:\n";
+        ret += "\n  OUTPUTS:\n";
         for( const TestDouble::ParameterChain* pEntry = pFirstOutput; 0 != pEntry; pEntry = pEntry->pNext )
         {
           ret += "\t";
@@ -135,9 +129,13 @@ SimpleString ExpectationQueue::check()
         }
       }
 
-      ret += ")\n";
+      ret += ") RETURNS: 0x";
+      ret += HexStringFrom( pExpectation->pExpectedCall->getReturn().value.asLongLong );
+      ret += "\n";
     }
   }
+
+  if( false == ret.isEmpty() ) printf( "\n%s", ret.asCharString() );
 
   // drop expectations
   delete _pExpectations;
