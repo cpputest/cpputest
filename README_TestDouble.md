@@ -16,12 +16,10 @@ universal test doubles implementations.
 
 ### How is this different than CppuMock?
 
-<!-- TODO
-* **Separate interfaces for expectations <CppuTestExt/TestDouble.h> and a Test Double <CppuTestExt/ActualCall.h>**
-    * MockSupport.h brings in both interfaces, developers new to CppUMock are often confused about which interfaces to
+* **Separate interfaces for test expectations <CppuTestExt/TestDouble.h> and a Test Double <CppuTestExt/ActualCall.h>**
+    * MockSupport.h brings in all interfaces.  Developers new to CppUMock are often confused about which interfaces to
         use under different contexts (e.g. testing vs DoC).
-    * With **Test Double**, attempts to use expectation interfaces in a DoC result in compile time errors.
--->
+    * With **Test Double**, attempts to use expectation interfaces in a Test Double result in compile time errors.
 
 * **No support for test namespacing (i.e. _mock("namespace")_ )**
     * CppUMock supports test namespacing.  This feature is unnecessary as it couples testing directly to the DoC test
@@ -177,7 +175,8 @@ Schema  Legend
 ```c
     []      : optional
     {}      : specialization (i.e. developer must provide the rest of the syntax)
-    <>      : literal (i.e. developer must provide the literal)
+    <>      : syntax literal provided by the test developer (e.g. a string value "<call>" could be "foo"
+                or a method specialization `.return<type>()` could be `.returnBool()` )
 ```
 
 Schema of an Test(Expectation) Context
@@ -185,14 +184,16 @@ Schema of an Test(Expectation) Context
 ```c
 [failUnexpected()]                      // fail the test if an actual call was not expected
 [strictOrder()]                         // fail the test if an actual call did not follow the expected order
-[checkExpectation()]                    // fail the test if unmet expectations
+[checkExpectation()]                    // called after CuT to fail the test if there are unmet expectations
 
 expectCall( "<call>" )                                  // expect a call with the DoC name matching <call>
     [.times( count )]                                   // necessary invocations for the CuT test (default=infinity)
     [.with( "<parameter>", value )]                     // expected input parameter for CuT test
-    [.withBuffer( "<parameter>", buffer, size )]        // expected input buffer data for CuT test (NOTE: buffer must be static)
-    [.output( "<parameter>", value )]                   // necessary value to set for the CuT test
-    [.outputBuffer( "<parameter>", buffer, size )]      // necessary buffer value for the CuT test (NOTE: buffer must be static)
+    [.withBuffer( "<parameter>", buffer, size )]        // expected input buffer data for CuT test
+                                                        //      (NOTE: buffer must be static)
+    [.output( "<parameter>", value )]                   // necessary output value for the CuT test
+    [.outputBuffer( "<parameter>", buffer, size )]      // necessary output buffer for the CuT test
+                                                        //      (NOTE: buffer must be static)
     [.use( <Model> )]                                   // necessary Model for the CuT (i.e. override the DoC defaults)
     [.returns( value )]                                 // necessary return value for the CuT test
 ```
@@ -200,10 +201,12 @@ expectCall( "<call>" )                                  // expect a call with th
 Schema of a DoC Context
 ------------------------------------------------------------------------------------------------------------------------
 ```c
-actualCall( "<call>" )                                  // name of method/function used by actual
-    [.with( "<parameter>", value )]                     // actual input parameter
-    [.withBuffer( "<parameter>", buffer, size )]        // actual input buffer data (NOTE: buffer must be static)
-    [.output( "<parameter>", [defaultValue] )]          // default output value for general testing
-    [.outputBuffer( "<parameter>", buffer, size )]      // default buffer value for the CuT test (NOTE: buffer must be static)
-    [.return<type>( [defaultValue] )]                   // default return value for general testing
+actualCall( "<call>" )                                          // name of method/function used by actual
+    [.with( "<parameter>", value )]                             // actual input parameter
+    [.withBuffer( "<parameter>", buffer, size )]                // actual input buffer data
+                                                                //      (NOTE: buffer must be static)
+    [.output( "<parameter>", [default] )]                       // default output value for general testing
+    [.outputBuffer( "<parameter>", buffer, size, default )]     // default buffer value for general testing
+                                                                //      (NOTE: buffer must be static)
+    [.return<type>( [default] )]                                // default return value for general testing
 ```

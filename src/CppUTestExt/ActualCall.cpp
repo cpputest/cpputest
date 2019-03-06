@@ -31,6 +31,8 @@
 #include "CppUTestExt/TestDouble.h"
 #include "CppUTest/Utest.h"
 
+namespace TestDouble 
+{
 const ExpectedCall* ActualCall::_setOutputs()
 {
   _hasSetOutputs = true;
@@ -332,3 +334,5 @@ ActualCall::~ActualCall()
     pShell->failWith( failure, terminator );
   }
 }
+} // namespace TestDouble
+

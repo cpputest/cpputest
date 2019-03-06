@@ -29,17 +29,17 @@
 #define ACTUAL_CALL_H
 
 #include <CppUTest/SimpleString.h>
-#include "CppUTest/TestHarness.h"
+#include <CppUTest/TestHarness.h>
 #include <CppUTestExt/TestDoubleParameter.h>
 #include <CppUTestExt/ExpectCall.h>
-
 #include <typeinfo>
-// #include "CppUTestExt/ExpectCall.h"
 
-class ActualCall;
+namespace TestDouble { class ActualCall; }
 /// implemented in TestDouble.cpp
-ActualCall actualCall( const SimpleString &name );
+TestDouble::ActualCall actualCall( const SimpleString &name );
 
+namespace TestDouble 
+{
 class ActualCall : public AActualCall
 {
 public:
@@ -126,5 +126,6 @@ private:
   SimpleString _failureMessage;
 
 };  // class ActualCall
+} // namespace TestDouble
 
 #endif /* ACTUAL_CALL_H */

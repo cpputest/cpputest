@@ -28,10 +28,10 @@
 #ifndef TEST_DOUBLE_PARAMETER_H
 #define TEST_DOUBLE_PARAMETER_H
 
-#include <typeinfo>
 #include <CppUTest/SimpleString.h>
-
 #include <CppUTest/PlatformSpecificFunctions.h>
+#include <typeinfo>
+
 
 // CppUTest replaces string.h API but not memcmp
 extern "C" int memcmp ( const void * ptr1, const void * ptr2, size_t num );

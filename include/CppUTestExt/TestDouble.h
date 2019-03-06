@@ -30,19 +30,24 @@
 #include <CppUTest/SimpleString.h>
 #include <CppUTestExt/TestDoubleParameter.h>
 
+/// fail the test if an actual call doesn't match an expectation
 void failUnexpected();
+/// fail the test if an actual call doesn't match the order of expectations
 void strictOrder();
+/// fail the test if there are unmet expectations
 void checkExpectations();
 
+
 class ExpectedCall;
-ExpectedCall& expectCall( const SimpleString &call );            ///< add expectation to registry
+/// create an expectation using a [Builder pattern](https://en.wikipedia.org/wiki/Builder_pattern)
+ExpectedCall& expectCall( const SimpleString &call );
 
 
-// Expectation framework
+// Expectation framework (i.e. Test Double)
 //======================================================================================================================
-class ExpectedCall;
-class ActualCall;
 namespace TestDouble {
+
+class ActualCall;
 
 bool shouldFailUnexpected();
 bool shouldEnforceOrder();

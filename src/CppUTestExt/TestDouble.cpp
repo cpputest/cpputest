@@ -57,7 +57,7 @@ ExpectedCall& expectCall( const SimpleString &call )
   return *pExpected;
 }
 
-ActualCall actualCall( const SimpleString &call ) { return ActualCall( call ); }
+TestDouble::ActualCall actualCall( const SimpleString &call ) { return TestDouble::ActualCall( call ); }
 
 
 
