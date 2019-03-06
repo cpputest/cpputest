@@ -66,14 +66,14 @@ universal test doubles implementations.
         src/CppUTestExt/TestDoubleParameter.cpp
         -->
         ~~~
-        github.com/AlDanial/cloc v 1.74  T=0.02 s (460.4 files/s, 87016.8 lines/s)
+        github.com/AlDanial/cloc v 1.74  T=0.02 s (391.0 files/s, 67530.2 lines/s)
         -------------------------------------------------------------------------------
         Language                     files          blank        comment           code
         -------------------------------------------------------------------------------
-        C++                              3            118            106            558
-        C/C++ Header                     4             87            129            325
+        C++                              3             92             96            464
+        C/C++ Header                     4             90            139            328
         -------------------------------------------------------------------------------
-        SUM:                             7            205            235            883
+        SUM:                             7            182            235            792
         -------------------------------------------------------------------------------
         ~~~
     * `cloc` for CppUMock
