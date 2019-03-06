@@ -57,13 +57,13 @@ universal test doubles implementations.
 * **Smaller (simpler) Source Code**
     * `cloc` for **Test Double**
         <!--
-        include/CppUTestExt/ActualCall.h
-        include/CppUTestExt/ExpectCall.h
-        include/CppUTestExt/TestDouble.h
-        include/CppUTestExt/TestDoubleParameter.h
-        src/CppUTestExt/ActualCall.cpp
-        src/CppUTestExt/TestDouble.cpp
-        src/CppUTestExt/TestDoubleParameter.cpp
+            include/CppUTestExt/ActualCall.h
+            include/CppUTestExt/ExpectCall.h
+            include/CppUTestExt/TestDouble.h
+            include/CppUTestExt/TestDoubleParameter.h
+            src/CppUTestExt/ActualCall.cpp
+            src/CppUTestExt/TestDouble.cpp
+            src/CppUTestExt/TestDoubleParameter.cpp
         -->
         ~~~
         github.com/AlDanial/cloc v 1.74  T=0.02 s (391.0 files/s, 67530.2 lines/s)
@@ -78,46 +78,32 @@ universal test doubles implementations.
         ~~~
     * `cloc` for CppUMock
         <!--
-        ./include/CppUTestExt/MockActualCall.h
-        ./include/CppUTestExt/MockCheckedActualCall.h
-        ./include/CppUTestExt/MockExpectedCallsList.h
-        ./include/CppUTestExt/MockFailure.h
-        ./include/CppUTestExt/MockSupport.h
-        ./include/CppUTestExt/MockSupportPlugin.h
-        ./include/CppUTestExt/MockCheckedExpectedCall.h
-        ./include/CppUTestExt/MockExpectedCall.h
-        ./include/CppUTestExt/MockNamedValue.h
-        ./scripts/CppUnitTemplates/MockClassName.h
-        ./scripts/CppUnitTemplates/MockClassNameC.c
-        ./scripts/CppUnitTemplates/MockClassNameC.h
-        ./scripts/templates/MockClassName.h
-        ./scripts/templates/MockClassNameC.c
-        ./scripts/templates/MockClassNameC.h
-        ./src/CppUTestExt/CMakeFiles/CppUTestExt.dir/MockSupportPlugin.cpp.o
-        ./src/CppUTestExt/CMakeFiles/CppUTestExt.dir/MockExpectedCallsList.cpp.o
-        ./src/CppUTestExt/CMakeFiles/CppUTestExt.dir/MockFailure.cpp.o
-        ./src/CppUTestExt/CMakeFiles/CppUTestExt.dir/MockSupport.cpp.o
-        ./src/CppUTestExt/CMakeFiles/CppUTestExt.dir/MockExpectedCall.cpp.o
-        ./src/CppUTestExt/CMakeFiles/CppUTestExt.dir/MockActualCall.cpp.o
-        ./src/CppUTestExt/CMakeFiles/CppUTestExt.dir/MockNamedValue.cpp.o
-        ./src/CppUTestExt/MockActualCall.cpp
-        ./src/CppUTestExt/MockExpectedCallsList.cpp
-        ./src/CppUTestExt/MockFailure.cpp
-        ./src/CppUTestExt/MockSupportPlugin.cpp
-        ./src/CppUTestExt/MockExpectedCall.cpp
-        ./src/CppUTestExt/MockNamedValue.cpp
-        ./src/CppUTestExt/MockSupport.cpp
+            ./include/CppUTestExt/MockActualCall.h
+            ./include/CppUTestExt/MockCheckedActualCall.h
+            ./include/CppUTestExt/MockExpectedCallsList.h
+            ./include/CppUTestExt/MockFailure.h
+            ./include/CppUTestExt/MockSupport.h
+            ./include/CppUTestExt/MockSupportPlugin.h
+            ./include/CppUTestExt/MockCheckedExpectedCall.h
+            ./include/CppUTestExt/MockExpectedCall.h
+            ./include/CppUTestExt/MockNamedValue.h
+            ./src/CppUTestExt/MockActualCall.cpp
+            ./src/CppUTestExt/MockExpectedCallsList.cpp
+            ./src/CppUTestExt/MockFailure.cpp
+            ./src/CppUTestExt/MockSupportPlugin.cpp
+            ./src/CppUTestExt/MockExpectedCall.cpp
+            ./src/CppUTestExt/MockNamedValue.cpp
+            ./src/CppUTestExt/MockSupport.cpp
         -->
         ~~~
-            github.com/AlDanial/cloc v 1.74  T=0.04 s (549.3 files/s, 133612.5 lines/s)
+        github.com/AlDanial/cloc v 1.74  T=0.06 s (285.7 files/s, 89753.1 lines/s)
         -------------------------------------------------------------------------------
         Language                     files          blank        comment           code
         -------------------------------------------------------------------------------
         C++                              7            580            185           2870
-        C/C++ Header                    12            244            280            922
-        C                                2             10              1             16
+        C/C++ Header                     9            232            260            899
         -------------------------------------------------------------------------------
-        SUM:                            21            834            466           3808
+        SUM:                            16            812            445           3769
         -------------------------------------------------------------------------------
         ~~~
 
