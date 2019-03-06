@@ -29,7 +29,6 @@
 #include <CppUTest/PlatformSpecificFunctions.h>
 // CppUTest replaces string.h API but does not provide memcmp
 extern "C" int memcmp ( const void * ptr1, const void * ptr2, size_t num );
-#include <typeinfo>
 
 namespace TestDouble {
 
@@ -204,12 +203,6 @@ SimpleString Parameter::toString()
     case Variant::BOOL:
     {
       return ret + StringFrom( _variant.value.asBool );
-      break;
-    }
-    case Variant::RETURN_VALUE:
-    {
-      /// for unknown types display the largest union member in hex
-      return ret + "<return value>" + HexStringFrom( _variant.value.asLongLong );
       break;
     }
     default:

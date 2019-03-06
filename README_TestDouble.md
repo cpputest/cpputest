@@ -7,6 +7,19 @@ The CppUMock framework introduces patterns that unnecessarily couple the Compone
 Dependencies of Component (DoC).  **Test Double** focuses on the testing (expectations) and decouples the DoC
 implementation- i.e. a single **Test Double** implementation of a DoC can be used for all testing.
 
+### Why should I trust **Test Double**?
+* The original prototype of **Test Double** used the CppUMock API to demonstrate correctness.
+* In the development of **Test Double** the CppUMock usage was maintained until its opinions conflicted with the
+    design objectives of **Test Double**
+* The behavior of **Test Double** is tested via 
+```
+ tests/CppUTestExt/TestDoubleReturnsTest.cpp
+ tests/CppUTestExt/TestDoubleParametersTest.cpp
+ tests/CppUTestExt/TestDoubleOutputParametersTest.cpp
+ tests/CppUTestExt/TestDoubleTest.cpp
+```
+
+
 ### Where can this go?
 
 Since **Test Double** DoC implementations directly follow their header interface, auto-generation of DoC implementations

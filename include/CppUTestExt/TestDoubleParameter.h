@@ -37,32 +37,27 @@ class Parameter
 public:
   const SimpleString  name;
   const SimpleString  type;
-  // TODO should buffer require a static reference or should this clone?
-  const void* buffer = 0;
-  void* const outputBuffer = 0;
+  const void* buffer = 0;           ///< reference to a test's static buffer (i.e. the buffer must be referencable throughout the test)
+  void* const outputBuffer = 0;     ///< reference to a actual's static buffer (i.e. the buffer must be referencable by the test double)
   const std::size_t bufferSize_bytes = 0;
 
   /// an input parameter
   template<typename T>
   Parameter( const SimpleString &_name, const T &value )
-  : name(_name), type( typeid(value).name() ), _variant(value)
-  { }
+  : name(_name), type(typeid(value).name()), _variant(value) {}
 
   /// an input buffer
   Parameter( const SimpleString &_name, const void* const &_buffer, const std::size_t &_bufferSize_bytes )
-  : name(_name), type(typeid(void*).name()), buffer(_buffer), bufferSize_bytes(_bufferSize_bytes)
-  { }
+  : name(_name), type(typeid(void*).name()), buffer(_buffer), bufferSize_bytes(_bufferSize_bytes) {}
 
-  /// an output parameter (the unused bool parameter is used to workaround overriding input buffer)
+  /// an output parameter (the unused bool parameter is used to workaround overriding input buffer constructor)
   template<typename T>
   Parameter( const SimpleString &_name, T* const &_buffer, T defaultValue, const bool )
-  : name(_name), type(typeid(T).name()), outputBuffer(_buffer), bufferSize_bytes(sizeof(T)), _variant(defaultValue)
-  { }
+  : name(_name), type(typeid(T).name()), outputBuffer(_buffer), bufferSize_bytes(sizeof(T)), _variant(defaultValue) {}
 
   /// an output buffer parameter
   Parameter( const SimpleString &_name, void* const &_buffer, const std::size_t &_bufferSize_bytes, const void* const defaultValue )
-  : name(_name), type(typeid(_buffer).name()), buffer(defaultValue), outputBuffer(_buffer), bufferSize_bytes(_bufferSize_bytes)
-  { }
+  : name(_name), type(typeid(_buffer).name()), buffer(defaultValue), outputBuffer(_buffer), bufferSize_bytes(_bufferSize_bytes) {}
 
 
   bool equals( const Parameter* const &pOther ) const;
@@ -70,11 +65,12 @@ public:
   /// used by ActualCall to set output based on expectation parameter
   bool setValue( const Parameter* const &pOther );
 
-  /// used by ActualCall to set output to provided default (or true-ish)
+  /// used by ActualCall to set output to provided default (or true-ish by default)
   void setDefault();
   
   SimpleString toString();
 
+  /// a generic data object used as an Input, Output, and ReturnValue
   struct Variant
   {
     const enum Type
@@ -89,10 +85,10 @@ public:
         SHORT, UNSIGNED_SHORT,
         CHAR, UNSIGNED_CHAR,
         BOOL,
-        RETURN_VALUE
+        UNTYPED
     } type;
 
-    /// only copies value (does not change original type)
+    /// copies value (does not change original type)
     Variant& operator=( const TestDouble::Parameter::Variant &other );
 
     union Value
@@ -150,13 +146,13 @@ public:
     Variant( const char &_value ) : type(CHAR), value(_value) {}
     Variant( const unsigned char &_value ) : type(UNSIGNED_CHAR), value(_value) {}
     Variant( const bool &_value ) : type(BOOL), value(_value) {}
-
-    /// return value constructor
-    Variant() : type(RETURN_VALUE) {}
+    /// default constructor for void value (i.e. return void)
+    Variant() : type(UNTYPED) {}
 
   } _variant = 0;
 
 };  // class Parameter
+
 
 // generic list of parameters (used for both input and output)
 struct ParameterChain
