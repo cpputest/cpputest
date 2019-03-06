@@ -29,25 +29,8 @@
 #define TEST_DOUBLE_PARAMETER_H
 
 #include <CppUTest/SimpleString.h>
-#include <CppUTest/PlatformSpecificFunctions.h>
-#include <typeinfo>
-
-
-// CppUTest replaces string.h API but not memcmp
-extern "C" int memcmp ( const void * ptr1, const void * ptr2, size_t num );
 
 namespace TestDouble {
-
-class Parameter;
-// generic list of parameters (used for both input and output)
-struct ParameterChain
-{
-  TestDouble::Parameter* const pParameter = 0;
-  ParameterChain* const pNext = 0;
-
-  ParameterChain( TestDouble::Parameter* const &_pParameter, ParameterChain* const &_pNext );
-  ~ParameterChain();
-};
 
 class Parameter
 {
@@ -174,6 +157,19 @@ public:
   } _variant = 0;
 
 };  // class Parameter
+
+// generic list of parameters (used for both input and output)
+struct ParameterChain
+{
+  TestDouble::Parameter* const pParameter;
+  ParameterChain* const pNext;
+
+  /// prepends new paramater to the chain
+  ParameterChain( TestDouble::Parameter* const &_pParameter, ParameterChain* const &_pNext )
+  : pParameter(_pParameter) ,pNext(_pNext) {}
+  ~ParameterChain() { delete pParameter; delete pNext; }
+};
+
 
 } // namespace TestDouble
 

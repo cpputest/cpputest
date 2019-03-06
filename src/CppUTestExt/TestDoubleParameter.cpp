@@ -26,18 +26,12 @@
  */
 
 #include <CppUTestExt/TestDoubleParameter.h>
+#include <CppUTest/PlatformSpecificFunctions.h>
+// CppUTest replaces string.h API but does not provide memcmp
+extern "C" int memcmp ( const void * ptr1, const void * ptr2, size_t num );
+#include <typeinfo>
 
 namespace TestDouble {
-
-ParameterChain::ParameterChain( TestDouble::Parameter* const &_pParameter, ParameterChain* const &_pNext )
-  : pParameter(_pParameter)
-   ,pNext(_pNext)   ///< prepend chain
-{}
-ParameterChain::~ParameterChain()
-{
-  delete pParameter;
-  delete pNext;
-}
 
 bool Parameter::equals( const Parameter* const &pOther ) const
 {
