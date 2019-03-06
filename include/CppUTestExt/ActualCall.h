@@ -91,14 +91,7 @@ public:
     const ExpectedCall* pExpectation = _setOutputs();
 
     if( 0 == pExpectation ) return defaultValue;
-
-    /// allow Model to override expectations
-    if( pExpectation->hasModel() )
-    {
-      pExpectation->handleModel( *this );
-      return static_cast<T*>(_return.value.asPointer);
-    }
-
+    if( pExpectation->hasModel() ) return static_cast<T*>(_return.value.asPointer);
     return static_cast<T*>(pExpectation->getReturn().value.asPointer);
   }
   template<typename T>
@@ -107,14 +100,7 @@ public:
     const ExpectedCall* pExpectation = _setOutputs();
 
     if( 0 == pExpectation ) return defaultValue;
-
-    /// allow Model to override expectations
-    if( pExpectation->hasModel() )
-    {
-      pExpectation->handleModel( *this );
-      return static_cast<const T*>(_return.value.asConstPointer);
-    }
-
+    if( pExpectation->hasModel() ) return static_cast<const T*>(_return.value.asConstPointer);
     return static_cast<const T*>(pExpectation->getReturn().value.asConstPointer);
   }
   double returnDouble( double defaultValue=true );
@@ -139,7 +125,8 @@ private:
   TestDouble::ParameterChain*     _outputs = 0;
 
   bool  _hasSetOutputs = false;
-  /// returns   expectation used to set the outputs
+  /// sets outputs and handles expectation model (which may change return value)
+  /// returns   found expectation or 0
   const ExpectedCall* _setOutputs();
 
   SimpleString _failureMessage;

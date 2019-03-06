@@ -45,6 +45,11 @@ universal test doubles implementations.
 * **Stronger Typing**
     * **Test Double** leverages the compiler's typing, whereas CppuMock introduces its own typing which incurs implicit
         transforms based upon the CppuMock implementation.
+    * **Test Double** expected return values are abstract as the compiler makes the decision to implicitly convert
+        return values.  As implicit conversion is a choice of the compiler, **Test Double** does not opine as to the
+        type of an expected return value, as compiler settings and interface design (allowing implicit conversion) are
+        a responsibility of the design and not a quality that should be tested at run-time- (i.e. incorrect usage
+        should result in compilation failure).
 
 * **Smaller memory usage**
     * **Test Double** uses less heap and stack memory than CppUMock, while providing the same functionality.

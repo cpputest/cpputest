@@ -65,6 +65,7 @@ protected:
 class IModel
 {
 public:
+  /// @note implementation must call setReturn()
   virtual void model( AActualCall &call ) = 0;
 };
 
