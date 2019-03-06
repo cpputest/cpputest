@@ -103,7 +103,14 @@ SimpleString ExpectationQueue::check()
             ( 0 >= pExpectation->actualCount )    :
             ( pExpectation->actualCount < pExpectation->pExpectedCall->getCount() ) )
     {
-      ret += StringFromFormat( "unmet expectation: \n%s(", pExpectation->pExpectedCall->name.asCharString() );
+      ret += "unmet expectation: ";
+
+      if( ExpectedCall::EXPECT_ALWAYS != pExpectation->pExpectedCall->getCount() )
+      {
+        ret += StringFromFormat( "  CALLED: %d / %d \n", pExpectation->actualCount, pExpectation->pExpectedCall->getCount() );
+      }
+
+      ret += StringFromFormat( "%s(", pExpectation->pExpectedCall->name.asCharString() );
 
       const TestDouble::ParameterChain* pFirstInput = pExpectation->pExpectedCall->getInputs();
       if( 0 != pFirstInput )
@@ -134,8 +141,6 @@ SimpleString ExpectationQueue::check()
       ret += "\n";
     }
   }
-
-  if( false == ret.isEmpty() ) printf( "\n%s", ret.asCharString() );
 
   // drop expectations
   delete _pExpectations;

@@ -209,7 +209,7 @@ SimpleString Parameter::toString()
     }
     case Variant::BOOL:
     {
-      return ret + "<bool>" + StringFrom( _variant.value.asBool );
+      return ret + StringFrom( _variant.value.asBool );
       break;
     }
     case Variant::RETURN_VALUE:
