@@ -96,8 +96,7 @@ Parameter::Variant& Parameter::Variant::operator=( const TestDouble::Parameter::
   else if( type == BOOL )
       value.asBool = other.value.asBool;
   else
-      // copy largest member if type is unknown
-      value.asFunctionPointer = other.value.asFunctionPointer;
+      PlatformSpecificMemCpy( &value, &(other.value), sizeof(value) );
   
   return *this;
 }
