@@ -63,41 +63,7 @@ bool Parameter::equals( const Parameter* const &pOther ) const
 
 Parameter::Variant& Parameter::Variant::operator=( const TestDouble::Parameter::Variant &other )
 {
-  if( type == FN_POINTER )
-      value.asFunctionPointer = other.value.asFunctionPointer;
-  else if( type == POINTER )
-      value.asPointer = other.value.asPointer;
-  else if( type == CONST_POINTER )
-      value.asConstPointer = other.value.asConstPointer;
-  else if( type == DOUBLE )
-      value.asDouble = other.value.asDouble;
-  else if( type == FLOAT )
-      value.asFloat = other.value.asFloat;
-  else if( type == LONG_LONG )
-      value.asLongLong = other.value.asLongLong;
-  else if( type == UNSIGNED_LONG_LONG )
-      value.asUnsignedLongLong = other.value.asUnsignedLongLong;
-  else if( type == LONG )
-      value.asLong = other.value.asLong;
-  else if( type == UNSIGNED_LONG )
-      value.asUnsignedLong = other.value.asUnsignedLong;
-  else if( type == INT )
-      value.asInt = other.value.asInt;
-  else if( type == UNSIGNED_INT )
-      value.asUnsignedInt = other.value.asUnsignedInt;
-  else if( type == SHORT )
-      value.asShort = other.value.asShort;
-  else if( type == UNSIGNED_SHORT )
-      value.asUnsignedShort = other.value.asUnsignedShort;
-  else if( type == CHAR )
-      value.asChar = other.value.asChar;
-  else if( type == UNSIGNED_CHAR )
-      value.asUnsignedChar = other.value.asUnsignedChar;
-  else if( type == BOOL )
-      value.asBool = other.value.asBool;
-  else
-      PlatformSpecificMemCpy( &value, &(other.value), sizeof(value) );
-  
+  PlatformSpecificMemCpy( &value, &(other.value), sizeof(value) );
   return *this;
 }
 
