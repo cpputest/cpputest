@@ -32,15 +32,18 @@
 
 /// fail the test if an actual call doesn't match an expectation
 void failUnexpected();
+
 /// fail the test if an actual call doesn't match the order of expectations
 void strictOrder();
+
 /// fail the test if there are unmet expectations
+/// @post resets expectation framework state
 void checkExpectations();
 
 
-class ExpectedCall;
+namespace TestDouble { class ExpectedCall; }
 /// create an expectation using a [Builder pattern](https://en.wikipedia.org/wiki/Builder_pattern)
-ExpectedCall& expectCall( const SimpleString &call );
+TestDouble::ExpectedCall& expectCall( const SimpleString &call );
 
 
 // Expectation framework (i.e. Test Double)
@@ -49,17 +52,17 @@ namespace TestDouble {
 
 class ActualCall;
 
-bool shouldFailUnexpected();
-bool shouldEnforceOrder();
+bool shouldFailUnexpected();    ///< returns  state of expectation framework, set to true by failUnexpected()
+bool shouldEnforceOrder();      ///< returns  state of expectation framework, set to true by strictOrder()
 
 /// retval 0    no expectation found
-const ExpectedCall* findExpectation( const ActualCall &call );
+const TestDouble::ExpectedCall* findExpectation( const ActualCall &call );
 
-// list of expectations
+/// list of expectations
 class ExpectationChain
 {
 public:
-  const ExpectedCall* const pExpectedCall = 0;
+  const ExpectedCall* const pExpectedCall;
   int                       actualCount = 0;
   ExpectationChain*         pNext = 0;
 

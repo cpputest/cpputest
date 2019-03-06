@@ -50,9 +50,9 @@ void checkExpectations()
   FAIL( report.asCharString() );
 }
 
-ExpectedCall& expectCall( const SimpleString &call )
+TestDouble::ExpectedCall& expectCall( const SimpleString &call )
 {
-  ExpectedCall* pExpected = new ExpectedCall( call );
+  TestDouble::ExpectedCall* pExpected = new TestDouble::ExpectedCall( call );
   expectations.enqueue( pExpected );
   return *pExpected;
 }

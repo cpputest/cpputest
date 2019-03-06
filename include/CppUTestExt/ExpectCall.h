@@ -28,6 +28,8 @@
 #ifndef EXPECT_CALL_H
 #define EXPECT_CALL_H
 
+namespace TestDouble
+{
 /// Abstract actual call for model usage
 class AActualCall
 {
@@ -146,6 +148,8 @@ private:
   TestDouble::Parameter::Variant  _returnValue = 0;
   IModel* _pModel = 0;
 };
+
+} //namespace TestDouble
 
 
 #endif /* EXPECT_CALL_H */

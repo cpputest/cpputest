@@ -43,6 +43,13 @@ TEST_GROUP( TestDoubleState )
   }
 };
 
+TEST( TestDoubleState, new_expecatation_has_zero_actualCount )
+{
+  TestDouble::ExpectedCall* pExpectation = new TestDouble::ExpectedCall("foo");
+  TestDouble::ExpectationChain chain( pExpectation, 0 );
+  CHECK( 0 == chain.actualCount );
+}
+
 TEST( TestDoubleState, upon_checkExpectations_restore_default_state )
 {
   // assert default state
@@ -86,23 +93,23 @@ TEST( IgnoreUnmatchedActual, ignore_all )
 //======================================================================================================================
 TEST_GROUP( UseModel )
 {
-  class OutputModel : public IModel
+  class OutputModel : public TestDouble::IModel
   {
   public:
     const int value = 2;    ///< don't use 1 as default actual produces true == 1
 
-    virtual void model( AActualCall &actualCall )
+    virtual void model( TestDouble::AActualCall &actualCall )
     {
       actualCall.setOutput( "value", value );
     }
   } outputModel;
 
-  class ReturnModel : public IModel
+  class ReturnModel : public TestDouble::IModel
   {
   public:
     const int value = 2;    ///< don't use 1 as default actual produces true == 1
 
-    virtual void model( AActualCall &actualCall )
+    virtual void model( TestDouble::AActualCall &actualCall )
     {
       actualCall.setReturn( value );
     }
