@@ -293,11 +293,21 @@ TEST( ResultDefault, match_double )
 TEST( ResultDefault, match_pointer )
 {
   static char values[] = "HELLO";
-  const char* pValue = values;
+  char* pValue = values;
   char* pActual = 0;
   pActual = actualCall("foo").returnPointer<char>(pValue);
   CHECK( pValue == pActual );
 }
+
+TEST( ResultDefault, match_const_pointer )
+{
+  static char values[] = "HELLO";
+  const char* pValue = values;
+  const char* pActual = 0;
+  pActual = actualCall("foo").returnConstPointer<char>(pValue);
+  CHECK( pValue == pActual );
+}
+
 
 TEST( ResultDefault, match_fn )
 {

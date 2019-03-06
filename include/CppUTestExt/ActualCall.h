@@ -81,15 +81,16 @@ public:
     return *this;
   }
 
-  /// sets outputs
+
+  /// used for testing so that actual sets outputs immediately (prior to destructor)
   void returns() { _setOutputs(); }
 
   template<typename T>
-  T* returnPointer( const T* const defaultValue=0 )
+  T* returnPointer( T* const defaultValue=0 )
   {
     const ExpectedCall* pExpectation = _setOutputs();
 
-    if( 0 == pExpectation ) return const_cast<T*>(defaultValue);
+    if( 0 == pExpectation ) return defaultValue;
 
     /// allow Model to override expectations
     if( pExpectation->hasModel() )
@@ -99,6 +100,22 @@ public:
     }
 
     return static_cast<T*>(pExpectation->getReturn().value.asPointer);
+  }
+  template<typename T>
+  const T* returnConstPointer( const T* const defaultValue=0 )
+  {
+    const ExpectedCall* pExpectation = _setOutputs();
+
+    if( 0 == pExpectation ) return defaultValue;
+
+    /// allow Model to override expectations
+    if( pExpectation->hasModel() )
+    {
+      pExpectation->handleModel( *this );
+      return static_cast<const T*>(_return.value.asConstPointer);
+    }
+
+    return static_cast<const T*>(pExpectation->getReturn().value.asConstPointer);
   }
   double returnDouble( double defaultValue=true );
   float returnFloat( float defaultValue=true );
@@ -122,6 +139,7 @@ private:
   TestDouble::ParameterChain*     _outputs = 0;
 
   bool  _hasSetOutputs = false;
+  /// returns   expectation used to set the outputs
   const ExpectedCall* _setOutputs();
 
   SimpleString _failureMessage;
