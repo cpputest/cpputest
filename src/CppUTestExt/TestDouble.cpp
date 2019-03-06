@@ -71,6 +71,7 @@ namespace TestDouble {
 bool shouldFailUnexpected() { return _failActuals; }
 bool shouldEnforceOrder() { return _strictOrder; }
 
+
 ExpectationChain::ExpectationChain( const ExpectedCall* const &_pExpectedCall, ExpectationChain* const &pLast )
   : pExpectedCall( _pExpectedCall )
 {
@@ -99,20 +100,21 @@ SimpleString ExpectationQueue::check()
   // find uncalled expectations
   for( const ExpectationChain* pExpectation = expectations.get(); 0 != pExpectation; pExpectation = pExpectation->pNext )
   {
-    if( ( ExpectedCall::EXPECT_ALWAYS == pExpectation->pExpectedCall->getCount() )  ?
+    const ExpectedCall& expected = *(pExpectation->pExpectedCall);
+    if( ( ExpectedCall::EXPECT_ALWAYS == expected.getCount() )  ?
             ( 0 >= pExpectation->actualCount )    :
-            ( pExpectation->actualCount < pExpectation->pExpectedCall->getCount() ) )
+            ( pExpectation->actualCount < expected.getCount() ) )
     {
       ret += "unmet expectation: ";
 
-      if( ExpectedCall::EXPECT_ALWAYS != pExpectation->pExpectedCall->getCount() )
+      if( ExpectedCall::EXPECT_ALWAYS != expected.getCount() )
       {
-        ret += StringFromFormat( "  CALLED: %d / %d \n", pExpectation->actualCount, pExpectation->pExpectedCall->getCount() );
+        ret += StringFromFormat( "  CALLED: %d / %d \n", pExpectation->actualCount, expected.getCount() );
       }
 
-      ret += StringFromFormat( "%s(", pExpectation->pExpectedCall->name.asCharString() );
+      ret += StringFromFormat( "%s(", expected.name.asCharString() );
 
-      const TestDouble::ParameterChain* pFirstInput = pExpectation->pExpectedCall->getInputs();
+      const TestDouble::ParameterChain* pFirstInput = expected.getInputs();
       if( 0 != pFirstInput )
       {
         ret += "\n  INPUTS:\n";
@@ -124,7 +126,7 @@ SimpleString ExpectationQueue::check()
         }
       }
 
-      const TestDouble::ParameterChain* pFirstOutput = pExpectation->pExpectedCall->getOutputs();
+      const TestDouble::ParameterChain* pFirstOutput = expected.getOutputs();
       if( 0 != pFirstOutput )
       {
         ret += "\n  OUTPUTS:\n";
@@ -137,7 +139,7 @@ SimpleString ExpectationQueue::check()
       }
 
       ret += ") RETURNS: 0x";
-      ret += HexStringFrom( pExpectation->pExpectedCall->getReturn().value.asLongLong );
+      ret += HexStringFrom( expected.getReturn().value.asLongLong );
       ret += "\n";
     }
   }
