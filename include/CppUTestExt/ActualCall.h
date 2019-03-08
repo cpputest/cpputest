@@ -46,7 +46,9 @@ class ActualCall : public AActualCall
 public:
   const SimpleString      name;
 
-  ActualCall( const SimpleString &_name ) : name(_name) { }
+  ActualCall( const SimpleString &_name )
+    : name(_name), _inputs(0), _outputs(0),
+      _hasSetOutputs(false), _failureMessage() {}
 
   /// match this against expectations if not already returned
   ~ActualCall();
@@ -121,10 +123,10 @@ public:
   virtual TestDouble::ParameterChain* getOutputs() const { return _outputs; }
 
 private:
-  TestDouble::ParameterChain*     _inputs = 0;
-  TestDouble::ParameterChain*     _outputs = 0;
+  TestDouble::ParameterChain*     _inputs;
+  TestDouble::ParameterChain*     _outputs;
 
-  bool  _hasSetOutputs = false;
+  bool  _hasSetOutputs;
   /// sets outputs and handles expectation model (which may change return value)
   /// returns   found expectation or 0
   const ExpectedCall* _setOutputs();

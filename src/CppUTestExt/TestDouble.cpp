@@ -73,7 +73,7 @@ bool shouldEnforceOrder() { return _strictOrder; }
 
 
 ExpectationChain::ExpectationChain( const ExpectedCall* const &_pExpectedCall, ExpectationChain* const &pLast )
-  : pExpectedCall( _pExpectedCall )
+  : pExpectedCall( _pExpectedCall ), actualCount(0), pNext(0)
 {
   if( 0 != pLast )
   {
@@ -82,6 +82,10 @@ ExpectationChain::ExpectationChain( const ExpectedCall* const &_pExpectedCall, E
   }
 }
 
+
+
+ExpectationQueue::ExpectationQueue()
+  : _pExpectations(0), _pTail(0) {}
 
 void ExpectationQueue::enqueue( const ExpectedCall* const &pCall )
 {

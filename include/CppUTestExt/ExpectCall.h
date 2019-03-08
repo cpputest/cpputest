@@ -78,7 +78,7 @@ public:
   const SimpleString  name;
 
   ExpectedCall( const SimpleString &_name )
-  : name(_name), _count(EXPECT_ALWAYS)
+  : name(_name), _count(EXPECT_ALWAYS), _inputs(0), _outputs(0), _returnValue(0)
   {}
 
   ~ExpectedCall()
@@ -144,9 +144,9 @@ public:
 
 private:
   int   _count = 0;
-  TestDouble::ParameterChain*     _inputs = 0;
-  TestDouble::ParameterChain*     _outputs = 0;
-  TestDouble::Parameter::Variant  _returnValue = 0;
+  TestDouble::ParameterChain*     _inputs;
+  TestDouble::ParameterChain*     _outputs;
+  TestDouble::Parameter::Variant  _returnValue;
   IModel* _pModel = 0;
 };
 

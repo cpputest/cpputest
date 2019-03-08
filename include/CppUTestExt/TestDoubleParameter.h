@@ -29,6 +29,7 @@
 #define TEST_DOUBLE_PARAMETER_H
 
 #include <CppUTest/SimpleString.h>
+#include <typeinfo>
 
 namespace TestDouble {
 
@@ -126,8 +127,9 @@ public:
       Value( const char &_value ) : asChar(_value) {}
       Value( const unsigned char &_value ) : asUnsignedChar(_value) {}
       Value( const bool &_value ) : asBool(_value) {}
+      Value() {}    ///< a default constructor for a future return value
 
-    } value = 0;
+    } value;
 
     // provide pointer support first (so references won't degrade to primitives)
     Variant( void(*_value)() ) : type(FN_POINTER), value(_value) {}

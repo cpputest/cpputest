@@ -62,8 +62,8 @@ class ExpectationChain
 {
 public:
   const ExpectedCall* const pExpectedCall;
-  int                       actualCount = 0;
-  ExpectationChain*         pNext = 0;
+  int                       actualCount;
+  ExpectationChain*         pNext;
 
   /// appends expectation chain to pLast if pLast != 0
   ExpectationChain( const ExpectedCall* const &_pExpectedCall, ExpectationChain* const &pLast );
@@ -80,10 +80,11 @@ public:
   /// detect un-actualized expectations and then clear expectations
   SimpleString check();
 
+  ExpectationQueue();
   ~ExpectationQueue() { delete _pExpectations; }
 private:
-  ExpectationChain*   _pExpectations = 0;
-  ExpectationChain*   _pTail = 0;         ///< reference to last enqueued expectation
+  ExpectationChain*   _pExpectations;
+  ExpectationChain*   _pTail;           ///< reference to last enqueued expectation
 };
 
 } // namespace TestDouble
