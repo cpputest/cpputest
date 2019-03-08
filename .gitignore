@@ -51,6 +51,9 @@ _build_
 _build
 builds/*gcc*
 /.deps
+CppUTestExtTests
+CppUTestTests
+/Makefile
 config.h
 config.h.in
 config.status
@@ -85,26 +88,3 @@ generated/
 #IAR automatically generated files
 *.dep
 *.ewt
-
-#CMake files
-CppUTestExtTests
-CppUTestTests
-Makefile
-CMakeFiles/
-CMakeCache.txt
-Testing/
-generated/
-CTestTestfile.cmake
-install/
-CppUTestConfig.cmake
-CppUTestConfigVersion.cmake
-CppUTestTargets.cmake
-cmake_install.cmake
-src/CppUTest/cmake_install.cmake
-src/CppUTestExt/cmake_install.cmake
-tests/CppUTest/cmake_install.cmake
-tests/CppUTestExt/cmake_install.cmake
-
-# Dart files
-DartConfiguration.tcl
-.cproject
