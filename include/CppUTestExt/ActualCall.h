@@ -47,7 +47,7 @@ public:
   const SimpleString      name;
 
   ActualCall( const SimpleString &_name )
-    : name(_name), _inputs(0), _outputs(0),
+    : name(_name), _inputs(nullptr), _outputs(nullptr),
       _hasSetOutputs(false), _failureMessage() {}
 
   /// match this against expectations if not already returned
