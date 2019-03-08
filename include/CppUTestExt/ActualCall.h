@@ -51,7 +51,7 @@ public:
       _hasSetOutputs(false), _failureMessage() {}
 
   /// match this against expectations if not already returned
-  ~ActualCall();
+  virtual ~ActualCall();
 
   template<typename T>
   ActualCall& with( const SimpleString &_name, const T &value )

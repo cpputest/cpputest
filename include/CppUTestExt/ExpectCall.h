@@ -57,7 +57,7 @@ public:
     _return = TestDouble::Parameter::Variant(value);
   }
 
-  virtual ~AActualCall() = default;
+  virtual ~AActualCall() {}
 
 protected:
   TestDouble::Parameter::Variant  _return;
@@ -69,7 +69,7 @@ class IModel
 public:
   /// @note implementation must call setReturn()
   virtual void model( AActualCall &call ) = 0;
-  virtual ~IModel() = default;
+  virtual ~IModel() {}
 };
 
 
