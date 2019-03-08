@@ -45,8 +45,8 @@ bool Parameter::equals( const Parameter* const &pOther ) const
 
   if( type == typeid(void*).name() ) { return _variant.value.asPointer == pOther->_variant.value.asPointer; }
   if( type == typeid(const void*).name() ) { return _variant.value.asConstPointer == pOther->_variant.value.asConstPointer; }
-  if( type == typeid(double).name() ) { return _variant.value.asDouble == pOther->_variant.value.asDouble; }
-  if( type == typeid(float).name() ) { return _variant.value.asFloat == pOther->_variant.value.asFloat; }
+  if( type == typeid(double).name() ) { return ( _variant.value.asDouble - pOther->_variant.value.asDouble) == 0.0; }
+  if( type == typeid(float).name() ) { return ( _variant.value.asFloat - pOther->_variant.value.asFloat ) == 0.0; }
   if( type == typeid(long long).name() ) { return _variant.value.asLongLong == pOther->_variant.value.asLongLong; }
   if( type == typeid(unsigned long long).name() ) { return _variant.value.asUnsignedLongLong == pOther->_variant.value.asUnsignedLongLong; }
   if( type == typeid(long).name() ) { return _variant.value.asLong == pOther->_variant.value.asLong; }
@@ -93,91 +93,56 @@ SimpleString Parameter::toString()
   switch( _variant.type )
   {
     case Variant::FN_POINTER:
-    {
       return ret + "<function pointer>" + HexStringFrom(_variant.value.asFunctionPointer);
-      break;
-    }
+
     case Variant::POINTER:
-    {
       return ret + "<pointer>" + HexStringFrom(_variant.value.asPointer);
-      break;
-    }
+
     case Variant::CONST_POINTER:
-    {
       return ret + "<const pointer>" + HexStringFrom(_variant.value.asConstPointer);
-      break;
-    }
+
     case Variant::DOUBLE:
-    {
       return ret + "<double>" + StringFrom( _variant.value.asDouble );
-      break;
-    }
+
     case Variant::FLOAT:
-    {
-      return ret + "<float>" + StringFrom( _variant.value.asFloat );
-      break;
-    }
+      return ret + "<float>" + StringFrom( static_cast<double>(_variant.value.asFloat) );
+
     case Variant::LONG_LONG:
-    {
       return ret + "<long long>" + StringFrom( _variant.value.asLongLong );
-      break;
-    }
+
     case Variant::UNSIGNED_LONG_LONG:
-    {
       return ret + "<unsigned long long>" + StringFrom( _variant.value.asUnsignedLongLong );
-      break;
-    }
+
     case Variant::LONG:
-    {
       return ret + "<long>" + StringFrom( _variant.value.asLong );
-      break;
-    }
+
     case Variant::UNSIGNED_LONG:
-    {
       return ret + "<unsigned long>" + StringFrom( _variant.value.asUnsignedLong );
-      break;
-    }
+
     case Variant::INT:
-    {
       return ret + "<int>" + StringFrom( _variant.value.asInt );
-      break;
-    }
+
     case Variant::UNSIGNED_INT:
-    {
       return ret + "<unsigned int>" + StringFrom( _variant.value.asUnsignedInt );
-      break;
-    }
+
     case Variant::SHORT:
-    {
       return ret + "<short>" + StringFrom( _variant.value.asShort );
-      break;
-    }
+
     case Variant::UNSIGNED_SHORT:
-    {
       return ret + "<unsigned short>" + StringFrom( _variant.value.asUnsignedShort );
-      break;
-    }
+
     case Variant::CHAR:
-    {
       return ret + "<char>" + StringFrom( _variant.value.asChar );
-      break;
-    }
+
     case Variant::UNSIGNED_CHAR:
-    {
       return ret + "<unsigned char>" + StringFrom( _variant.value.asUnsignedChar );
-      break;
-    }
+
     case Variant::BOOL:
-    {
       return ret + StringFrom( _variant.value.asBool );
-      break;
-    }
+
     case Variant::RETURN_VALUE:
-    default:
-    {
       /// for unknown types display the largest union member in hex
       return ret + "<unknown type (" + type + ")>" + HexStringFrom(_variant.value.asLongLong );
-    }
   }
 }
 
