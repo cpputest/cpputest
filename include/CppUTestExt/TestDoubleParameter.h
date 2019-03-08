@@ -38,27 +38,27 @@ class Parameter
 public:
   const SimpleString  name;
   const SimpleString  type;
-  const void* buffer = 0;           ///< reference to a test's static buffer (i.e. the buffer must be referencable throughout the test)
-  void* const outputBuffer = 0;     ///< reference to a actual's static buffer (i.e. the buffer must be referencable by the test double)
-  const std::size_t bufferSize_bytes = 0;
+  const void* buffer;               ///< reference to a test's static buffer (i.e. the buffer must be referencable throughout the test)
+  void* const outputBuffer;         ///< reference to a actual's static buffer (i.e. the buffer must be referencable by the test double)
+  const std::size_t bufferSize_bytes;
 
   /// an input parameter
   template<typename T>
   Parameter( const SimpleString &_name, const T &value )
-  : name(_name), type(typeid(value).name()), _variant(value) {}
+  : name(_name), type(typeid(value).name()), buffer(0), outputBuffer(0), bufferSize_bytes(0), _variant(value) {}
 
   /// an input buffer
   Parameter( const SimpleString &_name, const void* const &_buffer, const std::size_t &_bufferSize_bytes )
-  : name(_name), type(typeid(void*).name()), buffer(_buffer), bufferSize_bytes(_bufferSize_bytes) {}
+  : name(_name), type(typeid(void*).name()), buffer(_buffer), outputBuffer(0), bufferSize_bytes(_bufferSize_bytes), _variant(0) {}
 
   /// an output parameter (the unused bool parameter is used to workaround overriding input buffer constructor)
   template<typename T>
   Parameter( const SimpleString &_name, T* const &_buffer, T defaultValue, const bool )
-  : name(_name), type(typeid(T).name()), outputBuffer(_buffer), bufferSize_bytes(sizeof(T)), _variant(defaultValue) {}
+  : name(_name), type(typeid(T).name()), buffer(0), outputBuffer(_buffer), bufferSize_bytes(sizeof(T)), _variant(defaultValue) {}
 
   /// an output buffer parameter
   Parameter( const SimpleString &_name, void* const &_buffer, const std::size_t &_bufferSize_bytes, const void* const defaultValue )
-  : name(_name), type(typeid(_buffer).name()), buffer(defaultValue), outputBuffer(_buffer), bufferSize_bytes(_bufferSize_bytes) {}
+  : name(_name), type(typeid(_buffer).name()), buffer(defaultValue), outputBuffer(_buffer), bufferSize_bytes(_bufferSize_bytes), _variant(0) {}
 
 
   bool equals( const Parameter* const &pOther ) const;
@@ -153,7 +153,7 @@ public:
     ///    so explicit type cannot be enforced by Variant)
     Variant() : type(RETURN_VALUE) {}
 
-  } _variant = 0;
+  } _variant;
 
 };  // class Parameter
 
