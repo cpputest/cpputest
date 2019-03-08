@@ -57,6 +57,8 @@ public:
     _return = TestDouble::Parameter::Variant(value);
   }
 
+  virtual ~AActualCall() = default;
+
 protected:
   TestDouble::Parameter::Variant  _return;
 };
@@ -67,6 +69,7 @@ class IModel
 public:
   /// @note implementation must call setReturn()
   virtual void model( AActualCall &call ) = 0;
+  virtual ~IModel() = default;
 };
 
 
@@ -78,8 +81,7 @@ public:
   const SimpleString  name;
 
   ExpectedCall( const SimpleString &_name )
-  : name(_name), _count(EXPECT_ALWAYS), _inputs(0), _outputs(0), _returnValue(0)
-  {}
+    : name(_name), _count(EXPECT_ALWAYS), _inputs(0), _outputs(0), _returnValue(0), _pModel(0) {}
 
   ~ExpectedCall()
   {
@@ -134,7 +136,7 @@ public:
   }
 
   template<typename T > 
-  void returns( const T& value ) { _returnValue.value = {value}; }
+  void returns( const T& value ) { _returnValue.value = value; }
 
 
   int getCount() const { return _count; }
@@ -143,11 +145,11 @@ public:
   const TestDouble::Parameter::Variant getReturn() const { return _returnValue; }
 
 private:
-  int   _count = 0;
+  int   _count;
   TestDouble::ParameterChain*     _inputs;
   TestDouble::ParameterChain*     _outputs;
   TestDouble::Parameter::Variant  _returnValue;
-  IModel* _pModel = 0;
+  IModel* _pModel;
 };
 
 } //namespace TestDouble
