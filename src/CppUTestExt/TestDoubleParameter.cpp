@@ -46,7 +46,7 @@ bool Parameter::equals( const Parameter* const &pOther ) const
   if( type == typeid(void*).name() ) { return _variant.value.asPointer == pOther->_variant.value.asPointer; }
   if( type == typeid(const void*).name() ) { return _variant.value.asConstPointer == pOther->_variant.value.asConstPointer; }
   if( type == typeid(double).name() ) { return ( _variant.value.asDouble - pOther->_variant.value.asDouble) == 0.0; }
-  if( type == typeid(float).name() ) { return ( _variant.value.asFloat - pOther->_variant.value.asFloat ) == 0.0; }
+  if( type == typeid(float).name() ) { return ( _variant.value.asFloat - pOther->_variant.value.asFloat ) == 0.0f; }
   if( type == typeid(long long).name() ) { return _variant.value.asLongLong == pOther->_variant.value.asLongLong; }
   if( type == typeid(unsigned long long).name() ) { return _variant.value.asUnsignedLongLong == pOther->_variant.value.asUnsignedLongLong; }
   if( type == typeid(long).name() ) { return _variant.value.asLong == pOther->_variant.value.asLong; }
