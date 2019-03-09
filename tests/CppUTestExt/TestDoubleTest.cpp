@@ -108,7 +108,8 @@ TEST_GROUP( UseModel )
   class OutputModel : public TestDouble::IModel
   {
   public:
-    const int value = 2;    ///< don't use 1 as default actual produces true == 1
+    const int value;
+    OutputModel() : value(2) {};  ///< don't use 1 as default actual produces true == 1
 
     virtual void model( TestDouble::AActualCall &actualCall )
     {
@@ -119,7 +120,8 @@ TEST_GROUP( UseModel )
   class ReturnModel : public TestDouble::IModel
   {
   public:
-    const int value = 2;    ///< don't use 1 as default actual produces true == 1
+    const int value;
+    ReturnModel() : value(2) {};  ///< don't use 1 as default actual produces true == 1
 
     virtual void model( TestDouble::AActualCall &actualCall )
     {
