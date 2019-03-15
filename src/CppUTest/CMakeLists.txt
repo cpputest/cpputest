@@ -60,6 +60,8 @@ set(CppUTest_headers
         ${CppUTestRootDirectory}/include/CppUTest/MemoryLeakWarningPlugin.h
         ${CppUTestRootDirectory}/include/CppUTest/TestHarness_c.h
         ${CppUTestRootDirectory}/include/CppUTest/UtestMacros.h
+        ${CppUTestRootDirectory}/include/CppUTest/Shuffle.h
+        ${CppUTestRootDirectory}/include/CppUTest/SimpleMutex.h
 )
 
 if (WIN32)
