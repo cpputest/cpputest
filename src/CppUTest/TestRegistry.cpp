@@ -128,7 +128,7 @@ bool TestRegistry::endOfGroup(UtestShell* test)
     return (!test || !test->getNext() || test->getGroup() != test->getNext()->getGroup());
 }
 
-int TestRegistry::countTests()
+size_t TestRegistry::countTests()
 {
     return tests_ ? tests_->countTests() : 0;
 }
@@ -234,11 +234,11 @@ void TestRegistry::shuffleRunOrder(rand_func_t rand_func)
     {
         return;
     }
-    int numTests = getFirstTest()->countTests();
+    const size_t numTests = getFirstTest()->countTests();
     typedef UtestShell* listElem;
     listElem* tests = new listElem[numTests];
     UtestShell *test = getFirstTest();
-    for (int testsIdx = 0; testsIdx < numTests; ++testsIdx)
+    for (size_t testsIdx = 0; testsIdx < numTests; ++testsIdx)
     {
         tests[testsIdx] = test;
         test = test->getNext();
@@ -247,7 +247,7 @@ void TestRegistry::shuffleRunOrder(rand_func_t rand_func)
 
     // Store shuffled list back to linked list
     UtestShell *prev = NULLPTR;
-    for (int i = 0; i < numTests; ++i)
+    for (size_t i = 0; i < numTests; ++i)
     {
         prev = tests[numTests - 1 - i]->addTest(prev);
     }

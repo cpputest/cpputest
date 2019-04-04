@@ -93,7 +93,7 @@ public:
 
     virtual UtestShell* addTest(UtestShell* test);
     virtual UtestShell *getNext() const;
-    virtual int countTests();
+    virtual size_t countTests();
 
     bool shouldRun(const TestFilter* groupFilters, const TestFilter* nameFilters) const;
     const SimpleString getName() const;

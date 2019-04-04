@@ -33,6 +33,7 @@
 #ifndef D_TestRegistry_h
 #define D_TestRegistry_h
 
+#include <stddef.h>
 #include "SimpleString.h"
 #include "TestFilter.h"
 #include "Shuffle.h"
@@ -49,7 +50,7 @@ public:
 
     virtual void addTest(UtestShell *test);
     virtual void unDoLastAddTest();
-    virtual int countTests();
+    virtual size_t countTests();
     virtual void runAllTests(TestResult& result);
     virtual void shuffleRunOrder(rand_func_t);
     virtual void listTestGroupNames(TestResult& result);

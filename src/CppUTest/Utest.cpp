@@ -227,7 +227,7 @@ UtestShell* UtestShell::addTest(UtestShell *test)
     return this;
 }
 
-int UtestShell::countTests()
+size_t UtestShell::countTests()
 {
     return next_ ? next_->countTests() + 1 : 1;
 }
