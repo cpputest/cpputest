@@ -262,6 +262,9 @@ void SimpleString::replace(char to, char with)
 void SimpleString::replace(const char* to, const char* with)
 {
     size_t c = count(to);
+    if (c == 0) {
+	return;
+    }
     size_t len = size();
     size_t tolen = StrLen(to);
     size_t withlen = StrLen(with);

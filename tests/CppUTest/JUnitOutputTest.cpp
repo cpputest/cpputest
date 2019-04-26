@@ -510,7 +510,7 @@ TEST(JUnitOutputTest, testFailureWithLessThanAndGreaterThanInsideIt)
 
     outputFile = fileSystem.file("cpputest_testGroupWithFailingTest.xml");
 
-    STRCMP_EQUAL("<failure message=\"thisfile:10: Test [failed]\" type=\"AssertionFailedError\">\n", outputFile->line(6));
+    STRCMP_EQUAL("<failure message=\"thisfile:10: Test &lt;failed&gt;\" type=\"AssertionFailedError\">\n", outputFile->line(6));
 }
 
 TEST(JUnitOutputTest, testFailureWithQuotesInIt)
@@ -522,7 +522,7 @@ TEST(JUnitOutputTest, testFailureWithQuotesInIt)
 
     outputFile = fileSystem.file("cpputest_testGroupWithFailingTest.xml");
 
-    STRCMP_EQUAL("<failure message=\"thisfile:10: Test 'failed'\" type=\"AssertionFailedError\">\n", outputFile->line(6));
+    STRCMP_EQUAL("<failure message=\"thisfile:10: Test &quot;failed&quot;\" type=\"AssertionFailedError\">\n", outputFile->line(6));
 }
 
 TEST(JUnitOutputTest, testFailureWithNewlineInIt)
@@ -547,6 +547,18 @@ TEST(JUnitOutputTest, testFailureWithDifferentFileAndLine)
     outputFile = fileSystem.file("cpputest_testGroupWithFailingTest.xml");
 
     STRCMP_EQUAL("<failure message=\"importantFile:999: Test failed\" type=\"AssertionFailedError\">\n", outputFile->line(6));
+}
+
+TEST(JUnitOutputTest, testFailureWithAmpersandsAndLessThan)
+{
+    testCaseRunner->start()
+            .withGroup("testGroupWithFailingTest")
+                .withTest("FailingTestName").thatFails("&object1 < &object2", "importantFile", 999)
+            .end();
+
+    outputFile = fileSystem.file("cpputest_testGroupWithFailingTest.xml");
+
+    STRCMP_EQUAL("<failure message=\"importantFile:999: &amp;object1 &lt; &amp;object2\" type=\"AssertionFailedError\">\n", outputFile->line(6));
 }
 
 TEST(JUnitOutputTest, testFailureWithAmpersands)
@@ -723,4 +735,15 @@ TEST(JUnitOutputTest, UTPRINTOutputInJUnitOutput)
 
     outputFile = fileSystem.file("cpputest_groupname.xml");
     STRCMP_EQUAL("<system-out>someoutput</system-out>\n", outputFile->lineFromTheBack(3));
+}
+
+TEST(JUnitOutputTest, UTPRINTOutputInJUnitOutputWithSpecials)
+{
+    testCaseRunner->start()
+            .withGroup("groupname")
+            .withTest("testname").thatPrints("The <rain> in \"Spain\"\nGoes \\mainly\\ down the Dr&in\n")
+            .end();
+
+    outputFile = fileSystem.file("cpputest_groupname.xml");
+    STRCMP_EQUAL("<system-out>The &lt;rain&gt; in &quot;Spain&quot;{newline}Goes \\mainly\\ down the Dr&amp;in{newline}</system-out>\n", outputFile->lineFromTheBack(3));
 }
