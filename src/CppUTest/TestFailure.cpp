@@ -387,5 +387,5 @@ FeatureUnsupportedFailure::FeatureUnsupportedFailure(UtestShell* test, const cha
 {
     message_ = createUserText(text);
 
-    message_ += StringFromFormat("The feature \"%s\" is not supported in this environment or with the feature set selected when building the library.", featureName.asCharString());;
+    message_ += StringFromFormat("The feature \"%s\" is not supported in this environment or with the feature set selected when building the library.", featureName.asCharString());
 }

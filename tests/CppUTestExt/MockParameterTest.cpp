@@ -616,7 +616,7 @@ TEST(MockParameterTest, newCallStartsWhileNotAllParametersWerePassed)
 
     mock().expectOneCall("foo").withParameter("p1", 1);
     mock().actualCall("foo");
-    mock().actualCall("foo").withParameter("p1", 1);;
+    mock().actualCall("foo").withParameter("p1", 1);
 
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }

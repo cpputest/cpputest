@@ -77,7 +77,6 @@ public:
 TEST(SetPointerPluginTest, installTwoFunctionPointer)
 {
     FunctionPointerUtestShell *tst = new FunctionPointerUtestShell();
-    ;
 
     fp1 = orig_func1;
     fp2 = orig_func2;
