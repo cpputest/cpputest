@@ -44,11 +44,13 @@ static inline int rand_(void) // rand_func_t
 }
 
 // "Durstenfeld shuffle" according to Wikipedia
-static inline void shuffle_list(rand_func_t rand_func, int numElems, void* listToShuffleInPlace[])
+static inline void shuffle_list(rand_func_t rand_func, size_t numElems, void* listToShuffleInPlace[])
 {
-    for (int i = numElems - 1; i >= 1; --i)
+    if( numElems == 0 ) return;
+
+    for (size_t i = numElems - 1; i >= 1; --i)
     {
-        int j = rand_func() % (i + 1); // distribution biased by modulo, but good enough for shuffling
+        const size_t j = ((size_t)rand_func()) % (i + 1); // distribution biased by modulo, but good enough for shuffling
         void* e1 = listToShuffleInPlace[j];
         void* e2 = listToShuffleInPlace[i];
         listToShuffleInPlace[i] = e1;
