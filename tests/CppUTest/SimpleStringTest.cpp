@@ -610,17 +610,17 @@ TEST(SimpleString, StringFromFormatpointer)
     //this is not a great test. but %p is odd on mingw and even more odd on Solaris.
     SimpleString h1 = StringFromFormat("%p", (void*) 1);
     if (h1.size() == 3)
-        STRCMP_EQUAL("0x1", h1.asCharString())
+        STRCMP_EQUAL("0x1", h1.asCharString());
     else if (h1.size() == 8)
-        STRCMP_EQUAL("00000001", h1.asCharString())
+        STRCMP_EQUAL("00000001", h1.asCharString());
     else if (h1.size() == 9)
-        STRCMP_EQUAL("0000:0001", h1.asCharString())
+        STRCMP_EQUAL("0000:0001", h1.asCharString());
     else if (h1.size() == 16)
-        STRCMP_EQUAL("0000000000000001", h1.asCharString())
+        STRCMP_EQUAL("0000000000000001", h1.asCharString());
     else if (h1.size() == 1)
-        STRCMP_EQUAL("1", h1.asCharString())
+        STRCMP_EQUAL("1", h1.asCharString());
     else
-        FAIL("Off %p behavior")
+        FAIL("Off %p behavior");
 }
 
 TEST(SimpleString, StringFromFormatLarge)

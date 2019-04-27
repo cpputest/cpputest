@@ -65,7 +65,7 @@ TEST(MockPlugin, checkExpectationsAndClearAtEnd)
 
     plugin.postTestAction(*test, *result);
 
-    STRCMP_CONTAINS(expectedFailure.getMessage().asCharString(), output.getOutput().asCharString())
+    STRCMP_CONTAINS(expectedFailure.getMessage().asCharString(), output.getOutput().asCharString());
     LONGS_EQUAL(0, mock().expectedCallsLeft());
     CHECK_NO_MOCK_FAILURE();
 }
@@ -83,7 +83,7 @@ TEST(MockPlugin, checkExpectationsWorksAlsoWithHierachicalObjects)
 
     plugin.postTestAction(*test, *result);
 
-    STRCMP_CONTAINS(expectedFailure.getMessage().asCharString(), output.getOutput().asCharString())
+    STRCMP_CONTAINS(expectedFailure.getMessage().asCharString(), output.getOutput().asCharString());
     CHECK_NO_MOCK_FAILURE();
 }
 
