@@ -128,7 +128,7 @@ void cpputest_free_location_with_leak_detection(void* buffer, const char* file, 
 #undef new
 
 #if CPPUTEST_USE_STD_CPP_LIB
-#define UT_THROW_BAD_ALLOC_WHEN_NULL(memory) if (memory == NULLPTR) throw std::bad_alloc();
+#define UT_THROW_BAD_ALLOC_WHEN_NULL(memory) if (memory == NULLPTR) throw std::bad_alloc()
 #else
 #define UT_THROW_BAD_ALLOC_WHEN_NULL(memory)
 #endif

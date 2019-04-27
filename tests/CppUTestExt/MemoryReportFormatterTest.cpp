@@ -30,7 +30,7 @@
 #include "CppUTestExt/MemoryReportAllocator.h"
 #include "CppUTestExt/MemoryReportFormatter.h"
 
-#define TESTOUTPUT_EQUAL(a) STRCMP_EQUAL_LOCATION(a, testOutput.getOutput().asCharString(), "", __FILE__, __LINE__);
+#define TESTOUTPUT_EQUAL(a) STRCMP_EQUAL_LOCATION(a, testOutput.getOutput().asCharString(), "", __FILE__, __LINE__)
 
 TEST_GROUP(NormalMemoryReportFormatter)
 {
