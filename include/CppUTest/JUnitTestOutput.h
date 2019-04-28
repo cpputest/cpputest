@@ -71,6 +71,7 @@ protected:
     virtual void writeTestSuiteSummary();
     virtual void writeProperties();
     virtual void writeTestCases();
+    virtual SimpleString encodeXmlText(const SimpleString& textbody);
     virtual void writeFailure(JUnitTestCaseResultNode* node);
     virtual void writeFileEnding();
 
