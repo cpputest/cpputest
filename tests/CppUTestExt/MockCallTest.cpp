@@ -301,7 +301,7 @@ TEST(MockCallTest, ignoreOtherCallsExceptForTheExpectedOne)
 {
     mock().expectOneCall("foo");
     mock().ignoreOtherCalls();
-    mock().actualCall("bar").withParameter("foo", 1);;
+    mock().actualCall("bar").withParameter("foo", 1);
 
     mock().clear();
 }
@@ -392,7 +392,7 @@ TEST(MockCallTest, OnObjectIgnored_InitialMatchDiscarded)
 
     mock().expectOneCall("boo");
     mock().expectOneCall("boo").withBoolParameter("p", true);
-    mock().actualCall("boo").onObject(objectPtr2).withBoolParameter("p", true);;
+    mock().actualCall("boo").onObject(objectPtr2).withBoolParameter("p", true);
     mock().actualCall("boo").onObject(objectPtr1);
 }
 

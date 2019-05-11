@@ -178,8 +178,8 @@ TEST(MemoryReporterPlugin, preTestActionReportsTest)
 
 TEST(MemoryReporterPlugin, postTestActionReportsTest)
 {
-    mock("formatter").expectOneCall("report_test_end").withParameter("result", result).withParameter("test", test);;
-    mock("formatter").expectOneCall("report_testgroup_end").withParameter("result", result).withParameter("test", test);;
+    mock("formatter").expectOneCall("report_test_end").withParameter("result", result).withParameter("test", test);
+    mock("formatter").expectOneCall("report_testgroup_end").withParameter("result", result).withParameter("test", test);
 
     reporter->postTestAction(*test, *result);
 }

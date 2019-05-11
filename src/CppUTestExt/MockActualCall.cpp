@@ -386,7 +386,7 @@ void MockCheckedActualCall::checkExpectations()
     }
 
     if (potentiallyMatchingExpectations_.hasFinalizedMatchingExpectations())
-        FAIL("Actual call is in progress, but there are finalized matching expectations when checking expectations. This cannot happen.") // LCOV_EXCL_LINE
+        FAIL("Actual call is in progress, but there are finalized matching expectations when checking expectations. This cannot happen."); // LCOV_EXCL_LINE
 
     matchingExpectation_ = potentiallyMatchingExpectations_.removeFirstMatchingExpectation();
     if (matchingExpectation_) {

@@ -43,6 +43,6 @@ void TestTestingFixture::checkTestFailsWithProperTestLocation(const char* text, 
   STRCMP_CONTAINS_LOCATION(text, output_->getOutput().asCharString(), "", file, line);
 
   if (lineOfCodeExecutedAfterCheck)
-    FAIL_LOCATION("The test should jump/throw on failure and not execute the next line. However, the next line was executed.", file, line)
+    FAIL_LOCATION("The test should jump/throw on failure and not execute the next line. However, the next line was executed.", file, line);
 }
 
