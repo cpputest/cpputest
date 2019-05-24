@@ -71,7 +71,7 @@ static long TimeInMillisImplementation() {
     struct timeval tv;
     struct timezone tz;
     ::gettimeofday(&tv, &tz);
-    return (tv.tv_sec * 1000) + (long)(tv.tv_usec * 0.001);
+    return (tv.tv_sec * 1000) + (long)(tv.tv_usec * (double)0.001L);
 }
 
 long (*GetPlatformSpecificTimeInMillis)() = TimeInMillisImplementation;

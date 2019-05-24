@@ -31,7 +31,7 @@
 
 
 MockNamedValueComparatorsAndCopiersRepository* MockNamedValue::defaultRepository_ = NULLPTR;
-const double MockNamedValue::defaultDoubleTolerance = 0.005;
+const double MockNamedValue::defaultDoubleTolerance = (double)0.005L;
 
 void MockNamedValue::setDefaultComparatorsAndCopiersRepository(MockNamedValueComparatorsAndCopiersRepository* repository)
 {

@@ -274,7 +274,7 @@ public:
     virtual unsigned int returnUnsignedIntValue() _override { return 0; }
     virtual unsigned int returnUnsignedIntValueOrDefault(unsigned int value) _override { return value; }
 
-    virtual double returnDoubleValue() _override { return 0.0; }
+    virtual double returnDoubleValue() _override { return (double)0.0L; }
     virtual double returnDoubleValueOrDefault(double value) _override { return value; }
 
     virtual const char * returnStringValue() _override { return ""; }

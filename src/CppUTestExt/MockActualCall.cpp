@@ -923,7 +923,7 @@ int MockActualCallTrace::returnIntValue()
 
 double MockActualCallTrace::returnDoubleValue()
 {
-    return 0.0;
+    return (double)0.0L;
 }
 
 double MockActualCallTrace::returnDoubleValueOrDefault(double)
