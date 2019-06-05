@@ -31,7 +31,7 @@ endif(CPP_PLATFORM)
 target_include_directories(CppUTest
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../include>
-        $<INSTALL_INTERFACE:include/CppUTest>
+        $<INSTALL_INTERFACE:include>
 )
 
 set(CppUTest_headers

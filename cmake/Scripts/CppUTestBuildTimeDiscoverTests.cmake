@@ -5,6 +5,13 @@
 #
 # This script is to be called from ../Modules/CppUTestBuildTimeDiscoverTests.cmake
 #
+# Notes on invocation and used variables:
+# ${CMAKE_COMMAND} -DTESTS_DETAILED:BOOL=<ON|OFF> -DEXECUTABLE=<FULLPATH-TO-EXECUTABLE> -P <PATH-TO-THIS-SCRIPT>
+#
+# TESTS_DETAILED c.f. top-level CMakeLists.txt
+# FULLPATH-TO-EXECUTABLE - use  $<TARGET_FILE:${EXECUTABLE}> or explicit
+# The overwritten CTestTestfile.cmake is located in ${CMAKE_CURRENT_BINARY_DIR}
+#
 # Steps to generate ADD_TEST() commands build time
 # - Read CTestTestfile.cmake
 # - Create update entries
@@ -33,13 +40,13 @@ function (JOIN VALUES GLUE OUTPUT)
   set (${OUTPUT} "${_TMP_STR}" PARENT_SCOPE)
 endfunction()
 
-function (buildtime_discover_tests EXECUTABLE_CMD DISCOVER_ARG OUTPUT)
-  execute_process(COMMAND ${EXECUTABLE_CMD} ${DISCOVER_ARG}
+function (buildtime_discover_tests EXECUTABLE DISCOVER_ARG OUTPUT)
+  execute_process(COMMAND ${EXECUTABLE} ${DISCOVER_ARG}
     OUTPUT_VARIABLE _TMP_OUTPUT
     ERROR_VARIABLE DISCOVER_ERR
     RESULT_VARIABLE DISCOVER_ERR)
   if(NOT ${DISCOVER_ERR} EQUAL 0)
-    message(SEND_ERROR "Executable \"${EXECUTABLE_CMD} ${DISCOVER_ARG}\" failed with output:\n"
+    message(SEND_ERROR "Executable \"${EXECUTABLE} ${DISCOVER_ARG}\" failed with output:\n"
       "${DISCOVER_ERR}\n"
       "Please check that the excutable was added.")
   endif(NOT ${DISCOVER_ERR} EQUAL 0)
@@ -54,11 +61,11 @@ endfunction()
 
 set(CTESTFNAME "${CMAKE_CURRENT_BINARY_DIR}/CTestTestfile.cmake")
 file(STRINGS ${CTESTFNAME} CTESTTESTS)
-set(EXECUTABLE_CMD "${CMAKE_CURRENT_BINARY_DIR}/${EXECUTABLE}")
+get_filename_component(EXECUTABLE_SHORT_NAME ${EXECUTABLE} NAME_WE)
 
 if (TESTS_DETAILED)
   set(DISCOVER_ARG "-ln")
-  buildtime_discover_tests("${EXECUTABLE_CMD}" "${DISCOVER_ARG}" TestList_GroupsAndNames)
+  buildtime_discover_tests("${EXECUTABLE}" "${DISCOVER_ARG}" TestList_GroupsAndNames)
   set(lastgroup "")
   foreach(testfullname ${TestList_GroupsAndNames})
     string(REGEX MATCH "^([^/.]+)" groupname ${testfullname})
@@ -68,14 +75,14 @@ if (TESTS_DETAILED)
       set(lastgroup "${groupname}")
     endif (NOT ("${groupname}" STREQUAL "${lastgroup}"))
     message("... ${testname}")
-    buildtime_add_test(${EXECUTABLE}.${testfullname} ${EXECUTABLE_CMD} -sg ${groupname} -sn ${testname} -c)
+    buildtime_add_test(${EXECUTABLE_SHORT_NAME}.${testfullname} ${EXECUTABLE} -sg ${groupname} -sn ${testname})
   endforeach()
 else (TESTS_DETAILED)
   set(DISCOVER_ARG "-lg")
-  buildtime_discover_tests("${EXECUTABLE_CMD}" "${DISCOVER_ARG}" TestList_Groups)
+  buildtime_discover_tests("${EXECUTABLE}" "${DISCOVER_ARG}" TestList_Groups)
   foreach(group ${TestList_Groups})
     message("TestGroup: ${group}")
-    buildtime_add_test(${EXECUTABLE}.${group} "${EXECUTABLE_CMD}" -sg ${group} -c)
+    buildtime_add_test(${EXECUTABLE_SHORT_NAME}.${group} "${EXECUTABLE}" -sg ${group})
   endforeach()
 endif (TESTS_DETAILED)
 

@@ -141,6 +141,10 @@ if(PkgHelpers_AVAILABLE)
     DESTINATION ${LIB_INSTALL_DIR}/CppUTest/cmake )
   install(EXPORT CppUTestTargets
     DESTINATION ${LIB_INSTALL_DIR}/CppUTest/cmake)
+  install(FILES  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Scripts/CppUTestBuildTimeDiscoverTests.cmake
+    DESTINATION ${LIB_INSTALL_DIR}/CppUTest/cmake/Scripts)
+  install(FILES  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules/CppUTestBuildTimeDiscoverTests.cmake
+    DESTINATION ${LIB_INSTALL_DIR}/CppUTest/cmake/Modules)
   configure_package_config_file(CppUTestConfig.cmake.build.in
     ${CMAKE_CURRENT_BINARY_DIR}/CppUTestConfig.cmake
     INSTALL_DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
