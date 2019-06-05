@@ -83,24 +83,30 @@ void MockCheckedActualCall::copyOutputParameters(MockCheckedExpectedCall* expect
 {
     for (MockOutputParametersListNode* p = outputParameterExpectations_; p; p = p->next_)
     {
-        MockNamedValue outputParameter = expectedCall->getOutputParameter(p->name_);
-        MockNamedValueCopier* copier = outputParameter.getCopier();
-        if (copier)
+	MockNamedValue dummy = MockNamedValue("");
+	MockNamedValue* outputParameter = expectedCall->getOutputParameter(p->name_);
+	if (outputParameter == NULLPTR)
+	{
+	    outputParameter = &dummy;
+	}
+	MockNamedValueCopier* copier = outputParameter->getCopier();
+
+	if (copier)
+	{
+	    copier->copy(p->ptr_, outputParameter->getConstObjectPointer());
+	}
+	else if ((outputParameter->getType() == "const void*") && (p->type_ == "void*"))
+	{
+	    const void* data = outputParameter->getConstPointerValue();
+	    size_t size = outputParameter->getSize();
+	    PlatformSpecificMemCpy(p->ptr_, data, size);
+	}
+        else if (outputParameter->getName() != "")
         {
-            copier->copy(p->ptr_, outputParameter.getConstObjectPointer());
-        }
-        else if ((outputParameter.getType() == "const void*") && (p->type_ == "void*"))
-        {
-            const void* data = outputParameter.getConstPointerValue();
-            size_t size = outputParameter.getSize();
-            PlatformSpecificMemCpy(p->ptr_, data, size);
-        }
-        else if (outputParameter.getName() != "")
-        {
-            SimpleString type = expectedCall->getOutputParameter(p->name_).getType();
+            SimpleString type = expectedCall->getOutputParameter(p->name_)->getType();
             MockNoWayToCopyCustomTypeFailure failure(getTest(), type);
             failTest(failure);
-        }
+	}
     }
 }
 

@@ -38,13 +38,17 @@ void MockNamedValue::setDefaultComparatorsAndCopiersRepository(MockNamedValueCom
     defaultRepository_ = repository;
 }
 
-MockNamedValue::MockNamedValue(const SimpleString& name) : name_(name), type_("int"), size_(0), comparator_(NULLPTR), copier_(NULLPTR)
+MockNamedValue::MockNamedValue(const SimpleString& name) : name_(name), type_("int"), membuf_(NULL), size_(0), comparator_(NULLPTR), copier_(NULLPTR)
 {
     value_.intValue_ = 0;
 }
 
 MockNamedValue::~MockNamedValue()
 {
+    if ( (membuf_ != NULL)) {
+	delete [] membuf_;
+	membuf_ = NULL;
+    }
 }
 
 void MockNamedValue::setValue(bool value)
@@ -127,6 +131,17 @@ void MockNamedValue::setValue(const void* value)
 {
     type_ = "const void*";
     value_.constPointerValue_ = value;
+}
+
+void MockNamedValue::copyValue(const void* value, size_t size)
+{
+	type_ = "const void*";
+	if (membuf_ == NULL) {
+		membuf_ = new uint8_t[size];
+	}
+	memcpy(membuf_, value, size);
+	value_.constPointerValue_ = (const void*) membuf_;
+	size_ = size;
 }
 
 void MockNamedValue::setValue(void (*value)())

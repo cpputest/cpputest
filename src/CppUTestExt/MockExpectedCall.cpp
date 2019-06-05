@@ -227,8 +227,7 @@ MockExpectedCall& MockCheckedExpectedCall::withOutputParameterReturning(const Si
 {
     MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
     outputParameters_->add(newParameter);
-    newParameter->setValue(value);
-    newParameter->setSize(size);
+    newParameter->copyValue(value, size);
     return *this;
 }
 
@@ -264,10 +263,9 @@ MockNamedValue MockCheckedExpectedCall::getInputParameter(const SimpleString& na
     return (p) ? *p : MockNamedValue("");
 }
 
-MockNamedValue MockCheckedExpectedCall::getOutputParameter(const SimpleString& name)
+MockNamedValue* MockCheckedExpectedCall::getOutputParameter(const SimpleString& name)
 {
-    MockNamedValue * p = outputParameters_->getValueByName(name);
-    return (p) ? *p : MockNamedValue("");
+    return outputParameters_->getValueByName(name);
 }
 
 bool MockCheckedExpectedCall::areParametersMatchingActualCall()
