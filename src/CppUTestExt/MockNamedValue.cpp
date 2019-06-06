@@ -29,6 +29,7 @@
 #include "CppUTestExt/MockNamedValue.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
+#include <cstring>
 
 MockNamedValueComparatorsAndCopiersRepository* MockNamedValue::defaultRepository_ = NULLPTR;
 const double MockNamedValue::defaultDoubleTolerance = 0.005;
@@ -38,16 +39,16 @@ void MockNamedValue::setDefaultComparatorsAndCopiersRepository(MockNamedValueCom
     defaultRepository_ = repository;
 }
 
-MockNamedValue::MockNamedValue(const SimpleString& name) : name_(name), type_("int"), membuf_(NULL), size_(0), comparator_(NULLPTR), copier_(NULLPTR)
+MockNamedValue::MockNamedValue(const SimpleString& name) : name_(name), type_("int"), membuf_(NULLPTR), size_(0), comparator_(NULLPTR), copier_(NULLPTR)
 {
     value_.intValue_ = 0;
 }
 
 MockNamedValue::~MockNamedValue()
 {
-    if ( (membuf_ != NULL)) {
+    if ( (membuf_ != NULLPTR)) {
 	delete [] membuf_;
-	membuf_ = NULL;
+	membuf_ = NULLPTR;
     }
 }
 
@@ -136,7 +137,7 @@ void MockNamedValue::setValue(const void* value)
 void MockNamedValue::copyValue(const void* value, size_t size)
 {
 	type_ = "const void*";
-	if (membuf_ == NULL) {
+	if (membuf_ == NULLPTR) {
 		membuf_ = new char[size];
 	}
 	memcpy(membuf_, value, size);
