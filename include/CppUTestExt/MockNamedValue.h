@@ -187,7 +187,7 @@ private:
         void* objectPointerValue_;
         const void* outputPointerValue_;
     } value_;
-    uint8_t* membuf_;
+    char * membuf_;
     size_t size_;
     MockNamedValueComparator* comparator_;
     MockNamedValueCopier* copier_;

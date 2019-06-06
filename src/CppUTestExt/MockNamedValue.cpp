@@ -137,7 +137,7 @@ void MockNamedValue::copyValue(const void* value, size_t size)
 {
 	type_ = "const void*";
 	if (membuf_ == NULL) {
-		membuf_ = new uint8_t[size];
+		membuf_ = new char[size];
 	}
 	memcpy(membuf_, value, size);
 	value_.constPointerValue_ = (const void*) membuf_;
