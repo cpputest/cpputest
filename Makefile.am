@@ -66,6 +66,7 @@ include_cpputest_HEADERS = \
 	include/CppUTest/MemoryLeakWarningPlugin.h \
 	include/CppUTest/PlatformSpecificFunctions.h \
 	include/CppUTest/PlatformSpecificFunctions_c.h \
+	include/CppUTest/Shuffle.h \
 	include/CppUTest/SimpleString.h \
 	include/CppUTest/SimpleMutex.h \
 	include/CppUTest/StandardCLibrary.h \
