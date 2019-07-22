@@ -178,24 +178,24 @@ public:
     CompositeTestOutput();
     virtual ~CompositeTestOutput();
 
-    virtual void printTestsStarted();
-    virtual void printTestsEnded(const TestResult& result);
+    virtual void printTestsStarted() _override;
+    virtual void printTestsEnded(const TestResult& result) _override;
 
-    virtual void printCurrentTestStarted(const UtestShell& test);
-    virtual void printCurrentTestEnded(const TestResult& res);
-    virtual void printCurrentGroupStarted(const UtestShell& test);
-    virtual void printCurrentGroupEnded(const TestResult& res);
+    virtual void printCurrentTestStarted(const UtestShell& test) _override;
+    virtual void printCurrentTestEnded(const TestResult& res) _override;
+    virtual void printCurrentGroupStarted(const UtestShell& test) _override;
+    virtual void printCurrentGroupEnded(const TestResult& res) _override;
 
-    virtual void verbose();
-    virtual void color();
-    virtual void printBuffer(const char*);
-    virtual void print(const char*);
-    virtual void print(long);
-    virtual void printDouble(double);
-    virtual void printFailure(const TestFailure& failure);
-    virtual void setProgressIndicator(const char*);
+    virtual void verbose() _override;
+    virtual void color() _override;
+    virtual void printBuffer(const char*) _override;
+    virtual void print(const char*) _override;
+    virtual void print(long) _override;
+    virtual void printDouble(double) _override;
+    virtual void printFailure(const TestFailure& failure) _override;
+    virtual void setProgressIndicator(const char*) _override;
 
-    virtual void flush();
+    virtual void flush() _override;
 
 protected:
     CompositeTestOutput(const TestOutput&);
