@@ -207,7 +207,7 @@ public:
                 tear), testFunction_(NULLPTR)
     {
     }
-    Utest* createTest() { return new ExecFunctionTest(this); }
+    Utest* createTest() _override { return new ExecFunctionTest(this); }
     virtual ~ExecFunctionTestShell();
 };
 

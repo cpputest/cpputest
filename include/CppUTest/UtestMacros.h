@@ -62,7 +62,7 @@
   \
   class TEST_##testGroup##_##testName##_Test : public TEST_GROUP_##CppUTestGroup##testGroup \
 { public: TEST_##testGroup##_##testName##_Test () : TEST_GROUP_##CppUTestGroup##testGroup () {} \
-       void testBody(); }; \
+       void testBody() _override; }; \
   class TEST_##testGroup##_##testName##_TestShell : public UtestShell { \
       virtual Utest* createTest() _override { return new TEST_##testGroup##_##testName##_Test; } \
   } TEST_##testGroup##_##testName##_TestShell_instance; \
@@ -76,7 +76,7 @@
   \
   class IGNORE##testGroup##_##testName##_Test : public TEST_GROUP_##CppUTestGroup##testGroup \
 { public: IGNORE##testGroup##_##testName##_Test () : TEST_GROUP_##CppUTestGroup##testGroup () {} \
-  public: void testBody (); }; \
+  public: void testBody() _override; }; \
   class IGNORE##testGroup##_##testName##_TestShell : public IgnoredUtestShell { \
       virtual Utest* createTest() _override { return new IGNORE##testGroup##_##testName##_Test; } \
   } IGNORE##testGroup##_##testName##_TestShell_instance; \
