@@ -69,6 +69,7 @@ else (MSVC)
            Wno-c++98-compat
            Wno-c++98-compat-pedantic
            Wno-c++14-compat
+           Wno-inconsistent-missing-destructor-override
            )
     endif (C++11)
 
