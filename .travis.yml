@@ -1,6 +1,6 @@
 language: cpp
 
-dist: trusty
+dist: bionic
 
 matrix:
     include:
