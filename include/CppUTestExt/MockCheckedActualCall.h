@@ -92,8 +92,8 @@ public:
     virtual void * returnPointerValue() _override;
     virtual void * returnPointerValueOrDefault(void *) _override;
 
-    virtual void (*returnFunctionPointerValue())() _override;
-    virtual void (*returnFunctionPointerValueOrDefault(void (*)()))() _override;
+    virtual void (*returnFunctionPointerValue() _override )();
+    virtual void (*returnFunctionPointerValueOrDefault(void (*)()) _override )();
 
     virtual MockActualCall& onObject(const void* objectPtr) _override;
 
@@ -213,8 +213,8 @@ public:
     virtual const void * returnConstPointerValue() _override;
     virtual const void * returnConstPointerValueOrDefault(const void * default_value) _override;
 
-    virtual void (*returnFunctionPointerValue())() _override;
-    virtual void (*returnFunctionPointerValueOrDefault(void (*)()))() _override;
+    virtual void (*returnFunctionPointerValue() _override )();
+    virtual void (*returnFunctionPointerValueOrDefault(void (*)()) _override )();
 
     virtual MockActualCall& onObject(const void* objectPtr) _override;
 
@@ -286,8 +286,8 @@ public:
     virtual const void * returnConstPointerValue() _override { return NULLPTR; }
     virtual const void * returnConstPointerValueOrDefault(const void * value) _override { return value; }
 
-    virtual void (*returnFunctionPointerValue())() _override { return NULLPTR; }
-    virtual void (*returnFunctionPointerValueOrDefault(void (*value)()))() _override { return value; }
+    virtual void (*returnFunctionPointerValue() _override )() { return NULLPTR; }
+    virtual void (*returnFunctionPointerValueOrDefault(void (*value)()) _override )() { return value; }
 
     virtual MockActualCall& onObject(const void* ) _override { return *this; }
 
