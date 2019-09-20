@@ -34,8 +34,14 @@ if [ "x$BUILD" = "xautotools" ]; then
 fi
 
 if [ "x$BUILD" = "xcmake" ]; then
+    BUILD_ARGS=("-DWERROR=ON" "-DC++11=${CPP11}")
+
+    if [ "x$CPP11" = "xOFF" ]; then
+        BUILD_ARGS+=("-DCMAKE_CXX_STANDARD=98")
+    fi
+
     cmake --version
-    cmake -DWERROR=ON -DC++11=${CPP11} ..
+    cmake "${BUILD_ARGS[@]}" ..
     make
     ctest -V
 fi
