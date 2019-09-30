@@ -486,6 +486,7 @@ void UtestShell::assertDoublesEqual(double expected, double actual, double thres
 void UtestShell::assertBinaryEqual(const void *expected, const void *actual, size_t length, const char* text, const char *fileName, int lineNumber, const TestTerminator& testTerminator)
 {
     getTestResult()->countCheck();
+	if (length == 0) return;
     if (actual == NULLPTR && expected == NULLPTR) return;
     if (actual == NULLPTR || expected == NULLPTR)
         failWith(BinaryEqualFailure(this, fileName, lineNumber, (const unsigned char *) expected, (const unsigned char *) actual, length, text), testTerminator);
