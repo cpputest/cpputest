@@ -1011,6 +1011,18 @@ TEST(UnitTestMacros, MEMCMP_EQUALNullExpectedNullActual)
     MEMCMP_EQUAL(NULLPTR, NULLPTR, 1024);
 }
 
+TEST(UnitTestMacros, MEMCMP_EQUALNullPointerIgnoredInExpectationWhenSize0)
+{
+	unsigned char actualData[] = { 0x00, 0x01, 0x03, 0x03 };
+	MEMCMP_EQUAL(NULLPTR, actualData, 0);
+}
+
+TEST(UnitTestMacros, MEMCMP_EQUALNullPointerIgnoredInActualWhenSize0)
+{
+	unsigned char expectedData[] = { 0x00, 0x01, 0x02, 0x03 };
+	MEMCMP_EQUAL(expectedData, NULLPTR, 0);
+}
+
 static void _failingTestMethodWithMEMCMP_EQUAL_TEXT()
 {
     unsigned char expectedData[] = { 0x00, 0x01, 0x02, 0x03 };
