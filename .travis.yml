@@ -5,22 +5,38 @@ dist: bionic
 matrix:
     include:
     - compiler: clang
-      env: BUILD=cmake CPP11=OFF
+      env: BUILD=cmake CPP_STD=98 CPP11=OFF
       addons:
         apt:
           packages:
             - libc++-dev
     - compiler: clang
-      env: BUILD=cmake CPP11=ON
+      env: BUILD=cmake CPP_STD=11 CPP11=ON
+      addons:
+        apt:
+          packages:
+            - libc++-dev
+    - compiler: clang
+      env: BUILD=cmake CPP_STD=14 CPP11=ON
+      addons:
+        apt:
+          packages:
+            - libc++-dev
+    - compiler: clang
+      env: BUILD=cmake CPP_STD=17 CPP11=ON
       addons:
         apt:
           packages:
             - libc++-dev
 
     - compiler: gcc
-      env: BUILD=cmake CPP11=OFF
+      env: BUILD=cmake CPP_STD=98 CPP11=OFF
     - compiler: gcc
-      env: BUILD=cmake CPP11=ON
+      env: BUILD=cmake CPP_STD=11 CPP11=ON
+    - compiler: gcc
+      env: BUILD=cmake CPP_STD=14 CPP11=ON
+    - compiler: gcc
+      env: BUILD=cmake CPP_STD=17 CPP11=ON
 
     - compiler: gcc
       env: BUILD=autotools
