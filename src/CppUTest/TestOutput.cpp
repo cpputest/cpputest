@@ -181,6 +181,10 @@ void TestOutput::printTestsEnded(const TestResult& result)
         print("\033[m");
     }
     print("\n\n");
+    
+    if (anyTestFailed) {
+      result.printFailureMessages();
+    }
 
     dotCount_ = 0;
 }

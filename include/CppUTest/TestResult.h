@@ -34,6 +34,8 @@
 #ifndef D_TestResult_h
 #define D_TestResult_h
 
+#include <list>
+
 class TestFailure;
 class TestOutput;
 class UtestShell;
@@ -58,7 +60,8 @@ public:
     virtual void countFilteredOut();
     virtual void countIgnored();
     virtual void addFailure(const TestFailure& failure);
-    virtual void print(const char* text);
+    virtual void print(const char* text) const;
+    virtual void printFailureMessages() const;
 
     int getTestCount() const
     {
@@ -105,6 +108,7 @@ private:
     long currentTestTotalExecutionTime_;
     long currentGroupTimeStarted_;
     long currentGroupTotalExecutionTime_;
+    std::list<TestFailure> failureMessages_;
 };
 
 #endif

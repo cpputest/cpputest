@@ -59,22 +59,34 @@ void TestResult::currentTestStarted(UtestShell* test)
     currentTestTimeStarted_ = GetPlatformSpecificTimeInMillis();
 }
 
-void TestResult::print(const char* text)
+void TestResult::print(const char* text) const
 {
     output_.print(text);
+}
+
+void TestResult::printFailureMessages() const
+{
+  print("Failed test:\n");
+  int i = 0;
+  for (const auto& failure: failureMessages_) {
+    ++i;
+    output_.print(i);
+    output_.print(") ");
+    output_.printFailure(failure);
+  }
 }
 
 void TestResult::currentTestEnded(UtestShell* /*test*/)
 {
     currentTestTotalExecutionTime_ = GetPlatformSpecificTimeInMillis() - currentTestTimeStarted_;
     output_.printCurrentTestEnded(*this);
-
 }
 
 void TestResult::addFailure(const TestFailure& failure)
 {
     output_.printFailure(failure);
     failureCount_++;
+    failureMessages_.push_back(failure);
 }
 
 void TestResult::countTest()
