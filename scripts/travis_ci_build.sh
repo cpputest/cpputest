@@ -34,7 +34,7 @@ if [ "x$BUILD" = "xautotools" ]; then
 fi
 
 if [ "x$BUILD" = "xcmake" ]; then
-    BUILD_ARGS=("-DWERROR=ON" "-DC++11=$CPP11")
+    BUILD_ARGS=("-DWERROR=ON")
 
     if [ -n "$CPP_STD" ]; then
         BUILD_ARGS+=("-DCMAKE_CXX_STANDARD=$CPP_STD")
