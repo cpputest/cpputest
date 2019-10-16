@@ -63,7 +63,7 @@ else (MSVC)
         Wno-old-style-cast
         )
 
-    if (C++11)
+    if (C++11 OR (DEFINED CMAKE_CXX_STANDARD AND NOT CMAKE_CXX_STANDARD EQUAL 98))
         set(WARNING_CXX_FLAGS
            ${WARNING_CXX_FLAGS}
            Wno-c++98-compat
@@ -71,7 +71,7 @@ else (MSVC)
            Wno-c++14-compat
            Wno-inconsistent-missing-destructor-override
            )
-    endif (C++11)
+    endif ()
 
     check_and_append_c_warning_flags(${WARNING_C_FLAGS})
     check_and_append_c_warning_flags(${WARNING_C_ONLY_FLAGS})
