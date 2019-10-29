@@ -61,6 +61,7 @@ else (MSVC)
         Wno-exit-time-destructors
         Wno-weak-vtables
         Wno-old-style-cast
+        Wno-c++14-compat
         )
 
     if (C++11 OR (DEFINED CMAKE_CXX_STANDARD AND NOT CMAKE_CXX_STANDARD EQUAL 98))
@@ -68,7 +69,6 @@ else (MSVC)
            ${WARNING_CXX_FLAGS}
            Wno-c++98-compat
            Wno-c++98-compat-pedantic
-           Wno-c++14-compat
            Wno-inconsistent-missing-destructor-override
            )
     endif ()
