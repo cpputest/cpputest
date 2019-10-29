@@ -38,6 +38,7 @@ TEST(BasicBehavior, deleteInvalidatesMemory)
     CHECK(*memory != 0xAD);
 }
 
+#if __cplusplus >= 201402L
 TEST(BasicBehavior, DeleteWithSizeParameterWorks)
 {
     char* charMemory = new char;
@@ -45,7 +46,7 @@ TEST(BasicBehavior, DeleteWithSizeParameterWorks)
     ::operator delete(charMemory, sizeof(char));
     ::operator delete[](charArrayMemory, sizeof(char)* 10);
 }
-
+#endif
 
 static void deleteUnallocatedMemory()
 {
