@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2007, Michael Feathers, James Grenning and Bas Vodde
+ * Copyright (c) 2019, Nokia
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -137,6 +138,26 @@ TEST(CommandLineTestRunner, NoPluginsAreInstalledAtTheEndOfARunWhenTheArgumentsA
 
     LONGS_EQUAL(0, registry.countPlugins());
 
+}
+
+TEST(CommandLineTestRunner, ReturnsNonZeroWhenTheArgumentsAreInvalid)
+{
+    const char* argv[] = { "tests.exe", "-fdskjnfkds"};
+
+    CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(2, argv, &registry);
+    int returned = commandLineTestRunner.runAllTestsMain();
+
+    CHECK_TRUE(0 != returned);
+}
+
+TEST(CommandLineTestRunner, ReturnsZeroWhenNoErrors)
+{
+    const char* argv[] = { "tests.exe" };
+
+    CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(1, argv, &registry);
+    int returned = commandLineTestRunner.runAllTestsMain();
+
+    LONGS_EQUAL(0, returned);
 }
 
 TEST(CommandLineTestRunner, TeamcityOutputEnabled)
