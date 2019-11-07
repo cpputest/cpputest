@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2007, Michael Feathers, James Grenning and Bas Vodde
- * Copyright (c) 2019, Nokia
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -140,14 +139,14 @@ TEST(CommandLineTestRunner, NoPluginsAreInstalledAtTheEndOfARunWhenTheArgumentsA
 
 }
 
-TEST(CommandLineTestRunner, ReturnsNonZeroWhenTheArgumentsAreInvalid)
+TEST(CommandLineTestRunner, ReturnsNegativeWhenTheArgumentsAreInvalid)
 {
-    const char* argv[] = { "tests.exe", "-fdskjnfkds"};
+    const char* argv[] = { "tests.exe", "-some-invalid=parameter" };
 
     CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(2, argv, &registry);
     int returned = commandLineTestRunner.runAllTestsMain();
 
-    CHECK_TRUE(0 != returned);
+    CHECK_COMPARE(returned, <, 0);
 }
 
 TEST(CommandLineTestRunner, ReturnsZeroWhenNoErrors)
@@ -155,6 +154,16 @@ TEST(CommandLineTestRunner, ReturnsZeroWhenNoErrors)
     const char* argv[] = { "tests.exe" };
 
     CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(1, argv, &registry);
+    int returned = commandLineTestRunner.runAllTestsMain();
+
+    LONGS_EQUAL(0, returned);
+}
+
+TEST(CommandLineTestRunner, ReturnsZeroWhenNoTestsMatchProvidedFilter)
+{
+    const char* argv[] = { "tests.exe", "-g", "NoSuchGroup"};
+
+    CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(3, argv, &registry);
     int returned = commandLineTestRunner.runAllTestsMain();
 
     LONGS_EQUAL(0, returned);

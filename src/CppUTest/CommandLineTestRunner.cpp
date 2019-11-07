@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2007, Michael Feathers, James Grenning and Bas Vodde
- * Copyright (c) 2019, Nokia
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -74,7 +73,7 @@ CommandLineTestRunner::~CommandLineTestRunner()
 
 int CommandLineTestRunner::runAllTestsMain()
 {
-    int testResult = 1;
+    int testResult = -1;
 
     SetPointerPlugin pPlugin(DEF_PLUGIN_SET_POINTER);
     registry_->installPlugin(&pPlugin);
