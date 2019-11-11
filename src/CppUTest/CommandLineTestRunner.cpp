@@ -73,7 +73,7 @@ CommandLineTestRunner::~CommandLineTestRunner()
 
 int CommandLineTestRunner::runAllTestsMain()
 {
-    int testResult = -1;
+    int testResult = 1;
 
     SetPointerPlugin pPlugin(DEF_PLUGIN_SET_POINTER);
     registry_->installPlugin(&pPlugin);
