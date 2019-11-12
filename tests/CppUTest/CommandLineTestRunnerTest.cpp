@@ -139,6 +139,36 @@ TEST(CommandLineTestRunner, NoPluginsAreInstalledAtTheEndOfARunWhenTheArgumentsA
 
 }
 
+TEST(CommandLineTestRunner, ReturnsOneWhenTheArgumentsAreInvalid)
+{
+    const char* argv[] = { "tests.exe", "-some-invalid=parameter" };
+
+    CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(2, argv, &registry);
+    int returned = commandLineTestRunner.runAllTestsMain();
+
+    LONGS_EQUAL(1, returned);
+}
+
+TEST(CommandLineTestRunner, ReturnsZeroWhenNoErrors)
+{
+    const char* argv[] = { "tests.exe" };
+
+    CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(1, argv, &registry);
+    int returned = commandLineTestRunner.runAllTestsMain();
+
+    LONGS_EQUAL(0, returned);
+}
+
+TEST(CommandLineTestRunner, ReturnsZeroWhenNoTestsMatchProvidedFilter)
+{
+    const char* argv[] = { "tests.exe", "-g", "NoSuchGroup"};
+
+    CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(3, argv, &registry);
+    int returned = commandLineTestRunner.runAllTestsMain();
+
+    LONGS_EQUAL(0, returned);
+}
+
 TEST(CommandLineTestRunner, TeamcityOutputEnabled)
 {
     const char* argv[] = {"tests.exe", "-oteamcity"};
