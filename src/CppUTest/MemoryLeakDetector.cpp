@@ -49,8 +49,8 @@ void SimpleStringBuffer::clear()
 void SimpleStringBuffer::add(const char* format, ...)
 {
     int count = 0;
-    size_t positions_left = write_limit_ - positions_filled_;
-    if (positions_left <= 0) return;
+    const size_t positions_left = write_limit_ - positions_filled_;
+    if (positions_left == 0) return;
 
     va_list arguments;
     va_start(arguments, format);
@@ -65,7 +65,7 @@ void SimpleStringBuffer::addMemoryDump(const void* memory, size_t memorySize)
     const unsigned char* byteMemory = (const unsigned char*)memory;
     const size_t maxLineBytes = 16;
     size_t currentPos = 0;
-	size_t p;
+    size_t p;
 
     while (currentPos < memorySize) {
         add("    %04lx: ", (unsigned long) currentPos);
