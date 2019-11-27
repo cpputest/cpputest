@@ -48,13 +48,12 @@ void SimpleStringBuffer::clear()
 
 void SimpleStringBuffer::add(const char* format, ...)
 {
-    int count = 0;
     const size_t positions_left = write_limit_ - positions_filled_;
     if (positions_left == 0) return;
 
     va_list arguments;
     va_start(arguments, format);
-    count = PlatformSpecificVSNprintf(buffer_ + positions_filled_, positions_left+1, format, arguments);
+    const int count = PlatformSpecificVSNprintf(buffer_ + positions_filled_, positions_left+1, format, arguments);
     if (count > 0) positions_filled_ += (size_t) count;
     if (positions_filled_ > write_limit_) positions_filled_ = write_limit_;
     va_end(arguments);
