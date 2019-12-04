@@ -21,6 +21,13 @@
 /* Needed for malloc */
 #include <stdlib.h>
 
+/* Needed for std::nullptr */
+#ifdef __cplusplus
+ #if CPPUTEST_USE_STD_CPP_LIB
+  #include <cstddef>
+ #endif
+#endif
+
 /* Needed for ... */
 #include <stdarg.h>
 
