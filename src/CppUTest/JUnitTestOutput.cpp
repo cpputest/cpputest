@@ -151,10 +151,24 @@ void JUnitTestOutput::printCurrentTestStarted(const UtestShell& test)
 SimpleString JUnitTestOutput::createFileName(const SimpleString& group)
 {
     SimpleString fileName = "cpputest_";
+    if (!impl_->package_.isEmpty()) {
+        fileName += impl_->package_;
+        fileName += "_";
+    }
     fileName += group;
-    fileName.replace('/', '_');
-    fileName += ".xml";
-    return fileName;
+    return encodeFileName(fileName) + ".xml";
+}
+
+SimpleString JUnitTestOutput::encodeFileName(const SimpleString& fileName)
+{
+    // special character list based on: https://en.wikipedia.org/wiki/Filename
+    static const char* const forbiddenCharacters = "/\\?%*:|\"<>";
+
+    SimpleString result = fileName;
+    for (const char* sym = forbiddenCharacters; *sym; ++sym) {
+        result.replace(*sym, '_');
+    }
+    return result;
 }
 
 void JUnitTestOutput::setPackageName(const SimpleString& package)
@@ -208,7 +222,7 @@ void JUnitTestOutput::writeTestCases()
         SimpleString buf = StringFromFormat(
                 "<testcase classname=\"%s%s%s\" name=\"%s\" assertions=\"%d\" time=\"%d.%03d\" file=\"%s\" line=\"%d\">\n",
                 impl_->package_.asCharString(),
-                impl_->package_.isEmpty() == true ? "" : ".",
+                impl_->package_.isEmpty() ? "" : ".",
                 impl_->results_.group_.asCharString(),
                 cur->name_.asCharString(),
                 cur->checkCount_ - impl_->results_.totalCheckCount_,

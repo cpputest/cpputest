@@ -42,7 +42,7 @@ class FileForJUnitOutputTests
 
 public:
 
-    FileForJUnitOutputTests(SimpleString filename, FileForJUnitOutputTests* next) :
+    FileForJUnitOutputTests(const SimpleString& filename, FileForJUnitOutputTests* next) :
         name_(filename), isOpen_(true), next_(next) {}
 
     FileForJUnitOutputTests* nextFile()
@@ -162,7 +162,7 @@ class JUnitTestOutputTestRunner
 
 public:
 
-    JUnitTestOutputTestRunner(TestResult result) :
+    explicit JUnitTestOutputTestRunner(const TestResult& result) :
         result_(result), currentGroupName_(NULLPTR), currentTest_(NULLPTR), firstTestInGroup_(true), timeTheTestTakes_(0), numberOfChecksInTest_(0), testFailure_(NULLPTR)
     {
         millisTime = 0;
@@ -363,6 +363,16 @@ TEST(JUnitOutputTest, withOneTestGroupAndOneTestOnlyWriteToOneFile)
 
     LONGS_EQUAL(1, fileSystem.amountOfFiles());
     CHECK(fileSystem.fileExists("cpputest_groupname.xml"));
+}
+
+TEST(JUnitOutputTest, withReservedCharactersInPackageOrTestGroupUsesUnderscoresForFileName)
+{
+    junitOutput->setPackageName("p/a\\c?k%a*g:e|n\"a<m>e.");
+    testCaseRunner->start()
+                  .withGroup("g/r\\o?u%p*n:a|m\"e<h>ere").withTest("testname")
+                  .end();
+
+    CHECK(fileSystem.fileExists("cpputest_p_a_c_k_a_g_e_n_a_m_e._g_r_o_u_p_n_a_m_e_h_ere.xml"));
 }
 
 TEST(JUnitOutputTest, withOneTestGroupAndOneTestOutputsValidXMLFiles)
@@ -634,7 +644,7 @@ TEST(JUnitOutputTest, TestCaseBlockWithAPackageName)
             .withGroup("groupname").withTest("testname")
             .end();
 
-    outputFile = fileSystem.file("cpputest_groupname.xml");
+    outputFile = fileSystem.file("cpputest_packagename_groupname.xml");
 
     STRCMP_EQUAL("<testcase classname=\"packagename.groupname\" name=\"testname\" assertions=\"0\" time=\"0.000\" file=\"file\" line=\"1\">\n", outputFile->line(5));
     STRCMP_EQUAL("</testcase>\n", outputFile->line(6));
@@ -647,7 +657,7 @@ TEST(JUnitOutputTest, TestCaseBlockForIgnoredTest)
       .withGroup("groupname").withIgnoredTest("testname")
       .end();
 
-   outputFile = fileSystem.file("cpputest_groupname.xml");
+   outputFile = fileSystem.file("cpputest_packagename_groupname.xml");
 
    STRCMP_EQUAL("<testcase classname=\"packagename.groupname\" name=\"testname\" assertions=\"0\" time=\"0.000\" file=\"file\" line=\"1\">\n", outputFile->line(5));
    STRCMP_EQUAL("<skipped />\n", outputFile->line(6));
@@ -662,7 +672,7 @@ TEST(JUnitOutputTest, TestCaseWithTestLocation)
             .withTest("testname").inFile("MySource.c").onLine(159)
             .end();
 
-    outputFile = fileSystem.file("cpputest_groupname.xml");
+    outputFile = fileSystem.file("cpputest_packagename_groupname.xml");
 
     STRCMP_EQUAL("<testcase classname=\"packagename.groupname\" name=\"testname\" assertions=\"0\" time=\"0.000\" file=\"MySource.c\" line=\"159\">\n", outputFile->line(5));
 }
@@ -690,7 +700,7 @@ TEST(JUnitOutputTest, TestCaseBlockWithAssertions)
             .thatHasChecks(24)
             .end();
 
-    outputFile = fileSystem.file("cpputest_groupname.xml");
+    outputFile = fileSystem.file("cpputest_packagename_groupname.xml");
 
     STRCMP_EQUAL("<testcase classname=\"packagename.groupname\" name=\"testname\" assertions=\"24\" time=\"0.000\" file=\"file\" line=\"1\">\n", outputFile->line(5));
 }
