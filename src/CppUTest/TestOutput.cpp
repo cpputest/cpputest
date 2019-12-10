@@ -145,14 +145,19 @@ void TestOutput::printCurrentGroupEnded(const TestResult& /*res*/)
 void TestOutput::printTestsEnded(const TestResult& result)
 {
     print("\n");
-    const bool anyTestFailed = result.getFailureCount() > 0;
-    if (anyTestFailed) {
+    const bool isFailure = !result.isSuccess();
+    if (isFailure) {
         if (color_) {
             print("\033[31;1m");
         }
         print("Errors (");
-        print(result.getFailureCount());
-        print(" failures, ");
+        const int failureCount = result.getFailureCount();
+        if (failureCount > 0) {
+            print(failureCount);
+            print(" failures, ");
+        }
+        else if (result.getRunCount() == 0)
+            print("ran nothing, ");
     }
     else {
         if (color_) {
@@ -170,7 +175,7 @@ void TestOutput::printTestsEnded(const TestResult& result)
     print(" ignored, ");
     print(result.getFilteredOutCount());
     print(" filtered out, ");
-    if (shuffleSeed_ != SHUFFLE_DISABLED && (verbose_ || anyTestFailed)) {
+    if (shuffleSeed_ != SHUFFLE_DISABLED && (verbose_ || isFailure)) {
         print("shuffle seed was: ");
         print(shuffleSeed_);
         print(", ");

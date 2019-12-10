@@ -113,8 +113,9 @@ int CommandLineTestRunner::runAllTests()
 {
     initializeTestRun();
     int loopCount = 0;
-    int failureCount = 0;
-    int repeat_ = arguments_->getRepeatCount();
+    int failedTestCount = 0;
+    int successCount = 0;
+    int repeatCount = arguments_->getRepeatCount();
 
     if (arguments_->isListingTestGroupNames())
     {
@@ -139,17 +140,21 @@ int CommandLineTestRunner::runAllTests()
         output_->print("\n");
         srand(seed);
     }
-    while (loopCount++ < repeat_) {
+    while (loopCount++ < repeatCount) {
         if (shuffleEnabled)
         {
             registry_->shuffleRunOrder(rand_);
         }
-        output_->printTestRun(loopCount, repeat_);
+        output_->printTestRun(loopCount, repeatCount);
         TestResult tr(*output_);
         registry_->runAllTests(tr);
-        failureCount += tr.getFailureCount();
+        failedTestCount += tr.getFailureCount();
+        if (tr.isSuccess()) successCount++;
     }
-    return failureCount;
+    if (failedTestCount != 0)
+        return failedTestCount;
+    else
+        return successCount != repeatCount;
 }
 
 TestOutput* CommandLineTestRunner::createTeamCityOutput()

@@ -41,7 +41,7 @@ class UtestShell;
 class TestResult
 {
 public:
-    TestResult(TestOutput&);
+    explicit TestResult(TestOutput&);
     DEFAULT_COPY_CONSTRUCTOR(TestResult)
     virtual ~TestResult();
 
@@ -59,6 +59,8 @@ public:
     virtual void countIgnored();
     virtual void addFailure(const TestFailure& failure);
     virtual void print(const char* text);
+
+    virtual void clear();
 
     int getTestCount() const
     {
@@ -83,6 +85,11 @@ public:
     int getFailureCount() const
     {
         return failureCount_;
+    }
+
+    bool isSuccess() const
+    {
+        return getFailureCount() == 0 && getRunCount() > 0;
     }
 
     long getTotalExecutionTime() const;

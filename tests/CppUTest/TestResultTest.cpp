@@ -57,10 +57,65 @@ TEST_GROUP(TestResult)
         delete printer;
         delete res;
     }
+
+    void addTestFailure()
+    {
+        res->addFailure(TestFailure(UtestShell::getCurrent(), StringFrom("dummy message")));
+    }
 };
 
 TEST(TestResult, TestEndedWillPrintResultsAndExecutionTime)
 {
     res->testsEnded();
     CHECK(mock->getOutput().contains("10 ms"));
+}
+
+TEST(TestResult, ResultIsOkIfNoFailures)
+{
+    res->countTest();
+    res->countRun();
+    CHECK_TRUE(res->isSuccess());
+}
+
+TEST(TestResult, ResultIsNotOkIfFailures)
+{
+    res->countTest();
+    res->countRun();
+    addTestFailure();
+    CHECK_FALSE(res->isSuccess());
+}
+
+TEST(TestResult, ResultIsNotOkIfNoTestsAtAll)
+{
+    CHECK_FALSE(res->isSuccess());
+}
+
+TEST(TestResult, ResultIsNotOkIfNoTestsRun)
+{
+    res->countTest();
+    CHECK_FALSE(res->isSuccess());
+}
+
+TEST(TestResult, CanBeCleared)
+{
+    res->countTest();
+    res->countRun();
+    res->countCheck();
+    res->countFilteredOut();
+    res->countIgnored();
+    addTestFailure();
+    res->setTotalExecutionTime(100);
+
+    res->clear();
+
+    LONGS_EQUAL(0, res->getTestCount());
+    LONGS_EQUAL(0, res->getRunCount());
+    LONGS_EQUAL(0, res->getCheckCount());
+    LONGS_EQUAL(0, res->getFilteredOutCount());
+    LONGS_EQUAL(0, res->getIgnoredCount());
+    LONGS_EQUAL(0, res->getFailureCount());
+    LONGS_EQUAL(0, res->getTotalExecutionTime());
+    // checking for consistency, but not set above:
+    LONGS_EQUAL(0, res->getCurrentTestTotalExecutionTime());
+    LONGS_EQUAL(0, res->getCurrentGroupTotalExecutionTime());
 }

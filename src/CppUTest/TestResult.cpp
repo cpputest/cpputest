@@ -41,6 +41,22 @@ TestResult::~TestResult()
 {
 }
 
+void TestResult::clear()
+{
+    testCount_ = 0;
+    runCount_ = 0;
+    checkCount_ = 0;
+    failureCount_ = 0;
+    filteredOutCount_ = 0;
+    ignoredCount_ = 0;
+    totalExecutionTime_ = 0;
+    timeStarted_ = 0;
+    currentTestTimeStarted_ = 0;
+    currentTestTotalExecutionTime_ = 0;
+    currentGroupTimeStarted_ = 0;
+    currentGroupTotalExecutionTime_ = 0;
+}
+
 void TestResult::currentGroupStarted(UtestShell* test)
 {
     output_.printCurrentGroupStarted(*test);

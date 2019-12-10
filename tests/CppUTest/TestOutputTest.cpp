@@ -76,6 +76,12 @@ TEST_GROUP(TestOutput)
         delete f3;
         delete result;
     }
+
+    void runOneTest()
+    {
+        result->countTest();
+        result->countRun();
+    }
 };
 
 TEST(TestOutput, PrintConstCharStar)
@@ -119,17 +125,21 @@ TEST(TestOutput, PrintTestALot)
 
 TEST(TestOutput, PrintTestALotAndSimulateRepeatRun)
 {
-    for (int i = 0; i < 60; ++i) {
+    const int repetitions = 60;
+
+    for (int i = 0; i < repetitions; ++i) {
+        runOneTest();
         printer->printCurrentTestEnded(*result);
     }
 
     printer->printTestsEnded(*result);
 
-    for (int i = 0; i < 60; ++i) {
+    for (int i = 0; i < repetitions; ++i) {
+        runOneTest();
         printer->printCurrentTestEnded(*result);
     }
     STRCMP_EQUAL("..................................................\n.........." \
-        "\nOK (0 tests, 0 ran, 0 checks, 0 ignored, 0 filtered out, 10 ms)\n\n" \
+        "\nOK (60 tests, 60 ran, 0 checks, 0 ignored, 0 filtered out, 10 ms)\n\n" \
         "..................................................\n..........", mock->getOutput().asCharString());
 }
 
@@ -164,17 +174,29 @@ TEST(TestOutput, PrintTestVerboseEnded)
 TEST(TestOutput, printColorWithSuccess)
 {
     mock->color();
+    runOneTest();
     printer->printTestsEnded(*result);
-    STRCMP_EQUAL("\n\033[32;1mOK (0 tests, 0 ran, 0 checks, 0 ignored, 0 filtered out, 10 ms)\033[m\n\n", mock->getOutput().asCharString());
+    STRCMP_EQUAL("\n\033[32;1mOK (1 tests, 1 ran, 0 checks, 0 ignored, 0 filtered out, 10 ms)\033[m\n\n", mock->getOutput().asCharString());
 }
 
 TEST(TestOutput, printColorWithFailures)
 {
     mock->color();
+    runOneTest();
     result->addFailure(*f);
     printer->flush();
     printer->printTestsEnded(*result);
-    STRCMP_EQUAL("\n\033[31;1mErrors (1 failures, 0 tests, 0 ran, 0 checks, 0 ignored, 0 filtered out, 10 ms)\033[m\n\n", mock->getOutput().asCharString());
+    STRCMP_EQUAL("\n\033[31;1mErrors (1 failures, 1 tests, 1 ran, 0 checks, 0 ignored, 0 filtered out, 10 ms)\033[m\n\n",
+        mock->getOutput().asCharString());
+}
+
+TEST(TestOutput, printColorWithNoTestsRun)
+{
+    mock->color();
+    printer->flush();
+    printer->printTestsEnded(*result);
+    STRCMP_EQUAL("\n\033[31;1mErrors (ran nothing, 0 tests, 0 ran, 0 checks, 0 ignored, 0 filtered out, 10 ms)\033[m\n\n",
+        mock->getOutput().asCharString());
 }
 
 TEST(TestOutput, PrintTestRun)
@@ -248,6 +270,15 @@ TEST(TestOutput, printTestsEndedWithFailures)
     printer->flush();
     printer->printTestsEnded(*result);
     STRCMP_EQUAL("\nErrors (1 failures, 0 tests, 0 ran, 0 checks, 0 ignored, 0 filtered out, 10 ms)\n\n", mock->getOutput().asCharString());
+}
+
+TEST(TestOutput, printTestsEndedWithNoTestsRun)
+{
+    result->countTest();
+    printer->flush();
+    printer->printTestsEnded(*result);
+    STRCMP_EQUAL("\nErrors (ran nothing, 1 tests, 0 ran, 0 checks, 0 ignored, 0 filtered out, 10 ms)\n\n",
+        mock->getOutput().asCharString());
 }
 
 class CompositeTestOutputTestStringBufferTestOutput : public StringBufferTestOutput
