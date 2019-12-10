@@ -156,21 +156,19 @@ SimpleString JUnitTestOutput::createFileName(const SimpleString& group)
         fileName += "_";
     }
     fileName += group;
+    return encodeFileName(fileName) + ".xml";
+}
 
+SimpleString JUnitTestOutput::encodeFileName(const SimpleString& fileName)
+{
     // special character list based on: https://en.wikipedia.org/wiki/Filename
-    fileName.replace('/', '_');
-    fileName.replace('\\', '_');
-    fileName.replace('?', '_');
-    fileName.replace('%', '_');
-    fileName.replace('*', '_');
-    fileName.replace(':', '_');
-    fileName.replace('|', '_');
-    fileName.replace('"', '_');
-    fileName.replace('<', '_');
-    fileName.replace('>', '_');
+    static const char* const forbiddenCharacters = "/\\?%*:|\"<>";
 
-    fileName += ".xml";
-    return fileName;
+    SimpleString result = fileName;
+    for (const char* sym = forbiddenCharacters; *sym; ++sym) {
+        result.replace(*sym, '_');
+    }
+    return result;
 }
 
 void JUnitTestOutput::setPackageName(const SimpleString& package)
