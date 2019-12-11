@@ -58,6 +58,7 @@ static void _failFunction()
     FAIL("This test fails");
 }
 
+static void _exitNonZeroFunction() __no_return__;
 static void _exitNonZeroFunction()
 {
     exit(1);
