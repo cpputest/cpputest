@@ -74,6 +74,19 @@ static int PlatformSpecificWaitPidImplementation(int, int*, int)
 
 #else
 
+static void SetTestFailureByStatusCode(UtestShell* shell, TestResult* result, int status)
+{
+    if (WIFEXITED(status) && WEXITSTATUS(status) != 0) {
+        result->addFailure(TestFailure(shell, "Failed in separate process"));
+    } else if (WIFSIGNALED(status)) {
+        SimpleString message("Failed in separate process - killed by signal ");
+        message += StringFrom(WTERMSIG(status));
+        result->addFailure(TestFailure(shell, message));
+    } else if (WIFSTOPPED(status)) {
+        result->addFailure(TestFailure(shell, "Stopped in separate process - continuing"));
+    }
+}
+
 static void GccPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
 {
     const pid_t syscallError = -1;
@@ -93,27 +106,17 @@ static void GccPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, Test
         shell->runOneTestInCurrentProcess(plugin, *result);        // LCOV_EXCL_LINE
         _exit(initialFailureCount < result->getFailureCount());    // LCOV_EXCL_LINE
     } else {                    /* Code executed by parent */
-        result->countRun();
         do {
             w = PlatformSpecificWaitPid(cpid, &status, WUNTRACED);
             if (w == syscallError) {
-                if(EINTR == errno) continue; /* OS X debugger */
-                result->addFailure(TestFailure(shell, "Call to waitpid() failed"));
-                return;
-            }
-
-            if (WIFEXITED(status) && WEXITSTATUS(status) != 0) {
-                result->addFailure(TestFailure(shell, "Failed in separate process"));
-            } else if (WIFSIGNALED(status)) {
-                SimpleString signal(StringFrom(WTERMSIG(status)));
-                {
-                    SimpleString message("Failed in separate process - killed by signal ");
-                    message += signal;
-                    result->addFailure(TestFailure(shell, message));
+                // OS X debugger causes EINTR
+                if (EINTR != errno) {
+                    result->addFailure(TestFailure(shell, "Call to waitpid() failed"));
+                    return;
                 }
-            } else if (WIFSTOPPED(status)) {
-                result->addFailure(TestFailure(shell, "Stopped in separate process - continuing"));
-                kill(w, SIGCONT);
+            } else {
+                if (WIFSTOPPED(status)) kill(w, SIGCONT);
+                SetTestFailureByStatusCode(shell, result, status);
             }
         } while ((w == syscallError) || (!WIFEXITED(status) && !WIFSIGNALED(status)));
     }

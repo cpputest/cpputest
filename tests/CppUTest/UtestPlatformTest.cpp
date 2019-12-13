@@ -146,7 +146,7 @@ TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, CallToForkFai
     fixture.registry_->setRunTestsInSeperateProcess();
     fixture.runAllTests();
     fixture.assertPrintContains("Call to fork() failed");
-    fixture.assertPrintContains("Errors (1 failures, 1 tests, 0 ran");
+    fixture.assertPrintContains("Errors (1 failures, 1 tests, 1 ran");
 }
 
 TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, CallToWaitPidWhileDebuggingInSeparateProcessWorks)
