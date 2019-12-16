@@ -115,8 +115,8 @@ static void GccPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, Test
                     return;
                 }
             } else {
-                if (WIFSTOPPED(status)) kill(w, SIGCONT);
                 SetTestFailureByStatusCode(shell, result, status);
+                if (WIFSTOPPED(status)) kill(w, SIGCONT);
             }
         } while ((w == syscallError) || (!WIFEXITED(status) && !WIFSIGNALED(status)));
     }
