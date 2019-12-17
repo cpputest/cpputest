@@ -74,44 +74,51 @@ static int PlatformSpecificWaitPidImplementation(int, int*, int)
 
 #else
 
+static void SetTestFailureByStatusCode(UtestShell* shell, TestResult* result, int status)
+{
+    if (WIFEXITED(status) && WEXITSTATUS(status) != 0) {
+        result->addFailure(TestFailure(shell, "Failed in separate process"));
+    } else if (WIFSIGNALED(status)) {
+        SimpleString message("Failed in separate process - killed by signal ");
+        message += StringFrom(WTERMSIG(status));
+        result->addFailure(TestFailure(shell, message));
+    } else if (WIFSTOPPED(status)) {
+        result->addFailure(TestFailure(shell, "Stopped in separate process - continuing"));
+    }
+}
+
 static void GccPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
 {
-    pid_t cpid, w;
+    const pid_t syscallError = -1;
+    pid_t cpid;
+    pid_t w;
     int status;
 
     cpid = PlatformSpecificFork();
 
-    if (cpid == -1) {
+    if (cpid == syscallError) {
         result->addFailure(TestFailure(shell, "Call to fork() failed"));
         return;
     }
 
     if (cpid == 0) {            /* Code executed by child */
-        shell->runOneTestInCurrentProcess(plugin, *result);   // LCOV_EXCL_LINE
-        _exit(result->getFailureCount());                     // LCOV_EXCL_LINE
+        const int initialFailureCount = result->getFailureCount(); // LCOV_EXCL_LINE
+        shell->runOneTestInCurrentProcess(plugin, *result);        // LCOV_EXCL_LINE
+        _exit(initialFailureCount < result->getFailureCount());    // LCOV_EXCL_LINE
     } else {                    /* Code executed by parent */
         do {
             w = PlatformSpecificWaitPid(cpid, &status, WUNTRACED);
-            if (w == -1) {
-                if(EINTR ==errno) continue; /* OS X debugger */
-                result->addFailure(TestFailure(shell, "Call to waitpid() failed"));
-                return;
-            }
-
-            if (WIFEXITED(status) && WEXITSTATUS(status) > result->getFailureCount()) {
-                result->addFailure(TestFailure(shell, "Failed in separate process"));
-            } else if (WIFSIGNALED(status)) {
-                SimpleString signal(StringFrom(WTERMSIG(status)));
-                {
-                    SimpleString message("Failed in separate process - killed by signal ");
-                    message += signal;
-                    result->addFailure(TestFailure(shell, message));
+            if (w == syscallError) {
+                // OS X debugger causes EINTR
+                if (EINTR != errno) {
+                    result->addFailure(TestFailure(shell, "Call to waitpid() failed"));
+                    return;
                 }
-            } else if (WIFSTOPPED(status)) {
-                result->addFailure(TestFailure(shell, "Stopped in separate process - continuing"));
-                kill(w, SIGCONT);
+            } else {
+                SetTestFailureByStatusCode(shell, result, status);
+                if (WIFSTOPPED(status)) kill(w, SIGCONT);
             }
-        } while (!WIFEXITED(status) && !WIFSIGNALED(status));
+        } while ((w == syscallError) || (!WIFEXITED(status) && !WIFSIGNALED(status)));
     }
 }
 
