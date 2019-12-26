@@ -267,7 +267,9 @@ TEST(TestOutput, printTestsEndedWithNoTestsRunOrIgnored)
     result->countTest();
     printer->flush();
     printer->printTestsEnded(*result);
-    STRCMP_EQUAL("\nErrors (ran nothing, 1 tests, 0 ran, 0 checks, 0 ignored, 0 filtered out, 10 ms)\n\n",
+    STRCMP_EQUAL("\nErrors (ran nothing, 1 tests, 0 ran, 0 checks, 0 ignored, 0 filtered out, 10 ms)\n"
+                 "Note: test run failed because no tests were run or ignored. Assuming something went wrong. "
+                 "This often happens because of linking errors or typos in test filter.\n\n",
         mock->getOutput().asCharString());
 }
 
