@@ -56,15 +56,15 @@ public:
 
     int alloc_called;
     int free_called;
-    char* alloc_memory(size_t size, const char*, int)
+    char* alloc_memory(size_t size, const char*, int, void *)
     {
         alloc_called++;
-        return TestMemoryAllocator::alloc_memory(size, "file", 1);
+        return TestMemoryAllocator::alloc_memory(size, "file", 1, NULLPTR);
     }
-    void free_memory(char* memory, const char* file, int line)
+    void free_memory(char* memory, const char* file, int line, void *caller)
     {
         free_called++;
-        TestMemoryAllocator::free_memory(memory, file, line);
+        TestMemoryAllocator::free_memory(memory, file, line, caller);
     }
 };
 
@@ -81,27 +81,27 @@ public:
     int allocMemoryLeakNodeCalled;
     int freeMemoryLeakNodeCalled;
 
-    char* alloc_memory(size_t size, const char* file, int line)
+    char* alloc_memory(size_t size, const char* file, int line, void *caller)
     {
         alloc_called++;
-        return TestMemoryAllocator::alloc_memory(size, file, line);
+        return TestMemoryAllocator::alloc_memory(size, file, line, caller);
     }
-    void free_memory(char* memory, const char* file, int line)
+    void free_memory(char* memory, const char* file, int line, void *caller)
     {
         free_called++;
-        TestMemoryAllocator::free_memory(memory, file, line);
+        TestMemoryAllocator::free_memory(memory, file, line, caller);
     }
 
     char* allocMemoryLeakNode(size_t size)
     {
         allocMemoryLeakNodeCalled++;
-        return TestMemoryAllocator::alloc_memory(size, __FILE__, __LINE__);
+        return TestMemoryAllocator::alloc_memory(size, __FILE__, __LINE__, NULLPTR);
     }
 
     void freeMemoryLeakNode(char* memory)
     {
         freeMemoryLeakNodeCalled++;
-        TestMemoryAllocator::free_memory(memory, __FILE__, __LINE__);
+        TestMemoryAllocator::free_memory(memory, __FILE__, __LINE__, NULLPTR);
     }
 };
 
@@ -167,7 +167,7 @@ TEST(MemoryLeakDetectorTest, memoryDumpOutput)
     SimpleString output = detector->report(mem_leak_period_checking);
 
     STRCMP_CONTAINS("Alloc num (1)", output.asCharString());
-    STRCMP_CONTAINS("Leak size: 6 Allocated at",  output.asCharString());
+    STRCMP_CONTAINS("Leak size: 6 Allocated from",  output.asCharString());
     STRCMP_CONTAINS("Content:",  output.asCharString());
     STRCMP_CONTAINS("0000: 74 65 73 74 31 00                                |test1.|", output.asCharString());
 
@@ -267,7 +267,7 @@ TEST(MemoryLeakDetectorTest, DeleteNonAlocatedMemory)
 {
     char a;
     char* pa = &a;
-    detector->deallocMemory(defaultMallocAllocator(), pa, "FREE.c", 100);
+    detector->deallocMemory(defaultMallocAllocator(), pa, "FREE.c", 100, NULLPTR);
     detector->stopChecking();
     CHECK(reporter->message->contains("Deallocating non-allocated memory"));
     CHECK(reporter->message->contains("   allocated at file: <unknown> line: 0 size: 0 type: unknown"));
@@ -313,7 +313,7 @@ TEST(MemoryLeakDetectorTest, IgnoreMemoryAllocatedOutsideCheckingPeriodComplicat
 
 TEST(MemoryLeakDetectorTest, OneLeakUsingOperatorNewWithFileLine)
 {
-    char* mem = detector->allocMemory(defaultNewAllocator(), 4, "file.cpp", 1234);
+    char* mem = detector->allocMemory(defaultNewAllocator(), 4, "file.cpp", 1234, NULLPTR);
     detector->stopChecking();
     SimpleString output = detector->report(mem_leak_period_checking);
     CHECK(output.contains("file.cpp"));
@@ -323,7 +323,7 @@ TEST(MemoryLeakDetectorTest, OneLeakUsingOperatorNewWithFileLine)
 
 TEST(MemoryLeakDetectorTest, OneAllocAndFreeUsingArrayNew)
 {
-    char* mem = detector->allocMemory(defaultNewArrayAllocator(), 10, "file.cpp", 1234);
+    char* mem = detector->allocMemory(defaultNewArrayAllocator(), 10, "file.cpp", 1234, NULLPTR);
     char* mem2 = detector->allocMemory(defaultNewArrayAllocator(), 12);
     LONGS_EQUAL(2, detector->totalMemoryLeaks(mem_leak_period_all));
     SimpleString output = detector->report(mem_leak_period_checking);
@@ -336,22 +336,22 @@ TEST(MemoryLeakDetectorTest, OneAllocAndFreeUsingArrayNew)
 
 TEST(MemoryLeakDetectorTest, OneAllocAndFree)
 {
-    char* mem = detector->allocMemory(defaultMallocAllocator(), 10, "file.cpp", 1234);
+    char* mem = detector->allocMemory(defaultMallocAllocator(), 10, "file.cpp", 1234, NULLPTR);
     char* mem2 = detector->allocMemory(defaultMallocAllocator(), 12);
     LONGS_EQUAL(2, detector->totalMemoryLeaks(mem_leak_period_checking));
     SimpleString output = detector->report(mem_leak_period_checking);
     CHECK(output.contains("malloc"));
     detector->deallocMemory(defaultMallocAllocator(), mem);
-    detector->deallocMemory(defaultMallocAllocator(), mem2, "file.c", 5678);
+    detector->deallocMemory(defaultMallocAllocator(), mem2, "file.c", 5678, NULLPTR);
     LONGS_EQUAL(0, detector->totalMemoryLeaks(mem_leak_period_all));
     detector->stopChecking();
 }
 
 TEST(MemoryLeakDetectorTest, OneRealloc)
 {
-    char* mem1 = detector->allocMemory(testAllocator, 10, "file.cpp", 1234, true);
+    char* mem1 = detector->allocMemory(testAllocator, 10, "file.cpp", 1234, NULLPTR, true);
 
-    char* mem2 = detector->reallocMemory(testAllocator, mem1, 1000, "other.cpp", 5678, true);
+    char* mem2 = detector->reallocMemory(testAllocator, mem1, 1000, "other.cpp", 5678, NULLPTR, true);
 
     LONGS_EQUAL(1, detector->totalMemoryLeaks(mem_leak_period_checking));
     SimpleString output = detector->report(mem_leak_period_checking);
@@ -369,7 +369,7 @@ TEST(MemoryLeakDetectorTest, OneRealloc)
 TEST(MemoryLeakDetectorTest, ReallocNonAllocatedMemory)
 {
     char mem1;
-    char* mem2 = detector->reallocMemory(testAllocator, &mem1, 5, "other.cpp", 13, true);
+    char* mem2 = detector->reallocMemory(testAllocator, &mem1, 5, "other.cpp", 13, NULLPTR, true);
     detector->deallocMemory(testAllocator, mem2, true);
     detector->stopChecking();
     CHECK(reporter->message->contains("Deallocating non-allocated memory\n"));
@@ -378,8 +378,8 @@ TEST(MemoryLeakDetectorTest, ReallocNonAllocatedMemory)
 
 TEST(MemoryLeakDetectorTest, AllocOneTypeFreeAnotherType)
 {
-    char* mem = detector->allocMemory(defaultNewArrayAllocator(), 100, "ALLOC.c", 10);
-    detector->deallocMemory(defaultMallocAllocator(), mem, "FREE.c", 100);
+    char* mem = detector->allocMemory(defaultNewArrayAllocator(), 100, "ALLOC.c", 10, NULLPTR);
+    detector->deallocMemory(defaultMallocAllocator(), mem, "FREE.c", 100, NULLPTR);
     detector->stopChecking();
     CHECK(reporter->message->contains("Allocation/deallocation type mismatch"));
     CHECK(reporter->message->contains("   allocated at file: ALLOC.c line: 10 size: 100 type: new []"));
@@ -389,8 +389,8 @@ TEST(MemoryLeakDetectorTest, AllocOneTypeFreeAnotherType)
 TEST(MemoryLeakDetectorTest, AllocOneTypeFreeAnotherTypeWithCheckingDisabled)
 {
     detector->disableAllocationTypeChecking();
-    char* mem = detector->allocMemory(defaultNewArrayAllocator(), 100, "ALLOC.c", 10);
-    detector->deallocMemory(defaultNewAllocator(), mem, "FREE.c", 100);
+    char* mem = detector->allocMemory(defaultNewArrayAllocator(), 100, "ALLOC.c", 10, NULLPTR);
+    detector->deallocMemory(defaultNewAllocator(), mem, "FREE.c", 100, NULLPTR);
     detector->stopChecking();
     STRCMP_EQUAL("", reporter->message->asCharString());
     detector->enableAllocationTypeChecking();
@@ -398,7 +398,7 @@ TEST(MemoryLeakDetectorTest, AllocOneTypeFreeAnotherTypeWithCheckingDisabled)
 
 TEST(MemoryLeakDetectorTest, mallocLeakGivesAdditionalWarning)
 {
-    char* mem = detector->allocMemory(defaultMallocAllocator(), 100, "ALLOC.c", 10);
+    char* mem = detector->allocMemory(defaultMallocAllocator(), 100, "ALLOC.c", 10, NULLPTR);
     detector->stopChecking();
     SimpleString output = detector->report(mem_leak_period_checking);
     STRCMP_CONTAINS("Memory leak reports about malloc and free can be caused by allocating using the cpputest version of malloc", output.asCharString());
@@ -407,7 +407,7 @@ TEST(MemoryLeakDetectorTest, mallocLeakGivesAdditionalWarning)
 
 TEST(MemoryLeakDetectorTest, newLeakDoesNotGiveAdditionalWarning)
 {
-    char* mem = detector->allocMemory(defaultNewAllocator(), 100, "ALLOC.c", 10);
+    char* mem = detector->allocMemory(defaultNewAllocator(), 100, "ALLOC.c", 10, NULLPTR);
     detector->stopChecking();
     SimpleString output = detector->report(mem_leak_period_checking);
     CHECK(! output.contains("Memory leak reports about malloc and free"));
@@ -430,10 +430,10 @@ TEST(MemoryLeakDetectorTest, MarkCheckingPeriodLeaksAsNonCheckingPeriod)
 
 TEST(MemoryLeakDetectorTest, memoryCorruption)
 {
-    char* mem = detector->allocMemory(defaultMallocAllocator(), 10, "ALLOC.c", 10);
+    char* mem = detector->allocMemory(defaultMallocAllocator(), 10, "ALLOC.c", 10, NULLPTR);
     mem[10] = 'O';
     mem[11] = 'H';
-    detector->deallocMemory(defaultMallocAllocator(), mem, "FREE.c", 100);
+    detector->deallocMemory(defaultMallocAllocator(), mem, "FREE.c", 100, NULLPTR);
     detector->stopChecking();
     CHECK(reporter->message->contains("Memory corruption"));
     CHECK(reporter->message->contains("   allocated at file: ALLOC.c line: 10 size: 10 type: malloc"));
@@ -635,15 +635,15 @@ TEST_GROUP(ReallocBugReported)
 TEST(ReallocBugReported, CanSafelyDoAReallocWithANewAllocator)
 {
     MemoryLeakDetector detector(&reporter);
-    char* mem = detector.allocMemory(getCurrentNewAllocator(), 5, "file", 1);
-    mem = detector.reallocMemory(getCurrentNewAllocator(), mem, 19, "file", 1);
+    char* mem = detector.allocMemory(getCurrentNewAllocator(), 5, "file", 1, NULLPTR);
+    mem = detector.reallocMemory(getCurrentNewAllocator(), mem, 19, "file", 1, NULLPTR);
     detector.deallocMemory(getCurrentNewAllocator(), mem);
 }
 
 TEST(ReallocBugReported, CanSafelyDoAReallocWithAMallocAllocator)
 {
     MemoryLeakDetector detector(&reporter);
-    char* mem = detector.allocMemory(getCurrentMallocAllocator(), 5, "file", 1, true);
-    mem = detector.reallocMemory(getCurrentMallocAllocator(), mem, 19, "file", 1, true);
+    char* mem = detector.allocMemory(getCurrentMallocAllocator(), 5, "file", 1, NULLPTR, true);
+    mem = detector.reallocMemory(getCurrentMallocAllocator(), mem, 19, "file", 1, NULLPTR, true);
     detector.deallocMemory(getCurrentMallocAllocator(), mem, true);
 }

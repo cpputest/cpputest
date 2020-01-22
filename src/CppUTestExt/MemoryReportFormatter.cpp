@@ -28,6 +28,11 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTestExt/MemoryReportAllocator.h"
 #include "CppUTestExt/MemoryReportFormatter.h"
+#include "CppUTest/PlatformSpecificFunctions.h"
+
+#if CPPUTEST_GNU_CALLSTACK_SUPPORTED
+SimpleString getCallerInfo(const char* file, int line, void *caller);
+#endif
 
 NormalMemoryReportFormatter::NormalMemoryReportFormatter()
 {
@@ -47,15 +52,31 @@ void NormalMemoryReportFormatter::report_test_end(TestResult* result, UtestShell
     result->print(StringFromFormat("ENDTEST(%s, %s)\n", test.getGroup().asCharString(), test.getName().asCharString()).asCharString());
 }
 
-void NormalMemoryReportFormatter::report_alloc_memory(TestResult* result, TestMemoryAllocator* allocator, size_t size, char* memory, const char* file, int line)
+#if CPPUTEST_GNU_CALLSTACK_SUPPORTED
+
+void NormalMemoryReportFormatter::report_alloc_memory(TestResult* result, TestMemoryAllocator* allocator, size_t size, char* memory, const char* file, int line, void *caller)
 {
-    result->print(StringFromFormat("\tAllocation using %s of size: %lu pointer: %p at %s:%d\n", allocator->alloc_name(), (unsigned long) size, (void*) memory, file, line).asCharString());
+    result->print(StringFromFormat("\tAllocation using %s of size: %lu pointer: %p from: %s\n", allocator->alloc_name(), (unsigned long) size, (void*) memory, getCallerInfo(file, line, caller).asCharString()).asCharString());
 }
 
-void NormalMemoryReportFormatter::report_free_memory(TestResult* result, TestMemoryAllocator* allocator, char* memory, const char* file, int line)
+void NormalMemoryReportFormatter::report_free_memory(TestResult* result, TestMemoryAllocator* allocator, char* memory, const char* file, int line, void *caller)
 {
-    result->print(StringFromFormat("\tDeallocation using %s of pointer: %p at %s:%d\n", allocator->free_name(),  (void*) memory, file, line).asCharString());
+    result->print(StringFromFormat("\tDeallocation using %s of pointer: %p allocated from: %s\n", allocator->free_name(),  (void*) memory, getCallerInfo(file, line, caller).asCharString()).asCharString());
 }
+
+#else
+
+void NormalMemoryReportFormatter::report_alloc_memory(TestResult* result, TestMemoryAllocator* allocator, size_t size, char* memory, const char* file, int line, void *)
+{
+    result->print(StringFromFormat("\tAllocation using %s of size: %lu pointer: %p from: Source '%s'<Line:%d>\n", allocator->alloc_name(), (unsigned long) size, (void*) memory, file, line).asCharString());
+}
+
+void NormalMemoryReportFormatter::report_free_memory(TestResult* result, TestMemoryAllocator* allocator, char* memory, const char* file, int line, void *)
+{
+    result->print(StringFromFormat("\tDeallocation using %s of pointer: %p allocated from: Source '%s'<Line:%d>\n", allocator->free_name(),  (void*) memory, file, line).asCharString());
+}
+
+#endif
 
 void NormalMemoryReportFormatter::report_testgroup_start(TestResult* result, UtestShell& test)
 {

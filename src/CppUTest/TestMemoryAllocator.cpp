@@ -132,20 +132,20 @@ bool TestMemoryAllocator::isOfEqualType(TestMemoryAllocator* allocator)
 
 char* TestMemoryAllocator::allocMemoryLeakNode(size_t size)
 {
-    return alloc_memory(size, "MemoryLeakNode", 1);
+    return alloc_memory(size, "MemoryLeakNode", 1, NULLPTR);
 }
 
 void TestMemoryAllocator::freeMemoryLeakNode(char* memory)
 {
-    free_memory(memory, "MemoryLeakNode", 1);
+    free_memory(memory, "MemoryLeakNode", 1, NULLPTR);
 }
 
-char* TestMemoryAllocator::alloc_memory(size_t size, const char*, int)
+char* TestMemoryAllocator::alloc_memory(size_t size, const char*, int, void*)
 {
     return checkedMalloc(size);
 }
 
-void TestMemoryAllocator::free_memory(char* memory, const char*, int)
+void TestMemoryAllocator::free_memory(char* memory, const char*, int, void*)
 {
     PlatformSpecificFree(memory);
 }
@@ -173,21 +173,21 @@ void CrashOnAllocationAllocator::setNumberToCrashOn(unsigned allocationToCrashOn
     allocationToCrashOn_ = allocationToCrashOn;
 }
 
-char* CrashOnAllocationAllocator::alloc_memory(size_t size, const char* file, int line)
+char* CrashOnAllocationAllocator::alloc_memory(size_t size, const char* file, int line, void *caller)
 {
     if (MemoryLeakWarningPlugin::getGlobalDetector()->getCurrentAllocationNumber() == allocationToCrashOn_)
         UT_CRASH();
 
-    return TestMemoryAllocator::alloc_memory(size, file, line);
+    return TestMemoryAllocator::alloc_memory(size, file, line, caller);
 }
 
 
-char* NullUnknownAllocator::alloc_memory(size_t /*size*/, const char*, int)
+char* NullUnknownAllocator::alloc_memory(size_t /*size*/, const char*, int, void *)
 {
     return NULLPTR;
 }
 
-void NullUnknownAllocator::free_memory(char* /*memory*/, const char*, int)
+void NullUnknownAllocator::free_memory(char* /*memory*/, const char*, int, void *)
 {
 }
 
@@ -268,7 +268,7 @@ void FailableMemoryAllocator::failNthAllocAt(int allocationNumber, const char* f
     head_ = newNode;
 }
 
-char* FailableMemoryAllocator::alloc_memory(size_t size, const char* file, int line)
+char* FailableMemoryAllocator::alloc_memory(size_t size, const char* file, int line, void *caller)
 {
     currentAllocNumber_++;
     LocationToFailAllocNode* current = head_;
@@ -279,13 +279,13 @@ char* FailableMemoryAllocator::alloc_memory(size_t size, const char* file, int l
         if (previous) previous->next_ = current->next_;
         else head_ = current->next_;
 
-        free_memory((char*) current, __FILE__, __LINE__);
+        free_memory((char*) current, __FILE__, __LINE__, NULLPTR);
         return NULLPTR;
       }
       previous = current;
       current = current->next_;
     }
-    return TestMemoryAllocator::alloc_memory(size, file, line);
+    return TestMemoryAllocator::alloc_memory(size, file, line, caller);
 }
 
 char* FailableMemoryAllocator::allocMemoryLeakNode(size_t size)
@@ -313,7 +313,7 @@ void FailableMemoryAllocator::clearFailedAllocs()
   LocationToFailAllocNode* current = head_;
   while (current) {
     head_ = current->next_;
-    free_memory((char*) current, __FILE__, __LINE__);
+    free_memory((char*) current, __FILE__, __LINE__, NULLPTR);
     current = head_;
   }
   currentAllocNumber_ = 0;

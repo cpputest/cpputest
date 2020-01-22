@@ -58,13 +58,13 @@ void CodeMemoryReportFormatter::clearReporting()
     while (codeReportingList_) {
         CodeReportingAllocationNode* oldNode = codeReportingList_;
         codeReportingList_ = codeReportingList_->next_;
-        internalAllocator_->free_memory((char*) oldNode, __FILE__, __LINE__);
+        internalAllocator_->free_memory((char*) oldNode, __FILE__, __LINE__, NULLPTR);
     }
 }
 
 void CodeMemoryReportFormatter::addNodeToList(const char* variableName, void* memory, CodeReportingAllocationNode* next)
 {
-    CodeReportingAllocationNode* newNode = (CodeReportingAllocationNode*) (void*) internalAllocator_->alloc_memory(sizeof(CodeReportingAllocationNode), __FILE__, __LINE__);
+    CodeReportingAllocationNode* newNode = (CodeReportingAllocationNode*) (void*) internalAllocator_->alloc_memory(sizeof(CodeReportingAllocationNode), __FILE__, __LINE__, NULLPTR);
     newNode->memory_ = memory;
     newNode->next_ = next;
     SimpleString::StrNCpy(newNode->variableName_, variableName, MAX_VARIABLE_NAME_LENGTH);
@@ -153,14 +153,14 @@ void CodeMemoryReportFormatter::report_testgroup_start(TestResult* result, Utest
             test.getGroup().asCharString()).asCharString());
 }
 
-void CodeMemoryReportFormatter::report_alloc_memory(TestResult* result, TestMemoryAllocator* allocator, size_t size, char* memory, const char* file, int line)
+void CodeMemoryReportFormatter::report_alloc_memory(TestResult* result, TestMemoryAllocator* allocator, size_t size, char* memory, const char* file, int line, void *)
 {
     SimpleString variableName = createVariableNameFromFileLineInfo(file, line);
     result->print(StringFromFormat("\t%s\n", getAllocationString(allocator, variableName, size).asCharString()).asCharString());
     addNodeToList(variableName.asCharString(), memory, codeReportingList_);
 }
 
-void CodeMemoryReportFormatter::report_free_memory(TestResult* result, TestMemoryAllocator* allocator, char* memory, const char* file, int line)
+void CodeMemoryReportFormatter::report_free_memory(TestResult* result, TestMemoryAllocator* allocator, char* memory, const char* file, int line, void *)
 {
     SimpleString variableName;
     CodeReportingAllocationNode* node = findNode(memory);

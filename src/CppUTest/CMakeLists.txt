@@ -18,6 +18,9 @@ add_library(CppUTest
         SimpleMutex.cpp
         Utest.cpp
 )
+if( NOT WIN32 AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU" )
+    set_source_files_properties(MemoryLeakWarningPlugin.cpp PROPERTIES COMPILE_FLAGS -fno-optimize-sibling-calls)
+endif()
 
 #[[Set CPP_PLATFORM in a parent CMakeLists.txt if reusing one of the provided platforms, else supply the missing definitions]]
 if (CPP_PLATFORM)

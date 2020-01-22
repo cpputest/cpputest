@@ -53,8 +53,8 @@ public:
     virtual ~TestMemoryAllocator();
     bool hasBeenDestroyed();
 
-    virtual char* alloc_memory(size_t size, const char* file, int line);
-    virtual void free_memory(char* memory, const char* file, int line);
+    virtual char* alloc_memory(size_t size, const char* file, int line, void *caller);
+    virtual void free_memory(char* memory, const char* file, int line, void *caller);
 
     virtual const char* name() const;
     virtual const char* alloc_name() const;
@@ -82,7 +82,7 @@ public:
 
     virtual void setNumberToCrashOn(unsigned allocationToCrashOn);
 
-    virtual char* alloc_memory(size_t size, const char* file, int line) _override;
+    virtual char* alloc_memory(size_t size, const char* file, int line, void *caller) _override;
 };
 
 
@@ -90,8 +90,8 @@ class NullUnknownAllocator: public TestMemoryAllocator
 {
 public:
     NullUnknownAllocator();
-    virtual char* alloc_memory(size_t size, const char* file, int line) _override;
-    virtual void free_memory(char* memory, const char* file, int line) _override;
+    virtual char* alloc_memory(size_t size, const char* file, int line, void *caller) _override;
+    virtual void free_memory(char* memory, const char* file, int line, void *caller) _override;
 
     static TestMemoryAllocator* defaultAllocator();
 };
@@ -103,7 +103,7 @@ class FailableMemoryAllocator: public TestMemoryAllocator
 public:
     FailableMemoryAllocator(const char* name_str = "failable alloc", const char* alloc_name_str = "alloc", const char* free_name_str = "free");
 
-    virtual char* alloc_memory(size_t size, const char* file, int line);
+    virtual char* alloc_memory(size_t size, const char* file, int line, void *caller);
     virtual char* allocMemoryLeakNode(size_t size);
 
     virtual void failAllocNumber(int number);

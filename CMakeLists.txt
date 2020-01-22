@@ -49,6 +49,7 @@ option(STD_C "Use the standard C library" ON)
 option(STD_CPP "Use the standard C++ library" ON)
 option(CPPUTEST_FLAGS "Use the CFLAGS/CXXFLAGS/LDFLAGS set by CppUTest" ON)
 option(MEMORY_LEAK_DETECTION "Enable memory leak detection" ON)
+option(CALLSTACK_INSPECTION "Enable inspecting the call stack" ON)
 option(EXTENSIONS "Use the CppUTest extenstion library" ON)
 option(LONGLONG "Support long long" OFF)
 option(MAP_FILE "Enable the creation of a map file" OFF)
@@ -181,6 +182,7 @@ Current compiler options:
 
 Features configured in CppUTest:
     Memory Leak Detection:              ${MEMORY_LEAK_DETECTION}
+    Callstack Inspaction:               ${CALLSTACK_INSPECTION}
     Compiling Extensions:               ${EXTENSIONS}
     Support Long Long:                  ${LONGLONG}
     Use CppUTest flags:                 ${CPPUTEST_FLAGS}
