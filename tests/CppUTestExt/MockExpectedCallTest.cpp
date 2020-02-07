@@ -610,6 +610,15 @@ TEST(MockExpectedCall, toStringForMultipleOutputParameters)
     STRCMP_EQUAL("name -> const void* buffer1: <output>, const void* buffer2: <output> (expected 1 call, called 1 time)", expectedCall.callToString().asCharString());
 }
 
+TEST(MockExpectedCall, toStringForUnmodifiedOutputParameter)
+{
+    MockCheckedExpectedCall expectedCall(1);
+    expectedCall.withName("name");
+    expectedCall.withUnmodifiedOutputParameter("buffer1");
+    expectedCall.callWasMade(1);
+    STRCMP_EQUAL("name -> const void* buffer1: <output> (expected 1 call, called 1 time)", expectedCall.callToString().asCharString());
+}
+
 TEST(MockExpectedCall, toStringForParameterAndIgnored)
 {
     MockCheckedExpectedCall expectedCall(1);
@@ -706,6 +715,15 @@ TEST(MockExpectedCall, hasOutputParameter)
     CHECK(call->hasOutputParameter(foo));
 }
 
+TEST(MockExpectedCall, hasUnmodifiedOutputParameter)
+{
+    call->withUnmodifiedOutputParameter("foo");
+    MockNamedValue foo("foo");
+    foo.setValue((const void *)NULLPTR);
+    foo.setSize(0);
+    CHECK(call->hasOutputParameter(foo));
+}
+
 TEST(MockExpectedCall, hasNoOutputParameter)
 {
     call->withIntParameter("foo", (int)1);
@@ -771,6 +789,7 @@ TEST(MockIgnoredExpectedCall, worksAsItShould)
     ignored.withParameterOfType( "mytype", "top", (const void*) NULLPTR);
     ignored.withOutputParameterReturning("bar", (void*) NULLPTR, 1);
     ignored.withOutputParameterOfTypeReturning("mytype", "bar", (const void*) NULLPTR);
+    ignored.withUnmodifiedOutputParameter("unmod");
     ignored.ignoreOtherParameters();
     ignored.andReturnValue(true);
     ignored.andReturnValue((double) 1.0f);
