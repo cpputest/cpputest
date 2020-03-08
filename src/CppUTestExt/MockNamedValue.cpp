@@ -38,13 +38,17 @@ void MockNamedValue::setDefaultComparatorsAndCopiersRepository(MockNamedValueCom
     defaultRepository_ = repository;
 }
 
-MockNamedValue::MockNamedValue(const SimpleString& name) : name_(name), type_("int"), size_(0), comparator_(NULLPTR), copier_(NULLPTR)
+MockNamedValue::MockNamedValue(const SimpleString& name) : name_(name), type_("int"), membuf_(NULLPTR), size_(0), comparator_(NULLPTR), copier_(NULLPTR)
 {
     value_.intValue_ = 0;
 }
 
 MockNamedValue::~MockNamedValue()
 {
+    if ( (membuf_ != NULLPTR)) {
+	delete [] membuf_;
+	membuf_ = NULLPTR;
+    }
 }
 
 void MockNamedValue::setValue(bool value)
@@ -127,6 +131,17 @@ void MockNamedValue::setValue(const void* value)
 {
     type_ = "const void*";
     value_.constPointerValue_ = value;
+}
+
+void MockNamedValue::copyValue(const void* value, size_t size)
+{
+	type_ = "const void*";
+	if (membuf_ == NULLPTR) {
+		membuf_ = new char[size];
+	}
+	PlatformSpecificMemCpy(membuf_, value, size);
+	value_.constPointerValue_ = (const void*) membuf_;
+	size_ = size;
 }
 
 void MockNamedValue::setValue(void (*value)())

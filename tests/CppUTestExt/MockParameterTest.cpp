@@ -634,6 +634,27 @@ TEST(MockParameterTest, outputParameterSucceeds)
     mock().checkExpectations();
 }
 
+TEST(MockParameterTest, outputParameterIsCopiedOnExpect)
+{
+    int param = 1;
+    int retval = 2;
+
+    /*
+       The mock method .withOutputParameterReturning() should copied
+       on .expectOneCall(), but is actually dereference on
+       .actualCall(). This will allow the memory pointed to by
+       .withOutputParameterReturning() to be changed between calls.
+    */
+
+    mock().expectOneCall("function").withOutputParameterReturning("parameterName", &retval, sizeof(retval));
+    retval = 7;
+
+    mock().actualCall("function").withOutputParameter("parameterName", &param);
+    CHECK_EQUAL(param, 2); // Check fails !!!
+
+    mock().checkExpectations();
+}
+
 TEST(MockParameterTest, noActualCallForOutputParameter)
 {
     MockFailureReporterInstaller failureReporterInstaller;
@@ -904,4 +925,3 @@ TEST(MockParameterTest, expectMultipleMultipleCallsWithParameters)
 
     mock().checkExpectations();
 }
-

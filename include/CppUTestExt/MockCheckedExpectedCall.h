@@ -79,7 +79,7 @@ public:
     virtual MockExpectedCall& onObject(void* objectPtr) _override;
 
     virtual MockNamedValue getInputParameter(const SimpleString& name);
-    virtual MockNamedValue getOutputParameter(const SimpleString& name);
+    virtual MockNamedValue* getOutputParameter(const SimpleString& name);
     virtual SimpleString getInputParameterType(const SimpleString& name);
     virtual SimpleString getInputParameterValueString(const SimpleString& name);
 

@@ -104,6 +104,8 @@ public:
     DEFAULT_COPY_CONSTRUCTOR(MockNamedValue)
     virtual ~MockNamedValue();
 
+    virtual void copyValue(const void* value, size_t size);
+
     virtual void setValue(bool value);
     virtual void setValue(int value);
     virtual void setValue(unsigned int value);
@@ -185,6 +187,7 @@ private:
         void* objectPointerValue_;
         const void* outputPointerValue_;
     } value_;
+    char * membuf_;
     size_t size_;
     MockNamedValueComparator* comparator_;
     MockNamedValueCopier* copier_;
