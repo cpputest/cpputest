@@ -58,7 +58,7 @@ void CHECK_NO_MOCK_FAILURE_LOCATION(const char* file, int line);
 class MockExpectedCallsListForTest : public MockExpectedCallsList
 {
   public:
-    ~MockExpectedCallsListForTest();
+    ~MockExpectedCallsListForTest() _destructor_override;
     MockCheckedExpectedCall* addFunction(const SimpleString& name);
     MockCheckedExpectedCall* addFunction(unsigned int numCalls, const SimpleString& name);
     MockCheckedExpectedCall* addFunctionOrdered(const SimpleString& name, unsigned int order);

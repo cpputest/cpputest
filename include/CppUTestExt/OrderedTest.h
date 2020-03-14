@@ -32,7 +32,7 @@ class OrderedTestShell : public UtestShell
 {
 public:
     OrderedTestShell();
-   virtual ~OrderedTestShell();
+   virtual ~OrderedTestShell() _destructor_override;
 
    virtual OrderedTestShell* addOrderedTest(OrderedTestShell* test);
    virtual OrderedTestShell* getNextOrderedTest();

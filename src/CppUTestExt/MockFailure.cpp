@@ -38,7 +38,7 @@ public:
     {
     }
 
-    virtual void exitCurrentTest() const
+    virtual void exitCurrentTest() const _override
     {
         if (crashOnFailure_)
             UT_CRASH();
@@ -46,7 +46,7 @@ public:
         NormalTestTerminator::exitCurrentTest();
     } // LCOV_EXCL_LINE
 
-    virtual ~MockFailureReporterTestTerminator()
+    virtual ~MockFailureReporterTestTerminator() _destructor_override
     {
     }
 private:

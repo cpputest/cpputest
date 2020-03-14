@@ -34,13 +34,13 @@
 class JustUseNewStringAllocator : public TestMemoryAllocator
 {
 public:
-    virtual ~JustUseNewStringAllocator() {}
+    virtual ~JustUseNewStringAllocator() _destructor_override {}
 
-    char* alloc_memory(size_t size, const char* file, int line)
+    char* alloc_memory(size_t size, const char* file, int line) _override
     {
       return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewArrayAllocator(), size, file, line);
     }
-    void free_memory(char* str, const char* file, int line)
+    void free_memory(char* str, const char* file, int line) _override
     {
       MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(getCurrentNewArrayAllocator(), str, file, line);
     }
@@ -70,10 +70,10 @@ class MyOwnStringAllocator : public TestMemoryAllocator
 {
 public:
     MyOwnStringAllocator() : memoryWasAllocated(false) {}
-    virtual ~MyOwnStringAllocator() {}
+    virtual ~MyOwnStringAllocator() _destructor_override {}
 
     bool memoryWasAllocated;
-    char* alloc_memory(size_t size, const char* file, int line)
+    char* alloc_memory(size_t size, const char* file, int line) _override
     {
         memoryWasAllocated = true;
         return TestMemoryAllocator::alloc_memory(size, file, line);

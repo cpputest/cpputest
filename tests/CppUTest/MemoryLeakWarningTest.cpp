@@ -41,10 +41,10 @@ static long* leak2;
 class DummyReporter: public MemoryLeakFailure
 {
 public:
-    virtual ~DummyReporter()
+    virtual ~DummyReporter() _destructor_override
     {
     }
-    virtual void fail(char* /*fail_string*/)
+    virtual void fail(char* /*fail_string*/) _override
     {
     }
 };
@@ -156,7 +156,7 @@ class DummyMemoryLeakDetector : public MemoryLeakDetector
 {
 public:
     DummyMemoryLeakDetector(MemoryLeakFailure* reporter) : MemoryLeakDetector(reporter) {}
-    virtual ~DummyMemoryLeakDetector()
+    virtual ~DummyMemoryLeakDetector() _destructor_override
     {
         memoryLeakDetectorWasDeleted = true;
     }
@@ -164,11 +164,11 @@ public:
 
 class DummyMemoryLeakFailure : public MemoryLeakFailure
 {
-    virtual ~DummyMemoryLeakFailure()
+    virtual ~DummyMemoryLeakFailure() _destructor_override
     {
         memoryLeakFailureWasDelete = true;
     }
-    virtual void fail(char*)
+    virtual void fail(char*) _override
     {
     }
 };

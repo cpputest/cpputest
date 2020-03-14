@@ -55,7 +55,7 @@ public:
     {
         return defaultTestResult;
     }
-    virtual ~OutsideTestRunnerUTest()
+    virtual ~OutsideTestRunnerUTest() _destructor_override
     {
     }
 private:

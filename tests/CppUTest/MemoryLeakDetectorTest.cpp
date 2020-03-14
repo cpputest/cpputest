@@ -33,11 +33,11 @@
 class MemoryLeakFailureForTest: public MemoryLeakFailure
 {
 public:
-    virtual ~MemoryLeakFailureForTest()
+    virtual ~MemoryLeakFailureForTest() _destructor_override
     {
     }
 
-    virtual void fail(char* fail_string)
+    virtual void fail(char* fail_string) _override
     {
         *message = fail_string;
     }
