@@ -180,7 +180,7 @@ SimpleString BracketsFormattedHexString(SimpleString hexString);
  * Specifically nullptr_t is not officially supported
  */
 #if __cplusplus > 199711L && !defined __arm__
-SimpleString StringFrom(const nullptr_t value);
+SimpleString StringFrom(const std::nullptr_t value);
 #endif
 
 #if CPPUTEST_USE_STD_CPP_LIB

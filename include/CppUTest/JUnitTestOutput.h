@@ -72,9 +72,9 @@ protected:
     virtual void writeProperties();
     virtual void writeTestCases();
     virtual SimpleString encodeXmlText(const SimpleString& textbody);
+    virtual SimpleString encodeFileName(const SimpleString& fileName);
     virtual void writeFailure(JUnitTestCaseResultNode* node);
     virtual void writeFileEnding();
-
 };
 
 #endif

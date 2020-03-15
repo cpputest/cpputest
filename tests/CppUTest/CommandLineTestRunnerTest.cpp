@@ -159,14 +159,14 @@ TEST(CommandLineTestRunner, ReturnsZeroWhenNoErrors)
     LONGS_EQUAL(0, returned);
 }
 
-TEST(CommandLineTestRunner, ReturnsZeroWhenNoTestsMatchProvidedFilter)
+TEST(CommandLineTestRunner, ReturnsOneWhenNoTestsMatchProvidedFilter)
 {
     const char* argv[] = { "tests.exe", "-g", "NoSuchGroup"};
 
     CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(3, argv, &registry);
     int returned = commandLineTestRunner.runAllTestsMain();
 
-    LONGS_EQUAL(0, returned);
+    LONGS_EQUAL(1, returned);
 }
 
 TEST(CommandLineTestRunner, TeamcityOutputEnabled)

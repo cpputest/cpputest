@@ -145,14 +145,20 @@ void TestOutput::printCurrentGroupEnded(const TestResult& /*res*/)
 void TestOutput::printTestsEnded(const TestResult& result)
 {
     print("\n");
-    const bool anyTestFailed = result.getFailureCount() > 0;
-    if (anyTestFailed) {
+    const bool isFailure = result.isFailure();
+    const int failureCount = result.getFailureCount();
+    if (isFailure) {
         if (color_) {
             print("\033[31;1m");
         }
         print("Errors (");
-        print(result.getFailureCount());
-        print(" failures, ");
+        if (failureCount > 0) {
+            print(failureCount);
+            print(" failures, ");
+        }
+        else {
+            print("ran nothing, ");
+        }
     }
     else {
         if (color_) {
@@ -170,7 +176,7 @@ void TestOutput::printTestsEnded(const TestResult& result)
     print(" ignored, ");
     print(result.getFilteredOutCount());
     print(" filtered out, ");
-    if (shuffleSeed_ != SHUFFLE_DISABLED && (verbose_ || anyTestFailed)) {
+    if (shuffleSeed_ != SHUFFLE_DISABLED && (verbose_ || isFailure)) {
         print("shuffle seed was: ");
         print(shuffleSeed_);
         print(", ");
@@ -179,6 +185,10 @@ void TestOutput::printTestsEnded(const TestResult& result)
     print(" ms)");
     if (color_) {
         print("\033[m");
+    }
+    if (isFailure && failureCount == 0) {
+        print("\nNote: test run failed because no tests were run or ignored. Assuming something went wrong. "
+              "This often happens because of linking errors or typos in test filter.");
     }
     print("\n\n");
 

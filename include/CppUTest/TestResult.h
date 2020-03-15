@@ -85,6 +85,11 @@ public:
         return failureCount_;
     }
 
+    bool isFailure() const
+    {
+        return (getFailureCount() != 0) || (getRunCount() + getIgnoredCount() == 0);
+    }
+
     long getTotalExecutionTime() const;
     void setTotalExecutionTime(long exTime);
 

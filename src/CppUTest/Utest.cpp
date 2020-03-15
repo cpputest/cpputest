@@ -177,6 +177,7 @@ void UtestShell::crash()
 void UtestShell::runOneTest(TestPlugin* plugin, TestResult& result)
 {
     hasFailed_ = false;
+    result.countRun();
     HelperTestRunInfo runInfo(this, plugin, &result);
     if (isRunInSeperateProcess())
         PlatformSpecificSetJmp(helperDoRunOneTestSeperateProcess, &runInfo);
@@ -202,7 +203,6 @@ void UtestShell::runOneTestInCurrentProcess(TestPlugin* plugin, TestResult& resu
     UtestShell* savedTest = UtestShell::getCurrent();
     TestResult* savedResult = UtestShell::getTestResult();
 
-    result.countRun();
     UtestShell::setTestResult(&result);
     UtestShell::setCurrentTest(this);
 
