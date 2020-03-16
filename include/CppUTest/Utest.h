@@ -208,7 +208,7 @@ public:
     {
     }
     Utest* createTest() _override { return new ExecFunctionTest(this); }
-    virtual ~ExecFunctionTestShell();
+    virtual ~ExecFunctionTestShell() _destructor_override;
 };
 
 //////////////////// CppUTestFailedException

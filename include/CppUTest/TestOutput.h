@@ -176,7 +176,7 @@ public:
     virtual void setOutputTwo(TestOutput* output);
 
     CompositeTestOutput();
-    virtual ~CompositeTestOutput();
+    virtual ~CompositeTestOutput() _destructor_override;
 
     virtual void printTestsStarted() _override;
     virtual void printTestsEnded(const TestResult& result) _override;

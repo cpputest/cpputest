@@ -66,7 +66,7 @@ public:
         resetCount();
     }
 
-    virtual ~MockTestResult()
+    virtual ~MockTestResult() _destructor_override
     {
     }
 
@@ -80,27 +80,27 @@ public:
         countCurrentGroupEnded = 0;
     }
 
-    virtual void testsStarted()
+    virtual void testsStarted() _override
     {
         countTestsStarted++;
     }
-    virtual void testsEnded()
+    virtual void testsEnded() _override
     {
         countTestsEnded++;
     }
-    virtual void currentTestStarted(UtestShell* /*test*/)
+    virtual void currentTestStarted(UtestShell* /*test*/) _override
     {
         countCurrentTestStarted++;
     }
-    virtual void currentTestEnded(UtestShell* /*test*/)
+    virtual void currentTestEnded(UtestShell* /*test*/) _override
     {
         countCurrentTestEnded++;
     }
-    virtual void currentGroupStarted(UtestShell* /*test*/)
+    virtual void currentGroupStarted(UtestShell* /*test*/) _override
     {
         countCurrentGroupStarted++;
     }
-    virtual void currentGroupEnded(UtestShell* /*test*/)
+    virtual void currentGroupEnded(UtestShell* /*test*/) _override
     {
         countCurrentGroupEnded++;
     }

@@ -36,10 +36,10 @@ public:
         TestPlugin(name)
     {
     }
-    ~OptionsPlugin()
+    ~OptionsPlugin() _destructor_override
     {
     }
-    bool parseArguments(int /*ac*/, const char *const * /*av*/, int /*index*/)
+    bool parseArguments(int /*ac*/, const char *const * /*av*/, int /*index*/) _override
     {
         return true;
     }
