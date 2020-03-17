@@ -195,12 +195,35 @@ TEST(MockSupport_c, outputParameters)
     LONGS_EQUAL(2, retval);
 }
 
+TEST(MockSupport_c, inputParameters)
+{
+    int param = 1;
+    int retval = 2;
+    mock_c()->expectOneCall("foo")->withInputParameterForwarding("in", &param, sizeof(param));
+    mock_c()->actualCall("foo")->withInputParameter("in", &retval);
+    mock_c()->checkExpectations();
+    LONGS_EQUAL(2, param);
+    LONGS_EQUAL(2, retval);
+}
+
+
 TEST(MockSupport_c, outputParameters_differentType)
 {
     long param = 1;
     const long retval = 2;
     mock_c()->expectOneCall("foo")->withOutputParameterReturning("out", &retval, sizeof(retval));
     mock_c()->actualCall("foo")->withOutputParameter("out", &param);
+    mock_c()->checkExpectations();
+    LONGS_EQUAL(2, param);
+    LONGS_EQUAL(2, retval);
+}
+
+TEST(MockSupport_c, inputParameters_differentType)
+{
+    long param = 1;
+    long retval = 2;
+    mock_c()->expectOneCall("foo")->withInputParameterForwarding("in", &param, sizeof(param));
+    mock_c()->actualCall("foo")->withInputParameter("in", &retval);
     mock_c()->checkExpectations();
     LONGS_EQUAL(2, param);
     LONGS_EQUAL(2, retval);
@@ -213,6 +236,21 @@ TEST(MockSupport_c, outputParametersOfType)
     mock_c()->installCopier("typeName", typeCopy);
     mock_c()->expectOneCall("foo")->withOutputParameterOfTypeReturning("typeName", "out", &retval);
     mock_c()->actualCall("foo")->withOutputParameterOfType("typeName", "out", &param);
+    LONGS_EQUAL(2, param);
+    LONGS_EQUAL(2, retval);
+    mock_c()->checkExpectations();
+    mock_c()->removeAllComparatorsAndCopiers();
+}
+
+TEST(MockSupport_c, inputParametersOfType)
+{
+
+    int param = 1;
+    const int retval = 2;
+    mock_c()->installCopier("typeName", typeCopy);
+
+    mock_c()->expectOneCall("foo")->withInputParameterOfTypeForwarding("typeName", "in", &param);
+    mock_c()->actualCall("foo")->withInputParameterOfType("typeName", "in", &retval);
     LONGS_EQUAL(2, param);
     LONGS_EQUAL(2, retval);
     mock_c()->checkExpectations();

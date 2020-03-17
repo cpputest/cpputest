@@ -97,6 +97,8 @@ struct SMockActualCall_c
     MockActualCall_c* (*withParameterOfType)(const char* type, const char* name, const void* value);
     MockActualCall_c* (*withOutputParameter)(const char* name, void* value);
     MockActualCall_c* (*withOutputParameterOfType)(const char* type, const char* name, void* value);
+    MockActualCall_c* (*withInputParameter)(const char* name, const void* value);
+    MockActualCall_c* (*withInputParameterOfType)(const char* type, const char* name, const void* value);
     int (*hasReturnValue)(void);
     MockValue_c (*returnValue)(void);
     int (*boolReturnValue)(void);
@@ -145,6 +147,8 @@ struct SMockExpectedCall_c
     MockExpectedCall_c* (*withParameterOfType)(const char* type, const char* name, const void* value);
     MockExpectedCall_c* (*withOutputParameterReturning)(const char* name, const void* value, size_t size);
     MockExpectedCall_c* (*withOutputParameterOfTypeReturning)(const char* type, const char* name, const void* value);
+    MockExpectedCall_c* (*withInputParameterForwarding)(const char* name, void* value, size_t size);
+    MockExpectedCall_c* (*withInputParameterOfTypeForwarding)(const char* type, const char* name, void* value);
     MockExpectedCall_c* (*ignoreOtherParameters)(void);
 
     MockExpectedCall_c* (*andReturnBoolValue)(int value);

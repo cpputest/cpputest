@@ -87,13 +87,28 @@ void MockCheckedActualCall::copyOutputParameters(MockCheckedExpectedCall* expect
         MockNamedValueCopier* copier = outputParameter.getCopier();
         if (copier)
         {
-            copier->copy(p->ptr_, outputParameter.getConstObjectPointer());
+            if (p->ptr_ != NULLPTR)
+            {
+                // Test to code direction
+                copier->copy(p->ptr_, outputParameter.getConstObjectPointer());
+            }
+            else if (p->constPtr_ != NULLPTR)
+            {
+                // Code to test direction
+                copier->copy(outputParameter.getObjectPointer(), p->constPtr_);
+            }
         }
         else if ((outputParameter.getType() == "const void*") && (p->type_ == "void*"))
         {
             const void* data = outputParameter.getConstPointerValue();
             size_t size = outputParameter.getSize();
             PlatformSpecificMemCpy(p->ptr_, data, size);
+        }
+        else if ((outputParameter.getType() == "void*") && (p->type_ == "const void*"))
+        {
+            void* data = outputParameter.getPointerValue();
+            size_t size = outputParameter.getSize();
+            PlatformSpecificMemCpy(data, p->constPtr_, size);
         }
         else if (outputParameter.getName() != "")
         {
@@ -354,6 +369,28 @@ MockActualCall& MockCheckedActualCall::withOutputParameterOfType(const SimpleStr
 
     MockNamedValue outputParameter(name);
     outputParameter.setConstObjectPointer(type, output);
+    checkOutputParameter(outputParameter);
+
+    return *this;
+}
+
+MockActualCall& MockCheckedActualCall::withInputParameter(const SimpleString& name, const void* output)
+{
+    addOutputParameter(name, "const void*", output);
+
+    MockNamedValue outputParameter(name);
+    outputParameter.setValue(output);
+    checkOutputParameter(outputParameter);
+
+    return *this;
+}
+
+MockActualCall& MockCheckedActualCall::withInputParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* output)
+{
+    addOutputParameter(name, typeName, output);
+
+    MockNamedValue outputParameter(name);
+    outputParameter.setConstObjectPointer(typeName, output);
     checkOutputParameter(outputParameter);
 
     return *this;
@@ -639,8 +676,16 @@ MockActualCall& MockCheckedActualCall::onObject(const void* objectPtr)
 
 void MockCheckedActualCall::addOutputParameter(const SimpleString& name, const SimpleString& type, void* ptr)
 {
-    MockOutputParametersListNode* newNode = new MockOutputParametersListNode(name, type, ptr);
+    addOutputParameterNode(new MockOutputParametersListNode(name, type, ptr));
+}
 
+void MockCheckedActualCall::addOutputParameter(const SimpleString& name, const SimpleString& type, const void* constPtr)
+{
+    addOutputParameterNode(new MockOutputParametersListNode(name, type, constPtr));
+}
+
+void MockCheckedActualCall::addOutputParameterNode(MockOutputParametersListNode *newNode)
+{
     if (outputParameterExpectations_ == NULLPTR)
         outputParameterExpectations_ = newNode;
     else {
@@ -818,6 +863,22 @@ MockActualCall& MockActualCallTrace::withOutputParameter(const SimpleString& nam
 }
 
 MockActualCall& MockActualCallTrace::withOutputParameterOfType(const SimpleString& typeName, const SimpleString& name, void* output)
+{
+    traceBuffer_ += " ";
+    traceBuffer_ += typeName;
+    addParameterName(name);
+    traceBuffer_ += StringFrom(output);
+    return *this;
+}
+
+MockActualCall& MockActualCallTrace::withInputParameter(const SimpleString& name, const void* output)
+{
+    addParameterName(name);
+    traceBuffer_ += StringFrom(output);
+    return *this;
+}
+
+MockActualCall& MockActualCallTrace::withInputParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* output)
 {
     traceBuffer_ += " ";
     traceBuffer_ += typeName;

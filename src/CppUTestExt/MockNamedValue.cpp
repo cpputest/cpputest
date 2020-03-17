@@ -476,6 +476,9 @@ bool MockNamedValue::compatibleForCopying(const MockNamedValue& p) const
     if ((type_ == "const void*") && (p.type_ == "void*"))
         return true;
 
+    if ((type_ == "void*") && (p.type_ == "const void*"))
+        return true;
+
     return false;
 }
 

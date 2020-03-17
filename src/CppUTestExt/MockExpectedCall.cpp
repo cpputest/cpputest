@@ -240,6 +240,23 @@ MockExpectedCall& MockCheckedExpectedCall::withOutputParameterOfTypeReturning(co
     return *this;
 }
 
+MockExpectedCall& MockCheckedExpectedCall::withInputParameterForwarding(const SimpleString& name, void* value, size_t size)
+{
+    MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
+    outputParameters_->add(newParameter);
+    newParameter->setValue(value);
+    newParameter->setSize(size);
+    return *this;
+}
+
+MockExpectedCall& MockCheckedExpectedCall::withInputParameterOfTypeForwarding(const SimpleString& typeName, const SimpleString& name, void* value)
+{
+    MockNamedValue* newParameter = new MockExpectedFunctionParameter(name);
+    outputParameters_->add(newParameter);
+    newParameter->setObjectPointer(typeName, value);
+    return *this;
+}
+
 SimpleString MockCheckedExpectedCall::getInputParameterType(const SimpleString& name)
 {
     MockNamedValue * p = inputParameters_->getValueByName(name);

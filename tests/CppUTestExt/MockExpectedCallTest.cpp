@@ -771,6 +771,8 @@ TEST(MockIgnoredExpectedCall, worksAsItShould)
     ignored.withParameterOfType( "mytype", "top", (const void*) NULLPTR);
     ignored.withOutputParameterReturning("bar", (void*) NULLPTR, 1);
     ignored.withOutputParameterOfTypeReturning("mytype", "bar", (const void*) NULLPTR);
+    ignored.withInputParameterForwarding("fos", (void*) NULLPTR, 1);
+    ignored.withInputParameterOfTypeForwarding("haz", "cso", (void*) NULLPTR);
     ignored.ignoreOtherParameters();
     ignored.andReturnValue(true);
     ignored.andReturnValue((double) 1.0f);
