@@ -63,6 +63,11 @@ void TestOutput::color()
     color_ = true;
 }
 
+void TestOutput::setSummaryEnd()
+{
+    summaryEnd_ = true;
+}
+
 void TestOutput::setShuffleSeed(unsigned int shuffleSeed)
 {
     shuffleSeed_ = shuffleSeed;
@@ -182,7 +187,7 @@ void TestOutput::printTestsEnded(const TestResult& result)
     }
     print("\n\n");
     
-    if (anyTestFailed) {
+    if (summaryEnd_ && anyTestFailed) {
       result.printFailureMessages();
     }
 
@@ -352,6 +357,12 @@ void CompositeTestOutput::color()
 {
   if (outputOne_) outputOne_->color();
   if (outputTwo_) outputTwo_->color();
+}
+
+void CompositeTestOutput::setSummaryEnd()
+{
+  if (outputOne_) outputOne_->setSummaryEnd();
+  if (outputTwo_) outputTwo_->setSummaryEnd();
 }
 
 void CompositeTestOutput::printBuffer(const char* buffer)

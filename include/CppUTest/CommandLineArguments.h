@@ -46,6 +46,7 @@ public:
     bool isListingTestGroupNames() const;
     bool isListingTestGroupAndCaseNames() const;
     bool isRunIgnored() const;
+    bool isPrintSummaryEnd() const;
     int getRepeatCount() const;
     unsigned int getShuffle() const;
     const TestFilter* getGroupFilters() const;
@@ -72,6 +73,7 @@ private:
     bool listTestGroupNames_;
     bool listTestGroupAndCaseNames_;
     bool runIgnored_;
+    bool printSummaryEnd_;
     int repeat_;
     unsigned int shuffle_;
     TestFilter* groupFilters_;
