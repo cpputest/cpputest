@@ -520,7 +520,7 @@ endif
 clean:
 	@echo Making clean
 	$(SILENCE)$(RM) $(STUFF_TO_CLEAN)
-	$(SILENCE)rm -rf gcov $(CPPUTEST_OBJS_DIR)
+	$(SILENCE)rm -rf gcov $(CPPUTEST_OBJS_DIR) $(CPPUTEST_LIB_DIR)
 	$(SILENCE)find . -name "*.gcno" | xargs rm -f
 	$(SILENCE)find . -name "*.gcda" | xargs rm -f
 
