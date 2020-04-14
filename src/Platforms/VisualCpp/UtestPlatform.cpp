@@ -185,6 +185,8 @@ static void VisualCppFree(void* memory)
     free(memory);
 }
 
+void (*PlatformSpecificSrand)(unsigned int) = srand;
+int (*PlatformSpecificRand)(void) = rand;
 void* (*PlatformSpecificMalloc)(size_t size) = VisualCppMalloc;
 void* (*PlatformSpecificRealloc)(void* memory, size_t size) = VisualCppReAlloc;
 void (*PlatformSpecificFree)(void* memory) = VisualCppFree;
