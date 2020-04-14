@@ -281,6 +281,7 @@
     <ClCompile Include="CppUTest\JUnitOutputTest.cpp" />
     <ClCompile Include="CppUTest\MemoryLeakDetectorTest.cpp" />
     <ClCompile Include="CppUTest\MemoryOperatorOverloadTest.cpp" />
+    <ClCompile Include="CppUTest\DummyMemoryLeakDetector.cpp" />
     <ClCompile Include="CppUTest\MemoryLeakWarningTest.cpp" />
     <ClCompile Include="CppUTest\PluginTest.cpp" />
     <ClCompile Include="CppUTest\PreprocessorTest.cpp" />
