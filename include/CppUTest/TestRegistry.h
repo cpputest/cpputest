@@ -52,7 +52,7 @@ public:
     virtual void unDoLastAddTest();
     virtual size_t countTests();
     virtual void runAllTests(TestResult& result);
-    virtual void shuffleRunOrder(rand_func_t);
+    virtual void shuffleRunOrder();
     virtual void listTestGroupNames(TestResult& result);
     virtual void listTestGroupAndCaseNames(TestResult& result);
     virtual void setNameFilters(const TestFilter* filters);
@@ -76,6 +76,8 @@ public:
     virtual void setRunTestsInSeperateProcess();
     int getCurrentRepetition();
     void setRunIgnored();
+
+    static void shuffleList(size_t numElems, void* listToShuffleInPlace[]);
 private:
 
     bool testShouldRun(UtestShell* test, TestResult& result);

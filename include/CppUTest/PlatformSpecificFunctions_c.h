@@ -69,6 +69,10 @@ extern void (*PlatformSpecificFClose)(PlatformSpecificFile file);
 extern int (*PlatformSpecificPutchar)(int c);
 extern void (*PlatformSpecificFlush)(void);
 
+/* Random operations */
+extern void (*PlatformSpecificSrand)(unsigned int);
+extern int (*PlatformSpecificRand)(void);
+
 /* Dynamic Memory operations */
 extern void* (*PlatformSpecificMalloc)(size_t size);
 extern void* (*PlatformSpecificRealloc)(void* memory, size_t size);

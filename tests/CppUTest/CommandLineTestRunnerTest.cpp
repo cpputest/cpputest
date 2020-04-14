@@ -234,7 +234,6 @@ TEST(CommandLineTestRunner, specificShuffleSeedIsPrintedVerbose)
     const char* argv[] = { "tests.exe", "-s2", "-v"};
     SimpleString text = runAndGetOutput(3, argv);
     STRCMP_CONTAINS("shuffling enabled with seed: 2", text.asCharString());
-    STRCMP_CONTAINS("shuffle seed was: 2", text.asCharString());
 }
 
 extern "C" {

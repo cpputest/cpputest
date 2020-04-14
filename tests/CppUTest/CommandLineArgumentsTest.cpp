@@ -66,17 +66,6 @@ TEST_GROUP(CommandLineArguments)
         args = new CommandLineArguments(argc, argv);
         return args->parse(plugin);
     }
-
-    void shuffleTest(int argc, const char* argv[], unsigned int expectedShuffle)
-    {
-        CHECK(newArgumentParser(argc, argv));
-        CHECK_EQUAL(expectedShuffle, args->getShuffle());
-    }
-    void shuffleInvalidParamTest(int argc, const char* argv[])
-    {
-        CHECK_FALSE(newArgumentParser(argc, argv));
-        CHECK_EQUAL(SHUFFLE_DISABLED, args->getShuffle());
-    }
 };
 
 TEST(CommandLineArguments, Create)
@@ -119,49 +108,54 @@ TEST(CommandLineArguments, repeatSetDefaultsToTwoAndShuffleDisabled)
     const char* argv[] = { "tests.exe", "-r" };
     CHECK(newArgumentParser(argc, argv));
     LONGS_EQUAL(2, args->getRepeatCount());
-    CHECK_EQUAL(args->getShuffle(), SHUFFLE_DISABLED);
+}
+
+TEST(CommandLineArguments, shuffleDisabledByDefault)
+{
+    int argc = 1;
+    const char* argv[] = { "tests.exe" };
+    CHECK(newArgumentParser(argc, argv));
+    CHECK_FALSE(args->isShuffling());
 }
 
 TEST(CommandLineArguments, shuffleEnabled)
 {
+    int argc = 2;
     const char* argv[] = { "tests.exe", "-s" };
-    shuffleTest(2, argv, SHUFFLE_ENABLED_RANDOM_SEED);
+    CHECK(newArgumentParser(argc, argv));
+    CHECK_TRUE(args->isShuffling());
 }
 
-TEST(CommandLineArguments, shuffleInvalidParamCase1)
+TEST(CommandLineArguments, shuffleWithSeedZeroIsOk)
 {
+    int argc = 2;
     const char* argv[] = { "tests.exe", "-s0" };
-    shuffleInvalidParamTest(2, argv);
-}
-
-TEST(CommandLineArguments, shuffleInvalidParamCase2)
-{
-    const char* argv[] = { "tests.exe", "-s 0" };
-    shuffleInvalidParamTest(2, argv);
-}
-
-TEST(CommandLineArguments, shuffleInvalidParamCase3)
-{
-    const char* argv[] = { "tests.exe", "-s", "0" };
-    shuffleInvalidParamTest(3, argv);
+    CHECK_FALSE(newArgumentParser(argc, argv));
+    CHECK_EQUAL(0, args->getShuffleSeed());
 }
 
 TEST(CommandLineArguments, shuffleEnabledSpecificSeedCase1)
 {
+    int argc = 2;
     const char* argv[] = { "tests.exe", "-s999"};
-    shuffleTest(2, argv, 999);
+    CHECK(newArgumentParser(argc, argv));
+    CHECK_EQUAL(999, args->getShuffleSeed());
 }
 
 TEST(CommandLineArguments, shuffleEnabledSpecificSeedCase2)
 {
+    int argc = 2;
     const char* argv[] = { "tests.exe", "-s 888"};
-    shuffleTest(2, argv, 888);
+    CHECK(newArgumentParser(argc, argv));
+    CHECK_EQUAL(888, args->getShuffleSeed());
 }
 
 TEST(CommandLineArguments, shuffleEnabledSpecificSeedCase3)
 {
+    int argc = 3;
     const char* argv[] = { "tests.exe", "-s", "777"};
-    shuffleTest(3, argv, 777);
+    CHECK(newArgumentParser(argc, argv));
+    CHECK_EQUAL(777, args->getShuffleSeed());
 }
 
 TEST(CommandLineArguments, shuffleBeforeDoesNotDisturbOtherSwitch)
@@ -172,7 +166,7 @@ TEST(CommandLineArguments, shuffleBeforeDoesNotDisturbOtherSwitch)
     TestFilter groupFilter("group");
     groupFilter.strictMatching();
     CHECK_EQUAL(groupFilter, *args->getGroupFilters());
-    CHECK_EQUAL(args->getShuffle(), SHUFFLE_ENABLED_RANDOM_SEED);
+    CHECK_TRUE(args->isShuffling());
 }
 
 TEST(CommandLineArguments, runningTestsInSeperateProcesses)
