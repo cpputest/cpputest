@@ -58,7 +58,6 @@ public:
 
     virtual void verbose();
     virtual void color();
-    virtual void setShuffleSeed(unsigned int);
     virtual void printBuffer(const char*)=0;
     virtual void print(const char*);
     virtual void print(long);
@@ -92,7 +91,6 @@ protected:
     int dotCount_;
     bool verbose_;
     bool color_;
-    unsigned int shuffleSeed_;
     const char* progressIndication_;
 
     static WorkingEnvironment workingEnvironment_;

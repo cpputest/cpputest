@@ -45,7 +45,7 @@ TestOutput::WorkingEnvironment TestOutput::getWorkingEnvironment()
 
 
 TestOutput::TestOutput() :
-    dotCount_(0), verbose_(false), color_(false), shuffleSeed_(SHUFFLE_DISABLED), progressIndication_(".")
+    dotCount_(0), verbose_(false), color_(false), progressIndication_(".")
 {
 }
 
@@ -61,11 +61,6 @@ void TestOutput::verbose()
 void TestOutput::color()
 {
     color_ = true;
-}
-
-void TestOutput::setShuffleSeed(unsigned int shuffleSeed)
-{
-    shuffleSeed_ = shuffleSeed;
 }
 
 void TestOutput::print(const char* str)
@@ -176,11 +171,6 @@ void TestOutput::printTestsEnded(const TestResult& result)
     print(" ignored, ");
     print(result.getFilteredOutCount());
     print(" filtered out, ");
-    if (shuffleSeed_ != SHUFFLE_DISABLED && (verbose_ || isFailure)) {
-        print("shuffle seed was: ");
-        print(shuffleSeed_);
-        print(", ");
-    }
     print(result.getTotalExecutionTime());
     print(" ms)");
     if (color_) {

@@ -227,32 +227,46 @@ UtestShell* TestRegistry::getFirstTest()
     return tests_;
 }
 
+// "Durstenfeld shuffle" according to Wikipedia
+void TestRegistry::shuffleList(size_t numElems, void* listToShuffleInPlace[])
+{
+    if( numElems == 0 ) return;
 
-void TestRegistry::shuffleRunOrder(rand_func_t rand_func)
+    for (size_t i = numElems - 1; i >= 1; --i)
+    {
+        const size_t j = ((size_t)PlatformSpecificRand()) % (i + 1); // distribution biased by modulo, but good enough for shuffling
+        void* e1 = listToShuffleInPlace[j];
+        void* e2 = listToShuffleInPlace[i];
+        listToShuffleInPlace[i] = e1;
+        listToShuffleInPlace[j] = e2;
+    }
+}
+
+void TestRegistry::shuffleRunOrder()
 {
     if (getFirstTest() == NULLPTR)
-    {
         return;
-    }
-    const size_t numTests = getFirstTest()->countTests();
-    typedef UtestShell* listElem;
-    listElem* tests = new listElem[numTests];
-    UtestShell *test = getFirstTest();
-    for (size_t testsIdx = 0; testsIdx < numTests; ++testsIdx)
-    {
-        tests[testsIdx] = test;
-        test = test->getNext();
-    }
-    shuffle_list(rand_func, numTests, reinterpret_cast<void**>(tests));
 
-    // Store shuffled list back to linked list
-    UtestShell *prev = NULLPTR;
-    for (size_t i = 0; i < numTests; ++i)
+    const size_t testCount = getFirstTest()->countTests();
+
+    UtestShell** arrayOfTests = new UtestShell*[testCount];
+
+    UtestShell* currentTest = getFirstTest();
+    for (size_t i = 0; i < testCount; i++)
     {
-        prev = tests[numTests - 1 - i]->addTest(prev);
+        arrayOfTests[i] = currentTest;
+        currentTest = currentTest->getNext();
     }
-    tests_ = prev;
-    delete[] tests;
+
+    shuffleList(testCount, (void**)arrayOfTests);
+
+    tests_ = NULLPTR;
+    for (size_t i = 0; i < testCount; i++)
+    {
+        tests_ = arrayOfTests[testCount - 1 - i]->addTest(tests_);
+    }
+
+    delete[] arrayOfTests;
 }
 
 UtestShell* TestRegistry::getTestWithNext(UtestShell* test)

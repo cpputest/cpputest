@@ -96,19 +96,6 @@ void CommandLineTestRunner::initializeTestRun()
     if (arguments_->isRunIgnored()) registry_->setRunIgnored();
 }
 
-static unsigned getSeed(unsigned shuffleArg)
-{
-    if (shuffleArg != SHUFFLE_ENABLED_RANDOM_SEED) return shuffleArg;
-
-    const unsigned generatedSeed = static_cast<unsigned>(GetPlatformSpecificTimeInMillis());
-
-    // do not allow seed values 0 or 1 because they cannot be given as cmd line arguments
-    // (0 and 1 overloaded by SHUFFLE_DISABLED and SHUFFLE_ENABLED_RANDOM_SEED)
-    if (generatedSeed < SHUFFLE_SEED_MINIMUM_VALUE) return SHUFFLE_SEED_MINIMUM_VALUE;
-
-    return generatedSeed;
-}
-
 int CommandLineTestRunner::runAllTests()
 {
     initializeTestRun();
@@ -130,21 +117,19 @@ int CommandLineTestRunner::runAllTests()
         registry_->listTestGroupAndCaseNames(tr);
         return 0;
     }
-    const bool shuffleEnabled = arguments_->getShuffle() != SHUFFLE_DISABLED;
-    if (shuffleEnabled)
+
+    if (arguments_->isShuffling())
     {
-        const unsigned seed = getSeed(arguments_->getShuffle());
-        output_->setShuffleSeed(seed);
         output_->print("Test order shuffling enabled with seed: ");
-        output_->print(seed);
+        output_->print(arguments_->getShuffleSeed());
         output_->print("\n");
-        srand(seed);
+        PlatformSpecificSrand(arguments_->getShuffleSeed());
     }
     while (loopCount++ < repeatCount) {
-        if (shuffleEnabled)
-        {
-            registry_->shuffleRunOrder(rand_);
-        }
+
+        if (arguments_->isShuffling())
+            registry_->shuffleRunOrder();
+
         output_->printTestRun(loopCount, repeatCount);
         TestResult tr(*output_);
         registry_->runAllTests(tr);

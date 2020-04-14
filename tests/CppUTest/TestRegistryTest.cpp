@@ -360,27 +360,28 @@ TEST(TestRegistry, listTestGroupAndCaseNames_shouldListBackwardsGroupATestaAfter
     STRCMP_EQUAL("GROUP_A.test_aa GROUP_B.test_b GROUP_A.test_a", s.asCharString());
 }
 
-static int getZero()
-{
-    return 0;
-}
-
 TEST(TestRegistry, shuffleEmptyListIsNoOp)
 {
     CHECK_TRUE(myRegistry->getFirstTest() == NULLPTR);
-    myRegistry->shuffleRunOrder(getZero);
+    myRegistry->shuffleRunOrder();
     CHECK_TRUE(myRegistry->getFirstTest() == NULLPTR);
 }
 
 TEST(TestRegistry, shuffleSingleTestIsNoOp)
 {
     myRegistry->addTest(test1);
-    myRegistry->shuffleRunOrder(getZero);
+    myRegistry->shuffleRunOrder();
     CHECK_TRUE(myRegistry->getFirstTest() == test1);
+}
+
+static int getZero()
+{
+    return 0;
 }
 
 TEST(TestRegistry, shuffleTestList)
 {
+    UT_PTR_SET(PlatformSpecificRand, getZero);
     myRegistry->addTest(test3);
     myRegistry->addTest(test2);
     myRegistry->addTest(test1);
@@ -395,7 +396,7 @@ TEST(TestRegistry, shuffleTestList)
     CHECK_TRUE(third_before->getNext()  == NULLPTR);
 
     // shuffle always with element at index 0: [1] 2 [3] --> [3] [2] 1 --> 2 3 1
-    myRegistry->shuffleRunOrder(getZero);
+    myRegistry->shuffleRunOrder();
 
     UtestShell* first_after  = myRegistry->getFirstTest();
     UtestShell* second_after = first_after->getNext();

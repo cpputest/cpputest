@@ -28,12 +28,30 @@
 #include "CppUTest/Shuffle.h"
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TestOutput.h"
+#include "CppUTest/TestRegistry.h"
+
+static const int maxNumItems = 3;
 
 TEST_GROUP(ShuffleTest)
 {
-};
+    int x0;
+    int x1;
+    int x2;
 
-static const int maxNumItems = 3;
+    void* elements[maxNumItems];
+
+    void setup()
+    {
+        x0 = 0;
+        x1 = 1;
+        x2 = 2;
+
+        elements[0] = &x0;
+        elements[1] = &x1;
+        elements[2] = &x2;
+    }
+
+};
 
 static int getZero()
 {
@@ -50,34 +68,34 @@ static int getValueExceedingMaxIdx()
     return maxNumItems + 1;
 }
 
-TEST(ShuffleTest, ShuffleListTest)
+TEST(ShuffleTest, ShuffleListTestWithNoElementsInList)
 {
-    int x0 = 0;
-    int x1 = 1;
-    int x2 = 2;
-    void* tests[maxNumItems] = {&x0, &x1, &x2};
+    UT_PTR_SET(PlatformSpecificRand, getValueExceedingMaxIdx);
+    TestRegistry::shuffleList(0, elements);
 
-    // check no-op
-    shuffle_list(getValueExceedingMaxIdx, 0, tests);
-    CHECK(tests[0] == &x0);
-    CHECK(tests[1] == &x1);
-    CHECK(tests[2] == &x2);
-
-    // swap element with itself: 0, [1], 2 --> 0, 1, 2
-    shuffle_list(getOne, 1, tests);
-    CHECK(tests[0] == &x0);
-    CHECK(tests[1] == &x1);
-    CHECK(tests[2] == &x2);
-
-    // always swaps with element at index 0: [0], 1, [2] --> [2], [1], 0 --> 1, 2, 0
-    shuffle_list(getZero, maxNumItems, tests);
-    CHECK(tests[0] == &x1);
-    CHECK(tests[1] == &x2);
-    CHECK(tests[2] == &x0);
-
-    // swaps with 4 mod 3 (1) then 4 mod 2 (0): 1, [2], [0] --> [1], [0], 2 --> 0, 1, 2
-    shuffle_list(getValueExceedingMaxIdx, maxNumItems, tests);
-    CHECK(tests[0] == &x0);
-    CHECK(tests[1] == &x1);
-    CHECK(tests[2] == &x2);
+    CHECK(elements[0] == &x0);
+    CHECK(elements[1] == &x1);
+    CHECK(elements[2] == &x2);
 }
+
+TEST(ShuffleTest, ShuffleListTestWithRandomAlwaysReturningZero)
+{
+    UT_PTR_SET(PlatformSpecificRand, getZero);
+    TestRegistry::shuffleList(3, elements);
+
+    CHECK(elements[0] == &x1);
+    CHECK(elements[1] == &x2);
+    CHECK(elements[2] == &x0);
+}
+
+// swaps with 4 mod 3 (1) then 4 mod 2 (0): 1, [2], [0] --> [1], [0], 2 --> 0, 1, 2
+TEST(ShuffleTest, ShuffleListTestWithRandomAlwaysReturningOne)
+{
+    UT_PTR_SET(PlatformSpecificRand, getOne);
+    TestRegistry::shuffleList(3, elements);
+
+    CHECK(elements[0] == &x0);
+    CHECK(elements[1] == &x2);
+    CHECK(elements[2] == &x1);
+}
+
