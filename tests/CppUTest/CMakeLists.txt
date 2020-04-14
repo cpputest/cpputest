@@ -13,6 +13,7 @@ set(CppUTestTests_src
     TestHarness_cTest.cpp
     JUnitOutputTest.cpp
     TestHarness_cTestCFile.c
+    DummyMemoryLeakDetector.cpp
     MemoryLeakDetectorTest.cpp
     TestInstallerTest.cpp
     AllocLetTestFree.c
