@@ -36,7 +36,6 @@
 #include "StandardCLibrary.h"
 #include "SimpleString.h"
 #include "TestFilter.h"
-#include "Shuffle.h"
 
 class UtestShell;
 class TestResult;
