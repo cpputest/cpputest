@@ -34,7 +34,7 @@ DummyMemoryLeakDetector::DummyMemoryLeakDetector(MemoryLeakFailure* reporter) : 
     memoryLeakDetectorWasDeleted = false;
 }
 
-DummyMemoryLeakDetector::~DummyMemoryLeakDetector() _destructor_override
+DummyMemoryLeakDetector::~DummyMemoryLeakDetector()
 {
     memoryLeakDetectorWasDeleted = true;
 }
@@ -52,7 +52,7 @@ DummyMemoryLeakFailure::DummyMemoryLeakFailure()
     memoryLeakFailureWasDelete = false;
 }
 
-DummyMemoryLeakFailure::~DummyMemoryLeakFailure() _destructor_override
+DummyMemoryLeakFailure::~DummyMemoryLeakFailure()
 {
     memoryLeakFailureWasDelete = true;
 }
@@ -62,7 +62,7 @@ bool DummyMemoryLeakFailure::wasDeleted()
     return memoryLeakFailureWasDelete;
 }
 
-void DummyMemoryLeakFailure::fail(char*) _override
+void DummyMemoryLeakFailure::fail(char*)
 {
 }
 
