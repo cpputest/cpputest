@@ -44,6 +44,7 @@ CPPU1_OBJECTS := \
   $(CPPUTEST_HOME)/tests/CppUTest/CommandLineArgumentsTest.o \
   $(CPPUTEST_HOME)/tests/CppUTest/CommandLineTestRunnerTest.o \
   $(CPPUTEST_HOME)/tests/CppUTest/JUnitOutputTest.o \
+  $(CPPUTEST_HOME)/tests/CppUTest/DummyMemoryLeakDetector.o \
   $(CPPUTEST_HOME)/tests/CppUTest/MemoryLeakWarningTest.o \
   $(CPPUTEST_HOME)/tests/CppUTest/PluginTest.o \
   $(CPPUTEST_HOME)/tests/CppUTest/PreprocessorTest.o \

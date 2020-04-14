@@ -34,28 +34,11 @@
 #include "CppUTest/TestTestingFixture.h"
 #include "CppUTest/TestHarness_c.h"
 #include "CppUTest/SimpleMutex.h"
-
-static char* leak1;
-static long* leak2;
-
-class DummyReporter: public MemoryLeakFailure
-{
-public:
-    virtual ~DummyReporter() _destructor_override
-    {
-    }
-    virtual void fail(char* /*fail_string*/) _override
-    {
-    }
-};
-
-static MemoryLeakDetector* detector;
-static MemoryLeakWarningPlugin* memPlugin;
-static DummyReporter dummy;
-static TestMemoryAllocator* allocator;
+#include "DummyMemoryLeakDetector.h"
 
 TEST_GROUP(MemoryLeakWarningLocalDetectorTest)
 {
+    DummyMemoryLeakFailure dummy;
 };
 
 TEST(MemoryLeakWarningLocalDetectorTest, localDetectorReturnsNewGlobalWhenNoneWasSet)
@@ -79,9 +62,16 @@ TEST(MemoryLeakWarningLocalDetectorTest, localDetectorIsGlobalDetector)
     POINTERS_EQUAL(globalDetector, localDetector);
 }
 
+static char* leak1;
+static long* leak2;
+
+static MemoryLeakDetector* detector;
+static MemoryLeakWarningPlugin* memPlugin;
+static TestMemoryAllocator* allocator;
 
 TEST_GROUP(MemoryLeakWarningTest)
 {
+    DummyMemoryLeakFailure dummy;
     TestTestingFixture* fixture;
 
     void setup()
@@ -96,6 +86,7 @@ TEST_GROUP(MemoryLeakWarningTest)
         leak1 = NULLPTR;
         leak2 = NULLPTR;
     }
+
     void teardown()
     {
         detector->deallocMemory(allocator, leak1);
@@ -149,31 +140,6 @@ TEST(MemoryLeakWarningTest, FailingTestDoesNotReportMemoryLeaks)
     LONGS_EQUAL(1, fixture->getFailureCount());
 }
 
-static bool memoryLeakDetectorWasDeleted = false;
-static bool memoryLeakFailureWasDelete = false;
-
-class DummyMemoryLeakDetector : public MemoryLeakDetector
-{
-public:
-    DummyMemoryLeakDetector(MemoryLeakFailure* reporter) : MemoryLeakDetector(reporter) {}
-    virtual ~DummyMemoryLeakDetector() _destructor_override
-    {
-        memoryLeakDetectorWasDeleted = true;
-    }
-};
-
-class DummyMemoryLeakFailure : public MemoryLeakFailure
-{
-    virtual ~DummyMemoryLeakFailure() _destructor_override
-    {
-        memoryLeakFailureWasDelete = true;
-    }
-    virtual void fail(char*) _override
-    {
-    }
-};
-
-
 static bool cpputestHasCrashed;
 
 TEST_GROUP(MemoryLeakWarningGlobalDetectorTest)
@@ -194,9 +160,6 @@ TEST_GROUP(MemoryLeakWarningGlobalDetectorTest)
         detector = MemoryLeakWarningPlugin::getGlobalDetector();
         failureReporter = MemoryLeakWarningPlugin::getGlobalFailureReporter();
 
-        memoryLeakDetectorWasDeleted = false;
-        memoryLeakFailureWasDelete = false;
-
         MemoryLeakWarningPlugin::turnOffNewDeleteOverloads();
 
         dummyReporter = new DummyMemoryLeakFailure;
@@ -209,8 +172,8 @@ TEST_GROUP(MemoryLeakWarningGlobalDetectorTest)
     void teardown()
     {
         MemoryLeakWarningPlugin::turnOffNewDeleteOverloads();
-        if (!memoryLeakDetectorWasDeleted) delete dummyDetector;
-        if (!memoryLeakFailureWasDelete) delete dummyReporter;
+        if (!DummyMemoryLeakDetector::wasDeleted()) delete dummyDetector;
+        if (!DummyMemoryLeakFailure::wasDeleted()) delete dummyReporter;
 
         MemoryLeakWarningPlugin::setGlobalDetector(detector, failureReporter);
         MemoryLeakWarningPlugin::turnOnNewDeleteOverloads();
@@ -246,8 +209,8 @@ TEST(MemoryLeakWarningGlobalDetectorTest, destroyGlobalDetector)
 
     MemoryLeakWarningPlugin::destroyGlobalDetector();
 
-    CHECK(memoryLeakDetectorWasDeleted);
-    CHECK(memoryLeakFailureWasDelete);
+    CHECK(DummyMemoryLeakDetector::wasDeleted());
+    CHECK(DummyMemoryLeakFailure::wasDeleted());
 }
 
 TEST(MemoryLeakWarningGlobalDetectorTest, MemoryWarningPluginCanBeSetToDestroyTheGlobalDetector)
@@ -258,7 +221,7 @@ TEST(MemoryLeakWarningGlobalDetectorTest, MemoryWarningPluginCanBeSetToDestroyTh
 
     delete plugin;
 
-    CHECK(memoryLeakDetectorWasDeleted);
+    CHECK(DummyMemoryLeakDetector::wasDeleted());
 }
 
 #ifndef CPPUTEST_MEM_LEAK_DETECTION_DISABLED
@@ -371,8 +334,6 @@ static void StubMutexUnlock(PlatformSpecificMutex)
 {
     mutexUnlockCount++;
 }
-
-
 
 TEST_GROUP(MemoryLeakWarningThreadSafe)
 {
