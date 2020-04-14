@@ -145,6 +145,7 @@ CppUTestTests_SOURCES = \
 	tests/CppUTest/CheatSheetTest.cpp \
 	tests/CppUTest/CommandLineArgumentsTest.cpp \
 	tests/CppUTest/CommandLineTestRunnerTest.cpp \
+	tests/CppUTest/DummyMemoryLeakDetector.cpp \
 	tests/CppUTest/JUnitOutputTest.cpp \
 	tests/CppUTest/MemoryLeakDetectorTest.cpp \
 	tests/CppUTest/MemoryOperatorOverloadTest.cpp \
