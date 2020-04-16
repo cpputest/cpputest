@@ -92,7 +92,7 @@ static void GccPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, Test
     const pid_t syscallError = -1;
     pid_t cpid;
     pid_t w;
-    int status;
+    int status = 0;
 
     cpid = PlatformSpecificFork();
 
@@ -106,11 +106,19 @@ static void GccPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, Test
         shell->runOneTestInCurrentProcess(plugin, *result);        // LCOV_EXCL_LINE
         _exit(initialFailureCount < result->getFailureCount());    // LCOV_EXCL_LINE
     } else {                    /* Code executed by parent */
+        size_t amountOfRetries = 0;
         do {
             w = PlatformSpecificWaitPid(cpid, &status, WUNTRACED);
             if (w == syscallError) {
                 // OS X debugger causes EINTR
-                if (EINTR != errno) {
+                if (EINTR == errno) {
+                  if (amountOfRetries > 30) {
+                    result->addFailure(TestFailure(shell, "Call to waitpid() failed with EINTR. Tried 30 times and giving up! Sometimes happens in debugger"));
+                    return;
+                  }
+                  amountOfRetries++;
+                }
+                else {
                     result->addFailure(TestFailure(shell, "Call to waitpid() failed"));
                     return;
                 }
