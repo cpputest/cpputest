@@ -154,7 +154,6 @@ CppUTestTests_SOURCES = \
 	tests/CppUTest/SetPluginTest.cpp \
 	tests/CppUTest/SimpleStringTest.cpp \
 	tests/CppUTest/SimpleMutexTest.cpp \
-	tests/CppUTest/ShuffleTest.cpp \
 	tests/CppUTest/TeamCityOutputTest.cpp \
 	tests/CppUTest/TestFailureNaNTest.cpp \
 	tests/CppUTest/TestFailureTest.cpp \
