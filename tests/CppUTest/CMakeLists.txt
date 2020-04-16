@@ -23,7 +23,6 @@ set(CppUTestTests_src
     TestOutputTest.cpp
     AllocLetTestFreeTest.cpp
     TestRegistryTest.cpp
-    ShuffleTest.cpp
     AllocationInCFile.c
     PluginTest.cpp
     TestResultTest.cpp
