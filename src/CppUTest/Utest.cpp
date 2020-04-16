@@ -715,6 +715,85 @@ void IgnoredUtestShell::setRunIgnored()
     runIgnored_ = true;
 }
 
+//////////////////// UtestShellPointerArray
+
+UtestShellPointerArray::UtestShellPointerArray(UtestShell* firstTest)
+    : arrayOfTests_(NULLPTR), count_(0)
+{
+    count_ = (firstTest) ? firstTest->countTests() : 0;
+    if (count_ == 0) return;
+
+    arrayOfTests_ = new UtestShell*[count_];
+
+    UtestShell*currentTest = firstTest;
+    for (size_t i = 0; i < count_; i++)
+    {
+        arrayOfTests_[i] = currentTest;
+        currentTest = currentTest->getNext();
+    }
+}
+
+UtestShellPointerArray::~UtestShellPointerArray()
+{
+    delete [] arrayOfTests_;
+}
+
+void UtestShellPointerArray::swap(size_t index1, size_t index2)
+{
+        UtestShell* e2 = arrayOfTests_[index2];
+        UtestShell* e1 = arrayOfTests_[index1];
+        arrayOfTests_[index1] = e2;
+        arrayOfTests_[index2] = e1;
+}
+
+void UtestShellPointerArray::shuffle(unsigned seed)
+{
+    if (count_ == 0) return;
+
+    PlatformSpecificSrand(seed);
+
+    for (size_t i = count_ - 1; i >= 1; --i)
+    {
+        if (count_ == 0) return;
+
+        const size_t j = ((size_t)PlatformSpecificRand()) % (i + 1); // distribution biased by modulo, but good enough for shuffling
+        swap(i, j);
+   }
+   relinkTestsInOrder();
+}
+
+void UtestShellPointerArray::reverse()
+{
+    if (count_ == 0) return;
+
+    size_t halfCount = count_ / 2;
+    for (size_t i = 0; i < halfCount; i++)
+    {
+        size_t j = count_ - i - 1;
+        swap(i, j);
+   }
+   relinkTestsInOrder();
+}
+
+void UtestShellPointerArray::relinkTestsInOrder()
+{
+    UtestShell *tests = NULLPTR;
+    for (size_t i = 0; i < count_; i++)
+        tests = arrayOfTests_[count_ - i - 1]->addTest(tests);
+}
+
+UtestShell* UtestShellPointerArray::getFirstTest() const
+{
+    return get(0);
+}
+
+UtestShell* UtestShellPointerArray::get(unsigned index) const
+{
+    if (index >= count_) return NULLPTR;
+    return arrayOfTests_[index];
+}
+
+
 
 ////////////// TestInstaller ////////////
 

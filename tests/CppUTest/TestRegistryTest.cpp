@@ -364,14 +364,14 @@ TEST(TestRegistry, listTestGroupAndCaseNames_shouldListBackwardsGroupATestaAfter
 TEST(TestRegistry, shuffleEmptyListIsNoOp)
 {
     CHECK_TRUE(myRegistry->getFirstTest() == NULLPTR);
-    myRegistry->shuffleRunOrder();
+    myRegistry->shuffleTests(0);
     CHECK_TRUE(myRegistry->getFirstTest() == NULLPTR);
 }
 
 TEST(TestRegistry, shuffleSingleTestIsNoOp)
 {
     myRegistry->addTest(test1);
-    myRegistry->shuffleRunOrder();
+    myRegistry->shuffleTests(0);
     CHECK_TRUE(myRegistry->getFirstTest() == test1);
 }
 
@@ -380,7 +380,7 @@ static int getZero()
     return 0;
 }
 
-TEST(TestRegistry, shuffleTestList)
+IGNORE_TEST(TestRegistry, shuffleTestList)
 {
     UT_PTR_SET(PlatformSpecificRand, getZero);
     myRegistry->addTest(test3);
@@ -397,7 +397,7 @@ TEST(TestRegistry, shuffleTestList)
     CHECK_TRUE(third_before->getNext()  == NULLPTR);
 
     // shuffle always with element at index 0: [1] 2 [3] --> [3] [2] 1 --> 2 3 1
-    myRegistry->shuffleRunOrder();
+    myRegistry->shuffleTests(0);
 
     UtestShell* first_after  = myRegistry->getFirstTest();
     UtestShell* second_after = first_after->getNext();
@@ -407,4 +407,21 @@ TEST(TestRegistry, shuffleTestList)
     CHECK_TRUE(second_after == test3);
     CHECK_TRUE(third_after  == test1);
     CHECK_TRUE(third_after->getNext() == NULLPTR);
+}
+
+TEST(TestRegistry, reverseTests)
+{
+    myRegistry->addTest(test1);
+    myRegistry->addTest(test2);
+
+    myRegistry->reverseTests();
+
+    CHECK(test1 == myRegistry->getFirstTest());
+}
+
+TEST(TestRegistry, reverseZeroTests)
+{
+    myRegistry->reverseTests();
+
+    CHECK(NULLPTR == myRegistry->getFirstTest());
 }

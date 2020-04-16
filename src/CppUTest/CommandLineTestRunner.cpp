@@ -123,12 +123,11 @@ int CommandLineTestRunner::runAllTests()
         output_->print("Test order shuffling enabled with seed: ");
         output_->print(arguments_->getShuffleSeed());
         output_->print("\n");
-        PlatformSpecificSrand(arguments_->getShuffleSeed());
     }
     while (loopCount++ < repeatCount) {
 
         if (arguments_->isShuffling())
-            registry_->shuffleRunOrder();
+            registry_->shuffleTests(arguments_->getShuffleSeed());
 
         output_->printTestRun(loopCount, repeatCount);
         TestResult tr(*output_);
