@@ -242,6 +242,29 @@ private:
 
 };
 
+//////////////////// UtestShellPointerArray
+
+class UtestShellPointerArray
+{
+public:
+    UtestShellPointerArray(UtestShell* firstTest);
+    ~UtestShellPointerArray();
+
+    void shuffle(unsigned seed);
+    void reverse();
+    void relinkTestsInOrder();
+    UtestShell* getFirstTest() const;
+    UtestShell* get(unsigned index) const;
+
+private:
+
+    void swap(size_t index1, size_t index2);
+
+    UtestShell** arrayOfTests_;
+    size_t count_;
+};
+
+
 //////////////////// TestInstaller
 
 class TestInstaller

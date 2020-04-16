@@ -30,29 +30,6 @@
 #include "CppUTest/TestRegistry.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
-static const int maxNumItems = 3;
-
-TEST_GROUP(ShuffleTest)
-{
-    int x0;
-    int x1;
-    int x2;
-
-    void* elements[maxNumItems];
-
-    void setup()
-    {
-        x0 = 0;
-        x1 = 1;
-        x2 = 2;
-
-        elements[0] = &x0;
-        elements[1] = &x1;
-        elements[2] = &x2;
-    }
-
-};
-
 static int getZero()
 {
     return 0;
@@ -63,39 +40,94 @@ static int getOne()
     return 1;
 }
 
-static int getValueExceedingMaxIdx()
+TEST_GROUP(ShuffleTest)
 {
-    return maxNumItems + 1;
+    UtestShell* test0;
+    UtestShell* test1;
+    UtestShell* test2;
+
+    void setup()
+    {
+        test0 = new IgnoredUtestShell();
+        test1 = new IgnoredUtestShell();
+        test2 = new IgnoredUtestShell();
+
+        test0->addTest(test1);
+        test1->addTest(test2);
+    }
+
+    void teardown()
+    {
+        delete test0;
+        delete test1;
+        delete test2;
+    }
+};
+
+
+TEST(ShuffleTest, empty)
+{
+    UtestShellPointerArray tests(NULLPTR);
+    tests.shuffle(0);
+    CHECK(NULL == tests.getFirstTest());
 }
 
-TEST(ShuffleTest, ShuffleListTestWithNoElementsInList)
+TEST(ShuffleTest, testsAreInOrder)
 {
-    UT_PTR_SET(PlatformSpecificRand, getValueExceedingMaxIdx);
-    TestRegistry::shuffleList(0, elements);
+    UtestShellPointerArray tests(test0);
+    CHECK(tests.get(0) == test0);
+    CHECK(tests.get(1) == test1);
+    CHECK(tests.get(2) == test2);
+}
 
-    CHECK(elements[0] == &x0);
-    CHECK(elements[1] == &x1);
-    CHECK(elements[2] == &x2);
+TEST(ShuffleTest, relinkingTestsWillKeepThemTheSameWhenNothingWasDone)
+{
+    UtestShellPointerArray tests(test0);
+    tests.relinkTestsInOrder();
+    CHECK(tests.get(0) == test0);
+    CHECK(tests.get(1) == test1);
+    CHECK(tests.get(2) == test2);
+}
+
+
+TEST(ShuffleTest, firstTestisNotTheFirstTestWithSeed1234)
+{
+    UtestShellPointerArray tests(test0);
+    tests.shuffle(1234);
+    CHECK(tests.getFirstTest() != test0);
 }
 
 TEST(ShuffleTest, ShuffleListTestWithRandomAlwaysReturningZero)
 {
     UT_PTR_SET(PlatformSpecificRand, getZero);
-    TestRegistry::shuffleList(3, elements);
 
-    CHECK(elements[0] == &x1);
-    CHECK(elements[1] == &x2);
-    CHECK(elements[2] == &x0);
+    UtestShellPointerArray tests(test0);
+    tests.shuffle(3);
+    CHECK(tests.get(0) == test1);
+    CHECK(tests.get(1) == test2);
+    CHECK(tests.get(2) == test0);
 }
 
 // swaps with 4 mod 3 (1) then 4 mod 2 (0): 1, [2], [0] --> [1], [0], 2 --> 0, 1, 2
 TEST(ShuffleTest, ShuffleListTestWithRandomAlwaysReturningOne)
 {
     UT_PTR_SET(PlatformSpecificRand, getOne);
-    TestRegistry::shuffleList(3, elements);
 
-    CHECK(elements[0] == &x0);
-    CHECK(elements[1] == &x2);
-    CHECK(elements[2] == &x1);
+    UtestShellPointerArray tests(test0);
+    tests.shuffle(3);
+    CHECK(tests.get(0) == test0);
+    CHECK(tests.get(1) == test2);
+    CHECK(tests.get(2) == test1);
+}
+
+TEST(ShuffleTest, reverse)
+{
+    UT_PTR_SET(PlatformSpecificRand, getOne);
+
+    UtestShellPointerArray tests(test0);
+    tests.reverse();
+    CHECK(tests.get(0) == test2);
+    CHECK(tests.get(1) == test1);
+    CHECK(tests.get(2) == test0);
 }
 
