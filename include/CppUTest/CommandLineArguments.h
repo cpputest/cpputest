@@ -41,6 +41,7 @@ public:
     virtual ~CommandLineArguments();
 
     bool parse(TestPlugin* plugin);
+    bool needHelp() const;
     bool isVerbose() const;
     bool isColor() const;
     bool isListingTestGroupNames() const;
@@ -57,6 +58,7 @@ public:
     bool runTestsInSeperateProcess() const;
     const SimpleString& getPackageName() const;
     const char* usage() const;
+    const char* help() const;
 
 private:
 
@@ -68,6 +70,7 @@ private:
     int ac_;
     const char *const *av_;
 
+    bool needHelp_;
     bool verbose_;
     bool color_;
     bool runTestsAsSeperateProcess_;
