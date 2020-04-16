@@ -91,19 +91,22 @@ public:
 TEST_GROUP(CommandLineTestRunner)
 {
     TestRegistry registry;
-    UtestShell *oneTest_;
+    UtestShell *test1;
+    UtestShell *test2;
     DummyPluginWhichCountsThePlugins* pluginCountingPlugin;
 
     void setup()
     {
-      oneTest_ = new UtestShell("group", "test", "file", 1);
-      registry.addTest(oneTest_);
+      test1 = new UtestShell("group1", "test1", "file1", 1);
+      test2 = new UtestShell("group2", "test2", "file2", 2);
+      registry.addTest(test1);
       pluginCountingPlugin = new DummyPluginWhichCountsThePlugins("PluginCountingPlugin", &registry);
     }
     void teardown()
     {
       delete pluginCountingPlugin;
-      delete oneTest_;
+      delete test2;
+      delete test1;
     }
 
     SimpleString runAndGetOutput(const int argc, const char* argv[])
@@ -204,8 +207,36 @@ TEST(CommandLineTestRunner, JunitOutputAndVerboseEnabled)
 
     CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(3, argv, &registry);
     commandLineTestRunner.runAllTestsMain();
-    STRCMP_CONTAINS("TEST(group, test)", commandLineTestRunner.fakeJUnitOutputWhichIsReallyABuffer_->getOutput().asCharString());
-    STRCMP_CONTAINS("TEST(group, test)", commandLineTestRunner.fakeConsoleOutputWhichIsReallyABuffer->getOutput().asCharString());
+    STRCMP_CONTAINS("TEST(group1, test1)", commandLineTestRunner.fakeJUnitOutputWhichIsReallyABuffer_->getOutput().asCharString());
+    STRCMP_CONTAINS("TEST(group1, test1)", commandLineTestRunner.fakeConsoleOutputWhichIsReallyABuffer->getOutput().asCharString());
+}
+
+TEST(CommandLineTestRunner, defaultTestsAreRunInOrderTheyAreInRepository)
+{
+    const char* argv[] = { "tests.exe", "-v"};
+
+    registry.addTest(test2);
+    CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(2, argv, &registry);
+    commandLineTestRunner.runAllTestsMain();
+
+    SimpleStringCollection stringCollection;
+    commandLineTestRunner.fakeConsoleOutputWhichIsReallyABuffer->getOutput().split("\n", stringCollection);
+    STRCMP_CONTAINS("test2", stringCollection[0].asCharString());
+    STRCMP_CONTAINS("test1", stringCollection[1].asCharString());
+}
+
+TEST(CommandLineTestRunner, testsCanBeRunInReverseOrder)
+{
+    const char* argv[] = { "tests.exe", "-v", "-b"};
+
+    registry.addTest(test2);
+    CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(3, argv, &registry);
+    commandLineTestRunner.runAllTestsMain();
+
+    SimpleStringCollection stringCollection;
+    commandLineTestRunner.fakeConsoleOutputWhichIsReallyABuffer->getOutput().split("\n", stringCollection);
+    STRCMP_CONTAINS("test1", stringCollection[0].asCharString());
+    STRCMP_CONTAINS("test2", stringCollection[1].asCharString());
 }
 
 TEST(CommandLineTestRunner, listTestGroupNamesShouldWorkProperly)
@@ -225,7 +256,7 @@ TEST(CommandLineTestRunner, listTestGroupAndCaseNamesShouldWorkProperly)
     CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(2, argv, &registry);
     commandLineTestRunner.runAllTestsMain();
 
-    STRCMP_CONTAINS("group.test", commandLineTestRunner.fakeConsoleOutputWhichIsReallyABuffer->getOutput().asCharString());
+    STRCMP_CONTAINS("group1.test1", commandLineTestRunner.fakeConsoleOutputWhichIsReallyABuffer->getOutput().asCharString());
 }
 
 TEST(CommandLineTestRunner, randomShuffleSeedIsPrintedAndRandFuncIsExercised)
@@ -311,8 +342,8 @@ TEST(CommandLineTestRunner, realJunitOutputShouldBeCreatedAndWorkProperly)
 
     delete fakeOutput; /* Original output must be restored before further output occurs */
 
-    STRCMP_CONTAINS("<testcase classname=\"package.group\" name=\"test\"", FakeOutput::file.asCharString());
-    STRCMP_CONTAINS("TEST(group, test)", FakeOutput::console.asCharString());
+    STRCMP_CONTAINS("<testcase classname=\"package.group1\" name=\"test1\"", FakeOutput::file.asCharString());
+    STRCMP_CONTAINS("TEST(group1, test1)", FakeOutput::console.asCharString());
 }
 
 TEST(CommandLineTestRunner, realTeamCityOutputShouldBeCreatedAndWorkProperly)
@@ -326,10 +357,10 @@ TEST(CommandLineTestRunner, realTeamCityOutputShouldBeCreatedAndWorkProperly)
 
     delete fakeOutput; /* Original output must be restored before further output occurs */
 
-    STRCMP_CONTAINS("##teamcity[testSuiteStarted name='group'", FakeOutput::console.asCharString());
-    STRCMP_CONTAINS("##teamcity[testStarted name='test'", FakeOutput::console.asCharString());
-    STRCMP_CONTAINS("##teamcity[testFinished name='test'", FakeOutput::console.asCharString());
-    STRCMP_CONTAINS("##teamcity[testSuiteFinished name='group'", FakeOutput::console.asCharString());
+    STRCMP_CONTAINS("##teamcity[testSuiteStarted name='group1'", FakeOutput::console.asCharString());
+    STRCMP_CONTAINS("##teamcity[testStarted name='test1'", FakeOutput::console.asCharString());
+    STRCMP_CONTAINS("##teamcity[testFinished name='test1'", FakeOutput::console.asCharString());
+    STRCMP_CONTAINS("##teamcity[testSuiteFinished name='group1'", FakeOutput::console.asCharString());
 }
 
 
