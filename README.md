@@ -206,18 +206,16 @@ include(FetchContent)
 FetchContent_Declare(
     CppUTest
     GIT_REPOSITORY https://github.com/cpputest/cpputest.git
-    GIT_TAG        v3.8
+    GIT_TAG        master # or use release tag, eg. v3.8
 )
 # Set this to ON if you want to have the CppUTests in your project as well.
 set(TESTS OFF CACHE BOOL "Switch off CppUTest Test build")
 FetchContent_MakeAvailable(CppUTest)
-include_directories(${CppUTest_SOURCE_DIR}/include)
 ```
 
 It can be used then like so:
 
 ```cmake
-file(GLOB_RECURSE TEST_SOURCES ${TEST_DIR}/*.cpp)
-add_executable(run_tests ${TEST_SOURCES})
-target_link_libraries(run_tests CppUTest)
+add_executable(run_tests UnitTest1.cpp UnitTest2.cpp)
+target_link_libraries(run_tests PRIVATE CppUTest CppUTestExt)
 ```
