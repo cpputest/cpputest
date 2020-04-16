@@ -110,6 +110,14 @@ TEST(CommandLineArguments, repeatSetDefaultsToTwoAndShuffleDisabled)
     LONGS_EQUAL(2, args->getRepeatCount());
 }
 
+TEST(CommandLineArguments, reverseEnabled)
+{
+    int argc = 2;
+    const char* argv[] = { "tests.exe", "-b" };
+    CHECK(newArgumentParser(argc, argv));
+    CHECK_TRUE(args->isReversing());
+}
+
 TEST(CommandLineArguments, shuffleDisabledByDefault)
 {
     int argc = 1;
@@ -433,7 +441,7 @@ TEST(CommandLineArguments, weirdParamatersReturnsFalse)
 
 TEST(CommandLineArguments, printUsage)
 {
-    STRCMP_EQUAL("use -h for more extensive help\nusage [-h] [-v] [-c] [-p] [-lg] [-ln] [-ri] [-r#] [-g|sg|xg|xsg groupName]... [-n|sn|xn|xsn testName]... [-s [randomizerSeed>0]] [\"TEST(groupName, testName)\"]... [-o{normal, junit, teamcity}] [-k packageName]\n",
+    STRCMP_EQUAL("use -h for more extensive help\nusage [-h] [-v] [-c] [-p] [-lg] [-ln] [-ri] [-r#] [-g|sg|xg|xsg groupName]... [-n|sn|xn|xsn testName]... [-b] [-s [randomizerSeed>0]] [\"TEST(groupName, testName)\"]... [-o{normal, junit, teamcity}] [-k packageName]\n",
             args->usage());
 }
 

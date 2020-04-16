@@ -118,6 +118,9 @@ int CommandLineTestRunner::runAllTests()
         return 0;
     }
 
+    if (arguments_->isReversing())
+        registry_->reverseTests();
+
     if (arguments_->isShuffling())
     {
         output_->print("Test order shuffling enabled with seed: ");

@@ -30,7 +30,7 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 
 CommandLineArguments::CommandLineArguments(int ac, const char *const *av) :
-    ac_(ac), av_(av), needHelp_(false), verbose_(false), color_(false), runTestsAsSeperateProcess_(false), listTestGroupNames_(false), listTestGroupAndCaseNames_(false), runIgnored_(false), shuffling_(false), shufflingPreSeeded_(false), repeat_(1), shuffleSeed_(0), groupFilters_(NULLPTR), nameFilters_(NULLPTR), outputType_(OUTPUT_ECLIPSE)
+    ac_(ac), av_(av), needHelp_(false), verbose_(false), color_(false), runTestsAsSeperateProcess_(false), listTestGroupNames_(false), listTestGroupAndCaseNames_(false), runIgnored_(false), reversing_(false), shuffling_(false), shufflingPreSeeded_(false), repeat_(1), shuffleSeed_(0), groupFilters_(NULLPTR), nameFilters_(NULLPTR), outputType_(OUTPUT_ECLIPSE)
 {
 }
 
@@ -58,6 +58,7 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
         if      (argument == "-v") verbose_ = true;
         else if (argument == "-c") color_ = true;
         else if (argument == "-p") runTestsAsSeperateProcess_ = true;
+        else if (argument == "-b") reversing_ = true;
         else if (argument == "-lg") listTestGroupNames_ = true;
         else if (argument == "-ln") listTestGroupAndCaseNames_ = true;
         else if (argument == "-ri") runIgnored_ = true;
@@ -87,7 +88,7 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
 
 const char* CommandLineArguments::usage() const
 {
-    return "use -h for more extensive help\nusage [-h] [-v] [-c] [-p] [-lg] [-ln] [-ri] [-r#] [-g|sg|xg|xsg groupName]... [-n|sn|xn|xsn testName]... [-s [randomizerSeed>0]] [\"TEST(groupName, testName)\"]... [-o{normal, junit, teamcity}] [-k packageName]\n";
+    return "use -h for more extensive help\nusage [-h] [-v] [-c] [-p] [-lg] [-ln] [-ri] [-r#] [-g|sg|xg|xsg groupName]... [-n|sn|xn|xsn testName]... [-b] [-s [randomizerSeed>0]] [\"TEST(groupName, testName)\"]... [-o{normal, junit, teamcity}] [-k packageName]\n";
 }
 
 const char* CommandLineArguments::help() const
@@ -122,6 +123,7 @@ const char* CommandLineArguments::help() const
       "\n"
       "Options that control how the tests are run:\n"
       "  -p               - run tests in a separate process.\n"
+      "  -b               - run the tests backwards, reversing the normal way\n"
       "  -s [seed]        - shuffle tests randomly. Seed is optional\n"
       "  -r#              - repeat the tests some number (#) of times, or twice if # is not specified.\n";
 }
@@ -165,6 +167,11 @@ bool CommandLineArguments::runTestsInSeperateProcess() const
 int CommandLineArguments::getRepeatCount() const
 {
     return repeat_;
+}
+
+bool CommandLineArguments::isReversing() const
+{
+    return reversing_;
 }
 
 bool CommandLineArguments::isShuffling() const

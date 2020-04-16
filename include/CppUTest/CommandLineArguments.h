@@ -49,6 +49,7 @@ public:
     bool isRunIgnored() const;
     int getRepeatCount() const;
     bool isShuffling() const;
+    bool isReversing() const;
     unsigned int getShuffleSeed() const;
     const TestFilter* getGroupFilters() const;
     const TestFilter* getNameFilters() const;
@@ -77,6 +78,7 @@ private:
     bool listTestGroupNames_;
     bool listTestGroupAndCaseNames_;
     bool runIgnored_;
+    bool reversing_;
     bool shuffling_;
     bool shufflingPreSeeded_;
     int repeat_;
