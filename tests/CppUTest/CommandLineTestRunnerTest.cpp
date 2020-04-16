@@ -149,6 +149,18 @@ TEST(CommandLineTestRunner, ReturnsOneWhenTheArgumentsAreInvalid)
     LONGS_EQUAL(1, returned);
 }
 
+TEST(CommandLineTestRunner, ReturnsOnePrintsHelpOnHelp)
+{
+    const char* argv[] = { "tests.exe", "-h" };
+
+    CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(2, argv, &registry);
+    int returned = commandLineTestRunner.runAllTestsMain();
+
+    LONGS_EQUAL(1, returned);
+    STRCMP_CONTAINS("Thanks for using CppUTest.", commandLineTestRunner.fakeConsoleOutputWhichIsReallyABuffer->getOutput().asCharString());
+}
+
+
 TEST(CommandLineTestRunner, ReturnsZeroWhenNoErrors)
 {
     const char* argv[] = { "tests.exe" };

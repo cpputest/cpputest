@@ -30,7 +30,7 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 
 CommandLineArguments::CommandLineArguments(int ac, const char *const *av) :
-    ac_(ac), av_(av), verbose_(false), color_(false), runTestsAsSeperateProcess_(false), listTestGroupNames_(false), listTestGroupAndCaseNames_(false), runIgnored_(false), shuffling_(false), shufflingPreSeeded_(false), repeat_(1), shuffleSeed_(0), groupFilters_(NULLPTR), nameFilters_(NULLPTR), outputType_(OUTPUT_ECLIPSE)
+    ac_(ac), av_(av), needHelp_(false), verbose_(false), color_(false), runTestsAsSeperateProcess_(false), listTestGroupNames_(false), listTestGroupAndCaseNames_(false), runIgnored_(false), shuffling_(false), shufflingPreSeeded_(false), repeat_(1), shuffleSeed_(0), groupFilters_(NULLPTR), nameFilters_(NULLPTR), outputType_(OUTPUT_ECLIPSE)
 {
 }
 
@@ -54,6 +54,7 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
     for (int i = 1; i < ac_; i++) {
         SimpleString argument = av_[i];
 
+        if      (argument == "-h") needHelp_ = true;
         if      (argument == "-v") verbose_ = true;
         else if (argument == "-c") color_ = true;
         else if (argument == "-p") runTestsAsSeperateProcess_ = true;
@@ -86,7 +87,48 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
 
 const char* CommandLineArguments::usage() const
 {
-    return "usage [-v] [-c] [-p] [-lg] [-ln] [-ri] [-r#] [-g|sg|xg|xsg groupName]... [-n|sn|xn|xsn testName]... [-s [randomizerSeed>0]] [\"TEST(groupName, testName)\"]... [-o{normal, junit, teamcity}] [-k packageName]\n";
+    return "use -h for more extensive help\nusage [-h] [-v] [-c] [-p] [-lg] [-ln] [-ri] [-r#] [-g|sg|xg|xsg groupName]... [-n|sn|xn|xsn testName]... [-s [randomizerSeed>0]] [\"TEST(groupName, testName)\"]... [-o{normal, junit, teamcity}] [-k packageName]\n";
+}
+
+const char* CommandLineArguments::help() const
+{
+    return
+      "Thanks for using CppUTest.\n"
+      "\n"
+      "Options that do not run tests but query:\n"
+      "  -h                 - this wonderful help screen. Joy!\n"
+      "  -lg                - print a list of group names, separated by spaces\n"
+      "  -ln                - print a list of test names in the form of group.name, separated by spaces\n"
+      "\n"
+      "Options that change the output format:\n"
+      "  -c                - colorize output, print green if OK, or red if failed\n"
+      "  -v                - verbose, print each test name as it runs\n"
+      "\n"
+      "Options that change the output location:\n"
+      "  -oteamcity       - output to xml files (as the name suggests, for TeamCity)\n"
+      "  -ojunit          - output to JUnit ant plugin style xml files (for CI systems)\n"
+      "  -k package name  - Add a package name in JUnit output (for classification in CI systems)\n"
+      "\n"
+      "\n"
+      "Options that control which tests are run:\n"
+      "  -g group         - only run test whose group contains the substring group\n"
+      "  -n name          - only run test whose name contains the substring name\n"
+      "  -sg group        - only run test whose group exactly matches the string group\n"
+      "  -sn name         - only run test whose name exactly matches the string name\n"
+      "  -xg group        - exclude tests whose group contains the substring group (v3.8)\n"
+      "  -xn name         - exclude tests whose name contains the substring name (v3.8)\n"
+      "  TEST(group,name) - only run test whose group and name matches the strings group and name.\n"
+      "                     This can be used to copy-paste output from the -v option on the command line.\n"
+      "\n"
+      "Options that control how the tests are run:\n"
+      "  -p               - run tests in a separate process.\n"
+      "  -s [seed]        - shuffle tests randomly. Seed is optional\n"
+      "  -r#              - repeat the tests some number (#) of times, or twice if # is not specified.\n";
+}
+
+bool CommandLineArguments::needHelp() const
+{
+    return needHelp_;
 }
 
 bool CommandLineArguments::isVerbose() const

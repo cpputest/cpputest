@@ -424,14 +424,27 @@ TEST(CommandLineArguments, setPrintGroupsAndNames)
     CHECK(args->isListingTestGroupAndCaseNames());
 }
 
-TEST(CommandLineArguments, weirdParamatersPrintsUsageAndReturnsFalse)
+TEST(CommandLineArguments, weirdParamatersReturnsFalse)
 {
     int argc = 2;
     const char* argv[] = { "tests.exe", "-SomethingWeird" };
     CHECK(!newArgumentParser(argc, argv));
-    STRCMP_EQUAL("usage [-v] [-c] [-p] [-lg] [-ln] [-ri] [-r#] [-g|sg|xg|xsg groupName]... [-n|sn|xn|xsn testName]... [-s [randomizerSeed>0]] [\"TEST(groupName, testName)\"]... [-o{normal, junit, teamcity}] [-k packageName]\n",
+}
+
+TEST(CommandLineArguments, printUsage)
+{
+    STRCMP_EQUAL("use -h for more extensive help\nusage [-h] [-v] [-c] [-p] [-lg] [-ln] [-ri] [-r#] [-g|sg|xg|xsg groupName]... [-n|sn|xn|xsn testName]... [-s [randomizerSeed>0]] [\"TEST(groupName, testName)\"]... [-o{normal, junit, teamcity}] [-k packageName]\n",
             args->usage());
 }
+
+TEST(CommandLineArguments, helpPrintsTheHelp)
+{
+    int argc = 2;
+    const char* argv[] = { "tests.exe", "-h" };
+    CHECK(!newArgumentParser(argc, argv));
+    CHECK(args->needHelp());
+}
+
 
 TEST(CommandLineArguments, pluginKnowsOption)
 {

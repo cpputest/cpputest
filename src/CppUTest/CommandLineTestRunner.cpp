@@ -172,7 +172,7 @@ bool CommandLineTestRunner::parseArguments(TestPlugin* plugin)
 {
   if (!arguments_->parse(plugin)) {
     output_ = createConsoleOutput();
-    output_->print(arguments_->usage());
+    output_->print((arguments_->needHelp()) ? arguments_->help() : arguments_->usage());
     return false;
   }
 
