@@ -69,6 +69,25 @@ jobs:
         apt:
           packages:
             - libc++-dev
+    - compiler: gcc
+      os: osx
+      env: BUILD=cmake CPP_STD=14
+
+    - compiler: gcc
+      os: osx
+      env: BUILD=autotools
+      addons:
+        apt:
+          packages:
+            - valgrind
+    - compiler: clang
+      env: BUILD=autotools
+      os: osx
+      addons:
+        apt:
+          packages:
+            - libc++-dev
+            - valgrind
 
 global:
 - secure: |-
