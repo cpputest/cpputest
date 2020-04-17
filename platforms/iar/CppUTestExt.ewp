@@ -1928,6 +1928,9 @@
         <name>$PROJ_DIR$\..\..\src\CppUTestExt\CodeMemoryReportFormatter.cpp</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\..\src\CppUTestExt\GTest.cpp</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\..\src\CppUTestExt\IEEE754ExceptionsPlugin.cpp</name>
       </file>
       <file>

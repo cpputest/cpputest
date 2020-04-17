@@ -1565,6 +1565,11 @@
 			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/src/CppUTestExt/CodeMemoryReportFormatter.cpp</locationURI>
 		</link>
 		<link>
+			<name>src/CppUTestExt/GTest.cpp</name>
+			<type>1</type>
+			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/src/CppUTestExt/GTest.cpp</locationURI>
+		</link>
+		<link>
 			<name>src/CppUTestExt/MemoryReportAllocator.cpp</name>
 			<type>1</type>
 			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/src/CppUTestExt/MemoryReportAllocator.cpp</locationURI>
