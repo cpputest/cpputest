@@ -31,6 +31,8 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 #include "CppUTest/StandardCLibrary.h"
 
+#if CPPUTEST_USE_STD_C_LIB
+
 // This will cause a crash in VS2010 due to PlatformSpecificFree being uninitialized
 static const SimpleString str1("abc");
 static const SimpleString str2("def");
@@ -198,3 +200,5 @@ TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, MultipleTests
 }
 
 #endif
+#endif
+

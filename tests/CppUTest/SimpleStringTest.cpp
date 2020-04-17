@@ -572,7 +572,7 @@ TEST(SimpleString, Sizes)
     STRCMP_EQUAL("10", StringFrom((int) size).asCharString());
 }
 
-#if __cplusplus > 199711L
+#if __cplusplus > 199711L && CPPUTEST_USE_STD_C_LIB
 TEST(SimpleString, nullptr_type)
 {
     SimpleString s(StringFrom(nullptr));
