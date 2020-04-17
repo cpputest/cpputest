@@ -227,8 +227,8 @@ size_t SimpleString::count(const SimpleString& substr) const
     size_t num = 0;
     const char* str = buffer_;
     while (*str && (str = StrStr(str, substr.buffer_))) {
-        num++;
         str++;
+        num++;
     }
     return num;
 }
@@ -730,15 +730,6 @@ SimpleString StringFrom(unsigned long i)
 {
     return StringFromFormat("%lu", i);
 }
-
-//Kludge to get a va_copy in VC++ V6 and in C++98 GCC
-#ifndef va_copy
-#ifdef __GNUC__
-#define va_copy __va_copy
-#else
-#define va_copy(copy, original) copy = original;
-#endif
-#endif
 
 SimpleString VStringFromFormat(const char* format, va_list args)
 {
