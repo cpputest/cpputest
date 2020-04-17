@@ -41,6 +41,7 @@ ALL : "$(OUTDIR)\CppUTest.lib"
 
 CLEAN :
 	-@erase "$(INTDIR)\CodeMemoryReportFormatter.obj"
+	-@erase "$(INTDIR)\GTest.obj"
 	-@erase "$(INTDIR)\CommandLineArguments.obj"
 	-@erase "$(INTDIR)\CommandLineTestRunner.obj"
 	-@erase "$(INTDIR)\JUnitTestOutput.obj"

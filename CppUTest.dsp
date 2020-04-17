@@ -90,6 +90,10 @@ SOURCE=.\src\CppUTestExt\CodeMemoryReportFormatter.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\CppUTestExt\GTest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\CppUTestExt\MemoryReportAllocator.cpp
 # End Source File
 # Begin Source File

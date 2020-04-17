@@ -211,6 +211,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\CppUTestExt\CodeMemoryReportFormatter.cpp" />
+    <ClCompile Include="src\CppUTestExt\GTest.cpp" />
     <ClCompile Include="src\CppUTestExt\IEEE754ExceptionsPlugin.cpp" />
     <ClCompile Include="src\CppUTestExt\MemoryReportAllocator.cpp" />
     <ClCompile Include="src\CppUTestExt\MemoryReporterPlugin.cpp" />

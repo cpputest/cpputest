@@ -1,5 +1,6 @@
 set(CppUTestExt_src
         CodeMemoryReportFormatter.cpp
+        GTest.cpp
         IEEE754ExceptionsPlugin.cpp
         MemoryReporterPlugin.cpp
         MockFailure.cpp
