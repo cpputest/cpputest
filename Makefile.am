@@ -90,6 +90,7 @@ lib_libCppUTestExt_a_CXXFLAGS = $(lib_libCppUTest_a_CXXFLAGS)
 
 lib_libCppUTestExt_a_SOURCES = \
    src/CppUTestExt/CodeMemoryReportFormatter.cpp \
+   src/CppUTestExt/GTest.cpp \
    src/CppUTestExt/IEEE754ExceptionsPlugin.cpp \
    src/CppUTestExt/MemoryReportAllocator.cpp \
    src/CppUTestExt/MemoryReporterPlugin.cpp \
@@ -276,18 +277,18 @@ check_gtest15: cpputest_build_gtest15
 check_gtest16: cpputest_build_gtest16
 	@echo "Build using gmock 1.6";
 	export GMOCK_HOME=`pwd`/cpputest_build_gtest16/googlemock-release-1.6.0; \
-	make distclean; $(srcdir)/configure; make check
+	make distclean; $(srcdir)/configure --enable-std-cpp98; make check
 
 check_gtest17: cpputest_build_gtest17
 	@echo "Build using gmock 1.7"
 	export GMOCK_HOME=`pwd`/cpputest_build_gtest17/googlemock-release-1.7.0; \
-	make distclean; $(srcdir)/configure; make check
+	make distclean; $(srcdir)/configure --enable-std-cpp98; make check
 
 check_gtest18: cpputest_build_gtest18
 	@echo "Build using gmock 1.8"
 	export GMOCK_HOME=`pwd`/cpputest_build_gtest18/googletest-release-1.8.0/googlemock; \
 	export GTEST_HOME=`pwd`/cpputest_build_gtest18/googletest-release-1.8.0/googletest; \
-	make distclean; $(srcdir)/configure; make check
+	make distclean; $(srcdir)/configure --enable-std-cpp98; make check
 
 remove_gtest_directories:
 	rm -rf cpputest_build_gtest15
