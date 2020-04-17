@@ -572,12 +572,14 @@ TEST(SimpleString, Sizes)
     STRCMP_EQUAL("10", StringFrom((int) size).asCharString());
 }
 
-#if __cplusplus > 199711L && CPPUTEST_USE_STD_C_LIB
+#if __cplusplus > 199711L && !defined __arm__ && CPPUTEST_USE_STD_CPP_LIB
+
 TEST(SimpleString, nullptr_type)
 {
     SimpleString s(StringFrom(nullptr));
     STRCMP_EQUAL("(null)", s.asCharString());
 }
+
 #endif
 
 TEST(SimpleString, HexStrings)
