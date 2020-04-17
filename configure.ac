@@ -99,9 +99,15 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CPP14FL
 CXXFLAGS="$saved_cxxflags"
 
 #####################################################################################
-##### C++ 11 checks
+##### C++ version checks
 
-### Checking for Standard C++ 11 compiler flags
+### Checking for C++ version compiler flags
+
+# FLag -std=c++98
+CXXFLAGS="-Werror -std=c++98"
+AC_MSG_CHECKING([whether CXX supports -std=c++98])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CPP98FLAG="-std=c++98" ], [AC_MSG_RESULT([no])])
+CXXFLAGS="$saved_cxxflags"
 
 # FLag -std=c++0x
 CXXFLAGS="-Werror -std=c++0x"
@@ -357,6 +363,9 @@ AC_ARG_ENABLE([std-c], [AC_HELP_STRING([--disable-std-c], [disable the use of St
 AC_ARG_ENABLE([std-cpp], [AC_HELP_STRING([--disable-std-cpp], [disable the use of Standard C++ Library])],
    [use_std_cpp=${enableval}], [use_std_cpp=${default_use_std_cpp}])
 
+AC_ARG_ENABLE([std-cpp98], [AC_HELP_STRING([--enable-std-cpp98], [enable the use of Standard C++ 98 (if the compiler supports that)])],
+   [use_std_cpp98=${enableval}], [use_std_cpp98=no])
+
 AC_ARG_ENABLE([std-cpp11], [AC_HELP_STRING([--enable-std-cpp11], [enable the use of Standard C++ 11 (if the compiler supports that)])],
    [use_std_cpp11=${enableval}], [use_std_cpp11=no])
 
@@ -409,6 +418,12 @@ if test "x${use_std_cpp}" = xno; then
     fi
 fi
 cpp_standard_used="default"
+
+# Using the C++98 standard?
+if test "x${use_std_cpp98}" = xyes; then
+	CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} ${CPPUTEST_CPP98FLAG} ${CPPUTEST_CPP11BLACKLIST}"
+  cpp_standard_used="C++98"
+fi
 
 # Using the C++11 standard?
 if test "x${use_std_cpp11}" = xyes; then

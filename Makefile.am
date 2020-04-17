@@ -271,7 +271,7 @@ cpputest_build_gtest15:
 check_gtest15: cpputest_build_gtest15
 	@echo "Build using gmock 1.5";
 	export GMOCK_HOME=`pwd`/cpputest_build_gtest15/googlemock-release-1.5.0; \
-	make distclean; $(srcdir)/configure; make check
+	make distclean; $(srcdir)/configure --enable-std-cpp98; make check
 
 check_gtest16: cpputest_build_gtest16
 	@echo "Build using gmock 1.6";
@@ -308,6 +308,9 @@ check_basic:
 
 	@echo "Building without extensions"
 	make distclean; $(srcdir)/configure --disable-extensions; make check
+
+	@echo "Building with the Std C++ 98 turned on. Compiler acts differently then."
+	make distclean; $(srcdir)/configure --enable-std-cpp98; make
 
 	@echo "Building with the Std C++ 11 turned on. Compiler acts differently then."
 	make distclean; $(srcdir)/configure --enable-std-cpp11; make
