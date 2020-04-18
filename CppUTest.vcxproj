@@ -249,6 +249,7 @@
     <ClInclude Include="include\CppUTestExt\CodeMemoryReportFormatter.h" />
     <ClInclude Include="include\CppUTestExt\GMock.h" />
     <ClInclude Include="include\CppUTestExt\GTest.h" />
+    <ClInclude Include="include\CppUTestExt\GTestSupport.h" />
     <ClInclude Include="include\CppUTestExt\GTestConvertor.h" />
     <ClInclude Include="include\cpputestext\ieee754exceptionsplugin.h" />
     <ClInclude Include="include\CppUTestExt\MemoryReportAllocator.h" />

@@ -30,6 +30,7 @@ set(CppUTestExt_headers
         ${CppUTestRootDirectory}/include/CppUTestExt/MockSupport_c.h
         ${CppUTestRootDirectory}/include/CppUTestExt/GMock.h
         ${CppUTestRootDirectory}/include/CppUTestExt/GTest.h
+        ${CppUTestRootDirectory}/include/CppUTestExt/GTestSupport.h
         ${CppUTestRootDirectory}/include/CppUTestExt/MemoryReporterPlugin.h
         ${CppUTestRootDirectory}/include/CppUTestExt/OrderedTest.h
         ${CppUTestRootDirectory}/include/CppUTestExt/GTestConvertor.h
