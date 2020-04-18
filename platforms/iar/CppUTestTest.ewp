@@ -1976,6 +1976,9 @@
         <name>$PROJ_DIR$\..\..\tests\CppUTest\SimpleStringTest.cpp</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\..\tests\CppUTest\TeamCityOutputTest.cpp</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\..\tests\CppUTest\TestFailureNaNTest.cpp</name>
       </file>
       <file>
@@ -2007,6 +2010,9 @@
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\tests\CppUTest\TestUTestMacro.cpp</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\tests\CppUTest\TestUTestStringMacro.cpp</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\tests\CppUTest\UtestPlatformTest.cpp</name>
