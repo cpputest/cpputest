@@ -906,6 +906,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\include\CppUTestExt\GTestSupport.h"
+				>
+			</File>
+			<File
 				RelativePath="include\CppUTestExt\GTestConvertor.h"
 				>
 			</File>

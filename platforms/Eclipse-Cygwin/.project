@@ -1095,6 +1095,11 @@
 			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/include/CppUTestExt/GMock.h</locationURI>
 		</link>
 		<link>
+			<name>include/CppUTestExt/GTestSupport.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/include/CppUTestExt/GTestSupport.h</locationURI>
+		</link>
+		<link>
 			<name>include/CppUTestExt/GTest.h</name>
 			<type>1</type>
 			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/include/CppUTestExt/GTest.h</locationURI>

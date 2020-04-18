@@ -25,37 +25,9 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef GTEST__H_
-#define GTEST__H_
+#ifndef GTESTSUPPORT__H_
+#define GTESTSUPPORT__H_
 
-#undef new
-#undef strdup
-#undef strndup
-
-#undef RUN_ALL_TESTS
-
-#include "gtest/gtest.h"
-
-#ifdef CPPUTEST_USE_NEW_MACROS
-#include "CppUTest/MemoryLeakDetectorNewMacros.h"
-#endif
-
-#ifdef CPPUTEST_USE_MALLOC_MACROS
-#include "CppUTest/MemoryLeakDetectorMallocMacros.h"
-#endif
-
-#include "CppUTestExt/GTestSupport.h"
-
-#ifndef RUN_ALL_TESTS
-#define GTEST_VERSION_GTEST_1_7
-#else
-#ifdef ADD_FAILURE_AT
-#define GTEST_VERSION_GTEST_1_6
-#else
-#define GTEST_VERSION_GTEST_1_5
-#endif
-#endif
-
-#undef RUN_ALL_TESTS
+extern void CppuTestGTestIgnoreLeaksInTest();
 
 #endif

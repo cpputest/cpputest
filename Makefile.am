@@ -111,6 +111,7 @@ include_cpputestextdir = $(includedir)/CppUTestExt
 include_cpputestext_HEADERS = \
 	include/CppUTestExt/GMock.h \
 	include/CppUTestExt/GTest.h \
+	include/CppUTestExt/GTestSupport.h \
 	include/CppUTestExt/GTestConvertor.h \
 	include/CppUTestExt/IEEE754ExceptionsPlugin.h \
 	include/CppUTestExt/MemoryReportAllocator.h \
