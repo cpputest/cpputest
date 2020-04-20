@@ -34,6 +34,7 @@ AM_SILENT_RULES
 
 ACX_PTHREAD([LIBS="$PTHREAD_LIBS $LIBS"])
 
+AX_COMPILER_VERSION
 # This additional -lpthread was added due to a bug on gcc for MacOSX: http://gcc.gnu.org/bugzilla/show_bug.cgi?id=42159
 # According to the bug report, a workaround is to link -lpthread. Even the ACX_PTHREAD doesn't do that, so we add an
 # additional check if that it possible, and if it is, then we link pthread
@@ -561,6 +562,8 @@ ${PACKAGE_NAME} Version ${PACKAGE_VERSION}
 Current compiler options:
    CC:                                  ${CC}
    CXX:                                 ${CXX}
+   CC version:                          ${ax_cv_c_compiler_version}
+   CXX version:                         ${ax_cv_cxx_compiler_version}
    LD:                                  ${LD}
    Default CFLAGS:                      ${CFLAGS}
    Default CXXFLAGS:                    ${CXXFLAGS}
