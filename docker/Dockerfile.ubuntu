@@ -1,0 +1,14 @@
+FROM ubuntu
+
+RUN apt-get update
+RUN apt-get install -y -q file
+RUN apt-get install -y -q git
+RUN apt-get install -y -q gcc
+RUN apt-get install -y -q g++
+RUN apt-get install -y -q make
+RUN apt-get install -y -q automake
+RUN apt-get install -y -q autoconf
+RUN apt-get install -y -q libtool
+
+WORKDIR /cpputest_build
+
