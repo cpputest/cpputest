@@ -128,18 +128,18 @@ int (*PlatformSpecificVSNprintf)(char *str, size_t size, const char* format, va_
 
 static PlatformSpecificFile PlatformSpecificFOpenImplementation(const char* filename, const char* flag)
 {
-    static int fileNo = 0;   // Count the files so different files can be differenciated.
+    static int fileNo = 0;
     (void)filename;
     (void)flag;
     fileNo++;
-    return (void*)fileNo;   // Return the file handle number.
+    return (void*)fileNo;
 }
 
 static void PlatformSpecificFPutsImplementation(const char* str, PlatformSpecificFile file)
 {
     (void)str;
     (void)file;
-    printf("FILE%d:%s",(int)file, str);   // Print the text to stdout preceeded by the characters "FILE<fileNo>".
+    printf("FILE%d:%s",(int)file, str);
 }
 
 static void PlatformSpecificFCloseImplementation(PlatformSpecificFile file)
