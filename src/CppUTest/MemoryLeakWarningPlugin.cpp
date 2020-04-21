@@ -426,7 +426,7 @@ void MemoryLeakWarningPlugin::turnOffNewDeleteOverloads()
 #endif
 }
 
-void MemoryLeakWarningPlugin::turnOnNewDeleteOverloads()
+void MemoryLeakWarningPlugin::turnOnDefaultNotThreadSafeNewDeleteOverloads()
 {
 #if CPPUTEST_USE_MEM_LEAK_DETECTION
     operator_new_fptr = mem_leak_operator_new;
@@ -457,6 +457,15 @@ void MemoryLeakWarningPlugin::turnOnThreadSafeNewDeleteOverloads()
     malloc_fptr = threadsafe_mem_leak_malloc;
     realloc_fptr = threadsafe_mem_leak_realloc;
     free_fptr = threadsafe_mem_leak_free;
+#endif
+}
+
+bool MemoryLeakWarningPlugin::areNewDeleteOverloaded()
+{
+#if CPPUTEST_USE_MEM_LEAK_DETECTION
+    return operator_new_fptr == mem_leak_operator_new || operator_new_fptr == threadsafe_mem_leak_operator_new;
+#else
+    return false;
 #endif
 }
 
