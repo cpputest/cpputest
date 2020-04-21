@@ -100,6 +100,11 @@ if [ "x$BUILD" = "xdocker_ubuntu_autotools" ]; then
     docker start -i cpputest_ubuntu
 fi
 
+if [ "x$BUILD" = "xdocker_ubuntu_gcc10" ]; then
+    $CPPUTEST_HOME/scripts/create_docker_images_and_containers gcc10
+    docker start -i cpputest_gcc10
+fi
+
 if [ "x$BUILD" = "xmake_dos" ]; then
     wget http://ftp.openwatcom.org/install/open-watcom-c-linux-1.9 -O /tmp/watcom.zip
     mkdir -p watcom && unzip -aqd watcom /tmp/watcom.zip && chmod -R +x watcom/binl
