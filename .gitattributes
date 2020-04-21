@@ -15,6 +15,6 @@
 *.vcxproj text eol=crlf
 
 
-*.sh -crlf
-*.ac -crlf
-*.am -crlf
+*.sh text
+*.ac text
+*.am text
