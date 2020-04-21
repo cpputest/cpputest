@@ -109,13 +109,9 @@ TEST(MemoryLeakWarningTest, TwoLeaks)
 {
     fixture->setTestFunction(_testTwoLeaks);
     fixture->runAllTests();
-    if(MemoryLeakWarningPlugin::areNewDeleteOverloaded())
-    {
-        LONGS_EQUAL(1, fixture->getFailureCount());
-        fixture->assertPrintContains("Total number of leaks:  2");
-    } else {
-        LONGS_EQUAL(0, fixture->getFailureCount());
-    }
+
+    CHECK(MemoryLeakWarningPlugin::areNewDeleteOverloaded());
+    LONGS_EQUAL(1, fixture->getFailureCount());
 }
 
 static void _testLeakWarningWithPluginDisabled()
@@ -126,7 +122,7 @@ static void _testLeakWarningWithPluginDisabled()
 
 TEST(MemoryLeakWarningTest, LeakWarningWithPluginDisabled)
 {
-    MemoryLeakWarningPlugin::turnOffNewDeleteOverloads(); // force off even if memleak enabled
+    MemoryLeakWarningPlugin::saveAndDisableNewDeleteOverloads();
 
     MemoryLeakDetector* origDetector = MemoryLeakWarningPlugin::getGlobalDetector();
     MemoryLeakFailure* origReporter = MemoryLeakWarningPlugin::getGlobalFailureReporter();
@@ -138,12 +134,12 @@ TEST(MemoryLeakWarningTest, LeakWarningWithPluginDisabled)
     fixture->runAllTests();
 
     LONGS_EQUAL(0, fixture->getFailureCount());
-    fixture->assertPrintContains("Warning: Expected 1 leak, but leak detection was disabled");
+    fixture->assertPrintContains("Warning: Expected 1 leak(s), but leak detection was disabled");
 
     MemoryLeakWarningPlugin::setGlobalDetector(origDetector, origReporter);
-    setCurrentMallocAllocator(NULLPTR);
+    setCurrentMallocAllocatorToDefault();
 
-    MemoryLeakWarningPlugin::turnOnNewDeleteOverloads();
+    MemoryLeakWarningPlugin::restoreNewDeleteOverloads();
 }
 
 static void _testIgnore2()
