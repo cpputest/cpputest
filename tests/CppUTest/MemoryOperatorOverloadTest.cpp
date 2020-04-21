@@ -371,9 +371,16 @@ TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorReturnsNull)
  * We (Bas Vodde and Terry Yin) suspect that in a real product, you wouldn't be able to detect the optimization and it's breaking of Standard C++. Therefore,
  * for now, we keep this hack in the test to fool the optimizer and hope nobody will ever notice this 'optimizer behavior' in a real product.
  *
+ * Update 2020: The gcc compiler implemented the same optimization, but it seems to be slightly smarter and discovered that we assign to a static variable.
+ * Thus it still optimized away the call to operator new. Did another bug report, but it is unlikely to get fixed. You can find it at:
+ * https://gcc.gnu.org/bugzilla/show_bug.cgi?id=94671
+ *
+ * Changed the variable to be external so it would definitively be a mistake to optimize the call.
+ *
  */
 
-static char* some_memory;
+extern char* some_memory;
+char* some_memory;
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorThrowsAnExceptionWhenUsingStdCppNewWithoutOverride)
 {
