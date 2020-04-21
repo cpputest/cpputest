@@ -623,8 +623,12 @@ void MemoryLeakWarningPlugin::postTestAction(UtestShell& test, TestResult& resul
     int leaks = memLeakDetector_->totalMemoryLeaks(mem_leak_period_checking);
 
     if (!ignoreAllWarnings_ && expectedLeaks_ != leaks && failureCount_ == result.getFailureCount()) {
-        TestFailure f(&test, memLeakDetector_->report(mem_leak_period_checking));
-        result.addFailure(f);
+        if(MemoryLeakWarningPlugin::areNewDeleteOverloaded()) {
+            TestFailure f(&test, memLeakDetector_->report(mem_leak_period_checking));
+            result.addFailure(f);
+        } else if(expectedLeaks_ > 0) {
+            result.print(StringFromFormat("Warning: Expected %d leak(s), but leak detection was disabled", expectedLeaks_).asCharString());
+        }
     }
     memLeakDetector_->markCheckingPeriodLeaksAsNonCheckingPeriod();
     ignoreAllWarnings_ = false;

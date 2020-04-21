@@ -105,12 +105,47 @@ static void _testTwoLeaks()
     leak2 = (long*) (void*) detector->allocMemory(allocator, 4);
 }
 
+#if CPPUTEST_USE_MEM_LEAK_DETECTION
+
 TEST(MemoryLeakWarningTest, TwoLeaks)
 {
     fixture->setTestFunction(_testTwoLeaks);
     fixture->runAllTests();
+
     LONGS_EQUAL(1, fixture->getFailureCount());
-    fixture->assertPrintContains("Total number of leaks:  2");
+}
+
+#else
+
+TEST(MemoryLeakWarningTest, TwoLeaks)
+{
+    fixture->setTestFunction(_testTwoLeaks);
+    fixture->runAllTests();
+
+    LONGS_EQUAL(0, fixture->getFailureCount());
+}
+
+#endif
+
+
+static void _testLeakWarningWithPluginDisabled()
+{
+    memPlugin->expectLeaksInTest(1);
+    cpputest_malloc_location_with_leak_detection(10, __FILE__, __LINE__);
+}
+
+TEST(MemoryLeakWarningTest, LeakWarningWithPluginDisabled)
+{
+    MemoryLeakWarningPlugin::saveAndDisableNewDeleteOverloads();
+
+    fixture->setTestFunction(_testLeakWarningWithPluginDisabled);
+    fixture->runAllTests();
+
+    LONGS_EQUAL(0, fixture->getFailureCount());
+    fixture->assertPrintContains("Warning: Expected 1 leak(s), but leak detection was disabled");
+
+    MemoryLeakWarningPlugin::restoreNewDeleteOverloads();
+
 }
 
 static void _testIgnore2()
