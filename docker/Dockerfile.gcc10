@@ -1,13 +1,8 @@
 FROM okannen/gcc-10
 
-RUN apt-get update
-RUN apt-get install -y -q file
-RUN apt-get install -y -q git
-RUN apt-get install -y -q make
-RUN apt-get install -y -q automake
-RUN apt-get install -y -q autoconf
-RUN apt-get install -y -q libtool
-RUN update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-10 100
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends file git make automake autoconf libtool && \
+    update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-10 100
 
 WORKDIR /cpputest_build
 
