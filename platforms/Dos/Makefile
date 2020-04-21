@@ -10,8 +10,8 @@ path_separator := /
 drive = $(subst $(CYGDRIVE),$(lastword $(subst /, ,$(CYGDRIVE))):/,$(1))
 convert_paths = $(if $(CYGDRIVE),$(subst /,$(path_separator),$(call drive,$(1))),$(1))
 
--include ../platforms/Dos/platform.mk
-include ../platforms/Dos/sources.mk
+-include $(CPPUTEST_HOME)/platforms/Dos/platform.mk
+include $(CPPUTEST_HOME)/platforms/Dos/sources.mk
 
 # Disable W013 unreachable code - it overreacts to CHECK_EQUAL macros
 # Disable W367 conditional expression in if statement is always true - same

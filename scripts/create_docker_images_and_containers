@@ -30,8 +30,8 @@ checkForImageNameParameter
 
 docker build -f $CPPUTEST_HOME/docker/Dockerfile.$container --tag cpputest/$container:current .
 docker container rm cpputest_$container
-docker create -i -v$CPPUTEST_HOME:/cpputest --name cpputest_$container cpputest/$container:current
+docker create -it -v$CPPUTEST_HOME:/cpputest -e "CPPUTEST_HOME=/cpputest" --name cpputest_$container cpputest/$container:current
 
-echo "You can run your container through: docker start -i cpputest_<container>. E.g. docker start -i cpputest_ubuntu"
+echo "You can run your container through: docker start -i cpputest_<container>. E.g. docker start -i cpputest_$container"
 
 

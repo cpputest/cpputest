@@ -1,0 +1,12 @@
+FROM ubuntu
+
+RUN apt-get update
+RUN apt-get install -y wget
+RUN apt-get install -y unzip
+RUN apt-get install -y dosbox
+RUN apt-get install -y make
+
+WORKDIR /cpputest_build
+
+CMD BUILD=make_dos /cpputest/scripts/travis_ci_build.sh
+
