@@ -89,6 +89,7 @@ jobs:
             - libc++-dev
             - valgrind
     - env: BUILD=docker_ubuntu_autotools
+    - env: BUILD=docker_ubuntu_gcc10
 
 global:
 - secure: |-
