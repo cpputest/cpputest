@@ -6,6 +6,7 @@ if [[ "$CXX" == clang* ]]; then
     export CXXFLAGS="-stdlib=libc++"
 fi
 
+export CPPUTEST_HOME=$TRAVIS_BUILD_DIR
 
 if [ "x$BUILD" = "xautotools" ]; then
     autoreconf -i ..
@@ -94,12 +95,16 @@ if [ "x$BUILD" = "xcmake_coverage" ]; then
     coveralls -b . -r .. -i "src" -i "include" --gcov-options="-lbc" || true
 fi
 
+if [ "x$BUILD" = "xdocker_ubuntu_autotools" ]; then
+    $(CPPUTEST_HOME)/scripts/create_docker_images_and_containers ubuntu
+    docker start -i cpputest_ubuntu
+fi
+
 if [ "x$BUILD" = "xmake_dos" ]; then
     wget http://ftp.openwatcom.org/install/open-watcom-c-linux-1.9 -O /tmp/watcom.zip
     mkdir -p watcom && unzip -aqd watcom /tmp/watcom.zip && chmod -R +x watcom/binl
     export PATH=$PATH:$PWD/watcom/binl
     export WATCOM=$PWD/watcom
-    export CPPUTEST_HOME=$TRAVIS_BUILD_DIR
     export CC=wcl
     export CXX=wcl
     $CC --version
