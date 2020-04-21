@@ -240,6 +240,11 @@ MockExpectedCall& MockCheckedExpectedCall::withOutputParameterOfTypeReturning(co
     return *this;
 }
 
+MockExpectedCall& MockCheckedExpectedCall::withUnmodifiedOutputParameter(const SimpleString& name)
+{
+    return withOutputParameterReturning(name, NULLPTR, 0);
+}
+
 SimpleString MockCheckedExpectedCall::getInputParameterType(const SimpleString& name)
 {
     MockNamedValue * p = inputParameters_->getValueByName(name);
