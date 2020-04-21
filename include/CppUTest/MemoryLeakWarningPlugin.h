@@ -65,9 +65,13 @@ public:
     static void destroyGlobalDetector();
 
     static void turnOffNewDeleteOverloads();
-    static void turnOnNewDeleteOverloads();
+    static void turnOnDefaultNotThreadSafeNewDeleteOverloads();
     static void turnOnThreadSafeNewDeleteOverloads();
     static bool areNewDeleteOverloaded();
+
+    static void saveAndDisableNewDeleteOverloads();
+    static void restoreNewDeleteOverloads();
+
 private:
     MemoryLeakDetector* memLeakDetector_;
     bool ignoreAllWarnings_;

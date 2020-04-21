@@ -101,6 +101,9 @@ static void normal_free(void* buffer, const char*, int)
 static void *(*malloc_fptr)(size_t size, const char* file, int line) = mem_leak_malloc;
 static void (*free_fptr)(void* mem, const char* file, int line) = mem_leak_free;
 static void*(*realloc_fptr)(void* memory, size_t size, const char* file, int line) = mem_leak_realloc;
+static void *(*saved_malloc_fptr)(size_t size, const char* file, int line) = mem_leak_malloc;
+static void (*saved_free_fptr)(void* mem, const char* file, int line) = mem_leak_free;
+static void*(*saved_realloc_fptr)(void* memory, size_t size, const char* file, int line) = mem_leak_realloc;
 #else
 static void *(*malloc_fptr)(size_t size, const char* file, int line) = normal_malloc;
 static void (*free_fptr)(void* mem, const char* file, int line) = normal_free;
@@ -299,6 +302,16 @@ static void *(*operator_new_array_debug_fptr)(size_t size, const char* file, int
 static void (*operator_delete_fptr)(void* mem) UT_NOTHROW = mem_leak_operator_delete;
 static void (*operator_delete_array_fptr)(void* mem) UT_NOTHROW = mem_leak_operator_delete_array;
 
+static void *(*saved_operator_new_fptr)(size_t size) UT_THROW(std::bad_alloc) = mem_leak_operator_new;
+static void *(*saved_operator_new_nothrow_fptr)(size_t size) UT_NOTHROW = mem_leak_operator_new_nothrow;
+static void *(*saved_operator_new_debug_fptr)(size_t size, const char* file, int line) UT_THROW(std::bad_alloc) = mem_leak_operator_new_debug;
+static void *(*saved_operator_new_array_fptr)(size_t size) UT_THROW(std::bad_alloc) = mem_leak_operator_new_array;
+static void *(*saved_operator_new_array_nothrow_fptr)(size_t size) UT_NOTHROW = mem_leak_operator_new_array_nothrow;
+static void *(*saved_operator_new_array_debug_fptr)(size_t size, const char* file, int line) UT_THROW(std::bad_alloc) = mem_leak_operator_new_array_debug;
+static void (*saved_operator_delete_fptr)(void* mem) UT_NOTHROW = mem_leak_operator_delete;
+static void (*saved_operator_delete_array_fptr)(void* mem) UT_NOTHROW = mem_leak_operator_delete_array;
+static int save_counter = 0;
+
 void* operator new(size_t size) UT_THROW(std::bad_alloc)
 {
     return operator_new_fptr(size);
@@ -413,7 +426,7 @@ void MemoryLeakWarningPlugin::turnOffNewDeleteOverloads()
 #endif
 }
 
-void MemoryLeakWarningPlugin::turnOnNewDeleteOverloads()
+void MemoryLeakWarningPlugin::turnOnDefaultNotThreadSafeNewDeleteOverloads()
 {
 #if CPPUTEST_USE_MEM_LEAK_DETECTION
     operator_new_fptr = mem_leak_operator_new;
@@ -427,15 +440,6 @@ void MemoryLeakWarningPlugin::turnOnNewDeleteOverloads()
     malloc_fptr = mem_leak_malloc;
     realloc_fptr = mem_leak_realloc;
     free_fptr = mem_leak_free;
-#endif
-}
-
-bool MemoryLeakWarningPlugin::areNewDeleteOverloaded()
-{
-#if CPPUTEST_USE_MEM_LEAK_DETECTION
-    return operator_new_fptr == mem_leak_operator_new;
-#else
-    return false;
 #endif
 }
 
@@ -453,6 +457,52 @@ void MemoryLeakWarningPlugin::turnOnThreadSafeNewDeleteOverloads()
     malloc_fptr = threadsafe_mem_leak_malloc;
     realloc_fptr = threadsafe_mem_leak_realloc;
     free_fptr = threadsafe_mem_leak_free;
+#endif
+}
+
+bool MemoryLeakWarningPlugin::areNewDeleteOverloaded()
+{
+#if CPPUTEST_USE_MEM_LEAK_DETECTION
+    return operator_new_fptr == mem_leak_operator_new || operator_new_fptr == threadsafe_mem_leak_operator_new;
+#else
+    return false;
+#endif
+}
+
+void MemoryLeakWarningPlugin::saveAndDisableNewDeleteOverloads()
+{
+#if CPPUTEST_USE_MEM_LEAK_DETECTION
+    if (++save_counter > 1) return;
+    saved_operator_new_fptr = operator_new_fptr;
+    saved_operator_new_nothrow_fptr = operator_new_nothrow_fptr;
+    saved_operator_new_debug_fptr = operator_new_debug_fptr;
+    saved_operator_new_array_fptr = operator_new_array_fptr;
+    saved_operator_new_array_nothrow_fptr = operator_new_array_nothrow_fptr;
+    saved_operator_new_array_debug_fptr = operator_new_array_debug_fptr;
+    saved_operator_delete_fptr = operator_delete_fptr;
+    saved_operator_delete_array_fptr = operator_delete_array_fptr;
+    saved_malloc_fptr = malloc_fptr;
+    saved_realloc_fptr = realloc_fptr;
+    saved_free_fptr = free_fptr;
+    turnOffNewDeleteOverloads();
+#endif
+}
+
+void MemoryLeakWarningPlugin::restoreNewDeleteOverloads()
+{
+#if CPPUTEST_USE_MEM_LEAK_DETECTION
+    if (--save_counter > 0) return;
+    operator_new_fptr = saved_operator_new_fptr;
+    operator_new_nothrow_fptr = saved_operator_new_nothrow_fptr;
+    operator_new_debug_fptr = saved_operator_new_debug_fptr;
+    operator_new_array_fptr = saved_operator_new_array_fptr;
+    operator_new_array_nothrow_fptr = saved_operator_new_array_nothrow_fptr;
+    operator_new_array_debug_fptr = saved_operator_new_array_debug_fptr;
+    operator_delete_fptr = saved_operator_delete_fptr;
+    operator_delete_array_fptr = saved_operator_delete_array_fptr;
+    malloc_fptr = saved_malloc_fptr;
+    realloc_fptr = saved_realloc_fptr;
+    free_fptr = saved_free_fptr;
 #endif
 }
 
@@ -485,13 +535,12 @@ static MemoryLeakDetector* globalDetector = NULLPTR;
 MemoryLeakDetector* MemoryLeakWarningPlugin::getGlobalDetector()
 {
     if (globalDetector == NULLPTR) {
-        bool newDeleteOverloaded = areNewDeleteOverloaded();
-        turnOffNewDeleteOverloads();
+        saveAndDisableNewDeleteOverloads();
 
         globalReporter = new MemoryLeakWarningReporter;
         globalDetector = new MemoryLeakDetector(globalReporter);
 
-        if (newDeleteOverloaded) turnOnNewDeleteOverloads();
+        restoreNewDeleteOverloads();
     }
     return globalDetector;
 }
