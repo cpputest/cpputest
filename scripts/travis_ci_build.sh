@@ -6,7 +6,7 @@ if [[ "$CXX" == clang* ]]; then
     export CXXFLAGS="-stdlib=libc++"
 fi
 
-if [ "x$CPPUTEST_HOME" = "" ] ; then
+if [ "x$CPPUTEST_HOME" = "x" ] ; then
   export CPPUTEST_HOME=$TRAVIS_BUILD_DIR
 fi
 
@@ -15,7 +15,7 @@ if [ "x$BUILD" = "xautotools" ]; then
     ../configure
     echo "CONFIGURATION DONE. Compiling now."
 
-    if [ "${TRAVIS_EVENT_TYPE}" == "cron" ]; then
+    if [ "${TRAVIS_EVENT_TYPE}" = "cron" ]; then
         make check_all
     fi
 
