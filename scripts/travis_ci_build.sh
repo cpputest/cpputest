@@ -96,7 +96,7 @@ if [ "x$BUILD" = "xcmake_coverage" ]; then
 fi
 
 if [ "x$BUILD" = "xdocker_ubuntu_autotools" ]; then
-    $(CPPUTEST_HOME)/scripts/create_docker_images_and_containers ubuntu
+    $CPPUTEST_HOME/scripts/create_docker_images_and_containers ubuntu
     docker start -i cpputest_ubuntu
 fi
 
