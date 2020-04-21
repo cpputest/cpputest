@@ -4,7 +4,7 @@ printf "" >ALLTESTS.LOG
 for test in `ls *.EXE`; do
     kb=`ls -lsk ${test} | awk '{print $1}'`
     printf "Running ${test} (${kb}k) inside DOSBox...\n"
-    dosbox -conf ../platforms/Dos/dosbox-0.74.conf exit \
+    dosbox -conf ${CPPUTEST_HOME}/platforms/Dos/dosbox-0.74.conf exit \
     -c "echo *** ${test} (${kb}k) *****************************>>ALLTESTS.LOG" \
     -c "${test}>>ALLTESTS.LOG" \
     -noconsole -exit || exit 1

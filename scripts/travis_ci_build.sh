@@ -6,7 +6,9 @@ if [[ "$CXX" == clang* ]]; then
     export CXXFLAGS="-stdlib=libc++"
 fi
 
-export CPPUTEST_HOME=$TRAVIS_BUILD_DIR
+if [ "x$CPPUTEST_HOME" = "" ] ; then
+  export CPPUTEST_HOME=$TRAVIS_BUILD_DIR
+fi
 
 if [ "x$BUILD" = "xautotools" ]; then
     autoreconf -i ..
@@ -113,7 +115,7 @@ if [ "x$BUILD" = "xmake_dos" ]; then
     export CC=wcl
     export CXX=wcl
     $CC --version
-    make -f ../platforms/Dos/Makefile || exit 1
-    ../platforms/Dos/alltests.sh || exit 1
+    make -f $CPPUTEST_HOME/platforms/Dos/Makefile || exit 1
+    $CPPUTEST_HOME/platforms/Dos/alltests.sh || exit 1
  fi
 
