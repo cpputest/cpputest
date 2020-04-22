@@ -7,7 +7,7 @@ for test in `ls *.EXE`; do
     dosbox -conf ${CPPUTEST_HOME}/platforms/Dos/dosbox-0.74.conf exit \
     -c "echo *** ${test} (${kb}k) *****************************>>ALLTESTS.LOG" \
     -c "${test}>>ALLTESTS.LOG" \
-    -noconsole -exit 2>/dev/null || exit 1
+    -noconsole -exit 2>dosbox_error.log || { printf "error running command!\n"; cat dosbox_error.log;  exit 1; }
 done
 printf "\n"
 [ "`cat ALLTESTS.LOG`" ] || { printf "No tests to run!\n"; exit 1; }
