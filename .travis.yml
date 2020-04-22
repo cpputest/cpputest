@@ -91,7 +91,7 @@ jobs:
     - env: BUILD=docker_ubuntu_autotools
     - env: BUILD=docker_ubuntu_gcc10
     - stage: "Final Build"
-    - if: branch = master
+    - if: (NOT type IN (pull_request)) AND (branch = master)
       stage: "Deploy"
       script: ../scripts/travis_before_deploy.sh
       deploy:
