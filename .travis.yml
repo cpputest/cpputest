@@ -57,6 +57,10 @@ jobs:
     - compiler: gcc
       env: BUILD=cmake_gtest
     - env: BUILD=make_dos
+      addons:
+        apt:
+          packages:
+            - dosbox
     - compiler: clang
       os: osx
       env: BUILD=cmake CPP_STD=17
