@@ -4,7 +4,8 @@ dist: bionic
 
 jobs:
     include:
-    - compiler: clang
+    - stage: "build & test"
+      compiler: clang
       env: BUILD=cmake CPP_STD=98
       addons:
         apt:
@@ -89,6 +90,16 @@ jobs:
             - valgrind
     - env: BUILD=docker_ubuntu_autotools
     - env: BUILD=docker_ubuntu_gcc10
+    - stage: "Final Build"
+    - stage: "Deploy"
+      script: ../scripts/travis_before_deploy.sh
+      deploy:
+        provider: releases
+        # ⋮
+        edge: true
+        skip_cleanup: true
+        on:
+          tags: false
 
 before_script:
     - export CPPUTEST_BUILD_DIR=$TRAVIS_BUILD_DIR/cpputest_build
@@ -104,18 +115,5 @@ after_success:
     - "../scripts/travis_ci_after.sh"
 
 before_deploy:
-    - "openssl aes-256-cbc -K $encrypted_8ebb1ef83f64_key -iv $encrypted_8ebb1ef83f64_iv -in $TRAVIS_BUILD_DIR/github_deploy_key.enc -out github_deploy_key -d"
-    - chmod 600 github_deploy_key
-    - eval $(ssh-agent -s)
-    - ssh-add github_deploy_key
-    - git tag latest_passing_build -a -m "Generated tag from TravisCI for build $TRAVIS_BUILD_NUMBER"
-    - this travis yaml is still an experiment
 
-deploy:
-    provider: releases
-    # ⋮
-    edge: true
-    skip_cleanup: true
-    on:
-      tags: false
 
