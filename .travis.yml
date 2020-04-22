@@ -56,8 +56,7 @@ jobs:
       env: BUILD=cmake_coverage
     - compiler: gcc
       env: BUILD=cmake_gtest
-    - compiler: wcl
-      env: BUILD=make_dos
+    - env: BUILD=make_dos
       addons:
         apt:
           packages:
@@ -94,16 +93,20 @@ jobs:
 before_script:
     - export CPPUTEST_BUILD_DIR=$TRAVIS_BUILD_DIR/cpputest_build
     - mkdir -p $CPPUTEST_BUILD_DIR && cd $CPPUTEST_BUILD_DIR
+
 script:
     - "../scripts/travis_ci_build.sh"
+
 after_failure:
     - "../scripts/travis_ci_after.sh"
+
 after_success:
     - "../scripts/travis_ci_after.sh"
-before_install:
+
+before_deploy:
     - "openssl aes-256-cbc -K $encrypted_8ebb1ef83f64_key -iv $encrypted_8ebb1ef83f64_iv -in github_deploy_key.enc -out github_deploy_key -d"
     - chmod 600 github_deploy_key
     - eval $(ssh-agent -s)
     - ssh-add github_deploy_key
-
-
+    - git tag latest_passing_build -a -m "Generated tag from TravisCI for build $TRAVIS_BUILD_NUMBER"
+    - this travis yaml is still an experiment
