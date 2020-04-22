@@ -56,7 +56,7 @@ jobs:
       env: BUILD=cmake_coverage
     - compiler: gcc
       env: BUILD=cmake_gtest
-    - env: BUILD=docker_dos
+    - env: BUILD=make_dos
     - compiler: clang
       os: osx
       env: BUILD=cmake CPP_STD=17
