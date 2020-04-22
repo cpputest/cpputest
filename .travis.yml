@@ -110,3 +110,12 @@ before_deploy:
     - ssh-add github_deploy_key
     - git tag latest_passing_build -a -m "Generated tag from TravisCI for build $TRAVIS_BUILD_NUMBER"
     - this travis yaml is still an experiment
+
+deploy:
+    provider: releases
+    # ⋮
+    edge: true
+    skip_cleanup: true
+    on:
+      tags: false
+
