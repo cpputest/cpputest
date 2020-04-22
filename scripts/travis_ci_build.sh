@@ -113,8 +113,7 @@ if [ "x$BUILD" = "xdocker_dos" ]; then
 fi
 
 if [ "x$BUILD" = "xmake_dos" ]; then
-    wget http://ftp.openwatcom.org/install/open-watcom-c-linux-1.9 -O /tmp/watcom.zip
-    mkdir -p watcom && unzip -aqod watcom /tmp/watcom.zip && chmod -R +x watcom/binl
+    git clone https://github.com/cpputest/watcom-compiler.git watcom
     export PATH=$PATH:$PWD/watcom/binl
     export WATCOM=$PWD/watcom
     export CC=wcl
