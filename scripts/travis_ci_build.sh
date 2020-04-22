@@ -1,6 +1,6 @@
 #!/bin/bash
 # Script run in the travis CI
-set -ex
+# set -ex
 
 if [[ "$CXX" == clang* ]]; then
     export CXXFLAGS="-stdlib=libc++"
@@ -109,7 +109,7 @@ fi
 
 if [ "x$BUILD" = "xdocker_dos" ]; then
     $CPPUTEST_HOME/scripts/create_docker_images_and_containers dos
-    docker start -i dos
+    docker start -i cpputest_dos
 fi
 
 if [ "x$BUILD" = "xmake_dos" ]; then
