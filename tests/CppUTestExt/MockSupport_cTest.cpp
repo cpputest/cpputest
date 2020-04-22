@@ -195,6 +195,15 @@ TEST(MockSupport_c, outputParameters)
     LONGS_EQUAL(2, retval);
 }
 
+TEST(MockSupport_c, unmodifiedOutputParameter)
+{
+    int param = 1;
+    mock_c()->expectOneCall("foo")->withUnmodifiedOutputParameter("out");
+    mock_c()->actualCall("foo")->withOutputParameter("out", &param);
+    mock_c()->checkExpectations();
+    LONGS_EQUAL(1, param);
+}
+
 TEST(MockSupport_c, outputParameters_differentType)
 {
     long param = 1;

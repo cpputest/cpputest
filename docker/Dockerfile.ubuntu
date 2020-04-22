@@ -1,16 +1,8 @@
 FROM ubuntu
 
-RUN apt-get update
-RUN apt-get install -y -q file
-RUN apt-get install -y -q git
-RUN apt-get install -y -q gcc
-RUN apt-get install -y -q g++
-RUN apt-get install -y -q make
-RUN apt-get install -y -q automake
-RUN apt-get install -y -q autoconf
-RUN apt-get install -y -q libtool
+RUN apt-get update && \
+    apt-get install -y -q --no-install-recommends file git gcc g++ make automake autoconf libtool
 
 WORKDIR /cpputest_build
 
 CMD autoreconf -i ../cpputest && ../cpputest/configure && make tdd
-

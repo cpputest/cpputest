@@ -634,6 +634,17 @@ TEST(MockParameterTest, outputParameterSucceeds)
     mock().checkExpectations();
 }
 
+TEST(MockParameterTest, unmodifiedOutputParameterSucceeds)
+{
+    int param = 1;
+
+    mock().expectOneCall("function").withUnmodifiedOutputParameter("parameterName");
+    mock().actualCall("function").withOutputParameter("parameterName", &param);
+
+    CHECK_EQUAL(param, 1);
+    mock().checkExpectations();
+}
+
 TEST(MockParameterTest, noActualCallForOutputParameter)
 {
     MockFailureReporterInstaller failureReporterInstaller;
@@ -643,6 +654,20 @@ TEST(MockParameterTest, noActualCallForOutputParameter)
     mock().expectOneCall("foo").withOutputParameterReturning("output", &output, sizeof(output));
 
     expectations.addFunction("foo")->withOutputParameterReturning("output", &output, sizeof(output));
+    MockExpectedCallsDidntHappenFailure expectedFailure(mockFailureTest(), expectations);
+
+    mock().checkExpectations();
+    CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
+TEST(MockParameterTest, noActualCallForUnmodifiedOutputParameter)
+{
+    MockFailureReporterInstaller failureReporterInstaller;
+
+    MockExpectedCallsListForTest expectations;
+    mock().expectOneCall("foo").withUnmodifiedOutputParameter("output");
+
+    expectations.addFunction("foo")->withUnmodifiedOutputParameter("output");
     MockExpectedCallsDidntHappenFailure expectedFailure(mockFailureTest(), expectations);
 
     mock().checkExpectations();

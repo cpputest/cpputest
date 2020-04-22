@@ -59,6 +59,7 @@ public:
     virtual MockExpectedCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value) _override;
     virtual MockExpectedCall& withOutputParameterReturning(const SimpleString& name, const void* value, size_t size) _override;
     virtual MockExpectedCall& withOutputParameterOfTypeReturning(const SimpleString& typeName, const SimpleString& name, const void* value) _override;
+    virtual MockExpectedCall& withUnmodifiedOutputParameter(const SimpleString& name) _override;
     virtual MockExpectedCall& ignoreOtherParameters() _override;
 
     virtual MockExpectedCall& andReturnValue(bool value) _override;
@@ -170,6 +171,7 @@ public:
     virtual MockExpectedCall& withParameterOfType(const SimpleString&, const SimpleString&, const void*) _override { return *this; }
     virtual MockExpectedCall& withOutputParameterReturning(const SimpleString&, const void*, size_t) _override { return *this; }
     virtual MockExpectedCall& withOutputParameterOfTypeReturning(const SimpleString&, const SimpleString&, const void*) _override { return *this; }
+    virtual MockExpectedCall& withUnmodifiedOutputParameter(const SimpleString&) _override { return *this; }
     virtual MockExpectedCall& ignoreOtherParameters() _override { return *this;}
 
     virtual MockExpectedCall& andReturnValue(bool) _override { return *this; }
