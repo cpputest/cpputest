@@ -92,6 +92,7 @@ jobs:
     - env: BUILD=docker_ubuntu_gcc10
     - stage: "Final Build"
     - stage: "Deploy"
+      if: branch = master
       script: ../scripts/travis_before_deploy.sh
       deploy:
         provider: releases
