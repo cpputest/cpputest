@@ -5,4 +5,4 @@ chmod 600 github_deploy_key
 eval $(ssh-agent -s)
 ssh-add github_deploy_key
 git tag latest-passing-build -a -m "Generated tag from TravisCI for build $TRAVIS_BUILD_NUMBER"
-git push https://github.com/cpputest/cpputest.git --tags
+git push git@github.com:cpputest/cpputest.git --tags
