@@ -100,11 +100,11 @@ jobs:
     - if: (NOT type IN (pull_request)) AND (branch = master)
       stage: "Deploy"
       script: ../scripts/travis_before_deploy.sh
-      api-key:
-        secure: O98m3aZQaKYWnEHlAR9XBRLnJpusBRwWKLwzOraHIrlxJ3Xy0QU1G/QOWb2lII2FWcCdeTYU77VIMvbZ5vt7wggS1/dUfN/5faO70g8UMJh4+QPqA+jHYcf4cZvAiScFYEmp8ptTxecnKMFRNWTrZGbY8xoFfMk6LyOje0KcPK4=
       deploy:
         provider: releases
         skip_cleanup: true
+        api-key:
+          secure: O98m3aZQaKYWnEHlAR9XBRLnJpusBRwWKLwzOraHIrlxJ3Xy0QU1G/QOWb2lII2FWcCdeTYU77VIMvbZ5vt7wggS1/dUfN/5faO70g8UMJh4+QPqA+jHYcf4cZvAiScFYEmp8ptTxecnKMFRNWTrZGbY8xoFfMk6LyOje0KcPK4=
         tag_name: latest-passing-build
         name: "Latest passing build"
         body: "This is the automatic release from Travis CI. Whenever a build passes, it gets released as Latest Passing Build."
