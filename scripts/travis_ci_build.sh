@@ -27,13 +27,6 @@ if [ "x$BUILD" = "xautotools" ]; then
         make dist
         make dist-zip
     fi
-
-
-    if [ "x$CXX" = "xg++" ]; then
-      echo "Deploy please"
-#      gem install travis_github_deployer
-#      cd .. && travis_github_deployer -v || exit 1
-    fi;
 fi
 
 if [ "x$BUILD" = "xcmake" ]; then
