@@ -100,6 +100,9 @@ jobs:
         # ⋮
         edge: true
         skip_cleanup: true
+        token: github_deploy_key
+        name: "Latest passing build"
+        tag: latest-passing-build
         on:
           tags: false
 
