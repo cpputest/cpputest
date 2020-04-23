@@ -40,11 +40,6 @@
 			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/.travis.yml</locationURI>
 		</link>
 		<link>
-			<name>.travis_github_deployer.yml</name>
-			<type>1</type>
-			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/.travis_github_deployer.yml</locationURI>
-		</link>
-		<link>
 			<name>AUTHORS</name>
 			<type>1</type>
 			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/AUTHORS</locationURI>
