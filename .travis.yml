@@ -100,7 +100,8 @@ jobs:
     - if: (NOT type IN (pull_request)) AND (branch = master)
       stage: "Deploy"
       script: ../scripts/travis_before_deploy.sh
-      api-key: "GITHUB OAUTH TOKEN"
+      api-key:
+        secure: O98m3aZQaKYWnEHlAR9XBRLnJpusBRwWKLwzOraHIrlxJ3Xy0QU1G/QOWb2lII2FWcCdeTYU77VIMvbZ5vt7wggS1/dUfN/5faO70g8UMJh4+QPqA+jHYcf4cZvAiScFYEmp8ptTxecnKMFRNWTrZGbY8xoFfMk6LyOje0KcPK4=
       deploy:
         provider: releases
         skip_cleanup: true
@@ -122,9 +123,3 @@ after_failure:
 
 after_success:
     - "../scripts/travis_ci_after.sh"
-
-before_deploy:
-
-env:
-  global:
-    secure: O98m3aZQaKYWnEHlAR9XBRLnJpusBRwWKLwzOraHIrlxJ3Xy0QU1G/QOWb2lII2FWcCdeTYU77VIMvbZ5vt7wggS1/dUfN/5faO70g8UMJh4+QPqA+jHYcf4cZvAiScFYEmp8ptTxecnKMFRNWTrZGbY8xoFfMk6LyOje0KcPK4=
