@@ -6,6 +6,32 @@ jobs:
     include:
     - stage: "build & test"
       compiler: clang
+      os: osx
+      env: BUILD=cmake CPP_STD=17
+      addons:
+        apt:
+          packages:
+            - libc++-dev
+    - compiler: gcc
+      os: osx
+      env: BUILD=cmake CPP_STD=14
+
+    - compiler: gcc
+      os: osx
+      env: BUILD=autotools
+      addons:
+        apt:
+          packages:
+            - valgrind
+    - compiler: clang
+      env: BUILD=autotools
+      os: osx
+      addons:
+        apt:
+          packages:
+            - libc++-dev
+            - valgrind
+    - compiler: clang
       env: BUILD=cmake CPP_STD=98
       addons:
         apt:
@@ -62,32 +88,6 @@ jobs:
         apt:
           packages:
             - dosbox
-    - compiler: clang
-      os: osx
-      env: BUILD=cmake CPP_STD=17
-      addons:
-        apt:
-          packages:
-            - libc++-dev
-    - compiler: gcc
-      os: osx
-      env: BUILD=cmake CPP_STD=14
-
-    - compiler: gcc
-      os: osx
-      env: BUILD=autotools
-      addons:
-        apt:
-          packages:
-            - valgrind
-    - compiler: clang
-      env: BUILD=autotools
-      os: osx
-      addons:
-        apt:
-          packages:
-            - libc++-dev
-            - valgrind
     - env: BUILD=docker_ubuntu_autotools
     - env: BUILD=docker_ubuntu_gcc10
     - stage: "Final Build"
