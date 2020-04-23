@@ -98,7 +98,7 @@ jobs:
       deploy:
         provider: releases
         api_key:
-         secure: <your key>
+          secure: github_deploy_key
         skip_cleanup: true
         tag_name: latest-passing-build
         name: "Latest passing build"
