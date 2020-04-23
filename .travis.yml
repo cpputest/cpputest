@@ -97,10 +97,9 @@ jobs:
       script: ../scripts/travis_before_deploy.sh
       deploy:
         provider: releases
-        # ⋮
-        edge: true
+        api_key:
+         secure: <your key>
         skip_cleanup: true
-        token: github_deploy_key
         tag_name: latest-passing-build
         name: "Latest passing build"
         body: "This is the automatic release from Travis CI. Whenever a build passes, it gets released as Latest Passing Build."
