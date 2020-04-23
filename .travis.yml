@@ -101,8 +101,9 @@ jobs:
         edge: true
         skip_cleanup: true
         token: github_deploy_key
+        tag_name: latest-passing-build
         name: "Latest passing build"
-        tag: latest-passing-build
+        body: "This is the automatic release from Travis CI. Whenever a build passes, it gets released as Latest Passing Build."
         on:
           tags: false
 
