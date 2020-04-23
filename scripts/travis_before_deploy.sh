@@ -1,4 +1,5 @@
 #!/bin/bash -x
+set -ex
 
 openssl aes-256-cbc -K $encrypted_8ebb1ef83f64_key -iv $encrypted_8ebb1ef83f64_iv -in $TRAVIS_BUILD_DIR/github_deploy_key.enc -out github_deploy_key -d
 chmod 600 github_deploy_key
