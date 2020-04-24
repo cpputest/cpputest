@@ -3,9 +3,9 @@ language: cpp
 dist: bionic
 
 # Do not let the tag trigger a build.
-#branches:
-#  except:
-#    - latest-passing-build
+branches:
+  except:
+    - latest-passing-build
 
 jobs:
     include:
