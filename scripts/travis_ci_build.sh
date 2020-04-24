@@ -112,7 +112,7 @@ if [ "x$BUILD" = "xmake_dos" ]; then
     export CC=wcl
     export CXX=wcl
     $CC --version
-    make -f $CPPUTEST_HOME/platforms/Dos/Makefile || exit 1
-    $CPPUTEST_HOME/platforms/Dos/alltests.sh || exit 1
+    make -f $CPPUTEST_HOME/platforms/Dos/Makefile
+    $CPPUTEST_HOME/platforms/Dos/alltests.sh
  fi
 
