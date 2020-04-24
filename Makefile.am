@@ -345,6 +345,9 @@ check_basic:
 	@echo "Building without memory leak detection"
 	make distclean; $(srcdir)/configure --disable-memory-leak-detection; make check
 
+	@echo "Building with address sanitizer"
+	make distclean; $(srcdir)/configure --enable-sanitize-address; make check
+
 	@echo "Building without memory leak detection and without Standard C++"
 	make distclean; $(srcdir)/configure --disable-memory-leak-detection --disable-std-cpp; make check
 

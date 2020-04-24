@@ -168,6 +168,32 @@
 #endif
 
 /*
+ * Address sanitizer is a good thing... and it causes some conflicts with the CppUTest tests
+ * To check whether it is on or off, we create a CppUTest define here.
+*/
+#if defined(__has_feature)
+#if __has_feature(address_sanitizer)
+#define CPPUTEST_SANITIZE_ADDRESS 1
+#endif
+#endif
+
+#ifdef __SANITIZE_ADDRESS__
+#define CPPUTEST_SANITIZE_ADDRESS 1
+#endif
+
+#ifndef CPPUTEST_SANITIZE_ADDRESS
+#define CPPUTEST_SANITIZE_ADDRESS 0
+#endif
+
+#if CPPUTEST_SANITIZE_ADDRESS
+#define CPPUTEST_SANITIZE_ADDRESS 1
+#define CPPUTEST_DO_NOT_SANITIZE_ADDRESS __attribute__((no_sanitize_address))
+#else
+#define CPPUTEST_SANITIZER_ADDRESS 0
+#define CPPUTEST_DO_NOT_SANITIZE_ADDRESS
+#endif
+
+/*
  * Handling of IEEE754 floating point exceptions via fenv.h
  * Predominantly works on non-Visual C++ compilers and Visual C++ 2008 and newer
  */

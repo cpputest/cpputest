@@ -391,6 +391,9 @@ AC_ARG_ENABLE([generate-map-file], [AC_HELP_STRING([--enable-generate-map-file],
 AC_ARG_ENABLE([coverage], [AC_HELP_STRING([--enable-coverage], [enable running with coverage])],
    [coverage=${enableval}], [coverage=no])
 
+AC_ARG_ENABLE([sanitize-address], [AC_HELP_STRING([--enable-sanitize-address], [enable running with address sanitizer])],
+   [sanitize_address=${enableval}], [sanitize_address=no])
+
 ############################## Setting options ###############################
 
 AM_CONDITIONAL([INCLUDE_CPPUTEST_EXT], [test "x${cpputest_ext}" = xyes])
@@ -449,6 +452,12 @@ fi
 # Disabling long long support
 if test "x${use_longlong}" = xno; then
   AC_DEFINE([LONG_LONG_DISABLED], 1, [disable long long])
+fi
+
+# Dealing with address sanitizer
+if test "x${sanitize_address}" = xyes; then
+	CPPUTEST_CFLAGS="${CPPUTEST_CFLAGS} -fsanitize=address"
+	CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} -fsanitize=address"
 fi
 
 # Generating map files.
@@ -579,6 +588,7 @@ Features configured in ${PACKAGE_NAME}:
    Compiling extensions:                ${cpputest_ext}
    Use Long Long (if available):        ${use_longlong}
    Disable CppUTest compile/link flags: ${cpputest_flags}
+   Address sanitizer:                   ${sanitize_address}
 
    Using Standard C++ Library:          ${use_std_cpp}
    Using Standard C Library:            ${use_std_c}
