@@ -90,6 +90,35 @@ if [ "x$BUILD" = "xcmake_coverage" ]; then
     coveralls -b . -r .. -i "src" -i "include" --gcov-options="-lbc" || true
 fi
 
+if [ "x$BUILD" = "xautotools_cmake_install_test" ]; then
+    autoreconf -i ..
+    ../configure
+    rm -rf install_autotools
+    mkdir -p install_autotools
+    make DESTDIR=install_autotools install
+
+    cmake ..
+    rm -rf install_cmake
+    mkdir -p install_cmake
+    make DESTDIR=install_cmake install
+
+    export INSTALL_DIFF=`diff -rq install_autotools install_cmake | grep -v CppUTestGeneratedConfig.h | grep -v libCppUTest.a | grep -v libCppUTestExt.a`
+    if [ "x$INSTALL_DIFF" != "x" ]; then
+        echo "FAILED: CMake install and Autotools install is not the same!\n"
+        echo "Difference\n"
+        echo "-------------------------------\n"
+        echo "$INSTALL_DIFF"
+        echo "-------------------------------\n"
+        exit 1;
+    fi
+
+    # Hack: autotools cannot make CMake package. We cached and copied them. Here we check they are still the same
+    for cmakefile in CppUTestConfig.cmake /CppUTestConfigVersion.cmake; do
+      diff install_autotools/usr/local/lib/CppUTest/cmake/$cmakefile  install_cmake/usr/local/lib/CppUTest/cmake/$cmakefile || exit 1
+    done
+    diff install_autotools/usr/local/lib/CppUTest/cmake//CppUTestConfigVersion.cmake  install_cmale/usr/local/lib/CppUTest/cmake//CppUTestConfigVersion.cmake
+fi
+
 if [ "x$BUILD" = "xdocker_ubuntu_autotools" ]; then
     $CPPUTEST_HOME/scripts/create_docker_images_and_containers ubuntu
     docker start -i cpputest_ubuntu
