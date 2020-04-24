@@ -99,7 +99,7 @@ jobs:
       env: BUILD=autotools
     - if: (NOT type IN (pull_request)) AND (branch = master)
       stage: "Deploy"
-      - git tag -f latest-passing-build -a -m "Generated tag from TravisCI for build $TRAVIS_BUILD_NUMBER"
+      script: ./.scripts/travis_before_deploy.sh
       deploy:
         provider: releases
         token:
