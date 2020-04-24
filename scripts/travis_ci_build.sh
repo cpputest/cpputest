@@ -113,7 +113,7 @@ if [ "x$BUILD" = "xautotools_cmake_install_test" ]; then
     fi
 
     # Hack: autotools cannot make CMake package. We cached and copied them. Here we check they are still the same
-    for cmakefile in CppUTestConfig.cmake /CppUTestConfigVersion.cmake; do
+    for cmakefile in CppUTestConfig.cmake CppUTestConfigVersion.cmake CppUTestTargets-relwithdebinfo.cmake CppUTestTargets.cmake; do
       diff install_autotools/usr/local/lib/CppUTest/cmake/$cmakefile  install_cmake/usr/local/lib/CppUTest/cmake/$cmakefile || exit 1
     done
 fi
