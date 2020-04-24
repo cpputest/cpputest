@@ -116,7 +116,6 @@ if [ "x$BUILD" = "xautotools_cmake_install_test" ]; then
     for cmakefile in CppUTestConfig.cmake /CppUTestConfigVersion.cmake; do
       diff install_autotools/usr/local/lib/CppUTest/cmake/$cmakefile  install_cmake/usr/local/lib/CppUTest/cmake/$cmakefile || exit 1
     done
-    diff install_autotools/usr/local/lib/CppUTest/cmake//CppUTestConfigVersion.cmake  install_cmale/usr/local/lib/CppUTest/cmake//CppUTestConfigVersion.cmake
 fi
 
 if [ "x$BUILD" = "xdocker_ubuntu_autotools" ]; then

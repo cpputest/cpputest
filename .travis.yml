@@ -64,6 +64,8 @@ jobs:
   - compiler: gcc
     env: BUILD=cmake CPP_STD=17
   - compiler: gcc
+    env: BUILD=autotools_cmake_install_test
+  - compiler: gcc
     env: BUILD=autotools
     addons:
       apt:
