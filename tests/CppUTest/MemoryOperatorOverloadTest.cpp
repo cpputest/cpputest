@@ -22,7 +22,8 @@ TEST(BasicBehavior, CanDeleteNullPointers)
 
 #ifndef CPPUTEST_MEM_LEAK_DETECTION_DISABLED
 
-TEST(BasicBehavior, deleteArrayInvalidatesMemory)
+CPPUTEST_DO_NOT_SANITIZE_ADDRESS
+static void deleteArrayInvalidatesMemory()
 {
     unsigned char* memory = new unsigned char[10];
     PlatformSpecificMemset(memory, 0xAB, 10);
@@ -30,12 +31,23 @@ TEST(BasicBehavior, deleteArrayInvalidatesMemory)
     CHECK(memory[5] != 0xCB);
 }
 
-TEST(BasicBehavior, deleteInvalidatesMemory)
+TEST(BasicBehavior, deleteArrayInvalidatesMemory)
+{
+    deleteArrayInvalidatesMemory();
+}
+
+CPPUTEST_DO_NOT_SANITIZE_ADDRESS
+static void deleteInvalidatesMemory()
 {
     unsigned char* memory = new unsigned char;
     *memory = 0xAD;
     delete memory;
     CHECK(*memory != 0xAD);
+}
+
+TEST(BasicBehavior, deleteInvalidatesMemory)
+{
+    deleteInvalidatesMemory();
 }
 
 #if __cplusplus >= 201402L
@@ -91,12 +103,18 @@ TEST(BasicBehavior, bothMallocAndFreeAreOverloaded)
 
 #if CPPUTEST_USE_MEM_LEAK_DETECTION
 
-TEST(BasicBehavior, freeInvalidatesMemory)
+CPPUTEST_DO_NOT_SANITIZE_ADDRESS
+static void freeInvalidatesMemory()
 {
     unsigned char* memory = (unsigned char*) cpputest_malloc(sizeof(unsigned char));
     *memory = 0xAD;
     cpputest_free(memory);
     CHECK(*memory != 0xAD);
+}
+
+TEST(BasicBehavior, freeInvalidatesMemory)
+{
+    freeInvalidatesMemory();
 }
 #endif
 

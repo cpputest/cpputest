@@ -28,6 +28,7 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TestMemoryAllocator.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
+#include "CppUTest/TestTestingFixture.h"
 
 TEST_GROUP(TestMemoryAllocatorTest)
 {
@@ -112,6 +113,8 @@ TEST(TestMemoryAllocatorTest, NullUnknownNames)
     STRCMP_EQUAL("unknown", allocator->free_name());
 }
 
+#if (! CPPUTEST_SANITIZE_ADDRESS)
+
 #define MAX_SIZE_FOR_ALLOC ((size_t) -1 > (unsigned short)-1) ? (size_t) -97 : (size_t) -1
 
 static void failTryingToAllocateTooMuchMemory(void)
@@ -120,8 +123,6 @@ static void failTryingToAllocateTooMuchMemory(void)
     allocator.alloc_memory(MAX_SIZE_FOR_ALLOC, "file", 1);
 } // LCOV_EXCL_LINE
 
-#include "CppUTest/TestTestingFixture.h"
-
 TEST(TestMemoryAllocatorTest, TryingToAllocateTooMuchFailsTest)
 {
     TestTestingFixture fixture;
@@ -129,6 +130,8 @@ TEST(TestMemoryAllocatorTest, TryingToAllocateTooMuchFailsTest)
     fixture.runAllTests();
     fixture.assertPrintContains("malloc returned null pointer");
 }
+
+#endif
 
 #if CPPUTEST_USE_MEM_LEAK_DETECTION
 #if CPPUTEST_USE_MALLOC_MACROS
