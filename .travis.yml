@@ -101,6 +101,7 @@ jobs:
       stage: "Deploy"
       script:
         - git tag -f latest-passing-build -a -m "Generated tag from TravisCI for build $TRAVIS_BUILD_NUMBER"
+        - git push -f git@github.com:cpputest/cpputest.git --tags
       deploy:
         provider: releases
         token:
