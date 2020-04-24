@@ -102,12 +102,11 @@ jobs:
       - git tag -f latest-passing-build -a -m "Generated tag from TravisCI for build $TRAVIS_BUILD_NUMBER"
       deploy:
         provider: releases
-        skip_cleanup: true
-        api-key:
+        token:
           secure: O98m3aZQaKYWnEHlAR9XBRLnJpusBRwWKLwzOraHIrlxJ3Xy0QU1G/QOWb2lII2FWcCdeTYU77VIMvbZ5vt7wggS1/dUfN/5faO70g8UMJh4+QPqA+jHYcf4cZvAiScFYEmp8ptTxecnKMFRNWTrZGbY8xoFfMk6LyOje0KcPK4=
         tag_name: latest-passing-build
         name: "Latest passing build"
-        body: "This is the automatic release from Travis CI. Whenever a build passes, it gets released as Latest Passing Build."
+        release_notes: "This is the automatic release from Travis CI. Whenever a build passes, it gets released as Latest Passing Build."
         on:
           tags: false
 
