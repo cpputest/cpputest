@@ -1,126 +1,119 @@
 language: cpp
-
 dist: bionic
-
-# Do not let the tag trigger a build.
 branches:
   except:
-    - latest-passing-build
-
+  - latest-passing-build
 jobs:
-    include:
-    - stage: "build & test"
-      compiler: clang
-      os: osx
-      env: BUILD=cmake CPP_STD=17
-      addons:
-        apt:
-          packages:
-            - libc++-dev
-    - compiler: gcc
-      os: osx
-      env: BUILD=cmake CPP_STD=14
-
-    - compiler: gcc
-      os: osx
-      env: BUILD=autotools
-      addons:
-        apt:
-          packages:
-            - valgrind
-    - compiler: clang
-      env: BUILD=autotools
-      os: osx
-      addons:
-        apt:
-          packages:
-            - libc++-dev
-            - valgrind
-    - compiler: clang
-      env: BUILD=cmake CPP_STD=98
-      addons:
-        apt:
-          packages:
-            - libc++-dev
-    - compiler: clang
-      env: BUILD=cmake CPP_STD=11
-      addons:
-        apt:
-          packages:
-            - libc++-dev
-    - compiler: clang
-      env: BUILD=cmake CPP_STD=14
-      addons:
-        apt:
-          packages:
-            - libc++-dev
-    - compiler: clang
-      env: BUILD=cmake CPP_STD=17
-      addons:
-        apt:
-          packages:
-            - libc++-dev
-
-    - compiler: gcc
-      env: BUILD=cmake CPP_STD=98
-    - compiler: gcc
-      env: BUILD=cmake CPP_STD=11
-    - compiler: gcc
-      env: BUILD=cmake CPP_STD=14
-    - compiler: gcc
-      env: BUILD=cmake CPP_STD=17
-
-    - compiler: gcc
-      env: BUILD=autotools
-      addons:
-        apt:
-          packages:
-            - valgrind
-    - compiler: clang
-      env: BUILD=autotools
-      addons:
-        apt:
-          packages:
-            - libc++-dev
-            - valgrind
-
-    - compiler: gcc
-      env: BUILD=cmake_coverage
-    - compiler: gcc
-      env: BUILD=cmake_gtest
-    - env: BUILD=make_dos
-      addons:
-        apt:
-          packages:
-            - dosbox
-    - env: BUILD=docker_ubuntu_autotools
-    - env: BUILD=docker_ubuntu_gcc10
-    - stage: "Final Build"
-      env: BUILD=autotools
-    - if: (NOT type IN (pull_request)) AND (branch = master)
-      stage: "Deploy"
-      script:
-        - git tag -f latest-passing-build -a -m "Generated tag from TravisCI for build $TRAVIS_BUILD_NUMBER"
-        - git push -f git@github.com:cpputest/cpputest.git --tags
-      deploy:
-        provider: releases
-        token:
-          secure: O98m3aZQaKYWnEHlAR9XBRLnJpusBRwWKLwzOraHIrlxJ3Xy0QU1G/QOWb2lII2FWcCdeTYU77VIMvbZ5vt7wggS1/dUfN/5faO70g8UMJh4+QPqA+jHYcf4cZvAiScFYEmp8ptTxecnKMFRNWTrZGbY8xoFfMk6LyOje0KcPK4=
-        tag_name: latest-passing-build
-        name: "Latest passing build"
-        release_notes: "This is the automatic release from Travis CI. Whenever a build passes, it gets released as Latest Passing Build."
-        on:
-          tags: false
-
+  include:
+  - stage: build & test
+    compiler: clang
+    os: osx
+    env: BUILD=cmake CPP_STD=17
+    addons:
+      apt:
+        packages:
+        - libc++-dev
+  - compiler: gcc
+    os: osx
+    env: BUILD=cmake CPP_STD=14
+  - compiler: gcc
+    os: osx
+    env: BUILD=autotools
+    addons:
+      apt:
+        packages:
+        - valgrind
+  - compiler: clang
+    env: BUILD=autotools
+    os: osx
+    addons:
+      apt:
+        packages:
+        - libc++-dev
+        - valgrind
+  - compiler: clang
+    env: BUILD=cmake CPP_STD=98
+    addons:
+      apt:
+        packages:
+        - libc++-dev
+  - compiler: clang
+    env: BUILD=cmake CPP_STD=11
+    addons:
+      apt:
+        packages:
+        - libc++-dev
+  - compiler: clang
+    env: BUILD=cmake CPP_STD=14
+    addons:
+      apt:
+        packages:
+        - libc++-dev
+  - compiler: clang
+    env: BUILD=cmake CPP_STD=17
+    addons:
+      apt:
+        packages:
+        - libc++-dev
+  - compiler: gcc
+    env: BUILD=cmake CPP_STD=98
+  - compiler: gcc
+    env: BUILD=cmake CPP_STD=11
+  - compiler: gcc
+    env: BUILD=cmake CPP_STD=14
+  - compiler: gcc
+    env: BUILD=cmake CPP_STD=17
+  - compiler: gcc
+    env: BUILD=autotools
+    addons:
+      apt:
+        packages:
+        - valgrind
+  - compiler: clang
+    env: BUILD=autotools
+    addons:
+      apt:
+        packages:
+        - libc++-dev
+        - valgrind
+  - compiler: gcc
+    env: BUILD=cmake_coverage
+  - compiler: gcc
+    env: BUILD=cmake_gtest
+  - env: BUILD=make_dos
+    addons:
+      apt:
+        packages:
+        - dosbox
+  - env: BUILD=docker_ubuntu_autotools
+  - env: BUILD=docker_ubuntu_gcc10
+  - stage: Final Build
+    env: BUILD=autotools
+  - if: "(NOT type IN (pull_request)) AND (branch = master)"
+    stage: Deploy
+    script:
+    - git tag -f latest-passing-build -a -m "Generated tag from TravisCI for build
+      $TRAVIS_BUILD_NUMBER"
+    - git push -f git@github.com:cpputest/cpputest.git --tags
+    deploy:
+      provider: releases
+      token:
+        secure: O98m3aZQaKYWnEHlAR9XBRLnJpusBRwWKLwzOraHIrlxJ3Xy0QU1G/QOWb2lII2FWcCdeTYU77VIMvbZ5vt7wggS1/dUfN/5faO70g8UMJh4+QPqA+jHYcf4cZvAiScFYEmp8ptTxecnKMFRNWTrZGbY8xoFfMk6LyOje0KcPK4=
+      tag_name: latest-passing-build
+      name: Latest passing build
+      release_notes: This is the automatic release from Travis CI. Whenever a build
+        passes, it gets released as Latest Passing Build.
+      on:
+        tags: false
 before_script:
-    - export CPPUTEST_BUILD_DIR=$TRAVIS_BUILD_DIR/cpputest_build
-    - mkdir -p $CPPUTEST_BUILD_DIR && cd $CPPUTEST_BUILD_DIR
-
+- export CPPUTEST_BUILD_DIR=$TRAVIS_BUILD_DIR/cpputest_build
+- mkdir -p $CPPUTEST_BUILD_DIR && cd $CPPUTEST_BUILD_DIR
 script:
-    - "../scripts/travis_ci_build.sh"
-
+- "../scripts/travis_ci_build.sh"
 after_failure:
-    - "../scripts/travis_ci_after.sh"
-
+- "../scripts/travis_ci_after.sh"
 after_success:
-    - "../scripts/travis_ci_after.sh"
+- "../scripts/travis_ci_after.sh"
+notifications:
+  slack:
+    secure: oOx4AGIiJB+j1pkIxlLeQh5qp7TF89Sj+3RzJRQuo6z0HocTz9yJgXPlDh1H9rLj5SxK/UKsk+WFafVuPdWakQ40LeYO49C/+e+mCDcS0ujLka6dvIE8v0SEb1PuaAGjJWdhiviAhSqu9YOKPYZs37lD3oqepuEpxeiXwsur9QU=
