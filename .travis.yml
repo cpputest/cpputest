@@ -92,13 +92,11 @@ jobs:
   - if: "(NOT type IN (pull_request)) AND (branch = master)"
     stage: Deploy
     script:
-    - git tag -f latest-passing-build -a -m "Generated tag from TravisCI for build
-      $TRAVIS_BUILD_NUMBER"
-    - git push -f git@github.com:cpputest/cpputest.git --tags
+      #    - git tag -f latest-passing-build -a -m "Generated tag from TravisCI for build $TRAVIS_BUILD_NUMBER"
+      #    - git push -f git@github.com:cpputest/cpputest.git --tags
     deploy:
       provider: releases
-      token:
-        secure: O98m3aZQaKYWnEHlAR9XBRLnJpusBRwWKLwzOraHIrlxJ3Xy0QU1G/QOWb2lII2FWcCdeTYU77VIMvbZ5vt7wggS1/dUfN/5faO70g8UMJh4+QPqA+jHYcf4cZvAiScFYEmp8ptTxecnKMFRNWTrZGbY8xoFfMk6LyOje0KcPK4=
+      token: $(GH_TOKEN)
       tag_name: latest-passing-build
       name: Latest passing build
       release_notes: This is the automatic release from Travis CI. Whenever a build
