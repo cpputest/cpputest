@@ -24,6 +24,21 @@ TESTS = $(check_PROGRAMS)
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = cpputest.pc
 
+cmakemodulesdir = $(libdir)/CppUTest/cmake/Modules
+cmakemodules_DATA = \
+  cmake/Modules/CppUTestBuildTimeDiscoverTests.cmake
+
+cmakescriptsdir = $(libdir)/CppUTest/cmake/Scripts
+cmakescripts_DATA = \
+  cmake/Scripts/CppUTestBuildTimeDiscoverTests.cmake
+
+cmakedir = $(libdir)/CppUTest/cmake
+cmake_DATA = \
+  build/cmake_package_files/CppUTestConfig.cmake \
+  build/cmake_package_files/CppUTestConfigVersion.cmake \
+  build/cmake_package_files/CppUTestTargets-relwithdebinfo.cmake \
+  build/cmake_package_files/CppUTestTargets.cmake
+
 EXTRA_DIST = \
 	cpputest.pc.in \
 	$(ALL_FILES_IN_GIT)
@@ -109,6 +124,7 @@ if INCLUDE_CPPUTEST_EXT
 include_cpputestextdir = $(includedir)/CppUTestExt
 
 include_cpputestext_HEADERS = \
+  include/CppUTestExt/CodeMemoryReportFormatter.h \
 	include/CppUTestExt/GMock.h \
 	include/CppUTestExt/GTest.h \
 	include/CppUTestExt/GTestSupport.h \
