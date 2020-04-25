@@ -102,7 +102,14 @@ if [ "x$BUILD" = "xautotools_cmake_install_test" ]; then
     mkdir -p install_cmake
     make DESTDIR=install_cmake install
 
-    export INSTALL_DIFF=`diff -rq install_autotools install_cmake | grep -v CppUTestGeneratedConfig.h | grep -v libCppUTest.a | grep -v libCppUTestExt.a`
+    # Hack: autotools cannot make CMake package. We cached and copied them. Here we check they are still the same
+    for cmakefile in CppUTestConfig.cmake CppUTestConfigVersion.cmake CppUTestTargets-relwithdebinfo.cmake CppUTestTargets.cmake; do
+      cat install_autotools/usr/local/lib/CppUTest/cmake/$cmakefile
+      cat install_cmake/usr/local/lib/CppUTest/cmake/$cmakefile
+      diff -Bw install_autotools/usr/local/lib/CppUTest/cmake/$cmakefile  install_cmake/usr/local/lib/CppUTest/cmake/$cmakefile || exit 1
+    done
+
+    export INSTALL_DIFF=`diff -rwBq install_autotools install_cmake  -X CppUTestGeneratedConfig.h -X libCppUTest.a -X libCppUTestExt.a`
     if [ "x$INSTALL_DIFF" != "x" ]; then
         echo "FAILED: CMake install and Autotools install is not the same!\n"
         echo "Difference\n"
@@ -111,12 +118,6 @@ if [ "x$BUILD" = "xautotools_cmake_install_test" ]; then
         echo "-------------------------------\n"
         exit 1;
     fi
-
-    # Hack: autotools cannot make CMake package. We cached and copied them. Here we check they are still the same
-    for cmakefile in CppUTestConfig.cmake /CppUTestConfigVersion.cmake; do
-      diff install_autotools/usr/local/lib/CppUTest/cmake/$cmakefile  install_cmake/usr/local/lib/CppUTest/cmake/$cmakefile || exit 1
-    done
-    diff install_autotools/usr/local/lib/CppUTest/cmake//CppUTestConfigVersion.cmake  install_cmale/usr/local/lib/CppUTest/cmake//CppUTestConfigVersion.cmake
 fi
 
 if [ "x$BUILD" = "xdocker_ubuntu_autotools" ]; then
