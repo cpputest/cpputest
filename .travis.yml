@@ -124,11 +124,15 @@ jobs:
 
 #   Specific other tests
     - compiler: gcc
-      env: BUILD=autotools_cmake_install_test
+      env: BUILD=test_report
     - compiler: gcc
       env: BUILD=cmake_coverage
     - compiler: gcc
       env: BUILD=cmake_gtest
+    - compiler: clang
+      env: BUILD=autotools_gtest
+    - compiler: gcc
+      env: BUILD=autotools_cmake_install_test
 
 #   MS DOS Build
     - env: BUILD=make_dos
@@ -140,6 +144,7 @@ jobs:
 #   Docker images. Need to be cleared at times
     - env: BUILD=docker_ubuntu_autotools
     - env: BUILD=docker_ubuntu_gcc10
+    - env: BUILD=docker_ubuntu_dos
 
 #   Create zip and tgz for distribution
     - stage: dist build
