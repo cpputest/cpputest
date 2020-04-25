@@ -6,10 +6,6 @@ if [ "x$CPPUTEST_HOME" = "x" ] ; then
   export CPPUTEST_HOME=$TRAVIS_BUILD_DIR
 fi
 
-#if [[ "$CXX" == clang* ]]; then
-#    export CXXFLAGS="-stdlib=libc++"
-#fi
-
 if [ "x$BUILD" = "xautotools" ]; then
     autoreconf -i ..
     ../configure
@@ -54,9 +50,6 @@ if [ "x$BUILD" = "xcmake_gtest" ]; then
 fi
 
 if [ "x$BUILD" = "xtest_report" ]; then
-    if [ "x$TRAVIS_OS_NAME" = "xosx" ]; then
-        brew install ant
-    fi
     autoreconf -i ..
     ../configure
     make check
