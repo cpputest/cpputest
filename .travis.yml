@@ -134,6 +134,8 @@ jobs:
       - git tag -f latest-passing-build -a -m "Generated tag from TravisCI for build $TRAVIS_BUILD_NUMBER"
       - git push -f https://cpputest-travis:$GH_TOKEN@github.com/cpputest/cpputest.git --tags
       - ../scripts/travis_ci_build.sh
+      - pwd
+      - ls
       deploy:
         provider: releases
         token: $GH_TOKEN
