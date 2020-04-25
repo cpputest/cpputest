@@ -106,10 +106,10 @@ if [ "x$BUILD" = "xautotools_cmake_install_test" ]; then
     for cmakefile in CppUTestConfig.cmake CppUTestConfigVersion.cmake CppUTestTargets-relwithdebinfo.cmake CppUTestTargets.cmake; do
       cat install_autotools/usr/local/lib/CppUTest/cmake/$cmakefile
       cat install_cmake/usr/local/lib/CppUTest/cmake/$cmakefile
-      diff -w install_autotools/usr/local/lib/CppUTest/cmake/$cmakefile  install_cmake/usr/local/lib/CppUTest/cmake/$cmakefile || exit 1
+      diff -Bw install_autotools/usr/local/lib/CppUTest/cmake/$cmakefile  install_cmake/usr/local/lib/CppUTest/cmake/$cmakefile || exit 1
     done
 
-    export INSTALL_DIFF=`diff -rwq install_autotools install_cmake  -X CppUTestGeneratedConfig.h -X libCppUTest.a -X libCppUTestExt.a`
+    export INSTALL_DIFF=`diff -rwBq install_autotools install_cmake  -X CppUTestGeneratedConfig.h -X libCppUTest.a -X libCppUTestExt.a`
     if [ "x$INSTALL_DIFF" != "x" ]; then
         echo "FAILED: CMake install and Autotools install is not the same!\n"
         echo "Difference\n"
