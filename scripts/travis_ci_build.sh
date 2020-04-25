@@ -2,31 +2,18 @@
 # Script run in the travis CI
 set -ex
 
-if [[ "$CXX" == clang* ]]; then
-    export CXXFLAGS="-stdlib=libc++"
-fi
-
 if [ "x$CPPUTEST_HOME" = "x" ] ; then
   export CPPUTEST_HOME=$TRAVIS_BUILD_DIR
 fi
 
+#if [[ "$CXX" == clang* ]]; then
+#    export CXXFLAGS="-stdlib=libc++"
+#fi
+
 if [ "x$BUILD" = "xautotools" ]; then
     autoreconf -i ..
     ../configure
-    echo "CONFIGURATION DONE. Compiling now."
-
-    if [ "${TRAVIS_EVENT_TYPE}" = "cron" ]; then
-        make check_all
-    fi
-
-
-    if [ "x$TRAVIS_OS_NAME" = "xosx" ]; then
-        COPYFILE_DISABLE=1 make dist
-        COPYFILE_DISABLE=1 make dist-zip
-    else
-        make dist
-        make dist-zip
-    fi
+    make tdd
 fi
 
 if [ "x$BUILD" = "xcmake" ]; then
@@ -45,7 +32,6 @@ fi
 if [ "x$BUILD" = "xautotools_gtest" ]; then
     autoreconf -i ..
     ../configure
-
     make check_gtest
 fi
 
@@ -144,5 +130,24 @@ if [ "x$BUILD" = "xmake_dos" ]; then
     $CC --version
     make -f $CPPUTEST_HOME/platforms/Dos/Makefile
     $CPPUTEST_HOME/platforms/Dos/alltests.sh
- fi
+fi
+
+if [ "x$BUILD" = "xextensive_check" ]; then
+    if [ "${TRAVIS_EVENT_TYPE}" = "cron" ]; then
+        make check_all
+    fi
+fi
+
+if [ "x$BUILD" = "xautotools_dist" ]; then
+    autoreconf -i ..
+    ../configure
+
+    if [ "x$TRAVIS_OS_NAME" = "xosx" ]; then
+        COPYFILE_DISABLE=1 make dist VERSION=latest
+        COPYFILE_DISABLE=1 make dist-zip VERSION=latest
+    else
+        make dist VERSION=latest
+        make dist-zip VERSION=latest
+    fi
+fi
 
