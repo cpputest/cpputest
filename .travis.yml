@@ -33,10 +33,7 @@ jobs:
     - compiler: clang
       env: BUILD=autotools
       os: osx
-      addons:
-        apt:
-          packages:
-          - libc++-dev
+
 # Linux
     - compiler: gcc
       env: BUILD=cmake CPP_STD=17
@@ -44,10 +41,6 @@ jobs:
       env: BUILD=autotools
     - compiler: clang
       env: BUILD=autotools
-      addons:
-        apt:
-          packages:
-          - libc++-dev
 
 # Extended builds, different C++ version and build tools
     - stage: extended build & test
@@ -56,10 +49,6 @@ jobs:
       compiler: clang
       os: osx
       env: BUILD=cmake CPP_STD=17
-      addons:
-        apt:
-          packages:
-          - libc++-dev
     - compiler: gcc
       os: osx
       env: BUILD=cmake CPP_STD=14
@@ -68,28 +57,12 @@ jobs:
 #   CMake different C++ versions with clang
     - compiler: clang
       env: BUILD=cmake CPP_STD=98
-      addons:
-        apt:
-          packages:
-          - libc++-dev
     - compiler: clang
       env: BUILD=cmake CPP_STD=11
-      addons:
-        apt:
-          packages:
-          - libc++-dev
     - compiler: clang
       env: BUILD=cmake CPP_STD=14
-      addons:
-        apt:
-          packages:
-          - libc++-dev
     - compiler: clang
       env: BUILD=cmake CPP_STD=17
-      addons:
-        apt:
-          packages:
-          - libc++-dev
 
 #   CMake different C++ versions with gcc
     - compiler: gcc
@@ -135,10 +108,6 @@ jobs:
       env: BUILD=cmake_gtest
     - compiler: clang
       env: BUILD=autotools_gtest
-      addons:
-        apt:
-          packages:
-          - libc++-dev
     - compiler: gcc
       env: BUILD=autotools_cmake_install_test
 
