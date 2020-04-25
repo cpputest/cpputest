@@ -14,9 +14,11 @@ stages:
   - name: basic build & test
     if: "(NOT (TRAVIS_EVENT_TYPE = cron))"
   - extended build & test
+    if: "(NOT (TRAVIS_EVENT_TYPE = cron))"
   - dist build
+    if: "(NOT (TRAVIS_EVENT_TYPE = cron))"
   - name: deploy latest
-    if: "(NOT type IN (pull_request)) AND (branch = master)"
+    if: "(NOT type IN (pull_request)) AND (branch = master) AND (NOT (TRAVIS_EVENT_TYPE = cron))"
 
 jobs:
   include:
@@ -51,7 +53,7 @@ jobs:
     - stage: extended build & test
 
 # Mac OSX
-    - compiler: clang
+      compiler: clang
       os: osx
       env: BUILD=cmake CPP_STD=17
       addons:
