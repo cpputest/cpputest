@@ -129,13 +129,13 @@ CXXFLAGS="$saved_cxxflags"
 # Flag -Wno-c++98-compat
 CXXFLAGS="-Werror -Wno-c++98-compat"
 AC_MSG_CHECKING([whether CXX supports -Wno-c++98-compat])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CPP11BLACKLIST="${CPPUTEST_CPP11BLACKLIST} -Wno-c++98-compat" ], [AC_MSG_RESULT([no])])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wno-c++98-compat" ], [AC_MSG_RESULT([no])])
 CXXFLAGS="$saved_cxxflags"
 
 # Flag -Wno-c++98-compat-pedantic
 CXXFLAGS="-Werror -Wno-c++98-compat-pedantic"
 AC_MSG_CHECKING([whether CXX supports -Wno-c++98-compat-pedantic])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CPP11BLACKLIST="${CPPUTEST_CPP11BLACKLIST} -Wno-c++98-compat-pedantic" ], [AC_MSG_RESULT([no])])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wno-c++98-compat-pedantic" ], [AC_MSG_RESULT([no])])
 CXXFLAGS="$saved_cxxflags"
 
 # Flag -Wno-c++14-compat
@@ -425,19 +425,19 @@ cpp_standard_used="default"
 
 # Using the C++98 standard?
 if test "x${use_std_cpp98}" = xyes; then
-	CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} ${CPPUTEST_CPP98FLAG} ${CPPUTEST_CPP11BLACKLIST}"
+	CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} ${CPPUTEST_CPP98FLAG}"
   cpp_standard_used="C++98"
 fi
 
 # Using the C++11 standard?
 if test "x${use_std_cpp11}" = xyes; then
-	CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} ${CPPUTEST_CPP11FLAG} ${CPPUTEST_CPP11BLACKLIST}"
+	CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} ${CPPUTEST_CPP11FLAG}"
   cpp_standard_used="C++11"
 fi
 
 # Using the C++14 standard?
 if test "x${use_std_cpp14}" = xyes; then
-	CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} ${CPPUTEST_CPP14FLAG} ${CPPUTEST_CPP11BLACKLIST}"
+	CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} ${CPPUTEST_CPP14FLAG}"
   cpp_standard_used="C++14"
 fi
 
