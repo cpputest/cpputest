@@ -135,6 +135,10 @@ jobs:
       env: BUILD=cmake_gtest
     - compiler: clang
       env: BUILD=autotools_gtest
+      addons:
+        apt:
+          packages:
+          - libc++-dev
     - compiler: gcc
       env: BUILD=autotools_cmake_install_test
 
