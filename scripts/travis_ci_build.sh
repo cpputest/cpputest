@@ -6,9 +6,9 @@ if [ "x$CPPUTEST_HOME" = "x" ] ; then
   export CPPUTEST_HOME=$TRAVIS_BUILD_DIR
 fi
 
-if [[ "$CXX" == clang* ]]; then
-    export CXXFLAGS="-stdlib=libc++"
-fi
+#if [[ "$CXX" == clang* ]]; then
+#    export CXXFLAGS="-stdlib=libc++"
+#fi
 
 if [ "x$BUILD" = "xautotools" ]; then
     autoreconf -i ..
