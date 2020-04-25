@@ -13,9 +13,9 @@ branches:
 stages:
   - name: basic build & test
     if: "(NOT (TRAVIS_EVENT_TYPE = cron))"
-  - extended build & test
+  - name: extended build & test
     if: "(NOT (TRAVIS_EVENT_TYPE = cron))"
-  - dist build
+  - name: dist build
     if: "(NOT (TRAVIS_EVENT_TYPE = cron))"
   - name: deploy latest
     if: "(NOT type IN (pull_request)) AND (branch = master) AND (NOT (TRAVIS_EVENT_TYPE = cron))"
