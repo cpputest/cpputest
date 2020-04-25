@@ -16,7 +16,7 @@ stages:
   - extended build & test
   - dist build
   - name: deploy latest
-  - if: "(NOT type IN (pull_request)) AND (branch = master)"
+    if: "(NOT type IN (pull_request)) AND (branch = master)"
 
 jobs:
   include:
@@ -25,7 +25,7 @@ jobs:
 
 # Mac OSX
     - stage: basic build & test
-    - compiler: gcc
+      compiler: gcc
       os: osx
       env: BUILD=autotools
     - compiler: clang
