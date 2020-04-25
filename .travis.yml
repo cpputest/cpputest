@@ -125,6 +125,10 @@ jobs:
 #   Specific other tests
     - compiler: gcc
       env: BUILD=test_report
+      addons:
+        apt:
+          packages:
+          - ant-optional
     - compiler: gcc
       env: BUILD=cmake_coverage
     - compiler: gcc
