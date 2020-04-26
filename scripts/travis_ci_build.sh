@@ -126,9 +126,9 @@ if [ "x$BUILD" = "xmake_dos" ]; then
 fi
 
 if [ "x$BUILD" = "xextensive_check" ]; then
-    if [ "${TRAVIS_EVENT_TYPE}" = "cron" ]; then
-        make check_all
-    fi
+    autoreconf -i ..
+    ../configure
+    make check_all
 fi
 
 if [ "x$BUILD" = "xautotools_dist" ]; then

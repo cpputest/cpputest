@@ -194,7 +194,7 @@ TEST(UtestShell, RunInSeparateProcessTest)
     fixture.assertPrintContains("Failed in separate process");
 }
 
-#ifndef CPPUTEST_HAVE_FORK
+#if !CPPUTEST_HAVE_FORK
 
 IGNORE_TEST(UtestShell, TestDefaultCrashMethodInSeparateProcessTest) {}
 

@@ -11,11 +11,11 @@ branches:
 
 # Build stages and the conditionals for the stages
 stages:
+  - name: extensive daily tests
+    if: "(TRAVIS_EVENT_TYPE = cron)"
   - name: basic build & test
     if: "(NOT (TRAVIS_EVENT_TYPE = cron))"
   - name: extended build & test
-    if: "(NOT (TRAVIS_EVENT_TYPE = cron))"
-  - name: dist build
     if: "(NOT (TRAVIS_EVENT_TYPE = cron))"
   - name: deploy latest
     if: "(NOT type IN (pull_request)) AND (branch = master) AND (NOT (TRAVIS_EVENT_TYPE = cron))"
@@ -122,10 +122,13 @@ jobs:
     - env: BUILD=docker_ubuntu_autotools
     - env: BUILD=docker_ubuntu_gcc10
     - env: BUILD=docker_ubuntu_dos
+    - env: BUILD=autotools_dist
 
-#   Create zip and tgz for distribution
-    - stage: dist build
-      env: BUILD=autotools_dist
+    - stage: extensive daily tests
+      compiler: gcc
+      env: BUILD=extensive_check
+    - compiler: clang
+      env: BUILD=extensive_check
 
 #   Deploy to github releases
     - stage: deploy latest
