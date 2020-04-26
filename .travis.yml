@@ -131,7 +131,8 @@ jobs:
     - stage: deploy latest
       env: BUILD=autotools_dist
       script:
-      - git tag -f latest-passing-build -a -m "Generated tag from TravisCI for build $TRAVIS_BUILD_NUMBER"
+      - export DATE=`date`
+      - git tag -f latest-passing-build -a -m "Generated tag from TravisCI for build $TRAVIS_BUILD_NUMBER at $DATE"
       - git push -f https://cpputest-travis:$GH_TOKEN@github.com/cpputest/cpputest.git --tags
       - ../scripts/travis_ci_build.sh
       - pwd
@@ -143,7 +144,7 @@ jobs:
         name: Latest passing build
         file: cpputest-latest.tar.gz
         overwrite: true
-        cleanup: false
+        skip_cleanup: true
         release_notes: This is the automatic release from Travis CI. Whenever a build passes, it gets released as Latest Passing Build.
         on:
           tags: false
