@@ -59,6 +59,8 @@ option(WERROR "Compile with warnings as errors" OFF)
 option(TESTS "Compile and make tests for the code?" ON)
 option(TESTS_DETAILED "Run each test separately instead of grouped?" OFF)
 
+option(EXAMPLES "Compile and make exaples?" OFF)
+
 option(VERBOSE_CONFIG "Print configuration to stdout during generation" ON)
 
 if(NOT CMAKE_BUILD_TYPE)
@@ -100,6 +102,10 @@ if (TESTS)
         add_subdirectory(tests/CppUTestExt)
     endif (EXTENSIONS)
 endif (TESTS)
+
+if (EXAMPLES)
+  add_subdirectory(examples)
+endif(EXAMPLES)
 
 set (INCLUDE_INSTALL_DIR "${CMAKE_INSTALL_INCLUDEDIR}")
 set (LIB_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}")
