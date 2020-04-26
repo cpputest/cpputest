@@ -1,5 +1,3 @@
-enable_testing()
-
 set(CppUTestTests_src
     AllTests.cpp
     SetPluginTest.cpp
