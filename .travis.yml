@@ -143,6 +143,7 @@ jobs:
         name: Latest passing build
         file: cpputest-latest.tar.gz
         overwrite: true
+        cleanup: false
         release_notes: This is the automatic release from Travis CI. Whenever a build passes, it gets released as Latest Passing Build.
         on:
           tags: false
