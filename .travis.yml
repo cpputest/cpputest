@@ -12,6 +12,7 @@ branches:
 # Build stages and the conditionals for the stages
 stages:
   - name: extensive daily tests
+    if: "(TRAVIS_EVENT_TYPE = cron)"
   - name: basic build & test
     if: "(NOT (TRAVIS_EVENT_TYPE = cron))"
   - name: extended build & test
