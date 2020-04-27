@@ -84,6 +84,8 @@ include("${CppUTestRootDirectory}/cmake/Modules/CppUTestBuildTimeDiscoverTests.c
 include("${CppUTestRootDirectory}/cmake/Modules/CppUTestNormalizeTestOutputLocation.cmake")
 include(GNUInstallDirs)
 
+enable_testing()
+
 configure_file (
     "${PROJECT_SOURCE_DIR}/config.h.cmake"
     "${PROJECT_BINARY_DIR}/generated/CppUTestGeneratedConfig.h"

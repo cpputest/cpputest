@@ -1,5 +1,3 @@
-enable_testing()
-
 include_directories(../ApplicationLib)
 
 add_executable(ExampleTests
