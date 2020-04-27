@@ -12,13 +12,13 @@ branches:
 # Build stages and the conditionals for the stages
 stages:
   - name: extensive daily tests
-    if: "(TRAVIS_EVENT_TYPE = cron)"
+    if: type = cron
   - name: basic build & test
-    if: "(NOT (TRAVIS_EVENT_TYPE = cron))"
+    if: type != cron
   - name: extended build & test
-    if: "(NOT (TRAVIS_EVENT_TYPE = cron))"
+    if: type != cron
   - name: deploy latest
-    if: "(NOT type IN (pull_request)) AND (branch = master) AND (NOT (TRAVIS_EVENT_TYPE = cron))"
+    if: "(NOT type IN (pull_request)) AND (branch = master) AND (type != cron)"
 
 jobs:
   include:
