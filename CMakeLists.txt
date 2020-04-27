@@ -37,12 +37,14 @@ if (MINGW)
         add_definitions(-D_TIMESPEC_DEFINED=1)
     endif()
 
-    # Apply workaround for static/shared libraries on MinGW C/C++ compiler
-    # Issue occurs with CMake >= 3.9.0, it doesn't filter out gcc,gcc_s,gcc_eh from
-    # the implicit library list anymore, so the C++ linker is getting passed the static
-    # gcc_eh library since that's what the C linker uses by default. Only solution appears
-    # to be to force static linkage.
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static")
+    if (NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+        # Apply workaround for static/shared libraries on MinGW C/C++ compiler
+        # Issue occurs with CMake >= 3.9.0, it doesn't filter out gcc,gcc_s,gcc_eh from
+        # the implicit library list anymore, so the C++ linker is getting passed the static
+        # gcc_eh library since that's what the C linker uses by default. Only solution appears
+        # to be to force static linkage.
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static")
+    endif()
 endif()
 
 option(STD_C "Use the standard C library" ON)

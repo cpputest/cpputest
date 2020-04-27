@@ -72,12 +72,19 @@ switch -Wildcard ($env:Platform)
     'MinGW*'
     {
         $mingw_path = Get-MinGWBin
+        
+        if ($env:Platform -like 'MinGWClang*')
+        {
+            $toolchain_filename = Get-ClangToolchainFilename
+            $toolchain_path = (Join-Path (Split-Path $MyInvocation.MyCommand.Path) "..\cmake\$toolchain_filename")
+            $toolchain = "-DCMAKE_TOOLCHAIN_FILE=$toolchain_path" 
+        }
 
         # Add mingw to the path
         Add-PathFolder $mingw_path
 
         Invoke-BuildCommand "cmake --version"
-        Invoke-BuildCommand "cmake -G 'MinGW Makefiles' .." 'cpputest_build'
+        Invoke-BuildCommand "cmake -G 'MinGW Makefiles' $toolchain .." 'cpputest_build'
         Invoke-BuildCommand "mingw32-make all" 'cpputest_build'
 
         Remove-PathFolder $mingw_path

@@ -18,6 +18,16 @@ function Get-MinGWBin() {
     }
 }
 
+# Helper function to provide the toolchain file for clang
+function Get-ClangToolchainFilename() {
+    if ($env:Platform -like '*64') {
+        Write-Output 'clang+mingw-win64.toolchain.cmake'
+    }
+    else {
+        Write-Output 'clang+mingw-win32.toolchain.cmake'
+    }
+}
+
 # Helper function to provide the bin-folder path to cygwin
 function Get-CygwinBin() {
     if ($env:Platform -like '*64') {
