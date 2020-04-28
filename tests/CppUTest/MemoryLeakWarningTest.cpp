@@ -131,7 +131,7 @@ TEST(MemoryLeakWarningTest, TwoLeaks)
 static void _testLeakWarningWithPluginDisabled()
 {
     memPlugin->expectLeaksInTest(1);
-    cpputest_malloc_location_with_leak_detection(10, __FILE__, __LINE__);
+    leak1 = (char*) cpputest_malloc_location_with_leak_detection(10, __FILE__, __LINE__);
 }
 
 TEST(MemoryLeakWarningTest, LeakWarningWithPluginDisabled)
@@ -144,8 +144,10 @@ TEST(MemoryLeakWarningTest, LeakWarningWithPluginDisabled)
     LONGS_EQUAL(0, fixture->getFailureCount());
     fixture->assertPrintContains("Warning: Expected 1 leak(s), but leak detection was disabled");
 
-    MemoryLeakWarningPlugin::restoreNewDeleteOverloads();
+    cpputest_free_location_with_leak_detection(leak1, __FILE__, __LINE__);
+    leak1 = NULLPTR;
 
+    MemoryLeakWarningPlugin::restoreNewDeleteOverloads();
 }
 
 static void _testIgnore2()
