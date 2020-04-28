@@ -456,8 +456,9 @@ fi
 
 # Dealing with address sanitizer
 if test "x${sanitize_address}" = xyes; then
-	CPPUTEST_CFLAGS="${CPPUTEST_CFLAGS} -fsanitize=address"
-	CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} -fsanitize=address"
+	CPPUTEST_CFLAGS="${CPPUTEST_CFLAGS} -fsanitize=address -fno-omit-frame-pointer"
+	CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} -fsanitize=address -fno-omit-frame-pointer"
+  CPPUTEST_LDFLAGS="${CPPUTEST_CXXFLAGS} -fsanitize=address -fno-omit-frame-pointer"
 fi
 
 # Generating map files.
