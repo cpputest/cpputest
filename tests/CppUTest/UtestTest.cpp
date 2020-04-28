@@ -200,6 +200,8 @@ IGNORE_TEST(UtestShell, TestDefaultCrashMethodInSeparateProcessTest) {}
 
 #else
 
+#if !CPPUTEST_SANITIZE_ADDRESS
+
 TEST(UtestShell, TestDefaultCrashMethodInSeparateProcessTest)
 {
     fixture.setTestFunction(UtestShell::crash);
@@ -210,6 +212,8 @@ TEST(UtestShell, TestDefaultCrashMethodInSeparateProcessTest)
     /* Signal 11 usually happens, but with clang3.7 on Linux, it produced signal 4 */
     CHECK(fixture.getOutput().contains("signal 11") || fixture.getOutput().contains("signal 4"));
 }
+
+#endif
 
 #endif
 
