@@ -193,6 +193,22 @@ TEST(CommandLineArguments, setGroupFilter)
     CHECK_EQUAL(TestFilter("group"), *args->getGroupFilters());
 }
 
+TEST(CommandLineArguments, setCompleteGroupDotNameFilterInvalidArgument)
+{
+    int argc = 3;
+    const char* argv[] = { "tests.exe", "-t", "groupname" };
+    CHECK_FALSE(newArgumentParser(argc, argv));
+}
+TEST(CommandLineArguments, setCompleteGroupDotNameFilter)
+{
+    int argc = 3;
+    const char* argv[] = { "tests.exe", "-t", "group.name" };
+    CHECK(newArgumentParser(argc, argv));
+    CHECK_EQUAL(TestFilter("group"), *args->getGroupFilters());
+    CHECK_EQUAL(TestFilter("name"), *args->getNameFilters());
+}
+
+
 TEST(CommandLineArguments, setGroupFilterSameParameter)
 {
     int argc = 2;
@@ -441,7 +457,9 @@ TEST(CommandLineArguments, weirdParamatersReturnsFalse)
 
 TEST(CommandLineArguments, printUsage)
 {
-    STRCMP_EQUAL("use -h for more extensive help\nusage [-h] [-v] [-c] [-p] [-lg] [-ln] [-ri] [-r#] [-g|sg|xg|xsg groupName]... [-n|sn|xn|xsn testName]... [-b] [-s [randomizerSeed>0]] [\"TEST(groupName, testName)\"]... [-o{normal, junit, teamcity}] [-k packageName]\n",
+    STRCMP_EQUAL("use -h for more extensive help\nusage [-h] [-v] [-c] [-p] [-lg] [-ln] [-ri] [-r#]\n"
+                                                 "      [-g|sg|xg|xsg groupName]... [-n|sn|xn|xsn testName]... [-t groupName.testName]...\n"
+                                                 "      [-b] [-s [randomizerSeed>0]] [\"TEST(groupName, testName)\"]... [-o{normal, junit, teamcity}] [-k packageName]\n",
             args->usage());
 }
 
