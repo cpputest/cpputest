@@ -64,6 +64,7 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
         else if (argument == "-ri") runIgnored_ = true;
         else if (argument.startsWith("-r")) setRepeatCount(ac_, av_, i);
         else if (argument.startsWith("-g")) addGroupFilter(ac_, av_, i);
+        else if (argument.startsWith("-t")) correctParameters = addGroupDotNameFilter(ac_, av_, i);
         else if (argument.startsWith("-sg")) addStrictGroupFilter(ac_, av_, i);
         else if (argument.startsWith("-xg")) addExcludeGroupFilter(ac_, av_, i);
         else if (argument.startsWith("-xsg")) addExcludeStrictGroupFilter(ac_, av_, i);
@@ -88,7 +89,9 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
 
 const char* CommandLineArguments::usage() const
 {
-    return "use -h for more extensive help\nusage [-h] [-v] [-c] [-p] [-lg] [-ln] [-ri] [-r#] [-g|sg|xg|xsg groupName]... [-n|sn|xn|xsn testName]... [-b] [-s [randomizerSeed>0]] [\"TEST(groupName, testName)\"]... [-o{normal, junit, teamcity}] [-k packageName]\n";
+    return "use -h for more extensive help\nusage [-h] [-v] [-c] [-p] [-lg] [-ln] [-ri] [-r#]\n"
+                                           "      [-g|sg|xg|xsg groupName]... [-n|sn|xn|xsn testName]... [-t groupName.testName]...\n"
+                                           "      [-b] [-s [randomizerSeed>0]] [\"TEST(groupName, testName)\"]... [-o{normal, junit, teamcity}] [-k packageName]\n";
 }
 
 const char* CommandLineArguments::help() const
@@ -114,6 +117,7 @@ const char* CommandLineArguments::help() const
       "Options that control which tests are run:\n"
       "  -g group         - only run test whose group contains the substring group\n"
       "  -n name          - only run test whose name contains the substring name\n"
+      "  -t group.name    - only run test whose name contains the substring group and name\n"
       "  -sg group        - only run test whose group exactly matches the string group\n"
       "  -sn name         - only run test whose name exactly matches the string name\n"
       "  -xg group        - exclude tests whose group contains the substring group (v3.8)\n"
@@ -244,6 +248,19 @@ void CommandLineArguments::addGroupFilter(int ac, const char *const *av, int& i)
 {
     TestFilter* groupFilter = new TestFilter(getParameterField(ac, av, i, "-g"));
     groupFilters_ = groupFilter->add(groupFilters_);
+}
+
+bool CommandLineArguments::addGroupDotNameFilter(int ac, const char *const *av, int& i)
+{
+    SimpleString groupDotName = getParameterField(ac, av, i, "-t");
+    SimpleStringCollection collection;
+    groupDotName.split(".", collection);
+
+    if (collection.size() != 2) return false;
+
+    groupFilters_ = (new TestFilter(collection[0].subString(0, collection[0].size()-1)))->add(groupFilters_);
+    nameFilters_ = (new TestFilter(collection[1]))->add(nameFilters_);
+    return true;
 }
 
 void CommandLineArguments::addStrictGroupFilter(int ac, const char *const *av, int& i)
