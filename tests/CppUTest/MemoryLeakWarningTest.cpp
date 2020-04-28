@@ -321,6 +321,7 @@ TEST(MemoryLeakWarningGlobalDetectorTest, gettingTheGlobalDetectorDoesNotRestore
 
     delete temporaryReporter;
     delete temporaryDetector;
+    MemoryLeakWarningPlugin::setGlobalDetector(NULLPTR, NULLPTR);
 }
 
 TEST(MemoryLeakWarningGlobalDetectorTest, checkIfTheMemoryLeakOverloadsAreOn)

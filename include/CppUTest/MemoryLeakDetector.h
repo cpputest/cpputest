@@ -117,11 +117,11 @@ private:
 struct MemoryLeakDetectorNode
 {
     MemoryLeakDetectorNode() :
-        size_(0), number_(0), memory_(NULLPTR), file_(NULLPTR), line_(0), allocator_(NULLPTR), period_(mem_leak_period_enabled), next_(NULLPTR)
+        size_(0), number_(0), memory_(NULLPTR), file_(NULLPTR), line_(0), allocator_(NULLPTR), period_(mem_leak_period_enabled), allocation_stage_(0), next_(NULLPTR)
     {
     }
 
-    void init(char* memory, unsigned number, size_t size, TestMemoryAllocator* allocator, MemLeakPeriod period, const char* file, int line);
+    void init(char* memory, unsigned number, size_t size, TestMemoryAllocator* allocator, MemLeakPeriod period, unsigned char allocation_stage, const char* file, int line);
 
     size_t size_;
     unsigned number_;
@@ -130,6 +130,7 @@ struct MemoryLeakDetectorNode
     int line_;
     TestMemoryAllocator* allocator_;
     MemLeakPeriod period_;
+    unsigned char allocation_stage_;
 
 private:
     friend struct MemoryLeakDetectorList;
@@ -147,15 +148,19 @@ struct MemoryLeakDetectorList
     MemoryLeakDetectorNode* removeNode(char* memory);
 
     MemoryLeakDetectorNode* getFirstLeak(MemLeakPeriod period);
-    MemoryLeakDetectorNode* getNextLeak(MemoryLeakDetectorNode* node,
-            MemLeakPeriod period);
-    MemoryLeakDetectorNode* getLeakFrom(MemoryLeakDetectorNode* node,
-            MemLeakPeriod period);
+    MemoryLeakDetectorNode* getFirstLeakForAllocationStage(unsigned char allocation_stage);
+
+    MemoryLeakDetectorNode* getNextLeak(MemoryLeakDetectorNode* node, MemLeakPeriod period);
+    MemoryLeakDetectorNode* getNextLeakForAllocationStage(MemoryLeakDetectorNode* node, unsigned char allocation_stage);
+
+    MemoryLeakDetectorNode* getLeakFrom(MemoryLeakDetectorNode* node, MemLeakPeriod period);
+    MemoryLeakDetectorNode* getLeakForAllocationStageFrom(MemoryLeakDetectorNode* node, unsigned char allocation_stage);
 
     int getTotalLeaks(MemLeakPeriod period);
     void clearAllAccounting(MemLeakPeriod period);
 
     bool isInPeriod(MemoryLeakDetectorNode* node, MemLeakPeriod period);
+    bool isInAllocationStage(MemoryLeakDetectorNode* node, unsigned char allocation_stage);
 
 private:
     MemoryLeakDetectorNode* head_;
@@ -172,8 +177,9 @@ struct MemoryLeakDetectorTable
     int getTotalLeaks(MemLeakPeriod period);
 
     MemoryLeakDetectorNode* getFirstLeak(MemLeakPeriod period);
-    MemoryLeakDetectorNode* getNextLeak(MemoryLeakDetectorNode* leak,
-            MemLeakPeriod period);
+    MemoryLeakDetectorNode* getFirstLeakForAllocationStage(unsigned char allocation_stage);
+    MemoryLeakDetectorNode* getNextLeak(MemoryLeakDetectorNode* leak, MemLeakPeriod period);
+    MemoryLeakDetectorNode* getNextLeakForAllocationStage(MemoryLeakDetectorNode* leak, unsigned char allocation_stage);
 
 private:
     unsigned long hash(char* memory);
@@ -200,6 +206,10 @@ public:
     void startChecking();
     void stopChecking();
 
+    unsigned char getCurrentAllocationStage() const;
+    void increaseAllocationStage();
+    void decreaseAllocationStage();
+
     const char* report(MemLeakPeriod period);
     void markCheckingPeriodLeaksAsNonCheckingPeriod();
     int totalMemoryLeaks(MemLeakPeriod period);
@@ -210,6 +220,7 @@ public:
             const char* file, int line, bool allocatNodesSeperately = false);
     void deallocMemory(TestMemoryAllocator* allocator, void* memory, bool allocatNodesSeperately = false);
     void deallocMemory(TestMemoryAllocator* allocator, void* memory, const char* file, int line, bool allocatNodesSeperately = false);
+    void deallocAllMemoryInCurrentAllocationStage();
     char* reallocMemory(TestMemoryAllocator* allocator, char* memory, size_t size, const char* file, int line, bool allocatNodesSeperately = false);
 
     void invalidateMemory(char* memory);
@@ -233,6 +244,7 @@ private:
     MemoryLeakDetectorTable memoryTable_;
     bool doAllocationTypeChecking_;
     unsigned allocationSequenceNumber_;
+    unsigned char current_allocation_stage_;
     SimpleMutex* mutex_;
 
     char* allocateMemoryWithAccountingInformation(TestMemoryAllocator* allocator, size_t size, const char* file, int line, bool allocatNodesSeperately);

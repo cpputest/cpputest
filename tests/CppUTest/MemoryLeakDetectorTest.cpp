@@ -478,6 +478,36 @@ TEST(MemoryLeakDetectorTest, periodChecking)
     detector->deallocMemory(defaultMallocAllocator(), mem);
 }
 
+TEST(MemoryLeakDetectorTest, defaultAllocationStageIsZero)
+{
+    LONGS_EQUAL(0, detector->getCurrentAllocationStage());
+}
+
+TEST(MemoryLeakDetectorTest, increaseAllocationStage)
+{
+    detector->increaseAllocationStage();
+    LONGS_EQUAL(1, detector->getCurrentAllocationStage());
+}
+
+TEST(MemoryLeakDetectorTest, freeAllMemoryInCurrentAllocationStage)
+{
+    detector->increaseAllocationStage();
+    detector->allocMemory(defaultMallocAllocator(), 2);
+    detector->allocMemory(defaultMallocAllocator(), 2);
+    detector->deallocAllMemoryInCurrentAllocationStage();
+    LONGS_EQUAL(0, detector->totalMemoryLeaks(mem_leak_period_all));
+}
+
+TEST(MemoryLeakDetectorTest, freeOnlyTheMemoryInTheAllocationStage)
+{
+    char* mem = detector->allocMemory(defaultMallocAllocator(), 2);
+    detector->increaseAllocationStage();
+    detector->allocMemory(defaultMallocAllocator(), 2);
+    detector->deallocAllMemoryInCurrentAllocationStage();
+    LONGS_EQUAL(1, detector->totalMemoryLeaks(mem_leak_period_all));
+    detector->deallocMemory(defaultMallocAllocator(), mem);
+}
+
 TEST(MemoryLeakDetectorTest, allocateWithANullAllocatorCausesNoProblems)
 {
     char* mem = detector->allocMemory(NullUnknownAllocator::defaultAllocator(), 2);
