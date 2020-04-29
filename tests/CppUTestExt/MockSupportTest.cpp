@@ -250,16 +250,13 @@ TEST(MockSupportTestWithFixture, ShouldNotCrashOnFailureAfterCrashMethodWasReset
 
 TEST(MockSupportTestWithFixture, failedMockShouldFailAgainWhenRepeated)
 {
-    fixture.setTestFunction(unexpectedCallTestFunction_);
     int repeatCount = 2;
     while(repeatCount--)
     {
         fixture.runAllTests();
         fixture.assertPrintContains("Unexpected call to function: unexpected");
         fixture.assertPrintContains("Errors (1 failures, 1 tests, 1 ran, 0 checks, 0 ignored, 0 filtered out");
-        fixture.output_->flush();
-        delete fixture.result_;
-        fixture.result_ = new TestResult(*fixture.output_);
+        fixture.flushOutputAndResetResult();
     }
 }
 
