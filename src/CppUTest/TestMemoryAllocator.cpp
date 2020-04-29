@@ -295,17 +295,16 @@ char* FailableMemoryAllocator::allocMemoryLeakNode(size_t size)
 
 void FailableMemoryAllocator::checkAllFailedAllocsWereDone()
 {
-  if (head_) {
-    UtestShell* currentTest = UtestShell::getCurrent();
-    SimpleString failText;
-    if (head_->file_)
-      failText = StringFromFormat("Expected failing alloc at %s:%d was never done", head_->file_, head_->line_);
-    else
-      failText = StringFromFormat("Expected allocation number %d was never done", head_->allocNumberToFail_);
+    if (head_) {
+        UtestShell* currentTest = UtestShell::getCurrent();
+        SimpleString failText;
+        if (head_->file_)
+            failText = StringFromFormat("Expected failing alloc at %s:%d was never done", head_->file_, head_->line_);
+        else
+            failText = StringFromFormat("Expected allocation number %d was never done", head_->allocNumberToFail_);
 
-    currentTest->failWith(FailFailure(currentTest, currentTest->getName().asCharString(),
-    currentTest->getLineNumber(), failText), TestTerminatorWithoutExceptions());
-  }
+        currentTest->failWith(FailFailure(currentTest, currentTest->getName().asCharString(), currentTest->getLineNumber(), failText));
+    }
 }
 
 void FailableMemoryAllocator::clearFailedAllocs()

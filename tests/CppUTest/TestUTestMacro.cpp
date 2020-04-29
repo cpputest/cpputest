@@ -510,7 +510,7 @@ TEST(UnitTestMacros, failing_CHECK_EQUAL_WithExpectedBeingEvaluatesMultipleTimes
 TEST(UnitTestMacros, failing_CHECK_EQUAL_withParamatersThatDontChangeWillNotGiveAnyWarning)
 {
     fixture.runTestWithMethod(_failingTestMethodWithCHECK_EQUAL);
-    CHECK( ! fixture.output_->getOutput().contains("WARNING"));
+    fixture.assertPrintContainsNot("WARNING");
 }
 
 TEST(UnitTestMacros, CHECK_EQUALBehavesAsProperMacro)

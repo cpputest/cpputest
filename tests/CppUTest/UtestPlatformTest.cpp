@@ -104,14 +104,14 @@ static void _stoppedTestFunction()
 
 TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, TestInSeparateProcessWorks)
 {
-    fixture.registry_->setRunTestsInSeperateProcess();
+    fixture.setRunTestsInSeperateProcess();
     fixture.runAllTests();
     fixture.assertPrintContains("OK (1 tests, 1 ran, 0 checks, 0 ignored, 0 filtered out");
 }
 
 TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, FailureInSeparateProcessWorks)
 {
-    fixture.registry_->setRunTestsInSeperateProcess();
+    fixture.setRunTestsInSeperateProcess();
     fixture.setTestFunction(_failFunction);
     fixture.runAllTests();
     fixture.assertPrintContains("Failed in separate process");
@@ -138,7 +138,7 @@ TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, AccessViolati
 
 TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, StoppedInSeparateProcessWorks)
 {
-    fixture.registry_->setRunTestsInSeperateProcess();
+    fixture.setRunTestsInSeperateProcess();
     fixture.setTestFunction(_stoppedTestFunction);
     fixture.runAllTests();
     fixture.assertPrintContains("Stopped in separate process - continuing");
@@ -148,7 +148,7 @@ TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, StoppedInSepa
 TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, CallToForkFailedInSeparateProcessWorks)
 {
     UT_PTR_SET(PlatformSpecificFork, fork_failed_stub);
-    fixture.registry_->setRunTestsInSeperateProcess();
+    fixture.setRunTestsInSeperateProcess();
     fixture.runAllTests();
     fixture.assertPrintContains("Call to fork() failed");
     fixture.assertPrintContains("Errors (1 failures, 1 tests, 1 ran");
@@ -160,7 +160,7 @@ TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, CallToWaitPid
     UT_PTR_SET(PlatformSpecificWaitPid, waitpid_while_debugging_stub);
     waitpid_while_debugging_stub_number_called = 0;
     waitpid_while_debugging_stub_forced_failures = 10;
-    fixture.registry_->setRunTestsInSeperateProcess();
+    fixture.setRunTestsInSeperateProcess();
     fixture.runAllTests();
     fixture.assertPrintContains("OK (1 tests, 1 ran, 0 checks, 0 ignored, 0 filtered out");
     // extra check to confirm that waitpid() was polled until it passed (and passed call adds one)
@@ -173,7 +173,7 @@ TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, CallToWaitPid
     UT_PTR_SET(PlatformSpecificWaitPid, waitpid_while_debugging_stub);
     waitpid_while_debugging_stub_number_called = 0;
     waitpid_while_debugging_stub_forced_failures = 40;
-    fixture.registry_->setRunTestsInSeperateProcess();
+    fixture.setRunTestsInSeperateProcess();
     fixture.runAllTests();
     fixture.assertPrintContains("Call to waitpid() failed with EINTR. Tried 30 times and giving up! Sometimes happens in debugger");
     // extra check to confirm that waitpid() was polled until it passed (and passed call adds one)
@@ -184,7 +184,7 @@ TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, CallToWaitPid
 TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, CallToWaitPidFailedInSeparateProcessWorks)
 {
     UT_PTR_SET(PlatformSpecificWaitPid, waitpid_failed_stub);
-    fixture.registry_->setRunTestsInSeperateProcess();
+    fixture.setRunTestsInSeperateProcess();
     fixture.runAllTests();
     fixture.assertPrintContains("Call to waitpid() failed");
     fixture.assertPrintContains("Errors (1 failures, 1 tests, 1 ran");
@@ -192,7 +192,7 @@ TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, CallToWaitPid
 
 TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, MultipleTestsInSeparateProcessAreCountedProperly)
 {
-    fixture.registry_->setRunTestsInSeperateProcess();
+    fixture.setRunTestsInSeperateProcess();
     fixture.runTestWithMethod(NULLPTR);
     fixture.runTestWithMethod(_stoppedTestFunction);
     fixture.runTestWithMethod(NULLPTR);

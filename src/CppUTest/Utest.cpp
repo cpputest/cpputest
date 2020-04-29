@@ -649,6 +649,35 @@ TestTerminatorWithoutExceptions::~TestTerminatorWithoutExceptions()
 {
 }
 
+//////////////////// ExecFunction
+//
+ExecFunction::ExecFunction()
+{
+}
+
+ExecFunction::~ExecFunction()
+{
+}
+
+void ExecFunction::exec()
+{
+}
+
+ExecFunctionWithoutParameters::ExecFunctionWithoutParameters(void(*testFunction)())
+    : testFunction_(testFunction)
+{
+}
+
+ExecFunctionWithoutParameters::~ExecFunctionWithoutParameters()
+{
+}
+
+void ExecFunctionWithoutParameters::exec()
+{
+    if (testFunction_)
+        testFunction_();
+}
+
 //////////////////// ExecFunctionTest
 
 ExecFunctionTest::ExecFunctionTest(ExecFunctionTestShell* shell)
@@ -658,7 +687,7 @@ ExecFunctionTest::ExecFunctionTest(ExecFunctionTestShell* shell)
 
 void ExecFunctionTest::testBody()
 {
-    if (shell_->testFunction_) shell_->testFunction_();
+    if (shell_->testFunction_) shell_->testFunction_->exec();
 }
 
 void ExecFunctionTest::setup()
