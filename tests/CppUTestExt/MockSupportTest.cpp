@@ -250,6 +250,7 @@ TEST(MockSupportTestWithFixture, ShouldNotCrashOnFailureAfterCrashMethodWasReset
 
 TEST(MockSupportTestWithFixture, failedMockShouldFailAgainWhenRepeated)
 {
+    fixture.setTestFunction(unexpectedCallTestFunction_);
     int repeatCount = 2;
     while(repeatCount--)
     {
