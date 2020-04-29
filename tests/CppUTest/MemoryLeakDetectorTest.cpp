@@ -483,10 +483,23 @@ TEST(MemoryLeakDetectorTest, defaultAllocationStageIsZero)
     LONGS_EQUAL(0, detector->getCurrentAllocationStage());
 }
 
+TEST(MemoryLeakDetectorTest, canFreeNoAllocations)
+{
+    detector->deallocAllMemoryInCurrentAllocationStage();
+    LONGS_EQUAL(0, detector->getCurrentAllocationStage());
+}
+
 TEST(MemoryLeakDetectorTest, increaseAllocationStage)
 {
     detector->increaseAllocationStage();
     LONGS_EQUAL(1, detector->getCurrentAllocationStage());
+}
+
+TEST(MemoryLeakDetectorTest, decreaseAllocationStage)
+{
+    detector->increaseAllocationStage();
+    detector->decreaseAllocationStage();
+    LONGS_EQUAL(0, detector->getCurrentAllocationStage());
 }
 
 TEST(MemoryLeakDetectorTest, freeAllMemoryInCurrentAllocationStage)
