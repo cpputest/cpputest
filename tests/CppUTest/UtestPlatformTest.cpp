@@ -47,7 +47,7 @@ TEST_GROUP(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess)
 
 TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, DummyFailsWithMessage)
 {
-    fixture.registry_->setRunTestsInSeperateProcess();
+    fixture.setRunTestsInSeperateProcess();
     fixture.runAllTests();
     fixture.assertPrintContains("-p doesn't work on this platform, as it is lacking fork.\b");
 }
