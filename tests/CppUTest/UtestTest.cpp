@@ -205,7 +205,7 @@ IGNORE_TEST(UtestShell, TestDefaultCrashMethodInSeparateProcessTest) {}
 TEST(UtestShell, TestDefaultCrashMethodInSeparateProcessTest)
 {
     fixture.setTestFunction(UtestShell::crash);
-    fixture.registry_->setRunTestsInSeperateProcess();
+    fixture.setRunTestsInSeperateProcess();
     fixture.runAllTests();
     fixture.assertPrintContains("Failed in separate process - killed by signal");
 
