@@ -142,15 +142,16 @@ jobs:
       - ls
       deploy:
         provider: releases
+        #:
+        edge: true
         token: $GH_TOKEN
         tag_name: latest-passing-build
         name: Latest passing build
-        body: "This is the automatic release from Travis CI. Whenever a build passes, it gets released as Latest Passing Build."
+        release_notes: "This is the automatic release from Travis CI. Whenever a build passes, it gets released as Latest Passing Build."
         file:
           - cpputest-latest.tar.gz
           - cpputest-latest.zip
         overwrite: true
-        skip_cleanup: true
         on:
           tags: false
 
