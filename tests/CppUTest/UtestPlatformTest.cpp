@@ -127,7 +127,7 @@ static int _accessViolationTestFunction()
 
 TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, AccessViolationInSeparateProcessWorks)
 {
-    fixture.registry_->setRunTestsInSeperateProcess();
+    fixture.setRunTestsInSeperateProcess();
     fixture.setTestFunction((void(*)())_accessViolationTestFunction);
     fixture.runAllTests();
     fixture.assertPrintContains("Failed in separate process - killed by signal 11");
