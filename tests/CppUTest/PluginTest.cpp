@@ -86,14 +86,15 @@ TEST_GROUP(PluginTest)
     DummyPluginWhichAcceptsParameters* secondPlugin;
     DummyPlugin* thirdPlugin;
     TestTestingFixture *genFixture;
-    TestRegistry *registry;
+    TestRegistry* registry;
+
     void setup()
     {
         firstPlugin = new DummyPlugin(GENERIC_PLUGIN);
         secondPlugin = new DummyPluginWhichAcceptsParameters(GENERIC_PLUGIN2);
         thirdPlugin = new DummyPlugin(GENERIC_PLUGIN3);
         genFixture = new TestTestingFixture;
-        registry = genFixture->registry_;
+        registry = genFixture->getRegistry();
         registry->installPlugin(firstPlugin);
         sequenceNumber = 1;
     }

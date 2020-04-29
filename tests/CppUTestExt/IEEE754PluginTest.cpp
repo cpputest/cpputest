@@ -45,7 +45,7 @@ TEST_GROUP(FE__with_Plugin)
     IEEE754ExceptionsPlugin ieee754Plugin;
     void setup(void) _override
     {
-        fixture.registry_->installPlugin(&ieee754Plugin);
+        fixture.installPlugin(&ieee754Plugin);
     }
 };
 

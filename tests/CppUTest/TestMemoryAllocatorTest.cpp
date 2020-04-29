@@ -136,24 +136,42 @@ TEST(TestMemoryAllocatorTest, TryingToAllocateTooMuchFailsTest)
 #if CPPUTEST_USE_MEM_LEAK_DETECTION
 #if CPPUTEST_USE_MALLOC_MACROS
 
-// FailableMemoryAllocator must be global. Otherwise, it does not exist when memory leak detector
-// reports memory leaks.
-static FailableMemoryAllocator failableMallocAllocator("Failable Malloc Allocator", "malloc", "free");
+class FailableMemoryAllocatorExecFunction : public ExecFunction
+{
+public:
+    FailableMemoryAllocator* allocator_;
+    void (*testFunction_)(FailableMemoryAllocator*);
 
+    void exec() _override
+    {
+        testFunction_(allocator_);
+    }
+
+    FailableMemoryAllocatorExecFunction(FailableMemoryAllocator* allocator) : allocator_(allocator) {}
+    virtual ~FailableMemoryAllocatorExecFunction() _destructor_override {}
+};
 
 TEST_GROUP(FailableMemoryAllocator)
 {
+    FailableMemoryAllocator *failableMallocAllocator;
+    FailableMemoryAllocatorExecFunction * testFunction;
     TestTestingFixture *fixture;
+
     void setup()
     {
         fixture = new TestTestingFixture;
-        failableMallocAllocator.clearFailedAllocs();
-        setCurrentMallocAllocator(&failableMallocAllocator);
+        failableMallocAllocator = new FailableMemoryAllocator("Failable Malloc Allocator", "malloc", "free");
+        testFunction = new FailableMemoryAllocatorExecFunction(failableMallocAllocator);
+        fixture->setTestFunction(testFunction);
+        setCurrentMallocAllocator(failableMallocAllocator);
     }
     void teardown()
     {
-        failableMallocAllocator.checkAllFailedAllocsWereDone();
+        failableMallocAllocator->checkAllFailedAllocsWereDone();
         setCurrentMallocAllocatorToDefault();
+        failableMallocAllocator->clearFailedAllocs();
+        delete testFunction;
+        delete failableMallocAllocator;
         delete fixture;
     }
 };
@@ -167,14 +185,14 @@ TEST(FailableMemoryAllocator, MallocWorksNormallyIfNotAskedToFail)
 
 TEST(FailableMemoryAllocator, FailFirstMalloc)
 {
-    failableMallocAllocator.failAllocNumber(1);
+    failableMallocAllocator->failAllocNumber(1);
     POINTERS_EQUAL(NULLPTR, (int*)malloc(sizeof(int)));
 }
 
 TEST(FailableMemoryAllocator, FailSecondAndFourthMalloc)
 {
-    failableMallocAllocator.failAllocNumber(2);
-    failableMallocAllocator.failAllocNumber(4);
+    failableMallocAllocator->failAllocNumber(2);
+    failableMallocAllocator->failAllocNumber(4);
     int *memory1 = (int*)malloc(sizeof(int));
     int *memory2 = (int*)malloc(sizeof(int));
     int *memory3 = (int*)malloc(sizeof(int));
@@ -189,30 +207,30 @@ TEST(FailableMemoryAllocator, FailSecondAndFourthMalloc)
     free(memory3);
 }
 
-static void _failingAllocIsNeverDone()
+static void _failingAllocIsNeverDone(FailableMemoryAllocator* failableMallocAllocator)
 {
-    failableMallocAllocator.failAllocNumber(1);
-    failableMallocAllocator.failAllocNumber(2);
-    failableMallocAllocator.failAllocNumber(3);
+    failableMallocAllocator->failAllocNumber(1);
+    failableMallocAllocator->failAllocNumber(2);
+    failableMallocAllocator->failAllocNumber(3);
     malloc(sizeof(int));
     malloc(sizeof(int));
-    failableMallocAllocator.checkAllFailedAllocsWereDone();
+    failableMallocAllocator->checkAllFailedAllocsWereDone();
 }
 
 TEST(FailableMemoryAllocator, CheckAllFailingAllocsWereDone)
 {
-    fixture->setTestFunction(_failingAllocIsNeverDone);
+    testFunction->testFunction_ = _failingAllocIsNeverDone;
 
     fixture->runAllTests();
 
     LONGS_EQUAL(1, fixture->getFailureCount());
     fixture->assertPrintContains("Expected allocation number 3 was never done");
-    failableMallocAllocator.clearFailedAllocs();
+    failableMallocAllocator->clearFailedAllocs();
 }
 
 TEST(FailableMemoryAllocator, FailFirstAllocationAtGivenLine)
 {
-    failableMallocAllocator.failNthAllocAt(1, __FILE__, __LINE__ + 2);
+    failableMallocAllocator->failNthAllocAt(1, __FILE__, __LINE__ + 2);
 
     POINTERS_EQUAL(NULLPTR, malloc(sizeof(int)));
 }
@@ -221,35 +239,36 @@ TEST(FailableMemoryAllocator, FailThirdAllocationAtGivenLine)
 {
     int *memory[10] = { NULLPTR };
     int allocation;
-    failableMallocAllocator.failNthAllocAt(3, __FILE__, __LINE__ + 4);
+    failableMallocAllocator->failNthAllocAt(3, __FILE__, __LINE__ + 4);
 
     for (allocation = 1; allocation <= 10; allocation++)
     {
         memory[allocation - 1] = (int *)malloc(sizeof(int));
         if (memory[allocation - 1] == NULLPTR)
             break;
+        free(memory[allocation -1]);
     }
 
     LONGS_EQUAL(3, allocation);
-    free(memory[0]); free(memory[1]);
 }
 
-static void _failingLocationAllocIsNeverDone()
+static void _failingLocationAllocIsNeverDone(FailableMemoryAllocator* failableMallocAllocator)
 {
-    failableMallocAllocator.failNthAllocAt(1, "TestMemoryAllocatorTest.cpp", __LINE__);
-    failableMallocAllocator.checkAllFailedAllocsWereDone();
+    failableMallocAllocator->failNthAllocAt(1, "TestMemoryAllocatorTest.cpp", __LINE__);
+    failableMallocAllocator->checkAllFailedAllocsWereDone();
 }
 
 TEST(FailableMemoryAllocator, CheckAllFailingLocationAllocsWereDone)
 {
-    fixture->setTestFunction(_failingLocationAllocIsNeverDone);
+    testFunction->testFunction_ = _failingLocationAllocIsNeverDone;
 
     fixture->runAllTests();
 
     LONGS_EQUAL(1, fixture->getFailureCount());
     fixture->assertPrintContains("Expected failing alloc at TestMemoryAllocatorTest.cpp:");
     fixture->assertPrintContains("was never done");
-    failableMallocAllocator.clearFailedAllocs();
+
+    failableMallocAllocator->clearFailedAllocs();
 }
 
 #endif

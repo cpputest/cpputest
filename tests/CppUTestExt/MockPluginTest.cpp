@@ -161,7 +161,7 @@ static void _failTwiceFunction()
 TEST(MockPlugin, shouldNotFailAgainWhenTestAlreadyFailed)
 {
     TestTestingFixture fixture;
-    fixture.registry_->installPlugin(&plugin);
+    fixture.installPlugin(&plugin);
     fixture.setTestFunction(_failTwiceFunction);
     fixture.runAllTests();
     fixture.assertPrintContains("1 failures, 1 tests, 1 ran, 2 checks,");

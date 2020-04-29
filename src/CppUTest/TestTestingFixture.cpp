@@ -30,19 +30,162 @@
 
 bool TestTestingFixture::lineOfCodeExecutedAfterCheck = false;
 
+TestTestingFixture::TestTestingFixture()
+{
+    output_ = new StringBufferTestOutput();
+    result_ = new TestResult(*output_);
+    genTest_ = new ExecFunctionTestShell();
+    registry_ = new TestRegistry();
+    ownsExecFunction_ = false;
+
+    registry_->setCurrentRegistry(registry_);
+    registry_->addTest(genTest_);
+
+    lineOfCodeExecutedAfterCheck = false;
+}
+
+void TestTestingFixture::flushOutputAndResetResult()
+{
+     output_->flush();
+     delete result_;
+     result_ = new TestResult(*output_);
+}
+
+TestTestingFixture::~TestTestingFixture()
+{
+    registry_->setCurrentRegistry(NULLPTR);
+    if (ownsExecFunction_)
+        delete genTest_->testFunction_;
+    delete registry_;
+    delete result_;
+    delete output_;
+    delete genTest_;
+}
+
+void TestTestingFixture::addTest(UtestShell * test)
+{
+    registry_->addTest(test);
+}
+
+void TestTestingFixture::setTestFunction(void(*testFunction)())
+{
+    if (genTest_->testFunction_ && ownsExecFunction_)
+      delete genTest_->testFunction_;
+
+    genTest_->testFunction_ = new ExecFunctionWithoutParameters(testFunction);
+    ownsExecFunction_ = true;
+}
+
+void TestTestingFixture::setTestFunction(ExecFunction* testFunction)
+{
+    if (genTest_->testFunction_ && ownsExecFunction_)
+      delete genTest_->testFunction_;
+
+    genTest_->testFunction_ = testFunction;
+
+    ownsExecFunction_ = false;
+}
+
+void TestTestingFixture::setSetup(void(*setupFunction)())
+{
+    genTest_->setup_ = setupFunction;
+}
+
+void TestTestingFixture::setTeardown(void(*teardownFunction)())
+{
+    genTest_->teardown_ = teardownFunction;
+}
+
+void TestTestingFixture::installPlugin(TestPlugin* plugin)
+{
+    registry_->installPlugin(plugin);
+}
+
+void TestTestingFixture::setRunTestsInSeperateProcess()
+{
+    registry_->setRunTestsInSeperateProcess();
+}
+
+void TestTestingFixture::setOutputVerbose()
+{
+    output_->verbose();
+}
+
+void TestTestingFixture::runTestWithMethod(void(*method)())
+{
+    setTestFunction(method);
+    runAllTests();
+}
+
+void TestTestingFixture::runAllTests()
+{
+    registry_->runAllTests(*result_);
+}
+
+int TestTestingFixture::getFailureCount()
+{
+    return result_->getFailureCount();
+}
+
+int TestTestingFixture::getCheckCount()
+{
+    return result_->getCheckCount();
+}
+
+int TestTestingFixture::getTestCount()
+{
+    return result_->getTestCount();
+}
+
+int TestTestingFixture::getIgnoreCount()
+{
+    return result_->getIgnoredCount();
+}
+
+TestRegistry* TestTestingFixture::getRegistry()
+{
+    return registry_;
+}
+
+bool TestTestingFixture::hasTestFailed()
+{
+    return genTest_->hasFailed();
+}
+
+void TestTestingFixture::assertPrintContains(const SimpleString& contains)
+{
+    STRCMP_CONTAINS(contains.asCharString(), getOutput().asCharString());
+}
+
+void TestTestingFixture::assertPrintContainsNot(const SimpleString& contains)
+{
+    CHECK(! getOutput().contains(contains));
+}
+
+
+const SimpleString& TestTestingFixture::getOutput()
+{
+    return output_->getOutput();
+}
+
+int TestTestingFixture::getRunCount()
+{
+  	return result_->getRunCount();
+}
+
 void TestTestingFixture::lineExecutedAfterCheck()
 {
-  lineOfCodeExecutedAfterCheck = true;
+    lineOfCodeExecutedAfterCheck = true;
 }
 
 void TestTestingFixture::checkTestFailsWithProperTestLocation(const char* text, const char* file, int line)
 {
-  if (getFailureCount() != 1)
-    FAIL_LOCATION(StringFromFormat("Expected one test failure, but got %d amount of test failures", getFailureCount()).asCharString(), file, line);
+    if (getFailureCount() != 1)
+      FAIL_LOCATION(StringFromFormat("Expected one test failure, but got %d amount of test failures", getFailureCount()).asCharString(), file, line);
 
-  STRCMP_CONTAINS_LOCATION(text, output_->getOutput().asCharString(), "", file, line);
+    STRCMP_CONTAINS_LOCATION(text, output_->getOutput().asCharString(), "", file, line);
 
-  if (lineOfCodeExecutedAfterCheck)
-    FAIL_LOCATION("The test should jump/throw on failure and not execute the next line. However, the next line was executed.", file, line);
+    if (lineOfCodeExecutedAfterCheck)
+      FAIL_LOCATION("The test should jump/throw on failure and not execute the next line. However, the next line was executed.", file, line);
 }
 

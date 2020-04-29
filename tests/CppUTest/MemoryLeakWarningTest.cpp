@@ -80,7 +80,7 @@ TEST_GROUP(MemoryLeakWarningTest)
         detector = new MemoryLeakDetector(&dummy);
         allocator = new TestMemoryAllocator;
         memPlugin = new MemoryLeakWarningPlugin("TestMemoryLeakWarningPlugin", detector);
-        fixture->registry_->installPlugin(memPlugin);
+        fixture->installPlugin(memPlugin);
         memPlugin->enable();
 
         leak1 = NULLPTR;
@@ -136,9 +136,10 @@ static void _testLeakWarningWithPluginDisabled()
 
 TEST(MemoryLeakWarningTest, LeakWarningWithPluginDisabled)
 {
+    fixture->setTestFunction(_testLeakWarningWithPluginDisabled);
+
     MemoryLeakWarningPlugin::saveAndDisableNewDeleteOverloads();
 
-    fixture->setTestFunction(_testLeakWarningWithPluginDisabled);
     fixture->runAllTests();
 
     LONGS_EQUAL(0, fixture->getFailureCount());
@@ -211,10 +212,11 @@ TEST_GROUP(MemoryLeakWarningGlobalDetectorTest)
         MemoryLeakWarningPlugin::restoreNewDeleteOverloads();
 
         MemoryLeakWarningPlugin::saveAndDisableNewDeleteOverloads();
+
         if (!DummyMemoryLeakDetector::wasDeleted()) delete dummyDetector;
         if (!DummyMemoryLeakFailure::wasDeleted()) delete dummyReporter;
-
         MemoryLeakWarningPlugin::setGlobalDetector(detector, failureReporter);
+
         MemoryLeakWarningPlugin::restoreNewDeleteOverloads();
 
         UtestShell::resetCrashMethod();

@@ -193,20 +193,42 @@ private:
     ExecFunctionTestShell* shell_;
 };
 
+//////////////////// ExecFunction
+
+class ExecFunction
+{
+public:
+    ExecFunction();
+    virtual ~ExecFunction();
+
+    virtual void exec();
+};
+
+class ExecFunctionWithoutParameters : public ExecFunction
+{
+public:
+    void (*testFunction_)();
+
+    ExecFunctionWithoutParameters(void(*testFunction)());
+    virtual ~ExecFunctionWithoutParameters() _destructor_override;
+
+    virtual void exec() _override;
+};
+
 //////////////////// ExecFunctionTestShell
 
-class ExecFunctionTestShell: public UtestShell
+class ExecFunctionTestShell : public UtestShell
 {
 public:
     void (*setup_)();
     void (*teardown_)();
-    void (*testFunction_)();
+    ExecFunction* testFunction_;
 
     ExecFunctionTestShell(void(*set)() = NULLPTR, void(*tear)() = NULLPTR) :
-        UtestShell("Generic", "Generic", "Generic", 1), setup_(set), teardown_(
-                tear), testFunction_(NULLPTR)
+        UtestShell("ExecFunction", "ExecFunction", "ExecFunction", 1), setup_(set), teardown_(tear), testFunction_(NULLPTR)
     {
     }
+
     Utest* createTest() _override { return new ExecFunctionTest(this); }
     virtual ~ExecFunctionTestShell() _destructor_override;
 };

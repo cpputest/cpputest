@@ -31,7 +31,6 @@
 
 TestRegistry::TestRegistry() :
     tests_(NULLPTR), nameFilters_(NULLPTR), groupFilters_(NULLPTR), firstPlugin_(NullTestPlugin::instance()), runInSeperateProcess_(false), currentRepetition_(0), runIgnored_(false)
-
 {
 }
 

@@ -178,7 +178,7 @@ TEST(UtestShell, this_test_covers_the_UtestShell_createTest_and_Utest_testBody_m
     defaultUtestShell shell;
     fixture.addTest(&shell);
     fixture.runAllTests();
-    LONGS_EQUAL(2, fixture.result_->getTestCount());
+    LONGS_EQUAL(2, fixture.getTestCount());
 }
 
 static void StubPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin*, TestResult* result)
@@ -189,7 +189,7 @@ static void StubPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, Tes
 TEST(UtestShell, RunInSeparateProcessTest)
 {
     UT_PTR_SET(PlatformSpecificRunTestInASeperateProcess, StubPlatformSpecificRunTestInASeperateProcess);
-    fixture.registry_->setRunTestsInSeperateProcess();
+    fixture.getRegistry()->setRunTestsInSeperateProcess();
     fixture.runAllTests();
     fixture.assertPrintContains("Failed in separate process");
 }
@@ -205,7 +205,7 @@ IGNORE_TEST(UtestShell, TestDefaultCrashMethodInSeparateProcessTest) {}
 TEST(UtestShell, TestDefaultCrashMethodInSeparateProcessTest)
 {
     fixture.setTestFunction(UtestShell::crash);
-    fixture.registry_->setRunTestsInSeperateProcess();
+    fixture.setRunTestsInSeperateProcess();
     fixture.runAllTests();
     fixture.assertPrintContains("Failed in separate process - killed by signal");
 
@@ -258,7 +258,7 @@ TEST(IgnoredUtestShell, doesIgnoreCount)
 
 TEST(IgnoredUtestShell, printsIGNORE_TESTwhenVerbose)
 {
-    fixture.output_->verbose();
+    fixture.setOutputVerbose();
     fixture.runAllTests();
     fixture.assertPrintContains("IGNORE_TEST");
 }
