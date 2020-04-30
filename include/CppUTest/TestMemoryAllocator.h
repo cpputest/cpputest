@@ -49,6 +49,7 @@ extern TestMemoryAllocator* defaultMallocAllocator();
 class GlobalMemoryAllocatorStash
 {
 public:
+    GlobalMemoryAllocatorStash();
     void save();
     void restore();
 
