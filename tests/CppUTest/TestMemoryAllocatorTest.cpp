@@ -461,6 +461,8 @@ TEST(GlobalMemoryAccountant, stop)
     POINTERS_EQUAL(originalNewArrayAllocator, getCurrentNewArrayAllocator());
 }
 
+#if CPPUTEST_USE_MEM_LEAK_DETECTION
+
 TEST(GlobalMemoryAccountant, report)
 {
     accountant.start();
@@ -471,4 +473,6 @@ TEST(GlobalMemoryAccountant, report)
     /* Allocation includes memory leak info */
     STRCMP_CONTAINS("256", accountant.report().asCharString());
 }
+
+#endif
 
