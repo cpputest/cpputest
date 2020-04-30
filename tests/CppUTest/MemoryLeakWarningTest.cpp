@@ -188,6 +188,8 @@ TEST_GROUP(MemoryLeakWarningGlobalDetectorTest)
     DummyMemoryLeakDetector * dummyDetector;
     MemoryLeakFailure* dummyReporter;
 
+    GlobalMemoryAllocatorStash memoryAllocatorStash;
+
     static void crashMethod()
     {
         cpputestHasCrashed = true;
@@ -195,6 +197,7 @@ TEST_GROUP(MemoryLeakWarningGlobalDetectorTest)
 
     void setup()
     {
+        memoryAllocatorStash.save();
         detector = MemoryLeakWarningPlugin::getGlobalDetector();
         failureReporter = MemoryLeakWarningPlugin::getGlobalFailureReporter();
 
@@ -221,9 +224,7 @@ TEST_GROUP(MemoryLeakWarningGlobalDetectorTest)
 
         UtestShell::resetCrashMethod();
 
-        setCurrentMallocAllocatorToDefault();
-        setCurrentNewAllocatorToDefault();
-        setCurrentNewArrayAllocatorToDefault();
+        memoryAllocatorStash.restore();
     }
 };
 

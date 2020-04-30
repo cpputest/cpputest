@@ -33,15 +33,18 @@
 TEST_GROUP(TestMemoryAllocatorTest)
 {
     TestMemoryAllocator* allocator;
+    GlobalMemoryAllocatorStash memoryAllocatorStash;
 
     void setup()
     {
+        memoryAllocatorStash.save();
         allocator = NULLPTR;
     }
 
     void teardown()
     {
         delete allocator;
+        memoryAllocatorStash.restore();
     }
 };
 
@@ -50,8 +53,16 @@ TEST(TestMemoryAllocatorTest, SetCurrentNewAllocator)
     allocator = new TestMemoryAllocator("new allocator for test");
     setCurrentNewAllocator(allocator);
     POINTERS_EQUAL(allocator, getCurrentNewAllocator());
+}
+
+TEST(TestMemoryAllocatorTest, SetCurrentNewAllocatorToDefault)
+{
+    TestMemoryAllocator* originalAllocator = getCurrentNewAllocator();
+
     setCurrentNewAllocatorToDefault();
     POINTERS_EQUAL(defaultNewAllocator(), getCurrentNewAllocator());
+
+    setCurrentNewAllocator(originalAllocator);
 }
 
 TEST(TestMemoryAllocatorTest, SetCurrentNewArrayAllocator)
@@ -273,3 +284,191 @@ TEST(FailableMemoryAllocator, CheckAllFailingLocationAllocsWereDone)
 
 #endif
 #endif
+
+TEST_GROUP(TestMemoryAccountant)
+{
+    MemoryAccountant accountant;
+
+    void teardown()
+    {
+        accountant.clear();
+    }
+};
+
+TEST(TestMemoryAccountant, totalAllocsIsZero)
+{
+    LONGS_EQUAL(0, accountant.totalAllocations());
+    LONGS_EQUAL(0, accountant.totalDeallocations());
+}
+
+TEST(TestMemoryAccountant, countAllocationsPerSize)
+{
+    accountant.alloc(4);
+    LONGS_EQUAL(1, accountant.totalAllocationsOfSize(4));
+    LONGS_EQUAL(0, accountant.totalAllocationsOfSize(10));
+    LONGS_EQUAL(1, accountant.totalAllocations());
+}
+
+TEST(TestMemoryAccountant, countAllocationsPerSizeMultipleAllocations)
+{
+    accountant.alloc(4);
+    accountant.alloc(4);
+    accountant.alloc(8);
+    LONGS_EQUAL(2, accountant.totalAllocationsOfSize(4));
+    LONGS_EQUAL(1, accountant.totalAllocationsOfSize(8));
+    LONGS_EQUAL(0, accountant.totalAllocationsOfSize(10));
+    LONGS_EQUAL(3, accountant.totalAllocations());
+}
+
+TEST(TestMemoryAccountant, countAllocationsPerSizeMultipleAllocationsOutOfOrder)
+{
+    accountant.alloc(4);
+    accountant.alloc(8);
+    accountant.alloc(4);
+    accountant.alloc(5);
+    accountant.alloc(2);
+    accountant.alloc(4);
+    accountant.alloc(10);
+
+    LONGS_EQUAL(3, accountant.totalAllocationsOfSize(4));
+    LONGS_EQUAL(1, accountant.totalAllocationsOfSize(8));
+    LONGS_EQUAL(1, accountant.totalAllocationsOfSize(10));
+    LONGS_EQUAL(7, accountant.totalAllocations());
+}
+
+TEST(TestMemoryAccountant, countDeallocationsPerSizeMultipleAllocations)
+{
+    accountant.dealloc(8);
+    accountant.dealloc(4);
+    accountant.dealloc(8);
+    LONGS_EQUAL(1, accountant.totalDeallocationsOfSize(4));
+    LONGS_EQUAL(2, accountant.totalDeallocationsOfSize(8));
+    LONGS_EQUAL(0, accountant.totalDeallocationsOfSize(20));
+    LONGS_EQUAL(3, accountant.totalDeallocations());
+}
+
+TEST(TestMemoryAccountant, countMaximumAllocationsAtATime)
+{
+    accountant.alloc(4);
+    accountant.alloc(4);
+    accountant.dealloc(4);
+    accountant.dealloc(4);
+    accountant.alloc(4);
+    LONGS_EQUAL(2, accountant.maximumAllocationAtATimeOfSize(4));
+}
+
+TEST(TestMemoryAccountant, reportNoAllocations)
+{
+    STRCMP_EQUAL("CppUTest Memory Accountant has not noticed any allocations or deallocations. Sorry\n", accountant.report().asCharString());
+}
+
+TEST(TestMemoryAccountant, reportAllocations)
+{
+    accountant.dealloc(8);
+    accountant.dealloc(8);
+    accountant.dealloc(8);
+
+    accountant.alloc(4);
+    accountant.dealloc(4);
+    accountant.alloc(4);
+    STRCMP_EQUAL("CppUTest Memory Accountant report:\n"
+                 "Allocation size     # allocations    # deallocations   max # allocations at one time\n"
+                 "    4                   2                1                 1\n"
+                 "    8                   0                3                 0\n"
+                 "   Thank you for your business\n"
+                 , accountant.report().asCharString());
+}
+
+TEST_GROUP(AccountingTestMemoryAllocator)
+{
+    MemoryAccountant accountant;
+    AccountingTestMemoryAllocator *allocator;
+
+    void setup()
+    {
+        allocator = new AccountingTestMemoryAllocator(accountant, getCurrentMallocAllocator());
+    }
+
+    void teardown()
+    {
+        accountant.clear();
+        delete allocator;
+    }
+};
+
+TEST(AccountingTestMemoryAllocator, canAllocateAndAccountMemory)
+{
+    char* memory = allocator->alloc_memory(10, __FILE__, __LINE__);
+    allocator->free_memory(memory, __FILE__, __LINE__);
+
+    LONGS_EQUAL(1, accountant.totalAllocationsOfSize(10));
+    LONGS_EQUAL(1, accountant.totalDeallocationsOfSize(10));
+}
+
+TEST(AccountingTestMemoryAllocator, canAllocateAndAccountMemoryMultipleAllocations)
+{
+    char* memory1 = allocator->alloc_memory(10, __FILE__, __LINE__);
+    char* memory2 = allocator->alloc_memory(8, __FILE__, __LINE__);
+    char* memory3 = allocator->alloc_memory(12, __FILE__, __LINE__);
+
+    allocator->free_memory(memory1, __FILE__, __LINE__);
+    allocator->free_memory(memory3, __FILE__, __LINE__);
+
+    char* memory4 = allocator->alloc_memory(15, __FILE__, __LINE__);
+    char* memory5 = allocator->alloc_memory(20, __FILE__, __LINE__);
+
+    allocator->free_memory(memory2, __FILE__, __LINE__);
+    allocator->free_memory(memory4, __FILE__, __LINE__);
+    allocator->free_memory(memory5, __FILE__, __LINE__);
+
+    char* memory6 = allocator->alloc_memory(1, __FILE__, __LINE__);
+    char* memory7 = allocator->alloc_memory(100, __FILE__, __LINE__);
+
+    allocator->free_memory(memory6, __FILE__, __LINE__);
+    allocator->free_memory(memory7, __FILE__, __LINE__);
+
+    LONGS_EQUAL(7, accountant.totalAllocations());
+    LONGS_EQUAL(7, accountant.totalDeallocations());
+}
+
+TEST_GROUP(GlobalMemoryAccountant)
+{
+    GlobalMemoryAccountant accountant;
+};
+
+TEST(GlobalMemoryAccountant, start)
+{
+    accountant.start();
+
+    POINTERS_EQUAL(accountant.getMallocAllocator(), getCurrentMallocAllocator());
+    POINTERS_EQUAL(accountant.getNewAllocator(), getCurrentNewAllocator());
+    POINTERS_EQUAL(accountant.getNewArrayAllocator(), getCurrentNewArrayAllocator());
+
+    accountant.stop();
+}
+
+TEST(GlobalMemoryAccountant, stop)
+{
+    TestMemoryAllocator* originalMallocAllocator = getCurrentMallocAllocator();
+    TestMemoryAllocator* originalNewAllocator = getCurrentNewAllocator();
+    TestMemoryAllocator* originalNewArrayAllocator = getCurrentNewArrayAllocator();
+
+    accountant.start();
+    accountant.stop();
+
+    POINTERS_EQUAL(originalMallocAllocator, getCurrentMallocAllocator());
+    POINTERS_EQUAL(originalNewAllocator, getCurrentNewAllocator());
+    POINTERS_EQUAL(originalNewArrayAllocator, getCurrentNewArrayAllocator());
+}
+
+TEST(GlobalMemoryAccountant, report)
+{
+    accountant.start();
+    char* memory = new char[185];
+    delete [] memory;
+    accountant.stop();
+
+    /* Allocation includes memory leak info */
+    STRCMP_CONTAINS("256", accountant.report().asCharString());
+}
+

@@ -110,6 +110,20 @@ TestMemoryAllocator* defaultMallocAllocator()
 
 /////////////////////////////////////////////
 
+void GlobalMemoryAllocatorStash::save()
+{
+    originalMallocAllocator = getCurrentMallocAllocator();
+    originalNewAllocator = getCurrentNewAllocator();
+    originalNewArrayAllocator = getCurrentNewArrayAllocator();
+}
+
+void GlobalMemoryAllocatorStash::restore()
+{
+    setCurrentMallocAllocator(originalMallocAllocator);
+    setCurrentNewAllocator(originalNewAllocator);
+    setCurrentNewArrayAllocator(originalNewArrayAllocator);
+}
+
 TestMemoryAllocator::TestMemoryAllocator(const char* name_str, const char* alloc_name_str, const char* free_name_str)
     : name_(name_str), alloc_name_(alloc_name_str), free_name_(free_name_str), hasBeenDestroyed_(false)
 {
@@ -168,6 +182,10 @@ CrashOnAllocationAllocator::CrashOnAllocationAllocator() : allocationToCrashOn_(
 {
 }
 
+CrashOnAllocationAllocator::~CrashOnAllocationAllocator()
+{
+}
+
 void CrashOnAllocationAllocator::setNumberToCrashOn(unsigned allocationToCrashOn)
 {
     allocationToCrashOn_ = allocationToCrashOn;
@@ -181,6 +199,10 @@ char* CrashOnAllocationAllocator::alloc_memory(size_t size, const char* file, in
     return TestMemoryAllocator::alloc_memory(size, file, line);
 }
 
+
+NullUnknownAllocator::~NullUnknownAllocator()
+{
+}
 
 char* NullUnknownAllocator::alloc_memory(size_t /*size*/, const char*, int)
 {
@@ -248,6 +270,10 @@ class LocationToFailAllocNode
     }
 
 };
+
+FailableMemoryAllocator::~FailableMemoryAllocator()
+{
+}
 
 FailableMemoryAllocator::FailableMemoryAllocator(const char* name_str, const char* alloc_name_str, const char* free_name_str)
 : TestMemoryAllocator(name_str, alloc_name_str, free_name_str), head_(NULLPTR), currentAllocNumber_(0)
@@ -317,4 +343,277 @@ void FailableMemoryAllocator::clearFailedAllocs()
   }
   currentAllocNumber_ = 0;
 }
+
+struct MemoryAccountantAllocationNode
+{
+    size_t size_;
+    size_t allocations_;
+    size_t deallocations_;
+    size_t maxAllocations_;
+    size_t currentAllocations_;
+    MemoryAccountantAllocationNode* next_;
+};
+
+MemoryAccountantAllocationNode* MemoryAccountant::createNewAccountantAllocationNode(size_t size, MemoryAccountantAllocationNode* next)
+{
+    MemoryAccountantAllocationNode* node = (MemoryAccountantAllocationNode*) (void*) allocator_->alloc_memory(sizeof(MemoryAccountantAllocationNode), __FILE__, __LINE__);
+    node->size_ = size;
+    node->allocations_ = 0;
+    node->deallocations_ = 0;
+    node->maxAllocations_ = 0;
+    node->currentAllocations_ = 0;
+    node->next_ = next;
+    return node;
+}
+
+void MemoryAccountant::destroyAccountantAllocationNode(MemoryAccountantAllocationNode* node)
+{
+    allocator_->free_memory((char*) node, __FILE__, __LINE__);
+}
+
+MemoryAccountant::MemoryAccountant()
+    : head_(NULLPTR), allocator_(defaultMallocAllocator())
+{
+}
+
+void MemoryAccountant::setAllocator(TestMemoryAllocator* allocator)
+{
+    allocator_ = allocator;
+}
+
+void MemoryAccountant::clear()
+{
+    MemoryAccountantAllocationNode* node = head_;
+    MemoryAccountantAllocationNode* to_be_deleted = NULLPTR;
+    while (node) {
+        to_be_deleted = node;
+        node = node->next_;
+        destroyAccountantAllocationNode(to_be_deleted);
+    }
+}
+
+MemoryAccountantAllocationNode* MemoryAccountant::findNodeOfSize(size_t size) const
+{
+    for (MemoryAccountantAllocationNode* node = head_; node; node = node->next_)
+        if (node->size_ == size)
+            return node;
+    return NULLPTR;
+}
+
+MemoryAccountantAllocationNode* MemoryAccountant::findOrCreateNodeOfSize(size_t size)
+{
+    if (head_ && head_->size_ > size)
+        head_ = createNewAccountantAllocationNode(size, head_);
+
+    for (MemoryAccountantAllocationNode* node = head_; node; node = node->next_) {
+        if (node->size_ == size)
+            return node;
+        if (node->next_ == NULLPTR || node->next_->size_ > size)
+            node->next_ = createNewAccountantAllocationNode(size, node->next_);
+    }
+    head_ = createNewAccountantAllocationNode(size, head_);
+    return head_;
+}
+
+void MemoryAccountant::alloc(size_t size)
+{
+    MemoryAccountantAllocationNode* node = findOrCreateNodeOfSize(size);
+    node->allocations_++;
+    node->currentAllocations_++;
+    node->maxAllocations_ = (node->currentAllocations_ > node->maxAllocations_) ? node->currentAllocations_ : node->maxAllocations_;
+}
+
+void MemoryAccountant::dealloc(size_t size)
+{
+    MemoryAccountantAllocationNode* node = findOrCreateNodeOfSize(size);
+    node->deallocations_++;
+    node->currentAllocations_--;
+}
+
+size_t MemoryAccountant::totalAllocationsOfSize(size_t size) const
+{
+    MemoryAccountantAllocationNode* node = findNodeOfSize(size);
+    if (node)
+      return node->allocations_;
+    return 0;
+}
+
+size_t MemoryAccountant::totalDeallocationsOfSize(size_t size) const
+{
+    MemoryAccountantAllocationNode* node = findNodeOfSize(size);
+    if (node)
+      return node->deallocations_;
+    return 0;
+}
+
+size_t MemoryAccountant::maximumAllocationAtATimeOfSize(size_t size) const
+{
+    MemoryAccountantAllocationNode* node = findNodeOfSize(size);
+    if (node)
+      return node->maxAllocations_;
+    return 0;
+}
+
+size_t MemoryAccountant::totalAllocations() const
+{
+    size_t totalAllocations = 0;
+
+    for (MemoryAccountantAllocationNode* node = head_; node; node = node->next_)
+        totalAllocations += node->allocations_;
+
+    return totalAllocations;
+}
+
+size_t MemoryAccountant::totalDeallocations() const
+{
+    size_t totalDeallocations = 0;
+
+    for (MemoryAccountantAllocationNode* node = head_; node; node = node->next_)
+        totalDeallocations += node->deallocations_;
+
+    return totalDeallocations;
+}
+
+SimpleString MemoryAccountant::report() const
+{
+    if (head_ == NULLPTR)
+      return SimpleString("CppUTest Memory Accountant has not noticed any allocations or deallocations. Sorry\n");
+
+    SimpleString report("CppUTest Memory Accountant report:\n"
+                        "Allocation size     # allocations    # deallocations   max # allocations at one time\n");
+    for (MemoryAccountantAllocationNode* node = head_; node; node = node->next_)
+        report += StringFromFormat("%5lu               %5lu            %5lu             %5lu\n",
+            node->size_, node->allocations_, node->deallocations_, node->maxAllocations_);
+    report += SimpleString("   Thank you for your business\n");
+    return report;
+}
+
+AccountingTestMemoryAllocator::AccountingTestMemoryAllocator(MemoryAccountant& accountant, TestMemoryAllocator* originalAllocator)
+    : accountant_(accountant), originalAllocator_(originalAllocator)
+{
+}
+
+AccountingTestMemoryAllocator::~AccountingTestMemoryAllocator()
+{
+}
+
+struct AccountingTestMemoryAllocatorMemoryNode
+{
+    char* memory_;
+    size_t size_;
+    AccountingTestMemoryAllocatorMemoryNode* next_;
+};
+
+void AccountingTestMemoryAllocator::addMemoryToMemoryTrackingToKeepTrackOfSize(char* memory, size_t size)
+{
+    AccountingTestMemoryAllocatorMemoryNode* node = (AccountingTestMemoryAllocatorMemoryNode*) (void*) originalAllocator_->alloc_memory(sizeof(AccountingTestMemoryAllocatorMemoryNode), __FILE__, __LINE__);
+    node->memory_ = memory;
+    node->size_ = size;
+    node->next_ = head_;
+    head_ = node;
+}
+
+size_t AccountingTestMemoryAllocator::removeNextNodeAndReturnSize(AccountingTestMemoryAllocatorMemoryNode* node)
+{
+    AccountingTestMemoryAllocatorMemoryNode* foundNode = node->next_;
+    node->next_ = node->next_->next_;
+
+    size_t size = foundNode->size_;
+    originalAllocator_->free_memory((char*) foundNode, __FILE__, __LINE__);
+    return size;
+}
+
+size_t AccountingTestMemoryAllocator::removeHeadAndReturnSize()
+{
+    AccountingTestMemoryAllocatorMemoryNode* foundNode = head_;
+    head_ = head_->next_;
+
+    size_t size = foundNode->size_;
+    originalAllocator_->free_memory((char*) foundNode, __FILE__, __LINE__);
+    return size;
+}
+
+size_t AccountingTestMemoryAllocator::removeMemoryFromTrackingAndReturnAllocatedSize(char* memory)
+{
+    if (head_ && head_->memory_ == memory)
+        return removeHeadAndReturnSize();
+
+    for (AccountingTestMemoryAllocatorMemoryNode* node = head_; node; node = node->next_) {
+        if (node->next_ && node->next_->memory_ == memory)
+            return removeNextNodeAndReturnSize(node);
+    }
+
+    return 0;
+}
+
+TestMemoryAllocator* AccountingTestMemoryAllocator::getOriginalAllocator()
+{
+    return originalAllocator_;
+}
+
+char* AccountingTestMemoryAllocator::alloc_memory(size_t size, const char* file, int line)
+{
+    accountant_.alloc(size);
+    char* memory = originalAllocator_->alloc_memory(size, file, line);
+    addMemoryToMemoryTrackingToKeepTrackOfSize(memory, size);
+    return memory;
+}
+
+void AccountingTestMemoryAllocator::free_memory(char* memory, const char* file, int line)
+{
+    size_t size = removeMemoryFromTrackingAndReturnAllocatedSize(memory);
+    accountant_.dealloc(size);
+    return originalAllocator_->free_memory(memory, file, line);
+}
+
+GlobalMemoryAccountant::GlobalMemoryAccountant()
+    : mallocAllocator_(NULLPTR), newAllocator_(NULLPTR), newArrayAllocator_(NULLPTR)
+{
+}
+
+void GlobalMemoryAccountant::start()
+{
+    accountant_.setAllocator(getCurrentMallocAllocator());
+
+    mallocAllocator_ = new AccountingTestMemoryAllocator(accountant_, getCurrentMallocAllocator());
+    newAllocator_ = new AccountingTestMemoryAllocator(accountant_, getCurrentNewAllocator());
+    newArrayAllocator_ = new AccountingTestMemoryAllocator(accountant_, getCurrentNewArrayAllocator());
+
+
+    setCurrentMallocAllocator(mallocAllocator_);
+    setCurrentNewAllocator(newAllocator_);
+    setCurrentNewArrayAllocator(newArrayAllocator_);
+}
+
+void GlobalMemoryAccountant::stop()
+{
+    setCurrentMallocAllocator(mallocAllocator_->getOriginalAllocator());
+    setCurrentNewAllocator(newAllocator_->getOriginalAllocator());
+    setCurrentNewArrayAllocator(newArrayAllocator_->getOriginalAllocator());
+
+    delete mallocAllocator_;
+    delete newAllocator_;
+    delete newArrayAllocator_;
+}
+
+SimpleString GlobalMemoryAccountant::report()
+{
+    return accountant_.report();
+}
+
+TestMemoryAllocator* GlobalMemoryAccountant::getMallocAllocator()
+{
+    return mallocAllocator_;
+}
+
+TestMemoryAllocator* GlobalMemoryAccountant::getNewAllocator()
+{
+    return newAllocator_;
+}
+
+TestMemoryAllocator* GlobalMemoryAccountant::getNewArrayAllocator()
+{
+    return newArrayAllocator_;
+}
+
 
