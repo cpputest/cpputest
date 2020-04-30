@@ -110,6 +110,11 @@ TestMemoryAllocator* defaultMallocAllocator()
 
 /////////////////////////////////////////////
 
+GlobalMemoryAllocatorStash::GlobalMemoryAllocatorStash()
+    : originalMallocAllocator(NULLPTR), originalNewAllocator(NULLPTR), originalNewArrayAllocator(NULLPTR)
+{
+}
+
 void GlobalMemoryAllocatorStash::save()
 {
     originalMallocAllocator = getCurrentMallocAllocator();
@@ -119,9 +124,9 @@ void GlobalMemoryAllocatorStash::save()
 
 void GlobalMemoryAllocatorStash::restore()
 {
-    setCurrentMallocAllocator(originalMallocAllocator);
-    setCurrentNewAllocator(originalNewAllocator);
-    setCurrentNewArrayAllocator(originalNewArrayAllocator);
+    if (originalMallocAllocator) setCurrentMallocAllocator(originalMallocAllocator);
+    if (originalNewAllocator) setCurrentNewAllocator(originalNewAllocator);
+    if (originalNewArrayAllocator) setCurrentNewArrayAllocator(originalNewArrayAllocator);
 }
 
 TestMemoryAllocator::TestMemoryAllocator(const char* name_str, const char* alloc_name_str, const char* free_name_str)
