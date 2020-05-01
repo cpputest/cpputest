@@ -43,7 +43,5 @@
 
 #ifdef HAVE_CONFIG_H
 #include "generated/CppUTestGeneratedConfig.h"
-#else
-#define CPPUTEST_HAVE_FORK 1
 #endif
 

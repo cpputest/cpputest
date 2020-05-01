@@ -115,7 +115,9 @@ if [ "x$BUILD" = "xdocker_dos" ]; then
 fi
 
 if [ "x$BUILD" = "xmake_dos" ]; then
-    git clone https://github.com/cpputest/watcom-compiler.git watcom
+    if [ ! -d watcom ]; then
+        git clone https://github.com/cpputest/watcom-compiler.git watcom
+    fi
     export PATH=$PATH:$PWD/watcom/binl
     export WATCOM=$PWD/watcom
     export CC=wcl
