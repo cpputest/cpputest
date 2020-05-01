@@ -611,10 +611,10 @@ bool MemoryLeakDetector::matchingAllocation(TestMemoryAllocator *alloc_allocator
 
 void MemoryLeakDetector::checkForCorruption(MemoryLeakDetectorNode* node, const char* file, int line, TestMemoryAllocator* allocator, bool allocateNodesSeperately)
 {
-    if (!matchingAllocation(node->allocator_, allocator))
-        outputBuffer_.reportAllocationDeallocationMismatchFailure(node, file, line, allocator, reporter_);
+    if (!matchingAllocation(node->allocator_->actualAllocator(), allocator->actualAllocator()))
+        outputBuffer_.reportAllocationDeallocationMismatchFailure(node, file, line, allocator->actualAllocator(), reporter_);
     else if (!validMemoryCorruptionInformation(node->memory_ + node->size_))
-        outputBuffer_.reportMemoryCorruptionFailure(node, file, line, allocator, reporter_);
+        outputBuffer_.reportMemoryCorruptionFailure(node, file, line, allocator->actualAllocator(), reporter_);
     else if (allocateNodesSeperately)
         allocator->freeMemoryLeakNode((char*) node);
 }

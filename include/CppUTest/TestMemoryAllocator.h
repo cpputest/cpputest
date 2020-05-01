@@ -78,6 +78,8 @@ public:
     virtual char* allocMemoryLeakNode(size_t size);
     virtual void freeMemoryLeakNode(char* memory);
 
+    virtual TestMemoryAllocator* actualAllocator();
+
 protected:
 
     const char* name_;
@@ -179,7 +181,7 @@ public:
     virtual char* alloc_memory(size_t size, const char* file, int line) _override;
     virtual void free_memory(char* memory, const char* file, int line) _override;
 
-    TestMemoryAllocator* getOriginalAllocator();
+    virtual TestMemoryAllocator* actualAllocator() _override;
 private:
 
     void addMemoryToMemoryTrackingToKeepTrackOfSize(char* memory, size_t size);

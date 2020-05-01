@@ -435,6 +435,9 @@ TEST(AccountingTestMemoryAllocator, useOriginalAllocatorWhenDeallocatingMemoryNo
 {
     char* memory = getCurrentMallocAllocator()->alloc_memory(10, __FILE__, __LINE__);
     allocator->free_memory(memory, __FILE__, __LINE__);
+
+    LONGS_EQUAL(0, accountant.totalAllocations());
+    LONGS_EQUAL(1, accountant.totalDeallocations());
 }
 
 class GlobalMemoryAccountantExecFunction

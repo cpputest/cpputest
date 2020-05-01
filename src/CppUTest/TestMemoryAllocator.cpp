@@ -183,6 +183,11 @@ const char* TestMemoryAllocator::free_name() const
     return free_name_;
 }
 
+TestMemoryAllocator* TestMemoryAllocator::actualAllocator()
+{
+    return this;
+}
+
 CrashOnAllocationAllocator::CrashOnAllocationAllocator() : allocationToCrashOn_(0)
 {
 }
@@ -551,11 +556,6 @@ size_t AccountingTestMemoryAllocator::removeMemoryFromTrackingAndReturnAllocated
     return 0;
 }
 
-TestMemoryAllocator* AccountingTestMemoryAllocator::getOriginalAllocator()
-{
-    return originalAllocator_;
-}
-
 char* AccountingTestMemoryAllocator::alloc_memory(size_t size, const char* file, int line)
 {
     accountant_.alloc(size);
@@ -568,7 +568,12 @@ void AccountingTestMemoryAllocator::free_memory(char* memory, const char* file, 
 {
     size_t size = removeMemoryFromTrackingAndReturnAllocatedSize(memory);
     accountant_.dealloc(size);
-    return originalAllocator_->free_memory(memory, file, line);
+    originalAllocator_->free_memory(memory, file, line);
+}
+
+TestMemoryAllocator* AccountingTestMemoryAllocator::actualAllocator()
+{
+    return originalAllocator_;
 }
 
 GlobalMemoryAccountant::GlobalMemoryAccountant()
@@ -597,9 +602,9 @@ void GlobalMemoryAccountant::stop()
     if (mallocAllocator_ == NULLPTR)
       FAIL("GlobalMemoryAccount: Stop called without starting");
 
-    setCurrentMallocAllocator(mallocAllocator_->getOriginalAllocator());
-    setCurrentNewAllocator(newAllocator_->getOriginalAllocator());
-    setCurrentNewArrayAllocator(newArrayAllocator_->getOriginalAllocator());
+    setCurrentMallocAllocator(mallocAllocator_->actualAllocator());
+    setCurrentNewAllocator(newAllocator_->actualAllocator());
+    setCurrentNewArrayAllocator(newArrayAllocator_->actualAllocator());
 
     delete mallocAllocator_;
     delete newAllocator_;
