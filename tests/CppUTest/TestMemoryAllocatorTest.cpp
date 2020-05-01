@@ -431,9 +431,30 @@ TEST(AccountingTestMemoryAllocator, canAllocateAndAccountMemoryMultipleAllocatio
     LONGS_EQUAL(7, accountant.totalDeallocations());
 }
 
+class GlobalMemoryAccountantExecFunction
+    : public ExecFunction
+{
+public:
+    void (*testFunction_)(GlobalMemoryAccountant*);
+    GlobalMemoryAccountant* parameter_;
+
+    virtual void exec() _override
+    {
+        testFunction_(parameter_);
+    }
+};
+
 TEST_GROUP(GlobalMemoryAccountant)
 {
     GlobalMemoryAccountant accountant;
+    TestTestingFixture fixture;
+    GlobalMemoryAccountantExecFunction testFunction;
+
+    void setup()
+    {
+        testFunction.parameter_ = &accountant;
+        fixture.setTestFunction(&testFunction);
+    }
 };
 
 TEST(GlobalMemoryAccountant, start)
@@ -476,3 +497,51 @@ TEST(GlobalMemoryAccountant, report)
 
 #endif
 
+static void _failStopWithoutStartingWillFail(GlobalMemoryAccountant* accountant)
+{
+    accountant->stop();
+}
+
+TEST(GlobalMemoryAccountant, StopCantBeCalledWithoutStarting)
+{
+    testFunction.testFunction_ = _failStopWithoutStartingWillFail;
+    fixture.runAllTests();
+    fixture.assertPrintContains("GlobalMemoryAccount: Stop called without starting");
+}
+
+static void _failStartingTwiceWillFail(GlobalMemoryAccountant* accountant)
+{
+    accountant->start();
+}
+
+TEST(GlobalMemoryAccountant, startTwiceWillFail)
+{
+    testFunction.testFunction_ = _failStartingTwiceWillFail;
+    fixture.runAllTests();
+    accountant.stop();
+
+    fixture.assertPrintContains("Global allocator start called twice!");
+
+}
+
+#if 0
+TEST(GlobalMemoryAccountant, startTwiceWillFailWhenTheAllocatorIsntTheSame)
+{
+}
+
+static void _failChangeMallocMemoryAllocator(GlobalMemoryAccountant* accountant)
+{
+    accountant->start();
+    setCurrentMallocAllocator(defaultMallocAllocator());
+    accountant->stop();
+}
+
+TEST(GlobalMemoryAccountant, checkWhetherMallocAllocatorIsNotChanged)
+{
+    testFunction.testFunction_ = _failChangeMallocMemoryAllocator;
+    fixture.runAllTests();
+    fixture.assertPrintContains("Something wrong: Malloc memory allocator has been changed while accounting for memory");
+}
+
+
+#endif

@@ -578,12 +578,14 @@ GlobalMemoryAccountant::GlobalMemoryAccountant()
 
 void GlobalMemoryAccountant::start()
 {
-    accountant_.setAllocator(getCurrentMallocAllocator());
+    if (mallocAllocator_ != NULLPTR)
+      FAIL("FAIL");
 
     mallocAllocator_ = new AccountingTestMemoryAllocator(accountant_, getCurrentMallocAllocator());
     newAllocator_ = new AccountingTestMemoryAllocator(accountant_, getCurrentNewAllocator());
     newArrayAllocator_ = new AccountingTestMemoryAllocator(accountant_, getCurrentNewArrayAllocator());
 
+    accountant_.setAllocator(getCurrentMallocAllocator());
 
     setCurrentMallocAllocator(mallocAllocator_);
     setCurrentNewAllocator(newAllocator_);
@@ -592,6 +594,9 @@ void GlobalMemoryAccountant::start()
 
 void GlobalMemoryAccountant::stop()
 {
+    if (mallocAllocator_ == NULLPTR)
+      FAIL("GlobalMemoryAccount: Stop called without starting");
+
     setCurrentMallocAllocator(mallocAllocator_->getOriginalAllocator());
     setCurrentNewAllocator(newAllocator_->getOriginalAllocator());
     setCurrentNewArrayAllocator(newArrayAllocator_->getOriginalAllocator());
