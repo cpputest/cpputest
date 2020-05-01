@@ -660,10 +660,6 @@ ExecFunction::~ExecFunction()
 {
 }
 
-void ExecFunction::exec()
-{
-}
-
 ExecFunctionWithoutParameters::ExecFunctionWithoutParameters(void(*testFunction)())
     : testFunction_(testFunction)
 {
