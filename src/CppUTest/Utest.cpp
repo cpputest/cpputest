@@ -208,10 +208,11 @@ void UtestShell::runOneTestInCurrentProcess(TestPlugin* plugin, TestResult& resu
 
     Utest* testToRun = createTest();
     testToRun->run();
-    destroyTest(testToRun);
 
     UtestShell::setCurrentTest(savedTest);
     UtestShell::setTestResult(savedResult);
+
+    destroyTest(testToRun);
 
     plugin->runAllPostTestAction(*this, result);
 }
