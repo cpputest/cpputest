@@ -492,8 +492,8 @@ SimpleString MemoryAccountant::report() const
     SimpleString report("CppUTest Memory Accountant report:\n"
                         "Allocation size     # allocations    # deallocations   max # allocations at one time\n");
     for (MemoryAccountantAllocationNode* node = head_; node; node = node->next_)
-        report += StringFromFormat("%5lu               %5lu            %5lu             %5lu\n",
-            node->size_, node->allocations_, node->deallocations_, node->maxAllocations_);
+        report += StringFromFormat("%5d               %5d            %5d             %5d\n",
+            (int) node->size_, (int) node->allocations_, (int) node->deallocations_, (int) node->maxAllocations_);
     report += SimpleString("   Thank you for your business\n");
     return report;
 }
