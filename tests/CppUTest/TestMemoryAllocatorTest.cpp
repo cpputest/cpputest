@@ -305,6 +305,7 @@ TEST(TestMemoryAccountant, countAllocationsPerSize)
     LONGS_EQUAL(1, accountant.totalAllocationsOfSize(4));
     LONGS_EQUAL(0, accountant.totalAllocationsOfSize(10));
     LONGS_EQUAL(1, accountant.totalAllocations());
+    LONGS_EQUAL(0, accountant.maximumAllocationAtATimeOfSize(10));
 }
 
 TEST(TestMemoryAccountant, countAllocationsPerSizeMultipleAllocations)
