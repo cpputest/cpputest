@@ -573,12 +573,25 @@ void AccountingTestMemoryAllocator::free_memory(char* memory, const char* file, 
 
 TestMemoryAllocator* AccountingTestMemoryAllocator::actualAllocator()
 {
+    return originalAllocator_->actualAllocator();
+}
+
+TestMemoryAllocator* AccountingTestMemoryAllocator::originalAllocator()
+{
     return originalAllocator_;
 }
 
 GlobalMemoryAccountant::GlobalMemoryAccountant()
     : mallocAllocator_(NULLPTR), newAllocator_(NULLPTR), newArrayAllocator_(NULLPTR)
 {
+}
+
+GlobalMemoryAccountant::~GlobalMemoryAccountant()
+{
+    restoreMemoryAllocators();
+    delete mallocAllocator_;
+    delete newAllocator_;
+    delete newArrayAllocator_;
 }
 
 void GlobalMemoryAccountant::start()
@@ -597,18 +610,33 @@ void GlobalMemoryAccountant::start()
     setCurrentNewArrayAllocator(newArrayAllocator_);
 }
 
+void GlobalMemoryAccountant::restoreMemoryAllocators()
+{
+    if (getCurrentMallocAllocator() == mallocAllocator_)
+        setCurrentMallocAllocator(mallocAllocator_->originalAllocator());
+
+    if (getCurrentNewAllocator() == newAllocator_)
+        setCurrentNewAllocator(newAllocator_->originalAllocator());
+
+    if (getCurrentNewArrayAllocator() == newArrayAllocator_)
+        setCurrentNewArrayAllocator(newArrayAllocator_->originalAllocator());
+}
+
 void GlobalMemoryAccountant::stop()
 {
     if (mallocAllocator_ == NULLPTR)
       FAIL("GlobalMemoryAccount: Stop called without starting");
 
-    setCurrentMallocAllocator(mallocAllocator_->actualAllocator());
-    setCurrentNewAllocator(newAllocator_->actualAllocator());
-    setCurrentNewArrayAllocator(newArrayAllocator_->actualAllocator());
+    if (getCurrentMallocAllocator() != mallocAllocator_)
+        FAIL("GlobalMemoryAccountant: Malloc memory allocator has been changed while accounting for memory");
 
-    delete mallocAllocator_;
-    delete newAllocator_;
-    delete newArrayAllocator_;
+    if (getCurrentNewAllocator() != newAllocator_)
+        FAIL("GlobalMemoryAccountant: New memory allocator has been changed while accounting for memory");
+
+    if (getCurrentNewArrayAllocator() != newArrayAllocator_)
+        FAIL("GlobalMemoryAccountant: New Array memory allocator has been changed while accounting for memory");
+
+    restoreMemoryAllocators();
 }
 
 SimpleString GlobalMemoryAccountant::report()

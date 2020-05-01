@@ -182,6 +182,7 @@ public:
     virtual void free_memory(char* memory, const char* file, int line) _override;
 
     virtual TestMemoryAllocator* actualAllocator() _override;
+    TestMemoryAllocator* originalAllocator();
 private:
 
     void addMemoryToMemoryTrackingToKeepTrackOfSize(char* memory, size_t size);
@@ -199,6 +200,7 @@ class GlobalMemoryAccountant
 {
 public:
     GlobalMemoryAccountant();
+    ~GlobalMemoryAccountant();
 
     void start();
     void stop();
@@ -209,6 +211,9 @@ public:
     TestMemoryAllocator* getNewArrayAllocator();
 
 private:
+
+    void restoreMemoryAllocators();
+
     MemoryAccountant accountant_;
     AccountingTestMemoryAllocator* mallocAllocator_;
     AccountingTestMemoryAllocator* newAllocator_;

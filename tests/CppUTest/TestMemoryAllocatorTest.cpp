@@ -462,11 +462,18 @@ TEST_GROUP(GlobalMemoryAccountant)
     GlobalMemoryAccountant accountant;
     TestTestingFixture fixture;
     GlobalMemoryAccountantExecFunction testFunction;
+    GlobalMemoryAllocatorStash stash;
 
     void setup()
     {
         testFunction.parameter_ = &accountant;
         fixture.setTestFunction(&testFunction);
+        stash.save();
+    }
+
+    void teardown()
+    {
+        stash.restore();
     }
 };
 
@@ -535,12 +542,6 @@ TEST(GlobalMemoryAccountant, startTwiceWillFail)
     accountant.stop();
 
     fixture.assertPrintContains("Global allocator start called twice!");
-
-}
-
-#if 0
-TEST(GlobalMemoryAccountant, startTwiceWillFailWhenTheAllocatorIsntTheSame)
-{
 }
 
 static void _failChangeMallocMemoryAllocator(GlobalMemoryAccountant* accountant)
@@ -554,8 +555,34 @@ TEST(GlobalMemoryAccountant, checkWhetherMallocAllocatorIsNotChanged)
 {
     testFunction.testFunction_ = _failChangeMallocMemoryAllocator;
     fixture.runAllTests();
-    fixture.assertPrintContains("Something wrong: Malloc memory allocator has been changed while accounting for memory");
+    fixture.assertPrintContains("GlobalMemoryAccountant: Malloc memory allocator has been changed while accounting for memory");
 }
 
+static void _failChangeNewMemoryAllocator(GlobalMemoryAccountant* accountant)
+{
+    accountant->start();
+    setCurrentNewAllocator(defaultNewAllocator());
+    accountant->stop();
+}
 
-#endif
+TEST(GlobalMemoryAccountant, checkWhetherNewAllocatorIsNotChanged)
+{
+    testFunction.testFunction_ = _failChangeNewMemoryAllocator;
+    fixture.runAllTests();
+    fixture.assertPrintContains("GlobalMemoryAccountant: New memory allocator has been changed while accounting for memory");
+}
+
+static void _failChangeNewArrayMemoryAllocator(GlobalMemoryAccountant* accountant)
+{
+    accountant->start();
+    setCurrentNewArrayAllocator(defaultNewArrayAllocator());
+    accountant->stop();
+}
+
+TEST(GlobalMemoryAccountant, checkWhetherNewArrayAllocatorIsNotChanged)
+{
+    testFunction.testFunction_ = _failChangeNewArrayMemoryAllocator;
+    fixture.runAllTests();
+    fixture.assertPrintContains("GlobalMemoryAccountant: New Array memory allocator has been changed while accounting for memory");
+}
+
