@@ -37,14 +37,14 @@ TEST_GROUP(TestMemoryAllocatorTest)
 
     void setup()
     {
-        memoryAllocatorStash.save();
         allocator = NULLPTR;
+        memoryAllocatorStash.save();
     }
 
     void teardown()
     {
-        delete allocator;
         memoryAllocatorStash.restore();
+        delete allocator;
     }
 };
 
