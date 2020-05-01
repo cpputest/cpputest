@@ -584,7 +584,7 @@ GlobalMemoryAccountant::GlobalMemoryAccountant()
 void GlobalMemoryAccountant::start()
 {
     if (mallocAllocator_ != NULLPTR)
-      FAIL("FAIL");
+      FAIL("Global allocator start called twice!");
 
     mallocAllocator_ = new AccountingTestMemoryAllocator(accountant_, getCurrentMallocAllocator());
     newAllocator_ = new AccountingTestMemoryAllocator(accountant_, getCurrentNewAllocator());

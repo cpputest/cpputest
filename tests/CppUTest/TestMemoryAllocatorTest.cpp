@@ -525,6 +525,7 @@ TEST(GlobalMemoryAccountant, StopCantBeCalledWithoutStarting)
 static void _failStartingTwiceWillFail(GlobalMemoryAccountant* accountant)
 {
     accountant->start();
+    accountant->start();
 }
 
 TEST(GlobalMemoryAccountant, startTwiceWillFail)
