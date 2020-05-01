@@ -315,8 +315,8 @@ TEST_GROUP(OutOfMemoryTestsForOperatorNew)
 
     void teardown()
     {
-        delete no_memory_allocator;
         memoryAllocatorStash.restore();
+        delete no_memory_allocator;
     }
 };
 
