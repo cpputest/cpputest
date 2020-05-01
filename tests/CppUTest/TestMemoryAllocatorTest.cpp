@@ -158,32 +158,30 @@ public:
         testFunction_(allocator_);
     }
 
-    FailableMemoryAllocatorExecFunction(FailableMemoryAllocator* allocator) : allocator_(allocator) {}
+    FailableMemoryAllocatorExecFunction() : allocator_(NULLPTR), testFunction_(NULLPTR) {}
     virtual ~FailableMemoryAllocatorExecFunction() _destructor_override {}
 };
 
 TEST_GROUP(FailableMemoryAllocator)
 {
     FailableMemoryAllocator *failableMallocAllocator;
-    FailableMemoryAllocatorExecFunction * testFunction;
-    TestTestingFixture *fixture;
+    FailableMemoryAllocatorExecFunction testFunction;
+    TestTestingFixture fixture;
+    GlobalMemoryAllocatorStash stash;
 
     void setup()
     {
-        fixture = new TestTestingFixture;
-        failableMallocAllocator = new FailableMemoryAllocator("Failable Malloc Allocator", "malloc", "free");
-        testFunction = new FailableMemoryAllocatorExecFunction(failableMallocAllocator);
-        fixture->setTestFunction(testFunction);
+        stash.save();
+        testFunction.allocator_ = failableMallocAllocator = new FailableMemoryAllocator("Failable Malloc Allocator", "malloc", "free");
+        fixture.setTestFunction(&testFunction);
         setCurrentMallocAllocator(failableMallocAllocator);
     }
     void teardown()
     {
         failableMallocAllocator->checkAllFailedAllocsWereDone();
-        setCurrentMallocAllocatorToDefault();
         failableMallocAllocator->clearFailedAllocs();
-        delete testFunction;
         delete failableMallocAllocator;
-        delete fixture;
+        stash.restore();
     }
 };
 
@@ -230,12 +228,12 @@ static void _failingAllocIsNeverDone(FailableMemoryAllocator* failableMallocAllo
 
 TEST(FailableMemoryAllocator, CheckAllFailingAllocsWereDone)
 {
-    testFunction->testFunction_ = _failingAllocIsNeverDone;
+    testFunction.testFunction_ = _failingAllocIsNeverDone;
 
-    fixture->runAllTests();
+    fixture.runAllTests();
 
-    LONGS_EQUAL(1, fixture->getFailureCount());
-    fixture->assertPrintContains("Expected allocation number 3 was never done");
+    LONGS_EQUAL(1, fixture.getFailureCount());
+    fixture.assertPrintContains("Expected allocation number 3 was never done");
     failableMallocAllocator->clearFailedAllocs();
 }
 
@@ -271,13 +269,13 @@ static void _failingLocationAllocIsNeverDone(FailableMemoryAllocator* failableMa
 
 TEST(FailableMemoryAllocator, CheckAllFailingLocationAllocsWereDone)
 {
-    testFunction->testFunction_ = _failingLocationAllocIsNeverDone;
+    testFunction.testFunction_ = _failingLocationAllocIsNeverDone;
 
-    fixture->runAllTests();
+    fixture.runAllTests();
 
-    LONGS_EQUAL(1, fixture->getFailureCount());
-    fixture->assertPrintContains("Expected failing alloc at TestMemoryAllocatorTest.cpp:");
-    fixture->assertPrintContains("was never done");
+    LONGS_EQUAL(1, fixture.getFailureCount());
+    fixture.assertPrintContains("Expected failing alloc at TestMemoryAllocatorTest.cpp:");
+    fixture.assertPrintContains("was never done");
 
     failableMallocAllocator->clearFailedAllocs();
 }
