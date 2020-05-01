@@ -494,7 +494,7 @@ SimpleString MemoryAccountant::report() const
 }
 
 AccountingTestMemoryAllocator::AccountingTestMemoryAllocator(MemoryAccountant& accountant, TestMemoryAllocator* originalAllocator)
-    : accountant_(accountant), originalAllocator_(originalAllocator)
+    : accountant_(accountant), originalAllocator_(originalAllocator), head_(NULLPTR)
 {
 }
 

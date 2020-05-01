@@ -431,10 +431,20 @@ TEST(AccountingTestMemoryAllocator, canAllocateAndAccountMemoryMultipleAllocatio
     LONGS_EQUAL(7, accountant.totalDeallocations());
 }
 
+TEST(AccountingTestMemoryAllocator, useOriginalAllocatorWhenDeallocatingMemoryNotAllocatedByAllocator)
+{
+    char* memory = getCurrentMallocAllocator()->alloc_memory(10, __FILE__, __LINE__);
+    allocator->free_memory(memory, __FILE__, __LINE__);
+}
+
 class GlobalMemoryAccountantExecFunction
     : public ExecFunction
 {
 public:
+    virtual ~GlobalMemoryAccountantExecFunction() _destructor_override
+    {
+    }
+
     void (*testFunction_)(GlobalMemoryAccountant*);
     GlobalMemoryAccountant* parameter_;
 
