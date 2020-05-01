@@ -511,7 +511,7 @@ TEST(GlobalMemoryAccountant, report)
     accountant.stop();
 
     /* Allocation includes memory leak info */
-    STRCMP_CONTAINS("256", accountant.report().asCharString());
+    STRCMP_CONTAINS("1                1                 1", accountant.report().asCharString());
 }
 
 #endif
