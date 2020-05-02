@@ -30,6 +30,7 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 #include "CppUTest/TestMemoryAllocator.h"
 #include "CppUTest/MemoryLeakDetector.h"
+#include "CppUTest/TestTestingFixture.h"
 
 class JustUseNewStringAllocator : public TestMemoryAllocator
 {
@@ -46,24 +47,120 @@ public:
     }
 };
 
+class GlobalSimpleStringMemoryAccountantExecFunction
+    : public ExecFunction
+{
+public:
+    void (*testFunction_)(GlobalSimpleStringMemoryAccountant*);
+    GlobalSimpleStringMemoryAccountant* parameter_;
+
+    virtual void exec() _override
+    {
+        testFunction_(parameter_);
+    }
+};
+
+TEST_GROUP(GlobalSimpleStringMemoryAccountant)
+{
+    GlobalSimpleStringAllocatorStash stash;
+    GlobalSimpleStringMemoryAccountantExecFunction testFunction;
+    TestTestingFixture fixture;
+    GlobalSimpleStringMemoryAccountant accountant;
+
+    void setup()
+    {
+        stash.save();
+        testFunction.parameter_ = &accountant;
+        fixture.setTestFunction(&testFunction);
+    }
+
+    void teardown()
+    {
+        stash.restore();
+    }
+};
+
+TEST(GlobalSimpleStringMemoryAccountant, start)
+{
+    accountant.start();
+    POINTERS_EQUAL(accountant.getAllocator(), SimpleString::getStringAllocator());
+}
+
+static void _startTwice(GlobalSimpleStringMemoryAccountant* accountant)
+{
+    accountant->start();
+    accountant->start();
+}
+
+TEST(GlobalSimpleStringMemoryAccountant, startTwiceWillFail)
+{
+    testFunction.testFunction_ = _startTwice;
+    fixture.runAllTests();
+    fixture.assertPrintContains("Global SimpleString allocator start called twice!");
+}
+
+TEST(GlobalSimpleStringMemoryAccountant, stop)
+{
+    TestMemoryAllocator* originalAllocator = SimpleString::getStringAllocator();
+    accountant.start();
+    accountant.stop();
+    POINTERS_EQUAL(originalAllocator, SimpleString::getStringAllocator());
+}
+
+static void _stopAccountant(GlobalSimpleStringMemoryAccountant* accountant)
+{
+    accountant->stop();
+}
+
+TEST(GlobalSimpleStringMemoryAccountant, stopWithoutStartWillFail)
+{
+    testFunction.testFunction_ = _stopAccountant;
+    fixture.runAllTests();
+    fixture.assertPrintContains("Global SimpleString allocator stopped without starting");
+}
+
+static void _changeAllocatorBetweenStartAndStop(GlobalSimpleStringMemoryAccountant* accountant)
+{
+    accountant->start();
+    SimpleString::setStringAllocator(defaultMallocAllocator());
+    accountant->stop();
+}
+
+TEST(GlobalSimpleStringMemoryAccountant, stopFailsWhenAllocatorWasChangedInBetween)
+{
+    testFunction.testFunction_ = _changeAllocatorBetweenStartAndStop;
+    fixture.runAllTests();
+    fixture.assertPrintContains("GlobalStrimpleStringMemoryAccountant: allocator has changed between start and stop!");
+}
+
+TEST(GlobalSimpleStringMemoryAccountant, report)
+{
+    SimpleString str;
+    accountant.start();
+    str += "More";
+    accountant.stop();
+    STRCMP_CONTAINS(" 1                0                 1", accountant.report().asCharString());
+}
 
 TEST_GROUP(SimpleString)
 {
   JustUseNewStringAllocator justNewForSimpleStringTestAllocator;
+  GlobalSimpleStringAllocatorStash stash;
   void setup()
   {
-    SimpleString::setStringAllocator(&justNewForSimpleStringTestAllocator);
+      stash.save();
+      SimpleString::setStringAllocator(&justNewForSimpleStringTestAllocator);
   }
   void teardown()
   {
-    SimpleString::setStringAllocator(NULLPTR);
+      stash.restore();
   }
 };
 
 TEST(SimpleString, defaultAllocatorIsNewArrayAllocator)
 {
   SimpleString::setStringAllocator(NULLPTR);
-  POINTERS_EQUAL(getCurrentNewArrayAllocator(), SimpleString::getStringAllocator());
+  POINTERS_EQUAL(defaultNewArrayAllocator(), SimpleString::getStringAllocator());
 }
 
 class MyOwnStringAllocator : public TestMemoryAllocator
@@ -1154,4 +1251,39 @@ TEST(SimpleString, BracketsFormattedHexStringFromForULongLong)
 }
 
 #endif
+
+
+TEST_GROUP(SimpleStringInternalCache)
+{
+    SimpleStringInternalCache cache;
+
+    void teardown()
+    {
+        cache.clear();
+    }
+};
+
+TEST(SimpleStringInternalCache, noAllocationWillLeaveTheCacheEmpty)
+{
+    LONGS_EQUAL(0, cache.totalAvailableBlocks());
+}
+
+TEST(SimpleStringInternalCache, allocationAndFreeWillCreateAvailabelBlocks)
+{
+    char* mem = cache.alloc(10);
+    cache.dealloc(mem, 10);
+    LONGS_EQUAL(1, cache.totalAvailableBlocks());
+}
+
+TEST(SimpleStringInternalCache, allocationWillReuseTheAllocatedBlocks)
+{
+    char* mem = cache.alloc(10);
+    cache.dealloc(mem, 10);
+    mem = cache.alloc(10);
+    cache.dealloc(mem, 10);
+
+    LONGS_EQUAL(1, cache.totalAvailableBlocks());
+}
+
+
 
