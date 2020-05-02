@@ -147,7 +147,7 @@ jobs:
         token: $GH_TOKEN
         tag_name: latest-passing-build
         name: Latest passing build
-        release_notes: "This is the automatic release from Travis CI. Whenever a build passes, it gets released as Latest Passing Build."
+        release_notes: "This is the automatic release from Travis CI.\n\nWhenever a build passes, it gets released as Latest Passing Build.\n\nBuild number: $TRAVIS_BUILD_NUMBER\nDate: $DATE\nLog: $TRAVIS_BUILD_WEB_URL"
         file:
           - cpputest-latest.tar.gz
           - cpputest-latest.zip
