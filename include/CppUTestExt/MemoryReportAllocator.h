@@ -54,6 +54,8 @@ public:
     virtual const char* name() const _override;
     virtual const char* alloc_name() const _override;
     virtual const char* free_name() const _override;
+
+    virtual TestMemoryAllocator* actualAllocator();
 };
 
 #endif
