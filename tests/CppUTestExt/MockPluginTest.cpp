@@ -50,6 +50,7 @@ TEST_GROUP(MockPlugin)
     {
         delete test;
         delete result;
+        mock().clear();
     }
 };
 

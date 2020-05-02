@@ -39,8 +39,9 @@ TEST_GROUP(MockSupportTest)
 
   void teardown()
   {
-    mock().checkExpectations();
-    CHECK_NO_MOCK_FAILURE();
+      mock().checkExpectations();
+      CHECK_NO_MOCK_FAILURE();
+      mock().clear();
   }
 };
 
@@ -170,6 +171,11 @@ TEST(MockSupportTest, tracingWorksHierarchically)
 TEST_GROUP(MockSupportTestWithFixture)
 {
     TestTestingFixture fixture;
+
+    void teardown()
+    {
+        mock().clear();
+    }
 };
 
 static void CHECK_EXPECTED_MOCK_FAILURE_LOCATION_failedTestMethod_()

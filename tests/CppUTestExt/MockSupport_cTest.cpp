@@ -43,6 +43,10 @@ extern "C" {
 
 TEST_GROUP(MockSupport_c)
 {
+    void teardown()
+    {
+        mock_c()->clear();
+    }
 };
 
 TEST(MockSupport_c, OrderObserved)

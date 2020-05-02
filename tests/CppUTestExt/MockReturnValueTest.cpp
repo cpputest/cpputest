@@ -32,7 +32,8 @@ TEST_GROUP(MockReturnValueTest)
 {
   void teardown()
   {
-    mock().checkExpectations();
+      mock().checkExpectations();
+      mock().clear();
   }
 };
 
