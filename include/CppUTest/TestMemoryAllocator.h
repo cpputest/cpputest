@@ -46,6 +46,19 @@ extern TestMemoryAllocator* getCurrentMallocAllocator();
 extern void setCurrentMallocAllocatorToDefault();
 extern TestMemoryAllocator* defaultMallocAllocator();
 
+class GlobalMemoryAllocatorStash
+{
+public:
+    GlobalMemoryAllocatorStash();
+    void save();
+    void restore();
+
+private:
+    TestMemoryAllocator* originalMallocAllocator;
+    TestMemoryAllocator* originalNewAllocator;
+    TestMemoryAllocator* originalNewArrayAllocator;
+};
+
 class TestMemoryAllocator
 {
 public:
@@ -65,6 +78,8 @@ public:
     virtual char* allocMemoryLeakNode(size_t size);
     virtual void freeMemoryLeakNode(char* memory);
 
+    virtual TestMemoryAllocator* actualAllocator();
+
 protected:
 
     const char* name_;
@@ -79,6 +94,7 @@ class CrashOnAllocationAllocator : public TestMemoryAllocator
     unsigned allocationToCrashOn_;
 public:
     CrashOnAllocationAllocator();
+    virtual ~CrashOnAllocationAllocator() _destructor_override;
 
     virtual void setNumberToCrashOn(unsigned allocationToCrashOn);
 
@@ -90,6 +106,8 @@ class NullUnknownAllocator: public TestMemoryAllocator
 {
 public:
     NullUnknownAllocator();
+    virtual ~NullUnknownAllocator() _destructor_override;
+
     virtual char* alloc_memory(size_t size, const char* file, int line) _override;
     virtual void free_memory(char* memory, const char* file, int line) _override;
 
@@ -102,9 +120,10 @@ class FailableMemoryAllocator: public TestMemoryAllocator
 {
 public:
     FailableMemoryAllocator(const char* name_str = "failable alloc", const char* alloc_name_str = "alloc", const char* free_name_str = "free");
+    virtual ~FailableMemoryAllocator() _destructor_override;
 
-    virtual char* alloc_memory(size_t size, const char* file, int line);
-    virtual char* allocMemoryLeakNode(size_t size);
+    virtual char* alloc_memory(size_t size, const char* file, int line) _override;
+    virtual char* allocMemoryLeakNode(size_t size) _override;
 
     virtual void failAllocNumber(int number);
     virtual void failNthAllocAt(int allocationNumber, const char* file, int line);
@@ -116,6 +135,89 @@ protected:
 
     LocationToFailAllocNode* head_;
     int currentAllocNumber_;
+};
+
+struct MemoryAccountantAllocationNode;
+
+class MemoryAccountant
+{
+public:
+    MemoryAccountant();
+
+    void clear();
+
+    void alloc(size_t size);
+    void dealloc(size_t size);
+
+    size_t totalAllocationsOfSize(size_t size) const;
+    size_t totalDeallocationsOfSize(size_t size) const;
+    size_t maximumAllocationAtATimeOfSize(size_t size) const;
+
+    size_t totalAllocations() const;
+    size_t totalDeallocations() const;
+
+    SimpleString report() const;
+
+    void setAllocator(TestMemoryAllocator* allocator);
+private:
+    MemoryAccountantAllocationNode* findOrCreateNodeOfSize(size_t size);
+    MemoryAccountantAllocationNode* findNodeOfSize(size_t size) const;
+
+    MemoryAccountantAllocationNode* createNewAccountantAllocationNode(size_t size, MemoryAccountantAllocationNode* next);
+    void destroyAccountantAllocationNode(MemoryAccountantAllocationNode* node);
+
+    MemoryAccountantAllocationNode* head_;
+    TestMemoryAllocator* allocator_;
+};
+
+struct AccountingTestMemoryAllocatorMemoryNode;
+
+class AccountingTestMemoryAllocator : public TestMemoryAllocator
+{
+public:
+    AccountingTestMemoryAllocator(MemoryAccountant& accountant, TestMemoryAllocator* originalAllocator);
+    virtual ~AccountingTestMemoryAllocator() _destructor_override;
+
+    virtual char* alloc_memory(size_t size, const char* file, int line) _override;
+    virtual void free_memory(char* memory, const char* file, int line) _override;
+
+    virtual TestMemoryAllocator* actualAllocator() _override;
+    TestMemoryAllocator* originalAllocator();
+private:
+
+    void addMemoryToMemoryTrackingToKeepTrackOfSize(char* memory, size_t size);
+    size_t removeMemoryFromTrackingAndReturnAllocatedSize(char* memory);
+
+    size_t removeNextNodeAndReturnSize(AccountingTestMemoryAllocatorMemoryNode* node);
+    size_t removeHeadAndReturnSize();
+
+    MemoryAccountant& accountant_;
+    TestMemoryAllocator* originalAllocator_;
+    AccountingTestMemoryAllocatorMemoryNode* head_;
+};
+
+class GlobalMemoryAccountant
+{
+public:
+    GlobalMemoryAccountant();
+    ~GlobalMemoryAccountant();
+
+    void start();
+    void stop();
+    SimpleString report();
+
+    TestMemoryAllocator* getMallocAllocator();
+    TestMemoryAllocator* getNewAllocator();
+    TestMemoryAllocator* getNewArrayAllocator();
+
+private:
+
+    void restoreMemoryAllocators();
+
+    MemoryAccountant accountant_;
+    AccountingTestMemoryAllocator* mallocAllocator_;
+    AccountingTestMemoryAllocator* newAllocator_;
+    AccountingTestMemoryAllocator* newArrayAllocator_;
 };
 
 #endif

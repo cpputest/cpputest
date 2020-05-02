@@ -678,15 +678,15 @@ TEST_GROUP(ReallocBugReported)
 TEST(ReallocBugReported, CanSafelyDoAReallocWithANewAllocator)
 {
     MemoryLeakDetector detector(&reporter);
-    char* mem = detector.allocMemory(getCurrentNewAllocator(), 5, "file", 1);
-    mem = detector.reallocMemory(getCurrentNewAllocator(), mem, 19, "file", 1);
-    detector.deallocMemory(getCurrentNewAllocator(), mem);
+    char* mem = detector.allocMemory(defaultNewAllocator(), 5, "file", 1);
+    mem = detector.reallocMemory(defaultNewAllocator(), mem, 19, "file", 1);
+    detector.deallocMemory(defaultNewAllocator(), mem);
 }
 
 TEST(ReallocBugReported, CanSafelyDoAReallocWithAMallocAllocator)
 {
     MemoryLeakDetector detector(&reporter);
-    char* mem = detector.allocMemory(getCurrentMallocAllocator(), 5, "file", 1, true);
-    mem = detector.reallocMemory(getCurrentMallocAllocator(), mem, 19, "file", 1, true);
-    detector.deallocMemory(getCurrentMallocAllocator(), mem, true);
+    char* mem = detector.allocMemory(defaultMallocAllocator(), 5, "file", 1, true);
+    mem = detector.reallocMemory(defaultMallocAllocator(), mem, 19, "file", 1, true);
+    detector.deallocMemory(defaultMallocAllocator(), mem, true);
 }

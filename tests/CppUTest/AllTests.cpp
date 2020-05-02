@@ -26,6 +26,9 @@
  */
 
 #include "CppUTest/CommandLineTestRunner.h"
+#include "CppUTest/TestMemoryAllocator.h"
+
+#define SHOW_MEMORY_REPORT 0
 
 int main(int ac, char **av)
 {
@@ -33,6 +36,18 @@ int main(int ac, char **av)
     CHECK(true);
     LONGS_EQUAL(1, 1);
 
-    return CommandLineTestRunner::RunAllTests(ac, av); /* cover alternate method */
+#if SHOW_MEMORY_REPORT
+    GlobalMemoryAccountant accountant;
+    accountant.start();
+#endif
+
+    int returnValue = CommandLineTestRunner::RunAllTests(ac, av); /* cover alternate method */
+
+#if SHOW_MEMORY_REPORT
+    accountant.stop();
+    printf("%s", accountant.report().asCharString());
+#endif
+
+    return returnValue;
 }
 

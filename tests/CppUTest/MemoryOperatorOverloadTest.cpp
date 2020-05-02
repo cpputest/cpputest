@@ -304,8 +304,10 @@ TEST(MemoryLeakOverridesToBeUsedInProductionCode, MemoryOverridesAreDisabled)
 TEST_GROUP(OutOfMemoryTestsForOperatorNew)
 {
     TestMemoryAllocator* no_memory_allocator;
+    GlobalMemoryAllocatorStash memoryAllocatorStash;
     void setup()
     {
+        memoryAllocatorStash.save();
         no_memory_allocator = new NullUnknownAllocator;
         setCurrentNewAllocator(no_memory_allocator);
         setCurrentNewArrayAllocator(no_memory_allocator);
@@ -313,8 +315,7 @@ TEST_GROUP(OutOfMemoryTestsForOperatorNew)
 
     void teardown()
     {
-        setCurrentNewAllocatorToDefault();
-        setCurrentNewArrayAllocatorToDefault();
+        memoryAllocatorStash.restore();
         delete no_memory_allocator;
     }
 };

@@ -201,7 +201,7 @@ public:
     ExecFunction();
     virtual ~ExecFunction();
 
-    virtual void exec();
+    virtual void exec()=0;
 };
 
 class ExecFunctionWithoutParameters : public ExecFunction

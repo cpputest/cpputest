@@ -797,7 +797,7 @@ TEST(TestHarness_c, callocInitializedToZero)
     free(mem);
 }
 
-TEST(TestHarness_c, callocShouldReturnNULLWhenOutOfMeory)
+TEST(TestHarness_c, callocShouldReturnNULLWhenOutOfMemory)
 {
     cpputest_malloc_set_out_of_memory_countdown(0);
     void * m = cpputest_calloc(1, 1);

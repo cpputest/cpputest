@@ -33,14 +33,17 @@
 TEST_GROUP(TestMemoryAllocatorTest)
 {
     TestMemoryAllocator* allocator;
+    GlobalMemoryAllocatorStash memoryAllocatorStash;
 
     void setup()
     {
         allocator = NULLPTR;
+        memoryAllocatorStash.save();
     }
 
     void teardown()
     {
+        memoryAllocatorStash.restore();
         delete allocator;
     }
 };
@@ -50,8 +53,16 @@ TEST(TestMemoryAllocatorTest, SetCurrentNewAllocator)
     allocator = new TestMemoryAllocator("new allocator for test");
     setCurrentNewAllocator(allocator);
     POINTERS_EQUAL(allocator, getCurrentNewAllocator());
+}
+
+TEST(TestMemoryAllocatorTest, SetCurrentNewAllocatorToDefault)
+{
+    TestMemoryAllocator* originalAllocator = getCurrentNewAllocator();
+
     setCurrentNewAllocatorToDefault();
     POINTERS_EQUAL(defaultNewAllocator(), getCurrentNewAllocator());
+
+    setCurrentNewAllocator(originalAllocator);
 }
 
 TEST(TestMemoryAllocatorTest, SetCurrentNewArrayAllocator)
@@ -147,32 +158,30 @@ public:
         testFunction_(allocator_);
     }
 
-    FailableMemoryAllocatorExecFunction(FailableMemoryAllocator* allocator) : allocator_(allocator) {}
+    FailableMemoryAllocatorExecFunction() : allocator_(NULLPTR), testFunction_(NULLPTR) {}
     virtual ~FailableMemoryAllocatorExecFunction() _destructor_override {}
 };
 
 TEST_GROUP(FailableMemoryAllocator)
 {
     FailableMemoryAllocator *failableMallocAllocator;
-    FailableMemoryAllocatorExecFunction * testFunction;
-    TestTestingFixture *fixture;
+    FailableMemoryAllocatorExecFunction testFunction;
+    TestTestingFixture fixture;
+    GlobalMemoryAllocatorStash stash;
 
     void setup()
     {
-        fixture = new TestTestingFixture;
-        failableMallocAllocator = new FailableMemoryAllocator("Failable Malloc Allocator", "malloc", "free");
-        testFunction = new FailableMemoryAllocatorExecFunction(failableMallocAllocator);
-        fixture->setTestFunction(testFunction);
+        stash.save();
+        testFunction.allocator_ = failableMallocAllocator = new FailableMemoryAllocator("Failable Malloc Allocator", "malloc", "free");
+        fixture.setTestFunction(&testFunction);
         setCurrentMallocAllocator(failableMallocAllocator);
     }
     void teardown()
     {
         failableMallocAllocator->checkAllFailedAllocsWereDone();
-        setCurrentMallocAllocatorToDefault();
         failableMallocAllocator->clearFailedAllocs();
-        delete testFunction;
         delete failableMallocAllocator;
-        delete fixture;
+        stash.restore();
     }
 };
 
@@ -219,12 +228,12 @@ static void _failingAllocIsNeverDone(FailableMemoryAllocator* failableMallocAllo
 
 TEST(FailableMemoryAllocator, CheckAllFailingAllocsWereDone)
 {
-    testFunction->testFunction_ = _failingAllocIsNeverDone;
+    testFunction.testFunction_ = _failingAllocIsNeverDone;
 
-    fixture->runAllTests();
+    fixture.runAllTests();
 
-    LONGS_EQUAL(1, fixture->getFailureCount());
-    fixture->assertPrintContains("Expected allocation number 3 was never done");
+    LONGS_EQUAL(1, fixture.getFailureCount());
+    fixture.assertPrintContains("Expected allocation number 3 was never done");
     failableMallocAllocator->clearFailedAllocs();
 }
 
@@ -260,16 +269,319 @@ static void _failingLocationAllocIsNeverDone(FailableMemoryAllocator* failableMa
 
 TEST(FailableMemoryAllocator, CheckAllFailingLocationAllocsWereDone)
 {
-    testFunction->testFunction_ = _failingLocationAllocIsNeverDone;
+    testFunction.testFunction_ = _failingLocationAllocIsNeverDone;
 
-    fixture->runAllTests();
+    fixture.runAllTests();
 
-    LONGS_EQUAL(1, fixture->getFailureCount());
-    fixture->assertPrintContains("Expected failing alloc at TestMemoryAllocatorTest.cpp:");
-    fixture->assertPrintContains("was never done");
+    LONGS_EQUAL(1, fixture.getFailureCount());
+    fixture.assertPrintContains("Expected failing alloc at TestMemoryAllocatorTest.cpp:");
+    fixture.assertPrintContains("was never done");
 
     failableMallocAllocator->clearFailedAllocs();
 }
 
 #endif
 #endif
+
+TEST_GROUP(TestMemoryAccountant)
+{
+    MemoryAccountant accountant;
+
+    void teardown()
+    {
+        accountant.clear();
+    }
+};
+
+TEST(TestMemoryAccountant, totalAllocsIsZero)
+{
+    LONGS_EQUAL(0, accountant.totalAllocations());
+    LONGS_EQUAL(0, accountant.totalDeallocations());
+}
+
+TEST(TestMemoryAccountant, countAllocationsPerSize)
+{
+    accountant.alloc(4);
+    LONGS_EQUAL(1, accountant.totalAllocationsOfSize(4));
+    LONGS_EQUAL(0, accountant.totalAllocationsOfSize(10));
+    LONGS_EQUAL(1, accountant.totalAllocations());
+    LONGS_EQUAL(0, accountant.maximumAllocationAtATimeOfSize(10));
+}
+
+TEST(TestMemoryAccountant, countAllocationsPerSizeMultipleAllocations)
+{
+    accountant.alloc(4);
+    accountant.alloc(4);
+    accountant.alloc(8);
+    LONGS_EQUAL(2, accountant.totalAllocationsOfSize(4));
+    LONGS_EQUAL(1, accountant.totalAllocationsOfSize(8));
+    LONGS_EQUAL(0, accountant.totalAllocationsOfSize(10));
+    LONGS_EQUAL(3, accountant.totalAllocations());
+}
+
+TEST(TestMemoryAccountant, countAllocationsPerSizeMultipleAllocationsOutOfOrder)
+{
+    accountant.alloc(4);
+    accountant.alloc(8);
+    accountant.alloc(4);
+    accountant.alloc(5);
+    accountant.alloc(2);
+    accountant.alloc(4);
+    accountant.alloc(10);
+
+    LONGS_EQUAL(3, accountant.totalAllocationsOfSize(4));
+    LONGS_EQUAL(1, accountant.totalAllocationsOfSize(8));
+    LONGS_EQUAL(1, accountant.totalAllocationsOfSize(10));
+    LONGS_EQUAL(7, accountant.totalAllocations());
+}
+
+TEST(TestMemoryAccountant, countDeallocationsPerSizeMultipleAllocations)
+{
+    accountant.dealloc(8);
+    accountant.dealloc(4);
+    accountant.dealloc(8);
+    LONGS_EQUAL(1, accountant.totalDeallocationsOfSize(4));
+    LONGS_EQUAL(2, accountant.totalDeallocationsOfSize(8));
+    LONGS_EQUAL(0, accountant.totalDeallocationsOfSize(20));
+    LONGS_EQUAL(3, accountant.totalDeallocations());
+}
+
+TEST(TestMemoryAccountant, countMaximumAllocationsAtATime)
+{
+    accountant.alloc(4);
+    accountant.alloc(4);
+    accountant.dealloc(4);
+    accountant.dealloc(4);
+    accountant.alloc(4);
+    LONGS_EQUAL(2, accountant.maximumAllocationAtATimeOfSize(4));
+}
+
+TEST(TestMemoryAccountant, reportNoAllocations)
+{
+    STRCMP_EQUAL("CppUTest Memory Accountant has not noticed any allocations or deallocations. Sorry\n", accountant.report().asCharString());
+}
+
+TEST(TestMemoryAccountant, reportAllocations)
+{
+    accountant.dealloc(8);
+    accountant.dealloc(8);
+    accountant.dealloc(8);
+
+    accountant.alloc(4);
+    accountant.dealloc(4);
+    accountant.alloc(4);
+    STRCMP_EQUAL("CppUTest Memory Accountant report:\n"
+                 "Allocation size     # allocations    # deallocations   max # allocations at one time\n"
+                 "    4                   2                1                 1\n"
+                 "    8                   0                3                 0\n"
+                 "   Thank you for your business\n"
+                 , accountant.report().asCharString());
+}
+
+TEST_GROUP(AccountingTestMemoryAllocator)
+{
+    MemoryAccountant accountant;
+    AccountingTestMemoryAllocator *allocator;
+
+    void setup()
+    {
+        allocator = new AccountingTestMemoryAllocator(accountant, getCurrentMallocAllocator());
+    }
+
+    void teardown()
+    {
+        accountant.clear();
+        delete allocator;
+    }
+};
+
+TEST(AccountingTestMemoryAllocator, canAllocateAndAccountMemory)
+{
+    char* memory = allocator->alloc_memory(10, __FILE__, __LINE__);
+    allocator->free_memory(memory, __FILE__, __LINE__);
+
+    LONGS_EQUAL(1, accountant.totalAllocationsOfSize(10));
+    LONGS_EQUAL(1, accountant.totalDeallocationsOfSize(10));
+}
+
+TEST(AccountingTestMemoryAllocator, canAllocateAndAccountMemoryMultipleAllocations)
+{
+    char* memory1 = allocator->alloc_memory(10, __FILE__, __LINE__);
+    char* memory2 = allocator->alloc_memory(8, __FILE__, __LINE__);
+    char* memory3 = allocator->alloc_memory(12, __FILE__, __LINE__);
+
+    allocator->free_memory(memory1, __FILE__, __LINE__);
+    allocator->free_memory(memory3, __FILE__, __LINE__);
+
+    char* memory4 = allocator->alloc_memory(15, __FILE__, __LINE__);
+    char* memory5 = allocator->alloc_memory(20, __FILE__, __LINE__);
+
+    allocator->free_memory(memory2, __FILE__, __LINE__);
+    allocator->free_memory(memory4, __FILE__, __LINE__);
+    allocator->free_memory(memory5, __FILE__, __LINE__);
+
+    char* memory6 = allocator->alloc_memory(1, __FILE__, __LINE__);
+    char* memory7 = allocator->alloc_memory(100, __FILE__, __LINE__);
+
+    allocator->free_memory(memory6, __FILE__, __LINE__);
+    allocator->free_memory(memory7, __FILE__, __LINE__);
+
+    LONGS_EQUAL(7, accountant.totalAllocations());
+    LONGS_EQUAL(7, accountant.totalDeallocations());
+}
+
+TEST(AccountingTestMemoryAllocator, useOriginalAllocatorWhenDeallocatingMemoryNotAllocatedByAllocator)
+{
+    char* memory = getCurrentMallocAllocator()->alloc_memory(10, __FILE__, __LINE__);
+    allocator->free_memory(memory, __FILE__, __LINE__);
+
+    LONGS_EQUAL(0, accountant.totalAllocations());
+    LONGS_EQUAL(1, accountant.totalDeallocations());
+}
+
+class GlobalMemoryAccountantExecFunction
+    : public ExecFunction
+{
+public:
+    virtual ~GlobalMemoryAccountantExecFunction() _destructor_override
+    {
+    }
+
+    void (*testFunction_)(GlobalMemoryAccountant*);
+    GlobalMemoryAccountant* parameter_;
+
+    virtual void exec() _override
+    {
+        testFunction_(parameter_);
+    }
+};
+
+TEST_GROUP(GlobalMemoryAccountant)
+{
+    GlobalMemoryAccountant accountant;
+    TestTestingFixture fixture;
+    GlobalMemoryAccountantExecFunction testFunction;
+    GlobalMemoryAllocatorStash stash;
+
+    void setup()
+    {
+        testFunction.parameter_ = &accountant;
+        fixture.setTestFunction(&testFunction);
+        stash.save();
+    }
+
+    void teardown()
+    {
+        stash.restore();
+    }
+};
+
+TEST(GlobalMemoryAccountant, start)
+{
+    accountant.start();
+
+    POINTERS_EQUAL(accountant.getMallocAllocator(), getCurrentMallocAllocator());
+    POINTERS_EQUAL(accountant.getNewAllocator(), getCurrentNewAllocator());
+    POINTERS_EQUAL(accountant.getNewArrayAllocator(), getCurrentNewArrayAllocator());
+
+    accountant.stop();
+}
+
+TEST(GlobalMemoryAccountant, stop)
+{
+    TestMemoryAllocator* originalMallocAllocator = getCurrentMallocAllocator();
+    TestMemoryAllocator* originalNewAllocator = getCurrentNewAllocator();
+    TestMemoryAllocator* originalNewArrayAllocator = getCurrentNewArrayAllocator();
+
+    accountant.start();
+    accountant.stop();
+
+    POINTERS_EQUAL(originalMallocAllocator, getCurrentMallocAllocator());
+    POINTERS_EQUAL(originalNewAllocator, getCurrentNewAllocator());
+    POINTERS_EQUAL(originalNewArrayAllocator, getCurrentNewArrayAllocator());
+}
+
+#if CPPUTEST_USE_MEM_LEAK_DETECTION
+
+TEST(GlobalMemoryAccountant, report)
+{
+    accountant.start();
+    char* memory = new char[185];
+    delete [] memory;
+    accountant.stop();
+
+    /* Allocation includes memory leak info */
+    STRCMP_CONTAINS("1                1                 1", accountant.report().asCharString());
+}
+
+#endif
+
+static void _failStopWithoutStartingWillFail(GlobalMemoryAccountant* accountant)
+{
+    accountant->stop();
+}
+
+TEST(GlobalMemoryAccountant, StopCantBeCalledWithoutStarting)
+{
+    testFunction.testFunction_ = _failStopWithoutStartingWillFail;
+    fixture.runAllTests();
+    fixture.assertPrintContains("GlobalMemoryAccount: Stop called without starting");
+}
+
+static void _failStartingTwiceWillFail(GlobalMemoryAccountant* accountant)
+{
+    accountant->start();
+    accountant->start();
+}
+
+TEST(GlobalMemoryAccountant, startTwiceWillFail)
+{
+    testFunction.testFunction_ = _failStartingTwiceWillFail;
+    fixture.runAllTests();
+    accountant.stop();
+
+    fixture.assertPrintContains("Global allocator start called twice!");
+}
+
+static void _failChangeMallocMemoryAllocator(GlobalMemoryAccountant* accountant)
+{
+    accountant->start();
+    setCurrentMallocAllocator(defaultMallocAllocator());
+    accountant->stop();
+}
+
+TEST(GlobalMemoryAccountant, checkWhetherMallocAllocatorIsNotChanged)
+{
+    testFunction.testFunction_ = _failChangeMallocMemoryAllocator;
+    fixture.runAllTests();
+    fixture.assertPrintContains("GlobalMemoryAccountant: Malloc memory allocator has been changed while accounting for memory");
+}
+
+static void _failChangeNewMemoryAllocator(GlobalMemoryAccountant* accountant)
+{
+    accountant->start();
+    setCurrentNewAllocator(defaultNewAllocator());
+    accountant->stop();
+}
+
+TEST(GlobalMemoryAccountant, checkWhetherNewAllocatorIsNotChanged)
+{
+    testFunction.testFunction_ = _failChangeNewMemoryAllocator;
+    fixture.runAllTests();
+    fixture.assertPrintContains("GlobalMemoryAccountant: New memory allocator has been changed while accounting for memory");
+}
+
+static void _failChangeNewArrayMemoryAllocator(GlobalMemoryAccountant* accountant)
+{
+    accountant->start();
+    setCurrentNewArrayAllocator(defaultNewArrayAllocator());
+    accountant->stop();
+}
+
+TEST(GlobalMemoryAccountant, checkWhetherNewArrayAllocatorIsNotChanged)
+{
+    testFunction.testFunction_ = _failChangeNewArrayMemoryAllocator;
+    fixture.runAllTests();
+    fixture.assertPrintContains("GlobalMemoryAccountant: New Array memory allocator has been changed while accounting for memory");
+}
+
