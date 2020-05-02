@@ -135,6 +135,52 @@ private:
     SimpleStringCollection(SimpleStringCollection&);
 };
 
+class GlobalSimpleStringAllocatorStash
+{
+public:
+    GlobalSimpleStringAllocatorStash();
+    void save();
+    void restore();
+private:
+    TestMemoryAllocator* originalAllocator_;
+};
+
+class MemoryAccountant;
+class AccountingTestMemoryAllocator;
+
+class GlobalSimpleStringMemoryAccountant
+{
+public:
+    GlobalSimpleStringMemoryAccountant();
+    ~GlobalSimpleStringMemoryAccountant();
+
+    void start();
+    void stop();
+    SimpleString report();
+
+    AccountingTestMemoryAllocator* getAllocator();
+private:
+    void restoreAllocator();
+
+    AccountingTestMemoryAllocator* allocator_;
+    MemoryAccountant* accountant_;
+};
+
+class SimpleStringInternalCache
+{
+public:
+    SimpleStringInternalCache();
+
+    char* alloc(size_t size);
+    void dealloc(char* memory, size_t size);
+
+    void clear();
+    size_t totalAvailableBlocks() const;
+private:
+    size_t availableBlocks_;
+    char* cache_;
+};
+
 SimpleString StringFrom(bool value);
 SimpleString StringFrom(const void* value);
 SimpleString StringFrom(void (*value)());

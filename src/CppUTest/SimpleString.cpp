@@ -30,6 +30,102 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 #include "CppUTest/TestMemoryAllocator.h"
 
+GlobalSimpleStringAllocatorStash::GlobalSimpleStringAllocatorStash()
+    : originalAllocator_(NULLPTR)
+{
+}
+
+void GlobalSimpleStringAllocatorStash::save()
+{
+    originalAllocator_ = SimpleString::getStringAllocator();
+}
+
+void GlobalSimpleStringAllocatorStash::restore()
+{
+    SimpleString::setStringAllocator(originalAllocator_);
+}
+
+SimpleStringInternalCache::SimpleStringInternalCache()
+    : availableBlocks_(0), cache_(NULLPTR)
+{
+}
+
+GlobalSimpleStringMemoryAccountant::GlobalSimpleStringMemoryAccountant()
+    : allocator_(NULLPTR), accountant_(NULLPTR)
+{
+}
+
+GlobalSimpleStringMemoryAccountant::~GlobalSimpleStringMemoryAccountant()
+{
+    restoreAllocator();
+
+    delete accountant_;
+    delete allocator_;
+}
+
+void GlobalSimpleStringMemoryAccountant::restoreAllocator()
+{
+    if (SimpleString::getStringAllocator() == allocator_)
+        SimpleString::setStringAllocator(allocator_->originalAllocator());
+}
+
+void GlobalSimpleStringMemoryAccountant::start()
+{
+    if (accountant_ != NULLPTR)
+      FAIL("Global SimpleString allocator start called twice!");
+
+    accountant_ = new MemoryAccountant();
+    allocator_ = new AccountingTestMemoryAllocator(*accountant_, SimpleString::getStringAllocator());
+
+    SimpleString::setStringAllocator(allocator_);
+}
+
+void GlobalSimpleStringMemoryAccountant::stop()
+{
+    if (allocator_ == NULLPTR)
+        FAIL("Global SimpleString allocator stopped without starting");
+
+    if (SimpleString::getStringAllocator() != allocator_)
+      FAIL("GlobalStrimpleStringMemoryAccountant: allocator has changed between start and stop!");
+
+    restoreAllocator();
+}
+
+SimpleString GlobalSimpleStringMemoryAccountant::report()
+{
+    return accountant_->report();
+}
+
+AccountingTestMemoryAllocator* GlobalSimpleStringMemoryAccountant::getAllocator()
+{
+    return allocator_;
+}
+
+size_t SimpleStringInternalCache::totalAvailableBlocks() const
+{
+    return availableBlocks_;
+}
+
+char* SimpleStringInternalCache::alloc(size_t size)
+{
+    if (cache_)
+      return cache_;
+    return new char[size];
+}
+
+void SimpleStringInternalCache::dealloc(char* memory, size_t)
+{
+    if (cache_ == NULLPTR) {
+      cache_ = memory;
+      availableBlocks_++;
+    }
+}
+
+void SimpleStringInternalCache::clear()
+{
+    delete [] cache_;
+}
+
 TestMemoryAllocator* SimpleString::stringAllocator_ = NULLPTR;
 
 TestMemoryAllocator* SimpleString::getStringAllocator()
