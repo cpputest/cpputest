@@ -39,7 +39,7 @@ MemoryReportAllocator::~MemoryReportAllocator()
 
 const char* MemoryReportAllocator::name() const
 {
-    return realAllocator_->name();
+    return "MemoryReporterAllocator";
 }
 
 const char* MemoryReportAllocator::alloc_name() const
@@ -60,6 +60,11 @@ void MemoryReportAllocator::setRealAllocator(TestMemoryAllocator* allocator)
 TestMemoryAllocator* MemoryReportAllocator::getRealAllocator()
 {
     return realAllocator_;
+}
+
+TestMemoryAllocator* MemoryReportAllocator::actualAllocator()
+{
+    return realAllocator_->actualAllocator();
 }
 
 void MemoryReportAllocator::setTestResult(TestResult* result)

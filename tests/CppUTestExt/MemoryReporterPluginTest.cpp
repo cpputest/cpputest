@@ -140,6 +140,8 @@ TEST_GROUP(MemoryReporterPlugin)
     }
     void teardown()
     {
+        setCurrentNewAllocator(previousNewAllocator);
+        mock().clear();
         delete reporter;
         delete test;
         delete result;
@@ -186,8 +188,8 @@ TEST(MemoryReporterPlugin, postTestActionReportsTest)
 
 TEST(MemoryReporterPlugin, newAllocationsAreReportedTest)
 {
-    mock("formatter").expectOneCall("report_alloc_memory").withParameter("result", result).withParameterOfType("TestMemoryAllocator", "allocator", defaultNewAllocator());
-    mock("formatter").expectOneCall("report_free_memory").withParameter("result", result).withParameterOfType("TestMemoryAllocator", "allocator", defaultNewAllocator());
+    mock("formatter").expectOneCall("report_alloc_memory").withParameter("result", result).withParameterOfType("TestMemoryAllocator", "allocator", reporter->getNewAllocator());
+    mock("formatter").expectOneCall("report_free_memory").withParameter("result", result).withParameterOfType("TestMemoryAllocator", "allocator", reporter->getNewAllocator());
     mock("formatter").ignoreOtherCalls();
 
     reporter->preTestAction(*test, *result);
@@ -198,8 +200,8 @@ TEST(MemoryReporterPlugin, newAllocationsAreReportedTest)
 TEST(MemoryReporterPlugin, whenUsingOnlyMallocAllocatorNoOtherOfTheAllocatorsAreUsed)
 {
     mock("formatter").expectOneCall("report_test_start").withParameter("result", result).withParameter("test", test);
-    mock("formatter").expectOneCall("report_alloc_memory").withParameter("result", result).withParameterOfType("TestMemoryAllocator", "allocator", defaultMallocAllocator());
-    mock("formatter").expectOneCall("report_free_memory").withParameter("result", result).withParameterOfType("TestMemoryAllocator", "allocator", defaultMallocAllocator());
+    mock("formatter").expectOneCall("report_alloc_memory").withParameter("result", result).withParameterOfType("TestMemoryAllocator", "allocator", reporter->getMallocAllocator());
+    mock("formatter").expectOneCall("report_free_memory").withParameter("result", result).withParameterOfType("TestMemoryAllocator", "allocator", reporter->getMallocAllocator());
     mock("formatter").ignoreOtherCalls();
 
     reporter->preTestAction(*test, *result);
@@ -209,8 +211,8 @@ TEST(MemoryReporterPlugin, whenUsingOnlyMallocAllocatorNoOtherOfTheAllocatorsAre
 
 TEST(MemoryReporterPlugin, newArrayAllocationsAreReportedTest)
 {
-    mock("formatter").expectOneCall("report_alloc_memory").withParameter("result", result).withParameterOfType("TestMemoryAllocator", "allocator", defaultNewArrayAllocator());
-    mock("formatter").expectOneCall("report_free_memory").withParameter("result", result).withParameterOfType("TestMemoryAllocator", "allocator", defaultNewArrayAllocator());
+    mock("formatter").expectOneCall("report_alloc_memory").withParameter("result", result).withParameterOfType("TestMemoryAllocator", "allocator", reporter->getNewArrayAllocator());
+    mock("formatter").expectOneCall("report_free_memory").withParameter("result", result).withParameterOfType("TestMemoryAllocator", "allocator", reporter->getNewArrayAllocator());
     mock("formatter").ignoreOtherCalls();
 
     reporter->preTestAction(*test, *result);
@@ -220,8 +222,8 @@ TEST(MemoryReporterPlugin, newArrayAllocationsAreReportedTest)
 
 TEST(MemoryReporterPlugin, mallocAllocationsAreReportedTest)
 {
-    mock("formatter").expectOneCall("report_alloc_memory").withParameter("result", result).withParameterOfType("TestMemoryAllocator", "allocator", defaultMallocAllocator());
-    mock("formatter").expectOneCall("report_free_memory").withParameter("result", result).withParameterOfType("TestMemoryAllocator", "allocator", defaultMallocAllocator());
+    mock("formatter").expectOneCall("report_alloc_memory").withParameter("result", result).withParameterOfType("TestMemoryAllocator", "allocator", reporter->getMallocAllocator());
+    mock("formatter").expectOneCall("report_free_memory").withParameter("result", result).withParameterOfType("TestMemoryAllocator", "allocator", reporter->getMallocAllocator());
     mock("formatter").ignoreOtherCalls();
 
     reporter->preTestAction(*test, *result);
