@@ -31,10 +31,11 @@
 
 TEST_GROUP(MockCallTest)
 {
-  void teardown()
-  {
-    mock().checkExpectations();
-  }
+    void teardown()
+    {
+        mock().checkExpectations();
+        mock().clear();
+    }
 };
 
 TEST(MockCallTest, clear)

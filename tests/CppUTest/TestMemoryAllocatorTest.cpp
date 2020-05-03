@@ -439,6 +439,13 @@ TEST(AccountingTestMemoryAllocator, useOriginalAllocatorWhenDeallocatingMemoryNo
     LONGS_EQUAL(1, accountant.totalDeallocations());
 }
 
+TEST(AccountingTestMemoryAllocator, allocatorForwardsAllocAndFreeName)
+{
+    STRCMP_EQUAL("malloc", allocator->alloc_name());
+    STRCMP_EQUAL("free", allocator->free_name());
+}
+
+
 class GlobalMemoryAccountantExecFunction
     : public ExecFunction
 {

@@ -153,13 +153,16 @@ TEST(MockNamedValueHandlerRepository, installMultipleHandlers)
 TEST_GROUP(MockExpectedCall)
 {
     MockCheckedExpectedCall* call;
+    MockNamedValueComparatorsAndCopiersRepository* originalComparatorRepository;
     void setup()
     {
+        originalComparatorRepository = MockNamedValue::getDefaultComparatorsAndCopiersRepository();
         call = new MockCheckedExpectedCall(1);
         call->withName("funcName");
     }
     void teardown()
     {
+        MockNamedValue::setDefaultComparatorsAndCopiersRepository(originalComparatorRepository);
         delete call;
         CHECK_NO_MOCK_FAILURE();
     }

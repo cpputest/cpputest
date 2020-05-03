@@ -30,10 +30,12 @@
 
 TEST_GROUP(MockComparatorCopierTest)
 {
-  void teardown()
-  {
-    mock().checkExpectations();
-  }
+    void teardown()
+    {
+        mock().checkExpectations();
+        mock().clear();
+        mock().removeAllComparatorsAndCopiers();
+    }
 };
 
 class MyTypeForTesting

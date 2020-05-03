@@ -33,7 +33,8 @@ TEST_GROUP(MockParameterTest)
 {
   void teardown()
   {
-    mock().checkExpectations();
+      mock().checkExpectations();
+      mock().clear();
   }
 };
 

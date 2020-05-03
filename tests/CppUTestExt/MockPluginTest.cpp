@@ -51,6 +51,7 @@ TEST_GROUP(MockPlugin)
         delete test;
         delete result;
         mock().clear();
+        mock().removeAllComparatorsAndCopiers();
     }
 };
 
@@ -112,6 +113,8 @@ TEST(MockPlugin, installComparatorRecordsTheComparatorButNotInstallsItYet)
 
     MockNoWayToCompareCustomTypeFailure failure(test, "myType");
     CHECK_EXPECTED_MOCK_FAILURE(failure);
+
+    plugin.clear();
 }
 
 class DummyCopier : public MockNamedValueCopier
@@ -134,6 +137,8 @@ TEST(MockPlugin, installCopierRecordsTheCopierButNotInstallsItYet)
 
     MockNoWayToCopyCustomTypeFailure failure(test, "myType");
     CHECK_EXPECTED_MOCK_FAILURE(failure);
+
+    plugin.clear();
 }
 
 TEST(MockPlugin, preTestActionWillEnableMultipleComparatorsToTheGlobalMockSupportSpace)
@@ -151,6 +156,8 @@ TEST(MockPlugin, preTestActionWillEnableMultipleComparatorsToTheGlobalMockSuppor
 
     mock().checkExpectations();
     LONGS_EQUAL(0, result->getFailureCount());
+
+    plugin.clear();
 }
 
 static void _failTwiceFunction()
