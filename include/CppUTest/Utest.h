@@ -128,6 +128,7 @@ public:
 
     virtual void print(const char *text, const char *fileName, int lineNumber);
     virtual void print(const SimpleString & text, const char *fileName, int lineNumber);
+    virtual void printVeryVerbose(const char* text);
 
     void setFileName(const char *fileName);
     void setLineNumber(int lineNumber);

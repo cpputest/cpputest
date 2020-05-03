@@ -44,7 +44,7 @@ TestOutput::WorkingEnvironment TestOutput::getWorkingEnvironment()
 
 
 TestOutput::TestOutput() :
-    dotCount_(0), verbose_(false), color_(false), progressIndication_(".")
+    dotCount_(0), verbose_(level_quiet), color_(false), progressIndication_(".")
 {
 }
 
@@ -52,9 +52,9 @@ TestOutput::~TestOutput()
 {
 }
 
-void TestOutput::verbose()
+void TestOutput::verbose(VerbosityLevel level)
 {
-    verbose_ = true;
+    verbose_ = level;
 }
 
 void TestOutput::color()
@@ -91,7 +91,7 @@ TestOutput& operator<<(TestOutput& p, long int i)
 
 void TestOutput::printCurrentTestStarted(const UtestShell& test)
 {
-    if (verbose_) print(test.getFormattedName().asCharString());
+    if (verbose_ > level_quiet) print(test.getFormattedName().asCharString());
 
     if (test.willRun()) {
        setProgressIndicator(".");
@@ -103,7 +103,7 @@ void TestOutput::printCurrentTestStarted(const UtestShell& test)
 
 void TestOutput::printCurrentTestEnded(const TestResult& res)
 {
-    if (verbose_) {
+    if (verbose_ > level_quiet) {
         print(" - ");
         print(res.getCurrentTestTotalExecutionTime());
         print(" ms\n");
@@ -260,6 +260,13 @@ void TestOutput::printVisualStudioErrorInFileOnLine(SimpleString file, int lineN
     print(" error:");
 }
 
+void TestOutput::printVeryVerbose(const char* str)
+{
+    if(verbose_ == level_veryVerbose)
+        printBuffer(str);
+}
+
+
 void ConsoleTestOutput::printBuffer(const char* s)
 {
     while (*s) {
@@ -337,10 +344,10 @@ void CompositeTestOutput::printCurrentGroupEnded(const TestResult& res)
   if (outputTwo_) outputTwo_->printCurrentGroupEnded(res);
 }
 
-void CompositeTestOutput::verbose()
+void CompositeTestOutput::verbose(VerbosityLevel level)
 {
-  if (outputOne_) outputOne_->verbose();
-  if (outputTwo_) outputTwo_->verbose();
+  if (outputOne_) outputOne_->verbose(level);
+  if (outputTwo_) outputTwo_->verbose(level);
 }
 
 void CompositeTestOutput::color()

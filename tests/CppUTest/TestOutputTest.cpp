@@ -155,14 +155,14 @@ TEST(TestOutput, SetProgressIndicator)
 
 TEST(TestOutput, PrintTestVerboseStarted)
 {
-    mock->verbose();
+    mock->verbose(TestOutput::level_verbose);
     printer->printCurrentTestStarted(*tst);
     STRCMP_EQUAL("TEST(group, test)", mock->getOutput().asCharString());
 }
 
 TEST(TestOutput, PrintTestVerboseEnded)
 {
-    mock->verbose();
+    mock->verbose(TestOutput::level_verbose);
     result->currentTestStarted(tst);
     millisTime = 5;
     result->currentTestEnded(tst);
@@ -401,7 +401,7 @@ TEST(CompositeTestOutput, printDouble)
 
 TEST(CompositeTestOutput, verbose)
 {
-  compositeOutput.verbose();
+  compositeOutput.verbose(TestOutput::level_verbose);
   CHECK(output1->isVerbose());
   CHECK(output2->isVerbose());
 }

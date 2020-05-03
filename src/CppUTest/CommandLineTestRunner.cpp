@@ -90,7 +90,8 @@ void CommandLineTestRunner::initializeTestRun()
     registry_->setGroupFilters(arguments_->getGroupFilters());
     registry_->setNameFilters(arguments_->getNameFilters());
 
-    if (arguments_->isVerbose()) output_->verbose();
+    if (arguments_->isVerbose()) output_->verbose(TestOutput::level_verbose);
+    if (arguments_->isVeryVerbose()) output_->verbose(TestOutput::level_veryVerbose);
     if (arguments_->isColor()) output_->color();
     if (arguments_->runTestsInSeperateProcess()) registry_->setRunTestsInSeperateProcess();
     if (arguments_->isRunIgnored()) registry_->setRunIgnored();

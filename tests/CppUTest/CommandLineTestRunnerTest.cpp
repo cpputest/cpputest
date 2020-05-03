@@ -211,6 +211,16 @@ TEST(CommandLineTestRunner, JunitOutputAndVerboseEnabled)
     STRCMP_CONTAINS("TEST(group1, test1)", commandLineTestRunner.fakeConsoleOutputWhichIsReallyABuffer->getOutput().asCharString());
 }
 
+TEST(CommandLineTestRunner, veryVerboseSetOnOutput)
+{
+    const char* argv[] = { "tests.exe", "-vv"};
+
+    CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(2, argv, &registry);
+    commandLineTestRunner.runAllTestsMain();
+    STRCMP_CONTAINS("TEST(group1, test1)", commandLineTestRunner.fakeConsoleOutputWhichIsReallyABuffer->getOutput().asCharString());
+    STRCMP_CONTAINS("destroyTest", commandLineTestRunner.fakeConsoleOutputWhichIsReallyABuffer->getOutput().asCharString());
+}
+
 TEST(CommandLineTestRunner, defaultTestsAreRunInOrderTheyAreInRepository)
 {
     const char* argv[] = { "tests.exe", "-v"};

@@ -108,7 +108,7 @@ void TestTestingFixture::setRunTestsInSeperateProcess()
 
 void TestTestingFixture::setOutputVerbose()
 {
-    output_->verbose();
+    output_->verbose(TestOutput::level_verbose);
 }
 
 void TestTestingFixture::runTestWithMethod(void(*method)())

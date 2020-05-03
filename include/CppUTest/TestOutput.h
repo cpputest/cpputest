@@ -46,6 +46,9 @@ class TestResult;
 class TestOutput
 {
 public:
+    enum WorkingEnvironment {visualStudio, eclipse, detectEnvironment};
+    enum VerbosityLevel {level_quiet, level_verbose, level_veryVerbose};
+
     explicit TestOutput();
     virtual ~TestOutput();
 
@@ -56,7 +59,7 @@ public:
     virtual void printCurrentGroupStarted(const UtestShell& test);
     virtual void printCurrentGroupEnded(const TestResult& res);
 
-    virtual void verbose();
+    virtual void verbose(VerbosityLevel level);
     virtual void color();
     virtual void printBuffer(const char*)=0;
     virtual void print(const char*);
@@ -66,9 +69,9 @@ public:
     virtual void printTestRun(int number, int total);
     virtual void setProgressIndicator(const char*);
 
-    virtual void flush()=0;
+    virtual void printVeryVerbose(const char*);
 
-    enum WorkingEnvironment {visualStudio, eclipse, detectEnvironment};
+    virtual void flush()=0;
 
     static void setWorkingEnvironment(WorkingEnvironment workEnvironment);
     static WorkingEnvironment getWorkingEnvironment();
@@ -89,7 +92,7 @@ protected:
     TestOutput& operator=(const TestOutput&);
 
     int dotCount_;
-    bool verbose_;
+    VerbosityLevel verbose_;
     bool color_;
     const char* progressIndication_;
 
@@ -184,7 +187,7 @@ public:
     virtual void printCurrentGroupStarted(const UtestShell& test) _override;
     virtual void printCurrentGroupEnded(const TestResult& res) _override;
 
-    virtual void verbose() _override;
+    virtual void verbose(VerbosityLevel level) _override;
     virtual void color() _override;
     virtual void printBuffer(const char*) _override;
     virtual void print(const char*) _override;
