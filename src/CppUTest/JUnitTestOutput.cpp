@@ -290,6 +290,10 @@ void JUnitTestOutput::print(long)
 {
 }
 
+void JUnitTestOutput::print(size_t)
+{
+}
+
 void JUnitTestOutput::flush()
 {
 }
