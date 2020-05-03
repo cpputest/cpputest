@@ -79,6 +79,13 @@ TEST(CommandLineArguments, verboseSetMultipleParameters)
     CHECK(args->isVerbose());
 }
 
+TEST(CommandLineArguments, veryVerbose)
+{
+    const char* argv[] = { "tests.exe", "-vv" };
+    CHECK(newArgumentParser(2, argv));
+    CHECK(args->isVeryVerbose());
+}
+
 TEST(CommandLineArguments, setColor)
 {
     const char* argv[] = { "tests.exe", "-c" };
@@ -457,7 +464,7 @@ TEST(CommandLineArguments, weirdParamatersReturnsFalse)
 
 TEST(CommandLineArguments, printUsage)
 {
-    STRCMP_EQUAL("use -h for more extensive help\nusage [-h] [-v] [-c] [-p] [-lg] [-ln] [-ri] [-r#]\n"
+    STRCMP_EQUAL("use -h for more extensive help\nusage [-h] [-v] [-vv] [-c] [-p] [-lg] [-ln] [-ri] [-r#]\n"
                                                  "      [-g|sg|xg|xsg groupName]... [-n|sn|xn|xsn testName]... [-t groupName.testName]...\n"
                                                  "      [-b] [-s [randomizerSeed>0]] [\"TEST(groupName, testName)\"]... [-o{normal, junit, teamcity}] [-k packageName]\n",
             args->usage());

@@ -197,7 +197,9 @@ void UtestShell::destroyTest(Utest* test)
 
 void UtestShell::runOneTestInCurrentProcess(TestPlugin* plugin, TestResult& result)
 {
+    result.printVeryVerbose("\n-- before runAllPreTestAction: ");
     plugin->runAllPreTestAction(*this, result);
+    result.printVeryVerbose("\n-- after runAllPreTestAction: ");
 
     //save test context, so that test class can be tested
     UtestShell* savedTest = UtestShell::getCurrent();
@@ -206,15 +208,24 @@ void UtestShell::runOneTestInCurrentProcess(TestPlugin* plugin, TestResult& resu
     UtestShell::setTestResult(&result);
     UtestShell::setCurrentTest(this);
 
+    result.printVeryVerbose("\n---- before createTest: ");
     Utest* testToRun = createTest();
+    result.printVeryVerbose("\n---- after createTest: ");
+
+    result.printVeryVerbose("\n------ before runTest: ");
     testToRun->run();
+    result.printVeryVerbose("\n------ after runTest: ");
 
     UtestShell::setCurrentTest(savedTest);
     UtestShell::setTestResult(savedResult);
 
+    result.printVeryVerbose("\n---- before destroyTest: ");
     destroyTest(testToRun);
+    result.printVeryVerbose("\n---- after destroyTest: ");
 
+    result.printVeryVerbose("\n-- before runAllPostTestAction: ");
     plugin->runAllPostTestAction(*this, result);
+    result.printVeryVerbose("\n-- after runAllPostTestAction: ");
 }
 
 UtestShell *UtestShell::getNext() const

@@ -64,6 +64,11 @@ void TestResult::print(const char* text)
     output_.print(text);
 }
 
+void TestResult::printVeryVerbose(const char* text)
+{
+    output_.printVeryVerbose(text);
+}
+
 void TestResult::currentTestEnded(UtestShell* /*test*/)
 {
     currentTestTotalExecutionTime_ = GetPlatformSpecificTimeInMillis() - currentTestTimeStarted_;

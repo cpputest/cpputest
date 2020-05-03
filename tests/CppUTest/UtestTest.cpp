@@ -169,6 +169,18 @@ TEST(UtestShell, TestStopsAfterSetupFailure)
     LONGS_EQUAL(0, stopAfterFailure);
 }
 
+TEST(UtestShell, veryVebose)
+{
+    UtestShell shell("Group", "name", __FILE__, __LINE__);
+    StringBufferTestOutput normalOutput;
+    normalOutput.verbose(TestOutput::level_veryVerbose);
+    NullTestPlugin plugin;
+
+    TestResult result(normalOutput);
+    shell.runOneTestInCurrentProcess(&plugin, result);
+    STRCMP_CONTAINS("\n------ before runTest", normalOutput.getOutput().asCharString());
+}
+
 class defaultUtestShell: public UtestShell
 {
 };
@@ -180,6 +192,7 @@ TEST(UtestShell, this_test_covers_the_UtestShell_createTest_and_Utest_testBody_m
     fixture.runAllTests();
     LONGS_EQUAL(2, fixture.getTestCount());
 }
+
 
 static void StubPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin*, TestResult* result)
 {
@@ -486,4 +499,5 @@ TEST(UtestShellPointerArrayTest, reverse)
     CHECK(tests.get(1) == test1);
     CHECK(tests.get(2) == test0);
 }
+
 

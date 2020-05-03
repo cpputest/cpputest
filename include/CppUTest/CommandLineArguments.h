@@ -43,6 +43,7 @@ public:
     bool parse(TestPlugin* plugin);
     bool needHelp() const;
     bool isVerbose() const;
+    bool isVeryVerbose() const;
     bool isColor() const;
     bool isListingTestGroupNames() const;
     bool isListingTestGroupAndCaseNames() const;
@@ -73,6 +74,7 @@ private:
 
     bool needHelp_;
     bool verbose_;
+    bool veryVerbose_;
     bool color_;
     bool runTestsAsSeperateProcess_;
     bool listTestGroupNames_;

@@ -30,7 +30,7 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 
 CommandLineArguments::CommandLineArguments(int ac, const char *const *av) :
-    ac_(ac), av_(av), needHelp_(false), verbose_(false), color_(false), runTestsAsSeperateProcess_(false), listTestGroupNames_(false), listTestGroupAndCaseNames_(false), runIgnored_(false), reversing_(false), shuffling_(false), shufflingPreSeeded_(false), repeat_(1), shuffleSeed_(0), groupFilters_(NULLPTR), nameFilters_(NULLPTR), outputType_(OUTPUT_ECLIPSE)
+    ac_(ac), av_(av), needHelp_(false), verbose_(false), veryVerbose_(false), color_(false), runTestsAsSeperateProcess_(false), listTestGroupNames_(false), listTestGroupAndCaseNames_(false), runIgnored_(false), reversing_(false), shuffling_(false), shufflingPreSeeded_(false), repeat_(1), shuffleSeed_(0), groupFilters_(NULLPTR), nameFilters_(NULLPTR), outputType_(OUTPUT_ECLIPSE)
 {
 }
 
@@ -54,8 +54,12 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
     for (int i = 1; i < ac_; i++) {
         SimpleString argument = av_[i];
 
-        if      (argument == "-h") needHelp_ = true;
-        if      (argument == "-v") verbose_ = true;
+        if (argument == "-h") {
+            needHelp_ = true;
+            correctParameters = false;
+        }
+        else if (argument == "-v") verbose_ = true;
+        else if (argument == "-vv") veryVerbose_ = true;
         else if (argument == "-c") color_ = true;
         else if (argument == "-p") runTestsAsSeperateProcess_ = true;
         else if (argument == "-b") reversing_ = true;
@@ -89,7 +93,7 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
 
 const char* CommandLineArguments::usage() const
 {
-    return "use -h for more extensive help\nusage [-h] [-v] [-c] [-p] [-lg] [-ln] [-ri] [-r#]\n"
+    return "use -h for more extensive help\nusage [-h] [-v] [-vv] [-c] [-p] [-lg] [-ln] [-ri] [-r#]\n"
                                            "      [-g|sg|xg|xsg groupName]... [-n|sn|xn|xsn testName]... [-t groupName.testName]...\n"
                                            "      [-b] [-s [randomizerSeed>0]] [\"TEST(groupName, testName)\"]... [-o{normal, junit, teamcity}] [-k packageName]\n";
 }
@@ -107,6 +111,7 @@ const char* CommandLineArguments::help() const
       "Options that change the output format:\n"
       "  -c                - colorize output, print green if OK, or red if failed\n"
       "  -v                - verbose, print each test name as it runs\n"
+      "  -vv               - very verbose, print internal information during test run\n"
       "\n"
       "Options that change the output location:\n"
       "  -oteamcity       - output to xml files (as the name suggests, for TeamCity)\n"
@@ -140,6 +145,11 @@ bool CommandLineArguments::needHelp() const
 bool CommandLineArguments::isVerbose() const
 {
     return verbose_;
+}
+
+bool CommandLineArguments::isVeryVerbose() const
+{
+    return veryVerbose_;
 }
 
 bool CommandLineArguments::isColor() const
