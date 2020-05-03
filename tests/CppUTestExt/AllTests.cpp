@@ -54,7 +54,7 @@ int main(int ac, const char *const *av)
     testing::GMOCK_FLAG(verbose) = testing::internal::kWarningVerbosity;
 
     ConsoleTestOutput output;
-    CommandLineTestRunner runner(ac, av, &output, TestRegistry::getCurrentRegistry());
+    CommandLineTestRunner runner(ac, av, TestRegistry::getCurrentRegistry());
     return runner.runAllTestsMain();
 #endif
 }
