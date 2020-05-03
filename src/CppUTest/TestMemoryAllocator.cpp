@@ -159,12 +159,12 @@ void TestMemoryAllocator::freeMemoryLeakNode(char* memory)
     free_memory(memory, "MemoryLeakNode", 1);
 }
 
-char* TestMemoryAllocator::alloc_memory(size_t size, const char*, int)
+char* TestMemoryAllocator::alloc_memory(size_t size, const char*, size_t)
 {
     return checkedMalloc(size);
 }
 
-void TestMemoryAllocator::free_memory(char* memory, const char*, int)
+void TestMemoryAllocator::free_memory(char* memory, const char*, size_t)
 {
     PlatformSpecificFree(memory);
 }
@@ -201,7 +201,7 @@ void CrashOnAllocationAllocator::setNumberToCrashOn(unsigned allocationToCrashOn
     allocationToCrashOn_ = allocationToCrashOn;
 }
 
-char* CrashOnAllocationAllocator::alloc_memory(size_t size, const char* file, int line)
+char* CrashOnAllocationAllocator::alloc_memory(size_t size, const char* file, size_t line)
 {
     if (MemoryLeakWarningPlugin::getGlobalDetector()->getCurrentAllocationNumber() == allocationToCrashOn_)
         UT_CRASH();
@@ -214,12 +214,12 @@ NullUnknownAllocator::~NullUnknownAllocator()
 {
 }
 
-char* NullUnknownAllocator::alloc_memory(size_t /*size*/, const char*, int)
+char* NullUnknownAllocator::alloc_memory(size_t /*size*/, const char*, size_t)
 {
     return NULLPTR;
 }
 
-void NullUnknownAllocator::free_memory(char* /*memory*/, const char*, int)
+void NullUnknownAllocator::free_memory(char* /*memory*/, const char*, size_t)
 {
 }
 
@@ -241,7 +241,7 @@ class LocationToFailAllocNode
     int allocNumberToFail_;
     int actualAllocNumber_;
     const char* file_;
-    int line_;
+    size_t line_;
     LocationToFailAllocNode* next_;
 
     void failAtAllocNumber(int number, LocationToFailAllocNode* next)
@@ -250,7 +250,7 @@ class LocationToFailAllocNode
       allocNumberToFail_ = number;
     }
 
-    void failNthAllocAt(int allocationNumber, const char* file, int line, LocationToFailAllocNode* next)
+    void failNthAllocAt(int allocationNumber, const char* file, size_t line, LocationToFailAllocNode* next)
     {
       init(next);
       allocNumberToFail_ = allocationNumber;
@@ -258,7 +258,7 @@ class LocationToFailAllocNode
       line_ = line;
     }
 
-    bool shouldFail(int allocationNumber, const char* file, int line)
+    bool shouldFail(int allocationNumber, const char* file, size_t line)
     {
       if (file_ && SimpleString::StrCmp(file, file_) == 0 && line == line_) {
         actualAllocNumber_++;
@@ -297,14 +297,14 @@ void FailableMemoryAllocator::failAllocNumber(int number)
     head_ = newNode;
 }
 
-void FailableMemoryAllocator::failNthAllocAt(int allocationNumber, const char* file, int line)
+void FailableMemoryAllocator::failNthAllocAt(int allocationNumber, const char* file, size_t line)
 {
     LocationToFailAllocNode* newNode = (LocationToFailAllocNode*) (void*) allocMemoryLeakNode(sizeof(LocationToFailAllocNode));
     newNode->failNthAllocAt(allocationNumber, file, line, head_);
     head_ = newNode;
 }
 
-char* FailableMemoryAllocator::alloc_memory(size_t size, const char* file, int line)
+char* FailableMemoryAllocator::alloc_memory(size_t size, const char* file, size_t line)
 {
     currentAllocNumber_++;
     LocationToFailAllocNode* current = head_;
@@ -335,9 +335,9 @@ void FailableMemoryAllocator::checkAllFailedAllocsWereDone()
         UtestShell* currentTest = UtestShell::getCurrent();
         SimpleString failText;
         if (head_->file_)
-            failText = StringFromFormat("Expected failing alloc at %s:%d was never done", head_->file_, head_->line_);
+            failText = StringFromFormat("Expected failing alloc at %s:%d was never done", head_->file_, (int) head_->line_);
         else
-            failText = StringFromFormat("Expected allocation number %d was never done", head_->allocNumberToFail_);
+            failText = StringFromFormat("Expected allocation number %d was never done", (int) head_->allocNumberToFail_);
 
         currentTest->failWith(FailFailure(currentTest, currentTest->getName().asCharString(), currentTest->getLineNumber(), failText));
     }
@@ -556,7 +556,7 @@ size_t AccountingTestMemoryAllocator::removeMemoryFromTrackingAndReturnAllocated
     return 0;
 }
 
-char* AccountingTestMemoryAllocator::alloc_memory(size_t size, const char* file, int line)
+char* AccountingTestMemoryAllocator::alloc_memory(size_t size, const char* file, size_t line)
 {
     accountant_.alloc(size);
     char* memory = originalAllocator_->alloc_memory(size, file, line);
@@ -564,7 +564,7 @@ char* AccountingTestMemoryAllocator::alloc_memory(size_t size, const char* file,
     return memory;
 }
 
-void AccountingTestMemoryAllocator::free_memory(char* memory, const char* file, int line)
+void AccountingTestMemoryAllocator::free_memory(char* memory, const char* file, size_t line)
 {
     size_t size = removeMemoryFromTrackingAndReturnAllocatedSize(memory);
     accountant_.dealloc(size);

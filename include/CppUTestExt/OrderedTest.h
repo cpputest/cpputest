@@ -56,7 +56,7 @@ private:
 class OrderedTestInstaller
 {
   public:
-    explicit OrderedTestInstaller(OrderedTestShell& test, const char* groupName, const char* testName, const char* fileName, int lineNumber, int level);
+    explicit OrderedTestInstaller(OrderedTestShell& test, const char* groupName, const char* testName, const char* fileName, size_t lineNumber, int level);
     virtual ~OrderedTestInstaller();
 
   private:

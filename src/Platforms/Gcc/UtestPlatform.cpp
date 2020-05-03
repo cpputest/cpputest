@@ -102,7 +102,7 @@ static void GccPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, Test
     }
 
     if (cpid == 0) {            /* Code executed by child */
-        const int initialFailureCount = result->getFailureCount(); // LCOV_EXCL_LINE
+        const size_t initialFailureCount = result->getFailureCount(); // LCOV_EXCL_LINE
         shell->runOneTestInCurrentProcess(plugin, *result);        // LCOV_EXCL_LINE
         _exit(initialFailureCount < result->getFailureCount());    // LCOV_EXCL_LINE
     } else {                    /* Code executed by parent */

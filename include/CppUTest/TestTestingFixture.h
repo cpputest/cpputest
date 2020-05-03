@@ -53,18 +53,18 @@ public:
     void runTestWithMethod(void(*method)());
     void runAllTests();
 
-    int getFailureCount();
-    int getCheckCount();
-    int getIgnoreCount();
-    int getRunCount();
-    int getTestCount();
+    size_t getFailureCount();
+    size_t getCheckCount();
+    size_t getIgnoreCount();
+    size_t getRunCount();
+    size_t getTestCount();
     const SimpleString& getOutput();
     TestRegistry* getRegistry();
 
     bool hasTestFailed();
     void assertPrintContains(const SimpleString& contains);
     void assertPrintContainsNot(const SimpleString& contains);
-    void checkTestFailsWithProperTestLocation(const char* text, const char* file, int line);
+    void checkTestFailsWithProperTestLocation(const char* text, const char* file, size_t line);
 
     static void lineExecutedAfterCheck();
 

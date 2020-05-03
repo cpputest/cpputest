@@ -93,9 +93,18 @@ TEST(TestOutput, PrintConstCharStar)
 
 TEST(TestOutput, PrintLong)
 {
-    printer->print(1234);
+    long number = 1234;
+    printer->print(number);
     STRCMP_EQUAL("1234", mock->getOutput().asCharString());
 }
+
+TEST(TestOutput, PrintSize)
+{
+    size_t ten = 10;
+    printer->print(ten);
+    STRCMP_EQUAL("10", mock->getOutput().asCharString());
+}
+
 
 TEST(TestOutput, PrintDouble)
 {
@@ -283,7 +292,7 @@ class CompositeTestOutputTestStringBufferTestOutput : public StringBufferTestOut
 
     virtual void printTestsEnded(const TestResult& result)
     {
-      output += StringFromFormat("Test End %d\n", result.getTestCount());
+      output += StringFromFormat("Test End %d\n", (int) result.getTestCount());
     }
 
     void printCurrentGroupStarted(const UtestShell& test)
@@ -293,7 +302,7 @@ class CompositeTestOutputTestStringBufferTestOutput : public StringBufferTestOut
 
     void printCurrentGroupEnded(const TestResult& res)
     {
-      output += StringFromFormat("Group End %d\n", res.getTestCount());
+      output += StringFromFormat("Group End %d\n", (int) res.getTestCount());
     }
 
     virtual void printCurrentTestStarted(const UtestShell&)
@@ -387,9 +396,18 @@ TEST(CompositeTestOutput, printChar)
 
 TEST(CompositeTestOutput, printLong)
 {
-  compositeOutput.print(10);
+  long ten = 10;
+  compositeOutput.print(ten);
   STRCMP_EQUAL("10", output1->getOutput().asCharString());
   STRCMP_EQUAL("10", output2->getOutput().asCharString());
+}
+
+TEST(CompositeTestOutput, PrintSize)
+{
+    size_t ten = 10;
+    compositeOutput.print(ten);
+    STRCMP_EQUAL("10", output1->getOutput().asCharString());
+    STRCMP_EQUAL("10", output2->getOutput().asCharString());
 }
 
 TEST(CompositeTestOutput, printDouble)

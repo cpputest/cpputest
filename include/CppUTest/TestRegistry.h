@@ -51,7 +51,7 @@ public:
     virtual void unDoLastAddTest();
     virtual size_t countTests();
     virtual void runAllTests(TestResult& result);
-    virtual void shuffleTests(unsigned seed);
+    virtual void shuffleTests(size_t seed);
     virtual void reverseTests();
     virtual void listTestGroupNames(TestResult& result);
     virtual void listTestGroupAndCaseNames(TestResult& result);

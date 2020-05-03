@@ -132,7 +132,7 @@ TEST_GROUP(MemoryLeakOverridesToBeUsedInProductionCode)
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, MallocOverrideIsUsed)
 {
-    int memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
+    size_t memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
     void* memory = malloc(10);
     LONGS_EQUAL(memLeaks+1, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
     free (memory);
@@ -142,7 +142,7 @@ TEST(MemoryLeakOverridesToBeUsedInProductionCode, MallocOverrideIsUsed)
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, StrdupOverrideIsUsed)
 {
-    int memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
+    size_t memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
     char* memory = strdup("0123456789");
     LONGS_EQUAL(memLeaks+1, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
     free (memory);
@@ -150,7 +150,7 @@ TEST(MemoryLeakOverridesToBeUsedInProductionCode, StrdupOverrideIsUsed)
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, StrndupOverrideIsUsed)
 {
-    int memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
+    size_t memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
     char* memory = strndup("0123456789", 10);
     LONGS_EQUAL(memLeaks+1, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
     free (memory);
@@ -161,7 +161,7 @@ TEST(MemoryLeakOverridesToBeUsedInProductionCode, StrndupOverrideIsUsed)
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, UseNativeMallocByTemporarlySwitchingOffMalloc)
 {
-    int memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
+    size_t memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
 #ifdef CPPUTEST_USE_MALLOC_MACROS
     #undef malloc
     #undef free

@@ -42,8 +42,8 @@ public:
     virtual void report_test_start(TestResult* result, UtestShell& test)=0;
     virtual void report_test_end(TestResult* result, UtestShell& test)=0;
 
-    virtual void report_alloc_memory(TestResult* result, TestMemoryAllocator* allocator, size_t size, char* memory, const char* file, int line)=0;
-    virtual void report_free_memory(TestResult* result, TestMemoryAllocator* allocator, char* memory, const char* file, int line)=0;
+    virtual void report_alloc_memory(TestResult* result, TestMemoryAllocator* allocator, size_t size, char* memory, const char* file, size_t line)=0;
+    virtual void report_free_memory(TestResult* result, TestMemoryAllocator* allocator, char* memory, const char* file, size_t line)=0;
 };
 
 class NormalMemoryReportFormatter : public MemoryReportFormatter
@@ -58,8 +58,8 @@ public:
     virtual void report_test_start(TestResult* result, UtestShell& test) _override;
     virtual void report_test_end(TestResult* result, UtestShell& test) _override;
 
-    virtual void report_alloc_memory(TestResult* result, TestMemoryAllocator* allocator, size_t size, char* memory, const char* file, int line) _override;
-    virtual void report_free_memory(TestResult* result, TestMemoryAllocator* allocator, char* memory, const char* file, int line) _override;
+    virtual void report_alloc_memory(TestResult* result, TestMemoryAllocator* allocator, size_t size, char* memory, const char* file, size_t line) _override;
+    virtual void report_free_memory(TestResult* result, TestMemoryAllocator* allocator, char* memory, const char* file, size_t line) _override;
 };
 
 #endif

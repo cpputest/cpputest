@@ -389,7 +389,7 @@ bool RunIgnoredUtest::Checker = false;
 class RunIgnoredUtestShell : public IgnoredUtestShell
 {
 public:
-    RunIgnoredUtestShell(const char* groupName, const char* testName, const char* fileName, int lineNumber)
+    RunIgnoredUtestShell(const char* groupName, const char* testName, const char* fileName, size_t lineNumber)
         : IgnoredUtestShell(groupName, testName, fileName, lineNumber) {}
     virtual Utest* createTest() _override { return new RunIgnoredUtest; }
 };

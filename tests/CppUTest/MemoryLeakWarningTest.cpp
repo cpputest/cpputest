@@ -230,7 +230,7 @@ TEST_GROUP(MemoryLeakWarningGlobalDetectorTest)
 
 TEST(MemoryLeakWarningGlobalDetectorTest, turnOffNewOverloadsCausesNoAdditionalLeaks)
 {
-    int storedAmountOfLeaks = detector->totalMemoryLeaks(mem_leak_period_all);
+    size_t storedAmountOfLeaks = detector->totalMemoryLeaks(mem_leak_period_all);
 
     char* arrayMemory = new char[100];
     char* nonArrayMemory = new char;
@@ -374,7 +374,7 @@ TEST(MemoryLeakWarningGlobalDetectorTest, threadSafeMemoryLeakDetectorOverloadsA
 TEST(MemoryLeakWarningGlobalDetectorTest, turnOffNewOverloadsNoThrowCausesNoAdditionalLeaks)
 {
 #undef new
-    int storedAmountOfLeaks = detector->totalMemoryLeaks(mem_leak_period_all);
+    size_t storedAmountOfLeaks = detector->totalMemoryLeaks(mem_leak_period_all);
 
     char* nonMemoryNoThrow = new (std::nothrow) char;
     char* nonArrayMemoryNoThrow = new (std::nothrow) char[10];
@@ -423,7 +423,7 @@ TEST_GROUP(MemoryLeakWarningThreadSafe)
 
 TEST(MemoryLeakWarningThreadSafe, turnOnThreadSafeMallocFreeReallocOverloadsDebug)
 {
-    int storedAmountOfLeaks = MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all);
+    size_t storedAmountOfLeaks = MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all);
 
     MemoryLeakWarningPlugin::turnOnThreadSafeNewDeleteOverloads();
 
@@ -450,7 +450,7 @@ TEST(MemoryLeakWarningThreadSafe, turnOnThreadSafeMallocFreeReallocOverloadsDebu
 
 TEST(MemoryLeakWarningThreadSafe, turnOnThreadSafeNewDeleteOverloadsDebug)
 {
-    int storedAmountOfLeaks = MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all);
+    size_t storedAmountOfLeaks = MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all);
 
     MemoryLeakWarningPlugin::turnOnThreadSafeNewDeleteOverloads();
 

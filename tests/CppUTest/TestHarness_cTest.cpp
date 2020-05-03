@@ -773,7 +773,7 @@ TEST(TestHarness_c, macros)
 {
 #if CPPUTEST_USE_MALLOC_MACROS
     MemoryLeakDetector* memLeakDetector = MemoryLeakWarningPlugin::getGlobalDetector();
-    int memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
+    size_t memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
 #endif
     void* mem1 = malloc(10);
     void* mem2 = calloc(10, 20);

@@ -227,7 +227,7 @@ UtestShell* TestRegistry::getFirstTest()
     return tests_;
 }
 
-void TestRegistry::shuffleTests(unsigned seed)
+void TestRegistry::shuffleTests(size_t seed)
 {
     UtestShellPointerArray array(getFirstTest());
     array.shuffle(seed);

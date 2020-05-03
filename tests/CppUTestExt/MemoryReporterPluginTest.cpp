@@ -76,13 +76,13 @@ public:
         mock("formatter").actualCall("report_test_end").withParameter("result", result).withParameter("test", &test);
     }
 
-    virtual void report_alloc_memory(TestResult* result, TestMemoryAllocator* allocator, size_t, char* , const char* , int )
+    virtual void report_alloc_memory(TestResult* result, TestMemoryAllocator* allocator, size_t, char* , const char* , size_t )
     {
         TemporaryDefaultNewAllocator tempAlloc(previousNewAllocator);
         mock("formatter").actualCall("report_alloc_memory").withParameter("result", result).withParameterOfType("TestMemoryAllocator", "allocator", allocator);
     }
 
-    virtual void report_free_memory(TestResult* result, TestMemoryAllocator* allocator, char* , const char* , int )
+    virtual void report_free_memory(TestResult* result, TestMemoryAllocator* allocator, char* , const char* , size_t )
     {
         TemporaryDefaultNewAllocator tempAlloc(previousNewAllocator);
         mock("formatter").actualCall("report_free_memory").withParameter("result", result).withParameterOfType("TestMemoryAllocator", "allocator", allocator);

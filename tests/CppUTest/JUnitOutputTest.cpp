@@ -240,7 +240,7 @@ public:
         return *this;
     }
 
-    JUnitTestOutputTestRunner& onLine(int lineNumber)
+    JUnitTestOutputTestRunner& onLine(size_t lineNumber)
     {
         if(currentTest_) {
             currentTest_->setLineNumber(lineNumber);
@@ -290,7 +290,7 @@ public:
         return *this;
     }
 
-    JUnitTestOutputTestRunner& thatFails(const char* message, const char* file, int line)
+    JUnitTestOutputTestRunner& thatFails(const char* message, const char* file, size_t line)
     {
         testFailure_ = new TestFailure(	currentTest_, file, line, message);
         return *this;

@@ -100,10 +100,10 @@ void CommandLineTestRunner::initializeTestRun()
 int CommandLineTestRunner::runAllTests()
 {
     initializeTestRun();
-    int loopCount = 0;
-    int failedTestCount = 0;
-    int failedExecutionCount = 0;
-    int repeatCount = arguments_->getRepeatCount();
+    size_t loopCount = 0;
+    size_t failedTestCount = 0;
+    size_t failedExecutionCount = 0;
+    size_t repeatCount = arguments_->getRepeatCount();
 
     if (arguments_->isListingTestGroupNames())
     {
@@ -141,7 +141,7 @@ int CommandLineTestRunner::runAllTests()
             failedExecutionCount++;
         }
     }
-    return failedTestCount != 0 ? failedTestCount : failedExecutionCount;
+    return (int) (failedTestCount != 0 ? failedTestCount : failedExecutionCount);
 }
 
 TestOutput* CommandLineTestRunner::createTeamCityOutput()
