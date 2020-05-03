@@ -57,6 +57,11 @@ MockSupportPlugin::MockSupportPlugin(const SimpleString& name)
 
 MockSupportPlugin::~MockSupportPlugin()
 {
+    clear();
+}
+
+void MockSupportPlugin::clear()
+{
     repository_.clear();
 }
 

@@ -42,6 +42,8 @@ public:
 
     virtual void installComparator(const SimpleString& name, MockNamedValueComparator& comparator);
     virtual void installCopier(const SimpleString& name, MockNamedValueCopier& copier);
+
+    void clear();
 private:
     MockNamedValueComparatorsAndCopiersRepository repository_;
 };
