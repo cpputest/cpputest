@@ -543,6 +543,11 @@ void UtestShell::print(const SimpleString& text, const char* fileName, int lineN
     print(text.asCharString(), fileName, lineNumber);
 }
 
+void UtestShell::printVeryVerbose(const char* text)
+{
+    getTestResult()->printVeryVerbose(text);
+}
+
 TestResult* UtestShell::testResult_ = NULLPTR;
 UtestShell* UtestShell::currentTest_ = NULLPTR;
 
@@ -589,9 +594,17 @@ Utest::~Utest()
 
 void Utest::run()
 {
+    UtestShell* current = UtestShell::getCurrent();
+    int jumpResult = 0;
     try {
-        if (PlatformSpecificSetJmp(helperDoTestSetup, this)) {
+        current->printVeryVerbose("\n-------- before setup: ");
+        jumpResult = PlatformSpecificSetJmp(helperDoTestSetup, this);
+        current->printVeryVerbose("\n-------- after  setup: ");
+
+        if (jumpResult) {
+            current->printVeryVerbose("\n----------  before body: ");
             PlatformSpecificSetJmp(helperDoTestBody, this);
+            current->printVeryVerbose("\n----------  after body: ");
         }
     }
     catch (CppUTestFailedException&)
@@ -600,7 +613,9 @@ void Utest::run()
     }
 
     try {
+        current->printVeryVerbose("\n--------  before teardown: ");
         PlatformSpecificSetJmp(helperDoTestTeardown, this);
+        current->printVeryVerbose("\n--------  after teardown: ");
     }
     catch (CppUTestFailedException&)
     {
