@@ -581,6 +581,16 @@ TestMemoryAllocator* AccountingTestMemoryAllocator::originalAllocator()
     return originalAllocator_;
 }
 
+const char* AccountingTestMemoryAllocator::alloc_name() const
+{
+    return originalAllocator_->alloc_name();
+}
+
+const char* AccountingTestMemoryAllocator::free_name() const
+{
+    return originalAllocator_->free_name();
+}
+
 GlobalMemoryAccountant::GlobalMemoryAccountant()
     : mallocAllocator_(NULLPTR), newAllocator_(NULLPTR), newArrayAllocator_(NULLPTR)
 {
