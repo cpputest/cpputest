@@ -194,7 +194,6 @@ private:
 
     SimpleString reportNoAllocations() const;
     SimpleString reportTitle() const;
-    SimpleString reportTitleWithCacheSizes() const;
     SimpleString reportHeader() const;
     SimpleString reportFooter() const;
     SimpleString stringSize(size_t size) const;

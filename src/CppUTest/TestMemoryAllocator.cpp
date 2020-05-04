@@ -575,11 +575,6 @@ SimpleString MemoryAccountant::reportTitle() const
       return "CppUTest Memory Accountant report:\n";
 }
 
-SimpleString MemoryAccountant::reportTitleWithCacheSizes() const
-{
-    return "CppUTest Memory Accountant report (for cache sizes):\n";
-}
-
 SimpleString MemoryAccountant::reportHeader() const
 {
     if (useCacheSizes_)
