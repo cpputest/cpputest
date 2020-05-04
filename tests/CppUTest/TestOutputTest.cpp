@@ -315,9 +315,9 @@ class CompositeTestOutputTestStringBufferTestOutput : public StringBufferTestOut
       output += "flush";
     }
 
-    virtual VerbosityLevel isVerbose()
+    virtual bool isVerbose()
     {
-      return verbose_;
+      return verbose_ == level_verbose || verbose_ == level_veryVerbose;
     }
 
     virtual bool isColor()
