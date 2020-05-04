@@ -159,7 +159,7 @@ if [ "x$BUILD" = "xcmake_windows" ]; then
 
     cmake --version
     cmake "${BUILD_ARGS[@]}" ..
-    make
-    ctest -V
+#    make
+#    ctest -V
 fi
 
