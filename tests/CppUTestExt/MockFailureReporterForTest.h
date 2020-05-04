@@ -52,8 +52,8 @@ class MockFailureReporterInstaller
 UtestShell* mockFailureTest();
 SimpleString mockFailureString();
 void CLEAR_MOCK_FAILURE();
-void CHECK_EXPECTED_MOCK_FAILURE_LOCATION(const MockFailure& expectedFailure, const char* file, int line);
-void CHECK_NO_MOCK_FAILURE_LOCATION(const char* file, int line);
+void CHECK_EXPECTED_MOCK_FAILURE_LOCATION(const MockFailure& expectedFailure, const char* file, size_t line);
+void CHECK_NO_MOCK_FAILURE_LOCATION(const char* file, size_t line);
 
 class MockExpectedCallsListForTest : public MockExpectedCallsList
 {

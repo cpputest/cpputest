@@ -122,22 +122,22 @@ void TestTestingFixture::runAllTests()
     registry_->runAllTests(*result_);
 }
 
-int TestTestingFixture::getFailureCount()
+size_t TestTestingFixture::getFailureCount()
 {
     return result_->getFailureCount();
 }
 
-int TestTestingFixture::getCheckCount()
+size_t TestTestingFixture::getCheckCount()
 {
     return result_->getCheckCount();
 }
 
-int TestTestingFixture::getTestCount()
+size_t TestTestingFixture::getTestCount()
 {
     return result_->getTestCount();
 }
 
-int TestTestingFixture::getIgnoreCount()
+size_t TestTestingFixture::getIgnoreCount()
 {
     return result_->getIgnoredCount();
 }
@@ -168,7 +168,7 @@ const SimpleString& TestTestingFixture::getOutput()
     return output_->getOutput();
 }
 
-int TestTestingFixture::getRunCount()
+size_t TestTestingFixture::getRunCount()
 {
   	return result_->getRunCount();
 }
@@ -178,10 +178,10 @@ void TestTestingFixture::lineExecutedAfterCheck()
     lineOfCodeExecutedAfterCheck = true;
 }
 
-void TestTestingFixture::checkTestFailsWithProperTestLocation(const char* text, const char* file, int line)
+void TestTestingFixture::checkTestFailsWithProperTestLocation(const char* text, const char* file, size_t line)
 {
     if (getFailureCount() != 1)
-      FAIL_LOCATION(StringFromFormat("Expected one test failure, but got %d amount of test failures", getFailureCount()).asCharString(), file, line);
+      FAIL_LOCATION(StringFromFormat("Expected one test failure, but got %d amount of test failures", (int) getFailureCount()).asCharString(), file, line);
 
     STRCMP_CONTAINS_LOCATION(text, output_->getOutput().asCharString(), "", file, line);
 

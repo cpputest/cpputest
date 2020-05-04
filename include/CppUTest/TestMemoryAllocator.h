@@ -66,8 +66,8 @@ public:
     virtual ~TestMemoryAllocator();
     bool hasBeenDestroyed();
 
-    virtual char* alloc_memory(size_t size, const char* file, int line);
-    virtual void free_memory(char* memory, const char* file, int line);
+    virtual char* alloc_memory(size_t size, const char* file, size_t line);
+    virtual void free_memory(char* memory, const char* file, size_t line);
 
     virtual const char* name() const;
     virtual const char* alloc_name() const;
@@ -98,7 +98,7 @@ public:
 
     virtual void setNumberToCrashOn(unsigned allocationToCrashOn);
 
-    virtual char* alloc_memory(size_t size, const char* file, int line) _override;
+    virtual char* alloc_memory(size_t size, const char* file, size_t line) _override;
 };
 
 
@@ -108,8 +108,8 @@ public:
     NullUnknownAllocator();
     virtual ~NullUnknownAllocator() _destructor_override;
 
-    virtual char* alloc_memory(size_t size, const char* file, int line) _override;
-    virtual void free_memory(char* memory, const char* file, int line) _override;
+    virtual char* alloc_memory(size_t size, const char* file, size_t line) _override;
+    virtual void free_memory(char* memory, const char* file, size_t line) _override;
 
     static TestMemoryAllocator* defaultAllocator();
 };
@@ -122,11 +122,11 @@ public:
     FailableMemoryAllocator(const char* name_str = "failable alloc", const char* alloc_name_str = "alloc", const char* free_name_str = "free");
     virtual ~FailableMemoryAllocator() _destructor_override;
 
-    virtual char* alloc_memory(size_t size, const char* file, int line) _override;
+    virtual char* alloc_memory(size_t size, const char* file, size_t line) _override;
     virtual char* allocMemoryLeakNode(size_t size) _override;
 
     virtual void failAllocNumber(int number);
-    virtual void failNthAllocAt(int allocationNumber, const char* file, int line);
+    virtual void failNthAllocAt(int allocationNumber, const char* file, size_t line);
 
     virtual void checkAllFailedAllocsWereDone();
     virtual void clearFailedAllocs();
@@ -178,8 +178,8 @@ public:
     AccountingTestMemoryAllocator(MemoryAccountant& accountant, TestMemoryAllocator* originalAllocator);
     virtual ~AccountingTestMemoryAllocator() _destructor_override;
 
-    virtual char* alloc_memory(size_t size, const char* file, int line) _override;
-    virtual void free_memory(char* memory, const char* file, int line) _override;
+    virtual char* alloc_memory(size_t size, const char* file, size_t line) _override;
+    virtual void free_memory(char* memory, const char* file, size_t line) _override;
 
     virtual TestMemoryAllocator* actualAllocator() _override;
     TestMemoryAllocator* originalAllocator();

@@ -48,10 +48,10 @@ public:
     bool isListingTestGroupNames() const;
     bool isListingTestGroupAndCaseNames() const;
     bool isRunIgnored() const;
-    int getRepeatCount() const;
+    size_t getRepeatCount() const;
     bool isShuffling() const;
     bool isReversing() const;
-    unsigned int getShuffleSeed() const;
+    size_t getShuffleSeed() const;
     const TestFilter* getGroupFilters() const;
     const TestFilter* getNameFilters() const;
     bool isJUnitOutput() const;
@@ -83,8 +83,8 @@ private:
     bool reversing_;
     bool shuffling_;
     bool shufflingPreSeeded_;
-    int repeat_;
-    unsigned int shuffleSeed_;
+    size_t repeat_;
+    size_t shuffleSeed_;
     TestFilter* groupFilters_;
     TestFilter* nameFilters_;
     OutputType outputType_;

@@ -64,9 +64,10 @@ public:
     virtual void printBuffer(const char*)=0;
     virtual void print(const char*);
     virtual void print(long);
+    virtual void print(size_t);
     virtual void printDouble(double);
     virtual void printFailure(const TestFailure& failure);
-    virtual void printTestRun(int number, int total);
+    virtual void printTestRun(size_t number, size_t total);
     virtual void setProgressIndicator(const char*);
 
     virtual void printVeryVerbose(const char*);
@@ -78,15 +79,15 @@ public:
 
 protected:
 
-    virtual void printEclipseErrorInFileOnLine(SimpleString file, int lineNumber);
-    virtual void printVisualStudioErrorInFileOnLine(SimpleString file, int lineNumber);
+    virtual void printEclipseErrorInFileOnLine(SimpleString file, size_t lineNumber);
+    virtual void printVisualStudioErrorInFileOnLine(SimpleString file, size_t lineNumber);
 
     virtual void printProgressIndicator();
     void printFileAndLineForTestAndFailure(const TestFailure& failure);
     void printFileAndLineForFailure(const TestFailure& failure);
     void printFailureInTest(SimpleString testName);
     void printFailureMessage(SimpleString reason);
-    void printErrorInFileOnLineFormattedForWorkingEnvironment(SimpleString testFile, int lineNumber);
+    void printErrorInFileOnLineFormattedForWorkingEnvironment(SimpleString testFile, size_t lineNumber);
 
     TestOutput(const TestOutput&);
     TestOutput& operator=(const TestOutput&);
@@ -192,6 +193,7 @@ public:
     virtual void printBuffer(const char*) _override;
     virtual void print(const char*) _override;
     virtual void print(long) _override;
+    virtual void print(size_t) _override;
     virtual void printDouble(double) _override;
     virtual void printFailure(const TestFailure& failure) _override;
     virtual void setProgressIndicator(const char*) _override;

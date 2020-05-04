@@ -178,7 +178,7 @@ bool CommandLineArguments::runTestsInSeperateProcess() const
 }
 
 
-int CommandLineArguments::getRepeatCount() const
+size_t CommandLineArguments::getRepeatCount() const
 {
     return repeat_;
 }
@@ -193,7 +193,7 @@ bool CommandLineArguments::isShuffling() const
     return shuffling_;
 }
 
-unsigned int CommandLineArguments::getShuffleSeed() const
+size_t CommandLineArguments::getShuffleSeed() const
 {
     return shuffleSeed_;
 }
@@ -213,9 +213,9 @@ void CommandLineArguments::setRepeatCount(int ac, const char *const *av, int& i)
     repeat_ = 0;
 
     SimpleString repeatParameter(av[i]);
-    if (repeatParameter.size() > 2) repeat_ = SimpleString::AtoI(av[i] + 2);
+    if (repeatParameter.size() > 2) repeat_ = (size_t) (SimpleString::AtoI(av[i] + 2));
     else if (i + 1 < ac) {
-        repeat_ = SimpleString::AtoI(av[i + 1]);
+        repeat_ = (size_t) (SimpleString::AtoI(av[i + 1]));
         if (repeat_ != 0) i++;
     }
 

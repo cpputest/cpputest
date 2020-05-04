@@ -44,19 +44,19 @@ TestResult::~TestResult()
 void TestResult::currentGroupStarted(UtestShell* test)
 {
     output_.printCurrentGroupStarted(*test);
-    currentGroupTimeStarted_ = GetPlatformSpecificTimeInMillis();
+    currentGroupTimeStarted_ = (size_t) GetPlatformSpecificTimeInMillis();
 }
 
 void TestResult::currentGroupEnded(UtestShell* /*test*/)
 {
-    currentGroupTotalExecutionTime_ = GetPlatformSpecificTimeInMillis() - currentGroupTimeStarted_;
+    currentGroupTotalExecutionTime_ = (size_t) GetPlatformSpecificTimeInMillis() - currentGroupTimeStarted_;
     output_.printCurrentGroupEnded(*this);
 }
 
 void TestResult::currentTestStarted(UtestShell* test)
 {
     output_.printCurrentTestStarted(*test);
-    currentTestTimeStarted_ = GetPlatformSpecificTimeInMillis();
+    currentTestTimeStarted_ = (size_t) GetPlatformSpecificTimeInMillis();
 }
 
 void TestResult::print(const char* text)
@@ -71,7 +71,7 @@ void TestResult::printVeryVerbose(const char* text)
 
 void TestResult::currentTestEnded(UtestShell* /*test*/)
 {
-    currentTestTotalExecutionTime_ = GetPlatformSpecificTimeInMillis() - currentTestTimeStarted_;
+    currentTestTotalExecutionTime_ = (size_t) GetPlatformSpecificTimeInMillis() - currentTestTimeStarted_;
     output_.printCurrentTestEnded(*this);
 
 }
@@ -109,33 +109,33 @@ void TestResult::countIgnored()
 
 void TestResult::testsStarted()
 {
-    timeStarted_ = GetPlatformSpecificTimeInMillis();
+    timeStarted_ = (size_t) GetPlatformSpecificTimeInMillis();
     output_.printTestsStarted();
 }
 
 void TestResult::testsEnded()
 {
-    long timeEnded = GetPlatformSpecificTimeInMillis();
+    size_t timeEnded = (size_t) GetPlatformSpecificTimeInMillis();
     totalExecutionTime_ = timeEnded - timeStarted_;
     output_.printTestsEnded(*this);
 }
 
-long TestResult::getTotalExecutionTime() const
+size_t TestResult::getTotalExecutionTime() const
 {
     return totalExecutionTime_;
 }
 
-void TestResult::setTotalExecutionTime(long exTime)
+void TestResult::setTotalExecutionTime(size_t exTime)
 {
     totalExecutionTime_ = exTime;
 }
 
-long TestResult::getCurrentTestTotalExecutionTime() const
+size_t TestResult::getCurrentTestTotalExecutionTime() const
 {
     return currentTestTotalExecutionTime_;
 }
 
-long TestResult::getCurrentGroupTotalExecutionTime() const
+size_t TestResult::getCurrentGroupTotalExecutionTime() const
 {
     return currentGroupTotalExecutionTime_;
 }

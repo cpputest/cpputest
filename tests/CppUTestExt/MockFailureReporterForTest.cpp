@@ -63,7 +63,7 @@ void CLEAR_MOCK_FAILURE()
     MockFailureReporterForTest::getReporter()->mockFailureString = "";
 }
 
-void CHECK_EXPECTED_MOCK_FAILURE_LOCATION(const MockFailure& expectedFailure, const char* file, int line)
+void CHECK_EXPECTED_MOCK_FAILURE_LOCATION(const MockFailure& expectedFailure, const char* file, size_t line)
 {
     SimpleString expectedFailureString = expectedFailure.getMessage();
     SimpleString actualFailureString = mockFailureString();
@@ -79,7 +79,7 @@ void CHECK_EXPECTED_MOCK_FAILURE_LOCATION(const MockFailure& expectedFailure, co
     }
 }
 
-void CHECK_NO_MOCK_FAILURE_LOCATION(const char* file, int line)
+void CHECK_NO_MOCK_FAILURE_LOCATION(const char* file, size_t line)
 {
     if (mockFailureString() != "") {
         SimpleString error = "Unexpected mock failure:\n";

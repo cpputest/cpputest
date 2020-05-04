@@ -72,6 +72,11 @@ void TestOutput::print(long n)
     print(StringFrom(n).asCharString());
 }
 
+void TestOutput::print(size_t n)
+{
+    print(StringFrom(n).asCharString());
+}
+
 void TestOutput::printDouble(double d)
 {
     print(StringFrom(d).asCharString());
@@ -140,7 +145,7 @@ void TestOutput::printTestsEnded(const TestResult& result)
 {
     print("\n");
     const bool isFailure = result.isFailure();
-    const int failureCount = result.getFailureCount();
+    const size_t failureCount = result.getFailureCount();
     if (isFailure) {
         if (color_) {
             print("\033[31;1m");
@@ -184,7 +189,7 @@ void TestOutput::printTestsEnded(const TestResult& result)
     dotCount_ = 0;
 }
 
-void TestOutput::printTestRun(int number, int total)
+void TestOutput::printTestRun(size_t number, size_t total)
 {
     if (total > 1) {
         print("Test run ");
@@ -232,7 +237,7 @@ void TestOutput::printFailureMessage(SimpleString reason)
     print("\n\n");
 }
 
-void TestOutput::printErrorInFileOnLineFormattedForWorkingEnvironment(SimpleString file, int lineNumber)
+void TestOutput::printErrorInFileOnLineFormattedForWorkingEnvironment(SimpleString file, size_t lineNumber)
 {
     if (TestOutput::getWorkingEnvironment() == TestOutput::visualStudio)
         printVisualStudioErrorInFileOnLine(file, lineNumber);
@@ -240,7 +245,7 @@ void TestOutput::printErrorInFileOnLineFormattedForWorkingEnvironment(SimpleStri
         printEclipseErrorInFileOnLine(file, lineNumber);
 }
 
-void TestOutput::printEclipseErrorInFileOnLine(SimpleString file, int lineNumber)
+void TestOutput::printEclipseErrorInFileOnLine(SimpleString file, size_t lineNumber)
 {
     print("\n");
     print(file.asCharString());
@@ -250,7 +255,7 @@ void TestOutput::printEclipseErrorInFileOnLine(SimpleString file, int lineNumber
     print(" error:");
 }
 
-void TestOutput::printVisualStudioErrorInFileOnLine(SimpleString file, int lineNumber)
+void TestOutput::printVisualStudioErrorInFileOnLine(SimpleString file, size_t lineNumber)
 {
     print("\n");
     print(file.asCharString());
@@ -369,6 +374,12 @@ void CompositeTestOutput::print(const char* buffer)
 }
 
 void CompositeTestOutput::print(long number)
+{
+  if (outputOne_) outputOne_->print(number);
+  if (outputTwo_) outputTwo_->print(number);
+}
+
+void CompositeTestOutput::print(size_t number)
 {
   if (outputOne_) outputOne_->print(number);
   if (outputTwo_) outputTwo_->print(number);
