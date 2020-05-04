@@ -34,6 +34,11 @@ jobs:
       env: BUILD=autotools
       os: osx
 
+# Windows
+    - compiler: gcc
+      os: windows
+      env: BUILD=autotools
+
 # Linux
     - compiler: gcc
       env: BUILD=cmake CPP_STD=17
