@@ -35,9 +35,9 @@ jobs:
       os: osx
 
 # Windows
-    - compiler: gcc
+    - compiler: clang
       os: windows
-      env: BUILD=autotools
+      env: BUILD=cmake
 
 # Linux
     - compiler: gcc
