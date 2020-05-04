@@ -89,6 +89,24 @@ protected:
     bool hasBeenDestroyed_;
 };
 
+class MemoryLeakAllocator : public TestMemoryAllocator
+{
+public:
+    MemoryLeakAllocator(TestMemoryAllocator* originalAllocator);
+    virtual ~MemoryLeakAllocator() _destructor_override;
+
+    virtual char* alloc_memory(size_t size, const char* file, size_t line) _override;
+    virtual void free_memory(char* memory, const char* file, size_t line) _override;
+
+    virtual const char* name() const _override;
+    virtual const char* alloc_name() const _override;
+    virtual const char* free_name() const _override;
+
+    virtual TestMemoryAllocator* actualAllocator() _override;
+private:
+    TestMemoryAllocator* originalAllocator_;
+};
+
 class CrashOnAllocationAllocator : public TestMemoryAllocator
 {
     unsigned allocationToCrashOn_;
@@ -144,6 +162,8 @@ class MemoryAccountant
 public:
     MemoryAccountant();
 
+    void useCacheSizes(size_t sizes[], size_t length);
+
     void clear();
 
     void alloc(size_t size);
@@ -163,11 +183,21 @@ private:
     MemoryAccountantAllocationNode* findOrCreateNodeOfSize(size_t size);
     MemoryAccountantAllocationNode* findNodeOfSize(size_t size) const;
 
-    MemoryAccountantAllocationNode* createNewAccountantAllocationNode(size_t size, MemoryAccountantAllocationNode* next);
-    void destroyAccountantAllocationNode(MemoryAccountantAllocationNode* node);
+    MemoryAccountantAllocationNode* createNewAccountantAllocationNode(size_t size, MemoryAccountantAllocationNode* next) const;
+    void destroyAccountantAllocationNode(MemoryAccountantAllocationNode* node) const;
+
+    void createCacheSizeNodes(size_t sizes[], size_t length);
 
     MemoryAccountantAllocationNode* head_;
     TestMemoryAllocator* allocator_;
+    bool useCacheSizes_;
+
+    SimpleString reportNoAllocations() const;
+    SimpleString reportTitle() const;
+    SimpleString reportHeader() const;
+    SimpleString reportFooter() const;
+    SimpleString stringSize(size_t size) const;
+
 };
 
 struct AccountingTestMemoryAllocatorMemoryNode;
@@ -205,9 +235,12 @@ public:
     GlobalMemoryAccountant();
     ~GlobalMemoryAccountant();
 
+    void useCacheSizes(size_t sizes[], size_t length);
+
     void start();
     void stop();
     SimpleString report();
+    SimpleString reportWithCacheSizes(size_t sizes[], size_t length);
 
     TestMemoryAllocator* getMallocAllocator();
     TestMemoryAllocator* getNewAllocator();

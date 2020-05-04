@@ -142,6 +142,18 @@ TEST(GlobalSimpleStringMemoryAccountant, report)
     STRCMP_CONTAINS(" 1                0                 1", accountant.report().asCharString());
 }
 
+TEST(GlobalSimpleStringMemoryAccountant, reportUseCaches)
+{
+    size_t caches[] = {32};
+    accountant.useCacheSizes(caches, 1);
+    SimpleString str;
+    accountant.start();
+    str += "More";
+    accountant.stop();
+    STRCMP_CONTAINS("32                   1                1                 1", accountant.report().asCharString());
+}
+
+
 TEST_GROUP(SimpleString)
 {
   JustUseNewStringAllocator justNewForSimpleStringTestAllocator;

@@ -51,8 +51,9 @@ SimpleStringInternalCache::SimpleStringInternalCache()
 }
 
 GlobalSimpleStringMemoryAccountant::GlobalSimpleStringMemoryAccountant()
-    : allocator_(NULLPTR), accountant_(NULLPTR)
+    : allocator_(NULLPTR)
 {
+    accountant_ = new MemoryAccountant();
 }
 
 GlobalSimpleStringMemoryAccountant::~GlobalSimpleStringMemoryAccountant()
@@ -69,12 +70,16 @@ void GlobalSimpleStringMemoryAccountant::restoreAllocator()
         SimpleString::setStringAllocator(allocator_->originalAllocator());
 }
 
+void GlobalSimpleStringMemoryAccountant::useCacheSizes(size_t cacheSizes[], size_t length)
+{
+    accountant_->useCacheSizes(cacheSizes, length);
+}
+
 void GlobalSimpleStringMemoryAccountant::start()
 {
-    if (accountant_ != NULLPTR)
+    if (allocator_ != NULLPTR)
       FAIL("Global SimpleString allocator start called twice!");
 
-    accountant_ = new MemoryAccountant();
     allocator_ = new AccountingTestMemoryAllocator(*accountant_, SimpleString::getStringAllocator());
 
     SimpleString::setStringAllocator(allocator_);

@@ -188,6 +188,45 @@ TestMemoryAllocator* TestMemoryAllocator::actualAllocator()
     return this;
 }
 
+MemoryLeakAllocator::MemoryLeakAllocator(TestMemoryAllocator* originalAllocator)
+    : originalAllocator_(originalAllocator)
+{
+}
+
+MemoryLeakAllocator::~MemoryLeakAllocator()
+{
+}
+
+char* MemoryLeakAllocator::alloc_memory(size_t size, const char* file, size_t line)
+{
+    return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(originalAllocator_, size, file, line);
+}
+
+void MemoryLeakAllocator::free_memory(char* memory, const char* file, size_t line)
+{
+    MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(originalAllocator_, memory, file, line);
+}
+
+const char* MemoryLeakAllocator::name() const
+{
+    return "MemoryLeakAllocator";
+}
+
+const char* MemoryLeakAllocator::alloc_name() const
+{
+    return originalAllocator_->alloc_name();
+}
+
+const char* MemoryLeakAllocator::free_name() const
+{
+    return originalAllocator_->free_name();
+}
+
+TestMemoryAllocator* MemoryLeakAllocator::actualAllocator()
+{
+    return originalAllocator_->actualAllocator();
+}
+
 CrashOnAllocationAllocator::CrashOnAllocationAllocator() : allocationToCrashOn_(0)
 {
 }
@@ -364,7 +403,7 @@ struct MemoryAccountantAllocationNode
     MemoryAccountantAllocationNode* next_;
 };
 
-MemoryAccountantAllocationNode* MemoryAccountant::createNewAccountantAllocationNode(size_t size, MemoryAccountantAllocationNode* next)
+MemoryAccountantAllocationNode* MemoryAccountant::createNewAccountantAllocationNode(size_t size, MemoryAccountantAllocationNode* next) const
 {
     MemoryAccountantAllocationNode* node = (MemoryAccountantAllocationNode*) (void*) allocator_->alloc_memory(sizeof(MemoryAccountantAllocationNode), __FILE__, __LINE__);
     node->size_ = size;
@@ -376,14 +415,41 @@ MemoryAccountantAllocationNode* MemoryAccountant::createNewAccountantAllocationN
     return node;
 }
 
-void MemoryAccountant::destroyAccountantAllocationNode(MemoryAccountantAllocationNode* node)
+void MemoryAccountant::destroyAccountantAllocationNode(MemoryAccountantAllocationNode* node) const
 {
     allocator_->free_memory((char*) node, __FILE__, __LINE__);
 }
 
 MemoryAccountant::MemoryAccountant()
-    : head_(NULLPTR), allocator_(defaultMallocAllocator())
+    : head_(NULLPTR), allocator_(defaultMallocAllocator()), useCacheSizes_(false)
 {
+}
+
+void MemoryAccountant::createCacheSizeNodes(size_t sizes[], size_t length)
+{
+    for (size_t i = 0; i < length; i++)
+        findOrCreateNodeOfSize(sizes[i]);
+
+    if (head_ == NULLPTR)
+        head_ = createNewAccountantAllocationNode(0, NULLPTR);
+    else {
+        for (MemoryAccountantAllocationNode* lastNode = head_; lastNode; lastNode = lastNode->next_) {
+            if (lastNode->next_ == NULLPTR) {
+                lastNode->next_ = createNewAccountantAllocationNode(0, NULLPTR);
+                break;
+            }
+        }
+    }
+}
+
+
+void MemoryAccountant::useCacheSizes(size_t sizes[], size_t length)
+{
+    if (head_)
+      FAIL("MemoryAccountant: Cannot set cache sizes as allocations already occured!");
+
+    createCacheSizeNodes(sizes, length);
+    useCacheSizes_ = true;
 }
 
 void MemoryAccountant::setAllocator(TestMemoryAllocator* allocator)
@@ -404,14 +470,26 @@ void MemoryAccountant::clear()
 
 MemoryAccountantAllocationNode* MemoryAccountant::findNodeOfSize(size_t size) const
 {
-    for (MemoryAccountantAllocationNode* node = head_; node; node = node->next_)
-        if (node->size_ == size)
-            return node;
+    if (useCacheSizes_) {
+        for (MemoryAccountantAllocationNode* node = head_; node; node = node->next_) {
+            if (size > node->size_ && node->next_ == NULLPTR)
+                return node;
+            else if (size <= node->size_ && !(node->next_->size_ != 0 && node->next_->size_ <= size))
+                return node;
+        }
+    }
+    else
+        for (MemoryAccountantAllocationNode* node = head_; node; node = node->next_)
+            if (node->size_ == size)
+                return node;
     return NULLPTR;
 }
 
 MemoryAccountantAllocationNode* MemoryAccountant::findOrCreateNodeOfSize(size_t size)
 {
+    if (useCacheSizes_)
+      return findNodeOfSize(size);
+
     if (head_ && head_->size_ > size)
         head_ = createNewAccountantAllocationNode(size, head_);
 
@@ -437,7 +515,8 @@ void MemoryAccountant::dealloc(size_t size)
 {
     MemoryAccountantAllocationNode* node = findOrCreateNodeOfSize(size);
     node->deallocations_++;
-    node->currentAllocations_--;
+    if (node->currentAllocations_)
+      node->currentAllocations_--;
 }
 
 size_t MemoryAccountant::totalAllocationsOfSize(size_t size) const
@@ -484,18 +563,48 @@ size_t MemoryAccountant::totalDeallocations() const
     return totalDeallocations;
 }
 
+SimpleString MemoryAccountant::reportNoAllocations() const
+{
+      return SimpleString("CppUTest Memory Accountant has not noticed any allocations or deallocations. Sorry\n");
+}
+
+SimpleString MemoryAccountant::reportTitle() const
+{
+      if (useCacheSizes_)
+        return "CppUTest Memory Accountant report (with cache sizes):\n";
+      return "CppUTest Memory Accountant report:\n";
+}
+
+SimpleString MemoryAccountant::reportHeader() const
+{
+    if (useCacheSizes_)
+        return "Cache size          # allocations    # deallocations   max # allocations at one time\n";
+    return "Allocation size     # allocations    # deallocations   max # allocations at one time\n";
+}
+
+#define MEMORY_ACCOUNTANT_ROW_FORMAT "%s               %5d            %5d             %5d\n"
+
+SimpleString MemoryAccountant::reportFooter() const
+{
+    return SimpleString("   Thank you for your business\n");
+}
+
+SimpleString MemoryAccountant::stringSize(size_t size) const
+{
+    return (size == 0) ? "other" : StringFromFormat("%5d", (int) size);
+}
+
 SimpleString MemoryAccountant::report() const
 {
     if (head_ == NULLPTR)
-      return SimpleString("CppUTest Memory Accountant has not noticed any allocations or deallocations. Sorry\n");
+      return reportNoAllocations();
 
-    SimpleString report("CppUTest Memory Accountant report:\n"
-                        "Allocation size     # allocations    # deallocations   max # allocations at one time\n");
+    SimpleString report = reportTitle() + reportHeader();
+
     for (MemoryAccountantAllocationNode* node = head_; node; node = node->next_)
-        report += StringFromFormat("%5d               %5d            %5d             %5d\n",
-            (int) node->size_, (int) node->allocations_, (int) node->deallocations_, (int) node->maxAllocations_);
-    report += SimpleString("   Thank you for your business\n");
-    return report;
+        report += StringFromFormat(MEMORY_ACCOUNTANT_ROW_FORMAT, stringSize(node->size_).asCharString(), (int) node->allocations_, (int) node->deallocations_, (int) node->maxAllocations_);
+
+    return report + reportFooter();
 }
 
 AccountingTestMemoryAllocator::AccountingTestMemoryAllocator(MemoryAccountant& accountant, TestMemoryAllocator* originalAllocator)
@@ -602,6 +711,11 @@ GlobalMemoryAccountant::~GlobalMemoryAccountant()
     delete mallocAllocator_;
     delete newAllocator_;
     delete newArrayAllocator_;
+}
+
+void GlobalMemoryAccountant::useCacheSizes(size_t sizes[], size_t length)
+{
+    accountant_.useCacheSizes(sizes, length);
 }
 
 void GlobalMemoryAccountant::start()

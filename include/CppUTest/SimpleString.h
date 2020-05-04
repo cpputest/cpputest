@@ -154,6 +154,8 @@ public:
     GlobalSimpleStringMemoryAccountant();
     ~GlobalSimpleStringMemoryAccountant();
 
+    void useCacheSizes(size_t cacheSizes[], size_t length);
+
     void start();
     void stop();
     SimpleString report();
