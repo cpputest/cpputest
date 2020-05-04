@@ -283,9 +283,34 @@ TEST(FailableMemoryAllocator, CheckAllFailingLocationAllocsWereDone)
 #endif
 #endif
 
+class MemoryAccountantExecFunction
+    : public ExecFunction
+{
+public:
+    virtual ~MemoryAccountantExecFunction() _destructor_override
+    {
+    }
+
+    void (*testFunction_)(MemoryAccountant*);
+    MemoryAccountant* parameter_;
+
+    virtual void exec() _override
+    {
+        testFunction_(parameter_);
+    }
+};
+
 TEST_GROUP(TestMemoryAccountant)
 {
     MemoryAccountant accountant;
+    TestTestingFixture fixture;
+    MemoryAccountantExecFunction testFunction;
+
+    void setup()
+    {
+        testFunction.parameter_ = &accountant;
+        fixture.setTestFunction(&testFunction);
+    }
 
     void teardown()
     {
@@ -377,6 +402,98 @@ TEST(TestMemoryAccountant, reportAllocations)
                  "   Thank you for your business\n"
                  , accountant.report().asCharString());
 }
+
+TEST(TestMemoryAccountant, reportAllocationsWithSizeZero)
+{
+    accountant.dealloc(0);
+
+    accountant.dealloc(4);
+    accountant.dealloc(4);
+    accountant.alloc(4);
+
+    STRCMP_EQUAL("CppUTest Memory Accountant report:\n"
+                 "Allocation size     # allocations    # deallocations   max # allocations at one time\n"
+                 "other                   0                1                 0\n"
+                 "    4                   1                2                 1\n"
+                 "   Thank you for your business\n"
+                 , accountant.report().asCharString());
+}
+
+
+static void _failUseCacheSizesAfterAllocation(MemoryAccountant* accountant)
+{
+    size_t cacheSizes[] = {0};
+
+    accountant->alloc(4);
+    accountant->useCacheSizes(cacheSizes, 1);
+}
+
+TEST(TestMemoryAccountant, withCacheSizesFailsWhenAlreadyAllocatedMemory)
+{
+    testFunction.testFunction_ = _failUseCacheSizesAfterAllocation;
+
+    fixture.runAllTests();
+
+    fixture.assertPrintContains("MemoryAccountant: Cannot set cache sizes as allocations already occured!");
+}
+
+TEST(TestMemoryAccountant, reportWithCacheSizesEmpty)
+{
+    size_t cacheSizes[] = {0};
+
+    accountant.useCacheSizes(cacheSizes, 0);
+    accountant.alloc(4);
+
+    STRCMP_EQUAL("CppUTest Memory Accountant report (with cache sizes):\n"
+                 "Cache size          # allocations    # deallocations   max # allocations at one time\n"
+                 "other                   1                0                 1\n"
+                 "   Thank you for your business\n"
+                 , accountant.report().asCharString());
+}
+
+
+TEST(TestMemoryAccountant, reportWithCacheSizes)
+{
+    size_t cacheSizes[] = {4};
+
+    accountant.useCacheSizes(cacheSizes, 1);
+    accountant.dealloc(8);
+    accountant.dealloc(12);
+    accountant.dealloc(20);
+
+    accountant.alloc(4);
+    accountant.dealloc(4);
+    accountant.alloc(4);
+    STRCMP_EQUAL("CppUTest Memory Accountant report (with cache sizes):\n"
+                 "Cache size          # allocations    # deallocations   max # allocations at one time\n"
+                 "    4                   2                1                 1\n"
+                 "other                   0                3                 0\n"
+                 "   Thank you for your business\n"
+                 , accountant.report().asCharString());
+}
+
+TEST(TestMemoryAccountant, reportWithCacheSizesMultipleCaches)
+{
+    size_t cacheSizes[] = {4, 10, 20};
+
+    accountant.useCacheSizes(cacheSizes, 3);
+    accountant.alloc(8);
+    accountant.alloc(12);
+    accountant.alloc(20);
+
+    accountant.alloc(4);
+    accountant.dealloc(4);
+    accountant.alloc(4);
+    STRCMP_EQUAL("CppUTest Memory Accountant report (with cache sizes):\n"
+                 "Cache size          # allocations    # deallocations   max # allocations at one time\n"
+                 "    4                   2                1                 1\n"
+                 "   10                   1                0                 1\n"
+                 "   20                   2                0                 2\n"
+                 "other                   0                0                 0\n"
+                 "   Thank you for your business\n"
+                 , accountant.report().asCharString());
+}
+
 
 TEST_GROUP(AccountingTestMemoryAllocator)
 {
@@ -520,6 +637,20 @@ TEST(GlobalMemoryAccountant, report)
     /* Allocation includes memory leak info */
     STRCMP_CONTAINS("1                1                 1", accountant.report().asCharString());
 }
+
+TEST(GlobalMemoryAccountant, reportWithCacheSizes)
+{
+    size_t cacheSizes[] = {512};
+    accountant.useCacheSizes(cacheSizes, 1);
+    accountant.start();
+    char* memory = new char[185];
+    delete [] memory;
+    accountant.stop();
+
+    /* Allocation includes memory leak info */
+    STRCMP_CONTAINS("512                   1                1                 1", accountant.report().asCharString());
+}
+
 
 #endif
 
