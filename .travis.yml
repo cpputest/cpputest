@@ -37,7 +37,7 @@ jobs:
 # Windows
     - compiler: clang
       os: windows
-      env: BUILD=cmake
+      env: BUILD=cmake_windows
 
 # Linux
     - compiler: gcc

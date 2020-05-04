@@ -147,3 +147,19 @@ if [ "x$BUILD" = "xautotools_dist" ]; then
     fi
 fi
 
+if [ "x$BUILD" = "xcmake_windows" ]; then
+    pwd
+    ls
+    choco install make
+    BUILD_ARGS=("-DWERROR=ON")
+
+    if [ -n "$CPP_STD" ]; then
+        BUILD_ARGS+=("-DCMAKE_CXX_STANDARD=$CPP_STD")
+    fi
+
+    cmake --version
+    cmake "${BUILD_ARGS[@]}" ..
+#    make
+#    ctest -V
+fi
+
