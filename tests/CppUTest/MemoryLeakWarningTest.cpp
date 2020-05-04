@@ -486,7 +486,7 @@ TEST(MemoryLeakWarningThreadSafe, turnOnThreadSafeNewDeleteOverloads)
 {
 #undef new
 
-    int storedAmountOfLeaks = MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all);
+    size_t storedAmountOfLeaks = MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all);
     MemoryLeakWarningPlugin::turnOnThreadSafeNewDeleteOverloads();
 
     int *n = new int;
