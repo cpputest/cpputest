@@ -188,6 +188,45 @@ TestMemoryAllocator* TestMemoryAllocator::actualAllocator()
     return this;
 }
 
+MemoryLeakAllocator::MemoryLeakAllocator(TestMemoryAllocator* originalAllocator)
+    : originalAllocator_(originalAllocator)
+{
+}
+
+MemoryLeakAllocator::~MemoryLeakAllocator()
+{
+}
+
+char* MemoryLeakAllocator::alloc_memory(size_t size, const char* file, size_t line)
+{
+    return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(originalAllocator_, size, file, line);
+}
+
+void MemoryLeakAllocator::free_memory(char* memory, const char* file, size_t line)
+{
+    MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(originalAllocator_, memory, file, line);
+}
+
+const char* MemoryLeakAllocator::name() const
+{
+    return "MemoryLeakAllocator";
+}
+
+const char* MemoryLeakAllocator::alloc_name() const
+{
+    return originalAllocator_->alloc_name();
+}
+
+const char* MemoryLeakAllocator::free_name() const
+{
+    return originalAllocator_->free_name();
+}
+
+TestMemoryAllocator* MemoryLeakAllocator::actualAllocator()
+{
+    return originalAllocator_->actualAllocator();
+}
+
 CrashOnAllocationAllocator::CrashOnAllocationAllocator() : allocationToCrashOn_(0)
 {
 }

@@ -29,6 +29,7 @@
 #include "CppUTest/TestMemoryAllocator.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 #include "CppUTest/TestTestingFixture.h"
+#include "CppUTest/MemoryLeakDetector.h"
 
 TEST_GROUP(TestMemoryAllocatorTest)
 {
@@ -143,6 +144,50 @@ TEST(TestMemoryAllocatorTest, TryingToAllocateTooMuchFailsTest)
 }
 
 #endif
+
+TEST_GROUP(MemoryLeakAllocator)
+{
+    MemoryLeakAllocator* allocator;
+
+    void setup()
+    {
+        allocator = new MemoryLeakAllocator(defaultMallocAllocator());
+    }
+
+    void teardown()
+    {
+        delete allocator;
+    }
+};
+
+TEST(MemoryLeakAllocator, allocMemory)
+{
+    char* memory = allocator->alloc_memory(10, __FILE__, __LINE__);
+    memory[0] = 'B';
+    MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(allocator->actualAllocator(), memory);
+
+    /* No leaks or crashes */
+}
+
+TEST(MemoryLeakAllocator, freeMemory)
+{
+    char* memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(allocator->actualAllocator(), 10);
+    allocator->free_memory(memory, __FILE__, __LINE__);
+
+    /* No leaks or crashes */
+}
+
+TEST(MemoryLeakAllocator, originalAllocator)
+{
+    POINTERS_EQUAL(defaultMallocAllocator(), allocator->actualAllocator());
+    STRCMP_EQUAL(defaultMallocAllocator()->alloc_name(), allocator->alloc_name());
+    STRCMP_EQUAL(defaultMallocAllocator()->free_name(), allocator->free_name());
+}
+
+TEST(MemoryLeakAllocator, name)
+{
+    STRCMP_EQUAL("MemoryLeakAllocator", allocator->name());
+}
 
 #if CPPUTEST_USE_MEM_LEAK_DETECTION
 #if CPPUTEST_USE_MALLOC_MACROS
