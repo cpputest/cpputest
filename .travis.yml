@@ -36,6 +36,7 @@ jobs:
 
 # Windows
     - compiler: clang
+      before_install: choco install make
       os: windows
       env: BUILD=cmake
 
