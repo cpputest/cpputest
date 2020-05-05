@@ -168,19 +168,47 @@ private:
     MemoryAccountant* accountant_;
 };
 
+struct SimpleStringInternalCacheNode;
+struct SimpleStringMemoryBlock;
+
 class SimpleStringInternalCache
 {
 public:
     SimpleStringInternalCache();
+    ~SimpleStringInternalCache();
+
+    void setAllocator(TestMemoryAllocator* allocator);
 
     char* alloc(size_t size);
     void dealloc(char* memory, size_t size);
 
-    void clear();
-    size_t totalAvailableBlocks() const;
+    bool hasFreeBlocksOfSize(size_t size);
+
+    void clearCache();
+    void clearAllIncludingCurrentlyUsedMemory();
 private:
-    size_t availableBlocks_;
-    char* cache_;
+
+    enum { amountOfInternalCacheNodes = 5};
+    bool isCached(size_t size);
+    size_t getIndexForCache(size_t size);
+    SimpleStringInternalCacheNode* getCacheNodeFromSize(size_t size);
+
+    SimpleStringInternalCacheNode* createInternalCacheNodes();
+    void destroyInternalCacheNode(SimpleStringInternalCacheNode * node);
+    SimpleStringMemoryBlock* createSimpleStringMemoryBlock(size_t sizeOfString, SimpleStringMemoryBlock* next);
+    void destroySimpleStringMemoryBlock(SimpleStringMemoryBlock * block);
+    void destroySimpleStringMemoryBlockList(SimpleStringMemoryBlock * block);
+
+    SimpleStringMemoryBlock* reserveCachedBlockFrom(SimpleStringInternalCacheNode* node);
+    void releaseCachedBlockFrom(char* memory, SimpleStringInternalCacheNode* node);
+    void releaseNonCachedMemory(char* memory);
+
+    SimpleStringMemoryBlock* allocateNewCacheBlockFrom(SimpleStringInternalCacheNode* node);
+    SimpleStringMemoryBlock* addToSimpleStringMemoryBlockList(SimpleStringMemoryBlock* newBlock, SimpleStringMemoryBlock* previousHead);
+
+    TestMemoryAllocator* allocator_;
+    SimpleStringInternalCacheNode* cache_;
+    SimpleStringMemoryBlock* nonCachedAllocations_;
 };
 
 SimpleString StringFrom(bool value);

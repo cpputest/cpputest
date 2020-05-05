@@ -1268,34 +1268,186 @@ TEST(SimpleString, BracketsFormattedHexStringFromForULongLong)
 TEST_GROUP(SimpleStringInternalCache)
 {
     SimpleStringInternalCache cache;
+    MemoryAccountant accountant;
+    MemoryLeakAllocator* defaultAllocator;
+    AccountingTestMemoryAllocator* allocator;
+
+    void setup()
+    {
+        defaultAllocator = new MemoryLeakAllocator(defaultMallocAllocator());
+        allocator = new AccountingTestMemoryAllocator(accountant, defaultAllocator);
+        cache.setAllocator(defaultAllocator);
+    }
 
     void teardown()
     {
-        cache.clear();
+        cache.clearAllIncludingCurrentlyUsedMemory();
+        delete allocator;
+        delete defaultAllocator;
+    }
+
+    void createCacheForSize(size_t size, size_t amount)
+    {
+        for (size_t i = 0; i < amount; i++) {
+            char* memory = cache.alloc(size);
+            cache.dealloc(memory, size);
+        }
     }
 };
 
-TEST(SimpleStringInternalCache, noAllocationWillLeaveTheCacheEmpty)
+TEST(SimpleStringInternalCache, cacheHitWithOneEntry)
 {
-    LONGS_EQUAL(0, cache.totalAvailableBlocks());
+    createCacheForSize(10, 1);
+    cache.setAllocator(allocator);
+
+    char* mem = cache.alloc(10);
+    mem[0] = 'B';
+    mem[3] = 'A';
+    mem[9] = 'S';
+
+    cache.setAllocator(allocator->originalAllocator());
+
+    LONGS_EQUAL(0, accountant.totalAllocationsOfSize(10));
+    CHECK(!cache.hasFreeBlocksOfSize(10));
+
+    cache.setAllocator(allocator);
 }
 
-TEST(SimpleStringInternalCache, allocationAndFreeWillCreateAvailabelBlocks)
+TEST(SimpleStringInternalCache, cacheHitWithTwoEntries)
 {
+    createCacheForSize(10, 2);
+    cache.setAllocator(allocator);
+
     char* mem = cache.alloc(10);
-    cache.dealloc(mem, 10);
-    LONGS_EQUAL(1, cache.totalAvailableBlocks());
+    mem = cache.alloc(10);
+
+    cache.setAllocator(allocator->originalAllocator());
+
+    LONGS_EQUAL(0, accountant.totalAllocationsOfSize(10));
+    CHECK(!cache.hasFreeBlocksOfSize(10));
+
+    cache.setAllocator(allocator);
 }
+
+TEST(SimpleStringInternalCache, allocatingMoreThanCacheAvailable)
+{
+    createCacheForSize(10, 1);
+    cache.setAllocator(allocator);
+
+    char* mem = cache.alloc(10);
+    mem = cache.alloc(10);
+
+    cache.setAllocator(allocator->originalAllocator());
+
+    LONGS_EQUAL(1, accountant.totalAllocationsOfSize(32));
+    CHECK(!cache.hasFreeBlocksOfSize(10));
+
+    cache.setAllocator(allocator);
+}
+
 
 TEST(SimpleStringInternalCache, allocationWillReuseTheAllocatedBlocks)
 {
+    cache.setAllocator(allocator);
+
     char* mem = cache.alloc(10);
     cache.dealloc(mem, 10);
     mem = cache.alloc(10);
     cache.dealloc(mem, 10);
 
-    LONGS_EQUAL(1, cache.totalAvailableBlocks());
+    LONGS_EQUAL(1, accountant.totalAllocationsOfSize(32));
 }
 
+
+TEST(SimpleStringInternalCache, multipleDifferentSizeAllocationsAndDeallocations)
+{
+    cache.setAllocator(allocator);
+
+    char* mem10 = cache.alloc(10);
+    char* mem11 = cache.alloc(11);
+
+    char* mem100 = cache.alloc(100);
+    cache.dealloc(mem100, 100);
+
+    char* mem101 = cache.alloc(101);
+    char* mem102 = cache.alloc(102);
+    char* mem103 = cache.alloc(103);
+    cache.dealloc(mem101, 102);
+    cache.dealloc(mem102, 103);
+    cache.dealloc(mem103, 104);
+
+    cache.alloc(105);
+    cache.alloc(106);
+    cache.alloc(107);
+
+    cache.dealloc(mem10, 10);
+    cache.dealloc(mem11, 11);
+
+    LONGS_EQUAL(2, accountant.totalAllocationsOfSize(32));
+    LONGS_EQUAL(3, accountant.totalAllocationsOfSize(128));
+}
+
+TEST(SimpleStringInternalCache, deallocOfCachedMemoryWillNotDealloc)
+{
+    cache.setAllocator(allocator);
+
+    char* mem = cache.alloc(10);
+    cache.dealloc(mem, 10);
+
+    LONGS_EQUAL(0, accountant.totalDeallocationsOfSize(32));
+}
+
+TEST(SimpleStringInternalCache, clearCacheWillRemoveAllCachedMemoryButNotAllUsedMemory)
+{
+    cache.setAllocator(allocator);
+
+    char* mem = cache.alloc(10);
+    cache.dealloc(mem, 10);
+
+    mem = cache.alloc(60);
+
+    cache.clearCache();
+
+    LONGS_EQUAL(1, accountant.totalDeallocationsOfSize(32));
+    LONGS_EQUAL(0, accountant.totalDeallocationsOfSize(64));
+}
+
+TEST(SimpleStringInternalCache, clearAllIncludingCurrentlyUsedMemory)
+{
+    cache.setAllocator(allocator);
+
+    cache.alloc(60);
+
+    cache.clearAllIncludingCurrentlyUsedMemory();
+
+    LONGS_EQUAL(1, accountant.totalDeallocationsOfSize(64));
+}
+
+
+
+TEST(SimpleStringInternalCache, allocatingLargerStringThanCached)
+{
+    cache.setAllocator(allocator);
+
+    char* mem = cache.alloc(1234);
+    cache.dealloc(mem, 1234);
+
+    LONGS_EQUAL(1, accountant.totalAllocationsOfSize(1234));
+    LONGS_EQUAL(1, accountant.totalDeallocationsOfSize(1234));
+}
+
+TEST(SimpleStringInternalCache, clearAllIncludingCurrentlyUsedMemoryAlsoReleasesLargeNonCachesMemory)
+{
+    cache.setAllocator(allocator);
+
+    cache.alloc(1234);
+    cache.alloc(1234);
+    cache.alloc(1234);
+
+    cache.clearAllIncludingCurrentlyUsedMemory();
+
+    LONGS_EQUAL(3, accountant.totalAllocationsOfSize(1234));
+    LONGS_EQUAL(3, accountant.totalDeallocationsOfSize(1234));
+}
 
 
