@@ -1318,8 +1318,8 @@ TEST(SimpleStringInternalCache, cacheHitWithTwoEntries)
     createCacheForSize(10, 2);
     cache.setAllocator(allocator);
 
-    char* mem = cache.alloc(10);
-    mem = cache.alloc(10);
+    cache.alloc(10);
+    cache.alloc(10);
 
     cache.setAllocator(allocator->originalAllocator());
 
@@ -1334,8 +1334,8 @@ TEST(SimpleStringInternalCache, allocatingMoreThanCacheAvailable)
     createCacheForSize(10, 1);
     cache.setAllocator(allocator);
 
-    char* mem = cache.alloc(10);
-    mem = cache.alloc(10);
+    cache.alloc(10);
+    cache.alloc(10);
 
     cache.setAllocator(allocator->originalAllocator());
 
