@@ -85,9 +85,9 @@ char* MemoryReportAllocator::alloc_memory(size_t size, const char* file, size_t 
     return memory;
 }
 
-void MemoryReportAllocator::free_memory(char* memory, const char* file, size_t line)
+void MemoryReportAllocator::free_memory(char* memory, size_t size, const char* file, size_t line)
 {
-    realAllocator_->free_memory(memory, file, line);
+    realAllocator_->free_memory(memory, size, file, line);
     if (result_ && formatter_)
         formatter_->report_free_memory(result_, this, memory, file, line);
 }

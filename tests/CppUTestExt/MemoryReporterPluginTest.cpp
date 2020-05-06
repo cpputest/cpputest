@@ -194,7 +194,7 @@ TEST(MemoryReporterPlugin, newAllocationsAreReportedTest)
 
     reporter->preTestAction(*test, *result);
     char *memory = getCurrentNewAllocator()->allocMemoryLeakNode(100);
-    getCurrentNewAllocator()->free_memory(memory, "unknown", 1);
+    getCurrentNewAllocator()->free_memory(memory, 100, "unknown", 1);
 }
 
 TEST(MemoryReporterPlugin, whenUsingOnlyMallocAllocatorNoOtherOfTheAllocatorsAreUsed)
@@ -206,7 +206,7 @@ TEST(MemoryReporterPlugin, whenUsingOnlyMallocAllocatorNoOtherOfTheAllocatorsAre
 
     reporter->preTestAction(*test, *result);
     char *memory = getCurrentMallocAllocator()->allocMemoryLeakNode(100);
-    getCurrentMallocAllocator()->free_memory(memory, "unknown", 1);
+    getCurrentMallocAllocator()->free_memory(memory, 100, "unknown", 1);
 }
 
 TEST(MemoryReporterPlugin, newArrayAllocationsAreReportedTest)
@@ -217,7 +217,7 @@ TEST(MemoryReporterPlugin, newArrayAllocationsAreReportedTest)
 
     reporter->preTestAction(*test, *result);
     char *memory = getCurrentNewArrayAllocator()->allocMemoryLeakNode(100);
-    getCurrentNewArrayAllocator()->free_memory(memory, "unknown", 1);
+    getCurrentNewArrayAllocator()->free_memory(memory, 100, "unknown", 1);
 }
 
 TEST(MemoryReporterPlugin, mallocAllocationsAreReportedTest)
@@ -228,7 +228,7 @@ TEST(MemoryReporterPlugin, mallocAllocationsAreReportedTest)
 
     reporter->preTestAction(*test, *result);
     char *memory = getCurrentMallocAllocator()->allocMemoryLeakNode(100);
-    getCurrentMallocAllocator()->free_memory(memory, "unknown", 1);
+    getCurrentMallocAllocator()->free_memory(memory, 100, "unknown", 1);
 }
 
 TEST(MemoryReporterPlugin, startOfANewTestWillReportTheTestGroupStart)

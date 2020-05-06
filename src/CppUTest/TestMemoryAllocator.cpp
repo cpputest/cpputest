@@ -156,17 +156,12 @@ char* TestMemoryAllocator::allocMemoryLeakNode(size_t size)
 
 void TestMemoryAllocator::freeMemoryLeakNode(char* memory)
 {
-    free_memory(memory, "MemoryLeakNode", 1);
+    free_memory(memory, 0, "MemoryLeakNode", 1);
 }
 
 char* TestMemoryAllocator::alloc_memory(size_t size, const char*, size_t)
 {
     return checkedMalloc(size);
-}
-
-void TestMemoryAllocator::free_memory(char* memory, const char* file, size_t line)
-{
-    free_memory(memory, 0, file, line);
 }
 
 void TestMemoryAllocator::free_memory(char* memory, size_t, const char*, size_t)
@@ -208,7 +203,7 @@ char* MemoryLeakAllocator::alloc_memory(size_t size, const char* file, size_t li
     return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(originalAllocator_, size, file, line);
 }
 
-void MemoryLeakAllocator::free_memory(char* memory, const char* file, size_t line)
+void MemoryLeakAllocator::free_memory(char* memory, size_t, const char* file, size_t line)
 {
     MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(originalAllocator_, memory, file, line);
 }
@@ -264,7 +259,7 @@ char* NullUnknownAllocator::alloc_memory(size_t /*size*/, const char*, size_t)
     return NULLPTR;
 }
 
-void NullUnknownAllocator::free_memory(char* /*memory*/, const char*, size_t)
+void NullUnknownAllocator::free_memory(char* /*memory*/, size_t, const char*, size_t)
 {
 }
 
@@ -360,7 +355,7 @@ char* FailableMemoryAllocator::alloc_memory(size_t size, const char* file, size_
         if (previous) previous->next_ = current->next_;
         else head_ = current->next_;
 
-        free_memory((char*) current, __FILE__, __LINE__);
+        free_memory((char*) current, size, __FILE__, __LINE__);
         return NULLPTR;
       }
       previous = current;
@@ -393,7 +388,7 @@ void FailableMemoryAllocator::clearFailedAllocs()
   LocationToFailAllocNode* current = head_;
   while (current) {
     head_ = current->next_;
-    free_memory((char*) current, __FILE__, __LINE__);
+    free_memory((char*) current, 0, __FILE__, __LINE__);
     current = head_;
   }
   currentAllocNumber_ = 0;
@@ -423,7 +418,7 @@ MemoryAccountantAllocationNode* MemoryAccountant::createNewAccountantAllocationN
 
 void MemoryAccountant::destroyAccountantAllocationNode(MemoryAccountantAllocationNode* node) const
 {
-    allocator_->free_memory((char*) node, __FILE__, __LINE__);
+    allocator_->free_memory((char*) node, sizeof(node), __FILE__, __LINE__);
 }
 
 MemoryAccountant::MemoryAccountant()
@@ -644,7 +639,7 @@ size_t AccountingTestMemoryAllocator::removeNextNodeAndReturnSize(AccountingTest
     node->next_ = node->next_->next_;
 
     size_t size = foundNode->size_;
-    originalAllocator_->free_memory((char*) foundNode, __FILE__, __LINE__);
+    originalAllocator_->free_memory((char*) foundNode, size, __FILE__, __LINE__);
     return size;
 }
 
@@ -654,7 +649,7 @@ size_t AccountingTestMemoryAllocator::removeHeadAndReturnSize()
     head_ = head_->next_;
 
     size_t size = foundNode->size_;
-    originalAllocator_->free_memory((char*) foundNode, __FILE__, __LINE__);
+    originalAllocator_->free_memory((char*) foundNode, size, __FILE__, __LINE__);
     return size;
 }
 
@@ -679,11 +674,11 @@ char* AccountingTestMemoryAllocator::alloc_memory(size_t size, const char* file,
     return memory;
 }
 
-void AccountingTestMemoryAllocator::free_memory(char* memory, const char* file, size_t line)
+void AccountingTestMemoryAllocator::free_memory(char* memory, size_t, const char* file, size_t line)
 {
     size_t size = removeMemoryFromTrackingAndReturnAllocatedSize(memory);
     accountant_.dealloc(size);
-    originalAllocator_->free_memory(memory, file, line);
+    originalAllocator_->free_memory(memory, size, file, line);
 }
 
 TestMemoryAllocator* AccountingTestMemoryAllocator::actualAllocator()

@@ -67,7 +67,6 @@ public:
     bool hasBeenDestroyed();
 
     virtual char* alloc_memory(size_t size, const char* file, size_t line);
-    virtual void free_memory(char* memory, const char* file, size_t line);
     virtual void free_memory(char* memory, size_t size, const char* file, size_t line);
 
     virtual const char* name() const;
@@ -97,7 +96,7 @@ public:
     virtual ~MemoryLeakAllocator() _destructor_override;
 
     virtual char* alloc_memory(size_t size, const char* file, size_t line) _override;
-    virtual void free_memory(char* memory, const char* file, size_t line) _override;
+    virtual void free_memory(char* memory, size_t size, const char* file, size_t line) _override;
 
     virtual const char* name() const _override;
     virtual const char* alloc_name() const _override;
@@ -128,7 +127,7 @@ public:
     virtual ~NullUnknownAllocator() _destructor_override;
 
     virtual char* alloc_memory(size_t size, const char* file, size_t line) _override;
-    virtual void free_memory(char* memory, const char* file, size_t line) _override;
+    virtual void free_memory(char* memory, size_t size, const char* file, size_t line) _override;
 
     static TestMemoryAllocator* defaultAllocator();
 };
@@ -210,7 +209,7 @@ public:
     virtual ~AccountingTestMemoryAllocator() _destructor_override;
 
     virtual char* alloc_memory(size_t size, const char* file, size_t line) _override;
-    virtual void free_memory(char* memory, const char* file, size_t line) _override;
+    virtual void free_memory(char* memory, size_t size, const char* file, size_t line) _override;
 
     virtual TestMemoryAllocator* actualAllocator() _override;
     TestMemoryAllocator* originalAllocator();

@@ -102,14 +102,27 @@ public:
     static char ToLower(char ch);
     static int MemCmp(const void* s1, const void *s2, size_t n);
     static char* allocStringBuffer(size_t size, const char* file, size_t line);
-    static void deallocStringBuffer(char* str, const char* file, size_t line);
+    static void deallocStringBuffer(char* str, size_t size, const char* file, size_t line);
 private:
+
+    const char* getBuffer() const;
+
+    void deallocateInternalBuffer();
+    void setInternalBufferAsEmptyString();
+    void setInternalBufferToNewBuffer(size_t size);
+    void setInternalBufferTo(char* buffer, size_t size);
+    void copyBufferToNewInternalBuffer(const char* otherBuffer);
+    void copyBufferToNewInternalBuffer(const char* otherBuffer, size_t size);
+    void copyBufferToNewInternalBuffer(const SimpleString& otherBuffer);
+
     char *buffer_;
+    size_t bufferSize_;
 
     static TestMemoryAllocator* stringAllocator_;
 
     char* getEmptyString() const;
-    static char* copyToNewBuffer(const char* bufferToCopy, size_t bufferSize=0);
+    static char* copyToNewBuffer(const char* bufferToCopy);
+    static char* copyToNewBuffer(const char* bufferToCopy, size_t bufferSize);
     static bool isDigit(char ch);
     static bool isSpace(char ch);
     static bool isUpper(char ch);
@@ -196,12 +209,12 @@ private:
     SimpleStringInternalCacheNode* createInternalCacheNodes();
     void destroyInternalCacheNode(SimpleStringInternalCacheNode * node);
     SimpleStringMemoryBlock* createSimpleStringMemoryBlock(size_t sizeOfString, SimpleStringMemoryBlock* next);
-    void destroySimpleStringMemoryBlock(SimpleStringMemoryBlock * block);
-    void destroySimpleStringMemoryBlockList(SimpleStringMemoryBlock * block);
+    void destroySimpleStringMemoryBlock(SimpleStringMemoryBlock * block, size_t size);
+    void destroySimpleStringMemoryBlockList(SimpleStringMemoryBlock * block, size_t size);
 
     SimpleStringMemoryBlock* reserveCachedBlockFrom(SimpleStringInternalCacheNode* node);
     void releaseCachedBlockFrom(char* memory, SimpleStringInternalCacheNode* node);
-    void releaseNonCachedMemory(char* memory);
+    void releaseNonCachedMemory(char* memory, size_t size);
 
     SimpleStringMemoryBlock* allocateNewCacheBlockFrom(SimpleStringInternalCacheNode* node);
     SimpleStringMemoryBlock* addToSimpleStringMemoryBlockList(SimpleStringMemoryBlock* newBlock, SimpleStringMemoryBlock* previousHead);
