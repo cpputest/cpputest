@@ -751,12 +751,6 @@ SimpleString SimpleString::subStringFromTill(char startChar, char lastExcludedCh
     return subString(beginPos, endPos - beginPos);
 }
 
-char* SimpleString::copyToNewBuffer(const char* bufferToCopy)
-{
-    size_t bufferSize = StrLen(bufferToCopy) + 1;
-    return copyToNewBuffer(bufferToCopy, bufferSize);
-}
-
 char* SimpleString::copyToNewBuffer(const char* bufferToCopy, size_t bufferSize)
 {
     char* newBuffer = allocStringBuffer(bufferSize, __FILE__, __LINE__);

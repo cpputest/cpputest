@@ -121,7 +121,6 @@ private:
     static TestMemoryAllocator* stringAllocator_;
 
     char* getEmptyString() const;
-    static char* copyToNewBuffer(const char* bufferToCopy);
     static char* copyToNewBuffer(const char* bufferToCopy, size_t bufferSize);
     static bool isDigit(char ch);
     static bool isSpace(char ch);
