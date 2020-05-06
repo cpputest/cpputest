@@ -69,6 +69,8 @@ public:
     static void lineExecutedAfterCheck();
 
 private:
+    void clearExecFunction();
+
     static bool lineOfCodeExecutedAfterCheck;
 
     TestRegistry* registry_;

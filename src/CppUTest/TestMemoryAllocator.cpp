@@ -164,10 +164,16 @@ char* TestMemoryAllocator::alloc_memory(size_t size, const char*, size_t)
     return checkedMalloc(size);
 }
 
-void TestMemoryAllocator::free_memory(char* memory, const char*, size_t)
+void TestMemoryAllocator::free_memory(char* memory, const char* file, size_t line)
+{
+    free_memory(memory, 0, file, line);
+}
+
+void TestMemoryAllocator::free_memory(char* memory, size_t, const char*, size_t)
 {
     PlatformSpecificFree(memory);
 }
+
 const char* TestMemoryAllocator::name() const
 {
     return name_;
@@ -783,4 +789,44 @@ TestMemoryAllocator* GlobalMemoryAccountant::getNewArrayAllocator()
     return newArrayAllocator_;
 }
 
+SimpleStringCacheAllocator::SimpleStringCacheAllocator(SimpleStringInternalCache& cache, TestMemoryAllocator* originalAllocator)
+    : cache_(cache), originalAllocator_(originalAllocator)
+{
+    cache_.setAllocator(originalAllocator);
+}
+
+SimpleStringCacheAllocator::~SimpleStringCacheAllocator()
+{
+    cache_.setAllocator(NULLPTR);
+}
+
+char* SimpleStringCacheAllocator::alloc_memory(size_t size, const char*, size_t)
+{
+    return cache_.alloc(size);
+}
+
+void SimpleStringCacheAllocator::free_memory(char* memory, size_t size, const char*, size_t)
+{
+    cache_.dealloc(memory, size);
+}
+
+const char* SimpleStringCacheAllocator::name() const
+{
+    return "SimpleStringCacheAllocator";
+}
+
+const char* SimpleStringCacheAllocator::alloc_name() const
+{
+    return originalAllocator_->alloc_name();
+}
+
+const char* SimpleStringCacheAllocator::free_name() const
+{
+    return originalAllocator_->free_name();
+}
+
+TestMemoryAllocator* SimpleStringCacheAllocator::actualAllocator()
+{
+    return originalAllocator_->actualAllocator();
+}
 
