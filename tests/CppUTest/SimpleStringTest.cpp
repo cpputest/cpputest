@@ -39,11 +39,11 @@ public:
 
     char* alloc_memory(size_t size, const char* file, size_t line) _override
     {
-      return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewArrayAllocator(), size, file, line);
+        return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewArrayAllocator(), size, file, line);
     }
-    void free_memory(char* str, const char* file, size_t line) _override
+    void free_memory(char* str, size_t, const char* file, size_t line) _override
     {
-      MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(getCurrentNewArrayAllocator(), str, file, line);
+        MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(getCurrentNewArrayAllocator(), str, file, line);
     }
 };
 

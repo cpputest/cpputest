@@ -58,7 +58,7 @@ void CodeMemoryReportFormatter::clearReporting()
     while (codeReportingList_) {
         CodeReportingAllocationNode* oldNode = codeReportingList_;
         codeReportingList_ = codeReportingList_->next_;
-        internalAllocator_->free_memory((char*) oldNode, __FILE__, __LINE__);
+        internalAllocator_->free_memory((char*) oldNode, 0, __FILE__, __LINE__);
     }
 }
 

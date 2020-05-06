@@ -169,7 +169,7 @@ SimpleStringInternalCacheNode* SimpleStringInternalCache::getCacheNodeFromSize(s
 
 void SimpleStringInternalCache::destroyInternalCacheNode(SimpleStringInternalCacheNode * node)
 {
-    allocator_->free_memory((char*) node, __FILE__, __LINE__);
+    allocator_->free_memory((char*) node, sizeof(SimpleStringInternalCacheNode) * amountOfInternalCacheNodes, __FILE__, __LINE__);
 }
 
 SimpleStringMemoryBlock* SimpleStringInternalCache::createSimpleStringMemoryBlock(size_t size, SimpleStringMemoryBlock* next)
@@ -180,18 +180,18 @@ SimpleStringMemoryBlock* SimpleStringInternalCache::createSimpleStringMemoryBloc
     return block;
 }
 
-void SimpleStringInternalCache::destroySimpleStringMemoryBlock(SimpleStringMemoryBlock * block)
+void SimpleStringInternalCache::destroySimpleStringMemoryBlock(SimpleStringMemoryBlock * block, size_t size)
 {
-    allocator_->free_memory(block->memory_, __FILE__, __LINE__);
-    allocator_->free_memory((char*) block, __FILE__, __LINE__);
+    allocator_->free_memory(block->memory_, size, __FILE__, __LINE__);
+    allocator_->free_memory((char*) block, sizeof(SimpleStringMemoryBlock), __FILE__, __LINE__);
 }
 
-void SimpleStringInternalCache::destroySimpleStringMemoryBlockList(SimpleStringMemoryBlock * block)
+void SimpleStringInternalCache::destroySimpleStringMemoryBlockList(SimpleStringMemoryBlock * block, size_t size)
 {
     SimpleStringMemoryBlock* current = block;
     while (current) {
         SimpleStringMemoryBlock* next = current->next_;
-        destroySimpleStringMemoryBlock(current);
+        destroySimpleStringMemoryBlock(current, size);
         current = next;
     }
 }
@@ -240,12 +240,12 @@ void SimpleStringInternalCache::releaseCachedBlockFrom(char* memory, SimpleStrin
     }
 }
 
-void SimpleStringInternalCache::releaseNonCachedMemory(char* memory)
+void SimpleStringInternalCache::releaseNonCachedMemory(char* memory, size_t size)
 {
     if (nonCachedAllocations_ && nonCachedAllocations_->memory_ == memory) {
         SimpleStringMemoryBlock* block = nonCachedAllocations_;
         nonCachedAllocations_ = block->next_;
-        destroySimpleStringMemoryBlock(block);
+        destroySimpleStringMemoryBlock(block, size);
         return;
     }
 
@@ -253,7 +253,7 @@ void SimpleStringInternalCache::releaseNonCachedMemory(char* memory)
         if (block->next_ && block->next_->memory_ == memory) {
             SimpleStringMemoryBlock* blockToFree = block->next_;
             block->next_ = block->next_->next_;
-            destroySimpleStringMemoryBlock(blockToFree);
+            destroySimpleStringMemoryBlock(blockToFree, size);
         }
     }
 }
@@ -279,13 +279,13 @@ void SimpleStringInternalCache::dealloc(char* memory, size_t size)
         releaseCachedBlockFrom(memory, cacheNode);
         return;
     }
-    releaseNonCachedMemory(memory);
+    releaseNonCachedMemory(memory, size);
 }
 
 void SimpleStringInternalCache::clearCache()
 {
     for (size_t i = 0; i < amountOfInternalCacheNodes; i++) {
-        destroySimpleStringMemoryBlockList(cache_[i].freeMemoryHead_);
+        destroySimpleStringMemoryBlockList(cache_[i].freeMemoryHead_, cache_[i].size_);
         cache_[i].freeMemoryHead_ = NULLPTR;
     }
 }
@@ -293,12 +293,12 @@ void SimpleStringInternalCache::clearCache()
 void SimpleStringInternalCache::clearAllIncludingCurrentlyUsedMemory()
 {
     for (size_t i = 0; i < amountOfInternalCacheNodes; i++) {
-        destroySimpleStringMemoryBlockList(cache_[i].freeMemoryHead_);
-        destroySimpleStringMemoryBlockList(cache_[i].usedMemoryHead_);
+        destroySimpleStringMemoryBlockList(cache_[i].freeMemoryHead_, cache_[i].size_);
+        destroySimpleStringMemoryBlockList(cache_[i].usedMemoryHead_, cache_[i].size_);
         cache_[i].freeMemoryHead_ = NULLPTR;
         cache_[i].usedMemoryHead_ = NULLPTR;
     }
-    destroySimpleStringMemoryBlockList(nonCachedAllocations_);
+    destroySimpleStringMemoryBlockList(nonCachedAllocations_, 0);
     nonCachedAllocations_ = NULLPTR;
 }
 
@@ -322,9 +322,9 @@ char* SimpleString::allocStringBuffer(size_t _size, const char* file, size_t lin
     return getStringAllocator()->alloc_memory(_size, file, line);
 }
 
-void SimpleString::deallocStringBuffer(char* str, const char* file, size_t line)
+void SimpleString::deallocStringBuffer(char* str, size_t size, const char* file, size_t line)
 {
-    getStringAllocator()->free_memory(str, file, line);
+    getStringAllocator()->free_memory(str, size, file, line);
 }
 
 char* SimpleString::getEmptyString() const
@@ -430,21 +430,77 @@ int SimpleString::MemCmp(const void* s1, const void *s2, size_t n)
     return 0;
 }
 
-SimpleString::SimpleString(const char *otherBuffer)
+void SimpleString::deallocateInternalBuffer()
 {
-    if (otherBuffer == NULLPTR) {
-        buffer_ = getEmptyString();
-    }
-    else {
-        buffer_ = copyToNewBuffer(otherBuffer);
+    if (buffer_) {
+        deallocStringBuffer(buffer_, bufferSize_, __FILE__, __LINE__);
+        buffer_ = NULLPTR;
+        bufferSize_ = 0;
     }
 }
 
+void SimpleString::setInternalBufferAsEmptyString()
+{
+    deallocateInternalBuffer();
+
+    bufferSize_ = 1;
+    buffer_ = getEmptyString();
+}
+
+void SimpleString::copyBufferToNewInternalBuffer(const char* otherBuffer, size_t size)
+{
+    deallocateInternalBuffer();
+
+    bufferSize_ = size;
+    buffer_ = copyToNewBuffer(otherBuffer, bufferSize_);
+}
+
+void SimpleString::setInternalBufferToNewBuffer(size_t size)
+{
+    deallocateInternalBuffer();
+
+    bufferSize_ = size;
+    buffer_ = allocStringBuffer(bufferSize_, __FILE__, __LINE__);
+}
+
+void SimpleString::setInternalBufferTo(char* buffer, size_t size)
+{
+    deallocateInternalBuffer();
+
+    bufferSize_ = size;
+    buffer_ = buffer;
+}
+
+void SimpleString::copyBufferToNewInternalBuffer(const SimpleString& otherBuffer)
+{
+    copyBufferToNewInternalBuffer(otherBuffer.buffer_, otherBuffer.size() + 1);
+}
+
+void SimpleString::copyBufferToNewInternalBuffer(const char* otherBuffer)
+{
+    copyBufferToNewInternalBuffer(otherBuffer, StrLen(otherBuffer) + 1);
+}
+
+const char* SimpleString::getBuffer() const
+{
+    return buffer_;
+}
+
+SimpleString::SimpleString(const char *otherBuffer)
+    : buffer_(NULLPTR), bufferSize_(0)
+{
+    if (otherBuffer == NULLPTR)
+        setInternalBufferAsEmptyString();
+    else
+        copyBufferToNewInternalBuffer(otherBuffer);
+}
+
 SimpleString::SimpleString(const char *other, size_t repeatCount)
+    : buffer_(NULLPTR), bufferSize_(0)
 {
     size_t otherStringLength = StrLen(other);
-    size_t len = otherStringLength * repeatCount + 1;
-    buffer_ = allocStringBuffer(len, __FILE__, __LINE__);
+    setInternalBufferToNewBuffer(otherStringLength * repeatCount + 1);
+
     char* next = buffer_;
     for (size_t i = 0; i < repeatCount; i++) {
         StrNCpy(next, other, otherStringLength + 1);
@@ -454,22 +510,21 @@ SimpleString::SimpleString(const char *other, size_t repeatCount)
 }
 
 SimpleString::SimpleString(const SimpleString& other)
+    : buffer_(NULLPTR), bufferSize_(0)
 {
-    buffer_ = copyToNewBuffer(other.buffer_);
+    copyBufferToNewInternalBuffer(other.getBuffer());
 }
 
 SimpleString& SimpleString::operator=(const SimpleString& other)
 {
-    if (this != &other) {
-        deallocStringBuffer(buffer_, __FILE__, __LINE__);
-        buffer_ = copyToNewBuffer(other.buffer_);
-    }
+    if (this != &other)
+        copyBufferToNewInternalBuffer(other);
     return *this;
 }
 
 bool SimpleString::contains(const SimpleString& other) const
 {
-    return StrStr(buffer_, other.buffer_) != NULLPTR;
+    return StrStr(getBuffer(), other.getBuffer()) != NULLPTR;
 }
 
 bool SimpleString::containsNoCase(const SimpleString& other) const
@@ -479,26 +534,28 @@ bool SimpleString::containsNoCase(const SimpleString& other) const
 
 bool SimpleString::startsWith(const SimpleString& other) const
 {
-    if (StrLen(other.buffer_) == 0) return true;
+    if (other.size() == 0) return true;
     else if (size() == 0) return false;
-    else return StrStr(buffer_, other.buffer_) == buffer_;
+    else return StrStr(getBuffer(), other.getBuffer()) == getBuffer();
 }
 
 bool SimpleString::endsWith(const SimpleString& other) const
 {
-    size_t buffer_length = size();
-    size_t other_buffer_length = StrLen(other.buffer_);
-    if (other_buffer_length == 0) return true;
-    if (buffer_length == 0) return false;
-    if (buffer_length < other_buffer_length) return false;
-    return StrCmp(buffer_ + buffer_length - other_buffer_length, other.buffer_) == 0;
+    size_t length = size();
+    size_t other_length = other.size();
+
+    if (other_length == 0) return true;
+    if (length == 0) return false;
+    if (length < other_length) return false;
+
+    return StrCmp(getBuffer() + length - other_length, other.getBuffer()) == 0;
 }
 
 size_t SimpleString::count(const SimpleString& substr) const
 {
     size_t num = 0;
-    const char* str = buffer_;
-    while (*str && (str = StrStr(str, substr.buffer_))) {
+    const char* str = getBuffer();
+    while (*str && (str = StrStr(str, substr.getBuffer()))) {
         str++;
         num++;
     }
@@ -511,11 +568,11 @@ void SimpleString::split(const SimpleString& delimiter, SimpleStringCollection& 
     size_t extraEndToken = (endsWith(delimiter)) ? 0 : 1U;
     col.allocate(num + extraEndToken);
 
-    const char* str = buffer_;
+    const char* str = getBuffer();
     const char* prev;
     for (size_t i = 0; i < num; ++i) {
         prev = str;
-        str = StrStr(str, delimiter.buffer_) + 1;
+        str = StrStr(str, delimiter.getBuffer()) + 1;
         col[i] = SimpleString(prev).subString(0, size_t (str - prev));
     }
     if (extraEndToken) {
@@ -527,7 +584,7 @@ void SimpleString::replace(char to, char with)
 {
     size_t s = size();
     for (size_t i = 0; i < s; i++) {
-        if (buffer_[i] == to) buffer_[i] = with;
+        if (getBuffer()[i] == to) buffer_[i] = with;
     }
 }
 
@@ -546,25 +603,22 @@ void SimpleString::replace(const char* to, const char* with)
     if (newsize > 1) {
         char* newbuf = allocStringBuffer(newsize, __FILE__, __LINE__);
         for (size_t i = 0, j = 0; i < len;) {
-            if (StrNCmp(&buffer_[i], to, tolen) == 0) {
+            if (StrNCmp(&getBuffer()[i], to, tolen) == 0) {
                 StrNCpy(&newbuf[j], with, withlen + 1);
                 j += withlen;
                 i += tolen;
             }
             else {
-                newbuf[j] = buffer_[i];
+                newbuf[j] = getBuffer()[i];
                 j++;
                 i++;
             }
         }
-        deallocStringBuffer(buffer_, __FILE__, __LINE__);
-        buffer_ = newbuf;
-        buffer_[newsize - 1] = '\0';
+        newbuf[newsize - 1] = '\0';
+        setInternalBufferTo(newbuf, newsize);
     }
-    else {
-        deallocStringBuffer(buffer_, __FILE__, __LINE__);
-        buffer_ = getEmptyString();
-    }
+    else
+        setInternalBufferAsEmptyString();
 }
 
 SimpleString SimpleString::lowerCase() const
@@ -573,19 +627,19 @@ SimpleString SimpleString::lowerCase() const
 
     size_t str_size = str.size();
     for (size_t i = 0; i < str_size; i++)
-        str.buffer_[i] = ToLower(str.buffer_[i]);
+        str.buffer_[i] = ToLower(str.getBuffer()[i]);
 
     return str;
 }
 
 const char *SimpleString::asCharString() const
 {
-    return buffer_;
+    return getBuffer();
 }
 
 size_t SimpleString::size() const
 {
-    return StrLen(buffer_);
+    return StrLen(getBuffer());
 }
 
 bool SimpleString::isEmpty() const
@@ -593,10 +647,9 @@ bool SimpleString::isEmpty() const
     return size() == 0;
 }
 
-
 SimpleString::~SimpleString()
 {
-    deallocStringBuffer(buffer_, __FILE__, __LINE__);
+    deallocateInternalBuffer();
 }
 
 bool operator==(const SimpleString& left, const SimpleString& right)
@@ -617,14 +670,14 @@ bool operator!=(const SimpleString& left, const SimpleString& right)
 
 SimpleString SimpleString::operator+(const SimpleString& rhs) const
 {
-    SimpleString t(buffer_);
-    t += rhs.buffer_;
+    SimpleString t(getBuffer());
+    t += rhs.getBuffer();
     return t;
 }
 
 SimpleString& SimpleString::operator+=(const SimpleString& rhs)
 {
-    return operator+=(rhs.buffer_);
+    return operator+=(rhs.getBuffer());
 }
 
 SimpleString& SimpleString::operator+=(const char* rhs)
@@ -632,10 +685,10 @@ SimpleString& SimpleString::operator+=(const char* rhs)
     size_t originalSize = this->size();
     size_t additionalStringSize = StrLen(rhs) + 1;
     size_t sizeOfNewString = originalSize + additionalStringSize;
-    char* tbuffer = copyToNewBuffer(this->buffer_, sizeOfNewString);
+    char* tbuffer = copyToNewBuffer(this->getBuffer(), sizeOfNewString);
     StrNCpy(tbuffer + originalSize, rhs, additionalStringSize);
-    deallocStringBuffer(this->buffer_, __FILE__, __LINE__);
-    this->buffer_ = tbuffer;
+
+    setInternalBufferTo(tbuffer, sizeOfNewString);
     return *this;
 }
 
@@ -656,7 +709,7 @@ SimpleString SimpleString::subString(size_t beginPos, size_t amount) const
 {
     if (beginPos > size()-1) return "";
 
-    SimpleString newString = buffer_ + beginPos;
+    SimpleString newString = getBuffer() + beginPos;
 
     if (newString.size() > amount)
         newString.buffer_[amount] = '\0';
@@ -671,7 +724,7 @@ SimpleString SimpleString::subString(size_t beginPos) const
 
 char SimpleString::at(size_t pos) const
 {
-    return buffer_[pos];
+    return getBuffer()[pos];
 }
 
 size_t SimpleString::find(char ch) const
@@ -683,7 +736,7 @@ size_t SimpleString::findFrom(size_t starting_position, char ch) const
 {
     size_t length = size();
     for (size_t i = starting_position; i < length; i++)
-        if (buffer_[i] == ch) return i;
+        if (at(i) == ch) return i;
     return npos;
 }
 
@@ -700,13 +753,12 @@ SimpleString SimpleString::subStringFromTill(char startChar, char lastExcludedCh
 
 char* SimpleString::copyToNewBuffer(const char* bufferToCopy, size_t bufferSize)
 {
-    if(bufferSize == 0) bufferSize = StrLen(bufferToCopy) + 1;
-
     char* newBuffer = allocStringBuffer(bufferSize, __FILE__, __LINE__);
     StrNCpy(newBuffer, bufferToCopy, bufferSize);
     newBuffer[bufferSize-1] = '\0';
     return newBuffer;
 }
+
 
 void SimpleString::copyToBuffer(char* bufferToCopy, size_t bufferSize) const
 {
@@ -714,7 +766,7 @@ void SimpleString::copyToBuffer(char* bufferToCopy, size_t bufferSize) const
 
     size_t sizeToCopy = (bufferSize-1 < size()) ? (bufferSize-1) : size();
 
-    StrNCpy(bufferToCopy, buffer_, sizeToCopy);
+    StrNCpy(bufferToCopy, getBuffer(), sizeToCopy);
     bufferToCopy[sizeToCopy] = '\0';
 }
 
@@ -1024,7 +1076,7 @@ SimpleString VStringFromFormat(const char* format, va_list args)
         PlatformSpecificVSNprintf(newBuffer, newBufferSize, format, argsCopy);
         resultString = SimpleString(newBuffer);
 
-        SimpleString::deallocStringBuffer(newBuffer, __FILE__, __LINE__);
+        SimpleString::deallocStringBuffer(newBuffer, newBufferSize, __FILE__, __LINE__);
     }
     va_end(argsCopy);
     return resultString;

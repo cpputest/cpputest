@@ -682,7 +682,7 @@ void MemoryLeakDetector::deallocMemory(TestMemoryAllocator* allocator, void* mem
 #endif
     if (!allocator->hasBeenDestroyed()) {
         checkForCorruption(node, file, line, allocator, allocatNodesSeperately);
-        allocator->free_memory((char*) memory, file, line);
+        allocator->free_memory((char*) memory, node->size_, file, line);
     }
 }
 

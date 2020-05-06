@@ -61,10 +61,10 @@ public:
         alloc_called++;
         return TestMemoryAllocator::alloc_memory(size, "file", 1);
     }
-    void free_memory(char* memory, const char* file, size_t line)
+    void free_memory(char* memory, size_t size, const char* file, size_t line)
     {
         free_called++;
-        TestMemoryAllocator::free_memory(memory, file, line);
+        TestMemoryAllocator::free_memory(memory, size, file, line);
     }
 };
 
@@ -86,10 +86,10 @@ public:
         alloc_called++;
         return TestMemoryAllocator::alloc_memory(size, file, line);
     }
-    void free_memory(char* memory, const char* file, size_t line)
+    void free_memory(char* memory, size_t size, const char* file, size_t line)
     {
         free_called++;
-        TestMemoryAllocator::free_memory(memory, file, line);
+        TestMemoryAllocator::free_memory(memory, size, file, line);
     }
 
     char* allocMemoryLeakNode(size_t size)
@@ -101,7 +101,7 @@ public:
     void freeMemoryLeakNode(char* memory)
     {
         freeMemoryLeakNodeCalled++;
-        TestMemoryAllocator::free_memory(memory, __FILE__, __LINE__);
+        TestMemoryAllocator::free_memory(memory, 0,  __FILE__, __LINE__);
     }
 };
 

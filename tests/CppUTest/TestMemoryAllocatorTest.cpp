@@ -87,7 +87,7 @@ TEST(TestMemoryAllocatorTest, SetCurrentMallocAllocator)
 TEST(TestMemoryAllocatorTest, MemoryAllocation)
 {
     allocator = new TestMemoryAllocator();
-    allocator->free_memory(allocator->alloc_memory(100, "file", 1), "file", 1);
+    allocator->free_memory(allocator->alloc_memory(100, "file", 1), 100, "file", 1);
 }
 
 TEST(TestMemoryAllocatorTest, MallocNames)
@@ -114,7 +114,7 @@ TEST(TestMemoryAllocatorTest, NewArrayNames)
 TEST(TestMemoryAllocatorTest, NullUnknownAllocation)
 {
     allocator = new NullUnknownAllocator;
-    allocator->free_memory(allocator->alloc_memory(100, "file", 1), "file", 1);
+    allocator->free_memory(allocator->alloc_memory(100, "file", 1), 100, "file", 1);
 }
 
 TEST(TestMemoryAllocatorTest, NullUnknownNames)
@@ -172,7 +172,7 @@ TEST(MemoryLeakAllocator, allocMemory)
 TEST(MemoryLeakAllocator, freeMemory)
 {
     char* memory = MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(allocator->actualAllocator(), 10);
-    allocator->free_memory(memory, __FILE__, __LINE__);
+    allocator->free_memory(memory, 10, __FILE__, __LINE__);
 
     /* No leaks or crashes */
 }
@@ -560,7 +560,7 @@ TEST_GROUP(AccountingTestMemoryAllocator)
 TEST(AccountingTestMemoryAllocator, canAllocateAndAccountMemory)
 {
     char* memory = allocator->alloc_memory(10, __FILE__, __LINE__);
-    allocator->free_memory(memory, __FILE__, __LINE__);
+    allocator->free_memory(memory, 10, __FILE__, __LINE__);
 
     LONGS_EQUAL(1, accountant.totalAllocationsOfSize(10));
     LONGS_EQUAL(1, accountant.totalDeallocationsOfSize(10));
@@ -572,21 +572,21 @@ TEST(AccountingTestMemoryAllocator, canAllocateAndAccountMemoryMultipleAllocatio
     char* memory2 = allocator->alloc_memory(8, __FILE__, __LINE__);
     char* memory3 = allocator->alloc_memory(12, __FILE__, __LINE__);
 
-    allocator->free_memory(memory1, __FILE__, __LINE__);
-    allocator->free_memory(memory3, __FILE__, __LINE__);
+    allocator->free_memory(memory1, 10,  __FILE__, __LINE__);
+    allocator->free_memory(memory3, 12,  __FILE__, __LINE__);
 
     char* memory4 = allocator->alloc_memory(15, __FILE__, __LINE__);
     char* memory5 = allocator->alloc_memory(20, __FILE__, __LINE__);
 
-    allocator->free_memory(memory2, __FILE__, __LINE__);
-    allocator->free_memory(memory4, __FILE__, __LINE__);
-    allocator->free_memory(memory5, __FILE__, __LINE__);
+    allocator->free_memory(memory2, 8, __FILE__, __LINE__);
+    allocator->free_memory(memory4, 15, __FILE__, __LINE__);
+    allocator->free_memory(memory5, 20, __FILE__, __LINE__);
 
     char* memory6 = allocator->alloc_memory(1, __FILE__, __LINE__);
     char* memory7 = allocator->alloc_memory(100, __FILE__, __LINE__);
 
-    allocator->free_memory(memory6, __FILE__, __LINE__);
-    allocator->free_memory(memory7, __FILE__, __LINE__);
+    allocator->free_memory(memory6, 1, __FILE__, __LINE__);
+    allocator->free_memory(memory7, 100, __FILE__, __LINE__);
 
     LONGS_EQUAL(7, accountant.totalAllocations());
     LONGS_EQUAL(7, accountant.totalDeallocations());
@@ -595,7 +595,7 @@ TEST(AccountingTestMemoryAllocator, canAllocateAndAccountMemoryMultipleAllocatio
 TEST(AccountingTestMemoryAllocator, useOriginalAllocatorWhenDeallocatingMemoryNotAllocatedByAllocator)
 {
     char* memory = getCurrentMallocAllocator()->alloc_memory(10, __FILE__, __LINE__);
-    allocator->free_memory(memory, __FILE__, __LINE__);
+    allocator->free_memory(memory, 10, __FILE__, __LINE__);
 
     LONGS_EQUAL(0, accountant.totalAllocations());
     LONGS_EQUAL(1, accountant.totalDeallocations());
@@ -767,4 +767,52 @@ TEST(GlobalMemoryAccountant, checkWhetherNewArrayAllocatorIsNotChanged)
     fixture.runAllTests();
     fixture.assertPrintContains("GlobalMemoryAccountant: New Array memory allocator has been changed while accounting for memory");
 }
+
+TEST_GROUP(SimpleStringCacheAllocator)
+{
+    SimpleStringCacheAllocator* allocator;
+    SimpleStringInternalCache cache;
+    MemoryAccountant accountant;
+    AccountingTestMemoryAllocator* accountingAllocator;
+
+    void setup()
+    {
+        accountingAllocator = new AccountingTestMemoryAllocator(accountant, defaultMallocAllocator());
+        allocator = new SimpleStringCacheAllocator(cache, accountingAllocator);
+    }
+
+    void teardown()
+    {
+        delete allocator;
+        delete accountingAllocator;
+    }
+};
+
+TEST(SimpleStringCacheAllocator, allocationIsCached)
+{
+    char* mem = allocator->alloc_memory(10, __FILE__, __LINE__);
+    allocator->free_memory(mem, 10,  __FILE__, __LINE__);
+
+    size_t totalAllocations = accountant.totalAllocations();
+    size_t totalDeallocations = accountant.totalDeallocations();
+
+    mem = allocator->alloc_memory(10, __FILE__, __LINE__);
+    allocator->free_memory(mem, 10,  __FILE__, __LINE__);
+
+    LONGS_EQUAL(totalAllocations, accountant.totalAllocations());
+    LONGS_EQUAL(totalDeallocations, accountant.totalDeallocations());
+}
+
+TEST(SimpleStringCacheAllocator, originalAllocator)
+{
+    POINTERS_EQUAL(defaultMallocAllocator(), allocator->actualAllocator());
+    STRCMP_EQUAL(defaultMallocAllocator()->alloc_name(), allocator->alloc_name());
+    STRCMP_EQUAL(defaultMallocAllocator()->free_name(), allocator->free_name());
+}
+
+TEST(SimpleStringCacheAllocator, name)
+{
+    STRCMP_EQUAL("SimpleStringCacheAllocator", allocator->name());
+}
+
 

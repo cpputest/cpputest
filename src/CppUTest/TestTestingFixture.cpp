@@ -54,12 +54,17 @@ void TestTestingFixture::flushOutputAndResetResult()
 TestTestingFixture::~TestTestingFixture()
 {
     registry_->setCurrentRegistry(NULLPTR);
-    if (ownsExecFunction_)
-        delete genTest_->testFunction_;
+    clearExecFunction();
     delete registry_;
     delete result_;
     delete output_;
     delete genTest_;
+}
+
+void TestTestingFixture::clearExecFunction()
+{
+    if (genTest_->testFunction_ && ownsExecFunction_)
+        delete genTest_->testFunction_;
 }
 
 void TestTestingFixture::addTest(UtestShell * test)
@@ -69,8 +74,7 @@ void TestTestingFixture::addTest(UtestShell * test)
 
 void TestTestingFixture::setTestFunction(void(*testFunction)())
 {
-    if (genTest_->testFunction_ && ownsExecFunction_)
-      delete genTest_->testFunction_;
+    clearExecFunction();
 
     genTest_->testFunction_ = new ExecFunctionWithoutParameters(testFunction);
     ownsExecFunction_ = true;
@@ -78,8 +82,7 @@ void TestTestingFixture::setTestFunction(void(*testFunction)())
 
 void TestTestingFixture::setTestFunction(ExecFunction* testFunction)
 {
-    if (genTest_->testFunction_ && ownsExecFunction_)
-      delete genTest_->testFunction_;
+    clearExecFunction();
 
     genTest_->testFunction_ = testFunction;
 
