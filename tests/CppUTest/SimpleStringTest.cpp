@@ -1436,6 +1436,23 @@ TEST(SimpleStringInternalCache, allocatingLargerStringThanCached)
     LONGS_EQUAL(1, accountant.totalDeallocationsOfSize(1234));
 }
 
+TEST(SimpleStringInternalCache, allocatingMultipleLargerStringThanCached)
+{
+    cache.setAllocator(allocator);
+
+    char* mem = cache.alloc(1234);
+    char* mem2 = cache.alloc(1234);
+    char* mem3 = cache.alloc(1234);
+
+    cache.dealloc(mem2, 1234);
+    cache.dealloc(mem, 1234);
+    cache.dealloc(mem3, 1234);
+
+    LONGS_EQUAL(3, accountant.totalAllocationsOfSize(1234));
+    LONGS_EQUAL(3, accountant.totalDeallocationsOfSize(1234));
+}
+
+
 TEST(SimpleStringInternalCache, clearAllIncludingCurrentlyUsedMemoryAlsoReleasesLargeNonCachesMemory)
 {
     cache.setAllocator(allocator);

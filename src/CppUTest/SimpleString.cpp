@@ -158,7 +158,7 @@ size_t SimpleStringInternalCache::getIndexForCache(size_t size)
     for (size_t i = 0; i < amountOfInternalCacheNodes; i++)
       if (size <= cache_[i].size_)
         return i;
-    return 0;
+    return 0; // LCOV_EXCL_LINE
 }
 
 SimpleStringInternalCacheNode* SimpleStringInternalCache::getCacheNodeFromSize(size_t size)
@@ -204,9 +204,7 @@ SimpleStringMemoryBlock* SimpleStringInternalCache::addToSimpleStringMemoryBlock
 
 bool SimpleStringInternalCache::hasFreeBlocksOfSize(size_t size)
 {
-    if (isCached(size))
-        return getCacheNodeFromSize(size)->freeMemoryHead_ != NULLPTR;
-    return false;
+    return getCacheNodeFromSize(size)->freeMemoryHead_ != NULLPTR;
 }
 
 SimpleStringMemoryBlock* SimpleStringInternalCache::reserveCachedBlockFrom(SimpleStringInternalCacheNode* node)
