@@ -825,3 +825,8 @@ TestMemoryAllocator* SimpleStringCacheAllocator::actualAllocator()
     return originalAllocator_->actualAllocator();
 }
 
+TestMemoryAllocator* SimpleStringCacheAllocator::originalAllocator()
+{
+    return originalAllocator_;
+}
+

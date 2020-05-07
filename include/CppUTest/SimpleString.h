@@ -221,6 +221,20 @@ private:
     TestMemoryAllocator* allocator_;
     SimpleStringInternalCacheNode* cache_;
     SimpleStringMemoryBlock* nonCachedAllocations_;
+    bool hasWarnedAboutDeallocations;
+};
+
+class SimpleStringCacheAllocator;
+class GlobalSimpleStringCache
+{
+    SimpleStringCacheAllocator* allocator_;
+    SimpleStringInternalCache cache_;
+
+public:
+    GlobalSimpleStringCache();
+    ~GlobalSimpleStringCache();
+
+    TestMemoryAllocator* getAllocator();
 };
 
 SimpleString StringFrom(bool value);

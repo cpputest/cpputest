@@ -272,6 +272,7 @@ public:
     virtual const char* free_name() const _override;
 
     virtual TestMemoryAllocator* actualAllocator() _override;
+    TestMemoryAllocator* originalAllocator();
 private:
     SimpleStringInternalCache& cache_;
     TestMemoryAllocator* originalAllocator_;
