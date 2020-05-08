@@ -27,6 +27,7 @@
 
 #include "CppUTest/CommandLineTestRunner.h"
 #include "CppUTest/TestMemoryAllocator.h"
+#include "CppUTest/SimpleStringInternalCache.h"
 
 #define SHOW_MEMORY_REPORT 0
 

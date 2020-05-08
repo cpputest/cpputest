@@ -36,6 +36,7 @@ PRJ_EXPORTS
 ..\include\CppUTest\Failure.h \epoc32\include\CppUTest\Failure.h
 ..\include\CppUTest\TestRegistry.h \epoc32\include\CppUTest\TestRegistry.h
 ..\include\CppUTest\SimpleString.h \epoc32\include\CppUTest\SimpleString.h
+..\include\CppUTest\SimpleStringInternalCache.h \epoc32\include\CppUTest\SimpleStringInternalCache.h
 ..\include\CppUTest\MemoryLeakWarning.h \epoc32\include\CppUTest\MemoryLeakWarning.h
 ..\include\CppUTest\CommandLineTestRunner.h \epoc32\include\CppuTest\CommandLineTestRunner.h
 ..\include\CppUTest\TestOutput.h \epoc32\include\CppuTest\TestOutput.h

@@ -170,6 +170,10 @@ SOURCE=.\SRC\CPPUTEST\SimpleString.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\SRC\CPPUTEST\SimpleStringInternalCache.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\SRC\CPPUTEST\TeamCityTestOutput.cpp
 # End Source File
 # Begin Source File
@@ -322,7 +326,7 @@ SOURCE=.\include\CppUTest\SimpleString.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\include\CppUTest\SimpleStringExtensions.h
+SOURCE=.\include\CppUTest\SimpleStringInternalCache.h
 # End Source File
 # Begin Source File
 

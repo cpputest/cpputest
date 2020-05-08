@@ -257,27 +257,5 @@ private:
     AccountingTestMemoryAllocator* newArrayAllocator_;
 };
 
-class SimpleStringInternalCache;
-
-class SimpleStringCacheAllocator : public TestMemoryAllocator
-{
-public:
-    SimpleStringCacheAllocator(SimpleStringInternalCache& cache, TestMemoryAllocator* previousAllocator);
-    virtual ~SimpleStringCacheAllocator() _destructor_override;
-
-    virtual char* alloc_memory(size_t size, const char* file, size_t line) _override;
-    virtual void free_memory(char* memory, size_t size, const char* file, size_t line) _override;
-
-    virtual const char* name() const _override;
-    virtual const char* alloc_name() const _override;
-    virtual const char* free_name() const _override;
-
-    virtual TestMemoryAllocator* actualAllocator() _override;
-    TestMemoryAllocator* originalAllocator();
-private:
-    SimpleStringInternalCache& cache_;
-    TestMemoryAllocator* originalAllocator_;
-};
-
 #endif
 
