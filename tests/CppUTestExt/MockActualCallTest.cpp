@@ -48,6 +48,9 @@ TEST_GROUP(MockCheckedActualCall)
     void teardown()
     {
         CHECK_NO_MOCK_FAILURE();
+
+        MockFailureReporterForTest::clearReporter();
+
         delete emptyList;
         delete list;
     }
@@ -260,3 +263,10 @@ TEST(MockCheckedActualCall, remainderOfMockActualCallTraceWorksAsItShould)
     CHECK(NULLPTR == actual.returnFunctionPointerValueOrDefault((void (*)()) NULLPTR));
 }
 
+TEST(MockCheckedActualCall, MockActualCallTraceClear)
+{
+    MockActualCallTrace actual;
+    actual.withName("func");
+    actual.clear();
+    STRCMP_EQUAL("", actual.getTraceOutput());
+}

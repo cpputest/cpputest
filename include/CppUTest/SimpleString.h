@@ -199,6 +199,7 @@ public:
     void clearCache();
     void clearAllIncludingCurrentlyUsedMemory();
 private:
+    void printDeallocatingUnknownMemory(char* memory);
 
     enum { amountOfInternalCacheNodes = 5};
     bool isCached(size_t size);
@@ -221,6 +222,20 @@ private:
     TestMemoryAllocator* allocator_;
     SimpleStringInternalCacheNode* cache_;
     SimpleStringMemoryBlock* nonCachedAllocations_;
+    bool hasWarnedAboutDeallocations;
+};
+
+class SimpleStringCacheAllocator;
+class GlobalSimpleStringCache
+{
+    SimpleStringCacheAllocator* allocator_;
+    SimpleStringInternalCache cache_;
+
+public:
+    GlobalSimpleStringCache();
+    ~GlobalSimpleStringCache();
+
+    TestMemoryAllocator* getAllocator();
 };
 
 SimpleString StringFrom(bool value);

@@ -1003,10 +1003,19 @@ const char* MockActualCallTrace::getTraceOutput()
     return traceBuffer_.asCharString();
 }
 
+MockActualCallTrace* MockActualCallTrace::instance_ = NULLPTR;
+
 MockActualCallTrace& MockActualCallTrace::instance()
 {
-    static MockActualCallTrace call;
-    return call;
+    if (instance_ == NULLPTR)
+        instance_ = new MockActualCallTrace;
+    return *instance_;
+}
+
+void MockActualCallTrace::clearInstance()
+{
+    delete instance_;
+    instance_ = NULLPTR;
 }
 
 MockIgnoredActualCall& MockIgnoredActualCall::instance()

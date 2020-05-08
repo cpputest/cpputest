@@ -612,10 +612,6 @@ class GlobalMemoryAccountantExecFunction
     : public ExecFunction
 {
 public:
-    virtual ~GlobalMemoryAccountantExecFunction() _destructor_override
-    {
-    }
-
     void (*testFunction_)(GlobalMemoryAccountant*);
     GlobalMemoryAccountant* parameter_;
 
@@ -783,6 +779,7 @@ TEST_GROUP(SimpleStringCacheAllocator)
 
     void teardown()
     {
+        cache.clearCache();
         delete allocator;
         delete accountingAllocator;
     }

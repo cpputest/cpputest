@@ -54,7 +54,9 @@ TEST_GROUP(MockFailureTest)
         delete call2;
         delete call3;
         CHECK_NO_MOCK_FAILURE();
+        MockFailureReporterForTest::clearReporter();
     }
+
     void addAllToList()
     {
         list->addExpectedCall(call1);

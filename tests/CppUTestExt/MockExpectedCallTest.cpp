@@ -76,6 +76,7 @@ TEST_GROUP(MockNamedValueHandlerRepository)
     void teardown()
     {
         CHECK_NO_MOCK_FAILURE();
+        MockFailureReporterForTest::clearReporter();
     }
 };
 
@@ -165,6 +166,7 @@ TEST_GROUP(MockExpectedCall)
         MockNamedValue::setDefaultComparatorsAndCopiersRepository(originalComparatorRepository);
         delete call;
         CHECK_NO_MOCK_FAILURE();
+        MockFailureReporterForTest::clearReporter();
     }
 };
 

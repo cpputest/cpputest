@@ -41,6 +41,7 @@ TEST_GROUP(MockSupportTest)
   {
       mock().checkExpectations();
       CHECK_NO_MOCK_FAILURE();
+      MockFailureReporterForTest::clearReporter();
       mock().clear();
   }
 };
@@ -175,6 +176,7 @@ TEST_GROUP(MockSupportTestWithFixture)
     void teardown()
     {
         mock().clear();
+        MockFailureReporterForTest::clearReporter();
     }
 };
 

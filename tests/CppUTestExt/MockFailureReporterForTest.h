@@ -40,6 +40,9 @@ public:
 
     virtual void failTest(const MockFailure& failure);
     static MockFailureReporterForTest* getReporter();
+    static void clearReporter();
+private:
+    static MockFailureReporterForTest* instance_;
 };
 
 class MockFailureReporterInstaller
