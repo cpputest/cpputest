@@ -263,3 +263,10 @@ TEST(MockCheckedActualCall, remainderOfMockActualCallTraceWorksAsItShould)
     CHECK(NULLPTR == actual.returnFunctionPointerValueOrDefault((void (*)()) NULLPTR));
 }
 
+TEST(MockCheckedActualCall, MockActualCallTraceClear)
+{
+    MockActualCallTrace actual;
+    actual.withName("func");
+    actual.clear();
+    STRCMP_EQUAL("", actual.getTraceOutput());
+}
