@@ -3,6 +3,7 @@ set(CppUTestTests_src
     SetPluginTest.cpp
     CheatSheetTest.cpp
     SimpleStringTest.cpp
+    SimpleStringTestInternalCache.cpp
     CommandLineArgumentsTest.cpp
     TestFailureTest.cpp
     TestFailureNaNTest.cpp

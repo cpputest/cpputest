@@ -233,6 +233,7 @@
     <ClCompile Include="src\CppUTest\MemoryLeakWarningPlugin.cpp" />
     <ClCompile Include="src\CppUTest\SimpleMutex.cpp" />
     <ClCompile Include="src\CppUTest\SimpleString.cpp" />
+    <ClCompile Include="src\CppUTest\SimpleStringInternalCache.cpp" />
     <ClCompile Include="src\CppUTest\TestFailure.cpp" />
     <ClCompile Include="src\CppUTest\TestFilter.cpp" />
     <ClCompile Include="src\CppUTest\TestHarness_c.cpp" />
@@ -280,6 +281,7 @@
     <ClInclude Include="include\CppUTest\PlatformSpecificFunctions.h" />
     <ClInclude Include="include\CppUTest\SimpleMutex.h" />
     <ClInclude Include="include\CppUTest\SimpleString.h" />
+    <ClInclude Include="include\CppUTest\SimpleStringInternalCache.h" />
     <ClInclude Include="include\CppUTest\StandardCLibrary.h" />
     <ClInclude Include="include\CppUTest\TestFailure.h" />
     <ClInclude Include="include\CppUTest\TestFilter.h" />

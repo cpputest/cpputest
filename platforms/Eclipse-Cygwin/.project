@@ -785,6 +785,11 @@
 			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/tests/SetPluginTest.cpp</locationURI>
 		</link>
 		<link>
+			<name>tests/SimpleStringInternalCacheTest.cpp</name>
+			<type>1</type>
+			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/tests/SimpleStringInternalCacheTest.cpp</locationURI>
+		</link>
+		<link>
 			<name>tests/SimpleStringTest.cpp</name>
 			<type>1</type>
 			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/tests/SimpleStringTest.cpp</locationURI>
@@ -1013,6 +1018,11 @@
 			<name>include/CppUTest/SimpleString.h</name>
 			<type>1</type>
 			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/include/CppUTest/SimpleString.h</locationURI>
+		</link>
+		<link>
+			<name>include/CppUTest/SimpleStringInternalCache.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/include/CppUTest/SimpleStringInternalCache.h</locationURI>
 		</link>
 		<link>
 			<name>include/CppUTest/StandardCLibrary.h</name>
@@ -1504,10 +1514,15 @@
 			<type>1</type>
 			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/src/CppUTest/MemoryLeakWarningPlugin.cpp</locationURI>
 		</link>
-		<link>
+		<link
+		<link
 			<name>src/CppUTest/SimpleString.cpp</name>
 			<type>1</type>
 			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/src/CppUTest/SimpleString.cpp</locationURI>
+		</link>
+			<name>src/CppUTest/SimpleStringInternalCache.cpp</name>
+			<type>1</type>
+			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/src/CppUTest/SimpleStringInternalCache.cpp</locationURI>
 		</link>
 		<link>
 			<name>src/CppUTest/TestFailure.cpp</name>

@@ -1946,6 +1946,9 @@
         <name>$PROJ_DIR$\..\..\src\CppUTest\SimpleString.cpp</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\..\src\CppUTest\SimpleStringInternalCache.cpp</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\..\src\CppUTest\TeamCityTestOutput.cpp</name>
       </file>
       <file>
