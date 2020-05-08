@@ -54,6 +54,7 @@ lib_libCppUTest_a_SOURCES = \
 	src/CppUTest/MemoryLeakDetector.cpp \
 	src/CppUTest/MemoryLeakWarningPlugin.cpp \
 	src/CppUTest/SimpleString.cpp \
+	src/CppUTest/SimpleStringInternalCache.cpp \
 	src/CppUTest/SimpleMutex.cpp \
 	src/CppUTest/TeamCityTestOutput.cpp \
 	src/CppUTest/TestFailure.cpp \
@@ -82,6 +83,7 @@ include_cpputest_HEADERS = \
 	include/CppUTest/PlatformSpecificFunctions.h \
 	include/CppUTest/PlatformSpecificFunctions_c.h \
 	include/CppUTest/SimpleString.h \
+	include/CppUTest/SimpleStringInternalCache.h \
 	include/CppUTest/SimpleMutex.h \
 	include/CppUTest/StandardCLibrary.h \
 	include/CppUTest/TeamCityTestOutput.h \
@@ -171,6 +173,7 @@ CppUTestTests_SOURCES = \
 	tests/CppUTest/PreprocessorTest.cpp \
 	tests/CppUTest/SetPluginTest.cpp \
 	tests/CppUTest/SimpleStringTest.cpp \
+	tests/CppUTest/SimpleStringInternalCacheTest.cpp \
 	tests/CppUTest/SimpleMutexTest.cpp \
 	tests/CppUTest/TeamCityOutputTest.cpp \
 	tests/CppUTest/TestFailureNaNTest.cpp \

@@ -180,64 +180,6 @@ private:
     MemoryAccountant* accountant_;
 };
 
-struct SimpleStringInternalCacheNode;
-struct SimpleStringMemoryBlock;
-
-class SimpleStringInternalCache
-{
-public:
-    SimpleStringInternalCache();
-    ~SimpleStringInternalCache();
-
-    void setAllocator(TestMemoryAllocator* allocator);
-
-    char* alloc(size_t size);
-    void dealloc(char* memory, size_t size);
-
-    bool hasFreeBlocksOfSize(size_t size);
-
-    void clearCache();
-    void clearAllIncludingCurrentlyUsedMemory();
-private:
-    void printDeallocatingUnknownMemory(char* memory);
-
-    enum { amountOfInternalCacheNodes = 5};
-    bool isCached(size_t size);
-    size_t getIndexForCache(size_t size);
-    SimpleStringInternalCacheNode* getCacheNodeFromSize(size_t size);
-
-    SimpleStringInternalCacheNode* createInternalCacheNodes();
-    void destroyInternalCacheNode(SimpleStringInternalCacheNode * node);
-    SimpleStringMemoryBlock* createSimpleStringMemoryBlock(size_t sizeOfString, SimpleStringMemoryBlock* next);
-    void destroySimpleStringMemoryBlock(SimpleStringMemoryBlock * block, size_t size);
-    void destroySimpleStringMemoryBlockList(SimpleStringMemoryBlock * block, size_t size);
-
-    SimpleStringMemoryBlock* reserveCachedBlockFrom(SimpleStringInternalCacheNode* node);
-    void releaseCachedBlockFrom(char* memory, SimpleStringInternalCacheNode* node);
-    void releaseNonCachedMemory(char* memory, size_t size);
-
-    SimpleStringMemoryBlock* allocateNewCacheBlockFrom(SimpleStringInternalCacheNode* node);
-    SimpleStringMemoryBlock* addToSimpleStringMemoryBlockList(SimpleStringMemoryBlock* newBlock, SimpleStringMemoryBlock* previousHead);
-
-    TestMemoryAllocator* allocator_;
-    SimpleStringInternalCacheNode* cache_;
-    SimpleStringMemoryBlock* nonCachedAllocations_;
-    bool hasWarnedAboutDeallocations;
-};
-
-class SimpleStringCacheAllocator;
-class GlobalSimpleStringCache
-{
-    SimpleStringCacheAllocator* allocator_;
-    SimpleStringInternalCache cache_;
-
-public:
-    GlobalSimpleStringCache();
-    ~GlobalSimpleStringCache();
-
-    TestMemoryAllocator* getAllocator();
-};
-
 SimpleString StringFrom(bool value);
 SimpleString StringFrom(const void* value);
 SimpleString StringFrom(void (*value)());
