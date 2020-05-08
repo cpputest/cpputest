@@ -57,6 +57,7 @@ TEST_GROUP(MockExpectedCallsList)
         delete call4;
         delete list;
         CHECK_NO_MOCK_FAILURE();
+        MockFailureReporterForTest::clearReporter();
     }
 };
 

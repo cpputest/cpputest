@@ -116,7 +116,7 @@ void MockSupport::clear()
     lastActualFunctionCall_ = NULLPTR;
 
     tracing_ = false;
-    MockActualCallTrace::instance().clear();
+    MockActualCallTrace::clearInstance();
 
     expectations_.deleteAllExpectationsAndClearList();
     ignoreOtherCalls_ = false;

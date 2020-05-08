@@ -32,21 +32,26 @@
 
 int main(int ac, char **av)
 {
-    /* These checks are here to make sure assertions outside test runs don't crash */
-    CHECK(true);
-    LONGS_EQUAL(1, 1);
+    int returnValue = 0;
+    GlobalSimpleStringCache stringCache;
+
+    {
+        /* These checks are here to make sure assertions outside test runs don't crash */
+        CHECK(true);
+        LONGS_EQUAL(1, 1);
 
 #if SHOW_MEMORY_REPORT
-    GlobalMemoryAccountant accountant;
-    accountant.start();
+        GlobalMemoryAccountant accountant;
+        accountant.start();
 #endif
 
-    int returnValue = CommandLineTestRunner::RunAllTests(ac, av); /* cover alternate method */
+        CommandLineTestRunner::RunAllTests(ac, av); /* cover alternate method */
 
 #if SHOW_MEMORY_REPORT
-    accountant.stop();
-    printf("%s", accountant.report().asCharString());
+        accountant.stop();
+        printf("%s", accountant.report().asCharString());
 #endif
+    }
 
     return returnValue;
 }

@@ -221,9 +221,12 @@ public:
     const char* getTraceOutput();
     void clear();
     static MockActualCallTrace& instance();
+    static void clearInstance();
 
 private:
     SimpleString traceBuffer_;
+
+    static MockActualCallTrace* instance_;
 
     void addParameterName(const SimpleString& name);
 };

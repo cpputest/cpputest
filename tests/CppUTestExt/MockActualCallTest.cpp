@@ -48,6 +48,9 @@ TEST_GROUP(MockCheckedActualCall)
     void teardown()
     {
         CHECK_NO_MOCK_FAILURE();
+
+        MockFailureReporterForTest::clearReporter();
+
         delete emptyList;
         delete list;
     }
