@@ -30,6 +30,7 @@
 #include "CppUTest/TestTestingFixture.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 #include "CppUTest/StandardCLibrary.h"
+#include "CppUTest/TestMemoryAllocator.h"
 
 #if CPPUTEST_USE_STD_C_LIB
 
@@ -62,6 +63,8 @@ static void _failFunction()
 static void _exitNonZeroFunction() __no_return__;
 static void _exitNonZeroFunction()
 {
+    /* destructor of static objects will be called. If StringCache was there then the allocator will report invalid deallocations of static SimpleString */
+    SimpleString::setStringAllocator(SimpleString::getStringAllocator()->actualAllocator());
     exit(1);
 }
 

@@ -199,6 +199,7 @@ public:
     void clearCache();
     void clearAllIncludingCurrentlyUsedMemory();
 private:
+    void printDeallocatingUnknownMemory(char* memory);
 
     enum { amountOfInternalCacheNodes = 5};
     bool isCached(size_t size);

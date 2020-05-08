@@ -301,36 +301,56 @@ struct FakeOutput
     FakeOutput() : SaveFOpen(PlatformSpecificFOpen), SaveFPuts(PlatformSpecificFPuts),
         SaveFClose(PlatformSpecificFClose), SavePutchar(PlatformSpecificPutchar)
     {
+        installFakes();
+        currentFake = this;
+    }
+
+    ~FakeOutput()
+    {
+        currentFake = NULLPTR;
+        restoreOriginals();
+    }
+
+    void installFakes()
+    {
         PlatformSpecificFOpen = (FOpenFunc)fopen_fake;
         PlatformSpecificFPuts = (FPutsFunc)fputs_fake;
         PlatformSpecificFClose = (FCloseFunc)fclose_fake;
         PlatformSpecificPutchar = (PutcharFunc)putchar_fake;
     }
-    ~FakeOutput()
+
+    void restoreOriginals()
     {
         PlatformSpecificPutchar = SavePutchar;
         PlatformSpecificFOpen = SaveFOpen;
         PlatformSpecificFPuts = SaveFPuts;
         PlatformSpecificFClose = SaveFClose;
     }
+
     static PlatformSpecificFile fopen_fake(const char*, const char*)
     {
         return (PlatformSpecificFile) NULLPTR;
     }
+
     static void fputs_fake(const char* str, PlatformSpecificFile)
     {
-        file += str;
+        currentFake->file += str;
     }
+
     static void fclose_fake(PlatformSpecificFile)
     {
     }
+
     static int putchar_fake(int c)
     {
-        console += StringFrom((char)c);
+        currentFake->console += StringFrom((char)c);
         return c;
     }
-    static SimpleString file;
-    static SimpleString console;
+
+    SimpleString file;
+    SimpleString console;
+
+    static FakeOutput* currentFake;
 private:
     FOpenFunc SaveFOpen;
     FPutsFunc SaveFPuts;
@@ -338,39 +358,39 @@ private:
     PutcharFunc SavePutchar;
 };
 
-SimpleString FakeOutput::console = "";
-SimpleString FakeOutput::file = "";
+FakeOutput* FakeOutput::currentFake = NULLPTR;
 
 TEST(CommandLineTestRunner, realJunitOutputShouldBeCreatedAndWorkProperly)
 {
     const char* argv[] = { "tests.exe", "-ojunit", "-v", "-kpackage", };
 
-    FakeOutput* fakeOutput = new FakeOutput; /* UT_PTR_SET() is not reentrant */
+    FakeOutput fakeOutput; /* UT_PTR_SET() is not reentrant */
 
     CommandLineTestRunner commandLineTestRunner(4, argv, &registry);
     commandLineTestRunner.runAllTestsMain();
 
-    delete fakeOutput; /* Original output must be restored before further output occurs */
+    fakeOutput.restoreOriginals();
 
-    STRCMP_CONTAINS("<testcase classname=\"package.group1\" name=\"test1\"", FakeOutput::file.asCharString());
-    STRCMP_CONTAINS("TEST(group1, test1)", FakeOutput::console.asCharString());
+    STRCMP_CONTAINS("<testcase classname=\"package.group1\" name=\"test1\"", fakeOutput.file.asCharString());
+    STRCMP_CONTAINS("TEST(group1, test1)", fakeOutput.console.asCharString());
+
 }
 
 TEST(CommandLineTestRunner, realTeamCityOutputShouldBeCreatedAndWorkProperly)
 {
     const char* argv[] = { "tests.exe", "-oteamcity", "-v", "-kpackage", };
 
-    FakeOutput* fakeOutput = new FakeOutput; /* UT_PTR_SET() is not reentrant */
+    FakeOutput fakeOutput; /* UT_PTR_SET() is not reentrant */
 
     CommandLineTestRunner commandLineTestRunner(4, argv, &registry);
     commandLineTestRunner.runAllTestsMain();
 
-    delete fakeOutput; /* Original output must be restored before further output occurs */
+    fakeOutput.restoreOriginals();
 
-    STRCMP_CONTAINS("##teamcity[testSuiteStarted name='group1'", FakeOutput::console.asCharString());
-    STRCMP_CONTAINS("##teamcity[testStarted name='test1'", FakeOutput::console.asCharString());
-    STRCMP_CONTAINS("##teamcity[testFinished name='test1'", FakeOutput::console.asCharString());
-    STRCMP_CONTAINS("##teamcity[testSuiteFinished name='group1'", FakeOutput::console.asCharString());
+    STRCMP_CONTAINS("##teamcity[testSuiteStarted name='group1'", fakeOutput.console.asCharString());
+    STRCMP_CONTAINS("##teamcity[testStarted name='test1'", fakeOutput.console.asCharString());
+    STRCMP_CONTAINS("##teamcity[testFinished name='test1'", fakeOutput.console.asCharString());
+    STRCMP_CONTAINS("##teamcity[testSuiteFinished name='group1'", fakeOutput.console.asCharString());
 }
 
 

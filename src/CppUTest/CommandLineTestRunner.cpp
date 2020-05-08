@@ -35,6 +35,7 @@
 
 int CommandLineTestRunner::RunAllTests(int ac, char** av)
 {
+    GlobalSimpleStringCache cache;
     return RunAllTests(ac, (const char *const *) av);
 }
 

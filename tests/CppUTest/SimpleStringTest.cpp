@@ -86,17 +86,15 @@ TEST(GlobalSimpleStringMemoryAccountant, start)
     POINTERS_EQUAL(accountant.getAllocator(), SimpleString::getStringAllocator());
 }
 
-static void _startTwice(GlobalSimpleStringMemoryAccountant* accountant)
+TEST(GlobalSimpleStringMemoryAccountant, startTwiceDoesNothing)
 {
-    accountant->start();
-    accountant->start();
-}
+    accountant.start();
+    TestMemoryAllocator* memoryAccountantAllocator = SimpleString::getStringAllocator();
+    accountant.start();
 
-TEST(GlobalSimpleStringMemoryAccountant, startTwiceWillFail)
-{
-    testFunction.testFunction_ = _startTwice;
-    fixture.runAllTests();
-    fixture.assertPrintContains("Global SimpleString allocator start called twice!");
+    POINTERS_EQUAL(memoryAccountantAllocator, SimpleString::getStringAllocator());
+
+    accountant.stop();
 }
 
 TEST(GlobalSimpleStringMemoryAccountant, stop)
@@ -121,8 +119,9 @@ TEST(GlobalSimpleStringMemoryAccountant, stopWithoutStartWillFail)
 
 static void _changeAllocatorBetweenStartAndStop(GlobalSimpleStringMemoryAccountant* accountant)
 {
+    TestMemoryAllocator* originalAllocator = SimpleString::getStringAllocator();
     accountant->start();
-    SimpleString::setStringAllocator(defaultMallocAllocator());
+    SimpleString::setStringAllocator(originalAllocator);
     accountant->stop();
 }
 
@@ -1488,6 +1487,10 @@ TEST(SimpleStringInternalCache, clearAllIncludingCurrentlyUsedMemoryAlsoReleases
 static void _deallocatingStringMemoryThatWasntAllocatedWithCache(SimpleStringInternalCache* cache, size_t allocationSize)
 {
     char* mem = defaultMallocAllocator()->alloc_memory(allocationSize, __FILE__, __LINE__);
+    mem[0] = 'B';
+    mem[1] = 'a';
+    mem[2] = 's';
+    mem[3] = '\0';
     cache->dealloc(mem, allocationSize);
     defaultMallocAllocator()->free_memory(mem, allocationSize, __FILE__, __LINE__);
 }
@@ -1502,7 +1505,8 @@ TEST(SimpleStringInternalCache, deallocatingMemoryThatWasntAllocatedWhileCacheWa
 
     fixture.assertPrintContains("\nWARNING: Attempting to deallocate a String buffer that was allocated while not caching. Ignoring it!\n"
                                 "This is likely due statics and will cause problems.\n"
-                                "Only warning once to avoid recursive warnings\n");
+                                "Only warning once to avoid recursive warnings.\n"
+                                "String we are deallocating: \"Bas\"\n");
 
 }
 
@@ -1518,6 +1522,32 @@ TEST(SimpleStringInternalCache, deallocatingMemoryThatWasntAllocatedWhileCacheWa
 {
     testFunction.testFunction = _deallocatingStringMemoryTwiceThatWasntAllocatedWithCache;
     testFunction.allocationSize = 123;
+
+    cache.setAllocator(allocator);
+    fixture.runAllTests();
+
+    LONGS_EQUAL(1, fixture.getOutput().count("WARNING"));
+}
+
+TEST(SimpleStringInternalCache, deallocatingLargeMemoryThatWasntAllocatedWhileCacheWasInPlaceProducesWarning)
+{
+    testFunction.testFunction = _deallocatingStringMemoryThatWasntAllocatedWithCache;
+    testFunction.allocationSize = 12345;
+
+    cache.setAllocator(allocator);
+    fixture.runAllTests();
+
+    fixture.assertPrintContains("\nWARNING: Attempting to deallocate a String buffer that was allocated while not caching. Ignoring it!\n"
+                                "This is likely due statics and will cause problems.\n"
+                                "Only warning once to avoid recursive warnings.\n"
+                                "String we are deallocating: \"Bas\"\n");
+
+}
+
+TEST(SimpleStringInternalCache, deallocatingLargeMemoryThatWasntAllocatedWhileCacheWasInPlaceProducesWarningButOnlyOnce)
+{
+    testFunction.testFunction = _deallocatingStringMemoryTwiceThatWasntAllocatedWithCache;
+    testFunction.allocationSize = 12345;
 
     cache.setAllocator(allocator);
     fixture.runAllTests();

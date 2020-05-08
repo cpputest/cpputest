@@ -74,7 +74,7 @@ void GlobalSimpleStringMemoryAccountant::useCacheSizes(size_t cacheSizes[], size
 void GlobalSimpleStringMemoryAccountant::start()
 {
     if (allocator_ != NULLPTR)
-      FAIL("Global SimpleString allocator start called twice!");
+      return;
 
     allocator_ = new AccountingTestMemoryAllocator(*accountant_, SimpleString::getStringAllocator());
 
@@ -222,6 +222,17 @@ SimpleStringMemoryBlock* SimpleStringInternalCache::allocateNewCacheBlockFrom(Si
     return block;
 }
 
+void SimpleStringInternalCache::printDeallocatingUnknownMemory(char* memory)
+{
+    if (!hasWarnedAboutDeallocations) {
+        hasWarnedAboutDeallocations = true;
+        UtestShell::getCurrent()->print(StringFromFormat("\nWARNING: Attempting to deallocate a String buffer that was allocated while not caching. Ignoring it!\n"
+                                                         "This is likely due statics and will cause problems.\n"
+                                                          "Only warning once to avoid recursive warnings.\n"
+                                                          "String we are deallocating: \"%s\"\n", memory).asCharString(), __FILE__, __LINE__);
+    }
+}
+
 void SimpleStringInternalCache::releaseCachedBlockFrom(char* memory, SimpleStringInternalCacheNode* node)
 {
     if (node->usedMemoryHead_ && node->usedMemoryHead_->memory_ == memory) {
@@ -239,16 +250,8 @@ void SimpleStringInternalCache::releaseCachedBlockFrom(char* memory, SimpleStrin
             return;
         }
     }
+    printDeallocatingUnknownMemory(memory);
 
-    if (!hasWarnedAboutDeallocations) {
-        hasWarnedAboutDeallocations = true;
-        UtestShell::getCurrent()->print("\nWARNING: Attempting to deallocate a String buffer that was allocated while not caching. Ignoring it!\n"
-                                       "This is likely due statics and will cause problems.\n"
-                                       "Only warning once to avoid recursive warnings\n", __FILE__, __LINE__);
-        fprintf(stderr, "\nWARNING: Attempting to deallocate a String buffer that was allocated while not caching. Ignoring it!\n"
-                                       "This is likely due statics and will cause problems.\n"
-                                       "Only warning once to avoid recursive warnings\n", __FILE__, __LINE__);
-    }
 }
 
 void SimpleStringInternalCache::releaseNonCachedMemory(char* memory, size_t size)
@@ -265,8 +268,11 @@ void SimpleStringInternalCache::releaseNonCachedMemory(char* memory, size_t size
             SimpleStringMemoryBlock* blockToFree = block->next_;
             block->next_ = block->next_->next_;
             destroySimpleStringMemoryBlock(blockToFree, size);
+            return;
         }
     }
+
+    printDeallocatingUnknownMemory(memory);
 }
 
 char* SimpleStringInternalCache::alloc(size_t size)
@@ -305,15 +311,10 @@ void SimpleStringInternalCache::clearAllIncludingCurrentlyUsedMemory()
 {
     for (size_t i = 0; i < amountOfInternalCacheNodes; i++) {
         destroySimpleStringMemoryBlockList(cache_[i].freeMemoryHead_, cache_[i].size_);
-    if (cache_[i].usedMemoryHead_ && cache_[i].usedMemoryHead_->memory_)
-      fprintf(stderr, "\nNon cached items being cleared: %s\n", cache_[i].usedMemoryHead_->memory_);
         destroySimpleStringMemoryBlockList(cache_[i].usedMemoryHead_, cache_[i].size_);
         cache_[i].freeMemoryHead_ = NULLPTR;
         cache_[i].usedMemoryHead_ = NULLPTR;
     }
-
-    if (nonCachedAllocations_ && nonCachedAllocations_->memory_)
-      fprintf(stderr, "\nNon cached items being cleared: %s\n", nonCachedAllocations_->memory_);
 
     destroySimpleStringMemoryBlockList(nonCachedAllocations_, 0);
     nonCachedAllocations_ = NULLPTR;

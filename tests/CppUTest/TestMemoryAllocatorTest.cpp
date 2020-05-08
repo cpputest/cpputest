@@ -612,10 +612,6 @@ class GlobalMemoryAccountantExecFunction
     : public ExecFunction
 {
 public:
-    virtual ~GlobalMemoryAccountantExecFunction() _destructor_override
-    {
-    }
-
     void (*testFunction_)(GlobalMemoryAccountant*);
     GlobalMemoryAccountant* parameter_;
 
