@@ -19,7 +19,7 @@ CPPU_OBJECTS := \
   $(CPPUTEST_HOME)/src/CppUTest/TestTestingFixture.o \
   $(CPPUTEST_HOME)/src/CppUTest/TestResult.o \
   $(CPPUTEST_HOME)/src/CppUTest/Utest.o \
-  $(CPPUTEST_HOME)/src/Platforms/Dos/UtestPlatform.o \
+  $(CPPUTEST_HOME)/src/Platforms/Dos/UtestPlatform.o
 
 CPPUX_OBJECTS := \
   $(CPPUTEST_HOME)/src/CppUTestExt/CodeMemoryReportFormatter.o \
@@ -62,8 +62,8 @@ CPPU2_OBJECTS := \
 CPPU3_OBJECTS := \
   $(CPPUTEST_HOME)/tests/CppUTest/AllTests.o \
   $(CPPUTEST_HOME)/tests/CppUTest/MemoryLeakDetectorTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTest/SimpleStringTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTest/SimpleStringInternalCacheTest.o
+  $(CPPUTEST_HOME)/tests/CppUTest/SimpleStringTest.o
+#  $(CPPUTEST_HOME)/tests/CppUTest/SimpleStringInternalCacheTest.o
 
 CPPU4_OBJECTS := \
   $(CPPUTEST_HOME)/tests/CppUTest/AllTests.o \
