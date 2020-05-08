@@ -7,6 +7,7 @@ CPPU_OBJECTS := \
   $(CPPUTEST_HOME)/src/CppUTest/MemoryLeakWarningPlugin.o \
   $(CPPUTEST_HOME)/src/CppUTest/SimpleMutex.o \
   $(CPPUTEST_HOME)/src/CppUTest/SimpleString.o \
+  $(CPPUTEST_HOME)/src/CppUTest/SimpleStringInternalCache.o \
   $(CPPUTEST_HOME)/src/CppUTest/TeamCityTestOutput.o \
   $(CPPUTEST_HOME)/src/CppUTest/TestFailure.o \
   $(CPPUTEST_HOME)/src/CppUTest/TestFilter.o \
@@ -61,7 +62,8 @@ CPPU2_OBJECTS := \
 CPPU3_OBJECTS := \
   $(CPPUTEST_HOME)/tests/CppUTest/AllTests.o \
   $(CPPUTEST_HOME)/tests/CppUTest/MemoryLeakDetectorTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTest/SimpleStringTest.o
+  $(CPPUTEST_HOME)/tests/CppUTest/SimpleStringTest.o \
+  $(CPPUTEST_HOME)/tests/CppUTest/SimpleStringInternalCacheTest.o
 
 CPPU4_OBJECTS := \
   $(CPPUTEST_HOME)/tests/CppUTest/AllTests.o \
