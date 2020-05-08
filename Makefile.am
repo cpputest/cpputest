@@ -173,7 +173,7 @@ CppUTestTests_SOURCES = \
 	tests/CppUTest/PreprocessorTest.cpp \
 	tests/CppUTest/SetPluginTest.cpp \
 	tests/CppUTest/SimpleStringTest.cpp \
-	tests/CppUTest/SimpleStringInternalCacheTest.cpp \
+	tests/CppUTest/SimpleStringCacheTest.cpp \
 	tests/CppUTest/SimpleMutexTest.cpp \
 	tests/CppUTest/TeamCityOutputTest.cpp \
 	tests/CppUTest/TestFailureNaNTest.cpp \

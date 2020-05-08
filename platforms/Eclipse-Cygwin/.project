@@ -785,9 +785,9 @@
 			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/tests/SetPluginTest.cpp</locationURI>
 		</link>
 		<link>
-			<name>tests/SimpleStringInternalCacheTest.cpp</name>
+			<name>tests/SimpleStringCacheTest.cpp</name>
 			<type>1</type>
-			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/tests/SimpleStringInternalCacheTest.cpp</locationURI>
+			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/tests/SimpleStringCacheTest.cpp</locationURI>
 		</link>
 		<link>
 			<name>tests/SimpleStringTest.cpp</name>
