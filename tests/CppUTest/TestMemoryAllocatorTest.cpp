@@ -779,6 +779,7 @@ TEST_GROUP(SimpleStringCacheAllocator)
 
     void teardown()
     {
+        cache.clearCache();
         delete allocator;
         delete accountingAllocator;
     }

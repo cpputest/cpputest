@@ -161,6 +161,7 @@ class MemoryAccountant
 {
 public:
     MemoryAccountant();
+    ~MemoryAccountant();
 
     void useCacheSizes(size_t sizes[], size_t length);
 

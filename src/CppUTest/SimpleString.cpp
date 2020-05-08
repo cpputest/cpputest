@@ -497,6 +497,7 @@ void SimpleString::setInternalBufferToNewBuffer(size_t size)
 
     bufferSize_ = size;
     buffer_ = allocStringBuffer(bufferSize_, __FILE__, __LINE__);
+    buffer_[0] = '\0';
 }
 
 void SimpleString::setInternalBufferTo(char* buffer, size_t size)

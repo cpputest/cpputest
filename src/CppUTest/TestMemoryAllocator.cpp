@@ -426,6 +426,11 @@ MemoryAccountant::MemoryAccountant()
 {
 }
 
+MemoryAccountant::~MemoryAccountant()
+{
+    clear();
+}
+
 void MemoryAccountant::createCacheSizeNodes(size_t sizes[], size_t length)
 {
     for (size_t i = 0; i < length; i++)
@@ -467,6 +472,7 @@ void MemoryAccountant::clear()
         node = node->next_;
         destroyAccountantAllocationNode(to_be_deleted);
     }
+    head_ = NULLPTR;
 }
 
 MemoryAccountantAllocationNode* MemoryAccountant::findNodeOfSize(size_t size) const

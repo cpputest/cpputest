@@ -1299,6 +1299,7 @@ TEST_GROUP(SimpleStringInternalCache)
     void teardown()
     {
         cache.clearAllIncludingCurrentlyUsedMemory();
+        accountant.clear();
         delete allocator;
         delete defaultAllocator;
     }
@@ -1513,6 +1514,7 @@ TEST(SimpleStringInternalCache, deallocatingMemoryThatWasntAllocatedWhileCacheWa
 static void _deallocatingStringMemoryTwiceThatWasntAllocatedWithCache(SimpleStringInternalCache* cache, size_t allocationSize)
 {
     char* mem = defaultMallocAllocator()->alloc_memory(allocationSize, __FILE__, __LINE__);
+    mem[0] = '\0';
     cache->dealloc(mem, allocationSize);
     cache->dealloc(mem, allocationSize);
     defaultMallocAllocator()->free_memory(mem, allocationSize, __FILE__, __LINE__);
