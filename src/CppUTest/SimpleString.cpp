@@ -247,28 +247,28 @@ void SimpleString::setInternalBufferAsEmptyString()
     buffer_ = getEmptyString();
 }
 
-void SimpleString::copyBufferToNewInternalBuffer(const char* otherBuffer, size_t size)
+void SimpleString::copyBufferToNewInternalBuffer(const char* otherBuffer, size_t bufferSize)
 {
     deallocateInternalBuffer();
 
-    bufferSize_ = size;
+    bufferSize_ = bufferSize;
     buffer_ = copyToNewBuffer(otherBuffer, bufferSize_);
 }
 
-void SimpleString::setInternalBufferToNewBuffer(size_t size)
+void SimpleString::setInternalBufferToNewBuffer(size_t bufferSize)
 {
     deallocateInternalBuffer();
 
-    bufferSize_ = size;
+    bufferSize_ = bufferSize;
     buffer_ = allocStringBuffer(bufferSize_, __FILE__, __LINE__);
     buffer_[0] = '\0';
 }
 
-void SimpleString::setInternalBufferTo(char* buffer, size_t size)
+void SimpleString::setInternalBufferTo(char* buffer, size_t bufferSize)
 {
     deallocateInternalBuffer();
 
-    bufferSize_ = size;
+    bufferSize_ = bufferSize;
     buffer_ = buffer;
 }
 

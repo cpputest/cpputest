@@ -30,7 +30,7 @@
 /* Needed for ... */
 #include <stdarg.h>
 
-//Kludge to get a va_copy in VC++ V6 and in GCC 98
+/* Kludge to get a va_copy in VC++ V6 and in GCC 98 */
 #ifndef va_copy
 #ifdef __GNUC__
 #define va_copy __va_copy

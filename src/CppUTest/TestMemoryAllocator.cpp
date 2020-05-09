@@ -552,22 +552,22 @@ size_t MemoryAccountant::maximumAllocationAtATimeOfSize(size_t size) const
 
 size_t MemoryAccountant::totalAllocations() const
 {
-    size_t totalAllocations = 0;
+    size_t theTotalAllocations = 0;
 
     for (MemoryAccountantAllocationNode* node = head_; node; node = node->next_)
-        totalAllocations += node->allocations_;
+        theTotalAllocations += node->allocations_;
 
-    return totalAllocations;
+    return theTotalAllocations;
 }
 
 size_t MemoryAccountant::totalDeallocations() const
 {
-    size_t totalDeallocations = 0;
+    size_t theTotalDeallocations = 0;
 
     for (MemoryAccountantAllocationNode* node = head_; node; node = node->next_)
-        totalDeallocations += node->deallocations_;
+        theTotalDeallocations += node->deallocations_;
 
-    return totalDeallocations;
+    return theTotalDeallocations;
 }
 
 SimpleString MemoryAccountant::reportNoAllocations() const
@@ -606,16 +606,16 @@ SimpleString MemoryAccountant::report() const
     if (head_ == NULLPTR)
       return reportNoAllocations();
 
-    SimpleString report = reportTitle() + reportHeader();
+    SimpleString accountantReport = reportTitle() + reportHeader();
 
     for (MemoryAccountantAllocationNode* node = head_; node; node = node->next_)
-        report += StringFromFormat(MEMORY_ACCOUNTANT_ROW_FORMAT, stringSize(node->size_).asCharString(), (int) node->allocations_, (int) node->deallocations_, (int) node->maxAllocations_);
+        accountantReport += StringFromFormat(MEMORY_ACCOUNTANT_ROW_FORMAT, stringSize(node->size_).asCharString(), (int) node->allocations_, (int) node->deallocations_, (int) node->maxAllocations_);
 
-    return report + reportFooter();
+    return accountantReport + reportFooter();
 }
 
-AccountingTestMemoryAllocator::AccountingTestMemoryAllocator(MemoryAccountant& accountant, TestMemoryAllocator* originalAllocator)
-    : accountant_(accountant), originalAllocator_(originalAllocator), head_(NULLPTR)
+AccountingTestMemoryAllocator::AccountingTestMemoryAllocator(MemoryAccountant& accountant, TestMemoryAllocator* origAllocator)
+    : accountant_(accountant), originalAllocator_(origAllocator), head_(NULLPTR)
 {
 }
 

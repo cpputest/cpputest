@@ -264,10 +264,10 @@ TestMemoryAllocator* GlobalSimpleStringCache::getAllocator()
     return allocator_;
 }
 
-SimpleStringCacheAllocator::SimpleStringCacheAllocator(SimpleStringInternalCache& cache, TestMemoryAllocator* originalAllocator)
-    : cache_(cache), originalAllocator_(originalAllocator)
+SimpleStringCacheAllocator::SimpleStringCacheAllocator(SimpleStringInternalCache& cache, TestMemoryAllocator* origAllocator)
+    : cache_(cache), originalAllocator_(origAllocator)
 {
-    cache_.setAllocator(originalAllocator);
+    cache_.setAllocator(origAllocator);
 }
 
 SimpleStringCacheAllocator::~SimpleStringCacheAllocator()

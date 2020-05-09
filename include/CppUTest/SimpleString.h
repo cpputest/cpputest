@@ -109,10 +109,10 @@ private:
 
     void deallocateInternalBuffer();
     void setInternalBufferAsEmptyString();
-    void setInternalBufferToNewBuffer(size_t size);
-    void setInternalBufferTo(char* buffer, size_t size);
+    void setInternalBufferToNewBuffer(size_t bufferSize);
+    void setInternalBufferTo(char* buffer, size_t bufferSize);
     void copyBufferToNewInternalBuffer(const char* otherBuffer);
-    void copyBufferToNewInternalBuffer(const char* otherBuffer, size_t size);
+    void copyBufferToNewInternalBuffer(const char* otherBuffer, size_t bufferSize);
     void copyBufferToNewInternalBuffer(const SimpleString& otherBuffer);
 
     char *buffer_;
