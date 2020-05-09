@@ -51,7 +51,10 @@
 #include <math.h>
 #include <ctype.h>
 #include <signal.h>
+
+#ifdef CPPUTEST_HAVE_PTHREAD_MUTEX_LOCK
 #include <pthread.h>
+#endif
 
 #include "CppUTest/PlatformSpecificFunctions.h"
 
@@ -285,29 +288,51 @@ int (*PlatformSpecificAtExit)(void(*func)(void)) = atexit;  /// this was undefin
 
 static PlatformSpecificMutex PThreadMutexCreate(void)
 {
+#ifdef CPPUTEST_HAVE_PTHREAD_MUTEX_LOCK
     pthread_mutex_t *mutex = new pthread_mutex_t;
 
     pthread_mutex_init(mutex, NULLPTR);
-
     return (PlatformSpecificMutex)mutex;
+#else
+    return 0;
+#endif
+
 }
 
+#ifdef CPPUTEST_HAVE_PTHREAD_MUTEX_LOCK
 static void PThreadMutexLock(PlatformSpecificMutex mtx)
 {
     pthread_mutex_lock((pthread_mutex_t *)mtx);
 }
+#else
+static void PThreadMutexLock(PlatformSpecificMutex)
+{
+}
+#endif
 
+#ifdef CPPUTEST_HAVE_PTHREAD_MUTEX_LOCK
 static void PThreadMutexUnlock(PlatformSpecificMutex mtx)
 {
     pthread_mutex_unlock((pthread_mutex_t *)mtx);
 }
+#else
+static void PThreadMutexUnlock(PlatformSpecificMutex)
+{
+}
+#endif
 
+#ifdef CPPUTEST_HAVE_PTHREAD_MUTEX_LOCK
 static void PThreadMutexDestroy(PlatformSpecificMutex mtx)
 {
     pthread_mutex_t *mutex = (pthread_mutex_t *)mtx;
     pthread_mutex_destroy(mutex);
     delete mutex;
 }
+#else
+static void PThreadMutexDestroy(PlatformSpecificMutex)
+{
+}
+#endif
 
 PlatformSpecificMutex (*PlatformSpecificMutexCreate)(void) = PThreadMutexCreate;
 void (*PlatformSpecificMutexLock)(PlatformSpecificMutex) = PThreadMutexLock;

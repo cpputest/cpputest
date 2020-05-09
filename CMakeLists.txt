@@ -25,9 +25,14 @@ if(HAVE_FORK)
 endif(HAVE_FORK)
 
 check_function_exists(gettimeofday HAVE_GETTIMEOFDAY)
-if(HAVE_FORK)
+if(HAVE_GETTIMEOFDAY)
   add_definitions(-DCPPUTEST_HAVE_GETTIMEOFDAY=1)
 endif(HAVE_GETTIMEOFDAY)
+
+check_function_exists(pthread_mutex_lock HAVE_PTHREAD_MUTEX_LOCK)
+if(HAVE_PTHREAD_MUTEX_LOCK)
+  add_definitions(-DCPPUTEST_HAVE_PTHREAD_MUTEX_LOCK=1)
+endif(HAVE_PTHREAD_MUTEX_LOCK)
 
 check_function_exists(strdup HAVE_STRDUP)
 if(HAVE_STRDUP)
