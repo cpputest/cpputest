@@ -34,7 +34,15 @@
 #undef strdup
 #undef strndup
 
+#ifdef CPPUTEST_HAVE_GETTIMEOFDAY
 #include <sys/time.h>
+#endif
+#ifdef CPPUTEST_HAVE_FORK
+#include <unistd.h>
+#include <sys/wait.h>
+#include <errno.h>
+#endif
+
 #include <time.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -42,13 +50,11 @@
 #include <string.h>
 #include <math.h>
 #include <ctype.h>
-#include <unistd.h>
 #include <signal.h>
-#ifndef __MINGW32__
-#include <sys/wait.h>
-#include <errno.h>
-#endif
+
+#ifdef CPPUTEST_HAVE_PTHREAD_MUTEX_LOCK
 #include <pthread.h>
+#endif
 
 #include "CppUTest/PlatformSpecificFunctions.h"
 
@@ -191,17 +197,27 @@ void (*PlatformSpecificRestoreJumpBuffer)() = PlatformSpecificRestoreJumpBufferI
 
 static long TimeInMillisImplementation()
 {
+#ifdef CPPUTEST_HAVE_GETTIMEOFDAY
     struct timeval tv;
     struct timezone tz;
     gettimeofday(&tv, &tz);
     return (tv.tv_sec * 1000) + (long)((double)tv.tv_usec * 0.001);
+#else
+    return 0;
+#endif
 }
 
 static const char* TimeStringImplementation()
 {
-    time_t tm = time(NULLPTR);
+    time_t theTime = time(NULLPTR);
     static char dateTime[80];
-    struct tm *tmp = localtime(&tm);
+#ifdef _WIN32
+    static struct tm lastlocaltime;
+    localtime_s(&lastlocaltime, &theTime);
+    struct tm *tmp = &lastlocaltime;
+#else
+    struct tm *tmp = localtime(&theTime);
+#endif
     strftime(dateTime, 80, "%Y-%m-%dT%H:%M:%S", tmp);
     return dateTime;
 }
@@ -221,7 +237,13 @@ int (*PlatformSpecificVSNprintf)(char *str, size_t size, const char* format, va_
 
 static PlatformSpecificFile PlatformSpecificFOpenImplementation(const char* filename, const char* flag)
 {
+#ifdef _WIN32
+  FILE* file;
+   fopen_s(&file, filename, flag);
+   return file;
+#else
    return fopen(filename, flag);
+#endif
 }
 
 static void PlatformSpecificFPutsImplementation(const char* str, PlatformSpecificFile file)
@@ -278,29 +300,51 @@ int (*PlatformSpecificAtExit)(void(*func)(void)) = atexit;  /// this was undefin
 
 static PlatformSpecificMutex PThreadMutexCreate(void)
 {
+#ifdef CPPUTEST_HAVE_PTHREAD_MUTEX_LOCK
     pthread_mutex_t *mutex = new pthread_mutex_t;
 
     pthread_mutex_init(mutex, NULLPTR);
-
     return (PlatformSpecificMutex)mutex;
+#else
+    return NULLPTR;
+#endif
+
 }
 
+#ifdef CPPUTEST_HAVE_PTHREAD_MUTEX_LOCK
 static void PThreadMutexLock(PlatformSpecificMutex mtx)
 {
     pthread_mutex_lock((pthread_mutex_t *)mtx);
 }
+#else
+static void PThreadMutexLock(PlatformSpecificMutex)
+{
+}
+#endif
 
+#ifdef CPPUTEST_HAVE_PTHREAD_MUTEX_LOCK
 static void PThreadMutexUnlock(PlatformSpecificMutex mtx)
 {
     pthread_mutex_unlock((pthread_mutex_t *)mtx);
 }
+#else
+static void PThreadMutexUnlock(PlatformSpecificMutex)
+{
+}
+#endif
 
+#ifdef CPPUTEST_HAVE_PTHREAD_MUTEX_LOCK
 static void PThreadMutexDestroy(PlatformSpecificMutex mtx)
 {
     pthread_mutex_t *mutex = (pthread_mutex_t *)mtx;
     pthread_mutex_destroy(mutex);
     delete mutex;
 }
+#else
+static void PThreadMutexDestroy(PlatformSpecificMutex)
+{
+}
+#endif
 
 PlatformSpecificMutex (*PlatformSpecificMutexCreate)(void) = PThreadMutexCreate;
 void (*PlatformSpecificMutexLock)(PlatformSpecificMutex) = PThreadMutexLock;
