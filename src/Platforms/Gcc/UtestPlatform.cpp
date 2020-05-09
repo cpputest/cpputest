@@ -211,7 +211,11 @@ static const char* TimeStringImplementation()
 {
     time_t tm = time(NULLPTR);
     static char dateTime[80];
+#ifdef CPPUTEST_HAVE_LOCALTIME_S
+    struct tm *tmp = localtime_s(&tm);
+#else
     struct tm *tmp = localtime(&tm);
+#endif
     strftime(dateTime, 80, "%Y-%m-%dT%H:%M:%S", tmp);
     return dateTime;
 }
@@ -294,7 +298,7 @@ static PlatformSpecificMutex PThreadMutexCreate(void)
     pthread_mutex_init(mutex, NULLPTR);
     return (PlatformSpecificMutex)mutex;
 #else
-    return 0;
+    return NULLPTR;
 #endif
 
 }
