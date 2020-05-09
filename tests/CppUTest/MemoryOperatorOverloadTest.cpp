@@ -20,7 +20,7 @@ TEST(BasicBehavior, CanDeleteNullPointers)
     delete [] (char*) NULLPTR;
 }
 
-#ifndef CPPUTEST_MEM_LEAK_DETECTION_DISABLED
+#if CPPUTEST_USE_MEM_LEAK_DETECTION
 
 CPPUTEST_DO_NOT_SANITIZE_ADDRESS
 static void deleteArrayInvalidatesMemory()

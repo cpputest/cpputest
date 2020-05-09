@@ -266,7 +266,7 @@ TEST(MemoryLeakWarningGlobalDetectorTest, MemoryWarningPluginCanBeSetToDestroyTh
     CHECK(DummyMemoryLeakDetector::wasDeleted());
 }
 
-#ifndef CPPUTEST_MEM_LEAK_DETECTION_DISABLED
+#if CPPUTEST_USE_MEM_LEAK_DETECTION
 
 TEST(MemoryLeakWarningGlobalDetectorTest, crashOnLeakWithOperatorNew)
 {
@@ -390,7 +390,7 @@ TEST(MemoryLeakWarningGlobalDetectorTest, turnOffNewOverloadsNoThrowCausesNoAddi
 #endif
 }
 
-#ifndef CPPUTEST_MEM_LEAK_DETECTION_DISABLED
+#if CPPUTEST_USE_MEM_LEAK_DETECTION
 
 static int mutexLockCount = 0;
 static int mutexUnlockCount = 0;
