@@ -158,7 +158,7 @@ if [ "x$BUILD" = "xcmake_windows" ]; then
     fi
 
     cmake --version
-    cmake "${BUILD_ARGS[@]}" ..
+    cmake -G 'MinGW Makefiles' "${BUILD_ARGS[@]}" ..
 #    make
 #    ctest -V
 fi
