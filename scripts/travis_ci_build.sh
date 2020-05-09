@@ -148,8 +148,8 @@ if [ "x$BUILD" = "xautotools_dist" ]; then
 fi
 
 if [ "x$BUILD" = "xvc_windows" ]; then
-    msbuild -v
-    msbuild CppUTest.vcxproj
+    dotnet build  -v
+    dotnet build CppUTest.vcxproj
 #    BUILD_ARGS=("-DWERROR=ON")
 
 
