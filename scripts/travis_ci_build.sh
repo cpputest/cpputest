@@ -148,6 +148,8 @@ if [ "x$BUILD" = "xautotools_dist" ]; then
 fi
 
 if [ "x$BUILD" = "xvc_windows" ]; then
+    export PATH=$MSBUILD_PATH:$PATH
+    msbuild
     vcbuild
     dotnet build $CPPUTEST_HOME/CppUTest.vcxproj
 #    BUILD_ARGS=("-DWERROR=ON")
