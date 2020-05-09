@@ -37,6 +37,9 @@
 #ifdef CPPUTEST_HAVE_GETTIMEOFDAY
 #include <sys/time.h>
 #endif
+#ifdef CPPUTEST_HAVE_FORK
+#include <unistd.h>
+#endif
 
 #include <time.h>
 #include <stdio.h>
@@ -45,7 +48,6 @@
 #include <string.h>
 #include <math.h>
 #include <ctype.h>
-#include <unistd.h>
 #include <signal.h>
 #ifndef __MINGW32__
 #include <sys/wait.h>
