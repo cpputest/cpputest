@@ -241,7 +241,7 @@ int cpputest_malloc_get_count(void);
  */
 
 #ifndef PUNUSED
-#if defined(__GNUC__)
+#if defined(__GNUC__) || defined(__clang__)
 # define PUNUSED(x) PUNUSED_ ##x __attribute__((unused))
 #else
 # define PUNUSED(x) x
