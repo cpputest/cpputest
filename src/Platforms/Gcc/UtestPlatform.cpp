@@ -209,12 +209,14 @@ static long TimeInMillisImplementation()
 
 static const char* TimeStringImplementation()
 {
-    time_t tm = time(NULLPTR);
+    time_t theTime = time(NULLPTR);
     static char dateTime[80];
 #ifdef _WIN32
-    struct tm *tmp = localtime_s(&tm);
+    static struct tm lastlocaltime;
+    localtime_s(&lastlocaltime, &theTime);
+    struct tm *tmp = &lastlocaltime;
 #else
-    struct tm *tmp = localtime(&tm);
+    struct tm *tmp = localtime(&theTime);
 #endif
     strftime(dateTime, 80, "%Y-%m-%dT%H:%M:%S", tmp);
     return dateTime;
