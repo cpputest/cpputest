@@ -39,6 +39,8 @@
 #endif
 #ifdef CPPUTEST_HAVE_FORK
 #include <unistd.h>
+#include <sys/wait.h>
+#include <errno.h>
 #endif
 
 #include <time.h>
@@ -49,10 +51,6 @@
 #include <math.h>
 #include <ctype.h>
 #include <signal.h>
-#ifndef __MINGW32__
-#include <sys/wait.h>
-#include <errno.h>
-#endif
 #include <pthread.h>
 
 #include "CppUTest/PlatformSpecificFunctions.h"
