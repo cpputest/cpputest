@@ -211,7 +211,7 @@ static const char* TimeStringImplementation()
 {
     time_t tm = time(NULLPTR);
     static char dateTime[80];
-#ifdef CPPUTEST_HAVE_LOCALTIME_S
+#ifdef _WIN32
     struct tm *tmp = localtime_s(&tm);
 #else
     struct tm *tmp = localtime(&tm);

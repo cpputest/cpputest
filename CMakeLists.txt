@@ -39,11 +39,6 @@ if(HAVE_STRDUP)
   add_definitions(-DCPPUTEST_HAVE_STRDUP=1)
 endif(HAVE_STRDUP)
 
-check_function_exists(localtime_s HAVE_LOCALTIME_S)
-if(HAVE_LOCALTIME_S)
-  add_definitions(-DCPPUTEST_HAVE_LOCALTIME_S=1)
-endif(HAVE_LOCALTIME_S)
-
 if (MINGW)
     # Apply workaround for MinGW timespec redefinition (pthread.h / time.h)
     include(CheckStructHasMember)
