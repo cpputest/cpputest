@@ -237,7 +237,13 @@ int (*PlatformSpecificVSNprintf)(char *str, size_t size, const char* format, va_
 
 static PlatformSpecificFile PlatformSpecificFOpenImplementation(const char* filename, const char* flag)
 {
+#ifdef _WIN32
+  FILE* file;
+   fopen_s(&file, filename, flag);
+   return file;
+#else
    return fopen(filename, flag);
+#endif
 }
 
 static void PlatformSpecificFPutsImplementation(const char* str, PlatformSpecificFile file)
