@@ -34,7 +34,10 @@
 #undef strdup
 #undef strndup
 
+#ifdef CPPUTEST_HAVE_GETTIMEOFDAY
 #include <sys/time.h>
+#endif
+
 #include <time.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -191,10 +194,14 @@ void (*PlatformSpecificRestoreJumpBuffer)() = PlatformSpecificRestoreJumpBufferI
 
 static long TimeInMillisImplementation()
 {
+#ifdef CPPUTEST_HAVE_GETTIMEOFDAY
     struct timeval tv;
     struct timezone tz;
     gettimeofday(&tv, &tz);
     return (tv.tv_sec * 1000) + (long)((double)tv.tv_usec * 0.001);
+#else
+    return 0;
+#endif
 }
 
 static const char* TimeStringImplementation()
