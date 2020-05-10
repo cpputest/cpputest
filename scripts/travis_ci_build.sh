@@ -151,10 +151,7 @@ if [ "x$BUILD" = "xvc_windows" ]; then
     export PATH=$MSBUILD_PATH:$PATH
     cmake ..
     ls -la
-    ls -la ..
-    pwd
-    ls -la $CPPUTEST_HOME
-#    MSBuild.exe //ToolsVersion:4.0 $CPPUTEST_HOME/CppUTest.vcxproj
+    MSBuild.exe ALL_BUILD.vcxproj
 fi
 
 if [ "x$BUILD" = "xcmake_windows" ]; then
