@@ -43,6 +43,7 @@ set(CppUTest_headers
         ${CppUTestRootDirectory}/include/CppUTest/PlatformSpecificFunctions_c.h
         ${CppUTestRootDirectory}/include/CppUTest/TestOutput.h
         ${CppUTestRootDirectory}/include/CppUTest/CppUTestConfig.h
+        ${CppUTestRootDirectory}/include/CppUTest/SimpleString.h
         ${CppUTestRootDirectory}/include/CppUTest/SimpleStringInternalCache.h
         ${CppUTestRootDirectory}/include/CppUTest/TestPlugin.h
         ${CppUTestRootDirectory}/include/CppUTest/JUnitTestOutput.h
