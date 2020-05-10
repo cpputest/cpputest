@@ -136,6 +136,15 @@ jobs:
       env: BUILD=extensive_check
     - compiler: clang
       env: BUILD=extensive_check
+    - arch: ppc64le
+      compiler: gcc
+      env: BUILD=autotools
+    - arch: s390x
+      compiler: gcc
+      env: BUILD=autotools
+    - arch: arm64
+      compiler: gcc
+      env: BUILD=autotools
 
 #   Deploy to github releases
     - stage: deploy latest
