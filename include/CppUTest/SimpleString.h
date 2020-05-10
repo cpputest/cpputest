@@ -203,7 +203,7 @@ SimpleString HexStringFrom(const void* value);
 SimpleString HexStringFrom(void (*value)());
 SimpleString StringFrom(double value, int precision = 6);
 SimpleString StringFrom(const SimpleString& other);
-SimpleString StringFromFormat(const char* format, ...) __check_format__(printf, 1, 2);
+SimpleString StringFromFormat(const char* format, ...) _check_format_(printf, 1, 2);
 SimpleString VStringFromFormat(const char* format, va_list args);
 SimpleString StringFromBinary(const unsigned char* value, size_t size);
 SimpleString StringFromBinaryOrNull(const unsigned char* value, size_t size);

@@ -110,9 +110,9 @@
 #endif
 
 #if __has_attribute(format)
-  #define __check_format__(type, format_parameter, other_parameters) __attribute__ ((format (type, format_parameter, other_parameters)))
+  #define _check_format_(type, format_parameter, other_parameters) __attribute__ ((format (type, format_parameter, other_parameters)))
 #else
-  #define __check_format__(type, format_parameter, other_parameters) /* type, format_parameter, other_parameters */
+  #define _check_format_(type, format_parameter, other_parameters) /* type, format_parameter, other_parameters */
 #endif
 
 /*
