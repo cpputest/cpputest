@@ -438,7 +438,7 @@ TEST(UtestShellPointerArrayTest, empty)
 {
     UtestShellPointerArray tests(NULLPTR);
     tests.shuffle(0);
-    CHECK(NULL == tests.getFirstTest());
+    CHECK(NULLPTR == tests.getFirstTest());
 }
 
 TEST(UtestShellPointerArrayTest, testsAreInOrder)
@@ -499,5 +499,3 @@ TEST(UtestShellPointerArrayTest, reverse)
     CHECK(tests.get(1) == test1);
     CHECK(tests.get(2) == test0);
 }
-
-
