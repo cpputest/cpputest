@@ -60,7 +60,7 @@ static void _failFunction()
     FAIL("This test fails");
 }
 
-static void _exitNonZeroFunction() __no_return__;
+static void _exitNonZeroFunction() _no_return_;
 static void _exitNonZeroFunction()
 {
     /* destructor of static objects will be called. If StringCache was there then the allocator will report invalid deallocations of static SimpleString */
