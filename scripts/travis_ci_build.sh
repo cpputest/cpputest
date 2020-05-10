@@ -149,7 +149,7 @@ fi
 
 if [ "x$BUILD" = "xvc_windows" ]; then
     export PATH=$MSBUILD_PATH:$PATH
-    MSBuild.exe //ToolsVersion:4.0 $CPPUTEST_HOME/CppUTest.vcxproj
+    MSBuild.exe //ToolsVersion:15.0 $CPPUTEST_HOME/CppUTest.vcxproj
 fi
 
 if [ "x$BUILD" = "xcmake_windows" ]; then
