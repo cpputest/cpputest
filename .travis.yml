@@ -48,6 +48,15 @@ jobs:
       env: BUILD=autotools
     - compiler: clang
       env: BUILD=autotools
+    - arch: ppc64le
+      compiler: gcc
+      env: BUILD=autotools
+    - arch: s390x
+      compiler: gcc
+      env: BUILD=autotools
+    - arch: arm64
+      compiler: gcc
+      env: BUILD=autotools
 
 # Extended builds, different C++ version and build tools
     - stage: extended build & test
