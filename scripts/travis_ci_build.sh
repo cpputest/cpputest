@@ -152,9 +152,7 @@ if [ "x$BUILD" = "xvc_windows" ]; then
     cmake ..
     ls -la
     MSBuild.exe ALL_BUILD.vcxproj
-    ls -la
-    ls -la Debug
-    ls -la Testing
+    ls -laR
 fi
 
 if [ "x$BUILD" = "xcmake_windows" ]; then
