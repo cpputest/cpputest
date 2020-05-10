@@ -148,14 +148,11 @@ if [ "x$BUILD" = "xautotools_dist" ]; then
 fi
 
 if [ "x$BUILD" = "xvc_windows" ]; then
-    BUILD_ARGS=("-DWERROR=ON")
-
-    if [ -n "$CPP_STD" ]; then
-        BUILD_ARGS+=("-DCMAKE_CXX_STANDARD=$CPP_STD")
-    fi
-
-    cmake --version
-    cmake "${BUILD_ARGS[@]}" ..
+    export PATH=$MSBUILD_PATH:$PATH
+    cmake ..
+    MSBuild.exe ALL_BUILD.vcxproj
+    ./tests/CppUTest/CppUTestTests.exe
+    ./tests/CppUTestExt/CppUTestExtTests.exe
 fi
 
 if [ "x$BUILD" = "xcmake_windows" ]; then
