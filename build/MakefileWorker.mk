@@ -176,7 +176,7 @@ endif
 
 # Default warnings
 ifndef CPPUTEST_WARNINGFLAGS
-	CPPUTEST_WARNINGFLAGS =  -Wall -Wextra -Werror -Wshadow -Wswitch-default -Wswitch-enum -Wconversion -Wno-long-long -Wno-c++98-compat-pedantic
+	CPPUTEST_WARNINGFLAGS =  -Wall -Wextra -Werror -Wshadow -Wswitch-default -Wswitch-enum -Wconversion -Wno-long-long
 ifeq ($(CPPUTEST_PEDANTIC_ERRORS), Y)
 	CPPUTEST_WARNINGFLAGS += -pedantic-errors
 endif
@@ -195,7 +195,10 @@ ifeq ($(COMPILER_NAME),$(CLANG_STR))
 # -Wno-weak-vtables -> The TEST_GROUP macro declares a class and will automatically inline its methods. Thats ok as they are only in one translation unit. Unfortunately, the warning can't detect that, so it must be disabled.
 # -Wno-old-style-casts -> We only use old style casts by decision
 # -Wno-c++11-long-long -> When it detects long long, then we can use it and no need for a warning about that
-	CPPUTEST_CXX_WARNINGFLAGS += -Weverything -Wno-disabled-macro-expansion -Wno-padded -Wno-global-constructors -Wno-exit-time-destructors -Wno-weak-vtables -Wno-old-style-cast -Wno-c++11-long-long
+# -Wno-c++98-compat-pedantic -> Incompatibilities with C++98, these are happening through #define.
+# -Wno-reserved-id-macro -> Macro uses __ in MINGW... can't change that.
+# -Wno-keyword-macro -> new overload
+	CPPUTEST_CXX_WARNINGFLAGS += -Weverything -Wno-disabled-macro-expansion -Wno-padded -Wno-global-constructors -Wno-exit-time-destructors -Wno-weak-vtables -Wno-old-style-cast -Wno-c++11-long-long -Wno-c++98-compat-pedantic -Wno-reserved-id-macro -Wno-keyword-macro
 	CPPUTEST_C_WARNINGFLAGS += -Weverything -Wno-padded
 
 # Clang "7" or newer (Xcode 7 or newer command-line tools) introduced new warnings by default that don't exist on previous versions of clang and cause errors when present.
