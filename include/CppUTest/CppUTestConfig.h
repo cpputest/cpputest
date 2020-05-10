@@ -94,7 +94,7 @@
 /* Should be the only #include here. Standard C library wrappers */
 #include "StandardCLibrary.h"
 
-/* Create a __no_return__ macro, which is used to flag a function as not returning.
+/* Create a _no_return_ macro, which is used to flag a function as not returning.
  * Used for functions that always throws for instance.
  *
  * This is needed for compiling with clang, without breaking other compilers.
@@ -104,9 +104,9 @@
 #endif
 
 #if __has_attribute(noreturn)
-  #define __no_return__ __attribute__((noreturn))
+  #define _no_return_ __attribute__((noreturn))
 #else
-  #define __no_return__
+  #define _no_return_
 #endif
 
 #if __has_attribute(format)
