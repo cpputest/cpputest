@@ -149,18 +149,7 @@ fi
 
 if [ "x$BUILD" = "xvc_windows" ]; then
     export PATH=$MSBUILD_PATH:$PATH
-    MSBuild.exe
-    vcbuild
-    dotnet build $CPPUTEST_HOME/CppUTest.vcxproj
-#    BUILD_ARGS=("-DWERROR=ON")
-
-
-#    if [ -n "$CPP_STD" ]; then
-#        BUILD_ARGS+=("-DCMAKE_CXX_STANDARD=$CPP_STD")
-#    fi
-
-#    cmake --version
-#    cmake "${BUILD_ARGS[@]}" ..
+    MSBuild.exe //ToolsVersion:14.0 $CPPUTEST/CppUTest.vcxproj'
 fi
 
 if [ "x$BUILD" = "xcmake_windows" ]; then
