@@ -35,9 +35,10 @@ jobs:
       os: osx
 
 # Windows
-    - compiler: vc
+    - compiler: msbuild
       os: windows
       env: BUILD=vc_windows CPP_STD=17
+        - MSBUILD_PATH="c:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\MSBuild\15.0\Bin"
 
 # Linux
     - compiler: gcc
