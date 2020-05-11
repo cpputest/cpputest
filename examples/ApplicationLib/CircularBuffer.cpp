@@ -31,7 +31,7 @@
 CircularBuffer::CircularBuffer(int _capacity) :
     index(0), outdex(0), capacity(_capacity), empty(true), full(false)
 {
-    buffer = new int[this->capacity];
+    buffer = new int[(size_t) this->capacity];
 }
 
 CircularBuffer::~CircularBuffer()
