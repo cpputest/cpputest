@@ -41,6 +41,8 @@ jobs:
         - MSBUILD_PATH="c:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\MSBuild\15.0\Bin"
         - VCTargetsPath="C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\Common7\IDE\VC\VCTargets"
 
+    - compiler: clang
+      env: BUILD=extensive_check
 # Linux
     - compiler: gcc
       env: BUILD=cmake CPP_STD=17
