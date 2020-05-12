@@ -55,4 +55,6 @@ add_executable(CppUTestTests ${CppUTestTests_src})
 cpputest_normalize_test_output_location(CppUTestTests)
 target_link_libraries(CppUTestTests CppUTest ${THREAD_LIB})
 
-cpputest_buildtime_discover_tests(CppUTestTests)
+if (TESTS_BUILD_DISCOVER)
+    cpputest_buildtime_discover_tests(CppUTestTests)
+endif()
