@@ -60,7 +60,7 @@ if [ "x$BUILD" = "xtest_report" ]; then
 fi
 
 if [ "x$BUILD" = "xcmake_coverage" ]; then
-    pip install --user cpp-coveralls
+    pip install --user cpp-coveralls gcovr
 
     cmake .. -DCMAKE_BUILD_TYPE=Debug -DC++11=ON -DCOVERAGE=ON -DLONGLONG=ON
     make
@@ -168,4 +168,3 @@ if [ "x$BUILD" = "xcmake_windows" ]; then
     make
     ctest -V
 fi
-
