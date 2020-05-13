@@ -338,7 +338,7 @@ TEST(TestHarness_c, checkLongLongInt)
 static void _failLongLongIntTextMethod()
 {
     cpputest_longlong dummy_longlong;
-    CHECK_EQUAL_C_LONGLONG_TEXT(dummy_longlong, dummy_longlong);
+    CHECK_EQUAL_C_LONGLONG_TEXT(dummy_longlong, dummy_longlong, "Text");
 } // LCOV_EXCL_LINE
 
 TEST(TestHarness_c, checkLongLongIntText)
@@ -366,7 +366,7 @@ TEST(TestHarness_c, checkUnsignedLongLongInt)
 static void _failUnsignedLongLongIntTextMethod()
 {
     cpputest_ulonglong dummy_ulonglong;
-    CHECK_EQUAL_C_ULONGLONG_TEXT(dummy_ulonglong, dummy_ulonglong);
+    CHECK_EQUAL_C_ULONGLONG_TEXT(dummy_ulonglong, dummy_ulonglong, "Text");
 } // LCOV_EXCL_LINE
 
 TEST(TestHarness_c, checkUnsignedLongLongIntText)

@@ -145,6 +145,8 @@ jobs:
     - arch: arm64
       compiler: gcc
       env: BUILD=autotools
+    - compiler: gcc
+      env: BUILD=makefileworker
 
 #   Deploy to github releases
     - stage: deploy latest

@@ -78,3 +78,5 @@ void (*PlatformSpecificMutexLock)(PlatformSpecificMutex mtx) = NULLPTR;
 void (*PlatformSpecificMutexUnlock)(PlatformSpecificMutex mtx) = NULLPTR;
 void (*PlatformSpecificMutexDestroy)(PlatformSpecificMutex mtx) = NULLPTR;
 
+void (*PlatformSpecificSrand)(unsigned int) = NULLPTR;
+int (*PlatformSpecificRand)(void) = NULLPTR;
