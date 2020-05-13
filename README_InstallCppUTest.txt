@@ -14,18 +14,8 @@
  > make tdd   # This is to run the CppUTest unit tests
 
 2b. For Microsoft Visual C++ V6
- Double click <someDirectory>/CppUTest/CppUTest.dsw
- Run without debugging, see the test results in the command window
- Exit MS Visual C++
-
- To run the examples:
- Double click <someDirectory>/CppUTest/example/CppUTestExample.dsw
- Run without debugging, see the test results in the command window
- You should define the environment variable CPP_U_TEST to point to CppUTest
- to run these.
-
- NOTE: To create your own project, you need to have CppUTest and your project
- compiled with the same compile and link settings
+ We couldn't install the compiler anymore. We removed the project files.
+ You will need to make your own
 
 2c. For ARMCC from Keil MDK-ARM (building CppUTest library only)
  > make all -C platforms/armcc
