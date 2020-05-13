@@ -12,6 +12,10 @@ if [ "x$BUILD" = "xautotools" ]; then
     make tdd
 fi
 
+if [ "x$BUILD" = "xmakefileworker" ]; then
+    make -C $CPPUTEST_HOME -f Makefile_using_MakefileWorker
+fi
+
 if [ "x$BUILD" = "xcmake" ]; then
     BUILD_ARGS=("-DWERROR=ON")
 
