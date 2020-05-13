@@ -13,7 +13,7 @@ if [ "x$BUILD" = "xautotools" ]; then
 fi
 
 if [ "x$BUILD" = "xmakefileworker" ]; then
-    make -C $CPPUTEST_HOME -f Makefile_using_MakefileWorker
+    make -C $CPPUTEST_HOME -f Makefile_using_MakefileWorker test_all
 fi
 
 if [ "x$BUILD" = "xcmake" ]; then
