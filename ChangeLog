@@ -1,18 +1,4 @@
 
-Addition to Release 3.7 and Release 3.7.1:
-
-* -v and -ojunit together
-* Better memory leak printing
-* MEMCMP_EQUAL
-* STRNCMP_EQUAL
-* Memory Leak Detector multi-threading support
-* Mock Output parameters
-* Better Windows support
-* Many Mock improvements
-* Many small fixes and improvements
-* Less platform specific dependencies
-* More platforms supported
-
-For further changelog check the github page:
+For changelog check the github page:
 https://github.com/cpputest/cpputest
 
