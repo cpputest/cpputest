@@ -166,9 +166,16 @@ TEST(MemoryLeakOverridesToBeUsedInProductionCode, UseNativeMallocByTemporarlySwi
     #undef malloc
     #undef free
 #endif
+
+#if CPPUTEST_USE_STD_C_LIB
     void* memory = malloc(10);
     LONGS_EQUAL(memLeaks, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
     free (memory);
+#else
+    void* memory = PlatformSpecificMalloc(10);
+    LONGS_EQUAL(memLeaks, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
+    PlatformSpecificFree (memory);
+#endif
 
 #ifdef CPPUTEST_USE_MALLOC_MACROS
 #include "CppUTest/MemoryLeakDetectorMallocMacros.h"
