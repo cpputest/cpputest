@@ -52,7 +52,20 @@ if (COVERAGE AND NOT MSVC)
     set(CPPUTEST_C_FLAGS "${CPPUTEST_C_FLAGS} --coverage")
     set(CPPUTEST_CXX_FLAGS "${CPPUTEST_CXX_FLAGS} --coverage")
     set(CMAKE_BUILD_TYPE "Debug")
-endif (COVERAGE AND NOT MSVC)
+    find_program(GCOVR gcovr DOC "gcovr executable")
+
+    if (NOT GCOVR)
+        message(SEND_ERROR "gcovr not found")
+    endif()
+
+    add_custom_target(coverage ${GCOVR}
+        --root ${PROJECT_SOURCE_DIR}
+        --output "${CMAKE_BINARY_DIR}/coverage/coverage.html"
+        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+        COMMENT "Generate coverage data"
+        VERBATIM
+        )
+endif()
 
 if (CMAKE_CXX_STANDARD)
     set(CMAKE_CXX_EXTENSIONS OFF)
