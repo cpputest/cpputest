@@ -1943,6 +1943,9 @@
         <name>$PROJ_DIR$\..\..\tests\CppUTest\CheatSheetTest.cpp</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\..\tests\CppUTest\CompatabilityTests.cpp</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\..\tests\CppUTest\CommandLineArgumentsTest.cpp</name>
       </file>
       <file>

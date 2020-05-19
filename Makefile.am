@@ -162,6 +162,7 @@ CppUTestTests_SOURCES = \
 	tests/CppUTest/AllocLetTestFreeTest.cpp \
 	tests/CppUTest/AllTests.cpp \
 	tests/CppUTest/CheatSheetTest.cpp \
+	tests/CppUTest/CompatabilityTests.cpp \
 	tests/CppUTest/CommandLineArgumentsTest.cpp \
 	tests/CppUTest/CommandLineTestRunnerTest.cpp \
 	tests/CppUTest/DummyMemoryLeakDetector.cpp \
@@ -338,6 +339,12 @@ check_basic:
 
 	@echo "Building with the Std C++ 14 turned on. Compiler acts differently then."
 	make distclean; $(srcdir)/configure --enable-std-cpp14; make
+
+	@echo "Building with the Std C++ 17 turned on. Compiler acts differently then."
+	make distclean; $(srcdir)/configure --enable-std-cpp17; make
+
+	@echo "Building with the Std C++ 20 turned on. Compiler acts differently then."
+	make distclean; $(srcdir)/configure --enable-std-cpp20; make
 
 	@echo "Building without the Standard C library"
 	make distclean; $(srcdir)/configure --disable-std-c; make

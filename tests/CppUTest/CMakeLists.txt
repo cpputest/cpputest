@@ -4,6 +4,7 @@ set(CppUTestTests_src
     CheatSheetTest.cpp
     SimpleStringTest.cpp
     SimpleStringCacheTest.cpp
+    CompatabilityTests.cpp
     CommandLineArgumentsTest.cpp
     TestFailureTest.cpp
     TestFailureNaNTest.cpp

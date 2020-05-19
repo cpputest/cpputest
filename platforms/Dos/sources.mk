@@ -41,6 +41,7 @@ CPPU1_OBJECTS := \
   $(CPPUTEST_HOME)/tests/CppUTest/AllocLetTestFree.o \
   $(CPPUTEST_HOME)/tests/CppUTest/AllocLetTestFreeTest.o \
   $(CPPUTEST_HOME)/tests/CppUTest/CheatSheetTest.o \
+  $(CPPUTEST_HOME)/tests/CppUTest/CompatabilityTests.o \
   $(CPPUTEST_HOME)/tests/CppUTest/CommandLineArgumentsTest.o \
   $(CPPUTEST_HOME)/tests/CppUTest/CommandLineTestRunnerTest.o \
   $(CPPUTEST_HOME)/tests/CppUTest/JUnitOutputTest.o

@@ -247,6 +247,7 @@
     <ClCompile Include="CppUTest\AllocLetTestFree.c" />
     <ClCompile Include="CppUTest\AllocLetTestFreeTest.cpp" />
     <ClCompile Include="CppUTest\CheatSheetTest.cpp" />
+    <ClCompile Include="CppUTest\CompatabilityTests.cpp" />
     <ClCompile Include="CppUTest\CommandLineArgumentsTest.cpp" />
     <ClCompile Include="CppUTest\CommandLineTestRunnerTest.cpp" />
     <ClCompile Include="CppUTestExt\AllTests.cpp" />
