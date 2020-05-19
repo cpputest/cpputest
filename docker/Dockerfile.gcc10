@@ -1,9 +1,0 @@
-FROM okannen/gcc-10
-
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends file git make automake autoconf libtool && \
-    update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-10 100
-
-WORKDIR /cpputest_build
-
-CMD autoreconf -i ../cpputest && ../cpputest/configure && make tdd

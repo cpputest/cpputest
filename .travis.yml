@@ -127,7 +127,6 @@ jobs:
 
 #   Docker images. Need to be cleared at times
     - env: BUILD=docker_ubuntu_autotools
-    - env: BUILD=docker_ubuntu_gcc10
     - env: BUILD=docker_ubuntu_dos
     - env: BUILD=autotools_dist
 

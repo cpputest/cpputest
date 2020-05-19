@@ -108,11 +108,6 @@ if [ "x$BUILD" = "xdocker_ubuntu_autotools" ]; then
     docker start -i cpputest_ubuntu
 fi
 
-if [ "x$BUILD" = "xdocker_ubuntu_gcc10" ]; then
-    $CPPUTEST_HOME/scripts/create_docker_images_and_containers gcc10
-    docker start -i cpputest_gcc10
-fi
-
 if [ "x$BUILD" = "xdocker_ubuntu_dos" ]; then
     $CPPUTEST_HOME/scripts/create_docker_images_and_containers dos
     docker start -i cpputest_dos
