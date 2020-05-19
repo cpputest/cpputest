@@ -85,7 +85,7 @@ fi
 
 AC_LANG_PUSH([C++])
 #####################################################################################
-##### C++ 14 checks
+##### C++ checks
 
 # FLag -std=c++1y
 CXXFLAGS="-Werror -std=c++1y"
@@ -97,6 +97,24 @@ CXXFLAGS="$saved_cxxflags"
 CXXFLAGS="-Werror -std=c++14"
 AC_MSG_CHECKING([whether CXX supports -std=c++14])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CPP14FLAG="-std=c++14" ], [AC_MSG_RESULT([no])])
+CXXFLAGS="$saved_cxxflags"
+
+# FLag std=c++17
+CXXFLAGS="-Werror -std=c++17"
+AC_MSG_CHECKING([whether CXX supports -std=c++17])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CPP17FLAG="-std=c++17" ], [AC_MSG_RESULT([no])])
+CXXFLAGS="$saved_cxxflags"
+
+# FLag std=c++20
+CXXFLAGS="-Werror -std=c++2a"
+AC_MSG_CHECKING([whether CXX supports -std=c++2a])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CPP20FLAG="-std=c++2a" ], [AC_MSG_RESULT([no])])
+CXXFLAGS="$saved_cxxflags"
+
+# FLag std=c++20
+CXXFLAGS="-Werror -std=c++20"
+AC_MSG_CHECKING([whether CXX supports -std=c++20])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CPP20FLAG="-std=c++20" ], [AC_MSG_RESULT([no])])
 CXXFLAGS="$saved_cxxflags"
 
 #####################################################################################
@@ -373,6 +391,12 @@ AC_ARG_ENABLE([std-cpp11], [AC_HELP_STRING([--enable-std-cpp11], [enable the use
 AC_ARG_ENABLE([std-cpp14], [AC_HELP_STRING([--enable-std-cpp14], [enable the use of Standard C++ 14 (if the compiler supports that)])],
    [use_std_cpp14=${enableval}], [use_std_cpp14=no])
 
+AC_ARG_ENABLE([std-cpp17], [AC_HELP_STRING([--enable-std-cpp17], [enable the use of Standard C++ 17 (if the compiler supports that)])],
+   [use_std_cpp17=${enableval}], [use_std_cpp17=no])
+
+AC_ARG_ENABLE([std-cpp20], [AC_HELP_STRING([--enable-std-cpp20], [enable the use of Standard C++ 20 (if the compiler supports that)])],
+   [use_std_cpp20=${enableval}], [use_std_cpp20=no])
+
 AC_ARG_ENABLE([cpputest-flags], [AC_HELP_STRING([--disable-cpputest-flags], [disable CFLAGS/CPPFLAGS/CXXFLAGS set by CppUTest])],
    [cpputest_flags=${enableval}], [cpputest_flags=yes])
 
@@ -439,6 +463,18 @@ fi
 if test "x${use_std_cpp14}" = xyes; then
 	CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} ${CPPUTEST_CPP14FLAG}"
   cpp_standard_used="C++14"
+fi
+
+# Using the C++17 standard?
+if test "x${use_std_cpp17}" = xyes; then
+	CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} ${CPPUTEST_CPP17FLAG}"
+  cpp_standard_used="C++17"
+fi
+
+# Using the C++20 standard?
+if test "x${use_std_cpp20}" = xyes; then
+	CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} ${CPPUTEST_CPP20FLAG}"
+  cpp_standard_used="C++20"
 fi
 
 # Dealing with memory leak detection

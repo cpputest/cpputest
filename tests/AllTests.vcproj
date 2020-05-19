@@ -355,6 +355,29 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="CppUTest\CompatabilityTests.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						ForcedIncludeFiles=""
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="CppUTest\CommandLineArgumentsTest.cpp"
 				>
 				<FileConfiguration

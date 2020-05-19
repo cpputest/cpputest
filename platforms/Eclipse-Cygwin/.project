@@ -725,6 +725,11 @@
 			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/tests/CheatSheetTest.cpp</locationURI>
 		</link>
 		<link>
+			<name>tests/CompatabilityTests.cpp</name>
+			<type>1</type>
+			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/tests/CompatabilityTests.cpp</locationURI>
+		</link>
+		<link>
 			<name>tests/CommandLineArgumentsTest.cpp</name>
 			<type>1</type>
 			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/tests/CommandLineArgumentsTest.cpp</locationURI>
@@ -1883,6 +1888,16 @@
 			<name>tests/Debug/CodeMemoryReportFormatterTest.sbr</name>
 			<type>1</type>
 			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/tests/Debug/CodeMemoryReportFormatterTest.sbr</locationURI>
+		</link>
+		<link>
+			<name>tests/Debug/CompatabilityTests.obj</name>
+			<type>1</type>
+			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/tests/Debug/CompatabilityTests.obj</locationURI>
+		</link>
+		<link>
+			<name>tests/Debug/CompatabilityTests.sbr</name>
+			<type>1</type>
+			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/tests/Debug/CompatabilityTests.sbr</locationURI>
 		</link>
 		<link>
 			<name>tests/Debug/CommandLineArgumentsTest.obj</name>
