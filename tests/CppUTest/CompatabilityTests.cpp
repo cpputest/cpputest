@@ -18,7 +18,7 @@ TEST(StandardCppLibrary, UniquePtrConversationToBool)
 
     auto const notNull = std::make_unique<int>(1);
     CHECK_TRUE(notNull);
-};
+}
 
 #endif
 
