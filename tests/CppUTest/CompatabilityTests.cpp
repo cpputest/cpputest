@@ -9,7 +9,7 @@ TEST_GROUP(StandardCppLibrary)
 {
 };
 
-#if defined(__cplusplus) && __cplusplus >= 201103L && 0
+#if defined(__cplusplus) && __cplusplus >= 201402L
 
 TEST(StandardCppLibrary, UniquePtrConversationToBool)
 {
@@ -18,7 +18,7 @@ TEST(StandardCppLibrary, UniquePtrConversationToBool)
 
     auto const notNull = std::make_unique<int>(1);
     CHECK_TRUE(notNull);
-};
+}
 
 #endif
 
