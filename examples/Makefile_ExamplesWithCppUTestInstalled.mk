@@ -1,6 +1,6 @@
 
 CPPFLAGS += -I /usr/local/include
-LD_LIBRARIES = -L/usr/local/lib -lcpputest -lcpputestext
+LD_LIBRARIES = -L/usr/local/lib -lCppUTest -lCppUTestExt
 
 VPATH = ApplicationLib AllTests
 
