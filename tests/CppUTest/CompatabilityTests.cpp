@@ -9,7 +9,7 @@ TEST_GROUP(StandardCppLibrary)
 {
 };
 
-#if defined(__cplusplus) && __cplusplus >= 201103L
+#if defined(__cplusplus) && __cplusplus >= 201402L
 
 TEST(StandardCppLibrary, UniquePtrConversationToBool)
 {
