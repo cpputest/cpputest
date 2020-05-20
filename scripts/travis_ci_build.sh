@@ -150,6 +150,7 @@ if [ "x$BUILD" = "xautotools_install_and_test_examples" ]; then
     autoreconf -i ..
     ../configure
 
+    make tdd
     sudo make install
     make -C examples -f examples/Makefile_ExamplesWithCppUTestInstalled.mk
 fi
