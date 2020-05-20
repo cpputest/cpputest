@@ -70,7 +70,7 @@
 
 #ifdef __clang__
  #pragma clang diagnostic push
- #if __clang_major__ >= 3 && __clang_minor__ >= 6
+ #if (__clang_major__ == 3 && __clang_minor__ >= 6) || __clang_major__ >= 4
   #pragma clang diagnostic ignored "-Wkeyword-macro"
  #endif
 #endif
