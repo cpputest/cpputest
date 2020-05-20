@@ -152,6 +152,7 @@ if [ "x$BUILD" = "xautotools_install_and_test_examples" ]; then
 
     make tdd
     sudo make install
+    ls -la /usr/local/lib
     make -C $CPPUTEST_HOME/examples -f $CPPUTEST_HOME/examples/Makefile_ExamplesWithCppUTestInstalled.mk
 fi
 
