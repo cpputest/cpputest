@@ -152,7 +152,7 @@ if [ "x$BUILD" = "xautotools_install_and_test_examples" ]; then
 
     make tdd
     sudo make install
-    make -C examples -f examples/Makefile_ExamplesWithCppUTestInstalled.mk
+    make -C examples -f $CPPTEST_HOME/examples/Makefile_ExamplesWithCppUTestInstalled.mk
 fi
 
 if [ "x$BUILD" = "xvc_windows" ]; then
