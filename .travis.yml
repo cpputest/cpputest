@@ -48,6 +48,8 @@ jobs:
       env: BUILD=autotools
     - compiler: clang
       env: BUILD=autotools
+    - compiler: clang
+      env: BUILD=autotools_install_and_test_examples
 
 # Extended builds, different C++ version and build tools
     - stage: extended build & test

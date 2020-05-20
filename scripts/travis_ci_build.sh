@@ -146,6 +146,14 @@ if [ "x$BUILD" = "xautotools_dist" ]; then
     fi
 fi
 
+if [ "x$BUILD" = "xautotools_install_and_test_examples" ]; then
+    autoreconf -i ..
+    ../configure
+
+    make install
+    make -C examples -f examples/Makefile_ExamplesWithCppUTestInstalled.mk
+fi
+
 if [ "x$BUILD" = "xvc_windows" ]; then
     export PATH=$MSBUILD_PATH:$PATH
     cmake ..
