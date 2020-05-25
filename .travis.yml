@@ -146,6 +146,8 @@ jobs:
       env: BUILD=autotools
     - compiler: gcc
       env: BUILD=makefileworker
+    - compiler: clang
+      env: BUILD=autotools_install_and_test_examples
 
 #   Deploy to github releases
     - stage: deploy latest

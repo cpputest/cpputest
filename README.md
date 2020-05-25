@@ -23,13 +23,13 @@ You'll need to do the following to get started:
 
 Building from source (unix-based, cygwin, MacOSX):
 
-* Download latest version
-* autogen.sh
-* make a build directory and change to it `mkdir a_build_dir && cd a_build_dir`
-* configure `../configure`
-* `make`
-* `make check`
-* You can use `make install` if you want to install CppUTest system-wide
+* git clone git://github.com/cpputest/cpputest.git
+* cd cpputest_build
+* autoreconf .. -i
+* ../configure
+* make
+
+You can use `make install` if you want to install CppUTest system-wide
 
 You can also use CMake, which also works for Windows Visual Studio.
 
@@ -61,6 +61,7 @@ TEST(FirstTestGroup, FirstTest)
 
 ## Command line switches
 
+* -h help, shows the latest help, including the parameters we've implemented after updating this README page.
 * -v verbose, print each test name as it runs
 * -r# repeat the tests some number of times, default is one, default if # is not specified is 2. This is handy if you are experiencing memory leaks related to statics and caches.
 * -s# random shuffle the test execution order. # is an integer used for seeding the random number generator. # is optional, and if omitted, the seed value is chosen automatically, which results in a different order every time. The seed value is printed to console to make it possible to reproduce a previously generated execution order. Handy for detecting problems related to dependencies between tests.
