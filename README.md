@@ -23,13 +23,11 @@ You'll need to do the following to get started:
 
 Building from source (unix-based, cygwin, MacOSX):
 
-{% highlight bash %}
-$ git clone git://github.com/cpputest/cpputest.git
-$ cd cpputest_build
-$ autoreconf .. -i
-$ ../configure
-$ make
-{% endhighlight %}
+* git clone git://github.com/cpputest/cpputest.git
+* cd cpputest_build
+* autoreconf .. -i
+* ../configure
+* make
 
 You can use `make install` if you want to install CppUTest system-wide
 
