@@ -385,11 +385,6 @@
 			<locationURI>PARENT-2-PROJECT_LOC/cpputest_build/Makefile</locationURI>
 		</link>
 		<link>
-			<name>docs/WalkThrough_VS21010.docx</name>
-			<type>1</type>
-			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/docs/WalkThrough_VS21010.docx</locationURI>
-		</link>
-		<link>
 			<name>examples/.cdtproject</name>
 			<type>1</type>
 			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/examples/.cdtproject</locationURI>
