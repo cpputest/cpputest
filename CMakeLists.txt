@@ -1,7 +1,7 @@
 project(CppUTest)
 
-set(CppUTest_version_major 3)
-set(CppUTest_version_minor 8)
+set(CppUTest_version_major 4)
+set(CppUTest_version_minor 0)
 
 # 2.6.3 is needed for ctest support
 # 3.1 is needed for target_sources
