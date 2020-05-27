@@ -7,14 +7,14 @@
 # PACKAGE_VERSION_COMPATIBLE if the current version is >= requested version,
 # but only if the requested major version is the same as the current one.
 # The variable CVF_VERSION must be set before calling configure_file().
-set(PACKAGE_VERSION "3.8")
+set(PACKAGE_VERSION "4.0")
 if(PACKAGE_VERSION VERSION_LESS PACKAGE_FIND_VERSION)
   set(PACKAGE_VERSION_COMPATIBLE FALSE)
 else()
-  if("3.8" MATCHES "^([0-9]+)\\.")
+  if("4.0" MATCHES "^([0-9]+)\\.")
     set(CVF_VERSION_MAJOR "${CMAKE_MATCH_1}")
   else()
-    set(CVF_VERSION_MAJOR "3.8")
+    set(CVF_VERSION_MAJOR "4.0")
   endif()
   if(PACKAGE_FIND_VERSION_MAJOR STREQUAL CVF_VERSION_MAJOR)
     set(PACKAGE_VERSION_COMPATIBLE TRUE)
