@@ -15,7 +15,7 @@ Coverage:
 [![Coverage Status](https://coveralls.io/repos/cpputest/cpputest/badge.svg?branch=master&service=github)](https://coveralls.io/github/cpputest/cpputest?branch=master)
 
 Slack channel:
-[Join if link not expired](https://join.slack.com/t/cpputest/shared_invite/zt-dvhne8z8-i_sOcxMF3oYvjoN~qpwiDw)
+[Join if link not expired](https://join.slack.com/t/cpputest/shared_invite/zt-epq97u9h-6yBQHHl2cvUADjEENtdASw)
 
 ## Getting Started
 
