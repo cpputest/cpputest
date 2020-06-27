@@ -88,10 +88,10 @@ static long VisualCppTimeInMillis()
 	else 
 	{
 	#ifdef TIMERR_NOERROR
-		return timeGetTime();
+		return (long)timeGetTime();
 	#else
 		#if !defined(_WIN32_WINNT) || !defined(_WIN32_WINNT_VISTA) || (_WIN32_WINNT < _WIN32_WINNT_VISTA)
-			return GetTickCount();
+			return (long)GetTickCount();
 		#else
 			return (long)GetTickCount64();
 		#endif
