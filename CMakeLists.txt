@@ -57,6 +57,8 @@ if (MINGW)
     endif()
 endif()
 
+include(CMakeDependentOption)
+
 option(STD_C "Use the standard C library" ON)
 option(STD_CPP "Use the standard C++ library" ON)
 option(CPPUTEST_FLAGS "Use the CFLAGS/CXXFLAGS/LDFLAGS set by CppUTest" ON)
@@ -68,7 +70,8 @@ option(COVERAGE "Enable running with coverage" OFF)
 option(C++11 "Compile with C++11 support" OFF)
 option(WERROR "Compile with warnings as errors" OFF)
 
-option(TESTS "Compile and make tests for the code?" ON)
+cmake_dependent_option(TESTS "Compile and make tests for the code?" ON
+                       "NOT CMAKE_CROSSCOMPILING" OFF)
 option(TESTS_DETAILED "Run each test separately instead of grouped?" OFF)
 option(TESTS_BUILD_DISCOVER "Build time test discover" ON)
 
