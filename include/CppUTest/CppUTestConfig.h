@@ -33,9 +33,7 @@
 #endif
 
 #ifdef _cpputest_pid_t
-#define PID_T _cpputest_pid_t
-#else
-#define PID_T pid_t
+typedef _cpputest_pid_t pid_t;
 #endif
 
 /*
