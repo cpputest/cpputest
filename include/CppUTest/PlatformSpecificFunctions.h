@@ -28,6 +28,7 @@
 #ifndef PLATFORMSPECIFICFUNCTIONS_H_
 #define PLATFORMSPECIFICFUNCTIONS_H_
 
+#include "CppUTest/CppUTestConfig.h"
 #include "CppUTest/TestOutput.h"
 TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment();
 
