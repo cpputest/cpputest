@@ -75,11 +75,11 @@ static int waitpid_while_debugging_stub_forced_failures = 0;
 
 extern "C" {
 
-    static pid_t (*original_waitpid)(int, int*, int) = NULLPTR;
+    static PID_T (*original_waitpid)(int, int*, int) = NULLPTR;
 
-    static pid_t fork_failed_stub(void) { return -1; }
+    static PID_T fork_failed_stub(void) { return -1; }
 
-    static pid_t waitpid_while_debugging_stub(int pid, int* status, int options)
+    static PID_T waitpid_while_debugging_stub(int pid, int* status, int options)
     {
         static int saved_status;
 
@@ -94,7 +94,7 @@ extern "C" {
         }
     }
 
-    static pid_t waitpid_failed_stub(int, int*, int) { return -1; }
+    static PID_T waitpid_failed_stub(int, int*, int) { return -1; }
 }
 
 #include <unistd.h>

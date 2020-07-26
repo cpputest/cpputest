@@ -33,8 +33,8 @@ TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment();
 
 class TestPlugin;
 extern void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell* shell, TestPlugin* plugin, TestResult* result);
-extern pid_t (*PlatformSpecificFork)(void);
-extern pid_t (*PlatformSpecificWaitPid)(int pid, int* status, int options);
+extern PID_T (*PlatformSpecificFork)(void);
+extern PID_T (*PlatformSpecificWaitPid)(int pid, int* status, int options);
 
 /* Platform specific interface we use in order to minimize dependencies with LibC.
  * This enables porting to different embedded platforms.

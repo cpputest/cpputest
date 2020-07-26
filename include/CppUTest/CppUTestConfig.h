@@ -32,6 +32,12 @@
 #include "CppUTestGeneratedConfig.h"
 #endif
 
+#ifdef _cpputest_pid_t
+#define PID_T _cpputest_pid_t
+#else
+#define PID_T pid_t
+#endif
+
 /*
  * This file is added for some specific CppUTest configurations that earlier were spread out into multiple files.
  *
