@@ -2,42 +2,25 @@
 # Script run in the travis CI
 set -ex
 
-if [[ "$CXX" == clang* ]]; then
-    export CXXFLAGS="-stdlib=libc++"
+if [ "x$CPPUTEST_HOME" = "x" ] ; then
+  export CPPUTEST_HOME=$TRAVIS_BUILD_DIR
 fi
-
 
 if [ "x$BUILD" = "xautotools" ]; then
     autoreconf -i ..
     ../configure
-    echo "CONFIGURATION DONE. Compiling now."
+    make tdd
+fi
 
-    if [ "${TRAVIS_EVENT_TYPE}" == "cron" ]; then
-        make check_all
-    fi
-
-
-    if [ "x$TRAVIS_OS_NAME" = "xosx" ]; then
-        COPYFILE_DISABLE=1 make dist
-        COPYFILE_DISABLE=1 make dist-zip
-    else
-        make dist
-        make dist-zip
-    fi
-
-
-    if [ "x$CXX" = "xg++" ]; then
-      echo "Deploy please"
-#      gem install travis_github_deployer
-#      cd .. && travis_github_deployer -v || exit 1
-    fi;
+if [ "x$BUILD" = "xmakefileworker" ]; then
+    make -C $CPPUTEST_HOME -f Makefile_using_MakefileWorker test_all
 fi
 
 if [ "x$BUILD" = "xcmake" ]; then
-    BUILD_ARGS=("-DWERROR=ON" "-DC++11=${CPP11}")
+    BUILD_ARGS=("-DWERROR=ON")
 
-    if [ "x$CPP11" = "xOFF" ]; then
-        BUILD_ARGS+=("-DCMAKE_CXX_STANDARD=98")
+    if [ -n "$CPP_STD" ]; then
+        BUILD_ARGS+=("-DCMAKE_CXX_STANDARD=$CPP_STD")
     fi
 
     cmake --version
@@ -49,7 +32,6 @@ fi
 if [ "x$BUILD" = "xautotools_gtest" ]; then
     autoreconf -i ..
     ../configure
-
     make check_gtest
 fi
 
@@ -72,9 +54,6 @@ if [ "x$BUILD" = "xcmake_gtest" ]; then
 fi
 
 if [ "x$BUILD" = "xtest_report" ]; then
-    if [ "x$TRAVIS_OS_NAME" = "xosx" ]; then
-        brew install ant
-    fi
     autoreconf -i ..
     ../configure
     make check
@@ -85,25 +64,115 @@ if [ "x$BUILD" = "xtest_report" ]; then
 fi
 
 if [ "x$BUILD" = "xcmake_coverage" ]; then
-    pip install --user cpp-coveralls
+    pip install --user cpp-coveralls gcovr
 
-    cmake .. -DCMAKE_BUILD_TYPE=C++11=ON -DCOVERAGE=ON -DLONGLONG=ON
+    cmake .. -DCMAKE_BUILD_TYPE=Debug -DC++11=ON -DCOVERAGE=ON -DLONGLONG=ON
     make
     ctest
 
     coveralls -b . -r .. -i "src" -i "include" --gcov-options="-lbc" || true
 fi
 
+if [ "x$BUILD" = "xautotools_cmake_install_test" ]; then
+    autoreconf -i ..
+    ../configure
+    rm -rf install_autotools
+    mkdir -p install_autotools
+    make DESTDIR=install_autotools install
+
+    cmake ..
+    rm -rf install_cmake
+    mkdir -p install_cmake
+    make DESTDIR=install_cmake install
+
+    # Hack: autotools cannot make CMake package. We cached and copied them. Here we check they are still the same
+    for cmakefile in CppUTestConfig.cmake CppUTestConfigVersion.cmake CppUTestTargets-relwithdebinfo.cmake CppUTestTargets.cmake; do
+      cat install_autotools/usr/local/lib/CppUTest/cmake/$cmakefile
+      cat install_cmake/usr/local/lib/CppUTest/cmake/$cmakefile
+      diff -Bw install_autotools/usr/local/lib/CppUTest/cmake/$cmakefile  install_cmake/usr/local/lib/CppUTest/cmake/$cmakefile || exit 1
+    done
+
+    export INSTALL_DIFF=`diff -rwBq install_autotools install_cmake  -X CppUTestGeneratedConfig.h -X libCppUTest.a -X libCppUTestExt.a`
+    if [ "x$INSTALL_DIFF" != "x" ]; then
+        echo "FAILED: CMake install and Autotools install is not the same!\n"
+        echo "Difference\n"
+        echo "-------------------------------\n"
+        echo "$INSTALL_DIFF"
+        echo "-------------------------------\n"
+        exit 1;
+    fi
+fi
+
+if [ "x$BUILD" = "xdocker_ubuntu_autotools" ]; then
+    $CPPUTEST_HOME/scripts/create_docker_images_and_containers ubuntu
+    docker start -i cpputest_ubuntu
+fi
+
+if [ "x$BUILD" = "xdocker_ubuntu_dos" ]; then
+    $CPPUTEST_HOME/scripts/create_docker_images_and_containers dos
+    docker start -i cpputest_dos
+fi
+
 if [ "x$BUILD" = "xmake_dos" ]; then
-    wget http://ftp.openwatcom.org/install/open-watcom-c-linux-1.9 -O /tmp/watcom.zip
-    mkdir -p watcom && unzip -aqd watcom /tmp/watcom.zip && chmod -R +x watcom/binl
+    if [ ! -d watcom ]; then
+        git clone https://github.com/cpputest/watcom-compiler.git watcom
+    fi
     export PATH=$PATH:$PWD/watcom/binl
     export WATCOM=$PWD/watcom
-    export CPPUTEST_HOME=$TRAVIS_BUILD_DIR
     export CC=wcl
     export CXX=wcl
     $CC --version
-    make -f ../platforms/Dos/Makefile || exit 1
-    ../platforms/Dos/alltests.sh || exit 1
- fi
+    make -f $CPPUTEST_HOME/platforms/Dos/Makefile clean
+    make -f $CPPUTEST_HOME/platforms/Dos/Makefile
+    $CPPUTEST_HOME/platforms/Dos/alltests.sh
+fi
 
+if [ "x$BUILD" = "xextensive_check" ]; then
+    autoreconf -i ..
+    ../configure
+    make check_all
+fi
+
+if [ "x$BUILD" = "xautotools_dist" ]; then
+    autoreconf -i ..
+    ../configure
+
+    if [ "x$TRAVIS_OS_NAME" = "xosx" ]; then
+        COPYFILE_DISABLE=1 make dist VERSION=latest
+        COPYFILE_DISABLE=1 make dist-zip VERSION=latest
+    else
+        make dist VERSION=latest
+        make dist-zip VERSION=latest
+    fi
+fi
+
+if [ "x$BUILD" = "xautotools_install_and_test_examples" ]; then
+    autoreconf -i ..
+    ../configure
+
+    make tdd
+    sudo make install
+    make -C $CPPUTEST_HOME/examples -f $CPPUTEST_HOME/examples/Makefile_ExamplesWithCppUTestInstalled.mk
+fi
+
+if [ "x$BUILD" = "xvc_windows" ]; then
+    export PATH=$MSBUILD_PATH:$PATH
+    cmake ..
+    MSBuild.exe ALL_BUILD.vcxproj
+    ./tests/CppUTest/CppUTestTests.exe
+    ./tests/CppUTestExt/CppUTestExtTests.exe
+fi
+
+if [ "x$BUILD" = "xcmake_windows" ]; then
+    choco install make
+    BUILD_ARGS=("-DWERROR=ON")
+
+    if [ -n "$CPP_STD" ]; then
+        BUILD_ARGS+=("-DCMAKE_CXX_STANDARD=$CPP_STD")
+    fi
+
+    cmake --version
+    cmake -G 'Unix Makefiles' "${BUILD_ARGS[@]}" ..
+    make
+    ctest -V
+fi

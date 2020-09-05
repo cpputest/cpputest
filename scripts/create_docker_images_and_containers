@@ -1,0 +1,37 @@
+#!/bin/bash
+#$1 is the container name
+
+checkForCppUTestToolsEnvVariable() {
+	if [ -z "$CPPUTEST_HOME" ] ; then
+	   echo "CPPUTEST_HOME not set. You must set CPPUTEST_HOME to the top level CppUTest directory"
+	   exit 1
+	fi
+	if [ ! -d "$CPPUTEST_HOME" ] ; then
+	   echo "CPPUTEST_HOME not set to a directory.  You must set CPPUTEST_HOME to the top level CppUTest directory"
+	   exit 2
+	fi
+}
+
+checkForImageNameParameter() {
+	if [ -z "$container" ] ; then
+	   echo "Container name parameter not set. Check the docker directory. It should be the extension of the Dockerfile. e.g. ubuntu"
+	   exit 1
+	fi
+	if [ ! -f "$CPPUTEST_HOME/docker/Dockerfile.$container" ] ; then
+	   echo "The Dockerfile docker/Dockerfile.$container doesn't exist. Typo?"
+	   exit 2
+	fi
+}
+
+
+container=$1
+checkForCppUTestToolsEnvVariable
+checkForImageNameParameter
+
+docker build -f $CPPUTEST_HOME/docker/Dockerfile.$container --tag cpputest/$container:latest .
+docker container rm cpputest_$container
+docker create -it -v$CPPUTEST_HOME:/cpputest -e "CPPUTEST_HOME=/cpputest" --name cpputest_$container cpputest/$container:latest
+
+echo "You can run your container through: docker start -i cpputest_<container>. E.g. docker start -i cpputest_$container"
+
+

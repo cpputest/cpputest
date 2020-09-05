@@ -32,10 +32,20 @@ void MockFailureReporterForTest::failTest(const MockFailure& failure)
     mockFailureString = failure.getMessage();
 }
 
+MockFailureReporterForTest* MockFailureReporterForTest::instance_ = NULLPTR;
+
 MockFailureReporterForTest* MockFailureReporterForTest::getReporter()
 {
-    static MockFailureReporterForTest reporter;
-    return &reporter;
+    if (instance_ == NULLPTR)
+        instance_ = new MockFailureReporterForTest;
+
+    return instance_;
+}
+
+void MockFailureReporterForTest::clearReporter()
+{
+    delete instance_;
+    instance_ = NULLPTR;
 }
 
 MockFailureReporterInstaller::MockFailureReporterInstaller()
@@ -46,6 +56,7 @@ MockFailureReporterInstaller::MockFailureReporterInstaller()
 MockFailureReporterInstaller::~MockFailureReporterInstaller()
 {
   mock().setMockFailureStandardReporter(NULLPTR);
+  MockFailureReporterForTest::clearReporter();
 }
 
 UtestShell* mockFailureTest()
@@ -63,7 +74,7 @@ void CLEAR_MOCK_FAILURE()
     MockFailureReporterForTest::getReporter()->mockFailureString = "";
 }
 
-void CHECK_EXPECTED_MOCK_FAILURE_LOCATION(const MockFailure& expectedFailure, const char* file, int line)
+void CHECK_EXPECTED_MOCK_FAILURE_LOCATION(const MockFailure& expectedFailure, const char* file, size_t line)
 {
     SimpleString expectedFailureString = expectedFailure.getMessage();
     SimpleString actualFailureString = mockFailureString();
@@ -79,7 +90,7 @@ void CHECK_EXPECTED_MOCK_FAILURE_LOCATION(const MockFailure& expectedFailure, co
     }
 }
 
-void CHECK_NO_MOCK_FAILURE_LOCATION(const char* file, int line)
+void CHECK_NO_MOCK_FAILURE_LOCATION(const char* file, size_t line)
 {
     if (mockFailureString() != "") {
         SimpleString error = "Unexpected mock failure:\n";

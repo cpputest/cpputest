@@ -169,6 +169,18 @@ TEST(UtestShell, TestStopsAfterSetupFailure)
     LONGS_EQUAL(0, stopAfterFailure);
 }
 
+TEST(UtestShell, veryVebose)
+{
+    UtestShell shell("Group", "name", __FILE__, __LINE__);
+    StringBufferTestOutput normalOutput;
+    normalOutput.verbose(TestOutput::level_veryVerbose);
+    NullTestPlugin plugin;
+
+    TestResult result(normalOutput);
+    shell.runOneTestInCurrentProcess(&plugin, result);
+    STRCMP_CONTAINS("\n------ before runTest", normalOutput.getOutput().asCharString());
+}
+
 class defaultUtestShell: public UtestShell
 {
 };
@@ -178,8 +190,9 @@ TEST(UtestShell, this_test_covers_the_UtestShell_createTest_and_Utest_testBody_m
     defaultUtestShell shell;
     fixture.addTest(&shell);
     fixture.runAllTests();
-    LONGS_EQUAL(2, fixture.result_->getTestCount());
+    LONGS_EQUAL(2, fixture.getTestCount());
 }
+
 
 static void StubPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin*, TestResult* result)
 {
@@ -189,7 +202,7 @@ static void StubPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, Tes
 TEST(UtestShell, RunInSeparateProcessTest)
 {
     UT_PTR_SET(PlatformSpecificRunTestInASeperateProcess, StubPlatformSpecificRunTestInASeperateProcess);
-    fixture.registry_->setRunTestsInSeperateProcess();
+    fixture.getRegistry()->setRunTestsInSeperateProcess();
     fixture.runAllTests();
     fixture.assertPrintContains("Failed in separate process");
 }
@@ -200,16 +213,20 @@ IGNORE_TEST(UtestShell, TestDefaultCrashMethodInSeparateProcessTest) {}
 
 #else
 
+#if !CPPUTEST_SANITIZE_ADDRESS
+
 TEST(UtestShell, TestDefaultCrashMethodInSeparateProcessTest)
 {
     fixture.setTestFunction(UtestShell::crash);
-    fixture.registry_->setRunTestsInSeperateProcess();
+    fixture.setRunTestsInSeperateProcess();
     fixture.runAllTests();
     fixture.assertPrintContains("Failed in separate process - killed by signal");
 
     /* Signal 11 usually happens, but with clang3.7 on Linux, it produced signal 4 */
     CHECK(fixture.getOutput().contains("signal 11") || fixture.getOutput().contains("signal 4"));
 }
+
+#endif
 
 #endif
 
@@ -254,7 +271,7 @@ TEST(IgnoredUtestShell, doesIgnoreCount)
 
 TEST(IgnoredUtestShell, printsIGNORE_TESTwhenVerbose)
 {
-    fixture.output_->verbose();
+    fixture.setOutputVerbose();
     fixture.runAllTests();
     fixture.assertPrintContains("IGNORE_TEST");
 }
@@ -382,3 +399,103 @@ TEST(CanHaveMemberVariablesInTestGroupThatAllocateMemoryWithoutCausingMemoryLeak
     dummy.allocateMoreMemory();
 }
 
+static int getZero()
+{
+    return 0;
+}
+
+static int getOne()
+{
+    return 1;
+}
+
+TEST_GROUP(UtestShellPointerArrayTest)
+{
+    UtestShell* test0;
+    UtestShell* test1;
+    UtestShell* test2;
+
+    void setup()
+    {
+        test0 = new IgnoredUtestShell();
+        test1 = new IgnoredUtestShell();
+        test2 = new IgnoredUtestShell();
+
+        test0->addTest(test1);
+        test1->addTest(test2);
+    }
+
+    void teardown()
+    {
+        delete test0;
+        delete test1;
+        delete test2;
+    }
+};
+
+
+TEST(UtestShellPointerArrayTest, empty)
+{
+    UtestShellPointerArray tests(NULLPTR);
+    tests.shuffle(0);
+    CHECK(NULLPTR == tests.getFirstTest());
+}
+
+TEST(UtestShellPointerArrayTest, testsAreInOrder)
+{
+    UtestShellPointerArray tests(test0);
+    CHECK(tests.get(0) == test0);
+    CHECK(tests.get(1) == test1);
+    CHECK(tests.get(2) == test2);
+}
+
+TEST(UtestShellPointerArrayTest, relinkingTestsWillKeepThemTheSameWhenNothingWasDone)
+{
+    UtestShellPointerArray tests(test0);
+    tests.relinkTestsInOrder();
+    CHECK(tests.get(0) == test0);
+    CHECK(tests.get(1) == test1);
+    CHECK(tests.get(2) == test2);
+}
+
+
+TEST(UtestShellPointerArrayTest, firstTestisNotTheFirstTestWithSeed1234)
+{
+    UtestShellPointerArray tests(test0);
+    tests.shuffle(1234);
+    CHECK(tests.getFirstTest() != test0);
+}
+
+TEST(UtestShellPointerArrayTest, ShuffleListTestWithRandomAlwaysReturningZero)
+{
+    UT_PTR_SET(PlatformSpecificRand, getZero);
+
+    UtestShellPointerArray tests(test0);
+    tests.shuffle(3);
+    CHECK(tests.get(0) == test1);
+    CHECK(tests.get(1) == test2);
+    CHECK(tests.get(2) == test0);
+}
+
+// swaps with 4 mod 3 (1) then 4 mod 2 (0): 1, [2], [0] --> [1], [0], 2 --> 0, 1, 2
+TEST(UtestShellPointerArrayTest, ShuffleListTestWithRandomAlwaysReturningOne)
+{
+    UT_PTR_SET(PlatformSpecificRand, getOne);
+
+    UtestShellPointerArray tests(test0);
+    tests.shuffle(3);
+    CHECK(tests.get(0) == test0);
+    CHECK(tests.get(1) == test2);
+    CHECK(tests.get(2) == test1);
+}
+
+TEST(UtestShellPointerArrayTest, reverse)
+{
+    UT_PTR_SET(PlatformSpecificRand, getOne);
+
+    UtestShellPointerArray tests(test0);
+    tests.reverse();
+    CHECK(tests.get(0) == test2);
+    CHECK(tests.get(1) == test1);
+    CHECK(tests.get(2) == test0);
+}

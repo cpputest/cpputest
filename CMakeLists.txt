@@ -1,11 +1,11 @@
-project(CppUTest)
-
-set(CppUTest_version_major 3)
-set(CppUTest_version_minor 8)
-
 # 2.6.3 is needed for ctest support
 # 3.1 is needed for target_sources
 cmake_minimum_required(VERSION 3.1)
+
+project(CppUTest)
+
+set(CppUTest_version_major 4)
+set(CppUTest_version_minor 0)
 
 ###############
 # Conan support
@@ -24,6 +24,16 @@ if(HAVE_FORK)
   add_definitions(-DCPPUTEST_HAVE_FORK)
 endif(HAVE_FORK)
 
+check_function_exists(gettimeofday HAVE_GETTIMEOFDAY)
+if(HAVE_GETTIMEOFDAY)
+  add_definitions(-DCPPUTEST_HAVE_GETTIMEOFDAY=1)
+endif(HAVE_GETTIMEOFDAY)
+
+check_function_exists(pthread_mutex_lock HAVE_PTHREAD_MUTEX_LOCK)
+if(HAVE_PTHREAD_MUTEX_LOCK)
+  add_definitions(-DCPPUTEST_HAVE_PTHREAD_MUTEX_LOCK=1)
+endif(HAVE_PTHREAD_MUTEX_LOCK)
+
 check_function_exists(strdup HAVE_STRDUP)
 if(HAVE_STRDUP)
   add_definitions(-DCPPUTEST_HAVE_STRDUP=1)
@@ -37,19 +47,21 @@ if (MINGW)
         add_definitions(-D_TIMESPEC_DEFINED=1)
     endif()
 
-    # Apply workaround for static/shared libraries on MinGW C/C++ compiler
-    # Issue occurs with CMake >= 3.9.0, it doesn't filter out gcc,gcc_s,gcc_eh from
-    # the implicit library list anymore, so the C++ linker is getting passed the static
-    # gcc_eh library since that's what the C linker uses by default. Only solution appears
-    # to be to force static linkage.
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static")
+    if (NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+        # Apply workaround for static/shared libraries on MinGW C/C++ compiler
+        # Issue occurs with CMake >= 3.9.0, it doesn't filter out gcc,gcc_s,gcc_eh from
+        # the implicit library list anymore, so the C++ linker is getting passed the static
+        # gcc_eh library since that's what the C linker uses by default. Only solution appears
+        # to be to force static linkage.
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static")
+    endif()
 endif()
 
 option(STD_C "Use the standard C library" ON)
 option(STD_CPP "Use the standard C++ library" ON)
 option(CPPUTEST_FLAGS "Use the CFLAGS/CXXFLAGS/LDFLAGS set by CppUTest" ON)
 option(MEMORY_LEAK_DETECTION "Enable memory leak detection" ON)
-option(EXTENSIONS "Use the CppUTest extenstion library" ON)
+option(EXTENSIONS "Use the CppUTest extension library" ON)
 option(LONGLONG "Support long long" OFF)
 option(MAP_FILE "Enable the creation of a map file" OFF)
 option(COVERAGE "Enable running with coverage" OFF)
@@ -58,6 +70,9 @@ option(WERROR "Compile with warnings as errors" OFF)
 
 option(TESTS "Compile and make tests for the code?" ON)
 option(TESTS_DETAILED "Run each test separately instead of grouped?" OFF)
+option(TESTS_BUILD_DISCOVER "Build time test discover" ON)
+
+option(EXAMPLES "Compile and make exaples?" OFF)
 
 option(VERBOSE_CONFIG "Print configuration to stdout during generation" ON)
 
@@ -80,6 +95,8 @@ include("${CppUTestRootDirectory}/cmake/Modules/CppUTestBuildTimeDiscoverTests.c
 include("${CppUTestRootDirectory}/cmake/Modules/CppUTestNormalizeTestOutputLocation.cmake")
 include(GNUInstallDirs)
 
+enable_testing()
+
 configure_file (
     "${PROJECT_SOURCE_DIR}/config.h.cmake"
     "${PROJECT_BINARY_DIR}/generated/CppUTestGeneratedConfig.h"
@@ -100,6 +117,10 @@ if (TESTS)
         add_subdirectory(tests/CppUTestExt)
     endif (EXTENSIONS)
 endif (TESTS)
+
+if (EXAMPLES)
+  add_subdirectory(examples)
+endif(EXAMPLES)
 
 set (INCLUDE_INSTALL_DIR "${CMAKE_INSTALL_INCLUDEDIR}")
 set (LIB_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}")

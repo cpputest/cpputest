@@ -20,9 +20,10 @@ TEST(BasicBehavior, CanDeleteNullPointers)
     delete [] (char*) NULLPTR;
 }
 
-#ifndef CPPUTEST_MEM_LEAK_DETECTION_DISABLED
+#if CPPUTEST_USE_MEM_LEAK_DETECTION
 
-TEST(BasicBehavior, deleteArrayInvalidatesMemory)
+CPPUTEST_DO_NOT_SANITIZE_ADDRESS
+static void deleteArrayInvalidatesMemory()
 {
     unsigned char* memory = new unsigned char[10];
     PlatformSpecificMemset(memory, 0xAB, 10);
@@ -30,7 +31,13 @@ TEST(BasicBehavior, deleteArrayInvalidatesMemory)
     CHECK(memory[5] != 0xCB);
 }
 
-TEST(BasicBehavior, deleteInvalidatesMemory)
+TEST(BasicBehavior, deleteArrayInvalidatesMemory)
+{
+    deleteArrayInvalidatesMemory();
+}
+
+CPPUTEST_DO_NOT_SANITIZE_ADDRESS
+static void deleteInvalidatesMemory()
 {
     unsigned char* memory = new unsigned char;
     *memory = 0xAD;
@@ -38,6 +45,12 @@ TEST(BasicBehavior, deleteInvalidatesMemory)
     CHECK(*memory != 0xAD);
 }
 
+TEST(BasicBehavior, deleteInvalidatesMemory)
+{
+    deleteInvalidatesMemory();
+}
+
+#if __cplusplus >= 201402L
 TEST(BasicBehavior, DeleteWithSizeParameterWorks)
 {
     char* charMemory = new char;
@@ -45,7 +58,7 @@ TEST(BasicBehavior, DeleteWithSizeParameterWorks)
     ::operator delete(charMemory, sizeof(char));
     ::operator delete[](charArrayMemory, sizeof(char)* 10);
 }
-
+#endif
 
 static void deleteUnallocatedMemory()
 {
@@ -90,12 +103,18 @@ TEST(BasicBehavior, bothMallocAndFreeAreOverloaded)
 
 #if CPPUTEST_USE_MEM_LEAK_DETECTION
 
-TEST(BasicBehavior, freeInvalidatesMemory)
+CPPUTEST_DO_NOT_SANITIZE_ADDRESS
+static void freeInvalidatesMemory()
 {
     unsigned char* memory = (unsigned char*) cpputest_malloc(sizeof(unsigned char));
     *memory = 0xAD;
     cpputest_free(memory);
     CHECK(*memory != 0xAD);
+}
+
+TEST(BasicBehavior, freeInvalidatesMemory)
+{
+    freeInvalidatesMemory();
 }
 #endif
 
@@ -113,7 +132,7 @@ TEST_GROUP(MemoryLeakOverridesToBeUsedInProductionCode)
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, MallocOverrideIsUsed)
 {
-    int memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
+    size_t memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
     void* memory = malloc(10);
     LONGS_EQUAL(memLeaks+1, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
     free (memory);
@@ -123,7 +142,7 @@ TEST(MemoryLeakOverridesToBeUsedInProductionCode, MallocOverrideIsUsed)
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, StrdupOverrideIsUsed)
 {
-    int memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
+    size_t memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
     char* memory = strdup("0123456789");
     LONGS_EQUAL(memLeaks+1, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
     free (memory);
@@ -131,7 +150,7 @@ TEST(MemoryLeakOverridesToBeUsedInProductionCode, StrdupOverrideIsUsed)
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, StrndupOverrideIsUsed)
 {
-    int memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
+    size_t memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
     char* memory = strndup("0123456789", 10);
     LONGS_EQUAL(memLeaks+1, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
     free (memory);
@@ -142,14 +161,21 @@ TEST(MemoryLeakOverridesToBeUsedInProductionCode, StrndupOverrideIsUsed)
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, UseNativeMallocByTemporarlySwitchingOffMalloc)
 {
-    int memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
+    size_t memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
 #ifdef CPPUTEST_USE_MALLOC_MACROS
     #undef malloc
     #undef free
 #endif
+
+#if CPPUTEST_USE_STD_C_LIB
     void* memory = malloc(10);
     LONGS_EQUAL(memLeaks, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
     free (memory);
+#else
+    void* memory = PlatformSpecificMalloc(10);
+    LONGS_EQUAL(memLeaks, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
+    PlatformSpecificFree (memory);
+#endif
 
 #ifdef CPPUTEST_USE_MALLOC_MACROS
 #include "CppUTest/MemoryLeakDetectorMallocMacros.h"
@@ -285,8 +311,10 @@ TEST(MemoryLeakOverridesToBeUsedInProductionCode, MemoryOverridesAreDisabled)
 TEST_GROUP(OutOfMemoryTestsForOperatorNew)
 {
     TestMemoryAllocator* no_memory_allocator;
+    GlobalMemoryAllocatorStash memoryAllocatorStash;
     void setup()
     {
+        memoryAllocatorStash.save();
         no_memory_allocator = new NullUnknownAllocator;
         setCurrentNewAllocator(no_memory_allocator);
         setCurrentNewArrayAllocator(no_memory_allocator);
@@ -294,8 +322,7 @@ TEST_GROUP(OutOfMemoryTestsForOperatorNew)
 
     void teardown()
     {
-        setCurrentNewAllocatorToDefault();
-        setCurrentNewArrayAllocatorToDefault();
+        memoryAllocatorStash.restore();
         delete no_memory_allocator;
     }
 };
@@ -370,9 +397,16 @@ TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorReturnsNull)
  * We (Bas Vodde and Terry Yin) suspect that in a real product, you wouldn't be able to detect the optimization and it's breaking of Standard C++. Therefore,
  * for now, we keep this hack in the test to fool the optimizer and hope nobody will ever notice this 'optimizer behavior' in a real product.
  *
+ * Update 2020: The gcc compiler implemented the same optimization, but it seems to be slightly smarter and discovered that we assign to a static variable.
+ * Thus it still optimized away the call to operator new. Did another bug report, but it is unlikely to get fixed. You can find it at:
+ * https://gcc.gnu.org/bugzilla/show_bug.cgi?id=94671
+ *
+ * Changed the variable to be external so it would definitively be a mistake to optimize the call.
+ *
  */
 
-static char* some_memory;
+extern char* some_memory;
+char* some_memory;
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorThrowsAnExceptionWhenUsingStdCppNewWithoutOverride)
 {

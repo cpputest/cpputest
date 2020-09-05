@@ -30,50 +30,158 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 #include "CppUTest/TestMemoryAllocator.h"
 #include "CppUTest/MemoryLeakDetector.h"
+#include "CppUTest/TestTestingFixture.h"
 
 class JustUseNewStringAllocator : public TestMemoryAllocator
 {
 public:
-    virtual ~JustUseNewStringAllocator() {}
+    virtual ~JustUseNewStringAllocator() _destructor_override {}
 
-    char* alloc_memory(size_t size, const char* file, int line)
+    char* alloc_memory(size_t size, const char* file, size_t line) _override
     {
-      return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewArrayAllocator(), size, file, line);
+        return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewArrayAllocator(), size, file, line);
     }
-    void free_memory(char* str, const char* file, int line)
+    void free_memory(char* str, size_t, const char* file, size_t line) _override
     {
-      MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(getCurrentNewArrayAllocator(), str, file, line);
+        MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(getCurrentNewArrayAllocator(), str, file, line);
     }
 };
+
+class GlobalSimpleStringMemoryAccountantExecFunction
+    : public ExecFunction
+{
+public:
+    void (*testFunction_)(GlobalSimpleStringMemoryAccountant*);
+    GlobalSimpleStringMemoryAccountant* parameter_;
+
+    virtual void exec() _override
+    {
+        testFunction_(parameter_);
+    }
+};
+
+TEST_GROUP(GlobalSimpleStringMemoryAccountant)
+{
+    GlobalSimpleStringAllocatorStash stash;
+    GlobalSimpleStringMemoryAccountantExecFunction testFunction;
+    TestTestingFixture fixture;
+    GlobalSimpleStringMemoryAccountant accountant;
+
+    void setup()
+    {
+        stash.save();
+        testFunction.parameter_ = &accountant;
+        fixture.setTestFunction(&testFunction);
+    }
+
+    void teardown()
+    {
+        stash.restore();
+    }
+};
+
+TEST(GlobalSimpleStringMemoryAccountant, start)
+{
+    accountant.start();
+    POINTERS_EQUAL(accountant.getAllocator(), SimpleString::getStringAllocator());
+}
+
+TEST(GlobalSimpleStringMemoryAccountant, startTwiceDoesNothing)
+{
+    accountant.start();
+    TestMemoryAllocator* memoryAccountantAllocator = SimpleString::getStringAllocator();
+    accountant.start();
+
+    POINTERS_EQUAL(memoryAccountantAllocator, SimpleString::getStringAllocator());
+
+    accountant.stop();
+}
+
+TEST(GlobalSimpleStringMemoryAccountant, stop)
+{
+    TestMemoryAllocator* originalAllocator = SimpleString::getStringAllocator();
+    accountant.start();
+    accountant.stop();
+    POINTERS_EQUAL(originalAllocator, SimpleString::getStringAllocator());
+}
+
+static void _stopAccountant(GlobalSimpleStringMemoryAccountant* accountant)
+{
+    accountant->stop();
+}
+
+TEST(GlobalSimpleStringMemoryAccountant, stopWithoutStartWillFail)
+{
+    testFunction.testFunction_ = _stopAccountant;
+    fixture.runAllTests();
+    fixture.assertPrintContains("Global SimpleString allocator stopped without starting");
+}
+
+static void _changeAllocatorBetweenStartAndStop(GlobalSimpleStringMemoryAccountant* accountant)
+{
+    TestMemoryAllocator* originalAllocator = SimpleString::getStringAllocator();
+    accountant->start();
+    SimpleString::setStringAllocator(originalAllocator);
+    accountant->stop();
+}
+
+TEST(GlobalSimpleStringMemoryAccountant, stopFailsWhenAllocatorWasChangedInBetween)
+{
+    testFunction.testFunction_ = _changeAllocatorBetweenStartAndStop;
+    fixture.runAllTests();
+    fixture.assertPrintContains("GlobalStrimpleStringMemoryAccountant: allocator has changed between start and stop!");
+}
+
+TEST(GlobalSimpleStringMemoryAccountant, report)
+{
+    SimpleString str;
+    accountant.start();
+    str += "More";
+    accountant.stop();
+    STRCMP_CONTAINS(" 1                0                 1", accountant.report().asCharString());
+}
+
+TEST(GlobalSimpleStringMemoryAccountant, reportUseCaches)
+{
+    size_t caches[] = {32};
+    accountant.useCacheSizes(caches, 1);
+    SimpleString str;
+    accountant.start();
+    str += "More";
+    accountant.stop();
+    STRCMP_CONTAINS("32                   1                1                 1", accountant.report().asCharString());
+}
 
 
 TEST_GROUP(SimpleString)
 {
   JustUseNewStringAllocator justNewForSimpleStringTestAllocator;
+  GlobalSimpleStringAllocatorStash stash;
   void setup()
   {
-    SimpleString::setStringAllocator(&justNewForSimpleStringTestAllocator);
+      stash.save();
+      SimpleString::setStringAllocator(&justNewForSimpleStringTestAllocator);
   }
   void teardown()
   {
-    SimpleString::setStringAllocator(NULLPTR);
+      stash.restore();
   }
 };
 
 TEST(SimpleString, defaultAllocatorIsNewArrayAllocator)
 {
   SimpleString::setStringAllocator(NULLPTR);
-  POINTERS_EQUAL(getCurrentNewArrayAllocator(), SimpleString::getStringAllocator());
+  POINTERS_EQUAL(defaultNewArrayAllocator(), SimpleString::getStringAllocator());
 }
 
 class MyOwnStringAllocator : public TestMemoryAllocator
 {
 public:
     MyOwnStringAllocator() : memoryWasAllocated(false) {}
-    virtual ~MyOwnStringAllocator() {}
+    virtual ~MyOwnStringAllocator() _destructor_override {}
 
     bool memoryWasAllocated;
-    char* alloc_memory(size_t size, const char* file, int line)
+    char* alloc_memory(size_t size, const char* file, size_t line) _override
     {
         memoryWasAllocated = true;
         return TestMemoryAllocator::alloc_memory(size, file, line);
@@ -424,10 +532,10 @@ TEST(SimpleString, copyInBufferNormal)
 {
     SimpleString str("Hello World");
     size_t bufferSize = str.size()+1;
-    char* buffer = (char*) malloc(bufferSize);
+    char* buffer = (char*) PlatformSpecificMalloc(bufferSize);
     str.copyToBuffer(buffer, bufferSize);
     STRCMP_EQUAL(str.asCharString(), buffer);
-    free(buffer);
+    PlatformSpecificFree(buffer);
 }
 
 TEST(SimpleString, copyInBufferWithEmptyBuffer)
@@ -442,21 +550,21 @@ TEST(SimpleString, copyInBufferWithBiggerBufferThanNeeded)
 {
     SimpleString str("Hello");
     size_t bufferSize = 20;
-    char* buffer= (char*) malloc(bufferSize);
+    char* buffer= (char*) PlatformSpecificMalloc(bufferSize);
     str.copyToBuffer(buffer, bufferSize);
     STRCMP_EQUAL(str.asCharString(), buffer);
-    free(buffer);
+    PlatformSpecificFree(buffer);
 }
 
 TEST(SimpleString, copyInBufferWithSmallerBufferThanNeeded)
 {
     SimpleString str("Hello");
     size_t bufferSize = str.size();
-    char* buffer= (char*) malloc(bufferSize);
+    char* buffer= (char*) PlatformSpecificMalloc(bufferSize);
     str.copyToBuffer(buffer, bufferSize);
     STRNCMP_EQUAL(str.asCharString(), buffer, (bufferSize-1));
     LONGS_EQUAL(0, buffer[bufferSize-1]);
-    free(buffer);
+    PlatformSpecificFree(buffer);
 }
 
 TEST(SimpleString, ContainsNull)
@@ -572,12 +680,14 @@ TEST(SimpleString, Sizes)
     STRCMP_EQUAL("10", StringFrom((int) size).asCharString());
 }
 
-#if __cplusplus > 199711L
+#if __cplusplus > 199711L && !defined __arm__ && CPPUTEST_USE_STD_CPP_LIB
+
 TEST(SimpleString, nullptr_type)
 {
     SimpleString s(StringFrom(nullptr));
     STRCMP_EQUAL("(null)", s.asCharString());
 }
+
 #endif
 
 TEST(SimpleString, HexStrings)

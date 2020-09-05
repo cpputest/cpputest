@@ -160,6 +160,7 @@ MockExpectedCall_c* withMemoryBufferParameters_c(const char* name, const unsigne
 MockExpectedCall_c* withParameterOfType_c(const char* type, const char* name, const void* value);
 MockExpectedCall_c* withOutputParameterReturning_c(const char* name, const void* value, size_t size);
 MockExpectedCall_c* withOutputParameterOfTypeReturning_c(const char* type, const char* name, const void* value);
+MockExpectedCall_c* withUnmodifiedOutputParameter_c(const char* name);
 MockExpectedCall_c* ignoreOtherParameters_c();
 MockExpectedCall_c* andReturnBoolValue_c(int value);
 MockExpectedCall_c* andReturnIntValue_c(int value);
@@ -261,6 +262,7 @@ static MockExpectedCall_c gExpectedCall = {
         withParameterOfType_c,
         withOutputParameterReturning_c,
         withOutputParameterOfTypeReturning_c,
+        withUnmodifiedOutputParameter_c,
         ignoreOtherParameters_c,
         andReturnBoolValue_c,
         andReturnUnsignedIntValue_c,
@@ -493,6 +495,12 @@ MockExpectedCall_c* withOutputParameterReturning_c(const char* name, const void*
 MockExpectedCall_c* withOutputParameterOfTypeReturning_c(const char* type, const char* name, const void* value)
 {
     expectedCall = &expectedCall->withOutputParameterOfTypeReturning(type, name, value);
+    return &gExpectedCall;
+}
+
+MockExpectedCall_c* withUnmodifiedOutputParameter_c(const char* name)
+{
+    expectedCall = &expectedCall->withUnmodifiedOutputParameter(name);
     return &gExpectedCall;
 }
 

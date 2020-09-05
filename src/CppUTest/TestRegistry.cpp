@@ -27,10 +27,10 @@
 
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TestRegistry.h"
+#include "CppUTest/PlatformSpecificFunctions.h"
 
 TestRegistry::TestRegistry() :
     tests_(NULLPTR), nameFilters_(NULLPTR), groupFilters_(NULLPTR), firstPlugin_(NullTestPlugin::instance()), runInSeperateProcess_(false), currentRepetition_(0), runIgnored_(false)
-
 {
 }
 
@@ -227,32 +227,18 @@ UtestShell* TestRegistry::getFirstTest()
     return tests_;
 }
 
-
-void TestRegistry::shuffleRunOrder(rand_func_t rand_func)
+void TestRegistry::shuffleTests(size_t seed)
 {
-    if (getFirstTest() == NULLPTR)
-    {
-        return;
-    }
-    const size_t numTests = getFirstTest()->countTests();
-    typedef UtestShell* listElem;
-    listElem* tests = new listElem[numTests];
-    UtestShell *test = getFirstTest();
-    for (size_t testsIdx = 0; testsIdx < numTests; ++testsIdx)
-    {
-        tests[testsIdx] = test;
-        test = test->getNext();
-    }
-    shuffle_list(rand_func, numTests, reinterpret_cast<void**>(tests));
+    UtestShellPointerArray array(getFirstTest());
+    array.shuffle(seed);
+    tests_ = array.getFirstTest();
+}
 
-    // Store shuffled list back to linked list
-    UtestShell *prev = NULLPTR;
-    for (size_t i = 0; i < numTests; ++i)
-    {
-        prev = tests[numTests - 1 - i]->addTest(prev);
-    }
-    tests_ = prev;
-    delete[] tests;
+void TestRegistry::reverseTests()
+{
+    UtestShellPointerArray array(getFirstTest());
+    array.reverse();
+    tests_ = array.getFirstTest();
 }
 
 UtestShell* TestRegistry::getTestWithNext(UtestShell* test)

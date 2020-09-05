@@ -40,6 +40,9 @@ public:
 
     virtual void failTest(const MockFailure& failure);
     static MockFailureReporterForTest* getReporter();
+    static void clearReporter();
+private:
+    static MockFailureReporterForTest* instance_;
 };
 
 class MockFailureReporterInstaller
@@ -52,13 +55,13 @@ class MockFailureReporterInstaller
 UtestShell* mockFailureTest();
 SimpleString mockFailureString();
 void CLEAR_MOCK_FAILURE();
-void CHECK_EXPECTED_MOCK_FAILURE_LOCATION(const MockFailure& expectedFailure, const char* file, int line);
-void CHECK_NO_MOCK_FAILURE_LOCATION(const char* file, int line);
+void CHECK_EXPECTED_MOCK_FAILURE_LOCATION(const MockFailure& expectedFailure, const char* file, size_t line);
+void CHECK_NO_MOCK_FAILURE_LOCATION(const char* file, size_t line);
 
 class MockExpectedCallsListForTest : public MockExpectedCallsList
 {
   public:
-    ~MockExpectedCallsListForTest();
+    ~MockExpectedCallsListForTest() _destructor_override;
     MockCheckedExpectedCall* addFunction(const SimpleString& name);
     MockCheckedExpectedCall* addFunction(unsigned int numCalls, const SimpleString& name);
     MockCheckedExpectedCall* addFunctionOrdered(const SimpleString& name, unsigned int order);

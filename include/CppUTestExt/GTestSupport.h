@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007, Michael Feathers, James Grenning and Bas Vodde
+ * Copyright (c) 2011, Michael Feathers, James Grenning and Bas Vodde
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -25,59 +25,9 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "CppUTest/Shuffle.h"
-#include "CppUTest/TestHarness.h"
-#include "CppUTest/TestOutput.h"
+#ifndef GTESTSUPPORT__H_
+#define GTESTSUPPORT__H_
 
-TEST_GROUP(ShuffleTest)
-{
-};
+extern void CppuTestGTestIgnoreLeaksInTest();
 
-static const int maxNumItems = 3;
-
-static int getZero()
-{
-    return 0;
-}
-
-static int getOne()
-{
-    return 1;
-}
-
-static int getValueExceedingMaxIdx()
-{
-    return maxNumItems + 1;
-}
-
-TEST(ShuffleTest, ShuffleListTest)
-{
-    int x0 = 0;
-    int x1 = 1;
-    int x2 = 2;
-    void* tests[maxNumItems] = {&x0, &x1, &x2};
-
-    // check no-op
-    shuffle_list(getValueExceedingMaxIdx, 0, tests);
-    CHECK(tests[0] == &x0);
-    CHECK(tests[1] == &x1);
-    CHECK(tests[2] == &x2);
-
-    // swap element with itself: 0, [1], 2 --> 0, 1, 2
-    shuffle_list(getOne, 1, tests);
-    CHECK(tests[0] == &x0);
-    CHECK(tests[1] == &x1);
-    CHECK(tests[2] == &x2);
-
-    // always swaps with element at index 0: [0], 1, [2] --> [2], [1], 0 --> 1, 2, 0
-    shuffle_list(getZero, maxNumItems, tests);
-    CHECK(tests[0] == &x1);
-    CHECK(tests[1] == &x2);
-    CHECK(tests[2] == &x0);
-
-    // swaps with 4 mod 3 (1) then 4 mod 2 (0): 1, [2], [0] --> [1], [0], 2 --> 0, 1, 2
-    shuffle_list(getValueExceedingMaxIdx, maxNumItems, tests);
-    CHECK(tests[0] == &x0);
-    CHECK(tests[1] == &x1);
-    CHECK(tests[2] == &x2);
-}
+#endif

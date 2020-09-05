@@ -25,13 +25,12 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "CppUTest/Shuffle.h"
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/CommandLineArguments.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
 CommandLineArguments::CommandLineArguments(int ac, const char *const *av) :
-    ac_(ac), av_(av), verbose_(false), color_(false), runTestsAsSeperateProcess_(false), listTestGroupNames_(false), listTestGroupAndCaseNames_(false), runIgnored_(false), printSummaryEnd_(false), repeat_(1), shuffle_(SHUFFLE_DISABLED), groupFilters_(NULLPTR), nameFilters_(NULLPTR), outputType_(OUTPUT_ECLIPSE)
+    ac_(ac), av_(av), needHelp_(false), verbose_(false), veryVerbose_(false), color_(false), runTestsAsSeperateProcess_(false), listTestGroupNames_(false), listTestGroupAndCaseNames_(false), runIgnored_(false), printSummaryEnd_(false), reversing_(false), shuffling_(false), shufflingPreSeeded_(false), repeat_(1), shuffleSeed_(0), groupFilters_(NULLPTR), nameFilters_(NULLPTR), outputType_(OUTPUT_ECLIPSE)
 {
 }
 
@@ -55,32 +54,38 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
     for (int i = 1; i < ac_; i++) {
         SimpleString argument = av_[i];
 
-        if      (argument == "-v") verbose_ = true;
+        if (argument == "-h") {
+            needHelp_ = true;
+            correctParameters = false;
+        }
+        else if (argument == "-v") verbose_ = true;
+        else if (argument == "-vv") veryVerbose_ = true;
         else if (argument == "-c") color_ = true;
         else if (argument == "-p") runTestsAsSeperateProcess_ = true;
+        else if (argument == "-b") reversing_ = true;
         else if (argument == "-lg") listTestGroupNames_ = true;
         else if (argument == "-ln") listTestGroupAndCaseNames_ = true;
         else if (argument == "-ri") runIgnored_ = true;
         else if (argument == "-pse") printSummaryEnd_ = true;
-        else if (argument.startsWith("-r")) SetRepeatCount(ac_, av_, i);
-        else if (argument.startsWith("-g")) AddGroupFilter(ac_, av_, i);
-        else if (argument.startsWith("-sg")) AddStrictGroupFilter(ac_, av_, i);
-        else if (argument.startsWith("-xg")) AddExcludeGroupFilter(ac_, av_, i);
-        else if (argument.startsWith("-xsg")) AddExcludeStrictGroupFilter(ac_, av_, i);
-        else if (argument.startsWith("-n")) AddNameFilter(ac_, av_, i);
-        else if (argument.startsWith("-sn")) AddStrictNameFilter(ac_, av_, i);
-        else if (argument.startsWith("-xn")) AddExcludeNameFilter(ac_, av_, i);
-        else if (argument.startsWith("-xsn")) AddExcludeStrictNameFilter(ac_, av_, i);
-        else if (argument.startsWith("-s")) correctParameters = SetShuffle(ac_, av_, i);
-        else if (argument.startsWith("TEST(")) AddTestToRunBasedOnVerboseOutput(ac_, av_, i, "TEST(");
-        else if (argument.startsWith("IGNORE_TEST(")) AddTestToRunBasedOnVerboseOutput(ac_, av_, i, "IGNORE_TEST(");
-        else if (argument.startsWith("-o")) correctParameters = SetOutputType(ac_, av_, i);
+        else if (argument.startsWith("-r")) setRepeatCount(ac_, av_, i);
+        else if (argument.startsWith("-g")) addGroupFilter(ac_, av_, i);
+        else if (argument.startsWith("-t")) correctParameters = addGroupDotNameFilter(ac_, av_, i);
+        else if (argument.startsWith("-sg")) addStrictGroupFilter(ac_, av_, i);
+        else if (argument.startsWith("-xg")) addExcludeGroupFilter(ac_, av_, i);
+        else if (argument.startsWith("-xsg")) addExcludeStrictGroupFilter(ac_, av_, i);
+        else if (argument.startsWith("-n")) addNameFilter(ac_, av_, i);
+        else if (argument.startsWith("-sn")) addStrictNameFilter(ac_, av_, i);
+        else if (argument.startsWith("-xn")) addExcludeNameFilter(ac_, av_, i);
+        else if (argument.startsWith("-xsn")) addExcludeStrictNameFilter(ac_, av_, i);
+        else if (argument.startsWith("-s")) correctParameters = setShuffle(ac_, av_, i);
+        else if (argument.startsWith("TEST(")) addTestToRunBasedOnVerboseOutput(ac_, av_, i, "TEST(");
+        else if (argument.startsWith("IGNORE_TEST(")) addTestToRunBasedOnVerboseOutput(ac_, av_, i, "IGNORE_TEST(");
+        else if (argument.startsWith("-o")) correctParameters = setOutputType(ac_, av_, i);
         else if (argument.startsWith("-p")) correctParameters = plugin->parseAllArguments(ac_, av_, i);
-        else if (argument.startsWith("-k")) SetPackageName(ac_, av_, i);
+        else if (argument.startsWith("-k")) setPackageName(ac_, av_, i);
         else correctParameters = false;
 
         if (correctParameters == false) {
-            shuffle_ = SHUFFLE_DISABLED;
             return false;
         }
     }
@@ -89,12 +94,63 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
 
 const char* CommandLineArguments::usage() const
 {
-    return "usage [-v] [-c] [-p] [-lg] [-ln] [-ri] [-pse] [-r#] [-g|sg|xg|xsg groupName]... [-n|sn|xn|xsn testName]... [-s [randomizerSeed>0]] [\"TEST(groupName, testName)\"]... [-o{normal, junit, teamcity}] [-k packageName]\n";
+    return "use -h for more extensive help\nusage [-h] [-v] [-vv] [-c] [-p] [-lg] [-ln] [-ri] [-pse] [-r#]\n"
+                                           "      [-g|sg|xg|xsg groupName]... [-n|sn|xn|xsn testName]... [-t groupName.testName]...\n"
+                                           "      [-b] [-s [randomizerSeed>0]] [\"TEST(groupName, testName)\"]... [-o{normal, junit, teamcity}] [-k packageName]\n";
+}
+
+const char* CommandLineArguments::help() const
+{
+    return
+      "Thanks for using CppUTest.\n"
+      "\n"
+      "Options that do not run tests but query:\n"
+      "  -h                 - this wonderful help screen. Joy!\n"
+      "  -lg                - print a list of group names, separated by spaces\n"
+      "  -ln                - print a list of test names in the form of group.name, separated by spaces\n"
+      "\n"
+      "Options that change the output format:\n"
+      "  -c                - colorize output, print green if OK, or red if failed\n"
+      "  -v                - verbose, print each test name as it runs\n"
+      "  -vv               - very verbose, print internal information during test run\n"
+      "\n"
+      "Options that change the output location:\n"
+      "  -oteamcity       - output to xml files (as the name suggests, for TeamCity)\n"
+      "  -ojunit          - output to JUnit ant plugin style xml files (for CI systems)\n"
+      "  -k package name  - Add a package name in JUnit output (for classification in CI systems)\n"
+      "\n"
+      "\n"
+      "Options that control which tests are run:\n"
+      "  -g group         - only run test whose group contains the substring group\n"
+      "  -n name          - only run test whose name contains the substring name\n"
+      "  -t group.name    - only run test whose name contains the substring group and name\n"
+      "  -sg group        - only run test whose group exactly matches the string group\n"
+      "  -sn name         - only run test whose name exactly matches the string name\n"
+      "  -xg group        - exclude tests whose group contains the substring group (v3.8)\n"
+      "  -xn name         - exclude tests whose name contains the substring name (v3.8)\n"
+      "  TEST(group,name) - only run test whose group and name matches the strings group and name.\n"
+      "                     This can be used to copy-paste output from the -v option on the command line.\n"
+      "\n"
+      "Options that control how the tests are run:\n"
+      "  -p               - run tests in a separate process.\n"
+      "  -b               - run the tests backwards, reversing the normal way\n"
+      "  -s [seed]        - shuffle tests randomly. Seed is optional\n"
+      "  -r#              - repeat the tests some number (#) of times, or twice if # is not specified.\n";
+}
+
+bool CommandLineArguments::needHelp() const
+{
+    return needHelp_;
 }
 
 bool CommandLineArguments::isVerbose() const
 {
     return verbose_;
+}
+
+bool CommandLineArguments::isVeryVerbose() const
+{
+    return veryVerbose_;
 }
 
 bool CommandLineArguments::isColor() const
@@ -128,14 +184,24 @@ bool CommandLineArguments::runTestsInSeperateProcess() const
 }
 
 
-int CommandLineArguments::getRepeatCount() const
+size_t CommandLineArguments::getRepeatCount() const
 {
     return repeat_;
 }
 
-unsigned int CommandLineArguments::getShuffle() const
+bool CommandLineArguments::isReversing() const
 {
-    return shuffle_;
+    return reversing_;
+}
+
+bool CommandLineArguments::isShuffling() const
+{
+    return shuffling_;
+}
+
+size_t CommandLineArguments::getShuffleSeed() const
+{
+    return shuffleSeed_;
 }
 
 const TestFilter* CommandLineArguments::getGroupFilters() const
@@ -148,14 +214,14 @@ const TestFilter* CommandLineArguments::getNameFilters() const
     return nameFilters_;
 }
 
-void CommandLineArguments::SetRepeatCount(int ac, const char *const *av, int& i)
+void CommandLineArguments::setRepeatCount(int ac, const char *const *av, int& i)
 {
     repeat_ = 0;
 
     SimpleString repeatParameter(av[i]);
-    if (repeatParameter.size() > 2) repeat_ = SimpleString::AtoI(av[i] + 2);
+    if (repeatParameter.size() > 2) repeat_ = (size_t) (SimpleString::AtoI(av[i] + 2));
     else if (i + 1 < ac) {
-        repeat_ = SimpleString::AtoI(av[i + 1]);
+        repeat_ = (size_t) (SimpleString::AtoI(av[i + 1]));
         if (repeat_ != 0) i++;
     }
 
@@ -163,24 +229,26 @@ void CommandLineArguments::SetRepeatCount(int ac, const char *const *av, int& i)
 
 }
 
-bool CommandLineArguments::SetShuffle(int ac, const char * const *av, int& i)
+bool CommandLineArguments::setShuffle(int ac, const char * const *av, int& i)
 {
-    shuffle_ = SHUFFLE_ENABLED_RANDOM_SEED;
-    SimpleString shuffleParameter(av[i]);
+    shuffling_ = true;
+    shuffleSeed_ = (unsigned int)GetPlatformSpecificTimeInMillis();
+    if (shuffleSeed_ == 0) shuffleSeed_++;
+
+    SimpleString shuffleParameter = av[i];
     if (shuffleParameter.size() > 2) {
-        shuffle_ = SimpleString::AtoU(av[i] + 2);
-        if (shuffle_ == SHUFFLE_DISABLED) {
-            return false;
-        }
+        shufflingPreSeeded_ = true;
+        shuffleSeed_ = SimpleString::AtoU(av[i] + 2);
     } else if (i + 1 < ac) {
-        const unsigned parsed = SimpleString::AtoU(av[i + 1]);
-        if (parsed != 0)
+        unsigned int parsedParameter = SimpleString::AtoU(av[i + 1]);
+        if (parsedParameter != 0)
         {
-            shuffle_ = parsed;
+            shufflingPreSeeded_ = true;
+            shuffleSeed_ = parsedParameter;
             i++;
         }
     }
-    return true;
+    return (shuffleSeed_ != 0);
 }
 
 SimpleString CommandLineArguments::getParameterField(int ac, const char * const *av, int& i, const SimpleString& parameterName)
@@ -192,27 +260,40 @@ SimpleString CommandLineArguments::getParameterField(int ac, const char * const 
     return "";
 }
 
-void CommandLineArguments::AddGroupFilter(int ac, const char *const *av, int& i)
+void CommandLineArguments::addGroupFilter(int ac, const char *const *av, int& i)
 {
     TestFilter* groupFilter = new TestFilter(getParameterField(ac, av, i, "-g"));
     groupFilters_ = groupFilter->add(groupFilters_);
 }
 
-void CommandLineArguments::AddStrictGroupFilter(int ac, const char *const *av, int& i)
+bool CommandLineArguments::addGroupDotNameFilter(int ac, const char *const *av, int& i)
+{
+    SimpleString groupDotName = getParameterField(ac, av, i, "-t");
+    SimpleStringCollection collection;
+    groupDotName.split(".", collection);
+
+    if (collection.size() != 2) return false;
+
+    groupFilters_ = (new TestFilter(collection[0].subString(0, collection[0].size()-1)))->add(groupFilters_);
+    nameFilters_ = (new TestFilter(collection[1]))->add(nameFilters_);
+    return true;
+}
+
+void CommandLineArguments::addStrictGroupFilter(int ac, const char *const *av, int& i)
 {
     TestFilter* groupFilter = new TestFilter(getParameterField(ac, av, i, "-sg"));
     groupFilter->strictMatching();
     groupFilters_ = groupFilter->add(groupFilters_);
 }
 
-void CommandLineArguments::AddExcludeGroupFilter(int ac, const char *const *av, int& i)
+void CommandLineArguments::addExcludeGroupFilter(int ac, const char *const *av, int& i)
 {
     TestFilter* groupFilter = new TestFilter(getParameterField(ac, av, i, "-xg"));
     groupFilter->invertMatching();
     groupFilters_ = groupFilter->add(groupFilters_);
 }
 
-void CommandLineArguments::AddExcludeStrictGroupFilter(int ac, const char *const *av, int& i)
+void CommandLineArguments::addExcludeStrictGroupFilter(int ac, const char *const *av, int& i)
 {
     TestFilter* groupFilter = new TestFilter(getParameterField(ac, av, i, "-xsg"));
     groupFilter->strictMatching();
@@ -220,27 +301,27 @@ void CommandLineArguments::AddExcludeStrictGroupFilter(int ac, const char *const
     groupFilters_ = groupFilter->add(groupFilters_);
 }
 
-void CommandLineArguments::AddNameFilter(int ac, const char *const *av, int& i)
+void CommandLineArguments::addNameFilter(int ac, const char *const *av, int& i)
 {
     TestFilter* nameFilter = new TestFilter(getParameterField(ac, av, i, "-n"));
     nameFilters_ = nameFilter->add(nameFilters_);
 }
 
-void CommandLineArguments::AddStrictNameFilter(int ac, const char *const *av, int& index)
+void CommandLineArguments::addStrictNameFilter(int ac, const char *const *av, int& index)
 {
     TestFilter* nameFilter = new TestFilter(getParameterField(ac, av, index, "-sn"));
     nameFilter->strictMatching();
     nameFilters_= nameFilter->add(nameFilters_);
 }
 
-void CommandLineArguments::AddExcludeNameFilter(int ac, const char *const *av, int& index)
+void CommandLineArguments::addExcludeNameFilter(int ac, const char *const *av, int& index)
 {
     TestFilter* nameFilter = new TestFilter(getParameterField(ac, av, index, "-xn"));
     nameFilter->invertMatching();
     nameFilters_= nameFilter->add(nameFilters_);
 }
 
-void CommandLineArguments::AddExcludeStrictNameFilter(int ac, const char *const *av, int& index)
+void CommandLineArguments::addExcludeStrictNameFilter(int ac, const char *const *av, int& index)
 {
     TestFilter* nameFilter = new TestFilter(getParameterField(ac, av, index, "-xsn"));
     nameFilter->invertMatching();
@@ -248,7 +329,7 @@ void CommandLineArguments::AddExcludeStrictNameFilter(int ac, const char *const 
     nameFilters_= nameFilter->add(nameFilters_);
 }
 
-void CommandLineArguments::AddTestToRunBasedOnVerboseOutput(int ac, const char *const *av, int& index, const char* parameterName)
+void CommandLineArguments::addTestToRunBasedOnVerboseOutput(int ac, const char *const *av, int& index, const char* parameterName)
 {
     SimpleString wholename = getParameterField(ac, av, index, parameterName);
     SimpleString testname = wholename.subStringFromTill(',', ')');
@@ -261,7 +342,7 @@ void CommandLineArguments::AddTestToRunBasedOnVerboseOutput(int ac, const char *
     nameFilters_ = namefilter->add(nameFilters_);
 }
 
-void CommandLineArguments::SetPackageName(int ac, const char *const *av, int& i)
+void CommandLineArguments::setPackageName(int ac, const char *const *av, int& i)
 {
     SimpleString packageName = getParameterField(ac, av, i, "-k");
     if (packageName.size() == 0) return;
@@ -269,7 +350,7 @@ void CommandLineArguments::SetPackageName(int ac, const char *const *av, int& i)
     packageName_ = packageName;
 }
 
-bool CommandLineArguments::SetOutputType(int ac, const char *const *av, int& i)
+bool CommandLineArguments::setOutputType(int ac, const char *const *av, int& i)
 {
     SimpleString outputType = getParameterField(ac, av, i, "-o");
     if (outputType.size() == 0) return false;

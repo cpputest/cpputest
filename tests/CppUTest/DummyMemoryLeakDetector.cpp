@@ -25,37 +25,48 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef D_Shuffle_h
-#define D_Shuffle_h
+#include "CppUTest/TestHarness.h"
+#include "CppUTest/MemoryLeakDetector.h"
+#include "DummyMemoryLeakDetector.h"
 
-#include "StandardCLibrary.h"
-
-
-#define SHUFFLE_DISABLED 0
-#define SHUFFLE_ENABLED_RANDOM_SEED 1
-#define SHUFFLE_SEED_MINIMUM_VALUE 2
-
-typedef int (*rand_func_t)(void);
-
-// wrapper needed for translating calling convention on Watcom/DOS
-static inline int rand_(void) // rand_func_t
+DummyMemoryLeakDetector::DummyMemoryLeakDetector(MemoryLeakFailure* reporter) : MemoryLeakDetector(reporter)
 {
-    return rand();
+    memoryLeakDetectorWasDeleted = false;
 }
 
-// "Durstenfeld shuffle" according to Wikipedia
-static inline void shuffle_list(rand_func_t rand_func, size_t numElems, void* listToShuffleInPlace[])
+DummyMemoryLeakDetector::~DummyMemoryLeakDetector()
 {
-    if( numElems == 0 ) return;
-
-    for (size_t i = numElems - 1; i >= 1; --i)
-    {
-        const size_t j = ((size_t)rand_func()) % (i + 1); // distribution biased by modulo, but good enough for shuffling
-        void* e1 = listToShuffleInPlace[j];
-        void* e2 = listToShuffleInPlace[i];
-        listToShuffleInPlace[i] = e1;
-        listToShuffleInPlace[j] = e2;
-    }
+    memoryLeakDetectorWasDeleted = true;
 }
 
-#endif
+bool DummyMemoryLeakDetector::wasDeleted()
+{
+    return memoryLeakDetectorWasDeleted;
+}
+
+bool DummyMemoryLeakDetector::memoryLeakDetectorWasDeleted = false;
+
+DummyMemoryLeakFailure::DummyMemoryLeakFailure()
+    : MemoryLeakFailure()
+{
+    memoryLeakFailureWasDelete = false;
+}
+
+DummyMemoryLeakFailure::~DummyMemoryLeakFailure()
+{
+    memoryLeakFailureWasDelete = true;
+}
+
+bool DummyMemoryLeakFailure::wasDeleted()
+{
+    return memoryLeakFailureWasDelete;
+}
+
+void DummyMemoryLeakFailure::fail(char*)
+{
+}
+
+bool DummyMemoryLeakFailure::memoryLeakFailureWasDelete = false;
+
+
+

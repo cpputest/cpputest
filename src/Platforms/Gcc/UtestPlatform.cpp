@@ -34,7 +34,15 @@
 #undef strdup
 #undef strndup
 
+#ifdef CPPUTEST_HAVE_GETTIMEOFDAY
 #include <sys/time.h>
+#endif
+#ifdef CPPUTEST_HAVE_FORK
+#include <unistd.h>
+#include <sys/wait.h>
+#include <errno.h>
+#endif
+
 #include <time.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -42,13 +50,11 @@
 #include <string.h>
 #include <math.h>
 #include <ctype.h>
-#include <unistd.h>
 #include <signal.h>
-#ifndef __MINGW32__
-#include <sys/wait.h>
-#include <errno.h>
-#endif
+
+#ifdef CPPUTEST_HAVE_PTHREAD_MUTEX_LOCK
 #include <pthread.h>
+#endif
 
 #include "CppUTest/PlatformSpecificFunctions.h"
 
@@ -74,44 +80,59 @@ static int PlatformSpecificWaitPidImplementation(int, int*, int)
 
 #else
 
+static void SetTestFailureByStatusCode(UtestShell* shell, TestResult* result, int status)
+{
+    if (WIFEXITED(status) && WEXITSTATUS(status) != 0) {
+        result->addFailure(TestFailure(shell, "Failed in separate process"));
+    } else if (WIFSIGNALED(status)) {
+        SimpleString message("Failed in separate process - killed by signal ");
+        message += StringFrom(WTERMSIG(status));
+        result->addFailure(TestFailure(shell, message));
+    } else if (WIFSTOPPED(status)) {
+        result->addFailure(TestFailure(shell, "Stopped in separate process - continuing"));
+    }
+}
+
 static void GccPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
 {
-    pid_t cpid, w;
-    int status;
+    const pid_t syscallError = -1;
+    pid_t cpid;
+    pid_t w;
+    int status = 0;
 
     cpid = PlatformSpecificFork();
 
-    if (cpid == -1) {
+    if (cpid == syscallError) {
         result->addFailure(TestFailure(shell, "Call to fork() failed"));
         return;
     }
 
     if (cpid == 0) {            /* Code executed by child */
-        shell->runOneTestInCurrentProcess(plugin, *result);   // LCOV_EXCL_LINE
-        _exit(result->getFailureCount());                     // LCOV_EXCL_LINE
+        const size_t initialFailureCount = result->getFailureCount(); // LCOV_EXCL_LINE
+        shell->runOneTestInCurrentProcess(plugin, *result);        // LCOV_EXCL_LINE
+        _exit(initialFailureCount < result->getFailureCount());    // LCOV_EXCL_LINE
     } else {                    /* Code executed by parent */
+        size_t amountOfRetries = 0;
         do {
             w = PlatformSpecificWaitPid(cpid, &status, WUNTRACED);
-            if (w == -1) {
-                if(EINTR ==errno) continue; /* OS X debugger */
-                result->addFailure(TestFailure(shell, "Call to waitpid() failed"));
-                return;
-            }
-
-            if (WIFEXITED(status) && WEXITSTATUS(status) > result->getFailureCount()) {
-                result->addFailure(TestFailure(shell, "Failed in separate process"));
-            } else if (WIFSIGNALED(status)) {
-                SimpleString signal(StringFrom(WTERMSIG(status)));
-                {
-                    SimpleString message("Failed in separate process - killed by signal ");
-                    message += signal;
-                    result->addFailure(TestFailure(shell, message));
+            if (w == syscallError) {
+                // OS X debugger causes EINTR
+                if (EINTR == errno) {
+                  if (amountOfRetries > 30) {
+                    result->addFailure(TestFailure(shell, "Call to waitpid() failed with EINTR. Tried 30 times and giving up! Sometimes happens in debugger"));
+                    return;
+                  }
+                  amountOfRetries++;
                 }
-            } else if (WIFSTOPPED(status)) {
-                result->addFailure(TestFailure(shell, "Stopped in separate process - continuing"));
-                kill(w, SIGCONT);
+                else {
+                    result->addFailure(TestFailure(shell, "Call to waitpid() failed"));
+                    return;
+                }
+            } else {
+                SetTestFailureByStatusCode(shell, result, status);
+                if (WIFSTOPPED(status)) kill(w, SIGCONT);
             }
-        } while (!WIFEXITED(status) && !WIFSIGNALED(status));
+        } while ((w == syscallError) || (!WIFEXITED(status) && !WIFSIGNALED(status)));
     }
 }
 
@@ -151,11 +172,11 @@ static int PlatformSpecificSetJmpImplementation(void (*function) (void* data), v
 }
 
 /*
- * MacOSX clang 3.0 doesn't seem to recognize longjmp and thus complains about __no_return_.
+ * MacOSX clang 3.0 doesn't seem to recognize longjmp and thus complains about _no_return_.
  * The later clang compilers complain when it isn't there. So only way is to check the clang compiler here :(
  */
 #if !((__clang_major__ == 3) && (__clang_minor__ == 0))
-__no_return__
+_no_return_
 #endif
 static void PlatformSpecificLongJmpImplementation()
 {
@@ -176,17 +197,27 @@ void (*PlatformSpecificRestoreJumpBuffer)() = PlatformSpecificRestoreJumpBufferI
 
 static long TimeInMillisImplementation()
 {
+#ifdef CPPUTEST_HAVE_GETTIMEOFDAY
     struct timeval tv;
     struct timezone tz;
     gettimeofday(&tv, &tz);
     return (tv.tv_sec * 1000) + (long)((double)tv.tv_usec * 0.001);
+#else
+    return 0;
+#endif
 }
 
 static const char* TimeStringImplementation()
 {
-    time_t tm = time(NULLPTR);
+    time_t theTime = time(NULLPTR);
     static char dateTime[80];
-    struct tm *tmp = localtime(&tm);
+#if defined(_WIN32) && defined(MINGW_HAS_SECURE_API)
+    static struct tm lastlocaltime;
+    localtime_s(&lastlocaltime, &theTime);
+    struct tm *tmp = &lastlocaltime;
+#else
+    struct tm *tmp = localtime(&theTime);
+#endif
     strftime(dateTime, 80, "%Y-%m-%dT%H:%M:%S", tmp);
     return dateTime;
 }
@@ -206,7 +237,13 @@ int (*PlatformSpecificVSNprintf)(char *str, size_t size, const char* format, va_
 
 static PlatformSpecificFile PlatformSpecificFOpenImplementation(const char* filename, const char* flag)
 {
+#if defined(_WIN32) && defined(MINGW_HAS_SECURE_API)
+  FILE* file;
+   fopen_s(&file, filename, flag);
+   return file;
+#else
    return fopen(filename, flag);
+#endif
 }
 
 static void PlatformSpecificFPutsImplementation(const char* str, PlatformSpecificFile file)
@@ -255,35 +292,59 @@ static int IsInfImplementation(double d)
 }
 
 double (*PlatformSpecificFabs)(double) = fabs;
+void (*PlatformSpecificSrand)(unsigned int) = srand;
+int (*PlatformSpecificRand)(void) = rand;
 int (*PlatformSpecificIsNan)(double) = IsNanImplementation;
 int (*PlatformSpecificIsInf)(double) = IsInfImplementation;
 int (*PlatformSpecificAtExit)(void(*func)(void)) = atexit;  /// this was undefined before
 
 static PlatformSpecificMutex PThreadMutexCreate(void)
 {
+#ifdef CPPUTEST_HAVE_PTHREAD_MUTEX_LOCK
     pthread_mutex_t *mutex = new pthread_mutex_t;
 
     pthread_mutex_init(mutex, NULLPTR);
-
     return (PlatformSpecificMutex)mutex;
+#else
+    return NULLPTR;
+#endif
+
 }
 
+#ifdef CPPUTEST_HAVE_PTHREAD_MUTEX_LOCK
 static void PThreadMutexLock(PlatformSpecificMutex mtx)
 {
     pthread_mutex_lock((pthread_mutex_t *)mtx);
 }
+#else
+static void PThreadMutexLock(PlatformSpecificMutex)
+{
+}
+#endif
 
+#ifdef CPPUTEST_HAVE_PTHREAD_MUTEX_LOCK
 static void PThreadMutexUnlock(PlatformSpecificMutex mtx)
 {
     pthread_mutex_unlock((pthread_mutex_t *)mtx);
 }
+#else
+static void PThreadMutexUnlock(PlatformSpecificMutex)
+{
+}
+#endif
 
+#ifdef CPPUTEST_HAVE_PTHREAD_MUTEX_LOCK
 static void PThreadMutexDestroy(PlatformSpecificMutex mtx)
 {
     pthread_mutex_t *mutex = (pthread_mutex_t *)mtx;
     pthread_mutex_destroy(mutex);
     delete mutex;
 }
+#else
+static void PThreadMutexDestroy(PlatformSpecificMutex)
+{
+}
+#endif
 
 PlatformSpecificMutex (*PlatformSpecificMutexCreate)(void) = PThreadMutexCreate;
 void (*PlatformSpecificMutexLock)(PlatformSpecificMutex) = PThreadMutexLock;

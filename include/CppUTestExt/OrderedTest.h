@@ -32,7 +32,7 @@ class OrderedTestShell : public UtestShell
 {
 public:
     OrderedTestShell();
-   virtual ~OrderedTestShell();
+   virtual ~OrderedTestShell() _destructor_override;
 
    virtual OrderedTestShell* addOrderedTest(OrderedTestShell* test);
    virtual OrderedTestShell* getNextOrderedTest();
@@ -56,7 +56,7 @@ private:
 class OrderedTestInstaller
 {
   public:
-    explicit OrderedTestInstaller(OrderedTestShell& test, const char* groupName, const char* testName, const char* fileName, int lineNumber, int level);
+    explicit OrderedTestInstaller(OrderedTestShell& test, const char* groupName, const char* testName, const char* fileName, size_t lineNumber, int level);
     virtual ~OrderedTestInstaller();
 
   private:

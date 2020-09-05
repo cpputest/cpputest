@@ -5,7 +5,6 @@
 #ifndef STANDARDCLIBRARY_H_
 #define STANDARDCLIBRARY_H_
 
-
 #if CPPUTEST_USE_STD_C_LIB
 
 /* Needed for size_t */
@@ -21,8 +20,24 @@
 /* Needed for malloc */
 #include <stdlib.h>
 
+/* Needed for std::nullptr */
+#ifdef __cplusplus
+ #if CPPUTEST_USE_STD_CPP_LIB
+  #include <cstddef>
+ #endif
+#endif
+
 /* Needed for ... */
 #include <stdarg.h>
+
+/* Kludge to get a va_copy in VC++ V6 and in GCC 98 */
+#ifndef va_copy
+#ifdef __GNUC__
+#define va_copy __va_copy
+#else
+#define va_copy(copy, original) copy = original;
+#endif
+#endif
 
 /* Needed for some detection of long long and 64 bit */
 #include <limits.h>
@@ -62,14 +77,16 @@ typedef __SIZE_TYPE__ size_t;
 typedef long unsigned int size_t;
 #endif
 
-typedef char* va_list;
 #define NULL (0)
 extern void*	malloc(size_t);
 extern void     free(void *);
 
 #define _bnd(X, bnd)            (((sizeof (X)) + (bnd)) & (~(bnd)))
-#define va_start(ap, A)         (void) ((ap) = (((char *) &(A)) + (_bnd (A,sizeof(int)-1))))
-#define va_end(ap)              (void) 0
+
+#define va_list __builtin_va_list
+#define va_copy __builtin_va_copy
+#define va_start __builtin_va_start
+#define va_end __builtin_va_end
 
 #endif
 

@@ -34,7 +34,6 @@
 #include "CppUTestExt/MockFailure.h"
 #include "MockFailureReporterForTest.h"
 
-#define CHECK_TEST_FAILS_PROPER_WITH_TEXT(text) fixture.checkTestFailsWithProperTestLocation(text, __FILE__, __LINE__)
 
 TEST_GROUP(FakeLongLongs)
 {
@@ -42,6 +41,8 @@ TEST_GROUP(FakeLongLongs)
 };
 
 #ifndef CPPUTEST_USE_LONG_LONG
+
+#define CHECK_TEST_FAILS_PROPER_WITH_TEXT(text) fixture.checkTestFailsWithProperTestLocation(text, __FILE__, __LINE__)
 
 static void _actualCallWithFakeLongLongParameter()
 {

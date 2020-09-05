@@ -64,3 +64,36 @@ TEST(TestResult, TestEndedWillPrintResultsAndExecutionTime)
     res->testsEnded();
     CHECK(mock->getOutput().contains("10 ms"));
 }
+
+TEST(TestResult, ResultIsOkIfTestIsRunWithNoFailures)
+{
+    res->countTest();
+    res->countRun();
+    CHECK_FALSE(res->isFailure());
+}
+
+TEST(TestResult, ResultIsOkIfTestIsIgnored)
+{
+    res->countTest();
+    res->countIgnored();
+    CHECK_FALSE(res->isFailure());
+}
+
+TEST(TestResult, ResultIsNotOkIfFailures)
+{
+    res->countTest();
+    res->countRun();
+    res->addFailure(TestFailure(UtestShell::getCurrent(), StringFrom("dummy message")));
+    CHECK_TRUE(res->isFailure());
+}
+
+TEST(TestResult, ResultIsNotOkIfNoTestsAtAll)
+{
+    CHECK_TRUE(res->isFailure());
+}
+
+TEST(TestResult, ResultIsNotOkIfNoTestsRunOrIgnored)
+{
+    res->countTest();
+    CHECK_TRUE(res->isFailure());
+}

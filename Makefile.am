@@ -24,6 +24,21 @@ TESTS = $(check_PROGRAMS)
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = cpputest.pc
 
+cmakemodulesdir = $(libdir)/CppUTest/cmake/Modules
+cmakemodules_DATA = \
+  cmake/Modules/CppUTestBuildTimeDiscoverTests.cmake
+
+cmakescriptsdir = $(libdir)/CppUTest/cmake/Scripts
+cmakescripts_DATA = \
+  cmake/Scripts/CppUTestBuildTimeDiscoverTests.cmake
+
+cmakedir = $(libdir)/CppUTest/cmake
+cmake_DATA = \
+  build/cmake_package_files/CppUTestConfig.cmake \
+  build/cmake_package_files/CppUTestConfigVersion.cmake \
+  build/cmake_package_files/CppUTestTargets-relwithdebinfo.cmake \
+  build/cmake_package_files/CppUTestTargets.cmake
+
 EXTRA_DIST = \
 	cpputest.pc.in \
 	$(ALL_FILES_IN_GIT)
@@ -39,6 +54,7 @@ lib_libCppUTest_a_SOURCES = \
 	src/CppUTest/MemoryLeakDetector.cpp \
 	src/CppUTest/MemoryLeakWarningPlugin.cpp \
 	src/CppUTest/SimpleString.cpp \
+	src/CppUTest/SimpleStringInternalCache.cpp \
 	src/CppUTest/SimpleMutex.cpp \
 	src/CppUTest/TeamCityTestOutput.cpp \
 	src/CppUTest/TestFailure.cpp \
@@ -66,8 +82,8 @@ include_cpputest_HEADERS = \
 	include/CppUTest/MemoryLeakWarningPlugin.h \
 	include/CppUTest/PlatformSpecificFunctions.h \
 	include/CppUTest/PlatformSpecificFunctions_c.h \
-	include/CppUTest/Shuffle.h \
 	include/CppUTest/SimpleString.h \
+	include/CppUTest/SimpleStringInternalCache.h \
 	include/CppUTest/SimpleMutex.h \
 	include/CppUTest/StandardCLibrary.h \
 	include/CppUTest/TeamCityTestOutput.h \
@@ -91,6 +107,7 @@ lib_libCppUTestExt_a_CXXFLAGS = $(lib_libCppUTest_a_CXXFLAGS)
 
 lib_libCppUTestExt_a_SOURCES = \
    src/CppUTestExt/CodeMemoryReportFormatter.cpp \
+   src/CppUTestExt/GTest.cpp \
    src/CppUTestExt/IEEE754ExceptionsPlugin.cpp \
    src/CppUTestExt/MemoryReportAllocator.cpp \
    src/CppUTestExt/MemoryReporterPlugin.cpp \
@@ -109,8 +126,10 @@ if INCLUDE_CPPUTEST_EXT
 include_cpputestextdir = $(includedir)/CppUTestExt
 
 include_cpputestext_HEADERS = \
+  include/CppUTestExt/CodeMemoryReportFormatter.h \
 	include/CppUTestExt/GMock.h \
 	include/CppUTestExt/GTest.h \
+	include/CppUTestExt/GTestSupport.h \
 	include/CppUTestExt/GTestConvertor.h \
 	include/CppUTestExt/IEEE754ExceptionsPlugin.h \
 	include/CppUTestExt/MemoryReportAllocator.h \
@@ -143,8 +162,10 @@ CppUTestTests_SOURCES = \
 	tests/CppUTest/AllocLetTestFreeTest.cpp \
 	tests/CppUTest/AllTests.cpp \
 	tests/CppUTest/CheatSheetTest.cpp \
+	tests/CppUTest/CompatabilityTests.cpp \
 	tests/CppUTest/CommandLineArgumentsTest.cpp \
 	tests/CppUTest/CommandLineTestRunnerTest.cpp \
+	tests/CppUTest/DummyMemoryLeakDetector.cpp \
 	tests/CppUTest/JUnitOutputTest.cpp \
 	tests/CppUTest/MemoryLeakDetectorTest.cpp \
 	tests/CppUTest/MemoryOperatorOverloadTest.cpp \
@@ -153,8 +174,8 @@ CppUTestTests_SOURCES = \
 	tests/CppUTest/PreprocessorTest.cpp \
 	tests/CppUTest/SetPluginTest.cpp \
 	tests/CppUTest/SimpleStringTest.cpp \
+	tests/CppUTest/SimpleStringCacheTest.cpp \
 	tests/CppUTest/SimpleMutexTest.cpp \
-	tests/CppUTest/ShuffleTest.cpp \
 	tests/CppUTest/TeamCityOutputTest.cpp \
 	tests/CppUTest/TestFailureNaNTest.cpp \
 	tests/CppUTest/TestFailureTest.cpp \
@@ -272,23 +293,23 @@ cpputest_build_gtest15:
 check_gtest15: cpputest_build_gtest15
 	@echo "Build using gmock 1.5";
 	export GMOCK_HOME=`pwd`/cpputest_build_gtest15/googlemock-release-1.5.0; \
-	make distclean; $(srcdir)/configure; make check
+	make distclean; $(srcdir)/configure --enable-std-cpp98; make check
 
 check_gtest16: cpputest_build_gtest16
 	@echo "Build using gmock 1.6";
 	export GMOCK_HOME=`pwd`/cpputest_build_gtest16/googlemock-release-1.6.0; \
-	make distclean; $(srcdir)/configure; make check
+	make distclean; $(srcdir)/configure --enable-std-cpp98; make check
 
 check_gtest17: cpputest_build_gtest17
 	@echo "Build using gmock 1.7"
 	export GMOCK_HOME=`pwd`/cpputest_build_gtest17/googlemock-release-1.7.0; \
-	make distclean; $(srcdir)/configure; make check
+	make distclean; $(srcdir)/configure --enable-std-cpp98; make check
 
 check_gtest18: cpputest_build_gtest18
 	@echo "Build using gmock 1.8"
 	export GMOCK_HOME=`pwd`/cpputest_build_gtest18/googletest-release-1.8.0/googlemock; \
 	export GTEST_HOME=`pwd`/cpputest_build_gtest18/googletest-release-1.8.0/googletest; \
-	make distclean; $(srcdir)/configure; make check
+	make distclean; $(srcdir)/configure --enable-std-cpp98; make check
 
 remove_gtest_directories:
 	rm -rf cpputest_build_gtest15
@@ -310,11 +331,20 @@ check_basic:
 	@echo "Building without extensions"
 	make distclean; $(srcdir)/configure --disable-extensions; make check
 
+	@echo "Building with the Std C++ 98 turned on. Compiler acts differently then."
+	make distclean; $(srcdir)/configure --enable-std-cpp98; make
+
 	@echo "Building with the Std C++ 11 turned on. Compiler acts differently then."
 	make distclean; $(srcdir)/configure --enable-std-cpp11; make
 
 	@echo "Building with the Std C++ 14 turned on. Compiler acts differently then."
 	make distclean; $(srcdir)/configure --enable-std-cpp14; make
+
+	@echo "Building with the Std C++ 17 turned on. Compiler acts differently then."
+	make distclean; $(srcdir)/configure --enable-std-cpp17; make
+
+	@echo "Building with the Std C++ 20 turned on. Compiler acts differently then."
+	make distclean; $(srcdir)/configure --enable-std-cpp20; make
 
 	@echo "Building without the Standard C library"
 	make distclean; $(srcdir)/configure --disable-std-c; make
@@ -324,6 +354,9 @@ check_basic:
 
 	@echo "Building without memory leak detection"
 	make distclean; $(srcdir)/configure --disable-memory-leak-detection; make check
+
+	@echo "Building with address sanitizer"
+	make distclean; $(srcdir)/configure --enable-sanitize-address; make check
 
 	@echo "Building without memory leak detection and without Standard C++"
 	make distclean; $(srcdir)/configure --disable-memory-leak-detection --disable-std-cpp; make check

@@ -42,7 +42,7 @@
 
 #ifdef __clang__
  #pragma clang diagnostic push
- #if __clang_major__ >= 3 && __clang_minor__ >= 6
+ #if (__clang_major__ == 3 && __clang_minor__ >= 6) || __clang_major__ >= 4
   #pragma clang diagnostic ignored "-Wreserved-id-macro"
  #endif
 #endif
@@ -94,7 +94,7 @@
 /* Should be the only #include here. Standard C library wrappers */
 #include "StandardCLibrary.h"
 
-/* Create a __no_return__ macro, which is used to flag a function as not returning.
+/* Create a _no_return_ macro, which is used to flag a function as not returning.
  * Used for functions that always throws for instance.
  *
  * This is needed for compiling with clang, without breaking other compilers.
@@ -104,15 +104,15 @@
 #endif
 
 #if __has_attribute(noreturn)
-  #define __no_return__ __attribute__((noreturn))
+  #define _no_return_ __attribute__((noreturn))
 #else
-  #define __no_return__
+  #define _no_return_
 #endif
 
 #if __has_attribute(format)
-  #define __check_format__(type, format_parameter, other_parameters) __attribute__ ((format (type, format_parameter, other_parameters)))
+  #define _check_format_(type, format_parameter, other_parameters) __attribute__ ((format (type, format_parameter, other_parameters)))
 #else
-  #define __check_format__(type, format_parameter, other_parameters) /* type, format_parameter, other_parameters */
+  #define _check_format_(type, format_parameter, other_parameters) /* type, format_parameter, other_parameters */
 #endif
 
 /*
@@ -168,6 +168,39 @@
 #endif
 
 /*
+ * Address sanitizer is a good thing... and it causes some conflicts with the CppUTest tests
+ * To check whether it is on or off, we create a CppUTest define here.
+*/
+#if defined(__has_feature)
+#if __has_feature(address_sanitizer)
+#define CPPUTEST_SANITIZE_ADDRESS 1
+#endif
+#endif
+
+#ifdef __SANITIZE_ADDRESS__
+#define CPPUTEST_SANITIZE_ADDRESS 1
+#endif
+
+#ifndef CPPUTEST_SANITIZE_ADDRESS
+#define CPPUTEST_SANITIZE_ADDRESS 0
+#endif
+
+#if CPPUTEST_SANITIZE_ADDRESS
+#define CPPUTEST_SANITIZE_ADDRESS 1
+#define CPPUTEST_DO_NOT_SANITIZE_ADDRESS __attribute__((no_sanitize_address))
+  #if defined(__linux__) && defined(__clang__)
+    #if CPPUTEST_USE_MEM_LEAK_DETECTION 
+    #warning Compiling with Address Sanitizer with clang on linux will cause duplicate symbols for operator new. Turning off memory leak detection. Compile with -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED to get rid of this warning.
+    #undef CPPUTEST_USE_MEM_LEAK_DETECTION
+    #define CPPUTEST_USE_MEM_LEAK_DETECTION 0
+    #endif
+  #endif
+#else
+#define CPPUTEST_SANITIZER_ADDRESS 0
+#define CPPUTEST_DO_NOT_SANITIZE_ADDRESS
+#endif
+
+/*
  * Handling of IEEE754 floating point exceptions via fenv.h
  * Predominantly works on non-Visual C++ compilers and Visual C++ 2008 and newer
  */
@@ -213,7 +246,7 @@
 /*
  * Support for "long long" type.
  *
- * Not supported when CPUTEST_LONG_LONG_DISABLED is set.
+ * Not supported when CPPUTEST_LONG_LONG_DISABLED is set.
  * Can be overridden by using CPPUTEST_USE_LONG_LONG
  *
  * CPPUTEST_HAVE_LONG_LONG_INT is set by configure
@@ -290,10 +323,6 @@ typedef struct cpputest_ulonglong cpputest_ulonglong;
 #else
 #define _destructor_override
 #endif
-
-/* MinGW-w64 prefers to act like Visual C++, but we want the ANSI behaviors instead */
-#undef __USE_MINGW_ANSI_STDIO
-#define __USE_MINGW_ANSI_STDIO 1
 
 #ifdef __clang__
  #pragma clang diagnostic pop

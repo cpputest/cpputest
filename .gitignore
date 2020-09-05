@@ -50,6 +50,10 @@ Release
 _build_
 _build
 builds/*gcc*
+cpputest_build/Makefile
+cpputest_build/generated
+cpputest_build/src
+cpputest_build/tests
 /.deps
 CppUTestExtTests
 CppUTestTests

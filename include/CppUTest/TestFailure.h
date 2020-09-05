@@ -45,20 +45,19 @@ class TestFailure
 {
 
 public:
-    TestFailure(UtestShell*, const char* fileName, int lineNumber,
-            const SimpleString& theMessage);
+    TestFailure(UtestShell*, const char* fileName, size_t lineNumber, const SimpleString& theMessage);
     TestFailure(UtestShell*, const SimpleString& theMessage);
-    TestFailure(UtestShell*, const char* fileName, int lineNumber);
+    TestFailure(UtestShell*, const char* fileName, size_t lineNumber);
     TestFailure(const TestFailure&);
     virtual ~TestFailure();
 
     virtual SimpleString getFileName() const;
     virtual SimpleString getTestName() const;
     virtual SimpleString getTestNameOnly() const;
-    virtual int getFailureLineNumber() const;
+    virtual size_t getFailureLineNumber() const;
     virtual SimpleString getMessage() const;
     virtual SimpleString getTestFileName() const;
-    virtual int getTestLineNumber() const;
+    virtual size_t getTestLineNumber() const;
     bool isOutsideTestFile() const;
     bool isInHelperFunction() const;
 
@@ -76,9 +75,9 @@ protected:
     SimpleString testName_;
     SimpleString testNameOnly_;
     SimpleString fileName_;
-    int lineNumber_;
+    size_t lineNumber_;
     SimpleString testFileName_;
-    int testLineNumber_;
+    size_t testLineNumber_;
     SimpleString message_;
 
     TestFailure& operator=(const TestFailure&);
@@ -88,104 +87,104 @@ protected:
 class EqualsFailure: public TestFailure
 {
 public:
-    EqualsFailure(UtestShell*, const char* fileName, int lineNumber, const char* expected, const char* actual, const SimpleString& text);
-    EqualsFailure(UtestShell*, const char* fileName, int lineNumber, const SimpleString& expected, const SimpleString& actual, const SimpleString& text);
+    EqualsFailure(UtestShell*, const char* fileName, size_t lineNumber, const char* expected, const char* actual, const SimpleString& text);
+    EqualsFailure(UtestShell*, const char* fileName, size_t lineNumber, const SimpleString& expected, const SimpleString& actual, const SimpleString& text);
 };
 
 class DoublesEqualFailure: public TestFailure
 {
 public:
-    DoublesEqualFailure(UtestShell*, const char* fileName, int lineNumber, double expected, double actual, double threshold, const SimpleString& text);
+    DoublesEqualFailure(UtestShell*, const char* fileName, size_t lineNumber, double expected, double actual, double threshold, const SimpleString& text);
 };
 
 class CheckEqualFailure : public TestFailure
 {
 public:
-    CheckEqualFailure(UtestShell* test, const char* fileName, int lineNumber, const SimpleString& expected, const SimpleString& actual, const SimpleString& text);
+    CheckEqualFailure(UtestShell* test, const char* fileName, size_t lineNumber, const SimpleString& expected, const SimpleString& actual, const SimpleString& text);
 };
 
 class ComparisonFailure : public TestFailure
 {
 public:
-    ComparisonFailure(UtestShell* test, const char *fileName, int lineNumber, const SimpleString& checkString, const SimpleString& comparisonString, const SimpleString& text);
+    ComparisonFailure(UtestShell* test, const char *fileName, size_t lineNumber, const SimpleString& checkString, const SimpleString& comparisonString, const SimpleString& text);
 };
 
 class ContainsFailure: public TestFailure
 {
 public:
-    ContainsFailure(UtestShell*, const char* fileName, int lineNumber, const SimpleString& expected, const SimpleString& actual, const SimpleString& text);
+    ContainsFailure(UtestShell*, const char* fileName, size_t lineNumber, const SimpleString& expected, const SimpleString& actual, const SimpleString& text);
 };
 
 class CheckFailure : public TestFailure
 {
 public:
-    CheckFailure(UtestShell* test, const char* fileName, int lineNumber, const SimpleString& checkString, const SimpleString& conditionString, const SimpleString& textString = "");
+    CheckFailure(UtestShell* test, const char* fileName, size_t lineNumber, const SimpleString& checkString, const SimpleString& conditionString, const SimpleString& textString = "");
 };
 
 class FailFailure : public TestFailure
 {
 public:
-    FailFailure(UtestShell* test, const char* fileName, int lineNumber, const SimpleString& message);
+    FailFailure(UtestShell* test, const char* fileName, size_t lineNumber, const SimpleString& message);
 };
 
 class LongsEqualFailure : public TestFailure
 {
 public:
-    LongsEqualFailure(UtestShell* test, const char* fileName, int lineNumber, long expected, long actual, const SimpleString& text);
+    LongsEqualFailure(UtestShell* test, const char* fileName, size_t lineNumber, long expected, long actual, const SimpleString& text);
 };
 
 class UnsignedLongsEqualFailure : public TestFailure
 {
 public:
-    UnsignedLongsEqualFailure(UtestShell* test, const char* fileName, int lineNumber, unsigned long expected, unsigned long actual, const SimpleString& text);
+    UnsignedLongsEqualFailure(UtestShell* test, const char* fileName, size_t lineNumber, unsigned long expected, unsigned long actual, const SimpleString& text);
 };
 
 class LongLongsEqualFailure : public TestFailure
 {
 public:
-    LongLongsEqualFailure(UtestShell* test, const char* fileName, int lineNumber, cpputest_longlong expected, cpputest_longlong actual, const SimpleString& text);
+    LongLongsEqualFailure(UtestShell* test, const char* fileName, size_t lineNumber, cpputest_longlong expected, cpputest_longlong actual, const SimpleString& text);
 };
 
 class UnsignedLongLongsEqualFailure : public TestFailure
 {
 public:
-    UnsignedLongLongsEqualFailure(UtestShell* test, const char* fileName, int lineNumber, cpputest_ulonglong expected, cpputest_ulonglong actual, const SimpleString& text);
+    UnsignedLongLongsEqualFailure(UtestShell* test, const char* fileName, size_t lineNumber, cpputest_ulonglong expected, cpputest_ulonglong actual, const SimpleString& text);
 };
 
 class SignedBytesEqualFailure : public TestFailure
 {
 public:
-    SignedBytesEqualFailure (UtestShell* test, const char* fileName, int lineNumber, signed char expected, signed char actual, const SimpleString& text);
+    SignedBytesEqualFailure (UtestShell* test, const char* fileName, size_t lineNumber, signed char expected, signed char actual, const SimpleString& text);
 };
 
 class StringEqualFailure : public TestFailure
 {
 public:
-    StringEqualFailure(UtestShell* test, const char* fileName, int lineNumber, const char* expected, const char* actual, const SimpleString& text);
+    StringEqualFailure(UtestShell* test, const char* fileName, size_t lineNumber, const char* expected, const char* actual, const SimpleString& text);
 };
 
 class StringEqualNoCaseFailure : public TestFailure
 {
 public:
-    StringEqualNoCaseFailure(UtestShell* test, const char* fileName, int lineNumber, const char* expected, const char* actual, const SimpleString& text);
+    StringEqualNoCaseFailure(UtestShell* test, const char* fileName, size_t lineNumber, const char* expected, const char* actual, const SimpleString& text);
 };
 
 class BinaryEqualFailure : public TestFailure
 {
 public:
-	BinaryEqualFailure(UtestShell* test, const char* fileName, int lineNumber, const unsigned char* expected, const unsigned char* actual, size_t size, const SimpleString& text);
+	BinaryEqualFailure(UtestShell* test, const char* fileName, size_t lineNumber, const unsigned char* expected, const unsigned char* actual, size_t size, const SimpleString& text);
 };
 
 class BitsEqualFailure : public TestFailure
 {
 public:
-	BitsEqualFailure(UtestShell* test, const char* fileName, int lineNumber, unsigned long expected, unsigned long actual, unsigned long mask, size_t byteCount, const SimpleString& text);
+	BitsEqualFailure(UtestShell* test, const char* fileName, size_t lineNumber, unsigned long expected, unsigned long actual, unsigned long mask, size_t byteCount, const SimpleString& text);
 };
 
 class FeatureUnsupportedFailure : public TestFailure
 {
 public:
-    FeatureUnsupportedFailure(UtestShell* test, const char* fileName, int lineNumber, const SimpleString& featureName, const SimpleString& text);
+    FeatureUnsupportedFailure(UtestShell* test, const char* fileName, size_t lineNumber, const SimpleString& featureName, const SimpleString& text);
 };
 
 #endif

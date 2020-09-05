@@ -1,0 +1,2 @@
+add_subdirectory(AllTests)
+add_subdirectory(ApplicationLib)

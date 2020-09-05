@@ -30,19 +30,165 @@
 
 bool TestTestingFixture::lineOfCodeExecutedAfterCheck = false;
 
-void TestTestingFixture::lineExecutedAfterCheck()
+TestTestingFixture::TestTestingFixture()
 {
-  lineOfCodeExecutedAfterCheck = true;
+    output_ = new StringBufferTestOutput();
+    result_ = new TestResult(*output_);
+    genTest_ = new ExecFunctionTestShell();
+    registry_ = new TestRegistry();
+    ownsExecFunction_ = false;
+
+    registry_->setCurrentRegistry(registry_);
+    registry_->addTest(genTest_);
+
+    lineOfCodeExecutedAfterCheck = false;
 }
 
-void TestTestingFixture::checkTestFailsWithProperTestLocation(const char* text, const char* file, int line)
+void TestTestingFixture::flushOutputAndResetResult()
 {
-  if (getFailureCount() != 1)
-    FAIL_LOCATION(StringFromFormat("Expected one test failure, but got %d amount of test failures", getFailureCount()).asCharString(), file, line);
+     output_->flush();
+     delete result_;
+     result_ = new TestResult(*output_);
+}
 
-  STRCMP_CONTAINS_LOCATION(text, output_->getOutput().asCharString(), "", file, line);
+TestTestingFixture::~TestTestingFixture()
+{
+    registry_->setCurrentRegistry(NULLPTR);
+    clearExecFunction();
+    delete registry_;
+    delete result_;
+    delete output_;
+    delete genTest_;
+}
 
-  if (lineOfCodeExecutedAfterCheck)
-    FAIL_LOCATION("The test should jump/throw on failure and not execute the next line. However, the next line was executed.", file, line);
+void TestTestingFixture::clearExecFunction()
+{
+    if (genTest_->testFunction_ && ownsExecFunction_)
+        delete genTest_->testFunction_;
+}
+
+void TestTestingFixture::addTest(UtestShell * test)
+{
+    registry_->addTest(test);
+}
+
+void TestTestingFixture::setTestFunction(void(*testFunction)())
+{
+    clearExecFunction();
+
+    genTest_->testFunction_ = new ExecFunctionWithoutParameters(testFunction);
+    ownsExecFunction_ = true;
+}
+
+void TestTestingFixture::setTestFunction(ExecFunction* testFunction)
+{
+    clearExecFunction();
+
+    genTest_->testFunction_ = testFunction;
+
+    ownsExecFunction_ = false;
+}
+
+void TestTestingFixture::setSetup(void(*setupFunction)())
+{
+    genTest_->setup_ = setupFunction;
+}
+
+void TestTestingFixture::setTeardown(void(*teardownFunction)())
+{
+    genTest_->teardown_ = teardownFunction;
+}
+
+void TestTestingFixture::installPlugin(TestPlugin* plugin)
+{
+    registry_->installPlugin(plugin);
+}
+
+void TestTestingFixture::setRunTestsInSeperateProcess()
+{
+    registry_->setRunTestsInSeperateProcess();
+}
+
+void TestTestingFixture::setOutputVerbose()
+{
+    output_->verbose(TestOutput::level_verbose);
+}
+
+void TestTestingFixture::runTestWithMethod(void(*method)())
+{
+    setTestFunction(method);
+    runAllTests();
+}
+
+void TestTestingFixture::runAllTests()
+{
+    registry_->runAllTests(*result_);
+}
+
+size_t TestTestingFixture::getFailureCount()
+{
+    return result_->getFailureCount();
+}
+
+size_t TestTestingFixture::getCheckCount()
+{
+    return result_->getCheckCount();
+}
+
+size_t TestTestingFixture::getTestCount()
+{
+    return result_->getTestCount();
+}
+
+size_t TestTestingFixture::getIgnoreCount()
+{
+    return result_->getIgnoredCount();
+}
+
+TestRegistry* TestTestingFixture::getRegistry()
+{
+    return registry_;
+}
+
+bool TestTestingFixture::hasTestFailed()
+{
+    return genTest_->hasFailed();
+}
+
+void TestTestingFixture::assertPrintContains(const SimpleString& contains)
+{
+    STRCMP_CONTAINS(contains.asCharString(), getOutput().asCharString());
+}
+
+void TestTestingFixture::assertPrintContainsNot(const SimpleString& contains)
+{
+    CHECK(! getOutput().contains(contains));
+}
+
+
+const SimpleString& TestTestingFixture::getOutput()
+{
+    return output_->getOutput();
+}
+
+size_t TestTestingFixture::getRunCount()
+{
+  	return result_->getRunCount();
+}
+
+void TestTestingFixture::lineExecutedAfterCheck()
+{
+    lineOfCodeExecutedAfterCheck = true;
+}
+
+void TestTestingFixture::checkTestFailsWithProperTestLocation(const char* text, const char* file, size_t line)
+{
+    if (getFailureCount() != 1)
+      FAIL_LOCATION(StringFromFormat("Expected one test failure, but got %d amount of test failures", (int) getFailureCount()).asCharString(), file, line);
+
+    STRCMP_CONTAINS_LOCATION(text, output_->getOutput().asCharString(), "", file, line);
+
+    if (lineOfCodeExecutedAfterCheck)
+      FAIL_LOCATION("The test should jump/throw on failure and not execute the next line. However, the next line was executed.", file, line);
 }
 

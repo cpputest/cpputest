@@ -54,7 +54,9 @@ TEST_GROUP(MockFailureTest)
         delete call2;
         delete call3;
         CHECK_NO_MOCK_FAILURE();
+        MockFailureReporterForTest::clearReporter();
     }
+
     void addAllToList()
     {
         list->addExpectedCall(call1);
@@ -164,6 +166,28 @@ TEST(MockFailureTest, MockUnexpectedOutputParameterFailure)
     int out2;
     call1->withName("foo").withOutputParameterReturning("boo", &out1, sizeof(out1));
     call2->withName("foo").withOutputParameterReturning("boo", &out2, sizeof(out2));
+    call3->withName("unrelated");
+    addAllToList();
+
+    MockNamedValue actualParameter("bar");
+    actualParameter.setValue((void *)0x123);
+
+    MockUnexpectedOutputParameterFailure failure(UtestShell::getCurrent(), "foo", actualParameter, *list);
+    STRCMP_EQUAL("Mock Failure: Unexpected output parameter name to function \"foo\": bar\n"
+                 "\tEXPECTED calls that WERE NOT fulfilled related to function: foo\n"
+                 "\t\tfoo -> const void* boo: <output> (expected 1 call, called 0 times)\n"
+                 "\t\tfoo -> const void* boo: <output> (expected 1 call, called 0 times)\n"
+                 "\tEXPECTED calls that WERE fulfilled related to function: foo\n"
+                 "\t\t<none>\n"
+                 "\tACTUAL unexpected output parameter passed to function: foo\n"
+                 "\t\tvoid* bar", failure.getMessage().asCharString());
+}
+
+TEST(MockFailureTest, MockUnexpectedUnmodifiedOutputParameterFailure)
+{
+    int out1;
+    call1->withName("foo").withOutputParameterReturning("boo", &out1, sizeof(out1));
+    call2->withName("foo").withUnmodifiedOutputParameter("boo");
     call3->withName("unrelated");
     addAllToList();
 

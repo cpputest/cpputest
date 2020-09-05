@@ -50,7 +50,7 @@ TEST_GROUP(TestOrderedTest)
         OrderedTestShell::setOrderedTestHead(NULLPTR);
 
         fixture = new TestTestingFixture();
-        fixture->registry_->unDoLastAddTest();
+        fixture->getRegistry()->unDoLastAddTest();
     }
 
     void teardown()
@@ -71,12 +71,12 @@ TEST_GROUP(TestOrderedTest)
 
     UtestShell* firstTest()
     {
-        return fixture->registry_->getFirstTest();
+        return fixture->getRegistry()->getFirstTest();
     }
 
     UtestShell* secondTest()
     {
-        return fixture->registry_->getFirstTest()->getNext();
+        return firstTest()->getNext();
     }
 };
 

@@ -338,7 +338,7 @@ TEST(TestHarness_c, checkLongLongInt)
 static void _failLongLongIntTextMethod()
 {
     cpputest_longlong dummy_longlong;
-    CHECK_EQUAL_C_LONGLONG_TEXT(dummy_longlong, dummy_longlong);
+    CHECK_EQUAL_C_LONGLONG_TEXT(dummy_longlong, dummy_longlong, "Text");
 } // LCOV_EXCL_LINE
 
 TEST(TestHarness_c, checkLongLongIntText)
@@ -366,7 +366,7 @@ TEST(TestHarness_c, checkUnsignedLongLongInt)
 static void _failUnsignedLongLongIntTextMethod()
 {
     cpputest_ulonglong dummy_ulonglong;
-    CHECK_EQUAL_C_ULONGLONG_TEXT(dummy_ulonglong, dummy_ulonglong);
+    CHECK_EQUAL_C_ULONGLONG_TEXT(dummy_ulonglong, dummy_ulonglong, "Text");
 } // LCOV_EXCL_LINE
 
 TEST(TestHarness_c, checkUnsignedLongLongIntText)
@@ -773,7 +773,7 @@ TEST(TestHarness_c, macros)
 {
 #if CPPUTEST_USE_MALLOC_MACROS
     MemoryLeakDetector* memLeakDetector = MemoryLeakWarningPlugin::getGlobalDetector();
-    int memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
+    size_t memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
 #endif
     void* mem1 = malloc(10);
     void* mem2 = calloc(10, 20);
@@ -797,7 +797,7 @@ TEST(TestHarness_c, callocInitializedToZero)
     free(mem);
 }
 
-TEST(TestHarness_c, callocShouldReturnNULLWhenOutOfMeory)
+TEST(TestHarness_c, callocShouldReturnNULLWhenOutOfMemory)
 {
     cpputest_malloc_set_out_of_memory_countdown(0);
     void * m = cpputest_calloc(1, 1);

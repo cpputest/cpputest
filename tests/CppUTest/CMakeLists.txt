@@ -1,10 +1,10 @@
-enable_testing()
-
 set(CppUTestTests_src
     AllTests.cpp
     SetPluginTest.cpp
     CheatSheetTest.cpp
     SimpleStringTest.cpp
+    SimpleStringCacheTest.cpp
+    CompatabilityTests.cpp
     CommandLineArgumentsTest.cpp
     TestFailureTest.cpp
     TestFailureNaNTest.cpp
@@ -13,6 +13,7 @@ set(CppUTestTests_src
     TestHarness_cTest.cpp
     JUnitOutputTest.cpp
     TestHarness_cTestCFile.c
+    DummyMemoryLeakDetector.cpp
     MemoryLeakDetectorTest.cpp
     TestInstallerTest.cpp
     AllocLetTestFree.c
@@ -22,7 +23,6 @@ set(CppUTestTests_src
     TestOutputTest.cpp
     AllocLetTestFreeTest.cpp
     TestRegistryTest.cpp
-    ShuffleTest.cpp
     AllocationInCFile.c
     PluginTest.cpp
     TestResultTest.cpp
@@ -56,4 +56,6 @@ add_executable(CppUTestTests ${CppUTestTests_src})
 cpputest_normalize_test_output_location(CppUTestTests)
 target_link_libraries(CppUTestTests CppUTest ${THREAD_LIB})
 
-cpputest_buildtime_discover_tests(CppUTestTests)
+if (TESTS_BUILD_DISCOVER)
+    cpputest_buildtime_discover_tests(CppUTestTests)
+endif()

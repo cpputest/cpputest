@@ -44,6 +44,8 @@
 #include "CppUTest/MemoryLeakDetectorMallocMacros.h"
 #endif
 
+#include "CppUTestExt/GTestSupport.h"
+
 #ifndef RUN_ALL_TESTS
 #define GTEST_VERSION_GTEST_1_7
 #else

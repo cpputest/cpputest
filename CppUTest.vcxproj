@@ -47,19 +47,15 @@
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
@@ -211,6 +207,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\CppUTestExt\CodeMemoryReportFormatter.cpp" />
+    <ClCompile Include="src\CppUTestExt\GTest.cpp" />
     <ClCompile Include="src\CppUTestExt\IEEE754ExceptionsPlugin.cpp" />
     <ClCompile Include="src\CppUTestExt\MemoryReportAllocator.cpp" />
     <ClCompile Include="src\CppUTestExt\MemoryReporterPlugin.cpp" />
@@ -232,6 +229,7 @@
     <ClCompile Include="src\CppUTest\MemoryLeakWarningPlugin.cpp" />
     <ClCompile Include="src\CppUTest\SimpleMutex.cpp" />
     <ClCompile Include="src\CppUTest\SimpleString.cpp" />
+    <ClCompile Include="src\CppUTest\SimpleStringInternalCache.cpp" />
     <ClCompile Include="src\CppUTest\TestFailure.cpp" />
     <ClCompile Include="src\CppUTest\TestFilter.cpp" />
     <ClCompile Include="src\CppUTest\TestHarness_c.cpp" />
@@ -248,6 +246,7 @@
     <ClInclude Include="include\CppUTestExt\CodeMemoryReportFormatter.h" />
     <ClInclude Include="include\CppUTestExt\GMock.h" />
     <ClInclude Include="include\CppUTestExt\GTest.h" />
+    <ClInclude Include="include\CppUTestExt\GTestSupport.h" />
     <ClInclude Include="include\CppUTestExt\GTestConvertor.h" />
     <ClInclude Include="include\cpputestext\ieee754exceptionsplugin.h" />
     <ClInclude Include="include\CppUTestExt\MemoryReportAllocator.h" />
@@ -278,6 +277,7 @@
     <ClInclude Include="include\CppUTest\PlatformSpecificFunctions.h" />
     <ClInclude Include="include\CppUTest\SimpleMutex.h" />
     <ClInclude Include="include\CppUTest\SimpleString.h" />
+    <ClInclude Include="include\CppUTest\SimpleStringInternalCache.h" />
     <ClInclude Include="include\CppUTest\StandardCLibrary.h" />
     <ClInclude Include="include\CppUTest\TestFailure.h" />
     <ClInclude Include="include\CppUTest\TestFilter.h" />

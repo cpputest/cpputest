@@ -30,6 +30,10 @@
 
 TEST_GROUP(MockHierarchyTest)
 {
+    void teardown()
+    {
+        mock().clear();
+    }
 };
 
 TEST(MockHierarchyTest, getMockSupportScope)

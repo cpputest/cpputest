@@ -102,10 +102,10 @@
   CHECK_TRUE_LOCATION(condition, "CHECK", #condition, NULLPTR, __FILE__, __LINE__)
 
 #define CHECK_TEXT(condition, text) \
-  CHECK_TRUE_LOCATION(condition, "CHECK", #condition, text, __FILE__, __LINE__)
+  CHECK_TRUE_LOCATION((bool)(condition), "CHECK", #condition, text, __FILE__, __LINE__)
 
 #define CHECK_TRUE(condition)\
-  CHECK_TRUE_LOCATION(condition, "CHECK_TRUE", #condition, NULLPTR, __FILE__, __LINE__)
+  CHECK_TRUE_LOCATION((bool) (condition), "CHECK_TRUE", #condition, NULLPTR, __FILE__, __LINE__)
 
 #define CHECK_TRUE_TEXT(condition, text)\
   CHECK_TRUE_LOCATION(condition, "CHECK_TRUE", #condition, text, __FILE__, __LINE__)

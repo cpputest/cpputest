@@ -43,6 +43,8 @@ TEST_GROUP(MockCheatSheet)
     {
         /* Check expectations. Alternatively use MockSupportPlugin */
         mock().checkExpectations();
+
+        mock().clear();
     }
 };
 

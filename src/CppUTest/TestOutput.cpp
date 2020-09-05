@@ -24,7 +24,6 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#include "CppUTest/Shuffle.h"
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TestOutput.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
@@ -45,7 +44,7 @@ TestOutput::WorkingEnvironment TestOutput::getWorkingEnvironment()
 
 
 TestOutput::TestOutput() :
-    dotCount_(0), verbose_(false), color_(false), shuffleSeed_(SHUFFLE_DISABLED), progressIndication_(".")
+    dotCount_(0), verbose_(level_quiet), color_(false), progressIndication_(".")
 {
 }
 
@@ -53,24 +52,14 @@ TestOutput::~TestOutput()
 {
 }
 
-void TestOutput::verbose()
+void TestOutput::verbose(VerbosityLevel level)
 {
-    verbose_ = true;
+    verbose_ = level;
 }
 
 void TestOutput::color()
 {
     color_ = true;
-}
-
-void TestOutput::setSummaryEnd()
-{
-    summaryEnd_ = true;
-}
-
-void TestOutput::setShuffleSeed(unsigned int shuffleSeed)
-{
-    shuffleSeed_ = shuffleSeed;
 }
 
 void TestOutput::print(const char* str)
@@ -79,6 +68,11 @@ void TestOutput::print(const char* str)
 }
 
 void TestOutput::print(long n)
+{
+    print(StringFrom(n).asCharString());
+}
+
+void TestOutput::print(size_t n)
 {
     print(StringFrom(n).asCharString());
 }
@@ -102,7 +96,7 @@ TestOutput& operator<<(TestOutput& p, long int i)
 
 void TestOutput::printCurrentTestStarted(const UtestShell& test)
 {
-    if (verbose_) print(test.getFormattedName().asCharString());
+    if (verbose_ > level_quiet) print(test.getFormattedName().asCharString());
 
     if (test.willRun()) {
        setProgressIndicator(".");
@@ -114,7 +108,7 @@ void TestOutput::printCurrentTestStarted(const UtestShell& test)
 
 void TestOutput::printCurrentTestEnded(const TestResult& res)
 {
-    if (verbose_) {
+    if (verbose_ > level_quiet) {
         print(" - ");
         print(res.getCurrentTestTotalExecutionTime());
         print(" ms\n");
@@ -150,14 +144,20 @@ void TestOutput::printCurrentGroupEnded(const TestResult& /*res*/)
 void TestOutput::printTestsEnded(const TestResult& result)
 {
     print("\n");
-    const bool anyTestFailed = result.getFailureCount() > 0;
-    if (anyTestFailed) {
+    const bool isFailure = result.isFailure();
+    const size_t failureCount = result.getFailureCount();
+    if (isFailure) {
         if (color_) {
             print("\033[31;1m");
         }
         print("Errors (");
-        print(result.getFailureCount());
-        print(" failures, ");
+        if (failureCount > 0) {
+            print(failureCount);
+            print(" failures, ");
+        }
+        else {
+            print("ran nothing, ");
+        }
     }
     else {
         if (color_) {
@@ -175,15 +175,14 @@ void TestOutput::printTestsEnded(const TestResult& result)
     print(" ignored, ");
     print(result.getFilteredOutCount());
     print(" filtered out, ");
-    if (shuffleSeed_ != SHUFFLE_DISABLED && (verbose_ || anyTestFailed)) {
-        print("shuffle seed was: ");
-        print(shuffleSeed_);
-        print(", ");
-    }
     print(result.getTotalExecutionTime());
     print(" ms)");
     if (color_) {
         print("\033[m");
+    }
+    if (isFailure && failureCount == 0) {
+        print("\nNote: test run failed because no tests were run or ignored. Assuming something went wrong. "
+              "This often happens because of linking errors or typos in test filter.");
     }
     print("\n\n");
     
@@ -194,7 +193,7 @@ void TestOutput::printTestsEnded(const TestResult& result)
     dotCount_ = 0;
 }
 
-void TestOutput::printTestRun(int number, int total)
+void TestOutput::printTestRun(size_t number, size_t total)
 {
     if (total > 1) {
         print("Test run ");
@@ -242,7 +241,7 @@ void TestOutput::printFailureMessage(SimpleString reason)
     print("\n\n");
 }
 
-void TestOutput::printErrorInFileOnLineFormattedForWorkingEnvironment(SimpleString file, int lineNumber)
+void TestOutput::printErrorInFileOnLineFormattedForWorkingEnvironment(SimpleString file, size_t lineNumber)
 {
     if (TestOutput::getWorkingEnvironment() == TestOutput::visualStudio)
         printVisualStudioErrorInFileOnLine(file, lineNumber);
@@ -250,7 +249,7 @@ void TestOutput::printErrorInFileOnLineFormattedForWorkingEnvironment(SimpleStri
         printEclipseErrorInFileOnLine(file, lineNumber);
 }
 
-void TestOutput::printEclipseErrorInFileOnLine(SimpleString file, int lineNumber)
+void TestOutput::printEclipseErrorInFileOnLine(SimpleString file, size_t lineNumber)
 {
     print("\n");
     print(file.asCharString());
@@ -260,7 +259,7 @@ void TestOutput::printEclipseErrorInFileOnLine(SimpleString file, int lineNumber
     print(" error:");
 }
 
-void TestOutput::printVisualStudioErrorInFileOnLine(SimpleString file, int lineNumber)
+void TestOutput::printVisualStudioErrorInFileOnLine(SimpleString file, size_t lineNumber)
 {
     print("\n");
     print(file.asCharString());
@@ -269,6 +268,13 @@ void TestOutput::printVisualStudioErrorInFileOnLine(SimpleString file, int lineN
     print("):");
     print(" error:");
 }
+
+void TestOutput::printVeryVerbose(const char* str)
+{
+    if(verbose_ == level_veryVerbose)
+        printBuffer(str);
+}
+
 
 void ConsoleTestOutput::printBuffer(const char* s)
 {
@@ -347,10 +353,10 @@ void CompositeTestOutput::printCurrentGroupEnded(const TestResult& res)
   if (outputTwo_) outputTwo_->printCurrentGroupEnded(res);
 }
 
-void CompositeTestOutput::verbose()
+void CompositeTestOutput::verbose(VerbosityLevel level)
 {
-  if (outputOne_) outputOne_->verbose();
-  if (outputTwo_) outputTwo_->verbose();
+  if (outputOne_) outputOne_->verbose(level);
+  if (outputTwo_) outputTwo_->verbose(level);
 }
 
 void CompositeTestOutput::color()
@@ -378,6 +384,12 @@ void CompositeTestOutput::print(const char* buffer)
 }
 
 void CompositeTestOutput::print(long number)
+{
+  if (outputOne_) outputOne_->print(number);
+  if (outputTwo_) outputTwo_->print(number);
+}
+
+void CompositeTestOutput::print(size_t number)
 {
   if (outputOne_) outputOne_->print(number);
   if (outputTwo_) outputTwo_->print(number);

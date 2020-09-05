@@ -73,7 +73,7 @@ CommandLineTestRunner::~CommandLineTestRunner()
 
 int CommandLineTestRunner::runAllTestsMain()
 {
-    int testResult = 0;
+    int testResult = 1;
 
     SetPointerPlugin pPlugin(DEF_PLUGIN_SET_POINTER);
     registry_->installPlugin(&pPlugin);
@@ -90,32 +90,21 @@ void CommandLineTestRunner::initializeTestRun()
     registry_->setGroupFilters(arguments_->getGroupFilters());
     registry_->setNameFilters(arguments_->getNameFilters());
 
-    if (arguments_->isVerbose()) output_->verbose();
+    if (arguments_->isVerbose()) output_->verbose(TestOutput::level_verbose);
+    if (arguments_->isVeryVerbose()) output_->verbose(TestOutput::level_veryVerbose);
     if (arguments_->isColor()) output_->color();
     if (arguments_->isPrintSummaryEnd()) output_->setSummaryEnd(); 
     if (arguments_->runTestsInSeperateProcess()) registry_->setRunTestsInSeperateProcess();
     if (arguments_->isRunIgnored()) registry_->setRunIgnored();
 }
 
-static unsigned getSeed(unsigned shuffleArg)
-{
-    if (shuffleArg != SHUFFLE_ENABLED_RANDOM_SEED) return shuffleArg;
-
-    const unsigned generatedSeed = static_cast<unsigned>(GetPlatformSpecificTimeInMillis());
-
-    // do not allow seed values 0 or 1 because they cannot be given as cmd line arguments
-    // (0 and 1 overloaded by SHUFFLE_DISABLED and SHUFFLE_ENABLED_RANDOM_SEED)
-    if (generatedSeed < SHUFFLE_SEED_MINIMUM_VALUE) return SHUFFLE_SEED_MINIMUM_VALUE;
-
-    return generatedSeed;
-}
-
 int CommandLineTestRunner::runAllTests()
 {
     initializeTestRun();
-    int loopCount = 0;
-    int failureCount = 0;
-    int repeat_ = arguments_->getRepeatCount();
+    size_t loopCount = 0;
+    size_t failedTestCount = 0;
+    size_t failedExecutionCount = 0;
+    size_t repeatCount = arguments_->getRepeatCount();
 
     if (arguments_->isListingTestGroupNames())
     {
@@ -130,27 +119,30 @@ int CommandLineTestRunner::runAllTests()
         registry_->listTestGroupAndCaseNames(tr);
         return 0;
     }
-    const bool shuffleEnabled = arguments_->getShuffle() != SHUFFLE_DISABLED;
-    if (shuffleEnabled)
+
+    if (arguments_->isReversing())
+        registry_->reverseTests();
+
+    if (arguments_->isShuffling())
     {
-        const unsigned seed = getSeed(arguments_->getShuffle());
-        output_->setShuffleSeed(seed);
         output_->print("Test order shuffling enabled with seed: ");
-        output_->print(seed);
+        output_->print(arguments_->getShuffleSeed());
         output_->print("\n");
-        srand(seed);
     }
-    while (loopCount++ < repeat_) {
-        if (shuffleEnabled)
-        {
-            registry_->shuffleRunOrder(rand_);
-        }
-        output_->printTestRun(loopCount, repeat_);
+    while (loopCount++ < repeatCount) {
+
+        if (arguments_->isShuffling())
+            registry_->shuffleTests(arguments_->getShuffleSeed());
+
+        output_->printTestRun(loopCount, repeatCount);
         TestResult tr(*output_);
         registry_->runAllTests(tr);
-        failureCount += tr.getFailureCount();
+        failedTestCount += tr.getFailureCount();
+        if (tr.isFailure()) {
+            failedExecutionCount++;
+        }
     }
-    return failureCount;
+    return (int) (failedTestCount != 0 ? failedTestCount : failedExecutionCount);
 }
 
 TestOutput* CommandLineTestRunner::createTeamCityOutput()
@@ -184,7 +176,7 @@ bool CommandLineTestRunner::parseArguments(TestPlugin* plugin)
 {
   if (!arguments_->parse(plugin)) {
     output_ = createConsoleOutput();
-    output_->print(arguments_->usage());
+    output_->print((arguments_->needHelp()) ? arguments_->help() : arguments_->usage());
     return false;
   }
 

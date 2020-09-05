@@ -43,6 +43,10 @@ extern "C" {
 
 TEST_GROUP(MockSupport_c)
 {
+    void teardown()
+    {
+        mock_c()->clear();
+    }
 };
 
 TEST(MockSupport_c, OrderObserved)
@@ -193,6 +197,15 @@ TEST(MockSupport_c, outputParameters)
     mock_c()->checkExpectations();
     LONGS_EQUAL(2, param);
     LONGS_EQUAL(2, retval);
+}
+
+TEST(MockSupport_c, unmodifiedOutputParameter)
+{
+    int param = 1;
+    mock_c()->expectOneCall("foo")->withUnmodifiedOutputParameter("out");
+    mock_c()->actualCall("foo")->withOutputParameter("out", &param);
+    mock_c()->checkExpectations();
+    LONGS_EQUAL(1, param);
 }
 
 TEST(MockSupport_c, outputParameters_differentType)

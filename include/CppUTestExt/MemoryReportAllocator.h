@@ -48,12 +48,14 @@ public:
 
     virtual TestMemoryAllocator* getRealAllocator();
 
-    virtual char* alloc_memory(size_t size, const char* file, int line) _override;
-    virtual void free_memory(char* memory, const char* file, int line) _override;
+    virtual char* alloc_memory(size_t size, const char* file, size_t line) _override;
+    virtual void free_memory(char* memory, size_t size, const char* file, size_t line) _override;
 
     virtual const char* name() const _override;
     virtual const char* alloc_name() const _override;
     virtual const char* free_name() const _override;
+
+    virtual TestMemoryAllocator* actualAllocator() _override;
 };
 
 #endif

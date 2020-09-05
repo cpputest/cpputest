@@ -3,7 +3,8 @@ FirstLetter=${0:0:1}
 if [[ $FirstLetter == "/" ]] ;  then
 	CPPUTEST_HOME=${0%/scripts/*}
 else
-	CPPUTEST_HOME="$(pwd)/${0%/scripts/*}"
+  file=$(pwd)/${0}
+  CPPUTEST_HOME="${file%/scripts/*}"
 fi
 
 EXE_DIR=${EXE_DIR:-/usr/local/bin}

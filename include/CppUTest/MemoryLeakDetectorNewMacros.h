@@ -51,24 +51,26 @@
         #endif
     #endif
 
-    void* operator new(size_t size, const char* file, int line) UT_THROW (std::bad_alloc);
-    void* operator new[](size_t size, const char* file, int line) UT_THROW (std::bad_alloc);
+    void* operator new(size_t size, const char* file, size_t line) UT_THROW (std::bad_alloc);
+    void* operator new[](size_t size, const char* file, size_t line) UT_THROW (std::bad_alloc);
     void* operator new(size_t size) UT_THROW(std::bad_alloc);
     void* operator new[](size_t size) UT_THROW(std::bad_alloc);
 
-    void operator delete(void* mem, const char* file, int line) UT_NOTHROW;
-    void operator delete[](void* mem, const char* file, int line) UT_NOTHROW;
+    void operator delete(void* mem, const char* file, size_t line) UT_NOTHROW;
+    void operator delete[](void* mem, const char* file, size_t line) UT_NOTHROW;
     void operator delete(void* mem) UT_NOTHROW;
     void operator delete[](void* mem) UT_NOTHROW;
+#if __cplusplus >= 201402L
     void operator delete (void* mem, size_t size) UT_NOTHROW;
     void operator delete[] (void* mem, size_t size) UT_NOTHROW;
+#endif
 
 #endif
 
 
 #ifdef __clang__
  #pragma clang diagnostic push
- #if __clang_major__ >= 3 && __clang_minor__ >= 6
+ #if (__clang_major__ == 3 && __clang_minor__ >= 6) || __clang_major__ >= 4
   #pragma clang diagnostic ignored "-Wkeyword-macro"
  #endif
 #endif

@@ -1,5 +1,6 @@
 set(CppUTestExt_src
         CodeMemoryReportFormatter.cpp
+        GTest.cpp
         IEEE754ExceptionsPlugin.cpp
         MemoryReporterPlugin.cpp
         MockFailure.cpp
@@ -29,6 +30,7 @@ set(CppUTestExt_headers
         ${CppUTestRootDirectory}/include/CppUTestExt/MockSupport_c.h
         ${CppUTestRootDirectory}/include/CppUTestExt/GMock.h
         ${CppUTestRootDirectory}/include/CppUTestExt/GTest.h
+        ${CppUTestRootDirectory}/include/CppUTestExt/GTestSupport.h
         ${CppUTestRootDirectory}/include/CppUTestExt/MemoryReporterPlugin.h
         ${CppUTestRootDirectory}/include/CppUTestExt/OrderedTest.h
         ${CppUTestRootDirectory}/include/CppUTestExt/GTestConvertor.h
