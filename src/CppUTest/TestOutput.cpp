@@ -44,7 +44,7 @@ TestOutput::WorkingEnvironment TestOutput::getWorkingEnvironment()
 
 
 TestOutput::TestOutput() :
-    dotCount_(0), verbose_(level_quiet), color_(false), progressIndication_(".")
+    dotCount_(0), verbose_(level_quiet), color_(false), summaryEnd_(false), progressIndication_(".")
 {
 }
 
@@ -60,6 +60,11 @@ void TestOutput::verbose(VerbosityLevel level)
 void TestOutput::color()
 {
     color_ = true;
+}
+
+void TestOutput::setSummaryEnd()
+{
+    summaryEnd_ = true;
 }
 
 void TestOutput::print(const char* str)
@@ -186,7 +191,7 @@ void TestOutput::printTestsEnded(const TestResult& result)
     }
     print("\n\n");
     
-    if (summaryEnd_ && anyTestFailed) {
+    if (summaryEnd_ && isFailure) {
       result.printFailureMessages();
     }
 

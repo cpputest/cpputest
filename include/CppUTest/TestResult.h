@@ -60,7 +60,7 @@ public:
     virtual void countFilteredOut();
     virtual void countIgnored();
     virtual void addFailure(const TestFailure& failure);
-    virtual void print(const char* text);
+    virtual void print(const char* text) const;
     virtual void printVeryVerbose(const char* text);
     virtual void printFailureMessages() const;
   

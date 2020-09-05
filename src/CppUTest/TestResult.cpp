@@ -67,7 +67,7 @@ void TestResult::print(const char* text) const
 void TestResult::printFailureMessages() const
 {
   print("Failed test:\n");
-  int i = 0;
+  long i = 0;
   for (const auto& failure: failureMessages_) {
     ++i;
     output_.print(i);
