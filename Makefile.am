@@ -88,6 +88,7 @@ include_cpputest_HEADERS = \
 	include/CppUTest/StandardCLibrary.h \
 	include/CppUTest/TeamCityTestOutput.h \
 	include/CppUTest/TestFailure.h \
+	include/CppUTest/TestFailureList.h \
 	include/CppUTest/TestFilter.h \
 	include/CppUTest/TestHarness.h \
 	include/CppUTest/TestHarness_c.h \

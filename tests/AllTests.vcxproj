@@ -292,6 +292,7 @@
     <ClCompile Include="CppUTest\TeamCityOutputTest.cpp" />
     <ClCompile Include="CppUTest\TestFailureNaNTest.cpp" />
     <ClCompile Include="CppUTest\TestFailureTest.cpp" />
+    <ClCompile Include="CppUTest\TestFailureListTest.cpp" />
     <ClCompile Include="CppUTest\TestFilterTest.cpp" />
     <ClCompile Include="CppUTest\TestHarness_cTest.cpp" />
     <ClCompile Include="CppUTest\TestHarness_cTestCFile.c" />

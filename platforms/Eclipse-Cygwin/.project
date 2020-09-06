@@ -805,6 +805,11 @@
 			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/tests/TestFailureTest.cpp</locationURI>
 		</link>
 		<link>
+			<name>tests/TestFailureListTest.cpp</name>
+			<type>1</type>
+			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/tests/TestFailureListTest.cpp</locationURI>
+		</link>
+		<link>
 			<name>tests/TestFilterTest.cpp</name>
 			<type>1</type>
 			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/tests/TestFilterTest.cpp</locationURI>
@@ -1033,6 +1038,11 @@
 			<name>include/CppUTest/TestFailure.h</name>
 			<type>1</type>
 			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/include/CppUTest/TestFailure.h</locationURI>
+		</link>
+		<link>
+			<name>include/CppUTest/TestFailureList.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/include/CppUTest/TestFailureList.h</locationURI>
 		</link>
 		<link>
 			<name>include/CppUTest/TestFilter.h</name>
@@ -2160,9 +2170,19 @@
 			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/tests/Debug/TestFailureTest.obj</locationURI>
 		</link>
 		<link>
+			<name>tests/Debug/TestFailureListTest.obj</name>
+			<type>1</type>
+			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/tests/Debug/TestFailureListTest.obj</locationURI>
+		</link>
+		<link>
 			<name>tests/Debug/TestFailureTest.sbr</name>
 			<type>1</type>
 			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/tests/Debug/TestFailureTest.sbr</locationURI>
+		</link>
+		<link>
+			<name>tests/Debug/TestFailureListTest.sbr</name>
+			<type>1</type>
+			<locationURI>PARENT-2-ECLIPSE_HOME/00_Dev/05_CppUTest/cpputest/tests/Debug/TestFailureListTest.sbr</locationURI>
 		</link>
 		<link>
 			<name>tests/Debug/TestFilterTest.obj</name>

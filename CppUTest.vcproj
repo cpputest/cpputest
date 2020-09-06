@@ -1048,6 +1048,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\include\CppUTest\TestFailureList.h"
+				>
+			</File>
+			<File
 				RelativePath=".\include\CppUTest\TestFilter.h"
 				>
 			</File>
