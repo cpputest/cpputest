@@ -34,7 +34,7 @@
 #ifndef D_TestResult_h
 #define D_TestResult_h
 
-#include <list>
+#include "TestFailureList.h"
 
 class TestFailure;
 class TestOutput;
@@ -115,7 +115,7 @@ private:
     size_t currentTestTotalExecutionTime_;
     size_t currentGroupTimeStarted_;
     size_t currentGroupTotalExecutionTime_;
-    std::list<TestFailure> failureMessages_;
+    TestFailureList failureMessages_;
 };
 
 #endif
