@@ -37,7 +37,7 @@ class Node {
 	friend class TestFailureList;
 
 public:
-	Node() : _next(this), _prev(this) {}
+	Node() : _next(self()), _prev(self()) {}
 	~Node() { unlink(); }
 
 protected:
@@ -58,6 +58,8 @@ protected:
 		_next = this;
 		_prev = this;
 	}
+private:
+	Node* self() { return this; }
 };
 
 class Iter {
