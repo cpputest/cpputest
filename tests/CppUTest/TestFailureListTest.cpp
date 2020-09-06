@@ -32,8 +32,9 @@
 TEST_GROUP(TestFailureList)
 {
 };
-TEST(TestFailureList, CreateFailure)
+TEST(TestFailureList, CreateFailureList)
 {
+    CHECK(1==1);
 }
 
 
