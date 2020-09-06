@@ -180,6 +180,7 @@ CppUTestTests_SOURCES = \
 	tests/CppUTest/TeamCityOutputTest.cpp \
 	tests/CppUTest/TestFailureNaNTest.cpp \
 	tests/CppUTest/TestFailureTest.cpp \
+	tests/CppUTest/TestFailureListTest.cpp \
 	tests/CppUTest/TestFilterTest.cpp \
 	tests/CppUTest/TestHarness_cTest.cpp \
 	tests/CppUTest/TestHarness_cTestCFile.c \
