@@ -68,6 +68,7 @@ void TestResult::printFailureMessages() const
 {
   print("Failed test:\n");
   long i = 0;
+
   for (const auto& failure: failureMessages_) {
     ++i;
     output_.print(i);
@@ -91,7 +92,7 @@ void TestResult::addFailure(const TestFailure& failure)
 {
     output_.printFailure(failure);
     failureCount_++;
-    failureMessages_.push_back(failure);
+    failureMessages_.pushBack(failure);
 }
 
 void TestResult::countTest()

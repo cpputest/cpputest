@@ -33,7 +33,7 @@ class TestFailureList;
 class Iter;
 
 class Node {
-	friend Iter;
+	friend class Iter;
 	friend class TestFailureList;
 
 public:
@@ -96,13 +96,13 @@ class TestFailureList {
 		TestFailure& operator*() const { return node()->_data; }
 		TestFailure* operator->() const { return &node()->_data; }
 		operator Iter_TestFailure() const { return _node; }
-		Iter_TestFailure(Node* node) : Iter{node} {}
+		Iter_TestFailure(Node* node) : Iter(node) {}
 	};
 
 	Node _list;
 
 public:
-	using iterator = Iter_TestFailure;
+	typedef Iter_TestFailure iterator;
 
 	~TestFailureList() { clear(); }
 
