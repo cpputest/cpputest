@@ -97,7 +97,7 @@ class TestFailureList {
 	public:
 		TestFailure& operator*() const { return node()->_data; }
 		TestFailure* operator->() const { return &node()->_data; }
-		operator Iter_TestFailure() const { return _node; }
+
 		Iter_TestFailure(Node* node) : Iter(node) {}
 	};
 
