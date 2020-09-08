@@ -312,12 +312,12 @@ static void (*saved_operator_delete_fptr)(void* mem) UT_NOTHROW = mem_leak_opera
 static void (*saved_operator_delete_array_fptr)(void* mem) UT_NOTHROW = mem_leak_operator_delete_array;
 static int save_counter = 0;
 
-#if !defined(__MINGW32__)
+#if defined(__CYGWIN__) || !defined(__MINGW32__)
 void* operator new(size_t size) UT_THROW(std::bad_alloc)
 {
     return operator_new_fptr(size);
 }
-#endif // !defined(__MINGW32__)
+#endif // defined(__CYGWIN__) || !defined(__MINGW32__)
 
 void* operator new(size_t size, const char* file, size_t line) UT_THROW(std::bad_alloc)
 {
@@ -334,33 +334,33 @@ void operator delete(void* mem, const char*, size_t) UT_NOTHROW
     operator_delete_fptr(mem);
 }
 
-#if !defined(__MINGW32__)
+#if defined(__CYGWIN__) || !defined(__MINGW32__)
 #if __cplusplus >= 201402L
 void operator delete (void* mem, size_t) UT_NOTHROW
 {
     operator_delete_fptr(mem);
 }
 #endif // __cplusplus >= 201402L
-#endif // !defined(__MINGW32__)
+#endif // defined(__CYGWIN__) || !defined(__MINGW32__)
 
-#if !defined(__MINGW32__)
+#if defined(__CYGWIN__) || !defined(__MINGW32__)
 void* operator new[](size_t size) UT_THROW(std::bad_alloc)
 {
     return operator_new_array_fptr(size);
 }
-#endif // !defined(__MINGW32__)
+#endif // defined(__CYGWIN__) || !defined(__MINGW32__)
 
 void* operator new [](size_t size, const char* file, size_t line) UT_THROW(std::bad_alloc)
 {
     return operator_new_array_debug_fptr(size, file, line);
 }
 
-#if !defined(__MINGW32__)
+#if defined(__CYGWIN__) || !defined(__MINGW32__)
 void operator delete[](void* mem) UT_NOTHROW
 {
     operator_delete_array_fptr(mem);
 }
-#endif // !defined(__MINGW32__)
+#endif // defined(__CYGWIN__) || !defined(__MINGW32__)
 
 void operator delete[](void* mem, const char*, size_t) UT_NOTHROW
 {
