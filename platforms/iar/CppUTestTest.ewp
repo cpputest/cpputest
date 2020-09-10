@@ -77,7 +77,7 @@
         </option>
         <option>
           <name>OGLastSavedByProductVersion</name>
-          <state>7.70.1.11471</state>
+          <state>7.80.4.12487</state>
         </option>
         <option>
           <name>GeneralEnableMisra</name>
@@ -128,7 +128,7 @@
         <option>
           <name>GBECoreSlave</name>
           <version>24</version>
-          <state>40</state>
+          <state>39</state>
         </option>
         <option>
           <name>OGUseCmsis</name>
@@ -644,7 +644,7 @@
       <name>ILINK</name>
       <archiveVersion>0</archiveVersion>
       <data>
-        <version>17</version>
+        <version>18</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
@@ -697,7 +697,7 @@
         </option>
         <option>
           <name>IlinkMapFile</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>IlinkLogFile</name>
@@ -916,7 +916,7 @@
         </option>
         <option>
           <name>CrcAlgorithm</name>
-          <version>0</version>
+          <version>1</version>
           <state>1</state>
         </option>
         <option>
@@ -931,6 +931,10 @@
         <option>
           <name>IlinkLogCallGraph</name>
           <state>0</state>
+        </option>
+        <option>
+          <name>IlinkIcfFile_AltDefault</name>
+          <state></state>
         </option>
       </data>
     </settings>
@@ -1603,7 +1607,7 @@
       <name>ILINK</name>
       <archiveVersion>0</archiveVersion>
       <data>
-        <version>17</version>
+        <version>18</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>0</debug>
         <option>
@@ -1875,7 +1879,7 @@
         </option>
         <option>
           <name>CrcAlgorithm</name>
-          <version>0</version>
+          <version>1</version>
           <state>1</state>
         </option>
         <option>
@@ -1890,6 +1894,10 @@
         <option>
           <name>IlinkLogCallGraph</name>
           <state>0</state>
+        </option>
+        <option>
+          <name>IlinkIcfFile_AltDefault</name>
+          <state></state>
         </option>
       </data>
     </settings>
@@ -1943,22 +1951,28 @@
         <name>$PROJ_DIR$\..\..\tests\CppUTest\CheatSheetTest.cpp</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\tests\CppUTest\CompatabilityTests.cpp</name>
-      </file>
-      <file>
         <name>$PROJ_DIR$\..\..\tests\CppUTest\CommandLineArgumentsTest.cpp</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\tests\CppUTest\CommandLineTestRunnerTest.cpp</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\..\tests\CppUTest\CompatabilityTests.cpp</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\..\tests\CppUTest\JUnitOutputTest.cpp</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\tests\CppUTest\MemoryLeakDetectorTest.cpp</name>
+        <excluded>
+          <configuration>Debug</configuration>
+        </excluded>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\tests\CppUTest\MemoryLeakWarningTest.cpp</name>
+        <excluded>
+          <configuration>Debug</configuration>
+        </excluded>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\tests\CppUTest\MemoryOperatorOverloadTest.cpp</name>

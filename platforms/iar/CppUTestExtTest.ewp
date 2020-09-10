@@ -77,7 +77,7 @@
         </option>
         <option>
           <name>OGLastSavedByProductVersion</name>
-          <state>7.70.1.11471</state>
+          <state>7.80.4.12487</state>
         </option>
         <option>
           <name>GeneralEnableMisra</name>
@@ -644,7 +644,7 @@
       <name>ILINK</name>
       <archiveVersion>0</archiveVersion>
       <data>
-        <version>17</version>
+        <version>18</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
@@ -697,7 +697,7 @@
         </option>
         <option>
           <name>IlinkMapFile</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>IlinkLogFile</name>
@@ -917,7 +917,7 @@
         </option>
         <option>
           <name>CrcAlgorithm</name>
-          <version>0</version>
+          <version>1</version>
           <state>1</state>
         </option>
         <option>
@@ -932,6 +932,10 @@
         <option>
           <name>IlinkLogCallGraph</name>
           <state>0</state>
+        </option>
+        <option>
+          <name>IlinkIcfFile_AltDefault</name>
+          <state></state>
         </option>
       </data>
     </settings>
@@ -1604,7 +1608,7 @@
       <name>ILINK</name>
       <archiveVersion>0</archiveVersion>
       <data>
-        <version>17</version>
+        <version>18</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>0</debug>
         <option>
@@ -1876,7 +1880,7 @@
         </option>
         <option>
           <name>CrcAlgorithm</name>
-          <version>0</version>
+          <version>1</version>
           <state>1</state>
         </option>
         <option>
@@ -1891,6 +1895,10 @@
         <option>
           <name>IlinkLogCallGraph</name>
           <state>0</state>
+        </option>
+        <option>
+          <name>IlinkIcfFile_AltDefault</name>
+          <state></state>
         </option>
       </data>
     </settings>
@@ -2019,10 +2027,10 @@
         <name>$PROJ_DIR$\..\..\tests\CppUTestExt\OrderedTestTest.cpp</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\tests\CppUTestExt\OrderedTestTest_c.c</name>
+        <name>$PROJ_DIR$\..\..\tests\CppUTestExt\OrderedTestTest.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\tests\CppUTestExt\OrderedTestTest.h</name>
+        <name>$PROJ_DIR$\..\..\tests\CppUTestExt\OrderedTestTest_c.c</name>
       </file>
     </group>
     <group>
