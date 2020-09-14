@@ -26,20 +26,39 @@
  */
 
 #include "CppUTest/CommandLineTestRunner.h"
+#include "CppUTest/TestMemoryAllocator.h"
+#include "CppUTest/SimpleStringInternalCache.h"
 
+#define SHOW_MEMORY_REPORT 0
 
-int main(int ac, const char** av)
+int main(int ac, char **av)
 {
-    /* These checks are here to make sure assertions outside test runs don't crash */
-    CHECK(true);
-    LONGS_EQUAL(1, 1);
-    const char * av_override[] = {"exe", "-v"};
+    int returnValue = 0;
+    GlobalSimpleStringCache stringCache;
+
+    {
+        /* These checks are here to make sure assertions outside test runs don't crash */
+        CHECK(true);
+        LONGS_EQUAL(1, 1);
+
+#if SHOW_MEMORY_REPORT
+        GlobalMemoryAccountant accountant;
+        accountant.start();
+#endif
     
-    int rv = CommandLineTestRunner::RunAllTests(2, av_override);
+	    const char * av_override[] = {"exe", "-v"};
+		returnValue = CommandLineTestRunner::RunAllTests(2, av_override);
     
-    //Exiting from main causes IAR simulator to issue out-of-bounds memory access warnings.
-    volatile int wait = 1;
-    while (wait){}
-    return rv;
+#if SHOW_MEMORY_REPORT
+        accountant.stop();
+        printf("%s", accountant.report().asCharString());
+#endif
+
+	    //Exiting from main causes IAR simulator to issue out-of-bounds memory access warnings.
+	    volatile int wait = 1;
+	    while (wait){}
+    }
+
+    return returnValue;
 }
 

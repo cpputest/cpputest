@@ -27,6 +27,7 @@
 
 #include "CppUTest/CommandLineTestRunner.h"
 #include "CppUTest/TestRegistry.h"
+#include "CppUTest/SimpleStringInternalCache.h"
 #include "CppUTestExt/MemoryReporterPlugin.h"
 #include "CppUTestExt/MockSupportPlugin.h"
 
@@ -34,34 +35,39 @@
 #include "CppUTestExt/GTestConvertor.h"
 #endif
 
-int main(int ac, const char** av)
+int main(int ac, const char *const *av)
 {
-    const char * av_override[] = {"exe", "-v"};
+    int result = 0;
+    GlobalSimpleStringCache simpleStringCache;
+
+    {
 #ifdef CPPUTEST_INCLUDE_GTEST_TESTS
-    GTestConvertor convertor;
-    convertor.addAllGTestToTestRegistry();
+        GTestConvertor convertor;
+        convertor.addAllGTestToTestRegistry();
 #endif
 
-    MemoryReporterPlugin plugin;
-    MockSupportPlugin mockPlugin;
-    TestRegistry::getCurrentRegistry()->installPlugin(&plugin);
-    TestRegistry::getCurrentRegistry()->installPlugin(&mockPlugin);
+        MemoryReporterPlugin plugin;
+        MockSupportPlugin mockPlugin;
+        TestRegistry::getCurrentRegistry()->installPlugin(&plugin);
+        TestRegistry::getCurrentRegistry()->installPlugin(&mockPlugin);
 
 #ifndef GMOCK_RENAME_MAIN
-    int rv = CommandLineTestRunner::RunAllTests(2, av_override);
+        const char * av_override[] = {"exe", "-v"};
+        result = CommandLineTestRunner::RunAllTests(2, av_override);
 #else
-    /* Don't have any memory leak detector when running the Google Test tests */
+        /* Don't have any memory leak detector when running the Google Test tests */
 
-    testing::GMOCK_FLAG(verbose) = testing::internal::kWarningVerbosity;
+        testing::GMOCK_FLAG(verbose) = testing::internal::kWarningVerbosity;
 
-    ConsoleTestOutput output;
-    CommandLineTestRunner runner(ac, av, &output, TestRegistry::getCurrentRegistry());
-    return runner.runAllTestsMain();
+        ConsoleTestOutput output;
+        CommandLineTestRunner runner(ac, av, TestRegistry::getCurrentRegistry());
+        result = runner.runAllTestsMain();
 #endif
+	}
     
     //Exiting from main causes IAR simulator to issue out-of-bounds memory access warnings.
     volatile int wait = 1;
     while (wait){}
-    return rv;
+    return result;
 }
 
