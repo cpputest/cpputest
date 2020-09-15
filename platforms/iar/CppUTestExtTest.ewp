@@ -2038,7 +2038,10 @@
       <name>warnings</name>
     </group>
     <file>
-      <name>$PROJ_DIR$\tests\CppUTestExt\AllTests.cpp</name>
+      <name>$PROJ_DIR$\..\..\tests\CppUTestExt\AllTests.cpp</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\tests\iar_argc_argv.c</name>
     </file>
   </group>
 </project>

@@ -101,7 +101,7 @@
         </option>
         <option>
           <name>OGBufferedTerminalOutput</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>GenStdoutInterface</name>
@@ -2043,7 +2043,10 @@
       <name>warnings</name>
     </group>
     <file>
-      <name>$PROJ_DIR$\tests\AllTests.cpp</name>
+      <name>$PROJ_DIR$\..\..\tests\CppUTest\AllTests.cpp</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\tests\iar_argc_argv.c</name>
     </file>
   </group>
 </project>
