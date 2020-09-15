@@ -46,7 +46,7 @@ int main(int ac, char **av)
         accountant.start();
 #endif
 
-        CommandLineTestRunner::RunAllTests(ac, av); /* cover alternate method */
+        returnValue = CommandLineTestRunner::RunAllTests(ac, av); /* cover alternate method */
 
 #if SHOW_MEMORY_REPORT
         accountant.stop();
