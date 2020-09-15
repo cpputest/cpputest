@@ -4,10 +4,10 @@ set(CMAKE_SYSTEM_NAME Generic)
 
 # Set the EW installation root directory
 #(Avoid spaces in the path or you need to escape them)
-set(EW_ROOT_DIR "E:/Program Files\ (x86)/IAR\ Systems/Embedded\ Workbench\ Arm 8.50.5/arm")
+set(EW_ROOT_DIR "E:/Program Files\ (x86)/IAR\ Systems/Embedded\ Workbench\ Arm 8.50.6/arm")
 
 # Compiler flags needed to compile for this CPU
-set(CPU_FLAGS "--cpu Cortex-M3")
+set(CPU_FLAGS "--cpu Cortex-M4F")
 
 # Set up the CMake variables for compiler and assembler
 # (The reason for both C and CXX variables is that CMake

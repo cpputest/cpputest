@@ -101,7 +101,7 @@
         </option>
         <option>
           <name>OGBufferedTerminalOutput</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>GenStdoutInterface</name>
@@ -262,7 +262,8 @@
         </option>
         <option>
           <name>IExtraOptions</name>
-          <state></state>
+          <state>--preinclude $PROJ_DIR$\..\..\include\CppUTest\MemoryLeakDetectorNewMacros.h</state>
+          <state>--preinclude $PROJ_DIR$\..\..\include\CppUTest\MemoryLeakDetectorMallocMacros.h</state>
         </option>
         <option>
           <name>CCLangConformance</name>
@@ -335,7 +336,7 @@
         <option>
           <name>CCOptStrategy</name>
           <version>0</version>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>CCOptLevelSlave</name>
@@ -385,7 +386,7 @@
         </option>
         <option>
           <name>IccRTTI</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>IccStaticDestr</name>
@@ -414,7 +415,7 @@
         <option>
           <name>CCOptStrategySlave</name>
           <version>0</version>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>CCGuardCalls</name>
@@ -1960,19 +1961,16 @@
         <name>$PROJ_DIR$\..\..\tests\CppUTest\CompatabilityTests.cpp</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\..\tests\CppUTest\DummyMemoryLeakDetector.cpp</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\..\tests\CppUTest\JUnitOutputTest.cpp</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\tests\CppUTest\MemoryLeakDetectorTest.cpp</name>
-        <excluded>
-          <configuration>Debug</configuration>
-        </excluded>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\tests\CppUTest\MemoryLeakWarningTest.cpp</name>
-        <excluded>
-          <configuration>Debug</configuration>
-        </excluded>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\tests\CppUTest\MemoryOperatorOverloadTest.cpp</name>
@@ -1988,6 +1986,9 @@
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\tests\CppUTest\SimpleMutexTest.cpp</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\tests\CppUTest\SimpleStringCacheTest.cpp</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\tests\CppUTest\SimpleStringTest.cpp</name>
@@ -2042,7 +2043,10 @@
       <name>warnings</name>
     </group>
     <file>
-      <name>$PROJ_DIR$\tests\AllTests.cpp</name>
+      <name>$PROJ_DIR$\..\..\tests\CppUTest\AllTests.cpp</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\tests\iar_argc_argv.c</name>
     </file>
   </group>
 </project>

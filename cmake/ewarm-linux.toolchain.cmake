@@ -7,7 +7,7 @@ set(CMAKE_SYSTEM_NAME Generic)
 set(EW_ROOT_DIR "/opt/iarsystems/bxarm/arm/")
 
 # Compiler flags needed to compile for this CPU
-set(CPU_FLAGS "--cpu Cortex-M3")
+set(CPU_FLAGS "--cpu Cortex-M4F")
 
 # Set up the CMake variables for compiler and assembler
 # (The reason for both C and CXX variables is that CMake
