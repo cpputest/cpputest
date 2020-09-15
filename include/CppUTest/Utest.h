@@ -61,7 +61,12 @@ public:
 
 class TestTerminator
 {
+protected:
+    static bool crashOnFail_;
+    virtual void checkCrashOnFail() const;
 public:
+    static void setCrashOnFail(bool crashOnFail = true);
+
     virtual void exitCurrentTest() const=0;
     virtual ~TestTerminator();
 };

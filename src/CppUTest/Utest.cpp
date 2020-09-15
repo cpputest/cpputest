@@ -498,7 +498,7 @@ void UtestShell::assertDoublesEqual(double expected, double actual, double thres
 void UtestShell::assertBinaryEqual(const void *expected, const void *actual, size_t length, const char* text, const char *fileName, size_t lineNumber, const TestTerminator& testTerminator)
 {
     getTestResult()->countCheck();
-	if (length == 0) return;
+    if (length == 0) return;
     if (actual == NULLPTR && expected == NULLPTR) return;
     if (actual == NULLPTR || expected == NULLPTR)
         failWith(BinaryEqualFailure(this, fileName, lineNumber, (const unsigned char *) expected, (const unsigned char *) actual, length, text), testTerminator);
@@ -650,12 +650,27 @@ void Utest::teardown()
 
 /////////////////// Terminators
 
+bool TestTerminator::crashOnFail_ = false;
+
 TestTerminator::~TestTerminator()
 {
 }
 
+void TestTerminator::setCrashOnFail(bool crashOnFail)
+{
+    crashOnFail_ = crashOnFail;
+}
+
+void TestTerminator::checkCrashOnFail() const
+{
+    if (crashOnFail_)
+        UtestShell::crash();
+}
+
 void NormalTestTerminator::exitCurrentTest() const
 {
+    checkCrashOnFail();
+
     #if CPPUTEST_USE_STD_CPP_LIB
         throw CppUTestFailedException();
     #else
@@ -669,6 +684,7 @@ NormalTestTerminator::~NormalTestTerminator()
 
 void TestTerminatorWithoutExceptions::exitCurrentTest() const
 {
+    checkCrashOnFail();
     PlatformSpecificLongJmp();
 } // LCOV_EXCL_LINE
 
