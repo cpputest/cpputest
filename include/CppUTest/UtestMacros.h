@@ -142,6 +142,10 @@
     UtestShell::getCurrent()->assertLongsEqual((long)0, (long)0, NULLPTR, file, line); \
   } } while(0)
 
+#define CHECK_EQUAL_ZERO(actual) CHECK_EQUAL(0, (actual))
+
+#define CHECK_EQUAL_ZERO_TEXT(actual, text) CHECK_EQUAL_TEXT(0, (actual), (text))
+
 #define CHECK_COMPARE(first, relop, second)\
   CHECK_COMPARE_TEXT(first, relop, second, NULLPTR)
 
