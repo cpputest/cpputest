@@ -61,22 +61,29 @@ public:
 
 class TestTerminator
 {
+protected:
+    static bool crashOnFail_;
+    virtual void coreExitCurrentTest() const=0;
 public:
-    virtual void exitCurrentTest() const=0;
+    static void setCrashOnFail(bool crashOnFail = true);
+
+    virtual void exitCurrentTest() const;
     virtual ~TestTerminator();
 };
 
 class NormalTestTerminator : public TestTerminator
 {
+protected:
+    virtual void coreExitCurrentTest() const _override;
 public:
-    virtual void exitCurrentTest() const _override;
     virtual ~NormalTestTerminator() _destructor_override;
 };
 
 class TestTerminatorWithoutExceptions  : public TestTerminator
 {
+protected:
+    virtual void coreExitCurrentTest() const _override;
 public:
-    virtual void exitCurrentTest() const _override;
     virtual ~TestTerminatorWithoutExceptions() _destructor_override;
 };
 
