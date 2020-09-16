@@ -580,7 +580,7 @@ bool UtestShell::crashOnFail_ = false;
 const TestTerminator &UtestShell::getDefaultTestTerminator()
 {
     static NormalTestTerminator normalTestTerminator = NormalTestTerminator();
-    static CrashingTestTerminator crashingTestTerminator = CrashingTestTerminator(normalTestTerminator);
+    static CrashingTestTerminator crashingTestTerminator(normalTestTerminator);
 
     if (crashOnFail_)
         return crashingTestTerminator;
@@ -589,8 +589,8 @@ const TestTerminator &UtestShell::getDefaultTestTerminator()
 
 const TestTerminator &UtestShell::getDefaultTestTerminatorWithoutExceptions()
 {
-    static TestTerminatorWithoutExceptions testTerminatorWithoutExceptions = TestTerminatorWithoutExceptions();
-    static CrashingTestTerminator crashingTestTerminator = CrashingTestTerminator(testTerminatorWithoutExceptions);
+    static TestTerminatorWithoutExceptions testTerminatorWithoutExceptions;
+    static CrashingTestTerminator crashingTestTerminator(testTerminatorWithoutExceptions);
 
     if (crashOnFail_)
         return crashingTestTerminator;
