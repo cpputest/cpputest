@@ -349,7 +349,7 @@ bool UtestShell::shouldRun(const TestFilter* groupFilters, const TestFilter* nam
 
 void UtestShell::failWith(const TestFailure& failure)
 {
-    failWith(failure, NormalTestTerminator());
+    failWith(failure, getDefaultTestTerminator());
 } // LCOV_EXCL_LINE
 
 void UtestShell::failWith(const TestFailure& failure, const TestTerminator& terminator)
@@ -498,7 +498,7 @@ void UtestShell::assertDoublesEqual(double expected, double actual, double thres
 void UtestShell::assertBinaryEqual(const void *expected, const void *actual, size_t length, const char* text, const char *fileName, size_t lineNumber, const TestTerminator& testTerminator)
 {
     getTestResult()->countCheck();
-    if (length == 0) return;
+	if (length == 0) return;
     if (actual == NULLPTR && expected == NULLPTR) return;
     if (actual == NULLPTR || expected == NULLPTR)
         failWith(BinaryEqualFailure(this, fileName, lineNumber, (const unsigned char *) expected, (const unsigned char *) actual, length, text), testTerminator);
@@ -575,6 +575,32 @@ UtestShell* UtestShell::getCurrent()
     return currentTest_;
 }
 
+bool UtestShell::crashOnFail_ = false;
+
+const TestTerminator &UtestShell::getDefaultTestTerminator()
+{
+    static NormalTestTerminator normalTestTerminator = NormalTestTerminator();
+    static CrashingTestTerminator crashingTestTerminator = CrashingTestTerminator(normalTestTerminator);
+
+    if (crashOnFail_)
+        return crashingTestTerminator;
+    return normalTestTerminator;
+}
+
+const TestTerminator &UtestShell::getDefaultTestTerminatorWithoutExceptions()
+{
+    static TestTerminatorWithoutExceptions testTerminatorWithoutExceptions = TestTerminatorWithoutExceptions();
+    static CrashingTestTerminator crashingTestTerminator = CrashingTestTerminator(testTerminatorWithoutExceptions);
+
+    if (crashOnFail_)
+        return crashingTestTerminator;
+    return testTerminatorWithoutExceptions;
+}
+
+void UtestShell::setCrashOnFail(bool crashOnFail)
+{
+    crashOnFail_ = crashOnFail;
+}
 
 ExecFunctionTestShell::~ExecFunctionTestShell()
 {
@@ -650,25 +676,11 @@ void Utest::teardown()
 
 /////////////////// Terminators
 
-bool TestTerminator::crashOnFail_ = false;
-
 TestTerminator::~TestTerminator()
 {
 }
 
-void TestTerminator::setCrashOnFail(bool crashOnFail)
-{
-    crashOnFail_ = crashOnFail;
-}
-
-void TestTerminator::exitCurrentTest() const
-{
-    if (crashOnFail_)
-        UtestShell::crash();
-    coreExitCurrentTest();
-}
-
-void NormalTestTerminator::coreExitCurrentTest() const
+void NormalTestTerminator::exitCurrentTest() const
 {
     #if CPPUTEST_USE_STD_CPP_LIB
         throw CppUTestFailedException();
@@ -681,12 +693,28 @@ NormalTestTerminator::~NormalTestTerminator()
 {
 }
 
-void TestTerminatorWithoutExceptions::coreExitCurrentTest() const
+void TestTerminatorWithoutExceptions::exitCurrentTest() const
 {
     PlatformSpecificLongJmp();
 } // LCOV_EXCL_LINE
 
 TestTerminatorWithoutExceptions::~TestTerminatorWithoutExceptions()
+{
+}
+
+CrashingTestTerminator::CrashingTestTerminator(const TestTerminator &coreTestTerminator)
+    : coreTestTerminator_(coreTestTerminator)
+{
+}
+
+void CrashingTestTerminator::exitCurrentTest() const
+{
+    printf("Crash\n");
+    UtestShell::crash();
+    coreTestTerminator_.exitCurrentTest();
+}
+
+CrashingTestTerminator::~CrashingTestTerminator()
 {
 }
 

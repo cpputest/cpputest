@@ -174,7 +174,7 @@ void TestRegistry::setRunTestsInSeperateProcess()
 
 void TestRegistry::setCrashOnFail(bool crashOnFail)
 {
-    TestTerminator::setCrashOnFail(crashOnFail);
+    UtestShell::setCrashOnFail(crashOnFail);
 }
 
 int TestRegistry::getCurrentRepetition()
