@@ -549,6 +549,81 @@ IGNORE_TEST(UnitTestMacros, CHECK_EQUAL_TEXTWorksInAnIgnoredTest)
     CHECK_EQUAL_TEXT(1, 2, "Failed because it failed"); // LCOV_EXCL_LINE;
 } // LCOV_EXCL_LINE
 
+static void _failingTestMethodWithCHECK_EQUAL_ZERO()
+{
+    CHECK_EQUAL_ZERO(1);
+    TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
+
+TEST(UnitTestMacros, FailureWithCHECK_EQUAL_ZERO)
+{
+    fixture.runTestWithMethod(_failingTestMethodWithCHECK_EQUAL_ZERO);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <0>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <1>");
+}
+
+TEST(UnitTestMacros, passingCheckEqualWillNotBeEvaluatedMultipleTimesWithCHECK_EQUAL_ZERO)
+{
+    countInCountingMethod = 0;
+    CHECK_EQUAL_ZERO(_countingMethod());
+
+    LONGS_EQUAL(1, countInCountingMethod);
+}
+
+static void _failing_CHECK_EQUAL_ZERO_WithActualBeingEvaluatesMultipleTimesWillGiveAWarning()
+{
+    countInCountingMethod = 1;
+    CHECK_EQUAL_ZERO(_countingMethod());
+} // LCOV_EXCL_LINE
+
+TEST(UnitTestMacros, failing_CHECK_EQUAL_ZERO_WithActualBeingEvaluatesMultipleTimesWillGiveAWarning)
+{
+    fixture.runTestWithMethod(_failing_CHECK_EQUAL_ZERO_WithActualBeingEvaluatesMultipleTimesWillGiveAWarning);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("WARNING:\n\tThe \"Actual Parameter\" parameter is evaluated multiple times resulting in different values.\n\tThus the value in the error message is probably incorrect.");
+}
+
+TEST(UnitTestMacros, failing_CHECK_EQUAL_ZERO_withParamatersThatDontChangeWillNotGiveAnyWarning)
+{
+    fixture.runTestWithMethod(_failingTestMethodWithCHECK_EQUAL_ZERO);
+    fixture.assertPrintContainsNot("WARNING");
+}
+
+IGNORE_TEST(UnitTestMacros, CHECK_EQUAL_ZERO_WorksInAnIgnoredTest)
+{
+    CHECK_EQUAL_ZERO(1); // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
+
+TEST(UnitTestMacros, CHECK_EQUAL_ZERO_BehavesAsProperMacro)
+{
+    if (false) CHECK_EQUAL_ZERO(1);
+    else CHECK_EQUAL_ZERO(0);
+}
+
+static void _failingTestMethodWithCHECK_EQUAL_ZERO_TEXT()
+{
+    CHECK_EQUAL_ZERO_TEXT(1, "Failed because it failed");
+    TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
+
+TEST(UnitTestMacros, FailureWithCHECK_EQUAL_ZERO_TEXT)
+{
+    fixture.runTestWithMethod(_failingTestMethodWithCHECK_EQUAL_ZERO_TEXT);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <0>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <1>");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("Failed because it failed");
+}
+
+TEST(UnitTestMacros, CHECK_EQUAL_ZERO_TEXTBehavesAsProperMacro)
+{
+    if (false) CHECK_EQUAL_ZERO_TEXT(1, "Failed because it failed");
+    else CHECK_EQUAL_ZERO_TEXT(0, "Failed because it failed");
+}
+
+IGNORE_TEST(UnitTestMacros, CHECK_EQUAL_ZERO_TEXTWorksInAnIgnoredTest)
+{
+    CHECK_EQUAL_ZERO_TEXT(1, "Failed because it failed"); // LCOV_EXCL_LINE;
+} // LCOV_EXCL_LINE
+
 static void _failingTestMethodWithLONGS_EQUAL()
 {
     LONGS_EQUAL(1, 0xff);
@@ -927,6 +1002,8 @@ static int functionThatReturnsAValue()
     BYTES_EQUAL_TEXT(0xab, 0xab, "Shouldn't fail");
     CHECK_EQUAL(100,100);
     CHECK_EQUAL_TEXT(100, 100, "Shouldn't fail");
+    CHECK_EQUAL_ZERO(0);
+    CHECK_EQUAL_ZERO_TEXT(0, "Shouldn't fail");
     STRCMP_EQUAL("THIS", "THIS");
     STRCMP_EQUAL_TEXT("THIS", "THIS", "Shouldn't fail");
     DOUBLES_EQUAL(1.0, 1.0, .01);
