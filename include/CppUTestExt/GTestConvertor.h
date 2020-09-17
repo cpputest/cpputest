@@ -199,8 +199,6 @@ public:
 
 class GMockTestTerminator : public TestTerminator
 {
-protected:
-    virtual void coreExitCurrentTest() {};
 public:
     GMockTestTerminator(const ::testing::TestPartResult& result) : result_(result)
     {
