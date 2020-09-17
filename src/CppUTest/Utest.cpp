@@ -129,6 +129,14 @@ extern "C" {
 
 }
 
+/************************************************************************** */
+/* Define the two possible TestTerminators that can be selected at run time */
+
+static const NormalTestTerminator normalTestTerminator;
+static const CrashingTestTerminator crashingTestTerminator;
+
+const TestTerminator *UtestShell::currentTestTerminator_ = &normalTestTerminator;
+
 /******************************** */
 
 UtestShell::UtestShell() :
@@ -349,7 +357,7 @@ bool UtestShell::shouldRun(const TestFilter* groupFilters, const TestFilter* nam
 
 void UtestShell::failWith(const TestFailure& failure)
 {
-    failWith(failure, getDefaultTestTerminator());
+    failWith(failure, getCurrentTestTerminator());
 } // LCOV_EXCL_LINE
 
 void UtestShell::failWith(const TestFailure& failure, const TestTerminator& terminator)
@@ -575,31 +583,17 @@ UtestShell* UtestShell::getCurrent()
     return currentTest_;
 }
 
-bool UtestShell::crashOnFail_ = false;
-
-const TestTerminator &UtestShell::getDefaultTestTerminator()
+const TestTerminator &UtestShell::getCurrentTestTerminator()
 {
-    static NormalTestTerminator normalTestTerminator = NormalTestTerminator();
-    static CrashingTestTerminator crashingTestTerminator(normalTestTerminator);
-
-    if (crashOnFail_)
-        return crashingTestTerminator;
-    return normalTestTerminator;
-}
-
-const TestTerminator &UtestShell::getDefaultTestTerminatorWithoutExceptions()
-{
-    static TestTerminatorWithoutExceptions testTerminatorWithoutExceptions;
-    static CrashingTestTerminator crashingTestTerminator(testTerminatorWithoutExceptions);
-
-    if (crashOnFail_)
-        return crashingTestTerminator;
-    return testTerminatorWithoutExceptions;
+    return *currentTestTerminator_;
 }
 
 void UtestShell::setCrashOnFail(bool crashOnFail)
 {
-    crashOnFail_ = crashOnFail;
+    if (crashOnFail)
+        currentTestTerminator_ = &crashingTestTerminator;
+    else
+        currentTestTerminator_ = &normalTestTerminator;
 }
 
 ExecFunctionTestShell::~ExecFunctionTestShell()
@@ -702,16 +696,10 @@ TestTerminatorWithoutExceptions::~TestTerminatorWithoutExceptions()
 {
 }
 
-CrashingTestTerminator::CrashingTestTerminator(const TestTerminator &coreTestTerminator)
-    : coreTestTerminator_(coreTestTerminator)
-{
-}
-
 void CrashingTestTerminator::exitCurrentTest() const
 {
-    printf("Crash\n");
     UtestShell::crash();
-    coreTestTerminator_.exitCurrentTest();
+    NormalTestTerminator::exitCurrentTest();
 }
 
 CrashingTestTerminator::~CrashingTestTerminator()

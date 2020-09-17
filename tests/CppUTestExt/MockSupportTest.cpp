@@ -260,7 +260,7 @@ TEST(MockSupportTestWithFixture, ShouldNotCrashOnFailureAfterCrashMethodWasReset
 TEST(MockSupportTestWithFixture, shouldCrashOnFailureWithCppUTestSetting)
 {
     cpputestHasCrashed = false;
-    fixture.getRegistry()->setCrashOnFail();
+    UtestShell::setCrashOnFail();
     UtestShell::setCrashMethod(crashMethod);
     fixture.setTestFunction(unexpectedCallTestFunction_);
 
@@ -268,7 +268,7 @@ TEST(MockSupportTestWithFixture, shouldCrashOnFailureWithCppUTestSetting)
 
     CHECK(cpputestHasCrashed);
 
-    fixture.getRegistry()->setCrashOnFail(false);
+    UtestShell::setCrashOnFail(false);
     UtestShell::resetCrashMethod();
 }
 

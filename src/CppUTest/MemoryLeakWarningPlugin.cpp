@@ -525,7 +525,7 @@ public:
     virtual void fail(char* fail_string) _override
     {
         UtestShell* currentTest = UtestShell::getCurrent();
-        currentTest->failWith(FailFailure(currentTest, currentTest->getName().asCharString(), currentTest->getLineNumber(), fail_string), UtestShell::getDefaultTestTerminatorWithoutExceptions());
+        currentTest->failWith(FailFailure(currentTest, currentTest->getName().asCharString(), currentTest->getLineNumber(), fail_string), TestTerminatorWithoutExceptions());
     } // LCOV_EXCL_LINE
 };
 

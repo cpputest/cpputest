@@ -43,7 +43,7 @@ public:
         if (crashOnFailure_)
             UT_CRASH();
 
-        UtestShell::getDefaultTestTerminator().exitCurrentTest();
+        UtestShell::getCurrentTestTerminator().exitCurrentTest();
     } // LCOV_EXCL_LINE
 
     virtual ~MockFailureReporterTestTerminator() _destructor_override
