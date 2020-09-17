@@ -268,7 +268,7 @@ TEST(MockSupportTestWithFixture, shouldCrashOnFailureWithCppUTestSetting)
 
     CHECK(cpputestHasCrashed);
 
-    UtestShell::setCrashOnFail(false);
+    UtestShell::resetFailBehaviour();
     UtestShell::resetCrashMethod();
 }
 

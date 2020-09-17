@@ -129,8 +129,7 @@ extern "C" {
 
 }
 
-/************************************************************************** */
-/* Define the two possible TestTerminators that can be selected at run time */
+/******************************** */
 
 static const NormalTestTerminator normalTestTerminator;
 static const CrashingTestTerminator crashingTestTerminator;
@@ -588,12 +587,14 @@ const TestTerminator &UtestShell::getCurrentTestTerminator()
     return *currentTestTerminator_;
 }
 
-void UtestShell::setCrashOnFail(bool crashOnFail)
+void UtestShell::setCrashOnFail()
 {
-    if (crashOnFail)
-        currentTestTerminator_ = &crashingTestTerminator;
-    else
-        currentTestTerminator_ = &normalTestTerminator;
+    currentTestTerminator_ = &crashingTestTerminator;
+}
+
+void UtestShell::resetFailBehaviour()
+{
+    currentTestTerminator_ = &normalTestTerminator;
 }
 
 ExecFunctionTestShell::~ExecFunctionTestShell()
