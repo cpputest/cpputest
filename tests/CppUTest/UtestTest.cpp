@@ -120,6 +120,42 @@ TEST(UtestShell, ExitLeavesQuietly)
     LONGS_EQUAL(0, fixture.getFailureCount());
 }
 
+static bool cpputestHasCrashed;
+
+static void crashMethod()
+{
+    cpputestHasCrashed = true;
+}
+
+TEST(UtestShell, FailWillNotCrashIfNotEnabled)
+{
+    cpputestHasCrashed = false;
+    UtestShell::setCrashMethod(crashMethod);
+
+    fixture.setTestFunction(_failMethod);
+    fixture.runAllTests();
+
+    CHECK_FALSE(cpputestHasCrashed);
+
+    UtestShell::resetFailBehaviour();
+    UtestShell::resetCrashMethod();
+}
+
+TEST(UtestShell, FailWillCrashIfEnabled)
+{
+    cpputestHasCrashed = false;
+    UtestShell::setCrashOnFail();
+    UtestShell::setCrashMethod(crashMethod);
+
+    fixture.setTestFunction(_failMethod);
+    fixture.runAllTests();
+
+    CHECK(cpputestHasCrashed);
+
+    UtestShell::resetFailBehaviour();
+    UtestShell::resetCrashMethod();
+}
+
 
 
 static int teardownCalled = 0;
