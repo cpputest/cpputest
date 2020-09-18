@@ -152,7 +152,7 @@ TEST(UtestShell, FailWillCrashIfEnabled)
 
     CHECK(cpputestHasCrashed);
 
-    UtestShell::resetDefaultTestTerminator();
+    UtestShell::restoreDefaultTestTerminator();
     UtestShell::resetCrashMethod();
 }
 

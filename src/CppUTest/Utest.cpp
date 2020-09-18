@@ -592,7 +592,7 @@ void UtestShell::setCrashOnFail()
     currentTestTerminator_ = &crashingTestTerminator;
 }
 
-void UtestShell::resetDefaultTestTerminator()
+void UtestShell::restoreDefaultTestTerminator()
 {
     currentTestTerminator_ = &normalTestTerminator;
 }
