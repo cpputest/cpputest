@@ -231,6 +231,7 @@ static void unexpectedCallTestFunction_(void)
 
 TEST(MockSupportTestWithFixture, shouldCrashOnFailure)
 {
+    cpputestHasCrashed = false;
     mock().crashOnFailure(true);
     UtestShell::setCrashMethod(crashMethod);
     fixture.setTestFunction(unexpectedCallTestFunction_);
@@ -254,6 +255,21 @@ TEST(MockSupportTestWithFixture, ShouldNotCrashOnFailureAfterCrashMethodWasReset
 
     fixture.assertPrintContains("Unexpected call to function: unexpected");
     CHECK_FALSE(cpputestHasCrashed);
+}
+
+TEST(MockSupportTestWithFixture, shouldCrashOnFailureWithCppUTestSetting)
+{
+    cpputestHasCrashed = false;
+    UtestShell::setCrashOnFail();
+    UtestShell::setCrashMethod(crashMethod);
+    fixture.setTestFunction(unexpectedCallTestFunction_);
+
+    fixture.runAllTests();
+
+    CHECK(cpputestHasCrashed);
+
+    UtestShell::restoreDefaultTestTerminator();
+    UtestShell::resetCrashMethod();
 }
 
 TEST(MockSupportTestWithFixture, failedMockShouldFailAgainWhenRepeated)

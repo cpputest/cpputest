@@ -131,6 +131,13 @@ extern "C" {
 
 /******************************** */
 
+static const NormalTestTerminator normalTestTerminator;
+static const CrashingTestTerminator crashingTestTerminator;
+
+const TestTerminator *UtestShell::currentTestTerminator_ = &normalTestTerminator;
+
+/******************************** */
+
 UtestShell::UtestShell() :
     group_("UndefinedTestGroup"), name_("UndefinedTest"), file_("UndefinedFile"), lineNumber_(0), next_(NULLPTR), isRunAsSeperateProcess_(false), hasFailed_(false)
 {
@@ -349,7 +356,7 @@ bool UtestShell::shouldRun(const TestFilter* groupFilters, const TestFilter* nam
 
 void UtestShell::failWith(const TestFailure& failure)
 {
-    failWith(failure, NormalTestTerminator());
+    failWith(failure, getCurrentTestTerminator());
 } // LCOV_EXCL_LINE
 
 void UtestShell::failWith(const TestFailure& failure, const TestTerminator& terminator)
@@ -575,6 +582,20 @@ UtestShell* UtestShell::getCurrent()
     return currentTest_;
 }
 
+const TestTerminator &UtestShell::getCurrentTestTerminator()
+{
+    return *currentTestTerminator_;
+}
+
+void UtestShell::setCrashOnFail()
+{
+    currentTestTerminator_ = &crashingTestTerminator;
+}
+
+void UtestShell::restoreDefaultTestTerminator()
+{
+    currentTestTerminator_ = &normalTestTerminator;
+}
 
 ExecFunctionTestShell::~ExecFunctionTestShell()
 {
@@ -673,6 +694,16 @@ void TestTerminatorWithoutExceptions::exitCurrentTest() const
 } // LCOV_EXCL_LINE
 
 TestTerminatorWithoutExceptions::~TestTerminatorWithoutExceptions()
+{
+}
+
+void CrashingTestTerminator::exitCurrentTest() const
+{
+    UtestShell::crash();
+    NormalTestTerminator::exitCurrentTest();
+}
+
+CrashingTestTerminator::~CrashingTestTerminator()
 {
 }
 

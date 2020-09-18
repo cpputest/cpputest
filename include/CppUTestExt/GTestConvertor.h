@@ -207,7 +207,7 @@ public:
     virtual void exitCurrentTest() const
     {
         /*
-         * When using GMock, it throws an exception fromt he destructor leaving
+         * When using GMock, it throws an exception from the destructor leaving
          * the system in an unstable state.
          * Therefore, when the test fails because of failed gmock expectation
          * then don't throw the exception, but let it return. Usually this should
