@@ -67,6 +67,7 @@ TEST(FirstTestGroup, FirstTest)
 * -s# random shuffle the test execution order. # is an integer used for seeding the random number generator. # is optional, and if omitted, the seed value is chosen automatically, which results in a different order every time. The seed value is printed to console to make it possible to reproduce a previously generated execution order. Handy for detecting problems related to dependencies between tests.
 * -g group only run test whose group contains the substring group
 * -n name only run test whose name contains the substring name
+* -f crash on fail, run the tests as normal but, when a test fails, crash rather than report the failure in the normal way
 
 ## Test Macros
 

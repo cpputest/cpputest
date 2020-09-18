@@ -95,6 +95,7 @@ void CommandLineTestRunner::initializeTestRun()
     if (arguments_->isColor()) output_->color();
     if (arguments_->runTestsInSeperateProcess()) registry_->setRunTestsInSeperateProcess();
     if (arguments_->isRunIgnored()) registry_->setRunIgnored();
+    if (arguments_->isCrashingOnFail()) registry_->setCrashOnFail();
 }
 
 int CommandLineTestRunner::runAllTests()

@@ -77,6 +77,8 @@ public:
     int getCurrentRepetition();
     void setRunIgnored();
 
+    virtual void setCrashOnFail();
+
 private:
 
     bool testShouldRun(UtestShell* test, TestResult& result);
