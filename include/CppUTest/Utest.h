@@ -97,7 +97,7 @@ public:
     static const TestTerminator &getCurrentTestTerminator();
 
     static void setCrashOnFail();
-    static void resetFailBehaviour();
+    static void resetDefaultTestTerminator();
 
 public:
     UtestShell(const char* groupName, const char* testName, const char* fileName, size_t lineNumber);

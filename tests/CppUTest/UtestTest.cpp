@@ -136,8 +136,8 @@ TEST(UtestShell, FailWillNotCrashIfNotEnabled)
     fixture.runAllTests();
 
     CHECK_FALSE(cpputestHasCrashed);
+    LONGS_EQUAL(1, fixture.getFailureCount());
 
-    UtestShell::resetFailBehaviour();
     UtestShell::resetCrashMethod();
 }
 
@@ -152,7 +152,7 @@ TEST(UtestShell, FailWillCrashIfEnabled)
 
     CHECK(cpputestHasCrashed);
 
-    UtestShell::resetFailBehaviour();
+    UtestShell::resetDefaultTestTerminator();
     UtestShell::resetCrashMethod();
 }
 
