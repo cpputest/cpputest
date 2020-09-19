@@ -34,6 +34,8 @@
 #ifndef D_TestResult_h
 #define D_TestResult_h
 
+#include "TestFailureList.h"
+
 class TestFailure;
 class TestOutput;
 class UtestShell;
@@ -58,9 +60,10 @@ public:
     virtual void countFilteredOut();
     virtual void countIgnored();
     virtual void addFailure(const TestFailure& failure);
-    virtual void print(const char* text);
+    virtual void print(const char* text) const;
     virtual void printVeryVerbose(const char* text);
-
+    virtual void printFailureMessages() const;
+  
     size_t getTestCount() const
     {
         return testCount_;
@@ -99,6 +102,7 @@ public:
 private:
 
     TestOutput& output_;
+
     size_t testCount_;
     size_t runCount_;
     size_t checkCount_;
@@ -111,6 +115,7 @@ private:
     size_t currentTestTotalExecutionTime_;
     size_t currentGroupTimeStarted_;
     size_t currentGroupTotalExecutionTime_;
+    TestFailureList failureMessages_;
 };
 
 #endif

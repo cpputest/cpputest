@@ -7,6 +7,7 @@ set(CppUTestTests_src
     CompatabilityTests.cpp
     CommandLineArgumentsTest.cpp
     TestFailureTest.cpp
+    TestFailureListTest.cpp
     TestFailureNaNTest.cpp
     CommandLineTestRunnerTest.cpp
     TestFilterTest.cpp

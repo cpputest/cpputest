@@ -88,6 +88,7 @@ include_cpputest_HEADERS = \
 	include/CppUTest/StandardCLibrary.h \
 	include/CppUTest/TeamCityTestOutput.h \
 	include/CppUTest/TestFailure.h \
+	include/CppUTest/TestFailureList.h \
 	include/CppUTest/TestFilter.h \
 	include/CppUTest/TestHarness.h \
 	include/CppUTest/TestHarness_c.h \
@@ -99,6 +100,7 @@ include_cpputest_HEADERS = \
 	include/CppUTest/TestTestingFixture.h \
 	include/CppUTest/Utest.h \
 	include/CppUTest/UtestMacros.h \
+	include/CppUTest/TestFailureList.h \
 	generated/CppUTestGeneratedConfig.h
 
 lib_libCppUTestExt_a_CPPFLAGS = $(lib_libCppUTest_a_CPPFLAGS)
@@ -179,6 +181,7 @@ CppUTestTests_SOURCES = \
 	tests/CppUTest/TeamCityOutputTest.cpp \
 	tests/CppUTest/TestFailureNaNTest.cpp \
 	tests/CppUTest/TestFailureTest.cpp \
+	tests/CppUTest/TestFailureListTest.cpp \
 	tests/CppUTest/TestFilterTest.cpp \
 	tests/CppUTest/TestHarness_cTest.cpp \
 	tests/CppUTest/TestHarness_cTestCFile.c \

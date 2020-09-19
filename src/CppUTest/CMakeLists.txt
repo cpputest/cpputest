@@ -52,6 +52,7 @@ set(CppUTest_headers
         ${CppUTestRootDirectory}/include/CppUTest/TestRegistry.h
         ${CppUTestRootDirectory}/include/CppUTest/MemoryLeakDetector.h
         ${CppUTestRootDirectory}/include/CppUTest/TestFailure.h
+        ${CppUTestRootDirectory}/include/CppUTest/TestFailureList.h
         ${CppUTestRootDirectory}/include/CppUTest/TestResult.h
         ${CppUTestRootDirectory}/include/CppUTest/MemoryLeakDetectorMallocMacros.h
         ${CppUTestRootDirectory}/include/CppUTest/TestFilter.h

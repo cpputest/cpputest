@@ -57,6 +57,7 @@ CPPU2_OBJECTS := \
   $(CPPUTEST_HOME)/tests/CppUTest/TeamCityOutputTest.o \
   $(CPPUTEST_HOME)/tests/CppUTest/TestFailureNaNTest.o \
   $(CPPUTEST_HOME)/tests/CppUTest/TestFailureTest.o \
+  $(CPPUTEST_HOME)/tests/CppUTest/TestFailureListTest.o \
   $(CPPUTEST_HOME)/tests/CppUTest/TestResultTest.o \
 
 CPPU3_OBJECTS := \

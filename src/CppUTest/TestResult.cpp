@@ -59,9 +59,18 @@ void TestResult::currentTestStarted(UtestShell* test)
     currentTestTimeStarted_ = (size_t) GetPlatformSpecificTimeInMillis();
 }
 
-void TestResult::print(const char* text)
+void TestResult::print(const char* text) const
 {
     output_.print(text);
+}
+
+void TestResult::printFailureMessages() const
+{
+  print("Failed test:\n");
+
+  for (TestFailureList::iterator failure = failureMessages_.begin(); failure != failureMessages_.end(); ++failure) {
+    output_.printFailure(*failure);
+  }
 }
 
 void TestResult::printVeryVerbose(const char* text)
@@ -73,13 +82,13 @@ void TestResult::currentTestEnded(UtestShell* /*test*/)
 {
     currentTestTotalExecutionTime_ = (size_t) GetPlatformSpecificTimeInMillis() - currentTestTimeStarted_;
     output_.printCurrentTestEnded(*this);
-
 }
 
 void TestResult::addFailure(const TestFailure& failure)
 {
     output_.printFailure(failure);
     failureCount_++;
+    failureMessages_.pushBack(failure);
 }
 
 void TestResult::countTest()

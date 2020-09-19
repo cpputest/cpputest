@@ -44,7 +44,7 @@ TestOutput::WorkingEnvironment TestOutput::getWorkingEnvironment()
 
 
 TestOutput::TestOutput() :
-    dotCount_(0), verbose_(level_quiet), color_(false), progressIndication_(".")
+    dotCount_(0), verbose_(level_quiet), color_(false), summaryEnd_(false), progressIndication_(".")
 {
 }
 
@@ -60,6 +60,11 @@ void TestOutput::verbose(VerbosityLevel level)
 void TestOutput::color()
 {
     color_ = true;
+}
+
+void TestOutput::setSummaryEnd()
+{
+    summaryEnd_ = true;
 }
 
 void TestOutput::print(const char* str)
@@ -185,6 +190,10 @@ void TestOutput::printTestsEnded(const TestResult& result)
               "This often happens because of linking errors or typos in test filter.");
     }
     print("\n\n");
+    
+    if (summaryEnd_ && isFailure) {
+      result.printFailureMessages();
+    }
 
     dotCount_ = 0;
 }
@@ -359,6 +368,12 @@ void CompositeTestOutput::color()
 {
   if (outputOne_) outputOne_->color();
   if (outputTwo_) outputTwo_->color();
+}
+
+void CompositeTestOutput::setSummaryEnd()
+{
+  if (outputOne_) outputOne_->setSummaryEnd();
+  if (outputTwo_) outputTwo_->setSummaryEnd();
 }
 
 void CompositeTestOutput::printBuffer(const char* buffer)

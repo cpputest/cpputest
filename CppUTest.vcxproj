@@ -280,6 +280,7 @@
     <ClInclude Include="include\CppUTest\SimpleStringInternalCache.h" />
     <ClInclude Include="include\CppUTest\StandardCLibrary.h" />
     <ClInclude Include="include\CppUTest\TestFailure.h" />
+    <ClInclude Include="include\CppUTest\TestFailureList.h" />
     <ClInclude Include="include\CppUTest\TestFilter.h" />
     <ClInclude Include="include\CppUTest\TestHarness.h" />
     <ClInclude Include="include\CppUTest\TestHarness_c.h" />

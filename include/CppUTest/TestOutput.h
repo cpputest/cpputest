@@ -61,6 +61,7 @@ public:
 
     virtual void verbose(VerbosityLevel level);
     virtual void color();
+    virtual void setSummaryEnd();
     virtual void printBuffer(const char*)=0;
     virtual void print(const char*);
     virtual void print(long);
@@ -95,6 +96,7 @@ protected:
     int dotCount_;
     VerbosityLevel verbose_;
     bool color_;
+    bool summaryEnd_;
     const char* progressIndication_;
 
     static WorkingEnvironment workingEnvironment_;
@@ -190,6 +192,7 @@ public:
 
     virtual void verbose(VerbosityLevel level) _override;
     virtual void color() _override;
+    virtual void setSummaryEnd() _override;
     virtual void printBuffer(const char*) _override;
     virtual void print(const char*) _override;
     virtual void print(long) _override;

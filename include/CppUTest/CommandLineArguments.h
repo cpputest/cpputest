@@ -48,6 +48,7 @@ public:
     bool isListingTestGroupNames() const;
     bool isListingTestGroupAndCaseNames() const;
     bool isRunIgnored() const;
+    bool isPrintSummaryEnd() const;
     size_t getRepeatCount() const;
     bool isShuffling() const;
     bool isReversing() const;
@@ -80,6 +81,7 @@ private:
     bool listTestGroupNames_;
     bool listTestGroupAndCaseNames_;
     bool runIgnored_;
+    bool printSummaryEnd_;
     bool reversing_;
     bool shuffling_;
     bool shufflingPreSeeded_;

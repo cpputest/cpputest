@@ -2003,6 +2003,9 @@
         <name>$PROJ_DIR$\..\..\tests\CppUTest\TestFailureTest.cpp</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\..\tests\CppUTest\TestFailureListTest.cpp</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\..\tests\CppUTest\TestFilterTest.cpp</name>
       </file>
       <file>
