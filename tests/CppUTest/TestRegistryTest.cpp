@@ -425,3 +425,16 @@ TEST(TestRegistry, reverseZeroTests)
 
     CHECK(NULLPTR == myRegistry->getFirstTest());
 }
+
+TEST(TestRegistry, doesNotCrashIfNotSetToCrash)
+{
+    CHECK(NULLPTR == dynamic_cast<const CrashingTestTerminator*>(&UtestShell::getCurrentTestTerminator()));
+}
+
+TEST(TestRegistry, crashesIfSetToCrash)
+{
+    myRegistry->setCrashOnFail();
+
+    CHECK(NULLPTR != dynamic_cast<const CrashingTestTerminator*>(&UtestShell::getCurrentTestTerminator()));
+    UtestShell::restoreDefaultTestTerminator();
+}
