@@ -48,6 +48,11 @@ public:
     }
 
     bool hasRun_;
+
+    static bool wouldCrash()
+    {
+        return &getCurrentTestTerminator() == &crashingTestTerminator_;
+    }
 };
 
 class MockTestResult: public TestResult
@@ -428,13 +433,13 @@ TEST(TestRegistry, reverseZeroTests)
 
 TEST(TestRegistry, doesNotCrashIfNotSetToCrash)
 {
-    CHECK(NULLPTR == dynamic_cast<const CrashingTestTerminator*>(&UtestShell::getCurrentTestTerminator()));
+    CHECK_FALSE(MockTest::wouldCrash());
 }
 
 TEST(TestRegistry, crashesIfSetToCrash)
 {
     myRegistry->setCrashOnFail();
 
-    CHECK(NULLPTR != dynamic_cast<const CrashingTestTerminator*>(&UtestShell::getCurrentTestTerminator()));
+    CHECK(MockTest::wouldCrash());
     UtestShell::restoreDefaultTestTerminator();
 }

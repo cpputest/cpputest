@@ -131,13 +131,6 @@ extern "C" {
 
 /******************************** */
 
-static const NormalTestTerminator normalTestTerminator;
-static const CrashingTestTerminator crashingTestTerminator;
-
-const TestTerminator *UtestShell::currentTestTerminator_ = &normalTestTerminator;
-
-/******************************** */
-
 UtestShell::UtestShell() :
     group_("UndefinedTestGroup"), name_("UndefinedTest"), file_("UndefinedFile"), lineNumber_(0), next_(NULLPTR), isRunAsSeperateProcess_(false), hasFailed_(false)
 {
@@ -582,6 +575,11 @@ UtestShell* UtestShell::getCurrent()
     return currentTest_;
 }
 
+const NormalTestTerminator UtestShell::normalTestTerminator_;
+const CrashingTestTerminator UtestShell::crashingTestTerminator_;
+
+const TestTerminator *UtestShell::currentTestTerminator_ = &UtestShell::normalTestTerminator_;
+
 const TestTerminator &UtestShell::getCurrentTestTerminator()
 {
     return *currentTestTerminator_;
@@ -589,12 +587,12 @@ const TestTerminator &UtestShell::getCurrentTestTerminator()
 
 void UtestShell::setCrashOnFail()
 {
-    currentTestTerminator_ = &crashingTestTerminator;
+    currentTestTerminator_ = &crashingTestTerminator_;
 }
 
 void UtestShell::restoreDefaultTestTerminator()
 {
-    currentTestTerminator_ = &normalTestTerminator;
+    currentTestTerminator_ = &normalTestTerminator_;
 }
 
 ExecFunctionTestShell::~ExecFunctionTestShell()
