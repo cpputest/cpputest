@@ -34,37 +34,13 @@
 
 typedef void (*cpputest_cpp_function_pointer)();  /* Cl2000 requires cast to C++ function */
 
-class MockFailureReporterTestTerminatorForInCOnlyCode : public TestTerminator
-{
-public:
-    MockFailureReporterTestTerminatorForInCOnlyCode(bool crashOnFailure) : crashOnFailure_(crashOnFailure)
-    {
-    }
-
-    virtual void exitCurrentTest() const _override
-    {
-        if (crashOnFailure_)
-            UT_CRASH();
-
-        UtestShell::getCurrentTestTerminatorWithoutExceptions().exitCurrentTest();
-    } // LCOV_EXCL_LINE
-    // LCOV_EXCL_START
-    virtual ~MockFailureReporterTestTerminatorForInCOnlyCode() _destructor_override
-    {
-    }
-    // LCOV_EXCL_STOP
-private:
-    bool crashOnFailure_;
-
-};
-
 class MockFailureReporterForInCOnlyCode : public MockFailureReporter
 {
 public:
     void failTest(const MockFailure& failure) _override
     {
         if (!getTestToFail()->hasFailed())
-            getTestToFail()->failWith(failure, MockFailureReporterTestTerminatorForInCOnlyCode(crashOnFailure_));
+            getTestToFail()->failWith(failure, UtestShell::getCurrentTestTerminatorWithoutExceptions());
     } // LCOV_EXCL_LINE
 
 };

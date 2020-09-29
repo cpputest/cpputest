@@ -31,33 +31,10 @@
 #include "CppUTestExt/MockExpectedCallsList.h"
 #include "CppUTestExt/MockNamedValue.h"
 
-class MockFailureReporterTestTerminator : public TestTerminator
-{
-public:
-    MockFailureReporterTestTerminator(bool crashOnFailure) : crashOnFailure_(crashOnFailure)
-    {
-    }
-
-    virtual void exitCurrentTest() const _override
-    {
-        if (crashOnFailure_)
-            UT_CRASH();
-
-        UtestShell::getCurrentTestTerminator().exitCurrentTest();
-    } // LCOV_EXCL_LINE
-
-    virtual ~MockFailureReporterTestTerminator() _destructor_override
-    {
-    }
-private:
-    bool crashOnFailure_;
-
-};
-
 void MockFailureReporter::failTest(const MockFailure& failure)
 {
     if (!getTestToFail()->hasFailed())
-        getTestToFail()->failWith(failure, MockFailureReporterTestTerminator(crashOnFailure_));
+        getTestToFail()->failWith(failure, UtestShell::getCurrentTestTerminator());
 } // LCOV_EXCL_LINE
 
 UtestShell* MockFailureReporter::getTestToFail()

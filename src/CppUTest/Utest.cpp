@@ -603,9 +603,6 @@ UtestShell* UtestShell::getCurrent()
     return currentTest_;
 }
 
-const TestTerminatorWithoutExceptions UtestShell::normalTestTerminatorWithoutExceptions_;
-const CrashingTestTerminatorWithoutExceptions UtestShell::crashingTestTerminatorWithoutExceptions_;
-const TestTerminator *UtestShell::currentTestTerminatorWithoutExceptions_ = &UtestShell::normalTestTerminatorWithoutExceptions_;
 const TestTerminator &UtestShell::getCurrentTestTerminator()
 {
     return *currentTestTerminator_;

@@ -64,7 +64,10 @@ MockSupport::~MockSupport()
 
 void MockSupport::crashOnFailure(bool shouldCrash)
 {
-    activeReporter_->crashOnFailure(shouldCrash);
+    if (shouldCrash)
+        UtestShell::setCrashOnFail();
+    else
+        UtestShell::restoreDefaultTestTerminator();
 }
 
 void MockSupport::setMockFailureStandardReporter(MockFailureReporter* reporter)

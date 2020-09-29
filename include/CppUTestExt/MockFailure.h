@@ -38,16 +38,12 @@ class MockFailure;
 
 class MockFailureReporter
 {
-protected:
-    bool crashOnFailure_;
 public:
-    MockFailureReporter() : crashOnFailure_(false){}
+    MockFailureReporter() {}
     virtual ~MockFailureReporter() {}
 
     virtual void failTest(const MockFailure& failure);
     virtual UtestShell* getTestToFail();
-
-    virtual void crashOnFailure(bool shouldCrash) { crashOnFailure_ = shouldCrash; }
 };
 
 class MockFailure : public TestFailure
