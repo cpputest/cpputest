@@ -133,8 +133,11 @@ extern "C" {
 
 static const NormalTestTerminator normalTestTerminator;
 static const CrashingTestTerminator crashingTestTerminator;
+static const TestTerminatorWithoutExceptions normalTestTerminatorWithoutExceptions;
+static const CrashingTestTerminatorWithoutExceptions crashingTestTerminatorWithoutExceptions;
 
 const TestTerminator *UtestShell::currentTestTerminator_ = &normalTestTerminator;
+const TestTerminator *UtestShell::currentTestTerminatorWithoutExceptions_ = &normalTestTerminatorWithoutExceptions;
 
 /******************************** */
 
@@ -587,14 +590,21 @@ const TestTerminator &UtestShell::getCurrentTestTerminator()
     return *currentTestTerminator_;
 }
 
+const TestTerminator &UtestShell::getCurrentTestTerminatorWithoutExceptions()
+{
+    return *currentTestTerminatorWithoutExceptions_;
+}
+
 void UtestShell::setCrashOnFail()
 {
     currentTestTerminator_ = &crashingTestTerminator;
+    currentTestTerminatorWithoutExceptions_ = &crashingTestTerminatorWithoutExceptions;
 }
 
 void UtestShell::restoreDefaultTestTerminator()
 {
     currentTestTerminator_ = &normalTestTerminator;
+    currentTestTerminatorWithoutExceptions_ = &normalTestTerminatorWithoutExceptions;
 }
 
 ExecFunctionTestShell::~ExecFunctionTestShell()
@@ -704,6 +714,16 @@ void CrashingTestTerminator::exitCurrentTest() const
 }
 
 CrashingTestTerminator::~CrashingTestTerminator()
+{
+}
+
+void CrashingTestTerminatorWithoutExceptions::exitCurrentTest() const
+{
+    UtestShell::crash();
+    TestTerminatorWithoutExceptions::exitCurrentTest();
+}
+
+CrashingTestTerminatorWithoutExceptions::~CrashingTestTerminatorWithoutExceptions()
 {
 }
 
