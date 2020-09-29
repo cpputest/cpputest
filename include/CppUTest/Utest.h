@@ -184,6 +184,8 @@ protected:
 
     virtual SimpleString getMacroName() const;
     TestResult *getTestResult();
+    static const TestTerminatorWithoutExceptions normalTestTerminatorWithoutExceptions_;
+    static const CrashingTestTerminatorWithoutExceptions crashingTestTerminatorWithoutExceptions_;
 private:
     const char *group_;
     const char *name_;
