@@ -319,7 +319,7 @@ void* operator new(size_t size) UT_THROW(std::bad_alloc)
 
 void* operator new(size_t size, const char* file, int line) UT_THROW(std::bad_alloc)
 {
-    return operator_new_debug_fptr(size, file, line);
+    return operator_new_debug_fptr(size, file, (size_t)line);
 }
 
 void* operator new(size_t size, const char* file, size_t line) UT_THROW(std::bad_alloc)
@@ -356,7 +356,7 @@ void* operator new[](size_t size) UT_THROW(std::bad_alloc)
 
 void* operator new [](size_t size, const char* file, int line) UT_THROW(std::bad_alloc)
 {
-    return operator_new_array_debug_fptr(size, file, line);
+    return operator_new_array_debug_fptr(size, file, (size_t)line);
 }
 
 void* operator new [](size_t size, const char* file, size_t line) UT_THROW(std::bad_alloc)
