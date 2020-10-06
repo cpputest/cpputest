@@ -128,6 +128,66 @@ TEST_GROUP(MemoryLeakOverridesToBeUsedInProductionCode)
 
 };
 
+TEST(MemoryLeakOverridesToBeUsedInProductionCode, newDeleteOverloadsWithIntLineWorks)
+{
+#ifdef CPPUTEST_USE_NEW_MACROS
+    #undef new
+    #undef delete
+#endif
+    const int line = 42;
+    char* leak = new("TestFile.cpp", line) char;
+    STRCMP_NOCASE_CONTAINS("Allocated at: TestFile.cpp and line: 42.", memLeakDetector->report(mem_leak_period_checking));
+    delete leak;
+#ifdef CPPUTEST_USE_NEW_MACROS
+    #include "CppUTest/MemoryLeakDetectorNewMacros.h"
+#endif
+}
+
+TEST(MemoryLeakOverridesToBeUsedInProductionCode, newDeleteOverloadsWithSizeTLineWorks)
+{
+#ifdef CPPUTEST_USE_NEW_MACROS
+    #undef new
+    #undef delete
+#endif
+    const size_t line = 42;
+    char* leak = new("TestFile.cpp", line) char;
+    STRCMP_NOCASE_CONTAINS("Allocated at: TestFile.cpp and line: 42.", memLeakDetector->report(mem_leak_period_checking));
+    delete leak;
+#ifdef CPPUTEST_USE_NEW_MACROS
+    #include "CppUTest/MemoryLeakDetectorNewMacros.h"
+#endif
+}
+
+TEST(MemoryLeakOverridesToBeUsedInProductionCode, newDeleteArrayOverloadsWithIntLineWorks)
+{
+#ifdef CPPUTEST_USE_NEW_MACROS
+    #undef new
+    #undef delete
+#endif
+    const int line = 42;
+    char* leak = new("TestFile.cpp", line) char[10];
+    STRCMP_NOCASE_CONTAINS("Allocated at: TestFile.cpp and line: 42.", memLeakDetector->report(mem_leak_period_checking));
+    delete [] leak;
+#ifdef CPPUTEST_USE_NEW_MACROS
+    #include "CppUTest/MemoryLeakDetectorNewMacros.h"
+#endif
+}
+
+TEST(MemoryLeakOverridesToBeUsedInProductionCode, newDeleteArrayOverloadsWithSizeTLineWorks)
+{
+#ifdef CPPUTEST_USE_NEW_MACROS
+    #undef new
+    #undef delete
+#endif
+    const size_t line = 42;
+    char* leak = new("TestFile.cpp", line) char[10];
+    STRCMP_NOCASE_CONTAINS("Allocated at: TestFile.cpp and line: 42.", memLeakDetector->report(mem_leak_period_checking));
+    delete [] leak;
+#ifdef CPPUTEST_USE_NEW_MACROS
+    #include "CppUTest/MemoryLeakDetectorNewMacros.h"
+#endif
+}
+
 #ifdef CPPUTEST_USE_MALLOC_MACROS
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, MallocOverrideIsUsed)
