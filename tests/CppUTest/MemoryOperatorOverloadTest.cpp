@@ -128,65 +128,66 @@ TEST_GROUP(MemoryLeakOverridesToBeUsedInProductionCode)
 
 };
 
-TEST(MemoryLeakOverridesToBeUsedInProductionCode, newDeleteOverloadsWithIntLineWorks)
-{
+#if ! CPPUTEST_MEM_LEAK_DETECTION_DISABLED
+
 #ifdef CPPUTEST_USE_NEW_MACROS
     #undef new
-    #undef delete
 #endif
+TEST(MemoryLeakOverridesToBeUsedInProductionCode, newDeleteOverloadsWithIntLineWorks)
+{
     const int line = 42;
     char* leak = new("TestFile.cpp", line) char;
+
+    size_t memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
     STRCMP_NOCASE_CONTAINS("Allocated at: TestFile.cpp and line: 42.", memLeakDetector->report(mem_leak_period_checking));
-    delete leak;
-#ifdef CPPUTEST_USE_NEW_MACROS
-    #include "CppUTest/MemoryLeakDetectorNewMacros.h"
-#endif
+
+    ::operator delete (leak, "TestFile.cpp", line);
+
+    LONGS_EQUAL(memLeaks-1, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
 }
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, newDeleteOverloadsWithSizeTLineWorks)
 {
-#ifdef CPPUTEST_USE_NEW_MACROS
-    #undef new
-    #undef delete
-#endif
     const size_t line = 42;
     char* leak = new("TestFile.cpp", line) char;
+
+    size_t memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
     STRCMP_NOCASE_CONTAINS("Allocated at: TestFile.cpp and line: 42.", memLeakDetector->report(mem_leak_period_checking));
-    delete leak;
-#ifdef CPPUTEST_USE_NEW_MACROS
-    #include "CppUTest/MemoryLeakDetectorNewMacros.h"
-#endif
+
+    ::operator delete (leak, "TestFile.cpp", line);
+
+    LONGS_EQUAL(memLeaks-1, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
 }
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, newDeleteArrayOverloadsWithIntLineWorks)
 {
-#ifdef CPPUTEST_USE_NEW_MACROS
-    #undef new
-    #undef delete
-#endif
     const int line = 42;
     char* leak = new("TestFile.cpp", line) char[10];
+
+    size_t memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
     STRCMP_NOCASE_CONTAINS("Allocated at: TestFile.cpp and line: 42.", memLeakDetector->report(mem_leak_period_checking));
-    delete [] leak;
-#ifdef CPPUTEST_USE_NEW_MACROS
-    #include "CppUTest/MemoryLeakDetectorNewMacros.h"
-#endif
+
+    ::operator delete [] (leak, "TestFile.cpp", line);
+
+    LONGS_EQUAL(memLeaks-1, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
 }
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, newDeleteArrayOverloadsWithSizeTLineWorks)
 {
-#ifdef CPPUTEST_USE_NEW_MACROS
-    #undef new
-    #undef delete
-#endif
     const size_t line = 42;
     char* leak = new("TestFile.cpp", line) char[10];
+
+    size_t memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
     STRCMP_NOCASE_CONTAINS("Allocated at: TestFile.cpp and line: 42.", memLeakDetector->report(mem_leak_period_checking));
-    delete [] leak;
-#ifdef CPPUTEST_USE_NEW_MACROS
-    #include "CppUTest/MemoryLeakDetectorNewMacros.h"
-#endif
+
+    ::operator delete [] (leak, "TestFile.cpp", line);
+
+    LONGS_EQUAL(memLeaks-1, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
 }
+#ifdef CPPUTEST_USE_NEW_MACROS
+    #include "CppUTest/MemoryLeakDetectorNewMacros.h" // redefine the 'new' macro
+#endif
+#endif
 
 #ifdef CPPUTEST_USE_MALLOC_MACROS
 
