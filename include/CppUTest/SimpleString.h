@@ -230,8 +230,6 @@ SimpleString StringFrom(const std::nullptr_t value);
 
 #if CPPUTEST_USE_STD_CPP_LIB
 
-#include <string>
-
 SimpleString StringFrom(const std::string& other);
 
 #endif
