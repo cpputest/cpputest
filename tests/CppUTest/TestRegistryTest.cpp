@@ -48,11 +48,6 @@ public:
     }
 
     bool hasRun_;
-
-    static bool wouldCrash()
-    {
-        return &getCurrentTestTerminator() == &crashingTestTerminator_;
-    }
 };
 
 class MockTestResult: public TestResult
@@ -429,17 +424,4 @@ TEST(TestRegistry, reverseZeroTests)
     myRegistry->reverseTests();
 
     CHECK(NULLPTR == myRegistry->getFirstTest());
-}
-
-TEST(TestRegistry, doesNotCrashIfNotSetToCrash)
-{
-    CHECK_FALSE(MockTest::wouldCrash());
-}
-
-TEST(TestRegistry, crashesIfSetToCrash)
-{
-    myRegistry->setCrashOnFail();
-
-    CHECK(MockTest::wouldCrash());
-    UtestShell::restoreDefaultTestTerminator();
 }

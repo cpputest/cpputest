@@ -172,11 +172,6 @@ void TestRegistry::setRunTestsInSeperateProcess()
     runInSeperateProcess_ = true;
 }
 
-void TestRegistry::setCrashOnFail()
-{
-    UtestShell::setCrashOnFail();
-}
-
 int TestRegistry::getCurrentRepetition()
 {
     return currentRepetition_;
