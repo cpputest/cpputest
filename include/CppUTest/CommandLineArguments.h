@@ -51,6 +51,7 @@ public:
     size_t getRepeatCount() const;
     bool isShuffling() const;
     bool isReversing() const;
+    bool isCrashingOnFail() const;
     size_t getShuffleSeed() const;
     const TestFilter* getGroupFilters() const;
     const TestFilter* getNameFilters() const;
@@ -81,6 +82,7 @@ private:
     bool listTestGroupAndCaseNames_;
     bool runIgnored_;
     bool reversing_;
+    bool crashOnFail_;
     bool shuffling_;
     bool shufflingPreSeeded_;
     size_t repeat_;

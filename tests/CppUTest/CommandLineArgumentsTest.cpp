@@ -464,9 +464,12 @@ TEST(CommandLineArguments, weirdParamatersReturnsFalse)
 
 TEST(CommandLineArguments, printUsage)
 {
-    STRCMP_EQUAL("use -h for more extensive help\nusage [-h] [-v] [-vv] [-c] [-p] [-lg] [-ln] [-ri] [-r#]\n"
-                                                 "      [-g|sg|xg|xsg groupName]... [-n|sn|xn|xsn testName]... [-t groupName.testName]...\n"
-                                                 "      [-b] [-s [randomizerSeed>0]] [\"TEST(groupName, testName)\"]... [-o{normal, junit, teamcity}] [-k packageName]\n",
+    STRCMP_EQUAL(
+            "use -h for more extensive help\n"
+            "usage [-h] [-v] [-vv] [-c] [-p] [-lg] [-ln] [-ri] [-r#] [-f]\n"
+            "      [-g|sg|xg|xsg groupName]... [-n|sn|xn|xsn testName]... [-t groupName.testName]...\n"
+            "      [-b] [-s [randomizerSeed>0]] [\"TEST(groupName, testName)\"]...\n"
+            "      [-o{normal, junit, teamcity}] [-k packageName]\n",
             args->usage());
 }
 
@@ -500,6 +503,7 @@ TEST(CommandLineArguments, checkDefaultArguments)
     CHECK(NULLPTR == args->getNameFilters());
     CHECK(args->isEclipseOutput());
     CHECK(SimpleString("") == args->getPackageName());
+    CHECK(!args->isCrashingOnFail());
 }
 
 TEST(CommandLineArguments, setPackageName)
@@ -537,5 +541,13 @@ TEST(CommandLineArguments, setOptRun)
     const char* argv[] = { "tests.exe", "-ri"};
     CHECK(newArgumentParser(argc, argv));
     CHECK(args->isRunIgnored());
+}
+
+TEST(CommandLineArguments, setOptCrashOnFail)
+{
+    int argc = 2;
+    const char* argv[] = { "tests.exe", "-f"};
+    CHECK(newArgumentParser(argc, argv));
+    CHECK(args->isCrashingOnFail());
 }
 
