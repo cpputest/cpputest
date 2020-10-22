@@ -25,16 +25,62 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "CppUTest/TestResult.h"
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TestOutput.h"
-//#include "CppUtest/TestFailureList.h"
 
 TEST_GROUP(TestFailureList)
-{
+{    
+    UtestShell* tst;
+    TestFailure *f;
+    TestFailure *f2;
+    TestFailure *f3;
+
+    void setup()
+    {
+        tst = new UtestShell("group", "test", "file", 10);
+        f = new TestFailure(tst, "failfile", 20, "message");
+        f2 = new TestFailure(tst, "file", 20, "message");
+        f3 = new TestFailure(tst, "file", 2, "message");
+
+    }
+
+    void teardown()
+    {
+        delete tst;
+        delete f;
+        delete f2;
+        delete f3;
+    }
 };
-TEST(TestFailureList, CreateFailureList)
+
+TEST(TestFailureList, puchBackFailureList)
 {
-    CHECK(1==1);
+    TestFailureList list;
+    list.pushBack(*f);
+    list.pushBack(*f2);
+    list.pushBack(*f3);
+    int count = 0;
+    while (!list.empty()) {
+		list.erase(list.begin());
+        ++count;
+	}
+    CHECK(count == 3);
 }
 
-
+TEST(TestFailureList, emptyClearFailureList)
+{
+    TestFailureList list;
+    CHECK(list.empty() == true);
+    list.pushBack(*f);
+    list.pushBack(*f2);
+    list.pushBack(*f3);
+    int count = 0;
+    while (!list.empty()) {
+		list.erase(list.begin());
+        ++count;
+	}
+    CHECK(count == 3);
+    list.clear();
+    CHECK(list.empty() == true);
+}

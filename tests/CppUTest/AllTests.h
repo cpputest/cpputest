@@ -29,6 +29,7 @@
 IMPORT_TEST_GROUP( Utest);
 IMPORT_TEST_GROUP( Failure);
 IMPORT_TEST_GROUP( TestOutput);
+IMPORT_TEST_GROUP( TestFailureList);
 IMPORT_TEST_GROUP( SimpleString);
 IMPORT_TEST_GROUP( TestInstaller);
 IMPORT_TEST_GROUP( NullTest);
