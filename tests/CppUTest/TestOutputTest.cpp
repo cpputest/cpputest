@@ -325,6 +325,11 @@ class CompositeTestOutputTestStringBufferTestOutput : public StringBufferTestOut
       return color_;
     }
 
+    virtual bool isPrintSummaryEnd()
+    {
+      return summaryEnd_;
+    }
+
     virtual const char* getProgressIndicator()
     {
       return progressIndication_;
@@ -429,6 +434,13 @@ TEST(CompositeTestOutput, color)
   compositeOutput.color();
   CHECK(output1->isColor());
   CHECK(output2->isColor());
+}
+
+TEST(CompositeTestOutput, setSummaryEnd)
+{
+  compositeOutput.setSummaryEnd();
+  CHECK(output1->isPrintSummaryEnd());
+  CHECK(output2->isPrintSummaryEnd());
 }
 
 TEST(CompositeTestOutput, PrintTestFailure)

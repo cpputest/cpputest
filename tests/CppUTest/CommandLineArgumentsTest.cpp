@@ -539,3 +539,10 @@ TEST(CommandLineArguments, setOptRun)
     CHECK(args->isRunIgnored());
 }
 
+TEST(CommandLineArguments, printSummaryEnd)
+{
+    int argc = 2;
+    const char* argv[] = { "tests.exe", "-pse"};
+    CHECK(newArgumentParser(argc, argv));
+    CHECK(args->isPrintSummaryEnd());
+}
