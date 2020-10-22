@@ -59,7 +59,7 @@ static void StubMutexDestroy(PlatformSpecificMutex)
 
 TEST_GROUP(SimpleMutexTest)
 {
-    void setup()
+    void setup() _override
     {
         UT_PTR_SET(PlatformSpecificMutexCreate, StubMutexCreate);
         UT_PTR_SET(PlatformSpecificMutexLock, StubMutexLock);
@@ -72,7 +72,7 @@ TEST_GROUP(SimpleMutexTest)
         mutexUnlockCount = 0;
     }
 
-    void teardown()
+    void teardown() _override
     {
     }
 };

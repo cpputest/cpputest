@@ -37,7 +37,7 @@ TEST_GROUP(MockSupportTest)
   MockExpectedCallsListForTest expectations;
   MockFailureReporterInstaller failureReporterInstaller;
 
-  void teardown()
+  void teardown() _override
   {
       mock().checkExpectations();
       CHECK_NO_MOCK_FAILURE();
@@ -173,7 +173,7 @@ TEST_GROUP(MockSupportTestWithFixture)
 {
     TestTestingFixture fixture;
 
-    void teardown()
+    void teardown() _override
     {
         mock().clear();
         MockFailureReporterForTest::clearReporter();
@@ -284,4 +284,3 @@ TEST(MockSupportTestWithFixture, failedMockShouldFailAgainWhenRepeated)
         fixture.flushOutputAndResetResult();
     }
 }
-

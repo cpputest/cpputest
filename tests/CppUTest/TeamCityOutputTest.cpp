@@ -51,7 +51,7 @@ TEST_GROUP(TeamCityOutputTest)
     TestFailure *f, *f2, *f3;
     TestResult* result;
 
-    void setup()
+    void setup() _override
     {
         mock = new TeamCityOutputToBuffer();
         tcout = mock;
@@ -64,7 +64,7 @@ TEST_GROUP(TeamCityOutputTest)
         millisTime = 0;
         UT_PTR_SET(GetPlatformSpecificTimeInMillis, MockGetPlatformSpecificTimeInMillis);
     }
-    void teardown()
+    void teardown() _override
     {
         delete tcout;
         delete tst;

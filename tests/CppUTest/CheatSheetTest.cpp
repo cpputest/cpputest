@@ -9,14 +9,14 @@ static void stub(){}
 TEST_GROUP(CheatSheet)
 {
 /* declare a setup method for the test group. Optional. */
-    void setup ()
+    void setup() _override
     {
 /* Set method real_one to stub. Automatically restore in teardown */
         UT_PTR_SET(real_one, stub);
     }
 
 /* Declare a teardown method for the test group. Optional */
-    void teardown()
+    void teardown() _override
     {
     }
 }; /* Do not forget semicolumn */
@@ -33,4 +33,3 @@ TEST(CheatSheet, TestName)
     /* Check a string */
     STRCMP_EQUAL("HelloWorld", "HelloWorld");
 }
-

@@ -36,13 +36,13 @@ TEST_GROUP(TestMemoryAllocatorTest)
     TestMemoryAllocator* allocator;
     GlobalMemoryAllocatorStash memoryAllocatorStash;
 
-    void setup()
+    void setup() _override
     {
         allocator = NULLPTR;
         memoryAllocatorStash.save();
     }
 
-    void teardown()
+    void teardown() _override
     {
         memoryAllocatorStash.restore();
         delete allocator;
@@ -149,12 +149,12 @@ TEST_GROUP(MemoryLeakAllocator)
 {
     MemoryLeakAllocator* allocator;
 
-    void setup()
+    void setup() _override
     {
         allocator = new MemoryLeakAllocator(defaultMallocAllocator());
     }
 
-    void teardown()
+    void teardown() _override
     {
         delete allocator;
     }
@@ -214,14 +214,14 @@ TEST_GROUP(FailableMemoryAllocator)
     TestTestingFixture fixture;
     GlobalMemoryAllocatorStash stash;
 
-    void setup()
+    void setup() _override
     {
         stash.save();
         testFunction.allocator_ = failableMallocAllocator = new FailableMemoryAllocator("Failable Malloc Allocator", "malloc", "free");
         fixture.setTestFunction(&testFunction);
         setCurrentMallocAllocator(failableMallocAllocator);
     }
-    void teardown()
+    void teardown() _override
     {
         failableMallocAllocator->checkAllFailedAllocsWereDone();
         failableMallocAllocator->clearFailedAllocs();
@@ -351,13 +351,13 @@ TEST_GROUP(TestMemoryAccountant)
     TestTestingFixture fixture;
     MemoryAccountantExecFunction testFunction;
 
-    void setup()
+    void setup() _override
     {
         testFunction.parameter_ = &accountant;
         fixture.setTestFunction(&testFunction);
     }
 
-    void teardown()
+    void teardown() _override
     {
         accountant.clear();
     }
@@ -545,12 +545,12 @@ TEST_GROUP(AccountingTestMemoryAllocator)
     MemoryAccountant accountant;
     AccountingTestMemoryAllocator *allocator;
 
-    void setup()
+    void setup() _override
     {
         allocator = new AccountingTestMemoryAllocator(accountant, getCurrentMallocAllocator());
     }
 
-    void teardown()
+    void teardown() _override
     {
         accountant.clear();
         delete allocator;
@@ -628,14 +628,14 @@ TEST_GROUP(GlobalMemoryAccountant)
     GlobalMemoryAccountantExecFunction testFunction;
     GlobalMemoryAllocatorStash stash;
 
-    void setup()
+    void setup() _override
     {
         testFunction.parameter_ = &accountant;
         fixture.setTestFunction(&testFunction);
         stash.save();
     }
 
-    void teardown()
+    void teardown() _override
     {
         stash.restore();
     }
@@ -763,4 +763,3 @@ TEST(GlobalMemoryAccountant, checkWhetherNewArrayAllocatorIsNotChanged)
     fixture.runAllTests();
     fixture.assertPrintContains("GlobalMemoryAccountant: New Array memory allocator has been changed while accounting for memory");
 }
-

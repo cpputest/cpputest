@@ -40,14 +40,14 @@ TEST_GROUP(MockFailureTest)
     MockCheckedExpectedCall* call2;
     MockCheckedExpectedCall* call3;
 
-    void setup ()
+    void setup () _override
     {
         list = new MockExpectedCallsList;
         call1 = new MockCheckedExpectedCall;
         call2 = new MockCheckedExpectedCall;
         call3 = new MockCheckedExpectedCall;
     }
-    void teardown ()
+    void teardown () _override
     {
         delete list;
         delete call1;

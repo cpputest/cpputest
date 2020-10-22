@@ -40,13 +40,13 @@ TEST_GROUP(NormalMemoryReportFormatter)
     TestResult* testResult;
     NormalMemoryReportFormatter formatter;
 
-    void setup()
+    void setup() _override
     {
         memory01 = (char*) 0x01;
         testResult = new TestResult(testOutput);
     }
 
-    void teardown()
+    void teardown() _override
     {
         delete testResult;
     }

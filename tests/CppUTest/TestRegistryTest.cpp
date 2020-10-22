@@ -42,7 +42,7 @@ public:
         UtestShell(group, "Name", "File", testLineNumber), hasRun_(false)
     {
     }
-    virtual void runOneTest(TestPlugin*, TestResult&)
+    virtual void runOneTest(TestPlugin*, TestResult&) _override
     {
         hasRun_ = true;
     }
@@ -118,7 +118,7 @@ TEST_GROUP(TestRegistry)
     MockTest* test4;
     TestResult *result;
     MockTestResult *mockResult;
-    void setup()
+    void setup() _override
     {
         output = new StringBufferTestOutput();
         mockResult = new MockTestResult(*output);
@@ -131,7 +131,7 @@ TEST_GROUP(TestRegistry)
         myRegistry->setCurrentRegistry(myRegistry);
     }
 
-    void teardown()
+    void teardown() _override
     {
         myRegistry->setCurrentRegistry(NULLPTR);
         delete myRegistry;

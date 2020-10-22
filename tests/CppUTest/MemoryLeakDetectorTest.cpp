@@ -56,12 +56,12 @@ public:
 
     int alloc_called;
     int free_called;
-    char* alloc_memory(size_t size, const char*, size_t)
+    char* alloc_memory(size_t size, const char*, size_t) _override
     {
         alloc_called++;
         return TestMemoryAllocator::alloc_memory(size, "file", 1);
     }
-    void free_memory(char* memory, size_t size, const char* file, size_t line)
+    void free_memory(char* memory, size_t size, const char* file, size_t line) _override
     {
         free_called++;
         TestMemoryAllocator::free_memory(memory, size, file, line);
@@ -81,24 +81,24 @@ public:
     int allocMemoryLeakNodeCalled;
     int freeMemoryLeakNodeCalled;
 
-    char* alloc_memory(size_t size, const char* file, size_t line)
+    char* alloc_memory(size_t size, const char* file, size_t line) _override
     {
         alloc_called++;
         return TestMemoryAllocator::alloc_memory(size, file, line);
     }
-    void free_memory(char* memory, size_t size, const char* file, size_t line)
+    void free_memory(char* memory, size_t size, const char* file, size_t line) _override
     {
         free_called++;
         TestMemoryAllocator::free_memory(memory, size, file, line);
     }
 
-    char* allocMemoryLeakNode(size_t size)
+    char* allocMemoryLeakNode(size_t size) _override
     {
         allocMemoryLeakNodeCalled++;
         return TestMemoryAllocator::alloc_memory(size, __FILE__, __LINE__);
     }
 
-    void freeMemoryLeakNode(char* memory)
+    void freeMemoryLeakNode(char* memory) _override
     {
         freeMemoryLeakNodeCalled++;
         TestMemoryAllocator::free_memory(memory, 0,  __FILE__, __LINE__);
@@ -111,7 +111,7 @@ TEST_GROUP(MemoryLeakDetectorTest)
     MemoryLeakFailureForTest *reporter;
     AllocatorForMemoryLeakDetectionTest* testAllocator;
 
-    void setup()
+    void setup() _override
     {
         reporter = new MemoryLeakFailureForTest;
         detector = new MemoryLeakDetector(reporter);
@@ -120,7 +120,7 @@ TEST_GROUP(MemoryLeakDetectorTest)
         detector->startChecking();
         reporter->message = new SimpleString();
     }
-    void teardown()
+    void teardown() _override
     {
         delete reporter->message;
         delete detector;

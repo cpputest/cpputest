@@ -371,12 +371,12 @@ TEST_BASE(MyOwnTest)
     }
     bool inTest;
 
-    void setup()
+    void setup() _override
     {
         CHECK(!inTest);
         inTest = true;
     }
-    void teardown()
+    void teardown() _override
     {
         CHECK(inTest);
         inTest = false;
@@ -451,7 +451,7 @@ TEST_GROUP(UtestShellPointerArrayTest)
     UtestShell* test1;
     UtestShell* test2;
 
-    void setup()
+    void setup() _override
     {
         test0 = new IgnoredUtestShell();
         test1 = new IgnoredUtestShell();
@@ -461,7 +461,7 @@ TEST_GROUP(UtestShellPointerArrayTest)
         test1->addTest(test2);
     }
 
-    void teardown()
+    void teardown() _override
     {
         delete test0;
         delete test1;

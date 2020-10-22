@@ -71,7 +71,7 @@ class OrderedTestInstaller
   extern TEST_##testGroup##_##testName##_TestShell TEST_##testGroup##_##testName##_Instance; \
   class TEST_##testGroup##_##testName##_Test : public TEST_GROUP_##CppUTestGroup##testGroup \
 { public: TEST_##testGroup##_##testName##_Test () : TEST_GROUP_##CppUTestGroup##testGroup () {} \
-       void testBody(); }; \
+       void testBody() _override; }; \
   class TEST_##testGroup##_##testName##_TestShell : public OrderedTestShell { \
        virtual Utest* createTest() _override { return new TEST_##testGroup##_##testName##_Test; } \
   }  TEST_##testGroup##_##testName##_Instance; \
@@ -85,4 +85,3 @@ class OrderedTestInstaller
   }
 
 #endif
-

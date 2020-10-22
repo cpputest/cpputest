@@ -52,7 +52,7 @@ TEST_GROUP(SimpleStringInternalCache)
     TestFunctionWithCache testFunction;
     TestTestingFixture fixture;
 
-    void setup()
+    void setup() _override
     {
         fixture.setTestFunction(&testFunction);
         testFunction.parameter = &cache;
@@ -62,7 +62,7 @@ TEST_GROUP(SimpleStringInternalCache)
         cache.setAllocator(defaultAllocator);
     }
 
-    void teardown()
+    void teardown() _override
     {
         cache.clearAllIncludingCurrentlyUsedMemory();
         accountant.clear();
@@ -330,13 +330,13 @@ TEST_GROUP(SimpleStringCacheAllocator)
     MemoryAccountant accountant;
     AccountingTestMemoryAllocator* accountingAllocator;
 
-    void setup()
+    void setup() _override
     {
         accountingAllocator = new AccountingTestMemoryAllocator(accountant, defaultMallocAllocator());
         allocator = new SimpleStringCacheAllocator(cache, accountingAllocator);
     }
 
-    void teardown()
+    void teardown() _override
     {
         cache.clearCache();
         delete allocator;
@@ -387,4 +387,3 @@ TEST(GlobalSimpleStringCache, installsAndRemovedCache)
     }
     POINTERS_EQUAL(originalStringAllocator, SimpleString::getStringAllocator());
 }
-
