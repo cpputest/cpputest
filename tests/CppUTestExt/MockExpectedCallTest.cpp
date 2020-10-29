@@ -47,13 +47,13 @@ public:
 class TypeForTestingExpectedFunctionCallComparator : public MockNamedValueComparator
 {
 public:
-    virtual bool isEqual(const void* object1, const void* object2)
+    virtual bool isEqual(const void* object1, const void* object2) _override
     {
         const TypeForTestingExpectedFunctionCall* obj1 = (const TypeForTestingExpectedFunctionCall*) object1;
         const TypeForTestingExpectedFunctionCall* obj2 = (const TypeForTestingExpectedFunctionCall*) object2;
         return *(obj1->value) == *(obj2->value);
     }
-    virtual SimpleString valueToString(const void* object)
+    virtual SimpleString valueToString(const void* object) _override
     {
         const TypeForTestingExpectedFunctionCall* obj = (const TypeForTestingExpectedFunctionCall*) object;
         return StringFrom(*(obj->value));
@@ -63,7 +63,7 @@ public:
 class TypeForTestingExpectedFunctionCallCopier : public MockNamedValueCopier
 {
 public:
-    virtual void copy(void* dst_, const void* src_)
+    virtual void copy(void* dst_, const void* src_) _override
     {
         TypeForTestingExpectedFunctionCall* dst = (TypeForTestingExpectedFunctionCall*) dst_;
         const TypeForTestingExpectedFunctionCall* src = (const TypeForTestingExpectedFunctionCall*) src_;
@@ -73,7 +73,7 @@ public:
 
 TEST_GROUP(MockNamedValueHandlerRepository)
 {
-    void teardown()
+    void teardown() _override
     {
         CHECK_NO_MOCK_FAILURE();
         MockFailureReporterForTest::clearReporter();
@@ -155,13 +155,13 @@ TEST_GROUP(MockExpectedCall)
 {
     MockCheckedExpectedCall* call;
     MockNamedValueComparatorsAndCopiersRepository* originalComparatorRepository;
-    void setup()
+    void setup() _override
     {
         originalComparatorRepository = MockNamedValue::getDefaultComparatorsAndCopiersRepository();
         call = new MockCheckedExpectedCall(1);
         call->withName("funcName");
     }
-    void teardown()
+    void teardown() _override
     {
         MockNamedValue::setDefaultComparatorsAndCopiersRepository(originalComparatorRepository);
         delete call;

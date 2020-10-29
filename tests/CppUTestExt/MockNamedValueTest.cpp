@@ -83,12 +83,12 @@ TEST(ComparatorsAndCopiersRepository, InstallComparatorsAndCopiersFromRepository
 
   source.installCopier("MyType", copier);
   source.installComparator("MyType", comparator);
-  
+
   target.installComparatorsAndCopiers(source);
-  
+
   POINTERS_EQUAL(&comparator, target.getComparatorForType("MyType"));
   POINTERS_EQUAL(&copier, target.getCopierForType("MyType"));
-  
+
   source.clear();
   target.clear();
 }
@@ -96,12 +96,12 @@ TEST(ComparatorsAndCopiersRepository, InstallComparatorsAndCopiersFromRepository
 TEST_GROUP(MockNamedValue)
 {
   MockNamedValue * value;
-  void setup()
+  void setup() _override
   {
     value = new MockNamedValue("param");
   }
 
-  void teardown()
+  void teardown() _override
   {
     delete value;
   }

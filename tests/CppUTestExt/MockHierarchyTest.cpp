@@ -30,7 +30,7 @@
 
 TEST_GROUP(MockHierarchyTest)
 {
-    void teardown()
+    void teardown() _override
     {
         mock().clear();
     }
@@ -151,4 +151,3 @@ TEST(MockHierarchyTest, reporterIsInheritedInHierarchicalMocks)
     MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "differentScope::foobar", expectations);
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
-

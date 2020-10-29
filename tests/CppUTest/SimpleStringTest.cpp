@@ -67,14 +67,14 @@ TEST_GROUP(GlobalSimpleStringMemoryAccountant)
     TestTestingFixture fixture;
     GlobalSimpleStringMemoryAccountant accountant;
 
-    void setup()
+    void setup() _override
     {
         stash.save();
         testFunction.parameter_ = &accountant;
         fixture.setTestFunction(&testFunction);
     }
 
-    void teardown()
+    void teardown() _override
     {
         stash.restore();
     }
@@ -157,12 +157,12 @@ TEST_GROUP(SimpleString)
 {
   JustUseNewStringAllocator justNewForSimpleStringTestAllocator;
   GlobalSimpleStringAllocatorStash stash;
-  void setup()
+  void setup() _override
   {
       stash.save();
       SimpleString::setStringAllocator(&justNewForSimpleStringTestAllocator);
   }
-  void teardown()
+  void teardown() _override
   {
       stash.restore();
   }
@@ -1262,4 +1262,3 @@ TEST(SimpleString, BracketsFormattedHexStringFromForULongLong)
 }
 
 #endif
-

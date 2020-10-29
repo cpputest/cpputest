@@ -47,7 +47,7 @@ public:
     {
     }
 
-    virtual bool parseArguments(int, const char *const *, int)
+    virtual bool parseArguments(int, const char *const *, int) _override
     {
         /* Remove ourselves from the count */
         amountOfPlugins = registry_->countPlugins() - 1;
@@ -69,19 +69,19 @@ public:
     fakeConsoleOutputWhichIsReallyABuffer(NULLPTR), fakeTCOutputWhichIsReallyABuffer(NULLPTR)
   {}
 
-  TestOutput* createConsoleOutput()
+  TestOutput* createConsoleOutput() _override
   {
     fakeConsoleOutputWhichIsReallyABuffer = new StringBufferTestOutput;
     return fakeConsoleOutputWhichIsReallyABuffer;
   }
 
-  TestOutput* createJUnitOutput(const SimpleString&)
+  TestOutput* createJUnitOutput(const SimpleString&) _override
   {
     fakeJUnitOutputWhichIsReallyABuffer_ = new StringBufferTestOutput;
     return fakeJUnitOutputWhichIsReallyABuffer_;
   }
 
-  TestOutput* createTeamCityOutput()
+  TestOutput* createTeamCityOutput() _override
   {
     fakeTCOutputWhichIsReallyABuffer = new StringBufferTestOutput;
     return fakeTCOutputWhichIsReallyABuffer;
@@ -95,14 +95,14 @@ TEST_GROUP(CommandLineTestRunner)
     UtestShell *test2;
     DummyPluginWhichCountsThePlugins* pluginCountingPlugin;
 
-    void setup()
+    void setup() _override
     {
       test1 = new UtestShell("group1", "test1", "file1", 1);
       test2 = new UtestShell("group2", "test2", "file2", 2);
       registry.addTest(test1);
       pluginCountingPlugin = new DummyPluginWhichCountsThePlugins("PluginCountingPlugin", &registry);
     }
-    void teardown()
+    void teardown() _override
     {
       delete pluginCountingPlugin;
       delete test2;
@@ -398,7 +398,7 @@ class RunIgnoredUtest : public Utest
 {
 public:
     static bool Checker;
-    void testBody()
+    void testBody() _override
     {
         Checker = true;
     }
@@ -420,13 +420,13 @@ TEST_GROUP(RunIgnoredTest)
     RunIgnoredUtestShell *runIgnoredTest;
     DummyPluginWhichCountsThePlugins* pluginCountingPlugin;
 
-    void setup()
+    void setup() _override
     {
       runIgnoredTest = new RunIgnoredUtestShell("group", "test", "file", 1);
       registry.addTest(runIgnoredTest);
       pluginCountingPlugin = new DummyPluginWhichCountsThePlugins("PluginCountingPlugin", &registry);
     }
-    void teardown()
+    void teardown() _override
     {
       delete pluginCountingPlugin;
       delete runIgnoredTest;
@@ -453,4 +453,3 @@ TEST(RunIgnoredTest, IgnoreTestWillGetRunIfOptionSpecified)
 
     CHECK_TRUE( RunIgnoredUtest::Checker );
 }
-

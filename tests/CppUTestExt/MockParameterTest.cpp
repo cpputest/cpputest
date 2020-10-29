@@ -31,7 +31,7 @@
 
 TEST_GROUP(MockParameterTest)
 {
-  void teardown()
+  void teardown() _override
   {
       mock().checkExpectations();
       mock().clear();
@@ -930,4 +930,3 @@ TEST(MockParameterTest, expectMultipleMultipleCallsWithParameters)
 
     mock().checkExpectations();
 }
-

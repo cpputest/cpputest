@@ -164,12 +164,12 @@
     TEST_GROUP(group_name)
 
 #define TEST_GROUP_C_SETUP_WRAPPER(group_name) \
-    void setup() { \
+    void setup() _override { \
        group_##group_name##_setup_wrapper_c(); \
     }
 
 #define TEST_GROUP_C_TEARDOWN_WRAPPER(group_name) \
-    void teardown() { \
+    void teardown() _override { \
        group_##group_name##_teardown_wrapper_c(); \
     }
 

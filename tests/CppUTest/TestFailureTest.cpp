@@ -38,11 +38,11 @@ TEST_GROUP(TestFailure)
 {
     UtestShell* test;
 
-    void setup()
+    void setup() _override
     {
         test = new UtestShell("groupname", "testname", failFileName, failLineNumber-1);
     }
-    void teardown()
+    void teardown() _override
     {
         delete test;
     }

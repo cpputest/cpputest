@@ -43,7 +43,7 @@ extern "C" {
 
 TEST_GROUP(MockSupport_c)
 {
-    void teardown()
+    void teardown() _override
     {
         mock_c()->clear();
     }

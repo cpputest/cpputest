@@ -40,13 +40,13 @@ TEST_GROUP(MockPlugin)
 
     MockSupportPlugin plugin;
 
-    void setup()
+    void setup() _override
     {
         test = new UtestShell("group", "name", "file", 1);
         result = new TestResult(output);
     }
 
-    void teardown()
+    void teardown() _override
     {
         delete test;
         delete result;
@@ -92,11 +92,11 @@ TEST(MockPlugin, checkExpectationsWorksAlsoWithHierachicalObjects)
 class DummyComparator : public MockNamedValueComparator
 {
 public:
-    bool isEqual(const void* object1, const void* object2)
+    bool isEqual(const void* object1, const void* object2) _override
     {
         return object1 == object2;
     }
-    SimpleString valueToString(const void*)
+    SimpleString valueToString(const void*) _override
     {
         return "string";
     }
@@ -120,7 +120,7 @@ TEST(MockPlugin, installComparatorRecordsTheComparatorButNotInstallsItYet)
 class DummyCopier : public MockNamedValueCopier
 {
 public:
-    void copy(void* dst, const void* src)
+    void copy(void* dst, const void* src) _override
     {
         *(int*)dst = *(const int*)src;
     }
@@ -174,4 +174,3 @@ TEST(MockPlugin, shouldNotFailAgainWhenTestAlreadyFailed)
     fixture.runAllTests();
     fixture.assertPrintContains("1 failures, 1 tests, 1 ran, 2 checks,");
 }
-

@@ -50,12 +50,12 @@ TEST_GROUP(CommandLineArguments)
     CommandLineArguments* args;
     OptionsPlugin* plugin;
 
-    void setup()
+    void setup() _override
     {
         plugin = new OptionsPlugin("options");
         args = NULLPTR;
     }
-    void teardown()
+    void teardown() _override
     {
         delete args;
         delete plugin;
@@ -550,4 +550,3 @@ TEST(CommandLineArguments, setOptCrashOnFail)
     CHECK(newArgumentParser(argc, argv));
     CHECK(args->isCrashingOnFail());
 }
-

@@ -93,14 +93,14 @@ jobs:
             - sourceline: 'ppa:ubuntu-toolchain-r/test'
     - compiler: clang
       env: BUILD=cmake CPP_STD=17
-        - CC=clang-10
-        - CXX=clang++-10
+        - CC=clang-11
+        - CXX=clang++-11
       addons:
         apt:
           sources:
-            - sourceline: 'deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-10 main'
+            - sourceline: 'deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-11 main'
               key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
-          packages: ['clang-10', 'libc++-10-dev', 'libc++abi-10-dev']
+          packages: ['clang-11', 'libc++-11-dev', 'libc++abi-11-dev']
 
 #   Specific other tests
     - compiler: gcc

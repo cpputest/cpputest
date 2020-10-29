@@ -121,7 +121,7 @@ TEST(BasicBehavior, freeInvalidatesMemory)
 TEST_GROUP(MemoryLeakOverridesToBeUsedInProductionCode)
 {
     MemoryLeakDetector* memLeakDetector;
-    void setup()
+    void setup() _override
     {
         memLeakDetector = MemoryLeakWarningPlugin::getGlobalDetector();
     }
@@ -373,7 +373,7 @@ TEST_GROUP(OutOfMemoryTestsForOperatorNew)
 {
     TestMemoryAllocator* no_memory_allocator;
     GlobalMemoryAllocatorStash memoryAllocatorStash;
-    void setup()
+    void setup() _override
     {
         memoryAllocatorStash.save();
         no_memory_allocator = new NullUnknownAllocator;
@@ -381,7 +381,7 @@ TEST_GROUP(OutOfMemoryTestsForOperatorNew)
         setCurrentNewArrayAllocator(no_memory_allocator);
     }
 
-    void teardown()
+    void teardown() _override
     {
         memoryAllocatorStash.restore();
         delete no_memory_allocator;

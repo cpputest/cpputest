@@ -30,7 +30,7 @@
 
 TEST_GROUP(MockReturnValueTest)
 {
-  void teardown()
+  void teardown() _override
   {
       mock().checkExpectations();
       mock().clear();
@@ -745,4 +745,3 @@ TEST(MockReturnValueTest, whenCallingDisabledOrIgnoredActualCallsThenTheyDontRet
 
     CHECK(!mock().hasReturnValue());
 }
-

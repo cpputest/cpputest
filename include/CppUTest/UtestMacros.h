@@ -50,10 +50,10 @@
   TEST_GROUP_BASE(testGroup, Utest)
 
 #define TEST_SETUP() \
-  virtual void setup()
+  virtual void setup() _override
 
 #define TEST_TEARDOWN() \
-  virtual void teardown()
+  virtual void teardown() _override
 
 #define TEST(testGroup, testName) \
   /* External declarations for strict compilers */ \

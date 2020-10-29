@@ -805,4 +805,3 @@ TEST(TestHarness_c, callocShouldReturnNULLWhenOutOfMemory)
     cpputest_malloc_set_not_out_of_memory();
 }
 #endif
-
