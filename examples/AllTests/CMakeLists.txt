@@ -11,5 +11,5 @@ add_executable(ExampleTests
 )
 
 cpputest_normalize_test_output_location(ExampleTests)
-target_link_libraries(ExampleTests ApplicationLib CppUTest CppUTestExt)
+target_link_libraries(ExampleTests ApplicationLib ${CppUTestLibName} ${CppUTestExtLibName})
 cpputest_buildtime_discover_tests(ExampleTests)

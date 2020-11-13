@@ -1,4 +1,4 @@
-add_library(CppUTest
+add_library(${CppUTestLibName}
         CommandLineArguments.cpp
         MemoryLeakWarningPlugin.cpp
         TestHarness_c.cpp
@@ -20,16 +20,20 @@ add_library(CppUTest
         Utest.cpp
 )
 
+if(LIBNAME_POSTFIX_DEBUG)
+    set_target_properties(${CppUTestLibName} PROPERTIES DEBUG_POSTFIX "d")
+endif()
+
 #[[Set CPP_PLATFORM in a parent CMakeLists.txt if reusing one of the provided platforms, else supply the missing definitions]]
 if (CPP_PLATFORM)
-    target_sources(CppUTest
+    target_sources(${CppUTestLibName}
         PRIVATE
             ${CMAKE_CURRENT_LIST_DIR}/../Platforms/${CPP_PLATFORM}/UtestPlatform.cpp
     )
 endif(CPP_PLATFORM)
 
 #[[Arrange for the include directory to be added to the include paths of any CMake target depending on CppUTest.]]
-target_include_directories(CppUTest
+target_include_directories(${CppUTestLibName}
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../include>
         $<INSTALL_INTERFACE:include>
@@ -65,13 +69,13 @@ set(CppUTest_headers
         ${CppUTestRootDirectory}/include/CppUTest/SimpleMutex.h
 )
 
-set_target_properties(CppUTest PROPERTIES
+set_target_properties(${CppUTestLibName} PROPERTIES
     PUBLIC_HEADER "${CppUTest_headers}")
 
 if (WIN32)
-    target_link_libraries(CppUTest winmm)
+    target_link_libraries(${CppUTestLibName} winmm)
 endif (WIN32)
-install(TARGETS CppUTest
+install(TARGETS ${CppUTestLibName}
     EXPORT CppUTestTargets
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
