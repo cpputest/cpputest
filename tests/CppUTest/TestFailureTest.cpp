@@ -212,10 +212,10 @@ TEST(TestFailure, StringsEqualFailureWithNewLinesAndTabs)
             "StringWith\t\nDifferentString",
             "StringWith\t\ndifferentString", "");
 
-    FAILURE_EQUAL("expected <StringWith\t\nDifferentString>\n"
-                "\tbut was  <StringWith\t\ndifferentString>\n"
-                "\tdifference starts at position 12 at: <ringWith\t\ndifferentS>\n"
-                "\t                                              \t\n^", f);
+    FAILURE_EQUAL("expected <StringWith\\t\\nDifferentString>\n"
+                "\tbut was  <StringWith\\t\\ndifferentString>\n"
+                "\tdifference starts at position 12 at: <ngWith\\t\\ndifferentS>\n"
+                "\t                                                ^", f);
 }
 
 TEST(TestFailure, StringsEqualFailureInTheMiddle)

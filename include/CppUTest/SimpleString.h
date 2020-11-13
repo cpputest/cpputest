@@ -83,6 +83,8 @@ public:
     SimpleString subStringFromTill(char startChar, char lastExcludedChar) const;
     void copyToBuffer(char* buffer, size_t bufferSize) const;
 
+    SimpleString printable() const;
+
     const char *asCharString() const;
     size_t size() const;
     bool isEmpty() const;
@@ -219,6 +221,7 @@ SimpleString BracketsFormattedHexStringFrom(cpputest_longlong value);
 SimpleString BracketsFormattedHexStringFrom(cpputest_ulonglong value);
 SimpleString BracketsFormattedHexStringFrom(signed char value);
 SimpleString BracketsFormattedHexString(SimpleString hexString);
+SimpleString PrintableStringFromOrNull(const char * expected);
 
 /*
  * ARM compiler has only partial support for C++11.

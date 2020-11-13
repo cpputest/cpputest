@@ -422,6 +422,64 @@ void SimpleString::replace(const char* to, const char* with)
         setInternalBufferAsEmptyString();
 }
 
+SimpleString SimpleString::printable() const
+{
+    const char* shortEscapeCodes[] =
+    {
+        "\\a",
+        "\\b",
+        "\\t",
+        "\\n",
+        "\\v",
+        "\\f",
+        "\\r"
+    };
+
+    size_t str_size = size();
+    size_t new_str_size = str_size;
+
+    for (size_t i = 0; i < str_size; i++)
+    {
+        unsigned char c = (unsigned char) buffer_[i];
+        if ((c >= 0x07) && (c <= 0x0D))
+        {
+            new_str_size += 1;
+        }
+        else if ((c < 0x20) || (c == 0x7F))
+        {
+            new_str_size += 3;
+        }
+    }
+
+    SimpleString result;
+    result.setInternalBufferToNewBuffer(new_str_size + 1);
+
+    size_t j = 0;
+    for (size_t i = 0; i < str_size; i++)
+    {
+        unsigned char c = (unsigned char) buffer_[i];
+        if ((c >= 0x07) && (c <= 0x0D))
+        {
+            StrNCpy(&result.buffer_[j], shortEscapeCodes[c - 0x07], 2);
+            j += 2;
+        }
+        else if ((c < 0x20) || (c == 0x7F))
+        {
+            SimpleString hexEscapeCode = StringFromFormat("\\x%02X ", c);
+            StrNCpy(&result.buffer_[j], hexEscapeCode.asCharString(), 4);
+            j += 4;
+        }
+        else
+        {
+            result.buffer_[j] = (char) c;
+            j++;
+        }
+    }
+    result.buffer_[j] = 0;
+
+    return result;
+}
+
 SimpleString SimpleString::lowerCase() const
 {
     SimpleString str(*this);
@@ -599,6 +657,11 @@ SimpleString StringFrom(const char *value)
 SimpleString StringFromOrNull(const char * expected)
 {
     return (expected) ? StringFrom(expected) : "(null)";
+}
+
+SimpleString PrintableStringFromOrNull(const char * expected)
+{
+    return (expected) ? StringFrom(expected).printable() : "(null)";
 }
 
 SimpleString StringFrom(int value)

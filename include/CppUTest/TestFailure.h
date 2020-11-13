@@ -63,13 +63,8 @@ public:
 
 
 protected:
-    enum DifferenceFormat
-    {
-        DIFFERENCE_STRING, DIFFERENCE_BINARY
-    };
-
     SimpleString createButWasString(const SimpleString& expected, const SimpleString& actual);
-    SimpleString createDifferenceAtPosString(const SimpleString& actual, size_t position, DifferenceFormat format = DIFFERENCE_STRING);
+    SimpleString createDifferenceAtPosString(const SimpleString& actual, size_t offset, size_t reportedPosition);
     SimpleString createUserText(const SimpleString& text);
 
     SimpleString testName_;
