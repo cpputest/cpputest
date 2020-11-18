@@ -83,6 +83,8 @@ public:
     SimpleString subStringFromTill(char startChar, char lastExcludedChar) const;
     void copyToBuffer(char* buffer, size_t bufferSize) const;
 
+    SimpleString printable() const;
+
     const char *asCharString() const;
     size_t size() const;
     bool isEmpty() const;
@@ -125,6 +127,10 @@ private:
     static bool isDigit(char ch);
     static bool isSpace(char ch);
     static bool isUpper(char ch);
+    static bool isControl(char ch);
+    static bool isControlWithShortEscapeSequence(char ch);
+    
+    size_t getPrintableSize() const;
 };
 
 class SimpleStringCollection
@@ -219,6 +225,7 @@ SimpleString BracketsFormattedHexStringFrom(cpputest_longlong value);
 SimpleString BracketsFormattedHexStringFrom(cpputest_ulonglong value);
 SimpleString BracketsFormattedHexStringFrom(signed char value);
 SimpleString BracketsFormattedHexString(SimpleString hexString);
+SimpleString PrintableStringFromOrNull(const char * expected);
 
 /*
  * ARM compiler has only partial support for C++11.

@@ -422,6 +422,70 @@ void SimpleString::replace(const char* to, const char* with)
         setInternalBufferAsEmptyString();
 }
 
+SimpleString SimpleString::printable() const
+{
+    static const char* shortEscapeCodes[] =
+    {
+        "\\a",
+        "\\b",
+        "\\t",
+        "\\n",
+        "\\v",
+        "\\f",
+        "\\r"
+    };
+
+    SimpleString result;
+    result.setInternalBufferToNewBuffer(getPrintableSize() + 1);
+
+    size_t str_size = size();
+    size_t j = 0;
+    for (size_t i = 0; i < str_size; i++)
+    {
+        char c = buffer_[i];
+        if (isControlWithShortEscapeSequence(c))
+        {
+            StrNCpy(&result.buffer_[j], shortEscapeCodes[(unsigned char)(c - '\a')], 2);
+            j += 2;
+        }
+        else if (isControl(c))
+        {
+            SimpleString hexEscapeCode = StringFromFormat("\\x%02X ", c);
+            StrNCpy(&result.buffer_[j], hexEscapeCode.asCharString(), 4);
+            j += 4;
+        }
+        else
+        {
+            result.buffer_[j] = c;
+            j++;
+        }
+    }
+    result.buffer_[j] = 0;
+
+    return result;
+}
+
+size_t SimpleString::getPrintableSize() const
+{
+    size_t str_size = size();
+    size_t printable_str_size = str_size;
+
+    for (size_t i = 0; i < str_size; i++)
+    {
+        char c = buffer_[i];
+        if (isControlWithShortEscapeSequence(c))
+        {
+            printable_str_size += 1;
+        }
+        else if (isControl(c))
+        {
+            printable_str_size += 3;
+        }
+    }
+
+    return printable_str_size;
+}
+
 SimpleString SimpleString::lowerCase() const
 {
     SimpleString str(*this);
@@ -586,6 +650,16 @@ bool SimpleString::isUpper(char ch)
     return 'A' <= ch && 'Z' >= ch;
 }
 
+bool SimpleString::isControl(char ch)
+{
+    return ch < ' ' || ch == char(0x7F);
+}
+
+bool SimpleString::isControlWithShortEscapeSequence(char ch)
+{
+    return '\a' <= ch && '\r' >= ch;
+}
+
 SimpleString StringFrom(bool value)
 {
     return SimpleString(StringFromFormat("%s", value ? "true" : "false"));
@@ -599,6 +673,11 @@ SimpleString StringFrom(const char *value)
 SimpleString StringFromOrNull(const char * expected)
 {
     return (expected) ? StringFrom(expected) : "(null)";
+}
+
+SimpleString PrintableStringFromOrNull(const char * expected)
+{
+    return (expected) ? StringFrom(expected).printable() : "(null)";
 }
 
 SimpleString StringFrom(int value)

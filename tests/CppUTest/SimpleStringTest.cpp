@@ -294,6 +294,14 @@ TEST(SimpleString, lowerCase)
     STRCMP_EQUAL("AbCdEfG1234", s1.asCharString());
 }
 
+TEST(SimpleString, printable)
+{
+    SimpleString s1("ABC\01\06\a\n\r\b\t\v\f\x0E\x1F\x7F""abc");
+    SimpleString s2(s1.printable());
+    STRCMP_EQUAL("ABC\\x01\\x06\\a\\n\\r\\b\\t\\v\\f\\x0E\\x1F\\x7Fabc", s2.asCharString());
+    STRCMP_EQUAL("ABC\01\06\a\n\r\b\t\v\f\x0E\x1F\x7F""abc", s1.asCharString());
+}
+
 TEST(SimpleString, Addition)
 {
     SimpleString s1("hello!");
@@ -576,6 +584,11 @@ TEST(SimpleString, ContainsNull)
 TEST(SimpleString, NULLReportsNullString)
 {
     STRCMP_EQUAL("(null)", StringFromOrNull((char*) NULLPTR).asCharString());
+}
+
+TEST(SimpleString, NULLReportsNullStringPrintable)
+{
+    STRCMP_EQUAL("(null)", PrintableStringFromOrNull((char*) NULLPTR).asCharString());
 }
 
 TEST(SimpleString, Booleans)
