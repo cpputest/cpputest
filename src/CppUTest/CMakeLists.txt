@@ -24,7 +24,7 @@ add_library(CppUTest
 if (CPP_PLATFORM)
     target_sources(CppUTest
         PRIVATE
-            ../Platforms/${CPP_PLATFORM}/UtestPlatform.cpp
+            ${CMAKE_CURRENT_LIST_DIR}/../Platforms/${CPP_PLATFORM}/UtestPlatform.cpp
     )
 endif(CPP_PLATFORM)
 
