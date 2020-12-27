@@ -34,7 +34,7 @@ You can use `make install` if you want to install CppUTest system-wide
 You can also use CMake, which also works for Windows Visual Studio.
 
 * Download latest version
-* cmake CMakeList.txt
+* cmake CMakeLists.txt
 * make
 
 Then to get started, you'll need to do the following:
