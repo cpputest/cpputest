@@ -41,6 +41,12 @@ if (NOT IAR)
   endif(HAVE_STRDUP)
 endif(NOT IAR)
 
+include(CheckTypeSize)
+CHECK_TYPE_SIZE(pid_t PID_T)
+IF(NOT HAVE_PID_T)
+  SET(_cpputest_pid_t "int")
+ENDIF(NOT HAVE_PID_T)
+
 if (MINGW)
     # Apply workaround for MinGW timespec redefinition (pthread.h / time.h)
     include(CheckStructHasMember)

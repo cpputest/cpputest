@@ -9,4 +9,6 @@
 
 #cmakedefine INCLUDE_GTEST_TESTS
 
+#cmakedefine _cpputest_pid_t @_cpputest_pid_t@
+
 #endif

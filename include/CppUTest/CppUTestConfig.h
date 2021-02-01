@@ -28,8 +28,10 @@
 #ifndef CPPUTESTCONFIG_H_
 #define CPPUTESTCONFIG_H_
 
-#ifndef CPPUTEST_USE_OWN_CONFIGURATION
 #include "CppUTestGeneratedConfig.h"
+
+#ifdef _cpputest_pid_t
+typedef _cpputest_pid_t pid_t;
 #endif
 
 /*
