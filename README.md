@@ -200,6 +200,33 @@ TEST(ClassName, Create)
 There are some scripts that are helpful in creating your initial h, cpp, and
 Test files.  See scripts/README.TXT
 
+## Conan
+
+CppUTest is available through [conan-center](https://conan.io/center/cpputest).
+
+##### conanfile.txt
+
+```ini
+[requires]
+cpputest/4.0
+
+[generators]
+cmake_find_package
+cmake_paths
+```
+
+##### CMake
+
+```cmake
+find_package(CppUTest REQUIRED)
+
+add_executable(example_test ExampleTest.cpp)
+
+target_link_libraries(example_test PRIVATE
+    CppUTest::CppUTest
+    CppUTest::CppUTestExt)
+```
+
 
 ## Integration as external CMake project
 
