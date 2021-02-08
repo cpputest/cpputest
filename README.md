@@ -4,6 +4,7 @@ CppUTest
 [![Build Status](https://travis-ci.org/cpputest/cpputest.png?branch=master)](https://travis-ci.org/cpputest/cpputest)
 [![Build status](https://ci.appveyor.com/api/projects/status/irh38i4wblsb5tew?svg=true)](https://ci.appveyor.com/project/basvodde/cpputest)
 [![Coverage Status](https://coveralls.io/repos/cpputest/cpputest/badge.svg?branch=master&service=github)](https://coveralls.io/github/cpputest/cpputest?branch=master)
+[![Conan Center](https://img.shields.io/badge/conan-center-blue.svg)][conan-center]
 
 
 CppUTest unit testing and mocking framework for C/C++
@@ -199,7 +200,7 @@ Test files.  See scripts/README.TXT
 
 ## Conan
 
-CppUTest is available through [conan-center](https://conan.io/center/cpputest).
+CppUTest is available through [conan-center][conan-center].
 
 ##### conanfile.txt
 
@@ -248,3 +249,5 @@ It can be used then like so:
 add_executable(run_tests UnitTest1.cpp UnitTest2.cpp)
 target_link_libraries(run_tests PRIVATE CppUTest CppUTestExt)
 ```
+
+[conan-center]: https://conan.io/center/cpputest
