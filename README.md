@@ -1,18 +1,15 @@
 CppUTest
 ========
 
+[![Build Status](https://travis-ci.org/cpputest/cpputest.png?branch=master)](https://travis-ci.org/cpputest/cpputest)
+[![Build status](https://ci.appveyor.com/api/projects/status/irh38i4wblsb5tew?svg=true)](https://ci.appveyor.com/project/basvodde/cpputest)
+[![Coverage Status](https://coveralls.io/repos/cpputest/cpputest/badge.svg?branch=master&service=github)](https://coveralls.io/github/cpputest/cpputest?branch=master)
+
+
 CppUTest unit testing and mocking framework for C/C++
 
 [More information on the project page](http://cpputest.github.com)
 
-Travis Linux build status:
-[![Build Status](https://travis-ci.org/cpputest/cpputest.png?branch=master)](https://travis-ci.org/cpputest/cpputest)
-
-AppVeyor Windows build status:
-[![Build status](https://ci.appveyor.com/api/projects/status/irh38i4wblsb5tew?svg=true)](https://ci.appveyor.com/project/basvodde/cpputest)
-
-Coverage:
-[![Coverage Status](https://coveralls.io/repos/cpputest/cpputest/badge.svg?branch=master&service=github)](https://coveralls.io/github/cpputest/cpputest?branch=master)
 
 Slack channel:
 [Join if link not expired](https://join.slack.com/t/cpputest/shared_invite/zt-epq97u9h-6yBQHHl2cvUADjEENtdASw)
