@@ -1,18 +1,16 @@
 CppUTest
 ========
 
+[![Build Status](https://travis-ci.org/cpputest/cpputest.png?branch=master)](https://travis-ci.org/cpputest/cpputest)
+[![Build status](https://ci.appveyor.com/api/projects/status/irh38i4wblsb5tew?svg=true)](https://ci.appveyor.com/project/basvodde/cpputest)
+[![Coverage Status](https://coveralls.io/repos/cpputest/cpputest/badge.svg?branch=master&service=github)](https://coveralls.io/github/cpputest/cpputest?branch=master)
+[![ConanCenter package](https://repology.org/badge/version-for-repo/conancenter/cpputest.svg)](https://conan.io/center/cpputest)
+
+
 CppUTest unit testing and mocking framework for C/C++
 
 [More information on the project page](http://cpputest.github.com)
 
-Travis Linux build status:
-[![Build Status](https://travis-ci.org/cpputest/cpputest.png?branch=master)](https://travis-ci.org/cpputest/cpputest)
-
-AppVeyor Windows build status:
-[![Build status](https://ci.appveyor.com/api/projects/status/irh38i4wblsb5tew?svg=true)](https://ci.appveyor.com/project/basvodde/cpputest)
-
-Coverage:
-[![Coverage Status](https://coveralls.io/repos/cpputest/cpputest/badge.svg?branch=master&service=github)](https://coveralls.io/github/cpputest/cpputest?branch=master)
 
 Slack channel:
 [Join if link not expired](https://join.slack.com/t/cpputest/shared_invite/zt-epq97u9h-6yBQHHl2cvUADjEENtdASw)
@@ -200,6 +198,33 @@ TEST(ClassName, Create)
 There are some scripts that are helpful in creating your initial h, cpp, and
 Test files.  See scripts/README.TXT
 
+## Conan
+
+CppUTest is available through [conan-center][conan-center].
+
+##### conanfile.txt
+
+```ini
+[requires]
+cpputest/4.0
+
+[generators]
+cmake_find_package
+cmake_paths
+```
+
+##### CMake
+
+```cmake
+find_package(CppUTest REQUIRED)
+
+add_executable(example_test ExampleTest.cpp)
+
+target_link_libraries(example_test PRIVATE
+    CppUTest::CppUTest
+    CppUTest::CppUTestExt)
+```
+
 
 ## Integration as external CMake project
 
@@ -224,3 +249,5 @@ It can be used then like so:
 add_executable(run_tests UnitTest1.cpp UnitTest2.cpp)
 target_link_libraries(run_tests PRIVATE CppUTest CppUTestExt)
 ```
+
+[conan-center]: https://conan.io/center/cpputest
