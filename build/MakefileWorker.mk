@@ -500,11 +500,14 @@ $(TARGET_LIB): $(OBJ)
 	$(SILENCE)$(AR) $(ARFLAGS) $@ $^
 	$(SILENCE)$(RANLIB) $@
 
+TEST_RUN_RETURN_CODE_FILE:=$(shell mktemp /tmp/cpputestResult.XXX)
 test: $(TEST_TARGET)
-	$(RUN_TEST_TARGET) | tee $(TEST_OUTPUT)
+	($(RUN_TEST_TARGET); echo $$? > $(TEST_RUN_RETURN_CODE_FILE)) | tee $(TEST_OUTPUT)
+	@ret=$$(cat $(TEST_RUN_RETURN_CODE_FILE)); rm $(TEST_RUN_RETURN_CODE_FILE); if [ "$$ret" -ne 0 ]; then echo "$$(tput setaf 1)$(TEST_TARGET) returned $${ret}$$(tput sgr0)"; fi; exit $$ret
 
 vtest: $(TEST_TARGET)
-	$(RUN_TEST_TARGET) -v  | tee $(TEST_OUTPUT)
+	($(RUN_TEST_TARGET) -v; echo $$? > $(TEST_RUN_RETURN_CODE_FILE)) | tee $(TEST_OUTPUT)
+	@ret=$$(cat $(TEST_RUN_RETURN_CODE_FILE)); rm $(TEST_RUN_RETURN_CODE_FILE); if [ "$$ret" -ne 0 ]; then echo "$$(tput setaf 1)$(TEST_TARGET) returned $${ret}$$(tput sgr0)"; fi; exit $$ret
 
 $(CPPUTEST_OBJS_DIR)/%.o: %.cc
 	@echo compiling $(notdir $<)
