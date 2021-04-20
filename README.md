@@ -9,7 +9,7 @@ CppUTest
 
 CppUTest unit testing and mocking framework for C/C++
 
-[More information on the project page](http://cpputest.github.com)
+[More information on the project page](https://cpputest.github.io)
 
 
 Slack channel:
