@@ -30,6 +30,10 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 #include "CppUTest/TestOutput.h"
 
+#if defined(__GNUC__) && __GNUC__ >= 11
+# define NEEDS_DISABLE_NULL_WARNING
+#endif /* GCC >= 11 */
+
 bool doubles_equal(double d1, double d2, double threshold)
 {
     if (PlatformSpecificIsNan(d1) || PlatformSpecificIsNan(d2) || PlatformSpecificIsNan(threshold))
@@ -158,10 +162,20 @@ UtestShell::~UtestShell()
 }
 
 // LCOV_EXCL_START - actually covered but not in .gcno due to race condition
+#ifdef NEEDS_DISABLE_NULL_WARNING
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wnonnull"
+#endif /* NEEDS_DISABLE_NULL_WARNING */
+
 static void defaultCrashMethod()
 {
-    UtestShell* ptr = (UtestShell*) NULLPTR; ptr->countTests();
+    UtestShell* ptr = (UtestShell*) NULLPTR;
+    ptr->countTests();
 }
+
+#ifdef NEEDS_DISABLE_NULL_WARNING
+# pragma GCC diagnostic pop
+#endif /* NEEDS_DISABLE_NULL_WARNING */
 // LCOV_EXCL_STOP
 
 static void (*pleaseCrashMeRightNow) () = defaultCrashMethod;
