@@ -686,6 +686,40 @@ TEST_ORDERED(MockSupport_c, nextTestShouldNotCrashOnFailure, 22)
     UtestShell::resetCrashMethod();
 }
 
+TEST(MockSupport_c, FailWillNotCrashIfNotEnabled)
+{
+    cpputestHasCrashed = false;
+    TestTestingFixture fixture;
+    UtestShell::setCrashMethod(crashMethod);
+
+    fixture.setTestFunction(failedCallToMockC);
+
+    fixture.runAllTests();
+
+    CHECK_FALSE(cpputestHasCrashed);
+    LONGS_EQUAL(1, fixture.getFailureCount());
+
+    UtestShell::resetCrashMethod();
+}
+
+TEST(MockSupport_c, FailWillCrashIfEnabled)
+{
+    cpputestHasCrashed = false;
+    TestTestingFixture fixture;
+    UtestShell::setCrashOnFail();
+    UtestShell::setCrashMethod(crashMethod);
+
+    fixture.setTestFunction(failedCallToMockC);
+
+    fixture.runAllTests();
+
+    CHECK(cpputestHasCrashed);
+    LONGS_EQUAL(1, fixture.getFailureCount());
+
+    UtestShell::restoreDefaultTestTerminator();
+    UtestShell::resetCrashMethod();
+}
+
 static void failingCallToMockCWithParameterOfType_()
 {
     mock_c()->expectOneCall("bar")->withParameterOfType("typeName", "name", (const void*) 1);
