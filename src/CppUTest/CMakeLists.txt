@@ -69,7 +69,7 @@ set_target_properties(CppUTest PROPERTIES
     PUBLIC_HEADER "${CppUTest_headers}")
 
 if (WIN32)
-    target_link_libraries(CppUTest winmm.lib)
+    target_link_libraries(CppUTest winmm)
 endif (WIN32)
 install(TARGETS CppUTest
     EXPORT CppUTestTargets
