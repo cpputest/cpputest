@@ -49,7 +49,7 @@
 
 #include "CppUTest/PlatformSpecificFunctions.h"
 
-static jmp_buf test_exit_jmp_buf[10];
+static jmp_buf test_exit_jmp_buf[2];
 static int jmp_buf_index = 0;
 
 TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
