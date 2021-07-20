@@ -44,7 +44,8 @@ TEST_GROUP(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess)
     TestTestingFixture fixture;
 };
 
-#ifndef CPPUTEST_HAVE_FORK
+// There is a possibility that a compiler provides fork but not waitpid.
+#if !defined(CPPUTEST_HAVE_FORK) || !defined(CPPUTEST_HAVE_WAITPID)
 
 TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, DummyFailsWithMessage)
 {

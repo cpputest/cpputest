@@ -24,6 +24,11 @@ if(HAVE_FORK)
   add_definitions(-DCPPUTEST_HAVE_FORK)
 endif(HAVE_FORK)
 
+check_function_exists(waitpid HAVE_WAITPID)
+if(HAVE_WAITPID)
+  add_definitions(-DCPPUTEST_HAVE_WAITPID)
+endif(HAVE_WAITPID)
+
 check_function_exists(gettimeofday HAVE_GETTIMEOFDAY)
 if(HAVE_GETTIMEOFDAY)
   add_definitions(-DCPPUTEST_HAVE_GETTIMEOFDAY=1)

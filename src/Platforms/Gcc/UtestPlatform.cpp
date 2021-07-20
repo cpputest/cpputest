@@ -37,7 +37,7 @@
 #ifdef CPPUTEST_HAVE_GETTIMEOFDAY
 #include <sys/time.h>
 #endif
-#ifdef CPPUTEST_HAVE_FORK
+#if defined(CPPUTEST_HAVE_FORK) && defined(CPPUTEST_HAVE_WAITPID)
 #include <unistd.h>
 #include <sys/wait.h>
 #include <errno.h>
@@ -61,7 +61,8 @@
 static jmp_buf test_exit_jmp_buf[10];
 static int jmp_buf_index = 0;
 
-#ifndef CPPUTEST_HAVE_FORK
+// There is a possibility that a compiler provides fork but not waitpid.
+#if !defined(CPPUTEST_HAVE_FORK) || !defined(CPPUTEST_HAVE_WAITPID)
 
 static void GccPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin*, TestResult* result)
 {

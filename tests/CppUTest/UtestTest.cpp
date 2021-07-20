@@ -243,7 +243,8 @@ TEST(UtestShell, RunInSeparateProcessTest)
     fixture.assertPrintContains("Failed in separate process");
 }
 
-#ifndef CPPUTEST_HAVE_FORK
+// There is a possibility that a compiler provides fork but not waitpid.
+#if !defined(CPPUTEST_HAVE_FORK) || !defined(CPPUTEST_HAVE_WAITPID)
 
 IGNORE_TEST(UtestShell, TestDefaultCrashMethodInSeparateProcessTest) {}
 
