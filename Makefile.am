@@ -80,6 +80,7 @@ include_cpputest_HEADERS = \
 	include/CppUTest/MemoryLeakDetectorMallocMacros.h \
 	include/CppUTest/MemoryLeakDetectorNewMacros.h \
 	include/CppUTest/MemoryLeakWarningPlugin.h \
+	include/CppUTest/MultiGroup.h \
 	include/CppUTest/PlatformSpecificFunctions.h \
 	include/CppUTest/PlatformSpecificFunctions_c.h \
 	include/CppUTest/SimpleString.h \
@@ -170,6 +171,7 @@ CppUTestTests_SOURCES = \
 	tests/CppUTest/MemoryLeakDetectorTest.cpp \
 	tests/CppUTest/MemoryOperatorOverloadTest.cpp \
 	tests/CppUTest/MemoryLeakWarningTest.cpp \
+	tests/CppUTest/MultiGroupTest.cpp \
 	tests/CppUTest/PluginTest.cpp \
 	tests/CppUTest/PreprocessorTest.cpp \
 	tests/CppUTest/SetPluginTest.cpp \
