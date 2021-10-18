@@ -160,7 +160,7 @@ TEST(MockPlugin, preTestActionWillEnableMultipleComparatorsToTheGlobalMockSuppor
     plugin.clear();
 }
 
-static void _failTwiceFunction()
+static void failTwiceFunction_()
 {
     mock().expectOneCall("foobar");
     FAIL("This failed");
@@ -170,7 +170,7 @@ TEST(MockPlugin, shouldNotFailAgainWhenTestAlreadyFailed)
 {
     TestTestingFixture fixture;
     fixture.installPlugin(&plugin);
-    fixture.setTestFunction(_failTwiceFunction);
+    fixture.setTestFunction(failTwiceFunction_);
     fixture.runAllTests();
     fixture.assertPrintContains("1 failures, 1 tests, 1 ran, 2 checks,");
 }

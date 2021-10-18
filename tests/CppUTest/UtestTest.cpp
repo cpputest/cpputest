@@ -35,22 +35,22 @@ TEST_GROUP(UtestShell)
     TestTestingFixture fixture;
 };
 
-static void _failMethod()
+static void failMethod_()
 {
     FAIL("This test fails");
 }
 
-static void _passingTestMethod()
+static void passingTestMethod_()
 {
     CHECK(true);
 }
 
-static void _passingCheckEqualTestMethod()
+static void passingCheckEqualTestMethod_()
 {
     CHECK_EQUAL(1, 1);
 }
 
-static void _exitTestMethod()
+static void exitTestMethod_()
 {
     TEST_EXIT;
     FAIL("Should not get here");
@@ -78,14 +78,14 @@ TEST(UtestShell, compareDoubles)
 
 TEST(UtestShell, FailWillIncreaseTheAmountOfChecks)
 {
-    fixture.setTestFunction(_failMethod);
+    fixture.setTestFunction(failMethod_);
     fixture.runAllTests();
     LONGS_EQUAL(1, fixture.getCheckCount());
 }
 
 TEST(UtestShell, PassedCheckEqualWillIncreaseTheAmountOfChecks)
 {
-    fixture.setTestFunction(_passingCheckEqualTestMethod);
+    fixture.setTestFunction(passingCheckEqualTestMethod_);
     fixture.runAllTests();
     LONGS_EQUAL(1, fixture.getCheckCount());
 }
@@ -98,8 +98,8 @@ IGNORE_TEST(UtestShell, IgnoreTestAccessingFixture)
 TEST(UtestShell, MacrosUsedInSetup)
 {
     IGNORE_ALL_LEAKS_IN_TEST();
-    fixture.setSetup(_failMethod);
-    fixture.setTestFunction(_passingTestMethod);
+    fixture.setSetup(failMethod_);
+    fixture.setTestFunction(passingTestMethod_);
     fixture.runAllTests();
     LONGS_EQUAL(1, fixture.getFailureCount());
 }
@@ -107,15 +107,15 @@ TEST(UtestShell, MacrosUsedInSetup)
 TEST(UtestShell, MacrosUsedInTearDown)
 {
     IGNORE_ALL_LEAKS_IN_TEST();
-    fixture.setTeardown(_failMethod);
-    fixture.setTestFunction(_passingTestMethod);
+    fixture.setTeardown(failMethod_);
+    fixture.setTestFunction(passingTestMethod_);
     fixture.runAllTests();
     LONGS_EQUAL(1, fixture.getFailureCount());
 }
 
 TEST(UtestShell, ExitLeavesQuietly)
 {
-    fixture.setTestFunction(_exitTestMethod);
+    fixture.setTestFunction(exitTestMethod_);
     fixture.runAllTests();
     LONGS_EQUAL(0, fixture.getFailureCount());
 }
@@ -132,7 +132,7 @@ TEST(UtestShell, FailWillNotCrashIfNotEnabled)
     cpputestHasCrashed = false;
     UtestShell::setCrashMethod(crashMethod);
 
-    fixture.setTestFunction(_failMethod);
+    fixture.setTestFunction(failMethod_);
     fixture.runAllTests();
 
     CHECK_FALSE(cpputestHasCrashed);
@@ -147,7 +147,7 @@ TEST(UtestShell, FailWillCrashIfEnabled)
     UtestShell::setCrashOnFail();
     UtestShell::setCrashMethod(crashMethod);
 
-    fixture.setTestFunction(_failMethod);
+    fixture.setTestFunction(failMethod_);
     fixture.runAllTests();
 
     CHECK(cpputestHasCrashed);
@@ -160,7 +160,7 @@ TEST(UtestShell, FailWillCrashIfEnabled)
 
 static int teardownCalled = 0;
 
-static void _teardownMethod()
+static void teardownMethod_()
 {
     teardownCalled++;
 }
@@ -169,15 +169,15 @@ TEST(UtestShell, TeardownCalledAfterTestFailure)
 {
     teardownCalled = 0;
     IGNORE_ALL_LEAKS_IN_TEST();
-    fixture.setTeardown(_teardownMethod);
-    fixture.setTestFunction(_failMethod);
+    fixture.setTeardown(teardownMethod_);
+    fixture.setTestFunction(failMethod_);
     fixture.runAllTests();
     LONGS_EQUAL(1, fixture.getFailureCount());
     LONGS_EQUAL(1, teardownCalled);
 }
 
 static int stopAfterFailure = 0;
-static void _stopAfterFailureMethod()
+static void stopAfterFailureMethod_()
 {
     FAIL("fail");
     stopAfterFailure++;
@@ -187,7 +187,7 @@ TEST(UtestShell, TestStopsAfterTestFailure)
 {
     IGNORE_ALL_LEAKS_IN_TEST();
     stopAfterFailure = 0;
-    fixture.setTestFunction(_stopAfterFailureMethod);
+    fixture.setTestFunction(stopAfterFailureMethod_);
     fixture.runAllTests();
     CHECK(fixture.hasTestFailed());
     LONGS_EQUAL(1, fixture.getFailureCount());
@@ -197,9 +197,9 @@ TEST(UtestShell, TestStopsAfterTestFailure)
 TEST(UtestShell, TestStopsAfterSetupFailure)
 {
     stopAfterFailure = 0;
-    fixture.setSetup(_stopAfterFailureMethod);
-    fixture.setTeardown(_stopAfterFailureMethod);
-    fixture.setTestFunction(_failMethod);
+    fixture.setSetup(stopAfterFailureMethod_);
+    fixture.setTeardown(stopAfterFailureMethod_);
+    fixture.setTestFunction(failMethod_);
     fixture.runAllTests();
     LONGS_EQUAL(2, fixture.getFailureCount());
     LONGS_EQUAL(0, stopAfterFailure);
@@ -271,7 +271,7 @@ TEST(UtestShell, TestDefaultCrashMethodInSeparateProcessTest)
 
 static bool destructorWasCalledOnFailedTest = false;
 
-static void _destructorCalledForLocalObjects()
+static void destructorCalledForLocalObjects_()
 {
     SetBooleanOnDestructorCall pleaseCallTheDestructor(destructorWasCalledOnFailedTest);
     destructorWasCalledOnFailedTest = false;
@@ -280,7 +280,7 @@ static void _destructorCalledForLocalObjects()
 
 TEST(UtestShell, DestructorIsCalledForLocalObjectsWhenTheTestFails)
 {
-    fixture.setTestFunction(_destructorCalledForLocalObjects);
+    fixture.setTestFunction(destructorCalledForLocalObjects_);
     fixture.runAllTests();
     CHECK(destructorWasCalledOnFailedTest);
 }

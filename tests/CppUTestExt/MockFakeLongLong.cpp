@@ -44,7 +44,7 @@ TEST_GROUP(FakeLongLongs)
 
 #define CHECK_TEST_FAILS_PROPER_WITH_TEXT(text) fixture.checkTestFailsWithProperTestLocation(text, __FILE__, __LINE__)
 
-static void _actualCallWithFakeLongLongParameter()
+static void actualCallWithFakeLongLongParameter_()
 {
     cpputest_longlong value = {0};
 
@@ -55,12 +55,12 @@ static void _actualCallWithFakeLongLongParameter()
 
 TEST(FakeLongLongs, ActualCallWithFakeLongLongParameterFAILS)
 {
-    fixture.runTestWithMethod(_actualCallWithFakeLongLongParameter);
+    fixture.runTestWithMethod(actualCallWithFakeLongLongParameter);
     mock().clear();
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("Long Long type is not supported");
 }
 
-static void _actualCallWithFakeUnsignedLongLongParameter()
+static void actualCallWithFakeUnsignedLongLongParameter_()
 {
     cpputest_ulonglong value = {0};
 
@@ -71,12 +71,12 @@ static void _actualCallWithFakeUnsignedLongLongParameter()
 
 TEST(FakeLongLongs, ActualCallWithFakeUnsignedLongLongParameterFAILS)
 {
-    fixture.runTestWithMethod(_actualCallWithFakeUnsignedLongLongParameter);
+    fixture.runTestWithMethod(actualCallWithFakeUnsignedLongLongParameter_);
     mock().clear();
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("Unsigned Long Long type is not supported");
 }
 
-static void _actualCallWithFakeLongLongReturn()
+static void actualCallWithFakeLongLongReturn_()
 {
     mock().expectOneCall("foo").andReturnValue(0);
     mock().actualCall("foo").returnLongLongIntValue();
@@ -85,12 +85,12 @@ static void _actualCallWithFakeLongLongReturn()
 
 TEST(FakeLongLongs, ActualCallWithFakeLongLongReturnFAILS)
 {
-    fixture.runTestWithMethod(_actualCallWithFakeLongLongReturn);
+    fixture.runTestWithMethod(actualCallWithFakeLongLongReturn_);
     mock().clear();
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("Long Long type is not supported");
 }
 
-static void _actualCallWithFakeUnsignedLongLongReturn()
+static void actualCallWithFakeUnsignedLongLongReturn_()
 {
     mock().expectOneCall("foo").andReturnValue(0);
     mock().actualCall("foo").returnUnsignedLongLongIntValue();
@@ -99,12 +99,12 @@ static void _actualCallWithFakeUnsignedLongLongReturn()
 
 TEST(FakeLongLongs, ActualCallWithFakeUnsignedLongLongReturnFAILS)
 {
-    fixture.runTestWithMethod(_actualCallWithFakeUnsignedLongLongReturn);
+    fixture.runTestWithMethod(actualCallWithFakeUnsignedLongLongReturn_);
     mock().clear();
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("Unsigned Long Long type is not supported");
 }
 
-static void _expectOneCallWithFakeLongLongParameter()
+static void expectOneCallWithFakeLongLongParameter_()
 {
     cpputest_longlong value = {0};
 
@@ -115,12 +115,12 @@ static void _expectOneCallWithFakeLongLongParameter()
 
 TEST(FakeLongLongs, ExpectedCallWithFakeLongLongParameterFAILS)
 {
-    fixture.runTestWithMethod(_expectOneCallWithFakeLongLongParameter);
+    fixture.runTestWithMethod(expectOneCallWithFakeLongLongParameter_);
     mock().clear();
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("Long Long type is not supported");
 }
 
-static void _expectOneCallWithFakeUnsignedLongLongParameter()
+static void expectOneCallWithFakeUnsignedLongLongParameter_()
 {
     cpputest_ulonglong value = {0};
 
@@ -131,12 +131,12 @@ static void _expectOneCallWithFakeUnsignedLongLongParameter()
 
 TEST(FakeLongLongs, ExpectedCallWithFakeUnsignedLongLongParameterFAILS)
 {
-    fixture.runTestWithMethod(_expectOneCallWithFakeUnsignedLongLongParameter);
+    fixture.runTestWithMethod(expectOneCallWithFakeUnsignedLongLongParameter_);
     mock().clear();
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("Unsigned Long Long type is not supported");
 }
 
-static void _expectOneCallWithFakeLongLongReturn()
+static void expectOneCallWithFakeLongLongReturn_()
 {
     cpputest_longlong value = {0};
 
@@ -147,12 +147,12 @@ static void _expectOneCallWithFakeLongLongReturn()
 
 TEST(FakeLongLongs, ExpectedCallWithFakeLongLongReturnFAILS)
 {
-    fixture.runTestWithMethod(_expectOneCallWithFakeLongLongReturn);
+    fixture.runTestWithMethod(expectOneCallWithFakeLongLongReturn_);
     mock().clear();
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("Long Long type is not supported");
 }
 
-static void _expectOneCallWithFakeUnsignedLongLongReturn()
+static void expectOneCallWithFakeUnsignedLongLongReturn_()
 {
     cpputest_ulonglong value = {0};
 
@@ -163,7 +163,7 @@ static void _expectOneCallWithFakeUnsignedLongLongReturn()
 
 TEST(FakeLongLongs, ExpectedCallWithFakeUnsignedLongLongReturnFAILS)
 {
-    fixture.runTestWithMethod(_expectOneCallWithFakeUnsignedLongLongReturn);
+    fixture.runTestWithMethod(expectOneCallWithFakeUnsignedLongLongReturn_);
     mock().clear();
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("Unsigned Long Long type is not supported");
 }

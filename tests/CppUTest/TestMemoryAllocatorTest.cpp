@@ -261,7 +261,7 @@ TEST(FailableMemoryAllocator, FailSecondAndFourthMalloc)
     free(memory3);
 }
 
-static void _failingAllocIsNeverDone(FailableMemoryAllocator* failableMallocAllocator)
+static void failingAllocIsNeverDone_(FailableMemoryAllocator* failableMallocAllocator)
 {
     failableMallocAllocator->failAllocNumber(1);
     failableMallocAllocator->failAllocNumber(2);
@@ -273,7 +273,7 @@ static void _failingAllocIsNeverDone(FailableMemoryAllocator* failableMallocAllo
 
 TEST(FailableMemoryAllocator, CheckAllFailingAllocsWereDone)
 {
-    testFunction.testFunction_ = _failingAllocIsNeverDone;
+    testFunction.testFunction_ = failingAllocIsNeverDone_;
 
     fixture.runAllTests();
 
@@ -306,7 +306,7 @@ TEST(FailableMemoryAllocator, FailThirdAllocationAtGivenLine)
     LONGS_EQUAL(3, allocation);
 }
 
-static void _failingLocationAllocIsNeverDone(FailableMemoryAllocator* failableMallocAllocator)
+static void failingLocationAllocIsNeverDone_(FailableMemoryAllocator* failableMallocAllocator)
 {
     failableMallocAllocator->failNthAllocAt(1, "TestMemoryAllocatorTest.cpp", __LINE__);
     failableMallocAllocator->checkAllFailedAllocsWereDone();
@@ -314,7 +314,7 @@ static void _failingLocationAllocIsNeverDone(FailableMemoryAllocator* failableMa
 
 TEST(FailableMemoryAllocator, CheckAllFailingLocationAllocsWereDone)
 {
-    testFunction.testFunction_ = _failingLocationAllocIsNeverDone;
+    testFunction.testFunction_ = failingLocationAllocIsNeverDone_;
 
     fixture.runAllTests();
 
@@ -465,7 +465,7 @@ TEST(TestMemoryAccountant, reportAllocationsWithSizeZero)
 }
 
 
-static void _failUseCacheSizesAfterAllocation(MemoryAccountant* accountant)
+static void failUseCacheSizesAfterAllocation_(MemoryAccountant* accountant)
 {
     size_t cacheSizes[] = {0};
 
@@ -475,7 +475,7 @@ static void _failUseCacheSizesAfterAllocation(MemoryAccountant* accountant)
 
 TEST(TestMemoryAccountant, withCacheSizesFailsWhenAlreadyAllocatedMemory)
 {
-    testFunction.testFunction_ = _failUseCacheSizesAfterAllocation;
+    testFunction.testFunction_ = failUseCacheSizesAfterAllocation_;
 
     fixture.runAllTests();
 
@@ -695,19 +695,19 @@ TEST(GlobalMemoryAccountant, reportWithCacheSizes)
 
 #endif
 
-static void _failStopWithoutStartingWillFail(GlobalMemoryAccountant* accountant)
+static void failStopWithoutStartingWillFail_(GlobalMemoryAccountant* accountant)
 {
     accountant->stop();
 }
 
 TEST(GlobalMemoryAccountant, StopCantBeCalledWithoutStarting)
 {
-    testFunction.testFunction_ = _failStopWithoutStartingWillFail;
+    testFunction.testFunction_ = failStopWithoutStartingWillFail_;
     fixture.runAllTests();
     fixture.assertPrintContains("GlobalMemoryAccount: Stop called without starting");
 }
 
-static void _failStartingTwiceWillFail(GlobalMemoryAccountant* accountant)
+static void failStartingTwiceWillFail_(GlobalMemoryAccountant* accountant)
 {
     accountant->start();
     accountant->start();
@@ -715,14 +715,14 @@ static void _failStartingTwiceWillFail(GlobalMemoryAccountant* accountant)
 
 TEST(GlobalMemoryAccountant, startTwiceWillFail)
 {
-    testFunction.testFunction_ = _failStartingTwiceWillFail;
+    testFunction.testFunction_ = failStartingTwiceWillFail_;
     fixture.runAllTests();
     accountant.stop();
 
     fixture.assertPrintContains("Global allocator start called twice!");
 }
 
-static void _failChangeMallocMemoryAllocator(GlobalMemoryAccountant* accountant)
+static void failChangeMallocMemoryAllocator_(GlobalMemoryAccountant* accountant)
 {
     accountant->start();
     setCurrentMallocAllocator(defaultMallocAllocator());
@@ -731,12 +731,12 @@ static void _failChangeMallocMemoryAllocator(GlobalMemoryAccountant* accountant)
 
 TEST(GlobalMemoryAccountant, checkWhetherMallocAllocatorIsNotChanged)
 {
-    testFunction.testFunction_ = _failChangeMallocMemoryAllocator;
+    testFunction.testFunction_ = failChangeMallocMemoryAllocator_;
     fixture.runAllTests();
     fixture.assertPrintContains("GlobalMemoryAccountant: Malloc memory allocator has been changed while accounting for memory");
 }
 
-static void _failChangeNewMemoryAllocator(GlobalMemoryAccountant* accountant)
+static void failChangeNewMemoryAllocator_(GlobalMemoryAccountant* accountant)
 {
     accountant->start();
     setCurrentNewAllocator(defaultNewAllocator());
@@ -745,12 +745,12 @@ static void _failChangeNewMemoryAllocator(GlobalMemoryAccountant* accountant)
 
 TEST(GlobalMemoryAccountant, checkWhetherNewAllocatorIsNotChanged)
 {
-    testFunction.testFunction_ = _failChangeNewMemoryAllocator;
+    testFunction.testFunction_ = failChangeNewMemoryAllocator_;
     fixture.runAllTests();
     fixture.assertPrintContains("GlobalMemoryAccountant: New memory allocator has been changed while accounting for memory");
 }
 
-static void _failChangeNewArrayMemoryAllocator(GlobalMemoryAccountant* accountant)
+static void failChangeNewArrayMemoryAllocator_(GlobalMemoryAccountant* accountant)
 {
     accountant->start();
     setCurrentNewArrayAllocator(defaultNewArrayAllocator());
@@ -759,7 +759,7 @@ static void _failChangeNewArrayMemoryAllocator(GlobalMemoryAccountant* accountan
 
 TEST(GlobalMemoryAccountant, checkWhetherNewArrayAllocatorIsNotChanged)
 {
-    testFunction.testFunction_ = _failChangeNewArrayMemoryAllocator;
+    testFunction.testFunction_ = failChangeNewArrayMemoryAllocator_;
     fixture.runAllTests();
     fixture.assertPrintContains("GlobalMemoryAccountant: New Array memory allocator has been changed while accounting for memory");
 }
