@@ -196,8 +196,10 @@ char* SimpleString::StrNCpy(char* s1, const char* s2, size_t n)
 
     if((NULLPTR == s1) || (0 == n)) return result;
 
-    while ((*s1++ = *s2++) && --n != 0)
-        ;
+    *s1 = *s2;
+    while ((--n != 0) && *s1){
+        *++s1 = *++s2;
+    }
     return result;
 }
 
