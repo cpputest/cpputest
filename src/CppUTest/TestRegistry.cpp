@@ -123,6 +123,26 @@ void TestRegistry::listTestGroupAndCaseNames(TestResult& result)
     result.print(groupAndNameList.asCharString());
 }
 
+void TestRegistry::listTestLocations(TestResult& result)
+{
+    SimpleString testLocations;
+
+    for (UtestShell *test = tests_; test != NULLPTR; test = test->getNext()) {
+            SimpleString testLocation;
+            testLocation += test->getGroup();
+            testLocation += ".";
+            testLocation += test->getName();
+            testLocation += ".";
+            testLocation += test->getFile();
+            testLocation += ".";
+            testLocation += StringFromFormat("%d\n",test->getLineNumber());
+
+            testLocations += testLocation;
+    }
+
+    result.print(testLocations.asCharString());
+}
+
 bool TestRegistry::endOfGroup(UtestShell* test)
 {
     return (!test || !test->getNext() || test->getGroup() != test->getNext()->getGroup());

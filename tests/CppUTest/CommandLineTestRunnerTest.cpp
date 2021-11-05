@@ -269,6 +269,16 @@ TEST(CommandLineTestRunner, listTestGroupAndCaseNamesShouldWorkProperly)
     STRCMP_CONTAINS("group1.test1", commandLineTestRunner.fakeConsoleOutputWhichIsReallyABuffer->getOutput().asCharString());
 }
 
+TEST(CommandLineTestRunner, listTestLocationsShouldWorkProperly)
+{
+    const char* argv[] = { "tests.exe", "-ll" };
+
+    CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(2, argv, &registry);
+    commandLineTestRunner.runAllTestsMain();
+
+    STRCMP_CONTAINS("group1.test1", commandLineTestRunner.fakeConsoleOutputWhichIsReallyABuffer->getOutput().asCharString());
+}
+
 TEST(CommandLineTestRunner, randomShuffleSeedIsPrintedAndRandFuncIsExercised)
 {
     // more than 1 item in test list ensures that shuffle algorithm calls rand_()

@@ -30,7 +30,7 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 
 CommandLineArguments::CommandLineArguments(int ac, const char *const *av) :
-    ac_(ac), av_(av), needHelp_(false), verbose_(false), veryVerbose_(false), color_(false), runTestsAsSeperateProcess_(false), listTestGroupNames_(false), listTestGroupAndCaseNames_(false), runIgnored_(false), reversing_(false), crashOnFail_(false), shuffling_(false), shufflingPreSeeded_(false), repeat_(1), shuffleSeed_(0), groupFilters_(NULLPTR), nameFilters_(NULLPTR), outputType_(OUTPUT_ECLIPSE)
+    ac_(ac), av_(av), needHelp_(false), verbose_(false), veryVerbose_(false), color_(false), runTestsAsSeperateProcess_(false), listTestGroupNames_(false), listTestGroupAndCaseNames_(false), listTestLocations_(false), runIgnored_(false), reversing_(false), crashOnFail_(false), shuffling_(false), shufflingPreSeeded_(false), repeat_(1), shuffleSeed_(0), groupFilters_(NULLPTR), nameFilters_(NULLPTR), outputType_(OUTPUT_ECLIPSE)
 {
 }
 
@@ -65,6 +65,7 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
         else if (argument == "-b") reversing_ = true;
         else if (argument == "-lg") listTestGroupNames_ = true;
         else if (argument == "-ln") listTestGroupAndCaseNames_ = true;
+        else if (argument == "-ll") listTestLocations_ = true;
         else if (argument == "-ri") runIgnored_ = true;
         else if (argument == "-f") crashOnFail_ = true;
         else if (argument.startsWith("-r")) setRepeatCount(ac_, av_, i);
@@ -169,6 +170,11 @@ bool CommandLineArguments::isListingTestGroupNames() const
 bool CommandLineArguments::isListingTestGroupAndCaseNames() const
 {
     return listTestGroupAndCaseNames_;
+}
+
+bool CommandLineArguments::isListingTestLocations() const
+{
+    return listTestLocations_;
 }
 
 bool CommandLineArguments::isRunIgnored() const
