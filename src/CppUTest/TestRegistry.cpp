@@ -135,7 +135,7 @@ void TestRegistry::listTestLocations(TestResult& result)
             testLocation += ".";
             testLocation += test->getFile();
             testLocation += ".";
-            testLocation += StringFromFormat("%d\n",test->getLineNumber());
+            testLocation += StringFromFormat("%zu\n",test->getLineNumber());
 
             testLocations += testLocation;
     }

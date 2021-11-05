@@ -111,6 +111,7 @@ const char* CommandLineArguments::help() const
       "  -h                 - this wonderful help screen. Joy!\n"
       "  -lg                - print a list of group names, separated by spaces\n"
       "  -ln                - print a list of test names in the form of group.name, separated by spaces\n"
+      "  -ll                - print a list of test locations in the form of group.name.location.linenumber, separated by newlines\n"
       "\n"
       "Options that change the output format:\n"
       "  -c                - colorize output, print green if OK, or red if failed\n"
