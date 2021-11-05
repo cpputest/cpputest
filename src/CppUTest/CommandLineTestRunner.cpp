@@ -120,6 +120,13 @@ int CommandLineTestRunner::runAllTests()
         return 0;
     }
 
+    if (arguments_->isListingTestLocations())
+    {
+        TestResult tr(*output_);
+        registry_->listTestLocations(tr);
+        return 0;
+    }
+
     if (arguments_->isReversing())
         registry_->reverseTests();
 

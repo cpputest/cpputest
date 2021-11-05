@@ -361,6 +361,29 @@ TEST(TestRegistry, listTestGroupAndCaseNames_shouldListBackwardsGroupATestaAfter
     STRCMP_EQUAL("GROUP_A.test_aa GROUP_B.test_b GROUP_A.test_a", s.asCharString());
 }
 
+TEST(TestRegistry, listTestLocations_shouldListBackwardsGroupATestaAfterGroupAtestaa)
+{
+    test1->setGroupName("GROUP_A");
+    test1->setTestName("test_a");
+    test1->setFileName("cpptest_simple/my_tests/testa.cpp");
+    test1->setLineNumber(100);
+    myRegistry->addTest(test1);
+    test2->setGroupName("GROUP_B");
+    test2->setTestName("test_b");
+    test2->setFileName("cpptest_simple/my tests/testb.cpp");
+    test2->setLineNumber(200);
+    myRegistry->addTest(test2);
+    test3->setGroupName("GROUP_A");
+    test3->setTestName("test_aa");
+    test3->setFileName("cpptest_simple/my_tests/testaa.cpp");
+    test3->setLineNumber(300);
+    myRegistry->addTest(test3);
+
+    myRegistry->listTestLocations(*result);
+    SimpleString s = output->getOutput();
+    STRCMP_EQUAL("GROUP_A.test_aa.cpptest_simple/my_tests/testaa.cpp.300\nGROUP_B.test_b.cpptest_simple/my tests/testb.cpp.200\nGROUP_A.test_a.cpptest_simple/my_tests/testa.cpp.100\n", s.asCharString());
+}
+
 TEST(TestRegistry, shuffleEmptyListIsNoOp)
 {
     CHECK_TRUE(myRegistry->getFirstTest() == NULLPTR);

@@ -47,6 +47,7 @@ public:
     bool isColor() const;
     bool isListingTestGroupNames() const;
     bool isListingTestGroupAndCaseNames() const;
+    bool isListingTestLocations() const;
     bool isRunIgnored() const;
     size_t getRepeatCount() const;
     bool isShuffling() const;
@@ -80,6 +81,7 @@ private:
     bool runTestsAsSeperateProcess_;
     bool listTestGroupNames_;
     bool listTestGroupAndCaseNames_;
+    bool listTestLocations_;
     bool runIgnored_;
     bool reversing_;
     bool crashOnFail_;
