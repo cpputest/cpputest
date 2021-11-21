@@ -105,19 +105,19 @@ TEST(GlobalSimpleStringMemoryAccountant, stop)
     POINTERS_EQUAL(originalAllocator, SimpleString::getStringAllocator());
 }
 
-static void _stopAccountant(GlobalSimpleStringMemoryAccountant* accountant)
+static void stopAccountant_(GlobalSimpleStringMemoryAccountant* accountant)
 {
     accountant->stop();
 }
 
 TEST(GlobalSimpleStringMemoryAccountant, stopWithoutStartWillFail)
 {
-    testFunction.testFunction_ = _stopAccountant;
+    testFunction.testFunction_ = stopAccountant_;
     fixture.runAllTests();
     fixture.assertPrintContains("Global SimpleString allocator stopped without starting");
 }
 
-static void _changeAllocatorBetweenStartAndStop(GlobalSimpleStringMemoryAccountant* accountant)
+static void changeAllocatorBetweenStartAndStop_(GlobalSimpleStringMemoryAccountant* accountant)
 {
     TestMemoryAllocator* originalAllocator = SimpleString::getStringAllocator();
     accountant->start();
@@ -127,7 +127,7 @@ static void _changeAllocatorBetweenStartAndStop(GlobalSimpleStringMemoryAccounta
 
 TEST(GlobalSimpleStringMemoryAccountant, stopFailsWhenAllocatorWasChangedInBetween)
 {
-    testFunction.testFunction_ = _changeAllocatorBetweenStartAndStop;
+    testFunction.testFunction_ = changeAllocatorBetweenStartAndStop_;
     fixture.runAllTests();
     fixture.assertPrintContains("GlobalStrimpleStringMemoryAccountant: allocator has changed between start and stop!");
 }
@@ -847,7 +847,7 @@ TEST(SimpleString, CollectionWritingToEmptyString)
 
 #ifdef CPPUTEST_64BIT
 
-TEST(SimpleString, _64BitAddressPrintsCorrectly)
+TEST(SimpleString, 64BitAddressPrintsCorrectly)
 {
     char* p = (char*) 0x0012345678901234;
     SimpleString expected("0x12345678901234");
@@ -878,7 +878,7 @@ TEST(SimpleString, BracketsFormattedHexStringFromForLongOnDifferentPlatform)
 /*
  * This test case cannot pass on 32 bit systems.
  */
-IGNORE_TEST(SimpleString, _64BitAddressPrintsCorrectly)
+IGNORE_TEST(SimpleString, 64BitAddressPrintsCorrectly)
 {
 }
 
