@@ -233,7 +233,7 @@ static void LONGLONGS_EQUALFailsWithUnsupportedFeatureTestMethod_()
     LONGLONGS_EQUAL(1, 1);
 } // LCOV_EXCL_LINE
 
-static void UNSIGNED_LONGLONGS_EQUALFailsWithUnsupportedFeatureTestMethod()
+static void UNSIGNED_LONGLONGS_EQUALFailsWithUnsupportedFeatureTestMethod_()
 {
     UNSIGNED_LONGLONGS_EQUAL(1, 1);
 } // LCOV_EXCL_LINE
