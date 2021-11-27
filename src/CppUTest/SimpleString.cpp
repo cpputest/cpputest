@@ -358,9 +358,15 @@ size_t SimpleString::count(const SimpleString& substr) const
 {
     size_t num = 0;
     const char* str = getBuffer();
-    while (*str && (str = StrStr(str, substr.getBuffer()))) {
+    const char* strpart = NULL;
+    if (*str){
+        strpart = StrStr(str, substr.getBuffer());
+    }
+    while (*str && strpart) {
+        str = strpart;
         str++;
         num++;
+        strpart = StrStr(str, substr.getBuffer());
     }
     return num;
 }
