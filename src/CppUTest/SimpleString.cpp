@@ -680,7 +680,7 @@ SimpleString StringFrom(const char *value)
 
 SimpleString StringFromOrNull(const char * expected)
 {
-    return (expected) ? StringFrom(expected) : "(null)";
+    return (expected) ? StringFrom(expected) : StringFrom("(null)");
 }
 
 SimpleString PrintableStringFromOrNull(const char * expected)
