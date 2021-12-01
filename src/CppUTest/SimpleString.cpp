@@ -685,7 +685,7 @@ SimpleString StringFromOrNull(const char * expected)
 
 SimpleString PrintableStringFromOrNull(const char * expected)
 {
-    return (expected) ? StringFrom(expected).printable() : "(null)";
+    return (expected) ? StringFrom(expected).printable() : StringFrom("(null)");
 }
 
 SimpleString StringFrom(int value)
