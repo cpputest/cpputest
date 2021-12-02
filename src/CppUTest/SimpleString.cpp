@@ -984,7 +984,7 @@ SimpleString StringFromBinary(const unsigned char* value, size_t size)
 
 SimpleString StringFromBinaryOrNull(const unsigned char* value, size_t size)
 {
-    return (value) ? StringFromBinary(value, size) : "(null)";
+    return (value) ? StringFromBinary(value, size) : StringFrom("(null)");
 }
 
 SimpleString StringFromBinaryWithSize(const unsigned char* value, size_t size)
