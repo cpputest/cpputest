@@ -1001,7 +1001,7 @@ SimpleString StringFromBinaryWithSize(const unsigned char* value, size_t size)
 
 SimpleString StringFromBinaryWithSizeOrNull(const unsigned char* value, size_t size)
 {
-    return (value) ? StringFromBinaryWithSize(value, size) : "(null)";
+    return (value) ? StringFromBinaryWithSize(value, size) : StringFrom("(null)");
 }
 
 SimpleString StringFromMaskedBits(unsigned long value, unsigned long mask, size_t byteCount)
