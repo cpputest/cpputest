@@ -598,7 +598,7 @@ SimpleString MemoryAccountant::reportFooter() const
 
 SimpleString MemoryAccountant::stringSize(size_t size) const
 {
-    return (size == 0) ? "other" : StringFromFormat("%5d", (int) size);
+    return (size == 0) ? StringFrom("other") : StringFromFormat("%5d", (int) size);
 }
 
 SimpleString MemoryAccountant::report() const
