@@ -248,7 +248,7 @@ MockExpectedCall& MockCheckedExpectedCall::withUnmodifiedOutputParameter(const S
 SimpleString MockCheckedExpectedCall::getInputParameterType(const SimpleString& name)
 {
     MockNamedValue * p = inputParameters_->getValueByName(name);
-    return (p) ? p->getType() : "";
+    return (p) ? p->getType() : StringFrom("");
 }
 
 bool MockCheckedExpectedCall::hasInputParameterWithName(const SimpleString& name)
