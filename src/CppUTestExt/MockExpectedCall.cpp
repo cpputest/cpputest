@@ -368,7 +368,7 @@ void MockCheckedExpectedCall::outputParameterWasPassed(const SimpleString& name)
 SimpleString MockCheckedExpectedCall::getInputParameterValueString(const SimpleString& name)
 {
     MockNamedValue * p = inputParameters_->getValueByName(name);
-    return (p) ? StringFrom(*p) : "failed";
+    return (p) ? StringFrom(*p) : StringFrom("failed");
 }
 
 bool MockCheckedExpectedCall::hasInputParameter(const MockNamedValue& parameter)
