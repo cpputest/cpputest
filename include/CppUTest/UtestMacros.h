@@ -239,7 +239,7 @@
   UNSIGNED_LONGLONGS_EQUAL_LOCATION(expected, actual, text, __FILE__, __LINE__)
 
 #define LONGLONGS_EQUAL_LOCATION(expected, actual, text, file, line)\
-        do { UtestShell::getCurrent()->assertLongLongsEqual((cpputest_ulonglong)expected, (cpputest_ulonglong)actual, text, file, line); } while(0)
+        do { UtestShell::getCurrent()->assertLongLongsEqual((cpputest_longlong)expected, (cpputest_longlong)actual, text, file, line); } while(0)
 
 #define UNSIGNED_LONGLONGS_EQUAL_LOCATION(expected, actual, text, file, line)\
         do { UtestShell::getCurrent()->assertUnsignedLongLongsEqual((unsigned long long)expected, (unsigned long long)actual, text, file, line); } while(0)
