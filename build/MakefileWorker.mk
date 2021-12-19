@@ -62,6 +62,8 @@
 #	CPPUTEST_CPPFLAGS - flags for the C++ AND C preprocessor
 #	CPPUTEST_CFLAGS - flags for the C complier
 #	CPPUTEST_LDFLAGS - Linker flags
+#	CPPUTEST_CXX_PREFIX - prefix for the C++ compiler
+#	CPPUTEST_CC_PREFIX - prefix for the C compiler
 #----------
 
 # Some behavior is weird on some platforms. Need to discover the platform.
@@ -512,17 +514,17 @@ vtest: $(TEST_TARGET)
 $(CPPUTEST_OBJS_DIR)/%.o: %.cc
 	@echo compiling $(notdir $<)
 	$(SILENCE)mkdir -p $(dir $@)
-	$(SILENCE)$(COMPILE.cpp) $(DEP_FLAGS) $(OUTPUT_OPTION) $<
+	$(SILENCE)$(CPPUTEST_CXX_PREFIX)$(COMPILE.cpp) $(DEP_FLAGS) $(OUTPUT_OPTION) $<
 
 $(CPPUTEST_OBJS_DIR)/%.o: %.cpp
 	@echo compiling $(notdir $<)
 	$(SILENCE)mkdir -p $(dir $@)
-	$(SILENCE)$(COMPILE.cpp) $(DEP_FLAGS) $(OUTPUT_OPTION) $<
+	$(SILENCE)$(CPPUTEST_CXX_PREFIX)$(COMPILE.cpp) $(DEP_FLAGS) $(OUTPUT_OPTION) $<
 
 $(CPPUTEST_OBJS_DIR)/%.o: %.c
 	@echo compiling $(notdir $<)
 	$(SILENCE)mkdir -p $(dir $@)
-	$(SILENCE)$(COMPILE.c) $(DEP_FLAGS) $(OUTPUT_OPTION) $<
+	$(SILENCE)$(CPPUTEST_CC_PREFIX)$(COMPILE.c) $(DEP_FLAGS) $(OUTPUT_OPTION) $<
 
 ifneq "$(MAKECMDGOALS)" "clean"
 -include $(DEP_FILES)
