@@ -493,13 +493,21 @@ TEST_DEPS = $(TEST_OBJS) $(MOCKS_OBJS) $(PRODUCTION_CODE_START) $(TARGET_LIB) $(
 test-deps: $(TEST_DEPS)
 
 $(TEST_TARGET): $(TEST_DEPS)
+ifndef MORE_SILENCE
 	@echo Linking $@
+endif
 	$(SILENCE)$(CXX) -o $@ $^ $(LD_LIBRARIES) $(LDFLAGS)
 
 $(TARGET_LIB): $(OBJ)
+ifndef MORE_SILENCE
 	@echo Building archive $@
+endif
 	$(SILENCE)mkdir -p $(dir $@)
+ifndef MORE_SILENCE
 	$(SILENCE)$(AR) $(ARFLAGS) $@ $^
+else
+	$(SILENCE)$(AR) $(ARFLAGS) $@ $^ >/dev/null
+endif
 	$(SILENCE)$(RANLIB) $@
 
 TEST_RUN_RETURN_CODE_FILE:=$(shell mktemp /tmp/cpputestResult.XXX)
@@ -512,17 +520,23 @@ vtest: $(TEST_TARGET)
 	@ret=$$(cat $(TEST_RUN_RETURN_CODE_FILE)); rm $(TEST_RUN_RETURN_CODE_FILE); if [ "$$ret" -ne 0 ]; then echo "$$(tput setaf 1)$(TEST_TARGET) returned $${ret}$$(tput sgr0)"; fi; exit $$ret
 
 $(CPPUTEST_OBJS_DIR)/%.o: %.cc
+ifndef MORE_SILENCE
 	@echo compiling $(notdir $<)
+endif
 	$(SILENCE)mkdir -p $(dir $@)
 	$(SILENCE)$(CPPUTEST_CXX_PREFIX)$(COMPILE.cpp) $(DEP_FLAGS) $(OUTPUT_OPTION) $<
 
 $(CPPUTEST_OBJS_DIR)/%.o: %.cpp
+ifndef MORE_SILENCE
 	@echo compiling $(notdir $<)
+endif
 	$(SILENCE)mkdir -p $(dir $@)
 	$(SILENCE)$(CPPUTEST_CXX_PREFIX)$(COMPILE.cpp) $(DEP_FLAGS) $(OUTPUT_OPTION) $<
 
 $(CPPUTEST_OBJS_DIR)/%.o: %.c
+ifndef MORE_SILENCE
 	@echo compiling $(notdir $<)
+endif
 	$(SILENCE)mkdir -p $(dir $@)
 	$(SILENCE)$(CPPUTEST_CC_PREFIX)$(COMPILE.c) $(DEP_FLAGS) $(OUTPUT_OPTION) $<
 
@@ -532,7 +546,9 @@ endif
 
 .PHONY: clean
 clean:
+ifndef MORE_SILENCE
 	@echo Making clean
+endif
 	$(SILENCE)$(RM) $(STUFF_TO_CLEAN)
 	$(SILENCE)rm -rf gcov $(CPPUTEST_OBJS_DIR) $(CPPUTEST_LIB_DIR)
 	$(SILENCE)find . -name "*.gcno" | xargs rm -f
