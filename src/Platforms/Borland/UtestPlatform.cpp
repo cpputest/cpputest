@@ -22,7 +22,7 @@
  * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMA
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #include <stdlib.h>
@@ -49,6 +49,7 @@
 #include <setjmp.h>
 #include <string.h>
 #include <math.h>
+#include <float.h>
 #include <ctype.h>
 #include <signal.h>
 
@@ -251,7 +252,7 @@ void* (*PlatformSpecificMemset)(void*, int, size_t) = memset;
 
 static int IsNanImplementation(double d)
 {
-    return isnan(d);
+    return _isnan(d);
 }
 
 static int IsInfImplementation(double d)
