@@ -217,13 +217,7 @@ int (*PlatformSpecificVSNprintf)(char *str, size_t size, const char* format, va_
 
 static PlatformSpecificFile PlatformSpecificFOpenImplementation(const char* filename, const char* flag)
 {
-#if defined(_WIN32) && defined(MINGW_HAS_SECURE_API)
-  FILE* file;
-   fopen_s(&file, filename, flag);
-   return file;
-#else
    return fopen(filename, flag);
-#endif
 }
 
 static void PlatformSpecificFPutsImplementation(const char* str, PlatformSpecificFile file)
