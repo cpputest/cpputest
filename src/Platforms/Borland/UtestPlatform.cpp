@@ -62,9 +62,10 @@ static jmp_buf test_exit_jmp_buf[10];
 static int jmp_buf_index = 0;
 
 // There is a possibility that a compiler provides fork but not waitpid.
+// TODO consider using spawn() and cwait()?
 #if !defined(CPPUTEST_HAVE_FORK) || !defined(CPPUTEST_HAVE_WAITPID)
 
-static void GccPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin*, TestResult* result)
+static void BorlandPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin*, TestResult* result)
 {
     result->addFailure(TestFailure(shell, "-p doesn't work on this platform, as it is lacking fork.\b"));
 }
@@ -94,7 +95,7 @@ static void SetTestFailureByStatusCode(UtestShell* shell, TestResult* result, in
     }
 }
 
-static void GccPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
+static void BorlandPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
 {
     const pid_t syscallError = -1;
     pid_t cpid;
@@ -155,7 +156,7 @@ TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
 }
 
 void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell* shell, TestPlugin* plugin, TestResult* result) =
-        GccPlatformSpecificRunTestInASeperateProcess;
+        BorlandPlatformSpecificRunTestInASeperateProcess;
 int (*PlatformSpecificFork)(void) = PlatformSpecificForkImplementation;
 int (*PlatformSpecificWaitPid)(int, int*, int) = PlatformSpecificWaitPidImplementation;
 
