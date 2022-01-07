@@ -257,7 +257,7 @@ static int IsNanImplementation(double d)
 
 static int IsInfImplementation(double d)
 {
-    return isinf(d);
+    return !(_finite(d) || _isnan(d));
 }
 
 double (*PlatformSpecificFabs)(double) = fabs;
