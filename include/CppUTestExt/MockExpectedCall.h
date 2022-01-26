@@ -77,6 +77,15 @@ public:
     virtual MockExpectedCall& withFunctionPointerParameter(const SimpleString& name, void (*value)())=0;
     virtual MockExpectedCall& withConstPointerParameter(const SimpleString& name, const void* value)=0;
     virtual MockExpectedCall& withMemoryBufferParameter(const SimpleString& name, const unsigned char* value, size_t size)=0;
+
+#if defined(__cplusplus) && __cplusplus >= 201103L
+    template<typename E, typename = typename std::enable_if<std::is_enum<E>::value>::type>
+    MockExpectedCall& withParameter(const SimpleString& name, E enumValue)
+    {
+        return withParameter(name, static_cast<typename std::underlying_type<E>::type>(enumValue));
+    }
+#endif
+
     virtual MockExpectedCall& andReturnValue(bool value)=0;
     virtual MockExpectedCall& andReturnValue(int value)=0;
     virtual MockExpectedCall& andReturnValue(unsigned int value)=0;
@@ -89,6 +98,14 @@ public:
     virtual MockExpectedCall& andReturnValue(void* value)=0;
     virtual MockExpectedCall& andReturnValue(const void* value)=0;
     virtual MockExpectedCall& andReturnValue(void (*value)())=0;
+
+#if defined(__cplusplus) && __cplusplus >= 201103L
+    template<typename E, typename = typename std::enable_if<std::is_enum<E>::value>::type>
+    MockExpectedCall& andReturnValue(E enumValue)
+    {
+        return andReturnValue(static_cast<typename std::underlying_type<E>::type>(enumValue));
+    }
+#endif
 
     virtual MockExpectedCall& onObject(void* objectPtr)=0;
 };

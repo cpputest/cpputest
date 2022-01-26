@@ -86,6 +86,42 @@ TEST(MockParameterTest, expectOneLongLongIntegerParameterAndValue)
 
 #endif
 
+#if defined(__cplusplus) && __cplusplus >= 201103L
+
+enum class TestScopedEnum { A, B };
+enum class TestScopedEnumUnsignedChar : unsigned char { A = 3, B = 5 };
+
+TEST(MockParameterTest, expectOneScopedEnumParameterAndValue)
+{
+  TestScopedEnum value = TestScopedEnum::A;
+  mock().expectOneCall("foo").withParameter("parameter", value);
+  mock().actualCall("foo").withParameter("parameter", value);
+
+  mock().checkExpectations();
+}
+
+TEST(MockParameterTest, expectOneScopedEnumClassUnsignedCharParameterAndValue)
+{
+  TestScopedEnumUnsignedChar value = TestScopedEnumUnsignedChar::A;
+  mock().expectOneCall("foo").withParameter("parameter", value);
+  mock().actualCall("foo").withParameter("parameter", value);
+
+  mock().checkExpectations();
+}
+
+#endif
+
+enum TestUnscopedEnum { TestUnscopedEnum_A, TestUnscopedEnum_B };
+
+TEST(MockParameterTest, expectOneUnscopedEnumClassParameterAndValue)
+{
+  TestUnscopedEnum value = TestUnscopedEnum_A;
+  mock().expectOneCall("foo").withParameter("parameter", value);
+  mock().actualCall("foo").withParameter("parameter", value);
+
+  mock().checkExpectations();
+}
+
 TEST(MockParameterTest, mismatchedIntegerTypesIntAndLongAreAllowed)
 {
     mock().expectOneCall("foo").withParameter("parameter", (int)1);

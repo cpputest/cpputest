@@ -241,4 +241,14 @@ SimpleString StringFrom(const std::string& other);
 
 #endif
 
+#if defined(__cplusplus) && __cplusplus >= 201103L
+
+template<typename E, typename = typename std::enable_if<std::is_enum<E>::value>::type>
+SimpleString StringFrom(E enumValue)
+{
+  return StringFrom(static_cast<typename std::underlying_type<E>::type>(enumValue));
+}
+
+#endif
+
 #endif

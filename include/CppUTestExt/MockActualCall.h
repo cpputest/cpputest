@@ -75,6 +75,14 @@ public:
     virtual MockActualCall& withConstPointerParameter(const SimpleString& name, const void* value)=0;
     virtual MockActualCall& withMemoryBufferParameter(const SimpleString& name, const unsigned char* value, size_t size)=0;
 
+#if defined(__cplusplus) && __cplusplus >= 201103L
+    template<typename E, typename = typename std::enable_if<std::is_enum<E>::value>::type>
+    MockActualCall& withParameter(const SimpleString& name, E enumValue)
+    {
+        return withParameter(name, static_cast<typename std::underlying_type<E>::type>(enumValue));
+    }
+#endif
+
     virtual bool hasReturnValue()=0;
     virtual MockNamedValue returnValue()=0;
 
@@ -113,6 +121,27 @@ public:
 
     virtual void (*returnFunctionPointerValue())()=0;
     virtual void (*returnFunctionPointerValueOrDefault(void (*default_value)()))()=0;
+
+    bool returnValueOrDefault(bool default_value) { return returnBoolValueOrDefault(default_value); }
+    int returnValueOrDefault(int default_value) { return returnIntValueOrDefault(default_value); }
+    unsigned long int returnValueOrDefault(unsigned long int default_value) { return returnUnsignedLongIntValueOrDefault(default_value); }
+    long int returnValueOrDefault(long int default_value) { return returnLongIntValueOrDefault(default_value); }
+    cpputest_ulonglong returnValueOrDefault(cpputest_ulonglong default_value) { return returnUnsignedLongLongIntValueOrDefault(default_value); }
+    cpputest_longlong returnValueOrDefault(cpputest_longlong default_value) { return returnLongLongIntValueOrDefault(default_value); }
+    unsigned int returnValueOrDefault(unsigned int default_value) { return returnUnsignedIntValueOrDefault(default_value); }
+    const char * returnValueOrDefault(const char * default_value) { return returnStringValueOrDefault(default_value); }
+    double returnValueOrDefault(double default_value) { return returnDoubleValueOrDefault(default_value); }
+    void * returnValueOrDefault(void * default_value) { return returnPointerValueOrDefault(default_value); }
+    const void * returnValueOrDefault(const void * default_value) { return returnConstPointerValueOrDefault(default_value); }
+    void (*returnValueOrDefault(void (*default_value)()))() { return returnFunctionPointerValueOrDefault(default_value); }
+
+#if defined(__cplusplus) && __cplusplus >= 201103L
+    template<typename E, typename = typename std::enable_if<std::is_enum<E>::value>::type>
+    E returnValueOrDefault(E enumValue)
+    {
+      return static_cast<E>(returnValueOrDefault(static_cast<typename std::underlying_type<E>::type>(enumValue)));
+    }
+#endif
 
     virtual MockActualCall& onObject(const void* objectPtr)=0;
 };
