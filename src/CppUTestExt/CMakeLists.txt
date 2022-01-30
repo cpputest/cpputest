@@ -40,19 +40,23 @@ set(CppUTestExt_headers
         ${CppUTestRootDirectory}/include/CppUTestExt/MockSupport.h
 )
 
-add_library(CppUTestExt STATIC ${CppUTestExt_src} ${CppUTestExt_headers})
-target_link_libraries(CppUTestExt ${CPPUNIT_EXTERNAL_LIBRARIES})
+add_library(${CppUTestExtLibName} STATIC ${CppUTestExt_src} ${CppUTestExt_headers})
+target_link_libraries(${CppUTestExtLibName} ${CPPUNIT_EXTERNAL_LIBRARIES})
+
+if(LIBNAME_POSTFIX_DEBUG)
+    set_target_properties(${CppUTestExtLibName} PROPERTIES DEBUG_POSTFIX "d")
+endif()
 
 #[[Arrange for the include directory to be added to the include paths of any CMake target depending on CppUTestExt.]]
-target_include_directories(CppUTestExt
+target_include_directories(${CppUTestExtLibName}
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../include>
         $<INSTALL_INTERFACE:include>
 )
 
-set_target_properties(CppUTestExt PROPERTIES
+set_target_properties(${CppUTestExtLibName} PROPERTIES
     PUBLIC_HEADER "${CppUTestExt_headers}")
-install(TARGETS CppUTestExt
+install(TARGETS ${CppUTestExtLibName}
     EXPORT CppUTestTargets
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
