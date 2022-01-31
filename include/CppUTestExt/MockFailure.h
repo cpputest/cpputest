@@ -93,7 +93,8 @@ public:
 class MockExpectedParameterDidntHappenFailure : public MockFailure
 {
 public:
-    MockExpectedParameterDidntHappenFailure(UtestShell* test, const SimpleString& functionName, const MockExpectedCallsList& expectations);
+    MockExpectedParameterDidntHappenFailure(UtestShell* test, const SimpleString& functionName, const MockExpectedCallsList& allExpectations, 
+                                            const MockExpectedCallsList& matchingExpectations);
 };
 
 class MockNoWayToCompareCustomTypeFailure : public MockFailure

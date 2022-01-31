@@ -253,6 +253,24 @@ TEST(MockExpectedCallsList, callToStringForUnfulfilledFunctions)
     STRCMP_EQUAL(expectedString.asCharString(), list->unfulfilledCallsToString().asCharString());
 }
 
+TEST(MockExpectedCallsList, callsWithMissingParametersToString)
+{
+    call1->withName("foo").withParameter("boo", 0);
+    call2->withName("bar").withParameter("baa", 10).withParameter("baz", "blah");
+    call2->inputParameterWasPassed("baa");
+
+    list->addExpectedCall(call1);
+    list->addExpectedCall(call2);
+
+    SimpleString expectedString;
+    expectedString = StringFromFormat("-%s\n-#%s\n-%s\n-#%s",
+                                      call1->callToString().asCharString(), 
+                                      call1->missingParametersToString().asCharString(),
+                                      call2->callToString().asCharString(), 
+                                      call2->missingParametersToString().asCharString());
+    STRCMP_EQUAL(expectedString.asCharString(), list->callsWithMissingParametersToString("-", "#").asCharString());
+}
+
 TEST(MockExpectedCallsList, callToStringForFulfilledFunctions)
 {
     call1->withName("foo");
