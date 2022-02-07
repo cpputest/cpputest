@@ -63,13 +63,20 @@ TEST_GROUP(MockFailureTest)
         MockFailureReporterForTest::clearReporter();
     }
 
-    void addCallsToList( unsigned int count )
+    void addThreeCallsToList()
     {
-        if(count >= 1) list->addExpectedCall(call1);
-        if(count >= 2) list->addExpectedCall(call2);
-        if(count >= 3) list->addExpectedCall(call3);
-        if(count >= 4) list->addExpectedCall(call4);
-        if(count >= 5) list->addExpectedCall(call5);
+        list->addExpectedCall(call1);
+        list->addExpectedCall(call2);
+        list->addExpectedCall(call3);
+    }
+
+    void addFiveCallsToList()
+    {
+        list->addExpectedCall(call1);
+        list->addExpectedCall(call2);
+        list->addExpectedCall(call3);
+        list->addExpectedCall(call4);
+        list->addExpectedCall(call5);
     }
 
     void checkUnexpectedNthCallMessage(unsigned int count, const char* expectedOrdinal)
@@ -122,7 +129,7 @@ TEST(MockFailureTest, expectedCallDidNotHappen)
     call2->withName("world").withParameter("boo", 2).withParameter("hello", "world");
     call3->withName("haphaphap");
     call3->callWasMade(1);
-    addCallsToList(3);
+    addThreeCallsToList();
 
     MockExpectedCallsDidntHappenFailure failure(UtestShell::getCurrent(), *list);
     STRCMP_EQUAL("Mock Failure: Expected call WAS NOT fulfilled.\n"
@@ -152,7 +159,7 @@ TEST(MockFailureTest, MockUnexpectedInputParameterFailure)
     call1->withName("foo").withParameter("boo", 2);
     call2->withName("foo").withParameter("boo", 3.3);
     call3->withName("unrelated");
-    addCallsToList(3);
+    addThreeCallsToList();
 
     MockNamedValue actualParameter("bar");
     actualParameter.setValue(2);
@@ -175,7 +182,7 @@ TEST(MockFailureTest, MockUnexpectedOutputParameterFailure)
     call1->withName("foo").withOutputParameterReturning("boo", &out1, sizeof(out1));
     call2->withName("foo").withOutputParameterReturning("boo", &out2, sizeof(out2));
     call3->withName("unrelated");
-    addCallsToList(3);
+    addThreeCallsToList();
 
     MockNamedValue actualParameter("bar");
     actualParameter.setValue((void *)0x123);
@@ -197,7 +204,7 @@ TEST(MockFailureTest, MockUnexpectedUnmodifiedOutputParameterFailure)
     call1->withName("foo").withOutputParameterReturning("boo", &out1, sizeof(out1));
     call2->withName("foo").withUnmodifiedOutputParameter("boo");
     call3->withName("unrelated");
-    addCallsToList(3);
+    addThreeCallsToList();
 
     MockNamedValue actualParameter("bar");
     actualParameter.setValue((void *)0x123);
@@ -218,7 +225,7 @@ TEST(MockFailureTest, MockUnexpectedParameterValueFailure)
     call1->withName("foo").withParameter("boo", 2);
     call2->withName("foo").withParameter("boo", 10);
     call3->withName("unrelated");
-    addCallsToList(3);
+    addThreeCallsToList();
 
     MockNamedValue actualParameter("boo");
     actualParameter.setValue(20);
@@ -246,7 +253,7 @@ TEST(MockFailureTest, MockExpectedParameterDidntHappenFailure)
     call3->inputParameterWasPassed("bar");
     call4->withName("foo").withParameter("bar", 20);
     call5->withName("unrelated");
-    addCallsToList(5);
+    addFiveCallsToList();
 
     MockExpectedCallsList matchingCalls;
     matchingCalls.addExpectedCall(call1);
@@ -281,7 +288,7 @@ TEST(MockFailureTest, MockUnexpectedObjectFailure)
     call2->callWasMade(1);
     call2->wasPassedToObject();
     call3->withName("unrelated");
-    addCallsToList(3);
+    addThreeCallsToList();
 
     MockUnexpectedObjectFailure failure(UtestShell::getCurrent(), "foo", (void*)0x1, *list);
     STRCMP_EQUAL(StringFromFormat (
@@ -301,7 +308,7 @@ TEST(MockFailureTest, MockExpectedObjectDidntHappenFailure)
     call2->callWasMade(1);
     call2->wasPassedToObject();
     call3->withName("unrelated");
-    addCallsToList(3);
+    addThreeCallsToList();
 
     MockExpectedObjectDidntHappenFailure failure(UtestShell::getCurrent(), "foo", *list);
     STRCMP_EQUAL(StringFromFormat(
