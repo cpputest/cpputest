@@ -344,14 +344,17 @@ SimpleString MockExpectedCallsList::fulfilledCallsToString(const SimpleString& l
     return stringOrNoneTextWhenEmpty(str, linePrefix);
 }
 
-SimpleString MockExpectedCallsList::missingParametersToString() const
+SimpleString MockExpectedCallsList::callsWithMissingParametersToString(const SimpleString& linePrefix, 
+                                                                       const SimpleString& missingParametersPrefix) const
 {
     SimpleString str;
     for (MockExpectedCallsListNode* p = head_; p; p = p->next_)
-        if (! p->expectedCall_->isMatchingActualCall())
-            str = appendStringOnANewLine(str, "", p->expectedCall_->missingParametersToString());
+    {
+        str = appendStringOnANewLine(str, linePrefix, p->expectedCall_->callToString());
+        str = appendStringOnANewLine(str, linePrefix + missingParametersPrefix, p->expectedCall_->missingParametersToString());
+    }
 
-    return stringOrNoneTextWhenEmpty(str, "");
+    return stringOrNoneTextWhenEmpty(str, linePrefix);
 }
 
 bool MockExpectedCallsList::hasUnmatchingExpectationsBecauseOfMissingParameters() const

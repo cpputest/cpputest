@@ -398,7 +398,7 @@ void MockCheckedActualCall::checkExpectations()
     }
 
     if (potentiallyMatchingExpectations_.hasUnmatchingExpectationsBecauseOfMissingParameters()) {
-        MockExpectedParameterDidntHappenFailure failure(getTest(), getName(), allExpectations_);
+        MockExpectedParameterDidntHappenFailure failure(getTest(), getName(), allExpectations_, potentiallyMatchingExpectations_);
         failTest(failure);
     }
     else {
