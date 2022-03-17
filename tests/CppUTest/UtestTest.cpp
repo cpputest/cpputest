@@ -205,6 +205,42 @@ TEST(UtestShell, TestStopsAfterSetupFailure)
     LONGS_EQUAL(0, stopAfterFailure);
 }
 
+#if CPPUTEST_USE_STD_CPP_LIB
+static void thrownUnknownExceptionMethod_()
+{
+    throw 33;
+    stopAfterFailure++;
+}
+
+TEST(UtestShell, TestStopsAfterUnknownExceptionIsThrown)
+{
+    stopAfterFailure = 0;
+    fixture.setTestFunction(thrownUnknownExceptionMethod_);
+    fixture.runAllTests();
+    LONGS_EQUAL(1, fixture.getFailureCount());
+    fixture.assertPrintContains("Unexpected exception of unknown type was thrown");
+    LONGS_EQUAL(0, stopAfterFailure);
+}
+
+static void thrownStandardExceptionMethod_()
+{
+    throw std::runtime_error("exception text");
+    stopAfterFailure++;
+}
+
+TEST(UtestShell, TestStopsAfterStandardExceptionIsThrown)
+{
+    stopAfterFailure = 0;
+    fixture.setTestFunction(thrownStandardExceptionMethod_);
+    fixture.runAllTests();
+    LONGS_EQUAL(1, fixture.getFailureCount());
+    fixture.assertPrintContains("Unexpected exception of type '");
+    fixture.assertPrintContains("runtime_error");
+    fixture.assertPrintContains("' was thrown: exception text");
+    LONGS_EQUAL(0, stopAfterFailure);
+}
+#endif
+
 TEST(UtestShell, veryVebose)
 {
     UtestShell shell("Group", "name", __FILE__, __LINE__);

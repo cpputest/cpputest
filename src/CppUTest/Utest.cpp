@@ -375,10 +375,15 @@ void UtestShell::failWith(const TestFailure& failure)
 
 void UtestShell::failWith(const TestFailure& failure, const TestTerminator& terminator)
 {
-    hasFailed_ = true;
-    getTestResult()->addFailure(failure);
+    addFailure(failure);
     terminator.exitCurrentTest();
 } // LCOV_EXCL_LINE
+
+void UtestShell::addFailure(const TestFailure& failure)
+{
+    hasFailed_ = true;
+    getTestResult()->addFailure(failure);
+}
 
 void UtestShell::exitTest(const TestTerminator& terminator)
 {
@@ -646,6 +651,18 @@ void Utest::run()
     {
         PlatformSpecificRestoreJumpBuffer();
     }
+#if CPPUTEST_USE_STD_CPP_LIB
+    catch (const std::exception& e)
+    {
+        PlatformSpecificRestoreJumpBuffer();
+        current->addFailure(UnexpectedExceptionFailure(current, e));
+    }
+    catch (...)
+    {
+        PlatformSpecificRestoreJumpBuffer();
+        current->addFailure(UnexpectedExceptionFailure(current));
+    }
+#endif
 
     try {
         current->printVeryVerbose("\n--------  before teardown: ");
@@ -656,7 +673,18 @@ void Utest::run()
     {
         PlatformSpecificRestoreJumpBuffer();
     }
-
+#if CPPUTEST_USE_STD_CPP_LIB
+    catch (const std::exception& e)
+    {
+        PlatformSpecificRestoreJumpBuffer();
+        current->addFailure(UnexpectedExceptionFailure(current, e));
+    }
+    catch (...)
+    {
+        PlatformSpecificRestoreJumpBuffer();
+        current->addFailure(UnexpectedExceptionFailure(current));
+    }
+#endif
 }
 #else
 
