@@ -466,7 +466,7 @@ TEST(CommandLineArguments, printUsage)
 {
     STRCMP_EQUAL(
             "use -h for more extensive help\n"
-            "usage [-h] [-v] [-vv] [-c] [-p] [-lg] [-ln] [-ri] [-r#] [-f]\n"
+            "usage [-h] [-v] [-vv] [-c] [-p] [-lg] [-ln] [-ri] [-r#] [-f] [-e]\n"
             "      [-g|sg|xg|xsg groupName]... [-n|sn|xn|xsn testName]... [-t groupName.testName]...\n"
             "      [-b] [-s [randomizerSeed>0]] [\"TEST(groupName, testName)\"]...\n"
             "      [-o{normal, junit, teamcity}] [-k packageName]\n",
@@ -549,4 +549,12 @@ TEST(CommandLineArguments, setOptCrashOnFail)
     const char* argv[] = { "tests.exe", "-f"};
     CHECK(newArgumentParser(argc, argv));
     CHECK(args->isCrashingOnFail());
+}
+
+TEST(CommandLineArguments, setOptRethrowExceptions)
+{
+    int argc = 2;
+    const char* argv[] = { "tests.exe", "-e"};
+    CHECK(newArgumentParser(argc, argv));
+    CHECK(args->isRethrowingExceptions());
 }

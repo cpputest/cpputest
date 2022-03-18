@@ -140,6 +140,8 @@ static const CrashingTestTerminator crashingTestTerminator;
 
 const TestTerminator *UtestShell::currentTestTerminator_ = &normalTestTerminator;
 
+bool UtestShell::rethrowExceptions_ = false;
+
 /******************************** */
 
 UtestShell::UtestShell() :
@@ -229,16 +231,25 @@ void UtestShell::runOneTestInCurrentProcess(TestPlugin* plugin, TestResult& resu
     UtestShell::setTestResult(&result);
     UtestShell::setCurrentTest(this);
 
-    result.printVeryVerbose("\n---- before createTest: ");
-    Utest* testToRun = createTest();
-    result.printVeryVerbose("\n---- after createTest: ");
+    Utest* testToRun = nullptr;
+    try
+    {
+        result.printVeryVerbose("\n---- before createTest: ");
+        testToRun = createTest();
+        result.printVeryVerbose("\n---- after createTest: ");
 
-    result.printVeryVerbose("\n------ before runTest: ");
-    testToRun->run();
-    result.printVeryVerbose("\n------ after runTest: ");
+        result.printVeryVerbose("\n------ before runTest: ");
+        testToRun->run();
+        result.printVeryVerbose("\n------ after runTest: ");
 
-    UtestShell::setCurrentTest(savedTest);
-    UtestShell::setTestResult(savedResult);
+        UtestShell::setCurrentTest(savedTest);
+        UtestShell::setTestResult(savedResult);
+    }
+    catch(...)
+    {
+        destroyTest(testToRun);
+        throw;
+    }
 
     result.printVeryVerbose("\n---- before destroyTest: ");
     destroyTest(testToRun);
@@ -616,6 +627,16 @@ void UtestShell::restoreDefaultTestTerminator()
     currentTestTerminator_ = &normalTestTerminator;
 }
 
+void UtestShell::setRethrowExceptions(bool rethrowExceptions)
+{
+    rethrowExceptions_ = rethrowExceptions;
+}
+
+bool UtestShell::isRethrowingExceptions()
+{
+    return rethrowExceptions_;
+}
+
 ExecFunctionTestShell::~ExecFunctionTestShell()
 {
 }
@@ -656,11 +677,19 @@ void Utest::run()
     {
         PlatformSpecificRestoreJumpBuffer();
         current->addFailure(UnexpectedExceptionFailure(current, e));
+        if (current->isRethrowingExceptions())
+        {
+            throw;
+        }
     }
     catch (...)
     {
         PlatformSpecificRestoreJumpBuffer();
         current->addFailure(UnexpectedExceptionFailure(current));
+        if (current->isRethrowingExceptions())
+        {
+            throw;
+        }
     }
 #endif
 
@@ -678,11 +707,19 @@ void Utest::run()
     {
         PlatformSpecificRestoreJumpBuffer();
         current->addFailure(UnexpectedExceptionFailure(current, e));
+        if (current->isRethrowingExceptions())
+        {
+            throw;
+        }
     }
     catch (...)
     {
         PlatformSpecificRestoreJumpBuffer();
         current->addFailure(UnexpectedExceptionFailure(current));
+        if (current->isRethrowingExceptions())
+        {
+            throw;
+        }
     }
 #endif
 }

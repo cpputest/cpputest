@@ -96,6 +96,8 @@ void CommandLineTestRunner::initializeTestRun()
     if (arguments_->runTestsInSeperateProcess()) registry_->setRunTestsInSeperateProcess();
     if (arguments_->isRunIgnored()) registry_->setRunIgnored();
     if (arguments_->isCrashingOnFail()) UtestShell::setCrashOnFail();
+
+    UtestShell::setRethrowExceptions( arguments_->isRethrowingExceptions() );
 }
 
 int CommandLineTestRunner::runAllTests()

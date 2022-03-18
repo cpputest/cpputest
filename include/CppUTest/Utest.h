@@ -99,6 +99,9 @@ public:
     static void setCrashOnFail();
     static void restoreDefaultTestTerminator();
 
+    static void setRethrowExceptions(bool rethrowExceptions);
+    static bool isRethrowingExceptions();
+
 public:
     UtestShell(const char* groupName, const char* testName, const char* fileName, size_t lineNumber);
     virtual ~UtestShell();
@@ -190,6 +193,8 @@ private:
     static TestResult* testResult_;
 
     static const TestTerminator *currentTestTerminator_;
+    
+    static bool rethrowExceptions_;
 };
 
 

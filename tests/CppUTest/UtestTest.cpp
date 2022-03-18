@@ -239,6 +239,52 @@ TEST(UtestShell, TestStopsAfterStandardExceptionIsThrown)
     fixture.assertPrintContains("' was thrown: exception text");
     LONGS_EQUAL(0, stopAfterFailure);
 }
+
+TEST(UtestShell, UnknownExceptionIsRethrownIfEnabled)
+{
+    bool exceptionRethrown = false;
+    stopAfterFailure = 0;
+    UtestShell::setRethrowExceptions(true);
+    fixture.setTestFunction(thrownUnknownExceptionMethod_);
+    try
+    {
+        fixture.runAllTests();
+        stopAfterFailure++;
+    }
+    catch(...)
+    {
+        exceptionRethrown = true;
+    }
+    CHECK_TRUE(exceptionRethrown);
+    LONGS_EQUAL(1, fixture.getFailureCount());
+    fixture.assertPrintContains("Unexpected exception of unknown type was thrown");
+    LONGS_EQUAL(0, stopAfterFailure);
+    UtestShell::setRethrowExceptions(false);
+}
+
+TEST(UtestShell, StandardExceptionIsRethrownIfEnabled)
+{
+    bool exceptionRethrown = false;
+    stopAfterFailure = 0;
+    UtestShell::setRethrowExceptions(true);
+    fixture.setTestFunction(thrownStandardExceptionMethod_);
+    try
+    {
+        fixture.runAllTests();
+        stopAfterFailure++;
+    }
+    catch(const std::exception &)
+    {
+        exceptionRethrown = true;
+    }
+    CHECK_TRUE(exceptionRethrown);
+    LONGS_EQUAL(1, fixture.getFailureCount());
+    fixture.assertPrintContains("Unexpected exception of type '");
+    fixture.assertPrintContains("runtime_error");
+    fixture.assertPrintContains("' was thrown: exception text");
+    LONGS_EQUAL(0, stopAfterFailure);
+    UtestShell::setRethrowExceptions(false);
+}
 #endif
 
 TEST(UtestShell, veryVebose)
