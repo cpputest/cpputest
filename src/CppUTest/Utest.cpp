@@ -672,10 +672,10 @@ void Utest::run()
     {
         PlatformSpecificRestoreJumpBuffer();
     }
-    catch (const std::exception& e)
+    catch (const std::exception &e)
     {
-        PlatformSpecificRestoreJumpBuffer();
         current->addFailure(UnexpectedExceptionFailure(current, e));
+        PlatformSpecificRestoreJumpBuffer();
         if (current->isRethrowingExceptions())
         {
             throw;
@@ -683,8 +683,8 @@ void Utest::run()
     }
     catch (...)
     {
-        PlatformSpecificRestoreJumpBuffer();
         current->addFailure(UnexpectedExceptionFailure(current));
+        PlatformSpecificRestoreJumpBuffer();
         if (current->isRethrowingExceptions())
         {
             throw;
@@ -700,10 +700,10 @@ void Utest::run()
     {
         PlatformSpecificRestoreJumpBuffer();
     }
-    catch (const std::exception& e)
+    catch (const std::exception &e)
     {
-        PlatformSpecificRestoreJumpBuffer();
         current->addFailure(UnexpectedExceptionFailure(current, e));
+        PlatformSpecificRestoreJumpBuffer();
         if (current->isRethrowingExceptions())
         {
             throw;
@@ -711,8 +711,8 @@ void Utest::run()
     }
     catch (...)
     {
-        PlatformSpecificRestoreJumpBuffer();
         current->addFailure(UnexpectedExceptionFailure(current));
+        PlatformSpecificRestoreJumpBuffer();
         if (current->isRethrowingExceptions())
         {
             throw;
