@@ -59,6 +59,8 @@
 
 #include "CppUTest/PlatformSpecificFunctions.h"
 
+const std::nothrow_t std::nothrow;
+
 static jmp_buf test_exit_jmp_buf[10];
 static int jmp_buf_index = 0;
 
