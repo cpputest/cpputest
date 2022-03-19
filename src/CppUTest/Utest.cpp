@@ -672,7 +672,6 @@ void Utest::run()
     {
         PlatformSpecificRestoreJumpBuffer();
     }
-#if CPPUTEST_USE_STD_CPP_LIB
     catch (const std::exception& e)
     {
         PlatformSpecificRestoreJumpBuffer();
@@ -691,7 +690,6 @@ void Utest::run()
             throw;
         }
     }
-#endif
 
     try {
         current->printVeryVerbose("\n--------  before teardown: ");
@@ -702,7 +700,6 @@ void Utest::run()
     {
         PlatformSpecificRestoreJumpBuffer();
     }
-#if CPPUTEST_USE_STD_CPP_LIB
     catch (const std::exception& e)
     {
         PlatformSpecificRestoreJumpBuffer();
@@ -721,7 +718,6 @@ void Utest::run()
             throw;
         }
     }
-#endif
 }
 #else
 
