@@ -231,7 +231,7 @@ void UtestShell::runOneTestInCurrentProcess(TestPlugin* plugin, TestResult& resu
     UtestShell::setTestResult(&result);
     UtestShell::setCurrentTest(this);
 
-    Utest* testToRun = nullptr;
+    Utest* testToRun = NULLPTR;
     try
     {
         result.printVeryVerbose("\n---- before createTest: ");
