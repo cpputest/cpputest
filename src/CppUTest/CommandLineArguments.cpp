@@ -72,6 +72,7 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
         else if (argument == "-ri") runIgnored_ = true;
         else if (argument == "-f") crashOnFail_ = true;
         else if (argument == "-e") rethrowExceptions_ = false;
+        else if (argument == "-ci") rethrowExceptions_ = false;
         else if (argument.startsWith("-r")) setRepeatCount(ac_, av_, i);
         else if (argument.startsWith("-g")) addGroupFilter(ac_, av_, i);
         else if (argument.startsWith("-t")) correctParameters = addGroupDotNameFilter(ac_, av_, i);
@@ -100,7 +101,7 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
 const char* CommandLineArguments::usage() const
 {
     return "use -h for more extensive help\n"
-           "usage [-h] [-v] [-vv] [-c] [-p] [-lg] [-ln] [-ri] [-r#] [-f] [-e]\n"
+           "usage [-h] [-v] [-vv] [-c] [-p] [-lg] [-ln] [-ri] [-r#] [-f] [-e] [-ci]\n"
            "      [-g|sg|xg|xsg groupName]... [-n|sn|xn|xsn testName]... [-t groupName.testName]...\n"
            "      [-b] [-s [randomizerSeed>0]] [\"TEST(groupName, testName)\"]...\n"
            "      [-o{normal, junit, teamcity}] [-k packageName]\n";
@@ -144,7 +145,8 @@ const char* CommandLineArguments::help() const
       "  -s [seed]        - shuffle tests randomly. Seed is optional\n"
       "  -r#              - repeat the tests some number (#) of times, or twice if # is not specified.\n"
       "  -f               - Cause the tests to crash on failure (to allow the test to be debugged if necessary)\n"
-      "  -e               - do not rethrow unexpected exceptions on failure\n";
+      "  -e               - do not rethrow unexpected exceptions on failure\n"
+      "  -ci              - continuous integration mode (equivalent to -e)\n";
 }
 
 bool CommandLineArguments::needHelp() const
