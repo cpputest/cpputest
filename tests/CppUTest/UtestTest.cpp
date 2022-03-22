@@ -214,12 +214,15 @@ static void thrownUnknownExceptionMethod_()
 
 TEST(UtestShell, TestStopsAfterUnknownExceptionIsThrown)
 {
+    bool initialRethrowExceptions = UtestShell::isRethrowingExceptions();
+    UtestShell::setRethrowExceptions(false);
     stopAfterFailure = 0;
     fixture.setTestFunction(thrownUnknownExceptionMethod_);
     fixture.runAllTests();
     LONGS_EQUAL(1, fixture.getFailureCount());
     fixture.assertPrintContains("Unexpected exception of unknown type was thrown");
     LONGS_EQUAL(0, stopAfterFailure);
+    UtestShell::setRethrowExceptions(initialRethrowExceptions);
 }
 
 static void thrownStandardExceptionMethod_()
@@ -230,6 +233,8 @@ static void thrownStandardExceptionMethod_()
 
 TEST(UtestShell, TestStopsAfterStandardExceptionIsThrown)
 {
+    bool initialRethrowExceptions = UtestShell::isRethrowingExceptions();
+    UtestShell::setRethrowExceptions(false);
     stopAfterFailure = 0;
     fixture.setTestFunction(thrownStandardExceptionMethod_);
     fixture.runAllTests();
@@ -238,10 +243,12 @@ TEST(UtestShell, TestStopsAfterStandardExceptionIsThrown)
     fixture.assertPrintContains("runtime_error");
     fixture.assertPrintContains("' was thrown: exception text");
     LONGS_EQUAL(0, stopAfterFailure);
+    UtestShell::setRethrowExceptions(initialRethrowExceptions);
 }
 
 TEST(UtestShell, UnknownExceptionIsRethrownIfEnabled)
 {
+    bool initialRethrowExceptions = UtestShell::isRethrowingExceptions();
     bool exceptionRethrown = false;
     stopAfterFailure = 0;
     UtestShell::setRethrowExceptions(true);
@@ -259,11 +266,12 @@ TEST(UtestShell, UnknownExceptionIsRethrownIfEnabled)
     LONGS_EQUAL(1, fixture.getFailureCount());
     fixture.assertPrintContains("Unexpected exception of unknown type was thrown");
     LONGS_EQUAL(0, stopAfterFailure);
-    UtestShell::setRethrowExceptions(false);
+    UtestShell::setRethrowExceptions(initialRethrowExceptions);
 }
 
 TEST(UtestShell, StandardExceptionIsRethrownIfEnabled)
 {
+    bool initialRethrowExceptions = UtestShell::isRethrowingExceptions();
     bool exceptionRethrown = false;
     stopAfterFailure = 0;
     UtestShell::setRethrowExceptions(true);
@@ -283,7 +291,7 @@ TEST(UtestShell, StandardExceptionIsRethrownIfEnabled)
     fixture.assertPrintContains("runtime_error");
     fixture.assertPrintContains("' was thrown: exception text");
     LONGS_EQUAL(0, stopAfterFailure);
-    UtestShell::setRethrowExceptions(false);
+    UtestShell::setRethrowExceptions(initialRethrowExceptions);
 }
 #endif
 

@@ -504,6 +504,7 @@ TEST(CommandLineArguments, checkDefaultArguments)
     CHECK(args->isEclipseOutput());
     CHECK(SimpleString("") == args->getPackageName());
     CHECK(!args->isCrashingOnFail());
+    CHECK(args->isRethrowingExceptions());
 }
 
 TEST(CommandLineArguments, setPackageName)
@@ -556,5 +557,5 @@ TEST(CommandLineArguments, setOptRethrowExceptions)
     int argc = 2;
     const char* argv[] = { "tests.exe", "-e"};
     CHECK(newArgumentParser(argc, argv));
-    CHECK(args->isRethrowingExceptions());
+    CHECK_FALSE(args->isRethrowingExceptions());
 }
