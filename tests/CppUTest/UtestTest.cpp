@@ -66,7 +66,7 @@ TEST(UtestShell, compareDoubles)
     CHECK(doubles_equal(a, a, 0.000000001));
 }
 
-#ifdef CPPUTEST_HAS_NAN
+#if CPPUTEST_HAS_NAN == 1
 TEST(UtestShell, compareDoublesNaN)
 {
     double not_a_number = zero / zero;
@@ -76,7 +76,7 @@ TEST(UtestShell, compareDoublesNaN)
 }
 #endif
 
-#ifdef CPPUTEST_HAS_INF
+#if CPPUTEST_HAS_INF == 1
 TEST(UtestShell, compareDoublesInf)
 {
     double infinity = 1 / zero;
