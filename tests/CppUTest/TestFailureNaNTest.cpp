@@ -35,6 +35,8 @@ const int failLineNumber = 2;
 const char* failFileName = "fail.cpp";
 }
 
+#if CPPUTEST_HAS_NAN == 1 && CPPUTEST_HAS_INF == 1
+
 static double zero = 0.0;
 static double one = 1.0;
 static double not_a_number = zero / zero;
@@ -115,3 +117,5 @@ TEST(TestFailureNanAndInf, DoublesEqualThresholdIsInf)
                 "\tbut was  <Nan - Not a number> threshold used was <Inf - Infinity>\n"
                 "\tCannot make comparisons with Nan", f);
 }
+
+#endif
