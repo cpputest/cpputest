@@ -232,8 +232,11 @@ void UtestShell::runOneTestInCurrentProcess(TestPlugin* plugin, TestResult& resu
     UtestShell::setCurrentTest(this);
 
     Utest* testToRun = NULLPTR;
+
+#if CPPUTEST_USE_STD_CPP_LIB
     try
     {
+#endif
         result.printVeryVerbose("\n---- before createTest: ");
         testToRun = createTest();
         result.printVeryVerbose("\n---- after createTest: ");
@@ -244,12 +247,14 @@ void UtestShell::runOneTestInCurrentProcess(TestPlugin* plugin, TestResult& resu
 
         UtestShell::setCurrentTest(savedTest);
         UtestShell::setTestResult(savedResult);
+#if CPPUTEST_USE_STD_CPP_LIB
     }
     catch(...)
     {
         destroyTest(testToRun);
         throw;
     }
+#endif
 
     result.printVeryVerbose("\n---- before destroyTest: ");
     destroyTest(testToRun);
