@@ -1,5 +1,3 @@
-include_directories(../ApplicationLib)
-
 add_executable(ExampleTests
     AllTests.cpp
     CircularBufferTest.cpp
@@ -8,6 +6,11 @@ add_executable(ExampleTests
     HelloTest.cpp
     MockDocumentationTest.cpp
     PrinterTest.cpp
+)
+
+target_include_directories(ExampleTests
+    PRIVATE
+        ../ApplicationLib
 )
 
 cpputest_normalize_test_output_location(ExampleTests)
