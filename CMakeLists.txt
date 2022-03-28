@@ -136,8 +136,6 @@ target_include_directories(${CppUTestLibName}
 )
 add_definitions(-DHAVE_CONFIG_H)
 
-include_directories(${CppUTestRootDirectory}/include)
-
 if (EXTENSIONS)
     add_subdirectory(src/CppUTestExt)
 endif (EXTENSIONS)
