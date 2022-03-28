@@ -33,7 +33,9 @@ else (MSVC)
     set(CPP_PLATFORM GccNoStdC)
 endif (MSVC)
 
-include("${CppUTestRootDirectory}/cmake/Modules/CppUTestWarningFlags.cmake")
+if (CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+    include("${CppUTestRootDirectory}/cmake/Modules/CppUTestWarningFlags.cmake")
+endif ()
 
 if (NOT STD_CPP)
     set(CPPUTEST_STD_CPP_LIB_DISABLED 1)
