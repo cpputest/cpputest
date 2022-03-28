@@ -43,6 +43,8 @@ set(CppUTestExt_headers
 add_library(${CppUTestExtLibName} STATIC ${CppUTestExt_src} ${CppUTestExt_headers})
 target_link_libraries(${CppUTestExtLibName} ${CPPUNIT_EXTERNAL_LIBRARIES})
 
+target_link_libraries(${CppUTestExtLibName} PUBLIC ${CppUTestLibName})
+
 if(LIBNAME_POSTFIX_DEBUG)
     set_target_properties(${CppUTestExtLibName} PROPERTIES DEBUG_POSTFIX "d")
 endif()

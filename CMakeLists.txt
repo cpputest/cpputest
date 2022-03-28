@@ -124,15 +124,19 @@ include(GNUInstallDirs)
 
 enable_testing()
 
+add_subdirectory(src/CppUTest)
+
 configure_file (
     "${PROJECT_SOURCE_DIR}/config.h.cmake"
     "${PROJECT_BINARY_DIR}/generated/CppUTestGeneratedConfig.h"
     )
-include_directories(${PROJECT_BINARY_DIR})
+target_include_directories(${CppUTestLibName}
+    PUBLIC
+        $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}>
+)
 add_definitions(-DHAVE_CONFIG_H)
 
 include_directories(${CppUTestRootDirectory}/include)
-add_subdirectory(src/CppUTest)
 
 if (EXTENSIONS)
     add_subdirectory(src/CppUTestExt)
