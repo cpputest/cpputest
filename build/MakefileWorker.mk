@@ -46,6 +46,7 @@
 #		of the test harness
 #   CPPUTEST_USE_GCOV - Turn on coverage analysis
 #		Clean then build with this flag set to Y, then 'make gcov'
+#   CPPUTEST_USE_GCOV_NO_GCNO_FILES - Disable gcov's .gcno files from being generated
 #   CPPUTEST_MAPFILE - generate a map file
 #   CPPUTEST_WARNINGFLAGS - overly picky by default
 #   OTHER_MAKEFILE_TO_INCLUDE - a hook to use this makefile to make
@@ -168,6 +169,11 @@ endif
 # Use gcov, off by default
 ifndef CPPUTEST_USE_GCOV
 	CPPUTEST_USE_GCOV = N
+endif
+
+# Skip generating gcov's .gcno files, off by default
+ifndef CPPUTEST_USE_GCOV_NO_GCNO_FILES
+	CPPUTEST_USE_GCOV_NO_GCNO_FILES = N
 endif
 
 ifndef CPPUTEST_PEDANTIC_ERRORS
@@ -323,8 +329,12 @@ endif
 
 
 ifeq ($(CPPUTEST_USE_GCOV), Y)
-	CPPUTEST_CXXFLAGS += -fprofile-arcs -ftest-coverage
-	CPPUTEST_CFLAGS += -fprofile-arcs -ftest-coverage
+	CPPUTEST_CXXFLAGS += -fprofile-arcs
+	CPPUTEST_CFLAGS += -fprofile-arcs
+	ifneq ($(CPPUTEST_USE_GCOV_NO_GCNO_FILES), Y)
+		CPPUTEST_CXXFLAGS += -ftest-coverage
+		CPPUTEST_CFLAGS += -ftest-coverage
+	endif
 endif
 
 CPPUTEST_CXXFLAGS += $(CPPUTEST_WARNINGFLAGS) $(CPPUTEST_CXX_WARNINGFLAGS)
