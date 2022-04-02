@@ -30,6 +30,10 @@ if (CPP_PLATFORM)
         PRIVATE
             ${CMAKE_CURRENT_LIST_DIR}/../Platforms/${CPP_PLATFORM}/UtestPlatform.cpp
     )
+    target_include_directories(${CppUTestLibName}
+        PUBLIC
+            $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/../../include/Platforms/${CPP_PLATFORM}>
+    )
 endif(CPP_PLATFORM)
 
 #[[Arrange for the include directory to be added to the include paths of any CMake target depending on CppUTest.]]
