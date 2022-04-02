@@ -16,6 +16,11 @@ if (EXISTS "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
     conan_basic_setup()
 endif()
 
+# Backport option handling fix from CMake 3.13 if available.
+if(POLICY CMP0077)
+  cmake_policy(SET CMP0077 NEW)
+endif()
+
 option(STD_C "Use the standard C library" ON)
 option(STD_CPP "Use the standard C++ library" ON)
 option(CPPUTEST_FLAGS "Use the CFLAGS/CXXFLAGS/LDFLAGS set by CppUTest" ON)
