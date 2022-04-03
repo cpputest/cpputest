@@ -79,6 +79,9 @@ set_target_properties(${CppUTestLibName} PROPERTIES
 if (WIN32)
     target_link_libraries(${CppUTestLibName} winmm)
 endif (WIN32)
+
+add_library(CppUTest::${CppUTestLibName} ALIAS ${CppUTestLibName})
+
 install(TARGETS ${CppUTestLibName}
     EXPORT CppUTestTargets
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}

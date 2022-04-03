@@ -58,6 +58,9 @@ target_include_directories(${CppUTestExtLibName}
 
 set_target_properties(${CppUTestExtLibName} PROPERTIES
     PUBLIC_HEADER "${CppUTestExt_headers}")
+
+add_library(CppUTest::${CppUTestExtLibName} ALIAS ${CppUTestExtLibName})
+
 install(TARGETS ${CppUTestExtLibName}
     EXPORT CppUTestTargets
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
