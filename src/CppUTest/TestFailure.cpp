@@ -392,9 +392,10 @@ UnexpectedExceptionFailure::UnexpectedExceptionFailure(UtestShell* test)
 {
 }
 
-#if defined(__GNUC__)
-static SimpleString demangle(const char* name)
+static SimpleString getExceptionTypeName(const std::exception &e)
 {
+    const char *name = typeid(e).name();
+#if defined(__GNUC__)
     int status = -1;
 
     std::unique_ptr<char, void(*)(void*)> demangledName {
@@ -402,15 +403,14 @@ static SimpleString demangle(const char* name)
         std::free
     };
 
-    return (status==0) ? demangledName.get() : name ;
-}
-#define DEMANGLE(name) demangle(name).asCharString()
+    return (status==0) ? demangledName.get() : name;
 #else
-#define DEMANGLE(name) (name)
+    return name;
 #endif
+}
 
 UnexpectedExceptionFailure::UnexpectedExceptionFailure(UtestShell* test, const std::exception &e)
-: TestFailure(test, StringFromFormat("Unexpected exception of type '%s' was thrown: %s", DEMANGLE(typeid(e).name()), e.what()))
+: TestFailure(test, StringFromFormat("Unexpected exception of type '%s' was thrown: %s", getExceptionTypeName(e).asCharString(), e.what()))
 {
 }
 #endif
