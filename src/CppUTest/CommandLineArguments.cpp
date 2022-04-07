@@ -30,7 +30,10 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 
 CommandLineArguments::CommandLineArguments(int ac, const char *const *av) :
-    ac_(ac), av_(av), needHelp_(false), verbose_(false), veryVerbose_(false), color_(false), runTestsAsSeperateProcess_(false), listTestGroupNames_(false), listTestGroupAndCaseNames_(false), listTestLocations_(false), runIgnored_(false), reversing_(false), crashOnFail_(false), shuffling_(false), shufflingPreSeeded_(false), repeat_(1), shuffleSeed_(0), groupFilters_(NULLPTR), nameFilters_(NULLPTR), outputType_(OUTPUT_ECLIPSE)
+    ac_(ac), av_(av), needHelp_(false), verbose_(false), veryVerbose_(false), color_(false), runTestsAsSeperateProcess_(false),
+    listTestGroupNames_(false), listTestGroupAndCaseNames_(false), listTestLocations_(false), runIgnored_(false), reversing_(false),
+    crashOnFail_(false), rethrowExceptions_(true), shuffling_(false), shufflingPreSeeded_(false), repeat_(1), shuffleSeed_(0),
+    groupFilters_(NULLPTR), nameFilters_(NULLPTR), outputType_(OUTPUT_ECLIPSE)
 {
 }
 
@@ -68,6 +71,8 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
         else if (argument == "-ll") listTestLocations_ = true;
         else if (argument == "-ri") runIgnored_ = true;
         else if (argument == "-f") crashOnFail_ = true;
+        else if (argument == "-e") rethrowExceptions_ = false;
+        else if (argument == "-ci") rethrowExceptions_ = false;
         else if (argument.startsWith("-r")) setRepeatCount(ac_, av_, i);
         else if (argument.startsWith("-g")) addGroupFilter(ac_, av_, i);
         else if (argument.startsWith("-t")) correctParameters = addGroupDotNameFilter(ac_, av_, i);
@@ -96,7 +101,7 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
 const char* CommandLineArguments::usage() const
 {
     return "use -h for more extensive help\n"
-           "usage [-h] [-v] [-vv] [-c] [-p] [-lg] [-ln] [-ri] [-r#] [-f]\n"
+           "usage [-h] [-v] [-vv] [-c] [-p] [-lg] [-ln] [-ri] [-r#] [-f] [-e] [-ci]\n"
            "      [-g|sg|xg|xsg groupName]... [-n|sn|xn|xsn testName]... [-t groupName.testName]...\n"
            "      [-b] [-s [randomizerSeed>0]] [\"TEST(groupName, testName)\"]...\n"
            "      [-o{normal, junit, teamcity}] [-k packageName]\n";
@@ -139,7 +144,9 @@ const char* CommandLineArguments::help() const
       "  -b               - run the tests backwards, reversing the normal way\n"
       "  -s [seed]        - shuffle tests randomly. Seed is optional\n"
       "  -r#              - repeat the tests some number (#) of times, or twice if # is not specified.\n"
-      "  -f               - Cause the tests to crash on failure (to allow the test to be debugged if necessary)\n";
+      "  -f               - Cause the tests to crash on failure (to allow the test to be debugged if necessary)\n"
+      "  -e               - do not rethrow unexpected exceptions on failure\n"
+      "  -ci              - continuous integration mode (equivalent to -e)\n";
 }
 
 bool CommandLineArguments::needHelp() const
@@ -201,6 +208,11 @@ bool CommandLineArguments::isReversing() const
 bool CommandLineArguments::isCrashingOnFail() const
 {
     return crashOnFail_;
+}
+
+bool CommandLineArguments::isRethrowingExceptions() const
+{
+    return rethrowExceptions_;
 }
 
 bool CommandLineArguments::isShuffling() const

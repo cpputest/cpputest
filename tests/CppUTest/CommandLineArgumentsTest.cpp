@@ -466,7 +466,7 @@ TEST(CommandLineArguments, printUsage)
 {
     STRCMP_EQUAL(
             "use -h for more extensive help\n"
-            "usage [-h] [-v] [-vv] [-c] [-p] [-lg] [-ln] [-ri] [-r#] [-f]\n"
+            "usage [-h] [-v] [-vv] [-c] [-p] [-lg] [-ln] [-ri] [-r#] [-f] [-e] [-ci]\n"
             "      [-g|sg|xg|xsg groupName]... [-n|sn|xn|xsn testName]... [-t groupName.testName]...\n"
             "      [-b] [-s [randomizerSeed>0]] [\"TEST(groupName, testName)\"]...\n"
             "      [-o{normal, junit, teamcity}] [-k packageName]\n",
@@ -504,6 +504,22 @@ TEST(CommandLineArguments, checkDefaultArguments)
     CHECK(args->isEclipseOutput());
     CHECK(SimpleString("") == args->getPackageName());
     CHECK(!args->isCrashingOnFail());
+    CHECK(args->isRethrowingExceptions());
+}
+
+TEST(CommandLineArguments, checkContinuousIntegrationMode)
+{
+    int argc = 2;
+    const char* argv[] = { "tests.exe", "-ci" };
+    CHECK(newArgumentParser(argc, argv));
+    CHECK(!args->isVerbose());
+    LONGS_EQUAL(1, args->getRepeatCount());
+    CHECK(NULLPTR == args->getGroupFilters());
+    CHECK(NULLPTR == args->getNameFilters());
+    CHECK(args->isEclipseOutput());
+    CHECK(SimpleString("") == args->getPackageName());
+    CHECK(!args->isCrashingOnFail());
+    CHECK_FALSE(args->isRethrowingExceptions());
 }
 
 TEST(CommandLineArguments, setPackageName)
@@ -549,4 +565,12 @@ TEST(CommandLineArguments, setOptCrashOnFail)
     const char* argv[] = { "tests.exe", "-f"};
     CHECK(newArgumentParser(argc, argv));
     CHECK(args->isCrashingOnFail());
+}
+
+TEST(CommandLineArguments, setOptRethrowExceptions)
+{
+    int argc = 2;
+    const char* argv[] = { "tests.exe", "-e"};
+    CHECK(newArgumentParser(argc, argv));
+    CHECK_FALSE(args->isRethrowingExceptions());
 }

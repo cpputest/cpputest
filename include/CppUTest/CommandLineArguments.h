@@ -53,6 +53,7 @@ public:
     bool isShuffling() const;
     bool isReversing() const;
     bool isCrashingOnFail() const;
+    bool isRethrowingExceptions() const;
     size_t getShuffleSeed() const;
     const TestFilter* getGroupFilters() const;
     const TestFilter* getNameFilters() const;
@@ -85,6 +86,7 @@ private:
     bool runIgnored_;
     bool reversing_;
     bool crashOnFail_;
+    bool rethrowExceptions_;
     bool shuffling_;
     bool shufflingPreSeeded_;
     size_t repeat_;

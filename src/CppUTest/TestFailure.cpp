@@ -31,6 +31,13 @@
 #include "CppUTest/SimpleString.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
+#if CPPUTEST_USE_STD_CPP_LIB
+#include <typeinfo>
+#if defined(__GNUC__)
+#include <cxxabi.h>
+#endif
+#endif
+
 TestFailure::TestFailure(UtestShell* test, const char* fileName, size_t lineNumber, const SimpleString& theMessage) :
     testName_(test->getFormattedName()), testNameOnly_(test->getName()), fileName_(fileName), lineNumber_(lineNumber), testFileName_(test->getFile()), testLineNumber_(test->getLineNumber()), message_(theMessage)
 {
@@ -378,3 +385,32 @@ FeatureUnsupportedFailure::FeatureUnsupportedFailure(UtestShell* test, const cha
 
     message_ += StringFromFormat("The feature \"%s\" is not supported in this environment or with the feature set selected when building the library.", featureName.asCharString());
 }
+
+#if CPPUTEST_USE_STD_CPP_LIB
+UnexpectedExceptionFailure::UnexpectedExceptionFailure(UtestShell* test)
+: TestFailure(test, "Unexpected exception of unknown type was thrown.")
+{
+}
+
+static SimpleString getExceptionTypeName(const std::exception &e)
+{
+    const char *name = typeid(e).name();
+#if defined(__GNUC__)
+    int status = -1;
+
+    std::unique_ptr<char, void(*)(void*)> demangledName {
+        abi::__cxa_demangle(name, nullptr, nullptr, &status),
+        std::free
+    };
+
+    return (status==0) ? demangledName.get() : name;
+#else
+    return name;
+#endif
+}
+
+UnexpectedExceptionFailure::UnexpectedExceptionFailure(UtestShell* test, const std::exception &e)
+: TestFailure(test, StringFromFormat("Unexpected exception of type '%s' was thrown: %s", getExceptionTypeName(e).asCharString(), e.what()))
+{
+}
+#endif

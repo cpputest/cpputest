@@ -140,6 +140,8 @@ static const CrashingTestTerminator crashingTestTerminator;
 
 const TestTerminator *UtestShell::currentTestTerminator_ = &normalTestTerminator;
 
+bool UtestShell::rethrowExceptions_ = false;
+
 /******************************** */
 
 UtestShell::UtestShell() :
@@ -229,16 +231,30 @@ void UtestShell::runOneTestInCurrentProcess(TestPlugin* plugin, TestResult& resu
     UtestShell::setTestResult(&result);
     UtestShell::setCurrentTest(this);
 
-    result.printVeryVerbose("\n---- before createTest: ");
-    Utest* testToRun = createTest();
-    result.printVeryVerbose("\n---- after createTest: ");
+    Utest* testToRun = NULLPTR;
 
-    result.printVeryVerbose("\n------ before runTest: ");
-    testToRun->run();
-    result.printVeryVerbose("\n------ after runTest: ");
+#if CPPUTEST_USE_STD_CPP_LIB
+    try
+    {
+#endif
+        result.printVeryVerbose("\n---- before createTest: ");
+        testToRun = createTest();
+        result.printVeryVerbose("\n---- after createTest: ");
 
-    UtestShell::setCurrentTest(savedTest);
-    UtestShell::setTestResult(savedResult);
+        result.printVeryVerbose("\n------ before runTest: ");
+        testToRun->run();
+        result.printVeryVerbose("\n------ after runTest: ");
+
+        UtestShell::setCurrentTest(savedTest);
+        UtestShell::setTestResult(savedResult);
+#if CPPUTEST_USE_STD_CPP_LIB
+    }
+    catch(...)
+    {
+        destroyTest(testToRun);
+        throw;
+    }
+#endif
 
     result.printVeryVerbose("\n---- before destroyTest: ");
     destroyTest(testToRun);
@@ -375,10 +391,15 @@ void UtestShell::failWith(const TestFailure& failure)
 
 void UtestShell::failWith(const TestFailure& failure, const TestTerminator& terminator)
 {
-    hasFailed_ = true;
-    getTestResult()->addFailure(failure);
+    addFailure(failure);
     terminator.exitCurrentTest();
 } // LCOV_EXCL_LINE
+
+void UtestShell::addFailure(const TestFailure& failure)
+{
+    hasFailed_ = true;
+    getTestResult()->addFailure(failure);
+}
 
 void UtestShell::exitTest(const TestTerminator& terminator)
 {
@@ -611,6 +632,16 @@ void UtestShell::restoreDefaultTestTerminator()
     currentTestTerminator_ = &normalTestTerminator;
 }
 
+void UtestShell::setRethrowExceptions(bool rethrowExceptions)
+{
+    rethrowExceptions_ = rethrowExceptions;
+}
+
+bool UtestShell::isRethrowingExceptions()
+{
+    return rethrowExceptions_;
+}
+
 ExecFunctionTestShell::~ExecFunctionTestShell()
 {
 }
@@ -646,6 +677,24 @@ void Utest::run()
     {
         PlatformSpecificRestoreJumpBuffer();
     }
+    catch (const std::exception &e)
+    {
+        current->addFailure(UnexpectedExceptionFailure(current, e));
+        PlatformSpecificRestoreJumpBuffer();
+        if (current->isRethrowingExceptions())
+        {
+            throw;
+        }
+    }
+    catch (...)
+    {
+        current->addFailure(UnexpectedExceptionFailure(current));
+        PlatformSpecificRestoreJumpBuffer();
+        if (current->isRethrowingExceptions())
+        {
+            throw;
+        }
+    }
 
     try {
         current->printVeryVerbose("\n--------  before teardown: ");
@@ -656,7 +705,24 @@ void Utest::run()
     {
         PlatformSpecificRestoreJumpBuffer();
     }
-
+    catch (const std::exception &e)
+    {
+        current->addFailure(UnexpectedExceptionFailure(current, e));
+        PlatformSpecificRestoreJumpBuffer();
+        if (current->isRethrowingExceptions())
+        {
+            throw;
+        }
+    }
+    catch (...)
+    {
+        current->addFailure(UnexpectedExceptionFailure(current));
+        PlatformSpecificRestoreJumpBuffer();
+        if (current->isRethrowingExceptions())
+        {
+            throw;
+        }
+    }
 }
 #else
 
