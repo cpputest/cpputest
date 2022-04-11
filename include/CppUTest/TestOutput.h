@@ -46,6 +46,9 @@ class TestResult;
 class TestOutput
 {
 public:
+    enum WorkingEnvironment {visualStudio, eclipse, detectEnvironment};
+    enum VerbosityLevel {level_quiet, level_verbose, level_veryVerbose};
+
     explicit TestOutput();
     virtual ~TestOutput();
 
@@ -56,43 +59,42 @@ public:
     virtual void printCurrentGroupStarted(const UtestShell& test);
     virtual void printCurrentGroupEnded(const TestResult& res);
 
-    virtual void verbose();
+    virtual void verbose(VerbosityLevel level);
     virtual void color();
-    virtual void setShuffleSeed(unsigned int);
     virtual void printBuffer(const char*)=0;
     virtual void print(const char*);
     virtual void print(long);
+    virtual void print(size_t);
     virtual void printDouble(double);
     virtual void printFailure(const TestFailure& failure);
-    virtual void printTestRun(int number, int total);
+    virtual void printTestRun(size_t number, size_t total);
     virtual void setProgressIndicator(const char*);
 
-    virtual void flush()=0;
+    virtual void printVeryVerbose(const char*);
 
-    enum WorkingEnvironment {visualStudio, eclipse, detectEnvironment};
+    virtual void flush()=0;
 
     static void setWorkingEnvironment(WorkingEnvironment workEnvironment);
     static WorkingEnvironment getWorkingEnvironment();
 
 protected:
 
-    virtual void printEclipseErrorInFileOnLine(SimpleString file, int lineNumber);
-    virtual void printVisualStudioErrorInFileOnLine(SimpleString file, int lineNumber);
+    virtual void printEclipseErrorInFileOnLine(SimpleString file, size_t lineNumber);
+    virtual void printVisualStudioErrorInFileOnLine(SimpleString file, size_t lineNumber);
 
     virtual void printProgressIndicator();
     void printFileAndLineForTestAndFailure(const TestFailure& failure);
     void printFileAndLineForFailure(const TestFailure& failure);
     void printFailureInTest(SimpleString testName);
     void printFailureMessage(SimpleString reason);
-    void printErrorInFileOnLineFormattedForWorkingEnvironment(SimpleString testFile, int lineNumber);
+    void printErrorInFileOnLineFormattedForWorkingEnvironment(SimpleString testFile, size_t lineNumber);
 
     TestOutput(const TestOutput&);
     TestOutput& operator=(const TestOutput&);
 
     int dotCount_;
-    bool verbose_;
+    VerbosityLevel verbose_;
     bool color_;
-    unsigned int shuffleSeed_;
     const char* progressIndication_;
 
     static WorkingEnvironment workingEnvironment_;
@@ -176,26 +178,27 @@ public:
     virtual void setOutputTwo(TestOutput* output);
 
     CompositeTestOutput();
-    virtual ~CompositeTestOutput();
+    virtual ~CompositeTestOutput() _destructor_override;
 
-    virtual void printTestsStarted();
-    virtual void printTestsEnded(const TestResult& result);
+    virtual void printTestsStarted() _override;
+    virtual void printTestsEnded(const TestResult& result) _override;
 
-    virtual void printCurrentTestStarted(const UtestShell& test);
-    virtual void printCurrentTestEnded(const TestResult& res);
-    virtual void printCurrentGroupStarted(const UtestShell& test);
-    virtual void printCurrentGroupEnded(const TestResult& res);
+    virtual void printCurrentTestStarted(const UtestShell& test) _override;
+    virtual void printCurrentTestEnded(const TestResult& res) _override;
+    virtual void printCurrentGroupStarted(const UtestShell& test) _override;
+    virtual void printCurrentGroupEnded(const TestResult& res) _override;
 
-    virtual void verbose();
-    virtual void color();
-    virtual void printBuffer(const char*);
-    virtual void print(const char*);
-    virtual void print(long);
-    virtual void printDouble(double);
-    virtual void printFailure(const TestFailure& failure);
-    virtual void setProgressIndicator(const char*);
+    virtual void verbose(VerbosityLevel level) _override;
+    virtual void color() _override;
+    virtual void printBuffer(const char*) _override;
+    virtual void print(const char*) _override;
+    virtual void print(long) _override;
+    virtual void print(size_t) _override;
+    virtual void printDouble(double) _override;
+    virtual void printFailure(const TestFailure& failure) _override;
+    virtual void setProgressIndicator(const char*) _override;
 
-    virtual void flush();
+    virtual void flush() _override;
 
 protected:
     CompositeTestOutput(const TestOutput&);

@@ -10,8 +10,8 @@ path_separator := /
 drive = $(subst $(CYGDRIVE),$(lastword $(subst /, ,$(CYGDRIVE))):/,$(1))
 convert_paths = $(if $(CYGDRIVE),$(subst /,$(path_separator),$(call drive,$(1))),$(1))
 
--include ../platforms/Dos/platform.mk
-include ../platforms/Dos/sources.mk
+-include $(CPPUTEST_HOME)/platforms/Dos/platform.mk
+include $(CPPUTEST_HOME)/platforms/Dos/sources.mk
 
 # Disable W013 unreachable code - it overreacts to CHECK_EQUAL macros
 # Disable W367 conditional expression in if statement is always true - same
@@ -30,8 +30,8 @@ CXXFLAGS := $(CFLAGS) -xds
 .PHONY: all clean
 
 all: CPPU.LIB CPPUX.LIB \
-     CPPU1.EXE CPPU2.EXE CPPU3.EXE \
-     CPPUX1.EXE CPPUX2.EXE CPPUX3.EXE CPPUX4.EXE
+     CPPU1.EXE CPPU2.EXE CPPU3.EXE CPPU4.EXE CPPU5.EXE CPPU6.EXE CPPU7.EXE CPPU8.EXE \
+     CPPUX1.EXE CPPUX2.EXE CPPUX3.EXE CPPUX4.EXE CPPUX5.EXE CPPUX6.EXE CPPUX7.EXE CPPUX8.EXE CPPUX9.EXE
 
 clean:
 	rm -rf ../src/CppUTest/*.o ../src/CppUTestExt/*.o \

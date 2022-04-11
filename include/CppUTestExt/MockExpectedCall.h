@@ -60,6 +60,7 @@ public:
     virtual MockExpectedCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value)=0;
     virtual MockExpectedCall& withOutputParameterReturning(const SimpleString& name, const void* value, size_t size)=0;
     virtual MockExpectedCall& withOutputParameterOfTypeReturning(const SimpleString& typeName, const SimpleString& name, const void* value)=0;
+    virtual MockExpectedCall& withUnmodifiedOutputParameter(const SimpleString& name)=0;
     virtual MockExpectedCall& ignoreOtherParameters()=0;
 
     virtual MockExpectedCall& withBoolParameter(const SimpleString& name, bool value)=0;

@@ -39,12 +39,12 @@ struct JUnitTestCaseResultNode
     }
 
     SimpleString name_;
-    long execTime_;
+    size_t execTime_;
     TestFailure* failure_;
     bool ignored_;
     SimpleString file_;
-    int lineNumber_;
-    int checkCount_;
+    size_t lineNumber_;
+    size_t checkCount_;
     JUnitTestCaseResultNode* next_;
 };
 
@@ -55,11 +55,11 @@ struct JUnitTestGroupResult
     {
     }
 
-    int testCount_;
-    int failureCount_;
-    int totalCheckCount_;
-    long startTime_;
-    long groupExecTime_;
+    size_t testCount_;
+    size_t failureCount_;
+    size_t totalCheckCount_;
+    size_t startTime_;
+    size_t groupExecTime_;
     SimpleString group_;
     JUnitTestCaseResultNode* head_;
     JUnitTestCaseResultNode* tail_;
@@ -92,7 +92,6 @@ void JUnitTestOutput::resetTestGroupResult()
     JUnitTestCaseResultNode* cur = impl_->results_.head_;
     while (cur) {
         JUnitTestCaseResultNode* tmp = cur->next_;
-        ;
         delete cur->failure_;
         delete cur;
         cur = tmp;
@@ -111,8 +110,7 @@ void JUnitTestOutput::printCurrentGroupStarted(const UtestShell& /*test*/)
 
 void JUnitTestOutput::printCurrentTestEnded(const TestResult& result)
 {
-    impl_->results_.tail_->execTime_
-            = result.getCurrentTestTotalExecutionTime();
+    impl_->results_.tail_->execTime_ = result.getCurrentTestTotalExecutionTime();
     impl_->results_.tail_->checkCount_ = result.getCheckCount();
 }
 
@@ -131,7 +129,7 @@ void JUnitTestOutput::printCurrentTestStarted(const UtestShell& test)
 {
     impl_->results_.testCount_++;
     impl_->results_.group_ = test.getGroup();
-    impl_->results_.startTime_ = GetPlatformSpecificTimeInMillis();
+    impl_->results_.startTime_ = (size_t) GetPlatformSpecificTimeInMillis();
 
     if (impl_->results_.tail_ == NULLPTR) {
         impl_->results_.head_ = impl_->results_.tail_
@@ -152,10 +150,24 @@ void JUnitTestOutput::printCurrentTestStarted(const UtestShell& test)
 SimpleString JUnitTestOutput::createFileName(const SimpleString& group)
 {
     SimpleString fileName = "cpputest_";
+    if (!impl_->package_.isEmpty()) {
+        fileName += impl_->package_;
+        fileName += "_";
+    }
     fileName += group;
-    fileName.replace('/', '_');
-    fileName += ".xml";
-    return fileName;
+    return encodeFileName(fileName) + ".xml";
+}
+
+SimpleString JUnitTestOutput::encodeFileName(const SimpleString& fileName)
+{
+    // special character list based on: https://en.wikipedia.org/wiki/Filename
+    static const char* const forbiddenCharacters = "/\\?%*:|\"<>";
+
+    SimpleString result = fileName;
+    for (const char* sym = forbiddenCharacters; *sym; ++sym) {
+        result.replace(*sym, '_');
+    }
+    return result;
 }
 
 void JUnitTestOutput::setPackageName(const SimpleString& package)
@@ -176,9 +188,9 @@ void JUnitTestOutput::writeTestSuiteSummary()
             buf =
                     StringFromFormat(
                             "<testsuite errors=\"0\" failures=\"%d\" hostname=\"localhost\" name=\"%s\" tests=\"%d\" time=\"%d.%03d\" timestamp=\"%s\">\n",
-                            impl_->results_.failureCount_,
+                            (int)impl_->results_.failureCount_,
                             impl_->results_.group_.asCharString(),
-                            impl_->results_.testCount_,
+                            (int) impl_->results_.testCount_,
                             (int) (impl_->results_.groupExecTime_ / 1000), (int) (impl_->results_.groupExecTime_ % 1000),
                             GetPlatformSpecificTimeString());
     writeToFile(buf.asCharString());
@@ -190,6 +202,17 @@ void JUnitTestOutput::writeProperties()
     writeToFile("</properties>\n");
 }
 
+SimpleString JUnitTestOutput::encodeXmlText(const SimpleString& textbody)
+{
+    SimpleString buf = textbody.asCharString();
+    buf.replace("&", "&amp;");
+    buf.replace("\"", "&quot;");
+    buf.replace("<", "&lt;");
+    buf.replace(">", "&gt;");
+    buf.replace("\n", "{newline}");
+    return buf;
+}
+
 void JUnitTestOutput::writeTestCases()
 {
     JUnitTestCaseResultNode* cur = impl_->results_.head_;
@@ -198,13 +221,13 @@ void JUnitTestOutput::writeTestCases()
         SimpleString buf = StringFromFormat(
                 "<testcase classname=\"%s%s%s\" name=\"%s\" assertions=\"%d\" time=\"%d.%03d\" file=\"%s\" line=\"%d\">\n",
                 impl_->package_.asCharString(),
-                impl_->package_.isEmpty() == true ? "" : ".",
+                impl_->package_.isEmpty() ? "" : ".",
                 impl_->results_.group_.asCharString(),
                 cur->name_.asCharString(),
-                cur->checkCount_ - impl_->results_.totalCheckCount_,
+                (int) (cur->checkCount_ - impl_->results_.totalCheckCount_),
                 (int) (cur->execTime_ / 1000), (int)(cur->execTime_ % 1000),
                 cur->file_.asCharString(),
-                cur->lineNumber_);
+                (int) cur->lineNumber_);
         writeToFile(buf.asCharString());
 
         impl_->results_.totalCheckCount_ = cur->checkCount_;
@@ -222,23 +245,21 @@ void JUnitTestOutput::writeTestCases()
 
 void JUnitTestOutput::writeFailure(JUnitTestCaseResultNode* node)
 {
-    SimpleString message = node->failure_->getMessage().asCharString();
-    message.replace('"', '\'');
-    message.replace('<', '[');
-    message.replace('>', ']');
-    message.replace("&", "&amp;");
-    message.replace("\n", "{newline}");
     SimpleString buf = StringFromFormat(
             "<failure message=\"%s:%d: %s\" type=\"AssertionFailedError\">\n",
             node->failure_->getFileName().asCharString(),
-            node->failure_->getFailureLineNumber(), message.asCharString());
+            (int) node->failure_->getFailureLineNumber(),
+            encodeXmlText(node->failure_->getMessage()).asCharString());
     writeToFile(buf.asCharString());
     writeToFile("</failure>\n");
 }
 
+
 void JUnitTestOutput::writeFileEnding()
 {
-    writeToFile("<system-out>"); writeToFile(impl_->stdOutput_); writeToFile("</system-out>\n");
+    writeToFile("<system-out>");
+    writeToFile(encodeXmlText(impl_->stdOutput_));
+    writeToFile("</system-out>\n");
     writeToFile("<system-err></system-err>\n");
     writeToFile("</testsuite>\n");
 }
@@ -266,6 +287,10 @@ void JUnitTestOutput::print(const char *output)
 }
 
 void JUnitTestOutput::print(long)
+{
+}
+
+void JUnitTestOutput::print(size_t)
 {
 }
 

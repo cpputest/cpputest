@@ -51,7 +51,7 @@ TEST_GROUP(TestOutput)
     TestFailure *f3;
     TestResult* result;
 
-    void setup()
+    void setup() _override
     {
         mock = new StringBufferTestOutput();
         printer = mock;
@@ -66,7 +66,7 @@ TEST_GROUP(TestOutput)
         TestOutput::setWorkingEnvironment(TestOutput::eclipse);
 
     }
-    void teardown()
+    void teardown() _override
     {
         TestOutput::setWorkingEnvironment(TestOutput::detectEnvironment);
         delete printer;
@@ -75,6 +75,12 @@ TEST_GROUP(TestOutput)
         delete f2;
         delete f3;
         delete result;
+    }
+
+    void runOneTest()
+    {
+        result->countTest();
+        result->countRun();
     }
 };
 
@@ -87,9 +93,18 @@ TEST(TestOutput, PrintConstCharStar)
 
 TEST(TestOutput, PrintLong)
 {
-    printer->print(1234);
+    long number = 1234;
+    printer->print(number);
     STRCMP_EQUAL("1234", mock->getOutput().asCharString());
 }
+
+TEST(TestOutput, PrintSize)
+{
+    size_t ten = 10;
+    printer->print(ten);
+    STRCMP_EQUAL("10", mock->getOutput().asCharString());
+}
+
 
 TEST(TestOutput, PrintDouble)
 {
@@ -120,16 +135,18 @@ TEST(TestOutput, PrintTestALot)
 TEST(TestOutput, PrintTestALotAndSimulateRepeatRun)
 {
     for (int i = 0; i < 60; ++i) {
+        runOneTest();
         printer->printCurrentTestEnded(*result);
     }
 
     printer->printTestsEnded(*result);
 
     for (int i = 0; i < 60; ++i) {
+        runOneTest();
         printer->printCurrentTestEnded(*result);
     }
     STRCMP_EQUAL("..................................................\n.........." \
-        "\nOK (0 tests, 0 ran, 0 checks, 0 ignored, 0 filtered out, 10 ms)\n\n" \
+        "\nOK (60 tests, 60 ran, 0 checks, 0 ignored, 0 filtered out, 10 ms)\n\n" \
         "..................................................\n..........", mock->getOutput().asCharString());
 }
 
@@ -147,14 +164,14 @@ TEST(TestOutput, SetProgressIndicator)
 
 TEST(TestOutput, PrintTestVerboseStarted)
 {
-    mock->verbose();
+    mock->verbose(TestOutput::level_verbose);
     printer->printCurrentTestStarted(*tst);
     STRCMP_EQUAL("TEST(group, test)", mock->getOutput().asCharString());
 }
 
 TEST(TestOutput, PrintTestVerboseEnded)
 {
-    mock->verbose();
+    mock->verbose(TestOutput::level_verbose);
     result->currentTestStarted(tst);
     millisTime = 5;
     result->currentTestEnded(tst);
@@ -164,17 +181,21 @@ TEST(TestOutput, PrintTestVerboseEnded)
 TEST(TestOutput, printColorWithSuccess)
 {
     mock->color();
+    runOneTest();
     printer->printTestsEnded(*result);
-    STRCMP_EQUAL("\n\033[32;1mOK (0 tests, 0 ran, 0 checks, 0 ignored, 0 filtered out, 10 ms)\033[m\n\n", mock->getOutput().asCharString());
+    STRCMP_EQUAL("\n\033[32;1mOK (1 tests, 1 ran, 0 checks, 0 ignored, 0 filtered out, 10 ms)\033[m\n\n",
+        mock->getOutput().asCharString());
 }
 
 TEST(TestOutput, printColorWithFailures)
 {
     mock->color();
+    runOneTest();
     result->addFailure(*f);
     printer->flush();
     printer->printTestsEnded(*result);
-    STRCMP_EQUAL("\n\033[31;1mErrors (1 failures, 0 tests, 0 ran, 0 checks, 0 ignored, 0 filtered out, 10 ms)\033[m\n\n", mock->getOutput().asCharString());
+    STRCMP_EQUAL("\n\033[31;1mErrors (1 failures, 1 tests, 1 ran, 0 checks, 0 ignored, 0 filtered out, 10 ms)"
+                 "\033[m\n\n", mock->getOutput().asCharString());
 }
 
 TEST(TestOutput, PrintTestRun)
@@ -250,42 +271,53 @@ TEST(TestOutput, printTestsEndedWithFailures)
     STRCMP_EQUAL("\nErrors (1 failures, 0 tests, 0 ran, 0 checks, 0 ignored, 0 filtered out, 10 ms)\n\n", mock->getOutput().asCharString());
 }
 
+TEST(TestOutput, printTestsEndedWithNoTestsRunOrIgnored)
+{
+    result->countTest();
+    printer->flush();
+    printer->printTestsEnded(*result);
+    STRCMP_EQUAL("\nErrors (ran nothing, 1 tests, 0 ran, 0 checks, 0 ignored, 0 filtered out, 10 ms)\n"
+                 "Note: test run failed because no tests were run or ignored. Assuming something went wrong. "
+                 "This often happens because of linking errors or typos in test filter.\n\n",
+        mock->getOutput().asCharString());
+}
+
 class CompositeTestOutputTestStringBufferTestOutput : public StringBufferTestOutput
 {
   public:
-    virtual void printTestsStarted()
+    virtual void printTestsStarted() _override
     {
       output += "Test Start\n";
     }
 
-    virtual void printTestsEnded(const TestResult& result)
+    virtual void printTestsEnded(const TestResult& result) _override
     {
-      output += StringFromFormat("Test End %d\n", result.getTestCount());
+      output += StringFromFormat("Test End %d\n", (int) result.getTestCount());
     }
 
-    void printCurrentGroupStarted(const UtestShell& test)
+    void printCurrentGroupStarted(const UtestShell& test) _override
     {
       output += StringFromFormat("Group %s Start\n", test.getGroup().asCharString());
     }
 
-    void printCurrentGroupEnded(const TestResult& res)
+    void printCurrentGroupEnded(const TestResult& res) _override
     {
-      output += StringFromFormat("Group End %d\n", res.getTestCount());
+      output += StringFromFormat("Group End %d\n", (int) res.getTestCount());
     }
 
-    virtual void printCurrentTestStarted(const UtestShell&)
+    virtual void printCurrentTestStarted(const UtestShell&) _override
     {
       output += "s";
     }
 
-    void flush()
+    void flush() _override
     {
       output += "flush";
     }
 
     virtual bool isVerbose()
     {
-      return verbose_;
+      return verbose_ == level_verbose || verbose_ == level_veryVerbose;
     }
 
     virtual bool isColor()
@@ -307,7 +339,7 @@ TEST_GROUP(CompositeTestOutput)
   TestResult* result;
   UtestShell* test;
 
-  void setup()
+  void setup() _override
   {
     output1 = new CompositeTestOutputTestStringBufferTestOutput;
     output2 = new CompositeTestOutputTestStringBufferTestOutput;
@@ -317,7 +349,7 @@ TEST_GROUP(CompositeTestOutput)
     test = new UtestShell("Group", "Name", "file", 10);
   }
 
-  void teardown()
+  void teardown() _override
   {
     delete test;
     delete result;
@@ -364,9 +396,18 @@ TEST(CompositeTestOutput, printChar)
 
 TEST(CompositeTestOutput, printLong)
 {
-  compositeOutput.print(10);
+  long ten = 10;
+  compositeOutput.print(ten);
   STRCMP_EQUAL("10", output1->getOutput().asCharString());
   STRCMP_EQUAL("10", output2->getOutput().asCharString());
+}
+
+TEST(CompositeTestOutput, PrintSize)
+{
+    size_t ten = 10;
+    compositeOutput.print(ten);
+    STRCMP_EQUAL("10", output1->getOutput().asCharString());
+    STRCMP_EQUAL("10", output2->getOutput().asCharString());
 }
 
 TEST(CompositeTestOutput, printDouble)
@@ -378,7 +419,7 @@ TEST(CompositeTestOutput, printDouble)
 
 TEST(CompositeTestOutput, verbose)
 {
-  compositeOutput.verbose();
+  compositeOutput.verbose(TestOutput::level_verbose);
   CHECK(output1->isVerbose());
   CHECK(output2->isVerbose());
 }
@@ -429,4 +470,3 @@ TEST(CompositeTestOutput, deletePreviousInstanceWhenSettingNew)
 
   // CHECK NO MEMORY LEAKS
 }
-

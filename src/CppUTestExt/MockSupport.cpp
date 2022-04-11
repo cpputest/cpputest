@@ -116,7 +116,7 @@ void MockSupport::clear()
     lastActualFunctionCall_ = NULLPTR;
 
     tracing_ = false;
-    MockActualCallTrace::instance().clear();
+    MockActualCallTrace::clearInstance();
 
     expectations_.deleteAllExpectationsAndClearList();
     ignoreOtherCalls_ = false;
@@ -185,7 +185,7 @@ bool MockSupport::callIsIgnored(const SimpleString& functionName)
 
 MockActualCall& MockSupport::actualCall(const SimpleString& functionName)
 {
-    const SimpleString scopeFuntionName = appendScopeToName(functionName);
+    const SimpleString scopeFunctionName = appendScopeToName(functionName);
 
     if (lastActualFunctionCall_) {
         lastActualFunctionCall_->checkExpectations();
@@ -194,15 +194,15 @@ MockActualCall& MockSupport::actualCall(const SimpleString& functionName)
     }
 
     if (!enabled_) return MockIgnoredActualCall::instance();
-    if (tracing_) return MockActualCallTrace::instance().withName(scopeFuntionName);
+    if (tracing_) return MockActualCallTrace::instance().withName(scopeFunctionName);
 
 
-    if (callIsIgnored(scopeFuntionName)) {
+    if (callIsIgnored(scopeFunctionName)) {
         return MockIgnoredActualCall::instance();
     }
 
     MockCheckedActualCall* call = createActualCall();
-    call->withName(scopeFuntionName);
+    call->withName(scopeFunctionName);
     return *call;
 }
 

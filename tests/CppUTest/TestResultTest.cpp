@@ -45,14 +45,14 @@ TEST_GROUP(TestResult)
 
     TestResult* res;
 
-    void setup()
+    void setup() _override
     {
         mock = new StringBufferTestOutput();
         printer = mock;
         res = new TestResult(*printer);
         UT_PTR_SET(GetPlatformSpecificTimeInMillis, MockGetPlatformSpecificTimeInMillis);
     }
-    void teardown()
+    void teardown() _override
     {
         delete printer;
         delete res;
@@ -63,4 +63,37 @@ TEST(TestResult, TestEndedWillPrintResultsAndExecutionTime)
 {
     res->testsEnded();
     CHECK(mock->getOutput().contains("10 ms"));
+}
+
+TEST(TestResult, ResultIsOkIfTestIsRunWithNoFailures)
+{
+    res->countTest();
+    res->countRun();
+    CHECK_FALSE(res->isFailure());
+}
+
+TEST(TestResult, ResultIsOkIfTestIsIgnored)
+{
+    res->countTest();
+    res->countIgnored();
+    CHECK_FALSE(res->isFailure());
+}
+
+TEST(TestResult, ResultIsNotOkIfFailures)
+{
+    res->countTest();
+    res->countRun();
+    res->addFailure(TestFailure(UtestShell::getCurrent(), StringFrom("dummy message")));
+    CHECK_TRUE(res->isFailure());
+}
+
+TEST(TestResult, ResultIsNotOkIfNoTestsAtAll)
+{
+    CHECK_TRUE(res->isFailure());
+}
+
+TEST(TestResult, ResultIsNotOkIfNoTestsRunOrIgnored)
+{
+    res->countTest();
+    CHECK_TRUE(res->isFailure());
 }

@@ -38,7 +38,7 @@ TEST_GROUP(MockExpectedCallsList)
     MockCheckedExpectedCall* call2;
     MockCheckedExpectedCall* call3;
     MockCheckedExpectedCall* call4;
-    void setup()
+    void setup() _override
     {
         list = new MockExpectedCallsList;
         call1 = new MockCheckedExpectedCall;
@@ -49,7 +49,7 @@ TEST_GROUP(MockExpectedCallsList)
         call2->withName("bar");
         call3->withName("boo");
     }
-    void teardown()
+    void teardown() _override
     {
         delete call1;
         delete call2;
@@ -57,6 +57,7 @@ TEST_GROUP(MockExpectedCallsList)
         delete call4;
         delete list;
         CHECK_NO_MOCK_FAILURE();
+        MockFailureReporterForTest::clearReporter();
     }
 };
 
@@ -250,6 +251,24 @@ TEST(MockExpectedCallsList, callToStringForUnfulfilledFunctions)
     SimpleString expectedString;
     expectedString = StringFromFormat("%s\n%s", call1->callToString().asCharString(), call2->callToString().asCharString());
     STRCMP_EQUAL(expectedString.asCharString(), list->unfulfilledCallsToString().asCharString());
+}
+
+TEST(MockExpectedCallsList, callsWithMissingParametersToString)
+{
+    call1->withName("foo").withParameter("boo", 0);
+    call2->withName("bar").withParameter("baa", 10).withParameter("baz", "blah");
+    call2->inputParameterWasPassed("baa");
+
+    list->addExpectedCall(call1);
+    list->addExpectedCall(call2);
+
+    SimpleString expectedString;
+    expectedString = StringFromFormat("-%s\n-#%s\n-%s\n-#%s",
+                                      call1->callToString().asCharString(), 
+                                      call1->missingParametersToString().asCharString(),
+                                      call2->callToString().asCharString(), 
+                                      call2->missingParametersToString().asCharString());
+    STRCMP_EQUAL(expectedString.asCharString(), list->callsWithMissingParametersToString("-", "#").asCharString());
 }
 
 TEST(MockExpectedCallsList, callToStringForFulfilledFunctions)

@@ -88,10 +88,10 @@ static long VisualCppTimeInMillis()
 	else 
 	{
 	#ifdef TIMERR_NOERROR
-		return timeGetTime();
+		return (long)timeGetTime();
 	#else
 		#if !defined(_WIN32_WINNT) || !defined(_WIN32_WINNT_VISTA) || (_WIN32_WINNT < _WIN32_WINNT_VISTA)
-			return GetTickCount();
+			return (long)GetTickCount();
 		#else
 			return (long)GetTickCount64();
 		#endif
@@ -185,6 +185,8 @@ static void VisualCppFree(void* memory)
     free(memory);
 }
 
+void (*PlatformSpecificSrand)(unsigned int) = srand;
+int (*PlatformSpecificRand)(void) = rand;
 void* (*PlatformSpecificMalloc)(size_t size) = VisualCppMalloc;
 void* (*PlatformSpecificRealloc)(void* memory, size_t size) = VisualCppReAlloc;
 void (*PlatformSpecificFree)(void* memory) = VisualCppFree;

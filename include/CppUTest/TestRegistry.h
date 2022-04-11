@@ -33,9 +33,9 @@
 #ifndef D_TestRegistry_h
 #define D_TestRegistry_h
 
+#include "StandardCLibrary.h"
 #include "SimpleString.h"
 #include "TestFilter.h"
-#include "Shuffle.h"
 
 class UtestShell;
 class TestResult;
@@ -49,11 +49,13 @@ public:
 
     virtual void addTest(UtestShell *test);
     virtual void unDoLastAddTest();
-    virtual int countTests();
+    virtual size_t countTests();
     virtual void runAllTests(TestResult& result);
-    virtual void shuffleRunOrder(rand_func_t);
+    virtual void shuffleTests(size_t seed);
+    virtual void reverseTests();
     virtual void listTestGroupNames(TestResult& result);
     virtual void listTestGroupAndCaseNames(TestResult& result);
+    virtual void listTestLocations(TestResult& result);
     virtual void setNameFilters(const TestFilter* filters);
     virtual void setGroupFilters(const TestFilter* filters);
     virtual void installPlugin(TestPlugin* plugin);
@@ -75,6 +77,7 @@ public:
     virtual void setRunTestsInSeperateProcess();
     int getCurrentRepetition();
     void setRunIgnored();
+
 private:
 
     bool testShouldRun(UtestShell* test, TestResult& result);

@@ -27,6 +27,7 @@
 
 #include "CppUTest/CommandLineTestRunner.h"
 #include "CppUTest/TestRegistry.h"
+#include "CppUTest/SimpleStringInternalCache.h"
 #include "CppUTestExt/MemoryReporterPlugin.h"
 #include "CppUTestExt/MockSupportPlugin.h"
 
@@ -36,26 +37,33 @@
 
 int main(int ac, const char *const *av)
 {
+    int result = 0;
+    GlobalSimpleStringCache simpleStringCache;
+
+    {
 #ifdef CPPUTEST_INCLUDE_GTEST_TESTS
-    GTestConvertor convertor;
-    convertor.addAllGTestToTestRegistry();
+        GTestConvertor convertor;
+        convertor.addAllGTestToTestRegistry();
 #endif
 
-    MemoryReporterPlugin plugin;
-    MockSupportPlugin mockPlugin;
-    TestRegistry::getCurrentRegistry()->installPlugin(&plugin);
-    TestRegistry::getCurrentRegistry()->installPlugin(&mockPlugin);
+        MemoryReporterPlugin plugin;
+        MockSupportPlugin mockPlugin;
+        TestRegistry::getCurrentRegistry()->installPlugin(&plugin);
+        TestRegistry::getCurrentRegistry()->installPlugin(&mockPlugin);
 
 #ifndef GMOCK_RENAME_MAIN
-    return CommandLineTestRunner::RunAllTests(ac, av);
+        result = CommandLineTestRunner::RunAllTests(ac, av);
 #else
-    /* Don't have any memory leak detector when running the Google Test tests */
+        /* Don't have any memory leak detector when running the Google Test tests */
 
-    testing::GMOCK_FLAG(verbose) = testing::internal::kWarningVerbosity;
+        testing::GMOCK_FLAG(verbose) = testing::internal::kWarningVerbosity;
 
-    ConsoleTestOutput output;
-    CommandLineTestRunner runner(ac, av, &output, TestRegistry::getCurrentRegistry());
-    return runner.runAllTestsMain();
+        ConsoleTestOutput output;
+        CommandLineTestRunner runner(ac, av, TestRegistry::getCurrentRegistry());
+        result = runner.runAllTestsMain();
 #endif
+    }
+
+    return result;
 }
 

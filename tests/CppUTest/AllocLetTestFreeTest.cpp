@@ -16,12 +16,12 @@ TEST_GROUP(AllocLetTestFree)
 {
     AllocLetTestFree allocLetTestFree;
 
-    void setup()
+    void setup() _override
     {
         allocLetTestFree = AllocLetTestFree_Create();
     }
 
-    void teardown()
+    void teardown() _override
     {
         AllocLetTestFree_Destroy(allocLetTestFree);
     }

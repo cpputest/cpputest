@@ -98,7 +98,7 @@ public:
     };
 };
 
-#define UT_PTR_SET(a, b) { CppUTestStore( (void**)&a ); a = b; }
+#define UT_PTR_SET(a, b) do { CppUTestStore( (void**)&a ); a = b; } while(0)
 
 ///////////// Null Plugin
 

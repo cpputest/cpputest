@@ -96,7 +96,7 @@ OrderedTestShell* OrderedTestShell::getNextOrderedTest()
 
 OrderedTestInstaller::OrderedTestInstaller(OrderedTestShell& test,
         const char* groupName, const char* testName, const char* fileName,
-        int lineNumber, int level)
+        size_t lineNumber, int level)
 {
     test.setTestName(testName);
     test.setGroupName(groupName);

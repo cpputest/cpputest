@@ -38,16 +38,19 @@ TEST_GROUP(MockCheckedActualCall)
     MockExpectedCallsList* list;
     MockFailureReporter* reporter;
 
-    void setup()
+    void setup() _override
     {
         emptyList = new MockExpectedCallsList;
         list = new MockExpectedCallsList;
         reporter = MockFailureReporterForTest::getReporter();
     }
 
-    void teardown()
+    void teardown() _override
     {
         CHECK_NO_MOCK_FAILURE();
+
+        MockFailureReporterForTest::clearReporter();
+
         delete emptyList;
         delete list;
     }
@@ -260,3 +263,10 @@ TEST(MockCheckedActualCall, remainderOfMockActualCallTraceWorksAsItShould)
     CHECK(NULLPTR == actual.returnFunctionPointerValueOrDefault((void (*)()) NULLPTR));
 }
 
+TEST(MockCheckedActualCall, MockActualCallTraceClear)
+{
+    MockActualCallTrace actual;
+    actual.withName("func");
+    actual.clear();
+    STRCMP_EQUAL("", actual.getTraceOutput());
+}

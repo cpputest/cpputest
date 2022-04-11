@@ -47,13 +47,13 @@ public:
 class TypeForTestingExpectedFunctionCallComparator : public MockNamedValueComparator
 {
 public:
-    virtual bool isEqual(const void* object1, const void* object2)
+    virtual bool isEqual(const void* object1, const void* object2) _override
     {
         const TypeForTestingExpectedFunctionCall* obj1 = (const TypeForTestingExpectedFunctionCall*) object1;
         const TypeForTestingExpectedFunctionCall* obj2 = (const TypeForTestingExpectedFunctionCall*) object2;
         return *(obj1->value) == *(obj2->value);
     }
-    virtual SimpleString valueToString(const void* object)
+    virtual SimpleString valueToString(const void* object) _override
     {
         const TypeForTestingExpectedFunctionCall* obj = (const TypeForTestingExpectedFunctionCall*) object;
         return StringFrom(*(obj->value));
@@ -63,7 +63,7 @@ public:
 class TypeForTestingExpectedFunctionCallCopier : public MockNamedValueCopier
 {
 public:
-    virtual void copy(void* dst_, const void* src_)
+    virtual void copy(void* dst_, const void* src_) _override
     {
         TypeForTestingExpectedFunctionCall* dst = (TypeForTestingExpectedFunctionCall*) dst_;
         const TypeForTestingExpectedFunctionCall* src = (const TypeForTestingExpectedFunctionCall*) src_;
@@ -73,9 +73,10 @@ public:
 
 TEST_GROUP(MockNamedValueHandlerRepository)
 {
-    void teardown()
+    void teardown() _override
     {
         CHECK_NO_MOCK_FAILURE();
+        MockFailureReporterForTest::clearReporter();
     }
 };
 
@@ -153,15 +154,19 @@ TEST(MockNamedValueHandlerRepository, installMultipleHandlers)
 TEST_GROUP(MockExpectedCall)
 {
     MockCheckedExpectedCall* call;
-    void setup()
+    MockNamedValueComparatorsAndCopiersRepository* originalComparatorRepository;
+    void setup() _override
     {
+        originalComparatorRepository = MockNamedValue::getDefaultComparatorsAndCopiersRepository();
         call = new MockCheckedExpectedCall(1);
         call->withName("funcName");
     }
-    void teardown()
+    void teardown() _override
     {
+        MockNamedValue::setDefaultComparatorsAndCopiersRepository(originalComparatorRepository);
         delete call;
         CHECK_NO_MOCK_FAILURE();
+        MockFailureReporterForTest::clearReporter();
     }
 };
 
@@ -610,6 +615,15 @@ TEST(MockExpectedCall, toStringForMultipleOutputParameters)
     STRCMP_EQUAL("name -> const void* buffer1: <output>, const void* buffer2: <output> (expected 1 call, called 1 time)", expectedCall.callToString().asCharString());
 }
 
+TEST(MockExpectedCall, toStringForUnmodifiedOutputParameter)
+{
+    MockCheckedExpectedCall expectedCall(1);
+    expectedCall.withName("name");
+    expectedCall.withUnmodifiedOutputParameter("buffer1");
+    expectedCall.callWasMade(1);
+    STRCMP_EQUAL("name -> const void* buffer1: <output> (expected 1 call, called 1 time)", expectedCall.callToString().asCharString());
+}
+
 TEST(MockExpectedCall, toStringForParameterAndIgnored)
 {
     MockCheckedExpectedCall expectedCall(1);
@@ -706,6 +720,15 @@ TEST(MockExpectedCall, hasOutputParameter)
     CHECK(call->hasOutputParameter(foo));
 }
 
+TEST(MockExpectedCall, hasUnmodifiedOutputParameter)
+{
+    call->withUnmodifiedOutputParameter("foo");
+    MockNamedValue foo("foo");
+    foo.setValue((const void *)NULLPTR);
+    foo.setSize(0);
+    CHECK(call->hasOutputParameter(foo));
+}
+
 TEST(MockExpectedCall, hasNoOutputParameter)
 {
     call->withIntParameter("foo", (int)1);
@@ -771,6 +794,7 @@ TEST(MockIgnoredExpectedCall, worksAsItShould)
     ignored.withParameterOfType( "mytype", "top", (const void*) NULLPTR);
     ignored.withOutputParameterReturning("bar", (void*) NULLPTR, 1);
     ignored.withOutputParameterOfTypeReturning("mytype", "bar", (const void*) NULLPTR);
+    ignored.withUnmodifiedOutputParameter("unmod");
     ignored.ignoreOtherParameters();
     ignored.andReturnValue(true);
     ignored.andReturnValue((double) 1.0f);

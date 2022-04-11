@@ -38,11 +38,11 @@ TEST_GROUP(TestFailure)
 {
     UtestShell* test;
 
-    void setup()
+    void setup() _override
     {
         test = new UtestShell("groupname", "testname", failFileName, failLineNumber-1);
     }
-    void teardown()
+    void teardown() _override
     {
         delete test;
     }
@@ -212,10 +212,10 @@ TEST(TestFailure, StringsEqualFailureWithNewLinesAndTabs)
             "StringWith\t\nDifferentString",
             "StringWith\t\ndifferentString", "");
 
-    FAILURE_EQUAL("expected <StringWith\t\nDifferentString>\n"
-                "\tbut was  <StringWith\t\ndifferentString>\n"
-                "\tdifference starts at position 12 at: <ringWith\t\ndifferentS>\n"
-                "\t                                              \t\n^", f);
+    FAILURE_EQUAL("expected <StringWith\\t\\nDifferentString>\n"
+                "\tbut was  <StringWith\\t\\ndifferentString>\n"
+                "\tdifference starts at position 12 at: <ngWith\\t\\ndifferentS>\n"
+                "\t                                                ^", f);
 }
 
 TEST(TestFailure, StringsEqualFailureInTheMiddle)
@@ -426,3 +426,20 @@ TEST(TestFailure, FeatureUnsupported)
     FeatureUnsupportedFailure f(test, failFileName, failLineNumber, "SOME_FEATURE", "");
     FAILURE_EQUAL("The feature \"SOME_FEATURE\" is not supported in this environment or with the feature set selected when building the library.", f);
 }
+
+#if CPPUTEST_USE_STD_CPP_LIB
+TEST(TestFailure, UnexpectedExceptionFailure_UnknownException)
+{
+    UnexpectedExceptionFailure f(test);
+    FAILURE_EQUAL("Unexpected exception of unknown type was thrown.", f);
+}
+
+TEST(TestFailure, UnexpectedExceptionFailure_StandardException)
+{
+    std::runtime_error e("Some error");
+    UnexpectedExceptionFailure f(test, e);
+    STRCMP_CONTAINS("Unexpected exception of type '", f.getMessage().asCharString());
+    STRCMP_CONTAINS("runtime_error", f.getMessage().asCharString());
+    STRCMP_CONTAINS("' was thrown: Some error", f.getMessage().asCharString());
+}
+#endif

@@ -386,7 +386,7 @@ void MockCheckedActualCall::checkExpectations()
     }
 
     if (potentiallyMatchingExpectations_.hasFinalizedMatchingExpectations())
-        FAIL("Actual call is in progress, but there are finalized matching expectations when checking expectations. This cannot happen.") // LCOV_EXCL_LINE
+        FAIL("Actual call is in progress, but there are finalized matching expectations when checking expectations. This cannot happen."); // LCOV_EXCL_LINE
 
     matchingExpectation_ = potentiallyMatchingExpectations_.removeFirstMatchingExpectation();
     if (matchingExpectation_) {
@@ -398,7 +398,7 @@ void MockCheckedActualCall::checkExpectations()
     }
 
     if (potentiallyMatchingExpectations_.hasUnmatchingExpectationsBecauseOfMissingParameters()) {
-        MockExpectedParameterDidntHappenFailure failure(getTest(), getName(), allExpectations_);
+        MockExpectedParameterDidntHappenFailure failure(getTest(), getName(), allExpectations_, potentiallyMatchingExpectations_);
         failTest(failure);
     }
     else {
@@ -1003,10 +1003,19 @@ const char* MockActualCallTrace::getTraceOutput()
     return traceBuffer_.asCharString();
 }
 
+MockActualCallTrace* MockActualCallTrace::instance_ = NULLPTR;
+
 MockActualCallTrace& MockActualCallTrace::instance()
 {
-    static MockActualCallTrace call;
-    return call;
+    if (instance_ == NULLPTR)
+        instance_ = new MockActualCallTrace;
+    return *instance_;
+}
+
+void MockActualCallTrace::clearInstance()
+{
+    delete instance_;
+    instance_ = NULLPTR;
 }
 
 MockIgnoredActualCall& MockIgnoredActualCall::instance()

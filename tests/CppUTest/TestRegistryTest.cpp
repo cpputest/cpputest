@@ -28,6 +28,7 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TestRegistry.h"
 #include "CppUTest/TestOutput.h"
+#include "CppUTest/PlatformSpecificFunctions.h"
 
 namespace
 {
@@ -41,7 +42,7 @@ public:
         UtestShell(group, "Name", "File", testLineNumber), hasRun_(false)
     {
     }
-    virtual void runOneTest(TestPlugin*, TestResult&)
+    virtual void runOneTest(TestPlugin*, TestResult&) _override
     {
         hasRun_ = true;
     }
@@ -66,7 +67,7 @@ public:
         resetCount();
     }
 
-    virtual ~MockTestResult()
+    virtual ~MockTestResult() _destructor_override
     {
     }
 
@@ -80,27 +81,27 @@ public:
         countCurrentGroupEnded = 0;
     }
 
-    virtual void testsStarted()
+    virtual void testsStarted() _override
     {
         countTestsStarted++;
     }
-    virtual void testsEnded()
+    virtual void testsEnded() _override
     {
         countTestsEnded++;
     }
-    virtual void currentTestStarted(UtestShell* /*test*/)
+    virtual void currentTestStarted(UtestShell* /*test*/) _override
     {
         countCurrentTestStarted++;
     }
-    virtual void currentTestEnded(UtestShell* /*test*/)
+    virtual void currentTestEnded(UtestShell* /*test*/) _override
     {
         countCurrentTestEnded++;
     }
-    virtual void currentGroupStarted(UtestShell* /*test*/)
+    virtual void currentGroupStarted(UtestShell* /*test*/) _override
     {
         countCurrentGroupStarted++;
     }
-    virtual void currentGroupEnded(UtestShell* /*test*/)
+    virtual void currentGroupEnded(UtestShell* /*test*/) _override
     {
         countCurrentGroupEnded++;
     }
@@ -117,7 +118,7 @@ TEST_GROUP(TestRegistry)
     MockTest* test4;
     TestResult *result;
     MockTestResult *mockResult;
-    void setup()
+    void setup() _override
     {
         output = new StringBufferTestOutput();
         mockResult = new MockTestResult(*output);
@@ -130,7 +131,7 @@ TEST_GROUP(TestRegistry)
         myRegistry->setCurrentRegistry(myRegistry);
     }
 
-    void teardown()
+    void teardown() _override
     {
         myRegistry->setCurrentRegistry(NULLPTR);
         delete myRegistry;
@@ -360,27 +361,51 @@ TEST(TestRegistry, listTestGroupAndCaseNames_shouldListBackwardsGroupATestaAfter
     STRCMP_EQUAL("GROUP_A.test_aa GROUP_B.test_b GROUP_A.test_a", s.asCharString());
 }
 
-static int getZero()
+TEST(TestRegistry, listTestLocations_shouldListBackwardsGroupATestaAfterGroupAtestaa)
 {
-    return 0;
+    test1->setGroupName("GROUP_A");
+    test1->setTestName("test_a");
+    test1->setFileName("cpptest_simple/my_tests/testa.cpp");
+    test1->setLineNumber(100);
+    myRegistry->addTest(test1);
+    test2->setGroupName("GROUP_B");
+    test2->setTestName("test_b");
+    test2->setFileName("cpptest_simple/my tests/testb.cpp");
+    test2->setLineNumber(200);
+    myRegistry->addTest(test2);
+    test3->setGroupName("GROUP_A");
+    test3->setTestName("test_aa");
+    test3->setFileName("cpptest_simple/my_tests/testaa.cpp");
+    test3->setLineNumber(300);
+    myRegistry->addTest(test3);
+
+    myRegistry->listTestLocations(*result);
+    SimpleString s = output->getOutput();
+    STRCMP_EQUAL("GROUP_A.test_aa.cpptest_simple/my_tests/testaa.cpp.300\nGROUP_B.test_b.cpptest_simple/my tests/testb.cpp.200\nGROUP_A.test_a.cpptest_simple/my_tests/testa.cpp.100\n", s.asCharString());
 }
 
 TEST(TestRegistry, shuffleEmptyListIsNoOp)
 {
     CHECK_TRUE(myRegistry->getFirstTest() == NULLPTR);
-    myRegistry->shuffleRunOrder(getZero);
+    myRegistry->shuffleTests(0);
     CHECK_TRUE(myRegistry->getFirstTest() == NULLPTR);
 }
 
 TEST(TestRegistry, shuffleSingleTestIsNoOp)
 {
     myRegistry->addTest(test1);
-    myRegistry->shuffleRunOrder(getZero);
+    myRegistry->shuffleTests(0);
     CHECK_TRUE(myRegistry->getFirstTest() == test1);
 }
 
-TEST(TestRegistry, shuffleTestList)
+static int getZero()
 {
+    return 0;
+}
+
+IGNORE_TEST(TestRegistry, shuffleTestList)
+{
+    UT_PTR_SET(PlatformSpecificRand, getZero);
     myRegistry->addTest(test3);
     myRegistry->addTest(test2);
     myRegistry->addTest(test1);
@@ -395,7 +420,7 @@ TEST(TestRegistry, shuffleTestList)
     CHECK_TRUE(third_before->getNext()  == NULLPTR);
 
     // shuffle always with element at index 0: [1] 2 [3] --> [3] [2] 1 --> 2 3 1
-    myRegistry->shuffleRunOrder(getZero);
+    myRegistry->shuffleTests(0);
 
     UtestShell* first_after  = myRegistry->getFirstTest();
     UtestShell* second_after = first_after->getNext();
@@ -405,4 +430,21 @@ TEST(TestRegistry, shuffleTestList)
     CHECK_TRUE(second_after == test3);
     CHECK_TRUE(third_after  == test1);
     CHECK_TRUE(third_after->getNext() == NULLPTR);
+}
+
+TEST(TestRegistry, reverseTests)
+{
+    myRegistry->addTest(test1);
+    myRegistry->addTest(test2);
+
+    myRegistry->reverseTests();
+
+    CHECK(test1 == myRegistry->getFirstTest());
+}
+
+TEST(TestRegistry, reverseZeroTests)
+{
+    myRegistry->reverseTests();
+
+    CHECK(NULLPTR == myRegistry->getFirstTest());
 }

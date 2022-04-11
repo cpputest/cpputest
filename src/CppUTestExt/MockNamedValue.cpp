@@ -38,6 +38,11 @@ void MockNamedValue::setDefaultComparatorsAndCopiersRepository(MockNamedValueCom
     defaultRepository_ = repository;
 }
 
+MockNamedValueComparatorsAndCopiersRepository* MockNamedValue::getDefaultComparatorsAndCopiersRepository()
+{
+    return defaultRepository_;
+}
+
 MockNamedValue::MockNamedValue(const SimpleString& name) : name_(name), type_("int"), size_(0), comparator_(NULLPTR), copier_(NULLPTR)
 {
     value_.intValue_ = 0;

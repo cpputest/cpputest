@@ -145,6 +145,7 @@ struct SMockExpectedCall_c
     MockExpectedCall_c* (*withParameterOfType)(const char* type, const char* name, const void* value);
     MockExpectedCall_c* (*withOutputParameterReturning)(const char* name, const void* value, size_t size);
     MockExpectedCall_c* (*withOutputParameterOfTypeReturning)(const char* type, const char* name, const void* value);
+    MockExpectedCall_c* (*withUnmodifiedOutputParameter)(const char* name);
     MockExpectedCall_c* (*ignoreOtherParameters)(void);
 
     MockExpectedCall_c* (*andReturnBoolValue)(int value);

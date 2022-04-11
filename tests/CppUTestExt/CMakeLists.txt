@@ -40,5 +40,8 @@ endif (MINGW)
 
 add_executable(CppUTestExtTests ${CppUTestExtTests_src})
 cpputest_normalize_test_output_location(CppUTestExtTests)
-target_link_libraries(CppUTestExtTests CppUTest CppUTestExt ${THREAD_LIB} ${CPPUNIT_EXTERNAL_LIBRARIES})
-cpputest_buildtime_discover_tests(CppUTestExtTests)
+target_link_libraries(CppUTestExtTests ${CppUTestLibName} ${CppUTestExtLibName} ${THREAD_LIB} ${CPPUNIT_EXTERNAL_LIBRARIES})
+
+if (TESTS_BUILD_DISCOVER)
+    cpputest_buildtime_discover_tests(CppUTestExtTests)
+endif()

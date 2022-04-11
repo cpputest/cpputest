@@ -37,12 +37,12 @@
 TEST_GROUP(GMock)
 {
     TestTestingFixture *fixture;
-    void setup()
+    void setup() _override
     {
         fixture = new TestTestingFixture;
     }
 
-    void teardown()
+    void teardown() _override
     {
         delete fixture;
 
@@ -90,5 +90,3 @@ TEST(GMock, GMockNiceMocksWorkFine)
 }
 
 #endif
-
-

@@ -73,6 +73,9 @@ static void crashMe ()
 
 TEST(GTestSimpleTest, GTestDeathTest)
 {
+#if defined(GTEST_VERSION_GTEST_1_7)
+    CppuTestGTestIgnoreLeaksInTest();
+#endif
     ASSERT_DEATH(crashMe(), "Crash me!");
 }
 
@@ -114,37 +117,37 @@ TEST(gtest, SimpleGoogleTestGetCalled)
 
 static bool afterCheck;
 
-static void _failMethodEXPECT_EQ()
+static void failMethodEXPECT_EQ_()
 {
     EXPECT_EQ(1, 2);
     afterCheck = true;
 }
 
-static void _failMethodASSERT_EQ()
+static void failMethodASSERT_EQ_()
 {
     ASSERT_EQ(1, 2);
     afterCheck = true;
 }
 
-static void _failMethodEXPECT_TRUE()
+static void failMethodEXPECT_TRUE_()
 {
     EXPECT_TRUE(false);
     afterCheck = true;
 }
 
-static void _failMethodASSERT_TRUE()
+static void failMethodASSERT_TRUE_()
 {
     ASSERT_TRUE(false);
     afterCheck = true;
 }
 
-static void _failMethodEXPECT_FALSE()
+static void failMethodEXPECT_FALSE_()
 {
     EXPECT_FALSE(true);
     afterCheck = true;
 }
 
-static void _failMethodEXPECT_STREQ()
+static void failMethodEXPECT_STREQ_()
 {
     EXPECT_STREQ("hello", "world");
     afterCheck = true;
@@ -153,12 +156,12 @@ static void _failMethodEXPECT_STREQ()
 TEST_GROUP(gtestMacros)
 {
     TestTestingFixture* fixture;
-    void setup()
+    void setup() _override
     {
         fixture = new TestTestingFixture();
         afterCheck = false;
     }
-    void teardown()
+    void teardown() _override
     {
         delete fixture;
     }
@@ -175,32 +178,32 @@ TEST_GROUP(gtestMacros)
 
 TEST(gtestMacros, EXPECT_EQFails)
 {
-    testFailureWith(_failMethodEXPECT_EQ);
+    testFailureWith(failMethodEXPECT_EQ_);
 }
 
 TEST(gtestMacros, EXPECT_TRUEFails)
 {
-    testFailureWith(_failMethodEXPECT_TRUE);
+    testFailureWith(failMethodEXPECT_TRUE_);
 }
 
 TEST(gtestMacros, EXPECT_FALSEFails)
 {
-    testFailureWith(_failMethodEXPECT_FALSE);
+    testFailureWith(failMethodEXPECT_FALSE_);
 }
 
 TEST(gtestMacros, EXPECT_STREQFails)
 {
-    testFailureWith(_failMethodEXPECT_STREQ);
+    testFailureWith(failMethodEXPECT_STREQ_);
 }
 
 TEST(gtestMacros, ASSERT_EQFails)
 {
-    testFailureWith(_failMethodASSERT_EQ);
+    testFailureWith(failMethodASSERT_EQ_);
 }
 
 TEST(gtestMacros, ASSERT_TRUEFails)
 {
-    testFailureWith(_failMethodASSERT_TRUE);
+    testFailureWith(failMethodASSERT_TRUE_);
 }
 
 #endif

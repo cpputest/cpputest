@@ -25,21 +25,48 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "CppUTest/CommandLineTestRunner.h"
+#include "CppUTest/TestHarness.h"
+#include "CppUTest/MemoryLeakDetector.h"
+#include "DummyMemoryLeakDetector.h"
 
-
-int main(int ac, const char** av)
+DummyMemoryLeakDetector::DummyMemoryLeakDetector(MemoryLeakFailure* reporter) : MemoryLeakDetector(reporter)
 {
-    /* These checks are here to make sure assertions outside test runs don't crash */
-    CHECK(true);
-    LONGS_EQUAL(1, 1);
-    const char * av_override[] = {"exe", "-v"};
-    
-    int rv = CommandLineTestRunner::RunAllTests(2, av_override);
-    
-    //Exiting from main causes IAR simulator to issue out-of-bounds memory access warnings.
-    volatile int wait = 1;
-    while (wait){}
-    return rv;
+    memoryLeakDetectorWasDeleted = false;
 }
+
+DummyMemoryLeakDetector::~DummyMemoryLeakDetector()
+{
+    memoryLeakDetectorWasDeleted = true;
+}
+
+bool DummyMemoryLeakDetector::wasDeleted()
+{
+    return memoryLeakDetectorWasDeleted;
+}
+
+bool DummyMemoryLeakDetector::memoryLeakDetectorWasDeleted = false;
+
+DummyMemoryLeakFailure::DummyMemoryLeakFailure()
+    : MemoryLeakFailure()
+{
+    memoryLeakFailureWasDelete = false;
+}
+
+DummyMemoryLeakFailure::~DummyMemoryLeakFailure()
+{
+    memoryLeakFailureWasDelete = true;
+}
+
+bool DummyMemoryLeakFailure::wasDeleted()
+{
+    return memoryLeakFailureWasDelete;
+}
+
+void DummyMemoryLeakFailure::fail(char*)
+{
+}
+
+bool DummyMemoryLeakFailure::memoryLeakFailureWasDelete = false;
+
+
 

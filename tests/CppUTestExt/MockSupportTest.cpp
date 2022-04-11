@@ -37,10 +37,12 @@ TEST_GROUP(MockSupportTest)
   MockExpectedCallsListForTest expectations;
   MockFailureReporterInstaller failureReporterInstaller;
 
-  void teardown()
+  void teardown() _override
   {
-    mock().checkExpectations();
-    CHECK_NO_MOCK_FAILURE();
+      mock().checkExpectations();
+      CHECK_NO_MOCK_FAILURE();
+      MockFailureReporterForTest::clearReporter();
+      mock().clear();
   }
 };
 
@@ -170,6 +172,12 @@ TEST(MockSupportTest, tracingWorksHierarchically)
 TEST_GROUP(MockSupportTestWithFixture)
 {
     TestTestingFixture fixture;
+
+    void teardown() _override
+    {
+        mock().clear();
+        MockFailureReporterForTest::clearReporter();
+    }
 };
 
 static void CHECK_EXPECTED_MOCK_FAILURE_LOCATION_failedTestMethod_()
@@ -223,6 +231,7 @@ static void unexpectedCallTestFunction_(void)
 
 TEST(MockSupportTestWithFixture, shouldCrashOnFailure)
 {
+    cpputestHasCrashed = false;
     mock().crashOnFailure(true);
     UtestShell::setCrashMethod(crashMethod);
     fixture.setTestFunction(unexpectedCallTestFunction_);
@@ -248,6 +257,21 @@ TEST(MockSupportTestWithFixture, ShouldNotCrashOnFailureAfterCrashMethodWasReset
     CHECK_FALSE(cpputestHasCrashed);
 }
 
+TEST(MockSupportTestWithFixture, shouldCrashOnFailureWithCppUTestSetting)
+{
+    cpputestHasCrashed = false;
+    UtestShell::setCrashOnFail();
+    UtestShell::setCrashMethod(crashMethod);
+    fixture.setTestFunction(unexpectedCallTestFunction_);
+
+    fixture.runAllTests();
+
+    CHECK(cpputestHasCrashed);
+
+    UtestShell::restoreDefaultTestTerminator();
+    UtestShell::resetCrashMethod();
+}
+
 TEST(MockSupportTestWithFixture, failedMockShouldFailAgainWhenRepeated)
 {
     fixture.setTestFunction(unexpectedCallTestFunction_);
@@ -257,9 +281,6 @@ TEST(MockSupportTestWithFixture, failedMockShouldFailAgainWhenRepeated)
         fixture.runAllTests();
         fixture.assertPrintContains("Unexpected call to function: unexpected");
         fixture.assertPrintContains("Errors (1 failures, 1 tests, 1 ran, 0 checks, 0 ignored, 0 filtered out");
-        fixture.output_->flush();
-        delete fixture.result_;
-        fixture.result_ = new TestResult(*fixture.output_);
+        fixture.flushOutputAndResetResult();
     }
 }
-

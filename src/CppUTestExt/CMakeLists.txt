@@ -1,5 +1,6 @@
 set(CppUTestExt_src
         CodeMemoryReportFormatter.cpp
+        GTest.cpp
         IEEE754ExceptionsPlugin.cpp
         MemoryReporterPlugin.cpp
         MockFailure.cpp
@@ -32,6 +33,7 @@ set(CppUTestExt_headers
         ${CppUTestRootDirectory}/include/CppUTestExt/MockSupport_c.h
         ${CppUTestRootDirectory}/include/CppUTestExt/GMock.h
         ${CppUTestRootDirectory}/include/CppUTestExt/GTest.h
+        ${CppUTestRootDirectory}/include/CppUTestExt/GTestSupport.h
         ${CppUTestRootDirectory}/include/CppUTestExt/MemoryReporterPlugin.h
         ${CppUTestRootDirectory}/include/CppUTestExt/OrderedTest.h
         ${CppUTestRootDirectory}/include/CppUTestExt/GTestConvertor.h
@@ -45,10 +47,27 @@ set(CppUTestExt_headers
         ${CppUTestRootDirectory}/include/CppUTestExt/ActualCall.h
 )
 
-add_library(CppUTestExt STATIC ${CppUTestExt_src} ${CppUTestExt_headers})
-target_link_libraries(CppUTestExt ${CPPUNIT_EXTERNAL_LIBRARIES})
-install(FILES ${CppUTestExt_headers} DESTINATION include/CppUTestExt)
-install(TARGETS CppUTestExt
+add_library(${CppUTestExtLibName} STATIC ${CppUTestExt_src} ${CppUTestExt_headers})
+target_link_libraries(${CppUTestExtLibName} ${CPPUNIT_EXTERNAL_LIBRARIES})
+
+target_link_libraries(${CppUTestExtLibName} PUBLIC ${CppUTestLibName})
+
+if(LIBNAME_POSTFIX_DEBUG)
+    set_target_properties(${CppUTestExtLibName} PROPERTIES DEBUG_POSTFIX "d")
+endif()
+
+#[[Arrange for the include directory to be added to the include paths of any CMake target depending on CppUTestExt.]]
+target_include_directories(${CppUTestExtLibName}
+    PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../include>
+        $<INSTALL_INTERFACE:include>
+)
+
+set_target_properties(${CppUTestExtLibName} PROPERTIES
+    PUBLIC_HEADER "${CppUTestExt_headers}")
+install(TARGETS ${CppUTestExtLibName}
     EXPORT CppUTestTargets
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/CppUTestExt"
+    PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/CppUTestExt")

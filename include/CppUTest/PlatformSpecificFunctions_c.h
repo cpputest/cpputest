@@ -69,6 +69,10 @@ extern void (*PlatformSpecificFClose)(PlatformSpecificFile file);
 extern int (*PlatformSpecificPutchar)(int c);
 extern void (*PlatformSpecificFlush)(void);
 
+/* Random operations */
+extern void (*PlatformSpecificSrand)(unsigned int);
+extern int (*PlatformSpecificRand)(void);
+
 /* Dynamic Memory operations */
 extern void* (*PlatformSpecificMalloc)(size_t size);
 extern void* (*PlatformSpecificRealloc)(void* memory, size_t size);
@@ -78,6 +82,8 @@ extern void* (*PlatformSpecificMemset)(void* mem, int c, size_t size);
 
 typedef void* PlatformSpecificMutex;
 extern PlatformSpecificMutex (*PlatformSpecificMutexCreate)(void);
+extern void (*PlatformSpecificSrand)(unsigned int);
+extern int (*PlatformSpecificRand)(void);
 extern void (*PlatformSpecificMutexLock)(PlatformSpecificMutex mtx);
 extern void (*PlatformSpecificMutexUnlock)(PlatformSpecificMutex mtx);
 extern void (*PlatformSpecificMutexDestroy)(PlatformSpecificMutex mtx);

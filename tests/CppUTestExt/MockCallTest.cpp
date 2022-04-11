@@ -31,10 +31,11 @@
 
 TEST_GROUP(MockCallTest)
 {
-  void teardown()
-  {
-    mock().checkExpectations();
-  }
+    void teardown() _override
+    {
+        mock().checkExpectations();
+        mock().clear();
+    }
 };
 
 TEST(MockCallTest, clear)
@@ -301,7 +302,7 @@ TEST(MockCallTest, ignoreOtherCallsExceptForTheExpectedOne)
 {
     mock().expectOneCall("foo");
     mock().ignoreOtherCalls();
-    mock().actualCall("bar").withParameter("foo", 1);;
+    mock().actualCall("bar").withParameter("foo", 1);
 
     mock().clear();
 }
@@ -392,7 +393,7 @@ TEST(MockCallTest, OnObjectIgnored_InitialMatchDiscarded)
 
     mock().expectOneCall("boo");
     mock().expectOneCall("boo").withBoolParameter("p", true);
-    mock().actualCall("boo").onObject(objectPtr2).withBoolParameter("p", true);;
+    mock().actualCall("boo").onObject(objectPtr2).withBoolParameter("p", true);
     mock().actualCall("boo").onObject(objectPtr1);
 }
 
@@ -499,4 +500,3 @@ TEST(MockCallTest, mockExpectationShouldIncreaseNumberOfChecks)
     fixture.runAllTests();
     LONGS_EQUAL(3, fixture.getCheckCount());
 }
-

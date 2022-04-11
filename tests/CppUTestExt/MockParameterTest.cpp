@@ -31,9 +31,10 @@
 
 TEST_GROUP(MockParameterTest)
 {
-  void teardown()
+  void teardown() _override
   {
-    mock().checkExpectations();
+      mock().checkExpectations();
+      mock().clear();
   }
 };
 
@@ -534,7 +535,7 @@ TEST(MockParameterTest, calledWithoutParameters)
 
     MockExpectedCallsListForTest expectations;
     expectations.addFunction("foo")->withParameter("p1", 1);
-    MockExpectedParameterDidntHappenFailure expectedFailure(mockFailureTest(), "foo", expectations);
+    MockExpectedParameterDidntHappenFailure expectedFailure(mockFailureTest(), "foo", expectations, expectations);
 
     mock().expectOneCall("foo").withParameter("p1", 1);
     mock().actualCall("foo");
@@ -565,7 +566,7 @@ TEST(MockParameterTest, ignoreOtherParametersButExpectedParameterDidntHappen)
 
     MockExpectedCallsListForTest expectations;
     expectations.addFunction("foo")->withParameter("p1", 1).ignoreOtherParameters();
-    MockExpectedParameterDidntHappenFailure expectedFailure(mockFailureTest(), "foo", expectations);
+    MockExpectedParameterDidntHappenFailure expectedFailure(mockFailureTest(), "foo", expectations, expectations);
 
     mock().expectOneCall("foo").withParameter("p1", 1).ignoreOtherParameters();
     mock().actualCall("foo").withParameter("p2", 2).withParameter("p3", 3).withParameter("p4", 4);
@@ -612,11 +613,11 @@ TEST(MockParameterTest, newCallStartsWhileNotAllParametersWerePassed)
 
     MockExpectedCallsListForTest expectations;
     expectations.addFunction("foo")->withParameter("p1", 1);
-    MockExpectedParameterDidntHappenFailure expectedFailure(mockFailureTest(), "foo", expectations);
+    MockExpectedParameterDidntHappenFailure expectedFailure(mockFailureTest(), "foo", expectations, expectations);
 
     mock().expectOneCall("foo").withParameter("p1", 1);
     mock().actualCall("foo");
-    mock().actualCall("foo").withParameter("p1", 1);;
+    mock().actualCall("foo").withParameter("p1", 1);
 
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
@@ -634,6 +635,17 @@ TEST(MockParameterTest, outputParameterSucceeds)
     mock().checkExpectations();
 }
 
+TEST(MockParameterTest, unmodifiedOutputParameterSucceeds)
+{
+    int param = 1;
+
+    mock().expectOneCall("function").withUnmodifiedOutputParameter("parameterName");
+    mock().actualCall("function").withOutputParameter("parameterName", &param);
+
+    CHECK_EQUAL(param, 1);
+    mock().checkExpectations();
+}
+
 TEST(MockParameterTest, noActualCallForOutputParameter)
 {
     MockFailureReporterInstaller failureReporterInstaller;
@@ -643,6 +655,20 @@ TEST(MockParameterTest, noActualCallForOutputParameter)
     mock().expectOneCall("foo").withOutputParameterReturning("output", &output, sizeof(output));
 
     expectations.addFunction("foo")->withOutputParameterReturning("output", &output, sizeof(output));
+    MockExpectedCallsDidntHappenFailure expectedFailure(mockFailureTest(), expectations);
+
+    mock().checkExpectations();
+    CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
+}
+
+TEST(MockParameterTest, noActualCallForUnmodifiedOutputParameter)
+{
+    MockFailureReporterInstaller failureReporterInstaller;
+
+    MockExpectedCallsListForTest expectations;
+    mock().expectOneCall("foo").withUnmodifiedOutputParameter("output");
+
+    expectations.addFunction("foo")->withUnmodifiedOutputParameter("output");
     MockExpectedCallsDidntHappenFailure expectedFailure(mockFailureTest(), expectations);
 
     mock().checkExpectations();
@@ -677,7 +703,7 @@ TEST(MockParameterTest, outputParameterMissing)
     mock().actualCall("foo");
 
     expectations.addFunction("foo")->withOutputParameterReturning("output", &output, sizeof(output));
-    MockExpectedParameterDidntHappenFailure expectedFailure(mockFailureTest(), "foo", expectations);
+    MockExpectedParameterDidntHappenFailure expectedFailure(mockFailureTest(), "foo", expectations, expectations);
 
     mock().checkExpectations();
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
@@ -904,4 +930,3 @@ TEST(MockParameterTest, expectMultipleMultipleCallsWithParameters)
 
     mock().checkExpectations();
 }
-

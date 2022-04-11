@@ -95,6 +95,20 @@ void MemoryReporterPlugin::removeGlobalMemoryReportAllocators()
         setCurrentMallocAllocator(mallocAllocator.getRealAllocator());
 }
 
+MemoryReportAllocator* MemoryReporterPlugin::getMallocAllocator()
+{
+    return &mallocAllocator;
+}
+
+MemoryReportAllocator* MemoryReporterPlugin::getNewAllocator()
+{
+    return &newAllocator;
+}
+
+MemoryReportAllocator* MemoryReporterPlugin::getNewArrayAllocator()
+{
+    return &newArrayAllocator;
+}
 
 void MemoryReporterPlugin::initializeAllocator(MemoryReportAllocator* allocator, TestResult & result)
 {

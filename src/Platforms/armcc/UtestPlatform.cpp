@@ -159,6 +159,9 @@ void (*PlatformSpecificFree)(void* memory) = free;
 void* (*PlatformSpecificMemCpy)(void*, const void*, size_t) = memcpy;
 void* (*PlatformSpecificMemset)(void*, int, size_t) = memset;
 
+void (*PlatformSpecificSrand)(unsigned int) = srand;
+int (*PlatformSpecificRand)(void) = rand;
+
 static int IsNanImplementation(double d)
 {
     return isnan(d);

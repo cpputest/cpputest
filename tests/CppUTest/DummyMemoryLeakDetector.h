@@ -25,35 +25,27 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef D_Shuffle_h
-#define D_Shuffle_h
-
-#include "StandardCLibrary.h"
-
-
-#define SHUFFLE_DISABLED 0
-#define SHUFFLE_ENABLED_RANDOM_SEED 1
-#define SHUFFLE_SEED_MINIMUM_VALUE 2
-
-typedef int (*rand_func_t)(void);
-
-// wrapper needed for translating calling convention on Watcom/DOS
-static inline int rand_(void) // rand_func_t
+class DummyMemoryLeakDetector : public MemoryLeakDetector
 {
-    return rand();
-}
+public:
+    DummyMemoryLeakDetector(MemoryLeakFailure* reporter);
+    virtual ~DummyMemoryLeakDetector() _destructor_override;
+    static bool wasDeleted();
 
-// "Durstenfeld shuffle" according to Wikipedia
-static inline void shuffle_list(rand_func_t rand_func, int numElems, void* listToShuffleInPlace[])
+private:
+    static bool memoryLeakDetectorWasDeleted;
+};
+
+class DummyMemoryLeakFailure : public MemoryLeakFailure
 {
-    for (int i = numElems - 1; i >= 1; --i)
-    {
-        int j = rand_func() % (i + 1); // distribution biased by modulo, but good enough for shuffling
-        void* e1 = listToShuffleInPlace[j];
-        void* e2 = listToShuffleInPlace[i];
-        listToShuffleInPlace[i] = e1;
-        listToShuffleInPlace[j] = e2;
-    }
-}
+public:
+    DummyMemoryLeakFailure();
 
-#endif
+    virtual ~DummyMemoryLeakFailure() _destructor_override;
+    static bool wasDeleted();
+    virtual void fail(char*) _override;
+
+private:
+    static bool memoryLeakFailureWasDelete;
+};
+

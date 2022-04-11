@@ -42,7 +42,7 @@ class FileForJUnitOutputTests
 
 public:
 
-    FileForJUnitOutputTests(SimpleString filename, FileForJUnitOutputTests* next) :
+    FileForJUnitOutputTests(const SimpleString& filename, FileForJUnitOutputTests* next) :
         name_(filename), isOpen_(true), next_(next) {}
 
     FileForJUnitOutputTests* nextFile()
@@ -162,7 +162,7 @@ class JUnitTestOutputTestRunner
 
 public:
 
-    JUnitTestOutputTestRunner(TestResult result) :
+    explicit JUnitTestOutputTestRunner(const TestResult& result) :
         result_(result), currentGroupName_(NULLPTR), currentTest_(NULLPTR), firstTestInGroup_(true), timeTheTestTakes_(0), numberOfChecksInTest_(0), testFailure_(NULLPTR)
     {
         millisTime = 0;
@@ -240,7 +240,7 @@ public:
         return *this;
     }
 
-    JUnitTestOutputTestRunner& onLine(int lineNumber)
+    JUnitTestOutputTestRunner& onLine(size_t lineNumber)
     {
         if(currentTest_) {
             currentTest_->setLineNumber(lineNumber);
@@ -290,7 +290,7 @@ public:
         return *this;
     }
 
-    JUnitTestOutputTestRunner& thatFails(const char* message, const char* file, int line)
+    JUnitTestOutputTestRunner& thatFails(const char* message, const char* file, size_t line)
     {
         testFailure_ = new TestFailure(	currentTest_, file, line, message);
         return *this;
@@ -336,7 +336,7 @@ TEST_GROUP(JUnitOutputTest)
     JUnitTestOutputTestRunner *testCaseRunner;
     FileForJUnitOutputTests* outputFile;
 
-    void setup()
+    void setup() _override
     {
         UT_PTR_SET(PlatformSpecificFOpen, mockFOpen);
         UT_PTR_SET(PlatformSpecificFPuts, mockFPuts);
@@ -346,7 +346,7 @@ TEST_GROUP(JUnitOutputTest)
         testCaseRunner = new JUnitTestOutputTestRunner(*result);
     }
 
-    void teardown()
+    void teardown() _override
     {
         delete testCaseRunner;
         delete result;
@@ -363,6 +363,16 @@ TEST(JUnitOutputTest, withOneTestGroupAndOneTestOnlyWriteToOneFile)
 
     LONGS_EQUAL(1, fileSystem.amountOfFiles());
     CHECK(fileSystem.fileExists("cpputest_groupname.xml"));
+}
+
+TEST(JUnitOutputTest, withReservedCharactersInPackageOrTestGroupUsesUnderscoresForFileName)
+{
+    junitOutput->setPackageName("p/a\\c?k%a*g:e|n\"a<m>e.");
+    testCaseRunner->start()
+                  .withGroup("g/r\\o?u%p*n:a|m\"e<h>ere").withTest("testname")
+                  .end();
+
+    CHECK(fileSystem.fileExists("cpputest_p_a_c_k_a_g_e_n_a_m_e._g_r_o_u_p_n_a_m_e_h_ere.xml"));
 }
 
 TEST(JUnitOutputTest, withOneTestGroupAndOneTestOutputsValidXMLFiles)
@@ -510,7 +520,7 @@ TEST(JUnitOutputTest, testFailureWithLessThanAndGreaterThanInsideIt)
 
     outputFile = fileSystem.file("cpputest_testGroupWithFailingTest.xml");
 
-    STRCMP_EQUAL("<failure message=\"thisfile:10: Test [failed]\" type=\"AssertionFailedError\">\n", outputFile->line(6));
+    STRCMP_EQUAL("<failure message=\"thisfile:10: Test &lt;failed&gt;\" type=\"AssertionFailedError\">\n", outputFile->line(6));
 }
 
 TEST(JUnitOutputTest, testFailureWithQuotesInIt)
@@ -522,7 +532,7 @@ TEST(JUnitOutputTest, testFailureWithQuotesInIt)
 
     outputFile = fileSystem.file("cpputest_testGroupWithFailingTest.xml");
 
-    STRCMP_EQUAL("<failure message=\"thisfile:10: Test 'failed'\" type=\"AssertionFailedError\">\n", outputFile->line(6));
+    STRCMP_EQUAL("<failure message=\"thisfile:10: Test &quot;failed&quot;\" type=\"AssertionFailedError\">\n", outputFile->line(6));
 }
 
 TEST(JUnitOutputTest, testFailureWithNewlineInIt)
@@ -547,6 +557,18 @@ TEST(JUnitOutputTest, testFailureWithDifferentFileAndLine)
     outputFile = fileSystem.file("cpputest_testGroupWithFailingTest.xml");
 
     STRCMP_EQUAL("<failure message=\"importantFile:999: Test failed\" type=\"AssertionFailedError\">\n", outputFile->line(6));
+}
+
+TEST(JUnitOutputTest, testFailureWithAmpersandsAndLessThan)
+{
+    testCaseRunner->start()
+            .withGroup("testGroupWithFailingTest")
+                .withTest("FailingTestName").thatFails("&object1 < &object2", "importantFile", 999)
+            .end();
+
+    outputFile = fileSystem.file("cpputest_testGroupWithFailingTest.xml");
+
+    STRCMP_EQUAL("<failure message=\"importantFile:999: &amp;object1 &lt; &amp;object2\" type=\"AssertionFailedError\">\n", outputFile->line(6));
 }
 
 TEST(JUnitOutputTest, testFailureWithAmpersands)
@@ -622,7 +644,7 @@ TEST(JUnitOutputTest, TestCaseBlockWithAPackageName)
             .withGroup("groupname").withTest("testname")
             .end();
 
-    outputFile = fileSystem.file("cpputest_groupname.xml");
+    outputFile = fileSystem.file("cpputest_packagename_groupname.xml");
 
     STRCMP_EQUAL("<testcase classname=\"packagename.groupname\" name=\"testname\" assertions=\"0\" time=\"0.000\" file=\"file\" line=\"1\">\n", outputFile->line(5));
     STRCMP_EQUAL("</testcase>\n", outputFile->line(6));
@@ -635,7 +657,7 @@ TEST(JUnitOutputTest, TestCaseBlockForIgnoredTest)
       .withGroup("groupname").withIgnoredTest("testname")
       .end();
 
-   outputFile = fileSystem.file("cpputest_groupname.xml");
+   outputFile = fileSystem.file("cpputest_packagename_groupname.xml");
 
    STRCMP_EQUAL("<testcase classname=\"packagename.groupname\" name=\"testname\" assertions=\"0\" time=\"0.000\" file=\"file\" line=\"1\">\n", outputFile->line(5));
    STRCMP_EQUAL("<skipped />\n", outputFile->line(6));
@@ -650,7 +672,7 @@ TEST(JUnitOutputTest, TestCaseWithTestLocation)
             .withTest("testname").inFile("MySource.c").onLine(159)
             .end();
 
-    outputFile = fileSystem.file("cpputest_groupname.xml");
+    outputFile = fileSystem.file("cpputest_packagename_groupname.xml");
 
     STRCMP_EQUAL("<testcase classname=\"packagename.groupname\" name=\"testname\" assertions=\"0\" time=\"0.000\" file=\"MySource.c\" line=\"159\">\n", outputFile->line(5));
 }
@@ -678,7 +700,7 @@ TEST(JUnitOutputTest, TestCaseBlockWithAssertions)
             .thatHasChecks(24)
             .end();
 
-    outputFile = fileSystem.file("cpputest_groupname.xml");
+    outputFile = fileSystem.file("cpputest_packagename_groupname.xml");
 
     STRCMP_EQUAL("<testcase classname=\"packagename.groupname\" name=\"testname\" assertions=\"24\" time=\"0.000\" file=\"file\" line=\"1\">\n", outputFile->line(5));
 }
@@ -723,4 +745,15 @@ TEST(JUnitOutputTest, UTPRINTOutputInJUnitOutput)
 
     outputFile = fileSystem.file("cpputest_groupname.xml");
     STRCMP_EQUAL("<system-out>someoutput</system-out>\n", outputFile->lineFromTheBack(3));
+}
+
+TEST(JUnitOutputTest, UTPRINTOutputInJUnitOutputWithSpecials)
+{
+    testCaseRunner->start()
+            .withGroup("groupname")
+            .withTest("testname").thatPrints("The <rain> in \"Spain\"\nGoes \\mainly\\ down the Dr&in\n")
+            .end();
+
+    outputFile = fileSystem.file("cpputest_groupname.xml");
+    STRCMP_EQUAL("<system-out>The &lt;rain&gt; in &quot;Spain&quot;{newline}Goes \\mainly\\ down the Dr&amp;in{newline}</system-out>\n", outputFile->lineFromTheBack(3));
 }

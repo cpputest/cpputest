@@ -42,7 +42,7 @@
 
 #ifdef __clang__
  #pragma clang diagnostic push
- #if __clang_major__ >= 3 && __clang_minor__ >= 6
+ #if (__clang_major__ == 3 && __clang_minor__ >= 6) || __clang_major__ >= 4
   #pragma clang diagnostic ignored "-Wreserved-id-macro"
  #endif
 #endif
@@ -94,7 +94,7 @@
 /* Should be the only #include here. Standard C library wrappers */
 #include "StandardCLibrary.h"
 
-/* Create a __no_return__ macro, which is used to flag a function as not returning.
+/* Create a _no_return_ macro, which is used to flag a function as not returning.
  * Used for functions that always throws for instance.
  *
  * This is needed for compiling with clang, without breaking other compilers.
@@ -104,15 +104,21 @@
 #endif
 
 #if __has_attribute(noreturn)
-  #define __no_return__ __attribute__((noreturn))
+  #define _no_return_ __attribute__((noreturn))
 #else
-  #define __no_return__
+  #define _no_return_
+#endif
+
+#if defined(__MINGW32__)
+#define CPPUTEST_CHECK_FORMAT_TYPE __MINGW_PRINTF_FORMAT
+#else
+#define CPPUTEST_CHECK_FORMAT_TYPE printf
 #endif
 
 #if __has_attribute(format)
-  #define __check_format__(type, format_parameter, other_parameters) __attribute__ ((format (type, format_parameter, other_parameters)))
+  #define _check_format_(type, format_parameter, other_parameters) __attribute__ ((format (type, format_parameter, other_parameters)))
 #else
-  #define __check_format__(type, format_parameter, other_parameters) /* type, format_parameter, other_parameters */
+  #define _check_format_(type, format_parameter, other_parameters) /* type, format_parameter, other_parameters */
 #endif
 
 /*
@@ -168,11 +174,47 @@
 #endif
 
 /*
+ * Address sanitizer is a good thing... and it causes some conflicts with the CppUTest tests
+ * To check whether it is on or off, we create a CppUTest define here.
+*/
+#if defined(__has_feature)
+#if __has_feature(address_sanitizer)
+#define CPPUTEST_SANITIZE_ADDRESS 1
+#endif
+#endif
+
+#ifdef __SANITIZE_ADDRESS__
+#define CPPUTEST_SANITIZE_ADDRESS 1
+#endif
+
+#ifndef CPPUTEST_SANITIZE_ADDRESS
+#define CPPUTEST_SANITIZE_ADDRESS 0
+#endif
+
+#if CPPUTEST_SANITIZE_ADDRESS
+#define CPPUTEST_SANITIZE_ADDRESS 1
+#define CPPUTEST_DO_NOT_SANITIZE_ADDRESS __attribute__((no_sanitize_address))
+  #if defined(__linux__) && defined(__clang__)
+    #if CPPUTEST_USE_MEM_LEAK_DETECTION 
+    #warning Compiling with Address Sanitizer with clang on linux will cause duplicate symbols for operator new. Turning off memory leak detection. Compile with -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED to get rid of this warning.
+    #undef CPPUTEST_USE_MEM_LEAK_DETECTION
+    #define CPPUTEST_USE_MEM_LEAK_DETECTION 0
+    #endif
+  #endif
+#else
+#define CPPUTEST_SANITIZER_ADDRESS 0
+#define CPPUTEST_DO_NOT_SANITIZE_ADDRESS
+#endif
+
+/*
  * Handling of IEEE754 floating point exceptions via fenv.h
- * Works on non-Visual C++ compilers and Visual C++ 2008 and newer
+ * Predominantly works on non-Visual C++ compilers and Visual C++ 2008 and newer
  */
 
-#if CPPUTEST_USE_STD_C_LIB && (!defined(_MSC_VER) || (_MSC_VER >= 1800)) && (!defined(__APPLE__))
+#if CPPUTEST_USE_STD_C_LIB && \
+  (!defined(_MSC_VER) || (_MSC_VER >= 1800)) && \
+  (!defined(__APPLE__)) && \
+  (!defined(__ghs__) || !defined(__ColdFire__)) && (!defined(__BCPLUSPLUS__))
 #define CPPUTEST_HAVE_FENV
 #if defined(__WATCOMC__) || defined(__ARMEL__) || defined(__m68k__)
 #define CPPUTEST_FENV_IS_WORKING_PROPERLY 0
@@ -210,7 +252,7 @@
 /*
  * Support for "long long" type.
  *
- * Not supported when CPUTEST_LONG_LONG_DISABLED is set.
+ * Not supported when CPPUTEST_LONG_LONG_DISABLED is set.
  * Can be overridden by using CPPUTEST_USE_LONG_LONG
  *
  * CPPUTEST_HAVE_LONG_LONG_INT is set by configure
@@ -265,8 +307,16 @@ typedef struct cpputest_ulonglong cpputest_ulonglong;
 
 /* Visual C++ 10.0+ (2010+) supports the override keyword, but doesn't define the C++ version as C++11 */
 #if defined(__cplusplus) && ((__cplusplus >= 201103L) || (defined(_MSC_VER) && (_MSC_VER >= 1600)))
+#if !defined(__ghs__)
 #define CPPUTEST_COMPILER_FULLY_SUPPORTS_CXX11
 #define _override override
+#else
+/* GreenHills is not compatible with other compilers with regards to where
+ * it expects the override specifier to be on methods that return function
+ * pointers. Given this, it is easiest to not use the override specifier.
+ */
+#define _override
+#endif
 #define NULLPTR nullptr
 #else
 #define _override
@@ -280,12 +330,20 @@ typedef struct cpputest_ulonglong cpputest_ulonglong;
 #define _destructor_override
 #endif
 
-/* MinGW-w64 prefers to act like Visual C++, but we want the ANSI behaviors instead */
-#undef __USE_MINGW_ANSI_STDIO
-#define __USE_MINGW_ANSI_STDIO 1
-
 #ifdef __clang__
  #pragma clang diagnostic pop
+#endif
+
+/* Borland v5.4 does not have a NaN or Inf value */
+#if defined(CPPUTEST_NO_INF)
+#define CPPUTEST_HAS_INF 0
+#else
+#define CPPUTEST_HAS_INF 1
+#endif
+#if defined(CPPUTEST_NO_NAN)
+#define CPPUTEST_HAS_NAN 0
+#else
+#define CPPUTEST_HAS_NAN 1
 #endif
 
 

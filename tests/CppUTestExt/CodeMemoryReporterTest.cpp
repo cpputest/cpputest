@@ -30,8 +30,8 @@
 #include "CppUTestExt/MemoryReportAllocator.h"
 #include "CppUTestExt/CodeMemoryReportFormatter.h"
 
-#define TESTOUTPUT_EQUAL(a) STRCMP_EQUAL_LOCATION(a, testOutput.getOutput().asCharString(), "", __FILE__, __LINE__);
-#define TESTOUTPUT_CONTAINS(a) STRCMP_CONTAINS_LOCATION(a, testOutput.getOutput().asCharString(), "", __FILE__, __LINE__);
+#define TESTOUTPUT_EQUAL(a) STRCMP_EQUAL_LOCATION(a, testOutput.getOutput().asCharString(), "", __FILE__, __LINE__)
+#define TESTOUTPUT_CONTAINS(a) STRCMP_CONTAINS_LOCATION(a, testOutput.getOutput().asCharString(), "", __FILE__, __LINE__)
 
 TEST_GROUP(CodeMemoryReportFormatter)
 {
@@ -45,7 +45,7 @@ TEST_GROUP(CodeMemoryReportFormatter)
     TestResult* testResult;
     CodeMemoryReportFormatter* formatter;
 
-    void setup()
+    void setup() _override
     {
         cAllocator = defaultMallocAllocator();
         newAllocator = defaultNewAllocator();
@@ -57,7 +57,7 @@ TEST_GROUP(CodeMemoryReportFormatter)
         testResult = new TestResult(testOutput);
     }
 
-    void teardown()
+    void teardown() _override
     {
         delete testResult;
         delete formatter;

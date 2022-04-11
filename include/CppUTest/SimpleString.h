@@ -83,6 +83,8 @@ public:
     SimpleString subStringFromTill(char startChar, char lastExcludedChar) const;
     void copyToBuffer(char* buffer, size_t bufferSize) const;
 
+    SimpleString printable() const;
+
     const char *asCharString() const;
     size_t size() const;
     bool isEmpty() const;
@@ -101,18 +103,34 @@ public:
     static const char* StrStr(const char* s1, const char* s2);
     static char ToLower(char ch);
     static int MemCmp(const void* s1, const void *s2, size_t n);
-    static char* allocStringBuffer(size_t size, const char* file, int line);
-    static void deallocStringBuffer(char* str, const char* file, int line);
+    static char* allocStringBuffer(size_t size, const char* file, size_t line);
+    static void deallocStringBuffer(char* str, size_t size, const char* file, size_t line);
 private:
+
+    const char* getBuffer() const;
+
+    void deallocateInternalBuffer();
+    void setInternalBufferAsEmptyString();
+    void setInternalBufferToNewBuffer(size_t bufferSize);
+    void setInternalBufferTo(char* buffer, size_t bufferSize);
+    void copyBufferToNewInternalBuffer(const char* otherBuffer);
+    void copyBufferToNewInternalBuffer(const char* otherBuffer, size_t bufferSize);
+    void copyBufferToNewInternalBuffer(const SimpleString& otherBuffer);
+
     char *buffer_;
+    size_t bufferSize_;
 
     static TestMemoryAllocator* stringAllocator_;
 
     char* getEmptyString() const;
-    static char* copyToNewBuffer(const char* bufferToCopy, size_t bufferSize=0);
+    static char* copyToNewBuffer(const char* bufferToCopy, size_t bufferSize);
     static bool isDigit(char ch);
     static bool isSpace(char ch);
     static bool isUpper(char ch);
+    static bool isControl(char ch);
+    static bool isControlWithShortEscapeSequence(char ch);
+    
+    size_t getPrintableSize() const;
 };
 
 class SimpleStringCollection
@@ -133,6 +151,39 @@ private:
 
     void operator =(SimpleStringCollection&);
     SimpleStringCollection(SimpleStringCollection&);
+};
+
+class GlobalSimpleStringAllocatorStash
+{
+public:
+    GlobalSimpleStringAllocatorStash();
+    void save();
+    void restore();
+private:
+    TestMemoryAllocator* originalAllocator_;
+};
+
+class MemoryAccountant;
+class AccountingTestMemoryAllocator;
+
+class GlobalSimpleStringMemoryAccountant
+{
+public:
+    GlobalSimpleStringMemoryAccountant();
+    ~GlobalSimpleStringMemoryAccountant();
+
+    void useCacheSizes(size_t cacheSizes[], size_t length);
+
+    void start();
+    void stop();
+    SimpleString report();
+
+    AccountingTestMemoryAllocator* getAllocator();
+private:
+    void restoreAllocator();
+
+    AccountingTestMemoryAllocator* allocator_;
+    MemoryAccountant* accountant_;
 };
 
 SimpleString StringFrom(bool value);
@@ -158,7 +209,7 @@ SimpleString HexStringFrom(const void* value);
 SimpleString HexStringFrom(void (*value)());
 SimpleString StringFrom(double value, int precision = 6);
 SimpleString StringFrom(const SimpleString& other);
-SimpleString StringFromFormat(const char* format, ...) __check_format__(printf, 1, 2);
+SimpleString StringFromFormat(const char* format, ...) _check_format_(CPPUTEST_CHECK_FORMAT_TYPE, 1, 2);
 SimpleString VStringFromFormat(const char* format, va_list args);
 SimpleString StringFromBinary(const unsigned char* value, size_t size);
 SimpleString StringFromBinaryOrNull(const unsigned char* value, size_t size);
@@ -174,18 +225,17 @@ SimpleString BracketsFormattedHexStringFrom(cpputest_longlong value);
 SimpleString BracketsFormattedHexStringFrom(cpputest_ulonglong value);
 SimpleString BracketsFormattedHexStringFrom(signed char value);
 SimpleString BracketsFormattedHexString(SimpleString hexString);
+SimpleString PrintableStringFromOrNull(const char * expected);
 
 /*
  * ARM compiler has only partial support for C++11.
- * Specifically std::nullptr_t is not officially supported
+ * Specifically nullptr_t is not officially supported
  */
-#if __cplusplus > 199711L && !defined __arm__
+#if __cplusplus > 199711L && !defined __arm__ && CPPUTEST_USE_STD_CPP_LIB
 SimpleString StringFrom(const std::nullptr_t value);
 #endif
 
 #if CPPUTEST_USE_STD_CPP_LIB
-
-#include <string>
 
 SimpleString StringFrom(const std::string& other);
 

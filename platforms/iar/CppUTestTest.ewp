@@ -77,7 +77,7 @@
         </option>
         <option>
           <name>OGLastSavedByProductVersion</name>
-          <state>7.70.1.11471</state>
+          <state>7.80.4.12487</state>
         </option>
         <option>
           <name>GeneralEnableMisra</name>
@@ -101,7 +101,7 @@
         </option>
         <option>
           <name>OGBufferedTerminalOutput</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>GenStdoutInterface</name>
@@ -128,7 +128,7 @@
         <option>
           <name>GBECoreSlave</name>
           <version>24</version>
-          <state>40</state>
+          <state>39</state>
         </option>
         <option>
           <name>OGUseCmsis</name>
@@ -262,7 +262,8 @@
         </option>
         <option>
           <name>IExtraOptions</name>
-          <state></state>
+          <state>--preinclude $PROJ_DIR$\..\..\include\CppUTest\MemoryLeakDetectorNewMacros.h</state>
+          <state>--preinclude $PROJ_DIR$\..\..\include\CppUTest\MemoryLeakDetectorMallocMacros.h</state>
         </option>
         <option>
           <name>CCLangConformance</name>
@@ -335,7 +336,7 @@
         <option>
           <name>CCOptStrategy</name>
           <version>0</version>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>CCOptLevelSlave</name>
@@ -385,7 +386,7 @@
         </option>
         <option>
           <name>IccRTTI</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>IccStaticDestr</name>
@@ -414,7 +415,7 @@
         <option>
           <name>CCOptStrategySlave</name>
           <version>0</version>
-          <state>1</state>
+          <state>0</state>
         </option>
         <option>
           <name>CCGuardCalls</name>
@@ -644,7 +645,7 @@
       <name>ILINK</name>
       <archiveVersion>0</archiveVersion>
       <data>
-        <version>17</version>
+        <version>18</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
@@ -697,7 +698,7 @@
         </option>
         <option>
           <name>IlinkMapFile</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>IlinkLogFile</name>
@@ -916,7 +917,7 @@
         </option>
         <option>
           <name>CrcAlgorithm</name>
-          <version>0</version>
+          <version>1</version>
           <state>1</state>
         </option>
         <option>
@@ -931,6 +932,10 @@
         <option>
           <name>IlinkLogCallGraph</name>
           <state>0</state>
+        </option>
+        <option>
+          <name>IlinkIcfFile_AltDefault</name>
+          <state></state>
         </option>
       </data>
     </settings>
@@ -1603,7 +1608,7 @@
       <name>ILINK</name>
       <archiveVersion>0</archiveVersion>
       <data>
-        <version>17</version>
+        <version>18</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>0</debug>
         <option>
@@ -1875,7 +1880,7 @@
         </option>
         <option>
           <name>CrcAlgorithm</name>
-          <version>0</version>
+          <version>1</version>
           <state>1</state>
         </option>
         <option>
@@ -1890,6 +1895,10 @@
         <option>
           <name>IlinkLogCallGraph</name>
           <state>0</state>
+        </option>
+        <option>
+          <name>IlinkIcfFile_AltDefault</name>
+          <state></state>
         </option>
       </data>
     </settings>
@@ -1949,6 +1958,12 @@
         <name>$PROJ_DIR$\..\..\tests\CppUTest\CommandLineTestRunnerTest.cpp</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\..\tests\CppUTest\CompatabilityTests.cpp</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\tests\CppUTest\DummyMemoryLeakDetector.cpp</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\..\tests\CppUTest\JUnitOutputTest.cpp</name>
       </file>
       <file>
@@ -1973,7 +1988,13 @@
         <name>$PROJ_DIR$\..\..\tests\CppUTest\SimpleMutexTest.cpp</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\..\tests\CppUTest\SimpleStringCacheTest.cpp</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\..\tests\CppUTest\SimpleStringTest.cpp</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\tests\CppUTest\TeamCityOutputTest.cpp</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\tests\CppUTest\TestFailureNaNTest.cpp</name>
@@ -2009,6 +2030,9 @@
         <name>$PROJ_DIR$\..\..\tests\CppUTest\TestUTestMacro.cpp</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\..\tests\CppUTest\TestUTestStringMacro.cpp</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\..\tests\CppUTest\UtestPlatformTest.cpp</name>
       </file>
       <file>
@@ -2019,7 +2043,10 @@
       <name>warnings</name>
     </group>
     <file>
-      <name>$PROJ_DIR$\tests\AllTests.cpp</name>
+      <name>$PROJ_DIR$\..\..\tests\CppUTest\AllTests.cpp</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\tests\iar_argc_argv.c</name>
     </file>
   </group>
 </project>

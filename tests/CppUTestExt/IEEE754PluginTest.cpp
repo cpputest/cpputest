@@ -39,38 +39,38 @@ extern "C"
     #include "IEEE754PluginTest_c.h"
 }
 
-TEST_GROUP(FE__with_Plugin)
+TEST_GROUP(FE_with_Plugin)
 {
     TestTestingFixture fixture;
     IEEE754ExceptionsPlugin ieee754Plugin;
     void setup(void) _override
     {
-        fixture.registry_->installPlugin(&ieee754Plugin);
+        fixture.installPlugin(&ieee754Plugin);
     }
 };
 
-TEST(FE__with_Plugin, should_fail____when__FE_DIVBYZERO__is_set)
+TEST(FE_with_Plugin, should_fail_when_FE_DIVBYZERO_is_set)
 {
     fixture.setTestFunction(set_divisionbyzero_c);
     fixture.runAllTests();
     fixture.assertPrintContains("IEEE754_CHECK_CLEAR(FE_DIVBYZERO) failed");
 }
 
-TEST(FE__with_Plugin, should_fail____when__FE_OVERFLOW___is_set)
+TEST(FE_with_Plugin, should_fail_when_FE_OVERFLOW_is_set)
 {
     fixture.setTestFunction(set_overflow_c);
     fixture.runAllTests();
     fixture.assertPrintContains("IEEE754_CHECK_CLEAR(FE_OVERFLOW) failed");
 }
 
-TEST(FE__with_Plugin, should_fail____when__FE_UNDERFLOW__is_set)
+TEST(FE_with_Plugin, should_fail_when_FE_UNDERFLOW_is_set)
 {
     fixture.setTestFunction(set_underflow_c);
     fixture.runAllTests();
     fixture.assertPrintContains("IEEE754_CHECK_CLEAR(FE_UNDERFLOW) failed");
 }
 
-TEST(FE__with_Plugin, should_fail____when__FE_INEXACT____is_set_and_enabled)
+TEST(FE_with_Plugin, should_fail_when_FE_INEXACT_is_set_and_enabled)
 {
     IEEE754ExceptionsPlugin::enableInexact();
     fixture.setTestFunction(set_inexact_c);
@@ -78,7 +78,7 @@ TEST(FE__with_Plugin, should_fail____when__FE_INEXACT____is_set_and_enabled)
     fixture.assertPrintContains("IEEE754_CHECK_CLEAR(FE_INEXACT) failed");
 }
 
-TEST(FE__with_Plugin, should_succeed_when__FE_INEXACT____is_set_and_disabled)
+TEST(FE_with_Plugin, should_succeed_when_FE_INEXACT_is_set_and_disabled)
 {
     IEEE754ExceptionsPlugin::enableInexact();
     IEEE754ExceptionsPlugin::disableInexact();
@@ -87,7 +87,7 @@ TEST(FE__with_Plugin, should_succeed_when__FE_INEXACT____is_set_and_disabled)
     fixture.assertPrintContains("OK");
 }
 
-TEST(FE__with_Plugin, should_succeed_with_5_checks_when_no_flags_are_set)
+TEST(FE_with_Plugin, should_succeed_with_5_checks_when_no_flags_are_set)
 {
     IEEE754ExceptionsPlugin::enableInexact();
     fixture.setTestFunction(set_nothing_c);
@@ -96,14 +96,14 @@ TEST(FE__with_Plugin, should_succeed_with_5_checks_when_no_flags_are_set)
     IEEE754ExceptionsPlugin::disableInexact();
 }
 
-TEST(FE__with_Plugin, should_check_five_times_when_all_flags_are_set)
+TEST(FE_with_Plugin, should_check_five_times_when_all_flags_are_set)
 {
     fixture.setTestFunction(set_everything_c);
     fixture.runAllTests();
     LONGS_EQUAL(5, fixture.getCheckCount());
 }
 
-TEST(FE__with_Plugin, should_fail_only_once_when_all_flags_are_set)
+TEST(FE_with_Plugin, should_fail_only_once_when_all_flags_are_set)
 {
     fixture.setTestFunction(set_everything_c);
     fixture.runAllTests();
@@ -116,7 +116,7 @@ static void set_everything_but_already_failed(void)
     CHECK(1 == 2);
 }
 
-TEST(FE__with_Plugin, should_not_fail_again_when_test_has_already_failed)
+TEST(FE_with_Plugin, should_not_fail_again_when_test_has_already_failed)
 {
     fixture.setTestFunction(set_everything_but_already_failed);
     fixture.runAllTests();

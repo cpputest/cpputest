@@ -50,6 +50,9 @@ public:
     virtual void postTestAction(UtestShell & test, TestResult & result) _override;
     virtual bool parseArguments(int, const char *const *, int) _override;
 
+    MemoryReportAllocator* getMallocAllocator();
+    MemoryReportAllocator* getNewAllocator();
+    MemoryReportAllocator* getNewArrayAllocator();
 protected:
     virtual MemoryReportFormatter* createMemoryFormatter(const SimpleString& type);
 

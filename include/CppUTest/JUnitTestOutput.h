@@ -50,6 +50,7 @@ public:
     virtual void printBuffer(const char*) _override;
     virtual void print(const char*) _override;
     virtual void print(long) _override;
+    virtual void print(size_t) _override;
     virtual void printFailure(const TestFailure& failure) _override;
 
     virtual void flush() _override;
@@ -71,9 +72,10 @@ protected:
     virtual void writeTestSuiteSummary();
     virtual void writeProperties();
     virtual void writeTestCases();
+    virtual SimpleString encodeXmlText(const SimpleString& textbody);
+    virtual SimpleString encodeFileName(const SimpleString& fileName);
     virtual void writeFailure(JUnitTestCaseResultNode* node);
     virtual void writeFileEnding();
-
 };
 
 #endif

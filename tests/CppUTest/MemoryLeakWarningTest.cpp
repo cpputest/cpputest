@@ -34,28 +34,11 @@
 #include "CppUTest/TestTestingFixture.h"
 #include "CppUTest/TestHarness_c.h"
 #include "CppUTest/SimpleMutex.h"
-
-static char* leak1;
-static long* leak2;
-
-class DummyReporter: public MemoryLeakFailure
-{
-public:
-    virtual ~DummyReporter()
-    {
-    }
-    virtual void fail(char* /*fail_string*/)
-    {
-    }
-};
-
-static MemoryLeakDetector* detector;
-static MemoryLeakWarningPlugin* memPlugin;
-static DummyReporter dummy;
-static TestMemoryAllocator* allocator;
+#include "DummyMemoryLeakDetector.h"
 
 TEST_GROUP(MemoryLeakWarningLocalDetectorTest)
 {
+    DummyMemoryLeakFailure dummy;
 };
 
 TEST(MemoryLeakWarningLocalDetectorTest, localDetectorReturnsNewGlobalWhenNoneWasSet)
@@ -79,24 +62,32 @@ TEST(MemoryLeakWarningLocalDetectorTest, localDetectorIsGlobalDetector)
     POINTERS_EQUAL(globalDetector, localDetector);
 }
 
+static char* leak1;
+static long* leak2;
+
+static MemoryLeakDetector* detector;
+static MemoryLeakWarningPlugin* memPlugin;
+static TestMemoryAllocator* allocator;
 
 TEST_GROUP(MemoryLeakWarningTest)
 {
+    DummyMemoryLeakFailure dummy;
     TestTestingFixture* fixture;
 
-    void setup()
+    void setup() _override
     {
         fixture = new TestTestingFixture();
         detector = new MemoryLeakDetector(&dummy);
         allocator = new TestMemoryAllocator;
         memPlugin = new MemoryLeakWarningPlugin("TestMemoryLeakWarningPlugin", detector);
-        fixture->registry_->installPlugin(memPlugin);
+        fixture->installPlugin(memPlugin);
         memPlugin->enable();
 
         leak1 = NULLPTR;
         leak2 = NULLPTR;
     }
-    void teardown()
+
+    void teardown() _override
     {
         detector->deallocMemory(allocator, leak1);
         detector->deallocMemory(allocator, leak2);
@@ -108,21 +99,59 @@ TEST_GROUP(MemoryLeakWarningTest)
     }
 };
 
-static void _testTwoLeaks()
+static void testTwoLeaks_()
 {
     leak1 = detector->allocMemory(allocator, 10);
     leak2 = (long*) (void*) detector->allocMemory(allocator, 4);
 }
 
+#if CPPUTEST_USE_MEM_LEAK_DETECTION
+
 TEST(MemoryLeakWarningTest, TwoLeaks)
 {
-    fixture->setTestFunction(_testTwoLeaks);
+    fixture->setTestFunction(testTwoLeaks_);
     fixture->runAllTests();
+
     LONGS_EQUAL(1, fixture->getFailureCount());
-    fixture->assertPrintContains("Total number of leaks:  2");
 }
 
-static void _testIgnore2()
+#else
+
+TEST(MemoryLeakWarningTest, TwoLeaks)
+{
+    fixture->setTestFunction(testTwoLeaks_);
+    fixture->runAllTests();
+
+    LONGS_EQUAL(0, fixture->getFailureCount());
+}
+
+#endif
+
+
+static void testLeakWarningWithPluginDisabled_()
+{
+    memPlugin->expectLeaksInTest(1);
+    leak1 = (char*) cpputest_malloc_location_with_leak_detection(10, __FILE__, __LINE__);
+}
+
+TEST(MemoryLeakWarningTest, LeakWarningWithPluginDisabled)
+{
+    fixture->setTestFunction(testLeakWarningWithPluginDisabled_);
+
+    MemoryLeakWarningPlugin::saveAndDisableNewDeleteOverloads();
+
+    fixture->runAllTests();
+
+    LONGS_EQUAL(0, fixture->getFailureCount());
+    fixture->assertPrintContains("Warning: Expected 1 leak(s), but leak detection was disabled");
+
+    cpputest_free_location_with_leak_detection(leak1, __FILE__, __LINE__);
+    leak1 = NULLPTR;
+
+    MemoryLeakWarningPlugin::restoreNewDeleteOverloads();
+}
+
+static void testIgnore2_()
 {
     memPlugin->expectLeaksInTest(2);
     leak1 = detector->allocMemory(allocator, 10);
@@ -131,12 +160,12 @@ static void _testIgnore2()
 
 TEST(MemoryLeakWarningTest, Ignore2)
 {
-    fixture->setTestFunction(_testIgnore2);
+    fixture->setTestFunction(testIgnore2_);
     fixture->runAllTests();
     LONGS_EQUAL(0, fixture->getFailureCount());
 }
 
-static void _failAndLeakMemory()
+static void failAndLeakMemory_()
 {
     leak1 = detector->allocMemory(allocator, 10);
     FAIL("");
@@ -144,35 +173,10 @@ static void _failAndLeakMemory()
 
 TEST(MemoryLeakWarningTest, FailingTestDoesNotReportMemoryLeaks)
 {
-    fixture->setTestFunction(_failAndLeakMemory);
+    fixture->setTestFunction(failAndLeakMemory_);
     fixture->runAllTests();
     LONGS_EQUAL(1, fixture->getFailureCount());
 }
-
-static bool memoryLeakDetectorWasDeleted = false;
-static bool memoryLeakFailureWasDelete = false;
-
-class DummyMemoryLeakDetector : public MemoryLeakDetector
-{
-public:
-    DummyMemoryLeakDetector(MemoryLeakFailure* reporter) : MemoryLeakDetector(reporter) {}
-    virtual ~DummyMemoryLeakDetector()
-    {
-        memoryLeakDetectorWasDeleted = true;
-    }
-};
-
-class DummyMemoryLeakFailure : public MemoryLeakFailure
-{
-    virtual ~DummyMemoryLeakFailure()
-    {
-        memoryLeakFailureWasDelete = true;
-    }
-    virtual void fail(char*)
-    {
-    }
-};
-
 
 static bool cpputestHasCrashed;
 
@@ -184,20 +188,20 @@ TEST_GROUP(MemoryLeakWarningGlobalDetectorTest)
     DummyMemoryLeakDetector * dummyDetector;
     MemoryLeakFailure* dummyReporter;
 
+    GlobalMemoryAllocatorStash memoryAllocatorStash;
+
     static void crashMethod()
     {
         cpputestHasCrashed = true;
     }
 
-    void setup()
+    void setup() _override
     {
+        memoryAllocatorStash.save();
         detector = MemoryLeakWarningPlugin::getGlobalDetector();
         failureReporter = MemoryLeakWarningPlugin::getGlobalFailureReporter();
 
-        memoryLeakDetectorWasDeleted = false;
-        memoryLeakFailureWasDelete = false;
-
-        MemoryLeakWarningPlugin::turnOffNewDeleteOverloads();
+        MemoryLeakWarningPlugin::saveAndDisableNewDeleteOverloads();
 
         dummyReporter = new DummyMemoryLeakFailure;
         dummyDetector = new DummyMemoryLeakDetector(dummyReporter);
@@ -206,26 +210,27 @@ TEST_GROUP(MemoryLeakWarningGlobalDetectorTest)
         cpputestHasCrashed = false;
 }
 
-    void teardown()
+    void teardown() _override
     {
-        MemoryLeakWarningPlugin::turnOffNewDeleteOverloads();
-        if (!memoryLeakDetectorWasDeleted) delete dummyDetector;
-        if (!memoryLeakFailureWasDelete) delete dummyReporter;
+        MemoryLeakWarningPlugin::restoreNewDeleteOverloads();
 
+        MemoryLeakWarningPlugin::saveAndDisableNewDeleteOverloads();
+
+        if (!DummyMemoryLeakDetector::wasDeleted()) delete dummyDetector;
+        if (!DummyMemoryLeakFailure::wasDeleted()) delete dummyReporter;
         MemoryLeakWarningPlugin::setGlobalDetector(detector, failureReporter);
-        MemoryLeakWarningPlugin::turnOnNewDeleteOverloads();
+
+        MemoryLeakWarningPlugin::restoreNewDeleteOverloads();
 
         UtestShell::resetCrashMethod();
 
-        setCurrentMallocAllocatorToDefault();
-        setCurrentNewAllocatorToDefault();
-        setCurrentNewArrayAllocatorToDefault();
+        memoryAllocatorStash.restore();
     }
 };
 
 TEST(MemoryLeakWarningGlobalDetectorTest, turnOffNewOverloadsCausesNoAdditionalLeaks)
 {
-    int storedAmountOfLeaks = detector->totalMemoryLeaks(mem_leak_period_all);
+    size_t storedAmountOfLeaks = detector->totalMemoryLeaks(mem_leak_period_all);
 
     char* arrayMemory = new char[100];
     char* nonArrayMemory = new char;
@@ -246,8 +251,8 @@ TEST(MemoryLeakWarningGlobalDetectorTest, destroyGlobalDetector)
 
     MemoryLeakWarningPlugin::destroyGlobalDetector();
 
-    CHECK(memoryLeakDetectorWasDeleted);
-    CHECK(memoryLeakFailureWasDelete);
+    CHECK(DummyMemoryLeakDetector::wasDeleted());
+    CHECK(DummyMemoryLeakFailure::wasDeleted());
 }
 
 TEST(MemoryLeakWarningGlobalDetectorTest, MemoryWarningPluginCanBeSetToDestroyTheGlobalDetector)
@@ -258,45 +263,50 @@ TEST(MemoryLeakWarningGlobalDetectorTest, MemoryWarningPluginCanBeSetToDestroyTh
 
     delete plugin;
 
-    CHECK(memoryLeakDetectorWasDeleted);
+    CHECK(DummyMemoryLeakDetector::wasDeleted());
 }
 
-#ifndef CPPUTEST_MEM_LEAK_DETECTION_DISABLED
+#if CPPUTEST_USE_MEM_LEAK_DETECTION
 
 TEST(MemoryLeakWarningGlobalDetectorTest, crashOnLeakWithOperatorNew)
 {
     MemoryLeakWarningPlugin::setGlobalDetector(dummyDetector, dummyReporter);
 
-    MemoryLeakWarningPlugin::turnOnNewDeleteOverloads();
+    MemoryLeakWarningPlugin::restoreNewDeleteOverloads();
 
     crash_on_allocation_number(1);
     char* memory = new char[100];
     CHECK(cpputestHasCrashed);
     delete [] memory;
+    MemoryLeakWarningPlugin::saveAndDisableNewDeleteOverloads();
 }
 
 TEST(MemoryLeakWarningGlobalDetectorTest, crashOnLeakWithOperatorNewArray)
 {
     MemoryLeakWarningPlugin::setGlobalDetector(dummyDetector, dummyReporter);
 
-    MemoryLeakWarningPlugin::turnOnNewDeleteOverloads();
+    MemoryLeakWarningPlugin::restoreNewDeleteOverloads();
 
     crash_on_allocation_number(1);
     char* memory = new char;
     CHECK(cpputestHasCrashed);
     delete memory;
+
+    MemoryLeakWarningPlugin::saveAndDisableNewDeleteOverloads();
 }
 
 TEST(MemoryLeakWarningGlobalDetectorTest, crashOnLeakWithOperatorMalloc)
 {
     MemoryLeakWarningPlugin::setGlobalDetector(dummyDetector, dummyReporter);
 
-    MemoryLeakWarningPlugin::turnOnNewDeleteOverloads();
+    MemoryLeakWarningPlugin::restoreNewDeleteOverloads();
 
     crash_on_allocation_number(1);
     char* memory = (char*) cpputest_malloc(10);
     CHECK(cpputestHasCrashed);
     cpputest_free(memory);
+
+    MemoryLeakWarningPlugin::saveAndDisableNewDeleteOverloads();
 }
 
 TEST(MemoryLeakWarningGlobalDetectorTest, gettingTheGlobalDetectorDoesNotRestoreTheMemoryLeakOverloadsWhenTheyWereAlreadyOff)
@@ -305,20 +315,21 @@ TEST(MemoryLeakWarningGlobalDetectorTest, gettingTheGlobalDetectorDoesNotRestore
     MemoryLeakDetector* temporaryDetector = MemoryLeakWarningPlugin::getGlobalDetector();
     MemoryLeakFailure*  temporaryReporter = MemoryLeakWarningPlugin::getGlobalFailureReporter();
 
-    MemoryLeakWarningPlugin::turnOffNewDeleteOverloads();
+    MemoryLeakWarningPlugin::saveAndDisableNewDeleteOverloads();
+
     bool areNewDeleteOverloaded = MemoryLeakWarningPlugin::areNewDeleteOverloaded();
-    MemoryLeakWarningPlugin::turnOnNewDeleteOverloads();
+    MemoryLeakWarningPlugin::restoreNewDeleteOverloads();
 
     CHECK(!areNewDeleteOverloaded);
 
-    MemoryLeakWarningPlugin::turnOffNewDeleteOverloads();
     delete temporaryReporter;
     delete temporaryDetector;
+    MemoryLeakWarningPlugin::setGlobalDetector(NULLPTR, NULLPTR);
 }
 
 TEST(MemoryLeakWarningGlobalDetectorTest, checkIfTheMemoryLeakOverloadsAreOn)
 {
-    MemoryLeakWarningPlugin::turnOnNewDeleteOverloads();
+    MemoryLeakWarningPlugin::turnOnDefaultNotThreadSafeNewDeleteOverloads();
     CHECK(MemoryLeakWarningPlugin::areNewDeleteOverloaded());
 
     MemoryLeakWarningPlugin::turnOffNewDeleteOverloads();
@@ -329,10 +340,32 @@ TEST(MemoryLeakWarningGlobalDetectorTest, checkIfTheMemoryLeakOverloadsAreOff)
     MemoryLeakWarningPlugin::turnOffNewDeleteOverloads();
     bool areNewDeleteOverloaded = MemoryLeakWarningPlugin::areNewDeleteOverloaded();
 
-    MemoryLeakWarningPlugin::turnOnNewDeleteOverloads();
+    MemoryLeakWarningPlugin::turnOnDefaultNotThreadSafeNewDeleteOverloads();
     CHECK(!areNewDeleteOverloaded);
 }
 
+TEST(MemoryLeakWarningGlobalDetectorTest, checkIfTheMemoryLeakOverloadsAreOnWithRestore)
+{
+    MemoryLeakWarningPlugin::restoreNewDeleteOverloads();
+    CHECK(MemoryLeakWarningPlugin::areNewDeleteOverloaded());
+    MemoryLeakWarningPlugin::saveAndDisableNewDeleteOverloads();
+}
+
+TEST(MemoryLeakWarningGlobalDetectorTest, checkIfTheMemoryLeakOverloadsAreOffWithSaveDisable)
+{
+    MemoryLeakWarningPlugin::saveAndDisableNewDeleteOverloads();
+    CHECK(!MemoryLeakWarningPlugin::areNewDeleteOverloaded());
+    MemoryLeakWarningPlugin::restoreNewDeleteOverloads();
+}
+
+TEST(MemoryLeakWarningGlobalDetectorTest, threadSafeMemoryLeakDetectorOverloadsAreAlsoOverloaded)
+{
+    MemoryLeakWarningPlugin::restoreNewDeleteOverloads();
+    MemoryLeakWarningPlugin::turnOnThreadSafeNewDeleteOverloads();
+    CHECK(MemoryLeakWarningPlugin::areNewDeleteOverloaded());
+    MemoryLeakWarningPlugin::turnOnDefaultNotThreadSafeNewDeleteOverloads();
+    MemoryLeakWarningPlugin::saveAndDisableNewDeleteOverloads();
+}
 
 #endif
 
@@ -341,7 +374,7 @@ TEST(MemoryLeakWarningGlobalDetectorTest, checkIfTheMemoryLeakOverloadsAreOff)
 TEST(MemoryLeakWarningGlobalDetectorTest, turnOffNewOverloadsNoThrowCausesNoAdditionalLeaks)
 {
 #undef new
-    int storedAmountOfLeaks = detector->totalMemoryLeaks(mem_leak_period_all);
+    size_t storedAmountOfLeaks = detector->totalMemoryLeaks(mem_leak_period_all);
 
     char* nonMemoryNoThrow = new (std::nothrow) char;
     char* nonArrayMemoryNoThrow = new (std::nothrow) char[10];
@@ -357,7 +390,7 @@ TEST(MemoryLeakWarningGlobalDetectorTest, turnOffNewOverloadsNoThrowCausesNoAddi
 #endif
 }
 
-#ifndef CPPUTEST_MEM_LEAK_DETECTION_DISABLED
+#if CPPUTEST_USE_MEM_LEAK_DETECTION
 
 static int mutexLockCount = 0;
 static int mutexUnlockCount = 0;
@@ -372,11 +405,9 @@ static void StubMutexUnlock(PlatformSpecificMutex)
     mutexUnlockCount++;
 }
 
-
-
 TEST_GROUP(MemoryLeakWarningThreadSafe)
 {
-    void setup()
+    void setup() _override
     {
         UT_PTR_SET(PlatformSpecificMutexLock, StubMutexLock);
         UT_PTR_SET(PlatformSpecificMutexUnlock, StubMutexUnlock);
@@ -385,14 +416,14 @@ TEST_GROUP(MemoryLeakWarningThreadSafe)
         mutexUnlockCount = 0;
     }
 
-    void teardown()
+    void teardown() _override
     {
     }
 };
 
 TEST(MemoryLeakWarningThreadSafe, turnOnThreadSafeMallocFreeReallocOverloadsDebug)
 {
-    int storedAmountOfLeaks = MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all);
+    size_t storedAmountOfLeaks = MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all);
 
     MemoryLeakWarningPlugin::turnOnThreadSafeNewDeleteOverloads();
 
@@ -414,12 +445,12 @@ TEST(MemoryLeakWarningThreadSafe, turnOnThreadSafeMallocFreeReallocOverloadsDebu
     CHECK_EQUAL(3, mutexLockCount);
     CHECK_EQUAL(3, mutexUnlockCount);
 
-    MemoryLeakWarningPlugin::turnOnNewDeleteOverloads();
+    MemoryLeakWarningPlugin::turnOnDefaultNotThreadSafeNewDeleteOverloads();
 }
 
 TEST(MemoryLeakWarningThreadSafe, turnOnThreadSafeNewDeleteOverloadsDebug)
 {
-    int storedAmountOfLeaks = MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all);
+    size_t storedAmountOfLeaks = MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all);
 
     MemoryLeakWarningPlugin::turnOnThreadSafeNewDeleteOverloads();
 
@@ -437,7 +468,7 @@ TEST(MemoryLeakWarningThreadSafe, turnOnThreadSafeNewDeleteOverloadsDebug)
     CHECK_EQUAL(4, mutexLockCount);
     CHECK_EQUAL(4, mutexUnlockCount);
 
-    MemoryLeakWarningPlugin::turnOnNewDeleteOverloads();
+    MemoryLeakWarningPlugin::turnOnDefaultNotThreadSafeNewDeleteOverloads();
 }
 
 #ifdef __clang__
@@ -455,7 +486,7 @@ TEST(MemoryLeakWarningThreadSafe, turnOnThreadSafeNewDeleteOverloads)
 {
 #undef new
 
-    int storedAmountOfLeaks = MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all);
+    size_t storedAmountOfLeaks = MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all);
     MemoryLeakWarningPlugin::turnOnThreadSafeNewDeleteOverloads();
 
     int *n = new int;
@@ -476,7 +507,7 @@ TEST(MemoryLeakWarningThreadSafe, turnOnThreadSafeNewDeleteOverloads)
     CHECK_EQUAL(8, mutexLockCount);
     CHECK_EQUAL(8, mutexUnlockCount);
 
-    MemoryLeakWarningPlugin::turnOnNewDeleteOverloads();
+    MemoryLeakWarningPlugin::turnOnDefaultNotThreadSafeNewDeleteOverloads();
 #ifdef CPPUTEST_USE_NEW_MACROS
     #include "CppUTest/MemoryLeakDetectorNewMacros.h"
 #endif

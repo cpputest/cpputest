@@ -30,7 +30,7 @@
 #include "CppUTestExt/MemoryReportAllocator.h"
 #include "CppUTestExt/MemoryReportFormatter.h"
 
-#define TESTOUTPUT_EQUAL(a) STRCMP_EQUAL_LOCATION(a, testOutput.getOutput().asCharString(), "", __FILE__, __LINE__);
+#define TESTOUTPUT_EQUAL(a) STRCMP_EQUAL_LOCATION(a, testOutput.getOutput().asCharString(), "", __FILE__, __LINE__)
 
 TEST_GROUP(NormalMemoryReportFormatter)
 {
@@ -40,13 +40,13 @@ TEST_GROUP(NormalMemoryReportFormatter)
     TestResult* testResult;
     NormalMemoryReportFormatter formatter;
 
-    void setup()
+    void setup() _override
     {
         memory01 = (char*) 0x01;
         testResult = new TestResult(testOutput);
     }
 
-    void teardown()
+    void teardown() _override
     {
         delete testResult;
     }

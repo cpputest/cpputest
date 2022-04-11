@@ -7,10 +7,9 @@ common problems to solve.
 ---++ Using extern "C"
 
 When including C-header files or when declaring C-variables and routines
-in a .cpp file, you'll have to surround them with an extern "C". This is
-because the C++ linker works different than the C linker and you need to
-instruct the compiler about this. If you do NOT do this, you will probably
-get a linker error, like unresolved symbols, for a routine that you did
+in a .cpp file, you'll need to enclose them within an extern "C". This is
+because the C++ linker works differently than the C linker and you need to
+instruct the compiler about this else you may encounter a linker error. Like unresolved symbols for a routine that you did
 implement.
 
 An example:
@@ -25,10 +24,10 @@ extern "C" {
 
 CppUTest comes with a file called TestHarness_c.h which contains a couple
 of routines that can be used in C code, like C-versions of the CHECK-macro's.
-The file also contains malloc and free routines that can be used for using
+The file also contains malloc and free routines that can be used for accessing
 the CppUTest memory leak detector. These routines should be used instead of
 the normal malloc/free. This can be achieved by #defining them somewhere, for
-examples as a compiler option: -Dmalloc=cpputest_malloc.
+example as a compiler option: -Dmalloc=cpputest_malloc.
 
 It's important to remember that TestHarness_c.h is a C-header file. It can be
 used in C code, but when using in C++ code, you need to use extern "C" before

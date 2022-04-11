@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007, Michael Feathers, James Grenning and Bas Vodde
+ * Copyright (c) 2011, Michael Feathers, James Grenning and Bas Vodde
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -25,19 +25,9 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-//Include this in the test main to execute these tests
-IMPORT_TEST_GROUP( Utest);
-IMPORT_TEST_GROUP( Failure);
-IMPORT_TEST_GROUP( TestOutput);
-IMPORT_TEST_GROUP( SimpleString);
-IMPORT_TEST_GROUP( TestInstaller);
-IMPORT_TEST_GROUP( NullTest);
-IMPORT_TEST_GROUP( MemoryLeakWarningTest);
-IMPORT_TEST_GROUP( TestHarness_c);
-IMPORT_TEST_GROUP( CommandLineTestRunner);
-IMPORT_TEST_GROUP( JUnitOutputTest);
-IMPORT_TEST_GROUP( MemoryLeakDetectorTest);
+#ifndef GTESTSUPPORT__H_
+#define GTESTSUPPORT__H_
 
-/* In allTest.cpp */
-IMPORT_TEST_GROUP(CheatSheet);
+extern void CppuTestGTestIgnoreLeaksInTest();
 
+#endif

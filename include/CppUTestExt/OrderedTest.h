@@ -32,7 +32,7 @@ class OrderedTestShell : public UtestShell
 {
 public:
     OrderedTestShell();
-   virtual ~OrderedTestShell();
+   virtual ~OrderedTestShell() _destructor_override;
 
    virtual OrderedTestShell* addOrderedTest(OrderedTestShell* test);
    virtual OrderedTestShell* getNextOrderedTest();
@@ -56,7 +56,7 @@ private:
 class OrderedTestInstaller
 {
   public:
-    explicit OrderedTestInstaller(OrderedTestShell& test, const char* groupName, const char* testName, const char* fileName, int lineNumber, int level);
+    explicit OrderedTestInstaller(OrderedTestShell& test, const char* groupName, const char* testName, const char* fileName, size_t lineNumber, int level);
     virtual ~OrderedTestInstaller();
 
   private:
@@ -71,7 +71,7 @@ class OrderedTestInstaller
   extern TEST_##testGroup##_##testName##_TestShell TEST_##testGroup##_##testName##_Instance; \
   class TEST_##testGroup##_##testName##_Test : public TEST_GROUP_##CppUTestGroup##testGroup \
 { public: TEST_##testGroup##_##testName##_Test () : TEST_GROUP_##CppUTestGroup##testGroup () {} \
-       void testBody(); }; \
+       void testBody() _override; }; \
   class TEST_##testGroup##_##testName##_TestShell : public OrderedTestShell { \
        virtual Utest* createTest() _override { return new TEST_##testGroup##_##testName##_Test; } \
   }  TEST_##testGroup##_##testName##_Instance; \
@@ -85,4 +85,3 @@ class OrderedTestInstaller
   }
 
 #endif
-

@@ -1,18 +1,19 @@
 CppUTest
 ========
 
+[![Build Status](https://app.travis-ci.com/cpputest/cpputest.svg?branch=master)](https://app.travis-ci.com/github/cpputest/cpputest)
+[![Build status](https://ci.appveyor.com/api/projects/status/irh38i4wblsb5tew?svg=true)](https://ci.appveyor.com/project/basvodde/cpputest)
+[![Coverage Status](https://coveralls.io/repos/cpputest/cpputest/badge.svg?branch=master&service=github)](https://coveralls.io/github/cpputest/cpputest?branch=master)
+[![ConanCenter package](https://repology.org/badge/version-for-repo/conancenter/cpputest.svg)](https://conan.io/center/cpputest)
+
+
 CppUTest unit testing and mocking framework for C/C++
 
-[More information on the project page](http://cpputest.github.com)
+[More information on the project page](https://cpputest.github.io)
 
-Travis Linux build status:
-[![Build Status](https://travis-ci.org/cpputest/cpputest.png?branch=master)](https://travis-ci.org/cpputest/cpputest)
 
-AppVeyor Windows build status:
-[![Build status](https://ci.appveyor.com/api/projects/status/irh38i4wblsb5tew?svg=true)](https://ci.appveyor.com/project/basvodde/cpputest)
-
-Coverage:
-[![Coverage Status](https://coveralls.io/repos/cpputest/cpputest/badge.svg?branch=master&service=github)](https://coveralls.io/github/cpputest/cpputest?branch=master)
+Slack channel:
+[Join if link not expired](https://join.slack.com/t/cpputest/shared_invite/zt-epq97u9h-6yBQHHl2cvUADjEENtdASw)
 
 ## Getting Started
 
@@ -20,23 +21,23 @@ You'll need to do the following to get started:
 
 Building from source (unix-based, cygwin, MacOSX):
 
-* Download latest version
-* autogen.sh
-* make a build directory and change to it `mkdir a_build_dir && cd a_build_dir`
-* configure `../configure`
-* `make`
-* `make check`
-* You can use `make install` if you want to install CppUTest system-wide
+* git clone git://github.com/cpputest/cpputest.git
+* cd cpputest_build
+* autoreconf .. -i
+* ../configure
+* make
+
+You can use `make install` if you want to install CppUTest system-wide
 
 You can also use CMake, which also works for Windows Visual Studio.
 
 * Download latest version
-* cmake CMakeList.txt
+* cmake CMakeLists.txt
 * make
 
 Then to get started, you'll need to do the following:
 * Add the include path to the Makefile. Something like:
-    * CPPFLAGS += -I(CPPUTEST_HOME)/include
+    * CPPFLAGS += -I$(CPPUTEST_HOME)/include
 * Add the memory leak macros to your Makefile (needed for additional debug info!). Something like:
     * CXXFLAGS += -include $(CPPUTEST_HOME)/include/CppUTest/MemoryLeakDetectorNewMacros.h
     * CFLAGS += -include $(CPPUTEST_HOME)/include/CppUTest/MemoryLeakDetectorMallocMacros.h
@@ -58,11 +59,13 @@ TEST(FirstTestGroup, FirstTest)
 
 ## Command line switches
 
+* -h help, shows the latest help, including the parameters we've implemented after updating this README page.
 * -v verbose, print each test name as it runs
 * -r# repeat the tests some number of times, default is one, default if # is not specified is 2. This is handy if you are experiencing memory leaks related to statics and caches.
 * -s# random shuffle the test execution order. # is an integer used for seeding the random number generator. # is optional, and if omitted, the seed value is chosen automatically, which results in a different order every time. The seed value is printed to console to make it possible to reproduce a previously generated execution order. Handy for detecting problems related to dependencies between tests.
 * -g group only run test whose group contains the substring group
 * -n name only run test whose name contains the substring name
+* -f crash on fail, run the tests as normal but, when a test fails, crash rather than report the failure in the normal way
 
 ## Test Macros
 
@@ -178,7 +181,7 @@ TEST_GROUP(ClassName)
   {
     delete className;
   }
-}
+};
 
 TEST(ClassName, Create)
 {
@@ -195,6 +198,56 @@ TEST(ClassName, Create)
 There are some scripts that are helpful in creating your initial h, cpp, and
 Test files.  See scripts/README.TXT
 
+## Conan
+
+CppUTest is available through [conan-center][conan-center].
+
+##### conanfile.txt
+
+```ini
+[requires]
+cpputest/4.0
+
+[generators]
+cmake_find_package
+cmake_paths
+```
+
+##### CMake
+
+```cmake
+find_package(CppUTest REQUIRED)
+
+add_executable(example_test ExampleTest.cpp)
+
+target_link_libraries(example_test PRIVATE
+    CppUTest::CppUTest
+    CppUTest::CppUTestExt)
+```
 
 
+## Integration as external CMake project
 
+Sometimes you want to use CppUTest in your project without installing it to your system or for having control over the version you are using. This little snippet get the wanted version from Github and builds it as a library.
+
+```cmake
+# CppUTest
+include(FetchContent)
+FetchContent_Declare(
+    CppUTest
+    GIT_REPOSITORY https://github.com/cpputest/cpputest.git
+    GIT_TAG        latest-passing-build # or use release tag, eg. v3.8
+)
+# Set this to ON if you want to have the CppUTests in your project as well.
+set(TESTS OFF CACHE BOOL "Switch off CppUTest Test build")
+FetchContent_MakeAvailable(CppUTest)
+```
+
+It can be used then like so:
+
+```cmake
+add_executable(run_tests UnitTest1.cpp UnitTest2.cpp)
+target_link_libraries(run_tests PRIVATE CppUTest CppUTestExt)
+```
+
+[conan-center]: https://conan.io/center/cpputest

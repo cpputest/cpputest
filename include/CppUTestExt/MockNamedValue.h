@@ -155,6 +155,7 @@ public:
     virtual MockNamedValueCopier* getCopier() const;
 
     static void setDefaultComparatorsAndCopiersRepository(MockNamedValueComparatorsAndCopiersRepository* repository);
+    static MockNamedValueComparatorsAndCopiersRepository* getDefaultComparatorsAndCopiersRepository();
 
     static const double defaultDoubleTolerance;
 private:
