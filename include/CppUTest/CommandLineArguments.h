@@ -100,7 +100,7 @@ private:
     void setRepeatCount(int ac, const char *const *av, int& index);
     bool setShuffle(int ac, const char *const *av, int& index);
     void addGroupFilter(int ac, const char *const *av, int& index);
-    bool addGroupDotNameFilter(int ac, const char *const *av, int& index);
+    bool addGroupDotNameFilter(int ac, const char *const *av, int& index, const SimpleString& parameterName, bool strict, bool exclude);
     void addStrictGroupFilter(int ac, const char *const *av, int& index);
     void addExcludeGroupFilter(int ac, const char *const *av, int& index);
     void addExcludeStrictGroupFilter(int ac, const char *const *av, int& index);

@@ -75,7 +75,10 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
         else if (argument == "-ci") rethrowExceptions_ = false;
         else if (argument.startsWith("-r")) setRepeatCount(ac_, av_, i);
         else if (argument.startsWith("-g")) addGroupFilter(ac_, av_, i);
-        else if (argument.startsWith("-t")) correctParameters = addGroupDotNameFilter(ac_, av_, i);
+        else if (argument.startsWith("-t")) correctParameters = addGroupDotNameFilter(ac_, av_, i, "-t", false, false);
+        else if (argument.startsWith("-st")) correctParameters = addGroupDotNameFilter(ac_, av_, i, "-st", true, false);
+        else if (argument.startsWith("-xt")) correctParameters = addGroupDotNameFilter(ac_, av_, i, "-xt", false, true);
+        else if (argument.startsWith("-xst")) correctParameters = addGroupDotNameFilter(ac_, av_, i, "-xst", true, true);
         else if (argument.startsWith("-sg")) addStrictGroupFilter(ac_, av_, i);
         else if (argument.startsWith("-xg")) addExcludeGroupFilter(ac_, av_, i);
         else if (argument.startsWith("-xsg")) addExcludeStrictGroupFilter(ac_, av_, i);
@@ -293,16 +296,29 @@ void CommandLineArguments::addGroupFilter(int ac, const char *const *av, int& i)
     groupFilters_ = groupFilter->add(groupFilters_);
 }
 
-bool CommandLineArguments::addGroupDotNameFilter(int ac, const char *const *av, int& i)
+bool CommandLineArguments::addGroupDotNameFilter(int ac, const char *const *av, int& i, const SimpleString& parameterName, 
+                                                 bool strict, bool exclude)
 {
-    SimpleString groupDotName = getParameterField(ac, av, i, "-t");
+    SimpleString groupDotName = getParameterField(ac, av, i, parameterName);
     SimpleStringCollection collection;
     groupDotName.split(".", collection);
 
     if (collection.size() != 2) return false;
 
-    groupFilters_ = (new TestFilter(collection[0].subString(0, collection[0].size()-1)))->add(groupFilters_);
-    nameFilters_ = (new TestFilter(collection[1]))->add(nameFilters_);
+    TestFilter* groupFilter = new TestFilter(collection[0].subString(0, collection[0].size()-1));
+    TestFilter* nameFilter = new TestFilter(collection[1]);
+    if (strict)
+    {
+        groupFilter->strictMatching();
+        nameFilter->strictMatching();
+    }
+    if (exclude)
+    {
+        groupFilter->invertMatching();
+        nameFilter->invertMatching();
+    }
+    groupFilters_ = groupFilter->add(groupFilters_);
+    nameFilters_ = nameFilter->add(nameFilters_);
     return true;
 }
 
