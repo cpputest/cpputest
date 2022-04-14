@@ -529,7 +529,7 @@ TEST(CommandLineArguments, printUsage)
     STRCMP_EQUAL(
             "use -h for more extensive help\n"
             "usage [-h] [-v] [-vv] [-c] [-p] [-lg] [-ln] [-ll] [-ri] [-r[<#>]] [-f] [-e] [-ci]\n"
-            "      [-g|sg|xg|xsg <groupName>]... [-n|sn|xn|xsn <testName>]... [-t <groupName>.<testName>]...\n"
+            "      [-g|sg|xg|xsg <groupName>]... [-n|sn|xn|xsn <testName>]... [-t|st|xt|xst <groupName>.<testName>]...\n"
             "      [-b] [-s [<seed>]] [\"[IGNORE_]TEST(<groupName>, <testName>)\"]...\n"
             "      [-o{normal|eclipse|junit|teamcity}] [-k <packageName>]\n",
             args->usage());

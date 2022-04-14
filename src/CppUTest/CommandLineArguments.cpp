@@ -105,7 +105,7 @@ const char* CommandLineArguments::usage() const
 {
     return "use -h for more extensive help\n"
            "usage [-h] [-v] [-vv] [-c] [-p] [-lg] [-ln] [-ll] [-ri] [-r[<#>]] [-f] [-e] [-ci]\n"
-           "      [-g|sg|xg|xsg <groupName>]... [-n|sn|xn|xsn <testName>]... [-t <groupName>.<testName>]...\n"
+           "      [-g|sg|xg|xsg <groupName>]... [-n|sn|xn|xsn <testName>]... [-t|st|xt|xst <groupName>.<testName>]...\n"
            "      [-b] [-s [<seed>]] [\"[IGNORE_]TEST(<groupName>, <testName>)\"]...\n"
            "      [-o{normal|eclipse|junit|teamcity}] [-k <packageName>]\n";
 }
@@ -140,12 +140,15 @@ const char* CommandLineArguments::help() const
       "  -t <group>.<name> - only run tests whose group and name contain <group> and <name>\n"
       "  -sg <group>       - only run tests whose group exactly matches <group>\n"
       "  -sn <name>        - only run tests whose name exactly matches <name>\n"
+      "  -st <grp>.<name>  - only run tests whose group and name exactly match <grp> and <name>\n"
       "  -xg <group>       - exclude tests whose group contains <group>\n"
       "  -xn <name>        - exclude tests whose name contains <name>\n"
+      "  -xt <grp>.<name>  - exclude tests whose group and name contain <grp> and <name>\n"
       "  -xsg <group>      - exclude tests whose group exactly matches <group>\n"
       "  -xsn <name>       - exclude tests whose name exactly matches <name>\n"
+      "  -xst <grp>.<name> - exclude tests whose group and name exactly match <grp> and <name>\n"
       "  \"[IGNORE_]TEST(<group>, <name>)\"\n"
-      "                    - only run test whose group and name exactly matches <group> and <name>\n"
+      "                    - only run tests whose group and name exactly match <group> and <name>\n"
       "                      (this can be used to copy-paste output from the -v option on the command line)\n"
       "\n"
       "Options that control how the tests are run:\n"
