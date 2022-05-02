@@ -75,7 +75,10 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
         else if (argument == "-ci") rethrowExceptions_ = false;
         else if (argument.startsWith("-r")) setRepeatCount(ac_, av_, i);
         else if (argument.startsWith("-g")) addGroupFilter(ac_, av_, i);
-        else if (argument.startsWith("-t")) correctParameters = addGroupDotNameFilter(ac_, av_, i);
+        else if (argument.startsWith("-t")) correctParameters = addGroupDotNameFilter(ac_, av_, i, "-t", false, false);
+        else if (argument.startsWith("-st")) correctParameters = addGroupDotNameFilter(ac_, av_, i, "-st", true, false);
+        else if (argument.startsWith("-xt")) correctParameters = addGroupDotNameFilter(ac_, av_, i, "-xt", false, true);
+        else if (argument.startsWith("-xst")) correctParameters = addGroupDotNameFilter(ac_, av_, i, "-xst", true, true);
         else if (argument.startsWith("-sg")) addStrictGroupFilter(ac_, av_, i);
         else if (argument.startsWith("-xg")) addExcludeGroupFilter(ac_, av_, i);
         else if (argument.startsWith("-xsg")) addExcludeStrictGroupFilter(ac_, av_, i);
@@ -102,7 +105,7 @@ const char* CommandLineArguments::usage() const
 {
     return "use -h for more extensive help\n"
            "usage [-h] [-v] [-vv] [-c] [-p] [-lg] [-ln] [-ll] [-ri] [-r[<#>]] [-f] [-e] [-ci]\n"
-           "      [-g|sg|xg|xsg <groupName>]... [-n|sn|xn|xsn <testName>]... [-t <groupName>.<testName>]...\n"
+           "      [-g|sg|xg|xsg <groupName>]... [-n|sn|xn|xsn <testName>]... [-t|st|xt|xst <groupName>.<testName>]...\n"
            "      [-b] [-s [<seed>]] [\"[IGNORE_]TEST(<groupName>, <testName>)\"]...\n"
            "      [-o{normal|eclipse|junit|teamcity}] [-k <packageName>]\n";
 }
@@ -137,12 +140,15 @@ const char* CommandLineArguments::help() const
       "  -t <group>.<name> - only run tests whose group and name contain <group> and <name>\n"
       "  -sg <group>       - only run tests whose group exactly matches <group>\n"
       "  -sn <name>        - only run tests whose name exactly matches <name>\n"
+      "  -st <grp>.<name>  - only run tests whose group and name exactly match <grp> and <name>\n"
       "  -xg <group>       - exclude tests whose group contains <group>\n"
       "  -xn <name>        - exclude tests whose name contains <name>\n"
+      "  -xt <grp>.<name>  - exclude tests whose group and name contain <grp> and <name>\n"
       "  -xsg <group>      - exclude tests whose group exactly matches <group>\n"
       "  -xsn <name>       - exclude tests whose name exactly matches <name>\n"
+      "  -xst <grp>.<name> - exclude tests whose group and name exactly match <grp> and <name>\n"
       "  \"[IGNORE_]TEST(<group>, <name>)\"\n"
-      "                    - only run test whose group and name exactly matches <group> and <name>\n"
+      "                    - only run tests whose group and name exactly match <group> and <name>\n"
       "                      (this can be used to copy-paste output from the -v option on the command line)\n"
       "\n"
       "Options that control how the tests are run:\n"
@@ -293,16 +299,29 @@ void CommandLineArguments::addGroupFilter(int ac, const char *const *av, int& i)
     groupFilters_ = groupFilter->add(groupFilters_);
 }
 
-bool CommandLineArguments::addGroupDotNameFilter(int ac, const char *const *av, int& i)
+bool CommandLineArguments::addGroupDotNameFilter(int ac, const char *const *av, int& i, const SimpleString& parameterName, 
+                                                 bool strict, bool exclude)
 {
-    SimpleString groupDotName = getParameterField(ac, av, i, "-t");
+    SimpleString groupDotName = getParameterField(ac, av, i, parameterName);
     SimpleStringCollection collection;
     groupDotName.split(".", collection);
 
     if (collection.size() != 2) return false;
 
-    groupFilters_ = (new TestFilter(collection[0].subString(0, collection[0].size()-1)))->add(groupFilters_);
-    nameFilters_ = (new TestFilter(collection[1]))->add(nameFilters_);
+    TestFilter* groupFilter = new TestFilter(collection[0].subString(0, collection[0].size()-1));
+    TestFilter* nameFilter = new TestFilter(collection[1]);
+    if (strict)
+    {
+        groupFilter->strictMatching();
+        nameFilter->strictMatching();
+    }
+    if (exclude)
+    {
+        groupFilter->invertMatching();
+        nameFilter->invertMatching();
+    }
+    groupFilters_ = groupFilter->add(groupFilters_);
+    nameFilters_ = nameFilter->add(nameFilters_);
     return true;
 }
 
