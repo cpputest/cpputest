@@ -1,6 +1,8 @@
 if (MSVC)
     set(CPPUTEST_C_WARNING_FLAGS "/WX")
     set(CPPUTEST_CXX_WARNING_FLAGS "/WX /wd4290")
+elseif(BORLAND)
+    set(CPPUTEST_CXX_WARNING_FLAGS "-w-8008 -w-8066")
 else (MSVC)
     include(CheckCCompilerFlag)
     include(CheckCXXCompilerFlag)
