@@ -64,7 +64,10 @@ option(WERROR "Compile with warnings as errors" OFF)
 
 option(TESTS "Compile and make tests for the code?" ON)
 option(TESTS_DETAILED "Run each test separately instead of grouped?" OFF)
-option(TESTS_BUILD_DISCOVER "Build time test discover" ON)
+include(CMakeDependentOption)
+cmake_dependent_option(TESTS_BUILD_DISCOVER "Build time test discover" ON
+    "NOT CPP_PLATFORM STREQUAL Iar" OFF
+)
 
 option(EXAMPLES "Compile and make examples?" OFF)
 
@@ -76,7 +79,6 @@ option(LIBNAME_POSTFIX_DEBUG "Add indication of debug compilation to the library
 option(HAS_INF "Compiler has Inf value for float" ON)
 option(HAS_NAN "Compiler has NaN value for float" ON)
 
-include(CMakeDependentOption)
 cmake_dependent_option(STDC_WANT_SECURE_LIB "Use MSVC safe functions" ON "CPP_PLATFORM STREQUAL VisualCpp" OFF)
 
 if(NOT CMAKE_BUILD_TYPE)
