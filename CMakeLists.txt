@@ -1,6 +1,7 @@
 # 2.6.3 is needed for ctest support
 # 3.1 is needed for target_sources
-cmake_minimum_required(VERSION 3.1)
+# 3.10 is needed for IAR support
+cmake_minimum_required(VERSION 3.10)
 
 project(CppUTest)
 
@@ -15,6 +16,40 @@ if (EXISTS "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
     message(STATUS "conan_basic_setup()")
     conan_basic_setup()
 endif()
+
+if(NOT DEFINED CPP_PLATFORM)
+    if(MSVC)
+        set(CPP_PLATFORM VisualCpp)
+    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "IAR")
+        set(CPP_PLATFORM Iar)
+    elseif(BORLAND)
+        set(CPP_PLATFORM Borland)
+    elseif(
+        CMAKE_CXX_COMPILER_ID STREQUAL "GNU"
+        # Clang generally behaves like GCC
+        OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang"
+    )
+        set(CPP_PLATFORM Gcc)
+    else()
+        set(CPP_PLATFORM GccNoStdC)
+    endif()
+endif()
+
+set(CPP_PLATFORM ${CPP_PLATFORM} CACHE STRING "Target platform")
+set_property(
+    CACHE CPP_PLATFORM
+    PROPERTY STRINGS
+      "armcc"
+      "Borland"
+      "C2000"
+      "Dos"
+      "Gcc"
+      "GccNoStdC"
+      "Iar"
+      "Keil"
+      "Symbian"
+      "VisualCpp"
+)
 
 option(STD_C "Use the standard C library" ON)
 option(STD_CPP "Use the standard C++ library" ON)
@@ -225,6 +260,7 @@ Current compiler options:
     CppUTest LDFLAGS:                   ${CPPUTEST_LD_FLAGS}
 
 Features configured in CppUTest:
+    Target runtime:                     ${CPP_PLATFORM}
     Memory Leak Detection:              ${MEMORY_LEAK_DETECTION}
     Compiling Extensions:               ${EXTENSIONS}
     Support Long Long:                  ${LONGLONG}
