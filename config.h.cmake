@@ -4,6 +4,7 @@
 #cmakedefine CPPUTEST_MEM_LEAK_DETECTION_DISABLED
 #cmakedefine CPPUTEST_USE_LONG_LONG
 
+#cmakedefine CPPUTEST_HAVE_FENV
 #cmakedefine CPPUTEST_NO_INF
 #cmakedefine CPPUTEST_NO_NAN
 
