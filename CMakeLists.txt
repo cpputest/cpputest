@@ -136,7 +136,7 @@ check_symbol_exists(waitpid "sys/wait.h" CPPUTEST_HAVE_WAITPID)
 check_symbol_exists(gettimeofday "sys/time.h" CPPUTEST_HAVE_GETTIMEOFDAY)
 check_symbol_exists(pthread_mutex_lock "pthread.h" CPPUTEST_HAVE_PTHREAD_MUTEX_LOCK)
 
-if (NOT IAR)
+if (NOT CPP_PLATFORM STREQUAL "Iar")
     include(CheckFunctionExists)
     check_function_exists(strdup CPPUTEST_HAVE_STRDUP)
 endif()
