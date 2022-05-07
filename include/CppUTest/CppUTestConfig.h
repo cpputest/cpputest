@@ -258,7 +258,7 @@
  * Not supported when CPPUTEST_LONG_LONG_DISABLED is set.
  * Can be overridden by using CPPUTEST_USE_LONG_LONG
  *
- * CPPUTEST_HAVE_LONG_LONG_INT is set by configure
+ * CPPUTEST_HAVE_LONG_LONG_INT is set by configure or CMake.
  * LLONG_MAX is set in limits.h. This is a crude attempt to detect long long support when no configure is used
  *
  */

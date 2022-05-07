@@ -147,6 +147,12 @@ if (MINGW)
     endif()
 endif()
 
+include(CheckTypeSize)
+check_type_size("long long" SIZEOF_LONGLONG)
+if(HAVE_SIZEOF_LONGLONG)
+    set(CPPUTEST_HAVE_LONG_LONG_INT ON)
+endif()
+
 configure_file (
     "${PROJECT_SOURCE_DIR}/config.h.cmake"
     "${PROJECT_BINARY_DIR}/generated/CppUTestGeneratedConfig.h"
