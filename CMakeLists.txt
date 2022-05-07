@@ -80,51 +80,16 @@ add_subdirectory(src/CppUTest)
 include(CheckIncludeFileCXX)
 check_include_file_cxx("fenv.h" CPPUTEST_HAVE_FENV)
 
-# Check for functions before setting a lot of stuff
-include(CheckFunctionExists)
 include(CheckSymbolExists)
-set (CMAKE_REQUIRED_INCLUDES "unistd.h")
-check_symbol_exists(fork "unistd.h" HAVE_FORK)
-if(HAVE_FORK)
-  target_compile_definitions(${CppUTestLibName}
-    PUBLIC
-      CPPUTEST_HAVE_FORK
-  )
-endif(HAVE_FORK)
-
-check_symbol_exists(waitpid "sys/wait.h" HAVE_WAITPID)
-if(HAVE_WAITPID)
-  target_compile_definitions(${CppUTestLibName}
-    PUBLIC
-      CPPUTEST_HAVE_WAITPID
-  )
-endif(HAVE_WAITPID)
-
-check_symbol_exists(gettimeofday "sys/time.h" HAVE_GETTIMEOFDAY)
-if(HAVE_GETTIMEOFDAY)
-  target_compile_definitions(${CppUTestLibName}
-    PUBLIC
-      CPPUTEST_HAVE_GETTIMEOFDAY=1
-  )
-endif(HAVE_GETTIMEOFDAY)
-
-check_symbol_exists(pthread_mutex_lock "pthread.h" HAVE_PTHREAD_MUTEX_LOCK)
-if(HAVE_PTHREAD_MUTEX_LOCK)
-  target_compile_definitions(${CppUTestLibName}
-    PUBLIC
-      CPPUTEST_HAVE_PTHREAD_MUTEX_LOCK=1
-  )
-endif(HAVE_PTHREAD_MUTEX_LOCK)
+check_symbol_exists(fork "unistd.h" CPPUTEST_HAVE_FORK)
+check_symbol_exists(waitpid "sys/wait.h" CPPUTEST_HAVE_WAITPID)
+check_symbol_exists(gettimeofday "sys/time.h" CPPUTEST_HAVE_GETTIMEOFDAY)
+check_symbol_exists(pthread_mutex_lock "pthread.h" CPPUTEST_HAVE_PTHREAD_MUTEX_LOCK)
 
 if (NOT IAR)
-  check_function_exists(strdup HAVE_STRDUP)
-  if(HAVE_STRDUP)
-    target_compile_definitions(${CppUTestLibName}
-      PUBLIC
-        CPPUTEST_HAVE_STRDUP=1
-    )
-  endif(HAVE_STRDUP)
-endif(NOT IAR)
+    include(CheckFunctionExists)
+    check_function_exists(strdup CPPUTEST_HAVE_STRDUP)
+endif()
 
 if (MINGW)
     # Apply workaround for MinGW timespec redefinition (pthread.h / time.h)
