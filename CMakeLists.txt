@@ -17,53 +17,13 @@ if (EXISTS "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
     conan_basic_setup()
 endif()
 
-if(NOT DEFINED CPP_PLATFORM)
-    if(MSVC)
-        set(CPP_PLATFORM VisualCpp)
-    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "IAR")
-        set(CPP_PLATFORM Iar)
-    elseif(BORLAND)
-        set(CPP_PLATFORM Borland)
-    elseif(
-        CMAKE_CXX_COMPILER_ID STREQUAL "GNU"
-        # Clang generally behaves like GCC
-        OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang"
-    )
-        set(CPP_PLATFORM Gcc)
-    else()
-        set(CPP_PLATFORM GccNoStdC)
-    endif()
-endif()
-
-set(CPP_PLATFORM ${CPP_PLATFORM} CACHE STRING "Target platform")
-set_property(
-    CACHE CPP_PLATFORM
-    PROPERTY STRINGS
-      "armcc"
-      "Borland"
-      "C2000"
-      "Dos"
-      "Gcc"
-      "GccNoStdC"
-      "Iar"
-      "Keil"
-      "Symbian"
-      "VisualCpp"
-)
-
 include(CMakeDependentOption)
-cmake_dependent_option(STD_C "Use the standard C library" ON
-    "NOT CPP_PLATFORM STREQUAL GccNoStdC" OFF
-)
+option(STD_C "Use the standard C library" ON)
 option(STD_CPP "Use the standard C++ library" ON)
 option(CPPUTEST_FLAGS "Use the CFLAGS/CXXFLAGS/LDFLAGS set by CppUTest" ON)
-cmake_dependent_option(MEMORY_LEAK_DETECTION "Enable memory leak detection" ON
-  "NOT CPP_PLATFORM STREQUAL Borland;NOT CPP_PLATFORM STREQUAL GccNoStdC" OFF
-)
+cmake_dependent_option(MEMORY_LEAK_DETECTION "Enable memory leak detection" ON "STD_C;NOT BORLAND" OFF)
 option(EXTENSIONS "Use the CppUTest extension library" ON)
-cmake_dependent_option(LONGLONG "Support long long" OFF
-    "NOT CPP_PLATFORM STREQUAL Borland" OFF
-)
+cmake_dependent_option(LONGLONG "Support long long" OFF "NOT BORLAND" OFF)
 option(MAP_FILE "Enable the creation of a map file" OFF)
 option(COVERAGE "Enable running with coverage" OFF)
 option(C++11 "Compile with C++11 support" OFF)
@@ -71,9 +31,7 @@ option(WERROR "Compile with warnings as errors" OFF)
 
 option(TESTS "Compile and make tests for the code?" ON)
 option(TESTS_DETAILED "Run each test separately instead of grouped?" OFF)
-cmake_dependent_option(TESTS_BUILD_DISCOVER "Build time test discover" ON
-    "NOT CPP_PLATFORM STREQUAL Iar" OFF
-)
+cmake_dependent_option(TESTS_BUILD_DISCOVER "Build time test discover" ON "NOT CMAKE_CXX_COMPILER_ID STREQUAL IAR" OFF)
 
 option(EXAMPLES "Compile and make examples?" OFF)
 
@@ -82,14 +40,10 @@ option(VERBOSE_CONFIG "Print configuration to stdout during generation" ON)
 option(LIBNAME_POSTFIX_BITSIZE "Add architecture bitsize (32/64) to the library name?" OFF)
 option(LIBNAME_POSTFIX_DEBUG "Add indication of debug compilation to the library name?" OFF)
 
-cmake_dependent_option(HAS_INF "Compiler has Inf value for float" ON
-    "NOT CPP_PLATFORM STREQUAL Borland" OFF
-)
-cmake_dependent_option(HAS_NAN "Compiler has NaN value for float" ON
-    "NOT CPP_PLATFORM STREQUAL Borland" OFF
-)
+cmake_dependent_option(HAS_INF "Compiler has Inf value for float" ON "NOT BORLAND" OFF)
+cmake_dependent_option(HAS_NAN "Compiler has NaN value for float" ON "NOT BORLAND" OFF)
 
-cmake_dependent_option(STDC_WANT_SECURE_LIB "Use MSVC safe functions" ON "CPP_PLATFORM STREQUAL VisualCpp" OFF)
+cmake_dependent_option(STDC_WANT_SECURE_LIB "Use MSVC safe functions" ON "MSVC" OFF)
 
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "What kind of build this is" FORCE)
@@ -136,7 +90,7 @@ check_symbol_exists(waitpid "sys/wait.h" CPPUTEST_HAVE_WAITPID)
 check_symbol_exists(gettimeofday "sys/time.h" CPPUTEST_HAVE_GETTIMEOFDAY)
 check_symbol_exists(pthread_mutex_lock "pthread.h" CPPUTEST_HAVE_PTHREAD_MUTEX_LOCK)
 
-if (NOT CPP_PLATFORM STREQUAL "Iar")
+if (CMAKE_CXX_COMPILER_ID STREQUAL "IAR")
     include(CheckFunctionExists)
     check_function_exists(strdup CPPUTEST_HAVE_STRDUP)
 endif()
@@ -275,7 +229,6 @@ Current compiler options:
     CppUTest LDFLAGS:                   ${CPPUTEST_LD_FLAGS}
 
 Features configured in CppUTest:
-    Target runtime:                     ${CPP_PLATFORM}
     Memory Leak Detection:              ${MEMORY_LEAK_DETECTION}
     Compiling Extensions:               ${EXTENSIONS}
     Support Long Long:                  ${LONGLONG}

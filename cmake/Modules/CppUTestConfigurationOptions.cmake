@@ -1,12 +1,12 @@
-if (CPP_PLATFORM STREQUAL "Iar")
+if (CMAKE_CXX_COMPILER_ID STREQUAL "IAR")
     unset(CMAKE_CXX_EXTENSION_COMPILE_OPTION)
     # Set up the CMake variables for the linker
     set(LINKER_SCRIPT "${CppUTestRootDirectory}/platforms/iar/CppUTestTest.icf")
     set(CMAKE_C_LINK_FLAGS "--semihosting --config ${LINKER_SCRIPT} --map mapfile.map")
     set(CMAKE_CXX_LINK_FLAGS "--semihosting --config ${LINKER_SCRIPT} --map mapfile.map")
-elseif (CPP_PLATFORM STREQUAL "Borland")
+elseif (BORLAND)
     set(CPPUTEST_CXX_FLAGS "${CPPUTEST_CXX_FLAGS} -w-8008 -w-8066")
-elseif (CPP_PLATFORM STREQUAL GccNoStdC)
+elseif (NOT STD_C)
     set(CPPUTEST_CXX_FLAGS "${CPPUTEST_CXX_FLAGS} -nostdinc")
     set(CPPUTEST_LD_FLAGS "${CPPUTEST_LD_FLAGS} -nostdinc")
 endif ()
@@ -30,16 +30,16 @@ endif ()
 if(
     CPPUTEST_STD_CPP_LIB_DISABLED
     AND NOT CPPUTEST_STD_C_LIB_DISABLED
-    AND NOT CPP_PLATFORM STREQUAL "VisualCpp"
+    AND NOT MSVC
 )
     set(CPPUTEST_CXX_FLAGS "${CPPUTEST_CXX_FLAGS} -nostdinc++")
 endif()
 
 if(MEMORY_LEAK_DETECTION)
-    if(CPP_PLATFORM STREQUAL "VisualCpp")
+    if(MSVC)
         set(CPPUTEST_C_FLAGS "${CPPUTEST_C_FLAGS} /FI \"${CppUTestRootDirectory}/include/CppUTest/MemoryLeakDetectorMallocMacros.h\"")
         set(CPPUTEST_CXX_FLAGS "${CPPUTEST_CXX_FLAGS} /FI \"${CppUTestRootDirectory}/include/CppUTest/MemoryLeakDetectorMallocMacros.h\"")
-    elseif(CPP_PLATFORM STREQUAL "Iar")
+    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "IAR")
         set(CPPUTEST_C_FLAGS "${CPPUTEST_C_FLAGS} --preinclude \"${CppUTestRootDirectory}/include/CppUTest/MemoryLeakDetectorMallocMacros.h\"")
         set(CPPUTEST_CXX_FLAGS "${CPPUTEST_CXX_FLAGS} --preinclude \"${CppUTestRootDirectory}/include/CppUTest/MemoryLeakDetectorNewMacros.h\"")
         set(CPPUTEST_CXX_FLAGS "${CPPUTEST_CXX_FLAGS} --preinclude \"${CppUTestRootDirectory}/include/CppUTest/MemoryLeakDetectorMallocMacros.h\"")
@@ -64,11 +64,11 @@ if(NOT HAS_NAN)
     set(CPPUTEST_NO_NAN ON)
 endif()
 
-if(MAP_FILE AND NOT CPP_PLATFORM STREQUAL "VisualCpp")
+if(MAP_FILE AND NOT MSVC)
     set(CPPUTEST_LD_FLAGS "${CPPUTEST_LD_FLAGS} -Wl,-Map,$<.map.txt")
 endif()
 
-if(COVERAGE AND NOT CPP_PLATFORM STREQUAL "VisualCpp")
+if(COVERAGE AND NOT MSVC)
     set(CPPUTEST_C_FLAGS "${CPPUTEST_C_FLAGS} --coverage")
     set(CPPUTEST_CXX_FLAGS "${CPPUTEST_CXX_FLAGS} --coverage")
     set(CMAKE_BUILD_TYPE "Debug")
