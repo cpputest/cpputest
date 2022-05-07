@@ -80,8 +80,12 @@ option(VERBOSE_CONFIG "Print configuration to stdout during generation" ON)
 option(LIBNAME_POSTFIX_BITSIZE "Add architecture bitsize (32/64) to the library name?" OFF)
 option(LIBNAME_POSTFIX_DEBUG "Add indication of debug compilation to the library name?" OFF)
 
-option(HAS_INF "Compiler has Inf value for float" ON)
-option(HAS_NAN "Compiler has NaN value for float" ON)
+cmake_dependent_option(HAS_INF "Compiler has Inf value for float" ON
+    "NOT CPP_PLATFORM STREQUAL Borland" OFF
+)
+cmake_dependent_option(HAS_NAN "Compiler has NaN value for float" ON
+    "NOT CPP_PLATFORM STREQUAL Borland" OFF
+)
 
 cmake_dependent_option(STDC_WANT_SECURE_LIB "Use MSVC safe functions" ON "CPP_PLATFORM STREQUAL VisualCpp" OFF)
 
