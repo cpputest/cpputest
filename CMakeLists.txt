@@ -52,7 +52,9 @@ set_property(
 )
 
 include(CMakeDependentOption)
-option(STD_C "Use the standard C library" ON)
+cmake_dependent_option(STD_C "Use the standard C library" ON
+    "NOT CPP_PLATFORM STREQUAL GccNoStdC" OFF
+)
 option(STD_CPP "Use the standard C++ library" ON)
 option(CPPUTEST_FLAGS "Use the CFLAGS/CXXFLAGS/LDFLAGS set by CppUTest" ON)
 cmake_dependent_option(MEMORY_LEAK_DETECTION "Enable memory leak detection" ON
