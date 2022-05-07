@@ -1,9 +1,4 @@
-if (CPP_PLATFORM STREQUAL "VisualCpp")
-    option(STDC_WANT_SECURE_LIB "Use MSVC safe functions" ON)
-    if(STDC_WANT_SECURE_LIB)
-      ADD_DEFINITIONS(-DSTDC_WANT_SECURE_LIB)
-    endif(STDC_WANT_SECURE_LIB)
-elseif (CPP_PLATFORM STREQUAL "Iar")
+if (CPP_PLATFORM STREQUAL "Iar")
     unset(CMAKE_CXX_EXTENSION_COMPILE_OPTION)
     set(TESTS_BUILD_DISCOVER OFF)
     # Set up the CMake variables for the linker
@@ -23,6 +18,10 @@ elseif (CPP_PLATFORM STREQUAL GccNoStdC)
     set(CPPUTEST_LD_FLAGS "${CPPUTEST_LD_FLAGS} -nostdinc")
     set(CPPUTEST_STD_C_LIB_DISABLED 1)
 endif ()
+
+if(STDC_WANT_SECURE_LIB)
+    add_definitions(-DSTDC_WANT_SECURE_LIB)
+endif()
 
 if (CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     include("${CppUTestRootDirectory}/cmake/Modules/CppUTestWarningFlags.cmake")

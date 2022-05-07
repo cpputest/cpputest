@@ -76,6 +76,9 @@ option(LIBNAME_POSTFIX_DEBUG "Add indication of debug compilation to the library
 option(HAS_INF "Compiler has Inf value for float" ON)
 option(HAS_NAN "Compiler has NaN value for float" ON)
 
+include(CMakeDependentOption)
+cmake_dependent_option(STDC_WANT_SECURE_LIB "Use MSVC safe functions" ON "CPP_PLATFORM STREQUAL VisualCpp" OFF)
+
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "What kind of build this is" FORCE)
 endif(NOT CMAKE_BUILD_TYPE)
