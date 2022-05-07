@@ -1,9 +1,7 @@
 if (CMAKE_CXX_COMPILER_ID STREQUAL "IAR")
-    unset(CMAKE_CXX_EXTENSION_COMPILE_OPTION)
     # Set up the CMake variables for the linker
     set(LINKER_SCRIPT "${CppUTestRootDirectory}/platforms/iar/CppUTestTest.icf")
-    set(CMAKE_C_LINK_FLAGS "--semihosting --config ${LINKER_SCRIPT} --map mapfile.map")
-    set(CMAKE_CXX_LINK_FLAGS "--semihosting --config ${LINKER_SCRIPT} --map mapfile.map")
+    set(CPPUTEST_LD_FLAGS "--semihosting --config ${LINKER_SCRIPT} --map mapfile.map")
 elseif (NOT STD_C)
     set(CPPUTEST_CXX_FLAGS "${CPPUTEST_CXX_FLAGS} -nostdinc")
     set(CPPUTEST_LD_FLAGS "${CPPUTEST_LD_FLAGS} -nostdinc")
@@ -12,14 +10,6 @@ endif ()
 if(STDC_WANT_SECURE_LIB)
     add_definitions(-DSTDC_WANT_SECURE_LIB)
 endif()
-
-if(NOT STD_C)
-    set(CPPUTEST_STD_C_LIB_DISABLED ON)
-endif()
-
-if (NOT STD_CPP)
-    set(CPPUTEST_STD_CPP_LIB_DISABLED ON)
-endif (NOT STD_CPP)
 
 if (CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     include("${CppUTestRootDirectory}/cmake/Modules/CppUTestWarningFlags.cmake")
@@ -31,6 +21,15 @@ if(
     AND NOT MSVC
 )
     set(CPPUTEST_CXX_FLAGS "${CPPUTEST_CXX_FLAGS} -nostdinc++")
+endif()
+
+if (MINGW AND NOT CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    # Apply workaround for static/shared libraries on MinGW C/C++ compiler
+    # Issue occurs with CMake >= 3.9.0, it doesn't filter out gcc,gcc_s,gcc_eh from
+    # the implicit library list anymore, so the C++ linker is getting passed the static
+    # gcc_eh library since that's what the C linker uses by default. Only solution appears
+    # to be to force static linkage.
+    set(CPPUTEST_LD_FLAGS "${CPPUTEST_LD_FLAGS} -static")
 endif()
 
 if(MEMORY_LEAK_DETECTION)
@@ -46,20 +45,6 @@ if(MEMORY_LEAK_DETECTION)
         set(CPPUTEST_CXX_FLAGS "${CPPUTEST_CXX_FLAGS} -include \"${CppUTestRootDirectory}/include/CppUTest/MemoryLeakDetectorNewMacros.h\"")
         set(CPPUTEST_CXX_FLAGS "${CPPUTEST_CXX_FLAGS} -include \"${CppUTestRootDirectory}/include/CppUTest/MemoryLeakDetectorMallocMacros.h\"")
     endif()
-else()
-    set(CPPUTEST_MEM_LEAK_DETECTION_DISABLED ON)
-endif()
-
-if(LONGLONG)
-    set(CPPUTEST_USE_LONG_LONG ON)
-endif()
-
-if(NOT HAS_INF)
-    set(CPPUTEST_NO_INF ON)
-endif()
-
-if(NOT HAS_NAN)
-    set(CPPUTEST_NO_NAN ON)
 endif()
 
 if(MAP_FILE AND NOT MSVC)
@@ -83,6 +68,8 @@ if(COVERAGE AND NOT MSVC)
         COMMENT "Generate coverage data"
         VERBATIM
         )
+else()
+    set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "What kind of build this is" FORCE)
 endif()
 
 if (CMAKE_CXX_STANDARD)
@@ -98,7 +85,7 @@ set(GMOCK_HOME $ENV{GMOCK_HOME})
 if (DEFINED ENV{GMOCK_HOME})
     # GMock pulls in gtest.
     set(CPPUTEST_INCLUDE_GTEST_TESTS 1)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGTEST_USE_OWN_TR1_TUPLE=1")
+    set(CPPUTEST_CXX_FLAGS "${CPPUTEST_CXX_FLAGS} -DGTEST_USE_OWN_TR1_TUPLE=1")
     include_directories(${GMOCK_HOME}/include ${GMOCK_HOME}/gtest ${GMOCK_HOME}/gtest/include)
     add_subdirectory(${GMOCK_HOME} "${CMAKE_CURRENT_BINARY_DIR}/gmock")
 
@@ -109,8 +96,6 @@ endif (DEFINED ENV{GMOCK_HOME})
 set(CPPUTEST_C_FLAGS "${CPPUTEST_C_FLAGS} ${CPPUTEST_C_WARNING_FLAGS}")
 set(CPPUTEST_CXX_FLAGS "${CPPUTEST_CXX_FLAGS} ${CPPUTEST_CXX_WARNING_FLAGS}")
 
-if (CPPUTEST_FLAGS)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${CPPUTEST_C_FLAGS}")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CPPUTEST_CXX_FLAGS}")
-    set(CMAKE_LD_FLAGS "${CMAKE_LD_FLAGS} ${CPPUTEST_LD_FLAGS}")
-endif (CPPUTEST_FLAGS)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${CPPUTEST_C_FLAGS}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CPPUTEST_CXX_FLAGS}")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${CPPUTEST_LD_FLAGS}")
