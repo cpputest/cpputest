@@ -59,7 +59,9 @@ cmake_dependent_option(MEMORY_LEAK_DETECTION "Enable memory leak detection" ON
   "NOT CPP_PLATFORM STREQUAL Borland;NOT CPP_PLATFORM STREQUAL GccNoStdC" OFF
 )
 option(EXTENSIONS "Use the CppUTest extension library" ON)
-option(LONGLONG "Support long long" OFF)
+cmake_dependent_option(LONGLONG "Support long long" OFF
+    "NOT CPP_PLATFORM STREQUAL Borland" OFF
+)
 option(MAP_FILE "Enable the creation of a map file" OFF)
 option(COVERAGE "Enable running with coverage" OFF)
 option(C++11 "Compile with C++11 support" OFF)
