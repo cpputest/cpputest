@@ -121,7 +121,7 @@ endif(LIBNAME_POSTFIX_BITSIZE)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CppUTestRootDirectory}/cmake/Modules)
 
 if(CPPUTEST_FLAGS)
-    include("${CppUTestRootDirectory}/cmake/Modules/CppUTestConfigurationOptions.cmake")
+    include("${CppUTestRootDirectory}/cmake/Modules/CppUTestGlobalFlags.cmake")
 endif()
 include(CTest)
 #include("${CppUTestRootDirectory}/cmake/Modules/CheckFunctionExists.cmake")
