@@ -48,8 +48,8 @@ option(EXAMPLES "Compile and make examples?" ${PROJECT_IS_TOP_LEVEL})
 
 option(VERBOSE_CONFIG "Print configuration to stdout during generation" ${PROJECT_IS_TOP_LEVEL})
 
-option(LIBNAME_POSTFIX_BITSIZE "Add architecture bitsize (32/64) to the library name?" OFF)
-option(LIBNAME_POSTFIX_DEBUG "Add indication of debug compilation to the library name?" OFF)
+cmake_dependent_option(LIBNAME_POSTFIX_BITSIZE "Add architecture bitsize (32/64) to the library name?" OFF "PROJECT_IS_TOP_LEVEL" OFF)
+cmake_dependent_option(LIBNAME_POSTFIX_DEBUG "Add indication of debug compilation to the library name?" OFF "PROJECT_IS_TOP_LEVEL" OFF)
 
 cmake_dependent_option(HAS_INF "Compiler has Inf value for float" ON "NOT BORLAND" OFF)
 cmake_dependent_option(HAS_NAN "Compiler has NaN value for float" ON "NOT BORLAND" OFF)
