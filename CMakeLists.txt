@@ -32,13 +32,13 @@ include(CMakeDependentOption)
 option(STD_C "Use the standard C library" ON)
 option(STD_CPP "Use the standard C++ library" ON)
 option(CPPUTEST_FLAGS "Use the CFLAGS/CXXFLAGS/LDFLAGS set by CppUTest" ON)
-cmake_dependent_option(MEMORY_LEAK_DETECTION "Enable memory leak detection" ON "STD_C;NOT BORLAND" OFF)
+cmake_dependent_option(MEMORY_LEAK_DETECTION "Enable memory leak detection" ${PROJECT_IS_TOP_LEVEL} "STD_C;NOT BORLAND;CPPUTEST_FLAGS" OFF)
 option(EXTENSIONS "Use the CppUTest extension library" ON)
 cmake_dependent_option(LONGLONG "Support long long" OFF "NOT BORLAND" OFF)
-option(MAP_FILE "Enable the creation of a map file" OFF)
-option(COVERAGE "Enable running with coverage" OFF)
-option(C++11 "Compile with C++11 support" OFF)
-option(WERROR "Compile with warnings as errors" OFF)
+cmake_dependent_option(MAP_FILE "Enable the creation of a map file" OFF "NOT MSVC;CPPUTEST_FLAGS" OFF)
+cmake_dependent_option(COVERAGE "Enable running with coverage" OFF "NOT MSVC;CPPUTEST_FLAGS" OFF)
+cmake_dependent_option(CPPUTEST_USE_CXX11 "Compile with C++11 support" OFF "CPPUTEST_FLAGS" OFF)
+cmake_dependent_option(WERROR "Compile with warnings as errors" OFF "CPPUTEST_FLAGS" OFF)
 
 option(TESTS "Compile and make tests for the code?" ${PROJECT_IS_TOP_LEVEL})
 option(TESTS_DETAILED "Run each test separately instead of grouped?" OFF)
@@ -54,7 +54,7 @@ option(LIBNAME_POSTFIX_DEBUG "Add indication of debug compilation to the library
 cmake_dependent_option(HAS_INF "Compiler has Inf value for float" ON "NOT BORLAND" OFF)
 cmake_dependent_option(HAS_NAN "Compiler has NaN value for float" ON "NOT BORLAND" OFF)
 
-cmake_dependent_option(STDC_WANT_SECURE_LIB "Use MSVC safe functions" ON "MSVC" OFF)
+cmake_dependent_option(STDC_WANT_SECURE_LIB "Use MSVC safe functions" ON "MSVC;CPPUTEST_FLAGS" OFF)
 
 # Deduce a default CPP_PLATFORM.
 if(NOT DEFINED CPP_PLATFORM)

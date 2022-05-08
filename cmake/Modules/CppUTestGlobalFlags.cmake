@@ -74,7 +74,7 @@ endif()
 
 if (CMAKE_CXX_STANDARD)
     set(CMAKE_CXX_EXTENSIONS OFF)
-elseif (C++11)
+elseif (CPPUTEST_USE_CXX11)
     find_package(CXX11 REQUIRED)
     set(CPPUTEST_CXX_FLAGS "${CPPUTEST_CXX_FLAGS} ${CXX11_FLAGS}")
 else()
