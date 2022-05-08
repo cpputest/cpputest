@@ -123,13 +123,11 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CppUTestRootDirectory}/cmake/Module
 if(CPPUTEST_FLAGS)
     include("${CppUTestRootDirectory}/cmake/Modules/CppUTestGlobalFlags.cmake")
 endif()
-include(CTest)
-#include("${CppUTestRootDirectory}/cmake/Modules/CheckFunctionExists.cmake")
 include("${CppUTestRootDirectory}/cmake/Modules/CppUTestBuildTimeDiscoverTests.cmake")
 include("${CppUTestRootDirectory}/cmake/Modules/CppUTestNormalizeTestOutputLocation.cmake")
 include(GNUInstallDirs)
 
-enable_testing()
+include(CTest)
 
 add_subdirectory(src/CppUTest)
 
