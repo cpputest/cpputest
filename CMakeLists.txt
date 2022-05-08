@@ -8,6 +8,13 @@ project(CppUTest
     VERSION 4.0
 )
 
+# Backport CMake v3.21 feature
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+    set(PROJECT_IS_TOP_LEVEL ON)
+else()
+    set(PROJECT_IS_TOP_LEVEL OFF)
+endif()
+
 ###############
 # Conan support
 ###############
@@ -33,13 +40,13 @@ option(COVERAGE "Enable running with coverage" OFF)
 option(C++11 "Compile with C++11 support" OFF)
 option(WERROR "Compile with warnings as errors" OFF)
 
-option(TESTS "Compile and make tests for the code?" ON)
+option(TESTS "Compile and make tests for the code?" ${PROJECT_IS_TOP_LEVEL})
 option(TESTS_DETAILED "Run each test separately instead of grouped?" OFF)
 cmake_dependent_option(TESTS_BUILD_DISCOVER "Build time test discover" ON "NOT CMAKE_CXX_COMPILER_ID STREQUAL IAR" OFF)
 
-option(EXAMPLES "Compile and make examples?" OFF)
+option(EXAMPLES "Compile and make examples?" ${PROJECT_IS_TOP_LEVEL})
 
-option(VERBOSE_CONFIG "Print configuration to stdout during generation" ON)
+option(VERBOSE_CONFIG "Print configuration to stdout during generation" ${PROJECT_IS_TOP_LEVEL})
 
 option(LIBNAME_POSTFIX_BITSIZE "Add architecture bitsize (32/64) to the library name?" OFF)
 option(LIBNAME_POSTFIX_DEBUG "Add indication of debug compilation to the library name?" OFF)
