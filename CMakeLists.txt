@@ -3,10 +3,10 @@
 # 3.10 is needed for IAR support
 cmake_minimum_required(VERSION 3.10)
 
-project(CppUTest)
-
-set(CppUTest_version_major 4)
-set(CppUTest_version_minor 0)
+project(CppUTest
+    LANGUAGES CXX C
+    VERSION 4.0
+)
 
 ###############
 # Conan support
@@ -219,7 +219,7 @@ set (prefix "${CMAKE_INSTALL_PREFIX}")
 set (exec_prefix "\${prefix}")
 set (libdir "\${exec_prefix}/${LIB_INSTALL_DIR}")
 set (includedir "\${prefix}/${INCLUDE_INSTALL_DIR}")
-set (PACKAGE_VERSION "${CppUTest_version_major}.${CppUTest_version_minor}")
+set (PACKAGE_VERSION "${PROJECT_VERSION}")
 
 configure_file (cpputest.pc.in
     ${CMAKE_CURRENT_BINARY_DIR}/${CppUTest_PKGCONFIG_FILE} @ONLY)
@@ -243,7 +243,7 @@ if(PkgHelpers_AVAILABLE)
     PATH_VARS INCLUDE_INSTALL_DIR LIB_INSTALL_DIR)
   write_basic_package_version_file(
     ${CMAKE_CURRENT_BINARY_DIR}/install/CppUTestConfigVersion.cmake
-    VERSION ${CppUTest_version_major}.${CppUTest_version_minor}
+    VERSION ${PROJECT_VERSION}
     COMPATIBILITY SameMajorVersion )
   install(FILES ${CMAKE_CURRENT_BINARY_DIR}/install/CppUTestConfig.cmake
     ${CMAKE_CURRENT_BINARY_DIR}/install/CppUTestConfigVersion.cmake
@@ -267,7 +267,7 @@ if(PkgHelpers_AVAILABLE)
   endif()
   write_basic_package_version_file(
     ${CMAKE_CURRENT_BINARY_DIR}/CppUTestConfigVersion.cmake
-    VERSION ${CppUTest_version_major}.${CppUTest_version_minor}
+    VERSION ${PROJECT_VERSION}
     COMPATIBILITY SameMajorVersion )
   set(CppUTest_DIR "${CMAKE_CURRENT_BINARY_DIR}" CACHE PATH "The directory containing a CMake configuration file for CppUTest.")
 else()
@@ -279,7 +279,7 @@ endif()
 if(VERBOSE_CONFIG)
   message("
 -------------------------------------------------------
-CppUTest Version ${CppUTest_version_major}.${CppUTest_version_minor}
+CppUTest Version ${PROJECT_VERSION}
 
 Current compiler options:
     CC:                                 ${CMAKE_C_COMPILER}
