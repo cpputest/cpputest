@@ -17,6 +17,10 @@ if (EXISTS "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
     conan_basic_setup()
 endif()
 
+#############
+# User config
+#############
+
 include(CMakeDependentOption)
 option(STD_C "Use the standard C library" ON)
 option(STD_CPP "Use the standard C++ library" ON)
@@ -44,6 +48,49 @@ cmake_dependent_option(HAS_INF "Compiler has Inf value for float" ON "NOT BORLAN
 cmake_dependent_option(HAS_NAN "Compiler has NaN value for float" ON "NOT BORLAND" OFF)
 
 cmake_dependent_option(STDC_WANT_SECURE_LIB "Use MSVC safe functions" ON "MSVC" OFF)
+
+# Deduce a default CPP_PLATFORM.
+if(NOT DEFINED CPP_PLATFORM)
+    if(MSVC)
+        set(CPP_PLATFORM "VisualCpp")
+    elseif(CMAKE_SYSTEM_NAME STREQUAL "Symbian")
+        set(CPP_PLATFORM "Symbian")
+    elseif(BORLAND)
+        set(CPP_PLATFORM "Borland")
+    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "IAR")
+        set(CPP_PLATFORM "Iar")
+    elseif(CMAKE_SYSTEM_NAME STREQUAL "DOS")
+        set(CPP_PLATFORM "DOS")
+    elseif(CMAKE_CXX_COMPILE_FEATURES STREQUAL "TI")
+        # FIXME: This is probably wrong.
+        set(CPP_PLATFORM  "C2000")
+    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "ARMCC")
+        set(CPP_PLATFORM "armcc")
+    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "ARMClang")
+        set(CPP_PLATFORM "Keil")
+    elseif(NOT STD_C)
+        set(CPP_PLATFORM "GccNoStdC")
+    else()
+        set(CPP_PLATFORM "Gcc")
+    endif()
+endif()
+
+set(CPP_PLATFORM "${CPP_PLATFORM}" CACHE STRING "Provided platform implementation")
+set_property(CACHE CPP_PLATFORM
+    PROPERTY STRINGS
+        # Valid options:
+        "FALSE" # User provided
+        "VisualCpp"
+        "Symbian"
+        "Borland"
+        "Iar"
+        "DOS"
+        "C2000"
+        "armcc"
+        "Keil"
+        "GccNoStdC"
+        "Gcc"
+)
 
 # Pkg-config file
 include(FindPkgConfig)
@@ -242,6 +289,7 @@ Current compiler options:
     CppUTest LDFLAGS:                   ${CPPUTEST_LD_FLAGS}
 
 Features configured in CppUTest:
+    Platform:                           ${CPP_PLATFORM}
     Memory Leak Detection:              ${MEMORY_LEAK_DETECTION}
     Compiling Extensions:               ${EXTENSIONS}
     Support Long Long:                  ${LONGLONG}

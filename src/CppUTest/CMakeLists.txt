@@ -24,32 +24,7 @@ if(LIBNAME_POSTFIX_DEBUG)
     set_target_properties(${CppUTestLibName} PROPERTIES DEBUG_POSTFIX "d")
 endif()
 
-if(NOT DEFINED CPP_PLATFORM)
-    if(MSVC)
-        set(CPP_PLATFORM "VisualCpp")
-    elseif(CMAKE_SYSTEM_NAME STREQUAL "Symbian")
-        set(CPP_PLATFORM "Symbian")
-    elseif(BORLAND)
-        set(CPP_PLATFORM "Borland")
-    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "IAR")
-        set(CPP_PLATFORM "Iar")
-    elseif(CMAKE_SYSTEM_NAME STREQUAL "DOS")
-        set(CPP_PLATFORM "DOS")
-    elseif(CMAKE_CXX_COMPILE_FEATURES STREQUAL "TI")
-        # FIXME: This is probably wrong.
-        set(CPP_PLATFORM STREQUAL "C2000")
-    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "ARMCC")
-        set(CPP_PLATFORM "armcc")
-    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "ARMClang")
-        set(CPP_PLATFORM "Keil")
-    elseif(NOT STD_C)
-        set(CPP_PLATFORM "GccNoStdC")
-    else()
-        set(CPP_PLATFORM "Gcc")
-    endif()
-endif()
-
-if(DEFINED CPP_PLATFORM)
+if(CPP_PLATFORM)
     target_sources(${CppUTestLibName}
         PRIVATE
             ${CMAKE_CURRENT_LIST_DIR}/../Platforms/${CPP_PLATFORM}/UtestPlatform.cpp
