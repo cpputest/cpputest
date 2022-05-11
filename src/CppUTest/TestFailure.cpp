@@ -35,6 +35,7 @@
 #include <typeinfo>
 #if defined(__GNUC__)
 #include <cxxabi.h>
+#include <memory>
 #endif
 #endif
 
