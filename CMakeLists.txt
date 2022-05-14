@@ -153,6 +153,9 @@ if(HAVE_SIZEOF_LONGLONG)
     set(CPPUTEST_HAVE_LONG_LONG_INT ON)
 endif()
 
+include(CheckCXXSymbolExists)
+check_cxx_symbol_exists(INFINITY "math.h" CPPUTEST_HAS_INF)
+
 configure_file (
     "${PROJECT_SOURCE_DIR}/config.h.cmake"
     "${PROJECT_BINARY_DIR}/generated/CppUTestGeneratedConfig.h"
