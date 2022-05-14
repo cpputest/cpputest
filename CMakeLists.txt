@@ -85,12 +85,11 @@ enable_testing()
 
 add_subdirectory(src/CppUTest)
 
-include(CheckIncludeFileCXX)
-check_include_file_cxx("fenv.h" CPPUTEST_HAVE_FENV)
-
 # Check for functions before setting a lot of stuff
 include(CheckFunctionExists)
+include(CheckCXXSymbolExists)
 include(CheckSymbolExists)
+check_cxx_symbol_exists(FE_DIVBYZERO "fenv.h" CPPUTEST_HAVE_FENV)
 set (CMAKE_REQUIRED_INCLUDES "unistd.h")
 check_symbol_exists(fork "unistd.h" HAVE_FORK)
 if(HAVE_FORK)

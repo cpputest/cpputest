@@ -212,15 +212,18 @@
  * Handling of IEEE754 floating point exceptions via fenv.h
  * Predominantly works on non-Visual C++ compilers and Visual C++ 2008 and newer
  */
-
-#if !defined(CPPUTEST_HAVE_FENV) && CPPUTEST_USE_STD_C_LIB && \
-  (!defined(_MSC_VER) || (_MSC_VER >= 1800)) && \
-  (!defined(__APPLE__)) && \
-  (!defined(__ghs__) || !defined(__ColdFire__)) && (!defined(__BCPLUSPLUS__))
-#define CPPUTEST_HAVE_FENV
+#ifndef CPPUTEST_HAVE_FENV
+ #if CPPUTEST_USE_STD_C_LIB && \
+     (!defined(_MSC_VER) || (_MSC_VER >= 1800)) && \
+     (!defined(__APPLE__)) && \
+     (!defined(__ghs__) || !defined(__ColdFire__)) && (!defined(__BCPLUSPLUS__))
+  #define CPPUTEST_HAVE_FENV 1
+ #else
+  #define CPPUTEST_HAVE_FENV 0
+ #endif
 #endif
 
-#ifdef CPPUTEST_HAVE_FENV
+#if CPPUTEST_HAVE_FENV
 #if defined(__WATCOMC__) || defined(__ARMEL__) || defined(__m68k__)
 #define CPPUTEST_FENV_IS_WORKING_PROPERLY 0
 #else
