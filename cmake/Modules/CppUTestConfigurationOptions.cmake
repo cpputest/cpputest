@@ -87,12 +87,14 @@ endif()
 
 if (CMAKE_CXX_STANDARD)
     set(CMAKE_CXX_EXTENSIONS OFF)
-elseif (C++11)
-    find_package(CXX11 REQUIRED)
-    set(CPPUTEST_CXX_FLAGS "${CPPUTEST_CXX_FLAGS} ${CXX11_FLAGS}")
-else()
-    # No standard specified
 endif ()
+
+if(DEFINED C++11)
+    message(WARNING
+        "The C++11 option is no longer supported. "
+        "Set the CMAKE_CXX_STANDARD explicitly."
+    )
+endif()
 
 set(GMOCK_HOME $ENV{GMOCK_HOME})
 if (DEFINED ENV{GMOCK_HOME})
