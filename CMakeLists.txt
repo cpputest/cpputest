@@ -153,8 +153,18 @@ if(HAVE_SIZEOF_LONGLONG)
     set(CPPUTEST_HAVE_LONG_LONG_INT ON)
 endif()
 
-include(CheckCXXSymbolExists)
-check_cxx_symbol_exists(INFINITY "math.h" CPPUTEST_HAS_INF)
+if(DEFINED HAS_INF)
+  message(DEPRECATION
+    "The HAS_INF cache variable has been deprecated. "
+    "CPPUTEST_HAS_INF is assessed automatically, "
+    "but can be assigned manually."
+  )
+  set(CPPUTEST_HAS_INF ${HAS_INF})
+endif()
+if(NOT DEFINED CPPUTEST_HAS_INF)
+  include(CheckCXXSymbolExists)
+  check_cxx_symbol_exists(INFINITY "math.h" CPPUTEST_HAS_INF)
+endif()
 
 configure_file (
     "${PROJECT_SOURCE_DIR}/config.h.cmake"
