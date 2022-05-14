@@ -87,38 +87,10 @@ include(CheckFunctionExists)
 include(CheckCXXSymbolExists)
 include(CheckSymbolExists)
 check_cxx_symbol_exists(FE_DIVBYZERO "fenv.h" CPPUTEST_HAVE_FENV)
-set (CMAKE_REQUIRED_INCLUDES "unistd.h")
-check_symbol_exists(fork "unistd.h" HAVE_FORK)
-if(HAVE_FORK)
-  target_compile_definitions(${CppUTestLibName}
-    PUBLIC
-      CPPUTEST_HAVE_FORK
-  )
-endif(HAVE_FORK)
-
-check_symbol_exists(waitpid "sys/wait.h" HAVE_WAITPID)
-if(HAVE_WAITPID)
-  target_compile_definitions(${CppUTestLibName}
-    PUBLIC
-      CPPUTEST_HAVE_WAITPID
-  )
-endif(HAVE_WAITPID)
-
-check_symbol_exists(gettimeofday "sys/time.h" HAVE_GETTIMEOFDAY)
-if(HAVE_GETTIMEOFDAY)
-  target_compile_definitions(${CppUTestLibName}
-    PUBLIC
-      CPPUTEST_HAVE_GETTIMEOFDAY=1
-  )
-endif(HAVE_GETTIMEOFDAY)
-
-check_symbol_exists(pthread_mutex_lock "pthread.h" HAVE_PTHREAD_MUTEX_LOCK)
-if(HAVE_PTHREAD_MUTEX_LOCK)
-  target_compile_definitions(${CppUTestLibName}
-    PUBLIC
-      CPPUTEST_HAVE_PTHREAD_MUTEX_LOCK=1
-  )
-endif(HAVE_PTHREAD_MUTEX_LOCK)
+check_cxx_symbol_exists(fork "unistd.h" CPPUTEST_HAVE_FORK)
+check_cxx_symbol_exists(waitpid "sys/wait.h" CPPUTEST_HAVE_WAITPID)
+check_cxx_symbol_exists(gettimeofday "sys/time.h" CPPUTEST_HAVE_GETTIMEOFDAY)
+check_cxx_symbol_exists(pthread_mutex_lock "pthread.h" CPPUTEST_HAVE_PTHREAD_MUTEX_LOCK)
 
 if(DEFINED HAS_NAN)
   message(DEPRECATION
@@ -129,18 +101,24 @@ if(DEFINED HAS_NAN)
   set(CPPUTEST_HAS_NAN ${HAS_NAN})
 endif()
 if(NOT DEFINED CPPUTEST_HAS_NAN)
-  include(CheckCXXSymbolExists)
   check_cxx_symbol_exists(NAN "math.h" CPPUTEST_HAS_NAN)
 endif()
 
+if(DEFINED HAS_INF)
+  message(DEPRECATION
+    "The HAS_INF cache variable has been deprecated. "
+    "CPPUTEST_HAS_INF is assessed automatically, "
+    "but can be assigned manually."
+  )
+  set(CPPUTEST_HAS_INF ${HAS_INF})
+endif()
+if(NOT DEFINED CPPUTEST_HAS_INF)
+  include(CheckCXXSymbolExists)
+  check_cxx_symbol_exists(INFINITY "math.h" CPPUTEST_HAS_INF)
+endif()
+
 if (NOT IAR)
-  check_function_exists(strdup HAVE_STRDUP)
-  if(HAVE_STRDUP)
-    target_compile_definitions(${CppUTestLibName}
-      PUBLIC
-        CPPUTEST_HAVE_STRDUP=1
-    )
-  endif(HAVE_STRDUP)
+  check_function_exists(strdup CPPUTEST_HAVE_STRDUP)
 endif(NOT IAR)
 
 if (MINGW)
@@ -168,19 +146,6 @@ include(CheckTypeSize)
 check_type_size("long long" SIZEOF_LONGLONG)
 if(HAVE_SIZEOF_LONGLONG)
     set(CPPUTEST_HAVE_LONG_LONG_INT ON)
-endif()
-
-if(DEFINED HAS_INF)
-  message(DEPRECATION
-    "The HAS_INF cache variable has been deprecated. "
-    "CPPUTEST_HAS_INF is assessed automatically, "
-    "but can be assigned manually."
-  )
-  set(CPPUTEST_HAS_INF ${HAS_INF})
-endif()
-if(NOT DEFINED CPPUTEST_HAS_INF)
-  include(CheckCXXSymbolExists)
-  check_cxx_symbol_exists(INFINITY "math.h" CPPUTEST_HAS_INF)
 endif()
 
 configure_file (
