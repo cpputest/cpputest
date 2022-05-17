@@ -3,6 +3,7 @@ CppUTest
 
 [![Travis Build Status (deprecated)](https://app.travis-ci.com/cpputest/cpputest.svg?branch=master)](https://app.travis-ci.com/github/cpputest/cpputest)
 [![AppveyorBuild status](https://ci.appveyor.com/api/projects/status/irh38i4wblsb5tew?svg=true)](https://ci.appveyor.com/project/basvodde/cpputest)
+[![CircleCI status](https://circleci.com/gh/cpputest/cpputest.svg?style=svg)](https://app.circleci.com/pipelines/github/cpputest)
 [![Coverage Status](https://coveralls.io/repos/cpputest/cpputest/badge.svg?branch=master&service=github)](https://coveralls.io/github/cpputest/cpputest?branch=master)
 [![ConanCenter package](https://repology.org/badge/version-for-repo/conancenter/cpputest.svg)](https://conan.io/center/cpputest)
 
