@@ -1,9 +1,9 @@
 version: 2.1
 
 jobs:
-  say-hello:
+  latest-clang:
     docker:
-      - image: cimg/base:stable
+      - image: silkeh/clang:latest
     steps:
       - checkout
       - run:
@@ -13,4 +13,4 @@ jobs:
 workflows:
   say-hello-workflow:
     jobs:
-      - say-hello
+      - latest-clang
