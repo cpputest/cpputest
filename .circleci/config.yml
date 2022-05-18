@@ -1,16 +1,17 @@
 version: 2.1
 
 jobs:
-  latest-clang:
+  latest-clang-autotools:
     docker:
       - image: silkeh/clang:latest
     steps:
       - checkout
-      - run:
-          name: "Say hello"
-          command: "echo Hello, World!"
+      - environment:
+        - BUILD=autotools
+        - CXX=clang
+      - run ./scripts/travis_ci_build.sh
 
 workflows:
-  say-hello-workflow:
+  basic-build-and-test:
     jobs:
-      - latest-clang
+      - latest-clang-autotools
