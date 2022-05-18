@@ -4,12 +4,12 @@ jobs:
   latest-clang-autotools:
     docker:
       - image: silkeh/clang:latest
+    environment:
+      BUILD: autotools
+      CXX: clang
     steps:
       - checkout
-      - environment:
-        - BUILD=autotools
-        - CXX=clang
-      - run ./scripts/travis_ci_build.sh
+      - run: ./scripts/travis_ci_build.sh
 
 workflows:
   basic-build-and-test:
