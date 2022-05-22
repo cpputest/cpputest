@@ -14,5 +14,5 @@ target_include_directories(ExampleTests
 )
 
 cpputest_normalize_test_output_location(ExampleTests)
-target_link_libraries(ExampleTests ApplicationLib ${CppUTestLibName} ${CppUTestExtLibName})
+target_link_libraries(ExampleTests ApplicationLib CppUTest CppUTestExt)
 cpputest_buildtime_discover_tests(ExampleTests)

@@ -30,7 +30,7 @@ add_executable(CppUTestExtTests
 )
 
 target_link_libraries(CppUTestExtTests
-    PRIVATE ${CppUTestExtLibName}
+    PRIVATE CppUTestExt
 )
 
 if (MINGW)

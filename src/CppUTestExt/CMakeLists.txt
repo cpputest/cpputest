@@ -1,4 +1,4 @@
-add_library(${CppUTestExtLibName} STATIC
+add_library(CppUTestExt STATIC
     CodeMemoryReportFormatter.cpp
     GTest.cpp
     IEEE754ExceptionsPlugin.cpp
@@ -37,14 +37,14 @@ add_library(${CppUTestExtLibName} STATIC
     ${PROJECT_SOURCE_DIR}/include/CppUTestExt/MockSupport.h
 )
 
-target_link_libraries(${CppUTestExtLibName} PUBLIC ${CppUTestLibName})
+target_link_libraries(CppUTestExt PUBLIC CppUTest)
 
 if(LIBNAME_POSTFIX_DEBUG)
-    set_target_properties(${CppUTestExtLibName} PROPERTIES DEBUG_POSTFIX "d")
+    set_target_properties(CppUTestExt PROPERTIES DEBUG_POSTFIX "d")
 endif()
 
 #[[Arrange for the include directory to be added to the include paths of any CMake target depending on CppUTestExt.]]
-target_include_directories(${CppUTestExtLibName}
+target_include_directories(CppUTestExt
     PUBLIC
         ${PROJECT_SOURCE_DIR}/include
 )

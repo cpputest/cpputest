@@ -45,19 +45,6 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "What kind of build this is" FORCE)
 endif(NOT CMAKE_BUILD_TYPE)
 
-set( CppUTestLibName "CppUTest" )
-set( CppUTestExtLibName "CppUTestExt" )
-
-if(LIBNAME_POSTFIX_BITSIZE)
-  if( "${CMAKE_SIZEOF_VOID_P}" STREQUAL "8" )
-      set( CppUTestLibName "${CppUTestLibName}64" )
-      set( CppUTestExtLibName "${CppUTestExtLibName}64" )
-  elseif( "${CMAKE_SIZEOF_VOID_P}" STREQUAL "4" )
-      set( CppUTestLibName "${CppUTestLibName}32" )
-      set( CppUTestExtLibName "${CppUTestExtLibName}32" )
-  endif()
-endif(LIBNAME_POSTFIX_BITSIZE)
-
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake/Modules)
 
 include("${PROJECT_SOURCE_DIR}/cmake/Modules/CppUTestConfigurationOptions.cmake")
@@ -79,7 +66,7 @@ include(CheckSymbolExists)
 set (CMAKE_REQUIRED_INCLUDES "unistd.h")
 check_symbol_exists(fork "unistd.h" HAVE_FORK)
 if(HAVE_FORK)
-  target_compile_definitions(${CppUTestLibName}
+  target_compile_definitions(CppUTest
     PUBLIC
       CPPUTEST_HAVE_FORK
   )
@@ -87,7 +74,7 @@ endif(HAVE_FORK)
 
 check_symbol_exists(waitpid "sys/wait.h" HAVE_WAITPID)
 if(HAVE_WAITPID)
-  target_compile_definitions(${CppUTestLibName}
+  target_compile_definitions(CppUTest
     PUBLIC
       CPPUTEST_HAVE_WAITPID
   )
@@ -95,7 +82,7 @@ endif(HAVE_WAITPID)
 
 check_symbol_exists(gettimeofday "sys/time.h" HAVE_GETTIMEOFDAY)
 if(HAVE_GETTIMEOFDAY)
-  target_compile_definitions(${CppUTestLibName}
+  target_compile_definitions(CppUTest
     PUBLIC
       CPPUTEST_HAVE_GETTIMEOFDAY=1
   )
@@ -103,7 +90,7 @@ endif(HAVE_GETTIMEOFDAY)
 
 check_symbol_exists(pthread_mutex_lock "pthread.h" HAVE_PTHREAD_MUTEX_LOCK)
 if(HAVE_PTHREAD_MUTEX_LOCK)
-  target_compile_definitions(${CppUTestLibName}
+  target_compile_definitions(CppUTest
     PUBLIC
       CPPUTEST_HAVE_PTHREAD_MUTEX_LOCK=1
   )
@@ -112,7 +99,7 @@ endif(HAVE_PTHREAD_MUTEX_LOCK)
 if (NOT IAR)
   check_function_exists(strdup HAVE_STRDUP)
   if(HAVE_STRDUP)
-    target_compile_definitions(${CppUTestLibName}
+    target_compile_definitions(CppUTest
       PUBLIC
         CPPUTEST_HAVE_STRDUP=1
     )
@@ -124,7 +111,7 @@ if (MINGW)
     include(CheckStructHasMember)
     check_struct_has_member("struct timespec" tv_sec time.h HAVE_STRUCT_TIMESPEC)
     if (HAVE_STRUCT_TIMESPEC)
-      target_compile_definitions(${CppUTestLibName}
+      target_compile_definitions(CppUTest
         PUBLIC
           _TIMESPEC_DEFINED=1
       )
@@ -150,11 +137,11 @@ configure_file (
     "${PROJECT_SOURCE_DIR}/config.h.cmake"
     "${PROJECT_BINARY_DIR}/generated/CppUTestGeneratedConfig.h"
     )
-target_include_directories(${CppUTestLibName}
+target_include_directories(CppUTest
     PUBLIC
         $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}>
 )
-target_compile_definitions(${CppUTestLibName}
+target_compile_definitions(CppUTest
   PUBLIC
     $<BUILD_INTERFACE:HAVE_CONFIG_H>
 )

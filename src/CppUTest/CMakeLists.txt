@@ -1,4 +1,4 @@
-add_library(${CppUTestLibName}
+add_library(CppUTest
     CommandLineArguments.cpp
     MemoryLeakWarningPlugin.cpp
     TestHarness_c.cpp
@@ -21,27 +21,27 @@ add_library(${CppUTestLibName}
 )
 
 if(LIBNAME_POSTFIX_DEBUG)
-    set_target_properties(${CppUTestLibName} PROPERTIES DEBUG_POSTFIX "d")
+    set_target_properties(CppUTest PROPERTIES DEBUG_POSTFIX "d")
 endif()
 
 #[[Set CPP_PLATFORM in a parent CMakeLists.txt if reusing one of the provided platforms, else supply the missing definitions]]
 if (CPP_PLATFORM)
-    target_sources(${CppUTestLibName}
+    target_sources(CppUTest
         PRIVATE
             ${CMAKE_CURRENT_LIST_DIR}/../Platforms/${CPP_PLATFORM}/UtestPlatform.cpp
     )
-    target_include_directories(${CppUTestLibName}
+    target_include_directories(CppUTest
         PUBLIC
             ${PROJECT_SOURCE_DIR}/include/Platforms/${CPP_PLATFORM}
     )
 endif(CPP_PLATFORM)
 
 #[[Arrange for the include directory to be added to the include paths of any CMake target depending on CppUTest.]]
-target_include_directories(${CppUTestLibName}
+target_include_directories(CppUTest
     PUBLIC
         ${PROJECT_SOURCE_DIR}/include
 )
 
 if (WIN32)
-    target_link_libraries(${CppUTestLibName} winmm)
+    target_link_libraries(CppUTest winmm)
 endif (WIN32)
