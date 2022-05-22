@@ -1,11 +1,19 @@
 # 2.6.3 is needed for ctest support
 # 3.1 is needed for target_sources
-cmake_minimum_required(VERSION 3.1)
+# 3.14 is needed for GNUInstallDirs/install
+cmake_minimum_required(VERSION 3.14)
 
-project(CppUTest)
+project(CppUTest
+  VERSION 4.0
+)
 
-set(CppUTest_version_major 4)
-set(CppUTest_version_minor 0)
+if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.21")
+  # PROJECT_IS_TOP_LEVEL supported natively
+elseif(PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME)
+  set(PROJECT_IS_TOP_LEVEL ON)
+else()
+  set(PROJECT_IS_TOP_LEVEL OFF)
+endif()
 
 ###############
 # Conan support
@@ -16,6 +24,7 @@ if (EXISTS "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
     conan_basic_setup()
 endif()
 
+include(CMakeDependentOption)
 option(STD_C "Use the standard C library" ON)
 option(STD_CPP "Use the standard C++ library" ON)
 option(CPPUTEST_FLAGS "Use the CFLAGS/CXXFLAGS/LDFLAGS set by CppUTest" ON)
@@ -35,8 +44,14 @@ option(EXAMPLES "Compile and make examples?" OFF)
 
 option(VERBOSE_CONFIG "Print configuration to stdout during generation" ON)
 
-option(LIBNAME_POSTFIX_BITSIZE "Add architecture bitsize (32/64) to the library name?" OFF)
-option(LIBNAME_POSTFIX_DEBUG "Add indication of debug compilation to the library name?" OFF)
+cmake_dependent_option(LIBNAME_POSTFIX_BITSIZE
+  "Add architecture bitsize (32/64) to the library name?" OFF
+  "PROJECT_IS_TOP_LEVEL" OFF
+)
+cmake_dependent_option(LIBNAME_POSTFIX_DEBUG
+  "Add indication of debug compilation to the library name?" OFF
+  "PROJECT_IS_TOP_LEVEL" OFF
+)
 
 option(HAS_INF "Compiler has Inf value for float" ON)
 option(HAS_NAN "Compiler has NaN value for float" ON)
@@ -46,6 +61,14 @@ if(NOT CMAKE_BUILD_TYPE)
 endif(NOT CMAKE_BUILD_TYPE)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake/Modules)
+
+include(GNUInstallDirs)
+install(
+    EXPORT CppUTest
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/CppUTest
+    NAMESPACE CppUTest::
+    FILE CppUTestConfig.cmake
+)
 
 include("${PROJECT_SOURCE_DIR}/cmake/Modules/CppUTestConfigurationOptions.cmake")
 include(CTest)

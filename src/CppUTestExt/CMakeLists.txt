@@ -14,6 +14,11 @@ add_library(CppUTestExt STATIC
     MemoryReportFormatter.cpp
     MockExpectedCallsList.cpp
     MockSupport.cpp
+)
+
+target_link_libraries(CppUTestExt PUBLIC CppUTest)
+
+set(CppUTestExt_headers
     ${PROJECT_SOURCE_DIR}/include/CppUTestExt/CodeMemoryReportFormatter.h
     ${PROJECT_SOURCE_DIR}/include/CppUTestExt/IEEE754ExceptionsPlugin.h
     ${PROJECT_SOURCE_DIR}/include/CppUTestExt/MemoryReportAllocator.h
@@ -37,14 +42,37 @@ add_library(CppUTestExt STATIC
     ${PROJECT_SOURCE_DIR}/include/CppUTestExt/MockSupport.h
 )
 
-target_link_libraries(CppUTestExt PUBLIC CppUTest)
+target_sources(CppUTestExt
+    PRIVATE ${CppUTestExt_headers}
+)
+
+set_target_properties(CppUTestExt PROPERTIES
+    PUBLIC_HEADER "${CppUTestExt_headers}"
+)
+
+#[[Arrange for the include directory to be added to the include paths of any CMake target depending on CppUTestExt.]]
+target_include_directories(CppUTestExt
+    PUBLIC
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/CppUTestExt>
+)
+
+add_library(CppUTest::CppUTestExt ALIAS CppUTestExt)
 
 if(LIBNAME_POSTFIX_DEBUG)
     set_target_properties(CppUTestExt PROPERTIES DEBUG_POSTFIX "d")
 endif()
 
-#[[Arrange for the include directory to be added to the include paths of any CMake target depending on CppUTestExt.]]
-target_include_directories(CppUTestExt
-    PUBLIC
-        ${PROJECT_SOURCE_DIR}/include
+if(LIBNAME_POSTFIX_BITSIZE)
+    if(CMAKE_SIZEOF_VOID_P STREQUAL "8")
+        set_target_properties(CppUTestExt PROPERTIES EXPORT_NAME "CppUTestExt64")
+    elseif(CMAKE_SIZEOF_VOID_P STREQUAL "4")
+        set_target_properties(CppUTestExt PROPERTIES EXPORT_NAME "CppUTestExt32")
+    endif()
+endif()
+
+install(
+    TARGETS CppUTestExt
+    EXPORT CppUTest
+    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/CppUTestExt
 )
