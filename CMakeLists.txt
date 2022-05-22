@@ -45,8 +45,6 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "What kind of build this is" FORCE)
 endif(NOT CMAKE_BUILD_TYPE)
 
-set(CppUTestRootDirectory ${PROJECT_SOURCE_DIR})
-
 set( CppUTestLibName "CppUTest" )
 set( CppUTestExtLibName "CppUTestExt" )
 
@@ -60,13 +58,13 @@ if(LIBNAME_POSTFIX_BITSIZE)
   endif()
 endif(LIBNAME_POSTFIX_BITSIZE)
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CppUTestRootDirectory}/cmake/Modules)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake/Modules)
 
-include("${CppUTestRootDirectory}/cmake/Modules/CppUTestConfigurationOptions.cmake")
+include("${PROJECT_SOURCE_DIR}/cmake/Modules/CppUTestConfigurationOptions.cmake")
 include(CTest)
-#include("${CppUTestRootDirectory}/cmake/Modules/CheckFunctionExists.cmake")
-include("${CppUTestRootDirectory}/cmake/Modules/CppUTestBuildTimeDiscoverTests.cmake")
-include("${CppUTestRootDirectory}/cmake/Modules/CppUTestNormalizeTestOutputLocation.cmake")
+#include("${PROJECT_SOURCE_DIR}/cmake/Modules/CheckFunctionExists.cmake")
+include("${PROJECT_SOURCE_DIR}/cmake/Modules/CppUTestBuildTimeDiscoverTests.cmake")
+include("${PROJECT_SOURCE_DIR}/cmake/Modules/CppUTestNormalizeTestOutputLocation.cmake")
 
 enable_testing()
 

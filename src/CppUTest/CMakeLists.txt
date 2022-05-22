@@ -32,14 +32,14 @@ if (CPP_PLATFORM)
     )
     target_include_directories(${CppUTestLibName}
         PUBLIC
-            ${CppUTestRootDirectory}/include/Platforms/${CPP_PLATFORM}
+            ${PROJECT_SOURCE_DIR}/include/Platforms/${CPP_PLATFORM}
     )
 endif(CPP_PLATFORM)
 
 #[[Arrange for the include directory to be added to the include paths of any CMake target depending on CppUTest.]]
 target_include_directories(${CppUTestLibName}
     PUBLIC
-        ${CppUTestRootDirectory}/include
+        ${PROJECT_SOURCE_DIR}/include
 )
 
 if (WIN32)

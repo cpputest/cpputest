@@ -14,27 +14,27 @@ add_library(${CppUTestExtLibName} STATIC
     MemoryReportFormatter.cpp
     MockExpectedCallsList.cpp
     MockSupport.cpp
-    ${CppUTestRootDirectory}/include/CppUTestExt/CodeMemoryReportFormatter.h
-    ${CppUTestRootDirectory}/include/CppUTestExt/IEEE754ExceptionsPlugin.h
-    ${CppUTestRootDirectory}/include/CppUTestExt/MemoryReportAllocator.h
-    ${CppUTestRootDirectory}/include/CppUTestExt/MockExpectedCall.h
-    ${CppUTestRootDirectory}/include/CppUTestExt/MockCheckedExpectedCall.h
-    ${CppUTestRootDirectory}/include/CppUTestExt/MockExpectedCallsList.h
-    ${CppUTestRootDirectory}/include/CppUTestExt/MockSupportPlugin.h
-    ${CppUTestRootDirectory}/include/CppUTestExt/MemoryReportFormatter.h
-    ${CppUTestRootDirectory}/include/CppUTestExt/MockFailure.h
-    ${CppUTestRootDirectory}/include/CppUTestExt/MockSupport.h
-    ${CppUTestRootDirectory}/include/CppUTestExt/MockSupport_c.h
-    ${CppUTestRootDirectory}/include/CppUTestExt/GMock.h
-    ${CppUTestRootDirectory}/include/CppUTestExt/GTest.h
-    ${CppUTestRootDirectory}/include/CppUTestExt/GTestSupport.h
-    ${CppUTestRootDirectory}/include/CppUTestExt/MemoryReporterPlugin.h
-    ${CppUTestRootDirectory}/include/CppUTestExt/OrderedTest.h
-    ${CppUTestRootDirectory}/include/CppUTestExt/GTestConvertor.h
-    ${CppUTestRootDirectory}/include/CppUTestExt/MockActualCall.h
-    ${CppUTestRootDirectory}/include/CppUTestExt/MockCheckedActualCall.h
-    ${CppUTestRootDirectory}/include/CppUTestExt/MockNamedValue.h
-    ${CppUTestRootDirectory}/include/CppUTestExt/MockSupport.h
+    ${PROJECT_SOURCE_DIR}/include/CppUTestExt/CodeMemoryReportFormatter.h
+    ${PROJECT_SOURCE_DIR}/include/CppUTestExt/IEEE754ExceptionsPlugin.h
+    ${PROJECT_SOURCE_DIR}/include/CppUTestExt/MemoryReportAllocator.h
+    ${PROJECT_SOURCE_DIR}/include/CppUTestExt/MockExpectedCall.h
+    ${PROJECT_SOURCE_DIR}/include/CppUTestExt/MockCheckedExpectedCall.h
+    ${PROJECT_SOURCE_DIR}/include/CppUTestExt/MockExpectedCallsList.h
+    ${PROJECT_SOURCE_DIR}/include/CppUTestExt/MockSupportPlugin.h
+    ${PROJECT_SOURCE_DIR}/include/CppUTestExt/MemoryReportFormatter.h
+    ${PROJECT_SOURCE_DIR}/include/CppUTestExt/MockFailure.h
+    ${PROJECT_SOURCE_DIR}/include/CppUTestExt/MockSupport.h
+    ${PROJECT_SOURCE_DIR}/include/CppUTestExt/MockSupport_c.h
+    ${PROJECT_SOURCE_DIR}/include/CppUTestExt/GMock.h
+    ${PROJECT_SOURCE_DIR}/include/CppUTestExt/GTest.h
+    ${PROJECT_SOURCE_DIR}/include/CppUTestExt/GTestSupport.h
+    ${PROJECT_SOURCE_DIR}/include/CppUTestExt/MemoryReporterPlugin.h
+    ${PROJECT_SOURCE_DIR}/include/CppUTestExt/OrderedTest.h
+    ${PROJECT_SOURCE_DIR}/include/CppUTestExt/GTestConvertor.h
+    ${PROJECT_SOURCE_DIR}/include/CppUTestExt/MockActualCall.h
+    ${PROJECT_SOURCE_DIR}/include/CppUTestExt/MockCheckedActualCall.h
+    ${PROJECT_SOURCE_DIR}/include/CppUTestExt/MockNamedValue.h
+    ${PROJECT_SOURCE_DIR}/include/CppUTestExt/MockSupport.h
 )
 
 target_link_libraries(${CppUTestExtLibName} PUBLIC ${CppUTestLibName})
@@ -46,5 +46,5 @@ endif()
 #[[Arrange for the include directory to be added to the include paths of any CMake target depending on CppUTestExt.]]
 target_include_directories(${CppUTestExtLibName}
     PUBLIC
-        ${CppUTestRootDirectory}/include
+        ${PROJECT_SOURCE_DIR}/include
 )
