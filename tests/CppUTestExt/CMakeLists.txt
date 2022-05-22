@@ -1,4 +1,4 @@
-set(CppUTestExtTests_src
+add_executable(CppUTestExtTests
     AllTests.cpp
     CodeMemoryReporterTest.cpp
     GMockTest.cpp
@@ -29,14 +29,16 @@ set(CppUTestExtTests_src
     OrderedTestTest.cpp
 )
 
+target_link_libraries(CppUTestExtTests
+    PRIVATE ${CppUTestExtLibName}
+)
+
 if (MINGW)
     find_package (Threads REQUIRED)
     set(THREAD_LIB "pthread")
 endif (MINGW)
 
-add_executable(CppUTestExtTests ${CppUTestExtTests_src})
 cpputest_normalize_test_output_location(CppUTestExtTests)
-target_link_libraries(CppUTestExtTests ${CppUTestLibName} ${CppUTestExtLibName} ${THREAD_LIB} ${CPPUNIT_EXTERNAL_LIBRARIES})
 
 if (TESTS_BUILD_DISCOVER)
     cpputest_buildtime_discover_tests(CppUTestExtTests)
