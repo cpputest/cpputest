@@ -8,11 +8,14 @@ add_executable(ExampleTests
     PrinterTest.cpp
 )
 
-target_include_directories(ExampleTests
+target_link_libraries(ExampleTests
     PRIVATE
-        ../ApplicationLib
+        ApplicationLib
+        CppUTest::CppUTestExt
 )
 
+include(CppUTestNormalizeTestOutputLocation)
 cpputest_normalize_test_output_location(ExampleTests)
-target_link_libraries(ExampleTests ApplicationLib CppUTest CppUTestExt)
+
+include(CppUTestBuildTimeDiscoverTests)
 cpputest_buildtime_discover_tests(ExampleTests)

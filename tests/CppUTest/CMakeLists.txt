@@ -53,9 +53,12 @@ if (${CMAKE_HOST_SYSTEM_NAME} MATCHES "OpenBSD")
 endif ()
 
 add_executable(CppUTestTests ${CppUTestTests_src})
-cpputest_normalize_test_output_location(CppUTestTests)
 target_link_libraries(CppUTestTests CppUTest ${THREAD_LIB})
 
+include(CppUTestNormalizeTestOutputLocation)
+cpputest_normalize_test_output_location(CppUTestTests)
+
 if (TESTS_BUILD_DISCOVER)
+    include(CppUTestBuildTimeDiscoverTests)
     cpputest_buildtime_discover_tests(CppUTestTests)
 endif()

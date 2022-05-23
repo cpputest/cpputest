@@ -2,7 +2,7 @@ set(_CPPUTEST_BUILDTIME_DISCOVER_TESTS_DIR "${CMAKE_CURRENT_LIST_DIR}")
 
 # Create target to discover tests
 function (cpputest_buildtime_discover_tests EXECUTABLE)
-  set(DISCOVER_SCRIPT "${_CPPUTEST_BUILDTIME_DISCOVER_TESTS_DIR}/../Scripts/CppUTestBuildTimeDiscoverTests.cmake")
+  set(DISCOVER_SCRIPT "${_CPPUTEST_BUILDTIME_DISCOVER_TESTS_DIR}/CppUTestBuildTimeDiscoverTests/discover.cmake")
 
   add_custom_command (TARGET ${EXECUTABLE}
     POST_BUILD

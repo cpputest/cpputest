@@ -38,8 +38,10 @@ if (MINGW)
     set(THREAD_LIB "pthread")
 endif (MINGW)
 
+include(CppUTestNormalizeTestOutputLocation)
 cpputest_normalize_test_output_location(CppUTestExtTests)
 
 if (TESTS_BUILD_DISCOVER)
+    include(CppUTestBuildTimeDiscoverTests)
     cpputest_buildtime_discover_tests(CppUTestExtTests)
 endif()

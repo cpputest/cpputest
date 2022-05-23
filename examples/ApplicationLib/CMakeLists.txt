@@ -4,7 +4,7 @@ add_library(ApplicationLib
     hello.c
     Printer.cpp
 )
-target_include_directories(ExampleTests
+target_include_directories(ApplicationLib
     PUBLIC
         .
 )

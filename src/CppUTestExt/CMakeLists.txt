@@ -71,8 +71,10 @@ if(LIBNAME_POSTFIX_BITSIZE)
     endif()
 endif()
 
-install(
-    TARGETS CppUTestExt
-    EXPORT CppUTest
-    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/CppUTestExt
-)
+if(PROJECT_IS_TOP_LEVEL)
+    install(
+        TARGETS CppUTestExt
+        EXPORT CppUTestTargets
+        PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/CppUTestExt
+    )
+endif()

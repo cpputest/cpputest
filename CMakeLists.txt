@@ -40,7 +40,7 @@ option(TESTS "Compile and make tests for the code?" ON)
 option(TESTS_DETAILED "Run each test separately instead of grouped?" OFF)
 option(TESTS_BUILD_DISCOVER "Build time test discover" ON)
 
-option(EXAMPLES "Compile and make examples?" OFF)
+option(EXAMPLES "Compile and make examples?" ${PROJECT_IS_TOP_LEVEL})
 
 option(VERBOSE_CONFIG "Print configuration to stdout during generation" ON)
 
@@ -61,22 +61,56 @@ if(NOT CMAKE_BUILD_TYPE)
 endif(NOT CMAKE_BUILD_TYPE)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake/Modules)
+if(NOT PROJECT_IS_TOP_LEVEL)
+    set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" PARENT_SCOPE)
+endif()
 
-include(GNUInstallDirs)
-install(
-    EXPORT CppUTest
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/CppUTest
-    NAMESPACE CppUTest::
-    FILE CppUTestConfig.cmake
-)
+if(PROJECT_IS_TOP_LEVEL)
+  include(CMakePackageConfigHelpers)
+  include(GNUInstallDirs)
 
-include("${PROJECT_SOURCE_DIR}/cmake/Modules/CppUTestConfigurationOptions.cmake")
+  set(CPPUTEST_CMAKE_CONFIG_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/CppUTest")
+
+  configure_package_config_file(
+    ${CMAKE_CURRENT_LIST_DIR}/cmake/CppUTestConfig.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/CppUTestConfig.cmake
+    INSTALL_DESTINATION "${CPPUTEST_CMAKE_CONFIG_DESTINATION}"
+  )
+
+  write_basic_package_version_file(
+    "${CMAKE_CURRENT_BINARY_DIR}/CppUTestConfigVersion.cmake"
+    COMPATIBILITY SameMajorVersion
+  )
+
+  install(
+    FILES
+      "${CMAKE_CURRENT_BINARY_DIR}/CppUTestConfig.cmake"
+      "${CMAKE_CURRENT_BINARY_DIR}/CppUTestConfigVersion.cmake"
+    DESTINATION "${CPPUTEST_CMAKE_CONFIG_DESTINATION}"
+  )
+
+  install(
+      EXPORT CppUTestTargets
+      DESTINATION "${CPPUTEST_CMAKE_CONFIG_DESTINATION}"
+      NAMESPACE CppUTest::
+  )
+
+  install(
+    FILES
+      cmake/Modules/CppUTestBuildTimeDiscoverTests.cmake
+      cmake/Modules/CppUTestNormalizeTestOutputLocation.cmake
+    DESTINATION "${CPPUTEST_CMAKE_CONFIG_DESTINATION}"
+  )
+
+  install(
+      FILES cmake/Modules/CppUTestBuildTimeDiscoverTests/discover.cmake
+      DESTINATION "${CPPUTEST_CMAKE_CONFIG_DESTINATION}/CppUTestBuildTimeDiscoverTests"
+  )
+endif()
+
 include(CTest)
-#include("${PROJECT_SOURCE_DIR}/cmake/Modules/CheckFunctionExists.cmake")
-include("${PROJECT_SOURCE_DIR}/cmake/Modules/CppUTestBuildTimeDiscoverTests.cmake")
-include("${PROJECT_SOURCE_DIR}/cmake/Modules/CppUTestNormalizeTestOutputLocation.cmake")
 
-enable_testing()
+include(CppUTestConfigurationOptions)
 
 add_subdirectory(src/CppUTest)
 
