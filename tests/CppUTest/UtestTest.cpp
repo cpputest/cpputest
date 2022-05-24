@@ -30,6 +30,10 @@
 #include "CppUTest/TestTestingFixture.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
+#ifdef __clang__
+# define NEEDS_DISABLE_UNREACHABLE_CODE
+#endif /* clang */
+
 TEST_GROUP(UtestShell)
 {
     TestTestingFixture fixture;
@@ -218,11 +222,25 @@ TEST(UtestShell, TestStopsAfterSetupFailure)
 }
 
 #if CPPUTEST_USE_STD_CPP_LIB
-static void thrownUnknownExceptionMethod_()
+#ifdef NEEDS_DISABLE_UNREACHABLE_CODE
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wunreachable-code"
+#endif /* NEEDS_DISABLE_UNREACHABLE_CODE */
+_no_return_ static void thrownUnknownExceptionMethod_()
 {
     throw 33;
     stopAfterFailure++;
 }
+
+_no_return_ static void thrownStandardExceptionMethod_()
+{
+    throw std::runtime_error("exception text");
+    stopAfterFailure++;
+}
+
+#ifdef NEEDS_DISABLE_UNREACHABLE_CODE
+# pragma GCC diagnostic pop
+#endif /* NEEDS_DISABLE_UNREACHABLE_CODE */
 
 TEST(UtestShell, TestStopsAfterUnknownExceptionIsThrown)
 {
@@ -235,12 +253,6 @@ TEST(UtestShell, TestStopsAfterUnknownExceptionIsThrown)
     fixture.assertPrintContains("Unexpected exception of unknown type was thrown");
     LONGS_EQUAL(0, stopAfterFailure);
     UtestShell::setRethrowExceptions(initialRethrowExceptions);
-}
-
-static void thrownStandardExceptionMethod_()
-{
-    throw std::runtime_error("exception text");
-    stopAfterFailure++;
 }
 
 TEST(UtestShell, TestStopsAfterStandardExceptionIsThrown)
