@@ -214,6 +214,7 @@ CLANG_VERSION := $(shell echo $(CC_VERSION_OUTPUT) | sed -n 's/.* \([0-9]*\.[0-9
 CLANG_VERSION_NUM := $(subst .,,$(CLANG_VERSION))
 CLANG_VERSION_NUM_GT_700 := $(shell [ "$(CLANG_VERSION_NUM)" -ge 700 ] && echo Y || echo N)
 CLANG_VERSION_NUM_GT_1200 := $(shell [ "$(CLANG_VERSION_NUM)" -ge 1200 ] && echo Y || echo N)
+CLANG_VERSION_NUM_GT_1205 := $(shell [ "$(CLANG_VERSION_NUM)" -ge 1205 ] && echo Y || echo N)
 
 ifeq ($(CLANG_VERSION_NUM_GT_700), Y)
 # -Wno-reserved-id-macro -> Many CppUTest macros start with __, which is a reserved namespace
@@ -221,10 +222,20 @@ ifeq ($(CLANG_VERSION_NUM_GT_700), Y)
 	CPPUTEST_CXX_WARNINGFLAGS += -Wno-reserved-id-macro -Wno-keyword-macro
 	CPPUTEST_C_WARNINGFLAGS += -Wno-reserved-id-macro -Wno-keyword-macro
 endif
+
+ifeq ($(UNAME_OS),$(MACOSX_STR))
+#apple clang has some special behavior
 ifeq ($(CLANG_VERSION_NUM_GT_1200), Y)
 # -Wno-poison-system-directories -> Apparently apple clang thinks everything is a cross compile, making this useless
 	CPPUTEST_CXX_WARNINGFLAGS += -Wno-poison-system-directories
 	CPPUTEST_C_WARNINGFLAGS += -Wno-poison-system-directories
+endif # clang 1200
+
+ifeq ($(CLANG_VERSION_NUM_GT_1205), Y)
+# Not sure why apple clang throws these warnings on cpputest code when clang doesn't
+	CPPUTEST_CXX_WARNINGFLAGS += -Wno-suggest-override -Wno-suggest-destructor-override
+	CPPUTEST_C_WARNINGFLAGS += -Wno-suggest-override -Wno-suggest-destructor-override
+endif
 endif
 endif
 
