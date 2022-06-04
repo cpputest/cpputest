@@ -82,10 +82,11 @@ enable_testing()
 
 add_subdirectory(src/CppUTest)
 
-# Check for functions before setting a lot of stuff
-include(CheckFunctionExists)
+# Check for symbols before setting a lot of stuff
 include(CheckCXXSymbolExists)
-include(CheckSymbolExists)
+include(CheckTypeSize)
+include(CheckStructHasMember)
+set(CMAKE_REQUIRED_FLAGS ${CMAKE_CXX_FLAGS})
 check_cxx_symbol_exists(FE_DIVBYZERO "fenv.h" CPPUTEST_HAVE_FENV)
 check_cxx_symbol_exists(fork "unistd.h" CPPUTEST_HAVE_FORK)
 check_cxx_symbol_exists(waitpid "sys/wait.h" CPPUTEST_HAVE_WAITPID)
@@ -118,20 +119,15 @@ if(NOT DEFINED CPPUTEST_HAS_INF)
 endif()
 
 if (NOT IAR)
-  check_function_exists(strdup CPPUTEST_HAVE_STRDUP)
+  check_cxx_symbol_exists(strdup "string.h" CPPUTEST_HAVE_STRDUP)
 endif(NOT IAR)
+check_type_size("long long" SIZEOF_LONGLONG LANGUAGE CXX)
+if(HAVE_SIZEOF_LONGLONG)
+    set(CPPUTEST_HAVE_LONG_LONG_INT ON)
+endif()
 
 if (MINGW)
-    # Apply workaround for MinGW timespec redefinition (pthread.h / time.h)
-    include(CheckStructHasMember)
-    check_struct_has_member("struct timespec" tv_sec time.h HAVE_STRUCT_TIMESPEC)
-    if (HAVE_STRUCT_TIMESPEC)
-      target_compile_definitions(${CppUTestLibName}
-        PUBLIC
-          _TIMESPEC_DEFINED=1
-      )
-    endif()
-
+    check_struct_has_member("struct timespec" tv_sec time.h CPPUTEST_HAVE_STRUCT_TIMESPEC LANGUAGE CXX)
     if (NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
         # Apply workaround for static/shared libraries on MinGW C/C++ compiler
         # Issue occurs with CMake >= 3.9.0, it doesn't filter out gcc,gcc_s,gcc_eh from
@@ -140,12 +136,6 @@ if (MINGW)
         # to be to force static linkage.
         set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static")
     endif()
-endif()
-
-include(CheckTypeSize)
-check_type_size("long long" SIZEOF_LONGLONG)
-if(HAVE_SIZEOF_LONGLONG)
-    set(CPPUTEST_HAVE_LONG_LONG_INT ON)
 endif()
 
 configure_file (
