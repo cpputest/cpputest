@@ -61,6 +61,7 @@ else (MSVC)
         Wno-exit-time-destructors
         Wno-weak-vtables
         Wno-old-style-cast
+        Wsuggest-override
         )
 
     if (C++11 OR (DEFINED CMAKE_CXX_STANDARD AND NOT CMAKE_CXX_STANDARD EQUAL 98))
