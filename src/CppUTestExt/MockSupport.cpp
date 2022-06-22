@@ -628,7 +628,7 @@ const void* MockSupport::returnConstPointerValueOrDefault(const void * defaultVa
     return defaultValue;
 }
 
-void (*MockSupport::returnFunctionPointerValueOrDefault(void (*defaultValue)()))()
+MockActualCall::FunctionPointer MockSupport::returnFunctionPointerValueOrDefault(MockActualCall::FunctionPointer defaultValue)
 {
     if (hasReturnValue()) {
         return functionPointerReturnValue();

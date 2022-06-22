@@ -214,8 +214,8 @@ void* pointerReturnValue_c();
 void* returnPointerValueOrDefault_c(void * defaultValue);
 const void* constPointerReturnValue_c();
 const void* returnConstPointerValueOrDefault_c(const void * defaultValue);
-void (*functionPointerReturnValue_c())();
-void (*returnFunctionPointerValueOrDefault_c(void(*defaultValue)()))();
+MockActualCall::FunctionPointer functionPointerReturnValue_c();
+MockActualCall::FunctionPointer returnFunctionPointerValueOrDefault_c(MockActualCall::FunctionPointer defaultValue);
 
 static void installComparator_c (const char* typeName, MockTypeEqualFunction_c isEqual, MockTypeValueToStringFunction_c valueToString)
 {
@@ -984,12 +984,12 @@ const void* returnConstPointerValueOrDefault_c(const void * defaultValue)
     return constPointerReturnValue_c();
 }
 
-void (*functionPointerReturnValue_c())()
+MockActualCall::FunctionPointer functionPointerReturnValue_c()
 {
-    return (void (*)()) actualCall->returnFunctionPointerValue();
+    return (MockActualCall::FunctionPointer) actualCall->returnFunctionPointerValue();
 }
 
-void (*returnFunctionPointerValueOrDefault_c(void (*defaultValue)()))()
+MockActualCall::FunctionPointer returnFunctionPointerValueOrDefault_c(MockActualCall::FunctionPointer defaultValue)
 {
     if (!hasReturnValue_c()) {
         return defaultValue;
