@@ -76,14 +76,14 @@ MINGW_STR = MINGW
 CYGWIN_STR = CYGWIN
 LINUX_STR = Linux
 SUNOS_STR = SunOS
-UNKNWOWN_OS_STR = Unknown
+UNKNOWN_OS_STR = Unknown
 
 # Compilers
 CC_VERSION_OUTPUT ="$(shell $(CXX) -v 2>&1)"
 CLANG_STR = clang
 SUNSTUDIO_CXX_STR = SunStudio
 
-UNAME_OS = $(UNKNWOWN_OS_STR)
+UNAME_OS = $(UNKNOWN_OS_STR)
 
 ifeq ($(findstring $(MINGW_STR),$(UNAME_OUTPUT)),$(MINGW_STR))
 	UNAME_OS = $(MINGW_STR)
@@ -200,7 +200,7 @@ ifeq ($(COMPILER_NAME),$(CLANG_STR))
 # -Wno-disabled-macro-expansion -> Have to disable the macro expansion warning as the operator new overload warns on that.
 # -Wno-padded -> I sort-of like this warning but if there is a bool at the end of the class, it seems impossible to remove it! (except by making padding explicit)
 # -Wno-global-constructors Wno-exit-time-destructors -> Great warnings, but in CppUTest it is impossible to avoid as the automatic test registration depends on the global ctor and dtor
-# -Wno-weak-vtables -> The TEST_GROUP macro declares a class and will automatically inline its methods. Thats ok as they are only in one translation unit. Unfortunately, the warning can't detect that, so it must be disabled.
+# -Wno-weak-vtables -> The TEST_GROUP macro declares a class and will automatically inline its methods. That's ok as they are only in one translation unit. Unfortunately, the warning can't detect that, so it must be disabled.
 # -Wno-old-style-casts -> We only use old style casts by decision
 # -Wno-c++11-long-long -> When it detects long long, then we can use it and no need for a warning about that
 # -Wno-c++98-compat-pedantic -> Incompatibilities with C++98, these are happening through #define.
@@ -243,7 +243,7 @@ else
 endif
 endif
 
-# Default dir for the outout library
+# Default dir for the output library
 ifndef CPPUTEST_LIB_DIR
 ifndef TARGET_PLATFORM
     CPPUTEST_LIB_DIR = lib
@@ -257,7 +257,7 @@ ifndef CPPUTEST_MAP_FILE
 	CPPUTEST_MAP_FILE = N
 endif
 
-# No extentions is default
+# No extensions is default
 ifndef CPPUTEST_USE_EXTENSIONS
 	CPPUTEST_USE_EXTENSIONS = N
 endif
