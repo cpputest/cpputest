@@ -1,0 +1,41 @@
+---
+name: Basic builds
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  mac-gcc-autotools:
+    runs-on: macos-latest
+    env:
+      BUILD: autotools
+      CC: gcc
+      CXX: g++
+    name: "basic build & test"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+      - name: Build
+        run: |
+          brew install automake
+          autoreconf -i .
+          ./configure
+          make tdd
+
+  mac-clang-autotools:
+    runs-on: macos-latest
+    env:
+      BUILD: autotools
+      CC: clang
+      CXX: clang++
+    name: "basic build & test"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+      - name: Build
+        run: |
+          brew install automake
+          autoreconf -i .
+          ./configure
+          make tdd
