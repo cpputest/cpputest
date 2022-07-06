@@ -40,14 +40,57 @@ jobs:
 
   windows:
     runs-on: windows-latest
-    env:
-      CPP_STD: 17
     name: "Windows msbuild"
     steps:
       - name: Checkout
         uses: actions/checkout@main
       - name: Build
         run: |
-          cmake -B build -S .
+          cmake -B build -S . -DCMAKE_CXX_STANDARD=17
           cmake --build build
           ctest --test-dir build
+
+  linux-gcc-cmake:
+    runs-on: ubuntu-latest
+    env:
+      CC: gcc
+      CXX: g++
+    name: "Linux GCC CMake"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+      - name: Build
+        run: |
+          cmake -B build -S . -DCMAKE_CXX_STANDARD=17
+          cmake --build build
+          ctest --test-dir build
+
+  linux-gcc-autotools:
+    runs-on: ubuntu-latest
+    env:
+      CC: gcc
+      CXX: g++
+    name: "Linux GCC autotools"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+      - name: Build
+        run: |
+          autoreconf -i .
+          ./configure
+          make tdd
+
+  linux-clang-autotools:
+    runs-on: ubuntu-latest
+    env:
+      CC: clang
+      CXX: clang++
+    name: "Linux Clang autotools"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+      - name: Build
+        run: |
+          autoreconf -i .
+          ./configure
+          make tdd
