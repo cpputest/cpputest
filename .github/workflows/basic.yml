@@ -9,10 +9,9 @@ jobs:
   mac-gcc-autotools:
     runs-on: macos-latest
     env:
-      BUILD: autotools
       CC: gcc
       CXX: g++
-    name: "basic build & test"
+    name: "Mac GCC Autotools"
     steps:
       - name: Checkout
         uses: actions/checkout@main
@@ -26,10 +25,9 @@ jobs:
   mac-clang-autotools:
     runs-on: macos-latest
     env:
-      BUILD: autotools
       CC: clang
       CXX: clang++
-    name: "basic build & test"
+    name: "Mac Clang Autotools"
     steps:
       - name: Checkout
         uses: actions/checkout@main
@@ -39,3 +37,17 @@ jobs:
           autoreconf -i .
           ./configure
           make tdd
+
+  windows:
+    runs-on: windows-latest
+    env:
+      CPP_STD: 17
+    name: "Windows msbuild"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+      - name: Build
+        run: |
+          cmake -B build -S .
+          cmake --build build
+          ctest --test-dir build
