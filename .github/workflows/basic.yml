@@ -38,6 +38,18 @@ jobs:
           ./configure
           make tdd
 
+  mac-cmake:
+    runs-on: macos-latest
+    name: "Mac CMake"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+      - name: Build
+        run: |
+          cmake -B build -S . -DCMAKE_CXX_STANDARD=17
+          cmake --build build
+          ctest --test-dir build
+
   windows:
     runs-on: windows-latest
     name: "Windows msbuild"
