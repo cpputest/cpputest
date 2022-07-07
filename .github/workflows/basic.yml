@@ -6,37 +6,40 @@ on:
   pull_request:
 
 jobs:
-  mac-gcc-autotools:
-    runs-on: macos-latest
-    env:
-      CC: gcc
-      CXX: g++
-    name: "Mac GCC Autotools"
+  automake:
+    strategy:
+      matrix:
+        include:
+          # Mac OSX
+          - os: macos-latest
+            cc: gcc
+            cxx: g++
+          - os: macos-latest
+            cc: clang
+            cxx: clang++
+          # Linux
+          - os: ubuntu-latest
+            cc: gcc
+            cxx: g++
+          - os: ubuntu-latest
+            cc: clang
+            cxx: clang++
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
         uses: actions/checkout@main
-      - name: Build
+      - run: brew install automake
+        if: ${{ startswith(matrix.os, 'macos') }}
+      - if: ${{ matrix.cxx }}
+        run: echo "CXX=${{ matrix.cxx }}" >> $GITHUB_ENV
+      - if: ${{ matrix.cc }}
+        run: echo "CC=${{ matrix.cc }}" >> $GITHUB_ENV
+      - name: Configure
         run: |
-          brew install automake
           autoreconf -i .
           ./configure
-          make tdd
-
-  mac-clang-autotools:
-    runs-on: macos-latest
-    env:
-      CC: clang
-      CXX: clang++
-    name: "Mac Clang Autotools"
-    steps:
-      - name: Checkout
-        uses: actions/checkout@main
-      - name: Build
-        run: |
-          brew install automake
-          autoreconf -i .
-          ./configure
-          make tdd
+      - name: Build and test
+        run: make tdd
 
   cmake:
     strategy:
@@ -96,33 +99,3 @@ jobs:
         run: cmake --build build
       - name: Test
         run: ctest --test-dir build
-
-  linux-gcc-autotools:
-    runs-on: ubuntu-latest
-    env:
-      CC: gcc
-      CXX: g++
-    name: "Linux GCC autotools"
-    steps:
-      - name: Checkout
-        uses: actions/checkout@main
-      - name: Build
-        run: |
-          autoreconf -i .
-          ./configure
-          make tdd
-
-  linux-clang-autotools:
-    runs-on: ubuntu-latest
-    env:
-      CC: clang
-      CXX: clang++
-    name: "Linux Clang autotools"
-    steps:
-      - name: Checkout
-        uses: actions/checkout@main
-      - name: Build
-        run: |
-          autoreconf -i .
-          ./configure
-          make tdd
