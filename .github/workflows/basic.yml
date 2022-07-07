@@ -38,44 +38,64 @@ jobs:
           ./configure
           make tdd
 
-  mac-cmake:
-    runs-on: macos-latest
-    name: "Mac CMake"
+  cmake:
+    strategy:
+      matrix:
+        include:
+          # Windows
+          - os: windows-latest
+            cpp_version: 17
+          # Linux
+          #   CMake different C++ versions with clang
+          - os: ubuntu-latest
+            cpp_version: 11
+            cxx: clang++
+            cc: clang
+          - os: ubuntu-latest
+            cpp_version: 14
+            cxx: clang++
+            cc: clang
+          - os: ubuntu-latest
+            cpp_version: 17
+            cxx: clang++
+            cc: clang
+          #   CMake different C++ versions with gcc
+          - os: ubuntu-latest
+            cpp_version: 11
+            cxx: g++
+            cc: gcc
+          - os: ubuntu-latest
+            cpp_version: 14
+            cxx: g++
+            cc: gcc
+          - os: ubuntu-latest
+            cpp_version: 17
+            cxx: g++
+            cc: gcc
+          # Mac OSX
+          - os: macos-latest
+            cpp_version: 17
+            cxx: clang++
+            cc: clang
+          - os: macos-latest
+            cpp_version: 14
+            cxx: g++
+            cc: gcc
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
         uses: actions/checkout@main
+      - if: ${{ matrix.cxx }}
+        run: echo "CXX=${{ matrix.cxx }}" >> $GITHUB_ENV
+      - if: ${{ matrix.cc }}
+        run: echo "CC=${{ matrix.cc }}" >> $GITHUB_ENV
+      - name: Configure
+        run: cmake -B build -S . -DCMAKE_CXX_STANDARD=${{ matrix.cpp_version }}
+        if: ${{ matrix.cpp_version }}
       - name: Build
-        run: |
-          cmake -B build -S . -DCMAKE_CXX_STANDARD=17
-          cmake --build build
-          ctest --test-dir build
-
-  windows:
-    runs-on: windows-latest
-    name: "Windows msbuild"
-    steps:
-      - name: Checkout
-        uses: actions/checkout@main
-      - name: Build
-        run: |
-          cmake -B build -S . -DCMAKE_CXX_STANDARD=17
-          cmake --build build
-          ctest --test-dir build
-
-  linux-gcc-cmake:
-    runs-on: ubuntu-latest
-    env:
-      CC: gcc
-      CXX: g++
-    name: "Linux GCC CMake"
-    steps:
-      - name: Checkout
-        uses: actions/checkout@main
-      - name: Build
-        run: |
-          cmake -B build -S . -DCMAKE_CXX_STANDARD=17
-          cmake --build build
-          ctest --test-dir build
+        run: cmake --build build
+      - name: Test
+        run: ctest --test-dir build
 
   linux-gcc-autotools:
     runs-on: ubuntu-latest
