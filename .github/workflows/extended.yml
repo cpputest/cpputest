@@ -1,0 +1,35 @@
+name: Extended builds
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test_report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install tools
+        run: sudo apt-get install -y ant-optional
+      - name: Checkout
+        uses: actions/checkout@main
+      - run: |
+          autoreconf -i .
+          ./configure
+          make check
+          ./CppUTestTests -ojunit
+          ./CppUTestExtTests -ojunit
+          cp ./scripts/generate_junit_report_ant.xml .
+          ant -f generate_junit_report_ant.xml
+
+  cmake_coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install tools
+        run: pip install --user cpp-coveralls gcovr
+      - name: Checkout
+        uses: actions/checkout@main
+      - run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DC++11=ON -DCOVERAGE=ON -DLONGLONG=ON
+          cmake --build build
+          ctest --test-dir build
+          coveralls -b build -r . -i "src" -i "include" --gcov-options="-lbc" || true
