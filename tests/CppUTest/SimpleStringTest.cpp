@@ -697,7 +697,7 @@ TEST(SimpleString, Sizes)
 
 TEST(SimpleString, nullptr_type)
 {
-    SimpleString s(StringFrom(nullptr));
+    SimpleString s(StringFrom(NULLPTR));
     STRCMP_EQUAL("(null)", s.asCharString());
 }
 
