@@ -54,4 +54,6 @@ jobs:
           make -f $CPPUTEST_HOME/platforms/Dos/Makefile clean
           make -f $CPPUTEST_HOME/platforms/Dos/Makefile
       - name: Test
+        env:
+          TERM: linux
         run: $CPPUTEST_HOME/platforms/Dos/alltests.sh
