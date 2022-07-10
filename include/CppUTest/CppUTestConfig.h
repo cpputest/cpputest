@@ -311,7 +311,12 @@ typedef struct cpputest_ulonglong cpputest_ulonglong;
 #endif
 
 /* Visual C++ 10.0+ (2010+) supports the override keyword, but doesn't define the C++ version as C++11 */
-#if defined(__cplusplus) && ((__cplusplus >= 201103L) || (defined(_MSC_VER) && (_MSC_VER >= 1600)) || (defined(__clang__) && defined(__apple_build_version__)))
+/* Apple Clang does the same thing. */
+#if defined(__cplusplus) && ( \
+  (__cplusplus >= 201103L) || \
+  (defined(_MSC_VER) && (_MSC_VER >= 1600)) || \
+  (defined(__clang__) && defined(__apple_build_version__)) \
+)
 #if !defined(__ghs__)
 #define CPPUTEST_COMPILER_FULLY_SUPPORTS_CXX11
 #define _override override
@@ -329,7 +334,12 @@ typedef struct cpputest_ulonglong cpputest_ulonglong;
 #endif
 
 /* Visual C++ 11.0+ (2012+) supports the override keyword on destructors */
-#if defined(__cplusplus) && ((__cplusplus >= 201103L) || (defined(_MSC_VER) && (_MSC_VER >= 1700)) || (defined(__clang__) && defined(__apple_build_version__)))
+/* Apple Clang does the same thing. */
+#if defined(__cplusplus) && ( \
+  (__cplusplus >= 201103L) || \
+  (defined(_MSC_VER) && (_MSC_VER >= 1700)) ||  \
+  (defined(__clang__) && defined(__apple_build_version__))\
+)
 #define _destructor_override override
 #else
 #define _destructor_override
