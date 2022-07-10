@@ -99,3 +99,15 @@ jobs:
         run: cmake --build build
       - name: Test
         run: ctest --test-dir build
+
+  xcode:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+      - name: Configure
+        run: cmake -B cpputest_build -S . -G Xcode -DWERROR=ON
+      - name: Build
+        run: cmake --build cpputest_build
+      - name: Test
+        run: ctest --test-dir cpputest_build
