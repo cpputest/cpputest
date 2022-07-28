@@ -51,6 +51,10 @@ jobs:
           # Linux
           #   CMake different C++ versions with clang
           - os: ubuntu-latest
+            cpp_version: 98
+            cxx: clang++
+            cc: clang
+          - os: ubuntu-latest
             cpp_version: 11
             cxx: clang++
             cc: clang
@@ -63,6 +67,10 @@ jobs:
             cxx: clang++
             cc: clang
           #   CMake different C++ versions with gcc
+          - os: ubuntu-latest
+            cpp_version: 98
+            cxx: g++
+            cc: gcc
           - os: ubuntu-latest
             cpp_version: 11
             cxx: g++
