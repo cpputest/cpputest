@@ -407,7 +407,7 @@ TEST(TestFailure, BitsEqualChar)
     BitsEqualFailure f(test, failFileName, failLineNumber, 0x01, 0x03, 0xFF, sizeof(char), "");
     FAILURE_EQUAL("expected <00000001>\n\tbut was  <00000011>", f);
 }
-#endif /* CPPUTEST_CHAR_BIT */
+#endif
 
 TEST(TestFailure, BitsEqual16Bit)
 {
@@ -442,4 +442,4 @@ TEST(TestFailure, UnexpectedExceptionFailure_StandardException)
     STRCMP_CONTAINS("runtime_error", f.getMessage().asCharString());
     STRCMP_CONTAINS("' was thrown: Some error", f.getMessage().asCharString());
 }
-#endif /* CPPUTEST_USE_STD_CPP_LIB */
+#endif

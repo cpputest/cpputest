@@ -32,7 +32,7 @@
 
 #ifdef __clang__
 # define NEEDS_DISABLE_UNREACHABLE_CODE
-#endif /* clang */
+#endif
 
 TEST_GROUP(UtestShell)
 {
@@ -225,7 +225,7 @@ TEST(UtestShell, TestStopsAfterSetupFailure)
 #ifdef NEEDS_DISABLE_UNREACHABLE_CODE
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wunreachable-code"
-#endif /* NEEDS_DISABLE_UNREACHABLE_CODE */
+#endif
 _no_return_ static void thrownUnknownExceptionMethod_()
 {
     throw 33;
@@ -240,7 +240,7 @@ _no_return_ static void thrownStandardExceptionMethod_()
 
 #ifdef NEEDS_DISABLE_UNREACHABLE_CODE
 # pragma GCC diagnostic pop
-#endif /* NEEDS_DISABLE_UNREACHABLE_CODE */
+#endif
 
 TEST(UtestShell, TestStopsAfterUnknownExceptionIsThrown)
 {
