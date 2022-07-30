@@ -30,10 +30,6 @@
 #include "CppUTest/TestTestingFixture.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
-#ifdef __clang__
-# define NEEDS_DISABLE_UNREACHABLE_CODE
-#endif
-
 TEST_GROUP(UtestShell)
 {
     TestTestingFixture fixture;

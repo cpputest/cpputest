@@ -41,6 +41,7 @@
  */
 
 #ifdef __clang__
+ #define NEEDS_DISABLE_UNREACHABLE_CODE 1
  #pragma clang diagnostic push
  #if (__clang_major__ == 3 && __clang_minor__ >= 6) || __clang_major__ >= 4
   #pragma clang diagnostic ignored "-Wreserved-id-macro"
