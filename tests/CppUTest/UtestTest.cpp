@@ -218,25 +218,36 @@ TEST(UtestShell, TestStopsAfterSetupFailure)
 }
 
 #if CPPUTEST_USE_STD_CPP_LIB
-#ifdef NEEDS_DISABLE_UNREACHABLE_CODE
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wunreachable-code"
-#endif
-_no_return_ static void thrownUnknownExceptionMethod_()
+
+/*
+ * Prevents -Wunreachable-code; should always return true
+ */
+static bool avoidUnreachableCodeWarning()
 {
-    throw 33;
+    do
+    {
+        return true;
+    }
+    while(0);
+}
+
+static void thrownUnknownExceptionMethod_()
+{
+    if (avoidUnreachableCodeWarning())
+    {
+        throw 33;
+    }
     stopAfterFailure++;
 }
 
-_no_return_ static void thrownStandardExceptionMethod_()
+static void thrownStandardExceptionMethod_()
 {
-    throw std::runtime_error("exception text");
+    if (avoidUnreachableCodeWarning())
+    {
+        throw std::runtime_error("exception text");
+    }
     stopAfterFailure++;
 }
-
-#ifdef NEEDS_DISABLE_UNREACHABLE_CODE
-# pragma GCC diagnostic pop
-#endif
 
 TEST(UtestShell, TestStopsAfterUnknownExceptionIsThrown)
 {
