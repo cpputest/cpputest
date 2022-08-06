@@ -32,7 +32,6 @@
 #include "CppUTest/TestPlugin.h"
 #include "CppUTest/JUnitTestOutput.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
-#include "CppUTestExt/MockSupport.h"
 
 
 class DummyPluginWhichCountsThePlugins : public TestPlugin
