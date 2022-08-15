@@ -219,21 +219,12 @@ TEST(UtestShell, TestStopsAfterSetupFailure)
 
 #if CPPUTEST_USE_STD_CPP_LIB
 
-/*
- * Prevents -Wunreachable-code; should always return true
- */
-static bool avoidUnreachableCodeWarning()
-{
-    do
-    {
-        return true;
-    }
-    while(0);
-}
+// Prevents -Wunreachable-code; should always be 'true'
+static bool avoidUnreachableCodeWarning = true;
 
 static void thrownUnknownExceptionMethod_()
 {
-    if (avoidUnreachableCodeWarning())
+    if (avoidUnreachableCodeWarning)
     {
         throw 33;
     }
@@ -242,7 +233,7 @@ static void thrownUnknownExceptionMethod_()
 
 static void thrownStandardExceptionMethod_()
 {
-    if (avoidUnreachableCodeWarning())
+    if (avoidUnreachableCodeWarning)
     {
         throw std::runtime_error("exception text");
     }
