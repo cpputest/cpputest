@@ -220,11 +220,11 @@ TEST(UtestShell, TestStopsAfterSetupFailure)
 #if CPPUTEST_USE_STD_CPP_LIB
 
 // Prevents -Wunreachable-code; should always be 'true'
-static bool avoidUnreachableCodeWarning = true;
+static bool shouldThrowException = true;
 
 static void thrownUnknownExceptionMethod_()
 {
-    if (avoidUnreachableCodeWarning)
+    if (shouldThrowException)
     {
         throw 33;
     }
@@ -233,7 +233,7 @@ static void thrownUnknownExceptionMethod_()
 
 static void thrownStandardExceptionMethod_()
 {
-    if (avoidUnreachableCodeWarning)
+    if (shouldThrowException)
     {
         throw std::runtime_error("exception text");
     }
@@ -245,6 +245,7 @@ TEST(UtestShell, TestStopsAfterUnknownExceptionIsThrown)
     bool initialRethrowExceptions = UtestShell::isRethrowingExceptions();
     UtestShell::setRethrowExceptions(false);
     stopAfterFailure = 0;
+    shouldThrowException = true;
     fixture.setTestFunction(thrownUnknownExceptionMethod_);
     fixture.runAllTests();
     LONGS_EQUAL(1, fixture.getFailureCount());
@@ -258,6 +259,7 @@ TEST(UtestShell, TestStopsAfterStandardExceptionIsThrown)
     bool initialRethrowExceptions = UtestShell::isRethrowingExceptions();
     UtestShell::setRethrowExceptions(false);
     stopAfterFailure = 0;
+    shouldThrowException = true;
     fixture.setTestFunction(thrownStandardExceptionMethod_);
     fixture.runAllTests();
     LONGS_EQUAL(1, fixture.getFailureCount());
@@ -268,12 +270,35 @@ TEST(UtestShell, TestStopsAfterStandardExceptionIsThrown)
     UtestShell::setRethrowExceptions(initialRethrowExceptions);
 }
 
+TEST(UtestShell, NoExceptionIsRethrownIfEnabledButNotThrown)
+{
+    bool initialRethrowExceptions = UtestShell::isRethrowingExceptions();
+    bool exceptionRethrown = false;
+    stopAfterFailure = 0;
+    UtestShell::setRethrowExceptions(true);
+    shouldThrowException = false;
+    fixture.setTestFunction(thrownUnknownExceptionMethod_);
+    try
+    {
+        fixture.runAllTests();
+    }
+    catch(...)
+    {
+        exceptionRethrown = true;
+    }
+    CHECK_FALSE(exceptionRethrown);
+    LONGS_EQUAL(0, fixture.getFailureCount());
+    LONGS_EQUAL(1, stopAfterFailure);
+    UtestShell::setRethrowExceptions(initialRethrowExceptions);
+}
+
 TEST(UtestShell, UnknownExceptionIsRethrownIfEnabled)
 {
     bool initialRethrowExceptions = UtestShell::isRethrowingExceptions();
     bool exceptionRethrown = false;
     stopAfterFailure = 0;
     UtestShell::setRethrowExceptions(true);
+    shouldThrowException = true;
     fixture.setTestFunction(thrownUnknownExceptionMethod_);
     try
     {
@@ -297,6 +322,7 @@ TEST(UtestShell, StandardExceptionIsRethrownIfEnabled)
     bool exceptionRethrown = false;
     stopAfterFailure = 0;
     UtestShell::setRethrowExceptions(true);
+    shouldThrowException = true;
     fixture.setTestFunction(thrownStandardExceptionMethod_);
     try
     {
