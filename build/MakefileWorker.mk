@@ -502,11 +502,19 @@ flags:
 TEST_DEPS = $(TEST_OBJS) $(MOCKS_OBJS) $(PRODUCTION_CODE_START) $(TARGET_LIB) $(USER_LIBS) $(PRODUCTION_CODE_END) $(CPPUTEST_LIB) $(STDLIB_CODE_START)
 test-deps: $(TEST_DEPS)
 
+ifeq ($(COMPILER_NAME),$(CLANG_STR))
+LD_START_GROUP = -Wl,--start-lib
+LD_END_GROUP = -Wl,--end-lib
+else
+LD_START_GROUP = -Wl,--start-group
+LD_END_GROUP = -Wl,--end-group
+endif
+
 $(TEST_TARGET): $(TEST_DEPS)
 ifndef MORE_SILENCE
 	@echo Linking $@
 endif
-	$(SILENCE)$(CXX) -o $@ $^ $(LD_LIBRARIES) $(LDFLAGS)
+	$(SILENCE)$(CXX) -o $@ $(LD_START_GROUP) $^ $(LD_LIBRARIES) $(LD_END_GROUP) $(LDFLAGS)
 
 $(TARGET_LIB): $(OBJ)
 ifndef MORE_SILENCE
