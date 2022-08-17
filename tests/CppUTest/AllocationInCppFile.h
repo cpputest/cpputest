@@ -12,7 +12,7 @@ char* newArrayAllocationWithoutMacro();
 class ClassThatThrowsAnExceptionInTheConstructor
 {
 public:
-  ClassThatThrowsAnExceptionInTheConstructor() _no_return_;
+    _no_return_ ClassThatThrowsAnExceptionInTheConstructor();
 };
 
 #endif
