@@ -41,9 +41,17 @@ option(LIBNAME_POSTFIX_DEBUG "Add indication of debug compilation to the library
 option(HAS_INF "Compiler has Inf value for float" ON)
 option(HAS_NAN "Compiler has NaN value for float" ON)
 
-if(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "What kind of build this is" FORCE)
-endif(NOT CMAKE_BUILD_TYPE)
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME) # Don't change users' build type.
+  # Multi-configuration generators don't have a single build type.
+  get_property(
+    GENERATOR_IS_MULTI_CONFIG GLOBAL
+    PROPERTY GENERATOR_IS_MULTI_CONFIG
+  )
+  if(NOT GENERATOR_IS_MULTICONFIG AND NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "What kind of build this is" FORCE)
+    message("No CMAKE_BUILD_TYPE set. Assigning: ${CMAKE_BUILD_TYPE}")
+  endif()
+endif()
 
 # Pkg-config file
 include(FindPkgConfig)
@@ -151,6 +159,19 @@ include(CheckTypeSize)
 check_type_size("long long" SIZEOF_LONGLONG)
 if(HAVE_SIZEOF_LONGLONG)
     set(CPPUTEST_HAVE_LONG_LONG_INT ON)
+endif()
+
+if(DEFINED HAS_INF)
+  message(DEPRECATION
+    "The HAS_INF cache variable has been deprecated. "
+    "CPPUTEST_HAS_INF is assessed automatically, "
+    "but can be assigned manually."
+  )
+  set(CPPUTEST_HAS_INF ${HAS_INF})
+endif()
+if(NOT DEFINED CPPUTEST_HAS_INF)
+  include(CheckCXXSymbolExists)
+  check_cxx_symbol_exists(INFINITY "math.h" CPPUTEST_HAS_INF)
 endif()
 
 configure_file (

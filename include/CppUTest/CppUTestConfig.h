@@ -103,10 +103,12 @@
   #define __has_attribute(x) 0
 #endif
 
-#if __has_attribute(noreturn)
-  #define _no_return_ __attribute__((noreturn))
+#if defined (__cplusplus) && __cplusplus >= 201103L
+   #define _no_return_ [[noreturn]]
+#elif __has_attribute(noreturn)
+   #define _no_return_ __attribute__((noreturn))
 #else
-  #define _no_return_
+   #define _no_return_
 #endif
 
 #if defined(__MINGW32__)
@@ -195,7 +197,7 @@
 #define CPPUTEST_SANITIZE_ADDRESS 1
 #define CPPUTEST_DO_NOT_SANITIZE_ADDRESS __attribute__((no_sanitize_address))
   #if defined(__linux__) && defined(__clang__)
-    #if CPPUTEST_USE_MEM_LEAK_DETECTION 
+    #if CPPUTEST_USE_MEM_LEAK_DETECTION
     #warning Compiling with Address Sanitizer with clang on linux will cause duplicate symbols for operator new. Turning off memory leak detection. Compile with -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED to get rid of this warning.
     #undef CPPUTEST_USE_MEM_LEAK_DETECTION
     #define CPPUTEST_USE_MEM_LEAK_DETECTION 0
@@ -337,12 +339,6 @@ typedef struct cpputest_ulonglong cpputest_ulonglong;
  #pragma clang diagnostic pop
 #endif
 
-/* Borland v5.4 does not have a NaN or Inf value */
-#if defined(CPPUTEST_NO_INF)
-#define CPPUTEST_HAS_INF 0
-#else
-#define CPPUTEST_HAS_INF 1
-#endif
 #if defined(CPPUTEST_NO_NAN)
 #define CPPUTEST_HAS_NAN 0
 #else

@@ -55,6 +55,10 @@ endif ()
 add_executable(CppUTestTests ${CppUTestTests_src})
 cpputest_normalize_test_output_location(CppUTestTests)
 target_link_libraries(CppUTestTests ${CppUTestLibName} ${THREAD_LIB})
+target_compile_definitions(CppUTestTests
+    PRIVATE
+        CPPUTEST_HAS_INF=$<BOOL:${CPPUTEST_HAS_INF}>
+)
 
 if (TESTS_BUILD_DISCOVER)
     cpputest_buildtime_discover_tests(CppUTestTests)
