@@ -41,9 +41,17 @@ option(LIBNAME_POSTFIX_DEBUG "Add indication of debug compilation to the library
 option(HAS_INF "Compiler has Inf value for float" ON)
 option(HAS_NAN "Compiler has NaN value for float" ON)
 
-if(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "What kind of build this is" FORCE)
-endif(NOT CMAKE_BUILD_TYPE)
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME) # Don't change users' build type.
+  # Multi-configuration generators don't have a single build type.
+  get_property(
+    GENERATOR_IS_MULTI_CONFIG GLOBAL
+    PROPERTY GENERATOR_IS_MULTI_CONFIG
+  )
+  if(NOT GENERATOR_IS_MULTICONFIG AND NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "What kind of build this is" FORCE)
+    message("No CMAKE_BUILD_TYPE set. Assigning: ${CMAKE_BUILD_TYPE}")
+  endif()
+endif()
 
 # Pkg-config file
 include(FindPkgConfig)
