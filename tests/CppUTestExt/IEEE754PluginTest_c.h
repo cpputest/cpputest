@@ -25,6 +25,9 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#ifndef IEEE754PLUGINTEST_C_H
+#define IEEE754PLUGINTEST_C_H
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -39,3 +42,5 @@ void set_everything_c(void);
 #ifdef __cplusplus
 }
 #endif
+
+#endif /* IEEE754PLUGINTEST_C_H */
