@@ -25,14 +25,31 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install tools
-        run: pip install --user cpp-coveralls gcovr
+        run: |
+          pip install --user gcovr
+          sudo apt install lcov
       - name: Checkout
         uses: actions/checkout@main
-      - run: |
-          cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DC++11=ON -DCOVERAGE=ON -DLONGLONG=ON
-          cmake --build build
-          ctest --test-dir build
-          coveralls -b build -r . -i "src" -i "include" --gcov-options="-lbc" || true
+      - name: Configure
+        run: >
+          cmake
+          -S .
+          -B cpputest_build
+          -D CMAKE_BUILD_TYPE=Debug
+          -D C++11=ON
+          -D COVERAGE=ON
+          -D LONGLONG=ON
+      - name: Build
+        run: cmake --build cpputest_build
+      - name: Test
+        run: ctest --test-dir cpputest_build
+      - name: Coverage
+        run: lcov --capture --directory . --output-file lcov.info
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          path-to-lcov: lcov.info
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
   make_dos:
     runs-on: ubuntu-latest
