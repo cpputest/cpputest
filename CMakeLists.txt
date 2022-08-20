@@ -38,7 +38,8 @@ check_type_size("long long" SIZEOF_LONGLONG)
 cmake_dependent_option(CPPUTEST_USE_LONG_LONG "Support long long"
   YES "HAVE_SIZEOF_LONGLONG" OFF)
 
-option(MAP_FILE "Enable the creation of a map file" OFF)
+cmake_dependent_option(CPPUTEST_MAP_FILE "Enable the creation of a map file"
+  OFF "NOT MSVC" OFF)
 option(COVERAGE "Enable running with coverage" OFF)
 cmake_dependent_option(CPPUTEST_WERROR
   "Compile with warnings as errors"
@@ -271,7 +272,7 @@ Features configured in CppUTest:
     Disable Standard C library:         ${CPPUTEST_STD_C_LIB_DISABLED}
     Disable Standard C++ library:       ${CPPUTEST_STD_CPP_LIB_DISABLED}
 
-    Generating map file:                ${MAP_FILE}
+    Generating map file:                ${CPPUTEST_MAP_FILE}
     Compiling with coverage:            ${COVERAGE}
 
     Compile and run self-tests          ${TESTS}
