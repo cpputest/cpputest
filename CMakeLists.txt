@@ -114,14 +114,6 @@ check_cxx_symbol_exists(waitpid "sys/wait.h" CPPUTEST_HAVE_WAITPID)
 check_cxx_symbol_exists(gettimeofday "sys/time.h" CPPUTEST_HAVE_GETTIMEOFDAY)
 check_cxx_symbol_exists(pthread_mutex_lock "pthread.h" CPPUTEST_HAVE_PTHREAD_MUTEX_LOCK)
 
-if(DEFINED HAS_NAN)
-  message(DEPRECATION
-    "The HAS_NAN cache variable has been deprecated. "
-    "CPPUTEST_HAS_NAN is assessed automatically, "
-    "but can be assigned manually."
-  )
-  set(CPPUTEST_HAS_NAN ${HAS_NAN})
-endif()
 if(NOT DEFINED CPPUTEST_HAS_NAN)
   check_cxx_symbol_exists(NAN "math.h" CPPUTEST_HAS_NAN)
 endif()
