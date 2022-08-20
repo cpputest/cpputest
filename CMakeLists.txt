@@ -25,7 +25,7 @@ if (EXISTS "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
 endif()
 
 include(CMakeDependentOption)
-option(STD_C "Use the standard C library" ON)
+option(CPPUTEST_STD_C_LIB_DISABLED "Disable the standard C library")
 option(STD_CPP "Use the standard C++ library" ON)
 option(CPPUTEST_FLAGS "Use the CFLAGS/CXXFLAGS/LDFLAGS set by CppUTest" ON)
 option(MEMORY_LEAK_DETECTION "Enable memory leak detection" ON)
@@ -261,7 +261,7 @@ Features configured in CppUTest:
     Support Long Long:                  ${LONGLONG}
     Use CppUTest flags:                 ${CPPUTEST_FLAGS}
 
-    Using Standard C library:           ${STD_C}
+    Disable Standard C library:         ${CPPUTEST_STD_C_LIB_DISABLED}
     Using Standard C++ library:         ${STD_CPP}
 
     Generating map file:                ${MAP_FILE}
