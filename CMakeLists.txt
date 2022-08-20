@@ -50,7 +50,7 @@ cmake_dependent_option(CPPUTEST_WERROR
 )
 cmake_dependent_option(CPPUTEST_BUILD_TESTING "Compile and make tests for CppUTest"
   ${PROJECT_IS_TOP_LEVEL} "BUILD_TESTING" OFF)
-option(TESTS_DETAILED "Run each test separately instead of grouped?" OFF)
+option(CPPUTEST_TESTS_DETAILED "Run each test separately instead of grouped?" OFF)
 cmake_dependent_option(CPPUTEST_TEST_DISCOVERY "Build time test discover"
   ON "CPPUTEST_BUILD_TESTING;NOT IAR" OFF)
 
@@ -277,7 +277,7 @@ Features configured in CppUTest:
     Compiling with coverage:            ${CPPUTEST_COVERAGE}
 
     Compile and run self-tests          ${CPPUTEST_BUILD_TESTING}
-    Run self-tests separately           ${TESTS_DETAILED}
+    Run self-tests separately           ${CPPUTEST_TESTS_DETAILED}
 
 Library name options:
     Add architecture bitsize (32/64)    ${LIBNAME_POSTFIX_BITSIZE}

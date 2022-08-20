@@ -24,7 +24,7 @@ function (cpputest_buildtime_discover_tests tgt)
     TARGET ${tgt} POST_BUILD
     COMMAND
       ${CMAKE_COMMAND}
-      -D "TESTS_DETAILED:BOOL=${TESTS_DETAILED}"
+      -D "TESTS_DETAILED:BOOL=${CPPUTEST_TESTS_DETAILED}"
       -D "EXECUTABLE=$<TARGET_FILE:${tgt}>"
       -D "EMULATOR=$<TARGET_PROPERTY:${tgt},CROSSCOMPILING_EMULATOR>"
       -P "${_DISCOVER_SCRIPT}"
