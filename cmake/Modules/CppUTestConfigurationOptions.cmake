@@ -7,7 +7,6 @@ if (MSVC)
 elseif (IAR)
     set(CPP_PLATFORM Iar)
     unset(CMAKE_CXX_EXTENSION_COMPILE_OPTION)
-    set(TESTS_BUILD_DISCOVER OFF)
     # Set up the CMake variables for the linker
     set(LINKER_SCRIPT "${CppUTest_SOURCE_DIR}/platforms/iar/CppUTestTest.icf")
     set(CMAKE_C_LINK_FLAGS "--semihosting --config ${LINKER_SCRIPT} --map mapfile.map")

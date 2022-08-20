@@ -51,7 +51,8 @@ cmake_dependent_option(CPPUTEST_WERROR
 cmake_dependent_option(CPPUTEST_BUILD_TESTING "Compile and make tests for CppUTest"
   ${PROJECT_IS_TOP_LEVEL} "BUILD_TESTING" OFF)
 option(TESTS_DETAILED "Run each test separately instead of grouped?" OFF)
-option(TESTS_BUILD_DISCOVER "Build time test discover" ON)
+cmake_dependent_option(CPPUTEST_TEST_DISCOVERY "Build time test discover"
+  ON "CPPUTEST_BUILD_TESTING;NOT IAR" OFF)
 
 option(EXAMPLES "Compile and make examples?" OFF)
 
