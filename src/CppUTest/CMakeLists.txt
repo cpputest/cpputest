@@ -47,7 +47,7 @@ add_library(${CppUTestLibName}
         ${PROJECT_SOURCE_DIR}/include/CppUTest/SimpleMutex.h
 )
 
-if(LIBNAME_POSTFIX_DEBUG)
+if(CPPUTEST_LIBNAME_POSTFIX_DEBUG)
     set_target_properties(${CppUTestLibName} PROPERTIES DEBUG_POSTFIX "d")
 endif()
 

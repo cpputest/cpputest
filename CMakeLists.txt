@@ -57,8 +57,10 @@ cmake_dependent_option(CPPUTEST_TEST_DISCOVERY "Build time test discover"
 option(CPPUTEST_EXAMPLES "Compile and make examples?" ${PROJECT_IS_TOP_LEVEL})
 option(CPPUTEST_VERBOSE_CONFIG "Print configuration to stdout during generation" ${PROJECT_IS_TOP_LEVEL})
 
-option(LIBNAME_POSTFIX_BITSIZE "Add architecture bitsize (32/64) to the library name?" OFF)
-option(LIBNAME_POSTFIX_DEBUG "Add indication of debug compilation to the library name?" OFF)
+cmake_dependent_option(CPPUTEST_LIBNAME_POSTFIX_BITSIZE "Add architecture bitsize (32/64) to the library name?"
+  OFF "PROJECT_IS_TOP_LEVEL" OFF)
+cmake_dependent_option(CPPUTEST_LIBNAME_POSTFIX_DEBUG "Add indication of debug compilation to the library name?"
+  OFF "PROJECT_IS_TOP_LEVEL" OFF)
 
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME) # Don't change users' build type.
   # Multi-configuration generators don't have a single build type.
@@ -79,7 +81,7 @@ set(CppUTest_PKGCONFIG_FILE cpputest.pc)
 set( CppUTestLibName "CppUTest" )
 set( CppUTestExtLibName "CppUTestExt" )
 
-if(LIBNAME_POSTFIX_BITSIZE)
+if(CPPUTEST_LIBNAME_POSTFIX_BITSIZE)
   if( "${CMAKE_SIZEOF_VOID_P}" STREQUAL "8" )
       set( CppUTestLibName "${CppUTestLibName}64" )
       set( CppUTestExtLibName "${CppUTestExtLibName}64" )
@@ -87,7 +89,7 @@ if(LIBNAME_POSTFIX_BITSIZE)
       set( CppUTestLibName "${CppUTestLibName}32" )
       set( CppUTestExtLibName "${CppUTestExtLibName}32" )
   endif()
-endif(LIBNAME_POSTFIX_BITSIZE)
+endif()
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules")
 if(NOT PROJECT_IS_TOP_LEVEL)
@@ -279,8 +281,8 @@ Features configured in CppUTest:
     Run self-tests separately           ${CPPUTEST_TESTS_DETAILED}
 
 Library name options:
-    Add architecture bitsize (32/64)    ${LIBNAME_POSTFIX_BITSIZE}
-    Add debug compilation indicator     ${LIBNAME_POSTFIX_DEBUG}
+    Add architecture bitsize (32/64)    ${CPPUTEST_LIBNAME_POSTFIX_BITSIZE}
+    Add debug compilation indicator     ${CPPUTEST_LIBNAME_POSTFIX_DEBUG}
 
 -------------------------------------------------------
 ")
