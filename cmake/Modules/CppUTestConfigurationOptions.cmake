@@ -72,16 +72,6 @@ if (CPPUTEST_COVERAGE AND NOT MSVC)
         )
 endif()
 
-if(DEFINED C++11)
-    message(DEPRECATION
-        "The C++11 option is deprecated. "
-        "Set CMAKE_CXX_STANDARD explicitly."
-    )
-    if(C++11 AND NOT CMAKE_CXX_STANDARD)
-        set(CMAKE_CXX_STANDARD 11)
-    endif()
-endif()
-
 if (CMAKE_CXX_STANDARD)
     set(CMAKE_CXX_EXTENSIONS OFF)
 endif ()
