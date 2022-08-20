@@ -7,9 +7,9 @@ project(CppUTest
   VERSION 4.0
 )
 
-if (CMAKE_VERSION GREATER_EQUAL "3.21")
+if (CMAKE_VERSION VERSION_GREATER_EQUAL "3.21")
   # PROJECT_IS_TOP_LEVEL is defined automatically
-elseif(CMAKE_CURRENT_BINARY_DIR STREQUAL CMAKE_BINARY_DIR)
+elseif (CMAKE_CURRENT_BINARY_DIR STREQUAL CMAKE_BINARY_DIR)
   set(PROJECT_IS_TOP_LEVEL TRUE)
 else()
   set(PROJECT_IS_TOP_LEVEL FALSE)
@@ -24,6 +24,7 @@ if (EXISTS "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
     conan_basic_setup()
 endif()
 
+include(CMakeDependentOption)
 option(STD_C "Use the standard C library" ON)
 option(STD_CPP "Use the standard C++ library" ON)
 option(CPPUTEST_FLAGS "Use the CFLAGS/CXXFLAGS/LDFLAGS set by CppUTest" ON)
@@ -32,7 +33,10 @@ option(EXTENSIONS "Use the CppUTest extension library" ON)
 option(LONGLONG "Support long long" OFF)
 option(MAP_FILE "Enable the creation of a map file" OFF)
 option(COVERAGE "Enable running with coverage" OFF)
-option(WERROR "Compile with warnings as errors" OFF)
+cmake_dependent_option(CPPUTEST_WERROR
+  "Compile with warnings as errors"
+  ON "PROJECT_IS_TOP_LEVEL" OFF
+)
 
 option(TESTS "Compile and make tests for the code?" ON)
 option(TESTS_DETAILED "Run each test separately instead of grouped?" OFF)

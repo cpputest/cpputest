@@ -44,9 +44,9 @@ else (MSVC)
         Wno-long-long
         )
 
-    if (WERROR)
+    if (CPPUTEST_WERROR)
         list(APPEND WARNING_C_FLAGS Werror)
-    endif (WERROR)
+    endif ()
 
 
     set(WARNING_C_ONLY_FLAGS

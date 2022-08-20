@@ -108,7 +108,6 @@ jobs:
           -B build
           -S .
           -D CMAKE_CXX_STANDARD=${{ matrix.cpp_version }}
-          -D WERROR=ON
         if: ${{ matrix.cpp_version }}
       - name: Build
         run: cmake --build build --verbose
