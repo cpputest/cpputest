@@ -38,6 +38,7 @@ jobs:
           -D CMAKE_BUILD_TYPE=Debug
           -D CMAKE_CXX_STANDARD=11
           -D CPPUTEST_COVERAGE=ON
+          -D CPPUTEST_EXAMPLES=OFF
       - name: Build
         run: cmake --build cpputest_build
       - name: Test

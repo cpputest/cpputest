@@ -54,7 +54,7 @@ option(CPPUTEST_TESTS_DETAILED "Run each test separately instead of grouped?" OF
 cmake_dependent_option(CPPUTEST_TEST_DISCOVERY "Build time test discover"
   ON "CPPUTEST_BUILD_TESTING;NOT IAR" OFF)
 
-option(EXAMPLES "Compile and make examples?" OFF)
+option(CPPUTEST_EXAMPLES "Compile and make examples?" ${PROJECT_IS_TOP_LEVEL})
 
 option(VERBOSE_CONFIG "Print configuration to stdout during generation" ON)
 
@@ -182,9 +182,9 @@ if (CPPUTEST_BUILD_TESTING)
     endif ()
 endif ()
 
-if (EXAMPLES)
+if (CPPUTEST_EXAMPLES)
   add_subdirectory(examples)
-endif(EXAMPLES)
+endif()
 
 if(PROJECT_IS_TOP_LEVEL)
   set (INCLUDE_INSTALL_DIR "${CMAKE_INSTALL_INCLUDEDIR}")
