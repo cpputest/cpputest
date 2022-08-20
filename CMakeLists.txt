@@ -24,6 +24,8 @@ if (EXISTS "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
     conan_basic_setup()
 endif()
 
+include(CTest)
+
 include(CMakeDependentOption)
 option(CPPUTEST_STD_C_LIB_DISABLED "Disable the standard C library")
 cmake_dependent_option(CPPUTEST_STD_CPP_LIB_DISABLED "Use the standard C++ library"
@@ -46,8 +48,8 @@ cmake_dependent_option(CPPUTEST_WERROR
   "Compile with warnings as errors"
   ON "PROJECT_IS_TOP_LEVEL" OFF
 )
-
-option(TESTS "Compile and make tests for the code?" ON)
+cmake_dependent_option(CPPUTEST_BUILD_TESTING "Compile and make tests for CppUTest"
+  ${PROJECT_IS_TOP_LEVEL} "BUILD_TESTING" OFF)
 option(TESTS_DETAILED "Run each test separately instead of grouped?" OFF)
 option(TESTS_BUILD_DISCOVER "Build time test discover" ON)
 
@@ -93,12 +95,9 @@ if(NOT PROJECT_IS_TOP_LEVEL)
 endif()
 
 include(CppUTestConfigurationOptions)
-include(CTest)
 include(CppUTestBuildTimeDiscoverTests)
 include(CppUTestNormalizeTestOutputLocation)
 include(GNUInstallDirs)
-
-enable_testing()
 
 add_subdirectory(src/CppUTest)
 
@@ -175,12 +174,12 @@ if (CPPUTEST_EXTENSIONS)
     add_subdirectory(src/CppUTestExt)
 endif ()
 
-if (TESTS)
+if (CPPUTEST_BUILD_TESTING)
     add_subdirectory(tests/CppUTest)
     if (CPPUTEST_EXTENSIONS)
         add_subdirectory(tests/CppUTestExt)
     endif ()
-endif (TESTS)
+endif ()
 
 if (EXAMPLES)
   add_subdirectory(examples)
@@ -276,7 +275,7 @@ Features configured in CppUTest:
     Generating map file:                ${CPPUTEST_MAP_FILE}
     Compiling with coverage:            ${CPPUTEST_COVERAGE}
 
-    Compile and run self-tests          ${TESTS}
+    Compile and run self-tests          ${CPPUTEST_BUILD_TESTING}
     Run self-tests separately           ${TESTS_DETAILED}
 
 Library name options:
