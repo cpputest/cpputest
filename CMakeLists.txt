@@ -26,7 +26,8 @@ endif()
 
 include(CMakeDependentOption)
 option(CPPUTEST_STD_C_LIB_DISABLED "Disable the standard C library")
-option(STD_CPP "Use the standard C++ library" ON)
+cmake_dependent_option(CPPUTEST_STD_CPP_LIB_DISABLED "Use the standard C++ library"
+  OFF "NOT CPPUTEST_STD_C_LIB_DISABLED" ON)
 option(CPPUTEST_FLAGS "Use the CFLAGS/CXXFLAGS/LDFLAGS set by CppUTest" ON)
 option(MEMORY_LEAK_DETECTION "Enable memory leak detection" ON)
 option(EXTENSIONS "Use the CppUTest extension library" ON)
@@ -262,7 +263,7 @@ Features configured in CppUTest:
     Use CppUTest flags:                 ${CPPUTEST_FLAGS}
 
     Disable Standard C library:         ${CPPUTEST_STD_C_LIB_DISABLED}
-    Using Standard C++ library:         ${STD_CPP}
+    Disable Standard C++ library:       ${CPPUTEST_STD_CPP_LIB_DISABLED}
 
     Generating map file:                ${MAP_FILE}
     Compiling with coverage:            ${COVERAGE}
