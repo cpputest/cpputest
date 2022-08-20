@@ -38,7 +38,6 @@ jobs:
           -D CMAKE_BUILD_TYPE=Debug
           -D CMAKE_CXX_STANDARD=11
           -D COVERAGE=ON
-          -D LONGLONG=ON
       - name: Build
         run: cmake --build cpputest_build
       - name: Test
