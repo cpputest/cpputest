@@ -55,8 +55,7 @@ cmake_dependent_option(CPPUTEST_TEST_DISCOVERY "Build time test discover"
   ON "CPPUTEST_BUILD_TESTING;NOT IAR" OFF)
 
 option(CPPUTEST_EXAMPLES "Compile and make examples?" ${PROJECT_IS_TOP_LEVEL})
-
-option(VERBOSE_CONFIG "Print configuration to stdout during generation" ON)
+option(CPPUTEST_VERBOSE_CONFIG "Print configuration to stdout during generation" ${PROJECT_IS_TOP_LEVEL})
 
 option(LIBNAME_POSTFIX_BITSIZE "Add architecture bitsize (32/64) to the library name?" OFF)
 option(LIBNAME_POSTFIX_DEBUG "Add indication of debug compilation to the library name?" OFF)
@@ -252,7 +251,7 @@ if(PROJECT_IS_TOP_LEVEL)
   endif()
 endif()
 
-if(VERBOSE_CONFIG)
+if(CPPUTEST_VERBOSE_CONFIG)
   message("
 -------------------------------------------------------
 CppUTest Version ${PROJECT_VERSION}
