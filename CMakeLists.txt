@@ -29,7 +29,8 @@ option(CPPUTEST_STD_C_LIB_DISABLED "Disable the standard C library")
 cmake_dependent_option(CPPUTEST_STD_CPP_LIB_DISABLED "Use the standard C++ library"
   OFF "NOT CPPUTEST_STD_C_LIB_DISABLED" ON)
 option(CPPUTEST_FLAGS "Use the CFLAGS/CXXFLAGS/LDFLAGS set by CppUTest" ON)
-option(MEMORY_LEAK_DETECTION "Enable memory leak detection" ON)
+cmake_dependent_option(CPPUTEST_MEM_LEAK_DETECTION_DISABLED "Enable memory leak detection"
+  OFF "NOT BORLAND;NOT CPPUTEST_STD_C_LIB_DISABLED" ON)
 option(EXTENSIONS "Use the CppUTest extension library" ON)
 option(LONGLONG "Support long long" OFF)
 option(MAP_FILE "Enable the creation of a map file" OFF)
@@ -257,7 +258,7 @@ Current compiler options:
     CppUTest LDFLAGS:                   ${CPPUTEST_LD_FLAGS}
 
 Features configured in CppUTest:
-    Memory Leak Detection:              ${MEMORY_LEAK_DETECTION}
+    Memory Leak Detection Disabled:     ${CPPUTEST_MEM_LEAK_DETECTION_DISABLED}
     Compiling Extensions:               ${EXTENSIONS}
     Support Long Long:                  ${LONGLONG}
     Use CppUTest flags:                 ${CPPUTEST_FLAGS}
