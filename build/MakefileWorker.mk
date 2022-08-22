@@ -206,8 +206,8 @@ ifeq ($(COMPILER_NAME),$(CLANG_STR))
 # -Wno-c++98-compat-pedantic -> Incompatibilities with C++98, these are happening through #define.
 # -Wno-reserved-id-macro -> Macro uses __ in MINGW... can't change that.
 # -Wno-keyword-macro -> new overload
-	CPPUTEST_CXX_WARNINGFLAGS += -Weverything -Wno-disabled-macro-expansion -Wno-padded -Wno-global-constructors -Wno-exit-time-destructors -Wno-weak-vtables -Wno-old-style-cast -Wno-c++11-long-long -Wno-c++98-compat-pedantic -Wno-reserved-id-macro -Wno-keyword-macro
-	CPPUTEST_C_WARNINGFLAGS += -Weverything -Wno-padded
+	CPPUTEST_CXX_WARNINGFLAGS += -Wno-disabled-macro-expansion -Wno-padded -Wno-global-constructors -Wno-exit-time-destructors -Wno-weak-vtables -Wno-old-style-cast -Wno-c++11-long-long -Wno-c++98-compat-pedantic -Wno-reserved-id-macro -Wno-keyword-macro
+	CPPUTEST_C_WARNINGFLAGS += -Wno-padded
 
 # Clang 7 and 12 introduced new warnings by default that don't exist on previous versions of clang and cause errors when present.
 CLANG_VERSION := $(shell echo $(CC_VERSION_OUTPUT) | sed -n 's/.* \([0-9]*\.[0-9]*\.[0-9]*\).*/\1/p')

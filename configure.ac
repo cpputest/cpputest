@@ -178,13 +178,6 @@ CFLAGS="$saved_cflags"
 
 
 #####################################################################################
-##### More of these warnings
-# FLag -Weverything.
-CFLAGS="-Werror -Weverything -Wno-unused-macros"
-AC_MSG_CHECKING([whether CC and CXX supports -Weverything])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Weverything"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Weverything" ], [AC_MSG_RESULT([no])])
-CFLAGS="$saved_cflags"
-
 # FLag -Wall.
 CFLAGS="-Werror -Wall"
 AC_MSG_CHECKING([whether CC and CXX supports -Wall])

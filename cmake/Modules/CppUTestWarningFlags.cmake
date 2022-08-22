@@ -29,7 +29,6 @@ else (MSVC)
     endif (NOT GMOCK AND NOT REAL_GTEST)
 
     set(WARNING_C_FLAGS
-        Weverything
         Wall
         Wextra
         pedantic
