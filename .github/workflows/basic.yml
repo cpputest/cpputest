@@ -85,6 +85,8 @@ jobs:
             cc: gcc
           # Mac OSX
           - os: macos-latest
+            cpp_version: 98
+          - os: macos-latest
             cpp_version: 17
             cxx: clang++
             cc: clang
