@@ -74,3 +74,25 @@ jobs:
         env:
           TERM: linux
         run: $CPPUTEST_HOME/platforms/Dos/alltests.sh
+
+  cmake_wine:
+    runs-on: ubuntu-latest
+    env:
+      CC: x86_64-w64-mingw32-gcc
+      CXX: x86_64-w64-mingw32-g++
+    steps:
+      - name: Install tools
+        run: sudo apt-get install -y mingw-w64 wine64
+      - name: Checkout
+        uses: actions/checkout@main
+      - name: Configure
+        run: >
+          cmake
+          -B build
+          -S .
+          -D CMAKE_SYSTEM_NAME=Windows
+          -D CMAKE_CROSSCOMPILING_EMULATOR=wine
+      - name: Build
+        run: cmake --build build --verbose
+      - name: Test
+        run: ctest --test-dir build
