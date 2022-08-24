@@ -96,3 +96,15 @@ jobs:
         run: cmake --build build --verbose
       - name: Test
         run: ctest --test-dir build
+
+  cmake_install:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+      - name: Install
+        run: |
+          cmake -B cpputest_build/ -S . -DCMAKE_BUILD_TYPE=RelWithDebInfo
+          cmake --build cpputest_build/ -j
+          ctest --test-dir cpputest_build/
+          sudo cmake --install cpputest_build/
