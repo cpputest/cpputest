@@ -25,6 +25,9 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#ifndef DUMMYMEMORYLEAKDETECTOR_H
+#define DUMMYMEMORYLEAKDETECTOR_H
+
 class DummyMemoryLeakDetector : public MemoryLeakDetector
 {
 public:
@@ -49,3 +52,4 @@ private:
     static bool memoryLeakFailureWasDelete;
 };
 
+#endif /* DUMMYMEMORYLEAKDETECTOR_H */
