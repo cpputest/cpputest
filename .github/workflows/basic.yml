@@ -103,9 +103,14 @@ jobs:
       - if: ${{ matrix.cc }}
         run: echo "CC=${{ matrix.cc }}" >> $GITHUB_ENV
       - name: Configure
-        run: cmake -B build -S . -DCMAKE_CXX_STANDARD=${{ matrix.cpp_version }}
+        run: >
+          cmake
+          -B build
+          -S .
+          -D CMAKE_CXX_STANDARD=${{ matrix.cpp_version }}
+          -D WERROR=ON
         if: ${{ matrix.cpp_version }}
       - name: Build
-        run: cmake --build build
+        run: cmake --build build --verbose
       - name: Test
         run: ctest --test-dir build
