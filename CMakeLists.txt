@@ -1,11 +1,11 @@
 # 2.6.3 is needed for ctest support
 # 3.1 is needed for target_sources
-cmake_minimum_required(VERSION 3.1)
+# 3.8 is needed for try_compile improvements (CMP0067)
+cmake_minimum_required(VERSION 3.8)
 
-project(CppUTest)
-
-set(CppUTest_version_major 4)
-set(CppUTest_version_minor 0)
+project(CppUTest
+  VERSION 4.0
+)
 
 ###############
 # Conan support
@@ -37,9 +37,6 @@ option(VERBOSE_CONFIG "Print configuration to stdout during generation" ON)
 
 option(LIBNAME_POSTFIX_BITSIZE "Add architecture bitsize (32/64) to the library name?" OFF)
 option(LIBNAME_POSTFIX_DEBUG "Add indication of debug compilation to the library name?" OFF)
-
-option(HAS_INF "Compiler has Inf value for float" ON)
-option(HAS_NAN "Compiler has NaN value for float" ON)
 
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME) # Don't change users' build type.
   # Multi-configuration generators don't have a single build type.
@@ -122,6 +119,19 @@ if(HAVE_PTHREAD_MUTEX_LOCK)
       CPPUTEST_HAVE_PTHREAD_MUTEX_LOCK=1
   )
 endif(HAVE_PTHREAD_MUTEX_LOCK)
+
+if(DEFINED HAS_NAN)
+  message(DEPRECATION
+    "The HAS_NAN cache variable has been deprecated. "
+    "CPPUTEST_HAS_NAN is assessed automatically, "
+    "but can be assigned manually."
+  )
+  set(CPPUTEST_HAS_NAN ${HAS_NAN})
+endif()
+if(NOT DEFINED CPPUTEST_HAS_NAN)
+  include(CheckCXXSymbolExists)
+  check_cxx_symbol_exists(NAN "math.h" CPPUTEST_HAS_NAN)
+endif()
 
 if (NOT IAR)
   check_function_exists(strdup HAVE_STRDUP)
@@ -210,7 +220,7 @@ set (prefix "${CMAKE_INSTALL_PREFIX}")
 set (exec_prefix "\${prefix}")
 set (libdir "\${exec_prefix}/${LIB_INSTALL_DIR}")
 set (includedir "\${prefix}/${INCLUDE_INSTALL_DIR}")
-set (PACKAGE_VERSION "${CppUTest_version_major}.${CppUTest_version_minor}")
+set (PACKAGE_VERSION "${PROJECT_VERSION}")
 
 configure_file (cpputest.pc.in
     ${CMAKE_CURRENT_BINARY_DIR}/${CppUTest_PKGCONFIG_FILE} @ONLY)
@@ -234,7 +244,7 @@ if(PkgHelpers_AVAILABLE)
     PATH_VARS INCLUDE_INSTALL_DIR LIB_INSTALL_DIR)
   write_basic_package_version_file(
     ${CMAKE_CURRENT_BINARY_DIR}/install/CppUTestConfigVersion.cmake
-    VERSION ${CppUTest_version_major}.${CppUTest_version_minor}
+    VERSION ${PROJECT_VERSION}
     COMPATIBILITY SameMajorVersion )
   install(FILES ${CMAKE_CURRENT_BINARY_DIR}/install/CppUTestConfig.cmake
     ${CMAKE_CURRENT_BINARY_DIR}/install/CppUTestConfigVersion.cmake
@@ -258,7 +268,7 @@ if(PkgHelpers_AVAILABLE)
   endif()
   write_basic_package_version_file(
     ${CMAKE_CURRENT_BINARY_DIR}/CppUTestConfigVersion.cmake
-    VERSION ${CppUTest_version_major}.${CppUTest_version_minor}
+    VERSION ${PROJECT_VERSION}
     COMPATIBILITY SameMajorVersion )
   set(CppUTest_DIR "${CMAKE_CURRENT_BINARY_DIR}" CACHE PATH "The directory containing a CMake configuration file for CppUTest.")
 else()
@@ -270,7 +280,7 @@ endif()
 if(VERBOSE_CONFIG)
   message("
 -------------------------------------------------------
-CppUTest Version ${CppUTest_version_major}.${CppUTest_version_minor}
+CppUTest Version ${PROJECT_VERSION}
 
 Current compiler options:
     CC:                                 ${CMAKE_C_COMPILER}
