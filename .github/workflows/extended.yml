@@ -108,3 +108,8 @@ jobs:
           cmake --build cpputest_build/ -j
           ctest --test-dir cpputest_build/
           sudo cmake --install cpputest_build/
+      - name: Use
+        run: |
+          cmake -B build -S examples
+          cmake --build build -j
+          ctest --test-dir build
