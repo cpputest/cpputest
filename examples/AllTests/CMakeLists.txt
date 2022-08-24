@@ -10,9 +10,14 @@ add_executable(ExampleTests
 
 target_include_directories(ExampleTests
     PRIVATE
-        ../ApplicationLib
+        .
 )
 
-cpputest_normalize_test_output_location(ExampleTests)
-target_link_libraries(ExampleTests ApplicationLib ${CppUTestLibName} ${CppUTestExtLibName})
+target_link_libraries(ExampleTests
+    PRIVATE
+        ApplicationLib
+        CppUTest::CppUTestExt
+)
+
+include(CppUTestBuildTimeDiscoverTests)
 cpputest_buildtime_discover_tests(ExampleTests)
