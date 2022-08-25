@@ -36,7 +36,7 @@ jobs:
           -S .
           -B cpputest_build
           -D CMAKE_BUILD_TYPE=Debug
-          -D C++11=ON
+          -D CMAKE_CXX_STANDARD=11
           -D COVERAGE=ON
           -D LONGLONG=ON
       - name: Build
@@ -44,7 +44,7 @@ jobs:
       - name: Test
         run: ctest --test-dir cpputest_build
       - name: Coverage
-        run: lcov --capture --directory . --output-file lcov.info
+        run: lcov --capture --directory . --no-external --output-file lcov.info
       - name: Coveralls
         uses: coverallsapp/github-action@master
         with:

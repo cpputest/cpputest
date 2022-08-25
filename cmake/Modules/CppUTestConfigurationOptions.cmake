@@ -85,13 +85,18 @@ if (COVERAGE AND NOT MSVC)
         )
 endif()
 
+if(DEFINED C++11)
+    message(DEPRECATION
+        "The C++11 option is deprecated. "
+        "Set CMAKE_CXX_STANDARD explicitly."
+    )
+    if(C++11 AND NOT CMAKE_CXX_STANDARD)
+        set(CMAKE_CXX_STANDARD 11)
+    endif()
+endif()
+
 if (CMAKE_CXX_STANDARD)
     set(CMAKE_CXX_EXTENSIONS OFF)
-elseif (C++11)
-    find_package(CXX11 REQUIRED)
-    set(CPPUTEST_CXX_FLAGS "${CPPUTEST_CXX_FLAGS} ${CXX11_FLAGS}")
-else()
-    # No standard specified
 endif ()
 
 set(GMOCK_HOME $ENV{GMOCK_HOME})
