@@ -1,16 +1,18 @@
 version: 2.1
 
 jobs:
-  latest-clang:
+  latest-clang-autotools:
     docker:
       - image: silkeh/clang:latest
+    environment:
+      BUILD: autotools
+      CXX: clang
+      CPPUTEST_BUILD_DIR: ./cpputest_build
     steps:
       - checkout
-      - run:
-          name: "Say hello"
-          command: "echo Hello, World!"
+#      - run:  mkdir -p $CPPUTEST_BUILD_DIR && cd $CPPUTEST_BUILD_DIR && ../scripts/travis_ci_build.sh
 
 workflows:
-  say-hello-workflow:
+  basic-build-and-test:
     jobs:
-      - latest-clang
+      - latest-clang-autotools
