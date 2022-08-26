@@ -29,7 +29,6 @@ else (MSVC)
     endif (NOT GMOCK AND NOT REAL_GTEST)
 
     set(WARNING_C_FLAGS
-        Weverything
         Wall
         Wextra
         pedantic
@@ -63,7 +62,7 @@ else (MSVC)
         Wno-old-style-cast
         )
 
-    if (C++11 OR (DEFINED CMAKE_CXX_STANDARD AND NOT CMAKE_CXX_STANDARD EQUAL 98))
+    if (DEFINED CMAKE_CXX_STANDARD AND NOT CMAKE_CXX_STANDARD EQUAL 98)
         set(WARNING_CXX_FLAGS
            ${WARNING_CXX_FLAGS}
            Wno-c++98-compat

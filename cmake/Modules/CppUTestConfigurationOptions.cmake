@@ -17,8 +17,6 @@ elseif (BORLAND)
     set(MEMORY_LEAK_DETECTION OFF)
     set(LONGLONG OFF)
     set(CPPUTEST_CXX_FLAGS "${CPPUTEST_CXX_FLAGS} -w-8008 -w-8066")
-    set(HAS_INF OFF)
-    set(HAS_NAN OFF)
 elseif (STD_C)
     if(NOT CPP_PLATFORM)
         set(CPP_PLATFORM Gcc)
@@ -64,14 +62,6 @@ if (LONGLONG)
     set(CPPUTEST_USE_LONG_LONG 1)
 endif (LONGLONG)
 
-if (NOT HAS_INF)
-    set(CPPUTEST_NO_INF 1)
-endif (NOT HAS_INF)
-
-if (NOT HAS_NAN)
-    set(CPPUTEST_NO_NAN 1)
-endif (NOT HAS_NAN)
-
 if (MAP_FILE AND NOT MSVC)
     set(CPPUTEST_LD_FLAGS "${CPPUTEST_LD_FLAGS} -Wl,-Map,$<.map.txt")
 endif (MAP_FILE AND NOT MSVC)
@@ -95,13 +85,18 @@ if (COVERAGE AND NOT MSVC)
         )
 endif()
 
+if(DEFINED C++11)
+    message(DEPRECATION
+        "The C++11 option is deprecated. "
+        "Set CMAKE_CXX_STANDARD explicitly."
+    )
+    if(C++11 AND NOT CMAKE_CXX_STANDARD)
+        set(CMAKE_CXX_STANDARD 11)
+    endif()
+endif()
+
 if (CMAKE_CXX_STANDARD)
     set(CMAKE_CXX_EXTENSIONS OFF)
-elseif (C++11)
-    find_package(CXX11 REQUIRED)
-    set(CPPUTEST_CXX_FLAGS "${CPPUTEST_CXX_FLAGS} ${CXX11_FLAGS}")
-else()
-    # No standard specified
 endif ()
 
 set(GMOCK_HOME $ENV{GMOCK_HOME})

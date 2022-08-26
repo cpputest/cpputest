@@ -76,14 +76,14 @@ MINGW_STR = MINGW
 CYGWIN_STR = CYGWIN
 LINUX_STR = Linux
 SUNOS_STR = SunOS
-UNKNWOWN_OS_STR = Unknown
+UNKNOWN_OS_STR = Unknown
 
 # Compilers
 CC_VERSION_OUTPUT ="$(shell $(CXX) -v 2>&1)"
 CLANG_STR = clang
 SUNSTUDIO_CXX_STR = SunStudio
 
-UNAME_OS = $(UNKNWOWN_OS_STR)
+UNAME_OS = $(UNKNOWN_OS_STR)
 
 ifeq ($(findstring $(MINGW_STR),$(UNAME_OUTPUT)),$(MINGW_STR))
 	UNAME_OS = $(MINGW_STR)
@@ -200,20 +200,21 @@ ifeq ($(COMPILER_NAME),$(CLANG_STR))
 # -Wno-disabled-macro-expansion -> Have to disable the macro expansion warning as the operator new overload warns on that.
 # -Wno-padded -> I sort-of like this warning but if there is a bool at the end of the class, it seems impossible to remove it! (except by making padding explicit)
 # -Wno-global-constructors Wno-exit-time-destructors -> Great warnings, but in CppUTest it is impossible to avoid as the automatic test registration depends on the global ctor and dtor
-# -Wno-weak-vtables -> The TEST_GROUP macro declares a class and will automatically inline its methods. Thats ok as they are only in one translation unit. Unfortunately, the warning can't detect that, so it must be disabled.
+# -Wno-weak-vtables -> The TEST_GROUP macro declares a class and will automatically inline its methods. That's ok as they are only in one translation unit. Unfortunately, the warning can't detect that, so it must be disabled.
 # -Wno-old-style-casts -> We only use old style casts by decision
 # -Wno-c++11-long-long -> When it detects long long, then we can use it and no need for a warning about that
 # -Wno-c++98-compat-pedantic -> Incompatibilities with C++98, these are happening through #define.
 # -Wno-reserved-id-macro -> Macro uses __ in MINGW... can't change that.
 # -Wno-keyword-macro -> new overload
-	CPPUTEST_CXX_WARNINGFLAGS += -Weverything -Wno-disabled-macro-expansion -Wno-padded -Wno-global-constructors -Wno-exit-time-destructors -Wno-weak-vtables -Wno-old-style-cast -Wno-c++11-long-long -Wno-c++98-compat-pedantic -Wno-reserved-id-macro -Wno-keyword-macro
-	CPPUTEST_C_WARNINGFLAGS += -Weverything -Wno-padded
+	CPPUTEST_CXX_WARNINGFLAGS += -Wno-disabled-macro-expansion -Wno-padded -Wno-global-constructors -Wno-exit-time-destructors -Wno-weak-vtables -Wno-old-style-cast -Wno-c++11-long-long -Wno-c++98-compat-pedantic -Wno-reserved-id-macro -Wno-keyword-macro
+	CPPUTEST_C_WARNINGFLAGS += -Wno-padded
 
 # Clang 7 and 12 introduced new warnings by default that don't exist on previous versions of clang and cause errors when present.
 CLANG_VERSION := $(shell echo $(CC_VERSION_OUTPUT) | sed -n 's/.* \([0-9]*\.[0-9]*\.[0-9]*\).*/\1/p')
 CLANG_VERSION_NUM := $(subst .,,$(CLANG_VERSION))
 CLANG_VERSION_NUM_GT_700 := $(shell [ "$(CLANG_VERSION_NUM)" -ge 700 ] && echo Y || echo N)
 CLANG_VERSION_NUM_GT_1200 := $(shell [ "$(CLANG_VERSION_NUM)" -ge 1200 ] && echo Y || echo N)
+CLANG_VERSION_NUM_GT_1205 := $(shell [ "$(CLANG_VERSION_NUM)" -ge 1205 ] && echo Y || echo N)
 
 ifeq ($(CLANG_VERSION_NUM_GT_700), Y)
 # -Wno-reserved-id-macro -> Many CppUTest macros start with __, which is a reserved namespace
@@ -221,10 +222,20 @@ ifeq ($(CLANG_VERSION_NUM_GT_700), Y)
 	CPPUTEST_CXX_WARNINGFLAGS += -Wno-reserved-id-macro -Wno-keyword-macro
 	CPPUTEST_C_WARNINGFLAGS += -Wno-reserved-id-macro -Wno-keyword-macro
 endif
+
+ifeq ($(UNAME_OS),$(MACOSX_STR))
+#apple clang has some special behavior
 ifeq ($(CLANG_VERSION_NUM_GT_1200), Y)
 # -Wno-poison-system-directories -> Apparently apple clang thinks everything is a cross compile, making this useless
 	CPPUTEST_CXX_WARNINGFLAGS += -Wno-poison-system-directories
 	CPPUTEST_C_WARNINGFLAGS += -Wno-poison-system-directories
+endif # clang 1200
+
+ifeq ($(CLANG_VERSION_NUM_GT_1205), Y)
+# Not sure why apple clang throws these warnings on cpputest code when clang doesn't
+	CPPUTEST_CXX_WARNINGFLAGS += -Wno-suggest-override -Wno-suggest-destructor-override
+	CPPUTEST_C_WARNINGFLAGS += -Wno-suggest-override -Wno-suggest-destructor-override
+endif
 endif
 endif
 
@@ -243,7 +254,7 @@ else
 endif
 endif
 
-# Default dir for the outout library
+# Default dir for the output library
 ifndef CPPUTEST_LIB_DIR
 ifndef TARGET_PLATFORM
     CPPUTEST_LIB_DIR = lib
@@ -257,7 +268,7 @@ ifndef CPPUTEST_MAP_FILE
 	CPPUTEST_MAP_FILE = N
 endif
 
-# No extentions is default
+# No extensions is default
 ifndef CPPUTEST_USE_EXTENSIONS
 	CPPUTEST_USE_EXTENSIONS = N
 endif
@@ -520,13 +531,14 @@ else
 endif
 	$(SILENCE)$(RANLIB) $@
 
-TEST_RUN_RETURN_CODE_FILE:=$(shell mktemp /tmp/cpputestResult.XXX)
 test: $(TEST_TARGET)
-	($(RUN_TEST_TARGET); echo $$? > $(TEST_RUN_RETURN_CODE_FILE)) | tee $(TEST_OUTPUT)
+	@$(eval TEST_RUN_RETURN_CODE_FILE=$(shell mktemp /tmp/cpputestResult.XXX))
+	@($(RUN_TEST_TARGET); echo $$? > $(TEST_RUN_RETURN_CODE_FILE)) | tee $(TEST_OUTPUT)
 	@ret=$$(cat $(TEST_RUN_RETURN_CODE_FILE)); rm $(TEST_RUN_RETURN_CODE_FILE); if [ "$$ret" -ne 0 ]; then echo "$$(tput setaf 1)$(TEST_TARGET) returned $${ret}$$(tput sgr0)"; fi; exit $$ret
 
 vtest: $(TEST_TARGET)
-	($(RUN_TEST_TARGET) -v; echo $$? > $(TEST_RUN_RETURN_CODE_FILE)) | tee $(TEST_OUTPUT)
+	@$(eval TEST_RUN_RETURN_CODE_FILE=$(shell mktemp /tmp/cpputestResult.XXX))
+	@($(RUN_TEST_TARGET) -v; echo $$? > $(TEST_RUN_RETURN_CODE_FILE)) | tee $(TEST_OUTPUT)
 	@ret=$$(cat $(TEST_RUN_RETURN_CODE_FILE)); rm $(TEST_RUN_RETURN_CODE_FILE); if [ "$$ret" -ne 0 ]; then echo "$$(tput setaf 1)$(TEST_TARGET) returned $${ret}$$(tput sgr0)"; fi; exit $$ret
 
 $(CPPUTEST_OBJS_DIR)/%.o: %.cc

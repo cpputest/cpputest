@@ -10,9 +10,14 @@
 #include "CppUTest/TestHarness_c.h"
 #include "AllocationInCFile.h"
 
-#if defined(__GNUC__) && __GNUC__ >= 11
-# define NEEDS_DISABLE_FREE_NON_HEEP_WARNING
-#endif /* GCC >= 11 */
+#if defined(__GNUC__)
+# if __GNUC__ >= 11
+#  define NEEDS_DISABLE_FREE_NON_HEEP_WARNING
+# endif /* GCC >= 11 */
+# if __GNUC__ >= 12
+#  define NEEDS_DISABLE_USE_AFTER_FREE
+# endif /* GCC >= 12 */
+#endif /* GCC */
 
 
 TEST_GROUP(BasicBehavior)
@@ -27,6 +32,11 @@ TEST(BasicBehavior, CanDeleteNullPointers)
 
 #if CPPUTEST_USE_MEM_LEAK_DETECTION
 
+#ifdef NEEDS_DISABLE_USE_AFTER_FREE
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wuse-after-free"
+#endif /* NEEDS_DISABLE_USE_AFTER_FREE */
+
 CPPUTEST_DO_NOT_SANITIZE_ADDRESS
 static void deleteArrayInvalidatesMemory()
 {
@@ -36,11 +46,6 @@ static void deleteArrayInvalidatesMemory()
     CHECK(memory[5] != 0xCB);
 }
 
-TEST(BasicBehavior, deleteArrayInvalidatesMemory)
-{
-    deleteArrayInvalidatesMemory();
-}
-
 CPPUTEST_DO_NOT_SANITIZE_ADDRESS
 static void deleteInvalidatesMemory()
 {
@@ -48,6 +53,15 @@ static void deleteInvalidatesMemory()
     *memory = 0xAD;
     delete memory;
     CHECK(*memory != 0xAD);
+}
+
+#ifdef NEEDS_DISABLE_USE_AFTER_FREE
+# pragma GCC diagnostic pop
+#endif /* NEEDS_DISABLE_USE_AFTER_FREE */
+
+TEST(BasicBehavior, deleteArrayInvalidatesMemory)
+{
+    deleteArrayInvalidatesMemory();
 }
 
 TEST(BasicBehavior, deleteInvalidatesMemory)

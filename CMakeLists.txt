@@ -1,11 +1,11 @@
 # 2.6.3 is needed for ctest support
 # 3.1 is needed for target_sources
-cmake_minimum_required(VERSION 3.1)
+# 3.8 is needed for try_compile improvements (CMP0067)
+cmake_minimum_required(VERSION 3.8)
 
-project(CppUTest)
-
-set(CppUTest_version_major 4)
-set(CppUTest_version_minor 0)
+project(CppUTest
+  VERSION 4.0
+)
 
 ###############
 # Conan support
@@ -24,7 +24,6 @@ option(EXTENSIONS "Use the CppUTest extension library" ON)
 option(LONGLONG "Support long long" OFF)
 option(MAP_FILE "Enable the creation of a map file" OFF)
 option(COVERAGE "Enable running with coverage" OFF)
-option(C++11 "Compile with C++11 support" OFF)
 option(WERROR "Compile with warnings as errors" OFF)
 
 option(TESTS "Compile and make tests for the code?" ON)
@@ -38,12 +37,17 @@ option(VERBOSE_CONFIG "Print configuration to stdout during generation" ON)
 option(LIBNAME_POSTFIX_BITSIZE "Add architecture bitsize (32/64) to the library name?" OFF)
 option(LIBNAME_POSTFIX_DEBUG "Add indication of debug compilation to the library name?" OFF)
 
-option(HAS_INF "Compiler has Inf value for float" ON)
-option(HAS_NAN "Compiler has NaN value for float" ON)
-
-if(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "What kind of build this is" FORCE)
-endif(NOT CMAKE_BUILD_TYPE)
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME) # Don't change users' build type.
+  # Multi-configuration generators don't have a single build type.
+  get_property(
+    GENERATOR_IS_MULTI_CONFIG GLOBAL
+    PROPERTY GENERATOR_IS_MULTI_CONFIG
+  )
+  if(NOT GENERATOR_IS_MULTICONFIG AND NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "What kind of build this is" FORCE)
+    message("No CMAKE_BUILD_TYPE set. Assigning: ${CMAKE_BUILD_TYPE}")
+  endif()
+endif()
 
 # Pkg-config file
 include(FindPkgConfig)
@@ -77,66 +81,52 @@ enable_testing()
 
 add_subdirectory(src/CppUTest)
 
-include(CheckIncludeFileCXX)
-check_include_file_cxx("fenv.h" CPPUTEST_HAVE_FENV)
+# Check for symbols before setting a lot of stuff
+include(CheckCXXSymbolExists)
+include(CheckTypeSize)
+include(CheckStructHasMember)
+set(CMAKE_REQUIRED_FLAGS ${CMAKE_CXX_FLAGS})
+check_cxx_symbol_exists(FE_DIVBYZERO "fenv.h" CPPUTEST_HAVE_FENV)
+check_cxx_symbol_exists(fork "unistd.h" CPPUTEST_HAVE_FORK)
+check_cxx_symbol_exists(waitpid "sys/wait.h" CPPUTEST_HAVE_WAITPID)
+check_cxx_symbol_exists(gettimeofday "sys/time.h" CPPUTEST_HAVE_GETTIMEOFDAY)
+check_cxx_symbol_exists(pthread_mutex_lock "pthread.h" CPPUTEST_HAVE_PTHREAD_MUTEX_LOCK)
 
-# Check for functions before setting a lot of stuff
-include(CheckFunctionExists)
-include(CheckSymbolExists)
-set (CMAKE_REQUIRED_INCLUDES "unistd.h")
-check_symbol_exists(fork "unistd.h" HAVE_FORK)
-if(HAVE_FORK)
-  target_compile_definitions(${CppUTestLibName}
-    PUBLIC
-      CPPUTEST_HAVE_FORK
+if(DEFINED HAS_NAN)
+  message(DEPRECATION
+    "The HAS_NAN cache variable has been deprecated. "
+    "CPPUTEST_HAS_NAN is assessed automatically, "
+    "but can be assigned manually."
   )
-endif(HAVE_FORK)
+  set(CPPUTEST_HAS_NAN ${HAS_NAN})
+endif()
+if(NOT DEFINED CPPUTEST_HAS_NAN)
+  check_cxx_symbol_exists(NAN "math.h" CPPUTEST_HAS_NAN)
+endif()
 
-check_symbol_exists(waitpid "sys/wait.h" HAVE_WAITPID)
-if(HAVE_WAITPID)
-  target_compile_definitions(${CppUTestLibName}
-    PUBLIC
-      CPPUTEST_HAVE_WAITPID
+if(DEFINED HAS_INF)
+  message(DEPRECATION
+    "The HAS_INF cache variable has been deprecated. "
+    "CPPUTEST_HAS_INF is assessed automatically, "
+    "but can be assigned manually."
   )
-endif(HAVE_WAITPID)
-
-check_symbol_exists(gettimeofday "sys/time.h" HAVE_GETTIMEOFDAY)
-if(HAVE_GETTIMEOFDAY)
-  target_compile_definitions(${CppUTestLibName}
-    PUBLIC
-      CPPUTEST_HAVE_GETTIMEOFDAY=1
-  )
-endif(HAVE_GETTIMEOFDAY)
-
-check_symbol_exists(pthread_mutex_lock "pthread.h" HAVE_PTHREAD_MUTEX_LOCK)
-if(HAVE_PTHREAD_MUTEX_LOCK)
-  target_compile_definitions(${CppUTestLibName}
-    PUBLIC
-      CPPUTEST_HAVE_PTHREAD_MUTEX_LOCK=1
-  )
-endif(HAVE_PTHREAD_MUTEX_LOCK)
+  set(CPPUTEST_HAS_INF ${HAS_INF})
+endif()
+if(NOT DEFINED CPPUTEST_HAS_INF)
+  include(CheckCXXSymbolExists)
+  check_cxx_symbol_exists(INFINITY "math.h" CPPUTEST_HAS_INF)
+endif()
 
 if (NOT IAR)
-  check_function_exists(strdup HAVE_STRDUP)
-  if(HAVE_STRDUP)
-    target_compile_definitions(${CppUTestLibName}
-      PUBLIC
-        CPPUTEST_HAVE_STRDUP=1
-    )
-  endif(HAVE_STRDUP)
+  check_cxx_symbol_exists(strdup "string.h" CPPUTEST_HAVE_STRDUP)
 endif(NOT IAR)
+check_type_size("long long" SIZEOF_LONGLONG LANGUAGE CXX)
+if(HAVE_SIZEOF_LONGLONG)
+    set(CPPUTEST_HAVE_LONG_LONG_INT ON)
+endif()
 
 if (MINGW)
-    # Apply workaround for MinGW timespec redefinition (pthread.h / time.h)
-    include(CheckStructHasMember)
-    check_struct_has_member("struct timespec" tv_sec time.h HAVE_STRUCT_TIMESPEC)
-    if (HAVE_STRUCT_TIMESPEC)
-      target_compile_definitions(${CppUTestLibName}
-        PUBLIC
-          _TIMESPEC_DEFINED=1
-      )
-    endif()
-
+    check_struct_has_member("struct timespec" tv_sec time.h CPPUTEST_HAVE_STRUCT_TIMESPEC LANGUAGE CXX)
     if (NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
         # Apply workaround for static/shared libraries on MinGW C/C++ compiler
         # Issue occurs with CMake >= 3.9.0, it doesn't filter out gcc,gcc_s,gcc_eh from
@@ -145,12 +135,6 @@ if (MINGW)
         # to be to force static linkage.
         set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static")
     endif()
-endif()
-
-include(CheckTypeSize)
-check_type_size("long long" SIZEOF_LONGLONG)
-if(HAVE_SIZEOF_LONGLONG)
-    set(CPPUTEST_HAVE_LONG_LONG_INT ON)
 endif()
 
 configure_file (
@@ -190,7 +174,7 @@ set (prefix "${CMAKE_INSTALL_PREFIX}")
 set (exec_prefix "\${prefix}")
 set (libdir "\${exec_prefix}/${LIB_INSTALL_DIR}")
 set (includedir "\${prefix}/${INCLUDE_INSTALL_DIR}")
-set (PACKAGE_VERSION "${CppUTest_version_major}.${CppUTest_version_minor}")
+set (PACKAGE_VERSION "${PROJECT_VERSION}")
 
 configure_file (cpputest.pc.in
     ${CMAKE_CURRENT_BINARY_DIR}/${CppUTest_PKGCONFIG_FILE} @ONLY)
@@ -214,7 +198,7 @@ if(PkgHelpers_AVAILABLE)
     PATH_VARS INCLUDE_INSTALL_DIR LIB_INSTALL_DIR)
   write_basic_package_version_file(
     ${CMAKE_CURRENT_BINARY_DIR}/install/CppUTestConfigVersion.cmake
-    VERSION ${CppUTest_version_major}.${CppUTest_version_minor}
+    VERSION ${PROJECT_VERSION}
     COMPATIBILITY SameMajorVersion )
   install(FILES ${CMAKE_CURRENT_BINARY_DIR}/install/CppUTestConfig.cmake
     ${CMAKE_CURRENT_BINARY_DIR}/install/CppUTestConfigVersion.cmake
@@ -238,7 +222,7 @@ if(PkgHelpers_AVAILABLE)
   endif()
   write_basic_package_version_file(
     ${CMAKE_CURRENT_BINARY_DIR}/CppUTestConfigVersion.cmake
-    VERSION ${CppUTest_version_major}.${CppUTest_version_minor}
+    VERSION ${PROJECT_VERSION}
     COMPATIBILITY SameMajorVersion )
   set(CppUTest_DIR "${CMAKE_CURRENT_BINARY_DIR}" CACHE PATH "The directory containing a CMake configuration file for CppUTest.")
 else()
@@ -250,7 +234,7 @@ endif()
 if(VERBOSE_CONFIG)
   message("
 -------------------------------------------------------
-CppUTest Version ${CppUTest_version_major}.${CppUTest_version_minor}
+CppUTest Version ${PROJECT_VERSION}
 
 Current compiler options:
     CC:                                 ${CMAKE_C_COMPILER}
@@ -267,7 +251,6 @@ Features configured in CppUTest:
 
     Using Standard C library:           ${STD_C}
     Using Standard C++ library:         ${STD_CPP}
-    Using C++11 library:                ${C++11}
 
     Generating map file:                ${MAP_FILE}
     Compiling with coverage:            ${COVERAGE}
