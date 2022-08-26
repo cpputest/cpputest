@@ -1,6 +1,6 @@
 
-AC_PREREQ([2.68])
-AC_INIT([CppUTest], [4.0], [https://github.com/cpputest/cpputest])
+AC_PREREQ([2.71])
+AC_INIT([CppUTest],[4.0],[https://github.com/cpputest/cpputest])
 AC_CONFIG_AUX_DIR([.])
 AM_INIT_AUTOMAKE([subdir-objects])
 AC_CONFIG_SRCDIR([src/CppUTest/Utest.cpp])
@@ -8,8 +8,11 @@ AC_CONFIG_HEADERS([config.h])
 AX_PREFIX_CONFIG_H(generated/CppUTestGeneratedConfig.h)
 AC_CONFIG_FILES([cpputest.pc])
 AC_CONFIG_MACRO_DIR([m4])
-AC_LIBTOOL_DLOPEN
-AC_PROG_LIBTOOL
+_LT_SET_OPTION([LT_INIT],[dlopen])
+m4_warn([obsolete],[AC_LIBTOOL_DLOPEN: Remove this warning and the call to _LT_SET_OPTION when you
+put the 'dlopen' option into LT_INIT's first parameter.])
+
+LT_INIT
 
 AC_CANONICAL_HOST
 
@@ -369,46 +372,46 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_LD_MAP_GEN
 LDFLAGS="$saved_ldflags"
 
 # Different features
-AC_ARG_ENABLE([std-c], [AC_HELP_STRING([--disable-std-c], [disable the use of Standard C Library (warning: requires implementing Platforms/GccNoStdC) ])],
+AC_ARG_ENABLE([std-c], [AS_HELP_STRING([--disable-std-c],[disable the use of Standard C Library (warning: requires implementing Platforms/GccNoStdC) ])],
    [use_std_c=${enableval}], [use_std_c=yes])
 
-AC_ARG_ENABLE([std-cpp], [AC_HELP_STRING([--disable-std-cpp], [disable the use of Standard C++ Library])],
+AC_ARG_ENABLE([std-cpp], [AS_HELP_STRING([--disable-std-cpp],[disable the use of Standard C++ Library])],
    [use_std_cpp=${enableval}], [use_std_cpp=${default_use_std_cpp}])
 
-AC_ARG_ENABLE([std-cpp98], [AC_HELP_STRING([--enable-std-cpp98], [enable the use of Standard C++ 98 (if the compiler supports that)])],
+AC_ARG_ENABLE([std-cpp98], [AS_HELP_STRING([--enable-std-cpp98],[enable the use of Standard C++ 98 (if the compiler supports that)])],
    [use_std_cpp98=${enableval}], [use_std_cpp98=no])
 
-AC_ARG_ENABLE([std-cpp11], [AC_HELP_STRING([--enable-std-cpp11], [enable the use of Standard C++ 11 (if the compiler supports that)])],
+AC_ARG_ENABLE([std-cpp11], [AS_HELP_STRING([--enable-std-cpp11],[enable the use of Standard C++ 11 (if the compiler supports that)])],
    [use_std_cpp11=${enableval}], [use_std_cpp11=no])
 
-AC_ARG_ENABLE([std-cpp14], [AC_HELP_STRING([--enable-std-cpp14], [enable the use of Standard C++ 14 (if the compiler supports that)])],
+AC_ARG_ENABLE([std-cpp14], [AS_HELP_STRING([--enable-std-cpp14],[enable the use of Standard C++ 14 (if the compiler supports that)])],
    [use_std_cpp14=${enableval}], [use_std_cpp14=no])
 
-AC_ARG_ENABLE([std-cpp17], [AC_HELP_STRING([--enable-std-cpp17], [enable the use of Standard C++ 17 (if the compiler supports that)])],
+AC_ARG_ENABLE([std-cpp17], [AS_HELP_STRING([--enable-std-cpp17],[enable the use of Standard C++ 17 (if the compiler supports that)])],
    [use_std_cpp17=${enableval}], [use_std_cpp17=no])
 
-AC_ARG_ENABLE([std-cpp20], [AC_HELP_STRING([--enable-std-cpp20], [enable the use of Standard C++ 20 (if the compiler supports that)])],
+AC_ARG_ENABLE([std-cpp20], [AS_HELP_STRING([--enable-std-cpp20],[enable the use of Standard C++ 20 (if the compiler supports that)])],
    [use_std_cpp20=${enableval}], [use_std_cpp20=no])
 
-AC_ARG_ENABLE([cpputest-flags], [AC_HELP_STRING([--disable-cpputest-flags], [disable CFLAGS/CPPFLAGS/CXXFLAGS set by CppUTest])],
+AC_ARG_ENABLE([cpputest-flags], [AS_HELP_STRING([--disable-cpputest-flags],[disable CFLAGS/CPPFLAGS/CXXFLAGS set by CppUTest])],
    [cpputest_flags=${enableval}], [cpputest_flags=yes])
 
-AC_ARG_ENABLE([memory-leak-detection], [AC_HELP_STRING([--disable-memory-leak-detection], [disable memory leak detection])],
+AC_ARG_ENABLE([memory-leak-detection], [AS_HELP_STRING([--disable-memory-leak-detection],[disable memory leak detection])],
    [memory_leak_detection=${enableval}], [memory_leak_detection=yes])
 
-AC_ARG_ENABLE([extensions], [AC_HELP_STRING([--disable-extensions], [disable CppUTest extension library])],
+AC_ARG_ENABLE([extensions], [AS_HELP_STRING([--disable-extensions],[disable CppUTest extension library])],
    [cpputest_ext=${enableval}], [cpputest_ext=yes])
 
-AC_ARG_ENABLE([longlong], [AC_HELP_STRING([--disable-longlong], [disable support for long long type])],
+AC_ARG_ENABLE([longlong], [AS_HELP_STRING([--disable-longlong],[disable support for long long type])],
    [use_longlong=${enableval}], [use_longlong=yes])
 
-AC_ARG_ENABLE([generate-map-file], [AC_HELP_STRING([--enable-generate-map-file], [enable the creation of a map file])],
+AC_ARG_ENABLE([generate-map-file], [AS_HELP_STRING([--enable-generate-map-file],[enable the creation of a map file])],
    [generate_map_file=${enableval}], [generate_map_file=no])
 
-AC_ARG_ENABLE([coverage], [AC_HELP_STRING([--enable-coverage], [enable running with coverage])],
+AC_ARG_ENABLE([coverage], [AS_HELP_STRING([--enable-coverage],[enable running with coverage])],
    [coverage=${enableval}], [coverage=no])
 
-AC_ARG_ENABLE([sanitize-address], [AC_HELP_STRING([--enable-sanitize-address], [enable running with address sanitizer])],
+AC_ARG_ENABLE([sanitize-address], [AS_HELP_STRING([--enable-sanitize-address],[enable running with address sanitizer])],
    [sanitize_address=${enableval}], [sanitize_address=no])
 
 ############################## Setting options ###############################
