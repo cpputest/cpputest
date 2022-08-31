@@ -192,9 +192,11 @@ include(CMakePackageConfigHelpers OPTIONAL
   RESULT_VARIABLE PkgHelpers_AVAILABLE)
 # guard against older versions of cmake which do not provide it
 if(PkgHelpers_AVAILABLE)
+  set(CPPUTEST_CONFIG_DEST "${LIB_INSTALL_DIR}/CppUTest/cmake")
+
   configure_package_config_file(CppUTestConfig.cmake.install.in
     ${CMAKE_CURRENT_BINARY_DIR}/install/CppUTestConfig.cmake
-    INSTALL_DESTINATION ${LIB_INSTALL_DIR}/CppUTest/cmake
+    INSTALL_DESTINATION "${CPPUTEST_CONFIG_DEST}"
     PATH_VARS INCLUDE_INSTALL_DIR LIB_INSTALL_DIR)
   write_basic_package_version_file(
     ${CMAKE_CURRENT_BINARY_DIR}/install/CppUTestConfigVersion.cmake
@@ -202,24 +204,20 @@ if(PkgHelpers_AVAILABLE)
     COMPATIBILITY SameMajorVersion )
   install(FILES ${CMAKE_CURRENT_BINARY_DIR}/install/CppUTestConfig.cmake
     ${CMAKE_CURRENT_BINARY_DIR}/install/CppUTestConfigVersion.cmake
-    DESTINATION ${LIB_INSTALL_DIR}/CppUTest/cmake )
-  install(EXPORT CppUTestTargets
-    DESTINATION ${LIB_INSTALL_DIR}/CppUTest/cmake)
+    DESTINATION "${CPPUTEST_CONFIG_DEST}" )
+  install(
+    EXPORT CppUTestTargets
+    NAMESPACE CppUTest::
+    DESTINATION "${CPPUTEST_CONFIG_DEST}"
+  )
   install(FILES  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Scripts/CppUTestBuildTimeDiscoverTests.cmake
-    DESTINATION ${LIB_INSTALL_DIR}/CppUTest/cmake/Scripts)
+    DESTINATION "${CPPUTEST_CONFIG_DEST}/Scripts")
   install(FILES  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules/CppUTestBuildTimeDiscoverTests.cmake
-    DESTINATION ${LIB_INSTALL_DIR}/CppUTest/cmake/Modules)
+    DESTINATION "${CPPUTEST_CONFIG_DEST}/Modules")
   configure_package_config_file(CppUTestConfig.cmake.build.in
     ${CMAKE_CURRENT_BINARY_DIR}/CppUTestConfig.cmake
     INSTALL_DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
     PATH_VARS INCLUDE_DIR CMAKE_CURRENT_BINARY_DIR)
-  if (EXTENSIONS)
-    export(TARGETS ${CppUTestLibName} ${CppUTestExtLibName}
-      FILE "${CMAKE_CURRENT_BINARY_DIR}/CppUTestTargets.cmake")
-  else()
-    export(TARGETS ${CppUTestLibName}
-      FILE "${CMAKE_CURRENT_BINARY_DIR}/CppUTestTargets.cmake")
-  endif()
   write_basic_package_version_file(
     ${CMAKE_CURRENT_BINARY_DIR}/CppUTestConfigVersion.cmake
     VERSION ${PROJECT_VERSION}
