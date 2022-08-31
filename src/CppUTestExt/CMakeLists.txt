@@ -54,13 +54,15 @@ target_include_directories(${CppUTestExtLibName}
 
 add_library(CppUTest::CppUTestExt ALIAS ${CppUTestExtLibName})
 
-install(
-    TARGETS ${CppUTestExtLibName}
-    EXPORT CppUTestTargets
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-)
-install(
-    DIRECTORY "${PROJECT_SOURCE_DIR}/include/CppUTestExt"
-    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
-)
+if(PROJECT_IS_TOP_LEVEL)
+    install(
+        TARGETS ${CppUTestExtLibName}
+        EXPORT CppUTestTargets
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    )
+    install(
+        DIRECTORY "${PROJECT_SOURCE_DIR}/include/CppUTestExt"
+        DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+    )
+endif()

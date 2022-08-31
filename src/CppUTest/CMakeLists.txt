@@ -76,13 +76,15 @@ endif (WIN32)
 
 add_library(CppUTest::CppUTest ALIAS ${CppUTestLibName})
 
-install(
-    TARGETS ${CppUTestLibName}
-    EXPORT CppUTestTargets
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-)
-install(
-    DIRECTORY "${PROJECT_SOURCE_DIR}/include/CppUTest"
-    DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
-)
+if(PROJECT_IS_TOP_LEVEL)
+    install(
+        TARGETS ${CppUTestLibName}
+        EXPORT CppUTestTargets
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    )
+    install(
+        DIRECTORY "${PROJECT_SOURCE_DIR}/include/CppUTest"
+        DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+    )
+endif()
