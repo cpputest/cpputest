@@ -31,7 +31,7 @@ else (MSVC)
 endif (MSVC)
 
 if (CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
-    include("${CppUTestRootDirectory}/cmake/Modules/CppUTestWarningFlags.cmake")
+    include(CppUTestWarningFlags)
 endif ()
 
 if (NOT STD_CPP)
