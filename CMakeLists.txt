@@ -61,8 +61,6 @@ endif()
 include(FindPkgConfig)
 set(CppUTest_PKGCONFIG_FILE cpputest.pc)
 
-set(CppUTestRootDirectory ${PROJECT_SOURCE_DIR})
-
 set( CppUTestLibName "CppUTest" )
 set( CppUTestExtLibName "CppUTestExt" )
 
