@@ -118,16 +118,7 @@ if(NOT DEFINED CPPUTEST_HAS_NAN)
   check_cxx_symbol_exists(NAN "math.h" CPPUTEST_HAS_NAN)
 endif()
 
-if(DEFINED HAS_INF)
-  message(DEPRECATION
-    "The HAS_INF cache variable has been deprecated. "
-    "CPPUTEST_HAS_INF is assessed automatically, "
-    "but can be assigned manually."
-  )
-  set(CPPUTEST_HAS_INF ${HAS_INF})
-endif()
 if(NOT DEFINED CPPUTEST_HAS_INF)
-  include(CheckCXXSymbolExists)
   check_cxx_symbol_exists(INFINITY "math.h" CPPUTEST_HAS_INF)
 endif()
 
