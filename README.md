@@ -252,7 +252,10 @@ It can be used then like so:
 
 ```cmake
 add_executable(run_tests UnitTest1.cpp UnitTest2.cpp)
-target_link_libraries(run_tests PRIVATE CppUTest CppUTestExt)
+
+target_link_libraries(example_test PRIVATE
+    CppUTest::CppUTest
+    CppUTest::CppUTestExt)
 ```
 
 [conan-center]: https://conan.io/center/cpputest
