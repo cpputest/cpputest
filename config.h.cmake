@@ -18,7 +18,7 @@
 
 #cmakedefine CPPUTEST_HAVE_STRUCT_TIMESPEC
 #ifdef CPPUTEST_HAVE_STRUCT_TIMESPEC
-// Apply workaround for MinGW timespec redefinition (pthread.h / time.h)
+/* Apply workaround for MinGW timespec redefinition (pthread.h / time.h) */
 #define _TIMESPEC_DEFINED 1
 #endif
 

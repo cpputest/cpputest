@@ -77,7 +77,7 @@ switch -Wildcard ($env:Platform)
         {
             $toolchain_filename = Get-ClangToolchainFilename
             $toolchain_path = (Join-Path (Split-Path $MyInvocation.MyCommand.Path) "..\cmake\$toolchain_filename")
-            $toolchain = "-DCMAKE_TOOLCHAIN_FILE=$toolchain_path"
+            $toolchain = "-DCMAKE_TOOLCHAIN_FILE=$toolchain_path -DCPPUTEST_WERROR=OFF"
         }
 
         # Add mingw to the path
