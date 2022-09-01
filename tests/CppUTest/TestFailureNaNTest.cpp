@@ -29,13 +29,13 @@
 #include "CppUTest/TestOutput.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
+#if CPPUTEST_HAS_NAN == 1 && CPPUTEST_HAS_INF == 1
+
 namespace
 {
 const int failLineNumber = 2;
 const char* failFileName = "fail.cpp";
 }
-
-#if CPPUTEST_HAS_NAN == 1 && CPPUTEST_HAS_INF == 1
 
 static double zero = 0.0;
 static double one = 1.0;
