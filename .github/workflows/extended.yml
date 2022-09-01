@@ -97,6 +97,23 @@ jobs:
       - name: Test
         run: ctest --test-dir build
 
+  cmake_no_exceptions:
+    runs-on: ubuntu-latest
+    name: Disable exceptions
+    env:
+      CC: gcc
+      CXX: g++
+      CXXFLAGS: -fno-exceptions
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+      - name: Configure
+        run: cmake -B cpputest_build -S .
+      - name: Build
+        run: cmake --build cpputest_build --verbose
+      - name: Test
+        run: ctest --test-dir cpputest_build
+
   cmake_install:
     runs-on: ubuntu-latest
     steps:
