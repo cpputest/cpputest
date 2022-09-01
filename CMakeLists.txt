@@ -60,8 +60,8 @@ cmake_dependent_option(CPPUTEST_BUILD_TESTING "Compile and make tests for CppUTe
 option(CPPUTEST_TESTS_DETAILED "Run each test separately instead of grouped?" OFF)
 cmake_dependent_option(CPPUTEST_TEST_DISCOVERY "Build time test discover"
   ON "CPPUTEST_BUILD_TESTING;CMAKE_CROSSCOMPILING_EMULATOR OR NOT CMAKE_CROSSCOMPILING" OFF)
-
-option(CPPUTEST_EXAMPLES "Compile and make examples?" ${PROJECT_IS_TOP_LEVEL})
+cmake_dependent_option(CPPUTEST_EXAMPLES "Compile and make examples?"
+  ${PROJECT_IS_TOP_LEVEL} "NOT CPPUTEST_STD_CPP_LIB_DISABLED" OFF)
 option(CPPUTEST_VERBOSE_CONFIG "Print configuration to stdout during generation" ${PROJECT_IS_TOP_LEVEL})
 
 cmake_dependent_option(CPPUTEST_LIBNAME_POSTFIX_BITSIZE "Add architecture bitsize (32/64) to the library name?"
