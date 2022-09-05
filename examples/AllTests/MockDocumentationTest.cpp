@@ -25,7 +25,6 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #include "CppUTest/TestHarness.h"
 #include "CppUTestExt/MockSupport.h"
 #include "CppUTestExt/MockSupport_c.h"
@@ -36,14 +35,13 @@ TEST_GROUP(FirstTestGroup)
 
 TEST(FirstTestGroup, FirsTest)
 {
-//	FAIL("Fail me!");
+    //	FAIL("Fail me!");
 }
 
 TEST(FirstTestGroup, SecondTest)
 {
-//	STRCMP_EQUAL("hello", "world");
+    //	STRCMP_EQUAL("hello", "world");
 }
-
 
 TEST_GROUP(MockDocumentation)
 {
@@ -64,7 +62,7 @@ TEST(MockDocumentation, SimpleScenario)
 class ClassFromProductionCode
 {
 public:
-    virtual void importantFunction(){}
+    virtual void importantFunction() {}
     virtual ~ClassFromProductionCode() {}
 };
 
@@ -90,13 +88,13 @@ TEST(MockDocumentation, SimpleScenarioObject)
 
 static void parameters_function(int p1, const char* p2)
 {
-    void* object = (void*) 1;
+    void* object = (void*)1;
     mock().actualCall("function").onObject(object).withParameter("p1", p1).withParameter("p2", p2);
 }
 
 TEST(MockDocumentation, parameters)
 {
-    void* object = (void*) 1;
+    void* object = (void*)1;
     mock().expectOneCall("function").onObject(object).withParameter("p1", 2).withParameter("p2", "hah");
     parameters_function(2, "hah");
 }
@@ -116,7 +114,7 @@ public:
 
 TEST(MockDocumentation, ObjectParameters)
 {
-    void* object = (void*) 1;
+    void* object = (void*)1;
     MyTypeComparator comparator;
     mock().installComparator("myType", comparator);
     mock().expectOneCall("function").withParameterOfType("myType", "parameterName", object);
@@ -138,22 +136,20 @@ TEST(MockDocumentation, setData)
     mock().setData("importantValue", 10);
     mock().setDataObject("importantObject", "ClassFromProductionCode", &object);
 
-    ClassFromProductionCode * pobject;
+    ClassFromProductionCode* pobject;
     int value = mock().getData("importantValue").getIntValue();
-    pobject = (ClassFromProductionCode*) mock().getData("importantObject").getObjectPointer();
+    pobject = (ClassFromProductionCode*)mock().getData("importantObject").getObjectPointer();
 
     LONGS_EQUAL(10, value);
     POINTERS_EQUAL(pobject, &object);
 }
 
-static void doSomethingThatWouldOtherwiseBlowUpTheMockingFramework()
-{
-}
+static void doSomethingThatWouldOtherwiseBlowUpTheMockingFramework() {}
 
 TEST(MockDocumentation, otherMockSupport)
 {
     mock().crashOnFailure();
-//	mock().actualCall("unex");
+    //	mock().actualCall("unex");
 
     mock().expectOneCall("foo");
     mock().ignoreOtherCalls();
@@ -163,7 +159,6 @@ TEST(MockDocumentation, otherMockSupport)
     mock().enable();
 
     mock().clear();
-
 }
 
 TEST(MockDocumentation, scope)
@@ -174,7 +169,7 @@ TEST(MockDocumentation, scope)
     mock("xmlparser").actualCall("open");
 }
 
-static  int equalMethod(const void* object1, const void* object2)
+static int equalMethod(const void* object1, const void* object2)
 {
     return object1 == object2;
 }
@@ -186,12 +181,11 @@ static const char* toStringMethod(const void*)
 
 TEST(MockDocumentation, CInterface)
 {
-    void* object = (void*) 0x1;
+    void* object = (void*)0x1;
 
     mock_c()->expectOneCall("foo")->withIntParameters("integer", 10)->andReturnDoubleValue(1.11);
     double d = mock_c()->actualCall("foo")->withIntParameters("integer", 10)->returnValue().value.doubleValue;
     DOUBLES_EQUAL(1.11, d, 0.00001);
-
 
     mock_c()->installComparator("type", equalMethod, toStringMethod);
     mock_scope_c("scope")->expectOneCall("bar")->withParameterOfType("type", "name", object);

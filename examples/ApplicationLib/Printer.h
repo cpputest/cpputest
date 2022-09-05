@@ -44,13 +44,11 @@ public:
     virtual void Print(long int);
 
 private:
-
     Printer(const Printer&);
     Printer& operator=(const Printer&);
-
 };
 
 Printer& operator<<(Printer&, const char*);
 Printer& operator<<(Printer&, long int);
 
-#endif  // D_Printer_H
+#endif // D_Printer_H

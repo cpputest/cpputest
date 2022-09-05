@@ -29,10 +29,9 @@
 #include "Printer.h"
 #include <stddef.h>
 
-CircularBuffer::CircularBuffer(int _capacity) :
-    index(0), outdex(0), capacity(_capacity), empty(true), full(false)
+CircularBuffer::CircularBuffer(int _capacity) : index(0), outdex(0), capacity(_capacity), empty(true), full(false)
 {
-    buffer = new int[(size_t) this->capacity];
+    buffer = new int[(size_t)this->capacity];
 }
 
 CircularBuffer::~CircularBuffer()
@@ -55,8 +54,10 @@ void CircularBuffer::Put(int i)
     empty = false;
     buffer[index] = i;
     index = Next(index);
-    if (full) outdex = Next(outdex);
-    else if (index == outdex) full = true;
+    if (full)
+        outdex = Next(outdex);
+    else if (index == outdex)
+        full = true;
 }
 
 int CircularBuffer::Get()
@@ -67,7 +68,8 @@ int CircularBuffer::Get()
     if (!empty) {
         result = buffer[outdex];
         outdex = Next(outdex);
-        if (outdex == index) empty = true;
+        if (outdex == index)
+            empty = true;
     }
     return result;
 }
@@ -79,7 +81,8 @@ int CircularBuffer::Capacity()
 
 int CircularBuffer::Next(int i)
 {
-    if (++i >= capacity) i = 0;
+    if (++i >= capacity)
+        i = 0;
     return i;
 }
 
@@ -90,12 +93,14 @@ void CircularBuffer::Print(Printer* p)
     int printIndex = outdex;
     int count = index - outdex;
 
-    if (!empty && (index <= outdex)) count = capacity - (outdex - index);
+    if (!empty && (index <= outdex))
+        count = capacity - (outdex - index);
 
     for (int i = 0; i < count; i++) {
         p->Print(buffer[printIndex]);
         printIndex = Next(printIndex);
-        if (i + 1 != count) p->Print(", ");
+        if (i + 1 != count)
+            p->Print(", ");
     }
     p->Print(">\n");
 }
