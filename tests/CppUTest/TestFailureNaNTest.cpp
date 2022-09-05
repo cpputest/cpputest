@@ -29,9 +29,11 @@
 #include "CppUTest/TestOutput.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
-#if CPPUTEST_HAS_NAN == 1 && CPPUTEST_HAS_INF == 1
+#if CPPUTEST_USE_STD_C_LIB
+#include <math.h>
+#endif
 
-#include "math.h"
+#if defined(NAN) && defined(INFINITY)
 
 namespace
 {

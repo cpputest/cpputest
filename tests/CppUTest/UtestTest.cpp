@@ -30,8 +30,8 @@
 #include "CppUTest/TestTestingFixture.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
-#if CPPUTEST_HAS_INF || CPPUTEST_HAS_NAN
-#include "math.h"
+#if CPPUTEST_USE_STD_C_LIB
+#include <math.h>
 #endif
 
 TEST_GROUP(UtestShell)
@@ -68,7 +68,7 @@ TEST(UtestShell, compareDoubles)
     CHECK(doubles_equal(a, a, 0.000000001));
 }
 
-#if CPPUTEST_HAS_NAN == 1
+#ifdef NAN
 TEST(UtestShell, compareDoublesNaN)
 {
     CHECK(!doubles_equal(NAN, 1.001, 0.01));
@@ -77,7 +77,7 @@ TEST(UtestShell, compareDoublesNaN)
 }
 #endif
 
-#if CPPUTEST_HAS_INF == 1
+#ifdef INFINITY
 TEST(UtestShell, compareDoublesInf)
 {
     CHECK(!doubles_equal(INFINITY, 1.0, 0.01));
