@@ -13,6 +13,10 @@ target_include_directories(ExampleTests
         .
 )
 
+target_compile_options(ExampleTests
+    PRIVATE $<$<BOOL:${MSVC}>:/wd4723>
+)
+
 target_link_libraries(ExampleTests
     PRIVATE
         ApplicationLib

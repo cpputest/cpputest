@@ -2,8 +2,7 @@
 #define CONFIG_H_
 
 #cmakedefine CPPUTEST_MEM_LEAK_DETECTION_DISABLED
-#cmakedefine CPPUTEST_USE_LONG_LONG
-#cmakedefine CPPUTEST_HAVE_LONG_LONG_INT
+#cmakedefine01 CPPUTEST_USE_LONG_LONG
 #cmakedefine CPPUTEST_HAVE_STRDUP
 
 #cmakedefine CPPUTEST_HAVE_FORK
@@ -18,7 +17,7 @@
 
 #cmakedefine CPPUTEST_HAVE_STRUCT_TIMESPEC
 #ifdef CPPUTEST_HAVE_STRUCT_TIMESPEC
-// Apply workaround for MinGW timespec redefinition (pthread.h / time.h)
+/* Apply workaround for MinGW timespec redefinition (pthread.h / time.h) */
 #define _TIMESPEC_DEFINED 1
 #endif
 

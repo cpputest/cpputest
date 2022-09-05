@@ -7,9 +7,9 @@ project(CppUTest
   VERSION 4.0
 )
 
-if (CMAKE_VERSION GREATER_EQUAL "3.21")
+if (CMAKE_VERSION VERSION_GREATER_EQUAL "3.21")
   # PROJECT_IS_TOP_LEVEL is defined automatically
-elseif(CMAKE_CURRENT_BINARY_DIR STREQUAL CMAKE_BINARY_DIR)
+elseif (CMAKE_CURRENT_BINARY_DIR STREQUAL CMAKE_BINARY_DIR)
   set(PROJECT_IS_TOP_LEVEL TRUE)
 else()
   set(PROJECT_IS_TOP_LEVEL FALSE)
@@ -24,26 +24,43 @@ if (EXISTS "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
     conan_basic_setup()
 endif()
 
-option(STD_C "Use the standard C library" ON)
-option(STD_CPP "Use the standard C++ library" ON)
+include(CTest)
+
+include(CMakeDependentOption)
+option(CPPUTEST_STD_C_LIB_DISABLED "Disable the standard C library")
+cmake_dependent_option(CPPUTEST_STD_CPP_LIB_DISABLED "Use the standard C++ library"
+  OFF "NOT CPPUTEST_STD_C_LIB_DISABLED" ON)
 option(CPPUTEST_FLAGS "Use the CFLAGS/CXXFLAGS/LDFLAGS set by CppUTest" ON)
-option(MEMORY_LEAK_DETECTION "Enable memory leak detection" ON)
-option(EXTENSIONS "Use the CppUTest extension library" ON)
-option(LONGLONG "Support long long" OFF)
-option(MAP_FILE "Enable the creation of a map file" OFF)
-option(COVERAGE "Enable running with coverage" OFF)
-option(WERROR "Compile with warnings as errors" OFF)
+cmake_dependent_option(CPPUTEST_MEM_LEAK_DETECTION_DISABLED "Enable memory leak detection"
+  OFF "NOT BORLAND;NOT CPPUTEST_STD_C_LIB_DISABLED" ON)
+option(CPPUTEST_EXTENSIONS "Use the CppUTest extension library" ON)
 
-option(TESTS "Compile and make tests for the code?" ON)
-option(TESTS_DETAILED "Run each test separately instead of grouped?" OFF)
-option(TESTS_BUILD_DISCOVER "Build time test discover" ON)
+include(CheckTypeSize)
+check_type_size("long long" SIZEOF_LONGLONG)
+cmake_dependent_option(CPPUTEST_USE_LONG_LONG "Support long long"
+  YES "HAVE_SIZEOF_LONGLONG" OFF)
 
-option(EXAMPLES "Compile and make examples?" OFF)
+cmake_dependent_option(CPPUTEST_MAP_FILE "Enable the creation of a map file"
+  OFF "NOT MSVC" OFF)
+cmake_dependent_option(CPPUTEST_COVERAGE "Enable running with coverage"
+  OFF "NOT MSVC" OFF)
+cmake_dependent_option(CPPUTEST_WERROR
+  "Compile with warnings as errors"
+  ON "PROJECT_IS_TOP_LEVEL" OFF
+)
+cmake_dependent_option(CPPUTEST_BUILD_TESTING "Compile and make tests for CppUTest"
+  ${PROJECT_IS_TOP_LEVEL} "BUILD_TESTING" OFF)
+option(CPPUTEST_TESTS_DETAILED "Run each test separately instead of grouped?" OFF)
+cmake_dependent_option(CPPUTEST_TEST_DISCOVERY "Build time test discover"
+  ON "CPPUTEST_BUILD_TESTING;NOT IAR" OFF)
 
-option(VERBOSE_CONFIG "Print configuration to stdout during generation" ON)
+option(CPPUTEST_EXAMPLES "Compile and make examples?" ${PROJECT_IS_TOP_LEVEL})
+option(CPPUTEST_VERBOSE_CONFIG "Print configuration to stdout during generation" ${PROJECT_IS_TOP_LEVEL})
 
-option(LIBNAME_POSTFIX_BITSIZE "Add architecture bitsize (32/64) to the library name?" OFF)
-option(LIBNAME_POSTFIX_DEBUG "Add indication of debug compilation to the library name?" OFF)
+cmake_dependent_option(CPPUTEST_LIBNAME_POSTFIX_BITSIZE "Add architecture bitsize (32/64) to the library name?"
+  OFF "PROJECT_IS_TOP_LEVEL" OFF)
+cmake_dependent_option(CPPUTEST_LIBNAME_POSTFIX_DEBUG "Add indication of debug compilation to the library name?"
+  OFF "PROJECT_IS_TOP_LEVEL" OFF)
 
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME) # Don't change users' build type.
   # Multi-configuration generators don't have a single build type.
@@ -64,7 +81,7 @@ set(CppUTest_PKGCONFIG_FILE cpputest.pc)
 set( CppUTestLibName "CppUTest" )
 set( CppUTestExtLibName "CppUTestExt" )
 
-if(LIBNAME_POSTFIX_BITSIZE)
+if(CPPUTEST_LIBNAME_POSTFIX_BITSIZE)
   if( "${CMAKE_SIZEOF_VOID_P}" STREQUAL "8" )
       set( CppUTestLibName "${CppUTestLibName}64" )
       set( CppUTestExtLibName "${CppUTestExtLibName}64" )
@@ -72,7 +89,7 @@ if(LIBNAME_POSTFIX_BITSIZE)
       set( CppUTestLibName "${CppUTestLibName}32" )
       set( CppUTestExtLibName "${CppUTestExtLibName}32" )
   endif()
-endif(LIBNAME_POSTFIX_BITSIZE)
+endif()
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules")
 if(NOT PROJECT_IS_TOP_LEVEL)
@@ -80,12 +97,9 @@ if(NOT PROJECT_IS_TOP_LEVEL)
 endif()
 
 include(CppUTestConfigurationOptions)
-include(CTest)
 include(CppUTestBuildTimeDiscoverTests)
 include(CppUTestNormalizeTestOutputLocation)
 include(GNUInstallDirs)
-
-enable_testing()
 
 add_subdirectory(src/CppUTest)
 
@@ -100,28 +114,11 @@ check_cxx_symbol_exists(waitpid "sys/wait.h" CPPUTEST_HAVE_WAITPID)
 check_cxx_symbol_exists(gettimeofday "sys/time.h" CPPUTEST_HAVE_GETTIMEOFDAY)
 check_cxx_symbol_exists(pthread_mutex_lock "pthread.h" CPPUTEST_HAVE_PTHREAD_MUTEX_LOCK)
 
-if(DEFINED HAS_NAN)
-  message(DEPRECATION
-    "The HAS_NAN cache variable has been deprecated. "
-    "CPPUTEST_HAS_NAN is assessed automatically, "
-    "but can be assigned manually."
-  )
-  set(CPPUTEST_HAS_NAN ${HAS_NAN})
-endif()
 if(NOT DEFINED CPPUTEST_HAS_NAN)
   check_cxx_symbol_exists(NAN "math.h" CPPUTEST_HAS_NAN)
 endif()
 
-if(DEFINED HAS_INF)
-  message(DEPRECATION
-    "The HAS_INF cache variable has been deprecated. "
-    "CPPUTEST_HAS_INF is assessed automatically, "
-    "but can be assigned manually."
-  )
-  set(CPPUTEST_HAS_INF ${HAS_INF})
-endif()
 if(NOT DEFINED CPPUTEST_HAS_INF)
-  include(CheckCXXSymbolExists)
   check_cxx_symbol_exists(INFINITY "math.h" CPPUTEST_HAS_INF)
 endif()
 
@@ -158,20 +155,20 @@ target_compile_definitions(${CppUTestLibName}
     $<BUILD_INTERFACE:HAVE_CONFIG_H>
 )
 
-if (EXTENSIONS)
+if (CPPUTEST_EXTENSIONS)
     add_subdirectory(src/CppUTestExt)
-endif (EXTENSIONS)
+endif ()
 
-if (TESTS)
+if (CPPUTEST_BUILD_TESTING)
     add_subdirectory(tests/CppUTest)
-    if (EXTENSIONS)
+    if (CPPUTEST_EXTENSIONS)
         add_subdirectory(tests/CppUTestExt)
-    endif (EXTENSIONS)
-endif (TESTS)
+    endif ()
+endif ()
 
-if (EXAMPLES)
+if (CPPUTEST_EXAMPLES)
   add_subdirectory(examples)
-endif(EXAMPLES)
+endif()
 
 if(PROJECT_IS_TOP_LEVEL)
   set (INCLUDE_INSTALL_DIR "${CMAKE_INSTALL_INCLUDEDIR}")
@@ -239,7 +236,7 @@ if(PROJECT_IS_TOP_LEVEL)
   endif()
 endif()
 
-if(VERBOSE_CONFIG)
+if(CPPUTEST_VERBOSE_CONFIG)
   message("
 -------------------------------------------------------
 CppUTest Version ${PROJECT_VERSION}
@@ -252,23 +249,23 @@ Current compiler options:
     CppUTest LDFLAGS:                   ${CPPUTEST_LD_FLAGS}
 
 Features configured in CppUTest:
-    Memory Leak Detection:              ${MEMORY_LEAK_DETECTION}
-    Compiling Extensions:               ${EXTENSIONS}
-    Support Long Long:                  ${LONGLONG}
+    Memory Leak Detection Disabled:     ${CPPUTEST_MEM_LEAK_DETECTION_DISABLED}
+    Compiling Extensions:               ${CPPUTEST_EXTENSIONS}
+    Support Long Long:                  ${CPPUTEST_USE_LONG_LONG}
     Use CppUTest flags:                 ${CPPUTEST_FLAGS}
 
-    Using Standard C library:           ${STD_C}
-    Using Standard C++ library:         ${STD_CPP}
+    Disable Standard C library:         ${CPPUTEST_STD_C_LIB_DISABLED}
+    Disable Standard C++ library:       ${CPPUTEST_STD_CPP_LIB_DISABLED}
 
-    Generating map file:                ${MAP_FILE}
-    Compiling with coverage:            ${COVERAGE}
+    Generating map file:                ${CPPUTEST_MAP_FILE}
+    Compiling with coverage:            ${CPPUTEST_COVERAGE}
 
-    Compile and run self-tests          ${TESTS}
-    Run self-tests separately           ${TESTS_DETAILED}
+    Compile and run self-tests          ${CPPUTEST_BUILD_TESTING}
+    Run self-tests separately           ${CPPUTEST_TESTS_DETAILED}
 
 Library name options:
-    Add architecture bitsize (32/64)    ${LIBNAME_POSTFIX_BITSIZE}
-    Add debug compilation indicator     ${LIBNAME_POSTFIX_DEBUG}
+    Add architecture bitsize (32/64)    ${CPPUTEST_LIBNAME_POSTFIX_BITSIZE}
+    Add debug compilation indicator     ${CPPUTEST_LIBNAME_POSTFIX_DEBUG}
 
 -------------------------------------------------------
 ")

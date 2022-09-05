@@ -281,7 +281,7 @@
 #endif
 #endif
 
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
 typedef long long cpputest_longlong;
 typedef unsigned long long cpputest_ulonglong;
 #else

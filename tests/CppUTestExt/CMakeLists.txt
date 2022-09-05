@@ -38,6 +38,6 @@ add_executable(CppUTestExtTests ${CppUTestExtTests_src})
 cpputest_normalize_test_output_location(CppUTestExtTests)
 target_link_libraries(CppUTestExtTests ${CppUTestLibName} ${CppUTestExtLibName} ${THREAD_LIB} ${CPPUNIT_EXTERNAL_LIBRARIES})
 
-if (TESTS_BUILD_DISCOVER)
+if (CPPUTEST_TEST_DISCOVERY)
     cpputest_buildtime_discover_tests(CppUTestExtTests)
 endif()

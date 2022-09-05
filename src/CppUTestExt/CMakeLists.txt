@@ -41,7 +41,7 @@ target_link_libraries(${CppUTestExtLibName} ${CPPUNIT_EXTERNAL_LIBRARIES})
 
 target_link_libraries(${CppUTestExtLibName} PUBLIC ${CppUTestLibName})
 
-if(LIBNAME_POSTFIX_DEBUG)
+if(CPPUTEST_LIBNAME_POSTFIX_DEBUG)
     set_target_properties(${CppUTestExtLibName} PROPERTIES DEBUG_POSTFIX "d")
 endif()
 
