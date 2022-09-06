@@ -1,4 +1,4 @@
-set(CppUTestTests_src
+add_executable(CppUTestTests
     AllTests.cpp
     SetPluginTest.cpp
     CheatSheetTest.cpp
@@ -41,20 +41,16 @@ if (MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4723")
 endif (MSVC)
 
-if (MINGW)
-    find_package (Threads REQUIRED)
-    set(THREAD_LIB "pthread")
-endif (MINGW)
+if(MINGW OR (${CMAKE_HOST_SYSTEM_NAME} MATCHES "OpenBSD"))
+    set(THREADS_PREFER_PTHREAD_FLAG ON)
+    find_package(Threads)
+    if(CMAKE_USE_PTHREADS_INIT)
+        target_link_libraries(CppUTestTests PRIVATE Threads::Threads)
+    endif()
+endif()
 
-if (${CMAKE_HOST_SYSTEM_NAME} MATCHES "OpenBSD")
-   set (THREADS_HAVE_PTHREAD_ARG 1)
-   find_package (Threads REQUIRED)
-   set (THREAD_LIB "pthread")
-endif ()
-
-add_executable(CppUTestTests ${CppUTestTests_src})
 cpputest_normalize_test_output_location(CppUTestTests)
-target_link_libraries(CppUTestTests ${CppUTestLibName} ${THREAD_LIB})
+target_link_libraries(CppUTestTests PRIVATE ${CppUTestLibName})
 
 if (CPPUTEST_TEST_DISCOVERY)
     cpputest_buildtime_discover_tests(CppUTestTests)

@@ -37,8 +37,6 @@ add_library(${CppUTestExtLibName} STATIC
     ${PROJECT_SOURCE_DIR}/include/CppUTestExt/MockSupport.h
 )
 
-target_link_libraries(${CppUTestExtLibName} ${CPPUNIT_EXTERNAL_LIBRARIES})
-
 target_link_libraries(${CppUTestExtLibName} PUBLIC ${CppUTestLibName})
 
 if(CPPUTEST_LIBNAME_POSTFIX_DEBUG)
