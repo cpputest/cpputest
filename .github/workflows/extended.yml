@@ -113,3 +113,20 @@ jobs:
           cmake -B build -S examples
           cmake --build build -j
           ctest --test-dir build
+
+  arm-embedded:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+      - uses: carlosperate/arm-none-eabi-gcc-action@v1
+      - name: Configure
+        run: >
+          cmake
+          -B cpputest_build
+          -D CMAKE_TOOLCHAIN_FILE=cmake/arm-none-eabi-gcc.toolchain.cmake
+      - name: Build
+        run: cmake --build cpputest_build
+      - name: Test
+        # This won't do anything, because there is no way to run the tests.
+        run: ctest --test-dir cpputest_build
