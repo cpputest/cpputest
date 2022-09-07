@@ -19,13 +19,13 @@ BraceWrapping:
   AfterUnion: true
   AfterExternBlock: false
   BeforeCatch: true
-  BeforeElse: false
+  BeforeElse: true
   BeforeWhile: false
   SplitEmptyFunction: true
   SplitEmptyRecord: true
   SplitEmptyNamespace: true
 BreakConstructorInitializers: AfterColon
-ColumnLimit: 120
+ColumnLimit: 180
 NamespaceIndentation: All
 NamespaceMacros:
   - TEST_GROUP
