@@ -172,7 +172,6 @@ if(PROJECT_IS_TOP_LEVEL)
   set (INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
   # Pkg-config file
-  include(FindPkgConfig)
   set(CppUTest_PKGCONFIG_FILE cpputest.pc)
 
   # Pkg-config file.
