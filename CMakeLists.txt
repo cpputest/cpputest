@@ -172,7 +172,7 @@ if(PROJECT_IS_TOP_LEVEL)
   set (INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
   # Pkg-config file
-  set(CppUTest_PKGCONFIG_FILE cpputest.pc)
+  set(CppUTest_PKGCONFIG_FILE ${CMAKE_CURRENT_BINARY_DIR}/cpputest.pc)
 
   # Pkg-config file.
   set (prefix "${CMAKE_INSTALL_PREFIX}")
@@ -181,14 +181,14 @@ if(PROJECT_IS_TOP_LEVEL)
   set (includedir "\${prefix}/${INCLUDE_INSTALL_DIR}")
   set (PACKAGE_VERSION "${PROJECT_VERSION}")
 
-  configure_file (cpputest.pc.in
-    ${CMAKE_CURRENT_BINARY_DIR}/${CppUTest_PKGCONFIG_FILE} @ONLY)
-
-  install(FILES  ${CMAKE_CURRENT_BINARY_DIR}/${CppUTest_PKGCONFIG_FILE}
+  configure_file (cpputest.pc.in "${CppUTest_PKGCONFIG_FILE}" @ONLY)
+  install(
+    FILES "${CppUTest_PKGCONFIG_FILE}"
     DESTINATION ${LIB_INSTALL_DIR}/pkgconfig
   )
 
-  install(FILES  "${CMAKE_CURRENT_BINARY_DIR}/generated/CppUTestGeneratedConfig.h"
+  install(
+    FILES "${CMAKE_CURRENT_BINARY_DIR}/generated/CppUTestGeneratedConfig.h"
     DESTINATION "${INCLUDE_INSTALL_DIR}/CppUTest"
   )
 
