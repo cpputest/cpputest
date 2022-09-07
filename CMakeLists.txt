@@ -74,10 +74,6 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME) # Don't change users' build type.
   endif()
 endif()
 
-# Pkg-config file
-include(FindPkgConfig)
-set(CppUTest_PKGCONFIG_FILE cpputest.pc)
-
 set( CppUTestLibName "CppUTest" )
 set( CppUTestExtLibName "CppUTestExt" )
 
@@ -174,6 +170,10 @@ if(PROJECT_IS_TOP_LEVEL)
   set (INCLUDE_INSTALL_DIR "${CMAKE_INSTALL_INCLUDEDIR}")
   set (LIB_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}")
   set (INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
+
+  # Pkg-config file
+  include(FindPkgConfig)
+  set(CppUTest_PKGCONFIG_FILE cpputest.pc)
 
   # Pkg-config file.
   set (prefix "${CMAKE_INSTALL_PREFIX}")
