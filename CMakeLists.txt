@@ -74,10 +74,6 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME) # Don't change users' build type.
   endif()
 endif()
 
-# Pkg-config file
-include(FindPkgConfig)
-set(CppUTest_PKGCONFIG_FILE cpputest.pc)
-
 set( CppUTestLibName "CppUTest" )
 set( CppUTestExtLibName "CppUTestExt" )
 
@@ -175,6 +171,9 @@ if(PROJECT_IS_TOP_LEVEL)
   set (LIB_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}")
   set (INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
+  # Pkg-config file
+  set(CppUTest_PKGCONFIG_FILE ${CMAKE_CURRENT_BINARY_DIR}/cpputest.pc)
+
   # Pkg-config file.
   set (prefix "${CMAKE_INSTALL_PREFIX}")
   set (exec_prefix "\${prefix}")
@@ -182,14 +181,14 @@ if(PROJECT_IS_TOP_LEVEL)
   set (includedir "\${prefix}/${INCLUDE_INSTALL_DIR}")
   set (PACKAGE_VERSION "${PROJECT_VERSION}")
 
-  configure_file (cpputest.pc.in
-    ${CMAKE_CURRENT_BINARY_DIR}/${CppUTest_PKGCONFIG_FILE} @ONLY)
-
-  install(FILES  ${CMAKE_CURRENT_BINARY_DIR}/${CppUTest_PKGCONFIG_FILE}
+  configure_file (cpputest.pc.in "${CppUTest_PKGCONFIG_FILE}" @ONLY)
+  install(
+    FILES "${CppUTest_PKGCONFIG_FILE}"
     DESTINATION ${LIB_INSTALL_DIR}/pkgconfig
   )
 
-  install(FILES  "${CMAKE_CURRENT_BINARY_DIR}/generated/CppUTestGeneratedConfig.h"
+  install(
+    FILES "${CMAKE_CURRENT_BINARY_DIR}/generated/CppUTestGeneratedConfig.h"
     DESTINATION "${INCLUDE_INSTALL_DIR}/CppUTest"
   )
 
