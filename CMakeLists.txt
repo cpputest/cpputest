@@ -28,8 +28,15 @@ include(CTest)
 
 include(CMakeDependentOption)
 option(CPPUTEST_STD_C_LIB_DISABLED "Disable the standard C library")
+
+include(CheckCXXSourceCompiles)
+check_cxx_source_compiles(
+  "int main(int argc, char ** argv) { throw 20; }"
+  CPPUTEST_HAVE_EXCEPTIONS
+)
+
 cmake_dependent_option(CPPUTEST_STD_CPP_LIB_DISABLED "Use the standard C++ library"
-  OFF "NOT CPPUTEST_STD_C_LIB_DISABLED" ON)
+  OFF "NOT CPPUTEST_STD_C_LIB_DISABLED;CPPUTEST_HAVE_EXCEPTIONS" ON)
 option(CPPUTEST_FLAGS "Use the CFLAGS/CXXFLAGS/LDFLAGS set by CppUTest" ON)
 cmake_dependent_option(CPPUTEST_MEM_LEAK_DETECTION_DISABLED "Enable memory leak detection"
   OFF "NOT BORLAND;NOT CPPUTEST_STD_C_LIB_DISABLED" ON)
@@ -53,8 +60,8 @@ cmake_dependent_option(CPPUTEST_BUILD_TESTING "Compile and make tests for CppUTe
 option(CPPUTEST_TESTS_DETAILED "Run each test separately instead of grouped?" OFF)
 cmake_dependent_option(CPPUTEST_TEST_DISCOVERY "Build time test discover"
   ON "CPPUTEST_BUILD_TESTING;CMAKE_CROSSCOMPILING_EMULATOR OR NOT CMAKE_CROSSCOMPILING" OFF)
-
-option(CPPUTEST_EXAMPLES "Compile and make examples?" ${PROJECT_IS_TOP_LEVEL})
+cmake_dependent_option(CPPUTEST_EXAMPLES "Compile and make examples?"
+  ${PROJECT_IS_TOP_LEVEL} "NOT CPPUTEST_STD_CPP_LIB_DISABLED" OFF)
 option(CPPUTEST_VERBOSE_CONFIG "Print configuration to stdout during generation" ${PROJECT_IS_TOP_LEVEL})
 
 cmake_dependent_option(CPPUTEST_LIBNAME_POSTFIX_BITSIZE "Add architecture bitsize (32/64) to the library name?"
