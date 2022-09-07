@@ -40,15 +40,11 @@
 #include <stdlib.h>
 #include <string>
 
-class MockPrinter: public Printer
+class MockPrinter : public Printer
 {
 public:
-    explicit MockPrinter()
-    {
-    }
-    virtual ~MockPrinter()
-    {
-    }
+    explicit MockPrinter() {}
+    virtual ~MockPrinter() {}
 
     virtual void Print(const char* s)
     {
@@ -68,12 +64,10 @@ public:
     }
 
 private:
-
     std::string savedOutput;
 
     MockPrinter(const MockPrinter&);
     MockPrinter& operator=(const MockPrinter&);
-
 };
 
-#endif  // D_MockPrinter_H
+#endif // D_MockPrinter_H

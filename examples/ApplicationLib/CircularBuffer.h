@@ -52,7 +52,6 @@ public:
     void Print(Printer*);
 
 private:
-
     int index;
     int outdex;
     int* buffer;
@@ -66,7 +65,6 @@ private:
 
     CircularBuffer(const CircularBuffer&);
     CircularBuffer& operator=(const CircularBuffer&);
-
 };
 
-#endif  // D_CircularBuffer_H
+#endif // D_CircularBuffer_H

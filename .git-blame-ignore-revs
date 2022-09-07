@@ -1,0 +1,7 @@
+# Enable via `git config blame.ignoreRevsFile .git-blame-ignore-revs`
+
+# Fix line endings
+e674cfe759b20c6b78becbc50d8f9f644d32ea8a
+
+# clang-format
+2a4942eb93b823c9723d4797222d6d3315f3bef2
