@@ -137,7 +137,17 @@ PlatformSpecificFile C2000FOpen(const char* filename, const char* flag)
 
 static void C2000FPuts(const char* str, PlatformSpecificFile file)
 {
-   fputs(str, (FILE*)file);
+#if USE_BUFFER_OUTPUT
+    if (file == PlatformSpecificStdOut) {
+        while (*str && (idx < BUFFER_SIZE)) {
+            buf[idx++] = *str++;
+        }
+    }
+    else
+#endif
+    { 
+        fputs(str, (FILE*)file);
+    }
 }
 
 static void C2000FClose(PlatformSpecificFile file)
