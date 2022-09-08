@@ -341,9 +341,14 @@ struct FakeOutput
         return (PlatformSpecificFile) NULLPTR;
     }
 
-    static void fputs_fake(const char* str, PlatformSpecificFile)
+    static void fputs_fake(const char* str, PlatformSpecificFile f)
     {
-        currentFake->file += str;
+        if (f == PlatformSpecificStdOut) {
+            currentFake->console += str;
+        }
+        else {
+            currentFake->file += str;
+        }
     }
 
     static void fclose_fake(PlatformSpecificFile)

@@ -138,6 +138,7 @@ static void DosFClose(PlatformSpecificFile file)
    fclose((FILE*)file);
 }
 
+const PlatformSpecificFile PlatformSpecificStdOut = stdout;
 PlatformSpecificFile (*PlatformSpecificFOpen)(const char* filename, const char* flag) = DosFOpen;
 void (*PlatformSpecificFPuts)(const char* str, PlatformSpecificFile file) = DosFPuts;
 void (*PlatformSpecificFClose)(PlatformSpecificFile file) = DosFClose;
