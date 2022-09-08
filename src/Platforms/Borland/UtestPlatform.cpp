@@ -251,7 +251,6 @@ PlatformSpecificFile (*PlatformSpecificFOpen)(const char*, const char*) = Platfo
 void (*PlatformSpecificFPuts)(const char*, PlatformSpecificFile) = PlatformSpecificFPutsImplementation;
 void (*PlatformSpecificFClose)(PlatformSpecificFile) = PlatformSpecificFCloseImplementation;
 
-int (*PlatformSpecificPutchar)(int) = putchar;
 void (*PlatformSpecificFlush)() = PlatformSpecificFlushImplementation;
 
 void* (*PlatformSpecificMalloc)(size_t size) = malloc;

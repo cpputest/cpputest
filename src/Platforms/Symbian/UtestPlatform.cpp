@@ -96,10 +96,6 @@ void PlatformSpecificFlush() {
     fflush(stdout);
 }
 
-int PlatformSpecificPutchar(int c) {
-    return putchar(c);
-}
-
 double PlatformSpecificFabs(double d) {
     return fabs(d);
 }

@@ -143,17 +143,11 @@ PlatformSpecificFile (*PlatformSpecificFOpen)(const char* filename, const char* 
 void (*PlatformSpecificFPuts)(const char* str, PlatformSpecificFile file) = DosFPuts;
 void (*PlatformSpecificFClose)(PlatformSpecificFile file) = DosFClose;
 
-static int DosPutchar(int c)
-{
-    return putchar(c);
-}
-
 static void DosFlush()
 {
   fflush(stdout);
 }
 
-extern int (*PlatformSpecificPutchar)(int c) = DosPutchar;
 extern void (*PlatformSpecificFlush)(void) = DosFlush;
 
 static void* DosMalloc(size_t size)

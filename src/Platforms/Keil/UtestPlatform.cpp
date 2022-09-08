@@ -160,7 +160,6 @@ extern "C"
     void (*PlatformSpecificFPuts)(const char*, PlatformSpecificFile) = PlatformSpecificFPutsImplementation;
     void (*PlatformSpecificFClose)(PlatformSpecificFile) = PlatformSpecificFCloseImplementation;
 
-    int (*PlatformSpecificPutchar)(int) = putchar;
     void (*PlatformSpecificFlush)() = PlatformSpecificFlushImplementation;
     void* (*PlatformSpecificMalloc)(size_t) = malloc;
     void* (*PlatformSpecificRealloc) (void*, size_t) = realloc;

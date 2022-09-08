@@ -57,7 +57,6 @@ PlatformSpecificFile (*PlatformSpecificFOpen)(const char* filename, const char* 
 void (*PlatformSpecificFPuts)(const char* str, PlatformSpecificFile file) = NULLPTR;
 void (*PlatformSpecificFClose)(PlatformSpecificFile file) = NULLPTR;
 
-int (*PlatformSpecificPutchar)(int c) = NULLPTR;
 void (*PlatformSpecificFlush)(void) = NULLPTR;
 
 int (*PlatformSpecificVSNprintf)(char *str, size_t size, const char* format, va_list va_args_list) = NULLPTR;

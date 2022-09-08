@@ -302,13 +302,12 @@ extern "C" {
     typedef PlatformSpecificFile (*FOpenFunc)(const char*, const char*);
     typedef void (*FPutsFunc)(const char*, PlatformSpecificFile);
     typedef void (*FCloseFunc)(PlatformSpecificFile);
-    typedef int (*PutcharFunc)(int);
 }
 
 struct FakeOutput
 {
     FakeOutput() : SaveFOpen(PlatformSpecificFOpen), SaveFPuts(PlatformSpecificFPuts),
-        SaveFClose(PlatformSpecificFClose), SavePutchar(PlatformSpecificPutchar)
+        SaveFClose(PlatformSpecificFClose)
     {
         installFakes();
         currentFake = this;
@@ -325,12 +324,10 @@ struct FakeOutput
         PlatformSpecificFOpen = (FOpenFunc)fopen_fake;
         PlatformSpecificFPuts = (FPutsFunc)fputs_fake;
         PlatformSpecificFClose = (FCloseFunc)fclose_fake;
-        PlatformSpecificPutchar = (PutcharFunc)putchar_fake;
     }
 
     void restoreOriginals()
     {
-        PlatformSpecificPutchar = SavePutchar;
         PlatformSpecificFOpen = SaveFOpen;
         PlatformSpecificFPuts = SaveFPuts;
         PlatformSpecificFClose = SaveFClose;
@@ -355,12 +352,6 @@ struct FakeOutput
     {
     }
 
-    static int putchar_fake(int c)
-    {
-        currentFake->console += StringFrom((char)c);
-        return c;
-    }
-
     SimpleString file;
     SimpleString console;
 
@@ -369,7 +360,6 @@ private:
     FOpenFunc SaveFOpen;
     FPutsFunc SaveFPuts;
     FCloseFunc SaveFClose;
-    PutcharFunc SavePutchar;
 };
 
 FakeOutput* FakeOutput::currentFake = NULLPTR;

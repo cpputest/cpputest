@@ -168,7 +168,6 @@ static void VisualCppFlush()
     fflush(stdout);
 }
 
-int (*PlatformSpecificPutchar)(int c) = putchar;
 void (*PlatformSpecificFlush)(void) = VisualCppFlush;
 
 static void* VisualCppMalloc(size_t size)

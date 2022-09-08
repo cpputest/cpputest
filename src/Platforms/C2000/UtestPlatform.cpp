@@ -150,29 +150,11 @@ PlatformSpecificFile (*PlatformSpecificFOpen)(const char* filename, const char* 
 void (*PlatformSpecificFPuts)(const char* str, PlatformSpecificFile file) = C2000FPuts;
 void (*PlatformSpecificFClose)(PlatformSpecificFile file) = C2000FClose;
 
-static int CL2000Putchar(int c)
-{
-#if USE_BUFFER_OUTPUT
-    if(idx < BUFFER_SIZE) {
-        buffer[idx] = (char) c;
-        idx++;
-        /* "buffer[idx]" instead of "c" eliminates "never used" warning */
- 		return (buffer[idx]);
-    }
-    else {
-        return EOF;
-    }
-#else
-    return putchar(c);
-#endif
-}
-
 static void CL2000Flush()
 {
   fflush(stdout);
 }
 
-extern int (*PlatformSpecificPutchar)(int c) = CL2000Putchar;
 extern void (*PlatformSpecificFlush)(void) = CL2000Flush;
 
 static void* C2000Malloc(size_t size)

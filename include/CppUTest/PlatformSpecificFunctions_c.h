@@ -68,7 +68,6 @@ extern PlatformSpecificFile (*PlatformSpecificFOpen)(const char* filename, const
 extern void (*PlatformSpecificFPuts)(const char* str, PlatformSpecificFile file);
 extern void (*PlatformSpecificFClose)(PlatformSpecificFile file);
 
-extern int (*PlatformSpecificPutchar)(int c);
 extern void (*PlatformSpecificFlush)(void);
 
 /* Random operations */
