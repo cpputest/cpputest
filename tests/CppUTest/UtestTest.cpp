@@ -30,6 +30,10 @@
 #include "CppUTest/TestTestingFixture.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
+#if CPPUTEST_USE_STD_C_LIB
+#include <math.h>
+#endif
+
 TEST_GROUP(UtestShell)
 {
     TestTestingFixture fixture;
@@ -56,8 +60,6 @@ static void exitTestMethod_()
     FAIL("Should not get here");
 }
 
-static volatile double zero = 0.0;
-
 TEST(UtestShell, compareDoubles)
 {
     CHECK(doubles_equal(1.0, 1.001, 0.01));
@@ -66,25 +68,23 @@ TEST(UtestShell, compareDoubles)
     CHECK(doubles_equal(a, a, 0.000000001));
 }
 
-#if CPPUTEST_HAS_NAN == 1
+#ifdef NAN
 TEST(UtestShell, compareDoublesNaN)
 {
-    double not_a_number = zero / zero;
-    CHECK(!doubles_equal(not_a_number, 1.001, 0.01));
-    CHECK(!doubles_equal(1.0, not_a_number, 0.01));
-    CHECK(!doubles_equal(1.0, 1.001, not_a_number));
+    CHECK(!doubles_equal(NAN, 1.001, 0.01));
+    CHECK(!doubles_equal(1.0, NAN, 0.01));
+    CHECK(!doubles_equal(1.0, 1.001, NAN));
 }
 #endif
 
-#if CPPUTEST_HAS_INF == 1
+#ifdef INFINITY
 TEST(UtestShell, compareDoublesInf)
 {
-    double infinity = 1 / zero;
-    CHECK(!doubles_equal(infinity, 1.0, 0.01));
-    CHECK(!doubles_equal(1.0, infinity, 0.01));
-    CHECK(doubles_equal(1.0, -1.0, infinity));
-    CHECK(doubles_equal(infinity, infinity, 0.01));
-    CHECK(doubles_equal(infinity, infinity, infinity));
+    CHECK(!doubles_equal(INFINITY, 1.0, 0.01));
+    CHECK(!doubles_equal(1.0, INFINITY, 0.01));
+    CHECK(doubles_equal(1.0, -1.0, INFINITY));
+    CHECK(doubles_equal(INFINITY, INFINITY, 0.01));
+    CHECK(doubles_equal(INFINITY, INFINITY, INFINITY));
 }
 #endif
 

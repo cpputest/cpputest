@@ -117,14 +117,6 @@ check_cxx_symbol_exists(waitpid "sys/wait.h" CPPUTEST_HAVE_WAITPID)
 check_cxx_symbol_exists(gettimeofday "sys/time.h" CPPUTEST_HAVE_GETTIMEOFDAY)
 check_cxx_symbol_exists(pthread_mutex_lock "pthread.h" CPPUTEST_HAVE_PTHREAD_MUTEX_LOCK)
 
-if(NOT DEFINED CPPUTEST_HAS_NAN)
-  check_cxx_symbol_exists(NAN "math.h" CPPUTEST_HAS_NAN)
-endif()
-
-if(NOT DEFINED CPPUTEST_HAS_INF)
-  check_cxx_symbol_exists(INFINITY "math.h" CPPUTEST_HAS_INF)
-endif()
-
 if (NOT IAR)
   check_cxx_symbol_exists(strdup "string.h" CPPUTEST_HAVE_STRDUP)
 endif(NOT IAR)

@@ -349,21 +349,4 @@ typedef struct cpputest_ulonglong cpputest_ulonglong;
  #pragma clang diagnostic pop
 #endif
 
-#ifndef CPPUTEST_HAS_INF
-#if defined(CPPUTEST_NO_INF)
-#define CPPUTEST_HAS_INF 0
-#else
-#define CPPUTEST_HAS_INF 1
-#endif
-#endif
-
-#ifndef CPPUTEST_HAS_NAN
-#if defined(CPPUTEST_NO_NAN)
-#define CPPUTEST_HAS_NAN 0
-#else
-#define CPPUTEST_HAS_NAN 1
-#endif
-#endif
-
-
 #endif
