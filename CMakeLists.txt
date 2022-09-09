@@ -69,6 +69,11 @@ cmake_dependent_option(CPPUTEST_LIBNAME_POSTFIX_BITSIZE "Add architecture bitsiz
 cmake_dependent_option(CPPUTEST_LIBNAME_POSTFIX_DEBUG "Add indication of debug compilation to the library name?"
   OFF "PROJECT_IS_TOP_LEVEL" OFF)
 
+include(CheckCXXSymbolExists)
+check_cxx_symbol_exists(fopen_s "stdio.h" CPPUTEST_HAVE_SECURE_STDLIB)
+cmake_dependent_option(CPPUTEST_USE_SECURE_STDLIB "Use MSVC safe functions"
+  ON "WIN32;CPPUTEST_HAVE_SECURE_STDLIB" OFF)
+
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME) # Don't change users' build type.
   # Multi-configuration generators don't have a single build type.
   get_property(
@@ -107,7 +112,6 @@ include(GNUInstallDirs)
 add_subdirectory(src/CppUTest)
 
 # Check for symbols before setting a lot of stuff
-include(CheckCXXSymbolExists)
 include(CheckTypeSize)
 include(CheckStructHasMember)
 set(CMAKE_REQUIRED_FLAGS ${CMAKE_CXX_FLAGS})

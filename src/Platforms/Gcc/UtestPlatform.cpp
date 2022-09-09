@@ -214,7 +214,7 @@ static const char* TimeStringImplementation()
 {
     time_t theTime = time(NULLPTR);
     static char dateTime[80];
-#if defined(_WIN32) && defined(MINGW_HAS_SECURE_API)
+#ifdef STDC_WANT_SECURE_LIB
     static struct tm lastlocaltime;
     localtime_s(&lastlocaltime, &theTime);
     struct tm *tmp = &lastlocaltime;
@@ -240,7 +240,7 @@ int (*PlatformSpecificVSNprintf)(char *str, size_t size, const char* format, va_
 
 static PlatformSpecificFile PlatformSpecificFOpenImplementation(const char* filename, const char* flag)
 {
-#if defined(_WIN32) && defined(MINGW_HAS_SECURE_API)
+#ifdef STDC_WANT_SECURE_LIB
   FILE* file;
    fopen_s(&file, filename, flag);
    return file;
