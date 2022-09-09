@@ -96,10 +96,6 @@ void PlatformSpecificFlush() {
     fflush(stdout);
 }
 
-int PlatformSpecificPutchar(int c) {
-    return putchar(c);
-}
-
 double PlatformSpecificFabs(double d) {
     return fabs(d);
 }
@@ -124,6 +120,8 @@ void* PlatformSpecificMemset(void* mem, int c, size_t size)
 {
     return memset(mem, c, size);
 }
+
+const PlatformSpecificFile PlatformSpecificStdOut = stdout;
 
 PlatformSpecificFile PlatformSpecificFOpen(const char* filename, const char* flag) {
     return fopen(filename, flag);

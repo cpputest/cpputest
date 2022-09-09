@@ -62,11 +62,12 @@ extern int (*PlatformSpecificAtExit)(void(*func)(void));
 /* IO operations */
 typedef void* PlatformSpecificFile;
 
+extern const PlatformSpecificFile PlatformSpecificStdOut;
+
 extern PlatformSpecificFile (*PlatformSpecificFOpen)(const char* filename, const char* flag);
 extern void (*PlatformSpecificFPuts)(const char* str, PlatformSpecificFile file);
 extern void (*PlatformSpecificFClose)(PlatformSpecificFile file);
 
-extern int (*PlatformSpecificPutchar)(int c);
 extern void (*PlatformSpecificFlush)(void);
 
 /* Random operations */

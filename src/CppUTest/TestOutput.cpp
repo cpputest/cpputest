@@ -274,10 +274,7 @@ void TestOutput::printVeryVerbose(const char* str)
 
 void ConsoleTestOutput::printBuffer(const char* s)
 {
-    while (*s) {
-        PlatformSpecificPutchar(*s);
-        s++;
-    }
+    PlatformSpecificFPuts(s, PlatformSpecificStdOut);
     flush();
 }
 
