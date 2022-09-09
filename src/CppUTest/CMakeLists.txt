@@ -70,6 +70,11 @@ target_include_directories(${CppUTestLibName}
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 
+target_compile_definitions(${CppUTestLibName}
+    PRIVATE
+        $<$<BOOL:${CPPUTEST_USE_SECURE_STDLIB}>:STDC_WANT_SECURE_LIB>
+)
+
 if (WIN32)
     target_link_libraries(${CppUTestLibName} winmm)
 endif (WIN32)
