@@ -35,7 +35,8 @@ extern "C" {
 #include "CppUTest/CppUTestConfig.h"
 #include "CppUTest/StandardCLibrary.h"
 
-typedef enum {
+typedef enum
+{
     MOCKVALUETYPE_BOOL,
     MOCKVALUETYPE_UNSIGNED_INTEGER,
     MOCKVALUETYPE_INTEGER,
@@ -55,7 +56,8 @@ typedef enum {
 typedef struct SMockValue_c
 {
     MockValueType_c type;
-    union {
+    union
+    {
         int boolValue;
         int intValue;
         unsigned int unsignedIntValue;
@@ -114,15 +116,15 @@ struct SMockActualCall_c
     cpputest_ulonglong (*unsignedLongLongIntReturnValue)(void);
     cpputest_ulonglong (*returnUnsignedLongLongIntValueOrDefault)(cpputest_ulonglong defaultValue);
     const char* (*stringReturnValue)(void);
-    const char* (*returnStringValueOrDefault)(const char * defaultValue);
+    const char* (*returnStringValueOrDefault)(const char* defaultValue);
     double (*doubleReturnValue)(void);
     double (*returnDoubleValueOrDefault)(double defaultValue);
     void* (*pointerReturnValue)(void);
-    void* (*returnPointerValueOrDefault)(void * defaultValue);
+    void* (*returnPointerValueOrDefault)(void* defaultValue);
     const void* (*constPointerReturnValue)(void);
-    const void* (*returnConstPointerValueOrDefault)(const void * defaultValue);
+    const void* (*returnConstPointerValueOrDefault)(const void* defaultValue);
     void (*(*functionPointerReturnValue)(void))(void);
-    void (*(*returnFunctionPointerValueOrDefault)(void(*defaultValue)(void)))(void);
+    void (*(*returnFunctionPointerValueOrDefault)(void (*defaultValue)(void)))(void);
 };
 
 typedef struct SMockExpectedCall_c MockExpectedCall_c;
@@ -191,26 +193,26 @@ struct SMockSupport_c
     cpputest_ulonglong (*unsignedLongLongIntReturnValue)(void);
     cpputest_ulonglong (*returnUnsignedLongLongIntValueOrDefault)(cpputest_ulonglong defaultValue);
     const char* (*stringReturnValue)(void);
-    const char* (*returnStringValueOrDefault)(const char * defaultValue);
+    const char* (*returnStringValueOrDefault)(const char* defaultValue);
     double (*doubleReturnValue)(void);
     double (*returnDoubleValueOrDefault)(double defaultValue);
     void* (*pointerReturnValue)(void);
-    void* (*returnPointerValueOrDefault)(void * defaultValue);
+    void* (*returnPointerValueOrDefault)(void* defaultValue);
     const void* (*constPointerReturnValue)(void);
-    const void* (*returnConstPointerValueOrDefault)(const void * defaultValue);
+    const void* (*returnConstPointerValueOrDefault)(const void* defaultValue);
     void (*(*functionPointerReturnValue)(void))(void);
-    void (*(*returnFunctionPointerValueOrDefault) (void(*defaultValue)(void)))(void);
+    void (*(*returnFunctionPointerValueOrDefault)(void (*defaultValue)(void)))(void);
 
-    void (*setBoolData) (const char* name, int value);
-    void (*setIntData) (const char* name, int value);
-    void (*setUnsignedIntData) (const char* name, unsigned int value);
-    void (*setStringData) (const char* name, const char* value);
-    void (*setDoubleData) (const char* name, double value);
-    void (*setPointerData) (const char* name, void* value);
-    void (*setConstPointerData) (const char* name, const void* value);
-    void (*setFunctionPointerData) (const char* name, void (*value)(void));
-    void (*setDataObject) (const char* name, const char* type, void* value);
-    void (*setDataConstObject) (const char* name, const char* type, const void* value);
+    void (*setBoolData)(const char* name, int value);
+    void (*setIntData)(const char* name, int value);
+    void (*setUnsignedIntData)(const char* name, unsigned int value);
+    void (*setStringData)(const char* name, const char* value);
+    void (*setDoubleData)(const char* name, double value);
+    void (*setPointerData)(const char* name, void* value);
+    void (*setConstPointerData)(const char* name, const void* value);
+    void (*setFunctionPointerData)(const char* name, void (*value)(void));
+    void (*setDataObject)(const char* name, const char* type, void* value);
+    void (*setDataConstObject)(const char* name, const char* type, const void* value);
     MockValue_c (*getData)(const char* name);
 
     void (*disable)(void);
@@ -223,8 +225,8 @@ struct SMockSupport_c
     void (*clear)(void);
     void (*crashOnFailure)(unsigned shouldCrash);
 
-    void (*installComparator) (const char* typeName, MockTypeEqualFunction_c isEqual, MockTypeValueToStringFunction_c valueToString);
-    void (*installCopier) (const char* typeName, MockTypeCopyFunction_c copier);
+    void (*installComparator)(const char* typeName, MockTypeEqualFunction_c isEqual, MockTypeValueToStringFunction_c valueToString);
+    void (*installCopier)(const char* typeName, MockTypeCopyFunction_c copier);
     void (*removeAllComparatorsAndCopiers)(void);
 };
 

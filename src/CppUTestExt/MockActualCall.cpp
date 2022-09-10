@@ -31,13 +31,9 @@
 #include "CppUTestExt/MockFailure.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
-MockActualCall::MockActualCall()
-{
-}
+MockActualCall::MockActualCall() {}
 
-MockActualCall::~MockActualCall()
-{
-}
+MockActualCall::~MockActualCall() {}
 
 void MockCheckedActualCall::setName(const SimpleString& name)
 {
@@ -49,9 +45,14 @@ SimpleString MockCheckedActualCall::getName() const
     return functionName_;
 }
 
-MockCheckedActualCall::MockCheckedActualCall(unsigned int callOrder, MockFailureReporter* reporter, const MockExpectedCallsList& allExpectations)
-    : callOrder_(callOrder), reporter_(reporter), state_(CALL_SUCCEED), expectationsChecked_(false), matchingExpectation_(NULLPTR),
-      allExpectations_(allExpectations), outputParameterExpectations_(NULLPTR)
+MockCheckedActualCall::MockCheckedActualCall(unsigned int callOrder, MockFailureReporter* reporter, const MockExpectedCallsList& allExpectations) :
+    callOrder_(callOrder),
+    reporter_(reporter),
+    state_(CALL_SUCCEED),
+    expectationsChecked_(false),
+    matchingExpectation_(NULLPTR),
+    allExpectations_(allExpectations),
+    outputParameterExpectations_(NULLPTR)
 {
     potentiallyMatchingExpectations_.addPotentiallyMatchingExpectations(allExpectations);
 }
@@ -81,22 +82,18 @@ void MockCheckedActualCall::failTest(const MockFailure& failure)
 
 void MockCheckedActualCall::copyOutputParameters(MockCheckedExpectedCall* expectedCall)
 {
-    for (MockOutputParametersListNode* p = outputParameterExpectations_; p; p = p->next_)
-    {
+    for (MockOutputParametersListNode* p = outputParameterExpectations_; p; p = p->next_) {
         MockNamedValue outputParameter = expectedCall->getOutputParameter(p->name_);
         MockNamedValueCopier* copier = outputParameter.getCopier();
-        if (copier)
-        {
+        if (copier) {
             copier->copy(p->ptr_, outputParameter.getConstObjectPointer());
         }
-        else if ((outputParameter.getType() == "const void*") && (p->type_ == "void*"))
-        {
+        else if ((outputParameter.getType() == "const void*") && (p->type_ == "void*")) {
             const void* data = outputParameter.getConstPointerValue();
             size_t size = outputParameter.getSize();
             PlatformSpecificMemCpy(p->ptr_, data, size);
         }
-        else if (outputParameter.getName() != "")
-        {
+        else if (outputParameter.getName() != "") {
             SimpleString type = expectedCall->getOutputParameter(p->name_).getType();
             MockNoWayToCopyCustomTypeFailure failure(getTest(), type);
             failTest(failure);
@@ -112,7 +109,8 @@ void MockCheckedActualCall::completeCallWhenMatchIsFound()
     if (matchingExpectation_) {
         copyOutputParameters(matchingExpectation_);
         callHasSucceeded();
-    } else {
+    }
+    else {
         MockCheckedExpectedCall* matchingExpectationWithIgnoredParameters = potentiallyMatchingExpectations_.getFirstMatchingExpectation();
         if (matchingExpectationWithIgnoredParameters) {
             copyOutputParameters(matchingExpectationWithIgnoredParameters);
@@ -127,8 +125,7 @@ void MockCheckedActualCall::callHasSucceeded()
 
 void MockCheckedActualCall::discardCurrentlyMatchingExpectations()
 {
-    if (matchingExpectation_)
-    {
+    if (matchingExpectation_) {
         matchingExpectation_->resetActualCallMatchingState();
         matchingExpectation_ = NULLPTR;
     }
@@ -159,8 +156,7 @@ MockActualCall& MockCheckedActualCall::withCallOrder(unsigned int)
 
 void MockCheckedActualCall::checkInputParameter(const MockNamedValue& actualParameter)
 {
-    if(hasFailed())
-    {
+    if (hasFailed()) {
         return;
     }
 
@@ -181,8 +177,7 @@ void MockCheckedActualCall::checkInputParameter(const MockNamedValue& actualPara
 
 void MockCheckedActualCall::checkOutputParameter(const MockNamedValue& outputParameter)
 {
-    if(hasFailed())
-    {
+    if (hasFailed()) {
         return;
     }
 
@@ -371,14 +366,14 @@ bool MockCheckedActualCall::hasFailed() const
 
 void MockCheckedActualCall::checkExpectations()
 {
-    if(expectationsChecked_) {
+    if (expectationsChecked_) {
         return;
     }
 
     expectationsChecked_ = true;
 
     if (state_ != CALL_IN_PROGRESS) {
-        if(state_ == CALL_SUCCEED) {
+        if (state_ == CALL_SUCCEED) {
             matchingExpectation_->callWasMade(callOrder_);
         }
         potentiallyMatchingExpectations_.resetActualCallMatchingState();
@@ -554,7 +549,7 @@ unsigned int MockCheckedActualCall::returnUnsignedIntValueOrDefault(unsigned int
     return returnUnsignedIntValue();
 }
 
-void * MockCheckedActualCall::returnPointerValueOrDefault(void * default_value)
+void* MockCheckedActualCall::returnPointerValueOrDefault(void* default_value)
 {
     if (!hasReturnValue()) {
         return default_value;
@@ -562,17 +557,17 @@ void * MockCheckedActualCall::returnPointerValueOrDefault(void * default_value)
     return returnPointerValue();
 }
 
-void * MockCheckedActualCall::returnPointerValue()
+void* MockCheckedActualCall::returnPointerValue()
 {
     return returnValue().getPointerValue();
 }
 
-const void * MockCheckedActualCall::returnConstPointerValue()
+const void* MockCheckedActualCall::returnConstPointerValue()
 {
     return returnValue().getConstPointerValue();
 }
 
-const void * MockCheckedActualCall::returnConstPointerValueOrDefault(const void * default_value)
+const void* MockCheckedActualCall::returnConstPointerValueOrDefault(const void* default_value)
 {
     if (!hasReturnValue()) {
         return default_value;
@@ -593,7 +588,7 @@ void (*MockCheckedActualCall::returnFunctionPointerValueOrDefault(void (*default
     return returnFunctionPointerValue();
 }
 
-const char * MockCheckedActualCall::returnStringValueOrDefault(const char * default_value)
+const char* MockCheckedActualCall::returnStringValueOrDefault(const char* default_value)
 {
     if (!hasReturnValue()) {
         return default_value;
@@ -601,19 +596,19 @@ const char * MockCheckedActualCall::returnStringValueOrDefault(const char * defa
     return returnStringValue();
 }
 
-const char * MockCheckedActualCall::returnStringValue()
+const char* MockCheckedActualCall::returnStringValue()
 {
     return returnValue().getStringValue();
 }
 
 bool MockCheckedActualCall::hasReturnValue()
 {
-    return ! returnValue().getName().isEmpty();
+    return !returnValue().getName().isEmpty();
 }
 
 MockActualCall& MockCheckedActualCall::onObject(const void* objectPtr)
 {
-    if(hasFailed()) {
+    if (hasFailed()) {
         return *this;
     }
 
@@ -645,7 +640,8 @@ void MockCheckedActualCall::addOutputParameter(const SimpleString& name, const S
         outputParameterExpectations_ = newNode;
     else {
         MockOutputParametersListNode* lastNode = outputParameterExpectations_;
-        while (lastNode->next_) lastNode = lastNode->next_;
+        while (lastNode->next_)
+            lastNode = lastNode->next_;
         lastNode->next_ = newNode;
     }
 }
@@ -662,14 +658,9 @@ void MockCheckedActualCall::cleanUpOutputParameterList()
     }
 }
 
+MockActualCallTrace::MockActualCallTrace() {}
 
-MockActualCallTrace::MockActualCallTrace()
-{
-}
-
-MockActualCallTrace::~MockActualCallTrace()
-{
-}
+MockActualCallTrace::~MockActualCallTrace() {}
 
 MockActualCall& MockActualCallTrace::withName(const SimpleString& name)
 {
@@ -936,12 +927,12 @@ unsigned int MockActualCallTrace::returnUnsignedIntValue()
     return 0;
 }
 
-void * MockActualCallTrace::returnPointerValue()
+void* MockActualCallTrace::returnPointerValue()
 {
     return NULLPTR;
 }
 
-const void * MockActualCallTrace::returnConstPointerValue()
+const void* MockActualCallTrace::returnConstPointerValue()
 {
     return NULLPTR;
 }
@@ -951,12 +942,12 @@ void (*MockActualCallTrace::returnFunctionPointerValue())()
     return NULLPTR;
 }
 
-const void * MockActualCallTrace::returnConstPointerValueOrDefault(const void *)
+const void* MockActualCallTrace::returnConstPointerValueOrDefault(const void*)
 {
     return returnConstPointerValue();
 }
 
-void * MockActualCallTrace::returnPointerValueOrDefault(void *)
+void* MockActualCallTrace::returnPointerValueOrDefault(void*)
 {
     return returnPointerValue();
 }
@@ -966,12 +957,12 @@ void (*MockActualCallTrace::returnFunctionPointerValueOrDefault(void (*)()))()
     return returnFunctionPointerValue();
 }
 
-const char * MockActualCallTrace::returnStringValue()
+const char* MockActualCallTrace::returnStringValue()
 {
     return "";
 }
 
-const char * MockActualCallTrace::returnStringValueOrDefault(const char *)
+const char* MockActualCallTrace::returnStringValueOrDefault(const char*)
 {
     return returnStringValue();
 }
@@ -1023,4 +1014,3 @@ MockIgnoredActualCall& MockIgnoredActualCall::instance()
     static MockIgnoredActualCall call;
     return call;
 }
-

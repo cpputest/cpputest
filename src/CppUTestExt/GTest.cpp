@@ -6,4 +6,3 @@ void CppuTestGTestIgnoreLeaksInTest()
 {
     IGNORE_ALL_LEAKS_IN_TEST();
 }
-

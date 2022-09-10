@@ -31,14 +31,9 @@
 
 OrderedTestShell* OrderedTestShell::_orderedTestsHead = NULLPTR;
 
-OrderedTestShell::OrderedTestShell() :
-    _nextOrderedTest(NULLPTR), _level(0)
-{
-}
+OrderedTestShell::OrderedTestShell() : _nextOrderedTest(NULLPTR), _level(0) {}
 
-OrderedTestShell::~OrderedTestShell()
-{
-}
+OrderedTestShell::~OrderedTestShell() {}
 
 int OrderedTestShell::getLevel()
 {
@@ -74,7 +69,7 @@ OrderedTestShell* OrderedTestShell::addOrderedTest(OrderedTestShell* test)
 
 void OrderedTestShell::addOrderedTestToHead(OrderedTestShell* test)
 {
-    TestRegistry *reg = TestRegistry::getCurrentRegistry();
+    TestRegistry* reg = TestRegistry::getCurrentRegistry();
     UtestShell* head = getOrderedTestHead();
 
     if (NULLPTR == reg->getFirstTest() || head == reg->getFirstTest()) {
@@ -94,9 +89,7 @@ OrderedTestShell* OrderedTestShell::getNextOrderedTest()
     return _nextOrderedTest;
 }
 
-OrderedTestInstaller::OrderedTestInstaller(OrderedTestShell& test,
-        const char* groupName, const char* testName, const char* fileName,
-        size_t lineNumber, int level)
+OrderedTestInstaller::OrderedTestInstaller(OrderedTestShell& test, const char* groupName, const char* testName, const char* fileName, size_t lineNumber, int level)
 {
     test.setTestName(testName);
     test.setGroupName(groupName);
@@ -104,19 +97,21 @@ OrderedTestInstaller::OrderedTestInstaller(OrderedTestShell& test,
     test.setLineNumber(lineNumber);
     test.setLevel(level);
 
-    if (OrderedTestShell::firstOrderedTest()) OrderedTestShell::addOrderedTestToHead(&test);
-    else addOrderedTestInOrder(&test);
+    if (OrderedTestShell::firstOrderedTest())
+        OrderedTestShell::addOrderedTestToHead(&test);
+    else
+        addOrderedTestInOrder(&test);
 }
 
 void OrderedTestInstaller::addOrderedTestInOrder(OrderedTestShell* test)
 {
     if (test->getLevel() < OrderedTestShell::getOrderedTestHead()->getLevel())
         OrderedTestShell::addOrderedTestToHead(test);
-    else addOrderedTestInOrderNotAtHeadPosition(test);
+    else
+        addOrderedTestInOrderNotAtHeadPosition(test);
 }
 
-void OrderedTestInstaller::addOrderedTestInOrderNotAtHeadPosition(
-        OrderedTestShell* test)
+void OrderedTestInstaller::addOrderedTestInOrderNotAtHeadPosition(OrderedTestShell* test)
 {
     OrderedTestShell* current = OrderedTestShell::getOrderedTestHead();
     while (current->getNextOrderedTest()) {
@@ -132,6 +127,4 @@ void OrderedTestInstaller::addOrderedTestInOrderNotAtHeadPosition(
     current->addOrderedTest(test);
 }
 
-OrderedTestInstaller::~OrderedTestInstaller()
-{
-}
+OrderedTestInstaller::~OrderedTestInstaller() {}
