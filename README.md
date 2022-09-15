@@ -62,6 +62,17 @@ TEST(FirstTestGroup, FirstTest)
 }
 ```
 
+You can build and install cpputest using [vcpkg](https://github.com/Microsoft/vcpkg/) dependency manager:
+
+* git clone https://github.com/Microsoft/vcpkg.git
+* cd vcpkg
+* ./bootstrap-vcpkg.sh  # ./bootstrap-vcpkg.bat for Windows
+* ./vcpkg integrate install
+* ./vcpkg install cpputest
+
+The cpputest port in vcpkg is kept up to date by Microsoft team members and community contributors. If the version is out of date, please [create an issue or pull request](https://github.com/Microsoft/vcpkg) on the vcpkg repository.
+
+
 ## Command line switches
 
 * -h help, shows the latest help, including the parameters we've implemented after updating this README page.
