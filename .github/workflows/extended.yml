@@ -18,8 +18,11 @@ jobs:
           make check
           ./CppUTestTests -ojunit
           ./CppUTestExtTests -ojunit
-          cp ./scripts/generate_junit_report_ant.xml .
-          ant -f generate_junit_report_ant.xml
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          junit_files: "**/cpputest_*.xml"
 
   cmake_coverage:
     runs-on: ubuntu-latest
