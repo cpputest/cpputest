@@ -18,11 +18,12 @@ jobs:
           make check
           ./CppUTestTests -ojunit
           ./CppUTestExtTests -ojunit
-      - name: Publish Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v2
+      - name: Upload Test Results
         if: always()
+        uses: actions/upload-artifact@v2
         with:
-          junit_files: "**/cpputest_*.xml"
+          name: Unit Test Results
+          path: "**/cpputest_*.xml"
 
   cmake_coverage:
     runs-on: ubuntu-latest
@@ -152,3 +153,13 @@ jobs:
       - name: Test
         # This won't do anything, because there is no way to run the tests.
         run: ctest --test-dir cpputest_build
+
+  event_file:
+    name: "Event File"
+    runs-on: ubuntu-latest
+    steps:
+    - name: Upload
+      uses: actions/upload-artifact@v2
+      with:
+        name: Event File
+        path: ${{ github.event_path }}
