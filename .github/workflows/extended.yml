@@ -139,13 +139,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@main
       - uses: carlosperate/arm-none-eabi-gcc-action@v1
+      - name: Install QEMU
+        run: sudo apt-get install -y --no-install-recommends qemu-user-static
       - name: Configure
         run: >
           cmake
           -B cpputest_build
           -D CMAKE_TOOLCHAIN_FILE=cmake/arm-none-eabi-gcc.toolchain.cmake
+          -D CMAKE_CROSSCOMPILING_EMULATOR="qemu-arm-static;-cpu;cortex-m4"
       - name: Build
         run: cmake --build cpputest_build
       - name: Test
-        # This won't do anything, because there is no way to run the tests.
         run: ctest --test-dir cpputest_build
