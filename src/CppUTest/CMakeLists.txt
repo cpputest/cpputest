@@ -47,10 +47,6 @@ add_library(${CppUTestLibName}
         ${PROJECT_SOURCE_DIR}/include/CppUTest/SimpleMutex.h
 )
 
-if(CPPUTEST_LIBNAME_POSTFIX_DEBUG)
-    set_target_properties(${CppUTestLibName} PROPERTIES DEBUG_POSTFIX "d")
-endif()
-
 #[[Set CPP_PLATFORM in a parent CMakeLists.txt if reusing one of the provided platforms, else supply the missing definitions]]
 if (CPP_PLATFORM)
     target_sources(${CppUTestLibName}

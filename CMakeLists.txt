@@ -70,8 +70,6 @@ option(CPPUTEST_VERBOSE_CONFIG "Print configuration to stdout during generation"
 
 cmake_dependent_option(CPPUTEST_LIBNAME_POSTFIX_BITSIZE "Add architecture bitsize (32/64) to the library name?"
   OFF "PROJECT_IS_TOP_LEVEL" OFF)
-cmake_dependent_option(CPPUTEST_LIBNAME_POSTFIX_DEBUG "Add indication of debug compilation to the library name?"
-  OFF "PROJECT_IS_TOP_LEVEL" OFF)
 
 include(CheckCXXSymbolExists)
 check_cxx_symbol_exists(fopen_s "stdio.h" CPPUTEST_HAVE_SECURE_STDLIB)
@@ -271,7 +269,6 @@ Features configured in CppUTest:
 
 Library name options:
     Add architecture bitsize (32/64)    ${CPPUTEST_LIBNAME_POSTFIX_BITSIZE}
-    Add debug compilation indicator     ${CPPUTEST_LIBNAME_POSTFIX_DEBUG}
 
 -------------------------------------------------------
 ")
