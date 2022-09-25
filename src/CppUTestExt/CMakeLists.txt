@@ -39,10 +39,6 @@ add_library(${CppUTestExtLibName} STATIC
 
 target_link_libraries(${CppUTestExtLibName} PUBLIC ${CppUTestLibName})
 
-if(CPPUTEST_LIBNAME_POSTFIX_DEBUG)
-    set_target_properties(${CppUTestExtLibName} PROPERTIES DEBUG_POSTFIX "d")
-endif()
-
 #[[Arrange for the include directory to be added to the include paths of any CMake target depending on CppUTestExt.]]
 target_include_directories(${CppUTestExtLibName}
     PUBLIC
