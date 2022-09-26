@@ -153,7 +153,7 @@ target_include_directories(${CppUTestLibName}
 )
 target_compile_definitions(${CppUTestLibName}
   PUBLIC
-    $<BUILD_INTERFACE:HAVE_CONFIG_H>
+    HAVE_CONFIG_H
 )
 
 if (CPPUTEST_EXTENSIONS)
@@ -194,7 +194,7 @@ if(PROJECT_IS_TOP_LEVEL)
 
   install(
     FILES "${CMAKE_CURRENT_BINARY_DIR}/generated/CppUTestGeneratedConfig.h"
-    DESTINATION "${INCLUDE_INSTALL_DIR}/CppUTest"
+    DESTINATION "${INCLUDE_INSTALL_DIR}/generated"
   )
 
   # Try to include helper module
