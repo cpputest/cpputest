@@ -4,12 +4,12 @@
 
 /* This file is for simulating overloads of malloc */
 
-char* mallocAllocation()
+char* mallocAllocation(void)
 {
     return (char*) malloc(10UL);
 }
 
-char* strdupAllocation()
+char* strdupAllocation(void)
 {
 #ifdef CPPUTEST_USE_STRDUP_MACROS
     return strdup("0123456789");
@@ -19,7 +19,7 @@ char* strdupAllocation()
 }
 
 
-char* strndupAllocation()
+char* strndupAllocation(void)
 {
 #ifdef CPPUTEST_USE_STRDUP_MACROS
     return strndup("0123456789", 10);

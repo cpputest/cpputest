@@ -28,7 +28,7 @@
 #include <stdio.h>
 #include "hello.h"
 
-void printHelloWorld()
+void printHelloWorld(void)
 {
     PrintFormated("Hello World!\n");
 }
