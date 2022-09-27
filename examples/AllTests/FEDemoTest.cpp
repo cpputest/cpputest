@@ -44,8 +44,6 @@ extern "C" {
 
     #include <limits>
 
-static volatile float f;
-
 TEST_GROUP(FE_Demo)
 {
     void setup() _override
@@ -56,30 +54,30 @@ TEST_GROUP(FE_Demo)
 
 IGNORE_TEST(FE_Demo, should_fail_when__FE_DIVBYZERO__is_set)
 {
-    f = 1.0f;
+    float f = 1.0f;
     CHECK((f /= 0.0f) >= std::numeric_limits<float>::infinity());
 }
 
 IGNORE_TEST(FE_Demo, should_fail_when__FE_UNDERFLOW__is_set)
 {
-    f = 0.01f;
+    volatile float f = 0.01f;
     while (f > 0.0f)
-        f *= f;
+        f = f * f;
     CHECK(f == 0.0f);
 }
 
 IGNORE_TEST(FE_Demo, should_fail_when__FE_OVERFLOW__is_set)
 {
-    f = 1000.0f;
+    volatile float f = 1000.0f;
     while (f < std::numeric_limits<float>::infinity())
-        f *= f;
+        f = f * f;
     CHECK(f >= std::numeric_limits<float>::infinity());
 }
 
 IGNORE_TEST(FE_Demo, should_fail_when__FE_INEXACT____is_set)
 {
     IEEE754ExceptionsPlugin::enableInexact();
-    f = 10.0f;
+    float f = 10.0f;
     DOUBLES_EQUAL((double)(f / 3.0f), (double)3.333f, (double)0.001f);
 }
 
