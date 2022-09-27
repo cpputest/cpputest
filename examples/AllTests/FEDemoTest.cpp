@@ -68,9 +68,9 @@ IGNORE_TEST(FE_Demo, should_fail_when__FE_UNDERFLOW__is_set)
 
 IGNORE_TEST(FE_Demo, should_fail_when__FE_OVERFLOW__is_set)
 {
-    float f = 1000.0f;
+    volatile float f = 1000.0f;
     while (f < std::numeric_limits<float>::infinity())
-        f *= f;
+        f = f * f;
     CHECK(f >= std::numeric_limits<float>::infinity());
 }
 
