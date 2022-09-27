@@ -64,12 +64,13 @@ else (MSVC)
 
     if (DEFINED CMAKE_CXX_STANDARD AND NOT CMAKE_CXX_STANDARD EQUAL 98)
         set(WARNING_CXX_FLAGS
-           ${WARNING_CXX_FLAGS}
-           Wno-c++98-compat
-           Wno-c++98-compat-pedantic
-           Wno-c++14-compat
-           Wno-inconsistent-missing-destructor-override
-           )
+            ${WARNING_CXX_FLAGS}
+            Wno-c++98-compat
+            Wno-c++98-compat-pedantic
+            Wno-c++14-compat
+            Wno-inconsistent-missing-destructor-override
+            Wsuggest-override
+        )
     endif ()
 
     check_and_append_c_warning_flags(${WARNING_C_FLAGS})
