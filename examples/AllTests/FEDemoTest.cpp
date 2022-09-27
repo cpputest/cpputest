@@ -60,9 +60,9 @@ IGNORE_TEST(FE_Demo, should_fail_when__FE_DIVBYZERO__is_set)
 
 IGNORE_TEST(FE_Demo, should_fail_when__FE_UNDERFLOW__is_set)
 {
-    float f = 0.01f;
+    volatile float f = 0.01f;
     while (f > 0.0f)
-        f *= f;
+        f = f * f;
     CHECK(f == 0.0f);
 }
 
