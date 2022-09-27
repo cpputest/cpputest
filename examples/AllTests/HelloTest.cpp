@@ -43,12 +43,12 @@ TEST_GROUP(HelloWorld)
         va_end(arguments);
         return 1;
     }
-    void setup()
+    void setup() _override
     {
         buffer = new SimpleString();
         UT_PTR_SET(PrintFormated, &output_method);
     }
-    void teardown()
+    void teardown() _override
     {
         delete buffer;
     }
