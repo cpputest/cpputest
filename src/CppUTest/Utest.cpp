@@ -486,7 +486,7 @@ void UtestShell::assertUnsignedLongsEqual(unsigned long expected, unsigned long 
 void UtestShell::assertLongLongsEqual(cpputest_longlong expected, cpputest_longlong actual, const char* text, const char* fileName, size_t lineNumber, const TestTerminator& testTerminator)
 {
     getTestResult()->countCheck();
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
     if (expected != actual)
         failWith(LongLongsEqualFailure(this, fileName, lineNumber, expected, actual, text), testTerminator);
 #else
@@ -499,7 +499,7 @@ void UtestShell::assertLongLongsEqual(cpputest_longlong expected, cpputest_longl
 void UtestShell::assertUnsignedLongLongsEqual(cpputest_ulonglong expected, cpputest_ulonglong actual, const char* text, const char* fileName, size_t lineNumber, const TestTerminator& testTerminator)
 {
     getTestResult()->countCheck();
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
     if (expected != actual)
         failWith(UnsignedLongLongsEqualFailure(this, fileName, lineNumber, expected, actual, text), testTerminator);
 #else

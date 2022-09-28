@@ -251,7 +251,7 @@ TEST(TestHarness_c, checkUnsignedLongIntText)
     CHECK(!hasDestructorOfTheDestructorCheckedBeenCalled);
 }
 
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
 
 static void failLongLongIntMethod_()
 {

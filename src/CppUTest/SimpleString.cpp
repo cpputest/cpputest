@@ -781,7 +781,7 @@ SimpleString StringFrom(const std::nullptr_t value)
 }
 #endif
 
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
 
 SimpleString StringFrom(cpputest_longlong value)
 {

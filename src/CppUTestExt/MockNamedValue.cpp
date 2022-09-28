@@ -82,7 +82,7 @@ void MockNamedValue::setValue(unsigned long int value)
     value_.unsignedLongIntValue_ = value;
 }
 
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
 
 void MockNamedValue::setValue(cpputest_longlong value)
 {
@@ -246,7 +246,7 @@ unsigned long int MockNamedValue::getUnsignedLongIntValue() const
     }
 }
 
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
 
 cpputest_longlong MockNamedValue::getLongLongIntValue() const
 {
@@ -393,7 +393,7 @@ bool MockNamedValue::equals(const MockNamedValue& p) const
         return (value_.longIntValue_ >= 0) && ((unsigned long)value_.longIntValue_ == p.value_.unsignedLongIntValue_);
     else if((type_ == "unsigned long int") && (p.type_ == "long int"))
         return (p.value_.longIntValue_ >= 0) && (value_.unsignedLongIntValue_ == (unsigned long) p.value_.longIntValue_);
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
     else if ((type_ == "long long int") && (p.type_ == "int"))
         return value_.longLongIntValue_ == p.value_.intValue_;
     else if ((type_ == "int") && (p.type_ == "long long int"))
@@ -444,7 +444,7 @@ bool MockNamedValue::equals(const MockNamedValue& p) const
         return value_.longIntValue_ == p.value_.longIntValue_;
     else if (type_ == "unsigned long int")
         return value_.unsignedLongIntValue_ == p.value_.unsignedLongIntValue_;
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
     else if (type_ == "long long int")
         return value_.longLongIntValue_ == p.value_.longLongIntValue_;
     else if (type_ == "unsigned long long int")
@@ -496,7 +496,7 @@ SimpleString MockNamedValue::toString() const
         return StringFrom(value_.longIntValue_) + " " + BracketsFormattedHexStringFrom(value_.longIntValue_);
     else if (type_ == "unsigned long int")
         return StringFrom(value_.unsignedLongIntValue_) + " " + BracketsFormattedHexStringFrom(value_.unsignedLongIntValue_);
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
     else if (type_ == "long long int")
         return StringFrom(value_.longLongIntValue_) + " " + BracketsFormattedHexStringFrom(value_.longLongIntValue_);
     else if (type_ == "unsigned long long int")

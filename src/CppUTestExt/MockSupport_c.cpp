@@ -408,7 +408,7 @@ MockExpectedCall_c* withUnsignedLongIntParameters_c(const char* name, unsigned l
     return &gExpectedCall;
 }
 
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
 
 MockExpectedCall_c* withLongLongIntParameters_c(const char* name, cpputest_longlong value)
 {
@@ -540,7 +540,7 @@ MockExpectedCall_c* andReturnUnsignedLongIntValue_c(unsigned long int value)
     return &gExpectedCall;
 }
 
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
 
 MockExpectedCall_c* andReturnLongLongIntValue_c(cpputest_longlong value)
 {
@@ -623,7 +623,7 @@ static MockValue_c getMockValueCFromNamedValue(const MockNamedValue& namedValue)
         returnValue.type = MOCKVALUETYPE_UNSIGNED_LONG_INTEGER;
         returnValue.value.unsignedLongIntValue = namedValue.getUnsignedLongIntValue();
     }
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
     else if (SimpleString::StrCmp(namedValue.getType().asCharString(), "long long int") == 0) {
         returnValue.type = MOCKVALUETYPE_LONG_LONG_INTEGER;
         returnValue.value.longLongIntValue = namedValue.getLongLongIntValue();
@@ -722,7 +722,7 @@ MockActualCall_c* withActualUnsignedLongIntParameters_c(const char* name, unsign
     return &gActualCall;
 }
 
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
 
 MockActualCall_c* withActualLongLongIntParameters_c(const char* name, cpputest_longlong value)
 {
@@ -876,7 +876,7 @@ unsigned long int returnUnsignedLongIntValueOrDefault_c(unsigned long int defaul
     return unsignedLongIntReturnValue_c();
 }
 
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
 
 cpputest_longlong longLongIntReturnValue_c()
 {

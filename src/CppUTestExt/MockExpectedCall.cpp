@@ -125,7 +125,7 @@ MockExpectedCall& MockCheckedExpectedCall::withUnsignedLongIntParameter(const Si
     return *this;
 }
 
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
 
 MockExpectedCall& MockCheckedExpectedCall::withLongLongIntParameter(const SimpleString& name, cpputest_longlong value)
 {
@@ -514,7 +514,7 @@ MockExpectedCall& MockCheckedExpectedCall::andReturnValue(unsigned long int valu
     return *this;
 }
 
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
 
 MockExpectedCall& MockCheckedExpectedCall::andReturnValue(cpputest_longlong value)
 {

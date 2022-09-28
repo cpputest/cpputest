@@ -546,7 +546,7 @@ unsigned long int MockSupport::unsignedLongIntReturnValue()
     return returnValue().getUnsignedLongIntValue();
 }
 
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
 
 cpputest_longlong MockSupport::longLongIntReturnValue()
 {
