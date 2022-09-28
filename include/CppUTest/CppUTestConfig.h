@@ -274,10 +274,11 @@
  * LLONG_MAX is set in limits.h. This is a crude attempt to detect long long support when no configure is used
  *
  */
-
-#if !defined(CPPUTEST_LONG_LONG_DISABLED) && !defined(CPPUTEST_USE_LONG_LONG)
-#if defined(CPPUTEST_HAVE_LONG_LONG_INT) || defined(LLONG_MAX)
+#ifndef CPPUTEST_USE_LONG_LONG
+#if !defined(CPPUTEST_LONG_LONG_DISABLED) && (defined(CPPUTEST_HAVE_LONG_LONG_INT) || defined(LLONG_MAX))
 #define CPPUTEST_USE_LONG_LONG 1
+#else
+#define CPPUTEST_USE_LONG_LONG 0
 #endif
 #endif
 
