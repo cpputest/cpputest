@@ -909,25 +909,29 @@ cpputest_ulonglong returnUnsignedLongLongIntValueOrDefault_c(cpputest_ulonglong 
 cpputest_longlong longLongIntReturnValue_c()
 {
     FAIL("Long Long type is not supported");
-    return cpputest_longlong(0);
+    cpputest_longlong ret;
+    return ret;
 }
 
 cpputest_longlong returnLongLongIntValueOrDefault_c(cpputest_longlong)
 {
     FAIL("Long Long type is not supported");
-    return cpputest_longlong(0);
+    cpputest_longlong ret;
+    return ret;
 }
 
 cpputest_ulonglong unsignedLongLongIntReturnValue_c()
 {
     FAIL("Unsigned Long Long type is not supported");
-    return cpputest_ulonglong(0);
+    cpputest_ulonglong ret;
+    return ret;
 }
 
 cpputest_ulonglong returnUnsignedLongLongIntValueOrDefault_c(cpputest_ulonglong)
 {
     FAIL("Unsigned Long Long type is not supported");
-    return cpputest_ulonglong(0);
+    cpputest_ulonglong ret;
+    return ret;
 }
 
 #endif

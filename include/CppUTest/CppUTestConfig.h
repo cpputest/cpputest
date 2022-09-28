@@ -296,27 +296,22 @@ typedef unsigned long long cpputest_ulonglong;
 #define CPPUTEST_SIZE_OF_FAKE_LONG_LONG_TYPE 8
 #endif
 
-struct cpputest_longlong
-{
 #if defined(__cplusplus)
-  cpputest_longlong() {}
-  cpputest_longlong(int) {}
+extern "C" {
 #endif
-  char dummy[CPPUTEST_SIZE_OF_FAKE_LONG_LONG_TYPE];
-};
 
-struct cpputest_ulonglong
+typedef struct
 {
-#if defined(__cplusplus)
-  cpputest_ulonglong() {}
-  cpputest_ulonglong(int) {}
-#endif
   char dummy[CPPUTEST_SIZE_OF_FAKE_LONG_LONG_TYPE];
-};
+} cpputest_longlong;
 
-#if !defined(__cplusplus)
-typedef struct cpputest_longlong cpputest_longlong;
-typedef struct cpputest_ulonglong cpputest_ulonglong;
+typedef struct
+{
+  char dummy[CPPUTEST_SIZE_OF_FAKE_LONG_LONG_TYPE];
+} cpputest_ulonglong;
+
+#if defined(__cplusplus)
+} /* extern "C" */
 #endif
 
 #endif

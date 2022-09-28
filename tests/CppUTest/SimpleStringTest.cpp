@@ -1263,13 +1263,13 @@ TEST(SimpleString, BracketsFormattedHexStringFromForULongLong)
 #else
 TEST(SimpleString, BracketsFormattedHexStringFromForLongLong)
 {
-	cpputest_longlong value = 1;
+	cpputest_longlong value;
 
 	STRCMP_EQUAL("", BracketsFormattedHexStringFrom(value).asCharString());
 }
 TEST(SimpleString, BracketsFormattedHexStringFromForULongLong)
 {
-	cpputest_ulonglong value = 1;
+	cpputest_ulonglong value;
 
 	STRCMP_EQUAL("", BracketsFormattedHexStringFrom(value).asCharString());
 }
