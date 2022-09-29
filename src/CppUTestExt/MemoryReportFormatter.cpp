@@ -29,9 +29,13 @@
 #include "CppUTestExt/MemoryReportAllocator.h"
 #include "CppUTestExt/MemoryReportFormatter.h"
 
-NormalMemoryReportFormatter::NormalMemoryReportFormatter() {}
+NormalMemoryReportFormatter::NormalMemoryReportFormatter()
+{
+}
 
-NormalMemoryReportFormatter::~NormalMemoryReportFormatter() {}
+NormalMemoryReportFormatter::~NormalMemoryReportFormatter()
+{
+}
 
 void NormalMemoryReportFormatter::report_test_start(TestResult* result, UtestShell& test)
 {
@@ -45,14 +49,12 @@ void NormalMemoryReportFormatter::report_test_end(TestResult* result, UtestShell
 
 void NormalMemoryReportFormatter::report_alloc_memory(TestResult* result, TestMemoryAllocator* allocator, size_t size, char* memory, const char* file, size_t line)
 {
-    result->print(
-        StringFromFormat("\tAllocation using %s of size: %lu pointer: %p at %s:%d\n", allocator->alloc_name(), (unsigned long)size, (void*)memory, file, (int)line).asCharString()
-    );
+    result->print(StringFromFormat("\tAllocation using %s of size: %lu pointer: %p at %s:%d\n", allocator->alloc_name(), (unsigned long) size, (void*) memory, file, (int) line).asCharString());
 }
 
 void NormalMemoryReportFormatter::report_free_memory(TestResult* result, TestMemoryAllocator* allocator, char* memory, const char* file, size_t line)
 {
-    result->print(StringFromFormat("\tDeallocation using %s of pointer: %p at %s:%d\n", allocator->free_name(), (void*)memory, file, (int)line).asCharString());
+    result->print(StringFromFormat("\tDeallocation using %s of pointer: %p at %s:%d\n", allocator->free_name(),  (void*) memory, file, (int) line).asCharString());
 }
 
 void NormalMemoryReportFormatter::report_testgroup_start(TestResult* result, UtestShell& test)
@@ -60,7 +62,7 @@ void NormalMemoryReportFormatter::report_testgroup_start(TestResult* result, Ute
     const size_t line_size = 80;
 
     SimpleString groupName = StringFromFormat("TEST GROUP(%s)", test.getGroup().asCharString());
-    size_t beginPos = (line_size / 2) - (groupName.size() / 2);
+    size_t beginPos = (line_size/2) - (groupName.size()/2);
 
     SimpleString line("-", beginPos);
     line += groupName;

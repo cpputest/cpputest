@@ -30,7 +30,7 @@
 
 #include "CppUTest/TestPlugin.h"
 
-class IEEE754ExceptionsPlugin : public TestPlugin
+class IEEE754ExceptionsPlugin: public TestPlugin
 {
 public:
     IEEE754ExceptionsPlugin(const SimpleString& name = "IEEE754ExceptionsPlugin");

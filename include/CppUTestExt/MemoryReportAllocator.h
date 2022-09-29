@@ -38,7 +38,6 @@ protected:
     TestResult* result_;
     TestMemoryAllocator* realAllocator_;
     MemoryReportFormatter* formatter_;
-
 public:
     MemoryReportAllocator();
     virtual ~MemoryReportAllocator() _destructor_override;

@@ -25,6 +25,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+
 #ifndef D_MockFailure_h
 #define D_MockFailure_h
 
@@ -39,18 +40,14 @@ class MockFailureReporter
 {
 protected:
     bool crashOnFailure_;
-
 public:
-    MockFailureReporter() : crashOnFailure_(false) {}
+    MockFailureReporter() : crashOnFailure_(false){}
     virtual ~MockFailureReporter() {}
 
     virtual void failTest(const MockFailure& failure);
     virtual UtestShell* getTestToFail();
 
-    virtual void crashOnFailure(bool shouldCrash)
-    {
-        crashOnFailure_ = shouldCrash;
-    }
+    virtual void crashOnFailure(bool shouldCrash) { crashOnFailure_ = shouldCrash; }
 };
 
 class MockFailure : public TestFailure
@@ -58,7 +55,6 @@ class MockFailure : public TestFailure
 public:
     MockFailure(UtestShell* test);
     virtual ~MockFailure() _destructor_override {}
-
 protected:
     void addExpectationsAndCallHistory(const MockExpectedCallsList& expectations);
     void addExpectationsAndCallHistoryRelatedTo(const SimpleString& function, const MockExpectedCallsList& expectations);
@@ -97,9 +93,8 @@ public:
 class MockExpectedParameterDidntHappenFailure : public MockFailure
 {
 public:
-    MockExpectedParameterDidntHappenFailure(
-        UtestShell* test, const SimpleString& functionName, const MockExpectedCallsList& allExpectations, const MockExpectedCallsList& matchingExpectations
-    );
+    MockExpectedParameterDidntHappenFailure(UtestShell* test, const SimpleString& functionName, const MockExpectedCallsList& allExpectations, 
+                                            const MockExpectedCallsList& matchingExpectations);
 };
 
 class MockNoWayToCompareCustomTypeFailure : public MockFailure

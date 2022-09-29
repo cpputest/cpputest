@@ -51,13 +51,14 @@ public:
     virtual void report_free_memory(TestResult* result, TestMemoryAllocator* allocator, char* memory, const char* file, size_t line) _override;
 
 private:
+
     void addNodeToList(const char* variableName, void* memory, CodeReportingAllocationNode* next);
     CodeReportingAllocationNode* findNode(void* memory);
     bool variableExists(const SimpleString& variableName);
     void clearReporting();
 
     bool isNewAllocator(TestMemoryAllocator* allocator);
-    SimpleString createVariableNameFromFileLineInfo(const char* file, size_t line);
+    SimpleString createVariableNameFromFileLineInfo(const char *file, size_t line);
 
     SimpleString getAllocationString(TestMemoryAllocator* allocator, const SimpleString& variableName, size_t size);
     SimpleString getDeallocationString(TestMemoryAllocator* allocator, const SimpleString& variableName, const char* file, size_t line);

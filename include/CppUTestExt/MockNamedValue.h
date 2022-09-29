@@ -41,8 +41,8 @@ public:
     MockNamedValueComparator() {}
     virtual ~MockNamedValueComparator() {}
 
-    virtual bool isEqual(const void* object1, const void* object2) = 0;
-    virtual SimpleString valueToString(const void* object) = 0;
+    virtual bool isEqual(const void* object1, const void* object2)=0;
+    virtual SimpleString valueToString(const void* object)=0;
 };
 
 /*
@@ -56,8 +56,9 @@ public:
     MockNamedValueCopier() {}
     virtual ~MockNamedValueCopier() {}
 
-    virtual void copy(void* out, const void* in) = 0;
+    virtual void copy(void* out, const void* in)=0;
 };
+
 
 class MockFunctionComparator : public MockNamedValueComparator
 {
@@ -65,17 +66,11 @@ public:
     typedef bool (*isEqualFunction)(const void*, const void*);
     typedef SimpleString (*valueToStringFunction)(const void*);
 
-    MockFunctionComparator(isEqualFunction equal, valueToStringFunction valToString) : equal_(equal), valueToString_(valToString) {}
+    MockFunctionComparator(isEqualFunction equal, valueToStringFunction valToString)
+        : equal_(equal), valueToString_(valToString) {}
 
-    virtual bool isEqual(const void* object1, const void* object2) _override
-    {
-        return equal_(object1, object2);
-    }
-    virtual SimpleString valueToString(const void* object) _override
-    {
-        return valueToString_(object);
-    }
-
+    virtual bool isEqual(const void* object1, const void* object2) _override { return equal_(object1, object2); }
+    virtual SimpleString valueToString(const void* object) _override { return valueToString_(object); }
 private:
     isEqualFunction equal_;
     valueToStringFunction valueToString_;
@@ -88,10 +83,7 @@ public:
 
     MockFunctionCopier(copyFunction copier) : copier_(copier) {}
 
-    virtual void copy(void* dst, const void* src) _override
-    {
-        copier_(dst, src);
-    }
+    virtual void copy(void* dst, const void* src) _override { copier_(dst, src); }
 
 private:
     copyFunction copier_;
@@ -158,6 +150,7 @@ public:
     virtual void* getObjectPointer() const;
     virtual size_t getSize() const;
 
+
     virtual MockNamedValueComparator* getComparator() const;
     virtual MockNamedValueCopier* getCopier() const;
 
@@ -165,12 +158,10 @@ public:
     static MockNamedValueComparatorsAndCopiersRepository* getDefaultComparatorsAndCopiersRepository();
 
     static const double defaultDoubleTolerance;
-
 private:
     SimpleString name_;
     SimpleString type_;
-    union
-    {
+    union {
         bool boolValue_;
         int intValue_;
         unsigned int unsignedIntValue_;
@@ -182,8 +173,7 @@ private:
 #else
         char longLongPlaceholder_[CPPUTEST_SIZE_OF_FAKE_LONG_LONG_TYPE];
 #endif
-        struct
-        {
+        struct {
             double value;
             double tolerance;
         } doubleValue_;
@@ -215,7 +205,6 @@ public:
 
     void destroy();
     void setNext(MockNamedValueListNode* node);
-
 private:
     MockNamedValue* data_;
     MockNamedValueListNode* next_;
@@ -246,7 +235,6 @@ struct MockNamedValueComparatorsAndCopiersRepositoryNode;
 class MockNamedValueComparatorsAndCopiersRepository
 {
     MockNamedValueComparatorsAndCopiersRepositoryNode* head_;
-
 public:
     MockNamedValueComparatorsAndCopiersRepository();
     virtual ~MockNamedValueComparatorsAndCopiersRepository();

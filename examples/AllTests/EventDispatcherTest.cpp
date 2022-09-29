@@ -34,7 +34,11 @@ class ObserverMock : public EventObserver
 public:
     virtual void notify(const Event& event, int timeOutInSeconds)
     {
-        mock().actualCall("notify").onObject(this).withParameterOfType("Event", "event", (void*)&event).withParameter("timeOutInSeconds", timeOutInSeconds);
+        mock()
+            .actualCall("notify")
+            .onObject(this)
+            .withParameterOfType("Event", "event", (void*)&event)
+            .withParameter("timeOutInSeconds", timeOutInSeconds);
     }
     virtual void notifyRegistration(EventObserver* newObserver)
     {
@@ -82,7 +86,11 @@ TEST(EventDispatcher, EventWithoutRegistrationsResultsIntoNoCalls)
 
 TEST(EventDispatcher, EventWithRegistrationForEventResultsIntoCallback)
 {
-    mock().expectOneCall("notify").onObject(&observer).withParameterOfType("Event", "event", &event).withParameter("timeOutInSeconds", 10);
+    mock()
+        .expectOneCall("notify")
+        .onObject(&observer)
+        .withParameterOfType("Event", "event", &event)
+        .withParameter("timeOutInSeconds", 10);
     event.type = IMPORTANT_EVENT;
 
     dispatcher->registerObserver(IMPORTANT_EVENT, &observer);
@@ -98,8 +106,16 @@ TEST(EventDispatcher, DifferentEventWithRegistrationDoesNotResultIntoCallback)
 
 TEST(EventDispatcher, RegisterTwoObserversResultIntoTwoCallsAndARegistrationNotification)
 {
-    mock().expectOneCall("notify").onObject(&observer).withParameterOfType("Event", "event", &event).withParameter("timeOutInSeconds", 10);
-    mock().expectOneCall("notify").onObject(&observer2).withParameterOfType("Event", "event", &event).withParameter("timeOutInSeconds", 10);
+    mock()
+        .expectOneCall("notify")
+        .onObject(&observer)
+        .withParameterOfType("Event", "event", &event)
+        .withParameter("timeOutInSeconds", 10);
+    mock()
+        .expectOneCall("notify")
+        .onObject(&observer2)
+        .withParameterOfType("Event", "event", &event)
+        .withParameter("timeOutInSeconds", 10);
     mock().expectOneCall("notifyRegistration").onObject(&observer).withParameter("newObserver", &observer2);
 
     event.type = IMPORTANT_EVENT;

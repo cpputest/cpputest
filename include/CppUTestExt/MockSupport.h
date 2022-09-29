@@ -67,12 +67,12 @@ public:
     virtual cpputest_ulonglong returnUnsignedLongLongIntValueOrDefault(cpputest_ulonglong defaultValue);
     virtual unsigned int returnUnsignedIntValueOrDefault(unsigned int defaultValue);
     virtual const char* stringReturnValue();
-    virtual const char* returnStringValueOrDefault(const char* defaultValue);
+    virtual const char* returnStringValueOrDefault(const char * defaultValue);
     virtual double returnDoubleValueOrDefault(double defaultValue);
     virtual double doubleReturnValue();
     virtual void* pointerReturnValue();
-    virtual void* returnPointerValueOrDefault(void* defaultValue);
-    virtual const void* returnConstPointerValueOrDefault(const void* defaultValue);
+    virtual void* returnPointerValueOrDefault(void * defaultValue);
+    virtual const void* returnConstPointerValueOrDefault(const void * defaultValue);
     virtual const void* constPointerReturnValue();
     virtual void (*returnFunctionPointerValueOrDefault(void (*defaultValue)()))();
     virtual void (*functionPointerReturnValue())();
@@ -96,7 +96,7 @@ public:
     /*
      * The following functions are recursively through the lower MockSupports scopes
      * This means, if you do mock().disable() it will disable *all* mocking scopes, including mock("myScope").
-     */
+  	 */
 
     virtual void disable();
     virtual void enable();
@@ -124,7 +124,7 @@ public:
 
 protected:
     MockSupport* clone(const SimpleString& mockName);
-    virtual MockCheckedActualCall* createActualCall();
+    virtual MockCheckedActualCall *createActualCall();
     virtual void failTest(MockFailure& failure);
     void countCheck();
 
@@ -132,13 +132,13 @@ private:
     unsigned int actualCallOrder_;
     unsigned int expectedCallOrder_;
     bool strictOrdering_;
-    MockFailureReporter* activeReporter_;
-    MockFailureReporter* standardReporter_;
+    MockFailureReporter *activeReporter_;
+    MockFailureReporter *standardReporter_;
     MockFailureReporter defaultReporter_;
     MockExpectedCallsList expectations_;
     bool ignoreOtherCalls_;
     bool enabled_;
-    MockCheckedActualCall* lastActualFunctionCall_;
+    MockCheckedActualCall *lastActualFunctionCall_;
     MockNamedValueComparatorsAndCopiersRepository comparatorsAndCopiersRepository_;
     MockNamedValueList data_;
     const SimpleString mockName_;
@@ -158,6 +158,8 @@ private:
     bool hasCallsOutOfOrder();
 
     SimpleString appendScopeToName(const SimpleString& functionName);
+
 };
 
 #endif
+
