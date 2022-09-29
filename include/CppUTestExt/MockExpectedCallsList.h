@@ -75,8 +75,7 @@ public:
 
     virtual SimpleString unfulfilledCallsToString(const SimpleString& linePrefix = "") const;
     virtual SimpleString fulfilledCallsToString(const SimpleString& linePrefix = "") const;
-    virtual SimpleString callsWithMissingParametersToString(const SimpleString& linePrefix,
-                                                            const SimpleString& missingParametersPrefix) const;
+    virtual SimpleString callsWithMissingParametersToString(const SimpleString& linePrefix, const SimpleString& missingParametersPrefix) const;
 
 protected:
     virtual void pruneEmptyNodeFromList();
@@ -87,8 +86,9 @@ protected:
         MockCheckedExpectedCall* expectedCall_;
 
         MockExpectedCallsListNode* next_;
-        MockExpectedCallsListNode(MockCheckedExpectedCall* expectedCall)
-            : expectedCall_(expectedCall), next_(NULLPTR) {}
+        MockExpectedCallsListNode(MockCheckedExpectedCall* expectedCall) :
+            expectedCall_(expectedCall),
+            next_(NULLPTR) {}
     };
 
 private:

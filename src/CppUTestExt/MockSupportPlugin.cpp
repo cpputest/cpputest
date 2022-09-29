@@ -33,9 +33,11 @@ class MockSupportPluginReporter : public MockFailureReporter
 {
     UtestShell& test_;
     TestResult& result_;
+
 public:
-    MockSupportPluginReporter(UtestShell& test, TestResult& result)
-        : test_(test), result_(result)
+    MockSupportPluginReporter(UtestShell& test, TestResult& result) :
+        test_(test),
+        result_(result)
     {
     }
 
@@ -50,8 +52,8 @@ public:
     }
 };
 
-MockSupportPlugin::MockSupportPlugin(const SimpleString& name)
-    : TestPlugin(name)
+MockSupportPlugin::MockSupportPlugin(const SimpleString& name) :
+    TestPlugin(name)
 {
 }
 
