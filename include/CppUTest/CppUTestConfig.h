@@ -103,10 +103,18 @@
   #define __has_attribute(x) 0
 #endif
 
-#if __has_attribute(noreturn)
-  #define _no_return_ __attribute__((noreturn))
+#if defined (__cplusplus) && __cplusplus >= 201103L
+   #define _no_return_ [[noreturn]]
+#elif __has_attribute(noreturn)
+   #define _no_return_ __attribute__((noreturn))
 #else
-  #define _no_return_
+   #define _no_return_
+#endif
+
+#if defined(__MINGW32__)
+#define CPPUTEST_CHECK_FORMAT_TYPE __MINGW_PRINTF_FORMAT
+#else
+#define CPPUTEST_CHECK_FORMAT_TYPE printf
 #endif
 
 #if __has_attribute(format)
@@ -189,7 +197,7 @@
 #define CPPUTEST_SANITIZE_ADDRESS 1
 #define CPPUTEST_DO_NOT_SANITIZE_ADDRESS __attribute__((no_sanitize_address))
   #if defined(__linux__) && defined(__clang__)
-    #if CPPUTEST_USE_MEM_LEAK_DETECTION 
+    #if CPPUTEST_USE_MEM_LEAK_DETECTION
     #warning Compiling with Address Sanitizer with clang on linux will cause duplicate symbols for operator new. Turning off memory leak detection. Compile with -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED to get rid of this warning.
     #undef CPPUTEST_USE_MEM_LEAK_DETECTION
     #define CPPUTEST_USE_MEM_LEAK_DETECTION 0
@@ -204,12 +212,25 @@
  * Handling of IEEE754 floating point exceptions via fenv.h
  * Predominantly works on non-Visual C++ compilers and Visual C++ 2008 and newer
  */
+#ifndef CPPUTEST_FENV_DISABLED
+ #if !CPPUTEST_USE_STD_C_LIB || \
+     (defined(_MSC_VER) && (_MSC_VER < 1800)) || \
+     defined(__APPLE__) || \
+     (defined(__ghs__) && defined(__ColdFire__)) || \
+     defined(__BCPLUSPLUS__)
+  #define CPPUTEST_FENV_DISABLED
+ #endif
+#endif
 
-#if CPPUTEST_USE_STD_C_LIB && \
-  (!defined(_MSC_VER) || (_MSC_VER >= 1800)) && \
-  (!defined(__APPLE__)) && \
-  (!defined(__ghs__) || !defined(__ColdFire__))
-#define CPPUTEST_HAVE_FENV
+#ifndef CPPUTEST_HAVE_FENV
+ #ifdef CPPUTEST_FENV_DISABLED
+  #define CPPUTEST_HAVE_FENV 0
+ #else
+  #define CPPUTEST_HAVE_FENV 1
+ #endif
+#endif
+
+#if CPPUTEST_HAVE_FENV
 #if defined(__WATCOMC__) || defined(__ARMEL__) || defined(__m68k__)
 #define CPPUTEST_FENV_IS_WORKING_PROPERLY 0
 #else
@@ -249,7 +270,7 @@
  * Not supported when CPPUTEST_LONG_LONG_DISABLED is set.
  * Can be overridden by using CPPUTEST_USE_LONG_LONG
  *
- * CPPUTEST_HAVE_LONG_LONG_INT is set by configure
+ * CPPUTEST_HAVE_LONG_LONG_INT is set by configure or CMake.
  * LLONG_MAX is set in limits.h. This is a crude attempt to detect long long support when no configure is used
  *
  */
@@ -260,7 +281,7 @@
 #endif
 #endif
 
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
 typedef long long cpputest_longlong;
 typedef unsigned long long cpputest_ulonglong;
 #else
@@ -327,6 +348,5 @@ typedef struct cpputest_ulonglong cpputest_ulonglong;
 #ifdef __clang__
  #pragma clang diagnostic pop
 #endif
-
 
 #endif

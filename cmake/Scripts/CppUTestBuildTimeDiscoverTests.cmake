@@ -41,7 +41,7 @@ function (JOIN VALUES GLUE OUTPUT)
 endfunction()
 
 function (buildtime_discover_tests EXECUTABLE DISCOVER_ARG OUTPUT)
-  execute_process(COMMAND ${EXECUTABLE} ${DISCOVER_ARG}
+  execute_process(COMMAND ${EMULATOR} ${EXECUTABLE} ${DISCOVER_ARG}
     OUTPUT_VARIABLE _TMP_OUTPUT
     ERROR_VARIABLE DISCOVER_ERR
     RESULT_VARIABLE DISCOVER_ERR)
@@ -75,14 +75,14 @@ if (TESTS_DETAILED)
       set(lastgroup "${groupname}")
     endif (NOT ("${groupname}" STREQUAL "${lastgroup}"))
     message("... ${testname}")
-    buildtime_add_test(${EXECUTABLE_SHORT_NAME}.${testfullname} ${EXECUTABLE} -sg ${groupname} -sn ${testname})
+    buildtime_add_test(${EXECUTABLE_SHORT_NAME}.${testfullname} ${EMULATOR} ${EXECUTABLE} -sg ${groupname} -sn ${testname})
   endforeach()
 else (TESTS_DETAILED)
   set(DISCOVER_ARG "-lg")
   buildtime_discover_tests("${EXECUTABLE}" "${DISCOVER_ARG}" TestList_Groups)
   foreach(group ${TestList_Groups})
     message("TestGroup: ${group}")
-    buildtime_add_test(${EXECUTABLE_SHORT_NAME}.${group} "${EXECUTABLE}" -sg ${group})
+    buildtime_add_test(${EXECUTABLE_SHORT_NAME}.${group} ${EMULATOR} "${EXECUTABLE}" -sg ${group})
   endforeach()
 endif (TESTS_DETAILED)
 

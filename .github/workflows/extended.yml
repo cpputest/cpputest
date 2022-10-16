@@ -1,0 +1,157 @@
+name: Extended builds
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test_report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install tools
+        run: sudo apt-get install -y ant-optional
+      - name: Checkout
+        uses: actions/checkout@main
+      - run: |
+          autoreconf -i .
+          ./configure
+          make check
+          ./CppUTestTests -ojunit
+          ./CppUTestExtTests -ojunit
+          cp ./scripts/generate_junit_report_ant.xml .
+          ant -f generate_junit_report_ant.xml
+
+  cmake_coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install tools
+        run: |
+          pip install --user gcovr
+          sudo apt install lcov
+      - name: Checkout
+        uses: actions/checkout@main
+      - name: Configure
+        run: >
+          cmake
+          -S .
+          -B cpputest_build
+          -D CMAKE_BUILD_TYPE=Debug
+          -D CMAKE_CXX_STANDARD=11
+          -D CPPUTEST_COVERAGE=ON
+          -D CPPUTEST_EXAMPLES=OFF
+      - name: Build
+        run: cmake --build cpputest_build
+      - name: Test
+        run: ctest --test-dir cpputest_build
+      - name: Coverage
+        run: |
+          lcov --capture --directory . --no-external --output-file lcov.info
+          lcov --remove lcov.info --output-file lcov.info '*/tests/*'
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          path-to-lcov: lcov.info
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+  make_dos:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+      - name: Install tools
+        run: |
+          sudo apt-get install -y dosbox
+          git clone https://github.com/cpputest/watcom-compiler.git watcom
+          echo "WATCOM=$GITHUB_WORKSPACE/watcom" >> $GITHUB_ENV
+          echo "CC=wcl" >> $GITHUB_ENV
+          echo "CXX=wcl" >> $GITHUB_ENV
+          echo "$GITHUB_WORKSPACE/watcom/binl" >> $GITHUB_PATH
+          echo "CPPUTEST_HOME=$GITHUB_WORKSPACE" >> $GITHUB_ENV
+      - name: Build
+        run: |
+          $CC --version
+          make -f $CPPUTEST_HOME/platforms/Dos/Makefile clean
+          make -f $CPPUTEST_HOME/platforms/Dos/Makefile
+      - name: Test
+        env:
+          TERM: linux
+        run: $CPPUTEST_HOME/platforms/Dos/alltests.sh
+
+  cmake_wine:
+    runs-on: ubuntu-latest
+    env:
+      CC: x86_64-w64-mingw32-gcc
+      CXX: x86_64-w64-mingw32-g++
+    steps:
+      - name: Install tools
+        run: sudo apt-get install -y mingw-w64 wine64
+      - name: Checkout
+        uses: actions/checkout@main
+      - name: Configure
+        run: >
+          cmake
+          -B build
+          -S .
+          -D CMAKE_SYSTEM_NAME=Windows
+          -D CMAKE_CROSSCOMPILING_EMULATOR=wine
+      - name: Build
+        run: cmake --build build --verbose
+      - name: Test
+        run: ctest --test-dir build
+
+  cmake_no_exceptions:
+    runs-on: ubuntu-latest
+    name: Disable exceptions
+    env:
+      CC: gcc
+      CXX: g++
+      CXXFLAGS: -fno-exceptions
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+      - name: Configure
+        run: cmake -B cpputest_build -S .
+      - name: Build
+        run: cmake --build cpputest_build --verbose
+      - name: Test
+        run: ctest --test-dir cpputest_build
+
+  cmake_install:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+      - name: Install
+        run: |
+          cmake -B cpputest_build/ -S . -DCMAKE_BUILD_TYPE=RelWithDebInfo
+          cmake --build cpputest_build/ -j
+          ctest --test-dir cpputest_build/
+          sudo cmake --install cpputest_build/
+      - name: Use
+        run: |
+          cmake -B build -S examples
+          cmake --build build -j
+          ctest --test-dir build
+
+  arm-embedded:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+      - uses: carlosperate/arm-none-eabi-gcc-action@v1
+      - name: Install QEMU
+        # The version in the ubuntu repositories (6.2) is broken.
+        run: |
+          wget -nv http://ftp.de.debian.org/debian/pool/main/q/qemu/qemu-user-static_7.1+dfsg-2_amd64.deb -O qemu.deb
+          sudo dpkg --install qemu.deb
+          rm -f qemu.deb
+      - name: Configure
+        run: >
+          cmake
+          -B cpputest_build
+          -D CMAKE_TOOLCHAIN_FILE=cmake/arm-none-eabi-gcc.toolchain.cmake
+          -D CMAKE_CROSSCOMPILING_EMULATOR="qemu-arm-static;-cpu;cortex-m4"
+      - name: Build
+        run: cmake --build cpputest_build
+      - name: Test
+        run: ctest --test-dir cpputest_build

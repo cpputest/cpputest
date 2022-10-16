@@ -38,6 +38,10 @@
 
 #include "SimpleString.h"
 
+#if CPPUTEST_USE_STD_CPP_LIB
+#include <stdexcept>
+#endif
+
 class UtestShell;
 class TestOutput;
 
@@ -181,5 +185,14 @@ class FeatureUnsupportedFailure : public TestFailure
 public:
     FeatureUnsupportedFailure(UtestShell* test, const char* fileName, size_t lineNumber, const SimpleString& featureName, const SimpleString& text);
 };
+
+#if CPPUTEST_USE_STD_CPP_LIB
+class UnexpectedExceptionFailure : public TestFailure
+{
+public:
+    UnexpectedExceptionFailure(UtestShell* test);
+    UnexpectedExceptionFailure(UtestShell* test, const std::exception &e);
+};
+#endif
 
 #endif

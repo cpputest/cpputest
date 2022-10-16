@@ -96,6 +96,8 @@ void CommandLineTestRunner::initializeTestRun()
     if (arguments_->runTestsInSeperateProcess()) registry_->setRunTestsInSeperateProcess();
     if (arguments_->isRunIgnored()) registry_->setRunIgnored();
     if (arguments_->isCrashingOnFail()) UtestShell::setCrashOnFail();
+
+    UtestShell::setRethrowExceptions( arguments_->isRethrowingExceptions() );
 }
 
 int CommandLineTestRunner::runAllTests()
@@ -117,6 +119,13 @@ int CommandLineTestRunner::runAllTests()
     {
         TestResult tr(*output_);
         registry_->listTestGroupAndCaseNames(tr);
+        return 0;
+    }
+
+    if (arguments_->isListingTestLocations())
+    {
+        TestResult tr(*output_);
+        registry_->listTestLocations(tr);
         return 0;
     }
 

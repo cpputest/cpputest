@@ -29,7 +29,6 @@ else (MSVC)
     endif (NOT GMOCK AND NOT REAL_GTEST)
 
     set(WARNING_C_FLAGS
-        Weverything
         Wall
         Wextra
         pedantic
@@ -45,9 +44,9 @@ else (MSVC)
         Wno-long-long
         )
 
-    if (WERROR)
+    if (CPPUTEST_WERROR)
         list(APPEND WARNING_C_FLAGS Werror)
-    endif (WERROR)
+    endif ()
 
 
     set(WARNING_C_ONLY_FLAGS
@@ -63,14 +62,15 @@ else (MSVC)
         Wno-old-style-cast
         )
 
-    if (C++11 OR (DEFINED CMAKE_CXX_STANDARD AND NOT CMAKE_CXX_STANDARD EQUAL 98))
+    if (DEFINED CMAKE_CXX_STANDARD AND NOT CMAKE_CXX_STANDARD EQUAL 98)
         set(WARNING_CXX_FLAGS
-           ${WARNING_CXX_FLAGS}
-           Wno-c++98-compat
-           Wno-c++98-compat-pedantic
-           Wno-c++14-compat
-           Wno-inconsistent-missing-destructor-override
-           )
+            ${WARNING_CXX_FLAGS}
+            Wno-c++98-compat
+            Wno-c++98-compat-pedantic
+            Wno-c++14-compat
+            Wno-inconsistent-missing-destructor-override
+            Wsuggest-override
+        )
     endif ()
 
     check_and_append_c_warning_flags(${WARNING_C_FLAGS})

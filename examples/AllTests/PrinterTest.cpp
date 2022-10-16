@@ -30,18 +30,19 @@
 #include "MockPrinter.h"
 
 TEST_GROUP(Printer)
-{ Printer* printer;
-MockPrinter* mockPrinter;
+{
+    Printer* printer;
+    MockPrinter* mockPrinter;
 
-void setup()
-{
-    mockPrinter = new MockPrinter();
-    printer = mockPrinter;
-}
-void teardown()
-{
-    delete printer;
-}
+    void setup() _override
+    {
+        mockPrinter = new MockPrinter();
+        printer = mockPrinter;
+    }
+    void teardown() _override
+    {
+        delete printer;
+    }
 };
 
 TEST(Printer, PrintConstCharStar)
@@ -65,4 +66,3 @@ TEST(Printer, StreamOperators)
     const char* expected = "n=1234";
     CHECK_EQUAL(expected, mockPrinter->getOutput());
 }
-

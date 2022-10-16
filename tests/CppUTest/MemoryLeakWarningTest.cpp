@@ -99,7 +99,7 @@ TEST_GROUP(MemoryLeakWarningTest)
     }
 };
 
-static void _testTwoLeaks()
+static void testTwoLeaks_()
 {
     leak1 = detector->allocMemory(allocator, 10);
     leak2 = (long*) (void*) detector->allocMemory(allocator, 4);
@@ -109,7 +109,7 @@ static void _testTwoLeaks()
 
 TEST(MemoryLeakWarningTest, TwoLeaks)
 {
-    fixture->setTestFunction(_testTwoLeaks);
+    fixture->setTestFunction(testTwoLeaks_);
     fixture->runAllTests();
 
     LONGS_EQUAL(1, fixture->getFailureCount());
@@ -119,7 +119,7 @@ TEST(MemoryLeakWarningTest, TwoLeaks)
 
 TEST(MemoryLeakWarningTest, TwoLeaks)
 {
-    fixture->setTestFunction(_testTwoLeaks);
+    fixture->setTestFunction(testTwoLeaks_);
     fixture->runAllTests();
 
     LONGS_EQUAL(0, fixture->getFailureCount());
@@ -128,7 +128,7 @@ TEST(MemoryLeakWarningTest, TwoLeaks)
 #endif
 
 
-static void _testLeakWarningWithPluginDisabled()
+static void testLeakWarningWithPluginDisabled_()
 {
     memPlugin->expectLeaksInTest(1);
     leak1 = (char*) cpputest_malloc_location_with_leak_detection(10, __FILE__, __LINE__);
@@ -136,7 +136,7 @@ static void _testLeakWarningWithPluginDisabled()
 
 TEST(MemoryLeakWarningTest, LeakWarningWithPluginDisabled)
 {
-    fixture->setTestFunction(_testLeakWarningWithPluginDisabled);
+    fixture->setTestFunction(testLeakWarningWithPluginDisabled_);
 
     MemoryLeakWarningPlugin::saveAndDisableNewDeleteOverloads();
 
@@ -151,7 +151,7 @@ TEST(MemoryLeakWarningTest, LeakWarningWithPluginDisabled)
     MemoryLeakWarningPlugin::restoreNewDeleteOverloads();
 }
 
-static void _testIgnore2()
+static void testIgnore2_()
 {
     memPlugin->expectLeaksInTest(2);
     leak1 = detector->allocMemory(allocator, 10);
@@ -160,12 +160,12 @@ static void _testIgnore2()
 
 TEST(MemoryLeakWarningTest, Ignore2)
 {
-    fixture->setTestFunction(_testIgnore2);
+    fixture->setTestFunction(testIgnore2_);
     fixture->runAllTests();
     LONGS_EQUAL(0, fixture->getFailureCount());
 }
 
-static void _failAndLeakMemory()
+static void failAndLeakMemory_()
 {
     leak1 = detector->allocMemory(allocator, 10);
     FAIL("");
@@ -173,7 +173,7 @@ static void _failAndLeakMemory()
 
 TEST(MemoryLeakWarningTest, FailingTestDoesNotReportMemoryLeaks)
 {
-    fixture->setTestFunction(_failAndLeakMemory);
+    fixture->setTestFunction(failAndLeakMemory_);
     fixture->runAllTests();
     LONGS_EQUAL(1, fixture->getFailureCount());
 }

@@ -49,6 +49,7 @@
 #include <setjmp.h>
 #include <string.h>
 #include <math.h>
+#include <float.h>
 #include <ctype.h>
 #include <signal.h>
 
@@ -58,13 +59,16 @@
 
 #include "CppUTest/PlatformSpecificFunctions.h"
 
-static jmp_buf test_exit_jmp_buf[2];
+const std::nothrow_t std::nothrow;
+
+static jmp_buf test_exit_jmp_buf[10];
 static int jmp_buf_index = 0;
 
 // There is a possibility that a compiler provides fork but not waitpid.
+// TODO consider using spawn() and cwait()?
 #if !defined(CPPUTEST_HAVE_FORK) || !defined(CPPUTEST_HAVE_WAITPID)
 
-static void GccPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin*, TestResult* result)
+static void BorlandPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin*, TestResult* result)
 {
     result->addFailure(TestFailure(shell, "-p doesn't work on this platform, as it is lacking fork.\b"));
 }
@@ -94,7 +98,7 @@ static void SetTestFailureByStatusCode(UtestShell* shell, TestResult* result, in
     }
 }
 
-static void GccPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
+static void BorlandPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
 {
     const pid_t syscallError = -1;
     pid_t cpid;
@@ -155,7 +159,7 @@ TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
 }
 
 void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell* shell, TestPlugin* plugin, TestResult* result) =
-        GccPlatformSpecificRunTestInASeperateProcess;
+        BorlandPlatformSpecificRunTestInASeperateProcess;
 int (*PlatformSpecificFork)(void) = PlatformSpecificForkImplementation;
 int (*PlatformSpecificWaitPid)(int, int*, int) = PlatformSpecificWaitPidImplementation;
 
@@ -172,15 +176,6 @@ static int PlatformSpecificSetJmpImplementation(void (*function) (void* data), v
     return 0;
 }
 
-/*
- * MacOSX clang 3.0 doesn't seem to recognize longjmp and thus complains about _no_return_.
- * The later clang compilers complain when it isn't there. So only way is to check the clang compiler here :(
- */
-#ifdef __clang__
- #if !((__clang_major__ == 3) && (__clang_minor__ == 0))
- _no_return_
- #endif
-#endif
 static void PlatformSpecificLongJmpImplementation()
 {
     jmp_buf_index--;
@@ -204,7 +199,7 @@ static long TimeInMillisImplementation()
     struct timeval tv;
     struct timezone tz;
     gettimeofday(&tv, &tz);
-    return (long)((tv.tv_sec * 1000) + (time_t)((double)tv.tv_usec * 0.001));
+    return (tv.tv_sec * 1000) + (long)((double)tv.tv_usec * 0.001);
 #else
     return 0;
 #endif
@@ -214,13 +209,7 @@ static const char* TimeStringImplementation()
 {
     time_t theTime = time(NULLPTR);
     static char dateTime[80];
-#ifdef STDC_WANT_SECURE_LIB
-    static struct tm lastlocaltime;
-    localtime_s(&lastlocaltime, &theTime);
-    struct tm *tmp = &lastlocaltime;
-#else
     struct tm *tmp = localtime(&theTime);
-#endif
     strftime(dateTime, 80, "%Y-%m-%dT%H:%M:%S", tmp);
     return dateTime;
 }
@@ -228,25 +217,18 @@ static const char* TimeStringImplementation()
 long (*GetPlatformSpecificTimeInMillis)() = TimeInMillisImplementation;
 const char* (*GetPlatformSpecificTimeString)() = TimeStringImplementation;
 
-/* Wish we could add an attribute to the format for discovering mis-use... but the __attribute__(format) seems to not work on va_list */
-#ifdef __clang__
-#pragma clang diagnostic ignored "-Wformat-nonliteral"
-#endif
+static int BorlandVSNprintf(char *str, size_t size, const char* format, va_list args)
+{
+    int result = vsnprintf( str, size, format, args);
+    str[size-1] = 0;
+    return result;
+}
 
-#ifdef __clang__
-#pragma clang diagnostic ignored "-Wused-but-marked-unused"
-#endif
-int (*PlatformSpecificVSNprintf)(char *str, size_t size, const char* format, va_list va_args_list) = vsnprintf;
+int (*PlatformSpecificVSNprintf)(char *str, size_t size, const char* format, va_list va_args_list) = BorlandVSNprintf;
 
 static PlatformSpecificFile PlatformSpecificFOpenImplementation(const char* filename, const char* flag)
 {
-#ifdef STDC_WANT_SECURE_LIB
-  FILE* file;
-   fopen_s(&file, filename, flag);
-   return file;
-#else
    return fopen(filename, flag);
-#endif
 }
 
 static void PlatformSpecificFPutsImplementation(const char* str, PlatformSpecificFile file)
@@ -265,7 +247,6 @@ static void PlatformSpecificFlushImplementation()
 }
 
 const PlatformSpecificFile PlatformSpecificStdOut = stdout;
-
 PlatformSpecificFile (*PlatformSpecificFOpen)(const char*, const char*) = PlatformSpecificFOpenImplementation;
 void (*PlatformSpecificFPuts)(const char*, PlatformSpecificFile) = PlatformSpecificFPutsImplementation;
 void (*PlatformSpecificFClose)(PlatformSpecificFile) = PlatformSpecificFCloseImplementation;
@@ -278,21 +259,14 @@ void (*PlatformSpecificFree)(void* memory) = free;
 void* (*PlatformSpecificMemCpy)(void*, const void*, size_t) = memcpy;
 void* (*PlatformSpecificMemset)(void*, int, size_t) = memset;
 
-/* GCC 4.9.x introduces -Wfloat-conversion, which causes a warning / error
- * in GCC's own (macro) implementation of isnan() and isinf().
- */
-#if defined(__GNUC__) && (__GNUC__ >= 5 || (__GNUC__ == 4 && __GNUC_MINOR__ > 8))
-#pragma GCC diagnostic ignored "-Wfloat-conversion"
-#endif
-
 static int IsNanImplementation(double d)
 {
-    return isnan(d);
+    return _isnan(d);
 }
 
 static int IsInfImplementation(double d)
 {
-    return isinf(d);
+    return !(_finite(d) || _isnan(d));
 }
 
 double (*PlatformSpecificFabs)(double) = fabs;

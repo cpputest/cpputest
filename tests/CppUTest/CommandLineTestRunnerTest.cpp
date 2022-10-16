@@ -32,7 +32,6 @@
 #include "CppUTest/TestPlugin.h"
 #include "CppUTest/JUnitTestOutput.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
-#include "CppUTestExt/MockSupport.h"
 
 
 class DummyPluginWhichCountsThePlugins : public TestPlugin
@@ -269,6 +268,16 @@ TEST(CommandLineTestRunner, listTestGroupAndCaseNamesShouldWorkProperly)
     STRCMP_CONTAINS("group1.test1", commandLineTestRunner.fakeConsoleOutputWhichIsReallyABuffer->getOutput().asCharString());
 }
 
+TEST(CommandLineTestRunner, listTestLocationsShouldWorkProperly)
+{
+    const char* argv[] = { "tests.exe", "-ll" };
+
+    CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(2, argv, &registry);
+    commandLineTestRunner.runAllTestsMain();
+
+    STRCMP_CONTAINS("group1.test1", commandLineTestRunner.fakeConsoleOutputWhichIsReallyABuffer->getOutput().asCharString());
+}
+
 TEST(CommandLineTestRunner, randomShuffleSeedIsPrintedAndRandFuncIsExercised)
 {
     // more than 1 item in test list ensures that shuffle algorithm calls rand_()
@@ -293,13 +302,12 @@ extern "C" {
     typedef PlatformSpecificFile (*FOpenFunc)(const char*, const char*);
     typedef void (*FPutsFunc)(const char*, PlatformSpecificFile);
     typedef void (*FCloseFunc)(PlatformSpecificFile);
-    typedef int (*PutcharFunc)(int);
 }
 
 struct FakeOutput
 {
     FakeOutput() : SaveFOpen(PlatformSpecificFOpen), SaveFPuts(PlatformSpecificFPuts),
-        SaveFClose(PlatformSpecificFClose), SavePutchar(PlatformSpecificPutchar)
+        SaveFClose(PlatformSpecificFClose)
     {
         installFakes();
         currentFake = this;
@@ -316,12 +324,10 @@ struct FakeOutput
         PlatformSpecificFOpen = (FOpenFunc)fopen_fake;
         PlatformSpecificFPuts = (FPutsFunc)fputs_fake;
         PlatformSpecificFClose = (FCloseFunc)fclose_fake;
-        PlatformSpecificPutchar = (PutcharFunc)putchar_fake;
     }
 
     void restoreOriginals()
     {
-        PlatformSpecificPutchar = SavePutchar;
         PlatformSpecificFOpen = SaveFOpen;
         PlatformSpecificFPuts = SaveFPuts;
         PlatformSpecificFClose = SaveFClose;
@@ -332,19 +338,18 @@ struct FakeOutput
         return (PlatformSpecificFile) NULLPTR;
     }
 
-    static void fputs_fake(const char* str, PlatformSpecificFile)
+    static void fputs_fake(const char* str, PlatformSpecificFile f)
     {
-        currentFake->file += str;
+        if (f == PlatformSpecificStdOut) {
+            currentFake->console += str;
+        }
+        else {
+            currentFake->file += str;
+        }
     }
 
     static void fclose_fake(PlatformSpecificFile)
     {
-    }
-
-    static int putchar_fake(int c)
-    {
-        currentFake->console += StringFrom((char)c);
-        return c;
     }
 
     SimpleString file;
@@ -355,7 +360,6 @@ private:
     FOpenFunc SaveFOpen;
     FPutsFunc SaveFPuts;
     FCloseFunc SaveFClose;
-    PutcharFunc SavePutchar;
 };
 
 FakeOutput* FakeOutput::currentFake = NULLPTR;

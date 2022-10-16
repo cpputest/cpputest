@@ -535,7 +535,7 @@ TEST(MockParameterTest, calledWithoutParameters)
 
     MockExpectedCallsListForTest expectations;
     expectations.addFunction("foo")->withParameter("p1", 1);
-    MockExpectedParameterDidntHappenFailure expectedFailure(mockFailureTest(), "foo", expectations);
+    MockExpectedParameterDidntHappenFailure expectedFailure(mockFailureTest(), "foo", expectations, expectations);
 
     mock().expectOneCall("foo").withParameter("p1", 1);
     mock().actualCall("foo");
@@ -566,7 +566,7 @@ TEST(MockParameterTest, ignoreOtherParametersButExpectedParameterDidntHappen)
 
     MockExpectedCallsListForTest expectations;
     expectations.addFunction("foo")->withParameter("p1", 1).ignoreOtherParameters();
-    MockExpectedParameterDidntHappenFailure expectedFailure(mockFailureTest(), "foo", expectations);
+    MockExpectedParameterDidntHappenFailure expectedFailure(mockFailureTest(), "foo", expectations, expectations);
 
     mock().expectOneCall("foo").withParameter("p1", 1).ignoreOtherParameters();
     mock().actualCall("foo").withParameter("p2", 2).withParameter("p3", 3).withParameter("p4", 4);
@@ -613,7 +613,7 @@ TEST(MockParameterTest, newCallStartsWhileNotAllParametersWerePassed)
 
     MockExpectedCallsListForTest expectations;
     expectations.addFunction("foo")->withParameter("p1", 1);
-    MockExpectedParameterDidntHappenFailure expectedFailure(mockFailureTest(), "foo", expectations);
+    MockExpectedParameterDidntHappenFailure expectedFailure(mockFailureTest(), "foo", expectations, expectations);
 
     mock().expectOneCall("foo").withParameter("p1", 1);
     mock().actualCall("foo");
@@ -703,7 +703,7 @@ TEST(MockParameterTest, outputParameterMissing)
     mock().actualCall("foo");
 
     expectations.addFunction("foo")->withOutputParameterReturning("output", &output, sizeof(output));
-    MockExpectedParameterDidntHappenFailure expectedFailure(mockFailureTest(), "foo", expectations);
+    MockExpectedParameterDidntHappenFailure expectedFailure(mockFailureTest(), "foo", expectations, expectations);
 
     mock().checkExpectations();
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);

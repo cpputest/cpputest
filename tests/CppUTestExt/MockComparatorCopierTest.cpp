@@ -229,7 +229,7 @@ TEST(MockComparatorCopierTest, customTypeOutputParameterMissing)
 
     MockExpectedCallsListForTest expectations;
     expectations.addFunction("foo")->withOutputParameterOfTypeReturning("MyTypeForTesting", "output", &expectedObject);
-    MockExpectedParameterDidntHappenFailure expectedFailure(mockFailureTest(), "foo", expectations);
+    MockExpectedParameterDidntHappenFailure expectedFailure(mockFailureTest(), "foo", expectations, expectations);
 
     mock().expectOneCall("foo").withOutputParameterOfTypeReturning("MyTypeForTesting", "output", &expectedObject);
     mock().actualCall("foo");

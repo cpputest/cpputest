@@ -1,5 +1,3 @@
-include_directories(../ApplicationLib)
-
 add_executable(ExampleTests
     AllTests.cpp
     CircularBufferTest.cpp
@@ -10,6 +8,22 @@ add_executable(ExampleTests
     PrinterTest.cpp
 )
 
-cpputest_normalize_test_output_location(ExampleTests)
-target_link_libraries(ExampleTests ApplicationLib CppUTest CppUTestExt)
-cpputest_buildtime_discover_tests(ExampleTests)
+target_include_directories(ExampleTests
+    PRIVATE
+        .
+)
+
+target_compile_options(ExampleTests
+    PRIVATE $<$<BOOL:${MSVC}>:/wd4723>
+)
+
+target_link_libraries(ExampleTests
+    PRIVATE
+        ApplicationLib
+        CppUTest::CppUTestExt
+)
+
+include(CppUTestBuildTimeDiscoverTests)
+if(CPPUTEST_TEST_DISCOVERY OR NOT DEFINED CPPUTEST_TEST_DISCOVERY)
+    cpputest_buildtime_discover_tests(ExampleTests)
+endif()

@@ -196,8 +196,10 @@ char* SimpleString::StrNCpy(char* s1, const char* s2, size_t n)
 
     if((NULLPTR == s1) || (0 == n)) return result;
 
-    while ((*s1++ = *s2++) && --n != 0)
-        ;
+    *s1 = *s2;
+    while ((--n != 0) && *s1){
+        *++s1 = *++s2;
+    }
     return result;
 }
 
@@ -356,9 +358,15 @@ size_t SimpleString::count(const SimpleString& substr) const
 {
     size_t num = 0;
     const char* str = getBuffer();
-    while (*str && (str = StrStr(str, substr.getBuffer()))) {
+    const char* strpart = NULLPTR;
+    if (*str){
+        strpart = StrStr(str, substr.getBuffer());
+    }
+    while (*str && strpart) {
+        str = strpart;
         str++;
         num++;
+        strpart = StrStr(str, substr.getBuffer());
     }
     return num;
 }
@@ -672,12 +680,12 @@ SimpleString StringFrom(const char *value)
 
 SimpleString StringFromOrNull(const char * expected)
 {
-    return (expected) ? StringFrom(expected) : "(null)";
+    return (expected) ? StringFrom(expected) : StringFrom("(null)");
 }
 
 SimpleString PrintableStringFromOrNull(const char * expected)
 {
-    return (expected) ? StringFrom(expected).printable() : "(null)";
+    return (expected) ? StringFrom(expected).printable() : StringFrom("(null)");
 }
 
 SimpleString StringFrom(int value)
@@ -976,7 +984,7 @@ SimpleString StringFromBinary(const unsigned char* value, size_t size)
 
 SimpleString StringFromBinaryOrNull(const unsigned char* value, size_t size)
 {
-    return (value) ? StringFromBinary(value, size) : "(null)";
+    return (value) ? StringFromBinary(value, size) : StringFrom("(null)");
 }
 
 SimpleString StringFromBinaryWithSize(const unsigned char* value, size_t size)
@@ -993,7 +1001,7 @@ SimpleString StringFromBinaryWithSize(const unsigned char* value, size_t size)
 
 SimpleString StringFromBinaryWithSizeOrNull(const unsigned char* value, size_t size)
 {
-    return (value) ? StringFromBinaryWithSize(value, size) : "(null)";
+    return (value) ? StringFromBinaryWithSize(value, size) : StringFrom("(null)");
 }
 
 SimpleString StringFromMaskedBits(unsigned long value, unsigned long mask, size_t byteCount)

@@ -158,6 +158,7 @@ static void VisualCppFClose(PlatformSpecificFile file)
     fclose((FILE*)file);
 }
 
+const PlatformSpecificFile PlatformSpecificStdOut = stdout;
 PlatformSpecificFile (*PlatformSpecificFOpen)(const char* filename, const char* flag) = VisualCppFOpen;
 void (*PlatformSpecificFPuts)(const char* str, PlatformSpecificFile file) = VisualCppFPuts;
 void (*PlatformSpecificFClose)(PlatformSpecificFile file) = VisualCppFClose;
@@ -167,7 +168,6 @@ static void VisualCppFlush()
     fflush(stdout);
 }
 
-int (*PlatformSpecificPutchar)(int c) = putchar;
 void (*PlatformSpecificFlush)(void) = VisualCppFlush;
 
 static void* VisualCppMalloc(size_t size)

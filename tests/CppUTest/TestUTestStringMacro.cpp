@@ -36,128 +36,128 @@ TEST_GROUP(UnitTestStringMacros)
     TestTestingFixture fixture;
 };
 
-static void _STRCMP_EQUALWithActualIsNULLTestMethod()
+static void STRCMP_EQUALWithActualIsNULLTestMethod_()
 {
     STRCMP_EQUAL("ok", NULLPTR);
 } // LCOV_EXCL_LINE
 
 TEST(UnitTestStringMacros, FailureWithSTRCMP_EQUALAndActualIsNULL)
 {
-    fixture.runTestWithMethod(_STRCMP_EQUALWithActualIsNULLTestMethod);
+    fixture.runTestWithMethod(STRCMP_EQUALWithActualIsNULLTestMethod_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <(null)>");
 }
 
-static void _STRCMP_EQUALWithExpectedIsNULLTestMethod()
+static void STRCMP_EQUALWithExpectedIsNULLTestMethod_()
 {
     STRCMP_EQUAL(NULLPTR, "ok");
 } // LCOV_EXCL_LINE
 
 TEST(UnitTestStringMacros, FailureWithSTRCMP_EQUALAndExpectedIsNULL)
 {
-    fixture.runTestWithMethod(_STRCMP_EQUALWithExpectedIsNULLTestMethod);
+    fixture.runTestWithMethod(STRCMP_EQUALWithExpectedIsNULLTestMethod_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <(null)>");
 }
 
-static void _STRCMP_CONTAINSWithActualIsNULLTestMethod()
+static void STRCMP_CONTAINSWithActualIsNULLTestMethod_()
 {
     STRCMP_CONTAINS("ok", NULLPTR);
 } // LCOV_EXCL_LINE
 
 TEST(UnitTestStringMacros, FailureWithSTRCMP_CONTAINSAndActualIsNULL)
 {
-    fixture.runTestWithMethod(_STRCMP_CONTAINSWithActualIsNULLTestMethod);
+    fixture.runTestWithMethod(STRCMP_CONTAINSWithActualIsNULLTestMethod_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("did not contain  <ok>");
 }
 
-static void _STRCMP_CONTAINSWithExpectedIsNULLTestMethod()
+static void STRCMP_CONTAINSWithExpectedIsNULLTestMethod_()
 {
     STRCMP_CONTAINS(NULLPTR, "ok");
 } // LCOV_EXCL_LINE
 
 TEST(UnitTestStringMacros, FailureWithSTRCMP_CONTAINSAndExpectedIsNULL)
 {
-    fixture.runTestWithMethod(_STRCMP_CONTAINSWithExpectedIsNULLTestMethod);
+    fixture.runTestWithMethod(STRCMP_CONTAINSWithExpectedIsNULLTestMethod_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("did not contain  <>");
 }
 
-static void _STRNCMP_EQUALWithActualIsNULLTestMethod()
+static void STRNCMP_EQUALWithActualIsNULLTestMethod_()
 {
     STRNCMP_EQUAL("ok", NULLPTR, 2);
 } // LCOV_EXCL_LINE
 
 TEST(UnitTestStringMacros, FailureWithSTRNCMP_EQUALAndActualIsNULL)
 {
-    fixture.runTestWithMethod(_STRNCMP_EQUALWithActualIsNULLTestMethod);
+    fixture.runTestWithMethod(STRNCMP_EQUALWithActualIsNULLTestMethod_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <(null)>");
 }
 
-static void _STRNCMP_EQUALWithExpectedIsNULLTestMethod()
+static void STRNCMP_EQUALWithExpectedIsNULLTestMethod_()
 {
     STRNCMP_EQUAL(NULLPTR, "ok", 2);
 } // LCOV_EXCL_LINE
 
 TEST(UnitTestStringMacros, FailureWithSTRNCMP_EQUALAndExpectedIsNULL)
 {
-    fixture.runTestWithMethod(_STRNCMP_EQUALWithExpectedIsNULLTestMethod);
+    fixture.runTestWithMethod(STRNCMP_EQUALWithExpectedIsNULLTestMethod_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <(null)>");
 }
 
-static void _STRCMP_NOCASE_EQUALWithActualIsNULLTestMethod()
+static void STRCMP_NOCASE_EQUALWithActualIsNULLTestMethod_()
 {
     STRCMP_NOCASE_EQUAL("ok", NULLPTR);
 } // LCOV_EXCL_LINE
 
 TEST(UnitTestStringMacros, FailureWithSTRCMP_NOCASE_EQUALAndActualIsNULL)
 {
-    fixture.runTestWithMethod(_STRCMP_NOCASE_EQUALWithActualIsNULLTestMethod);
+    fixture.runTestWithMethod(STRCMP_NOCASE_EQUALWithActualIsNULLTestMethod_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <(null)>");
 }
 
-static void _STRCMP_NOCASE_EQUALWithExpectedIsNULLTestMethod()
+static void STRCMP_NOCASE_EQUALWithExpectedIsNULLTestMethod_()
 {
     STRCMP_NOCASE_EQUAL(NULLPTR, "ok");
 } // LCOV_EXCL_LINE
 
 TEST(UnitTestStringMacros, FailureWithSTRCMP_NOCASE_EQUALAndExpectedIsNULL)
 {
-    fixture.runTestWithMethod(_STRCMP_NOCASE_EQUALWithExpectedIsNULLTestMethod);
+    fixture.runTestWithMethod(STRCMP_NOCASE_EQUALWithExpectedIsNULLTestMethod_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <(null)>");
 }
 
-static void _STRCMP_NOCASE_EQUALWithUnequalInputTestMethod()
+static void STRCMP_NOCASE_EQUALWithUnequalInputTestMethod_()
 {
     STRCMP_NOCASE_EQUAL("no", "ok");
 } // LCOV_EXCL_LINE
 
 TEST(UnitTestStringMacros, FailureWithSTRCMP_NOCASE_EQUALAndUnequalInput)
 {
-    fixture.runTestWithMethod(_STRCMP_NOCASE_EQUALWithUnequalInputTestMethod);
+    fixture.runTestWithMethod(STRCMP_NOCASE_EQUALWithUnequalInputTestMethod_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <ok>");
 }
 
-static void _STRCMP_NOCASE_CONTAINSWithActualIsNULLTestMethod()
+static void STRCMP_NOCASE_CONTAINSWithActualIsNULLTestMethod_()
 {
     STRCMP_NOCASE_CONTAINS("ok", NULLPTR);
 } // LCOV_EXCL_LINE
 
 TEST(UnitTestStringMacros, FailureWithSTRCMP_NOCASE_CONTAINSAndActualIsNULL)
 {
-    fixture.runTestWithMethod(_STRCMP_NOCASE_CONTAINSWithActualIsNULLTestMethod);
+    fixture.runTestWithMethod(STRCMP_NOCASE_CONTAINSWithActualIsNULLTestMethod_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("did not contain  <ok>");
 }
 
-static void _STRCMP_NOCASE_CONTAINSWithExpectedIsNULLTestMethod()
+static void STRCMP_NOCASE_CONTAINSWithExpectedIsNULLTestMethod_()
 {
     STRCMP_NOCASE_CONTAINS(NULLPTR, "ok");
 } // LCOV_EXCL_LINE
 
 TEST(UnitTestStringMacros, FailureWithSTRCMP_NOCASE_CONTAINSAndExpectedIsNULL)
 {
-    fixture.runTestWithMethod(_STRCMP_NOCASE_CONTAINSWithExpectedIsNULLTestMethod);
+    fixture.runTestWithMethod(STRCMP_NOCASE_CONTAINSWithExpectedIsNULLTestMethod_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("did not contain  <>");
 }
 
-static void _failingTestMethodWithSTRCMP_EQUAL()
+static void failingTestMethodWithSTRCMP_EQUAL_()
 {
     STRCMP_EQUAL("hello", "hell");
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
@@ -165,7 +165,7 @@ static void _failingTestMethodWithSTRCMP_EQUAL()
 
 TEST(UnitTestStringMacros, FailureWithSTRCMP_EQUAL)
 {
-    fixture.runTestWithMethod(_failingTestMethodWithSTRCMP_EQUAL);
+    fixture.runTestWithMethod(failingTestMethodWithSTRCMP_EQUAL_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <hello>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <hell>");
 }
@@ -181,7 +181,7 @@ IGNORE_TEST(UnitTestStringMacros, STRCMP_EQUALWorksInAnIgnoredTest)
     STRCMP_EQUAL("Hello", "World"); // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
 
-static void _failingTestMethodWithSTRCMP_EQUAL_TEXT()
+static void failingTestMethodWithSTRCMP_EQUAL_TEXT_()
 {
     STRCMP_EQUAL_TEXT("hello", "hell", "Failed because it failed");
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
@@ -189,7 +189,7 @@ static void _failingTestMethodWithSTRCMP_EQUAL_TEXT()
 
 TEST(UnitTestStringMacros, FailureWithSTRCMP_EQUAL_TEXT)
 {
-    fixture.runTestWithMethod(_failingTestMethodWithSTRCMP_EQUAL_TEXT);
+    fixture.runTestWithMethod(failingTestMethodWithSTRCMP_EQUAL_TEXT_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <hello>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <hell>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("Failed because it failed");
@@ -206,7 +206,7 @@ IGNORE_TEST(UnitTestStringMacros, STRCMP_EQUAL_TEXTWorksInAnIgnoredTest)
     STRCMP_EQUAL_TEXT("Hello", "World", "Failed because it failed"); // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
 
-static void _failingTestMethodWithSTRNCMP_EQUAL()
+static void failingTestMethodWithSTRNCMP_EQUAL_()
 {
     STRNCMP_EQUAL("hello", "hallo", 5);
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
@@ -214,7 +214,7 @@ static void _failingTestMethodWithSTRNCMP_EQUAL()
 
 TEST(UnitTestStringMacros, FailureWithSTRNCMP_EQUAL)
 {
-    fixture.runTestWithMethod(_failingTestMethodWithSTRNCMP_EQUAL);
+    fixture.runTestWithMethod(failingTestMethodWithSTRNCMP_EQUAL_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <hello>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <hallo>");
 }
@@ -230,7 +230,7 @@ IGNORE_TEST(UnitTestStringMacros, STRNCMP_EQUALWorksInAnIgnoredTest)
     STRNCMP_EQUAL("Hello", "World", 3); // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
 
-static void _failingTestMethodWithSTRNCMP_EQUAL_TEXT()
+static void failingTestMethodWithSTRNCMP_EQUAL_TEXT_()
 {
     STRNCMP_EQUAL_TEXT("hello", "hallo", 5, "Failed because it failed");
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
@@ -238,7 +238,7 @@ static void _failingTestMethodWithSTRNCMP_EQUAL_TEXT()
 
 TEST(UnitTestStringMacros, FailureWithSTRNCMP_EQUAL_TEXT)
 {
-    fixture.runTestWithMethod(_failingTestMethodWithSTRNCMP_EQUAL_TEXT);
+    fixture.runTestWithMethod(failingTestMethodWithSTRNCMP_EQUAL_TEXT_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <hello>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <hallo>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("Failed because it failed");
@@ -255,7 +255,7 @@ IGNORE_TEST(UnitTestStringMacros, STRNCMP_EQUAL_TEXTWorksInAnIgnoredTest)
     STRNCMP_EQUAL_TEXT("Hello", "World", 3, "Failed because it failed"); // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
 
-static void _failingTestMethodWithSTRCMP_NOCASE_EQUAL()
+static void failingTestMethodWithSTRCMP_NOCASE_EQUAL_()
 {
     STRCMP_NOCASE_EQUAL("hello", "Hell");
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
@@ -263,7 +263,7 @@ static void _failingTestMethodWithSTRCMP_NOCASE_EQUAL()
 
 TEST(UnitTestStringMacros, FailureWithSTRCMP_NOCASE_EQUAL)
 {
-    fixture.runTestWithMethod(_failingTestMethodWithSTRCMP_NOCASE_EQUAL);
+    fixture.runTestWithMethod(failingTestMethodWithSTRCMP_NOCASE_EQUAL_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <hello>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <Hell>");
 }
@@ -279,7 +279,7 @@ IGNORE_TEST(UnitTestStringMacros, STRCMP_NOCASE_EQUALWorksInAnIgnoredTest)
     STRCMP_NOCASE_EQUAL("Hello", "World"); // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
 
-static void _failingTestMethodWithSTRCMP_NOCASE_EQUAL_TEXT()
+static void failingTestMethodWithSTRCMP_NOCASE_EQUAL_TEXT_()
 {
     STRCMP_NOCASE_EQUAL_TEXT("hello", "hell", "Failed because it failed");
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
@@ -287,7 +287,7 @@ static void _failingTestMethodWithSTRCMP_NOCASE_EQUAL_TEXT()
 
 TEST(UnitTestStringMacros, FailureWithSTRCMP_NOCASE_EQUAL_TEXT)
 {
-    fixture.runTestWithMethod(_failingTestMethodWithSTRCMP_NOCASE_EQUAL_TEXT);
+    fixture.runTestWithMethod(failingTestMethodWithSTRCMP_NOCASE_EQUAL_TEXT_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <hello>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <hell>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("Failed because it failed");
@@ -304,7 +304,7 @@ IGNORE_TEST(UnitTestStringMacros, STRCMP_NOCASE_EQUAL_TEXTWorksInAnIgnoredTest)
     STRCMP_NOCASE_EQUAL_TEXT("Hello", "World", "Failed because it failed"); // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
 
-static void _failingTestMethodWithSTRCMP_CONTAINS()
+static void failingTestMethodWithSTRCMP_CONTAINS_()
 {
     STRCMP_CONTAINS("hello", "world");
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
@@ -312,7 +312,7 @@ static void _failingTestMethodWithSTRCMP_CONTAINS()
 
 TEST(UnitTestStringMacros, FailureWithSTRCMP_CONTAINS)
 {
-    fixture.runTestWithMethod(_failingTestMethodWithSTRCMP_CONTAINS);
+    fixture.runTestWithMethod(failingTestMethodWithSTRCMP_CONTAINS_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("actual <world>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("did not contain  <hello>");
 }
@@ -328,7 +328,7 @@ IGNORE_TEST(UnitTestStringMacros, STRCMP_CONTAINSWorksInAnIgnoredTest)
     STRCMP_CONTAINS("Hello", "World"); // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
 
-static void _failingTestMethodWithSTRCMP_CONTAINS_TEXT()
+static void failingTestMethodWithSTRCMP_CONTAINS_TEXT_()
 {
     STRCMP_CONTAINS_TEXT("hello", "world", "Failed because it failed");
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
@@ -336,7 +336,7 @@ static void _failingTestMethodWithSTRCMP_CONTAINS_TEXT()
 
 TEST(UnitTestStringMacros, FailureWithSTRCMP_CONTAINS_TEXT)
 {
-    fixture.runTestWithMethod(_failingTestMethodWithSTRCMP_CONTAINS_TEXT);
+    fixture.runTestWithMethod(failingTestMethodWithSTRCMP_CONTAINS_TEXT_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("actual <world>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("did not contain  <hello>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("Failed because it failed");
@@ -353,7 +353,7 @@ IGNORE_TEST(UnitTestStringMacros, STRCMP_CONTAINS_TEXTWorksInAnIgnoredTest)
     STRCMP_CONTAINS_TEXT("Hello", "World", "Failed because it failed"); // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
 
-static void _failingTestMethodWithSTRCMP_NOCASE_CONTAINS()
+static void failingTestMethodWithSTRCMP_NOCASE_CONTAINS_()
 {
     STRCMP_NOCASE_CONTAINS("hello", "WORLD");
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
@@ -361,7 +361,7 @@ static void _failingTestMethodWithSTRCMP_NOCASE_CONTAINS()
 
 TEST(UnitTestStringMacros, FailureWithSTRCMP_NOCASE_CONTAINS)
 {
-    fixture.runTestWithMethod(_failingTestMethodWithSTRCMP_NOCASE_CONTAINS);
+    fixture.runTestWithMethod(failingTestMethodWithSTRCMP_NOCASE_CONTAINS_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("actual <WORLD>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("did not contain  <hello>");
 }
@@ -377,7 +377,7 @@ IGNORE_TEST(UnitTestStringMacros, STRCMP_NO_CASE_CONTAINSWorksInAnIgnoredTest)
     STRCMP_NOCASE_CONTAINS("Hello", "World"); // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
 
-static void _failingTestMethodWithSTRCMP_NOCASE_CONTAINS_TEXT()
+static void failingTestMethodWithSTRCMP_NOCASE_CONTAINS_TEXT_()
 {
     STRCMP_NOCASE_CONTAINS_TEXT("hello", "WORLD", "Failed because it failed");
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
@@ -385,7 +385,7 @@ static void _failingTestMethodWithSTRCMP_NOCASE_CONTAINS_TEXT()
 
 TEST(UnitTestStringMacros, FailureWithSTRCMP_NOCASE_CONTAINS_TEXT)
 {
-    fixture.runTestWithMethod(_failingTestMethodWithSTRCMP_NOCASE_CONTAINS_TEXT);
+    fixture.runTestWithMethod(failingTestMethodWithSTRCMP_NOCASE_CONTAINS_TEXT_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("actual <WORLD>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("did not contain  <hello>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("Failed because it failed");
@@ -410,7 +410,7 @@ TEST(UnitTestStringMacros, NFirstCharsComparison)
     STRNCMP_EQUAL("Hello World!", "Hello", 5);
 }
 
-static void _compareNFirstCharsWithUpperAndLowercase()
+static void compareNFirstCharsWithUpperAndLowercase_()
 {
     STRNCMP_EQUAL("hello world!", "HELLO WORLD!", 12);
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
@@ -418,13 +418,13 @@ static void _compareNFirstCharsWithUpperAndLowercase()
 
 TEST(UnitTestStringMacros, CompareNFirstCharsWithUpperAndLowercase)
 {
-    fixture.runTestWithMethod(_compareNFirstCharsWithUpperAndLowercase);
+    fixture.runTestWithMethod(compareNFirstCharsWithUpperAndLowercase_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <hello world!>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <HELLO WORLD!>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("difference starts at position 0");
 }
 
-static void _compareNFirstCharsWithDifferenceInTheMiddle()
+static void compareNFirstCharsWithDifferenceInTheMiddle_()
 {
     STRNCMP_EQUAL("Hello World!", "Hello Peter!", 12);
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
@@ -432,13 +432,13 @@ static void _compareNFirstCharsWithDifferenceInTheMiddle()
 
 TEST(UnitTestStringMacros, CompareNFirstCharsWithDifferenceInTheMiddle)
 {
-    fixture.runTestWithMethod(_compareNFirstCharsWithDifferenceInTheMiddle);
+    fixture.runTestWithMethod(compareNFirstCharsWithDifferenceInTheMiddle_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <Hello World!>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <Hello Peter!>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("difference starts at position 6");
 }
 
-static void _compareNFirstCharsWithEmptyString()
+static void compareNFirstCharsWithEmptyString_()
 {
     STRNCMP_EQUAL("", "Not empty string", 5);
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
@@ -446,13 +446,13 @@ static void _compareNFirstCharsWithEmptyString()
 
 TEST(UnitTestStringMacros, CompareNFirstCharsWithEmptyString)
 {
-    fixture.runTestWithMethod(_compareNFirstCharsWithEmptyString);
+    fixture.runTestWithMethod(compareNFirstCharsWithEmptyString_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <Not empty string>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("difference starts at position 0");
 }
 
-static void _compareNFirstCharsWithLastCharDifferent()
+static void compareNFirstCharsWithLastCharDifferent_()
 {
     STRNCMP_EQUAL("Not empty string?", "Not empty string!", 17);
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
@@ -460,9 +460,8 @@ static void _compareNFirstCharsWithLastCharDifferent()
 
 TEST(UnitTestStringMacros, CompareNFirstCharsWithLastCharDifferent)
 {
-    fixture.runTestWithMethod(_compareNFirstCharsWithLastCharDifferent);
+    fixture.runTestWithMethod(compareNFirstCharsWithLastCharDifferent_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <Not empty string?>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <Not empty string!>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("difference starts at position 16");
 }
-

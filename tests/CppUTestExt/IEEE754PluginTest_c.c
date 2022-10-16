@@ -58,7 +58,7 @@ void set_nothing_c(void)
 {
 }
 
-void set_everything_c()
+void set_everything_c(void)
 {
     set_divisionbyzero_c();
     set_overflow_c();

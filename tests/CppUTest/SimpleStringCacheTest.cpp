@@ -251,7 +251,7 @@ TEST(SimpleStringInternalCache, clearAllIncludingCurrentlyUsedMemoryAlsoReleases
     LONGS_EQUAL(3, accountant.totalDeallocationsOfSize(1234));
 }
 
-static void _deallocatingStringMemoryThatWasntAllocatedWithCache(SimpleStringInternalCache* cache, size_t allocationSize)
+static void deallocatingStringMemoryThatWasntAllocatedWithCache_(SimpleStringInternalCache* cache, size_t allocationSize)
 {
     char* mem = defaultMallocAllocator()->alloc_memory(allocationSize, __FILE__, __LINE__);
     mem[0] = 'B';
@@ -264,7 +264,7 @@ static void _deallocatingStringMemoryThatWasntAllocatedWithCache(SimpleStringInt
 
 TEST(SimpleStringInternalCache, deallocatingMemoryThatWasntAllocatedWhileCacheWasInPlaceProducesWarning)
 {
-    testFunction.testFunction = _deallocatingStringMemoryThatWasntAllocatedWithCache;
+    testFunction.testFunction = deallocatingStringMemoryThatWasntAllocatedWithCache_;
     testFunction.allocationSize = 123;
 
     cache.setAllocator(allocator);
@@ -277,7 +277,7 @@ TEST(SimpleStringInternalCache, deallocatingMemoryThatWasntAllocatedWhileCacheWa
 
 }
 
-static void _deallocatingStringMemoryTwiceThatWasntAllocatedWithCache(SimpleStringInternalCache* cache, size_t allocationSize)
+static void deallocatingStringMemoryTwiceThatWasntAllocatedWithCache_(SimpleStringInternalCache* cache, size_t allocationSize)
 {
     char* mem = defaultMallocAllocator()->alloc_memory(allocationSize, __FILE__, __LINE__);
     mem[0] = '\0';
@@ -288,7 +288,7 @@ static void _deallocatingStringMemoryTwiceThatWasntAllocatedWithCache(SimpleStri
 
 TEST(SimpleStringInternalCache, deallocatingMemoryThatWasntAllocatedWhileCacheWasInPlaceProducesWarningButOnlyOnce)
 {
-    testFunction.testFunction = _deallocatingStringMemoryTwiceThatWasntAllocatedWithCache;
+    testFunction.testFunction = deallocatingStringMemoryTwiceThatWasntAllocatedWithCache_;
     testFunction.allocationSize = 123;
 
     cache.setAllocator(allocator);
@@ -299,7 +299,7 @@ TEST(SimpleStringInternalCache, deallocatingMemoryThatWasntAllocatedWhileCacheWa
 
 TEST(SimpleStringInternalCache, deallocatingLargeMemoryThatWasntAllocatedWhileCacheWasInPlaceProducesWarning)
 {
-    testFunction.testFunction = _deallocatingStringMemoryThatWasntAllocatedWithCache;
+    testFunction.testFunction = deallocatingStringMemoryThatWasntAllocatedWithCache_;
     testFunction.allocationSize = 12345;
 
     cache.setAllocator(allocator);
@@ -314,7 +314,7 @@ TEST(SimpleStringInternalCache, deallocatingLargeMemoryThatWasntAllocatedWhileCa
 
 TEST(SimpleStringInternalCache, deallocatingLargeMemoryThatWasntAllocatedWhileCacheWasInPlaceProducesWarningButOnlyOnce)
 {
-    testFunction.testFunction = _deallocatingStringMemoryTwiceThatWasntAllocatedWithCache;
+    testFunction.testFunction = deallocatingStringMemoryTwiceThatWasntAllocatedWithCache_;
     testFunction.allocationSize = 12345;
 
     cache.setAllocator(allocator);

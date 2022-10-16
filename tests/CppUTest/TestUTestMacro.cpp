@@ -48,7 +48,7 @@ TEST_GROUP(UnitTestMacros)
     TestTestingFixture fixture;
 };
 
-static void _failingTestMethodWithFAIL()
+static void failingTestMethodWithFAIL_()
 {
     FAIL("This test fails");
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
@@ -56,13 +56,13 @@ static void _failingTestMethodWithFAIL()
 
 TEST(UnitTestMacros, FAILMakesTheTestFailPrintsTheRightResultAndStopsExecuting)
 {
-    fixture.runTestWithMethod(_failingTestMethodWithFAIL);
+    fixture.runTestWithMethod(failingTestMethodWithFAIL_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("This test fails");
 }
 
 TEST(UnitTestMacros, FAILWillPrintTheFileThatItFailed)
 {
-    fixture.runTestWithMethod(_failingTestMethodWithFAIL);
+    fixture.runTestWithMethod(failingTestMethodWithFAIL_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT(__FILE__);
 }
 
@@ -80,7 +80,7 @@ IGNORE_TEST(UnitTestMacros, FAILworksInAnIgnoredTest)
     FAIL("die!"); // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
 
-static void _UNSIGNED_LONGS_EQUALTestMethod()
+static void UNSIGNED_LONGS_EQUALTestMethod_()
 {
     UNSIGNED_LONGS_EQUAL(1, 1);
     UNSIGNED_LONGS_EQUAL(1, 0);
@@ -88,7 +88,7 @@ static void _UNSIGNED_LONGS_EQUALTestMethod()
 
 TEST(UnitTestMacros, TestUNSIGNED_LONGS_EQUAL)
 {
-    fixture.runTestWithMethod(_UNSIGNED_LONGS_EQUALTestMethod);
+    fixture.runTestWithMethod(UNSIGNED_LONGS_EQUALTestMethod_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1 (0x1)>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0 (0x0)>");
 }
@@ -104,14 +104,14 @@ IGNORE_TEST(UnitTestMacros, UNSIGNED_LONGS_EQUALWorksInAnIgnoredTest)
     UNSIGNED_LONGS_EQUAL(1, 0); // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
 
-static void _UNSIGNED_LONGS_EQUAL_TEXTTestMethod()
+static void UNSIGNED_LONGS_EQUAL_TEXTTestMethod_()
 {
     UNSIGNED_LONGS_EQUAL_TEXT(1, 0, "Failed because it failed");
 } // LCOV_EXCL_LINE
 
 TEST(UnitTestMacros, TestUNSIGNED_LONGS_EQUAL_TEXT)
 {
-    fixture.runTestWithMethod(_UNSIGNED_LONGS_EQUAL_TEXTTestMethod);
+    fixture.runTestWithMethod(UNSIGNED_LONGS_EQUAL_TEXTTestMethod_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1 (0x1)>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0 (0x0)>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("Failed because it failed");
@@ -130,7 +130,7 @@ IGNORE_TEST(UnitTestMacros, UNSIGNED_LONGS_EQUAL_TEXTWorksInAnIgnoredTest)
 
 #ifdef CPPUTEST_USE_LONG_LONG
 
-static void _LONGLONGS_EQUALTestMethod()
+static void LONGLONGS_EQUALTestMethod_()
 {
     LONGLONGS_EQUAL(1, 1);
     LONGLONGS_EQUAL(1, 0);
@@ -138,7 +138,7 @@ static void _LONGLONGS_EQUALTestMethod()
 
 TEST(UnitTestMacros, TestLONGLONGS_EQUAL)
 {
-    fixture.runTestWithMethod(_LONGLONGS_EQUALTestMethod);
+    fixture.runTestWithMethod(LONGLONGS_EQUALTestMethod_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1 (0x1)>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0 (0x0)>");
 }
@@ -154,14 +154,14 @@ IGNORE_TEST(UnitTestMacros, LONGLONGS_EQUALWorksInAnIgnoredTest)
     LONGLONGS_EQUAL(1, 0); // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
 
-static void _LONGLONGS_EQUAL_TEXTTestMethod()
+static void LONGLONGS_EQUAL_TEXTTestMethod_()
 {
     LONGLONGS_EQUAL_TEXT(1, 0, "Failed because it failed");
 } // LCOV_EXCL_LINE
 
 TEST(UnitTestMacros, TestLONGLONGS_EQUAL_TEXT)
 {
-    fixture.runTestWithMethod(_LONGLONGS_EQUAL_TEXTTestMethod);
+    fixture.runTestWithMethod(LONGLONGS_EQUAL_TEXTTestMethod_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1 (0x1)>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0 (0x0)>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("Failed because it failed");
@@ -178,7 +178,7 @@ IGNORE_TEST(UnitTestMacros, LONGLONGS_EQUAL_TEXTWorksInAnIgnoredTest)
     LONGLONGS_EQUAL_TEXT(1, 0, "Failed because it failed"); // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
 
-static void _UNSIGNED_LONGLONGS_EQUALTestMethod()
+static void UNSIGNED_LONGLONGS_EQUALTestMethod_()
 {
     UNSIGNED_LONGLONGS_EQUAL(1, 1);
     UNSIGNED_LONGLONGS_EQUAL(1, 0);
@@ -186,7 +186,7 @@ static void _UNSIGNED_LONGLONGS_EQUALTestMethod()
 
 TEST(UnitTestMacros, TestUNSIGNED_LONGLONGS_EQUAL)
 {
-    fixture.runTestWithMethod(_UNSIGNED_LONGLONGS_EQUALTestMethod);
+    fixture.runTestWithMethod(UNSIGNED_LONGLONGS_EQUALTestMethod_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1 (0x1)>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0 (0x0)>");
 }
@@ -202,14 +202,14 @@ IGNORE_TEST(UnitTestMacros, UNSIGNED_LONGLONGS_EQUALWorksInAnIgnoredTest)
     UNSIGNED_LONGLONGS_EQUAL(1, 0); // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
 
-static void _UNSIGNED_LONGLONGS_EQUAL_TEXTTestMethod()
+static void UNSIGNED_LONGLONGS_EQUAL_TEXTTestMethod_()
 {
     UNSIGNED_LONGLONGS_EQUAL_TEXT(1, 0, "Failed because it failed");
 } // LCOV_EXCL_LINE
 
 TEST(UnitTestMacros, TestUNSIGNED_LONGLONGS_EQUAL_TEXT)
 {
-    fixture.runTestWithMethod(_UNSIGNED_LONGLONGS_EQUAL_TEXTTestMethod);
+    fixture.runTestWithMethod(UNSIGNED_LONGLONGS_EQUAL_TEXTTestMethod_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1 (0x1)>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0 (0x0)>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("Failed because it failed");
@@ -228,31 +228,31 @@ IGNORE_TEST(UnitTestMacros, UNSIGNED_LONGLONGS_EQUAL_TEXTWorksInAnIgnoredTest)
 
 #else
 
-static void _LONGLONGS_EQUALFailsWithUnsupportedFeatureTestMethod()
+static void LONGLONGS_EQUALFailsWithUnsupportedFeatureTestMethod_()
 {
     LONGLONGS_EQUAL(1, 1);
 } // LCOV_EXCL_LINE
 
-static void _UNSIGNED_LONGLONGS_EQUALFailsWithUnsupportedFeatureTestMethod()
+static void UNSIGNED_LONGLONGS_EQUALFailsWithUnsupportedFeatureTestMethod_()
 {
     UNSIGNED_LONGLONGS_EQUAL(1, 1);
 } // LCOV_EXCL_LINE
 
 TEST(UnitTestMacros, LONGLONGS_EQUALFailsWithUnsupportedFeature)
 {
-    fixture.runTestWithMethod(_LONGLONGS_EQUALFailsWithUnsupportedFeatureTestMethod);
+    fixture.runTestWithMethod(LONGLONGS_EQUALFailsWithUnsupportedFeatureTestMethod_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("\"CPPUTEST_USE_LONG_LONG\" is not supported");
 }
 
 TEST(UnitTestMacros, UNSIGNED_LONGLONGS_EQUALFailsWithUnsupportedFeature)
 {
-    fixture.runTestWithMethod(_UNSIGNED_LONGLONGS_EQUALFailsWithUnsupportedFeatureTestMethod);
+    fixture.runTestWithMethod(UNSIGNED_LONGLONGS_EQUALFailsWithUnsupportedFeatureTestMethod_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("\"CPPUTEST_USE_LONG_LONG\" is not supported");
 }
 
 #endif /* CPPUTEST_USE_LONG_LONG */
 
-static void _failingTestMethodWithCHECK()
+static void failingTestMethodWithCHECK_()
 {
     CHECK(false);
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
@@ -260,7 +260,7 @@ static void _failingTestMethodWithCHECK()
 
 TEST(UnitTestMacros, FailureWithCHECK)
 {
-    fixture.runTestWithMethod(_failingTestMethodWithCHECK);
+    fixture.runTestWithMethod(failingTestMethodWithCHECK_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("CHECK(false) failed");
 }
 
@@ -275,7 +275,7 @@ IGNORE_TEST(UnitTestMacros, CHECKWorksInAnIgnoredTest)
     CHECK(false); // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
 
-static void _failingTestMethodWithCHECK_TEXT()
+static void failingTestMethodWithCHECK_TEXT_()
 {
     CHECK_TEXT(false, "Failed because it failed");
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
@@ -283,7 +283,7 @@ static void _failingTestMethodWithCHECK_TEXT()
 
 TEST(UnitTestMacros, FailureWithCHECK_TEXT)
 {
-    fixture.runTestWithMethod(_failingTestMethodWithCHECK_TEXT);
+    fixture.runTestWithMethod(failingTestMethodWithCHECK_TEXT_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("CHECK(false) failed");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("Failed because it failed");
 }
@@ -299,7 +299,7 @@ IGNORE_TEST(UnitTestMacros, CHECK_TEXTWorksInAnIgnoredTest)
     CHECK_TEXT(false, "false"); // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
 
-static void _failingTestMethodWithCHECK_TRUE()
+static void failingTestMethodWithCHECK_TRUE_()
 {
     CHECK_TRUE(false);
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
@@ -307,7 +307,7 @@ static void _failingTestMethodWithCHECK_TRUE()
 
 TEST(UnitTestMacros, FailureWithCHECK_TRUE)
 {
-    fixture.runTestWithMethod(_failingTestMethodWithCHECK_TRUE);
+    fixture.runTestWithMethod(failingTestMethodWithCHECK_TRUE_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("CHECK_TRUE(false) failed");
 }
 
@@ -322,7 +322,7 @@ IGNORE_TEST(UnitTestMacros, CHECK_TRUEWorksInAnIgnoredTest)
     CHECK_TRUE(false); // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
 
-static void _failingTestMethodWithCHECK_TRUE_TEXT()
+static void failingTestMethodWithCHECK_TRUE_TEXT_()
 {
     CHECK_TRUE_TEXT(false, "Failed because it failed");
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
@@ -330,7 +330,7 @@ static void _failingTestMethodWithCHECK_TRUE_TEXT()
 
 TEST(UnitTestMacros, FailureWithCHECK_TRUE_TEXT)
 {
-    fixture.runTestWithMethod(_failingTestMethodWithCHECK_TRUE_TEXT);
+    fixture.runTestWithMethod(failingTestMethodWithCHECK_TRUE_TEXT_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("CHECK_TRUE(false) failed");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("Failed because it failed");
 }
@@ -346,7 +346,7 @@ IGNORE_TEST(UnitTestMacros, CHECK_TRUE_TEXTWorksInAnIgnoredTest)
     CHECK_TRUE_TEXT(false, "Failed because it failed"); // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
 
-static void _failingTestMethodWithCHECK_FALSE()
+static void failingTestMethodWithCHECK_FALSE_()
 {
     CHECK_FALSE(true);
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
@@ -354,7 +354,7 @@ static void _failingTestMethodWithCHECK_FALSE()
 
 TEST(UnitTestMacros, FailureWithCHECK_FALSE)
 {
-    fixture.runTestWithMethod(_failingTestMethodWithCHECK_FALSE);
+    fixture.runTestWithMethod(failingTestMethodWithCHECK_FALSE_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("CHECK_FALSE(true) failed");
 }
 
@@ -369,7 +369,7 @@ IGNORE_TEST(UnitTestMacros, CHECK_FALSEWorksInAnIgnoredTest)
     CHECK_FALSE(true); // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
 
-static void _failingTestMethodWithCHECK_FALSE_TEXT()
+static void failingTestMethodWithCHECK_FALSE_TEXT_()
 {
     CHECK_FALSE_TEXT(true, "Failed because it failed");
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
@@ -377,7 +377,7 @@ static void _failingTestMethodWithCHECK_FALSE_TEXT()
 
 TEST(UnitTestMacros, FailureWithCHECK_FALSE_TEXT)
 {
-    fixture.runTestWithMethod(_failingTestMethodWithCHECK_FALSE_TEXT);
+    fixture.runTestWithMethod(failingTestMethodWithCHECK_FALSE_TEXT_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("CHECK_FALSE(true)");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("Failed because it failed");
 }
@@ -393,7 +393,7 @@ IGNORE_TEST(UnitTestMacros, CHECK_FALSE_TEXTWorksInAnIgnoredTest)
     CHECK_FALSE_TEXT(true, "Failed because it failed"); // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
 
-static void _failingTestMethodWithCHECK_EQUAL()
+static void failingTestMethodWithCHECK_EQUAL_()
 {
     CHECK_EQUAL(1, 2);
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
@@ -401,12 +401,12 @@ static void _failingTestMethodWithCHECK_EQUAL()
 
 TEST(UnitTestMacros, FailureWithCHECK_EQUAL)
 {
-    fixture.runTestWithMethod(_failingTestMethodWithCHECK_EQUAL);
+    fixture.runTestWithMethod(failingTestMethodWithCHECK_EQUAL_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <2>");
 }
 
-static void _failingTestMethodWithCHECK_COMPARE()
+static void failingTestMethodWithCHECK_COMPARE_()
 {
     double small = 0.5, big = 0.8;
     CHECK_COMPARE(small, >=, big);
@@ -415,7 +415,7 @@ static void _failingTestMethodWithCHECK_COMPARE()
 
 TEST(UnitTestMacros, FailureWithCHECK_COMPARE)
 {
-    fixture.runTestWithMethod(_failingTestMethodWithCHECK_COMPARE);
+    fixture.runTestWithMethod(failingTestMethodWithCHECK_COMPARE_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("CHECK_COMPARE(0.5 >= 0.8)");
 }
 
@@ -430,7 +430,7 @@ IGNORE_TEST(UnitTestMacros, CHECK_COMPAREWorksInAnIgnoredTest)
   CHECK_COMPARE(1, >, 2); // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
 
-static void _failingTestMethodWithCHECK_COMPARE_TEXT()
+static void failingTestMethodWithCHECK_COMPARE_TEXT_()
 {
     double small = 0.5, big = 0.8;
     CHECK_COMPARE_TEXT(small, >=, big, "small bigger than big");
@@ -439,7 +439,7 @@ static void _failingTestMethodWithCHECK_COMPARE_TEXT()
 
 TEST(UnitTestMacros, FailureWithCHECK_COMPARE_TEXT)
 {
-    fixture.runTestWithMethod(_failingTestMethodWithCHECK_COMPARE_TEXT);
+    fixture.runTestWithMethod(failingTestMethodWithCHECK_COMPARE_TEXT_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("CHECK_COMPARE(0.5 >= 0.8)");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("small bigger than big");
 }
@@ -456,7 +456,7 @@ IGNORE_TEST(UnitTestMacros, CHECK_COMPARE_TEXTWorksInAnIgnoredTest)
 } // LCOV_EXCL_LINE
 
 static int countInCountingMethod;
-static int _countingMethod()
+static int countingMethod_()
 {
     return countInCountingMethod++;
 }
@@ -480,36 +480,36 @@ TEST(UnitTestMacros, UNSIGNED_LONGS_EQUAL_macroExpressionSafety)
 TEST(UnitTestMacros, passingCheckEqualWillNotBeEvaluatedMultipleTimesWithCHECK_EQUAL)
 {
     countInCountingMethod = 0;
-    CHECK_EQUAL(0, _countingMethod());
+    CHECK_EQUAL(0, countingMethod_());
 
     LONGS_EQUAL(1, countInCountingMethod);
 }
 
-static void _failing_CHECK_EQUAL_WithActualBeingEvaluatesMultipleTimesWillGiveAWarning()
+static void failing_CHECK_EQUAL_WithActualBeingEvaluatesMultipleTimesWillGiveAWarning_()
 {
-    CHECK_EQUAL(12345, _countingMethod());
+    CHECK_EQUAL(12345, countingMethod_());
 } // LCOV_EXCL_LINE
 
 TEST(UnitTestMacros, failing_CHECK_EQUAL_WithActualBeingEvaluatesMultipleTimesWillGiveAWarning)
 {
-    fixture.runTestWithMethod(_failing_CHECK_EQUAL_WithActualBeingEvaluatesMultipleTimesWillGiveAWarning);
+    fixture.runTestWithMethod(failing_CHECK_EQUAL_WithActualBeingEvaluatesMultipleTimesWillGiveAWarning_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("WARNING:\n\tThe \"Actual Parameter\" parameter is evaluated multiple times resulting in different values.\n\tThus the value in the error message is probably incorrect.");
 }
 
-static void _failing_CHECK_EQUAL_WithExpectedBeingEvaluatesMultipleTimesWillGiveAWarning()
+static void failing_CHECK_EQUAL_WithExpectedBeingEvaluatesMultipleTimesWillGiveAWarning_()
 {
-    CHECK_EQUAL(_countingMethod(), 12345);
+    CHECK_EQUAL(countingMethod_(), 12345);
 } // LCOV_EXCL_LINE
 
 TEST(UnitTestMacros, failing_CHECK_EQUAL_WithExpectedBeingEvaluatesMultipleTimesWillGiveAWarning)
 {
-    fixture.runTestWithMethod(_failing_CHECK_EQUAL_WithExpectedBeingEvaluatesMultipleTimesWillGiveAWarning);
+    fixture.runTestWithMethod(failing_CHECK_EQUAL_WithExpectedBeingEvaluatesMultipleTimesWillGiveAWarning_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("WARNING:\n\tThe \"Expected Parameter\" parameter is evaluated multiple times resulting in different values.\n\tThus the value in the error message is probably incorrect.");
 }
 
 TEST(UnitTestMacros, failing_CHECK_EQUAL_withParamatersThatDontChangeWillNotGiveAnyWarning)
 {
-    fixture.runTestWithMethod(_failingTestMethodWithCHECK_EQUAL);
+    fixture.runTestWithMethod(failingTestMethodWithCHECK_EQUAL_);
     fixture.assertPrintContainsNot("WARNING");
 }
 
@@ -524,7 +524,7 @@ IGNORE_TEST(UnitTestMacros, CHECK_EQUALWorksInAnIgnoredTest)
     CHECK_EQUAL(1, 2); // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
 
-static void _failingTestMethodWithCHECK_EQUAL_TEXT()
+static void failingTestMethodWithCHECK_EQUAL_TEXT_()
 {
     CHECK_EQUAL_TEXT(1, 2, "Failed because it failed");
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
@@ -532,7 +532,7 @@ static void _failingTestMethodWithCHECK_EQUAL_TEXT()
 
 TEST(UnitTestMacros, FailureWithCHECK_EQUAL_TEXT)
 {
-    fixture.runTestWithMethod(_failingTestMethodWithCHECK_EQUAL_TEXT);
+    fixture.runTestWithMethod(failingTestMethodWithCHECK_EQUAL_TEXT_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <2>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("Failed because it failed");
@@ -549,7 +549,7 @@ IGNORE_TEST(UnitTestMacros, CHECK_EQUAL_TEXTWorksInAnIgnoredTest)
     CHECK_EQUAL_TEXT(1, 2, "Failed because it failed"); // LCOV_EXCL_LINE;
 } // LCOV_EXCL_LINE
 
-static void _failingTestMethodWithCHECK_EQUAL_ZERO()
+static void failingTestMethodWithCHECK_EQUAL_ZERO_()
 {
     CHECK_EQUAL_ZERO(1);
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
@@ -557,7 +557,7 @@ static void _failingTestMethodWithCHECK_EQUAL_ZERO()
 
 TEST(UnitTestMacros, FailureWithCHECK_EQUAL_ZERO)
 {
-    fixture.runTestWithMethod(_failingTestMethodWithCHECK_EQUAL_ZERO);
+    fixture.runTestWithMethod(failingTestMethodWithCHECK_EQUAL_ZERO_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <0>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <1>");
 }
@@ -565,26 +565,26 @@ TEST(UnitTestMacros, FailureWithCHECK_EQUAL_ZERO)
 TEST(UnitTestMacros, passingCheckEqualWillNotBeEvaluatedMultipleTimesWithCHECK_EQUAL_ZERO)
 {
     countInCountingMethod = 0;
-    CHECK_EQUAL_ZERO(_countingMethod());
+    CHECK_EQUAL_ZERO(countingMethod_());
 
     LONGS_EQUAL(1, countInCountingMethod);
 }
 
-static void _failing_CHECK_EQUAL_ZERO_WithActualBeingEvaluatesMultipleTimesWillGiveAWarning()
+static void failing_CHECK_EQUAL_ZERO_WithActualBeingEvaluatesMultipleTimesWillGiveAWarning_()
 {
     countInCountingMethod = 1;
-    CHECK_EQUAL_ZERO(_countingMethod());
+    CHECK_EQUAL_ZERO(countingMethod_());
 } // LCOV_EXCL_LINE
 
 TEST(UnitTestMacros, failing_CHECK_EQUAL_ZERO_WithActualBeingEvaluatesMultipleTimesWillGiveAWarning)
 {
-    fixture.runTestWithMethod(_failing_CHECK_EQUAL_ZERO_WithActualBeingEvaluatesMultipleTimesWillGiveAWarning);
+    fixture.runTestWithMethod(failing_CHECK_EQUAL_ZERO_WithActualBeingEvaluatesMultipleTimesWillGiveAWarning_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("WARNING:\n\tThe \"Actual Parameter\" parameter is evaluated multiple times resulting in different values.\n\tThus the value in the error message is probably incorrect.");
 }
 
 TEST(UnitTestMacros, failing_CHECK_EQUAL_ZERO_withParamatersThatDontChangeWillNotGiveAnyWarning)
 {
-    fixture.runTestWithMethod(_failingTestMethodWithCHECK_EQUAL_ZERO);
+    fixture.runTestWithMethod(failingTestMethodWithCHECK_EQUAL_ZERO_);
     fixture.assertPrintContainsNot("WARNING");
 }
 
@@ -599,7 +599,7 @@ TEST(UnitTestMacros, CHECK_EQUAL_ZERO_BehavesAsProperMacro)
     else CHECK_EQUAL_ZERO(0);
 }
 
-static void _failingTestMethodWithCHECK_EQUAL_ZERO_TEXT()
+static void failingTestMethodWithCHECK_EQUAL_ZERO_TEXT_()
 {
     CHECK_EQUAL_ZERO_TEXT(1, "Failed because it failed");
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
@@ -607,7 +607,7 @@ static void _failingTestMethodWithCHECK_EQUAL_ZERO_TEXT()
 
 TEST(UnitTestMacros, FailureWithCHECK_EQUAL_ZERO_TEXT)
 {
-    fixture.runTestWithMethod(_failingTestMethodWithCHECK_EQUAL_ZERO_TEXT);
+    fixture.runTestWithMethod(failingTestMethodWithCHECK_EQUAL_ZERO_TEXT_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <0>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <1>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("Failed because it failed");
@@ -624,7 +624,7 @@ IGNORE_TEST(UnitTestMacros, CHECK_EQUAL_ZERO_TEXTWorksInAnIgnoredTest)
     CHECK_EQUAL_ZERO_TEXT(1, "Failed because it failed"); // LCOV_EXCL_LINE;
 } // LCOV_EXCL_LINE
 
-static void _failingTestMethodWithLONGS_EQUAL()
+static void failingTestMethodWithLONGS_EQUAL_()
 {
     LONGS_EQUAL(1, 0xff);
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
@@ -632,12 +632,12 @@ static void _failingTestMethodWithLONGS_EQUAL()
 
 TEST(UnitTestMacros, FailureWithLONGS_EQUALS)
 {
-    fixture.runTestWithMethod(_failingTestMethodWithLONGS_EQUAL);
+    fixture.runTestWithMethod(failingTestMethodWithLONGS_EQUAL_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <  1 (0x1)>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <255 (0xff)>");
 }
 
-static void _failingTestMethodWithLONGS_EQUALWithSymbolicParameters()
+static void failingTestMethodWithLONGS_EQUALWithSymbolicParameters_()
 {
 #define _MONDAY 1
     int day_of_the_week = _MONDAY+1;
@@ -647,7 +647,7 @@ static void _failingTestMethodWithLONGS_EQUALWithSymbolicParameters()
 
 TEST(UnitTestMacros, FailureWithLONGS_EQUALShowsSymbolicParameters)
 {
-    fixture.runTestWithMethod(_failingTestMethodWithLONGS_EQUALWithSymbolicParameters);
+    fixture.runTestWithMethod(failingTestMethodWithLONGS_EQUALWithSymbolicParameters_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("LONGS_EQUAL(_MONDAY, day_of_the_week) failed");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1 (0x1)>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <2 (0x2)>");
@@ -665,7 +665,7 @@ IGNORE_TEST(UnitTestMacros, LONGS_EQUALWorksInAnIgnoredTest)
     LONGS_EQUAL(11, 22); // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
 
-static void _failingTestMethodWithLONGS_EQUAL_TEXT()
+static void failingTestMethodWithLONGS_EQUAL_TEXT_()
 {
     LONGS_EQUAL_TEXT(1, 0xff, "Failed because it failed");
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
@@ -673,7 +673,7 @@ static void _failingTestMethodWithLONGS_EQUAL_TEXT()
 
 TEST(UnitTestMacros, FailureWithLONGS_EQUALS_TEXT)
 {
-    fixture.runTestWithMethod(_failingTestMethodWithLONGS_EQUAL_TEXT);
+    fixture.runTestWithMethod(failingTestMethodWithLONGS_EQUAL_TEXT_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <  1 (0x1)>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <255 (0xff)>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("Failed because it failed");
@@ -690,7 +690,7 @@ IGNORE_TEST(UnitTestMacros, LONGS_EQUAL_TEXTWorksInAnIgnoredTest)
     LONGS_EQUAL_TEXT(11, 22, "Failed because it failed"); // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
 
-static void _failingTestMethodWithBYTES_EQUAL()
+static void failingTestMethodWithBYTES_EQUAL_()
 {
     BYTES_EQUAL('a', 'b');
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
@@ -698,7 +698,7 @@ static void _failingTestMethodWithBYTES_EQUAL()
 
 TEST(UnitTestMacros, FailureWithBYTES_EQUAL)
 {
-    fixture.runTestWithMethod(_failingTestMethodWithBYTES_EQUAL);
+    fixture.runTestWithMethod(failingTestMethodWithBYTES_EQUAL_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <97 (0x61)>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <98 (0x62)>");
 }
@@ -714,7 +714,7 @@ IGNORE_TEST(UnitTestMacros, BYTES_EQUALWorksInAnIgnoredTest)
     BYTES_EQUAL('q', 'w'); // LCOV_EXCL_LINE;
 } // LCOV_EXCL_LINE
 
-static void _failingTestMethodWithBYTES_EQUAL_TEXT()
+static void failingTestMethodWithBYTES_EQUAL_TEXT_()
 {
     BYTES_EQUAL_TEXT('a', 'b', "Failed because it failed");
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
@@ -722,7 +722,7 @@ static void _failingTestMethodWithBYTES_EQUAL_TEXT()
 
 TEST(UnitTestMacros, FailureWithBYTES_EQUAL_TEXT)
 {
-    fixture.runTestWithMethod(_failingTestMethodWithBYTES_EQUAL_TEXT);
+    fixture.runTestWithMethod(failingTestMethodWithBYTES_EQUAL_TEXT_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <97 (0x61)>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <98 (0x62)>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("Failed because it failed");
@@ -739,7 +739,7 @@ IGNORE_TEST(UnitTestMacros, BYTES_EQUAL_TEXTWorksInAnIgnoredTest)
     BYTES_EQUAL_TEXT('q', 'w', "Failed because it failed"); // LCOV_EXCL_LINE;
 } // LCOV_EXCL_LINE
 
-static void _failingTestMethodWithSIGNED_BYTES_EQUAL()
+static void failingTestMethodWithSIGNED_BYTES_EQUAL_()
 {
     SIGNED_BYTES_EQUAL(-1, -2);
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
@@ -747,7 +747,7 @@ static void _failingTestMethodWithSIGNED_BYTES_EQUAL()
 
 TEST(UnitTestMacros, FailureWithSIGNED_BYTES_EQUAL)
 {
-    fixture.runTestWithMethod(_failingTestMethodWithSIGNED_BYTES_EQUAL);
+    fixture.runTestWithMethod(failingTestMethodWithSIGNED_BYTES_EQUAL_);
 #if CPPUTEST_CHAR_BIT == 16
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <-1 (0xffff)>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <-2 (0xfffe)>");
@@ -768,7 +768,7 @@ IGNORE_TEST(UnitTestMacros, CHARS_EQUALWorksInAnIgnoredTest)
     SIGNED_BYTES_EQUAL(-7, 19); // LCOV_EXCL_LINE;
 } // LCOV_EXCL_LINE
 
-static void _failingTestMethodWithSIGNED_BYTES_EQUAL_TEXT()
+static void failingTestMethodWithSIGNED_BYTES_EQUAL_TEXT_()
 {
     SIGNED_BYTES_EQUAL_TEXT(-127, -126, "Failed because it failed");
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
@@ -776,7 +776,7 @@ static void _failingTestMethodWithSIGNED_BYTES_EQUAL_TEXT()
 
 TEST(UnitTestMacros, FailureWithSIGNED_BYTES_EQUAL_TEXT)
 {
-    fixture.runTestWithMethod(_failingTestMethodWithSIGNED_BYTES_EQUAL_TEXT);
+    fixture.runTestWithMethod(failingTestMethodWithSIGNED_BYTES_EQUAL_TEXT_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <-127 (0x81)>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <-126 (0x82)>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("Failed because it failed");
@@ -793,7 +793,7 @@ IGNORE_TEST(UnitTestMacros, SIGNED_BYTES_EQUAL_TEXTWorksInAnIgnoredTest)
     SIGNED_BYTES_EQUAL_TEXT(-7, 19, "Failed because it failed"); // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
 
-static void _failingTestMethodWithPOINTERS_EQUAL()
+static void failingTestMethodWithPOINTERS_EQUAL_()
 {
     POINTERS_EQUAL((void*)0xa5a5, (void*)0xf0f0);
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
@@ -801,7 +801,7 @@ static void _failingTestMethodWithPOINTERS_EQUAL()
 
 TEST(UnitTestMacros, FailureWithPOINTERS_EQUAL)
 {
-    fixture.runTestWithMethod(_failingTestMethodWithPOINTERS_EQUAL);
+    fixture.runTestWithMethod(failingTestMethodWithPOINTERS_EQUAL_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <0xa5a5>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0xf0f0>");
 }
@@ -817,7 +817,7 @@ IGNORE_TEST(UnitTestMacros, POINTERS_EQUALWorksInAnIgnoredTest)
     POINTERS_EQUAL((void*) 0xbeef, (void*) 0xdead); // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
 
-static void _failingTestMethodWithPOINTERS_EQUAL_TEXT()
+static void failingTestMethodWithPOINTERS_EQUAL_TEXT_()
 {
     POINTERS_EQUAL_TEXT((void*)0xa5a5, (void*)0xf0f0, "Failed because it failed");
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
@@ -825,7 +825,7 @@ static void _failingTestMethodWithPOINTERS_EQUAL_TEXT()
 
 TEST(UnitTestMacros, FailureWithPOINTERS_EQUAL_TEXT)
 {
-    fixture.runTestWithMethod(_failingTestMethodWithPOINTERS_EQUAL_TEXT);
+    fixture.runTestWithMethod(failingTestMethodWithPOINTERS_EQUAL_TEXT_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <0xa5a5>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0xf0f0>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("Failed because it failed");
@@ -843,7 +843,7 @@ IGNORE_TEST(UnitTestMacros, POINTERS_EQUAL_TEXTWorksInAnIgnoredTest)
 } // LCOV_EXCL_LINE
 
 
-static void _failingTestMethodWithFUNCTIONPOINTERS_EQUAL()
+static void failingTestMethodWithFUNCTIONPOINTERS_EQUAL_()
 {
     FUNCTIONPOINTERS_EQUAL((void (*)())0xa5a5, (void (*)())0xf0f0);
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
@@ -851,7 +851,7 @@ static void _failingTestMethodWithFUNCTIONPOINTERS_EQUAL()
 
 TEST(UnitTestMacros, FailureWithFUNCTIONPOINTERS_EQUAL)
 {
-    fixture.runTestWithMethod(_failingTestMethodWithFUNCTIONPOINTERS_EQUAL);
+    fixture.runTestWithMethod(failingTestMethodWithFUNCTIONPOINTERS_EQUAL_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <0xa5a5>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0xf0f0>");
 }
@@ -867,7 +867,7 @@ IGNORE_TEST(UnitTestMacros, FUNCTIONPOINTERS_EQUALWorksInAnIgnoredTest)
     FUNCTIONPOINTERS_EQUAL((void (*)())0xbeef, (void (*)())0xdead); // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
 
-static void _failingTestMethodWithFUNCTIONPOINTERS_EQUAL_TEXT()
+static void failingTestMethodWithFUNCTIONPOINTERS_EQUAL_TEXT_()
 {
     FUNCTIONPOINTERS_EQUAL_TEXT((void (*)())0xa5a5, (void (*)())0xf0f0, "Failed because it failed");
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
@@ -875,7 +875,7 @@ static void _failingTestMethodWithFUNCTIONPOINTERS_EQUAL_TEXT()
 
 TEST(UnitTestMacros, FailureWithFUNCTIONPOINTERS_EQUAL_TEXT)
 {
-    fixture.runTestWithMethod(_failingTestMethodWithFUNCTIONPOINTERS_EQUAL_TEXT);
+    fixture.runTestWithMethod(failingTestMethodWithFUNCTIONPOINTERS_EQUAL_TEXT_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <0xa5a5>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0xf0f0>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("Failed because it failed");
@@ -895,7 +895,7 @@ IGNORE_TEST(UnitTestMacros, FUNCTIONPOINTERS_EQUAL_TEXTWorksInAnIgnoredTest)
 
 
 
-static void _failingTestMethodWithDOUBLES_EQUAL()
+static void failingTestMethodWithDOUBLES_EQUAL_()
 {
     DOUBLES_EQUAL(0.12, 44.1, 0.3);
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
@@ -903,7 +903,7 @@ static void _failingTestMethodWithDOUBLES_EQUAL()
 
 TEST(UnitTestMacros, FailureWithDOUBLES_EQUAL)
 {
-    fixture.runTestWithMethod(_failingTestMethodWithDOUBLES_EQUAL);
+    fixture.runTestWithMethod(failingTestMethodWithDOUBLES_EQUAL_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <0.12>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <44.1>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("threshold used was <0.3>");
@@ -920,7 +920,7 @@ IGNORE_TEST(UnitTestMacros, DOUBLES_EQUALWorksInAnIgnoredTest)
     DOUBLES_EQUAL(100.0, 0.0, 0.2); // LCOV_EXCL_LINE;
 } // LCOV_EXCL_LINE
 
-static void _failingTestMethodWithDOUBLES_EQUAL_TEXT()
+static void failingTestMethodWithDOUBLES_EQUAL_TEXT_()
 {
     DOUBLES_EQUAL_TEXT(0.12, 44.1, 0.3, "Failed because it failed");
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
@@ -928,7 +928,7 @@ static void _failingTestMethodWithDOUBLES_EQUAL_TEXT()
 
 TEST(UnitTestMacros, FailureWithDOUBLES_EQUAL_TEXT)
 {
-    fixture.runTestWithMethod(_failingTestMethodWithDOUBLES_EQUAL_TEXT);
+    fixture.runTestWithMethod(failingTestMethodWithDOUBLES_EQUAL_TEXT_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <0.12>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <44.1>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("threshold used was <0.3>");
@@ -948,7 +948,7 @@ IGNORE_TEST(UnitTestMacros, DOUBLES_EQUAL_TEXTWorksInAnIgnoredTest)
 
 static bool lineOfCodeExecutedAfterCheck = false;
 
-static void _passingTestMethod()
+static void passingTestMethod_()
 {
     CHECK(true);
     lineOfCodeExecutedAfterCheck = true;
@@ -956,35 +956,35 @@ static void _passingTestMethod()
 
 TEST(UnitTestMacros, SuccessPrintsNothing)
 {
-    fixture.runTestWithMethod(_passingTestMethod);
+    fixture.runTestWithMethod(passingTestMethod_);
 
     LONGS_EQUAL(0, fixture.getFailureCount());
     fixture.assertPrintContains(".\nOK (1 tests");
     CHECK(lineOfCodeExecutedAfterCheck);
 }
 
-static void _methodThatOnlyPrints()
+static void methodThatOnlyPrints_()
 {
     UT_PRINT("Hello World!");
 }
 
 TEST(UnitTestMacros, PrintPrintsWhateverPrintPrints)
 {
-    fixture.runTestWithMethod(_methodThatOnlyPrints);
+    fixture.runTestWithMethod(methodThatOnlyPrints_);
 
     LONGS_EQUAL(0, fixture.getFailureCount());
     fixture.assertPrintContains("Hello World!");
     fixture.assertPrintContains(__FILE__);
 }
 
-static void _methodThatOnlyPrintsUsingSimpleStringFromFormat()
+static void methodThatOnlyPrintsUsingSimpleStringFromFormat_()
 {
     UT_PRINT(StringFromFormat("Hello %s %d", "World!", 2009));
 }
 
 TEST(UnitTestMacros, PrintPrintsSimpleStringsForExampleThoseReturnedByFromString)
 {
-    fixture.runTestWithMethod(_methodThatOnlyPrintsUsingSimpleStringFromFormat);
+    fixture.runTestWithMethod(methodThatOnlyPrintsUsingSimpleStringFromFormat_);
     fixture.assertPrintContains("Hello World! 2009");
 }
 
@@ -1035,7 +1035,7 @@ IGNORE_TEST(UnitTestMacros, MEMCMP_EQUALWorksInAnIgnoredTest)
     MEMCMP_EQUAL("TEST", "test", 5); // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
 
-static void _MEMCMP_EQUALFailingTestMethodWithUnequalInput()
+static void MEMCMP_EQUALFailingTestMethodWithUnequalInput_()
 {
     unsigned char expectedData[] = { 0x00, 0x01, 0x02, 0x03 };
     unsigned char actualData[] = { 0x00, 0x01, 0x03, 0x03 };
@@ -1046,13 +1046,13 @@ static void _MEMCMP_EQUALFailingTestMethodWithUnequalInput()
 
 TEST(UnitTestMacros, MEMCMP_EQUALFailureWithUnequalInput)
 {
-    fixture.runTestWithMethod(_MEMCMP_EQUALFailingTestMethodWithUnequalInput);
+    fixture.runTestWithMethod(MEMCMP_EQUALFailingTestMethodWithUnequalInput_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <00 01 02 03>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <00 01 03 03>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("difference starts at position 2");
 }
 
-static void _MEMCMP_EQUALFailingTestMethodWithNullExpected()
+static void MEMCMP_EQUALFailingTestMethodWithNullExpected_()
 {
     unsigned char actualData[] = { 0x00, 0x01, 0x02, 0x03 };
 
@@ -1062,12 +1062,12 @@ static void _MEMCMP_EQUALFailingTestMethodWithNullExpected()
 
 TEST(UnitTestMacros, MEMCMP_EQUALFailureWithNullExpected)
 {
-    fixture.runTestWithMethod(_MEMCMP_EQUALFailingTestMethodWithNullExpected);
+    fixture.runTestWithMethod(MEMCMP_EQUALFailingTestMethodWithNullExpected_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <(null)>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <00 01 02 03>");
 }
 
-static void _MEMCMP_EQUALFailingTestMethodWithNullActual()
+static void MEMCMP_EQUALFailingTestMethodWithNullActual_()
 {
     unsigned char expectedData[] = { 0x00, 0x01, 0x02, 0x03 };
 
@@ -1077,7 +1077,7 @@ static void _MEMCMP_EQUALFailingTestMethodWithNullActual()
 
 TEST(UnitTestMacros, MEMCMP_EQUALFailureWithNullActual)
 {
-    fixture.runTestWithMethod(_MEMCMP_EQUALFailingTestMethodWithNullActual);
+    fixture.runTestWithMethod(MEMCMP_EQUALFailingTestMethodWithNullActual_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <00 01 02 03>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <(null)>");
 }
@@ -1100,7 +1100,7 @@ TEST(UnitTestMacros, MEMCMP_EQUALNullPointerIgnoredInActualWhenSize0)
 	MEMCMP_EQUAL(expectedData, NULLPTR, 0);
 }
 
-static void _failingTestMethodWithMEMCMP_EQUAL_TEXT()
+static void failingTestMethodWithMEMCMP_EQUAL_TEXT_()
 {
     unsigned char expectedData[] = { 0x00, 0x01, 0x02, 0x03 };
     unsigned char actualData[] = { 0x00, 0x01, 0x03, 0x03 };
@@ -1111,7 +1111,7 @@ static void _failingTestMethodWithMEMCMP_EQUAL_TEXT()
 
 TEST(UnitTestMacros, FailureWithMEMCMP_EQUAL_TEXT)
 {
-    fixture.runTestWithMethod(_failingTestMethodWithMEMCMP_EQUAL_TEXT);
+    fixture.runTestWithMethod(failingTestMethodWithMEMCMP_EQUAL_TEXT_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <00 01 02 03>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <00 01 03 03>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("difference starts at position 2");
@@ -1140,7 +1140,7 @@ IGNORE_TEST(UnitTestMacros, BITS_EQUALWorksInAnIgnoredTest)
     BITS_EQUAL(0x00, 0xFF, 0xFF); // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
 
-static void _BITS_EQUALFailingTestMethodWithUnequalInput()
+static void BITS_EQUALFailingTestMethodWithUnequalInput_()
 {
     BITS_EQUAL(0x00, 0xFF, 0xFF);
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
@@ -1148,7 +1148,7 @@ static void _BITS_EQUALFailingTestMethodWithUnequalInput()
 
 TEST(UnitTestMacros, BITS_EQUALFailureWithUnequalInput)
 {
-    fixture.runTestWithMethod(_BITS_EQUALFailingTestMethodWithUnequalInput);
+    fixture.runTestWithMethod(BITS_EQUALFailingTestMethodWithUnequalInput_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("00000000>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("11111111>");
 }
@@ -1158,7 +1158,7 @@ TEST(UnitTestMacros, BITS_EQUALZeroMaskEqual)
     BITS_EQUAL(0x00, 0xFF, 0x00);
 }
 
-static void _failingTestMethodWithBITS_EQUAL_TEXT()
+static void failingTestMethodWithBITS_EQUAL_TEXT_()
 {
     BITS_EQUAL_TEXT(0x00, 0xFFFFFFFF, 0xFF, "Failed because it failed");
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
@@ -1166,7 +1166,7 @@ static void _failingTestMethodWithBITS_EQUAL_TEXT()
 
 TEST(UnitTestMacros, FailureWithBITS_EQUAL_TEXT)
 {
-    fixture.runTestWithMethod(_failingTestMethodWithBITS_EQUAL_TEXT);
+    fixture.runTestWithMethod(failingTestMethodWithBITS_EQUAL_TEXT_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <xxxxxxxx xxxxxxxx xxxxxxxx 00000000>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <xxxxxxxx xxxxxxxx xxxxxxxx 11111111>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("Failed because it failed");
@@ -1188,7 +1188,7 @@ enum class ScopedIntEnum {
     A, B
 };
 
-static void _ENUMS_EQUAL_INTWithScopedIntEnumTestMethod()
+static void ENUMS_EQUAL_INTWithScopedIntEnumTestMethod_()
 {
     ENUMS_EQUAL_INT(ScopedIntEnum::B, ScopedIntEnum::B);
     ENUMS_EQUAL_INT(ScopedIntEnum::B, ScopedIntEnum::A);
@@ -1196,7 +1196,7 @@ static void _ENUMS_EQUAL_INTWithScopedIntEnumTestMethod()
 
 TEST(UnitTestMacros, TestENUMS_EQUAL_INTWithScopedIntEnum)
 {
-    fixture.runTestWithMethod(_ENUMS_EQUAL_INTWithScopedIntEnumTestMethod);
+    fixture.runTestWithMethod(ENUMS_EQUAL_INTWithScopedIntEnumTestMethod_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0>");
 }
@@ -1212,14 +1212,14 @@ IGNORE_TEST(UnitTestMacros, ENUMS_EQUAL_INTWithScopedIntEnumWorksInAnIgnoredTest
     ENUMS_EQUAL_INT(ScopedIntEnum::B, ScopedIntEnum::A); // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
 
-static void _ENUMS_EQUAL_INT_TEXTWithScopedIntEnumTestMethod()
+static void ENUMS_EQUAL_INT_TEXTWithScopedIntEnumTestMethod_()
 {
     ENUMS_EQUAL_INT_TEXT(ScopedIntEnum::B, ScopedIntEnum::A, "Failed because it failed");
 } // LCOV_EXCL_LINE
 
 TEST(UnitTestMacros, TestENUMS_EQUAL_INT_TEXTWithScopedIntEnum)
 {
-    fixture.runTestWithMethod(_ENUMS_EQUAL_INT_TEXTWithScopedIntEnumTestMethod);
+    fixture.runTestWithMethod(ENUMS_EQUAL_INT_TEXTWithScopedIntEnumTestMethod_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("Failed because it failed");
@@ -1240,7 +1240,7 @@ enum class ScopedLongEnum : long {
     A, B
 };
 
-static void _ENUMS_EQUAL_TYPEWithScopedLongEnumTestMethod()
+static void ENUMS_EQUAL_TYPEWithScopedLongEnumTestMethod_()
 {
     ENUMS_EQUAL_TYPE(long, ScopedLongEnum::B, ScopedLongEnum::B);
     ENUMS_EQUAL_TYPE(long, ScopedLongEnum::B, ScopedLongEnum::A);
@@ -1248,7 +1248,7 @@ static void _ENUMS_EQUAL_TYPEWithScopedLongEnumTestMethod()
 
 TEST(UnitTestMacros, TestENUMS_EQUAL_TYPEWithScopedLongEnum)
 {
-    fixture.runTestWithMethod(_ENUMS_EQUAL_TYPEWithScopedLongEnumTestMethod);
+    fixture.runTestWithMethod(ENUMS_EQUAL_TYPEWithScopedLongEnumTestMethod_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0>");
 }
@@ -1264,14 +1264,14 @@ IGNORE_TEST(UnitTestMacros, ENUMS_EQUAL_TYPEWithScopedLongEnumWorksInAnIgnoredTe
     ENUMS_EQUAL_TYPE(long, ScopedLongEnum::B, ScopedLongEnum::A); // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
 
-static void _ENUMS_EQUAL_TYPE_TEXTWithScopedLongEnumTestMethod()
+static void ENUMS_EQUAL_TYPE_TEXTWithScopedLongEnumTestMethod_()
 {
     ENUMS_EQUAL_TYPE_TEXT(long, ScopedLongEnum::B, ScopedLongEnum::A, "Failed because it failed");
 } // LCOV_EXCL_LINE
 
 TEST(UnitTestMacros, TestENUMS_EQUAL_TYPE_TEXTWithScopedLongEnum)
 {
-    fixture.runTestWithMethod(_ENUMS_EQUAL_TYPE_TEXTWithScopedLongEnumTestMethod);
+    fixture.runTestWithMethod(ENUMS_EQUAL_TYPE_TEXTWithScopedLongEnumTestMethod_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("Failed because it failed");
@@ -1294,7 +1294,7 @@ enum UnscopedEnum {
     UNSCOPED_ENUM_A, UNSCOPED_ENUM_B
 };
 
-static void _ENUMS_EQUAL_INTWithUnscopedEnumTestMethod()
+static void ENUMS_EQUAL_INTWithUnscopedEnumTestMethod_()
 {
     ENUMS_EQUAL_INT(UNSCOPED_ENUM_B, UNSCOPED_ENUM_B);
     ENUMS_EQUAL_INT(UNSCOPED_ENUM_B, UNSCOPED_ENUM_A);
@@ -1302,7 +1302,7 @@ static void _ENUMS_EQUAL_INTWithUnscopedEnumTestMethod()
 
 TEST(UnitTestMacros, TestENUMS_EQUAL_INTWithUnscopedEnum)
 {
-    fixture.runTestWithMethod(_ENUMS_EQUAL_INTWithUnscopedEnumTestMethod);
+    fixture.runTestWithMethod(ENUMS_EQUAL_INTWithUnscopedEnumTestMethod_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0>");
 }
@@ -1318,14 +1318,14 @@ IGNORE_TEST(UnitTestMacros, ENUMS_EQUAL_INTWithUnscopedEnumWorksInAnIgnoredTest)
     ENUMS_EQUAL_INT(UNSCOPED_ENUM_B, UNSCOPED_ENUM_A); // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
 
-static void _ENUMS_EQUAL_INT_TEXTWithUnscopedEnumTestMethod()
+static void ENUMS_EQUAL_INT_TEXTWithUnscopedEnumTestMethod_()
 {
     ENUMS_EQUAL_INT_TEXT(UNSCOPED_ENUM_B, UNSCOPED_ENUM_A, "Failed because it failed");
 } // LCOV_EXCL_LINE
 
 TEST(UnitTestMacros, TestENUMS_EQUAL_INT_TEXTWithUnscopedEnum)
 {
-    fixture.runTestWithMethod(_ENUMS_EQUAL_INT_TEXTWithUnscopedEnumTestMethod);
+    fixture.runTestWithMethod(ENUMS_EQUAL_INT_TEXTWithUnscopedEnumTestMethod_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <0>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("Failed because it failed");
@@ -1343,7 +1343,7 @@ IGNORE_TEST(UnitTestMacros, ENUMS_EQUAL_EQUAL_INT_TEXTWithUnscopedEnumWorksInAnI
 } // LCOV_EXCL_LINE
 
 #if CPPUTEST_USE_STD_CPP_LIB
-static void _failingTestMethod_NoThrowWithCHECK_THROWS()
+static void failingTestMethod_NoThrowWithCHECK_THROWS_()
 {
     CHECK_THROWS(int, (void) (1+2));
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
@@ -1351,13 +1351,13 @@ static void _failingTestMethod_NoThrowWithCHECK_THROWS()
 
 TEST(UnitTestMacros, FailureWithCHECK_THROWS_whenDoesntThrow)
 {
-    fixture.runTestWithMethod(_failingTestMethod_NoThrowWithCHECK_THROWS);
+    fixture.runTestWithMethod(failingTestMethod_NoThrowWithCHECK_THROWS_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected to throw int");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but threw nothing");
     LONGS_EQUAL(1, fixture.getCheckCount());
 }
 
-static void _succeedingTestMethod_CorrectThrowWithCHECK_THROWS()
+static void succeedingTestMethod_CorrectThrowWithCHECK_THROWS_()
 {
     CHECK_THROWS(int, throw 4);
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
@@ -1365,11 +1365,11 @@ static void _succeedingTestMethod_CorrectThrowWithCHECK_THROWS()
 
 TEST(UnitTestMacros, SuccessWithCHECK_THROWS)
 {
-    fixture.runTestWithMethod(_succeedingTestMethod_CorrectThrowWithCHECK_THROWS);
+    fixture.runTestWithMethod(succeedingTestMethod_CorrectThrowWithCHECK_THROWS_);
     LONGS_EQUAL(1, fixture.getCheckCount());
 }
 
-static void _failingTestMethod_WrongThrowWithCHECK_THROWS()
+static void failingTestMethod_WrongThrowWithCHECK_THROWS_()
 {
     CHECK_THROWS(int, throw 4.3);
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
@@ -1377,7 +1377,7 @@ static void _failingTestMethod_WrongThrowWithCHECK_THROWS()
 
 TEST(UnitTestMacros, FailureWithCHECK_THROWS_whenWrongThrow)
 {
-    fixture.runTestWithMethod(_failingTestMethod_WrongThrowWithCHECK_THROWS);
+    fixture.runTestWithMethod(failingTestMethod_WrongThrowWithCHECK_THROWS_);
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected to throw int");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but threw a different type");
     LONGS_EQUAL(1, fixture.getCheckCount());

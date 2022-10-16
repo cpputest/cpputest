@@ -155,11 +155,11 @@ extern "C"
     {
     }
 
+    const PlatformSpecificFile PlatformSpecificStdOut = stdout;
     PlatformSpecificFile (*PlatformSpecificFOpen)(const char*, const char*) = PlatformSpecificFOpenImplementation;
     void (*PlatformSpecificFPuts)(const char*, PlatformSpecificFile) = PlatformSpecificFPutsImplementation;
     void (*PlatformSpecificFClose)(PlatformSpecificFile) = PlatformSpecificFCloseImplementation;
 
-    int (*PlatformSpecificPutchar)(int) = putchar;
     void (*PlatformSpecificFlush)() = PlatformSpecificFlushImplementation;
     void* (*PlatformSpecificMalloc)(size_t) = malloc;
     void* (*PlatformSpecificRealloc) (void*, size_t) = realloc;
