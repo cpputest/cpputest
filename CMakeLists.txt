@@ -41,7 +41,7 @@ endif()
 
 cmake_dependent_option(CPPUTEST_STD_CPP_LIB_DISABLED "Use the standard C++ library"
   OFF "NOT CPPUTEST_STD_C_LIB_DISABLED;CPPUTEST_HAVE_EXCEPTIONS" ON)
-option(CPPUTEST_FLAGS "Use the CFLAGS/CXXFLAGS/LDFLAGS set by CppUTest" ON)
+option(CPPUTEST_FLAGS "Use the CFLAGS/CXXFLAGS/LDFLAGS set by CppUTest" ${PROJECT_IS_TOP_LEVEL})
 cmake_dependent_option(CPPUTEST_MEM_LEAK_DETECTION_DISABLED "Enable memory leak detection"
   OFF "NOT BORLAND;NOT CPPUTEST_STD_C_LIB_DISABLED;NOT is_clang_cl" ON)
 option(CPPUTEST_EXTENSIONS "Use the CppUTest extension library" ON)
