@@ -71,6 +71,45 @@ option(CPPUTEST_VERBOSE_CONFIG "Print configuration to stdout during generation"
 cmake_dependent_option(CPPUTEST_LIBNAME_POSTFIX_BITSIZE "Add architecture bitsize (32/64) to the library name?"
   OFF "PROJECT_IS_TOP_LEVEL" OFF)
 
+if(DEFINED CPP_PLATFORM)
+  message(DEPRECATION
+    "The CPP_PLATFORM variable has been deprecated. "
+    "Use CPPUTEST_PLATFORM instead."
+  )
+else()
+  if(MSVC)
+    set(CPP_PLATFORM VisualCpp)
+  elseif(CMAKE_CXX_COMPILER_ID STREQUAL "IAR")
+    set(CPP_PLATFORM Iar)
+  elseif(CMAKE_CXX_COMPILER_ID STREQUAL "ARMCC")
+    set(CPP_PLATFORM armcc)
+  elseif(DOS)
+    set(CPP_PLATFORM Dos)
+  elseif(BORLAND)
+    set(CPP_PLATFORM Borland)
+  elseif(CPPUTEST_STD_C_LIB_DISABLED)
+    set(CPP_PLATFORM GccNoStdC)
+  else()
+    set(CPP_PLATFORM Gcc)
+  endif()
+endif()
+set(CPPUTEST_PLATFORM "${CPP_PLATFORM}" CACHE STRING "Platform implementation")
+set_property(
+  CACHE CPPUTEST_PLATFORM
+  PROPERTY STRINGS
+    armcc
+    Borland
+    C2000
+    Dos
+    Gcc
+    GccNoStdC
+    Iar
+    Keil
+    Symbian
+    VisualCpp
+    OFF
+)
+
 include(CheckCXXSymbolExists)
 check_cxx_symbol_exists(fopen_s "stdio.h" CPPUTEST_HAVE_SECURE_STDLIB)
 cmake_dependent_option(CPPUTEST_USE_SECURE_STDLIB "Use MSVC safe functions"
@@ -123,9 +162,9 @@ check_cxx_symbol_exists(waitpid "sys/wait.h" CPPUTEST_HAVE_WAITPID)
 check_cxx_symbol_exists(gettimeofday "sys/time.h" CPPUTEST_HAVE_GETTIMEOFDAY)
 check_cxx_symbol_exists(pthread_mutex_lock "pthread.h" CPPUTEST_HAVE_PTHREAD_MUTEX_LOCK)
 
-if (NOT IAR)
+if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "IAR")
   check_cxx_symbol_exists(strdup "string.h" CPPUTEST_HAVE_STRDUP)
-endif(NOT IAR)
+endif()
 check_type_size("long long" SIZEOF_LONGLONG LANGUAGE CXX)
 if(HAVE_SIZEOF_LONGLONG)
     set(CPPUTEST_HAVE_LONG_LONG_INT ON)
