@@ -55,6 +55,14 @@
         "CMAKE_SYSTEM_NAME": "Windows",
         "CMAKE_CROSSCOMPILING_EMULATOR": "wine"
       }
+    },
+    {
+      "name": "arm-embedded",
+      "inherits": ["defaults"],
+      "toolchainFile": "${sourceDir}/cmake/arm-none-eabi-gcc.toolchain.cmake",
+      "cacheVariables": {
+        "CMAKE_CROSSCOMPILING_EMULATOR": "qemu-arm-static;-cpu;cortex-m4"
+      }
     }
   ]
 }

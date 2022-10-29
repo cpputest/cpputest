@@ -96,14 +96,12 @@ jobs:
     runs-on: ubuntu-latest
     name: Disable exceptions
     env:
-      CC: gcc
-      CXX: g++
       CXXFLAGS: -fno-exceptions
     steps:
       - name: Checkout
         uses: actions/checkout@main
       - name: Configure
-        run: cmake -B cpputest_build -S .
+        run: cmake --preset GNU
       - name: Build
         run: cmake --build cpputest_build --verbose
       - name: Test
@@ -116,7 +114,7 @@ jobs:
         uses: actions/checkout@main
       - name: Install
         run: |
-          cmake -B cpputest_build/ -S . -DCMAKE_BUILD_TYPE=RelWithDebInfo
+          cmake --preset GNU
           cmake --build cpputest_build/ -j
           ctest --test-dir cpputest_build/
           sudo cmake --install cpputest_build/
@@ -139,11 +137,7 @@ jobs:
           sudo dpkg --install qemu.deb
           rm -f qemu.deb
       - name: Configure
-        run: >
-          cmake
-          -B cpputest_build
-          -D CMAKE_TOOLCHAIN_FILE=cmake/arm-none-eabi-gcc.toolchain.cmake
-          -D CMAKE_CROSSCOMPILING_EMULATOR="qemu-arm-static;-cpu;cortex-m4"
+        run: cmake --preset arm-embedded
       - name: Build
         run: cmake --build cpputest_build
       - name: Test
