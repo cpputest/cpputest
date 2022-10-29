@@ -15,12 +15,6 @@ if (CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     include(CppUTestWarningFlags)
 endif ()
 
-if (CPPUTEST_STD_CPP_LIB_DISABLED)
-    if (NOT CPPUTEST_STD_C_LIB_DISABLED AND NOT MSVC)
-        set(CPPUTEST_CXX_FLAGS "${CPPUTEST_CXX_FLAGS} -nostdinc++")
-    endif ()
-endif ()
-
 if (NOT CPPUTEST_MEM_LEAK_DETECTION_DISABLED)
     if (MSVC)
         set(CPPUTEST_C_FLAGS "${CPPUTEST_C_FLAGS} /FI \"${CppUTest_SOURCE_DIR}/include/CppUTest/MemoryLeakDetectorMallocMacros.h\"")

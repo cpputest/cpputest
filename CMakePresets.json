@@ -73,6 +73,13 @@
         "CMAKE_CXX_STANDARD": "11",
         "CPPUTEST_EXAMPLES": false
       }
+    },
+    {
+      "name": "no-std-cpp",
+      "inherits": ["GNU"],
+      "environment": {
+        "CXXFLAGS": "-Werror -fno-exceptions -fno-rtti -nostdinc++"
+      }
     }
   ]
 }
