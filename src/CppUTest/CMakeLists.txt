@@ -59,6 +59,11 @@ if(CPPUTEST_PLATFORM)
     )
 endif()
 
+if (MINGW)
+    include(CheckStructHasMember)
+    check_struct_has_member("struct timespec" tv_sec time.h HAVE_STRUCT_TIMESPEC LANGUAGE CXX)
+endif()
+
 #[[Arrange for the include directory to be added to the include paths of any CMake target depending on CppUTest.]]
 target_include_directories(${CppUTestLibName}
     PUBLIC
@@ -69,6 +74,8 @@ target_include_directories(${CppUTestLibName}
 target_compile_definitions(${CppUTestLibName}
     PRIVATE
         $<$<BOOL:${CPPUTEST_USE_SECURE_STDLIB}>:STDC_WANT_SECURE_LIB>
+        # Apply workaround for MinGW timespec redefinition (pthread.h / time.h).
+        $<$<BOOL:${HAVE_STRUCT_TIMESPEC}>:_TIMESPEC_DEFINED>
 )
 
 if (WIN32)

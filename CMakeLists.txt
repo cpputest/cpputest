@@ -150,18 +150,6 @@ if(HAVE_SIZEOF_LONGLONG)
     set(CPPUTEST_HAVE_LONG_LONG_INT ON)
 endif()
 
-if (MINGW)
-    check_struct_has_member("struct timespec" tv_sec time.h CPPUTEST_HAVE_STRUCT_TIMESPEC LANGUAGE CXX)
-    if (NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-        # Apply workaround for static/shared libraries on MinGW C/C++ compiler
-        # Issue occurs with CMake >= 3.9.0, it doesn't filter out gcc,gcc_s,gcc_eh from
-        # the implicit library list anymore, so the C++ linker is getting passed the static
-        # gcc_eh library since that's what the C linker uses by default. Only solution appears
-        # to be to force static linkage.
-        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static")
-    endif()
-endif()
-
 configure_file (
     "${PROJECT_SOURCE_DIR}/config.h.cmake"
     "${PROJECT_BINARY_DIR}/generated/CppUTestGeneratedConfig.h"

@@ -13,12 +13,6 @@
 
 #cmakedefine01 CPPUTEST_HAVE_FENV
 
-#cmakedefine CPPUTEST_HAVE_STRUCT_TIMESPEC
-#ifdef CPPUTEST_HAVE_STRUCT_TIMESPEC
-/* Apply workaround for MinGW timespec redefinition (pthread.h / time.h) */
-#define _TIMESPEC_DEFINED 1
-#endif
-
 #cmakedefine CPPUTEST_STD_C_LIB_DISABLED
 #cmakedefine CPPUTEST_STD_CPP_LIB_DISABLED
 
