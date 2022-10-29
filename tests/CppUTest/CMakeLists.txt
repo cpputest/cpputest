@@ -43,7 +43,7 @@ if(CPPUTEST_STD_C_LIB_DISABLED)
     )
 endif()
 
-target_link_libraries(CppUTestTests PRIVATE ${CppUTestLibName})
+target_link_libraries(CppUTestTests PRIVATE CppUTest)
 
 add_mapfile(CppUTestTests)
 
