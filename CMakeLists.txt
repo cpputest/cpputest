@@ -130,8 +130,6 @@ include(CppUTestBuildTimeDiscoverTests)
 include(CppUTestNormalizeTestOutputLocation)
 include(GNUInstallDirs)
 
-add_subdirectory(src/CppUTest)
-
 # Check for symbols before setting a lot of stuff
 include(CheckTypeSize)
 include(CheckStructHasMember)
@@ -153,7 +151,10 @@ endif()
 configure_file (
     "${PROJECT_SOURCE_DIR}/config.h.cmake"
     "${PROJECT_BINARY_DIR}/generated/CppUTestGeneratedConfig.h"
-    )
+)
+
+add_subdirectory(src)
+
 target_include_directories(${CppUTestLibName}
     PUBLIC
         $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}>
@@ -163,15 +164,8 @@ target_compile_definitions(${CppUTestLibName}
     HAVE_CONFIG_H
 )
 
-if (CPPUTEST_EXTENSIONS)
-    add_subdirectory(src/CppUTestExt)
-endif ()
-
 if (CPPUTEST_BUILD_TESTING)
-    add_subdirectory(tests/CppUTest)
-    if (CPPUTEST_EXTENSIONS)
-        add_subdirectory(tests/CppUTestExt)
-    endif ()
+    add_subdirectory(tests)
 endif ()
 
 if (CPPUTEST_EXAMPLES)
