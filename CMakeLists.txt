@@ -111,18 +111,6 @@ check_cxx_symbol_exists(fopen_s "stdio.h" CPPUTEST_HAVE_SECURE_STDLIB)
 cmake_dependent_option(CPPUTEST_USE_SECURE_STDLIB "Use MSVC safe functions"
   ON "WIN32;CPPUTEST_HAVE_SECURE_STDLIB" OFF)
 
-if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME) # Don't change users' build type.
-  # Multi-configuration generators don't have a single build type.
-  get_property(
-    GENERATOR_IS_MULTI_CONFIG GLOBAL
-    PROPERTY GENERATOR_IS_MULTI_CONFIG
-  )
-  if(NOT GENERATOR_IS_MULTICONFIG AND NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "What kind of build this is" FORCE)
-    message("No CMAKE_BUILD_TYPE set. Assigning: ${CMAKE_BUILD_TYPE}")
-  endif()
-endif()
-
 set( CppUTestLibName "CppUTest" )
 set( CppUTestExtLibName "CppUTestExt" )
 

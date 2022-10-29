@@ -3,7 +3,10 @@
   "configurePresets": [
     {
       "name": "defaults",
-      "binaryDir": "cpputest_build"
+      "binaryDir": "cpputest_build",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+      }
     },
     {
       "name": "GNU",
