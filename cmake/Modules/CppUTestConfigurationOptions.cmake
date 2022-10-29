@@ -59,10 +59,6 @@ if (CPPUTEST_COVERAGE AND NOT MSVC)
         )
 endif()
 
-if (CMAKE_CXX_STANDARD)
-    set(CMAKE_CXX_EXTENSIONS OFF)
-endif ()
-
 set(GMOCK_HOME $ENV{GMOCK_HOME})
 if (DEFINED ENV{GMOCK_HOME})
     # GMock pulls in gtest.

@@ -5,7 +5,8 @@
       "name": "defaults",
       "binaryDir": "cpputest_build",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+        "CMAKE_CXX_EXTENSIONS": false
       }
     },
     {
