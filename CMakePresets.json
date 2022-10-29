@@ -64,6 +64,17 @@
       "cacheVariables": {
         "CMAKE_CROSSCOMPILING_EMULATOR": "qemu-arm-static;-cpu;cortex-m4"
       }
+    },
+    {
+      "name": "coverage",
+      "inherits": ["GNU"],
+      "cacheVariables": {
+        "CMAKE_C_FLAGS": "--coverage",
+        "CMAKE_CXX_FLAGS": "--coverage",
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_CXX_STANDARD": "11",
+        "CPPUTEST_EXAMPLES": false
+      }
     }
   ]
 }

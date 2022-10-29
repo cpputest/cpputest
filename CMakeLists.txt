@@ -53,8 +53,6 @@ cmake_dependent_option(CPPUTEST_USE_LONG_LONG "Support long long"
 
 cmake_dependent_option(CPPUTEST_MAP_FILE "Enable the creation of a map file"
   OFF "CPPUTEST_FLAGS;NOT MSVC" OFF)
-cmake_dependent_option(CPPUTEST_COVERAGE "Enable running with coverage"
-  OFF "CPPUTEST_FLAGS;NOT MSVC" OFF)
 cmake_dependent_option(CPPUTEST_BUILD_TESTING "Compile and make tests for CppUTest"
   ${PROJECT_IS_TOP_LEVEL} "BUILD_TESTING" OFF)
 option(CPPUTEST_TESTS_DETAILED "Run each test separately instead of grouped?" OFF)
@@ -285,7 +283,6 @@ Features configured in CppUTest:
     Disable Standard C++ library:       ${CPPUTEST_STD_CPP_LIB_DISABLED}
 
     Generating map file:                ${CPPUTEST_MAP_FILE}
-    Compiling with coverage:            ${CPPUTEST_COVERAGE}
 
     Compile and run self-tests          ${CPPUTEST_BUILD_TESTING}
     Run self-tests separately           ${CPPUTEST_TESTS_DETAILED}
