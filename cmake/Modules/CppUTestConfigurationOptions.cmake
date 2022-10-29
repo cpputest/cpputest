@@ -1,10 +1,4 @@
-if (CPPUTEST_PLATFORM STREQUAL "IAR")
-    unset(CMAKE_CXX_EXTENSION_COMPILE_OPTION)
-    # Set up the CMake variables for the linker
-    set(LINKER_SCRIPT "${CppUTest_SOURCE_DIR}/platforms/iar/CppUTestTest.icf")
-    set(CMAKE_C_LINK_FLAGS "--semihosting --config ${LINKER_SCRIPT}")
-    set(CMAKE_CXX_LINK_FLAGS "--semihosting --config ${LINKER_SCRIPT}")
-elseif (CPPUTEST_PLATFORM STREQUAL "BORLAND")
+if (CPPUTEST_PLATFORM STREQUAL "BORLAND")
     set(CPPUTEST_CXX_FLAGS "${CPPUTEST_CXX_FLAGS} -w-8008 -w-8066")
 elseif (CPPUTEST_PLATFORM STREQUAL "GccNoStdC")
     set(CPPUTEST_CXX_FLAGS "${CPPUTEST_CXX_FLAGS} -nostdinc")
