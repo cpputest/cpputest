@@ -20,6 +20,12 @@
         "CMAKE_C_COMPILER": "clang",
         "CMAKE_CXX_COMPILER": "clang++"
       }
+    },
+    {
+      "name": "ClangCL",
+      "inherits": ["defaults"],
+      "generator": "Visual Studio 17 2022",
+      "toolset": "ClangCL"
     }
   ]
 }
