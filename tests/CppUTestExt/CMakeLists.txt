@@ -44,6 +44,15 @@ target_link_libraries(CppUTestExtTests
         ${CppUTestExtLibName}
 )
 
+if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.13")
+    target_link_options(CppUTestExtTests
+        PRIVATE
+            $<$<CXX_COMPILER_ID:GNU,Clang>:LINKER:-Map=$<TARGET_FILE:CppUTestExtTests>.map>
+            "$<$<CXX_COMPILER_ID:MSVC>:/MAP>"
+            $<$<CXX_COMPILER_ID:IAR>:"SHELL:--map $<TARGET_FILE:CppUTestExtTests>.map">
+    )
+endif()
+
 if (CPPUTEST_TEST_DISCOVERY)
     cpputest_buildtime_discover_tests(CppUTestExtTests)
 endif()

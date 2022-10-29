@@ -12,40 +12,36 @@
     {
       "name": "GNU",
       "inherits": ["defaults"],
+      "environment": {
+        "CFLAGS": "-Werror",
+        "CXXFLAGS": "-Werror"
+      },
       "cacheVariables": {
         "CMAKE_C_COMPILER": "gcc",
-        "CMAKE_C_FLAGS": "-Werror",
-        "CMAKE_CXX_COMPILER": "g++",
-        "CMAKE_CXX_FLAGS": "-Werror"
+        "CMAKE_CXX_COMPILER": "g++"
       }
     },
     {
       "name": "Clang",
-      "inherits": ["defaults"],
+      "inherits": ["GNU"],
       "cacheVariables": {
         "CMAKE_C_COMPILER": "clang",
-        "CMAKE_C_FLAGS": "-Werror",
-        "CMAKE_CXX_COMPILER": "clang++",
-        "CMAKE_CXX_FLAGS": "-Werror"
-      }
-    },
-    {
-      "name": "ClangCL",
-      "inherits": ["defaults"],
-      "generator": "Visual Studio 17 2022",
-      "toolset": "ClangCL",
-      "cacheVariables": {
-        "CMAKE_C_FLAGS": "/WX",
-        "CMAKE_CXX_FLAGS": "/WX /EHsc"
+        "CMAKE_CXX_COMPILER": "clang++"
       }
     },
     {
       "name": "MSVC",
       "inherits": ["defaults"],
-      "cacheVariables": {
-        "CMAKE_C_FLAGS": "/WX",
-        "CMAKE_CXX_FLAGS": "/WX /EHsc"
+      "environment": {
+        "CFLAGS": "/WX",
+        "CXXFLAGS": "/WX"
       }
+    },
+    {
+      "name": "ClangCL",
+      "inherits": ["MSVC"],
+      "generator": "Visual Studio 17 2022",
+      "toolset": "ClangCL"
     },
     {
       "name": "MinGW",
@@ -68,9 +64,11 @@
     {
       "name": "coverage",
       "inherits": ["GNU"],
+      "environment": {
+        "CFLAGS": "--coverage",
+        "CXXFLAGS": "--coverage"
+      },
       "cacheVariables": {
-        "CMAKE_C_FLAGS": "--coverage",
-        "CMAKE_CXX_FLAGS": "--coverage",
         "CMAKE_BUILD_TYPE": "Debug",
         "CMAKE_CXX_STANDARD": "11",
         "CPPUTEST_EXAMPLES": false
