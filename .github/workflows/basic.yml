@@ -58,7 +58,7 @@ jobs:
           # Windows
           - os: windows-latest
             cpp_version: 17
-            preset: defaults
+            preset: MSVC
           - os: windows-latest
             cpp_version: 17
             preset: ClangCL

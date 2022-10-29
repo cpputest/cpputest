@@ -55,10 +55,6 @@ cmake_dependent_option(CPPUTEST_MAP_FILE "Enable the creation of a map file"
   OFF "CPPUTEST_FLAGS;NOT MSVC" OFF)
 cmake_dependent_option(CPPUTEST_COVERAGE "Enable running with coverage"
   OFF "CPPUTEST_FLAGS;NOT MSVC" OFF)
-cmake_dependent_option(CPPUTEST_WERROR
-  "Compile with warnings as errors"
-  ON "CPPUTEST_FLAGS;PROJECT_IS_TOP_LEVEL" OFF
-)
 cmake_dependent_option(CPPUTEST_BUILD_TESTING "Compile and make tests for CppUTest"
   ${PROJECT_IS_TOP_LEVEL} "BUILD_TESTING" OFF)
 option(CPPUTEST_TESTS_DETAILED "Run each test separately instead of grouped?" OFF)

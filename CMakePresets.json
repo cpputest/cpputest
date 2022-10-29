@@ -10,7 +10,9 @@
       "inherits": ["defaults"],
       "cacheVariables": {
         "CMAKE_C_COMPILER": "gcc",
-        "CMAKE_CXX_COMPILER": "g++"
+        "CMAKE_C_FLAGS": "-Werror",
+        "CMAKE_CXX_COMPILER": "g++",
+        "CMAKE_CXX_FLAGS": "-Werror"
       }
     },
     {
@@ -18,14 +20,28 @@
       "inherits": ["defaults"],
       "cacheVariables": {
         "CMAKE_C_COMPILER": "clang",
-        "CMAKE_CXX_COMPILER": "clang++"
+        "CMAKE_C_FLAGS": "-Werror",
+        "CMAKE_CXX_COMPILER": "clang++",
+        "CMAKE_CXX_FLAGS": "-Werror"
       }
     },
     {
       "name": "ClangCL",
       "inherits": ["defaults"],
       "generator": "Visual Studio 17 2022",
-      "toolset": "ClangCL"
+      "toolset": "ClangCL",
+      "cacheVariables": {
+        "CMAKE_C_FLAGS": "/WX",
+        "CMAKE_CXX_FLAGS": "/WX /EHsc"
+      }
+    },
+    {
+      "name": "MSVC",
+      "inherits": ["defaults"],
+      "cacheVariables": {
+        "CMAKE_C_FLAGS": "/WX",
+        "CMAKE_CXX_FLAGS": "/WX /EHsc"
+      }
     }
   ]
 }

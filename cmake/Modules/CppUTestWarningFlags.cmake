@@ -1,10 +1,9 @@
 if (MSVC)
-    set(CPPUTEST_C_WARNING_FLAGS "/WX")
-    set(CPPUTEST_CXX_WARNING_FLAGS "/WX /wd4290")
 else (MSVC)
     include(CheckCCompilerFlag)
     include(CheckCXXCompilerFlag)
 
+    set(CMAKE_REQUIRED_FLAGS "-Wno-error")
     macro(check_and_append_c_warning_flags)
       foreach (flag ${ARGN})
         check_c_compiler_flag("-${flag}" WARNING_C_FLAG_${flag})
@@ -24,10 +23,6 @@ else (MSVC)
       endforeach (flag)
     endmacro(check_and_append_cxx_warning_flags)
 
-    if (NOT GMOCK AND NOT REAL_GTEST)
-      list(APPEND WARNING_C_FLAGS Werror pedantic-errors)
-    endif (NOT GMOCK AND NOT REAL_GTEST)
-
     set(WARNING_C_FLAGS
         Wall
         Wextra
@@ -43,11 +38,6 @@ else (MSVC)
         Wno-keyword-macro
         Wno-long-long
         )
-
-    if (CPPUTEST_WERROR)
-        list(APPEND WARNING_C_FLAGS Werror)
-    endif ()
-
 
     set(WARNING_C_ONLY_FLAGS
         Wstrict-prototypes
