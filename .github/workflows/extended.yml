@@ -98,6 +98,20 @@ jobs:
       - name: Test
         run: ctest --test-dir cpputest_build
 
+  cmake_no_std_c:
+    runs-on: ubuntu-latest
+    name: Disable libc
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+      - name: Configure
+        run: cmake --preset no-std-c
+      # FIXME: This is broken.
+      # - name: Build
+      #   run: cmake --build cpputest_build --verbose
+      # - name: Test
+      #   run: ctest --test-dir cpputest_build
+
   cmake_install:
     runs-on: ubuntu-latest
     steps:
