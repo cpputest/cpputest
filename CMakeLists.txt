@@ -189,7 +189,6 @@ Current compiler options:
     CXX:                                ${CMAKE_CXX_COMPILER}
     CppUTest CFLAGS:                    ${CPPUTEST_C_FLAGS}
     CppUTest CXXFLAGS:                  ${CPPUTEST_CXX_FLAGS}
-    CppUTest LDFLAGS:                   ${CPPUTEST_LD_FLAGS}
 
 Features configured in CppUTest:
     Memory Leak Detection Disabled:     ${CPPUTEST_MEM_LEAK_DETECTION_DISABLED}
