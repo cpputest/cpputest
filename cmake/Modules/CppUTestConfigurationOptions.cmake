@@ -1,18 +1,3 @@
-if (NOT CPPUTEST_MEM_LEAK_DETECTION_DISABLED)
-    if (MSVC)
-        set(CPPUTEST_C_FLAGS "${CPPUTEST_C_FLAGS} /FI \"${CppUTest_SOURCE_DIR}/include/CppUTest/MemoryLeakDetectorMallocMacros.h\"")
-        set(CPPUTEST_CXX_FLAGS "${CPPUTEST_CXX_FLAGS} /FI \"${CppUTest_SOURCE_DIR}/include/CppUTest/MemoryLeakDetectorMallocMacros.h\"")
-    elseif (CMAKE_CXX_COMPILER_ID STREQUAL "IAR")
-        set(CPPUTEST_C_FLAGS "${CPPUTEST_C_FLAGS} --preinclude \"${CppUTest_SOURCE_DIR}/include/CppUTest/MemoryLeakDetectorMallocMacros.h\"")
-        set(CPPUTEST_CXX_FLAGS "${CPPUTEST_CXX_FLAGS} --preinclude \"${CppUTest_SOURCE_DIR}/include/CppUTest/MemoryLeakDetectorNewMacros.h\"")
-        set(CPPUTEST_CXX_FLAGS "${CPPUTEST_CXX_FLAGS} --preinclude \"${CppUTest_SOURCE_DIR}/include/CppUTest/MemoryLeakDetectorMallocMacros.h\"")
-    else (MSVC)
-        set(CPPUTEST_C_FLAGS "${CPPUTEST_C_FLAGS} -include \"${CppUTest_SOURCE_DIR}/include/CppUTest/MemoryLeakDetectorMallocMacros.h\"")
-        set(CPPUTEST_CXX_FLAGS "${CPPUTEST_CXX_FLAGS} -include \"${CppUTest_SOURCE_DIR}/include/CppUTest/MemoryLeakDetectorNewMacros.h\"")
-        set(CPPUTEST_CXX_FLAGS "${CPPUTEST_CXX_FLAGS} -include \"${CppUTest_SOURCE_DIR}/include/CppUTest/MemoryLeakDetectorMallocMacros.h\"")
-    endif (MSVC)
-endif ()
-
 set(GMOCK_HOME $ENV{GMOCK_HOME})
 if (DEFINED ENV{GMOCK_HOME})
     # GMock pulls in gtest.
