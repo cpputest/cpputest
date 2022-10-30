@@ -117,7 +117,7 @@ private:
 struct MemoryLeakDetectorNode
 {
     MemoryLeakDetectorNode() :
-        size_(0), number_(0), memory_(NULLPTR), file_(NULLPTR), line_(0), allocator_(NULLPTR), period_(mem_leak_period_enabled), allocation_stage_(0), next_(NULLPTR)
+        size_(0), number_(0), memory_(nullptr), file_(nullptr), line_(0), allocator_(nullptr), period_(mem_leak_period_enabled), allocation_stage_(0), next_(nullptr)
     {
     }
 
@@ -140,7 +140,7 @@ private:
 struct MemoryLeakDetectorList
 {
     MemoryLeakDetectorList() :
-        head_(NULLPTR)
+        head_(nullptr)
     {}
 
     void addNewNode(MemoryLeakDetectorNode* node);

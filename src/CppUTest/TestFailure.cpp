@@ -400,7 +400,7 @@ static SimpleString getExceptionTypeName(const std::exception &e)
     int status = -1;
 
     std::unique_ptr<char, void(*)(void*)> demangledName(
-        abi::__cxa_demangle(name, NULLPTR, NULLPTR, &status),
+        abi::__cxa_demangle(name, nullptr, nullptr, &status),
         std::free );
 
     return (status==0) ? demangledName.get() : name;

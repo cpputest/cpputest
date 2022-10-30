@@ -60,7 +60,7 @@ int CommandLineTestRunner::RunAllTests(int ac, const char *const *av)
 }
 
 CommandLineTestRunner::CommandLineTestRunner(int ac, const char *const *av, TestRegistry* registry) :
-    output_(NULLPTR), arguments_(NULLPTR), registry_(registry)
+    output_(nullptr), arguments_(nullptr), registry_(registry)
 {
     arguments_ = new CommandLineArguments(ac, av);
 }
@@ -162,7 +162,7 @@ TestOutput* CommandLineTestRunner::createTeamCityOutput()
 TestOutput* CommandLineTestRunner::createJUnitOutput(const SimpleString& packageName)
 {
     JUnitTestOutput* junitOutput = new JUnitTestOutput;
-    if (junitOutput != NULLPTR) {
+    if (junitOutput != nullptr) {
       junitOutput->setPackageName(packageName);
     }
     return junitOutput;

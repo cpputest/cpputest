@@ -31,7 +31,7 @@
 
 TEST_GROUP(MockParameterTest)
 {
-  void teardown() _override
+  void teardown() override
   {
       mock().checkExpectations();
       mock().clear();
@@ -894,12 +894,12 @@ TEST(MockParameterTest, ignoreOtherCallsIgnoresWithAllKindsOfParameters)
            .withParameter("grr", 1ull)
 #endif
            .withParameter("duh", 1.0)
-           .withParameter("yoo", (const void*) NULLPTR)
-           .withParameter("func", (void(*)()) NULLPTR)
-           .withParameter("mem", (const unsigned char*) NULLPTR, 0)
-           .withParameterOfType("hoo", "int", (const void*) NULLPTR)
-           .withOutputParameter("gah", (void*) NULLPTR)
-           .withOutputParameterOfType("goo", "int", (void*) NULLPTR);
+           .withParameter("yoo", (const void*) nullptr)
+           .withParameter("func", (void(*)()) nullptr)
+           .withParameter("mem", (const unsigned char*) nullptr, 0)
+           .withParameterOfType("hoo", "int", (const void*) nullptr)
+           .withOutputParameter("gah", (void*) nullptr)
+           .withOutputParameterOfType("goo", "int", (void*) nullptr);
 
     mock().checkExpectations();
 }

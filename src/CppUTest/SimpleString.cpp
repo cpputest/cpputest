@@ -31,7 +31,7 @@
 #include "CppUTest/TestMemoryAllocator.h"
 
 GlobalSimpleStringAllocatorStash::GlobalSimpleStringAllocatorStash()
-    : originalAllocator_(NULLPTR)
+    : originalAllocator_(nullptr)
 {
 }
 
@@ -47,7 +47,7 @@ void GlobalSimpleStringAllocatorStash::restore()
 
 
 GlobalSimpleStringMemoryAccountant::GlobalSimpleStringMemoryAccountant()
-    : allocator_(NULLPTR)
+    : allocator_(nullptr)
 {
     accountant_ = new MemoryAccountant();
 }
@@ -73,7 +73,7 @@ void GlobalSimpleStringMemoryAccountant::useCacheSizes(size_t cacheSizes[], size
 
 void GlobalSimpleStringMemoryAccountant::start()
 {
-    if (allocator_ != NULLPTR)
+    if (allocator_ != nullptr)
       return;
 
     allocator_ = new AccountingTestMemoryAllocator(*accountant_, SimpleString::getStringAllocator());
@@ -83,7 +83,7 @@ void GlobalSimpleStringMemoryAccountant::start()
 
 void GlobalSimpleStringMemoryAccountant::stop()
 {
-    if (allocator_ == NULLPTR)
+    if (allocator_ == nullptr)
         FAIL("Global SimpleString allocator stopped without starting");
 
     if (SimpleString::getStringAllocator() != allocator_)
@@ -102,11 +102,11 @@ AccountingTestMemoryAllocator* GlobalSimpleStringMemoryAccountant::getAllocator(
     return allocator_;
 }
 
-TestMemoryAllocator* SimpleString::stringAllocator_ = NULLPTR;
+TestMemoryAllocator* SimpleString::stringAllocator_ = nullptr;
 
 TestMemoryAllocator* SimpleString::getStringAllocator()
 {
-    if (stringAllocator_ == NULLPTR)
+    if (stringAllocator_ == nullptr)
         return defaultNewArrayAllocator();
     return stringAllocator_;
 }
@@ -194,7 +194,7 @@ char* SimpleString::StrNCpy(char* s1, const char* s2, size_t n)
 {
     char* result = s1;
 
-    if((NULLPTR == s1) || (0 == n)) return result;
+    if((nullptr == s1) || (0 == n)) return result;
 
     *s1 = *s2;
     while ((--n != 0) && *s1){
@@ -209,7 +209,7 @@ const char* SimpleString::StrStr(const char* s1, const char* s2)
     for (; *s1; s1++)
         if (StrNCmp(s1, s2, StrLen(s2)) == 0)
             return s1;
-    return NULLPTR;
+    return nullptr;
 }
 
 char SimpleString::ToLower(char ch)
@@ -236,7 +236,7 @@ void SimpleString::deallocateInternalBuffer()
 {
     if (buffer_) {
         deallocStringBuffer(buffer_, bufferSize_, __FILE__, __LINE__);
-        buffer_ = NULLPTR;
+        buffer_ = nullptr;
         bufferSize_ = 0;
     }
 }
@@ -290,16 +290,16 @@ const char* SimpleString::getBuffer() const
 }
 
 SimpleString::SimpleString(const char *otherBuffer)
-    : buffer_(NULLPTR), bufferSize_(0)
+    : buffer_(nullptr), bufferSize_(0)
 {
-    if (otherBuffer == NULLPTR)
+    if (otherBuffer == nullptr)
         setInternalBufferAsEmptyString();
     else
         copyBufferToNewInternalBuffer(otherBuffer);
 }
 
 SimpleString::SimpleString(const char *other, size_t repeatCount)
-    : buffer_(NULLPTR), bufferSize_(0)
+    : buffer_(nullptr), bufferSize_(0)
 {
     size_t otherStringLength = StrLen(other);
     setInternalBufferToNewBuffer(otherStringLength * repeatCount + 1);
@@ -313,7 +313,7 @@ SimpleString::SimpleString(const char *other, size_t repeatCount)
 }
 
 SimpleString::SimpleString(const SimpleString& other)
-    : buffer_(NULLPTR), bufferSize_(0)
+    : buffer_(nullptr), bufferSize_(0)
 {
     copyBufferToNewInternalBuffer(other.getBuffer());
 }
@@ -327,7 +327,7 @@ SimpleString& SimpleString::operator=(const SimpleString& other)
 
 bool SimpleString::contains(const SimpleString& other) const
 {
-    return StrStr(getBuffer(), other.getBuffer()) != NULLPTR;
+    return StrStr(getBuffer(), other.getBuffer()) != nullptr;
 }
 
 bool SimpleString::containsNoCase(const SimpleString& other) const
@@ -358,7 +358,7 @@ size_t SimpleString::count(const SimpleString& substr) const
 {
     size_t num = 0;
     const char* str = getBuffer();
-    const char* strpart = NULLPTR;
+    const char* strpart = nullptr;
     if (*str){
         strpart = StrStr(str, substr.getBuffer());
     }
@@ -635,7 +635,7 @@ char* SimpleString::copyToNewBuffer(const char* bufferToCopy, size_t bufferSize)
 
 void SimpleString::copyToBuffer(char* bufferToCopy, size_t bufferSize) const
 {
-    if (bufferToCopy == NULLPTR || bufferSize == 0) return;
+    if (bufferToCopy == nullptr || bufferSize == 0) return;
 
     size_t sizeToCopy = (bufferSize-1 < size()) ? (bufferSize-1) : size();
 
@@ -1051,7 +1051,7 @@ SimpleString StringFromOrdinalNumber(unsigned int number)
 
 SimpleStringCollection::SimpleStringCollection()
 {
-    collection_ = NULLPTR;
+    collection_ = nullptr;
     size_ = 0;
 }
 

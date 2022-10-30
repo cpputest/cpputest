@@ -46,7 +46,7 @@ public:
 
     virtual ~DummyMemoryLeakFailure() _destructor_override;
     static bool wasDeleted();
-    virtual void fail(char*) _override;
+    virtual void fail(char*) override;
 
 private:
     static bool memoryLeakFailureWasDelete;

@@ -37,7 +37,7 @@ public:
     {
     }
 
-    virtual void fail(char* fail_string) _override
+    virtual void fail(char* fail_string) override
     {
         *message = fail_string;
     }
@@ -56,12 +56,12 @@ public:
 
     int alloc_called;
     int free_called;
-    char* alloc_memory(size_t size, const char*, size_t) _override
+    char* alloc_memory(size_t size, const char*, size_t) override
     {
         alloc_called++;
         return TestMemoryAllocator::alloc_memory(size, "file", 1);
     }
-    void free_memory(char* memory, size_t size, const char* file, size_t line) _override
+    void free_memory(char* memory, size_t size, const char* file, size_t line) override
     {
         free_called++;
         TestMemoryAllocator::free_memory(memory, size, file, line);
@@ -81,24 +81,24 @@ public:
     int allocMemoryLeakNodeCalled;
     int freeMemoryLeakNodeCalled;
 
-    char* alloc_memory(size_t size, const char* file, size_t line) _override
+    char* alloc_memory(size_t size, const char* file, size_t line) override
     {
         alloc_called++;
         return TestMemoryAllocator::alloc_memory(size, file, line);
     }
-    void free_memory(char* memory, size_t size, const char* file, size_t line) _override
+    void free_memory(char* memory, size_t size, const char* file, size_t line) override
     {
         free_called++;
         TestMemoryAllocator::free_memory(memory, size, file, line);
     }
 
-    char* allocMemoryLeakNode(size_t size) _override
+    char* allocMemoryLeakNode(size_t size) override
     {
         allocMemoryLeakNodeCalled++;
         return TestMemoryAllocator::alloc_memory(size, __FILE__, __LINE__);
     }
 
-    void freeMemoryLeakNode(char* memory) _override
+    void freeMemoryLeakNode(char* memory) override
     {
         freeMemoryLeakNodeCalled++;
         TestMemoryAllocator::free_memory(memory, 0,  __FILE__, __LINE__);
@@ -111,7 +111,7 @@ TEST_GROUP(MemoryLeakDetectorTest)
     MemoryLeakFailureForTest *reporter;
     AllocatorForMemoryLeakDetectionTest* testAllocator;
 
-    void setup() _override
+    void setup() override
     {
         reporter = new MemoryLeakFailureForTest;
         detector = new MemoryLeakDetector(reporter);
@@ -120,7 +120,7 @@ TEST_GROUP(MemoryLeakDetectorTest)
         detector->startChecking();
         reporter->message = new SimpleString();
     }
-    void teardown() _override
+    void teardown() override
     {
         delete reporter->message;
         delete detector;
@@ -442,7 +442,7 @@ TEST(MemoryLeakDetectorTest, memoryCorruption)
 
 TEST(MemoryLeakDetectorTest, safelyDeleteNULL)
 {
-    detector->deallocMemory(defaultNewAllocator(), NULLPTR);
+    detector->deallocMemory(defaultNewAllocator(), nullptr);
     STRCMP_EQUAL("", reporter->message->asCharString());
 }
 
@@ -539,7 +539,7 @@ TEST(MemoryLeakDetectorTest, invalidateMemory)
 
 TEST(MemoryLeakDetectorTest, invalidateMemoryNULLShouldWork)
 {
-  detector->invalidateMemory(NULLPTR);
+  detector->invalidateMemory(nullptr);
 }
 
 TEST_GROUP(MemoryLeakDetectorListTest)
@@ -557,7 +557,7 @@ TEST(MemoryLeakDetectorListTest, clearAllAccountingIsWorkingProperly)
 
     listForTesting.clearAllAccounting(mem_leak_period_enabled);
 
-    POINTERS_EQUAL(NULLPTR, listForTesting.getFirstLeak(mem_leak_period_enabled));
+    POINTERS_EQUAL(nullptr, listForTesting.getFirstLeak(mem_leak_period_enabled));
     CHECK(&node3 == listForTesting.getFirstLeak(mem_leak_period_disabled));
 }
 

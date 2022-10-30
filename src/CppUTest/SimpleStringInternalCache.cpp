@@ -42,7 +42,7 @@ struct SimpleStringInternalCacheNode
 };
 
 SimpleStringInternalCache::SimpleStringInternalCache()
-    : allocator_(defaultMallocAllocator()), cache_(NULLPTR), nonCachedAllocations_(NULLPTR), hasWarnedAboutDeallocations(false)
+    : allocator_(defaultMallocAllocator()), cache_(nullptr), nonCachedAllocations_(nullptr), hasWarnedAboutDeallocations(false)
 {
     cache_ = createInternalCacheNodes();
 }
@@ -63,8 +63,8 @@ SimpleStringInternalCacheNode* SimpleStringInternalCache::createInternalCacheNod
     SimpleStringInternalCacheNode* node = (SimpleStringInternalCacheNode*) (void*) allocator_->alloc_memory(sizeof(SimpleStringInternalCacheNode) * amountOfInternalCacheNodes, __FILE__, __LINE__);
 
     for (int i = 0; i < amountOfInternalCacheNodes; i++) {
-        node[i].freeMemoryHead_ = NULLPTR;
-        node[i].usedMemoryHead_ = NULLPTR;
+        node[i].freeMemoryHead_ = nullptr;
+        node[i].usedMemoryHead_ = nullptr;
     }
     node[0].size_ = 32;
     node[1].size_ = 64;
@@ -130,7 +130,7 @@ SimpleStringMemoryBlock* SimpleStringInternalCache::addToSimpleStringMemoryBlock
 
 bool SimpleStringInternalCache::hasFreeBlocksOfSize(size_t size)
 {
-    return getCacheNodeFromSize(size)->freeMemoryHead_ != NULLPTR;
+    return getCacheNodeFromSize(size)->freeMemoryHead_ != nullptr;
 }
 
 SimpleStringMemoryBlock* SimpleStringInternalCache::reserveCachedBlockFrom(SimpleStringInternalCacheNode* node)
@@ -229,7 +229,7 @@ void SimpleStringInternalCache::clearCache()
 {
     for (size_t i = 0; i < amountOfInternalCacheNodes; i++) {
         destroySimpleStringMemoryBlockList(cache_[i].freeMemoryHead_, cache_[i].size_);
-        cache_[i].freeMemoryHead_ = NULLPTR;
+        cache_[i].freeMemoryHead_ = nullptr;
     }
 }
 
@@ -238,12 +238,12 @@ void SimpleStringInternalCache::clearAllIncludingCurrentlyUsedMemory()
     for (size_t i = 0; i < amountOfInternalCacheNodes; i++) {
         destroySimpleStringMemoryBlockList(cache_[i].freeMemoryHead_, cache_[i].size_);
         destroySimpleStringMemoryBlockList(cache_[i].usedMemoryHead_, cache_[i].size_);
-        cache_[i].freeMemoryHead_ = NULLPTR;
-        cache_[i].usedMemoryHead_ = NULLPTR;
+        cache_[i].freeMemoryHead_ = nullptr;
+        cache_[i].usedMemoryHead_ = nullptr;
     }
 
     destroySimpleStringMemoryBlockList(nonCachedAllocations_, 0);
-    nonCachedAllocations_ = NULLPTR;
+    nonCachedAllocations_ = nullptr;
 }
 
 GlobalSimpleStringCache::GlobalSimpleStringCache()
@@ -272,7 +272,7 @@ SimpleStringCacheAllocator::SimpleStringCacheAllocator(SimpleStringInternalCache
 
 SimpleStringCacheAllocator::~SimpleStringCacheAllocator()
 {
-    cache_.setAllocator(NULLPTR);
+    cache_.setAllocator(nullptr);
 }
 
 char* SimpleStringCacheAllocator::alloc_memory(size_t size, const char*, size_t)

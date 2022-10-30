@@ -37,7 +37,7 @@ class UtestShell;
 class MockSupport;
 
 /* This allows access to "the global" mocking support for easier testing */
-MockSupport& mock(const SimpleString& mockName = "", MockFailureReporter* failureReporterForThisCall = NULLPTR);
+MockSupport& mock(const SimpleString& mockName = "", MockFailureReporter* failureReporterForThisCall = nullptr);
 
 class MockSupport
 {

@@ -45,14 +45,14 @@ TEST_GROUP(TestResult)
 
     TestResult* res;
 
-    void setup() _override
+    void setup() override
     {
         mock = new StringBufferTestOutput();
         printer = mock;
         res = new TestResult(*printer);
         UT_PTR_SET(GetPlatformSpecificTimeInMillis, MockGetPlatformSpecificTimeInMillis);
     }
-    void teardown() _override
+    void teardown() override
     {
         delete printer;
         delete res;

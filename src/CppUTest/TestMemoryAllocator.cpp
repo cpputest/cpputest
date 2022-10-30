@@ -33,14 +33,14 @@
 static char* checkedMalloc(size_t size)
 {
     char* mem = (char*) PlatformSpecificMalloc(size);
-    if (mem == NULLPTR)
+    if (mem == nullptr)
     FAIL("malloc returned null pointer");
     return mem;
 }
 
-static TestMemoryAllocator* currentNewAllocator = NULLPTR;
-static TestMemoryAllocator* currentNewArrayAllocator = NULLPTR;
-static TestMemoryAllocator* currentMallocAllocator = NULLPTR;
+static TestMemoryAllocator* currentNewAllocator = nullptr;
+static TestMemoryAllocator* currentNewArrayAllocator = nullptr;
+static TestMemoryAllocator* currentMallocAllocator = nullptr;
 
 void setCurrentNewAllocator(TestMemoryAllocator* allocator)
 {
@@ -49,7 +49,7 @@ void setCurrentNewAllocator(TestMemoryAllocator* allocator)
 
 TestMemoryAllocator* getCurrentNewAllocator()
 {
-    if (currentNewAllocator == NULLPTR) setCurrentNewAllocatorToDefault();
+    if (currentNewAllocator == nullptr) setCurrentNewAllocatorToDefault();
     return currentNewAllocator;
 }
 
@@ -71,7 +71,7 @@ void setCurrentNewArrayAllocator(TestMemoryAllocator* allocator)
 
 TestMemoryAllocator* getCurrentNewArrayAllocator()
 {
-    if (currentNewArrayAllocator == NULLPTR) setCurrentNewArrayAllocatorToDefault();
+    if (currentNewArrayAllocator == nullptr) setCurrentNewArrayAllocatorToDefault();
     return currentNewArrayAllocator;
 }
 
@@ -93,7 +93,7 @@ void setCurrentMallocAllocator(TestMemoryAllocator* allocator)
 
 TestMemoryAllocator* getCurrentMallocAllocator()
 {
-    if (currentMallocAllocator == NULLPTR) setCurrentMallocAllocatorToDefault();
+    if (currentMallocAllocator == nullptr) setCurrentMallocAllocatorToDefault();
     return currentMallocAllocator;
 }
 
@@ -111,7 +111,7 @@ TestMemoryAllocator* defaultMallocAllocator()
 /////////////////////////////////////////////
 
 GlobalMemoryAllocatorStash::GlobalMemoryAllocatorStash()
-    : originalMallocAllocator(NULLPTR), originalNewAllocator(NULLPTR), originalNewArrayAllocator(NULLPTR)
+    : originalMallocAllocator(nullptr), originalNewAllocator(nullptr), originalNewArrayAllocator(nullptr)
 {
 }
 
@@ -256,7 +256,7 @@ NullUnknownAllocator::~NullUnknownAllocator()
 
 char* NullUnknownAllocator::alloc_memory(size_t /*size*/, const char*, size_t)
 {
-    return NULLPTR;
+    return nullptr;
 }
 
 void NullUnknownAllocator::free_memory(char* /*memory*/, size_t, const char*, size_t)
@@ -310,11 +310,11 @@ class LocationToFailAllocNode
     }
 
   private:
-    void init(LocationToFailAllocNode* next = NULLPTR)
+    void init(LocationToFailAllocNode* next = nullptr)
     {
       allocNumberToFail_ = 0;
       actualAllocNumber_ = 0;
-      file_ = NULLPTR;
+      file_ = nullptr;
       line_ = 0;
       next_ = next;
     }
@@ -326,7 +326,7 @@ FailableMemoryAllocator::~FailableMemoryAllocator()
 }
 
 FailableMemoryAllocator::FailableMemoryAllocator(const char* name_str, const char* alloc_name_str, const char* free_name_str)
-: TestMemoryAllocator(name_str, alloc_name_str, free_name_str), head_(NULLPTR), currentAllocNumber_(0)
+: TestMemoryAllocator(name_str, alloc_name_str, free_name_str), head_(nullptr), currentAllocNumber_(0)
 {
 }
 
@@ -348,7 +348,7 @@ char* FailableMemoryAllocator::alloc_memory(size_t size, const char* file, size_
 {
     currentAllocNumber_++;
     LocationToFailAllocNode* current = head_;
-    LocationToFailAllocNode* previous = NULLPTR;
+    LocationToFailAllocNode* previous = nullptr;
 
     while (current) {
       if (current->shouldFail(currentAllocNumber_, file, line)) {
@@ -356,7 +356,7 @@ char* FailableMemoryAllocator::alloc_memory(size_t size, const char* file, size_
         else head_ = current->next_;
 
         free_memory((char*) current, size, __FILE__, __LINE__);
-        return NULLPTR;
+        return nullptr;
       }
       previous = current;
       current = current->next_;
@@ -422,7 +422,7 @@ void MemoryAccountant::destroyAccountantAllocationNode(MemoryAccountantAllocatio
 }
 
 MemoryAccountant::MemoryAccountant()
-    : head_(NULLPTR), allocator_(defaultMallocAllocator()), useCacheSizes_(false)
+    : head_(nullptr), allocator_(defaultMallocAllocator()), useCacheSizes_(false)
 {
 }
 
@@ -436,12 +436,12 @@ void MemoryAccountant::createCacheSizeNodes(size_t sizes[], size_t length)
     for (size_t i = 0; i < length; i++)
         findOrCreateNodeOfSize(sizes[i]);
 
-    if (head_ == NULLPTR)
-        head_ = createNewAccountantAllocationNode(0, NULLPTR);
+    if (head_ == nullptr)
+        head_ = createNewAccountantAllocationNode(0, nullptr);
     else {
         for (MemoryAccountantAllocationNode* lastNode = head_; lastNode; lastNode = lastNode->next_) {
-            if (lastNode->next_ == NULLPTR) {
-                lastNode->next_ = createNewAccountantAllocationNode(0, NULLPTR);
+            if (lastNode->next_ == nullptr) {
+                lastNode->next_ = createNewAccountantAllocationNode(0, nullptr);
                 break;
             }
         }
@@ -466,20 +466,20 @@ void MemoryAccountant::setAllocator(TestMemoryAllocator* allocator)
 void MemoryAccountant::clear()
 {
     MemoryAccountantAllocationNode* node = head_;
-    MemoryAccountantAllocationNode* to_be_deleted = NULLPTR;
+    MemoryAccountantAllocationNode* to_be_deleted = nullptr;
     while (node) {
         to_be_deleted = node;
         node = node->next_;
         destroyAccountantAllocationNode(to_be_deleted);
     }
-    head_ = NULLPTR;
+    head_ = nullptr;
 }
 
 MemoryAccountantAllocationNode* MemoryAccountant::findNodeOfSize(size_t size) const
 {
     if (useCacheSizes_) {
         for (MemoryAccountantAllocationNode* node = head_; node; node = node->next_) {
-            if (size > node->size_ && node->next_ == NULLPTR)
+            if (size > node->size_ && node->next_ == nullptr)
                 return node;
             else if (size <= node->size_ && !(node->next_->size_ != 0 && node->next_->size_ <= size))
                 return node;
@@ -489,7 +489,7 @@ MemoryAccountantAllocationNode* MemoryAccountant::findNodeOfSize(size_t size) co
         for (MemoryAccountantAllocationNode* node = head_; node; node = node->next_)
             if (node->size_ == size)
                 return node;
-    return NULLPTR;
+    return nullptr;
 }
 
 MemoryAccountantAllocationNode* MemoryAccountant::findOrCreateNodeOfSize(size_t size)
@@ -503,7 +503,7 @@ MemoryAccountantAllocationNode* MemoryAccountant::findOrCreateNodeOfSize(size_t 
     for (MemoryAccountantAllocationNode* node = head_; node; node = node->next_) {
         if (node->size_ == size)
             return node;
-        if (node->next_ == NULLPTR || node->next_->size_ > size)
+        if (node->next_ == nullptr || node->next_->size_ > size)
             node->next_ = createNewAccountantAllocationNode(size, node->next_);
     }
     head_ = createNewAccountantAllocationNode(size, head_);
@@ -603,7 +603,7 @@ SimpleString MemoryAccountant::stringSize(size_t size) const
 
 SimpleString MemoryAccountant::report() const
 {
-    if (head_ == NULLPTR)
+    if (head_ == nullptr)
       return reportNoAllocations();
 
     SimpleString accountantReport = reportTitle() + reportHeader();
@@ -615,7 +615,7 @@ SimpleString MemoryAccountant::report() const
 }
 
 AccountingTestMemoryAllocator::AccountingTestMemoryAllocator(MemoryAccountant& accountant, TestMemoryAllocator* origAllocator)
-    : accountant_(accountant), originalAllocator_(origAllocator), head_(NULLPTR)
+    : accountant_(accountant), originalAllocator_(origAllocator), head_(nullptr)
 {
 }
 
@@ -708,7 +708,7 @@ const char* AccountingTestMemoryAllocator::free_name() const
 }
 
 GlobalMemoryAccountant::GlobalMemoryAccountant()
-    : mallocAllocator_(NULLPTR), newAllocator_(NULLPTR), newArrayAllocator_(NULLPTR)
+    : mallocAllocator_(nullptr), newAllocator_(nullptr), newArrayAllocator_(nullptr)
 {
 }
 
@@ -727,7 +727,7 @@ void GlobalMemoryAccountant::useCacheSizes(size_t sizes[], size_t length)
 
 void GlobalMemoryAccountant::start()
 {
-    if (mallocAllocator_ != NULLPTR)
+    if (mallocAllocator_ != nullptr)
       FAIL("Global allocator start called twice!");
 
     mallocAllocator_ = new AccountingTestMemoryAllocator(accountant_, getCurrentMallocAllocator());
@@ -755,7 +755,7 @@ void GlobalMemoryAccountant::restoreMemoryAllocators()
 
 void GlobalMemoryAccountant::stop()
 {
-    if (mallocAllocator_ == NULLPTR)
+    if (mallocAllocator_ == nullptr)
       FAIL("GlobalMemoryAccount: Stop called without starting");
 
     if (getCurrentMallocAllocator() != mallocAllocator_)

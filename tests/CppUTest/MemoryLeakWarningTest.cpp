@@ -43,8 +43,8 @@ TEST_GROUP(MemoryLeakWarningLocalDetectorTest)
 
 TEST(MemoryLeakWarningLocalDetectorTest, localDetectorReturnsNewGlobalWhenNoneWasSet)
 {
-    MemoryLeakWarningPlugin memoryLeakWarningPlugin("TestMemoryLeakWarningPlugin", NULLPTR);
-    CHECK(NULLPTR != memoryLeakWarningPlugin.getMemoryLeakDetector());
+    MemoryLeakWarningPlugin memoryLeakWarningPlugin("TestMemoryLeakWarningPlugin", nullptr);
+    CHECK(nullptr != memoryLeakWarningPlugin.getMemoryLeakDetector());
 }
 
 TEST(MemoryLeakWarningLocalDetectorTest, localDetectorIsTheOneSpecifiedInConstructor)
@@ -57,7 +57,7 @@ TEST(MemoryLeakWarningLocalDetectorTest, localDetectorIsTheOneSpecifiedInConstru
 TEST(MemoryLeakWarningLocalDetectorTest, localDetectorIsGlobalDetector)
 {
     MemoryLeakDetector* globalDetector = MemoryLeakWarningPlugin::getGlobalDetector();
-    MemoryLeakWarningPlugin memoryLeakWarningPlugin("TestMemoryLeakWarningPlugin", NULLPTR);
+    MemoryLeakWarningPlugin memoryLeakWarningPlugin("TestMemoryLeakWarningPlugin", nullptr);
     MemoryLeakDetector* localDetector =  memoryLeakWarningPlugin.getMemoryLeakDetector();
     POINTERS_EQUAL(globalDetector, localDetector);
 }
@@ -74,7 +74,7 @@ TEST_GROUP(MemoryLeakWarningTest)
     DummyMemoryLeakFailure dummy;
     TestTestingFixture* fixture;
 
-    void setup() _override
+    void setup() override
     {
         fixture = new TestTestingFixture();
         detector = new MemoryLeakDetector(&dummy);
@@ -83,11 +83,11 @@ TEST_GROUP(MemoryLeakWarningTest)
         fixture->installPlugin(memPlugin);
         memPlugin->enable();
 
-        leak1 = NULLPTR;
-        leak2 = NULLPTR;
+        leak1 = nullptr;
+        leak2 = nullptr;
     }
 
-    void teardown() _override
+    void teardown() override
     {
         detector->deallocMemory(allocator, leak1);
         detector->deallocMemory(allocator, leak2);
@@ -146,7 +146,7 @@ TEST(MemoryLeakWarningTest, LeakWarningWithPluginDisabled)
     fixture->assertPrintContains("Warning: Expected 1 leak(s), but leak detection was disabled");
 
     cpputest_free_location_with_leak_detection(leak1, __FILE__, __LINE__);
-    leak1 = NULLPTR;
+    leak1 = nullptr;
 
     MemoryLeakWarningPlugin::restoreNewDeleteOverloads();
 }
@@ -195,7 +195,7 @@ TEST_GROUP(MemoryLeakWarningGlobalDetectorTest)
         cpputestHasCrashed = true;
     }
 
-    void setup() _override
+    void setup() override
     {
         memoryAllocatorStash.save();
         detector = MemoryLeakWarningPlugin::getGlobalDetector();
@@ -210,7 +210,7 @@ TEST_GROUP(MemoryLeakWarningGlobalDetectorTest)
         cpputestHasCrashed = false;
 }
 
-    void teardown() _override
+    void teardown() override
     {
         MemoryLeakWarningPlugin::restoreNewDeleteOverloads();
 
@@ -235,7 +235,7 @@ TEST(MemoryLeakWarningGlobalDetectorTest, turnOffNewOverloadsCausesNoAdditionalL
     char* arrayMemory = new char[100];
     char* nonArrayMemory = new char;
     char* mallocMemory = (char*) cpputest_malloc_location_with_leak_detection(10, "file", 10);
-    char* reallocMemory = (char*) cpputest_realloc_location_with_leak_detection(NULLPTR, 10, "file", 10);
+    char* reallocMemory = (char*) cpputest_realloc_location_with_leak_detection(nullptr, 10, "file", 10);
 
     LONGS_EQUAL(storedAmountOfLeaks, detector->totalMemoryLeaks(mem_leak_period_all));
 
@@ -311,7 +311,7 @@ TEST(MemoryLeakWarningGlobalDetectorTest, crashOnLeakWithOperatorMalloc)
 
 TEST(MemoryLeakWarningGlobalDetectorTest, gettingTheGlobalDetectorDoesNotRestoreTheMemoryLeakOverloadsWhenTheyWereAlreadyOff)
 {
-    MemoryLeakWarningPlugin::setGlobalDetector(NULLPTR, NULLPTR);
+    MemoryLeakWarningPlugin::setGlobalDetector(nullptr, nullptr);
     MemoryLeakDetector* temporaryDetector = MemoryLeakWarningPlugin::getGlobalDetector();
     MemoryLeakFailure*  temporaryReporter = MemoryLeakWarningPlugin::getGlobalFailureReporter();
 
@@ -324,7 +324,7 @@ TEST(MemoryLeakWarningGlobalDetectorTest, gettingTheGlobalDetectorDoesNotRestore
 
     delete temporaryReporter;
     delete temporaryDetector;
-    MemoryLeakWarningPlugin::setGlobalDetector(NULLPTR, NULLPTR);
+    MemoryLeakWarningPlugin::setGlobalDetector(nullptr, nullptr);
 }
 
 TEST(MemoryLeakWarningGlobalDetectorTest, checkIfTheMemoryLeakOverloadsAreOn)
@@ -407,7 +407,7 @@ static void StubMutexUnlock(PlatformSpecificMutex)
 
 TEST_GROUP(MemoryLeakWarningThreadSafe)
 {
-    void setup() _override
+    void setup() override
     {
         UT_PTR_SET(PlatformSpecificMutexLock, StubMutexLock);
         UT_PTR_SET(PlatformSpecificMutexUnlock, StubMutexUnlock);
@@ -416,7 +416,7 @@ TEST_GROUP(MemoryLeakWarningThreadSafe)
         mutexUnlockCount = 0;
     }
 
-    void teardown() _override
+    void teardown() override
     {
     }
 };

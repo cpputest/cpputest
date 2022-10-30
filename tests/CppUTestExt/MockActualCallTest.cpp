@@ -38,14 +38,14 @@ TEST_GROUP(MockCheckedActualCall)
     MockExpectedCallsList* list;
     MockFailureReporter* reporter;
 
-    void setup() _override
+    void setup() override
     {
         emptyList = new MockExpectedCallsList;
         list = new MockExpectedCallsList;
         reporter = MockFailureReporterForTest::getReporter();
     }
 
-    void teardown() _override
+    void teardown() override
     {
         CHECK_NO_MOCK_FAILURE();
 
@@ -77,7 +77,7 @@ TEST(MockCheckedActualCall, unExpectedCallWithAParameter)
 TEST(MockCheckedActualCall, unExpectedCallWithAnOutputParameter)
 {
     MockCheckedActualCall actualCall(1, reporter, *emptyList);
-    actualCall.withName("unexpected").withOutputParameter("bar", NULLPTR);
+    actualCall.withName("unexpected").withOutputParameter("bar", nullptr);
 
     MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "unexpected", *list);
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
@@ -174,11 +174,11 @@ TEST(MockCheckedActualCall, MockIgnoredActualCallWorksAsItShould)
     DOUBLES_EQUAL(1.5, actual.returnDoubleValueOrDefault(1.5), 0.0);
     STRCMP_EQUAL("bla", actual.returnStringValueOrDefault("bla"));
     STRCMP_EQUAL("", actual.returnStringValue());
-    CHECK(NULLPTR == actual.returnPointerValue());
+    CHECK(nullptr == actual.returnPointerValue());
     CHECK((void*) 0x2 == actual.returnPointerValueOrDefault((void*) 0x2));
-    CHECK(NULLPTR == actual.returnConstPointerValue());
+    CHECK(nullptr == actual.returnConstPointerValue());
     CHECK((const void*) 0x2 == actual.returnConstPointerValueOrDefault((const void*) 0x2));
-    CHECK(NULLPTR == actual.returnFunctionPointerValue());
+    CHECK(nullptr == actual.returnFunctionPointerValue());
     CHECK((void(*)()) 1 == actual.returnFunctionPointerValueOrDefault((void(*)()) 0x1));
     CHECK_FALSE(actual.hasReturnValue());
     CHECK(actual.returnValue().equals(MockNamedValue("")));
@@ -255,12 +255,12 @@ TEST(MockCheckedActualCall, remainderOfMockActualCallTraceWorksAsItShould)
     DOUBLES_EQUAL(0.0, actual.returnDoubleValueOrDefault(1.0), 0.0);
     STRCMP_EQUAL("", actual.returnStringValueOrDefault("bla"));
     STRCMP_EQUAL("", actual.returnStringValue());
-    CHECK(NULLPTR == actual.returnPointerValue());
-    CHECK(NULLPTR == actual.returnPointerValueOrDefault((void*) NULLPTR));
-    CHECK(NULLPTR == actual.returnConstPointerValue());
-    CHECK(NULLPTR == actual.returnConstPointerValueOrDefault((const void*) NULLPTR));
-    CHECK(NULLPTR == actual.returnFunctionPointerValue());
-    CHECK(NULLPTR == actual.returnFunctionPointerValueOrDefault((void (*)()) NULLPTR));
+    CHECK(nullptr == actual.returnPointerValue());
+    CHECK(nullptr == actual.returnPointerValueOrDefault((void*) nullptr));
+    CHECK(nullptr == actual.returnConstPointerValue());
+    CHECK(nullptr == actual.returnConstPointerValueOrDefault((const void*) nullptr));
+    CHECK(nullptr == actual.returnFunctionPointerValue());
+    CHECK(nullptr == actual.returnFunctionPointerValueOrDefault((void (*)()) nullptr));
 }
 
 TEST(MockCheckedActualCall, MockActualCallTraceClear)

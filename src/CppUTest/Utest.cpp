@@ -145,12 +145,12 @@ bool UtestShell::rethrowExceptions_ = false;
 /******************************** */
 
 UtestShell::UtestShell() :
-    group_("UndefinedTestGroup"), name_("UndefinedTest"), file_("UndefinedFile"), lineNumber_(0), next_(NULLPTR), isRunAsSeperateProcess_(false), hasFailed_(false)
+    group_("UndefinedTestGroup"), name_("UndefinedTest"), file_("UndefinedFile"), lineNumber_(0), next_(nullptr), isRunAsSeperateProcess_(false), hasFailed_(false)
 {
 }
 
 UtestShell::UtestShell(const char* groupName, const char* testName, const char* fileName, size_t lineNumber) :
-    group_(groupName), name_(testName), file_(fileName), lineNumber_(lineNumber), next_(NULLPTR), isRunAsSeperateProcess_(false), hasFailed_(false)
+    group_(groupName), name_(testName), file_(fileName), lineNumber_(lineNumber), next_(nullptr), isRunAsSeperateProcess_(false), hasFailed_(false)
 {
 }
 
@@ -171,7 +171,7 @@ UtestShell::~UtestShell()
 
 static void defaultCrashMethod()
 {
-    UtestShell* ptr = (UtestShell*) NULLPTR;
+    UtestShell* ptr = (UtestShell*) nullptr;
     ptr->countTests();
 }
 
@@ -231,7 +231,7 @@ void UtestShell::runOneTestInCurrentProcess(TestPlugin* plugin, TestResult& resu
     UtestShell::setTestResult(&result);
     UtestShell::setCurrentTest(this);
 
-    Utest* testToRun = NULLPTR;
+    Utest* testToRun = nullptr;
 
 #if CPPUTEST_USE_STD_CPP_LIB
     try
@@ -371,9 +371,9 @@ size_t UtestShell::getLineNumber() const
 
 bool UtestShell::match(const char* target, const TestFilter* filters) const
 {
-    if(filters == NULLPTR) return true;
+    if(filters == nullptr) return true;
 
-    for(; filters != NULLPTR; filters = filters->getNext())
+    for(; filters != nullptr; filters = filters->getNext())
         if(filters->match(target)) return true;
 
     return false;
@@ -422,8 +422,8 @@ void UtestShell::fail(const char *text, const char* fileName, size_t lineNumber,
 void UtestShell::assertCstrEqual(const char* expected, const char* actual, const char* text, const char* fileName, size_t lineNumber, const TestTerminator& testTerminator)
 {
     getTestResult()->countCheck();
-    if (actual == NULLPTR && expected == NULLPTR) return;
-    if (actual == NULLPTR || expected == NULLPTR)
+    if (actual == nullptr && expected == nullptr) return;
+    if (actual == nullptr || expected == nullptr)
         failWith(StringEqualFailure(this, fileName, lineNumber, expected, actual, text), testTerminator);
     if (SimpleString::StrCmp(expected, actual) != 0)
         failWith(StringEqualFailure(this, fileName, lineNumber, expected, actual, text), testTerminator);
@@ -432,8 +432,8 @@ void UtestShell::assertCstrEqual(const char* expected, const char* actual, const
 void UtestShell::assertCstrNEqual(const char* expected, const char* actual, size_t length, const char* text, const char* fileName, size_t lineNumber, const TestTerminator& testTerminator)
 {
     getTestResult()->countCheck();
-    if (actual == NULLPTR && expected == NULLPTR) return;
-    if (actual == NULLPTR || expected == NULLPTR)
+    if (actual == nullptr && expected == nullptr) return;
+    if (actual == nullptr || expected == nullptr)
         failWith(StringEqualFailure(this, fileName, lineNumber, expected, actual, text), testTerminator);
     if (SimpleString::StrNCmp(expected, actual, length) != 0)
         failWith(StringEqualFailure(this, fileName, lineNumber, expected, actual, text), testTerminator);
@@ -442,8 +442,8 @@ void UtestShell::assertCstrNEqual(const char* expected, const char* actual, size
 void UtestShell::assertCstrNoCaseEqual(const char* expected, const char* actual, const char* text, const char* fileName, size_t lineNumber)
 {
     getTestResult()->countCheck();
-    if (actual == NULLPTR && expected == NULLPTR) return;
-    if (actual == NULLPTR || expected == NULLPTR)
+    if (actual == nullptr && expected == nullptr) return;
+    if (actual == nullptr || expected == nullptr)
         failWith(StringEqualNoCaseFailure(this, fileName, lineNumber, expected, actual, text));
     if (!SimpleString(expected).equalsNoCase(actual))
         failWith(StringEqualNoCaseFailure(this, fileName, lineNumber, expected, actual, text));
@@ -452,8 +452,8 @@ void UtestShell::assertCstrNoCaseEqual(const char* expected, const char* actual,
 void UtestShell::assertCstrContains(const char* expected, const char* actual, const char* text, const char* fileName, size_t lineNumber)
 {
     getTestResult()->countCheck();
-    if (actual == NULLPTR && expected == NULLPTR) return;
-    if (actual == NULLPTR || expected == NULLPTR)
+    if (actual == nullptr && expected == nullptr) return;
+    if (actual == nullptr || expected == nullptr)
         failWith(ContainsFailure(this, fileName, lineNumber, expected, actual, text));
     if (!SimpleString(actual).contains(expected))
         failWith(ContainsFailure(this, fileName, lineNumber, expected, actual, text));
@@ -462,8 +462,8 @@ void UtestShell::assertCstrContains(const char* expected, const char* actual, co
 void UtestShell::assertCstrNoCaseContains(const char* expected, const char* actual, const char* text, const char* fileName, size_t lineNumber)
 {
     getTestResult()->countCheck();
-    if (actual == NULLPTR && expected == NULLPTR) return;
-    if (actual == NULLPTR || expected == NULLPTR)
+    if (actual == nullptr && expected == nullptr) return;
+    if (actual == nullptr || expected == nullptr)
         failWith(ContainsFailure(this, fileName, lineNumber, expected, actual, text));
     if (!SimpleString(actual).containsNoCase(expected))
         failWith(ContainsFailure(this, fileName, lineNumber, expected, actual, text));
@@ -541,8 +541,8 @@ void UtestShell::assertBinaryEqual(const void *expected, const void *actual, siz
 {
     getTestResult()->countCheck();
 	if (length == 0) return;
-    if (actual == NULLPTR && expected == NULLPTR) return;
-    if (actual == NULLPTR || expected == NULLPTR)
+    if (actual == nullptr && expected == nullptr) return;
+    if (actual == nullptr || expected == nullptr)
         failWith(BinaryEqualFailure(this, fileName, lineNumber, (const unsigned char *) expected, (const unsigned char *) actual, length, text), testTerminator);
     if (SimpleString::MemCmp(expected, actual, length) != 0)
         failWith(BinaryEqualFailure(this, fileName, lineNumber, (const unsigned char *) expected, (const unsigned char *) actual, length, text), testTerminator);
@@ -590,8 +590,8 @@ void UtestShell::printVeryVerbose(const char* text)
     getTestResult()->printVeryVerbose(text);
 }
 
-TestResult* UtestShell::testResult_ = NULLPTR;
-UtestShell* UtestShell::currentTest_ = NULLPTR;
+TestResult* UtestShell::testResult_ = nullptr;
+UtestShell* UtestShell::currentTest_ = nullptr;
 
 void UtestShell::setTestResult(TestResult* result)
 {
@@ -605,14 +605,14 @@ void UtestShell::setCurrentTest(UtestShell* test)
 
 TestResult* UtestShell::getTestResult()
 {
-    if (testResult_ == NULLPTR)
+    if (testResult_ == nullptr)
         return &OutsideTestRunnerUTest::instance().getTestResult();
     return testResult_;
 }
 
 UtestShell* UtestShell::getCurrent()
 {
-    if (currentTest_ == NULLPTR)
+    if (currentTest_ == nullptr)
         return &OutsideTestRunnerUTest::instance();
     return currentTest_;
 }
@@ -881,7 +881,7 @@ void IgnoredUtestShell::setRunIgnored()
 //////////////////// UtestShellPointerArray
 
 UtestShellPointerArray::UtestShellPointerArray(UtestShell* firstTest)
-    : arrayOfTests_(NULLPTR), count_(0)
+    : arrayOfTests_(nullptr), count_(0)
 {
     count_ = (firstTest) ? firstTest->countTests() : 0;
     if (count_ == 0) return;
@@ -940,7 +940,7 @@ void UtestShellPointerArray::reverse()
 
 void UtestShellPointerArray::relinkTestsInOrder()
 {
-    UtestShell *tests = NULLPTR;
+    UtestShell *tests = nullptr;
     for (size_t i = 0; i < count_; i++)
         tests = arrayOfTests_[count_ - i - 1]->addTest(tests);
 }
@@ -952,7 +952,7 @@ UtestShell* UtestShellPointerArray::getFirstTest() const
 
 UtestShell* UtestShellPointerArray::get(size_t index) const
 {
-    if (index >= count_) return NULLPTR;
+    if (index >= count_) return nullptr;
     return arrayOfTests_[index];
 }
 

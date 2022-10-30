@@ -36,13 +36,13 @@ TEST_GROUP(TestMemoryAllocatorTest)
     TestMemoryAllocator* allocator;
     GlobalMemoryAllocatorStash memoryAllocatorStash;
 
-    void setup() _override
+    void setup() override
     {
-        allocator = NULLPTR;
+        allocator = nullptr;
         memoryAllocatorStash.save();
     }
 
-    void teardown() _override
+    void teardown() override
     {
         memoryAllocatorStash.restore();
         delete allocator;
@@ -149,12 +149,12 @@ TEST_GROUP(MemoryLeakAllocator)
 {
     MemoryLeakAllocator* allocator;
 
-    void setup() _override
+    void setup() override
     {
         allocator = new MemoryLeakAllocator(defaultMallocAllocator());
     }
 
-    void teardown() _override
+    void teardown() override
     {
         delete allocator;
     }
@@ -198,12 +198,12 @@ public:
     FailableMemoryAllocator* allocator_;
     void (*testFunction_)(FailableMemoryAllocator*);
 
-    void exec() _override
+    void exec() override
     {
         testFunction_(allocator_);
     }
 
-    FailableMemoryAllocatorExecFunction() : allocator_(NULLPTR), testFunction_(NULLPTR) {}
+    FailableMemoryAllocatorExecFunction() : allocator_(nullptr), testFunction_(nullptr) {}
     virtual ~FailableMemoryAllocatorExecFunction() _destructor_override {}
 };
 
@@ -214,14 +214,14 @@ TEST_GROUP(FailableMemoryAllocator)
     TestTestingFixture fixture;
     GlobalMemoryAllocatorStash stash;
 
-    void setup() _override
+    void setup() override
     {
         stash.save();
         testFunction.allocator_ = failableMallocAllocator = new FailableMemoryAllocator("Failable Malloc Allocator", "malloc", "free");
         fixture.setTestFunction(&testFunction);
         setCurrentMallocAllocator(failableMallocAllocator);
     }
-    void teardown() _override
+    void teardown() override
     {
         failableMallocAllocator->checkAllFailedAllocsWereDone();
         failableMallocAllocator->clearFailedAllocs();
@@ -233,14 +233,14 @@ TEST_GROUP(FailableMemoryAllocator)
 TEST(FailableMemoryAllocator, MallocWorksNormallyIfNotAskedToFail)
 {
     int *memory = (int*)malloc(sizeof(int));
-    CHECK(memory != NULLPTR);
+    CHECK(memory != nullptr);
     free(memory);
 }
 
 TEST(FailableMemoryAllocator, FailFirstMalloc)
 {
     failableMallocAllocator->failAllocNumber(1);
-    POINTERS_EQUAL(NULLPTR, (int*)malloc(sizeof(int)));
+    POINTERS_EQUAL(nullptr, (int*)malloc(sizeof(int)));
 }
 
 TEST(FailableMemoryAllocator, FailSecondAndFourthMalloc)
@@ -252,10 +252,10 @@ TEST(FailableMemoryAllocator, FailSecondAndFourthMalloc)
     int *memory3 = (int*)malloc(sizeof(int));
     int *memory4 = (int*)malloc(sizeof(int));
 
-    CHECK(NULLPTR != memory1);
-    POINTERS_EQUAL(NULLPTR, memory2);
-    CHECK(NULLPTR != memory3);
-    POINTERS_EQUAL(NULLPTR, memory4);
+    CHECK(nullptr != memory1);
+    POINTERS_EQUAL(nullptr, memory2);
+    CHECK(nullptr != memory3);
+    POINTERS_EQUAL(nullptr, memory4);
 
     free(memory1);
     free(memory3);
@@ -286,19 +286,19 @@ TEST(FailableMemoryAllocator, FailFirstAllocationAtGivenLine)
 {
     failableMallocAllocator->failNthAllocAt(1, __FILE__, __LINE__ + 2);
 
-    POINTERS_EQUAL(NULLPTR, malloc(sizeof(int)));
+    POINTERS_EQUAL(nullptr, malloc(sizeof(int)));
 }
 
 TEST(FailableMemoryAllocator, FailThirdAllocationAtGivenLine)
 {
-    int *memory[10] = { NULLPTR };
+    int *memory[10] = { nullptr };
     int allocation;
     failableMallocAllocator->failNthAllocAt(3, __FILE__, __LINE__ + 4);
 
     for (allocation = 1; allocation <= 10; allocation++)
     {
         memory[allocation - 1] = (int *)malloc(sizeof(int));
-        if (memory[allocation - 1] == NULLPTR)
+        if (memory[allocation - 1] == nullptr)
             break;
         free(memory[allocation -1]);
     }
@@ -339,7 +339,7 @@ public:
     void (*testFunction_)(MemoryAccountant*);
     MemoryAccountant* parameter_;
 
-    virtual void exec() _override
+    virtual void exec() override
     {
         testFunction_(parameter_);
     }
@@ -351,13 +351,13 @@ TEST_GROUP(TestMemoryAccountant)
     TestTestingFixture fixture;
     MemoryAccountantExecFunction testFunction;
 
-    void setup() _override
+    void setup() override
     {
         testFunction.parameter_ = &accountant;
         fixture.setTestFunction(&testFunction);
     }
 
-    void teardown() _override
+    void teardown() override
     {
         accountant.clear();
     }
@@ -545,12 +545,12 @@ TEST_GROUP(AccountingTestMemoryAllocator)
     MemoryAccountant accountant;
     AccountingTestMemoryAllocator *allocator;
 
-    void setup() _override
+    void setup() override
     {
         allocator = new AccountingTestMemoryAllocator(accountant, getCurrentMallocAllocator());
     }
 
-    void teardown() _override
+    void teardown() override
     {
         accountant.clear();
         delete allocator;
@@ -615,7 +615,7 @@ public:
     void (*testFunction_)(GlobalMemoryAccountant*);
     GlobalMemoryAccountant* parameter_;
 
-    virtual void exec() _override
+    virtual void exec() override
     {
         testFunction_(parameter_);
     }
@@ -628,14 +628,14 @@ TEST_GROUP(GlobalMemoryAccountant)
     GlobalMemoryAccountantExecFunction testFunction;
     GlobalMemoryAllocatorStash stash;
 
-    void setup() _override
+    void setup() override
     {
         testFunction.parameter_ = &accountant;
         fixture.setTestFunction(&testFunction);
         stash.save();
     }
 
-    void teardown() _override
+    void teardown() override
     {
         stash.restore();
     }

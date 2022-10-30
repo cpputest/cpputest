@@ -36,7 +36,7 @@ public:
     SimpleStringInternalCache* parameter;
     size_t allocationSize;
 
-    void exec() _override
+    void exec() override
     {
         testFunction(parameter, allocationSize);
     }
@@ -52,7 +52,7 @@ TEST_GROUP(SimpleStringInternalCache)
     TestFunctionWithCache testFunction;
     TestTestingFixture fixture;
 
-    void setup() _override
+    void setup() override
     {
         fixture.setTestFunction(&testFunction);
         testFunction.parameter = &cache;
@@ -62,7 +62,7 @@ TEST_GROUP(SimpleStringInternalCache)
         cache.setAllocator(defaultAllocator);
     }
 
-    void teardown() _override
+    void teardown() override
     {
         cache.clearAllIncludingCurrentlyUsedMemory();
         accountant.clear();
@@ -330,13 +330,13 @@ TEST_GROUP(SimpleStringCacheAllocator)
     MemoryAccountant accountant;
     AccountingTestMemoryAllocator* accountingAllocator;
 
-    void setup() _override
+    void setup() override
     {
         accountingAllocator = new AccountingTestMemoryAllocator(accountant, defaultMallocAllocator());
         allocator = new SimpleStringCacheAllocator(cache, accountingAllocator);
     }
 
-    void teardown() _override
+    void teardown() override
     {
         cache.clearCache();
         delete allocator;

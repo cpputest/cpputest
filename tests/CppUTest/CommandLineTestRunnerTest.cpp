@@ -46,7 +46,7 @@ public:
     {
     }
 
-    virtual bool parseArguments(int, const char *const *, int) _override
+    virtual bool parseArguments(int, const char *const *, int) override
     {
         /* Remove ourselves from the count */
         amountOfPlugins = registry_->countPlugins() - 1;
@@ -64,23 +64,23 @@ public:
   StringBufferTestOutput* fakeTCOutputWhichIsReallyABuffer;
 
   CommandLineTestRunnerWithStringBufferOutput(int argc, const char *const *argv, TestRegistry* registry)
-    : CommandLineTestRunner(argc, argv, registry), fakeJUnitOutputWhichIsReallyABuffer_(NULLPTR),
-    fakeConsoleOutputWhichIsReallyABuffer(NULLPTR), fakeTCOutputWhichIsReallyABuffer(NULLPTR)
+    : CommandLineTestRunner(argc, argv, registry), fakeJUnitOutputWhichIsReallyABuffer_(nullptr),
+    fakeConsoleOutputWhichIsReallyABuffer(nullptr), fakeTCOutputWhichIsReallyABuffer(nullptr)
   {}
 
-  TestOutput* createConsoleOutput() _override
+  TestOutput* createConsoleOutput() override
   {
     fakeConsoleOutputWhichIsReallyABuffer = new StringBufferTestOutput;
     return fakeConsoleOutputWhichIsReallyABuffer;
   }
 
-  TestOutput* createJUnitOutput(const SimpleString&) _override
+  TestOutput* createJUnitOutput(const SimpleString&) override
   {
     fakeJUnitOutputWhichIsReallyABuffer_ = new StringBufferTestOutput;
     return fakeJUnitOutputWhichIsReallyABuffer_;
   }
 
-  TestOutput* createTeamCityOutput() _override
+  TestOutput* createTeamCityOutput() override
   {
     fakeTCOutputWhichIsReallyABuffer = new StringBufferTestOutput;
     return fakeTCOutputWhichIsReallyABuffer;
@@ -94,14 +94,14 @@ TEST_GROUP(CommandLineTestRunner)
     UtestShell *test2;
     DummyPluginWhichCountsThePlugins* pluginCountingPlugin;
 
-    void setup() _override
+    void setup() override
     {
       test1 = new UtestShell("group1", "test1", "file1", 1);
       test2 = new UtestShell("group2", "test2", "file2", 2);
       registry.addTest(test1);
       pluginCountingPlugin = new DummyPluginWhichCountsThePlugins("PluginCountingPlugin", &registry);
     }
-    void teardown() _override
+    void teardown() override
     {
       delete pluginCountingPlugin;
       delete test2;
@@ -188,7 +188,7 @@ TEST(CommandLineTestRunner, TeamcityOutputEnabled)
     const char* argv[] = {"tests.exe", "-oteamcity"};
     CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(2, argv, &registry);
     commandLineTestRunner.runAllTestsMain();
-    CHECK(commandLineTestRunner.fakeTCOutputWhichIsReallyABuffer != NULLPTR);
+    CHECK(commandLineTestRunner.fakeTCOutputWhichIsReallyABuffer != nullptr);
 }
 
 TEST(CommandLineTestRunner, JunitOutputEnabled)
@@ -197,7 +197,7 @@ TEST(CommandLineTestRunner, JunitOutputEnabled)
 
     CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(2, argv, &registry);
     commandLineTestRunner.runAllTestsMain();
-    CHECK(commandLineTestRunner.fakeJUnitOutputWhichIsReallyABuffer_ != NULLPTR);
+    CHECK(commandLineTestRunner.fakeJUnitOutputWhichIsReallyABuffer_ != nullptr);
 }
 
 TEST(CommandLineTestRunner, JunitOutputAndVerboseEnabled)
@@ -315,7 +315,7 @@ struct FakeOutput
 
     ~FakeOutput()
     {
-        currentFake = NULLPTR;
+        currentFake = nullptr;
         restoreOriginals();
     }
 
@@ -335,7 +335,7 @@ struct FakeOutput
 
     static PlatformSpecificFile fopen_fake(const char*, const char*)
     {
-        return (PlatformSpecificFile) NULLPTR;
+        return (PlatformSpecificFile) nullptr;
     }
 
     static void fputs_fake(const char* str, PlatformSpecificFile f)
@@ -362,7 +362,7 @@ private:
     FCloseFunc SaveFClose;
 };
 
-FakeOutput* FakeOutput::currentFake = NULLPTR;
+FakeOutput* FakeOutput::currentFake = nullptr;
 
 TEST(CommandLineTestRunner, realJunitOutputShouldBeCreatedAndWorkProperly)
 {
@@ -402,7 +402,7 @@ class RunIgnoredUtest : public Utest
 {
 public:
     static bool Checker;
-    void testBody() _override
+    void testBody() override
     {
         Checker = true;
     }
@@ -415,7 +415,7 @@ class RunIgnoredUtestShell : public IgnoredUtestShell
 public:
     RunIgnoredUtestShell(const char* groupName, const char* testName, const char* fileName, size_t lineNumber)
         : IgnoredUtestShell(groupName, testName, fileName, lineNumber) {}
-    virtual Utest* createTest() _override { return new RunIgnoredUtest; }
+    virtual Utest* createTest() override { return new RunIgnoredUtest; }
 };
 
 TEST_GROUP(RunIgnoredTest)
@@ -424,13 +424,13 @@ TEST_GROUP(RunIgnoredTest)
     RunIgnoredUtestShell *runIgnoredTest;
     DummyPluginWhichCountsThePlugins* pluginCountingPlugin;
 
-    void setup() _override
+    void setup() override
     {
       runIgnoredTest = new RunIgnoredUtestShell("group", "test", "file", 1);
       registry.addTest(runIgnoredTest);
       pluginCountingPlugin = new DummyPluginWhichCountsThePlugins("PluginCountingPlugin", &registry);
     }
-    void teardown() _override
+    void teardown() override
     {
       delete pluginCountingPlugin;
       delete runIgnoredTest;

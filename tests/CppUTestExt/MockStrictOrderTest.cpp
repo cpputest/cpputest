@@ -30,7 +30,7 @@
 
 TEST_GROUP(MockStrictOrderTest)
 {
-  void teardown() _override
+  void teardown() override
   {
     mock().clear();
   }

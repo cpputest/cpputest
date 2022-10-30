@@ -35,48 +35,48 @@
 
 #include "CppUTest/PlatformSpecificFunctions.h"
 
-void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell*, TestPlugin*, TestResult*) = NULLPTR;
-int (*PlatformSpecificFork)() = NULLPTR;
-int (*PlatformSpecificWaitPid)(int, int*, int) = NULLPTR;
+void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell*, TestPlugin*, TestResult*) = nullptr;
+int (*PlatformSpecificFork)() = nullptr;
+int (*PlatformSpecificWaitPid)(int, int*, int) = nullptr;
 
 TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
 {
     return TestOutput::eclipse;
 }
 
-void (*PlatformSpecificLongJmp)() = NULLPTR;
-int (*PlatformSpecificSetJmp)(void (*)(void*), void*) = NULLPTR;
-void (*PlatformSpecificRestoreJumpBuffer)() = NULLPTR;
+void (*PlatformSpecificLongJmp)() = nullptr;
+int (*PlatformSpecificSetJmp)(void (*)(void*), void*) = nullptr;
+void (*PlatformSpecificRestoreJumpBuffer)() = nullptr;
 
-long (*GetPlatformSpecificTimeInMillis)() = NULLPTR;
-const char* (*GetPlatformSpecificTimeString)() = NULLPTR;
+long (*GetPlatformSpecificTimeInMillis)() = nullptr;
+const char* (*GetPlatformSpecificTimeString)() = nullptr;
 
 /* IO operations */
-PlatformSpecificFile PlatformSpecificStdOut = NULLPTR;
-PlatformSpecificFile (*PlatformSpecificFOpen)(const char* filename, const char* flag) = NULLPTR;
-void (*PlatformSpecificFPuts)(const char* str, PlatformSpecificFile file) = NULLPTR;
-void (*PlatformSpecificFClose)(PlatformSpecificFile file) = NULLPTR;
+PlatformSpecificFile PlatformSpecificStdOut = nullptr;
+PlatformSpecificFile (*PlatformSpecificFOpen)(const char* filename, const char* flag) = nullptr;
+void (*PlatformSpecificFPuts)(const char* str, PlatformSpecificFile file) = nullptr;
+void (*PlatformSpecificFClose)(PlatformSpecificFile file) = nullptr;
 
-void (*PlatformSpecificFlush)(void) = NULLPTR;
+void (*PlatformSpecificFlush)(void) = nullptr;
 
-int (*PlatformSpecificVSNprintf)(char *str, size_t size, const char* format, va_list va_args_list) = NULLPTR;
+int (*PlatformSpecificVSNprintf)(char *str, size_t size, const char* format, va_list va_args_list) = nullptr;
 
 /* Dynamic Memory operations */
-void* (*PlatformSpecificMalloc)(size_t) = NULLPTR;
-void* (*PlatformSpecificRealloc)(void*, size_t) = NULLPTR;
-void (*PlatformSpecificFree)(void*) = NULLPTR;
-void* (*PlatformSpecificMemCpy)(void*, const void*, size_t) = NULLPTR;
-void* (*PlatformSpecificMemset)(void*, int, size_t) = NULLPTR;
+void* (*PlatformSpecificMalloc)(size_t) = nullptr;
+void* (*PlatformSpecificRealloc)(void*, size_t) = nullptr;
+void (*PlatformSpecificFree)(void*) = nullptr;
+void* (*PlatformSpecificMemCpy)(void*, const void*, size_t) = nullptr;
+void* (*PlatformSpecificMemset)(void*, int, size_t) = nullptr;
 
-double (*PlatformSpecificFabs)(double) = NULLPTR;
-int (*PlatformSpecificIsNan)(double) = NULLPTR;
-int (*PlatformSpecificIsInf)(double) = NULLPTR;
-int (*PlatformSpecificAtExit)(void(*func)(void)) = NULLPTR;
+double (*PlatformSpecificFabs)(double) = nullptr;
+int (*PlatformSpecificIsNan)(double) = nullptr;
+int (*PlatformSpecificIsInf)(double) = nullptr;
+int (*PlatformSpecificAtExit)(void(*func)(void)) = nullptr;
 
-PlatformSpecificMutex (*PlatformSpecificMutexCreate)(void) = NULLPTR;
-void (*PlatformSpecificMutexLock)(PlatformSpecificMutex mtx) = NULLPTR;
-void (*PlatformSpecificMutexUnlock)(PlatformSpecificMutex mtx) = NULLPTR;
-void (*PlatformSpecificMutexDestroy)(PlatformSpecificMutex mtx) = NULLPTR;
+PlatformSpecificMutex (*PlatformSpecificMutexCreate)(void) = nullptr;
+void (*PlatformSpecificMutexLock)(PlatformSpecificMutex mtx) = nullptr;
+void (*PlatformSpecificMutexUnlock)(PlatformSpecificMutex mtx) = nullptr;
+void (*PlatformSpecificMutexDestroy)(PlatformSpecificMutex mtx) = nullptr;
 
-void (*PlatformSpecificSrand)(unsigned int) = NULLPTR;
-int (*PlatformSpecificRand)(void) = NULLPTR;
+void (*PlatformSpecificSrand)(unsigned int) = nullptr;
+int (*PlatformSpecificRand)(void) = nullptr;

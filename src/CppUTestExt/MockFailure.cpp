@@ -38,7 +38,7 @@ public:
     {
     }
 
-    virtual void exitCurrentTest() const _override
+    virtual void exitCurrentTest() const override
     {
         if (crashOnFailure_)
             UT_CRASH();

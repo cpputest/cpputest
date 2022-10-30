@@ -34,13 +34,13 @@ protected:
     bool setup_was_called;
     char* freed_during_teardown;
 
-    void SetUp() _override
+    void SetUp() override
     {
         setup_was_called = true;
         freed_during_teardown = NULL;
     }
 
-    void TearDown() _override
+    void TearDown() override
     {
         delete [] freed_during_teardown;
     }

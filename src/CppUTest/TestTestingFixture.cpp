@@ -53,7 +53,7 @@ void TestTestingFixture::flushOutputAndResetResult()
 
 TestTestingFixture::~TestTestingFixture()
 {
-    registry_->setCurrentRegistry(NULLPTR);
+    registry_->setCurrentRegistry(nullptr);
     clearExecFunction();
     delete registry_;
     delete result_;

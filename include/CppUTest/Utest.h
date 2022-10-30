@@ -69,21 +69,21 @@ public:
 class NormalTestTerminator : public TestTerminator
 {
 public:
-    virtual void exitCurrentTest() const _override;
+    virtual void exitCurrentTest() const override;
     virtual ~NormalTestTerminator() _destructor_override;
 };
 
 class TestTerminatorWithoutExceptions  : public TestTerminator
 {
 public:
-    virtual void exitCurrentTest() const _override;
+    virtual void exitCurrentTest() const override;
     virtual ~TestTerminatorWithoutExceptions() _destructor_override;
 };
 
 class CrashingTestTerminator : public NormalTestTerminator
 {
 public:
-    virtual void exitCurrentTest() const _override;
+    virtual void exitCurrentTest() const override;
     virtual ~CrashingTestTerminator() _destructor_override;
 };
 
@@ -207,9 +207,9 @@ class ExecFunctionTest : public Utest
 {
 public:
     ExecFunctionTest(ExecFunctionTestShell* shell);
-    void testBody() _override;
-    virtual void setup() _override;
-    virtual void teardown() _override;
+    void testBody() override;
+    virtual void setup() override;
+    virtual void teardown() override;
 private:
     ExecFunctionTestShell* shell_;
 };
@@ -233,7 +233,7 @@ public:
     ExecFunctionWithoutParameters(void(*testFunction)());
     virtual ~ExecFunctionWithoutParameters() _destructor_override;
 
-    virtual void exec() _override;
+    virtual void exec() override;
 };
 
 //////////////////// ExecFunctionTestShell
@@ -245,12 +245,12 @@ public:
     void (*teardown_)();
     ExecFunction* testFunction_;
 
-    ExecFunctionTestShell(void(*set)() = NULLPTR, void(*tear)() = NULLPTR) :
-        UtestShell("ExecFunction", "ExecFunction", "ExecFunction", 1), setup_(set), teardown_(tear), testFunction_(NULLPTR)
+    ExecFunctionTestShell(void(*set)() = nullptr, void(*tear)() = nullptr) :
+        UtestShell("ExecFunction", "ExecFunction", "ExecFunction", 1), setup_(set), teardown_(tear), testFunction_(nullptr)
     {
     }
 
-    Utest* createTest() _override { return new ExecFunctionTest(this); }
+    Utest* createTest() override { return new ExecFunctionTest(this); }
     virtual ~ExecFunctionTestShell() _destructor_override;
 };
 
@@ -271,11 +271,11 @@ public:
     virtual ~IgnoredUtestShell() _destructor_override;
     explicit IgnoredUtestShell(const char* groupName, const char* testName,
             const char* fileName, size_t lineNumber);
-    virtual bool willRun() const _override;
-    virtual void setRunIgnored() _override;
+    virtual bool willRun() const override;
+    virtual void setRunIgnored() override;
 protected:
-    virtual SimpleString getMacroName() const _override;
-    virtual void runOneTest(TestPlugin* plugin, TestResult& result) _override;
+    virtual SimpleString getMacroName() const override;
+    virtual void runOneTest(TestPlugin* plugin, TestResult& result) override;
 private:
 
     IgnoredUtestShell(const IgnoredUtestShell&);

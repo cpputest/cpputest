@@ -10,12 +10,12 @@ public:
     TeamCityTestOutput(void);
     virtual ~TeamCityTestOutput(void) _destructor_override;
 
-    virtual void printCurrentTestStarted(const UtestShell& test) _override;
-    virtual void printCurrentTestEnded(const TestResult& res) _override;
-    virtual void printCurrentGroupStarted(const UtestShell& test) _override;
-    virtual void printCurrentGroupEnded(const TestResult& res) _override;
+    virtual void printCurrentTestStarted(const UtestShell& test) override;
+    virtual void printCurrentTestEnded(const TestResult& res) override;
+    virtual void printCurrentGroupStarted(const UtestShell& test) override;
+    virtual void printCurrentGroupEnded(const TestResult& res) override;
 
-    virtual void printFailure(const TestFailure& failure) _override;
+    virtual void printFailure(const TestFailure& failure) override;
 
 protected:
 

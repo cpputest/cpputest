@@ -37,7 +37,7 @@ static int mutexDestroyCount = 0;
 static PlatformSpecificMutex StubMutexCreate(void)
 {
     mutexCreateCount++;
-    return NULLPTR;
+    return nullptr;
 }
 
 static void StubMutexLock(PlatformSpecificMutex)
@@ -59,7 +59,7 @@ static void StubMutexDestroy(PlatformSpecificMutex)
 
 TEST_GROUP(SimpleMutexTest)
 {
-    void setup() _override
+    void setup() override
     {
         UT_PTR_SET(PlatformSpecificMutexCreate, StubMutexCreate);
         UT_PTR_SET(PlatformSpecificMutexLock, StubMutexLock);
@@ -72,7 +72,7 @@ TEST_GROUP(SimpleMutexTest)
         mutexUnlockCount = 0;
     }
 
-    void teardown() _override
+    void teardown() override
     {
     }
 };

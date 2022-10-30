@@ -156,12 +156,12 @@ static void failMethodEXPECT_STREQ_()
 TEST_GROUP(gtestMacros)
 {
     TestTestingFixture* fixture;
-    void setup() _override
+    void setup() override
     {
         fixture = new TestTestingFixture();
         afterCheck = false;
     }
-    void teardown() _override
+    void teardown() override
     {
         delete fixture;
     }

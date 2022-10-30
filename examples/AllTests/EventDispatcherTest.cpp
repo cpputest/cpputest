@@ -32,7 +32,7 @@
 class ObserverMock : public EventObserver
 {
 public:
-    virtual void notify(const Event& event, int timeOutInSeconds) _override
+    virtual void notify(const Event& event, int timeOutInSeconds) override
     {
         mock()
             .actualCall("notify")
@@ -40,7 +40,7 @@ public:
             .withParameterOfType("Event", "event", (void*)&event)
             .withParameter("timeOutInSeconds", timeOutInSeconds);
     }
-    virtual void notifyRegistration(EventObserver* newObserver) _override
+    virtual void notifyRegistration(EventObserver* newObserver) override
     {
         mock().actualCall("notifyRegistration").onObject(this).withParameter("newObserver", newObserver);
     }
@@ -49,11 +49,11 @@ public:
 class EventComparator : public MockNamedValueComparator
 {
 public:
-    virtual bool isEqual(const void* object1, const void* object2) _override
+    virtual bool isEqual(const void* object1, const void* object2) override
     {
         return ((const Event*)object1)->type == ((const Event*)object2)->type;
     }
-    virtual SimpleString valueToString(const void* object) _override
+    virtual SimpleString valueToString(const void* object) override
     {
         return StringFrom(((const Event*)object)->type);
     }
@@ -67,12 +67,12 @@ TEST_GROUP(EventDispatcher)
     ObserverMock observer2;
     EventComparator eventComparator;
 
-    void setup() _override
+    void setup() override
     {
         dispatcher = new EventDispatcher;
         mock().installComparator("Event", eventComparator);
     }
-    void teardown() _override
+    void teardown() override
     {
         delete dispatcher;
         mock().removeAllComparatorsAndCopiers();

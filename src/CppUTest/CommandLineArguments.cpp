@@ -33,7 +33,7 @@ CommandLineArguments::CommandLineArguments(int ac, const char *const *av) :
     ac_(ac), av_(av), needHelp_(false), verbose_(false), veryVerbose_(false), color_(false), runTestsAsSeperateProcess_(false),
     listTestGroupNames_(false), listTestGroupAndCaseNames_(false), listTestLocations_(false), runIgnored_(false), reversing_(false),
     crashOnFail_(false), rethrowExceptions_(true), shuffling_(false), shufflingPreSeeded_(false), repeat_(1), shuffleSeed_(0),
-    groupFilters_(NULLPTR), nameFilters_(NULLPTR), outputType_(OUTPUT_ECLIPSE)
+    groupFilters_(nullptr), nameFilters_(nullptr), outputType_(OUTPUT_ECLIPSE)
 {
 }
 

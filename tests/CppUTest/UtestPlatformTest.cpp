@@ -76,7 +76,7 @@ static int waitpid_while_debugging_stub_forced_failures = 0;
 
 extern "C" {
 
-    static int (*original_waitpid)(int, int*, int) = NULLPTR;
+    static int (*original_waitpid)(int, int*, int) = nullptr;
 
     static int fork_failed_stub(void) { return -1; }
 
@@ -126,7 +126,7 @@ TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, FailureInSepa
 
 static int accessViolationTestFunction_()
 {
-    return *(volatile int*) NULLPTR;
+    return *(volatile int*) nullptr;
 }
 
 TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, AccessViolationInSeparateProcessWorks)
@@ -197,11 +197,11 @@ TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, CallToWaitPid
 TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, MultipleTestsInSeparateProcessAreCountedProperly)
 {
     fixture.setRunTestsInSeperateProcess();
-    fixture.runTestWithMethod(NULLPTR);
+    fixture.runTestWithMethod(nullptr);
     fixture.runTestWithMethod(stoppedTestFunction_);
-    fixture.runTestWithMethod(NULLPTR);
+    fixture.runTestWithMethod(nullptr);
     fixture.runTestWithMethod(exitNonZeroFunction_);
-    fixture.runTestWithMethod(NULLPTR);
+    fixture.runTestWithMethod(nullptr);
     fixture.assertPrintContains("Failed in separate process");
     fixture.assertPrintContains("Stopped in separate process");
     fixture.assertPrintContains("Errors (2 failures, 5 tests, 5 ran, 0 checks, 0 ignored, 0 filtered out");

@@ -131,7 +131,7 @@ void cpputest_free_location_with_leak_detection(void* buffer, const char* file, 
 #undef new
 
 #if CPPUTEST_USE_STD_CPP_LIB
-#define UT_THROW_BAD_ALLOC_WHEN_NULL(memory) if (memory == NULLPTR) throw std::bad_alloc()
+#define UT_THROW_BAD_ALLOC_WHEN_NULL(memory) if (memory == nullptr) throw std::bad_alloc()
 #else
 #define UT_THROW_BAD_ALLOC_WHEN_NULL(memory)
 #endif
@@ -542,19 +542,19 @@ public:
     {
     }
 
-    virtual void fail(char* fail_string) _override
+    virtual void fail(char* fail_string) override
     {
         UtestShell* currentTest = UtestShell::getCurrent();
         currentTest->failWith(FailFailure(currentTest, currentTest->getName().asCharString(), currentTest->getLineNumber(), fail_string), TestTerminatorWithoutExceptions());
     } // LCOV_EXCL_LINE
 };
 
-static MemoryLeakFailure* globalReporter = NULLPTR;
-static MemoryLeakDetector* globalDetector = NULLPTR;
+static MemoryLeakFailure* globalReporter = nullptr;
+static MemoryLeakDetector* globalDetector = nullptr;
 
 MemoryLeakDetector* MemoryLeakWarningPlugin::getGlobalDetector()
 {
-    if (globalDetector == NULLPTR) {
+    if (globalDetector == nullptr) {
         saveAndDisableNewDeleteOverloads();
 
         globalReporter = new MemoryLeakWarningReporter;
@@ -586,11 +586,11 @@ void MemoryLeakWarningPlugin::destroyGlobalDetector()
     turnOffNewDeleteOverloads();
     delete globalDetector;
     delete globalReporter;
-    globalDetector = NULLPTR;
+    globalDetector = nullptr;
 }
 
 
-MemoryLeakWarningPlugin* MemoryLeakWarningPlugin::firstPlugin_ = NULLPTR;
+MemoryLeakWarningPlugin* MemoryLeakWarningPlugin::firstPlugin_ = nullptr;
 
 MemoryLeakWarningPlugin* MemoryLeakWarningPlugin::getFirstPlugin()
 {
@@ -615,7 +615,7 @@ void MemoryLeakWarningPlugin::expectLeaksInTest(size_t n)
 MemoryLeakWarningPlugin::MemoryLeakWarningPlugin(const SimpleString& name, MemoryLeakDetector* localDetector) :
     TestPlugin(name), ignoreAllWarnings_(false), destroyGlobalDetectorAndTurnOfMemoryLeakDetectionInDestructor_(false), expectedLeaks_(0)
 {
-    if (firstPlugin_ == NULLPTR) firstPlugin_ = this;
+    if (firstPlugin_ == nullptr) firstPlugin_ = this;
 
     if (localDetector) memLeakDetector_ = localDetector;
     else memLeakDetector_ = getGlobalDetector();

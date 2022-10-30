@@ -141,7 +141,7 @@ TEST(TestFilter, stringFromWithStrictInvertMatching)
 
 TEST(TestFilter, listOfFilters)
 {
-    TestFilter *listOfFilters = NULLPTR;
+    TestFilter *listOfFilters = nullptr;
     TestFilter first("foo");
     TestFilter secnd("bar");
     listOfFilters = first.add(listOfFilters);
@@ -150,7 +150,7 @@ TEST(TestFilter, listOfFilters)
     STRCMP_EQUAL("TestFilter: \"bar\"", StringFrom(*current).asCharString());
     current = current->getNext();
     STRCMP_EQUAL("TestFilter: \"foo\"", StringFrom(*current).asCharString());
-    POINTERS_EQUAL(NULLPTR, current->getNext());
+    POINTERS_EQUAL(nullptr, current->getNext());
 }
 
 TEST(TestFilter, constructors)
@@ -158,9 +158,9 @@ TEST(TestFilter, constructors)
     TestFilter filter1;
     TestFilter filter2(SimpleString("a"));
     TestFilter filter3("a");
-    CHECK(filter1.getNext() == NULLPTR);
-    CHECK(filter2.getNext() == NULLPTR);
-    CHECK(filter3.getNext() == NULLPTR);
+    CHECK(filter1.getNext() == nullptr);
+    CHECK(filter2.getNext() == nullptr);
+    CHECK(filter3.getNext() == nullptr);
     CHECK(filter2.match("ab"));
     CHECK(filter3.match("ab"));
 }

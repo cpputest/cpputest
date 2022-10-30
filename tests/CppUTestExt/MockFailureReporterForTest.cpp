@@ -32,11 +32,11 @@ void MockFailureReporterForTest::failTest(const MockFailure& failure)
     mockFailureString = failure.getMessage();
 }
 
-MockFailureReporterForTest* MockFailureReporterForTest::instance_ = NULLPTR;
+MockFailureReporterForTest* MockFailureReporterForTest::instance_ = nullptr;
 
 MockFailureReporterForTest* MockFailureReporterForTest::getReporter()
 {
-    if (instance_ == NULLPTR)
+    if (instance_ == nullptr)
         instance_ = new MockFailureReporterForTest;
 
     return instance_;
@@ -45,7 +45,7 @@ MockFailureReporterForTest* MockFailureReporterForTest::getReporter()
 void MockFailureReporterForTest::clearReporter()
 {
     delete instance_;
-    instance_ = NULLPTR;
+    instance_ = nullptr;
 }
 
 MockFailureReporterInstaller::MockFailureReporterInstaller()
@@ -55,7 +55,7 @@ MockFailureReporterInstaller::MockFailureReporterInstaller()
 
 MockFailureReporterInstaller::~MockFailureReporterInstaller()
 {
-  mock().setMockFailureStandardReporter(NULLPTR);
+  mock().setMockFailureStandardReporter(nullptr);
   MockFailureReporterForTest::clearReporter();
 }
 

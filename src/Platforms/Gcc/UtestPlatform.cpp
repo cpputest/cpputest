@@ -212,7 +212,7 @@ static long TimeInMillisImplementation()
 
 static const char* TimeStringImplementation()
 {
-    time_t theTime = time(NULLPTR);
+    time_t theTime = time(nullptr);
     static char dateTime[80];
 #ifdef STDC_WANT_SECURE_LIB
     static struct tm lastlocaltime;
@@ -307,10 +307,10 @@ static PlatformSpecificMutex PThreadMutexCreate(void)
 #ifdef CPPUTEST_HAVE_PTHREAD_MUTEX_LOCK
     pthread_mutex_t *mutex = new pthread_mutex_t;
 
-    pthread_mutex_init(mutex, NULLPTR);
+    pthread_mutex_init(mutex, nullptr);
     return (PlatformSpecificMutex)mutex;
 #else
-    return NULLPTR;
+    return nullptr;
 #endif
 
 }

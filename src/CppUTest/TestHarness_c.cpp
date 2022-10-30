@@ -133,11 +133,11 @@ int cpputest_malloc_get_count()
     return malloc_count;
 }
 
-static TestMemoryAllocator* originalAllocator = NULLPTR;
+static TestMemoryAllocator* originalAllocator = nullptr;
 
 void cpputest_malloc_set_out_of_memory()
 {
-    if (originalAllocator == NULLPTR)
+    if (originalAllocator == nullptr)
         originalAllocator = getCurrentMallocAllocator();
     setCurrentMallocAllocator(NullUnknownAllocator::defaultAllocator());
 }
@@ -146,7 +146,7 @@ void cpputest_malloc_set_not_out_of_memory()
 {
     malloc_out_of_memory_counter = NO_COUNTDOWN;
     setCurrentMallocAllocator(originalAllocator);
-    originalAllocator = NULLPTR;
+    originalAllocator = nullptr;
 }
 
 void cpputest_malloc_set_out_of_memory_countdown(int count)

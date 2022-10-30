@@ -52,14 +52,14 @@ public:
     NormalMemoryReportFormatter();
     virtual ~NormalMemoryReportFormatter() _destructor_override;
 
-    virtual void report_testgroup_start(TestResult* /*result*/, UtestShell& /*test*/) _override;
-    virtual void report_testgroup_end(TestResult* /*result*/, UtestShell& /*test*/) _override {} // LCOV_EXCL_LINE
+    virtual void report_testgroup_start(TestResult* /*result*/, UtestShell& /*test*/) override;
+    virtual void report_testgroup_end(TestResult* /*result*/, UtestShell& /*test*/) override {} // LCOV_EXCL_LINE
 
-    virtual void report_test_start(TestResult* result, UtestShell& test) _override;
-    virtual void report_test_end(TestResult* result, UtestShell& test) _override;
+    virtual void report_test_start(TestResult* result, UtestShell& test) override;
+    virtual void report_test_end(TestResult* result, UtestShell& test) override;
 
-    virtual void report_alloc_memory(TestResult* result, TestMemoryAllocator* allocator, size_t size, char* memory, const char* file, size_t line) _override;
-    virtual void report_free_memory(TestResult* result, TestMemoryAllocator* allocator, char* memory, const char* file, size_t line) _override;
+    virtual void report_alloc_memory(TestResult* result, TestMemoryAllocator* allocator, size_t size, char* memory, const char* file, size_t line) override;
+    virtual void report_free_memory(TestResult* result, TestMemoryAllocator* allocator, char* memory, const char* file, size_t line) override;
 };
 
 #endif

@@ -13,7 +13,7 @@ TEST_GROUP(StandardCppLibrary)
 
 TEST(StandardCppLibrary, UniquePtrConversationToBool)
 {
-    auto const aNull = std::unique_ptr<int>(NULLPTR);
+    auto const aNull = std::unique_ptr<int>(nullptr);
     CHECK_FALSE(aNull);
 
     auto const notNull = std::make_unique<int>(1);

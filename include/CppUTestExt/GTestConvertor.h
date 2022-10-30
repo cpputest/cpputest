@@ -66,7 +66,7 @@ class GTestShell : public UtestShell
 public:
     GTestShell(::testing::TestInfo* testinfo, GTestShell* next, GTestFlagsThatAllocateMemory* flags);
 
-    virtual Utest* createTest() _override;
+    virtual Utest* createTest() override;
 
     GTestShell* nextGTest()
     {

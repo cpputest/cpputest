@@ -784,7 +784,7 @@ TEST(UnitTestMacros, FailureWithPOINTERS_EQUAL)
 
 TEST(UnitTestMacros, POINTERS_EQUALBehavesAsProperMacro)
 {
-    if (false) POINTERS_EQUAL(NULLPTR, to_void_pointer(0xbeefbeef));
+    if (false) POINTERS_EQUAL(nullptr, to_void_pointer(0xbeefbeef));
     else POINTERS_EQUAL(to_void_pointer(0xdeadbeef), to_void_pointer(0xdeadbeef));
 }
 
@@ -809,7 +809,7 @@ TEST(UnitTestMacros, FailureWithPOINTERS_EQUAL_TEXT)
 
 TEST(UnitTestMacros, POINTERS_EQUAL_TEXTBehavesAsProperMacro)
 {
-    if (false) POINTERS_EQUAL_TEXT(NULLPTR, to_void_pointer(0xbeefbeef), "Failed because it failed");
+    if (false) POINTERS_EQUAL_TEXT(nullptr, to_void_pointer(0xbeefbeef), "Failed because it failed");
     else POINTERS_EQUAL_TEXT(to_void_pointer(0xdeadbeef), to_void_pointer(0xdeadbeef), "Failed because it failed");
 }
 
@@ -834,7 +834,7 @@ TEST(UnitTestMacros, FailureWithFUNCTIONPOINTERS_EQUAL)
 
 TEST(UnitTestMacros, FUNCTIONPOINTERS_EQUALBehavesAsProperMacro)
 {
-    if (false) FUNCTIONPOINTERS_EQUAL(NULLPTR, to_func_pointer(0xbeefbeef));
+    if (false) FUNCTIONPOINTERS_EQUAL(nullptr, to_func_pointer(0xbeefbeef));
     else FUNCTIONPOINTERS_EQUAL(to_func_pointer(0xdeadbeef), to_func_pointer(0xdeadbeef));
 }
 
@@ -859,7 +859,7 @@ TEST(UnitTestMacros, FailureWithFUNCTIONPOINTERS_EQUAL_TEXT)
 
 TEST(UnitTestMacros, FUNCTIONPOINTERS_EQUAL_TEXTBehavesAsProperMacro)
 {
-    if (false) FUNCTIONPOINTERS_EQUAL_TEXT(NULLPTR, to_func_pointer(0xbeefbeef), "Failed because it failed");
+    if (false) FUNCTIONPOINTERS_EQUAL_TEXT(nullptr, to_func_pointer(0xbeefbeef), "Failed because it failed");
     else FUNCTIONPOINTERS_EQUAL_TEXT(to_func_pointer(0xdeadbeef), to_func_pointer(0xdeadbeef), "Failed because it failed");
 }
 
@@ -984,8 +984,8 @@ static int functionThatReturnsAValue()
     STRCMP_EQUAL_TEXT("THIS", "THIS", "Shouldn't fail");
     DOUBLES_EQUAL(1.0, 1.0, .01);
     DOUBLES_EQUAL_TEXT(1.0, 1.0, .01, "Shouldn't fail");
-    POINTERS_EQUAL(NULLPTR, NULLPTR);
-    POINTERS_EQUAL_TEXT(NULLPTR, NULLPTR, "Shouldn't fail");
+    POINTERS_EQUAL(nullptr, nullptr);
+    POINTERS_EQUAL_TEXT(nullptr, nullptr, "Shouldn't fail");
     MEMCMP_EQUAL("THIS", "THIS", 5);
     MEMCMP_EQUAL_TEXT("THIS", "THIS", 5, "Shouldn't fail");
     BITS_EQUAL(0x01, (unsigned char )0x01, 0xFF);
@@ -1032,7 +1032,7 @@ static void MEMCMP_EQUALFailingTestMethodWithNullExpected_()
 {
     unsigned char actualData[] = { 0x00, 0x01, 0x02, 0x03 };
 
-    MEMCMP_EQUAL(NULLPTR, actualData, sizeof(actualData));
+    MEMCMP_EQUAL(nullptr, actualData, sizeof(actualData));
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
 
@@ -1047,7 +1047,7 @@ static void MEMCMP_EQUALFailingTestMethodWithNullActual_()
 {
     unsigned char expectedData[] = { 0x00, 0x01, 0x02, 0x03 };
 
-    MEMCMP_EQUAL(expectedData, NULLPTR, sizeof(expectedData));
+    MEMCMP_EQUAL(expectedData, nullptr, sizeof(expectedData));
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
 
@@ -1060,20 +1060,20 @@ TEST(UnitTestMacros, MEMCMP_EQUALFailureWithNullActual)
 
 TEST(UnitTestMacros, MEMCMP_EQUALNullExpectedNullActual)
 {
-    MEMCMP_EQUAL(NULLPTR, NULLPTR, 0);
-    MEMCMP_EQUAL(NULLPTR, NULLPTR, 1024);
+    MEMCMP_EQUAL(nullptr, nullptr, 0);
+    MEMCMP_EQUAL(nullptr, nullptr, 1024);
 }
 
 TEST(UnitTestMacros, MEMCMP_EQUALNullPointerIgnoredInExpectationWhenSize0)
 {
 	unsigned char actualData[] = { 0x00, 0x01, 0x03, 0x03 };
-	MEMCMP_EQUAL(NULLPTR, actualData, 0);
+	MEMCMP_EQUAL(nullptr, actualData, 0);
 }
 
 TEST(UnitTestMacros, MEMCMP_EQUALNullPointerIgnoredInActualWhenSize0)
 {
 	unsigned char expectedData[] = { 0x00, 0x01, 0x02, 0x03 };
-	MEMCMP_EQUAL(expectedData, NULLPTR, 0);
+	MEMCMP_EQUAL(expectedData, nullptr, 0);
 }
 
 static void failingTestMethodWithMEMCMP_EQUAL_TEXT_()
