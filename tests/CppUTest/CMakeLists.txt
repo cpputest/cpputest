@@ -36,11 +36,6 @@ add_executable(CppUTestTests
     TeamCityOutputTest.cpp
 )
 
-if (MSVC)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /wd4723")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4723")
-endif (MSVC)
-
 if(MINGW OR (${CMAKE_HOST_SYSTEM_NAME} MATCHES "OpenBSD"))
     set(THREADS_PREFER_PTHREAD_FLAG ON)
     find_package(Threads)
