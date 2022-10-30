@@ -30,9 +30,7 @@
 #include "CppUTest/TestTestingFixture.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
-#if CPPUTEST_USE_STD_C_LIB
 #include <math.h>
-#endif
 
 TEST_GROUP(UtestShell)
 {

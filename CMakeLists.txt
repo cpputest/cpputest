@@ -26,9 +26,6 @@ endif()
 
 include(CTest)
 
-include(CMakeDependentOption)
-option(CPPUTEST_STD_C_LIB_DISABLED "Disable the standard C library")
-
 include(CheckCXXSourceCompiles)
 check_cxx_source_compiles(
   "int main(int argc, char ** argv) { throw 20; }"
@@ -39,11 +36,12 @@ if((CMAKE_CXX_COMPILER_ID STREQUAL "Clang") AND (CMAKE_CXX_SIMULATE_ID STREQUAL 
   set(is_clang_cl TRUE)
 endif()
 
+include(CMakeDependentOption)
 cmake_dependent_option(CPPUTEST_STD_CPP_LIB_DISABLED "Use the standard C++ library"
-  OFF "NOT CPPUTEST_STD_C_LIB_DISABLED;CPPUTEST_HAVE_EXCEPTIONS" ON)
+  OFF "CPPUTEST_HAVE_EXCEPTIONS" ON)
 option(CPPUTEST_FLAGS "Use the CFLAGS/CXXFLAGS/LDFLAGS set by CppUTest" ${PROJECT_IS_TOP_LEVEL})
 cmake_dependent_option(CPPUTEST_MEM_LEAK_DETECTION_DISABLED "Enable memory leak detection"
-  OFF "CPPUTEST_FLAGS;NOT BORLAND;NOT CPPUTEST_STD_C_LIB_DISABLED;NOT is_clang_cl" ON)
+  OFF "CPPUTEST_FLAGS;NOT BORLAND;NOT is_clang_cl" ON)
 option(CPPUTEST_EXTENSIONS "Use the CppUTest extension library" ON)
 
 include(CheckTypeSize)
@@ -87,8 +85,6 @@ else()
     set(CPP_PLATFORM Dos)
   elseif(BORLAND)
     set(CPP_PLATFORM Borland)
-  elseif(CPPUTEST_STD_C_LIB_DISABLED)
-    set(CPP_PLATFORM GccNoStdC)
   else()
     set(CPP_PLATFORM Gcc)
   endif()
@@ -102,7 +98,6 @@ set_property(
     C2000
     Dos
     Gcc
-    GccNoStdC
     Iar
     Keil
     Symbian
@@ -297,7 +292,6 @@ Features configured in CppUTest:
     Support Long Long:                  ${CPPUTEST_USE_LONG_LONG}
     Use CppUTest flags:                 ${CPPUTEST_FLAGS}
 
-    Disable Standard C library:         ${CPPUTEST_STD_C_LIB_DISABLED}
     Disable Standard C++ library:       ${CPPUTEST_STD_CPP_LIB_DISABLED}
 
     Generating map file:                ${CPPUTEST_MAP_FILE}

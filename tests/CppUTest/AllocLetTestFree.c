@@ -1,8 +1,6 @@
 
 #include "CppUTest/StandardCLibrary.h"
 
-#if CPPUTEST_USE_STD_C_LIB
-
 #include "AllocLetTestFree.h"
 
 typedef struct AllocLetTestFreeStruct
@@ -25,4 +23,3 @@ void AllocLetTestFree_Destroy(AllocLetTestFree self)
     (void)self;
 
 }
-#endif

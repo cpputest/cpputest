@@ -32,8 +32,6 @@
 #include "CppUTest/StandardCLibrary.h"
 #include "CppUTest/TestMemoryAllocator.h"
 
-#if CPPUTEST_USE_STD_C_LIB
-
 // This will cause a crash in VS2010 due to PlatformSpecificFree being uninitialized
 static const SimpleString str1("abc");
 static const SimpleString str2("def");
@@ -207,5 +205,4 @@ TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, MultipleTests
     fixture.assertPrintContains("Errors (2 failures, 5 tests, 5 ran, 0 checks, 0 ignored, 0 filtered out");
 }
 
-#endif
 #endif

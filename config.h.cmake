@@ -19,7 +19,6 @@
 #define _TIMESPEC_DEFINED 1
 #endif
 
-#cmakedefine CPPUTEST_STD_C_LIB_DISABLED
 #cmakedefine CPPUTEST_STD_CPP_LIB_DISABLED
 
 #cmakedefine INCLUDE_GTEST_TESTS

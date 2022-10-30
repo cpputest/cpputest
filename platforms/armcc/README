@@ -22,7 +22,6 @@ For compiling CppUTest library using ARMCC, please adjust Makefile:
 	CPPUTEST_USE_MEM_LEAK_DETECTION := Y
 	CPPUTEST_USE_STD_CPP_LIB := N
 	CPPUTEST_USE_VPATH := Y
-	CPPUTEST_USE_STD_C_LIB := Y
 	CPPUTEST_ENABLE_DEBUG := Y
 
 You may add additional options "CPU=xx" and "CPU_MODE=yy"

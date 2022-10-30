@@ -369,9 +369,6 @@ AC_LINK_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_LD_MAP_GEN
 LDFLAGS="$saved_ldflags"
 
 # Different features
-AC_ARG_ENABLE([std-c], [AC_HELP_STRING([--disable-std-c], [disable the use of Standard C Library (warning: requires implementing Platforms/GccNoStdC) ])],
-   [use_std_c=${enableval}], [use_std_c=yes])
-
 AC_ARG_ENABLE([std-cpp], [AC_HELP_STRING([--disable-std-cpp], [disable the use of Standard C++ Library])],
    [use_std_cpp=${enableval}], [use_std_cpp=${default_use_std_cpp}])
 
@@ -415,28 +412,15 @@ AC_ARG_ENABLE([sanitize-address], [AC_HELP_STRING([--enable-sanitize-address], [
 
 AM_CONDITIONAL([INCLUDE_CPPUTEST_EXT], [test "x${cpputest_ext}" = xyes])
 
-# Dealing with not having a Standard C library... (usually for Kernel development)
-if test "x${use_std_c}" = xno; then
-	use_std_cpp=no
-	memory_leak_detection=no
-    CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -nostdinc"
-    CPPUTEST_LDFLAGS="${CPPUTEST_LDFLAGS} -nostdlib"
-    AC_DEFINE([STD_C_LIB_DISABLED], [1], [Standard C library disabled])
-    CPP_PLATFORM="GccNoStdC"
-else
-	CPP_PLATFORM="Gcc"
-fi
+CPP_PLATFORM="Gcc"
 
 # Using standard C++
 if test "x${use_std_cpp}" = xno; then
 	AC_DEFINE([STD_CPP_LIB_DISABLED], 1, [Standard C++ library disabled])
-	if test "x${use_std_c}" = xyes; then
     	CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} -nostdinc++ ${CPPUTEST_CXX_NO_INC_WARNINGFLAGS}"
 
     	# Since automake passes the CXXFLAGS to the linker, this will cause warnings with clang 3.2 (which become errors)
     	CPPUTEST_LDFLAGS="${CPPUTEST_LDFLAGS} ${CPPUTEST_NO_UNUSED_ARGUMENT_WARNING}"
-
-    fi
 fi
 cpp_standard_used="default"
 
@@ -621,7 +605,6 @@ Features configured in ${PACKAGE_NAME}:
    Address sanitizer:                   ${sanitize_address}
 
    Using Standard C++ Library:          ${use_std_cpp}
-   Using Standard C Library:            ${use_std_c}
 
    Generating map file:                 ${generate_map_file}
    Compiling w coverage info:           ${coverage}
