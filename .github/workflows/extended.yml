@@ -156,7 +156,19 @@ jobs:
       - name: Test
         run: ctest --test-dir cpputest_build
 
-  no-long-long:
+  automake-no-long-long:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+      - name: Configure
+        run: |
+          autoreconf -i .
+          ./configure --disable-longlong
+      - name: Build and test
+        run: make tdd
+
+  cmake-no-long-long:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
