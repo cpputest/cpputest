@@ -58,8 +58,6 @@ cmake_dependent_option(CPPUTEST_TEST_DISCOVERY "Build time test discover"
   ON "CPPUTEST_BUILD_TESTING;CMAKE_CROSSCOMPILING_EMULATOR OR NOT CMAKE_CROSSCOMPILING" OFF)
 cmake_dependent_option(CPPUTEST_EXAMPLES "Compile and make examples?"
   ${PROJECT_IS_TOP_LEVEL} "NOT CPPUTEST_STD_CPP_LIB_DISABLED" OFF)
-option(CPPUTEST_VERBOSE_CONFIG "Print configuration to stdout during generation" ${PROJECT_IS_TOP_LEVEL})
-
 cmake_dependent_option(CPPUTEST_LIBNAME_POSTFIX_BITSIZE "Add architecture bitsize (32/64) to the library name?"
   OFF "PROJECT_IS_TOP_LEVEL" OFF)
 
@@ -177,34 +175,4 @@ endif()
 
 if(PROJECT_IS_TOP_LEVEL)
   include(cmake/install.cmake)
-endif()
-
-if(CPPUTEST_VERBOSE_CONFIG)
-  message("
--------------------------------------------------------
-CppUTest Version ${PROJECT_VERSION}
-
-Current compiler options:
-    CC:                                 ${CMAKE_C_COMPILER}
-    CXX:                                ${CMAKE_CXX_COMPILER}
-    CppUTest CFLAGS:                    ${CPPUTEST_C_FLAGS}
-    CppUTest CXXFLAGS:                  ${CPPUTEST_CXX_FLAGS}
-
-Features configured in CppUTest:
-    Memory Leak Detection Disabled:     ${CPPUTEST_MEM_LEAK_DETECTION_DISABLED}
-    Compiling Extensions:               ${CPPUTEST_EXTENSIONS}
-    Support Long Long:                  ${CPPUTEST_USE_LONG_LONG}
-    Use CppUTest flags:                 ${CPPUTEST_FLAGS}
-
-    Disable Standard C library:         ${CPPUTEST_STD_C_LIB_DISABLED}
-    Disable Standard C++ library:       ${CPPUTEST_STD_CPP_LIB_DISABLED}
-
-    Compile and run self-tests          ${CPPUTEST_BUILD_TESTING}
-    Run self-tests separately           ${CPPUTEST_TESTS_DETAILED}
-
-Library name options:
-    Add architecture bitsize (32/64)    ${CPPUTEST_LIBNAME_POSTFIX_BITSIZE}
-
--------------------------------------------------------
-")
 endif()
