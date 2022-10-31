@@ -579,14 +579,14 @@ cpputest_ulonglong MockSupport::returnUnsignedLongLongIntValueOrDefault(cpputest
 cpputest_longlong MockSupport::longLongIntReturnValue()
 {
     FAIL("Long Long type is not supported");
-    cpputest_longlong ret;
+    cpputest_longlong ret = {};
     return ret;
 }
 
 cpputest_ulonglong MockSupport::unsignedLongLongIntReturnValue()
 {
     FAIL("Unsigned Long Long type is not supported");
-    cpputest_ulonglong ret;
+    cpputest_ulonglong ret = {};
     return ret;
 }
 

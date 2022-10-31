@@ -289,14 +289,14 @@ cpputest_ulonglong MockNamedValue::getUnsignedLongLongIntValue() const
 cpputest_longlong MockNamedValue::getLongLongIntValue() const
 {
     FAIL("Long Long type is not supported");
-    cpputest_longlong ret;
+    cpputest_longlong ret = {};
     return ret;
 }
 
 cpputest_ulonglong MockNamedValue::getUnsignedLongLongIntValue() const
 {
     FAIL("Unsigned Long Long type is not supported");
-    cpputest_ulonglong ret;
+    cpputest_ulonglong ret = {};
     return ret;
 }
 

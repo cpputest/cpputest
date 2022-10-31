@@ -274,7 +274,7 @@ public:
 #if CPPUTEST_USE_LONG_LONG
         return 0;
 #else
-        cpputest_ulonglong ret;
+        cpputest_ulonglong ret = {};
         return ret;
 #endif
     }
@@ -286,7 +286,7 @@ public:
 #if CPPUTEST_USE_LONG_LONG
         return 0;
 #else
-        cpputest_longlong ret;
+        cpputest_longlong ret = {};
         return ret;
 #endif
     }

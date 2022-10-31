@@ -505,7 +505,7 @@ cpputest_longlong MockCheckedActualCall::returnLongLongIntValueOrDefault(cpputes
 cpputest_ulonglong MockCheckedActualCall::returnUnsignedLongLongIntValue()
 {
     FAIL("Unsigned Long Long type is not supported");
-    cpputest_ulonglong ret;
+    cpputest_ulonglong ret = {};
     return ret;
 }
 
@@ -518,7 +518,7 @@ cpputest_ulonglong MockCheckedActualCall::returnUnsignedLongLongIntValueOrDefaul
 cpputest_longlong MockCheckedActualCall::returnLongLongIntValue()
 {
     FAIL("Long Long type is not supported");
-    cpputest_longlong ret;
+    cpputest_longlong ret = {};
     return ret;
 }
 
@@ -885,28 +885,28 @@ cpputest_longlong MockActualCallTrace::returnLongLongIntValueOrDefault(cpputest_
 cpputest_longlong MockActualCallTrace::returnLongLongIntValue()
 {
     FAIL("Long Long type is not supported");
-    cpputest_longlong ret;
+    cpputest_longlong ret = {};
     return ret;
 }
 
 cpputest_ulonglong MockActualCallTrace::returnUnsignedLongLongIntValue()
 {
     FAIL("Unsigned Long Long type is not supported");
-    cpputest_ulonglong ret;
+    cpputest_ulonglong ret = {};
     return ret;
 }
 
 cpputest_ulonglong MockActualCallTrace::returnUnsignedLongLongIntValueOrDefault(cpputest_ulonglong)
 {
     FAIL("Unsigned Long Long type is not supported");
-    cpputest_ulonglong ret;
+    cpputest_ulonglong ret = {};
     return ret;
 }
 
 cpputest_longlong MockActualCallTrace::returnLongLongIntValueOrDefault(cpputest_longlong)
 {
     FAIL("Long Long type is not supported");
-    cpputest_longlong ret;
+    cpputest_longlong ret = {};
     return ret;
 }
 
