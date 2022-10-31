@@ -114,6 +114,18 @@
         "CMAKE_CXX_FLAGS_INIT": "--cpu Cortex-M4F --dlib_config normal",
         "CMAKE_EXE_LINKER_FLAGS": "--semihosting --config ${sourceDir}/platforms/iar/CppUTestTest.icf"
       }
+    },
+    {
+      "name": "DOS",
+      "inherits": ["defaults"],
+      "generator": "Watcom WMake",
+      "cacheVariables": {
+        "CMAKE_SYSTEM_NAME": "DOS",
+        "CMAKE_BUILD_TYPE": "MinRelSize",
+        "CMAKE_CXX_STANDARD": "98",
+        "CPPUTEST_MEM_LEAK_DETECTION_DISABLED": true,
+        "CPPUTEST_STD_CPP_LIB_DISABLED": true
+      }
     }
   ]
 }

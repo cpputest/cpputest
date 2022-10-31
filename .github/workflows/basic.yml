@@ -148,12 +148,20 @@ jobs:
             os: macos-latest
             cpp_version: 14
             preset: GNU
+          - name: OpenWatcom DOS
+            os: ubuntu-latest
+            cpp_version: 98
+            preset: DOS
+            apt_packages: dosbox
     name: ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
     steps:
-      - name: Install tools
-        run: sudo apt install ${{ matrix.apt_packages }}
+      ### SETUP
+
+      - name: Install packages
+        run: sudo apt install -y ${{ matrix.apt_packages }}
         if: ${{ matrix.apt_packages }}
+
       - uses: carlosperate/arm-none-eabi-gcc-action@v1
         if: ${{ matrix.name == 'GCC ARM embedded' }}
       - name: Install QEMU
@@ -163,17 +171,26 @@ jobs:
           sudo dpkg --install qemu.deb
           rm -f qemu.deb
         if: ${{ matrix.name == 'GCC ARM embedded' }}
+
+      - name: Install OpenWatcom
+        uses: open-watcom/setup-watcom@v0
+        with:
+          version: "2.0"
+        if: ${{ matrix.name == 'OpenWatcom DOS' }}
+
+      ## BUILD AND TEST
+
       - name: Checkout
         uses: actions/checkout@main
       - name: Configure
-        run: >
-          cmake
-          --preset ${{ matrix.preset }}
-          -D CMAKE_CXX_STANDARD=${{ matrix.cpp_version }}
+        run: cmake --preset ${{ matrix.preset }} -D CMAKE_CXX_STANDARD=${{ matrix.cpp_version }}
       - name: Build
         run: cmake --build cpputest_build --verbose
       - name: Test
         run: ctest --test-dir cpputest_build
+
+      # POST PROCESSING
+
       - name: Install
         run: sudo cmake --install cpputest_build/
         if: ${{ matrix.install }}
@@ -183,6 +200,7 @@ jobs:
           cmake --build build -j
           ctest --test-dir build
         if: ${{ matrix.install }}
+
       - name: Coverage
         run: |
           lcov --capture --directory . --no-external --output-file lcov.info
