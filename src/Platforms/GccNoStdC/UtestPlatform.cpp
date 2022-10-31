@@ -52,7 +52,7 @@ long (*GetPlatformSpecificTimeInMillis)() = NULLPTR;
 const char* (*GetPlatformSpecificTimeString)() = NULLPTR;
 
 /* IO operations */
-const PlatformSpecificFile PlatformSpecificStdOut = NULLPTR;
+PlatformSpecificFile PlatformSpecificStdOut = NULLPTR;
 PlatformSpecificFile (*PlatformSpecificFOpen)(const char* filename, const char* flag) = NULLPTR;
 void (*PlatformSpecificFPuts)(const char* str, PlatformSpecificFile file) = NULLPTR;
 void (*PlatformSpecificFClose)(PlatformSpecificFile file) = NULLPTR;
