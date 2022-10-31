@@ -45,23 +45,6 @@ jobs:
           TERM: linux
         run: $CPPUTEST_HOME/platforms/Dos/alltests.sh
 
-  cmake_install:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@main
-      - name: Install
-        run: |
-          cmake --preset GNU
-          cmake --build cpputest_build/ -j
-          ctest --test-dir cpputest_build/
-          sudo cmake --install cpputest_build/
-      - name: Use
-        run: |
-          cmake -B build -S examples
-          cmake --build build -j
-          ctest --test-dir build
-
   automake-no-long-long:
     runs-on: ubuntu-latest
     steps:

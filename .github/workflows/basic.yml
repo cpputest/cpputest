@@ -59,6 +59,7 @@ jobs:
           - os: windows-latest
             cpp_version: 17
             preset: MSVC
+            # install: true
           - os: windows-latest
             cpp_version: 17
             preset: ClangCL
@@ -86,6 +87,7 @@ jobs:
           - os: ubuntu-latest
             cpp_version: 11
             preset: GNU
+            install: true
           - os: ubuntu-latest
             cpp_version: 14
             preset: GNU
@@ -110,6 +112,7 @@ jobs:
           - os: macos-latest
             cpp_version: 98
             preset: defaults
+            install: true
           - os: macos-latest
             cpp_version: 17
             preset: Clang
@@ -141,6 +144,15 @@ jobs:
         run: cmake --build cpputest_build --verbose
       - name: Test
         run: ctest --test-dir cpputest_build
+      - name: Install
+        run: sudo cmake --install cpputest_build/
+        if: ${{ matrix.install }}
+      - name: Use install
+        run: |
+          cmake -B build -S examples
+          cmake --build build -j
+          ctest --test-dir build
+        if: ${{ matrix.install }}
       - name: Coverage
         run: |
           lcov --capture --directory . --no-external --output-file lcov.info
