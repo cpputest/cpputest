@@ -55,84 +55,97 @@ jobs:
     strategy:
       matrix:
         include:
-          # Windows
-          - os: windows-latest
+          - name: windows defaults
+            os: windows-latest
             cpp_version: 17
             preset: MSVC
-            # install: true
-          - os: windows-latest
+          - name: ClangCL
+            os: windows-latest
             cpp_version: 17
             preset: ClangCL
-          # Linux
-          #   CMake different C++ versions with clang
-          - os: ubuntu-latest
+          - name: Linux Clang 98
+            os: ubuntu-latest
             cpp_version: 98
             preset: Clang
-          - os: ubuntu-latest
+          - name: Linux Clang 11
+            os: ubuntu-latest
             cpp_version: 11
             preset: Clang
-          - os: ubuntu-latest
+          - name: Linux Clang 14
+            os: ubuntu-latest
             cpp_version: 14
             preset: Clang
-          - os: ubuntu-latest
+          - name: Linux Clang 17
+            os: ubuntu-latest
             cpp_version: 17
             preset: Clang
-          #   CMake different C++ versions with gcc
-          - os: ubuntu-latest
+          - name: Linux GNU 98
+            os: ubuntu-latest
             cpp_version: 98
             preset: GNU
-          - os: ubuntu-latest
+          - name: No long long
+            os: ubuntu-latest
             cpp_version: 98
             preset: no-long-long
-          - os: ubuntu-latest
+          - name: Linux GNU Install
+            os: ubuntu-latest
             cpp_version: 11
             preset: GNU
             install: true
-          - os: ubuntu-latest
+          - name: Linux GNU 14
+            os: ubuntu-latest
             cpp_version: 14
             preset: GNU
-          - os: ubuntu-latest
+          - name: Linux GNU 17
+            os: ubuntu-latest
             cpp_version: 17
             preset: GNU
-          - os: ubuntu-latest
+          - name: MinGW
+            os: ubuntu-latest
             cpp_version: 11
             preset: MinGW
             apt_packages: mingw-w64 wine64
-          - os: ubuntu-latest
+          - name: No C++ Standard Library
+            os: ubuntu-latest
             cpp_version: 98
             preset: no-std-cpp
-          - os: ubuntu-latest
+          - name: Coverage
+            os: ubuntu-latest
             cpp_version: 11
             preset: coverage
             apt_packages: lcov
-          - os: ubuntu-latest
+          - name: GCC ARM embedded
+            os: ubuntu-latest
             cpp_version: 11
             preset: arm-embedded
-          # Mac OSX
-          - os: macos-latest
+          - name: Mac install
+            os: macos-latest
             cpp_version: 98
             preset: defaults
             install: true
-          - os: macos-latest
+          - name: Apple Clang 17
+            os: macos-latest
             cpp_version: 17
             preset: Clang
-          - os: macos-latest
+          - name: Mac GNU 14
+            os: macos-latest
             cpp_version: 14
             preset: GNU
+    name: ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
     steps:
       - name: Install tools
         run: sudo apt install ${{ matrix.apt_packages }}
         if: ${{ matrix.apt_packages }}
       - uses: carlosperate/arm-none-eabi-gcc-action@v1
-        if: ${{ matrix.preset == 'arm-embedded' }}
+        if: ${{ matrix.name == 'GCC ARM embedded' }}
       - name: Install QEMU
         # The version in the ubuntu repositories (6.2) is broken.
         run: |
           wget -nv http://ftp.de.debian.org/debian/pool/main/q/qemu/qemu-user-static_7.1+dfsg-2_amd64.deb -O qemu.deb
           sudo dpkg --install qemu.deb
           rm -f qemu.deb
-        if: ${{ matrix.preset == 'arm-embedded' }}
+        if: ${{ matrix.name == 'GCC ARM embedded' }}
       - name: Checkout
         uses: actions/checkout@main
       - name: Configure
@@ -157,10 +170,10 @@ jobs:
         run: |
           lcov --capture --directory . --no-external --output-file lcov.info
           lcov --remove lcov.info --output-file lcov.info '*/tests/*'
-        if: ${{ matrix.preset == 'coverage' }}
+        if: ${{ matrix.name == 'Coverage' }}
       - name: Coveralls
         uses: coverallsapp/github-action@master
         with:
           path-to-lcov: lcov.info
           github-token: ${{ secrets.GITHUB_TOKEN }}
-        if: ${{ matrix.preset == 'coverage' }}
+        if: ${{ matrix.name == 'Coverage' }}
