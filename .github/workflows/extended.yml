@@ -106,11 +106,8 @@ jobs:
         uses: actions/checkout@main
       - name: Configure
         run: cmake --preset no-std-c
-      # FIXME: This is broken.
-      # - name: Build
-      #   run: cmake --build cpputest_build --verbose
-      # - name: Test
-      #   run: ctest --test-dir cpputest_build
+      - name: Build
+        run: cmake --build cpputest_build --verbose
 
   cmake_install:
     runs-on: ubuntu-latest

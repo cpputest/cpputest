@@ -88,10 +88,11 @@
       "name": "no-std-c",
       "inherits": ["GNU"],
       "environment": {
-        "CXXFLAGS": "-nostdinc",
-        "CFLAGS": "-nostdinc"
+        "CXXFLAGS": "-Werror -nostdinc",
+        "CFLAGS": "-Werror -nostdinc"
       },
       "cacheVariables": {
+        "CMAKE_SYSTEM_NAME": "Generic",
         "CPPUTEST_STD_C_LIB_DISABLED": true
       }
     },
