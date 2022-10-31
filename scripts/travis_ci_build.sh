@@ -2,8 +2,8 @@
 # Script run in the travis CI
 set -ex
 
-if [ "x$CPPUTEST_HOME" = "x" ] ; then
-  export CPPUTEST_HOME=$TRAVIS_BUILD_DIR
+if [ "x$CPPUTEST_HOME" = "x" ]; then
+    export CPPUTEST_HOME=$TRAVIS_BUILD_DIR
 fi
 
 if [ "x$BUILD" = "xautotools" ]; then
@@ -25,30 +25,6 @@ if [ "x$BUILD" = "xcmake" ]; then
 
     cmake --version
     cmake "${BUILD_ARGS[@]}" ..
-    make
-    ctest -V
-fi
-
-if [ "x$BUILD" = "xautotools_gtest" ]; then
-    autoreconf -i ..
-    ../configure
-    make check_gtest
-fi
-
-if [ "x$BUILD" = "xcmake_gtest" ]; then
-    pwd
-    wget https://github.com/google/googletest/archive/release-1.6.0.zip -O gtest-1.6.0.zip  && unzip gtest-1.6.0.zip;
-    wget https://github.com/google/googlemock/archive/release-1.6.0.zip -O gmock-1.6.0.zip  && unzip gmock-1.6.0.zip;
-    unzip gtest-1.6.0.zip -d $TRAVIS_BUILD_DIR
-    unzip gmock-1.6.0.zip -d $TRAVIS_BUILD_DIR
-    cd $TRAVIS_BUILD_DIR
-    mv googletest-release-1.6.0 googlemock-release-1.6.0/gtest
-    cd googlemock-release-1.6.0
-    autoreconf -i; ./configure CXXFLAGS=-DGTEST_USE_OWN_TR1_TUPLE=1 && make
-    cd -
-    export GMOCK_HOME=$TRAVIS_BUILD_DIR/googlemock-release-1.6.0
-    export GTEST_HOME=$TRAVIS_BUILD_DIR/googlemock-release-1.6.0/gtest
-    cmake . -DGMOCK=ON
     make
     ctest -V
 fi
@@ -87,19 +63,19 @@ if [ "x$BUILD" = "xautotools_cmake_install_test" ]; then
 
     # Hack: autotools cannot make CMake package. We cached and copied them. Here we check they are still the same
     for cmakefile in CppUTestConfig.cmake CppUTestConfigVersion.cmake CppUTestTargets-relwithdebinfo.cmake CppUTestTargets.cmake; do
-      cat install_autotools/usr/local/lib/CppUTest/cmake/$cmakefile
-      cat install_cmake/usr/local/lib/CppUTest/cmake/$cmakefile
-      diff -Bw install_autotools/usr/local/lib/CppUTest/cmake/$cmakefile  install_cmake/usr/local/lib/CppUTest/cmake/$cmakefile || exit 1
+        cat install_autotools/usr/local/lib/CppUTest/cmake/$cmakefile
+        cat install_cmake/usr/local/lib/CppUTest/cmake/$cmakefile
+        diff -Bw install_autotools/usr/local/lib/CppUTest/cmake/$cmakefile install_cmake/usr/local/lib/CppUTest/cmake/$cmakefile || exit 1
     done
 
-    export INSTALL_DIFF=`diff -rwBq install_autotools install_cmake  -X CppUTestGeneratedConfig.h -X libCppUTest.a -X libCppUTestExt.a`
+    export INSTALL_DIFF=$(diff -rwBq install_autotools install_cmake -X CppUTestGeneratedConfig.h -X libCppUTest.a -X libCppUTestExt.a)
     if [ "x$INSTALL_DIFF" != "x" ]; then
         echo "FAILED: CMake install and Autotools install is not the same!\n"
         echo "Difference\n"
         echo "-------------------------------\n"
         echo "$INSTALL_DIFF"
         echo "-------------------------------\n"
-        exit 1;
+        exit 1
     fi
 fi
 

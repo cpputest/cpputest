@@ -504,49 +504,9 @@ if test "x${coverage}" = xyes; then
 fi
 fi
 
-# GMock, check whether we can compile the GMock tests.
+CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} ${CPPUTEST_CWARNINGFLAGS_STRICT}"
+CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} ${CPPUTEST_CXXWARNINGFLAGS_STRICT}"
 
-AC_ARG_VAR([GMOCK_HOME], Directory where gmock is installed so the gmock tests can run)
-AC_MSG_CHECKING([for the availability of gmock via the GMOCK_HOME variable])
-
-AM_CONDITIONAL([INCLUDE_GMOCKTESTS], [test -n "${GMOCK_HOME}"])
-if test -n "${GMOCK_HOME}"; then
-
-	AC_DEFINE([INCLUDE_GTEST_TESTS], 1, [Include the GTest-related tests in the build])
-	AC_ARG_VAR([GMOCK_HOME], [Location of the GMock])
-
-  if test -z "${GTEST_HOME}"; then
-	  GTEST_HOME=${GMOCK_HOME}/gtest
-  fi
-
-	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I${GMOCK_HOME}/include -I${GTEST_HOME}/include -I${GTEST_HOME}"
-	CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} -DGTEST_USE_OWN_TR1_TUPLE=1 -DGMOCK_RENAME_MAIN=1"
-	if test -e ${GMOCK_HOME}/lib/libgmock.la && test -e ${GTEST_HOME}/lib/libgtest.la; then \
-		CPPUTEST_LDADD="${CPPUTEST_LDADD} ${GMOCK_HOME}/lib/libgmock.la ${GTEST_HOME}/lib/libgtest.la"; \
-	elif test -e ${GMOCK_HOME}/libgmock.a && test -e ${GTEST_HOME}/libgtest.a; then \
-		CPPUTEST_LDADD="${CPPUTEST_LDADD} ${GMOCK_HOME}/libgmock.a ${GTEST_HOME}/libgtest.a"; \
-	elif test -e ${GMOCK_HOME}/libgmock.a && test -e ${GMOCK_HOME}/gtest/libgtest.a; then \
-		CPPUTEST_LDADD="${CPPUTEST_LDADD} ${GMOCK_HOME}/libgmock.a ${GMOCK_HOME}/gtest/libgtest.a"; \
-	else \
-		AC_MSG_ERROR([
--------------------------------------
-GMOCK_HOME was set, but couldn't find the compiled library.
-Did you compile it?
--------------------------------------]);
-	fi
-
-	# In Travis, do not show warnings. The GTest warnings cause a log overflow that errors the build. Nice :)
-	if test -n "${TRAVIS_BRANCH}"; then
-		CPPUTEST_CWARNINGFLAGS=""
-		CPPUTEST_CXXWARNINGFLAGS=""
-	fi
-
-else
-	# When we don't compile with GMock, we can be a bit stricter on warnings.
-	CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} ${CPPUTEST_CWARNINGFLAGS_STRICT}"
-	CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} ${CPPUTEST_CXXWARNINGFLAGS_STRICT}"
-
-fi
 
 
 CPPUTEST_CFLAGS="${CPPUTEST_CFLAGS} ${CPPUTEST_CWARNINGFLAGS}"

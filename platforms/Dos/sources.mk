@@ -98,10 +98,7 @@ CPPU8_OBJECTS := \
 CPPUX1_OBJECTS := \
   $(CPPUTEST_HOME)/tests/CppUTestExt/AllTests.o \
   $(CPPUTEST_HOME)/tests/CppUTestExt/MockFailureReporterForTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/ExpectedFunctionsListTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/GMockTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/GTest1Test.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/GTest2ConvertorTest.o
+  $(CPPUTEST_HOME)/tests/CppUTestExt/ExpectedFunctionsListTest.o
 
 CPPUX2_OBJECTS := \
   $(CPPUTEST_HOME)/tests/CppUTestExt/AllTests.o \

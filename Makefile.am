@@ -15,10 +15,6 @@ lib_LIBRARIES+= lib/libCppUTestExt.a
 check_PROGRAMS += $(CPPUTESTEXT_TESTS)
 endif
 
-if INCLUDE_GMOCKTESTS
-# check_PROGRAMS += GTestTests
-endif
-
 TESTS = $(check_PROGRAMS)
 
 pkgconfigdir = $(libdir)/pkgconfig
@@ -107,7 +103,6 @@ lib_libCppUTestExt_a_CXXFLAGS = $(lib_libCppUTest_a_CXXFLAGS)
 
 lib_libCppUTestExt_a_SOURCES = \
    src/CppUTestExt/CodeMemoryReportFormatter.cpp \
-   src/CppUTestExt/GTest.cpp \
    src/CppUTestExt/IEEE754ExceptionsPlugin.cpp \
    src/CppUTestExt/MemoryReportAllocator.cpp \
    src/CppUTestExt/MemoryReporterPlugin.cpp \
@@ -127,10 +122,6 @@ include_cpputestextdir = $(includedir)/CppUTestExt
 
 include_cpputestext_HEADERS = \
   include/CppUTestExt/CodeMemoryReportFormatter.h \
-	include/CppUTestExt/GMock.h \
-	include/CppUTestExt/GTest.h \
-	include/CppUTestExt/GTestSupport.h \
-	include/CppUTestExt/GTestConvertor.h \
 	include/CppUTestExt/IEEE754ExceptionsPlugin.h \
 	include/CppUTestExt/MemoryReportAllocator.h \
 	include/CppUTestExt/MemoryReporterPlugin.h \
@@ -201,9 +192,6 @@ CppUTestExtTests_LDFLAGS = $(CppUTestTests_LDFLAGS)
 CppUTestExtTests_SOURCES = \
 	tests/CppUTestExt/AllTests.cpp \
 	tests/CppUTestExt/CodeMemoryReporterTest.cpp \
-	tests/CppUTestExt/GMockTest.cpp \
-	tests/CppUTestExt/GTest1Test.cpp \
-	tests/CppUTestExt/GTest2ConvertorTest.cpp \
 	tests/CppUTestExt/IEEE754PluginTest.cpp \
 	tests/CppUTestExt/IEEE754PluginTest_c.c \
 	tests/CppUTestExt/MemoryReportAllocatorTest.cpp \
@@ -234,19 +222,6 @@ DISTCLEANFILES = \
 	filename.map.txt \
 	generated/CppUTestGeneratedConfig.h
 
-if INCLUDE_GMOCKTESTS
-
-#GTestTests_CPPFLAGS = $(lib_libCppUTestExt_a_CPPFLAGS)
-#GTestTests_CFLAGS = $(lib_libCppUTestExt_a_CFLAGS)
-#GTestTests_CXXFLAGS = $(lib_libCppUTestExt_a_CXXFLAGS) -DCPPUTEST_USE_MEM_LEAK_DETECTION=0 -DGMOCK_RENAME_MAIN=1 -D_THREAD_SAFE  -DGTEST_HAS_PTHREAD=1
-#GTestTests_LDADD = lib/libCppUTestExt.a lib/libCppUTest.a $(CPPUTEST_LDADD)
-#GTestTests_LDFLAGS = $(CppUTestTests_LDFLAGS)
-
-#GTestTests_SOURCES = \
-	$(GMOCK_HOME)/test/gmock-spec-builders_test.cc \
-	tests/CppUTestExt/AllTests.cpp
-endif
-
 RUN_CPPUTEST_TESTS = ./$(CPPUTEST_TESTS)
 RUN_CPPUTESTEXT_TESTS = ./$(CPPUTESTEXT_TESTS)
 
@@ -259,65 +234,6 @@ tdd: $(CPPUTEST_TESTS)$(EXEEXT) $(CPPUTESTEXT_TESTS)$(EXEEXT)
 if INCLUDE_CPPUTEST_EXT
 	./$(CPPUTESTEXT_TESTS)
 endif
-
-cpputest_build_gtest18:
-	mkdir -p cpputest_build_gtest18
-	cd cpputest_build_gtest18; \
-	wget https://github.com/google/googletest/archive/release-1.8.0.zip -O gtest-1.8.0.zip  && unzip gtest-1.8.0.zip; \
-	cd googletest-release-1.8.0; cmake .; make
-
-cpputest_build_gtest17:
-	mkdir -p cpputest_build_gtest17
-	cd cpputest_build_gtest17; \
-	wget https://github.com/google/googletest/archive/release-1.7.0.zip -O gtest-1.7.0.zip  && unzip gtest-1.7.0.zip; \
-	wget https://github.com/google/googlemock/archive/release-1.7.0.zip -O gmock-1.7.0.zip  && unzip gmock-1.7.0.zip; \
-	mv googletest-release-1.7.0 googlemock-release-1.7.0/gtest; \
-	cd googlemock-release-1.7.0; autoreconf -i; ./configure && make
-
-cpputest_build_gtest16:
-	mkdir -p cpputest_build_gtest16
-	cd cpputest_build_gtest16; \
-	wget https://github.com/google/googletest/archive/release-1.6.0.zip -O gtest-1.6.0.zip  && unzip gtest-1.6.0.zip; \
-	wget https://github.com/google/googlemock/archive/release-1.6.0.zip -O gmock-1.6.0.zip  && unzip gmock-1.6.0.zip; \
-	mv googletest-release-1.6.0 googlemock-release-1.6.0/gtest; \
-	cd googlemock-release-1.6.0; autoreconf -i; ./configure CXXFLAGS=-DGTEST_USE_OWN_TR1_TUPLE=1 && make
-
-cpputest_build_gtest15:
-	mkdir -p cpputest_build_gtest15
-	cd cpputest_build_gtest15; \
-	wget https://github.com/google/googletest/archive/release-1.5.0.zip -O gtest-1.5.0.zip  && unzip gtest-1.5.0.zip; \
-	wget https://github.com/google/googlemock/archive/release-1.5.0.zip -O gmock-1.5.0.zip  && unzip gmock-1.5.0.zip; \
-	mv googletest-release-1.5.0 googlemock-release-1.5.0/gtest; \
-	cd googlemock-release-1.5.0; autoreconf -i; ./configure CXXFLAGS=-DGTEST_USE_OWN_TR1_TUPLE=1 && make
-
-check_gtest15: cpputest_build_gtest15
-	@echo "Build using gmock 1.5";
-	export GMOCK_HOME=`pwd`/cpputest_build_gtest15/googlemock-release-1.5.0; \
-	make distclean; $(srcdir)/configure --enable-std-cpp98; make check
-
-check_gtest16: cpputest_build_gtest16
-	@echo "Build using gmock 1.6";
-	export GMOCK_HOME=`pwd`/cpputest_build_gtest16/googlemock-release-1.6.0; \
-	make distclean; $(srcdir)/configure --enable-std-cpp98; make check
-
-check_gtest17: cpputest_build_gtest17
-	@echo "Build using gmock 1.7"
-	export GMOCK_HOME=`pwd`/cpputest_build_gtest17/googlemock-release-1.7.0; \
-	make distclean; $(srcdir)/configure --enable-std-cpp98; make check
-
-check_gtest18: cpputest_build_gtest18
-	@echo "Build using gmock 1.8"
-	export GMOCK_HOME=`pwd`/cpputest_build_gtest18/googletest-release-1.8.0/googlemock; \
-	export GTEST_HOME=`pwd`/cpputest_build_gtest18/googletest-release-1.8.0/googletest; \
-	make distclean; $(srcdir)/configure --enable-std-cpp98; make check
-
-remove_gtest_directories:
-	rm -rf cpputest_build_gtest15
-	rm -rf cpputest_build_gtest16
-	rm -rf cpputest_build_gtest17
-	rm -rf cpputest_build_gtest18
-
-check_gtest: remove_gtest_directories check_gtest15 check_gtest16 check_gtest17 check_gtest18
 
 check_basic:
 	@echo "If dash is available, run the configure with dash to find bash-isms and increase portability"
@@ -381,7 +297,7 @@ check_special_situations:
 	rm junit_run_output; rm cpputest_*.xml
 
 	@echo "Building with all flags turned off"
-	make distclean; $(srcdir)/configure --disable-cpputest-flags CFLAGS="" CXXFLAGS="" CPPFLAGS="-I $(srcdir)/include -I$(srcdir)/include/CppUTestExt/CppUTestGTest -I$(srcdir)/include/CppUTestExt/CppUTestGMock" --disable-dependency-tracking; make check
+	make distclean; $(srcdir)/configure --disable-cpputest-flags CFLAGS="" CXXFLAGS="" CPPFLAGS="-I $(srcdir)/include" --disable-dependency-tracking; make check
 
 check_coverage:
 	@echo "Compile with coverage (switch to clang for Mac OSX)"
@@ -414,7 +330,7 @@ check_examples:
 	@echo "Compiling and running the examples. This will use the old Makefile"
 	make distclean; $(srcdir)/configure; make; $(MAKE) -C $(srcdir)/examples all clean CPPUTEST_LIB_LINK_DIR="`pwd`/lib"
 
-check_all: check_basic check_special_situations check_coverage remove_coverage_output check_examples check_gtest
+check_all: check_basic check_special_situations check_coverage remove_coverage_output check_examples
 	@echo "Last... one normal build and test"
 	make distclean; $(srcdir)/configure; make check;
 	@echo "Check running tests repeatedly"

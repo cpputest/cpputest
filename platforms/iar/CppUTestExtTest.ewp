@@ -1944,15 +1944,6 @@
         <name>$PROJ_DIR$\..\..\tests\CppUTestExt\ExpectedFunctionsListTest.cpp</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\tests\CppUTestExt\GMockTest.cpp</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\tests\CppUTestExt\GTest1Test.cpp</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\tests\CppUTestExt\GTest2ConvertorTest.cpp</name>
-      </file>
-      <file>
         <name>$PROJ_DIR$\..\..\tests\CppUTestExt\IEEE754PluginTest.cpp</name>
       </file>
       <file>

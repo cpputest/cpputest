@@ -183,28 +183,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="src\CppUTestExt\GTest.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="SRC\CPPUTEST\CommandLineArguments.cpp"
 				>
 				<FileConfiguration
@@ -917,22 +895,6 @@
 			</File>
 			<File
 				RelativePath=".\include\CppUTest\CppUTestGeneratedConfig.h"
-				>
-			</File>
-			<File
-				RelativePath="include\CppUTestExt\GMock.h"
-				>
-			</File>
-			<File
-				RelativePath=".\include\CppUTestExt\GTest.h"
-				>
-			</File>
-			<File
-				RelativePath=".\include\CppUTestExt\GTestSupport.h"
-				>
-			</File>
-			<File
-				RelativePath="include\CppUTestExt\GTestConvertor.h"
 				>
 			</File>
 			<File

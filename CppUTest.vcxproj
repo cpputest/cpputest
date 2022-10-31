@@ -207,7 +207,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\CppUTestExt\CodeMemoryReportFormatter.cpp" />
-    <ClCompile Include="src\CppUTestExt\GTest.cpp" />
     <ClCompile Include="src\CppUTestExt\IEEE754ExceptionsPlugin.cpp" />
     <ClCompile Include="src\CppUTestExt\MemoryReportAllocator.cpp" />
     <ClCompile Include="src\CppUTestExt\MemoryReporterPlugin.cpp" />
@@ -244,10 +243,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\CppUTestExt\CodeMemoryReportFormatter.h" />
-    <ClInclude Include="include\CppUTestExt\GMock.h" />
-    <ClInclude Include="include\CppUTestExt\GTest.h" />
-    <ClInclude Include="include\CppUTestExt\GTestSupport.h" />
-    <ClInclude Include="include\CppUTestExt\GTestConvertor.h" />
     <ClInclude Include="include\cpputestext\ieee754exceptionsplugin.h" />
     <ClInclude Include="include\CppUTestExt\MemoryReportAllocator.h" />
     <ClInclude Include="include\CppUTestExt\MemoryReporterPlugin.h" />

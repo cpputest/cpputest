@@ -1,6 +1,5 @@
 add_library(${CppUTestExtLibName} STATIC
     CodeMemoryReportFormatter.cpp
-    GTest.cpp
     IEEE754ExceptionsPlugin.cpp
     MemoryReporterPlugin.cpp
     MockFailure.cpp
@@ -25,12 +24,8 @@ add_library(${CppUTestExtLibName} STATIC
     ${PROJECT_SOURCE_DIR}/include/CppUTestExt/MockFailure.h
     ${PROJECT_SOURCE_DIR}/include/CppUTestExt/MockSupport.h
     ${PROJECT_SOURCE_DIR}/include/CppUTestExt/MockSupport_c.h
-    ${PROJECT_SOURCE_DIR}/include/CppUTestExt/GMock.h
-    ${PROJECT_SOURCE_DIR}/include/CppUTestExt/GTest.h
-    ${PROJECT_SOURCE_DIR}/include/CppUTestExt/GTestSupport.h
     ${PROJECT_SOURCE_DIR}/include/CppUTestExt/MemoryReporterPlugin.h
     ${PROJECT_SOURCE_DIR}/include/CppUTestExt/OrderedTest.h
-    ${PROJECT_SOURCE_DIR}/include/CppUTestExt/GTestConvertor.h
     ${PROJECT_SOURCE_DIR}/include/CppUTestExt/MockActualCall.h
     ${PROJECT_SOURCE_DIR}/include/CppUTestExt/MockCheckedActualCall.h
     ${PROJECT_SOURCE_DIR}/include/CppUTestExt/MockNamedValue.h
