@@ -21,31 +21,6 @@ jobs:
           cp ./scripts/generate_junit_report_ant.xml .
           ant -f generate_junit_report_ant.xml
 
-  cmake_coverage:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Install tools
-        run: |
-          pip install --user gcovr
-          sudo apt install lcov
-      - name: Checkout
-        uses: actions/checkout@main
-      - name: Configure
-        run: cmake --preset coverage
-      - name: Build
-        run: cmake --build cpputest_build
-      - name: Test
-        run: ctest --test-dir cpputest_build
-      - name: Coverage
-        run: |
-          lcov --capture --directory . --no-external --output-file lcov.info
-          lcov --remove lcov.info --output-file lcov.info '*/tests/*'
-      - name: Coveralls
-        uses: coverallsapp/github-action@master
-        with:
-          path-to-lcov: lcov.info
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
   make_dos:
     runs-on: ubuntu-latest
     steps:
@@ -70,45 +45,6 @@ jobs:
           TERM: linux
         run: $CPPUTEST_HOME/platforms/Dos/alltests.sh
 
-  cmake_wine:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Install tools
-        run: sudo apt-get install -y mingw-w64 wine64
-      - name: Checkout
-        uses: actions/checkout@main
-      - name: Configure
-        run: >
-          cmake --preset MinGW
-      - name: Build
-        run: cmake --build cpputest_build --verbose
-      - name: Test
-        run: ctest --test-dir cpputest_build
-
-  cmake_no_std_cpp:
-    runs-on: ubuntu-latest
-    name: Disable exceptions
-    steps:
-      - name: Checkout
-        uses: actions/checkout@main
-      - name: Configure
-        run: cmake --preset no-std-cpp
-      - name: Build
-        run: cmake --build cpputest_build --verbose
-      - name: Test
-        run: ctest --test-dir cpputest_build
-
-  cmake_no_std_c:
-    runs-on: ubuntu-latest
-    name: Disable libc
-    steps:
-      - name: Checkout
-        uses: actions/checkout@main
-      - name: Configure
-        run: cmake --preset no-std-c
-      - name: Build
-        run: cmake --build cpputest_build --verbose
-
   cmake_install:
     runs-on: ubuntu-latest
     steps:
@@ -126,25 +62,6 @@ jobs:
           cmake --build build -j
           ctest --test-dir build
 
-  arm-embedded:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@main
-      - uses: carlosperate/arm-none-eabi-gcc-action@v1
-      - name: Install QEMU
-        # The version in the ubuntu repositories (6.2) is broken.
-        run: |
-          wget -nv http://ftp.de.debian.org/debian/pool/main/q/qemu/qemu-user-static_7.1+dfsg-2_amd64.deb -O qemu.deb
-          sudo dpkg --install qemu.deb
-          rm -f qemu.deb
-      - name: Configure
-        run: cmake --preset arm-embedded
-      - name: Build
-        run: cmake --build cpputest_build
-      - name: Test
-        run: ctest --test-dir cpputest_build
-
   automake-no-long-long:
     runs-on: ubuntu-latest
     steps:
@@ -156,19 +73,3 @@ jobs:
           ./configure --disable-longlong
       - name: Build and test
         run: make tdd
-
-  cmake-no-long-long:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@main
-      - name: Configure
-        run: >
-          cmake
-          -B cpputest_build
-          -D CPPUTEST_USE_LONG_LONG=NO
-          -D CMAKE_CXX_COMPILER=clang++
-      - name: Build
-        run: cmake --build cpputest_build -j
-      - name: Test
-        run: ctest --test-dir cpputest_build -j

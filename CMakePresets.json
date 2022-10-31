@@ -97,6 +97,13 @@
       }
     },
     {
+      "name": "no-long-long",
+      "inherits":["GNU"],
+      "cacheVariables": {
+        "CPPUTEST_USE_LONG_LONG": false
+      }
+    },
+    {
       "name": "IAR",
       "inherits": ["defaults"],
       "cacheVariables": {

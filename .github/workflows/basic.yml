@@ -1,7 +1,7 @@
 ---
 name: Basic builds
 
-on:
+"on":
   push:
   pull_request:
 
@@ -81,6 +81,9 @@ jobs:
             cpp_version: 98
             preset: GNU
           - os: ubuntu-latest
+            cpp_version: 98
+            preset: no-long-long
+          - os: ubuntu-latest
             cpp_version: 11
             preset: GNU
           - os: ubuntu-latest
@@ -89,6 +92,20 @@ jobs:
           - os: ubuntu-latest
             cpp_version: 17
             preset: GNU
+          - os: ubuntu-latest
+            cpp_version: 11
+            preset: MinGW
+            apt_packages: mingw-w64 wine64
+          - os: ubuntu-latest
+            cpp_version: 98
+            preset: no-std-cpp
+          - os: ubuntu-latest
+            cpp_version: 11
+            preset: coverage
+            apt_packages: lcov
+          - os: ubuntu-latest
+            cpp_version: 11
+            preset: arm-embedded
           # Mac OSX
           - os: macos-latest
             cpp_version: 98
@@ -101,6 +118,18 @@ jobs:
             preset: GNU
     runs-on: ${{ matrix.os }}
     steps:
+      - name: Install tools
+        run: sudo apt install ${{ matrix.apt_packages }}
+        if: ${{ matrix.apt_packages }}
+      - uses: carlosperate/arm-none-eabi-gcc-action@v1
+        if: ${{ matrix.preset == 'arm-embedded' }}
+      - name: Install QEMU
+        # The version in the ubuntu repositories (6.2) is broken.
+        run: |
+          wget -nv http://ftp.de.debian.org/debian/pool/main/q/qemu/qemu-user-static_7.1+dfsg-2_amd64.deb -O qemu.deb
+          sudo dpkg --install qemu.deb
+          rm -f qemu.deb
+        if: ${{ matrix.preset == 'arm-embedded' }}
       - name: Checkout
         uses: actions/checkout@main
       - name: Configure
@@ -112,3 +141,14 @@ jobs:
         run: cmake --build cpputest_build --verbose
       - name: Test
         run: ctest --test-dir cpputest_build
+      - name: Coverage
+        run: |
+          lcov --capture --directory . --no-external --output-file lcov.info
+          lcov --remove lcov.info --output-file lcov.info '*/tests/*'
+        if: ${{ matrix.preset == 'coverage' }}
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          path-to-lcov: lcov.info
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+        if: ${{ matrix.preset == 'coverage' }}
