@@ -55,9 +55,14 @@ jobs:
     strategy:
       matrix:
         include:
-          - name: windows defaults
+          - name: MSVC defaults
             os: windows-latest
             cpp_version: 17
+            preset: MSVC
+            # install: true
+          - name: MSVC 20
+            os: windows-latest
+            cpp_version: 20
             preset: MSVC
           - name: ClangCL
             os: windows-latest
@@ -79,6 +84,10 @@ jobs:
             os: ubuntu-latest
             cpp_version: 17
             preset: Clang
+          - name: Linux Clang 20
+            os: ubuntu-latest
+            cpp_version: 20
+            preset: Clang
           - name: Linux GNU 98
             os: ubuntu-latest
             cpp_version: 98
@@ -99,6 +108,10 @@ jobs:
           - name: Linux GNU 17
             os: ubuntu-latest
             cpp_version: 17
+            preset: GNU
+          - name: Linux GNU 20
+            os: ubuntu-latest
+            cpp_version: 20
             preset: GNU
           - name: MinGW
             os: ubuntu-latest
@@ -126,6 +139,10 @@ jobs:
           - name: Apple Clang 17
             os: macos-latest
             cpp_version: 17
+            preset: Clang
+          - name: Apple Clang 20
+            os: macos-latest
+            cpp_version: 20
             preset: Clang
           - name: Mac GNU 14
             os: macos-latest
