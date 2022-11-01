@@ -69,12 +69,12 @@ static void GccPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, Test
     result->addFailure(TestFailure(shell, "-p doesn't work on this platform, as it is lacking fork.\b"));
 }
 
-static int PlatformSpecificForkImplementation(void)
+static pid_t PlatformSpecificForkImplementation(void)
 {
     return 0;
 }
 
-static int PlatformSpecificWaitPidImplementation(int, int*, int)
+static pid_t PlatformSpecificWaitPidImplementation(int, int*, int)
 {
     return 0;
 }
@@ -156,8 +156,8 @@ TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
 
 void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell* shell, TestPlugin* plugin, TestResult* result) =
         GccPlatformSpecificRunTestInASeperateProcess;
-int (*PlatformSpecificFork)(void) = PlatformSpecificForkImplementation;
-int (*PlatformSpecificWaitPid)(int, int*, int) = PlatformSpecificWaitPidImplementation;
+pid_t (*PlatformSpecificFork)(void) = PlatformSpecificForkImplementation;
+pid_t (*PlatformSpecificWaitPid)(int, int*, int) = PlatformSpecificWaitPidImplementation;
 
 extern "C" {
 

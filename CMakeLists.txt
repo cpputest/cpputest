@@ -170,6 +170,12 @@ if(HAVE_SIZEOF_LONGLONG)
     set(CPPUTEST_HAVE_LONG_LONG_INT ON)
 endif()
 
+include(CheckTypeSize)
+CHECK_TYPE_SIZE(pid_t PID_T)
+IF(NOT HAVE_PID_T)
+  SET(_cpputest_pid_t "int")
+ENDIF(NOT HAVE_PID_T)
+
 if (MINGW)
     check_struct_has_member("struct timespec" tv_sec time.h CPPUTEST_HAVE_STRUCT_TIMESPEC LANGUAGE CXX)
     if (NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
