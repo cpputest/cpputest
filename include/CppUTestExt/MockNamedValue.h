@@ -167,7 +167,7 @@ private:
         unsigned int unsignedIntValue_;
         long int longIntValue_;
         unsigned long int unsignedLongIntValue_;
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
         cpputest_longlong longLongIntValue_;
         cpputest_ulonglong unsignedLongLongIntValue_;
 #else

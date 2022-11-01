@@ -155,3 +155,31 @@ jobs:
         run: cmake --build cpputest_build
       - name: Test
         run: ctest --test-dir cpputest_build
+
+  automake-no-long-long:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+      - name: Configure
+        run: |
+          autoreconf -i .
+          ./configure --disable-longlong
+      - name: Build and test
+        run: make tdd
+
+  cmake-no-long-long:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+      - name: Configure
+        run: >
+          cmake
+          -B cpputest_build
+          -D CPPUTEST_USE_LONG_LONG=NO
+          -D CMAKE_CXX_COMPILER=clang++
+      - name: Build
+        run: cmake --build cpputest_build -j
+      - name: Test
+        run: ctest --test-dir cpputest_build -j

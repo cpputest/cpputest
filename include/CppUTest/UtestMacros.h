@@ -226,6 +226,7 @@
 #define UNSIGNED_LONGS_EQUAL_LOCATION(expected, actual, text, file, line)\
   do { UtestShell::getCurrent()->assertUnsignedLongsEqual((unsigned long)expected, (unsigned long)actual, text, file, line); } while(0)
 
+#if CPPUTEST_USE_LONG_LONG
 #define LONGLONGS_EQUAL(expected, actual)\
   LONGLONGS_EQUAL_LOCATION(expected, actual, NULLPTR, __FILE__, __LINE__)
 
@@ -243,6 +244,7 @@
 
 #define UNSIGNED_LONGLONGS_EQUAL_LOCATION(expected, actual, text, file, line)\
         do { UtestShell::getCurrent()->assertUnsignedLongLongsEqual((cpputest_ulonglong)expected, (cpputest_ulonglong)actual, text, file, line); } while(0)
+#endif // CPPUTEST_USE_LONG_LONG
 
 #define BYTES_EQUAL(expected, actual)\
     LONGS_EQUAL((expected) & 0xff,(actual) & 0xff)

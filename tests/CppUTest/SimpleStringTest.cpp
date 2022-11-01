@@ -640,7 +640,7 @@ TEST(SimpleString, UnsignedLongInts)
     CHECK(s == s2);
 }
 
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
 
 TEST(SimpleString, LongLongInts)
 {
@@ -710,7 +710,7 @@ TEST(SimpleString, HexStrings)
     SimpleString h1 = HexStringFrom(0xffffL);
     STRCMP_EQUAL("ffff", h1.asCharString());
 
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
     SimpleString h15 = HexStringFrom(0xffffLL);
     STRCMP_EQUAL("ffff", h15.asCharString());
 #endif
@@ -1246,7 +1246,7 @@ TEST(SimpleString, BracketsFormattedHexStringFromForLong)
 
 	STRCMP_EQUAL("(0x1)", BracketsFormattedHexStringFrom(value).asCharString());
 }
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
 
 TEST(SimpleString, BracketsFormattedHexStringFromForLongLong)
 {
@@ -1263,13 +1263,13 @@ TEST(SimpleString, BracketsFormattedHexStringFromForULongLong)
 #else
 TEST(SimpleString, BracketsFormattedHexStringFromForLongLong)
 {
-	cpputest_longlong value = 1;
+	cpputest_longlong value;
 
 	STRCMP_EQUAL("", BracketsFormattedHexStringFrom(value).asCharString());
 }
 TEST(SimpleString, BracketsFormattedHexStringFromForULongLong)
 {
-	cpputest_ulonglong value = 1;
+	cpputest_ulonglong value;
 
 	STRCMP_EQUAL("", BracketsFormattedHexStringFrom(value).asCharString());
 }

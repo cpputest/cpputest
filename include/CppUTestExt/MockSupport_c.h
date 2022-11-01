@@ -61,7 +61,7 @@ typedef struct SMockValue_c
         unsigned int unsignedIntValue;
         long int longIntValue;
         unsigned long int unsignedLongIntValue;
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
         cpputest_longlong longLongIntValue;
         cpputest_ulonglong unsignedLongLongIntValue;
 #else

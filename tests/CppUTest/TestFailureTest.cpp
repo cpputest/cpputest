@@ -141,7 +141,7 @@ TEST(TestFailure, LongsEqualFailure)
 
 TEST(TestFailure, LongLongsEqualFailure)
 {
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
     LongLongsEqualFailure f(test, failFileName, failLineNumber, 1, 2, "");
     FAILURE_EQUAL("expected <1 (0x1)>\n\tbut was  <2 (0x2)>", f);
 #else
@@ -153,7 +153,7 @@ TEST(TestFailure, LongLongsEqualFailure)
 
 TEST(TestFailure, UnsignedLongLongsEqualFailure)
 {
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
     UnsignedLongLongsEqualFailure f(test, failFileName, failLineNumber, 1, 2, "");
     FAILURE_EQUAL("expected <1 (0x1)>\n\tbut was  <2 (0x2)>", f);
 #else

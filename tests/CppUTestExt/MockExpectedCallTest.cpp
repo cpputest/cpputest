@@ -232,7 +232,7 @@ TEST(MockExpectedCall, callWithLongIntegerParameter)
     STRCMP_CONTAINS("funcName -> long int paramName: <777 (0x309)>", call->callToString().asCharString());
 }
 
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
 
 TEST(MockExpectedCall, callWithUnsignedLongLongIntegerParameter)
 {
@@ -780,7 +780,7 @@ TEST(MockIgnoredExpectedCall, worksAsItShould)
     ignored.withUnsignedIntParameter("foo", (unsigned int) 1);
     ignored.withLongIntParameter("hey", (long int) 1);
     ignored.withUnsignedLongIntParameter("bah", (unsigned long int) 1);
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
     ignored.withLongLongIntParameter("yo", (long long int) 1);
     ignored.withUnsignedLongLongIntParameter("grr", (unsigned long long int) 1);
 #endif
@@ -802,7 +802,7 @@ TEST(MockIgnoredExpectedCall, worksAsItShould)
     ignored.andReturnValue((int) 1);
     ignored.andReturnValue((unsigned long int) 1);
     ignored.andReturnValue((long int) 1);
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
     ignored.andReturnValue((unsigned long long int) 1);
     ignored.andReturnValue((long long int) 1);
 #endif

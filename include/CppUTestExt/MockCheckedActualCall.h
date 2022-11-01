@@ -269,10 +269,28 @@ public:
     virtual long int returnLongIntValue() _override { return 0; }
     virtual long int returnLongIntValueOrDefault(long int value) _override { return value; }
 
-    virtual cpputest_ulonglong returnUnsignedLongLongIntValue() _override { return 0; }
+    virtual cpputest_ulonglong returnUnsignedLongLongIntValue() _override
+    {
+#if CPPUTEST_USE_LONG_LONG
+        return 0;
+#else
+        cpputest_ulonglong ret = {};
+        return ret;
+#endif
+    }
+
     virtual cpputest_ulonglong returnUnsignedLongLongIntValueOrDefault(cpputest_ulonglong value) _override { return value; }
 
-    virtual cpputest_longlong returnLongLongIntValue() _override { return 0; }
+    virtual cpputest_longlong returnLongLongIntValue() _override
+    {
+#if CPPUTEST_USE_LONG_LONG
+        return 0;
+#else
+        cpputest_longlong ret = {};
+        return ret;
+#endif
+    }
+
     virtual cpputest_longlong returnLongLongIntValueOrDefault(cpputest_longlong value) _override { return value; }
 
     virtual unsigned int returnUnsignedIntValue() _override { return 0; }

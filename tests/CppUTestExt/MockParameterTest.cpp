@@ -63,7 +63,7 @@ TEST(MockParameterTest, expectOneIntegerParameterAndValue)
     mock().checkExpectations();
 }
 
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
 
 TEST(MockParameterTest, expectOneUnsignedLongLongIntegerParameterAndValue)
 {
@@ -152,7 +152,7 @@ TEST(MockParameterTest, mismatchedIntegerTypesLongAndUnsignedLongAreAllowed)
     mock().checkExpectations();
 }
 
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
 
 TEST(MockParameterTest, mismatchedIntegerTypesIntAndLongLongAreAllowed)
 {
@@ -889,7 +889,7 @@ TEST(MockParameterTest, ignoreOtherCallsIgnoresWithAllKindsOfParameters)
            .withParameter("bar", 1u)
            .withParameter("foo", 1l)
            .withParameter("hey", 1ul)
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
            .withParameter("ick", 1ll)
            .withParameter("grr", 1ull)
 #endif

@@ -128,7 +128,7 @@ IGNORE_TEST(UnitTestMacros, UNSIGNED_LONGS_EQUAL_TEXTWorksInAnIgnoredTest)
     UNSIGNED_LONGS_EQUAL_TEXT(1, 0, "Failed because it failed"); // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
 
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
 
 static void LONGLONGS_EQUALTestMethod_()
 {
@@ -225,30 +225,6 @@ IGNORE_TEST(UnitTestMacros, UNSIGNED_LONGLONGS_EQUAL_TEXTWorksInAnIgnoredTest)
 {
     UNSIGNED_LONGLONGS_EQUAL_TEXT(1, 0, "Failed because it failed"); // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
-
-#else
-
-static void LONGLONGS_EQUALFailsWithUnsupportedFeatureTestMethod_()
-{
-    LONGLONGS_EQUAL(1, 1);
-} // LCOV_EXCL_LINE
-
-static void UNSIGNED_LONGLONGS_EQUALFailsWithUnsupportedFeatureTestMethod_()
-{
-    UNSIGNED_LONGLONGS_EQUAL(1, 1);
-} // LCOV_EXCL_LINE
-
-TEST(UnitTestMacros, LONGLONGS_EQUALFailsWithUnsupportedFeature)
-{
-    fixture.runTestWithMethod(LONGLONGS_EQUALFailsWithUnsupportedFeatureTestMethod_);
-    CHECK_TEST_FAILS_PROPER_WITH_TEXT("\"CPPUTEST_USE_LONG_LONG\" is not supported");
-}
-
-TEST(UnitTestMacros, UNSIGNED_LONGLONGS_EQUALFailsWithUnsupportedFeature)
-{
-    fixture.runTestWithMethod(UNSIGNED_LONGLONGS_EQUALFailsWithUnsupportedFeatureTestMethod_);
-    CHECK_TEST_FAILS_PROPER_WITH_TEXT("\"CPPUTEST_USE_LONG_LONG\" is not supported");
-}
 
 #endif /* CPPUTEST_USE_LONG_LONG */
 
