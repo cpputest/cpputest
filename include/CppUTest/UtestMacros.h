@@ -153,11 +153,15 @@
   CHECK_COMPARE_LOCATION(first, relop, second, text, __FILE__, __LINE__)
 
 #define CHECK_COMPARE_LOCATION(first, relop, second, text, file, line)\
- do { SimpleString conditionString;\
-      conditionString += StringFrom(first); conditionString += " ";\
-      conditionString += #relop; conditionString += " ";\
-      conditionString += StringFrom(second);\
-      UtestShell::getCurrent()->assertCompare((first) relop (second), "CHECK_COMPARE", conditionString.asCharString(), text, __FILE__, __LINE__);\
+ do {\
+      bool success = (first) relop (second);\
+      if (!success) {\
+          SimpleString conditionString;\
+          conditionString += StringFrom(first); conditionString += " ";\
+          conditionString += #relop; conditionString += " ";\
+          conditionString += StringFrom(second);\
+          UtestShell::getCurrent()->assertCompare(false, "CHECK_COMPARE", conditionString.asCharString(), text, __FILE__, __LINE__);\
+      }\
  } while(0)
 
 //This check checks for char* string equality using strcmp.
