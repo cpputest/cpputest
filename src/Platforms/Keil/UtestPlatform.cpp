@@ -155,7 +155,7 @@ extern "C"
     {
     }
 
-    const PlatformSpecificFile PlatformSpecificStdOut = stdout;
+    PlatformSpecificFile PlatformSpecificStdOut = stdout;
     PlatformSpecificFile (*PlatformSpecificFOpen)(const char*, const char*) = PlatformSpecificFOpenImplementation;
     void (*PlatformSpecificFPuts)(const char*, PlatformSpecificFile) = PlatformSpecificFPutsImplementation;
     void (*PlatformSpecificFClose)(PlatformSpecificFile) = PlatformSpecificFCloseImplementation;

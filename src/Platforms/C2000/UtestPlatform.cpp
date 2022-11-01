@@ -155,7 +155,7 @@ static void C2000FClose(PlatformSpecificFile file)
    fclose((FILE*)file);
 }
 
-const PlatformSpecificFile PlatformSpecificStdOut = stdout;
+PlatformSpecificFile PlatformSpecificStdOut = stdout;
 PlatformSpecificFile (*PlatformSpecificFOpen)(const char* filename, const char* flag) = C2000FOpen;
 void (*PlatformSpecificFPuts)(const char* str, PlatformSpecificFile file) = C2000FPuts;
 void (*PlatformSpecificFClose)(PlatformSpecificFile file) = C2000FClose;
