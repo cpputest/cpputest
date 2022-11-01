@@ -58,83 +58,57 @@ jobs:
           # Windows
           - os: windows-latest
             cpp_version: 17
+            preset: MSVC
+          - os: windows-latest
+            cpp_version: 17
+            preset: ClangCL
           # Linux
           #   CMake different C++ versions with clang
           - os: ubuntu-latest
             cpp_version: 98
-            cxx: clang++
-            cc: clang
+            preset: Clang
           - os: ubuntu-latest
             cpp_version: 11
-            cxx: clang++
-            cc: clang
+            preset: Clang
           - os: ubuntu-latest
             cpp_version: 14
-            cxx: clang++
-            cc: clang
+            preset: Clang
           - os: ubuntu-latest
             cpp_version: 17
-            cxx: clang++
-            cc: clang
+            preset: Clang
           #   CMake different C++ versions with gcc
           - os: ubuntu-latest
             cpp_version: 98
-            cxx: g++
-            cc: gcc
+            preset: GNU
           - os: ubuntu-latest
             cpp_version: 11
-            cxx: g++
-            cc: gcc
+            preset: GNU
           - os: ubuntu-latest
             cpp_version: 14
-            cxx: g++
-            cc: gcc
+            preset: GNU
           - os: ubuntu-latest
             cpp_version: 17
-            cxx: g++
-            cc: gcc
+            preset: GNU
           # Mac OSX
           - os: macos-latest
             cpp_version: 98
+            preset: defaults
           - os: macos-latest
             cpp_version: 17
-            cxx: clang++
-            cc: clang
+            preset: Clang
           - os: macos-latest
             cpp_version: 14
-            cxx: g++
-            cc: gcc
+            preset: GNU
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
         uses: actions/checkout@main
-      - if: ${{ matrix.cxx }}
-        run: echo "CXX=${{ matrix.cxx }}" >> $GITHUB_ENV
-      - if: ${{ matrix.cc }}
-        run: echo "CC=${{ matrix.cc }}" >> $GITHUB_ENV
       - name: Configure
         run: >
           cmake
-          -B build
-          -S .
+          --preset ${{ matrix.preset }}
           -D CMAKE_CXX_STANDARD=${{ matrix.cpp_version }}
       - name: Build
-        run: cmake --build build --verbose
+        run: cmake --build cpputest_build --verbose
       - name: Test
-        run: ctest --test-dir build
-
-  visualstudio-clangcl:
-    runs-on: windows-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@main
-      - name: Configure
-        run: >
-          cmake
-          -B build
-          -G "Visual Studio 17 2022"
-          -T ClangCL
-      - name: Build
-        run: cmake --build build --verbose
-      - name: Test
-        run: ctest --test-dir build
+        run: ctest --test-dir cpputest_build

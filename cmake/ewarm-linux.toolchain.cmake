@@ -1,5 +1,5 @@
 ### BEGIN CMAKE_TOOLCHAIN_FILE
-# "Generic" is used when cross compiling
+# "Generic" is used when compiling for bare-metal
 set(CMAKE_SYSTEM_NAME Generic)
 
 # Set the EW installation root directory
@@ -16,9 +16,6 @@ set(CMAKE_C_COMPILER "${EW_ROOT_DIR}/bin/iccarm" "${CPU_FLAGS} --dlib_config nor
 set(CMAKE_CXX_COMPILER "${EW_ROOT_DIR}/bin/iccarm" "${CPU_FLAGS} --dlib_config normal")
 set(CMAKE_ASM_COMPILER "${EW_ROOT_DIR}/bin/iasmarm" "${CPU_FLAGS}")
 
-# For CppUTest, set the IAR variable
-set(IAR True)
-
-# Build with cmake -H. -Bbuild -G "Unix Makefiles" -DCMAKE_TOOLCHAIN_FILE=cmake/ewarm-linux.toolchain.cmake
+# Build with cmake -S. -Bbuild -G "Unix Makefiles" -DCMAKE_TOOLCHAIN_FILE=cmake/ewarm-linux.toolchain.cmake
 
 ### END CMAKE_TOOLCHAIN_FILE

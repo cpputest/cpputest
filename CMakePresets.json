@@ -1,0 +1,112 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "defaults",
+      "binaryDir": "cpputest_build",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+        "CMAKE_CXX_EXTENSIONS": false
+      }
+    },
+    {
+      "name": "GNU",
+      "inherits": ["defaults"],
+      "environment": {
+        "CFLAGS": "-Werror",
+        "CXXFLAGS": "-Werror"
+      },
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "gcc",
+        "CMAKE_CXX_COMPILER": "g++"
+      }
+    },
+    {
+      "name": "Clang",
+      "inherits": ["GNU"],
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "clang",
+        "CMAKE_CXX_COMPILER": "clang++"
+      }
+    },
+    {
+      "name": "MSVC",
+      "inherits": ["defaults"],
+      "environment": {
+        "CFLAGS": "/WX",
+        "CXXFLAGS": "/WX"
+      }
+    },
+    {
+      "name": "ClangCL",
+      "inherits": ["MSVC"],
+      "generator": "Visual Studio 17 2022",
+      "toolset": "ClangCL"
+    },
+    {
+      "name": "MinGW",
+      "inherits": ["GNU"],
+      "environment": {
+        "LDFLAGS": "-static"
+      },
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "x86_64-w64-mingw32-gcc",
+        "CMAKE_CXX_COMPILER": "x86_64-w64-mingw32-g++",
+        "CMAKE_SYSTEM_NAME": "Windows",
+        "CMAKE_CROSSCOMPILING_EMULATOR": "wine"
+      }
+    },
+    {
+      "name": "arm-embedded",
+      "inherits": ["defaults"],
+      "toolchainFile": "${sourceDir}/cmake/arm-none-eabi-gcc.toolchain.cmake",
+      "cacheVariables": {
+        "CMAKE_CROSSCOMPILING_EMULATOR": "qemu-arm-static;-cpu;cortex-m4"
+      }
+    },
+    {
+      "name": "coverage",
+      "inherits": ["GNU"],
+      "environment": {
+        "CFLAGS": "--coverage",
+        "CXXFLAGS": "--coverage"
+      },
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_CXX_STANDARD": "11",
+        "CPPUTEST_EXAMPLES": false
+      }
+    },
+    {
+      "name": "no-std-cpp",
+      "inherits": ["GNU"],
+      "environment": {
+        "CXXFLAGS": "-Werror -fno-exceptions -fno-rtti -nostdinc++"
+      }
+    },
+    {
+      "name": "no-std-c",
+      "inherits": ["GNU"],
+      "environment": {
+        "CXXFLAGS": "-Werror -nostdinc",
+        "CFLAGS": "-Werror -nostdinc"
+      },
+      "cacheVariables": {
+        "CMAKE_SYSTEM_NAME": "Generic",
+        "CPPUTEST_STD_C_LIB_DISABLED": true
+      }
+    },
+    {
+      "name": "IAR",
+      "inherits": ["defaults"],
+      "cacheVariables": {
+        "CMAKE_SYSTEM_NAME": "Generic",
+        "CMAKE_C_COMPILER": "iccarm",
+        "CMAKE_C_FLAGS_INIT": "--cpu Cortex-M4F --dlib_config normal",
+        "CMAKE_CXX_COMPILER": "iccarm",
+        "CMAKE_CXX_FLAGS_INIT": "--cpu Cortex-M4F --dlib_config normal",
+        "CMAKE_EXE_LINKER_FLAGS": "--semihosting --config ${sourceDir}/platforms/iar/CppUTestTest.icf"
+      }
+    }
+  ]
+}

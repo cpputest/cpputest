@@ -51,14 +51,6 @@ check_type_size("long long" SIZEOF_LONGLONG)
 cmake_dependent_option(CPPUTEST_USE_LONG_LONG "Support long long"
   YES "HAVE_SIZEOF_LONGLONG" OFF)
 
-cmake_dependent_option(CPPUTEST_MAP_FILE "Enable the creation of a map file"
-  OFF "CPPUTEST_FLAGS;NOT MSVC" OFF)
-cmake_dependent_option(CPPUTEST_COVERAGE "Enable running with coverage"
-  OFF "CPPUTEST_FLAGS;NOT MSVC" OFF)
-cmake_dependent_option(CPPUTEST_WERROR
-  "Compile with warnings as errors"
-  ON "CPPUTEST_FLAGS;PROJECT_IS_TOP_LEVEL" OFF
-)
 cmake_dependent_option(CPPUTEST_BUILD_TESTING "Compile and make tests for CppUTest"
   ${PROJECT_IS_TOP_LEVEL} "BUILD_TESTING" OFF)
 option(CPPUTEST_TESTS_DETAILED "Run each test separately instead of grouped?" OFF)
@@ -66,8 +58,6 @@ cmake_dependent_option(CPPUTEST_TEST_DISCOVERY "Build time test discover"
   ON "CPPUTEST_BUILD_TESTING;CMAKE_CROSSCOMPILING_EMULATOR OR NOT CMAKE_CROSSCOMPILING" OFF)
 cmake_dependent_option(CPPUTEST_EXAMPLES "Compile and make examples?"
   ${PROJECT_IS_TOP_LEVEL} "NOT CPPUTEST_STD_CPP_LIB_DISABLED" OFF)
-option(CPPUTEST_VERBOSE_CONFIG "Print configuration to stdout during generation" ${PROJECT_IS_TOP_LEVEL})
-
 cmake_dependent_option(CPPUTEST_LIBNAME_POSTFIX_BITSIZE "Add architecture bitsize (32/64) to the library name?"
   OFF "PROJECT_IS_TOP_LEVEL" OFF)
 
@@ -115,18 +105,6 @@ check_cxx_symbol_exists(fopen_s "stdio.h" CPPUTEST_HAVE_SECURE_STDLIB)
 cmake_dependent_option(CPPUTEST_USE_SECURE_STDLIB "Use MSVC safe functions"
   ON "WIN32;CPPUTEST_HAVE_SECURE_STDLIB" OFF)
 
-if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME) # Don't change users' build type.
-  # Multi-configuration generators don't have a single build type.
-  get_property(
-    GENERATOR_IS_MULTI_CONFIG GLOBAL
-    PROPERTY GENERATOR_IS_MULTI_CONFIG
-  )
-  if(NOT GENERATOR_IS_MULTICONFIG AND NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "What kind of build this is" FORCE)
-    message("No CMAKE_BUILD_TYPE set. Assigning: ${CMAKE_BUILD_TYPE}")
-  endif()
-endif()
-
 set( CppUTestLibName "CppUTest" )
 set( CppUTestExtLibName "CppUTestExt" )
 
@@ -146,11 +124,12 @@ if(NOT PROJECT_IS_TOP_LEVEL)
 endif()
 
 include(CppUTestConfigurationOptions)
+if(PROJECT_IS_TOP_LEVEL)
+  include(CppUTestWarningFlags)
+endif()
 include(CppUTestBuildTimeDiscoverTests)
 include(CppUTestNormalizeTestOutputLocation)
 include(GNUInstallDirs)
-
-add_subdirectory(src/CppUTest)
 
 # Check for symbols before setting a lot of stuff
 include(CheckTypeSize)
@@ -170,22 +149,13 @@ if(HAVE_SIZEOF_LONGLONG)
     set(CPPUTEST_HAVE_LONG_LONG_INT ON)
 endif()
 
-if (MINGW)
-    check_struct_has_member("struct timespec" tv_sec time.h CPPUTEST_HAVE_STRUCT_TIMESPEC LANGUAGE CXX)
-    if (NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-        # Apply workaround for static/shared libraries on MinGW C/C++ compiler
-        # Issue occurs with CMake >= 3.9.0, it doesn't filter out gcc,gcc_s,gcc_eh from
-        # the implicit library list anymore, so the C++ linker is getting passed the static
-        # gcc_eh library since that's what the C linker uses by default. Only solution appears
-        # to be to force static linkage.
-        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static")
-    endif()
-endif()
-
 configure_file (
     "${PROJECT_SOURCE_DIR}/config.h.cmake"
     "${PROJECT_BINARY_DIR}/generated/CppUTestGeneratedConfig.h"
-    )
+)
+
+add_subdirectory(src)
+
 target_include_directories(${CppUTestLibName}
     PUBLIC
         $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}>
@@ -195,15 +165,8 @@ target_compile_definitions(${CppUTestLibName}
     HAVE_CONFIG_H
 )
 
-if (CPPUTEST_EXTENSIONS)
-    add_subdirectory(src/CppUTestExt)
-endif ()
-
 if (CPPUTEST_BUILD_TESTING)
-    add_subdirectory(tests/CppUTest)
-    if (CPPUTEST_EXTENSIONS)
-        add_subdirectory(tests/CppUTestExt)
-    endif ()
+    add_subdirectory(tests)
 endif ()
 
 if (CPPUTEST_EXAMPLES)
@@ -211,104 +174,5 @@ if (CPPUTEST_EXAMPLES)
 endif()
 
 if(PROJECT_IS_TOP_LEVEL)
-  set (INCLUDE_INSTALL_DIR "${CMAKE_INSTALL_INCLUDEDIR}")
-  set (LIB_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}")
-  set (INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
-
-  # Pkg-config file
-  set(CppUTest_PKGCONFIG_FILE ${CMAKE_CURRENT_BINARY_DIR}/cpputest.pc)
-
-  # Pkg-config file.
-  set (prefix "${CMAKE_INSTALL_PREFIX}")
-  set (exec_prefix "\${prefix}")
-  set (libdir "\${exec_prefix}/${LIB_INSTALL_DIR}")
-  set (includedir "\${prefix}/${INCLUDE_INSTALL_DIR}")
-  set (PACKAGE_VERSION "${PROJECT_VERSION}")
-
-  configure_file (cpputest.pc.in "${CppUTest_PKGCONFIG_FILE}" @ONLY)
-  install(
-    FILES "${CppUTest_PKGCONFIG_FILE}"
-    DESTINATION ${LIB_INSTALL_DIR}/pkgconfig
-  )
-
-  install(
-    FILES "${CMAKE_CURRENT_BINARY_DIR}/generated/CppUTestGeneratedConfig.h"
-    DESTINATION "${INCLUDE_INSTALL_DIR}/generated"
-  )
-
-  # Try to include helper module
-  include(CMakePackageConfigHelpers OPTIONAL
-    RESULT_VARIABLE PkgHelpers_AVAILABLE)
-  # guard against older versions of cmake which do not provide it
-  if(PkgHelpers_AVAILABLE)
-    set(CPPUTEST_CONFIG_DEST "${LIB_INSTALL_DIR}/CppUTest/cmake")
-
-    configure_package_config_file(CppUTestConfig.cmake.install.in
-      ${CMAKE_CURRENT_BINARY_DIR}/install/CppUTestConfig.cmake
-      INSTALL_DESTINATION "${CPPUTEST_CONFIG_DEST}"
-      PATH_VARS INCLUDE_INSTALL_DIR LIB_INSTALL_DIR)
-    write_basic_package_version_file(
-      ${CMAKE_CURRENT_BINARY_DIR}/install/CppUTestConfigVersion.cmake
-      VERSION ${PROJECT_VERSION}
-      COMPATIBILITY SameMajorVersion )
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/install/CppUTestConfig.cmake
-      ${CMAKE_CURRENT_BINARY_DIR}/install/CppUTestConfigVersion.cmake
-      DESTINATION "${CPPUTEST_CONFIG_DEST}" )
-    install(
-      EXPORT CppUTestTargets
-      NAMESPACE CppUTest::
-      DESTINATION "${CPPUTEST_CONFIG_DEST}"
-    )
-    install(FILES  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Scripts/CppUTestBuildTimeDiscoverTests.cmake
-      DESTINATION "${CPPUTEST_CONFIG_DEST}/Scripts")
-    install(FILES  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules/CppUTestBuildTimeDiscoverTests.cmake
-      DESTINATION "${CPPUTEST_CONFIG_DEST}/Modules")
-    configure_package_config_file(CppUTestConfig.cmake.build.in
-      ${CMAKE_CURRENT_BINARY_DIR}/CppUTestConfig.cmake
-      INSTALL_DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
-      PATH_VARS INCLUDE_DIR CMAKE_CURRENT_BINARY_DIR)
-    write_basic_package_version_file(
-      ${CMAKE_CURRENT_BINARY_DIR}/CppUTestConfigVersion.cmake
-      VERSION ${PROJECT_VERSION}
-      COMPATIBILITY SameMajorVersion )
-    set(CppUTest_DIR "${CMAKE_CURRENT_BINARY_DIR}" CACHE PATH "The directory containing a CMake configuration file for CppUTest.")
-  else()
-    message("If you wish to use find_package(CppUTest) in your own project to find CppUTest library"
-      " please update cmake to version which provides CMakePackageConfighelpers module"
-      " or write generators for CppUTestConfig.cmake by yourself.")
-  endif()
-endif()
-
-if(CPPUTEST_VERBOSE_CONFIG)
-  message("
--------------------------------------------------------
-CppUTest Version ${PROJECT_VERSION}
-
-Current compiler options:
-    CC:                                 ${CMAKE_C_COMPILER}
-    CXX:                                ${CMAKE_CXX_COMPILER}
-    CppUTest CFLAGS:                    ${CPPUTEST_C_FLAGS}
-    CppUTest CXXFLAGS:                  ${CPPUTEST_CXX_FLAGS}
-    CppUTest LDFLAGS:                   ${CPPUTEST_LD_FLAGS}
-
-Features configured in CppUTest:
-    Memory Leak Detection Disabled:     ${CPPUTEST_MEM_LEAK_DETECTION_DISABLED}
-    Compiling Extensions:               ${CPPUTEST_EXTENSIONS}
-    Support Long Long:                  ${CPPUTEST_USE_LONG_LONG}
-    Use CppUTest flags:                 ${CPPUTEST_FLAGS}
-
-    Disable Standard C library:         ${CPPUTEST_STD_C_LIB_DISABLED}
-    Disable Standard C++ library:       ${CPPUTEST_STD_CPP_LIB_DISABLED}
-
-    Generating map file:                ${CPPUTEST_MAP_FILE}
-    Compiling with coverage:            ${CPPUTEST_COVERAGE}
-
-    Compile and run self-tests          ${CPPUTEST_BUILD_TESTING}
-    Run self-tests separately           ${CPPUTEST_TESTS_DETAILED}
-
-Library name options:
-    Add architecture bitsize (32/64)    ${CPPUTEST_LIBNAME_POSTFIX_BITSIZE}
-
--------------------------------------------------------
-")
+  include(cmake/install.cmake)
 endif()
