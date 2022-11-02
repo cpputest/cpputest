@@ -27,6 +27,10 @@ jobs:
       matrix:
         version: [15, 16, 17, 18]
     steps:
+      - name: Install Python 2
+        uses: actions/setup-python@v4
+        with:
+          python-version: "2.7"
       - name: Checkout
         uses: actions/checkout@main
       - name: Configure
