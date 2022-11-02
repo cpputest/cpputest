@@ -316,27 +316,25 @@ typedef struct
 
 #endif
 
-/* Visual C++ 10.0+ (2010+) supports the override keyword, but doesn't define the C++ version as C++11 */
-#if defined(__cplusplus) && ((__cplusplus >= 201103L) || (defined(_MSC_VER) && (_MSC_VER >= 1600)))
-  #if defined(__ghs__)
-    /* GreenHills is not compatible with other compilers with regards to where
-    * it expects the override specifier to be on methods that return function
-    * pointers. Given this, it is easiest to not use the override specifier.
-    */
-    #define override
-  #endif
-#else
-  #define override
-  #ifndef nullptr
-    #define nullptr NULL
+#if defined(__cplusplus)
+  /* Visual C++ 10.0+ (2010+) supports the override keyword, but doesn't define the C++ version as C++11 */
+  #if (__cplusplus < 201103L) && !(defined(_MSVC_VER) && (_MSC_VER < 1600))
+    #ifndef override
+      #define override
+    #endif
+    #ifndef nullptr
+      #define nullptr NULL
+    #endif
   #endif
 #endif
 
-/* Visual C++ 11.0+ (2012+) supports the override keyword on destructors */
-#if defined(__cplusplus) && ((__cplusplus >= 201103L) || (defined(_MSC_VER) && (_MSC_VER >= 1700)))
-#define _destructor_override override
-#else
-#define _destructor_override
+#if defined(__cplusplus)
+  /* Visual C++ 11.0+ (2012+) supports the override keyword on destructors */
+  #if (__cplusplus >= 201103L) || (defined(_MSC_VER) && (_MSC_VER >= 1700))
+    #define _destructor_override override
+  #else
+    #define _destructor_override
+  #endif
 #endif
 
 #ifdef __clang__
