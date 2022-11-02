@@ -84,6 +84,22 @@ endif (WIN32)
 
 add_library(CppUTest::CppUTest ALIAS ${CppUTestLibName})
 
+if(NOT CPPUTEST_MEM_LEAK_DETECTION_DISABLED)
+    if(MSVC)
+        set(force_include "/FI")
+    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "IAR")
+        set(force_include "--preinclude ")
+    else()
+        set(force_include "-include")
+    endif()
+    target_compile_options(${CppUTestLibName}
+        PUBLIC
+            "$<$<COMPILE_LANGUAGE:C,CXX>:${force_include}CppUTest/MemoryLeakDetectorMallocMacros.h>"
+            "$<$<COMPILE_LANGUAGE:CXX>:${force_include}CppUTest/MemoryLeakDetectorNewMacros.h>"
+    )
+endif()
+
+# Installation
 if(PROJECT_IS_TOP_LEVEL)
     install(
         TARGETS ${CppUTestLibName}
