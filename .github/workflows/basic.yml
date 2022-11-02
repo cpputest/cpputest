@@ -1,7 +1,7 @@
 ---
 name: Basic builds
 
-on:
+"on":
   push:
   pull_request:
 
@@ -55,60 +55,160 @@ jobs:
     strategy:
       matrix:
         include:
-          # Windows
-          - os: windows-latest
+          - name: MSVC defaults
+            os: windows-latest
             cpp_version: 17
             preset: MSVC
-          - os: windows-latest
+            # install: true
+          - name: MSVC 20
+            os: windows-latest
+            cpp_version: 20
+            preset: MSVC
+          - name: ClangCL
+            os: windows-latest
             cpp_version: 17
             preset: ClangCL
-          # Linux
-          #   CMake different C++ versions with clang
-          - os: ubuntu-latest
+          - name: Linux Clang 98
+            os: ubuntu-latest
             cpp_version: 98
             preset: Clang
-          - os: ubuntu-latest
+          - name: Linux Clang 11
+            os: ubuntu-latest
             cpp_version: 11
             preset: Clang
-          - os: ubuntu-latest
+          - name: Linux Clang 14
+            os: ubuntu-latest
             cpp_version: 14
             preset: Clang
-          - os: ubuntu-latest
+          - name: Linux Clang 17
+            os: ubuntu-latest
             cpp_version: 17
             preset: Clang
-          #   CMake different C++ versions with gcc
-          - os: ubuntu-latest
+          - name: Linux Clang 20
+            os: ubuntu-latest
+            cpp_version: 20
+            preset: Clang
+          - name: Linux GNU 98
+            os: ubuntu-latest
             cpp_version: 98
             preset: GNU
-          - os: ubuntu-latest
+          - name: No long long
+            os: ubuntu-latest
+            cpp_version: 98
+            preset: no-long-long
+          - name: Linux GNU Install
+            os: ubuntu-latest
             cpp_version: 11
             preset: GNU
-          - os: ubuntu-latest
+            install: true
+          - name: Linux GNU 14
+            os: ubuntu-latest
             cpp_version: 14
             preset: GNU
-          - os: ubuntu-latest
+          - name: Linux GNU 17
+            os: ubuntu-latest
             cpp_version: 17
             preset: GNU
-          # Mac OSX
-          - os: macos-latest
+          - name: Linux GNU 20
+            os: ubuntu-latest
+            cpp_version: 20
+            preset: GNU
+          - name: MinGW
+            os: ubuntu-latest
+            cpp_version: 11
+            preset: MinGW
+            apt_packages: mingw-w64 wine64
+          - name: No C++ Standard Library
+            os: ubuntu-latest
+            cpp_version: 98
+            preset: no-std-cpp
+          - name: Coverage
+            os: ubuntu-latest
+            cpp_version: 11
+            preset: coverage
+            apt_packages: lcov
+          - name: GCC ARM embedded
+            os: ubuntu-latest
+            cpp_version: 11
+            preset: arm-embedded
+          - name: Mac install
+            os: macos-latest
             cpp_version: 98
             preset: defaults
-          - os: macos-latest
+            install: true
+          - name: Apple Clang 17
+            os: macos-latest
             cpp_version: 17
             preset: Clang
-          - os: macos-latest
+          - name: Apple Clang 20
+            os: macos-latest
+            cpp_version: 20
+            preset: Clang
+          - name: Mac GNU 14
+            os: macos-latest
             cpp_version: 14
             preset: GNU
+          - name: OpenWatcom DOS
+            os: ubuntu-latest
+            cpp_version: 98
+            preset: DOS
+            apt_packages: dosbox
+    name: ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
     steps:
+      ### SETUP
+
+      - name: Install packages
+        run: sudo apt install -y ${{ matrix.apt_packages }}
+        if: ${{ matrix.apt_packages }}
+
+      - uses: carlosperate/arm-none-eabi-gcc-action@v1
+        if: ${{ matrix.name == 'GCC ARM embedded' }}
+      - name: Install QEMU
+        # The version in the ubuntu repositories (6.2) is broken.
+        run: |
+          wget -nv http://ftp.de.debian.org/debian/pool/main/q/qemu/qemu-user-static_7.1+dfsg-2_amd64.deb -O qemu.deb
+          sudo dpkg --install qemu.deb
+          rm -f qemu.deb
+        if: ${{ matrix.name == 'GCC ARM embedded' }}
+
+      - name: Install OpenWatcom
+        uses: open-watcom/setup-watcom@v0
+        with:
+          version: "2.0"
+        if: ${{ matrix.name == 'OpenWatcom DOS' }}
+
+      ## BUILD AND TEST
+
       - name: Checkout
         uses: actions/checkout@main
       - name: Configure
-        run: >
-          cmake
-          --preset ${{ matrix.preset }}
-          -D CMAKE_CXX_STANDARD=${{ matrix.cpp_version }}
+        run: cmake --preset ${{ matrix.preset }} -D CMAKE_CXX_STANDARD=${{ matrix.cpp_version }}
       - name: Build
         run: cmake --build cpputest_build --verbose
       - name: Test
         run: ctest --test-dir cpputest_build
+
+      # POST PROCESSING
+
+      - name: Install
+        run: sudo cmake --install cpputest_build/
+        if: ${{ matrix.install }}
+      - name: Use install
+        run: |
+          cmake -B build -S examples
+          cmake --build build -j
+          ctest --test-dir build
+        if: ${{ matrix.install }}
+
+      - name: Coverage
+        run: |
+          lcov --capture --directory . --no-external --output-file lcov.info
+          lcov --remove lcov.info --output-file lcov.info '*/tests/*'
+        if: ${{ matrix.name == 'Coverage' }}
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          path-to-lcov: lcov.info
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+        if: ${{ matrix.name == 'Coverage' }}
