@@ -49,7 +49,7 @@ jobs:
           autoreconf -i .
           ./configure
       - name: Build and test
-        run: make tdd
+        run: make check_all
 
   cmake:
     strategy:
