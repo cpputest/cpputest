@@ -21,6 +21,24 @@ jobs:
           cp ./scripts/generate_junit_report_ant.xml .
           ant -f generate_junit_report_ant.xml
 
+  gtest:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        version: [15, 16, 17, 18]
+    steps:
+      - name: Install Python 2
+        uses: actions/setup-python@v4
+        with:
+          python-version: "2.7"
+      - name: Checkout
+        uses: actions/checkout@main
+      - name: Configure
+        run: |
+          autoreconf -i .
+          ./configure
+      - name: Build and test
+        run: make check_gtest${{ matrix.version }}
   make_dos:
     runs-on: ubuntu-latest
     steps:
