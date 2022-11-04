@@ -83,6 +83,9 @@ jobs:
           - name: GTest 1.11
             os: ubuntu-20.04
             target: check_gtest111
+          - name: GTest 1.12
+            os: ubuntu-20.04
+            target: check_gtest112
           - name: Disable long long
             os: ubuntu-latest
             configure_args: --disable-longlong

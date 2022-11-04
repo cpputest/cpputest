@@ -261,6 +261,12 @@ if INCLUDE_CPPUTEST_EXT
 endif
 
 
+cpputest_build_gtest112:
+	mkdir -p cpputest_build_gtest112
+	cd cpputest_build_gtest112; \
+	wget https://github.com/google/googletest/archive/refs/tags/release-1.12.1.zip -O gtest-1.12.1.zip  && unzip gtest-1.12.1.zip; \
+	cd googletest-release-1.12.1; cmake .; make
+
 cpputest_build_gtest111:
 	mkdir -p cpputest_build_gtest111
 	cd cpputest_build_gtest111; \
@@ -336,6 +342,12 @@ check_gtest111: cpputest_build_gtest111
 	export GTEST_HOME=`pwd`/cpputest_build_gtest111/googletest-release-1.11.0; \
 	make distclean; $(srcdir)/configure --enable-std-cpp11; make check
 
+check_gtest112: cpputest_build_gtest112
+	@echo "Build using gmock 1.12"
+	export GMOCK_MOCK=`pwd`/cpputest_build_gtest121/googletest-release-1.12.1; \
+	export GTEST_HOME=`pwd`/cpputest_build_gtest121/googletest-release-1.12.1; \
+	make distclean; $(srcdir)/configure --enable-std-cpp11; make check
+
 remove_gtest_directories:
 	rm -rf cpputest_build_gtest15
 	rm -rf cpputest_build_gtest16
@@ -343,8 +355,9 @@ remove_gtest_directories:
 	rm -rf cpputest_build_gtest18
 	rm -rf cpputest_build_gtest110
 	rm -rf cpputest_build_gtest111
+	rm -rf cpputest_build_gtest112
 
-check_gtest: remove_gtest_directories check_gtest15 check_gtest16 check_gtest17 check_gtest18 check_gtest110 check_gtest111
+check_gtest: remove_gtest_directories check_gtest15 check_gtest16 check_gtest17 check_gtest18 check_gtest110 check_gtest111 check_gtest112
 
 check_basic:
 	@echo "If dash is available, run the configure with dash to find bash-isms and increase portability"
