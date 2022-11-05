@@ -88,8 +88,8 @@
       "name": "no-std-c",
       "inherits": ["GNU"],
       "environment": {
-        "CXXFLAGS": "-Werror -nostdinc",
-        "CFLAGS": "-Werror -nostdinc"
+        "CXXFLAGS": "-DCHAR_BIT=8 -Werror -nostdinc",
+        "CFLAGS": "-DCHAR_BIT=8 -Werror -nostdinc"
       },
       "cacheVariables": {
         "CMAKE_SYSTEM_NAME": "Generic",
