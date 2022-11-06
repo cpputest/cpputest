@@ -16,6 +16,6 @@ set(CMAKE_C_COMPILER "${EW_ROOT_DIR}/bin/iccarm.exe" "${CPU_FLAGS} --dlib_config
 set(CMAKE_CXX_COMPILER "${EW_ROOT_DIR}/bin/iccarm.exe" "${CPU_FLAGS} --dlib_config normal")
 set(CMAKE_ASM_COMPILER "${EW_ROOT_DIR}/bin/iasmarm.exe" "${CPU_FLAGS}")
 
-# Build with cmake -S. -Bbuild -G "NMake Makefiles" -DCMAKE_TOOLCHAIN_FILE=cmake/ewarm-win.toolchain.cmake
+# Build with cmake -S. -Bbuild -G "NMake Makefiles" -DCMAKE_TOOLCHAIN_FILE=cmake/Toolchains/ewarm-win.toolchain.cmake
 
 ### END CMAKE_TOOLCHAIN_FILE

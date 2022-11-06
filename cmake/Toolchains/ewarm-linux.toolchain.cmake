@@ -16,6 +16,6 @@ set(CMAKE_C_COMPILER "${EW_ROOT_DIR}/bin/iccarm" "${CPU_FLAGS} --dlib_config nor
 set(CMAKE_CXX_COMPILER "${EW_ROOT_DIR}/bin/iccarm" "${CPU_FLAGS} --dlib_config normal")
 set(CMAKE_ASM_COMPILER "${EW_ROOT_DIR}/bin/iasmarm" "${CPU_FLAGS}")
 
-# Build with cmake -S. -Bbuild -G "Unix Makefiles" -DCMAKE_TOOLCHAIN_FILE=cmake/ewarm-linux.toolchain.cmake
+# Build with cmake -S. -Bbuild -G "Unix Makefiles" -DCMAKE_TOOLCHAIN_FILE=cmake/Toolchains/ewarm-linux.toolchain.cmake
 
 ### END CMAKE_TOOLCHAIN_FILE
