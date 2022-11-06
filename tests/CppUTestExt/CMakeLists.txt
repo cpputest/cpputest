@@ -37,7 +37,6 @@ if(MINGW)
     endif()
 endif()
 
-cpputest_normalize_test_output_location(CppUTestExtTests)
 target_link_libraries(CppUTestExtTests
     PRIVATE
         ${CppUTestLibName}
@@ -53,7 +52,8 @@ if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.13")
     )
 endif()
 
-if (CPPUTEST_TEST_DISCOVERY)
+if(CPPUTEST_TEST_DISCOVERY)
+    include(CppUTestBuildTimeDiscoverTests)
     cpputest_buildtime_discover_tests(CppUTestExtTests
         # TestOrderedTestMacros must run together
         DETAILED FALSE

@@ -126,8 +126,6 @@ include(CppUTestConfigurationOptions)
 if(PROJECT_IS_TOP_LEVEL)
   include(CppUTestWarningFlags)
 endif()
-include(CppUTestBuildTimeDiscoverTests)
-include(CppUTestNormalizeTestOutputLocation)
 include(GNUInstallDirs)
 
 # Check for symbols before setting a lot of stuff
