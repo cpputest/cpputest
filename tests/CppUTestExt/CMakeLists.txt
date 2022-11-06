@@ -53,9 +53,8 @@ if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.13")
 endif()
 
 if(CPPUTEST_TEST_DISCOVERY)
-    include(CppUTestBuildTimeDiscoverTests)
-    cpputest_buildtime_discover_tests(CppUTestExtTests
-        # TestOrderedTestMacros must run together
+    include(CppUTest)
+    cpputest_discover_tests(CppUTestExtTests
         DETAILED FALSE
     )
 endif()

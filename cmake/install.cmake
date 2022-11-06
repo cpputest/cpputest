@@ -63,7 +63,10 @@ install(
     DESTINATION "${CPPUTEST_CONFIG_DEST}/Scripts"
 )
 install(
-    FILES ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules/CppUTestBuildTimeDiscoverTests.cmake
+    FILES
+        ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules/CppUTestBuildTimeDiscoverTests.cmake
+        ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules/CppUTest.cmake
+        ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules/_CppUTestDiscovery.cmake
     DESTINATION "${CPPUTEST_CONFIG_DEST}/Modules"
 )
 configure_package_config_file(CppUTestConfig.cmake.build.in
