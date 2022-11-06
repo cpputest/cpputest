@@ -35,14 +35,17 @@ function(cpputest_discover_tests target)
         set(_DETAILED ${CPPUTEST_TESTS_DETAILED})
     endif()
 
+    set(CTEST_FILE "${CMAKE_CURRENT_BINARY_DIR}/CTestTestfile.cmake")
+
     add_custom_command(
         TARGET ${target} POST_BUILD
-        BYPRODUCTS "${CMAKE_CURRENT_BINARY_DIR}/CTestTestfile.cmake"
+        BYPRODUCTS "${CTEST_FILE}"
         COMMAND
             "${CMAKE_COMMAND}"
             -D "TESTS_DETAILED:BOOL=${_DETAILED}"
             -D "EXECUTABLE=$<TARGET_FILE:${target}>"
             -D "EMULATOR=$<TARGET_PROPERTY:${target},CROSSCOMPILING_EMULATOR>"
+            -D "CTEST_FILE=${CTEST_FILE}"
             -P "${_CPPUTEST_DISCOVERY_SCRIPT}"
         WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
         VERBATIM
