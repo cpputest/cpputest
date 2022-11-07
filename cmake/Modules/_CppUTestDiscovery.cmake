@@ -31,7 +31,7 @@ endif()
 
 execute_process(
     COMMAND ${EMULATOR} "${EXECUTABLE}" ${discovery_arg}
-    OUTPUT_VARIABLE output
+    OUTPUT_VARIABLE discovered_tests
     RESULT_VARIABLE result
     ERROR_VARIABLE error
 )
@@ -41,15 +41,16 @@ if(NOT ${result} EQUAL 0)
         "${error}"
     )
 endif()
-separate_arguments(output)
-foreach(test IN LISTS output)
+separate_arguments(discovered_tests)
+foreach(test_name IN LISTS discovered_tests)
     add_command(
         add_test
-        "${test}"
+        "${test_name}"
         ${EMULATOR}
         "${EXECUTABLE}"
+        ${ARGS}
         ${select_arg}
-        ${test}
+        ${test_name}
     )
 endforeach()
 
