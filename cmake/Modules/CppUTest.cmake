@@ -35,21 +35,54 @@ function(cpputest_discover_tests target)
         set(_DETAILED ${CPPUTEST_TESTS_DETAILED})
     endif()
 
-    set(CTEST_FILE "${CMAKE_CURRENT_BINARY_DIR}/CTestTestfile.cmake")
+    set(CTEST_INCLUDE_FILE "${CMAKE_CURRENT_BINARY_DIR}/${target}_include.cmake")
+    set(CTEST_GENERATED_FILE "${CMAKE_CURRENT_BINARY_DIR}/${target}.cmake")
 
     add_custom_command(
         TARGET ${target} POST_BUILD
-        BYPRODUCTS "${CTEST_FILE}"
+        BYPRODUCTS "${CTEST_GENERATED_FILE}"
         COMMAND
             "${CMAKE_COMMAND}"
             -D "TESTS_DETAILED:BOOL=${_DETAILED}"
             -D "EXECUTABLE=$<TARGET_FILE:${target}>"
             -D "EMULATOR=$<TARGET_PROPERTY:${target},CROSSCOMPILING_EMULATOR>"
-            -D "CTEST_FILE=${CTEST_FILE}"
+            -D "CTEST_FILE=${CTEST_GENERATED_FILE}"
             -P "${_CPPUTEST_DISCOVERY_SCRIPT}"
         WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
         VERBATIM
     )
+
+    file(WRITE "${CTEST_INCLUDE_FILE}"
+        "if(EXISTS \"${CTEST_GENERATED_FILE}\")\n"
+        "  include(\"${CTEST_GENERATED_FILE}\")\n"
+        "else()\n"
+        "  add_test(${target}_NOT_BUILT ${target}_NOT_BUILT)\n"
+        "endif()\n"
+    )
+
+    if(${CMAKE_VERSION} VERSION_LESS "3.10")
+        # We can only set one.
+        get_property(already_set
+            DIRECTORY
+            PROPERTY TEST_INCLUDE_FILE
+            SET
+        )
+        if(${already_set})
+            message(FATAL_ERROR
+                "Cannot discovery multiple tests from the same file"
+            )
+        endif()
+        set_property(
+            DIRECTORY
+            PROPERTY TEST_INCLUDE_FILE "${CTEST_INCLUDE_FILE}"
+        )
+    else()
+        set_property(
+            DIRECTORY APPEND
+            PROPERTY TEST_INCLUDE_FILES "${CTEST_INCLUDE_FILE}"
+        )
+    endif()
+
 endfunction()
 
 set(_CPPUTEST_DISCOVERY_SCRIPT ${CMAKE_CURRENT_LIST_DIR}/_CppUTestDiscovery.cmake
