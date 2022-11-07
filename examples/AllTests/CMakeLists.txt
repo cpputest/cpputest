@@ -25,5 +25,7 @@ target_link_libraries(ExampleTests
 
 include(CppUTestBuildTimeDiscoverTests)
 if(CPPUTEST_TEST_DISCOVERY OR NOT DEFINED CPPUTEST_TEST_DISCOVERY)
-    cpputest_buildtime_discover_tests(ExampleTests)
+    cpputest_buildtime_discover_tests(ExampleTests
+        DETAILED TRUE
+    )
 endif()

@@ -98,9 +98,16 @@
     },
     {
       "name": "no-long-long",
-      "inherits":["GNU"],
+      "inherits": ["GNU"],
       "cacheVariables": {
         "CPPUTEST_USE_LONG_LONG": false
+      }
+    },
+    {
+      "name": "detailed",
+      "inherits": ["defaults"],
+      "cacheVariables": {
+        "CPPUTEST_TESTS_DETAILED": true
       }
     },
     {

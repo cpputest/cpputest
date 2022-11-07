@@ -96,6 +96,10 @@ jobs:
             os: ubuntu-latest
             cpp_version: 98
             preset: no-long-long
+          - name: Detailed
+            os: ubuntu-latest
+            cpp_version: 98
+            preset: detailed
           - name: Linux GNU Install
             os: ubuntu-latest
             cpp_version: 11
