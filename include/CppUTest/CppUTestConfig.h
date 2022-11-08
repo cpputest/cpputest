@@ -239,6 +239,17 @@
 #endif
 
 /*
+ * Detection of run-time type information (RTTI) presence
+ */
+#ifndef CPPUTEST_HAVE_RTTI
+  #if defined(_CPPRTTI) || defined(__GXX_RTTI) || defined(__RTTI) || (defined(__cpp_rtti) && __cpp_rtti)
+    #define CPPUTEST_HAVE_RTTI 1
+  #else
+    #define CPPUTEST_HAVE_RTTI 0
+  #endif
+#endif
+
+/*
  * Detection of different 64 bit environments
  */
 

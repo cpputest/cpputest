@@ -395,7 +395,7 @@ UnexpectedExceptionFailure::UnexpectedExceptionFailure(UtestShell* test)
 
 static SimpleString getExceptionTypeName(const std::exception &e)
 {
-#if defined(_CPPRTTI) || defined(__GXX_RTTI)
+#if CPPUTEST_HAVE_RTTI
     const char *name = typeid(e).name();
 #if defined(__GNUC__) && (__cplusplus >= 201103L)
     int status = -1;
