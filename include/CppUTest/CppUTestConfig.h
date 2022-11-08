@@ -260,13 +260,14 @@
 #endif
 #endif
 
-/* Handling of systems with a different byte-width (e.g. 16 bit).
- * Since CHAR_BIT is defined in limits.h (ANSI C), use default of 8 when building without Std C library.
+/* Handling of systems with a different byte-width (e.g. 16 bit). Since
+ * CHAR_BIT is defined in limits.h (ANSI C), the user must provide a definition
+ * when building without Std C library.
  */
-#if CPPUTEST_USE_STD_C_LIB
-#define CPPUTEST_CHAR_BIT CHAR_BIT
+#if defined(CHAR_BIT) && !defined(CPPUTEST_CHAR_BIT)
+  #define CPPUTEST_CHAR_BIT CHAR_BIT
 #else
-#define CPPUTEST_CHAR_BIT 8
+  #error "Provide a definition for CPPUTEST_CHAR_BIT"
 #endif
 
 /* Handling of systems with a different int-width (e.g. 16 bit).

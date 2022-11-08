@@ -1140,7 +1140,7 @@ TEST(SimpleString, MaskedBitsChar)
     STRCMP_EQUAL("xxxxxxxx xxxxxxx1", StringFromMaskedBits(0x01, 0x01, 1).asCharString());
     STRCMP_EQUAL("xxxxxxxx 11xx11xx", StringFromMaskedBits(0xFF, 0xCC, 1).asCharString());
 }
-#else
+#elif (CPPUTEST_CHAR_BIT == 8)
 TEST(SimpleString, MaskedBitsChar)
 {
     STRCMP_EQUAL("xxxxxxxx", StringFromMaskedBits(0x00, 0x00, 1).asCharString());

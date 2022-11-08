@@ -727,7 +727,7 @@ TEST(UnitTestMacros, FailureWithSIGNED_BYTES_EQUAL)
 #if CPPUTEST_CHAR_BIT == 16
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <-1 (0xffff)>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <-2 (0xfffe)>");
-#else
+#elif CPPUTEST_CHAR_BIT == 8
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <-1 (0xff)>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <-2 (0xfe)>");
 #endif

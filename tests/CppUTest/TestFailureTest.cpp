@@ -401,7 +401,7 @@ TEST(TestFailure, BitsEqualChar)
     BitsEqualFailure f(test, failFileName, failLineNumber, 0x01, 0x03, 0xFF, sizeof(char), "");
     FAILURE_EQUAL("expected <xxxxxxxx 00000001>\n\tbut was  <xxxxxxxx 00000011>", f);
 }
-#else
+#elif (CPPUTEST_CHAR_BIT == 8)
 TEST(TestFailure, BitsEqualChar)
 {
     BitsEqualFailure f(test, failFileName, failLineNumber, 0x01, 0x03, 0xFF, sizeof(char), "");
