@@ -253,8 +253,10 @@
  * CHAR_BIT is defined in limits.h (ANSI C), the user must provide a definition
  * when building without Std C library.
  */
-#if !CPPUTEST_USE_STD_C_LIB && !defined(CHAR_BIT)
-  #error "Provide a definition for CHAR_BIT"
+#if defined(CHAR_BIT) && !defined(CPPUTEST_CHAR_BIT)
+  #define CPPUTEST_CHAR_BIT CHAR_BIT
+#else
+  #error "Provide a definition for CPPUTEST_CHAR_BIT"
 #endif
 
 /* Handling of systems with a different int-width (e.g. 16 bit).

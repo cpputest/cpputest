@@ -1130,7 +1130,7 @@ TEST(SimpleString, MemCmpFirstLastNotMatching)
     CHECK(0 != SimpleString::MemCmp(base, lastNotMatching, sizeof(base)));
 }
 
-#if (CHAR_BIT == 16)
+#if (CPPUTEST_CHAR_BIT == 16)
 TEST(SimpleString, MaskedBitsChar)
 {
     STRCMP_EQUAL("xxxxxxxx xxxxxxxx", StringFromMaskedBits(0x00, 0x00, 1).asCharString());
@@ -1140,7 +1140,7 @@ TEST(SimpleString, MaskedBitsChar)
     STRCMP_EQUAL("xxxxxxxx xxxxxxx1", StringFromMaskedBits(0x01, 0x01, 1).asCharString());
     STRCMP_EQUAL("xxxxxxxx 11xx11xx", StringFromMaskedBits(0xFF, 0xCC, 1).asCharString());
 }
-#elif (CHAR_BIT == 8)
+#elif (CPPUTEST_CHAR_BIT == 8)
 TEST(SimpleString, MaskedBitsChar)
 {
     STRCMP_EQUAL("xxxxxxxx", StringFromMaskedBits(0x00, 0x00, 1).asCharString());
@@ -1154,22 +1154,22 @@ TEST(SimpleString, MaskedBitsChar)
 
 TEST(SimpleString, MaskedBits16Bit)
 {
-    STRCMP_EQUAL("xxxxxxxx xxxxxxxx", StringFromMaskedBits(0x0000, 0x0000, 2*8/CHAR_BIT).asCharString());
-    STRCMP_EQUAL("00000000 00000000", StringFromMaskedBits(0x0000, 0xFFFF, 2*8/CHAR_BIT).asCharString());
-    STRCMP_EQUAL("11111111 11111111", StringFromMaskedBits(0xFFFF, 0xFFFF, 2*8/CHAR_BIT).asCharString());
-    STRCMP_EQUAL("1xxxxxxx xxxxxxxx", StringFromMaskedBits(0x8000, 0x8000, 2*8/CHAR_BIT).asCharString());
-    STRCMP_EQUAL("xxxxxxxx xxxxxxx1", StringFromMaskedBits(0x0001, 0x0001, 2*8/CHAR_BIT).asCharString());
-    STRCMP_EQUAL("11xx11xx 11xx11xx", StringFromMaskedBits(0xFFFF, 0xCCCC, 2*8/CHAR_BIT).asCharString());
+    STRCMP_EQUAL("xxxxxxxx xxxxxxxx", StringFromMaskedBits(0x0000, 0x0000, 2*8/CPPUTEST_CHAR_BIT).asCharString());
+    STRCMP_EQUAL("00000000 00000000", StringFromMaskedBits(0x0000, 0xFFFF, 2*8/CPPUTEST_CHAR_BIT).asCharString());
+    STRCMP_EQUAL("11111111 11111111", StringFromMaskedBits(0xFFFF, 0xFFFF, 2*8/CPPUTEST_CHAR_BIT).asCharString());
+    STRCMP_EQUAL("1xxxxxxx xxxxxxxx", StringFromMaskedBits(0x8000, 0x8000, 2*8/CPPUTEST_CHAR_BIT).asCharString());
+    STRCMP_EQUAL("xxxxxxxx xxxxxxx1", StringFromMaskedBits(0x0001, 0x0001, 2*8/CPPUTEST_CHAR_BIT).asCharString());
+    STRCMP_EQUAL("11xx11xx 11xx11xx", StringFromMaskedBits(0xFFFF, 0xCCCC, 2*8/CPPUTEST_CHAR_BIT).asCharString());
 }
 
 TEST(SimpleString, MaskedBits32Bit)
 {
-    STRCMP_EQUAL("xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx", StringFromMaskedBits(0x00000000, 0x00000000, 4*8/CHAR_BIT).asCharString());
-    STRCMP_EQUAL("00000000 00000000 00000000 00000000", StringFromMaskedBits(0x00000000, 0xFFFFFFFF, 4*8/CHAR_BIT).asCharString());
-    STRCMP_EQUAL("11111111 11111111 11111111 11111111", StringFromMaskedBits(0xFFFFFFFF, 0xFFFFFFFF, 4*8/CHAR_BIT).asCharString());
-    STRCMP_EQUAL("1xxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx", StringFromMaskedBits(0x80000000, 0x80000000, 4*8/CHAR_BIT).asCharString());
-    STRCMP_EQUAL("xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxx1", StringFromMaskedBits(0x00000001, 0x00000001, 4*8/CHAR_BIT).asCharString());
-    STRCMP_EQUAL("11xx11xx 11xx11xx 11xx11xx 11xx11xx", StringFromMaskedBits(0xFFFFFFFF, 0xCCCCCCCC, 4*8/CHAR_BIT).asCharString());
+    STRCMP_EQUAL("xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx", StringFromMaskedBits(0x00000000, 0x00000000, 4*8/CPPUTEST_CHAR_BIT).asCharString());
+    STRCMP_EQUAL("00000000 00000000 00000000 00000000", StringFromMaskedBits(0x00000000, 0xFFFFFFFF, 4*8/CPPUTEST_CHAR_BIT).asCharString());
+    STRCMP_EQUAL("11111111 11111111 11111111 11111111", StringFromMaskedBits(0xFFFFFFFF, 0xFFFFFFFF, 4*8/CPPUTEST_CHAR_BIT).asCharString());
+    STRCMP_EQUAL("1xxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx", StringFromMaskedBits(0x80000000, 0x80000000, 4*8/CPPUTEST_CHAR_BIT).asCharString());
+    STRCMP_EQUAL("xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxx1", StringFromMaskedBits(0x00000001, 0x00000001, 4*8/CPPUTEST_CHAR_BIT).asCharString());
+    STRCMP_EQUAL("11xx11xx 11xx11xx 11xx11xx 11xx11xx", StringFromMaskedBits(0xFFFFFFFF, 0xCCCCCCCC, 4*8/CPPUTEST_CHAR_BIT).asCharString());
 }
 
 TEST(SimpleString, StringFromOrdinalNumberOnes)
