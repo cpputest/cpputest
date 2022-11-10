@@ -326,7 +326,7 @@ TEST(MockExpectedCall, callWithMemoryBuffer)
     const unsigned char value[] = { 0x12, 0xFE, 0xA1 };
     call->withParameter(paramName, value, sizeof(value));
     STRCMP_EQUAL("const unsigned char*", call->getInputParameterType(paramName).asCharString());
-    POINTERS_EQUAL( (void*) value, (void*) call->getInputParameter(paramName).getMemoryBuffer() );
+    POINTERS_EQUAL(value, call->getInputParameter(paramName).getMemoryBuffer());
     LONGS_EQUAL(sizeof(value),  call->getInputParameter(paramName).getSize());
     STRCMP_CONTAINS("funcName -> const unsigned char* paramName: <Size = 3 | HexContents = 12 FE A1>", call->callToString().asCharString());
 }
