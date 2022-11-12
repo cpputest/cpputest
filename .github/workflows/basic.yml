@@ -137,6 +137,10 @@ jobs:
             os: ubuntu-latest
             preset: coverage
             apt_packages: lcov
+          - name: Google Test
+            os: ubuntu-latest
+            cmake_args: -DCMAKE_CXX_STANDARD=98
+            preset: gtest
           - name: GCC ARM embedded
             os: ubuntu-latest
             preset: arm-embedded

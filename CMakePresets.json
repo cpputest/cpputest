@@ -127,6 +127,13 @@
       }
     },
     {
+      "name": "gtest",
+      "inherits": ["defaults"],
+      "cacheVariables": {
+        "CPPUTEST_TEST_GTEST": true
+      }
+    },
+    {
       "name": "IAR",
       "inherits": ["defaults"],
       "cacheVariables": {

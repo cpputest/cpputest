@@ -36,10 +36,28 @@ if(CPPUTEST_STD_C_LIB_DISABLED)
     )
 endif()
 
-find_package(GTest)
-if(GTEST_FOUND)
-    target_compile_definitions(CppUTestExtTests PRIVATE INCLUDE_GTEST_TESTS)
+if(CPPUTEST_TEST_GTEST)
+    find_package(GTest)
+    if(NOT GTest_FOUND)
+        if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.11")
+            include(FetchContent)
+            FetchContent_Declare(googletest
+                URL https://github.com/google/googletest/archive/release-1.8.0.zip
+            )
+            if(NOT googletest_POPULATED)
+                FetchContent_Populate(googletest)
+                add_subdirectory(${googletest_SOURCE_DIR} ${googletest_BINARY_DIR})
+            endif()
+            set(GTEST_LIBRARIES gmock gtest)
+        else()
+            # FetchContent is not supported.
+            message(FATAL_ERROR
+                "GTest not found"
+            )
+        endif()
+    endif()
     target_link_libraries(CppUTestExtTests PRIVATE ${GTEST_LIBRARIES})
+    target_compile_definitions(CppUTestExtTests PRIVATE CPPUTEST_INCLUDE_GTEST_TESTS)
 endif()
 
 if(MINGW)
