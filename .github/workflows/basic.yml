@@ -196,7 +196,9 @@ jobs:
       # POST PROCESSING
 
       - name: Install (*nix)
-        run: sudo cmake --install cpputest_build/
+        run: |
+          sudo cmake --install cpputest_build/
+          pkg-config --print-provides cpputest
         if: ${{ matrix.install && !startswith(matrix.os, 'windows')}}
       - name: Install (Windows)
         run: cmake --install cpputest_build/ --config=Debug
