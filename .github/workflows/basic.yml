@@ -141,7 +141,8 @@ jobs:
             os: ubuntu-latest
             cmake_args: -DCMAKE_CXX_STANDARD=98
             preset: gtest
-            apt_packages: python2
+            ctest_args: -C Debug
+            apt_packages: python2 ninja-build
           - name: GCC ARM embedded
             os: ubuntu-latest
             preset: arm-embedded
@@ -216,7 +217,11 @@ jobs:
       - name: Build
         run: cmake --build cpputest_build --verbose -j
       - name: Test
-        run: ctest --test-dir cpputest_build ${{ matrix.ctest_args }}
+        run: >
+          ctest
+          --test-dir cpputest_build
+          ${{ matrix.ctest_args }}
+          --output-on-failure
 
       # POST PROCESSING
 
