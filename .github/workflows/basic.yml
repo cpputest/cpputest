@@ -141,6 +141,7 @@ jobs:
             os: ubuntu-latest
             cmake_args: -DCMAKE_CXX_STANDARD=98
             preset: gtest
+            apt_packages: python2
           - name: GCC ARM embedded
             os: ubuntu-latest
             preset: arm-embedded

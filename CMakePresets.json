@@ -130,7 +130,8 @@
       "name": "gtest",
       "inherits": ["defaults"],
       "cacheVariables": {
-        "CPPUTEST_TEST_GTEST": true
+        "CPPUTEST_TEST_GTEST": true,
+        "gtest_build_tests": true
       }
     },
     {
