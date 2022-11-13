@@ -427,13 +427,14 @@ TEST(TestFailure, FeatureUnsupported)
     FAILURE_EQUAL("The feature \"SOME_FEATURE\" is not supported in this environment or with the feature set selected when building the library.", f);
 }
 
-#if CPPUTEST_USE_STD_CPP_LIB
+#if CPPUTEST_HAVE_EXCEPTIONS
 TEST(TestFailure, UnexpectedExceptionFailure_UnknownException)
 {
     UnexpectedExceptionFailure f(test);
     FAILURE_EQUAL("Unexpected exception of unknown type was thrown.", f);
 }
 
+#if CPPUTEST_USE_STD_CPP_LIB && CPPUTEST_HAVE_RTTI
 TEST(TestFailure, UnexpectedExceptionFailure_StandardException)
 {
     std::runtime_error e("Some error");
@@ -442,4 +443,5 @@ TEST(TestFailure, UnexpectedExceptionFailure_StandardException)
     STRCMP_CONTAINS("runtime_error", f.getMessage().asCharString());
     STRCMP_CONTAINS("' was thrown: Some error", f.getMessage().asCharString());
 }
-#endif
+#endif // CPPUTEST_USE_STD_CPP_LIB
+#endif // CPPUTEST_HAVE_EXCEPTIONS

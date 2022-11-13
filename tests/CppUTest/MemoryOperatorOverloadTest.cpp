@@ -419,8 +419,9 @@ TEST_GROUP(OutOfMemoryTestsForOperatorNew)
 
 #if CPPUTEST_USE_MEM_LEAK_DETECTION
 
-#if CPPUTEST_USE_STD_CPP_LIB
+#if CPPUTEST_HAVE_EXCEPTIONS
 
+#if CPPUTEST_USE_STD_CPP_LIB
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorThrowsAnExceptionWhenUsingStdCppNew)
 {
     CHECK_THROWS(std::bad_alloc, new char);
@@ -430,6 +431,7 @@ TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorThrowsAnExceptionWhe
 {
     CHECK_THROWS(std::bad_alloc, new char[10]);
 }
+#endif
 
 TEST_GROUP(TestForExceptionsInConstructor)
 {
@@ -461,7 +463,7 @@ TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorReturnsNull)
 
 #undef new
 
-#if CPPUTEST_USE_STD_CPP_LIB
+#if CPPUTEST_HAVE_EXCEPTIONS && CPPUTEST_USE_STD_CPP_LIB
 
 
 /*

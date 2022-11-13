@@ -233,7 +233,7 @@ void UtestShell::runOneTestInCurrentProcess(TestPlugin* plugin, TestResult& resu
 
     Utest* testToRun = NULLPTR;
 
-#if CPPUTEST_USE_STD_CPP_LIB
+#if CPPUTEST_HAVE_EXCEPTIONS
     try
     {
 #endif
@@ -247,7 +247,7 @@ void UtestShell::runOneTestInCurrentProcess(TestPlugin* plugin, TestResult& resu
 
         UtestShell::setCurrentTest(savedTest);
         UtestShell::setTestResult(savedResult);
-#if CPPUTEST_USE_STD_CPP_LIB
+#if CPPUTEST_HAVE_EXCEPTIONS
     }
     catch(...)
     {
@@ -656,7 +656,7 @@ Utest::~Utest()
 {
 }
 
-#if CPPUTEST_USE_STD_CPP_LIB
+#if CPPUTEST_HAVE_EXCEPTIONS
 
 void Utest::run()
 {
@@ -677,6 +677,7 @@ void Utest::run()
     {
         PlatformSpecificRestoreJumpBuffer();
     }
+#if CPPUTEST_USE_STD_CPP_LIB
     catch (const std::exception &e)
     {
         current->addFailure(UnexpectedExceptionFailure(current, e));
@@ -686,6 +687,7 @@ void Utest::run()
             throw;
         }
     }
+#endif
     catch (...)
     {
         current->addFailure(UnexpectedExceptionFailure(current));
@@ -705,6 +707,7 @@ void Utest::run()
     {
         PlatformSpecificRestoreJumpBuffer();
     }
+#if CPPUTEST_USE_STD_CPP_LIB
     catch (const std::exception &e)
     {
         current->addFailure(UnexpectedExceptionFailure(current, e));
@@ -714,6 +717,7 @@ void Utest::run()
             throw;
         }
     }
+#endif
     catch (...)
     {
         current->addFailure(UnexpectedExceptionFailure(current));
@@ -757,7 +761,7 @@ TestTerminator::~TestTerminator()
 
 void NormalTestTerminator::exitCurrentTest() const
 {
-    #if CPPUTEST_USE_STD_CPP_LIB
+    #if CPPUTEST_HAVE_EXCEPTIONS
         throw CppUTestFailedException();
     #else
         TestTerminatorWithoutExceptions().exitCurrentTest();

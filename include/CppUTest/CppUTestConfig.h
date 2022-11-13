@@ -238,14 +238,31 @@
 #endif
 #endif
 
-/*
- * Detection of run-time type information (RTTI) presence
- */
-#ifndef CPPUTEST_HAVE_RTTI
-  #if defined(_CPPRTTI) || defined(__GXX_RTTI) || defined(__RTTI) || (defined(__cpp_rtti) && __cpp_rtti)
-    #define CPPUTEST_HAVE_RTTI 1
-  #else
-    #define CPPUTEST_HAVE_RTTI 0
+#ifdef __cplusplus
+  /*
+   * Detection of run-time type information (RTTI) presence
+   */
+  #ifndef CPPUTEST_HAVE_RTTI
+    #if ((__cplusplus >= 202002L) && !defined(__cpp_rtti)) || \
+        (defined(_MSC_VER) && !defined(_CPPRTTI)) || \
+        (defined(__GNUC__) && !defined(__GXX_RTTI)) || \
+        (defined(__ghs__) && !defined(__RTTI))
+      #define CPPUTEST_HAVE_RTTI 0
+    #else
+      #define CPPUTEST_HAVE_RTTI 1
+    #endif
+  #endif
+  
+  /*
+   * Detection of exception support
+   */
+  #ifndef CPPUTEST_HAVE_EXCEPTIONS
+    #if ((__cplusplus >= 202002L) && !defined(__cpp_exceptions)) || \
+        (defined(__GNUC__) && !defined(__EXCEPTIONS))
+      #define CPPUTEST_HAVE_EXCEPTIONS 0
+    #else
+      #define CPPUTEST_HAVE_EXCEPTIONS 1
+    #endif
   #endif
 #endif
 

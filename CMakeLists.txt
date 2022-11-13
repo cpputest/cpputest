@@ -29,18 +29,12 @@ include(CTest)
 include(CMakeDependentOption)
 option(CPPUTEST_STD_C_LIB_DISABLED "Disable the standard C library")
 
-include(CheckCXXSourceCompiles)
-check_cxx_source_compiles(
-  "int main(int argc, char ** argv) { throw 20; }"
-  CPPUTEST_HAVE_EXCEPTIONS
-)
-
 if((CMAKE_CXX_COMPILER_ID STREQUAL "Clang") AND (CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC"))
   set(is_clang_cl TRUE)
 endif()
 
 cmake_dependent_option(CPPUTEST_STD_CPP_LIB_DISABLED "Use the standard C++ library"
-  OFF "NOT CPPUTEST_STD_C_LIB_DISABLED;CPPUTEST_HAVE_EXCEPTIONS" ON)
+  OFF "NOT CPPUTEST_STD_C_LIB_DISABLED" ON)
 option(CPPUTEST_FLAGS "Use the CFLAGS/CXXFLAGS/LDFLAGS set by CppUTest" ${PROJECT_IS_TOP_LEVEL})
 cmake_dependent_option(CPPUTEST_MEM_LEAK_DETECTION_DISABLED "Enable memory leak detection"
   OFF "CPPUTEST_FLAGS;NOT BORLAND;NOT CPPUTEST_STD_C_LIB_DISABLED;NOT is_clang_cl" ON)
@@ -133,7 +127,13 @@ include(GNUInstallDirs)
 # Check for symbols before setting a lot of stuff
 include(CheckTypeSize)
 include(CheckStructHasMember)
+include(CheckCXXSourceCompiles)
 set(CMAKE_REQUIRED_FLAGS ${CMAKE_CXX_FLAGS})
+
+check_cxx_source_compiles(
+  "int main(int argc, char ** argv) { throw 20; }"
+  CPPUTEST_HAVE_EXCEPTIONS
+)
 
 check_cxx_source_compiles(
   "#include <typeinfo>

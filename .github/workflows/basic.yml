@@ -126,6 +126,14 @@ jobs:
             os: ubuntu-latest
             cpp_version: 98
             preset: no-std-cpp
+          - name: No Exceptions
+            os: ubuntu-latest
+            cpp_version: 98
+            preset: no-exceptions
+          - name: No RTTI
+            os: ubuntu-latest
+            cpp_version: 98
+            preset: no-rtti
           - name: Coverage
             os: ubuntu-latest
             cpp_version: 11
