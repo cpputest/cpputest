@@ -134,6 +134,14 @@ include(GNUInstallDirs)
 include(CheckTypeSize)
 include(CheckStructHasMember)
 set(CMAKE_REQUIRED_FLAGS ${CMAKE_CXX_FLAGS})
+
+check_cxx_source_compiles(
+  "#include <typeinfo>
+  class A {};
+  int main(int argc, char ** argv) { A a; typeid(a); }"
+  CPPUTEST_HAVE_RTTI
+)
+
 check_cxx_symbol_exists(FE_DIVBYZERO "fenv.h" CPPUTEST_HAVE_FENV)
 check_cxx_symbol_exists(fork "unistd.h" CPPUTEST_HAVE_FORK)
 check_cxx_symbol_exists(waitpid "sys/wait.h" CPPUTEST_HAVE_WAITPID)
