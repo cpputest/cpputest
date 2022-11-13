@@ -254,6 +254,22 @@
       #define CPPUTEST_HAVE_RTTI 1
     #endif
   #endif
+
+  /*
+   * Detection of exception support. Since it's a standard language feature,
+   * assume it is enabled unless we see otherwise.
+   */
+  #ifndef CPPUTEST_HAVE_EXCEPTIONS
+    #if ((__cplusplus >= 202002L) && !__cpp_exceptions) || \
+        (defined(_MSC_VER) && !_CPPUNWIND) || \
+        (defined(__GNUC__) && !__EXCEPTIONS) || \
+        (defined(__ghs__) && !__EXCEPTION_HANDLING) || \
+        (defined(__WATCOMC__) && !_CPPUNWIND)
+      #define CPPUTEST_HAVE_EXCEPTIONS 0
+    #else
+      #define CPPUTEST_HAVE_EXCEPTIONS 1
+    #endif
+  #endif
 #endif
 
 /*

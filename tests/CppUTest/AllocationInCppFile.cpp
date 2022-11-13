@@ -27,7 +27,7 @@ char* newArrayAllocationWithoutMacro()
     return new char[100];
 }
 
-#if CPPUTEST_USE_STD_CPP_LIB
+#if CPPUTEST_HAVE_EXCEPTIONS
 
 ClassThatThrowsAnExceptionInTheConstructor::ClassThatThrowsAnExceptionInTheConstructor()
 {

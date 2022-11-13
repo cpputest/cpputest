@@ -363,7 +363,7 @@
 #define UT_PRINT(text) \
    UT_PRINT_LOCATION(text, __FILE__, __LINE__)
 
-#if CPPUTEST_USE_STD_CPP_LIB
+#if CPPUTEST_HAVE_EXCEPTIONS
 #define CHECK_THROWS(expected, expression) \
     do { \
     SimpleString failure_msg("expected to throw "#expected "\nbut threw nothing"); \
@@ -382,7 +382,7 @@
         UtestShell::getCurrent()->countCheck(); \
     } \
     } while(0)
-#endif /* CPPUTEST_USE_STD_CPP_LIB */
+#endif /* CPPUTEST_HAVE_EXCEPTIONS */
 
 #define UT_CRASH() do { UtestShell::crash(); } while(0)
 #define RUN_ALL_TESTS(ac, av) CommandLineTestRunner::RunAllTests(ac, av)

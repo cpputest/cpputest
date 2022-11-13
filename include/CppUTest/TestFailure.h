@@ -186,12 +186,14 @@ public:
     FeatureUnsupportedFailure(UtestShell* test, const char* fileName, size_t lineNumber, const SimpleString& featureName, const SimpleString& text);
 };
 
-#if CPPUTEST_USE_STD_CPP_LIB
+#if CPPUTEST_HAVE_EXCEPTIONS
 class UnexpectedExceptionFailure : public TestFailure
 {
 public:
     UnexpectedExceptionFailure(UtestShell* test);
+#if CPPUTEST_USE_STD_CPP_LIB
     UnexpectedExceptionFailure(UtestShell* test, const std::exception &e);
+#endif
 };
 #endif
 

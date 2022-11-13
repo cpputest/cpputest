@@ -419,16 +419,22 @@ TEST_GROUP(OutOfMemoryTestsForOperatorNew)
 
 #if CPPUTEST_USE_MEM_LEAK_DETECTION
 
+#if CPPUTEST_HAVE_EXCEPTIONS
+
 #if CPPUTEST_USE_STD_CPP_LIB
+#define BAD_ALLOC std::bad_alloc
+#else
+#define BAD_ALLOC int
+#endif
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorThrowsAnExceptionWhenUsingStdCppNew)
 {
-    CHECK_THROWS(std::bad_alloc, new char);
+    CHECK_THROWS(BAD_ALLOC, new char);
 }
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorThrowsAnExceptionWhenUsingStdCppNew)
 {
-    CHECK_THROWS(std::bad_alloc, new char[10]);
+    CHECK_THROWS(BAD_ALLOC, new char[10]);
 }
 
 TEST_GROUP(TestForExceptionsInConstructor)
@@ -461,7 +467,7 @@ TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorReturnsNull)
 
 #undef new
 
-#if CPPUTEST_USE_STD_CPP_LIB
+#if CPPUTEST_HAVE_EXCEPTIONS
 
 
 /*
@@ -500,14 +506,15 @@ char* some_memory;
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorThrowsAnExceptionWhenUsingStdCppNewWithoutOverride)
 {
-    CHECK_THROWS(std::bad_alloc, some_memory = new char);
+    CHECK_THROWS(BAD_ALLOC, some_memory = new char);
 }
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorThrowsAnExceptionWhenUsingStdCppNewWithoutOverride)
 {
-    CHECK_THROWS(std::bad_alloc, some_memory = new char[10]);
+    CHECK_THROWS(BAD_ALLOC, some_memory = new char[10]);
 }
 
+#if CPPUTEST_USE_STD_CPP_LIB
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorReturnsNullWithoutOverride)
 {
     POINTERS_EQUAL(NULLPTR, new (std::nothrow) char);
@@ -517,6 +524,7 @@ TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorReturnsNullWithoutOv
 {
     POINTERS_EQUAL(NULLPTR, new (std::nothrow) char[10]);
 }
+#endif
 
 #else
 

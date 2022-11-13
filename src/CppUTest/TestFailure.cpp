@@ -387,12 +387,13 @@ FeatureUnsupportedFailure::FeatureUnsupportedFailure(UtestShell* test, const cha
     message_ += StringFromFormat("The feature \"%s\" is not supported in this environment or with the feature set selected when building the library.", featureName.asCharString());
 }
 
-#if CPPUTEST_USE_STD_CPP_LIB
+#if CPPUTEST_HAVE_EXCEPTIONS
 UnexpectedExceptionFailure::UnexpectedExceptionFailure(UtestShell* test)
 : TestFailure(test, "Unexpected exception of unknown type was thrown.")
 {
 }
 
+#if CPPUTEST_USE_STD_CPP_LIB
 #if CPPUTEST_HAVE_RTTI
 static SimpleString getExceptionTypeName(const std::exception &e)
 {
@@ -427,3 +428,4 @@ UnexpectedExceptionFailure::UnexpectedExceptionFailure(UtestShell* test, const s
 {
 }
 #endif // CPPUTEST_USE_STD_CPP_LIB
+#endif // CPPUTEST_HAVE_EXCEPTIONS
