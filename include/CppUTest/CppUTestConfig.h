@@ -246,7 +246,8 @@
     #if ((__cplusplus >= 202002L) && !defined(__cpp_rtti)) || \
         (defined(_MSC_VER) && !defined(_CPPRTTI)) || \
         (defined(__GNUC__) && !defined(__GXX_RTTI)) || \
-        (defined(__ghs__) && !defined(__RTTI))
+        (defined(__ghs__) && !defined(__RTTI)) || \
+        (defined(__WATCOMC__) && !defined(_CPPRTTI))
       #define CPPUTEST_HAVE_RTTI 0
     #else
       #define CPPUTEST_HAVE_RTTI 1
@@ -258,7 +259,8 @@
    */
   #ifndef CPPUTEST_HAVE_EXCEPTIONS
     #if ((__cplusplus >= 202002L) && !defined(__cpp_exceptions)) || \
-        (defined(__GNUC__) && !defined(__EXCEPTIONS))
+        (defined(__GNUC__) && !defined(__EXCEPTIONS)) || \
+        (defined(__WATCOMC__) && !defined(__CPPUNWIND))
       #define CPPUTEST_HAVE_EXCEPTIONS 0
     #else
       #define CPPUTEST_HAVE_EXCEPTIONS 1
