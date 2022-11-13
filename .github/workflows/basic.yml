@@ -68,6 +68,10 @@ jobs:
             os: windows-latest
             cpp_version: 17
             preset: ClangCL
+          - name: Windows Clang
+            os: windows-latest
+            cpp_version: 14
+            preset: Clang
           - name: Linux Clang 98
             os: ubuntu-latest
             cpp_version: 98
