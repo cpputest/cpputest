@@ -130,6 +130,10 @@ jobs:
             os: ubuntu-latest
             cpp_version: 98
             preset: no-rtti
+          - name: No C Standard Library
+            os: ubuntu-latest
+            cpp_version: 98
+            preset: no-std-c
           - name: Coverage
             os: ubuntu-latest
             cpp_version: 11
