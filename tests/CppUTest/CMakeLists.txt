@@ -36,6 +36,13 @@ add_executable(CppUTestTests
     TeamCityOutputTest.cpp
 )
 
+if(CPPUTEST_STD_C_LIB_DISABLED)
+    target_sources(CppUTestTests
+        PRIVATE
+            ${CMAKE_CURRENT_SOURCE_DIR}/../DummyUTestPlatform/DummyUTestPlatform.cpp
+    )
+endif()
+
 if(MINGW OR (${CMAKE_HOST_SYSTEM_NAME} MATCHES "OpenBSD"))
     set(THREADS_PREFER_PTHREAD_FLAG ON)
     find_package(Threads)

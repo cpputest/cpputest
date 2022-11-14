@@ -99,7 +99,6 @@
         "CFLAGS": "-DCPPUTEST_CHAR_BIT=8 -Werror -nostdinc"
       },
       "cacheVariables": {
-        "CMAKE_SYSTEM_NAME": "Generic",
         "CPPUTEST_STD_C_LIB_DISABLED": true
       }
     },
