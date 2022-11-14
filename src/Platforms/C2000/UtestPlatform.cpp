@@ -245,5 +245,6 @@ int (*PlatformSpecificRand)(void) = rand;
 void (*PlatformSpecificMutexLock)(PlatformSpecificMutex) = DummyMutexLock;
 void (*PlatformSpecificMutexUnlock)(PlatformSpecificMutex) = DummyMutexUnlock;
 void (*PlatformSpecificMutexDestroy)(PlatformSpecificMutex) = DummyMutexDestroy;
+void (*PlatformSpecificAbort)(void) = abort;
 
 }

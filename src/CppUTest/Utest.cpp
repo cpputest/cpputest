@@ -163,12 +163,7 @@ UtestShell::~UtestShell()
 {
 }
 
-static void defaultCrashMethod()
-{
-    abort();
-}
-
-static void (*pleaseCrashMeRightNow) () = defaultCrashMethod;
+static void (*pleaseCrashMeRightNow) () = PlatformSpecificAbort;
 
 void UtestShell::setCrashMethod(void (*crashme)())
 {
@@ -177,7 +172,7 @@ void UtestShell::setCrashMethod(void (*crashme)())
 
 void UtestShell::resetCrashMethod()
 {
-    pleaseCrashMeRightNow = defaultCrashMethod;
+    pleaseCrashMeRightNow = PlatformSpecificAbort;
 }
 
 void UtestShell::crash()
