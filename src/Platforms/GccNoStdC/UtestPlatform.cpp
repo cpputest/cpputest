@@ -80,3 +80,4 @@ void (*PlatformSpecificMutexDestroy)(PlatformSpecificMutex mtx) = NULLPTR;
 
 void (*PlatformSpecificSrand)(unsigned int) = NULLPTR;
 int (*PlatformSpecificRand)(void) = NULLPTR;
+void (*PlatformSpecificAbort)(void) = NULLPTR;

@@ -88,6 +88,7 @@ extern int (*PlatformSpecificRand)(void);
 extern void (*PlatformSpecificMutexLock)(PlatformSpecificMutex mtx);
 extern void (*PlatformSpecificMutexUnlock)(PlatformSpecificMutex mtx);
 extern void (*PlatformSpecificMutexDestroy)(PlatformSpecificMutex mtx);
+extern void (*PlatformSpecificAbort)(void);
 
 #ifdef __cplusplus
 }

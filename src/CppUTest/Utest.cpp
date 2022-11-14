@@ -163,24 +163,7 @@ UtestShell::~UtestShell()
 {
 }
 
-// LCOV_EXCL_START - actually covered but not in .gcno due to race condition
-#ifdef NEEDS_DISABLE_NULL_WARNING
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wnonnull"
-#endif /* NEEDS_DISABLE_NULL_WARNING */
-
-static void defaultCrashMethod()
-{
-    UtestShell* ptr = (UtestShell*) NULLPTR;
-    ptr->countTests();
-}
-
-#ifdef NEEDS_DISABLE_NULL_WARNING
-# pragma GCC diagnostic pop
-#endif /* NEEDS_DISABLE_NULL_WARNING */
-// LCOV_EXCL_STOP
-
-static void (*pleaseCrashMeRightNow) () = defaultCrashMethod;
+static void (*pleaseCrashMeRightNow) () = PlatformSpecificAbort;
 
 void UtestShell::setCrashMethod(void (*crashme)())
 {
@@ -189,7 +172,7 @@ void UtestShell::setCrashMethod(void (*crashme)())
 
 void UtestShell::resetCrashMethod()
 {
-    pleaseCrashMeRightNow = defaultCrashMethod;
+    pleaseCrashMeRightNow = PlatformSpecificAbort;
 }
 
 void UtestShell::crash()

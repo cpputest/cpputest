@@ -234,4 +234,11 @@ void (*PlatformSpecificMutexLock)(PlatformSpecificMutex) = DummyMutexLock;
 void (*PlatformSpecificMutexUnlock)(PlatformSpecificMutex) = DummyMutexUnlock;
 void (*PlatformSpecificMutexDestroy)(PlatformSpecificMutex) = DummyMutexDestroy;
 
+static void DosAbort()
+{
+    abort();
+}
+
+void (*PlatformSpecificAbort)(void) = DosAbort;
+
 }
