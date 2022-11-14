@@ -55,11 +55,11 @@ jobs:
     strategy:
       matrix:
         include:
-          - name: MSVC defaults
+          - name: MSVC install
             os: windows-latest
             cpp_version: 17
             preset: MSVC
-            # install: true
+            install: true
           - name: MSVC 20
             os: windows-latest
             cpp_version: 20
@@ -199,9 +199,14 @@ jobs:
 
       # POST PROCESSING
 
-      - name: Install
-        run: sudo cmake --install cpputest_build/
-        if: ${{ matrix.install }}
+      - name: Install (*nix)
+        run: |
+          sudo cmake --install cpputest_build/
+          pkg-config --print-provides cpputest
+        if: ${{ matrix.install && !startswith(matrix.os, 'windows')}}
+      - name: Install (Windows)
+        run: cmake --install cpputest_build/ --config=Debug
+        if: ${{ matrix.install && startswith(matrix.os, 'windows')}}
       - name: Use install
         run: |
           cmake -B build -S examples
