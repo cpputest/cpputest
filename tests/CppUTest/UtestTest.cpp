@@ -400,8 +400,6 @@ TEST(UtestShell, TestDefaultCrashMethodInSeparateProcessTest)
     fixture.setRunTestsInSeperateProcess();
     fixture.runAllTests();
     fixture.assertPrintContains("Failed in separate process - killed by signal");
-
-    CHECK(fixture.getOutput().contains("signal 6"));
 }
 
 #endif
