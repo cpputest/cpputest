@@ -81,7 +81,14 @@
       "name": "no-std-cpp",
       "inherits": ["GNU"],
       "environment": {
-        "CXXFLAGS": "-Werror -fno-exceptions -fno-rtti -nostdinc++"
+        "CXXFLAGS": "-Werror -fno-exceptions -nostdinc++"
+      }
+    },
+    {
+      "name": "no-rtti",
+      "inherits": ["GNU"],
+      "environment": {
+        "CXXFLAGS": "-Werror -fno-rtti"
       }
     },
     {

@@ -393,9 +393,9 @@ UnexpectedExceptionFailure::UnexpectedExceptionFailure(UtestShell* test)
 {
 }
 
+#if CPPUTEST_HAVE_RTTI
 static SimpleString getExceptionTypeName(const std::exception &e)
 {
-#if CPPUTEST_HAVE_RTTI
     const char *name = typeid(e).name();
 #if defined(__GNUC__) && (__cplusplus >= 201103L)
     int status = -1;
@@ -408,13 +408,22 @@ static SimpleString getExceptionTypeName(const std::exception &e)
 #else
     return name;
 #endif
-#else
-    return "unknown-no-RTTI";
-#endif
 }
+#endif // CPPUTEST_HAVE_RTTI
 
 UnexpectedExceptionFailure::UnexpectedExceptionFailure(UtestShell* test, const std::exception &e)
-: TestFailure(test, StringFromFormat("Unexpected exception of type '%s' was thrown: %s", getExceptionTypeName(e).asCharString(), e.what()))
+: TestFailure(
+    test,
+#if CPPUTEST_HAVE_RTTI
+    StringFromFormat(
+        "Unexpected exception of type '%s' was thrown: %s",
+        getExceptionTypeName(e).asCharString(),
+        e.what()
+    )
+#else
+    "Unexpected exception of unknown type was thrown."
+#endif
+)
 {
 }
-#endif
+#endif // CPPUTEST_USE_STD_CPP_LIB

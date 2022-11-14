@@ -238,14 +238,21 @@
 #endif
 #endif
 
-/*
- * Detection of run-time type information (RTTI) presence
- */
-#ifndef CPPUTEST_HAVE_RTTI
-  #if defined(_CPPRTTI) || defined(__GXX_RTTI) || defined(__RTTI) || (defined(__cpp_rtti) && __cpp_rtti)
-    #define CPPUTEST_HAVE_RTTI 1
-  #else
-    #define CPPUTEST_HAVE_RTTI 0
+#ifdef __cplusplus
+  /*
+   * Detection of run-time type information (RTTI) presence. Since it's a
+   * standard language feature, assume it is enabled unless we see otherwise.
+   */
+  #ifndef CPPUTEST_HAVE_RTTI
+    #if ((__cplusplus >= 202002L) && !__cpp_rtti) || \
+        (defined(_MSC_VER) && !_CPPRTTI) || \
+        (defined(__GNUC__) && !__GXX_RTTI) || \
+        (defined(__ghs__) && !__RTTI) || \
+        (defined(__WATCOMC__) && !_CPPRTTI)
+      #define CPPUTEST_HAVE_RTTI 0
+    #else
+      #define CPPUTEST_HAVE_RTTI 1
+    #endif
   #endif
 #endif
 
