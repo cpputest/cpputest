@@ -81,7 +81,10 @@
       "name": "no-std-cpp",
       "inherits": ["GNU"],
       "environment": {
-        "CXXFLAGS": "-Werror -fno-exceptions -nostdinc++"
+        "CXXFLAGS": "-Werror  -nostdinc++"
+      },
+      "cacheVariables": {
+        "CPPUTEST_STD_CPP_LIB_DISABLED": true
       }
     },
     {
@@ -89,6 +92,13 @@
       "inherits": ["GNU"],
       "environment": {
         "CXXFLAGS": "-Werror -fno-rtti"
+      }
+    },
+    {
+      "name": "no-exceptions",
+      "inherits": ["GNU"],
+      "environment": {
+        "CXXFLAGS": "-Werror -fno-exceptions"
       }
     },
     {

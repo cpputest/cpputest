@@ -123,56 +123,10 @@
   #define _check_format_(type, format_parameter, other_parameters) /* type, format_parameter, other_parameters */
 #endif
 
-/*
- * When we don't link Standard C++, then we won't throw exceptions as we assume the compiler might not support that!
- */
-
-#if CPPUTEST_USE_STD_CPP_LIB
-  #if defined(__cplusplus) && __cplusplus >= 201103L
-    #define UT_THROW(exception)
-    #define UT_NOTHROW noexcept
-  #else
-    #define UT_THROW(exception) throw (exception)
-    #define UT_NOTHROW throw()
-  #endif
-#else
-  #define UT_THROW(exception)
-  #ifdef __clang__
-    #define UT_NOTHROW throw()
-  #else
-    #define UT_NOTHROW
-  #endif
-#endif
-
-/*
- * Visual C++ doesn't define __cplusplus as C++11 yet (201103), however it doesn't want the throw(exception) either, but
- * it does want throw().
- */
-
-#ifdef _MSC_VER
-  #undef UT_THROW
-  #define UT_THROW(exception)
-#endif
-
 #if defined(__cplusplus) && __cplusplus >= 201103L
     #define DEFAULT_COPY_CONSTRUCTOR(classname) classname(const classname &) = default;
 #else
     #define DEFAULT_COPY_CONSTRUCTOR(classname)
-#endif
-
-/*
- * g++-4.7 with stdc++11 enabled On MacOSX! will have a different exception specifier for operator new (and thank you!)
- * I assume they'll fix this in the future, but for now, we'll change that here.
- * (This should perhaps also be done in the configure.ac)
- */
-
-#ifdef __GXX_EXPERIMENTAL_CXX0X__
-#ifdef __APPLE__
-#ifdef _GLIBCXX_THROW
-#undef UT_THROW
-#define UT_THROW(exception) _GLIBCXX_THROW(exception)
-#endif
-#endif
 #endif
 
 /*
@@ -253,6 +207,67 @@
     #else
       #define CPPUTEST_HAVE_RTTI 1
     #endif
+  #endif
+
+  /*
+   * Detection of exception support. Since it's a standard language feature,
+   * assume it is enabled unless we see otherwise.
+   */
+  #ifndef CPPUTEST_HAVE_EXCEPTIONS
+    #if ((__cplusplus >= 202002L) && !__cpp_exceptions) || \
+        (defined(_MSC_VER) && !_CPPUNWIND) || \
+        (defined(__GNUC__) && !__EXCEPTIONS) || \
+        (defined(__ghs__) && !__EXCEPTION_HANDLING) || \
+        (defined(__WATCOMC__) && !_CPPUNWIND)
+      #define CPPUTEST_HAVE_EXCEPTIONS 0
+    #else
+      #define CPPUTEST_HAVE_EXCEPTIONS 1
+    #endif
+  #endif
+
+  #if CPPUTEST_HAVE_EXCEPTIONS
+    #if defined(__cplusplus) && __cplusplus >= 201103L
+      #define UT_THROW(exception)
+      #define UT_NOTHROW noexcept
+    #else
+      #define UT_THROW(exception) throw (exception)
+      #define UT_NOTHROW throw()
+    #endif
+  #else
+    #define UT_THROW(exception)
+    #ifdef __clang__
+      #define UT_NOTHROW throw()
+    #else
+      #define UT_NOTHROW
+    #endif
+  #endif
+
+  /*
+   * Visual C++ doesn't define __cplusplus as C++11 yet (201103), however it doesn't want the throw(exception) either, but
+   * it does want throw().
+   */
+  #ifdef _MSC_VER
+    #undef UT_THROW
+    #define UT_THROW(exception)
+  #endif
+
+  /*
+   * g++-4.7 with stdc++11 enabled On MacOSX! will have a different exception specifier for operator new (and thank you!)
+   * I assume they'll fix this in the future, but for now, we'll change that here.
+   * (This should perhaps also be done in the configure.ac)
+   */
+  #if defined(__GXX_EXPERIMENTAL_CXX0X__) && \
+      defined(__APPLE__) && \
+      defined(_GLIBCXX_THROW)
+    #undef UT_THROW
+    #define UT_THROW(exception) _GLIBCXX_THROW(exception)
+  #endif
+
+  #if CPPUTEST_USE_STD_CPP_LIB
+    #define CPPUTEST_BAD_ALLOC std::bad_alloc
+  #else
+    class CppUTestBadAlloc {};
+    #define CPPUTEST_BAD_ALLOC CppUTestBadAlloc
   #endif
 #endif
 

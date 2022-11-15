@@ -1318,7 +1318,7 @@ IGNORE_TEST(UnitTestMacros, ENUMS_EQUAL_EQUAL_INT_TEXTWithUnscopedEnumWorksInAnI
     ENUMS_EQUAL_INT_TEXT(UNSCOPED_ENUM_B, UNSCOPED_ENUM_A, "Failed because it failed"); // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
 
-#if CPPUTEST_USE_STD_CPP_LIB
+#if CPPUTEST_HAVE_EXCEPTIONS
 static void failingTestMethod_NoThrowWithCHECK_THROWS_()
 {
     CHECK_THROWS(int, (void) (1+2));

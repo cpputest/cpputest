@@ -217,7 +217,7 @@ TEST(UtestShell, TestStopsAfterSetupFailure)
     LONGS_EQUAL(0, stopAfterFailure);
 }
 
-#if CPPUTEST_USE_STD_CPP_LIB
+#if CPPUTEST_HAVE_EXCEPTIONS
 
 // Prevents -Wunreachable-code; should always be 'true'
 static bool shouldThrowException = true;
@@ -227,15 +227,6 @@ static void thrownUnknownExceptionMethod_()
     if (shouldThrowException)
     {
         throw 33;
-    }
-    stopAfterFailure++;
-}
-
-static void thrownStandardExceptionMethod_()
-{
-    if (shouldThrowException)
-    {
-        throw std::runtime_error("exception text");
     }
     stopAfterFailure++;
 }
@@ -250,26 +241,6 @@ TEST(UtestShell, TestStopsAfterUnknownExceptionIsThrown)
     fixture.runAllTests();
     LONGS_EQUAL(1, fixture.getFailureCount());
     fixture.assertPrintContains("Unexpected exception of unknown type was thrown");
-    LONGS_EQUAL(0, stopAfterFailure);
-    UtestShell::setRethrowExceptions(initialRethrowExceptions);
-}
-
-TEST(UtestShell, TestStopsAfterStandardExceptionIsThrown)
-{
-    bool initialRethrowExceptions = UtestShell::isRethrowingExceptions();
-    UtestShell::setRethrowExceptions(false);
-    stopAfterFailure = 0;
-    shouldThrowException = true;
-    fixture.setTestFunction(thrownStandardExceptionMethod_);
-    fixture.runAllTests();
-    LONGS_EQUAL(1, fixture.getFailureCount());
-#if CPPUTEST_HAVE_RTTI
-    fixture.assertPrintContains("Unexpected exception of type '");
-    fixture.assertPrintContains("runtime_error");
-    fixture.assertPrintContains("' was thrown: exception text");
-#else
-    fixture.assertPrintContains("Unexpected exception of unknown type was thrown");
-#endif
     LONGS_EQUAL(0, stopAfterFailure);
     UtestShell::setRethrowExceptions(initialRethrowExceptions);
 }
@@ -320,6 +291,36 @@ TEST(UtestShell, UnknownExceptionIsRethrownIfEnabled)
     UtestShell::setRethrowExceptions(initialRethrowExceptions);
 }
 
+#if CPPUTEST_USE_STD_CPP_LIB
+static void thrownStandardExceptionMethod_()
+{
+    if (shouldThrowException)
+    {
+        throw std::runtime_error("exception text");
+    }
+    stopAfterFailure++;
+}
+
+TEST(UtestShell, TestStopsAfterStandardExceptionIsThrown)
+{
+    bool initialRethrowExceptions = UtestShell::isRethrowingExceptions();
+    UtestShell::setRethrowExceptions(false);
+    stopAfterFailure = 0;
+    shouldThrowException = true;
+    fixture.setTestFunction(thrownStandardExceptionMethod_);
+    fixture.runAllTests();
+    LONGS_EQUAL(1, fixture.getFailureCount());
+#if CPPUTEST_HAVE_RTTI
+    fixture.assertPrintContains("Unexpected exception of type '");
+    fixture.assertPrintContains("runtime_error");
+    fixture.assertPrintContains("' was thrown: exception text");
+#else
+    fixture.assertPrintContains("Unexpected exception of unknown type was thrown");
+#endif
+    LONGS_EQUAL(0, stopAfterFailure);
+    UtestShell::setRethrowExceptions(initialRethrowExceptions);
+}
+
 TEST(UtestShell, StandardExceptionIsRethrownIfEnabled)
 {
     bool initialRethrowExceptions = UtestShell::isRethrowingExceptions();
@@ -345,7 +346,8 @@ TEST(UtestShell, StandardExceptionIsRethrownIfEnabled)
     LONGS_EQUAL(0, stopAfterFailure);
     UtestShell::setRethrowExceptions(initialRethrowExceptions);
 }
-#endif
+#endif // CPPUTEST_USE_STD_CPP_LIB
+#endif // CPPUTEST_HAVE_EXCEPTIONS
 
 TEST(UtestShell, veryVebose)
 {
@@ -406,7 +408,7 @@ TEST(UtestShell, TestDefaultCrashMethodInSeparateProcessTest)
 
 #endif
 
-#if CPPUTEST_USE_STD_CPP_LIB
+#if CPPUTEST_HAVE_EXCEPTIONS
 
 static bool destructorWasCalledOnFailedTest = false;
 
