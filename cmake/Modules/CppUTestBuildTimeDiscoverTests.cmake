@@ -4,6 +4,10 @@ set(_DISCOVER_SCRIPT "${CMAKE_CURRENT_LIST_DIR}/../Scripts/CppUTestBuildTimeDisc
 
 # Create target to discover tests
 function (cpputest_buildtime_discover_tests tgt)
+  message(DEPRECATION
+    "Use cpputest_discover_tests from the CppUTest module instead"
+  )
+
   set(options)
   set(oneValueArgs DETAILED)
   set(multiValueArgs)

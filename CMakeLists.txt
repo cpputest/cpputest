@@ -109,12 +109,10 @@ if(NOT PROJECT_IS_TOP_LEVEL)
   set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" PARENT_SCOPE)
 endif()
 
-include(CppUTestConfigurationOptions)
+include(cmake/gmock.cmake)
 if(PROJECT_IS_TOP_LEVEL)
-  include(CppUTestWarningFlags)
+  include(cmake/warnings.cmake)
 endif()
-include(CppUTestBuildTimeDiscoverTests)
-include(CppUTestNormalizeTestOutputLocation)
 include(GNUInstallDirs)
 
 # Check for symbols before setting a lot of stuff

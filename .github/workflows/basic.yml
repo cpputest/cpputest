@@ -60,14 +60,17 @@ jobs:
             cpp_version: 17
             preset: MSVC
             install: true
+            ctest_args: -C Debug
           - name: MSVC 20
             os: windows-latest
             cpp_version: 20
             preset: MSVC
+            ctest_args: -C Debug
           - name: ClangCL
             os: windows-latest
             cpp_version: 17
             preset: ClangCL
+            ctest_args: -C Debug
           - name: Linux Clang 98
             os: ubuntu-latest
             cpp_version: 98
@@ -203,7 +206,7 @@ jobs:
       - name: Build
         run: cmake --build cpputest_build --verbose
       - name: Test
-        run: ctest --test-dir cpputest_build
+        run: ctest --test-dir cpputest_build ${{ matrix.ctest_args }}
 
       # POST PROCESSING
 
