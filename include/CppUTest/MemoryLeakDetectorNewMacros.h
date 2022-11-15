@@ -56,12 +56,12 @@
      * know about all allocations and report freeing of unallocated blocks. Hence, provide both overloads.
      */
 
-    void* operator new(size_t size, const char* file, int line) UT_THROW (std::bad_alloc);
-    void* operator new(size_t size, const char* file, size_t line) UT_THROW (std::bad_alloc);
-    void* operator new[](size_t size, const char* file, int line) UT_THROW (std::bad_alloc);
-    void* operator new[](size_t size, const char* file, size_t line) UT_THROW (std::bad_alloc);
-    void* operator new(size_t size) UT_THROW(std::bad_alloc);
-    void* operator new[](size_t size) UT_THROW(std::bad_alloc);
+    void* operator new(size_t size, const char* file, int line) UT_THROW (CPPUTEST_BAD_ALLOC);
+    void* operator new(size_t size, const char* file, size_t line) UT_THROW (CPPUTEST_BAD_ALLOC);
+    void* operator new[](size_t size, const char* file, int line) UT_THROW (CPPUTEST_BAD_ALLOC);
+    void* operator new[](size_t size, const char* file, size_t line) UT_THROW (CPPUTEST_BAD_ALLOC);
+    void* operator new(size_t size) UT_THROW(CPPUTEST_BAD_ALLOC);
+    void* operator new[](size_t size) UT_THROW(CPPUTEST_BAD_ALLOC);
 
     void operator delete(void* mem, const char* file, int line) UT_NOTHROW;
     void operator delete(void* mem, const char* file, size_t line) UT_NOTHROW;
