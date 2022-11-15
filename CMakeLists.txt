@@ -39,7 +39,6 @@ option(CPPUTEST_FLAGS "Use the CFLAGS/CXXFLAGS/LDFLAGS set by CppUTest" ${PROJEC
 cmake_dependent_option(CPPUTEST_MEM_LEAK_DETECTION_DISABLED "Enable memory leak detection"
   OFF "CPPUTEST_FLAGS;NOT BORLAND;NOT CPPUTEST_STD_C_LIB_DISABLED;NOT is_clang_cl" ON)
 option(CPPUTEST_EXTENSIONS "Use the CppUTest extension library" ON)
-
 include(CheckTypeSize)
 check_type_size("long long" SIZEOF_LONGLONG)
 cmake_dependent_option(CPPUTEST_USE_LONG_LONG "Support long long"
@@ -54,43 +53,37 @@ cmake_dependent_option(CPPUTEST_EXAMPLES "Compile and make examples?"
 cmake_dependent_option(CPPUTEST_LIBNAME_POSTFIX_BITSIZE "Add architecture bitsize (32/64) to the library name?"
   OFF "PROJECT_IS_TOP_LEVEL" OFF)
 
-if(DEFINED CPP_PLATFORM)
-  message(DEPRECATION
-    "The CPP_PLATFORM variable has been deprecated. "
-    "Use CPPUTEST_PLATFORM instead."
-  )
-else()
-  if(MSVC)
-    set(CPP_PLATFORM VisualCpp)
-  elseif(CMAKE_CXX_COMPILER_ID STREQUAL "IAR")
-    set(CPP_PLATFORM Iar)
-  elseif(CMAKE_CXX_COMPILER_ID STREQUAL "ARMCC")
-    set(CPP_PLATFORM armcc)
-  elseif(DOS)
-    set(CPP_PLATFORM Dos)
-  elseif(BORLAND)
-    set(CPP_PLATFORM Borland)
-  elseif(CPPUTEST_STD_C_LIB_DISABLED)
-    set(CPP_PLATFORM GccNoStdC)
+if(NOT DEFINED CPPUTEST_PLATFORM)
+  if(DEFINED CPP_PLATFORM)
+    message(DEPRECATION
+      "The CPP_PLATFORM variable has been deprecated. "
+      "Use CPPUTEST_PLATFORM instead."
+    )
+    set(CPPUTEST_PLATFORM ${CPP_PLATFORM})
   else()
-    set(CPP_PLATFORM Gcc)
+    if(CPPUTEST_STD_C_LIB_DISABLED)
+      set(CPPUTEST_PLATFORM OFF)
+    elseif(MSVC)
+      set(CPPUTEST_PLATFORM VisualCpp)
+    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "IAR")
+      set(CPPUTEST_PLATFORM Iar)
+    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "ARMCC")
+      set(CPPUTEST_PLATFORM armcc)
+    elseif(DOS)
+      set(CPPUTEST_PLATFORM Dos)
+    elseif(BORLAND)
+      set(CPPUTEST_PLATFORM Borland)
+    else()
+      set(CPPUTEST_PLATFORM Gcc)
+    endif()
   endif()
+  message(STATUS "Setting CPPUTEST_PLATFORM: ${CPPUTEST_PLATFORM}")
 endif()
-set(CPPUTEST_PLATFORM "${CPP_PLATFORM}" CACHE STRING "Platform implementation")
+set(CPPUTEST_PLATFORM "${CPPUTEST_PLATFORM}" CACHE STRING "Platform implementation")
 set_property(
   CACHE CPPUTEST_PLATFORM
   PROPERTY STRINGS
-    armcc
-    Borland
-    C2000
-    Dos
-    Gcc
-    GccNoStdC
-    Iar
-    Keil
-    Symbian
-    VisualCpp
-    OFF
+    armcc Borland C2000 Dos Gcc Iar Keil Symbian VisualCpp OFF
 )
 
 include(CheckCXXSymbolExists)

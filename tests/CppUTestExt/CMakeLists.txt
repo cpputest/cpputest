@@ -29,6 +29,13 @@ add_executable(CppUTestExtTests
     OrderedTestTest.cpp
 )
 
+if(CPPUTEST_STD_C_LIB_DISABLED)
+    target_sources(CppUTestExtTests
+        PRIVATE
+            ${CMAKE_CURRENT_SOURCE_DIR}/../DummyUTestPlatform/DummyUTestPlatform.cpp
+    )
+endif()
+
 if(MINGW)
     set(THREADS_PREFER_PTHREAD_FLAG ON)
     find_package(Threads)

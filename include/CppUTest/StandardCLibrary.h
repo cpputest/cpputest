@@ -79,8 +79,15 @@ typedef long unsigned int size_t;
 #endif
 
 #define NULL (0)
+#ifdef __cplusplus
+extern "C" {
+#endif
 extern void*	malloc(size_t);
 extern void     free(void *);
+#ifdef __cplusplus
+}
+#endif
+
 
 #define _bnd(X, bnd)            (((sizeof (X)) + (bnd)) & (~(bnd)))
 
