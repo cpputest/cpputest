@@ -421,20 +421,14 @@ TEST_GROUP(OutOfMemoryTestsForOperatorNew)
 
 #if CPPUTEST_HAVE_EXCEPTIONS
 
-#if CPPUTEST_USE_STD_CPP_LIB
-#define BAD_ALLOC std::bad_alloc
-#else
-#define BAD_ALLOC int
-#endif
-
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorThrowsAnExceptionWhenUsingStdCppNew)
 {
-    CHECK_THROWS(BAD_ALLOC, new char);
+    CHECK_THROWS(CPPUTEST_BAD_ALLOC, new char);
 }
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorThrowsAnExceptionWhenUsingStdCppNew)
 {
-    CHECK_THROWS(BAD_ALLOC, new char[10]);
+    CHECK_THROWS(CPPUTEST_BAD_ALLOC, new char[10]);
 }
 
 TEST_GROUP(TestForExceptionsInConstructor)
@@ -506,12 +500,12 @@ char* some_memory;
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorThrowsAnExceptionWhenUsingStdCppNewWithoutOverride)
 {
-    CHECK_THROWS(BAD_ALLOC, some_memory = new char);
+    CHECK_THROWS(CPPUTEST_BAD_ALLOC, some_memory = new char);
 }
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorThrowsAnExceptionWhenUsingStdCppNewWithoutOverride)
 {
-    CHECK_THROWS(BAD_ALLOC, some_memory = new char[10]);
+    CHECK_THROWS(CPPUTEST_BAD_ALLOC, some_memory = new char[10]);
 }
 
 #if CPPUTEST_USE_STD_CPP_LIB
