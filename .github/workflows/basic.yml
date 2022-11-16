@@ -210,6 +210,11 @@ jobs:
         run: cmake --preset ${{ matrix.preset }} ${{ matrix.cmake_args }}
       - name: Build
         run: cmake --build cpputest_build --verbose -j
+      - name: Save map files
+        uses: actions/upload-artifact@v3
+        with:
+          name: "${{ matrix.name }} map files"
+          path: cpputest_build/**/*.map
       - name: Test
         run: ctest --test-dir cpputest_build ${{ matrix.ctest_args }}
 
