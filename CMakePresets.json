@@ -30,6 +30,14 @@
       }
     },
     {
+      "name": "clang-tidy",
+      "inherits": ["Clang"],
+      "cacheVariables": {
+        "CMAKE_CXX_CLANG_TIDY": "clang-tidy;-checks=bugprone-*,-bugprone-easily-swappable-parameters;-warnings-as-errors=*",
+        "CMAKE_C_CLANG_TIDY": "clang-tidy;-checks=bugprone-*,-bugprone-easily-swappable-parameters;-warnings-as-errors=*"
+      }
+    },
+    {
       "name": "MSVC",
       "inherits": ["defaults"],
       "environment": {

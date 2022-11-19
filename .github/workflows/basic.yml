@@ -70,6 +70,9 @@ jobs:
             cmake_args: -DCMAKE_CXX_STANDARD=17
             preset: ClangCL
             ctest_args: -C Debug
+          - name: Clang-Tidy
+            os: ubuntu-latest
+            preset: clang-tidy
           - name: Linux Clang 98
             os: ubuntu-latest
             cmake_args: -DCMAKE_CXX_STANDARD=98
