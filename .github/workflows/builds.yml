@@ -59,6 +59,11 @@ jobs:
             os: ubuntu-latest
             cc: clang
             cxx: clang++
+          - name: No long long
+            os: ubuntu-latest
+            cc: gcc
+            cxx: g++
+            configure_options: "--disable-longlong"
     runs-on: ${{ matrix.os }}
     name: Autotools ${{ matrix.name }}
     steps:
@@ -73,7 +78,7 @@ jobs:
       - name: Configure
         run: |
           autoreconf -i .
-          ./configure
+          ./configure ${{ matrix.configure_options }}
       - name: Build and test
         run: make tdd
 
@@ -325,15 +330,3 @@ jobs:
         env:
           TERM: linux
         run: $CPPUTEST_HOME/platforms/Dos/alltests.sh
-
-  automake-no-long-long:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@main
-      - name: Configure
-        run: |
-          autoreconf -i .
-          ./configure --disable-longlong
-      - name: Build and test
-        run: make tdd
