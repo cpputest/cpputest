@@ -54,7 +54,7 @@ TEST_GROUP(TestFailureNanAndInf)
         delete test;
     }
 };
-#define FAILURE_EQUAL(a, b) STRCMP_EQUAL_LOCATION(a, b.getMessage().asCharString(), "", __FILE__, __LINE__)
+#define FAILURE_EQUAL(a, b) STRCMP_EQUAL_LOCATION(a, (b).getMessage().asCharString(), "", __FILE__, __LINE__)
 
 TEST(TestFailureNanAndInf, DoublesEqualExpectedIsNaN)
 {

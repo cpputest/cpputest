@@ -131,7 +131,7 @@ void cpputest_free_location_with_leak_detection(void* buffer, const char* file, 
 #undef new
 
 #if CPPUTEST_HAVE_EXCEPTIONS
-#define UT_THROW_BAD_ALLOC_WHEN_NULL(memory) if (memory == NULLPTR) throw CPPUTEST_BAD_ALLOC()
+#define UT_THROW_BAD_ALLOC_WHEN_NULL(memory) if ((memory) == NULLPTR) throw CPPUTEST_BAD_ALLOC()
 #else
 #define UT_THROW_BAD_ALLOC_WHEN_NULL(memory)
 #endif

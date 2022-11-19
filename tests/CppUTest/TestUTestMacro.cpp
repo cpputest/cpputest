@@ -615,16 +615,16 @@ TEST(UnitTestMacros, FailureWithLONGS_EQUALS)
 
 static void failingTestMethodWithLONGS_EQUALWithSymbolicParameters_()
 {
-#define _MONDAY 1
-    int day_of_the_week = _MONDAY+1;
-    LONGS_EQUAL(_MONDAY, day_of_the_week);
+#define MONDAY 1
+    int day_of_the_week = MONDAY+1;
+    LONGS_EQUAL(MONDAY, day_of_the_week);
     TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
 
 TEST(UnitTestMacros, FailureWithLONGS_EQUALShowsSymbolicParameters)
 {
     fixture.runTestWithMethod(failingTestMethodWithLONGS_EQUALWithSymbolicParameters_);
-    CHECK_TEST_FAILS_PROPER_WITH_TEXT("LONGS_EQUAL(_MONDAY, day_of_the_week) failed");
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("LONGS_EQUAL(MONDAY, day_of_the_week) failed");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("expected <1 (0x1)>");
     CHECK_TEST_FAILS_PROPER_WITH_TEXT("but was  <2 (0x2)>");
     CHECK_FALSE(fixture.getOutput().contains("Message: "));

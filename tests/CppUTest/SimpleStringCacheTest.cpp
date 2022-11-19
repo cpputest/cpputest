@@ -188,7 +188,7 @@ TEST(SimpleStringInternalCache, clearCacheWillRemoveAllCachedMemoryButNotAllUsed
     char* mem = cache.alloc(10);
     cache.dealloc(mem, 10);
 
-    mem = cache.alloc(60);
+    cache.alloc(60);
 
     cache.clearCache();
 

@@ -44,9 +44,18 @@ MockSupport& mock(const SimpleString& mockName, MockFailureReporter* failureRepo
 }
 
 MockSupport::MockSupport(const SimpleString& mockName)
-    : actualCallOrder_(0), expectedCallOrder_(0), strictOrdering_(false), standardReporter_(&defaultReporter_), ignoreOtherCalls_(false), enabled_(true), lastActualFunctionCall_(NULLPTR), mockName_(mockName), tracing_(false)
+    :
+        actualCallOrder_(0),
+        expectedCallOrder_(0),
+        strictOrdering_(false),
+        activeReporter_(NULLPTR),
+        standardReporter_(&defaultReporter_),
+        ignoreOtherCalls_(false),
+        enabled_(true),
+        lastActualFunctionCall_(NULLPTR),
+        mockName_(mockName),
+        tracing_(false)
 {
-    setActiveReporter(NULLPTR);
 }
 
 MockSupport::~MockSupport()
