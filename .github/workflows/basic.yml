@@ -264,3 +264,71 @@ jobs:
           path-to-lcov: lcov.info
           github-token: ${{ secrets.GITHUB_TOKEN }}
         if: ${{ matrix.name == 'Coverage' }}
+
+  test_report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@main
+      - run: cmake --preset=defaults -DCPPUTEST_JUNIT_REPORT=TRUE
+      - run: cmake --build cpputest_build -j
+      - run: ctest --test-dir cpputest_build
+      - uses: actions/upload-artifact@v3
+        if: success() || failure()
+        with:
+          name: test-results
+          path: "cpputest_build/**/cpputest_*.xml"
+
+  gtest:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        version: [15, 16, 17, 18]
+    steps:
+      - name: Install Python 2
+        uses: actions/setup-python@v4
+        with:
+          python-version: "2.7"
+      - name: Checkout
+        uses: actions/checkout@main
+      - name: Configure
+        run: |
+          autoreconf -i .
+          ./configure
+      - name: Build and test
+        run: make check_gtest${{ matrix.version }}
+
+  make_dos:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+      - name: Install tools
+        run: |
+          sudo apt-get install -y dosbox
+          git clone https://github.com/cpputest/watcom-compiler.git watcom
+          echo "WATCOM=$GITHUB_WORKSPACE/watcom" >> $GITHUB_ENV
+          echo "CC=wcl" >> $GITHUB_ENV
+          echo "CXX=wcl" >> $GITHUB_ENV
+          echo "$GITHUB_WORKSPACE/watcom/binl" >> $GITHUB_PATH
+          echo "CPPUTEST_HOME=$GITHUB_WORKSPACE" >> $GITHUB_ENV
+      - name: Build
+        run: |
+          $CC --version
+          make -f $CPPUTEST_HOME/platforms/Dos/Makefile clean
+          make -f $CPPUTEST_HOME/platforms/Dos/Makefile
+      - name: Test
+        env:
+          TERM: linux
+        run: $CPPUTEST_HOME/platforms/Dos/alltests.sh
+
+  automake-no-long-long:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+      - name: Configure
+        run: |
+          autoreconf -i .
+          ./configure --disable-longlong
+      - name: Build and test
+        run: make tdd
